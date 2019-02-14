@@ -2,122 +2,163 @@ Return-Path: <SRS0=Lh3l=QV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_NEOMUTT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CE6EC10F00
-	for <bpf@archiver.kernel.org>; Thu, 14 Feb 2019 00:35:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61D66C4360F
+	for <bpf@archiver.kernel.org>; Thu, 14 Feb 2019 02:00:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F142B2083E
-	for <bpf@archiver.kernel.org>; Thu, 14 Feb 2019 00:35:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 23A29222A1
+	for <bpf@archiver.kernel.org>; Thu, 14 Feb 2019 02:00:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j1IbAvl6"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="H949i6Ip";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="LgTbepYn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726308AbfBNAfa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Feb 2019 19:35:30 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:43718 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726301AbfBNAfa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 Feb 2019 19:35:30 -0500
-Received: by mail-pl1-f193.google.com with SMTP id f90so2083216plb.10;
-        Wed, 13 Feb 2019 16:35:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=7k7kVnoE2QCZm4UrWnXltzZ/MJf5vEDOv/Ljvz4wZPM=;
-        b=j1IbAvl6Q1PzjT6GRm3QSSYBJQulpUKuS3peQ/DIH+B8J0UH86Bvz/nTCBiZsnWeIg
-         edYeheMiWq42vog3UydJkUKFx/2CN0fQGoLceA4uMkPCY7huw7Sic3S4ba1xqasCJCl9
-         NCXtcsxxaD4G0P3iG2IZAsKraZHKOAWZ2uZ5VD9epCIz2m7+7/1h8WsPNVeav53Lq+ZO
-         Mwu5VvFT0hqe26ZmAgKsNey9SoXFlFr4wi5zXQ6EaMTbezQesa0ZuP25BtW3XnEp1CFM
-         qHL6RUPXRgNjWlZhHXNnpTlb5H2YmCc+8vW5ax79QJXz0X6q+4doP/PQ+VWH7cp/AmqJ
-         MOuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7k7kVnoE2QCZm4UrWnXltzZ/MJf5vEDOv/Ljvz4wZPM=;
-        b=PFqtaPmsQYhkB+AlMm3sX4o4PJ8wCxWBzzgTtBPw67QubIfLy0LpuuyUJn1pI/P0hj
-         eSZjTTYUm/pLaPiY4+l535Kqb0zkRPY0L8mASFAGMBpX6s+seWwMGCARSsQRqkCQVIPE
-         w4cBQV5k2cvfHGfTUaD7TqnwLqNn7Z0hBtYtO6YoJp0iJmFIBHHvnrY0Ktbq5JwXCrej
-         pCa4LmYoMnKYQR8HMqpUKvavalgtBr5QciEDaQHQWbi4JcCm+aDyW1A7MTluK+nfCG4x
-         IJmzeRb1jTtKKR6FfqeQdJct83Bs/vFpp+r12cQt7cSVWX+bxmpqhR539huHz0Q+mwi5
-         LfAw==
-X-Gm-Message-State: AHQUAuazM55LXc8LvOaypU23EbpKtoRClf5bIlbmVl0Xd3LNwQimFSqv
-        OqHnIo8FtVGT7IilVGy1dEc=
-X-Google-Smtp-Source: AHgI3IZfEQWoN1wG4uh4BKu0mUlSt2fWEKqAhpKIbco5mE7qtXEEyI8M87PnClDDwkXnbc3D7M8Q/A==
-X-Received: by 2002:a17:902:c05:: with SMTP id 5mr1051765pls.155.1550104529198;
-        Wed, 13 Feb 2019 16:35:29 -0800 (PST)
-Received: from ast-mbp ([2620:10d:c090:200::7:963])
-        by smtp.gmail.com with ESMTPSA id h128sm577602pgc.15.2019.02.13.16.35.26
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 13 Feb 2019 16:35:28 -0800 (PST)
-Date:   Wed, 13 Feb 2019 16:35:25 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Joe Stringer <joe@wand.net.nz>
-Cc:     bpf@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org
-Subject: Re: [PATCH bpf-next 4/4] selftests/bpf: Test static data relocation
-Message-ID: <20190214003523.zjbiwdgcvy7yrauo@ast-mbp>
-References: <20190212004729.535-1-joe@wand.net.nz>
- <20190212004729.535-5-joe@wand.net.nz>
- <20190212050113.qkryxb34vpnst6w6@ast-mbp>
- <CAOftzPjffHZUK=uxiTsuOGLX4A5ag5oqRz6gorhREj6hxMFA4A@mail.gmail.com>
+        id S1729663AbfBNCAq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Feb 2019 21:00:46 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:48572 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727539AbfBNCAq (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 13 Feb 2019 21:00:46 -0500
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x1E20Xsm005392;
+        Wed, 13 Feb 2019 18:00:34 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=HBHJrDQfafml37jlCXLrGKZmsXpxKxFrdorDxj7aO6s=;
+ b=H949i6Ipq5wDVyoRCFM1igaT6ivdKY0Br0xBLW9nvZUWHD6z+T/c/djcfDi56DHygoRh
+ LiYsm5zPGgDFtUOxGctXOK/b4SxdToj4lyS5p4UGwCWfZx/lUbA7Pr3jMkzVIbytIaLB
+ QHBpHIstoUfmktV6BBjEt5PwghHyZlJiO6E= 
+Received: from maileast.thefacebook.com ([199.201.65.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2qmvrv0dh1-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 13 Feb 2019 18:00:34 -0800
+Received: from frc-mbx07.TheFacebook.com (2620:10d:c0a1:f82::31) by
+ frc-hub03.TheFacebook.com (2620:10d:c021:18::173) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1531.3; Wed, 13 Feb 2019 18:00:14 -0800
+Received: from frc-hub04.TheFacebook.com (2620:10d:c021:18::174) by
+ frc-mbx07.TheFacebook.com (2620:10d:c0a1:f82::31) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1531.3; Wed, 13 Feb 2019 18:00:14 -0800
+Received: from NAM04-CO1-obe.outbound.protection.outlook.com (192.168.183.28)
+ by o365-in.thefacebook.com (192.168.177.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1531.3
+ via Frontend Transport; Wed, 13 Feb 2019 18:00:14 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector1-fb-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HBHJrDQfafml37jlCXLrGKZmsXpxKxFrdorDxj7aO6s=;
+ b=LgTbepYnjoAFfK9SYFv3IlVuSl/DfWb7PReckeoiiOfgqvJc/OqtkzcV+bb4HddevlodcYE35+znt6vOOB/01dLR4wklIlNIh/LF9Vh6ds+2X/yVNavdN7/v2KbGrSLQrx9PvxYPDamaJLaR32fvf9ZBL+nZbY2oWw2mt0/QQMc=
+Received: from MWHPR15MB1165.namprd15.prod.outlook.com (10.175.2.19) by
+ MWHPR15MB1664.namprd15.prod.outlook.com (10.175.141.23) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1622.16; Thu, 14 Feb 2019 01:59:56 +0000
+Received: from MWHPR15MB1165.namprd15.prod.outlook.com
+ ([fe80::ec0e:4a05:81f8:7df9]) by MWHPR15MB1165.namprd15.prod.outlook.com
+ ([fe80::ec0e:4a05:81f8:7df9%4]) with mapi id 15.20.1601.023; Thu, 14 Feb 2019
+ 01:59:55 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     "lsf-pc@lists.linux-foundation.org" 
+        <lsf-pc@lists.linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-raid <linux-raid@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>
+Subject: Re: [LSF/MM TOPIC] (again) THP for file systems
+Thread-Topic: [LSF/MM TOPIC] (again) THP for file systems
+Thread-Index: AQHUw+d91LnZv2+dn0iH+77xUzeGLKXeaKSAgAAhgQA=
+Date:   Thu, 14 Feb 2019 01:59:55 +0000
+Message-ID: <843818E0-C7E8-451E-A5B1-DAF0F120BD5A@fb.com>
+References: <77A00946-D70D-469D-963D-4C4EA20AE4FA@fb.com>
+ <20190213235959.GX12668@bombadil.infradead.org>
+In-Reply-To: <20190213235959.GX12668@bombadil.infradead.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3445.102.3)
+x-originating-ip: [2620:10d:c090:180::1:757a]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e68b61ed-9cfc-471b-33b2-08d692201e06
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600110)(711020)(4605077)(2017052603328)(7153060)(7193020);SRVR:MWHPR15MB1664;
+x-ms-traffictypediagnostic: MWHPR15MB1664:
+x-ms-exchange-purlcount: 2
+x-microsoft-exchange-diagnostics: 1;MWHPR15MB1664;20:gGdmQOqdcoAWbkYV1ejN+RigJQAFvq/kVi8jxshKfDHqGSfCUoxBuJMv1nmxbIM3/Znc1clztdyNwDAaxxCen4FJquBFrbmnAgSt5UVf4F+RltwUWlL4BNwsot2Uoj1/fRiSX2WPbwxlNFNegJx2mapNlbaCg3FYO8Unu1/OLiU=
+x-microsoft-antispam-prvs: <MWHPR15MB16645FB96114342A2A6A0AD8B3670@MWHPR15MB1664.namprd15.prod.outlook.com>
+x-forefront-prvs: 09480768F8
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39860400002)(366004)(136003)(346002)(376002)(396003)(189003)(199004)(51914003)(71190400001)(6916009)(11346002)(476003)(46003)(2616005)(446003)(6506007)(57306001)(186003)(6486002)(229853002)(71200400001)(478600001)(6116002)(6436002)(486006)(6512007)(6306002)(4326008)(14454004)(25786009)(53546011)(102836004)(68736007)(97736004)(36756003)(86362001)(6246003)(82746002)(105586002)(106356001)(256004)(316002)(81156014)(33656002)(54906003)(8676002)(50226002)(53936002)(83716004)(8936002)(966005)(99286004)(2906002)(81166006)(7736002)(305945005)(76176011);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR15MB1664;H:MWHPR15MB1165.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: WxjhtRndmtAH3EsyXP3tmq2sWZzcpWgmVnPittg29ShtYm6G8KpID09JoMitXhXrQJpFF43PRZ9fgCZuS2z+AaMlaGL64SKFLURkPimiiW2uY9Cnep5R0LF/JnvWN4wat5rG/yilM1Gcn/mhtE8muJLiTeYMctR/Yt5SE/n0AZZkkUe6g8TsMc7G8BexfMLVk03tnxzQLEqpFbzg691hd2qycjWL+07o1DMtfb5oD3Bu9yJWaf/YLZQUYqgBJ0WWIOKOiRfbhYsGNtYif328PYcOFm8Xs7gh1nR6X08bNQD6Iao8Lmwn3aHjyS/8T+53v2UP9m2fBVix/C2JBfFD3gFkeLI/7ofOW1gZwiOuJ5phWSnKU04QaYYfzyWDwx6rGPQApio8kfO/Wix6wfACtKFdyp8ogbmPdofnnWbDHPU=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <050ED4B99A554F4AACE4A77BAE0F3527@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOftzPjffHZUK=uxiTsuOGLX4A5ag5oqRz6gorhREj6hxMFA4A@mail.gmail.com>
-User-Agent: NeoMutt/20180223
+X-MS-Exchange-CrossTenant-Network-Message-Id: e68b61ed-9cfc-471b-33b2-08d692201e06
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Feb 2019 01:59:55.8664
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR15MB1664
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-02-14_01:,,
+ signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Feb 12, 2019 at 12:43:21PM -0800, Joe Stringer wrote:
-> 
-> Do you see any value in having incremental support in libbpf that
-> could be used as a fallback for older kernels like in patch #2 of this
-> series? I could imagine libbpf probing kernel support for
-> global/static variables and attempting to handle references to .data
-> via some more comprehensive mechanism in-kernel, or falling back to
-> this approach if it is not available.
-
-I don't think we have to view it as older vs new kernel and fallback discussion.
-I think access to static vars can be implemented in libbpf today without
-changing llvm and kernel.
-
-For the following code:
-static volatile __u32 static_data = 42;
-
-SEC("anything")
-int load_static_data(struct __sk_buff *skb)
-{
-   __u32 value = static_data;
-
-llvm will generate asm:
-
-  r1 = static_data ll
-  r1 = *(u32 *)(r1 + 0)
-
-libbpf can replace first insn with r1 = 0 (or remove it altogether)
-and second insn with r1 = 42 _when it is safe_.
-
-If there was no volatile keyword llvm would have optimized
-these two instructions into operation with immediate constant.
-libbpf can do this opimization instead of llvm.
-libbpf can check that 'static_data' is indeed not global in elf file
-and there are no store operations in all programs in that elf file.
-Then every load from that address can be replaced with rX=imm
-of the value from data section.
-libbpf would need to do data flow analysis which is substantial
-feature addition. I think it's inevitable next step anyway.
-
-The key point that this approach will be compatible with future
-global variables and modifiable static variables.
-In such case load/store instructions will stay as-is
-and kernel support will be needed to replace 'r1 = static_data ll'
-with properly marked ld_imm64 insn.
 
 
+> On Feb 13, 2019, at 3:59 PM, Matthew Wilcox <willy@infradead.org> wrote:
+>=20
+> On Wed, Feb 13, 2019 at 10:00:10PM +0000, Song Liu wrote:
+>> I would like to discuss remaining work to bring THP to (non-tmpfs) file =
+systems.
+>> This topic has been discussed multiple times in previous LSF/MM summits =
+[1][2].
+>> However, there hasn't been much progress since late 2017 (the latest wor=
+k I can
+>> find is by Kirill A. Shutemov [3]).
+>=20
+> ... this was literally just discussed.
+>=20
+> Feel free to review
+> https://lore.kernel.org/lkml/20190212183454.26062-1-willy@infradead.org/
+>=20
+> with particular reference to the last three paragraphs of
+> https://lore.kernel.org/lkml/20190208042448.GB21860@bombadil.infradead.or=
+g/
+
+Thanks for the pointers! I will read the patches and related code. =20
+
+>=20
+>> Therefore, we would like discuss (for one more time) what is needed to b=
+ring
+>> THP to file systems like ext4, xfs, btrfs, etc. Once we are aligned on t=
+he
+>> direction, we are more than happy to commit time and resource to make it=
+ happen.
+>=20
+> I believe the direction is clear.  It needs people to do the work.
+> We're critically short of reviewers.  I got precious little review of
+> the original XArray work, which made Andrew nervous and delayed its
+> integration.  Now I'm getting little review of the followup patches
+> to lay the groundwork for filesystems to support larger page sizes.
+> I have very little patience for this situation.
+
+I don't feel I am a qualified reviewer for MM patches, yet. But I will=20
+try my best to catch up.=20
+
+Thanks again,
+Song=
