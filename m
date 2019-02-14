@@ -2,31 +2,32 @@ Return-Path: <SRS0=Lh3l=QV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9197DC43381
-	for <bpf@archiver.kernel.org>; Thu, 14 Feb 2019 15:50:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6188BC43381
+	for <bpf@archiver.kernel.org>; Thu, 14 Feb 2019 15:56:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5AF98222DA
-	for <bpf@archiver.kernel.org>; Thu, 14 Feb 2019 15:50:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3AA43222DA
+	for <bpf@archiver.kernel.org>; Thu, 14 Feb 2019 15:56:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439641AbfBNPus (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Feb 2019 10:50:48 -0500
-Received: from mx1.redhat.com ([209.132.183.28]:37768 "EHLO mx1.redhat.com"
+        id S2407597AbfBNP4Y (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Feb 2019 10:56:24 -0500
+Received: from mx1.redhat.com ([209.132.183.28]:59518 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731438AbfBNPus (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 Feb 2019 10:50:48 -0500
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        id S2404857AbfBNP4Y (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 Feb 2019 10:56:24 -0500
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id BC6A737E8B;
-        Thu, 14 Feb 2019 15:50:46 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id C595B89AD9;
+        Thu, 14 Feb 2019 15:56:23 +0000 (UTC)
 Received: from krava (unknown [10.43.17.161])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 0E2B55D6B3;
-        Thu, 14 Feb 2019 15:50:43 +0000 (UTC)
-Date:   Thu, 14 Feb 2019 16:50:42 +0100
+        by smtp.corp.redhat.com (Postfix) with SMTP id 5A86D5C54B;
+        Thu, 14 Feb 2019 15:56:21 +0000 (UTC)
+Date:   Thu, 14 Feb 2019 16:56:19 +0100
 From:   Jiri Olsa <jolsa@redhat.com>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>
 Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
@@ -42,7 +43,7 @@ Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
 Subject: Re: [PATCH] tools build: Add test-reallocarray.c to test-all.c to
  fix the build Was: Re: reallocarray failure on centos:7 superseded by raw
  data API
-Message-ID: <20190214155042.GB16707@krava>
+Message-ID: <20190214155619.GA18997@krava>
 References: <20190212205557.GM3269@kernel.org>
  <20190212205750.GN3269@kernel.org>
  <D9304DB8-0E43-49D0-9F61-871CB14473F8@fb.com>
@@ -58,8 +59,8 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20190214153018.GA23266@kernel.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.29]); Thu, 14 Feb 2019 15:50:47 +0000 (UTC)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.26]); Thu, 14 Feb 2019 15:56:24 +0000 (UTC)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
@@ -69,6 +70,26 @@ On Thu, Feb 14, 2019 at 12:30:18PM -0300, Arnaldo Carvalho de Melo wrote:
 
 SNIP
 
+>     
+>     Reported-by: Jin Yao <yao.jin@linux.intel.com>
+>     Cc: Adrian Hunter <adrian.hunter@intel.com>
+>     Cc: Alexei Starovoitov <ast@fb.com>
+>     Cc: Daniel Borkmann <daniel@iogearbox.net>
+>     Cc: Jakub Kicinski <jakub.kicinski@netronome.com>
+>     Cc: Jiri Olsa <jolsa@kernel.org>
+>     Cc: Namhyung Kim <namhyung@kernel.org>
+>     Cc: Song Liu <songliubraving@fb.com>
+>     Cc: Yonghong Song <yhs@fb.com>
+>     Fixes: 531b014e7a2f ("tools: bpf: make use of reallocarray")
+>     Link: https://lkml.kernel.org/n/tip-aonqku8axii8rxki5g11w40b@git.kernel.org
+>     Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+
+
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+
+jirka
+
+> 
 > diff --git a/tools/build/feature/test-all.c b/tools/build/feature/test-all.c
 > index 74329957553a..e903b86b742f 100644
 > --- a/tools/build/feature/test-all.c
@@ -102,7 +123,3 @@ SNIP
 >  }
 > +
 > +#undef _GNU_SOURCE
-
-nice, also test-sched_getcpu.c does not do #undef _GNU_SOURCE
-
-jirka
