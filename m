@@ -5,107 +5,60 @@ X-Spam-Level:
 X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6B6EC43381
-	for <bpf@archiver.kernel.org>; Thu, 21 Feb 2019 21:35:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEF7EC43381
+	for <bpf@archiver.kernel.org>; Thu, 21 Feb 2019 21:58:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BB5EC20818
-	for <bpf@archiver.kernel.org>; Thu, 21 Feb 2019 21:35:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8C1DE2070B
+	for <bpf@archiver.kernel.org>; Thu, 21 Feb 2019 21:58:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726035AbfBUVf2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Feb 2019 16:35:28 -0500
-Received: from www62.your-server.de ([213.133.104.62]:39576 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725802AbfBUVf2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Feb 2019 16:35:28 -0500
-Received: from [78.46.172.3] (helo=sslproxy06.your-server.de)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1gww06-0002xw-4C; Thu, 21 Feb 2019 22:35:26 +0100
-Received: from [178.197.248.36] (helo=linux.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1gww05-000LNT-Uh; Thu, 21 Feb 2019 22:35:25 +0100
-To:     lsf-pc@lists.linux-foundation.org
-Cc:     bpf@vger.kernel.org, ast@kernel.org
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Subject: [LSF/MM TOPIC] BPF: various core topics
-Message-ID: <0809ca3b-8a11-bf52-6578-0c0574d284ca@iogearbox.net>
-Date:   Thu, 21 Feb 2019 22:35:25 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.3.0
+        id S1726541AbfBUV6e (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Feb 2019 16:58:34 -0500
+Received: from mail-wr1-f43.google.com ([209.85.221.43]:44734 "EHLO
+        mail-wr1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725802AbfBUV6e (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Feb 2019 16:58:34 -0500
+Received: by mail-wr1-f43.google.com with SMTP id w2so129993wrt.11
+        for <bpf@vger.kernel.org>; Thu, 21 Feb 2019 13:58:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=YYBP/14j6XBs72qvfZuhhp5QlXd9v9JobnubN3uV1+4=;
+        b=UUeFWgEkYHE8RNFuNfeA7iKlZDSLKzm49wwIDBVwnVgksYdC4UfeFO+Z7B6xzEtnQA
+         mmRxvZ3gryFzjZPxot3jripISkNz+FP/+Dn2RgpKdyowbUQSnnrYQc9pn8stG9qfw1N8
+         hFMZZYsSFY9MQ/1UPOR7rbu5uOJYTPJfrWv7Ep6bXRX/GQL8NeLLIO5/yaHyksVh05rl
+         0yfqfv2/5npiNdgpvsPVAiJ0X0muG3gf3BTWCUO9S0AjZjLqKPPLKEO3pp+Wdj7ft92H
+         UgNoTnxKbNoVakb11CoV2r9Sdoj1IMxZ9TnpLJRgOTwPR14Z4kDfaf8j4T1p2EJ4+r8e
+         qRDw==
+X-Gm-Message-State: AHQUAuYdRzj9o5tx1j71ihjMToBFMINjglt3cQjWtIzidr3DO+/TV90V
+        mord5dGLZDG2SsAhQPWIms//kQBlpfcmoWefRqM=
+X-Google-Smtp-Source: AHgI3IbARXIbJI18kFEVUjBODWM/KvlE7XnGxSk93YeWyteD1fDsMxa/UIqT9pF4nTOge7zjl0Yod4sFoWA8RnFtGa4=
+X-Received: by 2002:adf:dd4f:: with SMTP id u15mr446861wrm.61.1550786312513;
+ Thu, 21 Feb 2019 13:58:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.100.2/25367/Thu Feb 21 14:02:13 2019)
+From:   Joe Stringer <joe@wand.net.nz>
+Date:   Thu, 21 Feb 2019 13:58:21 -0800
+Message-ID: <CAOftzPg4xi4TetQ=F3Gs3EfuyhtYLbcZuDrZUaX3MJ-DXhLqTw@mail.gmail.com>
+Subject: [LSF/MM ATTEND] BPF track
+To:     lsf-pc@lists.linux-foundation.org
+Cc:     bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
+        john fastabend <john.fastabend@gmail.com>, tgraf@suug.ch
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-BPF, various core topics:
+Hi folks,
 
-I'd like to propose a discussion on a variety of BPF core topics that
-I think would be valuable to further elaborate on with the crowd of
-BPF kernel developers present at LSF/MM. Most of the mentioned below
-are also related to how we use BPF in Cilium today and some of the
-challenges that we'd like to tackle on kernel/loader side going forward:
+I'm interested in attending the LSF/MM BPF track. I work on BPF stuff
+for Cilium, including recent reference tracking/socket lookup
+implementation in the kernel, and the kernel loader interactions.
 
-- Support for tail calls in combination with BPF-to-BPF calls: the
-  latter was also partially added back then with the thought that
-  they would potentially supersede the former. In Cilium tail calls
-  are used in various elaborate ways e.g. to jump into another local
-  container's specific BPF policy program or to have it as an entry
-  point in Cilium container's BPF fs to manage programs running in
-  other application container/pods on the same node without switching
-  namespaces. However, currently BPF-to-BPF calls are not supported
-  in such setup and therefore all program code needs to be inlined
-  preventing optimizing attached BPF programs to make them more
-  icache friendly.
+In particular I'd like to be involved in discussing support for global
+variables in BPF, ELF format handling with libbpf and loader
+unification as these are all topics related to ongoing development in
+the Cilium community, so I can provide some insight into how projects
+may want to consume this functionality.
 
-- Avoidance of expensive indirect calls by turning them into direct
-  calls: in the face of retpolines, it would be desirable to further
-  optimize indirect calls from BPF entry point and from tail calls
-  by turning them into direct calls instead by borrowing idea of
-  branch funnel into BPF, as one example. In particular XDP, but
-  also tc BPF or other type of programs in the critical path could
-  potentially benefit from this.
-
-- Support for global data: at LPC'18 we performed initial experiments
-  with global data variables and wrote an initial prototype as proof
-  of concept. Main goal in context of Cilium is to avoid recompilation
-  by putting configuration data into .data resp. .bss sections which
-  can then be rewritten in the ELF file upon reconfiguration events,
-  and to have the loader handle these relocations in i) user-space
-  only for older kernels, ii) kernel- and user space. Discussion is
-  revisited here and presents current progress in this area.
-
-- Today there are several BPF ELF loaders in the wild. Most notably
-  libbpf and the one in iproute2. While historically the former had
-  focused on tracing use-cases, the latter was implemented for BPF
-  networking programs (tc, XDP) and to allow quick adoption given
-  libbpf was not widely distributed. In case of Cilium we rely on
-  the object parsing from the latter. While today both support more
-  recent BPF features like BPF-to-BPF calls or loading BTF etc, they
-  differ in behavior in various other aspects, for example, ELF map
-  representation, tail call loading, map pinning. Given the rapid
-  feature growth in BPF kernel land and wider availability of
-  libbpf, it would be desirable to revisit and have vast majority of
-  loaders rely on libbpf in order to consolidate efforts and
-  standardize on common format / conventions of the BPF ELF file.
-  Additionally, it would also be desirable to add bindings for
-  other languages such as golang.
-
-- State of unprivileged BPF: currently most of the feature set of
-  BPF in the kernel is available to privileged users only, basically
-  resulting in a bigger feature split of BPF architecture. Discussion
-  here presents current use-cases for unprivileged, lock-downs and
-  mitigations (e.g. in terms of Spectre) as well as potential options
-  for future work to allow more fine-grained use of otherwise only
-  privileged features.
-
-Thanks,
-Daniel
+Cheers,
+Joe
