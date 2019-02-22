@@ -2,100 +2,93 @@ Return-Path: <SRS0=sv//=Q5=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.5 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_PASS,USER_AGENT_MUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10869C43381
-	for <bpf@archiver.kernel.org>; Fri, 22 Feb 2019 19:27:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48D57C43381
+	for <bpf@archiver.kernel.org>; Fri, 22 Feb 2019 19:30:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CD3D1206C0
-	for <bpf@archiver.kernel.org>; Fri, 22 Feb 2019 19:27:46 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=osandov-com.20150623.gappssmtp.com header.i=@osandov-com.20150623.gappssmtp.com header.b="rdJTemqG"
+	by mail.kernel.org (Postfix) with ESMTP id 20DC72070B
+	for <bpf@archiver.kernel.org>; Fri, 22 Feb 2019 19:30:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726265AbfBVT1q (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Feb 2019 14:27:46 -0500
-Received: from mail-pf1-f180.google.com ([209.85.210.180]:34744 "EHLO
-        mail-pf1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726178AbfBVT1q (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Feb 2019 14:27:46 -0500
-Received: by mail-pf1-f180.google.com with SMTP id u9so1551073pfn.1
-        for <bpf@vger.kernel.org>; Fri, 22 Feb 2019 11:27:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=osandov-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=JLvUkFABOQ5zCKgClVsmgG5SiUV3k0oVK91zJzRfLhs=;
-        b=rdJTemqGEezhT+19WFWhaixUiJAMb7LtyQ+VDnGVpoAm0mSeIbiNRcf/3ZvCi0egNa
-         czioFrsSb1nSBIve2/3kONc3V1xDgdttIvjQfULZHirgXYGJ5chHZvXWAJuHV2h8H3AT
-         0tsLEmRxTHK6cPNpE+tg4DyTQtKi66IQ6bsPCU2s5mZc+aqZjJGdV7RlbZiQ0bsj3DCp
-         eGkTbN1FNQQ4khBXi812CSMGlVnvqQsu47VkGgkj1KWQ5msyoNQ4a9PMviO1NSfjxmOw
-         dBdcjljjRUNE0XOVdY+RNWHfKTJEVSf5qvLA6BMuvS0i3ZOkLN3GSCvYwoSJGTpvZli1
-         5teg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=JLvUkFABOQ5zCKgClVsmgG5SiUV3k0oVK91zJzRfLhs=;
-        b=KFyfqHe6vA/VkwU6P7wU23lGiw8C9i1gPhT/kSxBYsAa0vYzl5MjMXo1W53vlTIkZI
-         dn9AoE1kCfdubFgI8vdvsltSYIEPEYVbbrzrBqb8j11yxBfeX8XDHfCjDpLF4UVTdkCb
-         +vl1uAw0vKAEwQoUCiGtLfJByW30i1Fd6zRyP5j3J5+JDmeIK0sL2h0MxTvy6PCSPoFa
-         gRSn6AGly7r8M7alzqsJ8Ixi003z6KFMT0G8L+64+RGJWTovf8bI7NZxTg3c3cv7ZgHH
-         fVLsK65xlUObdZpBk3cV+97OGvBZE+5dWqTWapLY6uWrLHGXEbFA3l6Pg+/TS0PpUE+X
-         q/qA==
-X-Gm-Message-State: AHQUAuaBRpW0zmIwNwa67Q25Q+ITKLGRWui8AfHd3njLUIXW/s5DBtEb
-        TkHmUsH9uNxk7Tm0p58Dh1VUplgNyNI=
-X-Google-Smtp-Source: AHgI3IY2eIn6N/Jx1oI9lY1+mPnSVGtCxRuuF43xgCbBa3RJPEwwmLrFaoPP1qfWL7noH7R1Y567IQ==
-X-Received: by 2002:a63:ea52:: with SMTP id l18mr5509988pgk.317.1550863665253;
-        Fri, 22 Feb 2019 11:27:45 -0800 (PST)
-Received: from vader ([2620:10d:c090:200::4:eee8])
-        by smtp.gmail.com with ESMTPSA id p6sm7908270pgd.69.2019.02.22.11.27.44
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 22 Feb 2019 11:27:44 -0800 (PST)
-Date:   Fri, 22 Feb 2019 11:27:43 -0800
-From:   Omar Sandoval <osandov@osandov.com>
-To:     lsf-pc@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [LSF/MM TOPIC] drgn, a scriptable debugger
-Message-ID: <20190222192743.GA31597@vader>
+        id S1726477AbfBVTa3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Feb 2019 14:30:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59470 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726441AbfBVTa3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Feb 2019 14:30:29 -0500
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7A49F206C0;
+        Fri, 22 Feb 2019 19:30:27 +0000 (UTC)
+Date:   Fri, 22 Feb 2019 14:30:26 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        stable <stable@vger.kernel.org>,
+        Changbin Du <changbin.du@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@kernel.org>, daniel@iogearbox.net,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH 1/2 v2] kprobe: Do not use uaccess functions to access
+ kernel memory that can fault
+Message-ID: <20190222143026.17d6f0f6@gandalf.local.home>
+In-Reply-To: <20190222192703.epvgxghwybte7gxs@ast-mbp.dhcp.thefacebook.com>
+References: <CAHk-=wgJzNp0R3cVhjBPHTR4X9sOvHdqK4UVFfbsOKQ6L=A_eQ@mail.gmail.com>
+        <CAHk-=wh9XrOykA5J9RQ7zaBio-S_D+1AE+rGnBYWSd==pCXh+w@mail.gmail.com>
+        <20190219111802.1d6dbaa3@gandalf.local.home>
+        <CAHk-=wgTuK3kAduP-gr10vykT1uG=B2VpdffvmyBuTQ1UxPpMg@mail.gmail.com>
+        <20190219140330.5dd9e876@gandalf.local.home>
+        <20190220171019.5e81a4946b56982f324f7c45@kernel.org>
+        <20190220094926.0ab575b3@gandalf.local.home>
+        <20190222172745.2c7205d62003c0a858e33278@kernel.org>
+        <20190222173509.88489b7c5d1bf0e2ec2382ee@kernel.org>
+        <CAHk-=whNf_n1WXWW+ugAVeL5ZK0GcEP3cTYocju1nS85VtMjjQ@mail.gmail.com>
+        <20190222192703.epvgxghwybte7gxs@ast-mbp.dhcp.thefacebook.com>
+X-Mailer: Claws Mail 3.16.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.11.3 (2019-02-01)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello,
+On Fri, 22 Feb 2019 11:27:05 -0800
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-I've already sent in an attend request for the I/O track, but I'd also
-like to propose my project, drgn [1], as a topic for the BPF/tracing
-track.
+> On Fri, Feb 22, 2019 at 09:43:14AM -0800, Linus Torvalds wrote:
+> > 
+> > Then we should still probably fix up "__probe_kernel_read()" to not
+> > allow user accesses. The easiest way to do that is actually likely to
+> > use the "unsafe_get_user()" functions *without* doing a
+> > uaccess_begin(), which will mean that modern CPU's will simply fault
+> > on a kernel access to user space.  
+> 
+> On bpf side the bpf_probe_read() helper just calls probe_kernel_read()
+> and users pass both user and kernel addresses into it and expect
+> that the helper will actually try to read from that address.
+> 
+> If __probe_kernel_read will suddenly start failing on all user addresses
+> it will break the expectations.
+> How do we solve it in bpf_probe_read?
+> Call probe_kernel_read and if that fails call unsafe_get_user byte-by-byte
+> in the loop?
+> That's doable, but people already complain that bpf_probe_read() is slow
+> and shows up in their perf report.
 
-Basically, drgn is a more intuitive replacement for crash(8) which
-exposes kernel types and variables to Python. For example, one can
-trivially access common kernel structures:
+We're changing kprobes to add a specific flag to say that we want to
+differentiate between kernel or user reads. Can this be done with
+bpf_probe_read()? If it's showing up in perf report, I doubt a single
+check is going to cause an issue. In fact, it may actually help speed
+things up as the read will be optimized for either user or kernel
+address reading.
 
->>> init = find_task(prog, 1)
->>> fd = fget(init, 3)
->>> fd.f_inode.i_sb.s_type.name
-(const char *)0xffffffff862bf29c = "devtmpfs"
-
-Since it's just Python, it's also easy to do more complex analysis:
-
->>> sum(1 for _ in list_for_each(fd.f_inode.i_sb.s_inodes.address_of_()))
-491
-
-I've been using this to debug issues in production at Facebook. Since
-the project is relatively new, some of it is still in flux. I'm
-currently rewriting the core components in C for performance reasons.
-Next after that is improved documentation as well as stack trace
-support, which is the biggest missing feature. Regardless, it's already
-proven quite useful, so I'd love a chance to talk about it and gather
-feedback.
-
-Thanks!
-
-1: https://github.com/osandov/drgn
+-- Steve
