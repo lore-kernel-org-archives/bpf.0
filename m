@@ -2,33 +2,68 @@ Return-Path: <SRS0=sv//=Q5=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EE9BC43381
-	for <bpf@archiver.kernel.org>; Fri, 22 Feb 2019 19:39:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79CDDC43381
+	for <bpf@archiver.kernel.org>; Fri, 22 Feb 2019 19:55:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2C9CC2070B
-	for <bpf@archiver.kernel.org>; Fri, 22 Feb 2019 19:39:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4439120700
+	for <bpf@archiver.kernel.org>; Fri, 22 Feb 2019 19:55:34 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=amacapital-net.20150623.gappssmtp.com header.i=@amacapital-net.20150623.gappssmtp.com header.b="EKghYf3/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726181AbfBVTjd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Feb 2019 14:39:33 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34956 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726086AbfBVTjc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Feb 2019 14:39:32 -0500
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DCA3F20700;
-        Fri, 22 Feb 2019 19:39:30 +0000 (UTC)
-Date:   Fri, 22 Feb 2019 14:39:29 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        id S1726298AbfBVTze (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Feb 2019 14:55:34 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:38219 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725832AbfBVTzd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Feb 2019 14:55:33 -0500
+Received: by mail-pf1-f196.google.com with SMTP id n125so1571676pfn.5
+        for <bpf@vger.kernel.org>; Fri, 22 Feb 2019 11:55:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=1ESzouTd9aSWneyfe8zSKSWmCjsDjjoGvrPNjmnih9s=;
+        b=EKghYf3/ECMuQqiCphtTOBJR0bxnF42l29yQRcAy3OEWv6isIeIRgokWGvaAP8owCF
+         f8ifYTA9dT4HUJbgauSO2vrSha1Tsd9PQ5I+veAtM1coa9GFz2S0cwo4YTyHEmlHLN2t
+         7waBoUwWqs9XgbXHWRk9shroCL7o/4PKDvYFAPIdLVOMr9wSp/6eHZTxr1UBZDQUiEaw
+         bC8quQvt5hekrUMsO6grwDKo2sBYWGwnb2T3nSHHndPa07KTDvn7/KwrPE11uYczMoZY
+         EGGtYD+hhlywwuyKEXY/wMM8eRReroQvlgvQHHbWQ3aiRLv31qh8LCWWP9yLMFyEF5Ch
+         HCow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=1ESzouTd9aSWneyfe8zSKSWmCjsDjjoGvrPNjmnih9s=;
+        b=NdECV3rSAZ4OpkSwyvzvepTEhFPBaOgbi6LQzkuwTqvX2xAL/y5cc7k6Oy1HoQG4BO
+         1lP+KSYbU8x8e3+BPY7wDqa9wBl1zAk+7hZtgIFtpz75Wk+1YY5t2rQTacqVKHLKx8HJ
+         SCPez9Vmkbds1N2l9lP15Z6r6/HR0neFKNqp3FLK4obSXnPFeUylnTMfww6Qi7CgPsye
+         Fl0RQ5JRLd/SoIFqusuAWk/AtWM3eLj7kb1jCcPhotXbgFmNrNK9W87VqrM5NxdahIsv
+         ee+hDHgt5dh1UyXPOAPTHEYkreoYZI0vmUwX88oHCvAqJdUme1m7qp5ChdIyh8gebPZB
+         4Tcg==
+X-Gm-Message-State: AHQUAua5+WdsegRWf/X2u2ZdWjrajMvv+g2RNBzXHkdILVxpJeLXPivq
+        8TshsuL73vdUnPyuGuCYVxIiqw==
+X-Google-Smtp-Source: AHgI3IYbHALC35fkk9jFV0wILUOoh9ZLE6OTYm+HLspqMvl+XYJjh3BGaGC4gEb8XCBBBNl+w2lBIQ==
+X-Received: by 2002:a63:c042:: with SMTP id z2mr5560103pgi.307.1550865332963;
+        Fri, 22 Feb 2019 11:55:32 -0800 (PST)
+Received: from ?IPv6:2601:646:c200:7429:6592:abd7:9236:4c2f? ([2601:646:c200:7429:6592:abd7:9236:4c2f])
+        by smtp.gmail.com with ESMTPSA id s12sm3094320pfm.120.2019.02.22.11.55.31
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 22 Feb 2019 11:55:32 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH 1/2 v2] kprobe: Do not use uaccess functions to access kernel memory that can fault
+From:   Andy Lutomirski <luto@amacapital.net>
+X-Mailer: iPhone Mail (16D57)
+In-Reply-To: <20190222193456.5vqppubzrcx5wsul@ast-mbp.dhcp.thefacebook.com>
+Date:   Fri, 22 Feb 2019 11:55:31 -0800
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
         Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
         Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -38,42 +73,61 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Kees Cook <keescook@chromium.org>,
         Andy Lutomirski <luto@kernel.org>, daniel@iogearbox.net,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 1/2 v2] kprobe: Do not use uaccess functions to access
- kernel memory that can fault
-Message-ID: <20190222143911.617604af@gandalf.local.home>
-In-Reply-To: <20190222193456.5vqppubzrcx5wsul@ast-mbp.dhcp.thefacebook.com>
-References: <20190219111802.1d6dbaa3@gandalf.local.home>
-        <CAHk-=wgTuK3kAduP-gr10vykT1uG=B2VpdffvmyBuTQ1UxPpMg@mail.gmail.com>
-        <20190219140330.5dd9e876@gandalf.local.home>
-        <20190220171019.5e81a4946b56982f324f7c45@kernel.org>
-        <20190220094926.0ab575b3@gandalf.local.home>
-        <20190222172745.2c7205d62003c0a858e33278@kernel.org>
-        <20190222173509.88489b7c5d1bf0e2ec2382ee@kernel.org>
-        <CAHk-=whNf_n1WXWW+ugAVeL5ZK0GcEP3cTYocju1nS85VtMjjQ@mail.gmail.com>
-        <20190222192703.epvgxghwybte7gxs@ast-mbp.dhcp.thefacebook.com>
-        <20190222143026.17d6f0f6@gandalf.local.home>
-        <20190222193456.5vqppubzrcx5wsul@ast-mbp.dhcp.thefacebook.com>
-X-Mailer: Claws Mail 3.16.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <9E670A9A-699C-4B65-962F-CE1AEFD72974@amacapital.net>
+References: <20190219111802.1d6dbaa3@gandalf.local.home> <CAHk-=wgTuK3kAduP-gr10vykT1uG=B2VpdffvmyBuTQ1UxPpMg@mail.gmail.com> <20190219140330.5dd9e876@gandalf.local.home> <20190220171019.5e81a4946b56982f324f7c45@kernel.org> <20190220094926.0ab575b3@gandalf.local.home> <20190222172745.2c7205d62003c0a858e33278@kernel.org> <20190222173509.88489b7c5d1bf0e2ec2382ee@kernel.org> <CAHk-=whNf_n1WXWW+ugAVeL5ZK0GcEP3cTYocju1nS85VtMjjQ@mail.gmail.com> <20190222192703.epvgxghwybte7gxs@ast-mbp.dhcp.thefacebook.com> <20190222143026.17d6f0f6@gandalf.local.home> <20190222193456.5vqppubzrcx5wsul@ast-mbp.dhcp.thefacebook.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 22 Feb 2019 11:34:58 -0800
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
+
+> On Feb 22, 2019, at 11:34 AM, Alexei Starovoitov <alexei.starovoitov@gmail=
+.com> wrote:
+>=20
+>> On Fri, Feb 22, 2019 at 02:30:26PM -0500, Steven Rostedt wrote:
+>> On Fri, 22 Feb 2019 11:27:05 -0800
+>> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+>>=20
+>>>> On Fri, Feb 22, 2019 at 09:43:14AM -0800, Linus Torvalds wrote:
+>>>>=20
+>>>> Then we should still probably fix up "__probe_kernel_read()" to not
+>>>> allow user accesses. The easiest way to do that is actually likely to
+>>>> use the "unsafe_get_user()" functions *without* doing a
+>>>> uaccess_begin(), which will mean that modern CPU's will simply fault
+>>>> on a kernel access to user space. =20
+>>>=20
+>>> On bpf side the bpf_probe_read() helper just calls probe_kernel_read()
+>>> and users pass both user and kernel addresses into it and expect
+>>> that the helper will actually try to read from that address.
+>>>=20
+>>> If __probe_kernel_read will suddenly start failing on all user addresses=
+
+>>> it will break the expectations.
+>>> How do we solve it in bpf_probe_read?
+>>> Call probe_kernel_read and if that fails call unsafe_get_user byte-by-by=
+te
+>>> in the loop?
+>>> That's doable, but people already complain that bpf_probe_read() is slow=
+
+>>> and shows up in their perf report.
+>>=20
+>> We're changing kprobes to add a specific flag to say that we want to
+>> differentiate between kernel or user reads. Can this be done with
+>> bpf_probe_read()? If it's showing up in perf report, I doubt a single
+>=20
 > so you're saying you will break existing kprobe scripts?
-
-Yes we may.
-
 > I don't think it's a good idea.
 > It's not acceptable to break bpf_probe_read uapi.
+>=20
 
-Then you may need to add more code to determine if the address is user
-space or not in the kernel, and then go the appropriate route, before
-calling probe_kernel_read().
+If so, the uapi is wrong: a long-sized number does not reliably identify an a=
+ddress if you don=E2=80=99t separately know whether it=E2=80=99s a user or k=
+ernel address. s390x and 4G:4G x86_32 are the notable exceptions. I have lob=
+bied for RISC-V and future x86_64 to join the crowd.  I don=E2=80=99t know w=
+hether I=E2=80=99ll win this fight, but the uapi will probably have to chang=
+e for at least s390x.
 
--- Steve
+What to do about existing scripts is a different question.=
