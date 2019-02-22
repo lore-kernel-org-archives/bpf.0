@@ -2,70 +2,41 @@ Return-Path: <SRS0=sv//=Q5=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+X-Spam-Status: No, score=-1.2 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77231C43381
-	for <bpf@archiver.kernel.org>; Fri, 22 Feb 2019 22:18:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8A77C43381
+	for <bpf@archiver.kernel.org>; Fri, 22 Feb 2019 22:23:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 39D3E20675
-	for <bpf@archiver.kernel.org>; Fri, 22 Feb 2019 22:18:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72299206C0
+	for <bpf@archiver.kernel.org>; Fri, 22 Feb 2019 22:23:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SL0/TkWy"
+	dkim=pass (1024-bit key) header.d=vmware.com header.i=@vmware.com header.b="I2GJjwU3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725900AbfBVWST (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Feb 2019 17:18:19 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:33686 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725814AbfBVWSS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Feb 2019 17:18:18 -0500
-Received: by mail-ot1-f67.google.com with SMTP id q24so3244035otk.0
-        for <bpf@vger.kernel.org>; Fri, 22 Feb 2019 14:18:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=NKBOUe4Z87PihIW/Oq4UnkWIjxrxPR2My4hzeBYqK5M=;
-        b=SL0/TkWyaLtzfIMAmW9AR6Eu1ol+YLIgN3w9c02OwzXGC3pSG3JoPQvZmm7eV5eIgo
-         JfBtoT/66tEX2M0xrpHurwqZdSxnL00bhQHyLR7Oc4bVyoTtbDRkYV29RLCy3JrcF0ml
-         UjEuXaF5yKF7q+FwTksr4piig1wsn8Z0ENwT7Fp36CcOSV47/YmLZAEdzwcalFewwmNo
-         iwBLdz1XvSiR4Nyu7zYC5YYFhlDdIJqb14jzbRGOpkdHdy29Xe+Z4qNu0HWVMSxO/WXV
-         j2jx/fssigIfRJ9aJNnugcslwepqdH4DuiCpZp5jiSDS3FhKwJlekZo4QwIG5CKp3C0V
-         2mCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=NKBOUe4Z87PihIW/Oq4UnkWIjxrxPR2My4hzeBYqK5M=;
-        b=Dmk32PRPaR6VU4FMJIjxwsuHZswo99YlQcrmrHKrLwtKOzxdHhxvryIDKbgRQuZuoM
-         L8Fp6fbZZfzgIoZA6fRAf7TtCGW4UbpAhoKS1dgAhVGBKbb4FsVhA4PLH3Hun2qDkoEu
-         eDM6bgpRi2w+V8xBM0XDBZw/hPnAjlz65g0vBNhQll+XVUL2OTdh38/wYod8V5vnNTfW
-         vqR8CxsBvBPJgg9nyqfZpS2YGTf068DHXIEZo4heab1X9C9fqUWX5yaxo1vQwJP453IX
-         yb3Vef8HG4DWLK8SFxmSXrMH3rpy9MUS8W+4F8245KIBFGOLndGE45ZLYOgyzt/pCxLu
-         yzdQ==
-X-Gm-Message-State: AHQUAubAI/Dl0XSzmywQ2++3oPpaZQk4+MHtRrizp6ttbAyftnvLMnpB
-        lNCsKc5p6eJD/IThgz7Y45c8sNWIpxbshKqZuoBUKg==
-X-Google-Smtp-Source: AHgI3IZkqmh0Dhhx+55L61ufYQ5vSjwy/gJOpFZia9RuqDSRg/0guweCfX1mKfFYHYaAc7ywtsSUhO+xQetLRRu63nM=
-X-Received: by 2002:a05:6830:14d6:: with SMTP id t22mr4297446otq.255.1550873897129;
- Fri, 22 Feb 2019 14:18:17 -0800 (PST)
-MIME-Version: 1.0
-References: <20190219111802.1d6dbaa3@gandalf.local.home> <CAHk-=wgTuK3kAduP-gr10vykT1uG=B2VpdffvmyBuTQ1UxPpMg@mail.gmail.com>
- <20190219140330.5dd9e876@gandalf.local.home> <20190220171019.5e81a4946b56982f324f7c45@kernel.org>
- <20190220094926.0ab575b3@gandalf.local.home> <20190222172745.2c7205d62003c0a858e33278@kernel.org>
- <20190222173509.88489b7c5d1bf0e2ec2382ee@kernel.org> <CAHk-=whNf_n1WXWW+ugAVeL5ZK0GcEP3cTYocju1nS85VtMjjQ@mail.gmail.com>
- <20190222192703.epvgxghwybte7gxs@ast-mbp.dhcp.thefacebook.com>
- <20190222143026.17d6f0f6@gandalf.local.home> <20190222193456.5vqppubzrcx5wsul@ast-mbp.dhcp.thefacebook.com>
- <9E670A9A-699C-4B65-962F-CE1AEFD72974@amacapital.net> <CAG48ez2tVwzhKPu1tvK+E52jUCq5vTwjssrtMaGuCO=kMpSXGw@mail.gmail.com>
- <0ED6836E-3432-4E1C-BABC-BEA6BDD36287@vmware.com>
-In-Reply-To: <0ED6836E-3432-4E1C-BABC-BEA6BDD36287@vmware.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Fri, 22 Feb 2019 23:17:50 +0100
-Message-ID: <CAG48ez10RH2YhQ0wnEDOpKoGjrociq+zK0En6Aq06Yg9W3o5aQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2 v2] kprobe: Do not use uaccess functions to access
- kernel memory that can fault
-To:     Nadav Amit <namit@vmware.com>
-Cc:     Andy Lutomirski <luto@amacapital.net>,
+        id S1726435AbfBVWX1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Feb 2019 17:23:27 -0500
+Received: from mail-eopbgr680042.outbound.protection.outlook.com ([40.107.68.42]:46880
+        "EHLO NAM04-BN3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725878AbfBVWX0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Feb 2019 17:23:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=icqfUX7UhDvMVhTlkrgK86HpMcGJjA//fDU2fikvLkE=;
+ b=I2GJjwU3auymdfCcl611c8ENx6BpogQfVG1fcJeYjVmpOxvE7y3tsCCjl2ipQNSa732nd9bVeIYYXXoS5JZS8979DhSqfuwhhrK2zazLtHF6bgv+mU/2iMvvhlRqSegBEEi9AEyp4+gMsPpDQVorwY5I+hhyRX2Kfeajl/+mlio=
+Received: from BYAPR05MB4776.namprd05.prod.outlook.com (52.135.233.146) by
+ BYAPR05MB6533.namprd05.prod.outlook.com (20.178.234.15) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1643.11; Fri, 22 Feb 2019 22:21:39 +0000
+Received: from BYAPR05MB4776.namprd05.prod.outlook.com
+ ([fe80::6cf6:1336:9f92:b1b5]) by BYAPR05MB4776.namprd05.prod.outlook.com
+ ([fe80::6cf6:1336:9f92:b1b5%4]) with mapi id 15.20.1665.008; Fri, 22 Feb 2019
+ 22:21:39 +0000
+From:   Nadav Amit <namit@vmware.com>
+To:     Jann Horn <jannh@google.com>
+CC:     Andy Lutomirski <luto@amacapital.net>,
         Alexei Starovoitov <alexei.starovoitov@gmail.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
@@ -82,100 +53,143 @@ Cc:     Andy Lutomirski <luto@amacapital.net>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
         Dave Hansen <dave.hansen@intel.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 1/2 v2] kprobe: Do not use uaccess functions to access
+ kernel memory that can fault
+Thread-Topic: [PATCH 1/2 v2] kprobe: Do not use uaccess functions to access
+ kernel memory that can fault
+Thread-Index: AQHUyvfM0aln3zH+GEuLAnG94DvLR6XsYEWAgAACsACAAAEPAA==
+Date:   Fri, 22 Feb 2019 22:21:39 +0000
+Message-ID: <7701651F-F10E-4212-925E-1CB77C5D3E69@vmware.com>
+References: <20190219111802.1d6dbaa3@gandalf.local.home>
+ <CAHk-=wgTuK3kAduP-gr10vykT1uG=B2VpdffvmyBuTQ1UxPpMg@mail.gmail.com>
+ <20190219140330.5dd9e876@gandalf.local.home>
+ <20190220171019.5e81a4946b56982f324f7c45@kernel.org>
+ <20190220094926.0ab575b3@gandalf.local.home>
+ <20190222172745.2c7205d62003c0a858e33278@kernel.org>
+ <20190222173509.88489b7c5d1bf0e2ec2382ee@kernel.org>
+ <CAHk-=whNf_n1WXWW+ugAVeL5ZK0GcEP3cTYocju1nS85VtMjjQ@mail.gmail.com>
+ <20190222192703.epvgxghwybte7gxs@ast-mbp.dhcp.thefacebook.com>
+ <20190222143026.17d6f0f6@gandalf.local.home>
+ <20190222193456.5vqppubzrcx5wsul@ast-mbp.dhcp.thefacebook.com>
+ <9E670A9A-699C-4B65-962F-CE1AEFD72974@amacapital.net>
+ <CAG48ez2tVwzhKPu1tvK+E52jUCq5vTwjssrtMaGuCO=kMpSXGw@mail.gmail.com>
+ <0ED6836E-3432-4E1C-BABC-BEA6BDD36287@vmware.com>
+ <CAG48ez10RH2YhQ0wnEDOpKoGjrociq+zK0En6Aq06Yg9W3o5aQ@mail.gmail.com>
+In-Reply-To: <CAG48ez10RH2YhQ0wnEDOpKoGjrociq+zK0En6Aq06Yg9W3o5aQ@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=namit@vmware.com; 
+x-originating-ip: [208.91.2.1]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2bd44469-44a4-433e-f137-08d699141dcd
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600110)(711020)(4605104)(2017052603328)(7153060)(7193020);SRVR:BYAPR05MB6533;
+x-ms-traffictypediagnostic: BYAPR05MB6533:
+x-ms-exchange-purlcount: 2
+x-microsoft-exchange-diagnostics: 1;BYAPR05MB6533;20:tvaIYbri2y0uVhRPPu36nscddxg28aaKp375N8HLQu1exjGJlGHcR3KAQE+tLFT0i/jygH2mMm8llJDfy6/7P9oLgAD4y2RXbYEzCM4rCsvTLp2ukRTUzDkcYP8dA3i+5DilGd3QW7WVyRd40loLdh3L/bnbebkViXBNDK/jhtQ=
+x-microsoft-antispam-prvs: <BYAPR05MB6533E6EF390818FAEA84636ED07F0@BYAPR05MB6533.namprd05.prod.outlook.com>
+x-forefront-prvs: 09565527D6
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(376002)(39860400002)(396003)(136003)(346002)(189003)(199004)(6512007)(478600001)(68736007)(82746002)(6306002)(45080400002)(93886005)(6506007)(81166006)(76176011)(8676002)(256004)(102836004)(53546011)(81156014)(6246003)(14454004)(86362001)(14444005)(305945005)(66066001)(71200400001)(7736002)(71190400001)(83716004)(36756003)(53936002)(316002)(3846002)(2906002)(8936002)(105586002)(186003)(33656002)(26005)(6116002)(54906003)(6486002)(476003)(106356001)(6916009)(99286004)(11346002)(446003)(2616005)(4326008)(229853002)(7416002)(25786009)(486006)(5660300002)(97736004)(6436002);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR05MB6533;H:BYAPR05MB4776.namprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: vmware.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: EE4DbvXtQxgE4jPIrwRCl+Efz2jCinmh+btVSIDnjNfj/CQZm0axNqSnt0VC4Yfqsdb+ltA6qYMKNqVc4JuzmU+YG9GIL9D7mwvOshY40vZofAyCcJSkNyJJdWiB1LyLkM0nxFyhUrvdvKBMmKkT/y0f0Zi0BfAQ6bnmzjHZ24XCE8xg1RCV6UQ+I0NameRkb0NmhJ73S1xsEyw4MaOdySdqvNa3jmmZueLIych2ji2V62ID4pIXzqj2wgUXddSLOtlbXBxmX8/rUuzZsxV0Fg0nXJqCdGYu4ZW4UvLpRucE5UAPRLcnrYf/XtWL2L8fCASk07TgwYsbCWtSA5C3zEY9jCbafi/2hb7FXssVE1TlNikKZuYTv3LCT1fB3O/f9q8PJsoS2luusWVv8hU6ud0H3NI3B/NtZIZdw7n5NDo=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F223E39CF6B9104CBD3B630AE57284F5@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2bd44469-44a4-433e-f137-08d699141dcd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Feb 2019 22:21:39.6114
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR05MB6533
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Feb 22, 2019 at 11:08 PM Nadav Amit <namit@vmware.com> wrote:
-> > On Feb 22, 2019, at 1:43 PM, Jann Horn <jannh@google.com> wrote:
-> >
-> > (adding some people from the text_poke series to the thread, removing s=
-table@)
-> >
-> > On Fri, Feb 22, 2019 at 8:55 PM Andy Lutomirski <luto@amacapital.net> w=
-rote:
-> >>> On Feb 22, 2019, at 11:34 AM, Alexei Starovoitov <alexei.starovoitov@=
-gmail.com> wrote:
-> >>>> On Fri, Feb 22, 2019 at 02:30:26PM -0500, Steven Rostedt wrote:
-> >>>> On Fri, 22 Feb 2019 11:27:05 -0800
-> >>>> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> >>>>
-> >>>>>> On Fri, Feb 22, 2019 at 09:43:14AM -0800, Linus Torvalds wrote:
-> >>>>>>
-> >>>>>> Then we should still probably fix up "__probe_kernel_read()" to no=
-t
-> >>>>>> allow user accesses. The easiest way to do that is actually likely=
- to
-> >>>>>> use the "unsafe_get_user()" functions *without* doing a
-> >>>>>> uaccess_begin(), which will mean that modern CPU's will simply fau=
-lt
-> >>>>>> on a kernel access to user space.
-> >>>>>
-> >>>>> On bpf side the bpf_probe_read() helper just calls probe_kernel_rea=
-d()
-> >>>>> and users pass both user and kernel addresses into it and expect
-> >>>>> that the helper will actually try to read from that address.
-> >>>>>
-> >>>>> If __probe_kernel_read will suddenly start failing on all user addr=
-esses
-> >>>>> it will break the expectations.
-> >>>>> How do we solve it in bpf_probe_read?
-> >>>>> Call probe_kernel_read and if that fails call unsafe_get_user byte-=
-by-byte
-> >>>>> in the loop?
-> >>>>> That's doable, but people already complain that bpf_probe_read() is=
- slow
-> >>>>> and shows up in their perf report.
-> >>>>
-> >>>> We're changing kprobes to add a specific flag to say that we want to
-> >>>> differentiate between kernel or user reads. Can this be done with
-> >>>> bpf_probe_read()? If it's showing up in perf report, I doubt a singl=
-e
-> >>>
-> >>> so you're saying you will break existing kprobe scripts?
-> >>> I don't think it's a good idea.
-> >>> It's not acceptable to break bpf_probe_read uapi.
-> >>
-> >> If so, the uapi is wrong: a long-sized number does not reliably identi=
-fy an address if you don=E2=80=99t separately know whether it=E2=80=99s a u=
-ser or kernel address. s390x and 4G:4G x86_32 are the notable exceptions. I=
- have lobbied for RISC-V and future x86_64 to join the crowd.  I don=E2=80=
-=99t know whether I=E2=80=99ll win this fight, but the uapi will probably h=
-ave to change for at least s390x.
-> >>
-> >> What to do about existing scripts is a different question.
-> >
-> > This lack of logical separation between user and kernel addresses
-> > might interact interestingly with the text_poke series, specifically
-> > "[PATCH v3 05/20] x86/alternative: Initialize temporary mm for
-> > patching" (https://na01.safelinks.protection.outlook.com/?url=3Dhttps%3=
-A%2F%2Flore.kernel.org%2Flkml%2F20190221234451.17632-6-rick.p.edgecombe%40i=
-ntel.com%2F&amp;data=3D02%7C01%7Cnamit%40vmware.com%7Cd44d6f0765dd49b20db70=
-8d6990ee7e8%7Cb39138ca3cee4b4aa4d6cd83d9dd62f0%7C0%7C0%7C636864686717142892=
-&amp;sdata=3DgVALdkEULEhj4iJNEWAGxyYWe2lxnHRdamW5ZA2A5RQ%3D&amp;reserved=3D=
-0)
-> > and "[PATCH v3 06/20] x86/alternative: Use temporary mm for text
-> > poking" (https://na01.safelinks.protection.outlook.com/?url=3Dhttps%3A%=
-2F%2Flore.kernel.org%2Flkml%2F20190221234451.17632-7-rick.p.edgecombe%40int=
-el.com%2F&amp;data=3D02%7C01%7Cnamit%40vmware.com%7Cd44d6f0765dd49b20db708d=
-6990ee7e8%7Cb39138ca3cee4b4aa4d6cd83d9dd62f0%7C0%7C0%7C636864686717142892&a=
-mp;sdata=3Dnu2J1FtJsZJmt53SKJz8C8ktWE9eycwdAA%2BiCi1TfCc%3D&amp;reserved=3D=
-0),
-> > right? If someone manages to get a tracing BPF program to trigger in a
-> > task that has switched to the patching mm, could they use
-> > bpf_probe_write_user() - which uses probe_kernel_write() after
-> > checking that KERNEL_DS isn't active and that access_ok() passes - to
-> > overwrite kernel text that is mapped writable in the patching mm?
->
-> Yes, this is a good point. I guess text_poke() should be defined with
-> =E2=80=9C__kprobes=E2=80=9D and open-code memcpy.
->
-> Does it sound reasonable?
-
-Doesn't __text_poke() as implemented in the proposed patch use a
-couple other kernel functions, too? Like switch_mm_irqs_off() and
-pte_clear() (which can be a call into a separate function on paravirt
-kernels)?
+PiBPbiBGZWIgMjIsIDIwMTksIGF0IDI6MTcgUE0sIEphbm4gSG9ybiA8amFubmhAZ29vZ2xlLmNv
+bT4gd3JvdGU6DQo+IA0KPiBPbiBGcmksIEZlYiAyMiwgMjAxOSBhdCAxMTowOCBQTSBOYWRhdiBB
+bWl0IDxuYW1pdEB2bXdhcmUuY29tPiB3cm90ZToNCj4+PiBPbiBGZWIgMjIsIDIwMTksIGF0IDE6
+NDMgUE0sIEphbm4gSG9ybiA8amFubmhAZ29vZ2xlLmNvbT4gd3JvdGU6DQo+Pj4gDQo+Pj4gKGFk
+ZGluZyBzb21lIHBlb3BsZSBmcm9tIHRoZSB0ZXh0X3Bva2Ugc2VyaWVzIHRvIHRoZSB0aHJlYWQs
+IHJlbW92aW5nIHN0YWJsZUApDQo+Pj4gDQo+Pj4gT24gRnJpLCBGZWIgMjIsIDIwMTkgYXQgODo1
+NSBQTSBBbmR5IEx1dG9taXJza2kgPGx1dG9AYW1hY2FwaXRhbC5uZXQ+IHdyb3RlOg0KPj4+Pj4g
+T24gRmViIDIyLCAyMDE5LCBhdCAxMTozNCBBTSwgQWxleGVpIFN0YXJvdm9pdG92IDxhbGV4ZWku
+c3Rhcm92b2l0b3ZAZ21haWwuY29tPiB3cm90ZToNCj4+Pj4+PiBPbiBGcmksIEZlYiAyMiwgMjAx
+OSBhdCAwMjozMDoyNlBNIC0wNTAwLCBTdGV2ZW4gUm9zdGVkdCB3cm90ZToNCj4+Pj4+PiBPbiBG
+cmksIDIyIEZlYiAyMDE5IDExOjI3OjA1IC0wODAwDQo+Pj4+Pj4gQWxleGVpIFN0YXJvdm9pdG92
+IDxhbGV4ZWkuc3Rhcm92b2l0b3ZAZ21haWwuY29tPiB3cm90ZToNCj4+Pj4+PiANCj4+Pj4+Pj4+
+IE9uIEZyaSwgRmViIDIyLCAyMDE5IGF0IDA5OjQzOjE0QU0gLTA4MDAsIExpbnVzIFRvcnZhbGRz
+IHdyb3RlOg0KPj4+Pj4+Pj4gDQo+Pj4+Pj4+PiBUaGVuIHdlIHNob3VsZCBzdGlsbCBwcm9iYWJs
+eSBmaXggdXAgIl9fcHJvYmVfa2VybmVsX3JlYWQoKSIgdG8gbm90DQo+Pj4+Pj4+PiBhbGxvdyB1
+c2VyIGFjY2Vzc2VzLiBUaGUgZWFzaWVzdCB3YXkgdG8gZG8gdGhhdCBpcyBhY3R1YWxseSBsaWtl
+bHkgdG8NCj4+Pj4+Pj4+IHVzZSB0aGUgInVuc2FmZV9nZXRfdXNlcigpIiBmdW5jdGlvbnMgKndp
+dGhvdXQqIGRvaW5nIGENCj4+Pj4+Pj4+IHVhY2Nlc3NfYmVnaW4oKSwgd2hpY2ggd2lsbCBtZWFu
+IHRoYXQgbW9kZXJuIENQVSdzIHdpbGwgc2ltcGx5IGZhdWx0DQo+Pj4+Pj4+PiBvbiBhIGtlcm5l
+bCBhY2Nlc3MgdG8gdXNlciBzcGFjZS4NCj4+Pj4+Pj4gDQo+Pj4+Pj4+IE9uIGJwZiBzaWRlIHRo
+ZSBicGZfcHJvYmVfcmVhZCgpIGhlbHBlciBqdXN0IGNhbGxzIHByb2JlX2tlcm5lbF9yZWFkKCkN
+Cj4+Pj4+Pj4gYW5kIHVzZXJzIHBhc3MgYm90aCB1c2VyIGFuZCBrZXJuZWwgYWRkcmVzc2VzIGlu
+dG8gaXQgYW5kIGV4cGVjdA0KPj4+Pj4+PiB0aGF0IHRoZSBoZWxwZXIgd2lsbCBhY3R1YWxseSB0
+cnkgdG8gcmVhZCBmcm9tIHRoYXQgYWRkcmVzcy4NCj4+Pj4+Pj4gDQo+Pj4+Pj4+IElmIF9fcHJv
+YmVfa2VybmVsX3JlYWQgd2lsbCBzdWRkZW5seSBzdGFydCBmYWlsaW5nIG9uIGFsbCB1c2VyIGFk
+ZHJlc3Nlcw0KPj4+Pj4+PiBpdCB3aWxsIGJyZWFrIHRoZSBleHBlY3RhdGlvbnMuDQo+Pj4+Pj4+
+IEhvdyBkbyB3ZSBzb2x2ZSBpdCBpbiBicGZfcHJvYmVfcmVhZD8NCj4+Pj4+Pj4gQ2FsbCBwcm9i
+ZV9rZXJuZWxfcmVhZCBhbmQgaWYgdGhhdCBmYWlscyBjYWxsIHVuc2FmZV9nZXRfdXNlciBieXRl
+LWJ5LWJ5dGUNCj4+Pj4+Pj4gaW4gdGhlIGxvb3A/DQo+Pj4+Pj4+IFRoYXQncyBkb2FibGUsIGJ1
+dCBwZW9wbGUgYWxyZWFkeSBjb21wbGFpbiB0aGF0IGJwZl9wcm9iZV9yZWFkKCkgaXMgc2xvdw0K
+Pj4+Pj4+PiBhbmQgc2hvd3MgdXAgaW4gdGhlaXIgcGVyZiByZXBvcnQuDQo+Pj4+Pj4gDQo+Pj4+
+Pj4gV2UncmUgY2hhbmdpbmcga3Byb2JlcyB0byBhZGQgYSBzcGVjaWZpYyBmbGFnIHRvIHNheSB0
+aGF0IHdlIHdhbnQgdG8NCj4+Pj4+PiBkaWZmZXJlbnRpYXRlIGJldHdlZW4ga2VybmVsIG9yIHVz
+ZXIgcmVhZHMuIENhbiB0aGlzIGJlIGRvbmUgd2l0aA0KPj4+Pj4+IGJwZl9wcm9iZV9yZWFkKCk/
+IElmIGl0J3Mgc2hvd2luZyB1cCBpbiBwZXJmIHJlcG9ydCwgSSBkb3VidCBhIHNpbmdsZQ0KPj4+
+Pj4gDQo+Pj4+PiBzbyB5b3UncmUgc2F5aW5nIHlvdSB3aWxsIGJyZWFrIGV4aXN0aW5nIGtwcm9i
+ZSBzY3JpcHRzPw0KPj4+Pj4gSSBkb24ndCB0aGluayBpdCdzIGEgZ29vZCBpZGVhLg0KPj4+Pj4g
+SXQncyBub3QgYWNjZXB0YWJsZSB0byBicmVhayBicGZfcHJvYmVfcmVhZCB1YXBpLg0KPj4+PiAN
+Cj4+Pj4gSWYgc28sIHRoZSB1YXBpIGlzIHdyb25nOiBhIGxvbmctc2l6ZWQgbnVtYmVyIGRvZXMg
+bm90IHJlbGlhYmx5IGlkZW50aWZ5IGFuIGFkZHJlc3MgaWYgeW91IGRvbuKAmXQgc2VwYXJhdGVs
+eSBrbm93IHdoZXRoZXIgaXTigJlzIGEgdXNlciBvciBrZXJuZWwgYWRkcmVzcy4gczM5MHggYW5k
+IDRHOjRHIHg4Nl8zMiBhcmUgdGhlIG5vdGFibGUgZXhjZXB0aW9ucy4gSSBoYXZlIGxvYmJpZWQg
+Zm9yIFJJU0MtViBhbmQgZnV0dXJlIHg4Nl82NCB0byBqb2luIHRoZSBjcm93ZC4gIEkgZG9u4oCZ
+dCBrbm93IHdoZXRoZXIgSeKAmWxsIHdpbiB0aGlzIGZpZ2h0LCBidXQgdGhlIHVhcGkgd2lsbCBw
+cm9iYWJseSBoYXZlIHRvIGNoYW5nZSBmb3IgYXQgbGVhc3QgczM5MHguDQo+Pj4+IA0KPj4+PiBX
+aGF0IHRvIGRvIGFib3V0IGV4aXN0aW5nIHNjcmlwdHMgaXMgYSBkaWZmZXJlbnQgcXVlc3Rpb24u
+DQo+Pj4gDQo+Pj4gVGhpcyBsYWNrIG9mIGxvZ2ljYWwgc2VwYXJhdGlvbiBiZXR3ZWVuIHVzZXIg
+YW5kIGtlcm5lbCBhZGRyZXNzZXMNCj4+PiBtaWdodCBpbnRlcmFjdCBpbnRlcmVzdGluZ2x5IHdp
+dGggdGhlIHRleHRfcG9rZSBzZXJpZXMsIHNwZWNpZmljYWxseQ0KPj4+ICJbUEFUQ0ggdjMgMDUv
+MjBdIHg4Ni9hbHRlcm5hdGl2ZTogSW5pdGlhbGl6ZSB0ZW1wb3JhcnkgbW0gZm9yDQo+Pj4gcGF0
+Y2hpbmciIChodHRwczovL25hMDEuc2FmZWxpbmtzLnByb3RlY3Rpb24ub3V0bG9vay5jb20vP3Vy
+bD1odHRwcyUzQSUyRiUyRmxvcmUua2VybmVsLm9yZyUyRmxrbWwlMkYyMDE5MDIyMTIzNDQ1MS4x
+NzYzMi02LXJpY2sucC5lZGdlY29tYmUlNDBpbnRlbC5jb20lMkYmYW1wO2RhdGE9MDIlN0MwMSU3
+Q25hbWl0JTQwdm13YXJlLmNvbSU3Q2YyNTEzMDA5ZWY3MzRlY2Q2YjBkMDhkNjk5MTNhNWFlJTdD
+YjM5MTM4Y2EzY2VlNGI0YWE0ZDZjZDgzZDlkZDYyZjAlN0MwJTdDMCU3QzYzNjg2NDcwNzAyMDgy
+MTc5MyZhbXA7c2RhdGE9SEFibkRjckJuZTY0SnlQdVZVTUttTTduUWs2N0YlMkJGdmp1WEVuOFRt
+SGVvJTNEJmFtcDtyZXNlcnZlZD0wKQ0KPj4+IGFuZCAiW1BBVENIIHYzIDA2LzIwXSB4ODYvYWx0
+ZXJuYXRpdmU6IFVzZSB0ZW1wb3JhcnkgbW0gZm9yIHRleHQNCj4+PiBwb2tpbmciIChodHRwczov
+L25hMDEuc2FmZWxpbmtzLnByb3RlY3Rpb24ub3V0bG9vay5jb20vP3VybD1odHRwcyUzQSUyRiUy
+RmxvcmUua2VybmVsLm9yZyUyRmxrbWwlMkYyMDE5MDIyMTIzNDQ1MS4xNzYzMi03LXJpY2sucC5l
+ZGdlY29tYmUlNDBpbnRlbC5jb20lMkYmYW1wO2RhdGE9MDIlN0MwMSU3Q25hbWl0JTQwdm13YXJl
+LmNvbSU3Q2YyNTEzMDA5ZWY3MzRlY2Q2YjBkMDhkNjk5MTNhNWFlJTdDYjM5MTM4Y2EzY2VlNGI0
+YWE0ZDZjZDgzZDlkZDYyZjAlN0MwJTdDMCU3QzYzNjg2NDcwNzAyMDgyMTc5MyZhbXA7c2RhdGE9
+dk5SSU1LdEZEeSUyRjN6NUZsVHdEaUpZNlZHRVYlMkZNSGdRUFRkRlNGdENvNHMlM0QmYW1wO3Jl
+c2VydmVkPTApLA0KPj4+IHJpZ2h0PyBJZiBzb21lb25lIG1hbmFnZXMgdG8gZ2V0IGEgdHJhY2lu
+ZyBCUEYgcHJvZ3JhbSB0byB0cmlnZ2VyIGluIGENCj4+PiB0YXNrIHRoYXQgaGFzIHN3aXRjaGVk
+IHRvIHRoZSBwYXRjaGluZyBtbSwgY291bGQgdGhleSB1c2UNCj4+PiBicGZfcHJvYmVfd3JpdGVf
+dXNlcigpIC0gd2hpY2ggdXNlcyBwcm9iZV9rZXJuZWxfd3JpdGUoKSBhZnRlcg0KPj4+IGNoZWNr
+aW5nIHRoYXQgS0VSTkVMX0RTIGlzbid0IGFjdGl2ZSBhbmQgdGhhdCBhY2Nlc3Nfb2soKSBwYXNz
+ZXMgLSB0bw0KPj4+IG92ZXJ3cml0ZSBrZXJuZWwgdGV4dCB0aGF0IGlzIG1hcHBlZCB3cml0YWJs
+ZSBpbiB0aGUgcGF0Y2hpbmcgbW0/DQo+PiANCj4+IFllcywgdGhpcyBpcyBhIGdvb2QgcG9pbnQu
+IEkgZ3Vlc3MgdGV4dF9wb2tlKCkgc2hvdWxkIGJlIGRlZmluZWQgd2l0aA0KPj4g4oCcX19rcHJv
+YmVz4oCdIGFuZCBvcGVuLWNvZGUgbWVtY3B5Lg0KPj4gDQo+PiBEb2VzIGl0IHNvdW5kIHJlYXNv
+bmFibGU/DQo+IA0KPiBEb2Vzbid0IF9fdGV4dF9wb2tlKCkgYXMgaW1wbGVtZW50ZWQgaW4gdGhl
+IHByb3Bvc2VkIHBhdGNoIHVzZSBhDQo+IGNvdXBsZSBvdGhlciBrZXJuZWwgZnVuY3Rpb25zLCB0
+b28/IExpa2Ugc3dpdGNoX21tX2lycXNfb2ZmKCkgYW5kDQo+IHB0ZV9jbGVhcigpICh3aGljaCBj
+YW4gYmUgYSBjYWxsIGludG8gYSBzZXBhcmF0ZSBmdW5jdGlvbiBvbiBwYXJhdmlydA0KPiBrZXJu
+ZWxzKT8NCg0KSSB3aWxsIG1vdmUgdGhlIHB0ZV9jbGVhcigpIHRvIGJlIGRvbmUgYWZ0ZXIgdGhl
+IHBva2luZyBtbSB3YXMgdW5sb2FkZWQuDQpHaXZlIG1lIGEgZmV3IG1pbnV0ZXMgdG8gc2VuZCBh
+IHNrZXRjaCBvZiB3aGF0IEkgdGhpbmsgc2hvdWxkIGJlIGRvbmUuDQoNCg==
