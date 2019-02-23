@@ -2,153 +2,92 @@ Return-Path: <SRS0=Kw1S=Q6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.2 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.2 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 754DAC43381
-	for <bpf@archiver.kernel.org>; Sat, 23 Feb 2019 04:51:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 732EBC43381
+	for <bpf@archiver.kernel.org>; Sat, 23 Feb 2019 17:44:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3E5FF20850
-	for <bpf@archiver.kernel.org>; Sat, 23 Feb 2019 04:51:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3FA34206B6
+	for <bpf@archiver.kernel.org>; Sat, 23 Feb 2019 17:44:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1550897493;
-	bh=42v0VnQi3IqZwIOMtu8X9hxtLnOZgCOMiNjt33ERHwk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=KFua+YodjR3pevBc1ayOUWVq9qDLtbNBwYf39ZaZcG/FJzCQ/AAKaApULoasDJm2A
-	 kE09lCVGFeQGa2nVZyt7CGqI3p1wDSdQHBmfmoXHwu8ya/d9/aHmpQNmZrgSxmLOQG
-	 9w1040dQYBuEW9ovUl73arcXHOo0pH+sTqgwWFBw=
+	s=default; t=1550943867;
+	bh=JwfBIFLVMjQTHsJeGc3mOgVWMK2HNupv6a/K4IUmZ9w=;
+	h=From:To:CC:Subject:Date:List-ID:From;
+	b=RMInrw7gw40vjd+ECrV7OLZrhXsh2bg+ky/6cW1Mw1njs1/tujexwV5f5a5nqlrwW
+	 J0732p7LJ9+VQSOVw28tS/MY7cJIJUvC3yqMdg5BfzAdDIkpmVKCZ0SHk2EBAFt5tS
+	 Vdbi94xsda9sZbyu5MSAYGQq81IHaAcNlpfwVDq4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727132AbfBWEvc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Feb 2019 23:51:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50332 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725821AbfBWEvc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Feb 2019 23:51:32 -0500
-Received: from devbox (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 05C12206A3;
-        Sat, 23 Feb 2019 04:51:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1550897490;
-        bh=42v0VnQi3IqZwIOMtu8X9hxtLnOZgCOMiNjt33ERHwk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RW6CV5sBrpGvBAojuJoLgh0HNgTHAf6PUk6pSMaYQGqv693gJEaT4eevt4w8N/ObM
-         WT/tFG6X7lVIT6k5Pvnq0zOxiMk4gT/fm1luImbhe4MX7VIPbp7yO7xDknetIrVNi2
-         IyivcLio7Y2Yo/+WKroQfUK8/cFOkXLluc+BU4fs=
-Date:   Sat, 23 Feb 2019 13:51:26 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        David Miller <davem@davemloft.net>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable <stable@vger.kernel.org>,
-        Changbin Du <changbin.du@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Lutomirski <luto@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Netdev <netdev@vger.kernel.org>, bpf@vger.kernel.org
-Subject: Re: [PATCH 1/2 v2] kprobe: Do not use uaccess functions to access
- kernel memory that can fault
-Message-Id: <20190223135126.1722237ffda9c50e66fff135@kernel.org>
-In-Reply-To: <20190222235618.dxewmv5dukltaoxl@ast-mbp.dhcp.thefacebook.com>
-References: <CAHk-=whNf_n1WXWW+ugAVeL5ZK0GcEP3cTYocju1nS85VtMjjQ@mail.gmail.com>
-        <20190222192703.epvgxghwybte7gxs@ast-mbp.dhcp.thefacebook.com>
-        <CAHk-=wib9VSbwbS+N82ZPNtvt4vrvYyHyQduhFimX8nyjCyZyA@mail.gmail.com>
-        <20190222.133842.1637029078039923178.davem@davemloft.net>
-        <CAHk-=wh9uWJaih5i6qBPer5rzcs=A+yb_ejU093b1esAhoFveQ@mail.gmail.com>
-        <20190222225103.o5rr5zr4fq77jdg4@ast-mbp.dhcp.thefacebook.com>
-        <CAHk-=wjJqVXydQf_dprBmr=zXsyNVrB9mBCmDL0nGmH_b0vY5g@mail.gmail.com>
-        <20190222235618.dxewmv5dukltaoxl@ast-mbp.dhcp.thefacebook.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1726089AbfBWRo0 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sat, 23 Feb 2019 12:44:26 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:36332 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725936AbfBWRo0 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 23 Feb 2019 12:44:26 -0500
+Received: from pps.filterd (m0044008.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x1NHcTnS010337
+        for <bpf@vger.kernel.org>; Sat, 23 Feb 2019 09:44:25 -0800
+Received: from maileast.thefacebook.com ([199.201.65.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2qu69w0jb5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Sat, 23 Feb 2019 09:44:25 -0800
+Received: from mx-out.facebook.com (2620:10d:c0a1:3::13) by
+ mail.thefacebook.com (2620:10d:c021:18::173) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1531.3;
+ Sat, 23 Feb 2019 09:44:23 -0800
+Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
+        id E4166760812; Sat, 23 Feb 2019 09:44:22 -0800 (PST)
+Smtp-Origin-Hostprefix: devbig
+From:   Alexei Starovoitov <ast@kernel.org>
+Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
+To:     <davem@davemloft.net>
+CC:     <daniel@iogearbox.net>, <edumazet@google.com>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <kernel-team@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH v2 bpf-next 0/4] bpf: per program stats
+Date:   Sat, 23 Feb 2019 09:44:18 -0800
+Message-ID: <20190223174422.663270-1-ast@kernel.org>
+X-Mailer: git-send-email 2.20.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-02-23_11:,,
+ signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 22 Feb 2019 15:56:20 -0800
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+Introduce per program stats to monitor the usage BPF
 
-> On Fri, Feb 22, 2019 at 03:16:35PM -0800, Linus Torvalds wrote:
-> > 
-> > So a kernel pointer value of 0x12345678 could be a value kernel
-> > pointer pointing to some random kmalloc'ed kernel memory, and a user
-> > pointer value of 0x12345678 could be a valid _user_ pointer pointing
-> > to some user mapping.
-> > 
-> > See?
-> > 
-> > If you access a user pointer, you need to use a user accessor function
-> > (eg "get_user()"), while if you access a kernel pointer you need to
-> > just dereference it directly (unless you can't trust it, in which case
-> > you need to use a _different_ accessor function).
-> 
-> that was clear already.
-> Reading 0x12345678 via probe_kernel_read can return valid value
-> and via get_user() can return another valid value on _some_ architectures.
-> 
-> > The fact that user and kernel pointers happen to be distinct on x86-64
-> > (right now) is just a random implementation detail.
-> 
-> yes and my point that people already rely on this implementation detail.
-> Say we implement 
-> int bpf_probe_read(void *val, void *unsafe_ptr)
-> {
->   if (probe_kernel_read(val, unsafe_ptr) == OK) {
->      return 0;
->   } else (get_user(val, unsafe_ptr) == OK) {
->      return 0;
->   } else {
->      *val = 0;
->      return -EFAULT;
->   }
-> }
+v1->v2:
+- fixed u64 stats on 32-bit archs. Thanks Eric
+- use more verbose run_time_ns in json output as suggested by Andrii
+- refactored prog_alloc and clarified behavior of stats in subprogs
 
-Note that we can not use get_user() form kprobe handler. If you use it,
-you have to prepare fault_handler() and make bpf itself can be aborted.
-So, maybe you can use probe_user_read().
+Alexei Starovoitov (4):
+  bpf: enable program stats
+  bpf: expose program stats via bpf_prog_info
+  tools/bpf: sync bpf.h into tools
+  tools/bpftool: recognize bpf_prog_info runtime and runcnt
 
-Hmm, however, it still doesn't work correctly on "some" architecture,
-since whether a pointer (address) points user-space or kernel-space
-depends on the context. In kprobe/bpf, the context means where you
-put the probe and which pointer you record.
-
-I think only "__user" tag tells us which one is user-space. But 
-unfortunately, that "__user" tag is only for compiler or checker, not
-for runtime binary. Such useful attribute goes away when we execute it.
-
-So, even if we introduce "ustring", ftrace/perf users has to decide to use
-it by themselves. As far as I know, DWARF(debuginfo) also doesn't have
-that attribute. So perf-probe can not help it from debuginfo.
-(Maybe if we introduce C parser, it might be detected...)
-
-> It will preserve existing bpf_probe_read() behavior on x86.
-> If x86 implementation changes tomorrow then progs that read user
-> addresses may start failing randomly because first probe_kernel_read()
-> will be returning random values from kernel memory and that's no good,
-> but at least we won't be breaking them today, so we have time to
-> introduce bpf_user_read and bpf_kernel_read and folks have time to adopt them.
-
-I see. I think bpf also has to introduce new bpf_probe_read_user() and
-keep bpf_probe_read() for kernel dataa only.
-
-> Imo that's much better than making current bpf_probe_read() fail
-> on user addresses today and not providing a non disruptive path forward.
-
-Agreed.
-
-Thank you,
-
+ include/linux/bpf.h                           |  9 +++++
+ include/linux/filter.h                        | 20 +++++++++-
+ include/uapi/linux/bpf.h                      |  2 +
+ kernel/bpf/core.c                             | 31 ++++++++++++++-
+ kernel/bpf/syscall.c                          | 39 ++++++++++++++++++-
+ kernel/bpf/verifier.c                         |  7 +++-
+ kernel/sysctl.c                               | 34 ++++++++++++++++
+ .../bpftool/Documentation/bpftool-prog.rst    |  4 +-
+ tools/bpf/bpftool/prog.c                      |  7 ++++
+ tools/include/uapi/linux/bpf.h                |  2 +
+ 10 files changed, 148 insertions(+), 7 deletions(-)
 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.20.0
+
