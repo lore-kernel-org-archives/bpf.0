@@ -2,113 +2,105 @@ Return-Path: <SRS0=Kw1S=Q6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_NEOMUTT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30B2EC43381
-	for <bpf@archiver.kernel.org>; Sat, 23 Feb 2019 02:38:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 915C0C43381
+	for <bpf@archiver.kernel.org>; Sat, 23 Feb 2019 02:41:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F284320700
-	for <bpf@archiver.kernel.org>; Sat, 23 Feb 2019 02:38:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5983720700
+	for <bpf@archiver.kernel.org>; Sat, 23 Feb 2019 02:41:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UL/llQTn"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="g4rXJS9b"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727110AbfBWCiO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Feb 2019 21:38:14 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:33706 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725821AbfBWCiO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Feb 2019 21:38:14 -0500
-Received: by mail-pl1-f194.google.com with SMTP id y10so1916490plp.0;
-        Fri, 22 Feb 2019 18:38:14 -0800 (PST)
+        id S1726080AbfBWClA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Feb 2019 21:41:00 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:35464 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725821AbfBWClA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Feb 2019 21:41:00 -0500
+Received: by mail-lf1-f66.google.com with SMTP id v7so3162724lfd.2
+        for <bpf@vger.kernel.org>; Fri, 22 Feb 2019 18:40:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=kyb8ZiyTfzCMKkyo7YIWgta+wwPH/+0FO/7FVI5Sp6Y=;
-        b=UL/llQTnoIHPAl0vcnJBmjJhjzajZUSOjB3Hfq9voPvCwfKdvpQJrBJC217je3diE+
-         yHpzMeWvKHPBH9EBLiMgfo58//htVpGqwS+h5FzBkk27EMqwReQYPoEQnnQtKjDBp6Fk
-         1OqVjXip2AGjhrt/TNQwutaCFPuHFt69ACy3hwbeF20+ngRqpHdMqx9m7QruTFveW4Nj
-         mWZYG8jOYmRpj1dEG+pNDsdPMEcP4m7y33CIKFLUP9tudevWI5fXE4hCZN+BjRaa81fw
-         7fr6QG4TdwW+WJLgMNGWWAbys/J+GQckx4NhgSwsIzFhujy5VdRQi3DdIfqvYbSBIL7X
-         FbIQ==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qtVpgAsfWx+jnrwvWOS9fgz99omyDP/WLc1UQ0qCLT8=;
+        b=g4rXJS9bIds3WBrMUVeDNPOY6xCJ4V/79nLbvGjCxEn52Sq12oZKUMOJJas1wihO46
+         XQGA5IOFwp1s+eaUoPyi9B/ye/oX7IGqy9UJxHEkOoc4aebV8J+SKeP7Hvpc+YKh1Bbi
+         IDq2bsPhQ1KksaUKA4vV6p2z4iAXcejCILHqE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kyb8ZiyTfzCMKkyo7YIWgta+wwPH/+0FO/7FVI5Sp6Y=;
-        b=arQq1gHCyhr8O+hMQrsSzvfN7beTlZR7l6EM1THLXnpTJSqevgmCzXEiGldahXaeWH
-         qPYtKMFgy10NT6NlP6CVuHoKkp7kGbAKsdnHfIm8SJssYIIsY2vGpeCkfG1Ck7+OLD6Q
-         oFyhfXvD8fE2GN2ARNXxBJSvvqddyXbInzgNzsRIGLN7izgtLeSM4g3Zn4OO4dmkeaQM
-         amF5epzwcSXHqmpou7KXXYTeWmEaiyOLdpCe88kwUIPm9vMYQNEWusz02tXrVH470N5i
-         M1QTPAri4yUblrWy19BXCQFbWBokMc+7MGeEy243uux5nnXSK6xY3Hf2nTJgYPF910lH
-         PJyg==
-X-Gm-Message-State: AHQUAuYrZhcOW+Pg6aDSai9OG6uIynRqGy8DoKLGgXffKhPK0egKcecV
-        454PaGoo12YVYKxboRrA36c=
-X-Google-Smtp-Source: AHgI3Ib8RwS53UtDfP2yvAhBeb9AkPx/Rmd2R2zfUJYtork7EUhac8kMM3A5fc04/MH9s9Ju/xx0lw==
-X-Received: by 2002:a17:902:2e01:: with SMTP id q1mr7345811plb.240.1550889493636;
-        Fri, 22 Feb 2019 18:38:13 -0800 (PST)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:200::4:1d52])
-        by smtp.gmail.com with ESMTPSA id 70sm8081180pfr.43.2019.02.22.18.38.12
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qtVpgAsfWx+jnrwvWOS9fgz99omyDP/WLc1UQ0qCLT8=;
+        b=K6nzBBNEKE7MoL+s3WVpgdBJzqozTFEcKloEFNbOMHV0TAFmZVPGKsINOAFY5thX5x
+         86Ud9ZklWq8tjOwW+13B62HZLZse6qHUtVKKDn5+Goc4q2ntXQ+7cg0Gg/MnwFezFQ39
+         ZF4dGbU8ze5LyEwzEFO4tarvXQ/NnFK5qHlUOeLQSecyizKmR1LDfQEqlklJoidudXHh
+         PwWblSw3fSH9Yw7F8G+a0+FsSIsX5p7XD6+FrfNusfSZAFQKIrPyoX2eAiaR33bzSXkA
+         zIr0zM1pWGTqqkbAeayKtHJa1f8OFV2bugmMz7HhFD84kDYV497xwaMzDEdnMlNEq2St
+         9+EA==
+X-Gm-Message-State: AHQUAubxp7BSgz+eKLHLAwcm0l3TnSJhjZYE9r+plU6Ph+0bDy+noddT
+        2EOhpVHeVuqbcYxHmwLKO1LouuUr32Y=
+X-Google-Smtp-Source: AHgI3IYJDswAejZmms7olnGVVWMfTIhTl24xNTqEAvT9P0yAUpIQ8FMnX6VLZ5wRmdUqm81HPBqAfg==
+X-Received: by 2002:ac2:43ad:: with SMTP id t13mr4262953lfl.93.1550889657465;
+        Fri, 22 Feb 2019 18:40:57 -0800 (PST)
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
+        by smtp.gmail.com with ESMTPSA id d6sm1003152lfg.2.2019.02.22.18.40.56
+        for <bpf@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 22 Feb 2019 18:38:12 -0800 (PST)
-Date:   Fri, 22 Feb 2019 18:38:11 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Roman Gushchin <guro@fb.com>, Alexei Starovoitov <ast@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Kernel Team <Kernel-team@fb.com>
-Subject: Re: [PATCH bpf-next 1/4] bpf: enable program stats
-Message-ID: <20190223023810.5s7zyj4zqe6poigg@ast-mbp.dhcp.thefacebook.com>
-References: <20190222233644.1487087-1-ast@kernel.org>
- <20190222233644.1487087-2-ast@kernel.org>
- <20190223003434.GA17559@tower.DHCP.thefacebook.com>
- <8de20612-c32a-9370-254d-9ebf1df78efa@iogearbox.net>
+        Fri, 22 Feb 2019 18:40:57 -0800 (PST)
+Received: by mail-lj1-f178.google.com with SMTP id q128so3157827ljb.11
+        for <bpf@vger.kernel.org>; Fri, 22 Feb 2019 18:40:56 -0800 (PST)
+X-Received: by 2002:a2e:7a03:: with SMTP id v3mr4002596ljc.22.1550889185850;
+ Fri, 22 Feb 2019 18:33:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8de20612-c32a-9370-254d-9ebf1df78efa@iogearbox.net>
-User-Agent: NeoMutt/20180223
+References: <CAHk-=whNf_n1WXWW+ugAVeL5ZK0GcEP3cTYocju1nS85VtMjjQ@mail.gmail.com>
+ <20190222192703.epvgxghwybte7gxs@ast-mbp.dhcp.thefacebook.com>
+ <CAHk-=wib9VSbwbS+N82ZPNtvt4vrvYyHyQduhFimX8nyjCyZyA@mail.gmail.com>
+ <20190222.133842.1637029078039923178.davem@davemloft.net> <CAHk-=wh9uWJaih5i6qBPer5rzcs=A+yb_ejU093b1esAhoFveQ@mail.gmail.com>
+ <20190222225103.o5rr5zr4fq77jdg4@ast-mbp.dhcp.thefacebook.com>
+ <CAHk-=wjJqVXydQf_dprBmr=zXsyNVrB9mBCmDL0nGmH_b0vY5g@mail.gmail.com>
+ <20190222235618.dxewmv5dukltaoxl@ast-mbp.dhcp.thefacebook.com>
+ <CAHk-=whu_iwv4TQP5Xd62bTfWW-uswVecUbFeiSCuTWnH1xgPg@mail.gmail.com> <20190223022850.nv4hnweueetprbot@ast-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20190223022850.nv4hnweueetprbot@ast-mbp.dhcp.thefacebook.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 22 Feb 2019 18:32:49 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiyFoHuK-EFgOxtepnvKNtzad2qeCTXz0gjRdbntEPoOQ@mail.gmail.com>
+Message-ID: <CAHk-=wiyFoHuK-EFgOxtepnvKNtzad2qeCTXz0gjRdbntEPoOQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2 v2] kprobe: Do not use uaccess functions to access
+ kernel memory that can fault
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        stable <stable@vger.kernel.org>,
+        Changbin Du <changbin.du@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Lutomirski <luto@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Netdev <netdev@vger.kernel.org>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Feb 23, 2019 at 02:06:56AM +0100, Daniel Borkmann wrote:
-> 
-> In general, having some stats and timing info would be useful, but I
-> guess people might want to customize it in future even more specifically
-> beyond number of runs + time it takes. One thing that would be super
-> useful is to have some notion of __attribute__((constructor)) and
-> __attribute__((destructor)) support in BPF which gets then inlined into
-> prologue / epilogue of program. E.g. such infrastructure would allow to
-> mark an skb and measure time it takes through the BPF prog till it hits
-> an exit point somewhere (without having to explicitly code this into the
-> program everywhere). Other examples may be histograms or p99 latencies
-> that might probably be useful. Feels like for monitoring more ways to
-> program would be nice and to move it into the BPF insns sequence (e.g.
-> enforced globally or by choice of prog as another option)? Thoughts?
+On Fri, Feb 22, 2019 at 6:29 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> imo this kernel release should finish as-is and in the next cycle we can
+> change probe_kernel_read() to reject user address [..]
 
-the constructor/destructor you mean to capture the full sequence of tail_calls?
-Or full path of skb through the stack with all hook points?
-That is likely very useful without any bpf, but I think hw timestamping
-already serves that purpose.
+Absolutely. Nothing is going to change right now for 5.0, which is imminent.
 
-I've been thinking about doing this stats per program
-(instead of static_key for all).
-Like replacing a bpf_prog->bpf_func with a wrapper function
-that does stats, but that is more costly in retpoline world
-due to extra indirect call.
-Another alternative is to patch the stats in via JITs, but
-it's much more complex and error prone.
-So went with the simplest approach.
+It's really a "long-term we really need to fix this", where the only
+question is how soon "long-term" is.
 
-With all stats ideas we need to be careful not to reintroduce what
-perf is already great at.
-These stats are _not_ for performance analysis. That's what perf does.
-These stats are for 24/7 monitoring to catch things that not suppose to happen.
-
+                   Linus
