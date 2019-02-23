@@ -2,99 +2,117 @@ Return-Path: <SRS0=Kw1S=Q6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75707C43381
-	for <bpf@archiver.kernel.org>; Sat, 23 Feb 2019 00:05:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 932EDC43381
+	for <bpf@archiver.kernel.org>; Sat, 23 Feb 2019 00:09:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2BB1620651
-	for <bpf@archiver.kernel.org>; Sat, 23 Feb 2019 00:05:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 62BCE20651
+	for <bpf@archiver.kernel.org>; Sat, 23 Feb 2019 00:09:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W9qk3OH3"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="BXGnY8ug"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726847AbfBWAF7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Feb 2019 19:05:59 -0500
-Received: from mail-yb1-f195.google.com ([209.85.219.195]:38303 "EHLO
-        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726681AbfBWAF6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Feb 2019 19:05:58 -0500
-Received: by mail-yb1-f195.google.com with SMTP id f196so1548922yba.5;
-        Fri, 22 Feb 2019 16:05:58 -0800 (PST)
+        id S1727430AbfBWAJT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Feb 2019 19:09:19 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:33792 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726847AbfBWAJS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Feb 2019 19:09:18 -0500
+Received: by mail-lj1-f196.google.com with SMTP id l5so3055214lje.1
+        for <bpf@vger.kernel.org>; Fri, 22 Feb 2019 16:09:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=QTVvCOevTDl73jViyulXbYfsjfDfQkQmmv67Me/VDic=;
-        b=W9qk3OH3RrBKV3EYVLlRqQZ93sYrf4+FyE6SU0ovn23gPPQPUZgQBgcMBfuRsP3oAm
-         pXbfhzFm9XA2zG/jNEv742JFJWBLc5QvT88gaBBLFQv9k8rh7jSGspGscwgQ1AhwYgZp
-         aGJycqzjP2ogEPpQshWxFceMiW8InS770H+YuDO+Iw7wovVSheRlm4GYuVbqljuz06N/
-         6cqyEZ7pHJXUTBVb2eDtAetlN1urWLao3B0xMWfxFH32FmLLzYTgzYRCfTk0FZoSiaaP
-         /pwJ5idtGmYAT1ZAssT0Sq/hUjE6MV2u6FNPNHvcx7r4MoAIsV/oTzdi8EpGoISmfJMX
-         dwxw==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nfPdBRc9tHlVx4731kzoTxYm9oHOsR9CfjKri/wmKro=;
+        b=BXGnY8uguxJoyc8/1beXM666q65BcuL7j71qhPOZoQUyrJTsEoBKigunyokVuT5Sla
+         4ZSIiA9wLPQk8l0PVwcbkAN6IHjqJgRLEWbiMC6B1kscR3ZELS9Pz/ujsOgRDUjwp2jT
+         E29kxlYkUCPPjzT/j1SLuTWgPw6Jk+sZ74gY4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=QTVvCOevTDl73jViyulXbYfsjfDfQkQmmv67Me/VDic=;
-        b=cep1KzfpYIE65LQX9kyuVy5jUfoOD+IIG3fHZRrUiXbR2u+Gp74aXMTFQmmWlSWbFB
-         9lMtlJCUih5+k8dhpR8lwgtkzpurGQDW31CYHOAXTcM24bUclR0nelCQHcckgElh2Qj7
-         JK9wmA3CULyFM4yI2iUd/rPSrAjmd2V8n9LF7C0QpRxecEkti8TRPEZMW88yrq4evqUa
-         NMQaE2syqTTlKEpfgpHuVbxsgA8w2kq8sZc8o8MMQCvFKEF4AP0cG2BJapd/IBQdfgj6
-         u395bstr03VnJxSFdyssqCvRPv/poywOd6a8JDAVgbEw4Rm7WehaPMeK8vgQK7ATliv5
-         L1UA==
-X-Gm-Message-State: AHQUAuYNmdvEKvmKXv8EHFGfGoOCJ8HE/YU3/ASVb7BXZ45JLg4Yfa6s
-        dX87pCBSa4lZIremLS4S+vVe5lvr
-X-Google-Smtp-Source: AHgI3IZn811PwJoRkp85VsordQPbew3mw5lQwlwZPF1IB7HS6F9d6Xh8O/XMf2jirzaB9l2+q/SA2g==
-X-Received: by 2002:a25:2b07:: with SMTP id r7mr5643137ybr.300.1550880357954;
-        Fri, 22 Feb 2019 16:05:57 -0800 (PST)
-Received: from [192.168.86.235] (c-73-241-150-70.hsd1.ca.comcast.net. [73.241.150.70])
-        by smtp.gmail.com with ESMTPSA id 79sm977321ywo.64.2019.02.22.16.05.56
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nfPdBRc9tHlVx4731kzoTxYm9oHOsR9CfjKri/wmKro=;
+        b=fw8F7xjtVzLXc9boY4ZKCdSeD/nzE7ikMuyGfnulwHHwQa4koG/3HqgFeqwl0C+UoD
+         xjpVEYUaWIbPw2UJq/9+S6WmTxBcRGyzPRz2XhfpaURRd8sRAMDiSOgeBPZqenBjRpf9
+         HJL2YXPYubNSy+hiUz1i89YfzHS5POV7cVO5Z9glMIbZI6oXyMPK0LoBmm/Y+yYi93uE
+         7JQOxbUqdZGOUsDoeJ6pyVYhUuHki3bW9TQiRhH+uSH3XS+pJdzs/l4KPnt5SJuWta7S
+         +FVk8hXlyFwC1aLNBW8J875HlwCwGiH83LtefJVNHFJbOxHOXPaDy210ysNG0NKgak0Y
+         q1JQ==
+X-Gm-Message-State: AHQUAuafxdY5CxB7+7j7etaTHakHiXsw/jb1A83TLKE4/lqnVwpx8xBo
+        XSg5NjJ0gTtcNdLubJ/TZqHEB0My+YA=
+X-Google-Smtp-Source: AHgI3IaDIbX12p0H6s7gaforz9f/AjwZXVwVT2zpmlSwG9cQJmne9mVa6fn38ZuWZimlfu8/m36clw==
+X-Received: by 2002:a2e:2007:: with SMTP id g7mr3819635ljg.93.1550880556746;
+        Fri, 22 Feb 2019 16:09:16 -0800 (PST)
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com. [209.85.208.170])
+        by smtp.gmail.com with ESMTPSA id b17sm876566lff.62.2019.02.22.16.09.16
+        for <bpf@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 22 Feb 2019 16:05:56 -0800 (PST)
-Subject: Re: [PATCH bpf-next 1/4] bpf: enable program stats
-To:     Alexei Starovoitov <ast@kernel.org>, davem@davemloft.net
-Cc:     daniel@iogearbox.net, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-team@fb.com
-References: <20190222233644.1487087-1-ast@kernel.org>
- <20190222233644.1487087-2-ast@kernel.org>
-From:   Eric Dumazet <eric.dumazet@gmail.com>
-Message-ID: <adabf404-7d0e-d801-1952-14f6b3ff8ced@gmail.com>
-Date:   Fri, 22 Feb 2019 16:05:55 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        Fri, 22 Feb 2019 16:09:16 -0800 (PST)
+Received: by mail-lj1-f170.google.com with SMTP id v16so3002535ljg.13
+        for <bpf@vger.kernel.org>; Fri, 22 Feb 2019 16:09:16 -0800 (PST)
+X-Received: by 2002:a2e:8585:: with SMTP id b5mr3689553lji.125.1550880555567;
+ Fri, 22 Feb 2019 16:09:15 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20190222233644.1487087-2-ast@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <CAHk-=whNf_n1WXWW+ugAVeL5ZK0GcEP3cTYocju1nS85VtMjjQ@mail.gmail.com>
+ <20190222192703.epvgxghwybte7gxs@ast-mbp.dhcp.thefacebook.com>
+ <CAHk-=wib9VSbwbS+N82ZPNtvt4vrvYyHyQduhFimX8nyjCyZyA@mail.gmail.com>
+ <20190222.133842.1637029078039923178.davem@davemloft.net> <CAHk-=wh9uWJaih5i6qBPer5rzcs=A+yb_ejU093b1esAhoFveQ@mail.gmail.com>
+ <20190222225103.o5rr5zr4fq77jdg4@ast-mbp.dhcp.thefacebook.com>
+ <CAHk-=wjJqVXydQf_dprBmr=zXsyNVrB9mBCmDL0nGmH_b0vY5g@mail.gmail.com> <20190222235618.dxewmv5dukltaoxl@ast-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20190222235618.dxewmv5dukltaoxl@ast-mbp.dhcp.thefacebook.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 22 Feb 2019 16:08:59 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whu_iwv4TQP5Xd62bTfWW-uswVecUbFeiSCuTWnH1xgPg@mail.gmail.com>
+Message-ID: <CAHk-=whu_iwv4TQP5Xd62bTfWW-uswVecUbFeiSCuTWnH1xgPg@mail.gmail.com>
+Subject: Re: [PATCH 1/2 v2] kprobe: Do not use uaccess functions to access
+ kernel memory that can fault
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        stable <stable@vger.kernel.org>,
+        Changbin Du <changbin.du@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Lutomirski <luto@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Netdev <netdev@vger.kernel.org>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Fri, Feb 22, 2019 at 3:56 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> It will preserve existing bpf_probe_read() behavior on x86.
 
+... but that's the worst possible situation.
 
-On 02/22/2019 03:36 PM, Alexei Starovoitov wrote:
+It appears that people haven't understood that kernel and user
+addresses are distinct, and may have written programs that are
+fundamentally buggy.
 
->  
-> +static void bpf_prog_get_stats(const struct bpf_prog *prog,
-> +			       struct bpf_prog_stats *stats)
-> +{
-> +	u64 nsecs = 0, cnt = 0;
-> +	int cpu;
-> +
-> +	for_each_possible_cpu(cpu) {
-> +		nsecs += per_cpu(prog->aux->stats->nsecs, cpu);
-> +		cnt += per_cpu(prog->aux->stats->cnt, cpu);
+And we _want_ to make it clear that they are buggy on x86-64, exactly
+because x86-64 is the one that gets the most testing - by far.
 
-This does not work reliably for 32 bit kernels.
+So if x86-64 continues working for buggy programs, then that only
+means that those bugs never get fixed.
 
-> +	}
-> +	stats->nsecs = nsecs;
-> +	stats->cnt = cnt;
-> +}
+It would be much better to try to get those things fixed, and make the
+x86-64 implementation stricter, exactly so that people end up
+_realizing_ that they can't just think "a pointer is a pointer, and
+the context doesn't matter".
 
+From a pure functional safety standpoint, I thought bpf already knew
+what kind of a pointer it had?
+
+                   Linus
