@@ -2,96 +2,172 @@ Return-Path: <SRS0=Kw1S=Q6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-8.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_NEOMUTT
-	autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA830C43381
-	for <bpf@archiver.kernel.org>; Sat, 23 Feb 2019 02:29:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53B80C43381
+	for <bpf@archiver.kernel.org>; Sat, 23 Feb 2019 02:31:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8E57E206B7
-	for <bpf@archiver.kernel.org>; Sat, 23 Feb 2019 02:29:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1AF3D206B7
+	for <bpf@archiver.kernel.org>; Sat, 23 Feb 2019 02:31:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TNctdvc2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VF6wkL8y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725821AbfBWC3m (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Feb 2019 21:29:42 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:40780 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725811AbfBWC3m (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Feb 2019 21:29:42 -0500
-Received: by mail-pg1-f194.google.com with SMTP id u9so1922155pgo.7;
-        Fri, 22 Feb 2019 18:29:41 -0800 (PST)
+        id S1725832AbfBWCbk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Feb 2019 21:31:40 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:39990 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725821AbfBWCbk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Feb 2019 21:31:40 -0500
+Received: by mail-pl1-f194.google.com with SMTP id bj4so1890961plb.7;
+        Fri, 22 Feb 2019 18:31:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=nUeMa/FlDVQKcxwIJIvHrRSXaAJ1CGk0LF/33V+5veM=;
-        b=TNctdvc28JyRv/alsYkb1ct+LCg1Quz+z5q67cLzvE4aw3Br5CySuO6ZlfFQ7zbMzY
-         onftg2bgbCZOwWZxyPcW4NBgg0VQ74ittdAKPx/Y5xbH0qNYRIMy1psJQHMu225HTpiq
-         xsDls71rqtE4vnoY1wk6tsq7HMZrZa2OXs8aMdswnLr8nmoQDOE/peszFr9LiHZBSM57
-         H9kIMV+tnrJd5WSasr1A9JUv8/ZboKp3qkPje2xmerzxFQDPMWUXnb8M0H9xJJvW6Z48
-         H2k8jb3MVNzRtKPr1TZBb03Pr+EG2jXUJM9K62ePpiMIU4fR0uoLEC6m/oPwgJv/ru71
-         EKcQ==
+        bh=3+geYU2x9ValRfcN+cVEc5qlJIrxjVyE1FGXupl6GAQ=;
+        b=VF6wkL8yN/dr48foodiR5WMWG0FPVTkvBcrtbIFgndlxrWlRqM0QCN4CM2BKrg/AKK
+         VBqRjHe5PJJwPZnNczsiwlItMJYfkYFkxkzuq0rmlXjlbvxQyyVRcXMgLj/7pPOy7t9C
+         QlLnU4qABSyIfNYmbk/CCLDYuQ14t7bGxy+aLolgjRWFM0sIJZgfa7YWigIE95703fjC
+         ml2pXyyYrL/KHbpREqpy1lJgm2bCiE9zSXZVpk1EW164hgbupGYw0hS4HgoCmIaDPAgq
+         ZYCt+nAQwvQkCAf6M44Uy20Jei8UM+9Ar4NuQn4j0fPphheZw+6B2yv8PKmycVHriujI
+         Dg7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=nUeMa/FlDVQKcxwIJIvHrRSXaAJ1CGk0LF/33V+5veM=;
-        b=FOpM4302FOg4Kw1hRufFY7bzLUsEK9RHXjXFXWt3DMFafEdTqabEJxhjf0iJpVKavn
-         KTzXzcD5KA2KMp7TW6mHDdaJ13CGCdYcTbcWtBt2hIVF/PiBpO+xfcJIXGT017AFdaah
-         BtXvogPmghz0q3JSpqVhpWMirSomX6W33B9KnjIL0P4afZ98v+tsSMxFe1BImKlb4kSu
-         VTb++uaOlf6vvyUqQIej85UdT2Wz+REQYWwk0QHv+t9hmgqOsKn+CxCpYbf+/kFAy/Fk
-         TnAevd0KhVdVcNtxPOPXA1Y/bOLSw9827VbESxDUvqdeMoY7p/vUo8ugIUqIspn9LsMP
-         RXaQ==
-X-Gm-Message-State: AHQUAubQXWNiheBF8mqhR8ezG1iyW87kFx01/bl7s82t38wmscJMVYXw
-        cYrnXz4oJ2fYwCZ5k/8Wa8Y=
-X-Google-Smtp-Source: AHgI3IbsX3zZUO4lQV6p9XHp2/FyYumMyOQIW17hDadsH3gQDkc2u73QOXn+CbkOApzk6KDrX5Hhug==
-X-Received: by 2002:a63:c0e:: with SMTP id b14mr6974452pgl.236.1550888981244;
-        Fri, 22 Feb 2019 18:29:41 -0800 (PST)
+        bh=3+geYU2x9ValRfcN+cVEc5qlJIrxjVyE1FGXupl6GAQ=;
+        b=i7Veja60shfrkOWPzAjm0syiQd2Sr875Irw2ZGAX0VQlkIImpnTnfb9LeANw4vRIc9
+         1aNwjaXwHLlVtN7QoLOOT2tneiW2wcHRZgFWDJkpyLLjyowT/OyW+i7r/ewIM2fl8i+h
+         /3Mt0plQgEDblXi6Ie3OrgTCPW3ozlzDW4CoCFd1eAnxYDg615zhUASC1pzSRLj7eaav
+         gz+40WCpOry+Mnn2rb9WxxX03KevN9dB+c7rD7urov8MI4LhnRw+bx46aEh3oUmfQUr9
+         WvUICaqDLPaoV8ExOi8lq2cXShn3ONaToGYcLAnp+0z11FZ+l+mQwpuAAECH5B9ThV7M
+         zq/Q==
+X-Gm-Message-State: AHQUAuYtY9In4akna3Dr9gHF9gzrzSpMTf8LD1/4teQZQz2MxaxrMN06
+        g4hWl9GuWyuI93OBpxafwks=
+X-Google-Smtp-Source: AHgI3Iba2NTJON6RpfNp5UmGQxGgXVh9qLIrx+PikjAtWPqxDA6zj3Oeslbzj2Qb7Pixo8/gV+I9Zw==
+X-Received: by 2002:a17:902:583:: with SMTP id f3mr7506252plf.202.1550889099358;
+        Fri, 22 Feb 2019 18:31:39 -0800 (PST)
 Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:200::4:1d52])
-        by smtp.gmail.com with ESMTPSA id f10sm3563512pfn.11.2019.02.22.18.29.39
+        by smtp.gmail.com with ESMTPSA id e6sm5679007pfe.59.2019.02.22.18.31.38
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 22 Feb 2019 18:29:40 -0800 (PST)
-Date:   Fri, 22 Feb 2019 18:29:39 -0800
+        Fri, 22 Feb 2019 18:31:38 -0800 (PST)
+Date:   Fri, 22 Feb 2019 18:31:37 -0800
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Eric Dumazet <eric.dumazet@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>, davem@davemloft.net,
-        daniel@iogearbox.net, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-team@fb.com
+To:     Roman Gushchin <guro@fb.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Kernel Team <Kernel-team@fb.com>
 Subject: Re: [PATCH bpf-next 1/4] bpf: enable program stats
-Message-ID: <20190223022938.hq3jys6as5e5kyjr@ast-mbp.dhcp.thefacebook.com>
+Message-ID: <20190223023136.ngg334d2k6aw4qzr@ast-mbp.dhcp.thefacebook.com>
 References: <20190222233644.1487087-1-ast@kernel.org>
  <20190222233644.1487087-2-ast@kernel.org>
- <adabf404-7d0e-d801-1952-14f6b3ff8ced@gmail.com>
+ <20190223003434.GA17559@tower.DHCP.thefacebook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <adabf404-7d0e-d801-1952-14f6b3ff8ced@gmail.com>
+In-Reply-To: <20190223003434.GA17559@tower.DHCP.thefacebook.com>
 User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Feb 22, 2019 at 04:05:55PM -0800, Eric Dumazet wrote:
-> 
-> 
-> On 02/22/2019 03:36 PM, Alexei Starovoitov wrote:
-> 
+On Sat, Feb 23, 2019 at 12:34:38AM +0000, Roman Gushchin wrote:
+> On Fri, Feb 22, 2019 at 03:36:41PM -0800, Alexei Starovoitov wrote:
+> > JITed BPF programs are indistinguishable from kernel functions, but unlike
+> > kernel code BPF code can be changed often.
+> > Typical approach of "perf record" + "perf report" profiling and tunning of
+> > kernel code works just as well for BPF programs, but kernel code doesn't
+> > need to be monitored whereas BPF programs do.
+> > Users load and run large amount of BPF programs.
+> > These BPF stats allow tools monitor the usage of BPF on the server.
+> > The monitoring tools will turn sysctl kernel.bpf_stats_enabled
+> > on and off for few seconds to sample average cost of the programs.
+> > Aggregated data over hours and days will provide an insight into cost of BPF
+> > and alarms can trigger in case given program suddenly gets more expensive.
+> > 
+> > The cost of two sched_clock() per program invocation adds ~20 nsec.
+> > Fast BPF progs (like selftests/bpf/progs/test_pkt_access.c) will slow down
+> > from ~40 nsec to ~60 nsec.
+> > static_key minimizes the cost of the stats collection.
+> > There is no measurable difference before/after this patch
+> > with kernel.bpf_stats_enabled=0
+> > 
+> > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> > ---
+> >  include/linux/bpf.h    |  7 +++++++
+> >  include/linux/filter.h | 16 +++++++++++++++-
+> >  kernel/bpf/core.c      | 13 +++++++++++++
+> >  kernel/bpf/syscall.c   | 24 ++++++++++++++++++++++--
+> >  kernel/bpf/verifier.c  |  5 +++++
+> >  kernel/sysctl.c        | 34 ++++++++++++++++++++++++++++++++++
+> >  6 files changed, 96 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > index de18227b3d95..14260674bc57 100644
+> > --- a/include/linux/bpf.h
+> > +++ b/include/linux/bpf.h
+> > @@ -340,6 +340,11 @@ enum bpf_cgroup_storage_type {
 > >  
-> > +static void bpf_prog_get_stats(const struct bpf_prog *prog,
-> > +			       struct bpf_prog_stats *stats)
-> > +{
-> > +	u64 nsecs = 0, cnt = 0;
-> > +	int cpu;
+> >  #define MAX_BPF_CGROUP_STORAGE_TYPE __BPF_CGROUP_STORAGE_MAX
+> >  
+> > +struct bpf_prog_stats {
+> > +	u64 cnt;
+> > +	u64 nsecs;
+> > +};
 > > +
-> > +	for_each_possible_cpu(cpu) {
-> > +		nsecs += per_cpu(prog->aux->stats->nsecs, cpu);
-> > +		cnt += per_cpu(prog->aux->stats->cnt, cpu);
+> >  struct bpf_prog_aux {
+> >  	atomic_t refcnt;
+> >  	u32 used_map_cnt;
+> > @@ -389,6 +394,7 @@ struct bpf_prog_aux {
+> >  	 * main prog always has linfo_idx == 0
+> >  	 */
+> >  	u32 linfo_idx;
+> > +	struct bpf_prog_stats __percpu *stats;
+> >  	union {
+> >  		struct work_struct work;
+> >  		struct rcu_head	rcu;
+> > @@ -559,6 +565,7 @@ void bpf_map_area_free(void *base);
+> >  void bpf_map_init_from_attr(struct bpf_map *map, union bpf_attr *attr);
+> >  
+> >  extern int sysctl_unprivileged_bpf_disabled;
+> > +extern int sysctl_bpf_stats_enabled;
+> >  
+> >  int bpf_map_new_fd(struct bpf_map *map, int flags);
+> >  int bpf_prog_new_fd(struct bpf_prog *prog);
+> > diff --git a/include/linux/filter.h b/include/linux/filter.h
+> > index f32b3eca5a04..7b14235b6f7d 100644
+> > --- a/include/linux/filter.h
+> > +++ b/include/linux/filter.h
+> > @@ -533,7 +533,21 @@ struct sk_filter {
+> >  	struct bpf_prog	*prog;
+> >  };
+> >  
+> > -#define BPF_PROG_RUN(filter, ctx)  ({ cant_sleep(); (*(filter)->bpf_func)(ctx, (filter)->insnsi); })
+> > +DECLARE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
+> > +
+> > +#define BPF_PROG_RUN(prog, ctx)	({				\
+> > +	u32 ret;						\
+> > +	cant_sleep();						\
+> > +	if (static_branch_unlikely(&bpf_stats_enabled_key)) {	\
+> > +		u64 start = sched_clock();			\
+> > +		ret = (*(prog)->bpf_func)(ctx, (prog)->insnsi);	\
+> > +		this_cpu_inc(prog->aux->stats->cnt);		\
+> > +		this_cpu_add(prog->aux->stats->nsecs,		\
+> > +			     sched_clock() - start);		\
+> > +	} else {						\
+> > +		ret = (*(prog)->bpf_func)(ctx, (prog)->insnsi);	\
+> > +	}							\
+> > +	ret; })
 > 
-> This does not work reliably for 32 bit kernels.
+> Can we bump "cnt" unconditionally and gate only the "nsecs" calculation?
 
-right. my mind was in probe_read thread. will fix.
+xdp cannot afford to pay this penalty unconditionally.
+It's not only this_cpu_inc. It's prog->aux->stats loads.
 
