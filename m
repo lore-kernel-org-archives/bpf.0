@@ -1,131 +1,253 @@
-Return-Path: <SRS0=Kw1S=Q6=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=+Scp=Q7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-1.2 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06E80C43381
-	for <bpf@archiver.kernel.org>; Sat, 23 Feb 2019 23:11:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53F17C43381
+	for <bpf@archiver.kernel.org>; Sun, 24 Feb 2019 19:35:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C0430206A3
-	for <bpf@archiver.kernel.org>; Sat, 23 Feb 2019 23:11:19 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bSDvyu8N"
+	by mail.kernel.org (Postfix) with ESMTP id 03E9020652
+	for <bpf@archiver.kernel.org>; Sun, 24 Feb 2019 19:35:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1551036924;
+	bh=Z4fFhJayjI+pWMaIH9gqLO/UBhQv5xQdBO9pJne0bXA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=TSiYIpjzs/q87ihMrBVRUgOMM/27ccdWTmp7Z6Cwn5xEHAHrtNg9DoWjSwA43Z4mm
+	 ykXTxT5VwLuwvWFxMU91V8axLNwwUkSdc0oPNrHmt/Z5EOpHu8U8kik9gVFNuchPpQ
+	 9Fmt8EDO2k6nBvBRuM2Jr7HtOt5i50kR74XxyYnw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727913AbfBWXLT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 23 Feb 2019 18:11:19 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:44850 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727912AbfBWXLS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 23 Feb 2019 18:11:18 -0500
-Received: by mail-pf1-f193.google.com with SMTP id a3so2737127pff.11;
-        Sat, 23 Feb 2019 15:11:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=LsaBM5vPqcfYW8NkSpm2GIEH1prHpJRY4rzTwGfACDQ=;
-        b=bSDvyu8NbmkQyZkHI6TwWTrSXqqhjg7wEP5uZXim2tvk6eVsCInjYznp0nzpSsQC5Z
-         RS6F29jEKpBOk84NKMcsKbITZRcNbkZzr9u4QCUuMvXWxFBpDYCTMGSBozdL5wdOL3kD
-         ys3nLYc+QCzBjlReoQ8qQCrUuxJJ0PtO/UMSvbBG03hmBztJ8O3IXoZz93pyyAnTnK9K
-         7PdUdP3RiP4KZsQ9wFYqxyxm9pxQp7nPFgKbTJoFXgkL9BipGboDlcWNkOuhvzXvMndB
-         4aB5lKhw3O1T2LQFEa+5pka7WGHC0l+fN1I3mFTBkwVLZYBAWsDrIvP0UbQEbf5Pd6PB
-         VKKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=LsaBM5vPqcfYW8NkSpm2GIEH1prHpJRY4rzTwGfACDQ=;
-        b=KlN9Nd1HnkK0Cx9JMBBxq4q5jd/bj+e/aitkKeIOacynVvDIYEGPx0hf+YJhiy4Div
-         kNpdVDgpz01ZYldiJjtLUK4oEfJ3rmpcFkLPWvb8On4fxBO7mIOVOMBh/w3128MOamo4
-         Cjmxb7wAGgimI3b8dCCy7ZzSmZj50fMRBSCIZnO8uDY6dYSD8KiHlwQ8mcSZyM2XD02X
-         4Z/HOuz7n0NKPCWMsncOxfr2uef1VAVJI+mvUUrYG/0jwsPveP0TyLTCgBwx+4JHS7Xk
-         rvBr+Yq3cCDDHfcEXxh1lCBrbgMXYC8L02VCMbM3hpEC+t7mcte6YfuedJPxYTNWLuG4
-         pouw==
-X-Gm-Message-State: AHQUAuZWOUkLC68lojbiNYgFrUVCwYyZw0igrVnBbrLq17hobl0Sep9m
-        D1flcnIxWQP7k4xu/jRy2uY=
-X-Google-Smtp-Source: AHgI3IaadYDTNyMDkid5omWhPTmhJjT2QsYJOdnUvU+LW7/kX/I3Puhj0daI4bnNYps5tjGnWBPnMQ==
-X-Received: by 2002:a63:f74c:: with SMTP id f12mr10744765pgk.195.1550963477757;
-        Sat, 23 Feb 2019 15:11:17 -0800 (PST)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:180::1:227a])
-        by smtp.gmail.com with ESMTPSA id q18sm6538902pgv.9.2019.02.23.15.11.16
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 23 Feb 2019 15:11:16 -0800 (PST)
-Date:   Sat, 23 Feb 2019 15:11:14 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Eric Dumazet <eric.dumazet@gmail.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        netdev <netdev@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        bpf <bpf@vger.kernel.org>, Lawrence Brakmo <brakmo@fb.com>
-Subject: Re: [PATCH bpf] bpf: properly check TCP_CONGESTION optlen
-Message-ID: <20190223231112.7dzt7ws472k6ajb5@ast-mbp.dhcp.thefacebook.com>
-References: <20190223190709.61558-1-edumazet@google.com>
- <20190223203808.f2r54xz2z7j2gecg@ast-mbp.dhcp.thefacebook.com>
- <73905026-571a-867d-43eb-3d9b36f6c39c@gmail.com>
+        id S1728093AbfBXTfX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 24 Feb 2019 14:35:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46420 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727798AbfBXTfX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 24 Feb 2019 14:35:23 -0500
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B0E91213F2
+        for <bpf@vger.kernel.org>; Sun, 24 Feb 2019 19:35:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1551036922;
+        bh=Z4fFhJayjI+pWMaIH9gqLO/UBhQv5xQdBO9pJne0bXA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=E1HuXWcIMR0ll9ZyKRv/UfTYbrjIn1Onwx2s52Mn97LR8uDMYzezNriAhmF2xrvqF
+         Po4cquAXMqlDdFOO5CLBMcK1agw2anH8h92UHbGfQNWRgJLSyqxTYCMiYexKj3SZjU
+         9ZRRFzSxoMWITrt0AeJCiTfvyAcLCcdpWncx1khc=
+Received: by mail-wm1-f42.google.com with SMTP id z84so6133501wmg.4
+        for <bpf@vger.kernel.org>; Sun, 24 Feb 2019 11:35:21 -0800 (PST)
+X-Gm-Message-State: AHQUAubN2MbHhWEQ0EKb91tsHQoRpr/KunoFryOrBTVuMkdpUSLkFKQO
+        BylYjrjMHvvpOlGo/2KoCwaW9NT14pmxpj/bugM0Tg==
+X-Google-Smtp-Source: AHgI3Ib+fwHZCkZEujoKcNWZ7EMTRdiYrRdwgkDsy+I84m2xp5lc3uDHq+cU4U3tDNHSqD61ihrZRhvJ5w7FMrBsDDg=
+X-Received: by 2002:a1c:a885:: with SMTP id r127mr9086487wme.74.1551036920000;
+ Sun, 24 Feb 2019 11:35:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <73905026-571a-867d-43eb-3d9b36f6c39c@gmail.com>
-User-Agent: NeoMutt/20180223
+References: <20190219111802.1d6dbaa3@gandalf.local.home> <CAHk-=wgTuK3kAduP-gr10vykT1uG=B2VpdffvmyBuTQ1UxPpMg@mail.gmail.com>
+ <20190219140330.5dd9e876@gandalf.local.home> <20190220171019.5e81a4946b56982f324f7c45@kernel.org>
+ <20190220094926.0ab575b3@gandalf.local.home> <20190222172745.2c7205d62003c0a858e33278@kernel.org>
+ <20190222173509.88489b7c5d1bf0e2ec2382ee@kernel.org> <CAHk-=whNf_n1WXWW+ugAVeL5ZK0GcEP3cTYocju1nS85VtMjjQ@mail.gmail.com>
+ <20190222192703.epvgxghwybte7gxs@ast-mbp.dhcp.thefacebook.com>
+ <20190222143026.17d6f0f6@gandalf.local.home> <20190222193456.5vqppubzrcx5wsul@ast-mbp.dhcp.thefacebook.com>
+ <9E670A9A-699C-4B65-962F-CE1AEFD72974@amacapital.net> <CAG48ez2tVwzhKPu1tvK+E52jUCq5vTwjssrtMaGuCO=kMpSXGw@mail.gmail.com>
+ <0ED6836E-3432-4E1C-BABC-BEA6BDD36287@vmware.com> <CAG48ez10RH2YhQ0wnEDOpKoGjrociq+zK0En6Aq06Yg9W3o5aQ@mail.gmail.com>
+ <7701651F-F10E-4212-925E-1CB77C5D3E69@vmware.com> <A7232EDD-C53C-4B7D-AD02-4A480F40538B@vmware.com>
+ <CAG48ez1Dm04kg2x3O=OOmBFFBSDr+RmnhBYChcwYv5zLbPGudQ@mail.gmail.com>
+ <CALCETrU2V5KBA97g3O-yHiUu1acmM_K9b2a5ATmKSqGwdd-+Dw@mail.gmail.com> <7E4E5362-4C13-40FA-B5A8-F88D3E60827F@vmware.com>
+In-Reply-To: <7E4E5362-4C13-40FA-B5A8-F88D3E60827F@vmware.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Sun, 24 Feb 2019 11:35:08 -0800
+X-Gmail-Original-Message-ID: <CALCETrWJ0RUxpDw=Th3JBUGBhwFKHzELS+oOwjekSDwYjqMGzA@mail.gmail.com>
+Message-ID: <CALCETrWJ0RUxpDw=Th3JBUGBhwFKHzELS+oOwjekSDwYjqMGzA@mail.gmail.com>
+Subject: Re: [PATCH 1/2 v2] kprobe: Do not use uaccess functions to access
+ kernel memory that can fault
+To:     Nadav Amit <namit@vmware.com>
+Cc:     Andy Lutomirski <luto@kernel.org>, Jann Horn <jannh@google.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Changbin Du <changbin.du@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Network Development <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Igor Stoppa <igor.stoppa@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Feb 23, 2019 at 12:48:53PM -0800, Eric Dumazet wrote:
-> 
-> 
-> On 02/23/2019 12:38 PM, Alexei Starovoitov wrote:
-> > On Sat, Feb 23, 2019 at 11:07:09AM -0800, Eric Dumazet wrote:
-> >> If caller of bpf_setsockopt() is silly passing a negative optlen
-> >> bad things happen.
+On Sat, Feb 23, 2019 at 12:30 AM Nadav Amit <namit@vmware.com> wrote:
+>
+> > On Feb 22, 2019, at 3:59 PM, Andy Lutomirski <luto@kernel.org> wrote:
+> >
+> > On Fri, Feb 22, 2019 at 3:02 PM Jann Horn <jannh@google.com> wrote:
+> >> On Fri, Feb 22, 2019 at 11:39 PM Nadav Amit <namit@vmware.com> wrote:
+> >>>> On Feb 22, 2019, at 2:21 PM, Nadav Amit <namit@vmware.com> wrote:
+> >>>>
+> >>>>> On Feb 22, 2019, at 2:17 PM, Jann Horn <jannh@google.com> wrote:
+> >>>>>
+> >>>>> On Fri, Feb 22, 2019 at 11:08 PM Nadav Amit <namit@vmware.com> wrot=
+e:
+> >>>>>>> On Feb 22, 2019, at 1:43 PM, Jann Horn <jannh@google.com> wrote:
+> >>>>>>>
+> >>>>>>> (adding some people from the text_poke series to the thread, remo=
+ving stable@)
+> >>>>>>>
+> >>>>>>> On Fri, Feb 22, 2019 at 8:55 PM Andy Lutomirski <luto@amacapital.=
+net> wrote:
+> >>>>>>>>> On Feb 22, 2019, at 11:34 AM, Alexei Starovoitov <alexei.starov=
+oitov@gmail.com> wrote:
+> >>>>>>>>>> On Fri, Feb 22, 2019 at 02:30:26PM -0500, Steven Rostedt wrote=
+:
+> >>>>>>>>>> On Fri, 22 Feb 2019 11:27:05 -0800
+> >>>>>>>>>> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> >>>>>>>>>>
+> >>>>>>>>>>>> On Fri, Feb 22, 2019 at 09:43:14AM -0800, Linus Torvalds wro=
+te:
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> Then we should still probably fix up "__probe_kernel_read()"=
+ to not
+> >>>>>>>>>>>> allow user accesses. The easiest way to do that is actually =
+likely to
+> >>>>>>>>>>>> use the "unsafe_get_user()" functions *without* doing a
+> >>>>>>>>>>>> uaccess_begin(), which will mean that modern CPU's will simp=
+ly fault
+> >>>>>>>>>>>> on a kernel access to user space.
+> >>>>>>>>>>>
+> >>>>>>>>>>> On bpf side the bpf_probe_read() helper just calls probe_kern=
+el_read()
+> >>>>>>>>>>> and users pass both user and kernel addresses into it and exp=
+ect
+> >>>>>>>>>>> that the helper will actually try to read from that address.
+> >>>>>>>>>>>
+> >>>>>>>>>>> If __probe_kernel_read will suddenly start failing on all use=
+r addresses
+> >>>>>>>>>>> it will break the expectations.
+> >>>>>>>>>>> How do we solve it in bpf_probe_read?
+> >>>>>>>>>>> Call probe_kernel_read and if that fails call unsafe_get_user=
+ byte-by-byte
+> >>>>>>>>>>> in the loop?
+> >>>>>>>>>>> That's doable, but people already complain that bpf_probe_rea=
+d() is slow
+> >>>>>>>>>>> and shows up in their perf report.
+> >>>>>>>>>>
+> >>>>>>>>>> We're changing kprobes to add a specific flag to say that we w=
+ant to
+> >>>>>>>>>> differentiate between kernel or user reads. Can this be done w=
+ith
+> >>>>>>>>>> bpf_probe_read()? If it's showing up in perf report, I doubt a=
+ single
+> >>>>>>>>>
+> >>>>>>>>> so you're saying you will break existing kprobe scripts?
+> >>>>>>>>> I don't think it's a good idea.
+> >>>>>>>>> It's not acceptable to break bpf_probe_read uapi.
+> >>>>>>>>
+> >>>>>>>> If so, the uapi is wrong: a long-sized number does not reliably =
+identify an address if you don=E2=80=99t separately know whether it=E2=80=
+=99s a user or kernel address. s390x and 4G:4G x86_32 are the notable excep=
+tions. I have lobbied for RISC-V and future x86_64 to join the crowd.  I do=
+n=E2=80=99t know whether I=E2=80=99ll win this fight, but the uapi will pro=
+bably have to change for at least s390x.
+> >>>>>>>>
+> >>>>>>>> What to do about existing scripts is a different question.
+> >>>>>>>
+> >>>>>>> This lack of logical separation between user and kernel addresses
+> >>>>>>> might interact interestingly with the text_poke series, specifica=
+lly
+> >>>>>>> "[PATCH v3 05/20] x86/alternative: Initialize temporary mm for
+> >>>>>>> patching" (https://na01.safelinks.protection.outlook.com/?url=3Dh=
+ttps%3A%2F%2Flore.kernel.org%2Flkml%2F20190221234451.17632-6-rick.p.edgecom=
+be%40intel.com%2F&amp;data=3D02%7C01%7Cnamit%40vmware.com%7Cbab53e52cc5c4ac=
+4419008d69921d1f1%7Cb39138ca3cee4b4aa4d6cd83d9dd62f0%7C0%7C0%7C636864767879=
+731941&amp;sdata=3D2tqD7udTCfNbcNLcj5SFpZt8WwK5NwtgaWMKm1Ye1EE%3D&amp;reser=
+ved=3D0)
+> >>>>>>> and "[PATCH v3 06/20] x86/alternative: Use temporary mm for text
+> >>>>>>> poking" (https://na01.safelinks.protection.outlook.com/?url=3Dhtt=
+ps%3A%2F%2Flore.kernel.org%2Flkml%2F20190221234451.17632-7-rick.p.edgecombe=
+%40intel.com%2F&amp;data=3D02%7C01%7Cnamit%40vmware.com%7Cbab53e52cc5c4ac44=
+19008d69921d1f1%7Cb39138ca3cee4b4aa4d6cd83d9dd62f0%7C0%7C0%7C63686476787973=
+1941&amp;sdata=3D7%2BLShgLKnra6xzSkxdJrCclCacfdE5IdczwScW83nuE%3D&amp;reser=
+ved=3D0),
+> >>>>>>> right? If someone manages to get a tracing BPF program to trigger=
+ in a
+> >>>>>>> task that has switched to the patching mm, could they use
+> >>>>>>> bpf_probe_write_user() - which uses probe_kernel_write() after
+> >>>>>>> checking that KERNEL_DS isn't active and that access_ok() passes =
+- to
+> >>>>>>> overwrite kernel text that is mapped writable in the patching mm?
+> >>>>>>
+> >>>>>> Yes, this is a good point. I guess text_poke() should be defined w=
+ith
+> >>>>>> =E2=80=9C__kprobes=E2=80=9D and open-code memcpy.
+> >>>>>>
+> >>>>>> Does it sound reasonable?
+> >>>>>
+> >>>>> Doesn't __text_poke() as implemented in the proposed patch use a
+> >>>>> couple other kernel functions, too? Like switch_mm_irqs_off() and
+> >>>>> pte_clear() (which can be a call into a separate function on paravi=
+rt
+> >>>>> kernels)?
+> >>>>
+> >>>> I will move the pte_clear() to be done after the poking mm was unloa=
+ded.
+> >>>> Give me a few minutes to send a sketch of what I think should be don=
+e.
+> >>>
+> >>> Err.. You are right, I don=E2=80=99t see an easy way of preventing a =
+kprobe from
+> >>> being set on switch_mm_irqs_off(), and open-coding this monster is to=
+o ugly.
+> >>>
+> >>> The reasonable solution seems to me as taking all the relevant pieces=
+ of
+> >>> code (and data) that might be used during text-poking and encapsulati=
+ng them, so they
+> >>> will be set in a memory area which cannot be kprobe'd. This can also =
+be
+> >>> useful to write-protect data structures of code that calls text_poke(=
+),
+> >>> e.g., static-keys. It can also protect data on that stack that is use=
+d
+> >>> during text_poke() from being overwritten from another core.
+> >>>
+> >>> This solution is somewhat similar to Igor Stoppa=E2=80=99s idea of us=
+ing =E2=80=9Cenclaves=E2=80=9D
+> >>> when doing write-rarely operations.
+> >>>
+> >>> Right now, I think that text_poke() will keep being susceptible to su=
+ch
+> >>> an attack, unless you have a better suggestion.
 > >>
-> >> Fixes: 91b5b21c7c16 ("bpf: Add support for changing congestion control")
-> >> Signed-off-by: Eric Dumazet <edumazet@google.com>
-> >> Cc: Lawrence Brakmo <brakmo@fb.com>
-> >> ---
-> >>  net/core/filter.c | 5 +++--
-> >>  1 file changed, 3 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/net/core/filter.c b/net/core/filter.c
-> >> index f7d0004fc16096eb42ece3a6acf645540ee2326b..6a5d89464168f2f35f43986c1dbc0446c9390a3c 100644
-> >> --- a/net/core/filter.c
-> >> +++ b/net/core/filter.c
-> >> @@ -4194,8 +4194,9 @@ BPF_CALL_5(bpf_setsockopt, struct bpf_sock_ops_kern *, bpf_sock,
-> >>  			char name[TCP_CA_NAME_MAX];
-> >>  			bool reinit = bpf_sock->op > BPF_SOCK_OPS_NEEDS_ECN;
-> >>  
-> >> -			strncpy(name, optval, min_t(long, optlen,
-> >> -						    TCP_CA_NAME_MAX-1));
-> >> +			if (optlen < 0)
-> >> +				return -EINVAL;
-> >> +			strncpy(name, optval, min(optlen, TCP_CA_NAME_MAX - 1));
-> > 
-> > Unnecessary.
-> > The verifier guarantees that optlen > 0 because
-> > static const struct bpf_func_proto bpf_setsockopt_proto = {
-> >         .func           = bpf_setsockopt,
-> > ...
-> >         .arg5_type      = ARG_CONST_SIZE,
-> > };
-> > 
-> 
-> Even on 32bit kernel ?
-> 
-> The suspect thing to me is the min_t(long, ....)
-> 
-> optlen is an integer, why do we need to promote to a long ?
+> >> A relatively simple approach might be to teach BPF not to run kprobe
+> >> programs and such in contexts where current->mm isn't the active mm?
+> >> Maybe using nmi_uaccess_okay(), or something like that? It looks like
+> >> perf_callchain_user() also already uses that. Except that a lot of
+> >> this code is x86-specific...
+> >
+> > This sounds like exactly the right solution.  If you're running from
+> > some unknown context (like NMI or tracing), then you should check
+> > nmi_uaccess_okay().  I think we should just promote that to be a
+> > non-arch-specific function (that returns true by default) and check it
+> > the relevant bpf_probe_xyz() functions.
+>
+> I can do that, but notice that switch_mm_irqs_off() writes to
+> cpu_tlbstate.loaded_mm before it actually writes to CR3. So there are sti=
+ll
+> a couple of instructions (and the load_new_mm_cr3()) in between that a
+> kprobe can be set on, no?
 
-I think the code is actually fine as-is.
-I bet it was copy pasted from do_tcp_setsockopt
-where similar min_t(long) is used to match strncpy_from_user() declaration.
-Here min_t(long) or min_t(int) or min() doesn't matter.
-I would keep it as-is to avoid noisy patches.
-
+But you can't mark then as no-nmi :)  See the comment in
+nmi_uaccess_ok() -- the code is intended to work correctly during this
+window.
