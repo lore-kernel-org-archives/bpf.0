@@ -2,77 +2,78 @@ Return-Path: <SRS0=zbR4=RA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT
-	autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS,
+	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FAFEC43381
-	for <bpf@archiver.kernel.org>; Mon, 25 Feb 2019 16:02:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFBE1C43381
+	for <bpf@archiver.kernel.org>; Mon, 25 Feb 2019 19:00:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DD6FE20C01
-	for <bpf@archiver.kernel.org>; Mon, 25 Feb 2019 16:02:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9EE2620C01
+	for <bpf@archiver.kernel.org>; Mon, 25 Feb 2019 19:00:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C84tBkAN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h+GqvOyi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727766AbfBYQC4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 25 Feb 2019 11:02:56 -0500
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:37877 "EHLO
+        id S1726382AbfBYTAG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 25 Feb 2019 14:00:06 -0500
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:38690 "EHLO
         mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727731AbfBYQC4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 25 Feb 2019 11:02:56 -0500
-Received: by mail-qt1-f193.google.com with SMTP id a48so11079293qtb.4;
-        Mon, 25 Feb 2019 08:02:54 -0800 (PST)
+        with ESMTP id S1726377AbfBYTAG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 25 Feb 2019 14:00:06 -0500
+Received: by mail-qt1-f193.google.com with SMTP id s1so11856967qte.5;
+        Mon, 25 Feb 2019 11:00:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:date:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=e92I+OTXRh6MBDhpcEsTsaqf7KTdif10qkpLioQ4tnM=;
-        b=C84tBkANlh/3EpOSf8qbP5o2C6tnk2+cJ20biCscEJsjy6CocQ39nIY5WtGhoc9bfs
-         wUn7Y/p9UtRGuJpapBlDFLfEj2AHps7hd1k0EQkUqNhjWp7R3gYxsHVcBl5UPrrzjKIX
-         I6eDFAUUth9hWsW29nDTnFjb69Y296xKuF9HySzE6GK8zEkrMwiCdJjUwvcsk7gPvwXm
-         3bwtuozE/rjZmNHLIsJwyW39rJQIoJ3nNftux3B3ssqrS7gERqoN+7lpyxy4ejRxT/Dg
-         EjSEYZbrChs6/xxcJEQsFqZv68R6ZTulHp31q29M3cLtWNaVuNRLHgXvC9Hpwcktu7d8
-         DXlQ==
+        bh=iHXGvFEYriakLuErlfAi7m/EXU3o7q2d0r9eUVXRRT0=;
+        b=h+GqvOyix7XJd5VoO/pfA2RfjL0kGLuwEA3TkYqmxJSVlqz8hCgtxnupGn6IAfatDm
+         YGgaNqhNYDoxUySWsEPqYj7yAEoCrApEKmX+iZ0/ILwYAC5crRZRPrLi7VdpTKkP6pN1
+         tQyJjrNAq+HSMhW6gKPQ7vWGx/2+mu30VzP+GLq3Rg28KZXVhdr1icPvT6I3I639wwl1
+         fEbWWj6K1v6D4bkD5eemwS23tbIieRI6NYRCU0/wF1H51eu1+NPGfacOGvLRvYk+ZSvP
+         00jGjeWIk2MyntLkPpk5G0igmzfbrCfElYR1mrDS+Msop1NL4d3781T29ZsQVb0Tu/WI
+         9Q9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:date:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=e92I+OTXRh6MBDhpcEsTsaqf7KTdif10qkpLioQ4tnM=;
-        b=cEEuX8NzGxEeTToHjCpb4e03Rm4Lei7IcUR5/xLhNp2WUsDgzhbejLFjIBcPGmI65Z
-         ZLq9hNxXV09QsarTcfIW4jFmukuDB6Zk3YH1Qka7EFwh6fPlBBnQ2HOh2nwqF/ssx9hL
-         7KwpmX1j+oeNDkNClO8OrdXv3M6sWIPIVdNIGCY0UfmMKJFceBKXUjwIZ/CKO6zxAef3
-         uptvdTXvYaIuvvklwmYtCknGh7HPynohX2ShtOS/Sg6R52c6BrvHIsyCmVAIEVtUuz1a
-         OtAXgNQ5sf4RZrkFyV/1EzNs6K6ZoNu6rUmDgAXm+m/3CI2PeVEroaSup1ibNvGP8kB3
-         cDcg==
-X-Gm-Message-State: AHQUAuajMYgproh6SXRP1XyoDSNXeebLAKg0lV2hxdvjbMgHdgoBQ9tI
-        nG3B2msUD3z0nEWXtFpj4tQ=
-X-Google-Smtp-Source: AHgI3IaJBUOfVG9bmBpEwcxMy5/4IvpOSiwDod377ZPlnGnD7/p5tef6jQjbupfZeK+dEJCV7H08Dw==
-X-Received: by 2002:aed:3ef6:: with SMTP id o51mr14333347qtf.183.1551110574139;
-        Mon, 25 Feb 2019 08:02:54 -0800 (PST)
-Received: from quaco.ghostprotocols.net ([190.15.121.82])
-        by smtp.gmail.com with ESMTPSA id u20sm6281750qku.50.2019.02.25.08.02.52
+        bh=iHXGvFEYriakLuErlfAi7m/EXU3o7q2d0r9eUVXRRT0=;
+        b=QWpkb8JVFCZLPjlaVxpoB0G1UZ6Sm7Qcpq7HHMoqeF4fHjQDlF1F0ljUi29gH5BUgy
+         vd9UFmuyMTBdj7eWgMO1ljPv5i59rubZEBd725f/blEgM7iJ3nYsTvOX4rroSg1WeOCr
+         /BcHEtssbJaPUV2ssXLXsvMQfvqR/KUEiKjONvjzohlvFvAHFXt2KV+yMo203TGbmQmM
+         MTSvAR277Ibc3pkVBtDseBiLkdlAeWo2JJCgyWwSjeAE6YE5Pic7KZwb3t6lbeTwAcWF
+         1xGf+ejEXibqEWj0zoKLXuHoo52e1jNns+VF37NjB/s7zBWmG8nI8/M22q22reh1GwIV
+         Ka0w==
+X-Gm-Message-State: AHQUAuafEi7FMEpYFfr59n/FpK2UK6u8UXDTAiQd78UHyYK0Av0JGhP1
+        R8GJYfB++0bO+OOqEfNT3X9HzJNGKj4=
+X-Google-Smtp-Source: AHgI3IYVyb4g0eSlh4RzKPLq1SZ2pvrL9G/guqHJ46kkvKxFelfukQdztHLSLGr5I7L3wJhvdvqB7g==
+X-Received: by 2002:ac8:43d5:: with SMTP id w21mr13970335qtn.98.1551121204551;
+        Mon, 25 Feb 2019 11:00:04 -0800 (PST)
+Received: from quaco.ghostprotocols.net ([179.179.86.104])
+        by smtp.gmail.com with ESMTPSA id g24sm7414263qtc.61.2019.02.25.11.00.01
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 25 Feb 2019 08:02:52 -0800 (PST)
+        Mon, 25 Feb 2019 11:00:03 -0800 (PST)
 From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
 X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 5AD7A4039C; Mon, 25 Feb 2019 13:02:39 -0300 (-03)
-Date:   Mon, 25 Feb 2019 13:02:39 -0300
+        id D5D9E4039C; Mon, 25 Feb 2019 15:59:49 -0300 (-03)
+Date:   Mon, 25 Feb 2019 15:59:49 -0300
 To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         Andrii Nakryiko <andriin@fb.com>, dwarves@vger.kernel.org,
         bpf@vger.kernel.org, Alexei Starovoitov <ast@fb.com>,
         Yonghong Song <yhs@fb.com>
 Subject: Re: [PATCH pahole 0/3] fix handling of bitfields in btf_loader
-Message-ID: <20190225160239.GR31136@kernel.org>
+Message-ID: <20190225185949.GT31136@kernel.org>
 References: <20190220205732.2514975-1-andriin@fb.com>
  <20190222220243.GI26132@kernel.org>
  <CAEf4BzYoJgxYWX9iS7pda62cnGr5VOC70NGgqPurMNWP_w1daA@mail.gmail.com>
+ <20190225160239.GR31136@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEf4BzYoJgxYWX9iS7pda62cnGr5VOC70NGgqPurMNWP_w1daA@mail.gmail.com>
+In-Reply-To: <20190225160239.GR31136@kernel.org>
 X-Url:  http://acmel.wordpress.com
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: bpf-owner@vger.kernel.org
@@ -80,198 +81,96 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Fri, Feb 22, 2019 at 03:23:52PM -0800, Andrii Nakryiko escreveu:
-> On Fri, Feb 22, 2019 at 2:02 PM Arnaldo Carvalho de Melo
-> <arnaldo.melo@gmail.com> wrote:
-> >
-> > Em Wed, Feb 20, 2019 at 12:57:29PM -0800, Andrii Nakryiko escreveu:
-> > > This patchset fixes the logic of determining bitfield_offsets and
-> > > initial bit_offset when using BTF type information. It eliminates all
-> > > the remaining discrepancies, when doing btfdiff on vmlinux image, module
-> > > two instances of incorrectly reporting struct member type name when
-> > > bitfield is the very first field in a struct, which is only happening
-> > > when using DWARF data.
-> > >
-> > > Patch #1 makes btfdiff script easier to use during local development.
-> > >
-> > > Patch #2 fixes list of known base type names to handle clang-generated
-> > > type descriptions better.
-> > >
-> > > Patch #3 fixes bitfield handling logic in btf_loader.
-> >
-> > Thanks a lot! Applied.
-> >
-> > And here I see no differences in my vmlinux:
-> >
-> 
-> <SNIP>
-> 
-> >
-> > Which ones where these: "module two instances of incorrectly reporting struct
-> > member type name when bitfield is the very first field in a struct, which is
-> > only happening when using DWARF data." ?
-> 
-> $ ./btfdiff /tmp/vmlinux4
-> --- /tmp/btfdiff.dwarf.GIVfpr   2019-02-20 12:18:29.138788970 -0800
-> +++ /tmp/btfdiff.btf.c3x2KY     2019-02-20 12:18:29.351786365 -0800
-> @@ -16884,7 +16884,7 @@ struct pebs_record_nhm {
->  };
->  union hsw_tsx_tuning {
->         struct {
-> -               unsigned int       cycles_last_block:32; /*     0: 0  4 */
-> +               u32                cycles_last_block:32; /*     0: 0  4 */
+Em Mon, Feb 25, 2019 at 01:02:39PM -0300, Arnaldo Carvalho de Melo escreveu:
+> So yeah, the BTF encoder/decoder is working just fine, the problem is in
+> pahole's DWARF code, lemme see...
 
-$ vim hsw_tsx_tuning.c
-$ gcc -g -c hsw_tsx_tuning.c -o hsw_tsx_tuning-gcc
-$ pahole -J hsw_tsx_tuning
-pahole: hsw_tsx_tuning: No such file or directory
-$ pahole -J hsw_tsx_tuning-gcc
-$
-$ btfdiff hsw_tsx_tuning-gcc
---- /tmp/btfdiff.dwarf.ErXffk	2019-02-25 10:26:56.863625697 -0300
-+++ /tmp/btfdiff.btf.Y5EDdM	2019-02-25 10:26:56.864625706 -0300
-@@ -1,6 +1,6 @@
- union hsw_tsx_tuning {
- 	struct {
--		unsigned int       cycles_last_block:32; /*     0: 0  4 */
-+		u32                cycles_last_block:32; /*     0: 0  4 */
- 		u32                hle_abort:1;        /*     4:31  4 */
- 		u32                rtm_abort:1;        /*     4:30  4 */
- 		u32                instruction_abort:1; /*     4:29  4 */
-$
+Please try the patch below, for me btfdiff continues to show no diff for
+all types in my vmlinux and now it also produces the same output for
+when the first element of a bitfield has its bit_size equal to its
+byte_size * 8:
 
-Reproduced. 
+[acme@quaco pahole]$ btfdiff vmlinux
+[acme@quaco pahole]$ btfdiff examples/andrii/hsw_tsx_tuning-gcc
+[acme@quaco pahole]$ btfdiff examples/andrii/hsw_tsx_tuning-clang
+[acme@quaco pahole]$ pahole examples/andrii/hsw_tsx_tuning-clang
+union hsw_tsx_tuning {
+	struct {
+		u32                cycles_last_block;  /*     0     4 */
+		u32                hle_abort:1;        /*     4:31  4 */
+		u32                rtm_abort:1;        /*     4:30  4 */
+		u32                instruction_abort:1; /*     4:29  4 */
+		u32                non_instruction_abort:1; /*     4:28  4 */
+		u32                retry:1;            /*     4:27  4 */
+		u32                data_conflict:1;    /*     4:26  4 */
+		u32                capacity_writes:1;  /*     4:25  4 */
+		u32                capacity_reads:1;   /*     4:24  4 */
+	};                                             /*     0     8 */
+	u64                        value;              /*     0     8 */
+};
+[acme@quaco pahole]$ pahole -F btf examples/andrii/hsw_tsx_tuning-clang
+union hsw_tsx_tuning {
+	struct {
+		u32                cycles_last_block;  /*     0     4 */
+		u32                hle_abort:1;        /*     4:31  4 */
+		u32                rtm_abort:1;        /*     4:30  4 */
+		u32                instruction_abort:1; /*     4:29  4 */
+		u32                non_instruction_abort:1; /*     4:28  4 */
+		u32                retry:1;            /*     4:27  4 */
+		u32                data_conflict:1;    /*     4:26  4 */
+		u32                capacity_writes:1;  /*     4:25  4 */
+		u32                capacity_reads:1;   /*     4:24  4 */
+	};                                             /*     0     8 */
+	u64                        value;              /*     0     8 */
+};
+[acme@quaco pahole]$
 
- <2><5c>: Abbrev Number: 5 (DW_TAG_member)
-    <5d>   DW_AT_name        : (indirect string, offset: 0x23): cycles_last_block
-    <61>   DW_AT_decl_file   : 1
-    <62>   DW_AT_decl_line   : 8
-    <63>   DW_AT_decl_column : 13
-    <64>   DW_AT_type        : <0x40>
-    <68>   DW_AT_byte_size   : 4
-    <69>   DW_AT_bit_size    : 32
-    <6a>   DW_AT_bit_offset  : 0
-    <6b>   DW_AT_data_member_location: 0
- <1><40>: Abbrev Number: 2 (DW_TAG_typedef)
-    <41>   DW_AT_name        : u32
-    <45>   DW_AT_decl_file   : 1
-    <46>   DW_AT_decl_line   : 4
-    <47>   DW_AT_decl_column : 22
-    <48>   DW_AT_type        : <0x4c>
- <1><4c>: Abbrev Number: 3 (DW_TAG_base_type)
-    <4d>   DW_AT_byte_size   : 4
-    <4e>   DW_AT_encoding    : 7        (unsigned)
-    <4f>   DW_AT_name        : (indirect string, offset: 0x16): unsigned int
-
-So yeah, the BTF encoder/decoder is working just fine, the problem is in
-pahole's DWARF code, lemme see...
-
->                 u32                hle_abort:1;        /*     4:31  4 */
->                 u32                rtm_abort:1;        /*     4:30  4 */
->                 u32                instruction_abort:1; /*     4:29  4 */
-> @@ -26154,7 +26154,7 @@ struct acpi_device_power {
->         /* last cacheline: 40 bytes */
->  };
->  struct acpi_device_perf_flags {
-> -       unsigned char              reserved:8;           /*     0: 0  1 */
-> +       u8                         reserved:8;           /*     0: 0  1 */
-> 
->         /* size: 1, cachelines: 1, members: 1 */
->         /* last cacheline: 1 bytes */
-> 
-> For hsw_tsx_tuning, it is defined in sources like this:
-> 
-> $ cat hsw_tsx_tuning.c
-> typedef unsigned long long u64;
-> typedef unsigned int u32;
-> 
-> union hsw_tsx_tuning {
->     struct {
->         u32 cycles_last_block     : 32,
->             hle_abort             : 1,
->             rtm_abort             : 1,
->             instruction_abort     : 1,
->             non_instruction_abort : 1,
->             retry                 : 1,
->             data_conflict         : 1,
->             capacity_writes       : 1,
->             capacity_reads        : 1;
->     };
->     u64        value;
-> };
-> 
-> int main() {
->     union hsw_tsx_tuning t;
->     return 0;
-> }
-> 
-> Building same defition with gcc and clang reveals some more info.
-> 
-> $ cc -g -c hsw_tsx_tuning.c -o hsw_tsx_tuning-gcc &&
-> ~/local/pahole/build/pahole -J hsw_tsx_tuning-gcc
-> $ clang -g -c hsw_tsx_tuning.c -o hsw_tsx_tuning-clang &&
-> ~/local/pahole/build/pahole -J hsw_tsx_tuning-clang
-> 
-> GCC-generated DWARF/BTF exposes this bug:
-> 
-> $ PAHOLE=~/local/pahole/build/pahole ~/local/pahole/btfdiff hsw_tsx_tuning-gcc
-> --- /tmp/btfdiff.dwarf.khRiFg   2019-02-22 15:18:46.768858141 -0800
-> +++ /tmp/btfdiff.btf.jqdEsR     2019-02-22 15:18:46.770858140 -0800
-> @@ -1,6 +1,6 @@
->  union hsw_tsx_tuning {
->         struct {
-> -               unsigned int       cycles_last_block:32; /*     0: 0  4 */
-> +               u32                cycles_last_block:32; /*     0: 0  4 */
->                 u32                hle_abort:1;        /*     4:31  4 */
->                 u32                rtm_abort:1;        /*     4:30  4 */
->                 u32                instruction_abort:1; /*     4:29  4 */
-> 
-> But the one generated by clang doesn't:
-> 
-> $ PAHOLE=~/local/pahole/build/pahole ~/local/pahole/btfdiff hsw_tsx_tuning-clang
-> 
-> The only difference is that GCC correctly marks cycles_last_block as
-> bitfield, while clang optimizes it to stand-alone u32.
-> 
-> $ ~/local/pahole/build/pahole -F btf hsw_tsx_tuning-gcc
-> union hsw_tsx_tuning {
->         struct {
->                 u32                cycles_last_block:32; /*     0: 0  4 */
->                 u32                hle_abort:1;        /*     4:31  4 */
->                 u32                rtm_abort:1;        /*     4:30  4 */
->                 u32                instruction_abort:1; /*     4:29  4 */
->                 u32                non_instruction_abort:1; /*     4:28  4 */
->                 u32                retry:1;            /*     4:27  4 */
->                 u32                data_conflict:1;    /*     4:26  4 */
->                 u32                capacity_writes:1;  /*     4:25  4 */
->                 u32                capacity_reads:1;   /*     4:24  4 */
->         };                                             /*     0     8 */
->         u64                        value;              /*     0     8 */
-> };
-> 
-> $ ~/local/pahole/build/pahole -F btf hsw_tsx_tuning-clang
-> union hsw_tsx_tuning {
->         struct {
->                 u32                cycles_last_block;  /*     0     4 */
->                 u32                hle_abort:1;        /*     4:31  4 */
->                 u32                rtm_abort:1;        /*     4:30  4 */
->                 u32                instruction_abort:1; /*     4:29  4 */
->                 u32                non_instruction_abort:1; /*     4:28  4 */
->                 u32                retry:1;            /*     4:27  4 */
->                 u32                data_conflict:1;    /*     4:26  4 */
->                 u32                capacity_writes:1;  /*     4:25  4 */
->                 u32                capacity_reads:1;   /*     4:24  4 */
->         };                                             /*     0     8 */
->         u64                        value;              /*     0     8 */
-> };
-> 
-> I've spent a bit of time debugging this, but didn't get far, as I'm
-> pretty unfamiliar with overall flow of decoders, I was hoping this can
-> give you some idea where to look, though.
-> 
-> >
-> > - Arnaldo
-
--- 
-
-- Arnaldo
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index adef437109f6..37477fb23be3 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -607,7 +607,8 @@ static struct variable *variable__new(Dwarf_Die *die, struct cu *cu)
+ 
+ int tag__recode_dwarf_bitfield(struct tag *tag, struct cu *cu, uint16_t bit_size)
+ {
+-	uint16_t id;
++	int id;
++	uint16_t short_id;
+ 	struct tag *recoded;
+ 	/* in all the cases the name is at the same offset */
+ 	strings_t name = tag__namespace(tag)->name;
+@@ -620,7 +621,7 @@ int tag__recode_dwarf_bitfield(struct tag *tag, struct cu *cu, uint16_t bit_size
+ 		struct tag *type = dtype->tag;
+ 
+ 		id = tag__recode_dwarf_bitfield(type, cu, bit_size);
+-		if (id == tag->type)
++		if (id < 0)
+ 			return id;
+ 
+ 		struct type *new_typedef = obstack_zalloc(&cu->obstack,
+@@ -660,10 +661,9 @@ int tag__recode_dwarf_bitfield(struct tag *tag, struct cu *cu, uint16_t bit_size
+ 		 * the dwarf_cu as in dwarf there are no such things
+ 		 * as base_types of less than 8 bits, etc.
+ 		 */
+-		recoded = cu__find_base_type_by_sname_and_size(cu, name, bit_size, &id);
++		recoded = cu__find_base_type_by_sname_and_size(cu, name, bit_size, &short_id);
+ 		if (recoded != NULL)
+-			return id;
+-
++			return short_id;
+ 
+ 		struct base_type *new_bt = obstack_zalloc(&cu->obstack,
+ 							  sizeof(*new_bt));
+@@ -683,10 +683,9 @@ int tag__recode_dwarf_bitfield(struct tag *tag, struct cu *cu, uint16_t bit_size
+ 		 * the dwarf_cu as in dwarf there are no such things
+ 		 * as enumeration_types of less than 8 bits, etc.
+ 		 */
+-		recoded = cu__find_enumeration_by_sname_and_size(cu, name,
+-								 bit_size, &id);
++		recoded = cu__find_enumeration_by_sname_and_size(cu, name, bit_size, &short_id);
+ 		if (recoded != NULL)
+-			return id;
++			return short_id;
+ 
+ 		struct type *alias = tag__type(tag);
+ 		struct type *new_enum = obstack_zalloc(&cu->obstack, sizeof(*new_enum));
