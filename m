@@ -2,134 +2,204 @@ Return-Path: <SRS0=zbR4=RA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD98CC43381
-	for <bpf@archiver.kernel.org>; Mon, 25 Feb 2019 11:17:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73A7FC43381
+	for <bpf@archiver.kernel.org>; Mon, 25 Feb 2019 13:36:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 85D0B2087C
-	for <bpf@archiver.kernel.org>; Mon, 25 Feb 2019 11:17:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3A6F22146F
+	for <bpf@archiver.kernel.org>; Mon, 25 Feb 2019 13:36:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1551101806;
+	bh=QZ5sLAX9jFqBUUba4gTaT7tgb3EUrBrb7rvstnwC8hA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=CJhl6RoMnbEWxtOZY3DyiJngqzXnKq4G1Fzgywv62Oe6hzMsFbjNqrlw7Eh2xrpW/
+	 SEjEU3K6ry+Wm2Mt1rh+Uwg6j2BjKBsRCnsnu1HnZ7nwC6H5+9Audg/jxzVnZFQCVd
+	 scu9MxEvkOWt9TdfXytTYjQRm/Y07QV3iZjua97o=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726759AbfBYLRo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 25 Feb 2019 06:17:44 -0500
-Received: from www62.your-server.de ([213.133.104.62]:43514 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726701AbfBYLRo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 25 Feb 2019 06:17:44 -0500
-Received: from [78.46.172.2] (helo=sslproxy05.your-server.de)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1gyEGP-00028H-DT; Mon, 25 Feb 2019 12:17:37 +0100
-Received: from [2a02:1205:34ea:9e0:5681:e3d2:fbd:7e53] (helo=linux.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1gyEGP-0003UL-7Z; Mon, 25 Feb 2019 12:17:37 +0100
-Subject: Re: [PATCH v2 bpf-next 4/4] tools/bpftool: recognize bpf_prog_info
- runtime and runcnt
-To:     Alexei Starovoitov <ast@kernel.org>, davem@davemloft.net
-Cc:     edumazet@google.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-team@fb.com
-References: <20190223174422.663270-1-ast@kernel.org>
- <20190223174422.663270-5-ast@kernel.org>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <cf8b7ffc-22f9-a095-7614-2d191ba53522@iogearbox.net>
-Date:   Mon, 25 Feb 2019 12:17:36 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.3.0
-MIME-Version: 1.0
-In-Reply-To: <20190223174422.663270-5-ast@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        id S1727246AbfBYNgi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 25 Feb 2019 08:36:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40806 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727044AbfBYNgi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 25 Feb 2019 08:36:38 -0500
+Received: from devbox (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D3554213A2;
+        Mon, 25 Feb 2019 13:36:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1551101796;
+        bh=QZ5sLAX9jFqBUUba4gTaT7tgb3EUrBrb7rvstnwC8hA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=H1KLQOSASc3WPLCvLg/m0OWwL9rAqHR8gL6aHLjCmJmhKKwxGtrqPHaiEjgfXx01y
+         0WjW1+V1eyVTJKYUzL7qZ+avXMnTP9u7ucb7Z0U9DW79nmiYsR2ZgKjz5f5ABW0bok
+         53cZwfJk4CmvD9FxlElGIxbraXjYOQm3/bLqT98Q=
+Date:   Mon, 25 Feb 2019 22:36:31 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Jann Horn <jannh@google.com>, Nadav Amit <namit@vmware.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Changbin Du <changbin.du@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Network Development <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Igor Stoppa <igor.stoppa@gmail.com>
+Subject: Re: [PATCH 1/2 v2] kprobe: Do not use uaccess functions to access
+ kernel memory that can fault
+Message-Id: <20190225223631.8ad8e949aa17a6c1eaae74ee@kernel.org>
+In-Reply-To: <CALCETrU2V5KBA97g3O-yHiUu1acmM_K9b2a5ATmKSqGwdd-+Dw@mail.gmail.com>
+References: <20190219111802.1d6dbaa3@gandalf.local.home>
+        <20190220094926.0ab575b3@gandalf.local.home>
+        <20190222172745.2c7205d62003c0a858e33278@kernel.org>
+        <20190222173509.88489b7c5d1bf0e2ec2382ee@kernel.org>
+        <CAHk-=whNf_n1WXWW+ugAVeL5ZK0GcEP3cTYocju1nS85VtMjjQ@mail.gmail.com>
+        <20190222192703.epvgxghwybte7gxs@ast-mbp.dhcp.thefacebook.com>
+        <20190222143026.17d6f0f6@gandalf.local.home>
+        <20190222193456.5vqppubzrcx5wsul@ast-mbp.dhcp.thefacebook.com>
+        <9E670A9A-699C-4B65-962F-CE1AEFD72974@amacapital.net>
+        <CAG48ez2tVwzhKPu1tvK+E52jUCq5vTwjssrtMaGuCO=kMpSXGw@mail.gmail.com>
+        <0ED6836E-3432-4E1C-BABC-BEA6BDD36287@vmware.com>
+        <CAG48ez10RH2YhQ0wnEDOpKoGjrociq+zK0En6Aq06Yg9W3o5aQ@mail.gmail.com>
+        <7701651F-F10E-4212-925E-1CB77C5D3E69@vmware.com>
+        <A7232EDD-C53C-4B7D-AD02-4A480F40538B@vmware.com>
+        <CAG48ez1Dm04kg2x3O=OOmBFFBSDr+RmnhBYChcwYv5zLbPGudQ@mail.gmail.com>
+        <CALCETrU2V5KBA97g3O-yHiUu1acmM_K9b2a5ATmKSqGwdd-+Dw@mail.gmail.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-2022-JP
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.100.2/25370/Sun Feb 24 14:23:00 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 02/23/2019 06:44 PM, Alexei Starovoitov wrote:
-> $ bpftool p s
-> 1: kprobe  tag a56587d488d216c9  gpl runtime 79786 runcnt 8
-> 	loaded_at 2019-02-22T12:22:51-0800  uid 0
-> 	xlated 352B  not jited  memlock 4096B
-> 
-> $ bpftool --json --pretty p s
-> [{
->         "id": 1,
->         "type": "kprobe",
->         "tag": "a56587d488d216c9",
->         "gpl_compatible": true,
->         "run_time_ns": 79786,
->         "run_cnt": 8,
->         "loaded_at": 1550866971,
->         "uid": 0,
->         "bytes_xlated": 352,
->         "jited": false,
->         "bytes_memlock": 4096
->     }
-> ]
-> 
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> ---
->  tools/bpf/bpftool/Documentation/bpftool-prog.rst | 4 +++-
->  tools/bpf/bpftool/prog.c                         | 7 +++++++
->  2 files changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> index 12bc1e2d4b46..d8b46a8f17e0 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> @@ -171,7 +171,7 @@ EXAMPLES
->  
->  ::
->  
-> -    10: xdp  name some_prog  tag 005a3d2123620c8b  gpl
-> +    10: xdp  name some_prog  tag 005a3d2123620c8b  gpl runtime 81632 runcnt 10
->              loaded_at 2017-09-29T20:11:00+0000  uid 0
->              xlated 528B  jited 370B  memlock 4096B  map_ids 10
->  
-> @@ -184,6 +184,8 @@ EXAMPLES
->              "type": "xdp",
->              "tag": "005a3d2123620c8b",
->              "gpl_compatible": true,
-> +            "run_time_ns": 81632,
-> +            "run_cnt": 10,
->              "loaded_at": 1506715860,
->              "uid": 0,
->              "bytes_xlated": 528,
-> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-> index db978c8d76a8..cdb6bd424340 100644
-> --- a/tools/bpf/bpftool/prog.c
-> +++ b/tools/bpf/bpftool/prog.c
-> @@ -214,6 +214,10 @@ static void print_prog_json(struct bpf_prog_info *info, int fd)
->  		     info->tag[4], info->tag[5], info->tag[6], info->tag[7]);
->  
->  	jsonw_bool_field(json_wtr, "gpl_compatible", info->gpl_compatible);
-> +	if (info->runtime) {
-> +		jsonw_uint_field(json_wtr, "run_time_ns", info->runtime);
-> +		jsonw_uint_field(json_wtr, "run_cnt", info->runcnt);
+On Fri, 22 Feb 2019 15:59:30 -0800
+Andy Lutomirski <luto@kernel.org> wrote:
 
-Didn't Andrii mean to generally name these fields run_time_ns and run_cnt, so also
-uapi aside from just changing bpftool output (why keeping these names not the same)?
-
-> +	}
->  
->  	print_dev_json(info->ifindex, info->netns_dev, info->netns_ino);
->  
-> @@ -277,6 +281,9 @@ static void print_prog_plain(struct bpf_prog_info *info, int fd)
->  	fprint_hex(stdout, info->tag, BPF_TAG_SIZE, "");
->  	print_dev_plain(info->ifindex, info->netns_dev, info->netns_ino);
->  	printf("%s", info->gpl_compatible ? "  gpl" : "");
-> +	if (info->runtime)
-> +		printf(" runtime %lld runcnt %lld",
-> +		       info->runtime, info->runcnt);
->  	printf("\n");
->  
->  	if (info->load_time) {
+> On Fri, Feb 22, 2019 at 3:02 PM Jann Horn <jannh@google.com> wrote:
+> >
+> > On Fri, Feb 22, 2019 at 11:39 PM Nadav Amit <namit@vmware.com> wrote:
+> > > > On Feb 22, 2019, at 2:21 PM, Nadav Amit <namit@vmware.com> wrote:
+> > > >
+> > > >> On Feb 22, 2019, at 2:17 PM, Jann Horn <jannh@google.com> wrote:
+> > > >>
+> > > >> On Fri, Feb 22, 2019 at 11:08 PM Nadav Amit <namit@vmware.com> wrote:
+> > > >>>> On Feb 22, 2019, at 1:43 PM, Jann Horn <jannh@google.com> wrote:
+> > > >>>>
+> > > >>>> (adding some people from the text_poke series to the thread, removing stable@)
+> > > >>>>
+> > > >>>> On Fri, Feb 22, 2019 at 8:55 PM Andy Lutomirski <luto@amacapital.net> wrote:
+> > > >>>>>> On Feb 22, 2019, at 11:34 AM, Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> > > >>>>>>> On Fri, Feb 22, 2019 at 02:30:26PM -0500, Steven Rostedt wrote:
+> > > >>>>>>> On Fri, 22 Feb 2019 11:27:05 -0800
+> > > >>>>>>> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> > > >>>>>>>
+> > > >>>>>>>>> On Fri, Feb 22, 2019 at 09:43:14AM -0800, Linus Torvalds wrote:
+> > > >>>>>>>>>
+> > > >>>>>>>>> Then we should still probably fix up "__probe_kernel_read()" to not
+> > > >>>>>>>>> allow user accesses. The easiest way to do that is actually likely to
+> > > >>>>>>>>> use the "unsafe_get_user()" functions *without* doing a
+> > > >>>>>>>>> uaccess_begin(), which will mean that modern CPU's will simply fault
+> > > >>>>>>>>> on a kernel access to user space.
+> > > >>>>>>>>
+> > > >>>>>>>> On bpf side the bpf_probe_read() helper just calls probe_kernel_read()
+> > > >>>>>>>> and users pass both user and kernel addresses into it and expect
+> > > >>>>>>>> that the helper will actually try to read from that address.
+> > > >>>>>>>>
+> > > >>>>>>>> If __probe_kernel_read will suddenly start failing on all user addresses
+> > > >>>>>>>> it will break the expectations.
+> > > >>>>>>>> How do we solve it in bpf_probe_read?
+> > > >>>>>>>> Call probe_kernel_read and if that fails call unsafe_get_user byte-by-byte
+> > > >>>>>>>> in the loop?
+> > > >>>>>>>> That's doable, but people already complain that bpf_probe_read() is slow
+> > > >>>>>>>> and shows up in their perf report.
+> > > >>>>>>>
+> > > >>>>>>> We're changing kprobes to add a specific flag to say that we want to
+> > > >>>>>>> differentiate between kernel or user reads. Can this be done with
+> > > >>>>>>> bpf_probe_read()? If it's showing up in perf report, I doubt a single
+> > > >>>>>>
+> > > >>>>>> so you're saying you will break existing kprobe scripts?
+> > > >>>>>> I don't think it's a good idea.
+> > > >>>>>> It's not acceptable to break bpf_probe_read uapi.
+> > > >>>>>
+> > > >>>>> If so, the uapi is wrong: a long-sized number does not reliably identify an address if you don’t separately know whether it’s a user or kernel address. s390x and 4G:4G x86_32 are the notable exceptions. I have lobbied for RISC-V and future x86_64 to join the crowd.  I don’t know whether I’ll win this fight, but the uapi will probably have to change for at least s390x.
+> > > >>>>>
+> > > >>>>> What to do about existing scripts is a different question.
+> > > >>>>
+> > > >>>> This lack of logical separation between user and kernel addresses
+> > > >>>> might interact interestingly with the text_poke series, specifically
+> > > >>>> "[PATCH v3 05/20] x86/alternative: Initialize temporary mm for
+> > > >>>> patching" (https://na01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flkml%2F20190221234451.17632-6-rick.p.edgecombe%40intel.com%2F&amp;data=02%7C01%7Cnamit%40vmware.com%7Cf2513009ef734ecd6b0d08d69913a5ae%7Cb39138ca3cee4b4aa4d6cd83d9dd62f0%7C0%7C0%7C636864707020821793&amp;sdata=HAbnDcrBne64JyPuVUMKmM7nQk67F%2BFvjuXEn8TmHeo%3D&amp;reserved=0)
+> > > >>>> and "[PATCH v3 06/20] x86/alternative: Use temporary mm for text
+> > > >>>> poking" (https://na01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flkml%2F20190221234451.17632-7-rick.p.edgecombe%40intel.com%2F&amp;data=02%7C01%7Cnamit%40vmware.com%7Cf2513009ef734ecd6b0d08d69913a5ae%7Cb39138ca3cee4b4aa4d6cd83d9dd62f0%7C0%7C0%7C636864707020821793&amp;sdata=vNRIMKtFDy%2F3z5FlTwDiJY6VGEV%2FMHgQPTdFSFtCo4s%3D&amp;reserved=0),
+> > > >>>> right? If someone manages to get a tracing BPF program to trigger in a
+> > > >>>> task that has switched to the patching mm, could they use
+> > > >>>> bpf_probe_write_user() - which uses probe_kernel_write() after
+> > > >>>> checking that KERNEL_DS isn't active and that access_ok() passes - to
+> > > >>>> overwrite kernel text that is mapped writable in the patching mm?
+> > > >>>
+> > > >>> Yes, this is a good point. I guess text_poke() should be defined with
+> > > >>> “__kprobes” and open-code memcpy.
+> > > >>>
+> > > >>> Does it sound reasonable?
+> > > >>
+> > > >> Doesn't __text_poke() as implemented in the proposed patch use a
+> > > >> couple other kernel functions, too? Like switch_mm_irqs_off() and
+> > > >> pte_clear() (which can be a call into a separate function on paravirt
+> > > >> kernels)?
+> > > >
+> > > > I will move the pte_clear() to be done after the poking mm was unloaded.
+> > > > Give me a few minutes to send a sketch of what I think should be done.
+> > >
+> > > Err.. You are right, I don’t see an easy way of preventing a kprobe from
+> > > being set on switch_mm_irqs_off(), and open-coding this monster is too ugly.
+> > >
+> > > The reasonable solution seems to me as taking all the relevant pieces of
+> > > code (and data) that might be used during text-poking and encapsulating them, so they
+> > > will be set in a memory area which cannot be kprobe'd. This can also be
+> > > useful to write-protect data structures of code that calls text_poke(),
+> > > e.g., static-keys. It can also protect data on that stack that is used
+> > > during text_poke() from being overwritten from another core.
+> > >
+> > > This solution is somewhat similar to Igor Stoppa’s idea of using “enclaves”
+> > > when doing write-rarely operations.
+> > >
+> > > Right now, I think that text_poke() will keep being susceptible to such
+> > > an attack, unless you have a better suggestion.
+> >
+> > A relatively simple approach might be to teach BPF not to run kprobe
+> > programs and such in contexts where current->mm isn't the active mm?
+> > Maybe using nmi_uaccess_okay(), or something like that? It looks like
+> > perf_callchain_user() also already uses that. Except that a lot of
+> > this code is x86-specific...
 > 
+> This sounds like exactly the right solution.  If you're running from
+> some unknown context (like NMI or tracing), then you should check
+> nmi_uaccess_okay().  I think we should just promote that to be a
+> non-arch-specific function (that returns true by default) and check it
+> the relevant bpf_probe_xyz() functions.
 
+This treat may also need for my work, like probe_user_read() we should
+fail if nmi_uaccess_okay().
+
+Thank you,
+
+> 
+> Alexei, does that seem reasonable?
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
