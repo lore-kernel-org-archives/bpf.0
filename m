@@ -2,392 +2,132 @@ Return-Path: <SRS0=zbR4=RA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73A3EC43381
-	for <bpf@archiver.kernel.org>; Mon, 25 Feb 2019 23:07:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D22A6C43381
+	for <bpf@archiver.kernel.org>; Mon, 25 Feb 2019 23:53:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2BA5221841
-	for <bpf@archiver.kernel.org>; Mon, 25 Feb 2019 23:07:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 947AE218B0
+	for <bpf@archiver.kernel.org>; Mon, 25 Feb 2019 23:53:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="K7OFVRJX"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="oJT3wwW/";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="DqyVMKGm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728787AbfBYXHG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 25 Feb 2019 18:07:06 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:45621 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727554AbfBYXHG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 25 Feb 2019 18:07:06 -0500
-Received: by mail-pf1-f195.google.com with SMTP id v21so5189623pfm.12
-        for <bpf@vger.kernel.org>; Mon, 25 Feb 2019 15:07:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=PLy8Q/kKDZNhVPiFUQfiBNFYoAveBr23/jPaPV1ZMkU=;
-        b=K7OFVRJXZdGt6y6Ao6OVwptUk7e83RVxIlviuaxwmKuQ4Tgbr+9jxn7eAwTt+qVWPI
-         fMRvpoXs2xyRR4AQkLaxlixNll7E6SNQSLGLLKETEGe/4ofjnRePVYeE86FIKBf2nELY
-         kjYm3PP7Ca3W4UpE0ZvWqPS3bODdEmCD4SbqmHhOM8fesdhaVR/CBQ1Jpuhl+NgZIG6x
-         xaingpHzHmVMbKtYfK3w69fw4braUNI/C5I/29I4zlZK+ZphnvgdFdG747G7smCs/E8z
-         /1h77DHWU34TfOjD7ViDtwYLH+cNH1LHq1bOYxQxoH+G+D5Gm5sEO1p2UjsgercbbTc9
-         2GlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=PLy8Q/kKDZNhVPiFUQfiBNFYoAveBr23/jPaPV1ZMkU=;
-        b=TgWK5XvaGlPSWC2CaCQNzwqMR3JzSw2p5Se9vnQnMe4PQB4HdTU7IHlpZN7Oe+X4SJ
-         oyQCPZO/MGQA1sBN68jBQKE/6Iqw5wKdDggFOuqDMcEhA+MnAp16SwDVyNM84QrQUgRw
-         fVFaTJjckfWDREy3J3mJgsfx0Hsuuyl7H4MINgsuUwUxgR1ppGSbofrYSYp6PutLodgG
-         QAtPgQrvBvkMbuT4bZeUR1JS5md47GEwvur1kAn0+x63zKNRA7jZYMOIoz6jHbL9obJB
-         ntDduC0228Go1oQzuWOZqlo6XU0yG46+t2oh1JQvO+XXwPgaEzXdpml6J8XSY7q7GtLj
-         phNw==
-X-Gm-Message-State: AHQUAuZ7UgluFGKQ15R0Y9rwVd5Y4OMTvBdIembza5K77mzJiOxIYUXQ
-        28xdRLpEk5n+z4DCqnH+BHu0CQ==
-X-Google-Smtp-Source: AHgI3IaEaO9F8soH/YLfSN8JHiuMO5Djcg6OoG9Ed/HnOXab8L2lw0Q6pvth4yS/kvdAdZD3lFYj8g==
-X-Received: by 2002:a63:a70b:: with SMTP id d11mr20870144pgf.213.1551136025022;
-        Mon, 25 Feb 2019 15:07:05 -0800 (PST)
-Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
-        by smtp.gmail.com with ESMTPSA id p78sm16150721pfa.84.2019.02.25.15.07.04
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 25 Feb 2019 15:07:04 -0800 (PST)
-Date:   Mon, 25 Feb 2019 15:07:03 -0800
-From:   Stanislav Fomichev <sdf@fomichev.me>
-To:     Alexei Starovoitov <ast@kernel.org>
-Cc:     davem@davemloft.net, daniel@iogearbox.net, edumazet@google.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, kernel-team@fb.com
+        id S1727570AbfBYXxZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 25 Feb 2019 18:53:25 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:46408 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726974AbfBYXxY (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 25 Feb 2019 18:53:24 -0500
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x1PNpbFH020145;
+        Mon, 25 Feb 2019 15:52:57 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=CPnYp8lRZC+ZILR2DmBgKSDz7u/57n75nK3c4sky18o=;
+ b=oJT3wwW/YQlNTuRNN9x2W/7JHh3iBkKW27jkvF1Je5vtDv13c+4uHrJUbMIwUy2o67E9
+ 8xk0XlEvjAR26j4w9t3A3rYb4u+Djs27AhU0lCG6wXGXtVOl7asImej0mCCu0nUkkAoe
+ 1J1M5suPy2fOs56O5vnOt3Ixzwezdpmb5Pc= 
+Received: from mail.thefacebook.com ([199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2qvrtpra6t-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Mon, 25 Feb 2019 15:52:57 -0800
+Received: from prn-hub03.TheFacebook.com (2620:10d:c081:35::127) by
+ prn-hub02.TheFacebook.com (2620:10d:c081:35::126) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1531.3; Mon, 25 Feb 2019 15:52:47 -0800
+Received: from NAM03-BY2-obe.outbound.protection.outlook.com (192.168.54.28)
+ by o365-in.thefacebook.com (192.168.16.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1531.3
+ via Frontend Transport; Mon, 25 Feb 2019 15:52:47 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector1-fb-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CPnYp8lRZC+ZILR2DmBgKSDz7u/57n75nK3c4sky18o=;
+ b=DqyVMKGmuI3X5R+WtIJE8KT2g/IAejiyhR5OZ/pBAgxd88cVRt20e+QJqwVEAFqr6ZNOmbtFXI0Mgwv+Oc6wNjJ6Xm+RxtYYQ+XG9VVk8r55+N53gwITmAcpYtnzrXu/wdAZfWphi6FShfEt903ReiNh9tQn8rxr294V4ptyfJM=
+Received: from BYAPR15MB2501.namprd15.prod.outlook.com (52.135.196.11) by
+ BYAPR15MB2904.namprd15.prod.outlook.com (20.178.236.203) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1643.14; Mon, 25 Feb 2019 23:52:46 +0000
+Received: from BYAPR15MB2501.namprd15.prod.outlook.com
+ ([fe80::5d5b:6c9d:ce40:ed1d]) by BYAPR15MB2501.namprd15.prod.outlook.com
+ ([fe80::5d5b:6c9d:ce40:ed1d%3]) with mapi id 15.20.1643.019; Mon, 25 Feb 2019
+ 23:52:46 +0000
+From:   Alexei Starovoitov <ast@fb.com>
+To:     Stanislav Fomichev <sdf@fomichev.me>,
+        Alexei Starovoitov <ast@kernel.org>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Kernel Team <Kernel-team@fb.com>
 Subject: Re: [PATCH v3 bpf-next 1/4] bpf: enable program stats
-Message-ID: <20190225230703.GB32115@mini-arch>
+Thread-Topic: [PATCH v3 bpf-next 1/4] bpf: enable program stats
+Thread-Index: AQHUzVl+TgA+w9+HAkOXAbBOtH+zIqXxIvCAgAAMwoA=
+Date:   Mon, 25 Feb 2019 23:52:45 +0000
+Message-ID: <2eeb7f8d-d184-07d1-2b7b-76c93b4b1bfe@fb.com>
 References: <20190225222842.2031962-1-ast@kernel.org>
- <20190225222842.2031962-2-ast@kernel.org>
+ <20190225222842.2031962-2-ast@kernel.org> <20190225230703.GB32115@mini-arch>
+In-Reply-To: <20190225230703.GB32115@mini-arch>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BYAPR05CA0079.namprd05.prod.outlook.com
+ (2603:10b6:a03:e0::20) To BYAPR15MB2501.namprd15.prod.outlook.com
+ (2603:10b6:a02:88::11)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2620:10d:c090:200::1:ebe2]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b2d5c9a9-e1a1-41f1-9398-08d69b7c56ef
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600127)(711020)(4605104)(2017052603328)(7153060)(7193020);SRVR:BYAPR15MB2904;
+x-ms-traffictypediagnostic: BYAPR15MB2904:
+x-microsoft-exchange-diagnostics: 1;BYAPR15MB2904;20:kudqNMG3xuFtvsHtILtYt/ozl8Sv8+NoajlcKn9Dm54+NFhK+eeoiCZUHazvvio1VRZTymKyl4qjaEnzqXhTYvUZIchdQivtV1M7kLoswKdxvLEythAzUtue5oLwJs0IYLt47izhTW7dKxDRGSCEfVkdMCJOyYcrh71rewc8IKQ=
+x-microsoft-antispam-prvs: <BYAPR15MB2904823EE77AD78FDB79591BD77A0@BYAPR15MB2904.namprd15.prod.outlook.com>
+x-forefront-prvs: 095972DF2F
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(376002)(346002)(366004)(39860400002)(136003)(199004)(189003)(76176011)(5660300002)(4744005)(52116002)(256004)(8936002)(2616005)(86362001)(99286004)(476003)(31686004)(11346002)(446003)(53936002)(81156014)(81166006)(186003)(6116002)(8676002)(31696002)(71200400001)(46003)(71190400001)(6246003)(54906003)(305945005)(97736004)(102836004)(7736002)(6436002)(14454004)(386003)(6506007)(25786009)(478600001)(106356001)(110136005)(105586002)(6486002)(6512007)(2906002)(486006)(36756003)(68736007)(229853002)(316002)(4326008)(53546011);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB2904;H:BYAPR15MB2501.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: wkonujB3MKffa7umKMP/RCoBDgcD1KNmsrFjIZEZaNoRffdzyrgBr7mro6/hk8Sz5P14MyzykJIuq2+2ck5SQGEyek/de4rjYL6/GHXGMKmS8qGjLf9duwoFcCQipowQbU5skUPNHM9oGEX27Zm9S3OjtS8f2v3AD4gnflyCsrBRA7WYrkXrEBzvvd4D+APweYVVDIaJix7gWj9Fdaxo3/XTiT+jCuJjmoWU0F71N7P5Vgz/+FFrSqVyrjgUnopJ1axobmHriqa6OgYoUq110wprCgRlDO+E5UvO0JzU4uIBcBGwcFo00WmAk93IsMCaEFh9zFbYuiLU3DDXglZOfrEuv489CL7qhWavvgWxnsEyR5tgd7CEiQIzXXjAYsRt9d5tbVV26Rp7J9Uio61MIk5EG4c4VQTu0CBRmdYddk4=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <35591142E9121643A87A9024B7AF8577@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190225222842.2031962-2-ast@kernel.org>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b2d5c9a9-e1a1-41f1-9398-08d69b7c56ef
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Feb 2019 23:52:45.1481
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2904
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-02-25_13:,,
+ signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 02/25, Alexei Starovoitov wrote:
-> JITed BPF programs are indistinguishable from kernel functions, but unlike
-> kernel code BPF code can be changed often.
-> Typical approach of "perf record" + "perf report" profiling and tuning of
-> kernel code works just as well for BPF programs, but kernel code doesn't
-> need to be monitored whereas BPF programs do.
-> Users load and run large amount of BPF programs.
-> These BPF stats allow tools monitor the usage of BPF on the server.
-> The monitoring tools will turn sysctl kernel.bpf_stats_enabled
-> on and off for few seconds to sample average cost of the programs.
-> Aggregated data over hours and days will provide an insight into cost of BPF
-> and alarms can trigger in case given program suddenly gets more expensive.
-> 
-> The cost of two sched_clock() per program invocation adds ~20 nsec.
-> Fast BPF progs (like selftests/bpf/progs/test_pkt_access.c) will slow down
-> from ~10 nsec to ~30 nsec.
-> static_key minimizes the cost of the stats collection.
-> There is no measurable difference before/after this patch
-> with kernel.bpf_stats_enabled=0
-> 
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> ---
->  include/linux/bpf.h    |  9 +++++++++
->  include/linux/filter.h | 20 +++++++++++++++++++-
->  kernel/bpf/core.c      | 31 +++++++++++++++++++++++++++++--
->  kernel/bpf/syscall.c   | 34 ++++++++++++++++++++++++++++++++--
->  kernel/bpf/verifier.c  |  7 ++++++-
->  kernel/sysctl.c        | 34 ++++++++++++++++++++++++++++++++++
->  6 files changed, 129 insertions(+), 6 deletions(-)
-> 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index de18227b3d95..a2132e09dc1c 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -16,6 +16,7 @@
->  #include <linux/rbtree_latch.h>
->  #include <linux/numa.h>
->  #include <linux/wait.h>
-> +#include <linux/u64_stats_sync.h>
->  
->  struct bpf_verifier_env;
->  struct perf_event;
-> @@ -340,6 +341,12 @@ enum bpf_cgroup_storage_type {
->  
->  #define MAX_BPF_CGROUP_STORAGE_TYPE __BPF_CGROUP_STORAGE_MAX
->  
-> +struct bpf_prog_stats {
-> +	u64 cnt;
-> +	u64 nsecs;
-> +	struct u64_stats_sync syncp;
-> +};
-> +
->  struct bpf_prog_aux {
->  	atomic_t refcnt;
->  	u32 used_map_cnt;
-> @@ -389,6 +396,7 @@ struct bpf_prog_aux {
->  	 * main prog always has linfo_idx == 0
->  	 */
->  	u32 linfo_idx;
-> +	struct bpf_prog_stats __percpu *stats;
->  	union {
->  		struct work_struct work;
->  		struct rcu_head	rcu;
-> @@ -559,6 +567,7 @@ void bpf_map_area_free(void *base);
->  void bpf_map_init_from_attr(struct bpf_map *map, union bpf_attr *attr);
->  
->  extern int sysctl_unprivileged_bpf_disabled;
-> +extern int sysctl_bpf_stats_enabled;
->  
->  int bpf_map_new_fd(struct bpf_map *map, int flags);
->  int bpf_prog_new_fd(struct bpf_prog *prog);
-> diff --git a/include/linux/filter.h b/include/linux/filter.h
-> index f32b3eca5a04..7e5e3db11106 100644
-> --- a/include/linux/filter.h
-> +++ b/include/linux/filter.h
-> @@ -533,7 +533,24 @@ struct sk_filter {
->  	struct bpf_prog	*prog;
->  };
->  
-> -#define BPF_PROG_RUN(filter, ctx)  ({ cant_sleep(); (*(filter)->bpf_func)(ctx, (filter)->insnsi); })
-> +DECLARE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
-> +
-> +#define BPF_PROG_RUN(prog, ctx)	({				\
-> +	u32 ret;						\
-> +	cant_sleep();						\
-> +	if (static_branch_unlikely(&bpf_stats_enabled_key)) {	\
-> +		struct bpf_prog_stats *stats;			\
-> +		u64 start = sched_clock();			\
-QQ: why sched_clock() and not, for example, ktime_get_ns() which we do
-in the bpf_test_run()? Or even why not local_clock?
-I'm just wondering what king of trade off we are doing here
-regarding precision vs run time cost.
-
-> +		ret = (*(prog)->bpf_func)(ctx, (prog)->insnsi);	\
-> +		stats = this_cpu_ptr(prog->aux->stats);		\
-> +		u64_stats_update_begin(&stats->syncp);		\
-> +		stats->cnt++;					\
-> +		stats->nsecs += sched_clock() - start;		\
-> +		u64_stats_update_end(&stats->syncp);		\
-> +	} else {						\
-> +		ret = (*(prog)->bpf_func)(ctx, (prog)->insnsi);	\
-> +	}							\
-> +	ret; })
->  
->  #define BPF_SKB_CB_LEN QDISC_CB_PRIV_LEN
->  
-> @@ -764,6 +781,7 @@ void bpf_prog_free_jited_linfo(struct bpf_prog *prog);
->  void bpf_prog_free_unused_jited_linfo(struct bpf_prog *prog);
->  
->  struct bpf_prog *bpf_prog_alloc(unsigned int size, gfp_t gfp_extra_flags);
-> +struct bpf_prog *bpf_prog_alloc_no_stats(unsigned int size, gfp_t gfp_extra_flags);
->  struct bpf_prog *bpf_prog_realloc(struct bpf_prog *fp_old, unsigned int size,
->  				  gfp_t gfp_extra_flags);
->  void __bpf_prog_free(struct bpf_prog *fp);
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index ef88b167959d..1c14c347f3cf 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -78,7 +78,7 @@ void *bpf_internal_load_pointer_neg_helper(const struct sk_buff *skb, int k, uns
->  	return NULL;
->  }
->  
-> -struct bpf_prog *bpf_prog_alloc(unsigned int size, gfp_t gfp_extra_flags)
-> +struct bpf_prog *bpf_prog_alloc_no_stats(unsigned int size, gfp_t gfp_extra_flags)
->  {
->  	gfp_t gfp_flags = GFP_KERNEL | __GFP_ZERO | gfp_extra_flags;
->  	struct bpf_prog_aux *aux;
-> @@ -104,6 +104,26 @@ struct bpf_prog *bpf_prog_alloc(unsigned int size, gfp_t gfp_extra_flags)
->  
->  	return fp;
->  }
-> +
-> +struct bpf_prog *bpf_prog_alloc(unsigned int size, gfp_t gfp_extra_flags)
-> +{
-> +	gfp_t gfp_flags = GFP_KERNEL | __GFP_ZERO | gfp_extra_flags;
-> +	struct bpf_prog *prog;
-> +
-> +	prog = bpf_prog_alloc_no_stats(size, gfp_extra_flags);
-> +	if (!prog)
-> +		return NULL;
-> +
-> +	prog->aux->stats = alloc_percpu_gfp(struct bpf_prog_stats, gfp_flags);
-> +	if (!prog->aux->stats) {
-> +		kfree(prog->aux);
-> +		vfree(prog);
-> +		return NULL;
-> +	}
-> +
-> +	u64_stats_init(&prog->aux->stats->syncp);
-> +	return prog;
-> +}
->  EXPORT_SYMBOL_GPL(bpf_prog_alloc);
->  
->  int bpf_prog_alloc_jited_linfo(struct bpf_prog *prog)
-> @@ -231,7 +251,10 @@ struct bpf_prog *bpf_prog_realloc(struct bpf_prog *fp_old, unsigned int size,
->  
->  void __bpf_prog_free(struct bpf_prog *fp)
->  {
-> -	kfree(fp->aux);
-> +	if (fp->aux) {
-> +		free_percpu(fp->aux->stats);
-> +		kfree(fp->aux);
-> +	}
->  	vfree(fp);
->  }
->  
-> @@ -2069,6 +2092,10 @@ int __weak skb_copy_bits(const struct sk_buff *skb, int offset, void *to,
->  	return -EFAULT;
->  }
->  
-> +DEFINE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
-> +EXPORT_SYMBOL(bpf_stats_enabled_key);
-> +int sysctl_bpf_stats_enabled __read_mostly;
-> +
->  /* All definitions of tracepoints related to BPF. */
->  #define CREATE_TRACE_POINTS
->  #include <linux/bpf_trace.h>
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index ec7c552af76b..31cf66fc3f5c 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -1283,24 +1283,54 @@ static int bpf_prog_release(struct inode *inode, struct file *filp)
->  	return 0;
->  }
->  
-> +static void bpf_prog_get_stats(const struct bpf_prog *prog,
-> +			       struct bpf_prog_stats *stats)
-> +{
-> +	u64 nsecs = 0, cnt = 0;
-> +	int cpu;
-> +
-> +	for_each_possible_cpu(cpu) {
-> +		const struct bpf_prog_stats *st;
-> +		unsigned int start;
-> +		u64 tnsecs, tcnt;
-> +
-> +		st = per_cpu_ptr(prog->aux->stats, cpu);
-> +		do {
-> +			start = u64_stats_fetch_begin_irq(&st->syncp);
-> +			tnsecs = st->nsecs;
-> +			tcnt = st->cnt;
-> +		} while (u64_stats_fetch_retry_irq(&st->syncp, start));
-> +		nsecs += tnsecs;
-> +		cnt += tcnt;
-> +	}
-> +	stats->nsecs = nsecs;
-> +	stats->cnt = cnt;
-> +}
-> +
->  #ifdef CONFIG_PROC_FS
->  static void bpf_prog_show_fdinfo(struct seq_file *m, struct file *filp)
->  {
->  	const struct bpf_prog *prog = filp->private_data;
->  	char prog_tag[sizeof(prog->tag) * 2 + 1] = { };
-> +	struct bpf_prog_stats stats;
->  
-> +	bpf_prog_get_stats(prog, &stats);
->  	bin2hex(prog_tag, prog->tag, sizeof(prog->tag));
->  	seq_printf(m,
->  		   "prog_type:\t%u\n"
->  		   "prog_jited:\t%u\n"
->  		   "prog_tag:\t%s\n"
->  		   "memlock:\t%llu\n"
-> -		   "prog_id:\t%u\n",
-> +		   "prog_id:\t%u\n"
-> +		   "run_time_ns:\t%llu\n"
-> +		   "run_cnt:\t%llu\n",
->  		   prog->type,
->  		   prog->jited,
->  		   prog_tag,
->  		   prog->pages * 1ULL << PAGE_SHIFT,
-> -		   prog->aux->id);
-> +		   prog->aux->id,
-> +		   stats.nsecs,
-> +		   stats.cnt);
->  }
->  #endif
->  
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 1b9496c41383..0e4edd7e3c5f 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -7320,7 +7320,12 @@ static int jit_subprogs(struct bpf_verifier_env *env)
->  		subprog_end = env->subprog_info[i + 1].start;
->  
->  		len = subprog_end - subprog_start;
-> -		func[i] = bpf_prog_alloc(bpf_prog_size(len), GFP_USER);
-> +		/* BPF_PROG_RUN doesn't call subprogs directly,
-> +		 * hence main prog stats include the runtime of subprogs.
-> +		 * subprogs don't have IDs and not reachable via prog_get_next_id
-> +		 * func[i]->aux->stats will never be accessed and stays NULL
-> +		 */
-> +		func[i] = bpf_prog_alloc_no_stats(bpf_prog_size(len), GFP_USER);
->  		if (!func[i])
->  			goto out_free;
->  		memcpy(func[i]->insnsi, &prog->insnsi[subprog_start],
-> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-> index ba4d9e85feb8..86e0771352f2 100644
-> --- a/kernel/sysctl.c
-> +++ b/kernel/sysctl.c
-> @@ -224,6 +224,9 @@ static int proc_dostring_coredump(struct ctl_table *table, int write,
->  #endif
->  static int proc_dopipe_max_size(struct ctl_table *table, int write,
->  		void __user *buffer, size_t *lenp, loff_t *ppos);
-> +static int proc_dointvec_minmax_bpf_stats(struct ctl_table *table, int write,
-> +					  void __user *buffer, size_t *lenp,
-> +					  loff_t *ppos);
->  
->  #ifdef CONFIG_MAGIC_SYSRQ
->  /* Note: sysrq code uses its own private copy */
-> @@ -1230,6 +1233,15 @@ static struct ctl_table kern_table[] = {
->  		.extra2		= &one,
->  	},
->  #endif
-> +	{
-> +		.procname	= "bpf_stats_enabled",
-> +		.data		= &sysctl_bpf_stats_enabled,
-> +		.maxlen		= sizeof(sysctl_bpf_stats_enabled),
-> +		.mode		= 0644,
-> +		.proc_handler	= proc_dointvec_minmax_bpf_stats,
-> +		.extra1		= &zero,
-> +		.extra2		= &one,
-> +	},
->  #if defined(CONFIG_TREE_RCU) || defined(CONFIG_PREEMPT_RCU)
->  	{
->  		.procname	= "panic_on_rcu_stall",
-> @@ -3260,6 +3272,28 @@ int proc_doulongvec_ms_jiffies_minmax(struct ctl_table *table, int write,
->  
->  #endif /* CONFIG_PROC_SYSCTL */
->  
-> +static int proc_dointvec_minmax_bpf_stats(struct ctl_table *table, int write,
-> +					  void __user *buffer, size_t *lenp,
-> +					  loff_t *ppos)
-> +{
-> +	int ret, bpf_stats = *(int *)table->data;
-> +	struct ctl_table tmp = *table;
-> +
-> +	if (write && !capable(CAP_SYS_ADMIN))
-> +		return -EPERM;
-> +
-> +	tmp.data = &bpf_stats;
-> +	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
-> +	if (write && !ret) {
-> +		*(int *)table->data = bpf_stats;
-> +		if (bpf_stats)
-> +			static_branch_enable(&bpf_stats_enabled_key);
-> +		else
-> +			static_branch_disable(&bpf_stats_enabled_key);
-> +	}
-> +	return ret;
-> +}
-> +
->  /*
->   * No sense putting this after each symbol definition, twice,
->   * exception granted :-)
-> -- 
-> 2.20.0
-> 
+T24gMi8yNS8xOSAzOjA3IFBNLCBTdGFuaXNsYXYgRm9taWNoZXYgd3JvdGU6DQo+PiArI2RlZmlu
+ZSBCUEZfUFJPR19SVU4ocHJvZywgY3R4KQkoewkJCQlcDQo+PiArCXUzMiByZXQ7CQkJCQkJXA0K
+Pj4gKwljYW50X3NsZWVwKCk7CQkJCQkJXA0KPj4gKwlpZiAoc3RhdGljX2JyYW5jaF91bmxpa2Vs
+eSgmYnBmX3N0YXRzX2VuYWJsZWRfa2V5KSkgewlcDQo+PiArCQlzdHJ1Y3QgYnBmX3Byb2dfc3Rh
+dHMgKnN0YXRzOwkJCVwNCj4+ICsJCXU2NCBzdGFydCA9IHNjaGVkX2Nsb2NrKCk7CQkJXA0KPiBR
+UTogd2h5IHNjaGVkX2Nsb2NrKCkgYW5kIG5vdCwgZm9yIGV4YW1wbGUsIGt0aW1lX2dldF9ucygp
+IHdoaWNoIHdlIGRvDQo+IGluIHRoZSBicGZfdGVzdF9ydW4oKT8gT3IgZXZlbiB3aHkgbm90IGxv
+Y2FsX2Nsb2NrPw0KPiBJJ20ganVzdCB3b25kZXJpbmcgd2hhdCBraW5nIG9mIHRyYWRlIG9mZiB3
+ZSBhcmUgZG9pbmcgaGVyZQ0KPiByZWdhcmRpbmcgcHJlY2lzaW9uIHZzIHJ1biB0aW1lIGNvc3Qu
+DQoNCg0KSSdtIG1ha2luZyB0aGlzIGRlY2lzaW9uIGJhc2VkIG9uIGRvY3VtZW50YXRpb246DQpE
+b2N1bWVudGF0aW9uL3RpbWVycy90aW1la2VlcGluZy50eHQNCiJDb21wYXJlZCB0byBjbG9jayBz
+b3VyY2VzLCBzY2hlZF9jbG9jaygpIGhhcyB0byBiZSB2ZXJ5IGZhc3Q6IGl0IGlzIA0KY2FsbGVk
+IG11Y2ggbW9yZSBvZnRlbiwgZXNwZWNpYWxseSBieSB0aGUgc2NoZWR1bGVyLiBJZiB5b3UgaGF2
+ZSB0byBkbyANCnRyYWRlLW9mZnMgYmV0d2VlbiBhY2N1cmFjeSBjb21wYXJlZCB0byB0aGUgY2xv
+Y2sgc291cmNlLCB5b3UgbWF5IA0Kc2FjcmlmaWNlIGFjY3VyYWN5IGZvciBzcGVlZCBpbiBzY2hl
+ZF9jbG9jaygpLiINCg==
