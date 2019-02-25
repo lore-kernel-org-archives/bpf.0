@@ -2,42 +2,43 @@ Return-Path: <SRS0=zbR4=RA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28753C43381
-	for <bpf@archiver.kernel.org>; Mon, 25 Feb 2019 22:29:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A350C43381
+	for <bpf@archiver.kernel.org>; Mon, 25 Feb 2019 22:30:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DCE5C20643
-	for <bpf@archiver.kernel.org>; Mon, 25 Feb 2019 22:29:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31CC1217F5
+	for <bpf@archiver.kernel.org>; Mon, 25 Feb 2019 22:30:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1551133767;
-	bh=jlyqaL5Fl2+K83Q81pHz1DivFyomD/oSWNN1KDeixfA=;
-	h=From:To:CC:Subject:Date:List-ID:From;
-	b=yvltdeyyFReyTXEKnERmtcnkq4Z5+XYhAfnyq1sKehI9MIml5xvgJ3ndr+qTZWvDW
-	 6YZnzTpSwAOIwYWD8uspvew4Hz2z7V0VTEOoSYrkj2Jq+3mCcc939UTBF3WKz6WXAB
-	 7vM7oZaaMfTrxhb9ODRm1UpUXKww3RS+8HTivYCI=
+	s=default; t=1551133830;
+	bh=ZujBwHyH8oHPKFnLVndUQ/8+Krn0MuaxVRZf34u2a1g=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=GI48Bhhu7/5AHCIvBKoZaos3B8RdkkU82fLVjs+qJbhtpGp4JtiLXN/TWpKrfMtts
+	 M9rVmLHxz+CxjmytcaRPZyHirJ5cmayNizftcNl64zgh+XMQCJm5mwozPoTeBDt9VH
+	 dzTsM8imA0RwODls9JShuMHiTMHx7rwn5Fr9hzBE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727554AbfBYW30 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 25 Feb 2019 17:29:26 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:46096 "EHLO
+        id S1726842AbfBYWaa convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Mon, 25 Feb 2019 17:30:30 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:55942 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727437AbfBYW30 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 25 Feb 2019 17:29:26 -0500
-Received: from pps.filterd (m0044008.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x1PMDRBe028106
-        for <bpf@vger.kernel.org>; Mon, 25 Feb 2019 14:29:25 -0800
+        by vger.kernel.org with ESMTP id S1726799AbfBYWa3 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 25 Feb 2019 17:30:29 -0500
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x1PMA2u9000521
+        for <bpf@vger.kernel.org>; Mon, 25 Feb 2019 14:30:29 -0800
 Received: from maileast.thefacebook.com ([199.201.65.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2qvpqurhyw-15
+        by mx0a-00082601.pphosted.com with ESMTP id 2qvrtpr2nk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 25 Feb 2019 14:29:25 -0800
+        for <bpf@vger.kernel.org>; Mon, 25 Feb 2019 14:30:28 -0800
 Received: from mx-out.facebook.com (2620:10d:c0a1:3::13) by
- mail.thefacebook.com (2620:10d:c021:18::172) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c021:18::176) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1531.3;
- Mon, 25 Feb 2019 14:28:42 -0800
+ Mon, 25 Feb 2019 14:28:46 -0800
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 0FCC976091F; Mon, 25 Feb 2019 14:28:42 -0800 (PST)
+        id 40E1D76091F; Mon, 25 Feb 2019 14:28:46 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -46,10 +47,12 @@ CC:     <daniel@iogearbox.net>, <edumazet@google.com>,
         <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
         <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v3 bpf-next 0/4] bpf: per program stats
-Date:   Mon, 25 Feb 2019 14:28:38 -0800
-Message-ID: <20190225222842.2031962-1-ast@kernel.org>
+Subject: [PATCH v3 bpf-next 2/4] bpf: expose program stats via bpf_prog_info
+Date:   Mon, 25 Feb 2019 14:28:40 -0800
+Message-ID: <20190225222842.2031962-3-ast@kernel.org>
 X-Mailer: git-send-email 2.20.0
+In-Reply-To: <20190225222842.2031962-1-ast@kernel.org>
+References: <20190225222842.2031962-1-ast@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
@@ -63,34 +66,51 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce per program stats to monitor the usage BPF
+Return bpf program run_time_ns and run_cnt via bpf_prog_info
 
-v2->v3:
-- rename to run_time_ns/run_cnt everywhere
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+---
+ include/uapi/linux/bpf.h | 2 ++
+ kernel/bpf/syscall.c     | 5 +++++
+ 2 files changed, 7 insertions(+)
 
-v1->v2:
-- fixed u64 stats on 32-bit archs. Thanks Eric
-- use more verbose run_time_ns in json output as suggested by Andrii
-- refactored prog_alloc and clarified behavior of stats in subprogs
-
-Alexei Starovoitov (4):
-  bpf: enable program stats
-  bpf: expose program stats via bpf_prog_info
-  tools/bpf: sync bpf.h into tools
-  tools/bpftool: recognize bpf_prog_info run_time_ns and run_cnt
-
- include/linux/bpf.h                           |  9 +++++
- include/linux/filter.h                        | 20 +++++++++-
- include/uapi/linux/bpf.h                      |  2 +
- kernel/bpf/core.c                             | 31 ++++++++++++++-
- kernel/bpf/syscall.c                          | 39 ++++++++++++++++++-
- kernel/bpf/verifier.c                         |  7 +++-
- kernel/sysctl.c                               | 34 ++++++++++++++++
- .../bpftool/Documentation/bpftool-prog.rst    |  4 +-
- tools/bpf/bpftool/prog.c                      |  7 ++++
- tools/include/uapi/linux/bpf.h                |  2 +
- 10 files changed, 148 insertions(+), 7 deletions(-)
-
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index bcdd2474eee7..2e308e90ffea 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -2813,6 +2813,8 @@ struct bpf_prog_info {
+ 	__u32 jited_line_info_rec_size;
+ 	__u32 nr_prog_tags;
+ 	__aligned_u64 prog_tags;
++	__u64 run_time_ns;
++	__u64 run_cnt;
+ } __attribute__((aligned(8)));
+ 
+ struct bpf_map_info {
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 31cf66fc3f5c..174581dfe225 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2152,6 +2152,7 @@ static int bpf_prog_get_info_by_fd(struct bpf_prog *prog,
+ 	struct bpf_prog_info __user *uinfo = u64_to_user_ptr(attr->info.info);
+ 	struct bpf_prog_info info = {};
+ 	u32 info_len = attr->info.info_len;
++	struct bpf_prog_stats stats;
+ 	char __user *uinsns;
+ 	u32 ulen;
+ 	int err;
+@@ -2191,6 +2192,10 @@ static int bpf_prog_get_info_by_fd(struct bpf_prog *prog,
+ 	if (err)
+ 		return err;
+ 
++	bpf_prog_get_stats(prog, &stats);
++	info.run_time_ns = stats.nsecs;
++	info.run_cnt = stats.cnt;
++
+ 	if (!capable(CAP_SYS_ADMIN)) {
+ 		info.jited_prog_len = 0;
+ 		info.xlated_prog_len = 0;
 -- 
 2.20.0
 
