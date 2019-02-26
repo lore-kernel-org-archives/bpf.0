@@ -4,82 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
 	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 711A9C43381
-	for <bpf@archiver.kernel.org>; Tue, 26 Feb 2019 13:12:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10839C43381
+	for <bpf@archiver.kernel.org>; Tue, 26 Feb 2019 14:07:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2EE2D2184E
-	for <bpf@archiver.kernel.org>; Tue, 26 Feb 2019 13:12:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D1951217F9
+	for <bpf@archiver.kernel.org>; Tue, 26 Feb 2019 14:07:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LmUulwox"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UJ+olCZT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726872AbfBZNMP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Feb 2019 08:12:15 -0500
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:34533 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726151AbfBZNMP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Feb 2019 08:12:15 -0500
-Received: by mail-qt1-f196.google.com with SMTP id w4so14756532qtc.1;
-        Tue, 26 Feb 2019 05:12:13 -0800 (PST)
+        id S1726475AbfBZOH4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Feb 2019 09:07:56 -0500
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:36528 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726020AbfBZOH4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 Feb 2019 09:07:56 -0500
+Received: by mail-qk1-f196.google.com with SMTP id c2so6898668qkb.3;
+        Tue, 26 Feb 2019 06:07:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:date:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=XgqgI2A3PtTGLt6Dvaw46gu/lTntZr2Ui2OPAYUPW1o=;
-        b=LmUulwoxRAmwLGV0NgYHa9G4cg5pWIerhEJ6z2ruFODd8fXPcqd6kGZVuUPXV2QkwV
-         gYOcQUIwytYGBWaITI2N9pHP30lQ58BXOimYngnx2Ohtvvrtk4A7aK9RH7zblncWzsOB
-         mSLbiQx0JYkuqIaL0I5+eQrzNTmVKQkVbfCqcV6JOftlhSH9ea/YZHzTZhIadbvtHjv3
-         6xyjjoGUb+smV+7Uzl2RAKkGk1CFVsxJT1x68AFiu/GrcOa/PSh/a2qPj9iM6KQ55IKd
-         u2WLuCrVp47C+kHqerFb3TM0O3vXKtE7HSO7V8QPw0vXpaM15zD6LyHOFa8QFzT6KALN
-         1LTQ==
+        bh=r1ANj00QTqryDERB2P/cqGgPu1G/FS/jtfY5mLlto6s=;
+        b=UJ+olCZTp1enYNmefm+EDAKuxHsh5qPg1IYUiyK4UdWYtV6EybB/5qrqLudKXUivmS
+         um0wueV6YwrxEIrMDx7s6QS7y5o6xX0+E8eltTonw8htZRV22mcggGHFwMKopdxIvjzS
+         7Lpl0MNsBHRaOifUbT+JgkXA7OrwWb5Dgp3IhZZzQULqcMUQDWrhVG1CnC/eDdHE6Q/U
+         gdW7QeOhe117Z97bc8Q+FASS8fhWRvWLJsHLlC6DP6Ox5I2UbT8ZBujWSDcyIAWu/lQn
+         zGL8etaUpLjCnfDYQ5RtQX4cz7yCRpqSo7iES4uKVWemcW8rSnzIqybAoijiIBNZAkvM
+         RrCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:date:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XgqgI2A3PtTGLt6Dvaw46gu/lTntZr2Ui2OPAYUPW1o=;
-        b=H5OWeoZ7QyI30ZdJVQvehnpHQNo4uHVhXZI04Us4puP/WucJzJlT+RmZozIUKSPrwc
-         a/t3T717GBsoPVbgE+krAxglTiIlE7RJUF8BHdQtNXmtaTDJX2BGFwGpP4E+MG1mW3a0
-         WbMmYQAi2PK1Gw2N4FZCZopmXIDZabU9WYRgYRp3EegMiUlW6rUvSJPWWu5hpDN1iSWx
-         j00dX5ehq2pZ3We0UWnTO5GMHqruAgnIDFm/hV8oy+0xW8sVkjoNQjQEfMYvgrLh7HLc
-         5RR5XDro+tE6mBD90pAwvwtFZVSPXzotEkWoUrR0jzqnAZqp8iAYW8dpkq7JQ3pSiKKE
-         rk+A==
-X-Gm-Message-State: AHQUAua/noKYpdCxP6/48BSJjv4tbdCwefMVVTVpRi2d9Exe15L+GXPG
-        xAMD+jsm8AWlkR7ilKECl4w=
-X-Google-Smtp-Source: AHgI3Ia9E0gC00VEov7a7fHCHgYuVHY2nsnhb11J81ElZpu6WU2H8kqEatC6Shtaawh7DzechYhykg==
-X-Received: by 2002:a0c:d90b:: with SMTP id p11mr17768923qvj.140.1551186733244;
-        Tue, 26 Feb 2019 05:12:13 -0800 (PST)
+        bh=r1ANj00QTqryDERB2P/cqGgPu1G/FS/jtfY5mLlto6s=;
+        b=TyanVIJpst5gHnrLKRljik3PGFV3xTtF2rK9x87NSASQDfm6Hcdl1AzWEvo7iMge7+
+         7Q6O/5pJF1CnGrgj9rlvEkN6akhPFENglv5A/R4xc6MzJtG3xBzc7cfzTVImHocjBpoB
+         aF/rpE1H13E32gdshnolauLOd8e6w5dCdwjxwQixVOd931Ojv2Y4G7ioRYYI0RkA9eob
+         eHD2DHyEW9XF1HcKnIM4ZEDTznxsTo+7fiLXjRGWU+KqnW48fpUAVK90f5fkIRGddu71
+         tLLpvkxd9NHiM9bLWqzzDTrMn/6wqXUNqHrN4YKYfmcKluuKeFZBySxPrIWweLY9zGPU
+         Bo6Q==
+X-Gm-Message-State: AHQUAuaYTVhJ8Gp0coPMxLpPZfcqXpxn+xF+iLVChCjKJB2JGZ6DUQnP
+        EqVTgb5+ViyljRdn9D4Trny/oAa7
+X-Google-Smtp-Source: AHgI3Iaz7U5Wj75RloXcCN3PEAfFDoQ4YxzAyRy3QL5POvjJ9hcX66U1f7bAUOCCutT9YzmB/yFKYA==
+X-Received: by 2002:a37:9fd7:: with SMTP id i206mr15944965qke.278.1551190074541;
+        Tue, 26 Feb 2019 06:07:54 -0800 (PST)
 Received: from quaco.ghostprotocols.net ([179.97.35.11])
-        by smtp.gmail.com with ESMTPSA id u31sm9137573qth.15.2019.02.26.05.12.11
+        by smtp.gmail.com with ESMTPSA id 20sm8355098qts.82.2019.02.26.06.07.52
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 26 Feb 2019 05:12:12 -0800 (PST)
+        Tue, 26 Feb 2019 06:07:52 -0800 (PST)
 From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
 X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 91DAA4039C; Tue, 26 Feb 2019 10:11:56 -0300 (-03)
-Date:   Tue, 26 Feb 2019 10:11:56 -0300
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andriin@fb.com>, dwarves@vger.kernel.org,
-        bpf@vger.kernel.org, Alexei Starovoitov <ast@fb.com>,
-        Yonghong Song <yhs@fb.com>
-Subject: Re: encoding BTF on glibc was: Re: [PATCH pahole 0/3] fix handling
- of bitfields in btf_loader
-Message-ID: <20190226131156.GA26786@kernel.org>
-References: <20190220205732.2514975-1-andriin@fb.com>
- <20190222220243.GI26132@kernel.org>
- <CAEf4BzYoJgxYWX9iS7pda62cnGr5VOC70NGgqPurMNWP_w1daA@mail.gmail.com>
- <20190225160239.GR31136@kernel.org>
- <20190225185949.GT31136@kernel.org>
- <CAEf4BzZjnvw9yDKst1xU4PkkcUuPh2Q2Oep=B1jhWSWoO6cgWg@mail.gmail.com>
- <20190225200822.GB13100@kernel.org>
- <CAEf4Bzb9rT8ohHtMBNdsYrkv9BDsjN-0TU5WDQqmG0j4rz3hGw@mail.gmail.com>
- <CAEf4BzYLomoEfGzW+81RtRS2s7pFyo4FuSbCLUxW8NBiOGxLdA@mail.gmail.com>
+        id 97A5A405CD; Tue, 26 Feb 2019 11:07:37 -0300 (-03)
+Date:   Tue, 26 Feb 2019 11:07:37 -0300
+To:     Andrii Nakryiko <andriin@fb.com>
+Cc:     yhs@fb.com, ast@fb.com, dwarves@vger.kernel.org,
+        bpf@vger.kernel.org, andrii.nakryiko@gmail.com
+Subject: Re: [PATCH v2 pahole 2/2] btf_encoder: don't special case packed
+ enums
+Message-ID: <20190226140737.GB26786@kernel.org>
+References: <20190226011927.597075-1-andriin@fb.com>
+ <20190226011927.597075-3-andriin@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEf4BzYLomoEfGzW+81RtRS2s7pFyo4FuSbCLUxW8NBiOGxLdA@mail.gmail.com>
+In-Reply-To: <20190226011927.597075-3-andriin@fb.com>
 X-Url:  http://acmel.wordpress.com
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: bpf-owner@vger.kernel.org
@@ -87,199 +78,28 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Mon, Feb 25, 2019 at 01:36:57PM -0800, Andrii Nakryiko escreveu:
-> On Mon, Feb 25, 2019 at 12:51 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Mon, Feb 25, 2019 at 12:08 PM Arnaldo Carvalho de Melo
-> > <arnaldo.melo@gmail.com> wrote:
-> > >
-> > > Em Mon, Feb 25, 2019 at 11:42:29AM -0800, Andrii Nakryiko escreveu:
-> > > > On Mon, Feb 25, 2019 at 11:00 AM Arnaldo Carvalho de Melo> <arnaldo.melo@gmail.com> wrote:
-> > >
-> > > > > Em Mon, Feb 25, 2019 at 01:02:39PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > > > > So yeah, the BTF encoder/decoder is working just fine, the problem is in
-> > > > > > pahole's DWARF code, lemme see...
-> > > > >
-> > > > > Please try the patch below, for me btfdiff continues to show no diff for
-> > > > > all types in my vmlinux and now it also produces the same output for
-> > > > > when the first element of a bitfield has its bit_size equal to its
-> > > > > byte_size * 8:
-> > > >
-> > > > Yes, this fixes all the issues I've seen. btfdiff output is now empty
-> > > > for my kernel image. Thanks for quick fix!
-> > > >
-> > > > Reviewed-by: Andrii Nakryiko <andriin@fb.com>
-> > >
-> > > Thanks, just for some extra testing I tried encoding BTF for glibc 2.28:
-> > >
-> > > [acme@quaco pahole]$ pahole -JV libc-2.28.so.debug
-> > > <BIG snip>
-> >
-> > <snip>
-> >
-> > > [386075] INT long unsigned int size=8 bit_offset=0 nr_bits=64 encoding=(none)
-> > > Cannot open libc-2.28.so.debug
-> > > Failed to encode BTF
-> >
-> > I've tried the same on libc-2.26.so.debug and it worked.
-> >
-> > It failes after BTF encoding and deduping is done, exactly when it
-> > tries to re-open libc-2.28.so.debug to write out new contents. Not
-> > sure why it would fail, as it seems to be just plain open() call, but
-> > the fact that we both can repro this means there is something there.
-> >
-> > It also seems that libc-2.28.so.debug is corrupted:
-> >
-> > $ readelf -n /home/andriin/local/btf/libc-2.26.so.debug | grep
-> > 'Unknown note type' | wc -l
-> > 0
-> > $ readelf -n /home/andriin/local/btf/libc-2.28.so.debug | grep
-> > 'Unknown note type' | wc -l
-> > 17953
-> >
+Em Mon, Feb 25, 2019 at 05:19:27PM -0800, Andrii Nakryiko escreveu:
+> BTF data can represent packed enums correctly without any special
+> handling from pahole side. Previously pahole's own `enum vscope` would
+> be omitted causing problems.
 > 
-> Ignore everything I've said (though 'Unknown note type' issue is
-> strange), for me it was just permissions issues.
+> Original commit tried to generate correct struct bitfield member type if
+> the member is an enum. This was dated before kind_flag implementation.
+> Later, kind_flag support was added and now pahole always generates BTF
+> with kind_flag = 1 for structures with bitfield, where bitfield size is
+> encoded in btf_member, so this workaround is not needed any more.
+> Removing this "hack" makes handling it easier to handle packed enums
+> correctly.
 
-yeah, we need to fix up these messages, I did the chmod here and got
-further.
-
-[acme@quaco pahole]$ ls -la libc-2.28.so.debug
--r--r--r--. 1 acme acme 17189368 Feb 25 17:04 libc-2.28.so.debug
-[acme@quaco pahole]$ pahole -J libc-2.28.so.debug
-Cannot open libc-2.28.so.debug
-Failed to encode BTF
-[acme@quaco pahole]$ chmod +w libc-2.28.so.debug
-[acme@quaco pahole]$ ls -la libc-2.28.so.debug
--rw-rw-r--. 1 acme acme 17189368 Feb 25 17:04 libc-2.28.so.debug
-[acme@quaco pahole]$ pahole -J libc-2.28.so.debug
-[acme@quaco pahole]$
-
-And I get the same warnings.
-
-base_type__name_to_size: base_type _Float128
-
-If we just add _Float128 to the base_type__name_to_size arrays I think
-its good enough for pretty printing, i.e. we won't know from encoding
-that this is a float or double, as CTF and DWARF can, but for printing
-purposes, even regenerating the type for consumption by other tools, it
-should just work, no?
-
-So, two bugs, the bit_size for "long double" is 128, not 64, and if we
-add an entry for _Float128, then btfdiff is clean for libc, without any
-further work on properly supporting float types as in CTF or DWARF:
-
-[acme@quaco pahole]$ btfdiff libc-2.28.so.debug
-[acme@quaco pahole]$ git diff
-diff --git a/dwarves.c b/dwarves.c
-index adc411a8279d..48a018a9c354 100644
---- a/dwarves.c
-+++ b/dwarves.c
-@@ -168,11 +168,12 @@ static struct base_type_name_to_size {
-        { .name = "double double",          .size = 64, },
-        { .name = "single float",           .size = 32, },
-        { .name = "float",                  .size = 32, },
--       { .name = "long double",            .size = 64, },
--       { .name = "long double long double", .size = 64, },
-+       { .name = "long double",            .size = sizeof(long double) * 8, },
-+       { .name = "long double long double", .size = sizeof(long double) * 8, },
-        { .name = "__int128",               .size = 128, },
-        { .name = "unsigned __int128",      .size = 128, },
-        { .name = "__int128 unsigned",      .size = 128, },
-+       { .name = "_Float128",              .size = 128, },
-        { .name = NULL },
- };
-
-[acme@quaco pahole]$
-
-I'll add a series of patches fixing up the types that don't have encoded
-in its name the size in bits, so that it works on all arches, one more
-for _Float128, should be enough for now, right?
-
-- Arnaldo
+<SNIP excellent repro before/after text>
  
-> $ chmod +rw /home/andriin/local/btf/libc-2.28.so.debug
-> 
-> $ ~/local/pahole/build/pahole -J ~/local/btf/libc-2.28.so.debug
-> 
-> $ PAHOLE=~/local/pahole/build/pahole ./btfdiff ~/local/btf/libc-2.28.so.debug
-> base_type__name_to_size: base_type _Float128
-> class__fixup_btf_bitfields: unknown base type name "_Float128"!
-> base_type__name_to_size: base_type _Float128
-> class__fixup_btf_bitfields: unknown base type name "_Float128"!
-> base_type__name_to_size: base_type _Float128
-> class__fixup_btf_bitfields: unknown base type name "_Float128"!
-> base_type__name_to_size: base_type _Float128
-> class__fixup_btf_bitfields: unknown base type name "_Float128"!
-> base_type__name_to_size: base_type _Float128
-> class__fixup_btf_bitfields: unknown base type name "_Float128"!
-> base_type__name_to_size: base_type _Float128
-> class__fixup_btf_bitfields: unknown base type name "_Float128"!
-> --- /tmp/btfdiff.dwarf.aV4wSL   2019-02-25 13:31:54.787923673 -0800
-> +++ /tmp/btfdiff.btf.22NQmJ     2019-02-25 13:31:54.802923668 -0800
-> @@ -461,9 +461,15 @@ struct La_x86_64_retval {
->         uint64_t                   lrv_rdx;              /*     8     8 */
->         La_x86_64_xmm              lrv_xmm0;             /*    16    16 */
->         La_x86_64_xmm              lrv_xmm1;             /*    32    16 */
-> -       long double                lrv_st0;              /*    48    16 */
-> +       long double                lrv_st0;              /*    48     8 */
-> +
-> +       /* XXX 8 bytes hole, try to pack */
-> +
->         /* --- cacheline 1 boundary (64 bytes) --- */
-> -       long double                lrv_st1;              /*    64    16 */
-> +       long double                lrv_st1;              /*    64     8 */
-> +
-> +       /* XXX 8 bytes hole, try to pack */
-> +
->         La_x86_64_vector           lrv_vector0;          /*    80    64 */
->         /* --- cacheline 2 boundary (128 bytes) was 16 bytes ago --- */
->         La_x86_64_vector           lrv_vector1;          /*   144    64 */
-> @@ -472,6 +478,7 @@ struct La_x86_64_retval {
->         __int128                   lrv_bnd1;             /*   224    16 */
-> 
->         /* size: 240, cachelines: 4, members: 10 */
-> +       /* sum members: 224, holes: 2, sum holes: 16 */
->         /* last cacheline: 48 bytes */
->  };
->  struct r_debug {
-> @@ -2044,7 +2051,7 @@ union ieee754_float {
->         } ieee_nan;                                    /*     0     4 */
->  };
->  union ieee854_long_double {
-> -       long double                d;                  /*     0    16 */
-> +       long double                d;                  /*     0     8 */
->         struct {
->                 unsigned int       mantissa1:32;       /*     0: 0  4 */
->                 unsigned int       mantissa0:32;       /*     4: 0  4 */
-> @@ -2141,7 +2148,7 @@ struct ucontext_t {
->         /* last cacheline: 8 bytes */
->  };
->  union ieee854_float128 {
-> -       _Float128                  d;                  /*     0    16 */
-> +       _Float128                  d;                  /*     0     0 */
->         struct {
->                 unsigned int       mantissa3:32;       /*     0: 0  4 */
->                 unsigned int       mantissa2:32;       /*     4: 0  4 */
-> @@ -2219,7 +2226,7 @@ union printf_arg {
->         long unsigned int          pa_u_long_int;      /*     0     8 */
->         long long unsigned int     pa_u_long_long_int; /*     0     8 */
->         double                     pa_double;          /*     0     8 */
-> -       long double                pa_long_double;     /*     0    16 */
-> +       long double                pa_long_double;     /*     0     8 */
->         const char  *              pa_string;          /*     0     8 */
->         const wchar_t  *           pa_wstring;         /*     0     8 */
->         void *                     pa_pointer;         /*     0     8 */
-> 
-> Seems like "long double" size is invalid for BTF. And we should
-> probably add "_Float128" as another "well known" base type name?
-> 
-> Though for the latter, it probably would be better to resolve base
-> type size using BTF data itself.
-> 
-> > > [acme@quaco pahole]$
+> Fixes: b18354f64cc2 ("btf: Generate correct struct bitfield member types")
+> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> Acked-by: Yonghong Song <yhs@fb.com>
 
--- 
+Thanks a lot, tested it with vmlinux, libc, your repro, all working
+jist fine, applied!
+
+Now out to get a vmlinux for a different arch to check that as well.
 
 - Arnaldo
