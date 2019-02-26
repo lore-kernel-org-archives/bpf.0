@@ -2,236 +2,110 @@ Return-Path: <SRS0=L7vf=RB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.5 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,
+	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5C84C43381
-	for <bpf@archiver.kernel.org>; Tue, 26 Feb 2019 01:20:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21A3FC43381
+	for <bpf@archiver.kernel.org>; Tue, 26 Feb 2019 03:10:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 64D3821841
-	for <bpf@archiver.kernel.org>; Tue, 26 Feb 2019 01:20:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DE16620842
+	for <bpf@archiver.kernel.org>; Tue, 26 Feb 2019 03:10:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="KdCvIoZK"
+	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="mh76pXYk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726035AbfBZBUZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 25 Feb 2019 20:20:25 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:44094 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726054AbfBZBUY (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 25 Feb 2019 20:20:24 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x1Q1Eu49020054
-        for <bpf@vger.kernel.org>; Mon, 25 Feb 2019 17:20:23 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=dlYbISBq8yOBrZ0MjOWSH4Ul5whZNLP1pigYuJu6FmA=;
- b=KdCvIoZKTMo+G3Il493PlXeJdTQY5VeOnvv/sGY0ELvqievlEtNIBQMTGYqM90Duph7b
- REnX5wRPd5yPyvkJhO/Lo/02H8ALBviML0IDdwqxjNmAnfjO0hd8nJlFM1yiSYJPAERN
- /HvjPoNstmasNmpb1U4PaELg1BRo/r24CzE= 
-Received: from maileast.thefacebook.com ([199.201.65.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2qvrru8k8w-10
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 25 Feb 2019 17:20:23 -0800
-Received: from mx-out.facebook.com (2620:10d:c0a1:3::13) by
- mail.thefacebook.com (2620:10d:c021:18::173) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1531.3;
- Mon, 25 Feb 2019 17:19:29 -0800
-Received: by devvm7221.prn2.facebook.com (Postfix, from userid 137359)
-        id 37922BBBC45D; Mon, 25 Feb 2019 17:19:28 -0800 (PST)
-Smtp-Origin-Hostprefix: devvm
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devvm7221.prn2.facebook.com
-To:     <acme@kernel.org>, <yhs@fb.com>, <ast@fb.com>,
-        <dwarves@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <andrii.nakryiko@gmail.com>
-CC:     Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v2 pahole 1/2] btf_loader: simplify fixup code by relying on BTF data more
-Date:   Mon, 25 Feb 2019 17:19:26 -0800
-Message-ID: <20190226011927.597075-2-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190226011927.597075-1-andriin@fb.com>
-References: <20190226011927.597075-1-andriin@fb.com>
-X-FB-Internal: Safe
+        id S1726105AbfBZDKw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 25 Feb 2019 22:10:52 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:37815 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726037AbfBZDKw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 25 Feb 2019 22:10:52 -0500
+Received: by mail-pf1-f194.google.com with SMTP id s22so5495567pfh.4
+        for <bpf@vger.kernel.org>; Mon, 25 Feb 2019 19:10:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=pt351PZKReNavNjhw2RTcrXUp2l6pKI0FirKR95LwEQ=;
+        b=mh76pXYkURzdjZNTDG1xhyqhPTiKY6eoInIhB0DDobLNmT/jhQlgtzCRPidS+ZtIGl
+         FO/d/It78XsVEASfyMtpMfOF30CzhFNvbkgCeWgjMndWzzDCGmw9IRw2IMti9JNOERcM
+         BCaDotIjuEb+IfomBw+VzxLrv8zm7UebUtbxIxaBaxTnPwOYO7Caj/55XopDjYdKIbyp
+         X1Qb1j+dvf8qroN/Wlcy9f4/dnAOFXcOOAmzrBob4UpRl50kEdFwLv5jw+1NlS6IpNdH
+         Z7W0rKt/9ns5ZEQRABcftUnVm0Tp3hKPV3om6Q3pp3Ja12z1tuD3czBScuBn/luu7hMM
+         kaMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=pt351PZKReNavNjhw2RTcrXUp2l6pKI0FirKR95LwEQ=;
+        b=XJZvFFIMVSKFVS8+t0vjsS+7qF6TAmjMgOaR7A0N2D/eoigRkZda+rMWqx6B0Z+dzd
+         cCmFJo9gwuRv/+t15g7GrI3gci7UJ9xGmhe6I+j03+lkJx2yddvdthdUJYBZvnhfQlKh
+         UriA3nppWGpFHaY/r8KeVxAsPQJfo4FC0r6uULwYEu1Z5rRz4G5gfjSMOyj760MzXMqw
+         FEc/ATYB4wn0cbmPNy41iI5M8nLJqK7ganFuibJCU2zRltVXa0Gw6hayjW0c32y2AN7X
+         EboHAleiUqE7MHokUxGpkczSK+r7TQcByRIq4dNps5zV0ISx5jhv5ag/igFVgfGR30w2
+         XJsQ==
+X-Gm-Message-State: AHQUAuavTWA2eLflqSYWrUCs2nFLvJzJ7TPEKgN+DqvEIbVaGNo+c6cJ
+        2gKmPh6vwXEWARqLX3ofP+4Rjg==
+X-Google-Smtp-Source: AHgI3IZTuCU6tmgVtgjVo3FXMxc5wnTSHmlq+GNIwhSXHSru2pAY8NoOabULgyi0vweSAaKQCPWVbQ==
+X-Received: by 2002:a62:444b:: with SMTP id r72mr23973753pfa.184.1551150651109;
+        Mon, 25 Feb 2019 19:10:51 -0800 (PST)
+Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
+        by smtp.gmail.com with ESMTPSA id 15sm16731952pfr.55.2019.02.25.19.10.50
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 25 Feb 2019 19:10:50 -0800 (PST)
+Date:   Mon, 25 Feb 2019 19:10:49 -0800
+From:   Stanislav Fomichev <sdf@fomichev.me>
+To:     Alexei Starovoitov <ast@fb.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Kernel Team <Kernel-team@fb.com>
+Subject: Re: [PATCH v3 bpf-next 1/4] bpf: enable program stats
+Message-ID: <20190226031049.GD32115@mini-arch>
+References: <20190225222842.2031962-1-ast@kernel.org>
+ <20190225222842.2031962-2-ast@kernel.org>
+ <20190225230703.GB32115@mini-arch>
+ <2eeb7f8d-d184-07d1-2b7b-76c93b4b1bfe@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-02-26_01:,,
- signatures=0
-X-Proofpoint-Spam-Reason: safe
-X-FB-Internal: Safe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2eeb7f8d-d184-07d1-2b7b-76c93b4b1bfe@fb.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-btf_loader relies on guessing base integral type size for enums and
-integers, which is unreliable. There doesn't seem to be a need for
-that, as all this information could be extracted from BTF information.
+On 02/25, Alexei Starovoitov wrote:
+> On 2/25/19 3:07 PM, Stanislav Fomichev wrote:
+> >> +#define BPF_PROG_RUN(prog, ctx)	({				\
+> >> +	u32 ret;						\
+> >> +	cant_sleep();						\
+> >> +	if (static_branch_unlikely(&bpf_stats_enabled_key)) {	\
+> >> +		struct bpf_prog_stats *stats;			\
+> >> +		u64 start = sched_clock();			\
+> > QQ: why sched_clock() and not, for example, ktime_get_ns() which we do
+> > in the bpf_test_run()? Or even why not local_clock?
+> > I'm just wondering what king of trade off we are doing here
+> > regarding precision vs run time cost.
+> 
+> 
+> I'm making this decision based on documentation:
+> Documentation/timers/timekeeping.txt
+> "Compared to clock sources, sched_clock() has to be very fast: it is 
+> called much more often, especially by the scheduler. If you have to do 
+> trade-offs between accuracy compared to the clock source, you may 
+> sacrifice accuracy for speed in sched_clock()."
+So sched_clock is fast, but imprecise; and ktime_get_ns (and
+lock_clock?) are slow(er), but more precise?
 
-Before:
-$ PAHOLE=~/local/pahole/build/pahole ./btfdiff ~/local/btf/libc-2.28.so.debug
-base_type__name_to_size: base_type _Float128
-class__fixup_btf_bitfields: unknown base type name "_Float128"!
-base_type__name_to_size: base_type _Float128
-class__fixup_btf_bitfields: unknown base type name "_Float128"!
-base_type__name_to_size: base_type _Float128
-class__fixup_btf_bitfields: unknown base type name "_Float128"!
-base_type__name_to_size: base_type _Float128
-class__fixup_btf_bitfields: unknown base type name "_Float128"!
-base_type__name_to_size: base_type _Float128
-class__fixup_btf_bitfields: unknown base type name "_Float128"!
-base_type__name_to_size: base_type _Float128
-class__fixup_btf_bitfields: unknown base type name "_Float128"!
---- /tmp/btfdiff.dwarf.aV4wSL   2019-02-25 13:31:54.787923673 -0800
-+++ /tmp/btfdiff.btf.22NQmJ     2019-02-25 13:31:54.802923668 -0800
-@@ -461,9 +461,15 @@ struct La_x86_64_retval {
-        uint64_t                   lrv_rdx;              /*     8     8 */
-        La_x86_64_xmm              lrv_xmm0;             /*    16    16 */
-        La_x86_64_xmm              lrv_xmm1;             /*    32    16 */
--       long double                lrv_st0;              /*    48    16 */
-+       long double                lrv_st0;              /*    48     8 */
-+
-+       /* XXX 8 bytes hole, try to pack */
-+
-        /* --- cacheline 1 boundary (64 bytes) --- */
--       long double                lrv_st1;              /*    64    16 */
-+       long double                lrv_st1;              /*    64     8 */
-+
-+       /* XXX 8 bytes hole, try to pack */
-+
-        La_x86_64_vector           lrv_vector0;          /*    80    64 */
-        /* --- cacheline 2 boundary (128 bytes) was 16 bytes ago --- */
-        La_x86_64_vector           lrv_vector1;          /*   144    64 */
-@@ -472,6 +478,7 @@ struct La_x86_64_retval {
-        __int128                   lrv_bnd1;             /*   224    16 */
+If that's the case, would it make sense to use a more precise
+measurement? I suppose the BPF program execution time is on the order of
+nanoseconds and if sched_close has msec or usec resolution, all we get is
+essentially noise?
 
-        /* size: 240, cachelines: 4, members: 10 */
-+       /* sum members: 224, holes: 2, sum holes: 16 */
-        /* last cacheline: 48 bytes */
- };
- struct r_debug {
-@@ -2044,7 +2051,7 @@ union ieee754_float {
-        } ieee_nan;                                    /*     0     4 */
- };
- union ieee854_long_double {
--       long double                d;                  /*     0    16 */
-+       long double                d;                  /*     0     8 */
-        struct {
-                unsigned int       mantissa1:32;       /*     0: 0  4 */
-                unsigned int       mantissa0:32;       /*     4: 0  4 */
-@@ -2141,7 +2148,7 @@ struct ucontext_t {
-        /* last cacheline: 8 bytes */
- };
- union ieee854_float128 {
--       _Float128                  d;                  /*     0    16 */
-+       _Float128                  d;                  /*     0     0 */
-        struct {
-                unsigned int       mantissa3:32;       /*     0: 0  4 */
-                unsigned int       mantissa2:32;       /*     4: 0  4 */
-@@ -2219,7 +2226,7 @@ union printf_arg {
-        long unsigned int          pa_u_long_int;      /*     0     8 */
-        long long unsigned int     pa_u_long_long_int; /*     0     8 */
-        double                     pa_double;          /*     0     8 */
--       long double                pa_long_double;     /*     0    16 */
-+       long double                pa_long_double;     /*     0     8 */
-        const char  *              pa_string;          /*     0     8 */
-        const wchar_t  *           pa_wstring;         /*     0     8 */
-        void *                     pa_pointer;         /*     0     8 */
-
-$ PAHOLE=~/local/pahole/build/pahole ./btfdiff ~/local/btf/libc-2.28.so.debug
-<empty output>
-
-Still good for kernel image:
-$ PAHOLE=~/local/pahole/build/pahole ./btfdiff ~/local/btf/vmlinux4
-<empty output>
-
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- btf_loader.c | 59 ++++++++++------------------------------------------
- 1 file changed, 11 insertions(+), 48 deletions(-)
-
-diff --git a/btf_loader.c b/btf_loader.c
-index 62e7e30..3b4fb40 100644
---- a/btf_loader.c
-+++ b/btf_loader.c
-@@ -463,64 +463,27 @@ static int class__fixup_btf_bitfields(struct tag *tag, struct cu *cu, struct btf
- 			continue;
- 
- 		pos->bitfield_offset = 0;
-+		pos->byte_size = tag__size(type, cu);
-+		pos->bit_size = pos->byte_size * 8;
- 
--		uint16_t type_bit_size;
--		size_t integral_bit_size;
--
--		switch (type->tag) {
--		case DW_TAG_enumeration_type:
--			type_bit_size = tag__type(type)->size;
--			/* Best we can do to check if this is a packed enum */
--			if (is_power_of_2(type_bit_size))
--				integral_bit_size = roundup(type_bit_size, 8);
--			else
--				integral_bit_size = sizeof(int) * 8;
--			break;
--		case DW_TAG_base_type: {
--			struct base_type *bt = tag__base_type(type);
--			char name[256];
--			type_bit_size = bt->bit_size;
--			integral_bit_size = base_type__name_to_size(bt, cu);
--			if (integral_bit_size == 0) {
--				fprintf(stderr, "%s: unknown base type name \"%s\"!\n",
--					__func__, base_type__name(bt, cu, name,
--								  sizeof(name)));
--			}
--		}
--			break;
--		default:
--			pos->byte_size = tag__size(type, cu);
--			pos->bit_size = pos->byte_size * 8;
-+		/* bitfield fixup is needed for enums and base types only */
-+		if (type->tag != DW_TAG_base_type && type->tag != DW_TAG_enumeration_type)
- 			continue;
--		}
- 
--		/*
--		 * XXX: integral_bit_size can be zero if base_type__name_to_size doesn't
--		 * know about the base_type name, so one has to add there when
--		 * such base_type isn't found. pahole will put zero on the
--		 * struct output so it should be easy to spot the name when
--		 * such unlikely thing happens.
--		 */
--		pos->byte_size = integral_bit_size / 8;
--		pos->bit_size = type_bit_size;
--
--		if (integral_bit_size == 0) {
--			pos->bit_size = 0;
-+		/* if BTF data is incorrect and has size == 0, skip field, 
-+		 * instead of crashing */
-+		if (pos->byte_size == 0) {
- 			continue;
- 		}
- 
- 		if (pos->bitfield_size) {
- 			/* bitfields seem to be always aligned, no matter the packing */
--			pos->byte_offset = pos->bit_offset / integral_bit_size * integral_bit_size / 8;
--		} else {
--			pos->byte_offset = pos->bit_offset / 8;
--		}
--
--
--		if (pos->bitfield_size) {
-+			pos->byte_offset = pos->bit_offset / pos->bit_size * pos->bit_size / 8;
- 			pos->bitfield_offset = pos->bit_offset - pos->byte_offset * 8;
- 			if (!btfe->is_big_endian)
--				pos->bitfield_offset = integral_bit_size - pos->bitfield_offset - pos->bitfield_size;
-+				pos->bitfield_offset = pos->bit_size - pos->bitfield_offset - pos->bitfield_size;
-+		} else {
-+			pos->byte_offset = pos->bit_offset / 8;
- 		}
- 	}
- 
--- 
-2.17.1
-
+I understand that you want this feature to have almost no overhead, but
+since it's gated by the static key, should we aim for a higher precision?
