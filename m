@@ -2,121 +2,284 @@ Return-Path: <SRS0=L7vf=RB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS,
+	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C51CDC43381
-	for <bpf@archiver.kernel.org>; Tue, 26 Feb 2019 06:46:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 711A9C43381
+	for <bpf@archiver.kernel.org>; Tue, 26 Feb 2019 13:12:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9035A213A2
-	for <bpf@archiver.kernel.org>; Tue, 26 Feb 2019 06:46:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2EE2D2184E
+	for <bpf@archiver.kernel.org>; Tue, 26 Feb 2019 13:12:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="rb5Tynjm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LmUulwox"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725901AbfBZGq3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Feb 2019 01:46:29 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:37892 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725879AbfBZGq2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Feb 2019 01:46:28 -0500
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x1Q6ix7u128921;
-        Tue, 26 Feb 2019 06:46:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2018-07-02;
- bh=as0xw3J2SisAwFLxS+XDEczbUfHeBVp+TQYJFLOqkvQ=;
- b=rb5Tynjmm65RfjEFAIwIr/rmJqVvIOl3wXIIZy1z/TVFkvPaG/C3hMMz59MFqmXjLLUg
- iCxmXFyO4efgMbjgY42QdELl3kBgpc5ECymEG8sxZR5KzppWm39uNq5pQx9+9kcXpgkN
- 2PfxFqQj9KUkZp/ZkrWc0UMTC70li7sISJq4Jgc9S8Fby8chxhZImWmZRsicxutGZkHT
- 9aDisINl/5jp1/O6paZ2aQqQVDBzkTSigLvmIHhlxWjuqN3zxxuWGCiTD14mdFSB+tlV
- sDyw7qv0q5sNm1GV/yCOmk7yQFprcuoGESrTYsZI2irF0Tbavz+OhSXftchjmblVopOZ ag== 
-Received: from aserv0022.oracle.com (aserv0022.oracle.com [141.146.126.234])
-        by aserp2130.oracle.com with ESMTP id 2qtupe2ucw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Feb 2019 06:46:09 +0000
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserv0022.oracle.com (8.14.4/8.14.4) with ESMTP id x1Q6k3ud007829
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Feb 2019 06:46:03 GMT
-Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x1Q6k36Y031530;
-        Tue, 26 Feb 2019 06:46:03 GMT
-Received: from localhost (/10.159.211.98)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 25 Feb 2019 22:46:03 -0800
-Date:   Tue, 26 Feb 2019 01:46:01 -0500
-From:   Kris Van Hees <kris.van.hees@oracle.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Kris Van Hees <kris.van.hees@oracle.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, daniel@iogearbox.net
-Subject: Re: [PATCH 0/2] bpf: context casting for tail call and gtrace prog
- type
-Message-ID: <20190226064601.GE16689@oracle.com>
-References: <201902251554.x1PFsD3w017626@userv0121.oracle.com>
- <20190226061823.f7hfs7yojfuycqmg@ast-mbp.dhcp.thefacebook.com>
+        id S1726872AbfBZNMP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Feb 2019 08:12:15 -0500
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:34533 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726151AbfBZNMP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 Feb 2019 08:12:15 -0500
+Received: by mail-qt1-f196.google.com with SMTP id w4so14756532qtc.1;
+        Tue, 26 Feb 2019 05:12:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=XgqgI2A3PtTGLt6Dvaw46gu/lTntZr2Ui2OPAYUPW1o=;
+        b=LmUulwoxRAmwLGV0NgYHa9G4cg5pWIerhEJ6z2ruFODd8fXPcqd6kGZVuUPXV2QkwV
+         gYOcQUIwytYGBWaITI2N9pHP30lQ58BXOimYngnx2Ohtvvrtk4A7aK9RH7zblncWzsOB
+         mSLbiQx0JYkuqIaL0I5+eQrzNTmVKQkVbfCqcV6JOftlhSH9ea/YZHzTZhIadbvtHjv3
+         6xyjjoGUb+smV+7Uzl2RAKkGk1CFVsxJT1x68AFiu/GrcOa/PSh/a2qPj9iM6KQ55IKd
+         u2WLuCrVp47C+kHqerFb3TM0O3vXKtE7HSO7V8QPw0vXpaM15zD6LyHOFa8QFzT6KALN
+         1LTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=XgqgI2A3PtTGLt6Dvaw46gu/lTntZr2Ui2OPAYUPW1o=;
+        b=H5OWeoZ7QyI30ZdJVQvehnpHQNo4uHVhXZI04Us4puP/WucJzJlT+RmZozIUKSPrwc
+         a/t3T717GBsoPVbgE+krAxglTiIlE7RJUF8BHdQtNXmtaTDJX2BGFwGpP4E+MG1mW3a0
+         WbMmYQAi2PK1Gw2N4FZCZopmXIDZabU9WYRgYRp3EegMiUlW6rUvSJPWWu5hpDN1iSWx
+         j00dX5ehq2pZ3We0UWnTO5GMHqruAgnIDFm/hV8oy+0xW8sVkjoNQjQEfMYvgrLh7HLc
+         5RR5XDro+tE6mBD90pAwvwtFZVSPXzotEkWoUrR0jzqnAZqp8iAYW8dpkq7JQ3pSiKKE
+         rk+A==
+X-Gm-Message-State: AHQUAua/noKYpdCxP6/48BSJjv4tbdCwefMVVTVpRi2d9Exe15L+GXPG
+        xAMD+jsm8AWlkR7ilKECl4w=
+X-Google-Smtp-Source: AHgI3Ia9E0gC00VEov7a7fHCHgYuVHY2nsnhb11J81ElZpu6WU2H8kqEatC6Shtaawh7DzechYhykg==
+X-Received: by 2002:a0c:d90b:: with SMTP id p11mr17768923qvj.140.1551186733244;
+        Tue, 26 Feb 2019 05:12:13 -0800 (PST)
+Received: from quaco.ghostprotocols.net ([179.97.35.11])
+        by smtp.gmail.com with ESMTPSA id u31sm9137573qth.15.2019.02.26.05.12.11
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 26 Feb 2019 05:12:12 -0800 (PST)
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 91DAA4039C; Tue, 26 Feb 2019 10:11:56 -0300 (-03)
+Date:   Tue, 26 Feb 2019 10:11:56 -0300
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Andrii Nakryiko <andriin@fb.com>, dwarves@vger.kernel.org,
+        bpf@vger.kernel.org, Alexei Starovoitov <ast@fb.com>,
+        Yonghong Song <yhs@fb.com>
+Subject: Re: encoding BTF on glibc was: Re: [PATCH pahole 0/3] fix handling
+ of bitfields in btf_loader
+Message-ID: <20190226131156.GA26786@kernel.org>
+References: <20190220205732.2514975-1-andriin@fb.com>
+ <20190222220243.GI26132@kernel.org>
+ <CAEf4BzYoJgxYWX9iS7pda62cnGr5VOC70NGgqPurMNWP_w1daA@mail.gmail.com>
+ <20190225160239.GR31136@kernel.org>
+ <20190225185949.GT31136@kernel.org>
+ <CAEf4BzZjnvw9yDKst1xU4PkkcUuPh2Q2Oep=B1jhWSWoO6cgWg@mail.gmail.com>
+ <20190225200822.GB13100@kernel.org>
+ <CAEf4Bzb9rT8ohHtMBNdsYrkv9BDsjN-0TU5WDQqmG0j4rz3hGw@mail.gmail.com>
+ <CAEf4BzYLomoEfGzW+81RtRS2s7pFyo4FuSbCLUxW8NBiOGxLdA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190226061823.f7hfs7yojfuycqmg@ast-mbp.dhcp.thefacebook.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9178 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1902260051
+In-Reply-To: <CAEf4BzYLomoEfGzW+81RtRS2s7pFyo4FuSbCLUxW8NBiOGxLdA@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Feb 25, 2019 at 10:18:25PM -0800, Alexei Starovoitov wrote:
-> On Mon, Feb 25, 2019 at 07:54:13AM -0800, Kris Van Hees wrote:
-> > 
-> > The goal is to further extend the BPF_PROG_TYPE_GTRACE implementation to
-> > support what tracers commonly need, and I am also looking at ways to further
-> > extend this model to allow more tracer-specific features as well without the
-> > need for adding a BPF program types for every tracer.
+Em Mon, Feb 25, 2019 at 01:36:57PM -0800, Andrii Nakryiko escreveu:
+> On Mon, Feb 25, 2019 at 12:51 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Mon, Feb 25, 2019 at 12:08 PM Arnaldo Carvalho de Melo
+> > <arnaldo.melo@gmail.com> wrote:
+> > >
+> > > Em Mon, Feb 25, 2019 at 11:42:29AM -0800, Andrii Nakryiko escreveu:
+> > > > On Mon, Feb 25, 2019 at 11:00 AM Arnaldo Carvalho de Melo> <arnaldo.melo@gmail.com> wrote:
+> > >
+> > > > > Em Mon, Feb 25, 2019 at 01:02:39PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > > > > So yeah, the BTF encoder/decoder is working just fine, the problem is in
+> > > > > > pahole's DWARF code, lemme see...
+> > > > >
+> > > > > Please try the patch below, for me btfdiff continues to show no diff for
+> > > > > all types in my vmlinux and now it also produces the same output for
+> > > > > when the first element of a bitfield has its bit_size equal to its
+> > > > > byte_size * 8:
+> > > >
+> > > > Yes, this fixes all the issues I've seen. btfdiff output is now empty
+> > > > for my kernel image. Thanks for quick fix!
+> > > >
+> > > > Reviewed-by: Andrii Nakryiko <andriin@fb.com>
+> > >
+> > > Thanks, just for some extra testing I tried encoding BTF for glibc 2.28:
+> > >
+> > > [acme@quaco pahole]$ pahole -JV libc-2.28.so.debug
+> > > <BIG snip>
+> >
+> > <snip>
+> >
+> > > [386075] INT long unsigned int size=8 bit_offset=0 nr_bits=64 encoding=(none)
+> > > Cannot open libc-2.28.so.debug
+> > > Failed to encode BTF
+> >
+> > I've tried the same on libc-2.26.so.debug and it worked.
+> >
+> > It failes after BTF encoding and deduping is done, exactly when it
+> > tries to re-open libc-2.28.so.debug to write out new contents. Not
+> > sure why it would fail, as it seems to be just plain open() call, but
+> > the fact that we both can repro this means there is something there.
+> >
+> > It also seems that libc-2.28.so.debug is corrupted:
+> >
+> > $ readelf -n /home/andriin/local/btf/libc-2.26.so.debug | grep
+> > 'Unknown note type' | wc -l
+> > 0
+> > $ readelf -n /home/andriin/local/btf/libc-2.28.so.debug | grep
+> > 'Unknown note type' | wc -l
+> > 17953
+> >
 > 
-> It seems by themselves the patches don't provide any new functionality,
-> but instead look like plumbing to call external code.
+> Ignore everything I've said (though 'Unknown note type' issue is
+> strange), for me it was just permissions issues.
 
-The patches are definitely not plumbing to call external code, and if I gave
-that impression I apologise.  I overlooked the information you quote below on
-allowing new functionality through modules when I wrote the comment above but
-please note that it was a forward-looking comment in terms of what could be
-done - not a reason for the patches that I submitted.
+yeah, we need to fix up these messages, I did the chmod here and got
+further.
 
-The patches accomplish something that is totally independent from that: they
-make it possible for existing events that execute BPF programs when triggered
-to transfer control to a BPF program with a more rich context.  The first
-patch makes such a transfer possible (using tail-call combined with converting
-the context to the new program type), and the second patch provides one such
-program type (generic trace).  The new functionality provided by the program
-type is direct access to task information that previously could only be
-obtained through helper calls.  E.g. the new program type allows programs to
-access the task state, prio, ppid, euid, and egid.  None of those pieces of
-information can currently be obtained unless you start poking around in
-memory using bpf_probe_read() helper calls.
+[acme@quaco pahole]$ ls -la libc-2.28.so.debug
+-r--r--r--. 1 acme acme 17189368 Feb 25 17:04 libc-2.28.so.debug
+[acme@quaco pahole]$ pahole -J libc-2.28.so.debug
+Cannot open libc-2.28.so.debug
+Failed to encode BTF
+[acme@quaco pahole]$ chmod +w libc-2.28.so.debug
+[acme@quaco pahole]$ ls -la libc-2.28.so.debug
+-rw-rw-r--. 1 acme acme 17189368 Feb 25 17:04 libc-2.28.so.debug
+[acme@quaco pahole]$ pahole -J libc-2.28.so.debug
+[acme@quaco pahole]$
 
-> This is no-go.
-> There were several attempts to do so in the past, so we documented it here:
-> Documentation/bpf/bpf_design_QA.rst
-> Q: New functionality via kernel modules?
-> ----------------------------------------
-> Q: Can BPF functionality such as new program or map types, new
-> helpers, etc be added out of kernel module code?
+And I get the same warnings.
+
+base_type__name_to_size: base_type _Float128
+
+If we just add _Float128 to the base_type__name_to_size arrays I think
+its good enough for pretty printing, i.e. we won't know from encoding
+that this is a float or double, as CTF and DWARF can, but for printing
+purposes, even regenerating the type for consumption by other tools, it
+should just work, no?
+
+So, two bugs, the bit_size for "long double" is 128, not 64, and if we
+add an entry for _Float128, then btfdiff is clean for libc, without any
+further work on properly supporting float types as in CTF or DWARF:
+
+[acme@quaco pahole]$ btfdiff libc-2.28.so.debug
+[acme@quaco pahole]$ git diff
+diff --git a/dwarves.c b/dwarves.c
+index adc411a8279d..48a018a9c354 100644
+--- a/dwarves.c
++++ b/dwarves.c
+@@ -168,11 +168,12 @@ static struct base_type_name_to_size {
+        { .name = "double double",          .size = 64, },
+        { .name = "single float",           .size = 32, },
+        { .name = "float",                  .size = 32, },
+-       { .name = "long double",            .size = 64, },
+-       { .name = "long double long double", .size = 64, },
++       { .name = "long double",            .size = sizeof(long double) * 8, },
++       { .name = "long double long double", .size = sizeof(long double) * 8, },
+        { .name = "__int128",               .size = 128, },
+        { .name = "unsigned __int128",      .size = 128, },
+        { .name = "__int128 unsigned",      .size = 128, },
++       { .name = "_Float128",              .size = 128, },
+        { .name = NULL },
+ };
+
+[acme@quaco pahole]$
+
+I'll add a series of patches fixing up the types that don't have encoded
+in its name the size in bits, so that it works on all arches, one more
+for _Float128, should be enough for now, right?
+
+- Arnaldo
+ 
+> $ chmod +rw /home/andriin/local/btf/libc-2.28.so.debug
 > 
-> A: NO.
+> $ ~/local/pahole/build/pahole -J ~/local/btf/libc-2.28.so.debug
 > 
-> The answer is still the same.
+> $ PAHOLE=~/local/pahole/build/pahole ./btfdiff ~/local/btf/libc-2.28.so.debug
+> base_type__name_to_size: base_type _Float128
+> class__fixup_btf_bitfields: unknown base type name "_Float128"!
+> base_type__name_to_size: base_type _Float128
+> class__fixup_btf_bitfields: unknown base type name "_Float128"!
+> base_type__name_to_size: base_type _Float128
+> class__fixup_btf_bitfields: unknown base type name "_Float128"!
+> base_type__name_to_size: base_type _Float128
+> class__fixup_btf_bitfields: unknown base type name "_Float128"!
+> base_type__name_to_size: base_type _Float128
+> class__fixup_btf_bitfields: unknown base type name "_Float128"!
+> base_type__name_to_size: base_type _Float128
+> class__fixup_btf_bitfields: unknown base type name "_Float128"!
+> --- /tmp/btfdiff.dwarf.aV4wSL   2019-02-25 13:31:54.787923673 -0800
+> +++ /tmp/btfdiff.btf.22NQmJ     2019-02-25 13:31:54.802923668 -0800
+> @@ -461,9 +461,15 @@ struct La_x86_64_retval {
+>         uint64_t                   lrv_rdx;              /*     8     8 */
+>         La_x86_64_xmm              lrv_xmm0;             /*    16    16 */
+>         La_x86_64_xmm              lrv_xmm1;             /*    32    16 */
+> -       long double                lrv_st0;              /*    48    16 */
+> +       long double                lrv_st0;              /*    48     8 */
+> +
+> +       /* XXX 8 bytes hole, try to pack */
+> +
+>         /* --- cacheline 1 boundary (64 bytes) --- */
+> -       long double                lrv_st1;              /*    64    16 */
+> +       long double                lrv_st1;              /*    64     8 */
+> +
+> +       /* XXX 8 bytes hole, try to pack */
+> +
+>         La_x86_64_vector           lrv_vector0;          /*    80    64 */
+>         /* --- cacheline 2 boundary (128 bytes) was 16 bytes ago --- */
+>         La_x86_64_vector           lrv_vector1;          /*   144    64 */
+> @@ -472,6 +478,7 @@ struct La_x86_64_retval {
+>         __int128                   lrv_bnd1;             /*   224    16 */
+> 
+>         /* size: 240, cachelines: 4, members: 10 */
+> +       /* sum members: 224, holes: 2, sum holes: 16 */
+>         /* last cacheline: 48 bytes */
+>  };
+>  struct r_debug {
+> @@ -2044,7 +2051,7 @@ union ieee754_float {
+>         } ieee_nan;                                    /*     0     4 */
+>  };
+>  union ieee854_long_double {
+> -       long double                d;                  /*     0    16 */
+> +       long double                d;                  /*     0     8 */
+>         struct {
+>                 unsigned int       mantissa1:32;       /*     0: 0  4 */
+>                 unsigned int       mantissa0:32;       /*     4: 0  4 */
+> @@ -2141,7 +2148,7 @@ struct ucontext_t {
+>         /* last cacheline: 8 bytes */
+>  };
+>  union ieee854_float128 {
+> -       _Float128                  d;                  /*     0    16 */
+> +       _Float128                  d;                  /*     0     0 */
+>         struct {
+>                 unsigned int       mantissa3:32;       /*     0: 0  4 */
+>                 unsigned int       mantissa2:32;       /*     4: 0  4 */
+> @@ -2219,7 +2226,7 @@ union printf_arg {
+>         long unsigned int          pa_u_long_int;      /*     0     8 */
+>         long long unsigned int     pa_u_long_long_int; /*     0     8 */
+>         double                     pa_double;          /*     0     8 */
+> -       long double                pa_long_double;     /*     0    16 */
+> +       long double                pa_long_double;     /*     0     8 */
+>         const char  *              pa_string;          /*     0     8 */
+>         const wchar_t  *           pa_wstring;         /*     0     8 */
+>         void *                     pa_pointer;         /*     0     8 */
+> 
+> Seems like "long double" size is invalid for BTF. And we should
+> probably add "_Float128" as another "well known" base type name?
+> 
+> Though for the latter, it probably would be better to resolve base
+> type size using BTF data itself.
+> 
+> > > [acme@quaco pahole]$
 
-Thanks for pointing this out - but again, my reference to modules was merely
-musing about the possibilities.  This information clearly closes the door on
-that train of thought, but that is not directly related to what I am doing
-with the patches I submitted.
+-- 
 
-	Kris
+- Arnaldo
