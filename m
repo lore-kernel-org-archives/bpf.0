@@ -2,182 +2,208 @@ Return-Path: <SRS0=L7vf=RB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9561EC43381
-	for <bpf@archiver.kernel.org>; Tue, 26 Feb 2019 17:22:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0772C43381
+	for <bpf@archiver.kernel.org>; Tue, 26 Feb 2019 17:25:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 55F7421848
-	for <bpf@archiver.kernel.org>; Tue, 26 Feb 2019 17:22:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C6862184D
+	for <bpf@archiver.kernel.org>; Tue, 26 Feb 2019 17:25:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nbGVnDxj"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="DXBr0n+D";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="ZkaCHKVp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728303AbfBZRWt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Feb 2019 12:22:49 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:41268 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726801AbfBZRWs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Feb 2019 12:22:48 -0500
-Received: by mail-ot1-f66.google.com with SMTP id t7so11736324otk.8;
-        Tue, 26 Feb 2019 09:22:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dWxnz8RHvDsMJWuK1C+Drke4JedYtY0DORzsqzgjf3M=;
-        b=nbGVnDxjabGS/6Qbb248kr+IdcsNYJMgxVapdK2pMTypSbvtMXxh7H6AzmBN80e3Pi
-         cjtE2p1+OYo4MvohNPMl2/kMQe1CG0pChhdwY2f8ridobw0yLzE/ymxxa3lPhzKMbNVL
-         HOOkCDoHnzL3hUB7n6yuaZkMA3IZmUdXoet5jfw7OlM/nr6D3T/rrkroIXTNaYyMrs8v
-         Ged60hQ/bxYXarqE+X378/MWTJnoGWm1AguLJ9Qm2BJx6SoRvRHYX1nCtYfSQIgCBbYK
-         gXkcA1g1QBXIfYcmatORH3AaotnOQZpjCKKoQldc1Y8aXu1qrVII+l9MeTP+NFHdwgQX
-         1wgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dWxnz8RHvDsMJWuK1C+Drke4JedYtY0DORzsqzgjf3M=;
-        b=GsdmaErQ7XdDnzXwT+NVYckWpRsh3wACZSdUu79jQqqz3dZ5obag8it7xK8QYnwg9K
-         4QwVhkuv0irvTKw6pLHX7/TRgbX1kKidC+SVCBxC9Og9rJNdp1bfI+RsA9u992NnuJKL
-         KodAfKneCJ09mQx237nlPLXHEAu6q63znEb1G5P2kcdEPgCwhq+OpWnIw3Qjw9PkvIlM
-         kytRV/NTvQsB09Q6kOs9Kw3BK/5VWYSxf9WBRdsI1Qi6IiWqkgYpgtRAz4EkStKGIXpc
-         X5eP+T/tGZFz7qtgPMiaffbsH+qzFJnRItXiWI4fJNU12BKp7SWM0WTUy2hEcIvYHUd9
-         AFKg==
-X-Gm-Message-State: AHQUAubUxKfYRP5ypGEpjB/ucd831jQN0QCzbUkuuOgUole+4yl/6aU7
-        egicV4kMTrHe1jVP6YpOOWOBgDQHpCH0IMW4Iew=
-X-Google-Smtp-Source: AHgI3IZbrswhxygHgcNWdtLj6HvMeRJKpo5bkyu3MNFIBDD9HfKtnHtuDDX20p/BpH/HgKf5KyDMcCh6rGxkXZxAJI0=
-X-Received: by 2002:a9d:20c4:: with SMTP id x62mr15427598ota.202.1551201767495;
- Tue, 26 Feb 2019 09:22:47 -0800 (PST)
-MIME-Version: 1.0
-References: <20190220205732.2514975-1-andriin@fb.com> <20190222220243.GI26132@kernel.org>
- <CAEf4BzYoJgxYWX9iS7pda62cnGr5VOC70NGgqPurMNWP_w1daA@mail.gmail.com>
- <20190225160239.GR31136@kernel.org> <20190225185949.GT31136@kernel.org>
- <CAEf4BzZjnvw9yDKst1xU4PkkcUuPh2Q2Oep=B1jhWSWoO6cgWg@mail.gmail.com>
- <20190225200822.GB13100@kernel.org> <CAEf4Bzb9rT8ohHtMBNdsYrkv9BDsjN-0TU5WDQqmG0j4rz3hGw@mail.gmail.com>
- <CAEf4BzYLomoEfGzW+81RtRS2s7pFyo4FuSbCLUxW8NBiOGxLdA@mail.gmail.com>
- <9033db30-1aab-69ae-dc2c-7dfa2585ead3@fb.com> <CAEf4BzZOC9O=ho2cdi2aY=BuXwcBBTO7zBCkW3zKbN7DMQ-a9Q@mail.gmail.com>
- <00483f56-1bb8-6b6b-c408-f6d37cc58764@fb.com>
-In-Reply-To: <00483f56-1bb8-6b6b-c408-f6d37cc58764@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 26 Feb 2019 09:22:36 -0800
-Message-ID: <CAEf4Bzb-L1Cu6y6GKH0gYv611EA1qmvk=h=cnndtqEGydRwhNw@mail.gmail.com>
-Subject: Re: encoding BTF on glibc was: Re: [PATCH pahole 0/3] fix handling of
- bitfields in btf_loader
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        id S1727690AbfBZRZP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Feb 2019 12:25:15 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:49606 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727054AbfBZRZP (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 26 Feb 2019 12:25:15 -0500
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x1QHJ0r7027374;
+        Tue, 26 Feb 2019 09:25:13 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=+GjUMXOIHK7VkyT/c2hIKIkAA1Eiyv+yAbDgT+Lz0rY=;
+ b=DXBr0n+DZ5BI4+9etltx6GEXi1Egaj8AtH8JIOKQfnQnBpvRG4I5/eW8Nw8FBw+7tnUJ
+ 8Zd8/g6BlGouJpLradTuqEN8yQ/jSv/MXWnCGyt9+yw5V5Y1XUrp2EVAfHKUjXlYl8Uo
+ A8CHc6VJG4VS8nv3fN0yDdGK0YS4wesUSG0= 
+Received: from mail.thefacebook.com ([199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2qw8bwrpqp-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Tue, 26 Feb 2019 09:25:13 -0800
+Received: from prn-mbx07.TheFacebook.com (2620:10d:c081:6::21) by
+ prn-hub05.TheFacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1531.3; Tue, 26 Feb 2019 09:25:02 -0800
+Received: from prn-hub05.TheFacebook.com (2620:10d:c081:35::129) by
+ prn-mbx07.TheFacebook.com (2620:10d:c081:6::21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1531.3; Tue, 26 Feb 2019 09:25:01 -0800
+Received: from NAM02-BL2-obe.outbound.protection.outlook.com (192.168.54.28)
+ by o365-in.thefacebook.com (192.168.16.29) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1531.3
+ via Frontend Transport; Tue, 26 Feb 2019 09:25:01 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector1-fb-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+GjUMXOIHK7VkyT/c2hIKIkAA1Eiyv+yAbDgT+Lz0rY=;
+ b=ZkaCHKVpfllS2edFQkFQi+waPwOETuF5UnHxxG13MaeJ45ptiap7uDepYMN7CAwZYq3i9ZTkW+4wFwNVE0s2bNAKKFJnyXngNEB0VWrHqDTBN+PS6ScobWZAQArTSWk5iKaGzHJw27SpIlYZFbArO/hLZ28+MH2pxq8VjA4DFq0=
+Received: from BYAPR15MB3384.namprd15.prod.outlook.com (20.179.59.17) by
+ BYAPR15MB3478.namprd15.prod.outlook.com (20.179.60.18) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1643.18; Tue, 26 Feb 2019 17:24:58 +0000
+Received: from BYAPR15MB3384.namprd15.prod.outlook.com
+ ([fe80::d051:e43:9e14:b94]) by BYAPR15MB3384.namprd15.prod.outlook.com
+ ([fe80::d051:e43:9e14:b94%4]) with mapi id 15.20.1643.019; Tue, 26 Feb 2019
+ 17:24:58 +0000
+From:   Yonghong Song <yhs@fb.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+CC:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         Andrii Nakryiko <andriin@fb.com>,
         "dwarves@vger.kernel.org" <dwarves@vger.kernel.org>,
         "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
         Alexei Starovoitov <ast@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: encoding BTF on glibc was: Re: [PATCH pahole 0/3] fix handling of
+ bitfields in btf_loader
+Thread-Topic: encoding BTF on glibc was: Re: [PATCH pahole 0/3] fix handling
+ of bitfields in btf_loader
+Thread-Index: AQHUyV718vJZBQQRBk+lN3pcSmGlf6XsYe2AgAAWrACABDu5gIAAMYCAgAAL64CAAAc8AIAAC/2AgAAMw4CAAIZHgIAAAiUA//9+9QCAAUPjAIAAAK2A
+Date:   Tue, 26 Feb 2019 17:24:58 +0000
+Message-ID: <5183cb3f-4ab9-f7d6-6148-71856435569a@fb.com>
+References: <20190220205732.2514975-1-andriin@fb.com>
+ <20190222220243.GI26132@kernel.org>
+ <CAEf4BzYoJgxYWX9iS7pda62cnGr5VOC70NGgqPurMNWP_w1daA@mail.gmail.com>
+ <20190225160239.GR31136@kernel.org> <20190225185949.GT31136@kernel.org>
+ <CAEf4BzZjnvw9yDKst1xU4PkkcUuPh2Q2Oep=B1jhWSWoO6cgWg@mail.gmail.com>
+ <20190225200822.GB13100@kernel.org>
+ <CAEf4Bzb9rT8ohHtMBNdsYrkv9BDsjN-0TU5WDQqmG0j4rz3hGw@mail.gmail.com>
+ <CAEf4BzYLomoEfGzW+81RtRS2s7pFyo4FuSbCLUxW8NBiOGxLdA@mail.gmail.com>
+ <9033db30-1aab-69ae-dc2c-7dfa2585ead3@fb.com>
+ <CAEf4BzZOC9O=ho2cdi2aY=BuXwcBBTO7zBCkW3zKbN7DMQ-a9Q@mail.gmail.com>
+ <00483f56-1bb8-6b6b-c408-f6d37cc58764@fb.com>
+ <CAEf4Bzb-L1Cu6y6GKH0gYv611EA1qmvk=h=cnndtqEGydRwhNw@mail.gmail.com>
+In-Reply-To: <CAEf4Bzb-L1Cu6y6GKH0gYv611EA1qmvk=h=cnndtqEGydRwhNw@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BYAPR08CA0009.namprd08.prod.outlook.com
+ (2603:10b6:a03:100::22) To BYAPR15MB3384.namprd15.prod.outlook.com
+ (2603:10b6:a03:10e::17)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2620:10d:c090:200::f2ac]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 055a7632-f2ce-4dec-f5fd-08d69c0f54f7
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600127)(711020)(4605104)(2017052603328)(7153060)(7193020);SRVR:BYAPR15MB3478;
+x-ms-traffictypediagnostic: BYAPR15MB3478:
+x-microsoft-exchange-diagnostics: 1;BYAPR15MB3478;20:G5QsLWXFt5q/aaLynrlHZ6rxtBgGU87+XJmfeYLlV6jQWbolt32y0GSfBgg0o/PXp2FE/c1oa7TC/bJr2RbSijc4Fa2vAdD14VUFycjF6vYROA94vdVbcJFLmHffG0ABTDLliaXL5aNBn4hxwkM+wOXgP9bHnRiWlw4z3wZcw0g=
+x-microsoft-antispam-prvs: <BYAPR15MB347890BB6DCAA09F8324AB0AD37B0@BYAPR15MB3478.namprd15.prod.outlook.com>
+x-forefront-prvs: 096029FF66
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(39860400002)(396003)(346002)(366004)(376002)(189003)(199004)(11346002)(476003)(2616005)(446003)(7736002)(46003)(186003)(76176011)(6486002)(31686004)(52116002)(229853002)(305945005)(81156014)(81166006)(8936002)(8676002)(486006)(99286004)(36756003)(6512007)(68736007)(106356001)(54906003)(6436002)(105586002)(316002)(53936002)(6246003)(256004)(71200400001)(71190400001)(97736004)(6916009)(6116002)(2906002)(478600001)(86362001)(102836004)(31696002)(5660300002)(25786009)(4326008)(386003)(6506007)(53546011)(93886005)(14454004);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB3478;H:BYAPR15MB3384.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: UAnrjCDDwqfnEYaPn5pEwHzv1j+WkUMlkcfNkR0WvvG77F3hIS3wH2N5SjT8v9/SuwTBwUWHAc8SDDjTuXxZUEvcrvJGdADtW1SDscLYOp4oIYj2KAS6+6QH9rz7QgDl+sPHWhXGmwcTv/31Z9S0bW23AhSUT5PVezLpWDw0xfLIyXJ7lYWRYWFy4Al/mG/ajESvHio2Q885uVwZ/snfJ4bCvSyKHJjj86m0a5s3u2Nb8ciu6d9ulocTrUCz5evt1MCfKtr07PMdjGpVFF/OpZ2PtWTbKv6PcFo5ssh4cND8Fk2t6ZxNNXnRUAEovGr+sWSjlEbymVTwU2D3L/6j32IAZYA0SUShEr6uMN9b6Lswyqi3ComDH/rrGvAMJNuVbki7pJ036PDXc9mfTZP7uWhndjblCn0IvffnnuwIE/g=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C816207DF48ADB4797D3C26499BBB853@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 055a7632-f2ce-4dec-f5fd-08d69c0f54f7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Feb 2019 17:24:57.9440
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3478
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-02-26_10:,,
+ signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Feb 25, 2019 at 10:03 PM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 2/25/19 9:45 PM, Andrii Nakryiko wrote:
-> > On Mon, Feb 25, 2019 at 9:38 PM Yonghong Song <yhs@fb.com> wrote:
-> >>
-> >>
-> >>
-> >> On 2/25/19 1:36 PM, Andrii Nakryiko wrote:
-> >>> On Mon, Feb 25, 2019 at 12:51 PM Andrii Nakryiko
-> >>> <andrii.nakryiko@gmail.com> wrote:
-> >>>>
-> >>>> On Mon, Feb 25, 2019 at 12:08 PM Arnaldo Carvalho de Melo
-> >>>> <arnaldo.melo@gmail.com> wrote:
-> >>>>>
-> >>>>> Em Mon, Feb 25, 2019 at 11:42:29AM -0800, Andrii Nakryiko escreveu:
-> >>>>>> On Mon, Feb 25, 2019 at 11:00 AM Arnaldo Carvalho de Melo> <arnaldo.melo@gmail.com> wrote:
-> >>>>>
-> >>>>>>> Em Mon, Feb 25, 2019 at 01:02:39PM -0300, Arnaldo Carvalho de Melo escreveu:
-> >>>>>>>> So yeah, the BTF encoder/decoder is working just fine, the problem is in
-> >>>>>>>> pahole's DWARF code, lemme see...
-> >>>>>>>
-> >>>>>>> Please try the patch below, for me btfdiff continues to show no diff for
-> >>>>>>> all types in my vmlinux and now it also produces the same output for
-> >>>>>>> when the first element of a bitfield has its bit_size equal to its
-> >>>>>>> byte_size * 8:
-> >>>>>>
-> >>>>>> Yes, this fixes all the issues I've seen. btfdiff output is now empty
-> >>>>>> for my kernel image. Thanks for quick fix!
-> >>>>>>
-> >>>>>> Reviewed-by: Andrii Nakryiko <andriin@fb.com>
-> >>>>>
-> >>>>> Thanks, just for some extra testing I tried encoding BTF for glibc 2.28:
-> >>>>>
-> >>>>> [acme@quaco pahole]$ pahole -JV libc-2.28.so.debug
-> >>>>> <BIG snip>
-> >>>>
-> >>>> <snip>
-> >>>>
-
-<snip>
-
-> >>>
-> >>> Seems like "long double" size is invalid for BTF. And we should
-> >>> probably add "_Float128" as another "well known" base type name?
-> >>
-> >> BPF does not support floating point instructions. As the result,
-> >> BTF design does not contain floating point types.
-> >>
-> >> Looks like kernel also uses float types (in certain drivers and arch's),
-> >> but types referred by bpf program mostly will not contain float types.
-> >>
-> >> Currently, both llvm and pahole will ignore floating types, so
-> >> from type comparison point of view, we will be fine.
-> >> The issue may come up with people using vmlinux BTF inside the
-> >> kernel for different purpose where a float type needs to be
-> >> specified, e.g., for a floating point function argument in ftrace.
-> >> But this is rare too.
-> >>
-> >> I am not 100% sure whether pahole dwarf/btf parity is considered
-> >> as a strong reason to add floating point type support in BTF or not.
-> >
-> > Isn't float and double just another base type with corresponding name?
-> > Fundamentally, how is it different from int or long? It's still just a
-> > collection of bits in 32-bit, 64-bit, etc number, except interpreted
-> > differently. Do you mean that for BTF to properly support floats,
-> > we'll need to extends set of possible encodings in INT type (in
-> > addition to today's CHAR, SIGNED and UNSIGNED)?
->
-> Probably another kind like BTF_KIND_FLOAT with additional u32 (in
-> addition to btf_type) indicating the size (4 bytes, 8 bytes and 16 bytes).
-
-This sounds exactly like current format of BTF_KIND_INT. What
-BTF_KIND_FLOAT will have that can't be represented by BTF_KIND_INT?
-Wouldn't it be equivalent to just adding BTF_INT_FLOAT in addition to
-existing BTF_INT_SIGNED, BTF_INT_CHAR, BTF_INT_BOOL to
-BTF_INT_ENCODING? Btw, while BTF_INT_SIGNED seems like it deserves
-separate bit, because it's mostly orthogonal to CHAR vs INT vs FLOAT
-vs (not so much) BOOL, BTF_INT_CHAR and BTF_INT_BOOL take two
-independent bits seems excessive. You can't have BOOL and CHAR, right?
-So why don't we just repurpose bits 1 and 2 to be a small 4-value
-enum:
-
-enum btf_int_encoding {
-    INT = 0,
-    CHAR = 1,
-    BOOL = 2,
-    FLOAT = 3,
-};
-
-This is backwards compatible and covers all floats (long double vs
-double vs float is just a question of bitness).
-
-Am I missing something here?
-
->
-> >
-> >>
-> >>>
-> >>> Though for the latter, it probably would be better to resolve base
-> >>> type size using BTF data itself.
-> >>>
-> >>>>> [acme@quaco pahole]$
+DQoNCk9uIDIvMjYvMTkgOToyMiBBTSwgQW5kcmlpIE5ha3J5aWtvIHdyb3RlOg0KPiBPbiBNb24s
+IEZlYiAyNSwgMjAxOSBhdCAxMDowMyBQTSBZb25naG9uZyBTb25nIDx5aHNAZmIuY29tPiB3cm90
+ZToNCj4+DQo+Pg0KPj4NCj4+IE9uIDIvMjUvMTkgOTo0NSBQTSwgQW5kcmlpIE5ha3J5aWtvIHdy
+b3RlOg0KPj4+IE9uIE1vbiwgRmViIDI1LCAyMDE5IGF0IDk6MzggUE0gWW9uZ2hvbmcgU29uZyA8
+eWhzQGZiLmNvbT4gd3JvdGU6DQo+Pj4+DQo+Pj4+DQo+Pj4+DQo+Pj4+IE9uIDIvMjUvMTkgMToz
+NiBQTSwgQW5kcmlpIE5ha3J5aWtvIHdyb3RlOg0KPj4+Pj4gT24gTW9uLCBGZWIgMjUsIDIwMTkg
+YXQgMTI6NTEgUE0gQW5kcmlpIE5ha3J5aWtvDQo+Pj4+PiA8YW5kcmlpLm5ha3J5aWtvQGdtYWls
+LmNvbT4gd3JvdGU6DQo+Pj4+Pj4NCj4+Pj4+PiBPbiBNb24sIEZlYiAyNSwgMjAxOSBhdCAxMjow
+OCBQTSBBcm5hbGRvIENhcnZhbGhvIGRlIE1lbG8NCj4+Pj4+PiA8YXJuYWxkby5tZWxvQGdtYWls
+LmNvbT4gd3JvdGU6DQo+Pj4+Pj4+DQo+Pj4+Pj4+IEVtIE1vbiwgRmViIDI1LCAyMDE5IGF0IDEx
+OjQyOjI5QU0gLTA4MDAsIEFuZHJpaSBOYWtyeWlrbyBlc2NyZXZldToNCj4+Pj4+Pj4+IE9uIE1v
+biwgRmViIDI1LCAyMDE5IGF0IDExOjAwIEFNIEFybmFsZG8gQ2FydmFsaG8gZGUgTWVsbz4gPGFy
+bmFsZG8ubWVsb0BnbWFpbC5jb20+IHdyb3RlOg0KPj4+Pj4+Pg0KPj4+Pj4+Pj4+IEVtIE1vbiwg
+RmViIDI1LCAyMDE5IGF0IDAxOjAyOjM5UE0gLTAzMDAsIEFybmFsZG8gQ2FydmFsaG8gZGUgTWVs
+byBlc2NyZXZldToNCj4+Pj4+Pj4+Pj4gU28geWVhaCwgdGhlIEJURiBlbmNvZGVyL2RlY29kZXIg
+aXMgd29ya2luZyBqdXN0IGZpbmUsIHRoZSBwcm9ibGVtIGlzIGluDQo+Pj4+Pj4+Pj4+IHBhaG9s
+ZSdzIERXQVJGIGNvZGUsIGxlbW1lIHNlZS4uLg0KPj4+Pj4+Pj4+DQo+Pj4+Pj4+Pj4gUGxlYXNl
+IHRyeSB0aGUgcGF0Y2ggYmVsb3csIGZvciBtZSBidGZkaWZmIGNvbnRpbnVlcyB0byBzaG93IG5v
+IGRpZmYgZm9yDQo+Pj4+Pj4+Pj4gYWxsIHR5cGVzIGluIG15IHZtbGludXggYW5kIG5vdyBpdCBh
+bHNvIHByb2R1Y2VzIHRoZSBzYW1lIG91dHB1dCBmb3INCj4+Pj4+Pj4+PiB3aGVuIHRoZSBmaXJz
+dCBlbGVtZW50IG9mIGEgYml0ZmllbGQgaGFzIGl0cyBiaXRfc2l6ZSBlcXVhbCB0byBpdHMNCj4+
+Pj4+Pj4+PiBieXRlX3NpemUgKiA4Og0KPj4+Pj4+Pj4NCj4+Pj4+Pj4+IFllcywgdGhpcyBmaXhl
+cyBhbGwgdGhlIGlzc3VlcyBJJ3ZlIHNlZW4uIGJ0ZmRpZmYgb3V0cHV0IGlzIG5vdyBlbXB0eQ0K
+Pj4+Pj4+Pj4gZm9yIG15IGtlcm5lbCBpbWFnZS4gVGhhbmtzIGZvciBxdWljayBmaXghDQo+Pj4+
+Pj4+Pg0KPj4+Pj4+Pj4gUmV2aWV3ZWQtYnk6IEFuZHJpaSBOYWtyeWlrbyA8YW5kcmlpbkBmYi5j
+b20+DQo+Pj4+Pj4+DQo+Pj4+Pj4+IFRoYW5rcywganVzdCBmb3Igc29tZSBleHRyYSB0ZXN0aW5n
+IEkgdHJpZWQgZW5jb2RpbmcgQlRGIGZvciBnbGliYyAyLjI4Og0KPj4+Pj4+Pg0KPj4+Pj4+PiBb
+YWNtZUBxdWFjbyBwYWhvbGVdJCBwYWhvbGUgLUpWIGxpYmMtMi4yOC5zby5kZWJ1Zw0KPj4+Pj4+
+PiA8QklHIHNuaXA+DQo+Pj4+Pj4NCj4+Pj4+PiA8c25pcD4NCj4+Pj4+Pg0KPiANCj4gPHNuaXA+
+DQo+IA0KPj4+Pj4NCj4+Pj4+IFNlZW1zIGxpa2UgImxvbmcgZG91YmxlIiBzaXplIGlzIGludmFs
+aWQgZm9yIEJURi4gQW5kIHdlIHNob3VsZA0KPj4+Pj4gcHJvYmFibHkgYWRkICJfRmxvYXQxMjgi
+IGFzIGFub3RoZXIgIndlbGwga25vd24iIGJhc2UgdHlwZSBuYW1lPw0KPj4+Pg0KPj4+PiBCUEYg
+ZG9lcyBub3Qgc3VwcG9ydCBmbG9hdGluZyBwb2ludCBpbnN0cnVjdGlvbnMuIEFzIHRoZSByZXN1
+bHQsDQo+Pj4+IEJURiBkZXNpZ24gZG9lcyBub3QgY29udGFpbiBmbG9hdGluZyBwb2ludCB0eXBl
+cy4NCj4+Pj4NCj4+Pj4gTG9va3MgbGlrZSBrZXJuZWwgYWxzbyB1c2VzIGZsb2F0IHR5cGVzIChp
+biBjZXJ0YWluIGRyaXZlcnMgYW5kIGFyY2gncyksDQo+Pj4+IGJ1dCB0eXBlcyByZWZlcnJlZCBi
+eSBicGYgcHJvZ3JhbSBtb3N0bHkgd2lsbCBub3QgY29udGFpbiBmbG9hdCB0eXBlcy4NCj4+Pj4N
+Cj4+Pj4gQ3VycmVudGx5LCBib3RoIGxsdm0gYW5kIHBhaG9sZSB3aWxsIGlnbm9yZSBmbG9hdGlu
+ZyB0eXBlcywgc28NCj4+Pj4gZnJvbSB0eXBlIGNvbXBhcmlzb24gcG9pbnQgb2Ygdmlldywgd2Ug
+d2lsbCBiZSBmaW5lLg0KPj4+PiBUaGUgaXNzdWUgbWF5IGNvbWUgdXAgd2l0aCBwZW9wbGUgdXNp
+bmcgdm1saW51eCBCVEYgaW5zaWRlIHRoZQ0KPj4+PiBrZXJuZWwgZm9yIGRpZmZlcmVudCBwdXJw
+b3NlIHdoZXJlIGEgZmxvYXQgdHlwZSBuZWVkcyB0byBiZQ0KPj4+PiBzcGVjaWZpZWQsIGUuZy4s
+IGZvciBhIGZsb2F0aW5nIHBvaW50IGZ1bmN0aW9uIGFyZ3VtZW50IGluIGZ0cmFjZS4NCj4+Pj4g
+QnV0IHRoaXMgaXMgcmFyZSB0b28uDQo+Pj4+DQo+Pj4+IEkgYW0gbm90IDEwMCUgc3VyZSB3aGV0
+aGVyIHBhaG9sZSBkd2FyZi9idGYgcGFyaXR5IGlzIGNvbnNpZGVyZWQNCj4+Pj4gYXMgYSBzdHJv
+bmcgcmVhc29uIHRvIGFkZCBmbG9hdGluZyBwb2ludCB0eXBlIHN1cHBvcnQgaW4gQlRGIG9yIG5v
+dC4NCj4+Pg0KPj4+IElzbid0IGZsb2F0IGFuZCBkb3VibGUganVzdCBhbm90aGVyIGJhc2UgdHlw
+ZSB3aXRoIGNvcnJlc3BvbmRpbmcgbmFtZT8NCj4+PiBGdW5kYW1lbnRhbGx5LCBob3cgaXMgaXQg
+ZGlmZmVyZW50IGZyb20gaW50IG9yIGxvbmc/IEl0J3Mgc3RpbGwganVzdCBhDQo+Pj4gY29sbGVj
+dGlvbiBvZiBiaXRzIGluIDMyLWJpdCwgNjQtYml0LCBldGMgbnVtYmVyLCBleGNlcHQgaW50ZXJw
+cmV0ZWQNCj4+PiBkaWZmZXJlbnRseS4gRG8geW91IG1lYW4gdGhhdCBmb3IgQlRGIHRvIHByb3Bl
+cmx5IHN1cHBvcnQgZmxvYXRzLA0KPj4+IHdlJ2xsIG5lZWQgdG8gZXh0ZW5kcyBzZXQgb2YgcG9z
+c2libGUgZW5jb2RpbmdzIGluIElOVCB0eXBlIChpbg0KPj4+IGFkZGl0aW9uIHRvIHRvZGF5J3Mg
+Q0hBUiwgU0lHTkVEIGFuZCBVTlNJR05FRCk/DQo+Pg0KPj4gUHJvYmFibHkgYW5vdGhlciBraW5k
+IGxpa2UgQlRGX0tJTkRfRkxPQVQgd2l0aCBhZGRpdGlvbmFsIHUzMiAoaW4NCj4+IGFkZGl0aW9u
+IHRvIGJ0Zl90eXBlKSBpbmRpY2F0aW5nIHRoZSBzaXplICg0IGJ5dGVzLCA4IGJ5dGVzIGFuZCAx
+NiBieXRlcykuDQo+IA0KPiBUaGlzIHNvdW5kcyBleGFjdGx5IGxpa2UgY3VycmVudCBmb3JtYXQg
+b2YgQlRGX0tJTkRfSU5ULiBXaGF0DQo+IEJURl9LSU5EX0ZMT0FUIHdpbGwgaGF2ZSB0aGF0IGNh
+bid0IGJlIHJlcHJlc2VudGVkIGJ5IEJURl9LSU5EX0lOVD8NCj4gV291bGRuJ3QgaXQgYmUgZXF1
+aXZhbGVudCB0byBqdXN0IGFkZGluZyBCVEZfSU5UX0ZMT0FUIGluIGFkZGl0aW9uIHRvDQo+IGV4
+aXN0aW5nIEJURl9JTlRfU0lHTkVELCBCVEZfSU5UX0NIQVIsIEJURl9JTlRfQk9PTCB0bw0KPiBC
+VEZfSU5UX0VOQ09ESU5HPyBCdHcsIHdoaWxlIEJURl9JTlRfU0lHTkVEIHNlZW1zIGxpa2UgaXQg
+ZGVzZXJ2ZXMNCj4gc2VwYXJhdGUgYml0LCBiZWNhdXNlIGl0J3MgbW9zdGx5IG9ydGhvZ29uYWwg
+dG8gQ0hBUiB2cyBJTlQgdnMgRkxPQVQNCj4gdnMgKG5vdCBzbyBtdWNoKSBCT09MLCBCVEZfSU5U
+X0NIQVIgYW5kIEJURl9JTlRfQk9PTCB0YWtlIHR3bw0KPiBpbmRlcGVuZGVudCBiaXRzIHNlZW1z
+IGV4Y2Vzc2l2ZS4gWW91IGNhbid0IGhhdmUgQk9PTCBhbmQgQ0hBUiwgcmlnaHQ/DQo+IFNvIHdo
+eSBkb24ndCB3ZSBqdXN0IHJlcHVycG9zZSBiaXRzIDEgYW5kIDIgdG8gYmUgYSBzbWFsbCA0LXZh
+bHVlDQo+IGVudW06DQo+IA0KPiBlbnVtIGJ0Zl9pbnRfZW5jb2Rpbmcgew0KPiAgICAgIElOVCA9
+IDAsDQo+ICAgICAgQ0hBUiA9IDEsDQo+ICAgICAgQk9PTCA9IDIsDQo+ICAgICAgRkxPQVQgPSAz
+LA0KPiB9Ow0KPiANCj4gVGhpcyBpcyBiYWNrd2FyZHMgY29tcGF0aWJsZSBhbmQgY292ZXJzIGFs
+bCBmbG9hdHMgKGxvbmcgZG91YmxlIHZzDQo+IGRvdWJsZSB2cyBmbG9hdCBpcyBqdXN0IGEgcXVl
+c3Rpb24gb2YgYml0bmVzcykuDQo+IA0KPiBBbSBJIG1pc3Npbmcgc29tZXRoaW5nIGhlcmU/DQoN
+CmZsb2F0IGlzIG5vdCBhbiAiaW50Ii4gRW5jb2RpbmcgImZsb2F0IiBpbiBJTlRfS0lORCBkb2Vz
+IG5vdCBzb3VuZCByaWdodCANCmluIG15IG9waW5pb24uDQoNCj4gDQo+Pg0KPj4+DQo+Pj4+DQo+
+Pj4+Pg0KPj4+Pj4gVGhvdWdoIGZvciB0aGUgbGF0dGVyLCBpdCBwcm9iYWJseSB3b3VsZCBiZSBi
+ZXR0ZXIgdG8gcmVzb2x2ZSBiYXNlDQo+Pj4+PiB0eXBlIHNpemUgdXNpbmcgQlRGIGRhdGEgaXRz
+ZWxmLg0KPj4+Pj4NCj4+Pj4+Pj4gW2FjbWVAcXVhY28gcGFob2xlXSQNCg==
