@@ -2,240 +2,272 @@ Return-Path: <SRS0=L7vf=RB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43AF2C43381
-	for <bpf@archiver.kernel.org>; Tue, 26 Feb 2019 05:45:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6C2AC43381
+	for <bpf@archiver.kernel.org>; Tue, 26 Feb 2019 06:03:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 05B452147C
-	for <bpf@archiver.kernel.org>; Tue, 26 Feb 2019 05:45:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 82E9E213A2
+	for <bpf@archiver.kernel.org>; Tue, 26 Feb 2019 06:03:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EHRu8vxg"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="AXOu5Exf";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="blLOwVB6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726063AbfBZFp1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Feb 2019 00:45:27 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:43741 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725983AbfBZFp1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Feb 2019 00:45:27 -0500
-Received: by mail-oi1-f195.google.com with SMTP id i8so9386695oib.10;
-        Mon, 25 Feb 2019 21:45:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sZMX9luGKi7gHYdneKnQu6cEgD/0QJSbk12gVsNJhAw=;
-        b=EHRu8vxgsmuEWmd9u8L1+nJOylGzKQ0S/jVXcHw/Gu1KK7Yl6l8FWq7zi9p9uvEB+G
-         dgzD7/OTJUfnSwV2H+AvBdMJjbcIAhAKDWFBsE2iz12kkTfdn1dy8KsgBv7OOqwiVyjr
-         pIVNHgJnXTSP9KRUJ9BJFGncQzzowV6UhfQ2z+cc6nUIFmtBQ438SKuJEYtAqcgJtExz
-         5YOc1wEWwwgcDueeFfO1JH5hahPM2MMVH1SGxwyShoY7oXxF1L6/bQ1s2koRNL2vMwFo
-         wv6GzYy0BclxW3t18Ol2utwgvAyxLVuCstinNuDrtSVF0w0W6lVb70ZjamxCnCQiacDS
-         48Og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sZMX9luGKi7gHYdneKnQu6cEgD/0QJSbk12gVsNJhAw=;
-        b=I1yjVKbCqCAsC+tcNWmQha8IPU0T1UJ0aXD69XuV960LTTI6aPgty2rzCk6X250vXc
-         TWLxUI37RAsmtyWd5df+HyPiOXgyT4MUCAjqTtf58n4bxjnW8ic+S33XCJSUhOUPbz2J
-         mj+sTDVPA6nsAdHBbidc1DlAoHfIM/Yww2XyYs+J2tNM6lLiXzAMYH+Vo0OgTavmxXyv
-         O1UgSpWn9nKFFCOnihZsQEcUnRY2JQLHciDQGXceGCnbf98toazcKC7gP/8ARQcRUlkr
-         jnIcXJFxgVK6hz9INoPiO9QvDPgby9OyCYJsJP/2XTPTXnIyq2Q9mtIUP/u8CxHzssl2
-         q8qg==
-X-Gm-Message-State: AHQUAuY11lDr+Dg46w6hLEMvDMM0MRhmPKtvhWa+Z2RREe1HQ3yKyqTr
-        RuE6FvFZon3pSaF4WzZlE8STh3zw2sHeLBTJGxg=
-X-Google-Smtp-Source: AHgI3IYDyJFV8pbRZLK2IXgaqtMCwiinpihiYFDPitlGGBkVIj/tPVIdVa+xFnGuTwIaO4a0ashHLcK1zqAoKxnWAKw=
-X-Received: by 2002:aca:3bd5:: with SMTP id i204mr1319698oia.167.1551159926278;
- Mon, 25 Feb 2019 21:45:26 -0800 (PST)
-MIME-Version: 1.0
-References: <20190220205732.2514975-1-andriin@fb.com> <20190222220243.GI26132@kernel.org>
- <CAEf4BzYoJgxYWX9iS7pda62cnGr5VOC70NGgqPurMNWP_w1daA@mail.gmail.com>
- <20190225160239.GR31136@kernel.org> <20190225185949.GT31136@kernel.org>
- <CAEf4BzZjnvw9yDKst1xU4PkkcUuPh2Q2Oep=B1jhWSWoO6cgWg@mail.gmail.com>
- <20190225200822.GB13100@kernel.org> <CAEf4Bzb9rT8ohHtMBNdsYrkv9BDsjN-0TU5WDQqmG0j4rz3hGw@mail.gmail.com>
- <CAEf4BzYLomoEfGzW+81RtRS2s7pFyo4FuSbCLUxW8NBiOGxLdA@mail.gmail.com> <9033db30-1aab-69ae-dc2c-7dfa2585ead3@fb.com>
-In-Reply-To: <9033db30-1aab-69ae-dc2c-7dfa2585ead3@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 25 Feb 2019 21:45:14 -0800
-Message-ID: <CAEf4BzZOC9O=ho2cdi2aY=BuXwcBBTO7zBCkW3zKbN7DMQ-a9Q@mail.gmail.com>
-Subject: Re: encoding BTF on glibc was: Re: [PATCH pahole 0/3] fix handling of
- bitfields in btf_loader
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        id S1726454AbfBZGDe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Feb 2019 01:03:34 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:41164 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725881AbfBZGDd (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 26 Feb 2019 01:03:33 -0500
+Received: from pps.filterd (m0001255.ppops.net [127.0.0.1])
+        by mx0b-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x1Q61l3W014789;
+        Mon, 25 Feb 2019 22:03:29 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=TtM4ntwuGME/ewW7P99RUHfWrGRdoBVJo6HPt9DXYPs=;
+ b=AXOu5ExfK6CdcZOUNCF4e0yWlfxpgE8HAJBz8bT0Zg3SiaxR7MsvvUkTRFMKfy4jAryd
+ rb7i0BAH0SxWZZl2/Lv9T8dONxWq6T+B2Ktdm0SUiS44Dr8Zc2ZDBcjvKlgZabec5yjw
+ HkgJsYZ+YcqhK01VxPkA/otn8HI76d1gxmk= 
+Received: from mail.thefacebook.com ([199.201.64.23])
+        by mx0b-00082601.pphosted.com with ESMTP id 2qvqf0hhcn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Mon, 25 Feb 2019 22:03:29 -0800
+Received: from prn-mbx07.TheFacebook.com (2620:10d:c081:6::21) by
+ prn-hub03.TheFacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1531.3; Mon, 25 Feb 2019 22:03:28 -0800
+Received: from prn-hub04.TheFacebook.com (2620:10d:c081:35::128) by
+ prn-mbx07.TheFacebook.com (2620:10d:c081:6::21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1531.3; Mon, 25 Feb 2019 22:03:27 -0800
+Received: from NAM01-SN1-obe.outbound.protection.outlook.com (192.168.54.28)
+ by o365-in.thefacebook.com (192.168.16.28) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1531.3
+ via Frontend Transport; Mon, 25 Feb 2019 22:03:27 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector1-fb-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TtM4ntwuGME/ewW7P99RUHfWrGRdoBVJo6HPt9DXYPs=;
+ b=blLOwVB66YHQmp+mEey8t/0cR9dpd7WQZBihXOLiSZ/a2rqa1qumwMrt7stE9YyZ6hgVwnQZfmSplNyrr+Y69PCaKlBriKevOzjKnMGf9zL2B+wXNZH5yGMtSv4GPvtGuP3/BsV/j4Nu6FuWKlsUPjVYGzcSAGZgDWFINEpdPeI=
+Received: from BYAPR15MB3384.namprd15.prod.outlook.com (20.179.59.17) by
+ BYAPR15MB2695.namprd15.prod.outlook.com (20.179.156.224) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1643.20; Tue, 26 Feb 2019 06:03:25 +0000
+Received: from BYAPR15MB3384.namprd15.prod.outlook.com
+ ([fe80::d051:e43:9e14:b94]) by BYAPR15MB3384.namprd15.prod.outlook.com
+ ([fe80::d051:e43:9e14:b94%4]) with mapi id 15.20.1643.019; Tue, 26 Feb 2019
+ 06:03:25 +0000
+From:   Yonghong Song <yhs@fb.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+CC:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         Andrii Nakryiko <andriin@fb.com>,
         "dwarves@vger.kernel.org" <dwarves@vger.kernel.org>,
         "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
         Alexei Starovoitov <ast@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: encoding BTF on glibc was: Re: [PATCH pahole 0/3] fix handling of
+ bitfields in btf_loader
+Thread-Topic: encoding BTF on glibc was: Re: [PATCH pahole 0/3] fix handling
+ of bitfields in btf_loader
+Thread-Index: AQHUyV718vJZBQQRBk+lN3pcSmGlf6XsYe2AgAAWrACABDu5gIAAMYCAgAAL64CAAAc8AIAAC/2AgAAMw4CAAIZHgIAAAiUAgAAFEQA=
+Date:   Tue, 26 Feb 2019 06:03:25 +0000
+Message-ID: <00483f56-1bb8-6b6b-c408-f6d37cc58764@fb.com>
+References: <20190220205732.2514975-1-andriin@fb.com>
+ <20190222220243.GI26132@kernel.org>
+ <CAEf4BzYoJgxYWX9iS7pda62cnGr5VOC70NGgqPurMNWP_w1daA@mail.gmail.com>
+ <20190225160239.GR31136@kernel.org> <20190225185949.GT31136@kernel.org>
+ <CAEf4BzZjnvw9yDKst1xU4PkkcUuPh2Q2Oep=B1jhWSWoO6cgWg@mail.gmail.com>
+ <20190225200822.GB13100@kernel.org>
+ <CAEf4Bzb9rT8ohHtMBNdsYrkv9BDsjN-0TU5WDQqmG0j4rz3hGw@mail.gmail.com>
+ <CAEf4BzYLomoEfGzW+81RtRS2s7pFyo4FuSbCLUxW8NBiOGxLdA@mail.gmail.com>
+ <9033db30-1aab-69ae-dc2c-7dfa2585ead3@fb.com>
+ <CAEf4BzZOC9O=ho2cdi2aY=BuXwcBBTO7zBCkW3zKbN7DMQ-a9Q@mail.gmail.com>
+In-Reply-To: <CAEf4BzZOC9O=ho2cdi2aY=BuXwcBBTO7zBCkW3zKbN7DMQ-a9Q@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BYAPR05CA0108.namprd05.prod.outlook.com
+ (2603:10b6:a03:e0::49) To BYAPR15MB3384.namprd15.prod.outlook.com
+ (2603:10b6:a03:10e::17)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2620:10d:c090:180::1:20dd]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: abda5c1c-65d8-4afd-f3bb-08d69bb01ed5
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600127)(711020)(4605104)(2017052603328)(7153060)(7193020);SRVR:BYAPR15MB2695;
+x-ms-traffictypediagnostic: BYAPR15MB2695:
+x-microsoft-exchange-diagnostics: 1;BYAPR15MB2695;20:f03lIkjV/5PIOEo+0aAqtYW5ks7xxOzOWRVglkZqK/sI4XBNpvc2ea32DxOrQpVKMu0dd4o7SzhuIujEVF3ZwWSHQ7xaZiKOanMfO/fNg3tpeoYw5r66aorVNyqgRLTHhm1JDbUE4BzSm/8p5O54mdhS8TnbPRK8t0H5/p2DBRg=
+x-microsoft-antispam-prvs: <BYAPR15MB26955484DAFFA21CAF940F2BD37B0@BYAPR15MB2695.namprd15.prod.outlook.com>
+x-forefront-prvs: 096029FF66
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(396003)(39860400002)(136003)(346002)(366004)(189003)(199004)(99286004)(5660300002)(6436002)(6486002)(76176011)(6916009)(7736002)(6506007)(53546011)(386003)(4326008)(6512007)(52116002)(53936002)(14454004)(97736004)(102836004)(25786009)(305945005)(478600001)(86362001)(6116002)(54906003)(71190400001)(2906002)(71200400001)(31696002)(106356001)(93886005)(68736007)(36756003)(31686004)(105586002)(486006)(8676002)(8936002)(316002)(81156014)(81166006)(446003)(229853002)(256004)(19627235002)(11346002)(46003)(186003)(6246003)(2616005)(476003)(21314003);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB2695;H:BYAPR15MB3384.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: H3NNpmR6G3UKp987UAjn14OTMB5f9odXylSHsg8ILe3OZMd7BSDfXRHMCsUsLpTH7fpNHvUohp14EzWcWZiwkJN6CPi6TeNHS2kb24kewLaoMzh3NkkosSGsep/cen0Mtwyj6OMlSO9UaGNm3a3GwHX2GYT1WbNN1pnjaJB0sSL4Y/xu1YzmRIS/4+C7RwePZcbWK5LpGQM1BjtZ5qR+ucnhEPi3vligm3jsQs+hUQgsu5b/qmFQXpdPZu/IiSOTFmKC3ibAN3BIzEConnKy2zGeHOoQ8I+E4bpgTvjqnIY5dijIqPaz68oQc/DkTx7RG4Aut7SXhTb+rlP4T7mOQndWUGQWSCPvlFs5w4OcVkR7FQ3Al7sALlmBFfXA0vcoL7EkZdnVy8shPTVVsxX1lOhTQU4Lxt8u/CjEXpNBP1s=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <5423600E3E6D1B49B2B7CEC64B878525@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: abda5c1c-65d8-4afd-f3bb-08d69bb01ed5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Feb 2019 06:03:24.4065
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2695
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-02-26_05:,,
+ signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Feb 25, 2019 at 9:38 PM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 2/25/19 1:36 PM, Andrii Nakryiko wrote:
-> > On Mon, Feb 25, 2019 at 12:51 PM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> >>
-> >> On Mon, Feb 25, 2019 at 12:08 PM Arnaldo Carvalho de Melo
-> >> <arnaldo.melo@gmail.com> wrote:
-> >>>
-> >>> Em Mon, Feb 25, 2019 at 11:42:29AM -0800, Andrii Nakryiko escreveu:
-> >>>> On Mon, Feb 25, 2019 at 11:00 AM Arnaldo Carvalho de Melo> <arnaldo.melo@gmail.com> wrote:
-> >>>
-> >>>>> Em Mon, Feb 25, 2019 at 01:02:39PM -0300, Arnaldo Carvalho de Melo escreveu:
-> >>>>>> So yeah, the BTF encoder/decoder is working just fine, the problem is in
-> >>>>>> pahole's DWARF code, lemme see...
-> >>>>>
-> >>>>> Please try the patch below, for me btfdiff continues to show no diff for
-> >>>>> all types in my vmlinux and now it also produces the same output for
-> >>>>> when the first element of a bitfield has its bit_size equal to its
-> >>>>> byte_size * 8:
-> >>>>
-> >>>> Yes, this fixes all the issues I've seen. btfdiff output is now empty
-> >>>> for my kernel image. Thanks for quick fix!
-> >>>>
-> >>>> Reviewed-by: Andrii Nakryiko <andriin@fb.com>
-> >>>
-> >>> Thanks, just for some extra testing I tried encoding BTF for glibc 2.28:
-> >>>
-> >>> [acme@quaco pahole]$ pahole -JV libc-2.28.so.debug
-> >>> <BIG snip>
-> >>
-> >> <snip>
-> >>
-> >>> [386075] INT long unsigned int size=8 bit_offset=0 nr_bits=64 encoding=(none)
-> >>> Cannot open libc-2.28.so.debug
-> >>> Failed to encode BTF
-> >>
-> >> I've tried the same on libc-2.26.so.debug and it worked.
-> >>
-> >> It failes after BTF encoding and deduping is done, exactly when it
-> >> tries to re-open libc-2.28.so.debug to write out new contents. Not
-> >> sure why it would fail, as it seems to be just plain open() call, but
-> >> the fact that we both can repro this means there is something there.
-> >>
-> >> It also seems that libc-2.28.so.debug is corrupted:
-> >>
-> >> $ readelf -n /home/andriin/local/btf/libc-2.26.so.debug | grep
-> >> 'Unknown note type' | wc -l
-> >> 0
-> >> $ readelf -n /home/andriin/local/btf/libc-2.28.so.debug | grep
-> >> 'Unknown note type' | wc -l
-> >> 17953
-> >>
-> >
-> > Ignore everything I've said (though 'Unknown note type' issue is
-> > strange), for me it was just permissions issues.
-> >
-> > $ chmod +rw /home/andriin/local/btf/libc-2.28.so.debug
-> >
-> > $ ~/local/pahole/build/pahole -J ~/local/btf/libc-2.28.so.debug
-> >
-> > $ PAHOLE=~/local/pahole/build/pahole ./btfdiff ~/local/btf/libc-2.28.so.debug
-> > base_type__name_to_size: base_type _Float128
-> > class__fixup_btf_bitfields: unknown base type name "_Float128"!
-> > base_type__name_to_size: base_type _Float128
-> > class__fixup_btf_bitfields: unknown base type name "_Float128"!
-> > base_type__name_to_size: base_type _Float128
-> > class__fixup_btf_bitfields: unknown base type name "_Float128"!
-> > base_type__name_to_size: base_type _Float128
-> > class__fixup_btf_bitfields: unknown base type name "_Float128"!
-> > base_type__name_to_size: base_type _Float128
-> > class__fixup_btf_bitfields: unknown base type name "_Float128"!
-> > base_type__name_to_size: base_type _Float128
-> > class__fixup_btf_bitfields: unknown base type name "_Float128"!
-> > --- /tmp/btfdiff.dwarf.aV4wSL   2019-02-25 13:31:54.787923673 -0800
-> > +++ /tmp/btfdiff.btf.22NQmJ     2019-02-25 13:31:54.802923668 -0800
-> > @@ -461,9 +461,15 @@ struct La_x86_64_retval {
-> >          uint64_t                   lrv_rdx;              /*     8     8 */
-> >          La_x86_64_xmm              lrv_xmm0;             /*    16    16 */
-> >          La_x86_64_xmm              lrv_xmm1;             /*    32    16 */
-> > -       long double                lrv_st0;              /*    48    16 */
-> > +       long double                lrv_st0;              /*    48     8 */
-> > +
-> > +       /* XXX 8 bytes hole, try to pack */
-> > +
-> >          /* --- cacheline 1 boundary (64 bytes) --- */
-> > -       long double                lrv_st1;              /*    64    16 */
-> > +       long double                lrv_st1;              /*    64     8 */
-> > +
-> > +       /* XXX 8 bytes hole, try to pack */
-> > +
-> >          La_x86_64_vector           lrv_vector0;          /*    80    64 */
-> >          /* --- cacheline 2 boundary (128 bytes) was 16 bytes ago --- */
-> >          La_x86_64_vector           lrv_vector1;          /*   144    64 */
-> > @@ -472,6 +478,7 @@ struct La_x86_64_retval {
-> >          __int128                   lrv_bnd1;             /*   224    16 */
-> >
-> >          /* size: 240, cachelines: 4, members: 10 */
-> > +       /* sum members: 224, holes: 2, sum holes: 16 */
-> >          /* last cacheline: 48 bytes */
-> >   };
-> >   struct r_debug {
-> > @@ -2044,7 +2051,7 @@ union ieee754_float {
-> >          } ieee_nan;                                    /*     0     4 */
-> >   };
-> >   union ieee854_long_double {
-> > -       long double                d;                  /*     0    16 */
-> > +       long double                d;                  /*     0     8 */
-> >          struct {
-> >                  unsigned int       mantissa1:32;       /*     0: 0  4 */
-> >                  unsigned int       mantissa0:32;       /*     4: 0  4 */
-> > @@ -2141,7 +2148,7 @@ struct ucontext_t {
-> >          /* last cacheline: 8 bytes */
-> >   };
-> >   union ieee854_float128 {
-> > -       _Float128                  d;                  /*     0    16 */
-> > +       _Float128                  d;                  /*     0     0 */
-> >          struct {
-> >                  unsigned int       mantissa3:32;       /*     0: 0  4 */
-> >                  unsigned int       mantissa2:32;       /*     4: 0  4 */
-> > @@ -2219,7 +2226,7 @@ union printf_arg {
-> >          long unsigned int          pa_u_long_int;      /*     0     8 */
-> >          long long unsigned int     pa_u_long_long_int; /*     0     8 */
-> >          double                     pa_double;          /*     0     8 */
-> > -       long double                pa_long_double;     /*     0    16 */
-> > +       long double                pa_long_double;     /*     0     8 */
-> >          const char  *              pa_string;          /*     0     8 */
-> >          const wchar_t  *           pa_wstring;         /*     0     8 */
-> >          void *                     pa_pointer;         /*     0     8 */
-> >
-> > Seems like "long double" size is invalid for BTF. And we should
-> > probably add "_Float128" as another "well known" base type name?
->
-> BPF does not support floating point instructions. As the result,
-> BTF design does not contain floating point types.
->
-> Looks like kernel also uses float types (in certain drivers and arch's),
-> but types referred by bpf program mostly will not contain float types.
->
-> Currently, both llvm and pahole will ignore floating types, so
-> from type comparison point of view, we will be fine.
-> The issue may come up with people using vmlinux BTF inside the
-> kernel for different purpose where a float type needs to be
-> specified, e.g., for a floating point function argument in ftrace.
-> But this is rare too.
->
-> I am not 100% sure whether pahole dwarf/btf parity is considered
-> as a strong reason to add floating point type support in BTF or not.
-
-Isn't float and double just another base type with corresponding name?
-Fundamentally, how is it different from int or long? It's still just a
-collection of bits in 32-bit, 64-bit, etc number, except interpreted
-differently. Do you mean that for BTF to properly support floats,
-we'll need to extends set of possible encodings in INT type (in
-addition to today's CHAR, SIGNED and UNSIGNED)?
-
->
-> >
-> > Though for the latter, it probably would be better to resolve base
-> > type size using BTF data itself.
-> >
-> >>> [acme@quaco pahole]$
+DQoNCk9uIDIvMjUvMTkgOTo0NSBQTSwgQW5kcmlpIE5ha3J5aWtvIHdyb3RlOg0KPiBPbiBNb24s
+IEZlYiAyNSwgMjAxOSBhdCA5OjM4IFBNIFlvbmdob25nIFNvbmcgPHloc0BmYi5jb20+IHdyb3Rl
+Og0KPj4NCj4+DQo+Pg0KPj4gT24gMi8yNS8xOSAxOjM2IFBNLCBBbmRyaWkgTmFrcnlpa28gd3Jv
+dGU6DQo+Pj4gT24gTW9uLCBGZWIgMjUsIDIwMTkgYXQgMTI6NTEgUE0gQW5kcmlpIE5ha3J5aWtv
+DQo+Pj4gPGFuZHJpaS5uYWtyeWlrb0BnbWFpbC5jb20+IHdyb3RlOg0KPj4+Pg0KPj4+PiBPbiBN
+b24sIEZlYiAyNSwgMjAxOSBhdCAxMjowOCBQTSBBcm5hbGRvIENhcnZhbGhvIGRlIE1lbG8NCj4+
+Pj4gPGFybmFsZG8ubWVsb0BnbWFpbC5jb20+IHdyb3RlOg0KPj4+Pj4NCj4+Pj4+IEVtIE1vbiwg
+RmViIDI1LCAyMDE5IGF0IDExOjQyOjI5QU0gLTA4MDAsIEFuZHJpaSBOYWtyeWlrbyBlc2NyZXZl
+dToNCj4+Pj4+PiBPbiBNb24sIEZlYiAyNSwgMjAxOSBhdCAxMTowMCBBTSBBcm5hbGRvIENhcnZh
+bGhvIGRlIE1lbG8+IDxhcm5hbGRvLm1lbG9AZ21haWwuY29tPiB3cm90ZToNCj4+Pj4+DQo+Pj4+
+Pj4+IEVtIE1vbiwgRmViIDI1LCAyMDE5IGF0IDAxOjAyOjM5UE0gLTAzMDAsIEFybmFsZG8gQ2Fy
+dmFsaG8gZGUgTWVsbyBlc2NyZXZldToNCj4+Pj4+Pj4+IFNvIHllYWgsIHRoZSBCVEYgZW5jb2Rl
+ci9kZWNvZGVyIGlzIHdvcmtpbmcganVzdCBmaW5lLCB0aGUgcHJvYmxlbSBpcyBpbg0KPj4+Pj4+
+Pj4gcGFob2xlJ3MgRFdBUkYgY29kZSwgbGVtbWUgc2VlLi4uDQo+Pj4+Pj4+DQo+Pj4+Pj4+IFBs
+ZWFzZSB0cnkgdGhlIHBhdGNoIGJlbG93LCBmb3IgbWUgYnRmZGlmZiBjb250aW51ZXMgdG8gc2hv
+dyBubyBkaWZmIGZvcg0KPj4+Pj4+PiBhbGwgdHlwZXMgaW4gbXkgdm1saW51eCBhbmQgbm93IGl0
+IGFsc28gcHJvZHVjZXMgdGhlIHNhbWUgb3V0cHV0IGZvcg0KPj4+Pj4+PiB3aGVuIHRoZSBmaXJz
+dCBlbGVtZW50IG9mIGEgYml0ZmllbGQgaGFzIGl0cyBiaXRfc2l6ZSBlcXVhbCB0byBpdHMNCj4+
+Pj4+Pj4gYnl0ZV9zaXplICogODoNCj4+Pj4+Pg0KPj4+Pj4+IFllcywgdGhpcyBmaXhlcyBhbGwg
+dGhlIGlzc3VlcyBJJ3ZlIHNlZW4uIGJ0ZmRpZmYgb3V0cHV0IGlzIG5vdyBlbXB0eQ0KPj4+Pj4+
+IGZvciBteSBrZXJuZWwgaW1hZ2UuIFRoYW5rcyBmb3IgcXVpY2sgZml4IQ0KPj4+Pj4+DQo+Pj4+
+Pj4gUmV2aWV3ZWQtYnk6IEFuZHJpaSBOYWtyeWlrbyA8YW5kcmlpbkBmYi5jb20+DQo+Pj4+Pg0K
+Pj4+Pj4gVGhhbmtzLCBqdXN0IGZvciBzb21lIGV4dHJhIHRlc3RpbmcgSSB0cmllZCBlbmNvZGlu
+ZyBCVEYgZm9yIGdsaWJjIDIuMjg6DQo+Pj4+Pg0KPj4+Pj4gW2FjbWVAcXVhY28gcGFob2xlXSQg
+cGFob2xlIC1KViBsaWJjLTIuMjguc28uZGVidWcNCj4+Pj4+IDxCSUcgc25pcD4NCj4+Pj4NCj4+
+Pj4gPHNuaXA+DQo+Pj4+DQo+Pj4+PiBbMzg2MDc1XSBJTlQgbG9uZyB1bnNpZ25lZCBpbnQgc2l6
+ZT04IGJpdF9vZmZzZXQ9MCBucl9iaXRzPTY0IGVuY29kaW5nPShub25lKQ0KPj4+Pj4gQ2Fubm90
+IG9wZW4gbGliYy0yLjI4LnNvLmRlYnVnDQo+Pj4+PiBGYWlsZWQgdG8gZW5jb2RlIEJURg0KPj4+
+Pg0KPj4+PiBJJ3ZlIHRyaWVkIHRoZSBzYW1lIG9uIGxpYmMtMi4yNi5zby5kZWJ1ZyBhbmQgaXQg
+d29ya2VkLg0KPj4+Pg0KPj4+PiBJdCBmYWlsZXMgYWZ0ZXIgQlRGIGVuY29kaW5nIGFuZCBkZWR1
+cGluZyBpcyBkb25lLCBleGFjdGx5IHdoZW4gaXQNCj4+Pj4gdHJpZXMgdG8gcmUtb3BlbiBsaWJj
+LTIuMjguc28uZGVidWcgdG8gd3JpdGUgb3V0IG5ldyBjb250ZW50cy4gTm90DQo+Pj4+IHN1cmUg
+d2h5IGl0IHdvdWxkIGZhaWwsIGFzIGl0IHNlZW1zIHRvIGJlIGp1c3QgcGxhaW4gb3BlbigpIGNh
+bGwsIGJ1dA0KPj4+PiB0aGUgZmFjdCB0aGF0IHdlIGJvdGggY2FuIHJlcHJvIHRoaXMgbWVhbnMg
+dGhlcmUgaXMgc29tZXRoaW5nIHRoZXJlLg0KPj4+Pg0KPj4+PiBJdCBhbHNvIHNlZW1zIHRoYXQg
+bGliYy0yLjI4LnNvLmRlYnVnIGlzIGNvcnJ1cHRlZDoNCj4+Pj4NCj4+Pj4gJCByZWFkZWxmIC1u
+IC9ob21lL2FuZHJpaW4vbG9jYWwvYnRmL2xpYmMtMi4yNi5zby5kZWJ1ZyB8IGdyZXANCj4+Pj4g
+J1Vua25vd24gbm90ZSB0eXBlJyB8IHdjIC1sDQo+Pj4+IDANCj4+Pj4gJCByZWFkZWxmIC1uIC9o
+b21lL2FuZHJpaW4vbG9jYWwvYnRmL2xpYmMtMi4yOC5zby5kZWJ1ZyB8IGdyZXANCj4+Pj4gJ1Vu
+a25vd24gbm90ZSB0eXBlJyB8IHdjIC1sDQo+Pj4+IDE3OTUzDQo+Pj4+DQo+Pj4NCj4+PiBJZ25v
+cmUgZXZlcnl0aGluZyBJJ3ZlIHNhaWQgKHRob3VnaCAnVW5rbm93biBub3RlIHR5cGUnIGlzc3Vl
+IGlzDQo+Pj4gc3RyYW5nZSksIGZvciBtZSBpdCB3YXMganVzdCBwZXJtaXNzaW9ucyBpc3N1ZXMu
+DQo+Pj4NCj4+PiAkIGNobW9kICtydyAvaG9tZS9hbmRyaWluL2xvY2FsL2J0Zi9saWJjLTIuMjgu
+c28uZGVidWcNCj4+Pg0KPj4+ICQgfi9sb2NhbC9wYWhvbGUvYnVpbGQvcGFob2xlIC1KIH4vbG9j
+YWwvYnRmL2xpYmMtMi4yOC5zby5kZWJ1Zw0KPj4+DQo+Pj4gJCBQQUhPTEU9fi9sb2NhbC9wYWhv
+bGUvYnVpbGQvcGFob2xlIC4vYnRmZGlmZiB+L2xvY2FsL2J0Zi9saWJjLTIuMjguc28uZGVidWcN
+Cj4+PiBiYXNlX3R5cGVfX25hbWVfdG9fc2l6ZTogYmFzZV90eXBlIF9GbG9hdDEyOA0KPj4+IGNs
+YXNzX19maXh1cF9idGZfYml0ZmllbGRzOiB1bmtub3duIGJhc2UgdHlwZSBuYW1lICJfRmxvYXQx
+MjgiIQ0KPj4+IGJhc2VfdHlwZV9fbmFtZV90b19zaXplOiBiYXNlX3R5cGUgX0Zsb2F0MTI4DQo+
+Pj4gY2xhc3NfX2ZpeHVwX2J0Zl9iaXRmaWVsZHM6IHVua25vd24gYmFzZSB0eXBlIG5hbWUgIl9G
+bG9hdDEyOCIhDQo+Pj4gYmFzZV90eXBlX19uYW1lX3RvX3NpemU6IGJhc2VfdHlwZSBfRmxvYXQx
+MjgNCj4+PiBjbGFzc19fZml4dXBfYnRmX2JpdGZpZWxkczogdW5rbm93biBiYXNlIHR5cGUgbmFt
+ZSAiX0Zsb2F0MTI4IiENCj4+PiBiYXNlX3R5cGVfX25hbWVfdG9fc2l6ZTogYmFzZV90eXBlIF9G
+bG9hdDEyOA0KPj4+IGNsYXNzX19maXh1cF9idGZfYml0ZmllbGRzOiB1bmtub3duIGJhc2UgdHlw
+ZSBuYW1lICJfRmxvYXQxMjgiIQ0KPj4+IGJhc2VfdHlwZV9fbmFtZV90b19zaXplOiBiYXNlX3R5
+cGUgX0Zsb2F0MTI4DQo+Pj4gY2xhc3NfX2ZpeHVwX2J0Zl9iaXRmaWVsZHM6IHVua25vd24gYmFz
+ZSB0eXBlIG5hbWUgIl9GbG9hdDEyOCIhDQo+Pj4gYmFzZV90eXBlX19uYW1lX3RvX3NpemU6IGJh
+c2VfdHlwZSBfRmxvYXQxMjgNCj4+PiBjbGFzc19fZml4dXBfYnRmX2JpdGZpZWxkczogdW5rbm93
+biBiYXNlIHR5cGUgbmFtZSAiX0Zsb2F0MTI4IiENCj4+PiAtLS0gL3RtcC9idGZkaWZmLmR3YXJm
+LmFWNHdTTCAgIDIwMTktMDItMjUgMTM6MzE6NTQuNzg3OTIzNjczIC0wODAwDQo+Pj4gKysrIC90
+bXAvYnRmZGlmZi5idGYuMjJOUW1KICAgICAyMDE5LTAyLTI1IDEzOjMxOjU0LjgwMjkyMzY2OCAt
+MDgwMA0KPj4+IEBAIC00NjEsOSArNDYxLDE1IEBAIHN0cnVjdCBMYV94ODZfNjRfcmV0dmFsIHsN
+Cj4+PiAgICAgICAgICAgdWludDY0X3QgICAgICAgICAgICAgICAgICAgbHJ2X3JkeDsgICAgICAg
+ICAgICAgIC8qICAgICA4ICAgICA4ICovDQo+Pj4gICAgICAgICAgIExhX3g4Nl82NF94bW0gICAg
+ICAgICAgICAgIGxydl94bW0wOyAgICAgICAgICAgICAvKiAgICAxNiAgICAxNiAqLw0KPj4+ICAg
+ICAgICAgICBMYV94ODZfNjRfeG1tICAgICAgICAgICAgICBscnZfeG1tMTsgICAgICAgICAgICAg
+LyogICAgMzIgICAgMTYgKi8NCj4+PiAtICAgICAgIGxvbmcgZG91YmxlICAgICAgICAgICAgICAg
+IGxydl9zdDA7ICAgICAgICAgICAgICAvKiAgICA0OCAgICAxNiAqLw0KPj4+ICsgICAgICAgbG9u
+ZyBkb3VibGUgICAgICAgICAgICAgICAgbHJ2X3N0MDsgICAgICAgICAgICAgIC8qICAgIDQ4ICAg
+ICA4ICovDQo+Pj4gKw0KPj4+ICsgICAgICAgLyogWFhYIDggYnl0ZXMgaG9sZSwgdHJ5IHRvIHBh
+Y2sgKi8NCj4+PiArDQo+Pj4gICAgICAgICAgIC8qIC0tLSBjYWNoZWxpbmUgMSBib3VuZGFyeSAo
+NjQgYnl0ZXMpIC0tLSAqLw0KPj4+IC0gICAgICAgbG9uZyBkb3VibGUgICAgICAgICAgICAgICAg
+bHJ2X3N0MTsgICAgICAgICAgICAgIC8qICAgIDY0ICAgIDE2ICovDQo+Pj4gKyAgICAgICBsb25n
+IGRvdWJsZSAgICAgICAgICAgICAgICBscnZfc3QxOyAgICAgICAgICAgICAgLyogICAgNjQgICAg
+IDggKi8NCj4+PiArDQo+Pj4gKyAgICAgICAvKiBYWFggOCBieXRlcyBob2xlLCB0cnkgdG8gcGFj
+ayAqLw0KPj4+ICsNCj4+PiAgICAgICAgICAgTGFfeDg2XzY0X3ZlY3RvciAgICAgICAgICAgbHJ2
+X3ZlY3RvcjA7ICAgICAgICAgIC8qICAgIDgwICAgIDY0ICovDQo+Pj4gICAgICAgICAgIC8qIC0t
+LSBjYWNoZWxpbmUgMiBib3VuZGFyeSAoMTI4IGJ5dGVzKSB3YXMgMTYgYnl0ZXMgYWdvIC0tLSAq
+Lw0KPj4+ICAgICAgICAgICBMYV94ODZfNjRfdmVjdG9yICAgICAgICAgICBscnZfdmVjdG9yMTsg
+ICAgICAgICAgLyogICAxNDQgICAgNjQgKi8NCj4+PiBAQCAtNDcyLDYgKzQ3OCw3IEBAIHN0cnVj
+dCBMYV94ODZfNjRfcmV0dmFsIHsNCj4+PiAgICAgICAgICAgX19pbnQxMjggICAgICAgICAgICAg
+ICAgICAgbHJ2X2JuZDE7ICAgICAgICAgICAgIC8qICAgMjI0ICAgIDE2ICovDQo+Pj4NCj4+PiAg
+ICAgICAgICAgLyogc2l6ZTogMjQwLCBjYWNoZWxpbmVzOiA0LCBtZW1iZXJzOiAxMCAqLw0KPj4+
+ICsgICAgICAgLyogc3VtIG1lbWJlcnM6IDIyNCwgaG9sZXM6IDIsIHN1bSBob2xlczogMTYgKi8N
+Cj4+PiAgICAgICAgICAgLyogbGFzdCBjYWNoZWxpbmU6IDQ4IGJ5dGVzICovDQo+Pj4gICAgfTsN
+Cj4+PiAgICBzdHJ1Y3Qgcl9kZWJ1ZyB7DQo+Pj4gQEAgLTIwNDQsNyArMjA1MSw3IEBAIHVuaW9u
+IGllZWU3NTRfZmxvYXQgew0KPj4+ICAgICAgICAgICB9IGllZWVfbmFuOyAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIC8qICAgICAwICAgICA0ICovDQo+Pj4gICAgfTsNCj4+PiAg
+ICB1bmlvbiBpZWVlODU0X2xvbmdfZG91YmxlIHsNCj4+PiAtICAgICAgIGxvbmcgZG91YmxlICAg
+ICAgICAgICAgICAgIGQ7ICAgICAgICAgICAgICAgICAgLyogICAgIDAgICAgMTYgKi8NCj4+PiAr
+ICAgICAgIGxvbmcgZG91YmxlICAgICAgICAgICAgICAgIGQ7ICAgICAgICAgICAgICAgICAgLyog
+ICAgIDAgICAgIDggKi8NCj4+PiAgICAgICAgICAgc3RydWN0IHsNCj4+PiAgICAgICAgICAgICAg
+ICAgICB1bnNpZ25lZCBpbnQgICAgICAgbWFudGlzc2ExOjMyOyAgICAgICAvKiAgICAgMDogMCAg
+NCAqLw0KPj4+ICAgICAgICAgICAgICAgICAgIHVuc2lnbmVkIGludCAgICAgICBtYW50aXNzYTA6
+MzI7ICAgICAgIC8qICAgICA0OiAwICA0ICovDQo+Pj4gQEAgLTIxNDEsNyArMjE0OCw3IEBAIHN0
+cnVjdCB1Y29udGV4dF90IHsNCj4+PiAgICAgICAgICAgLyogbGFzdCBjYWNoZWxpbmU6IDggYnl0
+ZXMgKi8NCj4+PiAgICB9Ow0KPj4+ICAgIHVuaW9uIGllZWU4NTRfZmxvYXQxMjggew0KPj4+IC0g
+ICAgICAgX0Zsb2F0MTI4ICAgICAgICAgICAgICAgICAgZDsgICAgICAgICAgICAgICAgICAvKiAg
+ICAgMCAgICAxNiAqLw0KPj4+ICsgICAgICAgX0Zsb2F0MTI4ICAgICAgICAgICAgICAgICAgZDsg
+ICAgICAgICAgICAgICAgICAvKiAgICAgMCAgICAgMCAqLw0KPj4+ICAgICAgICAgICBzdHJ1Y3Qg
+ew0KPj4+ICAgICAgICAgICAgICAgICAgIHVuc2lnbmVkIGludCAgICAgICBtYW50aXNzYTM6MzI7
+ICAgICAgIC8qICAgICAwOiAwICA0ICovDQo+Pj4gICAgICAgICAgICAgICAgICAgdW5zaWduZWQg
+aW50ICAgICAgIG1hbnRpc3NhMjozMjsgICAgICAgLyogICAgIDQ6IDAgIDQgKi8NCj4+PiBAQCAt
+MjIxOSw3ICsyMjI2LDcgQEAgdW5pb24gcHJpbnRmX2FyZyB7DQo+Pj4gICAgICAgICAgIGxvbmcg
+dW5zaWduZWQgaW50ICAgICAgICAgIHBhX3VfbG9uZ19pbnQ7ICAgICAgLyogICAgIDAgICAgIDgg
+Ki8NCj4+PiAgICAgICAgICAgbG9uZyBsb25nIHVuc2lnbmVkIGludCAgICAgcGFfdV9sb25nX2xv
+bmdfaW50OyAvKiAgICAgMCAgICAgOCAqLw0KPj4+ICAgICAgICAgICBkb3VibGUgICAgICAgICAg
+ICAgICAgICAgICBwYV9kb3VibGU7ICAgICAgICAgIC8qICAgICAwICAgICA4ICovDQo+Pj4gLSAg
+ICAgICBsb25nIGRvdWJsZSAgICAgICAgICAgICAgICBwYV9sb25nX2RvdWJsZTsgICAgIC8qICAg
+ICAwICAgIDE2ICovDQo+Pj4gKyAgICAgICBsb25nIGRvdWJsZSAgICAgICAgICAgICAgICBwYV9s
+b25nX2RvdWJsZTsgICAgIC8qICAgICAwICAgICA4ICovDQo+Pj4gICAgICAgICAgIGNvbnN0IGNo
+YXIgICogICAgICAgICAgICAgIHBhX3N0cmluZzsgICAgICAgICAgLyogICAgIDAgICAgIDggKi8N
+Cj4+PiAgICAgICAgICAgY29uc3Qgd2NoYXJfdCAgKiAgICAgICAgICAgcGFfd3N0cmluZzsgICAg
+ICAgICAvKiAgICAgMCAgICAgOCAqLw0KPj4+ICAgICAgICAgICB2b2lkICogICAgICAgICAgICAg
+ICAgICAgICBwYV9wb2ludGVyOyAgICAgICAgIC8qICAgICAwICAgICA4ICovDQo+Pj4NCj4+PiBT
+ZWVtcyBsaWtlICJsb25nIGRvdWJsZSIgc2l6ZSBpcyBpbnZhbGlkIGZvciBCVEYuIEFuZCB3ZSBz
+aG91bGQNCj4+PiBwcm9iYWJseSBhZGQgIl9GbG9hdDEyOCIgYXMgYW5vdGhlciAid2VsbCBrbm93
+biIgYmFzZSB0eXBlIG5hbWU/DQo+Pg0KPj4gQlBGIGRvZXMgbm90IHN1cHBvcnQgZmxvYXRpbmcg
+cG9pbnQgaW5zdHJ1Y3Rpb25zLiBBcyB0aGUgcmVzdWx0LA0KPj4gQlRGIGRlc2lnbiBkb2VzIG5v
+dCBjb250YWluIGZsb2F0aW5nIHBvaW50IHR5cGVzLg0KPj4NCj4+IExvb2tzIGxpa2Uga2VybmVs
+IGFsc28gdXNlcyBmbG9hdCB0eXBlcyAoaW4gY2VydGFpbiBkcml2ZXJzIGFuZCBhcmNoJ3MpLA0K
+Pj4gYnV0IHR5cGVzIHJlZmVycmVkIGJ5IGJwZiBwcm9ncmFtIG1vc3RseSB3aWxsIG5vdCBjb250
+YWluIGZsb2F0IHR5cGVzLg0KPj4NCj4+IEN1cnJlbnRseSwgYm90aCBsbHZtIGFuZCBwYWhvbGUg
+d2lsbCBpZ25vcmUgZmxvYXRpbmcgdHlwZXMsIHNvDQo+PiBmcm9tIHR5cGUgY29tcGFyaXNvbiBw
+b2ludCBvZiB2aWV3LCB3ZSB3aWxsIGJlIGZpbmUuDQo+PiBUaGUgaXNzdWUgbWF5IGNvbWUgdXAg
+d2l0aCBwZW9wbGUgdXNpbmcgdm1saW51eCBCVEYgaW5zaWRlIHRoZQ0KPj4ga2VybmVsIGZvciBk
+aWZmZXJlbnQgcHVycG9zZSB3aGVyZSBhIGZsb2F0IHR5cGUgbmVlZHMgdG8gYmUNCj4+IHNwZWNp
+ZmllZCwgZS5nLiwgZm9yIGEgZmxvYXRpbmcgcG9pbnQgZnVuY3Rpb24gYXJndW1lbnQgaW4gZnRy
+YWNlLg0KPj4gQnV0IHRoaXMgaXMgcmFyZSB0b28uDQo+Pg0KPj4gSSBhbSBub3QgMTAwJSBzdXJl
+IHdoZXRoZXIgcGFob2xlIGR3YXJmL2J0ZiBwYXJpdHkgaXMgY29uc2lkZXJlZA0KPj4gYXMgYSBz
+dHJvbmcgcmVhc29uIHRvIGFkZCBmbG9hdGluZyBwb2ludCB0eXBlIHN1cHBvcnQgaW4gQlRGIG9y
+IG5vdC4NCj4gDQo+IElzbid0IGZsb2F0IGFuZCBkb3VibGUganVzdCBhbm90aGVyIGJhc2UgdHlw
+ZSB3aXRoIGNvcnJlc3BvbmRpbmcgbmFtZT8NCj4gRnVuZGFtZW50YWxseSwgaG93IGlzIGl0IGRp
+ZmZlcmVudCBmcm9tIGludCBvciBsb25nPyBJdCdzIHN0aWxsIGp1c3QgYQ0KPiBjb2xsZWN0aW9u
+IG9mIGJpdHMgaW4gMzItYml0LCA2NC1iaXQsIGV0YyBudW1iZXIsIGV4Y2VwdCBpbnRlcnByZXRl
+ZA0KPiBkaWZmZXJlbnRseS4gRG8geW91IG1lYW4gdGhhdCBmb3IgQlRGIHRvIHByb3Blcmx5IHN1
+cHBvcnQgZmxvYXRzLA0KPiB3ZSdsbCBuZWVkIHRvIGV4dGVuZHMgc2V0IG9mIHBvc3NpYmxlIGVu
+Y29kaW5ncyBpbiBJTlQgdHlwZSAoaW4NCj4gYWRkaXRpb24gdG8gdG9kYXkncyBDSEFSLCBTSUdO
+RUQgYW5kIFVOU0lHTkVEKT8NCg0KUHJvYmFibHkgYW5vdGhlciBraW5kIGxpa2UgQlRGX0tJTkRf
+RkxPQVQgd2l0aCBhZGRpdGlvbmFsIHUzMiAoaW4gDQphZGRpdGlvbiB0byBidGZfdHlwZSkgaW5k
+aWNhdGluZyB0aGUgc2l6ZSAoNCBieXRlcywgOCBieXRlcyBhbmQgMTYgYnl0ZXMpLg0KDQo+IA0K
+Pj4NCj4+Pg0KPj4+IFRob3VnaCBmb3IgdGhlIGxhdHRlciwgaXQgcHJvYmFibHkgd291bGQgYmUg
+YmV0dGVyIHRvIHJlc29sdmUgYmFzZQ0KPj4+IHR5cGUgc2l6ZSB1c2luZyBCVEYgZGF0YSBpdHNl
+bGYuDQo+Pj4NCj4+Pj4+IFthY21lQHF1YWNvIHBhaG9sZV0kDQo=
