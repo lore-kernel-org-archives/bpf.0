@@ -4,64 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 647BDC4360F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DC21C10F03
 	for <bpf@archiver.kernel.org>; Wed, 27 Feb 2019 23:31:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 312B8218B0
+	by mail.kernel.org (Postfix) with ESMTP id 68B23218AC
 	for <bpf@archiver.kernel.org>; Wed, 27 Feb 2019 23:31:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="JqfF359v"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="TkmmwqII"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730594AbfB0XbO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Feb 2019 18:31:14 -0500
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:46033 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730592AbfB0XbN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Feb 2019 18:31:13 -0500
-Received: by mail-qk1-f194.google.com with SMTP id v139so10970232qkb.12
-        for <bpf@vger.kernel.org>; Wed, 27 Feb 2019 15:31:12 -0800 (PST)
+        id S1730585AbfB0XbP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Feb 2019 18:31:15 -0500
+Received: from mail-qt1-f182.google.com ([209.85.160.182]:35196 "EHLO
+        mail-qt1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730527AbfB0XbK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Feb 2019 18:31:10 -0500
+Received: by mail-qt1-f182.google.com with SMTP id p48so21471574qtk.2
+        for <bpf@vger.kernel.org>; Wed, 27 Feb 2019 15:31:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=nqKbId797bI7TH6lf2Cv2ChdSR49MOADR2ozK2f5nMM=;
-        b=JqfF359vrjRbmdknD3QgapIFSNAk8mSHxmRQk0swg/plVdtEF6xdoewP0MdsIFSLND
-         IAkJpmnrD6hviOcNbgWMsaPIvAfmSzJcycVmqb1sPTmQKwcs6Mj8xThnjdYkqbep5O/h
-         +nbqRHtOHBElm7AutpZ0JMbrQE7FUiwl765k2dSD2ncvOiEKjT4ma0qUJ49GxN62xcHh
-         0YxALxW7XN/le+Vk3P28zQN7UIkYRcdIYsrJyTIuVywvEZAcn2gt/iJyWObOlyDxa00J
-         ZYCC4iUhMOk3kXC4yN9H9e1mu6OHt6KhgXmTkZUZqWgUNzZKJZMCBT4FJPDzlPAK+6JG
-         337g==
+        bh=fjgw++pfyWnuZeWoSzI2ENIbAeSH0FKLnj0O/eulW90=;
+        b=TkmmwqIIht6CmVVb+UfKn9H9dqXV8x3dpOe/inO3M+7tzz0jRI5n+Jr3NWkpaj21Jl
+         tuo+TtA8SCR+rDd46y2IXRz12ImUMnznZonJTqFSwda7zl3rZ4WilOaokJdJO8MIAYJQ
+         NnGlXYZVwFB+DLuzZNGxTn9cIqN3CDC72LiXAkSL+BPMmJMN8smBY3s+/sNaviCDMckv
+         89hmfNr5X5rIJfuzJjyv08BjSvvYSuSutFG5Wdf+qwG4/1m9ifLBn1z4aG3tTQzBu/E6
+         3zlOzNKq+F4SkGY7tjwAy1ob7ONSeC4KNaHYZyPCoSdspPr9Feo6AGknIXrdPu+6wo97
+         MP4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=nqKbId797bI7TH6lf2Cv2ChdSR49MOADR2ozK2f5nMM=;
-        b=DMytP1erwUTgCUb9T7y+hpOphIdIwl2pb1tU5mmfVClMygLO7ACEIQHGw2kSnadXRU
-         f88ju5zA8GJlvwtDNKNQQpItDewWMip0JgujHyoPx5ZxcMbbaqH0+Q1mDqaA6hq58Cxe
-         /cnC5EQTEO2smO6t4xxPKWyWzxO7t+vOqxYipuTK3QwENdVFuVf1TAscH/Os2xOTgu55
-         2FbdhDpEQ9EoKFVrGPakT9nI84yiYBnG0RjDDAtiuoZVnJfxDXcQI/T/unRY0cqdwttN
-         pTcjgi39/DZrll32keicGyBPSA/69TdgUuUIT41taGkK7khq7ciCcgQ2ekSZH77UOXYi
-         2rQw==
-X-Gm-Message-State: APjAAAVX44lOcUfcroePu9oWzHj8/rYDmbOfAWzi5SEI3NKFCS5w3Ju3
-        gyoAyFk/oe5NLb7skfd0Clpo8g==
-X-Google-Smtp-Source: AHgI3Iax54qI9JVOUyhK1ME+Ybe4m1jrHqWiQo5577Jjen4DoJZlXQwyJMbB9sLBjGQdHRX/eMlDHA==
-X-Received: by 2002:a05:620a:136d:: with SMTP id d13mr4380795qkl.256.1551310271696;
-        Wed, 27 Feb 2019 15:31:11 -0800 (PST)
+        bh=fjgw++pfyWnuZeWoSzI2ENIbAeSH0FKLnj0O/eulW90=;
+        b=uoSVfRGMtMYp9XTfZbEhmjK/Qi4EIzyOg3fNu8qKDGOkz3UnHZdEG2GMfCOe3IBt6w
+         4SOoT8kqP6X+lv5XVeJ35u0KFu3M2EP1J/BYQv2NFvG1wspPuwt3UI0hpFL23cK52GZt
+         ZoOfT7YmmBTFvW8wSWHyCcUbpHI9Whu4CsJ5hu7mC7PlLi2NHnYIHkP2XtzSD4E+bxTA
+         cXkcdTvY4mHIHAbR/Nym3S1Bjm9/xU2kTC5S064dH5kip+Uo6MBLs6DQAEjcchhYfw8V
+         znHe6BEX5oXYmHbmpO6BanFqB++FKaid0Vv+c5EIt+ar8U82pOen5m1B3jm4vovbzT1N
+         PZgg==
+X-Gm-Message-State: APjAAAXFb5rBf+gjFQbX/58BaUDFC19l/LGd3rONeaq5je6anTrN3Tww
+        9lvv7wiypzuXR6uSu512nRsM8g==
+X-Google-Smtp-Source: AHgI3IZGt5DRB6Xrpa5w/4iAHrGrUovIc2/oDXC0/b+Ef4EIS8R0pn9ZyecASrqf3DZUeBZe5ThPXw==
+X-Received: by 2002:aed:3e97:: with SMTP id n23mr3917319qtf.201.1551310268813;
+        Wed, 27 Feb 2019 15:31:08 -0800 (PST)
 Received: from jkicinski-Precision-T1700.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id z28sm11509741qth.85.2019.02.27.15.31.10
+        by smtp.gmail.com with ESMTPSA id z28sm11509741qth.85.2019.02.27.15.31.07
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 27 Feb 2019 15:31:11 -0800 (PST)
+        Wed, 27 Feb 2019 15:31:08 -0800 (PST)
 From:   Jakub Kicinski <jakub.kicinski@netronome.com>
 To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         oss-drivers@netronome.com,
         Jakub Kicinski <jakub.kicinski@netronome.com>
-Subject: [PATCH bpf-next 4/5] samples: bpf: use libbpf where easy
-Date:   Wed, 27 Feb 2019 15:30:45 -0800
-Message-Id: <20190227233046.11718-5-jakub.kicinski@netronome.com>
+Subject: [PATCH bpf-next 2/5] samples: bpf: remove load_sock_ops in favour of bpftool
+Date:   Wed, 27 Feb 2019 15:30:43 -0800
+Message-Id: <20190227233046.11718-3-jakub.kicinski@netronome.com>
 X-Mailer: git-send-email 2.19.2
 In-Reply-To: <20190227233046.11718-1-jakub.kicinski@netronome.com>
 References: <20190227233046.11718-1-jakub.kicinski@netronome.com>
@@ -72,179 +72,298 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Some samples don't really need the magic of bpf_load,
-switch them to libbpf.
+bpftool can do all the things load_sock_ops used to do, and more.
+Point users to bpftool instead of maintaining this sample utility.
 
 Signed-off-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 Reviewed-by: Quentin Monnet <quentin.monnet@netronome.com>
 ---
- samples/bpf/Makefile       |  6 +++---
- samples/bpf/fds_example.c  |  9 ++++++---
- samples/bpf/sockex1_user.c | 22 ++++++++++++----------
- samples/bpf/sockex2_user.c | 20 +++++++++++---------
- 4 files changed, 32 insertions(+), 25 deletions(-)
+ samples/bpf/.gitignore             |  1 -
+ samples/bpf/Makefile               |  2 -
+ samples/bpf/load_sock_ops.c        | 97 ------------------------------
+ samples/bpf/tcp_basertt_kern.c     |  2 +-
+ samples/bpf/tcp_bpf.readme         | 14 +++--
+ samples/bpf/tcp_bufs_kern.c        |  2 +-
+ samples/bpf/tcp_clamp_kern.c       |  2 +-
+ samples/bpf/tcp_cong_kern.c        |  2 +-
+ samples/bpf/tcp_iw_kern.c          |  2 +-
+ samples/bpf/tcp_rwnd_kern.c        |  2 +-
+ samples/bpf/tcp_synrto_kern.c      |  2 +-
+ samples/bpf/tcp_tos_reflect_kern.c |  2 +-
+ 12 files changed, 16 insertions(+), 114 deletions(-)
+ delete mode 100644 samples/bpf/load_sock_ops.c
 
+diff --git a/samples/bpf/.gitignore b/samples/bpf/.gitignore
+index 8ae4940025f8..dbb817dbacfc 100644
+--- a/samples/bpf/.gitignore
++++ b/samples/bpf/.gitignore
+@@ -1,7 +1,6 @@
+ cpustat
+ fds_example
+ lathist
+-load_sock_ops
+ lwt_len_hist
+ map_perf_test
+ offwaketime
 diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 4dd98100678e..0c62ac39c697 100644
+index a333e258f319..4dd98100678e 100644
 --- a/samples/bpf/Makefile
 +++ b/samples/bpf/Makefile
-@@ -59,9 +59,9 @@ LIBBPF = $(TOOLS_PATH)/lib/bpf/libbpf.a
- CGROUP_HELPERS := ../../tools/testing/selftests/bpf/cgroup_helpers.o
- TRACE_HELPERS := ../../tools/testing/selftests/bpf/trace_helpers.o
- 
--fds_example-objs := bpf_load.o fds_example.o
--sockex1-objs := bpf_load.o sockex1_user.o
--sockex2-objs := bpf_load.o sockex2_user.o
-+fds_example-objs := fds_example.o
-+sockex1-objs := sockex1_user.o
-+sockex2-objs := sockex2_user.o
- sockex3-objs := bpf_load.o sockex3_user.o
- tracex1-objs := bpf_load.o tracex1_user.o
- tracex2-objs := bpf_load.o tracex2_user.o
-diff --git a/samples/bpf/fds_example.c b/samples/bpf/fds_example.c
-index 9854854f05d1..36f1f18aae3c 100644
---- a/samples/bpf/fds_example.c
-+++ b/samples/bpf/fds_example.c
-@@ -14,8 +14,8 @@
- 
- #include <bpf/bpf.h>
- 
-+#include "bpf/libbpf.h"
- #include "bpf_insn.h"
+@@ -40,7 +40,6 @@ hostprogs-y += lwt_len_hist
+ hostprogs-y += xdp_tx_iptunnel
+ hostprogs-y += test_map_in_map
+ hostprogs-y += per_socket_stats_example
+-hostprogs-y += load_sock_ops
+ hostprogs-y += xdp_redirect
+ hostprogs-y += xdp_redirect_map
+ hostprogs-y += xdp_redirect_cpu
+@@ -71,7 +70,6 @@ tracex4-objs := bpf_load.o tracex4_user.o
+ tracex5-objs := bpf_load.o tracex5_user.o
+ tracex6-objs := bpf_load.o tracex6_user.o
+ tracex7-objs := bpf_load.o tracex7_user.o
+-load_sock_ops-objs := bpf_load.o load_sock_ops.o
+ test_probe_write_user-objs := bpf_load.o test_probe_write_user_user.o
+ trace_output-objs := bpf_load.o trace_output_user.o $(TRACE_HELPERS)
+ lathist-objs := bpf_load.o lathist_user.o
+diff --git a/samples/bpf/load_sock_ops.c b/samples/bpf/load_sock_ops.c
+deleted file mode 100644
+index 8ecb41ea0c03..000000000000
+--- a/samples/bpf/load_sock_ops.c
++++ /dev/null
+@@ -1,97 +0,0 @@
+-/* Copyright (c) 2017 Facebook
+- *
+- * This program is free software; you can redistribute it and/or
+- * modify it under the terms of version 2 of the GNU General Public
+- * License as published by the Free Software Foundation.
+- */
+-#include <stdio.h>
+-#include <stdlib.h>
+-#include <string.h>
+-#include <linux/bpf.h>
+-#include <bpf/bpf.h>
 -#include "bpf_load.h"
- #include "sock_example.h"
- 
- #define BPF_F_PIN	(1 << 0)
-@@ -57,10 +57,13 @@ static int bpf_prog_create(const char *object)
- 		BPF_EXIT_INSN(),
- 	};
- 	size_t insns_cnt = sizeof(insns) / sizeof(struct bpf_insn);
-+	char bpf_log_buf[BPF_LOG_BUF_SIZE];
-+	struct bpf_object *obj;
-+	int prog_fd;
- 
- 	if (object) {
--		assert(!load_bpf_file((char *)object));
--		return prog_fd[0];
-+		assert(!bpf_prog_load(object, 0, &obj, &prog_fd));
-+		return prog_fd;
- 	} else {
- 		return bpf_load_program(BPF_PROG_TYPE_SOCKET_FILTER,
- 					insns, insns_cnt, "GPL", 0,
-diff --git a/samples/bpf/sockex1_user.c b/samples/bpf/sockex1_user.c
-index be8ba5686924..5e7c4be3e645 100644
---- a/samples/bpf/sockex1_user.c
-+++ b/samples/bpf/sockex1_user.c
-@@ -3,28 +3,30 @@
- #include <assert.h>
- #include <linux/bpf.h>
- #include <bpf/bpf.h>
--#include "bpf_load.h"
-+#include "bpf/libbpf.h"
- #include "sock_example.h"
- #include <unistd.h>
- #include <arpa/inet.h>
- 
- int main(int ac, char **argv)
- {
-+	struct bpf_object *obj;
-+	int map_fd, prog_fd;
- 	char filename[256];
--	FILE *f;
- 	int i, sock;
-+	FILE *f;
- 
- 	snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
- 
--	if (load_bpf_file(filename)) {
--		printf("%s", bpf_log_buf);
-+	if (bpf_prog_load(filename, 0, &obj, &prog_fd))
- 		return 1;
+-#include <unistd.h>
+-#include <errno.h>
+-#include <fcntl.h>
+-#include <linux/unistd.h>
+-
+-static void usage(char *pname)
+-{
+-	printf("USAGE:\n  %s [-l] <cg-path> <prog filename>\n", pname);
+-	printf("\tLoad and attach a sock_ops program to the specified "
+-	       "cgroup\n");
+-	printf("\tIf \"-l\" is used, the program will continue to run\n");
+-	printf("\tprinting the BPF log buffer\n");
+-	printf("\tIf the specified filename does not end in \".o\", it\n");
+-	printf("\tappends \"_kern.o\" to the name\n");
+-	printf("\n");
+-	printf("  %s -r <cg-path>\n", pname);
+-	printf("\tDetaches the currently attached sock_ops program\n");
+-	printf("\tfrom the specified cgroup\n");
+-	printf("\n");
+-	exit(1);
+-}
+-
+-int main(int argc, char **argv)
+-{
+-	int logFlag = 0;
+-	int error = 0;
+-	char *cg_path;
+-	char fn[500];
+-	char *prog;
+-	int cg_fd;
+-
+-	if (argc < 3)
+-		usage(argv[0]);
+-
+-	if (!strcmp(argv[1], "-r")) {
+-		cg_path = argv[2];
+-		cg_fd = open(cg_path, O_DIRECTORY, O_RDONLY);
+-		error = bpf_prog_detach(cg_fd, BPF_CGROUP_SOCK_OPS);
+-		if (error) {
+-			printf("ERROR: bpf_prog_detach: %d (%s)\n",
+-			       error, strerror(errno));
+-			return 2;
+-		}
+-		return 0;
+-	} else if (!strcmp(argv[1], "-h")) {
+-		usage(argv[0]);
+-	} else if (!strcmp(argv[1], "-l")) {
+-		logFlag = 1;
+-		if (argc < 4)
+-			usage(argv[0]);
 -	}
-+
-+	map_fd = bpf_object__find_map_fd_by_name(obj, "my_map");
- 
- 	sock = open_raw_sock("lo");
- 
--	assert(setsockopt(sock, SOL_SOCKET, SO_ATTACH_BPF, prog_fd,
--			  sizeof(prog_fd[0])) == 0);
-+	assert(setsockopt(sock, SOL_SOCKET, SO_ATTACH_BPF, &prog_fd,
-+			  sizeof(prog_fd)) == 0);
- 
- 	f = popen("ping -4 -c5 localhost", "r");
- 	(void) f;
-@@ -34,13 +36,13 @@ int main(int ac, char **argv)
- 		int key;
- 
- 		key = IPPROTO_TCP;
--		assert(bpf_map_lookup_elem(map_fd[0], &key, &tcp_cnt) == 0);
-+		assert(bpf_map_lookup_elem(map_fd, &key, &tcp_cnt) == 0);
- 
- 		key = IPPROTO_UDP;
--		assert(bpf_map_lookup_elem(map_fd[0], &key, &udp_cnt) == 0);
-+		assert(bpf_map_lookup_elem(map_fd, &key, &udp_cnt) == 0);
- 
- 		key = IPPROTO_ICMP;
--		assert(bpf_map_lookup_elem(map_fd[0], &key, &icmp_cnt) == 0);
-+		assert(bpf_map_lookup_elem(map_fd, &key, &icmp_cnt) == 0);
- 
- 		printf("TCP %lld UDP %lld ICMP %lld bytes\n",
- 		       tcp_cnt, udp_cnt, icmp_cnt);
-diff --git a/samples/bpf/sockex2_user.c b/samples/bpf/sockex2_user.c
-index 125ee6efc913..e3611dbfce97 100644
---- a/samples/bpf/sockex2_user.c
-+++ b/samples/bpf/sockex2_user.c
-@@ -3,7 +3,7 @@
- #include <assert.h>
- #include <linux/bpf.h>
- #include <bpf/bpf.h>
--#include "bpf_load.h"
-+#include "bpf/libbpf.h"
- #include "sock_example.h"
- #include <unistd.h>
- #include <arpa/inet.h>
-@@ -17,22 +17,24 @@ struct pair {
- int main(int ac, char **argv)
- {
- 	struct rlimit r = {RLIM_INFINITY, RLIM_INFINITY};
-+	struct bpf_object *obj;
-+	int map_fd, prog_fd;
- 	char filename[256];
--	FILE *f;
- 	int i, sock;
-+	FILE *f;
- 
- 	snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
- 	setrlimit(RLIMIT_MEMLOCK, &r);
- 
--	if (load_bpf_file(filename)) {
--		printf("%s", bpf_log_buf);
-+	if (bpf_prog_load(filename, 0, &obj, &prog_fd))
- 		return 1;
+-
+-	prog = argv[argc - 1];
+-	cg_path = argv[argc - 2];
+-	if (strlen(prog) > 480) {
+-		fprintf(stderr, "ERROR: program name too long (> 480 chars)\n");
+-		return 3;
 -	}
-+
-+	map_fd = bpf_object__find_map_fd_by_name(obj, "hash_map");
+-	cg_fd = open(cg_path, O_DIRECTORY, O_RDONLY);
+-
+-	if (!strcmp(prog + strlen(prog)-2, ".o"))
+-		strcpy(fn, prog);
+-	else
+-		sprintf(fn, "%s_kern.o", prog);
+-	if (logFlag)
+-		printf("loading bpf file:%s\n", fn);
+-	if (load_bpf_file(fn)) {
+-		printf("ERROR: load_bpf_file failed for: %s\n", fn);
+-		printf("%s", bpf_log_buf);
+-		return 4;
+-	}
+-	if (logFlag)
+-		printf("TCP BPF Loaded %s\n", fn);
+-
+-	error = bpf_prog_attach(prog_fd[0], cg_fd, BPF_CGROUP_SOCK_OPS, 0);
+-	if (error) {
+-		printf("ERROR: bpf_prog_attach: %d (%s)\n",
+-		       error, strerror(errno));
+-		return 5;
+-	} else if (logFlag) {
+-		read_trace_pipe();
+-	}
+-
+-	return error;
+-}
+diff --git a/samples/bpf/tcp_basertt_kern.c b/samples/bpf/tcp_basertt_kern.c
+index 4bf4fc597db9..6ef1625e8b2c 100644
+--- a/samples/bpf/tcp_basertt_kern.c
++++ b/samples/bpf/tcp_basertt_kern.c
+@@ -7,7 +7,7 @@
+  * BPF program to set base_rtt to 80us when host is running TCP-NV and
+  * both hosts are in the same datacenter (as determined by IPv6 prefix).
+  *
+- * Use load_sock_ops to load this BPF program.
++ * Use "bpftool cgroup attach $cg sock_ops $prog" to load this BPF program.
+  */
  
- 	sock = open_raw_sock("lo");
+ #include <uapi/linux/bpf.h>
+diff --git a/samples/bpf/tcp_bpf.readme b/samples/bpf/tcp_bpf.readme
+index 831fb601e3c9..fee746621aec 100644
+--- a/samples/bpf/tcp_bpf.readme
++++ b/samples/bpf/tcp_bpf.readme
+@@ -8,14 +8,16 @@ a cgroupv2 and attach a bash shell to the group.
+   bash
+   echo $$ >> /tmp/cgroupv2/foo/cgroup.procs
  
--	assert(setsockopt(sock, SOL_SOCKET, SO_ATTACH_BPF, prog_fd,
--			  sizeof(prog_fd[0])) == 0);
-+	assert(setsockopt(sock, SOL_SOCKET, SO_ATTACH_BPF, &prog_fd,
-+			  sizeof(prog_fd)) == 0);
+-Anything that runs under this shell belongs to the foo cgroupv2 To load
++Anything that runs under this shell belongs to the foo cgroupv2. To load
+ (attach) one of the tcp_*_kern.o programs:
  
- 	f = popen("ping -4 -c5 localhost", "r");
- 	(void) f;
-@@ -41,8 +43,8 @@ int main(int ac, char **argv)
- 		int key = 0, next_key;
- 		struct pair value;
+-  ./load_sock_ops -l /tmp/cgroupv2/foo tcp_basertt_kern.o
++  bpftool prog load tcp_basertt_kern.o /sys/fs/bpf/tcp_prog
++  bpftool cgroup attach /tmp/cgroupv2/foo sock_ops pinned /sys/fs/bpf/tcp_prog
++  bpftool prog tracelog
  
--		while (bpf_map_get_next_key(map_fd[0], &key, &next_key) == 0) {
--			bpf_map_lookup_elem(map_fd[0], &next_key, &value);
-+		while (bpf_map_get_next_key(map_fd, &key, &next_key) == 0) {
-+			bpf_map_lookup_elem(map_fd, &next_key, &value);
- 			printf("ip %s bytes %lld packets %lld\n",
- 			       inet_ntoa((struct in_addr){htonl(next_key)}),
- 			       value.bytes, value.packets);
+-If the "-l" flag is used, the load_sock_ops program will continue to run
+-printing the BPF log buffer. The tcp_*_kern.o programs use special print
+-functions to print logging information (if enabled by the ifdef).
++"bpftool prog tracelog" will continue to run printing the BPF log buffer.
++The tcp_*_kern.o programs use special print functions to print logging
++information (if enabled by the ifdef).
+ 
+ If using netperf/netserver to create traffic, you need to run them under the
+ cgroupv2 to which the BPF programs are attached (i.e. under bash shell
+@@ -23,4 +25,4 @@ attached to the cgroupv2).
+ 
+ To remove (unattach) a socket_ops BPF program from a cgroupv2:
+ 
+-  ./load_sock_ops -r /tmp/cgroupv2/foo
++  bpftool cgroup attach /tmp/cgroupv2/foo sock_ops pinned /sys/fs/bpf/tcp_prog
+diff --git a/samples/bpf/tcp_bufs_kern.c b/samples/bpf/tcp_bufs_kern.c
+index 0566b7fa38a1..e03e204739fa 100644
+--- a/samples/bpf/tcp_bufs_kern.c
++++ b/samples/bpf/tcp_bufs_kern.c
+@@ -9,7 +9,7 @@
+  * doing appropriate checks that indicate the hosts are far enough
+  * away (i.e. large RTT).
+  *
+- * Use load_sock_ops to load this BPF program.
++ * Use "bpftool cgroup attach $cg sock_ops $prog" to load this BPF program.
+  */
+ 
+ #include <uapi/linux/bpf.h>
+diff --git a/samples/bpf/tcp_clamp_kern.c b/samples/bpf/tcp_clamp_kern.c
+index f4225c9d2c0c..a0dc2d254aca 100644
+--- a/samples/bpf/tcp_clamp_kern.c
++++ b/samples/bpf/tcp_clamp_kern.c
+@@ -9,7 +9,7 @@
+  * the same datacenter. For his example, we assume they are within the same
+  * datacenter when the first 5.5 bytes of their IPv6 addresses are the same.
+  *
+- * Use load_sock_ops to load this BPF program.
++ * Use "bpftool cgroup attach $cg sock_ops $prog" to load this BPF program.
+  */
+ 
+ #include <uapi/linux/bpf.h>
+diff --git a/samples/bpf/tcp_cong_kern.c b/samples/bpf/tcp_cong_kern.c
+index ad0f1ba8206a..4fd3ca979a06 100644
+--- a/samples/bpf/tcp_cong_kern.c
++++ b/samples/bpf/tcp_cong_kern.c
+@@ -7,7 +7,7 @@
+  * BPF program to set congestion control to dctcp when both hosts are
+  * in the same datacenter (as deteremined by IPv6 prefix).
+  *
+- * Use load_sock_ops to load this BPF program.
++ * Use "bpftool cgroup attach $cg sock_ops $prog" to load this BPF program.
+  */
+ 
+ #include <uapi/linux/bpf.h>
+diff --git a/samples/bpf/tcp_iw_kern.c b/samples/bpf/tcp_iw_kern.c
+index 4ca5ecc9f580..9b139ec69560 100644
+--- a/samples/bpf/tcp_iw_kern.c
++++ b/samples/bpf/tcp_iw_kern.c
+@@ -9,7 +9,7 @@
+  * would usually be done after doing appropriate checks that indicate
+  * the hosts are far enough away (i.e. large RTT).
+  *
+- * Use load_sock_ops to load this BPF program.
++ * Use "bpftool cgroup attach $cg sock_ops $prog" to load this BPF program.
+  */
+ 
+ #include <uapi/linux/bpf.h>
+diff --git a/samples/bpf/tcp_rwnd_kern.c b/samples/bpf/tcp_rwnd_kern.c
+index 09ff65b40b31..cc71ee96e044 100644
+--- a/samples/bpf/tcp_rwnd_kern.c
++++ b/samples/bpf/tcp_rwnd_kern.c
+@@ -8,7 +8,7 @@
+  * and the first 5.5 bytes of the IPv6 addresses are not the same (in this
+  * example that means both hosts are not the same datacenter).
+  *
+- * Use load_sock_ops to load this BPF program.
++ * Use "bpftool cgroup attach $cg sock_ops $prog" to load this BPF program.
+  */
+ 
+ #include <uapi/linux/bpf.h>
+diff --git a/samples/bpf/tcp_synrto_kern.c b/samples/bpf/tcp_synrto_kern.c
+index 232bb242823e..ca87ed34f896 100644
+--- a/samples/bpf/tcp_synrto_kern.c
++++ b/samples/bpf/tcp_synrto_kern.c
+@@ -8,7 +8,7 @@
+  * and the first 5.5 bytes of the IPv6 addresses are the same (in this example
+  * that means both hosts are in the same datacenter).
+  *
+- * Use load_sock_ops to load this BPF program.
++ * Use "bpftool cgroup attach $cg sock_ops $prog" to load this BPF program.
+  */
+ 
+ #include <uapi/linux/bpf.h>
+diff --git a/samples/bpf/tcp_tos_reflect_kern.c b/samples/bpf/tcp_tos_reflect_kern.c
+index d51dab19eca6..de788be6f862 100644
+--- a/samples/bpf/tcp_tos_reflect_kern.c
++++ b/samples/bpf/tcp_tos_reflect_kern.c
+@@ -4,7 +4,7 @@
+  *
+  * BPF program to automatically reflect TOS option from received syn packet
+  *
+- * Use load_sock_ops to load this BPF program.
++ * Use "bpftool cgroup attach $cg sock_ops $prog" to load this BPF program.
+  */
+ 
+ #include <uapi/linux/bpf.h>
 -- 
 2.19.2
 
