@@ -2,240 +2,113 @@ Return-Path: <SRS0=P9GS=RC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C916DC00319
-	for <bpf@archiver.kernel.org>; Wed, 27 Feb 2019 22:43:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B14A4C43381
+	for <bpf@archiver.kernel.org>; Wed, 27 Feb 2019 22:46:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 893982133D
-	for <bpf@archiver.kernel.org>; Wed, 27 Feb 2019 22:43:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 76FB12133D
+	for <bpf@archiver.kernel.org>; Wed, 27 Feb 2019 22:46:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FoJmyTbr"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="a7N2hmmC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730254AbfB0WnA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Feb 2019 17:43:00 -0500
-Received: from mail-it1-f195.google.com ([209.85.166.195]:40125 "EHLO
-        mail-it1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729412AbfB0WnA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Feb 2019 17:43:00 -0500
-Received: by mail-it1-f195.google.com with SMTP id l139so10551791ita.5;
-        Wed, 27 Feb 2019 14:42:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W5sli1yFUrBl9ZS6IgmfWyh0MoFuHh/omhrW77OGzlM=;
-        b=FoJmyTbrnoy282NyQNaiMhnrROalpBFwSnHERwVFOW3TmsN0QLeuYWFQpjy9ddiGn9
-         nfT9slybPAeLuZX1d9rddTIdUeyoy/0ayFz7TMmGzjhyHMiVM8zo5q04O2zArdHbK6FN
-         T/PMG8DSp5UEef323VQlFj1k6VX7ifJYcqePsiWqfUL0ady4KXc38I/crtRmnJsiFI1S
-         Jp2rdzttTglk6X70azlFON4icBqJ4IPyGFajcOf3H87YBRkn4NLSsECkxVCx2VzlM5gu
-         30eF+Cox9Wpzq8YjEjytxOxFk3I92j3TbVdVVSb+JyciW4ZfD+/ybAJC1WM/URcodnGK
-         DJdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W5sli1yFUrBl9ZS6IgmfWyh0MoFuHh/omhrW77OGzlM=;
-        b=Ph/BzpIht7Vua/Jy0kHtqP8k8Wv6F48pGNsvOdN+g1aCkQtBkXMUYJ6XPyysi6JEtj
-         PzDGcRzyoV4tIOWf0j9WNmJag6Lp44oPZzNaAjAIhJao0eHr+44xfcDPXOkFj7DBjTk4
-         KYyyn8ZIhE3tMNZLMb+eWQVPMZaKxkR/uEe4cBvXePc4dJf43PEVhub8dmISkAAvTlgF
-         wik2skYJzKaeK1nqh311HjoZoNMuxjETv2S2uzMkHbchhCr7FstGB8v7sxnsul7YerN/
-         lJyOLsV8Y+KzjZqxhCixTKh/jve5ejAVL+byqAxj5fMuCOw6yggQjojbq4QOSAW5oJ9w
-         eXLg==
-X-Gm-Message-State: AHQUAuYNUzlEHq5IcvyXASY/knKUBsmGkL3e4nq1AIzM/p4BPZ7nCfXi
-        QstP7fjRgSq740n5pSEUHGczepVCtFFfHcp1APRYc9+t
-X-Google-Smtp-Source: AHgI3IY2X/xdOF42Z9vxDy0rM1/JZ40Og5kKbmqdtdH1oJI1hM1UhVJRXFM86s15Wa2GhmBiVzF4Obl9E91XCW6Plk8=
-X-Received: by 2002:a02:4c50:: with SMTP id a77mr2833100jab.59.1551307378585;
- Wed, 27 Feb 2019 14:42:58 -0800 (PST)
+        id S1730340AbfB0Wqy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Feb 2019 17:46:54 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:40154 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730254AbfB0Wqx (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 27 Feb 2019 17:46:53 -0500
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x1RMbOtc005758
+        for <bpf@vger.kernel.org>; Wed, 27 Feb 2019 14:46:50 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=9aNLpjBqFRqS9gdhzLnZZThY6ccSFCfONWG1DMgXnLk=;
+ b=a7N2hmmCZ7d/itFTCoKHC0IdXGn/LpvEjERVS2RSGhMdbmMrSDjt6MMEnnIN5Mvv0Lvo
+ QdJHdjJ48g+BLygjZlHapsc6ETv+0l0lQpacMKHMP4YDlTOAo3l9PpzN6AgHYgG7WhZF
+ LmL+J6NR1PVIeK+nrfoB0xEVc072PU06VD8= 
+Received: from maileast.thefacebook.com ([199.201.65.23])
+        by m0001303.ppops.net with ESMTP id 2qx25v89r7-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 27 Feb 2019 14:46:50 -0800
+Received: from mx-out.facebook.com (2620:10d:c0a1:3::13) by
+ mail.thefacebook.com (2620:10d:c021:18::171) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1531.3;
+ Wed, 27 Feb 2019 14:46:49 -0800
+Received: by devvm7221.prn2.facebook.com (Postfix, from userid 137359)
+        id 9DDFCC07CCD4; Wed, 27 Feb 2019 14:46:47 -0800 (PST)
+Smtp-Origin-Hostprefix: devvm
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: devvm7221.prn2.facebook.com
+To:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>, <ast@fb.com>,
+        <acme@kernel.org>, <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>
+CC:     Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: prn2c23
+Subject: [PATCH bpf-next 4/5] btf: fix bug with resolving STRUCT/UNION into corresponding FWD
+Date:   Wed, 27 Feb 2019 14:46:40 -0800
+Message-ID: <20190227224642.1069138-5-andriin@fb.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190227224642.1069138-1-andriin@fb.com>
+References: <20190227224642.1069138-1-andriin@fb.com>
+X-FB-Internal: Safe
 MIME-Version: 1.0
-References: <20190212004729.535-1-joe@wand.net.nz> <20190212004729.535-3-joe@wand.net.nz>
- <CAH3MdRVU5ayEm6eb9Fz53Q5gjA60vadyJ+0_meCkWBo+t+XXYA@mail.gmail.com>
- <CAOftzPjFbBHabG2SR=QrC053Y8cC+Gi1LvK19oLEvDvR6LSLkw@mail.gmail.com> <CAH3MdRWrwMgjd7UT+7w=xCmEBD+mxv-YBqW+Q8zL8t5WvGTn8A@mail.gmail.com>
-In-Reply-To: <CAH3MdRWrwMgjd7UT+7w=xCmEBD+mxv-YBqW+Q8zL8t5WvGTn8A@mail.gmail.com>
-From:   Y Song <ys114321@gmail.com>
-Date:   Wed, 27 Feb 2019 14:42:28 -0800
-Message-ID: <CAH3MdRXHdysYLccCsawKqcmzScW=7B-ArPaMq7F8qjm+wsCWQg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/4] libbpf: Support 32-bit static data loads
-To:     Joe Stringer <joe@wand.net.nz>
-Cc:     bpf@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-02-27_15:,,
+ signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-FYI.The latest llvm trunk will not emit errors for static variables. The patch
-also gives detailed information how to relate a particular static
-variable to a particular
-relocation.
+When checking available canonical candidates for struct/union algorithm
+utilizes btf_dedup_is_equiv to determine if candidate is suitable. This
+check is not enough when candidate is corresponding FWD for that
+struct/union, because according to equivalence logic they are
+equivalent. When it so happens that FWD and STRUCT/UNION end in hashing
+to the same bucket, it's possible to create remapping loop from FWD to
+STRUCT and STRUCT to same FWD, which will cause btf_dedup() to loop
+forever.
 
-https://reviews.llvm.org/rL354954
+This patch fixes the issue by additionally checking that type and
+canonical candidate are strictly equal (utilizing btf_equal_struct).
 
-Thanks,
-Yonghong
+Fixes: d5caef5b5655 ("btf: add BTF types deduplication algorithm")
+Reported-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/lib/bpf/btf.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-On Fri, Feb 15, 2019 at 12:18 PM Y Song <ys114321@gmail.com> wrote:
->
-> On Thu, Feb 14, 2019 at 11:16 PM Joe Stringer <joe@wand.net.nz> wrote:
-> >
-> > On Thu, 14 Feb 2019 at 21:39, Y Song <ys114321@gmail.com> wrote:
-> > >
-> > > On Mon, Feb 11, 2019 at 4:48 PM Joe Stringer <joe@wand.net.nz> wrote:
-> > > >
-> > > > Support loads of static 32-bit data when BPF writers make use of
-> > > > convenience macros for accessing static global data variables. A later
-> > > > patch in this series will demonstrate its usage in a selftest.
-> > > >
-> > > > As of LLVM-7, this technique only works with 32-bit data, as LLVM will
-> > > > complain if this technique is attempted with data of other sizes:
-> > > >
-> > > >     LLVM ERROR: Unsupported relocation: try to compile with -O2 or above,
-> > > >     or check your static variable usage
-> > >
-> > > A little bit clarification from compiler side.
-> > > The above compiler error is to prevent people use static variables since current
-> > > kernel/libbpf does not handle this. The compiler only warns if .bss or
-> > > .data section
-> > > has more than one definitions. The first definition always has section offset 0
-> > > and the compiler did not warn.
-> >
-> > Ah, interesting. I observed that warning when I attempted to define
-> > global variables of multiple sizes, and I thought also with sizes
-> > other than 32-bit. This clarifies things a bit, thanks.
-> >
-> > For the .bss my observation was that if you had a definition like:
-> >
-> > static int a = 0;
-> >
-> > Then this will be placed into .bss, hence why I looked into the
-> > approach from this patch for patch 3 as well.
-> >
-> > > The restriction is a little strange. To only work with 32-bit data is
-> > > not a right
-> > > statement. The following are some examples.
-> > >
-> > > The following static variable definitions will succeed:
-> > > static int a; /* one in .bss */
-> > > static long b = 2;  /* one in .data */
-> > >
-> > > The following definitions will fail as both in .bss.
-> > > static int a;
-> > > static int b;
-> > >
-> > > The following definitions will fail as both in .data:
-> > > static char a = 2;
-> > > static int b = 3;
-> >
-> > Are there type restrictions or something? I've been defining multiple
->
-> There is no type restrictions.
-> -bash-4.4$ cat g.c
-> struct t {
->   int a;
->   char b;
->   long c;
-> };
-> static volatile struct t v;
-> int test() { return v.a + v.b; }
-> -bash-4.4$ clang -O2 -g -c -target bpf g.c
-> -bash-4.4$
->
-> > static uint32_t and using them per the approach in this patch series
-> > without hitting this compiler assertion.
->
-> -bash-4.4$ cat g1.c
-> static volatile int a;
-> static volatile int b;
-> int test() { return a + b; }
-> -bash-4.4$ clang -O2 -g -c -target bpf g1.c
-> fatal error: error in backend: Unsupported relocation: try to compile
-> with -O2 or above, or check your static variable
->       usage
-> -bash-4.4$
->
-> >
-> > > Using global variables can prevent compiler errors.
-> > > maps are defined as globals and the compiler does not
-> > > check whether a particular global variable is defining a map or not.
-> > >
-> > > If you just use static variable like below
-> > > static int a = 2;
-> > > without potential assignment to a, the compiler will replace variable
-> > > a with 2 at compile time.
-> > > An alternative is to define like below
-> > > static volatile int a = 2;
-> > > You can get a "load" for variable "a" in the bpf load even if there is
-> > > no assignment to a.
-> >
-> > I'll take a closer look at this too.
-> >
-> > > Maybe now is the time to remove the compiler assertions as
-> > > libbpf/kernel starts to
-> > > handle static variables?
-> >
-> > I don't understand why those assertions exists in this form. It
-> > already allows code which will not load with libbpf (ie generate any
-> > .data/.bss), does it help prevent unexpected situations for
-> > developers?
->
-> The error is introduced by the following llvm commit:
-> commit 39184e407cd937f2f20d3f61eec205925bae7b13
-> Author: Yonghong Song <yhs@fb.com>
-> Date:   Wed Aug 22 21:21:03 2018 +0000
->
->     bpf: fix an assertion in BPFAsmBackend applyFixup()
->
->     Fix bug https://bugs.llvm.org/show_bug.cgi?id=38643
->
->     In BPFAsmBackend applyFixup(), there is an assertion for FixedValue to be 0.
->     This may not be true, esp. for optimiation level 0.
->     For example, in the above bug, for the following two
->     static variables:
->       @bpf_map_lookup_elem = internal global i8* (i8*, i8*)*
->           inttoptr (i64 1 to i8* (i8*, i8*)*), align 8
->       @bpf_map_update_elem = internal global i32 (i8*, i8*, i8*, i64)*
->           inttoptr (i64 2 to i32 (i8*, i8*, i8*, i64)*), align 8
->
->     The static variable @bpf_map_update_elem will have a symbol
->     offset of 8 and a FK_SecRel_8 with FixupValue 8 will cause
->     the assertion if llvm is built with -DLLVM_ENABLE_ASSERTIONS=ON.
->
->     The above relocations will not exist if the program is compiled
->     with optimization level -O1 and above as the compiler optimizes
->     those static variables away. In the below error message, -O2
->     is suggested as this is the common practice.
->
->     Note that FixedValue = 0 in applyFixup() does exist and is valid,
->     e.g., for the global variable my_map in the above bug. The bpf
->     loader will process them properly for map_id's before loading
->     the program into the kernel.
->
->     The static variables, which are not optimized away by compiler,
->     may have FK_SecRel_8 relocation with non-zero FixedValue.
->
->     The patch removed the offending assertion and will issue
->     a hard error as below if the FixedValue in applyFixup()
->     is not 0.
->       $ llc -march=bpf -filetype=obj fixup.ll
->       LLVM ERROR: Unsupported relocation: try to compile with -O2 or above,
->           or check your static variable usage
->
-> Its main purpose is to fix a behavior difference with and without
-> -DLLVM_ENABLE_ASSERTIONS=ON. The patch generated an error
-> regardless whether the compiler time assertion is turned on or not.
->
-> It does not catch all the cases e.g., only one static variable is defined,
-> which needs fine tuning as there are legitimate cases (e.g., in some dwarf
-> sessions) where the Fixup is valid with FixedValue = 0.
->
-> If you try to use more than onee static variables, the compiler will
-> print an error and let you know your potential issues.
->
-> The question is since we are on the path to allow static variables
-> in the bpf programs for later patching, we probably should remove
-> this compiler fatal error?
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 6bbb710216e6..53db26d158c9 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -2255,7 +2255,7 @@ static void btf_dedup_merge_hypot_map(struct btf_dedup *d)
+ static int btf_dedup_struct_type(struct btf_dedup *d, __u32 type_id)
+ {
+ 	struct btf_dedup_node *cand_node;
+-	struct btf_type *t;
++	struct btf_type *cand_type, *t;
+ 	/* if we don't find equivalent type, then we are canonical */
+ 	__u32 new_id = type_id;
+ 	__u16 kind;
+@@ -2275,6 +2275,10 @@ static int btf_dedup_struct_type(struct btf_dedup *d, __u32 type_id)
+ 	for_each_dedup_cand(d, h, cand_node) {
+ 		int eq;
+ 
++		cand_type = d->btf->types[cand_node->type_id];
++		if (!btf_equal_struct(t, cand_type))
++			continue;
++
+ 		btf_dedup_clear_hypot_map(d);
+ 		eq = btf_dedup_is_equiv(d, type_id, cand_node->type_id);
+ 		if (eq < 0)
+-- 
+2.17.1
+
