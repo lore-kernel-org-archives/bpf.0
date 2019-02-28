@@ -2,255 +2,150 @@ Return-Path: <SRS0=vk/n=RD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDEDBC10F00
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 23:19:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D1D9C43381
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 23:24:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 93E7F218D8
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 23:19:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F12E32085A
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 23:24:45 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="I5G45/zd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731573AbfB1XTV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Feb 2019 18:19:21 -0500
-Received: from www62.your-server.de ([213.133.104.62]:52342 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729481AbfB1XTJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Feb 2019 18:19:09 -0500
-Received: from [178.197.248.21] (helo=localhost)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1gzUxD-0000lZ-Bv; Fri, 01 Mar 2019 00:19:03 +0100
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     ast@fb.com
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, joe@wand.net.nz,
-        john.fastabend@gmail.com, tgraf@suug.ch, yhs@fb.com,
-        andriin@fb.com, jakub.kicinski@netronome.com, lmb@cloudflare.com,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v2 2/7] bpf: add program side {rd,wr}only support
-Date:   Fri,  1 Mar 2019 00:18:24 +0100
-Message-Id: <20190228231829.11993-3-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.9.5
-In-Reply-To: <20190228231829.11993-1-daniel@iogearbox.net>
-References: <20190228231829.11993-1-daniel@iogearbox.net>
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.100.2/25374/Thu Feb 28 11:38:05 2019)
+        id S1727866AbfB1XYp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Feb 2019 18:24:45 -0500
+Received: from mail-vk1-f202.google.com ([209.85.221.202]:38202 "EHLO
+        mail-vk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727858AbfB1XYp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Feb 2019 18:24:45 -0500
+Received: by mail-vk1-f202.google.com with SMTP id e13so11476441vka.5
+        for <bpf@vger.kernel.org>; Thu, 28 Feb 2019 15:24:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=XgBBH4WYPtp3jmfvCO+FpDf/2aZuUK+cYM3t38QE9Kk=;
+        b=I5G45/zdRusE7GnGy2f9rlEIQWibFXDfteXZAM1XfCJmawj60X9sVb+pZ5snJgIae1
+         g8s9PFjZWaanajJ0jv0cj1QYL2oknygG1/VUv9I4C4/xHCO5o5Dx2sjthaiHIr81YlFS
+         v6upI/39auCkmfWVNgWdkLCG2jOFERarwyJK0Ij3fetMxovLUz4OZIj9DIc0HkBvSMrb
+         r0Cn0VrLcBAmo4P9fGTEKEXNXo02v/EpIkJ+pTh05Xn60/1hCQ+oXy4zQdD1qBaVdm2x
+         HvwRM62TtTFqFDEWAqwCERjXKh7IVC1+VnS6Val51tDHSHhqamo6HdhhyCiAmzLPRy13
+         rb+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=XgBBH4WYPtp3jmfvCO+FpDf/2aZuUK+cYM3t38QE9Kk=;
+        b=fHQouzZINC2dwplM8Iai1p2k7Zuq+yWMPbx1aei1a/NRGiIf7KTbVOUL/Fh/cGtPKu
+         +dCFcaFUDoAv/zJQEDbBxOdD6W8mo85f4U8XDWrTtWqStZPlDsUNOI8ATD+RbokMYiCV
+         Yu6nfGfjkaW5/xWIiZhceWwB3mJu2EJIGljFI2UhbciIPw+24LVifWZu3Ml5CXB8k2gL
+         n8pk3xFPHdLWpQT7J+jeAD9nLGwfL2CxQEwf56TBHLVx58z5OVXwjqaweRTvAaXfo9x9
+         esupkndj9veNZrUiOBUEaLiLcAzzWbw2bqaXVXRRcmVoZd1MsUBygi43y/vrwrsyvOVZ
+         54gQ==
+X-Gm-Message-State: APjAAAU0TNrAEUAJwWpHcPYCXxwH0IgEdlS1OO3jlMyGPmFETqRVatB4
+        R1tTnVt5GhfLLLqNFY5s0kXoljQ=
+X-Google-Smtp-Source: APXvYqyea/ATAcfqzVs8YRqsGMKbhJrrCfmhxQZQsTHiZ0NIYenlWJ6JKH0iRDxwe6UOlCbiQuY7BCk=
+X-Received: by 2002:a67:7ac7:: with SMTP id v190mr1300855vsc.17.1551396284222;
+ Thu, 28 Feb 2019 15:24:44 -0800 (PST)
+Date:   Thu, 28 Feb 2019 15:24:33 -0800
+Message-Id: <20190228232440.28668-1-sdf@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.21.0.rc2.261.ga7da99ff1b-goog
+Subject: [PATCH bpf-next v2 0/7] selftests: bpf: break up test_progs
+From:   Stanislav Fomichev <sdf@google.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
+        Stanislav Fomichev <sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This work adds two new map creation flags BPF_F_RDONLY_PROG
-and BPF_F_WRONLY_PROG in order to allow for read-only or
-write-only BPF maps from a BPF program side.
+Recently we had linux-next bpf/bpf-next conflict when we added new
+functionality to the test_progs.c at the same location. Let's split
+test_progs.c the same way we recently split test_verifier.c.
 
-Today we have BPF_F_RDONLY and BPF_F_WRONLY, but this only
-applies to system call side, meaning the BPF program has full
-read/write access to the map as usual while bpf(2) calls with
-map fd can either only read or write into the map depending
-on the flags. BPF_F_RDONLY_PROG and BPF_F_WRONLY_PROG allows
-for the exact opposite such that verifier is going to reject
-program loads if write into a read-only map or a read into a
-write-only map is detected.
+I follow the same patten we did in commit 2dfb40121ee8 ("selftests: bpf:
+prepare for break up of verifier tests") for verifier: create
+scaffolding to support dedicated files and slowly move the tests into
+separate files.
 
-We've enabled this generic map extension to various non-special
-maps holding normal user data: array, hash, lru, lpm, local
-storage, queue and stack. Further map types could be followed
-up in future depending on use-case. Main use case here is to
-forbid writes into .rodata map values from verifier side.
+The first patch adds scaffolding, subsequent patches move progs into
+separate files.
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- include/linux/bpf.h           | 18 ++++++++++++++++++
- include/uapi/linux/bpf.h      | 10 +++++++++-
- kernel/bpf/arraymap.c         |  2 +-
- kernel/bpf/hashtab.c          |  2 +-
- kernel/bpf/local_storage.c    |  2 +-
- kernel/bpf/lpm_trie.c         |  2 +-
- kernel/bpf/queue_stack_maps.c |  3 +--
- kernel/bpf/verifier.c         | 30 +++++++++++++++++++++++++++++-
- 8 files changed, 61 insertions(+), 8 deletions(-)
+In theory, many of the standalone tests can be migrated to this new
+framework as well. They get the benefit of common CHECK macro and
+bpf_find_map function which a lot of standalone tests need to redefine.
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index bdcc6e2a9977..3f74194dd4f6 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -427,6 +427,24 @@ struct bpf_array {
- 	};
- };
- 
-+#define BPF_MAP_CAN_READ	BIT(0)
-+#define BPF_MAP_CAN_WRITE	BIT(1)
-+
-+static inline u32 bpf_map_flags_to_cap(struct bpf_map *map)
-+{
-+	u32 access_flags = map->map_flags & (BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG);
-+
-+	/* Combination of BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG is
-+	 * not possible.
-+	 */
-+	if (access_flags & BPF_F_RDONLY_PROG)
-+		return BPF_MAP_CAN_READ;
-+	else if (access_flags & BPF_F_WRONLY_PROG)
-+		return BPF_MAP_CAN_WRITE;
-+	else
-+		return BPF_MAP_CAN_READ | BPF_MAP_CAN_WRITE;
-+}
-+
- #define MAX_TAIL_CALL_CNT 32
- 
- struct bpf_event_entry {
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 8884072e1a46..04b26f59b413 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -287,7 +287,7 @@ enum bpf_attach_type {
- 
- #define BPF_OBJ_NAME_LEN 16U
- 
--/* Flags for accessing BPF object */
-+/* Flags for accessing BPF object from syscall side. */
- #define BPF_F_RDONLY		(1U << 3)
- #define BPF_F_WRONLY		(1U << 4)
- 
-@@ -297,6 +297,14 @@ enum bpf_attach_type {
- /* Zero-initialize hash function seed. This should only be used for testing. */
- #define BPF_F_ZERO_SEED		(1U << 6)
- 
-+/* Flags for accessing BPF object from program side. */
-+#define BPF_F_RDONLY_PROG	(1U << 7)
-+#define BPF_F_WRONLY_PROG	(1U << 8)
-+#define BPF_F_ACCESS_MASK	(BPF_F_RDONLY |		\
-+				 BPF_F_RDONLY_PROG |	\
-+				 BPF_F_WRONLY |		\
-+				 BPF_F_WRONLY_PROG)
-+
- /* flags for BPF_PROG_QUERY */
- #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
- 
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 3e5969c0c979..076dc3d77faf 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -22,7 +22,7 @@
- #include "map_in_map.h"
- 
- #define ARRAY_CREATE_FLAG_MASK \
--	(BPF_F_NUMA_NODE | BPF_F_RDONLY | BPF_F_WRONLY)
-+	(BPF_F_NUMA_NODE | BPF_F_ACCESS_MASK)
- 
- static void bpf_array_free_percpu(struct bpf_array *array)
- {
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index fed15cf94dca..ab9d51ac80e1 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -23,7 +23,7 @@
- 
- #define HTAB_CREATE_FLAG_MASK						\
- 	(BPF_F_NO_PREALLOC | BPF_F_NO_COMMON_LRU | BPF_F_NUMA_NODE |	\
--	 BPF_F_RDONLY | BPF_F_WRONLY | BPF_F_ZERO_SEED)
-+	 BPF_F_ACCESS_MASK | BPF_F_ZERO_SEED)
- 
- struct bucket {
- 	struct hlist_nulls_head head;
-diff --git a/kernel/bpf/local_storage.c b/kernel/bpf/local_storage.c
-index 6b572e2de7fb..3ffe3259da00 100644
---- a/kernel/bpf/local_storage.c
-+++ b/kernel/bpf/local_storage.c
-@@ -14,7 +14,7 @@ DEFINE_PER_CPU(struct bpf_cgroup_storage*, bpf_cgroup_storage[MAX_BPF_CGROUP_STO
- #ifdef CONFIG_CGROUP_BPF
- 
- #define LOCAL_STORAGE_CREATE_FLAG_MASK					\
--	(BPF_F_NUMA_NODE | BPF_F_RDONLY | BPF_F_WRONLY)
-+	(BPF_F_NUMA_NODE | BPF_F_ACCESS_MASK)
- 
- struct bpf_cgroup_storage_map {
- 	struct bpf_map map;
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index abf1002080df..79c75b1626b8 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -537,7 +537,7 @@ static int trie_delete_elem(struct bpf_map *map, void *_key)
- #define LPM_KEY_SIZE_MIN	LPM_KEY_SIZE(LPM_DATA_SIZE_MIN)
- 
- #define LPM_CREATE_FLAG_MASK	(BPF_F_NO_PREALLOC | BPF_F_NUMA_NODE |	\
--				 BPF_F_RDONLY | BPF_F_WRONLY)
-+				 BPF_F_ACCESS_MASK)
- 
- static struct bpf_map *trie_alloc(union bpf_attr *attr)
- {
-diff --git a/kernel/bpf/queue_stack_maps.c b/kernel/bpf/queue_stack_maps.c
-index b384ea9f3254..1eb9ceef075c 100644
---- a/kernel/bpf/queue_stack_maps.c
-+++ b/kernel/bpf/queue_stack_maps.c
-@@ -11,8 +11,7 @@
- #include "percpu_freelist.h"
- 
- #define QUEUE_STACK_CREATE_FLAG_MASK \
--	(BPF_F_NUMA_NODE | BPF_F_RDONLY | BPF_F_WRONLY)
--
-+	(BPF_F_NUMA_NODE | BPF_F_ACCESS_MASK)
- 
- struct bpf_queue_stack {
- 	struct bpf_map map;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 3ad05dda6e9d..cdd2cb01f789 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1429,6 +1429,28 @@ static int check_stack_access(struct bpf_verifier_env *env,
- 	return 0;
- }
- 
-+static int check_map_access_type(struct bpf_verifier_env *env, u32 regno,
-+				 int off, int size, enum bpf_access_type type)
-+{
-+	struct bpf_reg_state *regs = cur_regs(env);
-+	struct bpf_map *map = regs[regno].map_ptr;
-+	u32 cap = bpf_map_flags_to_cap(map);
-+
-+	if (type == BPF_WRITE && !(cap & BPF_MAP_CAN_WRITE)) {
-+		verbose(env, "write into map forbidden, value_size=%d off=%d size=%d\n",
-+			map->value_size, off, size);
-+		return -EACCES;
-+	}
-+
-+	if (type == BPF_READ && !(cap & BPF_MAP_CAN_READ)) {
-+		verbose(env, "read into map forbidden, value_size=%d off=%d size=%d\n",
-+			map->value_size, off, size);
-+		return -EACCES;
-+	}
-+
-+	return 0;
-+}
-+
- /* check read/write into map element returned by bpf_map_lookup_elem() */
- static int __check_map_access(struct bpf_verifier_env *env, u32 regno, int off,
- 			      int size, bool zero_size_allowed)
-@@ -2014,7 +2036,9 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
- 			verbose(env, "R%d leaks addr into map\n", value_regno);
- 			return -EACCES;
- 		}
--
-+		err = check_map_access_type(env, regno, off, size, t);
-+		if (err)
-+			return err;
- 		err = check_map_access(env, regno, off, size, false);
- 		if (!err && t == BPF_READ && value_regno >= 0)
- 			mark_reg_unknown(env, regs, value_regno);
-@@ -2250,6 +2274,10 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
- 		return check_packet_access(env, regno, reg->off, access_size,
- 					   zero_size_allowed);
- 	case PTR_TO_MAP_VALUE:
-+		if (check_map_access_type(env, regno, reg->off, access_size,
-+					  meta && meta->raw_mode ? BPF_WRITE :
-+					  BPF_READ))
-+			return -EACCES;
- 		return check_map_access(env, regno, reg->off, access_size,
- 					zero_size_allowed);
- 	default: /* scalar_value|ptr_to_stack or invalid ptr */
+v2 changes:
+* added cover letter, added more description about file structure
+
+Stanislav Fomichev (7):
+  selftests: bpf: break up test_progs - preparations
+  selftests: bpf: break up test_progs - pkt access
+  selftests: bpf: break up test_progs - xdp
+  selftests: bpf: break up test_progs - stackmap
+  selftests: bpf: break up test_progs - tracepoint
+  selftests: bpf: break up test_progs - spinlock
+  selftests: bpf: break up test_progs - misc
+
+ tools/testing/selftests/bpf/Makefile          |   27 +-
+ .../selftests/bpf/prog_tests/.gitignore       |    1 +
+ .../selftests/bpf/prog_tests/bpf_obj_id.c     |  249 ++
+ .../selftests/bpf/prog_tests/flow_dissector.c |   72 +
+ .../bpf/prog_tests/get_stack_raw_tp.c         |  139 ++
+ .../selftests/bpf/prog_tests/l4lb_all.c       |   90 +
+ .../selftests/bpf/prog_tests/map_lock.c       |   75 +
+ .../selftests/bpf/prog_tests/obj_name.c       |   71 +
+ .../selftests/bpf/prog_tests/pkt_access.c     |   29 +
+ .../selftests/bpf/prog_tests/pkt_md_access.c  |   24 +
+ .../selftests/bpf/prog_tests/prog_run_xattr.c |   49 +
+ .../bpf/prog_tests/queue_stack_map.c          |  103 +
+ .../bpf/prog_tests/reference_tracking.c       |   48 +
+ .../selftests/bpf/prog_tests/signal_pending.c |   48 +
+ .../selftests/bpf/prog_tests/spinlock.c       |   29 +
+ .../bpf/prog_tests/stacktrace_build_id.c      |  165 ++
+ .../bpf/prog_tests/stacktrace_build_id_nmi.c  |  150 ++
+ .../selftests/bpf/prog_tests/stacktrace_map.c |  103 +
+ .../bpf/prog_tests/stacktrace_map_raw_tp.c    |   59 +
+ .../bpf/prog_tests/task_fd_query_rawtp.c      |   78 +
+ .../bpf/prog_tests/task_fd_query_tp.c         |   82 +
+ .../selftests/bpf/prog_tests/tcp_estats.c     |   19 +
+ .../bpf/prog_tests/tp_attach_query.c          |  132 ++
+ tools/testing/selftests/bpf/prog_tests/xdp.c  |   46 +
+ .../bpf/prog_tests/xdp_adjust_tail.c          |   31 +
+ .../selftests/bpf/prog_tests/xdp_noinline.c   |   82 +
+ tools/testing/selftests/bpf/test_progs.c      | 2044 +----------------
+ tools/testing/selftests/bpf/test_progs.h      |   94 +
+ 28 files changed, 2109 insertions(+), 2030 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/.gitignore
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_obj_id.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/l4lb_all.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/map_lock.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/obj_name.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/pkt_access.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/pkt_md_access.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/prog_run_xattr.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/reference_tracking.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/signal_pending.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/spinlock.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/stacktrace_map.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/stacktrace_map_raw_tp.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/task_fd_query_rawtp.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tcp_estats.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_noinline.c
+ create mode 100644 tools/testing/selftests/bpf/test_progs.h
+
 -- 
-2.17.1
-
+2.21.0.rc2.261.ga7da99ff1b-goog
