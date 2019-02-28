@@ -7,46 +7,47 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C33E0C43381
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:30:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEA4CC4360F
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:30:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 935E72133D
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:30:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9B2AF2133D
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:30:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1551367842;
-	bh=4u3j2GUjzwUbikH7y5MSpux58vNLlKk5vF1owd59SC8=;
+	s=default; t=1551367844;
+	bh=eGEJ44wAVgpuhd9UmYjrlHvfG+utswhJaIZ2GcAwn3o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=BU6NUoGYGBO5bqI9xgm5LALCBSPJQ5cPnqVPGj4kHyjlXnPyz2EuMLJDg1L5l6MT3
-	 Fbl6TONWRPa0CMl15A5dv5e4GpZ0ub6b1+Uyjcte8VuDLHY6ZuNGXKJCZwSX2E+rI+
-	 F2i/6mygMGtfUV/2b//m28WgtHhlb/ODR6XhX/KI=
+	b=kyVl5V2ADi+pV3c9sDUepgBHgozmhno592roDwwuC/8AQXwJRVuDktDv1rKevl1iH
+	 6GPBi5fstjAlaXM4ib0YxlwH5PO1jvFWY7R+XJ48JgBxSevZSkQaF5FfVLv86NLeUd
+	 eKrhGtYCtZyykx7ADi5KbuzVVLl7ff/YXsOc9boo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387902AbfB1Pa2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Feb 2019 10:30:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42074 "EHLO mail.kernel.org"
+        id S1732257AbfB1PJ0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Feb 2019 10:09:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42050 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387540AbfB1PJ1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Feb 2019 10:09:27 -0500
+        id S2387518AbfB1PJZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Feb 2019 10:09:25 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 841AA218AE;
-        Thu, 28 Feb 2019 15:09:25 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2EC79206B8;
+        Thu, 28 Feb 2019 15:09:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1551366566;
-        bh=4u3j2GUjzwUbikH7y5MSpux58vNLlKk5vF1owd59SC8=;
+        s=default; t=1551366565;
+        bh=eGEJ44wAVgpuhd9UmYjrlHvfG+utswhJaIZ2GcAwn3o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nEuwOJs+FT72/1M8Lr9gIz71o8cZ7pXoDvP4QZbPRpiDlQr7yKbLQVHng1RABVV9V
-         IZMC5sKUC0djESFyGG18ZodfT2Vzc4rX2OGRU5NpGRaTuTIe30k/SyKgR7CkPEAaqe
-         v5fW/qBqT4wUaOYtWQjbcKIMNXpKUSuJ756TZ5as=
+        b=Q5OCGvrLmaCxnb7E5xszs8V9CYXmA6ASiG9WcVJRk3aq5jYAauhOb6jOlcZwKwjdB
+         oAR9fAdFQkqipEq8+r5YCgz8UEsESjFWQh6Z63B5j0V38silf9kSsK3NfSw88hEI23
+         e5XrZ2X/DtqQWojdT+XzavXZSF7V/OpCWvXs3AyE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+Cc:     Martynas Pumputis <m@lambda.lt>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.20 46/81] bpf: run bpf programs with preemption disabled
-Date:   Thu, 28 Feb 2019 10:07:38 -0500
-Message-Id: <20190228150813.10256-46-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.20 45/81] bpf, selftests: fix handling of sparse CPU allocations
+Date:   Thu, 28 Feb 2019 10:07:37 -0500
+Message-Id: <20190228150813.10256-45-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190228150813.10256-1-sashal@kernel.org>
 References: <20190228150813.10256-1-sashal@kernel.org>
@@ -58,92 +59,79 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Alexei Starovoitov <ast@kernel.org>
+From: Martynas Pumputis <m@lambda.lt>
 
-[ Upstream commit 6cab5e90ab2bd323c9f3811b6c70a4687df51e27 ]
+[ Upstream commit 1bb54c4071f585ebef56ce8fdfe6026fa2cbcddd ]
 
-Disabled preemption is necessary for proper access to per-cpu maps
-from BPF programs.
+Previously, bpf_num_possible_cpus() had a bug when calculating a
+number of possible CPUs in the case of sparse CPU allocations, as
+it was considering only the first range or element of
+/sys/devices/system/cpu/possible.
 
-But the sender side of socket filters didn't have preemption disabled:
-unix_dgram_sendmsg->sk_filter->sk_filter_trim_cap->bpf_prog_run_save_cb->BPF_PROG_RUN
+E.g. in the case of "0,2-3" (CPU 1 is not available), the function
+returned 1 instead of 3.
 
-and a combination of af_packet with tun device didn't disable either:
-tpacket_snd->packet_direct_xmit->packet_pick_tx_queue->ndo_select_queue->
-  tun_select_queue->tun_ebpf_select_queue->bpf_prog_run_clear_cb->BPF_PROG_RUN
+This patch fixes the function by making it parse all CPU ranges and
+elements.
 
-Disable preemption before executing BPF programs (both classic and extended).
-
-Reported-by: Jann Horn <jannh@google.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Song Liu <songliubraving@fb.com>
+Signed-off-by: Martynas Pumputis <m@lambda.lt>
+Acked-by: Yonghong Song <yhs@fb.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/filter.h | 21 ++++++++++++++++++---
- kernel/bpf/cgroup.c    |  2 +-
- 2 files changed, 19 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/bpf_util.h | 30 +++++++++++++++++---------
+ 1 file changed, 20 insertions(+), 10 deletions(-)
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index b776626aeb849..958eddbc44d32 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -591,8 +591,8 @@ static inline u8 *bpf_skb_cb(struct sk_buff *skb)
- 	return qdisc_skb_cb(skb)->data;
- }
+diff --git a/tools/testing/selftests/bpf/bpf_util.h b/tools/testing/selftests/bpf/bpf_util.h
+index 315a44fa32af3..84fd6f1bf33e7 100644
+--- a/tools/testing/selftests/bpf/bpf_util.h
++++ b/tools/testing/selftests/bpf/bpf_util.h
+@@ -13,7 +13,7 @@ static inline unsigned int bpf_num_possible_cpus(void)
+ 	unsigned int start, end, possible_cpus = 0;
+ 	char buff[128];
+ 	FILE *fp;
+-	int n;
++	int len, n, i, j = 0;
  
--static inline u32 bpf_prog_run_save_cb(const struct bpf_prog *prog,
--				       struct sk_buff *skb)
-+static inline u32 __bpf_prog_run_save_cb(const struct bpf_prog *prog,
-+					 struct sk_buff *skb)
- {
- 	u8 *cb_data = bpf_skb_cb(skb);
- 	u8 cb_saved[BPF_SKB_CB_LEN];
-@@ -611,15 +611,30 @@ static inline u32 bpf_prog_run_save_cb(const struct bpf_prog *prog,
- 	return res;
- }
+ 	fp = fopen(fcpu, "r");
+ 	if (!fp) {
+@@ -21,17 +21,27 @@ static inline unsigned int bpf_num_possible_cpus(void)
+ 		exit(1);
+ 	}
  
-+static inline u32 bpf_prog_run_save_cb(const struct bpf_prog *prog,
-+				       struct sk_buff *skb)
-+{
-+	u32 res;
+-	while (fgets(buff, sizeof(buff), fp)) {
+-		n = sscanf(buff, "%u-%u", &start, &end);
+-		if (n == 0) {
+-			printf("Failed to retrieve # possible CPUs!\n");
+-			exit(1);
+-		} else if (n == 1) {
+-			end = start;
++	if (!fgets(buff, sizeof(buff), fp)) {
++		printf("Failed to read %s!\n", fcpu);
++		exit(1);
++	}
 +
-+	preempt_disable();
-+	res = __bpf_prog_run_save_cb(prog, skb);
-+	preempt_enable();
-+	return res;
-+}
++	len = strlen(buff);
++	for (i = 0; i <= len; i++) {
++		if (buff[i] == ',' || buff[i] == '\0') {
++			buff[i] = '\0';
++			n = sscanf(&buff[j], "%u-%u", &start, &end);
++			if (n <= 0) {
++				printf("Failed to retrieve # possible CPUs!\n");
++				exit(1);
++			} else if (n == 1) {
++				end = start;
++			}
++			possible_cpus += end - start + 1;
++			j = i + 1;
+ 		}
+-		possible_cpus = start == 0 ? end + 1 : 0;
+-		break;
+ 	}
 +
- static inline u32 bpf_prog_run_clear_cb(const struct bpf_prog *prog,
- 					struct sk_buff *skb)
- {
- 	u8 *cb_data = bpf_skb_cb(skb);
-+	u32 res;
+ 	fclose(fp);
  
- 	if (unlikely(prog->cb_access))
- 		memset(cb_data, 0, BPF_SKB_CB_LEN);
- 
--	return BPF_PROG_RUN(prog, skb);
-+	preempt_disable();
-+	res = BPF_PROG_RUN(prog, skb);
-+	preempt_enable();
-+	return res;
- }
- 
- static __always_inline u32 bpf_prog_run_xdp(const struct bpf_prog *prog,
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 9425c2fb872f7..6c24b1fb2db8e 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -572,7 +572,7 @@ int __cgroup_bpf_run_filter_skb(struct sock *sk,
- 	bpf_compute_and_save_data_end(skb, &saved_data_end);
- 
- 	ret = BPF_PROG_RUN_ARRAY(cgrp->bpf.effective[type], skb,
--				 bpf_prog_run_save_cb);
-+				 __bpf_prog_run_save_cb);
- 	bpf_restore_data_end(skb, saved_data_end);
- 	__skb_pull(skb, offset);
- 	skb->sk = save_sk;
+ 	return possible_cpus;
 -- 
 2.19.1
 
