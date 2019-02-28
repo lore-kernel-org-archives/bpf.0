@@ -6,49 +6,50 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0116BC43381
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:26:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0AEFC43381
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:28:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BE9BA20C01
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:26:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B425320C01
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:28:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1551367616;
-	bh=fn2VglIejKGerKOg1gc9808eDGStI104LvGM0tXePCE=;
+	s=default; t=1551367704;
+	bh=Z5+rDUULjVujJ0pOmcJhH2eynq6PMvgP+zIvZu7OM10=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=YTjdiYXqS4GiX+xfV5njXQyHot9SjJzFqY9JA/viYdJRVN5JQiuHi8GlumUeIqRR/
-	 mEHtO3nLKvbvlig/AoZvIQSNxzguvXuUQeNX08ISWMqQMJFSwBirmFpeIJS2TMN9DK
-	 qSVuJvVzWRHkygAGvZA0nS3TN+2Q/nZullHdWoMg=
+	b=f+TKAJQnJ1joOX4ZIw3UygKum/vW9crpUkh3XzIY4mIRij3MvBzRfkG2ETTcMe7kS
+	 ca8Jmdg0U0Tty3Fr7gnHsUL5vfhgWIVksga6XA4bRCMfKe34cB7jba4jKOJC0obuor
+	 dYRcRVphSJode2F0ILTsjDP6KrNYEW8aQBLfrqY0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388003AbfB1PLc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Feb 2019 10:11:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44676 "EHLO mail.kernel.org"
+        id S2387483AbfB1P2P (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Feb 2019 10:28:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43970 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732726AbfB1PL3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Feb 2019 10:11:29 -0500
+        id S2387852AbfB1PLC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Feb 2019 10:11:02 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 87D89218C3;
-        Thu, 28 Feb 2019 15:11:28 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4300B218D8;
+        Thu, 28 Feb 2019 15:11:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1551366689;
-        bh=fn2VglIejKGerKOg1gc9808eDGStI104LvGM0tXePCE=;
+        s=default; t=1551366661;
+        bh=Z5+rDUULjVujJ0pOmcJhH2eynq6PMvgP+zIvZu7OM10=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=agqDPERkpM5kbS5eDnEo4lx14Me2WE6DdjyahSm7Ldr9kvMa858yoUV46WHPt7WsR
-         FCLB9hi5takptiTO5YsFVAabfiez8+Cd8cSbQDzatHWIJNevQ7dgBiZlE1UcGvi4yp
-         JZ05bg5ke6IfyZq0pvmSg65HGaYFUYO34Pw8AZH0=
+        b=WcUDCzD61npLXcEhc4THy/lBmV79efc9ObSfw8xJ5pP1H1lrQZoGDVtR51Yi47EGs
+         DCrayiZMie48omHLXHxZ35Onwx0kTXvxkYB7vZ40a/wNsqJLDfgnc7PhLQR19YaSGB
+         AKn02etk+hVb4748KFoOoqpEDehptZMiBrdcT3Qs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+Cc:     Sudarsana Reddy Kalluru <skalluru@marvell.com>,
+        Ariel Elior <aelior@marvell.com>,
+        "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 13/64] bpftool: Fix prog dump by tag
-Date:   Thu, 28 Feb 2019 10:10:14 -0500
-Message-Id: <20190228151105.11277-13-sashal@kernel.org>
+        xdp-newbies@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.20 79/81] qed: Consider TX tcs while deriving the max num_queues for PF.
+Date:   Thu, 28 Feb 2019 10:08:11 -0500
+Message-Id: <20190228150813.10256-79-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
-In-Reply-To: <20190228151105.11277-1-sashal@kernel.org>
-References: <20190228151105.11277-1-sashal@kernel.org>
+In-Reply-To: <20190228150813.10256-1-sashal@kernel.org>
+References: <20190228150813.10256-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -57,70 +58,44 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jiri Olsa <jolsa@kernel.org>
+From: Sudarsana Reddy Kalluru <skalluru@marvell.com>
 
-[ Upstream commit 752bcf80f5549c9901b2e8bc77b2138de55b1026 ]
+[ Upstream commit fb1faab74ddef9ec2d841d54e5d0912a097b3abe ]
 
-Lance reported an issue with bpftool not being able to
-dump program if there are more programs loaded and you
-want to dump any but the first program, like:
+Max supported queues is derived incorrectly in the case of multi-CoS.
+Need to consider TCs while calculating num_queues for PF.
 
-  # bpftool prog
-  28: kprobe  name trace_req_start  tag 1dfc28ba8b3dd597  gpl
-  	loaded_at 2019-01-18T17:02:40+1100  uid 0
-  	xlated 112B  jited 109B  memlock 4096B  map_ids 13
-  29: kprobe  name trace_req_compl  tag 5b6a5ecc6030a683  gpl
-  	loaded_at 2019-01-18T17:02:40+1100  uid 0
-  	xlated 928B  jited 575B  memlock 4096B  map_ids 13,14
-  #  bpftool prog dum jited tag 1dfc28ba8b3dd597
-   0:	push   %rbp
-   1:	mov    %rsp,%rbp
-  ...
-
-  #  bpftool prog dum jited tag 5b6a5ecc6030a683
-  Error: can't get prog info (29): Bad address
-
-The problem is in the prog_fd_by_tag function not cleaning
-the struct bpf_prog_info before another request, so the
-previous program length is still in there and kernel assumes
-it needs to dump the program, which fails because there's no
-user pointer set.
-
-Moving the struct bpf_prog_info declaration into the loop,
-so it gets cleaned before each query.
-
-Fixes: 71bb428fe2c1 ("tools: bpf: add bpftool")
-Reported-by: Lance Digby <ldigby@redhat.com>
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-Reviewed-by: Quentin Monnet <quentin.monnet@netronome.com>
-Acked-by: Jakub Kicinski <jakub.kicinski@netronome.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Sudarsana Reddy Kalluru <skalluru@marvell.com>
+Signed-off-by: Ariel Elior <aelior@marvell.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/bpf/bpftool/prog.c | 5 +++--
+ drivers/net/ethernet/qlogic/qed/qed_l2.c | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 0de024a6cc2be..bbba0d61570fe 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -109,13 +109,14 @@ static void print_boot_time(__u64 nsecs, char *buf, unsigned int size)
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_l2.c b/drivers/net/ethernet/qlogic/qed/qed_l2.c
+index 67c02ea939062..bde6f5f3bf8f7 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_l2.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_l2.c
+@@ -2207,7 +2207,7 @@ static int qed_fill_eth_dev_info(struct qed_dev *cdev,
+ 			u16 num_queues = 0;
  
- static int prog_fd_by_tag(unsigned char *tag)
- {
--	struct bpf_prog_info info = {};
--	__u32 len = sizeof(info);
- 	unsigned int id = 0;
- 	int err;
- 	int fd;
+ 			/* Since the feature controls only queue-zones,
+-			 * make sure we have the contexts [rx, tx, xdp] to
++			 * make sure we have the contexts [rx, xdp, tcs] to
+ 			 * match.
+ 			 */
+ 			for_each_hwfn(cdev, i) {
+@@ -2217,7 +2217,8 @@ static int qed_fill_eth_dev_info(struct qed_dev *cdev,
+ 				u16 cids;
  
- 	while (true) {
-+		struct bpf_prog_info info = {};
-+		__u32 len = sizeof(info);
-+
- 		err = bpf_prog_get_next_id(id, &id);
- 		if (err) {
- 			p_err("%s", strerror(errno));
+ 				cids = hwfn->pf_params.eth_pf_params.num_cons;
+-				num_queues += min_t(u16, l2_queues, cids / 3);
++				cids /= (2 + info->num_tc);
++				num_queues += min_t(u16, l2_queues, cids);
+ 			}
+ 
+ 			/* queues might theoretically be >256, but interrupts'
 -- 
 2.19.1
 
