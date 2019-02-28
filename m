@@ -2,139 +2,167 @@ Return-Path: <SRS0=vk/n=RD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B86BC43381
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 19:16:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 875B1C43381
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 19:19:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2DD4C218CD
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 19:16:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5CA4C218CD
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 19:19:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hqn/0ZQL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g6o4wy+X"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732668AbfB1TQT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Feb 2019 14:16:19 -0500
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:45300 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726093AbfB1TQT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Feb 2019 14:16:19 -0500
-Received: by mail-qt1-f195.google.com with SMTP id d18so24807978qtg.12;
-        Thu, 28 Feb 2019 11:16:18 -0800 (PST)
+        id S1732704AbfB1TT0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Feb 2019 14:19:26 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:38406 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730991AbfB1TTZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Feb 2019 14:19:25 -0500
+Received: by mail-ot1-f66.google.com with SMTP id m1so18743022otf.5;
+        Thu, 28 Feb 2019 11:19:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=PLVe0dg5PAXVsP2a8A/pI1lkD6c5jXwaBrVI0jlvk3s=;
-        b=Hqn/0ZQLXdTR6XyLGz65+CVqF3QTrbqyIaek6lp4qsouX+p7pKsPdFX4LeejtTSM1E
-         v6Jo4PmSLz6bq6KNXwV8tB6z5X9zZkvF92Zg4uECN4XlWB7TBn9t3/MAMwhuUmNqYUxc
-         +j9dg92lYGqx/m7fQ7rSM5Sqc6OmKMAs057pJqYF6cKYCt7idQh6nuxcGftWtPyt458I
-         r/SvMDU0KdDQG3hAuQPRdQwHzSWTi1qAPX9+rJQOfLrdJZFo5ClLcSLkoE2irnko5doZ
-         EMyP9e+hVLhDZZvlpd+v4uwM8qXURHPjGy7ISzseKYvBQRgQIQ4f8AOMRr1gniCVIy1T
-         3FyQ==
+        bh=oOduxGW1oMbubPrknhTIISLNzcddjeFP4fdBef7gCAw=;
+        b=g6o4wy+X9V+dgg5tjoU0Y+LVT1DIK1cpdJPk7z7bTS7swDGMJiOiFaCllBj18xDFi1
+         R9DDBb1xe1LDMCmxoY5k5Xd0BsQCw3LMl4Mz7Y9fsgIA4nLdhRMBR50rtMN507uRcXyI
+         deNnDSHIsxMBEfKMf7pR+uKfsgGEJRR0U1/EwnsNzl6oUkYfrQPKuvyxPcUMKflYDM6l
+         qRQtXq3G4WXYAMVW0vB2csvmC/3FerBwfmpp3szvCjfT/TdPEQFsdcZ0OnyQOSxfAIsr
+         2DNAcORHG1Ub/olIGcKcn7ECBpLoKbT5lJVR9ISo6sk4ns1GNufDXVomuhYiO6nmOeeO
+         DA0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=PLVe0dg5PAXVsP2a8A/pI1lkD6c5jXwaBrVI0jlvk3s=;
-        b=iTtFvJcTvVJexXCifUph/LjyPNpdICeWbSsecO4HqjQOpkxSPPmWd2E0830sfeZhrJ
-         olxPuFrIZmb3SgPCQMZEcLLaLc5/7RU5nCYF8mIcZxiop9LiFrzvKLAHfN7kiLAwJCI3
-         62MH0PPDSl8mrJQXl+GmuebSgIl/OQAJptLKUQkhpF333TKpTpeqiKwCJKjTaHJB/WCU
-         Uwo/47uReVBdIK5OGjkjhUZ5oxhkME10TGlP32Sek/hq07kC1H/5mKkO6aMBwfbeNf25
-         AT1yOnlOL8Ib6uUeBIQ6FeCk253+Q15cYoMjcHcJvL7Q+CoRnFc1npz5B6vtuzKPNrqj
-         5PDQ==
-X-Gm-Message-State: APjAAAWIE4EI+7wOxzYfJLj/nh6FTLhS0G6b6/IjMiyLsKDWRML3gZIn
-        Xh7qd2PT3a9mEvEMNDCf5gAciegb5sUU+ZYRMye34mu7
-X-Google-Smtp-Source: APXvYqydO/48FGqYITk1zW2DUGpiBVnS3YAOILETeeEzfedMqV68NbviI+T3l+6+ii/ORnVcGBKOSTsWNXW1IXF4xl0=
-X-Received: by 2002:aed:3904:: with SMTP id l4mr740253qte.194.1551381377934;
- Thu, 28 Feb 2019 11:16:17 -0800 (PST)
+        bh=oOduxGW1oMbubPrknhTIISLNzcddjeFP4fdBef7gCAw=;
+        b=NwyiKDjExi+rVGoEnQkVwSRhdBQEHvMYZCp0Wh7d0IkBE2DXXZR0FXBVrgw02gmZie
+         szwv0PU3pdqkxwFqezXeeSctM6AENuMmDdz010lrC9oWj6QEGaVln3thSeVrvhbrEEJY
+         v9dr9cO4md8neO4R/SrhGsWrrVFFNyGBhGeeB9dLPTdV+aYKokiewmrkQhbE28hd6aSo
+         INzhUdq2NsQJvaeTTe6vtFSJF9diu5/TJyANz2ey6bG3lODZKp1xxs7+Bttnh/fTzJaD
+         k/YqMzfj3DDOCFrMEY5CjUh03nVRPg3K0Aq53kLj5TWifTR6S1fiaZqSuXwfioguhonl
+         eAaw==
+X-Gm-Message-State: APjAAAWcF740KUuWVE1OXPB2oWhTmwe7AHT48BMkJlgoof5WM5/+RWvs
+        QM5Izbm0GCZX54Sn39Ib/w4dmIfTaqPiSkSnvRw=
+X-Google-Smtp-Source: APXvYqz7GWvR/ERFzk+1GbaqOFJcCGHf9uCtZy7kSZOVvST/Iv2STAd1nVLt3UbQ6lGEwQd6f1h1RY5QmgrwilE8SeQ=
+X-Received: by 2002:a9d:d88:: with SMTP id 8mr878242ots.164.1551381563992;
+ Thu, 28 Feb 2019 11:19:23 -0800 (PST)
 MIME-Version: 1.0
-References: <20190228030414.18973-1-jakub.kicinski@netronome.com>
-In-Reply-To: <20190228030414.18973-1-jakub.kicinski@netronome.com>
-From:   Song Liu <liu.song.a23@gmail.com>
-Date:   Thu, 28 Feb 2019 11:16:06 -0800
-Message-ID: <CAPhsuW5nJ+29yc58h5QX=pr1d3WwzZfBF+gMuvmUrOwHoEZ-cg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/5] samples: bpf: continue effort to get rid
- of bpf_load
-To:     Jakub Kicinski <jakub.kicinski@netronome.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+References: <20190227224642.1069138-1-andriin@fb.com> <20190227224642.1069138-2-andriin@fb.com>
+ <20190228185212.GH9508@kernel.org>
+In-Reply-To: <20190228185212.GH9508@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 28 Feb 2019 11:19:12 -0800
+Message-ID: <CAEf4Bzb_Pe6bvvTi1+6toQsYZ+4u+CcBtunrYs6iDMGWznqCAg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/5] selftests/bpf: fix btf_dedup testing code
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>, Kernel Team <kernel-team@fb.com>,
+        Alexei Starovoitov <ast@fb.com>,
         Networking <netdev@vger.kernel.org>, bpf@vger.kernel.org,
-        oss-drivers@netronome.com
+        Daniel Borkmann <daniel@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Feb 27, 2019 at 7:05 PM Jakub Kicinski
-<jakub.kicinski@netronome.com> wrote:
+On Thu, Feb 28, 2019 at 10:52 AM Arnaldo Carvalho de Melo
+<arnaldo.melo@gmail.com> wrote:
 >
-> Hi!
+> Em Wed, Feb 27, 2019 at 02:46:37PM -0800, Andrii Nakryiko escreveu:
+> > btf_dedup testing code doesn't account for length of struct btf_header
+> > when calculating the start of a string section. This patch fixes this
+> > problem.
+> >
+> > Fixes: 49b57e0d01db ("tools/bpf: remove btf__get_strings() superseded by raw data API")
 >
-> This set is next part of a quest to get rid of the bpf_load
-> ELF loader.  It fixes some minor issues with the samples and
-> starts the conversion.
+> I think this clarifies things, but a Fixes seems excessive, right? I.e.
+> if you missed it in both sides of the (a != b) expression, the test will
+> be just as valid.
 >
-> First patch fixes ping invocations, ping localhost defaults
-> to IPv6 on modern setups. Next load_sock_ops sample is removed
-> and users are directed towards using bpftool directly.
->
-> Patch 4 removes the use of bpf_load from samples which don't
-> need the auto-attachment functionality at all.
->
-> Patch 5 improves symbol counting in libbpf, it's not currently
-> an issue but it will be when anyone adds a symbol with a long
-> name. Let's make sure that person doesn't have to spend time
-> scratching their head and wondering why .a and .so symbol
-> counts don't match.
->
-> v2: - specify prog_type where possible (Andrii).
+> I say this because Fixes tags are now tracked and generates backporting
+> efforts that sometimes end up causing unnecessary human exchanges when
+> the patches don't apply because of some other patch.o
 
-For the series:
-
-Acked-by: Song Liu <songliubraving@fb.com>
-
-Thanks for doing this work!
-Song
+I think this is a legitimate fix. The bug wasn't exposed until I added
+a new test from this patchset, but still. See below.
 
 >
-> Jakub Kicinski (5):
->   samples: bpf: force IPv4 in ping
->   samples: bpf: remove load_sock_ops in favour of bpftool
->   tools: libbpf: add a correctly named define for map iteration
->   samples: bpf: use libbpf where easy
->   tools: libbpf: make sure readelf shows full names in build checks
+> Or is there some further use of 'test_strs' and 'expect_strs' further
+> down that do_test_dedup() function?
+
+Yes, few lines further down we use those pointers to iterate over all
+strings in BTF string section and compare them:
+
+        test_str_cur = test_strs;
+        test_str_end = test_strs + test_hdr->str_len;
+        expect_str_cur = expect_strs;
+        expect_str_end = expect_strs + expect_hdr->str_len;
+        while (test_str_cur < test_str_end && expect_str_cur < expect_str_end) {
+                ... compare strings ...
+        }
+
+With this bug, what ended up happening was that we never tested last
+sizeof(struct btf_header) bytes of string section. It worked fine for
+existing tests by luck, but in general it would fail, because after
+that loop we check that we finished iteration exactly where we should:
+
+        if (CHECK(test_str_cur != test_str_end,
+                  "test_str_cur:%p != test_str_end:%p",
+                  test_str_cur, test_str_end)) {
+                err = -1;
+                goto done;
+        }
+
+New test I added didn't have lucky byte arrangement that made
+test_str_cur == test_str_end true for previous tests.
+
+
 >
->  samples/bpf/.gitignore                        |  1 -
->  samples/bpf/Makefile                          |  8 +-
->  samples/bpf/fds_example.c                     | 10 +-
->  samples/bpf/load_sock_ops.c                   | 97 -------------------
->  samples/bpf/sock_example.c                    |  2 +-
->  samples/bpf/sockex1_user.c                    | 25 ++---
->  samples/bpf/sockex2_user.c                    | 23 +++--
->  samples/bpf/sockex3_user.c                    |  2 +-
->  samples/bpf/tcp_basertt_kern.c                |  2 +-
->  samples/bpf/tcp_bpf.readme                    | 14 +--
->  samples/bpf/tcp_bufs_kern.c                   |  2 +-
->  samples/bpf/tcp_clamp_kern.c                  |  2 +-
->  samples/bpf/tcp_cong_kern.c                   |  2 +-
->  samples/bpf/tcp_iw_kern.c                     |  2 +-
->  samples/bpf/tcp_rwnd_kern.c                   |  2 +-
->  samples/bpf/tcp_synrto_kern.c                 |  2 +-
->  samples/bpf/tcp_tos_reflect_kern.c            |  2 +-
->  samples/bpf/tracex2_user.c                    |  2 +-
->  tools/bpf/bpftool/prog.c                      |  4 +-
->  tools/lib/bpf/Makefile                        |  4 +-
->  tools/lib/bpf/libbpf.c                        |  8 +-
->  tools/lib/bpf/libbpf.h                        |  3 +-
->  tools/perf/util/bpf-loader.c                  |  4 +-
->  .../testing/selftests/bpf/test_libbpf_open.c  |  2 +-
->  24 files changed, 69 insertions(+), 156 deletions(-)
->  delete mode 100644 samples/bpf/load_sock_ops.c
+> /me scratches head, probably missing something...
+>
+> - Arnaldo
+>
+> > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> > ---
+> >  tools/testing/selftests/bpf/.gitignore | 1 +
+> >  tools/testing/selftests/bpf/test_btf.c | 4 ++--
+> >  2 files changed, 3 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+> > index e47168d1257d..3b74d23fffab 100644
+> > --- a/tools/testing/selftests/bpf/.gitignore
+> > +++ b/tools/testing/selftests/bpf/.gitignore
+> > @@ -14,6 +14,7 @@ feature
+> >  test_libbpf_open
+> >  test_sock
+> >  test_sock_addr
+> > +test_sock_fields
+> >  urandom_read
+> >  test_btf
+> >  test_sockmap
+> > diff --git a/tools/testing/selftests/bpf/test_btf.c b/tools/testing/selftests/bpf/test_btf.c
+> > index 02d314383a9c..1426c0a905c8 100644
+> > --- a/tools/testing/selftests/bpf/test_btf.c
+> > +++ b/tools/testing/selftests/bpf/test_btf.c
+> > @@ -5936,9 +5936,9 @@ static int do_test_dedup(unsigned int test_num)
+> >       }
+> >
+> >       test_hdr = test_btf_data;
+> > -     test_strs = test_btf_data + test_hdr->str_off;
+> > +     test_strs = test_btf_data + sizeof(*test_hdr) + test_hdr->str_off;
+> >       expect_hdr = expect_btf_data;
+> > -     expect_strs = expect_btf_data + expect_hdr->str_off;
+> > +     expect_strs = expect_btf_data + sizeof(*test_hdr) + expect_hdr->str_off;
+> >       if (CHECK(test_hdr->str_len != expect_hdr->str_len,
+> >                 "test_hdr->str_len:%u != expect_hdr->str_len:%u",
+> >                 test_hdr->str_len, expect_hdr->str_len)) {
+> > --
+> > 2.17.1
 >
 > --
-> 2.19.2
 >
+> - Arnaldo
