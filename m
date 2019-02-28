@@ -7,214 +7,400 @@ X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E955FC43381
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 20:26:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 747C6C43381
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 22:40:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A623E20851
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 20:26:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2B1452133D
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 22:40:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aWpVLUoT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aX8TrWkC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727871AbfB1U0P (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Feb 2019 15:26:15 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:34449 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725955AbfB1U0P (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Feb 2019 15:26:15 -0500
-Received: by mail-oi1-f196.google.com with SMTP id g16so17635244oib.1;
-        Thu, 28 Feb 2019 12:26:14 -0800 (PST)
+        id S1726088AbfB1Wkn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Feb 2019 17:40:43 -0500
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:43816 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726087AbfB1Wkm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Feb 2019 17:40:42 -0500
+Received: by mail-qk1-f196.google.com with SMTP id f196so13147833qke.10;
+        Thu, 28 Feb 2019 14:40:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=pwEw+Ub7SciqfMAX7ApmFX2A/aLUk4iWWviAYTfkwKA=;
-        b=aWpVLUoTeaWc7xmNfJSu4dDYCS3lRbUzEt651LCoGwIuBPk7ITGvUQvncRT85Vst2w
-         ebZNX1gXIiJphLZMxYlUkmA2DX7j6tXxQJzqwGiuZYSPmeZ4nL0TICgR4Lw37mExyo53
-         lNjw31klZREmtyU2FgiZGtIQ/tRbSUGSFrf/EIIQnVs7EVbzW+YirrAE2FHmPclMuQMY
-         9VXBelLq/PCPhl2ToUFsl5ROsISVlUUwflo3ol6UBa/CsPIt/E0A52nMRNT+jR+s93ca
-         tez6wswlQEejd+BfUn7CweVNSWV5mI8eXRbjgwBHn6uuw0uklTY0pv2V0e3c6j16t/eS
-         rX4g==
+        bh=XP1Dk868nN7SmykmuwvcXhAda/Hm4YzTrfo6Cbl0hEk=;
+        b=aX8TrWkC5wFckmQ+LDKyUJtGl9yxEcb52ZcMUZ03iRBKDgDPJj6Hfn+6ZbEqzyJy/G
+         zIETQf/KVyXUIr6ccV/Jau1UDyjUec4h/pq9Bi9Tw01GUW35SPmjbPzEsjJUsssByVz4
+         PaLDTndMl/LPk1pnzrBbKjCA4iHY3xWUlsr85ISEyuEhZa4knuHui2AwXxuCHvmoXmTp
+         opOIx+WoaCXlZTSN9HoAsEfKKDSC3Ue4armW5gSq3euxY03tNHr+zdcih9mY3KtYze4f
+         KYkq02NqIOt0GTKUtXL4cHCkPAZyMNkyKLBM83hbZl9UtQJeq4isV+DGaP64SFcFnUB2
+         R28g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=pwEw+Ub7SciqfMAX7ApmFX2A/aLUk4iWWviAYTfkwKA=;
-        b=AbF18n7D1rLxWpcSh/A3duQZnhJB6fNS5pGko7wXiSblY0/l7yWH0UVSGQMkr7LVDA
-         CUpETTpJAJzJyRr8mcCUX2R1Ajuu6urNRqxG3yoXEnVJgHrUrDVrZsYX5PgkbC+fp9Mj
-         KZA2gvZjK1EPiOs8CPQEuASKOolnZeXZLMfW9zyI3Qa2eHdev7TgCIRx1yE1SuB/6cba
-         JGZyrdguG4hHFyq2fg5DuTOHKQWu2NwioVlGAIgcXXmuopo2K7pyOTeXJ0xvarBvasEV
-         ioEZppu/yCxctNasvjR6c/jM+8H8mohPrhHjZu547JeBHYQSCpOO0TYrDVLftYJnwSmb
-         EB7g==
-X-Gm-Message-State: AHQUAub8Df4EaYe3aPLENut7Iv/lA/AUP2BkiENtd612XgqPZdvRRkad
-        31xpzU5MgUaUcBxA/OaK2kCX4zWADh3MU6Dxjb8OvTQ/
-X-Google-Smtp-Source: AHgI3IYpevgJsb5+tA/tQHjxenxLlP7ygqt3PdobKJyL8MOmdmfxgvESZBO0mTqMeVKOwIQkSuVDNUH4MuViAn9RKBQ=
-X-Received: by 2002:aca:3e54:: with SMTP id l81mr1016504oia.10.1551385573532;
- Thu, 28 Feb 2019 12:26:13 -0800 (PST)
+        bh=XP1Dk868nN7SmykmuwvcXhAda/Hm4YzTrfo6Cbl0hEk=;
+        b=ePm9lO9+ze0+nff28OFF6Ox7vjA+yURxl45xCYfXTildEzqWweX9huFqNVT2aQnlIZ
+         NufYKMK16+blf3MI1vx+b7rI51+++8QcDW4L/maAo6Tby/E72zFHsbJfaKeB+vwMeLa6
+         kzxb0bU0CXhjQVi4CaW1MPMlPVVG9D+f6EDK26rGEtUW/7MsTbffRy+ZM7FRTfi6rtrX
+         CndJCe3waFOHnAq/8Mwfv2i2wVkaq8FkcnCo4RhlKz4bqZ4FbDtMY9d+K7XidxR3DEdY
+         r72psNxfXNAIrD2B9ScxihssoVbplW7Cbj4HG9fWoJICrHao42T2Zzw1HMrvo8QO3OZ1
+         J7aw==
+X-Gm-Message-State: APjAAAVBos/j5mD/G48UNmuefSBYsXp/zpSO5WZpnoCXjAIdDzua39hU
+        pvyGNMRv0630yG3pg9qB4qvMGkxYygDLjB2cbNI=
+X-Google-Smtp-Source: APXvYqwkCiCoL5z40a5OIg3/DnlUCPNZKrGOjl7GDIDZP+YfkKkkPVq3a4cn8m+yixLSALF529mpAW1fG6xF0nPW3bU=
+X-Received: by 2002:a37:a38e:: with SMTP id m136mr1517496qke.120.1551393640660;
+ Thu, 28 Feb 2019 14:40:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20190227224642.1069138-1-andriin@fb.com> <20190227224642.1069138-5-andriin@fb.com>
- <797b56c0-2178-a0b1-3070-721c2fd4d38c@fb.com> <CAEf4BzZRHJQEC7Z8JReDeoa1w3DV9dtq-pajOA_RFGYucaRU=Q@mail.gmail.com>
- <44bbdc82-7678-0b8e-bc55-390daf9be4e4@fb.com>
-In-Reply-To: <44bbdc82-7678-0b8e-bc55-390daf9be4e4@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 28 Feb 2019 12:26:02 -0800
-Message-ID: <CAEf4BzZVda=d=xR4+R4-w+VRiLSnrybtgnCH_xZ6mVCy2hHauA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 4/5] btf: fix bug with resolving STRUCT/UNION
- into corresponding FWD
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Andrii Nakryiko <andriin@fb.com>, Kernel Team <Kernel-team@fb.com>,
-        Alexei Starovoitov <ast@fb.com>,
-        "acme@kernel.org" <acme@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>
+References: <20190228184512.198075-1-andriin@fb.com> <20190228184512.198075-4-andriin@fb.com>
+In-Reply-To: <20190228184512.198075-4-andriin@fb.com>
+From:   Song Liu <liu.song.a23@gmail.com>
+Date:   Thu, 28 Feb 2019 14:40:29 -0800
+Message-ID: <CAPhsuW6tDGhi3ROVsLU4j37_Xp7xbV=jnEQ5ce-fV=vdCaJ-BQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/4] bpf: fix formatting, typos, reflow comments
+ in syscall.c, verifier.c
+To:     Andrii Nakryiko <andriin@fb.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>, ast@fb.com,
+        yhs@fb.com, Networking <netdev@vger.kernel.org>,
+        bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Feb 28, 2019 at 11:42 AM Yonghong Song <yhs@fb.com> wrote:
+On Thu, Feb 28, 2019 at 10:59 AM Andrii Nakryiko <andriin@fb.com> wrote:
 >
+> Fix few formatting errors. Fix few typos and reflow long descriptive
+> comments for more even text fill.
 >
->
-> On 2/28/19 11:07 AM, Andrii Nakryiko wrote:
-> > On Thu, Feb 28, 2019 at 10:19 AM Yonghong Song <yhs@fb.com> wrote:
-> >>
-> >>
-> >>
-> >> On 2/27/19 2:46 PM, Andrii Nakryiko wrote:
-> >>> When checking available canonical candidates for struct/union algorithm
-> >>> utilizes btf_dedup_is_equiv to determine if candidate is suitable. This
-> >>> check is not enough when candidate is corresponding FWD for that
-> >>> struct/union, because according to equivalence logic they are
-> >>> equivalent. When it so happens that FWD and STRUCT/UNION end in hashing
-> >>> to the same bucket, it's possible to create remapping loop from FWD to
-> >>> STRUCT and STRUCT to same FWD, which will cause btf_dedup() to loop
-> >>> forever.
-> >>>
-> >>> This patch fixes the issue by additionally checking that type and
-> >>> canonical candidate are strictly equal (utilizing btf_equal_struct).
-> >>
-> >> It looks like btf_equal_struct() checking equality except
-> >> member type id's. Maybe calling it btf_almost_equal_struct() or
-> >> something like that?
-> >
-> > Yes, for struct/union we can't compare types directly, that's what
-> > btf_dedup_is_equiv is doing. I think btf_equal_struct w/ comment
-> > explaining this particular behavior is good enough. If you insist,
-> > though, I'd rather go to something like btf_shallow_equal_struct or
-> > something along those lines.
->
-> btf_shallow_equal_struct() will be fine.
+> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 
-Ok.
+I think we should not change the code for formatting, as these changes make
+git-blame more difficult. How about we only make changes to comments?
 
->
-> >
-> >>
-> >>>
-> >>> Fixes: d5caef5b5655 ("btf: add BTF types deduplication algorithm")
-> >>> Reported-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> >>> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-> >>> ---
-> >>>    tools/lib/bpf/btf.c | 6 +++++-
-> >>>    1 file changed, 5 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> >>> index 6bbb710216e6..53db26d158c9 100644
-> >>> --- a/tools/lib/bpf/btf.c
-> >>> +++ b/tools/lib/bpf/btf.c
-> >>> @@ -2255,7 +2255,7 @@ static void btf_dedup_merge_hypot_map(struct btf_dedup *d)
-> >>>    static int btf_dedup_struct_type(struct btf_dedup *d, __u32 type_id)
-> >>>    {
-> >>>        struct btf_dedup_node *cand_node;
-> >>> -     struct btf_type *t;
-> >>> +     struct btf_type *cand_type, *t;
-> >>>        /* if we don't find equivalent type, then we are canonical */
-> >>>        __u32 new_id = type_id;
-> >>>        __u16 kind;
-> >>> @@ -2275,6 +2275,10 @@ static int btf_dedup_struct_type(struct btf_dedup *d, __u32 type_id)
-> >>>        for_each_dedup_cand(d, h, cand_node) {
-> >>>                int eq;
-> >>>
-> >>> +             cand_type = d->btf->types[cand_node->type_id];
-> >>> +             if (!btf_equal_struct(t, cand_type))
-> >>
-> >> The comment for this btf_equal_struct is not quite right.
-> >> /*
-> >>    * Check structural compatibility of two FUNC_PROTOs, ignoring
-> >> referenced type
-> >>    * IDs. This check is performed during type graph equivalence check and
-> >>    * referenced types equivalence is checked separately.
-> >>    */
-> >> static bool btf_equal_struct(struct btf_type *t1, struct btf_type *t2)
-> >>
-> >> It should be two "struct/union types".
-> >
-> > Yep, good catch, will fix!
-> >
-> >>
-> >>> +                     continue;
-> >>> +
-> >>
-> >> I did not trace the algorithm how infinite loop happens. But the above
-> >
-> > Check the test in follow up patch. It has a minimal example that
-> > triggers this bug. It happens when we have some FWD x, which we
-> > discover that it should be resolved to some STRUCT x (as a result of
-> > equivalence check/resolution of some other struct s, that references
-> > struct x internally). But that struct x might not have been
-> > deduplicated yet, we just record this FWD -> STRUCT mapping so that we
-> > don't lose this connection. Later, once we get to deduplication of
-> > struct x, FWD x will be (in case of hash collision) one possible
-> > candidate to consider for deduplication. At that point,
-> > btf_dedup_is_equiv will consider them equivalent (but they are not
-> > equal (!), that's where the bug is), so we'll try to resolve STRUCT x
-> > -> FWD x, which creates a loop.
-> >
-> > In btf_dedup_merge_hypot_map() that is used to record discovered
-> > "equivalences" during struct/union type graph equivalence check, we
-> > have explicit check to never resolve STRUCT/UNION into equivalent FWD,
-> > so such loop shouldn't happen, except I missed the case of having FWD
-> > as a possible dedup candidate due to hash collision.
-> >
-> >> change is certainly a correct one, you want to do deduplication only
-> >> after everything else (except member types) are euqal?
-> >
-> > Well, if not for special case of FWD == STRUCT/UNION when
-> > deduplicating structs, btf_dedup_is_equiv would be enough, because it
-> > already checks for btf_equal_struct internally, when both types are
-> > struct/union. It's just the special bit at the beginning of is_equiv
-> > check that allows FWD and STRUCT/UNION with the same name to be
-> > declared equivalent, that throws this off.
-> >
-> >>
-> >> If the bug is due to circle in struct->fwd and fwd->struct mappings,
-> >> maybe a simple check whether such circle exists or not before update
-> >> the mapping will also work? I am not proposing this fix, but want
-> >> to understand better the issue.
-> >
-> > That's essentially what we use btf_equal_struct for here, really. We
-> > could equivalently just check BTF_INFO_KIND(t) == BTF_INFO_KIND(cand)
-> > explicitly, but I btf_equal_struct feels a bit more generic and
-> > obviously correct.
->
-> Okay, I see. So the goal is really to prevent processing FWD in the
-> struct/union dedup candidate list. It will be good to summarize
-> the above detailed explanation in commit message.
+Thanks,
+Song
 
-Ok, will try to do this more succinctly.
-
+> ---
+>  kernel/bpf/syscall.c  |   5 +-
+>  kernel/bpf/verifier.c | 169 +++++++++++++++++++++---------------------
+>  2 files changed, 87 insertions(+), 87 deletions(-)
 >
-> With the above suggested changes,
->    Acked-by: Yonghong Song <yhs@fb.com>
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 174581dfe225..5272ba491e00 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -214,6 +214,7 @@ static int bpf_map_init_memlock(struct bpf_map *map)
+>  static void bpf_map_release_memlock(struct bpf_map *map)
+>  {
+>         struct user_struct *user = map->user;
+> +
+>         bpf_uncharge_memlock(user, map->pages);
+>         free_uid(user);
+>  }
+> @@ -299,7 +300,7 @@ static void bpf_map_put_uref(struct bpf_map *map)
+>  }
 >
-> >
-> >>
-> >>
-> >>
-> >>
-> >>>                btf_dedup_clear_hypot_map(d);
-> >>>                eq = btf_dedup_is_equiv(d, type_id, cand_node->type_id);
-> >>>                if (eq < 0)
-> >>>
+>  /* decrement map refcnt and schedule it for freeing via workqueue
+> - * (unrelying map implementation ops->map_free() might sleep)
+> + * (underlying map implementation ops->map_free() might sleep)
+>   */
+>  static void __bpf_map_put(struct bpf_map *map, bool do_idr_lock)
+>  {
+> @@ -1414,7 +1415,7 @@ struct bpf_prog *bpf_prog_inc_not_zero(struct bpf_prog *prog)
+>  EXPORT_SYMBOL_GPL(bpf_prog_inc_not_zero);
+>
+>  bool bpf_prog_get_ok(struct bpf_prog *prog,
+> -                           enum bpf_prog_type *attach_type, bool attach_drv)
+> +                    enum bpf_prog_type *attach_type, bool attach_drv)
+>  {
+>         /* not an attachment, just a refcount inc, always allow */
+>         if (!attach_type)
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 0e4edd7e3c5f..0ee788bfd462 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -39,9 +39,9 @@ static const struct bpf_verifier_ops * const bpf_verifier_ops[] = {
+>  #undef BPF_MAP_TYPE
+>  };
+>
+> -/* bpf_check() is a static code analyzer that walks eBPF program
+> - * instruction by instruction and updates register/stack state.
+> - * All paths of conditional branches are analyzed until 'bpf_exit' insn.
+> +/* bpf_check() is a static code analyzer that walks eBPF program instruction by
+> + * instruction and updates register/stack state. All paths of conditional
+> + * branches are analyzed until 'bpf_exit' insn.
+>   *
+>   * The first pass is depth-first-search to check that the program is a DAG.
+>   * It rejects the following programs:
+> @@ -49,15 +49,15 @@ static const struct bpf_verifier_ops * const bpf_verifier_ops[] = {
+>   * - if loop is present (detected via back-edge)
+>   * - unreachable insns exist (shouldn't be a forest. program = one function)
+>   * - out of bounds or malformed jumps
+> - * The second pass is all possible path descent from the 1st insn.
+> - * Since it's analyzing all pathes through the program, the length of the
+> - * analysis is limited to 64k insn, which may be hit even if total number of
+> - * insn is less then 4K, but there are too many branches that change stack/regs.
+> - * Number of 'branches to be analyzed' is limited to 1k
+> + * The second pass is all possible path descent from the 1st insn. Since it's
+> + * analyzing all pathes through the program, the length of the analysis is
+> + * limited to 64k insn, which may be hit even if total number of insn is less
+> + * than 4K, but there are too many branches that change stack/regs. Number of
+> + * 'branches to be analyzed' is limited to 1k.
+>   *
+>   * On entry to each instruction, each register has a type, and the instruction
+> - * changes the types of the registers depending on instruction semantics.
+> - * If instruction is BPF_MOV64_REG(BPF_REG_1, BPF_REG_5), then type of R5 is
+> + * changes the types of the registers depending on instruction semantics. If
+> + * instruction is BPF_MOV64_REG(BPF_REG_1, BPF_REG_5), then type of R5 is
+>   * copied to R1.
+>   *
+>   * All registers are 64-bit.
+> @@ -66,37 +66,36 @@ static const struct bpf_verifier_ops * const bpf_verifier_ops[] = {
+>   * R6-R9 callee saved registers
+>   * R10 - frame pointer read-only
+>   *
+> - * At the start of BPF program the register R1 contains a pointer to bpf_context
+> - * and has type PTR_TO_CTX.
+> + * At the start of BPF program the register R1 contains a pointer to
+> + * bpf_context and has type PTR_TO_CTX.
+>   *
+>   * Verifier tracks arithmetic operations on pointers in case:
+>   *    BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
+>   *    BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -20),
+> - * 1st insn copies R10 (which has FRAME_PTR) type into R1
+> - * and 2nd arithmetic instruction is pattern matched to recognize
+> - * that it wants to construct a pointer to some element within stack.
+> - * So after 2nd insn, the register R1 has type PTR_TO_STACK
+> - * (and -20 constant is saved for further stack bounds checking).
+> - * Meaning that this reg is a pointer to stack plus known immediate constant.
+> + * 1st insn copies R10 (which has FRAME_PTR) type into R1 and 2nd arithmetic
+> + * instruction is pattern matched to recognize that it wants to construct
+> + * a pointer to some element within stack. So after 2nd insn, the register R1
+> + * has type PTR_TO_STACK (and -20 constant is saved for further stack bounds
+> + * checking). Meaning that this reg is a pointer to stack plus known immediate
+> + * constant.
+>   *
+> - * Most of the time the registers have SCALAR_VALUE type, which
+> - * means the register has some value, but it's not a valid pointer.
+> - * (like pointer plus pointer becomes SCALAR_VALUE type)
+> + * Most of the time the registers have SCALAR_VALUE type, which means the
+> + * register has some value, but it's not a valid pointer (like pointer plus
+> + * pointer becomes SCALAR_VALUE type).
+>   *
+> - * When verifier sees load or store instructions the type of base register
+> - * can be: PTR_TO_MAP_VALUE, PTR_TO_CTX, PTR_TO_STACK, PTR_TO_SOCKET. These are
+> + * When verifier sees load or store instructions the type of base register can
+> + * be: PTR_TO_MAP_VALUE, PTR_TO_CTX, PTR_TO_STACK, PTR_TO_SOCKET. These are
+>   * four pointer types recognized by check_mem_access() function.
+>   *
+>   * PTR_TO_MAP_VALUE means that this register is pointing to 'map element value'
+>   * and the range of [ptr, ptr + map's value_size) is accessible.
+>   *
+> - * registers used to pass values to function calls are checked against
+> + * Registers used to pass values to function calls are checked against
+>   * function argument constraints.
+>   *
+> - * ARG_PTR_TO_MAP_KEY is one of such argument constraints.
+> - * It means that the register type passed to this function must be
+> - * PTR_TO_STACK and it will be used inside the function as
+> - * 'pointer to map element key'
+> + * ARG_PTR_TO_MAP_KEY is one of such argument constraints. It means that the
+> + * register type passed to this function must be PTR_TO_STACK and it will be
+> + * used inside the function as 'pointer to map element key'
+>   *
+>   * For example the argument constraints for bpf_map_lookup_elem():
+>   *   .ret_type = RET_PTR_TO_MAP_VALUE_OR_NULL,
+> @@ -105,8 +104,8 @@ static const struct bpf_verifier_ops * const bpf_verifier_ops[] = {
+>   *
+>   * ret_type says that this function returns 'pointer to map elem value or null'
+>   * function expects 1st argument to be a const pointer to 'struct bpf_map' and
+> - * 2nd argument should be a pointer to stack, which will be used inside
+> - * the helper function as a pointer to map element key.
+> + * 2nd argument should be a pointer to stack, which will be used inside the
+> + * helper function as a pointer to map element key.
+>   *
+>   * On the kernel side the helper function looks like:
+>   * u64 bpf_map_lookup_elem(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5)
+> @@ -115,9 +114,9 @@ static const struct bpf_verifier_ops * const bpf_verifier_ops[] = {
+>   *    void *key = (void *) (unsigned long) r2;
+>   *    void *value;
+>   *
+> - *    here kernel can access 'key' and 'map' pointers safely, knowing that
+> - *    [key, key + map->key_size) bytes are valid and were initialized on
+> - *    the stack of eBPF program.
+> + *    Here kernel can access 'key' and 'map' pointers safely, knowing that
+> + *    [key, key + map->key_size) bytes are valid and were initialized on the
+> + *    stack of eBPF program.
+>   * }
+>   *
+>   * Corresponding eBPF program may look like:
+> @@ -126,21 +125,21 @@ static const struct bpf_verifier_ops * const bpf_verifier_ops[] = {
+>   *    BPF_LD_MAP_FD(BPF_REG_1, map_fd),      // after this insn R1 type is CONST_PTR_TO_MAP
+>   *    BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
+>   * here verifier looks at prototype of map_lookup_elem() and sees:
+> - * .arg1_type == ARG_CONST_MAP_PTR and R1->type == CONST_PTR_TO_MAP, which is ok,
+> - * Now verifier knows that this map has key of R1->map_ptr->key_size bytes
+> + * .arg1_type == ARG_CONST_MAP_PTR and R1->type == CONST_PTR_TO_MAP, which is
+> + * ok. Now verifier knows that this map has key of R1->map_ptr->key_size bytes.
+>   *
+> - * Then .arg2_type == ARG_PTR_TO_MAP_KEY and R2->type == PTR_TO_STACK, ok so far,
+> - * Now verifier checks that [R2, R2 + map's key_size) are within stack limits
+> - * and were initialized prior to this call.
+> - * If it's ok, then verifier allows this BPF_CALL insn and looks at
+> - * .ret_type which is RET_PTR_TO_MAP_VALUE_OR_NULL, so it sets
+> - * R0->type = PTR_TO_MAP_VALUE_OR_NULL which means bpf_map_lookup_elem() function
+> - * returns ether pointer to map value or NULL.
+> + * Then .arg2_type == ARG_PTR_TO_MAP_KEY and R2->type == PTR_TO_STACK, ok so
+> + * far. Now verifier checks that [R2, R2 + map's key_size) are within stack
+> + * limits and were initialized prior to this call. If it's ok, then verifier
+> + * allows this BPF_CALL insn and looks at .ret_type which is
+> + * RET_PTR_TO_MAP_VALUE_OR_NULL, so it sets R0->type = PTR_TO_MAP_VALUE_OR_NULL
+> + * which means bpf_map_lookup_elem() function returns either pointer to a map
+> + * value or NULL.
+>   *
+>   * When type PTR_TO_MAP_VALUE_OR_NULL passes through 'if (reg != 0) goto +off'
+>   * insn, the register holding that pointer in the true branch changes state to
+> - * PTR_TO_MAP_VALUE and the same register changes state to CONST_IMM in the false
+> - * branch. See check_cond_jmp_op().
+> + * PTR_TO_MAP_VALUE and the same register changes state to CONST_IMM in the
+> + * false branch. See check_cond_jmp_op().
+>   *
+>   * After the call R0 is set to return type of the function and registers R1-R5
+>   * are set to NOT_INIT to indicate that they are no longer readable.
+> @@ -148,10 +147,11 @@ static const struct bpf_verifier_ops * const bpf_verifier_ops[] = {
+>   * The following reference types represent a potential reference to a kernel
+>   * resource which, after first being allocated, must be checked and freed by
+>   * the BPF program:
+> - * - PTR_TO_SOCKET_OR_NULL, PTR_TO_SOCKET
+> + * - PTR_TO_SOCKET_OR_NULL
+> + * - PTR_TO_SOCKET
+>   *
+> - * When the verifier sees a helper call return a reference type, it allocates a
+> - * pointer id for the reference and stores it in the current function state.
+> + * When the verifier sees a helper call return a reference type, it allocates
+> + * a pointer id for the reference and stores it in the current function state.
+>   * Similar to the way that PTR_TO_MAP_VALUE_OR_NULL is converted into
+>   * PTR_TO_MAP_VALUE, PTR_TO_SOCKET_OR_NULL becomes PTR_TO_SOCKET when the type
+>   * passes through a NULL-check conditional. For the branch wherein the state is
+> @@ -258,7 +258,7 @@ void bpf_verifier_vlog(struct bpf_verifier_log *log, const char *fmt,
+>                 log->ubuf = NULL;
+>  }
+>
+> -/* log_level controls verbosity level of eBPF verifier.
+> +/* env->log.level controls verbosity level of eBPF verifier.
+>   * bpf_verifier_log_write() is used to dump the verification trace to the log,
+>   * so the user can figure out what's wrong with the program
+>   */
+> @@ -389,7 +389,7 @@ static bool is_release_function(enum bpf_func_id func_id)
+>  static bool is_acquire_function(enum bpf_func_id func_id)
+>  {
+>         return func_id == BPF_FUNC_sk_lookup_tcp ||
+> -               func_id == BPF_FUNC_sk_lookup_udp;
+> +              func_id == BPF_FUNC_sk_lookup_udp;
+>  }
+>
+>  /* string representation of 'enum bpf_reg_type' */
+> @@ -559,39 +559,39 @@ COPY_STATE_FN(reference, acquired_refs, refs, 1)
+>  COPY_STATE_FN(stack, allocated_stack, stack, BPF_REG_SIZE)
+>  #undef COPY_STATE_FN
+>
+> -#define REALLOC_STATE_FN(NAME, COUNT, FIELD, SIZE)                     \
+> -static int realloc_##NAME##_state(struct bpf_func_state *state, int size, \
+> -                                 bool copy_old)                        \
+> -{                                                                      \
+> -       u32 old_size = state->COUNT;                                    \
+> -       struct bpf_##NAME##_state *new_##FIELD;                         \
+> -       int slot = size / SIZE;                                         \
+> -                                                                       \
+> -       if (size <= old_size || !size) {                                \
+> -               if (copy_old)                                           \
+> -                       return 0;                                       \
+> -               state->COUNT = slot * SIZE;                             \
+> -               if (!size && old_size) {                                \
+> -                       kfree(state->FIELD);                            \
+> -                       state->FIELD = NULL;                            \
+> -               }                                                       \
+> -               return 0;                                               \
+> -       }                                                               \
+> +#define REALLOC_STATE_FN(NAME, COUNT, FIELD, SIZE)                          \
+> +static int realloc_##NAME##_state(struct bpf_func_state *state, int size,    \
+> +                                 bool copy_old)                             \
+> +{                                                                           \
+> +       u32 old_size = state->COUNT;                                         \
+> +       struct bpf_##NAME##_state *new_##FIELD;                              \
+> +       int slot = size / SIZE;                                              \
+> +                                                                            \
+> +       if (size <= old_size || !size) {                                     \
+> +               if (copy_old)                                                \
+> +                       return 0;                                            \
+> +               state->COUNT = slot * SIZE;                                  \
+> +               if (!size && old_size) {                                     \
+> +                       kfree(state->FIELD);                                 \
+> +                       state->FIELD = NULL;                                 \
+> +               }                                                            \
+> +               return 0;                                                    \
+> +       }                                                                    \
+>         new_##FIELD = kmalloc_array(slot, sizeof(struct bpf_##NAME##_state), \
+> -                                   GFP_KERNEL);                        \
+> -       if (!new_##FIELD)                                               \
+> -               return -ENOMEM;                                         \
+> -       if (copy_old) {                                                 \
+> -               if (state->FIELD)                                       \
+> -                       memcpy(new_##FIELD, state->FIELD,               \
+> -                              sizeof(*new_##FIELD) * (old_size / SIZE)); \
+> -               memset(new_##FIELD + old_size / SIZE, 0,                \
+> -                      sizeof(*new_##FIELD) * (size - old_size) / SIZE); \
+> -       }                                                               \
+> -       state->COUNT = slot * SIZE;                                     \
+> -       kfree(state->FIELD);                                            \
+> -       state->FIELD = new_##FIELD;                                     \
+> -       return 0;                                                       \
+> +                                   GFP_KERNEL);                             \
+> +       if (!new_##FIELD)                                                    \
+> +               return -ENOMEM;                                              \
+> +       if (copy_old) {                                                      \
+> +               if (state->FIELD)                                            \
+> +                       memcpy(new_##FIELD, state->FIELD,                    \
+> +                              sizeof(*new_##FIELD) * (old_size / SIZE));    \
+> +               memset(new_##FIELD + old_size / SIZE, 0,                     \
+> +                      sizeof(*new_##FIELD) * (size - old_size) / SIZE);     \
+> +       }                                                                    \
+> +       state->COUNT = slot * SIZE;                                          \
+> +       kfree(state->FIELD);                                                 \
+> +       state->FIELD = new_##FIELD;                                          \
+> +       return 0;                                                            \
+>  }
+>  /* realloc_reference_state() */
+>  REALLOC_STATE_FN(reference, acquired_refs, refs, 1)
+> @@ -617,7 +617,7 @@ static int realloc_func_state(struct bpf_func_state *state, int stack_size,
+>
+>  /* Acquire a pointer id from the env and update the state->refs to include
+>   * this new pointer reference.
+> - * On success, returns a valid pointer id to associate with the register
+> + * On success, returns a valid pointer id to associate with the register.
+>   * On failure, returns a negative errno.
+>   */
+>  static int acquire_reference_state(struct bpf_verifier_env *env, int insn_idx)
+> @@ -714,7 +714,7 @@ static int copy_verifier_state(struct bpf_verifier_state *dst_state,
+>         struct bpf_func_state *dst;
+>         int i, err;
+>
+> -       /* if dst has more stack frames then src frame, free them */
+> +       /* if dst has more stack frames than src frame, free them */
+>         for (i = src->curframe + 1; i <= dst_state->curframe; i++) {
+>                 free_func_state(dst_state->frame[i]);
+>                 dst_state->frame[i] = NULL;
+> @@ -863,8 +863,7 @@ static bool reg_is_init_pkt_pointer(const struct bpf_reg_state *reg,
+>                                     enum bpf_reg_type which)
+>  {
+>         /* The register can already have a range from prior markings.
+> -        * This is fine as long as it hasn't been advanced from its
+> -        * origin.
+> +        * This is fine as long as it hasn't been advanced from its origin.
+>          */
+>         return reg->type == which &&
+>                reg->id == 0 &&
+> --
+> 2.17.1
+>
