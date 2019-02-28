@@ -5,58 +5,58 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6753CC4360F
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 01:02:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96045C4360F
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 01:02:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 33B28218A5
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 01:02:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B56620842
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 01:02:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eSRwI3M1"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tij1zkGD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730499AbfB1BCE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Feb 2019 20:02:04 -0500
-Received: from mail-qt1-f201.google.com ([209.85.160.201]:54521 "EHLO
-        mail-qt1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729918AbfB1BCD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Feb 2019 20:02:03 -0500
-Received: by mail-qt1-f201.google.com with SMTP id j22so17041882qtq.21
-        for <bpf@vger.kernel.org>; Wed, 27 Feb 2019 17:02:02 -0800 (PST)
+        id S1730587AbfB1BCJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Feb 2019 20:02:09 -0500
+Received: from mail-pl1-f201.google.com ([209.85.214.201]:54533 "EHLO
+        mail-pl1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729918AbfB1BCF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Feb 2019 20:02:05 -0500
+Received: by mail-pl1-f201.google.com with SMTP id j95so13722383plb.21
+        for <bpf@vger.kernel.org>; Wed, 27 Feb 2019 17:02:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=95n6QdsqPcNtIuspkuuuFUNsPItQedo1bHA2bDFb1cU=;
-        b=eSRwI3M1/+mBRZgsYpWs3gKhp/AP+4HrYEMlAx5EB4GLanDunplR7XVUI+U0uut+s2
-         AhHanYN9UESunxNUrahe9hxGm5hh9O44DBjytxazdZu5zrCIL+H+6TGAJWZt08xqxUdG
-         nfGUossw9VvV++32P9F4oTpVKIKLhNqr23FhAURYzTmQ/WvX/qN9Jc/LHAIWsO7aNo1E
-         VL351efh7o2HybR1vfca+octAW+oC7RO6HC5Ah7F8fU81GpuKQu8nqsME2re+HQq7Q6c
-         PzI1KVfP4fKCIiifoM/STMVGSdKzTQ77xCcJrluV0Ree4uantDQk1yY2jzXH1c9sKCCg
-         FB9w==
+        bh=j6h+GwQ2theo5wHt3W6KddG7aVIYxunWGzSUi039IPg=;
+        b=tij1zkGDvpUjEqk1SxZr5+1Gg32MzF1+ovhpbtyAmmqMqBJtdw6ebfwEyvPBVmmbjS
+         4eE5tnT8XJSjHTmksehyOPvF4Tjz62YzhDlgRnUcK1Vj0km/p6/5/2hrgcITkxymyS71
+         qBJVk2zyNbY5FQmUWNr4dlhKjs382fHOmloseRRImmC6kFhsAtSlsOXdJijqjAE7frbk
+         Vc7pDOO1KeSziNUkkqPWHqK2Jp+UuquMyyLak2RNeyvHg9uRXUHy8/BU9zMIrk4RzJ+K
+         mUo1sRpAaiJfEDdlJ0OnulWnObTU2CAAfFsKnQLwEdIVYpI1dSQilfF2dV4xEybH1seD
+         lZIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=95n6QdsqPcNtIuspkuuuFUNsPItQedo1bHA2bDFb1cU=;
-        b=aJ2D+0TRAKcAZMJnK9VPlaL600rTww8jliKfo20FLPMG5VwS0mYz92cTlSPRL9e9gn
-         M9uCjmTGnEpyliTgAOKsqQ435rtlwPS5zqBrbPwDDnIE/sjkarSsAfUa0BPG87OxW4iw
-         UGbpaO1yzshQfa8knMTeVxhVcji+XA6oRylelRKcFpLRbiQkBXF2wl9+0PVfppRD5av+
-         HyyVimkrszcE/VPx85LfF/w9X8pCsc2fH100BFoDbo+2mDd8ciKntWxagmnPnEUGnDKL
-         W4n+MafaVFBQzkF0kkWh1RXmFe6hTjtmcHqTgpSa02bv/VKSGGFkCokWJhBeDXA8tlTo
-         xAeQ==
-X-Gm-Message-State: APjAAAUrz6uthIxw0zyJBbEjiVRpO9qWE5jyc57vdivFh3XN4SZ4Lrxt
-        9lgIYVgcBIujbfvjbICFSFqqZ0c=
-X-Google-Smtp-Source: APXvYqxCkDq/+KZY/+fAL/eUaPVpe/oWjkexPG1HanaD15xbfl5eSj3J174gHb5W1AOrnANgw1ml0bk=
-X-Received: by 2002:a0c:d95d:: with SMTP id t29mr2487658qvj.55.1551315722043;
- Wed, 27 Feb 2019 17:02:02 -0800 (PST)
-Date:   Wed, 27 Feb 2019 17:01:51 -0800
+        bh=j6h+GwQ2theo5wHt3W6KddG7aVIYxunWGzSUi039IPg=;
+        b=OVyJXL8WIibWG9B1bGOP1zxN9Lqu9O57GaKz/AfaYLO87LL4fGh1jdHL2aWOeheFxz
+         /BfOyF2KjBTnm5Zfhr5Gy5kvRMnCuuppD5oi4uzcNNLTo84hjtgzjXnBP2M2zzBiDmOe
+         nKb1pg5mHQNa+KK2vwaEDYkOsIJmxVHvol0vu7QsCecqZVC8z/Fo0qMt+nQv+3gL/Uyr
+         M7Ifr8wmUe3juVgavGyjH7ahfqfGPebdzXHhYHi1LNaqfW+vCs3lXqMsx/DYRQMX3Z49
+         3wtUR+cAsyCCe8IwBFngUJpu6s7eoRVWkm7V8/YNg4mJW25Xs+B+PNNSDSPy0+uB5wqc
+         Oifg==
+X-Gm-Message-State: AHQUAuabGeBmmHM8gMpKMnRvh5DgimOWygTz+dhDnWtv6aXSYlabUsqy
+        Xj4YrzrGyrhXt6ug14Uh6qtrqoM=
+X-Google-Smtp-Source: AHgI3IYDVE3kAkUN27BASzEcpzXMPXRz37cQfSnWDMGuqMcogNJP5eLDGvoDnXV2Y1q3v0oKI6daOhk=
+X-Received: by 2002:a17:902:9891:: with SMTP id s17mr1622476plp.5.1551315724646;
+ Wed, 27 Feb 2019 17:02:04 -0800 (PST)
+Date:   Wed, 27 Feb 2019 17:01:52 -0800
 In-Reply-To: <20190228010156.82981-1-sdf@google.com>
-Message-Id: <20190228010156.82981-2-sdf@google.com>
+Message-Id: <20190228010156.82981-3-sdf@google.com>
 Mime-Version: 1.0
 References: <20190228010156.82981-1-sdf@google.com>
 X-Mailer: git-send-email 2.21.0.rc2.261.ga7da99ff1b-goog
-Subject: [PATCH bpf-next 2/7] selftests: bpf: break up test_progs - pkt access
+Subject: [PATCH bpf-next 3/7] selftests: bpf: break up test_progs - xdp
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
@@ -67,165 +67,398 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Move pkt access prog tests into separate files.
+Move xdp prog tests into separate files.
 
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- .../selftests/bpf/prog_tests/pkt_access.c     | 29 +++++++++++
- .../selftests/bpf/prog_tests/pkt_md_access.c  | 24 +++++++++
- tools/testing/selftests/bpf/test_progs.c      | 51 -------------------
- 3 files changed, 53 insertions(+), 51 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/pkt_access.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/pkt_md_access.c
+ tools/testing/selftests/bpf/prog_tests/xdp.c  |  46 +++++
+ .../bpf/prog_tests/xdp_adjust_tail.c          |  31 ++++
+ .../selftests/bpf/prog_tests/xdp_noinline.c   |  82 +++++++++
+ tools/testing/selftests/bpf/test_progs.c      | 162 ------------------
+ tools/testing/selftests/bpf/test_progs.h      |   4 +
+ 5 files changed, 163 insertions(+), 162 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_noinline.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/pkt_access.c b/tools/testing/selftests/bpf/prog_tests/pkt_access.c
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp.c b/tools/testing/selftests/bpf/prog_tests/xdp.c
 new file mode 100644
-index 000000000000..4ecfd721a044
+index 000000000000..a74167289545
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/pkt_access.c
-@@ -0,0 +1,29 @@
++++ b/tools/testing/selftests/bpf/prog_tests/xdp.c
+@@ -0,0 +1,46 @@
 +// SPDX-License-Identifier: GPL-2.0
 +#include <test_progs.h>
 +
-+void test_pkt_access(void)
++void test_xdp(void)
 +{
-+	const char *file = "./test_pkt_access.o";
++	struct vip key4 = {.protocol = 6, .family = AF_INET};
++	struct vip key6 = {.protocol = 6, .family = AF_INET6};
++	struct iptnl_info value4 = {.family = AF_INET};
++	struct iptnl_info value6 = {.family = AF_INET6};
++	const char *file = "./test_xdp.o";
 +	struct bpf_object *obj;
-+	__u32 duration, retval;
-+	int err, prog_fd;
++	char buf[128];
++	struct ipv6hdr *iph6 = (void *)buf + sizeof(struct ethhdr);
++	struct iphdr *iph = (void *)buf + sizeof(struct ethhdr);
++	__u32 duration, retval, size;
++	int err, prog_fd, map_fd;
 +
-+	err = bpf_prog_load(file, BPF_PROG_TYPE_SCHED_CLS, &obj, &prog_fd);
++	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
 +	if (err) {
 +		error_cnt++;
 +		return;
 +	}
 +
-+	err = bpf_prog_test_run(prog_fd, 100000, &pkt_v4, sizeof(pkt_v4),
-+				NULL, NULL, &retval, &duration);
-+	CHECK(err || retval, "ipv4",
-+	      "err %d errno %d retval %d duration %d\n",
-+	      err, errno, retval, duration);
++	map_fd = bpf_find_map(__func__, obj, "vip2tnl");
++	if (map_fd < 0)
++		goto out;
++	bpf_map_update_elem(map_fd, &key4, &value4, 0);
++	bpf_map_update_elem(map_fd, &key6, &value6, 0);
 +
-+	err = bpf_prog_test_run(prog_fd, 100000, &pkt_v6, sizeof(pkt_v6),
-+				NULL, NULL, &retval, &duration);
-+	CHECK(err || retval, "ipv6",
-+	      "err %d errno %d retval %d duration %d\n",
-+	      err, errno, retval, duration);
++	err = bpf_prog_test_run(prog_fd, 1, &pkt_v4, sizeof(pkt_v4),
++				buf, &size, &retval, &duration);
++
++	CHECK(err || retval != XDP_TX || size != 74 ||
++	      iph->protocol != IPPROTO_IPIP, "ipv4",
++	      "err %d errno %d retval %d size %d\n",
++	      err, errno, retval, size);
++
++	err = bpf_prog_test_run(prog_fd, 1, &pkt_v6, sizeof(pkt_v6),
++				buf, &size, &retval, &duration);
++	CHECK(err || retval != XDP_TX || size != 114 ||
++	      iph6->nexthdr != IPPROTO_IPV6, "ipv6",
++	      "err %d errno %d retval %d size %d\n",
++	      err, errno, retval, size);
++out:
 +	bpf_object__close(obj);
 +}
-diff --git a/tools/testing/selftests/bpf/prog_tests/pkt_md_access.c b/tools/testing/selftests/bpf/prog_tests/pkt_md_access.c
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
 new file mode 100644
-index 000000000000..ac0d43435806
+index 000000000000..922aa0a19764
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/pkt_md_access.c
-@@ -0,0 +1,24 @@
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
+@@ -0,0 +1,31 @@
 +// SPDX-License-Identifier: GPL-2.0
 +#include <test_progs.h>
 +
-+void test_pkt_md_access(void)
++void test_xdp_adjust_tail(void)
 +{
-+	const char *file = "./test_pkt_md_access.o";
++	const char *file = "./test_adjust_tail.o";
 +	struct bpf_object *obj;
-+	__u32 duration, retval;
++	char buf[128];
++	__u32 duration, retval, size;
 +	int err, prog_fd;
 +
-+	err = bpf_prog_load(file, BPF_PROG_TYPE_SCHED_CLS, &obj, &prog_fd);
++	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
 +	if (err) {
 +		error_cnt++;
 +		return;
 +	}
 +
-+	err = bpf_prog_test_run(prog_fd, 10, &pkt_v4, sizeof(pkt_v4),
-+				NULL, NULL, &retval, &duration);
-+	CHECK(err || retval, "",
-+	      "err %d errno %d retval %d duration %d\n",
-+	      err, errno, retval, duration);
++	err = bpf_prog_test_run(prog_fd, 1, &pkt_v4, sizeof(pkt_v4),
++				buf, &size, &retval, &duration);
 +
++	CHECK(err || retval != XDP_DROP,
++	      "ipv4", "err %d errno %d retval %d size %d\n",
++	      err, errno, retval, size);
++
++	err = bpf_prog_test_run(prog_fd, 1, &pkt_v6, sizeof(pkt_v6),
++				buf, &size, &retval, &duration);
++	CHECK(err || retval != XDP_TX || size != 54,
++	      "ipv6", "err %d errno %d retval %d size %d\n",
++	      err, errno, retval, size);
++	bpf_object__close(obj);
++}
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_noinline.c b/tools/testing/selftests/bpf/prog_tests/xdp_noinline.c
+new file mode 100644
+index 000000000000..09e6b46f5515
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_noinline.c
+@@ -0,0 +1,82 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++
++void test_xdp_noinline(void)
++{
++	const char *file = "./test_xdp_noinline.o";
++	unsigned int nr_cpus = bpf_num_possible_cpus();
++	struct vip key = {.protocol = 6};
++	struct vip_meta {
++		__u32 flags;
++		__u32 vip_num;
++	} value = {.vip_num = VIP_NUM};
++	__u32 stats_key = VIP_NUM;
++	struct vip_stats {
++		__u64 bytes;
++		__u64 pkts;
++	} stats[nr_cpus];
++	struct real_definition {
++		union {
++			__be32 dst;
++			__be32 dstv6[4];
++		};
++		__u8 flags;
++	} real_def = {.dst = MAGIC_VAL};
++	__u32 ch_key = 11, real_num = 3;
++	__u32 duration, retval, size;
++	int err, i, prog_fd, map_fd;
++	__u64 bytes = 0, pkts = 0;
++	struct bpf_object *obj;
++	char buf[128];
++	u32 *magic = (u32 *)buf;
++
++	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
++	if (err) {
++		error_cnt++;
++		return;
++	}
++
++	map_fd = bpf_find_map(__func__, obj, "vip_map");
++	if (map_fd < 0)
++		goto out;
++	bpf_map_update_elem(map_fd, &key, &value, 0);
++
++	map_fd = bpf_find_map(__func__, obj, "ch_rings");
++	if (map_fd < 0)
++		goto out;
++	bpf_map_update_elem(map_fd, &ch_key, &real_num, 0);
++
++	map_fd = bpf_find_map(__func__, obj, "reals");
++	if (map_fd < 0)
++		goto out;
++	bpf_map_update_elem(map_fd, &real_num, &real_def, 0);
++
++	err = bpf_prog_test_run(prog_fd, NUM_ITER, &pkt_v4, sizeof(pkt_v4),
++				buf, &size, &retval, &duration);
++	CHECK(err || retval != 1 || size != 54 ||
++	      *magic != MAGIC_VAL, "ipv4",
++	      "err %d errno %d retval %d size %d magic %x\n",
++	      err, errno, retval, size, *magic);
++
++	err = bpf_prog_test_run(prog_fd, NUM_ITER, &pkt_v6, sizeof(pkt_v6),
++				buf, &size, &retval, &duration);
++	CHECK(err || retval != 1 || size != 74 ||
++	      *magic != MAGIC_VAL, "ipv6",
++	      "err %d errno %d retval %d size %d magic %x\n",
++	      err, errno, retval, size, *magic);
++
++	map_fd = bpf_find_map(__func__, obj, "stats");
++	if (map_fd < 0)
++		goto out;
++	bpf_map_lookup_elem(map_fd, &stats_key, stats);
++	for (i = 0; i < nr_cpus; i++) {
++		bytes += stats[i].bytes;
++		pkts += stats[i].pkts;
++	}
++	if (bytes != MAGIC_BYTES * NUM_ITER * 2 || pkts != NUM_ITER * 2) {
++		error_cnt++;
++		printf("test_xdp_noinline:FAIL:stats %lld %lld\n", bytes, pkts);
++	}
++out:
 +	bpf_object__close(obj);
 +}
 diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index e49a1e20dc63..91bb5c8a97c9 100644
+index 91bb5c8a97c9..cdf515dfaeed 100644
 --- a/tools/testing/selftests/bpf/test_progs.c
 +++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -39,33 +39,6 @@ int bpf_find_map(const char *test, struct bpf_object *obj, const char *name)
- 	return bpf_map__fd(map);
+@@ -86,85 +86,6 @@ static void test_prog_run_xattr(void)
+ 	bpf_object__close(obj);
  }
  
--static void test_pkt_access(void)
+-static void test_xdp(void)
 -{
--	const char *file = "./test_pkt_access.o";
+-	struct vip key4 = {.protocol = 6, .family = AF_INET};
+-	struct vip key6 = {.protocol = 6, .family = AF_INET6};
+-	struct iptnl_info value4 = {.family = AF_INET};
+-	struct iptnl_info value6 = {.family = AF_INET6};
+-	const char *file = "./test_xdp.o";
 -	struct bpf_object *obj;
--	__u32 duration, retval;
--	int err, prog_fd;
+-	char buf[128];
+-	struct ipv6hdr *iph6 = (void *)buf + sizeof(struct ethhdr);
+-	struct iphdr *iph = (void *)buf + sizeof(struct ethhdr);
+-	__u32 duration, retval, size;
+-	int err, prog_fd, map_fd;
 -
--	err = bpf_prog_load(file, BPF_PROG_TYPE_SCHED_CLS, &obj, &prog_fd);
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
 -	if (err) {
 -		error_cnt++;
 -		return;
 -	}
 -
--	err = bpf_prog_test_run(prog_fd, 100000, &pkt_v4, sizeof(pkt_v4),
--				NULL, NULL, &retval, &duration);
--	CHECK(err || retval, "ipv4",
--	      "err %d errno %d retval %d duration %d\n",
--	      err, errno, retval, duration);
+-	map_fd = bpf_find_map(__func__, obj, "vip2tnl");
+-	if (map_fd < 0)
+-		goto out;
+-	bpf_map_update_elem(map_fd, &key4, &value4, 0);
+-	bpf_map_update_elem(map_fd, &key6, &value6, 0);
 -
--	err = bpf_prog_test_run(prog_fd, 100000, &pkt_v6, sizeof(pkt_v6),
--				NULL, NULL, &retval, &duration);
--	CHECK(err || retval, "ipv6",
--	      "err %d errno %d retval %d duration %d\n",
--	      err, errno, retval, duration);
+-	err = bpf_prog_test_run(prog_fd, 1, &pkt_v4, sizeof(pkt_v4),
+-				buf, &size, &retval, &duration);
+-
+-	CHECK(err || retval != XDP_TX || size != 74 ||
+-	      iph->protocol != IPPROTO_IPIP, "ipv4",
+-	      "err %d errno %d retval %d size %d\n",
+-	      err, errno, retval, size);
+-
+-	err = bpf_prog_test_run(prog_fd, 1, &pkt_v6, sizeof(pkt_v6),
+-				buf, &size, &retval, &duration);
+-	CHECK(err || retval != XDP_TX || size != 114 ||
+-	      iph6->nexthdr != IPPROTO_IPV6, "ipv6",
+-	      "err %d errno %d retval %d size %d\n",
+-	      err, errno, retval, size);
+-out:
 -	bpf_object__close(obj);
 -}
 -
- static void test_prog_run_xattr(void)
- {
- 	const char *file = "./test_pkt_access.o";
-@@ -647,28 +620,6 @@ static void test_bpf_obj_id(void)
- 		bpf_object__close(objs[i]);
- }
- 
--static void test_pkt_md_access(void)
+-static void test_xdp_adjust_tail(void)
 -{
--	const char *file = "./test_pkt_md_access.o";
+-	const char *file = "./test_adjust_tail.o";
 -	struct bpf_object *obj;
--	__u32 duration, retval;
+-	char buf[128];
+-	__u32 duration, retval, size;
 -	int err, prog_fd;
 -
--	err = bpf_prog_load(file, BPF_PROG_TYPE_SCHED_CLS, &obj, &prog_fd);
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
 -	if (err) {
 -		error_cnt++;
 -		return;
 -	}
 -
--	err = bpf_prog_test_run(prog_fd, 10, &pkt_v4, sizeof(pkt_v4),
--				NULL, NULL, &retval, &duration);
--	CHECK(err || retval, "",
--	      "err %d errno %d retval %d duration %d\n",
--	      err, errno, retval, duration);
+-	err = bpf_prog_test_run(prog_fd, 1, &pkt_v4, sizeof(pkt_v4),
+-				buf, &size, &retval, &duration);
 -
+-	CHECK(err || retval != XDP_DROP,
+-	      "ipv4", "err %d errno %d retval %d size %d\n",
+-	      err, errno, retval, size);
+-
+-	err = bpf_prog_test_run(prog_fd, 1, &pkt_v6, sizeof(pkt_v6),
+-				buf, &size, &retval, &duration);
+-	CHECK(err || retval != XDP_TX || size != 54,
+-	      "ipv6", "err %d errno %d retval %d size %d\n",
+-	      err, errno, retval, size);
 -	bpf_object__close(obj);
 -}
 -
- static void test_obj_name(void)
+-
+-
+-#define MAGIC_VAL 0x1234
+-#define NUM_ITER 100000
+-#define VIP_NUM 5
+-
+ static void test_l4lb(const char *file)
  {
- 	struct {
-@@ -2094,7 +2045,6 @@ int main(void)
- #define CALL
+ 	unsigned int nr_cpus = bpf_num_possible_cpus();
+@@ -253,86 +174,6 @@ static void test_l4lb_all(void)
+ 	test_l4lb(file2);
+ }
+ 
+-static void test_xdp_noinline(void)
+-{
+-	const char *file = "./test_xdp_noinline.o";
+-	unsigned int nr_cpus = bpf_num_possible_cpus();
+-	struct vip key = {.protocol = 6};
+-	struct vip_meta {
+-		__u32 flags;
+-		__u32 vip_num;
+-	} value = {.vip_num = VIP_NUM};
+-	__u32 stats_key = VIP_NUM;
+-	struct vip_stats {
+-		__u64 bytes;
+-		__u64 pkts;
+-	} stats[nr_cpus];
+-	struct real_definition {
+-		union {
+-			__be32 dst;
+-			__be32 dstv6[4];
+-		};
+-		__u8 flags;
+-	} real_def = {.dst = MAGIC_VAL};
+-	__u32 ch_key = 11, real_num = 3;
+-	__u32 duration, retval, size;
+-	int err, i, prog_fd, map_fd;
+-	__u64 bytes = 0, pkts = 0;
+-	struct bpf_object *obj;
+-	char buf[128];
+-	u32 *magic = (u32 *)buf;
+-
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
+-	if (err) {
+-		error_cnt++;
+-		return;
+-	}
+-
+-	map_fd = bpf_find_map(__func__, obj, "vip_map");
+-	if (map_fd < 0)
+-		goto out;
+-	bpf_map_update_elem(map_fd, &key, &value, 0);
+-
+-	map_fd = bpf_find_map(__func__, obj, "ch_rings");
+-	if (map_fd < 0)
+-		goto out;
+-	bpf_map_update_elem(map_fd, &ch_key, &real_num, 0);
+-
+-	map_fd = bpf_find_map(__func__, obj, "reals");
+-	if (map_fd < 0)
+-		goto out;
+-	bpf_map_update_elem(map_fd, &real_num, &real_def, 0);
+-
+-	err = bpf_prog_test_run(prog_fd, NUM_ITER, &pkt_v4, sizeof(pkt_v4),
+-				buf, &size, &retval, &duration);
+-	CHECK(err || retval != 1 || size != 54 ||
+-	      *magic != MAGIC_VAL, "ipv4",
+-	      "err %d errno %d retval %d size %d magic %x\n",
+-	      err, errno, retval, size, *magic);
+-
+-	err = bpf_prog_test_run(prog_fd, NUM_ITER, &pkt_v6, sizeof(pkt_v6),
+-				buf, &size, &retval, &duration);
+-	CHECK(err || retval != 1 || size != 74 ||
+-	      *magic != MAGIC_VAL, "ipv6",
+-	      "err %d errno %d retval %d size %d magic %x\n",
+-	      err, errno, retval, size, *magic);
+-
+-	map_fd = bpf_find_map(__func__, obj, "stats");
+-	if (map_fd < 0)
+-		goto out;
+-	bpf_map_lookup_elem(map_fd, &stats_key, stats);
+-	for (i = 0; i < nr_cpus; i++) {
+-		bytes += stats[i].bytes;
+-		pkts += stats[i].pkts;
+-	}
+-	if (bytes != MAGIC_BYTES * NUM_ITER * 2 || pkts != NUM_ITER * 2) {
+-		error_cnt++;
+-		printf("test_xdp_noinline:FAIL:stats %lld %lld\n", bytes, pkts);
+-	}
+-out:
+-	bpf_object__close(obj);
+-}
+-
+ static void test_tcp_estats(void)
+ {
+ 	const char *file = "./test_tcp_estats.o";
+@@ -2046,10 +1887,7 @@ int main(void)
  #include <prog_tests/tests.h>
  #undef CALL
--	test_pkt_access();
  	test_prog_run_xattr();
- 	test_xdp();
- 	test_xdp_adjust_tail();
-@@ -2102,7 +2052,6 @@ int main(void)
- 	test_xdp_noinline();
+-	test_xdp();
+-	test_xdp_adjust_tail();
+ 	test_l4lb_all();
+-	test_xdp_noinline();
  	test_tcp_estats();
  	test_bpf_obj_id();
--	test_pkt_md_access();
  	test_obj_name();
- 	test_tp_attach_query();
- 	test_stacktrace_map();
+diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
+index 8b79ab3e3042..94e94ae87483 100644
+--- a/tools/testing/selftests/bpf/test_progs.h
++++ b/tools/testing/selftests/bpf/test_progs.h
+@@ -78,4 +78,8 @@ extern struct ipv6_packet pkt_v6;
+ #define CHECK_ATTR(condition, tag, format...) \
+ 	_CHECK(condition, tag, tattr.duration, format)
+ 
++#define MAGIC_VAL 0x1234
++#define NUM_ITER 100000
++#define VIP_NUM 5
++
+ int bpf_find_map(const char *test, struct bpf_object *obj, const char *name);
 -- 
 2.21.0.rc2.261.ga7da99ff1b-goog
 
