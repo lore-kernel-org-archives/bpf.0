@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6244AC43381
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:32:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A37EEC10F00
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:33:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2EEC320C01
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:32:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 67CDB20C01
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:33:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1551367955;
-	bh=33XJdYPXOXpKe8qlir1XCsIXPA+I3yWBBG5d6vjhHko=;
+	s=default; t=1551368017;
+	bh=AnhWVgnVb0OGBs6aSQS24Wxbaos0WWg4rNVPGSnLip0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=gNI7SzvGzukeWm8k6AmpYnHJZWrQoYPnISwLsFntlLP7iIvmODD08AGRzwbb/hftq
-	 QA3Qk5dXIaN3U1CKZJydjWVqVTN7yr3PiJBFXwPMhwCOq1VVCxKVkXaj2xVWyBXQki
-	 B2hYvxnv5ozfYo1bnNZToSwvvAys9gNZ/VcMGVXI=
+	b=0ofc31LIVILzmcJA2SJM0jMJUM3N5ZJ917A+EhAmA+zdFHGXLbhfVoSvenvfcd5ks
+	 qLwHM8OkbRFQAwDm44P2Q2SiMYC96qBIUari0zSjnTPQmQgm+1vUaF5009Af1mA74I
+	 LK1q/2VAB5GsH/RpkHZXQaeoKNh3saPoSP58A5cM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387937AbfB1PcO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Feb 2019 10:32:14 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41444 "EHLO mail.kernel.org"
+        id S1731285AbfB1Pd3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Feb 2019 10:33:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41032 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733307AbfB1PJB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Feb 2019 10:09:01 -0500
+        id S1733061AbfB1PIm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Feb 2019 10:08:42 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 02C36218AE;
-        Thu, 28 Feb 2019 15:08:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4B39A218CD;
+        Thu, 28 Feb 2019 15:08:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1551366539;
-        bh=33XJdYPXOXpKe8qlir1XCsIXPA+I3yWBBG5d6vjhHko=;
+        s=default; t=1551366522;
+        bh=AnhWVgnVb0OGBs6aSQS24Wxbaos0WWg4rNVPGSnLip0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zu5BoJrs6sJZUmXfQ2NOswgkZddMiPrqj75O4WV3/28dxNAfvapUQqtUH/uJ9UYe5
-         BSbDUA+xeGzB8Shkg1pIaBZPkLLIPG7fsaaCvXx9d7ZDQbMRa+E8avH1Ufaarn2iu+
-         94W3No0NUdOjF+vDzN//dMiYzRgop5sacQOnAlaA=
+        b=js8bh34wNhISjJRW0heusUyqzyIQ9jo4hFBPHdixYwld3KBNGASr8HjFreoZyrb+T
+         1co6Q1VcJYSnEN78ydXs8QD0fxFcHb7cHOJxUjMRpbFID7CZjYrnitoRkoDwAl8KXa
+         9OEiz3vETlpT4qZ3z0miAt9NdlZO4sX0uDQ8RmJY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jakub Sitnicki <jakub@cloudflare.com>,
+Cc:     Yafang Shao <laoar.shao@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.20 29/81] sk_msg: Always cancel strp work before freeing the psock
-Date:   Thu, 28 Feb 2019 10:07:21 -0500
-Message-Id: <20190228150813.10256-29-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.20 17/81] bpf: sock recvbuff must be limited by rmem_max in bpf_setsockopt()
+Date:   Thu, 28 Feb 2019 10:07:09 -0500
+Message-Id: <20190228150813.10256-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190228150813.10256-1-sashal@kernel.org>
 References: <20190228150813.10256-1-sashal@kernel.org>
@@ -57,97 +58,40 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jakub Sitnicki <jakub@cloudflare.com>
+From: Yafang Shao <laoar.shao@gmail.com>
 
-[ Upstream commit 1d79895aef18fa05789995d86d523c9b2ee58a02 ]
+[ Upstream commit c9e4576743eeda8d24dedc164d65b78877f9a98c ]
 
-Despite having stopped the parser, we still need to deinitialize it
-by calling strp_done so that it cancels its work. Otherwise the worker
-thread can run after we have freed the parser, and attempt to access
-its workqueue resulting in a use-after-free:
+When sock recvbuff is set by bpf_setsockopt(), the value must by
+limited by rmem_max. It is the same with sendbuff.
 
-==================================================================
-BUG: KASAN: use-after-free in pwq_activate_delayed_work+0x1b/0x1d0
-Read of size 8 at addr ffff888069975240 by task kworker/u2:2/93
-
-CPU: 0 PID: 93 Comm: kworker/u2:2 Not tainted 5.0.0-rc2-00335-g28f9d1a3d4fe-dirty #14
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.10.2-2.fc27 04/01/2014
-Workqueue:            (null) (kstrp)
-Call Trace:
- print_address_description+0x6e/0x2b0
- ? pwq_activate_delayed_work+0x1b/0x1d0
- kasan_report+0xfd/0x177
- ? pwq_activate_delayed_work+0x1b/0x1d0
- ? pwq_activate_delayed_work+0x1b/0x1d0
- pwq_activate_delayed_work+0x1b/0x1d0
- ? process_one_work+0x4aa/0x660
- pwq_dec_nr_in_flight+0x9b/0x100
- worker_thread+0x82/0x680
- ? process_one_work+0x660/0x660
- kthread+0x1b9/0x1e0
- ? __kthread_create_on_node+0x250/0x250
- ret_from_fork+0x1f/0x30
-
-Allocated by task 111:
- sk_psock_init+0x3c/0x1b0
- sock_map_link.isra.2+0x103/0x4b0
- sock_map_update_common+0x94/0x270
- sock_map_update_elem+0x145/0x160
- __se_sys_bpf+0x152e/0x1e10
- do_syscall_64+0xb2/0x3e0
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
-Freed by task 112:
- kfree+0x7f/0x140
- process_one_work+0x40b/0x660
- worker_thread+0x82/0x680
- kthread+0x1b9/0x1e0
- ret_from_fork+0x1f/0x30
-
-The buggy address belongs to the object at ffff888069975180
- which belongs to the cache kmalloc-512 of size 512
-The buggy address is located 192 bytes inside of
- 512-byte region [ffff888069975180, ffff888069975380)
-The buggy address belongs to the page:
-page:ffffea0001a65d00 count:1 mapcount:0 mapping:ffff88806d401280 index:0x0 compound_mapcount: 0
-flags: 0x4000000000010200(slab|head)
-raw: 4000000000010200 dead000000000100 dead000000000200 ffff88806d401280
-raw: 0000000000000000 00000000800c000c 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff888069975100: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff888069975180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff888069975200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                           ^
- ffff888069975280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888069975300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-Reported-by: Marek Majkowski <marek@cloudflare.com>
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
-Link: https://lore.kernel.org/netdev/CAJPywTLwgXNEZ2dZVoa=udiZmtrWJ0q5SuBW64aYs0Y1khXX3A@mail.gmail.com
-Acked-by: Song Liu <songliubraving@fb.com>
+Fixes: 8c4b4c7e9ff0 ("bpf: Add setsockopt helper function to bpf")
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+Acked-by: Lawrence Brakmo <brakmo@fb.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/skmsg.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ net/core/filter.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 54d8548076306..4932861d7b882 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -545,8 +545,7 @@ static void sk_psock_destroy_deferred(struct work_struct *gc)
- 	struct sk_psock *psock = container_of(gc, struct sk_psock, gc);
- 
- 	/* No sk_callback_lock since already detached. */
--	if (psock->parser.enabled)
--		strp_done(&psock->parser.strp);
-+	strp_done(&psock->parser.strp);
- 
- 	cancel_work_sync(&psock->work);
- 
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 16350f8c8815a..821050957acad 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -3927,10 +3927,12 @@ BPF_CALL_5(bpf_setsockopt, struct bpf_sock_ops_kern *, bpf_sock,
+ 		/* Only some socketops are supported */
+ 		switch (optname) {
+ 		case SO_RCVBUF:
++			val = min_t(u32, val, sysctl_rmem_max);
+ 			sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
+ 			sk->sk_rcvbuf = max_t(int, val * 2, SOCK_MIN_RCVBUF);
+ 			break;
+ 		case SO_SNDBUF:
++			val = min_t(u32, val, sysctl_wmem_max);
+ 			sk->sk_userlocks |= SOCK_SNDBUF_LOCK;
+ 			sk->sk_sndbuf = max_t(int, val * 2, SOCK_MIN_SNDBUF);
+ 			break;
 -- 
 2.19.1
 
