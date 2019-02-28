@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 557B2C4360F
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:20:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A842C43381
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:22:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 186AA2171F
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:20:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5F79B206B8
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:22:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1551367255;
-	bh=Qf41FU4ZnYBsUeVlYgl8dl1q98AeXfui78CUWkw5Dak=;
+	s=default; t=1551367328;
+	bh=QVLh0zGMUC9S/xw0SKfHJQerJR43UP5yFgxU0Z+Fxco=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=aJ1sPdgLMahpP6QHu1Sob8FaWyhUFlJyVghwfHYAdqsuqV1TUAyGaumNkdi+Vz7q5
-	 ad0mcH+R9jdFY8Xif9u1i9Nqzzl45tXQl3QqXrFXQT/FeVvi2//H1WfQiumUz4KMMS
-	 rDrslE85jW1eRVdz8mSZGlixuOXnvnrJ+lMMcGBs=
+	b=IHahyqQ13vACF33rIko9uBb4abZdrjPspfkvq7cvWlSvXnVcTFRQ6iifi7tWQ5Avb
+	 Co1BXPM9XNCPN1KyHTyfj+IHNEYP3OtGX8fdu8LmJPFvacF2xPeOaYs+LDAY+9fkix
+	 ZqhdGN5/hp1eX0Vt5a5HAEq/OUTtJiVq10uaHBeo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388628AbfB1POM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Feb 2019 10:14:12 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48718 "EHLO mail.kernel.org"
+        id S1731084AbfB1PWB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Feb 2019 10:22:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47906 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388624AbfB1POL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Feb 2019 10:14:11 -0500
+        id S2388515AbfB1PNp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Feb 2019 10:13:45 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 445F1218D8;
-        Thu, 28 Feb 2019 15:14:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2B6C5218E0;
+        Thu, 28 Feb 2019 15:13:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1551366851;
-        bh=Qf41FU4ZnYBsUeVlYgl8dl1q98AeXfui78CUWkw5Dak=;
+        s=default; t=1551366824;
+        bh=QVLh0zGMUC9S/xw0SKfHJQerJR43UP5yFgxU0Z+Fxco=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bXg4s51JwJxTngahLA4GsmYiIWgvrNPv5Z2PVMQ0d6aMwTa+3EDji1mMnbCLjpGZE
-         eXymKBnXjvmy8codx8C7CT0SET4/ly0ZsWGRISGdWqXnv9wusDSCiWKTRxoNjiaKsR
-         qNgM7l5X0gvdFij1qGtVlOl8UTifLIdV+Ako1R3o=
+        b=XUtgKJMMaSbs62J3+xUPCP10WgHu4zxyDTUMhS5+GztZbTiokB6hTFfBkLDgH4cui
+         8sHCBrn6xr//vU3HkaxBEyyrirAlUDMSuGyr8jMepCiKwZW4te5DrzKMUiEiuMAinz
+         iV0rCEIZlRwNFYa2dfbCYExbdyXvRPs50gSvnt+A=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Martynas Pumputis <m@lambda.lt>,
+Cc:     Yafang Shao <laoar.shao@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 18/36] bpf, selftests: fix handling of sparse CPU allocations
-Date:   Thu, 28 Feb 2019 10:13:19 -0500
-Message-Id: <20190228151337.12176-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 04/36] bpf: sock recvbuff must be limited by rmem_max in bpf_setsockopt()
+Date:   Thu, 28 Feb 2019 10:13:05 -0500
+Message-Id: <20190228151337.12176-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190228151337.12176-1-sashal@kernel.org>
 References: <20190228151337.12176-1-sashal@kernel.org>
@@ -58,79 +58,40 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Martynas Pumputis <m@lambda.lt>
+From: Yafang Shao <laoar.shao@gmail.com>
 
-[ Upstream commit 1bb54c4071f585ebef56ce8fdfe6026fa2cbcddd ]
+[ Upstream commit c9e4576743eeda8d24dedc164d65b78877f9a98c ]
 
-Previously, bpf_num_possible_cpus() had a bug when calculating a
-number of possible CPUs in the case of sparse CPU allocations, as
-it was considering only the first range or element of
-/sys/devices/system/cpu/possible.
+When sock recvbuff is set by bpf_setsockopt(), the value must by
+limited by rmem_max. It is the same with sendbuff.
 
-E.g. in the case of "0,2-3" (CPU 1 is not available), the function
-returned 1 instead of 3.
-
-This patch fixes the function by making it parse all CPU ranges and
-elements.
-
-Signed-off-by: Martynas Pumputis <m@lambda.lt>
-Acked-by: Yonghong Song <yhs@fb.com>
+Fixes: 8c4b4c7e9ff0 ("bpf: Add setsockopt helper function to bpf")
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+Acked-by: Lawrence Brakmo <brakmo@fb.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/bpf_util.h | 30 +++++++++++++++++---------
- 1 file changed, 20 insertions(+), 10 deletions(-)
+ net/core/filter.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/bpf_util.h b/tools/testing/selftests/bpf/bpf_util.h
-index d0811b3d6a6f1..4bf7203649344 100644
---- a/tools/testing/selftests/bpf/bpf_util.h
-+++ b/tools/testing/selftests/bpf/bpf_util.h
-@@ -13,7 +13,7 @@ static inline unsigned int bpf_num_possible_cpus(void)
- 	unsigned int start, end, possible_cpus = 0;
- 	char buff[128];
- 	FILE *fp;
--	int n;
-+	int len, n, i, j = 0;
- 
- 	fp = fopen(fcpu, "r");
- 	if (!fp) {
-@@ -21,17 +21,27 @@ static inline unsigned int bpf_num_possible_cpus(void)
- 		exit(1);
- 	}
- 
--	while (fgets(buff, sizeof(buff), fp)) {
--		n = sscanf(buff, "%u-%u", &start, &end);
--		if (n == 0) {
--			printf("Failed to retrieve # possible CPUs!\n");
--			exit(1);
--		} else if (n == 1) {
--			end = start;
-+	if (!fgets(buff, sizeof(buff), fp)) {
-+		printf("Failed to read %s!\n", fcpu);
-+		exit(1);
-+	}
-+
-+	len = strlen(buff);
-+	for (i = 0; i <= len; i++) {
-+		if (buff[i] == ',' || buff[i] == '\0') {
-+			buff[i] = '\0';
-+			n = sscanf(&buff[j], "%u-%u", &start, &end);
-+			if (n <= 0) {
-+				printf("Failed to retrieve # possible CPUs!\n");
-+				exit(1);
-+			} else if (n == 1) {
-+				end = start;
-+			}
-+			possible_cpus += end - start + 1;
-+			j = i + 1;
- 		}
--		possible_cpus = start == 0 ? end + 1 : 0;
--		break;
- 	}
-+
- 	fclose(fp);
- 
- 	return possible_cpus;
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 41ede90fc28f5..61396648381e5 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -3081,10 +3081,12 @@ BPF_CALL_5(bpf_setsockopt, struct bpf_sock_ops_kern *, bpf_sock,
+ 		/* Only some socketops are supported */
+ 		switch (optname) {
+ 		case SO_RCVBUF:
++			val = min_t(u32, val, sysctl_rmem_max);
+ 			sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
+ 			sk->sk_rcvbuf = max_t(int, val * 2, SOCK_MIN_RCVBUF);
+ 			break;
+ 		case SO_SNDBUF:
++			val = min_t(u32, val, sysctl_wmem_max);
+ 			sk->sk_userlocks |= SOCK_SNDBUF_LOCK;
+ 			sk->sk_sndbuf = max_t(int, val * 2, SOCK_MIN_SNDBUF);
+ 			break;
 -- 
 2.19.1
 
