@@ -7,58 +7,61 @@ X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 325EFC43381
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 03:35:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 138D1C43381
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 03:49:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E12152186A
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 03:35:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D2FE420851
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 03:49:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kQxrNQjR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aKJo1wHt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730410AbfB1DfU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Feb 2019 22:35:20 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:35612 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730131AbfB1DfU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Feb 2019 22:35:20 -0500
-Received: by mail-ot1-f68.google.com with SMTP id z19so16463287otm.2;
-        Wed, 27 Feb 2019 19:35:19 -0800 (PST)
+        id S1730600AbfB1DtX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Feb 2019 22:49:23 -0500
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:33083 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730131AbfB1DtX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Feb 2019 22:49:23 -0500
+Received: by mail-oi1-f194.google.com with SMTP id z14so15447898oid.0;
+        Wed, 27 Feb 2019 19:49:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=3iDaXcqu7apJ7qIyTdjo/1/biRiayHw3+DFiQzgTMGQ=;
-        b=kQxrNQjR3yV/l62HPkzsSGXorvem549Ui7Nc518cLwuWMUMX8H2HWIVcz87NrXvsoA
-         oPPYKiwD5zwOuhcApEGIGqvzs3hKueoM4KXx2EBVuduE7lXBHK2iVG30tZxE8mAYW/JC
-         9kK/ojHXbRU2qL6r2N5Cm91cfU0Q/i09YN/lsNsCByyU82IHQkvm1xi8p4ndTyL8ugpr
-         xLxfgMB53I0FayRmLShStMg3t/FFjpKKquzku8CACbh4bSR8CvkpPENNH6/mqmhG8Ya8
-         3hDbENKo3CiguyoHDH/Ub9mQkSdci8DCt2KhpV5rG5waDkPqLZdoewpDB9TMmB07YLzs
-         VEmQ==
+        bh=dcLVGmOTnvFkf2yTAO9jXVKBrkxyLFZ/9uNjnD70G3M=;
+        b=aKJo1wHtWzOjtTgRnMILkU96UXZOYmb04ONn/GvfkSirDdFpr5azAA2R7XJaqxnso4
+         3FKh3zN7TI0wNVeXbvZcWMf4wNwnTYQu0higfDTqGjLXQnDRQXPI2neIVCcpEu61JgAa
+         8BKXkz/CXRFF6IRuM5AQZmXOVu8PhKPJeUp6wAZmaz1UTvVyS4qd9dtaD/X+hzsR2E4x
+         3CmQ731ACoWd2NGiTjSx40mEfxYu3bMWPqMHejBgwpkoMYlFqj8xdrFS2fPd/QYgrVuL
+         ZIclAHUTlhBZlbanNmYUDeKh482xloEvBH1/ioqVoV9XaSdSNff65iRBBtQaQ6l3v/P8
+         w6NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3iDaXcqu7apJ7qIyTdjo/1/biRiayHw3+DFiQzgTMGQ=;
-        b=RwlBESmJ0P6KA3U7fAtqhUyZxzndLHgC0P3IokwffjlGU/0ryf5JgWNYgvW/MwktYB
-         B2mcdhTgb0P6OPo7k1rekD4TvP3+3+GGi62N6JGKARtduLktWFEXlXKTxOrg9tYJEYW3
-         DbUaE0zS5AKY0Wklgq47GYH2rFgWaEagO4JJxhMp4/vHH+ExkvNKOELybjJDyUWsUXMN
-         w4lPGWQL+ETv7TRzKnzdUc/gyNNiFU0rDJeVt4DCWjJfMzC1UAmyptQPVqFBVLIDKvd6
-         /77E/IadR0qAMnjR+QoYdwEuLK6JnliaUG2izLvcCw+HiusaNtcpfDQOcRM3Vi1E2nzR
-         4mQw==
-X-Gm-Message-State: AHQUAubY2tcrQmpWpAE/QaDcUsDx3vTrcGK2sSWWSQcCinnxUtt5yPxd
-        4QtmSm4a7UFU4TugbFlCw1fpTsmodV0n1UYI7kE=
-X-Google-Smtp-Source: AHgI3IZxkAMo9646oZcxQOPfl9ru/zxpPXyce31m/NFBEqOuH+JWtcIeDiUkN0KrFIc+sqTGdKy2JojnBvjBTA3csBM=
-X-Received: by 2002:a9d:27a9:: with SMTP id c38mr3527130otb.202.1551324919289;
- Wed, 27 Feb 2019 19:35:19 -0800 (PST)
+        bh=dcLVGmOTnvFkf2yTAO9jXVKBrkxyLFZ/9uNjnD70G3M=;
+        b=Gkk5ccAjcHIstChPRFDX/SFHmhrt9AhMsGiPgq4nqCHXbqMaEoV525HKaTKiDqXb6a
+         wkycTxLXevWmYrxLpME4+3+8YDuUedcM80fxkuyVWixaA4tbFRYGheGgQPHCl28mETa5
+         +km0FVCP+hKdxvHcWIv7IfKb3/xLA4svXQ7kXR5pmvF57wu7fdq2FaB8kM9hZZow0jlt
+         O8L9rWjVt40MsGJi/21FnPpqth+pODJvtlqODwYyADERyl528Jg6pJd8Daa56EoO6P4h
+         oge9bVWTV4JKB6ivlzfYm6MuHYoPj0FEwUeaUd6qb6fbfB/IPdtpC6nCQyr5ZsXPvCEy
+         qSng==
+X-Gm-Message-State: AHQUAuY1j28mejMV7XTq/ggTKFRnoA6edKkoFC+Pefd1JBcL5q4U1gXn
+        z4K+u2SHa7MaJ3+zIeea7TXb+VFZsgN6rF3CF6o=
+X-Google-Smtp-Source: APXvYqwzxkQYwq8f6V7HuQMbKv2bKhsI2p8IwM8aWO2LtQVERW6stkMwUnAIZqyEOhCJ4MwX6RdGtM++Y+gjq7SffLw=
+X-Received: by 2002:aca:3e54:: with SMTP id l81mr1673384oia.10.1551325761980;
+ Wed, 27 Feb 2019 19:49:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20190228030414.18973-1-jakub.kicinski@netronome.com> <20190228030414.18973-5-jakub.kicinski@netronome.com>
-In-Reply-To: <20190228030414.18973-5-jakub.kicinski@netronome.com>
+References: <20190227233046.11718-1-jakub.kicinski@netronome.com>
+ <20190227233046.11718-4-jakub.kicinski@netronome.com> <CAEf4BzZR+7R9TjXSMHiYzbHCvuwL+Z_LBD=Pk+rRW+X+pgdg4w@mail.gmail.com>
+ <20190227155703.121514a2@cakuba.netronome.com> <20190228024715.ijjki2fleuunxydn@ast-mbp>
+In-Reply-To: <20190228024715.ijjki2fleuunxydn@ast-mbp>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 27 Feb 2019 19:35:07 -0800
-Message-ID: <CAEf4BzZK=o6mNd59MGAkUU8zq3Z08LBM8RcJj=ryYsvGTk7G0g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 4/5] samples: bpf: use libbpf where easy
-To:     Jakub Kicinski <jakub.kicinski@netronome.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+Date:   Wed, 27 Feb 2019 19:49:10 -0800
+Message-ID: <CAEf4BzZuOeUXKUmMqukQm2M1eTnX2=JwkNyfwF5FvbMEuby9BQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/5] tools: libbpf: add a correctly named define
+ for map iteration
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jakub Kicinski <jakub.kicinski@netronome.com>,
         Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, oss-drivers@netronome.com
 Content-Type: text/plain; charset="UTF-8"
@@ -67,192 +70,75 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Feb 27, 2019 at 7:04 PM Jakub Kicinski
-<jakub.kicinski@netronome.com> wrote:
+On Wed, Feb 27, 2019 at 6:47 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> Some samples don't really need the magic of bpf_load,
-> switch them to libbpf.
+> On Wed, Feb 27, 2019 at 03:57:03PM -0800, Jakub Kicinski wrote:
+> > On Wed, 27 Feb 2019 15:47:56 -0800, Andrii Nakryiko wrote:
+> > > On Wed, Feb 27, 2019 at 3:31 PM Jakub Kicinski
+> > > <jakub.kicinski@netronome.com> wrote:
+> > > >
+> > > > For historical reasons the helper to loop over maps in an object
+> > > > is called bpf_map__for_each while it really should be called
+> > > > bpf_object__for_each_map.  Rename and add a correctly named
+> > > > define for backward compatibility.
+> > >
+> > > Seems like there are at least 3 more functions that are not named correctly:
+> > > - __bpf_map__iter (__bpf_object__iter_map?)
+> > > - bpf_map__next (=> bpf_object__next_map?)
+> > > - bpf_map__prev (=> bpf_object__prev_map?)
+> > >
+> > > Let's rename them as well?
+> >
+> > At least those are consistently named between programs and maps.
 >
-> v2: - specify program types.
+> I think this patch makes naming consistent enough.
+>
+> > I'm happy to do the rename if we don't need backward compat, seems
+> > a little much to add aliases?
+> >
+> > > > Switch all in-tree users to the correct name (Quentin).
+> > > >
+> > > > Signed-off-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+> > > > Reviewed-by: Quentin Monnet <quentin.monnet@netronome.com>
+> >
+> > > > diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> > > > index 6c0168f8bba5..b4652aa1a58a 100644
+> > > > --- a/tools/lib/bpf/libbpf.h
+> > > > +++ b/tools/lib/bpf/libbpf.h
+> > > > @@ -278,10 +278,11 @@ bpf_object__find_map_by_offset(struct bpf_object *obj, size_t offset);
+> > > >
+> > > >  LIBBPF_API struct bpf_map *
+> > > >  bpf_map__next(struct bpf_map *map, struct bpf_object *obj);
+> > > > -#define bpf_map__for_each(pos, obj)            \
+> > > > +#define bpf_object__for_each_map(pos, obj)             \
+> > > >         for ((pos) = bpf_map__next(NULL, (obj));        \
+> > > >              (pos) != NULL;                             \
+> > > >              (pos) = bpf_map__next((pos), (obj)))
+> > > > +#define bpf_map__for_each bpf_object__for_each_map
+> > >
+> > > Should we get rid of this as well, instead of accumulating cruft?
+> >
+> > Well, we did some gymnastics in the past to maintain backward compat,
+> > I thought we do need it..?
+>
+> We do need to keep backward compat.
+> This line is necessary.
+>
+> imo this set looks good to me as-is.
+>
 
-thanks!
+bpf_map__next/prev and bpf_program__next/prev convention feels a bit
+weird, they fill more like methods of bpf_object rather than methods
+of bpf_map and bpf_program, but I can understand why we might want to
+preserve them.
+
+Would it make sense to still add bpf_object__{next,prev}_{map,program}
+(with struct bpf_object as a first arg) and just call them from
+bpf_{map,program}__{next,prev}? That way we'll have consistent naming
+that follows libbpf's own naming guidelines and we'll preserve
+backwards compatibility? We can do that in follow up patches, if at
+all, so I'll ack this patch.
+
 
 Acked-by: Andrii Nakryiko <andriin@fb.com>
-
->
-> Signed-off-by: Jakub Kicinski <jakub.kicinski@netronome.com>
-> Reviewed-by: Quentin Monnet <quentin.monnet@netronome.com>
-> ---
->  samples/bpf/Makefile       |  6 +++---
->  samples/bpf/fds_example.c  | 10 +++++++---
->  samples/bpf/sockex1_user.c | 23 +++++++++++++----------
->  samples/bpf/sockex2_user.c | 21 ++++++++++++---------
->  4 files changed, 35 insertions(+), 25 deletions(-)
->
-> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-> index 4dd98100678e..0c62ac39c697 100644
-> --- a/samples/bpf/Makefile
-> +++ b/samples/bpf/Makefile
-> @@ -59,9 +59,9 @@ LIBBPF = $(TOOLS_PATH)/lib/bpf/libbpf.a
->  CGROUP_HELPERS := ../../tools/testing/selftests/bpf/cgroup_helpers.o
->  TRACE_HELPERS := ../../tools/testing/selftests/bpf/trace_helpers.o
->
-> -fds_example-objs := bpf_load.o fds_example.o
-> -sockex1-objs := bpf_load.o sockex1_user.o
-> -sockex2-objs := bpf_load.o sockex2_user.o
-> +fds_example-objs := fds_example.o
-> +sockex1-objs := sockex1_user.o
-> +sockex2-objs := sockex2_user.o
->  sockex3-objs := bpf_load.o sockex3_user.o
->  tracex1-objs := bpf_load.o tracex1_user.o
->  tracex2-objs := bpf_load.o tracex2_user.o
-> diff --git a/samples/bpf/fds_example.c b/samples/bpf/fds_example.c
-> index 9854854f05d1..e51eb060244e 100644
-> --- a/samples/bpf/fds_example.c
-> +++ b/samples/bpf/fds_example.c
-> @@ -14,8 +14,8 @@
->
->  #include <bpf/bpf.h>
->
-> +#include "bpf/libbpf.h"
->  #include "bpf_insn.h"
-> -#include "bpf_load.h"
->  #include "sock_example.h"
->
->  #define BPF_F_PIN      (1 << 0)
-> @@ -57,10 +57,14 @@ static int bpf_prog_create(const char *object)
->                 BPF_EXIT_INSN(),
->         };
->         size_t insns_cnt = sizeof(insns) / sizeof(struct bpf_insn);
-> +       char bpf_log_buf[BPF_LOG_BUF_SIZE];
-> +       struct bpf_object *obj;
-> +       int prog_fd;
->
->         if (object) {
-> -               assert(!load_bpf_file((char *)object));
-> -               return prog_fd[0];
-> +               assert(!bpf_prog_load(object, BPF_PROG_TYPE_UNSPEC,
-> +                                     &obj, &prog_fd));
-> +               return prog_fd;
->         } else {
->                 return bpf_load_program(BPF_PROG_TYPE_SOCKET_FILTER,
->                                         insns, insns_cnt, "GPL", 0,
-> diff --git a/samples/bpf/sockex1_user.c b/samples/bpf/sockex1_user.c
-> index be8ba5686924..7f90796ae15a 100644
-> --- a/samples/bpf/sockex1_user.c
-> +++ b/samples/bpf/sockex1_user.c
-> @@ -3,28 +3,31 @@
->  #include <assert.h>
->  #include <linux/bpf.h>
->  #include <bpf/bpf.h>
-> -#include "bpf_load.h"
-> +#include "bpf/libbpf.h"
->  #include "sock_example.h"
->  #include <unistd.h>
->  #include <arpa/inet.h>
->
->  int main(int ac, char **argv)
->  {
-> +       struct bpf_object *obj;
-> +       int map_fd, prog_fd;
->         char filename[256];
-> -       FILE *f;
->         int i, sock;
-> +       FILE *f;
->
->         snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
->
-> -       if (load_bpf_file(filename)) {
-> -               printf("%s", bpf_log_buf);
-> +       if (bpf_prog_load(filename, BPF_PROG_TYPE_SOCKET_FILTER,
-> +                         &obj, &prog_fd))
->                 return 1;
-> -       }
-> +
-> +       map_fd = bpf_object__find_map_fd_by_name(obj, "my_map");
->
->         sock = open_raw_sock("lo");
->
-> -       assert(setsockopt(sock, SOL_SOCKET, SO_ATTACH_BPF, prog_fd,
-> -                         sizeof(prog_fd[0])) == 0);
-> +       assert(setsockopt(sock, SOL_SOCKET, SO_ATTACH_BPF, &prog_fd,
-> +                         sizeof(prog_fd)) == 0);
->
->         f = popen("ping -4 -c5 localhost", "r");
->         (void) f;
-> @@ -34,13 +37,13 @@ int main(int ac, char **argv)
->                 int key;
->
->                 key = IPPROTO_TCP;
-> -               assert(bpf_map_lookup_elem(map_fd[0], &key, &tcp_cnt) == 0);
-> +               assert(bpf_map_lookup_elem(map_fd, &key, &tcp_cnt) == 0);
->
->                 key = IPPROTO_UDP;
-> -               assert(bpf_map_lookup_elem(map_fd[0], &key, &udp_cnt) == 0);
-> +               assert(bpf_map_lookup_elem(map_fd, &key, &udp_cnt) == 0);
->
->                 key = IPPROTO_ICMP;
-> -               assert(bpf_map_lookup_elem(map_fd[0], &key, &icmp_cnt) == 0);
-> +               assert(bpf_map_lookup_elem(map_fd, &key, &icmp_cnt) == 0);
->
->                 printf("TCP %lld UDP %lld ICMP %lld bytes\n",
->                        tcp_cnt, udp_cnt, icmp_cnt);
-> diff --git a/samples/bpf/sockex2_user.c b/samples/bpf/sockex2_user.c
-> index 125ee6efc913..bc257333ad92 100644
-> --- a/samples/bpf/sockex2_user.c
-> +++ b/samples/bpf/sockex2_user.c
-> @@ -3,7 +3,7 @@
->  #include <assert.h>
->  #include <linux/bpf.h>
->  #include <bpf/bpf.h>
-> -#include "bpf_load.h"
-> +#include "bpf/libbpf.h"
->  #include "sock_example.h"
->  #include <unistd.h>
->  #include <arpa/inet.h>
-> @@ -17,22 +17,25 @@ struct pair {
->  int main(int ac, char **argv)
->  {
->         struct rlimit r = {RLIM_INFINITY, RLIM_INFINITY};
-> +       struct bpf_object *obj;
-> +       int map_fd, prog_fd;
->         char filename[256];
-> -       FILE *f;
->         int i, sock;
-> +       FILE *f;
->
->         snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
->         setrlimit(RLIMIT_MEMLOCK, &r);
->
-> -       if (load_bpf_file(filename)) {
-> -               printf("%s", bpf_log_buf);
-> +       if (bpf_prog_load(filename, BPF_PROG_TYPE_SOCKET_FILTER,
-> +                         &obj, &prog_fd))
->                 return 1;
-> -       }
-> +
-> +       map_fd = bpf_object__find_map_fd_by_name(obj, "hash_map");
->
->         sock = open_raw_sock("lo");
->
-> -       assert(setsockopt(sock, SOL_SOCKET, SO_ATTACH_BPF, prog_fd,
-> -                         sizeof(prog_fd[0])) == 0);
-> +       assert(setsockopt(sock, SOL_SOCKET, SO_ATTACH_BPF, &prog_fd,
-> +                         sizeof(prog_fd)) == 0);
->
->         f = popen("ping -4 -c5 localhost", "r");
->         (void) f;
-> @@ -41,8 +44,8 @@ int main(int ac, char **argv)
->                 int key = 0, next_key;
->                 struct pair value;
->
-> -               while (bpf_map_get_next_key(map_fd[0], &key, &next_key) == 0) {
-> -                       bpf_map_lookup_elem(map_fd[0], &next_key, &value);
-> +               while (bpf_map_get_next_key(map_fd, &key, &next_key) == 0) {
-> +                       bpf_map_lookup_elem(map_fd, &next_key, &value);
->                         printf("ip %s bytes %lld packets %lld\n",
->                                inet_ntoa((struct in_addr){htonl(next_key)}),
->                                value.bytes, value.packets);
-> --
-> 2.19.2
->
