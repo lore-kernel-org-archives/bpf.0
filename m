@@ -2,207 +2,257 @@ Return-Path: <SRS0=vk/n=RD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B085C43381
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 03:04:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 325EFC43381
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 03:35:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3F2CA218A2
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 03:04:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E12152186A
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 03:35:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="UVNgoAFm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kQxrNQjR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730624AbfB1DEl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Feb 2019 22:04:41 -0500
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:41206 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730577AbfB1DEe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Feb 2019 22:04:34 -0500
-Received: by mail-qk1-f196.google.com with SMTP id y15so11240772qki.8
-        for <bpf@vger.kernel.org>; Wed, 27 Feb 2019 19:04:33 -0800 (PST)
+        id S1730410AbfB1DfU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Feb 2019 22:35:20 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:35612 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730131AbfB1DfU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Feb 2019 22:35:20 -0500
+Received: by mail-ot1-f68.google.com with SMTP id z19so16463287otm.2;
+        Wed, 27 Feb 2019 19:35:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=F5lRiUiw3F3eX0KxbrL0M5pggJT7dCKUsgeOXQoWa2Q=;
-        b=UVNgoAFmW/ZISgpaqqleOuCcN8FKzzTZ2nScfT49uMINdNQ9KdqaKct7eVDu8vnqLG
-         wTL+Y9Sst6V4pGk5//fPQRWI0ejAqKxuiXqaPgxZ/bxntlHvTLeLBzKhnD9iaYx0CUQ1
-         BMxkfUAnbDtGHENXOTZHDZMCvWAW7Jl9QuWziFm2d+pJqzuT1J621wUc7AzwrrxWbWbS
-         RwXZvisbYfEj9zdaznwPzmWn3oniDLRIsFihGIBBGnZsLrb8I1T9je16yGSIRoRGg2u2
-         YcB9cvPW3LX95/JbZVU08bF8+BeEdTGQG3ThAo8rGGxfDbQJqvttkejRziK35JtECEPi
-         pJtA==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3iDaXcqu7apJ7qIyTdjo/1/biRiayHw3+DFiQzgTMGQ=;
+        b=kQxrNQjR3yV/l62HPkzsSGXorvem549Ui7Nc518cLwuWMUMX8H2HWIVcz87NrXvsoA
+         oPPYKiwD5zwOuhcApEGIGqvzs3hKueoM4KXx2EBVuduE7lXBHK2iVG30tZxE8mAYW/JC
+         9kK/ojHXbRU2qL6r2N5Cm91cfU0Q/i09YN/lsNsCByyU82IHQkvm1xi8p4ndTyL8ugpr
+         xLxfgMB53I0FayRmLShStMg3t/FFjpKKquzku8CACbh4bSR8CvkpPENNH6/mqmhG8Ya8
+         3hDbENKo3CiguyoHDH/Ub9mQkSdci8DCt2KhpV5rG5waDkPqLZdoewpDB9TMmB07YLzs
+         VEmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=F5lRiUiw3F3eX0KxbrL0M5pggJT7dCKUsgeOXQoWa2Q=;
-        b=tw1aVHlgxUHJyxkY7TNiTk2Vv3YJxMYYm5c9jT+yUTzQ6wo8gn4J595tgKzrhrrnv1
-         qh+xvXRhu6A32WlciHypDnI2x8VjP/KWJc31d701FES1qMFczaDHWxLf6pJxBek5gfgI
-         Ie8PmPBzLDq8z+lyVo/1508fzKSy6WySco/coD9yzw4VE2eTftnBsaJrLEwCDgaiKx7k
-         raPCETMsuMojQODJaPjzyoBeMFvUyuylJw747vpGmlSvIVkI8HyLN1doVGW60arbrE3O
-         NaxlRMYFfNdLUC423OTnG1GzXV9qPdytc+qJcCfJd5UrACVfvjRq9ARkURY4cSgSXPgW
-         u/hA==
-X-Gm-Message-State: AHQUAuZ/iNv2GCzVHPJhqS7vSQR6pQmVL9ZHhZxhz0HmkymAqLPVYcaR
-        GZAyP3G6Lb17VYY31uu7AHgJEg==
-X-Google-Smtp-Source: AHgI3IYlwMGfQMWgZf6jlmWVtTuIoZA0XgdAZOSRaCSsaGY8CVWZ4wi7CdWJA59uAlFvzlvpwArUyQ==
-X-Received: by 2002:ae9:c30f:: with SMTP id n15mr4727103qkg.227.1551323071208;
-        Wed, 27 Feb 2019 19:04:31 -0800 (PST)
-Received: from jkicinski-Precision-T1700.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id r44sm11242066qtb.53.2019.02.27.19.04.29
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 27 Feb 2019 19:04:30 -0800 (PST)
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        oss-drivers@netronome.com,
-        Jakub Kicinski <jakub.kicinski@netronome.com>
-Subject: [PATCH bpf-next v2 3/5] tools: libbpf: add a correctly named define for map iteration
-Date:   Wed, 27 Feb 2019 19:04:12 -0800
-Message-Id: <20190228030414.18973-4-jakub.kicinski@netronome.com>
-X-Mailer: git-send-email 2.19.2
-In-Reply-To: <20190228030414.18973-1-jakub.kicinski@netronome.com>
-References: <20190228030414.18973-1-jakub.kicinski@netronome.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3iDaXcqu7apJ7qIyTdjo/1/biRiayHw3+DFiQzgTMGQ=;
+        b=RwlBESmJ0P6KA3U7fAtqhUyZxzndLHgC0P3IokwffjlGU/0ryf5JgWNYgvW/MwktYB
+         B2mcdhTgb0P6OPo7k1rekD4TvP3+3+GGi62N6JGKARtduLktWFEXlXKTxOrg9tYJEYW3
+         DbUaE0zS5AKY0Wklgq47GYH2rFgWaEagO4JJxhMp4/vHH+ExkvNKOELybjJDyUWsUXMN
+         w4lPGWQL+ETv7TRzKnzdUc/gyNNiFU0rDJeVt4DCWjJfMzC1UAmyptQPVqFBVLIDKvd6
+         /77E/IadR0qAMnjR+QoYdwEuLK6JnliaUG2izLvcCw+HiusaNtcpfDQOcRM3Vi1E2nzR
+         4mQw==
+X-Gm-Message-State: AHQUAubY2tcrQmpWpAE/QaDcUsDx3vTrcGK2sSWWSQcCinnxUtt5yPxd
+        4QtmSm4a7UFU4TugbFlCw1fpTsmodV0n1UYI7kE=
+X-Google-Smtp-Source: AHgI3IZxkAMo9646oZcxQOPfl9ru/zxpPXyce31m/NFBEqOuH+JWtcIeDiUkN0KrFIc+sqTGdKy2JojnBvjBTA3csBM=
+X-Received: by 2002:a9d:27a9:: with SMTP id c38mr3527130otb.202.1551324919289;
+ Wed, 27 Feb 2019 19:35:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190228030414.18973-1-jakub.kicinski@netronome.com> <20190228030414.18973-5-jakub.kicinski@netronome.com>
+In-Reply-To: <20190228030414.18973-5-jakub.kicinski@netronome.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 27 Feb 2019 19:35:07 -0800
+Message-ID: <CAEf4BzZK=o6mNd59MGAkUU8zq3Z08LBM8RcJj=ryYsvGTk7G0g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 4/5] samples: bpf: use libbpf where easy
+To:     Jakub Kicinski <jakub.kicinski@netronome.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, oss-drivers@netronome.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-For historical reasons the helper to loop over maps in an object
-is called bpf_map__for_each while it really should be called
-bpf_object__for_each_map.  Rename and add a correctly named
-define for backward compatibility.
+On Wed, Feb 27, 2019 at 7:04 PM Jakub Kicinski
+<jakub.kicinski@netronome.com> wrote:
+>
+> Some samples don't really need the magic of bpf_load,
+> switch them to libbpf.
+>
+> v2: - specify program types.
 
-Switch all in-tree users to the correct name (Quentin).
+thanks!
 
-Signed-off-by: Jakub Kicinski <jakub.kicinski@netronome.com>
-Reviewed-by: Quentin Monnet <quentin.monnet@netronome.com>
----
- tools/bpf/bpftool/prog.c                       | 4 ++--
- tools/lib/bpf/libbpf.c                         | 8 ++++----
- tools/lib/bpf/libbpf.h                         | 3 ++-
- tools/perf/util/bpf-loader.c                   | 4 ++--
- tools/testing/selftests/bpf/test_libbpf_open.c | 2 +-
- 5 files changed, 11 insertions(+), 10 deletions(-)
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 0c35dd543d49..8ef80d65a474 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -1053,7 +1053,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
- 	j = 0;
- 	while (j < old_map_fds && map_replace[j].name) {
- 		i = 0;
--		bpf_map__for_each(map, obj) {
-+		bpf_object__for_each_map(map, obj) {
- 			if (!strcmp(bpf_map__name(map), map_replace[j].name)) {
- 				map_replace[j].idx = i;
- 				break;
-@@ -1074,7 +1074,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
- 	/* Set ifindex and name reuse */
- 	j = 0;
- 	idx = 0;
--	bpf_map__for_each(map, obj) {
-+	bpf_object__for_each_map(map, obj) {
- 		if (!bpf_map__is_offload_neutral(map))
- 			bpf_map__set_ifindex(map, ifindex);
- 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index b38dcbe7460a..f5eb60379c8d 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -2100,7 +2100,7 @@ int bpf_object__pin_maps(struct bpf_object *obj, const char *path)
- 	if (err)
- 		return err;
- 
--	bpf_map__for_each(map, obj) {
-+	bpf_object__for_each_map(map, obj) {
- 		char buf[PATH_MAX];
- 		int len;
- 
-@@ -2147,7 +2147,7 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
- 	if (!obj)
- 		return -ENOENT;
- 
--	bpf_map__for_each(map, obj) {
-+	bpf_object__for_each_map(map, obj) {
- 		char buf[PATH_MAX];
- 		int len;
- 
-@@ -2835,7 +2835,7 @@ bpf_object__find_map_by_name(struct bpf_object *obj, const char *name)
- {
- 	struct bpf_map *pos;
- 
--	bpf_map__for_each(pos, obj) {
-+	bpf_object__for_each_map(pos, obj) {
- 		if (pos->name && !strcmp(pos->name, name))
- 			return pos;
- 	}
-@@ -2928,7 +2928,7 @@ int bpf_prog_load_xattr(const struct bpf_prog_load_attr *attr,
- 			first_prog = prog;
- 	}
- 
--	bpf_map__for_each(map, obj) {
-+	bpf_object__for_each_map(map, obj) {
- 		if (!bpf_map__is_offload_neutral(map))
- 			map->map_ifindex = attr->ifindex;
- 	}
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 6c0168f8bba5..b4652aa1a58a 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -278,10 +278,11 @@ bpf_object__find_map_by_offset(struct bpf_object *obj, size_t offset);
- 
- LIBBPF_API struct bpf_map *
- bpf_map__next(struct bpf_map *map, struct bpf_object *obj);
--#define bpf_map__for_each(pos, obj)		\
-+#define bpf_object__for_each_map(pos, obj)		\
- 	for ((pos) = bpf_map__next(NULL, (obj));	\
- 	     (pos) != NULL;				\
- 	     (pos) = bpf_map__next((pos), (obj)))
-+#define bpf_map__for_each bpf_object__for_each_map
- 
- LIBBPF_API struct bpf_map *
- bpf_map__prev(struct bpf_map *map, struct bpf_object *obj);
-diff --git a/tools/perf/util/bpf-loader.c b/tools/perf/util/bpf-loader.c
-index 037d8ff6a634..31b7e5a1453b 100644
---- a/tools/perf/util/bpf-loader.c
-+++ b/tools/perf/util/bpf-loader.c
-@@ -1489,7 +1489,7 @@ apply_obj_config_object(struct bpf_object *obj)
- 	struct bpf_map *map;
- 	int err;
- 
--	bpf_map__for_each(map, obj) {
-+	bpf_object__for_each_map(map, obj) {
- 		err = apply_obj_config_map(map);
- 		if (err)
- 			return err;
-@@ -1513,7 +1513,7 @@ int bpf__apply_obj_config(void)
- 
- #define bpf__for_each_map(pos, obj, objtmp)	\
- 	bpf_object__for_each_safe(obj, objtmp)	\
--		bpf_map__for_each(pos, obj)
-+		bpf_object__for_each_map(pos, obj)
- 
- #define bpf__for_each_map_named(pos, obj, objtmp, name)	\
- 	bpf__for_each_map(pos, obj, objtmp) 		\
-diff --git a/tools/testing/selftests/bpf/test_libbpf_open.c b/tools/testing/selftests/bpf/test_libbpf_open.c
-index 1909ecf4d999..65cbd30704b5 100644
---- a/tools/testing/selftests/bpf/test_libbpf_open.c
-+++ b/tools/testing/selftests/bpf/test_libbpf_open.c
-@@ -67,7 +67,7 @@ int test_walk_maps(struct bpf_object *obj, bool verbose)
- 	struct bpf_map *map;
- 	int cnt = 0;
- 
--	bpf_map__for_each(map, obj) {
-+	bpf_object__for_each_map(map, obj) {
- 		cnt++;
- 		if (verbose)
- 			printf("Map (count:%d) name: %s\n", cnt,
--- 
-2.19.2
-
+>
+> Signed-off-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+> Reviewed-by: Quentin Monnet <quentin.monnet@netronome.com>
+> ---
+>  samples/bpf/Makefile       |  6 +++---
+>  samples/bpf/fds_example.c  | 10 +++++++---
+>  samples/bpf/sockex1_user.c | 23 +++++++++++++----------
+>  samples/bpf/sockex2_user.c | 21 ++++++++++++---------
+>  4 files changed, 35 insertions(+), 25 deletions(-)
+>
+> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+> index 4dd98100678e..0c62ac39c697 100644
+> --- a/samples/bpf/Makefile
+> +++ b/samples/bpf/Makefile
+> @@ -59,9 +59,9 @@ LIBBPF = $(TOOLS_PATH)/lib/bpf/libbpf.a
+>  CGROUP_HELPERS := ../../tools/testing/selftests/bpf/cgroup_helpers.o
+>  TRACE_HELPERS := ../../tools/testing/selftests/bpf/trace_helpers.o
+>
+> -fds_example-objs := bpf_load.o fds_example.o
+> -sockex1-objs := bpf_load.o sockex1_user.o
+> -sockex2-objs := bpf_load.o sockex2_user.o
+> +fds_example-objs := fds_example.o
+> +sockex1-objs := sockex1_user.o
+> +sockex2-objs := sockex2_user.o
+>  sockex3-objs := bpf_load.o sockex3_user.o
+>  tracex1-objs := bpf_load.o tracex1_user.o
+>  tracex2-objs := bpf_load.o tracex2_user.o
+> diff --git a/samples/bpf/fds_example.c b/samples/bpf/fds_example.c
+> index 9854854f05d1..e51eb060244e 100644
+> --- a/samples/bpf/fds_example.c
+> +++ b/samples/bpf/fds_example.c
+> @@ -14,8 +14,8 @@
+>
+>  #include <bpf/bpf.h>
+>
+> +#include "bpf/libbpf.h"
+>  #include "bpf_insn.h"
+> -#include "bpf_load.h"
+>  #include "sock_example.h"
+>
+>  #define BPF_F_PIN      (1 << 0)
+> @@ -57,10 +57,14 @@ static int bpf_prog_create(const char *object)
+>                 BPF_EXIT_INSN(),
+>         };
+>         size_t insns_cnt = sizeof(insns) / sizeof(struct bpf_insn);
+> +       char bpf_log_buf[BPF_LOG_BUF_SIZE];
+> +       struct bpf_object *obj;
+> +       int prog_fd;
+>
+>         if (object) {
+> -               assert(!load_bpf_file((char *)object));
+> -               return prog_fd[0];
+> +               assert(!bpf_prog_load(object, BPF_PROG_TYPE_UNSPEC,
+> +                                     &obj, &prog_fd));
+> +               return prog_fd;
+>         } else {
+>                 return bpf_load_program(BPF_PROG_TYPE_SOCKET_FILTER,
+>                                         insns, insns_cnt, "GPL", 0,
+> diff --git a/samples/bpf/sockex1_user.c b/samples/bpf/sockex1_user.c
+> index be8ba5686924..7f90796ae15a 100644
+> --- a/samples/bpf/sockex1_user.c
+> +++ b/samples/bpf/sockex1_user.c
+> @@ -3,28 +3,31 @@
+>  #include <assert.h>
+>  #include <linux/bpf.h>
+>  #include <bpf/bpf.h>
+> -#include "bpf_load.h"
+> +#include "bpf/libbpf.h"
+>  #include "sock_example.h"
+>  #include <unistd.h>
+>  #include <arpa/inet.h>
+>
+>  int main(int ac, char **argv)
+>  {
+> +       struct bpf_object *obj;
+> +       int map_fd, prog_fd;
+>         char filename[256];
+> -       FILE *f;
+>         int i, sock;
+> +       FILE *f;
+>
+>         snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
+>
+> -       if (load_bpf_file(filename)) {
+> -               printf("%s", bpf_log_buf);
+> +       if (bpf_prog_load(filename, BPF_PROG_TYPE_SOCKET_FILTER,
+> +                         &obj, &prog_fd))
+>                 return 1;
+> -       }
+> +
+> +       map_fd = bpf_object__find_map_fd_by_name(obj, "my_map");
+>
+>         sock = open_raw_sock("lo");
+>
+> -       assert(setsockopt(sock, SOL_SOCKET, SO_ATTACH_BPF, prog_fd,
+> -                         sizeof(prog_fd[0])) == 0);
+> +       assert(setsockopt(sock, SOL_SOCKET, SO_ATTACH_BPF, &prog_fd,
+> +                         sizeof(prog_fd)) == 0);
+>
+>         f = popen("ping -4 -c5 localhost", "r");
+>         (void) f;
+> @@ -34,13 +37,13 @@ int main(int ac, char **argv)
+>                 int key;
+>
+>                 key = IPPROTO_TCP;
+> -               assert(bpf_map_lookup_elem(map_fd[0], &key, &tcp_cnt) == 0);
+> +               assert(bpf_map_lookup_elem(map_fd, &key, &tcp_cnt) == 0);
+>
+>                 key = IPPROTO_UDP;
+> -               assert(bpf_map_lookup_elem(map_fd[0], &key, &udp_cnt) == 0);
+> +               assert(bpf_map_lookup_elem(map_fd, &key, &udp_cnt) == 0);
+>
+>                 key = IPPROTO_ICMP;
+> -               assert(bpf_map_lookup_elem(map_fd[0], &key, &icmp_cnt) == 0);
+> +               assert(bpf_map_lookup_elem(map_fd, &key, &icmp_cnt) == 0);
+>
+>                 printf("TCP %lld UDP %lld ICMP %lld bytes\n",
+>                        tcp_cnt, udp_cnt, icmp_cnt);
+> diff --git a/samples/bpf/sockex2_user.c b/samples/bpf/sockex2_user.c
+> index 125ee6efc913..bc257333ad92 100644
+> --- a/samples/bpf/sockex2_user.c
+> +++ b/samples/bpf/sockex2_user.c
+> @@ -3,7 +3,7 @@
+>  #include <assert.h>
+>  #include <linux/bpf.h>
+>  #include <bpf/bpf.h>
+> -#include "bpf_load.h"
+> +#include "bpf/libbpf.h"
+>  #include "sock_example.h"
+>  #include <unistd.h>
+>  #include <arpa/inet.h>
+> @@ -17,22 +17,25 @@ struct pair {
+>  int main(int ac, char **argv)
+>  {
+>         struct rlimit r = {RLIM_INFINITY, RLIM_INFINITY};
+> +       struct bpf_object *obj;
+> +       int map_fd, prog_fd;
+>         char filename[256];
+> -       FILE *f;
+>         int i, sock;
+> +       FILE *f;
+>
+>         snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
+>         setrlimit(RLIMIT_MEMLOCK, &r);
+>
+> -       if (load_bpf_file(filename)) {
+> -               printf("%s", bpf_log_buf);
+> +       if (bpf_prog_load(filename, BPF_PROG_TYPE_SOCKET_FILTER,
+> +                         &obj, &prog_fd))
+>                 return 1;
+> -       }
+> +
+> +       map_fd = bpf_object__find_map_fd_by_name(obj, "hash_map");
+>
+>         sock = open_raw_sock("lo");
+>
+> -       assert(setsockopt(sock, SOL_SOCKET, SO_ATTACH_BPF, prog_fd,
+> -                         sizeof(prog_fd[0])) == 0);
+> +       assert(setsockopt(sock, SOL_SOCKET, SO_ATTACH_BPF, &prog_fd,
+> +                         sizeof(prog_fd)) == 0);
+>
+>         f = popen("ping -4 -c5 localhost", "r");
+>         (void) f;
+> @@ -41,8 +44,8 @@ int main(int ac, char **argv)
+>                 int key = 0, next_key;
+>                 struct pair value;
+>
+> -               while (bpf_map_get_next_key(map_fd[0], &key, &next_key) == 0) {
+> -                       bpf_map_lookup_elem(map_fd[0], &next_key, &value);
+> +               while (bpf_map_get_next_key(map_fd, &key, &next_key) == 0) {
+> +                       bpf_map_lookup_elem(map_fd, &next_key, &value);
+>                         printf("ip %s bytes %lld packets %lld\n",
+>                                inet_ntoa((struct in_addr){htonl(next_key)}),
+>                                value.bytes, value.packets);
+> --
+> 2.19.2
+>
