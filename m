@@ -2,676 +2,360 @@ Return-Path: <SRS0=vk/n=RD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A8B8C43381
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 23:41:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 714C4C43381
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 23:47:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2713A20850
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 23:41:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 08D2320C01
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 23:47:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="ovCZNaw6"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="qC7Zw2rk";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="Rtye6elG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727907AbfB1XlE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Feb 2019 18:41:04 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:38144 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727858AbfB1XlE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Feb 2019 18:41:04 -0500
-Received: by mail-pg1-f193.google.com with SMTP id m2so10479100pgl.5
-        for <bpf@vger.kernel.org>; Thu, 28 Feb 2019 15:41:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ofKvWTaUnhatV3ikD4BhqS0GX9moD5DEaViu+tybRH8=;
-        b=ovCZNaw6QrROaOvjp1BXdp22BuyprL7dlZqi65zhKJIylyIWfM/4bvHHX41So0B3J4
-         yDn/s5/TOT1L0k4aWBUC/m9cmMidlGrjjXuDHx+4BUSfqyKCEb/esP6qFTco8lwfQkm7
-         bZ7WNN4BuyTVL9fLGC22LZ66VZKj7nKyG3ZgIQ5FZr4MvNNZc8A6a1cpljnru2QAUAI/
-         spZRF4075OpcDEY+U1LY8lRuiohUD+JijZ4+83e9cf+FbasLWHu2FlW2JBFLp7AIHaYA
-         a2HDPM9/KCvSJnGUHjpC7vVjDA8BirDj+wKJqZd4IGPV6ctWQPZEK65pjINxpx2aWLZf
-         QNkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ofKvWTaUnhatV3ikD4BhqS0GX9moD5DEaViu+tybRH8=;
-        b=eLiglSMGxSdibYa6g7ihi8Oxn5Q0PxscQJCWEkWK8GyiedAjvGgctzXMCDrI8z/pv5
-         XhNBtZAXLt63/uBaV3LLoR2s8eE/86qJXUkedFpat+uN9Pd0cX2av9YByA84GYOK0MVa
-         k4mBQYMSwEpl1ekIkL/R/+Dz1YgoM9SyY13oLYuDuz5fkM2egSYq9bRpTQ84IXeIcnIa
-         iuQUZnzfTuoFeCHFQ3Apcorhxm6qMMLU6cTYTaQkG+QcLeEpyHzYK0UOcq98YRxqCldf
-         D6zgC+jdrIaDNDLHGF+xxDlXzt7Mg5nCoxUUjN49Q7KXPDOezZWzZ+xH8qIf2GZo+GBQ
-         zfiQ==
-X-Gm-Message-State: AHQUAuae9DIHEAFru6Wl9F+YRMnFQYlDsOn0fCYP3b91mc/g0yNB/3e9
-        MIWm3iR2lPaKOQsGU27D5890hw==
-X-Google-Smtp-Source: AHgI3IbMhmwIEbX214rKWM0YFRCm3XNTDkq+fI34ahnCGhyLFziIVoJLYL4sUGwzOeFaZZz+Ye0beg==
-X-Received: by 2002:a62:e802:: with SMTP id c2mr2253595pfi.249.1551397262830;
-        Thu, 28 Feb 2019 15:41:02 -0800 (PST)
-Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
-        by smtp.gmail.com with ESMTPSA id a24sm24905748pfo.160.2019.02.28.15.41.01
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 28 Feb 2019 15:41:02 -0800 (PST)
-Date:   Thu, 28 Feb 2019 15:41:01 -0800
-From:   Stanislav Fomichev <sdf@fomichev.me>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     ast@fb.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        joe@wand.net.nz, john.fastabend@gmail.com, tgraf@suug.ch,
-        yhs@fb.com, andriin@fb.com, jakub.kicinski@netronome.com,
-        lmb@cloudflare.com
-Subject: Re: [PATCH bpf-next v2 5/7] bpf, libbpf: support global
- data/bss/rodata sections
-Message-ID: <20190228234101.GA10108@mini-arch.hsd1.ca.comcast.net>
-References: <20190228231829.11993-1-daniel@iogearbox.net>
- <20190228231829.11993-6-daniel@iogearbox.net>
+        id S1727910AbfB1XrZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Feb 2019 18:47:25 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:40918 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727842AbfB1XrZ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 28 Feb 2019 18:47:25 -0500
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x1SNjOP2015508;
+        Thu, 28 Feb 2019 15:47:08 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : subject :
+ date : message-id : references : in-reply-to : content-type : content-id :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=WcobreqrivMusrLq+eknTeKP9S2pYyx9iTDtMn6ti3U=;
+ b=qC7Zw2rkk9r977dQMy6GZ2ppp/q/rtrhhHhdWNEd5rdkWX6hh4bkQS7+hXNI0eMZ5a2P
+ zcUp1RRBaWHqPZmhSo2vdtdn7ldaEbpIs4PQt6f8jVpMxYDz2iGivyevn6R2VtUmejz0
+ AvoAb5GLtLvKnxmZxA+jw6krYRzbhjrV5K8= 
+Received: from maileast.thefacebook.com ([199.201.65.23])
+        by m0089730.ppops.net with ESMTP id 2qxrh086rm-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Thu, 28 Feb 2019 15:47:08 -0800
+Received: from frc-hub06.TheFacebook.com (2620:10d:c021:18::176) by
+ frc-hub06.TheFacebook.com (2620:10d:c021:18::176) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1531.3; Thu, 28 Feb 2019 15:47:07 -0800
+Received: from NAM03-BY2-obe.outbound.protection.outlook.com (192.168.183.28)
+ by o365-in.thefacebook.com (192.168.177.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1531.3
+ via Frontend Transport; Thu, 28 Feb 2019 15:47:07 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector1-fb-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WcobreqrivMusrLq+eknTeKP9S2pYyx9iTDtMn6ti3U=;
+ b=Rtye6elGkguU2/9erUQYiSFJWoslllLFwI9epKm5dunh2rKwMC4ID6qLftfU2vXIshpflhhn3jhHYTsqV+t1EVS3C5SzSZ5rkrVfHslkH/T3fQ85S/kGSu/IQV/ViBwGGIIGyFLPZV10FQvgRrTe5mLLmSvwbqnUvFWCzSBl/ag=
+Received: from BN8PR15MB3380.namprd15.prod.outlook.com (20.179.75.139) by
+ BN8PR15MB3332.namprd15.prod.outlook.com (20.179.75.11) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1665.16; Thu, 28 Feb 2019 23:47:05 +0000
+Received: from BN8PR15MB3380.namprd15.prod.outlook.com
+ ([fe80::fd39:f9a3:23a9:264b]) by BN8PR15MB3380.namprd15.prod.outlook.com
+ ([fe80::fd39:f9a3:23a9:264b%5]) with mapi id 15.20.1665.015; Thu, 28 Feb 2019
+ 23:47:05 +0000
+From:   Yonghong Song <yhs@fb.com>
+To:     Andrii Nakryiko <andriin@fb.com>,
+        "andrii.nakryiko@gmail.com" <andrii.nakryiko@gmail.com>,
+        Alexei Starovoitov <ast@fb.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>
+Subject: Re: [PATCH bpf-next 1/4] docs/btf: fix typos, improve wording
+Thread-Topic: [PATCH bpf-next 1/4] docs/btf: fix typos, improve wording
+Thread-Index: AQHUz5XOxJT50XXAf0moww8msNi1bKX14KkA
+Date:   Thu, 28 Feb 2019 23:47:04 +0000
+Message-ID: <6bb53d5b-4acd-c33d-68ad-9d692586e5f0@fb.com>
+References: <20190228184512.198075-1-andriin@fb.com>
+ <20190228184512.198075-2-andriin@fb.com>
+In-Reply-To: <20190228184512.198075-2-andriin@fb.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BYAPR21CA0007.namprd21.prod.outlook.com
+ (2603:10b6:a03:114::17) To BN8PR15MB3380.namprd15.prod.outlook.com
+ (2603:10b6:408:a6::11)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2620:10d:c090:200::2:e2ab]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 897fd4da-8049-4e94-1947-08d69dd70ad1
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600127)(711020)(4605104)(2017052603328)(7153060)(7193020);SRVR:BN8PR15MB3332;
+x-ms-traffictypediagnostic: BN8PR15MB3332:
+x-microsoft-exchange-diagnostics: 1;BN8PR15MB3332;20:ZTtqMO8XZcyCYQl2KG7MIOrx0jKmZhowjCCuKFt0oLJzmXmyXfk0cFQN5C6uAmCIyEwwzDKPMYa/lgpwWE76wbKbHHhRCgSLqEjXSEpK1dpuSyFDG5tFbnKviuWFi+2ZuQ4QIhyMLb/XClSUr2JyO2/y1m5JZ0sMBmqc1UBb+UE=
+x-microsoft-antispam-prvs: <BN8PR15MB3332EC9BE218C421ACA3DDC4D3750@BN8PR15MB3332.namprd15.prod.outlook.com>
+x-forefront-prvs: 0962D394D2
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39860400002)(346002)(396003)(376002)(366004)(136003)(199004)(189003)(256004)(14444005)(31686004)(316002)(31696002)(229853002)(110136005)(102836004)(446003)(11346002)(186003)(68736007)(6486002)(53546011)(6116002)(6436002)(8936002)(86362001)(2201001)(386003)(6506007)(106356001)(76176011)(2501003)(52116002)(105586002)(6512007)(305945005)(14454004)(81166006)(6246003)(30864003)(8676002)(53936002)(71190400001)(71200400001)(2906002)(36756003)(46003)(5660300002)(99286004)(25786009)(476003)(478600001)(81156014)(2616005)(486006)(7736002)(97736004);DIR:OUT;SFP:1102;SCL:1;SRVR:BN8PR15MB3332;H:BN8PR15MB3380.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: Xmq1xBFiaOyGDcguDhJd6InPRkCZJR9qp5mO8uuYTNnMGU/DO9yu/z6/aiIEfrx706lRkYQFaUzpWpwKMKdYJ62/Bay4AMXnFeiJ9upCnGAgam2BZjukW2XTKkqb376UsbcjKEaoQ6IGg2BInN4kfaLqLl7y1AMW8mwBSjuyZUefvNfeof9HypSYn4feVNnk00mMemYNyRf0goTkj1rrilxzMiG+u4nqJmdVCuwUxJkmZFpqqMU0kacPEQ1kx4fDGqT6tdDqrwWrclE8ZwID/ya6upzamfJPFfn2RPbxvqroot504qxSY0zXdmCVJTnG0VmnlRDsJx01tfqqLZh4Y1TiIYfywefXApsWfs/Nf1Q96EqhJJM7mB6KRC4wmo5YlZoAQJe4hpBEHCEjHxKRXTLct6iqo82CIaPfXZCgfF0=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <235E04A77A3AD643B43AE9327EE0C6AF@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190228231829.11993-6-daniel@iogearbox.net>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 897fd4da-8049-4e94-1947-08d69dd70ad1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2019 23:47:04.9742
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR15MB3332
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-02-28_15:,,
+ signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 03/01, Daniel Borkmann wrote:
-> This work adds BPF loader support for global data sections
-> to libbpf. This allows to write BPF programs in more natural
-> C-like way by being able to define global variables and const
-> data.
-> 
-> Back at LPC 2018 [0] we presented a first prototype which
-> implemented support for global data sections by extending BPF
-> syscall where union bpf_attr would get additional memory/size
-> pair for each section passed during prog load in order to later
-> add this base address into the ldimm64 instruction along with
-> the user provided offset when accessing a variable. Consensus
-> from LPC was that for proper upstream support, it would be
-> more desirable to use maps instead of bpf_attr extension as
-> this would allow for introspection of these sections as well
-> as potential life updates of their content. This work follows
-> this path by taking the following steps from loader side:
-> 
->  1) In bpf_object__elf_collect() step we pick up ".data",
->     ".rodata", and ".bss" section information.
-> 
->  2) If present, in bpf_object__init_global_maps() we create
->     a map that corresponds to each of the present sections.
->     Given section size and access properties can differ, a
->     single entry array map is created with value size that
->     is corresponding to the ELF section size of .data, .bss
->     or .rodata. In the latter case, the map is created as
->     read-only from program side such that verifier rejects
->     any write attempts into .rodata. In a subsequent step,
->     for .data and .rodata sections, the section content is
->     copied into the map through bpf_map_update_elem(). For
->     .bss this is not necessary since array map is already
->     zero-initialized by default.
-> 
->  3) In bpf_program__collect_reloc() step, we record the
->     corresponding map, insn index, and relocation type for
->     the global data.
-> 
->  4) And last but not least in the actual relocation step in
->     bpf_program__relocate(), we mark the ldimm64 instruction
->     with src_reg = BPF_PSEUDO_MAP_VALUE where in the first
->     imm field the map's file descriptor is stored as similarly
->     done as in BPF_PSEUDO_MAP_FD, and in the second imm field
->     (as ldimm64 is 2-insn wide) we store the access offset
->     into the section.
-> 
->  5) On kernel side, this special marked BPF_PSEUDO_MAP_VALUE
->     load will then store the actual target address in order
->     to have a 'map-lookup'-free access. That is, the actual
->     map value base address + offset. The destination register
->     in the verifier will then be marked as PTR_TO_MAP_VALUE,
->     containing the fixed offset as reg->off and backing BPF
->     map as reg->map_ptr. Meaning, it's treated as any other
->     normal map value from verification side, only with
->     efficient, direct value access instead of actual call to
->     map lookup helper as in the typical case.
-> 
-> Simple example dump of program using globals vars in each
-> section:
-> 
->   # readelf -a test_global_data.o
->   [...]
->   [ 6] .bss              NOBITS           0000000000000000  00000328
->        0000000000000010  0000000000000000  WA       0     0     8
->   [ 7] .data             PROGBITS         0000000000000000  00000328
->        0000000000000010  0000000000000000  WA       0     0     8
->   [ 8] .rodata           PROGBITS         0000000000000000  00000338
->        0000000000000018  0000000000000000   A       0     0     8
->   [...]
->     95: 0000000000000000     8 OBJECT  LOCAL  DEFAULT    6 static_bss
->     96: 0000000000000008     8 OBJECT  LOCAL  DEFAULT    6 static_bss2
->     97: 0000000000000000     8 OBJECT  LOCAL  DEFAULT    7 static_data
->     98: 0000000000000008     8 OBJECT  LOCAL  DEFAULT    7 static_data2
->     99: 0000000000000000     8 OBJECT  LOCAL  DEFAULT    8 static_rodata
->    100: 0000000000000008     8 OBJECT  LOCAL  DEFAULT    8 static_rodata2
->    101: 0000000000000010     8 OBJECT  LOCAL  DEFAULT    8 static_rodata3
->   [...]
-> 
->   # bpftool prog
->   103: sched_cls  name load_static_dat  tag 37a8b6822fc39a29  gpl
->        loaded_at 2019-02-28T02:02:35+0000  uid 0
->        xlated 712B  jited 426B  memlock 4096B  map_ids 63,64,65,66
->   # bpftool map show id 63
->   63: array  name .bss  flags 0x0                      <-- .bss area, rw
-Can we use <main prog>.bss/data/rodata names? If we load more than one
-prog with global data that should make it easier to find which one is which.
-
->       key 4B  value 16B  max_entries 1  memlock 4096B
->   # bpftool map show id 64
->   64: array  name .data  flags 0x0                     <-- .data area, rw
->       key 4B  value 16B  max_entries 1  memlock 4096B
->   # bpftool map show id 65
->   65: array  name .rodata  flags 0x80                  <-- .rodata area, ro
->       key 4B  value 24B  max_entries 1  memlock 4096B
-> 
->   # bpftool prog dump xlated id 103
->   int load_static_data(struct __sk_buff * skb):
->   ; int load_static_data(struct __sk_buff *skb)
->      0: (b7) r1 = 0
->   ; key = 0;
->      1: (63) *(u32 *)(r10 -4) = r1
->      2: (bf) r6 = r10
->   ; int load_static_data(struct __sk_buff *skb)
->      3: (07) r6 += -4
->   ; bpf_map_update_elem(&result, &key, &static_bss, 0);
->      4: (18) r1 = map[id:66]
->      6: (bf) r2 = r6
->      7: (18) r3 = map[id:63][0]+0         <-- direct static_bss addr in .bss area
->      9: (b7) r4 = 0
->     10: (85) call array_map_update_elem#99888
->     11: (b7) r1 = 1
->   ; key = 1;
->     12: (63) *(u32 *)(r10 -4) = r1
->   ; bpf_map_update_elem(&result, &key, &static_data, 0);
->     13: (18) r1 = map[id:66]
->     15: (bf) r2 = r6
->     16: (18) r3 = map[id:64][0]+0         <-- direct static_data addr in .data area
->     18: (b7) r4 = 0
->     19: (85) call array_map_update_elem#99888
->     20: (b7) r1 = 2
->   ; key = 2;
->     21: (63) *(u32 *)(r10 -4) = r1
->   ; bpf_map_update_elem(&result, &key, &static_rodata, 0);
->     22: (18) r1 = map[id:66]
->     24: (bf) r2 = r6
->     25: (18) r3 = map[id:65][0]+0         <-- direct static_rodata addr in .rodata area
->     27: (b7) r4 = 0
->     28: (85) call array_map_update_elem#99888
->     29: (b7) r1 = 3
->   ; key = 3;
->     30: (63) *(u32 *)(r10 -4) = r1
->   ; bpf_map_update_elem(&result, &key, &static_bss2, 0);
->     31: (18) r7 = map[id:63][0]+8         <--.
->     33: (18) r1 = map[id:66]                 |
->     35: (bf) r2 = r6                         |
->     36: (18) r3 = map[id:63][0]+8         <-- direct static_bss2 addr in .bss area
->     38: (b7) r4 = 0
->     39: (85) call array_map_update_elem#99888
->   [...]
-> 
-> For now .data/.rodata/.bss maps are not exposed via API to the
-> user, but this could be done in a subsequent step.
-> 
-> Based upon recent fix in LLVM, commit c0db6b6bd444 ("[BPF] Don't
-> fail for static variables").
-> 
-> Joint work with Joe Stringer.
-> 
->   [0] LPC 2018, BPF track, "ELF relocation for static data in BPF",
->       http://vger.kernel.org/lpc-bpf2018.html#session-3
-> 
-> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> Signed-off-by: Joe Stringer <joe@wand.net.nz>
-> ---
->  tools/include/uapi/linux/bpf.h |  10 +-
->  tools/lib/bpf/libbpf.c         | 259 +++++++++++++++++++++++++++------
->  2 files changed, 226 insertions(+), 43 deletions(-)
-> 
-> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-> index 8884072e1a46..04b26f59b413 100644
-> --- a/tools/include/uapi/linux/bpf.h
-> +++ b/tools/include/uapi/linux/bpf.h
-> @@ -287,7 +287,7 @@ enum bpf_attach_type {
->  
->  #define BPF_OBJ_NAME_LEN 16U
->  
-> -/* Flags for accessing BPF object */
-> +/* Flags for accessing BPF object from syscall side. */
->  #define BPF_F_RDONLY		(1U << 3)
->  #define BPF_F_WRONLY		(1U << 4)
->  
-> @@ -297,6 +297,14 @@ enum bpf_attach_type {
->  /* Zero-initialize hash function seed. This should only be used for testing. */
->  #define BPF_F_ZERO_SEED		(1U << 6)
->  
-> +/* Flags for accessing BPF object from program side. */
-> +#define BPF_F_RDONLY_PROG	(1U << 7)
-> +#define BPF_F_WRONLY_PROG	(1U << 8)
-> +#define BPF_F_ACCESS_MASK	(BPF_F_RDONLY |		\
-> +				 BPF_F_RDONLY_PROG |	\
-> +				 BPF_F_WRONLY |		\
-> +				 BPF_F_WRONLY_PROG)
-> +
->  /* flags for BPF_PROG_QUERY */
->  #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
->  
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 8f8f688f3e9b..969bc3d9f02c 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -139,6 +139,9 @@ struct bpf_program {
->  		enum {
->  			RELO_LD64,
->  			RELO_CALL,
-> +			RELO_DATA,
-> +			RELO_RODATA,
-> +			RELO_BSS,
->  		} type;
->  		int insn_idx;
->  		union {
-> @@ -174,7 +177,10 @@ struct bpf_program {
->  struct bpf_map {
->  	int fd;
->  	char *name;
-> -	size_t offset;
-> +	union {
-> +		__u32 global_type;
-> +		size_t offset;
-> +	};
->  	int map_ifindex;
->  	int inner_map_fd;
->  	struct bpf_map_def def;
-> @@ -194,6 +200,8 @@ struct bpf_object {
->  	size_t nr_programs;
->  	struct bpf_map *maps;
->  	size_t nr_maps;
-> +	struct bpf_map *maps_global;
-> +	size_t nr_maps_global;
->  
->  	bool loaded;
->  	bool has_pseudo_calls;
-> @@ -209,6 +217,9 @@ struct bpf_object {
->  		Elf *elf;
->  		GElf_Ehdr ehdr;
->  		Elf_Data *symbols;
-> +		Elf_Data *global_data;
-> +		Elf_Data *global_rodata;
-> +		Elf_Data *global_bss;
->  		size_t strtabidx;
->  		struct {
->  			GElf_Shdr shdr;
-> @@ -217,6 +228,9 @@ struct bpf_object {
->  		int nr_reloc;
->  		int maps_shndx;
->  		int text_shndx;
-> +		int data_shndx;
-> +		int rodata_shndx;
-> +		int bss_shndx;
->  	} efile;
->  	/*
->  	 * All loaded bpf_object is linked in a list, which is
-> @@ -457,6 +471,9 @@ static struct bpf_object *bpf_object__new(const char *path,
->  	obj->efile.obj_buf = obj_buf;
->  	obj->efile.obj_buf_sz = obj_buf_sz;
->  	obj->efile.maps_shndx = -1;
-> +	obj->efile.data_shndx = -1;
-> +	obj->efile.rodata_shndx = -1;
-> +	obj->efile.bss_shndx = -1;
->  
->  	obj->loaded = false;
->  
-> @@ -475,6 +492,9 @@ static void bpf_object__elf_finish(struct bpf_object *obj)
->  		obj->efile.elf = NULL;
->  	}
->  	obj->efile.symbols = NULL;
-> +	obj->efile.global_data = NULL;
-> +	obj->efile.global_rodata = NULL;
-> +	obj->efile.global_bss = NULL;
->  
->  	zfree(&obj->efile.reloc);
->  	obj->efile.nr_reloc = 0;
-> @@ -757,6 +777,85 @@ bpf_object__init_maps(struct bpf_object *obj, int flags)
->  	return 0;
->  }
->  
-> +static int
-> +bpf_object__create_map(struct bpf_object *obj, struct bpf_map *map);
-> +
-> +static int
-> +bpf_object__init_global(struct bpf_object *obj, int i, int type,
-> +			const char *name, Elf_Data *map_data)
-> +{
-> +	struct bpf_map *map = &obj->maps_global[i];
-> +	struct bpf_map_def *def = &map->def;
-> +	char *cp, errmsg[STRERR_BUFSIZE];
-> +	int err, slot0 = 0;
-> +
-> +	def->type = BPF_MAP_TYPE_ARRAY;
-> +	def->key_size = sizeof(int);
-> +	def->value_size = map_data->d_size;
-> +	def->max_entries = 1;
-> +	def->map_flags = type == RELO_RODATA ? BPF_F_RDONLY_PROG : 0;
-> +
-> +	map->name = strdup(name);
-> +	map->global_type = type;
-> +	map->fd = bpf_object__create_map(obj, map);
-> +	if (map->fd < 0) {
-> +		err = map->fd;
-> +		cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
-> +		pr_warning("failed to create map (name: '%s'): %s\n",
-> +			   map->name, cp);
-> +		goto destroy;
-> +	}
-> +
-> +	pr_debug("create map %s: fd=%d\n", map->name, map->fd);
-> +
-> +	if (type != RELO_BSS) {
-> +		err = bpf_map_update_elem(map->fd, &slot0, map_data->d_buf, 0);
-> +		if (err < 0) {
-> +			cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
-> +			pr_warning("failed to update map (name: '%s'): %s\n",
-> +				   map->name, cp);
-> +			goto destroy;
-> +		}
-> +
-> +		pr_debug("updated map %s with elf data: fd=%d\n", map->name,
-> +			 map->fd);
-> +	}
-> +	return 0;
-> +destroy:
-> +	for (i = 0; i < obj->nr_maps_global; i++)
-> +		zclose(obj->maps_global[i].fd);
-> +	return err;
-> +}
-> +
-> +static int
-> +bpf_object__init_global_maps(struct bpf_object *obj)
-> +{
-> +	int nr_maps_global = (obj->efile.data_shndx >= 0) +
-> +			     (obj->efile.rodata_shndx >= 0) +
-> +			     (obj->efile.bss_shndx >= 0), i, err = 0;
-> +
-> +	obj->maps_global = calloc(nr_maps_global, sizeof(obj->maps_global[0]));
-> +	if (!obj->maps_global) {
-> +		pr_warning("alloc maps for object failed\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	obj->nr_maps_global = nr_maps_global;
-> +	for (i = 0; i < obj->nr_maps_global; i++)
-> +		obj->maps[i].fd = -1;
-> +	i = 0;
-> +	if (obj->efile.bss_shndx >= 0)
-> +		err = bpf_object__init_global(obj, i++, RELO_BSS, ".bss",
-> +					      obj->efile.global_bss);
-> +	if (obj->efile.data_shndx >= 0 && !err)
-> +		err = bpf_object__init_global(obj, i++, RELO_DATA, ".data",
-> +					      obj->efile.global_data);
-> +	if (obj->efile.rodata_shndx >= 0 && !err)
-> +		err = bpf_object__init_global(obj, i++, RELO_RODATA, ".rodata",
-> +					      obj->efile.global_rodata);
-> +	return err;
-> +}
-> +
->  static bool section_have_execinstr(struct bpf_object *obj, int idx)
->  {
->  	Elf_Scn *scn;
-> @@ -865,6 +964,12 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
->  					pr_warning("failed to alloc program %s (%s): %s",
->  						   name, obj->path, cp);
->  				}
-> +			} else if (strcmp(name, ".data") == 0) {
-> +				obj->efile.global_data = data;
-> +				obj->efile.data_shndx = idx;
-> +			} else if (strcmp(name, ".rodata") == 0) {
-> +				obj->efile.global_rodata = data;
-> +				obj->efile.rodata_shndx = idx;
->  			}
->  		} else if (sh.sh_type == SHT_REL) {
->  			void *reloc = obj->efile.reloc;
-> @@ -892,6 +997,9 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
->  				obj->efile.reloc[n].shdr = sh;
->  				obj->efile.reloc[n].data = data;
->  			}
-> +		} else if (sh.sh_type == SHT_NOBITS && strcmp(name, ".bss") == 0) {
-> +			obj->efile.global_bss = data;
-> +			obj->efile.bss_shndx = idx;
->  		} else {
->  			pr_debug("skip section(%d) %s\n", idx, name);
->  		}
-> @@ -923,6 +1031,14 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
->  		if (err)
->  			goto out;
->  	}
-> +	if (obj->efile.data_shndx >= 0 ||
-> +	    obj->efile.rodata_shndx >= 0 ||
-> +	    obj->efile.bss_shndx >= 0) {
-> +		err = bpf_object__init_global_maps(obj);
-> +		if (err)
-> +			goto out;
-> +	}
-> +
->  	err = bpf_object__init_prog_names(obj);
->  out:
->  	return err;
-> @@ -961,6 +1077,11 @@ bpf_program__collect_reloc(struct bpf_program *prog, GElf_Shdr *shdr,
->  	Elf_Data *symbols = obj->efile.symbols;
->  	int text_shndx = obj->efile.text_shndx;
->  	int maps_shndx = obj->efile.maps_shndx;
-> +	int data_shndx = obj->efile.data_shndx;
-> +	int rodata_shndx = obj->efile.rodata_shndx;
-> +	int bss_shndx = obj->efile.bss_shndx;
-> +	struct bpf_map *maps_global = obj->maps_global;
-> +	size_t nr_maps_global = obj->nr_maps_global;
->  	struct bpf_map *maps = obj->maps;
->  	size_t nr_maps = obj->nr_maps;
->  	int i, nrels;
-> @@ -999,8 +1120,10 @@ bpf_program__collect_reloc(struct bpf_program *prog, GElf_Shdr *shdr,
->  			 (long long) (rel.r_info >> 32),
->  			 (long long) sym.st_value, sym.st_name);
->  
-> -		if (sym.st_shndx != maps_shndx && sym.st_shndx != text_shndx) {
-> -			pr_warning("Program '%s' contains non-map related relo data pointing to section %u\n",
-> +		if (sym.st_shndx != maps_shndx && sym.st_shndx != text_shndx &&
-> +		    sym.st_shndx != data_shndx && sym.st_shndx != rodata_shndx &&
-> +		    sym.st_shndx != bss_shndx) {
-> +			pr_warning("Program '%s' contains unrecognized relo data pointing to section %u\n",
->  				   prog->section_name, sym.st_shndx);
->  			return -LIBBPF_ERRNO__RELOC;
->  		}
-> @@ -1045,6 +1168,30 @@ bpf_program__collect_reloc(struct bpf_program *prog, GElf_Shdr *shdr,
->  			prog->reloc_desc[i].type = RELO_LD64;
->  			prog->reloc_desc[i].insn_idx = insn_idx;
->  			prog->reloc_desc[i].map_idx = map_idx;
-> +		} else if (sym.st_shndx == data_shndx ||
-> +			   sym.st_shndx == rodata_shndx ||
-> +			   sym.st_shndx == bss_shndx) {
-> +			int type = (sym.st_shndx == data_shndx)   ? RELO_DATA :
-> +				   (sym.st_shndx == rodata_shndx) ? RELO_RODATA :
-> +								    RELO_BSS;
-> +
-> +			for (map_idx = 0; map_idx < nr_maps_global; map_idx++) {
-> +				if (maps_global[map_idx].global_type == type) {
-> +					pr_debug("relocation: find map %zd (%s) for insn %u\n",
-> +						 map_idx, maps_global[map_idx].name, insn_idx);
-> +					break;
-> +				}
-> +			}
-> +
-> +			if (map_idx >= nr_maps_global) {
-> +				pr_warning("bpf relocation: map_idx %d large than %d\n",
-> +					   (int)map_idx, (int)nr_maps_global - 1);
-> +				return -LIBBPF_ERRNO__RELOC;
-> +			}
-> +
-> +			prog->reloc_desc[i].type = type;
-> +			prog->reloc_desc[i].insn_idx = insn_idx;
-> +			prog->reloc_desc[i].map_idx = map_idx;
->  		}
->  	}
->  	return 0;
-> @@ -1176,15 +1323,58 @@ bpf_object__probe_caps(struct bpf_object *obj)
->  }
->  
->  static int
-> -bpf_object__create_maps(struct bpf_object *obj)
-> +bpf_object__create_map(struct bpf_object *obj, struct bpf_map *map)
->  {
->  	struct bpf_create_map_attr create_attr = {};
-> +	struct bpf_map_def *def = &map->def;
-> +	char *cp, errmsg[STRERR_BUFSIZE];
-> +	int fd;
-> +
-> +	if (obj->caps.name)
-> +		create_attr.name = map->name;
-> +	create_attr.map_ifindex = map->map_ifindex;
-> +	create_attr.map_type = def->type;
-> +	create_attr.map_flags = def->map_flags;
-> +	create_attr.key_size = def->key_size;
-> +	create_attr.value_size = def->value_size;
-> +	create_attr.max_entries = def->max_entries;
-> +	create_attr.btf_fd = 0;
-> +	create_attr.btf_key_type_id = 0;
-> +	create_attr.btf_value_type_id = 0;
-> +	if (bpf_map_type__is_map_in_map(def->type) &&
-> +	    map->inner_map_fd >= 0)
-> +		create_attr.inner_map_fd = map->inner_map_fd;
-> +	if (obj->btf && !bpf_map_find_btf_info(map, obj->btf)) {
-> +		create_attr.btf_fd = btf__fd(obj->btf);
-> +		create_attr.btf_key_type_id = map->btf_key_type_id;
-> +		create_attr.btf_value_type_id = map->btf_value_type_id;
-> +	}
-> +
-> +	fd = bpf_create_map_xattr(&create_attr);
-> +	if (fd < 0 && create_attr.btf_key_type_id) {
-> +		cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
-> +		pr_warning("Error in bpf_create_map_xattr(%s):%s(%d). Retrying without BTF.\n",
-> +			   map->name, cp, errno);
-> +
-> +		create_attr.btf_fd = 0;
-> +		create_attr.btf_key_type_id = 0;
-> +		create_attr.btf_value_type_id = 0;
-> +		map->btf_key_type_id = 0;
-> +		map->btf_value_type_id = 0;
-> +		fd = bpf_create_map_xattr(&create_attr);
-> +	}
-> +
-> +	return fd;
-> +}
-> +
-> +static int
-> +bpf_object__create_maps(struct bpf_object *obj)
-> +{
->  	unsigned int i;
->  	int err;
->  
->  	for (i = 0; i < obj->nr_maps; i++) {
->  		struct bpf_map *map = &obj->maps[i];
-> -		struct bpf_map_def *def = &map->def;
->  		char *cp, errmsg[STRERR_BUFSIZE];
->  		int *pfd = &map->fd;
->  
-> @@ -1193,41 +1383,7 @@ bpf_object__create_maps(struct bpf_object *obj)
->  				 map->name, map->fd);
->  			continue;
->  		}
-> -
-> -		if (obj->caps.name)
-> -			create_attr.name = map->name;
-> -		create_attr.map_ifindex = map->map_ifindex;
-> -		create_attr.map_type = def->type;
-> -		create_attr.map_flags = def->map_flags;
-> -		create_attr.key_size = def->key_size;
-> -		create_attr.value_size = def->value_size;
-> -		create_attr.max_entries = def->max_entries;
-> -		create_attr.btf_fd = 0;
-> -		create_attr.btf_key_type_id = 0;
-> -		create_attr.btf_value_type_id = 0;
-> -		if (bpf_map_type__is_map_in_map(def->type) &&
-> -		    map->inner_map_fd >= 0)
-> -			create_attr.inner_map_fd = map->inner_map_fd;
-> -
-> -		if (obj->btf && !bpf_map_find_btf_info(map, obj->btf)) {
-> -			create_attr.btf_fd = btf__fd(obj->btf);
-> -			create_attr.btf_key_type_id = map->btf_key_type_id;
-> -			create_attr.btf_value_type_id = map->btf_value_type_id;
-> -		}
-> -
-> -		*pfd = bpf_create_map_xattr(&create_attr);
-> -		if (*pfd < 0 && create_attr.btf_key_type_id) {
-> -			cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
-> -			pr_warning("Error in bpf_create_map_xattr(%s):%s(%d). Retrying without BTF.\n",
-> -				   map->name, cp, errno);
-> -			create_attr.btf_fd = 0;
-> -			create_attr.btf_key_type_id = 0;
-> -			create_attr.btf_value_type_id = 0;
-> -			map->btf_key_type_id = 0;
-> -			map->btf_value_type_id = 0;
-> -			*pfd = bpf_create_map_xattr(&create_attr);
-> -		}
-> -
-> +		*pfd = bpf_object__create_map(obj, map);
->  		if (*pfd < 0) {
->  			size_t j;
->  
-> @@ -1412,6 +1568,24 @@ bpf_program__relocate(struct bpf_program *prog, struct bpf_object *obj)
->  						      &prog->reloc_desc[i]);
->  			if (err)
->  				return err;
-> +		} else if (prog->reloc_desc[i].type == RELO_DATA ||
-> +			   prog->reloc_desc[i].type == RELO_RODATA ||
-> +			   prog->reloc_desc[i].type == RELO_BSS) {
-> +			struct bpf_insn *insns = prog->insns;
-> +			int insn_idx, map_idx, data_off;
-> +
-> +			insn_idx = prog->reloc_desc[i].insn_idx;
-> +			map_idx  = prog->reloc_desc[i].map_idx;
-> +			data_off = insns[insn_idx].imm;
-> +
-> +			if (insn_idx + 1 >= (int)prog->insns_cnt) {
-> +				pr_warning("relocation out of range: '%s'\n",
-> +					   prog->section_name);
-> +				return -LIBBPF_ERRNO__RELOC;
-> +			}
-> +			insns[insn_idx].src_reg = BPF_PSEUDO_MAP_VALUE;
-> +			insns[insn_idx].imm = obj->maps_global[map_idx].fd;
-> +			insns[insn_idx + 1].imm = data_off;
->  		}
->  	}
->  
-> @@ -1717,6 +1891,7 @@ __bpf_object__open(const char *path, void *obj_buf, size_t obj_buf_sz,
->  
->  	CHECK_ERR(bpf_object__elf_init(obj), err, out);
->  	CHECK_ERR(bpf_object__check_endianness(obj), err, out);
-> +	CHECK_ERR(bpf_object__probe_caps(obj), err, out);
->  	CHECK_ERR(bpf_object__elf_collect(obj, flags), err, out);
->  	CHECK_ERR(bpf_object__collect_reloc(obj), err, out);
->  	CHECK_ERR(bpf_object__validate(obj, needs_kver), err, out);
-> @@ -1789,7 +1964,8 @@ int bpf_object__unload(struct bpf_object *obj)
->  
->  	for (i = 0; i < obj->nr_maps; i++)
->  		zclose(obj->maps[i].fd);
-> -
-> +	for (i = 0; i < obj->nr_maps_global; i++)
-> +		zclose(obj->maps_global[i].fd);
->  	for (i = 0; i < obj->nr_programs; i++)
->  		bpf_program__unload(&obj->programs[i]);
->  
-> @@ -1810,7 +1986,6 @@ int bpf_object__load(struct bpf_object *obj)
->  
->  	obj->loaded = true;
->  
-> -	CHECK_ERR(bpf_object__probe_caps(obj), err, out);
->  	CHECK_ERR(bpf_object__create_maps(obj), err, out);
->  	CHECK_ERR(bpf_object__relocate(obj), err, out);
->  	CHECK_ERR(bpf_object__load_progs(obj), err, out);
-> -- 
-> 2.17.1
-> 
+DQoNCk9uIDIvMjgvMTkgMTA6NDUgQU0sIEFuZHJpaSBOYWtyeWlrbyB3cm90ZToNCj4gRml4IHZh
+cmlvdXMgdHlwb3MsIHNvbWUgb2YgdGhlIGZvcm1hdHRpbmcgYW5kIHdvcmRpbmcgZm9yDQo+IERv
+Y3VtZW50YXRpb24vYnRmLnJzdC4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEFuZHJpaSBOYWtyeWlr
+byA8YW5kcmlpbkBmYi5jb20+DQoNCkFjayBmb3IgUGF0Y2ggIzEgYW5kICMyOg0KICAgQWNrZWQt
+Ynk6IFlvbmdob25nIFNvbmcgPHloc0BmYi5jb20+DQoNCj4gLS0tDQo+ICAgRG9jdW1lbnRhdGlv
+bi9icGYvYnRmLnJzdCB8IDEwOCArKysrKysrKysrKysrKysrKysrLS0tLS0tLS0tLS0tLS0tLS0t
+LQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCA1MyBpbnNlcnRpb25zKCspLCA1NSBkZWxldGlvbnMoLSkN
+Cj4gDQo+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2JwZi9idGYucnN0IGIvRG9jdW1lbnRh
+dGlvbi9icGYvYnRmLnJzdA0KPiBpbmRleCAxZDQzNGMzYTI2OGQuLjFkNzYxZjFjNWIyYiAxMDA2
+NDQNCj4gLS0tIGEvRG9jdW1lbnRhdGlvbi9icGYvYnRmLnJzdA0KPiArKysgYi9Eb2N1bWVudGF0
+aW9uL2JwZi9idGYucnN0DQo+IEBAIC01LDcgKzUsNyBAQCBCUEYgVHlwZSBGb3JtYXQgKEJURikN
+Cj4gICAxLiBJbnRyb2R1Y3Rpb24NCj4gICAqKioqKioqKioqKioqKioNCj4gICANCj4gLUJURiAo
+QlBGIFR5cGUgRm9ybWF0KSBpcyB0aGUgbWV0YSBkYXRhIGZvcm1hdCB3aGljaA0KPiArQlRGIChC
+UEYgVHlwZSBGb3JtYXQpIGlzIHRoZSBtZXRhZGF0YSBmb3JtYXQgd2hpY2gNCj4gICBlbmNvZGVz
+IHRoZSBkZWJ1ZyBpbmZvIHJlbGF0ZWQgdG8gQlBGIHByb2dyYW0vbWFwLg0KPiAgIFRoZSBuYW1l
+IEJURiB3YXMgdXNlZCBpbml0aWFsbHkgdG8gZGVzY3JpYmUNCj4gICBkYXRhIHR5cGVzLiBUaGUg
+QlRGIHdhcyBsYXRlciBleHRlbmRlZCB0byBpbmNsdWRlDQo+IEBAIC00MCw4ICs0MCw4IEBAIGRl
+dGFpbHMgaW4gOnJlZjpgQlRGX1R5cGVfU3RyaW5nYC4NCj4gICAyLiBCVEYgVHlwZSBhbmQgU3Ry
+aW5nIEVuY29kaW5nDQo+ICAgKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKg0KPiAgIA0K
+PiAtVGhlIGZpbGUgYGBpbmNsdWRlL3VhcGkvbGludXgvYnRmLmhgYCBwcm92aWRlcyBoaWdoDQo+
+IC1sZXZlbCBkZWZpbml0aW9uIG9uIGhvdyB0eXBlcy9zdHJpbmdzIGFyZSBlbmNvZGVkLg0KPiAr
+VGhlIGZpbGUgYGBpbmNsdWRlL3VhcGkvbGludXgvYnRmLmhgYCBwcm92aWRlcyBoaWdoLWxldmVs
+DQo+ICtkZWZpbml0aW9uIG9mIGhvdyB0eXBlcy9zdHJpbmdzIGFyZSBlbmNvZGVkLg0KPiAgIA0K
+PiAgIFRoZSBiZWdpbm5pbmcgb2YgZGF0YSBibG9iIG11c3QgYmU6Og0KPiAgIA0KPiBAQCAtNTks
+MjMgKzU5LDIzIEBAIFRoZSBiZWdpbm5pbmcgb2YgZGF0YSBibG9iIG11c3QgYmU6Og0KPiAgICAg
+ICB9Ow0KPiAgIA0KPiAgIFRoZSBtYWdpYyBpcyBgYDB4ZUI5RmBgLCB3aGljaCBoYXMgZGlmZmVy
+ZW50IGVuY29kaW5nIGZvciBiaWcgYW5kIGxpdHRsZQ0KPiAtZW5kaWFuIHN5c3RlbSwgYW5kIGNh
+biBiZSB1c2VkIHRvIHRlc3Qgd2hldGhlciBCVEYgaXMgZ2VuZXJhdGVkIGZvcg0KPiAtYmlnIG9y
+IGxpdHRsZSBlbmRpYW4gdGFyZ2V0Lg0KPiAtVGhlIGJ0Zl9oZWFkZXIgaXMgZGVzaWduZWQgdG8g
+YmUgZXh0ZW5zaWJsZSB3aXRoIGhkcl9sZW4gZXF1YWwgdG8NCj4gLWBgc2l6ZW9mKHN0cnVjdCBi
+dGZfaGVhZGVyKWBgIHdoZW4gdGhlIGRhdGEgYmxvYiBpcyBnZW5lcmF0ZWQuDQo+ICtlbmRpYW4g
+c3lzdGVtcywgYW5kIGNhbiBiZSB1c2VkIHRvIHRlc3Qgd2hldGhlciBCVEYgaXMgZ2VuZXJhdGVk
+IGZvcg0KPiArYmlnLSBvciBsaXR0bGUtZW5kaWFuIHRhcmdldC4NCj4gK1RoZSBgYGJ0Zl9oZWFk
+ZXJgYCBpcyBkZXNpZ25lZCB0byBiZSBleHRlbnNpYmxlIHdpdGggYGBoZHJfbGVuYGAgZXF1YWwg
+dG8NCj4gK2Bgc2l6ZW9mKHN0cnVjdCBidGZfaGVhZGVyKWBgIHdoZW4gYSBkYXRhIGJsb2IgaXMg
+Z2VuZXJhdGVkLg0KPiAgIA0KPiAgIDIuMSBTdHJpbmcgRW5jb2RpbmcNCj4gICA9PT09PT09PT09
+PT09PT09PT09DQo+ICAgDQo+ICAgVGhlIGZpcnN0IHN0cmluZyBpbiB0aGUgc3RyaW5nIHNlY3Rp
+b24gbXVzdCBiZSBhIG51bGwgc3RyaW5nLg0KPiAtVGhlIHJlc3Qgb2Ygc3RyaW5nIHRhYmxlIGlz
+IGEgY29uY2F0ZW5hdGlvbiBvZiBvdGhlciBudWxsLXRyZW1pbmF0ZWQNCj4gK1RoZSByZXN0IG9m
+IHN0cmluZyB0YWJsZSBpcyBhIGNvbmNhdGVuYXRpb24gb2Ygb3RoZXIgbnVsbC10ZXJtaW5hdGVk
+DQo+ICAgc3RyaW5ncy4NCj4gICANCj4gICAyLjIgVHlwZSBFbmNvZGluZw0KPiAgID09PT09PT09
+PT09PT09PT09DQo+ICAgDQo+ICAgVGhlIHR5cGUgaWQgYGAwYGAgaXMgcmVzZXJ2ZWQgZm9yIGBg
+dm9pZGBgIHR5cGUuDQo+IC1UaGUgdHlwZSBzZWN0aW9uIGlzIHBhcnNlZCBzZXF1ZW50aWFsbHkg
+YW5kIHRoZSB0eXBlIGlkIGlzIGFzc2lnbmVkIHRvDQo+ICtUaGUgdHlwZSBzZWN0aW9uIGlzIHBh
+cnNlZCBzZXF1ZW50aWFsbHkgYW5kIHR5cGUgaWQgaXMgYXNzaWduZWQgdG8NCj4gICBlYWNoIHJl
+Y29nbml6ZWQgdHlwZSBzdGFydGluZyBmcm9tIGlkIGBgMWBgLg0KPiAgIEN1cnJlbnRseSwgdGhl
+IGZvbGxvd2luZyB0eXBlcyBhcmUgc3VwcG9ydGVkOjoNCj4gICANCj4gQEAgLTEyMiw5ICsxMjIs
+OSBAQCBFYWNoIHR5cGUgY29udGFpbnMgdGhlIGZvbGxvd2luZyBjb21tb24gZGF0YTo6DQo+ICAg
+ICAgICAgICB9Ow0KPiAgICAgICB9Ow0KPiAgIA0KPiAtRm9yIGNlcnRhaW4ga2luZHMsIHRoZSBj
+b21tb24gZGF0YSBhcmUgZm9sbG93ZWQgYnkga2luZCBzcGVjaWZpYyBkYXRhLg0KPiAtVGhlIGBg
+bmFtZV9vZmZgYCBpbiBgYHN0cnVjdCBidGZfdHlwZWBgIHNwZWNpZmllcyB0aGUgb2Zmc2V0IGlu
+IHRoZSBzdHJpbmcgdGFibGUuDQo+IC1UaGUgZm9sbG93aW5nIGRldGFpbHMgZW5jb2Rpbmcgb2Yg
+ZWFjaCBraW5kLg0KPiArRm9yIGNlcnRhaW4ga2luZHMsIHRoZSBjb21tb24gZGF0YSBhcmUgZm9s
+bG93ZWQgYnkga2luZC1zcGVjaWZpYyBkYXRhLg0KPiArVGhlIGBgbmFtZV9vZmZgYCBpbiBgYHN0
+cnVjdCBidGZfdHlwZWBgIHNwZWNpZmllcyB0aGUgb2Zmc2V0IGluIHRoZSBzdHJpbmcNCj4gK3Rh
+YmxlLiBUaGUgZm9sbG93aW5nIHNlY3Rpb25zIGRldGFpbCBlbmNvZGluZyBvZiBlYWNoIGtpbmQu
+DQo+ICAgDQo+ICAgMi4yLjEgQlRGX0tJTkRfSU5UDQo+ICAgfn5+fn5+fn5+fn5+fn5+fn5+DQo+
+IEBAIC0xMzYsNyArMTM2LDcgQEAgVGhlIGZvbGxvd2luZyBkZXRhaWxzIGVuY29kaW5nIG9mIGVh
+Y2gga2luZC4NCj4gICAgKiBgYGluZm8udmxlbmBgOiAwDQo+ICAgICogYGBzaXplYGA6IHRoZSBz
+aXplIG9mIHRoZSBpbnQgdHlwZSBpbiBieXRlcy4NCj4gICANCj4gLWBgYnRmX3R5cGVgYCBpcyBm
+b2xsb3dlZCBieSBhIGBgdTMyYGAgd2l0aCBmb2xsb3dpbmcgYml0cyBhcnJhbmdlbWVudDo6DQo+
+ICtgYGJ0Zl90eXBlYGAgaXMgZm9sbG93ZWQgYnkgYSBgYHUzMmBgIHdpdGggdGhlIGZvbGxvd2lu
+ZyBiaXRzIGFycmFuZ2VtZW50OjoNCj4gICANCj4gICAgICNkZWZpbmUgQlRGX0lOVF9FTkNPRElO
+RyhWQUwpICAgKCgoVkFMKSAmIDB4MGYwMDAwMDApID4+IDI0KQ0KPiAgICAgI2RlZmluZSBCVEZf
+SU5UX09GRlNFVChWQUwpICAgICAoKChWQUwgICYgMHgwMGZmMDAwMCkpID4+IDE2KQ0KPiBAQCAt
+MTQ4LDcgKzE0OCw3IEBAIFRoZSBgYEJURl9JTlRfRU5DT0RJTkdgYCBoYXMgdGhlIGZvbGxvd2lu
+ZyBhdHRyaWJ1dGVzOjoNCj4gICAgICNkZWZpbmUgQlRGX0lOVF9DSEFSICAgICgxIDw8IDEpDQo+
+ICAgICAjZGVmaW5lIEJURl9JTlRfQk9PTCAgICAoMSA8PCAyKQ0KPiAgIA0KPiAtVGhlIGBgQlRG
+X0lOVF9FTkNPRElORygpYGAgcHJvdmlkZXMgZXh0cmEgaW5mb3JtYXRpb24sIHNpZ25uZXNzLA0K
+PiArVGhlIGBgQlRGX0lOVF9FTkNPRElORygpYGAgcHJvdmlkZXMgZXh0cmEgaW5mb3JtYXRpb246
+IHNpZ25lZG5lc3MsDQo+ICAgY2hhciwgb3IgYm9vbCwgZm9yIHRoZSBpbnQgdHlwZS4gVGhlIGNo
+YXIgYW5kIGJvb2wgZW5jb2RpbmcNCj4gICBhcmUgbW9zdGx5IHVzZWZ1bCBmb3IgcHJldHR5IHBy
+aW50LiBBdCBtb3N0IG9uZSBlbmNvZGluZyBjYW4NCj4gICBiZSBzcGVjaWZpZWQgZm9yIHRoZSBp
+bnQgdHlwZS4NCj4gQEAgLTE2MSw4ICsxNjEsNyBAQCBUaGUgbWF4aW11bSB2YWx1ZSBvZiBgYEJU
+Rl9JTlRfQklUUygpYGAgaXMgMTI4Lg0KPiAgIA0KPiAgIFRoZSBgYEJURl9JTlRfT0ZGU0VUKClg
+YCBzcGVjaWZpZXMgdGhlIHN0YXJ0aW5nIGJpdCBvZmZzZXQgdG8NCj4gICBjYWxjdWxhdGUgdmFs
+dWVzIGZvciB0aGlzIGludC4gRm9yIGV4YW1wbGUsIGEgYml0ZmllbGQgc3RydWN0DQo+IC1tZW1i
+ZXIgaGFzDQo+IC0NCj4gK21lbWJlciBoYXM6DQo+ICAgICogYnRmIG1lbWJlciBiaXQgb2Zmc2V0
+IDEwMCBmcm9tIHRoZSBzdGFydCBvZiB0aGUgc3RydWN0dXJlLA0KPiAgICAqIGJ0ZiBtZW1iZXIg
+cG9pbnRpbmcgdG8gYW4gaW50IHR5cGUsDQo+ICAgICogdGhlIGludCB0eXBlIGhhcyBgYEJURl9J
+TlRfT0ZGU0VUKCkgPSAyYGAgYW5kIGBgQlRGX0lOVF9CSVRTKCkgPSA0YGANCj4gQEAgLTE3OSw3
+ICsxNzgsNyBAQCBhY2Nlc3MgdGhlIHNhbWUgYml0cyBhcyB0aGUgYWJvdmU6DQo+ICAgDQo+ICAg
+VGhlIG9yaWdpbmFsIGludGVudGlvbiBvZiBgYEJURl9JTlRfT0ZGU0VUKClgYCBpcyB0byBwcm92
+aWRlDQo+ICAgZmxleGliaWxpdHkgb2YgYml0ZmllbGQgZW5jb2RpbmcuDQo+IC1DdXJyZW50bHks
+IGJvdGggbGx2bSBhbmQgcGFob2xlIGdlbmVyYXRlcyBgYEJURl9JTlRfT0ZGU0VUKCkgPSAwYGAN
+Cj4gK0N1cnJlbnRseSwgYm90aCBsbHZtIGFuZCBwYWhvbGUgZ2VuZXJhdGUgYGBCVEZfSU5UX09G
+RlNFVCgpID0gMGBgDQo+ICAgZm9yIGFsbCBpbnQgdHlwZXMuDQo+ICAgDQo+ICAgMi4yLjIgQlRG
+X0tJTkRfUFRSDQo+IEBAIC0yMDQsNyArMjAzLDcgQEAgTm8gYWRkaXRpb25hbCB0eXBlIGRhdGEg
+Zm9sbG93IGBgYnRmX3R5cGVgYC4NCj4gICAgICogYGBpbmZvLnZsZW5gYDogMA0KPiAgICAgKiBg
+YHNpemUvdHlwZWBgOiAwLCBub3QgdXNlZA0KPiAgIA0KPiAtYnRmX3R5cGUgaXMgZm9sbG93ZWQg
+Ynkgb25lICJzdHJ1Y3QgYnRmX2FycmF5Ijo6DQo+ICtgYGJ0Zl90eXBlYGAgaXMgZm9sbG93ZWQg
+Ynkgb25lIGBgc3RydWN0IGJ0Zl9hcnJheWBgOjoNCj4gICANCj4gICAgICAgc3RydWN0IGJ0Zl9h
+cnJheSB7DQo+ICAgICAgICAgICBfX3UzMiAgIHR5cGU7DQo+IEBAIC0yMTcsMjcgKzIxNiwyNiBA
+QCBUaGUgYGBzdHJ1Y3QgYnRmX2FycmF5YGAgZW5jb2Rpbmc6DQo+ICAgICAqIGBgaW5kZXhfdHlw
+ZWBgOiB0aGUgaW5kZXggdHlwZQ0KPiAgICAgKiBgYG5lbGVtc2BgOiB0aGUgbnVtYmVyIG9mIGVs
+ZW1lbnRzIGZvciB0aGlzIGFycmF5IChgYDBgYCBpcyBhbHNvIGFsbG93ZWQpLg0KPiAgIA0KPiAt
+VGhlIGBgaW5kZXhfdHlwZWBgIGNhbiBiZSBhbnkgcmVndWxhciBpbnQgdHlwZXMNCj4gLSh1OCwg
+dTE2LCB1MzIsIHU2NCwgdW5zaWduZWQgX19pbnQxMjgpLg0KPiAtVGhlIG9yaWdpbmFsIGRlc2ln
+biBvZiBpbmNsdWRpbmcgYGBpbmRleF90eXBlYGAgZm9sbG93cyBkd2FyZg0KPiAtd2hpY2ggaGFz
+IGEgYGBpbmRleF90eXBlYGAgZm9yIGl0cyBhcnJheSB0eXBlLg0KPiArVGhlIGBgaW5kZXhfdHlw
+ZWBgIGNhbiBiZSBhbnkgcmVndWxhciBpbnQgdHlwZQ0KPiArKGBgdThgYCwgYGB1MTZgYCwgYGB1
+MzJgYCwgYGB1NjRgYCwgYGB1bnNpZ25lZCBfX2ludDEyOGBgKS4NCj4gK1RoZSBvcmlnaW5hbCBk
+ZXNpZ24gb2YgaW5jbHVkaW5nIGBgaW5kZXhfdHlwZWBgIGZvbGxvd3MgRFdBUkYsDQo+ICt3aGlj
+aCBoYXMgYW4gYGBpbmRleF90eXBlYGAgZm9yIGl0cyBhcnJheSB0eXBlLg0KPiAgIEN1cnJlbnRs
+eSBpbiBCVEYsIGJleW9uZCB0eXBlIHZlcmlmaWNhdGlvbiwgdGhlIGBgaW5kZXhfdHlwZWBgIGlz
+IG5vdCB1c2VkLg0KPiAgIA0KPiAgIFRoZSBgYHN0cnVjdCBidGZfYXJyYXlgYCBhbGxvd3MgY2hh
+aW5pbmcgdGhyb3VnaCBlbGVtZW50IHR5cGUgdG8gcmVwcmVzZW50DQo+IC1tdWx0aXBsZSBkaW1l
+bnNpb25hbCBhcnJheXMuIEZvciBleGFtcGxlLCBgYGludCBhWzVdWzZdYGAsIHRoZSBmb2xsb3dp
+bmcNCj4gLXR5cGUgc3lzdGVtIGlsbHVzdHJhdGVzIHRoZSBjaGFpbmluZzoNCj4gK211bHRpZGlt
+ZW5zaW9uYWwgYXJyYXlzLiBGb3IgZXhhbXBsZSwgZm9yIGBgaW50IGFbNV1bNl1gYCwgdGhlIGZv
+bGxvd2luZw0KPiArdHlwZSBpbmZvcm1hdGlvbiBpbGx1c3RyYXRlcyB0aGUgY2hhaW5pbmc6DQo+
+ICAgDQo+ICAgICAqIFsxXTogaW50DQo+ICAgICAqIFsyXTogYXJyYXksIGBgYnRmX2FycmF5LnR5
+cGUgPSBbMV1gYCwgYGBidGZfYXJyYXkubmVsZW1zID0gNmBgDQo+ICAgICAqIFszXTogYXJyYXks
+IGBgYnRmX2FycmF5LnR5cGUgPSBbMl1gYCwgYGBidGZfYXJyYXkubmVsZW1zID0gNWBgDQo+ICAg
+DQo+IC1DdXJyZW50bHksIGJvdGggcGFob2xlIGFuZCBsbHZtIGNvbGxhcHNlIG11bHRpcGxlIGRp
+bWVuc2lvbmFsIGFycmF5DQo+IC1pbnRvIG9uZSBkaW1lbnNpb25hbCBhcnJheSwgZS5nLiwgYGBh
+WzVdWzZdYGAsIHRoZSBidGZfYXJyYXkubmVsZW1zDQo+IC1lcXVhbCB0byBgYDMwYGAuIFRoaXMg
+aXMgYmVjYXVzZSB0aGUgb3JpZ2luYWwgdXNlIGNhc2UgaXMgbWFwIHByZXR0eQ0KPiAtcHJpbnQg
+d2hlcmUgdGhlIHdob2xlIGFycmF5IGlzIGR1bXBlZCBvdXQgc28gb25lIGRpbWVuc2lvbmFsIGFy
+cmF5DQo+ICtDdXJyZW50bHksIGJvdGggcGFob2xlIGFuZCBsbHZtIGNvbGxhcHNlIG11bHRpZGlt
+ZW5zaW9uYWwgYXJyYXkNCj4gK2ludG8gb25lLWRpbWVuc2lvbmFsIGFycmF5LCBlLmcuLCBmb3Ig
+YGBhWzVdWzZdYGAsIHRoZSBgYGJ0Zl9hcnJheS5uZWxlbXNgYA0KPiAraXMgZXF1YWwgdG8gYGAz
+MGBgLiBUaGlzIGlzIGJlY2F1c2UgdGhlIG9yaWdpbmFsIHVzZSBjYXNlIGlzIG1hcCBwcmV0dHkN
+Cj4gK3ByaW50IHdoZXJlIHRoZSB3aG9sZSBhcnJheSBpcyBkdW1wZWQgb3V0IHNvIG9uZS1kaW1l
+bnNpb25hbCBhcnJheQ0KPiAgIGlzIGVub3VnaC4gQXMgbW9yZSBCVEYgdXNhZ2UgaXMgZXhwbG9y
+ZWQsIHBhaG9sZSBhbmQgbGx2bSBjYW4gYmUNCj4gLWNoYW5nZWQgdG8gZ2VuZXJhdGUgcHJvcGVy
+IGNoYWluZWQgcmVwcmVzZW50YXRpb24gZm9yDQo+IC1tdWx0aXBsZSBkaW1lbnNpb25hbCBhcnJh
+eXMuDQo+ICtjaGFuZ2VkIHRvIGdlbmVyYXRlIHByb3BlciBjaGFpbmVkIHJlcHJlc2VudGF0aW9u
+IGZvciBtdWx0aWRpbWVuc2lvbmFsIGFycmF5cy4NCj4gICANCj4gICAyLjIuNCBCVEZfS0lORF9T
+VFJVQ1QNCj4gICB+fn5+fn5+fn5+fn5+fn5+fn5+fn4NCj4gQEAgLTM4Miw3ICszODAsNyBAQCBO
+byBhZGRpdGlvbmFsIHR5cGUgZGF0YSBmb2xsb3cgYGBidGZfdHlwZWBgLg0KPiAgIA0KPiAgIE5v
+IGFkZGl0aW9uYWwgdHlwZSBkYXRhIGZvbGxvdyBgYGJ0Zl90eXBlYGAuDQo+ICAgDQo+IC1BIEJU
+Rl9LSU5EX0ZVTkMgZGVmaW5lcywgbm90IGEgdHlwZSwgYnV0IGEgc3VicHJvZ3JhbSAoZnVuY3Rp
+b24pIHdob3NlDQo+ICtBIEJURl9LSU5EX0ZVTkMgZGVmaW5lcyBub3QgYSB0eXBlLCBidXQgYSBz
+dWJwcm9ncmFtIChmdW5jdGlvbikgd2hvc2UNCj4gICBzaWduYXR1cmUgaXMgZGVmaW5lZCBieSBg
+YHR5cGVgYC4gVGhlIHN1YnByb2dyYW0gaXMgdGh1cyBhbiBpbnN0YW5jZSBvZg0KPiAgIHRoYXQg
+dHlwZS4gVGhlIEJURl9LSU5EX0ZVTkMgbWF5IGluIHR1cm4gYmUgcmVmZXJlbmNlZCBieSBhIGZ1
+bmNfaW5mbyBpbg0KPiAgIHRoZSA6cmVmOmBCVEZfRXh0X1NlY3Rpb25gIChFTEYpIG9yIGluIHRo
+ZSBhcmd1bWVudHMgdG8NCj4gQEAgLTQ1OSwxMCArNDU3LDEwIEBAIFRoZSB3b3JrZmxvdyB0eXBp
+Y2FsbHkgbG9va3MgbGlrZToNCj4gICAzLjEgQlBGX0JURl9MT0FEDQo+ICAgPT09PT09PT09PT09
+PT09PQ0KPiAgIA0KPiAtTG9hZCBhIGJsb2Igb2YgQlRGIGRhdGEgaW50byBrZXJuZWwuIEEgYmxv
+YiBvZiBkYXRhDQo+IC1kZXNjcmliZWQgaW4gOnJlZjpgQlRGX1R5cGVfU3RyaW5nYA0KPiArTG9h
+ZCBhIGJsb2Igb2YgQlRGIGRhdGEgaW50byBrZXJuZWwuIEEgYmxvYiBvZiBkYXRhLA0KPiArZGVz
+Y3JpYmVkIGluIDpyZWY6YEJURl9UeXBlX1N0cmluZ2AsDQo+ICAgY2FuIGJlIGRpcmVjdGx5IGxv
+YWRlZCBpbnRvIHRoZSBrZXJuZWwuDQo+IC1BIGBgYnRmX2ZkYGAgcmV0dXJucyB0byB1c2Vyc3Bh
+Y2UuDQo+ICtBIGBgYnRmX2ZkYGAgaXMgcmV0dXJuZWQgdG8gYSB1c2Vyc3BhY2UuDQo+ICAgDQo+
+ICAgMy4yIEJQRl9NQVBfQ1JFQVRFDQo+ICAgPT09PT09PT09PT09PT09PT09DQo+IEBAIC00ODcs
+NyArNDg1LDcgQEAgSW4gbGliYnBmLCB0aGUgbWFwIGNhbiBiZSBkZWZpbmVkIHdpdGggZXh0cmEg
+YW5ub3RhdGlvbiBsaWtlIGJlbG93Og0KPiAgIEhlcmUsIHRoZSBwYXJhbWV0ZXJzIGZvciBtYWNy
+byBCUEZfQU5OT1RBVEVfS1ZfUEFJUiBhcmUgbWFwIG5hbWUsDQo+ICAga2V5IGFuZCB2YWx1ZSB0
+eXBlcyBmb3IgdGhlIG1hcC4NCj4gICBEdXJpbmcgRUxGIHBhcnNpbmcsIGxpYmJwZiBpcyBhYmxl
+IHRvIGV4dHJhY3Qga2V5L3ZhbHVlIHR5cGVfaWQncw0KPiAtYW5kIGFzc2lnbmVkIHRoZW0gdG8g
+QlBGX01BUF9DUkVBVEUgYXR0cmlidXRlcyBhdXRvbWF0aWNhbGx5Lg0KPiArYW5kIGFzc2lnbiB0
+aGVtIHRvIEJQRl9NQVBfQ1JFQVRFIGF0dHJpYnV0ZXMgYXV0b21hdGljYWxseS4NCj4gICANCj4g
+ICAuLiBfQlBGX1Byb2dfTG9hZDoNCj4gICANCj4gQEAgLTUzMiw3ICs1MzAsNyBAQCBCZWxvdyBh
+cmUgcmVxdWlyZW1lbnRzIGZvciBmdW5jX2luZm86DQo+ICAgICAgIGJwZiBmdW5jIGJvdW5kYXJp
+ZXMuDQo+ICAgDQo+ICAgQmVsb3cgYXJlIHJlcXVpcmVtZW50cyBmb3IgbGluZV9pbmZvOg0KPiAt
+ICAqIHRoZSBmaXJzdCBpbnNuIGluIGVhY2ggZnVuYyBtdXN0IHBvaW50cyB0byBhIGxpbmVfaW5m
+byByZWNvcmQuDQo+ICsgICogdGhlIGZpcnN0IGluc24gaW4gZWFjaCBmdW5jIG11c3QgaGF2ZSBh
+IGxpbmVfaW5mbyByZWNvcmQgcG9pbnRpbmcgdG8gaXQuDQo+ICAgICAqIHRoZSBsaW5lX2luZm8g
+aW5zbl9vZmYgaXMgaW4gc3RyaWN0bHkgaW5jcmVhc2luZyBvcmRlci4NCj4gICANCj4gICBGb3Ig
+bGluZV9pbmZvLCB0aGUgbGluZSBudW1iZXIgYW5kIGNvbHVtbiBudW1iZXIgYXJlIGRlZmluZWQg
+YXMgYmVsb3c6DQo+IEBAIC01NDQsMjYgKzU0MiwyNiBAQCBGb3IgbGluZV9pbmZvLCB0aGUgbGlu
+ZSBudW1iZXIgYW5kIGNvbHVtbiBudW1iZXIgYXJlIGRlZmluZWQgYXMgYmVsb3c6DQo+ICAgMy40
+IEJQRl97UFJPRyxNQVB9X0dFVF9ORVhUX0lEDQo+ICAgDQo+ICAgSW4ga2VybmVsLCBldmVyeSBs
+b2FkZWQgcHJvZ3JhbSwgbWFwIG9yIGJ0ZiBoYXMgYSB1bmlxdWUgaWQuDQo+IC1UaGUgaWQgd29u
+J3QgY2hhbmdlIGR1cmluZyB0aGUgbGlmZSB0aW1lIG9mIHRoZSBwcm9ncmFtLCBtYXAgb3IgYnRm
+Lg0KPiArVGhlIGlkIHdvbid0IGNoYW5nZSBkdXJpbmcgdGhlIGxpZmV0aW1lIG9mIGEgcHJvZ3Jh
+bSwgbWFwLCBvciBidGYuDQo+ICAgDQo+ICAgVGhlIGJwZiBzeXNjYWxsIGNvbW1hbmQgQlBGX3tQ
+Uk9HLE1BUH1fR0VUX05FWFRfSUQNCj4gICByZXR1cm5zIGFsbCBpZCdzLCBvbmUgZm9yIGVhY2gg
+Y29tbWFuZCwgdG8gdXNlciBzcGFjZSwgZm9yIGJwZg0KPiAtcHJvZ3JhbSBvciBtYXBzLA0KPiAt
+c28gdGhlIGluc3BlY3Rpb24gdG9vbCBjYW4gaW5zcGVjdCBhbGwgcHJvZ3JhbXMgYW5kIG1hcHMu
+DQo+ICtwcm9ncmFtIG9yIG1hcHMsIHJlc3BlY3RpdmVseSwNCj4gK3NvIGFuIGluc3BlY3Rpb24g
+dG9vbCBjYW4gaW5zcGVjdCBhbGwgcHJvZ3JhbXMgYW5kIG1hcHMuDQo+ICAgDQo+ICAgMy41IEJQ
+Rl97UFJPRyxNQVB9X0dFVF9GRF9CWV9JRA0KPiAgIA0KPiAtVGhlIGludHJvc3BlY3Rpb24gdG9v
+bCBjYW5ub3QgdXNlIGlkIHRvIGdldCBkZXRhaWxzIGFib3V0IHByb2dyYW0gb3IgbWFwcy4NCj4g
+LUEgZmlsZSBkZXNjcmlwdG9yIG5lZWRzIHRvIGJlIG9idGFpbmVkIGZpcnN0IGZvciByZWZlcmVu
+Y2UgY291bnRpbmcgcHVycG9zZS4NCj4gK0FuIGludHJvc3BlY3Rpb24gdG9vbCBjYW5ub3QgdXNl
+IGlkIHRvIGdldCBkZXRhaWxzIGFib3V0IHByb2dyYW0gb3IgbWFwcy4NCj4gK0EgZmlsZSBkZXNj
+cmlwdG9yIG5lZWRzIHRvIGJlIG9idGFpbmVkIGZpcnN0IGZvciByZWZlcmVuY2UtY291bnRpbmcg
+cHVycG9zZS4NCj4gICANCj4gICAzLjYgQlBGX09CSl9HRVRfSU5GT19CWV9GRA0KPiAgID09PT09
+PT09PT09PT09PT09PT09PT09PT09DQo+ICAgDQo+IC1PbmNlIGEgcHJvZ3JhbS9tYXAgZmQgaXMg
+YWNxdWlyZWQsIHRoZSBpbnRyb3NwZWN0aW9uIHRvb2wgY2FuDQo+ICtPbmNlIGEgcHJvZ3JhbS9t
+YXAgZmQgaXMgYWNxdWlyZWQsIGFuIGludHJvc3BlY3Rpb24gdG9vbCBjYW4NCj4gICBnZXQgdGhl
+IGRldGFpbGVkIGluZm9ybWF0aW9uIGZyb20ga2VybmVsIGFib3V0IHRoaXMgZmQsDQo+IC1zb21l
+IG9mIHdoaWNoIGlzIGJ0ZiByZWxhdGVkLiBGb3IgZXhhbXBsZSwNCj4gLWBgYnBmX21hcF9pbmZv
+YGAgcmV0dXJucyBgYGJ0Zl9pZGBgLCBrZXkvdmFsdWUgdHlwZSBpZC4NCj4gLWBgYnBmX3Byb2df
+aW5mb2BgIHJldHVybnMgYGBidGZfaWRgYCwgZnVuY19pbmZvIGFuZCBsaW5lIGluZm8NCj4gK3Nv
+bWUgb2Ygd2hpY2ggYXJlIEJURi1yZWxhdGVkLiBGb3IgZXhhbXBsZSwNCj4gK2BgYnBmX21hcF9p
+bmZvYGAgcmV0dXJucyBgYGJ0Zl9pZGBgIGFuZCBrZXkvdmFsdWUgdHlwZSBpZHMuDQo+ICtgYGJw
+Zl9wcm9nX2luZm9gYCByZXR1cm5zIGBgYnRmX2lkYGAsIGZ1bmNfaW5mbywgYW5kIGxpbmUgaW5m
+bw0KPiAgIGZvciB0cmFuc2xhdGVkIGJwZiBieXRlIGNvZGVzLCBhbmQgaml0ZWRfbGluZV9pbmZv
+Lg0KPiAgIA0KPiAgIDMuNyBCUEZfQlRGX0dFVF9GRF9CWV9JRA0KPiBAQCAtNTc0LDkgKzU3Miw5
+IEBAIGJwZiBzeXNjYWxsIGNvbW1hbmQgQlBGX0JURl9HRVRfRkRfQllfSUQgY2FuIHJldHJpZXZl
+IGEgYnRmIGZkLg0KPiAgIFRoZW4sIHdpdGggY29tbWFuZCBCUEZfT0JKX0dFVF9JTkZPX0JZX0ZE
+LCB0aGUgYnRmIGJsb2IsIG9yaWdpbmFsbHkNCj4gICBsb2FkZWQgaW50byB0aGUga2VybmVsIHdp
+dGggQlBGX0JURl9MT0FELCBjYW4gYmUgcmV0cmlldmVkLg0KPiAgIA0KPiAtV2l0aCB0aGUgYnRm
+IGJsb2IsIGBgYnBmX21hcF9pbmZvYGAgYW5kIGBgYnBmX3Byb2dfaW5mb2BgLCB0aGUgaW50cm9z
+cGVjdGlvbg0KPiArV2l0aCB0aGUgYnRmIGJsb2IsIGBgYnBmX21hcF9pbmZvYGAsIGFuZCBgYGJw
+Zl9wcm9nX2luZm9gYCwgYW4gaW50cm9zcGVjdGlvbg0KPiAgIHRvb2wgaGFzIGZ1bGwgYnRmIGtu
+b3dsZWRnZSBhbmQgaXMgYWJsZSB0byBwcmV0dHkgcHJpbnQgbWFwIGtleS92YWx1ZXMsDQo+IC1k
+dW1wIGZ1bmMgc2lnbmF0dXJlcywgZHVtcCBsaW5lIGluZm8gYWxvbmcgd2l0aCBieXRlL2ppdCBj
+b2Rlcy4NCj4gK2R1bXAgZnVuYyBzaWduYXR1cmVzIGFuZCBsaW5lIGluZm8sIGFsb25nIHdpdGgg
+Ynl0ZS9qaXQgY29kZXMuDQo+ICAgDQo+ICAgNC4gRUxGIEZpbGUgRm9ybWF0IEludGVyZmFjZQ0K
+PiAgICoqKioqKioqKioqKioqKioqKioqKioqKioqKioNCj4gQEAgLTYyNSw4ICs2MjMsOCBAQCBU
+aGUgZnVuY19pbmZvIGlzIG9yZ2FuaXplZCBhcyBiZWxvdy46Og0KPiAgICAgICAgLi4uDQo+ICAg
+DQo+ICAgYGBmdW5jX2luZm9fcmVjX3NpemVgYCBzcGVjaWZpZXMgdGhlIHNpemUgb2YgYGBicGZf
+ZnVuY19pbmZvYGAgc3RydWN0dXJlDQo+IC13aGVuIC5CVEYuZXh0IGlzIGdlbmVyYXRlZC4gYnRm
+X2V4dF9pbmZvX3NlYywgZGVmaW5lZCBiZWxvdywgaXMNCj4gLXRoZSBmdW5jX2luZm8gZm9yIGVh
+Y2ggc3BlY2lmaWMgRUxGIHNlY3Rpb24uOjoNCj4gK3doZW4gLkJURi5leHQgaXMgZ2VuZXJhdGVk
+LiBgYGJ0Zl9leHRfaW5mb19zZWNgYCwgZGVmaW5lZCBiZWxvdywgaXMNCj4gK2EgY29sbGVjdGlv
+biBvZiBmdW5jX2luZm8gZm9yIGVhY2ggc3BlY2lmaWMgRUxGIHNlY3Rpb24uOjoNCj4gICANCj4g
+ICAgICAgIHN0cnVjdCBidGZfZXh0X2luZm9fc2VjIHsNCj4gICAgICAgICAgIF9fdTMyICAgc2Vj
+X25hbWVfb2ZmOyAvKiBvZmZzZXQgdG8gc2VjdGlvbiBuYW1lICovDQo+IEBAIC02NjEsNyArNjU5
+LDcgQEAgZnJvbSB0aGUgYmVnaW5uaW5nIG9mIHNlY3Rpb24gKGBgYnRmX2V4dF9pbmZvX3NlYy0+
+c2VjX25hbWVfb2ZmYGApLg0KPiAgIA0KPiAgIFdpdGggQlRGLCB0aGUgbWFwIGtleS92YWx1ZSBj
+YW4gYmUgcHJpbnRlZCBiYXNlZCBvbiBmaWVsZHMgcmF0aGVyIHRoYW4NCj4gICBzaW1wbHkgcmF3
+IGJ5dGVzLiBUaGlzIGlzIGVzcGVjaWFsbHkNCj4gLXZhbHVhYmxlIGZvciBsYXJnZSBzdHJ1Y3R1
+cmUgb3IgaWYgeW91IGRhdGEgc3RydWN0dXJlDQo+ICt2YWx1YWJsZSBmb3IgbGFyZ2Ugc3RydWN0
+dXJlIG9yIGlmIHlvdXIgZGF0YSBzdHJ1Y3R1cmUNCj4gICBoYXMgYml0ZmllbGRzLiBGb3IgZXhh
+bXBsZSwgZm9yIHRoZSBmb2xsb3dpbmcgbWFwLDo6DQo+ICAgDQo+ICAgICAgICAgZW51bSBBIHsg
+QTEsIEEyLCBBMywgQTQsIEE1IH07DQo+IEBAIC03MDIsOCArNzAwLDggQEAgYnBmdG9vbCBpcyBh
+YmxlIHRvIHByZXR0eSBwcmludCBsaWtlIGJlbG93Og0KPiAgIDUuMiBicGZ0b29sIHByb2cgZHVt
+cA0KPiAgID09PT09PT09PT09PT09PT09PT09PQ0KPiAgIA0KPiAtVGhlIGZvbGxvd2luZyBpcyBh
+biBleGFtcGxlIHRvIHNob3cgZnVuY19pbmZvIGFuZCBsaW5lX2luZm8NCj4gLWNhbiBoZWxwIHBy
+b2cgZHVtcCB3aXRoIGJldHRlciBrZXJuZWwgc3ltYm9sIG5hbWUsIGZ1bmN0aW9uIHByb3RvdHlw
+ZQ0KPiArVGhlIGZvbGxvd2luZyBpcyBhbiBleGFtcGxlIHNob3dpbmcgaG93IGZ1bmNfaW5mbyBh
+bmQgbGluZV9pbmZvDQo+ICtjYW4gaGVscCBwcm9nIGR1bXAgd2l0aCBiZXR0ZXIga2VybmVsIHN5
+bWJvbCBuYW1lcywgZnVuY3Rpb24gcHJvdG90eXBlcw0KPiAgIGFuZCBsaW5lIGluZm9ybWF0aW9u
+Ljo6DQo+ICAgDQo+ICAgICAgICQgYnBmdG9vbCBwcm9nIGR1bXAgaml0ZWQgcGlubmVkIC9zeXMv
+ZnMvYnBmL3Rlc3RfYnRmX2hhc2t2DQo+IEBAIC03MzMsMTAgKzczMSwxMCBAQCBhbmQgbGluZSBp
+bmZvcm1hdGlvbi46Og0KPiAgICAgICA7IGNvdW50cyA9IGJwZl9tYXBfbG9va3VwX2VsZW0oJmJ0
+Zl9tYXAsICZrZXkpOw0KPiAgICAgICBbLi4uXQ0KPiAgIA0KPiAtNS4zIHZlcmlmaWVyIGxvZw0K
+PiArNS4zIFZlcmlmaWVyIExvZw0KPiAgID09PT09PT09PT09PT09PT0NCj4gICANCj4gLVRoZSBm
+b2xsb3dpbmcgaXMgYW4gZXhhbXBsZSBob3cgbGluZV9pbmZvIGNhbiBoZWxwIHZlcmlmaWVyIGZh
+aWx1cmUgZGVidWcuOjoNCj4gK1RoZSBmb2xsb3dpbmcgaXMgYW4gZXhhbXBsZSBvZiBob3cgbGlu
+ZV9pbmZvIGNhbiBoZWxwIGRlYnVnZ2luZyB2ZXJpZmljYXRpb24gZmFpbHVyZS46Og0KPiAgIA0K
+PiAgICAgICAgICAvKiBUaGUgY29kZSBhdCB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvdGVz
+dF94ZHBfbm9pbmxpbmUuYw0KPiAgICAgICAgICAgKiBpcyBtb2RpZmllZCBhcyBiZWxvdy4NCj4g
+QEAgLTg2Nyw0ICs4NjUsNCBAQCBUaGUgYXNzZW1ibHkgY29kZSAoLVMpIGlzIGFibGUgdG8gc2hv
+dyB0aGUgQlRGIGVuY29kaW5nIGluIGFzc2VtYmx5IGZvcm1hdC46Og0KPiAgIDcuIFRlc3RpbmcN
+Cj4gICAqKioqKioqKioqDQo+ICAgDQo+IC1LZXJuZWwgYnBmIHNlbGZ0ZXN0IGB0ZXN0X2J0Zi5j
+YCBwcm92aWRlcyBleHRlbnNpdmUgc2V0IG9mIEJURiByZWxhdGVkIHRlc3RzLg0KPiArS2VybmVs
+IGJwZiBzZWxmdGVzdCBgdGVzdF9idGYuY2AgcHJvdmlkZXMgZXh0ZW5zaXZlIHNldCBvZiBCVEYt
+cmVsYXRlZCB0ZXN0cy4NCj4gDQo=
