@@ -5,62 +5,63 @@ X-Spam-Level:
 X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74DFBC43381
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 20:00:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7C45C10F00
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 20:08:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 301DE218CD
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 20:00:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B8E4E218CD
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 20:08:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rq20SN01"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a82MeMYK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730815AbfB1UAc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Feb 2019 15:00:32 -0500
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:41255 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728140AbfB1UAc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Feb 2019 15:00:32 -0500
-Received: by mail-qt1-f194.google.com with SMTP id v10so25033281qtp.8;
-        Thu, 28 Feb 2019 12:00:31 -0800 (PST)
+        id S1730630AbfB1UIa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Feb 2019 15:08:30 -0500
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:39728 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726347AbfB1UIa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Feb 2019 15:08:30 -0500
+Received: by mail-oi1-f194.google.com with SMTP id b4so17576733oif.6;
+        Thu, 28 Feb 2019 12:08:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=GR+xRRGH/IaW+PrwqvQ8X/cXrfqX3y4zajCw2IPqt+8=;
-        b=rq20SN01xCpCfMYDezHcb2k0ocrOlwnaMrZjYfOzI5E5i3Y667YiNXMPOYyTPGzqmO
-         our6GtJGjcuYqkv8Ds3PQ8xX8e+8zbnaJKqMRKa3ieqRz/ApaDzXJsbE1IKSuX3wD2Hi
-         gQpznGU+Phnrcq6P2GZ/uVkO9AwqJc2fuTxisfj3Gk2kTNn0hizYPwhEHw5YJkSC3O3N
-         blVlwS0XqDTRFhq9Qb+2+ReiTd5qpsh/YeqSbWGjm7ShGjsuJ7BBgswUf6AosXQNkayA
-         kWi2UGPSpYCC76TkuR/x/e87VOVfIsJyykMTzp4WOP4s9qfAuRWBuZ+VElahkrwK/6ER
-         ccdA==
+        bh=llc7Lf3yQJc4aqS3jY9XdXqXsYTGzU41xCIozmua4fc=;
+        b=a82MeMYKuPRVt2yxP4kbLodSee/h2pmRSC+l4mJZiWENSrwDCM0ivzsX74qLwKO7wQ
+         tGwKD8oxgfu0M45eKMmtX8tl12bFpoGAVCUqw2qEAwnQu2YiW+CnKsdvXVegfJjJc2Z1
+         YkjcQy4SwP8eow4SEuULJg/LkvgwxLdI9xZSzbrGFQwVZ1fH9R/oSipX1aVLKL5pDKlr
+         +JS8LYtAT2pQKYR5gwrau/oGjqM2tQeZK4X+hmnUCCdggQ44g3eCBewWtAX2Tl4JK6w4
+         yaUD8vsMGwn/AthOaICl7QgAA6jBZLwRuWKSfArsUKRRM20mlVzKj0biU4zmAMHN2jmX
+         1+Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=GR+xRRGH/IaW+PrwqvQ8X/cXrfqX3y4zajCw2IPqt+8=;
-        b=BTY1iCBcJkGfb3CzNwxGO6XIrCzRHlM2EKAWo2Iu+LO/s29DxgPkCnLYI2zQcI+D6R
-         FXXGbJXsCa+YfKEvR1mC4kTu1B3guTa7Jp7OyxFs36jWKQBPwvLx2nA3bIPXaZdWHu9v
-         rQwWww7MO1+KFCMduiUM82ffnIDM710gqj3tQEX4V+sIFUHe2lFKsCFLwtY05dH2pCtw
-         XLe4BZtweMdcxgl9z3J2U9KrigHKleFlEgHAY6lEIUp97kp9JmlzTFKpYWT3tXsh00co
-         tG3afAk35BeqmupfAs7j7aKg08O+nDBWjq/Lgvl0TYlqUiHvAlK6QuE9rMjWrE9TybRI
-         lUFw==
-X-Gm-Message-State: APjAAAUxwTRCPN25txn4FiNqBwi8ced8lZjfmLigs/70JL91/q81Mw4I
-        jWySXWQG/koj3rsMEnmKIdX5QE5KleGeMg0I0Bw=
-X-Google-Smtp-Source: APXvYqyqXS0Q+HFaPEg9mklUuIuQeDGBzCXqA2u0VLtXuaGt9h87BFXSZRFjswEuHdZKVQCpcHthekGN0mUay3bUCfw=
-X-Received: by 2002:ac8:f4c:: with SMTP id l12mr879463qtk.225.1551384031087;
- Thu, 28 Feb 2019 12:00:31 -0800 (PST)
+        bh=llc7Lf3yQJc4aqS3jY9XdXqXsYTGzU41xCIozmua4fc=;
+        b=odg2qk6q7Yu4cEjriuR9cpu6ML7Oh1z+pGl3UmfCgsrKrU0Gnh/O76EZe56fMJ43u/
+         /AnyWTCA83q6xDYsc/DWKiUdAbGcHANBlywPxTnWOpI6N5LGUJ3HCXkPRSHJN5JhPNzX
+         uD/bixOHsoVwuLyJlE8sn+HeJJb+UH6QA+8YTAU5Q6K3zwxtuS42NfNKpVZ6cGDe++ru
+         iE4euKO/dR7or2G56NPFM4/HaE6DrswBmGiAbQ5qWf7tudIUZYisIBUxB4kuVKbOlFzF
+         Kgl2MsY/2xbd3YJJ76FhewHGA8Q/uTamoWbQg9KpiHXbq/NYbJJ1x0v/K7cigpO1Vc1A
+         l/fg==
+X-Gm-Message-State: AHQUAuY2Npc9Lnq3bIEBDf8oxTUfx2c2Mj+8WV0nDfW/yncBa1a10rvy
+        e7sCTPDY2i+9uozVFl+YMIOMg5QiXx4pPTb7zZM=
+X-Google-Smtp-Source: AHgI3IZwSbCn/Y/Su+3HY/kwF8AqEab4K+CMlbQkLp74yIOXq8qsriyXCzPgfVGuWh63oSYIHhbgLs/EqLjXUFoU1BY=
+X-Received: by 2002:aca:3bd5:: with SMTP id i204mr992926oia.167.1551384508926;
+ Thu, 28 Feb 2019 12:08:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20190228010156.82981-1-sdf@google.com>
-In-Reply-To: <20190228010156.82981-1-sdf@google.com>
-From:   Song Liu <liu.song.a23@gmail.com>
-Date:   Thu, 28 Feb 2019 12:00:19 -0800
-Message-ID: <CAPhsuW6kf1=QvZrmKtYwS2iOVQt=YqyQi-LW1XXiNKnqUSKZbg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/7] selftests: bpf: break up test_progs
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     Networking <netdev@vger.kernel.org>, bpf@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
+References: <20190227224642.1069138-1-andriin@fb.com> <20190227224642.1069138-4-andriin@fb.com>
+ <20190228185749.GJ9508@kernel.org>
+In-Reply-To: <20190228185749.GJ9508@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 28 Feb 2019 12:08:17 -0800
+Message-ID: <CAEf4Bza48298-6qE7NOqZb=wKvjwR0NdVgXA1Te7Hj9gH7r6EQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/5] btf: allow to customize dedup hash table size
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>, Kernel Team <kernel-team@fb.com>,
+        Alexei Starovoitov <ast@fb.com>,
+        Networking <netdev@vger.kernel.org>, bpf@vger.kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
@@ -68,311 +69,195 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Feb 27, 2019 at 5:02 PM Stanislav Fomichev <sdf@google.com> wrote:
+On Thu, Feb 28, 2019 at 10:57 AM Arnaldo Carvalho de Melo
+<arnaldo.melo@gmail.com> wrote:
 >
-> Recently we had linux-next bpf/bpf-next conflict when we added new
-> functionality to the test_progs.c at the same location. Let's split
-> test_progs.c the same way we recently split test_verifier.c.
+> Em Wed, Feb 27, 2019 at 02:46:39PM -0800, Andrii Nakryiko escreveu:
+> > Default size of dedup table (16k) is good enough for most binaries, even
+> > typical vmlinux images. But there are cases of binaries with huge amount
+> > of BTF types (e.g., allyesconfig variants of kernel), which benefit from
+> > having bigger dedup table size to lower amount of unnecessary hash
+> > collisions. Tools like pahole, thus, can tune this parameter to reach
+> > optimal performance.
+> >
+> > This change also serves double purpose of allowing tests to force hash
+> > collisions to test some corner cases, used in follow up patch.
+> >
+> > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> > ---
+> >  tools/lib/bpf/btf.c | 43 ++++++++++++++++++++++++++-----------------
+> >  tools/lib/bpf/btf.h |  1 +
+> >  2 files changed, 27 insertions(+), 17 deletions(-)
+> >
+> > diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> > index 68b50e9bbde1..6bbb710216e6 100644
+> > --- a/tools/lib/bpf/btf.c
+> > +++ b/tools/lib/bpf/btf.c
+> > @@ -1070,8 +1070,7 @@ int btf__dedup(struct btf *btf, struct btf_ext *btf_ext,
+> >       return err;
+> >  }
+> >
+> > -#define BTF_DEDUP_TABLE_SIZE_LOG 14
+> > -#define BTF_DEDUP_TABLE_MOD ((1 << BTF_DEDUP_TABLE_SIZE_LOG) - 1)
+> > +#define BTF_DEDUP_TABLE_DEFAULT_SIZE (1 << 14)
+> >  #define BTF_UNPROCESSED_ID ((__u32)-1)
+> >  #define BTF_IN_PROGRESS_ID ((__u32)-2)
+> >
+> > @@ -1128,18 +1127,21 @@ static inline __u32 hash_combine(__u32 h, __u32 value)
+> >  #undef GOLDEN_RATIO_PRIME
+> >  }
+> >
+> > -#define for_each_hash_node(table, hash, node) \
+> > -     for (node = table[hash & BTF_DEDUP_TABLE_MOD]; node; node = node->next)
+> > +#define for_each_dedup_cand(d, hash, node) \
+> > +     for (node = d->dedup_table[hash & (d->opts.dedup_table_size - 1)]; \
+> > +          node;                                                         \
+> > +          node = node->next)
+> >
+> >  static int btf_dedup_table_add(struct btf_dedup *d, __u32 hash, __u32 type_id)
+> >  {
+> >       struct btf_dedup_node *node = malloc(sizeof(struct btf_dedup_node));
+> > +     int bucket = hash & (d->opts.dedup_table_size - 1);
+> >
+> >       if (!node)
+> >               return -ENOMEM;
+> >       node->type_id = type_id;
+> > -     node->next = d->dedup_table[hash & BTF_DEDUP_TABLE_MOD];
+> > -     d->dedup_table[hash & BTF_DEDUP_TABLE_MOD] = node;
+> > +     node->next = d->dedup_table[bucket];
+> > +     d->dedup_table[bucket] = node;
+> >       return 0;
+> >  }
+> >
+> > @@ -1177,7 +1179,7 @@ static void btf_dedup_table_free(struct btf_dedup *d)
+> >       if (!d->dedup_table)
+> >               return;
+> >
+> > -     for (i = 0; i < (1 << BTF_DEDUP_TABLE_SIZE_LOG); i++) {
+> > +     for (i = 0; i < d->opts.dedup_table_size; i++) {
+> >               while (d->dedup_table[i]) {
+> >                       tmp = d->dedup_table[i];
+> >                       d->dedup_table[i] = tmp->next;
+> > @@ -1221,10 +1223,19 @@ static struct btf_dedup *btf_dedup_new(struct btf *btf, struct btf_ext *btf_ext,
+> >       if (!d)
+> >               return ERR_PTR(-ENOMEM);
+> >
+> > +     d->opts.dont_resolve_fwds = opts && opts->dont_resolve_fwds;
 >
-> I follow the same patten we did in commit 2dfb40121ee8 ("selftests: bpf:
-> prepare for break up of verifier tests") for verifier: create
-> scaffolding to support dedicated files and slowly move the tests into
-> separate files.
+> Is the above line a leftover from some other patch? Doesn't seem related
+> to this patch.
 >
-> Compared to the verifier split, each separate file here is
-> a compilation unit.
+> The rest seems ok.
 
-Please move most of the change log above to a cover letter. In this change log,
-please explain how each file in prog_tests/*.c should be structured; and how
-they are handled by the Makefile.
-
-Thanks,
-Song
+No, I added another option and moved options processing to the top of
+btf_dedup_new() (it used to be at the end, but it makes sense to first
+process options, because they can be required during construction of
+btf__dedup, as is the case for dedup_table_size).
 
 >
-> Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> ---
->  tools/testing/selftests/bpf/Makefile          | 27 +++++-
->  .../selftests/bpf/prog_tests/.gitignore       |  1 +
->  tools/testing/selftests/bpf/test_progs.c      | 92 +++----------------
->  tools/testing/selftests/bpf/test_progs.h      | 81 ++++++++++++++++
->  4 files changed, 122 insertions(+), 79 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/.gitignore
->  create mode 100644 tools/testing/selftests/bpf/test_progs.h
+> > +     /* ensure table size is power of two and limit to 2G */
+> > +     d->opts.dedup_table_size = opts && opts->dedup_table_size
+> > +             ? opts->dedup_table_size
+> > +             : BTF_DEDUP_TABLE_DEFAULT_SIZE;
+> > +     for (i = 0; i < 31 && (1 << i) < d->opts.dedup_table_size;  i++)
+> > +             ;
+> > +     d->opts.dedup_table_size = 1 << i;
+> > +
+> >       d->btf = btf;
+> >       d->btf_ext = btf_ext;
+> >
+> > -     d->dedup_table = calloc(1 << BTF_DEDUP_TABLE_SIZE_LOG,
+> > +     d->dedup_table = calloc(d->opts.dedup_table_size,
+> >                               sizeof(struct btf_dedup_node *));
+> >       if (!d->dedup_table) {
+> >               err = -ENOMEM;
+> > @@ -1249,8 +1260,6 @@ static struct btf_dedup *btf_dedup_new(struct btf *btf, struct btf_ext *btf_ext,
+> >       for (i = 0; i <= btf->nr_types; i++)
+> >               d->hypot_map[i] = BTF_UNPROCESSED_ID;
+> >
+> > -     d->opts.dont_resolve_fwds = opts && opts->dont_resolve_fwds;
+> > -
+> >  done:
+> >       if (err) {
+> >               btf_dedup_free(d);
+> > @@ -1824,7 +1833,7 @@ static int btf_dedup_prim_type(struct btf_dedup *d, __u32 type_id)
+> >
+> >       case BTF_KIND_INT:
+> >               h = btf_hash_int(t);
+> > -             for_each_hash_node(d->dedup_table, h, cand_node) {
+> > +             for_each_dedup_cand(d, h, cand_node) {
+> >                       cand = d->btf->types[cand_node->type_id];
+> >                       if (btf_equal_int(t, cand)) {
+> >                               new_id = cand_node->type_id;
+> > @@ -1835,7 +1844,7 @@ static int btf_dedup_prim_type(struct btf_dedup *d, __u32 type_id)
+> >
+> >       case BTF_KIND_ENUM:
+> >               h = btf_hash_enum(t);
+> > -             for_each_hash_node(d->dedup_table, h, cand_node) {
+> > +             for_each_dedup_cand(d, h, cand_node) {
+> >                       cand = d->btf->types[cand_node->type_id];
+> >                       if (btf_equal_enum(t, cand)) {
+> >                               new_id = cand_node->type_id;
+> > @@ -1846,7 +1855,7 @@ static int btf_dedup_prim_type(struct btf_dedup *d, __u32 type_id)
+> >
+> >       case BTF_KIND_FWD:
+> >               h = btf_hash_common(t);
+> > -             for_each_hash_node(d->dedup_table, h, cand_node) {
+> > +             for_each_dedup_cand(d, h, cand_node) {
+> >                       cand = d->btf->types[cand_node->type_id];
+> >                       if (btf_equal_common(t, cand)) {
+> >                               new_id = cand_node->type_id;
+> > @@ -2263,7 +2272,7 @@ static int btf_dedup_struct_type(struct btf_dedup *d, __u32 type_id)
+> >               return 0;
+> >
+> >       h = btf_hash_struct(t);
+> > -     for_each_hash_node(d->dedup_table, h, cand_node) {
+> > +     for_each_dedup_cand(d, h, cand_node) {
+> >               int eq;
+> >
+> >               btf_dedup_clear_hypot_map(d);
+> > @@ -2349,7 +2358,7 @@ static int btf_dedup_ref_type(struct btf_dedup *d, __u32 type_id)
+> >               t->type = ref_type_id;
+> >
+> >               h = btf_hash_common(t);
+> > -             for_each_hash_node(d->dedup_table, h, cand_node) {
+> > +             for_each_dedup_cand(d, h, cand_node) {
+> >                       cand = d->btf->types[cand_node->type_id];
+> >                       if (btf_equal_common(t, cand)) {
+> >                               new_id = cand_node->type_id;
+> > @@ -2372,7 +2381,7 @@ static int btf_dedup_ref_type(struct btf_dedup *d, __u32 type_id)
+> >               info->index_type = ref_type_id;
+> >
+> >               h = btf_hash_array(t);
+> > -             for_each_hash_node(d->dedup_table, h, cand_node) {
+> > +             for_each_dedup_cand(d, h, cand_node) {
+> >                       cand = d->btf->types[cand_node->type_id];
+> >                       if (btf_equal_array(t, cand)) {
+> >                               new_id = cand_node->type_id;
+> > @@ -2403,7 +2412,7 @@ static int btf_dedup_ref_type(struct btf_dedup *d, __u32 type_id)
+> >               }
+> >
+> >               h = btf_hash_fnproto(t);
+> > -             for_each_hash_node(d->dedup_table, h, cand_node) {
+> > +             for_each_dedup_cand(d, h, cand_node) {
+> >                       cand = d->btf->types[cand_node->type_id];
+> >                       if (btf_equal_fnproto(t, cand)) {
+> >                               new_id = cand_node->type_id;
+> > diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+> > index b60bb7cf5fff..28a1e1e59861 100644
+> > --- a/tools/lib/bpf/btf.h
+> > +++ b/tools/lib/bpf/btf.h
+> > @@ -90,6 +90,7 @@ LIBBPF_API __u32 btf_ext__func_info_rec_size(const struct btf_ext *btf_ext);
+> >  LIBBPF_API __u32 btf_ext__line_info_rec_size(const struct btf_ext *btf_ext);
+> >
+> >  struct btf_dedup_opts {
+> > +     unsigned int dedup_table_size;
+> >       bool dont_resolve_fwds;
+> >  };
+> >
+> > --
+> > 2.17.1
 >
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index ccffaa0a0787..518cd587cd63 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -165,7 +165,11 @@ $(ALU32_BUILD_DIR)/urandom_read: $(OUTPUT)/urandom_read
->  $(ALU32_BUILD_DIR)/test_progs_32: test_progs.c $(ALU32_BUILD_DIR) \
->                                                 $(ALU32_BUILD_DIR)/urandom_read
->         $(CC) $(CFLAGS) -o $(ALU32_BUILD_DIR)/test_progs_32 $< \
-> -               trace_helpers.c $(OUTPUT)/libbpf.a $(LDLIBS)
-> +               trace_helpers.c prog_tests/*.c $(OUTPUT)/libbpf.a $(LDLIBS)
-> +
-> +$(ALU32_BUILD_DIR)/test_progs_32: $(PROG_TESTS_H)
-> +$(ALU32_BUILD_DIR)/test_progs_32: CFLAGS += -I$(OUTPUT)
-> +$(ALU32_BUILD_DIR)/test_progs_32: prog_tests/*.c
->
->  $(ALU32_BUILD_DIR)/%.o: progs/%.c $(ALU32_BUILD_DIR) \
->                                         $(ALU32_BUILD_DIR)/test_progs_32
-> @@ -196,6 +200,25 @@ ifeq ($(DWARF2BTF),y)
->         $(BTF_PAHOLE) -J $@
->  endif
->
-> +PROG_TESTS_H := $(OUTPUT)/prog_tests/tests.h
-> +$(OUTPUT)/test_progs: $(PROG_TESTS_H)
-> +$(OUTPUT)/test_progs: CFLAGS += -I$(OUTPUT)
-> +$(OUTPUT)/test_progs: prog_tests/*.c
-> +
-> +PROG_TESTS_FILES := $(wildcard prog_tests/*.c)
-> +$(PROG_TESTS_H): $(PROG_TESTS_FILES)
-> +       $(shell ( cd prog_tests/
-> +                 echo '/* Generated header, do not edit */'; \
-> +                 echo '#ifdef DECLARE'; \
-> +                 ls *.c 2> /dev/null | \
-> +                       sed -e 's@\([^\.]*\)\.c@extern void test_\1(void);@'; \
-> +                 echo '#endif'; \
-> +                 echo '#ifdef CALL'; \
-> +                 ls *.c 2> /dev/null | \
-> +                       sed -e 's@\([^\.]*\)\.c@test_\1();@'; \
-> +                 echo '#endif' \
-> +                ) > $(PROG_TESTS_H))
-> +
->  VERIFIER_TESTS_H := $(OUTPUT)/verifier/tests.h
->  $(OUTPUT)/test_verifier: $(VERIFIER_TESTS_H)
->  $(OUTPUT)/test_verifier: CFLAGS += -I$(OUTPUT)
-> @@ -211,4 +234,4 @@ $(OUTPUT)/verifier/tests.h: $(VERIFIER_TEST_FILES)
->                  ) > $(VERIFIER_TESTS_H))
->
->  EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(ALU32_BUILD_DIR) \
-> -       $(VERIFIER_TESTS_H)
-> +       $(VERIFIER_TESTS_H) $(PROG_TESTS_H)
-> diff --git a/tools/testing/selftests/bpf/prog_tests/.gitignore b/tools/testing/selftests/bpf/prog_tests/.gitignore
-> new file mode 100644
-> index 000000000000..45984a364647
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/.gitignore
-> @@ -0,0 +1 @@
-> +tests.h
-> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-> index c59d2e015d16..e49a1e20dc63 100644
-> --- a/tools/testing/selftests/bpf/test_progs.c
-> +++ b/tools/testing/selftests/bpf/test_progs.c
-> @@ -4,57 +4,12 @@
->   * modify it under the terms of version 2 of the GNU General Public
->   * License as published by the Free Software Foundation.
->   */
-> -#include <stdio.h>
-> -#include <unistd.h>
-> -#include <errno.h>
-> -#include <string.h>
-> -#include <assert.h>
-> -#include <stdlib.h>
-> -#include <stdarg.h>
-> -#include <time.h>
-> -#include <signal.h>
-> -
-> -#include <linux/types.h>
-> -typedef __u16 __sum16;
-> -#include <arpa/inet.h>
-> -#include <linux/if_ether.h>
-> -#include <linux/if_packet.h>
-> -#include <linux/ip.h>
-> -#include <linux/ipv6.h>
-> -#include <linux/tcp.h>
-> -#include <linux/filter.h>
-> -#include <linux/perf_event.h>
-> -#include <linux/unistd.h>
-> -
-> -#include <sys/ioctl.h>
-> -#include <sys/wait.h>
-> -#include <sys/types.h>
-> -#include <sys/time.h>
-> -#include <fcntl.h>
-> -#include <pthread.h>
-> -#include <linux/bpf.h>
-> -#include <linux/err.h>
-> -#include <bpf/bpf.h>
-> -#include <bpf/libbpf.h>
-> -
-> -#include "test_iptunnel_common.h"
-> -#include "bpf_util.h"
-> -#include "bpf_endian.h"
-> -#include "bpf_rlimit.h"
-> -#include "trace_helpers.h"
-> -#include "flow_dissector_load.h"
-> -
-> -static int error_cnt, pass_cnt;
-> -static bool jit_enabled;
-> -
-> -#define MAGIC_BYTES 123
-> -
-> -/* ipv4 test vector */
-> -static struct {
-> -       struct ethhdr eth;
-> -       struct iphdr iph;
-> -       struct tcphdr tcp;
-> -} __packed pkt_v4 = {
-> +#include "test_progs.h"
-> +
-> +int error_cnt, pass_cnt;
-> +bool jit_enabled;
-> +
-> +struct ipv4_packet pkt_v4 = {
->         .eth.h_proto = __bpf_constant_htons(ETH_P_IP),
->         .iph.ihl = 5,
->         .iph.protocol = IPPROTO_TCP,
-> @@ -63,12 +18,7 @@ static struct {
->         .tcp.doff = 5,
->  };
->
-> -/* ipv6 test vector */
-> -static struct {
-> -       struct ethhdr eth;
-> -       struct ipv6hdr iph;
-> -       struct tcphdr tcp;
-> -} __packed pkt_v6 = {
-> +struct ipv6_packet pkt_v6 = {
->         .eth.h_proto = __bpf_constant_htons(ETH_P_IPV6),
->         .iph.nexthdr = IPPROTO_TCP,
->         .iph.payload_len = __bpf_constant_htons(MAGIC_BYTES),
-> @@ -76,26 +26,7 @@ static struct {
->         .tcp.doff = 5,
->  };
->
-> -#define _CHECK(condition, tag, duration, format...) ({                 \
-> -       int __ret = !!(condition);                                      \
-> -       if (__ret) {                                                    \
-> -               error_cnt++;                                            \
-> -               printf("%s:FAIL:%s ", __func__, tag);                   \
-> -               printf(format);                                         \
-> -       } else {                                                        \
-> -               pass_cnt++;                                             \
-> -               printf("%s:PASS:%s %d nsec\n", __func__, tag, duration);\
-> -       }                                                               \
-> -       __ret;                                                          \
-> -})
-> -
-> -#define CHECK(condition, tag, format...) \
-> -       _CHECK(condition, tag, duration, format)
-> -#define CHECK_ATTR(condition, tag, format...) \
-> -       _CHECK(condition, tag, tattr.duration, format)
-> -
-> -static int bpf_find_map(const char *test, struct bpf_object *obj,
-> -                       const char *name)
-> +int bpf_find_map(const char *test, struct bpf_object *obj, const char *name)
->  {
->         struct bpf_map *map;
->
-> @@ -2150,12 +2081,19 @@ static void test_signal_pending(enum bpf_prog_type prog_type)
->         signal(SIGALRM, SIG_DFL);
->  }
->
-> +#define DECLARE
-> +#include <prog_tests/tests.h>
-> +#undef DECLARE
-> +
->  int main(void)
->  {
->         srand(time(NULL));
->
->         jit_enabled = is_jit_enabled();
->
-> +#define CALL
-> +#include <prog_tests/tests.h>
-> +#undef CALL
->         test_pkt_access();
->         test_prog_run_xattr();
->         test_xdp();
-> diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-> new file mode 100644
-> index 000000000000..8b79ab3e3042
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/test_progs.h
-> @@ -0,0 +1,81 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#include <stdio.h>
-> +#include <unistd.h>
-> +#include <errno.h>
-> +#include <string.h>
-> +#include <assert.h>
-> +#include <stdlib.h>
-> +#include <stdarg.h>
-> +#include <time.h>
-> +#include <signal.h>
-> +
-> +#include <linux/types.h>
-> +typedef __u16 __sum16;
-> +#include <arpa/inet.h>
-> +#include <linux/if_ether.h>
-> +#include <linux/if_packet.h>
-> +#include <linux/ip.h>
-> +#include <linux/ipv6.h>
-> +#include <linux/tcp.h>
-> +#include <linux/filter.h>
-> +#include <linux/perf_event.h>
-> +#include <linux/unistd.h>
-> +
-> +#include <sys/ioctl.h>
-> +#include <sys/wait.h>
-> +#include <sys/types.h>
-> +#include <sys/time.h>
-> +#include <fcntl.h>
-> +#include <pthread.h>
-> +#include <linux/bpf.h>
-> +#include <linux/err.h>
-> +#include <bpf/bpf.h>
-> +#include <bpf/libbpf.h>
-> +
-> +#include "test_iptunnel_common.h"
-> +#include "bpf_util.h"
-> +#include "bpf_endian.h"
-> +#include "bpf_rlimit.h"
-> +#include "trace_helpers.h"
-> +#include "flow_dissector_load.h"
-> +
-> +extern int error_cnt, pass_cnt;
-> +extern bool jit_enabled;
-> +
-> +#define MAGIC_BYTES 123
-> +
-> +/* ipv4 test vector */
-> +struct ipv4_packet {
-> +       struct ethhdr eth;
-> +       struct iphdr iph;
-> +       struct tcphdr tcp;
-> +} __packed;
-> +extern struct ipv4_packet pkt_v4;
-> +
-> +/* ipv6 test vector */
-> +struct ipv6_packet {
-> +       struct ethhdr eth;
-> +       struct ipv6hdr iph;
-> +       struct tcphdr tcp;
-> +} __packed;
-> +extern struct ipv6_packet pkt_v6;
-> +
-> +#define _CHECK(condition, tag, duration, format...) ({                 \
-> +       int __ret = !!(condition);                                      \
-> +       if (__ret) {                                                    \
-> +               error_cnt++;                                            \
-> +               printf("%s:FAIL:%s ", __func__, tag);                   \
-> +               printf(format);                                         \
-> +       } else {                                                        \
-> +               pass_cnt++;                                             \
-> +               printf("%s:PASS:%s %d nsec\n", __func__, tag, duration);\
-> +       }                                                               \
-> +       __ret;                                                          \
-> +})
-> +
-> +#define CHECK(condition, tag, format...) \
-> +       _CHECK(condition, tag, duration, format)
-> +#define CHECK_ATTR(condition, tag, format...) \
-> +       _CHECK(condition, tag, tattr.duration, format)
-> +
-> +int bpf_find_map(const char *test, struct bpf_object *obj, const char *name);
 > --
-> 2.21.0.rc2.261.ga7da99ff1b-goog
 >
+> - Arnaldo
