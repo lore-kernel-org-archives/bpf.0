@@ -2,120 +2,137 @@ Return-Path: <SRS0=vk/n=RD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A62C0C43381
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 12:29:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5B8CC4360F
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:09:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 75B272183F
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 12:29:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 84603218D9
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:09:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1551356966;
-	bh=pNtoIm19/RbLA530zaYV92DVB139pC7B3avkF0tQ5PI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=zwIIJl7SLF6rmLQg3LpX0j32ovlgYn2tluxivnE9Dm8x2GUtGzUbN8Tn575yZmE+u
-	 6R5KmOpbLZ3sfRdXIAcmyQ3EgMhZSrDZNWPBqFmE72JBezA8Ych873lNtMnHhlV+Rd
-	 euYPR5TB5TxV9UJrAW+Q9hSiYWNePqDXlbPoWTVg=
+	s=default; t=1551366583;
+	bh=PEq46RXqOKbnl8VFkq+bKB1gAldK5jVxzjJ5ET6KvAA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=wXKf9WDqVOqI8yfltKy/iirQ84OLtamVnuaUy8bESjGTvI4bYoHCUSx9qu2YrPhGz
+	 aUN+HfEvDAE7JlUMXGiZ3diQniDBqbtDJYzHM/86dRHUpMQ5uSJ0gToMYy9zWoLxsZ
+	 UadS4fcI+FSrYDUXuywUNGWfb85RvLjglAs93qAQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731163AbfB1M3T (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Feb 2019 07:29:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35110 "EHLO mail.kernel.org"
+        id S1732709AbfB1PJf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Feb 2019 10:09:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42154 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730960AbfB1M3S (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Feb 2019 07:29:18 -0500
-Received: from devbox (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S2387575AbfB1PJb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Feb 2019 10:09:31 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 581EA2083D;
-        Thu, 28 Feb 2019 12:29:15 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 15AD0218B0;
+        Thu, 28 Feb 2019 15:09:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1551356957;
-        bh=pNtoIm19/RbLA530zaYV92DVB139pC7B3avkF0tQ5PI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=omgd/yZw4ojeqpb7pfcFA91qgLNCXdlJselo4cKLcltpHI98GV7a0T7uHggPLa8WA
-         tepmvVe/uMhQ7Ro4odpHy5ahACxo867l86bYRTiVnqHP8Ty8VgAcRUnbUvBwH2kiZT
-         MuXa1i+GYgtRKwzwksjLc6nwFE1AaJaJAJTs/bqQ=
-Date:   Thu, 28 Feb 2019 21:29:13 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Andy Lutomirski <luto@amacapital.net>, will.deacon@arm.com,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable <stable@vger.kernel.org>,
-        Changbin Du <changbin.du@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@kernel.org>, daniel@iogearbox.net,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 1/2 v2] kprobe: Do not use uaccess functions to access
- kernel memory that can fault
-Message-Id: <20190228212913.20079490b3df88d285664a56@kernel.org>
-In-Reply-To: <20190226152447.GA99670@google.com>
-References: <CAHk-=wh9XrOykA5J9RQ7zaBio-S_D+1AE+rGnBYWSd==pCXh+w@mail.gmail.com>
-        <20190219111802.1d6dbaa3@gandalf.local.home>
-        <CAHk-=wgTuK3kAduP-gr10vykT1uG=B2VpdffvmyBuTQ1UxPpMg@mail.gmail.com>
-        <20190219140330.5dd9e876@gandalf.local.home>
-        <20190220171019.5e81a4946b56982f324f7c45@kernel.org>
-        <20190220094926.0ab575b3@gandalf.local.home>
-        <20190222172745.2c7205d62003c0a858e33278@kernel.org>
-        <20190222173509.88489b7c5d1bf0e2ec2382ee@kernel.org>
-        <CAHk-=whNf_n1WXWW+ugAVeL5ZK0GcEP3cTYocju1nS85VtMjjQ@mail.gmail.com>
-        <20190222192703.epvgxghwybte7gxs@ast-mbp.dhcp.thefacebook.com>
-        <20190226152447.GA99670@google.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        s=default; t=1551366569;
+        bh=PEq46RXqOKbnl8VFkq+bKB1gAldK5jVxzjJ5ET6KvAA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=VxNqbpJ1/A5QlGBE5fsxMdS/JX1fZA/uHd1ZT4/sNqUJKS4Uy3x+DXLFKS4kNaQHR
+         XSA+WUUi+GA4ziS3BjHlrxJ7VmuTn05UF+BrgXQwZHs8S7vwXn2l/gOnbpd9REM7mA
+         xSO4p6+TRLMDyWuq1ZXldus75GX4mDhESwmk01CE=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Martin KaFai Lau <kafai@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.20 49/81] bpf: Fix syscall's stackmap lookup potential deadlock
+Date:   Thu, 28 Feb 2019 10:07:41 -0500
+Message-Id: <20190228150813.10256-49-sashal@kernel.org>
+X-Mailer: git-send-email 2.19.1
+In-Reply-To: <20190228150813.10256-1-sashal@kernel.org>
+References: <20190228150813.10256-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 26 Feb 2019 10:24:47 -0500
-Joel Fernandes <joel@joelfernandes.org> wrote:
+From: Martin KaFai Lau <kafai@fb.com>
 
-> On Fri, Feb 22, 2019 at 11:27:05AM -0800, Alexei Starovoitov wrote:
-> > On Fri, Feb 22, 2019 at 09:43:14AM -0800, Linus Torvalds wrote:
-> > > 
-> > > Then we should still probably fix up "__probe_kernel_read()" to not
-> > > allow user accesses. The easiest way to do that is actually likely to
-> > > use the "unsafe_get_user()" functions *without* doing a
-> > > uaccess_begin(), which will mean that modern CPU's will simply fault
-> > > on a kernel access to user space.
-> > 
-> > On bpf side the bpf_probe_read() helper just calls probe_kernel_read()
-> > and users pass both user and kernel addresses into it and expect
-> > that the helper will actually try to read from that address.
-> 
-> Slightly related and FWIW, BCC's eBPF-based opensnoop tool [1] installs a
-> kprobe on do_sys_open to monitor calls to the open syscall globally.
-> 
-> do_sys_open() has prototype:
-> 
-> long do_sys_open(int dfd, const char __user *filename, int flags, umode_t mode);
-> 
-> This causes a "blank" filename to be displayed by opensnoop when I run it on
-> my Pixel 3 (arm64), possibly because this is a user pointer. However, it
-> works fine on x86-64.
-> 
-> So it seems to me that on arm64, reading user pointers directly still doesn't
-> work even if there is a distinction between user/kernel addresses. In that
-> case reading the user pointer using user accessors (possibly using
-> bpf_probe_user_read helper) should be needed to fix this issue (as Yonghong
-> also privately discussed with me).
+[ Upstream commit 7c4cd051add3d00bbff008a133c936c515eaa8fe ]
 
-OK, it sounds like the same issue. Please add a bpf_user_read() and use it
-for __user pointer.
+The map_lookup_elem used to not acquiring spinlock
+in order to optimize the reader.
 
-Thank you,
+It was true until commit 557c0c6e7df8 ("bpf: convert stackmap to pre-allocation")
+The syscall's map_lookup_elem(stackmap) calls bpf_stackmap_copy().
+bpf_stackmap_copy() may find the elem no longer needed after the copy is done.
+If that is the case, pcpu_freelist_push() saves this elem for reuse later.
+This push requires a spinlock.
 
+If a tracing bpf_prog got run in the middle of the syscall's
+map_lookup_elem(stackmap) and this tracing bpf_prog is calling
+bpf_get_stackid(stackmap) which also requires the same pcpu_freelist's
+spinlock, it may end up with a dead lock situation as reported by
+Eric Dumazet in https://patchwork.ozlabs.org/patch/1030266/
 
+The situation is the same as the syscall's map_update_elem() which
+needs to acquire the pcpu_freelist's spinlock and could race
+with tracing bpf_prog.  Hence, this patch fixes it by protecting
+bpf_stackmap_copy() with this_cpu_inc(bpf_prog_active)
+to prevent tracing bpf_prog from running.
+
+A later syscall's map_lookup_elem commit f1a2e44a3aec ("bpf: add queue and stack maps")
+also acquires a spinlock and races with tracing bpf_prog similarly.
+Hence, this patch is forward looking and protects the majority
+of the map lookups.  bpf_map_offload_lookup_elem() is the exception
+since it is for network bpf_prog only (i.e. never called by tracing
+bpf_prog).
+
+Fixes: 557c0c6e7df8 ("bpf: convert stackmap to pre-allocation")
+Reported-by: Eric Dumazet <eric.dumazet@gmail.com>
+Acked-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ kernel/bpf/syscall.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index cf5040fd54344..5f03ddf7b6152 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -712,8 +712,13 @@ static int map_lookup_elem(union bpf_attr *attr)
+ 
+ 	if (bpf_map_is_dev_bound(map)) {
+ 		err = bpf_map_offload_lookup_elem(map, key, value);
+-	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
+-		   map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
++		goto done;
++	}
++
++	preempt_disable();
++	this_cpu_inc(bpf_prog_active);
++	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
++	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
+ 		err = bpf_percpu_hash_copy(map, key, value);
+ 	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY) {
+ 		err = bpf_percpu_array_copy(map, key, value);
+@@ -743,7 +748,10 @@ static int map_lookup_elem(union bpf_attr *attr)
+ 		}
+ 		rcu_read_unlock();
+ 	}
++	this_cpu_dec(bpf_prog_active);
++	preempt_enable();
+ 
++done:
+ 	if (err)
+ 		goto free_value;
+ 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.19.1
+
