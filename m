@@ -2,143 +2,676 @@ Return-Path: <SRS0=vk/n=RD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 157B8C4360F
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 23:31:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A8B8C43381
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 23:41:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D52F420830
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 23:31:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2713A20850
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 23:41:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="FCt4484A"
+	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="ovCZNaw6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732935AbfB1Xbu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Feb 2019 18:31:50 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:57130 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732367AbfB1Xbu (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 28 Feb 2019 18:31:50 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x1SNS8wQ002228
-        for <bpf@vger.kernel.org>; Thu, 28 Feb 2019 15:31:48 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=yv2te+/7ZWov+RFZsLfl7wFKUr1FUlswI0auD1wsbbU=;
- b=FCt4484ATkFxja13Pn/4MLDVkQ5CF0SIMvm6PrHBLi1rXPrUOU1twLqS73b4WwTkd86m
- y5/wS0e8GNmwtXsAcJll9xx/M7R2HdmM8T5DqjKaAPP5OnCGD7QkzbPa11sJLoioVTxW
- NtB/0zT7mAZEj+WXX/6RtpkY/1XFa2686Lw= 
-Received: from maileast.thefacebook.com ([199.201.65.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2qxr1509k7-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 28 Feb 2019 15:31:48 -0800
-Received: from mx-out.facebook.com (2620:10d:c0a1:3::13) by
- mail.thefacebook.com (2620:10d:c021:18::176) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1531.3;
- Thu, 28 Feb 2019 15:31:28 -0800
-Received: by devvm7221.prn2.facebook.com (Postfix, from userid 137359)
-        id D45B5C155DE0; Thu, 28 Feb 2019 15:31:26 -0800 (PST)
-Smtp-Origin-Hostprefix: devvm
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devvm7221.prn2.facebook.com
-To:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>, <ast@fb.com>,
-        <acme@kernel.org>, <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <songliubraving@fb.com>
-CC:     Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v2 bpf-next 4/5] btf: fix bug with resolving STRUCT/UNION into corresponding FWD
-Date:   Thu, 28 Feb 2019 15:31:24 -0800
-Message-ID: <20190228233125.1013080-5-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190228233125.1013080-1-andriin@fb.com>
-References: <20190228233125.1013080-1-andriin@fb.com>
-X-FB-Internal: Safe
+        id S1727907AbfB1XlE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Feb 2019 18:41:04 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:38144 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727858AbfB1XlE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Feb 2019 18:41:04 -0500
+Received: by mail-pg1-f193.google.com with SMTP id m2so10479100pgl.5
+        for <bpf@vger.kernel.org>; Thu, 28 Feb 2019 15:41:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ofKvWTaUnhatV3ikD4BhqS0GX9moD5DEaViu+tybRH8=;
+        b=ovCZNaw6QrROaOvjp1BXdp22BuyprL7dlZqi65zhKJIylyIWfM/4bvHHX41So0B3J4
+         yDn/s5/TOT1L0k4aWBUC/m9cmMidlGrjjXuDHx+4BUSfqyKCEb/esP6qFTco8lwfQkm7
+         bZ7WNN4BuyTVL9fLGC22LZ66VZKj7nKyG3ZgIQ5FZr4MvNNZc8A6a1cpljnru2QAUAI/
+         spZRF4075OpcDEY+U1LY8lRuiohUD+JijZ4+83e9cf+FbasLWHu2FlW2JBFLp7AIHaYA
+         a2HDPM9/KCvSJnGUHjpC7vVjDA8BirDj+wKJqZd4IGPV6ctWQPZEK65pjINxpx2aWLZf
+         QNkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ofKvWTaUnhatV3ikD4BhqS0GX9moD5DEaViu+tybRH8=;
+        b=eLiglSMGxSdibYa6g7ihi8Oxn5Q0PxscQJCWEkWK8GyiedAjvGgctzXMCDrI8z/pv5
+         XhNBtZAXLt63/uBaV3LLoR2s8eE/86qJXUkedFpat+uN9Pd0cX2av9YByA84GYOK0MVa
+         k4mBQYMSwEpl1ekIkL/R/+Dz1YgoM9SyY13oLYuDuz5fkM2egSYq9bRpTQ84IXeIcnIa
+         iuQUZnzfTuoFeCHFQ3Apcorhxm6qMMLU6cTYTaQkG+QcLeEpyHzYK0UOcq98YRxqCldf
+         D6zgC+jdrIaDNDLHGF+xxDlXzt7Mg5nCoxUUjN49Q7KXPDOezZWzZ+xH8qIf2GZo+GBQ
+         zfiQ==
+X-Gm-Message-State: AHQUAuae9DIHEAFru6Wl9F+YRMnFQYlDsOn0fCYP3b91mc/g0yNB/3e9
+        MIWm3iR2lPaKOQsGU27D5890hw==
+X-Google-Smtp-Source: AHgI3IbMhmwIEbX214rKWM0YFRCm3XNTDkq+fI34ahnCGhyLFziIVoJLYL4sUGwzOeFaZZz+Ye0beg==
+X-Received: by 2002:a62:e802:: with SMTP id c2mr2253595pfi.249.1551397262830;
+        Thu, 28 Feb 2019 15:41:02 -0800 (PST)
+Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
+        by smtp.gmail.com with ESMTPSA id a24sm24905748pfo.160.2019.02.28.15.41.01
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 28 Feb 2019 15:41:02 -0800 (PST)
+Date:   Thu, 28 Feb 2019 15:41:01 -0800
+From:   Stanislav Fomichev <sdf@fomichev.me>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     ast@fb.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+        joe@wand.net.nz, john.fastabend@gmail.com, tgraf@suug.ch,
+        yhs@fb.com, andriin@fb.com, jakub.kicinski@netronome.com,
+        lmb@cloudflare.com
+Subject: Re: [PATCH bpf-next v2 5/7] bpf, libbpf: support global
+ data/bss/rodata sections
+Message-ID: <20190228234101.GA10108@mini-arch.hsd1.ca.comcast.net>
+References: <20190228231829.11993-1-daniel@iogearbox.net>
+ <20190228231829.11993-6-daniel@iogearbox.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-02-28_15:,,
- signatures=0
-X-Proofpoint-Spam-Reason: safe
-X-FB-Internal: Safe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190228231829.11993-6-daniel@iogearbox.net>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When checking available canonical candidates for struct/union algorithm
-utilizes btf_dedup_is_equiv to determine if candidate is suitable. This
-check is not enough when candidate is corresponding FWD for that
-struct/union, because according to equivalence logic they are
-equivalent. When it so happens that FWD and STRUCT/UNION end in hashing
-to the same bucket, it's possible to create remapping loop from FWD to
-STRUCT and STRUCT to same FWD, which will cause btf_dedup() to loop
-forever.
+On 03/01, Daniel Borkmann wrote:
+> This work adds BPF loader support for global data sections
+> to libbpf. This allows to write BPF programs in more natural
+> C-like way by being able to define global variables and const
+> data.
+> 
+> Back at LPC 2018 [0] we presented a first prototype which
+> implemented support for global data sections by extending BPF
+> syscall where union bpf_attr would get additional memory/size
+> pair for each section passed during prog load in order to later
+> add this base address into the ldimm64 instruction along with
+> the user provided offset when accessing a variable. Consensus
+> from LPC was that for proper upstream support, it would be
+> more desirable to use maps instead of bpf_attr extension as
+> this would allow for introspection of these sections as well
+> as potential life updates of their content. This work follows
+> this path by taking the following steps from loader side:
+> 
+>  1) In bpf_object__elf_collect() step we pick up ".data",
+>     ".rodata", and ".bss" section information.
+> 
+>  2) If present, in bpf_object__init_global_maps() we create
+>     a map that corresponds to each of the present sections.
+>     Given section size and access properties can differ, a
+>     single entry array map is created with value size that
+>     is corresponding to the ELF section size of .data, .bss
+>     or .rodata. In the latter case, the map is created as
+>     read-only from program side such that verifier rejects
+>     any write attempts into .rodata. In a subsequent step,
+>     for .data and .rodata sections, the section content is
+>     copied into the map through bpf_map_update_elem(). For
+>     .bss this is not necessary since array map is already
+>     zero-initialized by default.
+> 
+>  3) In bpf_program__collect_reloc() step, we record the
+>     corresponding map, insn index, and relocation type for
+>     the global data.
+> 
+>  4) And last but not least in the actual relocation step in
+>     bpf_program__relocate(), we mark the ldimm64 instruction
+>     with src_reg = BPF_PSEUDO_MAP_VALUE where in the first
+>     imm field the map's file descriptor is stored as similarly
+>     done as in BPF_PSEUDO_MAP_FD, and in the second imm field
+>     (as ldimm64 is 2-insn wide) we store the access offset
+>     into the section.
+> 
+>  5) On kernel side, this special marked BPF_PSEUDO_MAP_VALUE
+>     load will then store the actual target address in order
+>     to have a 'map-lookup'-free access. That is, the actual
+>     map value base address + offset. The destination register
+>     in the verifier will then be marked as PTR_TO_MAP_VALUE,
+>     containing the fixed offset as reg->off and backing BPF
+>     map as reg->map_ptr. Meaning, it's treated as any other
+>     normal map value from verification side, only with
+>     efficient, direct value access instead of actual call to
+>     map lookup helper as in the typical case.
+> 
+> Simple example dump of program using globals vars in each
+> section:
+> 
+>   # readelf -a test_global_data.o
+>   [...]
+>   [ 6] .bss              NOBITS           0000000000000000  00000328
+>        0000000000000010  0000000000000000  WA       0     0     8
+>   [ 7] .data             PROGBITS         0000000000000000  00000328
+>        0000000000000010  0000000000000000  WA       0     0     8
+>   [ 8] .rodata           PROGBITS         0000000000000000  00000338
+>        0000000000000018  0000000000000000   A       0     0     8
+>   [...]
+>     95: 0000000000000000     8 OBJECT  LOCAL  DEFAULT    6 static_bss
+>     96: 0000000000000008     8 OBJECT  LOCAL  DEFAULT    6 static_bss2
+>     97: 0000000000000000     8 OBJECT  LOCAL  DEFAULT    7 static_data
+>     98: 0000000000000008     8 OBJECT  LOCAL  DEFAULT    7 static_data2
+>     99: 0000000000000000     8 OBJECT  LOCAL  DEFAULT    8 static_rodata
+>    100: 0000000000000008     8 OBJECT  LOCAL  DEFAULT    8 static_rodata2
+>    101: 0000000000000010     8 OBJECT  LOCAL  DEFAULT    8 static_rodata3
+>   [...]
+> 
+>   # bpftool prog
+>   103: sched_cls  name load_static_dat  tag 37a8b6822fc39a29  gpl
+>        loaded_at 2019-02-28T02:02:35+0000  uid 0
+>        xlated 712B  jited 426B  memlock 4096B  map_ids 63,64,65,66
+>   # bpftool map show id 63
+>   63: array  name .bss  flags 0x0                      <-- .bss area, rw
+Can we use <main prog>.bss/data/rodata names? If we load more than one
+prog with global data that should make it easier to find which one is which.
 
-This patch fixes the issue by additionally checking that type and
-canonical candidate are strictly equal (utilizing btf_equal_struct).
-
-Fixes: d5caef5b5655 ("btf: add BTF types deduplication algorithm")
-Reported-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Acked-by: Song Liu <songliubraving@fb.com>
-Acked-by: Yonghong Song <yhs@fb.com>
----
- tools/lib/bpf/btf.c | 20 +++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
-
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 0f83f99211c6..c0b575c6ebb0 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -1663,7 +1663,7 @@ static __u32 btf_hash_struct(struct btf_type *t)
-  * IDs. This check is performed during type graph equivalence check and
-  * referenced types equivalence is checked separately.
-  */
--static bool btf_equal_struct(struct btf_type *t1, struct btf_type *t2)
-+static bool btf_shallow_equal_struct(struct btf_type *t1, struct btf_type *t2)
- {
- 	struct btf_member *m1, *m2;
- 	__u16 vlen;
-@@ -2124,7 +2124,7 @@ static int btf_dedup_is_equiv(struct btf_dedup *d, __u32 cand_id,
- 		struct btf_member *cand_m, *canon_m;
- 		__u16 vlen;
- 
--		if (!btf_equal_struct(cand_type, canon_type))
-+		if (!btf_shallow_equal_struct(cand_type, canon_type))
- 			return 0;
- 		vlen = BTF_INFO_VLEN(cand_type->info);
- 		cand_m = (struct btf_member *)(cand_type + 1);
-@@ -2265,7 +2265,7 @@ static void btf_dedup_merge_hypot_map(struct btf_dedup *d)
- static int btf_dedup_struct_type(struct btf_dedup *d, __u32 type_id)
- {
- 	struct btf_dedup_node *cand_node;
--	struct btf_type *t;
-+	struct btf_type *cand_type, *t;
- 	/* if we don't find equivalent type, then we are canonical */
- 	__u32 new_id = type_id;
- 	__u16 kind;
-@@ -2285,6 +2285,20 @@ static int btf_dedup_struct_type(struct btf_dedup *d, __u32 type_id)
- 	for_each_dedup_cand(d, h, cand_node) {
- 		int eq;
- 
-+		/*
-+		 * Even though btf_dedup_is_equiv() checks for
-+		 * btf_shallow_equal_struct() internally when checking two
-+		 * structs (unions) for equivalence, we need to guard here
-+		 * from picking matching FWD type as a dedup candidate.
-+		 * This can happen due to hash collision. In such case just
-+		 * relying on btf_dedup_is_equiv() would lead to potentially
-+		 * creating a loop (FWD -> STRUCT and STRUCT -> FWD), because
-+		 * FWD and compatible STRUCT/UNION are considered equivalent.
-+		 */
-+		cand_type = d->btf->types[cand_node->type_id];
-+		if (!btf_shallow_equal_struct(t, cand_type))
-+			continue;
-+
- 		btf_dedup_clear_hypot_map(d);
- 		eq = btf_dedup_is_equiv(d, type_id, cand_node->type_id);
- 		if (eq < 0)
--- 
-2.17.1
-
+>       key 4B  value 16B  max_entries 1  memlock 4096B
+>   # bpftool map show id 64
+>   64: array  name .data  flags 0x0                     <-- .data area, rw
+>       key 4B  value 16B  max_entries 1  memlock 4096B
+>   # bpftool map show id 65
+>   65: array  name .rodata  flags 0x80                  <-- .rodata area, ro
+>       key 4B  value 24B  max_entries 1  memlock 4096B
+> 
+>   # bpftool prog dump xlated id 103
+>   int load_static_data(struct __sk_buff * skb):
+>   ; int load_static_data(struct __sk_buff *skb)
+>      0: (b7) r1 = 0
+>   ; key = 0;
+>      1: (63) *(u32 *)(r10 -4) = r1
+>      2: (bf) r6 = r10
+>   ; int load_static_data(struct __sk_buff *skb)
+>      3: (07) r6 += -4
+>   ; bpf_map_update_elem(&result, &key, &static_bss, 0);
+>      4: (18) r1 = map[id:66]
+>      6: (bf) r2 = r6
+>      7: (18) r3 = map[id:63][0]+0         <-- direct static_bss addr in .bss area
+>      9: (b7) r4 = 0
+>     10: (85) call array_map_update_elem#99888
+>     11: (b7) r1 = 1
+>   ; key = 1;
+>     12: (63) *(u32 *)(r10 -4) = r1
+>   ; bpf_map_update_elem(&result, &key, &static_data, 0);
+>     13: (18) r1 = map[id:66]
+>     15: (bf) r2 = r6
+>     16: (18) r3 = map[id:64][0]+0         <-- direct static_data addr in .data area
+>     18: (b7) r4 = 0
+>     19: (85) call array_map_update_elem#99888
+>     20: (b7) r1 = 2
+>   ; key = 2;
+>     21: (63) *(u32 *)(r10 -4) = r1
+>   ; bpf_map_update_elem(&result, &key, &static_rodata, 0);
+>     22: (18) r1 = map[id:66]
+>     24: (bf) r2 = r6
+>     25: (18) r3 = map[id:65][0]+0         <-- direct static_rodata addr in .rodata area
+>     27: (b7) r4 = 0
+>     28: (85) call array_map_update_elem#99888
+>     29: (b7) r1 = 3
+>   ; key = 3;
+>     30: (63) *(u32 *)(r10 -4) = r1
+>   ; bpf_map_update_elem(&result, &key, &static_bss2, 0);
+>     31: (18) r7 = map[id:63][0]+8         <--.
+>     33: (18) r1 = map[id:66]                 |
+>     35: (bf) r2 = r6                         |
+>     36: (18) r3 = map[id:63][0]+8         <-- direct static_bss2 addr in .bss area
+>     38: (b7) r4 = 0
+>     39: (85) call array_map_update_elem#99888
+>   [...]
+> 
+> For now .data/.rodata/.bss maps are not exposed via API to the
+> user, but this could be done in a subsequent step.
+> 
+> Based upon recent fix in LLVM, commit c0db6b6bd444 ("[BPF] Don't
+> fail for static variables").
+> 
+> Joint work with Joe Stringer.
+> 
+>   [0] LPC 2018, BPF track, "ELF relocation for static data in BPF",
+>       http://vger.kernel.org/lpc-bpf2018.html#session-3
+> 
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> Signed-off-by: Joe Stringer <joe@wand.net.nz>
+> ---
+>  tools/include/uapi/linux/bpf.h |  10 +-
+>  tools/lib/bpf/libbpf.c         | 259 +++++++++++++++++++++++++++------
+>  2 files changed, 226 insertions(+), 43 deletions(-)
+> 
+> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+> index 8884072e1a46..04b26f59b413 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+> @@ -287,7 +287,7 @@ enum bpf_attach_type {
+>  
+>  #define BPF_OBJ_NAME_LEN 16U
+>  
+> -/* Flags for accessing BPF object */
+> +/* Flags for accessing BPF object from syscall side. */
+>  #define BPF_F_RDONLY		(1U << 3)
+>  #define BPF_F_WRONLY		(1U << 4)
+>  
+> @@ -297,6 +297,14 @@ enum bpf_attach_type {
+>  /* Zero-initialize hash function seed. This should only be used for testing. */
+>  #define BPF_F_ZERO_SEED		(1U << 6)
+>  
+> +/* Flags for accessing BPF object from program side. */
+> +#define BPF_F_RDONLY_PROG	(1U << 7)
+> +#define BPF_F_WRONLY_PROG	(1U << 8)
+> +#define BPF_F_ACCESS_MASK	(BPF_F_RDONLY |		\
+> +				 BPF_F_RDONLY_PROG |	\
+> +				 BPF_F_WRONLY |		\
+> +				 BPF_F_WRONLY_PROG)
+> +
+>  /* flags for BPF_PROG_QUERY */
+>  #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
+>  
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 8f8f688f3e9b..969bc3d9f02c 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -139,6 +139,9 @@ struct bpf_program {
+>  		enum {
+>  			RELO_LD64,
+>  			RELO_CALL,
+> +			RELO_DATA,
+> +			RELO_RODATA,
+> +			RELO_BSS,
+>  		} type;
+>  		int insn_idx;
+>  		union {
+> @@ -174,7 +177,10 @@ struct bpf_program {
+>  struct bpf_map {
+>  	int fd;
+>  	char *name;
+> -	size_t offset;
+> +	union {
+> +		__u32 global_type;
+> +		size_t offset;
+> +	};
+>  	int map_ifindex;
+>  	int inner_map_fd;
+>  	struct bpf_map_def def;
+> @@ -194,6 +200,8 @@ struct bpf_object {
+>  	size_t nr_programs;
+>  	struct bpf_map *maps;
+>  	size_t nr_maps;
+> +	struct bpf_map *maps_global;
+> +	size_t nr_maps_global;
+>  
+>  	bool loaded;
+>  	bool has_pseudo_calls;
+> @@ -209,6 +217,9 @@ struct bpf_object {
+>  		Elf *elf;
+>  		GElf_Ehdr ehdr;
+>  		Elf_Data *symbols;
+> +		Elf_Data *global_data;
+> +		Elf_Data *global_rodata;
+> +		Elf_Data *global_bss;
+>  		size_t strtabidx;
+>  		struct {
+>  			GElf_Shdr shdr;
+> @@ -217,6 +228,9 @@ struct bpf_object {
+>  		int nr_reloc;
+>  		int maps_shndx;
+>  		int text_shndx;
+> +		int data_shndx;
+> +		int rodata_shndx;
+> +		int bss_shndx;
+>  	} efile;
+>  	/*
+>  	 * All loaded bpf_object is linked in a list, which is
+> @@ -457,6 +471,9 @@ static struct bpf_object *bpf_object__new(const char *path,
+>  	obj->efile.obj_buf = obj_buf;
+>  	obj->efile.obj_buf_sz = obj_buf_sz;
+>  	obj->efile.maps_shndx = -1;
+> +	obj->efile.data_shndx = -1;
+> +	obj->efile.rodata_shndx = -1;
+> +	obj->efile.bss_shndx = -1;
+>  
+>  	obj->loaded = false;
+>  
+> @@ -475,6 +492,9 @@ static void bpf_object__elf_finish(struct bpf_object *obj)
+>  		obj->efile.elf = NULL;
+>  	}
+>  	obj->efile.symbols = NULL;
+> +	obj->efile.global_data = NULL;
+> +	obj->efile.global_rodata = NULL;
+> +	obj->efile.global_bss = NULL;
+>  
+>  	zfree(&obj->efile.reloc);
+>  	obj->efile.nr_reloc = 0;
+> @@ -757,6 +777,85 @@ bpf_object__init_maps(struct bpf_object *obj, int flags)
+>  	return 0;
+>  }
+>  
+> +static int
+> +bpf_object__create_map(struct bpf_object *obj, struct bpf_map *map);
+> +
+> +static int
+> +bpf_object__init_global(struct bpf_object *obj, int i, int type,
+> +			const char *name, Elf_Data *map_data)
+> +{
+> +	struct bpf_map *map = &obj->maps_global[i];
+> +	struct bpf_map_def *def = &map->def;
+> +	char *cp, errmsg[STRERR_BUFSIZE];
+> +	int err, slot0 = 0;
+> +
+> +	def->type = BPF_MAP_TYPE_ARRAY;
+> +	def->key_size = sizeof(int);
+> +	def->value_size = map_data->d_size;
+> +	def->max_entries = 1;
+> +	def->map_flags = type == RELO_RODATA ? BPF_F_RDONLY_PROG : 0;
+> +
+> +	map->name = strdup(name);
+> +	map->global_type = type;
+> +	map->fd = bpf_object__create_map(obj, map);
+> +	if (map->fd < 0) {
+> +		err = map->fd;
+> +		cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
+> +		pr_warning("failed to create map (name: '%s'): %s\n",
+> +			   map->name, cp);
+> +		goto destroy;
+> +	}
+> +
+> +	pr_debug("create map %s: fd=%d\n", map->name, map->fd);
+> +
+> +	if (type != RELO_BSS) {
+> +		err = bpf_map_update_elem(map->fd, &slot0, map_data->d_buf, 0);
+> +		if (err < 0) {
+> +			cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
+> +			pr_warning("failed to update map (name: '%s'): %s\n",
+> +				   map->name, cp);
+> +			goto destroy;
+> +		}
+> +
+> +		pr_debug("updated map %s with elf data: fd=%d\n", map->name,
+> +			 map->fd);
+> +	}
+> +	return 0;
+> +destroy:
+> +	for (i = 0; i < obj->nr_maps_global; i++)
+> +		zclose(obj->maps_global[i].fd);
+> +	return err;
+> +}
+> +
+> +static int
+> +bpf_object__init_global_maps(struct bpf_object *obj)
+> +{
+> +	int nr_maps_global = (obj->efile.data_shndx >= 0) +
+> +			     (obj->efile.rodata_shndx >= 0) +
+> +			     (obj->efile.bss_shndx >= 0), i, err = 0;
+> +
+> +	obj->maps_global = calloc(nr_maps_global, sizeof(obj->maps_global[0]));
+> +	if (!obj->maps_global) {
+> +		pr_warning("alloc maps for object failed\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	obj->nr_maps_global = nr_maps_global;
+> +	for (i = 0; i < obj->nr_maps_global; i++)
+> +		obj->maps[i].fd = -1;
+> +	i = 0;
+> +	if (obj->efile.bss_shndx >= 0)
+> +		err = bpf_object__init_global(obj, i++, RELO_BSS, ".bss",
+> +					      obj->efile.global_bss);
+> +	if (obj->efile.data_shndx >= 0 && !err)
+> +		err = bpf_object__init_global(obj, i++, RELO_DATA, ".data",
+> +					      obj->efile.global_data);
+> +	if (obj->efile.rodata_shndx >= 0 && !err)
+> +		err = bpf_object__init_global(obj, i++, RELO_RODATA, ".rodata",
+> +					      obj->efile.global_rodata);
+> +	return err;
+> +}
+> +
+>  static bool section_have_execinstr(struct bpf_object *obj, int idx)
+>  {
+>  	Elf_Scn *scn;
+> @@ -865,6 +964,12 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
+>  					pr_warning("failed to alloc program %s (%s): %s",
+>  						   name, obj->path, cp);
+>  				}
+> +			} else if (strcmp(name, ".data") == 0) {
+> +				obj->efile.global_data = data;
+> +				obj->efile.data_shndx = idx;
+> +			} else if (strcmp(name, ".rodata") == 0) {
+> +				obj->efile.global_rodata = data;
+> +				obj->efile.rodata_shndx = idx;
+>  			}
+>  		} else if (sh.sh_type == SHT_REL) {
+>  			void *reloc = obj->efile.reloc;
+> @@ -892,6 +997,9 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
+>  				obj->efile.reloc[n].shdr = sh;
+>  				obj->efile.reloc[n].data = data;
+>  			}
+> +		} else if (sh.sh_type == SHT_NOBITS && strcmp(name, ".bss") == 0) {
+> +			obj->efile.global_bss = data;
+> +			obj->efile.bss_shndx = idx;
+>  		} else {
+>  			pr_debug("skip section(%d) %s\n", idx, name);
+>  		}
+> @@ -923,6 +1031,14 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
+>  		if (err)
+>  			goto out;
+>  	}
+> +	if (obj->efile.data_shndx >= 0 ||
+> +	    obj->efile.rodata_shndx >= 0 ||
+> +	    obj->efile.bss_shndx >= 0) {
+> +		err = bpf_object__init_global_maps(obj);
+> +		if (err)
+> +			goto out;
+> +	}
+> +
+>  	err = bpf_object__init_prog_names(obj);
+>  out:
+>  	return err;
+> @@ -961,6 +1077,11 @@ bpf_program__collect_reloc(struct bpf_program *prog, GElf_Shdr *shdr,
+>  	Elf_Data *symbols = obj->efile.symbols;
+>  	int text_shndx = obj->efile.text_shndx;
+>  	int maps_shndx = obj->efile.maps_shndx;
+> +	int data_shndx = obj->efile.data_shndx;
+> +	int rodata_shndx = obj->efile.rodata_shndx;
+> +	int bss_shndx = obj->efile.bss_shndx;
+> +	struct bpf_map *maps_global = obj->maps_global;
+> +	size_t nr_maps_global = obj->nr_maps_global;
+>  	struct bpf_map *maps = obj->maps;
+>  	size_t nr_maps = obj->nr_maps;
+>  	int i, nrels;
+> @@ -999,8 +1120,10 @@ bpf_program__collect_reloc(struct bpf_program *prog, GElf_Shdr *shdr,
+>  			 (long long) (rel.r_info >> 32),
+>  			 (long long) sym.st_value, sym.st_name);
+>  
+> -		if (sym.st_shndx != maps_shndx && sym.st_shndx != text_shndx) {
+> -			pr_warning("Program '%s' contains non-map related relo data pointing to section %u\n",
+> +		if (sym.st_shndx != maps_shndx && sym.st_shndx != text_shndx &&
+> +		    sym.st_shndx != data_shndx && sym.st_shndx != rodata_shndx &&
+> +		    sym.st_shndx != bss_shndx) {
+> +			pr_warning("Program '%s' contains unrecognized relo data pointing to section %u\n",
+>  				   prog->section_name, sym.st_shndx);
+>  			return -LIBBPF_ERRNO__RELOC;
+>  		}
+> @@ -1045,6 +1168,30 @@ bpf_program__collect_reloc(struct bpf_program *prog, GElf_Shdr *shdr,
+>  			prog->reloc_desc[i].type = RELO_LD64;
+>  			prog->reloc_desc[i].insn_idx = insn_idx;
+>  			prog->reloc_desc[i].map_idx = map_idx;
+> +		} else if (sym.st_shndx == data_shndx ||
+> +			   sym.st_shndx == rodata_shndx ||
+> +			   sym.st_shndx == bss_shndx) {
+> +			int type = (sym.st_shndx == data_shndx)   ? RELO_DATA :
+> +				   (sym.st_shndx == rodata_shndx) ? RELO_RODATA :
+> +								    RELO_BSS;
+> +
+> +			for (map_idx = 0; map_idx < nr_maps_global; map_idx++) {
+> +				if (maps_global[map_idx].global_type == type) {
+> +					pr_debug("relocation: find map %zd (%s) for insn %u\n",
+> +						 map_idx, maps_global[map_idx].name, insn_idx);
+> +					break;
+> +				}
+> +			}
+> +
+> +			if (map_idx >= nr_maps_global) {
+> +				pr_warning("bpf relocation: map_idx %d large than %d\n",
+> +					   (int)map_idx, (int)nr_maps_global - 1);
+> +				return -LIBBPF_ERRNO__RELOC;
+> +			}
+> +
+> +			prog->reloc_desc[i].type = type;
+> +			prog->reloc_desc[i].insn_idx = insn_idx;
+> +			prog->reloc_desc[i].map_idx = map_idx;
+>  		}
+>  	}
+>  	return 0;
+> @@ -1176,15 +1323,58 @@ bpf_object__probe_caps(struct bpf_object *obj)
+>  }
+>  
+>  static int
+> -bpf_object__create_maps(struct bpf_object *obj)
+> +bpf_object__create_map(struct bpf_object *obj, struct bpf_map *map)
+>  {
+>  	struct bpf_create_map_attr create_attr = {};
+> +	struct bpf_map_def *def = &map->def;
+> +	char *cp, errmsg[STRERR_BUFSIZE];
+> +	int fd;
+> +
+> +	if (obj->caps.name)
+> +		create_attr.name = map->name;
+> +	create_attr.map_ifindex = map->map_ifindex;
+> +	create_attr.map_type = def->type;
+> +	create_attr.map_flags = def->map_flags;
+> +	create_attr.key_size = def->key_size;
+> +	create_attr.value_size = def->value_size;
+> +	create_attr.max_entries = def->max_entries;
+> +	create_attr.btf_fd = 0;
+> +	create_attr.btf_key_type_id = 0;
+> +	create_attr.btf_value_type_id = 0;
+> +	if (bpf_map_type__is_map_in_map(def->type) &&
+> +	    map->inner_map_fd >= 0)
+> +		create_attr.inner_map_fd = map->inner_map_fd;
+> +	if (obj->btf && !bpf_map_find_btf_info(map, obj->btf)) {
+> +		create_attr.btf_fd = btf__fd(obj->btf);
+> +		create_attr.btf_key_type_id = map->btf_key_type_id;
+> +		create_attr.btf_value_type_id = map->btf_value_type_id;
+> +	}
+> +
+> +	fd = bpf_create_map_xattr(&create_attr);
+> +	if (fd < 0 && create_attr.btf_key_type_id) {
+> +		cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
+> +		pr_warning("Error in bpf_create_map_xattr(%s):%s(%d). Retrying without BTF.\n",
+> +			   map->name, cp, errno);
+> +
+> +		create_attr.btf_fd = 0;
+> +		create_attr.btf_key_type_id = 0;
+> +		create_attr.btf_value_type_id = 0;
+> +		map->btf_key_type_id = 0;
+> +		map->btf_value_type_id = 0;
+> +		fd = bpf_create_map_xattr(&create_attr);
+> +	}
+> +
+> +	return fd;
+> +}
+> +
+> +static int
+> +bpf_object__create_maps(struct bpf_object *obj)
+> +{
+>  	unsigned int i;
+>  	int err;
+>  
+>  	for (i = 0; i < obj->nr_maps; i++) {
+>  		struct bpf_map *map = &obj->maps[i];
+> -		struct bpf_map_def *def = &map->def;
+>  		char *cp, errmsg[STRERR_BUFSIZE];
+>  		int *pfd = &map->fd;
+>  
+> @@ -1193,41 +1383,7 @@ bpf_object__create_maps(struct bpf_object *obj)
+>  				 map->name, map->fd);
+>  			continue;
+>  		}
+> -
+> -		if (obj->caps.name)
+> -			create_attr.name = map->name;
+> -		create_attr.map_ifindex = map->map_ifindex;
+> -		create_attr.map_type = def->type;
+> -		create_attr.map_flags = def->map_flags;
+> -		create_attr.key_size = def->key_size;
+> -		create_attr.value_size = def->value_size;
+> -		create_attr.max_entries = def->max_entries;
+> -		create_attr.btf_fd = 0;
+> -		create_attr.btf_key_type_id = 0;
+> -		create_attr.btf_value_type_id = 0;
+> -		if (bpf_map_type__is_map_in_map(def->type) &&
+> -		    map->inner_map_fd >= 0)
+> -			create_attr.inner_map_fd = map->inner_map_fd;
+> -
+> -		if (obj->btf && !bpf_map_find_btf_info(map, obj->btf)) {
+> -			create_attr.btf_fd = btf__fd(obj->btf);
+> -			create_attr.btf_key_type_id = map->btf_key_type_id;
+> -			create_attr.btf_value_type_id = map->btf_value_type_id;
+> -		}
+> -
+> -		*pfd = bpf_create_map_xattr(&create_attr);
+> -		if (*pfd < 0 && create_attr.btf_key_type_id) {
+> -			cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
+> -			pr_warning("Error in bpf_create_map_xattr(%s):%s(%d). Retrying without BTF.\n",
+> -				   map->name, cp, errno);
+> -			create_attr.btf_fd = 0;
+> -			create_attr.btf_key_type_id = 0;
+> -			create_attr.btf_value_type_id = 0;
+> -			map->btf_key_type_id = 0;
+> -			map->btf_value_type_id = 0;
+> -			*pfd = bpf_create_map_xattr(&create_attr);
+> -		}
+> -
+> +		*pfd = bpf_object__create_map(obj, map);
+>  		if (*pfd < 0) {
+>  			size_t j;
+>  
+> @@ -1412,6 +1568,24 @@ bpf_program__relocate(struct bpf_program *prog, struct bpf_object *obj)
+>  						      &prog->reloc_desc[i]);
+>  			if (err)
+>  				return err;
+> +		} else if (prog->reloc_desc[i].type == RELO_DATA ||
+> +			   prog->reloc_desc[i].type == RELO_RODATA ||
+> +			   prog->reloc_desc[i].type == RELO_BSS) {
+> +			struct bpf_insn *insns = prog->insns;
+> +			int insn_idx, map_idx, data_off;
+> +
+> +			insn_idx = prog->reloc_desc[i].insn_idx;
+> +			map_idx  = prog->reloc_desc[i].map_idx;
+> +			data_off = insns[insn_idx].imm;
+> +
+> +			if (insn_idx + 1 >= (int)prog->insns_cnt) {
+> +				pr_warning("relocation out of range: '%s'\n",
+> +					   prog->section_name);
+> +				return -LIBBPF_ERRNO__RELOC;
+> +			}
+> +			insns[insn_idx].src_reg = BPF_PSEUDO_MAP_VALUE;
+> +			insns[insn_idx].imm = obj->maps_global[map_idx].fd;
+> +			insns[insn_idx + 1].imm = data_off;
+>  		}
+>  	}
+>  
+> @@ -1717,6 +1891,7 @@ __bpf_object__open(const char *path, void *obj_buf, size_t obj_buf_sz,
+>  
+>  	CHECK_ERR(bpf_object__elf_init(obj), err, out);
+>  	CHECK_ERR(bpf_object__check_endianness(obj), err, out);
+> +	CHECK_ERR(bpf_object__probe_caps(obj), err, out);
+>  	CHECK_ERR(bpf_object__elf_collect(obj, flags), err, out);
+>  	CHECK_ERR(bpf_object__collect_reloc(obj), err, out);
+>  	CHECK_ERR(bpf_object__validate(obj, needs_kver), err, out);
+> @@ -1789,7 +1964,8 @@ int bpf_object__unload(struct bpf_object *obj)
+>  
+>  	for (i = 0; i < obj->nr_maps; i++)
+>  		zclose(obj->maps[i].fd);
+> -
+> +	for (i = 0; i < obj->nr_maps_global; i++)
+> +		zclose(obj->maps_global[i].fd);
+>  	for (i = 0; i < obj->nr_programs; i++)
+>  		bpf_program__unload(&obj->programs[i]);
+>  
+> @@ -1810,7 +1986,6 @@ int bpf_object__load(struct bpf_object *obj)
+>  
+>  	obj->loaded = true;
+>  
+> -	CHECK_ERR(bpf_object__probe_caps(obj), err, out);
+>  	CHECK_ERR(bpf_object__create_maps(obj), err, out);
+>  	CHECK_ERR(bpf_object__relocate(obj), err, out);
+>  	CHECK_ERR(bpf_object__load_progs(obj), err, out);
+> -- 
+> 2.17.1
+> 
