@@ -7,49 +7,50 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A842C43381
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:22:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5C4CC10F00
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:23:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5F79B206B8
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:22:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9CB42206B8
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:23:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1551367328;
-	bh=QVLh0zGMUC9S/xw0SKfHJQerJR43UP5yFgxU0Z+Fxco=;
+	s=default; t=1551367388;
+	bh=Z5+rDUULjVujJ0pOmcJhH2eynq6PMvgP+zIvZu7OM10=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=IHahyqQ13vACF33rIko9uBb4abZdrjPspfkvq7cvWlSvXnVcTFRQ6iifi7tWQ5Avb
-	 Co1BXPM9XNCPN1KyHTyfj+IHNEYP3OtGX8fdu8LmJPFvacF2xPeOaYs+LDAY+9fkix
-	 ZqhdGN5/hp1eX0Vt5a5HAEq/OUTtJiVq10uaHBeo=
+	b=efuiVmjhqkbcWGAt5CcFQCLwsq8LP0DnR6RpSwlmOC4UHTkJy+zNwxzkWgZDjiCsH
+	 ZZRIy0NAS6dOwoIthdJGwxqoPTg3R5j3zCjAxL1pvsSGiykcC8QVoNOD1R6ZcL/EuJ
+	 0+l0yz+JFcemqTRgnJShGH/wIJv/j3hdDRXnHcWE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731084AbfB1PWB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Feb 2019 10:22:01 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47906 "EHLO mail.kernel.org"
+        id S1732923AbfB1PW5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Feb 2019 10:22:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47582 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388515AbfB1PNp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Feb 2019 10:13:45 -0500
+        id S2388462AbfB1PNd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Feb 2019 10:13:33 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2B6C5218E0;
-        Thu, 28 Feb 2019 15:13:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 43ED2218EA;
+        Thu, 28 Feb 2019 15:13:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1551366824;
-        bh=QVLh0zGMUC9S/xw0SKfHJQerJR43UP5yFgxU0Z+Fxco=;
+        s=default; t=1551366812;
+        bh=Z5+rDUULjVujJ0pOmcJhH2eynq6PMvgP+zIvZu7OM10=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XUtgKJMMaSbs62J3+xUPCP10WgHu4zxyDTUMhS5+GztZbTiokB6hTFfBkLDgH4cui
-         8sHCBrn6xr//vU3HkaxBEyyrirAlUDMSuGyr8jMepCiKwZW4te5DrzKMUiEiuMAinz
-         iV0rCEIZlRwNFYa2dfbCYExbdyXvRPs50gSvnt+A=
+        b=OXxs5GO+Uye6YCVubsBi/CYWo0zIWeLs2//YGeo1B3NDdVsDpoBy7FuLOEDGPbza0
+         Ejs8hRF0q+LegMcM2Jn30tpDCMxXOgUEUgqfVtxv2XHv2Id4FAT3Ttfkp6aw6AqxjV
+         e7a02/jK8Emyo9Y/+f8NQwDWKWpY05jq9StdH85E=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yafang Shao <laoar.shao@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+Cc:     Sudarsana Reddy Kalluru <skalluru@marvell.com>,
+        Ariel Elior <aelior@marvell.com>,
+        "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 04/36] bpf: sock recvbuff must be limited by rmem_max in bpf_setsockopt()
-Date:   Thu, 28 Feb 2019 10:13:05 -0500
-Message-Id: <20190228151337.12176-4-sashal@kernel.org>
+        xdp-newbies@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 62/64] qed: Consider TX tcs while deriving the max num_queues for PF.
+Date:   Thu, 28 Feb 2019 10:11:03 -0500
+Message-Id: <20190228151105.11277-62-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
-In-Reply-To: <20190228151337.12176-1-sashal@kernel.org>
-References: <20190228151337.12176-1-sashal@kernel.org>
+In-Reply-To: <20190228151105.11277-1-sashal@kernel.org>
+References: <20190228151105.11277-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -58,40 +59,44 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Yafang Shao <laoar.shao@gmail.com>
+From: Sudarsana Reddy Kalluru <skalluru@marvell.com>
 
-[ Upstream commit c9e4576743eeda8d24dedc164d65b78877f9a98c ]
+[ Upstream commit fb1faab74ddef9ec2d841d54e5d0912a097b3abe ]
 
-When sock recvbuff is set by bpf_setsockopt(), the value must by
-limited by rmem_max. It is the same with sendbuff.
+Max supported queues is derived incorrectly in the case of multi-CoS.
+Need to consider TCs while calculating num_queues for PF.
 
-Fixes: 8c4b4c7e9ff0 ("bpf: Add setsockopt helper function to bpf")
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-Acked-by: Martin KaFai Lau <kafai@fb.com>
-Acked-by: Lawrence Brakmo <brakmo@fb.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Sudarsana Reddy Kalluru <skalluru@marvell.com>
+Signed-off-by: Ariel Elior <aelior@marvell.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/filter.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/qlogic/qed/qed_l2.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 41ede90fc28f5..61396648381e5 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3081,10 +3081,12 @@ BPF_CALL_5(bpf_setsockopt, struct bpf_sock_ops_kern *, bpf_sock,
- 		/* Only some socketops are supported */
- 		switch (optname) {
- 		case SO_RCVBUF:
-+			val = min_t(u32, val, sysctl_rmem_max);
- 			sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
- 			sk->sk_rcvbuf = max_t(int, val * 2, SOCK_MIN_RCVBUF);
- 			break;
- 		case SO_SNDBUF:
-+			val = min_t(u32, val, sysctl_wmem_max);
- 			sk->sk_userlocks |= SOCK_SNDBUF_LOCK;
- 			sk->sk_sndbuf = max_t(int, val * 2, SOCK_MIN_SNDBUF);
- 			break;
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_l2.c b/drivers/net/ethernet/qlogic/qed/qed_l2.c
+index 67c02ea939062..bde6f5f3bf8f7 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_l2.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_l2.c
+@@ -2207,7 +2207,7 @@ static int qed_fill_eth_dev_info(struct qed_dev *cdev,
+ 			u16 num_queues = 0;
+ 
+ 			/* Since the feature controls only queue-zones,
+-			 * make sure we have the contexts [rx, tx, xdp] to
++			 * make sure we have the contexts [rx, xdp, tcs] to
+ 			 * match.
+ 			 */
+ 			for_each_hwfn(cdev, i) {
+@@ -2217,7 +2217,8 @@ static int qed_fill_eth_dev_info(struct qed_dev *cdev,
+ 				u16 cids;
+ 
+ 				cids = hwfn->pf_params.eth_pf_params.num_cons;
+-				num_queues += min_t(u16, l2_queues, cids / 3);
++				cids /= (2 + info->num_tc);
++				num_queues += min_t(u16, l2_queues, cids);
+ 			}
+ 
+ 			/* queues might theoretically be >256, but interrupts'
 -- 
 2.19.1
 
