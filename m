@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5C4CC10F00
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:23:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E810C43381
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:24:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9CB42206B8
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:23:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5DD7C20C01
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 15:24:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1551367388;
-	bh=Z5+rDUULjVujJ0pOmcJhH2eynq6PMvgP+zIvZu7OM10=;
+	s=default; t=1551367461;
+	bh=Ks6MaHWkc3RoIrf2XMcqOkDWiGiynDOijhhRQnn31zg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=efuiVmjhqkbcWGAt5CcFQCLwsq8LP0DnR6RpSwlmOC4UHTkJy+zNwxzkWgZDjiCsH
-	 ZZRIy0NAS6dOwoIthdJGwxqoPTg3R5j3zCjAxL1pvsSGiykcC8QVoNOD1R6ZcL/EuJ
-	 0+l0yz+JFcemqTRgnJShGH/wIJv/j3hdDRXnHcWE=
+	b=oNChKZAIYiYgXe3/449Y2BoHnY7QEcUqH0Z3Bc9UHtuicJaGDZ7ngiUUSJOyqL0xI
+	 tobjrlIBRc0Hi5ZbXK1xZR+KTBVYRsv04yqY2/KSEUvz33dDrAU29maL+8n0MfiZiQ
+	 OgRmJgohs0JA9cRJu2fsECga3cs9j107Mztwuz6c=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732923AbfB1PW5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Feb 2019 10:22:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47582 "EHLO mail.kernel.org"
+        id S2387705AbfB1PMV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Feb 2019 10:12:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45756 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388462AbfB1PNd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Feb 2019 10:13:33 -0500
+        id S2388223AbfB1PMT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Feb 2019 10:12:19 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 43ED2218EA;
-        Thu, 28 Feb 2019 15:13:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C1067218D8;
+        Thu, 28 Feb 2019 15:12:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1551366812;
-        bh=Z5+rDUULjVujJ0pOmcJhH2eynq6PMvgP+zIvZu7OM10=;
+        s=default; t=1551366738;
+        bh=Ks6MaHWkc3RoIrf2XMcqOkDWiGiynDOijhhRQnn31zg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OXxs5GO+Uye6YCVubsBi/CYWo0zIWeLs2//YGeo1B3NDdVsDpoBy7FuLOEDGPbza0
-         Ejs8hRF0q+LegMcM2Jn30tpDCMxXOgUEUgqfVtxv2XHv2Id4FAT3Ttfkp6aw6AqxjV
-         e7a02/jK8Emyo9Y/+f8NQwDWKWpY05jq9StdH85E=
+        b=QZGmEYtzrFIITfmjGvgPMwoycmFZ/yUC6/w4p/AGlyYcJDYXi9hid9C6MeFA31GAf
+         HLr1Ffe7PHcA3ooODcNMYGWnzuEXNLRQV54LHU3KUMW0CBT55Y+XUfoRLXw69g4/9X
+         spha5l42h4Bau7+ZFNMSqOIai2ec9MnBr2mWgC1c=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sudarsana Reddy Kalluru <skalluru@marvell.com>,
-        Ariel Elior <aelior@marvell.com>,
-        "David S . Miller" <davem@davemloft.net>,
+Cc:     Martin KaFai Lau <kafai@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        xdp-newbies@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 62/64] qed: Consider TX tcs while deriving the max num_queues for PF.
-Date:   Thu, 28 Feb 2019 10:11:03 -0500
-Message-Id: <20190228151105.11277-62-sashal@kernel.org>
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 38/64] bpf: Fix syscall's stackmap lookup potential deadlock
+Date:   Thu, 28 Feb 2019 10:10:39 -0500
+Message-Id: <20190228151105.11277-38-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190228151105.11277-1-sashal@kernel.org>
 References: <20190228151105.11277-1-sashal@kernel.org>
@@ -59,44 +59,80 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Sudarsana Reddy Kalluru <skalluru@marvell.com>
+From: Martin KaFai Lau <kafai@fb.com>
 
-[ Upstream commit fb1faab74ddef9ec2d841d54e5d0912a097b3abe ]
+[ Upstream commit 7c4cd051add3d00bbff008a133c936c515eaa8fe ]
 
-Max supported queues is derived incorrectly in the case of multi-CoS.
-Need to consider TCs while calculating num_queues for PF.
+The map_lookup_elem used to not acquiring spinlock
+in order to optimize the reader.
 
-Signed-off-by: Sudarsana Reddy Kalluru <skalluru@marvell.com>
-Signed-off-by: Ariel Elior <aelior@marvell.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+It was true until commit 557c0c6e7df8 ("bpf: convert stackmap to pre-allocation")
+The syscall's map_lookup_elem(stackmap) calls bpf_stackmap_copy().
+bpf_stackmap_copy() may find the elem no longer needed after the copy is done.
+If that is the case, pcpu_freelist_push() saves this elem for reuse later.
+This push requires a spinlock.
+
+If a tracing bpf_prog got run in the middle of the syscall's
+map_lookup_elem(stackmap) and this tracing bpf_prog is calling
+bpf_get_stackid(stackmap) which also requires the same pcpu_freelist's
+spinlock, it may end up with a dead lock situation as reported by
+Eric Dumazet in https://patchwork.ozlabs.org/patch/1030266/
+
+The situation is the same as the syscall's map_update_elem() which
+needs to acquire the pcpu_freelist's spinlock and could race
+with tracing bpf_prog.  Hence, this patch fixes it by protecting
+bpf_stackmap_copy() with this_cpu_inc(bpf_prog_active)
+to prevent tracing bpf_prog from running.
+
+A later syscall's map_lookup_elem commit f1a2e44a3aec ("bpf: add queue and stack maps")
+also acquires a spinlock and races with tracing bpf_prog similarly.
+Hence, this patch is forward looking and protects the majority
+of the map lookups.  bpf_map_offload_lookup_elem() is the exception
+since it is for network bpf_prog only (i.e. never called by tracing
+bpf_prog).
+
+Fixes: 557c0c6e7df8 ("bpf: convert stackmap to pre-allocation")
+Reported-by: Eric Dumazet <eric.dumazet@gmail.com>
+Acked-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/qlogic/qed/qed_l2.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ kernel/bpf/syscall.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_l2.c b/drivers/net/ethernet/qlogic/qed/qed_l2.c
-index 67c02ea939062..bde6f5f3bf8f7 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_l2.c
-+++ b/drivers/net/ethernet/qlogic/qed/qed_l2.c
-@@ -2207,7 +2207,7 @@ static int qed_fill_eth_dev_info(struct qed_dev *cdev,
- 			u16 num_queues = 0;
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 382c09dddf93b..cc40b8be1171d 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -701,8 +701,13 @@ static int map_lookup_elem(union bpf_attr *attr)
  
- 			/* Since the feature controls only queue-zones,
--			 * make sure we have the contexts [rx, tx, xdp] to
-+			 * make sure we have the contexts [rx, xdp, tcs] to
- 			 * match.
- 			 */
- 			for_each_hwfn(cdev, i) {
-@@ -2217,7 +2217,8 @@ static int qed_fill_eth_dev_info(struct qed_dev *cdev,
- 				u16 cids;
+ 	if (bpf_map_is_dev_bound(map)) {
+ 		err = bpf_map_offload_lookup_elem(map, key, value);
+-	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
+-		   map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
++		goto done;
++	}
++
++	preempt_disable();
++	this_cpu_inc(bpf_prog_active);
++	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
++	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
+ 		err = bpf_percpu_hash_copy(map, key, value);
+ 	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY) {
+ 		err = bpf_percpu_array_copy(map, key, value);
+@@ -722,7 +727,10 @@ static int map_lookup_elem(union bpf_attr *attr)
+ 		rcu_read_unlock();
+ 		err = ptr ? 0 : -ENOENT;
+ 	}
++	this_cpu_dec(bpf_prog_active);
++	preempt_enable();
  
- 				cids = hwfn->pf_params.eth_pf_params.num_cons;
--				num_queues += min_t(u16, l2_queues, cids / 3);
-+				cids /= (2 + info->num_tc);
-+				num_queues += min_t(u16, l2_queues, cids);
- 			}
++done:
+ 	if (err)
+ 		goto free_value;
  
- 			/* queues might theoretically be >256, but interrupts'
 -- 
 2.19.1
 
