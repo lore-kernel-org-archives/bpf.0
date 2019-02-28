@@ -2,153 +2,252 @@ Return-Path: <SRS0=vk/n=RD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F481C10F00
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 18:19:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7355FC43381
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 18:27:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6BB85218C3
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 18:19:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3BE07218C3
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 18:27:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="HhR0XPDJ";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="AiUvZueu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kdfk3G5f"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732364AbfB1STu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Feb 2019 13:19:50 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:40236 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726534AbfB1STu (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 28 Feb 2019 13:19:50 -0500
-Received: from pps.filterd (m0044008.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x1SICjB0003922;
-        Thu, 28 Feb 2019 10:19:27 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : subject :
- date : message-id : references : in-reply-to : content-type : content-id :
- content-transfer-encoding : mime-version; s=facebook;
- bh=G766Aw8MJxPvfCQdfHRqS3CCpK/TQF5lxNKgQSL8NbY=;
- b=HhR0XPDJlZGNPtnpKlg1jubFkTyt9XbZIe1OKDbUDKJW8gWCmcYv6oZAa5TTuyF/SbVk
- xRNqG9OYsmu6yc0n6oXEebL50DqwbpmxF5XGZHzcHWewx9R8q+QePIaR4Cpsm0DH9+bX
- y5Nk1UgBwaDfBZaUw/SsAbqoQN43LGF6QWI= 
-Received: from mail.thefacebook.com ([199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2qxjqt8j4g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 28 Feb 2019 10:19:27 -0800
-Received: from prn-mbx03.TheFacebook.com (2620:10d:c081:6::17) by
- prn-hub06.TheFacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1531.3; Thu, 28 Feb 2019 10:19:26 -0800
-Received: from prn-hub05.TheFacebook.com (2620:10d:c081:35::129) by
- prn-mbx03.TheFacebook.com (2620:10d:c081:6::17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1531.3; Thu, 28 Feb 2019 10:19:26 -0800
-Received: from NAM04-SN1-obe.outbound.protection.outlook.com (192.168.54.28)
- by o365-in.thefacebook.com (192.168.16.29) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1531.3
- via Frontend Transport; Thu, 28 Feb 2019 10:19:26 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector1-fb-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G766Aw8MJxPvfCQdfHRqS3CCpK/TQF5lxNKgQSL8NbY=;
- b=AiUvZueu41hpzJAmls5iuSm1Vq6/NnZUV1oPJQnLmlfVa+D/rq3IgyVv2YCr7kLy5W4HjjBSEIzJsf4KJj66HiU/Fsbogy3ffF6OkNl4nVz0HCnGp82AJja4AlE0M8XrIgmu1as2rtOuZi8i/6Yeug2yzHF6g12t32gWm8S4T5o=
-Received: from BYAPR15MB3384.namprd15.prod.outlook.com (20.179.59.17) by
- BYAPR15MB2918.namprd15.prod.outlook.com (20.178.236.223) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1665.15; Thu, 28 Feb 2019 18:19:24 +0000
-Received: from BYAPR15MB3384.namprd15.prod.outlook.com
- ([fe80::d051:e43:9e14:b94]) by BYAPR15MB3384.namprd15.prod.outlook.com
- ([fe80::d051:e43:9e14:b94%4]) with mapi id 15.20.1665.015; Thu, 28 Feb 2019
- 18:19:24 +0000
-From:   Yonghong Song <yhs@fb.com>
-To:     Andrii Nakryiko <andriin@fb.com>,
-        "andrii.nakryiko@gmail.com" <andrii.nakryiko@gmail.com>,
-        Kernel Team <Kernel-team@fb.com>,
-        "Alexei Starovoitov" <ast@fb.com>,
-        "acme@kernel.org" <acme@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>
-Subject: Re: [PATCH bpf-next 1/5] selftests/bpf: fix btf_dedup testing code
-Thread-Topic: [PATCH bpf-next 1/5] selftests/bpf: fix btf_dedup testing code
-Thread-Index: AQHUzu6HObzxqJSy0E6ARu/SXWTSJqX1hmyA
-Date:   Thu, 28 Feb 2019 18:19:24 +0000
-Message-ID: <44ac0073-0414-5e06-17c8-8568e3b3107e@fb.com>
-References: <20190227224642.1069138-1-andriin@fb.com>
- <20190227224642.1069138-2-andriin@fb.com>
-In-Reply-To: <20190227224642.1069138-2-andriin@fb.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: MW2PR16CA0045.namprd16.prod.outlook.com
- (2603:10b6:907:1::22) To BYAPR15MB3384.namprd15.prod.outlook.com
- (2603:10b6:a03:10e::17)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [2620:10d:c090:200::2:e2ab]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 21fa0682-6b15-4855-cb2f-08d69da94454
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600127)(711020)(4605104)(2017052603328)(7153060)(7193020);SRVR:BYAPR15MB2918;
-x-ms-traffictypediagnostic: BYAPR15MB2918:
-x-microsoft-exchange-diagnostics: 1;BYAPR15MB2918;20:z5QV+rSW+h/i7b68AmgxueQZ9FurQPJCHJLXVXoq59w5cqV6IH7Yk9iU9R9h6fTWacVa1ETK7goE3Q3luVOTiaRK/bIT87Xc82aNMiaqU8A4m1eTqmHEiZXhKgSegHhILu5lSAMdzA/GHlS9JOgQkh/DiO9ya4oU/rIA6wwk/jk=
-x-microsoft-antispam-prvs: <BYAPR15MB29189D93EADEE6AC851CD3C2D3750@BYAPR15MB2918.namprd15.prod.outlook.com>
-x-forefront-prvs: 0962D394D2
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(39860400002)(346002)(396003)(376002)(366004)(199004)(189003)(14444005)(6436002)(2906002)(71200400001)(86362001)(8676002)(31686004)(71190400001)(386003)(14454004)(478600001)(5660300002)(229853002)(6512007)(81156014)(316002)(8936002)(31696002)(6116002)(105586002)(110136005)(2201001)(6486002)(7736002)(106356001)(256004)(97736004)(52116002)(486006)(99286004)(186003)(446003)(2616005)(476003)(11346002)(81166006)(6246003)(25786009)(305945005)(53936002)(2501003)(76176011)(46003)(36756003)(68736007)(53546011)(6506007)(102836004);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB2918;H:BYAPR15MB3384.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: KUN+h7LmUNwOBuXPWHom6RjPpE4K/Pbbj5DsZS/KKpqua3g0ccjyU8xzMaIdl8DqlBCXwGMMUC2c2usvmM+DOVqE1sosr71iUYjToJdr3tEz9D+pbaEoCLVVb2piKuggF3ndgXSbszYFRWYe6eMQ6oRT67VDZHiAGT4RFHbDpbyHg54pVaH9W0RCOSCx1w47sJ7TBis9CRCgZA61AmAEnPtMhqtWYQnDGdPZSBsFvUOpi9VbarTULyljh6DeSOGw18UIkI8n8ZN1Q9+6pMGvNkuRMoK3SHM4yZWGU282/fI0K3MCi8MKfPztjKPHIS34hKZlHsnpXxWE9ZbQHrrujQ+0sU2NBBiOHCzhKXO/pdQAzenpEFtgAmVJ7jhFW7WBstKR9EugwuBM/Md5D/51+tNVzzAHeqBgo1XB6OWKq1I=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A4D227A10179EE4798553551A5E55373@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S2387718AbfB1S1w (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Feb 2019 13:27:52 -0500
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:45573 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733098AbfB1S1v (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Feb 2019 13:27:51 -0500
+Received: by mail-qt1-f193.google.com with SMTP id d18so24612428qtg.12;
+        Thu, 28 Feb 2019 10:27:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=J0s3wVyOJ1Bm0+CBlPghnb9pqKlU2R7CgxZ3fXx3jw4=;
+        b=Kdfk3G5fIQS0tK7RDRwhov0eYeyHSyc+5IhFCo6kHAsSSsZV+c91K3CMMfGKd7SoR3
+         PO103VQE3pK8orzd2DKBhJ/gdlrU5n1/S4bqlD4vQ8QPcgK5c8iovWgzJup7s5o3wXpb
+         luGg6Dy7gjpOWDVwdGmU9C+3cr+bAie3T0kr2LFk1cIobncWOgkFvGoe6Bfq90KYTlyi
+         ky2CdEiMYy242ts/s6ZqrRNOcrt2NIJq2N3awVsdTmWz8KBqN3NvzAajTglRXgTNmgup
+         +cynNz4HYLxq2TJ5vyIoeG+YnLpD5wJecGTXG2WbCTNT26Ii5kOD/NLfgnVAjw1pevdZ
+         ovSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=J0s3wVyOJ1Bm0+CBlPghnb9pqKlU2R7CgxZ3fXx3jw4=;
+        b=f0KUZrsOtdYZ+LJVFteQLSYTQhzXC8ul3zyNMI9F1ImczpFjQx1Kx0PTJPtPnm3LjV
+         bts0wrQWcO1LRcRzYqGtHshh4G70zj0Qunhm10DxZklCDPopZHZTM+X9UnkinDhanLBC
+         1jIVAdbSPiGTqrFnTi8OV623WNa145mnl+bqUmJDKVdk8pmH85gGBB7jwrXRLcjiSWOV
+         jaDoLSjm7/b4Ex6yu3FC/6XCqp33TEA2pbmrdTkWRnj0MBFo92AsWn77JsrKO9TOApBF
+         T0/1EAtPXZrcvtw2Ndb5PDLQtn0o8GQZ6LcR9YfzyOkKub50Ft6B/EuCBHyFt5hRVHZH
+         z6og==
+X-Gm-Message-State: APjAAAUNdOZIgoiB6qLQ/RyV1BcumOliELl+1+dvmCpNgK6mfY2JXoRY
+        3IxwQ67bXwKIWCAYHgfRD7wE1AJ+JofMfXUeFfs=
+X-Google-Smtp-Source: APXvYqxcoqYeGuvBpz4agmBx8bYqaG8ES5lXo7643QQbfkcgSPjvhu4jtB1XNTpB3CSMnaUmj3NBHv6p4YhnRJ1U+RA=
+X-Received: by 2002:a0c:ad67:: with SMTP id v36mr439260qvc.5.1551378470601;
+ Thu, 28 Feb 2019 10:27:50 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 21fa0682-6b15-4855-cb2f-08d69da94454
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2019 18:19:24.3907
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2918
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-02-28_10:,,
- signatures=0
-X-Proofpoint-Spam-Reason: safe
-X-FB-Internal: Safe
+References: <20190227224642.1069138-1-andriin@fb.com> <20190227224642.1069138-4-andriin@fb.com>
+In-Reply-To: <20190227224642.1069138-4-andriin@fb.com>
+From:   Song Liu <liu.song.a23@gmail.com>
+Date:   Thu, 28 Feb 2019 10:27:39 -0800
+Message-ID: <CAPhsuW73_ttrf_MrBzLZrzjqMmg6yE2A5JirtzBa+PYCfdajqg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/5] btf: allow to customize dedup hash table size
+To:     Andrii Nakryiko <andriin@fb.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>, kernel-team@fb.com,
+        ast@fb.com, Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-DQoNCk9uIDIvMjcvMTkgMjo0NiBQTSwgQW5kcmlpIE5ha3J5aWtvIHdyb3RlOg0KPiBidGZfZGVk
-dXAgdGVzdGluZyBjb2RlIGRvZXNuJ3QgYWNjb3VudCBmb3IgbGVuZ3RoIG9mIHN0cnVjdCBidGZf
-aGVhZGVyDQo+IHdoZW4gY2FsY3VsYXRpbmcgdGhlIHN0YXJ0IG9mIGEgc3RyaW5nIHNlY3Rpb24u
-IFRoaXMgcGF0Y2ggZml4ZXMgdGhpcw0KPiBwcm9ibGVtLg0KPiANCj4gRml4ZXM6IDQ5YjU3ZTBk
-MDFkYiAoInRvb2xzL2JwZjogcmVtb3ZlIGJ0Zl9fZ2V0X3N0cmluZ3MoKSBzdXBlcnNlZGVkIGJ5
-IHJhdyBkYXRhIEFQSSIpDQo+IFNpZ25lZC1vZmYtYnk6IEFuZHJpaSBOYWtyeWlrbyA8YW5kcmlp
-bkBmYi5jb20+DQoNCkFja2VkLWJ5OiBZb25naG9uZyBTb25nIDx5aHNAZmIuY29tPg0KZm9yIFBh
-dGNoICMxIC0gIzMuDQoNCj4gLS0tDQo+ICAgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmLy5n
-aXRpZ25vcmUgfCAxICsNCj4gICB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvdGVzdF9idGYu
-YyB8IDQgKystLQ0KPiAgIDIgZmlsZXMgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAyIGRlbGV0
-aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi8u
-Z2l0aWdub3JlIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmLy5naXRpZ25vcmUNCj4gaW5k
-ZXggZTQ3MTY4ZDEyNTdkLi4zYjc0ZDIzZmZmYWIgMTAwNjQ0DQo+IC0tLSBhL3Rvb2xzL3Rlc3Rp
-bmcvc2VsZnRlc3RzL2JwZi8uZ2l0aWdub3JlDQo+ICsrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRl
-c3RzL2JwZi8uZ2l0aWdub3JlDQo+IEBAIC0xNCw2ICsxNCw3IEBAIGZlYXR1cmUNCj4gICB0ZXN0
-X2xpYmJwZl9vcGVuDQo+ICAgdGVzdF9zb2NrDQo+ICAgdGVzdF9zb2NrX2FkZHINCj4gK3Rlc3Rf
-c29ja19maWVsZHMNCj4gICB1cmFuZG9tX3JlYWQNCj4gICB0ZXN0X2J0Zg0KPiAgIHRlc3Rfc29j
-a21hcA0KPiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Rlc3RfYnRm
-LmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvdGVzdF9idGYuYw0KPiBpbmRleCAwMmQz
-MTQzODNhOWMuLjE0MjZjMGE5MDVjOCAxMDA2NDQNCj4gLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxm
-dGVzdHMvYnBmL3Rlc3RfYnRmLmMNCj4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBm
-L3Rlc3RfYnRmLmMNCj4gQEAgLTU5MzYsOSArNTkzNiw5IEBAIHN0YXRpYyBpbnQgZG9fdGVzdF9k
-ZWR1cCh1bnNpZ25lZCBpbnQgdGVzdF9udW0pDQo+ICAgCX0NCj4gICANCj4gICAJdGVzdF9oZHIg
-PSB0ZXN0X2J0Zl9kYXRhOw0KPiAtCXRlc3Rfc3RycyA9IHRlc3RfYnRmX2RhdGEgKyB0ZXN0X2hk
-ci0+c3RyX29mZjsNCj4gKwl0ZXN0X3N0cnMgPSB0ZXN0X2J0Zl9kYXRhICsgc2l6ZW9mKCp0ZXN0
-X2hkcikgKyB0ZXN0X2hkci0+c3RyX29mZjsNCj4gICAJZXhwZWN0X2hkciA9IGV4cGVjdF9idGZf
-ZGF0YTsNCj4gLQlleHBlY3Rfc3RycyA9IGV4cGVjdF9idGZfZGF0YSArIGV4cGVjdF9oZHItPnN0
-cl9vZmY7DQo+ICsJZXhwZWN0X3N0cnMgPSBleHBlY3RfYnRmX2RhdGEgKyBzaXplb2YoKnRlc3Rf
-aGRyKSArIGV4cGVjdF9oZHItPnN0cl9vZmY7DQo+ICAgCWlmIChDSEVDSyh0ZXN0X2hkci0+c3Ry
-X2xlbiAhPSBleHBlY3RfaGRyLT5zdHJfbGVuLA0KPiAgIAkJICAidGVzdF9oZHItPnN0cl9sZW46
-JXUgIT0gZXhwZWN0X2hkci0+c3RyX2xlbjoldSIsDQo+ICAgCQkgIHRlc3RfaGRyLT5zdHJfbGVu
-LCBleHBlY3RfaGRyLT5zdHJfbGVuKSkgew0KPiANCg==
+On Wed, Feb 27, 2019 at 2:47 PM Andrii Nakryiko <andriin@fb.com> wrote:
+>
+> Default size of dedup table (16k) is good enough for most binaries, even
+> typical vmlinux images. But there are cases of binaries with huge amount
+> of BTF types (e.g., allyesconfig variants of kernel), which benefit from
+> having bigger dedup table size to lower amount of unnecessary hash
+> collisions. Tools like pahole, thus, can tune this parameter to reach
+> optimal performance.
+>
+> This change also serves double purpose of allowing tests to force hash
+> collisions to test some corner cases, used in follow up patch.
+>
+> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> ---
+>  tools/lib/bpf/btf.c | 43 ++++++++++++++++++++++++++-----------------
+>  tools/lib/bpf/btf.h |  1 +
+>  2 files changed, 27 insertions(+), 17 deletions(-)
+>
+> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> index 68b50e9bbde1..6bbb710216e6 100644
+> --- a/tools/lib/bpf/btf.c
+> +++ b/tools/lib/bpf/btf.c
+> @@ -1070,8 +1070,7 @@ int btf__dedup(struct btf *btf, struct btf_ext *btf_ext,
+>         return err;
+>  }
+>
+> -#define BTF_DEDUP_TABLE_SIZE_LOG 14
+> -#define BTF_DEDUP_TABLE_MOD ((1 << BTF_DEDUP_TABLE_SIZE_LOG) - 1)
+> +#define BTF_DEDUP_TABLE_DEFAULT_SIZE (1 << 14)
+>  #define BTF_UNPROCESSED_ID ((__u32)-1)
+>  #define BTF_IN_PROGRESS_ID ((__u32)-2)
+>
+> @@ -1128,18 +1127,21 @@ static inline __u32 hash_combine(__u32 h, __u32 value)
+>  #undef GOLDEN_RATIO_PRIME
+>  }
+>
+> -#define for_each_hash_node(table, hash, node) \
+> -       for (node = table[hash & BTF_DEDUP_TABLE_MOD]; node; node = node->next)
+> +#define for_each_dedup_cand(d, hash, node) \
+> +       for (node = d->dedup_table[hash & (d->opts.dedup_table_size - 1)]; \
+> +            node;                                                         \
+> +            node = node->next)
+>
+>  static int btf_dedup_table_add(struct btf_dedup *d, __u32 hash, __u32 type_id)
+>  {
+>         struct btf_dedup_node *node = malloc(sizeof(struct btf_dedup_node));
+> +       int bucket = hash & (d->opts.dedup_table_size - 1);
+>
+>         if (!node)
+>                 return -ENOMEM;
+>         node->type_id = type_id;
+> -       node->next = d->dedup_table[hash & BTF_DEDUP_TABLE_MOD];
+> -       d->dedup_table[hash & BTF_DEDUP_TABLE_MOD] = node;
+> +       node->next = d->dedup_table[bucket];
+> +       d->dedup_table[bucket] = node;
+>         return 0;
+>  }
+>
+> @@ -1177,7 +1179,7 @@ static void btf_dedup_table_free(struct btf_dedup *d)
+>         if (!d->dedup_table)
+>                 return;
+>
+> -       for (i = 0; i < (1 << BTF_DEDUP_TABLE_SIZE_LOG); i++) {
+> +       for (i = 0; i < d->opts.dedup_table_size; i++) {
+>                 while (d->dedup_table[i]) {
+>                         tmp = d->dedup_table[i];
+>                         d->dedup_table[i] = tmp->next;
+> @@ -1221,10 +1223,19 @@ static struct btf_dedup *btf_dedup_new(struct btf *btf, struct btf_ext *btf_ext,
+>         if (!d)
+>                 return ERR_PTR(-ENOMEM);
+>
+> +       d->opts.dont_resolve_fwds = opts && opts->dont_resolve_fwds;
+> +       /* ensure table size is power of two and limit to 2G */
+> +       d->opts.dedup_table_size = opts && opts->dedup_table_size
+> +               ? opts->dedup_table_size
+> +               : BTF_DEDUP_TABLE_DEFAULT_SIZE;
+> +       for (i = 0; i < 31 && (1 << i) < d->opts.dedup_table_size;  i++)
+> +               ;
+> +       d->opts.dedup_table_size = 1 << i;
+> +
+So this is the roundup log2 logic? How about we define some marcos
+to make it cleaner? Like
+
+#define BTF_DEDUP_TABLE_MAX_SIZE xxxx
+
+Also, how big hash table do we need for allyesconfig? 2G seems really
+big to me.
+
+>         d->btf = btf;
+>         d->btf_ext = btf_ext;
+>
+> -       d->dedup_table = calloc(1 << BTF_DEDUP_TABLE_SIZE_LOG,
+> +       d->dedup_table = calloc(d->opts.dedup_table_size,
+>                                 sizeof(struct btf_dedup_node *));
+>         if (!d->dedup_table) {
+>                 err = -ENOMEM;
+> @@ -1249,8 +1260,6 @@ static struct btf_dedup *btf_dedup_new(struct btf *btf, struct btf_ext *btf_ext,
+>         for (i = 0; i <= btf->nr_types; i++)
+>                 d->hypot_map[i] = BTF_UNPROCESSED_ID;
+>
+> -       d->opts.dont_resolve_fwds = opts && opts->dont_resolve_fwds;
+> -
+>  done:
+>         if (err) {
+>                 btf_dedup_free(d);
+> @@ -1824,7 +1833,7 @@ static int btf_dedup_prim_type(struct btf_dedup *d, __u32 type_id)
+>
+>         case BTF_KIND_INT:
+>                 h = btf_hash_int(t);
+> -               for_each_hash_node(d->dedup_table, h, cand_node) {
+> +               for_each_dedup_cand(d, h, cand_node) {
+>                         cand = d->btf->types[cand_node->type_id];
+>                         if (btf_equal_int(t, cand)) {
+>                                 new_id = cand_node->type_id;
+> @@ -1835,7 +1844,7 @@ static int btf_dedup_prim_type(struct btf_dedup *d, __u32 type_id)
+>
+>         case BTF_KIND_ENUM:
+>                 h = btf_hash_enum(t);
+> -               for_each_hash_node(d->dedup_table, h, cand_node) {
+> +               for_each_dedup_cand(d, h, cand_node) {
+>                         cand = d->btf->types[cand_node->type_id];
+>                         if (btf_equal_enum(t, cand)) {
+>                                 new_id = cand_node->type_id;
+> @@ -1846,7 +1855,7 @@ static int btf_dedup_prim_type(struct btf_dedup *d, __u32 type_id)
+>
+>         case BTF_KIND_FWD:
+>                 h = btf_hash_common(t);
+> -               for_each_hash_node(d->dedup_table, h, cand_node) {
+> +               for_each_dedup_cand(d, h, cand_node) {
+>                         cand = d->btf->types[cand_node->type_id];
+>                         if (btf_equal_common(t, cand)) {
+>                                 new_id = cand_node->type_id;
+> @@ -2263,7 +2272,7 @@ static int btf_dedup_struct_type(struct btf_dedup *d, __u32 type_id)
+>                 return 0;
+>
+>         h = btf_hash_struct(t);
+> -       for_each_hash_node(d->dedup_table, h, cand_node) {
+> +       for_each_dedup_cand(d, h, cand_node) {
+>                 int eq;
+>
+>                 btf_dedup_clear_hypot_map(d);
+> @@ -2349,7 +2358,7 @@ static int btf_dedup_ref_type(struct btf_dedup *d, __u32 type_id)
+>                 t->type = ref_type_id;
+>
+>                 h = btf_hash_common(t);
+> -               for_each_hash_node(d->dedup_table, h, cand_node) {
+> +               for_each_dedup_cand(d, h, cand_node) {
+>                         cand = d->btf->types[cand_node->type_id];
+>                         if (btf_equal_common(t, cand)) {
+>                                 new_id = cand_node->type_id;
+> @@ -2372,7 +2381,7 @@ static int btf_dedup_ref_type(struct btf_dedup *d, __u32 type_id)
+>                 info->index_type = ref_type_id;
+>
+>                 h = btf_hash_array(t);
+> -               for_each_hash_node(d->dedup_table, h, cand_node) {
+> +               for_each_dedup_cand(d, h, cand_node) {
+>                         cand = d->btf->types[cand_node->type_id];
+>                         if (btf_equal_array(t, cand)) {
+>                                 new_id = cand_node->type_id;
+> @@ -2403,7 +2412,7 @@ static int btf_dedup_ref_type(struct btf_dedup *d, __u32 type_id)
+>                 }
+>
+>                 h = btf_hash_fnproto(t);
+> -               for_each_hash_node(d->dedup_table, h, cand_node) {
+> +               for_each_dedup_cand(d, h, cand_node) {
+>                         cand = d->btf->types[cand_node->type_id];
+>                         if (btf_equal_fnproto(t, cand)) {
+>                                 new_id = cand_node->type_id;
+> diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+> index b60bb7cf5fff..28a1e1e59861 100644
+> --- a/tools/lib/bpf/btf.h
+> +++ b/tools/lib/bpf/btf.h
+> @@ -90,6 +90,7 @@ LIBBPF_API __u32 btf_ext__func_info_rec_size(const struct btf_ext *btf_ext);
+>  LIBBPF_API __u32 btf_ext__line_info_rec_size(const struct btf_ext *btf_ext);
+>
+>  struct btf_dedup_opts {
+> +       unsigned int dedup_table_size;
+>         bool dont_resolve_fwds;
+>  };
+>
+> --
+> 2.17.1
+>
