@@ -2,106 +2,116 @@ Return-Path: <SRS0=vk/n=RD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_MUTT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9570DC43381
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 18:07:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9B0BC43381
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 18:17:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6957B20863
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 18:07:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B9459218C3
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 18:17:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Qh9UsEC4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cH806AGe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732515AbfB1SHW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Feb 2019 13:07:22 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:42968 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727499AbfB1SHW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Feb 2019 13:07:22 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x1SHwoT2112994;
-        Thu, 28 Feb 2019 18:07:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type : in-reply-to;
- s=corp-2018-07-02; bh=e8cuSMex66hmLUuGTCLEgfNto/vUtTFmF8L73UNbtE0=;
- b=Qh9UsEC4+MwisvsL4shAO0wHC5S4qtTGmLocZjXzdAMgpuompG1WelV9eUO/SxFUqh5K
- mywWoGR2qx7N1zw1geSa5Ik91kkAonMUXaJS6G8bg4M3w+4sPeKlq4qN4l1Zp2zflv5O
- 9qOZKzm5cfjXjZmBEnsgZYLbOW2VPXlIGjeYIEkM2wiUfpUL+2DHzp643YZCMlUZvbIa
- azJTdpFVE4NH/V0mAv/dOoBXh2soOwXu1fWxTE1L6CDlOZ8AQzUY6QBQJ5htw3/MpCGu
- lG8Qz8M4GYZ1U4ALvKAShSQT040fi+Ex7JiwgscbZ+ShMRWrRKh+ozmdEw1LoVmD4yHD 8A== 
-Received: from aserv0022.oracle.com (aserv0022.oracle.com [141.146.126.234])
-        by userp2120.oracle.com with ESMTP id 2qtxts2mt7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 28 Feb 2019 18:07:00 +0000
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserv0022.oracle.com (8.14.4/8.14.4) with ESMTP id x1SI6wdv010937
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 28 Feb 2019 18:06:59 GMT
-Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x1SI6v1F007256;
-        Thu, 28 Feb 2019 18:06:58 GMT
-Received: from kadam (/197.157.0.25)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 28 Feb 2019 10:06:57 -0800
-Date:   Thu, 28 Feb 2019 21:06:47 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: [PATCH v3] tools/libbpf: signedness bug in btf_dedup_ref_type()
-Message-ID: <20190228180647.GF9806@kadam>
+        id S1731163AbfB1SR2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Feb 2019 13:17:28 -0500
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:41892 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727005AbfB1SR2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Feb 2019 13:17:28 -0500
+Received: by mail-qk1-f193.google.com with SMTP id y15so12655853qki.8;
+        Thu, 28 Feb 2019 10:17:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iaLAGaGGjqI+SVy0Xd17Jhezo2ZZtmB3NBZUS1FPZ64=;
+        b=cH806AGe13Fpnap+OlR4y0rWKAd1+tKG2EA0YW2dgrzMvS3MwLEDXwQLRS6FrsDE5Q
+         74SVN5o0mZmdT2V2IC48N8qhabmZq//Cqwzq8Oe4GN5X4d1a/3UnpFxncv6BiEVmqFiS
+         EItby0dmMantpL8bknZqs+lKj5QspGZxOzNSQ8X9OnX6woHneKcdvhmoef+RzKshJ9ye
+         S6EzPkCoUrGkymtI4vMFGkk7X2rMfmQXH7NAMhfdwW8QVXMAzbO/UCQDdEWtGEQO/L/3
+         zBShl5YzT3mol1YClOc2HUSjvOezdF/SIyvH3AJ9o/ZmMtZ2Z4m2se9F2mW5TxfBDYov
+         8rug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iaLAGaGGjqI+SVy0Xd17Jhezo2ZZtmB3NBZUS1FPZ64=;
+        b=lIfX3gb68DNi25gjui/iAT5l1mKKHZDbGWDFdZJRsTtkMJMPb1aQAhmjcLN+SzJaNV
+         rsvqFFBN6Z6WYLq6UiloeZ3dmg4Ln3/MYRZ6FAarPBvWT9qaDm8a0i+GqsNeuYb+dy8m
+         semWb5/2tlPoVvsMVJEKvG1QRNZkkwH8CkDh8ABXjWGhnNvAhNBEzO3BLzsjXC5VU/we
+         2nWf9oIcHJiLT/b+6fR2G2LYnG1wyv8VjkbzoXHXN5ZgkkB5pEkesTBKmrM7hr0xkecc
+         DkHvxluD3qzSXQoCGx452JBbP8LLh7vIoHQEkyvEBYtQs8mOl/sWkPDFBfeN1NdDnwZ2
+         eAfw==
+X-Gm-Message-State: APjAAAUJXZsYlJ1LKeZYb65momqYzknAnuFfP9xP6bM2F7kMNwH7oSaW
+        Ni8wDTOj16Y1xHyP1HWwJr87rBvcJJKuNxLGUf4=
+X-Google-Smtp-Source: APXvYqyjfPZNjazgNoC6r2Qf/rZDvIM3LQIt2c9fiWBajIh57MeveCg/zf7vv1dawrMyOnLOMLGuMwpqIS4n4CpgNh0=
+X-Received: by 2002:a37:e10d:: with SMTP id c13mr650383qkm.284.1551377846771;
+ Thu, 28 Feb 2019 10:17:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a34432d0-b838-c004-ef79-052cd50996c0@fb.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9181 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1902280122
+References: <20190227224642.1069138-1-andriin@fb.com> <20190227224642.1069138-2-andriin@fb.com>
+In-Reply-To: <20190227224642.1069138-2-andriin@fb.com>
+From:   Song Liu <liu.song.a23@gmail.com>
+Date:   Thu, 28 Feb 2019 10:17:15 -0800
+Message-ID: <CAPhsuW52gmGrZGr50=L6FEVK760G=HPVzRgvzeJc3-mU+MqkMQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/5] selftests/bpf: fix btf_dedup testing code
+To:     Andrii Nakryiko <andriin@fb.com>
+Cc:     andrii.nakryiko@gmail.com, kernel-team@fb.com, ast@fb.com,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The "ref_type_id" variable needs to be signed for the error handling
-to work.
+On Wed, Feb 27, 2019 at 2:47 PM Andrii Nakryiko <andriin@fb.com> wrote:
+>
+> btf_dedup testing code doesn't account for length of struct btf_header
+> when calculating the start of a string section. This patch fixes this
+> problem.
+>
+> Fixes: 49b57e0d01db ("tools/bpf: remove btf__get_strings() superseded by raw data API")
+> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 
-Fixes: d5caef5b5655 ("btf: add BTF types deduplication algorithm")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
----
-v2: Use reverse Christmas tree style
-v3: Remove the bonus fix.
+Acked-by: Song Liu <songliubraving@fb.com>
 
-This goes through the BPF tree probably, although it does apply to
-net-next.
-
- tools/lib/bpf/btf.c                      | 3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
-
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 68b50e9bbde1..00a2f06e38fd 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -2326,7 +2326,8 @@ static int btf_dedup_ref_type(struct btf_dedup *d, __u32 type_id)
- 	struct btf_type *t, *cand;
- 	/* if we don't find equivalent type, then we are representative type */
- 	__u32 new_id = type_id;
--	__u32 h, ref_type_id;
-+	int ref_type_id;
-+	__u32 h;
- 
- 	if (d->map[type_id] == BTF_IN_PROGRESS_ID)
- 		return -ELOOP;
--- 
-2.17.1
+> ---
+>  tools/testing/selftests/bpf/.gitignore | 1 +
+>  tools/testing/selftests/bpf/test_btf.c | 4 ++--
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+> index e47168d1257d..3b74d23fffab 100644
+> --- a/tools/testing/selftests/bpf/.gitignore
+> +++ b/tools/testing/selftests/bpf/.gitignore
+> @@ -14,6 +14,7 @@ feature
+>  test_libbpf_open
+>  test_sock
+>  test_sock_addr
+> +test_sock_fields
+>  urandom_read
+>  test_btf
+>  test_sockmap
+> diff --git a/tools/testing/selftests/bpf/test_btf.c b/tools/testing/selftests/bpf/test_btf.c
+> index 02d314383a9c..1426c0a905c8 100644
+> --- a/tools/testing/selftests/bpf/test_btf.c
+> +++ b/tools/testing/selftests/bpf/test_btf.c
+> @@ -5936,9 +5936,9 @@ static int do_test_dedup(unsigned int test_num)
+>         }
+>
+>         test_hdr = test_btf_data;
+> -       test_strs = test_btf_data + test_hdr->str_off;
+> +       test_strs = test_btf_data + sizeof(*test_hdr) + test_hdr->str_off;
+>         expect_hdr = expect_btf_data;
+> -       expect_strs = expect_btf_data + expect_hdr->str_off;
+> +       expect_strs = expect_btf_data + sizeof(*test_hdr) + expect_hdr->str_off;
+>         if (CHECK(test_hdr->str_len != expect_hdr->str_len,
+>                   "test_hdr->str_len:%u != expect_hdr->str_len:%u",
+>                   test_hdr->str_len, expect_hdr->str_len)) {
+> --
+> 2.17.1
+>
