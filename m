@@ -2,107 +2,301 @@ Return-Path: <SRS0=vk/n=RD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A739CC43381
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 19:37:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9043C43381
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 19:40:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 78952218B0
-	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 19:37:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 709B4218B0
+	for <bpf@archiver.kernel.org>; Thu, 28 Feb 2019 19:40:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="sEx5KvJF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tJd7xAqk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731833AbfB1ThQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Feb 2019 14:37:16 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:34314 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730845AbfB1ThQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Feb 2019 14:37:16 -0500
-Received: by mail-wr1-f67.google.com with SMTP id f14so23318886wrg.1
-        for <bpf@vger.kernel.org>; Thu, 28 Feb 2019 11:37:15 -0800 (PST)
+        id S1729936AbfB1TkO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Feb 2019 14:40:14 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:36420 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728082AbfB1TkN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Feb 2019 14:40:13 -0500
+Received: by mail-ot1-f67.google.com with SMTP id v62so18778961otb.3;
+        Thu, 28 Feb 2019 11:40:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=ywNJegvrXCPzOehxRf8aYVJrGRQRF+VxBdtUvrZbviQ=;
-        b=sEx5KvJFPb/NWNVI0Xi5gJPjhRxrMcDwUkhHwFJLgR1BRYlyEQIp/nVAFczYVlfz2j
-         Nhe65Y06VHSPLvRuj0/AB0VZCMiQxTF7+y6lXErbUeLam0Tkk/CCUmKsnV5UI0qLt7r8
-         KDI8hLcmZWdHcPvrm+6P8MrlF3K84MdmJyrtY0uHB6OoBiBYzrbr5hlKObMISkpkDzg1
-         ZXFbhY4806ndMwNxECa0i5c2JyBi+JAUQjas4/0ww/KK8TxXpfcW52mAzV5pkWpMr/Lk
-         iMn3CEuIG3y2VPjz8wOVsLSW/JkMMMEQfveorZkv5jyaT5eMHGmAUSNp8TzPWul0XYzr
-         TpbA==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DUWMKG2YaGYWdslla0TBC5wjdAkttM8jY9AGdQKnSsw=;
+        b=tJd7xAqkifY9zQC9BQV+Y6NP6rLPUG4xrTG9jmegrd+KSO3Igf/aTcF5LKdA08o2a5
+         cA+Wd4lI6mioYGgsC8/T4u980tlvVfiXHVwfGrKWw31ns77R3XmeXP6Nt7cTnDZGTW82
+         AskxRXU//RuMUF6OhDiwh2SJN9c77hI0D5ENe8/tr7kf3NFsi6jKN1WXpz34z97CvVvf
+         R+jRBzcapyXVt2S8eT6r8yWyr6Mnt4LzpQlwwWmNtqCcurbANPbfa7zU4V9C+S6aLPmi
+         9+246LbvfWhvjVKms0FQ0lfWgtYn2uUj+TpRqkuAEMdRM1bI/HfKbB6axjLwSeyexdd7
+         LcGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=ywNJegvrXCPzOehxRf8aYVJrGRQRF+VxBdtUvrZbviQ=;
-        b=S67SYsceZ3hHjbmpzYlO2c86luWxvG179XXHcYPmnmWEhJTVdoVAMeLsp0LMfD+KSW
-         0UlJPf+rIJFGutbMcmlyGC3ko7g3PRTGGQkjy5wk1ot+XjbXSan3IZNCRbSoZNaPmaqE
-         VljG3pjKH2LzDvu42Nyk7UgpN9lZn9TKlniMXr806f2FvM483jCwHOkJ6FQl5vYQnWBE
-         wIJiwUNyp49R2//wPGqRbAkh13+Jn1Hi6tXHtzBi/7CF3MSo0dOnmmL8n6UFtAlyMB3/
-         L3+bwvqNV19y52uROo5+4i7a6HvUbR/wNgGtDlQXmMTs/8COk48VwrAupaT1f/lQ4YQr
-         PCPA==
-X-Gm-Message-State: APjAAAVbZTL+NUvQUQGdINiQJOreiZJYpsF7lF4UNshL2ypVZejjZnsi
-        YMXdvPzY6leN4wKbbbtI9OPBGw==
-X-Google-Smtp-Source: APXvYqwLYwR2jW794wEqDiYOjVi0Jvs/F8sYhPIHrmFxPT8DC3kldCsb0aopJRJ12M7E08Hji2YAtA==
-X-Received: by 2002:a5d:4843:: with SMTP id n3mr675691wrs.209.1551382634391;
-        Thu, 28 Feb 2019 11:37:14 -0800 (PST)
-Received: from LAPTOP-V3S7NLPL (cpc1-cmbg19-2-0-cust104.5-4.cable.virginm.net. [82.27.180.105])
-        by smtp.gmail.com with ESMTPSA id b10sm15989122wru.92.2019.02.28.11.37.13
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 28 Feb 2019 11:37:13 -0800 (PST)
-References: <1551347957-4068-1-git-send-email-jiong.wang@netronome.com> <1a4bf225-2f41-aa35-cf28-3ddf5cc23a9d@fb.com>
-User-agent: mu4e 0.9.18; emacs 25.2.2
-From:   Jiong Wang <jiong.wang@netronome.com>
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Jiong Wang <jiong.wang@netronome.com>,
-        "alexei.starovoitov\@gmail.com" <alexei.starovoitov@gmail.com>,
-        "daniel\@iogearbox.net" <daniel@iogearbox.net>,
-        "bpf\@vger.kernel.org" <bpf@vger.kernel.org>,
-        "oss-drivers\@netronome.com" <oss-drivers@netronome.com>
-Subject: Re: [PATCH LLVM v2 0/3] bpf: improvements on XADD semantics check and code-gen
-In-reply-to: <1a4bf225-2f41-aa35-cf28-3ddf5cc23a9d@fb.com>
-Date:   Thu, 28 Feb 2019 19:37:12 +0000
-Message-ID: <87sgw7u2l3.fsf@netronome.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DUWMKG2YaGYWdslla0TBC5wjdAkttM8jY9AGdQKnSsw=;
+        b=XiYvmj+oOOHYfFNUieR7FrUPOI/2iav9Gk9WRgHpjVi48mSf44HKs+RDcl0OnRtOth
+         E8DD980sPbWl6rc42RVx62zNZQJt4JYMkcM9l7Zb1IsGXbaYQ1eHx99z0PYw2fKa7AOo
+         mw6dsz6bHST8TryP0VcDD/nsF8Tcc61UwjgGwi285UfWLENVt04nv5Hje0KxlqSJ58Qd
+         5nVjDIkX/czih4bTvh5H/eR7Ga/8tnfez5eCmn7s7EI3hpUZHA6gS8+fhczEhaJ7ts83
+         hVss1GDpM3FPjNOuvKJT1SPy+Ya8A1W2CxZAxXI7j3d9T/8oP+fsmAY/vrRE6edEhFUk
+         tDxg==
+X-Gm-Message-State: APjAAAX1J//qsV3g997nR9H67qE4A27kRzeURTPeX/eTlRYJVK69kl/7
+        hL/Te8VlEWEUNGw3B9QpXnHsGwwYygagEsPdoz4=
+X-Google-Smtp-Source: APXvYqz0/VR4CXd72GxTYl+I/VcTwwpLaQbsHUak6o67GegvmXg92P0lamYhrmZMXGleRTvR3kCsqt0CDr2CTz0ok98=
+X-Received: by 2002:a9d:27a9:: with SMTP id c38mr852013otb.202.1551382812657;
+ Thu, 28 Feb 2019 11:40:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20190227224642.1069138-1-andriin@fb.com> <20190227224642.1069138-4-andriin@fb.com>
+ <CAPhsuW73_ttrf_MrBzLZrzjqMmg6yE2A5JirtzBa+PYCfdajqg@mail.gmail.com>
+ <CAEf4Bzb_HS8F66GWkRCd3ZTKvo=DFTyGS-SxeswdM02OUMnvrg@mail.gmail.com> <743BC79E-0C97-4E71-8ED8-76D5B434B0B0@fb.com>
+In-Reply-To: <743BC79E-0C97-4E71-8ED8-76D5B434B0B0@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 28 Feb 2019 11:40:01 -0800
+Message-ID: <CAEf4BzYRy5bpyh49=GDg-1NCJEO7dBTQoFq3eR-gqriVhwt4Mw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/5] btf: allow to customize dedup hash table size
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Song Liu <liu.song.a23@gmail.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Kernel Team <Kernel-team@fb.com>,
+        Alexei Starovoitov <ast@fb.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-
-Yonghong Song writes:
-<snip>
+On Thu, Feb 28, 2019 at 11:02 AM Song Liu <songliubraving@fb.com> wrote:
 >
-> The change looks good. Tested with unit tests and kernel selftests.
-> I added something like below to one of test_progs bpf programs:
->    (void)__sync_fetch_and_add(value_p, 1);
-> and the generated code is correct for alu32 mode and the objdump
-> is able to disassemble correctly with -mattr=+alu32.
 >
-> You can add my ack:
->    Acked-by: Yonghong Song <yhs@fb.com>
 >
-> Could you go ahead to push to llvm trunk? Thanks!
+> > On Feb 28, 2019, at 10:51 AM, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Thu, Feb 28, 2019 at 10:27 AM Song Liu <liu.song.a23@gmail.com> wrote:
+> >>
+> >> On Wed, Feb 27, 2019 at 2:47 PM Andrii Nakryiko <andriin@fb.com> wrote:
+> >>>
+> >>> Default size of dedup table (16k) is good enough for most binaries, even
+> >>> typical vmlinux images. But there are cases of binaries with huge amount
+> >>> of BTF types (e.g., allyesconfig variants of kernel), which benefit from
+> >>> having bigger dedup table size to lower amount of unnecessary hash
+> >>> collisions. Tools like pahole, thus, can tune this parameter to reach
+> >>> optimal performance.
+> >>>
+> >>> This change also serves double purpose of allowing tests to force hash
+> >>> collisions to test some corner cases, used in follow up patch.
+> >>>
+> >>> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> >>> ---
+> >>> tools/lib/bpf/btf.c | 43 ++++++++++++++++++++++++++-----------------
+> >>> tools/lib/bpf/btf.h |  1 +
+> >>> 2 files changed, 27 insertions(+), 17 deletions(-)
+> >>>
+> >>> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> >>> index 68b50e9bbde1..6bbb710216e6 100644
+> >>> --- a/tools/lib/bpf/btf.c
+> >>> +++ b/tools/lib/bpf/btf.c
+> >>> @@ -1070,8 +1070,7 @@ int btf__dedup(struct btf *btf, struct btf_ext *btf_ext,
+> >>>        return err;
+> >>> }
+> >>>
+> >>> -#define BTF_DEDUP_TABLE_SIZE_LOG 14
+> >>> -#define BTF_DEDUP_TABLE_MOD ((1 << BTF_DEDUP_TABLE_SIZE_LOG) - 1)
+> >>> +#define BTF_DEDUP_TABLE_DEFAULT_SIZE (1 << 14)
+> >>> #define BTF_UNPROCESSED_ID ((__u32)-1)
+> >>> #define BTF_IN_PROGRESS_ID ((__u32)-2)
+> >>>
+> >>> @@ -1128,18 +1127,21 @@ static inline __u32 hash_combine(__u32 h, __u32 value)
+> >>> #undef GOLDEN_RATIO_PRIME
+> >>> }
+> >>>
+> >>> -#define for_each_hash_node(table, hash, node) \
+> >>> -       for (node = table[hash & BTF_DEDUP_TABLE_MOD]; node; node = node->next)
+> >>> +#define for_each_dedup_cand(d, hash, node) \
+> >>> +       for (node = d->dedup_table[hash & (d->opts.dedup_table_size - 1)]; \
+> >>> +            node;                                                         \
+> >>> +            node = node->next)
+> >>>
+> >>> static int btf_dedup_table_add(struct btf_dedup *d, __u32 hash, __u32 type_id)
+> >>> {
+> >>>        struct btf_dedup_node *node = malloc(sizeof(struct btf_dedup_node));
+> >>> +       int bucket = hash & (d->opts.dedup_table_size - 1);
+> >>>
+> >>>        if (!node)
+> >>>                return -ENOMEM;
+> >>>        node->type_id = type_id;
+> >>> -       node->next = d->dedup_table[hash & BTF_DEDUP_TABLE_MOD];
+> >>> -       d->dedup_table[hash & BTF_DEDUP_TABLE_MOD] = node;
+> >>> +       node->next = d->dedup_table[bucket];
+> >>> +       d->dedup_table[bucket] = node;
+> >>>        return 0;
+> >>> }
+> >>>
+> >>> @@ -1177,7 +1179,7 @@ static void btf_dedup_table_free(struct btf_dedup *d)
+> >>>        if (!d->dedup_table)
+> >>>                return;
+> >>>
+> >>> -       for (i = 0; i < (1 << BTF_DEDUP_TABLE_SIZE_LOG); i++) {
+> >>> +       for (i = 0; i < d->opts.dedup_table_size; i++) {
+> >>>                while (d->dedup_table[i]) {
+> >>>                        tmp = d->dedup_table[i];
+> >>>                        d->dedup_table[i] = tmp->next;
+> >>> @@ -1221,10 +1223,19 @@ static struct btf_dedup *btf_dedup_new(struct btf *btf, struct btf_ext *btf_ext,
+> >>>        if (!d)
+> >>>                return ERR_PTR(-ENOMEM);
+> >>>
+> >>> +       d->opts.dont_resolve_fwds = opts && opts->dont_resolve_fwds;
+> >>> +       /* ensure table size is power of two and limit to 2G */
+> >>> +       d->opts.dedup_table_size = opts && opts->dedup_table_size
+> >>> +               ? opts->dedup_table_size
+> >>> +               : BTF_DEDUP_TABLE_DEFAULT_SIZE;
+> >>> +       for (i = 0; i < 31 && (1 << i) < d->opts.dedup_table_size;  i++)
+> >>> +               ;
+> >>> +       d->opts.dedup_table_size = 1 << i;
+> >>> +
+> >> So this is the roundup log2 logic? How about we define some marcos
+> >> to make it cleaner? Like
+> >>
+> >> #define BTF_DEDUP_TABLE_MAX_SIZE xxxx
+> >
+> > You mean hide this loop behind macro? Or specify max size as a macro?
+> > If former, I'd rather do static function, something like
+> > roundup_pow_of_2_with_max?
+>
+> I meant specify max size as a macro. Doing static function is also a
+> good idea.
 
-Done, thanks.
-
-Regards,
-Jiong
+Ok, will do.
 
 >
->> 
->>   lib/Target/BPF/BPFInstrInfo.td                  | 28 ++++++-
->>   lib/Target/BPF/BPFMIChecking.cpp                | 97 ++++++++++++++++++++++++-
->>   lib/Target/BPF/Disassembler/BPFDisassembler.cpp |  3 +-
->>   test/CodeGen/BPF/xadd.ll                        |  2 +
->>   test/CodeGen/BPF/xadd_legal.ll                  | 26 +++++++
->>   test/MC/BPF/insn-unit.s                         |  3 +-
->>   test/MC/BPF/load-store-32.s                     |  3 +
->>   7 files changed, 154 insertions(+), 8 deletions(-)
->>   create mode 100644 test/CodeGen/BPF/xadd_legal.ll
->> 
+> >
+> >>
+> >> Also, how big hash table do we need for allyesconfig? 2G seems really
+> >> big to me.
+> >
+> > It works even with 16k and takes about 45 seconds. I didn't want to
+> > artificially limit this to something small and left it up to user.
+> > This algorithm can be used for arbitrary binaries after pahole's
+> > dwarf2btf conversion, which could be much bigger than kernel, so I
+> > didn't want to artificially limit this. Realistically, unlikely that
+> > you'll need more than 64k-128k.
+>
+> How about we show some warning like "You are using really big size" for
+> too big numbers, like 16M+?
 
+Tbh, adding extra arbitrary constant and emitting warning seems
+excessive. If it's huge number, allocation will fail and we'll return
+error. If it's just big, RSS will be high, and if user cares he should
+be able to deduce that he specified unreasonable size. In general, I
+doubt this value will be overriden often, most uses will probably just
+use default setting.
+
+>
+> Thanks,
+> Song
+>
+> >
+> >>
+> >>>        d->btf = btf;
+> >>>        d->btf_ext = btf_ext;
+> >>>
+> >>> -       d->dedup_table = calloc(1 << BTF_DEDUP_TABLE_SIZE_LOG,
+> >>> +       d->dedup_table = calloc(d->opts.dedup_table_size,
+> >>>                                sizeof(struct btf_dedup_node *));
+> >>>        if (!d->dedup_table) {
+> >>>                err = -ENOMEM;
+> >>> @@ -1249,8 +1260,6 @@ static struct btf_dedup *btf_dedup_new(struct btf *btf, struct btf_ext *btf_ext,
+> >>>        for (i = 0; i <= btf->nr_types; i++)
+> >>>                d->hypot_map[i] = BTF_UNPROCESSED_ID;
+> >>>
+> >>> -       d->opts.dont_resolve_fwds = opts && opts->dont_resolve_fwds;
+> >>> -
+> >>> done:
+> >>>        if (err) {
+> >>>                btf_dedup_free(d);
+> >>> @@ -1824,7 +1833,7 @@ static int btf_dedup_prim_type(struct btf_dedup *d, __u32 type_id)
+> >>>
+> >>>        case BTF_KIND_INT:
+> >>>                h = btf_hash_int(t);
+> >>> -               for_each_hash_node(d->dedup_table, h, cand_node) {
+> >>> +               for_each_dedup_cand(d, h, cand_node) {
+> >>>                        cand = d->btf->types[cand_node->type_id];
+> >>>                        if (btf_equal_int(t, cand)) {
+> >>>                                new_id = cand_node->type_id;
+> >>> @@ -1835,7 +1844,7 @@ static int btf_dedup_prim_type(struct btf_dedup *d, __u32 type_id)
+> >>>
+> >>>        case BTF_KIND_ENUM:
+> >>>                h = btf_hash_enum(t);
+> >>> -               for_each_hash_node(d->dedup_table, h, cand_node) {
+> >>> +               for_each_dedup_cand(d, h, cand_node) {
+> >>>                        cand = d->btf->types[cand_node->type_id];
+> >>>                        if (btf_equal_enum(t, cand)) {
+> >>>                                new_id = cand_node->type_id;
+> >>> @@ -1846,7 +1855,7 @@ static int btf_dedup_prim_type(struct btf_dedup *d, __u32 type_id)
+> >>>
+> >>>        case BTF_KIND_FWD:
+> >>>                h = btf_hash_common(t);
+> >>> -               for_each_hash_node(d->dedup_table, h, cand_node) {
+> >>> +               for_each_dedup_cand(d, h, cand_node) {
+> >>>                        cand = d->btf->types[cand_node->type_id];
+> >>>                        if (btf_equal_common(t, cand)) {
+> >>>                                new_id = cand_node->type_id;
+> >>> @@ -2263,7 +2272,7 @@ static int btf_dedup_struct_type(struct btf_dedup *d, __u32 type_id)
+> >>>                return 0;
+> >>>
+> >>>        h = btf_hash_struct(t);
+> >>> -       for_each_hash_node(d->dedup_table, h, cand_node) {
+> >>> +       for_each_dedup_cand(d, h, cand_node) {
+> >>>                int eq;
+> >>>
+> >>>                btf_dedup_clear_hypot_map(d);
+> >>> @@ -2349,7 +2358,7 @@ static int btf_dedup_ref_type(struct btf_dedup *d, __u32 type_id)
+> >>>                t->type = ref_type_id;
+> >>>
+> >>>                h = btf_hash_common(t);
+> >>> -               for_each_hash_node(d->dedup_table, h, cand_node) {
+> >>> +               for_each_dedup_cand(d, h, cand_node) {
+> >>>                        cand = d->btf->types[cand_node->type_id];
+> >>>                        if (btf_equal_common(t, cand)) {
+> >>>                                new_id = cand_node->type_id;
+> >>> @@ -2372,7 +2381,7 @@ static int btf_dedup_ref_type(struct btf_dedup *d, __u32 type_id)
+> >>>                info->index_type = ref_type_id;
+> >>>
+> >>>                h = btf_hash_array(t);
+> >>> -               for_each_hash_node(d->dedup_table, h, cand_node) {
+> >>> +               for_each_dedup_cand(d, h, cand_node) {
+> >>>                        cand = d->btf->types[cand_node->type_id];
+> >>>                        if (btf_equal_array(t, cand)) {
+> >>>                                new_id = cand_node->type_id;
+> >>> @@ -2403,7 +2412,7 @@ static int btf_dedup_ref_type(struct btf_dedup *d, __u32 type_id)
+> >>>                }
+> >>>
+> >>>                h = btf_hash_fnproto(t);
+> >>> -               for_each_hash_node(d->dedup_table, h, cand_node) {
+> >>> +               for_each_dedup_cand(d, h, cand_node) {
+> >>>                        cand = d->btf->types[cand_node->type_id];
+> >>>                        if (btf_equal_fnproto(t, cand)) {
+> >>>                                new_id = cand_node->type_id;
+> >>> diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+> >>> index b60bb7cf5fff..28a1e1e59861 100644
+> >>> --- a/tools/lib/bpf/btf.h
+> >>> +++ b/tools/lib/bpf/btf.h
+> >>> @@ -90,6 +90,7 @@ LIBBPF_API __u32 btf_ext__func_info_rec_size(const struct btf_ext *btf_ext);
+> >>> LIBBPF_API __u32 btf_ext__line_info_rec_size(const struct btf_ext *btf_ext);
+> >>>
+> >>> struct btf_dedup_opts {
+> >>> +       unsigned int dedup_table_size;
+> >>>        bool dont_resolve_fwds;
+> >>> };
+> >>>
+> >>> --
+> >>> 2.17.1
+>
