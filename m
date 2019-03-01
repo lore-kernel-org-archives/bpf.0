@@ -7,56 +7,56 @@ X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6836EC43381
-	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 06:35:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5DA4C43381
+	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 06:36:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 30560206DD
-	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 06:35:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A46EB206DD
+	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 06:36:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nQzz9RzH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MJq+zpX/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726739AbfCAGfb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Mar 2019 01:35:31 -0500
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:43245 "EHLO
+        id S1729181AbfCAGgJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Mar 2019 01:36:09 -0500
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:41212 "EHLO
         mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725913AbfCAGfb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 1 Mar 2019 01:35:31 -0500
-Received: by mail-qk1-f196.google.com with SMTP id f196so13663416qke.10;
-        Thu, 28 Feb 2019 22:35:31 -0800 (PST)
+        with ESMTP id S1728142AbfCAGgJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 1 Mar 2019 01:36:09 -0500
+Received: by mail-qk1-f196.google.com with SMTP id y15so13667835qki.8;
+        Thu, 28 Feb 2019 22:36:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=HUC4qzQGHYx36zgzUe83MUmf9+K58LsJSj2I4sRo+fY=;
-        b=nQzz9RzHg97iz5olsVbn5kCUd2RlU75GhTcYXQwXUjBoUYPLYYQNJgT7Gg+Xm8tm5u
-         r7y5JXAss2QBn7kAYWmmwWVIxp/gnB1uq4IfUcn6z6L//qJcndr6VLYl74H6op3ZsK5g
-         4faNudgdV+/RNOXmZRcSqTAUN6UgHdJ8KmcTzJpbqmmGqpIw9HspK39BYZzpA7cyzldZ
-         d2dnnasF3kKa4QSmlNJLMvYDYSYVtqNNkZp7FuqVZ7UZ7v7D2p68AGJP7pRKfow+SILv
-         5iqbAI66chd304h5pcwPuNDIYfedLlPhvoQlkgKvQhBhrojM13FSvonL+wn3/jgLyuvF
-         /T4Q==
+        bh=4wci2VGxWktEsMf2jUINHbXLI5CqPUf30cuE5HyZnKU=;
+        b=MJq+zpX/GgAG2Ogb7MMHT74yOF0EIGOEWtStqzqV5aRfPD13DijzaCvbnjmFBUXeIn
+         iyrEN65KgSxy3m5sxGvOsO3W8kjaCzZJluu2mR5RYsQliWBiyYrjIPQ2B15jhSIEfEoT
+         f486G5hblGaeCOMMON9TCSD/cQZ4zbcyv5RT2NQzuUIIOR08ozR00E4MgBm/wcwM+wdd
+         RWDn7bKd2xN9aoiHZ19n0cTiow//09PUiFqfG9r72N6JsQ4wEf4+uyn8fl0oDhnHQ82T
+         57CkLtqde9TzPy3/fN+62tPjIXBQ2rTdY+yTu+36GztmHFgZycERMYmGzJea3Dy6pxye
+         HHAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=HUC4qzQGHYx36zgzUe83MUmf9+K58LsJSj2I4sRo+fY=;
-        b=f4XhifjmDHTt5FNiaL38LBNPTNiybSw+lZJc2Kh8VhS1SqrFB/8I47dQdFKHiKwQiX
-         QpNdXSSQBs8ARvGb+XzQ7RSTl/vD4+xYK45z3/Fzdvjl9ch1G8OTD959CmcsTqS2kE+C
-         YgmCZTuF6ZEUmSZAxmBNUkgoDJXDRRBXyS/8uyI18PMWJWB8iSwVXkTZOTUm+qr7xtwQ
-         +OsNZR/h+uPOt5d2jclUKElfdO8TMICoZEZqrkwXeSn7OwOcv7WTazZKK7GYos1YJdhn
-         OdiCMTdJJEPbttKP6TSJir/NqhZyRBbdahIuDqu1rOY1vy19c4LlijUetpUp6ZS38BBS
-         62ig==
-X-Gm-Message-State: APjAAAU3WKXy95KvP3DkvK4bjk+3dAGiyWqVEP25ZFdCcbmozLeiJqJh
-        b1M71GFfi67oNWFIaDUpuAiOryTTs51OAEQgQAg=
-X-Google-Smtp-Source: APXvYqyj7Q2IiMorneVMjWKPeiowTxzXsTNrQ7qOFD3vvxUc4RdNmEuxr0GFvd3BMwdGZ53b+A6g+7BcxrkAS9vo8J0=
-X-Received: by 2002:a37:bc04:: with SMTP id m4mr2666850qkf.41.1551422130619;
- Thu, 28 Feb 2019 22:35:30 -0800 (PST)
+        bh=4wci2VGxWktEsMf2jUINHbXLI5CqPUf30cuE5HyZnKU=;
+        b=Yo4rVBojeP4vL8Q8HZYogTkpz8D329mliCLeG59+faFFkqlJ/BVVaEQ12y8uIBZ3Dq
+         4t61+FqfQkNjrjqaB1E/zANMHE3WntXv/SKwgsXbnbnC2EUgFcJCmRN6r6v/KB2IISX9
+         N1OfYR2by5McyKdZQmSVmJp4XiM14PAtQTGZv2ETNBrSHfn2asvVo5QUFg5sZIcKzs3D
+         Qs4PqT7YslgHIyQL9bM66apWiC+m372uMGtQ4VXDlFstiEaXHPR/lroTUUyKSPGsSH3s
+         Up2dRx/hRHzEnRXjCwurl6yrjQwRZm5DAbscYwPJ7Rp6vqDsU5CtUc9jHRGUDWo0z1jZ
+         pNFQ==
+X-Gm-Message-State: APjAAAUmO2IWogs+2A0i3jmtG1/uhqo+E5Vxfs0EK7V915Zt0NTHkQxV
+        hLy7fb3MlyWQZkSH/Wyro+3zkk6QB/Y1UUiupN8=
+X-Google-Smtp-Source: APXvYqxmRsv5EEjH+iaxFIsJhypphEnoTfmGIVHa5ms04UfhDkIViLYvXif85S+QnD5AoEuen9cMyw/ttModLd7Ivlc=
+X-Received: by 2002:a37:a38e:: with SMTP id m136mr2618779qke.120.1551422168023;
+ Thu, 28 Feb 2019 22:36:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20190301011221.1290474-1-andriin@fb.com>
-In-Reply-To: <20190301011221.1290474-1-andriin@fb.com>
+References: <20190301013716.1370014-1-andriin@fb.com>
+In-Reply-To: <20190301013716.1370014-1-andriin@fb.com>
 From:   Song Liu <liu.song.a23@gmail.com>
-Date:   Thu, 28 Feb 2019 22:35:19 -0800
-Message-ID: <CAPhsuW4ihU28Wok8psLKN5qFxk-bpnk3p9PV9R64ppn4W9p_=w@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 0/3] bpf docs typo, wording and formatting fixes
+Date:   Thu, 28 Feb 2019 22:35:57 -0800
+Message-ID: <CAPhsuW7LG7VHYN4ujh-ztrpFRE-Y0wCVht5-=0SJuq4A4eVw0w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/4] Formatting and typo fixes in kernel/bpf
 To:     Andrii Nakryiko <andriin@fb.com>
 Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>, ast@fb.com,
         yhs@fb.com, Networking <netdev@vger.kernel.org>,
@@ -68,27 +68,24 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Feb 28, 2019 at 6:02 PM Andrii Nakryiko <andriin@fb.com> wrote:
+On Thu, Feb 28, 2019 at 6:08 PM Andrii Nakryiko <andriin@fb.com> wrote:
 >
-> A bunch of BPF-related docs typo, wording and formatting fixes.
->
-> v1->v2:
-> - split off non-documentation changes into separate patchset
+> Few formatting fixes, as well as some comments clean up.
 
 For the series:
 
 Acked-by: Song Liu <songliubraving@fb.com>
 
 >
-> Andrii Nakryiko (3):
->   docs/btf: fix typos, improve wording
->   docs/btf: reflow text to fill up to 78 characters
->   docs/bpf: minor casing/punctuation fixes
+> Andrii Nakryiko (4):
+>   bpf: formatting fixes in syscall.c
+>   bpf/verifier: fix code formatting
+>   bpf/verifier: typo fixes and reflow verifier overview comment
+>   bpf/verifier: fix minor typos in comments
 >
->  Documentation/bpf/bpf_design_QA.rst |  24 +--
->  Documentation/bpf/btf.rst           | 316 +++++++++++++---------------
->  Documentation/networking/filter.txt |   2 +-
->  3 files changed, 160 insertions(+), 182 deletions(-)
+>  kernel/bpf/syscall.c  |   5 +-
+>  kernel/bpf/verifier.c | 169 +++++++++++++++++++++---------------------
+>  2 files changed, 87 insertions(+), 87 deletions(-)
 >
 > --
 > 2.17.1
