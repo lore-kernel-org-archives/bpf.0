@@ -5,41 +5,41 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC8ADC4360F
-	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 01:12:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87844C10F09
+	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 01:12:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BB025218AE
-	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 01:12:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 577F62087E
+	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 01:12:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Arv+H+Zn"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="i7jBDwJ9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728147AbfCABMc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1733044AbfCABMc (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 28 Feb 2019 20:12:32 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:40408 "EHLO
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:40394 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1733044AbfCABMa (ORCPT
+        by vger.kernel.org with ESMTP id S1729104AbfCABMa (ORCPT
         <rfc822;bpf@vger.kernel.org>); Thu, 28 Feb 2019 20:12:30 -0500
 Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x2110Fs7005804
-        for <bpf@vger.kernel.org>; Thu, 28 Feb 2019 17:12:29 -0800
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x2110Fs3005804
+        for <bpf@vger.kernel.org>; Thu, 28 Feb 2019 17:12:28 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=tcoldpO56bCr3y3Sc3Kgmu4itDd7Ce9MZbI5BS5q1rY=;
- b=Arv+H+ZnE7q/RAknPdBqdoIG499GDEkSOIqfBc1eLdYQPFXpG/FDlgzviQOyn6ZRHP+s
- uy8YVG87EmYOt0XisUG6Z+UXT1Bjfx2vHjnqVSWKQ3roOd3/heCIsP2jp52NEmJFQl2W
- f0p7JexlDdI8aqlb/zKoA1TvT4ZpeqgIBas= 
+ content-type; s=facebook; bh=IFES9EAadg+nxdrWgZhNrfH967ru0tyocUKDMGizd+Y=;
+ b=i7jBDwJ9Lp6m9ob7u2WF71Hv1cABtgKlNZ8pX/W9scNDm0yzqy0bTZyF3iS3yUJGWNeU
+ aBagurJJy6MzNxfOpXmcewVl/jpTFgf1L3YjjCWV1qwIe05karkLClcn+jUSJpk+2qHj
+ aQaDRDuPVvAA5Jk8s7d6vXZyqa4EGTXGto4= 
 Received: from mail.thefacebook.com ([199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2qxqw2gjmm-7
+        by mx0a-00082601.pphosted.com with ESMTP id 2qxqw2gjmm-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 28 Feb 2019 17:12:29 -0800
+        for <bpf@vger.kernel.org>; Thu, 28 Feb 2019 17:12:28 -0800
 Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
  mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1531.3;
  Thu, 28 Feb 2019 17:12:25 -0800
 Received: by devvm7221.prn2.facebook.com (Postfix, from userid 137359)
-        id 7A9E5C168024; Thu, 28 Feb 2019 17:12:25 -0800 (PST)
+        id 721CFC16801F; Thu, 28 Feb 2019 17:12:25 -0800 (PST)
 Smtp-Origin-Hostprefix: devvm
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devvm7221.prn2.facebook.com
@@ -48,9 +48,9 @@ To:     <andrii.nakryiko@gmail.com>, <ast@fb.com>, <yhs@fb.com>,
         <daniel@iogearbox.net>, <songliubraving@fb.com>
 CC:     Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v2 bpf-next 3/3] docs/bpf: minor casing/punctuation fixes
-Date:   Thu, 28 Feb 2019 17:12:21 -0800
-Message-ID: <20190301011221.1290474-4-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 1/3] docs/btf: fix typos, improve wording
+Date:   Thu, 28 Feb 2019 17:12:19 -0800
+Message-ID: <20190301011221.1290474-2-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190301011221.1290474-1-andriin@fb.com>
 References: <20190301011221.1290474-1-andriin@fb.com>
@@ -66,107 +66,306 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix few casing and punctuation glitches.
+Fix various typos, some of the formatting and wording for
+Documentation/btf.rst.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+Acked-by: Yonghong Song <yhs@fb.com>
 ---
- Documentation/bpf/bpf_design_QA.rst | 24 ++++++++++++------------
- Documentation/networking/filter.txt |  2 +-
- 2 files changed, 13 insertions(+), 13 deletions(-)
+ Documentation/bpf/btf.rst | 108 +++++++++++++++++++-------------------
+ 1 file changed, 53 insertions(+), 55 deletions(-)
 
-diff --git a/Documentation/bpf/bpf_design_QA.rst b/Documentation/bpf/bpf_design_QA.rst
-index 7cc9e368c1e9..10453c627135 100644
---- a/Documentation/bpf/bpf_design_QA.rst
-+++ b/Documentation/bpf/bpf_design_QA.rst
-@@ -36,27 +36,27 @@ consideration important quirks of other architectures) and
- defines calling convention that is compatible with C calling
- convention of the linux kernel on those architectures.
+diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
+index 1d434c3a268d..1d761f1c5b2b 100644
+--- a/Documentation/bpf/btf.rst
++++ b/Documentation/bpf/btf.rst
+@@ -5,7 +5,7 @@ BPF Type Format (BTF)
+ 1. Introduction
+ ***************
  
--Q: can multiple return values be supported in the future?
-+Q: Can multiple return values be supported in the future?
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- A: NO. BPF allows only register R0 to be used as return value.
+-BTF (BPF Type Format) is the meta data format which
++BTF (BPF Type Format) is the metadata format which
+ encodes the debug info related to BPF program/map.
+ The name BTF was used initially to describe
+ data types. The BTF was later extended to include
+@@ -40,8 +40,8 @@ details in :ref:`BTF_Type_String`.
+ 2. BTF Type and String Encoding
+ *******************************
  
--Q: can more than 5 function arguments be supported in the future?
-+Q: Can more than 5 function arguments be supported in the future?
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- A: NO. BPF calling convention only allows registers R1-R5 to be used
- as arguments. BPF is not a standalone instruction set.
- (unlike x64 ISA that allows msft, cdecl and other conventions)
+-The file ``include/uapi/linux/btf.h`` provides high
+-level definition on how types/strings are encoded.
++The file ``include/uapi/linux/btf.h`` provides high-level
++definition of how types/strings are encoded.
  
--Q: can BPF programs access instruction pointer or return address?
-+Q: Can BPF programs access instruction pointer or return address?
- -----------------------------------------------------------------
- A: NO.
+ The beginning of data blob must be::
  
--Q: can BPF programs access stack pointer ?
-+Q: Can BPF programs access stack pointer ?
- ------------------------------------------
- A: NO.
+@@ -59,23 +59,23 @@ The beginning of data blob must be::
+     };
  
- Only frame pointer (register R10) is accessible.
- From compiler point of view it's necessary to have stack pointer.
--For example LLVM defines register R11 as stack pointer in its
-+For example, LLVM defines register R11 as stack pointer in its
- BPF backend, but it makes sure that generated code never uses it.
+ The magic is ``0xeB9F``, which has different encoding for big and little
+-endian system, and can be used to test whether BTF is generated for
+-big or little endian target.
+-The btf_header is designed to be extensible with hdr_len equal to
+-``sizeof(struct btf_header)`` when the data blob is generated.
++endian systems, and can be used to test whether BTF is generated for
++big- or little-endian target.
++The ``btf_header`` is designed to be extensible with ``hdr_len`` equal to
++``sizeof(struct btf_header)`` when a data blob is generated.
  
- Q: Does C-calling convention diminishes possible use cases?
-@@ -66,8 +66,8 @@ A: YES.
- BPF design forces addition of major functionality in the form
- of kernel helper functions and kernel objects like BPF maps with
- seamless interoperability between them. It lets kernel call into
--BPF programs and programs call kernel helpers with zero overhead.
--As all of them were native C code. That is particularly the case
-+BPF programs and programs call kernel helpers with zero overhead,
-+as all of them were native C code. That is particularly the case
- for JITed BPF programs that are indistinguishable from
- native kernel C code.
+ 2.1 String Encoding
+ ===================
  
-@@ -75,9 +75,9 @@ Q: Does it mean that 'innovative' extensions to BPF code are disallowed?
- ------------------------------------------------------------------------
- A: Soft yes.
+ The first string in the string section must be a null string.
+-The rest of string table is a concatenation of other null-treminated
++The rest of string table is a concatenation of other null-terminated
+ strings.
  
--At least for now until BPF core has support for
-+At least for now, until BPF core has support for
- bpf-to-bpf calls, indirect calls, loops, global variables,
--jump tables, read only sections and all other normal constructs
-+jump tables, read-only sections, and all other normal constructs
- that C code can produce.
+ 2.2 Type Encoding
+ =================
  
- Q: Can loops be supported in a safe way?
-@@ -109,16 +109,16 @@ For example why BPF_JNE and other compare and jumps are not cpu-like?
- A: This was necessary to avoid introducing flags into ISA which are
- impossible to make generic and efficient across CPU architectures.
+ The type id ``0`` is reserved for ``void`` type.
+-The type section is parsed sequentially and the type id is assigned to
++The type section is parsed sequentially and type id is assigned to
+ each recognized type starting from id ``1``.
+ Currently, the following types are supported::
  
--Q: why BPF_DIV instruction doesn't map to x64 div?
-+Q: Why BPF_DIV instruction doesn't map to x64 div?
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- A: Because if we picked one-to-one relationship to x64 it would have made
- it more complicated to support on arm64 and other archs. Also it
- needs div-by-zero runtime check.
+@@ -122,9 +122,9 @@ Each type contains the following common data::
+         };
+     };
  
--Q: why there is no BPF_SDIV for signed divide operation?
-+Q: Why there is no BPF_SDIV for signed divide operation?
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- A: Because it would be rarely used. llvm errors in such case and
--prints a suggestion to use unsigned divide instead
-+prints a suggestion to use unsigned divide instead.
+-For certain kinds, the common data are followed by kind specific data.
+-The ``name_off`` in ``struct btf_type`` specifies the offset in the string table.
+-The following details encoding of each kind.
++For certain kinds, the common data are followed by kind-specific data.
++The ``name_off`` in ``struct btf_type`` specifies the offset in the string
++table. The following sections detail encoding of each kind.
  
- Q: Why BPF has implicit prologue and epilogue?
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-diff --git a/Documentation/networking/filter.txt b/Documentation/networking/filter.txt
-index b5e060edfc38..319e5e041f38 100644
---- a/Documentation/networking/filter.txt
-+++ b/Documentation/networking/filter.txt
-@@ -829,7 +829,7 @@ tracing filters may do to maintain counters of events, for example. Register R9
- is not used by socket filters either, but more complex filters may be running
- out of registers and would have to resort to spill/fill to stack.
+ 2.2.1 BTF_KIND_INT
+ ~~~~~~~~~~~~~~~~~~
+@@ -136,7 +136,7 @@ The following details encoding of each kind.
+  * ``info.vlen``: 0
+  * ``size``: the size of the int type in bytes.
  
--Internal BPF can used as generic assembler for last step performance
-+Internal BPF can be used as a generic assembler for last step performance
- optimizations, socket filters and seccomp are using it as assembler. Tracing
- filters may use it as assembler to generate code from kernel. In kernel usage
- may not be bounded by security considerations, since generated internal BPF code
+-``btf_type`` is followed by a ``u32`` with following bits arrangement::
++``btf_type`` is followed by a ``u32`` with the following bits arrangement::
+ 
+   #define BTF_INT_ENCODING(VAL)   (((VAL) & 0x0f000000) >> 24)
+   #define BTF_INT_OFFSET(VAL)     (((VAL  & 0x00ff0000)) >> 16)
+@@ -148,7 +148,7 @@ The ``BTF_INT_ENCODING`` has the following attributes::
+   #define BTF_INT_CHAR    (1 << 1)
+   #define BTF_INT_BOOL    (1 << 2)
+ 
+-The ``BTF_INT_ENCODING()`` provides extra information, signness,
++The ``BTF_INT_ENCODING()`` provides extra information: signedness,
+ char, or bool, for the int type. The char and bool encoding
+ are mostly useful for pretty print. At most one encoding can
+ be specified for the int type.
+@@ -161,8 +161,7 @@ The maximum value of ``BTF_INT_BITS()`` is 128.
+ 
+ The ``BTF_INT_OFFSET()`` specifies the starting bit offset to
+ calculate values for this int. For example, a bitfield struct
+-member has
+-
++member has:
+  * btf member bit offset 100 from the start of the structure,
+  * btf member pointing to an int type,
+  * the int type has ``BTF_INT_OFFSET() = 2`` and ``BTF_INT_BITS() = 4``
+@@ -179,7 +178,7 @@ access the same bits as the above:
+ 
+ The original intention of ``BTF_INT_OFFSET()`` is to provide
+ flexibility of bitfield encoding.
+-Currently, both llvm and pahole generates ``BTF_INT_OFFSET() = 0``
++Currently, both llvm and pahole generate ``BTF_INT_OFFSET() = 0``
+ for all int types.
+ 
+ 2.2.2 BTF_KIND_PTR
+@@ -204,7 +203,7 @@ No additional type data follow ``btf_type``.
+   * ``info.vlen``: 0
+   * ``size/type``: 0, not used
+ 
+-btf_type is followed by one "struct btf_array"::
++``btf_type`` is followed by one ``struct btf_array``::
+ 
+     struct btf_array {
+         __u32   type;
+@@ -217,27 +216,26 @@ The ``struct btf_array`` encoding:
+   * ``index_type``: the index type
+   * ``nelems``: the number of elements for this array (``0`` is also allowed).
+ 
+-The ``index_type`` can be any regular int types
+-(u8, u16, u32, u64, unsigned __int128).
+-The original design of including ``index_type`` follows dwarf
+-which has a ``index_type`` for its array type.
++The ``index_type`` can be any regular int type
++(``u8``, ``u16``, ``u32``, ``u64``, ``unsigned __int128``).
++The original design of including ``index_type`` follows DWARF,
++which has an ``index_type`` for its array type.
+ Currently in BTF, beyond type verification, the ``index_type`` is not used.
+ 
+ The ``struct btf_array`` allows chaining through element type to represent
+-multiple dimensional arrays. For example, ``int a[5][6]``, the following
+-type system illustrates the chaining:
++multidimensional arrays. For example, for ``int a[5][6]``, the following
++type information illustrates the chaining:
+ 
+   * [1]: int
+   * [2]: array, ``btf_array.type = [1]``, ``btf_array.nelems = 6``
+   * [3]: array, ``btf_array.type = [2]``, ``btf_array.nelems = 5``
+ 
+-Currently, both pahole and llvm collapse multiple dimensional array
+-into one dimensional array, e.g., ``a[5][6]``, the btf_array.nelems
+-equal to ``30``. This is because the original use case is map pretty
+-print where the whole array is dumped out so one dimensional array
++Currently, both pahole and llvm collapse multidimensional array
++into one-dimensional array, e.g., for ``a[5][6]``, the ``btf_array.nelems``
++is equal to ``30``. This is because the original use case is map pretty
++print where the whole array is dumped out so one-dimensional array
+ is enough. As more BTF usage is explored, pahole and llvm can be
+-changed to generate proper chained representation for
+-multiple dimensional arrays.
++changed to generate proper chained representation for multidimensional arrays.
+ 
+ 2.2.4 BTF_KIND_STRUCT
+ ~~~~~~~~~~~~~~~~~~~~~
+@@ -382,7 +380,7 @@ No additional type data follow ``btf_type``.
+ 
+ No additional type data follow ``btf_type``.
+ 
+-A BTF_KIND_FUNC defines, not a type, but a subprogram (function) whose
++A BTF_KIND_FUNC defines not a type, but a subprogram (function) whose
+ signature is defined by ``type``. The subprogram is thus an instance of
+ that type. The BTF_KIND_FUNC may in turn be referenced by a func_info in
+ the :ref:`BTF_Ext_Section` (ELF) or in the arguments to
+@@ -459,10 +457,10 @@ The workflow typically looks like:
+ 3.1 BPF_BTF_LOAD
+ ================
+ 
+-Load a blob of BTF data into kernel. A blob of data
+-described in :ref:`BTF_Type_String`
++Load a blob of BTF data into kernel. A blob of data,
++described in :ref:`BTF_Type_String`,
+ can be directly loaded into the kernel.
+-A ``btf_fd`` returns to userspace.
++A ``btf_fd`` is returned to a userspace.
+ 
+ 3.2 BPF_MAP_CREATE
+ ==================
+@@ -487,7 +485,7 @@ In libbpf, the map can be defined with extra annotation like below:
+ Here, the parameters for macro BPF_ANNOTATE_KV_PAIR are map name,
+ key and value types for the map.
+ During ELF parsing, libbpf is able to extract key/value type_id's
+-and assigned them to BPF_MAP_CREATE attributes automatically.
++and assign them to BPF_MAP_CREATE attributes automatically.
+ 
+ .. _BPF_Prog_Load:
+ 
+@@ -532,7 +530,7 @@ Below are requirements for func_info:
+     bpf func boundaries.
+ 
+ Below are requirements for line_info:
+-  * the first insn in each func must points to a line_info record.
++  * the first insn in each func must have a line_info record pointing to it.
+   * the line_info insn_off is in strictly increasing order.
+ 
+ For line_info, the line number and column number are defined as below:
+@@ -544,26 +542,26 @@ For line_info, the line number and column number are defined as below:
+ 3.4 BPF_{PROG,MAP}_GET_NEXT_ID
+ 
+ In kernel, every loaded program, map or btf has a unique id.
+-The id won't change during the life time of the program, map or btf.
++The id won't change during the lifetime of a program, map, or btf.
+ 
+ The bpf syscall command BPF_{PROG,MAP}_GET_NEXT_ID
+ returns all id's, one for each command, to user space, for bpf
+-program or maps,
+-so the inspection tool can inspect all programs and maps.
++program or maps, respectively,
++so an inspection tool can inspect all programs and maps.
+ 
+ 3.5 BPF_{PROG,MAP}_GET_FD_BY_ID
+ 
+-The introspection tool cannot use id to get details about program or maps.
+-A file descriptor needs to be obtained first for reference counting purpose.
++An introspection tool cannot use id to get details about program or maps.
++A file descriptor needs to be obtained first for reference-counting purpose.
+ 
+ 3.6 BPF_OBJ_GET_INFO_BY_FD
+ ==========================
+ 
+-Once a program/map fd is acquired, the introspection tool can
++Once a program/map fd is acquired, an introspection tool can
+ get the detailed information from kernel about this fd,
+-some of which is btf related. For example,
+-``bpf_map_info`` returns ``btf_id``, key/value type id.
+-``bpf_prog_info`` returns ``btf_id``, func_info and line info
++some of which are BTF-related. For example,
++``bpf_map_info`` returns ``btf_id`` and key/value type ids.
++``bpf_prog_info`` returns ``btf_id``, func_info, and line info
+ for translated bpf byte codes, and jited_line_info.
+ 
+ 3.7 BPF_BTF_GET_FD_BY_ID
+@@ -574,9 +572,9 @@ bpf syscall command BPF_BTF_GET_FD_BY_ID can retrieve a btf fd.
+ Then, with command BPF_OBJ_GET_INFO_BY_FD, the btf blob, originally
+ loaded into the kernel with BPF_BTF_LOAD, can be retrieved.
+ 
+-With the btf blob, ``bpf_map_info`` and ``bpf_prog_info``, the introspection
++With the btf blob, ``bpf_map_info``, and ``bpf_prog_info``, an introspection
+ tool has full btf knowledge and is able to pretty print map key/values,
+-dump func signatures, dump line info along with byte/jit codes.
++dump func signatures and line info, along with byte/jit codes.
+ 
+ 4. ELF File Format Interface
+ ****************************
+@@ -625,8 +623,8 @@ The func_info is organized as below.::
+      ...
+ 
+ ``func_info_rec_size`` specifies the size of ``bpf_func_info`` structure
+-when .BTF.ext is generated. btf_ext_info_sec, defined below, is
+-the func_info for each specific ELF section.::
++when .BTF.ext is generated. ``btf_ext_info_sec``, defined below, is
++a collection of func_info for each specific ELF section.::
+ 
+      struct btf_ext_info_sec {
+         __u32   sec_name_off; /* offset to section name */
+@@ -661,7 +659,7 @@ from the beginning of section (``btf_ext_info_sec->sec_name_off``).
+ 
+ With BTF, the map key/value can be printed based on fields rather than
+ simply raw bytes. This is especially
+-valuable for large structure or if you data structure
++valuable for large structure or if your data structure
+ has bitfields. For example, for the following map,::
+ 
+       enum A { A1, A2, A3, A4, A5 };
+@@ -702,8 +700,8 @@ bpftool is able to pretty print like below:
+ 5.2 bpftool prog dump
+ =====================
+ 
+-The following is an example to show func_info and line_info
+-can help prog dump with better kernel symbol name, function prototype
++The following is an example showing how func_info and line_info
++can help prog dump with better kernel symbol names, function prototypes
+ and line information.::
+ 
+     $ bpftool prog dump jited pinned /sys/fs/bpf/test_btf_haskv
+@@ -733,10 +731,10 @@ and line information.::
+     ; counts = bpf_map_lookup_elem(&btf_map, &key);
+     [...]
+ 
+-5.3 verifier log
++5.3 Verifier Log
+ ================
+ 
+-The following is an example how line_info can help verifier failure debug.::
++The following is an example of how line_info can help debugging verification failure.::
+ 
+        /* The code at tools/testing/selftests/bpf/test_xdp_noinline.c
+         * is modified as below.
+@@ -867,4 +865,4 @@ The assembly code (-S) is able to show the BTF encoding in assembly format.::
+ 7. Testing
+ **********
+ 
+-Kernel bpf selftest `test_btf.c` provides extensive set of BTF related tests.
++Kernel bpf selftest `test_btf.c` provides extensive set of BTF-related tests.
 -- 
 2.17.1
 
