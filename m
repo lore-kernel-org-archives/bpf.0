@@ -6,30 +6,30 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18BE4C43381
-	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 21:05:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D804C43381
+	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 21:08:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E1110206B6
-	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 21:05:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31F44206B6
+	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 21:08:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726080AbfCAVFh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Mar 2019 16:05:37 -0500
-Received: from www62.your-server.de ([213.133.104.62]:45540 "EHLO
+        id S1725996AbfCAVIY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Mar 2019 16:08:24 -0500
+Received: from www62.your-server.de ([213.133.104.62]:45900 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725905AbfCAVFh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 1 Mar 2019 16:05:37 -0500
+        with ESMTP id S1725982AbfCAVIY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 1 Mar 2019 16:08:24 -0500
 Received: from [178.197.248.21] (helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1gzpLa-0001tK-Vc; Fri, 01 Mar 2019 22:05:35 +0100
+        id 1gzpOI-00024U-6r; Fri, 01 Mar 2019 22:08:22 +0100
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     ast@fb.com
 Cc:     afabre@cloudflare.com, marek@cloudflare.com, bpf@vger.kernel.org,
         netdev@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf] bpf: fix sanitation rewrite in case of non-pointers
-Date:   Fri,  1 Mar 2019 22:05:29 +0100
-Message-Id: <20190301210529.8218-1-daniel@iogearbox.net>
+Subject: [PATCH bpf-next] bpf: add test cases for non-pointer sanitiation logic
+Date:   Fri,  1 Mar 2019 22:08:21 +0100
+Message-Id: <20190301210821.8330-1-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.9.5
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 0.100.2/25374/Thu Feb 28 11:38:05 2019)
@@ -38,50 +38,79 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Marek reported that he saw an issue with the below snippet in that
-timing measurements where off when loaded as unpriv while results
-were reasonable when loaded as privileged:
+Add two additional tests for further asserting the
+BPF_ALU_NON_POINTER logic with cases that were missed
+previously.
 
-    [...]
-    uint64_t a = bpf_ktime_get_ns();
-    uint64_t b = bpf_ktime_get_ns();
-    uint64_t delta = b - a;
-    if ((int64_t)delta > 0) {
-    [...]
-
-Turns out there is a bug where a corner case is missing in the fix
-d3bd7413e0ca ("bpf: fix sanitation of alu op with pointer / scalar
-type from different paths"), namely fixup_bpf_calls() only checks
-whether aux has a non-zero alu_state, but it also needs to test for
-the case of BPF_ALU_NON_POINTER since in both occasions we need to
-skip the masking rewrite (as there is nothing to mask).
-
-Fixes: d3bd7413e0ca ("bpf: fix sanitation of alu op with pointer / scalar type from different paths")
-Reported-by: Marek Majkowski <marek@cloudflare.com>
-Reported-by: Arthur Fabre <afabre@cloudflare.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/netdev/CAJPywTJqP34cK20iLM5YmUMz9KXQOdu1-+BZrGMAGgLuBWz7fg@mail.gmail.com/T/
+Cc: Marek Majkowski <marek@cloudflare.com>
+Cc: Arthur Fabre <afabre@cloudflare.com>
 ---
- [ Test case will be routed via bpf-next to avoid useless merge churn
-   due to test_verifier rework in bpf-next. ]
+ .../selftests/bpf/verifier/value_ptr_arith.c  | 44 ++++++++++++++++++-
+ 1 file changed, 43 insertions(+), 1 deletion(-)
 
- kernel/bpf/verifier.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8f295b790297..5fcce2f4209d 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6920,7 +6920,8 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
- 			u32 off_reg;
- 
- 			aux = &env->insn_aux_data[i + delta];
--			if (!aux->alu_state)
-+			if (!aux->alu_state ||
-+			    aux->alu_state == BPF_ALU_NON_POINTER)
- 				continue;
- 
- 			isneg = aux->alu_state & BPF_ALU_NEG_VALUE;
+diff --git a/tools/testing/selftests/bpf/verifier/value_ptr_arith.c b/tools/testing/selftests/bpf/verifier/value_ptr_arith.c
+index 4b721a77bebb..c3de1a2c9dc5 100644
+--- a/tools/testing/selftests/bpf/verifier/value_ptr_arith.c
++++ b/tools/testing/selftests/bpf/verifier/value_ptr_arith.c
+@@ -173,7 +173,7 @@
+ 	.retval = 0,
+ },
+ {
+-	"sanitation: alu with different scalars",
++	"sanitation: alu with different scalars 1",
+ 	.insns = {
+ 	BPF_MOV64_IMM(BPF_REG_0, 1),
+ 	BPF_LD_MAP_FD(BPF_REG_ARG1, 0),
+@@ -198,6 +198,48 @@
+ 	.result = ACCEPT,
+ 	.retval = 0x100000,
+ },
++{
++	"sanitation: alu with different scalars 2",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_FP),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -16),
++	BPF_ST_MEM(BPF_DW, BPF_REG_FP, -16, 0),
++	BPF_EMIT_CALL(BPF_FUNC_map_delete_elem),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_FP),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -16),
++	BPF_EMIT_CALL(BPF_FUNC_map_delete_elem),
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_0),
++	BPF_MOV64_REG(BPF_REG_8, BPF_REG_6),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_8, BPF_REG_7),
++	BPF_MOV64_REG(BPF_REG_0, BPF_REG_8),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_48b = { 1 },
++	.result = ACCEPT,
++	.retval = -EINVAL * 2,
++},
++{
++	"sanitation: alu with different scalars 3",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, EINVAL),
++	BPF_ALU64_IMM(BPF_MUL, BPF_REG_0, -1),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_MOV64_IMM(BPF_REG_0, EINVAL),
++	BPF_ALU64_IMM(BPF_MUL, BPF_REG_0, -1),
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_0),
++	BPF_MOV64_REG(BPF_REG_8, BPF_REG_6),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_8, BPF_REG_7),
++	BPF_MOV64_REG(BPF_REG_0, BPF_REG_8),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.retval = -EINVAL * 2,
++},
+ {
+ 	"map access: value_ptr += known scalar, upper oob arith, test 1",
+ 	.insns = {
 -- 
 2.17.1
 
