@@ -2,51 +2,57 @@ Return-Path: <SRS0=adOE=RE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FF25C43381
-	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 20:02:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5B4AC43381
+	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 20:06:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 73C6420848
-	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 20:02:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A133E20848
+	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 20:06:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725982AbfCAUCL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Mar 2019 15:02:11 -0500
-Received: from www62.your-server.de ([213.133.104.62]:35790 "EHLO
+        id S1725944AbfCAUGj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Mar 2019 15:06:39 -0500
+Received: from www62.your-server.de ([213.133.104.62]:36628 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725905AbfCAUCL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 1 Mar 2019 15:02:11 -0500
+        with ESMTP id S1725934AbfCAUGj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 1 Mar 2019 15:06:39 -0500
 Received: from [88.198.220.130] (helo=sslproxy01.your-server.de)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1gzoMD-0005iC-1f; Fri, 01 Mar 2019 21:02:09 +0100
+        id 1gzoQX-0005zG-0S; Fri, 01 Mar 2019 21:06:37 +0100
 Received: from [178.197.248.21] (helo=linux.home)
         by sslproxy01.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89)
         (envelope-from <daniel@iogearbox.net>)
-        id 1gzoMC-0002sA-Lo; Fri, 01 Mar 2019 21:02:08 +0100
-Subject: Re: [PATCH bpf-next v2 6/7] bpf, selftest: test global
+        id 1gzoQW-0003H0-JY; Fri, 01 Mar 2019 21:06:36 +0100
+Subject: Re: [PATCH bpf-next v2 5/7] bpf, libbpf: support global
  data/bss/rodata sections
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@fb.com>, bpf@vger.kernel.org,
-        Networking <netdev@vger.kernel.org>, joe@wand.net.nz,
-        john.fastabend@gmail.com, tgraf@suug.ch,
-        Yonghong Song <yhs@fb.com>, Andrii Nakryiko <andriin@fb.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        lmb@cloudflare.com
+To:     Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@fb.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "joe@wand.net.nz" <joe@wand.net.nz>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "tgraf@suug.ch" <tgraf@suug.ch>, Andrii Nakryiko <andriin@fb.com>,
+        "jakub.kicinski@netronome.com" <jakub.kicinski@netronome.com>,
+        "lmb@cloudflare.com" <lmb@cloudflare.com>
 References: <20190228231829.11993-1-daniel@iogearbox.net>
- <20190228231829.11993-7-daniel@iogearbox.net>
- <CAEf4BzZBPS_QmHfCV-AQYNHQPEvo6kcAC4PC1SZ=ucG15jv1rg@mail.gmail.com>
+ <20190228231829.11993-6-daniel@iogearbox.net>
+ <1e21ba74-f236-60b8-f33c-f3f060419197@fb.com>
+ <CAEf4BzYx=05UXSkOpRdKzhXenXJpRYrukgnG7fGjTSR30wLz-Q@mail.gmail.com>
+ <e8678d06-20e0-5501-7cff-62de57a2cdf2@fb.com>
+ <CAEf4BzZWZmTFj0Xqf+_1QoT5E6tt7ijmzk39khgZ2zYfe0QFUw@mail.gmail.com>
+ <e6157f2f-80e4-6a99-2053-498e0581a0db@fb.com>
 From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <cf6541f6-25eb-b858-3d4b-fbc68666cbba@iogearbox.net>
-Date:   Fri, 1 Mar 2019 21:02:07 +0100
+Message-ID: <93e20522-cafd-ee1f-1dc1-3cebab122588@iogearbox.net>
+Date:   Fri, 1 Mar 2019 21:06:35 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.3.0
 MIME-Version: 1.0
-In-Reply-To: <CAEf4BzZBPS_QmHfCV-AQYNHQPEvo6kcAC4PC1SZ=ucG15jv1rg@mail.gmail.com>
+In-Reply-To: <e6157f2f-80e4-6a99-2053-498e0581a0db@fb.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -57,88 +63,42 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 03/01/2019 08:13 PM, Andrii Nakryiko wrote:
-> On Thu, Feb 28, 2019 at 3:32 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->> From: Joe Stringer <joe@wand.net.nz>
+On 03/01/2019 08:19 PM, Yonghong Song wrote:
+> On 3/1/19 11:10 AM, Andrii Nakryiko wrote:
+>> On Fri, Mar 1, 2019 at 10:58 AM Yonghong Song <yhs@fb.com> wrote:
+>>> On 3/1/19 10:48 AM, Andrii Nakryiko wrote:
+>>>> On Fri, Mar 1, 2019 at 10:31 AM Yonghong Song <yhs@fb.com> wrote:
+>>>>> On 2/28/19 3:18 PM, Daniel Borkmann wrote:
+[...]
+>>>> Would it be reasonable to just plain disable usage of uninitialized
+>>>> global variables, as it kind of goes against BPF's philosophy that
+>>>> everything should be written to, before can be read? So while we can
+>>>> just implicitly zero-out everything beforehand, it might be a good
+>>>> idea to remind and enforce that explictly?
+>>>
+>>> There will be a verifier error, so the program with "int g" will not
+>>> run, the same as today.
 >>
->> Add tests for libbpf relocation of static variable references
->> into the .data, .rodata and .bss sections of the ELF. Tests with
->> different offsets are all passing:
+>> Yeah, I understand, but with pretty obscure error about not supporting
+>> relocations and stuff, right?
 >>
->>   # ./test_progs
->>   [...]
->>   test_static_data_access:PASS:load program 0 nsec
->>   test_static_data_access:PASS:pass packet 278 nsec
->>   test_static_data_access:PASS:relocate .bss reference 1 278 nsec
->>   test_static_data_access:PASS:relocate .data reference 1 278 nsec
->>   test_static_data_access:PASS:relocate .rodata reference 1 278 nsec
->>   test_static_data_access:PASS:relocate .bss reference 2 278 nsec
->>   test_static_data_access:PASS:relocate .data reference 2 278 nsec
->>   test_static_data_access:PASS:relocate .rodata reference 2 278 nsec
->>   test_static_data_access:PASS:relocate .bss reference 3 278 nsec
->>   test_static_data_access:PASS:relocate .bss reference 4 278 nsec
->>   Summary: 223 PASSED, 0 FAILED
+>>>
+>>> We could improve by flagging the error at compiler error or libbpf time.
 >>
->> Joint work with Daniel Borkmann.
->>
->> Signed-off-by: Joe Stringer <joe@wand.net.nz>
->> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
->> ---
->>  tools/testing/selftests/bpf/bpf_helpers.h     |  2 +-
->>  .../selftests/bpf/progs/test_global_data.c    | 61 +++++++++++++++++++
->>  tools/testing/selftests/bpf/test_progs.c      | 50 +++++++++++++++
->>  3 files changed, 112 insertions(+), 1 deletion(-)
->>  create mode 100644 tools/testing/selftests/bpf/progs/test_global_data.c
->>
->> diff --git a/tools/testing/selftests/bpf/bpf_helpers.h b/tools/testing/selftests/bpf/bpf_helpers.h
->> index d9999f1ed1d2..0463662935f9 100644
->> --- a/tools/testing/selftests/bpf/bpf_helpers.h
->> +++ b/tools/testing/selftests/bpf/bpf_helpers.h
->> @@ -11,7 +11,7 @@
->>  /* helper functions called from eBPF programs written in C */
->>  static void *(*bpf_map_lookup_elem)(void *map, void *key) =
->>         (void *) BPF_FUNC_map_lookup_elem;
->> -static int (*bpf_map_update_elem)(void *map, void *key, void *value,
->> +static int (*bpf_map_update_elem)(void *map, const void *key, const void *value,
->>                                   unsigned long long flags) =
->>         (void *) BPF_FUNC_map_update_elem;
->>  static int (*bpf_map_delete_elem)(void *map, void *key) =
->> diff --git a/tools/testing/selftests/bpf/progs/test_global_data.c b/tools/testing/selftests/bpf/progs/test_global_data.c
->> new file mode 100644
->> index 000000000000..2a7cf40b8efb
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/test_global_data.c
->> @@ -0,0 +1,61 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +// Copyright (c) 2019 Isovalent, Inc.
->> +
->> +#include <linux/bpf.h>
->> +#include <linux/pkt_cls.h>
->> +#include <string.h>
->> +
->> +#include "bpf_helpers.h"
->> +
->> +struct bpf_map_def SEC("maps") result = {
->> +       .type           = BPF_MAP_TYPE_ARRAY,
->> +       .key_size       = sizeof(__u32),
->> +       .value_size     = sizeof(__u64),
->> +       .max_entries    = 9,
->> +};
->> +
->> +static       __u64 static_bss     = 0;         /* Reloc reference to .bss  section   */
->> +static       __u64 static_data    = 42;                /* Reloc reference to .data section   */
->> +static const __u64 static_rodata  = 24;                /* Reloc reference to .rodata section */
->> +static       __u64 static_bss2    = 0;         /* Reloc reference to .bss  section   */
->> +static       __u64 static_data2   = 0xffeeff;  /* Reloc reference to .data section   */
->> +static const __u64 static_rodata2 = 0xabab;    /* Reloc reference to .rodata section */
->> +static const __u64 static_rodata3 = 0xab;      /* Reloc reference to .rodata section */
+>> So that's my point, that having compiler emit nicer error for
+>> target=bpf would be nice touch to user experience :)
 > 
-> In the light of Yonghong's explanation about static vs non-static
-> globals, it would be nice to add test for non-static initialized
-> globals here as well?
+> I just removed a compiler error for static variables...
+> 
+> I will wait for this patch lands, hear people complains (either need to
+> support "int g;" or need better error messages, etc.) and then decide
+> what next to do ...
 
-Yes, agree, I'll add them as well and integrate the correct offset
-for libbpf along with it.
+By the way, from LLVM side, do you think it makes sense for local vars
+where you encode the offset into insn->imm to already encode it into
+(insn+1)->imm of the ldimm64, so that loaders can just pass this offset
+through instead of fixing it up like I did? I'm fine either way though,
+just thought might be worth pointing out while we're at it. :)
 
-Cheers,
+Thanks,
 Daniel
