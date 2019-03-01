@@ -2,134 +2,214 @@ Return-Path: <SRS0=adOE=RE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9CDAC43381
-	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 19:24:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D78A5C43381
+	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 19:35:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ADAD02084F
-	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 19:24:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 99C112070B
+	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 19:35:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="UK8NweoJ";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="K10+sEKZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EypW/xee"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726087AbfCATYq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Mar 2019 14:24:46 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:34150 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725862AbfCATYq (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 1 Mar 2019 14:24:46 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x21JOE6m029855;
-        Fri, 1 Mar 2019 11:24:25 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : subject :
- date : message-id : references : in-reply-to : content-type : content-id :
- content-transfer-encoding : mime-version; s=facebook;
- bh=qT4Cpo70NLaqMjeazzR2/noThniB+d0pqVopgXYbWKs=;
- b=UK8NweoJXz2qLSiC+NDeofJXDjcsNPINEzwqdQCcyULjCkZRfsFPnRQ3S8xdIN3X2khN
- 3JHk8i04x4a8Vmj2E8TLwkbscKXt6Vt5LO4FC1RZhsqWj/N4j/TIfSG3zvZyX2f9uGpF
- M4mu71cqFPlkuKL9jxHc5J2bX1Vpmk+f4u8= 
-Received: from mail.thefacebook.com ([199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2qya3fg7nq-11
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 01 Mar 2019 11:24:24 -0800
-Received: from prn-hub03.TheFacebook.com (2620:10d:c081:35::127) by
- prn-hub06.TheFacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1713.5; Fri, 1 Mar 2019 11:23:46 -0800
-Received: from NAM05-CO1-obe.outbound.protection.outlook.com (192.168.54.28)
- by o365-in.thefacebook.com (192.168.16.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
- via Frontend Transport; Fri, 1 Mar 2019 11:23:46 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector1-fb-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qT4Cpo70NLaqMjeazzR2/noThniB+d0pqVopgXYbWKs=;
- b=K10+sEKZwgD7IAGUxjpw85V6L/wLR505OoUAxXT2R5q5dsl0PSsyIGAUWpbakuwQw/3im8vWOdGslxsI3jCnvFONwH8RfQnup6gao5+LAmIvsxcn6MwqYg0oHoAdljyQ2+lT2qzbveJcT3ibUfbIFbz4rKfoX2cifxupiqgvLB0=
-Received: from BYAPR15MB2501.namprd15.prod.outlook.com (52.135.196.11) by
- BYAPR15MB2518.namprd15.prod.outlook.com (20.179.154.155) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1665.18; Fri, 1 Mar 2019 19:23:45 +0000
-Received: from BYAPR15MB2501.namprd15.prod.outlook.com
- ([fe80::5d5b:6c9d:ce40:ed1d]) by BYAPR15MB2501.namprd15.prod.outlook.com
- ([fe80::5d5b:6c9d:ce40:ed1d%3]) with mapi id 15.20.1665.015; Fri, 1 Mar 2019
- 19:23:45 +0000
-From:   Alexei Starovoitov <ast@fb.com>
-To:     Andrii Nakryiko <andriin@fb.com>,
-        "andrii.nakryiko@gmail.com" <andrii.nakryiko@gmail.com>,
-        Yonghong Song <yhs@fb.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "Song Liu" <songliubraving@fb.com>
-Subject: Re: [PATCH bpf-next 2/4] bpf/verifier: fix code formatting
-Thread-Topic: [PATCH bpf-next 2/4] bpf/verifier: fix code formatting
-Thread-Index: AQHUz89ZGr+Z5gvnRkWe54ut05Ad/aX3KO4A
-Date:   Fri, 1 Mar 2019 19:23:44 +0000
-Message-ID: <fda23d5e-6de3-ab2f-107c-8abc1abaaef8@fb.com>
-References: <20190301013716.1370014-1-andriin@fb.com>
- <20190301013716.1370014-3-andriin@fb.com>
-In-Reply-To: <20190301013716.1370014-3-andriin@fb.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR02CA0021.namprd02.prod.outlook.com
- (2603:10b6:a02:ee::34) To BYAPR15MB2501.namprd15.prod.outlook.com
- (2603:10b6:a02:88::11)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [2620:10d:c090:180::4eb5]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7d1f2f5e-55c4-4403-cad4-08d69e7b6aab
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600127)(711020)(4605104)(2017052603328)(7153060)(7193020);SRVR:BYAPR15MB2518;
-x-ms-traffictypediagnostic: BYAPR15MB2518:
-x-microsoft-exchange-diagnostics: 1;BYAPR15MB2518;20:bSF4ZGClByTHWXDq1XhHIRcoHWXpz8CI0tuoZkxm87kBpgrm59xg0oSAstjjWnuOczsvummssu4c2mFK6yaB9mIHmRstRs8lAYhPxR40Wz4L2C4IJzRGe2TzstzU4HgR8zM9KErfKw13TOM4DZESH5u/ZbXEs/wrtZNkyrsNhGk=
-x-microsoft-antispam-prvs: <BYAPR15MB2518AB1C0D2FA9E322CAA792D7760@BYAPR15MB2518.namprd15.prod.outlook.com>
-x-forefront-prvs: 09634B1196
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(376002)(136003)(396003)(366004)(39860400002)(199004)(189003)(51444003)(52116002)(6436002)(4744005)(8676002)(6116002)(81166006)(6486002)(11346002)(446003)(53936002)(46003)(81156014)(14454004)(229853002)(8936002)(97736004)(5660300002)(102836004)(6512007)(53546011)(386003)(6506007)(71200400001)(76176011)(476003)(31696002)(2616005)(99286004)(2906002)(86362001)(68736007)(71190400001)(2201001)(316002)(110136005)(31686004)(7736002)(6246003)(106356001)(256004)(2501003)(105586002)(478600001)(305945005)(486006)(186003)(6636002)(25786009)(36756003);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB2518;H:BYAPR15MB2501.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: xKvNmE1wFef8XloezVa401zJkMvrutA/8aB7ILyuOA66U+xEwww+jjyH7v7ZMhpepGd02hHJFtyVj6N4koIwkXoqzAkJ+Uo/wYcNFrDFFWd5TA8NNdVHCQAe+Ig/GyyQAe6NgviI63YAZic0iHpEkctdh+DBL2bq3yFZ/2ZTpcjAK4T1dzwOCOlzg5wBTGEDZDDjVBhD1Csljtf6aP7FHXiL8O0lRQeKNYC1OnWOdqulLqlHuOxqAyJhE8+4sS2qp286QqN3JkV9Fwmo13SeuIwVn7TDtl4PuIjRMGfPQvzda/R6rIwRii3Hfft9/gfJLj/Egal0oUrhu4qA8179877p0oW21/qB2udbEKAHP3ld0brLsFyNjiwtTknHzCzJSSPF6vSuGpKanznlJYshO9I0WbVU3vhVckDyIOP+aGU=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <ADDBD342E6EF2F4EA3E5D20EA72128D8@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1725962AbfCATfc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Mar 2019 14:35:32 -0500
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:41283 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725944AbfCATfb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 1 Mar 2019 14:35:31 -0500
+Received: by mail-oi1-f194.google.com with SMTP id e7so20435356oia.8;
+        Fri, 01 Mar 2019 11:35:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tDxuHfRSkvtIHaNn65KvVjFuUjBr3TgVjDkGVCDw4Rc=;
+        b=EypW/xeeKe4o9236jKuM/c+nvassSaXLsd/NuUNwenMWMCKhsbO5mNi/aUM3amSvAU
+         une0EuU6py3L/1zRuPHBQI6dYUgKIzIDbReopK9WNr587AUA6zh1tTRKSO9F5/zZ+msZ
+         PULkCFUOWRwmVwFOqQLw/ei4lF7TWfMqbAbphEJbV195/kBzicnP36g0UdiAu6wajfXM
+         h3LOis6saHBDKlMSD9ZqMdZzj1Tqu2IbSO863rRKqTkEUXH7M4ko1PXyboFrA4MVh2bF
+         ezlxN6gWUJvbcWiTMvTjzK8q5XvKx8qr3nFkzAieyeb1vwgCy+CV7/6nk+yL0T/UHi/l
+         D8hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tDxuHfRSkvtIHaNn65KvVjFuUjBr3TgVjDkGVCDw4Rc=;
+        b=OgESuoXqo6pNiU04/ws+/YU4sN1wgnBk+3V1vgOqJXe1oHBPOXaGQ+V7Sb2P0FYoOd
+         ajP7plEbih7Yf/LnGHWtGhePeuYQOXCawn7u4c970Ta7mX/2pxzy0ZQtAGvuQhBN3ROc
+         QVqecjm07A+fhH7+mDKpZKeCByLgnVPUwCCDU9CAymaLlv1PoLqIPez/M2ih7gx55QoL
+         nGpb9ET0a3fxt9sdBFnNw2j9LDmfL1JImVbn31LsZfUsSFFiCeXgMzYd6QJtJ24mnhZH
+         pLQdLRYEg+kiC519wxW3Hhs/JuUuWX4FTGr62c1hfuNsljxMfW571zCe15uvJFdLaVwd
+         OPSQ==
+X-Gm-Message-State: AHQUAuZfiVSr1SIPT/FuU297DGdQGcUwRxmun4opB1hvib8X/ilioh2/
+        yEAOsW6kYfvQ3EJlhzX8173saIuq21cvp23wLiA=
+X-Google-Smtp-Source: AHgI3IZCMD3g61KftDnAmJFBLAqrKze86o8KgJIL3SUmmWyo9J6ElfQ3z9HJH15uWIqaP/x+3i4IB9XO9MDaF9TRW8I=
+X-Received: by 2002:aca:3e54:: with SMTP id l81mr4166946oia.10.1551468930084;
+ Fri, 01 Mar 2019 11:35:30 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7d1f2f5e-55c4-4403-cad4-08d69e7b6aab
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Mar 2019 19:23:44.8788
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2518
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-03-01_13:,,
- signatures=0
-X-Proofpoint-Spam-Reason: safe
-X-FB-Internal: Safe
+References: <20190228231829.11993-1-daniel@iogearbox.net> <20190228231829.11993-2-daniel@iogearbox.net>
+ <CAEf4BzYCFw861q-S=7VH3B7d9wQha5WYbNnbi+YU6XEya1ZE_w@mail.gmail.com> <93040e2a-cf74-0dfe-276f-0a91598011c5@iogearbox.net>
+In-Reply-To: <93040e2a-cf74-0dfe-276f-0a91598011c5@iogearbox.net>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 1 Mar 2019 11:35:17 -0800
+Message-ID: <CAEf4BzYeuBQn6GT7GAQooAsxevBXP2RJjGJV4QBUghAmewrJDg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/7] bpf: implement lookup-free direct value access
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Alexei Starovoitov <ast@fb.com>, bpf@vger.kernel.org,
+        Networking <netdev@vger.kernel.org>,
+        Joe Stringer <joe@wand.net.nz>,
+        john fastabend <john.fastabend@gmail.com>, tgraf@suug.ch,
+        Yonghong Song <yhs@fb.com>, Andrii Nakryiko <andriin@fb.com>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        lmb@cloudflare.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-T24gMi8yOC8xOSA1OjM3IFBNLCBBbmRyaWkgTmFrcnlpa28gd3JvdGU6DQo+IC0jZGVmaW5lIFJF
-QUxMT0NfU1RBVEVfRk4oTkFNRSwgQ09VTlQsIEZJRUxELCBTSVpFKQkJCVwNCj4gLXN0YXRpYyBp
-bnQgcmVhbGxvY18jI05BTUUjI19zdGF0ZShzdHJ1Y3QgYnBmX2Z1bmNfc3RhdGUgKnN0YXRlLCBp
-bnQgc2l6ZSwgXA0KPiAtCQkJCSAgYm9vbCBjb3B5X29sZCkJCQlcDQo+IC17CQkJCQkJCQkJXA0K
-PiAtCXUzMiBvbGRfc2l6ZSA9IHN0YXRlLT5DT1VOVDsJCQkJCVwNCj4gLQlzdHJ1Y3QgYnBmXyMj
-TkFNRSMjX3N0YXRlICpuZXdfIyNGSUVMRDsJCQkJXA0KPiAtCWludCBzbG90ID0gc2l6ZSAvIFNJ
-WkU7CQkJCQkJXA0KPiAtCQkJCQkJCQkJXA0KPiAtCWlmIChzaXplIDw9IG9sZF9zaXplIHx8ICFz
-aXplKSB7CQkJCVwNCj4gLQkJaWYgKGNvcHlfb2xkKQkJCQkJCVwNCj4gLQkJCXJldHVybiAwOwkJ
-CQkJXA0KPiAtCQlzdGF0ZS0+Q09VTlQgPSBzbG90ICogU0laRTsJCQkJXA0KPiAtCQlpZiAoIXNp
-emUgJiYgb2xkX3NpemUpIHsJCQkJXA0KPiAtCQkJa2ZyZWUoc3RhdGUtPkZJRUxEKTsJCQkJXA0K
-PiAtCQkJc3RhdGUtPkZJRUxEID0gTlVMTDsJCQkJXA0KPiAtCQl9CQkJCQkJCVwNCj4gLQkJcmV0
-dXJuIDA7CQkJCQkJXA0KPiAtCX0JCQkJCQkJCVwNCj4gKyNkZWZpbmUgUkVBTExPQ19TVEFURV9G
-TihOQU1FLCBDT1VOVCwgRklFTEQsIFNJWkUpCQkJICAgICBcDQo+ICtzdGF0aWMgaW50IHJlYWxs
-b2NfIyNOQU1FIyNfc3RhdGUoc3RydWN0IGJwZl9mdW5jX3N0YXRlICpzdGF0ZSwgaW50IHNpemUs
-ICAgIFwNCj4gKwkJCQkgIGJvb2wgY29weV9vbGQpCQkJICAgICBcDQo+ICt7CQkJCQkJCQkJICAg
-ICBcDQo+ICsJdTMyIG9sZF9zaXplID0gc3RhdGUtPkNPVU5UOwkJCQkJICAgICBcDQoNCndoYXQg
-aXMgdGhlIGNoYW5nZSBoZXJlPw0KZXh0cmEgdGFiIGF0IHRoZSBlbmQgb2YgZXZlcnkgbGluZT8N
-CkkgdGhpbmsgdGhhdCBhZGRzIHRvbyBtdWNoIG5vaXNlIHRvIGdpdCBoaXN0b3J5Lg0KSSdkIHJh
-dGhlciBrZWVwIHRoaXMgYml0IGFzLWlzLg0KDQoNCg==
+On Fri, Mar 1, 2019 at 1:49 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 03/01/2019 06:46 AM, Andrii Nakryiko wrote:
+> > On Thu, Feb 28, 2019 at 3:31 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+> >>
+> >> This generic extension to BPF maps allows for directly loading an
+> >> address residing inside a BPF map value as a single BPF ldimm64
+> >> instruction.
+> >
+> > This is great! I'm going to review code more thoroughly tomorrow, but
+> > I also have few questions/suggestions I'd like to discuss, if you
+> > don't mind.
+>
+> Awesome, thanks!
+>
+> >> The idea is similar to what BPF_PSEUDO_MAP_FD does today, which
+> >> is a special src_reg flag for ldimm64 instruction that indicates
+> >> that inside the first part of the double insns's imm field is a
+> >> file descriptor which the verifier then replaces as a full 64bit
+> >> address of the map into both imm parts.
+> >>
+> >> For the newly added BPF_PSEUDO_MAP_VALUE src_reg flag, the idea
+> >> is similar: the first part of the double insns's imm field is
+> >> again a file descriptor corresponding to the map, and the second
+> >> part of the imm field is an offset. The verifier will then replace
+> >> both imm parts with an address that points into the BPF map value
+> >> for maps that support this operation. BPF_PSEUDO_MAP_VALUE is a
+> >> distinct flag as otherwise with BPF_PSEUDO_MAP_FD we could not
+> >> differ offset 0 between load of map pointer versus load of map's
+> >> value at offset 0.
+> >
+> > Is having both BPF_PSEUDO_MAP_FD and BPF_PSEUDO_MAP_VALUE a desirable
+> > thing? I'm asking because it's seems like it would be really simple to
+> > stick to using just BPF_PSEUDO_MAP_FD and then interpret imm
+> > differently depending on whether it's 0 or not. E.g., we can say that
+> > imm=0 is old BPF_PSEUDO_MAP_FD behavior (loading map addr), but any
+> > other imm value X is really just (X-1) offset into map's value? Or,
+> > given that valid offset is limited to 1<<29, we can set highest-order
+> > bit to 1 and lower bits would be offset? In other words, if we just
+> > need too carve out zero as a special case, then it's easy to do and we
+> > can avoid adding new BPF_PSEUDO_MAP_VALUE.
+>
+> Was thinking about reusing BPF_PSEUDO_MAP_FD initially as mentioned in
+> here, but went for BPF_PSEUDO_MAP_VALUE eventually to have a straight
+> forward mapping. Your suggestion could be done, but it feels more
+> complex than necessary, imho, meaning it might confuse users trying to
+> make sense of a insn dump or verifier output wondering whether the off
+> by one is a bug or not, which won't happen if the offset is exactly the
+> same value as LLVM emits. There is also one more unfortunate reason
+> which I noticed while implementing: in replace_map_fd_with_map_ptr()
+> we never enforced that for BPF_PSEUDO_MAP_FD insns the second imm part
+> must be 0, meaning it could also have a garbage value which would then
+> break loaders in the wild; with the code today this is ignored and then
+> overridden by the map address. We could try to push a patch to stable
+> to reject anything non-zero in the second imm for BPF_PSEUDO_MAP_FD
+> and see if anyone actually notices, and then use some higher-order bit
+> as a selector, but that still would need some extra handling to make
+> the offset clear for users wrt dumps; I can give it a try though to
+> check how much more complex it gets. Worst case if something should
+> really break somewhere, we might need to revert the imm==0 rejection
+> though. Overall, BPF_PSEUDO_MAP_VALUE felt slightly more suitable to me.
+
+Yeah, make sense, BPF_PSEUDO_MAP_VALUE is more explicit.
+
+>
+> >> This allows for efficiently retrieving an address to a map value
+> >> memory area without having to issue a helper call which needs to
+> >> prepare registers according to calling convention, etc, without
+> >> needing the extra NULL test, and without having to add the offset
+> >> in an additional instruction to the value base pointer.
+> >
+> > It seems like we allow this only for arrays of size 1 right now. We
+> > can easily generalize this to support not just offset into map's
+> > value, but also specifying integer key (i.e., array index) by
+> > utilizing off fields (16-bit + 16-bit). This would allow to eliminate
+> > any bpf_map_update_elem calls to array maps altogether by allowing to
+> > provide both array index and offset into value in one BPF instruction.
+> > Do you think it's a good addition?
+>
+> Yeah, I've been thinking about this as well that for array-like maps
+> it's easy to support and at the same time lifts the restriction, too.
+> I think it would be useful and straight forward to implement, I can
+> include it into v3.
+>
+> >> The verifier then treats the destination register as PTR_TO_MAP_VALUE
+> >> with constant reg->off from the user passed offset from the second
+> >> imm field, and guarantees that this is within bounds of the map
+> >> value. Any subsequent operations are normally treated as typical
+> >> map value handling without anything else needed for verification.
+> >>
+> >> The two map operations for direct value access have been added to
+> >> array map for now. In future other types could be supported as
+> >> well depending on the use case. The main use case for this commit
+> >> is to allow for BPF loader support for global variables that
+> >> reside in .data/.rodata/.bss sections such that we can directly
+> >> load the address of them with minimal additional infrastructure
+> >> required. Loader support has been added in subsequent commits for
+> >> libbpf library.
+> >
+> > I was considering adding a new kind of map representing contiguous
+> > block of memory (e.g., how about BPF_MAP_TYPE_HEAP or
+> > BPF_MAP_TYPE_BLOB?). It's keys would be offset into that memory
+> > region. Value size is size of the memory region, but it would allow
+> > reading smaller chunks of memory as values. This would provide
+> > convenient interface for poking at global variables from userland,
+> > given offset.
+> >
+> > Libbpf itself would provide higher-level API as well, if there is
+> > corresponding BTF type information describing layout of
+> > .data/.bss/.rodata, so that applications can fetch variables by name
+> > and/or offset, whichever is more convenient. Together with
+> > bpf_spinlock this would allow easy way to customize subsets of global
+> > variables in atomic fashion.
+> >
+> > Do you think that would work? Using array is a bit limiting, because
+> > it doesn't allow to do partial reads/updates, while BPF_MAP_TYPE_HEAP
+> > would be single big value that allows partial reading/updating.
+>
+> If I understand it correctly, the main difference this would have is
+> to be able to use spin_locks in a more fine-grained fashion, right?
+
+spin_lock is just a nice bonus, if there is any manipulation that
+isn't <= 8 byte long that needs to be done atomically.
+
+The reason for this new type of map is actually ability to update
+global variables from outside BPF program in granular fashion. E.g.,
+turning on some extra debug output temporarily, tuning parameters,
+changing PID to trace, etc, without stopping and reloading BPF
+program. With array, it's all-or-nothing: to update anything you have
+to overwrite entire .data section. As I mentioned, if we can get BTF
+type information for entirety of .data, it would allow to manipulate
+those variables by name even with generic tools like bpftool.
+
+> Meaning, partial reads/updates of the memory area under spin_lock as
+> opposed to having to lock over the full area? Yeah, sounds like a
+> reasonable extension to me that could be done on top of the series,
+> presumably most of the array map logic could also be reused for this
+> which is nice.
+>
+> Thanks a lot,
+> Daniel
