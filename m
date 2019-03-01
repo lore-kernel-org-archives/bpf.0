@@ -2,100 +2,82 @@ Return-Path: <SRS0=adOE=RE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C487AC43381
-	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 00:52:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35EB5C43381
+	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 01:12:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 854322085A
-	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 00:52:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E9EA22087E
+	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 01:12:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="keME/dbz"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="FfVUSNHI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728388AbfCAAwu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Feb 2019 19:52:50 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:34098 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728253AbfCAAwt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Feb 2019 19:52:49 -0500
-Received: by mail-oi1-f196.google.com with SMTP id g16so18179014oib.1;
-        Thu, 28 Feb 2019 16:52:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Chs7EHAbnSFgsRpf8pQcV9Ktl0qBJZ+3oPiZgH2JF2U=;
-        b=keME/dbzqPgvGf4nzfc/WPulSj6BsJNt46RiS/MowRArzz0dq6XsqM5WQI8gRrCoqu
-         3U3howavSYWuaqvDIxxQfOnXM4BP+K02GEzsR4NfbExgxWOoMQ9IZu/XsRM78jVOryUE
-         bZmx99DsIR/1hT7cpoBWgQDC2u21BVGovFlwQFt54pRmuttdBe8p/KsVgWXafnMJ+5eE
-         A/lRvIjeQuJ+pnSfRM1F5Mcvp7nGQc7oxmdmztbM2Zw3u57dIw5v+FCl8nrOKCyIq38w
-         HJlmWa+3vfBCfzctAI1MC93NyLkWY3v1b4Nb6D/3+BslMIbXfIh9tAuB5jaClx8S3P8C
-         m/Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Chs7EHAbnSFgsRpf8pQcV9Ktl0qBJZ+3oPiZgH2JF2U=;
-        b=oND07pp7TX8eEXFzpGt/skOeSLJTzSDc8Cr9VHaJjpxqY+dUT1hOA8XAyx7/yYTT+G
-         0KFkzqVhMidvh0SjeSoe3vvg1wDzOwy44YdnLFMELyCyCKFYiHbXIlVNtXCGB12JpChw
-         mi5xWyT/RBHVr0TUCG/t+xtVvivox92+olYDzDdprQwuZ9JpQriQ9RpwMenJ+El87cHK
-         p146LiN4ZblMaJiIyjZRbme+eqeylgYKRYD2Eo/+yAeHEfTuhRlNlMVmRkF5j+zOnYIZ
-         rlmL4CtZ3/JYd5DZodBrEKSsiy3pr4PNH20WlofU4wpNvEun2ZOeQSMsTyLIkpPPjRKH
-         vniQ==
-X-Gm-Message-State: AHQUAuYKIIEgX+7OSCp9RjLm6HmUrFmvQauh0sG5gf0Mjh30PsRsnbak
-        t5WpSPVoYktKg86fxHjtCXoprCCNaKk3GXDUuLI=
-X-Google-Smtp-Source: AHgI3IaMy6qQZdtuZNP5+N6bTrPT35BIVD4l/qC/0fyUmrQ8/sJnn/OnQ2erc4QTxdTJDb3j0NcSh/hZBRxyPcthNG0=
-X-Received: by 2002:aca:abcf:: with SMTP id u198mr1549779oie.55.1551401568789;
- Thu, 28 Feb 2019 16:52:48 -0800 (PST)
+        id S1728164AbfCABM1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Feb 2019 20:12:27 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:33070 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727005AbfCABM1 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 28 Feb 2019 20:12:27 -0500
+Received: from pps.filterd (m0044008.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x210x3bO015688
+        for <bpf@vger.kernel.org>; Thu, 28 Feb 2019 17:12:26 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=8txS0RO+eBIf3qV2C17zMerL0ZBEHVCw4h2k93uNAHg=;
+ b=FfVUSNHI46ArCGVfgbbVkzUOLpueOTwBOc/XrLJ335icl/gufLygaSyabQfnkQOR4O5N
+ rUe1AoBIITKhI0zg1NCDCEUbyIFExu0fROThU2Y0rZouYJ9pepgbvXIOpkmyMzPfiPvt
+ kK38tVOBdehUrKyluQIB2RQrTPbMz4m/ZEE= 
+Received: from mail.thefacebook.com ([199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2qxsa0g96s-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 28 Feb 2019 17:12:26 -0800
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::128) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1531.3;
+ Thu, 28 Feb 2019 17:12:25 -0800
+Received: by devvm7221.prn2.facebook.com (Postfix, from userid 137359)
+        id 70319C16801E; Thu, 28 Feb 2019 17:12:25 -0800 (PST)
+Smtp-Origin-Hostprefix: devvm
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: devvm7221.prn2.facebook.com
+To:     <andrii.nakryiko@gmail.com>, <ast@fb.com>, <yhs@fb.com>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <songliubraving@fb.com>
+CC:     Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: prn2c23
+Subject: [PATCH v2 bpf-next 0/3] bpf docs typo, wording and formatting fixes
+Date:   Thu, 28 Feb 2019 17:12:18 -0800
+Message-ID: <20190301011221.1290474-1-andriin@fb.com>
+X-Mailer: git-send-email 2.17.1
+X-FB-Internal: Safe
 MIME-Version: 1.0
-References: <20190228184512.198075-1-andriin@fb.com> <20190228184512.198075-4-andriin@fb.com>
- <CAPhsuW6tDGhi3ROVsLU4j37_Xp7xbV=jnEQ5ce-fV=vdCaJ-BQ@mail.gmail.com>
- <23253537-2a33-9546-7ed2-0abb6e7de420@iogearbox.net> <831958de-985b-d150-d0d0-296e6c6cbec4@iogearbox.net>
-In-Reply-To: <831958de-985b-d150-d0d0-296e6c6cbec4@iogearbox.net>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 28 Feb 2019 16:52:37 -0800
-Message-ID: <CAEf4Bzatwzs7qq9JWftitvNou1mJJpCCcdhAXwTtkJbm8L2FjA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 3/4] bpf: fix formatting, typos, reflow comments
- in syscall.c, verifier.c
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Song Liu <liu.song.a23@gmail.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Alexei Starovoitov <ast@fb.com>, Yonghong Song <yhs@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-03-01_01:,,
+ signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Feb 28, 2019 at 4:28 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->
-> On 03/01/2019 01:27 AM, Daniel Borkmann wrote:
-> > On 02/28/2019 11:40 PM, Song Liu wrote:
-> >> On Thu, Feb 28, 2019 at 10:59 AM Andrii Nakryiko <andriin@fb.com> wrote:
-> >>>
-> >>> Fix few formatting errors. Fix few typos and reflow long descriptive
-> >>> comments for more even text fill.
-> >>>
-> >>> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-> >>
-> >> I think we should not change the code for formatting, as these changes make
-> >> git-blame more difficult. How about we only make changes to comments?
-> >
-> > Kind of true, though git blame is imho not too useful (unless I'm missing
-> > some git magic :)); git log -p has much more historical context to search
-> > through. I think these cleanups below are okay, though my worry is that
-> > for someone doing backports changes that are scattered like this mainly
-> > cause conflicts which then gets painful to resolve. I think we could make
-> > it work if they are split and more isolated, e.g. syscall ones could be
-> > one commit, another one only touching the big contiguous verifier comment,
-> > and so on.
->
-> (Ideally also separate from the doc-only patches which is the rest of your
->  series.)
+A bunch of BPF-related docs typo, wording and formatting fixes.
 
-Yep, sure, I'll split this into two patchsets and this patch into
-multiple patches (as part of second patchset).
+v1->v2:
+- split off non-documentation changes into separate patchset
+
+Andrii Nakryiko (3):
+  docs/btf: fix typos, improve wording
+  docs/btf: reflow text to fill up to 78 characters
+  docs/bpf: minor casing/punctuation fixes
+
+ Documentation/bpf/bpf_design_QA.rst |  24 +--
+ Documentation/bpf/btf.rst           | 316 +++++++++++++---------------
+ Documentation/networking/filter.txt |   2 +-
+ 3 files changed, 160 insertions(+), 182 deletions(-)
+
+-- 
+2.17.1
+
