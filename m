@@ -2,62 +2,35 @@ Return-Path: <SRS0=adOE=RE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0BB7C43381
-	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 20:33:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18BE4C43381
+	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 21:05:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8983A2084F
-	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 20:33:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E1110206B6
+	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 21:05:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725958AbfCAUdu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Mar 2019 15:33:50 -0500
-Received: from www62.your-server.de ([213.133.104.62]:41380 "EHLO
+        id S1726080AbfCAVFh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Mar 2019 16:05:37 -0500
+Received: from www62.your-server.de ([213.133.104.62]:45540 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725905AbfCAUdt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 1 Mar 2019 15:33:49 -0500
-Received: from [78.46.172.2] (helo=sslproxy05.your-server.de)
+        with ESMTP id S1725905AbfCAVFh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 1 Mar 2019 16:05:37 -0500
+Received: from [178.197.248.21] (helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1gzoqo-0008LM-Ka; Fri, 01 Mar 2019 21:33:46 +0100
-Received: from [178.197.248.21] (helo=linux.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1gzoqo-000OX0-DO; Fri, 01 Mar 2019 21:33:46 +0100
-Subject: Re: [PATCH bpf-next v2 5/7] bpf, libbpf: support global
- data/bss/rodata sections
-To:     Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@fb.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "joe@wand.net.nz" <joe@wand.net.nz>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "tgraf@suug.ch" <tgraf@suug.ch>, Andrii Nakryiko <andriin@fb.com>,
-        "jakub.kicinski@netronome.com" <jakub.kicinski@netronome.com>,
-        "lmb@cloudflare.com" <lmb@cloudflare.com>
-References: <20190228231829.11993-1-daniel@iogearbox.net>
- <20190228231829.11993-6-daniel@iogearbox.net>
- <1e21ba74-f236-60b8-f33c-f3f060419197@fb.com>
- <CAEf4BzYx=05UXSkOpRdKzhXenXJpRYrukgnG7fGjTSR30wLz-Q@mail.gmail.com>
- <e8678d06-20e0-5501-7cff-62de57a2cdf2@fb.com>
- <CAEf4BzZWZmTFj0Xqf+_1QoT5E6tt7ijmzk39khgZ2zYfe0QFUw@mail.gmail.com>
- <e6157f2f-80e4-6a99-2053-498e0581a0db@fb.com>
- <93e20522-cafd-ee1f-1dc1-3cebab122588@iogearbox.net>
- <0120903c-bef7-51b8-44b8-5f4288a78107@fb.com>
+        id 1gzpLa-0001tK-Vc; Fri, 01 Mar 2019 22:05:35 +0100
 From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <60074bf4-8fe5-bbc2-aaf4-df694a8518dd@iogearbox.net>
-Date:   Fri, 1 Mar 2019 21:33:45 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.3.0
-MIME-Version: 1.0
-In-Reply-To: <0120903c-bef7-51b8-44b8-5f4288a78107@fb.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+To:     ast@fb.com
+Cc:     afabre@cloudflare.com, marek@cloudflare.com, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH bpf] bpf: fix sanitation rewrite in case of non-pointers
+Date:   Fri,  1 Mar 2019 22:05:29 +0100
+Message-Id: <20190301210529.8218-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.9.5
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 0.100.2/25374/Thu Feb 28 11:38:05 2019)
 Sender: bpf-owner@vger.kernel.org
@@ -65,46 +38,50 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 03/01/2019 09:25 PM, Yonghong Song wrote:
-> On 3/1/19 12:06 PM, Daniel Borkmann wrote:
->> On 03/01/2019 08:19 PM, Yonghong Song wrote:
->>> On 3/1/19 11:10 AM, Andrii Nakryiko wrote:
->>>> On Fri, Mar 1, 2019 at 10:58 AM Yonghong Song <yhs@fb.com> wrote:
->>>>> On 3/1/19 10:48 AM, Andrii Nakryiko wrote:
->>>>>> On Fri, Mar 1, 2019 at 10:31 AM Yonghong Song <yhs@fb.com> wrote:
->>>>>>> On 2/28/19 3:18 PM, Daniel Borkmann wrote:
->> [...]
->>>>>> Would it be reasonable to just plain disable usage of uninitialized
->>>>>> global variables, as it kind of goes against BPF's philosophy that
->>>>>> everything should be written to, before can be read? So while we can
->>>>>> just implicitly zero-out everything beforehand, it might be a good
->>>>>> idea to remind and enforce that explictly?
->>>>>
->>>>> There will be a verifier error, so the program with "int g" will not
->>>>> run, the same as today.
->>>>
->>>> Yeah, I understand, but with pretty obscure error about not supporting
->>>> relocations and stuff, right?
->>>>
->>>>>
->>>>> We could improve by flagging the error at compiler error or libbpf time.
->>>>
->>>> So that's my point, that having compiler emit nicer error for
->>>> target=bpf would be nice touch to user experience :)
->>>
->>> I just removed a compiler error for static variables...
->>>
->>> I will wait for this patch lands, hear people complains (either need to
->>> support "int g;" or need better error messages, etc.) and then decide
->>> what next to do ...
->>
->> By the way, from LLVM side, do you think it makes sense for local vars
->> where you encode the offset into insn->imm to already encode it into
->> (insn+1)->imm of the ldimm64, so that loaders can just pass this offset
->> through instead of fixing it up like I did? I'm fine either way though,
->> just thought might be worth pointing out while we're at it. :)
-> 
-> Yes, llvm can do that. Let me prototype it and will let you know
-> if it landed in llvm trunk.
+Marek reported that he saw an issue with the below snippet in that
+timing measurements where off when loaded as unpriv while results
+were reasonable when loaded as privileged:
 
-Awesome, thanks!
+    [...]
+    uint64_t a = bpf_ktime_get_ns();
+    uint64_t b = bpf_ktime_get_ns();
+    uint64_t delta = b - a;
+    if ((int64_t)delta > 0) {
+    [...]
+
+Turns out there is a bug where a corner case is missing in the fix
+d3bd7413e0ca ("bpf: fix sanitation of alu op with pointer / scalar
+type from different paths"), namely fixup_bpf_calls() only checks
+whether aux has a non-zero alu_state, but it also needs to test for
+the case of BPF_ALU_NON_POINTER since in both occasions we need to
+skip the masking rewrite (as there is nothing to mask).
+
+Fixes: d3bd7413e0ca ("bpf: fix sanitation of alu op with pointer / scalar type from different paths")
+Reported-by: Marek Majkowski <marek@cloudflare.com>
+Reported-by: Arthur Fabre <afabre@cloudflare.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/netdev/CAJPywTJqP34cK20iLM5YmUMz9KXQOdu1-+BZrGMAGgLuBWz7fg@mail.gmail.com/T/
+---
+ [ Test case will be routed via bpf-next to avoid useless merge churn
+   due to test_verifier rework in bpf-next. ]
+
+ kernel/bpf/verifier.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 8f295b790297..5fcce2f4209d 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6920,7 +6920,8 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
+ 			u32 off_reg;
+ 
+ 			aux = &env->insn_aux_data[i + delta];
+-			if (!aux->alu_state)
++			if (!aux->alu_state ||
++			    aux->alu_state == BPF_ALU_NON_POINTER)
+ 				continue;
+ 
+ 			isneg = aux->alu_state & BPF_ALU_NEG_VALUE;
+-- 
+2.17.1
+
