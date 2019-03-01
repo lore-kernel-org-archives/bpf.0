@@ -2,84 +2,100 @@ Return-Path: <SRS0=adOE=RE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01427C43381
-	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 00:42:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C487AC43381
+	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 00:52:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C1EA62085A
-	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 00:42:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 854322085A
+	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 00:52:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="keME/dbz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731931AbfCAAmi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Feb 2019 19:42:38 -0500
-Received: from www62.your-server.de ([213.133.104.62]:33978 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726678AbfCAAmi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Feb 2019 19:42:38 -0500
-Received: from [78.46.172.3] (helo=sslproxy06.your-server.de)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1gzWG2-0003ZZ-C8; Fri, 01 Mar 2019 01:42:34 +0100
-Received: from [178.197.248.21] (helo=linux.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1gzWG2-000Q5R-4S; Fri, 01 Mar 2019 01:42:34 +0100
-Subject: Re: [PATCH v2 bpf-next 0/5] btf_dedup algorithm and test fixes
-To:     Andrii Nakryiko <andriin@fb.com>, andrii.nakryiko@gmail.com,
-        kernel-team@fb.com, ast@fb.com, acme@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, songliubraving@fb.com
-References: <20190228233125.1013080-1-andriin@fb.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <0128a624-68ec-9378-f34f-c21e566ced93@iogearbox.net>
-Date:   Fri, 1 Mar 2019 01:42:33 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.3.0
+        id S1728388AbfCAAwu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Feb 2019 19:52:50 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:34098 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728253AbfCAAwt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Feb 2019 19:52:49 -0500
+Received: by mail-oi1-f196.google.com with SMTP id g16so18179014oib.1;
+        Thu, 28 Feb 2019 16:52:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Chs7EHAbnSFgsRpf8pQcV9Ktl0qBJZ+3oPiZgH2JF2U=;
+        b=keME/dbzqPgvGf4nzfc/WPulSj6BsJNt46RiS/MowRArzz0dq6XsqM5WQI8gRrCoqu
+         3U3howavSYWuaqvDIxxQfOnXM4BP+K02GEzsR4NfbExgxWOoMQ9IZu/XsRM78jVOryUE
+         bZmx99DsIR/1hT7cpoBWgQDC2u21BVGovFlwQFt54pRmuttdBe8p/KsVgWXafnMJ+5eE
+         A/lRvIjeQuJ+pnSfRM1F5Mcvp7nGQc7oxmdmztbM2Zw3u57dIw5v+FCl8nrOKCyIq38w
+         HJlmWa+3vfBCfzctAI1MC93NyLkWY3v1b4Nb6D/3+BslMIbXfIh9tAuB5jaClx8S3P8C
+         m/Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Chs7EHAbnSFgsRpf8pQcV9Ktl0qBJZ+3oPiZgH2JF2U=;
+        b=oND07pp7TX8eEXFzpGt/skOeSLJTzSDc8Cr9VHaJjpxqY+dUT1hOA8XAyx7/yYTT+G
+         0KFkzqVhMidvh0SjeSoe3vvg1wDzOwy44YdnLFMELyCyCKFYiHbXIlVNtXCGB12JpChw
+         mi5xWyT/RBHVr0TUCG/t+xtVvivox92+olYDzDdprQwuZ9JpQriQ9RpwMenJ+El87cHK
+         p146LiN4ZblMaJiIyjZRbme+eqeylgYKRYD2Eo/+yAeHEfTuhRlNlMVmRkF5j+zOnYIZ
+         rlmL4CtZ3/JYd5DZodBrEKSsiy3pr4PNH20WlofU4wpNvEun2ZOeQSMsTyLIkpPPjRKH
+         vniQ==
+X-Gm-Message-State: AHQUAuYKIIEgX+7OSCp9RjLm6HmUrFmvQauh0sG5gf0Mjh30PsRsnbak
+        t5WpSPVoYktKg86fxHjtCXoprCCNaKk3GXDUuLI=
+X-Google-Smtp-Source: AHgI3IaMy6qQZdtuZNP5+N6bTrPT35BIVD4l/qC/0fyUmrQ8/sJnn/OnQ2erc4QTxdTJDb3j0NcSh/hZBRxyPcthNG0=
+X-Received: by 2002:aca:abcf:: with SMTP id u198mr1549779oie.55.1551401568789;
+ Thu, 28 Feb 2019 16:52:48 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20190228233125.1013080-1-andriin@fb.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.100.2/25374/Thu Feb 28 11:38:05 2019)
+References: <20190228184512.198075-1-andriin@fb.com> <20190228184512.198075-4-andriin@fb.com>
+ <CAPhsuW6tDGhi3ROVsLU4j37_Xp7xbV=jnEQ5ce-fV=vdCaJ-BQ@mail.gmail.com>
+ <23253537-2a33-9546-7ed2-0abb6e7de420@iogearbox.net> <831958de-985b-d150-d0d0-296e6c6cbec4@iogearbox.net>
+In-Reply-To: <831958de-985b-d150-d0d0-296e6c6cbec4@iogearbox.net>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 28 Feb 2019 16:52:37 -0800
+Message-ID: <CAEf4Bzatwzs7qq9JWftitvNou1mJJpCCcdhAXwTtkJbm8L2FjA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/4] bpf: fix formatting, typos, reflow comments
+ in syscall.c, verifier.c
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Song Liu <liu.song.a23@gmail.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Alexei Starovoitov <ast@fb.com>, Yonghong Song <yhs@fb.com>,
+        Networking <netdev@vger.kernel.org>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 03/01/2019 12:31 AM, Andrii Nakryiko wrote:
-> This patchset fixes a bug in btf_dedup() algorithm, which under specific hash
-> collision causes infinite loop. It also exposes ability to tune BTF
-> deduplication table size, with double purpose of allowing applications to
-> adjust size according to the size of BTF data, as well as allowing a simple way
-> to force hash collisions by setting table size to 1.
-> 
-> - Patch #1 fixes bug in btf_dedup testing code that's checking strings
-> - Patch #2 fixes pointer arg formatting in btf.h
-> - Patch #3 adds option to specify custom dedup table size
-> - Patch #4 fixes aforementioned bug in btf_dedup
-> - Patch #5 adds test that validates the fix
-> 
-> v1->v2:
-> - remove "Fixes" from formatting change patch
-> - extract roundup_pow2_max func for dedup table size
-> - btf_equal_struct -> btf_shallow_equal_struct
-> - explain in comment why we can't rely on just btf_dedup_is_equiv
-> 
-> Andrii Nakryiko (5):
->   selftests/bpf: fix btf_dedup testing code
->   libbpf: fix formatting for btf_ext__get_raw_data
->   btf: allow to customize dedup hash table size
->   btf: fix bug with resolving STRUCT/UNION into corresponding FWD
->   selftests/bpf: add btf_dedup test of FWD/STRUCT resolution
-> 
->  tools/lib/bpf/btf.c                    | 73 +++++++++++++++++++-------
->  tools/lib/bpf/btf.h                    |  3 +-
->  tools/testing/selftests/bpf/.gitignore |  1 +
->  tools/testing/selftests/bpf/test_btf.c | 49 ++++++++++++++++-
->  4 files changed, 103 insertions(+), 23 deletions(-)
-> 
+On Thu, Feb 28, 2019 at 4:28 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 03/01/2019 01:27 AM, Daniel Borkmann wrote:
+> > On 02/28/2019 11:40 PM, Song Liu wrote:
+> >> On Thu, Feb 28, 2019 at 10:59 AM Andrii Nakryiko <andriin@fb.com> wrote:
+> >>>
+> >>> Fix few formatting errors. Fix few typos and reflow long descriptive
+> >>> comments for more even text fill.
+> >>>
+> >>> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> >>
+> >> I think we should not change the code for formatting, as these changes make
+> >> git-blame more difficult. How about we only make changes to comments?
+> >
+> > Kind of true, though git blame is imho not too useful (unless I'm missing
+> > some git magic :)); git log -p has much more historical context to search
+> > through. I think these cleanups below are okay, though my worry is that
+> > for someone doing backports changes that are scattered like this mainly
+> > cause conflicts which then gets painful to resolve. I think we could make
+> > it work if they are split and more isolated, e.g. syscall ones could be
+> > one commit, another one only touching the big contiguous verifier comment,
+> > and so on.
+>
+> (Ideally also separate from the doc-only patches which is the rest of your
+>  series.)
 
-Applied, thanks!
+Yep, sure, I'll split this into two patchsets and this patch into
+multiple patches (as part of second patchset).
