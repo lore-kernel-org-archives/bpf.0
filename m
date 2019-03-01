@@ -2,103 +2,103 @@ Return-Path: <SRS0=adOE=RE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5B4AC43381
-	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 20:06:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33137C10F03
+	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 20:08:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A133E20848
-	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 20:06:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0336420848
+	for <bpf@archiver.kernel.org>; Fri,  1 Mar 2019 20:08:25 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="Xtvy6uZr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725944AbfCAUGj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Mar 2019 15:06:39 -0500
-Received: from www62.your-server.de ([213.133.104.62]:36628 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725934AbfCAUGj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 1 Mar 2019 15:06:39 -0500
-Received: from [88.198.220.130] (helo=sslproxy01.your-server.de)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1gzoQX-0005zG-0S; Fri, 01 Mar 2019 21:06:37 +0100
-Received: from [178.197.248.21] (helo=linux.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1gzoQW-0003H0-JY; Fri, 01 Mar 2019 21:06:36 +0100
-Subject: Re: [PATCH bpf-next v2 5/7] bpf, libbpf: support global
- data/bss/rodata sections
-To:     Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@fb.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "joe@wand.net.nz" <joe@wand.net.nz>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "tgraf@suug.ch" <tgraf@suug.ch>, Andrii Nakryiko <andriin@fb.com>,
-        "jakub.kicinski@netronome.com" <jakub.kicinski@netronome.com>,
-        "lmb@cloudflare.com" <lmb@cloudflare.com>
+        id S1725934AbfCAUIY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Mar 2019 15:08:24 -0500
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:36568 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725905AbfCAUIX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 1 Mar 2019 15:08:23 -0500
+Received: by mail-qt1-f195.google.com with SMTP id p25so29271868qtb.3
+        for <bpf@vger.kernel.org>; Fri, 01 Mar 2019 12:08:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=Xvvd0LRfzhVeWgtCA/8HowmEJU+4/SexrZUTbC9Fw1M=;
+        b=Xtvy6uZrFYnMHymL6nmyrWf8u35hZ2ar22GNZNSRr4boCkkJLk32Szhb+kJphihl3d
+         lftalo9JqOHcsr2VoIYk3zHzA8PDjK2N3fxYhDgrJrdbAmMdBJamGrtn51+oPYsP1ogV
+         LTJVekoGA8+YwYeVhAcHlkIOBKLC534+gi+dCM6ZUftdEIgT12P755P//5yhEZ5OsRws
+         yUJnamPWng2cKf8Z48y+y2hDWkit9C+FCTf4dIltsG5H26/V38wJPJEeC4jQ33TGU2FV
+         yD5m7MomChEbYDkirGbUZdTEN96/lLYtXLW1hPAPAKzEKJCafhdMFqJ3qCH3rdznrdcU
+         W3tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=Xvvd0LRfzhVeWgtCA/8HowmEJU+4/SexrZUTbC9Fw1M=;
+        b=a17vITEiC+K3qBJkjBHxqYK8PZSNlp0Ga/q/synwumXGTYgfNkvZJw6kzh80hfJwpB
+         nlfgJRGDymlxQScEtHvH1OWwLR8kp49ONaPexxVVqcwF63Uq0wJ/fRSYEQr4qHqWIqRL
+         uGoOzz6XvroCbsNsljR+UaYjcgZ2yDtScOIzKgmhGWmhqrQk1+OPdY8DVYga1Jy1FjJ7
+         M8XbYW/zw/xg1C3Z6shO5SovPRGmzbkumt3XkedHZE6DABcqFWOIu1ME9lQl0A0AokBs
+         ECFDuCkX++hGfaQy70CAe2zSylicv0BVDVZK+zp9Sn+A+OeCN5N7H2PYv+/qc+9g9bLq
+         nU+A==
+X-Gm-Message-State: APjAAAVsc77R+uJIgKPQCb8oyMgA9DxrZEwqnhGTsI7WPx+GQgK+4yB5
+        dyirLKKZh0hszxhwRcMk8/wIV7+COOQ=
+X-Google-Smtp-Source: APXvYqwp5FCCr3ZYp1wt148J+6HjxznPpZ5DVnVaDnBUqO2+7N18Ujf6Uu0YvRtTs+Eq2favmd3mng==
+X-Received: by 2002:a0c:ae78:: with SMTP id z53mr5185315qvc.235.1551470902146;
+        Fri, 01 Mar 2019 12:08:22 -0800 (PST)
+Received: from cakuba.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id 17sm7861591qtt.18.2019.03.01.12.08.20
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 01 Mar 2019 12:08:22 -0800 (PST)
+Date:   Fri, 1 Mar 2019 12:08:13 -0800
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@fb.com>, bpf@vger.kernel.org,
+        Networking <netdev@vger.kernel.org>,
+        Joe Stringer <joe@wand.net.nz>,
+        john fastabend <john.fastabend@gmail.com>, tgraf@suug.ch,
+        Yonghong Song <yhs@fb.com>, Andrii Nakryiko <andriin@fb.com>,
+        lmb@cloudflare.com
+Subject: Re: [PATCH bpf-next v2 1/7] bpf: implement lookup-free direct value
+ access
+Message-ID: <20190301120813.2517cbd2@cakuba.netronome.com>
+In-Reply-To: <CAEf4BzYeuBQn6GT7GAQooAsxevBXP2RJjGJV4QBUghAmewrJDg@mail.gmail.com>
 References: <20190228231829.11993-1-daniel@iogearbox.net>
- <20190228231829.11993-6-daniel@iogearbox.net>
- <1e21ba74-f236-60b8-f33c-f3f060419197@fb.com>
- <CAEf4BzYx=05UXSkOpRdKzhXenXJpRYrukgnG7fGjTSR30wLz-Q@mail.gmail.com>
- <e8678d06-20e0-5501-7cff-62de57a2cdf2@fb.com>
- <CAEf4BzZWZmTFj0Xqf+_1QoT5E6tt7ijmzk39khgZ2zYfe0QFUw@mail.gmail.com>
- <e6157f2f-80e4-6a99-2053-498e0581a0db@fb.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <93e20522-cafd-ee1f-1dc1-3cebab122588@iogearbox.net>
-Date:   Fri, 1 Mar 2019 21:06:35 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.3.0
+        <20190228231829.11993-2-daniel@iogearbox.net>
+        <CAEf4BzYCFw861q-S=7VH3B7d9wQha5WYbNnbi+YU6XEya1ZE_w@mail.gmail.com>
+        <93040e2a-cf74-0dfe-276f-0a91598011c5@iogearbox.net>
+        <CAEf4BzYeuBQn6GT7GAQooAsxevBXP2RJjGJV4QBUghAmewrJDg@mail.gmail.com>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-In-Reply-To: <e6157f2f-80e4-6a99-2053-498e0581a0db@fb.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.100.2/25374/Thu Feb 28 11:38:05 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 03/01/2019 08:19 PM, Yonghong Song wrote:
-> On 3/1/19 11:10 AM, Andrii Nakryiko wrote:
->> On Fri, Mar 1, 2019 at 10:58 AM Yonghong Song <yhs@fb.com> wrote:
->>> On 3/1/19 10:48 AM, Andrii Nakryiko wrote:
->>>> On Fri, Mar 1, 2019 at 10:31 AM Yonghong Song <yhs@fb.com> wrote:
->>>>> On 2/28/19 3:18 PM, Daniel Borkmann wrote:
-[...]
->>>> Would it be reasonable to just plain disable usage of uninitialized
->>>> global variables, as it kind of goes against BPF's philosophy that
->>>> everything should be written to, before can be read? So while we can
->>>> just implicitly zero-out everything beforehand, it might be a good
->>>> idea to remind and enforce that explictly?
->>>
->>> There will be a verifier error, so the program with "int g" will not
->>> run, the same as today.
->>
->> Yeah, I understand, but with pretty obscure error about not supporting
->> relocations and stuff, right?
->>
->>>
->>> We could improve by flagging the error at compiler error or libbpf time.
->>
->> So that's my point, that having compiler emit nicer error for
->> target=bpf would be nice touch to user experience :)
+On Fri, 1 Mar 2019 11:35:17 -0800, Andrii Nakryiko wrote:
+> > > Do you think that would work? Using array is a bit limiting, because
+> > > it doesn't allow to do partial reads/updates, while BPF_MAP_TYPE_HEAP
+> > > would be single big value that allows partial reading/updating.  
+> >
+> > If I understand it correctly, the main difference this would have is
+> > to be able to use spin_locks in a more fine-grained fashion, right?  
 > 
-> I just removed a compiler error for static variables...
+> spin_lock is just a nice bonus, if there is any manipulation that
+> isn't <= 8 byte long that needs to be done atomically.
 > 
-> I will wait for this patch lands, hear people complains (either need to
-> support "int g;" or need better error messages, etc.) and then decide
-> what next to do ...
+> The reason for this new type of map is actually ability to update
+> global variables from outside BPF program in granular fashion. E.g.,
+> turning on some extra debug output temporarily, tuning parameters,
+> changing PID to trace, etc, without stopping and reloading BPF
+> program. With array, it's all-or-nothing: to update anything you have
+> to overwrite entire .data section. As I mentioned, if we can get BTF
+> type information for entirety of .data, it would allow to manipulate
+> those variables by name even with generic tools like bpftool.
 
-By the way, from LLVM side, do you think it makes sense for local vars
-where you encode the offset into insn->imm to already encode it into
-(insn+1)->imm of the ldimm64, so that loaders can just pass this offset
-through instead of fixing it up like I did? I'm fine either way though,
-just thought might be worth pointing out while we're at it. :)
-
-Thanks,
-Daniel
+Sounds like you'd almost want to mmap the value ;)
