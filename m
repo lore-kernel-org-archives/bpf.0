@@ -2,108 +2,100 @@ Return-Path: <SRS0=p5ic=RF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_NEOMUTT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AB8FC43381
-	for <bpf@archiver.kernel.org>; Sat,  2 Mar 2019 10:12:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D85CC43381
+	for <bpf@archiver.kernel.org>; Sat,  2 Mar 2019 19:16:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 22D6C20838
-	for <bpf@archiver.kernel.org>; Sat,  2 Mar 2019 10:12:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 24DB620838
+	for <bpf@archiver.kernel.org>; Sat,  2 Mar 2019 19:16:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=cogentembedded-com.20150623.gappssmtp.com header.i=@cogentembedded-com.20150623.gappssmtp.com header.b="eQQ9zfpN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RRlUig/8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726114AbfCBKMN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 2 Mar 2019 05:12:13 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:40711 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726049AbfCBKMN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 2 Mar 2019 05:12:13 -0500
-Received: by mail-lf1-f66.google.com with SMTP id a8so232077lfi.7
-        for <bpf@vger.kernel.org>; Sat, 02 Mar 2019 02:12:12 -0800 (PST)
+        id S1726497AbfCBTQP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 2 Mar 2019 14:16:15 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:44751 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726434AbfCBTQP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 2 Mar 2019 14:16:15 -0500
+Received: by mail-pf1-f195.google.com with SMTP id a3so521866pff.11;
+        Sat, 02 Mar 2019 11:16:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=cYRHzHIJ93lUPFjUOboVeHRSEAE23+rZlrsUkMjtfhc=;
-        b=eQQ9zfpNAdp930A05+Mu/kBPGS9qD57Jzpj9tUFTjuCrFNqmqZibaq1IE/KR8Ca2Lo
-         6N17Oyuc+QG6o51lipGS2EWSoi8FLujKTnU4x3kxV097rwOIR4tCZqSmI7Bx16+uvUpY
-         gl4P7kBZGDeZpjQfWbXGYqqC7QLZa4+DC0lEf96aaes/jjIuq9NavK0WAWn76/4a5eWP
-         igHVx7G6M8/fQFB0OLUi/rwpnpYELr5SL8tMMV6T6eCTuz41pFdJo8/P0+u8GnvTzkxt
-         6rK3w7CHbZHKMdQAXxvtoFv+n49lBvR6WGPag3YprBAeboCwHgsZrujvZ72L9ZbMl+B1
-         c2/Q==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ra9yiimYN++3tmIcracFo4QooX2aqnPadUaRuQ+mnLk=;
+        b=RRlUig/8kitxn3Xm3bY8jaSUonjgJc8V8xQTlQhCF6c3Aw1FnM11mdtFxPixnufQN7
+         lwNHQt6dyb6nElAreWFKb84520OCAZzapLWiRiVrgo1J/JGmL5W9f5pSRliXcqLUyXtp
+         dTkSayQdmR83nWV3y1iff+zGeZ/sr78nAyvevKWqf2nMvlo6f2zxS2KQz9iqAREl2lCj
+         B5a9O493NUb6WJDqR8RS6bl08vFdYstJ9Dvq2WM43JEOhvNLRB9qAf12GobGW2NwP/EX
+         ZMSXXbInwJsQftjwVOvGFZkcLSDYulw9Unc3AiQIETL96s0nM6ZdiBD040/ktA55BwxS
+         u3Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=cYRHzHIJ93lUPFjUOboVeHRSEAE23+rZlrsUkMjtfhc=;
-        b=GxcrPczOFfNhVfJ4LuUtFdzMMSyiA24SKghxcBQXQQEwj8k6t16Y3ZSjb+H0ABvOah
-         +RunoatI3lYXGDhORTcHwu8gWYVZ/Q6nobwKFxADrZnKPlpkTChLmHHyQI5rHh2gaRtg
-         z0rUMvMkD3FvkIWy3MepnHOl/mHtL1+aJME7y/ZSiQhoB+sOMmCfpzF8rZ337FbjqVGp
-         xTsaA7es4Jb+6dHA8LQuoQMPHAgllHNGxP2OLJOpdcC3LmDACXFRIOz7aaHwvsMRd63Y
-         uF4SrNoumRPrrzFcLnav700EQyQbVfbiesbUcMG4gqWuWL27KwUtG9qvkKOvzsKmMR2z
-         wnFw==
-X-Gm-Message-State: APjAAAUzU74sMv3Cydee9QUoevraw4tL6hExrVQ+OgPEH/OG2HsmhvLC
-        YKMOTxV5BUeZ0JlcG33DBPPD9g==
-X-Google-Smtp-Source: APXvYqwbOuV01juLEEk/bhBYY+UJMI2Pl/Evf/+hmN3EtfzzA2DcGDw7P1pAgQrJpB0YDv35eFP9IQ==
-X-Received: by 2002:a19:2d44:: with SMTP id t4mr5241924lft.90.1551521531319;
-        Sat, 02 Mar 2019 02:12:11 -0800 (PST)
-Received: from [192.168.0.199] ([31.173.84.84])
-        by smtp.gmail.com with ESMTPSA id t135sm109119lff.74.2019.03.02.02.12.10
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ra9yiimYN++3tmIcracFo4QooX2aqnPadUaRuQ+mnLk=;
+        b=NJD1nMmGjHk3Mwvns6ap5+9I9gSGWXm8bnQVce8oOtvK8U+d45jYfYNoyV3uMl1B2F
+         6YHH1n5fzlrGT6MDyzb3C9XF3aAQYyrr3+gCeaHbGzyKvOC2sLG3TW5rxbH0JvUFEyLe
+         2jfDMuniDmooaVjdOQW05sNfRQ3sQpHFWfrISxkpwGvC1qiIGQr8VRjT5MN8rsn1AMwi
+         Acfs/EdBOAVLrfqorl3VssfiTtsDrlS97ihK2tOWBUOhn7tgdNKsD32ekGY8DVuxJqp3
+         PnP8ADEPGxBl9qiqzkdxWRNOKC5O9Vx+wEirjJCK/79F7tAaSssGXCkdOweNLnQbZC2t
+         ziwg==
+X-Gm-Message-State: AHQUAuZCOyQOZub8zOht1Cz6N/1Qu+kZFDCVO20MiQpzUh+ZOSNOScQD
+        LLi1fgKuITtEKTKUKFY8fiQ=
+X-Google-Smtp-Source: AHgI3IY6Knk48HYosIh9Q70zXBiO/KxQybTgVsAOMTJwu4JNsR4zLehkBxi4PcP9fVjA/Mq8Lis43g==
+X-Received: by 2002:aa7:9289:: with SMTP id j9mr12143033pfa.130.1551554174584;
+        Sat, 02 Mar 2019 11:16:14 -0800 (PST)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:180::6864])
+        by smtp.gmail.com with ESMTPSA id b6sm2999193pgl.49.2019.03.02.11.16.13
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 02 Mar 2019 02:12:10 -0800 (PST)
-Subject: Re: [PATCH bpf] bpf: fix sanitation rewrite in case of non-pointers
-To:     Daniel Borkmann <daniel@iogearbox.net>, ast@fb.com
-Cc:     afabre@cloudflare.com, marek@cloudflare.com, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20190301210529.8218-1-daniel@iogearbox.net>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Message-ID: <96367b1a-4ab5-8f1d-1823-a65ba48fa3cc@cogentembedded.com>
-Date:   Sat, 2 Mar 2019 13:11:57 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
+        Sat, 02 Mar 2019 11:16:13 -0800 (PST)
+Date:   Sat, 2 Mar 2019 11:16:12 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
+        ast@kernel.org, daniel@iogearbox.net
+Subject: Re: [PATCH bpf-next v3 0/7] selftests: bpf: break up test_progs
+Message-ID: <20190302191611.i2cikjrosuslocum@ast-mbp.dhcp.thefacebook.com>
+References: <20190302034219.99480-1-sdf@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20190301210529.8218-1-daniel@iogearbox.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190302034219.99480-1-sdf@google.com>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello!
-
-On 02.03.2019 0:05, Daniel Borkmann wrote:
-
-> Marek reported that he saw an issue with the below snippet in that
-> timing measurements where off when loaded as unpriv while results
-
-    Were?
-
-> were reasonable when loaded as privileged:
+On Fri, Mar 01, 2019 at 07:42:12PM -0800, Stanislav Fomichev wrote:
+> Recently we had linux-next bpf/bpf-next conflict when we added new
+> functionality to the test_progs.c at the same location. Let's split
+> test_progs.c the same way we recently split test_verifier.c.
 > 
->      [...]
->      uint64_t a = bpf_ktime_get_ns();
->      uint64_t b = bpf_ktime_get_ns();
->      uint64_t delta = b - a;
->      if ((int64_t)delta > 0) {
->      [...]
+> I follow the same patten we did in commit 2dfb40121ee8 ("selftests: bpf:
+> prepare for break up of verifier tests") for verifier: create
+> scaffolding to support dedicated files and slowly move the tests into
+> separate files.
 > 
-> Turns out there is a bug where a corner case is missing in the fix
-> d3bd7413e0ca ("bpf: fix sanitation of alu op with pointer / scalar
-> type from different paths"), namely fixup_bpf_calls() only checks
-> whether aux has a non-zero alu_state, but it also needs to test for
-> the case of BPF_ALU_NON_POINTER since in both occasions we need to
-> skip the masking rewrite (as there is nothing to mask).
+> The first patch adds scaffolding, subsequent patches move progs into
+> separate files.
 > 
-> Fixes: d3bd7413e0ca ("bpf: fix sanitation of alu op with pointer / scalar type from different paths")
-> Reported-by: Marek Majkowski <marek@cloudflare.com>
-> Reported-by: Arthur Fabre <afabre@cloudflare.com>
-> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> Link: https://lore.kernel.org/netdev/CAJPywTJqP34cK20iLM5YmUMz9KXQOdu1-+BZrGMAGgLuBWz7fg@mail.gmail.com/T/
-[...]
+> In theory, many of the standalone tests can be migrated to this new
+> framework as well. They get the benefit of common CHECK macro and
+> bpf_find_map function which a lot of standalone tests need to redefine.
+> 
+> v3 changes:
+> * respin on top of commit ebace0e981b2 ("selftests/bpf: use
+>   __bpf_constant_htons in test_prog.c for flow dissector")
+> * put bpf_rlimit.h into test_progs.c instead of test_progs.h
+> 
+> v2 changes:
+> * added cover letter, added more description about file structure
 
-MBR, Sergei
+Applied, Thanks
+
