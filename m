@@ -2,162 +2,139 @@ Return-Path: <SRS0=/NIo=RH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF2D4C4360F
-	for <bpf@archiver.kernel.org>; Mon,  4 Mar 2019 22:23:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11F10C43381
+	for <bpf@archiver.kernel.org>; Mon,  4 Mar 2019 22:59:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 797E620835
-	for <bpf@archiver.kernel.org>; Mon,  4 Mar 2019 22:23:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CDCC520684
+	for <bpf@archiver.kernel.org>; Mon,  4 Mar 2019 22:59:27 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sz+We9mQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726178AbfCDWXH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 4 Mar 2019 17:23:07 -0500
-Received: from mail-it1-f198.google.com ([209.85.166.198]:34236 "EHLO
-        mail-it1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726054AbfCDWXG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 4 Mar 2019 17:23:06 -0500
-Received: by mail-it1-f198.google.com with SMTP id x87so607103ita.1
-        for <bpf@vger.kernel.org>; Mon, 04 Mar 2019 14:23:05 -0800 (PST)
+        id S1726117AbfCDW71 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 4 Mar 2019 17:59:27 -0500
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:43738 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726066AbfCDW71 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 4 Mar 2019 17:59:27 -0500
+Received: by mail-qt1-f196.google.com with SMTP id y4so7025692qtc.10;
+        Mon, 04 Mar 2019 14:59:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NeVtyt6+gK4gj0AOHwzuOV7rIp87XdBaYOsjxe42f7w=;
+        b=sz+We9mQuRu2WZSVKWAibeYRfR8rWlGv566a3Z5rtjObVDpDCP8/zu68vPKUH9IS2M
+         FCML+KBr75fqxSxuUcnPLIeTmgmbYs4UfIyzyXW9n91UQ6lT7s44y82PWluzyuOMWWH9
+         j9wReu7Z2BxZ7/xdrS/FLgYyR6KcQhH5oYOlqkngRDhRECQ9IgRk8Zi9DNpj5Mv0k7dr
+         P9OGl5jD122xEeVRFDHhyBlmIPt3V4272nWmLYfIUJ3WunCEp76qYJ/QO1lIvF1bcRW0
+         7enBb9JqwLUN2lmvZAH5y3vpwWeUcjDSJBat26a6mOBtPnUHs15mhLUTsIfjTsbZq1gA
+         GiXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=wVsdx1+3EJK89k7jT6emg3o+0gy978hZeVywx1Fpvco=;
-        b=IDJ7A/Xu129RXaNwDuq7bANKy57nHlEyNXVcJ4ROHqBhI3PkIns21EjwvWM/COHB4R
-         BM4smEa129SEOHbNBcR09ldA+RXoTHZdJWPEkmjfuFyOjWAg+XDo4RdL9exiLcDwiIve
-         hpKtcQc2arYh8h/pVbPOTptrl6PixS9hYKCVJHSb+qoelDYyVoPzTA9xbLSbU7+JzL87
-         /tTIJn2BJK+zTjevDUCnv9TVNRHMJJ/tPXEo7/UhVxYC1guojEg6W2qDm4VFVUEKfyO0
-         id+yK+BBmqE8TxvgtCLBxq8/JgIT97h3cfiHgeD/9goQFw/p1GdbJ6xdnet+bVaJB1Ie
-         UgfQ==
-X-Gm-Message-State: APjAAAXP5D+Z8P/FsWzEIwltDJVMecZte/IZ7eUrcR+cXl2bZE/nnJIV
-        w8u/LI6IXhHwX2q/02hPL/tX9Wd1mH3dGDU2CGIiMmCLwtRm
-X-Google-Smtp-Source: APXvYqwpjPCoKQVzSXZNE7/Jt5zmATLG+a3jx2XFuzU1Cb2eq9UAaizi2E+/AgTriVaSYKC8byg0dTwOxyhvTRElXVXxdl0wLtnt
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NeVtyt6+gK4gj0AOHwzuOV7rIp87XdBaYOsjxe42f7w=;
+        b=lxFy1qXU/ECUGUcAISwhn9/jHbMMXXQqpU8ZX4wwe7EryxOOyMhrcHoPxbG8WWROLZ
+         VICt60AQROIGG9IuK7/KCKeusoFi+N83VXKujvVJyTNnhkKQh2Lk8F28G/GvXnHtktqg
+         hLFlgp1JmGhHJayMtgucdcFGEBQ44ShraiLmKD19mA1ZfPBibX7Wzv+/HIdo/Bg/VjN/
+         NmiNGPcGNhXfRalyPdaGze8gkTY/tq2pS6cMdNeHMtBScWRRRsmtt5DiqvxxxdDTQc6/
+         0q9jzAt+atQzYEQOniOzZIRqQxNXeQNHvrl4oOI6fB195EgNr7v8hrDbOJwWbBKeLuWP
+         xQrA==
+X-Gm-Message-State: APjAAAU3H9MbaCCTlDeff9O85VvT0KAmUdY6eITzBIyX6vCZOaVyRor0
+        2gnhjfKbt2cB+Glc5ghcEfehdhUikHrY1yLg4P9UKQ==
+X-Google-Smtp-Source: APXvYqygD5FSB8EOcNpTxxw6+tMTViQhN0+GodrkOvTNI1ZAcwoRnszEl/u8FPJirtXh09/URM3oj3wkRIvRU0Ja5Tk=
+X-Received: by 2002:aed:3904:: with SMTP id l4mr16071088qte.194.1551740365875;
+ Mon, 04 Mar 2019 14:59:25 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a02:3f1d:: with SMTP id d29mr12430186jaa.4.1551738185498;
- Mon, 04 Mar 2019 14:23:05 -0800 (PST)
-Date:   Mon, 04 Mar 2019 14:23:05 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000054cc6d05834c33d7@google.com>
-Subject: kernel BUG at include/linux/mm.h:LINE! (5)
-From:   syzbot <syzbot+5013d47539cdd43e7098@syzkaller.appspotmail.com>
-To:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-        davem@davemloft.net, edumazet@google.com, kafai@fb.com,
-        kuznet@ms2.inr.ac.ru, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com,
-        yoshfuji@linux-ipv6.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+References: <20190304205019.15071-1-adrian.ratiu@collabora.com>
+In-Reply-To: <20190304205019.15071-1-adrian.ratiu@collabora.com>
+From:   Song Liu <liu.song.a23@gmail.com>
+Date:   Mon, 4 Mar 2019 14:59:14 -0800
+Message-ID: <CAPhsuW4kbZhE=1v4t6v803zA6PnRjzGA5UaAu5Nrbo7mrYyw5Q@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: Add arm target register definitions
+To:     Adrian Ratiu <adrian.ratiu@collabora.com>
+Cc:     bpf <bpf@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello,
+On Mon, Mar 4, 2019 at 12:50 PM Adrian Ratiu <adrian.ratiu@collabora.com> wrote:
+>
+> eBPF "restricted C" code can be compiled with LLVM/clang using target
+> triplets like armv7l-unknown-linux-gnueabihf and loaded/run with small
+> cross-compiled gobpf/elf [1] programs without requiring a full BCC
+> port which is also undesirable on small embedded systems due to its
+> size footprint. The only missing pieces are these helper macros which
+> otherwise have to be redefined by each eBPF arm program.
+>
+> [1] https://github.com/iovisor/gobpf/tree/master/elf
+>
+> Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com>
 
-syzbot found the following crash on:
+I think this is for bpf-next tree, which is closed during the merge window.
+Please resubmit when the bpf-next trees is opened (usually in 2 weeks).
 
-HEAD commit:    9e9322e5d28e selftest/net: Remove duplicate header
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=13516233200000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=47f2db597668ac40
-dashboard link: https://syzkaller.appspot.com/bug?extid=5013d47539cdd43e7098
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=148763eb200000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1416ff3d200000
+Thanks,
+Song
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+5013d47539cdd43e7098@syzkaller.appspotmail.com
-
-flags: 0x1fffc0000000000()
-raw: 01fffc0000000000 ffffea00025f6208 ffff88812fffc878 0000000000000000
-raw: 0000000000000000 0000000000000003 00000000ffffff7f 0000000000000000
-page dumped because: VM_BUG_ON_PAGE(page_ref_count(page) == 0)
-------------[ cut here ]------------
-kernel BUG at include/linux/mm.h:546!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 7872 Comm: syz-executor445 Not tainted 5.0.0-rc7+ #95
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-RIP: 0010:put_page_testzero include/linux/mm.h:546 [inline]
-RIP: 0010:put_page include/linux/mm.h:992 [inline]
-RIP: 0010:__skb_frag_unref include/linux/skbuff.h:2837 [inline]
-RIP: 0010:skb_release_data+0x5a5/0x7b0 net/core/skbuff.c:571
-Code: f0 fe ff e9 b6 fb ff ff e8 38 b9 01 fc 4c 8d 63 ff e9 c8 fc ff ff e8  
-2a b9 01 fc 48 c7 c6 80 c2 fe 87 4c 89 e7 e8 bb c6 2a fc <0f> 0b e8 14 b9  
-01 fc 4d 8d 66 0e 48 b8 00 00 00 00 00 fc ff df 4c
-RSP: 0018:ffff888086a0f708 EFLAGS: 00010293
-RAX: ffff8880a3590440 RBX: ffffea00025dfa34 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff81990662 RDI: ffffea00025dfa38
-RBP: ffff888086a0f770 R08: 000000000000003e R09: ffffed1015d03ef9
-R10: ffffed1015d03ef8 R11: ffff8880ae81f7c7 R12: ffffea00025dfa00
-R13: ffff8880a4398c40 R14: 0000000000000001 R15: dffffc0000000000
-FS:  00007fba67236700(0000) GS:ffff8880ae800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fba67235e78 CR3: 0000000099c9f000 CR4: 00000000001406f0
-Call Trace:
-  skb_release_all+0x4d/0x60 net/core/skbuff.c:631
-  __kfree_skb+0x16/0x30 net/core/skbuff.c:645
-  sk_wmem_free_skb include/net/sock.h:1463 [inline]
-  tcp_write_queue_purge+0x253/0x7d0 net/ipv4/tcp.c:2543
-  tcp_disconnect+0x402/0x1890 net/ipv4/tcp.c:2583
-  tcp_close+0xe37/0x10c0 net/ipv4/tcp.c:2384
-  tls_sk_proto_close+0x40d/0x7a0 net/tls/tls_main.c:291
-  inet_release+0x105/0x1f0 net/ipv4/af_inet.c:428
-  inet6_release+0x53/0x80 net/ipv6/af_inet6.c:473
-  __sock_release+0xd3/0x2b0 net/socket.c:579
-  sock_close+0x1b/0x30 net/socket.c:1162
-  __fput+0x2df/0x8d0 fs/file_table.c:278
-  ____fput+0x16/0x20 fs/file_table.c:309
-  task_work_run+0x14a/0x1c0 kernel/task_work.c:113
-  exit_task_work include/linux/task_work.h:22 [inline]
-  do_exit+0x92c/0x2fd0 kernel/exit.c:875
-  do_group_exit+0x135/0x370 kernel/exit.c:979
-  get_signal+0x399/0x1d50 kernel/signal.c:2575
-  do_signal+0x87/0x1940 arch/x86/kernel/signal.c:816
-  exit_to_usermode_loop+0x244/0x2c0 arch/x86/entry/common.c:162
-  prepare_exit_to_usermode arch/x86/entry/common.c:197 [inline]
-  syscall_return_slowpath arch/x86/entry/common.c:268 [inline]
-  do_syscall_64+0x52d/0x610 arch/x86/entry/common.c:293
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x447589
-Code: 6e 4d 6f 64 65 00 69 43 75 72 72 4f 66 66 73 00 69 4d 61 78 46 69 6c  
-65 53 69 7a 65 00 69 4d 61 78 46 69 6c 65 73 00 69 46 69 <6c> 65 4e 75 6d  
-44 69 67 69 74 73 00 62 44 65 6c 65 74 65 4f 6e 43
-RSP: 002b:00007fba67235d98 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
-RAX: fffffffffffffe00 RBX: 00000000006ddc68 RCX: 0000000000447589
-RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00000000006ddc68
-RBP: 00000000006ddc60 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00000000006ddc6c
-R13: 0030656c69662f2e R14: 0000000000000000 R15: 0000000000000000
-Modules linked in:
----[ end trace 3c84b12f07d7d40a ]---
-RIP: 0010:put_page_testzero include/linux/mm.h:546 [inline]
-RIP: 0010:put_page include/linux/mm.h:992 [inline]
-RIP: 0010:__skb_frag_unref include/linux/skbuff.h:2837 [inline]
-RIP: 0010:skb_release_data+0x5a5/0x7b0 net/core/skbuff.c:571
-Code: f0 fe ff e9 b6 fb ff ff e8 38 b9 01 fc 4c 8d 63 ff e9 c8 fc ff ff e8  
-2a b9 01 fc 48 c7 c6 80 c2 fe 87 4c 89 e7 e8 bb c6 2a fc <0f> 0b e8 14 b9  
-01 fc 4d 8d 66 0e 48 b8 00 00 00 00 00 fc ff df 4c
-RSP: 0018:ffff888086a0f708 EFLAGS: 00010293
-RAX: ffff8880a3590440 RBX: ffffea00025dfa34 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff81990662 RDI: ffffea00025dfa38
-RBP: ffff888086a0f770 R08: 000000000000003e R09: ffffed1015d03ef9
-R10: ffffed1015d03ef8 R11: ffff8880ae81f7c7 R12: ffffea00025dfa00
-R13: ffff8880a4398c40 R14: 0000000000000001 R15: dffffc0000000000
-FS:  00007fba67236700(0000) GS:ffff8880ae800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fba67235e78 CR3: 0000000099c9f000 CR4: 00000000001406f0
-
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#bug-status-tracking for how to communicate with  
-syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> ---
+>  tools/testing/selftests/bpf/bpf_helpers.h | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/bpf_helpers.h b/tools/testing/selftests/bpf/bpf_helpers.h
+> index 6c77cf7bedce..f7883576f445 100644
+> --- a/tools/testing/selftests/bpf/bpf_helpers.h
+> +++ b/tools/testing/selftests/bpf/bpf_helpers.h
+> @@ -232,6 +232,9 @@ static int (*bpf_skb_pull_data)(void *, int len) =
+>  #elif defined(__TARGET_ARCH_s930x)
+>         #define bpf_target_s930x
+>         #define bpf_target_defined
+> +#elif defined(__TARGET_ARCH_arm)
+> +       #define bpf_target_arm
+> +       #define bpf_target_defined
+>  #elif defined(__TARGET_ARCH_arm64)
+>         #define bpf_target_arm64
+>         #define bpf_target_defined
+> @@ -254,6 +257,8 @@ static int (*bpf_skb_pull_data)(void *, int len) =
+>         #define bpf_target_x86
+>  #elif defined(__s390x__)
+>         #define bpf_target_s930x
+> +#elif defined(__arm__)
+> +       #define bpf_target_arm
+>  #elif defined(__aarch64__)
+>         #define bpf_target_arm64
+>  #elif defined(__mips__)
+> @@ -291,6 +296,19 @@ static int (*bpf_skb_pull_data)(void *, int len) =
+>  #define PT_REGS_SP(x) ((x)->gprs[15])
+>  #define PT_REGS_IP(x) ((x)->psw.addr)
+>
+> +#elif defined(bpf_target_arm)
+> +
+> +#define PT_REGS_PARM1(x) ((x)->uregs[0])
+> +#define PT_REGS_PARM2(x) ((x)->uregs[1])
+> +#define PT_REGS_PARM3(x) ((x)->uregs[2])
+> +#define PT_REGS_PARM4(x) ((x)->uregs[3])
+> +#define PT_REGS_PARM5(x) ((x)->uregs[4])
+> +#define PT_REGS_RET(x) ((x)->uregs[14])
+> +#define PT_REGS_FP(x) ((x)->uregs[11]) /* Works only with CONFIG_FRAME_POINTER */
+> +#define PT_REGS_RC(x) ((x)->uregs[0])
+> +#define PT_REGS_SP(x) ((x)->uregs[13])
+> +#define PT_REGS_IP(x) ((x)->uregs[12])
+> +
+>  #elif defined(bpf_target_arm64)
+>
+>  #define PT_REGS_PARM1(x) ((x)->regs[0])
+> --
+> 2.20.1
+>
