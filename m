@@ -2,359 +2,126 @@ Return-Path: <SRS0=/NIo=RH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19B01C43381
-	for <bpf@archiver.kernel.org>; Mon,  4 Mar 2019 11:19:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDAAFC43381
+	for <bpf@archiver.kernel.org>; Mon,  4 Mar 2019 13:55:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D240220835
-	for <bpf@archiver.kernel.org>; Mon,  4 Mar 2019 11:19:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B59B8205C9
+	for <bpf@archiver.kernel.org>; Mon,  4 Mar 2019 13:55:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726090AbfCDLTZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 4 Mar 2019 06:19:25 -0500
-Received: from www62.your-server.de ([213.133.104.62]:60646 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726360AbfCDLTZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 4 Mar 2019 06:19:25 -0500
-Received: from [83.78.160.158] (helo=localhost)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1h0lct-0007ZV-Rl; Mon, 04 Mar 2019 12:19:20 +0100
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     davem@davemloft.net
-Cc:     daniel@iogearbox.net, ast@kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: pull-request: bpf-next 2019-03-04
-Date:   Mon,  4 Mar 2019 12:19:19 +0100
-Message-Id: <20190304111919.28550-1-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.9.5
+        id S1726094AbfCDNzZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 4 Mar 2019 08:55:25 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:4210 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726032AbfCDNzZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 4 Mar 2019 08:55:25 -0500
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 275739E8D1F927BB9521;
+        Mon,  4 Mar 2019 21:55:21 +0800 (CST)
+Received: from localhost (10.177.31.96) by DGGEMS410-HUB.china.huawei.com
+ (10.3.19.210) with Microsoft SMTP Server id 14.3.408.0; Mon, 4 Mar 2019
+ 21:55:14 +0800
+From:   Yue Haibing <yuehaibing@huawei.com>
+To:     <mcgrof@kernel.org>, <keescook@chromium.org>,
+        <adobriyan@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH] proc/sysctl: Fix NULL pointer dereference in put_links
+Date:   Mon, 4 Mar 2019 21:54:38 +0800
+Message-ID: <20190304135438.29792-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.100.2/25377/Sun Mar  3 11:37:14 2019)
+Content-Type: text/plain
+X-Originating-IP: [10.177.31.96]
+X-CFilter-Loop: Reflected
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi David,
+From: YueHaibing <yuehaibing@huawei.com>
 
-The following pull-request contains BPF updates for your *net-next* tree.
+Syzkaller report this:
 
-The main changes are:
+kasan: GPF could be caused by NULL-ptr deref or user memory access
+general protection fault: 0000 [#1] SMP KASAN PTI
+CPU: 1 PID: 5373 Comm: syz-executor.0 Not tainted 5.0.0-rc8+ #3
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.10.2-1ubuntu1 04/01/2014
+RIP: 0010:put_links+0x101/0x440 fs/proc/proc_sysctl.c:1599
+Code: 00 0f 85 3a 03 00 00 48 8b 43 38 48 89 44 24 20 48 83 c0 38 48 89 c2 48 89 44 24 28 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c 02 00 0f 85 fe 02 00 00 48 8b 74 24 20 48 c7 c7 60 2a 9d 91
+RSP: 0018:ffff8881d828f238 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: ffff8881e01b1140 RCX: ffffffff8ee98267
+RDX: 0000000000000007 RSI: ffffc90001479000 RDI: ffff8881e01b1178
+RBP: dffffc0000000000 R08: ffffed103ee27259 R09: ffffed103ee27259
+R10: 0000000000000001 R11: ffffed103ee27258 R12: fffffffffffffff4
+R13: 0000000000000006 R14: ffff8881f59838c0 R15: dffffc0000000000
+FS:  00007f072254f700(0000) GS:ffff8881f7100000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff8b286668 CR3: 00000001f0542002 CR4: 00000000007606e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+PKRU: 55555554
+Call Trace:
+ drop_sysctl_table+0x152/0x9f0 fs/proc/proc_sysctl.c:1629
+ get_subdir fs/proc/proc_sysctl.c:1022 [inline]
+ __register_sysctl_table+0xd65/0x1090 fs/proc/proc_sysctl.c:1335
+ ? 0xffffffffc1a18000
+ br_netfilter_init+0xbc/0x1000 [br_netfilter]
+ ? 0xffffffffc1a18000
+ ? 0xffffffffc1a18000
+ do_one_initcall+0xfa/0x5ca init/main.c:887
+ do_init_module+0x204/0x5f6 kernel/module.c:3460
+ load_module+0x66b2/0x8570 kernel/module.c:3808
+ __do_sys_finit_module+0x238/0x2a0 kernel/module.c:3902
+ do_syscall_64+0x147/0x600 arch/x86/entry/common.c:290
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x462e99
+Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f072254ec58 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
+RAX: ffffffffffffffda RBX: 000000000073bf00 RCX: 0000000000462e99
+RDX: 0000000000000000 RSI: 0000000020000280 RDI: 0000000000000003
+RBP: 00007f072254ec70 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f072254f6bc
+R13: 00000000004bcefa R14: 00000000006f6fb0 R15: 0000000000000004
+Modules linked in: br_netfilter(+) dvb_usb_dibusb_mc_common dib3000mc dibx000_common dvb_usb_dibusb_common dvb_usb_dw2102 dvb_usb classmate_laptop palmas_regulator cn videobuf2_v4l2 v4l2_common snd_soc_bd28623 mptbase snd_usb_usx2y snd_usbmidi_lib snd_rawmidi wmi libnvdimm lockd sunrpc grace rc_kworld_pc150u rc_core rtc_da9063 sha1_ssse3 i2c_cros_ec_tunnel adxl34x_spi adxl34x nfnetlink lib80211 i5500_temp dvb_as102 dvb_core videobuf2_common videodev media videobuf2_vmalloc videobuf2_memops udc_core lnbp22 leds_lp3952 hid_roccat_ryos s1d13xxxfb mtd vport_geneve openvswitch nf_conncount nf_nat_ipv6 nsh geneve udp_tunnel ip6_udp_tunnel snd_soc_mt6351 sis_agp phylink snd_soc_adau1761_spi snd_soc_adau1761 snd_soc_adau17x1 snd_soc_core snd_pcm_dmaengine ac97_bus snd_compress snd_soc_adau_utils snd_soc_sigmadsp_regmap snd_soc_sigmadsp raid_class hid_roccat_konepure hid_roccat_common hid_roccat c2port_duramar2150 core mdio_bcm_unimac iptable_security iptable_raw iptable_mangle
+ iptable_nat nf_nat_ipv4 nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 iptable_filter bpfilter ip6_vti ip_vti ip_gre ipip sit tunnel4 ip_tunnel hsr veth netdevsim devlink vxcan batman_adv cfg80211 rfkill chnl_net caif nlmon dummy team bonding vcan bridge stp llc ip6_gre gre ip6_tunnel tunnel6 tun crct10dif_pclmul crc32_pclmul crc32c_intel ghash_clmulni_intel joydev mousedev ide_pci_generic piix aesni_intel aes_x86_64 ide_core crypto_simd atkbd cryptd glue_helper serio_raw ata_generic pata_acpi i2c_piix4 floppy sch_fq_codel ip_tables x_tables ipv6 [last unloaded: lm73]
+Dumping ftrace buffer:
+   (ftrace buffer empty)
+---[ end trace 770020de38961fd0 ]---
 
-1) Add AF_XDP support to libbpf. Rationale is to facilitate writing
-   AF_XDP applications by offering higher-level APIs that hide many
-   of the details of the AF_XDP uapi. Sample programs are converted
-   over to this new interface as well, from Magnus.
+A new dir entry can be created in get_subdir and its header->parent is set
+to NULL. Only after insert_header success, it will be set to 'dir'.
+However in err handling path of get_subdir, drop_sysctl_table maybe called
+on 'new->header' regardless value of header->parent. Then put_links
+be called, which triggers NULL-ptr deref when access the member of
+header->parent in xlate_dir.
 
-2) Introduce a new cant_sleep() macro for annotation of functions
-   that cannot sleep and use it in BPF_PROG_RUN() to assert that
-   BPF programs run under preemption disabled context, from Peter.
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Fixes: 0e47c99d7fe25 ("sysctl: Replace root_list with links between sysctl_table_sets")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ fs/proc/proc_sysctl.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-3) Introduce per BPF prog stats in order to monitor the usage
-   of BPF; this is controlled by kernel.bpf_stats_enabled sysctl
-   knob where monitoring tools can make use of this to efficiently
-   determine the average cost of programs, from Alexei.
+diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+index 4d598a3..4c2a05a 100644
+--- a/fs/proc/proc_sysctl.c
++++ b/fs/proc/proc_sysctl.c
+@@ -1626,7 +1626,8 @@ static void drop_sysctl_table(struct ctl_table_header *header)
+ 	if (--header->nreg)
+ 		return;
+ 
+-	put_links(header);
++	if (parent)
++		put_links(header);
+ 	start_unregistering(header);
+ 	if (!--header->count)
+ 		kfree_rcu(header, rcu);
+-- 
+2.7.0
 
-4) Split up BPF selftest's test_progs similarly as we already
-   did with test_verifier. This allows to further reduce merge
-   conflicts in future and to get more structure into our
-   quickly growing BPF selftest suite, from Stanislav.
 
-5) Fix a bug in BTF's dedup algorithm which can cause an infinite
-   loop in some circumstances; also various BPF doc fixes and
-   improvements, from Andrii.
-
-6) Various BPF sample cleanups and migration to libbpf in order
-   to further isolate the old sample loader code (so we can get
-   rid of it at some point), from Jakub.
-
-7) Add a new BPF helper for BPF cgroup skb progs that allows
-   to set ECN CE code point and a Host Bandwidth Manager (HBM)
-   sample program for limiting the bandwidth used by v2 cgroups,
-   from Lawrence.
-
-8) Enable write access to skb->queue_mapping from tc BPF egress
-   programs in order to let BPF pick TX queue, from Jesper.
-
-9) Fix a bug in BPF spinlock handling for map-in-map which did
-   not propagate spin_lock_off to the meta map, from Yonghong.
-
-10) Fix a bug in the new per-CPU BPF prog counters to properly
-    initialize stats for each CPU, from Eric.
-
-11) Add various BPF helper prototypes to selftest's bpf_helpers.h,
-    from Willem.
-
-12) Fix various BPF samples bugs in XDP and tracing progs,
-    from Toke, Daniel and Yonghong.
-
-13) Silence preemption splat in test_bpf after BPF_PROG_RUN()
-    enforces it now everywhere, from Anders.
-
-14) Fix a signedness bug in libbpf's btf_dedup_ref_type() to
-    get error handling working, from Dan.
-
-15) Fix bpftool documentation and auto-completion with regards
-    to stream_{verdict,parser} attach types, from Alban.
-
-Please consider pulling these changes from:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-
-Thanks a lot!
-
-----------------------------------------------------------------
-
-The following changes since commit c9b747dbc2036c917b1067fbb78dc38b105c4454:
-
-  bnx2x: Remove set but not used variable 'mfw_vn' (2019-02-18 16:47:32 -0800)
-
-are available in the git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git 
-
-for you to fetch changes up to 87dab7c3d54ce0f1ff6b54840bf7279d0944bc6a:
-
-  bpf: add test cases for non-pointer sanitiation logic (2019-03-04 10:54:20 +0100)
-
-----------------------------------------------------------------
-Alban Crequy (1):
-      bpf: bpftool, fix documentation for attach types
-
-Alexei Starovoitov (9):
-      seccomp, bpf: disable preemption before calling into bpf prog
-      bpf: enable program stats
-      bpf: expose program stats via bpf_prog_info
-      tools/bpf: sync bpf.h into tools
-      tools/bpftool: recognize bpf_prog_info run_time_ns and run_cnt
-      Merge branch 'inner_map_spin_lock-fix'
-      bpf: fix build without bpf_syscall
-      Merge branch 'bpf_skb_ecn_set_ce'
-      Merge branch 'split-test_progs'
-
-Anders Roxell (1):
-      bpf: test_bpf: turn off preemption in function __run_once
-
-Andrii Nakryiko (8):
-      selftests/bpf: fix btf_dedup testing code
-      libbpf: fix formatting for btf_ext__get_raw_data
-      btf: allow to customize dedup hash table size
-      btf: fix bug with resolving STRUCT/UNION into corresponding FWD
-      selftests/bpf: add btf_dedup test of FWD/STRUCT resolution
-      docs/btf: fix typos, improve wording
-      docs/btf: reflow text to fill up to 78 characters
-      docs/bpf: minor casing/punctuation fixes
-
-Dan Carpenter (1):
-      tools/libbpf: signedness bug in btf_dedup_ref_type()
-
-Daniel Borkmann (6):
-      Merge branch 'bpf-libbpf-af-xdp'
-      Merge branch 'bpf-prog-stats'
-      Merge branch 'bpf-samples-improvements'
-      Merge branch 'bpf-dedup-fixes'
-      Merge branch 'bpf-doc-improvements'
-      bpf: add test cases for non-pointer sanitiation logic
-
-Daniel T. Lee (1):
-      samples: bpf: fix: broken sample regarding removed function
-
-Eric Dumazet (1):
-      bpf: fix u64_stats_init() usage in bpf_prog_alloc()
-
-Jakub Kicinski (5):
-      samples: bpf: force IPv4 in ping
-      samples: bpf: remove load_sock_ops in favour of bpftool
-      tools: libbpf: add a correctly named define for map iteration
-      samples: bpf: use libbpf where easy
-      tools: libbpf: make sure readelf shows full names in build checks
-
-Jesper Dangaard Brouer (1):
-      bpf: add skb->queue_mapping write access from tc clsact
-
-Magnus Karlsson (3):
-      libbpf: add support for using AF_XDP sockets
-      samples/bpf: convert xdpsock to use libbpf for AF_XDP access
-      xsk: add FAQ to facilitate for first time users
-
-Peter Zijlstra (1):
-      bpf: check that BPF programs run with preemption disabled
-
-Stanislav Fomichev (10):
-      bpf/test_run: fix unkillable BPF_PROG_TEST_RUN for flow dissector
-      selftests/bpf: make sure signal interrupts BPF_PROG_TEST_RUN
-      selftests/bpf: use __bpf_constant_htons in test_prog.c for flow dissector
-      selftests: bpf: break up test_progs - preparations
-      selftests: bpf: break up test_progs - pkt access
-      selftests: bpf: break up test_progs - xdp
-      selftests: bpf: break up test_progs - stackmap
-      selftests: bpf: break up test_progs - tracepoint
-      selftests: bpf: break up test_progs - spinlock
-      selftests: bpf: break up test_progs - misc
-
-Toke Høiland-Jørgensen (1):
-      samples/bpf: Fix dummy program unloading for xdp_redirect samples
-
-Willem de Bruijn (1):
-      bpf: add missing entries to bpf_helpers.h
-
-Yonghong Song (4):
-      bpf: set inner_map_meta->spin_lock_off correctly
-      tools/bpf: selftests: add map lookup to test_map_in_map bpf prog
-      selftests/bpf: set unlimited RLIMIT_MEMLOCK for test_sock_fields
-      samples/bpf: silence compiler warning for xdpsock_user.c
-
-brakmo (5):
-      bpf: add bpf helper bpf_skb_ecn_set_ce
-      bpf: sync bpf.h to tools and update bpf_helpers.h
-      bpf: Sample HBM BPF program to limit egress bw
-      bpf: User program for testing HBM
-      bpf: HBM test script
-
- Documentation/bpf/bpf_design_QA.rst                |   24 +-
- Documentation/bpf/btf.rst                          |  316 ++--
- Documentation/networking/af_xdp.rst                |   36 +-
- Documentation/networking/filter.txt                |    2 +-
- include/linux/bpf.h                                |    9 +
- include/linux/filter.h                             |   20 +-
- include/linux/kernel.h                             |   14 +-
- include/uapi/linux/bpf.h                           |   12 +-
- kernel/bpf/core.c                                  |   37 +-
- kernel/bpf/map_in_map.c                            |    1 +
- kernel/bpf/syscall.c                               |   39 +-
- kernel/bpf/verifier.c                              |    7 +-
- kernel/sched/core.c                                |   28 +
- kernel/seccomp.c                                   |    2 +
- kernel/sysctl.c                                    |   37 +
- lib/test_bpf.c                                     |    2 +
- net/bpf/test_run.c                                 |   26 +-
- net/core/filter.c                                  |   44 +-
- samples/bpf/.gitignore                             |    1 -
- samples/bpf/Makefile                               |   14 +-
- samples/bpf/do_hbm_test.sh                         |  436 +++++
- samples/bpf/fds_example.c                          |   10 +-
- samples/bpf/hbm.c                                  |  441 +++++
- samples/bpf/hbm.h                                  |   31 +
- samples/bpf/hbm_kern.h                             |  137 ++
- samples/bpf/hbm_out_kern.c                         |  157 ++
- samples/bpf/load_sock_ops.c                        |   97 -
- samples/bpf/sock_example.c                         |    2 +-
- samples/bpf/sockex1_user.c                         |   25 +-
- samples/bpf/sockex2_user.c                         |   23 +-
- samples/bpf/sockex3_user.c                         |    2 +-
- samples/bpf/task_fd_query_kern.c                   |    2 +-
- samples/bpf/task_fd_query_user.c                   |    2 +-
- samples/bpf/tcp_basertt_kern.c                     |    2 +-
- samples/bpf/tcp_bpf.readme                         |   14 +-
- samples/bpf/tcp_bufs_kern.c                        |    2 +-
- samples/bpf/tcp_clamp_kern.c                       |    2 +-
- samples/bpf/tcp_cong_kern.c                        |    2 +-
- samples/bpf/tcp_iw_kern.c                          |    2 +-
- samples/bpf/tcp_rwnd_kern.c                        |    2 +-
- samples/bpf/tcp_synrto_kern.c                      |    2 +-
- samples/bpf/tcp_tos_reflect_kern.c                 |    2 +-
- samples/bpf/tracex2_user.c                         |    2 +-
- samples/bpf/tracex3_kern.c                         |    2 +-
- samples/bpf/xdp_redirect_map_user.c                |    2 +-
- samples/bpf/xdp_redirect_user.c                    |    2 +-
- samples/bpf/xdpsock.h                              |   11 -
- samples/bpf/xdpsock_kern.c                         |   56 -
- samples/bpf/xdpsock_user.c                         |  841 +++-----
- tools/bpf/bpftool/Documentation/bpftool-prog.rst   |    6 +-
- tools/bpf/bpftool/bash-completion/bpftool          |    4 +-
- tools/bpf/bpftool/prog.c                           |   13 +-
- tools/include/uapi/linux/bpf.h                     |   12 +-
- tools/include/uapi/linux/ethtool.h                 |   51 +
- tools/include/uapi/linux/if_xdp.h                  |   78 +
- tools/lib/bpf/Build                                |    2 +-
- tools/lib/bpf/Makefile                             |    9 +-
- tools/lib/bpf/README.rst                           |   15 +-
- tools/lib/bpf/btf.c                                |   76 +-
- tools/lib/bpf/btf.h                                |    3 +-
- tools/lib/bpf/libbpf.c                             |    8 +-
- tools/lib/bpf/libbpf.h                             |    3 +-
- tools/lib/bpf/libbpf.map                           |    6 +
- tools/lib/bpf/xsk.c                                |  723 +++++++
- tools/lib/bpf/xsk.h                                |  203 ++
- tools/perf/util/bpf-loader.c                       |    4 +-
- tools/testing/selftests/bpf/.gitignore             |    1 +
- tools/testing/selftests/bpf/Makefile               |   27 +-
- tools/testing/selftests/bpf/bpf_helpers.h          |   32 +
- tools/testing/selftests/bpf/prog_tests/.gitignore  |    1 +
- .../testing/selftests/bpf/prog_tests/bpf_obj_id.c  |  249 +++
- .../selftests/bpf/prog_tests/flow_dissector.c      |   72 +
- .../selftests/bpf/prog_tests/get_stack_raw_tp.c    |  139 ++
- tools/testing/selftests/bpf/prog_tests/l4lb_all.c  |   90 +
- tools/testing/selftests/bpf/prog_tests/map_lock.c  |   75 +
- tools/testing/selftests/bpf/prog_tests/obj_name.c  |   71 +
- .../testing/selftests/bpf/prog_tests/pkt_access.c  |   29 +
- .../selftests/bpf/prog_tests/pkt_md_access.c       |   24 +
- .../selftests/bpf/prog_tests/prog_run_xattr.c      |   49 +
- .../selftests/bpf/prog_tests/queue_stack_map.c     |  103 +
- .../selftests/bpf/prog_tests/reference_tracking.c  |   48 +
- .../selftests/bpf/prog_tests/signal_pending.c      |   48 +
- tools/testing/selftests/bpf/prog_tests/spinlock.c  |   29 +
- .../selftests/bpf/prog_tests/stacktrace_build_id.c |  165 ++
- .../bpf/prog_tests/stacktrace_build_id_nmi.c       |  150 ++
- .../selftests/bpf/prog_tests/stacktrace_map.c      |  103 +
- .../bpf/prog_tests/stacktrace_map_raw_tp.c         |   59 +
- .../selftests/bpf/prog_tests/task_fd_query_rawtp.c |   78 +
- .../selftests/bpf/prog_tests/task_fd_query_tp.c    |   82 +
- .../testing/selftests/bpf/prog_tests/tcp_estats.c  |   19 +
- .../selftests/bpf/prog_tests/tp_attach_query.c     |  132 ++
- tools/testing/selftests/bpf/prog_tests/xdp.c       |   46 +
- .../selftests/bpf/prog_tests/xdp_adjust_tail.c     |   31 +
- .../selftests/bpf/prog_tests/xdp_noinline.c        |   82 +
- .../testing/selftests/bpf/progs/test_map_in_map.c  |    4 +
- tools/testing/selftests/bpf/test_btf.c             |   49 +-
- tools/testing/selftests/bpf/test_libbpf_open.c     |    2 +-
- tools/testing/selftests/bpf/test_progs.c           | 1999 +-------------------
- tools/testing/selftests/bpf/test_progs.h           |   93 +
- tools/testing/selftests/bpf/test_sock_fields.c     |    1 +
- .../selftests/bpf/verifier/value_ptr_arith.c       |   44 +-
- 101 files changed, 5395 insertions(+), 3029 deletions(-)
- create mode 100755 samples/bpf/do_hbm_test.sh
- create mode 100644 samples/bpf/hbm.c
- create mode 100644 samples/bpf/hbm.h
- create mode 100644 samples/bpf/hbm_kern.h
- create mode 100644 samples/bpf/hbm_out_kern.c
- delete mode 100644 samples/bpf/load_sock_ops.c
- delete mode 100644 samples/bpf/xdpsock.h
- delete mode 100644 samples/bpf/xdpsock_kern.c
- create mode 100644 tools/include/uapi/linux/ethtool.h
- create mode 100644 tools/include/uapi/linux/if_xdp.h
- create mode 100644 tools/lib/bpf/xsk.c
- create mode 100644 tools/lib/bpf/xsk.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/.gitignore
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_obj_id.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/flow_dissector.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/l4lb_all.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/map_lock.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/obj_name.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/pkt_access.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/pkt_md_access.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/prog_run_xattr.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/reference_tracking.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/signal_pending.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/spinlock.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/stacktrace_map.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/stacktrace_map_raw_tp.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/task_fd_query_rawtp.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tcp_estats.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_noinline.c
- create mode 100644 tools/testing/selftests/bpf/test_progs.h
