@@ -2,166 +2,162 @@ Return-Path: <SRS0=/NIo=RH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79566C10F03
-	for <bpf@archiver.kernel.org>; Mon,  4 Mar 2019 21:00:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF2D4C4360F
+	for <bpf@archiver.kernel.org>; Mon,  4 Mar 2019 22:23:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 34CC2206B6
-	for <bpf@archiver.kernel.org>; Mon,  4 Mar 2019 21:00:00 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="QjxMuIae";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="L3u7vkmy"
+	by mail.kernel.org (Postfix) with ESMTP id 797E620835
+	for <bpf@archiver.kernel.org>; Mon,  4 Mar 2019 22:23:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726294AbfCDU7x (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 4 Mar 2019 15:59:53 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:52646 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726061AbfCDU7w (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 4 Mar 2019 15:59:52 -0500
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x24Kr7vi022386;
-        Mon, 4 Mar 2019 12:59:22 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=8igHvu0nV4EvAZN8fURXO51CG5uLbRdKR8zJ2kZI9O8=;
- b=QjxMuIaeCDg/MWGmhfpf1P0UXjTyB4yFZRFGonT2qbNG7lVYSECsiXx6RdJlqIjr6da8
- J7YS/fRyjNgLEzc+1+oSjQAB7ItyR8Ng1u7PQ9lkuddp4yk3mpQdonRo6OGFrMlWthFb
- lKMX9Rs+gnuzQoQr4zhKNQiiX1MYpMiNbVY= 
-Received: from maileast.thefacebook.com ([199.201.65.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2r1bcg814x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 04 Mar 2019 12:59:22 -0800
-Received: from frc-hub02.TheFacebook.com (2620:10d:c021:18::172) by
- frc-hub01.TheFacebook.com (2620:10d:c021:18::171) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1713.5; Mon, 4 Mar 2019 12:59:21 -0800
-Received: from NAM04-BN3-obe.outbound.protection.outlook.com (192.168.183.28)
- by o365-in.thefacebook.com (192.168.177.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
- via Frontend Transport; Mon, 4 Mar 2019 12:59:21 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector1-fb-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8igHvu0nV4EvAZN8fURXO51CG5uLbRdKR8zJ2kZI9O8=;
- b=L3u7vkmyB9wGhjEUeUTZ0eSJBibJhwF8/qNoB73hGwVBRXOWBvh51NV1kTzanZWW6XBZNerHzPfZwxihX9ov8P18ZyLkEfRCY7pz3EExudnv5uy+HfSDzeDn+YsEuQel7nPY3RmBU7HH4SOop1j8spa6bPdhZ4wR/FkHXAibFQU=
-Received: from MWHPR15MB1165.namprd15.prod.outlook.com (10.175.2.19) by
- MWHPR15MB1822.namprd15.prod.outlook.com (10.174.255.138) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1665.17; Mon, 4 Mar 2019 20:59:00 +0000
-Received: from MWHPR15MB1165.namprd15.prod.outlook.com
- ([fe80::f190:6de5:7e3:e065]) by MWHPR15MB1165.namprd15.prod.outlook.com
- ([fe80::f190:6de5:7e3:e065%6]) with mapi id 15.20.1665.020; Mon, 4 Mar 2019
- 20:59:00 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     Christian Brauner <christian@brauner.io>
-CC:     Arnd Bergmann <arnd@arndb.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "Kees Cook" <keescook@chromium.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        Martin Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: Re: [PATCH] bpf: fix sysctl.c warning
-Thread-Topic: [PATCH] bpf: fix sysctl.c warning
-Thread-Index: AQHU0sm+UeSSE6xtCkCep443A8dW2KX79B2AgAAAfIA=
-Date:   Mon, 4 Mar 2019 20:58:59 +0000
-Message-ID: <C94EB246-92FE-4A8D-AD60-C3D6F8292C0E@fb.com>
-References: <20190304203443.1992942-1-arnd@arndb.de>
- <20190304205714.rhpgpp26rbaghs2i@brauner.io>
-In-Reply-To: <20190304205714.rhpgpp26rbaghs2i@brauner.io>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3445.102.3)
-x-originating-ip: [2620:10d:c090:200::3:1d00]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a91502ec-3858-47a0-d3c9-08d6a0e439bb
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600127)(711020)(4605104)(2017052603328)(7153060)(7193020);SRVR:MWHPR15MB1822;
-x-ms-traffictypediagnostic: MWHPR15MB1822:
-x-microsoft-exchange-diagnostics: 1;MWHPR15MB1822;20:L5naOpr+qwGqb/88Fn9zrfAzc6JYrvy4PbJ327cr9/sCV4dUMDo5MEjqXABjcsb4gwWUJ67R7NSJSTihm7UC8SrYZ0uAQJX8SOlKPPkTLCFjEw0D2lqQWkiUAtozuzsbQ9FyAEEFSF4VnYd46JOZDRI5cRUSiXGcbNA7tXBdEhY=
-x-microsoft-antispam-prvs: <MWHPR15MB1822BF5018C4FB25E3F7E590B3710@MWHPR15MB1822.namprd15.prod.outlook.com>
-x-forefront-prvs: 09669DB681
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(376002)(396003)(136003)(39860400002)(366004)(199004)(189003)(8676002)(82746002)(81166006)(68736007)(81156014)(57306001)(97736004)(50226002)(14454004)(4326008)(71200400001)(7416002)(33656002)(2616005)(2906002)(476003)(486006)(83716004)(229853002)(25786009)(186003)(53936002)(71190400001)(6512007)(54906003)(6506007)(102836004)(11346002)(105586002)(46003)(106356001)(6116002)(446003)(6486002)(6436002)(478600001)(7736002)(76176011)(86362001)(53546011)(99286004)(5660300002)(6246003)(256004)(316002)(8936002)(6916009)(14444005)(36756003)(305945005);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR15MB1822;H:MWHPR15MB1165.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: xR4WUVecHAYBcso/70f4bUbJFewq5LygqcZx2J3RLxm0ec4GSrGsYDdWW/1OECcm6NUCiypakZS9Cgt/LWgPGR5e5UfjlZrtEYi/zxxGihCKYywe7RqpszjvxAczjpds12RMq859XaOA1nP2RRmD2EALt7xWdNs3YAMzjdSPKdQr0vgViAr1nIz3qxDMbIta4IC9eosyaUR6aZs6PXyUN9QRLjsGi+p3V1HY9dt9SyGSFKkWOS8XuRg8i/pA35XNzdL5OncR57JKYOqOuTYwBIy6z8a7XJvO29gLfDpRsj0leZg3BsQz346jaqkRXRgIvBKCb+rfImVJ4NFRvTV2sMfEaYq9o/qinfDVbdCAV+8Gwkmm7bOlEpMHISZSCj3Hl2jbvyo/a6Dyb85qLtXp7H6x6M5id3ywvFL544Chc6Y=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <9C1F0496849C3E4E80BAAE6BB9CE8DD3@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1726178AbfCDWXH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 4 Mar 2019 17:23:07 -0500
+Received: from mail-it1-f198.google.com ([209.85.166.198]:34236 "EHLO
+        mail-it1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726054AbfCDWXG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 4 Mar 2019 17:23:06 -0500
+Received: by mail-it1-f198.google.com with SMTP id x87so607103ita.1
+        for <bpf@vger.kernel.org>; Mon, 04 Mar 2019 14:23:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=wVsdx1+3EJK89k7jT6emg3o+0gy978hZeVywx1Fpvco=;
+        b=IDJ7A/Xu129RXaNwDuq7bANKy57nHlEyNXVcJ4ROHqBhI3PkIns21EjwvWM/COHB4R
+         BM4smEa129SEOHbNBcR09ldA+RXoTHZdJWPEkmjfuFyOjWAg+XDo4RdL9exiLcDwiIve
+         hpKtcQc2arYh8h/pVbPOTptrl6PixS9hYKCVJHSb+qoelDYyVoPzTA9xbLSbU7+JzL87
+         /tTIJn2BJK+zTjevDUCnv9TVNRHMJJ/tPXEo7/UhVxYC1guojEg6W2qDm4VFVUEKfyO0
+         id+yK+BBmqE8TxvgtCLBxq8/JgIT97h3cfiHgeD/9goQFw/p1GdbJ6xdnet+bVaJB1Ie
+         UgfQ==
+X-Gm-Message-State: APjAAAXP5D+Z8P/FsWzEIwltDJVMecZte/IZ7eUrcR+cXl2bZE/nnJIV
+        w8u/LI6IXhHwX2q/02hPL/tX9Wd1mH3dGDU2CGIiMmCLwtRm
+X-Google-Smtp-Source: APXvYqwpjPCoKQVzSXZNE7/Jt5zmATLG+a3jx2XFuzU1Cb2eq9UAaizi2E+/AgTriVaSYKC8byg0dTwOxyhvTRElXVXxdl0wLtnt
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: a91502ec-3858-47a0-d3c9-08d6a0e439bb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Mar 2019 20:58:59.9130
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR15MB1822
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-03-04_11:,,
- signatures=0
-X-Proofpoint-Spam-Reason: safe
-X-FB-Internal: Safe
+X-Received: by 2002:a02:3f1d:: with SMTP id d29mr12430186jaa.4.1551738185498;
+ Mon, 04 Mar 2019 14:23:05 -0800 (PST)
+Date:   Mon, 04 Mar 2019 14:23:05 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000054cc6d05834c33d7@google.com>
+Subject: kernel BUG at include/linux/mm.h:LINE! (5)
+From:   syzbot <syzbot+5013d47539cdd43e7098@syzkaller.appspotmail.com>
+To:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, edumazet@google.com, kafai@fb.com,
+        kuznet@ms2.inr.ac.ru, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com,
+        yoshfuji@linux-ipv6.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Hello,
+
+syzbot found the following crash on:
+
+HEAD commit:    9e9322e5d28e selftest/net: Remove duplicate header
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=13516233200000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=47f2db597668ac40
+dashboard link: https://syzkaller.appspot.com/bug?extid=5013d47539cdd43e7098
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=148763eb200000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1416ff3d200000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+5013d47539cdd43e7098@syzkaller.appspotmail.com
+
+flags: 0x1fffc0000000000()
+raw: 01fffc0000000000 ffffea00025f6208 ffff88812fffc878 0000000000000000
+raw: 0000000000000000 0000000000000003 00000000ffffff7f 0000000000000000
+page dumped because: VM_BUG_ON_PAGE(page_ref_count(page) == 0)
+------------[ cut here ]------------
+kernel BUG at include/linux/mm.h:546!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 7872 Comm: syz-executor445 Not tainted 5.0.0-rc7+ #95
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+RIP: 0010:put_page_testzero include/linux/mm.h:546 [inline]
+RIP: 0010:put_page include/linux/mm.h:992 [inline]
+RIP: 0010:__skb_frag_unref include/linux/skbuff.h:2837 [inline]
+RIP: 0010:skb_release_data+0x5a5/0x7b0 net/core/skbuff.c:571
+Code: f0 fe ff e9 b6 fb ff ff e8 38 b9 01 fc 4c 8d 63 ff e9 c8 fc ff ff e8  
+2a b9 01 fc 48 c7 c6 80 c2 fe 87 4c 89 e7 e8 bb c6 2a fc <0f> 0b e8 14 b9  
+01 fc 4d 8d 66 0e 48 b8 00 00 00 00 00 fc ff df 4c
+RSP: 0018:ffff888086a0f708 EFLAGS: 00010293
+RAX: ffff8880a3590440 RBX: ffffea00025dfa34 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff81990662 RDI: ffffea00025dfa38
+RBP: ffff888086a0f770 R08: 000000000000003e R09: ffffed1015d03ef9
+R10: ffffed1015d03ef8 R11: ffff8880ae81f7c7 R12: ffffea00025dfa00
+R13: ffff8880a4398c40 R14: 0000000000000001 R15: dffffc0000000000
+FS:  00007fba67236700(0000) GS:ffff8880ae800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fba67235e78 CR3: 0000000099c9f000 CR4: 00000000001406f0
+Call Trace:
+  skb_release_all+0x4d/0x60 net/core/skbuff.c:631
+  __kfree_skb+0x16/0x30 net/core/skbuff.c:645
+  sk_wmem_free_skb include/net/sock.h:1463 [inline]
+  tcp_write_queue_purge+0x253/0x7d0 net/ipv4/tcp.c:2543
+  tcp_disconnect+0x402/0x1890 net/ipv4/tcp.c:2583
+  tcp_close+0xe37/0x10c0 net/ipv4/tcp.c:2384
+  tls_sk_proto_close+0x40d/0x7a0 net/tls/tls_main.c:291
+  inet_release+0x105/0x1f0 net/ipv4/af_inet.c:428
+  inet6_release+0x53/0x80 net/ipv6/af_inet6.c:473
+  __sock_release+0xd3/0x2b0 net/socket.c:579
+  sock_close+0x1b/0x30 net/socket.c:1162
+  __fput+0x2df/0x8d0 fs/file_table.c:278
+  ____fput+0x16/0x20 fs/file_table.c:309
+  task_work_run+0x14a/0x1c0 kernel/task_work.c:113
+  exit_task_work include/linux/task_work.h:22 [inline]
+  do_exit+0x92c/0x2fd0 kernel/exit.c:875
+  do_group_exit+0x135/0x370 kernel/exit.c:979
+  get_signal+0x399/0x1d50 kernel/signal.c:2575
+  do_signal+0x87/0x1940 arch/x86/kernel/signal.c:816
+  exit_to_usermode_loop+0x244/0x2c0 arch/x86/entry/common.c:162
+  prepare_exit_to_usermode arch/x86/entry/common.c:197 [inline]
+  syscall_return_slowpath arch/x86/entry/common.c:268 [inline]
+  do_syscall_64+0x52d/0x610 arch/x86/entry/common.c:293
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x447589
+Code: 6e 4d 6f 64 65 00 69 43 75 72 72 4f 66 66 73 00 69 4d 61 78 46 69 6c  
+65 53 69 7a 65 00 69 4d 61 78 46 69 6c 65 73 00 69 46 69 <6c> 65 4e 75 6d  
+44 69 67 69 74 73 00 62 44 65 6c 65 74 65 4f 6e 43
+RSP: 002b:00007fba67235d98 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+RAX: fffffffffffffe00 RBX: 00000000006ddc68 RCX: 0000000000447589
+RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00000000006ddc68
+RBP: 00000000006ddc60 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00000000006ddc6c
+R13: 0030656c69662f2e R14: 0000000000000000 R15: 0000000000000000
+Modules linked in:
+---[ end trace 3c84b12f07d7d40a ]---
+RIP: 0010:put_page_testzero include/linux/mm.h:546 [inline]
+RIP: 0010:put_page include/linux/mm.h:992 [inline]
+RIP: 0010:__skb_frag_unref include/linux/skbuff.h:2837 [inline]
+RIP: 0010:skb_release_data+0x5a5/0x7b0 net/core/skbuff.c:571
+Code: f0 fe ff e9 b6 fb ff ff e8 38 b9 01 fc 4c 8d 63 ff e9 c8 fc ff ff e8  
+2a b9 01 fc 48 c7 c6 80 c2 fe 87 4c 89 e7 e8 bb c6 2a fc <0f> 0b e8 14 b9  
+01 fc 4d 8d 66 0e 48 b8 00 00 00 00 00 fc ff df 4c
+RSP: 0018:ffff888086a0f708 EFLAGS: 00010293
+RAX: ffff8880a3590440 RBX: ffffea00025dfa34 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff81990662 RDI: ffffea00025dfa38
+RBP: ffff888086a0f770 R08: 000000000000003e R09: ffffed1015d03ef9
+R10: ffffed1015d03ef8 R11: ffff8880ae81f7c7 R12: ffffea00025dfa00
+R13: ffff8880a4398c40 R14: 0000000000000001 R15: dffffc0000000000
+FS:  00007fba67236700(0000) GS:ffff8880ae800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fba67235e78 CR3: 0000000099c9f000 CR4: 00000000001406f0
 
 
-> On Mar 4, 2019, at 12:57 PM, Christian Brauner <christian@brauner.io> wro=
-te:
->=20
-> On Mon, Mar 04, 2019 at 09:34:12PM +0100, Arnd Bergmann wrote:
->> When CONFIG_BPF_SYSCALL or CONFIG_SYSCTL is disabled, we get
->> a warning about an unused function:
->>=20
->> kernel/sysctl.c:3331:12: error: 'proc_dointvec_minmax_bpf_stats' defined=
- but not used [-Werror=3Dunused-function]
->> static int proc_dointvec_minmax_bpf_stats(struct ctl_table *table, int w=
-rite,
->>=20
->> The CONFIG_BPF_SYSCALL check was already handled, but the SYSCTL check
->> is needed on top.
->>=20
->> Fixes: 492ecee892c2 ("bpf: enable program stats")
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->=20
-> Reviewed-by: Christian Brauner <christian@brauner.io>
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Acked-by: Song Liu <songliubraving@fb.com>
-
->=20
->> ---
->> kernel/sysctl.c | 2 +-
->> 1 file changed, 1 insertion(+), 1 deletion(-)
->>=20
->> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
->> index 46a0d0a14a66..b3df3ab7ac28 100644
->> --- a/kernel/sysctl.c
->> +++ b/kernel/sysctl.c
->> @@ -3330,7 +3330,7 @@ int proc_doulongvec_ms_jiffies_minmax(struct ctl_t=
-able *table, int write,
->>=20
->> #endif /* CONFIG_PROC_SYSCTL */
->>=20
->> -#ifdef CONFIG_BPF_SYSCALL
->> +#if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_SYSCTL)
->> static int proc_dointvec_minmax_bpf_stats(struct ctl_table *table, int w=
-rite,
->> 					  void __user *buffer, size_t *lenp,
->> 					  loff_t *ppos)
->> --=20
->> 2.20.0
->>=20
-
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#bug-status-tracking for how to communicate with  
+syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
