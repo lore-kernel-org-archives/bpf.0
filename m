@@ -2,195 +2,191 @@ Return-Path: <SRS0=GR7L=RI=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FROM_EXCESS_BASE64,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DF25C4360F
-	for <bpf@archiver.kernel.org>; Tue,  5 Mar 2019 17:50:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD701C43381
+	for <bpf@archiver.kernel.org>; Tue,  5 Mar 2019 17:54:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 64C912133F
-	for <bpf@archiver.kernel.org>; Tue,  5 Mar 2019 17:50:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A5E8D20643
+	for <bpf@archiver.kernel.org>; Tue,  5 Mar 2019 17:54:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bQj6+SKR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jVgHsyJV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730674AbfCERuK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Mar 2019 12:50:10 -0500
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:41595 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730657AbfCERuK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Mar 2019 12:50:10 -0500
-Received: by mail-qk1-f194.google.com with SMTP id y15so5239608qki.8;
-        Tue, 05 Mar 2019 09:50:09 -0800 (PST)
+        id S1730777AbfCERye (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Mar 2019 12:54:34 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:46289 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730776AbfCERyd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Mar 2019 12:54:33 -0500
+Received: by mail-pf1-f194.google.com with SMTP id g6so6256563pfh.13;
+        Tue, 05 Mar 2019 09:54:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=IFkFr7Y6Krg1NTr7hv5uapqujzAWdjD3bdYd4iR22Kg=;
-        b=bQj6+SKREPX+Za+o11P/XlijNlvG8RSWZui0WgOL3yK0bDgijuSssx8qOcXJIfE2nD
-         6UMjJ5uD4RuekwLHs805AK/LQrc2fkMCIOYFx4j8AmSkNdSc3SOzOIqP9zAv77TdbRUg
-         Oe04u2N8M2GXdreporZHQlGOD06HUhx8xxwpMAeimCTtr66e7cMZh73Tn8whbiVR6LL9
-         O5g+PbTS4Prrm3IbjBqUKvz95OnVhnV/T6MgE15MUHRgRYwnyfFmKBlNmuh9EtRAyAz0
-         KzfP6hMtCnnF8LnJLzT575QS2nLiRfz+t4GaUD8lqPucjQFyK5vpxoIkdACSrbV2fNy7
-         ADCg==
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=8F1FmymjK0Tf2LUay5y+wZDuLQaa/D1etQXxlPvv9rQ=;
+        b=jVgHsyJVLXt3X9cukSYMxYlyfxbhiDRzzy8qMNVxlqOEmvBEP8prKFvP02megTcUh4
+         rxOfG8Dze7+ni3pTOcStQ++Tq3U0YyhFRUePXZoJLPbuE/NDpwXBExMqpxw8RCEq0Cs3
+         kkpa0oFeaE3UF+Xxkygq6nbrwepKaFoRbj2cvXe2uxbKUAPl4uVIuII/Y0nqwMAI6EEd
+         TR1Qxn/5mIuyFPtUPLhKmDGpzD/s45W5PUElD5k1yvDw9c5JyRCPcveynu7Ez0t+yz2S
+         LTjheegP3atunA+HS0AmP8wjT3GR/po4Jur0rFaLPu5BuHG6Ow60hVkrvUuYl9Pxb9Lg
+         r8Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=IFkFr7Y6Krg1NTr7hv5uapqujzAWdjD3bdYd4iR22Kg=;
-        b=EUgjPx58wdK9sqdKHwT1I3uuL9KVhZJgWg+YBSxIEAhq6MPpFpBK6dYxTbgdSkBvgc
-         ahby0CyKyFzknT9SXLxZ4uY8CH0UjikgJ4v77iV+SXC1Ec1MsKqsX4RUTy2aBeIakrV4
-         IRynNantAzyEO94PpQosJB5w2SCUk36BkF1i8Mvlp6DyYRZt8MD3hF1JD6558XdlZaPQ
-         A5zV5cJR4I01pQNJrtl6aev3WqZXyqMR1cwzv8mXu0wEY7338ULvRqbknzwSLNdcpiKG
-         76ENzeppyXQxhYdLL4Jm/DqpItKNYTsZWkGq5aI6HUtkPEdrnnWLOHrco94gaNAqhxoP
-         SFOg==
-X-Gm-Message-State: APjAAAV4RLDpQ0Jc0vBh2gXLWWqyRYKlYqfiW8nxfJG5fzz/0jqthnnA
-        PKXZHRnM1kjS5JoaZffavKo2GpByynB1/D9MeJk=
-X-Google-Smtp-Source: APXvYqyxmu+ImX9Kk7ztJ336lYiHQ8ceyTIAWuvdfAYso/Om4oWa2oW1kUIUnm1uzw9NGQ0WNaWi5nkuklIv55nfybE=
-X-Received: by 2002:a05:620a:164a:: with SMTP id c10mr2631125qko.3.1551808208585;
- Tue, 05 Mar 2019 09:50:08 -0800 (PST)
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=8F1FmymjK0Tf2LUay5y+wZDuLQaa/D1etQXxlPvv9rQ=;
+        b=T0SnAOnI4zXuD67XFKogQaF8m18cxjT3pnrXSvd9H1Ki73F7GucdC9BPoLIOCDCcBW
+         nzeUu7GkUYrqs2/O049ZBdMsu42a6VaAwD2woJ2XWyuhygTiW+prV40XmESQkOmXX6QJ
+         L53UVNJmqwGaAEsfVMfnIWcae0+RcttV7tlFFk5PkEB5+hz8IbKSBrq2P3e6ULBjmzk7
+         kRkRAarcPl+imZ9OgZg9eKrYqW8vzi6D9YEJfhYnfJDBCuNCAwaD7JSlw9gEn430IBjb
+         c9E84DhMa+tAadT557rJlBKV5v0xCxjALVESR/rRxIQzdIQE5MnoR0KcMdsbTQi7dvIQ
+         69Gg==
+X-Gm-Message-State: APjAAAVathMD7b42aqcscOQ6vC6VRH3Qfuuk8G7TaoeueNtatVnqGfD2
+        dEaWaucYRVfIATvEI+6Sg1Q=
+X-Google-Smtp-Source: APXvYqwVfbGAJ6cz7gw7IZkD74fSCmi+ztM62cGLFIryMtkSC4qQOvvPZ7G3kOwQ+0esTA+n8MO1rg==
+X-Received: by 2002:a63:4509:: with SMTP id s9mr2439039pga.420.1551808472332;
+        Tue, 05 Mar 2019 09:54:32 -0800 (PST)
+Received: from ?IPv6:2620:15c:2c1:200:55c7:81e6:c7d8:94b? ([2620:15c:2c1:200:55c7:81e6:c7d8:94b])
+        by smtp.gmail.com with ESMTPSA id g69sm24431520pfd.168.2019.03.05.09.54.31
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 05 Mar 2019 09:54:31 -0800 (PST)
+Subject: Re: kernel BUG at include/linux/mm.h:LINE! (5)
+To:     syzbot <syzbot+5013d47539cdd43e7098@syzkaller.appspotmail.com>,
+        ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, edumazet@google.com, kafai@fb.com,
+        kuznet@ms2.inr.ac.ru, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com,
+        Boris Pismenny <borisp@mellanox.com>,
+        Aviad Yehezkel <aviadye@mellanox.com>,
+        Dave Watson <davejwatson@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>
+References: <00000000000054cc6d05834c33d7@google.com>
+From:   Eric Dumazet <eric.dumazet@gmail.com>
+Message-ID: <9da74ea0-6f41-48e2-6dc8-91e75783839c@gmail.com>
+Date:   Tue, 5 Mar 2019 09:54:30 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-References: <20190305173126.167142-1-edumazet@google.com>
-In-Reply-To: <20190305173126.167142-1-edumazet@google.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Tue, 5 Mar 2019 18:49:57 +0100
-Message-ID: <CAJ+HfNixOVDPiQN+BqU1L7wM6Df5q+one8x88JU6wTrA_t4QVA@mail.gmail.com>
-Subject: Re: [PATCH net] xsk: fix potential crash in xsk_diag_put_umem()
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        netdev <netdev@vger.kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        bpf <bpf@vger.kernel.org>, syzbot <syzkaller@googlegroups.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <00000000000054cc6d05834c33d7@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 5 Mar 2019 at 18:41, Eric Dumazet <edumazet@google.com> wrote:
->
-> Fixes two typos in xsk_diag_put_umem()
->
-> syzbot reported the following crash :
->
-> kasan: CONFIG_KASAN_INLINE enabled
-> kasan: GPF could be caused by NULL-ptr deref or user memory access
-> general protection fault: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 1 PID: 7641 Comm: syz-executor946 Not tainted 5.0.0-rc7+ #95
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS G=
-oogle 01/01/2011
-> RIP: 0010:xsk_diag_put_umem net/xdp/xsk_diag.c:71 [inline]
-> RIP: 0010:xsk_diag_fill net/xdp/xsk_diag.c:113 [inline]
-> RIP: 0010:xsk_diag_dump+0xdcb/0x13a0 net/xdp/xsk_diag.c:143
-> Code: 8d be c0 04 00 00 48 89 f8 48 c1 e8 03 42 80 3c 20 00 0f 85 39 04 0=
-0 00 49 8b 96 c0 04 00 00 48 8d 7a 14 48 89 f8 48 c1 e8 03 <42> 0f b6 0c 20=
- 48 89 f8 83 e0 07 83 c0 03 38 c8 7c 08 84 c9 0f 85
-> RSP: 0018:ffff888090bcf2d8 EFLAGS: 00010203
-> RAX: 0000000000000002 RBX: ffff8880a0aacbc0 RCX: ffffffff86ffdc3c
-> RDX: 0000000000000000 RSI: ffffffff86ffdc70 RDI: 0000000000000014
-> RBP: ffff888090bcf438 R08: ffff88808e04a700 R09: ffffed1011c74174
-> R10: ffffed1011c74173 R11: ffff88808e3a0b9f R12: dffffc0000000000
-> R13: ffff888093a6d818 R14: ffff88808e365240 R15: ffff88808e3a0b40
-> FS:  00000000011ea880(0000) GS:ffff8880ae900000(0000) knlGS:0000000000000=
-000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000020000080 CR3: 000000008fa13000 CR4: 00000000001406e0
+
+
+On 03/04/2019 02:23 PM, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    9e9322e5d28e selftest/net: Remove duplicate header
+> git tree:       net-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=13516233200000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=47f2db597668ac40
+> dashboard link: https://syzkaller.appspot.com/bug?extid=5013d47539cdd43e7098
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=148763eb200000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1416ff3d200000
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+5013d47539cdd43e7098@syzkaller.appspotmail.com
+> 
+> flags: 0x1fffc0000000000()
+> raw: 01fffc0000000000 ffffea00025f6208 ffff88812fffc878 0000000000000000
+> raw: 0000000000000000 0000000000000003 00000000ffffff7f 0000000000000000
+> page dumped because: VM_BUG_ON_PAGE(page_ref_count(page) == 0)
+> ------------[ cut here ]------------
+> kernel BUG at include/linux/mm.h:546!
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 0 PID: 7872 Comm: syz-executor445 Not tainted 5.0.0-rc7+ #95
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:put_page_testzero include/linux/mm.h:546 [inline]
+> RIP: 0010:put_page include/linux/mm.h:992 [inline]
+> RIP: 0010:__skb_frag_unref include/linux/skbuff.h:2837 [inline]
+> RIP: 0010:skb_release_data+0x5a5/0x7b0 net/core/skbuff.c:571
+> Code: f0 fe ff e9 b6 fb ff ff e8 38 b9 01 fc 4c 8d 63 ff e9 c8 fc ff ff e8 2a b9 01 fc 48 c7 c6 80 c2 fe 87 4c 89 e7 e8 bb c6 2a fc <0f> 0b e8 14 b9 01 fc 4d 8d 66 0e 48 b8 00 00 00 00 00 fc ff df 4c
+> RSP: 0018:ffff888086a0f708 EFLAGS: 00010293
+> RAX: ffff8880a3590440 RBX: ffffea00025dfa34 RCX: 0000000000000000
+> RDX: 0000000000000000 RSI: ffffffff81990662 RDI: ffffea00025dfa38
+> RBP: ffff888086a0f770 R08: 000000000000003e R09: ffffed1015d03ef9
+> R10: ffffed1015d03ef8 R11: ffff8880ae81f7c7 R12: ffffea00025dfa00
+> R13: ffff8880a4398c40 R14: 0000000000000001 R15: dffffc0000000000
+> FS:  00007fba67236700(0000) GS:ffff8880ae800000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fba67235e78 CR3: 0000000099c9f000 CR4: 00000000001406f0
 > Call Trace:
->  netlink_dump+0x55d/0xfb0 net/netlink/af_netlink.c:2252
->  __netlink_dump_start+0x5b4/0x7e0 net/netlink/af_netlink.c:2360
->  netlink_dump_start include/linux/netlink.h:226 [inline]
->  xsk_diag_handler_dump+0x1b2/0x250 net/xdp/xsk_diag.c:170
->  __sock_diag_cmd net/core/sock_diag.c:232 [inline]
->  sock_diag_rcv_msg+0x322/0x410 net/core/sock_diag.c:263
->  netlink_rcv_skb+0x17a/0x460 net/netlink/af_netlink.c:2485
->  sock_diag_rcv+0x2b/0x40 net/core/sock_diag.c:274
->  netlink_unicast_kernel net/netlink/af_netlink.c:1310 [inline]
->  netlink_unicast+0x536/0x720 net/netlink/af_netlink.c:1336
->  netlink_sendmsg+0x8ae/0xd70 net/netlink/af_netlink.c:1925
->  sock_sendmsg_nosec net/socket.c:622 [inline]
->  sock_sendmsg+0xdd/0x130 net/socket.c:632
->  sock_write_iter+0x27c/0x3e0 net/socket.c:923
->  call_write_iter include/linux/fs.h:1863 [inline]
->  do_iter_readv_writev+0x5e0/0x8e0 fs/read_write.c:680
->  do_iter_write fs/read_write.c:956 [inline]
->  do_iter_write+0x184/0x610 fs/read_write.c:937
->  vfs_writev+0x1b3/0x2f0 fs/read_write.c:1001
->  do_writev+0xf6/0x290 fs/read_write.c:1036
->  __do_sys_writev fs/read_write.c:1109 [inline]
->  __se_sys_writev fs/read_write.c:1106 [inline]
->  __x64_sys_writev+0x75/0xb0 fs/read_write.c:1106
->  do_syscall_64+0x103/0x610 arch/x86/entry/common.c:290
->  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> RIP: 0033:0x440139
-> Code: 18 89 d0 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 48 89 f8 48 89 f=
-7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff=
- ff 0f 83 fb 13 fc ff c3 66 2e 0f 1f 84 00 00 00 00
-> RSP: 002b:00007ffcc966cc18 EFLAGS: 00000246 ORIG_RAX: 0000000000000014
-> RAX: ffffffffffffffda RBX: 00000000004002c8 RCX: 0000000000440139
-> RDX: 0000000000000001 RSI: 0000000020000080 RDI: 0000000000000003
-> RBP: 00000000006ca018 R08: 00000000004002c8 R09: 00000000004002c8
-> R10: 0000000000000004 R11: 0000000000000246 R12: 00000000004019c0
-> R13: 0000000000401a50 R14: 0000000000000000 R15: 0000000000000000
+>  skb_release_all+0x4d/0x60 net/core/skbuff.c:631
+>  __kfree_skb+0x16/0x30 net/core/skbuff.c:645
+>  sk_wmem_free_skb include/net/sock.h:1463 [inline]
+>  tcp_write_queue_purge+0x253/0x7d0 net/ipv4/tcp.c:2543
+>  tcp_disconnect+0x402/0x1890 net/ipv4/tcp.c:2583
+>  tcp_close+0xe37/0x10c0 net/ipv4/tcp.c:2384
+>  tls_sk_proto_close+0x40d/0x7a0 net/tls/tls_main.c:291
+>  inet_release+0x105/0x1f0 net/ipv4/af_inet.c:428
+>  inet6_release+0x53/0x80 net/ipv6/af_inet6.c:473
+>  __sock_release+0xd3/0x2b0 net/socket.c:579
+>  sock_close+0x1b/0x30 net/socket.c:1162
+>  __fput+0x2df/0x8d0 fs/file_table.c:278
+>  ____fput+0x16/0x20 fs/file_table.c:309
+>  task_work_run+0x14a/0x1c0 kernel/task_work.c:113
+>  exit_task_work include/linux/task_work.h:22 [inline]
+>  do_exit+0x92c/0x2fd0 kernel/exit.c:875
+>  do_group_exit+0x135/0x370 kernel/exit.c:979
+>  get_signal+0x399/0x1d50 kernel/signal.c:2575
+>  do_signal+0x87/0x1940 arch/x86/kernel/signal.c:816
+>  exit_to_usermode_loop+0x244/0x2c0 arch/x86/entry/common.c:162
+>  prepare_exit_to_usermode arch/x86/entry/common.c:197 [inline]
+>  syscall_return_slowpath arch/x86/entry/common.c:268 [inline]
+>  do_syscall_64+0x52d/0x610 arch/x86/entry/common.c:293
+>  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> RIP: 0033:0x447589
+> Code: 6e 4d 6f 64 65 00 69 43 75 72 72 4f 66 66 73 00 69 4d 61 78 46 69 6c 65 53 69 7a 65 00 69 4d 61 78 46 69 6c 65 73 00 69 46 69 <6c> 65 4e 75 6d 44 69 67 69 74 73 00 62 44 65 6c 65 74 65 4f 6e 43
+> RSP: 002b:00007fba67235d98 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+> RAX: fffffffffffffe00 RBX: 00000000006ddc68 RCX: 0000000000447589
+> RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00000000006ddc68
+> RBP: 00000000006ddc60 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 00000000006ddc6c
+> R13: 0030656c69662f2e R14: 0000000000000000 R15: 0000000000000000
 > Modules linked in:
-> ---[ end trace 460a3c24d0a656c9 ]---
-> RIP: 0010:xsk_diag_put_umem net/xdp/xsk_diag.c:71 [inline]
-> RIP: 0010:xsk_diag_fill net/xdp/xsk_diag.c:113 [inline]
-> RIP: 0010:xsk_diag_dump+0xdcb/0x13a0 net/xdp/xsk_diag.c:143
-> Code: 8d be c0 04 00 00 48 89 f8 48 c1 e8 03 42 80 3c 20 00 0f 85 39 04 0=
-0 00 49 8b 96 c0 04 00 00 48 8d 7a 14 48 89 f8 48 c1 e8 03 <42> 0f b6 0c 20=
- 48 89 f8 83 e0 07 83 c0 03 38 c8 7c 08 84 c9 0f 85
-> RSP: 0018:ffff888090bcf2d8 EFLAGS: 00010203
-> RAX: 0000000000000002 RBX: ffff8880a0aacbc0 RCX: ffffffff86ffdc3c
-> RDX: 0000000000000000 RSI: ffffffff86ffdc70 RDI: 0000000000000014
-> RBP: ffff888090bcf438 R08: ffff88808e04a700 R09: ffffed1011c74174
-> R10: ffffed1011c74173 R11: ffff88808e3a0b9f R12: dffffc0000000000
-> R13: ffff888093a6d818 R14: ffff88808e365240 R15: ffff88808e3a0b40
-> FS:  00000000011ea880(0000) GS:ffff8880ae800000(0000) knlGS:0000000000000=
-000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000001d22000 CR3: 000000008fa13000 CR4: 00000000001406f0
->
-> Fixes: a36b38aa2af6 ("xsk: add sock_diag interface for AF_XDP")
-> Signed-off-by: Eric Dumazet <edumazet@google.com>
-> Reported-by: syzbot <syzkaller@googlegroups.com>
-> Cc: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Magnus Karlsson <magnus.karlsson@intel.com>
+> ---[ end trace 3c84b12f07d7d40a ]---
+> RIP: 0010:put_page_testzero include/linux/mm.h:546 [inline]
+> RIP: 0010:put_page include/linux/mm.h:992 [inline]
+> RIP: 0010:__skb_frag_unref include/linux/skbuff.h:2837 [inline]
+> RIP: 0010:skb_release_data+0x5a5/0x7b0 net/core/skbuff.c:571
+> Code: f0 fe ff e9 b6 fb ff ff e8 38 b9 01 fc 4c 8d 63 ff e9 c8 fc ff ff e8 2a b9 01 fc 48 c7 c6 80 c2 fe 87 4c 89 e7 e8 bb c6 2a fc <0f> 0b e8 14 b9 01 fc 4d 8d 66 0e 48 b8 00 00 00 00 00 fc ff df 4c
+> RSP: 0018:ffff888086a0f708 EFLAGS: 00010293
+> RAX: ffff8880a3590440 RBX: ffffea00025dfa34 RCX: 0000000000000000
+> RDX: 0000000000000000 RSI: ffffffff81990662 RDI: ffffea00025dfa38
+> RBP: ffff888086a0f770 R08: 000000000000003e R09: ffffed1015d03ef9
+> R10: ffffed1015d03ef8 R11: ffff8880ae81f7c7 R12: ffffea00025dfa00
+> R13: ffff8880a4398c40 R14: 0000000000000001 R15: dffffc0000000000
+> FS:  00007fba67236700(0000) GS:ffff8880ae800000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fba67235e78 CR3: 0000000099c9f000 CR4: 00000000001406f0
+> 
+> 
 > ---
->  net/xdp/xsk_diag.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/net/xdp/xsk_diag.c b/net/xdp/xsk_diag.c
-> index 661d007c3b2887223ecf417e1fb6f970b50146e8..d5e06c8e0cbf9f30fdcdfb6a6=
-ce65f7356c9d89e 100644
-> --- a/net/xdp/xsk_diag.c
-> +++ b/net/xdp/xsk_diag.c
-> @@ -68,9 +68,9 @@ static int xsk_diag_put_umem(const struct xdp_sock *xs,=
- struct sk_buff *nlskb)
->         err =3D nla_put(nlskb, XDP_DIAG_UMEM, sizeof(du), &du);
->
->         if (!err && umem->fq)
-> -               err =3D xsk_diag_put_ring(xs->tx, XDP_DIAG_UMEM_FILL_RING=
-, nlskb);
-> +               err =3D xsk_diag_put_ring(umem->fq, XDP_DIAG_UMEM_FILL_RI=
-NG, nlskb);
->         if (!err && umem->cq) {
-> -               err =3D xsk_diag_put_ring(xs->tx, XDP_DIAG_UMEM_COMPLETIO=
-N_RING,
-> +               err =3D xsk_diag_put_ring(umem->cq, XDP_DIAG_UMEM_COMPLET=
-ION_RING,
->                                         nlskb);
->         }
->         return err;
-> --
-> 2.21.0.352.gf09ad66450-goog
->
+> This bug is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this bug report. See:
+> https://goo.gl/tpsmEJ#bug-status-tracking for how to communicate with syzbot.
+> syzbot can test patches for this bug, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
 
-Yikes. Thank you Eric and syzkaller!
+This looks like a TLS issue to me ?
 
-Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
+There is a C repro on this bug report (  https://syzkaller.appspot.com/x/repro.c?x=1416ff3d200000 )
+
+
