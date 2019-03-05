@@ -2,61 +2,34 @@ Return-Path: <SRS0=GR7L=RI=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_NEOMUTT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3375FC43381
-	for <bpf@archiver.kernel.org>; Tue,  5 Mar 2019 02:29:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2534C43381
+	for <bpf@archiver.kernel.org>; Tue,  5 Mar 2019 09:31:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EAE6B206B6
-	for <bpf@archiver.kernel.org>; Tue,  5 Mar 2019 02:29:02 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kVWmWDvo"
+	by mail.kernel.org (Postfix) with ESMTP id AC9D520684
+	for <bpf@archiver.kernel.org>; Tue,  5 Mar 2019 09:31:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726553AbfCEC3C (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 4 Mar 2019 21:29:02 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:39360 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726096AbfCEC3C (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 4 Mar 2019 21:29:02 -0500
-Received: by mail-pf1-f194.google.com with SMTP id i20so4442901pfo.6;
-        Mon, 04 Mar 2019 18:29:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=+KkfnrRPzKEaVvK6hQX2VOG2vZ21cCOdw4HHZb6qdt8=;
-        b=kVWmWDvoOjZAvbW0/fVkFVBZJ2myyRoNDAzrTUfHgKJC+qaLlYCUzb1xEF1hKPxer/
-         WOMigKsQehl/iIjRerL/MDACafLVcQeV9BQT2HFj2kYeCp145GohkYVnuB7CaeW1AM51
-         r0egOnAQ1xrpiX4Am+A+SgqHgr7LGB0JeV2rTSARKLWv1Q/6F4LLF90xyjka42ebxr2v
-         2MYZJ1XDhlZazWwZyW0LzY5MFZ892+etWse/SiN7fhrVzjN/51Yqff148ASbORlXvc4V
-         QeA9RgQl7EatjsZEAaDiWCb6WwyAI3GDFjmOwNnYOyhMIHYnCo+vMm+BvDtj+0Pg0lf7
-         rpKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+KkfnrRPzKEaVvK6hQX2VOG2vZ21cCOdw4HHZb6qdt8=;
-        b=qxdW5r9DBZpVZI8c2D9PoY+r0yJSik7EJp7LJeneuwqIeawI4y9CD1HeMn2i8I6Vdg
-         DYHaF9ougM4LW1WyOyyg8GObGXce4G8a9/7w1pG9uVNOgyirsi/n91FeWJjaGGwTNs8A
-         Kbd0klQTNzCziwK4XfEoKxYjHUynjxrwysualm0x9LZ7F5qUUb/Skz7B7f+tGE17QMnK
-         L4lJ/snvvR32QVptlnVf6qf6T8VQQqM43sXeI5+Ve0qDlfiztGbCZB0VTlUPPLzaBPEd
-         BJwlkMY0iIUSW2YyoaqvSnwh5HJjoj9zb7yTVjM6wNwXnCj/zz/O+7iFTzksZtTLhriD
-         6psQ==
-X-Gm-Message-State: APjAAAUYVLsErHgVeSfWoK5E7HtH0bo2LPWb0raX11pzhaOuAOfbq9iE
-        SJf/Ypns+fLpLezrg6btoGI=
-X-Google-Smtp-Source: AHgI3IaCI8+9FnwD5Q5UMqqlOPxymj4rlCkbdj8Ny9/mRypCNnRL5ISTpHsXM++4qq4CoY+zNKiVjA==
-X-Received: by 2002:aa7:8205:: with SMTP id k5mr22742526pfi.86.1551752940836;
-        Mon, 04 Mar 2019 18:29:00 -0800 (PST)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:200::1:c0b5])
-        by smtp.gmail.com with ESMTPSA id n18sm14181843pfh.93.2019.03.04.18.28.59
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 04 Mar 2019 18:29:00 -0800 (PST)
-Date:   Mon, 4 Mar 2019 18:28:58 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
+        id S1727446AbfCEJba (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Mar 2019 04:31:30 -0500
+Received: from www62.your-server.de ([213.133.104.62]:59682 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726098AbfCEJba (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Mar 2019 04:31:30 -0500
+Received: from [78.46.172.3] (helo=sslproxy06.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1h16Q1-0005h0-BQ; Tue, 05 Mar 2019 10:31:25 +0100
+Received: from [178.197.248.17] (helo=linux.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1h16Q1-000Xaj-0b; Tue, 05 Mar 2019 10:31:25 +0100
+Subject: Re: static bpf vars. Was: [PATCH bpf-next v2 5/7] bpf, libbpf:
+ support global data/bss/rodata sections
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc:     Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Alexei Starovoitov <ast@fb.com>,
@@ -67,9 +40,6 @@ Cc:     Yonghong Song <yhs@fb.com>,
         "tgraf@suug.ch" <tgraf@suug.ch>, Andrii Nakryiko <andriin@fb.com>,
         "jakub.kicinski@netronome.com" <jakub.kicinski@netronome.com>,
         "lmb@cloudflare.com" <lmb@cloudflare.com>
-Subject: static bpf vars. Was: [PATCH bpf-next v2 5/7] bpf, libbpf: support
- global data/bss/rodata sections
-Message-ID: <20190305022856.uynexxxywfixzvl7@ast-mbp.dhcp.thefacebook.com>
 References: <20190228231829.11993-1-daniel@iogearbox.net>
  <20190228231829.11993-6-daniel@iogearbox.net>
  <1e21ba74-f236-60b8-f33c-f3f060419197@fb.com>
@@ -78,93 +48,152 @@ References: <20190228231829.11993-1-daniel@iogearbox.net>
  <CAEf4BzZWZmTFj0Xqf+_1QoT5E6tt7ijmzk39khgZ2zYfe0QFUw@mail.gmail.com>
  <e6157f2f-80e4-6a99-2053-498e0581a0db@fb.com>
  <93e20522-cafd-ee1f-1dc1-3cebab122588@iogearbox.net>
+ <20190305022856.uynexxxywfixzvl7@ast-mbp.dhcp.thefacebook.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <f6760fc2-9cf9-eadb-eba9-c7af953a703f@iogearbox.net>
+Date:   Tue, 5 Mar 2019 10:31:24 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <93e20522-cafd-ee1f-1dc1-3cebab122588@iogearbox.net>
-User-Agent: NeoMutt/20180223
+In-Reply-To: <20190305022856.uynexxxywfixzvl7@ast-mbp.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.2/25378/Mon Mar  4 11:47:26 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Mar 01, 2019 at 09:06:35PM +0100, Daniel Borkmann wrote:
+On 03/05/2019 03:28 AM, Alexei Starovoitov wrote:
+> On Fri, Mar 01, 2019 at 09:06:35PM +0100, Daniel Borkmann wrote:
 > 
+> Overall I think the patches and direction is great.
+> Thanks a lot for working on it.
+> More thoughts below:
 
-Overall I think the patches and direction is great.
-Thanks a lot for working on it.
-More thoughts below:
+Okay, thanks!
 
-> By the way, from LLVM side, do you think it makes sense for local vars
-> where you encode the offset into insn->imm to already encode it into
-> (insn+1)->imm of the ldimm64, so that loaders can just pass this offset
-> through instead of fixing it up like I did? I'm fine either way though,
-> just thought might be worth pointing out while we're at it. :)
+>> By the way, from LLVM side, do you think it makes sense for local vars
+>> where you encode the offset into insn->imm to already encode it into
+>> (insn+1)->imm of the ldimm64, so that loaders can just pass this offset
+>> through instead of fixing it up like I did? I'm fine either way though,
+>> just thought might be worth pointing out while we're at it. :)
+> 
+> 1.
+> typical ldimm64 carries 64-bit value. upper 32-bits are in insn[1]->imm.
+> I think it's better to stick to this meaning of imm for encoding
+> the section offset and keep it in insn[0]->imm.
+> Especially since from disassembler pov it looks like normal ldimm64 with relocation.
 
-1.
-typical ldimm64 carries 64-bit value. upper 32-bits are in insn[1]->imm.
-I think it's better to stick to this meaning of imm for encoding
-the section offset and keep it in insn[0]->imm.
-Especially since from disassembler pov it looks like normal ldimm64 with relocation.
-Later libbpf does PSEUDO trick and can move [0]->imm to [1]->imm.
-Or it can use [1]->imm to store FD to pass to kernel?
-Another alternative is to use 16-bit of 'off' to encode the offset,
-but the limit of 32kbyte of static variables is probably too small.
+Hadn't thought about it from this angle, but yes, from debugging /disasm
+point of view it makes perfect sense to keep it as-is.
 
-2.
-I think it's better to only allow 'static int foo' in libbpf for now.
-In C 'global' variables suppose to be shareable across multiple elf files.
-libbpf doesn't have support for it yet. We need to start discussing this multi elf
-support which will lead into discussion about bpf libraries.
-I think we need a bit of freedom to decide the meaning of 'global' modifier.
-So for now I would support only 'static int foo' in libbpf.
-llvm supports both and that's ok, since that's a standard elf markings.
+> Later libbpf does PSEUDO trick and can move [0]->imm to [1]->imm.
+> Or it can use [1]->imm to store FD to pass to kernel?
 
-Also were these patches tested with 'static struct {int a; int b;} foo;' and
-'static char foo[]="my string";' ?
-I suspect it should 'just work' with proposed design, but would be good to have a test.
+My preference would rather be the former as it's consistent with how
+we do it for normal map fds as well, so I'd keep loader side having it
+moved as it currently is; I think it's fine.
 
-3.
-let's come up with concrete plan for BTF for these static variables.
-With normal maps the BTF was retrofitted via BPF_ANNOTATE_KV_PAIR macro
-and no one is proud of this interface choice. We had 'struct bpf_map_def'
-and the macro was the least evil.
-For static variables let's figure out how to integrate BTF into it cleanly.
-LLVM already knows about the types. It needs another kind to describe
-the variable names and offsets. I think what we did with BTF_KIND_FUNC
-should be applicable here. Last time we discussed that we will add BTF_KIND_VAR
-for this purpose. Shouldn't be too much work to hack it into llvm now?
-I would even go a step further and make BTF to be mandatory for static vars.
-Introspection of BPF programs will go long way.
+> Another alternative is to use 16-bit of 'off' to encode the offset,
+> but the limit of 32kbyte of static variables is probably too small.
 
-4.
-if we make BTF mandatory then the issue of map names will be solved too.
-The <obj>.bss/data/rodata might not fit into map_name[16],
-but with BTF we can give it full name.
-"<obj>.data" looks great to me especially from introspection angle.
+Yes agree, and I've also reused both off fields now for optionally
+allowing to select an index into the array based on Andrii's feedback.
 
-5.
-I think it makes sense to keep .bss vs .data vs .rodata separate.
-I can imagine a program using large zero-inited static array.
-It's important to save space in elf file, save time to do map create
-and map populate. With combined .data and .bss it would be much harder.
+> 2.
+> I think it's better to only allow 'static int foo' in libbpf for now.
+> In C 'global' variables suppose to be shareable across multiple elf files.
+> libbpf doesn't have support for it yet. We need to start discussing this multi elf
+> support which will lead into discussion about bpf libraries.
+> I think we need a bit of freedom to decide the meaning of 'global' modifier.
+> So for now I would support only 'static int foo' in libbpf.
+> llvm supports both and that's ok, since that's a standard elf markings.
 
-6.
-as the next step would be good to add two new syscall command to read/write
-individual static variables. Something like:
-bpf_map_read/write_bytes(map, key, offset_in_value, buf, size_of_buf)
-would allow user space to tweak certain variables.
-With mandatory BTF we can have an api to read/write variable by name
-(and not only by offset).
-Such bpf_map_read_bytes() would be useful for regular hash maps too.
-It's convenient to be able to update few bytes in the hash value instead
-of overwriting the whole thing.
+Makes sense, we first need to have a better understanding on how semantics
+should look there from BPF pov. I'll restrict libbpf for static vars for
+the time being, and throw an error message otherwise.
 
-7.
-since these 3 maps are created as normal arrays from kernel pov
-the 'bpftool map show' should not exclude them from the output.
-Similarly libbpf api bpf_object__for_each_map() and bpf_map__next()
-should probably include them too. There can be bpf_map__is_pseudo() flag
-to tell them apart, but since it's a normal map in the kernel
-other libbpf accessors bpf_map__name(), bpf_map__pin() should work too.
+There is one more semantical question: a BPF ELF file can have multiple
+program entry points in it. Both programs from there could refer to static
+global variables inside that object file. My thinking which this patch set
+also implemented is to have both of them refer to the same .bss/.data/.rodata
+map (and _not_ separate ones) as I think this would also naturally be what
+the user is expecting when referring to the same global vars in the given
+object file.
 
+> Also were these patches tested with 'static struct {int a; int b;} foo;' and
+> 'static char foo[]="my string";' ?
+> I suspect it should 'just work' with proposed design, but would be good to have a test.
+
++1, I'll add more tests. Iirc, I tested it back with the original prototype
+from LPC which worked same way from high level point of view, but good to
+have it explicitly in BPF selftests, agree, will add.
+
+> 3.
+> let's come up with concrete plan for BTF for these static variables.
+> With normal maps the BTF was retrofitted via BPF_ANNOTATE_KV_PAIR macro
+> and no one is proud of this interface choice. We had 'struct bpf_map_def'
+> and the macro was the least evil.
+> For static variables let's figure out how to integrate BTF into it cleanly.
+> LLVM already knows about the types. It needs another kind to describe
+> the variable names and offsets. I think what we did with BTF_KIND_FUNC
+> should be applicable here. Last time we discussed that we will add BTF_KIND_VAR
+> for this purpose. Shouldn't be too much work to hack it into llvm now?
+> I would even go a step further and make BTF to be mandatory for static vars.
+> Introspection of BPF programs will go long way.
+
+We can make that mandatory, nice thing would be that such BPF_ANNOTATE_KV_PAIR
+macro hack wouldn't be needed at all. From BTF pov, that would be some sort of
+BTF_KIND_SEC as a section 'container' for all BTF_KIND_VAR variables belonging
+to it, so map could use its id to describe its map value as such?
+
+> 4.
+> if we make BTF mandatory then the issue of map names will be solved too.
+> The <obj>.bss/data/rodata might not fit into map_name[16],
+> but with BTF we can give it full name.
+> "<obj>.data" looks great to me especially from introspection angle.
+
++1
+
+> 5.
+> I think it makes sense to keep .bss vs .data vs .rodata separate.
+> I can imagine a program using large zero-inited static array.
+> It's important to save space in elf file, save time to do map create
+> and map populate. With combined .data and .bss it would be much harder.
+
+I'm fine either way, but yeah, this approach as also taken here means less
+fixing up from loader pov, and it would probably also make BTF handling
+easier. So, sticking with separate .bss/.data/.rodata then.
+
+> 6.
+> as the next step would be good to add two new syscall command to read/write
+> individual static variables. Something like:
+> bpf_map_read/write_bytes(map, key, offset_in_value, buf, size_of_buf)
+> would allow user space to tweak certain variables.
+> With mandatory BTF we can have an api to read/write variable by name
+> (and not only by offset).
+> Such bpf_map_read_bytes() would be useful for regular hash maps too.
+> It's convenient to be able to update few bytes in the hash value instead
+> of overwriting the whole thing.
+
+Definitely useful, there was also the suggestion to have an mmap interface
+which would work at least for array maps, though haven't looked yet into
+what would be needed from buffer mgmt side to remap for processes that just
+got the fd by id or via bpf fs for retrieving existing content.
+
+> 7.
+> since these 3 maps are created as normal arrays from kernel pov
+> the 'bpftool map show' should not exclude them from the output.
+> Similarly libbpf api bpf_object__for_each_map() and bpf_map__next()
+> should probably include them too. There can be bpf_map__is_pseudo() flag
+> to tell them apart, but since it's a normal map in the kernel
+> other libbpf accessors bpf_map__name(), bpf_map__pin() should work too.
+
+Yeah, I'll integrate it there in libbpf, as long as we have something to
+tell them apart from a user pov it should be good.
+
+Thanks,
+Daniel
