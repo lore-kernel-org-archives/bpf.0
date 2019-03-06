@@ -7,159 +7,189 @@ X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12757C43381
-	for <bpf@archiver.kernel.org>; Wed,  6 Mar 2019 19:59:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98F27C43381
+	for <bpf@archiver.kernel.org>; Wed,  6 Mar 2019 19:59:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CE07C206DD
-	for <bpf@archiver.kernel.org>; Wed,  6 Mar 2019 19:59:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6C70C20661
+	for <bpf@archiver.kernel.org>; Wed,  6 Mar 2019 19:59:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kkzQ73sC"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i1PY/L75"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727394AbfCFT7b (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Mar 2019 14:59:31 -0500
-Received: from mail-vk1-f201.google.com ([209.85.221.201]:37095 "EHLO
-        mail-vk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727236AbfCFT7b (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 6 Mar 2019 14:59:31 -0500
-Received: by mail-vk1-f201.google.com with SMTP id q65so7130929vkd.4
-        for <bpf@vger.kernel.org>; Wed, 06 Mar 2019 11:59:30 -0800 (PST)
+        id S1730106AbfCFT7e (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Mar 2019 14:59:34 -0500
+Received: from mail-io1-f74.google.com ([209.85.166.74]:53687 "EHLO
+        mail-io1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729972AbfCFT7d (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 6 Mar 2019 14:59:33 -0500
+Received: by mail-io1-f74.google.com with SMTP id z14so10582885ioh.20
+        for <bpf@vger.kernel.org>; Wed, 06 Mar 2019 11:59:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=z88xJiLosPr1XUk2OCfsa2fhSYsT5G++8dS++xiqguM=;
-        b=kkzQ73sCWXt3xy9EBCuj9/84MbNsRGcmi2rFnT+3OknTMzrgOvfZBKN5hYctl34LAS
-         zJeIJMuH1Zlun3McoZJ0M8tPd5fbpEaJaO1ggcv4rQqBMXtK0Hl01cx1FAEjaKeCZML4
-         vdkyOV7dWFmkM/bSDjOLs3wGMAjQPHCzyjsn4PmGCyZt6nD2LoTN8P1OvMn//xWyoYev
-         NpsN+69T+JUQTgX3KhwSrpn3daXZySSMXV4NBaWuw5LMYFocHZhoTdImm1Hnmyw5JXdN
-         0vX71Rh/XWnSFl2/pzKNTPWquJ4PKDDePr09vPtdXUPR3HAA01xRg4hw5hOn/Cm9cGdf
-         zujQ==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc:content-transfer-encoding;
+        bh=cI2jbWFMs3OSfiiGB5bFKev5DIoNkuJDsrHE8cgYj4g=;
+        b=i1PY/L75moaPQrhflCNUGXiUFBdY4p33LTEL7b9dV+CKypAOMmbO3eAUrgaYlcgRSK
+         eS4v88xpbSxL2TyWdkHJAZUFLXg5ID+/vSmgCjDKAwF8mX3gkBp6aqx4KyLrrSiC1N/G
+         usphvSU3FN1UwbB6bfhLeo9vzJDwQvNOPMDDG8g27Z7lz2swoTShP/1xOaqX8vp2CeL7
+         oe+Wkhnx94z/svjOsbQiZTatlfNzzErTLxsXUjvkHTuT0ZcR4VuPnUGoeTT7pMsMgU0i
+         5ECEM364zgOrK3AwUc8mRCbwF0HMaEVdP3wwgYhDJGr0PpagRwc8qG1WMjnJuXFY1LHN
+         7rNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=z88xJiLosPr1XUk2OCfsa2fhSYsT5G++8dS++xiqguM=;
-        b=hLJsDprAqkrgBmb/m/s/wCE9kLHaMZxeRFWzrcwjfJ3CNdQm5AYqDpzaMexFYDKEL7
-         Hig51+wUE4Ko7QxzLucD8XJSspmrnjtgJSfd6D6JmPtRvx187xKH1fd8fRPPNtmVUr/d
-         a/UURQWrEXf4VCbtMGF015enXPUZW94pVXX/8BsjZov8tB559dMmt6YKiF3dJhODqo4F
-         7baj62vWZF9PuPPooyircIVLZHgqfEixjypxqv1lkVa57rUA6OTcFgG8QVdy26T6csSX
-         /J5PNdGlP1TZ4FToVUrVZ+ypvwGu4Rf98AZ8h4YvzeVJILUebOgQmdI8pWcIDxgAhOf8
-         sOyA==
-X-Gm-Message-State: APjAAAVZ9MalXVkR+XpV1MPr3UBGz/aOvsRso19N3FWmTd/9vfXdgLay
-        HjmeyG+Vh8D2PBx1lb7NGZZPEkI=
-X-Google-Smtp-Source: APXvYqwLxldxGIAJV5po6Y9iHNLY2pEHZ0XZMSgfcVUHjt4gAAN5zeUSJETppRYmae8FV2NJxyeLzcY=
-X-Received: by 2002:ab0:3456:: with SMTP id a22mr6221727uaq.1.1551902370056;
- Wed, 06 Mar 2019 11:59:30 -0800 (PST)
-Date:   Wed,  6 Mar 2019 11:59:26 -0800
-Message-Id: <20190306195927.208503-1-sdf@google.com>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc:content-transfer-encoding;
+        bh=cI2jbWFMs3OSfiiGB5bFKev5DIoNkuJDsrHE8cgYj4g=;
+        b=OqHtSrt9TII89Z7EsQvnRVnl2micsa7GC3GTB9iTgM4Cs3nJAfETqOdEjvV4o1UzBS
+         vcBqOLQ1QohokCyRbL3FkbyeYx+VT8efLEQrLK04W95Di27PnqOmkEU53e5+w6DZqx6p
+         zBhrOrtr+6PJOvRW04svEx0Pa+PcyxJL9g+kOP/JW4Xwe3X6B8yFXZ1l9/YUeve1LVU6
+         k8J2/MvfA4q5d2If2dxZHfm67j47CsUQlx56yBLtUQoETUFKXGxi0qwDj7Huvult/YYJ
+         uRsrC9l/SJlGNEPMwHWxDYqPuL695exygd8CDVYV3jaDEvoiBQO9SDih00TFSPqrkCOS
+         Iy9A==
+X-Gm-Message-State: APjAAAU+z5JdNeVz9Wd98eOeffGBu+7Dyddzp4WZdc9ZMh/o/Gk9FUwp
+        wU2hXmE/Ky/cyUCeI0xWtp3CYHc=
+X-Google-Smtp-Source: APXvYqx4esoJ62Qdk71CE4pV3DZnXha6jLnjVLcmSAm2Co7iLPuK66/uWwr7M+qE2S4OcLuq15mqyZs=
+X-Received: by 2002:a24:6cd5:: with SMTP id w204mr7262937itb.16.1551902372379;
+ Wed, 06 Mar 2019 11:59:32 -0800 (PST)
+Date:   Wed,  6 Mar 2019 11:59:27 -0800
+In-Reply-To: <20190306195927.208503-1-sdf@google.com>
+Message-Id: <20190306195927.208503-2-sdf@google.com>
 Mime-Version: 1.0
+References: <20190306195927.208503-1-sdf@google.com>
 X-Mailer: git-send-email 2.21.0.352.gf09ad66450-goog
-Subject: [PATCH bpf 1/2] selftests: bpf: fix compilation with out-of-tree $(OUTPUT)
+Subject: [PATCH bpf 2/2] libbpf: force fixdep compilation at the start of the build
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        Stanislav Fomichev <sdf@google.com>
+        Stanislav Fomichev <sdf@google.com>,
+        Eric Dumazet <edumazet@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A bunch of related changes lumped together:
-* Create prog_tests and verifier output directories; these don't exist with
-  out-of-tree $(OUTPUT)
-* Add missing -I (via separate TEST_{PROGS,VERIFIER}_CFLAGS) for the main tree
-  ($(PWD) != $(OUTPUT) for out-of-tree)
-* Add libbpf.a dependency for test_progs_32 (parallel make fails otherwise)
-* Add missing "; \" after "cd" when generating test.h headers
+libbpf targets don't explicitly depend on fixdep target, so when
+we do 'make -j$(nproc)', there is a high probability, that some
+objects will be built before fixdep binary is available.
 
-Tested by:
-$ alias m="make -s -j$(nproc)"
-$ m -C tools/testing/selftests/bpf/ clean
-$ m -C tools/lib/bpf/ clean
-$ rm -rf xxx; mkdir xxx; m -C tools/testing/selftests/bpf/ OUTPUT=$PWD/xxx
-$ m -C tools/testing/selftests/bpf/
+Fix this by running sub-make; this makes sure that fixdep dependency
+is properly accounted for.
 
-Fixes: 3f30658830f3 ("selftests: bpf: break up test_progs - preparations")
-Fixes: 2dfb40121ee8 ("selftests: bpf: prepare for break up of verifier tests")
-Fixes: 3ef84346c561 ("selftests: bpf: makefile support sub-register code-gen test mode")
+For the same issue in perf, see commit abb26210a395 ("perf tools: Force
+fixdep compilation at the start of the build").
+
+Before:
+
+$ rm -rf /tmp/bld; mkdir /tmp/bld; make -j$(nproc) O=3D/tmp/bld -C tools/li=
+b/bpf/
+
+Auto-detecting system features:
+...                        libelf: [ on  ]
+...                           bpf: [ on  ]
+
+  HOSTCC   /tmp/bld/fixdep.o
+  CC       /tmp/bld/libbpf.o
+  CC       /tmp/bld/bpf.o
+  CC       /tmp/bld/btf.o
+  CC       /tmp/bld/nlattr.o
+  CC       /tmp/bld/libbpf_errno.o
+  CC       /tmp/bld/str_error.o
+  CC       /tmp/bld/netlink.o
+  CC       /tmp/bld/bpf_prog_linfo.o
+  CC       /tmp/bld/libbpf_probes.o
+  CC       /tmp/bld/xsk.o
+  HOSTLD   /tmp/bld/fixdep-in.o
+  LINK     /tmp/bld/fixdep
+  LD       /tmp/bld/libbpf-in.o
+  LINK     /tmp/bld/libbpf.a
+  LINK     /tmp/bld/libbpf.so
+  LINK     /tmp/bld/test_libbpf
+
+$ head /tmp/bld/.libbpf.o.cmd
+ # cannot find fixdep (/usr/local/google/home/sdf/src/linux/xxx//fixdep)
+ # using basic dep data
+
+/tmp/bld/libbpf.o: libbpf.c /usr/include/stdc-predef.h \
+ /usr/include/stdlib.h /usr/include/features.h \
+ /usr/include/x86_64-linux-gnu/sys/cdefs.h \
+ /usr/include/x86_64-linux-gnu/bits/wordsize.h \
+ /usr/include/x86_64-linux-gnu/gnu/stubs.h \
+ /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
+ /usr/lib/gcc/x86_64-linux-gnu/7/include/stddef.h \
+
+After:
+
+$ rm -rf /tmp/bld; mkdir /tmp/bld; make -j$(nproc) O=3D/tmp/bld -C tools/li=
+b/bpf/
+
+Auto-detecting system features:
+...                        libelf: [ on  ]
+...                           bpf: [ on  ]
+
+  HOSTCC   /tmp/bld/fixdep.o
+  HOSTLD   /tmp/bld/fixdep-in.o
+  LINK     /tmp/bld/fixdep
+  CC       /tmp/bld/libbpf.o
+  CC       /tmp/bld/bpf.o
+  CC       /tmp/bld/nlattr.o
+  CC       /tmp/bld/btf.o
+  CC       /tmp/bld/libbpf_errno.o
+  CC       /tmp/bld/str_error.o
+  CC       /tmp/bld/netlink.o
+  CC       /tmp/bld/bpf_prog_linfo.o
+  CC       /tmp/bld/libbpf_probes.o
+  CC       /tmp/bld/xsk.o
+  LD       /tmp/bld/libbpf-in.o
+  LINK     /tmp/bld/libbpf.a
+  LINK     /tmp/bld/libbpf.so
+  LINK     /tmp/bld/test_libbpf
+
+$ head /tmp/bld/.libbpf.o.cmd
+cmd_/tmp/bld/libbpf.o :=3D gcc -Wp,-MD,/tmp/bld/.libbpf.o.d -Wp,-MT,/tmp/bl=
+d/libbpf.o -g -Wall -DHAVE_LIBELF_MMAP_SUPPORT -DCOMPAT_NEED_REALLOCARRAY -=
+Wbad-function-cast -Wdeclaration-after-statement -Wformat-security -Wformat=
+-y2k -Winit-self -Wmissing-declarations -Wmissing-prototypes -Wnested-exter=
+ns -Wno-system-headers -Wold-style-definition -Wpacked -Wredundant-decls -W=
+shadow -Wstrict-prototypes -Wswitch-default -Wswitch-enum -Wundef -Wwrite-s=
+trings -Wformat -Wstrict-aliasing=3D3 -Werror -Wall -fPIC -I. -I/usr/local/=
+google/home/sdf/src/linux/tools/include -I/usr/local/google/home/sdf/src/li=
+nux/tools/arch/x86/include/uapi -I/usr/local/google/home/sdf/src/linux/tool=
+s/include/uapi -fvisibility=3Dhidden -D"BUILD_STR(s)=3D$(pound)s" -c -o /tm=
+p/bld/libbpf.o libbpf.c
+
+source_/tmp/bld/libbpf.o :=3D libbpf.c
+
+deps_/tmp/bld/libbpf.o :=3D \
+  /usr/include/stdc-predef.h \
+  /usr/include/stdlib.h \
+  /usr/include/features.h \
+  /usr/include/x86_64-linux-gnu/sys/cdefs.h \
+  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
+
+Reported-by: Eric Dumazet <edumazet@google.com>
+Fixes: 7c422f557266 ("tools build: Build fixdep helper from perf and basic =
+libs")
 
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- tools/testing/selftests/bpf/Makefile | 33 +++++++++++++++++++---------
- 1 file changed, 23 insertions(+), 10 deletions(-)
+ tools/lib/bpf/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 518cd587cd63..2aed37ea61a4 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -153,6 +153,9 @@ endif
- endif
- endif
- 
-+TEST_PROGS_CFLAGS := -I. -I$(OUTPUT)
-+TEST_VERIFIER_CFLAGS := -I. -I$(OUTPUT) -Iverifier
-+
- ifneq ($(SUBREG_CODEGEN),)
- ALU32_BUILD_DIR = $(OUTPUT)/alu32
- TEST_CUSTOM_PROGS += $(ALU32_BUILD_DIR)/test_progs_32
-@@ -162,13 +165,15 @@ TEST_CUSTOM_PROGS += $(ALU32_BUILD_DIR)/test_progs_32
- $(ALU32_BUILD_DIR)/urandom_read: $(OUTPUT)/urandom_read
- 	cp $< $@
- 
--$(ALU32_BUILD_DIR)/test_progs_32: test_progs.c $(ALU32_BUILD_DIR) \
-+$(ALU32_BUILD_DIR)/test_progs_32: test_progs.c $(OUTPUT)/libbpf.a\
-+						$(ALU32_BUILD_DIR) \
- 						$(ALU32_BUILD_DIR)/urandom_read
--	$(CC) $(CFLAGS) -o $(ALU32_BUILD_DIR)/test_progs_32 $< \
--		trace_helpers.c prog_tests/*.c $(OUTPUT)/libbpf.a $(LDLIBS)
-+	$(CC) $(TEST_PROGS_CFLAGS) $(CFLAGS) \
-+		-o $(ALU32_BUILD_DIR)/test_progs_32 \
-+		test_progs.c trace_helpers.c prog_tests/*.c \
-+		$(OUTPUT)/libbpf.a $(LDLIBS)
- 
- $(ALU32_BUILD_DIR)/test_progs_32: $(PROG_TESTS_H)
--$(ALU32_BUILD_DIR)/test_progs_32: CFLAGS += -I$(OUTPUT)
- $(ALU32_BUILD_DIR)/test_progs_32: prog_tests/*.c
- 
- $(ALU32_BUILD_DIR)/%.o: progs/%.c $(ALU32_BUILD_DIR) \
-@@ -202,12 +207,16 @@ endif
- 
- PROG_TESTS_H := $(OUTPUT)/prog_tests/tests.h
- $(OUTPUT)/test_progs: $(PROG_TESTS_H)
--$(OUTPUT)/test_progs: CFLAGS += -I$(OUTPUT)
-+$(OUTPUT)/test_progs: CFLAGS += $(TEST_PROGS_CFLAGS)
- $(OUTPUT)/test_progs: prog_tests/*.c
- 
-+PROG_TESTS_DIR = $(OUTPUT)/prog_tests
-+$(PROG_TESTS_DIR):
-+	mkdir -p $@
-+
- PROG_TESTS_FILES := $(wildcard prog_tests/*.c)
--$(PROG_TESTS_H): $(PROG_TESTS_FILES)
--	$(shell ( cd prog_tests/
-+$(PROG_TESTS_H): $(PROG_TESTS_DIR) $(PROG_TESTS_FILES)
-+	$(shell ( cd prog_tests/; \
- 		  echo '/* Generated header, do not edit */'; \
- 		  echo '#ifdef DECLARE'; \
- 		  ls *.c 2> /dev/null | \
-@@ -221,11 +230,15 @@ $(PROG_TESTS_H): $(PROG_TESTS_FILES)
- 
- VERIFIER_TESTS_H := $(OUTPUT)/verifier/tests.h
- $(OUTPUT)/test_verifier: $(VERIFIER_TESTS_H)
--$(OUTPUT)/test_verifier: CFLAGS += -I$(OUTPUT)
-+$(OUTPUT)/test_verifier: CFLAGS += $(TEST_VERIFIER_CFLAGS)
-+
-+VERIFIER_TESTS_DIR = $(OUTPUT)/verifier
-+$(VERIFIER_TESTS_DIR):
-+	mkdir -p $@
- 
- VERIFIER_TEST_FILES := $(wildcard verifier/*.c)
--$(OUTPUT)/verifier/tests.h: $(VERIFIER_TEST_FILES)
--	$(shell ( cd verifier/
-+$(OUTPUT)/verifier/tests.h: $(VERIFIER_TESTS_DIR) $(VERIFIER_TEST_FILES)
-+	$(shell ( cd verifier/; \
- 		  echo '/* Generated header, do not edit */'; \
- 		  echo '#ifdef FILL_ARRAY'; \
- 		  ls *.c 2> /dev/null | \
--- 
+diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+index a05c43468bd0..61aaacf0cfa1 100644
+--- a/tools/lib/bpf/Makefile
++++ b/tools/lib/bpf/Makefile
+@@ -147,7 +147,8 @@ endif
+=20
+ TARGETS =3D $(CMD_TARGETS)
+=20
+-all: fixdep all_cmd
++all: fixdep
++	$(Q)$(MAKE) all_cmd
+=20
+ all_cmd: $(CMD_TARGETS) check
+=20
+--=20
 2.21.0.352.gf09ad66450-goog
 
