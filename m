@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D59C5C4360F
-	for <bpf@archiver.kernel.org>; Wed,  6 Mar 2019 07:16:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32F72C43381
+	for <bpf@archiver.kernel.org>; Wed,  6 Mar 2019 07:16:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A491120675
-	for <bpf@archiver.kernel.org>; Wed,  6 Mar 2019 07:16:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EBD5920675
+	for <bpf@archiver.kernel.org>; Wed,  6 Mar 2019 07:16:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Ed0hf3J6"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="p6NMKOn1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729085AbfCFHQB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Mar 2019 02:16:01 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:57452 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729233AbfCFHOa (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 6 Mar 2019 02:14:30 -0500
-Received: from pps.filterd (m0001255.ppops.net [127.0.0.1])
-        by mx0b-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x267CfXw007477
-        for <bpf@vger.kernel.org>; Tue, 5 Mar 2019 23:14:29 -0800
+        id S1728911AbfCFHQJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Mar 2019 02:16:09 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:54962 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729223AbfCFHO2 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 6 Mar 2019 02:14:28 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x267Cj9i004878
+        for <bpf@vger.kernel.org>; Tue, 5 Mar 2019 23:14:28 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=v4CFG6GAoKDdVvUtX74CjwljSMlGo1gNsqjCsZJtPw0=;
- b=Ed0hf3J6yS3TmhNnnuQ0NJIHwUcfab2c0zgber22VyASaimRe4vok/z8bx1uPuAeOnMk
- IfAvsckXqbxql+sMA7i0jmvT0cRmJV7aFc60R9FBnEstlXR0V1mRrseEPoAOpFL/flFl
- +fKs3lcEnJ5XonYhAuU8+FU93fuERdGFB2Y= 
+ content-type; s=facebook; bh=hr8uwX4+bIMF/fgSZXlhqmuNaV8ARRG+U0H8UBZlNmE=;
+ b=p6NMKOn1IMum5AxtysQtYG9/UauGKhtahcOt0K0ZVozZvExfc2wWscYSaBbBChEMsK9+
+ 03+elKBRW77WLOXmsoWgZBV2NiYmL94JNTBW1iN6IjAV+FdPOJ2HWPMC0C6pOwJmiR6a
+ dIXeimKW9/IIRnDv03djW6aBul/NEDApKDQ= 
 Received: from mail.thefacebook.com ([199.201.64.23])
-        by mx0b-00082601.pphosted.com with ESMTP id 2r2861g6bg-1
+        by mx0a-00082601.pphosted.com with ESMTP id 2r281ng70g-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 05 Mar 2019 23:14:29 -0800
+        for <bpf@vger.kernel.org>; Tue, 05 Mar 2019 23:14:28 -0800
 Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::125) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c081:35::126) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Tue, 5 Mar 2019 23:14:28 -0800
+ Tue, 5 Mar 2019 23:14:25 -0800
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 3B05962E2965; Tue,  5 Mar 2019 23:14:28 -0800 (PST)
+        id 611F162E2965; Tue,  5 Mar 2019 23:14:24 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Song Liu <songliubraving@fb.com>
 Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
@@ -49,9 +49,9 @@ CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
         <peterz@infradead.org>, <acme@redhat.com>, <jolsa@kernel.org>,
         <namhyung@kernel.org>, Song Liu <songliubraving@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v6 perf,bpf 10/15] perf-top: add option --no-bpf-event
-Date:   Tue, 5 Mar 2019 23:13:54 -0800
-Message-ID: <20190306071359.2359896-11-songliubraving@fb.com>
+Subject: [PATCH v6 perf,bpf 08/15] perf, bpf: save btf in a rbtree in perf_env
+Date:   Tue, 5 Mar 2019 23:13:52 -0800
+Message-ID: <20190306071359.2359896-9-songliubraving@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190306071359.2359896-1-songliubraving@fb.com>
 References: <20190306071359.2359896-1-songliubraving@fb.com>
@@ -67,48 +67,190 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-bpf events should be tracked by default for perf-top. This patch makes it
-on by default, and adds option to disable bpf events.
+btf contains information necessary to annotate bpf programs. This patch
+saves btf for bpf programs loaded in the system.
 
 Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
- tools/perf/builtin-top.c | 3 +++
- tools/perf/util/top.h    | 1 +
- 2 files changed, 4 insertions(+)
+ tools/perf/util/bpf-event.c | 23 +++++++++++++
+ tools/perf/util/bpf-event.h |  7 ++++
+ tools/perf/util/env.c       | 65 +++++++++++++++++++++++++++++++++++++
+ tools/perf/util/env.h       |  4 +++
+ 4 files changed, 99 insertions(+)
 
-diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-index 27d8d42e0a4d..ccdf5689452f 100644
---- a/tools/perf/builtin-top.c
-+++ b/tools/perf/builtin-top.c
-@@ -1492,6 +1492,7 @@ int cmd_top(int argc, const char **argv)
- 		    "Display raw encoding of assembly instructions (default)"),
- 	OPT_BOOLEAN(0, "demangle-kernel", &symbol_conf.demangle_kernel,
- 		    "Enable kernel symbol demangling"),
-+	OPT_BOOLEAN(0, "no-bpf-event", &top.no_bpf_event, "do not record bpf events"),
- 	OPT_STRING(0, "objdump", &top.annotation_opts.objdump_path, "path",
- 		    "objdump binary to use for disassembly and annotations"),
- 	OPT_STRING('M', "disassembler-style", &top.annotation_opts.disassembler_style, "disassembler style",
-@@ -1651,6 +1652,8 @@ int cmd_top(int argc, const char **argv)
- 		signal(SIGWINCH, winch_sig);
+diff --git a/tools/perf/util/bpf-event.c b/tools/perf/util/bpf-event.c
+index ce81b2c43a51..536ca95df5f4 100644
+--- a/tools/perf/util/bpf-event.c
++++ b/tools/perf/util/bpf-event.c
+@@ -34,6 +34,28 @@ int machine__process_bpf_event(struct machine *machine __maybe_unused,
+ 	return 0;
+ }
+ 
++static int perf_env__fetch_btf(struct perf_env *env,
++			       u32 btf_id,
++			       struct btf *btf)
++{
++	struct btf_node *node;
++	u32 data_size;
++	const void *data;
++
++	data = btf__get_raw_data(btf, &data_size);
++
++	node = malloc(data_size + sizeof(struct btf_node));
++	if (!node)
++		return -1;
++
++	node->id = btf_id;
++	node->data_size = data_size;
++	memcpy(node->data, data, data_size);
++
++	perf_env__insert_btf(env, node);
++	return 0;
++}
++
+ /*
+  * Synthesize PERF_RECORD_KSYMBOL and PERF_RECORD_BPF_EVENT for one bpf
+  * program. One PERF_RECORD_BPF_EVENT is generated for the program. And
+@@ -113,6 +135,7 @@ static int perf_event__synthesize_one_bpf_prog(struct perf_session *session,
+ 			goto out;
+ 		}
+ 		has_btf = true;
++		perf_env__fetch_btf(env, info->btf_id, btf);
  	}
  
-+	top.record_opts.bpf_event = !top.no_bpf_event;
-+
- 	status = __cmd_top(&top);
+ 	/* Synthesize PERF_RECORD_KSYMBOL */
+diff --git a/tools/perf/util/bpf-event.h b/tools/perf/util/bpf-event.h
+index fad932f7404f..b9ec394dc7c7 100644
+--- a/tools/perf/util/bpf-event.h
++++ b/tools/perf/util/bpf-event.h
+@@ -16,6 +16,13 @@ struct bpf_prog_info_node {
+ 	struct rb_node			rb_node;
+ };
  
- out_delete_evlist:
-diff --git a/tools/perf/util/top.h b/tools/perf/util/top.h
-index 19f95eaf75c8..862a37bd27ea 100644
---- a/tools/perf/util/top.h
-+++ b/tools/perf/util/top.h
-@@ -32,6 +32,7 @@ struct perf_top {
- 	bool		   use_tui, use_stdio;
- 	bool		   vmlinux_warned;
- 	bool		   dump_symtab;
-+	bool		   no_bpf_event;
- 	struct hist_entry  *sym_filter_entry;
- 	struct perf_evsel  *sym_evsel;
- 	struct perf_session *session;
++struct btf_node {
++	struct rb_node	rb_node;
++	u32		id;
++	u32		data_size;
++	char		data[];
++};
++
+ #ifdef HAVE_LIBBPF_SUPPORT
+ int machine__process_bpf_event(struct machine *machine, union perf_event *event,
+ 			       struct perf_sample *sample);
+diff --git a/tools/perf/util/env.c b/tools/perf/util/env.c
+index cdda46f2633f..9e4ee7b0a3d1 100644
+--- a/tools/perf/util/env.c
++++ b/tools/perf/util/env.c
+@@ -63,6 +63,57 @@ struct bpf_prog_info_node *perf_env__find_bpf_prog_info(struct perf_env *env,
+ 	return node;
+ }
+ 
++void perf_env__insert_btf(struct perf_env *env, struct btf_node *btf_node)
++{
++	struct rb_node *parent = NULL;
++	__u32 btf_id = btf_node->id;
++	struct btf_node *node;
++	struct rb_node **p;
++
++	down_write(&env->bpf_progs.lock);
++	p = &env->bpf_progs.btfs.rb_node;
++
++	while (*p != NULL) {
++		parent = *p;
++		node = rb_entry(parent, struct btf_node, rb_node);
++		if (btf_id < node->id) {
++			p = &(*p)->rb_left;
++		} else if (btf_id > node->id) {
++			p = &(*p)->rb_right;
++		} else {
++			pr_debug("duplicated btf %u\n", btf_id);
++			goto out;
++		}
++	}
++
++	rb_link_node(&btf_node->rb_node, parent, p);
++	rb_insert_color(&btf_node->rb_node, &env->bpf_progs.btfs);
++out:
++	up_write(&env->bpf_progs.lock);
++}
++
++struct btf_node *perf_env__find_btf(struct perf_env *env, __u32 btf_id)
++{
++	struct btf_node *node = NULL;
++	struct rb_node *n;
++
++	down_read(&env->bpf_progs.lock);
++	n = env->bpf_progs.btfs.rb_node;
++
++	while (n) {
++		node = rb_entry(n, struct btf_node, rb_node);
++		if (btf_id < node->id)
++			n = n->rb_left;
++		else if (btf_id > node->id)
++			n = n->rb_right;
++		else
++			break;
++	}
++
++	up_read(&env->bpf_progs.lock);
++	return node;
++}
++
+ /* purge data in bpf_progs.infos tree */
+ static void perf_env__purge_bpf(struct perf_env *env)
+ {
+@@ -82,6 +133,19 @@ static void perf_env__purge_bpf(struct perf_env *env)
+ 		rb_erase_init(&node->rb_node, root);
+ 		free(node);
+ 	}
++
++	root = &env->bpf_progs.btfs;
++	next = rb_first(root);
++
++	while (next) {
++		struct btf_node *node;
++
++		node = rb_entry(next, struct btf_node, rb_node);
++		next = rb_next(&node->rb_node);
++		rb_erase_init(&node->rb_node, root);
++		free(node);
++	}
++
+ 	up_write(&env->bpf_progs.lock);
+ }
+ 
+@@ -119,6 +183,7 @@ void perf_env__exit(struct perf_env *env)
+ void perf_env__init(struct perf_env *env)
+ {
+ 	env->bpf_progs.infos = RB_ROOT;
++	env->bpf_progs.btfs = RB_ROOT;
+ 	init_rwsem(&env->bpf_progs.lock);
+ }
+ 
+diff --git a/tools/perf/util/env.h b/tools/perf/util/env.h
+index e034e5b438e3..c3e48504e834 100644
+--- a/tools/perf/util/env.h
++++ b/tools/perf/util/env.h
+@@ -74,10 +74,12 @@ struct perf_env {
+ 	struct {
+ 		struct rw_semaphore	lock;
+ 		struct rb_root		infos;
++		struct rb_root		btfs;
+ 	} bpf_progs;
+ };
+ 
+ struct bpf_prog_info_node;
++struct btf_node;
+ 
+ extern struct perf_env perf_env;
+ 
+@@ -98,4 +100,6 @@ void perf_env__insert_bpf_prog_info(struct perf_env *env,
+ 				    struct bpf_prog_info_node *info_node);
+ struct bpf_prog_info_node *perf_env__find_bpf_prog_info(struct perf_env *env,
+ 							__u32 prog_id);
++void perf_env__insert_btf(struct perf_env *env, struct btf_node *btf_node);
++struct btf_node *perf_env__find_btf(struct perf_env *env, __u32 btf_id);
+ #endif /* __PERF_ENV_H */
 -- 
 2.17.1
 
