@@ -2,94 +2,79 @@ Return-Path: <SRS0=uow0=RJ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 840A7C43381
-	for <bpf@archiver.kernel.org>; Wed,  6 Mar 2019 07:16:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FBE6C43381
+	for <bpf@archiver.kernel.org>; Wed,  6 Mar 2019 08:59:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4A24120675
-	for <bpf@archiver.kernel.org>; Wed,  6 Mar 2019 07:16:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D6CB720840
+	for <bpf@archiver.kernel.org>; Wed,  6 Mar 2019 08:59:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="L1Hchxzq"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="oy4oq9yz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729106AbfCFHON (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Mar 2019 02:14:13 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:49090 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729092AbfCFHON (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 6 Mar 2019 02:14:13 -0500
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x2673dF8017799
-        for <bpf@vger.kernel.org>; Tue, 5 Mar 2019 23:14:11 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=ZrZDcczo4vpZnSIhb1+K0nkCR0Uk73l7sK2TRzsEYmg=;
- b=L1HchxzqRDm/DZGpqdkgMXYG+jq1iBj/cbyOlT2XYg4gkt8AaLtxV4ylF018QY8zGc1u
- FMIAhi6KJs8DbHFsvuevebjKfRhJNx60m/JU2O2ss42zcCi+kOhGObAeZCFCKc9UMoo3
- oaqt/Lx5As7ueZCtnk39MfP/B2D/HKGiSVA= 
-Received: from maileast.thefacebook.com ([199.201.65.23])
-        by m0089730.ppops.net with ESMTP id 2r276y0a9r-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 05 Mar 2019 23:14:11 -0800
-Received: from mx-out.facebook.com (2620:10d:c0a1:3::13) by
- mail.thefacebook.com (2620:10d:c021:18::175) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Tue, 5 Mar 2019 23:14:10 -0800
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 9240B62E2965; Tue,  5 Mar 2019 23:14:09 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Song Liu <songliubraving@fb.com>
-Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        <peterz@infradead.org>, <acme@redhat.com>, <jolsa@kernel.org>,
-        <namhyung@kernel.org>, Song Liu <songliubraving@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v6 perf,bpf 01/15] perf, bpf: consider events with attr.bpf_event as side-band events
-Date:   Tue, 5 Mar 2019 23:13:45 -0800
-Message-ID: <20190306071359.2359896-2-songliubraving@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190306071359.2359896-1-songliubraving@fb.com>
-References: <20190306071359.2359896-1-songliubraving@fb.com>
-X-FB-Internal: Safe
+        id S1728359AbfCFI7Q (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Mar 2019 03:59:16 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:39314 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726391AbfCFI7Q (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 6 Mar 2019 03:59:16 -0500
+Received: by mail-lj1-f196.google.com with SMTP id g80so10138300ljg.6
+        for <bpf@vger.kernel.org>; Wed, 06 Mar 2019 00:59:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=1z2lAKclTsS+iuS3T7KcT8UEol80bg+om3zRGMhnM+M=;
+        b=oy4oq9yzO/1num5bG0XzsxcpE6NrUswTBxB0ANRRi6aATGTBuTUGO2VhEKttUrQVRx
+         sDQDfHDZmDeZh3bFDqoHzuhTuSZbvSKSQ330JbKYaYl7/fddCOSe6ibp36d+ibv7nNxJ
+         mpOaWuMx58R4gEfgpauuuQicQOJ9fUCSGgXbY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=1z2lAKclTsS+iuS3T7KcT8UEol80bg+om3zRGMhnM+M=;
+        b=q1hVF8iFcbfaHpR9b0gdo8/yFYiO1nQbvCp3UDBdB7X3WXanz6FerdSEe8ENdE1M4L
+         PsVlxcCR+lllI6rnrkI9DyY45qwpPz/LfeWKBZkMtGdlRFcAkq3+FUNIhG2gS+sIiiZi
+         K7LVqMnR6IUPAifD0/7t0IW+BnPIMTgZGpGAOg4EcJ3YAZfStf88Gj+mZEjoRj5e44Us
+         bj/c8zuL9VrG2o9EtOiZeVrFPKVjZGtsZDJN4S3Bs+eQWtZ38/s8QRptXLzxzNav1+T1
+         fDkmfbA6sdDGO25bMPfFl6Iblf/lzSYbEZiMNAJcuJzFdc/LHVwSdwM6XDUHMQhrTOFh
+         yxcQ==
+X-Gm-Message-State: APjAAAUEE+QxI4EMVy1gb0mDvWHnDTguQ7Cm3DWSBfArXICuAuePjA99
+        JOsbk0yL0KBFpxXerdgCRxOYhA==
+X-Google-Smtp-Source: APXvYqyKVRgqDcV6wLVzcIcrCOphv31chyO0tbseVQWh2Dg36MZt6MkbJya/IPsY7FS2fX+3QCPQbA==
+X-Received: by 2002:a2e:6f08:: with SMTP id k8mr1671553ljc.197.1551862754289;
+        Wed, 06 Mar 2019 00:59:14 -0800 (PST)
+Received: from cloudflare.com ([176.221.114.230])
+        by smtp.gmail.com with ESMTPSA id t14sm201656lfk.83.2019.03.06.00.59.13
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 06 Mar 2019 00:59:13 -0800 (PST)
+References: <20190301210529.8218-1-daniel@iogearbox.net> <87lg1tz9ys.fsf@cloudflare.com> <831131a1-59e3-e7c7-f56e-7b69d4850ffc@iogearbox.net>
+User-agent: mu4e 1.1.0; emacs 26.1
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     ast@fb.com, afabre@cloudflare.com, marek@cloudflare.com,
+        bpf@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH bpf] bpf: fix sanitation rewrite in case of non-pointers
+In-reply-to: <831131a1-59e3-e7c7-f56e-7b69d4850ffc@iogearbox.net>
+Date:   Wed, 06 Mar 2019 09:59:12 +0100
+Message-ID: <87k1hcz8db.fsf@cloudflare.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-03-06_04:,,
- signatures=0
-X-Proofpoint-Spam-Reason: safe
-X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Events with bpf_event should be considered as side-band event, as they
-carry information about BPF programs.
+On Tue, Mar 05, 2019 at 03:30 PM CET, Daniel Borkmann wrote:
+> On 03/05/2019 03:12 PM, Jakub Sitnicki wrote:
+> [...]
+>> Could you please queue it for -stable which has d3bd7413e0ca ("bpf: fix
+>> sanitation of alu op with pointer / scalar type from different paths")?
+>
+> Already done here yesterday morning:
+>
+> https://lore.kernel.org/stable/40b25ec1c31e234cf7eee75d62083a9a4bcbdbfe.1551702973.git.daniel@iogearbox.net/T/#u
 
-Fixes: 6ee52e2a3fe4 ("perf, bpf: Introduce PERF_RECORD_BPF_EVENT")
-Signed-off-by: Song Liu <songliubraving@fb.com>
----
- kernel/events/core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index f1a26c8f15b3..4a59cb9b29ee 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -4238,7 +4238,8 @@ static bool is_sb_event(struct perf_event *event)
- 	if (attr->mmap || attr->mmap_data || attr->mmap2 ||
- 	    attr->comm || attr->comm_exec ||
- 	    attr->task || attr->ksymbol ||
--	    attr->context_switch)
-+	    attr->context_switch ||
-+	    attr->bpf_event)
- 		return true;
- 	return false;
- }
--- 
-2.17.1
-
+Ah, you're one step ahead of me. Thank you.
