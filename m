@@ -2,120 +2,138 @@ Return-Path: <SRS0=xp9Q=RK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_NEOMUTT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6718DC43381
-	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 21:30:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05821C43381
+	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 23:26:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2DCF020684
-	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 21:30:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C0C5620851
+	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 23:26:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dPCr8JpD"
+	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="fOx0sap2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726216AbfCGVal (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 Mar 2019 16:30:41 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:36546 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726186AbfCGVal (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 7 Mar 2019 16:30:41 -0500
-Received: by mail-pg1-f195.google.com with SMTP id r124so12290257pgr.3;
-        Thu, 07 Mar 2019 13:30:41 -0800 (PST)
+        id S1726298AbfCGX0e (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 Mar 2019 18:26:34 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:38698 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726217AbfCGX0e (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 7 Mar 2019 18:26:34 -0500
+Received: by mail-pf1-f194.google.com with SMTP id n125so12644322pfn.5
+        for <bpf@vger.kernel.org>; Thu, 07 Mar 2019 15:26:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=K9IjzSKu+G9SDroW6rfnS+bl125mM2MXlkgG6cbvbqc=;
-        b=dPCr8JpDSIt8eOB3X0TlLKLQrYcgKvNECCzltSoX0OTXruNgAWhCenBbqNLWnTWzSK
-         W2467MigNvf7sNE7YVMUp1cx4wd9693rIhxfuP4hh1MS7Q10QMImY/Hg4/W0moL/4KF1
-         7XRjykthG7E2yQ78NeEUM2gBc8R9BUlBeFPsBhd9woilKw0jFKj4StnCw6ehnoaqaDlc
-         SxBsvINxo0hltjYO+BBUklKMI3psXOWCof2C3nQCcjv8zc9xCicmw6pRDt1lm18D5tYF
-         jTY3nzUaai1ZzqrrctGWp6VS2j/g4wI/PnIJuI7Npzs5XOMgf8yOMwtbmub8n2sk45kP
-         yoVQ==
+        bh=s7cJRMc5KalDw+jgFBJx4Iw1WPTiJ8GUlpiEplESzz8=;
+        b=fOx0sap2a/XNmLnTxYU5WTDKqg6FGqSAIw9cPN8nkEqxTqAxiZKDWfFzecWGiu5wt+
+         LAJ4UEHEVLIVwpwvTvA+bPb0jtDD+J2VqQgiou44DdHZL6zgnuD3lQW9LH+eAartcr6Q
+         hX1fuZvQ48Nbzs1mVpssiBrOK7j0YrUilel2mOmWzZd5aLqp2cLv6YK7fYnSWeNfBcj/
+         beHCFT9QosmBa9nr1zVNiclNZ28qxUJhpBIQXBxdtglqOZ5Z1wtleFSAFhiuS8HfzC7q
+         fZB51QxDi3alZF+kW1teqbq+nZw3AoOgK1t6DCGu6CoBEp5WPROm4wD1W5Gr5kcoHXh9
+         8FkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=K9IjzSKu+G9SDroW6rfnS+bl125mM2MXlkgG6cbvbqc=;
-        b=BAhx/Ay8v5EQ6D4tkTEYJ0GttG+6GowNdhaYHaG63ohTce9AnRkJlzKZUK6M/DjKVa
-         txNTXWjmcI1Ja/0f3FjCXXgIYzTNV3H5gX+E384wnejFKxlsyONFwGpCTNiknJbfhNBx
-         ZuIFkdJgacLR0lKR/5vIBzbVdNKHyH186LB7efLIp8gXiZHH7Daj57wy6K7/Ipy6RiO2
-         olBCB9iaZTxSP/1NHUksqDmDm8Mz5wS8HrQ3E3xCQrwywJLlMWtucEYzp47JTNoTq7UM
-         fqNuwxKMOdi4ag0t/utVmSc26jF17N20bEaHHOkZUaMA+xZL/MZkHOqhIzE2BDLTcjrK
-         DBDA==
-X-Gm-Message-State: APjAAAU77OwtbW+ulCPVQcNy52oqZ6MI8D1szzioU8hsiz6baMpY1dKc
-        u287k7GoiXLH/UM/eF7fmq8=
-X-Google-Smtp-Source: APXvYqw0zIaOvD1SlZOTnTzLoK3jAwbIlA+yWAmeAPkXQImQIcaKhrfomz4l/E4lAaVZeDmysyuKnQ==
-X-Received: by 2002:a62:6046:: with SMTP id u67mr14967464pfb.46.1551994240573;
-        Thu, 07 Mar 2019 13:30:40 -0800 (PST)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:180::e398])
-        by smtp.gmail.com with ESMTPSA id x1sm7807247pge.73.2019.03.07.13.30.38
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 07 Mar 2019 13:30:39 -0800 (PST)
-Date:   Thu, 7 Mar 2019 13:30:37 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Kris Van Hees <kris.van.hees@oracle.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net
-Subject: Re: [PATCH 0/2] bpf: context casting for tail call and gtrace prog
- type
-Message-ID: <20190307213035.5eagphx6vswxalai@ast-mbp.dhcp.thefacebook.com>
-References: <201902251554.x1PFsD3w017626@userv0121.oracle.com>
- <20190226061823.f7hfs7yojfuycqmg@ast-mbp.dhcp.thefacebook.com>
- <20190226064601.GE16689@oracle.com>
- <20190305185950.rpx7srzpbya5psnf@ast-mbp.dhcp.thefacebook.com>
- <20190306020357.GG32758@oracle.com>
+        bh=s7cJRMc5KalDw+jgFBJx4Iw1WPTiJ8GUlpiEplESzz8=;
+        b=FG9Ny1cluefXTxzCkVL179dpyuCI/Jyk+EaOESYi97cA6TljbU795UnPJ89VzOu4YM
+         RALo8aIkA3oeXkKvk/CKMF0idnYbLND3QfHmK+MNEH60p+FZchxuIvLxexHqk13D6j7B
+         +UfbhgzFtSee5UQNpEkyz7kCPJwSm72ZABvcyGzxp61pmrU+cUB1MeX+hkzYjnLZx/9A
+         LGmN0KdCK2Vp6lrEDMRqt7Y+B/8RS6e7K19vnFUYBJZLYzGS1/iTJ+Ema3nJBAeg6MCK
+         Y8SWp/gkeXe0BFYYlDcxrouSY4a+94OLKgGE6m///cXQXe68zbs0iqeAkGKaw5SeUAzp
+         fqOw==
+X-Gm-Message-State: APjAAAV7JdBQdf7x41dK3ZXukFpyekmAbmqByuFyvbNADRr5tfudLRgM
+        X4kZwHNLl+WGOQkrF5SEWqNT4Q==
+X-Google-Smtp-Source: APXvYqz72lYudIr5rK49mN+94KBfqJXlrbnZPy6hSG7AFNOkN1jApFV0sNyW3JjowB6U4HePfiz75g==
+X-Received: by 2002:a17:902:834b:: with SMTP id z11mr15667426pln.257.1552001192959;
+        Thu, 07 Mar 2019 15:26:32 -0800 (PST)
+Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
+        by smtp.gmail.com with ESMTPSA id a1sm9034196pfn.26.2019.03.07.15.26.31
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 07 Mar 2019 15:26:32 -0800 (PST)
+Date:   Thu, 7 Mar 2019 15:26:31 -0800
+From:   Stanislav Fomichev <sdf@fomichev.me>
+To:     Song Liu <songliubraving@fb.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kernel-team@fb.com, peterz@infradead.org, acme@redhat.com,
+        jolsa@kernel.org, namhyung@kernel.org
+Subject: Re: [PATCH v7 perf,bpf 11/15] perf: add -lopcodes to feature-libbfd
+Message-ID: <20190307232631.GA5481@mini-arch.hsd1.ca.comcast.net>
+References: <20190307175810.249857-1-songliubraving@fb.com>
+ <20190307175810.249857-12-songliubraving@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190306020357.GG32758@oracle.com>
-User-Agent: NeoMutt/20180223
+In-Reply-To: <20190307175810.249857-12-songliubraving@fb.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 05, 2019 at 09:03:57PM -0500, Kris Van Hees wrote:
+On 03/07, Song Liu wrote:
+> Both libbfd and libopcodes are distributed with binutil-dev/devel. When
+> libbfd presents, it is OK to assume libopcodes also presents. This has
+> been a safe assumption for bpftool.
 > 
-> So in summary, I am trying to solve two (related) problems:
+> This patch adds -lopcodes to perf/Makefile.config. libopcodes will be
+> used in the next commit for bpf annotation.
 > 
-> - Ensure that unprivileged tracing can obtain information about the task that
->   triggered a probe or event.  There will always be limitations but we can do
->   better than is available now.
+> Signed-off-by: Song Liu <songliubraving@fb.com>
+> ---
+>  tools/perf/Makefile.config | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> index b441c88cafa1..e0bafbc273af 100644
+> --- a/tools/perf/Makefile.config
+> +++ b/tools/perf/Makefile.config
+> @@ -701,7 +701,7 @@ else
+>  endif
+>  
+>  ifeq ($(feature-libbfd), 1)
+> -  EXTLIBS += -lbfd
+> +  EXTLIBS += -lbfd -lopcodes
+I think you need to add -lopcodes to the other feature checks as
+well (to work on the systems which require -liberty and/or -lz for
+libfd):
 
-I think unprivileged tracing is a huge topic on its own.
-It's too easy to create security holes with such mechanism.
-kprobe/tracepoints/etc have been historically root only and I don't see a way
-for them to become unpriv.
-imo the existing /proc/pid/status is already more powerful than
-what you're proposing with gtrace context.
+--
 
-> - Allow tracing tools ab ability to provide actions to be performed when a
->   probe or event fires, beyond what the individual BPF program types allow
->   for the specific probe/event types (and do it in a generic manner, in a
->   sense encapsulating multiple probe/event types in a more generic tracing
->   context).
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index b441c88cafa1..3fa2f5d7d54f 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -701,7 +701,7 @@ else
+ endif
+ 
+ ifeq ($(feature-libbfd), 1)
+-  EXTLIBS += -lbfd
++  EXTLIBS += -lbfd -lopcodes
+ else
+   # we are on a system that requires -liberty and (maybe) -lz
+   # to link against -lbfd; test each case individually here
+@@ -712,10 +712,10 @@ else
+   $(call feature_check,libbfd-liberty-z)
+ 
+   ifeq ($(feature-libbfd-liberty), 1)
+-    EXTLIBS += -lbfd -liberty
++    EXTLIBS += -lbfd -lopcodes -liberty
+   else
+     ifeq ($(feature-libbfd-liberty-z), 1)
+-      EXTLIBS += -lbfd -liberty -lz
++      EXTLIBS += -lbfd -lopcodes -liberty -lz
+     endif
+   endif
+ endif
 
-I think existing bpf tracing is generic whereas proposed gtrace is not generic at all.
-'generic' is a loaded word. we can throw it back and forth and won't make
-any forward progress. Let's focus on technical bits, ok?
-
-> A patch I am currently working on ties into this (and I hope to get it ready
-> sometime next week).  It builds on the support you already have for accessing
-> packet data from the __sk_buff context.  If we can make this same functionality
-> available to other contexts as well, my goal would be to make it possible for
-> the generic tracing context to have a buffer (data and data_end members) that
-> the BPF program can issue direct stores to as a means to allow a tracing
-> program to control how data is written into the buffer. 
-
-sounds like you're trying to reinvent bpf_perf_event_output() mechanism.
-
-> But being able to do things like this without
-> needing to touch the context of any other BPF program type is a great benefit
-> to offer tracing tools, as far as I see it.
-
-I still don't understand what you're referring to by 'things like this'
-that somehow will be possible in the future, but not possible today.
-Could you please give concrete example?
-
+>  else
+>    # we are on a system that requires -liberty and (maybe) -lz
+>    # to link against -lbfd; test each case individually here
+> -- 
+> 2.17.1
+> 
