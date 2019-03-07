@@ -2,150 +2,120 @@ Return-Path: <SRS0=xp9Q=RK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_NEOMUTT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 287F0C43381
-	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 18:02:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6718DC43381
+	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 21:30:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ECDEF20854
-	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 18:02:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2DCF020684
+	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 21:30:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="bMltFxCH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dPCr8JpD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726319AbfCGSCn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 Mar 2019 13:02:43 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:37412 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726361AbfCGSCn (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 7 Mar 2019 13:02:43 -0500
-Received: from pps.filterd (m0044008.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x27I0aKx017838
-        for <bpf@vger.kernel.org>; Thu, 7 Mar 2019 10:02:42 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=2GG3WKx2jfBDAkcfkUGTi2ecoxqVDeDzdNpDTVUASuE=;
- b=bMltFxCHy3u+uH11QWzBIrStoXQBVtEZ5XXRAjHtm1yvcnZOMW2sgVZD/CteQUj/JWig
- VZPTy6vEjdHuziNsw46eI5VNCcc+dMGApc8+d50E2a3UMzack2RZu0z8rTb+TFgzuVUA
- JNJ2iuF2UKCOuX56ANGgMHtqIlPm4VsEXJg= 
-Received: from mail.thefacebook.com ([199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2r37qv85ur-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 07 Mar 2019 10:02:41 -0800
-Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Thu, 7 Mar 2019 09:58:41 -0800
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id E0A3862E1750; Thu,  7 Mar 2019 09:58:39 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Song Liu <songliubraving@fb.com>
-Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        <peterz@infradead.org>, <acme@redhat.com>, <jolsa@kernel.org>,
-        <namhyung@kernel.org>, Song Liu <songliubraving@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v7 perf,bpf 13/15] perf, bpf: process PERF_BPF_EVENT_PROG_LOAD for annotation
-Date:   Thu, 7 Mar 2019 09:58:08 -0800
-Message-ID: <20190307175810.249857-14-songliubraving@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190307175810.249857-1-songliubraving@fb.com>
-References: <20190307175810.249857-1-songliubraving@fb.com>
-X-FB-Internal: Safe
+        id S1726216AbfCGVal (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 Mar 2019 16:30:41 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:36546 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726186AbfCGVal (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 7 Mar 2019 16:30:41 -0500
+Received: by mail-pg1-f195.google.com with SMTP id r124so12290257pgr.3;
+        Thu, 07 Mar 2019 13:30:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=K9IjzSKu+G9SDroW6rfnS+bl125mM2MXlkgG6cbvbqc=;
+        b=dPCr8JpDSIt8eOB3X0TlLKLQrYcgKvNECCzltSoX0OTXruNgAWhCenBbqNLWnTWzSK
+         W2467MigNvf7sNE7YVMUp1cx4wd9693rIhxfuP4hh1MS7Q10QMImY/Hg4/W0moL/4KF1
+         7XRjykthG7E2yQ78NeEUM2gBc8R9BUlBeFPsBhd9woilKw0jFKj4StnCw6ehnoaqaDlc
+         SxBsvINxo0hltjYO+BBUklKMI3psXOWCof2C3nQCcjv8zc9xCicmw6pRDt1lm18D5tYF
+         jTY3nzUaai1ZzqrrctGWp6VS2j/g4wI/PnIJuI7Npzs5XOMgf8yOMwtbmub8n2sk45kP
+         yoVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=K9IjzSKu+G9SDroW6rfnS+bl125mM2MXlkgG6cbvbqc=;
+        b=BAhx/Ay8v5EQ6D4tkTEYJ0GttG+6GowNdhaYHaG63ohTce9AnRkJlzKZUK6M/DjKVa
+         txNTXWjmcI1Ja/0f3FjCXXgIYzTNV3H5gX+E384wnejFKxlsyONFwGpCTNiknJbfhNBx
+         ZuIFkdJgacLR0lKR/5vIBzbVdNKHyH186LB7efLIp8gXiZHH7Daj57wy6K7/Ipy6RiO2
+         olBCB9iaZTxSP/1NHUksqDmDm8Mz5wS8HrQ3E3xCQrwywJLlMWtucEYzp47JTNoTq7UM
+         fqNuwxKMOdi4ag0t/utVmSc26jF17N20bEaHHOkZUaMA+xZL/MZkHOqhIzE2BDLTcjrK
+         DBDA==
+X-Gm-Message-State: APjAAAU77OwtbW+ulCPVQcNy52oqZ6MI8D1szzioU8hsiz6baMpY1dKc
+        u287k7GoiXLH/UM/eF7fmq8=
+X-Google-Smtp-Source: APXvYqw0zIaOvD1SlZOTnTzLoK3jAwbIlA+yWAmeAPkXQImQIcaKhrfomz4l/E4lAaVZeDmysyuKnQ==
+X-Received: by 2002:a62:6046:: with SMTP id u67mr14967464pfb.46.1551994240573;
+        Thu, 07 Mar 2019 13:30:40 -0800 (PST)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:180::e398])
+        by smtp.gmail.com with ESMTPSA id x1sm7807247pge.73.2019.03.07.13.30.38
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 07 Mar 2019 13:30:39 -0800 (PST)
+Date:   Thu, 7 Mar 2019 13:30:37 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Kris Van Hees <kris.van.hees@oracle.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net
+Subject: Re: [PATCH 0/2] bpf: context casting for tail call and gtrace prog
+ type
+Message-ID: <20190307213035.5eagphx6vswxalai@ast-mbp.dhcp.thefacebook.com>
+References: <201902251554.x1PFsD3w017626@userv0121.oracle.com>
+ <20190226061823.f7hfs7yojfuycqmg@ast-mbp.dhcp.thefacebook.com>
+ <20190226064601.GE16689@oracle.com>
+ <20190305185950.rpx7srzpbya5psnf@ast-mbp.dhcp.thefacebook.com>
+ <20190306020357.GG32758@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-03-07_09:,,
- signatures=0
-X-Proofpoint-Spam-Reason: safe
-X-FB-Internal: Safe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190306020357.GG32758@oracle.com>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds processing of PERF_BPF_EVENT_PROG_LOAD, which sets proper
-DSO type/id/etc of memory regions mapped to BPF programs to
-DSO_BINARY_TYPE__BPF_PROG_INFO
+On Tue, Mar 05, 2019 at 09:03:57PM -0500, Kris Van Hees wrote:
+> 
+> So in summary, I am trying to solve two (related) problems:
+> 
+> - Ensure that unprivileged tracing can obtain information about the task that
+>   triggered a probe or event.  There will always be limitations but we can do
+>   better than is available now.
 
-Signed-off-by: Song Liu <songliubraving@fb.com>
----
- tools/perf/util/bpf-event.c | 53 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+I think unprivileged tracing is a huge topic on its own.
+It's too easy to create security holes with such mechanism.
+kprobe/tracepoints/etc have been historically root only and I don't see a way
+for them to become unpriv.
+imo the existing /proc/pid/status is already more powerful than
+what you're proposing with gtrace context.
 
-diff --git a/tools/perf/util/bpf-event.c b/tools/perf/util/bpf-event.c
-index 4ef7c833830c..c0a316af5c2a 100644
---- a/tools/perf/util/bpf-event.c
-+++ b/tools/perf/util/bpf-event.c
-@@ -25,12 +25,65 @@ static int snprintf_hex(char *buf, size_t size, unsigned char *data, size_t len)
- 	return ret;
- }
- 
-+static int machine__process_bpf_event_load(struct machine *machine,
-+					   union perf_event *event,
-+					   struct perf_sample *sample __maybe_unused)
-+{
-+	struct bpf_prog_info_linear *info_linear;
-+	struct bpf_prog_info_node *info_node;
-+	struct perf_env *env = machine->env;
-+	int id = event->bpf_event.id;
-+	unsigned int i;
-+
-+	/* perf-record, no need to handle bpf-event */
-+	if (env == NULL)
-+		return 0;
-+
-+	info_node = perf_env__find_bpf_prog_info(env, id);
-+	if (!info_node)
-+		return 0;
-+	info_linear = info_node->info_linear;
-+
-+	for (i = 0; i < info_linear->info.nr_jited_ksyms; i++) {
-+		u64 *addrs = (u64 *)(info_linear->info.jited_ksyms);
-+		u64 addr = addrs[i];
-+		struct map *map;
-+
-+		map = map_groups__find(&machine->kmaps, addr);
-+
-+		if (map) {
-+			map->dso->binary_type = DSO_BINARY_TYPE__BPF_PROG_INFO;
-+			map->dso->bpf_prog.id = id;
-+			map->dso->bpf_prog.sub_id = i;
-+			map->dso->bpf_prog.env = env;
-+		}
-+	}
-+	return 0;
-+}
-+
- int machine__process_bpf_event(struct machine *machine __maybe_unused,
- 			       union perf_event *event,
- 			       struct perf_sample *sample __maybe_unused)
- {
- 	if (dump_trace)
- 		perf_event__fprintf_bpf_event(event, stdout);
-+
-+	switch (event->bpf_event.type) {
-+	case PERF_BPF_EVENT_PROG_LOAD:
-+		return machine__process_bpf_event_load(machine, event, sample);
-+
-+	case PERF_BPF_EVENT_PROG_UNLOAD:
-+		/*
-+		 * Do not free bpf_prog_info and btf of the program here,
-+		 * as annotation still need them. They will be freed at
-+		 * the end of the session.
-+		 */
-+		break;
-+	default:
-+		pr_debug("unexpected bpf_event type of %d\n",
-+			 event->bpf_event.type);
-+		break;
-+	}
- 	return 0;
- }
- 
--- 
-2.17.1
+> - Allow tracing tools ab ability to provide actions to be performed when a
+>   probe or event fires, beyond what the individual BPF program types allow
+>   for the specific probe/event types (and do it in a generic manner, in a
+>   sense encapsulating multiple probe/event types in a more generic tracing
+>   context).
+
+I think existing bpf tracing is generic whereas proposed gtrace is not generic at all.
+'generic' is a loaded word. we can throw it back and forth and won't make
+any forward progress. Let's focus on technical bits, ok?
+
+> A patch I am currently working on ties into this (and I hope to get it ready
+> sometime next week).  It builds on the support you already have for accessing
+> packet data from the __sk_buff context.  If we can make this same functionality
+> available to other contexts as well, my goal would be to make it possible for
+> the generic tracing context to have a buffer (data and data_end members) that
+> the BPF program can issue direct stores to as a means to allow a tracing
+> program to control how data is written into the buffer. 
+
+sounds like you're trying to reinvent bpf_perf_event_output() mechanism.
+
+> But being able to do things like this without
+> needing to touch the context of any other BPF program type is a great benefit
+> to offer tracing tools, as far as I see it.
+
+I still don't understand what you're referring to by 'things like this'
+that somehow will be possible in the future, but not possible today.
+Could you please give concrete example?
 
