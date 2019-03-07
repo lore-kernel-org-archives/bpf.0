@@ -2,390 +2,110 @@ Return-Path: <SRS0=xp9Q=RK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DE5CC43381
-	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 14:02:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8349BC43381
+	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 14:05:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 57D8E20835
-	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 14:02:53 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IO60s4sE"
+	by mail.kernel.org (Postfix) with ESMTP id 5F6622081B
+	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 14:05:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726242AbfCGOCw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 Mar 2019 09:02:52 -0500
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:39251 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726161AbfCGOCw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 7 Mar 2019 09:02:52 -0500
-Received: by mail-qt1-f193.google.com with SMTP id o6so17119148qtk.6;
-        Thu, 07 Mar 2019 06:02:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=EYgw6gBn3RZaOuNy8/pdKnRswbn5LwmEtfgud1nXaz8=;
-        b=IO60s4sEbXKt0QHgt7fCTQqVagi6pFsisgDKG8o4XKOiBxMFgxGDsh2IYBfaNovuVz
-         EaB+DUn7zsPL4h3i/yS7fOTnBOCHpYEM9zgh6frWeXy/6PfXw6CKPbg9xPUQ4nx8JhSO
-         F4nsweEeWtglHgI+FVTGc2b+xSSwOQ/6xv3ijM1PGkCx9e6YWMc3UHVv6H6ELbMcfVlg
-         rDeJwpSHkdNbglIPC4oTIVqsqgFreDJgd38Gbxa9JFwOaNRBudcInL6/GYwcCsFPF8go
-         x6Z/q9tXh1aG5D2a3XSLsy0Q8yLrlFSS+Lm2EUyTBVdFa9LC7EGPAlLCXYabjf0a1MAg
-         6F4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=EYgw6gBn3RZaOuNy8/pdKnRswbn5LwmEtfgud1nXaz8=;
-        b=cxONZurprswG65z0EstZjX+WiJcy9oEcLjE/SSky+yOOdJSI7+RWtEErv0Ltv8UvDa
-         JvpewhuqbqLNYEiRR9oTUJ8nutVvJGFQ28xK1NKW96wHOBiCnk8iDWkwLFc1St0/laD+
-         020u6EPKIPZsCETfLqzHDakR994f1ykQ1i46TgktRsYPun3ULzQpGGlvECQ9BTlxMg89
-         tTEeYq6WFfdyr8V3yRGxZK2JQ00ZV50g2cEFsJewVLjXDxTqRO0YqfsbM/fzu0Sv/ikc
-         8M9QpJYp5/wozWtQ4uoIl0Kwgfp0f34fuHxVZ9rPy2GFh72ipZaUb/eVd77Dxw9ODyXm
-         uThQ==
-X-Gm-Message-State: APjAAAWXqEhs4kTYxC3CPLje3Tb3hoeNjqb/sCpwTc8FYLNElH8Wpk+l
-        4rWTQ1vVbjxxts9VtCYIi/Q=
-X-Google-Smtp-Source: APXvYqxjG8mmxSK5AH00PUZu/mS7FOMaLc7vve8ZUX0rGagRmppDKt1vAfzDw7xuKNNetVFXbH4rCw==
-X-Received: by 2002:ac8:34ed:: with SMTP id x42mr10578238qtb.173.1551967370959;
-        Thu, 07 Mar 2019 06:02:50 -0800 (PST)
-Received: from quaco.ghostprotocols.net ([190.15.121.82])
-        by smtp.gmail.com with ESMTPSA id e67sm2009194qkc.63.2019.03.07.06.02.49
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 07 Mar 2019 06:02:50 -0800 (PST)
-From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 305324039C; Thu,  7 Mar 2019 11:02:47 -0300 (-03)
-Date:   Thu, 7 Mar 2019 11:02:47 -0300
-To:     Andrii Nakryiko <andriin@fb.com>
-Cc:     arnaldo.melo@gmail.com, andrii.nakryiko@gmail.com, ast@fb.com,
-        yhs@fb.com, dwarves@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH pahole] pahole: use 32-bit integers for iterations within
- CU
-Message-ID: <20190307140247.GV13100@kernel.org>
-References: <20190307002321.4071708-1-andriin@fb.com>
+        id S1726340AbfCGOFu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 Mar 2019 09:05:50 -0500
+Received: from mx1.redhat.com ([209.132.183.28]:41468 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726127AbfCGOFu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 7 Mar 2019 09:05:50 -0500
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 9AA57883CA;
+        Thu,  7 Mar 2019 14:05:49 +0000 (UTC)
+Received: from krava (unknown [10.40.206.1])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 609E25D783;
+        Thu,  7 Mar 2019 14:05:47 +0000 (UTC)
+Date:   Thu, 7 Mar 2019 15:05:46 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Song Liu <songliubraving@fb.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kernel-team@fb.com, peterz@infradead.org, acme@redhat.com,
+        jolsa@kernel.org, namhyung@kernel.org
+Subject: Re: [PATCH v6 perf,bpf 06/15] perf, bpf: save bpf_prog_info in a
+ rbtree in perf_env
+Message-ID: <20190307140546.GC7233@krava>
+References: <20190306071359.2359896-1-songliubraving@fb.com>
+ <20190306071359.2359896-7-songliubraving@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190307002321.4071708-1-andriin@fb.com>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <20190306071359.2359896-7-songliubraving@fb.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.26]); Thu, 07 Mar 2019 14:05:49 +0000 (UTC)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Wed, Mar 06, 2019 at 04:23:21PM -0800, Andrii Nakryiko escreveu:
-> Existing code base assumes that single CU doesn't have more than 65535 types
-> per each CU, which might be a reasonable assumption for DWARF data. With BTF,
-> though, all we get is single, potentially huge, CU which can easily have more
-> than 65k types. For example, this is the case for allyesconfig version of
-> Linux kernel, which has >200k types.
-
-And your patch seems to be a step in removing this limitation, thanks
-for working on it.
- 
-> Due to this assumption, libdwarves and other parts of pahole are using 16-bit
-> counters to iterate over entities within CU. This can cause infinite loop when
-> iterating BTF data, if there are more than 65535 types. This patch changes
-> non-public variables to use 32-bit integers, where appropriate.
-
-Ok, there are some bits that are unrelated, I'm comment on it and remove
-before applying.
- 
-> This still leads to invalid reported data when using BTF loader (due to using
-> (X & 0xFFFF) type ID, instead of X, when X > 65535) and loading huge files,
-> but at least it's not stuck in an infinite loop anymore.
-
-This can be a followup patch, I'm unaware of any usage of libdwarves,
-but if this leads to ABI breakage, then we can come up with a new
-SONAME.
-
-Mostly the libdwarves has been a internal thing so that the various
-tools don't have to statically link with it.
-
-- Arnaldo
- 
-> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-> ---
->  btf_loader.c      |  4 ++--
->  dwarves.c         | 16 ++++++++--------
->  dwarves_fprintf.c |  8 ++++----
->  pahole.c          | 36 ++++++++++++++++++------------------
->  4 files changed, 32 insertions(+), 32 deletions(-)
+On Tue, Mar 05, 2019 at 11:13:50PM -0800, Song Liu wrote:
+> bpf_prog_info contains information necessary to annotate bpf programs.
+> This patch saves bpf_prog_info for bpf programs loaded in the system.
 > 
-> diff --git a/btf_loader.c b/btf_loader.c
-> index 867c608..3de774a 100644
-> --- a/btf_loader.c
-> +++ b/btf_loader.c
-> @@ -45,7 +45,7 @@ static void *tag__alloc(const size_t size)
->  	return tag;
->  }
->  
-> -static int btf_elf__load_ftype(struct btf_elf *btfe, struct ftype *proto, uint16_t tag,
-> +static int btf_elf__load_ftype(struct btf_elf *btfe, struct ftype *proto, uint32_t tag,
->  			       uint32_t type, uint16_t vlen, struct btf_param *args, long id)
->  {
->  	int i;
-> @@ -100,7 +100,7 @@ static struct base_type *base_type__new(strings_t name, uint32_t attrs,
->  	return bt;
->  }
->  
-> -static void type__init(struct type *type, uint16_t tag,
-> +static void type__init(struct type *type, uint32_t tag,
->  		       strings_t name, size_t size)
->  {
->  	INIT_LIST_HEAD(&type->node);
-> diff --git a/dwarves.c b/dwarves.c
-> index 111797b..3594ae3 100644
-> --- a/dwarves.c
-> +++ b/dwarves.c
-> @@ -349,7 +349,7 @@ reevaluate:
->  
->  static void cu__find_class_holes(struct cu *cu)
->  {
-> -	uint16_t id;
-> +	uint32_t id;
->  	struct class *pos;
->  
->  	cu__for_each_struct(cu, id, pos)
-> @@ -566,7 +566,7 @@ struct tag *cu__type(const struct cu *cu, const uint16_t id)
->  struct tag *cu__find_first_typedef_of_type(const struct cu *cu,
->  					   const uint16_t type)
->  {
-> -	uint16_t id;
-> +	uint32_t id;
->  	struct tag *pos;
->  
->  	if (cu == NULL || type == 0)
-> @@ -582,7 +582,7 @@ struct tag *cu__find_first_typedef_of_type(const struct cu *cu,
->  struct tag *cu__find_base_type_by_name(const struct cu *cu,
->  				       const char *name, uint16_t *idp)
->  {
-> -	uint16_t id;
-> +	uint32_t id;
->  	struct tag *pos;
->  
->  	if (cu == NULL || name == NULL)
-> @@ -611,7 +611,7 @@ struct tag *cu__find_base_type_by_sname_and_size(const struct cu *cu,
->  						 uint16_t bit_size,
->  						 uint16_t *idp)
->  {
-> -	uint16_t id;
-> +	uint32_t id;
->  	struct tag *pos;
->  
->  	if (sname == 0)
-> @@ -638,7 +638,7 @@ struct tag *cu__find_enumeration_by_sname_and_size(const struct cu *cu,
->  						   uint16_t bit_size,
->  						   uint16_t *idp)
->  {
-> -	uint16_t id;
-> +	uint32_t id;
->  	struct tag *pos;
->  
->  	if (sname == 0)
-> @@ -663,7 +663,7 @@ struct tag *cu__find_enumeration_by_sname_and_size(const struct cu *cu,
->  struct tag *cu__find_struct_by_sname(const struct cu *cu, strings_t sname,
->  				     const int include_decls, uint16_t *idp)
->  {
-> -	uint16_t id;
-> +	uint32_t id;
->  	struct tag *pos;
->  
->  	if (sname == 0)
-> @@ -699,7 +699,7 @@ static struct tag *__cu__find_struct_by_name(const struct cu *cu, const char *na
->  	if (cu == NULL || name == NULL)
->  		return NULL;
->  
-> -	uint16_t id;
-> +	uint32_t id;
->  	struct tag *pos;
->  	cu__for_each_type(cu, id, pos) {
->  		struct type *type;
-> @@ -1128,7 +1128,7 @@ void lexblock__add_label(struct lexblock *block, struct label *label)
->  }
->  
->  const struct class_member *class__find_bit_hole(const struct class *class,
-> -					    const struct class_member *trailer,
-> +						const struct class_member *trailer,
->  						const uint16_t bit_hole_size)
->  {
->  	struct class_member *pos;
-> diff --git a/dwarves_fprintf.c b/dwarves_fprintf.c
-> index 490dc30..530c27b 100644
-> --- a/dwarves_fprintf.c
-> +++ b/dwarves_fprintf.c
-> @@ -163,7 +163,7 @@ static const char *tag__accessibility(const struct tag *tag)
->  	return NULL;
->  }
->  
-> -static size_t __tag__id_not_found_snprintf(char *bf, size_t len, uint16_t id,
-> +static size_t __tag__id_not_found_snprintf(char *bf, size_t len, uint32_t id,
->  					   const char *fn, int line)
->  {
->  	return snprintf(bf, len, "<ERROR(%s:%d): %#llx not found!>", fn, line,
-> @@ -425,7 +425,7 @@ static const char *__tag__name(const struct tag *tag, const struct cu *cu,
->  		return tag__ptr_name(tag, cu, bf, len, "&");
->  	case DW_TAG_ptr_to_member_type: {
->  		char suffix[512];
-> -		uint16_t id = tag__ptr_to_member_type(tag)->containing_type;
-> +		uint32_t id = tag__ptr_to_member_type(tag)->containing_type;
->  
->  		type = cu__type(cu, id);
->  		if (type != NULL)
-> @@ -1213,7 +1213,7 @@ static size_t __class__fprintf(struct class *class, const struct cu *cu,
->  	struct type *type = &class->type;
->  	size_t last_size = 0, size;
->  	uint8_t newline = 0;
-> -	uint16_t nr_paddings = 0;
-> +	uint32_t nr_paddings = 0;
->  	uint32_t sum = 0;
->  	uint32_t sum_holes = 0;
->  	uint32_t sum_paddings = 0;
-> @@ -1225,7 +1225,7 @@ static size_t __class__fprintf(struct class *class, const struct cu *cu,
->  	struct tag *tag_pos;
->  	const char *current_accessibility = NULL;
->  	struct conf_fprintf cconf = conf ? *conf : conf_fprintf__defaults;
-> -	const uint16_t t = type->namespace.tag.tag;
-> +	const uint32_t t = type->namespace.tag.tag;
->  	size_t printed = fprintf(fp, "%s%s%s%s%s",
->  				 cconf.prefix ?: "", cconf.prefix ? " " : "",
->  				 ((cconf.classes_as_structs ||
-> diff --git a/pahole.c b/pahole.c
-> index 2230e37..bec279c 100644
-> --- a/pahole.c
-> +++ b/pahole.c
-> @@ -41,9 +41,9 @@ static size_t cu__exclude_prefix_len;
->  static char *decl_exclude_prefix;
->  static size_t decl_exclude_prefix_len;
->  
-> -static uint16_t nr_holes;
-> -static uint16_t nr_bit_holes;
-> -static uint16_t hole_size_ge;
-> +static uint32_t nr_holes;
-> +static uint32_t nr_bit_holes;
-> +static uint32_t hole_size_ge;
->  static uint8_t show_packable;
->  static uint8_t global_verbose;
->  static uint8_t recursive;
-> @@ -156,7 +156,7 @@ static void nr_definitions_formatter(struct structure *st)
->  }
->  
->  static void nr_members_formatter(struct class *class,
-> -				 struct cu *cu, uint16_t id __unused)
-> +				 struct cu *cu, uint32_t id __unused)
->  {
->  	printf("%s%c%u\n", class__name(class, cu), separator,
->  	       class__nr_members(class));
-> @@ -168,26 +168,26 @@ static void nr_methods_formatter(struct structure *st)
->  }
->  
->  static void size_formatter(struct class *class,
-> -			   struct cu *cu, uint16_t id __unused)
-> +			   struct cu *cu, uint32_t id __unused)
->  {
->  	printf("%s%c%d%c%u\n", class__name(class, cu), separator,
->  	       class__size(class), separator, class->nr_holes);
->  }
->  
->  static void class_name_len_formatter(struct class *class, struct cu *cu,
-> -				     uint16_t id __unused)
-> +				     uint32_t id __unused)
->  {
->  	const char *name = class__name(class, cu);
->  	printf("%s%c%zd\n", name, separator, strlen(name));
->  }
->  
->  static void class_name_formatter(struct class *class,
-> -				 struct cu *cu, uint16_t id __unused)
-> +				 struct cu *cu, uint32_t id __unused)
->  {
->  	puts(class__name(class, cu));
->  }
->  
-> -static void class_formatter(struct class *class, struct cu *cu, uint16_t id)
-> +static void class_formatter(struct class *class, struct cu *cu, uint32_t id)
->  {
->  	struct tag *typedef_alias = NULL;
->  	struct tag *tag = class__tag(class);
-> @@ -224,7 +224,7 @@ static void class_formatter(struct class *class, struct cu *cu, uint16_t id)
->  	putchar('\n');
->  }
->  
-> -static void print_packable_info(struct class *c, struct cu *cu, uint16_t id)
-> +static void print_packable_info(struct class *c, struct cu *cu, uint32_t id)
->  {
->  	const struct tag *t = class__tag(c);
->  	const size_t orig_size = class__size(c);
-> @@ -267,14 +267,14 @@ static void print_stats(void)
->  }
->  
->  static struct class *class__filter(struct class *class, struct cu *cu,
-> -				   uint16_t tag_id);
-> +				   uint32_t tag_id);
->  
->  static void (*formatter)(struct class *class,
-> -			 struct cu *cu, uint16_t id) = class_formatter;
-> +			 struct cu *cu, uint32_t id) = class_formatter;
->  
->  static void print_classes(struct cu *cu)
->  {
-> -	uint16_t id;
-> +	uint32_t id;
->  	struct class *pos;
->  
->  	cu__for_each_struct_or_union(cu, id, pos) {
-> @@ -352,7 +352,7 @@ static int class__packable(struct class *class, struct cu *cu)
->  }
->  
->  static struct class *class__filter(struct class *class, struct cu *cu,
-> -				   uint16_t tag_id)
-> +				   uint32_t tag_id)
->  {
->  	struct tag *tag = class__tag(class);
->  	const char *name;
-> @@ -608,7 +608,7 @@ static void cu_fixup_word_size_iterator(struct cu *cu)
->  	original_word_size = cu->addr_size;
->  	cu->addr_size = word_size;
->  
-> -	uint16_t id;
-> +	uint32_t id;
->  	struct tag *pos;
->  	cu__for_each_type(cu, id, pos)
->  		tag__fixup_word_size(pos, cu);
-> @@ -659,11 +659,11 @@ static void cu__account_nr_methods(struct cu *cu)
->  
->  static char tab[128];
->  
-> -static void print_structs_with_pointer_to(const struct cu *cu, uint16_t type)
-> +static void print_structs_with_pointer_to(const struct cu *cu, uint32_t type)
->  {
->  	struct class *pos;
->  	struct class_member *pos_member;
-> -	uint16_t id;
-> +	uint32_t id;
->  
->  	cu__for_each_struct(cu, id, pos) {
->  		bool looked = false;
-> @@ -702,10 +702,10 @@ static void print_structs_with_pointer_to(const struct cu *cu, uint16_t type)
->  	}
->  }
->  
-> -static void print_containers(const struct cu *cu, uint16_t type, int ident)
-> +static void print_containers(const struct cu *cu, uint32_t type, int ident)
->  {
->  	struct class *pos;
-> -	uint16_t id;
-> +	uint32_t id;
->  
->  	cu__for_each_struct(cu, id, pos) {
->  		if (pos->type.namespace.name == 0)
-> -- 
-> 2.17.1
+> Some big picture of the next few patches:
+> 
+> To fully annotate BPF programs with source code mapping, 4 different
+> information are needed:
+>     1) PERF_RECORD_KSYMBOL
+>     2) PERF_RECORD_BPF_EVENT
+>     3) bpf_prog_info
+>     4) btf
+> 
+> Before this set, 1) and 2) in the list are already saved to perf.data
+> file. For BPF programs that are already loaded before perf run, 1) and 2)
+> are synthesized by perf_event__synthesize_bpf_events(). For short living
+> BPF programs, 1) and 2) are generated by kernel.
+> 
+> This set handles 3) and 4) from the list. Again, it is necessary to handle
+> existing BPF program and short living program separately.
+> 
+> This patch handles 3) for exising BPF programs while synthesizing 1) and
+> 2) in perf_event__synthesize_bpf_events(). These data are stored in
+> perf_env. The next patch saves these data from perf_env to perf.data as
+> headers.
+> 
+> Similarly, the two patches after the next saves 4) of existing BPF
+> programs to perf_env and perf.data.
+> 
+> Another patch later will handle 3) and 4) for short living BPF programs
+> by monitoring 1) and 2) in a dedicate thread.
+> 
 
--- 
+thanks for the changelog
 
-- Arnaldo
+SNIP
+
+> +
+> +		/* save bpf_prog_info to env */
+> +		info_node = malloc(sizeof(struct bpf_prog_info_node));
+> +
+> +		/*
+> +		 * Do not bail out for !info_node, as we still want to
+> +		 * call  perf_tool__process_synth_event()
+> +		 */
+
+well, we are out of memory, so I dont think perf_tool__process_synth_event
+will get too far.. also the perf_env data would be inconsistent with what
+you store as event.. how can that work?
+
+jirka
+
+> +		if (info_node) {
+> +			info_node->info_linear = info_linear;
+> +			perf_env__insert_bpf_prog_info(env, info_node);
+> +			info_linear = NULL;
+> +		}
+
+SNIP
