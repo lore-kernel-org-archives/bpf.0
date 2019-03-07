@@ -2,75 +2,74 @@ Return-Path: <SRS0=xp9Q=RK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_MUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D4CDC43381
-	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 13:57:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DE5CC43381
+	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 14:02:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5BC392081B
-	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 13:57:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 57D8E20835
+	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 14:02:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tw4lFA4W"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IO60s4sE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726250AbfCGN5U (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 Mar 2019 08:57:20 -0500
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:40244 "EHLO
+        id S1726242AbfCGOCw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 Mar 2019 09:02:52 -0500
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:39251 "EHLO
         mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726180AbfCGN5T (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 7 Mar 2019 08:57:19 -0500
-Received: by mail-qt1-f193.google.com with SMTP id j36so17113657qta.7;
-        Thu, 07 Mar 2019 05:57:19 -0800 (PST)
+        with ESMTP id S1726161AbfCGOCw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 7 Mar 2019 09:02:52 -0500
+Received: by mail-qt1-f193.google.com with SMTP id o6so17119148qtk.6;
+        Thu, 07 Mar 2019 06:02:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:date:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=CMcyL2d6xCUFRVYSyZvPMYxSu6A3u6MlB7yfhtDN2S8=;
-        b=tw4lFA4Wu8/D8XlDYmsn9v1FMpX5Bv5NPObHrJ9jaRkLJKgJPJg2U9I/E8dJuD6R7D
-         CqRVtIPmI5vHoOWfai2ZxK92zG/LFTzGuIPVSWCcAu4+/+L+J9jQpgGW7sVbtNKkagdg
-         9U+qGxr6FVS3OBOGTlIbs+wK4/rXq7YbcOe5DwtplVpSczvO4vvdLSElu6Pj8p+5WcRx
-         j7Fl1yK39fQpdwlH+BbvHhxS2A8smWIq8NBDNlsQFg5AhU+/jnx0OVDnSy27T1dB5a3/
-         xnMc42GqL1ef6aeNfWiGtNVc31oKbAvpnWWiQxu3bGktj92rcHxIn8q/ovLXK359ns3k
-         hoyQ==
+        bh=EYgw6gBn3RZaOuNy8/pdKnRswbn5LwmEtfgud1nXaz8=;
+        b=IO60s4sEbXKt0QHgt7fCTQqVagi6pFsisgDKG8o4XKOiBxMFgxGDsh2IYBfaNovuVz
+         EaB+DUn7zsPL4h3i/yS7fOTnBOCHpYEM9zgh6frWeXy/6PfXw6CKPbg9xPUQ4nx8JhSO
+         F4nsweEeWtglHgI+FVTGc2b+xSSwOQ/6xv3ijM1PGkCx9e6YWMc3UHVv6H6ELbMcfVlg
+         rDeJwpSHkdNbglIPC4oTIVqsqgFreDJgd38Gbxa9JFwOaNRBudcInL6/GYwcCsFPF8go
+         x6Z/q9tXh1aG5D2a3XSLsy0Q8yLrlFSS+Lm2EUyTBVdFa9LC7EGPAlLCXYabjf0a1MAg
+         6F4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:date:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=CMcyL2d6xCUFRVYSyZvPMYxSu6A3u6MlB7yfhtDN2S8=;
-        b=iYhYzfZja4THzTThdkndGb5loYks7IupBmUSZxzjgKcKJe0V7Xc9pr62+paAq0XUjS
-         c4i+vG++9jl5zFTDP7b3VZS9TKzGJ8HvoRjd2bKetZIBkGX/paB48ZIXPoNxdoBLTEr+
-         W0WUum0ZQv95in/A6V5LJeBgShSeqmn27s0jQbJPL+NAeAVVuvk50oTp1up5/EQAb39v
-         L7rxXPE+hJTJVZutSCHqrRfAWAASMfVwGuk/KOaU2a13zlTqr33hLhGJThYwiQMak9lL
-         MW6N8z1hszl5f9LBy13hTnjScHpQiiesY3MLa2jOCDmgQbe6IZ/hBn7pxfG4pdg20gBE
-         F0ew==
-X-Gm-Message-State: APjAAAUkMpfE5Wl6q2kfig5rs7iWLCUqulllLb0NBcbncFtM7c0/O9Bf
-        Kkdq5yfTyXHdi7pegcDJqzk=
-X-Google-Smtp-Source: APXvYqxfbbxnzq8eIj6KUc3iPxTqL9/tgpk+H5HP+F/AQJgP8LoeW05qqvgPI5tgvtoBIVphI1zLVw==
-X-Received: by 2002:ac8:22d4:: with SMTP id g20mr10220513qta.50.1551967038456;
-        Thu, 07 Mar 2019 05:57:18 -0800 (PST)
+        bh=EYgw6gBn3RZaOuNy8/pdKnRswbn5LwmEtfgud1nXaz8=;
+        b=cxONZurprswG65z0EstZjX+WiJcy9oEcLjE/SSky+yOOdJSI7+RWtEErv0Ltv8UvDa
+         JvpewhuqbqLNYEiRR9oTUJ8nutVvJGFQ28xK1NKW96wHOBiCnk8iDWkwLFc1St0/laD+
+         020u6EPKIPZsCETfLqzHDakR994f1ykQ1i46TgktRsYPun3ULzQpGGlvECQ9BTlxMg89
+         tTEeYq6WFfdyr8V3yRGxZK2JQ00ZV50g2cEFsJewVLjXDxTqRO0YqfsbM/fzu0Sv/ikc
+         8M9QpJYp5/wozWtQ4uoIl0Kwgfp0f34fuHxVZ9rPy2GFh72ipZaUb/eVd77Dxw9ODyXm
+         uThQ==
+X-Gm-Message-State: APjAAAWXqEhs4kTYxC3CPLje3Tb3hoeNjqb/sCpwTc8FYLNElH8Wpk+l
+        4rWTQ1vVbjxxts9VtCYIi/Q=
+X-Google-Smtp-Source: APXvYqxjG8mmxSK5AH00PUZu/mS7FOMaLc7vve8ZUX0rGagRmppDKt1vAfzDw7xuKNNetVFXbH4rCw==
+X-Received: by 2002:ac8:34ed:: with SMTP id x42mr10578238qtb.173.1551967370959;
+        Thu, 07 Mar 2019 06:02:50 -0800 (PST)
 Received: from quaco.ghostprotocols.net ([190.15.121.82])
-        by smtp.gmail.com with ESMTPSA id g33sm2848904qtk.44.2019.03.07.05.57.16
+        by smtp.gmail.com with ESMTPSA id e67sm2009194qkc.63.2019.03.07.06.02.49
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 07 Mar 2019 05:57:17 -0800 (PST)
+        Thu, 07 Mar 2019 06:02:50 -0800 (PST)
 From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
 X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id B76B04039C; Thu,  7 Mar 2019 10:57:13 -0300 (-03)
-Date:   Thu, 7 Mar 2019 10:57:13 -0300
+        id 305324039C; Thu,  7 Mar 2019 11:02:47 -0300 (-03)
+Date:   Thu, 7 Mar 2019 11:02:47 -0300
 To:     Andrii Nakryiko <andriin@fb.com>
 Cc:     arnaldo.melo@gmail.com, andrii.nakryiko@gmail.com, ast@fb.com,
         yhs@fb.com, dwarves@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v2 pahole] libbpf: update reference to bring in btf_dedup
- fixes
-Message-ID: <20190307135713.GU13100@kernel.org>
-References: <20190307001408.4041372-1-andriin@fb.com>
+Subject: Re: [PATCH pahole] pahole: use 32-bit integers for iterations within
+ CU
+Message-ID: <20190307140247.GV13100@kernel.org>
+References: <20190307002321.4071708-1-andriin@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190307001408.4041372-1-andriin@fb.com>
+In-Reply-To: <20190307002321.4071708-1-andriin@fb.com>
 X-Url:  http://acmel.wordpress.com
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: bpf-owner@vger.kernel.org
@@ -78,29 +77,312 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Wed, Mar 06, 2019 at 04:14:08PM -0800, Andrii Nakryiko escreveu:
-> Latest version of libbpf has btf_dedup() fixes preventing it from stucking
-> in a loop on allyesconfig kernels.
-> 
-> v1->v2: 
-> - use git reference from github.com/libbpf/libbpf instead of personal fork
+Em Wed, Mar 06, 2019 at 04:23:21PM -0800, Andrii Nakryiko escreveu:
+> Existing code base assumes that single CU doesn't have more than 65535 types
+> per each CU, which might be a reasonable assumption for DWARF data. With BTF,
+> though, all we get is single, potentially huge, CU which can easily have more
+> than 65k types. For example, this is the case for allyesconfig version of
+> Linux kernel, which has >200k types.
 
-I had already fixed this up, end result is the same as in this patch.
+And your patch seems to be a step in removing this limitation, thanks
+for working on it.
+ 
+> Due to this assumption, libdwarves and other parts of pahole are using 16-bit
+> counters to iterate over entities within CU. This can cause infinite loop when
+> iterating BTF data, if there are more than 65535 types. This patch changes
+> non-public variables to use 32-bit integers, where appropriate.
+
+Ok, there are some bits that are unrelated, I'm comment on it and remove
+before applying.
+ 
+> This still leads to invalid reported data when using BTF loader (due to using
+> (X & 0xFFFF) type ID, instead of X, when X > 65535) and loading huge files,
+> but at least it's not stuck in an infinite loop anymore.
+
+This can be a followup patch, I'm unaware of any usage of libdwarves,
+but if this leads to ABI breakage, then we can come up with a new
+SONAME.
+
+Mostly the libdwarves has been a internal thing so that the various
+tools don't have to statically link with it.
 
 - Arnaldo
  
 > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 > ---
->  lib/bpf | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  btf_loader.c      |  4 ++--
+>  dwarves.c         | 16 ++++++++--------
+>  dwarves_fprintf.c |  8 ++++----
+>  pahole.c          | 36 ++++++++++++++++++------------------
+>  4 files changed, 32 insertions(+), 32 deletions(-)
 > 
-> diff --git a/lib/bpf b/lib/bpf
-> index d5fa415..cb658e9 160000
-> --- a/lib/bpf
-> +++ b/lib/bpf
-> @@ -1 +1 @@
-> -Subproject commit d5fa4150f0c3a36e3ce458e1301531bd2edbf74d
-> +Subproject commit cb658e9724e3c34973eee913b1ff0cb9c50b8e53
+> diff --git a/btf_loader.c b/btf_loader.c
+> index 867c608..3de774a 100644
+> --- a/btf_loader.c
+> +++ b/btf_loader.c
+> @@ -45,7 +45,7 @@ static void *tag__alloc(const size_t size)
+>  	return tag;
+>  }
+>  
+> -static int btf_elf__load_ftype(struct btf_elf *btfe, struct ftype *proto, uint16_t tag,
+> +static int btf_elf__load_ftype(struct btf_elf *btfe, struct ftype *proto, uint32_t tag,
+>  			       uint32_t type, uint16_t vlen, struct btf_param *args, long id)
+>  {
+>  	int i;
+> @@ -100,7 +100,7 @@ static struct base_type *base_type__new(strings_t name, uint32_t attrs,
+>  	return bt;
+>  }
+>  
+> -static void type__init(struct type *type, uint16_t tag,
+> +static void type__init(struct type *type, uint32_t tag,
+>  		       strings_t name, size_t size)
+>  {
+>  	INIT_LIST_HEAD(&type->node);
+> diff --git a/dwarves.c b/dwarves.c
+> index 111797b..3594ae3 100644
+> --- a/dwarves.c
+> +++ b/dwarves.c
+> @@ -349,7 +349,7 @@ reevaluate:
+>  
+>  static void cu__find_class_holes(struct cu *cu)
+>  {
+> -	uint16_t id;
+> +	uint32_t id;
+>  	struct class *pos;
+>  
+>  	cu__for_each_struct(cu, id, pos)
+> @@ -566,7 +566,7 @@ struct tag *cu__type(const struct cu *cu, const uint16_t id)
+>  struct tag *cu__find_first_typedef_of_type(const struct cu *cu,
+>  					   const uint16_t type)
+>  {
+> -	uint16_t id;
+> +	uint32_t id;
+>  	struct tag *pos;
+>  
+>  	if (cu == NULL || type == 0)
+> @@ -582,7 +582,7 @@ struct tag *cu__find_first_typedef_of_type(const struct cu *cu,
+>  struct tag *cu__find_base_type_by_name(const struct cu *cu,
+>  				       const char *name, uint16_t *idp)
+>  {
+> -	uint16_t id;
+> +	uint32_t id;
+>  	struct tag *pos;
+>  
+>  	if (cu == NULL || name == NULL)
+> @@ -611,7 +611,7 @@ struct tag *cu__find_base_type_by_sname_and_size(const struct cu *cu,
+>  						 uint16_t bit_size,
+>  						 uint16_t *idp)
+>  {
+> -	uint16_t id;
+> +	uint32_t id;
+>  	struct tag *pos;
+>  
+>  	if (sname == 0)
+> @@ -638,7 +638,7 @@ struct tag *cu__find_enumeration_by_sname_and_size(const struct cu *cu,
+>  						   uint16_t bit_size,
+>  						   uint16_t *idp)
+>  {
+> -	uint16_t id;
+> +	uint32_t id;
+>  	struct tag *pos;
+>  
+>  	if (sname == 0)
+> @@ -663,7 +663,7 @@ struct tag *cu__find_enumeration_by_sname_and_size(const struct cu *cu,
+>  struct tag *cu__find_struct_by_sname(const struct cu *cu, strings_t sname,
+>  				     const int include_decls, uint16_t *idp)
+>  {
+> -	uint16_t id;
+> +	uint32_t id;
+>  	struct tag *pos;
+>  
+>  	if (sname == 0)
+> @@ -699,7 +699,7 @@ static struct tag *__cu__find_struct_by_name(const struct cu *cu, const char *na
+>  	if (cu == NULL || name == NULL)
+>  		return NULL;
+>  
+> -	uint16_t id;
+> +	uint32_t id;
+>  	struct tag *pos;
+>  	cu__for_each_type(cu, id, pos) {
+>  		struct type *type;
+> @@ -1128,7 +1128,7 @@ void lexblock__add_label(struct lexblock *block, struct label *label)
+>  }
+>  
+>  const struct class_member *class__find_bit_hole(const struct class *class,
+> -					    const struct class_member *trailer,
+> +						const struct class_member *trailer,
+>  						const uint16_t bit_hole_size)
+>  {
+>  	struct class_member *pos;
+> diff --git a/dwarves_fprintf.c b/dwarves_fprintf.c
+> index 490dc30..530c27b 100644
+> --- a/dwarves_fprintf.c
+> +++ b/dwarves_fprintf.c
+> @@ -163,7 +163,7 @@ static const char *tag__accessibility(const struct tag *tag)
+>  	return NULL;
+>  }
+>  
+> -static size_t __tag__id_not_found_snprintf(char *bf, size_t len, uint16_t id,
+> +static size_t __tag__id_not_found_snprintf(char *bf, size_t len, uint32_t id,
+>  					   const char *fn, int line)
+>  {
+>  	return snprintf(bf, len, "<ERROR(%s:%d): %#llx not found!>", fn, line,
+> @@ -425,7 +425,7 @@ static const char *__tag__name(const struct tag *tag, const struct cu *cu,
+>  		return tag__ptr_name(tag, cu, bf, len, "&");
+>  	case DW_TAG_ptr_to_member_type: {
+>  		char suffix[512];
+> -		uint16_t id = tag__ptr_to_member_type(tag)->containing_type;
+> +		uint32_t id = tag__ptr_to_member_type(tag)->containing_type;
+>  
+>  		type = cu__type(cu, id);
+>  		if (type != NULL)
+> @@ -1213,7 +1213,7 @@ static size_t __class__fprintf(struct class *class, const struct cu *cu,
+>  	struct type *type = &class->type;
+>  	size_t last_size = 0, size;
+>  	uint8_t newline = 0;
+> -	uint16_t nr_paddings = 0;
+> +	uint32_t nr_paddings = 0;
+>  	uint32_t sum = 0;
+>  	uint32_t sum_holes = 0;
+>  	uint32_t sum_paddings = 0;
+> @@ -1225,7 +1225,7 @@ static size_t __class__fprintf(struct class *class, const struct cu *cu,
+>  	struct tag *tag_pos;
+>  	const char *current_accessibility = NULL;
+>  	struct conf_fprintf cconf = conf ? *conf : conf_fprintf__defaults;
+> -	const uint16_t t = type->namespace.tag.tag;
+> +	const uint32_t t = type->namespace.tag.tag;
+>  	size_t printed = fprintf(fp, "%s%s%s%s%s",
+>  				 cconf.prefix ?: "", cconf.prefix ? " " : "",
+>  				 ((cconf.classes_as_structs ||
+> diff --git a/pahole.c b/pahole.c
+> index 2230e37..bec279c 100644
+> --- a/pahole.c
+> +++ b/pahole.c
+> @@ -41,9 +41,9 @@ static size_t cu__exclude_prefix_len;
+>  static char *decl_exclude_prefix;
+>  static size_t decl_exclude_prefix_len;
+>  
+> -static uint16_t nr_holes;
+> -static uint16_t nr_bit_holes;
+> -static uint16_t hole_size_ge;
+> +static uint32_t nr_holes;
+> +static uint32_t nr_bit_holes;
+> +static uint32_t hole_size_ge;
+>  static uint8_t show_packable;
+>  static uint8_t global_verbose;
+>  static uint8_t recursive;
+> @@ -156,7 +156,7 @@ static void nr_definitions_formatter(struct structure *st)
+>  }
+>  
+>  static void nr_members_formatter(struct class *class,
+> -				 struct cu *cu, uint16_t id __unused)
+> +				 struct cu *cu, uint32_t id __unused)
+>  {
+>  	printf("%s%c%u\n", class__name(class, cu), separator,
+>  	       class__nr_members(class));
+> @@ -168,26 +168,26 @@ static void nr_methods_formatter(struct structure *st)
+>  }
+>  
+>  static void size_formatter(struct class *class,
+> -			   struct cu *cu, uint16_t id __unused)
+> +			   struct cu *cu, uint32_t id __unused)
+>  {
+>  	printf("%s%c%d%c%u\n", class__name(class, cu), separator,
+>  	       class__size(class), separator, class->nr_holes);
+>  }
+>  
+>  static void class_name_len_formatter(struct class *class, struct cu *cu,
+> -				     uint16_t id __unused)
+> +				     uint32_t id __unused)
+>  {
+>  	const char *name = class__name(class, cu);
+>  	printf("%s%c%zd\n", name, separator, strlen(name));
+>  }
+>  
+>  static void class_name_formatter(struct class *class,
+> -				 struct cu *cu, uint16_t id __unused)
+> +				 struct cu *cu, uint32_t id __unused)
+>  {
+>  	puts(class__name(class, cu));
+>  }
+>  
+> -static void class_formatter(struct class *class, struct cu *cu, uint16_t id)
+> +static void class_formatter(struct class *class, struct cu *cu, uint32_t id)
+>  {
+>  	struct tag *typedef_alias = NULL;
+>  	struct tag *tag = class__tag(class);
+> @@ -224,7 +224,7 @@ static void class_formatter(struct class *class, struct cu *cu, uint16_t id)
+>  	putchar('\n');
+>  }
+>  
+> -static void print_packable_info(struct class *c, struct cu *cu, uint16_t id)
+> +static void print_packable_info(struct class *c, struct cu *cu, uint32_t id)
+>  {
+>  	const struct tag *t = class__tag(c);
+>  	const size_t orig_size = class__size(c);
+> @@ -267,14 +267,14 @@ static void print_stats(void)
+>  }
+>  
+>  static struct class *class__filter(struct class *class, struct cu *cu,
+> -				   uint16_t tag_id);
+> +				   uint32_t tag_id);
+>  
+>  static void (*formatter)(struct class *class,
+> -			 struct cu *cu, uint16_t id) = class_formatter;
+> +			 struct cu *cu, uint32_t id) = class_formatter;
+>  
+>  static void print_classes(struct cu *cu)
+>  {
+> -	uint16_t id;
+> +	uint32_t id;
+>  	struct class *pos;
+>  
+>  	cu__for_each_struct_or_union(cu, id, pos) {
+> @@ -352,7 +352,7 @@ static int class__packable(struct class *class, struct cu *cu)
+>  }
+>  
+>  static struct class *class__filter(struct class *class, struct cu *cu,
+> -				   uint16_t tag_id)
+> +				   uint32_t tag_id)
+>  {
+>  	struct tag *tag = class__tag(class);
+>  	const char *name;
+> @@ -608,7 +608,7 @@ static void cu_fixup_word_size_iterator(struct cu *cu)
+>  	original_word_size = cu->addr_size;
+>  	cu->addr_size = word_size;
+>  
+> -	uint16_t id;
+> +	uint32_t id;
+>  	struct tag *pos;
+>  	cu__for_each_type(cu, id, pos)
+>  		tag__fixup_word_size(pos, cu);
+> @@ -659,11 +659,11 @@ static void cu__account_nr_methods(struct cu *cu)
+>  
+>  static char tab[128];
+>  
+> -static void print_structs_with_pointer_to(const struct cu *cu, uint16_t type)
+> +static void print_structs_with_pointer_to(const struct cu *cu, uint32_t type)
+>  {
+>  	struct class *pos;
+>  	struct class_member *pos_member;
+> -	uint16_t id;
+> +	uint32_t id;
+>  
+>  	cu__for_each_struct(cu, id, pos) {
+>  		bool looked = false;
+> @@ -702,10 +702,10 @@ static void print_structs_with_pointer_to(const struct cu *cu, uint16_t type)
+>  	}
+>  }
+>  
+> -static void print_containers(const struct cu *cu, uint16_t type, int ident)
+> +static void print_containers(const struct cu *cu, uint32_t type, int ident)
+>  {
+>  	struct class *pos;
+> -	uint16_t id;
+> +	uint32_t id;
+>  
+>  	cu__for_each_struct(cu, id, pos) {
+>  		if (pos->type.namespace.name == 0)
 > -- 
 > 2.17.1
 
