@@ -2,138 +2,190 @@ Return-Path: <SRS0=xp9Q=RK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05821C43381
-	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 23:26:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B69B3C43381
+	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 23:48:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C0C5620851
-	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 23:26:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7BD0720840
+	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 23:48:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="fOx0sap2"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="nvB9b12C";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="haQ1ZLD/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726298AbfCGX0e (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 Mar 2019 18:26:34 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:38698 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726217AbfCGX0e (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 7 Mar 2019 18:26:34 -0500
-Received: by mail-pf1-f194.google.com with SMTP id n125so12644322pfn.5
-        for <bpf@vger.kernel.org>; Thu, 07 Mar 2019 15:26:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=s7cJRMc5KalDw+jgFBJx4Iw1WPTiJ8GUlpiEplESzz8=;
-        b=fOx0sap2a/XNmLnTxYU5WTDKqg6FGqSAIw9cPN8nkEqxTqAxiZKDWfFzecWGiu5wt+
-         LAJ4UEHEVLIVwpwvTvA+bPb0jtDD+J2VqQgiou44DdHZL6zgnuD3lQW9LH+eAartcr6Q
-         hX1fuZvQ48Nbzs1mVpssiBrOK7j0YrUilel2mOmWzZd5aLqp2cLv6YK7fYnSWeNfBcj/
-         beHCFT9QosmBa9nr1zVNiclNZ28qxUJhpBIQXBxdtglqOZ5Z1wtleFSAFhiuS8HfzC7q
-         fZB51QxDi3alZF+kW1teqbq+nZw3AoOgK1t6DCGu6CoBEp5WPROm4wD1W5Gr5kcoHXh9
-         8FkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=s7cJRMc5KalDw+jgFBJx4Iw1WPTiJ8GUlpiEplESzz8=;
-        b=FG9Ny1cluefXTxzCkVL179dpyuCI/Jyk+EaOESYi97cA6TljbU795UnPJ89VzOu4YM
-         RALo8aIkA3oeXkKvk/CKMF0idnYbLND3QfHmK+MNEH60p+FZchxuIvLxexHqk13D6j7B
-         +UfbhgzFtSee5UQNpEkyz7kCPJwSm72ZABvcyGzxp61pmrU+cUB1MeX+hkzYjnLZx/9A
-         LGmN0KdCK2Vp6lrEDMRqt7Y+B/8RS6e7K19vnFUYBJZLYzGS1/iTJ+Ema3nJBAeg6MCK
-         Y8SWp/gkeXe0BFYYlDcxrouSY4a+94OLKgGE6m///cXQXe68zbs0iqeAkGKaw5SeUAzp
-         fqOw==
-X-Gm-Message-State: APjAAAV7JdBQdf7x41dK3ZXukFpyekmAbmqByuFyvbNADRr5tfudLRgM
-        X4kZwHNLl+WGOQkrF5SEWqNT4Q==
-X-Google-Smtp-Source: APXvYqz72lYudIr5rK49mN+94KBfqJXlrbnZPy6hSG7AFNOkN1jApFV0sNyW3JjowB6U4HePfiz75g==
-X-Received: by 2002:a17:902:834b:: with SMTP id z11mr15667426pln.257.1552001192959;
-        Thu, 07 Mar 2019 15:26:32 -0800 (PST)
-Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
-        by smtp.gmail.com with ESMTPSA id a1sm9034196pfn.26.2019.03.07.15.26.31
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 07 Mar 2019 15:26:32 -0800 (PST)
-Date:   Thu, 7 Mar 2019 15:26:31 -0800
-From:   Stanislav Fomichev <sdf@fomichev.me>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        kernel-team@fb.com, peterz@infradead.org, acme@redhat.com,
-        jolsa@kernel.org, namhyung@kernel.org
+        id S1726217AbfCGXsK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 Mar 2019 18:48:10 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:60252 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726172AbfCGXsK (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 7 Mar 2019 18:48:10 -0500
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x27NZ852017386;
+        Thu, 7 Mar 2019 15:47:31 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=0GgDR47nCstH9IqPrpbEFIxvdNOiUDqLAJoF4HvXYaA=;
+ b=nvB9b12CkPMcQ85yWBTKgfFIFFjSrc1Z3/5Zxtzz8lLZltqX4BFlwTqjXMC+DKuIZOj3
+ WjOkdHqj8IsYl4mWMk5lR8z1LSBQUdR3FAC46eqrvfcGCu75CazOVIORRV7zox1WS76c
+ rck1YY1qjxCqWu3PrLkwNgf/VVPUA41HYXk= 
+Received: from maileast.thefacebook.com ([199.201.65.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2r3bw2r9b4-5
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Thu, 07 Mar 2019 15:47:31 -0800
+Received: from frc-hub01.TheFacebook.com (2620:10d:c021:18::171) by
+ frc-hub03.TheFacebook.com (2620:10d:c021:18::173) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1713.5; Thu, 7 Mar 2019 15:47:19 -0800
+Received: from NAM05-BY2-obe.outbound.protection.outlook.com (192.168.183.28)
+ by o365-in.thefacebook.com (192.168.177.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
+ via Frontend Transport; Thu, 7 Mar 2019 15:47:19 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector1-fb-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0GgDR47nCstH9IqPrpbEFIxvdNOiUDqLAJoF4HvXYaA=;
+ b=haQ1ZLD/Nlb9JL9qgLERLq/BVNhzB8Eaz+IHqV3/Z09O+HZFKUlBSR0UPWwjPvuzMz0x2Z5LWD0BfBfsIBg/X5kozIirrttLRdcrHzRdlhnVV796n5x+SqReOYVacARc5cq6E+4uT6bjgrL3NCEM6a3IqKleABoX6PgnZbAYvAs=
+Received: from MWHPR15MB1165.namprd15.prod.outlook.com (10.175.2.19) by
+ MWHPR15MB1376.namprd15.prod.outlook.com (10.173.234.15) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1665.19; Thu, 7 Mar 2019 23:47:02 +0000
+Received: from MWHPR15MB1165.namprd15.prod.outlook.com
+ ([fe80::f190:6de5:7e3:e065]) by MWHPR15MB1165.namprd15.prod.outlook.com
+ ([fe80::f190:6de5:7e3:e065%6]) with mapi id 15.20.1665.021; Thu, 7 Mar 2019
+ 23:47:02 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     Stanislav Fomichev <sdf@fomichev.me>
+CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "Alexei Starovoitov" <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "Kernel Team" <Kernel-team@fb.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Arnaldo Carvalho de Melo" <acme@redhat.com>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "namhyung@kernel.org" <namhyung@kernel.org>
 Subject: Re: [PATCH v7 perf,bpf 11/15] perf: add -lopcodes to feature-libbfd
-Message-ID: <20190307232631.GA5481@mini-arch.hsd1.ca.comcast.net>
+Thread-Topic: [PATCH v7 perf,bpf 11/15] perf: add -lopcodes to feature-libbfd
+Thread-Index: AQHU1Q95Afw72a5BokiECT48mwt8tKYA0EWAgAAFuoA=
+Date:   Thu, 7 Mar 2019 23:47:02 +0000
+Message-ID: <2D05DAB2-F16D-4310-9497-BC2C7CEF5B61@fb.com>
 References: <20190307175810.249857-1-songliubraving@fb.com>
  <20190307175810.249857-12-songliubraving@fb.com>
+ <20190307232631.GA5481@mini-arch.hsd1.ca.comcast.net>
+In-Reply-To: <20190307232631.GA5481@mini-arch.hsd1.ca.comcast.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3445.102.3)
+x-originating-ip: [2620:10d:c090:200::3:415b]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 586af9cd-9c61-421a-c7b3-08d6a3573264
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600127)(711020)(4605104)(2017052603328)(7153060)(7193020);SRVR:MWHPR15MB1376;
+x-ms-traffictypediagnostic: MWHPR15MB1376:
+x-microsoft-exchange-diagnostics: 1;MWHPR15MB1376;20:VdFYXUbDBvOIVImLH92NZ7EjrUKhmKP7d9uhc4oI8xYkpJErusxUZFo45CkSg2XyiQrh9i+BppZk4v29YBnNw2leA3uI7+N3dvyro06Ej06JbFv6564MfFBWRlRiZSzlwd5Wi/bF1BX8mvFLKlRIi+xFilR2D1Yu2PRX0I100uI=
+x-microsoft-antispam-prvs: <MWHPR15MB137663203242A3D6B0128F8EB34C0@MWHPR15MB1376.namprd15.prod.outlook.com>
+x-forefront-prvs: 096943F07A
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(346002)(366004)(396003)(136003)(39860400002)(189003)(199004)(81166006)(476003)(14454004)(57306001)(46003)(2906002)(2616005)(4326008)(11346002)(82746002)(7736002)(81156014)(446003)(53936002)(305945005)(8676002)(14444005)(256004)(478600001)(97736004)(25786009)(6916009)(6512007)(7416002)(8936002)(36756003)(186003)(71200400001)(71190400001)(6436002)(50226002)(68736007)(6486002)(99286004)(53546011)(5660300002)(102836004)(316002)(229853002)(83716004)(54906003)(76176011)(6506007)(6116002)(486006)(6246003)(86362001)(33656002)(105586002)(106356001)(142933001);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR15MB1376;H:MWHPR15MB1165.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 54Y4UpRyK3WYQwBYJ+mex8lcilxoLdsWhvKz8QcDzI97Cy66hcU9qPexMnp1MXlkPhoAygLCZo+xjjrrtg67oXrnaMsnUrgpieTCsNhKEcz1pN44u80XmVDlxpKIWpj3mWMA2IhjrzQ27FU68+P6qODqtCs6/KtilTrsSMy8hE9XD/ftMRRKNfAyrH34rYRMIawqBecEk1w/SIHWOt3Al01oXyYB+D4rVK9HAphzlrizhb9OjbBV/pgVkIYch0IMhvFQ92Ys/HeidALHS+5S0Qzr3eakHmMfOjB7YTNpug+Y5mnAOACO0vBt7RyI0nbXb0OOogu+trdQXKUpLD7gQ6ejPHTGc4gP2NYEItO3p6+fARkGiXQQPLYirMUyLQ0mwWT4VX0+22GpgKqxG+EypobK8YvPHKXc8bOPdutf/FI=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <37D2E46342A8DC4BA0AA71AA6BB18281@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190307175810.249857-12-songliubraving@fb.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 586af9cd-9c61-421a-c7b3-08d6a3573264
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Mar 2019 23:47:02.0510
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR15MB1376
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-03-07_14:,,
+ signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 03/07, Song Liu wrote:
-> Both libbfd and libopcodes are distributed with binutil-dev/devel. When
-> libbfd presents, it is OK to assume libopcodes also presents. This has
-> been a safe assumption for bpftool.
-> 
-> This patch adds -lopcodes to perf/Makefile.config. libopcodes will be
-> used in the next commit for bpf annotation.
-> 
-> Signed-off-by: Song Liu <songliubraving@fb.com>
-> ---
->  tools/perf/Makefile.config | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+
+
+> On Mar 7, 2019, at 3:26 PM, Stanislav Fomichev <sdf@fomichev.me> wrote:
+>=20
+> On 03/07, Song Liu wrote:
+>> Both libbfd and libopcodes are distributed with binutil-dev/devel. When
+>> libbfd presents, it is OK to assume libopcodes also presents. This has
+>> been a safe assumption for bpftool.
+>>=20
+>> This patch adds -lopcodes to perf/Makefile.config. libopcodes will be
+>> used in the next commit for bpf annotation.
+>>=20
+>> Signed-off-by: Song Liu <songliubraving@fb.com>
+>> ---
+>> tools/perf/Makefile.config | 2 +-
+>> 1 file changed, 1 insertion(+), 1 deletion(-)
+>>=20
+>> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+>> index b441c88cafa1..e0bafbc273af 100644
+>> --- a/tools/perf/Makefile.config
+>> +++ b/tools/perf/Makefile.config
+>> @@ -701,7 +701,7 @@ else
+>> endif
+>>=20
+>> ifeq ($(feature-libbfd), 1)
+>> -  EXTLIBS +=3D -lbfd
+>> +  EXTLIBS +=3D -lbfd -lopcodes
+> I think you need to add -lopcodes to the other feature checks as
+> well (to work on the systems which require -liberty and/or -lz for
+> libfd):
+>=20
+> --
+>=20
 > diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> index b441c88cafa1..e0bafbc273af 100644
+> index b441c88cafa1..3fa2f5d7d54f 100644
 > --- a/tools/perf/Makefile.config
 > +++ b/tools/perf/Makefile.config
 > @@ -701,7 +701,7 @@ else
->  endif
->  
->  ifeq ($(feature-libbfd), 1)
-> -  EXTLIBS += -lbfd
-> +  EXTLIBS += -lbfd -lopcodes
-I think you need to add -lopcodes to the other feature checks as
-well (to work on the systems which require -liberty and/or -lz for
-libfd):
+> endif
+>=20
+> ifeq ($(feature-libbfd), 1)
+> -  EXTLIBS +=3D -lbfd
+> +  EXTLIBS +=3D -lbfd -lopcodes
+> else
+>   # we are on a system that requires -liberty and (maybe) -lz
+>   # to link against -lbfd; test each case individually here
+> @@ -712,10 +712,10 @@ else
+>   $(call feature_check,libbfd-liberty-z)
+>=20
+>   ifeq ($(feature-libbfd-liberty), 1)
+> -    EXTLIBS +=3D -lbfd -liberty
+> +    EXTLIBS +=3D -lbfd -lopcodes -liberty
+>   else
+>     ifeq ($(feature-libbfd-liberty-z), 1)
+> -      EXTLIBS +=3D -lbfd -liberty -lz
+> +      EXTLIBS +=3D -lbfd -lopcodes -liberty -lz
+>     endif
+>   endif
+> endif
 
---
+Good point! I will fix it in next version.=20
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index b441c88cafa1..3fa2f5d7d54f 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -701,7 +701,7 @@ else
- endif
- 
- ifeq ($(feature-libbfd), 1)
--  EXTLIBS += -lbfd
-+  EXTLIBS += -lbfd -lopcodes
- else
-   # we are on a system that requires -liberty and (maybe) -lz
-   # to link against -lbfd; test each case individually here
-@@ -712,10 +712,10 @@ else
-   $(call feature_check,libbfd-liberty-z)
- 
-   ifeq ($(feature-libbfd-liberty), 1)
--    EXTLIBS += -lbfd -liberty
-+    EXTLIBS += -lbfd -lopcodes -liberty
-   else
-     ifeq ($(feature-libbfd-liberty-z), 1)
--      EXTLIBS += -lbfd -liberty -lz
-+      EXTLIBS += -lbfd -lopcodes -liberty -lz
-     endif
-   endif
- endif
+Thanks,
+Song
 
->  else
->    # we are on a system that requires -liberty and (maybe) -lz
->    # to link against -lbfd; test each case individually here
-> -- 
-> 2.17.1
-> 
+>=20
+>> else
+>>   # we are on a system that requires -liberty and (maybe) -lz
+>>   # to link against -lbfd; test each case individually here
+>> --=20
+>> 2.17.1
+
