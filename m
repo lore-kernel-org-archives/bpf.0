@@ -6,47 +6,44 @@ X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0F75C43381
-	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 10:05:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49606C43381
+	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 10:22:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EB81420684
-	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 10:05:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 20A5120675
+	for <bpf@archiver.kernel.org>; Thu,  7 Mar 2019 10:22:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726148AbfCGKFW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 Mar 2019 05:05:22 -0500
-Received: from www62.your-server.de ([213.133.104.62]:44310 "EHLO
+        id S1726166AbfCGKWL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 Mar 2019 05:22:11 -0500
+Received: from www62.your-server.de ([213.133.104.62]:46902 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725795AbfCGKFW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 7 Mar 2019 05:05:22 -0500
+        with ESMTP id S1725795AbfCGKWL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 7 Mar 2019 05:22:11 -0500
 Received: from [78.46.172.3] (helo=sslproxy06.your-server.de)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1h1ptt-0000as-2O; Thu, 07 Mar 2019 11:05:17 +0100
+        id 1h1qA9-0002p0-6V; Thu, 07 Mar 2019 11:22:05 +0100
 Received: from [178.197.249.29] (helo=linux.home)
         by sslproxy06.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89)
         (envelope-from <daniel@iogearbox.net>)
-        id 1h1pts-000XQl-PC; Thu, 07 Mar 2019 11:05:16 +0100
-Subject: Re: [PATCH] bpf: fix sysctl.c warning
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Alexei Starovoitov <ast@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <christian@brauner.io>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        id 1h1qA8-000CzI-WF; Thu, 07 Mar 2019 11:22:05 +0100
+Subject: Re: [PATCH][bpf-next] bpf: hbm: fix spelling mistake "deault" ->
+ "default"
+To:     Colin King <colin.king@canonical.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-References: <20190304203443.1992942-1-arnd@arndb.de>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190305173113.26119-1-colin.king@canonical.com>
 From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <1d79d4ec-99c7-1764-af8f-ea436a657eb0@iogearbox.net>
-Date:   Thu, 7 Mar 2019 11:05:15 +0100
+Message-ID: <71380d7d-7237-a0ec-eae6-9ac8af4b69ce@iogearbox.net>
+Date:   Thu, 7 Mar 2019 11:22:02 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.3.0
 MIME-Version: 1.0
-In-Reply-To: <20190304203443.1992942-1-arnd@arndb.de>
+In-Reply-To: <20190305173113.26119-1-colin.king@canonical.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -57,17 +54,11 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 03/04/2019 09:34 PM, Arnd Bergmann wrote:
-> When CONFIG_BPF_SYSCALL or CONFIG_SYSCTL is disabled, we get
-> a warning about an unused function:
+On 03/05/2019 06:31 PM, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
 > 
-> kernel/sysctl.c:3331:12: error: 'proc_dointvec_minmax_bpf_stats' defined but not used [-Werror=unused-function]
->  static int proc_dointvec_minmax_bpf_stats(struct ctl_table *table, int write,
+> There are a couple of typos, fix these.
 > 
-> The CONFIG_BPF_SYSCALL check was already handled, but the SYSCTL check
-> is needed on top.
-> 
-> Fixes: 492ecee892c2 ("bpf: enable program stats")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 
 Applied, thanks!
