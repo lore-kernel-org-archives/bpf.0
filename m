@@ -2,126 +2,115 @@ Return-Path: <SRS0=A/va=RL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 286FCC43381
-	for <bpf@archiver.kernel.org>; Fri,  8 Mar 2019 06:30:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDE93C43381
+	for <bpf@archiver.kernel.org>; Fri,  8 Mar 2019 06:45:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E7A5820684
-	for <bpf@archiver.kernel.org>; Fri,  8 Mar 2019 06:30:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA5132081B
+	for <bpf@archiver.kernel.org>; Fri,  8 Mar 2019 06:45:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ga2Oxs4y"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oium6+NZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725948AbfCHGa3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 Mar 2019 01:30:29 -0500
-Received: from mail-io1-f68.google.com ([209.85.166.68]:34482 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725372AbfCHGa3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 Mar 2019 01:30:29 -0500
-Received: by mail-io1-f68.google.com with SMTP id e1so15903818iok.1;
-        Thu, 07 Mar 2019 22:30:28 -0800 (PST)
+        id S1726297AbfCHGp7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 Mar 2019 01:45:59 -0500
+Received: from mail-yw1-f68.google.com ([209.85.161.68]:39449 "EHLO
+        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725776AbfCHGp7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 Mar 2019 01:45:59 -0500
+Received: by mail-yw1-f68.google.com with SMTP id z191so15502998ywa.6;
+        Thu, 07 Mar 2019 22:45:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+I6X8lV42nEy0XlSbCb8AiyODVlQAAox042t7liW4s4=;
-        b=ga2Oxs4yrQTvpsqktT8rOgc8T3sxv+Wcd8M2NwjFe0Y9WyZ4mlW+C70TMsh6UsxNL5
-         +otaTzTkY6GPHtAl+lgtgx0Tc8sO+Zo2NMyLtU6G8j3Sh+DrUFNCeQLjs/FlsEg1ybnu
-         gQC+mAO8pQHMqEze12EdSGC/FmGeb8EGEjWwiofCtJQWwdj6PBnPpj8wFhUjtRTB8QtY
-         gUDONlFpN8DFlA6gFMXAS5/7hMBP7ynYIK+YD7h+5yDxY8I8TBNNY2m9PzLVu40GRmBc
-         wwRhwhBgHFx4eznOaznjfaMoKHzNWnjJpZvTSZ6khf+OoYV/9tvR1fH2wBXat02gJovD
-         3fiw==
+        h=from:to:cc:subject:date:message-id;
+        bh=N/qtDf5fnqM9VoWDcwIOX2JbfjPFNVEEncbZjpulgtI=;
+        b=Oium6+NZkouHu57X10Chbvt6YdngPWL0x8Non/LDqmpvO699UxmHknIpfkvVUCr0H7
+         fMVEAmWGrTxB9tE23eiLXH0bPoWHEYnJolSI8V6g4hOLKo2JC3nXmnN/TiP46ah6pF8Z
+         /kjz7SRy0YopGqK3+5T5Z++gHnIglpPmkssBNlBssZi2+DSvkLcP+MzVyni51wdlnOYg
+         MoBf4vO5c/ttkfSRmyvIdewMP0OBnfJwE9T5hp2bsJnen4/1zl39JcLppeT57sTYOAJc
+         HrfhM/CPhGU84oq/6Ro6OnQnWlzDt7KRGQ+3J5fWp4wzUaRfGZw+/305/pUi4FhJL9n6
+         VuLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+I6X8lV42nEy0XlSbCb8AiyODVlQAAox042t7liW4s4=;
-        b=uPbOwHTUo+Ova/HVwEtH0rkcsmn64HipYwPooLJim2o5nmnjomd4ds4rY+sqh9bzuT
-         Yh5mXCY8GQehf3FB78BSp71McT2RxZjAuXUQE43GLQnFrs1zU1zS3zIzW8Xm8AmIqi+G
-         UiMmfmXuO6lj0JMxUTmlrkZJviZ1aw+uwzoaCpIODbfOS8aWW1f5YRt8jOKAbW0JmyyW
-         aFwywztZAEKhLho8X6KrvAppHEmTmHfmIRpkdvnjgsbvS07dHyWls2U0+l8Q2G/p3Pf7
-         idy4hsFW8npg0opbM47oSW+aaBa5oh5Fsvy7U1JG0uCICAriwnbT95SOsovtPVkyDLJF
-         93Cg==
-X-Gm-Message-State: APjAAAUZdaRjW4WqPHymNe/w+EwSH3BdGlt4hmGt1fzJz8L58NhvOQCt
-        wDEsQJdQfydxF2POTKfDt2hBjceRTd8YOG0zN38=
-X-Google-Smtp-Source: APXvYqy9XzyOz+gAEgcQng8TVsUOMz2yoKB+zw1icPQc9sHT1ZMXyGHZBqm+cObmOrRKqtWj7uffw8FZ+SUQ7UgI5vo=
-X-Received: by 2002:a5e:9412:: with SMTP id q18mr8260509ioj.233.1552026627695;
- Thu, 07 Mar 2019 22:30:27 -0800 (PST)
-MIME-Version: 1.0
-References: <20190308060938.17305-1-tsu.yubo@gmail.com>
-In-Reply-To: <20190308060938.17305-1-tsu.yubo@gmail.com>
-From:   Y Song <ys114321@gmail.com>
-Date:   Thu, 7 Mar 2019 22:29:51 -0800
-Message-ID: <CAH3MdRWKvif5Q-bP7nU26g8WTzL5Ox2R43hZbRS+ZRRwzaYyOg@mail.gmail.com>
-Subject: Re: [PATCH V2] bpf: fix warning about using plain integer as NULL
-To:     Bo YU <tsu.yubo@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>, ongliubraving@fb.com,
-        Yonghong Song <yhs@fb.com>, David Miller <davem@davemloft.net>,
-        netdev <netdev@vger.kernel.org>, bpf@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, yuzibode@126.com
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=N/qtDf5fnqM9VoWDcwIOX2JbfjPFNVEEncbZjpulgtI=;
+        b=dqAQqG98zge6mG9guPDof1L0PWmkGsZujtOjtSGEB0nDp3mYJhdGQcTMDwNTGPINL9
+         tPx58u4NwDMHfkuXUpJ8j4py0cgTI+yyu4FR56YkJ+2dPmPjKsNH8BDs9Z9gWoooq0GG
+         Y+gY0qZWod8wJZw+h67T2qSrbxIrdvxLm4PRsxYtJFFo6KIOy0PLogX9E/oCR2MgAYVx
+         0VpvG2v/KyQb4htU8GsJ1cVk0Ggl4AYUdlaV7xwoAzVJAsaI5t0N/SJzetjWY4y235U9
+         S7HRb0daLFNhFy071gu14JF78wyGCUsrWYIq+iASQnvg3oTLi53uwVXzPv1pDOcOMK3U
+         JH5w==
+X-Gm-Message-State: APjAAAXYhf6WGMbFOCTWbvn91Y8rZXkzbCknsgeJdaY+d91bBNfEufo7
+        Qb57cdp4xrN2mEK5ab8GQ2Q=
+X-Google-Smtp-Source: APXvYqyqOikmrYlfDVaQmwSdBbpLljoHYEu4OR6dibvJ7d05mmOJCDS6q9hD/Xg9KmnAOwICPotAVg==
+X-Received: by 2002:a5b:42:: with SMTP id e2mr9964922ybp.141.1552027557907;
+        Thu, 07 Mar 2019 22:45:57 -0800 (PST)
+Received: from localhost.localdomain ([191.101.9.198])
+        by smtp.gmail.com with ESMTPSA id 186sm2408540ywi.104.2019.03.07.22.45.56
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 07 Mar 2019 22:45:57 -0800 (PST)
+From:   Bo YU <tsu.yubo@gmail.com>
+To:     ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
+        ongliubraving@fb.com, yhs@fb.com, davem@davemloft.net
+Cc:     Bo YU <tsu.yubo@gmail.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org, yuzibode@126.com
+Subject: [PATCH V3] bpf: fix warning about using plain integer as NULL
+Date:   Fri,  8 Mar 2019 01:45:51 -0500
+Message-Id: <20190308064551.17437-1-tsu.yubo@gmail.com>
+X-Mailer: git-send-email 2.11.0
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Mar 7, 2019 at 10:12 PM Bo YU <tsu.yubo@gmail.com> wrote:
->
-> Sparse warning below:
->
-> sudo make C=2 CF=-D__CHECK_ENDIAN__ M=net/bpf/
-> CHECK   net/bpf//test_run.c
-> net/bpf//test_run.c:19:77: warning: Using plain integer as NULL pointer
-> ./include/linux/bpf-cgroup.h:295:77: warning: Using plain integer as NULL pointer
->
-> Fixes: 8bad74f9840f ("bpf: extend cgroup bpf core to allow multiple
-> cgroup storage types")
->
-> Acked-by: Yonghong Song <yhs@fb.com>
-> Signed-off-by: Bo YU <tsu.yubo@gmail.com>
+Sparse warning below:
 
-There should be no empty line between tags ("Fixes" and "Acked-by").
-"Fixes" tag should be all in one line. My previous reply may be
-wrapped by the email client, which is not my intention.
+sudo make C=2 CF=-D__CHECK_ENDIAN__ M=net/bpf/
+CHECK   net/bpf//test_run.c
+net/bpf//test_run.c:19:77: warning: Using plain integer as NULL pointer
+./include/linux/bpf-cgroup.h:295:77: warning: Using plain integer as NULL pointer
 
-> ---
-> V2: Add fix-up tag from Yonghong
-> ---
->  include/linux/bpf-cgroup.h | 2 +-
->  net/bpf/test_run.c         | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-> index 695b2a880d9a..a4c644c1c091 100644
-> --- a/include/linux/bpf-cgroup.h
-> +++ b/include/linux/bpf-cgroup.h
-> @@ -292,7 +292,7 @@ static inline int bpf_cgroup_storage_assign(struct bpf_prog *prog,
->  static inline void bpf_cgroup_storage_release(struct bpf_prog *prog,
->                                               struct bpf_map *map) {}
->  static inline struct bpf_cgroup_storage *bpf_cgroup_storage_alloc(
-> -       struct bpf_prog *prog, enum bpf_cgroup_storage_type stype) { return 0; }
-> +       struct bpf_prog *prog, enum bpf_cgroup_storage_type stype) { return NULL; }
->  static inline void bpf_cgroup_storage_free(
->         struct bpf_cgroup_storage *storage) {}
->  static inline int bpf_percpu_cgroup_storage_copy(struct bpf_map *map, void *key,
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index da7051d62727..fab142b796ef 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -16,7 +16,7 @@
->  static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
->                         u32 *retval, u32 *time)
->  {
-> -       struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = { 0 };
-> +       struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = { NULL };
->         enum bpf_cgroup_storage_type stype;
->         u64 time_start, time_spent = 0;
->         int ret = 0;
-> --
-> 2.11.0
->
+Fixes: 8bad74f9840f ("bpf: extend cgroup bpf core to allow multiple cgroup storage types")
+Acked-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Bo YU <tsu.yubo@gmail.com>
+---
+V3: put fix tag all in a line
+V2: Add fix-up tag from Yonghong
+---
+ include/linux/bpf-cgroup.h | 2 +-
+ net/bpf/test_run.c         | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+index 695b2a880d9a..a4c644c1c091 100644
+--- a/include/linux/bpf-cgroup.h
++++ b/include/linux/bpf-cgroup.h
+@@ -292,7 +292,7 @@ static inline int bpf_cgroup_storage_assign(struct bpf_prog *prog,
+ static inline void bpf_cgroup_storage_release(struct bpf_prog *prog,
+ 					      struct bpf_map *map) {}
+ static inline struct bpf_cgroup_storage *bpf_cgroup_storage_alloc(
+-	struct bpf_prog *prog, enum bpf_cgroup_storage_type stype) { return 0; }
++	struct bpf_prog *prog, enum bpf_cgroup_storage_type stype) { return NULL; }
+ static inline void bpf_cgroup_storage_free(
+ 	struct bpf_cgroup_storage *storage) {}
+ static inline int bpf_percpu_cgroup_storage_copy(struct bpf_map *map, void *key,
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index da7051d62727..fab142b796ef 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -16,7 +16,7 @@
+ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
+ 			u32 *retval, u32 *time)
+ {
+-	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = { 0 };
++	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = { NULL };
+ 	enum bpf_cgroup_storage_type stype;
+ 	u64 time_start, time_spent = 0;
+ 	int ret = 0;
+-- 
+2.11.0
+
