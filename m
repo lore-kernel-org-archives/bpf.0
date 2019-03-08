@@ -2,136 +2,168 @@ Return-Path: <SRS0=A/va=RL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB152C43381
-	for <bpf@archiver.kernel.org>; Fri,  8 Mar 2019 10:33:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2B72C43381
+	for <bpf@archiver.kernel.org>; Fri,  8 Mar 2019 10:46:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 95C5D20684
-	for <bpf@archiver.kernel.org>; Fri,  8 Mar 2019 10:33:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 929D820811
+	for <bpf@archiver.kernel.org>; Fri,  8 Mar 2019 10:46:31 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ss/e/ef7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726285AbfCHKdG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 Mar 2019 05:33:06 -0500
-Received: from www62.your-server.de ([213.133.104.62]:53244 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726367AbfCHKdG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 Mar 2019 05:33:06 -0500
-Received: from [88.198.220.132] (helo=sslproxy03.your-server.de)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1h2CoH-0004Kw-9e; Fri, 08 Mar 2019 11:33:01 +0100
-Received: from [2a02:120b:c3fc:feb0:dda7:bd28:a848:50e2] (helo=linux.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1h2CoH-00074E-2L; Fri, 08 Mar 2019 11:33:01 +0100
-Subject: Re: [PATCH] bpf: Try harder when allocating memory for maps
-To:     Michal Hocko <mhocko@kernel.org>, Martynas Pumputis <m@lambda.lt>
-Cc:     bpf@vger.kernel.org, ast@kernel.org
-References: <20190308080857.12005-1-m@lambda.lt>
- <20190308084413.GB5232@dhcp22.suse.cz>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <295a56f7-6028-3c45-63d4-b6394cc787f1@iogearbox.net>
-Date:   Fri, 8 Mar 2019 11:33:00 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.3.0
+        id S1726259AbfCHKqb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 Mar 2019 05:46:31 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:47061 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725975AbfCHKqa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 Mar 2019 05:46:30 -0500
+Received: by mail-pf1-f193.google.com with SMTP id g6so13875408pfh.13;
+        Fri, 08 Mar 2019 02:46:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=fSBx+rr1bSjOid41hu6DhztkFRxW8NBdtlS+vnPaWHo=;
+        b=ss/e/ef7/mcyF+YGBz4rWRwYTrq1b5+LoRM8QbL/iu+D0RMtxigK2/3J+4hSsGpIYf
+         ES7bd/YhKvSMN7w8rybCuAw2RZ4ILEqWf7TcFtrkt7Fq15kUa6RINrSJzPapwEOo/bM+
+         UozB+rtbFCV1hMMzFod500aAzZeRox5NcXjsyDNCDgqsdHvzA69kQVNjfqHv9H/7T0jm
+         P08rXEMJK01TLRGq0gYoyJu4+qs1eH2uW3vOGGJ2t82gRju4qk50T3gERg4udl8axHA6
+         5NbvETmf12LM+Wr6WIlV5l4hpu5Soun2z55Bu82myL3wTAzNL4WM1IXlIcuPcs+DlIi6
+         kMqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=fSBx+rr1bSjOid41hu6DhztkFRxW8NBdtlS+vnPaWHo=;
+        b=aXrwD14NP+PXdGLlGfV9h2GLApp8hFiD7ZpMMug5YD/T3E7tQRFmMRistlijHHDqla
+         V6CY4oVM6lZpirIgdjw5B6rLaebJMy7R4uwgpQ+XfA06haAt/rRLypaGBnZojpbrgzWs
+         YyrUsvqMtnkuL3g/bXQ2RnZtagtQAH/j3SJlc0sW7bnGcAipM0FSk2Dyq5Zed4K+1FMU
+         zevVuRKGa50kTUE8Ku9PbPpmWX2f9BqoZgLkssNsnUrAlH8ZIapnrssf+dzZWK6VCFDN
+         eN6fZA9OZStgOszz2AbhcMjVkaPMLGxYetG74i44aPTL0zON167LEgbf9DWurEOW8u1T
+         8FSg==
+X-Gm-Message-State: APjAAAWJbRgsUnj0T6/9KI6WcdEKQu5fp6CRd5lprgVG7UTZ4qkoYL4C
+        EohXZnlg+MuFT2g3gGRj3AY=
+X-Google-Smtp-Source: APXvYqxwUj3VTSzoWZ0BB1Sg7DIj/djD9Lnfb8XrrpKbbR04TxvqoHlH4sx6wexQuv/zFbZa2mfFrA==
+X-Received: by 2002:a63:3648:: with SMTP id d69mr16130546pga.314.1552041989809;
+        Fri, 08 Mar 2019 02:46:29 -0800 (PST)
+Received: from localhost ([192.55.54.40])
+        by smtp.gmail.com with ESMTPSA id v26sm10047331pgn.46.2019.03.08.02.46.27
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 08 Mar 2019 02:46:29 -0800 (PST)
+Date:   Fri, 8 Mar 2019 11:46:20 +0100
+From:   Maciej Fijalkowski <maciejromanfijalkowski@gmail.com>
+To:     =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Netdev <netdev@vger.kernel.org>,
+        =?ISO-8859-1?Q?B?= =?ISO-8859-1?Q?j=F6rn_T=F6pel?= 
+        <bjorn.topel@intel.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        Magnus Karlsson <magnus.karlsson@gmail.com>,
+        bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf 1/2] xsk: fix to reject invalid flags in xsk_bind
+Message-ID: <20190308114620.000067e7@gmail.com>
+In-Reply-To: <CAJ+HfNjtiT7v87OEF5kWikVdHro_hKXuC=Cm+gKYKS-3isyS7A@mail.gmail.com>
+References: <20190308075727.19358-1-bjorn.topel@gmail.com>
+        <20190308075727.19358-2-bjorn.topel@gmail.com>
+        <20190308105907.00000518@gmail.com>
+        <CAJ+HfNjtiT7v87OEF5kWikVdHro_hKXuC=Cm+gKYKS-3isyS7A@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.1 (GTK+ 2.24.32; x86_64-w64-mingw32)
 MIME-Version: 1.0
-In-Reply-To: <20190308084413.GB5232@dhcp22.suse.cz>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.100.2/25382/Fri Mar  8 09:55:42 2019)
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 03/08/2019 09:44 AM, Michal Hocko wrote:
-> On Fri 08-03-19 09:08:57, Martynas Pumputis wrote:
+On Fri, 8 Mar 2019 11:11:05 +0100
+Bj=F6rn T=F6pel <bjorn.topel@gmail.com> wrote:
 
-Martynas, for the patch, please also Cc netdev in the submission so
-that it lands properly in patchwork. Setup where patches only Cc'ed
-to bpf@vger.kernel.org would land in our delegate is not yet completed
-by ozlabs folks, just fyi.
+> On Fri, 8 Mar 2019 at 11:00, Maciej Fijalkowski
+> <maciejromanfijalkowski@gmail.com> wrote:
+> >
+> > On Fri,  8 Mar 2019 08:57:26 +0100
+> > Bj=F6rn T=F6pel <bjorn.topel@gmail.com> wrote:
+> > =20
+> > > From: Bj=F6rn T=F6pel <bjorn.topel@intel.com>
+> > >
+> > > Passing a non-existing flag in the sxdp_flags member of struct
+> > > sockaddr_xdp was, incorrectly, silently ignored. This patch addresses
+> > > that behavior, and rejects any non-existing flags.
+> > >
+> > > We have examined existing user space code, and to our best knowledge,
+> > > no one is relying on the current incorrect behavior. AF_XDP is still
+> > > in its infancy, so from our perspective, the risk of breakage is very
+> > > low, and addressing this problem now is important.
+> > >
+> > > Fixes: 965a99098443 ("xsk: add support for bind for Rx")
+> > > Signed-off-by: Bj=F6rn T=F6pel <bjorn.topel@intel.com>
+> > > ---
+> > >  net/xdp/xsk.c | 5 ++++-
+> > >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> > > index 6697084e3fdf..a14e8864e4fa 100644
+> > > --- a/net/xdp/xsk.c
+> > > +++ b/net/xdp/xsk.c
+> > > @@ -407,6 +407,10 @@ static int xsk_bind(struct socket *sock, struct =
+sockaddr *addr, int addr_len)
+> > >       if (sxdp->sxdp_family !=3D AF_XDP)
+> > >               return -EINVAL;
+> > >
+> > > +     flags =3D sxdp->sxdp_flags;
+> > > +     if (flags & ~(XDP_SHARED_UMEM | XDP_COPY | XDP_ZEROCOPY))
+> > > +             return -EINVAL;
+> > > + =20
+> >
+> > What about setting more than one flag at a time? Is it allowed/make any=
+ sense?
+> > After a quick look it seems that they exclude each other, e.g. you can'=
+t force
+> > a zero copy and copy mode at the same time. And for XDP_SHARED_UMEM two
+> > remaining flags can't be set.
+> >
+> > So maybe check here also that only one particular flag is set by doing:
+> >
+> > if (hweight32(flags & (XDP_SHARED_UMEM | XDP_COPY | XDP_ZEROCOPY)) > 1)
+> >         return -EINVAL;
+> >
+> > just like we do it for IFLA_XDP_FLAGS in net/core/rtnetlink.c?
+> > =20
+>=20
+> We have flag semantic checks further down, and my rational was to
+> *only* check unknown flags first. IMO the current patch is easier to
+> understand, than your suggested one.
+>=20
 
->> It has been observed that sometimes memory allocation for BPF maps
->> fails when there is no obvious memory pressure in a system.
->>
->> E.g. the map (BPF_MAP_TYPE_LRU_HASH, key=38, value=56, max_elems=524288)
->> could not be created due to due to vmalloc unable to allocate 75497472B,
->> when the system's memory consumption (in MB) was the following:
->>
->>     Total: 3942 Used: 837 (21.24%) Free: 138 Buffers: 239 Cached: 2727
-> 
-> Hmm 75MB is quite large and much larger than the slab/page allocator
-> cann provide so this is not really a fragmentation issue. Vmalloc does
+Hmm thought that bailing out earlier would be better and we could drop the
+actual copy flags checks for shared umem. For xdp_umem_assign_dev() instead=
+ of
+passing flags you could just pass a boolean whether you're doing zero copy =
+or
+not. And that brings up the question whether we really need a XDP_COPY flag?
 
-Agree.
-
-> respect noretry but considering that there shouldn't be a large memory
-> pressure I wonder how NORETRY managed to fail the allocation. Do you
-> happen to have the allocation failure report?
-
-I'll defer to Martynas here.
-
-> Btw. is there any real reason to opencode and duplicate kvmalloc logic
-> here? In other words why not simply make bpf_map_area_alloc use
-> kvmalloc_node with GFP_KERNEL?
-
-Mostly historical reasons from d407bd25a204 ("bpf: don't trigger OOM killer
-under pressure with map alloc"). I remember back then we had a discussion
-that __GFP_NORETRY is not fully supported and should only be seen as a hint
-in our case (since it's not propagated all the way through in vmalloc, if
-I recall correctly). And looking at kvmalloc_node(), __GFP_NORETRY is only
-really set in case of kmalloc attempts. Given these alloc requests for maps
-can often be large in size, what we really want is something that ideally under
-*no* circumstances oom killer would trigger as that is way too disruptive. So
-instead, allocation should just fail and bpf loader or whatnot can deal with
-it. Looks like __GFP_RETRY_MAYFAIL would be better suited wrt OOM for both
-allocators and would allow to reuse kvmalloc though it would try much harder
-than __GFP_NORETRY. Ideally something like GFP_KERNEL | __GFP_NOWARN |
-__GFP_NOOOM | __GFP_ZERO would be nice to have, semantics of __GFP_RETRY_MAYFAIL
-kind of gets closer to it from looking at dcda9b0471.
-
->> Considering dcda9b0471 ("mm, tree wide: replace __GFP_REPEAT by
->> __GFP_RETRY_MAYFAIL with more useful semantic") we can replace
->> __GFP_NORETRY with __GFP_RETRY_MAYFAIL, as it won't invoke OOM killer
->> and will try harder to fulfil allocation requests.
->>
->> The change has been tested with the workloads mentioned above and by
->> observing oom_kill value from /proc/vmstat.
->>
->> Signed-off-by: Martynas Pumputis <m@lambda.lt>
->> ---
->>  kernel/bpf/syscall.c | 8 ++++----
->>  1 file changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
->> index 62f6bced3a3c..eb5cefe44af3 100644
->> --- a/kernel/bpf/syscall.c
->> +++ b/kernel/bpf/syscall.c
->> @@ -136,11 +136,11 @@ static struct bpf_map *find_and_alloc_map(union bpf_attr *attr)
->>  
->>  void *bpf_map_area_alloc(size_t size, int numa_node)
->>  {
->> -	/* We definitely need __GFP_NORETRY, so OOM killer doesn't
->> -	 * trigger under memory pressure as we really just want to
->> -	 * fail instead.
->> +	/* We definitely need __GFP_NORETRY or __GFP_RETRY_MAYFAIL, so
->> +	 * OOM killer doesn't trigger under memory pressure as we really
->> +	 * just want to fail instead.
->>  	 */
->> -	const gfp_t flags = __GFP_NOWARN | __GFP_NORETRY | __GFP_ZERO;
->> +	const gfp_t flags = __GFP_NOWARN | __GFP_RETRY_MAYFAIL | __GFP_ZERO;
->>  	void *area;
->>  
->>  	if (size <= (PAGE_SIZE << PAGE_ALLOC_COSTLY_ORDER)) {
->> -- 
->> 2.21.0
->>
-> 
+> Thanks for taking a look!
+>=20
+> Cheers,
+> Bj=F6rn
+>=20
+> > >       mutex_lock(&xs->mutex);
+> > >       if (xs->dev) {
+> > >               err =3D -EBUSY;
+> > > @@ -425,7 +429,6 @@ static int xsk_bind(struct socket *sock, struct s=
+ockaddr *addr, int addr_len)
+> > >       }
+> > >
+> > >       qid =3D sxdp->sxdp_queue_id;
+> > > -     flags =3D sxdp->sxdp_flags;
+> > >
+> > >       if (flags & XDP_SHARED_UMEM) {
+> > >               struct xdp_sock *umem_xs; =20
+> > =20
 
