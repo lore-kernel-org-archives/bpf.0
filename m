@@ -2,118 +2,90 @@ Return-Path: <SRS0=A/va=RL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DB6CC43381
-	for <bpf@archiver.kernel.org>; Fri,  8 Mar 2019 12:01:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABC0EC43381
+	for <bpf@archiver.kernel.org>; Fri,  8 Mar 2019 13:26:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 272A120684
-	for <bpf@archiver.kernel.org>; Fri,  8 Mar 2019 12:01:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1552046461;
-	bh=ST/wkxAbC0akY5EDU0/+5Pd0bUoZG2xVbt/rjEH699M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=uiWxPjaJxgBUQV6gzsJXkMhLALUOFJce2H2/SQW4piNKsK3thPF/sV1lC7XdX+3OI
-	 Bc5Gk1iCeW1PVXfPaClFMPEoZjqtA2xhUhPVE5MuFo4q/JMmZllv1uR2hQXK7rAHdT
-	 bl/RGOMPghgwtXpMlS8nto94aX2Zv9lLOL3YF6pk=
+	by mail.kernel.org (Postfix) with ESMTP id 7ED0C20851
+	for <bpf@archiver.kernel.org>; Fri,  8 Mar 2019 13:26:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726305AbfCHMBA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 Mar 2019 07:01:00 -0500
-Received: from mx2.suse.de ([195.135.220.15]:47258 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726286AbfCHMBA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 Mar 2019 07:01:00 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 9B09DAE07;
-        Fri,  8 Mar 2019 12:00:58 +0000 (UTC)
-Date:   Fri, 8 Mar 2019 13:00:54 +0100
-From:   Michal Hocko <mhocko@kernel.org>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Martynas Pumputis <m@lambda.lt>, bpf@vger.kernel.org,
-        ast@kernel.org
-Subject: Re: [PATCH] bpf: Try harder when allocating memory for maps
-Message-ID: <20190308120054.GK5232@dhcp22.suse.cz>
-References: <20190308080857.12005-1-m@lambda.lt>
- <20190308084413.GB5232@dhcp22.suse.cz>
- <295a56f7-6028-3c45-63d4-b6394cc787f1@iogearbox.net>
- <20190308105553.GD5232@dhcp22.suse.cz>
- <71565608-1478-cbb9-62b6-0292e01a3d09@iogearbox.net>
+        id S1726418AbfCHN0I (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 Mar 2019 08:26:08 -0500
+Received: from www62.your-server.de ([213.133.104.62]:56448 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726171AbfCHN0H (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 Mar 2019 08:26:07 -0500
+Received: from [88.198.220.130] (helo=sslproxy01.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1h2FVm-0002un-68; Fri, 08 Mar 2019 14:26:06 +0100
+Received: from [2a02:120b:c3fc:feb0:dda7:bd28:a848:50e2] (helo=linux.home)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1h2FVl-0004HV-PJ; Fri, 08 Mar 2019 14:26:05 +0100
+Subject: Re: [PATCH bpf 1/2] xsk: fix to reject invalid flags in xsk_bind
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        Maciej Fijalkowski <maciejromanfijalkowski@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        Magnus Karlsson <magnus.karlsson@gmail.com>,
+        bpf <bpf@vger.kernel.org>
+References: <20190308075727.19358-1-bjorn.topel@gmail.com>
+ <20190308075727.19358-2-bjorn.topel@gmail.com>
+ <20190308105907.00000518@gmail.com>
+ <CAJ+HfNjtiT7v87OEF5kWikVdHro_hKXuC=Cm+gKYKS-3isyS7A@mail.gmail.com>
+ <20190308114620.000067e7@gmail.com>
+ <CAJ+HfNjGzjkf-LGOvprJrUd+LVu7BN5FV2CRmwGXTRxDBD1JBg@mail.gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <91b16f06-9a3d-603c-37f1-9f617fac5793@iogearbox.net>
+Date:   Fri, 8 Mar 2019 14:26:04 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <71565608-1478-cbb9-62b6-0292e01a3d09@iogearbox.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAJ+HfNjGzjkf-LGOvprJrUd+LVu7BN5FV2CRmwGXTRxDBD1JBg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.2/25382/Fri Mar  8 09:55:42 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri 08-03-19 12:30:47, Daniel Borkmann wrote:
-> On 03/08/2019 11:55 AM, Michal Hocko wrote:
-> > On Fri 08-03-19 11:33:00, Daniel Borkmann wrote:
-> >> On 03/08/2019 09:44 AM, Michal Hocko wrote:
-> >>> On Fri 08-03-19 09:08:57, Martynas Pumputis wrote:
-> >>
-> >> Martynas, for the patch, please also Cc netdev in the submission so
-> >> that it lands properly in patchwork. Setup where patches only Cc'ed
-> >> to bpf@vger.kernel.org would land in our delegate is not yet completed
-> >> by ozlabs folks, just fyi.
-> >>
-> >>>> It has been observed that sometimes memory allocation for BPF maps
-> >>>> fails when there is no obvious memory pressure in a system.
-> >>>>
-> >>>> E.g. the map (BPF_MAP_TYPE_LRU_HASH, key=38, value=56, max_elems=524288)
-> >>>> could not be created due to due to vmalloc unable to allocate 75497472B,
-> >>>> when the system's memory consumption (in MB) was the following:
-> >>>>
-> >>>>     Total: 3942 Used: 837 (21.24%) Free: 138 Buffers: 239 Cached: 2727
-> >>>
-> >>> Hmm 75MB is quite large and much larger than the slab/page allocator
-> >>> cann provide so this is not really a fragmentation issue. Vmalloc does
-> >>
-> >> Agree.
-> >>
-> >>> respect noretry but considering that there shouldn't be a large memory
-> >>> pressure I wonder how NORETRY managed to fail the allocation. Do you
-> >>> happen to have the allocation failure report?
-> >>
-> >> I'll defer to Martynas here.
-> >>
-> >>> Btw. is there any real reason to opencode and duplicate kvmalloc logic
-> >>> here? In other words why not simply make bpf_map_area_alloc use
-> >>> kvmalloc_node with GFP_KERNEL?
-> >>
-> >> Mostly historical reasons from d407bd25a204 ("bpf: don't trigger OOM killer
-> >> under pressure with map alloc"). I remember back then we had a discussion
-> >> that __GFP_NORETRY is not fully supported and should only be seen as a hint
-> >> in our case (since it's not propagated all the way through in vmalloc, if
-> >> I recall correctly).
-> > 
-> > Yes, that is still the case and there is no way to really have nooom
-> > semantic for vmalloc. Even with your opencoded version btw.
+On 03/08/2019 12:06 PM, Björn Töpel wrote:
+> On Fri, 8 Mar 2019 at 11:46, Maciej Fijalkowski
+> <maciejromanfijalkowski@gmail.com> wrote:
+[...]
+>>>> So maybe check here also that only one particular flag is set by doing:
+>>>>
+>>>> if (hweight32(flags & (XDP_SHARED_UMEM | XDP_COPY | XDP_ZEROCOPY)) > 1)
+>>>>         return -EINVAL;
+>>>>
+>>>> just like we do it for IFLA_XDP_FLAGS in net/core/rtnetlink.c?
+>>>
+>>> We have flag semantic checks further down, and my rational was to
+>>> *only* check unknown flags first. IMO the current patch is easier to
+>>> understand, than your suggested one.
+>>
+>> Hmm thought that bailing out earlier would be better and we could drop the
+>> actual copy flags checks for shared umem. For xdp_umem_assign_dev() instead of
+>> passing flags you could just pass a boolean whether you're doing zero copy or
+>> not. And that brings up the question whether we really need a XDP_COPY flag?
 > 
-> Okay, so similar situation applies to __GFP_RETRY_MAYFAIL reclaim modifier
-> then if I understand you correctly? In dcda9b0471, its mentioned "this
-> means that all the reclaim opportunities have been exhausted except the
-> most disruptive one (the OOM killer) and a user defined fallback behavior
-> is more sensible than keep retrying in the page allocator." In the api
-> comment in kvmalloc_node(), it says "__GFP_RETRY_MAYFAIL is supported,
-> and it should be used only if kmalloc is preferable to the vmalloc fallback,
-> due to visible performance drawbacks". But if you say above that for
-> vmalloc, there is no nooom semantic, then presumably __GFP_RETRY_MAYFAIL
-> should also be taken as a hint wrt OOM, not a guarantee for the given
-> allocation request (if kvmalloc_node selects the vmalloc based allocator),
-> is that correct?
+> I'd prefer doing that as a follow-up patch.
 
-Yes, kvmalloc* doesn't have the full MAYFAIL/NORETRY semantic because
-this is not possible to implement without reworking the whole page table
-allocation code or making both behave like scoped NOFS/NOIO.
+Ok, follow-up for Maciej's suggestion is fine, imho, it would definitely make
+it more obvious resp. future proof such that rejecting some invalid combination
+doesn't get missed under some branch. Given it's currently not the case aside
+from the fix, rolling this into your next patches for bpf-next might be best.
+In any case, fixes look good, so applied, thanks!
 
-But I believe you shouldn't really have to care. Does the same problem
-really happen with a plain kvmalloc(GFP_KERNEL)?
--- 
-Michal Hocko
-SUSE Labs
+> XDP_COPY is needed to explicitly enable copy-mode. No flags is "select
+> the best option", and COPY/ZEROCOPY is to explicitly select a mode.
