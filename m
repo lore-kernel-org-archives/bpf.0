@@ -2,97 +2,109 @@ Return-Path: <SRS0=A/va=RL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BF68C43381
-	for <bpf@archiver.kernel.org>; Fri,  8 Mar 2019 19:42:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1694C43381
+	for <bpf@archiver.kernel.org>; Fri,  8 Mar 2019 20:01:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C457A206DF
-	for <bpf@archiver.kernel.org>; Fri,  8 Mar 2019 19:42:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 90B3320857
+	for <bpf@archiver.kernel.org>; Fri,  8 Mar 2019 20:01:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O5x5K7PZ"
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MnVgGXu1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726633AbfCHTm1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 Mar 2019 14:42:27 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:34266 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726613AbfCHTm1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 Mar 2019 14:42:27 -0500
-Received: by mail-ot1-f65.google.com with SMTP id 98so18396844oty.1;
-        Fri, 08 Mar 2019 11:42:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Akar6VYy2ofGYetYqTfHmysGU8aDE88e1GVR6Bx+XJ8=;
-        b=O5x5K7PZxEN9FVMzI2eJk23OLC6g74AoAnGaqHNPWk0OqvnSvs5I7ZSH5tspZqEQsA
-         D3s12vj3OIzfy6Ou7thn/a7fueB5jqtLp8BVDcpR+uQaJhVmqwD3jvAFNN3W0QFuw2U2
-         0ccYzhhcwPdxbvK42ED/YxO6D77bvaZBqpGAbtvDUWZ3dXofWHfE77WK4ocXPlM3ZjcW
-         3FHWeMGkTvkMLbE/87MxuERqeDnjKZxKVCDPxpEU5F/2MRJ1CVu3bDRfWf6aRzq/dlCI
-         2IOk6/pOZ7XgqQmcOV85ghWCkTwNyK3TbEzDxZUrS2UHaB2Fn8HIVr00sYFwiSQSYgWs
-         +TrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Akar6VYy2ofGYetYqTfHmysGU8aDE88e1GVR6Bx+XJ8=;
-        b=Dg26lQWHbYhh1S8/PEseA/My4peHtsOeYzICC6UwxRB1iYjeKENagZJn1ZQHwAz0GN
-         3G2jGe4q7TPwMNqDv32MOC+legol41SeCfidKhvd4tK+jztEEt4aRV/tnxWTReiIvijA
-         SLFKmlWYitaplstmrwxUrcSiDSMhgck/5rkrvWNpGIJwmDopnd9fRZzaaoIjlgo+cgIf
-         kaUIkejuOqkoRxMgonUwu3uHIILj0Xqll0q0XT8tHM/BZcCQpXoQzFjlOxtgilvPVH/M
-         9gqn0XJWjwqd/zRfoYJlGTuEhlDHZWdknq6Kr3B9/lbsmv5G2vr8MXMRrN8KLJ4xIDaV
-         NkZg==
-X-Gm-Message-State: APjAAAU+PsWBzgNMtiGwLjmUqXNe6Hqy+5vfudMfdkunWLdteyrtX6dZ
-        P+69kDHhtUTuF5xyJRsU42Td8kc9LFQrOyVlu+4=
-X-Google-Smtp-Source: APXvYqwLEQ0ZI9/SEA7v2kQiSPWyn3B0hkBPUMhbYf8i3cNYWkhQy27oCMid2MJLrtJhbb+m61eaoMm64NsuVokzR64=
-X-Received: by 2002:a9d:745a:: with SMTP id p26mr12597577otk.206.1552074146367;
- Fri, 08 Mar 2019 11:42:26 -0800 (PST)
+        id S1726814AbfCHUBh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 Mar 2019 15:01:37 -0500
+Received: from out2-smtp.messagingengine.com ([66.111.4.26]:52939 "EHLO
+        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726654AbfCHUBg (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 8 Mar 2019 15:01:36 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 6C987216CA;
+        Fri,  8 Mar 2019 15:01:35 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Fri, 08 Mar 2019 15:01:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; bh=wkWqKZ4BDvo65SUW0fcuRlsWXDHXdPpmIOYOty7jq
+        NI=; b=MnVgGXu1+TYcB+w/voZBhUq/swGAgoyPv2Ha+W3jpEGgPP8373Sn1F8A3
+        miKcdyvw4ddvtNJ8Bmbo6vBtXvfKj/9OblAY3co902vgAXhG4dQsuBF9guq8ecse
+        kV+AyJ59rapbc5z4IGQUchz5gOPlaHEtzZ+a6Fb9K9wGjiN2H6daB0ixy07oU83a
+        QtLvsLZ9cBh3et5ipV4EJ6Lq3g7xKNvynUZIVORwmx08ntC8pHxACuYcSJUyOw+n
+        i9456bHPNkZx4aAEhqUt7kub94ePbfi4KmM82VMP/SqQB8BkGMNJhvIq4FgBOp0E
+        FV5ktraHKbEF2ltgyZuu6HZEBbZOA==
+X-ME-Sender: <xms:HsqCXOU1ZzCpWkLm7J1ye7S7iCvOwBYR7aacjGd0Q4ps3J8odZ9khA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedutddrgedtgddufeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepofgrrhht
+    hihnrghsucfruhhmphhuthhishcuoehmsehlrghmsggurgdrlhhtqeenucffohhmrghinh
+    epghhithhhuhgsrdgtohhmnecukfhppeefuddrudeigedruddvfedrvdefleenucfrrghr
+    rghmpehmrghilhhfrhhomhepmheslhgrmhgsuggrrdhlthenucevlhhushhtvghrufhiii
+    gvpedt
+X-ME-Proxy: <xmx:HsqCXJDB6u1MNfkISdCW_x07uyMS48hjJ1PgGaTvl5BF2emNbZDpaQ>
+    <xmx:HsqCXJhRCIcKj2-DxHXBaZyCwy3W2CwmYZ44dxjxYEMgCt-nzDep4A>
+    <xmx:HsqCXI4CNLLJaN1BcoWBfGg_OGl28SwtWhib5piaQ7ra9dVhqDA24Q>
+    <xmx:H8qCXAQmCY0FTv3D8GLxhmsLWA5Un_5zkjG3AZDdYWOZlD4FlnWXfQ>
+Received: from [192.168.1.21] (xdsl-31-164-123-239.adslplus.ch [31.164.123.239])
+        by mail.messagingengine.com (Postfix) with ESMTPA id CF86F10312;
+        Fri,  8 Mar 2019 15:01:33 -0500 (EST)
+Subject: Re: [PATCH] bpf: Try harder when allocating memory for maps
+To:     Michal Hocko <mhocko@kernel.org>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net
+References: <20190308080857.12005-1-m@lambda.lt>
+ <20190308084413.GB5232@dhcp22.suse.cz>
+ <69fdfb33-057b-b7fe-033e-d82006a779b9@lambda.lt>
+ <20190308112000.GG5232@dhcp22.suse.cz>
+From:   Martynas Pumputis <m@lambda.lt>
+Message-ID: <2cbb3fe7-39a9-1b1e-e22f-4dffa20b9414@lambda.lt>
+Date:   Fri, 8 Mar 2019 21:02:41 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.1
 MIME-Version: 1.0
-References: <20190307002321.4071708-1-andriin@fb.com> <20190307140247.GV13100@kernel.org>
- <20190308002637.GF32240@kernel.org> <20190308184517.GI10690@kernel.org>
-In-Reply-To: <20190308184517.GI10690@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 8 Mar 2019 11:42:14 -0800
-Message-ID: <CAEf4Bzb__EgBCV4HRPTmgY2WwTmq=C+hdG0wDQOOJpZmMeeQ9A@mail.gmail.com>
-Subject: Re: [PATCH pahole] pahole: use 32-bit integers for iterations within CU
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Andrii Nakryiko <andriin@fb.com>, Alexei Starovoitov <ast@fb.com>,
-        Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>,
-        Martin Lau <kafai@fb.com>, Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>, dwarves@vger.kernel.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190308112000.GG5232@dhcp22.suse.cz>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Mar 8, 2019 at 10:45 AM Arnaldo Carvalho de Melo
-<arnaldo.melo@gmail.com> wrote:
->
-> Em Thu, Mar 07, 2019 at 09:26:37PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Several looks similar and the low hanging fruit to investigate, seems to
-> > be enum bitfields, and the others may as well end up being the same, in
-> > miscalculated stats for structs embedded in other structs:
->
-> I had little time to further look into this, but from what I've seen the
-> good news is that it seems the problem is with the DWARF loader, the BTF
-> one producing the right results 8-) I'll take a look at a fix you made
-> for packed enums and probably use the same thing on the DWARF loader.
 
-Yeah, I suspected it might be related to base_type__name_to_size()
-logic I removed for btf_loader. Ideally we should take the size from
-DWARF data itself (assuming it's there) and remove
-base_type__name_to_size() and related parts.
 
->
-> - Arnaldo
->
-> > $ btfdiff examples/vmlinux-aarch64
-> > --- /tmp/btfdiff.dwarf.81KCPb 2019-03-07 18:20:13.153319625 -0300
-> > +++ /tmp/btfdiff.btf.g1QkcZ   2019-03-07 18:20:13.928328675 -0300
+On 3/8/19 12:20 PM, Michal Hocko wrote:
+> On Fri 08-03-19 12:14:16, Martynas Pumputis wrote:
+>>
+>>
+>> On 3/8/19 9:44 AM, Michal Hocko wrote:
+>>> On Fri 08-03-19 09:08:57, Martynas Pumputis wrote:
+>>>> It has been observed that sometimes memory allocation for BPF maps
+>>>> fails when there is no obvious memory pressure in a system.
+>>>>
+>>>> E.g. the map (BPF_MAP_TYPE_LRU_HASH, key=38, value=56, max_elems=524288)
+>>>> could not be created due to due to vmalloc unable to allocate 75497472B,
+>>>> when the system's memory consumption (in MB) was the following:
+>>>>
+>>>>       Total: 3942 Used: 837 (21.24%) Free: 138 Buffers: 239 Cached: 2727
+>>>
+>>> Hmm 75MB is quite large and much larger than the slab/page allocator
+>>> cann provide so this is not really a fragmentation issue. Vmalloc does
+>>> respect noretry but considering that there shouldn't be a large memory
+>>> pressure I wonder how NORETRY managed to fail the allocation. Do you
+>>> happen to have the allocation failure report?
+>>
+>> I got /proc/{meminfo,vmstat,vmallocinfo} just after the allocation has
+>> failed:
+>> https://gist.github.com/brb/62092c1d83daa6527271b88f0352e32d
+> 
+> dmesg with the allocation failure report would be more helpful
 
-<snip>
+https://gist.github.com/brb/2d7ac323d2e14cb7a38bacba301fe3af
+
+> 
+> Thanks!
+> 
