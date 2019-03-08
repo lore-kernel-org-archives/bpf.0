@@ -2,111 +2,141 @@ Return-Path: <SRS0=A/va=RL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FROM_EXCESS_BASE64,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-12.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2039C43381
-	for <bpf@archiver.kernel.org>; Fri,  8 Mar 2019 11:06:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61DDAC43381
+	for <bpf@archiver.kernel.org>; Fri,  8 Mar 2019 11:13:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7160D20851
-	for <bpf@archiver.kernel.org>; Fri,  8 Mar 2019 11:06:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2E72D20684
+	for <bpf@archiver.kernel.org>; Fri,  8 Mar 2019 11:13:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OQdUsS0g"
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="NhzBRJLn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725975AbfCHLGg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 Mar 2019 06:06:36 -0500
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:37399 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725789AbfCHLGg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 Mar 2019 06:06:36 -0500
-Received: by mail-qt1-f194.google.com with SMTP id a48so20707251qtb.4;
-        Fri, 08 Mar 2019 03:06:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=beWMzmpE5s16iAbfzvgY+Dn4G4gCXrvMmBI0gW+/9Q0=;
-        b=OQdUsS0gIMH+PoOvg/SRquH2f0DGOMaF7IV4+lbLIdP6pgmlFjnz+SM6GBxwKODnP0
-         OJdTjvjFiK+DoXqM2QnNwyufbQ+xd0RFmUz69Od2ElaCLxkrPOhV3jSVqe/JezkemNKl
-         lYFBNbZMRd9hzkODIKxzIwwpe7UcLBzZ6Sks7Y0dcQ/cP8ZjNo21UFC1w5WLGsvLC//w
-         1qNyWGTi66ba1I0e1BWLDc+We6T6nokFNXyt25Dr7WCZvFefor8hOJaTCka0it+ZfoUX
-         jh825WrpNJobloKVpvPWLNxyrvfNjuvi4rznLC4YH13cOMDYi6yr5V6WEJoSYX3xEKuW
-         8jRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=beWMzmpE5s16iAbfzvgY+Dn4G4gCXrvMmBI0gW+/9Q0=;
-        b=CVZB02TeYawqykQ/xPk+3LPRX7Z7svZ64si2vGgjFiXnCmz+Dhjt0YppRK/o+GuWek
-         gPHusmyEyGHiPyoHeFS9RdqLuhv4jpE9Kzi91dOBftH60R1Ub7bGCTWtzBUFR4FD4j5g
-         FeiXYzGHdONjdoIGGGBxGlp3KOac+t/iE0RCRBXMbgf+vIDolUhv7QVkclzBXlyndsSb
-         LU0x2T1O1VvJTDPDjcc4VErsfTHDQD0Fm6UVdJ3BU9RkhgLrdc1UuL5fw2tg2kMA/ir4
-         4ukXnswu2HQGMmKN28CtZYXfeRQEfZPhmev34b0WSChZYdz4dhYgLDSp6GMnzO2nHgel
-         HrxQ==
-X-Gm-Message-State: APjAAAVU7lNkIAwZkF90I7cmKTB0F6FMzWR/rRXDbjctwJLwczc3m3gz
-        Wcp4ZuDadqOU5SqXC69uqzCiGAg2bMJvtKC8KD0=
-X-Google-Smtp-Source: APXvYqyp/GE5CpQbRx3g9pfHaBDCyeF1TySnyRJUrMMRrW7ZCM+gKuyp915blQORyqw5y7wbuS1ZZ0IChyfPUFTQ9uo=
-X-Received: by 2002:ac8:1ba9:: with SMTP id z38mr14155635qtj.3.1552043194645;
- Fri, 08 Mar 2019 03:06:34 -0800 (PST)
+        id S1726270AbfCHLNO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 Mar 2019 06:13:14 -0500
+Received: from out2-smtp.messagingengine.com ([66.111.4.26]:37361 "EHLO
+        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725789AbfCHLNN (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 8 Mar 2019 06:13:13 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 1D9C22207E;
+        Fri,  8 Mar 2019 06:13:12 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Fri, 08 Mar 2019 06:13:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; bh=avA4FoeO6xNQkjlbiKeIRU2G/wq42n4zc+0robbos
+        /k=; b=NhzBRJLnt5eBE/IpOS+ld9DPxTxEWdYN4j56efJf+fFXyUiMgu8blENWE
+        +2HfS578ByExO/jZXlw5Ibn/UcF3UkgrThGNinpL5DGn7eTEiS7cj7pM1M9/qAH1
+        RyOSN3cOeKO+2KJXK8Uvq8/V+Ls6AqyzGQ44gpt69u495loeiGDAG6HCvV2Whx5E
+        kLryRLZEmft5cGixbFAgepSp71FJyRAZ4XmOEK+pOS4YMbcDkVQWtRGmrCp+2GdD
+        a1trZYJM4IIhuso62AJaVNiOx/CdrDYLFnazXgEpsWg5XVDxSmVpOZROWcvbv0S/
+        SHW2TkKJrExIrEs2zKRgtW1w/xkiA==
+X-ME-Sender: <xms:R06CXMaLUhteg6w4JijoPDhLJ5WdzmktKlmHfYiwq0lIjmDBtEu4Ag>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedutddrgedtgddviecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpeforghrthih
+    nhgrshcurfhumhhpuhhtihhsuceomheslhgrmhgsuggrrdhltheqnecuffhomhgrihhnpe
+    hgihhthhhusgdrtghomhenucfkphepudekkedrieefrddvtdejrddvfeehnecurfgrrhgr
+    mhepmhgrihhlfhhrohhmpehmsehlrghmsggurgdrlhhtnecuvehluhhsthgvrhfuihiivg
+    eptd
+X-ME-Proxy: <xmx:R06CXGLMJK4PBCZGV1TWieaz2z0RR3P9Su4x4yWsDgT3XN2izcro3g>
+    <xmx:R06CXLgII_JxiqkEKcoitr87nf6pEe3dSeUKRBpK9mTeMbf44bEaBA>
+    <xmx:R06CXCv7QQHRbjDChTyP4J4h8yCEMdujizIOPRcV3q_1V-adTJMY8A>
+    <xmx:SE6CXBdyt-2HA7NXFad2sH0gi8xWGYusd7GrUmf5sTYQBLBP857tFA>
+Received: from [192.168.1.116] (235.207.63.188.dynamic.wline.res.cust.swisscom.ch [188.63.207.235])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 6439710319;
+        Fri,  8 Mar 2019 06:13:10 -0500 (EST)
+Subject: Re: [PATCH] bpf: Try harder when allocating memory for maps
+To:     Michal Hocko <mhocko@kernel.org>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net
+References: <20190308080857.12005-1-m@lambda.lt>
+ <20190308084413.GB5232@dhcp22.suse.cz>
+From:   Martynas Pumputis <m@lambda.lt>
+Message-ID: <69fdfb33-057b-b7fe-033e-d82006a779b9@lambda.lt>
+Date:   Fri, 8 Mar 2019 12:14:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.1
 MIME-Version: 1.0
-References: <20190308075727.19358-1-bjorn.topel@gmail.com> <20190308075727.19358-2-bjorn.topel@gmail.com>
- <20190308105907.00000518@gmail.com> <CAJ+HfNjtiT7v87OEF5kWikVdHro_hKXuC=Cm+gKYKS-3isyS7A@mail.gmail.com>
- <20190308114620.000067e7@gmail.com>
-In-Reply-To: <20190308114620.000067e7@gmail.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Fri, 8 Mar 2019 12:06:23 +0100
-Message-ID: <CAJ+HfNjGzjkf-LGOvprJrUd+LVu7BN5FV2CRmwGXTRxDBD1JBg@mail.gmail.com>
-Subject: Re: [PATCH bpf 1/2] xsk: fix to reject invalid flags in xsk_bind
-To:     Maciej Fijalkowski <maciejromanfijalkowski@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Netdev <netdev@vger.kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190308084413.GB5232@dhcp22.suse.cz>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 8 Mar 2019 at 11:46, Maciej Fijalkowski
-<maciejromanfijalkowski@gmail.com> wrote:
->
-[...]
-> > > > +     flags = sxdp->sxdp_flags;
-> > > > +     if (flags & ~(XDP_SHARED_UMEM | XDP_COPY | XDP_ZEROCOPY))
-> > > > +             return -EINVAL;
-> > > > +
-> > >
-> > > What about setting more than one flag at a time? Is it allowed/make any sense?
-> > > After a quick look it seems that they exclude each other, e.g. you can't force
-> > > a zero copy and copy mode at the same time. And for XDP_SHARED_UMEM two
-> > > remaining flags can't be set.
-> > >
-> > > So maybe check here also that only one particular flag is set by doing:
-> > >
-> > > if (hweight32(flags & (XDP_SHARED_UMEM | XDP_COPY | XDP_ZEROCOPY)) > 1)
-> > >         return -EINVAL;
-> > >
-> > > just like we do it for IFLA_XDP_FLAGS in net/core/rtnetlink.c?
-> > >
-> >
-> > We have flag semantic checks further down, and my rational was to
-> > *only* check unknown flags first. IMO the current patch is easier to
-> > understand, than your suggested one.
-> >
->
-> Hmm thought that bailing out earlier would be better and we could drop the
-> actual copy flags checks for shared umem. For xdp_umem_assign_dev() instead of
-> passing flags you could just pass a boolean whether you're doing zero copy or
-> not. And that brings up the question whether we really need a XDP_COPY flag?
->
 
-I'd prefer doing that as a follow-up patch.
 
-XDP_COPY is needed to explicitly enable copy-mode. No flags is "select
-the best option", and COPY/ZEROCOPY is to explicitly select a mode.
+On 3/8/19 9:44 AM, Michal Hocko wrote:
+> On Fri 08-03-19 09:08:57, Martynas Pumputis wrote:
+>> It has been observed that sometimes memory allocation for BPF maps
+>> fails when there is no obvious memory pressure in a system.
+>>
+>> E.g. the map (BPF_MAP_TYPE_LRU_HASH, key=38, value=56, max_elems=524288)
+>> could not be created due to due to vmalloc unable to allocate 75497472B,
+>> when the system's memory consumption (in MB) was the following:
+>>
+>>      Total: 3942 Used: 837 (21.24%) Free: 138 Buffers: 239 Cached: 2727
+> 
+> Hmm 75MB is quite large and much larger than the slab/page allocator
+> cann provide so this is not really a fragmentation issue. Vmalloc does
+> respect noretry but considering that there shouldn't be a large memory
+> pressure I wonder how NORETRY managed to fail the allocation. Do you
+> happen to have the allocation failure report?
+
+I got /proc/{meminfo,vmstat,vmallocinfo} just after the allocation has 
+failed:
+https://gist.github.com/brb/62092c1d83daa6527271b88f0352e32d
+
+Let me know if more info is required, I can reproduce the failure. Thanks.
+
+> 
+> Btw. is there any real reason to opencode and duplicate kvmalloc logic
+> here? In other words why not simply make bpf_map_area_alloc use
+> kvmalloc_node with GFP_KERNEL?
+> 
+>> Considering dcda9b0471 ("mm, tree wide: replace __GFP_REPEAT by
+>> __GFP_RETRY_MAYFAIL with more useful semantic") we can replace
+>> __GFP_NORETRY with __GFP_RETRY_MAYFAIL, as it won't invoke OOM killer
+>> and will try harder to fulfil allocation requests.
+>>
+>> The change has been tested with the workloads mentioned above and by
+>> observing oom_kill value from /proc/vmstat.
+>>
+>> Signed-off-by: Martynas Pumputis <m@lambda.lt>
+>> ---
+>>   kernel/bpf/syscall.c | 8 ++++----
+>>   1 file changed, 4 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+>> index 62f6bced3a3c..eb5cefe44af3 100644
+>> --- a/kernel/bpf/syscall.c
+>> +++ b/kernel/bpf/syscall.c
+>> @@ -136,11 +136,11 @@ static struct bpf_map *find_and_alloc_map(union bpf_attr *attr)
+>>   
+>>   void *bpf_map_area_alloc(size_t size, int numa_node)
+>>   {
+>> -	/* We definitely need __GFP_NORETRY, so OOM killer doesn't
+>> -	 * trigger under memory pressure as we really just want to
+>> -	 * fail instead.
+>> +	/* We definitely need __GFP_NORETRY or __GFP_RETRY_MAYFAIL, so
+>> +	 * OOM killer doesn't trigger under memory pressure as we really
+>> +	 * just want to fail instead.
+>>   	 */
+>> -	const gfp_t flags = __GFP_NOWARN | __GFP_NORETRY | __GFP_ZERO;
+>> +	const gfp_t flags = __GFP_NOWARN | __GFP_RETRY_MAYFAIL | __GFP_ZERO;
+>>   	void *area;
+>>   
+>>   	if (size <= (PAGE_SIZE << PAGE_ALLOC_COSTLY_ORDER)) {
+>> -- 
+>> 2.21.0
+>>
+> 
