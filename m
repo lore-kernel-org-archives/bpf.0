@@ -4,35 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EFE8C10F0C
-	for <bpf@archiver.kernel.org>; Sat,  9 Mar 2019 01:49:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A80C0C43381
+	for <bpf@archiver.kernel.org>; Sat,  9 Mar 2019 02:04:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ED9D120851
-	for <bpf@archiver.kernel.org>; Sat,  9 Mar 2019 01:49:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 76EBD2081B
+	for <bpf@archiver.kernel.org>; Sat,  9 Mar 2019 02:04:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726375AbfCIBs5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 Mar 2019 20:48:57 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:5228 "EHLO huawei.com"
+        id S1726412AbfCICEM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 Mar 2019 21:04:12 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:4660 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726311AbfCIBs5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 Mar 2019 20:48:57 -0500
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id BCF83ED97B2D36D545CD;
-        Sat,  9 Mar 2019 09:48:53 +0800 (CST)
-Received: from [127.0.0.1] (10.177.31.96) by DGGEMS406-HUB.china.huawei.com
- (10.3.19.206) with Microsoft SMTP Server id 14.3.408.0; Sat, 9 Mar 2019
- 09:48:48 +0800
+        id S1726375AbfCICEL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 Mar 2019 21:04:11 -0500
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id BB0174942E17B58699BC;
+        Sat,  9 Mar 2019 10:04:06 +0800 (CST)
+Received: from [127.0.0.1] (10.177.31.96) by DGGEMS413-HUB.china.huawei.com
+ (10.3.19.213) with Microsoft SMTP Server id 14.3.408.0; Sat, 9 Mar 2019
+ 10:04:05 +0800
 Subject: Re: [PATCH] proc/sysctl: Fix NULL pointer dereference in put_links
 To:     <mcgrof@kernel.org>, <keescook@chromium.org>,
-        <adobriyan@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>
+        <adobriyan@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        Al Viro <viro@zeniv.linux.org.uk>
 References: <20190304135438.29792-1-yuehaibing@huawei.com>
 CC:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
         <linux-fsdevel@vger.kernel.org>, <bpf@vger.kernel.org>
 From:   YueHaibing <yuehaibing@huawei.com>
-Message-ID: <07200563-9b07-1311-e13b-07813a41acd5@huawei.com>
-Date:   Sat, 9 Mar 2019 09:48:45 +0800
+Message-ID: <03aafd33-f9d5-4a48-b123-7a6b2e7f16e7@huawei.com>
+Date:   Sat, 9 Mar 2019 10:04:03 +0800
 User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101
  Thunderbird/45.2.0
 MIME-Version: 1.0
@@ -46,7 +47,7 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-ping.
++cc Al Viro
 
 On 2019/3/4 21:54, Yue Haibing wrote:
 > From: YueHaibing <yuehaibing@huawei.com>
