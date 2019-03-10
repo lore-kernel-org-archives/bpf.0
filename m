@@ -1,188 +1,114 @@
-Return-Path: <SRS0=imf1=RM=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=ta7F=RN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,
+	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CA1BC43381
-	for <bpf@archiver.kernel.org>; Sat,  9 Mar 2019 12:28:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84E40C43381
+	for <bpf@archiver.kernel.org>; Sun, 10 Mar 2019 07:13:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1848B2081B
-	for <bpf@archiver.kernel.org>; Sat,  9 Mar 2019 12:28:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4AF1E206BA
+	for <bpf@archiver.kernel.org>; Sun, 10 Mar 2019 07:13:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1552202002;
+	bh=2ew/7LH3ZlyfVCQmSQuDMxZyZMjIBGE2G8i2txrkDuk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=xgEWXHAZsYqwFLHqjzyeGucAbk8XeEnToHspFcjs9E5v0wdIHZ6QtEDAv8mslpIeU
+	 unvEVyRa1EzIc7UuBrq/AiKAgl3Y5c5MXKZBHNNVGLStbJKcPuC8UrLOCH/M/8imDA
+	 JvSdOEjwuBYn5dfdOwzrK0qJCC9rFiL7/IEAwgrk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726286AbfCIM2A (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 9 Mar 2019 07:28:00 -0500
-Received: from szxga06-in.huawei.com ([45.249.212.32]:46136 "EHLO huawei.com"
+        id S1725852AbfCJHNW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 10 Mar 2019 03:13:22 -0400
+Received: from mx2.suse.de ([195.135.220.15]:33872 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726257AbfCIM2A (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 9 Mar 2019 07:28:00 -0500
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 45F9126514A9D249D6DC;
-        Sat,  9 Mar 2019 20:27:54 +0800 (CST)
-Received: from [127.0.0.1] (10.177.31.96) by DGGEMS414-HUB.china.huawei.com
- (10.3.19.214) with Microsoft SMTP Server id 14.3.408.0; Sat, 9 Mar 2019
- 20:27:51 +0800
-Subject: Re: [PATCH] proc/sysctl: Fix NULL pointer dereference in put_links
-To:     Luis Chamberlain <mcgrof@kernel.org>
-References: <20190304135438.29792-1-yuehaibing@huawei.com>
- <03aafd33-f9d5-4a48-b123-7a6b2e7f16e7@huawei.com>
- <CAB=NE6UF=2pWzOFY2PqpXyuDV3qSa7R8bpMAw-6qF9Z7Ly=PEw@mail.gmail.com>
-CC:     Kees Cook <keescook@chromium.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, Al Viro <viro@zeniv.linux.org.uk>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <bpf@vger.kernel.org>
-From:   YueHaibing <yuehaibing@huawei.com>
-Message-ID: <43f6b8c5-a9eb-c77d-0c52-dbc3c45b4dc7@huawei.com>
-Date:   Sat, 9 Mar 2019 20:27:49 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.2.0
+        id S1725813AbfCJHNW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 10 Mar 2019 03:13:22 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id DEB75AF42;
+        Sun, 10 Mar 2019 07:13:19 +0000 (UTC)
+Date:   Sun, 10 Mar 2019 08:13:18 +0100
+From:   Michal Hocko <mhocko@kernel.org>
+To:     Martynas Pumputis <m@lambda.lt>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net
+Subject: Re: [PATCH] bpf: Try harder when allocating memory for maps
+Message-ID: <20190310071318.GW5232@dhcp22.suse.cz>
+References: <20190308080857.12005-1-m@lambda.lt>
+ <20190308084413.GB5232@dhcp22.suse.cz>
+ <69fdfb33-057b-b7fe-033e-d82006a779b9@lambda.lt>
+ <20190308112000.GG5232@dhcp22.suse.cz>
+ <2cbb3fe7-39a9-1b1e-e22f-4dffa20b9414@lambda.lt>
 MIME-Version: 1.0
-In-Reply-To: <CAB=NE6UF=2pWzOFY2PqpXyuDV3qSa7R8bpMAw-6qF9Z7Ly=PEw@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-X-Originating-IP: [10.177.31.96]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2cbb3fe7-39a9-1b1e-e22f-4dffa20b9414@lambda.lt>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-T24gMjAxOS8zLzkgMTE6NTgsIEx1aXMgQ2hhbWJlcmxhaW4gd3JvdGU6DQo+IEkgc28gZXhj
-aXRlZCBhYm91dCB0aGUgcmVwb3J0LCB0aGFua3MgdGhpcyBpcyBhd2Vzb21lIHdvcmshISBI
-b3dldmVyIGl0IHNlZW1lZCBwb3NzaWJseSBsaWtlIGEgcGFwZXItb3ZlciBhIGRpZmZlcmVu
-dCBpc3N1ZS4gSSdtIG5vdCBjb252aW5jZWQgeWV0Lg0KPiANCj4gSWYgcHJlZmVyIGEgYml0
-IG1vcmUgaW52ZXN0aWdhdGlvbiB1bnRpbCB3ZSBjYW4gYmUgMTAwJSBzdXJlLiBBdCB0aGlz
-IHBvaW50IG15IHBvc2l0aW9uIHdvdWxkIGJlIHRoaXMgaXMgbW9yZSBvZiBhIHJpc2sgZm9y
-IG1vcmUgcmVncmVzc2lvbnMgYW5kIHRoYXQncyBhbiBvZmYgZmVlbGluZyBmb3IgYSBmaXgu
-DQo+IA0KPiAgIEx1aXMNCg0KVGhpcyBpc3N1ZSBvY2N1cnMgbGlrZSB0aGlzOg0KDQpfX3Jl
-Z2lzdGVyX3N5c2N0bF90YWJsZQ0KICAgICAtLT5nZXRfc3ViZGlyDQogICAgIAktLT5uZXdf
-ZGlyICAvL2NyZWF0ZSAnbmV3JyBkaXINCiAgICAgICAgICAgIC0tPmluaXRfaGVhZGVyICAv
-LyAmbmV3LT5oZWFkZXItPnBhcmVudCA9IE5VTEwNCiAgICAgICAgLS0+aW5zZXJ0X2hlYWRl
-cg0KICAgICAgICAgICAgLS0+IGluc2VydF9saW5rcw0KCQktLT5uZXdfbGlua3MNCgkJCS0t
-Pmt6YWxsb2MgIC8vZmFpbGVkDQoJCS0tPiZuZXctPmhlYWRlci0+cGFyZW50ID0gTlVMTA0K
-CS0tPmRyb3Bfc3lzY3RsX3RhYmxlKCZuZXctPmhlYWRlcikgLy9JbiBlcnIgcGF0aCBvZiBn
-ZXRfc3ViZGlyDQoJCS0tPnB1dF9saW5rcyAvL2NhbGwgeGxhdGVfZGlyIHdob3NlIDJuZCBw
-YXJhbSBpcyAnJm5ldy0+aGVhZGVyLT5wYXJlbnQnDQoJCQktLT4geGxhdGVfZGlyICAvL2Fj
-Y2VzcyBkaXItPmhlYWRlcixob3dldmVyICdkaXInIGlzIE5VTEwgd2hpY2ggY29tZXMgZnJv
-bSAnJm5ldy0+aGVhZGVyLT5wYXJlbnQnDQoNClBsZWFzZSBjb3JyZWN0IG1lIGlmIHRoaXMg
-aXMgaW5jb3JyZWN0Lg0KCQ0KPiANCj4gT24gRnJpLCBNYXIgOCwgMjAxOSwgODowNCBQTSBZ
-dWVIYWliaW5nIDx5dWVoYWliaW5nQGh1YXdlaS5jb20gPG1haWx0bzp5dWVoYWliaW5nQGh1
-YXdlaS5jb20+PiB3cm90ZToNCj4gDQo+ICAgICArY2MgQWwgVmlybw0KPiANCj4gICAgIE9u
-IDIwMTkvMy80IDIxOjU0LCBZdWUgSGFpYmluZyB3cm90ZToNCj4gICAgID4gRnJvbTogWXVl
-SGFpYmluZyA8eXVlaGFpYmluZ0BodWF3ZWkuY29tIDxtYWlsdG86eXVlaGFpYmluZ0BodWF3
-ZWkuY29tPj4NCj4gICAgID4NCj4gICAgID4gU3l6a2FsbGVyIHJlcG9ydCB0aGlzOg0KPiAg
-ICAgPg0KPiAgICAgPiBrYXNhbjogR1BGIGNvdWxkIGJlIGNhdXNlZCBieSBOVUxMLXB0ciBk
-ZXJlZiBvciB1c2VyIG1lbW9yeSBhY2Nlc3MNCj4gICAgID4gZ2VuZXJhbCBwcm90ZWN0aW9u
-IGZhdWx0OiAwMDAwIFsjMV0gU01QIEtBU0FOIFBUSQ0KPiAgICAgPiBDUFU6IDEgUElEOiA1
-MzczIENvbW06IHN5ei1leGVjdXRvci4wIE5vdCB0YWludGVkIDUuMC4wLXJjOCsgIzMNCj4g
-ICAgID4gSGFyZHdhcmUgbmFtZTogUUVNVSBTdGFuZGFyZCBQQyAoaTQ0MEZYICsgUElJWCwg
-MTk5NiksIEJJT1MgMS4xMC4yLTF1YnVudHUxIDA0LzAxLzIwMTQNCj4gICAgID4gUklQOiAw
-MDEwOnB1dF9saW5rcysweDEwMS8weDQ0MCBmcy9wcm9jL3Byb2Nfc3lzY3RsLmM6MTU5OQ0K
-PiAgICAgPiBDb2RlOiAwMCAwZiA4NSAzYSAwMyAwMCAwMCA0OCA4YiA0MyAzOCA0OCA4OSA0
-NCAyNCAyMCA0OCA4MyBjMCAzOCA0OCA4OSBjMiA0OCA4OSA0NCAyNCAyOCA0OCBiOCAwMCAw
-MCAwMCAwMCAwMCBmYyBmZiBkZiA0OCBjMSBlYSAwMyA8ODA+IDNjIDAyIDAwIDBmIDg1IGZl
-IDAyIDAwIDAwIDQ4IDhiIDc0IDI0IDIwIDQ4IGM3IGM3IDYwIDJhIDlkIDkxDQo+ICAgICA+
-IFJTUDogMDAxODpmZmZmODg4MWQ4MjhmMjM4IEVGTEFHUzogMDAwMTAyMDINCj4gICAgID4g
-UkFYOiBkZmZmZmMwMDAwMDAwMDAwIFJCWDogZmZmZjg4ODFlMDFiMTE0MCBSQ1g6IGZmZmZm
-ZmZmOGVlOTgyNjcNCj4gICAgID4gUkRYOiAwMDAwMDAwMDAwMDAwMDA3IFJTSTogZmZmZmM5
-MDAwMTQ3OTAwMCBSREk6IGZmZmY4ODgxZTAxYjExNzgNCj4gICAgID4gUkJQOiBkZmZmZmMw
-MDAwMDAwMDAwIFIwODogZmZmZmVkMTAzZWUyNzI1OSBSMDk6IGZmZmZlZDEwM2VlMjcyNTkN
-Cj4gICAgID4gUjEwOiAwMDAwMDAwMDAwMDAwMDAxIFIxMTogZmZmZmVkMTAzZWUyNzI1OCBS
-MTI6IGZmZmZmZmZmZmZmZmZmZjQNCj4gICAgID4gUjEzOiAwMDAwMDAwMDAwMDAwMDA2IFIx
-NDogZmZmZjg4ODFmNTk4MzhjMCBSMTU6IGRmZmZmYzAwMDAwMDAwMDANCj4gICAgID4gRlM6
-ICAwMDAwN2YwNzIyNTRmNzAwKDAwMDApIEdTOmZmZmY4ODgxZjcxMDAwMDAoMDAwMCkga25s
-R1M6MDAwMDAwMDAwMDAwMDAwMA0KPiAgICAgPiBDUzogIDAwMTAgRFM6IDAwMDAgRVM6IDAw
-MDAgQ1IwOiAwMDAwMDAwMDgwMDUwMDMzDQo+ICAgICA+IENSMjogMDAwMDdmZmY4YjI4NjY2
-OCBDUjM6IDAwMDAwMDAxZjA1NDIwMDIgQ1I0OiAwMDAwMDAwMDAwNzYwNmUwDQo+ICAgICA+
-IERSMDogMDAwMDAwMDAwMDAwMDAwMCBEUjE6IDAwMDAwMDAwMDAwMDAwMDAgRFIyOiAwMDAw
-MDAwMDAwMDAwMDAwDQo+ICAgICA+IERSMzogMDAwMDAwMDAwMDAwMDAwMCBEUjY6IDAwMDAw
-MDAwZmZmZTBmZjAgRFI3OiAwMDAwMDAwMDAwMDAwNDAwDQo+ICAgICA+IFBLUlU6IDU1NTU1
-NTU0DQo+ICAgICA+IENhbGwgVHJhY2U6DQo+ICAgICA+ICBkcm9wX3N5c2N0bF90YWJsZSsw
-eDE1Mi8weDlmMCBmcy9wcm9jL3Byb2Nfc3lzY3RsLmM6MTYyOQ0KPiAgICAgPiAgZ2V0X3N1
-YmRpciBmcy9wcm9jL3Byb2Nfc3lzY3RsLmM6MTAyMiBbaW5saW5lXQ0KPiAgICAgPiAgX19y
-ZWdpc3Rlcl9zeXNjdGxfdGFibGUrMHhkNjUvMHgxMDkwIGZzL3Byb2MvcHJvY19zeXNjdGwu
-YzoxMzM1DQo+ICAgICA+ICA/IDB4ZmZmZmZmZmZjMWExODAwMA0KPiAgICAgPiAgYnJfbmV0
-ZmlsdGVyX2luaXQrMHhiYy8weDEwMDAgW2JyX25ldGZpbHRlcl0NCj4gICAgID4gID8gMHhm
-ZmZmZmZmZmMxYTE4MDAwDQo+ICAgICA+ICA/IDB4ZmZmZmZmZmZjMWExODAwMA0KPiAgICAg
-PiAgZG9fb25lX2luaXRjYWxsKzB4ZmEvMHg1Y2EgaW5pdC9tYWluLmM6ODg3DQo+ICAgICA+
-ICBkb19pbml0X21vZHVsZSsweDIwNC8weDVmNiBrZXJuZWwvbW9kdWxlLmM6MzQ2MA0KPiAg
-ICAgPiAgbG9hZF9tb2R1bGUrMHg2NmIyLzB4ODU3MCBrZXJuZWwvbW9kdWxlLmM6MzgwOA0K
-PiAgICAgPiAgX19kb19zeXNfZmluaXRfbW9kdWxlKzB4MjM4LzB4MmEwIGtlcm5lbC9tb2R1
-bGUuYzozOTAyDQo+ICAgICA+ICBkb19zeXNjYWxsXzY0KzB4MTQ3LzB4NjAwIGFyY2gveDg2
-L2VudHJ5L2NvbW1vbi5jOjI5MA0KPiAgICAgPiAgZW50cnlfU1lTQ0FMTF82NF9hZnRlcl9o
-d2ZyYW1lKzB4NDkvMHhiZQ0KPiAgICAgPiBSSVA6IDAwMzM6MHg0NjJlOTkNCj4gICAgID4g
-Q29kZTogZjcgZDggNjQgODkgMDIgYjggZmYgZmYgZmYgZmYgYzMgNjYgMGYgMWYgNDQgMDAg
-MDAgNDggODkgZjggNDggODkgZjcgNDggODkgZDYgNDggODkgY2EgNGQgODkgYzIgNGQgODkg
-YzggNGMgOGIgNGMgMjQgMDggMGYgMDUgPDQ4PiAzZCAwMSBmMCBmZiBmZiA3MyAwMSBjMyA0
-OCBjNyBjMSBiYyBmZiBmZiBmZiBmNyBkOCA2NCA4OSAwMSA0OA0KPiAgICAgPiBSU1A6IDAw
-MmI6MDAwMDdmMDcyMjU0ZWM1OCBFRkxBR1M6IDAwMDAwMjQ2IE9SSUdfUkFYOiAwMDAwMDAw
-MDAwMDAwMTM5DQo+ICAgICA+IFJBWDogZmZmZmZmZmZmZmZmZmZkYSBSQlg6IDAwMDAwMDAw
-MDA3M2JmMDAgUkNYOiAwMDAwMDAwMDAwNDYyZTk5DQo+ICAgICA+IFJEWDogMDAwMDAwMDAw
-MDAwMDAwMCBSU0k6IDAwMDAwMDAwMjAwMDAyODAgUkRJOiAwMDAwMDAwMDAwMDAwMDAzDQo+
-ICAgICA+IFJCUDogMDAwMDdmMDcyMjU0ZWM3MCBSMDg6IDAwMDAwMDAwMDAwMDAwMDAgUjA5
-OiAwMDAwMDAwMDAwMDAwMDAwDQo+ICAgICA+IFIxMDogMDAwMDAwMDAwMDAwMDAwMCBSMTE6
-IDAwMDAwMDAwMDAwMDAyNDYgUjEyOiAwMDAwN2YwNzIyNTRmNmJjDQo+ICAgICA+IFIxMzog
-MDAwMDAwMDAwMDRiY2VmYSBSMTQ6IDAwMDAwMDAwMDA2ZjZmYjAgUjE1OiAwMDAwMDAwMDAw
-MDAwMDA0DQo+ICAgICA+IE1vZHVsZXMgbGlua2VkIGluOiBicl9uZXRmaWx0ZXIoKykgZHZi
-X3VzYl9kaWJ1c2JfbWNfY29tbW9uIGRpYjMwMDBtYyBkaWJ4MDAwX2NvbW1vbiBkdmJfdXNi
-X2RpYnVzYl9jb21tb24gZHZiX3VzYl9kdzIxMDIgZHZiX3VzYiBjbGFzc21hdGVfbGFwdG9w
-IHBhbG1hc19yZWd1bGF0b3IgY24gdmlkZW9idWYyX3Y0bDIgdjRsMl9jb21tb24gc25kX3Nv
-Y19iZDI4NjIzIG1wdGJhc2Ugc25kX3VzYl91c3gyeSBzbmRfdXNibWlkaV9saWIgc25kX3Jh
-d21pZGkgd21pIGxpYm52ZGltbSBsb2NrZCBzdW5ycGMgZ3JhY2UgcmNfa3dvcmxkX3BjMTUw
-dSByY19jb3JlIHJ0Y19kYTkwNjMgc2hhMV9zc3NlMyBpMmNfY3Jvc19lY190dW5uZWwgYWR4
-bDM0eF9zcGkgYWR4bDM0eCBuZm5ldGxpbmsgbGliODAyMTEgaTU1MDBfdGVtcCBkdmJfYXMx
-MDIgZHZiX2NvcmUgdmlkZW9idWYyX2NvbW1vbiB2aWRlb2RldiBtZWRpYSB2aWRlb2J1ZjJf
-dm1hbGxvYyB2aWRlb2J1ZjJfbWVtb3BzIHVkY19jb3JlIGxuYnAyMiBsZWRzX2xwMzk1MiBo
-aWRfcm9jY2F0X3J5b3MgczFkMTN4eHhmYiBtdGQgdnBvcnRfZ2VuZXZlIG9wZW52c3dpdGNo
-IG5mX2Nvbm5jb3VudCBuZl9uYXRfaXB2NiBuc2ggZ2VuZXZlIHVkcF90dW5uZWwgaXA2X3Vk
-cF90dW5uZWwgc25kX3NvY19tdDYzNTEgc2lzX2FncCBwaHlsaW5rIHNuZF9zb2NfYWRhdTE3
-NjFfc3BpIHNuZF9zb2NfYWRhdTE3NjEgc25kX3NvY19hZGF1MTd4MSBzbmRfc29jX2NvcmUg
-c25kX3BjbV9kbWFlbmdpbmUgYWM5N19idXMgc25kX2NvbXByZXNzIHNuZF9zb2NfYWRhdV91
-dGlscyBzbmRfc29jX3NpZ21hZHNwX3JlZ21hcCBzbmRfc29jX3NpZ21hZHNwIHJhaWRfY2xh
-c3MgaGlkX3JvY2NhdF9rb25lcHVyZSBoaWRfcm9jY2F0X2NvbW1vbiBoaWRfcm9jY2F0IGMy
-cG9ydF9kdXJhbWFyMjE1MCBjb3JlIG1kaW9fYmNtX3VuaW1hYyBpcHRhYmxlX3NlY3VyaXR5
-IGlwdGFibGVfcmF3IGlwdGFibGVfbWFuZ2xlDQo+ICAgICA+ICBpcHRhYmxlX25hdCBuZl9u
-YXRfaXB2NCBuZl9uYXQgbmZfY29ubnRyYWNrIG5mX2RlZnJhZ19pcHY2IG5mX2RlZnJhZ19p
-cHY0IGlwdGFibGVfZmlsdGVyIGJwZmlsdGVyIGlwNl92dGkgaXBfdnRpIGlwX2dyZSBpcGlw
-IHNpdCB0dW5uZWw0IGlwX3R1bm5lbCBoc3IgdmV0aCBuZXRkZXZzaW0gZGV2bGluayB2eGNh
-biBiYXRtYW5fYWR2IGNmZzgwMjExIHJma2lsbCBjaG5sX25ldCBjYWlmIG5sbW9uIGR1bW15
-IHRlYW0gYm9uZGluZyB2Y2FuIGJyaWRnZSBzdHAgbGxjIGlwNl9ncmUgZ3JlIGlwNl90dW5u
-ZWwgdHVubmVsNiB0dW4gY3JjdDEwZGlmX3BjbG11bCBjcmMzMl9wY2xtdWwgY3JjMzJjX2lu
-dGVsIGdoYXNoX2NsbXVsbmlfaW50ZWwgam95ZGV2IG1vdXNlZGV2IGlkZV9wY2lfZ2VuZXJp
-YyBwaWl4IGFlc25pX2ludGVsIGFlc194ODZfNjQgaWRlX2NvcmUgY3J5cHRvX3NpbWQgYXRr
-YmQgY3J5cHRkIGdsdWVfaGVscGVyIHNlcmlvX3JhdyBhdGFfZ2VuZXJpYyBwYXRhX2FjcGkg
-aTJjX3BpaXg0IGZsb3BweSBzY2hfZnFfY29kZWwgaXBfdGFibGVzIHhfdGFibGVzIGlwdjYg
-W2xhc3QgdW5sb2FkZWQ6IGxtNzNdDQo+ICAgICA+IER1bXBpbmcgZnRyYWNlIGJ1ZmZlcjoN
-Cj4gICAgID4gICAgKGZ0cmFjZSBidWZmZXIgZW1wdHkpDQo+ICAgICA+IC0tLVsgZW5kIHRy
-YWNlIDc3MDAyMGRlMzg5NjFmZDAgXS0tLQ0KPiAgICAgPg0KPiAgICAgPiBBIG5ldyBkaXIg
-ZW50cnkgY2FuIGJlIGNyZWF0ZWQgaW4gZ2V0X3N1YmRpciBhbmQgaXRzIGhlYWRlci0+cGFy
-ZW50IGlzIHNldA0KPiAgICAgPiB0byBOVUxMLiBPbmx5IGFmdGVyIGluc2VydF9oZWFkZXIg
-c3VjY2VzcywgaXQgd2lsbCBiZSBzZXQgdG8gJ2RpcicuDQo+ICAgICA+IEhvd2V2ZXIgaW4g
-ZXJyIGhhbmRsaW5nIHBhdGggb2YgZ2V0X3N1YmRpciwgZHJvcF9zeXNjdGxfdGFibGUgbWF5
-YmUgY2FsbGVkDQo+ICAgICA+IG9uICduZXctPmhlYWRlcicgcmVnYXJkbGVzcyB2YWx1ZSBv
-ZiBoZWFkZXItPnBhcmVudC4gVGhlbiBwdXRfbGlua3MNCj4gICAgID4gYmUgY2FsbGVkLCB3
-aGljaCB0cmlnZ2VycyBOVUxMLXB0ciBkZXJlZiB3aGVuIGFjY2VzcyB0aGUgbWVtYmVyIG9m
-DQo+ICAgICA+IGhlYWRlci0+cGFyZW50IGluIHhsYXRlX2Rpci4NCj4gICAgID4NCj4gICAg
-ID4gUmVwb3J0ZWQtYnk6IEh1bGsgUm9ib3QgPGh1bGtjaUBodWF3ZWkuY29tIDxtYWlsdG86
-aHVsa2NpQGh1YXdlaS5jb20+Pg0KPiAgICAgPiBGaXhlczogMGU0N2M5OWQ3ZmUyNSAoInN5
-c2N0bDogUmVwbGFjZSByb290X2xpc3Qgd2l0aCBsaW5rcyBiZXR3ZWVuIHN5c2N0bF90YWJs
-ZV9zZXRzIikNCj4gICAgID4gU2lnbmVkLW9mZi1ieTogWXVlSGFpYmluZyA8eXVlaGFpYmlu
-Z0BodWF3ZWkuY29tIDxtYWlsdG86eXVlaGFpYmluZ0BodWF3ZWkuY29tPj4NCj4gICAgID4g
-LS0tDQo+ICAgICA+ICBmcy9wcm9jL3Byb2Nfc3lzY3RsLmMgfCAzICsrLQ0KPiAgICAgPiAg
-MSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiAgICAg
-Pg0KPiAgICAgPiBkaWZmIC0tZ2l0IGEvZnMvcHJvYy9wcm9jX3N5c2N0bC5jIGIvZnMvcHJv
-Yy9wcm9jX3N5c2N0bC5jDQo+ICAgICA+IGluZGV4IDRkNTk4YTMuLjRjMmEwNWEgMTAwNjQ0
-DQo+ICAgICA+IC0tLSBhL2ZzL3Byb2MvcHJvY19zeXNjdGwuYw0KPiAgICAgPiArKysgYi9m
-cy9wcm9jL3Byb2Nfc3lzY3RsLmMNCj4gICAgID4gQEAgLTE2MjYsNyArMTYyNiw4IEBAIHN0
-YXRpYyB2b2lkIGRyb3Bfc3lzY3RsX3RhYmxlKHN0cnVjdCBjdGxfdGFibGVfaGVhZGVyICpo
-ZWFkZXIpDQo+ICAgICA+ICAgICAgIGlmICgtLWhlYWRlci0+bnJlZykNCj4gICAgID4gICAg
-ICAgICAgICAgICByZXR1cm47DQo+ICAgICA+IA0KPiAgICAgPiAtICAgICBwdXRfbGlua3Mo
-aGVhZGVyKTsNCj4gICAgID4gKyAgICAgaWYgKHBhcmVudCkNCj4gICAgID4gKyAgICAgICAg
-ICAgICBwdXRfbGlua3MoaGVhZGVyKTsNCj4gICAgID4gICAgICAgc3RhcnRfdW5yZWdpc3Rl
-cmluZyhoZWFkZXIpOw0KPiAgICAgPiAgICAgICBpZiAoIS0taGVhZGVyLT5jb3VudCkNCj4g
-ICAgID4gICAgICAgICAgICAgICBrZnJlZV9yY3UoaGVhZGVyLCByY3UpOw0KPiAgICAgPg0K
-PiANCg==
+On Fri 08-03-19 21:02:41, Martynas Pumputis wrote:
+> 
+> 
+> On 3/8/19 12:20 PM, Michal Hocko wrote:
+> > On Fri 08-03-19 12:14:16, Martynas Pumputis wrote:
+> > > 
+> > > 
+> > > On 3/8/19 9:44 AM, Michal Hocko wrote:
+> > > > On Fri 08-03-19 09:08:57, Martynas Pumputis wrote:
+> > > > > It has been observed that sometimes memory allocation for BPF maps
+> > > > > fails when there is no obvious memory pressure in a system.
+> > > > > 
+> > > > > E.g. the map (BPF_MAP_TYPE_LRU_HASH, key=38, value=56, max_elems=524288)
+> > > > > could not be created due to due to vmalloc unable to allocate 75497472B,
+> > > > > when the system's memory consumption (in MB) was the following:
+> > > > > 
+> > > > >       Total: 3942 Used: 837 (21.24%) Free: 138 Buffers: 239 Cached: 2727
+> > > > 
+> > > > Hmm 75MB is quite large and much larger than the slab/page allocator
+> > > > cann provide so this is not really a fragmentation issue. Vmalloc does
+> > > > respect noretry but considering that there shouldn't be a large memory
+> > > > pressure I wonder how NORETRY managed to fail the allocation. Do you
+> > > > happen to have the allocation failure report?
+> > > 
+> > > I got /proc/{meminfo,vmstat,vmallocinfo} just after the allocation has
+> > > failed:
+> > > https://gist.github.com/brb/62092c1d83daa6527271b88f0352e32d
+> > 
+> > dmesg with the allocation failure report would be more helpful
+> 
+> https://gist.github.com/brb/2d7ac323d2e14cb7a38bacba301fe3af
 
+Thanks!
+
+tc: vmalloc: allocation failure, allocated 15609856 of 62918656 bytes, mode:0x6090c0(GFP_KERNEL|__GFP_NORETRY|__GFP_ZERO), nodemask=(null),cpuset=b389e318420d891300ad9658f8e056b59972fda9547dd566245a922c34bb9e42,mems_allowed=0
+[...]
+Node 0 DMA free:15728kB min:268kB low:332kB high:396kB active_anon:0kB inactive_anon:0kB active_file:44kB inactive_file:12kB unevictable:0kB writepending:0kB present:15992kB managed:15908kB mlocked:0kB kernel_stack:0kB pagetables:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+lowmem_reserve[]: 0 3419 3866 3866 3866
+Node 0 DMA32 free:105004kB min:104588kB low:119468kB high:134348kB active_anon:526128kB inactive_anon:612kB active_file:862524kB inactive_file:1552884kB unevictable:0kB writepending:0kB present:3653568kB managed:3563596kB mlocked:0kB kernel_stack:7592kB pagetables:6636kB bounce:0kB free_pcp:916kB local_pcp:736kB free_cma:0kB
+lowmem_reserve[]: 0 0 446 446 446
+Node 0 Normal free:22844kB min:24160kB low:26104kB high:28048kB active_anon:92340kB inactive_anon:228kB active_file:160072kB inactive_file:82480kB unevictable:0kB writepending:0kB present:524288kB managed:457544kB mlocked:0kB kernel_stack:2224kB pagetables:3776kB bounce:0kB free_pcp:996kB local_pcp:672kB free_cma:0kB
+lowmem_reserve[]: 0 0 0 0 0
+
+Except for a srtange cpuset value (which should be checked separately),
+the allocation is restricted to node 0 which is pretty much out of
+memory (below min watermark - lowmem_reserve). There is still a lot of
+page cache to reclaim so a further reclaim is quite likely to make a
+further progress. There is still 45MB to go and at least page cache is
+1.5G so there is some buffer to allocate from.
+
+That being said __GFP_NORETRY caused a pre-mature failure indeed. Using
+kvmalloc(GFP_KERNEL|__GFP_RETRY_MAYFAIL) would likely help here unless
+the pagecache is really hard to reclaim. Please note that this will also
+imply that requests which can be satisfied from the slab allocator will
+retry harder as well. Not sure this is desirable for these requests
+though but your original patch does the same so if you wanted to have
+__GFP_RETRY_MAYFAIL behavior only for the vmalloc path then you would
+need to have an opencoded version which adds the flag just to the
+vmalloc fallback path.
+-- 
+Michal Hocko
+SUSE Labs
