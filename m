@@ -2,80 +2,80 @@ Return-Path: <SRS0=tULY=RO=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,USER_AGENT_MUTT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8773FC43381
-	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 13:23:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0700CC10F06
+	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 13:59:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 604FA20857
-	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 13:23:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CC0852087F
+	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 13:59:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727782AbfCKNXC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 Mar 2019 09:23:02 -0400
-Received: from mail-it1-f200.google.com ([209.85.166.200]:52202 "EHLO
-        mail-it1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727669AbfCKNXB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 11 Mar 2019 09:23:01 -0400
-Received: by mail-it1-f200.google.com with SMTP id x9so4987586ite.1
-        for <bpf@vger.kernel.org>; Mon, 11 Mar 2019 06:23:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=pK1+3s0qzliVgO8uChK0ndiAxt70wC3Rvaiv9+li/DY=;
-        b=cv3VC0kAhK1SYb1XM7t7FvzrTWPh+mXjYSf3xxhMGOwD8rQckTELh4JXu4fhZM/g8r
-         fuPCuhNwRMrs963BdedaTlQL+XoM4ZlCw8fchp4DJdkfwUreMmOZGVdtpfT4ei9UASMv
-         nOKiiqxxw0/veh8u56PJ7fq3a+dBTI6gN6+qXhHnZqnbJ7+D3+ofoncd3nd5dHpcQute
-         20D8o+6r25ZKrHu3I8t7PTy5puNtzubuTDKBcUjUL1Vd84kKtQEjIaUXHBnG7XvbHLRw
-         0kUB8e+QPONI0vYFzvnUljH7qMsU+Czw4r+1PW6ppwpBM6iGAkvrLNOUsaTmVDyE4ZNG
-         Wm8g==
-X-Gm-Message-State: APjAAAX7m1GmSCwUj4yAvwRB/xuSdkRmossAt3YmLQ/g0xQDZ+lk0mdF
-        0eiTIqv4SF0iN1aokelRcYJ1nMEj9i0IYxkRHPHF+CZAYUmS
-X-Google-Smtp-Source: APXvYqw5xG9uh2Gm9ddSyDz77pKjUJDXM3u365mXqCK7rViSoBgkjkhHMLjtY6/G8/Jdbai85TvgA8JTT2fUbMwoYP5kc6yuI0bN
+        id S1727605AbfCKN7m (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 Mar 2019 09:59:42 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:53986 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727655AbfCKN7i (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 11 Mar 2019 09:59:38 -0400
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 18B043082E55;
+        Mon, 11 Mar 2019 13:59:38 +0000 (UTC)
+Received: from krava (ovpn-204-224.brq.redhat.com [10.40.204.224])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 3946C5D722;
+        Mon, 11 Mar 2019 13:59:35 +0000 (UTC)
+Date:   Mon, 11 Mar 2019 14:59:34 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Song Liu <songliubraving@fb.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kernel-team@fb.com, peterz@infradead.org, acme@redhat.com,
+        jolsa@kernel.org, namhyung@kernel.org
+Subject: Re: [PATCH v7 perf,bpf 00/15] perf annotation of BPF programs
+Message-ID: <20190311135934.GA7160@krava>
+References: <20190307175810.249857-1-songliubraving@fb.com>
 MIME-Version: 1.0
-X-Received: by 2002:a24:78cb:: with SMTP id p194mr20558447itc.7.1552310581223;
- Mon, 11 Mar 2019 06:23:01 -0700 (PDT)
-Date:   Mon, 11 Mar 2019 06:23:01 -0700
-In-Reply-To: <00000000000054cc6d05834c33d7@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c66d400583d17848@google.com>
-Subject: Re: kernel BUG at include/linux/mm.h:LINE! (5)
-From:   syzbot <syzbot+5013d47539cdd43e7098@syzkaller.appspotmail.com>
-To:     ast@kernel.org, aviadye@mellanox.com, borisp@mellanox.com,
-        bpf@vger.kernel.org, daniel@iogearbox.net, davejwatson@fb.com,
-        davem@davemloft.net, edumazet@google.com, eranbe@mellanox.com,
-        eric.dumazet@gmail.com, john.fastabend@gmail.com, kafai@fb.com,
-        kuznet@ms2.inr.ac.ru, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com,
-        yoshfuji@linux-ipv6.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190307175810.249857-1-songliubraving@fb.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.46]); Mon, 11 Mar 2019 13:59:38 +0000 (UTC)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-syzbot has bisected this bug to:
+On Thu, Mar 07, 2019 at 09:57:55AM -0800, Song Liu wrote:
 
-commit 94850257cf0f88b20db7644f28bfedc7d284de15
-Author: Boris Pismenny <borisp@mellanox.com>
-Date:   Wed Feb 27 15:38:03 2019 +0000
+SNIP
 
-     tls: Fix tls_device handling of partial records
+> ===================== Note on patch dependency  ========================
+> This set has dependency in both bpf-next tree and tip/perf/core. Current
+> version is developed on bpf-next tree with the following commits
+> cherry-picked from tip/perf/core (or acme/perf/core):
+> 
+> (from 1/11 to 11/11)
+> commit 76193a94522f ("perf, bpf: Introduce PERF_RECORD_KSYMBOL")
+> commit d764ac646491 ("tools headers uapi: Sync tools/include/uapi/linux/perf_event.h")
+> commit 6ee52e2a3fe4 ("perf, bpf: Introduce PERF_RECORD_BPF_EVENT")
+> commit df063c83aa2c ("tools headers uapi: Sync tools/include/uapi/linux/perf_event.h")
+> commit 9aa0bfa370b2 ("perf tools: Handle PERF_RECORD_KSYMBOL")
+> commit 45178a928a4b ("perf tools: Handle PERF_RECORD_BPF_EVENT")
+> commit 7b612e291a5a ("perf tools: Synthesize PERF_RECORD_* for loaded BPF programs")
+> commit a40b95bcd30c ("perf top: Synthesize BPF events for pre-existing loaded BPF programs")
+> commit 6934058d9fb6 ("bpf: Add module name [bpf] to ksymbols for bpf programs")
+> commit 811184fb6977 ("perf bpf: Fix synthesized PERF_RECORD_KSYMBOL/BPF_EVENT")
+> comimt 94816add0005 ("perf tools: Add perf_exe() helper to find perf binary")
+> ========================================================================
+> 
+> This set is also available at:
+> 
+> https://github.com/liu-song-6/linux/tree/bpf-annotation
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13d9d977200000
-start commit:   94850257 tls: Fix tls_device handling of partial records
-git tree:       net-next
-final crash:    https://syzkaller.appspot.com/x/report.txt?x=1039d977200000
-console output: https://syzkaller.appspot.com/x/log.txt?x=17d9d977200000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=47f2db597668ac40
-dashboard link: https://syzkaller.appspot.com/bug?extid=5013d47539cdd43e7098
-userspace arch: amd64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=148763eb200000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1416ff3d200000
+could you please update the branch? it seems to have still the old version
 
-Reported-by: syzbot+5013d47539cdd43e7098@syzkaller.appspotmail.com
-Fixes: 94850257 ("tls: Fix tls_device handling of partial records")
+thanks,
+jirka
