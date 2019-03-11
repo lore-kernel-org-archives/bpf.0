@@ -2,85 +2,95 @@ Return-Path: <SRS0=tULY=RO=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_MUTT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FB36C43381
-	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 20:29:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58946C43381
+	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 20:45:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 67F56214AE
-	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 20:29:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 268FB2064A
+	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 20:45:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728022AbfCKU3I (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 Mar 2019 16:29:08 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:35952 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726675AbfCKU3I (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 11 Mar 2019 16:29:08 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 9BED630642AA;
-        Mon, 11 Mar 2019 20:29:08 +0000 (UTC)
-Received: from sandy.ghostprotocols.net (ovpn-112-29.phx2.redhat.com [10.3.112.29])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id AB22519724;
-        Mon, 11 Mar 2019 20:29:07 +0000 (UTC)
-Received: by sandy.ghostprotocols.net (Postfix, from userid 1000)
-        id 6EDEE56B8; Mon, 11 Mar 2019 17:29:00 -0300 (BRT)
-Date:   Mon, 11 Mar 2019 17:29:00 -0300
-From:   Arnaldo Carvalho de Melo <acme@redhat.com>
-To:     Song Liu <songliubraving@fb.com>
+        id S1727605AbfCKUpy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 Mar 2019 16:45:54 -0400
+Received: from www62.your-server.de ([213.133.104.62]:58078 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727304AbfCKUpy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 11 Mar 2019 16:45:54 -0400
+Received: from [88.198.220.130] (helo=sslproxy01.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1h3Rnz-00065F-F5; Mon, 11 Mar 2019 21:45:51 +0100
+Received: from [178.197.248.21] (helo=linux.home)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1h3Rnz-0004mF-3B; Mon, 11 Mar 2019 21:45:51 +0100
+Subject: Re: [PATCH v7 perf,bpf 02/15] bpf: libbpf: introduce
+ bpf_program__get_prog_info_linear()
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Song Liu <songliubraving@fb.com>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        kernel-team@fb.com, peterz@infradead.org, jolsa@kernel.org,
-        namhyung@kernel.org, sdf@fomichev.me
-Subject: Re: [PATCH v8 perf,bpf 01/15] perf, bpf: consider events with
- attr.bpf_event as side-band events
-Message-ID: <20190311202900.GB3078@redhat.com>
-References: <20190311195555.889995-1-songliubraving@fb.com>
- <20190311195555.889995-2-songliubraving@fb.com>
+        linux-kernel@vger.kernel.org, ast@kernel.org, kernel-team@fb.com,
+        peterz@infradead.org, acme@redhat.com, jolsa@kernel.org,
+        namhyung@kernel.org
+References: <20190307175810.249857-1-songliubraving@fb.com>
+ <20190307175810.249857-3-songliubraving@fb.com>
+ <20190311182631.GX10690@kernel.org>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <b6fb25aa-5bfc-cf97-f960-5966154e5ef5@iogearbox.net>
+Date:   Mon, 11 Mar 2019 21:45:49 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190311195555.889995-2-songliubraving@fb.com>
-X-Url:  http://acmel.wordpress.com
-User-Agent: Mutt/1.5.20 (2009-12-10)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.49]); Mon, 11 Mar 2019 20:29:08 +0000 (UTC)
+In-Reply-To: <20190311182631.GX10690@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.2/25385/Mon Mar 11 08:43:35 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Mon, Mar 11, 2019 at 12:55:41PM -0700, Song Liu escreveu:
-> Events with bpf_event should be considered as side-band event, as they
-> carry information about BPF programs.
+On 03/11/2019 07:26 PM, Arnaldo Carvalho de Melo wrote:
+> Em Thu, Mar 07, 2019 at 09:57:57AM -0800, Song Liu escreveu:
+>> Currently, bpf_prog_info includes 9 arrays. The user has the option to
+>> fetch any combination of these arrays. However, this requires a lot of
+>> handling of these arrays. This work becomes more tricky when we need to
+>> store bpf_prog_info to a file, because these arrays are allocated
+>> independently.
+>>
+>> This patch introduces struct bpf_prog_info_linear, which stores arrays
+>> of bpf_prog_info in continues memory. Helper functions are introduced
+>> to unify the work to get different information of bpf_prog_info.
+>> Specifically, bpf_program__get_prog_info_linear() allows the user to
+>> select which arrays to fetch, and handles details for the user.
+>>
+>> Plesae see the comments before enum bpf_prog_info_array for more details
+>> and examples.
+>>
+>> Cc: Daniel Borkmann <daniel@iogearbox.net>
+>> Cc: Alexei Starovoitov <ast@kernel.org>
 > 
-> Fixes: 6ee52e2a3fe4 ("perf, bpf: Introduce PERF_RECORD_BPF_EVENT")
-> Signed-off-by: Song Liu <songliubraving@fb.com>
-
-This patch is also already merged upstream, its in torvalds/master.
-
-- Arnaldo
-
-> ---
->  kernel/events/core.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> Daniel, are you ok with these changes to libbpf and bpftool? Perhaps
+> those should be detached from this patchkit and submitted sooner,
+> eroding the size of this kit.
 > 
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index f1a26c8f15b3..4a59cb9b29ee 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -4238,7 +4238,8 @@ static bool is_sb_event(struct perf_event *event)
->  	if (attr->mmap || attr->mmap_data || attr->mmap2 ||
->  	    attr->comm || attr->comm_exec ||
->  	    attr->task || attr->ksymbol ||
-> -	    attr->context_switch)
-> +	    attr->context_switch ||
-> +	    attr->bpf_event)
->  		return true;
->  	return false;
->  }
-> -- 
-> 2.17.1
+> Alternatively, if you're ok with it, please provide your Acked-by and
+> I'll process as soon as I get back to it after Jiri is done reviewing.
+
+Overall looks okay. Are you planning to get these in for 5.1 window? If
+yes, that would be great, otherwise we might need to cherry-pick the libbpf
+and bpftool ones from your tree into bpf-next as well since there's just
+too much going on in this area where we'd potentially run into complex
+merge conflicts. In the latter case, libbpf.map would need to be fixed up
+to LIBBPF_0.0.3 as convention is that this is in line with kernel release.
+
+Thanks,
+Daniel
+
+> - Arnaldo
