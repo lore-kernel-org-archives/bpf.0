@@ -2,182 +2,164 @@ Return-Path: <SRS0=tULY=RO=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_MUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76476C43381
-	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 20:57:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76F0BC43381
+	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 21:02:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 384E5214AE
-	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 20:57:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 35722214AF
+	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 21:02:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W1B+uHOz"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Jxlnaf7y";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="B0MvJ6Lk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727955AbfCKU50 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 Mar 2019 16:57:26 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:42581 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727753AbfCKU50 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 11 Mar 2019 16:57:26 -0400
-Received: by mail-qt1-f196.google.com with SMTP id u7so163700qtg.9;
-        Mon, 11 Mar 2019 13:57:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=oTqIPcquLN0WxH7JpOcWhV3nfI5Ss1yHEcWa/CSFZrQ=;
-        b=W1B+uHOze3+y7LtTW3aOCalmIBhvcODWbzGZbNL/WfFZ+mRsUAcRRe1lmZRmGCOoML
-         fyFC/+FuYb+5+dFbonZejq8bPWMgbVqyUGqkRRKvkJM4opKCtqYUA1dU+Xx2JniO9Vrg
-         KmT/Yq2H6aiUzRedFcb802w7MMLpeBItf/1oeRwmjCJ32Cg5noIbwQ7wIr9vv3ms5tSr
-         eVwXzrWikLIui0KiLbPYMCkHmum2EqsYOcoQlRrLUGn+N4Rhig1YHQTv1QtoBigRxTRr
-         SbZaUvEgH3q1HCgqq1et3hMIP/xBRNlh2mV8JH5IpEB1Bum4WhpMmyjAREjNBJaA8OWL
-         B95A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=oTqIPcquLN0WxH7JpOcWhV3nfI5Ss1yHEcWa/CSFZrQ=;
-        b=hBm5iNrMcAnue5K5j2/jvwN+nXANxZIZEaDQKDzcDhpuw0Mz1N5ozcd7ihIhUs3GzV
-         oSnWDvK316slwwevjBYPZOp4EjjVxyK/gjHFaqirit3duxjmRGnphE320N77Q3MhcleD
-         IysV33ttuSDdWpXcWQRoYu9W169vn7zyFxTitczJbiUCzmoUKGs8gTEXJ+h/u2pV/V8X
-         qP+ZR/j2stTxKEm6TCtP63Tzn09rjgLri7cFurY3214j+AcbRG96L3csQOZwajejHWUK
-         Un7cziuvXXDgqvadVAC8t264Hzpr/X7KaVRinjYgU5WPI+acIJ2Xgm3ZYWaG4Esz5n+z
-         58Tw==
-X-Gm-Message-State: APjAAAXOfCWZ33pys1VrzoBm2mZnPqlcvkGDY5MWpw8OmveU/s8VJuBn
-        RF9gIVPliV62Px+6BFSG/cg=
-X-Google-Smtp-Source: APXvYqzxuchVkvCkb8IuuayhpFMDjrKoZYSY8r0L9q9wuHTIsvf1OhR6VHEtVsYezOXzQQm6VPo+vA==
-X-Received: by 2002:ac8:3181:: with SMTP id h1mr17242637qte.294.1552337844812;
-        Mon, 11 Mar 2019 13:57:24 -0700 (PDT)
-Received: from quaco.ghostprotocols.net ([190.15.121.82])
-        by smtp.gmail.com with ESMTPSA id f18sm4582177qta.64.2019.03.11.13.57.23
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 11 Mar 2019 13:57:23 -0700 (PDT)
-From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 9E0B14039C; Mon, 11 Mar 2019 17:57:20 -0300 (-03)
-Date:   Mon, 11 Mar 2019 17:57:20 -0300
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Song Liu <songliubraving@fb.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ast@kernel.org, kernel-team@fb.com, peterz@infradead.org,
-        acme@redhat.com, jolsa@kernel.org, namhyung@kernel.org
-Subject: Re: [PATCH v7 perf,bpf 02/15] bpf: libbpf: introduce
- bpf_program__get_prog_info_linear()
-Message-ID: <20190311205720.GD10690@kernel.org>
-References: <20190307175810.249857-1-songliubraving@fb.com>
- <20190307175810.249857-3-songliubraving@fb.com>
- <20190311182631.GX10690@kernel.org>
- <b6fb25aa-5bfc-cf97-f960-5966154e5ef5@iogearbox.net>
+        id S1728289AbfCKVCU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 Mar 2019 17:02:20 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:37182 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727660AbfCKVCU (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 11 Mar 2019 17:02:20 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x2BKutGJ012384;
+        Mon, 11 Mar 2019 14:01:53 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=vFGu6UqDt/yu0oMB1Xc6TPFLbAwQuSuz6EJsTpyns8U=;
+ b=Jxlnaf7yXQfEx7A2KGiWiLnaxEwOMmPvKPn0bFdR25jzTUKvEd/fGYZ3Zm6vPjLfZsj7
+ NDOmQvyYl9SI3+YVxk1Il7Wh7xGLyXmkBK1P9y+ZZ9zFeS+GYXqlq/nrJ/BXUBPhMBld
+ +zV61G53zirLfJjEcrXwVvRtB31KsqD2Xpo= 
+Received: from maileast.thefacebook.com ([199.201.65.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2r5v488q6q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Mon, 11 Mar 2019 14:01:52 -0700
+Received: from frc-hub02.TheFacebook.com (2620:10d:c021:18::172) by
+ frc-hub04.TheFacebook.com (2620:10d:c021:18::174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1713.5; Mon, 11 Mar 2019 14:01:50 -0700
+Received: from NAM03-BY2-obe.outbound.protection.outlook.com (192.168.183.28)
+ by o365-in.thefacebook.com (192.168.177.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
+ via Frontend Transport; Mon, 11 Mar 2019 14:01:50 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector1-fb-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vFGu6UqDt/yu0oMB1Xc6TPFLbAwQuSuz6EJsTpyns8U=;
+ b=B0MvJ6LkQih1pNnRPBPR+B5vb7b4YRPX2uoztTxfoJR/oEteUXNfMKv7VOrDAv5kCXi3oDNjIVwWKRzpDawpW78RzOOBIhvIHZB98TNm2UOjHzHBF4oOeyMSpDM2JkmnArIUgNsWwIVf9uc/LmuOabfHsSgZpkEv57wO4S5btOM=
+Received: from MWHPR15MB1165.namprd15.prod.outlook.com (10.175.2.19) by
+ MWHPR15MB1117.namprd15.prod.outlook.com (10.175.2.7) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1686.20; Mon, 11 Mar 2019 21:01:48 +0000
+Received: from MWHPR15MB1165.namprd15.prod.outlook.com
+ ([fe80::f190:6de5:7e3:e065]) by MWHPR15MB1165.namprd15.prod.outlook.com
+ ([fe80::f190:6de5:7e3:e065%6]) with mapi id 15.20.1686.021; Mon, 11 Mar 2019
+ 21:01:48 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     Arnaldo Carvalho de Melo <acme@redhat.com>
+CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "namhyung@kernel.org" <namhyung@kernel.org>,
+        "sdf@fomichev.me" <sdf@fomichev.me>,
+        "acme@kernel.org" <acme@kernel.org>
+Subject: Re: [PATCH v8 perf,bpf 00/15] perf annotation of BPF programs
+Thread-Topic: [PATCH v8 perf,bpf 00/15] perf annotation of BPF programs
+Thread-Index: AQHU2ESEhUo7NOm9yEuQuJ5Kxn1dHqYG4EAAgAAKfoA=
+Date:   Mon, 11 Mar 2019 21:01:48 +0000
+Message-ID: <B72EC7B0-6B8B-4739-87A0-15364D3DE44F@fb.com>
+References: <20190311195555.889995-1-songliubraving@fb.com>
+ <20190311202414.GA3078@redhat.com>
+In-Reply-To: <20190311202414.GA3078@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3445.102.3)
+x-originating-ip: [2620:10d:c090:200::2:e2c1]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 359de5b8-cbe2-4617-b588-08d6a664c6e1
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600127)(711020)(4605104)(2017052603328)(7153060)(7193020);SRVR:MWHPR15MB1117;
+x-ms-traffictypediagnostic: MWHPR15MB1117:
+x-microsoft-exchange-diagnostics: 1;MWHPR15MB1117;20:EVrfCafIZI/QId/U9All/SUcY+xnESqAchG1AbGnFgji+1veua2DS7Y3TeNgyl9wzgWI5ne7EoeJGlAWE+N9pxwkLqG7Yq8HP8SueXzlWrLyIyxHG8YM/byHRJnQx4XmSk2KRo+P+f8o0834F4+ekV69ECNQx5kyznFzFBFqyvw=
+x-microsoft-antispam-prvs: <MWHPR15MB111765D41BF7ABDE36F570F4B3480@MWHPR15MB1117.namprd15.prod.outlook.com>
+x-forefront-prvs: 09730BD177
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(366004)(39860400002)(396003)(376002)(136003)(189003)(199004)(6116002)(71190400001)(71200400001)(54906003)(2616005)(83716004)(486006)(36756003)(476003)(6512007)(316002)(478600001)(68736007)(11346002)(76176011)(2906002)(7416002)(46003)(82746002)(25786009)(6916009)(6246003)(99286004)(86362001)(81166006)(7736002)(14454004)(53546011)(8936002)(57306001)(97736004)(6506007)(4326008)(81156014)(50226002)(256004)(33656002)(8676002)(186003)(53936002)(446003)(229853002)(5660300002)(102836004)(305945005)(6436002)(106356001)(6486002)(105586002)(142933001);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR15MB1117;H:MWHPR15MB1165.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: uwbQBy8br5UtaKSdZXyLZxmhzTfIn6k3ofgm7y5R0/D/pEhMYqEU6x8IBxfxhDHyaQY4amoKb00ZxrsirJhzQ/WnJ/HBGmfibdI5GAh8fgxVtEYcklYC8EBe2FkU2/gdVbNKB/T//5P6RzP/rY3qRL1ydhcnK3vmjHdCmYDsZSgDMSg7IB1HLqZ6xPkQC8Gtvj1yF2NLq2ljFJLBjWO/Z+v9DUVgl+3lCtDG/K5rBgt/eN/43kQsKskJF1ZPLB3NnxN3MkxOoAX7DS3QajX3sDcDgZK9AgCNsim7cQJ25VLU9IxS0iKfrtWFVyZUceS4uFrg20dIczXHBb/aho6bwLhnePqA0KdjSPiylYnzCaZ3mepZwDYoSMdDlzIIPZPW5CWYJX8QDaU9djAlqzz6ahIorUifIpwJmEQSpY9kgfw=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <4E9B33F2B5901C49A429204CE949BE87@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b6fb25aa-5bfc-cf97-f960-5966154e5ef5@iogearbox.net>
-X-Url:  http://acmel.wordpress.com
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 359de5b8-cbe2-4617-b588-08d6a664c6e1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Mar 2019 21:01:48.1834
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR15MB1117
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-03-11_16:,,
+ signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Mon, Mar 11, 2019 at 09:45:49PM +0100, Daniel Borkmann escreveu:
-> On 03/11/2019 07:26 PM, Arnaldo Carvalho de Melo wrote:
-> > Em Thu, Mar 07, 2019 at 09:57:57AM -0800, Song Liu escreveu:
-> >> Currently, bpf_prog_info includes 9 arrays. The user has the option to
-> >> fetch any combination of these arrays. However, this requires a lot of
-> >> handling of these arrays. This work becomes more tricky when we need to
-> >> store bpf_prog_info to a file, because these arrays are allocated
-> >> independently.
-> >>
-> >> This patch introduces struct bpf_prog_info_linear, which stores arrays
-> >> of bpf_prog_info in continues memory. Helper functions are introduced
-> >> to unify the work to get different information of bpf_prog_info.
-> >> Specifically, bpf_program__get_prog_info_linear() allows the user to
-> >> select which arrays to fetch, and handles details for the user.
-> >>
-> >> Plesae see the comments before enum bpf_prog_info_array for more details
-> >> and examples.
-> >>
-> >> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> >> Cc: Alexei Starovoitov <ast@kernel.org>
-> > 
-> > Daniel, are you ok with these changes to libbpf and bpftool? Perhaps
-> > those should be detached from this patchkit and submitted sooner,
-> > eroding the size of this kit.
-> > 
-> > Alternatively, if you're ok with it, please provide your Acked-by and
-> > I'll process as soon as I get back to it after Jiri is done reviewing.
-> 
-> Overall looks okay. Are you planning to get these in for 5.1 window? If
-
-I hope so.
-
-> yes, that would be great, otherwise we might need to cherry-pick the libbpf
-
-So I'll try and grab those for my next pull req to Ingo, this week,
-will add your Acked-by, ok?
-
-> and bpftool ones from your tree into bpf-next as well since there's just
-> too much going on in this area where we'd potentially run into complex
-> merge conflicts. In the latter case, libbpf.map would need to be fixed up
-> to LIBBPF_0.0.3 as convention is that this is in line with kernel release.
-
-BTW, while running my build tests I had to add this to today's batch,
-should be trivial when merging, I think, ok?
 
 
-commit dfcbc2f2994b8a3af3605a26dc29c07ad7378bf4
-Author: Arnaldo Carvalho de Melo <acme@redhat.com>
-Date:   Mon Mar 11 17:07:52 2019 -0300
+> On Mar 11, 2019, at 1:24 PM, Arnaldo Carvalho de Melo <acme@redhat.com> w=
+rote:
+>=20
+> Em Mon, Mar 11, 2019 at 12:55:40PM -0700, Song Liu escreveu:
+>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D Note on =
+patch dependency  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+>> This set has dependency in both bpf-next tree and tip/perf/core. Current
+>> version is developed on bpf-next tree with the following commits
+>> cherry-picked from tip/perf/core (or acme/perf/core):
+>>=20
+>> (from 1/11 to 11/11)
+>> commit 76193a94522f ("perf, bpf: Introduce PERF_RECORD_KSYMBOL")
+>> commit d764ac646491 ("tools headers uapi: Sync tools/include/uapi/linux/=
+perf_event.h")
+>> commit 6ee52e2a3fe4 ("perf, bpf: Introduce PERF_RECORD_BPF_EVENT")
+>> commit df063c83aa2c ("tools headers uapi: Sync tools/include/uapi/linux/=
+perf_event.h")
+>> commit 9aa0bfa370b2 ("perf tools: Handle PERF_RECORD_KSYMBOL")
+>> commit 45178a928a4b ("perf tools: Handle PERF_RECORD_BPF_EVENT")
+>> commit 7b612e291a5a ("perf tools: Synthesize PERF_RECORD_* for loaded BP=
+F programs")
+>> commit a40b95bcd30c ("perf top: Synthesize BPF events for pre-existing l=
+oaded BPF programs")
+>> commit 6934058d9fb6 ("bpf: Add module name [bpf] to ksymbols for bpf pro=
+grams")
+>> commit 811184fb6977 ("perf bpf: Fix synthesized PERF_RECORD_KSYMBOL/BPF_=
+EVENT")
+>> comimt 94816add0005 ("perf tools: Add perf_exe() helper to find perf bin=
+ary")
+>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>=20
+> These csets are already upstream, i.e. already hit torvalds/master, i.e.
+> will be in 5.1, can you check that we still need doing this
+> cherry-picking?
+>=20
+> - Arnaldo
 
-    tools lib bpf: Fix the build by adding a missing stdarg.h include
-    
-    The libbpf_print_fn_t typedef uses va_list without including the header
-    where that type is defined, stdarg.h, breaking in places where we're
-    unlucky for that type not to be already defined by some previously
-    included header.
-    
-    Noticed while building on fedora 24 cross building tools/perf to the ARC
-    architecture using the uClibc C library:
-    
-      28 fedora:24-x-ARC-uClibc   : FAIL arc-linux-gcc (ARCompact ISA Linux uClibc toolchain 2017.09-rc2) 7.1.1 20170710
-    
-        CC       /tmp/build/perf/tests/llvm.o
-      In file included from tests/llvm.c:3:0:
-      /git/linux/tools/lib/bpf/libbpf.h:57:20: error: unknown type name 'va_list'
-            const char *, va_list ap);
-                          ^~~~~~~
-      /git/linux/tools/lib/bpf/libbpf.h:59:34: error: unknown type name 'libbpf_print_fn_t'
-       LIBBPF_API void libbpf_set_print(libbpf_print_fn_t fn);
-                                        ^~~~~~~~~~~~~~~~~
-      mv: cannot stat '/tmp/build/perf/tests/.llvm.o.tmp': No such file or directory
-    
-    Cc: Alexei Starovoitov <ast@kernel.org>
-    Cc: Daniel Borkmann <daniel@iogearbox.net>
-    Cc: Jakub Kicinski <jakub.kicinski@netronome.com>
-    Cc: Jiri Olsa <jolsa@kernel.org>
-    Cc: Namhyung Kim <namhyung@kernel.org>
-    Cc: Quentin Monnet <quentin.monnet@netronome.com>
-    Cc: Stanislav Fomichev <sdf@google.com>
-    Cc: Yonghong Song <yhs@fb.com>
-    Fixes: a8a1f7d09cfc ("libbpf: fix libbpf_print")
-    Link: https://lkml.kernel.org/n/tip-5270n2quu2gqz22o7itfdx00@git.kernel.org
-    Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+I just checked that 02-15 of the set could apply to torvalds/master (with=20
+some minor conflicts), and it works as expected.=20
 
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index b4652aa1a58a..aa1521a51687 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -10,6 +10,7 @@
- #ifndef __LIBBPF_LIBBPF_H
- #define __LIBBPF_LIBBPF_H
- 
-+#include <stdarg.h>
- #include <stdio.h>
- #include <stdint.h>
- #include <stdbool.h>
+Thanks,
+Song=
