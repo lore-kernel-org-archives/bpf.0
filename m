@@ -2,37 +2,36 @@ Return-Path: <SRS0=tULY=RO=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29182C4360F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7019BC10F06
 	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 21:51:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DD8E82147C
-	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 21:51:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3A3A52147C
+	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 21:51:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727973AbfCKVvr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 Mar 2019 17:51:47 -0400
-Received: from www62.your-server.de ([213.133.104.62]:41150 "EHLO
+        id S1728371AbfCKVvs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 Mar 2019 17:51:48 -0400
+Received: from www62.your-server.de ([213.133.104.62]:41146 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728325AbfCKVvr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1728322AbfCKVvr (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 11 Mar 2019 17:51:47 -0400
 Received: from [178.197.248.21] (helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1h3Spi-0003PQ-8G; Mon, 11 Mar 2019 22:51:42 +0100
+        id 1h3Sph-0003PK-PG; Mon, 11 Mar 2019 22:51:41 +0100
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     ast@kernel.org
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, joe@wand.net.nz,
         john.fastabend@gmail.com, yhs@fb.com, andrii.nakryiko@gmail.com,
         jakub.kicinski@netronome.com, tgraf@suug.ch, lmb@cloudflare.com,
         Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH rfc v3 bpf-next 9/9] bpf, selftest: test global data/bss/rodata sections
-Date:   Mon, 11 Mar 2019 22:51:25 +0100
-Message-Id: <20190311215125.17793-10-daniel@iogearbox.net>
+Subject: [PATCH rfc v3 bpf-next 8/9] bpf, selftest: test {rd,wr}only flags and direct value access
+Date:   Mon, 11 Mar 2019 22:51:24 +0100
+Message-Id: <20190311215125.17793-9-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <20190311215125.17793-1-daniel@iogearbox.net>
 References: <20190311215125.17793-1-daniel@iogearbox.net>
@@ -43,353 +42,549 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Joe Stringer <joe@wand.net.nz>
+Extend test_verifier with various test cases around the two kernel
+extensions, that is, {rd,wr}only map support as well as direct map
+value access. All passing, one skipped due to xskmap not present
+on test machine:
 
-Add tests for libbpf relocation of static variable references
-into the .data, .rodata and .bss sections of the ELF, also add
-read-only test for .rodata. All passing:
-
-  # ./test_progs
+  # ./test_verifier
   [...]
-  test_global_data:PASS:load program 0 nsec
-  test_global_data:PASS:pass global data run 925 nsec
-  test_global_data_number:PASS:relocate .bss reference 925 nsec
-  test_global_data_number:PASS:relocate .data reference 925 nsec
-  test_global_data_number:PASS:relocate .rodata reference 925 nsec
-  test_global_data_number:PASS:relocate .bss reference 925 nsec
-  test_global_data_number:PASS:relocate .data reference 925 nsec
-  test_global_data_number:PASS:relocate .rodata reference 925 nsec
-  test_global_data_number:PASS:relocate .bss reference 925 nsec
-  test_global_data_number:PASS:relocate .bss reference 925 nsec
-  test_global_data_number:PASS:relocate .rodata reference 925 nsec
-  test_global_data_number:PASS:relocate .rodata reference 925 nsec
-  test_global_data_number:PASS:relocate .rodata reference 925 nsec
-  test_global_data_string:PASS:relocate .rodata reference 925 nsec
-  test_global_data_string:PASS:relocate .data reference 925 nsec
-  test_global_data_string:PASS:relocate .bss reference 925 nsec
-  test_global_data_string:PASS:relocate .data reference 925 nsec
-  test_global_data_string:PASS:relocate .bss reference 925 nsec
-  test_global_data_struct:PASS:relocate .rodata reference 925 nsec
-  test_global_data_struct:PASS:relocate .bss reference 925 nsec
-  test_global_data_struct:PASS:relocate .rodata reference 925 nsec
-  test_global_data_struct:PASS:relocate .data reference 925 nsec
-  test_global_data_rdonly:PASS:test .rodata read-only map 925 nsec
-  [...]
-  Summary: 229 PASSED, 0 FAILED
+  #920/p XDP pkt read, pkt_data <= pkt_meta', bad access 1 OK
+  #921/p XDP pkt read, pkt_data <= pkt_meta', bad access 2 OK
+  Summary: 1366 PASSED, 1 SKIPPED, 0 FAILED
 
-Note map helper signatures have been changed to avoid warnings
-when passing in const data.
-
-Joint work with Daniel Borkmann.
-
-Signed-off-by: Joe Stringer <joe@wand.net.nz>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- tools/testing/selftests/bpf/bpf_helpers.h     |   8 +-
- .../selftests/bpf/prog_tests/global_data.c    | 157 ++++++++++++++++++
- .../selftests/bpf/progs/test_global_data.c    | 106 ++++++++++++
- 3 files changed, 267 insertions(+), 4 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/global_data.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_global_data.c
+ tools/include/linux/filter.h                  |  14 ++
+ tools/testing/selftests/bpf/test_verifier.c   |  42 +++-
+ .../selftests/bpf/verifier/array_access.c     | 159 ++++++++++++
+ .../bpf/verifier/direct_value_access.c        | 226 ++++++++++++++++++
+ 4 files changed, 436 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/verifier/direct_value_access.c
 
-diff --git a/tools/testing/selftests/bpf/bpf_helpers.h b/tools/testing/selftests/bpf/bpf_helpers.h
-index c9433a496d54..91c53dac95c8 100644
---- a/tools/testing/selftests/bpf/bpf_helpers.h
-+++ b/tools/testing/selftests/bpf/bpf_helpers.h
-@@ -9,14 +9,14 @@
- #define SEC(NAME) __attribute__((section(NAME), used))
+diff --git a/tools/include/linux/filter.h b/tools/include/linux/filter.h
+index cce0b02c0e28..d288576e0bcd 100644
+--- a/tools/include/linux/filter.h
++++ b/tools/include/linux/filter.h
+@@ -283,6 +283,20 @@
+ #define BPF_LD_MAP_FD(DST, MAP_FD)				\
+ 	BPF_LD_IMM64_RAW(DST, BPF_PSEUDO_MAP_FD, MAP_FD)
  
- /* helper functions called from eBPF programs written in C */
--static void *(*bpf_map_lookup_elem)(void *map, void *key) =
-+static void *(*bpf_map_lookup_elem)(void *map, const void *key) =
- 	(void *) BPF_FUNC_map_lookup_elem;
--static int (*bpf_map_update_elem)(void *map, void *key, void *value,
-+static int (*bpf_map_update_elem)(void *map, const void *key, const void *value,
- 				  unsigned long long flags) =
- 	(void *) BPF_FUNC_map_update_elem;
--static int (*bpf_map_delete_elem)(void *map, void *key) =
-+static int (*bpf_map_delete_elem)(void *map, const void *key) =
- 	(void *) BPF_FUNC_map_delete_elem;
--static int (*bpf_map_push_elem)(void *map, void *value,
-+static int (*bpf_map_push_elem)(void *map, const void *value,
- 				unsigned long long flags) =
- 	(void *) BPF_FUNC_map_push_elem;
- static int (*bpf_map_pop_elem)(void *map, void *value) =
-diff --git a/tools/testing/selftests/bpf/prog_tests/global_data.c b/tools/testing/selftests/bpf/prog_tests/global_data.c
++#define BPF_LD_MAP_VALUE(DST, MAP_FD, VALUE_IDX, VALUE_OFF)	\
++	((struct bpf_insn) {					\
++		.code  = BPF_LD | BPF_DW | BPF_IMM,		\
++		.dst_reg = DST,					\
++		.src_reg = BPF_PSEUDO_MAP_VALUE,		\
++		.off   = (__u16)(VALUE_IDX),			\
++		.imm   = MAP_FD }),				\
++	((struct bpf_insn) {					\
++		.code  = 0, /* zero is reserved opcode */	\
++		.dst_reg = 0,					\
++		.src_reg = 0,					\
++		.off   = ((__u32)(VALUE_IDX)) >> 16,		\
++		.imm   = VALUE_OFF })
++
+ /* Relative call */
+ 
+ #define BPF_CALL_REL(TGT)					\
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index 477a9dcf9fff..7ef1991a5295 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -51,7 +51,7 @@
+ 
+ #define MAX_INSNS	BPF_MAXINSNS
+ #define MAX_FIXUPS	8
+-#define MAX_NR_MAPS	14
++#define MAX_NR_MAPS	16
+ #define MAX_TEST_RUNS	8
+ #define POINTER_VALUE	0xcafe4all
+ #define TEST_DATA_LEN	64
+@@ -80,6 +80,8 @@ struct bpf_test {
+ 	int fixup_cgroup_storage[MAX_FIXUPS];
+ 	int fixup_percpu_cgroup_storage[MAX_FIXUPS];
+ 	int fixup_map_spin_lock[MAX_FIXUPS];
++	int fixup_map_array_ro[MAX_FIXUPS];
++	int fixup_map_array_wo[MAX_FIXUPS];
+ 	const char *errstr;
+ 	const char *errstr_unpriv;
+ 	uint32_t retval, retval_unpriv, insn_processed;
+@@ -277,13 +279,15 @@ static bool skip_unsupported_map(enum bpf_map_type map_type)
+ 	return false;
+ }
+ 
+-static int create_map(uint32_t type, uint32_t size_key,
+-		      uint32_t size_value, uint32_t max_elem)
++static int __create_map(uint32_t type, uint32_t size_key,
++			uint32_t size_value, uint32_t max_elem,
++			uint32_t extra_flags)
+ {
+ 	int fd;
+ 
+ 	fd = bpf_create_map(type, size_key, size_value, max_elem,
+-			    type == BPF_MAP_TYPE_HASH ? BPF_F_NO_PREALLOC : 0);
++			    (type == BPF_MAP_TYPE_HASH ?
++			     BPF_F_NO_PREALLOC : 0) | extra_flags);
+ 	if (fd < 0) {
+ 		if (skip_unsupported_map(type))
+ 			return -1;
+@@ -293,6 +297,12 @@ static int create_map(uint32_t type, uint32_t size_key,
+ 	return fd;
+ }
+ 
++static int create_map(uint32_t type, uint32_t size_key,
++		      uint32_t size_value, uint32_t max_elem)
++{
++	return __create_map(type, size_key, size_value, max_elem, 0);
++}
++
+ static void update_map(int fd, int index)
+ {
+ 	struct test_val value = {
+@@ -519,6 +529,8 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
+ 	int *fixup_cgroup_storage = test->fixup_cgroup_storage;
+ 	int *fixup_percpu_cgroup_storage = test->fixup_percpu_cgroup_storage;
+ 	int *fixup_map_spin_lock = test->fixup_map_spin_lock;
++	int *fixup_map_array_ro = test->fixup_map_array_ro;
++	int *fixup_map_array_wo = test->fixup_map_array_wo;
+ 
+ 	if (test->fill_helper)
+ 		test->fill_helper(test);
+@@ -556,7 +568,7 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
+ 
+ 	if (*fixup_map_array_48b) {
+ 		map_fds[3] = create_map(BPF_MAP_TYPE_ARRAY, sizeof(int),
+-					sizeof(struct test_val), 1);
++					sizeof(struct test_val), 2);
+ 		update_map(map_fds[3], 0);
+ 		do {
+ 			prog[*fixup_map_array_48b].imm = map_fds[3];
+@@ -642,6 +654,26 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
+ 			fixup_map_spin_lock++;
+ 		} while (*fixup_map_spin_lock);
+ 	}
++	if (*fixup_map_array_ro) {
++		map_fds[14] = __create_map(BPF_MAP_TYPE_ARRAY, sizeof(int),
++					   sizeof(struct test_val), 1,
++					   BPF_F_RDONLY_PROG);
++		update_map(map_fds[14], 0);
++		do {
++			prog[*fixup_map_array_ro].imm = map_fds[14];
++			fixup_map_array_ro++;
++		} while (*fixup_map_array_ro);
++	}
++	if (*fixup_map_array_wo) {
++		map_fds[15] = __create_map(BPF_MAP_TYPE_ARRAY, sizeof(int),
++					   sizeof(struct test_val), 1,
++					   BPF_F_WRONLY_PROG);
++		update_map(map_fds[15], 0);
++		do {
++			prog[*fixup_map_array_wo].imm = map_fds[15];
++			fixup_map_array_wo++;
++		} while (*fixup_map_array_wo);
++	}
+ }
+ 
+ static int set_admin(bool admin)
+diff --git a/tools/testing/selftests/bpf/verifier/array_access.c b/tools/testing/selftests/bpf/verifier/array_access.c
+index 0dcecaf3ec6f..9a2b6f9b4414 100644
+--- a/tools/testing/selftests/bpf/verifier/array_access.c
++++ b/tools/testing/selftests/bpf/verifier/array_access.c
+@@ -217,3 +217,162 @@
+ 	.result = REJECT,
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
++{
++	"valid read map access into a read-only array 1",
++	.insns = {
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_ro = { 3 },
++	.result = ACCEPT,
++	.retval = 28,
++},
++{
++	"valid read map access into a read-only array 2",
++	.insns = {
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 6),
++
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
++	BPF_MOV64_IMM(BPF_REG_2, 4),
++	BPF_MOV64_IMM(BPF_REG_3, 0),
++	BPF_MOV64_IMM(BPF_REG_4, 0),
++	BPF_MOV64_IMM(BPF_REG_5, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0,
++		     BPF_FUNC_csum_diff),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++	.fixup_map_array_ro = { 3 },
++	.result = ACCEPT,
++	.retval = -29,
++},
++{
++	"invalid write map access into a read-only array 1",
++	.insns = {
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 1),
++	BPF_ST_MEM(BPF_DW, BPF_REG_0, 0, 42),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_ro = { 3 },
++	.result = REJECT,
++	.errstr = "write into map forbidden",
++},
++{
++	"invalid write map access into a read-only array 2",
++	.insns = {
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 5),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
++	BPF_MOV64_IMM(BPF_REG_2, 0),
++	BPF_MOV64_REG(BPF_REG_3, BPF_REG_0),
++	BPF_MOV64_IMM(BPF_REG_4, 8),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0,
++		     BPF_FUNC_skb_load_bytes),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++	.fixup_map_array_ro = { 4 },
++	.result = REJECT,
++	.errstr = "write into map forbidden",
++},
++{
++	"valid write map access into a write-only array 1",
++	.insns = {
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 1),
++	BPF_ST_MEM(BPF_DW, BPF_REG_0, 0, 42),
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_wo = { 3 },
++	.result = ACCEPT,
++	.retval = 1,
++},
++{
++	"valid write map access into a write-only array 2",
++	.insns = {
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 5),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
++	BPF_MOV64_IMM(BPF_REG_2, 0),
++	BPF_MOV64_REG(BPF_REG_3, BPF_REG_0),
++	BPF_MOV64_IMM(BPF_REG_4, 8),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0,
++		     BPF_FUNC_skb_load_bytes),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++	.fixup_map_array_wo = { 4 },
++	.result = ACCEPT,
++	.retval = 0,
++},
++{
++	"invalid read map access into a write-only array 1",
++	.insns = {
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_wo = { 3 },
++	.result = REJECT,
++	.errstr = "read into map forbidden",
++},
++{
++	"invalid read map access into a write-only array 2",
++	.insns = {
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 6),
++
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
++	BPF_MOV64_IMM(BPF_REG_2, 4),
++	BPF_MOV64_IMM(BPF_REG_3, 0),
++	BPF_MOV64_IMM(BPF_REG_4, 0),
++	BPF_MOV64_IMM(BPF_REG_5, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0,
++		     BPF_FUNC_csum_diff),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++	.fixup_map_array_wo = { 3 },
++	.result = REJECT,
++	.errstr = "read into map forbidden",
++},
+diff --git a/tools/testing/selftests/bpf/verifier/direct_value_access.c b/tools/testing/selftests/bpf/verifier/direct_value_access.c
 new file mode 100644
-index 000000000000..d011079fb0bf
+index 000000000000..656c3675b735
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/global_data.c
-@@ -0,0 +1,157 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+
-+static void test_global_data_number(struct bpf_object *obj, __u32 duration)
++++ b/tools/testing/selftests/bpf/verifier/direct_value_access.c
+@@ -0,0 +1,226 @@
 +{
-+	int i, err, map_fd;
-+	uint64_t num;
-+
-+	map_fd = bpf_find_map(__func__, obj, "result_number");
-+	if (map_fd < 0) {
-+		error_cnt++;
-+		return;
-+	}
-+
-+	struct {
-+		char *name;
-+		uint32_t key;
-+		uint64_t num;
-+	} tests[] = {
-+		{ "relocate .bss reference",     0, 0 },
-+		{ "relocate .data reference",    1, 42 },
-+		{ "relocate .rodata reference",  2, 24 },
-+		{ "relocate .bss reference",     3, 0 },
-+		{ "relocate .data reference",    4, 0xffeeff },
-+		{ "relocate .rodata reference",  5, 0xabab },
-+		{ "relocate .bss reference",     6, 1234 },
-+		{ "relocate .bss reference",     7, 0 },
-+		{ "relocate .rodata reference",  8, 0xab },
-+		{ "relocate .rodata reference",  9, 0x1111111111111111 },
-+		{ "relocate .rodata reference", 10, ~0 },
-+	};
-+
-+	for (i = 0; i < sizeof(tests) / sizeof(tests[0]); i++) {
-+		err = bpf_map_lookup_elem(map_fd, &tests[i].key, &num);
-+		CHECK(err || num != tests[i].num, tests[i].name,
-+		      "err %d result %lx expected %lx\n",
-+		      err, num, tests[i].num);
-+	}
-+}
-+
-+static void test_global_data_string(struct bpf_object *obj, __u32 duration)
++	"direct map access, write test 1",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0, 0),
++	BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 4242),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_48b = { 1 },
++	.result = ACCEPT,
++	.retval = 1,
++},
 +{
-+	int i, err, map_fd;
-+	char str[32];
-+
-+	map_fd = bpf_find_map(__func__, obj, "result_string");
-+	if (map_fd < 0) {
-+		error_cnt++;
-+		return;
-+	}
-+
-+	struct {
-+		char *name;
-+		uint32_t key;
-+		char str[32];
-+	} tests[] = {
-+		{ "relocate .rodata reference", 0, "abcdefghijklmnopqrstuvwxyz" },
-+		{ "relocate .data reference",   1, "abcdefghijklmnopqrstuvwxyz" },
-+		{ "relocate .bss reference",    2, "" },
-+		{ "relocate .data reference",   3, "abcdexghijklmnopqrstuvwxyz" },
-+		{ "relocate .bss reference",    4, "\0\0hello" },
-+	};
-+
-+	for (i = 0; i < sizeof(tests) / sizeof(tests[0]); i++) {
-+		err = bpf_map_lookup_elem(map_fd, &tests[i].key, str);
-+		CHECK(err || memcmp(str, tests[i].str, sizeof(str)),
-+		      tests[i].name, "err %d result \'%s\' expected \'%s\'\n",
-+		      err, str, tests[i].str);
-+	}
-+}
-+
-+struct foo {
-+	__u8  a;
-+	__u32 b;
-+	__u64 c;
-+};
-+
-+static void test_global_data_struct(struct bpf_object *obj, __u32 duration)
++	"direct map access, write test 2",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0, 8),
++	BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 4242),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_48b = { 1 },
++	.result = ACCEPT,
++	.retval = 1,
++},
 +{
-+	int i, err, map_fd;
-+	struct foo val;
-+
-+	map_fd = bpf_find_map(__func__, obj, "result_struct");
-+	if (map_fd < 0) {
-+		error_cnt++;
-+		return;
-+	}
-+
-+	struct {
-+		char *name;
-+		uint32_t key;
-+		struct foo val;
-+	} tests[] = {
-+		{ "relocate .rodata reference", 0, { 42, 0xfefeefef, 0x1111111111111111ULL, } },
-+		{ "relocate .bss reference",    1, { } },
-+		{ "relocate .rodata reference", 2, { } },
-+		{ "relocate .data reference",   3, { 41, 0xeeeeefef, 0x2111111111111111ULL, } },
-+	};
-+
-+	for (i = 0; i < sizeof(tests) / sizeof(tests[0]); i++) {
-+		err = bpf_map_lookup_elem(map_fd, &tests[i].key, &val);
-+		CHECK(err || memcmp(&val, &tests[i].val, sizeof(val)),
-+		      tests[i].name, "err %d result { %u, %u, %llu } expected { %u, %u, %llu }\n",
-+		      err, val.a, val.b, val.c, tests[i].val.a, tests[i].val.b, tests[i].val.c);
-+	}
-+}
-+
-+static void test_global_data_rdonly(struct bpf_object *obj, __u32 duration)
++	"direct map access, write test 3",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0, 8),
++	BPF_ST_MEM(BPF_DW, BPF_REG_1, 8, 4242),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_48b = { 1 },
++	.result = ACCEPT,
++	.retval = 1,
++},
 +{
-+	int err = -ENOMEM, map_fd, zero = 0;
-+	struct bpf_map *map;
-+	__u8 *buff;
-+
-+	map = bpf_object__find_map_by_name(obj, "test_glo.rodata");
-+	if (!map || !bpf_map__is_internal(map)) {
-+		error_cnt++;
-+		return;
-+	}
-+
-+	map_fd = bpf_map__fd(map);
-+	if (map_fd < 0) {
-+		error_cnt++;
-+		return;
-+	}
-+
-+	buff = malloc(bpf_map__def(map)->value_size);
-+	if (buff)
-+		err = bpf_map_update_elem(map_fd, &zero, buff, 0);
-+	free(buff);
-+	CHECK(!err || errno != EPERM, "test .rodata read-only map",
-+	      "err %d errno %d\n", err, errno);
-+}
-+
-+void test_global_data(void)
++	"direct map access, write test 4",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0, 40),
++	BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 4242),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_48b = { 1 },
++	.result = ACCEPT,
++	.retval = 1,
++},
 +{
-+	const char *file = "./test_global_data.o";
-+	__u32 duration = 0, retval;
-+	struct bpf_object *obj;
-+	int err, prog_fd;
-+
-+	err = bpf_prog_load(file, BPF_PROG_TYPE_SCHED_CLS, &obj, &prog_fd);
-+	if (CHECK(err, "load program", "error %d loading %s\n", err, file))
-+		return;
-+
-+	err = bpf_prog_test_run(prog_fd, 1, &pkt_v4, sizeof(pkt_v4),
-+				NULL, NULL, &retval, &duration);
-+	CHECK(err || retval, "pass global data run",
-+	      "err %d errno %d retval %d duration %d\n",
-+	      err, errno, retval, duration);
-+
-+	test_global_data_number(obj, duration);
-+	test_global_data_string(obj, duration);
-+	test_global_data_struct(obj, duration);
-+	test_global_data_rdonly(obj, duration);
-+
-+	bpf_object__close(obj);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_global_data.c b/tools/testing/selftests/bpf/progs/test_global_data.c
-new file mode 100644
-index 000000000000..5ab14e941980
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_global_data.c
-@@ -0,0 +1,106 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2019 Isovalent, Inc.
-+
-+#include <linux/bpf.h>
-+#include <linux/pkt_cls.h>
-+#include <string.h>
-+
-+#include "bpf_helpers.h"
-+
-+struct bpf_map_def SEC("maps") result_number = {
-+	.type		= BPF_MAP_TYPE_ARRAY,
-+	.key_size	= sizeof(__u32),
-+	.value_size	= sizeof(__u64),
-+	.max_entries	= 11,
-+};
-+
-+struct bpf_map_def SEC("maps") result_string = {
-+	.type		= BPF_MAP_TYPE_ARRAY,
-+	.key_size	= sizeof(__u32),
-+	.value_size	= 32,
-+	.max_entries	= 5,
-+};
-+
-+struct foo {
-+	__u8  a;
-+	__u32 b;
-+	__u64 c;
-+};
-+
-+struct bpf_map_def SEC("maps") result_struct = {
-+	.type		= BPF_MAP_TYPE_ARRAY,
-+	.key_size	= sizeof(__u32),
-+	.value_size	= sizeof(struct foo),
-+	.max_entries	= 5,
-+};
-+
-+/* Relocation tests for __u64s. */
-+static       __u64 num0;
-+static       __u64 num1 = 42;
-+static const __u64 num2 = 24;
-+static       __u64 num3 = 0;
-+static       __u64 num4 = 0xffeeff;
-+static const __u64 num5 = 0xabab;
-+static const __u64 num6 = 0xab;
-+
-+/* Relocation tests for strings. */
-+static const char str0[32] = "abcdefghijklmnopqrstuvwxyz";
-+static       char str1[32] = "abcdefghijklmnopqrstuvwxyz";
-+static       char str2[32];
-+
-+/* Relocation tests for structs. */
-+static const struct foo struct0 = {
-+	.a = 42,
-+	.b = 0xfefeefef,
-+	.c = 0x1111111111111111ULL,
-+};
-+static struct foo struct1;
-+static const struct foo struct2;
-+static struct foo struct3 = {
-+	.a = 41,
-+	.b = 0xeeeeefef,
-+	.c = 0x2111111111111111ULL,
-+};
-+
-+#define test_reloc(map, num, var)					\
-+	do {								\
-+		__u32 key = num;					\
-+		bpf_map_update_elem(&result_##map, &key, var, 0);	\
-+	} while (0)
-+
-+SEC("static_data_load")
-+int load_static_data(struct __sk_buff *skb)
++	"direct map access, write test 5",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0, 32),
++	BPF_ST_MEM(BPF_DW, BPF_REG_1, 8, 4242),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_48b = { 1 },
++	.result = ACCEPT,
++	.retval = 1,
++},
 +{
-+	static const __u64 bar = ~0;
-+
-+	test_reloc(number, 0, &num0);
-+	test_reloc(number, 1, &num1);
-+	test_reloc(number, 2, &num2);
-+	test_reloc(number, 3, &num3);
-+	test_reloc(number, 4, &num4);
-+	test_reloc(number, 5, &num5);
-+	num4 = 1234;
-+	test_reloc(number, 6, &num4);
-+	test_reloc(number, 7, &num0);
-+	test_reloc(number, 8, &num6);
-+
-+	test_reloc(string, 0, str0);
-+	test_reloc(string, 1, str1);
-+	test_reloc(string, 2, str2);
-+	str1[5] = 'x';
-+	test_reloc(string, 3, str1);
-+	__builtin_memcpy(&str2[2], "hello", sizeof("hello"));
-+	test_reloc(string, 4, str2);
-+
-+	test_reloc(struct, 0, &struct0);
-+	test_reloc(struct, 1, &struct1);
-+	test_reloc(struct, 2, &struct2);
-+	test_reloc(struct, 3, &struct3);
-+
-+	test_reloc(number,  9, &struct0.c);
-+	test_reloc(number, 10, &bar);
-+
-+	return TC_ACT_OK;
-+}
-+
-+char _license[] SEC("license") = "GPL";
++	"direct map access, write test 6",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0, 40),
++	BPF_ST_MEM(BPF_DW, BPF_REG_1, 4, 4242),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_48b = { 1 },
++	.result = REJECT,
++	.errstr = "R1 min value is outside of the array range",
++},
++{
++	"direct map access, write test 7",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0, -1),
++	BPF_ST_MEM(BPF_DW, BPF_REG_1, 4, 4242),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_48b = { 1 },
++	.result = REJECT,
++	.errstr = "direct value offset of 4294967295 is not allowed",
++},
++{
++	"direct map access, write test 8",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0, 1),
++	BPF_ST_MEM(BPF_DW, BPF_REG_1, -1, 4242),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_48b = { 1 },
++	.result = ACCEPT,
++	.retval = 1,
++},
++{
++	"direct map access, write test 9",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0, 48),
++	BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 4242),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_48b = { 1 },
++	.result = REJECT,
++	.errstr = "invalid access to map value pointer",
++},
++{
++	"direct map access, write test 10",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0, 47),
++	BPF_ST_MEM(BPF_B, BPF_REG_1, 0, 4),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_48b = { 1 },
++	.result = ACCEPT,
++	.retval = 1,
++},
++{
++	"direct map access, write test 11",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0, 48),
++	BPF_ST_MEM(BPF_B, BPF_REG_1, 0, 4),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_48b = { 1 },
++	.result = REJECT,
++	.errstr = "invalid access to map value pointer",
++},
++{
++	"direct map access, write test 12",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0, (1<<29)),
++	BPF_ST_MEM(BPF_B, BPF_REG_1, 0, 4),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_48b = { 1 },
++	.result = REJECT,
++	.errstr = "direct value offset of 536870912 is not allowed",
++},
++{
++	"direct map access, write test 13",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0, (1<<29)-1),
++	BPF_ST_MEM(BPF_B, BPF_REG_1, 0, 4),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_48b = { 1 },
++	.result = REJECT,
++	.errstr = "invalid access to map value pointer, value_size=48 index=0 off=536870911",
++},
++{
++	"direct map access, write test 14",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0, 47),
++	BPF_LD_MAP_VALUE(BPF_REG_2, 0, 0, 46),
++	BPF_ST_MEM(BPF_H, BPF_REG_2, 0, 0xffff),
++	BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_48b = { 1, 3 },
++	.result = ACCEPT,
++	.retval = 0xff,
++},
++{
++	"direct map access, write test 15",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 1, 47),
++	BPF_LD_MAP_VALUE(BPF_REG_2, 0, 1, 46),
++	BPF_ST_MEM(BPF_H, BPF_REG_2, 0, 0xffff),
++	BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_48b = { 1, 3 },
++	.result = ACCEPT,
++	.retval = 0xff,
++},
++{
++	"direct map access, write test 16",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 1, 46),
++	BPF_LD_MAP_VALUE(BPF_REG_2, 0, 0, 46),
++	BPF_ST_MEM(BPF_H, BPF_REG_2, 0, 0xffff),
++	BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_48b = { 1, 3 },
++	.result = ACCEPT,
++	.retval = 0,
++},
++{
++	"direct map access, write test 17",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 1, 46),
++	BPF_LD_MAP_VALUE(BPF_REG_2, 0, 2, 46),
++	BPF_ST_MEM(BPF_H, BPF_REG_2, 0, 0xffff),
++	BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_48b = { 1, 3 },
++	.result = REJECT,
++	.errstr = "invalid access to map value pointer, value_size=48 index=2 off=46",
++},
++{
++	"direct map access, write test 18",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_LD_MAP_VALUE(BPF_REG_1, 0, ~0, 46),
++	BPF_LD_MAP_VALUE(BPF_REG_2, 0, ~0, 46),
++	BPF_ST_MEM(BPF_H, BPF_REG_2, 0, 0xffff),
++	BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_48b = { 1, 3 },
++	.result = REJECT,
++	.errstr = "invalid access to map value pointer, value_size=48 index=4294967295 off=46",
++},
 -- 
 2.17.1
 
