@@ -6,32 +6,32 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DE04C4360F
-	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 21:52:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93F5FC10F06
+	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 21:52:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4489D2171F
-	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 21:52:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 61F17214AF
+	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 21:52:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728420AbfCKVvz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 Mar 2019 17:51:55 -0400
-Received: from www62.your-server.de ([213.133.104.62]:41140 "EHLO
+        id S1727753AbfCKVwI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 Mar 2019 17:52:08 -0400
+Received: from www62.your-server.de ([213.133.104.62]:41110 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728280AbfCKVvr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 11 Mar 2019 17:51:47 -0400
+        with ESMTP id S1727993AbfCKVvo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 11 Mar 2019 17:51:44 -0400
 Received: from [178.197.248.21] (helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1h3Sph-0003Oy-2j; Mon, 11 Mar 2019 22:51:41 +0100
+        id 1h3Spe-0003My-Du; Mon, 11 Mar 2019 22:51:38 +0100
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     ast@kernel.org
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, joe@wand.net.nz,
         john.fastabend@gmail.com, yhs@fb.com, andrii.nakryiko@gmail.com,
         jakub.kicinski@netronome.com, tgraf@suug.ch, lmb@cloudflare.com,
         Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH rfc v3 bpf-next 7/9] bpf, libbpf: support global data/bss/rodata sections
-Date:   Mon, 11 Mar 2019 22:51:23 +0100
-Message-Id: <20190311215125.17793-8-daniel@iogearbox.net>
+Subject: [PATCH rfc v3 bpf-next 2/9] bpf: add program side {rd,wr}only support for maps
+Date:   Mon, 11 Mar 2019 22:51:18 +0100
+Message-Id: <20190311215125.17793-3-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <20190311215125.17793-1-daniel@iogearbox.net>
 References: <20190311215125.17793-1-daniel@iogearbox.net>
@@ -42,813 +42,319 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This work adds BPF loader support for global data sections
-to libbpf. This allows to write BPF programs in more natural
-C-like way by being able to define global variables and const
-data.
+This work adds two new map creation flags BPF_F_RDONLY_PROG
+and BPF_F_WRONLY_PROG in order to allow for read-only or
+write-only BPF maps from a BPF program side.
 
-Back at LPC 2018 [0] we presented a first prototype which
-implemented support for global data sections by extending BPF
-syscall where union bpf_attr would get additional memory/size
-pair for each section passed during prog load in order to later
-add this base address into the ldimm64 instruction along with
-the user provided offset when accessing a variable. Consensus
-from LPC was that for proper upstream support, it would be
-more desirable to use maps instead of bpf_attr extension as
-this would allow for introspection of these sections as well
-as potential life updates of their content. This work follows
-this path by taking the following steps from loader side:
+Today we have BPF_F_RDONLY and BPF_F_WRONLY, but this only
+applies to system call side, meaning the BPF program has full
+read/write access to the map as usual while bpf(2) calls with
+map fd can either only read or write into the map depending
+on the flags. BPF_F_RDONLY_PROG and BPF_F_WRONLY_PROG allows
+for the exact opposite such that verifier is going to reject
+program loads if write into a read-only map or a read into a
+write-only map is detected. For read-only map case also some
+helpers are forbidden for programs that would alter the map
+state such as map deletion, update, etc.
 
- 1) In bpf_object__elf_collect() step we pick up ".data",
-    ".rodata", and ".bss" section information.
-
- 2) If present, in bpf_object__init_internal_map() we add
-    maps to the obj's map array that corresponds to each
-    of the present sections. Given section size and access
-    properties can differ, a single entry array map is
-    created with value size that is corresponding to the
-    ELF section size of .data, .bss or .rodata. These
-    internal maps are integrated into the normal map
-    handling of libbpf such that when user traverses all
-    obj maps, they can be differentiated from user-created
-    ones via bpf_map__is_internal(). In later steps when
-    we actually create these maps in the kernel via
-    bpf_object__create_maps(), then for .data and .rodata
-    sections their content is copied into the map through
-    bpf_map_update_elem(). For .bss this is not necessary
-    since array map is already zero-initialized by default.
-    Additionally, for .rodata the map is locked as read-only
-    after setup, such that neither from program nor syscall
-    side writes would be possible.
-
- 3) In bpf_program__collect_reloc() step, we record the
-    corresponding map, insn index, and relocation type for
-    the global data.
-
- 4) And last but not least in the actual relocation step in
-    bpf_program__relocate(), we mark the ldimm64 instruction
-    with src_reg = BPF_PSEUDO_MAP_VALUE where in the first
-    imm field the map's file descriptor is stored as similarly
-    done as in BPF_PSEUDO_MAP_FD, and in the second imm field
-    (as ldimm64 is 2-insn wide) we store the access offset
-    into the section. Given these maps have only single element
-    ldimm64's off remains zero in both parts.
-
- 5) On kernel side, this special marked BPF_PSEUDO_MAP_VALUE
-    load will then store the actual target address in order
-    to have a 'map-lookup'-free access. That is, the actual
-    map value base address + offset. The destination register
-    in the verifier will then be marked as PTR_TO_MAP_VALUE,
-    containing the fixed offset as reg->off and backing BPF
-    map as reg->map_ptr. Meaning, it's treated as any other
-    normal map value from verification side, only with
-    efficient, direct value access instead of actual call to
-    map lookup helper as in the typical case.
-
-Currently, only support for static global variables has been
-added, and libbpf rejects non-static global variables from
-loading. This can be lifted until we have proper semantics
-for how BPF will treat these.
-
-From BTF side, libbpf associates these three maps with BTF
-map name of ".bss", ".data" and ".rodata" which LLVM will
-emit (w/o the object name prefix).
-
-Simple example dump of program using globals vars in each
-section:
-
-  # bpftool prog
-  [...]
-  6784: sched_cls  name load_static_dat  tag a7e1291567277844  gpl
-        loaded_at 2019-03-11T15:39:34+0000  uid 0
-        xlated 1776B  jited 993B  memlock 4096B  map_ids 2238,2237,2235,2236,2239,2240
-
-  # bpftool map show id 2237
-  2237: array  name test_glo.bss  flags 0x0
-        key 4B  value 64B  max_entries 1  memlock 4096B
-  # bpftool map show id 2235
-  2235: array  name test_glo.data  flags 0x0
-        key 4B  value 64B  max_entries 1  memlock 4096B
-  # bpftool map show id 2236
-  2236: array  name test_glo.rodata  flags 0x80
-        key 4B  value 96B  max_entries 1  memlock 4096B
-
-  # bpftool prog dump xlated id 6784
-  int load_static_data(struct __sk_buff * skb):
-  ; int load_static_data(struct __sk_buff *skb)
-     0: (b7) r6 = 0
-  ; test_reloc(number, 0, &num0);
-     1: (63) *(u32 *)(r10 -4) = r6
-     2: (bf) r2 = r10
-  ; int load_static_data(struct __sk_buff *skb)
-     3: (07) r2 += -4
-  ; test_reloc(number, 0, &num0);
-     4: (18) r1 = map[id:2238]
-     6: (18) r3 = map[id:2237][0]+0    <-- direct addr in .bss area
-     8: (b7) r4 = 0
-     9: (85) call array_map_update_elem#100464
-    10: (b7) r1 = 1
-  ; test_reloc(number, 1, &num1);
-  [...]
-  ; test_reloc(string, 2, str2);
-   120: (18) r8 = map[id:2237][0]+16   <-- same here at offset +16
-   122: (18) r1 = map[id:2239]
-   124: (18) r3 = map[id:2237][0]+16
-   126: (b7) r4 = 0
-   127: (85) call array_map_update_elem#100464
-   128: (b7) r1 = 120
-  ; str1[5] = 'x';
-   129: (73) *(u8 *)(r9 +5) = r1
-  ; test_reloc(string, 3, str1);
-   130: (b7) r1 = 3
-   131: (63) *(u32 *)(r10 -4) = r1
-   132: (b7) r9 = 3
-   133: (bf) r2 = r10
-  ; int load_static_data(struct __sk_buff *skb)
-   134: (07) r2 += -4
-  ; test_reloc(string, 3, str1);
-   135: (18) r1 = map[id:2239]
-   137: (18) r3 = map[id:2235][0]+16   <-- direct addr in .data area
-   139: (b7) r4 = 0
-   140: (85) call array_map_update_elem#100464
-   141: (b7) r1 = 111
-  ; __builtin_memcpy(&str2[2], "hello", sizeof("hello"));
-   142: (73) *(u8 *)(r8 +6) = r1       <-- further access based on .bss data
-   143: (b7) r1 = 108
-   144: (73) *(u8 *)(r8 +5) = r1
-  [...]
-
-Based upon recent fix in LLVM, commit c0db6b6bd444 ("[BPF] Don't
-fail for static variables").
-
-  [0] LPC 2018, BPF track, "ELF relocation for static data in BPF",
-      http://vger.kernel.org/lpc-bpf2018.html#session-3
+We've enabled this generic map extension to various non-special
+maps holding normal user data: array, hash, lru, lpm, local
+storage, queue and stack. Further map types could be followed
+up in future depending on use-case. Main use case here is to
+forbid writes into .rodata map values from verifier side.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- tools/lib/bpf/bpf.c      |  10 ++
- tools/lib/bpf/bpf.h      |   1 +
- tools/lib/bpf/libbpf.c   | 324 ++++++++++++++++++++++++++++++++++-----
- tools/lib/bpf/libbpf.h   |   1 +
- tools/lib/bpf/libbpf.map |   6 +
- 5 files changed, 301 insertions(+), 41 deletions(-)
+ include/linux/bpf.h           | 24 ++++++++++++++++++
+ include/uapi/linux/bpf.h      | 10 +++++++-
+ kernel/bpf/arraymap.c         |  3 ++-
+ kernel/bpf/hashtab.c          |  6 ++---
+ kernel/bpf/local_storage.c    |  6 ++---
+ kernel/bpf/lpm_trie.c         |  3 ++-
+ kernel/bpf/queue_stack_maps.c |  6 ++---
+ kernel/bpf/syscall.c          |  2 ++
+ kernel/bpf/verifier.c         | 46 +++++++++++++++++++++++++++++++++--
+ 9 files changed, 92 insertions(+), 14 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 9cd015574e83..cba2a615e135 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -429,6 +429,16 @@ int bpf_map_get_next_key(int fd, const void *key, void *next_key)
- 	return sys_bpf(BPF_MAP_GET_NEXT_KEY, &attr, sizeof(attr));
- }
- 
-+int bpf_map_lock(int fd)
-+{
-+	union bpf_attr attr;
-+
-+	memset(&attr, 0, sizeof(attr));
-+	attr.map_fd = fd;
-+
-+	return sys_bpf(BPF_MAP_LOCK, &attr, sizeof(attr));
-+}
-+
- int bpf_obj_pin(int fd, const char *pathname)
- {
- 	union bpf_attr attr;
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 6ffdd79bea89..fa2bdbba6f00 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -117,6 +117,7 @@ LIBBPF_API int bpf_map_lookup_and_delete_elem(int fd, const void *key,
- 					      void *value);
- LIBBPF_API int bpf_map_delete_elem(int fd, const void *key);
- LIBBPF_API int bpf_map_get_next_key(int fd, const void *key, void *next_key);
-+LIBBPF_API int bpf_map_lock(int fd);
- LIBBPF_API int bpf_obj_pin(int fd, const char *pathname);
- LIBBPF_API int bpf_obj_get(const char *pathname);
- LIBBPF_API int bpf_prog_attach(int prog_fd, int attachable_fd,
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 0afdb8914386..7821c9b1e838 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -7,6 +7,7 @@
-  * Copyright (C) 2015 Wang Nan <wangnan0@huawei.com>
-  * Copyright (C) 2015 Huawei Inc.
-  * Copyright (C) 2017 Nicira, Inc.
-+ * Copyright (C) 2019 Isovalent, Inc.
-  */
- 
- #ifndef _GNU_SOURCE
-@@ -139,6 +140,7 @@ struct bpf_program {
- 		enum {
- 			RELO_LD64,
- 			RELO_CALL,
-+			RELO_DATA,
- 		} type;
- 		int insn_idx;
- 		union {
-@@ -171,6 +173,19 @@ struct bpf_program {
- 	__u32 line_info_cnt;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 85b6b5dc883f..bb80c78924b0 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -427,6 +427,30 @@ struct bpf_array {
+ 	};
  };
  
-+enum libbpf_map_type {
-+	LIBBPF_MAP_UNSPEC,
-+	LIBBPF_MAP_DATA,
-+	LIBBPF_MAP_BSS,
-+	LIBBPF_MAP_RODATA,
-+};
++#define BPF_MAP_CAN_READ	BIT(0)
++#define BPF_MAP_CAN_WRITE	BIT(1)
 +
-+static const char *libbpf_type_to_btf_name[] = {
-+	[LIBBPF_MAP_DATA]	= ".data",
-+	[LIBBPF_MAP_BSS]	= ".bss",
-+	[LIBBPF_MAP_RODATA]	= ".rodata",
-+};
-+
- struct bpf_map {
- 	int fd;
- 	char *name;
-@@ -182,11 +197,18 @@ struct bpf_map {
- 	__u32 btf_value_type_id;
- 	void *priv;
- 	bpf_map_clear_priv_t clear_priv;
-+	enum libbpf_map_type libbpf_type;
-+};
-+
-+struct bpf_secdata {
-+	void *rodata;
-+	void *data;
- };
- 
- static LIST_HEAD(bpf_objects_list);
- 
- struct bpf_object {
-+	char name[BPF_OBJ_NAME_LEN];
- 	char license[64];
- 	__u32 kern_version;
- 
-@@ -194,6 +216,7 @@ struct bpf_object {
- 	size_t nr_programs;
- 	struct bpf_map *maps;
- 	size_t nr_maps;
-+	struct bpf_secdata sections;
- 
- 	bool loaded;
- 	bool has_pseudo_calls;
-@@ -209,6 +232,9 @@ struct bpf_object {
- 		Elf *elf;
- 		GElf_Ehdr ehdr;
- 		Elf_Data *symbols;
-+		Elf_Data *data;
-+		Elf_Data *rodata;
-+		Elf_Data *bss;
- 		size_t strtabidx;
- 		struct {
- 			GElf_Shdr shdr;
-@@ -217,6 +243,9 @@ struct bpf_object {
- 		int nr_reloc;
- 		int maps_shndx;
- 		int text_shndx;
-+		int data_shndx;
-+		int rodata_shndx;
-+		int bss_shndx;
- 	} efile;
- 	/*
- 	 * All loaded bpf_object is linked in a list, which is
-@@ -438,6 +467,7 @@ static struct bpf_object *bpf_object__new(const char *path,
- 					  size_t obj_buf_sz)
- {
- 	struct bpf_object *obj;
-+	char *end;
- 
- 	obj = calloc(1, sizeof(struct bpf_object) + strlen(path) + 1);
- 	if (!obj) {
-@@ -446,8 +476,14 @@ static struct bpf_object *bpf_object__new(const char *path,
- 	}
- 
- 	strcpy(obj->path, path);
--	obj->efile.fd = -1;
-+	/* Using basename() GNU version which doesn't modify arg. */
-+	strncpy(obj->name, basename((void *)path),
-+		sizeof(obj->name) - 1);
-+	end = strchr(obj->name, '.');
-+	if (end)
-+		*end = 0;
- 
-+	obj->efile.fd = -1;
- 	/*
- 	 * Caller of this function should also calls
- 	 * bpf_object__elf_finish() after data collection to return
-@@ -457,6 +493,9 @@ static struct bpf_object *bpf_object__new(const char *path,
- 	obj->efile.obj_buf = obj_buf;
- 	obj->efile.obj_buf_sz = obj_buf_sz;
- 	obj->efile.maps_shndx = -1;
-+	obj->efile.data_shndx = -1;
-+	obj->efile.rodata_shndx = -1;
-+	obj->efile.bss_shndx = -1;
- 
- 	obj->loaded = false;
- 
-@@ -475,6 +514,9 @@ static void bpf_object__elf_finish(struct bpf_object *obj)
- 		obj->efile.elf = NULL;
- 	}
- 	obj->efile.symbols = NULL;
-+	obj->efile.data = NULL;
-+	obj->efile.rodata = NULL;
-+	obj->efile.bss = NULL;
- 
- 	zfree(&obj->efile.reloc);
- 	obj->efile.nr_reloc = 0;
-@@ -616,27 +658,76 @@ static bool bpf_map_type__is_map_in_map(enum bpf_map_type type)
- 	return false;
- }
- 
-+static bool bpf_object__has_maps(const struct bpf_object *obj)
++static inline u32 bpf_map_flags_to_cap(struct bpf_map *map)
 +{
-+	return obj->efile.maps_shndx >= 0 ||
-+	       obj->efile.data_shndx >= 0 ||
-+	       obj->efile.rodata_shndx >= 0 ||
-+	       obj->efile.bss_shndx >= 0;
-+}
++	u32 access_flags = map->map_flags & (BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG);
 +
-+static int
-+bpf_object__init_internal_map(struct bpf_object *obj, struct bpf_map *map,
-+			      enum libbpf_map_type type, Elf_Data *data,
-+			      void **data_buff)
-+{
-+	struct bpf_map_def *def = &map->def;
-+	char map_name[BPF_OBJ_NAME_LEN];
-+
-+	map->libbpf_type = type;
-+	map->offset = ~(typeof(map->offset))0;
-+	snprintf(map_name, sizeof(map_name), "%.8s%.7s", obj->name,
-+		 libbpf_type_to_btf_name[type]);
-+	map->name = strdup(map_name);
-+	if (!map->name) {
-+		pr_warning("failed to alloc map name\n");
-+		return -ENOMEM;
-+	}
-+
-+	def->type = BPF_MAP_TYPE_ARRAY;
-+	def->key_size = sizeof(int);
-+	def->value_size = data->d_size;
-+	def->max_entries = 1;
-+	def->map_flags = type == LIBBPF_MAP_RODATA ?
-+			 BPF_F_RDONLY_PROG : 0;
-+	if (data_buff) {
-+		*data_buff = malloc(data->d_size);
-+		if (!*data_buff) {
-+			zfree(&map->name);
-+			pr_warning("failed to alloc map content buffer\n");
-+			return -ENOMEM;
-+		}
-+		memcpy(*data_buff, data->d_buf, data->d_size);
-+	}
-+
-+	pr_debug("map %ld is \"%s\"\n", map - obj->maps, map->name);
-+	return 0;
-+}
-+
- static int
- bpf_object__init_maps(struct bpf_object *obj, int flags)
- {
-+	int i, map_idx, map_def_sz, nr_syms, nr_maps = 0, nr_maps_glob = 0;
- 	bool strict = !(flags & MAPS_RELAX_COMPAT);
--	int i, map_idx, map_def_sz, nr_maps = 0;
--	Elf_Scn *scn;
--	Elf_Data *data;
- 	Elf_Data *symbols = obj->efile.symbols;
-+	Elf_Data *data = NULL;
-+	int ret = 0;
- 
--	if (obj->efile.maps_shndx < 0)
--		return -EINVAL;
- 	if (!symbols)
- 		return -EINVAL;
-+	nr_syms = symbols->d_size / sizeof(GElf_Sym);
- 
--	scn = elf_getscn(obj->efile.elf, obj->efile.maps_shndx);
--	if (scn)
--		data = elf_getdata(scn, NULL);
--	if (!scn || !data) {
--		pr_warning("failed to get Elf_Data from map section %d\n",
--			   obj->efile.maps_shndx);
--		return -EINVAL;
-+	if (obj->efile.maps_shndx >= 0) {
-+		Elf_Scn *scn = elf_getscn(obj->efile.elf,
-+					  obj->efile.maps_shndx);
-+
-+		if (scn)
-+			data = elf_getdata(scn, NULL);
-+		if (!scn || !data) {
-+			pr_warning("failed to get Elf_Data from map section %d\n",
-+				   obj->efile.maps_shndx);
-+			return -EINVAL;
-+		}
- 	}
- 
- 	/*
-@@ -646,7 +737,13 @@ bpf_object__init_maps(struct bpf_object *obj, int flags)
- 	 *
- 	 * TODO: Detect array of map and report error.
- 	 */
--	for (i = 0; i < symbols->d_size / sizeof(GElf_Sym); i++) {
-+	if (obj->efile.data_shndx >= 0)
-+		nr_maps_glob++;
-+	if (obj->efile.rodata_shndx >= 0)
-+		nr_maps_glob++;
-+	if (obj->efile.bss_shndx >= 0)
-+		nr_maps_glob++;
-+	for (i = 0; data && i < nr_syms; i++) {
- 		GElf_Sym sym;
- 
- 		if (!gelf_getsym(symbols, i, &sym))
-@@ -659,19 +756,21 @@ bpf_object__init_maps(struct bpf_object *obj, int flags)
- 	/* Alloc obj->maps and fill nr_maps. */
- 	pr_debug("maps in %s: %d maps in %zd bytes\n", obj->path,
- 		 nr_maps, data->d_size);
--
--	if (!nr_maps)
-+	if (!nr_maps && !nr_maps_glob)
- 		return 0;
- 
- 	/* Assume equally sized map definitions */
--	map_def_sz = data->d_size / nr_maps;
--	if (!data->d_size || (data->d_size % nr_maps) != 0) {
--		pr_warning("unable to determine map definition size "
--			   "section %s, %d maps in %zd bytes\n",
--			   obj->path, nr_maps, data->d_size);
--		return -EINVAL;
-+	if (data) {
-+		map_def_sz = data->d_size / nr_maps;
-+		if (!data->d_size || (data->d_size % nr_maps) != 0) {
-+			pr_warning("unable to determine map definition size "
-+				   "section %s, %d maps in %zd bytes\n",
-+				   obj->path, nr_maps, data->d_size);
-+			return -EINVAL;
-+		}
- 	}
- 
-+	nr_maps += nr_maps_glob;
- 	obj->maps = calloc(nr_maps, sizeof(obj->maps[0]));
- 	if (!obj->maps) {
- 		pr_warning("alloc maps for object failed\n");
-@@ -692,7 +791,7 @@ bpf_object__init_maps(struct bpf_object *obj, int flags)
- 	/*
- 	 * Fill obj->maps using data in "maps" section.
- 	 */
--	for (i = 0, map_idx = 0; i < symbols->d_size / sizeof(GElf_Sym); i++) {
-+	for (i = 0, map_idx = 0; data && i < nr_syms; i++) {
- 		GElf_Sym sym;
- 		const char *map_name;
- 		struct bpf_map_def *def;
-@@ -705,6 +804,8 @@ bpf_object__init_maps(struct bpf_object *obj, int flags)
- 		map_name = elf_strptr(obj->efile.elf,
- 				      obj->efile.strtabidx,
- 				      sym.st_name);
-+
-+		obj->maps[map_idx].libbpf_type = LIBBPF_MAP_UNSPEC;
- 		obj->maps[map_idx].offset = sym.st_value;
- 		if (sym.st_value + map_def_sz > data->d_size) {
- 			pr_warning("corrupted maps section in %s: last map \"%s\" too small\n",
-@@ -753,8 +854,27 @@ bpf_object__init_maps(struct bpf_object *obj, int flags)
- 		map_idx++;
- 	}
- 
--	qsort(obj->maps, obj->nr_maps, sizeof(obj->maps[0]), compare_bpf_map);
--	return 0;
-+	/*
-+	 * Populate rest of obj->maps with libbpf internal maps.
++	/* Combination of BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG is
++	 * not possible.
 +	 */
-+	if (obj->efile.data_shndx >= 0)
-+		ret = bpf_object__init_internal_map(obj, &obj->maps[map_idx++],
-+						    LIBBPF_MAP_DATA,
-+						    obj->efile.data,
-+						    &obj->sections.data);
-+	if (!ret && obj->efile.rodata_shndx >= 0)
-+		ret = bpf_object__init_internal_map(obj, &obj->maps[map_idx++],
-+						    LIBBPF_MAP_RODATA,
-+						    obj->efile.rodata,
-+						    &obj->sections.rodata);
-+	if (!ret && obj->efile.bss_shndx >= 0)
-+		ret = bpf_object__init_internal_map(obj, &obj->maps[map_idx++],
-+						    LIBBPF_MAP_BSS,
-+						    obj->efile.bss, NULL);
-+	if (!ret)
-+		qsort(obj->maps, obj->nr_maps, sizeof(obj->maps[0]),
-+		      compare_bpf_map);
-+	return ret;
- }
- 
- static bool section_have_execinstr(struct bpf_object *obj, int idx)
-@@ -865,6 +985,14 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
- 					pr_warning("failed to alloc program %s (%s): %s",
- 						   name, obj->path, cp);
- 				}
-+			} else if (strcmp(name, ".data") == 0) {
-+				obj->efile.data = data;
-+				obj->efile.data_shndx = idx;
-+			} else if (strcmp(name, ".rodata") == 0) {
-+				obj->efile.rodata = data;
-+				obj->efile.rodata_shndx = idx;
-+			} else {
-+				pr_debug("skip section(%d) %s\n", idx, name);
- 			}
- 		} else if (sh.sh_type == SHT_REL) {
- 			void *reloc = obj->efile.reloc;
-@@ -892,6 +1020,9 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
- 				obj->efile.reloc[n].shdr = sh;
- 				obj->efile.reloc[n].data = data;
- 			}
-+		} else if (sh.sh_type == SHT_NOBITS && strcmp(name, ".bss") == 0) {
-+			obj->efile.bss = data;
-+			obj->efile.bss_shndx = idx;
- 		} else {
- 			pr_debug("skip section(%d) %s\n", idx, name);
- 		}
-@@ -918,7 +1049,7 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
- 			}
- 		}
- 	}
--	if (obj->efile.maps_shndx >= 0) {
-+	if (bpf_object__has_maps(obj)) {
- 		err = bpf_object__init_maps(obj, flags);
- 		if (err)
- 			goto out;
-@@ -954,13 +1085,46 @@ bpf_object__find_program_by_title(struct bpf_object *obj, const char *title)
- 	return NULL;
- }
- 
-+static bool bpf_object__shndx_is_data(const struct bpf_object *obj,
-+				      int shndx)
-+{
-+	return shndx == obj->efile.data_shndx ||
-+	       shndx == obj->efile.bss_shndx ||
-+	       shndx == obj->efile.rodata_shndx;
-+}
-+
-+static bool bpf_object__shndx_is_maps(const struct bpf_object *obj,
-+				      int shndx)
-+{
-+	return shndx == obj->efile.maps_shndx;
-+}
-+
-+static bool bpf_object__relo_in_known_section(const struct bpf_object *obj,
-+					      int shndx)
-+{
-+	return shndx == obj->efile.text_shndx ||
-+	       bpf_object__shndx_is_maps(obj, shndx) ||
-+	       bpf_object__shndx_is_data(obj, shndx);
-+}
-+
-+static enum libbpf_map_type
-+bpf_object__section_to_libbpf_map_type(const struct bpf_object *obj, int shndx)
-+{
-+	if (shndx == obj->efile.data_shndx)
-+		return LIBBPF_MAP_DATA;
-+	else if (shndx == obj->efile.bss_shndx)
-+		return LIBBPF_MAP_BSS;
-+	else if (shndx == obj->efile.rodata_shndx)
-+		return LIBBPF_MAP_RODATA;
++	if (access_flags & BPF_F_RDONLY_PROG)
++		return BPF_MAP_CAN_READ;
++	else if (access_flags & BPF_F_WRONLY_PROG)
++		return BPF_MAP_CAN_WRITE;
 +	else
-+		return LIBBPF_MAP_UNSPEC;
++		return BPF_MAP_CAN_READ | BPF_MAP_CAN_WRITE;
 +}
 +
- static int
- bpf_program__collect_reloc(struct bpf_program *prog, GElf_Shdr *shdr,
- 			   Elf_Data *data, struct bpf_object *obj)
++static inline bool bpf_map_flags_access_ok(u32 access_flags)
++{
++	return (access_flags & (BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG)) !=
++	       (BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG);
++}
++
+ #define MAX_TAIL_CALL_CNT 32
+ 
+ struct bpf_event_entry {
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index d0b80fce0fc9..e64fd9862e68 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -294,7 +294,7 @@ enum bpf_attach_type {
+ 
+ #define BPF_OBJ_NAME_LEN 16U
+ 
+-/* Flags for accessing BPF object */
++/* Flags for accessing BPF object from syscall side. */
+ #define BPF_F_RDONLY		(1U << 3)
+ #define BPF_F_WRONLY		(1U << 4)
+ 
+@@ -304,6 +304,14 @@ enum bpf_attach_type {
+ /* Zero-initialize hash function seed. This should only be used for testing. */
+ #define BPF_F_ZERO_SEED		(1U << 6)
+ 
++/* Flags for accessing BPF object from program side. */
++#define BPF_F_RDONLY_PROG	(1U << 7)
++#define BPF_F_WRONLY_PROG	(1U << 8)
++#define BPF_F_ACCESS_MASK	(BPF_F_RDONLY |		\
++				 BPF_F_RDONLY_PROG |	\
++				 BPF_F_WRONLY |		\
++				 BPF_F_WRONLY_PROG)
++
+ /* flags for BPF_PROG_QUERY */
+ #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
+ 
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 862d20422ad1..6d2ce06485ae 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -22,7 +22,7 @@
+ #include "map_in_map.h"
+ 
+ #define ARRAY_CREATE_FLAG_MASK \
+-	(BPF_F_NUMA_NODE | BPF_F_RDONLY | BPF_F_WRONLY)
++	(BPF_F_NUMA_NODE | BPF_F_ACCESS_MASK)
+ 
+ static void bpf_array_free_percpu(struct bpf_array *array)
  {
- 	Elf_Data *symbols = obj->efile.symbols;
--	int text_shndx = obj->efile.text_shndx;
--	int maps_shndx = obj->efile.maps_shndx;
- 	struct bpf_map *maps = obj->maps;
- 	size_t nr_maps = obj->nr_maps;
- 	int i, nrels;
-@@ -980,7 +1144,10 @@ bpf_program__collect_reloc(struct bpf_program *prog, GElf_Shdr *shdr,
- 		GElf_Sym sym;
- 		GElf_Rel rel;
- 		unsigned int insn_idx;
-+		unsigned int shdr_idx;
- 		struct bpf_insn *insns = prog->insns;
-+		enum libbpf_map_type type;
-+		const char *name;
- 		size_t map_idx;
+@@ -63,6 +63,7 @@ int array_map_alloc_check(union bpf_attr *attr)
+ 	if (attr->max_entries == 0 || attr->key_size != 4 ||
+ 	    attr->value_size == 0 ||
+ 	    attr->map_flags & ~ARRAY_CREATE_FLAG_MASK ||
++	    !bpf_map_flags_access_ok(attr->map_flags) ||
+ 	    (percpu && numa_node != NUMA_NO_NODE))
+ 		return -EINVAL;
  
- 		if (!gelf_getrel(data, i, &rel)) {
-@@ -995,13 +1162,18 @@ bpf_program__collect_reloc(struct bpf_program *prog, GElf_Shdr *shdr,
- 				   GELF_R_SYM(rel.r_info));
- 			return -LIBBPF_ERRNO__FORMAT;
- 		}
--		pr_debug("relo for %lld value %lld name %d\n",
-+
-+		name = elf_strptr(obj->efile.elf, obj->efile.strtabidx,
-+				  sym.st_name) ? : "<?>";
-+
-+		pr_debug("relo for %lld value %lld name %d (\'%s\')\n",
- 			 (long long) (rel.r_info >> 32),
--			 (long long) sym.st_value, sym.st_name);
-+			 (long long) sym.st_value, sym.st_name, name);
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index fed15cf94dca..192d32e77db3 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -23,7 +23,7 @@
  
--		if (sym.st_shndx != maps_shndx && sym.st_shndx != text_shndx) {
--			pr_warning("Program '%s' contains non-map related relo data pointing to section %u\n",
--				   prog->section_name, sym.st_shndx);
-+		shdr_idx = sym.st_shndx;
-+		if (!bpf_object__relo_in_known_section(obj, shdr_idx)) {
-+			pr_warning("Program '%s' contains unrecognized relo data pointing to section %u\n",
-+				   prog->section_name, shdr_idx);
- 			return -LIBBPF_ERRNO__RELOC;
- 		}
+ #define HTAB_CREATE_FLAG_MASK						\
+ 	(BPF_F_NO_PREALLOC | BPF_F_NO_COMMON_LRU | BPF_F_NUMA_NODE |	\
+-	 BPF_F_RDONLY | BPF_F_WRONLY | BPF_F_ZERO_SEED)
++	 BPF_F_ACCESS_MASK | BPF_F_ZERO_SEED)
  
-@@ -1026,10 +1198,22 @@ bpf_program__collect_reloc(struct bpf_program *prog, GElf_Shdr *shdr,
- 			return -LIBBPF_ERRNO__RELOC;
- 		}
+ struct bucket {
+ 	struct hlist_nulls_head head;
+@@ -262,8 +262,8 @@ static int htab_map_alloc_check(union bpf_attr *attr)
+ 		/* Guard against local DoS, and discourage production use. */
+ 		return -EPERM;
  
--		if (sym.st_shndx == maps_shndx) {
--			/* TODO: 'maps' is sorted. We can use bsearch to make it faster. */
-+		if (bpf_object__shndx_is_maps(obj, shdr_idx) ||
-+		    bpf_object__shndx_is_data(obj, shdr_idx)) {
-+			type = bpf_object__section_to_libbpf_map_type(obj, shdr_idx);
-+			if (type != LIBBPF_MAP_UNSPEC &&
-+			    GELF_ST_BIND(sym.st_info) == STB_GLOBAL) {
-+				pr_warning("bpf: relocation: not yet supported relo for non-static global \'%s\' variable found in insns[%d].code 0x%x\n",
-+					   name, insn_idx, insns[insn_idx].code);
-+				return -LIBBPF_ERRNO__RELOC;
-+			}
-+
- 			for (map_idx = 0; map_idx < nr_maps; map_idx++) {
--				if (maps[map_idx].offset == sym.st_value) {
-+				if (maps[map_idx].libbpf_type != type)
-+					continue;
-+				if (type != LIBBPF_MAP_UNSPEC ||
-+				    (type == LIBBPF_MAP_UNSPEC &&
-+				     maps[map_idx].offset == sym.st_value)) {
- 					pr_debug("relocation: find map %zd (%s) for insn %u\n",
- 						 map_idx, maps[map_idx].name, insn_idx);
- 					break;
-@@ -1042,7 +1226,8 @@ bpf_program__collect_reloc(struct bpf_program *prog, GElf_Shdr *shdr,
- 				return -LIBBPF_ERRNO__RELOC;
- 			}
+-	if (attr->map_flags & ~HTAB_CREATE_FLAG_MASK)
+-		/* reserved bits should not be used */
++	if (attr->map_flags & ~HTAB_CREATE_FLAG_MASK ||
++	    !bpf_map_flags_access_ok(attr->map_flags))
+ 		return -EINVAL;
  
--			prog->reloc_desc[i].type = RELO_LD64;
-+			prog->reloc_desc[i].type = type != LIBBPF_MAP_UNSPEC ?
-+						   RELO_DATA : RELO_LD64;
- 			prog->reloc_desc[i].insn_idx = insn_idx;
- 			prog->reloc_desc[i].map_idx = map_idx;
- 		}
-@@ -1050,13 +1235,25 @@ bpf_program__collect_reloc(struct bpf_program *prog, GElf_Shdr *shdr,
+ 	if (!lru && percpu_lru)
+diff --git a/kernel/bpf/local_storage.c b/kernel/bpf/local_storage.c
+index 6b572e2de7fb..980e8f1f6cb5 100644
+--- a/kernel/bpf/local_storage.c
++++ b/kernel/bpf/local_storage.c
+@@ -14,7 +14,7 @@ DEFINE_PER_CPU(struct bpf_cgroup_storage*, bpf_cgroup_storage[MAX_BPF_CGROUP_STO
+ #ifdef CONFIG_CGROUP_BPF
+ 
+ #define LOCAL_STORAGE_CREATE_FLAG_MASK					\
+-	(BPF_F_NUMA_NODE | BPF_F_RDONLY | BPF_F_WRONLY)
++	(BPF_F_NUMA_NODE | BPF_F_ACCESS_MASK)
+ 
+ struct bpf_cgroup_storage_map {
+ 	struct bpf_map map;
+@@ -282,8 +282,8 @@ static struct bpf_map *cgroup_storage_map_alloc(union bpf_attr *attr)
+ 	if (attr->value_size > PAGE_SIZE)
+ 		return ERR_PTR(-E2BIG);
+ 
+-	if (attr->map_flags & ~LOCAL_STORAGE_CREATE_FLAG_MASK)
+-		/* reserved bits should not be used */
++	if (attr->map_flags & ~LOCAL_STORAGE_CREATE_FLAG_MASK ||
++	    !bpf_map_flags_access_ok(attr->map_flags))
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	if (attr->max_entries)
+diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+index 93a5cbbde421..e61630c2e50b 100644
+--- a/kernel/bpf/lpm_trie.c
++++ b/kernel/bpf/lpm_trie.c
+@@ -538,7 +538,7 @@ static int trie_delete_elem(struct bpf_map *map, void *_key)
+ #define LPM_KEY_SIZE_MIN	LPM_KEY_SIZE(LPM_DATA_SIZE_MIN)
+ 
+ #define LPM_CREATE_FLAG_MASK	(BPF_F_NO_PREALLOC | BPF_F_NUMA_NODE |	\
+-				 BPF_F_RDONLY | BPF_F_WRONLY)
++				 BPF_F_ACCESS_MASK)
+ 
+ static struct bpf_map *trie_alloc(union bpf_attr *attr)
+ {
+@@ -553,6 +553,7 @@ static struct bpf_map *trie_alloc(union bpf_attr *attr)
+ 	if (attr->max_entries == 0 ||
+ 	    !(attr->map_flags & BPF_F_NO_PREALLOC) ||
+ 	    attr->map_flags & ~LPM_CREATE_FLAG_MASK ||
++	    !bpf_map_flags_access_ok(attr->map_flags) ||
+ 	    attr->key_size < LPM_KEY_SIZE_MIN ||
+ 	    attr->key_size > LPM_KEY_SIZE_MAX ||
+ 	    attr->value_size < LPM_VAL_SIZE_MIN ||
+diff --git a/kernel/bpf/queue_stack_maps.c b/kernel/bpf/queue_stack_maps.c
+index b384ea9f3254..0b140d236889 100644
+--- a/kernel/bpf/queue_stack_maps.c
++++ b/kernel/bpf/queue_stack_maps.c
+@@ -11,8 +11,7 @@
+ #include "percpu_freelist.h"
+ 
+ #define QUEUE_STACK_CREATE_FLAG_MASK \
+-	(BPF_F_NUMA_NODE | BPF_F_RDONLY | BPF_F_WRONLY)
+-
++	(BPF_F_NUMA_NODE | BPF_F_ACCESS_MASK)
+ 
+ struct bpf_queue_stack {
+ 	struct bpf_map map;
+@@ -52,7 +51,8 @@ static int queue_stack_map_alloc_check(union bpf_attr *attr)
+ 	/* check sanity of attributes */
+ 	if (attr->max_entries == 0 || attr->key_size != 0 ||
+ 	    attr->value_size == 0 ||
+-	    attr->map_flags & ~QUEUE_STACK_CREATE_FLAG_MASK)
++	    attr->map_flags & ~QUEUE_STACK_CREATE_FLAG_MASK ||
++	    !bpf_map_flags_access_ok(attr->map_flags))
+ 		return -EINVAL;
+ 
+ 	if (attr->value_size > KMALLOC_MAX_SIZE)
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index b0c7a6485c49..ba2fe4cfad09 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -481,6 +481,8 @@ static int map_check_btf(struct bpf_map *map, const struct btf *btf,
+ 	map->spin_lock_off = btf_find_spin_lock(btf, value_type);
+ 
+ 	if (map_value_has_spin_lock(map)) {
++		if (map->map_flags & BPF_F_RDONLY_PROG)
++			return -EACCES;
+ 		if (map->map_type != BPF_MAP_TYPE_HASH &&
+ 		    map->map_type != BPF_MAP_TYPE_ARRAY &&
+ 		    map->map_type != BPF_MAP_TYPE_CGROUP_STORAGE)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 57678cef9a2c..af3cddb18efb 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1429,6 +1429,28 @@ static int check_stack_access(struct bpf_verifier_env *env,
  	return 0;
  }
  
-+static const char *bpf_map___btf_name(struct bpf_map *map)
++static int check_map_access_type(struct bpf_verifier_env *env, u32 regno,
++				 int off, int size, enum bpf_access_type type)
 +{
-+	if (!bpf_map__is_internal(map))
-+		return map->name;
-+	/*
-+	 * LLVM annotates global data differently in BTF, that is,
-+	 * only as '.data', '.bss' or '.rodata'.
-+	 */
-+	return libbpf_type_to_btf_name[map->libbpf_type];
++	struct bpf_reg_state *regs = cur_regs(env);
++	struct bpf_map *map = regs[regno].map_ptr;
++	u32 cap = bpf_map_flags_to_cap(map);
++
++	if (type == BPF_WRITE && !(cap & BPF_MAP_CAN_WRITE)) {
++		verbose(env, "write into map forbidden, value_size=%d off=%d size=%d\n",
++			map->value_size, off, size);
++		return -EACCES;
++	}
++
++	if (type == BPF_READ && !(cap & BPF_MAP_CAN_READ)) {
++		verbose(env, "read into map forbidden, value_size=%d off=%d size=%d\n",
++			map->value_size, off, size);
++		return -EACCES;
++	}
++
++	return 0;
 +}
 +
- static int bpf_map_find_btf_info(struct bpf_map *map, const struct btf *btf)
- {
-+	const char *name = bpf_map___btf_name(map);
- 	struct bpf_map_def *def = &map->def;
- 	__u32 key_type_id, value_type_id;
- 	int ret;
- 
--	ret = btf__get_map_kv_tids(btf, map->name, def->key_size,
-+	ret = btf__get_map_kv_tids(btf, name, def->key_size,
- 				   def->value_size, &key_type_id,
- 				   &value_type_id);
- 	if (ret)
-@@ -1175,6 +1372,25 @@ bpf_object__probe_caps(struct bpf_object *obj)
- 	return bpf_object__probe_name(obj);
- }
- 
-+static int
-+bpf_object__populate_internal_map(struct bpf_object *obj, struct bpf_map *map)
-+{
-+	int err, zero = 0;
-+	__u8 *data;
-+
-+	/* Nothing to do here since kernel already zero-initializes .bss map. */
-+	if (map->libbpf_type == LIBBPF_MAP_BSS)
-+		return 0;
-+
-+	data = map->libbpf_type == LIBBPF_MAP_DATA ?
-+	       obj->sections.data : obj->sections.rodata;
-+	err = bpf_map_update_elem(map->fd, &zero, data, 0);
-+	/* Lock .rodata map as read-only from syscall side. */
-+	if (!err && map->libbpf_type == LIBBPF_MAP_RODATA)
-+		err = bpf_map_lock(map->fd);
-+	return err;
-+}
-+
- static int
- bpf_object__create_maps(struct bpf_object *obj)
- {
-@@ -1232,6 +1448,7 @@ bpf_object__create_maps(struct bpf_object *obj)
- 			size_t j;
- 
- 			err = *pfd;
-+err_out:
- 			cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
- 			pr_warning("failed to create map (name: '%s'): %s\n",
- 				   map->name, cp);
-@@ -1239,6 +1456,15 @@ bpf_object__create_maps(struct bpf_object *obj)
- 				zclose(obj->maps[j].fd);
- 			return err;
+ /* check read/write into map element returned by bpf_map_lookup_elem() */
+ static int __check_map_access(struct bpf_verifier_env *env, u32 regno, int off,
+ 			      int size, bool zero_size_allowed)
+@@ -2014,7 +2036,9 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
+ 			verbose(env, "R%d leaks addr into map\n", value_regno);
+ 			return -EACCES;
  		}
-+
-+		if (bpf_map__is_internal(map)) {
-+			err = bpf_object__populate_internal_map(obj, map);
-+			if (err < 0) {
-+				zclose(*pfd);
-+				goto err_out;
-+			}
-+		}
-+
- 		pr_debug("create map %s: fd=%d\n", map->name, *pfd);
- 	}
+-
++		err = check_map_access_type(env, regno, off, size, t);
++		if (err)
++			return err;
+ 		err = check_map_access(env, regno, off, size, false);
+ 		if (!err && t == BPF_READ && value_regno >= 0)
+ 			mark_reg_unknown(env, regs, value_regno);
+@@ -2250,6 +2274,10 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
+ 		return check_packet_access(env, regno, reg->off, access_size,
+ 					   zero_size_allowed);
+ 	case PTR_TO_MAP_VALUE:
++		if (check_map_access_type(env, regno, reg->off, access_size,
++					  meta && meta->raw_mode ? BPF_WRITE :
++					  BPF_READ))
++			return -EACCES;
+ 		return check_map_access(env, regno, reg->off, access_size,
+ 					zero_size_allowed);
+ 	default: /* scalar_value|ptr_to_stack or invalid ptr */
+@@ -2971,6 +2999,7 @@ record_func_map(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
+ 		int func_id, int insn_idx)
+ {
+ 	struct bpf_insn_aux_data *aux = &env->insn_aux_data[insn_idx];
++	struct bpf_map *map = meta->map_ptr;
  
-@@ -1393,19 +1619,27 @@ bpf_program__relocate(struct bpf_program *prog, struct bpf_object *obj)
+ 	if (func_id != BPF_FUNC_tail_call &&
+ 	    func_id != BPF_FUNC_map_lookup_elem &&
+@@ -2981,11 +3010,24 @@ record_func_map(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
+ 	    func_id != BPF_FUNC_map_peek_elem)
  		return 0;
  
- 	for (i = 0; i < prog->nr_reloc; i++) {
--		if (prog->reloc_desc[i].type == RELO_LD64) {
-+		if (prog->reloc_desc[i].type == RELO_LD64 ||
-+		    prog->reloc_desc[i].type == RELO_DATA) {
-+			bool relo_data = prog->reloc_desc[i].type == RELO_DATA;
- 			struct bpf_insn *insns = prog->insns;
- 			int insn_idx, map_idx;
- 
- 			insn_idx = prog->reloc_desc[i].insn_idx;
- 			map_idx = prog->reloc_desc[i].map_idx;
- 
--			if (insn_idx >= (int)prog->insns_cnt) {
-+			if (insn_idx + 1 >= (int)prog->insns_cnt) {
- 				pr_warning("relocation out of range: '%s'\n",
- 					   prog->section_name);
- 				return -LIBBPF_ERRNO__RELOC;
- 			}
--			insns[insn_idx].src_reg = BPF_PSEUDO_MAP_FD;
-+
-+			if (!relo_data) {
-+				insns[insn_idx].src_reg = BPF_PSEUDO_MAP_FD;
-+			} else {
-+				insns[insn_idx].src_reg = BPF_PSEUDO_MAP_VALUE;
-+				insns[insn_idx + 1].imm = insns[insn_idx].imm;
-+			}
- 			insns[insn_idx].imm = obj->maps[map_idx].fd;
- 		} else if (prog->reloc_desc[i].type == RELO_CALL) {
- 			err = bpf_program__reloc_text(prog, obj,
-@@ -2291,6 +2525,9 @@ void bpf_object__close(struct bpf_object *obj)
- 		obj->maps[i].priv = NULL;
- 		obj->maps[i].clear_priv = NULL;
+-	if (meta->map_ptr == NULL) {
++	if (map == NULL) {
+ 		verbose(env, "kernel subsystem misconfigured verifier\n");
+ 		return -EINVAL;
  	}
-+
-+	zfree(&obj->sections.rodata);
-+	zfree(&obj->sections.data);
- 	zfree(&obj->maps);
- 	obj->nr_maps = 0;
  
-@@ -2768,6 +3005,11 @@ bool bpf_map__is_offload_neutral(struct bpf_map *map)
- 	return map->def.type == BPF_MAP_TYPE_PERF_EVENT_ARRAY;
- }
- 
-+bool bpf_map__is_internal(struct bpf_map *map)
-+{
-+	return map->libbpf_type != LIBBPF_MAP_UNSPEC;
-+}
++	/* In case of read-only, some additional restrictions
++	 * need to be applied in order to prevent altering the
++	 * state of the map from program side.
++	 */
++	if ((map->map_flags & BPF_F_RDONLY_PROG) &&
++	    (func_id == BPF_FUNC_map_delete_elem ||
++	     func_id == BPF_FUNC_map_update_elem ||
++	     func_id == BPF_FUNC_map_push_elem ||
++	     func_id == BPF_FUNC_map_pop_elem)) {
++		verbose(env, "write into map forbidden\n");
++		return -EACCES;
++	}
 +
- void bpf_map__set_ifindex(struct bpf_map *map, __u32 ifindex)
- {
- 	map->map_ifindex = ifindex;
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index b4652aa1a58a..6e162da8e9f9 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -300,6 +300,7 @@ LIBBPF_API void *bpf_map__priv(struct bpf_map *map);
- LIBBPF_API int bpf_map__reuse_fd(struct bpf_map *map, int fd);
- LIBBPF_API int bpf_map__resize(struct bpf_map *map, __u32 max_entries);
- LIBBPF_API bool bpf_map__is_offload_neutral(struct bpf_map *map);
-+LIBBPF_API bool bpf_map__is_internal(struct bpf_map *map);
- LIBBPF_API void bpf_map__set_ifindex(struct bpf_map *map, __u32 ifindex);
- LIBBPF_API int bpf_map__pin(struct bpf_map *map, const char *path);
- LIBBPF_API int bpf_map__unpin(struct bpf_map *map, const char *path);
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 778a26702a70..3f493f3520c9 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -154,3 +154,9 @@ LIBBPF_0.0.2 {
- 		xsk_umem__fd;
- 		xsk_socket__fd;
- } LIBBPF_0.0.1;
-+
-+LIBBPF_0.0.3 {
-+	global:
-+		bpf_map__is_internal;
-+		bpf_map_lock;
-+} LIBBPF_0.0.2;
+ 	if (!BPF_MAP_PTR(aux->map_state))
+ 		bpf_map_ptr_store(aux, meta->map_ptr,
+ 				  meta->map_ptr->unpriv_array);
 -- 
 2.17.1
 
