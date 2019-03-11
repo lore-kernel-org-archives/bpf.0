@@ -2,106 +2,80 @@ Return-Path: <SRS0=tULY=RO=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB73AC43381
-	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 11:13:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8773FC43381
+	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 13:23:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8209C2075C
-	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 11:13:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 604FA20857
+	for <bpf@archiver.kernel.org>; Mon, 11 Mar 2019 13:23:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727386AbfCKLN1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 Mar 2019 07:13:27 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:4668 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727270AbfCKLN1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 11 Mar 2019 07:13:27 -0400
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id E05083A96283046EEC9E;
-        Mon, 11 Mar 2019 19:13:20 +0800 (CST)
-Received: from [127.0.0.1] (10.177.96.203) by DGGEMS409-HUB.china.huawei.com
- (10.3.19.209) with Microsoft SMTP Server id 14.3.408.0; Mon, 11 Mar 2019
- 19:13:14 +0800
-Subject: Re: 979d63d50c0c0f7bc537bf821e056cc9fe5abd38 bpf: prevent out of
- bounds speculation on pointer arithmetic
-To:     Daniel Borkmann <daniel@iogearbox.net>
-CC:     Jann Horn <jannh@google.com>, <ast@kernel.org>,
-        <gregkh@linuxfoundation.org>, "zhangyi (F)" <yi.zhang@huawei.com>,
-        Zhaohongjiang <zhaohongjiang@huawei.com>,
-        <netdev@vger.kernel.org>, <stable@vger.kernel.org>,
-        <bpf@vger.kernel.org>
-References: <5d71646c-f897-2178-9d4a-fababe999f36@huawei.com>
- <494a84f2-1a29-1521-e819-6e4fbed17641@iogearbox.net>
-From:   Jason Yan <yanaijie@huawei.com>
-Message-ID: <c9a89285-23bd-0e4d-3bdc-ea5d5c61e7ff@huawei.com>
-Date:   Mon, 11 Mar 2019 19:13:14 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+        id S1727782AbfCKNXC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 Mar 2019 09:23:02 -0400
+Received: from mail-it1-f200.google.com ([209.85.166.200]:52202 "EHLO
+        mail-it1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727669AbfCKNXB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 11 Mar 2019 09:23:01 -0400
+Received: by mail-it1-f200.google.com with SMTP id x9so4987586ite.1
+        for <bpf@vger.kernel.org>; Mon, 11 Mar 2019 06:23:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=pK1+3s0qzliVgO8uChK0ndiAxt70wC3Rvaiv9+li/DY=;
+        b=cv3VC0kAhK1SYb1XM7t7FvzrTWPh+mXjYSf3xxhMGOwD8rQckTELh4JXu4fhZM/g8r
+         fuPCuhNwRMrs963BdedaTlQL+XoM4ZlCw8fchp4DJdkfwUreMmOZGVdtpfT4ei9UASMv
+         nOKiiqxxw0/veh8u56PJ7fq3a+dBTI6gN6+qXhHnZqnbJ7+D3+ofoncd3nd5dHpcQute
+         20D8o+6r25ZKrHu3I8t7PTy5puNtzubuTDKBcUjUL1Vd84kKtQEjIaUXHBnG7XvbHLRw
+         0kUB8e+QPONI0vYFzvnUljH7qMsU+Czw4r+1PW6ppwpBM6iGAkvrLNOUsaTmVDyE4ZNG
+         Wm8g==
+X-Gm-Message-State: APjAAAX7m1GmSCwUj4yAvwRB/xuSdkRmossAt3YmLQ/g0xQDZ+lk0mdF
+        0eiTIqv4SF0iN1aokelRcYJ1nMEj9i0IYxkRHPHF+CZAYUmS
+X-Google-Smtp-Source: APXvYqw5xG9uh2Gm9ddSyDz77pKjUJDXM3u365mXqCK7rViSoBgkjkhHMLjtY6/G8/Jdbai85TvgA8JTT2fUbMwoYP5kc6yuI0bN
 MIME-Version: 1.0
-In-Reply-To: <494a84f2-1a29-1521-e819-6e4fbed17641@iogearbox.net>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.177.96.203]
-X-CFilter-Loop: Reflected
+X-Received: by 2002:a24:78cb:: with SMTP id p194mr20558447itc.7.1552310581223;
+ Mon, 11 Mar 2019 06:23:01 -0700 (PDT)
+Date:   Mon, 11 Mar 2019 06:23:01 -0700
+In-Reply-To: <00000000000054cc6d05834c33d7@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c66d400583d17848@google.com>
+Subject: Re: kernel BUG at include/linux/mm.h:LINE! (5)
+From:   syzbot <syzbot+5013d47539cdd43e7098@syzkaller.appspotmail.com>
+To:     ast@kernel.org, aviadye@mellanox.com, borisp@mellanox.com,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davejwatson@fb.com,
+        davem@davemloft.net, edumazet@google.com, eranbe@mellanox.com,
+        eric.dumazet@gmail.com, john.fastabend@gmail.com, kafai@fb.com,
+        kuznet@ms2.inr.ac.ru, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com,
+        yoshfuji@linux-ipv6.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+syzbot has bisected this bug to:
 
+commit 94850257cf0f88b20db7644f28bfedc7d284de15
+Author: Boris Pismenny <borisp@mellanox.com>
+Date:   Wed Feb 27 15:38:03 2019 +0000
 
-On 2019/3/11 17:41, Daniel Borkmann wrote:
-> Hi Jason,
-> 
-> On 03/11/2019 10:18 AM, Jason Yan wrote:
->> Hi, Daniel & Greg
->>
->> This patch (979d63d50c0c bpf: prevent out of bounds speculation on pointer arithmetic) was assigned a CVE (CVE-2019-7308) with a high score:
->>
->> CVSS v3.0 Severity and Metrics:
->> Base Score: 9.8 CRITICAL
->>
->> And this patch is not in stable-4.4, would you please backport this patch to 4.4?
-> 
-> We don't handle kernels as old as 4.4, so someone else would need to
-> do the backporting e.g. from your side. The series has been backported
-> to the last two most-recent stable kernels at that time (we usually
-> follow netdev practice here), and there have been asks about 4.14 as
-> well; I've been looking into backporting for the latter last two weeks
-> on and off, but there are conflicts all over the place in fragile core
-> areas where I didn't have enough free cycles to complete it yet. For
-> old kernels, you're probably better off doing something like this in
-> your tree instead of the huge complexity with a backport:
-> 
+     tls: Fix tls_device handling of partial records
 
-Thanks for you kindly reply.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13d9d977200000
+start commit:   94850257 tls: Fix tls_device handling of partial records
+git tree:       net-next
+final crash:    https://syzkaller.appspot.com/x/report.txt?x=1039d977200000
+console output: https://syzkaller.appspot.com/x/log.txt?x=17d9d977200000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=47f2db597668ac40
+dashboard link: https://syzkaller.appspot.com/bug?extid=5013d47539cdd43e7098
+userspace arch: amd64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=148763eb200000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1416ff3d200000
 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index bc34cf9..2cea2de 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -47,7 +47,7 @@ static DEFINE_SPINLOCK(prog_idr_lock);
->   static DEFINE_IDR(map_idr);
->   static DEFINE_SPINLOCK(map_idr_lock);
-> 
-> -int sysctl_unprivileged_bpf_disabled __read_mostly;
-> +int sysctl_unprivileged_bpf_disabled __read_mostly = 1;
-> 
-
-Greg, is it possible to get this kind of mitigation into 4.4?
-
-Thanks,
-Jason
-
->   static const struct bpf_map_ops * const bpf_map_types[] = {
->   #define BPF_PROG_TYPE(_id, _ops)
-> 
-> Thanks,
-> Daniel
-> 
-> .
-> 
-
+Reported-by: syzbot+5013d47539cdd43e7098@syzkaller.appspotmail.com
+Fixes: 94850257 ("tls: Fix tls_device handling of partial records")
