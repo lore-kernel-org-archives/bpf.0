@@ -7,75 +7,77 @@ X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A4D8C43381
-	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 14:34:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE552C4360F
+	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 14:48:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EE1B72147C
-	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 14:34:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7EA272147C
+	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 14:48:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vkv2ID2x"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BCvqqguM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726255AbfCLOeS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Mar 2019 10:34:18 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:46806 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726542AbfCLOeR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Mar 2019 10:34:17 -0400
-Received: by mail-qt1-f196.google.com with SMTP id z25so2700376qti.13;
-        Tue, 12 Mar 2019 07:34:17 -0700 (PDT)
+        id S1726866AbfCLOsF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Mar 2019 10:48:05 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:40520 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726304AbfCLOsE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Mar 2019 10:48:04 -0400
+Received: by mail-qk1-f193.google.com with SMTP id h28so1574938qkk.7;
+        Tue, 12 Mar 2019 07:48:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=FVv+o7DqfKzJrx4w1CC3UvFpUfwchNmos/cdS+aoglg=;
-        b=Vkv2ID2xNdPqVxq4HGCoThXR1ABkvQRqcUTrsGX0bMcI5SMi+DIpLfpU1+2OAr1KF4
-         0x8AUumAyXTRMFwJVHlLf3uGN2weTREeBDHxZNh6oSoJJaMLGcOKdPscgW+MjltkJeBC
-         CKaXKZpMBBvnt7UCjOGtbGohrx49pf7QyMmbf2F5YG4PQ2+tExtRIIB8huzzCdNNEzx1
-         51YgYoI7/Fp0UX+UxzQNv0M/ZF6s3Jn0A8Mp0fnXOfe3PDQJUPNU+YqfxJIdHO/QMOD3
-         TrqSeaCAbPOnH3XOBzjc2SFiRH5LdUl4pzglIk541/lkvEbFsPHGBJmUcBCSgdMPMh3b
-         5Q0w==
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=7IyRL8Mv5gxFyFp2FqPwI4V2MnxWESwOst1dyjfKLQA=;
+        b=BCvqqguML2Gql/hcZA1ZgPm23TJdEbTh0a4Fw/YVsYXYUdL9grVsKFv77mcubfXVmF
+         wxKcbTIor7DnvCiaVJHRG6iEz7zbqCYb0ctnHi+VPhMvGpgisPW/RSf3Mfe71VsEMSeL
+         w3IEecgTGk27AgIZ0DBt6qC0U2//Ppigq2SzENeCbEO6OjtClPATxOzhxW0Wr4pXe/h7
+         K9f8FGQKJUPHtamJr9wFLHk/xsR6ijeOI38k+nN4IJ6Di6DaKNGYjZtTTzohsHfLWfju
+         bBGPtclpCCXSUwAfAYvhl54HIugkWZR4GZAVKpQj3CSDWbGufjjOG11+zK4uNlf6AokO
+         3QoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FVv+o7DqfKzJrx4w1CC3UvFpUfwchNmos/cdS+aoglg=;
-        b=o0GnONuXeAATxtFeXQpSvAakbbOZrJP086I05O15ECaqi6aDQNIrExZZVvJnIJj4JF
-         XXuDQy454FqxxHcCaa8qOgnYlnayMXCwoNuhAMMhh+Lh2v7qKpDEufG0tfYfL7oBi2TQ
-         QEVElNZmq0QYGsfV5ab48Am8pD6yODi2oz/M3DQ6b80DHL/9sWd9inz0v5Ik7tUkrGSj
-         xY2krSzJPu8aFXY+zHGazGikzL1HzJtz2JLdHQ9FOpWassODSCq3mtTy4MmpPj1IetpG
-         AqGemyGm3D5Jf8YVWAHXIwsnKb9yQYguJNiOhiM6keJOgApcmAgkcNfC9l/Dy/NEmTFd
-         1cpA==
-X-Gm-Message-State: APjAAAWRPirWUQx3lWzuQAC88DZtiG+iLqU+fxZmrJFBx/xS4/i5oapD
-        JwbF6OoqvjLtuWSKFwTry8A=
-X-Google-Smtp-Source: APXvYqxOxx9jvtAEvElLFG8JmwKgcXclXJi5Xfm0avThEgPNhEJItNbG4bxTMKHW1v3p5v2pUgP4iw==
-X-Received: by 2002:a0c:80a8:: with SMTP id 37mr2991767qvb.138.1552401256353;
-        Tue, 12 Mar 2019 07:34:16 -0700 (PDT)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=7IyRL8Mv5gxFyFp2FqPwI4V2MnxWESwOst1dyjfKLQA=;
+        b=mS30cZXj7ZqzyKss9MFjuv5C5j2xCbPwqdY619AJofL6AlVCXqrSYdJ++qQWMe3E/4
+         fufkUZANKweViwwtnlqdcbYVRKv9Xu7pr5uChNSVjHbNLe2dpEV3SwbztB7AAzUkxp9r
+         B002GwzvJ47Shj39rGpsC5gdZNHkQGDekQ3A1bQcj7NYDb4sY2Os8yJT8KWjGY7VT8CF
+         FrZ5OgmZwvWNEjTAXM9V8pcfSWXXreHXLbWsc36oZswCsQ8LJPL4zcOrBa6zMwvVAIbG
+         so3E6yodsw70qFwy9qUQuSh2vByykaT7Nd0axQaDYk2P6/zVvz5SEL7Sn9wKiKLz7vfT
+         PEZQ==
+X-Gm-Message-State: APjAAAUzNjCv/zbnmSg7QT7fi3rZGXk7HzhRLjgLAUKz7A3AGZJ5HdB0
+        9JWIYVsjZpghW48PSVDiBJE=
+X-Google-Smtp-Source: APXvYqwZf6A4BxD5HRYwrEZWkBAvjRa+HcvzsS/dtGuIpWWh8Bm0WaAHPQEnylCBiQVGAfzro1A1gQ==
+X-Received: by 2002:a37:7ac6:: with SMTP id v189mr15757552qkc.205.1552402083267;
+        Tue, 12 Mar 2019 07:48:03 -0700 (PDT)
 Received: from quaco.ghostprotocols.net (177-59-123-113.3g.claro.net.br. [177.59.123.113])
-        by smtp.gmail.com with ESMTPSA id w33sm5751122qth.34.2019.03.12.07.34.14
+        by smtp.gmail.com with ESMTPSA id x25sm5758255qtx.71.2019.03.12.07.48.01
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 12 Mar 2019 07:34:14 -0700 (PDT)
+        Tue, 12 Mar 2019 07:48:02 -0700 (PDT)
 From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
 X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 230904039C; Tue, 12 Mar 2019 11:34:11 -0300 (-03)
-Date:   Tue, 12 Mar 2019 11:34:11 -0300
+        id BDF4D4039C; Tue, 12 Mar 2019 11:47:58 -0300 (-03)
+Date:   Tue, 12 Mar 2019 11:47:58 -0300
 To:     Jiri Olsa <jolsa@redhat.com>
 Cc:     Song Liu <songliubraving@fb.com>, bpf@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         ast@kernel.org, daniel@iogearbox.net, kernel-team@fb.com,
         peterz@infradead.org, acme@redhat.com, jolsa@kernel.org,
-        namhyung@kernel.org, sdf@fomichev.me,
-        Andi Kleen <andi@firstfloor.org>
-Subject: Re: [PATCH v9 perf,bpf 06/15] perf, bpf: save bpf_prog_info in a
- rbtree in perf_env
-Message-ID: <20190312143411.GD4939@kernel.org>
+        namhyung@kernel.org, sdf@fomichev.me
+Subject: Re: [PATCH v9 perf,bpf 07/15] perf, bpf: save bpf_prog_info
+ information as headers to perf.data
+Message-ID: <20190312144758.GE4939@kernel.org>
 References: <20190312053051.2690567-1-songliubraving@fb.com>
- <20190312053051.2690567-7-songliubraving@fb.com>
- <20190312131033.GB3034@krava>
+ <20190312053051.2690567-8-songliubraving@fb.com>
+ <20190312131023.GA3034@krava>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190312131033.GB3034@krava>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190312131023.GA3034@krava>
 X-Url:  http://acmel.wordpress.com
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: bpf-owner@vger.kernel.org
@@ -83,18 +85,18 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Tue, Mar 12, 2019 at 02:10:33PM +0100, Jiri Olsa escreveu:
-> On Mon, Mar 11, 2019 at 10:30:42PM -0700, Song Liu wrote:
+Em Tue, Mar 12, 2019 at 02:10:23PM +0100, Jiri Olsa escreveu:
+> On Mon, Mar 11, 2019 at 10:30:43PM -0700, Song Liu wrote:
 > 
 > SNIP
 > 
-> > +/* purge data in bpf_progs.infos tree */
-> > +static void perf_env__purge_bpf(struct perf_env *env)
+> > +static void print_bpf_prog_info(struct feat_fd *ff, FILE *fp)
 > > +{
+> > +	struct perf_env *env = &ff->ph->env;
 > > +	struct rb_root *root;
 > > +	struct rb_node *next;
 > > +
-> > +	down_write(&env->bpf_progs.lock);
+> > +	down_read(&env->bpf_progs.lock);
 > > +
 > > +	root = &env->bpf_progs.infos;
 > > +	next = rb_first(root);
@@ -104,26 +106,41 @@ Em Tue, Mar 12, 2019 at 02:10:33PM +0100, Jiri Olsa escreveu:
 > > +
 > > +		node = rb_entry(next, struct bpf_prog_info_node, rb_node);
 > > +		next = rb_next(&node->rb_node);
-> > +		rb_erase(&node->rb_node, root);
-> > +		free(node);
-> > +	}
+> > +		fprintf(fp, "# bpf_prog_info of id %u\n",
+> > +			node->info_linear->info.id);
 > 
-> 	env->bpf_progs.infos_cnt = 0;  ?
+> so report displays bpf prog dso/name like:
 > 
-> but it's probably not needed given the current usage
+>    0.02%  ls           bpf_prog_c80ffe554aba1bec_syscall_enter_o  [k] bpf_prog_c80ffe554aba1bec_syscall_enter_o                                                                                       ▒
+> 
+> and 'perf report --header-only -I' shows:
+> 
+> 
+> 	# bpf_prog_info of id 17
+> 	# bpf_prog_info of id 18
+> 	# bpf_prog_info of id 19
+> 	# bpf_prog_info of id 20
+> 	# bpf_prog_info of id 21
+> 	# bpf_prog_info of id 22
+> 	# bpf_prog_info of id 25
+> 	# bpf_prog_info of id 26
+> 	# bpf_prog_info of id 34
+> 	# bpf_prog_info of id 35
+> 
+> could we have something more detailed like bpftool output:
+> 
+> 	34: tracepoint  name syscall_enter_o  tag c80ffe554aba1bec  gpl
+> 		loaded_at 2019-03-12T14:02:03+0100  uid 0
+> 		xlated 360B  jited 232B  memlock 4096B  map_ids 30
+> 
+> 	35: tracepoint  name syscall_enter_o  tag ada5ccbe5576399c  gpl
+> 		loaded_at 2019-03-12T14:02:03+0100  uid 0
+> 		xlated 352B  jited 228B  memlock 4096B  map_ids 30
+> 
+> 
+> could be on top of this patchset
 
-Better be safe than sorry, see the Andi's "perf, tools, stat: Avoid
-memory overrun with -r" :-)
-
-I'll add the infos_cnt = 0 here.
- 
-> jirka
-> 
-> > +	up_write(&env->bpf_progs.lock);
-> > +}
-> 
-> SNIP
-
--- 
+Yeah, please, and can we have the name of programs that loaded that
+program there as well? 8-)
 
 - Arnaldo
