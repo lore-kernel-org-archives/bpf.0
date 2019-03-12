@@ -2,156 +2,177 @@ Return-Path: <SRS0=5gB9=RP=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77E6EC43381
-	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 06:03:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0A43C10F0B
+	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 11:07:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 361F82147C
-	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 06:03:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8316E20883
+	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 11:07:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=netflix.com header.i=@netflix.com header.b="jxPnP+Hf"
+	dkim=pass (1024-bit key) header.d=armh.onmicrosoft.com header.i=@armh.onmicrosoft.com header.b="F1JHxcDY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727012AbfCLGDj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Mar 2019 02:03:39 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:36147 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726396AbfCLGDj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Mar 2019 02:03:39 -0400
-Received: by mail-wr1-f66.google.com with SMTP id g18so1286664wru.3
-        for <bpf@vger.kernel.org>; Mon, 11 Mar 2019 23:03:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netflix.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Xpfu2eEpIRf3ja9OnEFDfVLQ8qmK6GlWSJywSwf9RMY=;
-        b=jxPnP+HfbKKprTjMVQd2+L1OqVqpqI9RST3wYrTYBvH85oUfL2xMVNJHriyFKIS0/D
-         /HYjT4l5JecnFzrbvu7PeBlmvPebOYUiWEH3S7KKlnDj+3WIpl0iGuB6YHyI3VNq0hLy
-         91UChm5U8aSeCKteVijOTEfZ31E0CEBVIucG4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Xpfu2eEpIRf3ja9OnEFDfVLQ8qmK6GlWSJywSwf9RMY=;
-        b=itMHvp5S4rz+vC8u0zdHyB4zrc2bCO+W3/0nalITm+2hgPL2bn8hubSEvBmsMoZ5PX
-         cdzZzEEnQ7W0WHOElCoaFHxLdAJzuUHUaLG6AxoP3HK4jH6/Ishlad9xEKiwFFD5qlSw
-         FU5emR5C02id8ZLcIfK5QtECmlzaZ+safQxyKZnr0j3Up/iOVbGHA3qHVzHpS5hwyMlw
-         H4PJ9ZX0VjrSHy/D9lgzm9BDHFi1u57iEJ+LOgwJ6QSe/Mg5SixQF3kgPTlQ1xRcwQLD
-         uRWkfUiqPO/icDfdeY+Sr9JRH2RkSq2JQFUbYZ/t8/h5qY7giswfdyKdFoO6VhOdlLI0
-         T4yw==
-X-Gm-Message-State: APjAAAWza6l+wcznfE+17jvDTvnwAs0AP2obmWPzRJqnGUwxiRXgDV5+
-        4KU/kHGcGT0xF53mJGKBfaBlFkEUMuedKmbFd4BNgw==
-X-Google-Smtp-Source: APXvYqzTTpEB5gGHG39NkbylqxXpxhNyzp+YRV2Ur3r7oD+A5YUHcEUHlstNslfnrB8LRdfs6NBADjt5oiOhn3XvOf8=
-X-Received: by 2002:adf:b211:: with SMTP id u17mr23907134wra.322.1552370616799;
- Mon, 11 Mar 2019 23:03:36 -0700 (PDT)
+        id S1726330AbfCLLHU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Mar 2019 07:07:20 -0400
+Received: from mail-eopbgr20070.outbound.protection.outlook.com ([40.107.2.70]:15490
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725811AbfCLLHT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Mar 2019 07:07:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector1-arm-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vo6/TypSMf7EfHn4pl5lXNtXlgr5TfUHuq5wT3QGEwI=;
+ b=F1JHxcDYVZQJtuE6J3xSJJ61l7+C+rzrUDTlXWdyiYicp5uLlCwl6oH01TMZap7ndnt98HvnW9qSdZwOo7+FaIRlCXYXYZx5Sv9PnJkzR+6MBhE9J9q6bHc8UmBWoccsGuIO1UgioKHZEeOZAXu/oaQcTWFuJUY0CUszpKtL0CI=
+Received: from AM6PR08MB3365.eurprd08.prod.outlook.com (20.177.112.214) by
+ AM6PR08MB3927.eurprd08.prod.outlook.com (20.179.0.27) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1709.13; Tue, 12 Mar 2019 11:07:14 +0000
+Received: from AM6PR08MB3365.eurprd08.prod.outlook.com
+ ([fe80::287d:f3df:7ebb:e0fa]) by AM6PR08MB3365.eurprd08.prod.outlook.com
+ ([fe80::287d:f3df:7ebb:e0fa%4]) with mapi id 15.20.1686.021; Tue, 12 Mar 2019
+ 11:07:14 +0000
+From:   Qais Yousef <Qais.Yousef@arm.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: [RFC][PATCH] Export supported trace features in debugfs
+Thread-Topic: [RFC][PATCH] Export supported trace features in debugfs
+Thread-Index: AQHU2MO/44zSUEkuI0KLRIY8LAP33g==
+Date:   Tue, 12 Mar 2019 11:07:14 +0000
+Message-ID: <20190312110437.5977-1-qais.yousef@arm.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: LO2P265CA0373.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:a3::25) To AM6PR08MB3365.eurprd08.prod.outlook.com
+ (2603:10a6:20b:43::22)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Qais.Yousef@arm.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-mailer: git-send-email 2.17.1
+x-originating-ip: [217.140.106.54]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d47a20b2-6b52-486a-9677-08d6a6dae235
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600127)(711020)(4605104)(4618075)(2017052603328)(7153060)(7193020);SRVR:AM6PR08MB3927;
+x-ms-traffictypediagnostic: AM6PR08MB3927:
+x-ms-exchange-purlcount: 1
+x-microsoft-antispam-prvs: <AM6PR08MB3927C4FA8C9DFB312EBDC37CFC490@AM6PR08MB3927.eurprd08.prod.outlook.com>
+x-forefront-prvs: 09749A275C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(366004)(39860400002)(376002)(346002)(136003)(40434004)(199004)(189003)(36756003)(7736002)(7416002)(386003)(25786009)(305945005)(52116002)(102836004)(6506007)(486006)(476003)(2616005)(186003)(99286004)(26005)(86362001)(966005)(97736004)(316002)(54906003)(478600001)(110136005)(72206003)(6116002)(71190400001)(71200400001)(6436002)(3846002)(6486002)(5660300002)(6306002)(14444005)(5024004)(6512007)(256004)(106356001)(2906002)(66066001)(8676002)(44832011)(105586002)(68736007)(4326008)(8936002)(53936002)(14454004)(1076003)(50226002)(81156014)(81166006);DIR:OUT;SFP:1101;SCL:1;SRVR:AM6PR08MB3927;H:AM6PR08MB3365.eurprd08.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: arm.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 7JGbhb47r+hMURDKobRBVkPf9skDG2NeR4kCd4SgqaWCDTV6Attod5+RTSHT4CFiU32yVEowtfrEftP9PUBgc0USUG3kqiv4BcWE+I4reKTVcbkIYgVoNA+3euLiOp6zMXnbqlOhMcGc3ixpI0WKJfkzR2cG91bRdXnvKCXE/Ks/WRy2GWyC8tyRBHgnyW4E7wcUXscTm4c++b2+Nhc3qq3+fG1sR8wo6s84oNFBRiaRMvwLcaCV1pCSDZYzooyYXyAM38Bx3vGh9u4ztTPZM/WRrsf0SVJIqnWPLS9lny99tD8DO3ovWmVAhh9lebLt718QMiOKORZF6XgN/NBz8kghiDU27LjlsRTMtX2/DtdyvRW9FIhmQtFQHfLvXSBvACZ3rRkAFyxuQUJ1wjnCumgi4ctOLN0NjXByVVK8itw=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <201902251554.x1PFsD3w017626@userv0121.oracle.com>
- <20190226061823.f7hfs7yojfuycqmg@ast-mbp.dhcp.thefacebook.com>
- <20190226064601.GE16689@oracle.com> <20190305185950.rpx7srzpbya5psnf@ast-mbp.dhcp.thefacebook.com>
- <20190306020357.GG32758@oracle.com> <20190307213035.5eagphx6vswxalai@ast-mbp.dhcp.thefacebook.com>
- <20190311142127.GA11634@oracle.com> <CAJN39ohS0+GCLMsc3s_JyROTDty8eomRJ==QW34YxhDrDGr9KA@mail.gmail.com>
- <20190312032405.GE11634@oracle.com>
-In-Reply-To: <20190312032405.GE11634@oracle.com>
-From:   Brendan Gregg <bgregg@netflix.com>
-Date:   Mon, 11 Mar 2019 23:03:10 -0700
-Message-ID: <CAJN39ohP2+k5V3CbNRKixdZ+_u4Zgk=Cdt5m5eE27vAv0Pp=Rg@mail.gmail.com>
-Subject: Re: [PATCH 0/2] bpf: context casting for tail call and gtrace prog type
-To:     Kris Van Hees <kris.van.hees@oracle.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d47a20b2-6b52-486a-9677-08d6a6dae235
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Mar 2019 11:07:14.9379
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR08MB3927
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 11, 2019 at 8:24 PM Kris Van Hees <kris.van.hees@oracle.com> wrote:
->
-> On Mon, Mar 11, 2019 at 06:29:55PM -0700, Brendan Gregg wrote:
-> > On Mon, Mar 11, 2019 at 7:21 AM Kris Van Hees <kris.van.hees@oracle.com> wrote:
-> > >
-> > > On Thu, Mar 07, 2019 at 01:30:37PM -0800, Alexei Starovoitov wrote:
-> > > > On Tue, Mar 05, 2019 at 09:03:57PM -0500, Kris Van Hees wrote:
-> > [...]
-> > > > > But being able to do things like this without
-> > > > > needing to touch the context of any other BPF program type is a great benefit
-> > > > > to offer tracing tools, as far as I see it.
-> > > >
-> > > > I still don't understand what you're referring to by 'things like this'
-> > > > that somehow will be possible in the future, but not possible today.
-> > > > Could you please give concrete example?
-> > >
-> > > My apologies for not being clear.  I am referring to the features of the
-> > > gtrace context in terms of containing task information, and output buffers
-> > > to be used in BPF programs triggered from various probe sources (kprobe,
-> > > tracepoints, ...)  I would not want to suggest making changes to all the
-> > > different program contexts in order to support tracing needs because that
-> > > would be wrong.  Doing it in a central place makes it a lot easier to maintain
-> > > without impacting other program types, etc.
-> > >
-> > > Of course, yes, bpf_probe_read() and bpf_perf_event_output() can be used
-> > > to implement a lot of what existing tracing tools like DTrace can do, if you
-> > > write them based on that.  One limitations I am obviously working with is
-> > > that DTrace already exists and has existed for a long time.  And while it is
-> > > 100% available as open source, it involves a pretty involved set of patches to
-> > > be applied to the kernel to be able to use it which is just not ideal.  Hence
-> > > the goal to make it available by re-using as much of the existing features in
-> > > Linux as possible, while still maintaining the same level of functionality in
-> > > DTrace.  That means we need to fill the gaps - and from where I am sitting,
-> > > the ways to do that might as well be of use to others (if they want to).
-> > >
-> > > If phrasing things in the context of DTrace would make the conversation easier
-> > > I certainly don;t mind doing that, but I really don't want to limit my patches
-> > > to supporting just DTrace (even if right now it might be the only tracer using
-> > > it).
-> >
-> > As a concrete example, can you point to one of my own published DTrace
-> > tools that BPF can't do? These were created to solve many real
-> > production issues, and make good use cases. I've been porting them
-> > over to BPF (bcc and bpftrace) without too much problem, and I can't
-> > think of a single one that I couldn't port over today.
->
-> I am unclear how pointing at one of your published DTrace tools would
-> contribute to this discussion.  Surely the scope of use cases is not limited
-> to the DTrace scripts you published?
->
-> Either way, one of the features that I make use of is speculative tracing.
+eBPF tools like bcc-tools have hard time figuring out when features like
+raw_tracepoint are supported in the kernel on which we are running. At
+the moment a fragile mechanism of matching bpf_find_raw_tracepoint()
+function in /proc/kallsyms is used to find out whether raw tracepoints
+can be used or not. But when this function was renamed recently to
+bpf_get_raw_tracepoint() the tool started to fail to use raw
+tracepoints.
 
-The subject was a concrete example. I don't think I used speculative
-tracing in any of my scripts. Can you pick a better example of
-something BPF can't do?
+To help in providing a more reliable way to detect features like
+RAW_TRACEPOINT, add a new file in trace debugfs to export the supported
+features.
 
-> And yes, even that could be handled with some ugly workarounds but my intent
-> is to implement things in a more clean way rather than depending on a bunch
-> of workarounds to make it somewhat work.
->
-> > There's a few minor things that I'm currently doing workarounds for,
-> > like ppid, but that should be satisfied with a few more helpers. And
-> > if it's really niche, then BTF sounds like a good solution.
->
-> Of course, we can always add more helpers to get to information that is
-> needed, but that is hardly a practical solution in the long run, and at
-> Plumbers 2019 it was already indicated that just adding helpers to get to
-> more information about tasks is not the route people want to take.
->
-> > If your ultimate goal is to have a command called "dtrace" that runs D
-> > programs, to support your existing users, then I'd add a lex/yacc pair
-> > to bpftrace and have it emit a dtrace binary.
->
-> My goal is not to have a command called dtarce that somehow simply provides
-> some form of support for dtrace scripts in some legacy support model.  My
-> goal is to make DTrace available on Linux based on existing kernel features
-> (and contirbuting extra features where needed, in a collaborative manner).
+$cat /sys/kernel/debug/tracing/supported_features
+RAW_TRACEPOINT
+EXAMPLE_FEATURE_1
+EXAMPLE_FEATURE_2
 
-If bpftrace builds a dtrace binary that runs D code, then you just did
-make DTrace available on Linux.
+Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+---
 
-And without changing the kernel.
+This is a half baked patch to probe the potential of this solution.
 
-Brendan
+The breakage mentioned in the commit message is here:
 
--- 
-Brendan Gregg, Senior Performance Architect, Netflix
+https://github.com/iovisor/bcc/pull/2241/commits/0f5849187972a50adf0d9eaa87=
+88c11f9fd926ea
+
+I am not sure what else beside raw_tracepoint makes sense to expose right n=
+ow.
+
+ kernel/trace/trace.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index c4238b441624..daae09238e62 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -6670,6 +6670,28 @@ static const struct file_operations snapshot_raw_fop=
+s =3D {
+
+ #endif /* CONFIG_TRACER_SNAPSHOT */
+
++#define TRACE_FEATURE(feat)__stringify(feat) "\n"
++
++#define TRACE_FEATURES\
++TRACE_FEATURE(RAW_TRACEPOINT)\
++TRACE_FEATURE(EXAMPLE_FEATUTE_1)\
++TRACE_FEATURE(EXAMPLE_FEATUTE_2)
++
++static ssize_t
++tracing_read_trace_features(struct file *filp, char __user *ubuf,
++size_t cnt, loff_t *ppos)
++{
++char *buf =3D TRACE_FEATURES;
++size_t len =3D sizeof(TRACE_FEATURES);
++
++return simple_read_from_buffer(ubuf, cnt, ppos, buf, len);
++}
++
++static const struct file_operations show_trace_features_fops =3D {
++.read           =3D tracing_read_trace_features,
++.llseek         =3D no_llseek,
++};
++
+ static int tracing_buffers_open(struct inode *inode, struct file *filp)
+ {
+ struct trace_array *tr =3D inode->i_private;
+@@ -8242,6 +8264,9 @@ static __init int tracer_init_tracefs(void)
+ &ftrace_update_tot_cnt, &tracing_dyn_info_fops);
+ #endif
+
++trace_create_file("trace_features", 0444, d_tracer,
++NULL, &show_trace_features_fops);
++
+ create_trace_instances(d_tracer);
+
+ update_tracer_options(&global_trace);
+--
+2.17.1
+
+IMPORTANT NOTICE: The contents of this email and any attachments are confid=
+ential and may also be privileged. If you are not the intended recipient, p=
+lease notify the sender immediately and do not disclose the contents to any=
+ other person, use it for any purpose, or store or copy the information in =
+any medium. Thank you.
