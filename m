@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23F2DC4360F
-	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 05:32:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14A78C10F00
+	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 05:32:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DB802214AF
-	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 05:32:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D5E46214D8
+	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 05:32:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="qeO46BUW"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Z5vCm0Jc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725792AbfCLFcd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Mar 2019 01:32:33 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:44354 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727276AbfCLFbR (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 12 Mar 2019 01:31:17 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x2C5Mabx024025
-        for <bpf@vger.kernel.org>; Mon, 11 Mar 2019 22:31:15 -0700
+        id S1727250AbfCLFct (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Mar 2019 01:32:49 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:53364 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727213AbfCLFbN (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 12 Mar 2019 01:31:13 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x2C5OIbL012391
+        for <bpf@vger.kernel.org>; Mon, 11 Mar 2019 22:31:12 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=GZGhObB5TtcgjHHvrpi/XxzWsP5LLks0l7BwUpAudT4=;
- b=qeO46BUWjNnqTc5HWc890u6LMpUlfwyYWoyp1E5atYGoL2Y6rFAZk/IcRwmv2TW+etCI
- DqdAsy0TuYa0JaP37/ALhTBf7wr+x/qU/zCgeygrjxvz7oqsa/G/cvEqyRoc1fYHbn+n
- n7z2BoNJAt82jBlFs25hYW2qL8k5F7qD6eM= 
+ content-type; s=facebook; bh=PCf97shjoNZac7UhGWCj/J1k8UTJlh5kyrTEemTaNf4=;
+ b=Z5vCm0JcPEfH5IP0ia3rAVWkeYj7tY2tDkpU6rcdS+xSEpJAX/BIys4q9zcDaj/lzRZ7
+ 3HvehKmQVHRym/5YKiradArGinkf3fJoGWUPOrLZUQ9vYTQLVstX0g1T3vHOYwfw76zd
+ IbUlfVAdRnYap1ipw4s0LML+4wvYtS0Pui4= 
 Received: from mail.thefacebook.com ([199.201.64.23])
-        by m0001303.ppops.net with ESMTP id 2r665jg2bh-11
+        by mx0a-00082601.pphosted.com with ESMTP id 2r668jg1ya-16
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 11 Mar 2019 22:31:15 -0700
+        for <bpf@vger.kernel.org>; Mon, 11 Mar 2019 22:31:12 -0700
 Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::126) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c081:35::125) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Mon, 11 Mar 2019 22:31:11 -0700
+ Mon, 11 Mar 2019 22:31:08 -0700
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 4491762E2019; Mon, 11 Mar 2019 22:31:10 -0700 (PDT)
+        id F421762E2019; Mon, 11 Mar 2019 22:31:03 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Song Liu <songliubraving@fb.com>
 Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
@@ -50,9 +50,9 @@ CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
         <namhyung@kernel.org>, <sdf@fomichev.me>,
         Song Liu <songliubraving@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v9 perf,bpf 07/15] perf, bpf: save bpf_prog_info information as headers to perf.data
-Date:   Mon, 11 Mar 2019 22:30:43 -0700
-Message-ID: <20190312053051.2690567-8-songliubraving@fb.com>
+Subject: [PATCH v9 perf,bpf 04/15] perf, bpf: synthesize bpf events with bpf_program__get_prog_info_linear()
+Date:   Mon, 11 Mar 2019 22:30:40 -0700
+Message-ID: <20190312053051.2690567-5-songliubraving@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190312053051.2690567-1-songliubraving@fb.com>
 References: <20190312053051.2690567-1-songliubraving@fb.com>
@@ -68,213 +68,203 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch enables perf-record to save bpf_prog_info information as
-headers to perf.data. A new header type HEADER_BPF_PROG_INFO is
-introduced for this data.
+With bpf_program__get_prog_info_linear, we can simplify the logic that
+synthesizes bpf events.
+
+This patch doesn't change the behavior of the code.
 
 Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
- tools/perf/util/header.c | 139 ++++++++++++++++++++++++++++++++++++++-
- tools/perf/util/header.h |   1 +
- 2 files changed, 139 insertions(+), 1 deletion(-)
+ tools/perf/util/bpf-event.c | 118 ++++++++++++------------------------
+ 1 file changed, 40 insertions(+), 78 deletions(-)
 
-diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
-index 01b324c275b9..a4ef8f657ad0 100644
---- a/tools/perf/util/header.c
-+++ b/tools/perf/util/header.c
-@@ -18,6 +18,7 @@
- #include <sys/utsname.h>
- #include <linux/time64.h>
- #include <dirent.h>
+diff --git a/tools/perf/util/bpf-event.c b/tools/perf/util/bpf-event.c
+index ea012b735a37..e9d9854be506 100644
+--- a/tools/perf/util/bpf-event.c
++++ b/tools/perf/util/bpf-event.c
+@@ -3,7 +3,9 @@
+ #include <stdlib.h>
+ #include <bpf/bpf.h>
+ #include <bpf/btf.h>
 +#include <bpf/libbpf.h>
- 
- #include "evlist.h"
- #include "evsel.h"
-@@ -40,6 +41,7 @@
- #include "time-utils.h"
- #include "units.h"
- #include "cputopo.h"
-+#include "bpf-event.h"
- 
- #include "sane_ctype.h"
- 
-@@ -861,6 +863,48 @@ static int write_clockid(struct feat_fd *ff,
- 			sizeof(ff->ph->env.clockid_res_ns));
- }
- 
-+static int write_bpf_prog_info(struct feat_fd *ff,
-+			       struct perf_evlist *evlist __maybe_unused)
-+{
-+	struct perf_env *env = &ff->ph->env;
-+	struct rb_root *root;
-+	struct rb_node *next;
-+	int ret;
-+
-+	down_read(&env->bpf_progs.lock);
-+
-+	ret = do_write(ff, &env->bpf_progs.infos_cnt,
-+		       sizeof(env->bpf_progs.infos_cnt));
-+	if (ret < 0)
-+		goto out;
-+
-+	root = &env->bpf_progs.infos;
-+	next = rb_first(root);
-+	while (next) {
-+		struct bpf_prog_info_node *node;
-+		size_t len;
-+
-+		node = rb_entry(next, struct bpf_prog_info_node, rb_node);
-+		next = rb_next(&node->rb_node);
-+		len = sizeof(struct bpf_prog_info_linear) +
-+			node->info_linear->data_len;
-+
-+		/* before writing to file, translate address to offset */
-+		bpf_program__bpil_addr_to_offs(node->info_linear);
-+		ret = do_write(ff, node->info_linear, len);
-+		/*
-+		 * translate back to address even when do_write() fails,
-+		 * so that this function never changes the data.
-+		 */
-+		bpf_program__bpil_offs_to_addr(node->info_linear);
-+		if (ret < 0)
-+			goto out;
-+	}
-+out:
-+	up_read(&env->bpf_progs.lock);
-+	return ret;
-+}
-+
- static int cpu_cache_level__sort(const void *a, const void *b)
+ #include <linux/btf.h>
++#include <linux/err.h>
+ #include "bpf-event.h"
+ #include "debug.h"
+ #include "symbol.h"
+@@ -49,99 +51,62 @@ static int perf_event__synthesize_one_bpf_prog(struct perf_tool *tool,
  {
- 	struct cpu_cache_level *cache_a = (struct cpu_cache_level *)a;
-@@ -1341,6 +1385,29 @@ static void print_clockid(struct feat_fd *ff, FILE *fp)
- 		ff->ph->env.clockid_res_ns * 1000);
- }
- 
-+static void print_bpf_prog_info(struct feat_fd *ff, FILE *fp)
-+{
-+	struct perf_env *env = &ff->ph->env;
-+	struct rb_root *root;
-+	struct rb_node *next;
-+
-+	down_read(&env->bpf_progs.lock);
-+
-+	root = &env->bpf_progs.infos;
-+	next = rb_first(root);
-+
-+	while (next) {
-+		struct bpf_prog_info_node *node;
-+
-+		node = rb_entry(next, struct bpf_prog_info_node, rb_node);
-+		next = rb_next(&node->rb_node);
-+		fprintf(fp, "# bpf_prog_info of id %u\n",
-+			node->info_linear->info.id);
-+	}
-+
-+	up_read(&env->bpf_progs.lock);
-+}
-+
- static void free_event_desc(struct perf_evsel *events)
- {
- 	struct perf_evsel *evsel;
-@@ -2373,6 +2440,75 @@ static int process_clockid(struct feat_fd *ff,
- 	return 0;
- }
- 
-+static int process_bpf_prog_info(struct feat_fd *ff,
-+				 void *data __maybe_unused)
-+{
+ 	struct ksymbol_event *ksymbol_event = &event->ksymbol_event;
+ 	struct bpf_event *bpf_event = &event->bpf_event;
+-	u32 sub_prog_cnt, i, func_info_rec_size = 0;
+-	u8 (*prog_tags)[BPF_TAG_SIZE] = NULL;
+-	struct bpf_prog_info info = { .type = 0, };
+-	u32 info_len = sizeof(info);
+-	void *func_infos = NULL;
+-	u64 *prog_addrs = NULL;
 +	struct bpf_prog_info_linear *info_linear;
-+	struct bpf_prog_info_node *info_node;
-+	struct perf_env *env = &ff->ph->env;
-+	u32 count, i;
-+	int err = -1;
-+
-+	if (ff->ph->needs_swap) {
-+		pr_warning("interpreting bpf_prog_info from systems with endianity is not yet supported\n");
-+		return 0;
-+	}
-+
-+	if (do_read_u32(ff, &count))
-+		return -1;
-+
-+	down_write(&env->bpf_progs.lock);
-+
-+	for (i = 0; i < count; ++i) {
-+		u32 info_len, data_len;
-+
-+		info_linear = NULL;
-+		info_node = NULL;
-+		if (do_read_u32(ff, &info_len))
-+			goto out;
-+		if (do_read_u32(ff, &data_len))
-+			goto out;
-+
-+		if (info_len > sizeof(struct bpf_prog_info)) {
-+			pr_warning("detected invalid bpf_prog_info\n");
-+			goto out;
-+		}
-+
-+		info_linear = malloc(sizeof(struct bpf_prog_info_linear) +
-+				     data_len);
-+		if (!info_linear)
-+			goto out;
-+		info_linear->info_len = sizeof(struct bpf_prog_info);
-+		info_linear->data_len = data_len;
-+		if (do_read_u64(ff, (u64 *)(&info_linear->arrays)))
-+			goto out;
-+		if (__do_read(ff, &info_linear->info, info_len))
-+			goto out;
-+		if (info_len < sizeof(struct bpf_prog_info))
-+			memset(((void *)(&info_linear->info)) + info_len, 0,
-+			       sizeof(struct bpf_prog_info) - info_len);
-+
-+		if (__do_read(ff, info_linear->data, data_len))
-+			goto out;
-+
-+		info_node = malloc(sizeof(struct bpf_prog_info_node));
-+		if (!info_node)
-+			goto out;
-+
-+		/* after reading from file, translate offset to address */
-+		bpf_program__bpil_offs_to_addr(info_linear);
-+		info_node->info_linear = info_linear;
-+		perf_env__insert_bpf_prog_info(env, info_node);
-+	}
-+
-+	return 0;
-+out:
-+	free(info_linear);
-+	free(info_node);
-+	up_write(&env->bpf_progs.lock);
-+	return err;
-+}
-+
- struct feature_ops {
- 	int (*write)(struct feat_fd *ff, struct perf_evlist *evlist);
- 	void (*print)(struct feat_fd *ff, FILE *fp);
-@@ -2432,7 +2568,8 @@ static const struct feature_ops feat_ops[HEADER_LAST_FEATURE] = {
- 	FEAT_OPN(CACHE,		cache,		true),
- 	FEAT_OPR(SAMPLE_TIME,	sample_time,	false),
- 	FEAT_OPR(MEM_TOPOLOGY,	mem_topology,	true),
--	FEAT_OPR(CLOCKID,       clockid,        false)
-+	FEAT_OPR(CLOCKID,       clockid,        false),
-+	FEAT_OPR(BPF_PROG_INFO, bpf_prog_info,  false)
- };
++	struct bpf_prog_info *info;
+ 	struct btf *btf = NULL;
+-	u32 *prog_lens = NULL;
+ 	bool has_btf = false;
+-	char errbuf[512];
++	u32 sub_prog_cnt, i;
+ 	int err = 0;
++	u64 arrays;
  
- struct header_print_data {
-diff --git a/tools/perf/util/header.h b/tools/perf/util/header.h
-index 0d553ddca0a3..0785c91b4c3a 100644
---- a/tools/perf/util/header.h
-+++ b/tools/perf/util/header.h
-@@ -39,6 +39,7 @@ enum {
- 	HEADER_SAMPLE_TIME,
- 	HEADER_MEM_TOPOLOGY,
- 	HEADER_CLOCKID,
-+	HEADER_BPF_PROG_INFO,
- 	HEADER_LAST_FEATURE,
- 	HEADER_FEAT_BITS	= 256,
- };
+-	/* Call bpf_obj_get_info_by_fd() to get sizes of arrays */
+-	err = bpf_obj_get_info_by_fd(fd, &info, &info_len);
++	arrays = 1UL << BPF_PROG_INFO_JITED_KSYMS;
++	arrays |= 1UL << BPF_PROG_INFO_JITED_FUNC_LENS;
++	arrays |= 1UL << BPF_PROG_INFO_FUNC_INFO;
++	arrays |= 1UL << BPF_PROG_INFO_PROG_TAGS;
+ 
+-	if (err) {
+-		pr_debug("%s: failed to get BPF program info: %s, aborting\n",
+-			 __func__, str_error_r(errno, errbuf, sizeof(errbuf)));
++	info_linear = bpf_program__get_prog_info_linear(fd, arrays);
++	if (IS_ERR_OR_NULL(info_linear)) {
++		info_linear = NULL;
++		pr_debug("%s: failed to get BPF program info. aborting\n", __func__);
+ 		return -1;
+ 	}
+-	if (info_len < offsetof(struct bpf_prog_info, prog_tags)) {
++
++	if (info_linear->info_len < offsetof(struct bpf_prog_info, prog_tags)) {
+ 		pr_debug("%s: the kernel is too old, aborting\n", __func__);
+ 		return -2;
+ 	}
+ 
++	info = &info_linear->info;
++
+ 	/* number of ksyms, func_lengths, and tags should match */
+-	sub_prog_cnt = info.nr_jited_ksyms;
+-	if (sub_prog_cnt != info.nr_prog_tags ||
+-	    sub_prog_cnt != info.nr_jited_func_lens)
++	sub_prog_cnt = info->nr_jited_ksyms;
++	if (sub_prog_cnt != info->nr_prog_tags ||
++	    sub_prog_cnt != info->nr_jited_func_lens)
+ 		return -1;
+ 
+ 	/* check BTF func info support */
+-	if (info.btf_id && info.nr_func_info && info.func_info_rec_size) {
++	if (info->btf_id && info->nr_func_info && info->func_info_rec_size) {
+ 		/* btf func info number should be same as sub_prog_cnt */
+-		if (sub_prog_cnt != info.nr_func_info) {
++		if (sub_prog_cnt != info->nr_func_info) {
+ 			pr_debug("%s: mismatch in BPF sub program count and BTF function info count, aborting\n", __func__);
+-			return -1;
+-		}
+-		if (btf__get_from_id(info.btf_id, &btf)) {
+-			pr_debug("%s: failed to get BTF of id %u, aborting\n", __func__, info.btf_id);
+-			return -1;
++			err = -1;
++			goto out;
+ 		}
+-		func_info_rec_size = info.func_info_rec_size;
+-		func_infos = calloc(sub_prog_cnt, func_info_rec_size);
+-		if (!func_infos) {
+-			pr_debug("%s: failed to allocate memory for func_infos, aborting\n", __func__);
+-			return -1;
++		if (btf__get_from_id(info->btf_id, &btf)) {
++			pr_debug("%s: failed to get BTF of id %u, aborting\n", __func__, info->btf_id);
++			err = -1;
++			btf = NULL;
++			goto out;
+ 		}
+ 		has_btf = true;
+ 	}
+ 
+-	/*
+-	 * We need address, length, and tag for each sub program.
+-	 * Allocate memory and call bpf_obj_get_info_by_fd() again
+-	 */
+-	prog_addrs = calloc(sub_prog_cnt, sizeof(u64));
+-	if (!prog_addrs) {
+-		pr_debug("%s: failed to allocate memory for prog_addrs, aborting\n", __func__);
+-		goto out;
+-	}
+-	prog_lens = calloc(sub_prog_cnt, sizeof(u32));
+-	if (!prog_lens) {
+-		pr_debug("%s: failed to allocate memory for prog_lens, aborting\n", __func__);
+-		goto out;
+-	}
+-	prog_tags = calloc(sub_prog_cnt, BPF_TAG_SIZE);
+-	if (!prog_tags) {
+-		pr_debug("%s: failed to allocate memory for prog_tags, aborting\n", __func__);
+-		goto out;
+-	}
+-
+-	memset(&info, 0, sizeof(info));
+-	info.nr_jited_ksyms = sub_prog_cnt;
+-	info.nr_jited_func_lens = sub_prog_cnt;
+-	info.nr_prog_tags = sub_prog_cnt;
+-	info.jited_ksyms = ptr_to_u64(prog_addrs);
+-	info.jited_func_lens = ptr_to_u64(prog_lens);
+-	info.prog_tags = ptr_to_u64(prog_tags);
+-	info_len = sizeof(info);
+-	if (has_btf) {
+-		info.nr_func_info = sub_prog_cnt;
+-		info.func_info_rec_size = func_info_rec_size;
+-		info.func_info = ptr_to_u64(func_infos);
+-	}
+-
+-	err = bpf_obj_get_info_by_fd(fd, &info, &info_len);
+-	if (err) {
+-		pr_debug("%s: failed to get BPF program info, aborting\n", __func__);
+-		goto out;
+-	}
+-
+ 	/* Synthesize PERF_RECORD_KSYMBOL */
+ 	for (i = 0; i < sub_prog_cnt; i++) {
++		u8 (*prog_tags)[BPF_TAG_SIZE] = (void *)(info->prog_tags);
++		__u32 *prog_lens = (__u32 *)(info->jited_func_lens);
++		__u64 *prog_addrs = (__u64 *)(info->jited_ksyms);
++		void *func_infos = (void *)(info->func_info);
+ 		const struct bpf_func_info *finfo;
+ 		const char *short_name = NULL;
+ 		const struct btf_type *t;
+@@ -163,13 +128,13 @@ static int perf_event__synthesize_one_bpf_prog(struct perf_tool *tool,
+ 					 KSYM_NAME_LEN - name_len,
+ 					 prog_tags[i], BPF_TAG_SIZE);
+ 		if (has_btf) {
+-			finfo = func_infos + i * info.func_info_rec_size;
++			finfo = func_infos + i * info->func_info_rec_size;
+ 			t = btf__type_by_id(btf, finfo->type_id);
+ 			short_name = btf__name_by_offset(btf, t->name_off);
+ 		} else if (i == 0 && sub_prog_cnt == 1) {
+ 			/* no subprog */
+-			if (info.name[0])
+-				short_name = info.name;
++			if (info->name[0])
++				short_name = info->name;
+ 		} else
+ 			short_name = "F";
+ 		if (short_name)
+@@ -195,9 +160,9 @@ static int perf_event__synthesize_one_bpf_prog(struct perf_tool *tool,
+ 			},
+ 			.type = PERF_BPF_EVENT_PROG_LOAD,
+ 			.flags = 0,
+-			.id = info.id,
++			.id = info->id,
+ 		};
+-		memcpy(bpf_event->tag, prog_tags[i], BPF_TAG_SIZE);
++		memcpy(bpf_event->tag, info->tag, BPF_TAG_SIZE);
+ 		memset((void *)event + event->header.size, 0, machine->id_hdr_size);
+ 		event->header.size += machine->id_hdr_size;
+ 		err = perf_tool__process_synth_event(tool, event,
+@@ -205,10 +170,7 @@ static int perf_event__synthesize_one_bpf_prog(struct perf_tool *tool,
+ 	}
+ 
+ out:
+-	free(prog_tags);
+-	free(prog_lens);
+-	free(prog_addrs);
+-	free(func_infos);
++	free(info_linear);
+ 	free(btf);
+ 	return err ? -1 : 0;
+ }
 -- 
 2.17.1
 
