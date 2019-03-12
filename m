@@ -5,41 +5,41 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33BBBC43381
-	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 05:32:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23F2DC4360F
+	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 05:32:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EF041214AF
-	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 05:32:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DB802214AF
+	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 05:32:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="bH0ZN6H5"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="qeO46BUW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726292AbfCLFc2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Mar 2019 01:32:28 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:44372 "EHLO
+        id S1725792AbfCLFcd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Mar 2019 01:32:33 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:44354 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727287AbfCLFbS (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 12 Mar 2019 01:31:18 -0400
+        by vger.kernel.org with ESMTP id S1727276AbfCLFbR (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 12 Mar 2019 01:31:17 -0400
 Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x2C5Mac2024025
-        for <bpf@vger.kernel.org>; Mon, 11 Mar 2019 22:31:16 -0700
+        by m0001303.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x2C5Mabx024025
+        for <bpf@vger.kernel.org>; Mon, 11 Mar 2019 22:31:15 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=2tzfLyc2EVrnwKn1BzqySZzBaeNMC6PpArIzrrNrPYY=;
- b=bH0ZN6H55w+hTl3K8NHuRFUFhwnDh+ez+yZb8svwrVcdT0vjCwBbPnTk+MtuGcSEGz36
- 8QAsixvsmPvfINgE3dlFEUKoIA+FgOu1OcFn/O/kCfLTqMY3/OnLEbcT1QnZssVWBpKO
- fb83ZScmM48ZUdJft+9VkcHpdZQiHptLNZ4= 
+ content-type; s=facebook; bh=GZGhObB5TtcgjHHvrpi/XxzWsP5LLks0l7BwUpAudT4=;
+ b=qeO46BUWjNnqTc5HWc890u6LMpUlfwyYWoyp1E5atYGoL2Y6rFAZk/IcRwmv2TW+etCI
+ DqdAsy0TuYa0JaP37/ALhTBf7wr+x/qU/zCgeygrjxvz7oqsa/G/cvEqyRoc1fYHbn+n
+ n7z2BoNJAt82jBlFs25hYW2qL8k5F7qD6eM= 
 Received: from mail.thefacebook.com ([199.201.64.23])
-        by m0001303.ppops.net with ESMTP id 2r665jg2bh-14
+        by m0001303.ppops.net with ESMTP id 2r665jg2bh-11
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 11 Mar 2019 22:31:16 -0700
+        for <bpf@vger.kernel.org>; Mon, 11 Mar 2019 22:31:15 -0700
 Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
  mail.thefacebook.com (2620:10d:c081:35::126) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Mon, 11 Mar 2019 22:31:13 -0700
+ Mon, 11 Mar 2019 22:31:11 -0700
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id E6F3E62E2019; Mon, 11 Mar 2019 22:31:11 -0700 (PDT)
+        id 4491762E2019; Mon, 11 Mar 2019 22:31:10 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Song Liu <songliubraving@fb.com>
 Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
@@ -50,9 +50,9 @@ CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
         <namhyung@kernel.org>, <sdf@fomichev.me>,
         Song Liu <songliubraving@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v9 perf,bpf 08/15] perf, bpf: save btf in a rbtree in perf_env
-Date:   Mon, 11 Mar 2019 22:30:44 -0700
-Message-ID: <20190312053051.2690567-9-songliubraving@fb.com>
+Subject: [PATCH v9 perf,bpf 07/15] perf, bpf: save bpf_prog_info information as headers to perf.data
+Date:   Mon, 11 Mar 2019 22:30:43 -0700
+Message-ID: <20190312053051.2690567-8-songliubraving@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190312053051.2690567-1-songliubraving@fb.com>
 References: <20190312053051.2690567-1-songliubraving@fb.com>
@@ -68,192 +68,213 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-btf contains information necessary to annotate bpf programs. This patch
-saves btf for bpf programs loaded in the system.
+This patch enables perf-record to save bpf_prog_info information as
+headers to perf.data. A new header type HEADER_BPF_PROG_INFO is
+introduced for this data.
 
 Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
- tools/perf/util/bpf-event.c | 23 +++++++++++++
- tools/perf/util/bpf-event.h |  7 ++++
- tools/perf/util/env.c       | 66 +++++++++++++++++++++++++++++++++++++
- tools/perf/util/env.h       |  5 +++
- 4 files changed, 101 insertions(+)
+ tools/perf/util/header.c | 139 ++++++++++++++++++++++++++++++++++++++-
+ tools/perf/util/header.h |   1 +
+ 2 files changed, 139 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/bpf-event.c b/tools/perf/util/bpf-event.c
-index 9013f7c29761..e02a38a98d8d 100644
---- a/tools/perf/util/bpf-event.c
-+++ b/tools/perf/util/bpf-event.c
-@@ -34,6 +34,28 @@ int machine__process_bpf_event(struct machine *machine __maybe_unused,
- 	return 0;
+diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
+index 01b324c275b9..a4ef8f657ad0 100644
+--- a/tools/perf/util/header.c
++++ b/tools/perf/util/header.c
+@@ -18,6 +18,7 @@
+ #include <sys/utsname.h>
+ #include <linux/time64.h>
+ #include <dirent.h>
++#include <bpf/libbpf.h>
+ 
+ #include "evlist.h"
+ #include "evsel.h"
+@@ -40,6 +41,7 @@
+ #include "time-utils.h"
+ #include "units.h"
+ #include "cputopo.h"
++#include "bpf-event.h"
+ 
+ #include "sane_ctype.h"
+ 
+@@ -861,6 +863,48 @@ static int write_clockid(struct feat_fd *ff,
+ 			sizeof(ff->ph->env.clockid_res_ns));
  }
  
-+static int perf_env__fetch_btf(struct perf_env *env,
-+			       u32 btf_id,
-+			       struct btf *btf)
++static int write_bpf_prog_info(struct feat_fd *ff,
++			       struct perf_evlist *evlist __maybe_unused)
 +{
-+	struct btf_node *node;
-+	u32 data_size;
-+	const void *data;
-+
-+	data = btf__get_raw_data(btf, &data_size);
-+
-+	node = malloc(data_size + sizeof(struct btf_node));
-+	if (!node)
-+		return -1;
-+
-+	node->id = btf_id;
-+	node->data_size = data_size;
-+	memcpy(node->data, data, data_size);
-+
-+	perf_env__insert_btf(env, node);
-+	return 0;
-+}
-+
- /*
-  * Synthesize PERF_RECORD_KSYMBOL and PERF_RECORD_BPF_EVENT for one bpf
-  * program. One PERF_RECORD_BPF_EVENT is generated for the program. And
-@@ -113,6 +135,7 @@ static int perf_event__synthesize_one_bpf_prog(struct perf_session *session,
- 			goto out;
- 		}
- 		has_btf = true;
-+		perf_env__fetch_btf(env, info->btf_id, btf);
- 	}
- 
- 	/* Synthesize PERF_RECORD_KSYMBOL */
-diff --git a/tools/perf/util/bpf-event.h b/tools/perf/util/bpf-event.h
-index fad932f7404f..b9ec394dc7c7 100644
---- a/tools/perf/util/bpf-event.h
-+++ b/tools/perf/util/bpf-event.h
-@@ -16,6 +16,13 @@ struct bpf_prog_info_node {
- 	struct rb_node			rb_node;
- };
- 
-+struct btf_node {
-+	struct rb_node	rb_node;
-+	u32		id;
-+	u32		data_size;
-+	char		data[];
-+};
-+
- #ifdef HAVE_LIBBPF_SUPPORT
- int machine__process_bpf_event(struct machine *machine, union perf_event *event,
- 			       struct perf_sample *sample);
-diff --git a/tools/perf/util/env.c b/tools/perf/util/env.c
-index fb82623b0822..84bdf726c6a1 100644
---- a/tools/perf/util/env.c
-+++ b/tools/perf/util/env.c
-@@ -64,6 +64,58 @@ struct bpf_prog_info_node *perf_env__find_bpf_prog_info(struct perf_env *env,
- 	return node;
- }
- 
-+void perf_env__insert_btf(struct perf_env *env, struct btf_node *btf_node)
-+{
-+	struct rb_node *parent = NULL;
-+	__u32 btf_id = btf_node->id;
-+	struct btf_node *node;
-+	struct rb_node **p;
-+
-+	down_write(&env->bpf_progs.lock);
-+	p = &env->bpf_progs.btfs.rb_node;
-+
-+	while (*p != NULL) {
-+		parent = *p;
-+		node = rb_entry(parent, struct btf_node, rb_node);
-+		if (btf_id < node->id) {
-+			p = &(*p)->rb_left;
-+		} else if (btf_id > node->id) {
-+			p = &(*p)->rb_right;
-+		} else {
-+			pr_debug("duplicated btf %u\n", btf_id);
-+			goto out;
-+		}
-+	}
-+
-+	rb_link_node(&btf_node->rb_node, parent, p);
-+	rb_insert_color(&btf_node->rb_node, &env->bpf_progs.btfs);
-+	env->bpf_progs.btfs_cnt++;
-+out:
-+	up_write(&env->bpf_progs.lock);
-+}
-+
-+struct btf_node *perf_env__find_btf(struct perf_env *env, __u32 btf_id)
-+{
-+	struct btf_node *node = NULL;
-+	struct rb_node *n;
++	struct perf_env *env = &ff->ph->env;
++	struct rb_root *root;
++	struct rb_node *next;
++	int ret;
 +
 +	down_read(&env->bpf_progs.lock);
-+	n = env->bpf_progs.btfs.rb_node;
 +
-+	while (n) {
-+		node = rb_entry(n, struct btf_node, rb_node);
-+		if (btf_id < node->id)
-+			n = n->rb_left;
-+		else if (btf_id > node->id)
-+			n = n->rb_right;
-+		else
-+			break;
++	ret = do_write(ff, &env->bpf_progs.infos_cnt,
++		       sizeof(env->bpf_progs.infos_cnt));
++	if (ret < 0)
++		goto out;
++
++	root = &env->bpf_progs.infos;
++	next = rb_first(root);
++	while (next) {
++		struct bpf_prog_info_node *node;
++		size_t len;
++
++		node = rb_entry(next, struct bpf_prog_info_node, rb_node);
++		next = rb_next(&node->rb_node);
++		len = sizeof(struct bpf_prog_info_linear) +
++			node->info_linear->data_len;
++
++		/* before writing to file, translate address to offset */
++		bpf_program__bpil_addr_to_offs(node->info_linear);
++		ret = do_write(ff, node->info_linear, len);
++		/*
++		 * translate back to address even when do_write() fails,
++		 * so that this function never changes the data.
++		 */
++		bpf_program__bpil_offs_to_addr(node->info_linear);
++		if (ret < 0)
++			goto out;
 +	}
-+
++out:
 +	up_read(&env->bpf_progs.lock);
-+	return node;
++	return ret;
 +}
 +
- /* purge data in bpf_progs.infos tree */
- static void perf_env__purge_bpf(struct perf_env *env)
+ static int cpu_cache_level__sort(const void *a, const void *b)
  {
-@@ -83,6 +135,19 @@ static void perf_env__purge_bpf(struct perf_env *env)
- 		rb_erase(&node->rb_node, root);
- 		free(node);
- 	}
+ 	struct cpu_cache_level *cache_a = (struct cpu_cache_level *)a;
+@@ -1341,6 +1385,29 @@ static void print_clockid(struct feat_fd *ff, FILE *fp)
+ 		ff->ph->env.clockid_res_ns * 1000);
+ }
+ 
++static void print_bpf_prog_info(struct feat_fd *ff, FILE *fp)
++{
++	struct perf_env *env = &ff->ph->env;
++	struct rb_root *root;
++	struct rb_node *next;
 +
-+	root = &env->bpf_progs.btfs;
++	down_read(&env->bpf_progs.lock);
++
++	root = &env->bpf_progs.infos;
 +	next = rb_first(root);
 +
 +	while (next) {
-+		struct btf_node *node;
++		struct bpf_prog_info_node *node;
 +
-+		node = rb_entry(next, struct btf_node, rb_node);
++		node = rb_entry(next, struct bpf_prog_info_node, rb_node);
 +		next = rb_next(&node->rb_node);
-+		rb_erase(&node->rb_node, root);
-+		free(node);
++		fprintf(fp, "# bpf_prog_info of id %u\n",
++			node->info_linear->info.id);
 +	}
 +
- 	up_write(&env->bpf_progs.lock);
- }
- 
-@@ -120,6 +185,7 @@ void perf_env__exit(struct perf_env *env)
- void perf_env__init(struct perf_env *env)
++	up_read(&env->bpf_progs.lock);
++}
++
+ static void free_event_desc(struct perf_evsel *events)
  {
- 	env->bpf_progs.infos = RB_ROOT;
-+	env->bpf_progs.btfs = RB_ROOT;
- 	init_rwsem(&env->bpf_progs.lock);
+ 	struct perf_evsel *evsel;
+@@ -2373,6 +2440,75 @@ static int process_clockid(struct feat_fd *ff,
+ 	return 0;
  }
  
-diff --git a/tools/perf/util/env.h b/tools/perf/util/env.h
-index 24b11c564ba4..4f8e2b485c01 100644
---- a/tools/perf/util/env.h
-+++ b/tools/perf/util/env.h
-@@ -75,10 +75,13 @@ struct perf_env {
- 		struct rw_semaphore	lock;
- 		struct rb_root		infos;
- 		u32			infos_cnt;
-+		struct rb_root		btfs;
-+		u32			btfs_cnt;
- 	} bpf_progs;
++static int process_bpf_prog_info(struct feat_fd *ff,
++				 void *data __maybe_unused)
++{
++	struct bpf_prog_info_linear *info_linear;
++	struct bpf_prog_info_node *info_node;
++	struct perf_env *env = &ff->ph->env;
++	u32 count, i;
++	int err = -1;
++
++	if (ff->ph->needs_swap) {
++		pr_warning("interpreting bpf_prog_info from systems with endianity is not yet supported\n");
++		return 0;
++	}
++
++	if (do_read_u32(ff, &count))
++		return -1;
++
++	down_write(&env->bpf_progs.lock);
++
++	for (i = 0; i < count; ++i) {
++		u32 info_len, data_len;
++
++		info_linear = NULL;
++		info_node = NULL;
++		if (do_read_u32(ff, &info_len))
++			goto out;
++		if (do_read_u32(ff, &data_len))
++			goto out;
++
++		if (info_len > sizeof(struct bpf_prog_info)) {
++			pr_warning("detected invalid bpf_prog_info\n");
++			goto out;
++		}
++
++		info_linear = malloc(sizeof(struct bpf_prog_info_linear) +
++				     data_len);
++		if (!info_linear)
++			goto out;
++		info_linear->info_len = sizeof(struct bpf_prog_info);
++		info_linear->data_len = data_len;
++		if (do_read_u64(ff, (u64 *)(&info_linear->arrays)))
++			goto out;
++		if (__do_read(ff, &info_linear->info, info_len))
++			goto out;
++		if (info_len < sizeof(struct bpf_prog_info))
++			memset(((void *)(&info_linear->info)) + info_len, 0,
++			       sizeof(struct bpf_prog_info) - info_len);
++
++		if (__do_read(ff, info_linear->data, data_len))
++			goto out;
++
++		info_node = malloc(sizeof(struct bpf_prog_info_node));
++		if (!info_node)
++			goto out;
++
++		/* after reading from file, translate offset to address */
++		bpf_program__bpil_offs_to_addr(info_linear);
++		info_node->info_linear = info_linear;
++		perf_env__insert_bpf_prog_info(env, info_node);
++	}
++
++	return 0;
++out:
++	free(info_linear);
++	free(info_node);
++	up_write(&env->bpf_progs.lock);
++	return err;
++}
++
+ struct feature_ops {
+ 	int (*write)(struct feat_fd *ff, struct perf_evlist *evlist);
+ 	void (*print)(struct feat_fd *ff, FILE *fp);
+@@ -2432,7 +2568,8 @@ static const struct feature_ops feat_ops[HEADER_LAST_FEATURE] = {
+ 	FEAT_OPN(CACHE,		cache,		true),
+ 	FEAT_OPR(SAMPLE_TIME,	sample_time,	false),
+ 	FEAT_OPR(MEM_TOPOLOGY,	mem_topology,	true),
+-	FEAT_OPR(CLOCKID,       clockid,        false)
++	FEAT_OPR(CLOCKID,       clockid,        false),
++	FEAT_OPR(BPF_PROG_INFO, bpf_prog_info,  false)
  };
  
- struct bpf_prog_info_node;
-+struct btf_node;
- 
- extern struct perf_env perf_env;
- 
-@@ -99,4 +102,6 @@ void perf_env__insert_bpf_prog_info(struct perf_env *env,
- 				    struct bpf_prog_info_node *info_node);
- struct bpf_prog_info_node *perf_env__find_bpf_prog_info(struct perf_env *env,
- 							__u32 prog_id);
-+void perf_env__insert_btf(struct perf_env *env, struct btf_node *btf_node);
-+struct btf_node *perf_env__find_btf(struct perf_env *env, __u32 btf_id);
- #endif /* __PERF_ENV_H */
+ struct header_print_data {
+diff --git a/tools/perf/util/header.h b/tools/perf/util/header.h
+index 0d553ddca0a3..0785c91b4c3a 100644
+--- a/tools/perf/util/header.h
++++ b/tools/perf/util/header.h
+@@ -39,6 +39,7 @@ enum {
+ 	HEADER_SAMPLE_TIME,
+ 	HEADER_MEM_TOPOLOGY,
+ 	HEADER_CLOCKID,
++	HEADER_BPF_PROG_INFO,
+ 	HEADER_LAST_FEATURE,
+ 	HEADER_FEAT_BITS	= 256,
+ };
 -- 
 2.17.1
 
