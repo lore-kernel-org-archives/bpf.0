@@ -2,87 +2,84 @@ Return-Path: <SRS0=5gB9=RP=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_NEOMUTT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B17FC43381
-	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 16:01:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA92EC43381
+	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 16:19:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E3B882054F
-	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 16:01:49 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="LnQHklFY"
+	by mail.kernel.org (Postfix) with ESMTP id 7926520657
+	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 16:19:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726360AbfCLQBt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Mar 2019 12:01:49 -0400
-Received: from mail-oi1-f174.google.com ([209.85.167.174]:40380 "EHLO
-        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725894AbfCLQBt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Mar 2019 12:01:49 -0400
-Received: by mail-oi1-f174.google.com with SMTP id k11so1975761oic.7
-        for <bpf@vger.kernel.org>; Tue, 12 Mar 2019 09:01:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=lCPO6aHHrTxnsEKjEQE93kCa2CHMaQzOH1xlmcOKjrk=;
-        b=LnQHklFYdc6Bz9xhbXGVw9YKNQPW+6yVtbjJ9tg2SvGOci9gpmgAMznJ42fn/Usl9/
-         ELic76eG01SLI5APFCpTaCAYteo0OBJRRqknl6jdCzVkipqEisl/e/kpMtsz8ubTDugD
-         q5uBstsoq40FlAJP6rb2oVyFzkcfIFyfl2jrs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=lCPO6aHHrTxnsEKjEQE93kCa2CHMaQzOH1xlmcOKjrk=;
-        b=UQfi4wdhIe8VW53jWu4BDe5Azlcd811XGpiv5N5Fvlz4F3IB3txqwxxD8c1yBORFkp
-         tte/BjmKyWryEOs7HDzZDUtrVGJp9KBu4lxA5y95eynO/NfoiT/IczpOZuR6fnR7wX2n
-         7pK4PEsod3gdTvTS499FK42eOR2kuQQLbLxh6Dks3VoQ5gOV0a5WcCqas2wBg48BY/ww
-         Q16KtSE6bqx+7qO8FKEXY/RXQL/Uczhr+elwEaxOj6xNjFMnolGaubcaeRKJucKV9BEy
-         SBV1To0wHrMPUjQJQOBHvURI4L2Tbpt1AsTH9X2ucI4DJ104ktDRnhEDv6yyUmZ/oaA/
-         zXSw==
-X-Gm-Message-State: APjAAAX5DaCC9zT5PnFBtlgrOwNfRFUn4o9q1vIooltze/hkF2NVY9j/
-        JNdfW/xsi860/ZArEw0BKsbGdbmFgCmuJSkocxTgLcT50U1HfQ==
-X-Google-Smtp-Source: APXvYqz8gyCoKEi+l+sqFMaFMr1UEC4/zK/+et+cypEaWB5bilbeiGNSfCVetqXeq/XeRge2hDqoFKG01QZW6QoNNqI=
-X-Received: by 2002:aca:e0c6:: with SMTP id x189mr2044297oig.78.1552406508533;
- Tue, 12 Mar 2019 09:01:48 -0700 (PDT)
+        id S1726378AbfCLQTq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Mar 2019 12:19:46 -0400
+Received: from foss.arm.com ([217.140.101.70]:44912 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726365AbfCLQTq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Mar 2019 12:19:46 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF36480D;
+        Tue, 12 Mar 2019 09:19:45 -0700 (PDT)
+Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.195.17])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CE1D43F59C;
+        Tue, 12 Mar 2019 09:19:43 -0700 (PDT)
+Date:   Tue, 12 Mar 2019 16:19:41 +0000
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: Re: [RFC][PATCH] Export supported trace features in debugfs
+Message-ID: <20190312161941.6vlxp3qvad5oy4fs@e107158-lin.cambridge.arm.com>
+References: <20190312110437.5977-1-qais.yousef@arm.com>
+ <20190312152703.dulqcnhkknklxihq@ast-mbp>
 MIME-Version: 1.0
-From:   Lorenz Bauer <lmb@cloudflare.com>
-Date:   Tue, 12 Mar 2019 16:01:37 +0000
-Message-ID: <CACAyw98JsBacLyjtLsj3XnikNbgNRmxhEHpRjzqdAk0=H4BbOg@mail.gmail.com>
-Subject: [LSF/MM ATTEND] BPF track
-To:     lsf-pc@lists.linux-foundation.org
-Cc:     Alexei Starovoitov <ast@fb.com>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190312152703.dulqcnhkknklxihq@ast-mbp>
+User-Agent: NeoMutt/20171215
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello,
+On 03/12/19 08:27, Alexei Starovoitov wrote:
+> On Tue, Mar 12, 2019 at 11:07:14AM +0000, Qais Yousef wrote:
+> > eBPF tools like bcc-tools have hard time figuring out when features like
+> > raw_tracepoint are supported in the kernel on which we are running. At
+> > the moment a fragile mechanism of matching bpf_find_raw_tracepoint()
+> > function in /proc/kallsyms is used to find out whether raw tracepoints
+> > can be used or not. But when this function was renamed recently to
+> > bpf_get_raw_tracepoint() the tool started to fail to use raw
+> > tracepoints.
+> > 
+> > To help in providing a more reliable way to detect features like
+> > RAW_TRACEPOINT, add a new file in trace debugfs to export the supported
+> > features.
+> > 
+> > $cat /sys/kernel/debug/tracing/supported_features
+> > RAW_TRACEPOINT
+> > EXAMPLE_FEATURE_1
+> > EXAMPLE_FEATURE_2
+> > 
+> > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+> 
+> this type of attempts have been made in the past and we always rejected them.
+> Please use 'bpftool' instead that detects numerous bpf related features including raw_tp.
+> # bpftool feature probe|grep raw_tracepoint
+> eBPF program_type raw_tracepoint is available
+> 
 
-I'd like to attend the BPF track of LSF/MM 2019 Summit. I work on L4
-load balancing at Cloudflare, which uses XDP as a key component. I've
-also been involved in our XDP DoS mitigation work.
+I see. I should have looked harder. I'll have a look at what bpftool does then.
 
-I'm working on moving the functionality of an out of tree kernel
-module into tc clsact / XDP and will contribute eBPF helpers to this
-effect. Checking SYN cookies, possibly integration with TPROXY, etc.
-As time permits I'll keep fixing small annoyances I encounter along
-the way.
+Thanks
 
-My focus would be getting acquainted with other contributors to eBPF,
-and sharing the experience we've had using eBPF at CF. Specifically,
-hitting verifier limits when generating code due to forced inlining
-and tail calling, and patching eBPF at load time to en/disable code
-paths because of missing global variables. Since we use / maintain an
-eBPF loader written in Go (github.com/newtools/ebpf) I'd also join the
-discussion around the one true loader and how BTF specifically affects
-third-party loaders.
-
-Best
-Lorenz
--- 
-Lorenz Bauer  |  Systems Engineer
-25 Lavington St., London SE1 0NZ
-
-www.cloudflare.com
+--
+Qais Yousef
