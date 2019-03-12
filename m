@@ -2,191 +2,162 @@ Return-Path: <SRS0=5gB9=RP=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_MUTT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22A89C4360F
-	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 02:11:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24C1EC43381
+	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 03:24:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DC176214AE
-	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 02:11:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D3F7F20693
+	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 03:24:34 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="kRiCB1cU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726727AbfCLCLE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 Mar 2019 22:11:04 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:4672 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726649AbfCLCLE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 11 Mar 2019 22:11:04 -0400
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 0E24B9A9AC8165639C78;
-        Tue, 12 Mar 2019 10:11:01 +0800 (CST)
-Received: from [127.0.0.1] (10.177.31.96) by DGGEMS409-HUB.china.huawei.com
- (10.3.19.209) with Microsoft SMTP Server id 14.3.408.0; Tue, 12 Mar 2019
- 10:10:58 +0800
-Subject: Re: [PATCH] proc/sysctl: Fix NULL pointer dereference in put_links
-To:     Luis Chamberlain <mcgrof@kernel.org>
-References: <20190304135438.29792-1-yuehaibing@huawei.com>
- <03aafd33-f9d5-4a48-b123-7a6b2e7f16e7@huawei.com>
- <CAB=NE6UF=2pWzOFY2PqpXyuDV3qSa7R8bpMAw-6qF9Z7Ly=PEw@mail.gmail.com>
- <43f6b8c5-a9eb-c77d-0c52-dbc3c45b4dc7@huawei.com>
-CC:     Kees Cook <keescook@chromium.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, Al Viro <viro@zeniv.linux.org.uk>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <bpf@vger.kernel.org>
-From:   YueHaibing <yuehaibing@huawei.com>
-Message-ID: <e5d45b4e-b821-f993-7e88-6b0c35159d5e@huawei.com>
-Date:   Tue, 12 Mar 2019 10:10:53 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.2.0
+        id S1726617AbfCLDYe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 Mar 2019 23:24:34 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:46654 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726534AbfCLDYe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 11 Mar 2019 23:24:34 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x2C3ODUZ000893;
+        Tue, 12 Mar 2019 03:24:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2018-07-02;
+ bh=61SFqZqTckXFwoDuqu+zIeYkYzbbKC2Dmp1CiOk05fs=;
+ b=kRiCB1cU8zyXXsuodbVSki8l8vflviCh6pfpL3p1g8oq/xzsHYOQGnBCJIKUcXotdtqV
+ 18vsm07w8yt1t9zq/LKbfYwJkgyz9If589SHWOsHD2p4hUcV5lPPhVqcB4xTssWTZmrx
+ sVK6uSV90rALAOCayqsZBprVL16dpHqULWoDGpRqZwrXl6uPdx2e/CUi2ajN5pQ8JfIx
+ /KNRSXEDNQ1dhvFNDEsiC9LBmVW/i64WbpYxPaQ4oZW6d3WZlXDRrmtaBxnO01W+KQT3
+ 3u0dXWJFTwDD/gNiX9HuKT99jcKNoffAYHWKFOwB8IWjJZGMGTEPcmPMgiEMKA/VZ4Rq Mw== 
+Received: from userv0022.oracle.com (userv0022.oracle.com [156.151.31.74])
+        by userp2130.oracle.com with ESMTP id 2r44wu20ed-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Mar 2019 03:24:13 +0000
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userv0022.oracle.com (8.14.4/8.14.4) with ESMTP id x2C3O8E0026258
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Mar 2019 03:24:08 GMT
+Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x2C3O7kE012243;
+        Tue, 12 Mar 2019 03:24:07 GMT
+Received: from localhost (/10.159.211.98)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 11 Mar 2019 20:24:07 -0700
+Date:   Mon, 11 Mar 2019 23:24:05 -0400
+From:   Kris Van Hees <kris.van.hees@oracle.com>
+To:     Brendan Gregg <bgregg@netflix.com>
+Cc:     Kris Van Hees <kris.van.hees@oracle.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: Re: [PATCH 0/2] bpf: context casting for tail call and gtrace prog
+ type
+Message-ID: <20190312032405.GE11634@oracle.com>
+References: <201902251554.x1PFsD3w017626@userv0121.oracle.com>
+ <20190226061823.f7hfs7yojfuycqmg@ast-mbp.dhcp.thefacebook.com>
+ <20190226064601.GE16689@oracle.com>
+ <20190305185950.rpx7srzpbya5psnf@ast-mbp.dhcp.thefacebook.com>
+ <20190306020357.GG32758@oracle.com>
+ <20190307213035.5eagphx6vswxalai@ast-mbp.dhcp.thefacebook.com>
+ <20190311142127.GA11634@oracle.com>
+ <CAJN39ohS0+GCLMsc3s_JyROTDty8eomRJ==QW34YxhDrDGr9KA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <43f6b8c5-a9eb-c77d-0c52-dbc3c45b4dc7@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-X-Originating-IP: [10.177.31.96]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJN39ohS0+GCLMsc3s_JyROTDty8eomRJ==QW34YxhDrDGr9KA@mail.gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9192 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1903120023
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-T24gMjAxOS8zLzkgMjA6MjcsIFl1ZUhhaWJpbmcgd3JvdGU6DQo+IE9uIDIwMTkvMy85IDEx
-OjU4LCBMdWlzIENoYW1iZXJsYWluIHdyb3RlOg0KPj4gSSBzbyBleGNpdGVkIGFib3V0IHRo
-ZSByZXBvcnQsIHRoYW5rcyB0aGlzIGlzIGF3ZXNvbWUgd29yayEhIEhvd2V2ZXIgaXQgc2Vl
-bWVkIHBvc3NpYmx5IGxpa2UgYSBwYXBlci1vdmVyIGEgZGlmZmVyZW50IGlzc3VlLiBJJ20g
-bm90IGNvbnZpbmNlZCB5ZXQuDQo+Pg0KPj4gSWYgcHJlZmVyIGEgYml0IG1vcmUgaW52ZXN0
-aWdhdGlvbiB1bnRpbCB3ZSBjYW4gYmUgMTAwJSBzdXJlLiBBdCB0aGlzIHBvaW50IG15IHBv
-c2l0aW9uIHdvdWxkIGJlIHRoaXMgaXMgbW9yZSBvZiBhIHJpc2sgZm9yIG1vcmUgcmVncmVz
-c2lvbnMgYW5kIHRoYXQncyBhbiBvZmYgZmVlbGluZyBmb3IgYSBmaXguDQo+Pg0KPj4gICBM
-dWlzDQo+IA0KPiBUaGlzIGlzc3VlIG9jY3VycyBsaWtlIHRoaXM6DQo+IA0KPiBfX3JlZ2lz
-dGVyX3N5c2N0bF90YWJsZQ0KPiAgICAgIC0tPmdldF9zdWJkaXINCj4gICAgICAJLS0+bmV3
-X2RpciAgLy9jcmVhdGUgJ25ldycgZGlyDQo+ICAgICAgICAgICAgIC0tPmluaXRfaGVhZGVy
-ICAvLyAmbmV3LT5oZWFkZXItPnBhcmVudCA9IE5VTEwNCj4gICAgICAgICAtLT5pbnNlcnRf
-aGVhZGVyDQo+ICAgICAgICAgICAgIC0tPiBpbnNlcnRfbGlua3MNCj4gCQktLT5uZXdfbGlu
-a3MNCj4gCQkJLS0+a3phbGxvYyAgLy9mYWlsZWQNCj4gCQktLT4mbmV3LT5oZWFkZXItPnBh
-cmVudCA9IE5VTEwNCj4gCS0tPmRyb3Bfc3lzY3RsX3RhYmxlKCZuZXctPmhlYWRlcikgLy9J
-biBlcnIgcGF0aCBvZiBnZXRfc3ViZGlyDQo+IAkJLS0+cHV0X2xpbmtzIC8vY2FsbCB4bGF0
-ZV9kaXIgd2hvc2UgMm5kIHBhcmFtIGlzICcmbmV3LT5oZWFkZXItPnBhcmVudCcNCj4gCQkJ
-LS0+IHhsYXRlX2RpciAgLy9hY2Nlc3MgZGlyLT5oZWFkZXIsaG93ZXZlciAnZGlyJyBpcyBO
-VUxMIHdoaWNoIGNvbWVzIGZyb20gJyZuZXctPmhlYWRlci0+cGFyZW50Jw0KPiANCj4gUGxl
-YXNlIGNvcnJlY3QgbWUgaWYgdGhpcyBpcyBpbmNvcnJlY3QuDQoNCkhlbGxvLA0KDQpBbnkg
-Y29tbWVudCB3aWxsIGJlIGFwcHJlY2lhdGVkLg0KDQo+IAkNCj4+DQo+PiBPbiBGcmksIE1h
-ciA4LCAyMDE5LCA4OjA0IFBNIFl1ZUhhaWJpbmcgPHl1ZWhhaWJpbmdAaHVhd2VpLmNvbSA8
-bWFpbHRvOnl1ZWhhaWJpbmdAaHVhd2VpLmNvbT4+IHdyb3RlOg0KPj4NCj4+ICAgICArY2Mg
-QWwgVmlybw0KPj4NCj4+ICAgICBPbiAyMDE5LzMvNCAyMTo1NCwgWXVlIEhhaWJpbmcgd3Jv
-dGU6DQo+PiAgICAgPiBGcm9tOiBZdWVIYWliaW5nIDx5dWVoYWliaW5nQGh1YXdlaS5jb20g
-PG1haWx0bzp5dWVoYWliaW5nQGh1YXdlaS5jb20+Pg0KPj4gICAgID4NCj4+ICAgICA+IFN5
-emthbGxlciByZXBvcnQgdGhpczoNCj4+ICAgICA+DQo+PiAgICAgPiBrYXNhbjogR1BGIGNv
-dWxkIGJlIGNhdXNlZCBieSBOVUxMLXB0ciBkZXJlZiBvciB1c2VyIG1lbW9yeSBhY2Nlc3MN
-Cj4+ICAgICA+IGdlbmVyYWwgcHJvdGVjdGlvbiBmYXVsdDogMDAwMCBbIzFdIFNNUCBLQVNB
-TiBQVEkNCj4+ICAgICA+IENQVTogMSBQSUQ6IDUzNzMgQ29tbTogc3l6LWV4ZWN1dG9yLjAg
-Tm90IHRhaW50ZWQgNS4wLjAtcmM4KyAjMw0KPj4gICAgID4gSGFyZHdhcmUgbmFtZTogUUVN
-VSBTdGFuZGFyZCBQQyAoaTQ0MEZYICsgUElJWCwgMTk5NiksIEJJT1MgMS4xMC4yLTF1YnVu
-dHUxIDA0LzAxLzIwMTQNCj4+ICAgICA+IFJJUDogMDAxMDpwdXRfbGlua3MrMHgxMDEvMHg0
-NDAgZnMvcHJvYy9wcm9jX3N5c2N0bC5jOjE1OTkNCj4+ICAgICA+IENvZGU6IDAwIDBmIDg1
-IDNhIDAzIDAwIDAwIDQ4IDhiIDQzIDM4IDQ4IDg5IDQ0IDI0IDIwIDQ4IDgzIGMwIDM4IDQ4
-IDg5IGMyIDQ4IDg5IDQ0IDI0IDI4IDQ4IGI4IDAwIDAwIDAwIDAwIDAwIGZjIGZmIGRmIDQ4
-IGMxIGVhIDAzIDw4MD4gM2MgMDIgMDAgMGYgODUgZmUgMDIgMDAgMDAgNDggOGIgNzQgMjQg
-MjAgNDggYzcgYzcgNjAgMmEgOWQgOTENCj4+ICAgICA+IFJTUDogMDAxODpmZmZmODg4MWQ4
-MjhmMjM4IEVGTEFHUzogMDAwMTAyMDINCj4+ICAgICA+IFJBWDogZGZmZmZjMDAwMDAwMDAw
-MCBSQlg6IGZmZmY4ODgxZTAxYjExNDAgUkNYOiBmZmZmZmZmZjhlZTk4MjY3DQo+PiAgICAg
-PiBSRFg6IDAwMDAwMDAwMDAwMDAwMDcgUlNJOiBmZmZmYzkwMDAxNDc5MDAwIFJESTogZmZm
-Zjg4ODFlMDFiMTE3OA0KPj4gICAgID4gUkJQOiBkZmZmZmMwMDAwMDAwMDAwIFIwODogZmZm
-ZmVkMTAzZWUyNzI1OSBSMDk6IGZmZmZlZDEwM2VlMjcyNTkNCj4+ICAgICA+IFIxMDogMDAw
-MDAwMDAwMDAwMDAwMSBSMTE6IGZmZmZlZDEwM2VlMjcyNTggUjEyOiBmZmZmZmZmZmZmZmZm
-ZmY0DQo+PiAgICAgPiBSMTM6IDAwMDAwMDAwMDAwMDAwMDYgUjE0OiBmZmZmODg4MWY1OTgz
-OGMwIFIxNTogZGZmZmZjMDAwMDAwMDAwMA0KPj4gICAgID4gRlM6ICAwMDAwN2YwNzIyNTRm
-NzAwKDAwMDApIEdTOmZmZmY4ODgxZjcxMDAwMDAoMDAwMCkga25sR1M6MDAwMDAwMDAwMDAw
-MDAwMA0KPj4gICAgID4gQ1M6ICAwMDEwIERTOiAwMDAwIEVTOiAwMDAwIENSMDogMDAwMDAw
-MDA4MDA1MDAzMw0KPj4gICAgID4gQ1IyOiAwMDAwN2ZmZjhiMjg2NjY4IENSMzogMDAwMDAw
-MDFmMDU0MjAwMiBDUjQ6IDAwMDAwMDAwMDA3NjA2ZTANCj4+ICAgICA+IERSMDogMDAwMDAw
-MDAwMDAwMDAwMCBEUjE6IDAwMDAwMDAwMDAwMDAwMDAgRFIyOiAwMDAwMDAwMDAwMDAwMDAw
-DQo+PiAgICAgPiBEUjM6IDAwMDAwMDAwMDAwMDAwMDAgRFI2OiAwMDAwMDAwMGZmZmUwZmYw
-IERSNzogMDAwMDAwMDAwMDAwMDQwMA0KPj4gICAgID4gUEtSVTogNTU1NTU1NTQNCj4+ICAg
-ICA+IENhbGwgVHJhY2U6DQo+PiAgICAgPiAgZHJvcF9zeXNjdGxfdGFibGUrMHgxNTIvMHg5
-ZjAgZnMvcHJvYy9wcm9jX3N5c2N0bC5jOjE2MjkNCj4+ICAgICA+ICBnZXRfc3ViZGlyIGZz
-L3Byb2MvcHJvY19zeXNjdGwuYzoxMDIyIFtpbmxpbmVdDQo+PiAgICAgPiAgX19yZWdpc3Rl
-cl9zeXNjdGxfdGFibGUrMHhkNjUvMHgxMDkwIGZzL3Byb2MvcHJvY19zeXNjdGwuYzoxMzM1
-DQo+PiAgICAgPiAgPyAweGZmZmZmZmZmYzFhMTgwMDANCj4+ICAgICA+ICBicl9uZXRmaWx0
-ZXJfaW5pdCsweGJjLzB4MTAwMCBbYnJfbmV0ZmlsdGVyXQ0KPj4gICAgID4gID8gMHhmZmZm
-ZmZmZmMxYTE4MDAwDQo+PiAgICAgPiAgPyAweGZmZmZmZmZmYzFhMTgwMDANCj4+ICAgICA+
-ICBkb19vbmVfaW5pdGNhbGwrMHhmYS8weDVjYSBpbml0L21haW4uYzo4ODcNCj4+ICAgICA+
-ICBkb19pbml0X21vZHVsZSsweDIwNC8weDVmNiBrZXJuZWwvbW9kdWxlLmM6MzQ2MA0KPj4g
-ICAgID4gIGxvYWRfbW9kdWxlKzB4NjZiMi8weDg1NzAga2VybmVsL21vZHVsZS5jOjM4MDgN
-Cj4+ICAgICA+ICBfX2RvX3N5c19maW5pdF9tb2R1bGUrMHgyMzgvMHgyYTAga2VybmVsL21v
-ZHVsZS5jOjM5MDINCj4+ICAgICA+ICBkb19zeXNjYWxsXzY0KzB4MTQ3LzB4NjAwIGFyY2gv
-eDg2L2VudHJ5L2NvbW1vbi5jOjI5MA0KPj4gICAgID4gIGVudHJ5X1NZU0NBTExfNjRfYWZ0
-ZXJfaHdmcmFtZSsweDQ5LzB4YmUNCj4+ICAgICA+IFJJUDogMDAzMzoweDQ2MmU5OQ0KPj4g
-ICAgID4gQ29kZTogZjcgZDggNjQgODkgMDIgYjggZmYgZmYgZmYgZmYgYzMgNjYgMGYgMWYg
-NDQgMDAgMDAgNDggODkgZjggNDggODkgZjcgNDggODkgZDYgNDggODkgY2EgNGQgODkgYzIg
-NGQgODkgYzggNGMgOGIgNGMgMjQgMDggMGYgMDUgPDQ4PiAzZCAwMSBmMCBmZiBmZiA3MyAw
-MSBjMyA0OCBjNyBjMSBiYyBmZiBmZiBmZiBmNyBkOCA2NCA4OSAwMSA0OA0KPj4gICAgID4g
-UlNQOiAwMDJiOjAwMDA3ZjA3MjI1NGVjNTggRUZMQUdTOiAwMDAwMDI0NiBPUklHX1JBWDog
-MDAwMDAwMDAwMDAwMDEzOQ0KPj4gICAgID4gUkFYOiBmZmZmZmZmZmZmZmZmZmRhIFJCWDog
-MDAwMDAwMDAwMDczYmYwMCBSQ1g6IDAwMDAwMDAwMDA0NjJlOTkNCj4+ICAgICA+IFJEWDog
-MDAwMDAwMDAwMDAwMDAwMCBSU0k6IDAwMDAwMDAwMjAwMDAyODAgUkRJOiAwMDAwMDAwMDAw
-MDAwMDAzDQo+PiAgICAgPiBSQlA6IDAwMDA3ZjA3MjI1NGVjNzAgUjA4OiAwMDAwMDAwMDAw
-MDAwMDAwIFIwOTogMDAwMDAwMDAwMDAwMDAwMA0KPj4gICAgID4gUjEwOiAwMDAwMDAwMDAw
-MDAwMDAwIFIxMTogMDAwMDAwMDAwMDAwMDI0NiBSMTI6IDAwMDA3ZjA3MjI1NGY2YmMNCj4+
-ICAgICA+IFIxMzogMDAwMDAwMDAwMDRiY2VmYSBSMTQ6IDAwMDAwMDAwMDA2ZjZmYjAgUjE1
-OiAwMDAwMDAwMDAwMDAwMDA0DQo+PiAgICAgPiBNb2R1bGVzIGxpbmtlZCBpbjogYnJfbmV0
-ZmlsdGVyKCspIGR2Yl91c2JfZGlidXNiX21jX2NvbW1vbiBkaWIzMDAwbWMgZGlieDAwMF9j
-b21tb24gZHZiX3VzYl9kaWJ1c2JfY29tbW9uIGR2Yl91c2JfZHcyMTAyIGR2Yl91c2IgY2xh
-c3NtYXRlX2xhcHRvcCBwYWxtYXNfcmVndWxhdG9yIGNuIHZpZGVvYnVmMl92NGwyIHY0bDJf
-Y29tbW9uIHNuZF9zb2NfYmQyODYyMyBtcHRiYXNlIHNuZF91c2JfdXN4Mnkgc25kX3VzYm1p
-ZGlfbGliIHNuZF9yYXdtaWRpIHdtaSBsaWJudmRpbW0gbG9ja2Qgc3VucnBjIGdyYWNlIHJj
-X2t3b3JsZF9wYzE1MHUgcmNfY29yZSBydGNfZGE5MDYzIHNoYTFfc3NzZTMgaTJjX2Nyb3Nf
-ZWNfdHVubmVsIGFkeGwzNHhfc3BpIGFkeGwzNHggbmZuZXRsaW5rIGxpYjgwMjExIGk1NTAw
-X3RlbXAgZHZiX2FzMTAyIGR2Yl9jb3JlIHZpZGVvYnVmMl9jb21tb24gdmlkZW9kZXYgbWVk
-aWEgdmlkZW9idWYyX3ZtYWxsb2MgdmlkZW9idWYyX21lbW9wcyB1ZGNfY29yZSBsbmJwMjIg
-bGVkc19scDM5NTIgaGlkX3JvY2NhdF9yeW9zIHMxZDEzeHh4ZmIgbXRkIHZwb3J0X2dlbmV2
-ZSBvcGVudnN3aXRjaCBuZl9jb25uY291bnQgbmZfbmF0X2lwdjYgbnNoIGdlbmV2ZSB1ZHBf
-dHVubmVsIGlwNl91ZHBfdHVubmVsIHNuZF9zb2NfbXQ2MzUxIHNpc19hZ3AgcGh5bGluayBz
-bmRfc29jX2FkYXUxNzYxX3NwaSBzbmRfc29jX2FkYXUxNzYxIHNuZF9zb2NfYWRhdTE3eDEg
-c25kX3NvY19jb3JlIHNuZF9wY21fZG1hZW5naW5lIGFjOTdfYnVzIHNuZF9jb21wcmVzcyBz
-bmRfc29jX2FkYXVfdXRpbHMgc25kX3NvY19zaWdtYWRzcF9yZWdtYXAgc25kX3NvY19zaWdt
-YWRzcCByYWlkX2NsYXNzIGhpZF9yb2NjYXRfa29uZXB1cmUgaGlkX3JvY2NhdF9jb21tb24g
-aGlkX3JvY2NhdCBjMnBvcnRfZHVyYW1hcjIxNTAgY29yZSBtZGlvX2JjbV91bmltYWMgaXB0
-YWJsZV9zZWN1cml0eSBpcHRhYmxlX3JhdyBpcHRhYmxlX21hbmdsZQ0KPj4gICAgID4gIGlw
-dGFibGVfbmF0IG5mX25hdF9pcHY0IG5mX25hdCBuZl9jb25udHJhY2sgbmZfZGVmcmFnX2lw
-djYgbmZfZGVmcmFnX2lwdjQgaXB0YWJsZV9maWx0ZXIgYnBmaWx0ZXIgaXA2X3Z0aSBpcF92
-dGkgaXBfZ3JlIGlwaXAgc2l0IHR1bm5lbDQgaXBfdHVubmVsIGhzciB2ZXRoIG5ldGRldnNp
-bSBkZXZsaW5rIHZ4Y2FuIGJhdG1hbl9hZHYgY2ZnODAyMTEgcmZraWxsIGNobmxfbmV0IGNh
-aWYgbmxtb24gZHVtbXkgdGVhbSBib25kaW5nIHZjYW4gYnJpZGdlIHN0cCBsbGMgaXA2X2dy
-ZSBncmUgaXA2X3R1bm5lbCB0dW5uZWw2IHR1biBjcmN0MTBkaWZfcGNsbXVsIGNyYzMyX3Bj
-bG11bCBjcmMzMmNfaW50ZWwgZ2hhc2hfY2xtdWxuaV9pbnRlbCBqb3lkZXYgbW91c2VkZXYg
-aWRlX3BjaV9nZW5lcmljIHBpaXggYWVzbmlfaW50ZWwgYWVzX3g4Nl82NCBpZGVfY29yZSBj
-cnlwdG9fc2ltZCBhdGtiZCBjcnlwdGQgZ2x1ZV9oZWxwZXIgc2VyaW9fcmF3IGF0YV9nZW5l
-cmljIHBhdGFfYWNwaSBpMmNfcGlpeDQgZmxvcHB5IHNjaF9mcV9jb2RlbCBpcF90YWJsZXMg
-eF90YWJsZXMgaXB2NiBbbGFzdCB1bmxvYWRlZDogbG03M10NCj4+ICAgICA+IER1bXBpbmcg
-ZnRyYWNlIGJ1ZmZlcjoNCj4+ICAgICA+ICAgIChmdHJhY2UgYnVmZmVyIGVtcHR5KQ0KPj4g
-ICAgID4gLS0tWyBlbmQgdHJhY2UgNzcwMDIwZGUzODk2MWZkMCBdLS0tDQo+PiAgICAgPg0K
-Pj4gICAgID4gQSBuZXcgZGlyIGVudHJ5IGNhbiBiZSBjcmVhdGVkIGluIGdldF9zdWJkaXIg
-YW5kIGl0cyBoZWFkZXItPnBhcmVudCBpcyBzZXQNCj4+ICAgICA+IHRvIE5VTEwuIE9ubHkg
-YWZ0ZXIgaW5zZXJ0X2hlYWRlciBzdWNjZXNzLCBpdCB3aWxsIGJlIHNldCB0byAnZGlyJy4N
-Cj4+ICAgICA+IEhvd2V2ZXIgaW4gZXJyIGhhbmRsaW5nIHBhdGggb2YgZ2V0X3N1YmRpciwg
-ZHJvcF9zeXNjdGxfdGFibGUgbWF5YmUgY2FsbGVkDQo+PiAgICAgPiBvbiAnbmV3LT5oZWFk
-ZXInIHJlZ2FyZGxlc3MgdmFsdWUgb2YgaGVhZGVyLT5wYXJlbnQuIFRoZW4gcHV0X2xpbmtz
-DQo+PiAgICAgPiBiZSBjYWxsZWQsIHdoaWNoIHRyaWdnZXJzIE5VTEwtcHRyIGRlcmVmIHdo
-ZW4gYWNjZXNzIHRoZSBtZW1iZXIgb2YNCj4+ICAgICA+IGhlYWRlci0+cGFyZW50IGluIHhs
-YXRlX2Rpci4NCj4+ICAgICA+DQo+PiAgICAgPiBSZXBvcnRlZC1ieTogSHVsayBSb2JvdCA8
-aHVsa2NpQGh1YXdlaS5jb20gPG1haWx0bzpodWxrY2lAaHVhd2VpLmNvbT4+DQo+PiAgICAg
-PiBGaXhlczogMGU0N2M5OWQ3ZmUyNSAoInN5c2N0bDogUmVwbGFjZSByb290X2xpc3Qgd2l0
-aCBsaW5rcyBiZXR3ZWVuIHN5c2N0bF90YWJsZV9zZXRzIikNCj4+ICAgICA+IFNpZ25lZC1v
-ZmYtYnk6IFl1ZUhhaWJpbmcgPHl1ZWhhaWJpbmdAaHVhd2VpLmNvbSA8bWFpbHRvOnl1ZWhh
-aWJpbmdAaHVhd2VpLmNvbT4+DQo+PiAgICAgPiAtLS0NCj4+ICAgICA+ICBmcy9wcm9jL3By
-b2Nfc3lzY3RsLmMgfCAzICsrLQ0KPj4gICAgID4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2Vy
-dGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4+ICAgICA+DQo+PiAgICAgPiBkaWZmIC0tZ2l0
-IGEvZnMvcHJvYy9wcm9jX3N5c2N0bC5jIGIvZnMvcHJvYy9wcm9jX3N5c2N0bC5jDQo+PiAg
-ICAgPiBpbmRleCA0ZDU5OGEzLi40YzJhMDVhIDEwMDY0NA0KPj4gICAgID4gLS0tIGEvZnMv
-cHJvYy9wcm9jX3N5c2N0bC5jDQo+PiAgICAgPiArKysgYi9mcy9wcm9jL3Byb2Nfc3lzY3Rs
-LmMNCj4+ICAgICA+IEBAIC0xNjI2LDcgKzE2MjYsOCBAQCBzdGF0aWMgdm9pZCBkcm9wX3N5
-c2N0bF90YWJsZShzdHJ1Y3QgY3RsX3RhYmxlX2hlYWRlciAqaGVhZGVyKQ0KPj4gICAgID4g
-ICAgICAgaWYgKC0taGVhZGVyLT5ucmVnKQ0KPj4gICAgID4gICAgICAgICAgICAgICByZXR1
-cm47DQo+PiAgICAgPiANCj4+ICAgICA+IC0gICAgIHB1dF9saW5rcyhoZWFkZXIpOw0KPj4g
-ICAgID4gKyAgICAgaWYgKHBhcmVudCkNCj4+ICAgICA+ICsgICAgICAgICAgICAgcHV0X2xp
-bmtzKGhlYWRlcik7DQo+PiAgICAgPiAgICAgICBzdGFydF91bnJlZ2lzdGVyaW5nKGhlYWRl
-cik7DQo+PiAgICAgPiAgICAgICBpZiAoIS0taGVhZGVyLT5jb3VudCkNCj4+ICAgICA+ICAg
-ICAgICAgICAgICAga2ZyZWVfcmN1KGhlYWRlciwgcmN1KTsNCj4+ICAgICA+DQo+Pg0K
+On Mon, Mar 11, 2019 at 06:29:55PM -0700, Brendan Gregg wrote:
+> On Mon, Mar 11, 2019 at 7:21 AM Kris Van Hees <kris.van.hees@oracle.com> wrote:
+> >
+> > On Thu, Mar 07, 2019 at 01:30:37PM -0800, Alexei Starovoitov wrote:
+> > > On Tue, Mar 05, 2019 at 09:03:57PM -0500, Kris Van Hees wrote:
+> [...]
+> > > > But being able to do things like this without
+> > > > needing to touch the context of any other BPF program type is a great benefit
+> > > > to offer tracing tools, as far as I see it.
+> > >
+> > > I still don't understand what you're referring to by 'things like this'
+> > > that somehow will be possible in the future, but not possible today.
+> > > Could you please give concrete example?
+> >
+> > My apologies for not being clear.  I am referring to the features of the
+> > gtrace context in terms of containing task information, and output buffers
+> > to be used in BPF programs triggered from various probe sources (kprobe,
+> > tracepoints, ...)  I would not want to suggest making changes to all the
+> > different program contexts in order to support tracing needs because that
+> > would be wrong.  Doing it in a central place makes it a lot easier to maintain
+> > without impacting other program types, etc.
+> >
+> > Of course, yes, bpf_probe_read() and bpf_perf_event_output() can be used
+> > to implement a lot of what existing tracing tools like DTrace can do, if you
+> > write them based on that.  One limitations I am obviously working with is
+> > that DTrace already exists and has existed for a long time.  And while it is
+> > 100% available as open source, it involves a pretty involved set of patches to
+> > be applied to the kernel to be able to use it which is just not ideal.  Hence
+> > the goal to make it available by re-using as much of the existing features in
+> > Linux as possible, while still maintaining the same level of functionality in
+> > DTrace.  That means we need to fill the gaps - and from where I am sitting,
+> > the ways to do that might as well be of use to others (if they want to).
+> >
+> > If phrasing things in the context of DTrace would make the conversation easier
+> > I certainly don;t mind doing that, but I really don't want to limit my patches
+> > to supporting just DTrace (even if right now it might be the only tracer using
+> > it).
+> 
+> As a concrete example, can you point to one of my own published DTrace
+> tools that BPF can't do? These were created to solve many real
+> production issues, and make good use cases. I've been porting them
+> over to BPF (bcc and bpftrace) without too much problem, and I can't
+> think of a single one that I couldn't port over today.
 
+I am unclear how pointing at one of your published DTrace tools would
+contribute to this discussion.  Surely the scope of use cases is not limited
+to the DTrace scripts you published?
+
+Either way, one of the features that I make use of is speculative tracing.
+And yes, even that could be handled with some ugly workarounds but my intent
+is to implement things in a more clean way rather than depending on a bunch
+of workarounds to make it somewhat work.
+
+> There's a few minor things that I'm currently doing workarounds for,
+> like ppid, but that should be satisfied with a few more helpers. And
+> if it's really niche, then BTF sounds like a good solution.
+
+Of course, we can always add more helpers to get to information that is
+needed, but that is hardly a practical solution in the long run, and at
+Plumbers 2019 it was already indicated that just adding helpers to get to
+more information about tasks is not the route people want to take.
+
+> If your ultimate goal is to have a command called "dtrace" that runs D
+> programs, to support your existing users, then I'd add a lex/yacc pair
+> to bpftrace and have it emit a dtrace binary.
+
+My goal is not to have a command called dtarce that somehow simply provides
+some form of support for dtrace scripts in some legacy support model.  My
+goal is to make DTrace available on Linux based on existing kernel features
+(and contirbuting extra features where needed, in a collaborative manner).
+
+DTrace is currently already available as open source for Linux but it involves
+a much too invasive set of patches to the kernel, often (almost) duplicating
+functionality that is already present.  That's not a good solution.  Working
+on implementing the kernel portion to make use of kernel features has brought
+to light some areas where contributions can help avoid workarounds and provide
+mechanisms that can be of use to other tracing solutions as well.  That is the
+basis for my patches.
+
+	Kris
