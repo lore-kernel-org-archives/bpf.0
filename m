@@ -2,174 +2,486 @@ Return-Path: <SRS0=5gB9=RP=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,USER_AGENT_MUTT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4A76C43381
-	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 13:12:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60380C43381
+	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 13:51:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8DEED21734
-	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 13:12:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1A9402147C
+	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 13:51:00 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lmFxLs3g"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726009AbfCLNM6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Mar 2019 09:12:58 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:36947 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725895AbfCLNM6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Mar 2019 09:12:58 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 7E2D3C05FBC5;
-        Tue, 12 Mar 2019 13:12:57 +0000 (UTC)
-Received: from krava (unknown [10.43.17.124])
-        by smtp.corp.redhat.com (Postfix) with SMTP id EAA6C648C2;
-        Tue, 12 Mar 2019 13:12:51 +0000 (UTC)
-Date:   Tue, 12 Mar 2019 14:12:51 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
+        id S1726284AbfCLNu7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Mar 2019 09:50:59 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:35500 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726193AbfCLNu7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Mar 2019 09:50:59 -0400
+Received: by mail-qk1-f194.google.com with SMTP id z13so1456602qki.2;
+        Tue, 12 Mar 2019 06:50:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=K2qgQ7sEFSYO1X587IGodc/KWRxiWDjVpDlAM1xtiSk=;
+        b=lmFxLs3g+gXYt34EYN8jhSyFoeStX79QyS70HaS48ZWBJNA4e2SoWVdUQKN2/41JDo
+         6Uu6h7qiasbCjUwrVS5hp2p7+VA5+/HZ/MvQq4h+Pa+jkNmTRdi6qiiMJ/sRxeK/5EPz
+         gbPnySrQMbXLfcOFSXNzf6e7rFyRc1liY4kbJa2QLuUswodxOHD4kNzDObkhcMSvJQQg
+         fe82M6Jg/Q2gSkX5y+oeZxXX9uK6ZLN0f9PXtMjJvomE02gt+L4VS1M4tkbvpAs1yQkh
+         5EA8tSTVNB3xYKuAXSK5tyRzue2HZC0kExzKNe+7ER36+QcIOulV4tOXoCOv7xUOZFgE
+         m6Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=K2qgQ7sEFSYO1X587IGodc/KWRxiWDjVpDlAM1xtiSk=;
+        b=BNGXczwI4Ju7uukZm1ps0vd+OZpOpIi2OA/2V5WeCXlFyFS5U7tCrJKYJ2Y/B2Np4u
+         7hga2qdN8quNDLCgmS4jis2d2tQZYteVp7rQJ1m+k2XxXjPbePGRNdeH9JN8V24QLRma
+         5ZQeRmcgjioj/64DWDtzOSedssREK4Sw5Zh2DtTIv19ddbpV78GUUckjvd82I2T9uxx7
+         Wt4fqJwW6wXXDJJBXsuOWtk4y/SMQfLKckDrwegtnQzk5StQpDo6G8ImfpMD8f0bTrtE
+         soj/kGzT/tibGY/1qqXKlz9G1oOG6nMSTqa9AO256nWraJuuDc6O3C6jPzCJwNC7PWf8
+         vfRg==
+X-Gm-Message-State: APjAAAWqFmjBQkC/RVS6pbcACF6BIi5BcMfUqExH5oZCupRGoWa696T7
+        Lx9Q321Ms/kRXaQUrQqPbzo=
+X-Google-Smtp-Source: APXvYqxK+YLnjfXETTmH/kwdPm5TDEWVCiPeZZFVecXEm3qFgfmH9igZvQPDFPYN5kUDfhGUIy8XPg==
+X-Received: by 2002:a37:6312:: with SMTP id x18mr13157267qkb.150.1552398657472;
+        Tue, 12 Mar 2019 06:50:57 -0700 (PDT)
+Received: from quaco.ghostprotocols.net (177-59-123-113.3g.claro.net.br. [177.59.123.113])
+        by smtp.gmail.com with ESMTPSA id z140sm5011159qka.81.2019.03.12.06.50.55
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 12 Mar 2019 06:50:56 -0700 (PDT)
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5FE514039C; Tue, 12 Mar 2019 10:50:52 -0300 (-03)
+Date:   Tue, 12 Mar 2019 10:50:52 -0300
 To:     Song Liu <songliubraving@fb.com>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
         kernel-team@fb.com, peterz@infradead.org, acme@redhat.com,
         jolsa@kernel.org, namhyung@kernel.org, sdf@fomichev.me
-Subject: Re: [PATCH v9 perf,bpf 00/15] perf annotation of BPF programs
-Message-ID: <20190312131251.GC3034@krava>
+Subject: Re: [PATCH v9 perf,bpf 02/15] bpf: libbpf: introduce
+ bpf_program__get_prog_info_linear()
+Message-ID: <20190312135052.GC4939@kernel.org>
 References: <20190312053051.2690567-1-songliubraving@fb.com>
+ <20190312053051.2690567-3-songliubraving@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190312053051.2690567-1-songliubraving@fb.com>
+In-Reply-To: <20190312053051.2690567-3-songliubraving@fb.com>
+X-Url:  http://acmel.wordpress.com
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.32]); Tue, 12 Mar 2019 13:12:57 +0000 (UTC)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 11, 2019 at 10:30:36PM -0700, Song Liu wrote:
-> Changes v8 to v9:
-> 1. Rebase on top of torvalds/master:
->     commit ea295481b6e313b4ea3ca2720ffcafd6005b5643 ;
-> 2. Change perf-record option --bpf-event to --no-bpf-event.
+Em Mon, Mar 11, 2019 at 10:30:38PM -0700, Song Liu escreveu:
+> Currently, bpf_prog_info includes 9 arrays. The user has the option to
+> fetch any combination of these arrays. However, this requires a lot of
+> handling of these arrays. This work becomes more tricky when we need to
+> store bpf_prog_info to a file, because these arrays are allocated
+> independently.
+> 
+> This patch introduces struct bpf_prog_info_linear, which stores arrays
+> of bpf_prog_info in continues memory. Helper functions are introduced
+> to unify the work to get different information of bpf_prog_info.
+> Specifically, bpf_program__get_prog_info_linear() allows the user to
+> select which arrays to fetch, and handles details for the user.
+> 
+> Plesae see the comments before enum bpf_prog_info_array for more details
+> and examples.
+> 
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Signed-off-by: Song Liu <songliubraving@fb.com>
+> ---
+>  tools/lib/bpf/libbpf.c   | 251 +++++++++++++++++++++++++++++++++++++++
+>  tools/lib/bpf/libbpf.h   |  63 ++++++++++
+>  tools/lib/bpf/libbpf.map |   3 +
+>  3 files changed, 317 insertions(+)
+> 
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index d5b830d60601..98ec9a8cd7af 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -112,6 +112,11 @@ void libbpf_print(enum libbpf_print_level level, const char *format, ...)
+>  # define LIBBPF_ELF_C_READ_MMAP ELF_C_READ
+>  #endif
+>  
+> +static inline __u64 ptr_to_u64(const void *ptr)
+> +{
+> +	return (__u64) (unsigned long) ptr;
+> +}
+> +
+>  struct bpf_capabilities {
+>  	/* v4.14: kernel support for program & map names. */
+>  	__u32 name:1;
+> @@ -2999,3 +3004,249 @@ bpf_perf_event_read_simple(void *mmap_mem, size_t mmap_size, size_t page_size,
+>  	ring_buffer_write_tail(header, data_tail);
+>  	return ret;
+>  }
+> +
+> +struct bpf_prog_info_array_desc {
+> +	int	array_offset;	/* e.g. offset of jited_prog_insns */
+> +	int	count_offset;	/* e.g. offset of jited_prog_len */
+> +	int	size_offset;	/* > 0: offset of rec size,
+> +				 * < 0: fix size of -size_offset
+> +				 */
+> +};
+> +
+> +static struct bpf_prog_info_array_desc bpf_prog_info_array_desc[] = {
+> +	[BPF_PROG_INFO_JITED_INSNS] = {
+> +		offsetof(struct bpf_prog_info, jited_prog_insns),
+> +		offsetof(struct bpf_prog_info, jited_prog_len),
+> +		-1,
+> +	},
+> +	[BPF_PROG_INFO_XLATED_INSNS] = {
+> +		offsetof(struct bpf_prog_info, xlated_prog_insns),
+> +		offsetof(struct bpf_prog_info, xlated_prog_len),
+> +		-1,
+> +	},
 
-Reviewed-by: Jiri Olsa <jolsa@kernel.org>
+Can be done on top, but this is too much boilerplate, later we can use
+something like:
 
-thanks for bearing with me ;-)
+@define BPF_PROG_INFO_ENTRY(idx, array, count, offset) \
+	[BPF_PROG_INFO ## index_name] = { \
+		offsetof(struct bpf_prog_info, array), \ 
+		offsetof(struct bpf_prog_info, count), \ 
+		(int)offset \
+	}
 
-jirka
+And then have a more compact
+
+	static struct bpf_prog_info_array_desc bpf_prog_info_array_desc[] = {
+		BPF_PROG_INFO_ENTRY(JITED_INSNS, jited_prog_insns, jided_prog_len, -1 );
+		BPF_PROG_INFO_ENTRY(MAP_IDS, map_ids, nr_map_ids, -sizeof(__u32));
+
+	etc.
+
+Anyway, processing it as-is for now.
 
 
-> 
-> Changes v7 to v8:
-> 1. Address issues suggested by Jiri and Stanislav.
-> 
-> Changes v6 to v7:
-> 1. Fix minor issues suggested by Jiri.
-> 
-> Changes v5 to v6:
-> 1. Improve side band evlist interface;
-> 2. Minor style fixes.
-> 
-> Changes v4 to v5:
-> 1. Rebase to latest bpf-next;
-> 2. Add dependency of 94816add0005 from Arnaldo's tree;
-> 3. More details in change logs;
-> 4. Add perf_env__init() to init bpf related lock and rbtrees;
-> 5. Small clean ups.
-> 
-> Changes v3 to v4:
-> 1. Incorporate feedbacks from Jiri and Namhyung;
-> 2. Fixed compilation error with different feature-disassembler-four-args;
-> 3. Split some patches to smaller patches;
-> 4. Improved error handleing in symbol__disassemble_bpf();
-> 5. Made side band thread more generic;
-> 6. Added comments as suggested.
-> 
-> Changes v2 to v3:
-> 1. Remove unnecessary include in header files;
-> 2. Improved error handling;
-> 3. Better naming of functions, variables, etc.;
-> 4. Enable bpf events by default for perf-top.
-> 
-> Changes v1 to v2:
-> 1. Fix compilation error with different feature-disassembler-four-args;
-> 2. Fix a segfault in perf-record;
-> 3. Split patches 5/9 and 6/9 so that perf_env changes and perf.data changes
->    are in separate patches.
-> 
-> This series enables annotation of BPF programs in perf.
-> 
-> perf tool gathers information via sys_bpf and (optionally) stores them in
-> perf.data as headers.
-> 
-> Patch 1/15 changes --bpf-event option to --no-bpf-event;
-> Patch 2/15 to 4/15 introduce new helper functions and use them in perf and
->      bpftool;
-> Patch 5/15 to 9/15 saves information of bpf program in perf_env;
-> Patch 10/15 adds --bpf-event options to perf-top;
-> Patch 11/15 to 13/15 enables annotation of bpf progs based on information
->      gathered in 5/15 to 9/15;
-> Patch 14/15 introduces side band polling thread that gathers information
->      for special kernel events during perf-record or perf-top.
-> Patch 15/15 handles information of short living BPF program using the new
->      side band polling thread.
-> 
-> Commands tested during developments are perf-top, perf-record, perf-report,
-> and perf-annotate.
-> 
-> This set is also available at:
-> 
-> https://github.com/liu-song-6/linux/tree/bpf-annotation-v9
-> 
-> Thanks!!
-> 
-> Song Liu (15):
->   perf-record: replace option --bpf-event with --no-bpf-event
->   bpf: libbpf: introduce bpf_program__get_prog_info_linear()
->   bpf: bpftool: use bpf_program__get_prog_info_linear() in
->     prog.c:do_dump()
->   perf, bpf: synthesize bpf events with
->     bpf_program__get_prog_info_linear()
->   perf: change prototype of perf_event__synthesize_bpf_events()
->   perf, bpf: save bpf_prog_info in a rbtree in perf_env
->   perf, bpf: save bpf_prog_info information as headers to perf.data
->   perf, bpf: save btf in a rbtree in perf_env
->   perf, bpf: save btf information as headers to perf.data
->   perf-top: add option --no-bpf-event
->   perf: add -lopcodes to feature-libbfd
->   perf, bpf: enable annotation of bpf program
->   perf, bpf: process PERF_BPF_EVENT_PROG_LOAD for annotation
->   perf: introduce side band thread
->   perf, bpf: save bpf_prog_info and btf of short living bpf programs
-> 
->  tools/bpf/bpftool/prog.c     | 266 +++++++---------------------
->  tools/build/Makefile.feature |   6 +-
->  tools/lib/bpf/libbpf.c       | 251 ++++++++++++++++++++++++++
->  tools/lib/bpf/libbpf.h       |  63 +++++++
->  tools/lib/bpf/libbpf.map     |   3 +
->  tools/perf/Makefile.config   |  10 +-
->  tools/perf/builtin-record.c  |  11 +-
->  tools/perf/builtin-top.c     |  10 +-
->  tools/perf/perf.c            |   1 +
->  tools/perf/perf.h            |   2 +-
->  tools/perf/util/annotate.c   | 150 +++++++++++++++-
->  tools/perf/util/bpf-event.c  | 330 ++++++++++++++++++++++++++---------
->  tools/perf/util/bpf-event.h  |  33 +++-
->  tools/perf/util/dso.c        |   1 +
->  tools/perf/util/dso.h        |  32 ++--
->  tools/perf/util/env.c        | 151 ++++++++++++++++
->  tools/perf/util/env.h        |  24 +++
->  tools/perf/util/evlist.c     | 119 +++++++++++++
->  tools/perf/util/evlist.h     |  12 ++
->  tools/perf/util/evsel.c      |   2 +-
->  tools/perf/util/evsel.h      |   6 +
->  tools/perf/util/header.c     | 238 ++++++++++++++++++++++++-
->  tools/perf/util/header.h     |   2 +
->  tools/perf/util/session.c    |   1 +
->  tools/perf/util/symbol.c     |   1 +
->  25 files changed, 1409 insertions(+), 316 deletions(-)
-> 
-> --
+> +	[BPF_PROG_INFO_MAP_IDS] = {
+> +		offsetof(struct bpf_prog_info, map_ids),
+> +		offsetof(struct bpf_prog_info, nr_map_ids),
+> +		-(int)sizeof(__u32),
+> +	},
+> +	[BPF_PROG_INFO_JITED_KSYMS] = {
+> +		offsetof(struct bpf_prog_info, jited_ksyms),
+> +		offsetof(struct bpf_prog_info, nr_jited_ksyms),
+> +		-(int)sizeof(__u64),
+> +	},
+> +	[BPF_PROG_INFO_JITED_FUNC_LENS] = {
+> +		offsetof(struct bpf_prog_info, jited_func_lens),
+> +		offsetof(struct bpf_prog_info, nr_jited_func_lens),
+> +		-(int)sizeof(__u32),
+> +	},
+> +	[BPF_PROG_INFO_FUNC_INFO] = {
+> +		offsetof(struct bpf_prog_info, func_info),
+> +		offsetof(struct bpf_prog_info, nr_func_info),
+> +		offsetof(struct bpf_prog_info, func_info_rec_size),
+> +	},
+> +	[BPF_PROG_INFO_LINE_INFO] = {
+> +		offsetof(struct bpf_prog_info, line_info),
+> +		offsetof(struct bpf_prog_info, nr_line_info),
+> +		offsetof(struct bpf_prog_info, line_info_rec_size),
+> +	},
+> +	[BPF_PROG_INFO_JITED_LINE_INFO] = {
+> +		offsetof(struct bpf_prog_info, jited_line_info),
+> +		offsetof(struct bpf_prog_info, nr_jited_line_info),
+> +		offsetof(struct bpf_prog_info, jited_line_info_rec_size),
+> +	},
+> +	[BPF_PROG_INFO_PROG_TAGS] = {
+> +		offsetof(struct bpf_prog_info, prog_tags),
+> +		offsetof(struct bpf_prog_info, nr_prog_tags),
+> +		-(int)sizeof(__u8) * BPF_TAG_SIZE,
+> +	},
+> +
+> +};
+> +
+> +static __u32 bpf_prog_info_read_offset_u32(struct bpf_prog_info *info, int offset)
+> +{
+> +	__u32 *array = (__u32 *)info;
+> +
+> +	if (offset >= 0)
+> +		return array[offset / sizeof(__u32)];
+> +	return -(int)offset;
+> +}
+> +
+> +static __u64 bpf_prog_info_read_offset_u64(struct bpf_prog_info *info, int offset)
+> +{
+> +	__u64 *array = (__u64 *)info;
+> +
+> +	if (offset >= 0)
+> +		return array[offset / sizeof(__u64)];
+> +	return -(int)offset;
+> +}
+> +
+> +static void bpf_prog_info_set_offset_u32(struct bpf_prog_info *info, int offset,
+> +					 __u32 val)
+> +{
+> +	__u32 *array = (__u32 *)info;
+> +
+> +	if (offset >= 0)
+> +		array[offset / sizeof(__u32)] = val;
+> +}
+> +
+> +static void bpf_prog_info_set_offset_u64(struct bpf_prog_info *info, int offset,
+> +					 __u64 val)
+> +{
+> +	__u64 *array = (__u64 *)info;
+> +
+> +	if (offset >= 0)
+> +		array[offset / sizeof(__u64)] = val;
+> +}
+> +
+> +struct bpf_prog_info_linear *
+> +bpf_program__get_prog_info_linear(int fd, __u64 arrays)
+> +{
+> +	struct bpf_prog_info_linear *info_linear;
+> +	struct bpf_prog_info info = {};
+> +	__u32 info_len = sizeof(info);
+> +	__u32 data_len = 0;
+> +	int i, err;
+> +	void *ptr;
+> +
+> +	if (arrays >> BPF_PROG_INFO_LAST_ARRAY)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	/* step 1: get array dimensions */
+> +	err = bpf_obj_get_info_by_fd(fd, &info, &info_len);
+> +	if (err) {
+> +		pr_debug("can't get prog info: %s", strerror(errno));
+> +		return ERR_PTR(-EFAULT);
+> +	}
+> +
+> +	/* step 2: calculate total size of all arrays */
+> +	for (i = BPF_PROG_INFO_FIRST_ARRAY; i < BPF_PROG_INFO_LAST_ARRAY; ++i) {
+> +		bool include_array = (arrays & (1UL << i)) > 0;
+> +		struct bpf_prog_info_array_desc *desc;
+> +		__u32 count, size;
+> +
+> +		desc = bpf_prog_info_array_desc + i;
+> +
+> +		/* kernel is too old to support this field */
+> +		if (info_len < desc->array_offset + sizeof(__u32) ||
+> +		    info_len < desc->count_offset + sizeof(__u32) ||
+> +		    (desc->size_offset > 0 && info_len < desc->size_offset))
+> +			include_array = false;
+> +
+> +		if (!include_array) {
+> +			arrays &= ~(1UL << i);	/* clear the bit */
+> +			continue;
+> +		}
+> +
+> +		count = bpf_prog_info_read_offset_u32(&info, desc->count_offset);
+> +		size = bpf_prog_info_read_offset_u32(&info, desc->size_offset);
+> +
+> +		data_len += count * size;
+> +	}
+> +
+> +	/* step 3: allocate continuous memory */
+> +	data_len = roundup(data_len, sizeof(__u64));
+> +	info_linear = malloc(sizeof(struct bpf_prog_info_linear) + data_len);
+> +	if (!info_linear)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	/* step 4: fill data to info_linear->info */
+> +	info_linear->arrays = arrays;
+> +	memset(&info_linear->info, 0, sizeof(info));
+> +	ptr = info_linear->data;
+> +
+> +	for (i = BPF_PROG_INFO_FIRST_ARRAY; i < BPF_PROG_INFO_LAST_ARRAY; ++i) {
+> +		struct bpf_prog_info_array_desc *desc;
+> +		__u32 count, size;
+> +
+> +		if ((arrays & (1UL << i)) == 0)
+> +			continue;
+> +
+> +		desc = bpf_prog_info_array_desc + i;
+> +		count = bpf_prog_info_read_offset_u32(&info, desc->count_offset);
+> +		size = bpf_prog_info_read_offset_u32(&info, desc->size_offset);
+> +		bpf_prog_info_set_offset_u32(&info_linear->info,
+> +					     desc->count_offset, count);
+> +		bpf_prog_info_set_offset_u32(&info_linear->info,
+> +					     desc->size_offset, size);
+> +		bpf_prog_info_set_offset_u64(&info_linear->info,
+> +					     desc->array_offset,
+> +					     ptr_to_u64(ptr));
+> +		ptr += count * size;
+> +	}
+> +
+> +	/* step 5: call syscall again to get required arrays */
+> +	err = bpf_obj_get_info_by_fd(fd, &info_linear->info, &info_len);
+> +	if (err) {
+> +		pr_debug("can't get prog info: %s", strerror(errno));
+> +		free(info_linear);
+> +		return ERR_PTR(-EFAULT);
+> +	}
+> +
+> +	/* step 6: verify the data */
+> +	for (i = BPF_PROG_INFO_FIRST_ARRAY; i < BPF_PROG_INFO_LAST_ARRAY; ++i) {
+> +		struct bpf_prog_info_array_desc *desc;
+> +		__u32 v1, v2;
+> +
+> +		if ((arrays & (1UL << i)) == 0)
+> +			continue;
+> +
+> +		desc = bpf_prog_info_array_desc + i;
+> +		v1 = bpf_prog_info_read_offset_u32(&info, desc->count_offset);
+> +		v2 = bpf_prog_info_read_offset_u32(&info_linear->info,
+> +						   desc->count_offset);
+> +		if (v1 != v2)
+> +			pr_warning("%s: mismatch in element count\n", __func__);
+> +
+> +		v1 = bpf_prog_info_read_offset_u32(&info, desc->size_offset);
+> +		v2 = bpf_prog_info_read_offset_u32(&info_linear->info,
+> +						   desc->size_offset);
+> +		if (v1 != v2)
+> +			pr_warning("%s: mismatch in rec size\n", __func__);
+> +	}
+> +
+> +	/* step 7: update info_len and data_len */
+> +	info_linear->info_len = sizeof(struct bpf_prog_info);
+> +	info_linear->data_len = data_len;
+> +
+> +	return info_linear;
+> +}
+> +
+> +void bpf_program__bpil_addr_to_offs(struct bpf_prog_info_linear *info_linear)
+> +{
+> +	int i;
+> +
+> +	for (i = BPF_PROG_INFO_FIRST_ARRAY; i < BPF_PROG_INFO_LAST_ARRAY; ++i) {
+> +		struct bpf_prog_info_array_desc *desc;
+> +		__u64 addr, offs;
+> +
+> +		if ((info_linear->arrays & (1UL << i)) == 0)
+> +			continue;
+> +
+> +		desc = bpf_prog_info_array_desc + i;
+> +		addr = bpf_prog_info_read_offset_u64(&info_linear->info,
+> +						     desc->array_offset);
+> +		offs = addr - ptr_to_u64(info_linear->data);
+> +		bpf_prog_info_set_offset_u64(&info_linear->info,
+> +					     desc->array_offset, offs);
+> +	}
+> +}
+> +
+> +void bpf_program__bpil_offs_to_addr(struct bpf_prog_info_linear *info_linear)
+> +{
+> +	int i;
+> +
+> +	for (i = BPF_PROG_INFO_FIRST_ARRAY; i < BPF_PROG_INFO_LAST_ARRAY; ++i) {
+> +		struct bpf_prog_info_array_desc *desc;
+> +		__u64 addr, offs;
+> +
+> +		if ((info_linear->arrays & (1UL << i)) == 0)
+> +			continue;
+> +
+> +		desc = bpf_prog_info_array_desc + i;
+> +		offs = bpf_prog_info_read_offset_u64(&info_linear->info,
+> +						     desc->array_offset);
+> +		addr = offs + ptr_to_u64(info_linear->data);
+> +		bpf_prog_info_set_offset_u64(&info_linear->info,
+> +					     desc->array_offset, addr);
+> +	}
+> +}
+> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> index b4652aa1a58a..c7645a5e1ac0 100644
+> --- a/tools/lib/bpf/libbpf.h
+> +++ b/tools/lib/bpf/libbpf.h
+> @@ -377,6 +377,69 @@ LIBBPF_API bool bpf_probe_map_type(enum bpf_map_type map_type, __u32 ifindex);
+>  LIBBPF_API bool bpf_probe_helper(enum bpf_func_id id,
+>  				 enum bpf_prog_type prog_type, __u32 ifindex);
+>  
+> +/*
+> + * Get bpf_prog_info in continuous memory
+> + *
+> + * struct bpf_prog_info has multiple arrays. The user has option to choose
+> + * arrays to fetch from kernel. The following APIs provide uniform way to
+> + * fetch these data. All arrays in bpf_prog_info are stored in singile
+> + * continuous memory region. This makes it easy to store the info in a
+> + * file.
+> + *
+> + * Before writing bpf_prog_info_linear to files, it is necessary to
+> + * translate pointers bpf_prog_info to offsets. Helper functions
+> + * bpf_program__bpil_addr_to_offs() and bpf_program__bpil_offs_to_addr()
+> + * are introduced to switch between pointers and offsets.
+> + *
+> + * Examples:
+> + *   # To fetch map_ids and prog_tags:
+> + *   __u64 arrays = (1UL << BPF_PROG_INFO_MAP_IDS) |
+> + *           (1UL << BPF_PROG_INFO_PROG_TAGS);
+> + *   struct bpf_prog_info_linear *info_linear =
+> + *           bpf_program__get_prog_info_linear(fd, arrays);
+> + *
+> + *   # To save data in file
+> + *   bpf_program__bpil_addr_to_offs(info_linear);
+> + *   write(f, info_linear, sizeof(*info_linear) + info_linear->data_len);
+> + *
+> + *   # To read data from file
+> + *   read(f, info_linear, <proper_size>);
+> + *   bpf_program__bpil_offs_to_addr(info_linear);
+> + */
+> +enum bpf_prog_info_array {
+> +	BPF_PROG_INFO_FIRST_ARRAY = 0,
+> +	BPF_PROG_INFO_JITED_INSNS = 0,
+> +	BPF_PROG_INFO_XLATED_INSNS,
+> +	BPF_PROG_INFO_MAP_IDS,
+> +	BPF_PROG_INFO_JITED_KSYMS,
+> +	BPF_PROG_INFO_JITED_FUNC_LENS,
+> +	BPF_PROG_INFO_FUNC_INFO,
+> +	BPF_PROG_INFO_LINE_INFO,
+> +	BPF_PROG_INFO_JITED_LINE_INFO,
+> +	BPF_PROG_INFO_PROG_TAGS,
+> +	BPF_PROG_INFO_LAST_ARRAY,
+> +};
+> +
+> +struct bpf_prog_info_linear {
+> +	/* size of struct bpf_prog_info, when the tool is compiled */
+> +	__u32			info_len;
+> +	/* total bytes allocated for data, round up to 8 bytes */
+> +	__u32			data_len;
+> +	/* which arrays are included in data */
+> +	__u64			arrays;
+> +	struct bpf_prog_info	info;
+> +	__u8			data[];
+> +};
+> +
+> +LIBBPF_API struct bpf_prog_info_linear *
+> +bpf_program__get_prog_info_linear(int fd, __u64 arrays);
+> +
+> +LIBBPF_API void
+> +bpf_program__bpil_addr_to_offs(struct bpf_prog_info_linear *info_linear);
+> +
+> +LIBBPF_API void
+> +bpf_program__bpil_offs_to_addr(struct bpf_prog_info_linear *info_linear);
+> +
+>  #ifdef __cplusplus
+>  } /* extern "C" */
+>  #endif
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index 778a26702a70..f3ce50500cf2 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -153,4 +153,7 @@ LIBBPF_0.0.2 {
+>  		xsk_socket__delete;
+>  		xsk_umem__fd;
+>  		xsk_socket__fd;
+> +		bpf_program__get_prog_info_linear;
+> +		bpf_program__bpil_addr_to_offs;
+> +		bpf_program__bpil_offs_to_addr;
+>  } LIBBPF_0.0.1;
+> -- 
 > 2.17.1
+
+-- 
+
+- Arnaldo
