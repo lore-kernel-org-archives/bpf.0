@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9B46C10F00
-	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 05:31:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1C82C43381
+	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 05:31:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8D95C2171F
-	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 05:31:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B50E72175B
+	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 05:31:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="hQB8TiVY"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="EEnbf/1X"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727366AbfCLFbT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Mar 2019 01:31:19 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:35526 "EHLO
+        id S1727383AbfCLFbV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Mar 2019 01:31:21 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:37974 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727322AbfCLFbT (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 12 Mar 2019 01:31:19 -0400
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x2C5NDYY016964
-        for <bpf@vger.kernel.org>; Mon, 11 Mar 2019 22:31:17 -0700
+        by vger.kernel.org with ESMTP id S1727278AbfCLFbU (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 12 Mar 2019 01:31:20 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x2C5Uf3R025993
+        for <bpf@vger.kernel.org>; Mon, 11 Mar 2019 22:31:20 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=vFcbv7D/gPyVPZX/VJANtcbs5tWZqDKQRMbNQ3TlDp0=;
- b=hQB8TiVYitKC6/bnmt0r30L7FlBUsXkVEsZ/uFtduAR3ukoNS4Hq4I+/zI4oCJnaRddP
- JzUaswb6dlao4ZElF9wENcgXCTB9mvJ4FjQaEeWq/hVh43xP3+NnqCM3U3Vm4oJfds4Z
- SgmZNj72VRAWBrrofe/U+3UFhHFy5cOpKjA= 
-Received: from maileast.thefacebook.com ([199.201.65.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2r63q28htr-4
+ content-type; s=facebook; bh=iEwHjWBMCQHCux+fE/Ba0va6KGFbfW5abV2svwHytOA=;
+ b=EEnbf/1XYTYSUsuTUVVUWg48xeIQET0TA4ku5eRWY3eA5pJbW2cvX26ntKxhRu5K4M45
+ Pg1/WWr+gCH8ylfI7YNpeUAgO5fOPaERGNn2BgXK2217XR6Ua90LBHL/qWRmtVkfy6IL
+ me8SJhsKVeIfhBZIBfcCQ3n86u//WWenKBQ= 
+Received: from mail.thefacebook.com ([199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2r644y0e13-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 11 Mar 2019 22:31:17 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a1:3::13) by
- mail.thefacebook.com (2620:10d:c021:18::174) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 11 Mar 2019 22:31:20 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::128) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Mon, 11 Mar 2019 22:31:15 -0700
+ Mon, 11 Mar 2019 22:31:18 -0700
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 3DDF962E2019; Mon, 11 Mar 2019 22:31:15 -0700 (PDT)
+        id CD72E62E2019; Mon, 11 Mar 2019 22:31:16 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Song Liu <songliubraving@fb.com>
 Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
@@ -50,9 +50,9 @@ CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
         <namhyung@kernel.org>, <sdf@fomichev.me>,
         Song Liu <songliubraving@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v9 perf,bpf 09/15] perf, bpf: save btf information as headers to perf.data
-Date:   Mon, 11 Mar 2019 22:30:45 -0700
-Message-ID: <20190312053051.2690567-10-songliubraving@fb.com>
+Subject: [PATCH v9 perf,bpf 10/15] perf-top: add option --no-bpf-event
+Date:   Mon, 11 Mar 2019 22:30:46 -0700
+Message-ID: <20190312053051.2690567-11-songliubraving@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190312053051.2690567-1-songliubraving@fb.com>
 References: <20190312053051.2690567-1-songliubraving@fb.com>
@@ -68,160 +68,28 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch enables perf-record to save btf information as headers to
-perf.data A new header type HEADER_BPF_BTF is introduced for this data.
+This patch adds option --no-bpf-event to perf-top, which is the same as
+the option of perf-record.
+
+The following patches will use this option.
 
 Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
- tools/perf/util/header.c | 101 ++++++++++++++++++++++++++++++++++++++-
- tools/perf/util/header.h |   1 +
- 2 files changed, 101 insertions(+), 1 deletion(-)
+ tools/perf/builtin-top.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
-index a4ef8f657ad0..7decd2d1dbda 100644
---- a/tools/perf/util/header.c
-+++ b/tools/perf/util/header.c
-@@ -905,6 +905,39 @@ static int write_bpf_prog_info(struct feat_fd *ff,
- 	return ret;
- }
- 
-+static int write_bpf_btf(struct feat_fd *ff,
-+			 struct perf_evlist *evlist __maybe_unused)
-+{
-+	struct perf_env *env = &ff->ph->env;
-+	struct rb_root *root;
-+	struct rb_node *next;
-+	int ret;
-+
-+	down_read(&env->bpf_progs.lock);
-+
-+	ret = do_write(ff, &env->bpf_progs.btfs_cnt,
-+		       sizeof(env->bpf_progs.btfs_cnt));
-+
-+	if (ret < 0)
-+		goto out;
-+
-+	root = &env->bpf_progs.btfs;
-+	next = rb_first(root);
-+	while (next) {
-+		struct btf_node *node;
-+
-+		node = rb_entry(next, struct btf_node, rb_node);
-+		next = rb_next(&node->rb_node);
-+		ret = do_write(ff, &node->id,
-+			       sizeof(u32) * 2 + node->data_size);
-+		if (ret < 0)
-+			goto out;
-+	}
-+out:
-+	up_read(&env->bpf_progs.lock);
-+	return ret;
-+}
-+
- static int cpu_cache_level__sort(const void *a, const void *b)
- {
- 	struct cpu_cache_level *cache_a = (struct cpu_cache_level *)a;
-@@ -1408,6 +1441,28 @@ static void print_bpf_prog_info(struct feat_fd *ff, FILE *fp)
- 	up_read(&env->bpf_progs.lock);
- }
- 
-+static void print_bpf_btf(struct feat_fd *ff, FILE *fp)
-+{
-+	struct perf_env *env = &ff->ph->env;
-+	struct rb_root *root;
-+	struct rb_node *next;
-+
-+	down_read(&env->bpf_progs.lock);
-+
-+	root = &env->bpf_progs.btfs;
-+	next = rb_first(root);
-+
-+	while (next) {
-+		struct btf_node *node;
-+
-+		node = rb_entry(next, struct btf_node, rb_node);
-+		next = rb_next(&node->rb_node);
-+		fprintf(fp, "# btf info of id %u\n", node->id);
-+	}
-+
-+	up_read(&env->bpf_progs.lock);
-+}
-+
- static void free_event_desc(struct perf_evsel *events)
- {
- 	struct perf_evsel *evsel;
-@@ -2509,6 +2564,49 @@ static int process_bpf_prog_info(struct feat_fd *ff,
- 	return err;
- }
- 
-+static int process_bpf_btf(struct feat_fd *ff, void *data __maybe_unused)
-+{
-+	struct perf_env *env = &ff->ph->env;
-+	u32 count, i;
-+
-+	if (ff->ph->needs_swap) {
-+		pr_warning("interpreting btf from systems with endianity is not yet supported\n");
-+		return 0;
-+	}
-+
-+	if (do_read_u32(ff, &count))
-+		return -1;
-+
-+	down_write(&env->bpf_progs.lock);
-+
-+	for (i = 0; i < count; ++i) {
-+		struct btf_node *node;
-+		u32 id, data_size;
-+
-+		if (do_read_u32(ff, &id))
-+			return -1;
-+		if (do_read_u32(ff, &data_size))
-+			return -1;
-+
-+		node = malloc(sizeof(struct btf_node) + data_size);
-+		if (!node)
-+			return -1;
-+
-+		node->id = id;
-+		node->data_size = data_size;
-+
-+		if (__do_read(ff, node->data, data_size)) {
-+			free(node);
-+			return -1;
-+		}
-+
-+		perf_env__insert_btf(env, node);
-+	}
-+
-+	up_write(&env->bpf_progs.lock);
-+	return 0;
-+}
-+
- struct feature_ops {
- 	int (*write)(struct feat_fd *ff, struct perf_evlist *evlist);
- 	void (*print)(struct feat_fd *ff, FILE *fp);
-@@ -2569,7 +2667,8 @@ static const struct feature_ops feat_ops[HEADER_LAST_FEATURE] = {
- 	FEAT_OPR(SAMPLE_TIME,	sample_time,	false),
- 	FEAT_OPR(MEM_TOPOLOGY,	mem_topology,	true),
- 	FEAT_OPR(CLOCKID,       clockid,        false),
--	FEAT_OPR(BPF_PROG_INFO, bpf_prog_info,  false)
-+	FEAT_OPR(BPF_PROG_INFO, bpf_prog_info,  false),
-+	FEAT_OPR(BPF_BTF,       bpf_btf,        false)
- };
- 
- struct header_print_data {
-diff --git a/tools/perf/util/header.h b/tools/perf/util/header.h
-index 0785c91b4c3a..9e7d931f7c0d 100644
---- a/tools/perf/util/header.h
-+++ b/tools/perf/util/header.h
-@@ -40,6 +40,7 @@ enum {
- 	HEADER_MEM_TOPOLOGY,
- 	HEADER_CLOCKID,
- 	HEADER_BPF_PROG_INFO,
-+	HEADER_BPF_BTF,
- 	HEADER_LAST_FEATURE,
- 	HEADER_FEAT_BITS	= 256,
- };
+diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
+index 09c0721c97df..63a8f686c5cb 100644
+--- a/tools/perf/builtin-top.c
++++ b/tools/perf/builtin-top.c
+@@ -1480,6 +1480,7 @@ int cmd_top(int argc, const char **argv)
+ 		    "Display raw encoding of assembly instructions (default)"),
+ 	OPT_BOOLEAN(0, "demangle-kernel", &symbol_conf.demangle_kernel,
+ 		    "Enable kernel symbol demangling"),
++	OPT_BOOLEAN(0, "no-bpf-event", &top.record_opts.no_bpf_event, "do not record bpf events"),
+ 	OPT_STRING(0, "objdump", &top.annotation_opts.objdump_path, "path",
+ 		    "objdump binary to use for disassembly and annotations"),
+ 	OPT_STRING('M', "disassembler-style", &top.annotation_opts.disassembler_style, "disassembler style",
 -- 
 2.17.1
 
