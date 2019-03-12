@@ -2,134 +2,165 @@ Return-Path: <SRS0=5gB9=RP=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0
+X-Spam-Status: No, score=-12.0 required=3.0
 	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E68A2C43381
-	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 11:13:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0E99C4360F
+	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 11:20:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BFF50206BA
-	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 11:13:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7A944206BA
+	for <bpf@archiver.kernel.org>; Tue, 12 Mar 2019 11:20:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726167AbfCLLNc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Mar 2019 07:13:32 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:40594 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725811AbfCLLNc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Mar 2019 07:13:32 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 77642374;
-        Tue, 12 Mar 2019 04:13:31 -0700 (PDT)
-Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.195.17])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A98043F59C;
-        Tue, 12 Mar 2019 04:13:29 -0700 (PDT)
-Date:   Tue, 12 Mar 2019 11:13:26 +0000
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: Re: [RFC][PATCH] Export supported trace features in debugfs
-Message-ID: <20190312111326.nz3wgdy64g2nk44v@e107158-lin.cambridge.arm.com>
-References: <20190312110437.5977-1-qais.yousef@arm.com>
+        id S1726273AbfCLLUb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Mar 2019 07:20:31 -0400
+Received: from www62.your-server.de ([213.133.104.62]:38348 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725792AbfCLLUb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Mar 2019 07:20:31 -0400
+Received: from [78.46.172.2] (helo=sslproxy05.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1h3fSM-0004gC-KT; Tue, 12 Mar 2019 12:20:26 +0100
+Received: from [178.197.248.21] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1h3fSM-0000CI-AF; Tue, 12 Mar 2019 12:20:26 +0100
+Subject: Re: [PATCH v7 perf,bpf 02/15] bpf: libbpf: introduce
+ bpf_program__get_prog_info_linear()
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Song Liu <songliubraving@fb.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ast@kernel.org, kernel-team@fb.com, peterz@infradead.org,
+        acme@redhat.com, jolsa@kernel.org, namhyung@kernel.org
+References: <20190307175810.249857-1-songliubraving@fb.com>
+ <20190307175810.249857-3-songliubraving@fb.com>
+ <20190311182631.GX10690@kernel.org>
+ <b6fb25aa-5bfc-cf97-f960-5966154e5ef5@iogearbox.net>
+ <20190311205720.GD10690@kernel.org>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <ce92c091-e80d-a0c1-4aa0-987706c42b20@iogearbox.net>
+Date:   Tue, 12 Mar 2019 12:20:24 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.3.0
 MIME-Version: 1.0
+In-Reply-To: <20190311205720.GD10690@kernel.org>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190312110437.5977-1-qais.yousef@arm.com>
-User-Agent: NeoMutt/20171215
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.2/25386/Tue Mar 12 09:15:09 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 03/12/19 11:07, Qais Yousef wrote:
-> eBPF tools like bcc-tools have hard time figuring out when features like
-> raw_tracepoint are supported in the kernel on which we are running. At
-> the moment a fragile mechanism of matching bpf_find_raw_tracepoint()
-> function in /proc/kallsyms is used to find out whether raw tracepoints
-> can be used or not. But when this function was renamed recently to
-> bpf_get_raw_tracepoint() the tool started to fail to use raw
-> tracepoints.
+On 03/11/2019 09:57 PM, Arnaldo Carvalho de Melo wrote:
+> Em Mon, Mar 11, 2019 at 09:45:49PM +0100, Daniel Borkmann escreveu:
+>> On 03/11/2019 07:26 PM, Arnaldo Carvalho de Melo wrote:
+>>> Em Thu, Mar 07, 2019 at 09:57:57AM -0800, Song Liu escreveu:
+>>>> Currently, bpf_prog_info includes 9 arrays. The user has the option to
+>>>> fetch any combination of these arrays. However, this requires a lot of
+>>>> handling of these arrays. This work becomes more tricky when we need to
+>>>> store bpf_prog_info to a file, because these arrays are allocated
+>>>> independently.
+>>>>
+>>>> This patch introduces struct bpf_prog_info_linear, which stores arrays
+>>>> of bpf_prog_info in continues memory. Helper functions are introduced
+>>>> to unify the work to get different information of bpf_prog_info.
+>>>> Specifically, bpf_program__get_prog_info_linear() allows the user to
+>>>> select which arrays to fetch, and handles details for the user.
+>>>>
+>>>> Plesae see the comments before enum bpf_prog_info_array for more details
+>>>> and examples.
+>>>>
+>>>> Cc: Daniel Borkmann <daniel@iogearbox.net>
+>>>> Cc: Alexei Starovoitov <ast@kernel.org>
+>>>
+>>> Daniel, are you ok with these changes to libbpf and bpftool? Perhaps
+>>> those should be detached from this patchkit and submitted sooner,
+>>> eroding the size of this kit.
+>>>
+>>> Alternatively, if you're ok with it, please provide your Acked-by and
+>>> I'll process as soon as I get back to it after Jiri is done reviewing.
+>>
+>> Overall looks okay. Are you planning to get these in for 5.1 window? If
 > 
-> To help in providing a more reliable way to detect features like
-> RAW_TRACEPOINT, add a new file in trace debugfs to export the supported
-> features.
+> I hope so.
 > 
-> $cat /sys/kernel/debug/tracing/supported_features
-> RAW_TRACEPOINT
-> EXAMPLE_FEATURE_1
-> EXAMPLE_FEATURE_2
+>> yes, that would be great, otherwise we might need to cherry-pick the libbpf
 > 
-> Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-> ---
-> 
-> This is a half baked patch to probe the potential of this solution.
-> 
-> The breakage mentioned in the commit message is here:
-> 
-> https://github.com/iovisor/bcc/pull/2241/commits/0f5849187972a50adf0d9eaa8788c11f9fd926ea
-> 
-> I am not sure what else beside raw_tracepoint makes sense to expose right now.
-> 
->  kernel/trace/trace.c | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
-> 
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index c4238b441624..daae09238e62 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -6670,6 +6670,28 @@ static const struct file_operations snapshot_raw_fops = {
-> 
->  #endif /* CONFIG_TRACER_SNAPSHOT */
-> 
-> +#define TRACE_FEATURE(feat)__stringify(feat) "\n"
-> +
-> +#define TRACE_FEATURES\
-> +TRACE_FEATURE(RAW_TRACEPOINT)\
-> +TRACE_FEATURE(EXAMPLE_FEATUTE_1)\
-> +TRACE_FEATURE(EXAMPLE_FEATUTE_2)
-> +
-> +static ssize_t
-> +tracing_read_trace_features(struct file *filp, char __user *ubuf,
-> +size_t cnt, loff_t *ppos)
-> +{
-> +char *buf = TRACE_FEATURES;
-> +size_t len = sizeof(TRACE_FEATURES);
-> +
-> +return simple_read_from_buffer(ubuf, cnt, ppos, buf, len);
-> +}
-> +
-> +static const struct file_operations show_trace_features_fops = {
-> +.read           = tracing_read_trace_features,
-> +.llseek         = no_llseek,
-> +};
-> +
->  static int tracing_buffers_open(struct inode *inode, struct file *filp)
->  {
->  struct trace_array *tr = inode->i_private;
-> @@ -8242,6 +8264,9 @@ static __init int tracer_init_tracefs(void)
->  &ftrace_update_tot_cnt, &tracing_dyn_info_fops);
->  #endif
-> 
-> +trace_create_file("trace_features", 0444, d_tracer,
-> +NULL, &show_trace_features_fops);
-> +
->  create_trace_instances(d_tracer);
-> 
->  update_tracer_options(&global_trace);
-> --
-> 2.17.1
-> 
-> IMPORTANT NOTICE: The contents of this email and any attachments are confidential and may also be privileged. If you are not the intended recipient, please notify the sender immediately and do not disclose the contents to any other person, use it for any purpose, or store or copy the information in any medium. Thank you.
+> So I'll try and grab those for my next pull req to Ingo, this week,
+> will add your Acked-by, ok?
 
-Apologies that shouldn't have appeared. I can resend the patch if it matters.
+Please do, thanks.
 
---
-Qais Yousef
+>> and bpftool ones from your tree into bpf-next as well since there's just
+>> too much going on in this area where we'd potentially run into complex
+>> merge conflicts. In the latter case, libbpf.map would need to be fixed up
+>> to LIBBPF_0.0.3 as convention is that this is in line with kernel release.
+> 
+> BTW, while running my build tests I had to add this to today's batch,
+> should be trivial when merging, I think, ok?
+
+That's fine as well, ack, lets shoot for getting it in during merge window
+such that we don't need to duplicate these dependencies in bpf trees.
+
+> commit dfcbc2f2994b8a3af3605a26dc29c07ad7378bf4
+> Author: Arnaldo Carvalho de Melo <acme@redhat.com>
+> Date:   Mon Mar 11 17:07:52 2019 -0300
+> 
+>     tools lib bpf: Fix the build by adding a missing stdarg.h include
+>     
+>     The libbpf_print_fn_t typedef uses va_list without including the header
+>     where that type is defined, stdarg.h, breaking in places where we're
+>     unlucky for that type not to be already defined by some previously
+>     included header.
+>     
+>     Noticed while building on fedora 24 cross building tools/perf to the ARC
+>     architecture using the uClibc C library:
+>     
+>       28 fedora:24-x-ARC-uClibc   : FAIL arc-linux-gcc (ARCompact ISA Linux uClibc toolchain 2017.09-rc2) 7.1.1 20170710
+>     
+>         CC       /tmp/build/perf/tests/llvm.o
+>       In file included from tests/llvm.c:3:0:
+>       /git/linux/tools/lib/bpf/libbpf.h:57:20: error: unknown type name 'va_list'
+>             const char *, va_list ap);
+>                           ^~~~~~~
+>       /git/linux/tools/lib/bpf/libbpf.h:59:34: error: unknown type name 'libbpf_print_fn_t'
+>        LIBBPF_API void libbpf_set_print(libbpf_print_fn_t fn);
+>                                         ^~~~~~~~~~~~~~~~~
+>       mv: cannot stat '/tmp/build/perf/tests/.llvm.o.tmp': No such file or directory
+>     
+>     Cc: Alexei Starovoitov <ast@kernel.org>
+>     Cc: Daniel Borkmann <daniel@iogearbox.net>
+>     Cc: Jakub Kicinski <jakub.kicinski@netronome.com>
+>     Cc: Jiri Olsa <jolsa@kernel.org>
+>     Cc: Namhyung Kim <namhyung@kernel.org>
+>     Cc: Quentin Monnet <quentin.monnet@netronome.com>
+>     Cc: Stanislav Fomichev <sdf@google.com>
+>     Cc: Yonghong Song <yhs@fb.com>
+>     Fixes: a8a1f7d09cfc ("libbpf: fix libbpf_print")
+>     Link: https://lkml.kernel.org/n/tip-5270n2quu2gqz22o7itfdx00@git.kernel.org
+>     Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> 
+> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> index b4652aa1a58a..aa1521a51687 100644
+> --- a/tools/lib/bpf/libbpf.h
+> +++ b/tools/lib/bpf/libbpf.h
+> @@ -10,6 +10,7 @@
+>  #ifndef __LIBBPF_LIBBPF_H
+>  #define __LIBBPF_LIBBPF_H
+>  
+> +#include <stdarg.h>
+>  #include <stdio.h>
+>  #include <stdint.h>
+>  #include <stdbool.h>
+> 
+
+Thanks,
+Daniel
