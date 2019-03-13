@@ -4,51 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A49A4C43381
-	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:29:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89014C10F03
+	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:30:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 78BA92075C
-	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:29:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A6272075C
+	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:30:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1552505356;
-	bh=FzHvRoG17K54IWiQfe8Szt+YKIB6vt1cflLjm0hIFzA=;
+	s=default; t=1552505400;
+	bh=g6jNQynlDkCvnkhWeEHFkEbWXRDWqsc39VFtV3edg1Y=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Ol0q7rKp8716sc9AFkRjoI075JVExPfFwPGPV9SrXSyanSUzDItHonCFmuQEEeeEo
-	 pxdx/3ozgW3gDTRMCnnj3CJ7Z/mRJZauQJCmYB1gXA3FLuplgW3mSze1Ghq3k2nTRR
-	 nQKY+KZe6krlpBJ65Vz9LqxY/xs8lZBUmfHVPG6c=
+	b=zeBYex2jcgsimxkgfiutuAhmloRysOeR/Z6Vk1n4wKhE/5odHVTu9jjr9eMcXKmUG
+	 xB3cf7QoQUtkU8LSQIyMEYTiuQ1mDmBiKmu9ZzgI1YhNYfN2kSHmbAi7HA42bVBvbC
+	 n8OX7FcgwZKDDA7nBQ9duiqe2btG7syx9CG2NoRw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727925AbfCMTNO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Mar 2019 15:13:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43754 "EHLO mail.kernel.org"
+        id S1727278AbfCMTMj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Mar 2019 15:12:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43224 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727921AbfCMTNN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 Mar 2019 15:13:13 -0400
+        id S1726263AbfCMTMi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 Mar 2019 15:12:38 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 472712075C;
-        Wed, 13 Mar 2019 19:13:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DAE17213A2;
+        Wed, 13 Mar 2019 19:12:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1552504392;
-        bh=FzHvRoG17K54IWiQfe8Szt+YKIB6vt1cflLjm0hIFzA=;
+        s=default; t=1552504357;
+        bh=g6jNQynlDkCvnkhWeEHFkEbWXRDWqsc39VFtV3edg1Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cW8wqD31hSMsfudA2yYZjbkf8/CZy/ms/SQKe0D6K+wrqxGUOz3WYkYIqze0Tn26O
-         39Jn6XPokMiNDbwDzx7QzO1qAw7UXwwkqsK3EPhZKp1RS+2f8ZXRQmR32fgiZ03MlX
-         GTxHbPxXR83/PL2oihf5WjKrCJnxD3yP4QtuEQDY=
+        b=0OtSfvstWUrhxWI2LCAet43PJXU+PCV7J/e7LDSj6LDDWNgWzxnRHKps7KE5qgKj5
+         ycJSLQ+cs8QBDbuC7GyBLyXSllu+XeH2T7kNJNMaBKttWoHYIXdTlnKHNt4/oSNxtx
+         z+lKUtmzSoe45cntaY2nQBfkUA0A1sTHKVC+P/PY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Willem de Bruijn <willemb@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+Cc:     Jiong Wang <jiong.wang@netronome.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 06/48] bpf: only adjust gso_size on bytestream protocols
-Date:   Wed, 13 Mar 2019 15:12:08 -0400
-Message-Id: <20190313191250.158955-6-sashal@kernel.org>
+        bpf@vger.kernel.org, oss-drivers@netronome.com
+Subject: [PATCH AUTOSEL 4.20 55/60] nfp: bpf: fix ALU32 high bits clearance bug
+Date:   Wed, 13 Mar 2019 15:10:16 -0400
+Message-Id: <20190313191021.158171-55-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
-In-Reply-To: <20190313191250.158955-1-sashal@kernel.org>
-References: <20190313191250.158955-1-sashal@kernel.org>
+In-Reply-To: <20190313191021.158171-1-sashal@kernel.org>
+References: <20190313191021.158171-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -57,93 +58,96 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Willem de Bruijn <willemb@google.com>
+From: Jiong Wang <jiong.wang@netronome.com>
 
-[ Upstream commit b90efd2258749e04e1b3f71ef0d716f2ac2337e0 ]
+[ Upstream commit f036ebd9bfbe1e91a3d855e85e05fc5ff156b641 ]
 
-bpf_skb_change_proto and bpf_skb_adjust_room change skb header length.
-For GSO packets they adjust gso_size to maintain the same MTU.
+NFP BPF JIT compiler is doing a couple of small optimizations when jitting
+ALU imm instructions, some of these optimizations could save code-gen, for
+example:
 
-The gso size can only be safely adjusted on bytestream protocols.
-Commit d02f51cbcf12 ("bpf: fix bpf_skb_adjust_net/bpf_skb_proto_xlat
-to deal with gso sctp skbs") excluded SKB_GSO_SCTP.
+  A & -1 =  A
+  A |  0 =  A
+  A ^  0 =  A
 
-Since then type SKB_GSO_UDP_L4 has been added, whose contents are one
-gso_size unit per datagram. Also exclude these.
+However, for ALU32, high 32-bit of the 64-bit register should still be
+cleared according to ISA semantics.
 
-Move from a blacklist to a whitelist check to future proof against
-additional such new GSO types, e.g., for fraglist based GRO.
-
-Fixes: bec1f6f69736 ("udp: generate gso with UDP_SEGMENT")
-Signed-off-by: Willem de Bruijn <willemb@google.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Fixes: cd7df56ed3e6 ("nfp: add BPF to NFP code translator")
+Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/skbuff.h |  6 ++++++
- net/core/filter.c      | 12 ++++--------
- 2 files changed, 10 insertions(+), 8 deletions(-)
+ drivers/net/ethernet/netronome/nfp/bpf/jit.c | 17 ++++++-----------
+ 1 file changed, 6 insertions(+), 11 deletions(-)
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index a404d475acee..3b0a25bb7c6f 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -4086,6 +4086,12 @@ static inline bool skb_is_gso_sctp(const struct sk_buff *skb)
- 	return skb_shinfo(skb)->gso_type & SKB_GSO_SCTP;
+diff --git a/drivers/net/ethernet/netronome/nfp/bpf/jit.c b/drivers/net/ethernet/netronome/nfp/bpf/jit.c
+index 0762401ee3fe..c89381bad6e4 100644
+--- a/drivers/net/ethernet/netronome/nfp/bpf/jit.c
++++ b/drivers/net/ethernet/netronome/nfp/bpf/jit.c
+@@ -1291,15 +1291,10 @@ wrp_alu64_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta,
+ 
+ static int
+ wrp_alu32_imm(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta,
+-	      enum alu_op alu_op, bool skip)
++	      enum alu_op alu_op)
+ {
+ 	const struct bpf_insn *insn = &meta->insn;
+ 
+-	if (skip) {
+-		meta->skip = true;
+-		return 0;
+-	}
+-
+ 	wrp_alu_imm(nfp_prog, insn->dst_reg * 2, alu_op, insn->imm);
+ 	wrp_immed(nfp_prog, reg_both(insn->dst_reg * 2 + 1), 0);
+ 
+@@ -2309,7 +2304,7 @@ static int xor_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
+ 
+ static int xor_imm(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
+ {
+-	return wrp_alu32_imm(nfp_prog, meta, ALU_OP_XOR, !meta->insn.imm);
++	return wrp_alu32_imm(nfp_prog, meta, ALU_OP_XOR);
  }
  
-+static inline bool skb_is_gso_tcp(const struct sk_buff *skb)
-+{
-+	return skb_is_gso(skb) &&
-+	       skb_shinfo(skb)->gso_type & (SKB_GSO_TCPV4 | SKB_GSO_TCPV6);
-+}
-+
- static inline void skb_gso_reset(struct sk_buff *skb)
+ static int and_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
+@@ -2319,7 +2314,7 @@ static int and_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
+ 
+ static int and_imm(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
  {
- 	skb_shinfo(skb)->gso_size = 0;
-diff --git a/net/core/filter.c b/net/core/filter.c
-index fb0080e84bd4..cb792b344b5e 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2614,8 +2614,7 @@ static int bpf_skb_proto_4_to_6(struct sk_buff *skb)
- 	u32 off = skb_mac_header_len(skb);
- 	int ret;
+-	return wrp_alu32_imm(nfp_prog, meta, ALU_OP_AND, !~meta->insn.imm);
++	return wrp_alu32_imm(nfp_prog, meta, ALU_OP_AND);
+ }
  
--	/* SCTP uses GSO_BY_FRAGS, thus cannot adjust it. */
--	if (skb_is_gso(skb) && unlikely(skb_is_gso_sctp(skb)))
-+	if (!skb_is_gso_tcp(skb))
- 		return -ENOTSUPP;
+ static int or_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
+@@ -2329,7 +2324,7 @@ static int or_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
  
- 	ret = skb_cow(skb, len_diff);
-@@ -2656,8 +2655,7 @@ static int bpf_skb_proto_6_to_4(struct sk_buff *skb)
- 	u32 off = skb_mac_header_len(skb);
- 	int ret;
+ static int or_imm(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
+ {
+-	return wrp_alu32_imm(nfp_prog, meta, ALU_OP_OR, !meta->insn.imm);
++	return wrp_alu32_imm(nfp_prog, meta, ALU_OP_OR);
+ }
  
--	/* SCTP uses GSO_BY_FRAGS, thus cannot adjust it. */
--	if (skb_is_gso(skb) && unlikely(skb_is_gso_sctp(skb)))
-+	if (!skb_is_gso_tcp(skb))
- 		return -ENOTSUPP;
+ static int add_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
+@@ -2339,7 +2334,7 @@ static int add_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
  
- 	ret = skb_unclone(skb, GFP_ATOMIC);
-@@ -2782,8 +2780,7 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u32 len_diff)
- 	u32 off = skb_mac_header_len(skb) + bpf_skb_net_base_len(skb);
- 	int ret;
+ static int add_imm(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
+ {
+-	return wrp_alu32_imm(nfp_prog, meta, ALU_OP_ADD, !meta->insn.imm);
++	return wrp_alu32_imm(nfp_prog, meta, ALU_OP_ADD);
+ }
  
--	/* SCTP uses GSO_BY_FRAGS, thus cannot adjust it. */
--	if (skb_is_gso(skb) && unlikely(skb_is_gso_sctp(skb)))
-+	if (!skb_is_gso_tcp(skb))
- 		return -ENOTSUPP;
+ static int sub_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
+@@ -2349,7 +2344,7 @@ static int sub_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
  
- 	ret = skb_cow(skb, len_diff);
-@@ -2812,8 +2809,7 @@ static int bpf_skb_net_shrink(struct sk_buff *skb, u32 len_diff)
- 	u32 off = skb_mac_header_len(skb) + bpf_skb_net_base_len(skb);
- 	int ret;
+ static int sub_imm(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
+ {
+-	return wrp_alu32_imm(nfp_prog, meta, ALU_OP_SUB, !meta->insn.imm);
++	return wrp_alu32_imm(nfp_prog, meta, ALU_OP_SUB);
+ }
  
--	/* SCTP uses GSO_BY_FRAGS, thus cannot adjust it. */
--	if (skb_is_gso(skb) && unlikely(skb_is_gso_sctp(skb)))
-+	if (!skb_is_gso_tcp(skb))
- 		return -ENOTSUPP;
- 
- 	ret = skb_unclone(skb, GFP_ATOMIC);
+ static int mul_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
 -- 
 2.19.1
 
