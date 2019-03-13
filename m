@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81CA2C43381
-	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:29:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A49A4C43381
+	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:29:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5395C2075C
-	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:29:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 78BA92075C
+	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:29:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1552505355;
-	bh=CI4eVSPweusS4UZeujFGsSvZul3yVTw+3cj7FSsLXEM=;
+	s=default; t=1552505356;
+	bh=FzHvRoG17K54IWiQfe8Szt+YKIB6vt1cflLjm0hIFzA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Ha5syagCec7AXUQx7ZTIB/G+ATuB4vZ8Glvu6Yo94OnyOpQ8pgqBhfY6+bynBIMxC
-	 iai/D9Ek8FGtP49DcWrPARiIbjSmct5YURo6xIsRXL+gTH5H39+Yh6LDGeFv303GCE
-	 zAs+zKJD7AD9/cJeNoaCQ6Q3KAL+F0hoVr3GHew8=
+	b=Ol0q7rKp8716sc9AFkRjoI075JVExPfFwPGPV9SrXSyanSUzDItHonCFmuQEEeeEo
+	 pxdx/3ozgW3gDTRMCnnj3CJ7Z/mRJZauQJCmYB1gXA3FLuplgW3mSze1Ghq3k2nTRR
+	 nQKY+KZe6krlpBJ65Vz9LqxY/xs8lZBUmfHVPG6c=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728058AbfCMT3G (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Mar 2019 15:29:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43812 "EHLO mail.kernel.org"
+        id S1727925AbfCMTNO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Mar 2019 15:13:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43754 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727933AbfCMTNP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 Mar 2019 15:13:15 -0400
+        id S1727921AbfCMTNN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 Mar 2019 15:13:13 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4461E20693;
-        Wed, 13 Mar 2019 19:13:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 472712075C;
+        Wed, 13 Mar 2019 19:13:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1552504394;
-        bh=CI4eVSPweusS4UZeujFGsSvZul3yVTw+3cj7FSsLXEM=;
+        s=default; t=1552504392;
+        bh=FzHvRoG17K54IWiQfe8Szt+YKIB6vt1cflLjm0hIFzA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TOnLcynZdZQpHIprlQtNm5qxcBAhZNJEljl30G5nkJsYBdnmgzhE6ZcFRJ90EYW7i
-         /SLtn3bo1AqYPbrhcp78xW7QhSvoX+IBG/1dQmtVd0Ur6agu/XQH9xTwyWWwHyIhOq
-         fzAV5SW/c8bqeUODh2FV8+B0cgSc/z/1/BbBQOMA=
+        b=cW8wqD31hSMsfudA2yYZjbkf8/CZy/ms/SQKe0D6K+wrqxGUOz3WYkYIqze0Tn26O
+         39Jn6XPokMiNDbwDzx7QzO1qAw7UXwwkqsK3EPhZKp1RS+2f8ZXRQmR32fgiZ03MlX
+         GTxHbPxXR83/PL2oihf5WjKrCJnxD3yP4QtuEQDY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+Cc:     Willem de Bruijn <willemb@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 07/48] bpf: fix lockdep false positive in stackmap
-Date:   Wed, 13 Mar 2019 15:12:09 -0400
-Message-Id: <20190313191250.158955-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 06/48] bpf: only adjust gso_size on bytestream protocols
+Date:   Wed, 13 Mar 2019 15:12:08 -0400
+Message-Id: <20190313191250.158955-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190313191250.158955-1-sashal@kernel.org>
 References: <20190313191250.158955-1-sashal@kernel.org>
@@ -58,64 +57,93 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Alexei Starovoitov <ast@kernel.org>
+From: Willem de Bruijn <willemb@google.com>
 
-[ Upstream commit 3defaf2f15b2bfd86c6664181ac009e91985f8ac ]
+[ Upstream commit b90efd2258749e04e1b3f71ef0d716f2ac2337e0 ]
 
-Lockdep warns about false positive:
-[   11.211460] ------------[ cut here ]------------
-[   11.211936] DEBUG_LOCKS_WARN_ON(depth <= 0)
-[   11.211985] WARNING: CPU: 0 PID: 141 at ../kernel/locking/lockdep.c:3592 lock_release+0x1ad/0x280
-[   11.213134] Modules linked in:
-[   11.214954] RIP: 0010:lock_release+0x1ad/0x280
-[   11.223508] Call Trace:
-[   11.223705]  <IRQ>
-[   11.223874]  ? __local_bh_enable+0x7a/0x80
-[   11.224199]  up_read+0x1c/0xa0
-[   11.224446]  do_up_read+0x12/0x20
-[   11.224713]  irq_work_run_list+0x43/0x70
-[   11.225030]  irq_work_run+0x26/0x50
-[   11.225310]  smp_irq_work_interrupt+0x57/0x1f0
-[   11.225662]  irq_work_interrupt+0xf/0x20
+bpf_skb_change_proto and bpf_skb_adjust_room change skb header length.
+For GSO packets they adjust gso_size to maintain the same MTU.
 
-since rw_semaphore is released in a different task vs task that locked the sema.
-It is expected behavior.
-Fix the warning with up_read_non_owner() and rwsem_release() annotation.
+The gso size can only be safely adjusted on bytestream protocols.
+Commit d02f51cbcf12 ("bpf: fix bpf_skb_adjust_net/bpf_skb_proto_xlat
+to deal with gso sctp skbs") excluded SKB_GSO_SCTP.
 
-Fixes: bae77c5eb5b2 ("bpf: enable stackmap with build_id in nmi context")
+Since then type SKB_GSO_UDP_L4 has been added, whose contents are one
+gso_size unit per datagram. Also exclude these.
+
+Move from a blacklist to a whitelist check to future proof against
+additional such new GSO types, e.g., for fraglist based GRO.
+
+Fixes: bec1f6f69736 ("udp: generate gso with UDP_SEGMENT")
+Signed-off-by: Willem de Bruijn <willemb@google.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/stackmap.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ include/linux/skbuff.h |  6 ++++++
+ net/core/filter.c      | 12 ++++--------
+ 2 files changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index 6a32933cae4f..7cb7a7f98a37 100644
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -44,7 +44,7 @@ static void do_up_read(struct irq_work *entry)
- 	struct stack_map_irq_work *work;
- 
- 	work = container_of(entry, struct stack_map_irq_work, irq_work);
--	up_read(work->sem);
-+	up_read_non_owner(work->sem);
- 	work->sem = NULL;
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index a404d475acee..3b0a25bb7c6f 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -4086,6 +4086,12 @@ static inline bool skb_is_gso_sctp(const struct sk_buff *skb)
+ 	return skb_shinfo(skb)->gso_type & SKB_GSO_SCTP;
  }
  
-@@ -338,6 +338,12 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
- 	} else {
- 		work->sem = &current->mm->mmap_sem;
- 		irq_work_queue(&work->irq_work);
-+		/*
-+		 * The irq_work will release the mmap_sem with
-+		 * up_read_non_owner(). The rwsem_release() is called
-+		 * here to release the lock from lockdep's perspective.
-+		 */
-+		rwsem_release(&current->mm->mmap_sem.dep_map, 1, _RET_IP_);
- 	}
- }
++static inline bool skb_is_gso_tcp(const struct sk_buff *skb)
++{
++	return skb_is_gso(skb) &&
++	       skb_shinfo(skb)->gso_type & (SKB_GSO_TCPV4 | SKB_GSO_TCPV6);
++}
++
+ static inline void skb_gso_reset(struct sk_buff *skb)
+ {
+ 	skb_shinfo(skb)->gso_size = 0;
+diff --git a/net/core/filter.c b/net/core/filter.c
+index fb0080e84bd4..cb792b344b5e 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -2614,8 +2614,7 @@ static int bpf_skb_proto_4_to_6(struct sk_buff *skb)
+ 	u32 off = skb_mac_header_len(skb);
+ 	int ret;
  
+-	/* SCTP uses GSO_BY_FRAGS, thus cannot adjust it. */
+-	if (skb_is_gso(skb) && unlikely(skb_is_gso_sctp(skb)))
++	if (!skb_is_gso_tcp(skb))
+ 		return -ENOTSUPP;
+ 
+ 	ret = skb_cow(skb, len_diff);
+@@ -2656,8 +2655,7 @@ static int bpf_skb_proto_6_to_4(struct sk_buff *skb)
+ 	u32 off = skb_mac_header_len(skb);
+ 	int ret;
+ 
+-	/* SCTP uses GSO_BY_FRAGS, thus cannot adjust it. */
+-	if (skb_is_gso(skb) && unlikely(skb_is_gso_sctp(skb)))
++	if (!skb_is_gso_tcp(skb))
+ 		return -ENOTSUPP;
+ 
+ 	ret = skb_unclone(skb, GFP_ATOMIC);
+@@ -2782,8 +2780,7 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u32 len_diff)
+ 	u32 off = skb_mac_header_len(skb) + bpf_skb_net_base_len(skb);
+ 	int ret;
+ 
+-	/* SCTP uses GSO_BY_FRAGS, thus cannot adjust it. */
+-	if (skb_is_gso(skb) && unlikely(skb_is_gso_sctp(skb)))
++	if (!skb_is_gso_tcp(skb))
+ 		return -ENOTSUPP;
+ 
+ 	ret = skb_cow(skb, len_diff);
+@@ -2812,8 +2809,7 @@ static int bpf_skb_net_shrink(struct sk_buff *skb, u32 len_diff)
+ 	u32 off = skb_mac_header_len(skb) + bpf_skb_net_base_len(skb);
+ 	int ret;
+ 
+-	/* SCTP uses GSO_BY_FRAGS, thus cannot adjust it. */
+-	if (skb_is_gso(skb) && unlikely(skb_is_gso_sctp(skb)))
++	if (!skb_is_gso_tcp(skb))
+ 		return -ENOTSUPP;
+ 
+ 	ret = skb_unclone(skb, GFP_ATOMIC);
 -- 
 2.19.1
 
