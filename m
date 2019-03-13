@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED3A8C43381
-	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:27:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81CA2C43381
+	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:29:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C09CE2075C
-	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:27:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5395C2075C
+	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:29:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1552505220;
-	bh=TY+zVZ/4klUEczISMX9gft6iMeeZS9G6MXrHEdH5kSg=;
+	s=default; t=1552505355;
+	bh=CI4eVSPweusS4UZeujFGsSvZul3yVTw+3cj7FSsLXEM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Oo4iw3eyykoXj+h2OzR8sHctjlukXyJbp5Cb6kVymJLbSmpQz9Mqsh9OWIGfCfMlk
-	 2Ma+qsjoEkzA7TSrPNhSlpH2thky74U0COmEUv01tJqBta+7LPopaUKjtPclx2eWqZ
-	 rgfIe1mrOIPd/1kSH4kox6iuZKeaGQncgteeWnEc=
+	b=Ha5syagCec7AXUQx7ZTIB/G+ATuB4vZ8Glvu6Yo94OnyOpQ8pgqBhfY6+bynBIMxC
+	 iai/D9Ek8FGtP49DcWrPARiIbjSmct5YURo6xIsRXL+gTH5H39+Yh6LDGeFv303GCE
+	 zAs+zKJD7AD9/cJeNoaCQ6Q3KAL+F0hoVr3GHew8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727856AbfCMT0v (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Mar 2019 15:26:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45044 "EHLO mail.kernel.org"
+        id S1728058AbfCMT3G (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Mar 2019 15:29:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43812 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728272AbfCMTOn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 Mar 2019 15:14:43 -0400
+        id S1727933AbfCMTNP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 Mar 2019 15:13:15 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CD2B82171F;
-        Wed, 13 Mar 2019 19:14:40 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4461E20693;
+        Wed, 13 Mar 2019 19:13:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1552504482;
-        bh=TY+zVZ/4klUEczISMX9gft6iMeeZS9G6MXrHEdH5kSg=;
+        s=default; t=1552504394;
+        bh=CI4eVSPweusS4UZeujFGsSvZul3yVTw+3cj7FSsLXEM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nzHiqfplw01PJFIViHG6j0zx8QA7RkDuoIZZZdJ+bzW2qNxCJR5t415i9E5IwDm44
-         /un48Jhzo9dSJHD7GWus5egaTwBWX/WUeLwAfJVFkGWjw35ij9rlpTCfcw2h8vkJqN
-         aYkaQSVkNzPVYrKyGAK+D40LhJcgdZuFBv6zkAek=
+        b=TOnLcynZdZQpHIprlQtNm5qxcBAhZNJEljl30G5nkJsYBdnmgzhE6ZcFRJ90EYW7i
+         /SLtn3bo1AqYPbrhcp78xW7QhSvoX+IBG/1dQmtVd0Ur6agu/XQH9xTwyWWwHyIhOq
+         fzAV5SW/c8bqeUODh2FV8+B0cgSc/z/1/BbBQOMA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alban Crequy <alban@kinvolk.io>, Craig Gallek <kraig@google.com>,
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 39/48] bpf, lpm: fix lookup bug in map_delete_elem
-Date:   Wed, 13 Mar 2019 15:12:41 -0400
-Message-Id: <20190313191250.158955-39-sashal@kernel.org>
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 07/48] bpf: fix lockdep false positive in stackmap
+Date:   Wed, 13 Mar 2019 15:12:09 -0400
+Message-Id: <20190313191250.158955-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190313191250.158955-1-sashal@kernel.org>
 References: <20190313191250.158955-1-sashal@kernel.org>
@@ -58,80 +58,64 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Alban Crequy <alban@kinvolk.io>
+From: Alexei Starovoitov <ast@kernel.org>
 
-[ Upstream commit 7c0cdf0b3940f63d9777c3fcf250a2f83859ca54 ]
+[ Upstream commit 3defaf2f15b2bfd86c6664181ac009e91985f8ac ]
 
-trie_delete_elem() was deleting an entry even though it was not matching
-if the prefixlen was correct. This patch adds a check on matchlen.
+Lockdep warns about false positive:
+[   11.211460] ------------[ cut here ]------------
+[   11.211936] DEBUG_LOCKS_WARN_ON(depth <= 0)
+[   11.211985] WARNING: CPU: 0 PID: 141 at ../kernel/locking/lockdep.c:3592 lock_release+0x1ad/0x280
+[   11.213134] Modules linked in:
+[   11.214954] RIP: 0010:lock_release+0x1ad/0x280
+[   11.223508] Call Trace:
+[   11.223705]  <IRQ>
+[   11.223874]  ? __local_bh_enable+0x7a/0x80
+[   11.224199]  up_read+0x1c/0xa0
+[   11.224446]  do_up_read+0x12/0x20
+[   11.224713]  irq_work_run_list+0x43/0x70
+[   11.225030]  irq_work_run+0x26/0x50
+[   11.225310]  smp_irq_work_interrupt+0x57/0x1f0
+[   11.225662]  irq_work_interrupt+0xf/0x20
 
-Reproducer:
+since rw_semaphore is released in a different task vs task that locked the sema.
+It is expected behavior.
+Fix the warning with up_read_non_owner() and rwsem_release() annotation.
 
-$ sudo bpftool map create /sys/fs/bpf/mylpm type lpm_trie key 8 value 1 entries 128 name mylpm flags 1
-$ sudo bpftool map update pinned /sys/fs/bpf/mylpm key hex 10 00 00 00 aa bb cc dd value hex 01
-$ sudo bpftool map dump pinned /sys/fs/bpf/mylpm
-key: 10 00 00 00 aa bb cc dd  value: 01
-Found 1 element
-$ sudo bpftool map delete pinned /sys/fs/bpf/mylpm key hex 10 00 00 00 ff ff ff ff
-$ echo $?
-0
-$ sudo bpftool map dump pinned /sys/fs/bpf/mylpm
-Found 0 elements
-
-A similar reproducer is added in the selftests.
-
-Without the patch:
-
-$ sudo ./tools/testing/selftests/bpf/test_lpm_map
-test_lpm_map: test_lpm_map.c:485: test_lpm_delete: Assertion `bpf_map_delete_elem(map_fd, key) == -1 && errno == ENOENT' failed.
-Aborted
-
-With the patch: test_lpm_map runs without errors.
-
-Fixes: e454cf595853 ("bpf: Implement map_delete_elem for BPF_MAP_TYPE_LPM_TRIE")
-Cc: Craig Gallek <kraig@google.com>
-Signed-off-by: Alban Crequy <alban@kinvolk.io>
-Acked-by: Craig Gallek <kraig@google.com>
+Fixes: bae77c5eb5b2 ("bpf: enable stackmap with build_id in nmi context")
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/lpm_trie.c                      |  1 +
- tools/testing/selftests/bpf/test_lpm_map.c | 10 ++++++++++
- 2 files changed, 11 insertions(+)
+ kernel/bpf/stackmap.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index 9058317ba9de..4f3138e6ecb2 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -432,6 +432,7 @@ static int trie_delete_elem(struct bpf_map *map, void *_key)
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index 6a32933cae4f..7cb7a7f98a37 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -44,7 +44,7 @@ static void do_up_read(struct irq_work *entry)
+ 	struct stack_map_irq_work *work;
+ 
+ 	work = container_of(entry, struct stack_map_irq_work, irq_work);
+-	up_read(work->sem);
++	up_read_non_owner(work->sem);
+ 	work->sem = NULL;
+ }
+ 
+@@ -338,6 +338,12 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+ 	} else {
+ 		work->sem = &current->mm->mmap_sem;
+ 		irq_work_queue(&work->irq_work);
++		/*
++		 * The irq_work will release the mmap_sem with
++		 * up_read_non_owner(). The rwsem_release() is called
++		 * here to release the lock from lockdep's perspective.
++		 */
++		rwsem_release(&current->mm->mmap_sem.dep_map, 1, _RET_IP_);
  	}
+ }
  
- 	if (!node || node->prefixlen != key->prefixlen ||
-+	    node->prefixlen != matchlen ||
- 	    (node->flags & LPM_TREE_NODE_FLAG_IM)) {
- 		ret = -ENOENT;
- 		goto out;
-diff --git a/tools/testing/selftests/bpf/test_lpm_map.c b/tools/testing/selftests/bpf/test_lpm_map.c
-index 147e34cfceb7..02d7c871862a 100644
---- a/tools/testing/selftests/bpf/test_lpm_map.c
-+++ b/tools/testing/selftests/bpf/test_lpm_map.c
-@@ -474,6 +474,16 @@ static void test_lpm_delete(void)
- 	assert(bpf_map_lookup_elem(map_fd, key, &value) == -1 &&
- 		errno == ENOENT);
- 
-+	key->prefixlen = 30; // unused prefix so far
-+	inet_pton(AF_INET, "192.255.0.0", key->data);
-+	assert(bpf_map_delete_elem(map_fd, key) == -1 &&
-+		errno == ENOENT);
-+
-+	key->prefixlen = 16; // same prefix as the root node
-+	inet_pton(AF_INET, "192.255.0.0", key->data);
-+	assert(bpf_map_delete_elem(map_fd, key) == -1 &&
-+		errno == ENOENT);
-+
- 	/* assert initial lookup */
- 	key->prefixlen = 32;
- 	inet_pton(AF_INET, "192.168.0.1", key->data);
 -- 
 2.19.1
 
