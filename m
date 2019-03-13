@@ -2,210 +2,234 @@ Return-Path: <SRS0=IWuG=RQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 745E0C10F03
-	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 16:30:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFA6CC43381
+	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 16:56:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 37E1520854
-	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 16:30:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 69C8C2147C
+	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 16:56:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=netflix.com header.i=@netflix.com header.b="mtnK2E4t"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="oev04SPn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726530AbfCMQab (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Mar 2019 12:30:31 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:46427 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726485AbfCMQaa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 Mar 2019 12:30:30 -0400
-Received: by mail-wr1-f66.google.com with SMTP id 33so2692691wrb.13
-        for <bpf@vger.kernel.org>; Wed, 13 Mar 2019 09:30:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netflix.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8FAbz8OodGpKKBMBnfD03Nn//jmUx/fpTGyYC2ty5hM=;
-        b=mtnK2E4tnJzu5Q91jVksCgUzDl5fV8RkndBXwCIjrUvuTaNEUGQRf3sywQsP3EUDHL
-         rqYH1W41RNMXkbvQI8aJsGlihUJIu/r4UMLrTmdacLUP+ETsIXmQQtnZ/qSVmEvnWQUg
-         rcC2SokVZqR8lWDtA3S1uKVg4URim6b9ukxVw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8FAbz8OodGpKKBMBnfD03Nn//jmUx/fpTGyYC2ty5hM=;
-        b=a/QwbM34YmMKgt7t1owkcOehxQ7ZeKkFnE9jY+sz1AhAsLL2Q2DLEu07Xe27xE5rv0
-         LH4qq9NvlxgH0t+exRi/D28SmI5ZparvhBU40LdOWvKM4A55BOS0igtDh5iNhCoT9sVW
-         2Y/kZlp7k7369J5reEGLkVC33RJYYyLQ44zJra+uS5ECnQbYKznNoPnsI9iwG/Q68BXW
-         4XoxHa6aiVWtpi8aKZIxDJxRj7+PoiCNK31/3c8Rq9XHTPvUwkDJlk/N9Y0jBRVJNLhJ
-         yA2A5d5heODbNpvgR4BtQ/dN59WwCWXP76KqbnMcm6nTUffQiF7xmqZnUrNDOLFbAceN
-         3IBw==
-X-Gm-Message-State: APjAAAXZMMIPx/goIKjJ6dCfbOxjLiCB5kVOr7d8774U+q2vc8AKBNl0
-        Mhy4l5CwAsnv3k4erjptiBGGjL80L8cNpO1PiredOw==
-X-Google-Smtp-Source: APXvYqxbdyGSczJ1gmi6L3x1L0hQhe3ibp3qI9kuc5EhCRctd+jqV8FZeX3q7DMDnacqAoCRiH6gjeaHwJ2sPlo2208=
-X-Received: by 2002:adf:b211:: with SMTP id u17mr30138758wra.322.1552494627943;
- Wed, 13 Mar 2019 09:30:27 -0700 (PDT)
+        id S1726867AbfCMQ4E (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Mar 2019 12:56:04 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:40336 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726842AbfCMQ4E (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 13 Mar 2019 12:56:04 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x2DGpmE7001162
+        for <bpf@vger.kernel.org>; Wed, 13 Mar 2019 09:56:02 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=VSuo33gBRTIxlGzZk+wVbL1azBeTWddhNZAkkUdw7rw=;
+ b=oev04SPnlXJPeNnB6vzbPwFdU+hbbD2YlybLzTXXJsyO7uufnkiJWu3Ni3ADF9bDteBE
+ ontPvstxfVoPb2s21FNfKFstRXSDgO3+jdQzhgLRehhCd2elAF3cpd/XzSku2D/Vy6wc
+ R/ytwmEqLhTSR4YtazGIJj86S4dekEbYoa0= 
+Received: from mail.thefacebook.com ([199.201.64.23])
+        by m0001303.ppops.net with ESMTP id 2r75nc81sc-13
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 13 Mar 2019 09:56:02 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::125) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Wed, 13 Mar 2019 09:53:31 -0700
+Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
+        id 0CE408613C1; Wed, 13 Mar 2019 09:53:31 -0700 (PDT)
+Smtp-Origin-Hostprefix: dev
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: dev101.prn2.facebook.com
+To:     <andrii.nakryiko@gmail.com>, <dwarves@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <acme@kernel.org>, <ast@fb.com>,
+        <yhs@fb.com>
+CC:     Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: prn2c23
+Subject: [PATCH pahole] loaders: strip away volatile/const/restrict when fixing bitfields
+Date:   Wed, 13 Mar 2019 09:53:01 -0700
+Message-ID: <20190313165301.2739423-1-andriin@fb.com>
+X-Mailer: git-send-email 2.17.1
+X-FB-Internal: Safe
 MIME-Version: 1.0
-References: <201902251554.x1PFsD3w017626@userv0121.oracle.com>
- <20190226061823.f7hfs7yojfuycqmg@ast-mbp.dhcp.thefacebook.com>
- <20190226064601.GE16689@oracle.com> <20190305185950.rpx7srzpbya5psnf@ast-mbp.dhcp.thefacebook.com>
- <20190306020357.GG32758@oracle.com> <20190307213035.5eagphx6vswxalai@ast-mbp.dhcp.thefacebook.com>
- <20190311142127.GA11634@oracle.com> <CAJN39ohS0+GCLMsc3s_JyROTDty8eomRJ==QW34YxhDrDGr9KA@mail.gmail.com>
- <20190312032405.GE11634@oracle.com> <CAJN39ohP2+k5V3CbNRKixdZ+_u4Zgk=Cdt5m5eE27vAv0Pp=Rg@mail.gmail.com>
- <20190312165335.GG11634@oracle.com>
-In-Reply-To: <20190312165335.GG11634@oracle.com>
-From:   Brendan Gregg <bgregg@netflix.com>
-Date:   Wed, 13 Mar 2019 09:30:02 -0700
-Message-ID: <CAJN39oio2i_TJ-DY62EO-59ed0mL1hvoPtgTBoVZYfZU6Ja4bg@mail.gmail.com>
-Subject: Re: [PATCH 0/2] bpf: context casting for tail call and gtrace prog type
-To:     Kris Van Hees <kris.van.hees@oracle.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-03-13_10:,,
+ signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 12, 2019 at 9:54 AM Kris Van Hees <kris.van.hees@oracle.com> wrote:
->
-> On Mon, Mar 11, 2019 at 11:03:10PM -0700, Brendan Gregg wrote:
-> > On Mon, Mar 11, 2019 at 8:24 PM Kris Van Hees <kris.van.hees@oracle.com> wrote:
-> > >
-> > > On Mon, Mar 11, 2019 at 06:29:55PM -0700, Brendan Gregg wrote:
-> > > > On Mon, Mar 11, 2019 at 7:21 AM Kris Van Hees <kris.van.hees@oracle.com> wrote:
-> > > > >
-> > > > > On Thu, Mar 07, 2019 at 01:30:37PM -0800, Alexei Starovoitov wrote:
-> > > > > > On Tue, Mar 05, 2019 at 09:03:57PM -0500, Kris Van Hees wrote:
-> > > > [...]
-> > > > > > > But being able to do things like this without
-> > > > > > > needing to touch the context of any other BPF program type is a great benefit
-> > > > > > > to offer tracing tools, as far as I see it.
-> > > > > >
-> > > > > > I still don't understand what you're referring to by 'things like this'
-> > > > > > that somehow will be possible in the future, but not possible today.
-> > > > > > Could you please give concrete example?
-> > > > >
-> > > > > My apologies for not being clear.  I am referring to the features of the
-> > > > > gtrace context in terms of containing task information, and output buffers
-> > > > > to be used in BPF programs triggered from various probe sources (kprobe,
-> > > > > tracepoints, ...)  I would not want to suggest making changes to all the
-> > > > > different program contexts in order to support tracing needs because that
-> > > > > would be wrong.  Doing it in a central place makes it a lot easier to maintain
-> > > > > without impacting other program types, etc.
-> > > > >
-> > > > > Of course, yes, bpf_probe_read() and bpf_perf_event_output() can be used
-> > > > > to implement a lot of what existing tracing tools like DTrace can do, if you
-> > > > > write them based on that.  One limitations I am obviously working with is
-> > > > > that DTrace already exists and has existed for a long time.  And while it is
-> > > > > 100% available as open source, it involves a pretty involved set of patches to
-> > > > > be applied to the kernel to be able to use it which is just not ideal.  Hence
-> > > > > the goal to make it available by re-using as much of the existing features in
-> > > > > Linux as possible, while still maintaining the same level of functionality in
-> > > > > DTrace.  That means we need to fill the gaps - and from where I am sitting,
-> > > > > the ways to do that might as well be of use to others (if they want to).
-> > > > >
-> > > > > If phrasing things in the context of DTrace would make the conversation easier
-> > > > > I certainly don;t mind doing that, but I really don't want to limit my patches
-> > > > > to supporting just DTrace (even if right now it might be the only tracer using
-> > > > > it).
-> > > >
-> > > > As a concrete example, can you point to one of my own published DTrace
-> > > > tools that BPF can't do? These were created to solve many real
-> > > > production issues, and make good use cases. I've been porting them
-> > > > over to BPF (bcc and bpftrace) without too much problem, and I can't
-> > > > think of a single one that I couldn't port over today.
-> > >
-> > > I am unclear how pointing at one of your published DTrace tools would
-> > > contribute to this discussion.  Surely the scope of use cases is not limited
-> > > to the DTrace scripts you published?
-> > >
-> > > Either way, one of the features that I make use of is speculative tracing.
-> >
-> > The subject was a concrete example. I don't think I used speculative
-> > tracing in any of my scripts. Can you pick a better example of
-> > something BPF can't do?
->
-> Well, then speculative tracing is a good example of something that cannot be
-> done right now.  The specopen.d script that is part of the DTrace documentation
-> and is also featured in the test suite makes for a concrete example.  That
-> script has been used as a kind of template script in situations where we had
-> to analyze code paths associated with a specific subset of conditions that
-> could not be known beforehand.
+btf_loader and ctf_loader didn't remove const/volatile/restrict, so
+bitfields using modifiers were not adjusted properly.
 
-I used spec tracing zero times in any of my published scripts from
-fifteen years of using DTrace, and zero times in my 1152-page DTrace
-book. Might I find a use one day? Maybe, just as you have. But I
-wouldn't call it a great example of necessary functionality!
+This patch abstracts logic of stripping aways typedefs and access
+modifiers into tag__strip_typedefs_and_modifiers, which handles any
+interleaving of typedefs and modifiers. dwarf_loader was adapter to
+reuse this function as well, instead of custom goto loop.
 
-Besides, I bet we could implement spec tracing using existing BPF maps
-if we wanted -- I just haven't had that need.
+REPRO:
+$ cat vc_map.c
+typedef unsigned int u32;
+typedef volatile u32 vu32;
+typedef vu32 vu32_t;
 
->
-> Are there other ways to accomplish the same thing?  Sure.  But I don't think
-> that is really the point.  There are often multiple tools that can do the same
-> thing (or close to the same thing), and people have the option to choose one
-> or the other.  DTrace is one of those tools, as is systemtap, bpftrace, perf,
-> and other tools.
->
-> > > And yes, even that could be handled with some ugly workarounds but my intent
-> > > is to implement things in a more clean way rather than depending on a bunch
-> > > of workarounds to make it somewhat work.
-> > >
-> > > > There's a few minor things that I'm currently doing workarounds for,
-> > > > like ppid, but that should be satisfied with a few more helpers. And
-> > > > if it's really niche, then BTF sounds like a good solution.
-> > >
-> > > Of course, we can always add more helpers to get to information that is
-> > > needed, but that is hardly a practical solution in the long run, and at
-> > > Plumbers 2019 it was already indicated that just adding helpers to get to
-> > > more information about tasks is not the route people want to take.
-> > >
-> > > > If your ultimate goal is to have a command called "dtrace" that runs D
-> > > > programs, to support your existing users, then I'd add a lex/yacc pair
-> > > > to bpftrace and have it emit a dtrace binary.
-> > >
-> > > My goal is not to have a command called dtrace that somehow simply provides
-> > > some form of support for dtrace scripts in some legacy support model.  My
-> > > goal is to make DTrace available on Linux based on existing kernel features
-> > > (and contributing extra features where needed, in a collaborative manner).
-> >
-> > If bpftrace builds a dtrace binary that runs D code, then you just did
-> > make DTrace available on Linux.
-> >
-> > And without changing the kernel.
->
-> If bpftrace could do everything that DTrace does, in a way that is 100%
-> transparent to the user, and without requiring extra dependencies like e.g.
-> software development packages (llvm, etc) to be installed on the system where
-> it will be used in production, I think we wouldn't be having this conversation.
+typedef struct vc_map {
+        volatile unsigned int tx: 1;
+        vu32_t rx: 1;
+        void *x1, *x2;
+} vc_map;
 
-bpftrace is solving that need, and it was built from the ground up to
-work with eBPF. It's going to provide 100% of useful functionality.
-Getting it available out of the box is both a user-space and distro
-problem.
+int main() {
+        struct vc_map s;
+        return 0;
+}
 
->
-> Anyway, I feel we're getting off track here...  the discussion is not about
-> whether bpftrace can do what dtrace can do, or any other tool for that matter.
-> There is a need for DTrace on Linux and I am working on making that possible
+BEFORE:
+$ ~/pahole/build/pahole -F btf vc_map
+struct vc_map {
+        volatile unsigned int      tx:1;                 /*     0: 0  4 */
+        vu32_t                     rx:1;                 /*     0: 0  4 */
 
-I wanted DTrace on Linux five years ago. Now I don't. We have eBPF,
-which does more.
+        /* XXX 30 bits hole, try to pack */
+        /* XXX 4 bytes hole, try to pack */
 
-> in a way where DTrace is one among multiple tracing tools, and by leveraging
+        void *                     x1;                   /*     8     8 */
+        void *                     x2;                   /*    16     8 */
 
-Multiple tracing tools? This will fracture the user and engineering
-communities. People have complained enough about Ftrace and perf and
-BPF -- we don't need a fourth tracing framework that doesn't solve any
-new problems.
+        /* size: 24, cachelines: 1, members: 4 */
+        /* sum members: 20, holes: 1, sum holes: 4 */
+        /* bit holes: 1, sum bit holes: 30 bits */
+        /* last cacheline: 24 bytes */
+};
 
-We can add a legacy interface to bpftrace for running D programs, to
-help people transition. That can be done as a user-space parser.
+AFTER:
+$ ~/pahole/build/pahole -F btf vc_map
+struct vc_map {
+        volatile unsigned int      tx:1;                 /*     0:31  4 */
+        vu32_t                     rx:1;                 /*     0:30  4 */
 
-Brendan
+        /* XXX 30 bits hole, try to pack */
+        /* XXX 4 bytes hole, try to pack */
 
+        void *                     x1;                   /*     8     8 */
+        void *                     x2;                   /*    16     8 */
+
+        /* size: 24, cachelines: 1, members: 4 */
+        /* sum members: 20, holes: 1, sum holes: 4 */
+        /* bit holes: 1, sum bit holes: 30 bits */
+        /* last cacheline: 24 bytes */
+};
+
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ btf_loader.c   |  2 +-
+ ctf_loader.c   |  2 +-
+ dwarf_loader.c |  7 +------
+ dwarves.c      | 10 ++++++++++
+ dwarves.h      | 13 +++++++++++++
+ 5 files changed, 26 insertions(+), 8 deletions(-)
+
+diff --git a/btf_loader.c b/btf_loader.c
+index 9a0714a..e04175e 100644
+--- a/btf_loader.c
++++ b/btf_loader.c
+@@ -457,7 +457,7 @@ static int class__fixup_btf_bitfields(struct tag *tag, struct cu *cu, struct btf
+ 	struct type *tag_type = tag__type(tag);
+ 
+ 	type__for_each_data_member(tag_type, pos) {
+-		struct tag *type = tag__follow_typedef(&pos->tag, cu);
++		struct tag *type = tag__strip_typedefs_and_modifiers(&pos->tag, cu);
+ 
+ 		if (type == NULL) /* FIXME: C++ BTF... */
+ 			continue;
+diff --git a/ctf_loader.c b/ctf_loader.c
+index 1631ea7..68479e2 100644
+--- a/ctf_loader.c
++++ b/ctf_loader.c
+@@ -613,7 +613,7 @@ static int class__fixup_ctf_bitfields(struct tag *tag, struct cu *cu)
+ 	struct type *tag_type = tag__type(tag);
+ 
+ 	type__for_each_data_member(tag_type, pos) {
+-		struct tag *type = tag__follow_typedef(&pos->tag, cu);
++		struct tag *type = tag__strip_typedefs_and_modifiers(&pos->tag, cu);
+ 
+ 		if (type == NULL) /* FIXME: C++ CTF... */
+ 			continue;
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index c2abdad..28d1393 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -2123,12 +2123,7 @@ static int class_member__cache_byte_size(struct tag *tag, struct cu *cu,
+ 	}
+ 
+ 	if (member->bitfield_size != 0) {
+-		struct tag *type = tag__follow_typedef(&member->tag, cu);
+-check_volatile:
+-		if (tag__is_volatile(type) || tag__is_const(type)) {
+-			type = tag__follow_typedef(type, cu);
+-			goto check_volatile;
+-		}
++		struct tag *type = tag__strip_typedefs_and_modifiers(&member->tag, cu);
+ 
+ 		uint16_t type_bit_size;
+ 		size_t integral_bit_size;
+diff --git a/dwarves.c b/dwarves.c
+index 4c6a12c..0b95d37 100644
+--- a/dwarves.c
++++ b/dwarves.c
+@@ -128,6 +128,16 @@ struct tag *tag__follow_typedef(const struct tag *tag, const struct cu *cu)
+ 	return type;
+ }
+ 
++struct tag *tag__strip_typedefs_and_modifiers(const struct tag *tag, const struct cu *cu)
++{
++	struct tag *type = cu__type(cu, tag->type);
++
++	while (type != NULL && (tag__is_typedef(type) || tag__is_modifier(type)))
++		type = cu__type(cu, type->type);
++
++	return type;
++}
++
+ size_t __tag__id_not_found_fprintf(FILE *fp, type_id_t id,
+ 				   const char *fn, int line)
+ {
+diff --git a/dwarves.h b/dwarves.h
+index 67ec014..f65dbe2 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -411,6 +411,18 @@ static inline bool tag__is_volatile(const struct tag *tag)
+ 	return tag->tag == DW_TAG_volatile_type;
+ }
+ 
++static inline bool tag__is_restrict(const struct tag *tag)
++{
++	return tag->tag == DW_TAG_restrict_type;
++}
++
++static inline int tag__is_modifier(const struct tag *tag)
++{
++	return tag__is_const(tag) ||
++	       tag__is_volatile(tag) ||
++	       tag__is_restrict(tag);
++}
++
+ static inline bool tag__has_namespace(const struct tag *tag)
+ {
+ 	return tag__is_struct(tag) ||
+@@ -498,6 +510,7 @@ void tag__not_found_die(const char *file, int line, const char *func);
+ size_t tag__size(const struct tag *tag, const struct cu *cu);
+ size_t tag__nr_cachelines(const struct tag *tag, const struct cu *cu);
+ struct tag *tag__follow_typedef(const struct tag *tag, const struct cu *cu);
++struct tag *tag__strip_typedefs_and_modifiers(const struct tag *tag, const struct cu *cu);
+ 
+ size_t __tag__id_not_found_fprintf(FILE *fp, type_id_t id,
+ 				   const char *fn, int line);
 -- 
-Brendan Gregg, Senior Performance Architect, Netflix
+2.17.1
+
