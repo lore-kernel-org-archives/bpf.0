@@ -7,73 +7,69 @@ X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A5E9C43381
-	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 21:08:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28EE0C43381
+	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 21:21:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BFAD02147C
-	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 21:08:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E55242054F
+	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 21:21:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kKbtH3+s"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ViLYiMmB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727275AbfCMVIp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Mar 2019 17:08:45 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:39221 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727022AbfCMVIp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 Mar 2019 17:08:45 -0400
-Received: by mail-qk1-f196.google.com with SMTP id c189so2054022qke.6;
-        Wed, 13 Mar 2019 14:08:44 -0700 (PDT)
+        id S1727187AbfCMVV6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Mar 2019 17:21:58 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:33628 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726994AbfCMVV6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 Mar 2019 17:21:58 -0400
+Received: by mail-qk1-f193.google.com with SMTP id x9so2084280qkf.0;
+        Wed, 13 Mar 2019 14:21:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:date:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=gHl7pab4HWZ1fyWQoYoSRKAmJkOm5E93j3TCFUyq89k=;
-        b=kKbtH3+sJfzCAukDJXpQYwbdbD/AOSvM1Ktl5mld8oaaf5AoPb32eiHzNpaEPEaPJO
-         3OI+004tF6/HDtRvlDzg2BY00zYTQ5dDjS2E1dOTPGZUMd6pT7EWX4V6p70wZm7UNCAC
-         /l1MWRXQSmckwjPYE/vcV86ouSCINMV7U8cTl1z2eKJ31KzcLp77CH+om8NW7IC1Y3lD
-         AIn1WvGtLhgDiQXsbGsdMNNsPVl4hKuqDx2lEgiLi35IUEBq7OxbtFnh3UUMNcARXX8J
-         QNXsBpCUzVzOxNHbQY+wI/4etz/k7spMOTQ2hT0/bpT7IdOKveuJ9cxF9FOOhlCOiegN
-         8/OQ==
+        bh=Sin21Y5zxCdKvCbMTCPYdWjniTBQ/YASC2K22GISZkM=;
+        b=ViLYiMmBjhxpyP7NTHNpUMCqx9Cng15DoM4YuZGwpH61hVwNkQNSC+fehoFBJL01BH
+         PQL7uMwBfy8iLrUhumRr18k59hgwHiCtPJ28KwRE0VSPm1TGh2OEfHeifQYdZHd+PyOM
+         +YR60z6PyMze+1mxTt709YWXdM4fPOcnyGndohJyU06XKAjUPqIRJAMswwxxth/Y7Ikz
+         hEmgfhYcGQ/8J0t+QUlT4UfmYC2UC/9digPp9Yu7vAYRCVD25nMg/tCpCPsn1eww8OLC
+         0uJDogF7xiexZUy34d9VzIRhfN5qmCozRvrBh5bmMZmGusulk5iVCu9TZ86CrzqVvqjJ
+         atXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:date:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=gHl7pab4HWZ1fyWQoYoSRKAmJkOm5E93j3TCFUyq89k=;
-        b=fTZ7xxn7fzQQqHSjaAyAwL4Q6BjGK0c9noIz0T4EOIqeILuit7ZhTrhSX3UAv4RJsm
-         fJK6H+6WBXVM0Zb5EhqEyASoJh5q9z3QK5nP2KGUIpESVCp/G1mwzuqyQQyGTnKEwNiB
-         pULUUdVhHxgX3hGVwsCyh18hDDN2apBmAHQiTpEZefQVQwD96lhcbNd/0FISJHFa4NuG
-         JYHhAa6NM6xzZiFJzYm7iGFe1h7ZdfYbMrM7P20KnhNNKrE2UuNdptaFhFVnONxJMxzo
-         HfmUAd9cp720uZhY80DOvrsQ/IOj96FT69RcO/iSzMHozkN5zlJOQrSM5WMkU+f+bFxM
-         gi/w==
-X-Gm-Message-State: APjAAAV26VzE3p+j+4gm513dt+zPhemW3q6s3jCs+MnUfMdysNoeR7zU
-        6TIzp+jyrSsNASoSi9gbFtU=
-X-Google-Smtp-Source: APXvYqzY93i1iMmxjkVgk2KjY10LrH0bNVDOgEImDSuvUlBInlJmR2ncryIGQU/x59x5feNBnpzBTQ==
-X-Received: by 2002:a37:c5d2:: with SMTP id k79mr9607183qkl.234.1552511323713;
-        Wed, 13 Mar 2019 14:08:43 -0700 (PDT)
+        bh=Sin21Y5zxCdKvCbMTCPYdWjniTBQ/YASC2K22GISZkM=;
+        b=RmG3aRS8yXB2CJQhsPrdScikJuNAVL/wvoF/jKxYBXylyC+LFZ4ZvBOiaovBC8n4rr
+         sPlzIgeoL/M4PpbwsnWE7nMNDKV3hYFE1UgsMN7DE00TeFrYibnuhVOzN2LLZaI76hyS
+         NgN6693eiL+1buRJ8/PSJWlTY4Zjw0oAMewflF9qew8kWyRJn0jFP2XQJQKAoGdn26qX
+         8x/Cii5ZYPhQc3+X3vmjpqg9s+ONjPSkHZJVRn+B/CuXv+JsYRgMSmQ+sDZbat0F/07k
+         NR8y3AjwV/KWCzY9BN5R4Ah5TeZdOjv9AUu7ZcM4i8oC4uDquWRwF6dPAsQdMm3gM9t8
+         0GBQ==
+X-Gm-Message-State: APjAAAUKQjVVCiunAJpYA6sJEnr8ch+NEpTsz8by18yBpI0O/0KVvD+f
+        5dCWzQu0jr81mVEx3B+RdqY=
+X-Google-Smtp-Source: APXvYqwyN31ei6e1EDsd0NTVwAlw0DqupfImuHC7OumT7qP2zzRuohxOrYKbJ82yIpLp1ngMCjFCZg==
+X-Received: by 2002:a37:c20c:: with SMTP id i12mr14017307qkm.94.1552512117158;
+        Wed, 13 Mar 2019 14:21:57 -0700 (PDT)
 Received: from quaco.ghostprotocols.net ([179.97.35.11])
-        by smtp.gmail.com with ESMTPSA id x28sm8077466qta.76.2019.03.13.14.08.42
+        by smtp.gmail.com with ESMTPSA id 24sm8835153qtu.17.2019.03.13.14.21.56
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 13 Mar 2019 14:08:42 -0700 (PDT)
+        Wed, 13 Mar 2019 14:21:56 -0700 (PDT)
 From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
 X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 758A24039C; Wed, 13 Mar 2019 18:08:40 -0300 (-03)
-Date:   Wed, 13 Mar 2019 18:08:40 -0300
-To:     Song Liu <songliubraving@fb.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        kernel-team@fb.com, peterz@infradead.org, acme@redhat.com,
-        jolsa@kernel.org, namhyung@kernel.org, sdf@fomichev.me
-Subject: Re: [PATCH v9 perf,bpf 04/15] perf, bpf: synthesize bpf events with
- bpf_program__get_prog_info_linear()
-Message-ID: <20190313210840.GB4786@kernel.org>
-References: <20190312053051.2690567-1-songliubraving@fb.com>
- <20190312053051.2690567-5-songliubraving@fb.com>
- <20190313210030.GA16304@kernel.org>
+        id 4A07E4039C; Wed, 13 Mar 2019 18:21:54 -0300 (-03)
+Date:   Wed, 13 Mar 2019 18:21:54 -0300
+To:     Andrii Nakryiko <andriin@fb.com>
+Cc:     andrii.nakryiko@gmail.com, dwarves@vger.kernel.org,
+        bpf@vger.kernel.org, ast@fb.com, yhs@fb.com
+Subject: Re: [PATCH pahole] loaders: strip away volatile/const/restrict when
+ fixing bitfields
+Message-ID: <20190313212154.GD4786@kernel.org>
+References: <20190313165301.2739423-1-andriin@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190313210030.GA16304@kernel.org>
+In-Reply-To: <20190313165301.2739423-1-andriin@fb.com>
 X-Url:  http://acmel.wordpress.com
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: bpf-owner@vger.kernel.org
@@ -81,58 +77,15 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Wed, Mar 13, 2019 at 06:00:30PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Mon, Mar 11, 2019 at 10:30:40PM -0700, Song Liu escreveu:
-> > -
-> >  	/* Synthesize PERF_RECORD_KSYMBOL */
-> >  	for (i = 0; i < sub_prog_cnt; i++) {
-> > +		u8 (*prog_tags)[BPF_TAG_SIZE] = (void *)(info->prog_tags);
+Em Wed, Mar 13, 2019 at 09:53:01AM -0700, Andrii Nakryiko escreveu:
+> btf_loader and ctf_loader didn't remove const/volatile/restrict, so
+> bitfields using modifiers were not adjusted properly.
 > 
-> Need this:
-> 
-> -               u8 (*prog_tags)[BPF_TAG_SIZE] = (void *)(info->prog_tags);
-> +               u8 (*prog_tags)[BPF_TAG_SIZE] = (u8 *)(info->prog_tags);
-> 
-> 
-> To overcome this on debian:experimental-x-mips, i.e. Debian Experimental
-> cross building to MIPS 32-bit:
-> 
-> util/bpf-event.c: In function 'perf_event__synthesize_one_bpf_prog':
-> util/bpf-event.c:143:35: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
->    u8 (*prog_tags)[BPF_TAG_SIZE] = (void *)(info->prog_tags);
->                                    ^
-> util/bpf-event.c:144:22: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
->    __u32 *prog_lens = (__u32 *)(info->jited_func_lens);
->                       ^
-> util/bpf-event.c:145:23: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
->    __u64 *prog_addrs = (__u64 *)(info->jited_ksyms);
->                        ^
-> util/bpf-event.c:146:22: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
->    void *func_infos = (void *)(info->func_info);
->                       ^
->   CC       /tmp/build/perf/util/pmu.o
->   CC       /tmp/build/perf/util/pmu-flex.o
-> cc1: all warnings being treated as errors
+> This patch abstracts logic of stripping aways typedefs and access
+> modifiers into tag__strip_typedefs_and_modifiers, which handles any
+> interleaving of typedefs and modifiers. dwarf_loader was adapter to
+> reuse this function as well, instead of custom goto loop.
 
-Argh, hit the send button too fast, that is not the only case and then
-my change just changed the error:
+Thanks, applied.
 
-util/bpf-event.c: In function 'perf_event__synthesize_one_bpf_prog':
-util/bpf-event.c:143:35: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
-   u8 (*prog_tags)[BPF_TAG_SIZE] = (u8 *)(info->prog_tags);
-                                   ^
-util/bpf-event.c:143:35: error: initialization of 'u8 (*)[8]' {aka 'unsigned char (*)[8]'} from incompatible pointer type 'u8 *' {aka 'unsigned char *'} [-Werror=incompatible-pointer-types]
-util/bpf-event.c:144:22: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
-   __u32 *prog_lens = (__u32 *)(info->jited_func_lens);
-                      ^
-util/bpf-event.c:145:23: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
-   __u64 *prog_addrs = (__u64 *)(info->jited_ksyms);
-                       ^
-util/bpf-event.c:146:22: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
-   void *func_infos = (void *)(info->func_info);
-                      ^
-  CC       /tmp/build/perf/util/pmu.o
-  CC       /tmp/build/perf/util/pmu-flex.o
-cc1: all warnings being treated as errors
-mv: cannot stat '/tmp/build/perf/util/.bpf-event.o.tmp': No such file or directory
-
+- Arnaldo
