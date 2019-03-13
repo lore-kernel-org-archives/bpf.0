@@ -7,49 +7,49 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C44EEC43381
-	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:23:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F303EC10F03
+	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:26:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8D0672075C
-	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:23:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BC8D22146E
+	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:26:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1552505038;
-	bh=U9ZlVv7RMFNTg2JV8eJtcBR8tKBABSPJURbpVrfvXHM=;
+	s=default; t=1552505198;
+	bh=Qpf3b6HvwCiMa73CHa5CCvbTTTwYgzcBwEfp9qaNGT8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=asvF5s4yulFAlksW75XgBnTIiqsmj8PPC8awcNnnuRTHz6jM0WNU6LgR23bJHkYsm
-	 2Q0dzHIvdHv98oGh9cZaHaD1WYQDqDxZtgaU9SmoTQDaW7whyz5XZK8Gci4O93KOKz
-	 1QfYajlR/p2uoRzJZDNiOg0268nM3odONJrXzkwk=
+	b=yZLGeeINEX+L4Ed+1fVpvMQlZiRVj+imhe/r8YRy55Z1gd4cHjnlMww0vHN5zaNuN
+	 gBUT7J84BPvf93iW8r7q4WRRj335mZYj3Ucdmwx/o93jg6PLMq+wXVy5o9F1QcNN2O
+	 jpcIBGjC9Fce4CykMno3rJqnEXm5q3fPaYpZpK+4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728677AbfCMTQj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Mar 2019 15:16:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46974 "EHLO mail.kernel.org"
+        id S1728317AbfCMTOx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Mar 2019 15:14:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45114 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727513AbfCMTQi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 Mar 2019 15:16:38 -0400
+        id S1727250AbfCMTOt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 Mar 2019 15:14:49 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 584E321852;
-        Wed, 13 Mar 2019 19:16:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 12B10217F5;
+        Wed, 13 Mar 2019 19:14:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1552504598;
-        bh=U9ZlVv7RMFNTg2JV8eJtcBR8tKBABSPJURbpVrfvXHM=;
+        s=default; t=1552504488;
+        bh=Qpf3b6HvwCiMa73CHa5CCvbTTTwYgzcBwEfp9qaNGT8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wKdvu1bxZ6A6/5Y3IjDsP/ht4Z6M8ewMrpNsVlHHsQkp4ROy5M4WjsD8h7KIbxEI9
-         E46Ky247dERP0wRxbwwYKF0m4UmKouWCsfAO1AY4IukTZak0dN3O89qb3dl0niM1l6
-         FRhH0EkFZKFLLbcn2i9yvlgFWELku3A3tOJnAV2g=
+        b=WrhZ7SDRykvgS88bGfKmjBBWWG08bCA84mLQ2F67l4DtAszggupVgGe6bd/RxpTJa
+         TtnKVkBrz8sZUqhew5FydgSsYS+XxGR2zvxZnGysl8KjiZwX1CrBE3BZbikOdKTsSR
+         Gg4LOWLEGZYaC8AwqRgHXtok5TO+Jp+LbFbS+Bf8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Jiong Wang <jiong.wang@netronome.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, oss-drivers@netronome.com
-Subject: [PATCH AUTOSEL 4.14 30/33] nfp: bpf: fix code-gen bug on BPF_ALU | BPF_XOR | BPF_K
-Date:   Wed, 13 Mar 2019 15:15:03 -0400
-Message-Id: <20190313191506.159677-30-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 42/48] nfp: bpf: fix code-gen bug on BPF_ALU | BPF_XOR | BPF_K
+Date:   Wed, 13 Mar 2019 15:12:44 -0400
+Message-Id: <20190313191250.158955-42-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
-In-Reply-To: <20190313191506.159677-1-sashal@kernel.org>
-References: <20190313191506.159677-1-sashal@kernel.org>
+In-Reply-To: <20190313191250.158955-1-sashal@kernel.org>
+References: <20190313191250.158955-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -74,10 +74,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/net/ethernet/netronome/nfp/bpf/jit.c b/drivers/net/ethernet/netronome/nfp/bpf/jit.c
-index 239dfbe8a0a1..3105ee5bbf8e 100644
+index eff57f7d056a..0a934296ea53 100644
 --- a/drivers/net/ethernet/netronome/nfp/bpf/jit.c
 +++ b/drivers/net/ethernet/netronome/nfp/bpf/jit.c
-@@ -1017,7 +1017,7 @@ static int xor_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
+@@ -2306,7 +2306,7 @@ static int xor_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
  
  static int xor_imm(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
  {
