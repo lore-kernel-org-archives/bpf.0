@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 874D2C43381
-	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:31:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B409C43381
+	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:31:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 59ABD2075C
-	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:31:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D031C20657
+	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:31:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1552505463;
-	bh=h2MFCwwsmU3xjvucEjhoBHxfSnw3tolqy0wBMXmZddQ=;
+	s=default; t=1552505478;
+	bh=pIxf4BS8JJGwfL9mjosrFoChjL0yXeHt9nthO0IPsuE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=qFz+S/xTZEQ/KCY//pL/nAzlSE0kTF+4IkZo6BEZ1swqZv87aqiDyX9vOOm+1LJSc
-	 l8y/u+09h87wztnUUV9ZEprZEV227H859L9NT2v2lxB3ffDMi7kNKoGC4T54rgKXdV
-	 Z+0IKHrqyqUFjB3sA8j/cuTuqtbx5R8KaJ72gI9M=
+	b=g1rjMw4l2X0MGpzjKTyjXcgOWHoEWItxfo9Qfp5WkFmg9tUyXhkEYBDW8GccJK7Hw
+	 m418PN15sWoSOEz3MQnTVn+d96nWtnFvuOH8LnHfn743tFVciaGAX7+8CTrg5T2boH
+	 W2+CG98SOY2Bk/OzI7UCURlsbrXhGlTZaACJZtik=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727952AbfCMTaz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Mar 2019 15:30:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42840 "EHLO mail.kernel.org"
+        id S1727623AbfCMTL7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Mar 2019 15:11:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42622 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727673AbfCMTMO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 Mar 2019 15:12:14 -0400
+        id S1727611AbfCMTL5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 Mar 2019 15:11:57 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B8944218A3;
-        Wed, 13 Mar 2019 19:12:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 56EB12173C;
+        Wed, 13 Mar 2019 19:11:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1552504332;
-        bh=h2MFCwwsmU3xjvucEjhoBHxfSnw3tolqy0wBMXmZddQ=;
+        s=default; t=1552504316;
+        bh=pIxf4BS8JJGwfL9mjosrFoChjL0yXeHt9nthO0IPsuE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hNek0vwwgLWm07JbJSmDpEae8yLjzYtbL1wjhkSKYcBeMMORosHjXWoQxN7F56CFV
-         BRgxf43IGPfr8mEem+UR8a3EodaWWc+VDi5S4EsGdVxWhJRyb2PL8qoQVuE+j0Hr/k
-         B2dS8cGI6Ah3FIqk4O7ECnFsPkDYLTXWNvL8d0nM=
+        b=uS9OwW+9V9r9RZylHY7b3GZIv5pRM1IqevB1FhtZwS8dtsmE+51PUGPulDHZjdv8P
+         3KtY7ofYSnJOs+RHSzVUzz/i+MXTnt+JE0bf/nhJHOBeo6jMheyeF+S6v6JIDMvi+W
+         mtaXJuOuuxU4nnmjfY1SCiLIdnvKNcCOb9ou49gI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+Cc:     Magnus Karlsson <magnus.karlsson@intel.com>,
         Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         xdp-newbies@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.20 46/60] i40e: fix XDP_REDIRECT/XDP xmit ring cleanup race
-Date:   Wed, 13 Mar 2019 15:10:07 -0400
-Message-Id: <20190313191021.158171-46-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.20 42/60] ixgbe: fix potential RX buffer starvation for AF_XDP
+Date:   Wed, 13 Mar 2019 15:10:03 -0400
+Message-Id: <20190313191021.158171-42-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190313191021.158171-1-sashal@kernel.org>
 References: <20190313191021.158171-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -58,88 +58,101 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Björn Töpel <bjorn.topel@intel.com>
+From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-[ Upstream commit 59eb2a884f5380011179acc4662fc2cc2d850454 ]
+[ Upstream commit 4a9b32f30f805ca596d76605903a48eab58e0b88 ]
 
-When the driver clears the XDP xmit ring due to re-configuration or
-teardown, in-progress ndo_xdp_xmit must be taken into consideration.
+When the RX rings are created they are also populated with buffers so
+that packets can be received. Usually these are kernel buffers, but
+for AF_XDP in zero-copy mode, these are user-space buffers and in this
+case the application might not have sent down any buffers to the
+driver at this point. And if no buffers are allocated at ring creation
+time, no packets can be received and no interrupts will be generated so
+the NAPI poll function that allocates buffers to the rings will never
+get executed.
 
-The ndo_xdp_xmit function is typically called from a NAPI context that
-the driver does not control. Therefore, we must be careful not to
-clear the XDP ring, while the call is on-going. This patch adds a
-synchronize_rcu() to wait for napi(s) (preempt-disable regions and
-softirqs), prior clearing the queue. Further, the __I40E_CONFIG_BUSY
-flag is checked in the ndo_xdp_xmit implementation to avoid touching
-the XDP xmit queue during re-configuration.
+To rectify this, we kick the NAPI context of any queue with an
+attached AF_XDP zero-copy socket in two places in the code. Once after
+an XDP program has loaded and once after the umem is registered.  This
+take care of both cases: XDP program gets loaded first then AF_XDP
+socket is created, and the reverse, AF_XDP socket is created first,
+then XDP program is loaded.
 
-Fixes: d9314c474d4f ("i40e: add support for XDP_REDIRECT")
-Fixes: 123cecd427b6 ("i40e: added queue pair disable/enable functions")
-Reported-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
+Fixes: d0bcacd0a130 ("ixgbe: add AF_XDP zero-copy Rx support")
+Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Tested-by: Andrew Bowers <andrewx.bowers@intel.com>
 Signed-off-by: Jeff Kirsher <jeffrey.t.kirsher@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/i40e/i40e_main.c | 14 ++++++++++++--
- drivers/net/ethernet/intel/i40e/i40e_txrx.c |  4 +++-
- 2 files changed, 15 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 12 +++++++++++-
+ drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c  | 12 ++++++++++--
+ 2 files changed, 21 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
-index 89a072b5ce6c..393647153857 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -6729,8 +6729,13 @@ void i40e_down(struct i40e_vsi *vsi)
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+index aed1890514d6..8c47451f17f1 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+@@ -10207,6 +10207,7 @@ static int ixgbe_xdp_setup(struct net_device *dev, struct bpf_prog *prog)
+ 	int i, frame_size = dev->mtu + ETH_HLEN + ETH_FCS_LEN + VLAN_HLEN;
+ 	struct ixgbe_adapter *adapter = netdev_priv(dev);
+ 	struct bpf_prog *old_prog;
++	bool need_reset;
  
- 	for (i = 0; i < vsi->num_queue_pairs; i++) {
- 		i40e_clean_tx_ring(vsi->tx_rings[i]);
--		if (i40e_enabled_xdp_vsi(vsi))
-+		if (i40e_enabled_xdp_vsi(vsi)) {
-+			/* Make sure that in-progress ndo_xdp_xmit
-+			 * calls are completed.
-+			 */
-+			synchronize_rcu();
- 			i40e_clean_tx_ring(vsi->xdp_rings[i]);
-+		}
- 		i40e_clean_rx_ring(vsi->rx_rings[i]);
- 	}
+ 	if (adapter->flags & IXGBE_FLAG_SRIOV_ENABLED)
+ 		return -EINVAL;
+@@ -10229,9 +10230,10 @@ static int ixgbe_xdp_setup(struct net_device *dev, struct bpf_prog *prog)
+ 		return -ENOMEM;
  
-@@ -11966,8 +11971,13 @@ static void i40e_queue_pair_reset_stats(struct i40e_vsi *vsi, int queue_pair)
- static void i40e_queue_pair_clean_rings(struct i40e_vsi *vsi, int queue_pair)
- {
- 	i40e_clean_tx_ring(vsi->tx_rings[queue_pair]);
--	if (i40e_enabled_xdp_vsi(vsi))
-+	if (i40e_enabled_xdp_vsi(vsi)) {
-+		/* Make sure that in-progress ndo_xdp_xmit calls are
-+		 * completed.
-+		 */
-+		synchronize_rcu();
- 		i40e_clean_tx_ring(vsi->xdp_rings[queue_pair]);
-+	}
- 	i40e_clean_rx_ring(vsi->rx_rings[queue_pair]);
+ 	old_prog = xchg(&adapter->xdp_prog, prog);
++	need_reset = (!!prog != !!old_prog);
+ 
+ 	/* If transitioning XDP modes reconfigure rings */
+-	if (!!prog != !!old_prog) {
++	if (need_reset) {
+ 		int err = ixgbe_setup_tc(dev, adapter->hw_tcs);
+ 
+ 		if (err) {
+@@ -10247,6 +10249,14 @@ static int ixgbe_xdp_setup(struct net_device *dev, struct bpf_prog *prog)
+ 	if (old_prog)
+ 		bpf_prog_put(old_prog);
+ 
++	/* Kick start the NAPI context if there is an AF_XDP socket open
++	 * on that queue id. This so that receiving will start.
++	 */
++	if (need_reset && prog)
++		for (i = 0; i < adapter->num_rx_queues; i++)
++			if (adapter->xdp_ring[i]->xsk_umem)
++				(void)ixgbe_xsk_async_xmit(adapter->netdev, i);
++
+ 	return 0;
  }
  
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-index d0a95424ce58..48a0d8a53895 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-@@ -3708,6 +3708,7 @@ int i40e_xdp_xmit(struct net_device *dev, int n, struct xdp_frame **frames,
- 	struct i40e_netdev_priv *np = netdev_priv(dev);
- 	unsigned int queue_index = smp_processor_id();
- 	struct i40e_vsi *vsi = np->vsi;
-+	struct i40e_pf *pf = vsi->back;
- 	struct i40e_ring *xdp_ring;
- 	int drops = 0;
- 	int i;
-@@ -3715,7 +3716,8 @@ int i40e_xdp_xmit(struct net_device *dev, int n, struct xdp_frame **frames,
- 	if (test_bit(__I40E_VSI_DOWN, vsi->state))
- 		return -ENETDOWN;
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
+index 65c3e2c979d4..654ae92342ea 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
+@@ -144,11 +144,19 @@ static int ixgbe_xsk_umem_enable(struct ixgbe_adapter *adapter,
+ 		ixgbe_txrx_ring_disable(adapter, qid);
  
--	if (!i40e_enabled_xdp_vsi(vsi) || queue_index >= vsi->num_queue_pairs)
-+	if (!i40e_enabled_xdp_vsi(vsi) || queue_index >= vsi->num_queue_pairs ||
-+	    test_bit(__I40E_CONFIG_BUSY, pf->state))
- 		return -ENXIO;
+ 	err = ixgbe_add_xsk_umem(adapter, umem, qid);
++	if (err)
++		return err;
  
- 	if (unlikely(flags & ~XDP_XMIT_FLAGS_MASK))
+-	if (if_running)
++	if (if_running) {
+ 		ixgbe_txrx_ring_enable(adapter, qid);
+ 
+-	return err;
++		/* Kick start the NAPI context so that receiving will start */
++		err = ixgbe_xsk_async_xmit(adapter->netdev, qid);
++		if (err)
++			return err;
++	}
++
++	return 0;
+ }
+ 
+ static int ixgbe_xsk_umem_disable(struct ixgbe_adapter *adapter, u16 qid)
 -- 
 2.19.1
 
