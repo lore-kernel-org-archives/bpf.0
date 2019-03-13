@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84186C43381
-	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:30:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3944EC43381
+	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:30:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4DEAF20657
-	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:30:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 01F1B2075C
+	for <bpf@archiver.kernel.org>; Wed, 13 Mar 2019 19:30:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1552505404;
-	bh=0xOAyFmhk06ZGLVjVE99rx1PYfwNibq4u5tzXeA1xYU=;
+	s=default; t=1552505455;
+	bh=WddH+or7KxxhUfkW8V+8x1zLcdH6jgiEi3Y72pPxG8k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=YvEEC4a9MIwZzwJih1oxF46ZBAZ4er5UPShz1Hch7xMGvsNlaZBt35r6OUeIeDXFx
-	 Fu2Cpdx6mgpi20EYaHiWOdQDkGVWJjz2lWFAACWF6QNlDr9M7rU8yzhPk4srcwwqPG
-	 /GLbS4wmVnDBVvYI9k/AS6yg1uoWTP+uruNSqs10=
+	b=HnNMGDbBdpGWVx3xg3uqh8nlo7S24P2yE94+1FIxX1JbIVjQGP2xeVy8Xs7FDxT4P
+	 WnMjbGUqMHAASVn6Wy1txRtEVUvtQNCY8RmxMmMHtm7yK3aFxJcgTH+z0Q91Q5U3fM
+	 98TiPbHDzSyMukioCIHgG7+DGtRYSmQGthdNIZ/k=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727251AbfCMTMf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Mar 2019 15:12:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43176 "EHLO mail.kernel.org"
+        id S1727675AbfCMTMQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Mar 2019 15:12:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42884 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726263AbfCMTMf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 Mar 2019 15:12:35 -0400
+        id S1727177AbfCMTMP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 Mar 2019 15:12:15 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4633621871;
-        Wed, 13 Mar 2019 19:12:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0480C20693;
+        Wed, 13 Mar 2019 19:12:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1552504354;
-        bh=0xOAyFmhk06ZGLVjVE99rx1PYfwNibq4u5tzXeA1xYU=;
+        s=default; t=1552504334;
+        bh=WddH+or7KxxhUfkW8V+8x1zLcdH6jgiEi3Y72pPxG8k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V8y3wJXt1PBa5VnVmluaOoiQORnPcI4D2MpQMnEhiRcWpoyoRFT8PiU8SmfaQrzLp
-         N1sgpCLU+RBMDfn4sh0CB8Ah5yoaQ4OC4YYgGqPUodlxzYl83KUz4hLZbPn9xCm+D7
-         9hYmbKqRyfcNUYkBITApb+hVRNygc9oJgdBIXwJY=
+        b=IO9zPFFm6sxvkCZ+DrgyFmWMyQIsQlUNG5Q7xUc8cvirM/mOm+xFyWBXNtgnY9shq
+         LugGFSZ2XLIMbwJbI0TCZKcKZNQNsZKCdBX65QRSGKbMxP/eiD2oD3Suj2pj+oTSO4
+         7Xx4Pte+fDE5mXngoARr6jxzxPKzsxPyrXvLp75U=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jiong Wang <jiong.wang@netronome.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+Cc:     Jan Sokolowski <jan.sokolowski@intel.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, oss-drivers@netronome.com
-Subject: [PATCH AUTOSEL 4.20 54/60] nfp: bpf: fix code-gen bug on BPF_ALU | BPF_XOR | BPF_K
-Date:   Wed, 13 Mar 2019 15:10:15 -0400
-Message-Id: <20190313191021.158171-54-sashal@kernel.org>
+        xdp-newbies@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.20 47/60] ixgbe: don't do any AF_XDP zero-copy transmit if netif is not OK
+Date:   Wed, 13 Mar 2019 15:10:08 -0400
+Message-Id: <20190313191021.158171-47-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190313191021.158171-1-sashal@kernel.org>
 References: <20190313191021.158171-1-sashal@kernel.org>
@@ -58,34 +58,40 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jiong Wang <jiong.wang@netronome.com>
+From: Jan Sokolowski <jan.sokolowski@intel.com>
 
-[ Upstream commit 71c190249f0ced5b26377ea6bf829ab3af77a40c ]
+[ Upstream commit c685c69fba71462c3f9f6a1fb6151cded6c74d42 ]
 
-The intended optimization should be A ^ 0 = A, not A ^ -1 = A.
+An issue has been found while testing zero-copy XDP that
+causes a reset to be triggered. As it takes some time to
+turn the carrier on after setting zc, and we already
+start trying to transmit some packets, watchdog considers
+this as an erroneous state and triggers a reset.
 
-Fixes: cd7df56ed3e6 ("nfp: add BPF to NFP code translator")
-Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
-Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Don't do any work if netif carrier is not OK.
+
+Fixes: 8221c5eba8c13 (ixgbe: add AF_XDP zero-copy Tx support)
+Signed-off-by: Jan Sokolowski <jan.sokolowski@intel.com>
+Signed-off-by: Jeff Kirsher <jeffrey.t.kirsher@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/netronome/nfp/bpf/jit.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/netronome/nfp/bpf/jit.c b/drivers/net/ethernet/netronome/nfp/bpf/jit.c
-index 97d33bb4d84d..0762401ee3fe 100644
---- a/drivers/net/ethernet/netronome/nfp/bpf/jit.c
-+++ b/drivers/net/ethernet/netronome/nfp/bpf/jit.c
-@@ -2309,7 +2309,7 @@ static int xor_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
+index 654ae92342ea..36a8879536a4 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
+@@ -642,7 +642,8 @@ static bool ixgbe_xmit_zc(struct ixgbe_ring *xdp_ring, unsigned int budget)
+ 	dma_addr_t dma;
  
- static int xor_imm(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
- {
--	return wrp_alu32_imm(nfp_prog, meta, ALU_OP_XOR, !~meta->insn.imm);
-+	return wrp_alu32_imm(nfp_prog, meta, ALU_OP_XOR, !meta->insn.imm);
- }
- 
- static int and_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
+ 	while (budget-- > 0) {
+-		if (unlikely(!ixgbe_desc_unused(xdp_ring))) {
++		if (unlikely(!ixgbe_desc_unused(xdp_ring)) ||
++		    !netif_carrier_ok(xdp_ring->netdev)) {
+ 			work_done = false;
+ 			break;
+ 		}
 -- 
 2.19.1
 
