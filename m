@@ -2,66 +2,63 @@ Return-Path: <SRS0=VVzb=RR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27B67C43381
-	for <bpf@archiver.kernel.org>; Thu, 14 Mar 2019 19:28:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8518FC43381
+	for <bpf@archiver.kernel.org>; Thu, 14 Mar 2019 19:40:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EA148217F5
-	for <bpf@archiver.kernel.org>; Thu, 14 Mar 2019 19:28:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 50D86217F5
+	for <bpf@archiver.kernel.org>; Thu, 14 Mar 2019 19:40:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KPyrYgC7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tiALaZ/7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727370AbfCNT2J (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Mar 2019 15:28:09 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:45539 "EHLO
+        id S1727329AbfCNTkc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Mar 2019 15:40:32 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:36113 "EHLO
         mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726848AbfCNT2J (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 Mar 2019 15:28:09 -0400
-Received: by mail-ot1-f66.google.com with SMTP id i12so6185910otp.12;
-        Thu, 14 Mar 2019 12:28:08 -0700 (PDT)
+        with ESMTP id S1727165AbfCNTkc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 Mar 2019 15:40:32 -0400
+Received: by mail-ot1-f66.google.com with SMTP id v62so6247220otb.3;
+        Thu, 14 Mar 2019 12:40:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ykekUB1l4ADChF+vKj9P8TR3yji7u6AAy+zFP4F3rtY=;
-        b=KPyrYgC7tBeesC0k2Igtt8A0sjoTFqGkpi8M86SrXUA6N3Lp+Rc7bcBFMbJieof7nI
-         VOzE5G9xZA/i5RpsficG5Fh02jsf1aL/bMsNenEpqXWnsN/FhRaJ7JHwXELq5mPBsTTK
-         gr2eca6kZiNnUOiRG1mjs7laTCPXYUanNQ5O11+UPkeQYm4nkRPOq01W7LBA9JO8ch8B
-         Wd12v/0nEA6XbSm+IhioWNRbm17/wqpOS4vVY5D06poL7v6qncAJBT0HvI1UqNkqha7W
-         vlmVUpyK20RmnrHriK48DMmdjQivyP4oEi1YSTDv27CUK5sZ+wFeRXL+MvsLQaCFvitY
-         sOSA==
+        bh=ACR6I54ujBl+OjRkjhF5YBdYhBIqfFUJqG9AUY7rC4g=;
+        b=tiALaZ/7ekcBECT1+OcHz7aSNv5gwWnNHX4Y1KD8vSpO/RU5X/QJCCjPsjxwYXrL73
+         oBl25dOQMFO+a+JlZK8LS0N+ETgSC52/fHBgXzZJM6Vn0CVkYxi2oM6Gjw/PdP+j+RSN
+         7glaAiLJ8tDDiIDJP+dmMLUGoXgQh3WqlNIv22q24gHiuy+m2ujYTluCEmrJRTqPHZdG
+         MxrhIYErKwhBgUHn3ld/LmIc38C1QmHUZ4Z9tUSTvNjM2ZUTw/r2vGIXxoGX3OBVq6vk
+         mUFO4YW3xevOyaTuY3va4EBbZRTYFnWcUgHod3UM/VWADd7CuxqyTqfDJDn0n/KzZ+RA
+         tztw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ykekUB1l4ADChF+vKj9P8TR3yji7u6AAy+zFP4F3rtY=;
-        b=ql1J/vjzNuHxVM3m8dkQFzK2jtnPUZSJR6cuNSlQL7P8BmtOzHTKAtBOOnskF2vrsu
-         N/CHp9Eu3b9NlIL9otB0q1UHvwby8eqMavk1gHXy9sc9lOl6xg+/r9MEpPVQELAYJQEV
-         +5dE692CqASZwwN/UI5sJsrTANyW4UtOQQmYdfaGFOKC/8rAy/GT0qMm7aaWvjGbuZ2c
-         RJORKePDz1hj6hUDF426qdDBE1BVPS6TLBVyuh3kjRKXxv2CPNeR+rw/BFqKMTfV+b0x
-         IIO8r0J3uMO+qt5W2UEh7poM8qhpATvHKWc4vDguvcwqMejmUaoZpqTHWfgqHcaAI9rM
-         OeQw==
-X-Gm-Message-State: APjAAAUG/Q2IZnLX+kQhCRq1CPsgdFS9Xa+Cn6/JiD1qEbkleUPH0ufU
-        R4j+zDtVS6JUrYdBMQyH20GZF73qg+Q514Dd9mc=
-X-Google-Smtp-Source: APXvYqyt/3egGKnKdTfOSTWjRZeLYV+NZ5CXJw4SpPKrld7ApXXZ0xvdH7h7yTsV3OC+UE46yKyqMnNCQosQSxuAfrQ=
-X-Received: by 2002:a9d:6649:: with SMTP id q9mr1640901otm.221.1552591687925;
- Thu, 14 Mar 2019 12:28:07 -0700 (PDT)
+        bh=ACR6I54ujBl+OjRkjhF5YBdYhBIqfFUJqG9AUY7rC4g=;
+        b=E+eIcgR6CPzfpdYfpLRuIfnygS06Mzy3A4d3u+fb4TyXYRoGxDuW0WObH3P4/LkfDw
+         cBCe6KwU0q/XqATvXARjdK+cALxLGYZG8xQpUcVvF82hC8uV7TFHGaBfW1KzSO8lhhmK
+         JDl7vkTXNqe4f3UUqdMOYZt4qmNA2AFBnlJL9oQ6Rm1wSlfJ3yTjBE0pVdpWc67oOqt2
+         mmB2Wh8SNKjs2ZA4l/qofFK1bdhLnIYPDxGS7zFcB2mst7I5H8VatOXDhLdkX4QLZ/4y
+         /CBN3oZQw8AsHHq/HCPox+luvx6AvYJvjlQ3x4yWzSVqPtwCv2rbZjHRSsb99Z8BbGaE
+         PM7A==
+X-Gm-Message-State: APjAAAVeTkugwJbR46ElvMmq3kC1XzrgUhtfmCKtxZd30UMwd0Y5UGjD
+        9yA9FvCU+ALu99dxHY27591Uwk3OQWyOD4enUnk=
+X-Google-Smtp-Source: APXvYqwYxzMdvb+bUFdTH8P34XaFaHHG3CIx2R8UFt/LOcQ9GM8dk+chFjgbH0R8y+r2KuGPHYjvEhRa1GBDgBUO0Ds=
+X-Received: by 2002:a9d:745a:: with SMTP id p26mr32258874otk.206.1552592431569;
+ Thu, 14 Mar 2019 12:40:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190311215125.17793-1-daniel@iogearbox.net> <20190311215125.17793-3-daniel@iogearbox.net>
- <20190311230643.hpbcxczrq46hnn7r@ast-mbp>
-In-Reply-To: <20190311230643.hpbcxczrq46hnn7r@ast-mbp>
+References: <20190311215125.17793-1-daniel@iogearbox.net> <20190311215125.17793-5-daniel@iogearbox.net>
+In-Reply-To: <20190311215125.17793-5-daniel@iogearbox.net>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 14 Mar 2019 12:27:56 -0700
-Message-ID: <CAEf4Bzb1yxgGYjLXnsUBgrAhi0+0GvHgPk4sgi6xEai9JbXMUw@mail.gmail.com>
-Subject: Re: [PATCH rfc v3 bpf-next 2/9] bpf: add program side {rd,wr}only
- support for maps
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
+Date:   Thu, 14 Mar 2019 12:40:20 -0700
+Message-ID: <CAEf4BzaeJe+0WKTRC7utiUh5zqTxpV2e0DSqVrfge2qSzHRfKQ@mail.gmail.com>
+Subject: Re: [PATCH rfc v3 bpf-next 4/9] bpf, obj: allow . char as part of the name
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
         Networking <netdev@vger.kernel.org>,
         Joe Stringer <joe@wand.net.nz>,
         john fastabend <john.fastabend@gmail.com>,
@@ -74,48 +71,39 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 11, 2019 at 4:06 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Mon, Mar 11, 2019 at 2:51 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
 >
-> On Mon, Mar 11, 2019 at 10:51:18PM +0100, Daniel Borkmann wrote:
-> > This work adds two new map creation flags BPF_F_RDONLY_PROG
-> > and BPF_F_WRONLY_PROG in order to allow for read-only or
-> > write-only BPF maps from a BPF program side.
-> >
-> > Today we have BPF_F_RDONLY and BPF_F_WRONLY, but this only
-> > applies to system call side, meaning the BPF program has full
-> > read/write access to the map as usual while bpf(2) calls with
-> > map fd can either only read or write into the map depending
-> > on the flags. BPF_F_RDONLY_PROG and BPF_F_WRONLY_PROG allows
-> > for the exact opposite such that verifier is going to reject
-> > program loads if write into a read-only map or a read into a
-> > write-only map is detected. For read-only map case also some
-> > helpers are forbidden for programs that would alter the map
-> > state such as map deletion, update, etc.
-> >
-> > We've enabled this generic map extension to various non-special
-> > maps holding normal user data: array, hash, lru, lpm, local
-> > storage, queue and stack. Further map types could be followed
-> > up in future depending on use-case. Main use case here is to
-> > forbid writes into .rodata map values from verifier side.
+> Trivial addition to allow '.' aside from '_' as "special" characters
+> in the object name. Used to allow for substrings in maps from loader
+> side such as ".bss", ".data", ".rodata", but could also be useful for
+> other purposes.
 >
-> I think WRONLY | WRONLY_PROG should be invalid combination?
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 
-Just curious, what about the cases of special arrays (e.g., at least
-PROG_ARRAY). Is doing tail call a read from that map?
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 
-> Since these attributes are set at creation time and cannot be changed,
-> nothing can ever read from it, so why write into it?
-> Similarly RDONLY | RDONLY_PROG is invalid too?
+> ---
+>  kernel/bpf/syscall.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 >
-> Also looking at the next patch and 'lock' command...
-> May be it would be cleaner to do add WRONCE (from syscall) flag?
-> Then for .rodata the attrs will be RDONLY_PROG | WRONCE
-> and no 'lock' necessary.
-> WRONCE_PROG probably doesn't make sense.
-> Storing dangling task_struct pointer in the next patch doesn't look great.
-> The whole 'lock' concept feels useful, but in the context of implementing
-> .rodata it feels that WRONCE would be a better fit,
-> since libbpf won't be able to make a mistake and forget to 'lock'.
-> 'lock' syscall cmd can be confused with BPF_F_LOCK too.
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index b5ba138351e1..04279747c092 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -456,10 +456,10 @@ static int bpf_obj_name_cpy(char *dst, const char *src)
+>         const char *end = src + BPF_OBJ_NAME_LEN;
+>
+>         memset(dst, 0, BPF_OBJ_NAME_LEN);
+> -
+> -       /* Copy all isalnum() and '_' char */
+> +       /* Copy all isalnum(), '_' and '.' chars. */
+>         while (src < end && *src) {
+> -               if (!isalnum(*src) && *src != '_')
+> +               if (!isalnum(*src) &&
+> +                   *src != '_' && *src != '.')
+>                         return -EINVAL;
+>                 *dst++ = *src++;
+>         }
+> --
+> 2.17.1
 >
