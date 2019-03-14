@@ -2,330 +2,169 @@ Return-Path: <SRS0=VVzb=RR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F077C10F06
-	for <bpf@archiver.kernel.org>; Thu, 14 Mar 2019 12:39:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC264C43381
+	for <bpf@archiver.kernel.org>; Thu, 14 Mar 2019 13:34:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2504A2184C
-	for <bpf@archiver.kernel.org>; Thu, 14 Mar 2019 12:39:05 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="DI4Wl5V4"
+	by mail.kernel.org (Postfix) with ESMTP id 736852085A
+	for <bpf@archiver.kernel.org>; Thu, 14 Mar 2019 13:34:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1552570484;
+	bh=6Iq9/NsKHiHTQEP15+yOPb7x5TBdbTTUwFAMmwa0W2I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=x1NhTWYUm9AMNcGZ8fKKs1/RY26ySU1SW2SsILvsIWSAlcyid6v0MZKwCWtEGO83f
+	 wgY4zUT5aoUP14Esh12ZYvOaUUoK1KmpJ+XbaSDTx3/D95xtEcch1xL0yaScprQLyu
+	 pzMFOpbPTmEIY0cC1k7pI5sj1JCKI2JS5a0wykpE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727554AbfCNMi7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Mar 2019 08:38:59 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:53697 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727476AbfCNMi6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 Mar 2019 08:38:58 -0400
-Received: by mail-wm1-f68.google.com with SMTP id e74so2788880wmg.3
-        for <bpf@vger.kernel.org>; Thu, 14 Mar 2019 05:38:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=7DgF5I6ZVKZkBYLUY17mpmD1boQqv9DtD//RUjM4nic=;
-        b=DI4Wl5V4uHARy+UiT1kkvJ7hYXIFn9fpkSK8GVV1ePp4wvxGNTaRHjgTZcTymYeevG
-         rCY/B8cLx5OMk1BHTKplwQroCS0oFf9ND8bq7//o6nvr+8Azl8rMiPY/uEI9opFw5SpQ
-         yRbP19Sb5cFWwqKwabyqU0aSVmM/tthexCaa4exOmdTojxvw2CxWo+ArJbIAhoadQsMS
-         NOv+bhhzGhhzTzOhKHV4TLYkwxgmCG4ODgqgCPwqeDoafYjqpCU3OH8t/wZgHSrHZUpM
-         dqH4nHfwv1XEKLie8l6YBscrDNVhSv+dTDkywkpMOP9Bdiw0Ye9fbKyZHLE1QTpeiA15
-         i0xA==
+        id S1726996AbfCNNeo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Mar 2019 09:34:44 -0400
+Received: from mail-yw1-f65.google.com ([209.85.161.65]:38723 "EHLO
+        mail-yw1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726728AbfCNNen (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 Mar 2019 09:34:43 -0400
+Received: by mail-yw1-f65.google.com with SMTP id m207so4393652ywd.5;
+        Thu, 14 Mar 2019 06:34:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=7DgF5I6ZVKZkBYLUY17mpmD1boQqv9DtD//RUjM4nic=;
-        b=FsMPRMEL5lRQhLf92jHnTGhFpeapuSfYRz3kkdhsdfPnbM/qld33qels2tJmGyx07S
-         9IeQfnD2G/yiF6Z6TwS/DYD1LQdEwuDoJRiPl6awr1j4JnCNdhMW6Ym4tPbhzwl5r2g+
-         OIQkFr91K9qZ/Oc9dhZOaPF1mku613h1XblLHk+0nRwx1tZmE50SsJPqWiG5xalGMYve
-         qIJOd9VbPbYTyxcdhDxxcst113V7v0CfO4oq3UA9WQdlurUqVj8K/nkY0FRHe3WHq3QZ
-         gsPRYY27jWFGcxzh8ejQBDpS8hL03VLnYUDN/tg/C7YM5s9lBy1ZrFeYIOEPBQGSE07P
-         D0aQ==
-X-Gm-Message-State: APjAAAU35nhSnUaNWUv0on+Nx2Vjzo72K/sn+UO6Pcayoaboy2ObY51T
-        oQ5N8xbLAMAgB4KxALAxqZom8w==
-X-Google-Smtp-Source: APXvYqzH5C/Xva78iu5DEbtG21tcdxGcQm0vsbBeepivvD8YQTP7/GpUVxTcjDeAHWCHIbfHoIzpRQ==
-X-Received: by 2002:a1c:27c4:: with SMTP id n187mr2430100wmn.23.1552567135543;
-        Thu, 14 Mar 2019 05:38:55 -0700 (PDT)
-Received: from reblochon.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id u8sm2285569wml.22.2019.03.14.05.38.54
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 14 Mar 2019 05:38:54 -0700 (PDT)
-From:   Quentin Monnet <quentin.monnet@netronome.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        oss-drivers@netronome.com,
-        Quentin Monnet <quentin.monnet@netronome.com>
-Subject: [PATCH bpf 1/3] bpf: fix documentation for eBPF helpers
-Date:   Thu, 14 Mar 2019 12:38:39 +0000
-Message-Id: <20190314123841.13092-2-quentin.monnet@netronome.com>
-X-Mailer: git-send-email 2.14.1
-In-Reply-To: <20190314123841.13092-1-quentin.monnet@netronome.com>
-References: <20190314123841.13092-1-quentin.monnet@netronome.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=4cLh3zsmf6ZXVF9owoqYs485OTH3qeZkPnkocOchsEs=;
+        b=l2ilwUiAGwwfuwn5TjKNJzFlHATpvK0UIVK9PO97zEeVewd9nzEezJ21cxyV4BtA1m
+         knXWEEOjwTtPG48h5UQGqQx03rVJGktZ+glM8v6g6aHXs98gzi6nKyhcsTdigXwlz5Kq
+         wurChUfHlMZit9FzEYoVW7psSiDtu0Oo54ldF/JJyNnzb5yfNN/tDAfrPKsx6XW0UTFs
+         d5k2Nq9CYaLLPWiaQoe+jLCymCFUWU3bqiiyOIrXXgD4kuecYyAefowQ3lLgeusOFbqT
+         Tpb7oluPLb/JC8mVJMpsLOd1V+r55hCvlQknQv3uLpxdAYb50tKCaR+guAJ9KcZSNgnz
+         wmUA==
+X-Gm-Message-State: APjAAAXpHIuBzZx3Knd5CsKRNC6Rtjnyn8e4ku1Twm/MEqwj2NiW8p3b
+        TOfOpdaoeENq1X/CLdl5Opg=
+X-Google-Smtp-Source: APXvYqzXPZr5OfoVPrX5Pu82Tc+SKG7b191NpfBHFJK3NNgPI0vOlExdm0Si4BG1oiCtHoj+hqvNKQ==
+X-Received: by 2002:a0d:eaca:: with SMTP id t193mr18731854ywe.29.1552570482480;
+        Thu, 14 Mar 2019 06:34:42 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id l184sm5751636ywl.45.2019.03.14.06.34.38
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 14 Mar 2019 06:34:40 -0700 (PDT)
+Received: by 42.do-not-panic.com (sSMTP sendmail emulation); Thu, 14 Mar 2019 13:34:37 +0000
+Date:   Thu, 14 Mar 2019 13:34:37 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Yue Haibing <yuehaibing@huawei.com>, akpm@linux-foundation.org
+Cc:     keescook@chromium.org, adobriyan@gmail.com, ast@kernel.org,
+        daniel@iogearbox.net, viro@zeniv.linux.org.uk,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v2] proc/sysctl: Fix NULL pointer dereference in put_links
+Message-ID: <20190314133437.GA1038@42.do-not-panic.com>
+References: <20190314085527.13244-1-yuehaibing@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190314085527.13244-1-yuehaibing@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Another round of minor fixes for the documentation of the BPF helpers
-located in the UAPI bpf.h header file. Changes include:
+On Thu, Mar 14, 2019 at 04:55:27PM +0800, Yue Haibing wrote:
+> From: YueHaibing <yuehaibing@huawei.com>
+> 
+> Syzkaller report this:
+> 
+> kasan: GPF could be caused by NULL-ptr deref or user memory access
+> general protection fault: 0000 [#1] SMP KASAN PTI
+> CPU: 1 PID: 5373 Comm: syz-executor.0 Not tainted 5.0.0-rc8+ #3
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.10.2-1ubuntu1 04/01/2014
+> RIP: 0010:put_links+0x101/0x440 fs/proc/proc_sysctl.c:1599
+> Code: 00 0f 85 3a 03 00 00 48 8b 43 38 48 89 44 24 20 48 83 c0 38 48 89 c2 48 89 44 24 28 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c 02 00 0f 85 fe 02 00 00 48 8b 74 24 20 48 c7 c7 60 2a 9d 91
+> RSP: 0018:ffff8881d828f238 EFLAGS: 00010202
+> RAX: dffffc0000000000 RBX: ffff8881e01b1140 RCX: ffffffff8ee98267
+> RDX: 0000000000000007 RSI: ffffc90001479000 RDI: ffff8881e01b1178
+> RBP: dffffc0000000000 R08: ffffed103ee27259 R09: ffffed103ee27259
+> R10: 0000000000000001 R11: ffffed103ee27258 R12: fffffffffffffff4
+> R13: 0000000000000006 R14: ffff8881f59838c0 R15: dffffc0000000000
+> FS:  00007f072254f700(0000) GS:ffff8881f7100000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fff8b286668 CR3: 00000001f0542002 CR4: 00000000007606e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> PKRU: 55555554
+> Call Trace:
+>  drop_sysctl_table+0x152/0x9f0 fs/proc/proc_sysctl.c:1629
+>  get_subdir fs/proc/proc_sysctl.c:1022 [inline]
+>  __register_sysctl_table+0xd65/0x1090 fs/proc/proc_sysctl.c:1335
+>  ? 0xffffffffc1a18000
+>  br_netfilter_init+0xbc/0x1000 [br_netfilter]
+>  ? 0xffffffffc1a18000
+>  ? 0xffffffffc1a18000
+>  do_one_initcall+0xfa/0x5ca init/main.c:887
+>  do_init_module+0x204/0x5f6 kernel/module.c:3460
+>  load_module+0x66b2/0x8570 kernel/module.c:3808
+>  __do_sys_finit_module+0x238/0x2a0 kernel/module.c:3902
+>  do_syscall_64+0x147/0x600 arch/x86/entry/common.c:290
+>  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> RIP: 0033:0x462e99
+> Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007f072254ec58 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
+> RAX: ffffffffffffffda RBX: 000000000073bf00 RCX: 0000000000462e99
+> RDX: 0000000000000000 RSI: 0000000020000280 RDI: 0000000000000003
+> RBP: 00007f072254ec70 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f072254f6bc
+> R13: 00000000004bcefa R14: 00000000006f6fb0 R15: 0000000000000004
+> Modules linked in: br_netfilter(+) dvb_usb_dibusb_mc_common dib3000mc dibx000_common dvb_usb_dibusb_common dvb_usb_dw2102 dvb_usb classmate_laptop palmas_regulator cn videobuf2_v4l2 v4l2_common snd_soc_bd28623 mptbase snd_usb_usx2y snd_usbmidi_lib snd_rawmidi wmi libnvdimm lockd sunrpc grace rc_kworld_pc150u rc_core rtc_da9063 sha1_ssse3 i2c_cros_ec_tunnel adxl34x_spi adxl34x nfnetlink lib80211 i5500_temp dvb_as102 dvb_core videobuf2_common videodev media videobuf2_vmalloc videobuf2_memops udc_core lnbp22 leds_lp3952 hid_roccat_ryos s1d13xxxfb mtd vport_geneve openvswitch nf_conncount nf_nat_ipv6 nsh geneve udp_tunnel ip6_udp_tunnel snd_soc_mt6351 sis_agp phylink snd_soc_adau1761_spi snd_soc_adau1761 snd_soc_adau17x1 snd_soc_core snd_pcm_dmaengine ac97_bus snd_compress snd_soc_adau_utils snd_soc_sigmadsp_regmap snd_soc_sigmadsp raid_class hid_roccat_konepure hid_roccat_common hid_roccat c2port_duramar2150 core mdio_bcm_unimac iptable_security iptable_raw iptable_mangle
+>  iptable_nat nf_nat_ipv4 nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 iptable_filter bpfilter ip6_vti ip_vti ip_gre ipip sit tunnel4 ip_tunnel hsr veth netdevsim devlink vxcan batman_adv cfg80211 rfkill chnl_net caif nlmon dummy team bonding vcan bridge stp llc ip6_gre gre ip6_tunnel tunnel6 tun crct10dif_pclmul crc32_pclmul crc32c_intel ghash_clmulni_intel joydev mousedev ide_pci_generic piix aesni_intel aes_x86_64 ide_core crypto_simd atkbd cryptd glue_helper serio_raw ata_generic pata_acpi i2c_piix4 floppy sch_fq_codel ip_tables x_tables ipv6 [last unloaded: lm73]
+> Dumping ftrace buffer:
+>    (ftrace buffer empty)
+> ---[ end trace 770020de38961fd0 ]---
+> 
+> A new dir entry can be created in get_subdir and its 'header->parent' is set
+> to NULL. Only after insert_header success, it will be set to 'dir', otherwise
+> 'header->parent' is set to NULL and drop_sysctl_table is called. However in err
+> handling path of get_subdir, drop_sysctl_table also be called on 'new->header'
+> regardless its value of parent pointer. Then put_links is called, which triggers
+> NULL-ptr deref when access member of header->parent.
+> 
+> In fact we have multiple error paths which call drop_sysctl_table() there,
+> upon failure on insert_links() we also call drop_sysctl_table().And even in
+> the successful case on __register_sysctl_table() we still always
+> call drop_sysctl_table().This patch fix it.
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Fixes: 0e47c99d7fe25 ("sysctl: Replace root_list with links between sysctl_table_sets")
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 
-- Moving around description of some helpers, to keep the descriptions in
-  the same order as helpers are declared (bpf_map_push_elem(), leftover
-  from commit 90b1023f68c7 ("bpf: fix documentation for eBPF helpers"),
-  bpf_rc_keydown(), and bpf_skb_ancestor_cgroup_id()).
-- Fixing typos ("contex" -> "context").
-- Harmonising return types ("void* " -> "void *", "uint64_t" -> "u64").
-- Addition of the "bpf_" prefix to bpf_get_storage().
-- Light additions of RST markup on some keywords.
-- Empty line deletion between description and return value for
-  bpf_tcp_sock().
-- Edit for the description for bpf_skb_ecn_set_ce() (capital letters,
-  acronym expansion, no effect if ECT not set, more details on return
-  value).
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
 
-Signed-off-by: Quentin Monnet <quentin.monnet@netronome.com>
-Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
----
- include/uapi/linux/bpf.h | 128 ++++++++++++++++++++++++-----------------------
- 1 file changed, 65 insertions(+), 63 deletions(-)
+This should also have:
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 983b25cb608d..4465d00d3493 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -502,16 +502,6 @@ union bpf_attr {
-  * 	Return
-  * 		0 on success, or a negative error in case of failure.
-  *
-- * int bpf_map_push_elem(struct bpf_map *map, const void *value, u64 flags)
-- * 	Description
-- * 		Push an element *value* in *map*. *flags* is one of:
-- *
-- * 		**BPF_EXIST**
-- * 		If the queue/stack is full, the oldest element is removed to
-- * 		make room for this.
-- * 	Return
-- * 		0 on success, or a negative error in case of failure.
-- *
-  * int bpf_probe_read(void *dst, u32 size, const void *src)
-  * 	Description
-  * 		For tracing programs, safely attempt to read *size* bytes from
-@@ -1435,14 +1425,14 @@ union bpf_attr {
-  * u64 bpf_get_socket_cookie(struct bpf_sock_addr *ctx)
-  * 	Description
-  * 		Equivalent to bpf_get_socket_cookie() helper that accepts
-- * 		*skb*, but gets socket from **struct bpf_sock_addr** contex.
-+ * 		*skb*, but gets socket from **struct bpf_sock_addr** context.
-  * 	Return
-  * 		A 8-byte long non-decreasing number.
-  *
-  * u64 bpf_get_socket_cookie(struct bpf_sock_ops *ctx)
-  * 	Description
-  * 		Equivalent to bpf_get_socket_cookie() helper that accepts
-- * 		*skb*, but gets socket from **struct bpf_sock_ops** contex.
-+ * 		*skb*, but gets socket from **struct bpf_sock_ops** context.
-  * 	Return
-  * 		A 8-byte long non-decreasing number.
-  *
-@@ -2098,52 +2088,52 @@ union bpf_attr {
-  *	Return
-  * 		0 on success, or a negative error in case of failure.
-  *
-- * int bpf_rc_keydown(void *ctx, u32 protocol, u64 scancode, u32 toggle)
-+ * int bpf_rc_repeat(void *ctx)
-  *	Description
-  *		This helper is used in programs implementing IR decoding, to
-- *		report a successfully decoded key press with *scancode*,
-- *		*toggle* value in the given *protocol*. The scancode will be
-- *		translated to a keycode using the rc keymap, and reported as
-- *		an input key down event. After a period a key up event is
-- *		generated. This period can be extended by calling either
-- *		**bpf_rc_keydown**\ () again with the same values, or calling
-- *		**bpf_rc_repeat**\ ().
-+ *		report a successfully decoded repeat key message. This delays
-+ *		the generation of a key up event for previously generated
-+ *		key down event.
-  *
-- *		Some protocols include a toggle bit, in case the button	was
-- *		released and pressed again between consecutive scancodes.
-+ *		Some IR protocols like NEC have a special IR message for
-+ *		repeating last button, for when a button is held down.
-  *
-  *		The *ctx* should point to the lirc sample as passed into
-  *		the program.
-  *
-- *		The *protocol* is the decoded protocol number (see
-- *		**enum rc_proto** for some predefined values).
-- *
-  *		This helper is only available is the kernel was compiled with
-  *		the **CONFIG_BPF_LIRC_MODE2** configuration option set to
-  *		"**y**".
-  *	Return
-  *		0
-  *
-- * int bpf_rc_repeat(void *ctx)
-+ * int bpf_rc_keydown(void *ctx, u32 protocol, u64 scancode, u32 toggle)
-  *	Description
-  *		This helper is used in programs implementing IR decoding, to
-- *		report a successfully decoded repeat key message. This delays
-- *		the generation of a key up event for previously generated
-- *		key down event.
-+ *		report a successfully decoded key press with *scancode*,
-+ *		*toggle* value in the given *protocol*. The scancode will be
-+ *		translated to a keycode using the rc keymap, and reported as
-+ *		an input key down event. After a period a key up event is
-+ *		generated. This period can be extended by calling either
-+ *		**bpf_rc_keydown**\ () again with the same values, or calling
-+ *		**bpf_rc_repeat**\ ().
-  *
-- *		Some IR protocols like NEC have a special IR message for
-- *		repeating last button, for when a button is held down.
-+ *		Some protocols include a toggle bit, in case the button	was
-+ *		released and pressed again between consecutive scancodes.
-  *
-  *		The *ctx* should point to the lirc sample as passed into
-  *		the program.
-  *
-+ *		The *protocol* is the decoded protocol number (see
-+ *		**enum rc_proto** for some predefined values).
-+ *
-  *		This helper is only available is the kernel was compiled with
-  *		the **CONFIG_BPF_LIRC_MODE2** configuration option set to
-  *		"**y**".
-  *	Return
-  *		0
-  *
-- * uint64_t bpf_skb_cgroup_id(struct sk_buff *skb)
-+ * u64 bpf_skb_cgroup_id(struct sk_buff *skb)
-  * 	Description
-  * 		Return the cgroup v2 id of the socket associated with the *skb*.
-  * 		This is roughly similar to the **bpf_get_cgroup_classid**\ ()
-@@ -2159,30 +2149,12 @@ union bpf_attr {
-  * 	Return
-  * 		The id is returned or 0 in case the id could not be retrieved.
-  *
-- * u64 bpf_skb_ancestor_cgroup_id(struct sk_buff *skb, int ancestor_level)
-- *	Description
-- *		Return id of cgroup v2 that is ancestor of cgroup associated
-- *		with the *skb* at the *ancestor_level*.  The root cgroup is at
-- *		*ancestor_level* zero and each step down the hierarchy
-- *		increments the level. If *ancestor_level* == level of cgroup
-- *		associated with *skb*, then return value will be same as that
-- *		of **bpf_skb_cgroup_id**\ ().
-- *
-- *		The helper is useful to implement policies based on cgroups
-- *		that are upper in hierarchy than immediate cgroup associated
-- *		with *skb*.
-- *
-- *		The format of returned id and helper limitations are same as in
-- *		**bpf_skb_cgroup_id**\ ().
-- *	Return
-- *		The id is returned or 0 in case the id could not be retrieved.
-- *
-  * u64 bpf_get_current_cgroup_id(void)
-  * 	Return
-  * 		A 64-bit integer containing the current cgroup id based
-  * 		on the cgroup within which the current task is running.
-  *
-- * void* get_local_storage(void *map, u64 flags)
-+ * void *bpf_get_local_storage(void *map, u64 flags)
-  *	Description
-  *		Get the pointer to the local storage area.
-  *		The type and the size of the local storage is defined
-@@ -2209,6 +2181,24 @@ union bpf_attr {
-  *	Return
-  *		0 on success, or a negative error in case of failure.
-  *
-+ * u64 bpf_skb_ancestor_cgroup_id(struct sk_buff *skb, int ancestor_level)
-+ *	Description
-+ *		Return id of cgroup v2 that is ancestor of cgroup associated
-+ *		with the *skb* at the *ancestor_level*.  The root cgroup is at
-+ *		*ancestor_level* zero and each step down the hierarchy
-+ *		increments the level. If *ancestor_level* == level of cgroup
-+ *		associated with *skb*, then return value will be same as that
-+ *		of **bpf_skb_cgroup_id**\ ().
-+ *
-+ *		The helper is useful to implement policies based on cgroups
-+ *		that are upper in hierarchy than immediate cgroup associated
-+ *		with *skb*.
-+ *
-+ *		The format of returned id and helper limitations are same as in
-+ *		**bpf_skb_cgroup_id**\ ().
-+ *	Return
-+ *		The id is returned or 0 in case the id could not be retrieved.
-+ *
-  * struct bpf_sock *bpf_sk_lookup_tcp(void *ctx, struct bpf_sock_tuple *tuple, u32 tuple_size, u64 netns, u64 flags)
-  *	Description
-  *		Look for TCP socket matching *tuple*, optionally in a child
-@@ -2289,6 +2279,16 @@ union bpf_attr {
-  *	Return
-  *		0 on success, or a negative error in case of failure.
-  *
-+ * int bpf_map_push_elem(struct bpf_map *map, const void *value, u64 flags)
-+ * 	Description
-+ * 		Push an element *value* in *map*. *flags* is one of:
-+ *
-+ * 		**BPF_EXIST**
-+ * 			If the queue/stack is full, the oldest element is
-+ * 			removed to make room for this.
-+ * 	Return
-+ * 		0 on success, or a negative error in case of failure.
-+ *
-  * int bpf_map_pop_elem(struct bpf_map *map, void *value)
-  * 	Description
-  * 		Pop an element from *map*.
-@@ -2346,33 +2346,35 @@ union bpf_attr {
-  * struct bpf_sock *bpf_sk_fullsock(struct bpf_sock *sk)
-  *	Description
-  *		This helper gets a **struct bpf_sock** pointer such
-- *		that all the fields in bpf_sock can be accessed.
-+ *		that all the fields in this **bpf_sock** can be accessed.
-  *	Return
-- *		A **struct bpf_sock** pointer on success, or NULL in
-+ *		A **struct bpf_sock** pointer on success, or **NULL** in
-  *		case of failure.
-  *
-  * struct bpf_tcp_sock *bpf_tcp_sock(struct bpf_sock *sk)
-  *	Description
-  *		This helper gets a **struct bpf_tcp_sock** pointer from a
-  *		**struct bpf_sock** pointer.
-- *
-  *	Return
-- *		A **struct bpf_tcp_sock** pointer on success, or NULL in
-+ *		A **struct bpf_tcp_sock** pointer on success, or **NULL** in
-  *		case of failure.
-  *
-  * int bpf_skb_ecn_set_ce(struct sk_buf *skb)
-- *     Description
-- *             Sets ECN of IP header to ce (congestion encountered) if
-- *             current value is ect (ECN capable). Works with IPv6 and IPv4.
-- *     Return
-- *             1 if set, 0 if not set.
-+ *	Description
-+ *		Set ECN (Explicit Congestion Notification) field of IP header
-+ *		to **CE** (Congestion Encountered) if current value is **ECT**
-+ *		(ECN Capable Transport). Otherwise, do nothing. Works with IPv6
-+ *		and IPv4.
-+ *	Return
-+ *		1 if the **CE** flag is set (either by the current helper call
-+ *		or because it was already present), 0 if it is not set.
-  *
-  * struct bpf_sock *bpf_get_listener_sock(struct bpf_sock *sk)
-  *	Description
-- *		Return a **struct bpf_sock** pointer in TCP_LISTEN state.
-- *		bpf_sk_release() is unnecessary and not allowed.
-+ *		Return a **struct bpf_sock** pointer in **TCP_LISTEN** state.
-+ *		**bpf_sk_release**\ () is unnecessary and not allowed.
-  *	Return
-- *		A **struct bpf_sock** pointer on success, or NULL in
-+ *		A **struct bpf_sock** pointer on success, or **NULL** in
-  *		case of failure.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
--- 
-2.14.1
+ Cc: <stable@vger.kernel.org>    [>= 3.4]
 
+   Luis
+
+> ---
+> v2: fix commit log
+> ---
+>  fs/proc/proc_sysctl.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+> index 4d598a3..4c2a05a 100644
+> --- a/fs/proc/proc_sysctl.c
+> +++ b/fs/proc/proc_sysctl.c
+> @@ -1626,7 +1626,8 @@ static void drop_sysctl_table(struct ctl_table_header *header)
+>  	if (--header->nreg)
+>  		return;
+>  
+> -	put_links(header);
+> +	if (parent)
+> +		put_links(header);
+>  	start_unregistering(header);
+>  	if (!--header->count)
+>  		kfree_rcu(header, rcu);
+> -- 
+> 2.7.0
+> 
+> 
