@@ -2,50 +2,41 @@ Return-Path: <SRS0=VVzb=RR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5742AC43381
-	for <bpf@archiver.kernel.org>; Thu, 14 Mar 2019 05:48:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DE17C43381
+	for <bpf@archiver.kernel.org>; Thu, 14 Mar 2019 08:57:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1A77B2184C
-	for <bpf@archiver.kernel.org>; Thu, 14 Mar 2019 05:48:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F28B6217F5
+	for <bpf@archiver.kernel.org>; Thu, 14 Mar 2019 08:57:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726717AbfCNFsM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Mar 2019 01:48:12 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:60062 "EHLO huawei.com"
+        id S1726628AbfCNI50 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Mar 2019 04:57:26 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:51158 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726303AbfCNFsM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 Mar 2019 01:48:12 -0400
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id DAEF74EB78609768649F;
-        Thu, 14 Mar 2019 13:48:06 +0800 (CST)
-Received: from [127.0.0.1] (10.177.31.96) by DGGEMS411-HUB.china.huawei.com
- (10.3.19.211) with Microsoft SMTP Server id 14.3.408.0; Thu, 14 Mar 2019
- 13:48:03 +0800
-Subject: Re: [PATCH] proc/sysctl: Fix NULL pointer dereference in put_links
-To:     Luis Chamberlain <mcgrof@kernel.org>
-References: <20190304135438.29792-1-yuehaibing@huawei.com>
- <03aafd33-f9d5-4a48-b123-7a6b2e7f16e7@huawei.com>
- <CAB=NE6UF=2pWzOFY2PqpXyuDV3qSa7R8bpMAw-6qF9Z7Ly=PEw@mail.gmail.com>
- <43f6b8c5-a9eb-c77d-0c52-dbc3c45b4dc7@huawei.com>
- <e5d45b4e-b821-f993-7e88-6b0c35159d5e@huawei.com>
- <20190313223543.GA993@42.do-not-panic.com>
-CC:     Kees Cook <keescook@chromium.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, Al Viro <viro@zeniv.linux.org.uk>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <bpf@vger.kernel.org>
-From:   YueHaibing <yuehaibing@huawei.com>
-Message-ID: <c066250c-505b-6b18-965f-b7321c237bea@huawei.com>
-Date:   Thu, 14 Mar 2019 13:48:01 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.2.0
+        id S1726421AbfCNI50 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 Mar 2019 04:57:26 -0400
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 0467834CF02955A3142D;
+        Thu, 14 Mar 2019 16:57:23 +0800 (CST)
+Received: from localhost (10.177.31.96) by DGGEMS402-HUB.china.huawei.com
+ (10.3.19.202) with Microsoft SMTP Server id 14.3.408.0; Thu, 14 Mar 2019
+ 16:57:16 +0800
+From:   Yue Haibing <yuehaibing@huawei.com>
+To:     <mcgrof@kernel.org>, <keescook@chromium.org>,
+        <adobriyan@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <viro@zeniv.linux.org.uk>
+CC:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH v2] proc/sysctl: Fix NULL pointer dereference in put_links
+Date:   Thu, 14 Mar 2019 16:55:27 +0800
+Message-ID: <20190314085527.13244-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-In-Reply-To: <20190313223543.GA993@42.do-not-panic.com>
-Content-Type: text/plain; charset="windows-1252"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain
 X-Originating-IP: [10.177.31.96]
 X-CFilter-Loop: Reflected
 Sender: bpf-owner@vger.kernel.org
@@ -53,159 +44,92 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-DQoNCk9uIDIwMTkvMy8xNCA2OjM1LCBMdWlzIENoYW1iZXJsYWluIHdyb3RlOg0KPiBPbiBU
-dWUsIE1hciAxMiwgMjAxOSBhdCAxMDoxMDo1M0FNICswODAwLCBZdWVIYWliaW5nIHdyb3Rl
-Og0KPj4gT24gMjAxOS8zLzkgMjA6MjcsIFl1ZUhhaWJpbmcgd3JvdGU6DQo+Pj4gT24gMjAx
-OS8zLzkgMTE6NTgsIEx1aXMgQ2hhbWJlcmxhaW4gd3JvdGU6DQo+Pj4+IEkgc28gZXhjaXRl
-ZCBhYm91dCB0aGUgcmVwb3J0LCB0aGFua3MgdGhpcyBpcyBhd2Vzb21lIHdvcmshISBIb3dl
-dmVyIGl0IHNlZW1lZCBwb3NzaWJseSBsaWtlIGEgcGFwZXItb3ZlciBhIGRpZmZlcmVudCBp
-c3N1ZS4gSSdtIG5vdCBjb252aW5jZWQgeWV0Lg0KPj4+Pg0KPj4+PiBJZiBwcmVmZXIgYSBi
-aXQgbW9yZSBpbnZlc3RpZ2F0aW9uIHVudGlsIHdlIGNhbiBiZSAxMDAlIHN1cmUuIEF0DQo+
-Pj4+IHRoaXMgcG9pbnQgbXkgcG9zaXRpb24gd291bGQgYmUgdGhpcyBpcyBtb3JlIG9mIGEg
-cmlzayBmb3IgbW9yZQ0KPj4+PiByZWdyZXNzaW9ucyBhbmQgdGhhdCdzIGFuIG9mZiBmZWVs
-aW5nIGZvciBhIGZpeC4NCj4+Pj4NCj4+Pj4gICBMdWlzDQo+Pj4NCj4+PiBUaGlzIGlzc3Vl
-IG9jY3VycyBsaWtlIHRoaXM6DQo+Pj4NCj4+PiBfX3JlZ2lzdGVyX3N5c2N0bF90YWJsZQ0K
-Pj4+ICAgICAgLS0+Z2V0X3N1YmRpcg0KPj4+ICAgICAgCS0tPm5ld19kaXIgIC8vY3JlYXRl
-ICduZXcnIGRpcg0KPj4+ICAgICAgICAgICAgIC0tPmluaXRfaGVhZGVyICAvLyAmbmV3LT5o
-ZWFkZXItPnBhcmVudCA9IE5VTEwNCj4+PiAgICAgICAgIC0tPmluc2VydF9oZWFkZXINCj4+
-PiAgICAgICAgICAgICAtLT4gaW5zZXJ0X2xpbmtzDQo+Pj4gCQktLT5uZXdfbGlua3MNCj4+
-PiAJCQktLT5remFsbG9jICAvL2ZhaWxlZA0KPj4+IAkJLS0+Jm5ldy0+aGVhZGVyLT5wYXJl
-bnQgPSBOVUxMDQo+Pj4gCS0tPmRyb3Bfc3lzY3RsX3RhYmxlKCZuZXctPmhlYWRlcikgLy9J
-biBlcnIgcGF0aCBvZiBnZXRfc3ViZGlyDQo+IA0KPiBOb3BlLCB3ZSBkcm9wICB0aGF0IGVh
-cmxpZXIgYWN0dWFsbHksIG5vdGUgdGhhdCB1cG9uIGZhaWx1cmUgb24NCj4gaW5zZXJ0X2xp
-bmtzKCkgd2UgYWxzbyBjYWxsIGRyb3Bfc3lzY3RsX3RhYmxlKCkuIEFuZCBldmVuIGluDQo+
-IHRoZSBzdWNjZXNzZnVsIGNhc2Ugb24gX19yZWdpc3Rlcl9zeXNjdGxfdGFibGUoKSB3ZSBz
-dGlsbCBhbHdheXMNCj4gY2FsbCBkcm9wX3N5c2N0bF90YWJsZSgpLg0KPiANCj4gU28gaXQg
-c2VlbXMgdGhhdCB0aGUgcmVhbCBpc3N1ZSBpcyB3ZSBoYXZlIG11bHRpcGxlIGVycm9yIHBh
-dGhzIHdoaWNoDQo+IGNhbGwgZHJvcF9zeXNjdGxfdGFibGUoKS4gIFRoYXQgaXMgdGhlIGp1
-c3RpZmljYXRpb24gZm9yIHdoaWNoIHdlIGRvDQo+IG5lZWQgeW91ciBwYXRjaC4gQ2FuIHlv
-dSBhZGp1c3QgeW91ciBjb21taXQgbG9nIHRvIGFjY291bnQgZm9yIHRoaXM/DQoNClN1cmUs
-IHdpbGwgcmVzZW5kIGl0IHdpdGggdGhpcy4NCg0KPiANCj4gICBMdWlzDQo+IA0KPj4+IAkJ
-LS0+cHV0X2xpbmtzIC8vY2FsbCB4bGF0ZV9kaXIgd2hvc2UgMm5kIHBhcmFtIGlzICcmbmV3
-LT5oZWFkZXItPnBhcmVudCcNCj4+PiAJCQktLT4geGxhdGVfZGlyICAvL2FjY2VzcyBkaXIt
-PmhlYWRlcixob3dldmVyICdkaXInIGlzIE5VTEwgd2hpY2ggY29tZXMgZnJvbSAnJm5ldy0+
-aGVhZGVyLT5wYXJlbnQnDQo+Pj4NCj4+PiBQbGVhc2UgY29ycmVjdCBtZSBpZiB0aGlzIGlz
-IGluY29ycmVjdC4NCj4+DQo+PiBIZWxsbywNCj4+DQo+PiBBbnkgY29tbWVudCB3aWxsIGJl
-IGFwcHJlY2lhdGVkLg0KPj4NCj4+PiAJDQo+Pj4+DQo+Pj4+IE9uIEZyaSwgTWFyIDgsIDIw
-MTksIDg6MDQgUE0gWXVlSGFpYmluZyA8eXVlaGFpYmluZ0BodWF3ZWkuY29tIDxtYWlsdG86
-eXVlaGFpYmluZ0BodWF3ZWkuY29tPj4gd3JvdGU6DQo+Pj4+DQo+Pj4+ICAgICArY2MgQWwg
-Vmlybw0KPj4+Pg0KPj4+PiAgICAgT24gMjAxOS8zLzQgMjE6NTQsIFl1ZSBIYWliaW5nIHdy
-b3RlOg0KPj4+PiAgICAgPiBGcm9tOiBZdWVIYWliaW5nIDx5dWVoYWliaW5nQGh1YXdlaS5j
-b20gPG1haWx0bzp5dWVoYWliaW5nQGh1YXdlaS5jb20+Pg0KPj4+PiAgICAgPg0KPj4+PiAg
-ICAgPiBTeXprYWxsZXIgcmVwb3J0IHRoaXM6DQo+Pj4+ICAgICA+DQo+Pj4+ICAgICA+IGth
-c2FuOiBHUEYgY291bGQgYmUgY2F1c2VkIGJ5IE5VTEwtcHRyIGRlcmVmIG9yIHVzZXIgbWVt
-b3J5IGFjY2Vzcw0KPj4+PiAgICAgPiBnZW5lcmFsIHByb3RlY3Rpb24gZmF1bHQ6IDAwMDAg
-WyMxXSBTTVAgS0FTQU4gUFRJDQo+Pj4+ICAgICA+IENQVTogMSBQSUQ6IDUzNzMgQ29tbTog
-c3l6LWV4ZWN1dG9yLjAgTm90IHRhaW50ZWQgNS4wLjAtcmM4KyAjMw0KPj4+PiAgICAgPiBI
-YXJkd2FyZSBuYW1lOiBRRU1VIFN0YW5kYXJkIFBDIChpNDQwRlggKyBQSUlYLCAxOTk2KSwg
-QklPUyAxLjEwLjItMXVidW50dTEgMDQvMDEvMjAxNA0KPj4+PiAgICAgPiBSSVA6IDAwMTA6
-cHV0X2xpbmtzKzB4MTAxLzB4NDQwIGZzL3Byb2MvcHJvY19zeXNjdGwuYzoxNTk5DQo+Pj4+
-ICAgICA+IENvZGU6IDAwIDBmIDg1IDNhIDAzIDAwIDAwIDQ4IDhiIDQzIDM4IDQ4IDg5IDQ0
-IDI0IDIwIDQ4IDgzIGMwIDM4IDQ4IDg5IGMyIDQ4IDg5IDQ0IDI0IDI4IDQ4IGI4IDAwIDAw
-IDAwIDAwIDAwIGZjIGZmIGRmIDQ4IGMxIGVhIDAzIDw4MD4gM2MgMDIgMDAgMGYgODUgZmUg
-MDIgMDAgMDAgNDggOGIgNzQgMjQgMjAgNDggYzcgYzcgNjAgMmEgOWQgOTENCj4+Pj4gICAg
-ID4gUlNQOiAwMDE4OmZmZmY4ODgxZDgyOGYyMzggRUZMQUdTOiAwMDAxMDIwMg0KPj4+PiAg
-ICAgPiBSQVg6IGRmZmZmYzAwMDAwMDAwMDAgUkJYOiBmZmZmODg4MWUwMWIxMTQwIFJDWDog
-ZmZmZmZmZmY4ZWU5ODI2Nw0KPj4+PiAgICAgPiBSRFg6IDAwMDAwMDAwMDAwMDAwMDcgUlNJ
-OiBmZmZmYzkwMDAxNDc5MDAwIFJESTogZmZmZjg4ODFlMDFiMTE3OA0KPj4+PiAgICAgPiBS
-QlA6IGRmZmZmYzAwMDAwMDAwMDAgUjA4OiBmZmZmZWQxMDNlZTI3MjU5IFIwOTogZmZmZmVk
-MTAzZWUyNzI1OQ0KPj4+PiAgICAgPiBSMTA6IDAwMDAwMDAwMDAwMDAwMDEgUjExOiBmZmZm
-ZWQxMDNlZTI3MjU4IFIxMjogZmZmZmZmZmZmZmZmZmZmNA0KPj4+PiAgICAgPiBSMTM6IDAw
-MDAwMDAwMDAwMDAwMDYgUjE0OiBmZmZmODg4MWY1OTgzOGMwIFIxNTogZGZmZmZjMDAwMDAw
-MDAwMA0KPj4+PiAgICAgPiBGUzogIDAwMDA3ZjA3MjI1NGY3MDAoMDAwMCkgR1M6ZmZmZjg4
-ODFmNzEwMDAwMCgwMDAwKSBrbmxHUzowMDAwMDAwMDAwMDAwMDAwDQo+Pj4+ICAgICA+IENT
-OiAgMDAxMCBEUzogMDAwMCBFUzogMDAwMCBDUjA6IDAwMDAwMDAwODAwNTAwMzMNCj4+Pj4g
-ICAgID4gQ1IyOiAwMDAwN2ZmZjhiMjg2NjY4IENSMzogMDAwMDAwMDFmMDU0MjAwMiBDUjQ6
-IDAwMDAwMDAwMDA3NjA2ZTANCj4+Pj4gICAgID4gRFIwOiAwMDAwMDAwMDAwMDAwMDAwIERS
-MTogMDAwMDAwMDAwMDAwMDAwMCBEUjI6IDAwMDAwMDAwMDAwMDAwMDANCj4+Pj4gICAgID4g
-RFIzOiAwMDAwMDAwMDAwMDAwMDAwIERSNjogMDAwMDAwMDBmZmZlMGZmMCBEUjc6IDAwMDAw
-MDAwMDAwMDA0MDANCj4+Pj4gICAgID4gUEtSVTogNTU1NTU1NTQNCj4+Pj4gICAgID4gQ2Fs
-bCBUcmFjZToNCj4+Pj4gICAgID4gIGRyb3Bfc3lzY3RsX3RhYmxlKzB4MTUyLzB4OWYwIGZz
-L3Byb2MvcHJvY19zeXNjdGwuYzoxNjI5DQo+Pj4+ICAgICA+ICBnZXRfc3ViZGlyIGZzL3By
-b2MvcHJvY19zeXNjdGwuYzoxMDIyIFtpbmxpbmVdDQo+Pj4+ICAgICA+ICBfX3JlZ2lzdGVy
-X3N5c2N0bF90YWJsZSsweGQ2NS8weDEwOTAgZnMvcHJvYy9wcm9jX3N5c2N0bC5jOjEzMzUN
-Cj4+Pj4gICAgID4gID8gMHhmZmZmZmZmZmMxYTE4MDAwDQo+Pj4+ICAgICA+ICBicl9uZXRm
-aWx0ZXJfaW5pdCsweGJjLzB4MTAwMCBbYnJfbmV0ZmlsdGVyXQ0KPj4+PiAgICAgPiAgPyAw
-eGZmZmZmZmZmYzFhMTgwMDANCj4+Pj4gICAgID4gID8gMHhmZmZmZmZmZmMxYTE4MDAwDQo+
-Pj4+ICAgICA+ICBkb19vbmVfaW5pdGNhbGwrMHhmYS8weDVjYSBpbml0L21haW4uYzo4ODcN
-Cj4+Pj4gICAgID4gIGRvX2luaXRfbW9kdWxlKzB4MjA0LzB4NWY2IGtlcm5lbC9tb2R1bGUu
-YzozNDYwDQo+Pj4+ICAgICA+ICBsb2FkX21vZHVsZSsweDY2YjIvMHg4NTcwIGtlcm5lbC9t
-b2R1bGUuYzozODA4DQo+Pj4+ICAgICA+ICBfX2RvX3N5c19maW5pdF9tb2R1bGUrMHgyMzgv
-MHgyYTAga2VybmVsL21vZHVsZS5jOjM5MDINCj4+Pj4gICAgID4gIGRvX3N5c2NhbGxfNjQr
-MHgxNDcvMHg2MDAgYXJjaC94ODYvZW50cnkvY29tbW9uLmM6MjkwDQo+Pj4+ICAgICA+ICBl
-bnRyeV9TWVNDQUxMXzY0X2FmdGVyX2h3ZnJhbWUrMHg0OS8weGJlDQo+Pj4+ICAgICA+IFJJ
-UDogMDAzMzoweDQ2MmU5OQ0KPj4+PiAgICAgPiBDb2RlOiBmNyBkOCA2NCA4OSAwMiBiOCBm
-ZiBmZiBmZiBmZiBjMyA2NiAwZiAxZiA0NCAwMCAwMCA0OCA4OSBmOCA0OCA4OSBmNyA0OCA4
-OSBkNiA0OCA4OSBjYSA0ZCA4OSBjMiA0ZCA4OSBjOCA0YyA4YiA0YyAyNCAwOCAwZiAwNSA8
-NDg+IDNkIDAxIGYwIGZmIGZmIDczIDAxIGMzIDQ4IGM3IGMxIGJjIGZmIGZmIGZmIGY3IGQ4
-IDY0IDg5IDAxIDQ4DQo+Pj4+ICAgICA+IFJTUDogMDAyYjowMDAwN2YwNzIyNTRlYzU4IEVG
-TEFHUzogMDAwMDAyNDYgT1JJR19SQVg6IDAwMDAwMDAwMDAwMDAxMzkNCj4+Pj4gICAgID4g
-UkFYOiBmZmZmZmZmZmZmZmZmZmRhIFJCWDogMDAwMDAwMDAwMDczYmYwMCBSQ1g6IDAwMDAw
-MDAwMDA0NjJlOTkNCj4+Pj4gICAgID4gUkRYOiAwMDAwMDAwMDAwMDAwMDAwIFJTSTogMDAw
-MDAwMDAyMDAwMDI4MCBSREk6IDAwMDAwMDAwMDAwMDAwMDMNCj4+Pj4gICAgID4gUkJQOiAw
-MDAwN2YwNzIyNTRlYzcwIFIwODogMDAwMDAwMDAwMDAwMDAwMCBSMDk6IDAwMDAwMDAwMDAw
-MDAwMDANCj4+Pj4gICAgID4gUjEwOiAwMDAwMDAwMDAwMDAwMDAwIFIxMTogMDAwMDAwMDAw
-MDAwMDI0NiBSMTI6IDAwMDA3ZjA3MjI1NGY2YmMNCj4+Pj4gICAgID4gUjEzOiAwMDAwMDAw
-MDAwNGJjZWZhIFIxNDogMDAwMDAwMDAwMDZmNmZiMCBSMTU6IDAwMDAwMDAwMDAwMDAwMDQN
-Cj4+Pj4gICAgID4gTW9kdWxlcyBsaW5rZWQgaW46IGJyX25ldGZpbHRlcigrKSBkdmJfdXNi
-X2RpYnVzYl9tY19jb21tb24gZGliMzAwMG1jIGRpYngwMDBfY29tbW9uIGR2Yl91c2JfZGli
-dXNiX2NvbW1vbiBkdmJfdXNiX2R3MjEwMiBkdmJfdXNiIGNsYXNzbWF0ZV9sYXB0b3AgcGFs
-bWFzX3JlZ3VsYXRvciBjbiB2aWRlb2J1ZjJfdjRsMiB2NGwyX2NvbW1vbiBzbmRfc29jX2Jk
-Mjg2MjMgbXB0YmFzZSBzbmRfdXNiX3VzeDJ5IHNuZF91c2JtaWRpX2xpYiBzbmRfcmF3bWlk
-aSB3bWkgbGlibnZkaW1tIGxvY2tkIHN1bnJwYyBncmFjZSByY19rd29ybGRfcGMxNTB1IHJj
-X2NvcmUgcnRjX2RhOTA2MyBzaGExX3Nzc2UzIGkyY19jcm9zX2VjX3R1bm5lbCBhZHhsMzR4
-X3NwaSBhZHhsMzR4IG5mbmV0bGluayBsaWI4MDIxMSBpNTUwMF90ZW1wIGR2Yl9hczEwMiBk
-dmJfY29yZSB2aWRlb2J1ZjJfY29tbW9uIHZpZGVvZGV2IG1lZGlhIHZpZGVvYnVmMl92bWFs
-bG9jIHZpZGVvYnVmMl9tZW1vcHMgdWRjX2NvcmUgbG5icDIyIGxlZHNfbHAzOTUyIGhpZF9y
-b2NjYXRfcnlvcyBzMWQxM3h4eGZiIG10ZCB2cG9ydF9nZW5ldmUgb3BlbnZzd2l0Y2ggbmZf
-Y29ubmNvdW50IG5mX25hdF9pcHY2IG5zaCBnZW5ldmUgdWRwX3R1bm5lbCBpcDZfdWRwX3R1
-bm5lbCBzbmRfc29jX210NjM1MSBzaXNfYWdwIHBoeWxpbmsgc25kX3NvY19hZGF1MTc2MV9z
-cGkgc25kX3NvY19hZGF1MTc2MSBzbmRfc29jX2FkYXUxN3gxIHNuZF9zb2NfY29yZSBzbmRf
-cGNtX2RtYWVuZ2luZSBhYzk3X2J1cyBzbmRfY29tcHJlc3Mgc25kX3NvY19hZGF1X3V0aWxz
-IHNuZF9zb2Nfc2lnbWFkc3BfcmVnbWFwIHNuZF9zb2Nfc2lnbWFkc3AgcmFpZF9jbGFzcyBo
-aWRfcm9jY2F0X2tvbmVwdXJlIGhpZF9yb2NjYXRfY29tbW9uIGhpZF9yb2NjYXQgYzJwb3J0
-X2R1cmFtYXIyMTUwIGNvcmUgbWRpb19iY21fdW5pbWFjIGlwdGFibGVfc2VjdXJpdHkgaXB0
-YWJsZV9yYXcgaXB0YWJsZV9tYW5nbGUNCj4+Pj4gICAgID4gIGlwdGFibGVfbmF0IG5mX25h
-dF9pcHY0IG5mX25hdCBuZl9jb25udHJhY2sgbmZfZGVmcmFnX2lwdjYgbmZfZGVmcmFnX2lw
-djQgaXB0YWJsZV9maWx0ZXIgYnBmaWx0ZXIgaXA2X3Z0aSBpcF92dGkgaXBfZ3JlIGlwaXAg
-c2l0IHR1bm5lbDQgaXBfdHVubmVsIGhzciB2ZXRoIG5ldGRldnNpbSBkZXZsaW5rIHZ4Y2Fu
-IGJhdG1hbl9hZHYgY2ZnODAyMTEgcmZraWxsIGNobmxfbmV0IGNhaWYgbmxtb24gZHVtbXkg
-dGVhbSBib25kaW5nIHZjYW4gYnJpZGdlIHN0cCBsbGMgaXA2X2dyZSBncmUgaXA2X3R1bm5l
-bCB0dW5uZWw2IHR1biBjcmN0MTBkaWZfcGNsbXVsIGNyYzMyX3BjbG11bCBjcmMzMmNfaW50
-ZWwgZ2hhc2hfY2xtdWxuaV9pbnRlbCBqb3lkZXYgbW91c2VkZXYgaWRlX3BjaV9nZW5lcmlj
-IHBpaXggYWVzbmlfaW50ZWwgYWVzX3g4Nl82NCBpZGVfY29yZSBjcnlwdG9fc2ltZCBhdGti
-ZCBjcnlwdGQgZ2x1ZV9oZWxwZXIgc2VyaW9fcmF3IGF0YV9nZW5lcmljIHBhdGFfYWNwaSBp
-MmNfcGlpeDQgZmxvcHB5IHNjaF9mcV9jb2RlbCBpcF90YWJsZXMgeF90YWJsZXMgaXB2NiBb
-bGFzdCB1bmxvYWRlZDogbG03M10NCj4+Pj4gICAgID4gRHVtcGluZyBmdHJhY2UgYnVmZmVy
-Og0KPj4+PiAgICAgPiAgICAoZnRyYWNlIGJ1ZmZlciBlbXB0eSkNCj4+Pj4gICAgID4gLS0t
-WyBlbmQgdHJhY2UgNzcwMDIwZGUzODk2MWZkMCBdLS0tDQo+Pj4+ICAgICA+DQo+Pj4+ICAg
-ICA+IEEgbmV3IGRpciBlbnRyeSBjYW4gYmUgY3JlYXRlZCBpbiBnZXRfc3ViZGlyIGFuZCBp
-dHMgaGVhZGVyLT5wYXJlbnQgaXMgc2V0DQo+Pj4+ICAgICA+IHRvIE5VTEwuIE9ubHkgYWZ0
-ZXIgaW5zZXJ0X2hlYWRlciBzdWNjZXNzLCBpdCB3aWxsIGJlIHNldCB0byAnZGlyJy4NCj4+
-Pj4gICAgID4gSG93ZXZlciBpbiBlcnIgaGFuZGxpbmcgcGF0aCBvZiBnZXRfc3ViZGlyLCBk
-cm9wX3N5c2N0bF90YWJsZSBtYXliZSBjYWxsZWQNCj4+Pj4gICAgID4gb24gJ25ldy0+aGVh
-ZGVyJyByZWdhcmRsZXNzIHZhbHVlIG9mIGhlYWRlci0+cGFyZW50LiBUaGVuIHB1dF9saW5r
-cw0KPj4+PiAgICAgPiBiZSBjYWxsZWQsIHdoaWNoIHRyaWdnZXJzIE5VTEwtcHRyIGRlcmVm
-IHdoZW4gYWNjZXNzIHRoZSBtZW1iZXIgb2YNCj4+Pj4gICAgID4gaGVhZGVyLT5wYXJlbnQg
-aW4geGxhdGVfZGlyLg0KPj4+PiAgICAgPg0KPj4+PiAgICAgPiBSZXBvcnRlZC1ieTogSHVs
-ayBSb2JvdCA8aHVsa2NpQGh1YXdlaS5jb20gPG1haWx0bzpodWxrY2lAaHVhd2VpLmNvbT4+
-DQo+Pj4+ICAgICA+IEZpeGVzOiAwZTQ3Yzk5ZDdmZTI1ICgic3lzY3RsOiBSZXBsYWNlIHJv
-b3RfbGlzdCB3aXRoIGxpbmtzIGJldHdlZW4gc3lzY3RsX3RhYmxlX3NldHMiKQ0KPj4+PiAg
-ICAgPiBTaWduZWQtb2ZmLWJ5OiBZdWVIYWliaW5nIDx5dWVoYWliaW5nQGh1YXdlaS5jb20g
-PG1haWx0bzp5dWVoYWliaW5nQGh1YXdlaS5jb20+Pg0KPj4+PiAgICAgPiAtLS0NCj4+Pj4g
-ICAgID4gIGZzL3Byb2MvcHJvY19zeXNjdGwuYyB8IDMgKystDQo+Pj4+ICAgICA+ICAxIGZp
-bGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+Pj4+ICAgICA+
-DQo+Pj4+ICAgICA+IGRpZmYgLS1naXQgYS9mcy9wcm9jL3Byb2Nfc3lzY3RsLmMgYi9mcy9w
-cm9jL3Byb2Nfc3lzY3RsLmMNCj4+Pj4gICAgID4gaW5kZXggNGQ1OThhMy4uNGMyYTA1YSAx
-MDA2NDQNCj4+Pj4gICAgID4gLS0tIGEvZnMvcHJvYy9wcm9jX3N5c2N0bC5jDQo+Pj4+ICAg
-ICA+ICsrKyBiL2ZzL3Byb2MvcHJvY19zeXNjdGwuYw0KPj4+PiAgICAgPiBAQCAtMTYyNiw3
-ICsxNjI2LDggQEAgc3RhdGljIHZvaWQgZHJvcF9zeXNjdGxfdGFibGUoc3RydWN0IGN0bF90
-YWJsZV9oZWFkZXIgKmhlYWRlcikNCj4+Pj4gICAgID4gICAgICAgaWYgKC0taGVhZGVyLT5u
-cmVnKQ0KPj4+PiAgICAgPiAgICAgICAgICAgICAgIHJldHVybjsNCj4+Pj4gICAgID4gDQo+
-Pj4+ICAgICA+IC0gICAgIHB1dF9saW5rcyhoZWFkZXIpOw0KPj4+PiAgICAgPiArICAgICBp
-ZiAocGFyZW50KQ0KPj4+PiAgICAgPiArICAgICAgICAgICAgIHB1dF9saW5rcyhoZWFkZXIp
-Ow0KPj4+PiAgICAgPiAgICAgICBzdGFydF91bnJlZ2lzdGVyaW5nKGhlYWRlcik7DQo+Pj4+
-ICAgICA+ICAgICAgIGlmICghLS1oZWFkZXItPmNvdW50KQ0KPj4+PiAgICAgPiAgICAgICAg
-ICAgICAgIGtmcmVlX3JjdShoZWFkZXIsIHJjdSk7DQo+Pj4+ICAgICA+DQo+Pj4+DQo+IA0K
-PiAuDQo+IA0K
+From: YueHaibing <yuehaibing@huawei.com>
+
+Syzkaller report this:
+
+kasan: GPF could be caused by NULL-ptr deref or user memory access
+general protection fault: 0000 [#1] SMP KASAN PTI
+CPU: 1 PID: 5373 Comm: syz-executor.0 Not tainted 5.0.0-rc8+ #3
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.10.2-1ubuntu1 04/01/2014
+RIP: 0010:put_links+0x101/0x440 fs/proc/proc_sysctl.c:1599
+Code: 00 0f 85 3a 03 00 00 48 8b 43 38 48 89 44 24 20 48 83 c0 38 48 89 c2 48 89 44 24 28 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c 02 00 0f 85 fe 02 00 00 48 8b 74 24 20 48 c7 c7 60 2a 9d 91
+RSP: 0018:ffff8881d828f238 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: ffff8881e01b1140 RCX: ffffffff8ee98267
+RDX: 0000000000000007 RSI: ffffc90001479000 RDI: ffff8881e01b1178
+RBP: dffffc0000000000 R08: ffffed103ee27259 R09: ffffed103ee27259
+R10: 0000000000000001 R11: ffffed103ee27258 R12: fffffffffffffff4
+R13: 0000000000000006 R14: ffff8881f59838c0 R15: dffffc0000000000
+FS:  00007f072254f700(0000) GS:ffff8881f7100000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff8b286668 CR3: 00000001f0542002 CR4: 00000000007606e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+PKRU: 55555554
+Call Trace:
+ drop_sysctl_table+0x152/0x9f0 fs/proc/proc_sysctl.c:1629
+ get_subdir fs/proc/proc_sysctl.c:1022 [inline]
+ __register_sysctl_table+0xd65/0x1090 fs/proc/proc_sysctl.c:1335
+ ? 0xffffffffc1a18000
+ br_netfilter_init+0xbc/0x1000 [br_netfilter]
+ ? 0xffffffffc1a18000
+ ? 0xffffffffc1a18000
+ do_one_initcall+0xfa/0x5ca init/main.c:887
+ do_init_module+0x204/0x5f6 kernel/module.c:3460
+ load_module+0x66b2/0x8570 kernel/module.c:3808
+ __do_sys_finit_module+0x238/0x2a0 kernel/module.c:3902
+ do_syscall_64+0x147/0x600 arch/x86/entry/common.c:290
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x462e99
+Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f072254ec58 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
+RAX: ffffffffffffffda RBX: 000000000073bf00 RCX: 0000000000462e99
+RDX: 0000000000000000 RSI: 0000000020000280 RDI: 0000000000000003
+RBP: 00007f072254ec70 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f072254f6bc
+R13: 00000000004bcefa R14: 00000000006f6fb0 R15: 0000000000000004
+Modules linked in: br_netfilter(+) dvb_usb_dibusb_mc_common dib3000mc dibx000_common dvb_usb_dibusb_common dvb_usb_dw2102 dvb_usb classmate_laptop palmas_regulator cn videobuf2_v4l2 v4l2_common snd_soc_bd28623 mptbase snd_usb_usx2y snd_usbmidi_lib snd_rawmidi wmi libnvdimm lockd sunrpc grace rc_kworld_pc150u rc_core rtc_da9063 sha1_ssse3 i2c_cros_ec_tunnel adxl34x_spi adxl34x nfnetlink lib80211 i5500_temp dvb_as102 dvb_core videobuf2_common videodev media videobuf2_vmalloc videobuf2_memops udc_core lnbp22 leds_lp3952 hid_roccat_ryos s1d13xxxfb mtd vport_geneve openvswitch nf_conncount nf_nat_ipv6 nsh geneve udp_tunnel ip6_udp_tunnel snd_soc_mt6351 sis_agp phylink snd_soc_adau1761_spi snd_soc_adau1761 snd_soc_adau17x1 snd_soc_core snd_pcm_dmaengine ac97_bus snd_compress snd_soc_adau_utils snd_soc_sigmadsp_regmap snd_soc_sigmadsp raid_class hid_roccat_konepure hid_roccat_common hid_roccat c2port_duramar2150 core mdio_bcm_unimac iptable_security iptable_raw iptable_mangle
+ iptable_nat nf_nat_ipv4 nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 iptable_filter bpfilter ip6_vti ip_vti ip_gre ipip sit tunnel4 ip_tunnel hsr veth netdevsim devlink vxcan batman_adv cfg80211 rfkill chnl_net caif nlmon dummy team bonding vcan bridge stp llc ip6_gre gre ip6_tunnel tunnel6 tun crct10dif_pclmul crc32_pclmul crc32c_intel ghash_clmulni_intel joydev mousedev ide_pci_generic piix aesni_intel aes_x86_64 ide_core crypto_simd atkbd cryptd glue_helper serio_raw ata_generic pata_acpi i2c_piix4 floppy sch_fq_codel ip_tables x_tables ipv6 [last unloaded: lm73]
+Dumping ftrace buffer:
+   (ftrace buffer empty)
+---[ end trace 770020de38961fd0 ]---
+
+A new dir entry can be created in get_subdir and its 'header->parent' is set
+to NULL. Only after insert_header success, it will be set to 'dir', otherwise
+'header->parent' is set to NULL and drop_sysctl_table is called. However in err
+handling path of get_subdir, drop_sysctl_table also be called on 'new->header'
+regardless its value of parent pointer. Then put_links is called, which triggers
+NULL-ptr deref when access member of header->parent.
+
+In fact we have multiple error paths which call drop_sysctl_table() there,
+upon failure on insert_links() we also call drop_sysctl_table().And even in
+the successful case on __register_sysctl_table() we still always
+call drop_sysctl_table().This patch fix it.
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Fixes: 0e47c99d7fe25 ("sysctl: Replace root_list with links between sysctl_table_sets")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+v2: fix commit log
+---
+ fs/proc/proc_sysctl.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+index 4d598a3..4c2a05a 100644
+--- a/fs/proc/proc_sysctl.c
++++ b/fs/proc/proc_sysctl.c
+@@ -1626,7 +1626,8 @@ static void drop_sysctl_table(struct ctl_table_header *header)
+ 	if (--header->nreg)
+ 		return;
+ 
+-	put_links(header);
++	if (parent)
++		put_links(header);
+ 	start_unregistering(header);
+ 	if (!--header->count)
+ 		kfree_rcu(header, rcu);
+-- 
+2.7.0
+
 
