@@ -4,64 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA6B6C43381
-	for <bpf@archiver.kernel.org>; Thu, 14 Mar 2019 12:38:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E05F2C43381
+	for <bpf@archiver.kernel.org>; Thu, 14 Mar 2019 12:39:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BBB5F21019
-	for <bpf@archiver.kernel.org>; Thu, 14 Mar 2019 12:38:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A845F21019
+	for <bpf@archiver.kernel.org>; Thu, 14 Mar 2019 12:39:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="Mzwb0K+W"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="Zdl7SO6F"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727551AbfCNMi7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Mar 2019 08:38:59 -0400
-Received: from mail-wm1-f52.google.com ([209.85.128.52]:50911 "EHLO
-        mail-wm1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727497AbfCNMi6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 Mar 2019 08:38:58 -0400
-Received: by mail-wm1-f52.google.com with SMTP id x7so2819745wmj.0
-        for <bpf@vger.kernel.org>; Thu, 14 Mar 2019 05:38:57 -0700 (PDT)
+        id S1726922AbfCNMjC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Mar 2019 08:39:02 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:54990 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727533AbfCNMjB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 Mar 2019 08:39:01 -0400
+Received: by mail-wm1-f67.google.com with SMTP id f3so2836705wmj.4
+        for <bpf@vger.kernel.org>; Thu, 14 Mar 2019 05:38:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=u02bxxll85EHUPBxk65Wr75o99hxDCX2L9TiBAgrHUY=;
-        b=Mzwb0K+W4uCsvrexrW7rgQtghLHfQyuy7Z/OqgCr3/EQOMUvGtg3b7mDEUTiSb/Sjf
-         ovWv2q64tUJWmsHOG5lIUnesA67uny8fsEKToM2GFSj41xSK15PL7k2gPqmNG8LFjZRa
-         kUIndMecCbSXRkielE507jXo4PU710GfHsR0RMXNXqIHLYQnwxdVxIZVwF5q8xa42Adi
-         opn7E46ZYnzTaBdsouAk2r+oppy0njTlgod+8sv/3z4iikvS+ZD7Ihf+vYhqyjgRvOfq
-         RmHHppqQR66uOAeyn9UNE5hPA5vZYBJn4Dq59AdTX2eIKTSOCKiYfcBJf+DaScfL9A+8
-         vt2Q==
+        bh=UFA00KGdgfw4IY1PDenGZXbSDweTm6Rjxc3ZxwbZbo0=;
+        b=Zdl7SO6FZUQFluonlFe/mFTGeYocPmBntwXjEkEI9M58Zmfouc+yWtXkotYTFvauMO
+         wg4gP51Ghm04F4NYFxo4uDUJ954CaL9vlWlUsK6m3wsX64cUPDgSNm4NVYnTXUm3mc7a
+         gKdNjQeEIjzuuWZr6mY9kiFaC4+fm87tSerGNkmoR29PcxsvdDTKmdxGulHg1Xgu4/Fi
+         L+Uohx5UhSvycAAC2+F/3v9WIHujLu4TSOG9V34uKUWGWasCW+Z/zZwCY3DeL4YkrwIs
+         qxEt8oN4O6RNgAf0aF6V12Uz0ypyk/Iv/SyY239gQYmg8Ov0bEyy4UDzrORrmW4q9iaq
+         RgmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=u02bxxll85EHUPBxk65Wr75o99hxDCX2L9TiBAgrHUY=;
-        b=JSIkIFikfBLItt5e1xoR8N/V0yHorsJPwDq4/24OzE6cL2SZS5Oo9f+ig4P3yvIy++
-         mHuKCV+NnXIKTqr8pDGnjujVtCc4N1+njqSzxN6WWPm0fBIcvzltFeWVk6LB0loYo/5L
-         JAu+S03wVAT50jQRv/os/ccRqKPAyxiKEUG10nqpttN4Jtalujo0i1rnOS7l8ZdzpWfp
-         c7hp+zRTxflLxmZJG1FBEKGzQHljdGl2gfxR6EGTbvl98v/04qBaL3orQnARWwveoF1S
-         rLtOi83ONv8NAOjN6Xst6h2MzrvEGBYrMZwj60o5VtKyKKU+bZBqsIdOxMa4N3VeQoOk
-         riIg==
-X-Gm-Message-State: APjAAAUmo9/nQ7d6DM8z8bCR+h1InaiZtLQ+QxqSjxgG++L/er9jop1U
-        20//0KWX+IXN2bUvtGWHZcHKFA==
-X-Google-Smtp-Source: APXvYqxYYuc29msep+ZDX4fcoTmSOhy8lsGUdWNaGLNdgK4nFgKeIWH7P3A60fK5yQs6w7qnk38IoQ==
-X-Received: by 2002:a1c:5581:: with SMTP id j123mr2597276wmb.10.1552567136303;
-        Thu, 14 Mar 2019 05:38:56 -0700 (PDT)
+        bh=UFA00KGdgfw4IY1PDenGZXbSDweTm6Rjxc3ZxwbZbo0=;
+        b=PBTVwWsOLMCA3t0+LUaUV2NxX6FreWYrJDg+9LdqH3gJAI29CHKfgkvDEkHhRyPz+a
+         4D2DCFZY2IeCVvnKybKThdAPRXZVbb7x7xpFNjmg5GVJ3lfuBA56ytgbPlayLLVEp78d
+         qmKdKYwG5hrUqgB7NAKmxt99uDwen2HN7/H+Obtkd4McB9tIT3HDXr8oBo13xEvqJaPs
+         lUqXEXtwiUJMAN+PiDIfcoJaOCW4MmNPmkuHLy2YrOmd+6Q7RjcDaQt6OsXS95vu/Nsf
+         KYfU/sXiA+mY3XDuCbGzwhTnwz/R3ThZgca69wxsZ2o0u/MjdgUKJN8FbjAOzRGxz8/q
+         n9wA==
+X-Gm-Message-State: APjAAAXcBd3mniOuH2lywClKYg5F1NIMLMdNuXzcagOrQyZnRoD42x4W
+        u5M9VbfpLnwR3gnzxbntgTwsag==
+X-Google-Smtp-Source: APXvYqx3o+xvctQW/VgIG6wIdmmmgi5SK1bYhNOLuKSxARsXiM4OaXZnAnEo7uyFzMA/SdewyoEwZw==
+X-Received: by 2002:a1c:2d4c:: with SMTP id t73mr2415518wmt.142.1552567138018;
+        Thu, 14 Mar 2019 05:38:58 -0700 (PDT)
 Received: from reblochon.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id u8sm2285569wml.22.2019.03.14.05.38.55
+        by smtp.gmail.com with ESMTPSA id u8sm2285569wml.22.2019.03.14.05.38.56
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 14 Mar 2019 05:38:55 -0700 (PDT)
+        Thu, 14 Mar 2019 05:38:57 -0700 (PDT)
 From:   Quentin Monnet <quentin.monnet@netronome.com>
 To:     Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         oss-drivers@netronome.com,
         Quentin Monnet <quentin.monnet@netronome.com>
-Subject: [PATCH bpf 2/3] bpf: add documentation for helpers bpf_spin_lock(), bpf_spin_unlock()
-Date:   Thu, 14 Mar 2019 12:38:40 +0000
-Message-Id: <20190314123841.13092-3-quentin.monnet@netronome.com>
+Subject: [PATCH bpf 3/3] tools: bpf: synchronise BPF UAPI header with tools
+Date:   Thu, 14 Mar 2019 12:38:41 +0000
+Message-Id: <20190314123841.13092-4-quentin.monnet@netronome.com>
 X-Mailer: git-send-email 2.14.1
 In-Reply-To: <20190314123841.13092-1-quentin.monnet@netronome.com>
 References: <20190314123841.13092-1-quentin.monnet@netronome.com>
@@ -70,26 +70,201 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add documentation for the BPF spinlock-related helpers to the doc in
-bpf.h. I added the constraints and restrictions coming with the use of
-spinlocks for BPF: not all of it is directly related to the use of the
-helper, but I thought it would be nice for users to find them in the man
-page.
-
-This list of restrictions is nearly a verbatim copy of the list in
-Alexei's commit log for those helpers.
+Synchronise the bpf.h header under tools, to report the latest fixes and
+additions to the documentation for the BPF helpers.
 
 Signed-off-by: Quentin Monnet <quentin.monnet@netronome.com>
 Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 ---
- include/uapi/linux/bpf.h | 55 ++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ tools/include/uapi/linux/bpf.h | 183 +++++++++++++++++++++++++++--------------
+ 1 file changed, 120 insertions(+), 63 deletions(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 4465d00d3493..929c8e537a14 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -2343,6 +2343,61 @@ union bpf_attr {
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 983b25cb608d..929c8e537a14 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -502,16 +502,6 @@ union bpf_attr {
+  * 	Return
+  * 		0 on success, or a negative error in case of failure.
+  *
+- * int bpf_map_push_elem(struct bpf_map *map, const void *value, u64 flags)
+- * 	Description
+- * 		Push an element *value* in *map*. *flags* is one of:
+- *
+- * 		**BPF_EXIST**
+- * 		If the queue/stack is full, the oldest element is removed to
+- * 		make room for this.
+- * 	Return
+- * 		0 on success, or a negative error in case of failure.
+- *
+  * int bpf_probe_read(void *dst, u32 size, const void *src)
+  * 	Description
+  * 		For tracing programs, safely attempt to read *size* bytes from
+@@ -1435,14 +1425,14 @@ union bpf_attr {
+  * u64 bpf_get_socket_cookie(struct bpf_sock_addr *ctx)
+  * 	Description
+  * 		Equivalent to bpf_get_socket_cookie() helper that accepts
+- * 		*skb*, but gets socket from **struct bpf_sock_addr** contex.
++ * 		*skb*, but gets socket from **struct bpf_sock_addr** context.
+  * 	Return
+  * 		A 8-byte long non-decreasing number.
+  *
+  * u64 bpf_get_socket_cookie(struct bpf_sock_ops *ctx)
+  * 	Description
+  * 		Equivalent to bpf_get_socket_cookie() helper that accepts
+- * 		*skb*, but gets socket from **struct bpf_sock_ops** contex.
++ * 		*skb*, but gets socket from **struct bpf_sock_ops** context.
+  * 	Return
+  * 		A 8-byte long non-decreasing number.
+  *
+@@ -2098,52 +2088,52 @@ union bpf_attr {
+  *	Return
+  * 		0 on success, or a negative error in case of failure.
+  *
+- * int bpf_rc_keydown(void *ctx, u32 protocol, u64 scancode, u32 toggle)
++ * int bpf_rc_repeat(void *ctx)
+  *	Description
+  *		This helper is used in programs implementing IR decoding, to
+- *		report a successfully decoded key press with *scancode*,
+- *		*toggle* value in the given *protocol*. The scancode will be
+- *		translated to a keycode using the rc keymap, and reported as
+- *		an input key down event. After a period a key up event is
+- *		generated. This period can be extended by calling either
+- *		**bpf_rc_keydown**\ () again with the same values, or calling
+- *		**bpf_rc_repeat**\ ().
++ *		report a successfully decoded repeat key message. This delays
++ *		the generation of a key up event for previously generated
++ *		key down event.
+  *
+- *		Some protocols include a toggle bit, in case the button	was
+- *		released and pressed again between consecutive scancodes.
++ *		Some IR protocols like NEC have a special IR message for
++ *		repeating last button, for when a button is held down.
+  *
+  *		The *ctx* should point to the lirc sample as passed into
+  *		the program.
+  *
+- *		The *protocol* is the decoded protocol number (see
+- *		**enum rc_proto** for some predefined values).
+- *
+  *		This helper is only available is the kernel was compiled with
+  *		the **CONFIG_BPF_LIRC_MODE2** configuration option set to
+  *		"**y**".
+  *	Return
+  *		0
+  *
+- * int bpf_rc_repeat(void *ctx)
++ * int bpf_rc_keydown(void *ctx, u32 protocol, u64 scancode, u32 toggle)
+  *	Description
+  *		This helper is used in programs implementing IR decoding, to
+- *		report a successfully decoded repeat key message. This delays
+- *		the generation of a key up event for previously generated
+- *		key down event.
++ *		report a successfully decoded key press with *scancode*,
++ *		*toggle* value in the given *protocol*. The scancode will be
++ *		translated to a keycode using the rc keymap, and reported as
++ *		an input key down event. After a period a key up event is
++ *		generated. This period can be extended by calling either
++ *		**bpf_rc_keydown**\ () again with the same values, or calling
++ *		**bpf_rc_repeat**\ ().
+  *
+- *		Some IR protocols like NEC have a special IR message for
+- *		repeating last button, for when a button is held down.
++ *		Some protocols include a toggle bit, in case the button	was
++ *		released and pressed again between consecutive scancodes.
+  *
+  *		The *ctx* should point to the lirc sample as passed into
+  *		the program.
+  *
++ *		The *protocol* is the decoded protocol number (see
++ *		**enum rc_proto** for some predefined values).
++ *
+  *		This helper is only available is the kernel was compiled with
+  *		the **CONFIG_BPF_LIRC_MODE2** configuration option set to
+  *		"**y**".
+  *	Return
+  *		0
+  *
+- * uint64_t bpf_skb_cgroup_id(struct sk_buff *skb)
++ * u64 bpf_skb_cgroup_id(struct sk_buff *skb)
+  * 	Description
+  * 		Return the cgroup v2 id of the socket associated with the *skb*.
+  * 		This is roughly similar to the **bpf_get_cgroup_classid**\ ()
+@@ -2159,30 +2149,12 @@ union bpf_attr {
+  * 	Return
+  * 		The id is returned or 0 in case the id could not be retrieved.
+  *
+- * u64 bpf_skb_ancestor_cgroup_id(struct sk_buff *skb, int ancestor_level)
+- *	Description
+- *		Return id of cgroup v2 that is ancestor of cgroup associated
+- *		with the *skb* at the *ancestor_level*.  The root cgroup is at
+- *		*ancestor_level* zero and each step down the hierarchy
+- *		increments the level. If *ancestor_level* == level of cgroup
+- *		associated with *skb*, then return value will be same as that
+- *		of **bpf_skb_cgroup_id**\ ().
+- *
+- *		The helper is useful to implement policies based on cgroups
+- *		that are upper in hierarchy than immediate cgroup associated
+- *		with *skb*.
+- *
+- *		The format of returned id and helper limitations are same as in
+- *		**bpf_skb_cgroup_id**\ ().
+- *	Return
+- *		The id is returned or 0 in case the id could not be retrieved.
+- *
+  * u64 bpf_get_current_cgroup_id(void)
+  * 	Return
+  * 		A 64-bit integer containing the current cgroup id based
+  * 		on the cgroup within which the current task is running.
+  *
+- * void* get_local_storage(void *map, u64 flags)
++ * void *bpf_get_local_storage(void *map, u64 flags)
+  *	Description
+  *		Get the pointer to the local storage area.
+  *		The type and the size of the local storage is defined
+@@ -2209,6 +2181,24 @@ union bpf_attr {
+  *	Return
+  *		0 on success, or a negative error in case of failure.
+  *
++ * u64 bpf_skb_ancestor_cgroup_id(struct sk_buff *skb, int ancestor_level)
++ *	Description
++ *		Return id of cgroup v2 that is ancestor of cgroup associated
++ *		with the *skb* at the *ancestor_level*.  The root cgroup is at
++ *		*ancestor_level* zero and each step down the hierarchy
++ *		increments the level. If *ancestor_level* == level of cgroup
++ *		associated with *skb*, then return value will be same as that
++ *		of **bpf_skb_cgroup_id**\ ().
++ *
++ *		The helper is useful to implement policies based on cgroups
++ *		that are upper in hierarchy than immediate cgroup associated
++ *		with *skb*.
++ *
++ *		The format of returned id and helper limitations are same as in
++ *		**bpf_skb_cgroup_id**\ ().
++ *	Return
++ *		The id is returned or 0 in case the id could not be retrieved.
++ *
+  * struct bpf_sock *bpf_sk_lookup_tcp(void *ctx, struct bpf_sock_tuple *tuple, u32 tuple_size, u64 netns, u64 flags)
+  *	Description
+  *		Look for TCP socket matching *tuple*, optionally in a child
+@@ -2289,6 +2279,16 @@ union bpf_attr {
+  *	Return
+  *		0 on success, or a negative error in case of failure.
+  *
++ * int bpf_map_push_elem(struct bpf_map *map, const void *value, u64 flags)
++ * 	Description
++ * 		Push an element *value* in *map*. *flags* is one of:
++ *
++ * 		**BPF_EXIST**
++ * 			If the queue/stack is full, the oldest element is
++ * 			removed to make room for this.
++ * 	Return
++ * 		0 on success, or a negative error in case of failure.
++ *
+  * int bpf_map_pop_elem(struct bpf_map *map, void *value)
+  * 	Description
+  * 		Pop an element from *map*.
+@@ -2343,36 +2343,93 @@ union bpf_attr {
   *	Return
   *		0
   *
@@ -151,6 +326,50 @@ index 4465d00d3493..929c8e537a14 100644
   * struct bpf_sock *bpf_sk_fullsock(struct bpf_sock *sk)
   *	Description
   *		This helper gets a **struct bpf_sock** pointer such
+- *		that all the fields in bpf_sock can be accessed.
++ *		that all the fields in this **bpf_sock** can be accessed.
+  *	Return
+- *		A **struct bpf_sock** pointer on success, or NULL in
++ *		A **struct bpf_sock** pointer on success, or **NULL** in
+  *		case of failure.
+  *
+  * struct bpf_tcp_sock *bpf_tcp_sock(struct bpf_sock *sk)
+  *	Description
+  *		This helper gets a **struct bpf_tcp_sock** pointer from a
+  *		**struct bpf_sock** pointer.
+- *
+  *	Return
+- *		A **struct bpf_tcp_sock** pointer on success, or NULL in
++ *		A **struct bpf_tcp_sock** pointer on success, or **NULL** in
+  *		case of failure.
+  *
+  * int bpf_skb_ecn_set_ce(struct sk_buf *skb)
+- *     Description
+- *             Sets ECN of IP header to ce (congestion encountered) if
+- *             current value is ect (ECN capable). Works with IPv6 and IPv4.
+- *     Return
+- *             1 if set, 0 if not set.
++ *	Description
++ *		Set ECN (Explicit Congestion Notification) field of IP header
++ *		to **CE** (Congestion Encountered) if current value is **ECT**
++ *		(ECN Capable Transport). Otherwise, do nothing. Works with IPv6
++ *		and IPv4.
++ *	Return
++ *		1 if the **CE** flag is set (either by the current helper call
++ *		or because it was already present), 0 if it is not set.
+  *
+  * struct bpf_sock *bpf_get_listener_sock(struct bpf_sock *sk)
+  *	Description
+- *		Return a **struct bpf_sock** pointer in TCP_LISTEN state.
+- *		bpf_sk_release() is unnecessary and not allowed.
++ *		Return a **struct bpf_sock** pointer in **TCP_LISTEN** state.
++ *		**bpf_sk_release**\ () is unnecessary and not allowed.
+  *	Return
+- *		A **struct bpf_sock** pointer on success, or NULL in
++ *		A **struct bpf_sock** pointer on success, or **NULL** in
+  *		case of failure.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
 -- 
 2.14.1
 
