@@ -7,61 +7,61 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E05F2C43381
-	for <bpf@archiver.kernel.org>; Thu, 14 Mar 2019 12:39:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F077C10F06
+	for <bpf@archiver.kernel.org>; Thu, 14 Mar 2019 12:39:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A845F21019
-	for <bpf@archiver.kernel.org>; Thu, 14 Mar 2019 12:39:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2504A2184C
+	for <bpf@archiver.kernel.org>; Thu, 14 Mar 2019 12:39:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="Zdl7SO6F"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="DI4Wl5V4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726922AbfCNMjC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Mar 2019 08:39:02 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:54990 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727533AbfCNMjB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 Mar 2019 08:39:01 -0400
-Received: by mail-wm1-f67.google.com with SMTP id f3so2836705wmj.4
-        for <bpf@vger.kernel.org>; Thu, 14 Mar 2019 05:38:58 -0700 (PDT)
+        id S1727554AbfCNMi7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Mar 2019 08:38:59 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:53697 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727476AbfCNMi6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 Mar 2019 08:38:58 -0400
+Received: by mail-wm1-f68.google.com with SMTP id e74so2788880wmg.3
+        for <bpf@vger.kernel.org>; Thu, 14 Mar 2019 05:38:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=UFA00KGdgfw4IY1PDenGZXbSDweTm6Rjxc3ZxwbZbo0=;
-        b=Zdl7SO6FZUQFluonlFe/mFTGeYocPmBntwXjEkEI9M58Zmfouc+yWtXkotYTFvauMO
-         wg4gP51Ghm04F4NYFxo4uDUJ954CaL9vlWlUsK6m3wsX64cUPDgSNm4NVYnTXUm3mc7a
-         gKdNjQeEIjzuuWZr6mY9kiFaC4+fm87tSerGNkmoR29PcxsvdDTKmdxGulHg1Xgu4/Fi
-         L+Uohx5UhSvycAAC2+F/3v9WIHujLu4TSOG9V34uKUWGWasCW+Z/zZwCY3DeL4YkrwIs
-         qxEt8oN4O6RNgAf0aF6V12Uz0ypyk/Iv/SyY239gQYmg8Ov0bEyy4UDzrORrmW4q9iaq
-         RgmQ==
+        bh=7DgF5I6ZVKZkBYLUY17mpmD1boQqv9DtD//RUjM4nic=;
+        b=DI4Wl5V4uHARy+UiT1kkvJ7hYXIFn9fpkSK8GVV1ePp4wvxGNTaRHjgTZcTymYeevG
+         rCY/B8cLx5OMk1BHTKplwQroCS0oFf9ND8bq7//o6nvr+8Azl8rMiPY/uEI9opFw5SpQ
+         yRbP19Sb5cFWwqKwabyqU0aSVmM/tthexCaa4exOmdTojxvw2CxWo+ArJbIAhoadQsMS
+         NOv+bhhzGhhzTzOhKHV4TLYkwxgmCG4ODgqgCPwqeDoafYjqpCU3OH8t/wZgHSrHZUpM
+         dqH4nHfwv1XEKLie8l6YBscrDNVhSv+dTDkywkpMOP9Bdiw0Ye9fbKyZHLE1QTpeiA15
+         i0xA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=UFA00KGdgfw4IY1PDenGZXbSDweTm6Rjxc3ZxwbZbo0=;
-        b=PBTVwWsOLMCA3t0+LUaUV2NxX6FreWYrJDg+9LdqH3gJAI29CHKfgkvDEkHhRyPz+a
-         4D2DCFZY2IeCVvnKybKThdAPRXZVbb7x7xpFNjmg5GVJ3lfuBA56ytgbPlayLLVEp78d
-         qmKdKYwG5hrUqgB7NAKmxt99uDwen2HN7/H+Obtkd4McB9tIT3HDXr8oBo13xEvqJaPs
-         lUqXEXtwiUJMAN+PiDIfcoJaOCW4MmNPmkuHLy2YrOmd+6Q7RjcDaQt6OsXS95vu/Nsf
-         KYfU/sXiA+mY3XDuCbGzwhTnwz/R3ThZgca69wxsZ2o0u/MjdgUKJN8FbjAOzRGxz8/q
-         n9wA==
-X-Gm-Message-State: APjAAAXcBd3mniOuH2lywClKYg5F1NIMLMdNuXzcagOrQyZnRoD42x4W
-        u5M9VbfpLnwR3gnzxbntgTwsag==
-X-Google-Smtp-Source: APXvYqx3o+xvctQW/VgIG6wIdmmmgi5SK1bYhNOLuKSxARsXiM4OaXZnAnEo7uyFzMA/SdewyoEwZw==
-X-Received: by 2002:a1c:2d4c:: with SMTP id t73mr2415518wmt.142.1552567138018;
-        Thu, 14 Mar 2019 05:38:58 -0700 (PDT)
+        bh=7DgF5I6ZVKZkBYLUY17mpmD1boQqv9DtD//RUjM4nic=;
+        b=FsMPRMEL5lRQhLf92jHnTGhFpeapuSfYRz3kkdhsdfPnbM/qld33qels2tJmGyx07S
+         9IeQfnD2G/yiF6Z6TwS/DYD1LQdEwuDoJRiPl6awr1j4JnCNdhMW6Ym4tPbhzwl5r2g+
+         OIQkFr91K9qZ/Oc9dhZOaPF1mku613h1XblLHk+0nRwx1tZmE50SsJPqWiG5xalGMYve
+         qIJOd9VbPbYTyxcdhDxxcst113V7v0CfO4oq3UA9WQdlurUqVj8K/nkY0FRHe3WHq3QZ
+         gsPRYY27jWFGcxzh8ejQBDpS8hL03VLnYUDN/tg/C7YM5s9lBy1ZrFeYIOEPBQGSE07P
+         D0aQ==
+X-Gm-Message-State: APjAAAU35nhSnUaNWUv0on+Nx2Vjzo72K/sn+UO6Pcayoaboy2ObY51T
+        oQ5N8xbLAMAgB4KxALAxqZom8w==
+X-Google-Smtp-Source: APXvYqzH5C/Xva78iu5DEbtG21tcdxGcQm0vsbBeepivvD8YQTP7/GpUVxTcjDeAHWCHIbfHoIzpRQ==
+X-Received: by 2002:a1c:27c4:: with SMTP id n187mr2430100wmn.23.1552567135543;
+        Thu, 14 Mar 2019 05:38:55 -0700 (PDT)
 Received: from reblochon.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id u8sm2285569wml.22.2019.03.14.05.38.56
+        by smtp.gmail.com with ESMTPSA id u8sm2285569wml.22.2019.03.14.05.38.54
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 14 Mar 2019 05:38:57 -0700 (PDT)
+        Thu, 14 Mar 2019 05:38:54 -0700 (PDT)
 From:   Quentin Monnet <quentin.monnet@netronome.com>
 To:     Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         oss-drivers@netronome.com,
         Quentin Monnet <quentin.monnet@netronome.com>
-Subject: [PATCH bpf 3/3] tools: bpf: synchronise BPF UAPI header with tools
-Date:   Thu, 14 Mar 2019 12:38:41 +0000
-Message-Id: <20190314123841.13092-4-quentin.monnet@netronome.com>
+Subject: [PATCH bpf 1/3] bpf: fix documentation for eBPF helpers
+Date:   Thu, 14 Mar 2019 12:38:39 +0000
+Message-Id: <20190314123841.13092-2-quentin.monnet@netronome.com>
 X-Mailer: git-send-email 2.14.1
 In-Reply-To: <20190314123841.13092-1-quentin.monnet@netronome.com>
 References: <20190314123841.13092-1-quentin.monnet@netronome.com>
@@ -70,19 +70,33 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Synchronise the bpf.h header under tools, to report the latest fixes and
-additions to the documentation for the BPF helpers.
+Another round of minor fixes for the documentation of the BPF helpers
+located in the UAPI bpf.h header file. Changes include:
+
+- Moving around description of some helpers, to keep the descriptions in
+  the same order as helpers are declared (bpf_map_push_elem(), leftover
+  from commit 90b1023f68c7 ("bpf: fix documentation for eBPF helpers"),
+  bpf_rc_keydown(), and bpf_skb_ancestor_cgroup_id()).
+- Fixing typos ("contex" -> "context").
+- Harmonising return types ("void* " -> "void *", "uint64_t" -> "u64").
+- Addition of the "bpf_" prefix to bpf_get_storage().
+- Light additions of RST markup on some keywords.
+- Empty line deletion between description and return value for
+  bpf_tcp_sock().
+- Edit for the description for bpf_skb_ecn_set_ce() (capital letters,
+  acronym expansion, no effect if ECT not set, more details on return
+  value).
 
 Signed-off-by: Quentin Monnet <quentin.monnet@netronome.com>
 Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 ---
- tools/include/uapi/linux/bpf.h | 183 +++++++++++++++++++++++++++--------------
- 1 file changed, 120 insertions(+), 63 deletions(-)
+ include/uapi/linux/bpf.h | 128 ++++++++++++++++++++++++-----------------------
+ 1 file changed, 65 insertions(+), 63 deletions(-)
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 983b25cb608d..929c8e537a14 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 983b25cb608d..4465d00d3493 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
 @@ -502,16 +502,6 @@ union bpf_attr {
   * 	Return
   * 		0 on success, or a negative error in case of failure.
@@ -264,65 +278,7 @@ index 983b25cb608d..929c8e537a14 100644
   * int bpf_map_pop_elem(struct bpf_map *map, void *value)
   * 	Description
   * 		Pop an element from *map*.
-@@ -2343,36 +2343,93 @@ union bpf_attr {
-  *	Return
-  *		0
-  *
-+ * int bpf_spin_lock(struct bpf_spin_lock *lock)
-+ *	Description
-+ *		Acquire a spinlock represented by the pointer *lock*, which is
-+ *		stored as part of a value of a map. Taking the lock allows to
-+ *		safely update the rest of the fields in that value. The
-+ *		spinlock can (and must) later be released with a call to
-+ *		**bpf_spin_unlock**\ (\ *lock*\ ).
-+ *
-+ *		Spinlocks in BPF programs come with a number of restrictions
-+ *		and constraints:
-+ *
-+ *		* **bpf_spin_lock** objects are only allowed inside maps of
-+ *		  types **BPF_MAP_TYPE_HASH** and **BPF_MAP_TYPE_ARRAY** (this
-+ *		  list could be extended in the future).
-+ *		* BTF description of the map is mandatory.
-+ *		* The BPF program can take ONE lock at a time, since taking two
-+ *		  or more could cause dead locks.
-+ *		* Only one **struct bpf_spin_lock** is allowed per map element.
-+ *		* When the lock is taken, calls (either BPF to BPF or helpers)
-+ *		  are not allowed.
-+ *		* The **BPF_LD_ABS** and **BPF_LD_IND** instructions are not
-+ *		  allowed inside a spinlock-ed region.
-+ *		* The BPF program MUST call **bpf_spin_unlock**\ () to release
-+ *		  the lock, on all execution paths, before it returns.
-+ *		* The BPF program can access **struct bpf_spin_lock** only via
-+ *		  the **bpf_spin_lock**\ () and **bpf_spin_unlock**\ ()
-+ *		  helpers. Loading or storing data into the **struct
-+ *		  bpf_spin_lock** *lock*\ **;** field of a map is not allowed.
-+ *		* To use the **bpf_spin_lock**\ () helper, the BTF description
-+ *		  of the map value must be a struct and have **struct
-+ *		  bpf_spin_lock** *anyname*\ **;** field at the top level.
-+ *		  Nested lock inside another struct is not allowed.
-+ *		* The **struct bpf_spin_lock** *lock* field in a map value must
-+ *		  be aligned on a multiple of 4 bytes in that value.
-+ *		* Syscall with command **BPF_MAP_LOOKUP_ELEM** does not copy
-+ *		  the **bpf_spin_lock** field to user space.
-+ *		* Syscall with command **BPF_MAP_UPDATE_ELEM**, or update from
-+ *		  a BPF program, do not update the **bpf_spin_lock** field.
-+ *		* **bpf_spin_lock** cannot be on the stack or inside a
-+ *		  networking packet (it can only be inside of a map values).
-+ *		* **bpf_spin_lock** is available to root only.
-+ *		* Tracing programs and socket filter programs cannot use
-+ *		  **bpf_spin_lock**\ () due to insufficient preemption checks
-+ *		  (but this may change in the future).
-+ *		* **bpf_spin_lock** is not allowed in inner maps of map-in-map.
-+ *	Return
-+ *		0
-+ *
-+ * int bpf_spin_unlock(struct bpf_spin_lock *lock)
-+ *	Description
-+ *		Release the *lock* previously locked by a call to
-+ *		**bpf_spin_lock**\ (\ *lock*\ ).
-+ *	Return
-+ *		0
-+ *
+@@ -2346,33 +2346,35 @@ union bpf_attr {
   * struct bpf_sock *bpf_sk_fullsock(struct bpf_sock *sk)
   *	Description
   *		This helper gets a **struct bpf_sock** pointer such
