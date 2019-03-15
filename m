@@ -7,56 +7,56 @@ X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A579AC10F00
-	for <bpf@archiver.kernel.org>; Fri, 15 Mar 2019 19:52:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76D6EC4360F
+	for <bpf@archiver.kernel.org>; Fri, 15 Mar 2019 19:53:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7485C2063F
-	for <bpf@archiver.kernel.org>; Fri, 15 Mar 2019 19:52:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 439152063F
+	for <bpf@archiver.kernel.org>; Fri, 15 Mar 2019 19:53:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="m8TjLlxT"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="erlzrsrP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727565AbfCOTwo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Mar 2019 15:52:44 -0400
-Received: from mail-yw1-f74.google.com ([209.85.161.74]:33105 "EHLO
-        mail-yw1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727568AbfCOTwZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 Mar 2019 15:52:25 -0400
-Received: by mail-yw1-f74.google.com with SMTP id p73so2893816ywp.0
-        for <bpf@vger.kernel.org>; Fri, 15 Mar 2019 12:52:25 -0700 (PDT)
+        id S1727481AbfCOTwS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 Mar 2019 15:52:18 -0400
+Received: from mail-io1-f74.google.com ([209.85.166.74]:35930 "EHLO
+        mail-io1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727506AbfCOTwQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Mar 2019 15:52:16 -0400
+Received: by mail-io1-f74.google.com with SMTP id a7so5063081ioq.3
+        for <bpf@vger.kernel.org>; Fri, 15 Mar 2019 12:52:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=sAfWvHiPwt89rwowuJd122MWpb2hIcncHtjST15rjKY=;
-        b=m8TjLlxTJg+rOoEWUReYdn8rdh11EMoghrFHbVAb9WAMjVa0U/T9FqdGOvqwTZpUfm
-         vVbcFLqWrP3TVwdj34DrYszJNIoQ9EJXeAXrC/wvs/z5IYKQAqYP9RwBD+8emDJu5PVP
-         Vo+huuqc6PHspT4+rXUR6NPieF9KLiWfhrJ7gi13d3MatbDKM4RF0bkO2DrrarQnmyYR
-         3h3NjRcSXCNOJ75ka4ui6zatbnk/g1PfEFqJlZRnqOTJFOnY1jqqoDx3fG9sQrGexBtX
-         ZZ96/DuknTpKXEYqtVY62yQBCWP1T+ifr5PT3FJRXj7RVMG+M4Fgps93zJ4tkNbNYwin
-         RjCQ==
+        bh=xQk3LhthwaCSqxwCcTkNdlxSKZFnDFG1SS+E3EAFA9Q=;
+        b=erlzrsrP8VxBF8HsFBwQbTIFhbizEW/LsVQAb4sB9lxRiyqjhT4uCp2723IUY/w0as
+         JDSkvwBZ2J/k/0Gr8MvYLy9+lPaE5Mbr5BxZqaj+B32fmuQao+20kq6UQFBqlr7iQum4
+         OAinUJ/2Tst5Nnic/IJVxsAPWJiUr5ue6Sg3ulcVoob/1X/OiS7RpGt905f6Qew6MgNY
+         JEYORaq1c6WpaRg5DMZPoFljR7vI3/R+mQc61CKtUt4qxBTghm37TZV9KMnlkevHn6ql
+         TPeg6qjkBgZQMlJkzr6XuOqDJLnou/KO5tmMMN3Tj/QArlELFQfSt7I9wSsT8s02fKRi
+         2vzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=sAfWvHiPwt89rwowuJd122MWpb2hIcncHtjST15rjKY=;
-        b=Mj9YJj4FhnE8dDVzLLyV7z9KCRhe3FUkpp/S88crKl7f3inpgmUAhOnj6Xt2cQqfNZ
-         AaaNLFlNmNhdm/4JVME6tmjSf+fvgkX5l/KyTMY7mmsgfrgI0nCcOu4huluuC7xRbyqx
-         /tGtlzWfUTKmYthRrFgCr1y6f+6iHy0X5oXrZJibvSb3kh/0N8YspOofOmnmKvKSrDao
-         cw718JYGUKgyx+2rgPNOLKT/fqmgZO+qILD2rG6P5wCjsWb0U0kD5JO8CawL5aCqqkmE
-         /wNcyh5pFff2s2qS6tzYS49UUva6VXMLnPdVvqXjj0YxWlmo9COHKBvwbfIDWOnE2IQ6
-         54wA==
-X-Gm-Message-State: APjAAAXtFyvFO6bvGjxd+ex9hGN3qYKOwpcrMBnC/OZGkFic8yMjzDUM
-        j3lN7rQvc+Wy5O6TjP2OQmwDQCS6Bq4gVeE8
-X-Google-Smtp-Source: APXvYqx6fJ/Xf2Wycfnq24ZgFIr73HZ4gPKerA6ul2fF+VVXr0NweKm2RI8g9OR3XNR3hwcUmUxVL0qXK1MAydWo
-X-Received: by 2002:a25:41c2:: with SMTP id o185mr2528725yba.96.1552679544923;
- Fri, 15 Mar 2019 12:52:24 -0700 (PDT)
-Date:   Fri, 15 Mar 2019 20:51:37 +0100
+        bh=xQk3LhthwaCSqxwCcTkNdlxSKZFnDFG1SS+E3EAFA9Q=;
+        b=r/SyGshxn7ea6OguHncemMmDg+CBxRGpUa+aRu569pJW5jbfEIerKexAyw8h3Wag3M
+         fETWZ5WcNqu4Ck7040KxuW3uXi8jLsSji7Uza1s2USFrk9oXQHe2hz4KUNX5yLMKFagN
+         2vgZnuuq2f2yOx9VW6kq48DtwXmEGN8mlxkSXCnGOxJ/cuboOJgbVCzD+aDJMizRt1RI
+         FeKdUlvXDDVC/SqHi+JBO6hU5Xhv/FWS1rqKfb328d6KEWpW1yTFVuoqcVL8A4VNCXiY
+         i5LromnOPMKc3qqTP1xPJP/1Q+kj500Pthjq0dapti0MC7vLc0HrJBmWcTMVZprmCv2Y
+         /Ldg==
+X-Gm-Message-State: APjAAAVAeSrBh4q8cTWji4cUQxwVoL863oGzOZXJz/Wg20zajc3ThrGe
+        Cssu7GWnIvgs4GtWCBcwrBjTLqhEUX+VTjwb
+X-Google-Smtp-Source: APXvYqz+GmruJTwbh+y6ScEKk8ZO6w3sULpD4k9iq4Qem8c0s9TmhOALFGnTHkcM6tlN06h5Rlqmfno2APVO8t8L
+X-Received: by 2002:a24:2b45:: with SMTP id h66mr677136ita.28.1552679535681;
+ Fri, 15 Mar 2019 12:52:15 -0700 (PDT)
+Date:   Fri, 15 Mar 2019 20:51:34 +0100
 In-Reply-To: <cover.1552679409.git.andreyknvl@google.com>
-Message-Id: <bf0abceeaf32e6b9cdbc9dde45cc5966b5747ec4.1552679409.git.andreyknvl@google.com>
+Message-Id: <355e7c0dadaa2bb79d22e0b7aac7e4efc1114d49.1552679409.git.andreyknvl@google.com>
 Mime-Version: 1.0
 References: <cover.1552679409.git.andreyknvl@google.com>
 X-Mailer: git-send-email 2.21.0.360.g471c308f928-goog
-Subject: [PATCH v11 13/14] arm64: update Documentation/arm64/tagged-pointers.txt
+Subject: [PATCH v11 10/14] tracing, arm64: untag user pointers in seq_print_user_ip
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will.deacon@arm.com>,
@@ -105,51 +105,99 @@ This patch is a part of a series that extends arm64 kernel ABI to allow to
 pass tagged user pointers (with the top byte set to something else other
 than 0x00) as syscall arguments.
 
-Document the ABI changes in Documentation/arm64/tagged-pointers.txt.
+seq_print_user_ip() uses provided user pointers for vma lookups, which
+can only by done with untagged pointers.
+
+Untag user pointers in this function.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- Documentation/arm64/tagged-pointers.txt | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+ kernel/trace/trace_output.c |  5 +++--
+ p                           | 45 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 48 insertions(+), 2 deletions(-)
+ create mode 100644 p
 
-diff --git a/Documentation/arm64/tagged-pointers.txt b/Documentation/arm64/tagged-pointers.txt
-index a25a99e82bb1..07fdddeacad0 100644
---- a/Documentation/arm64/tagged-pointers.txt
-+++ b/Documentation/arm64/tagged-pointers.txt
-@@ -17,13 +17,15 @@ this byte for application use.
- Passing tagged addresses to the kernel
- --------------------------------------
+diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
+index 54373d93e251..6376bee93c84 100644
+--- a/kernel/trace/trace_output.c
++++ b/kernel/trace/trace_output.c
+@@ -370,6 +370,7 @@ static int seq_print_user_ip(struct trace_seq *s, struct mm_struct *mm,
+ {
+ 	struct file *file = NULL;
+ 	unsigned long vmstart = 0;
++	unsigned long untagged_ip = untagged_addr(ip);
+ 	int ret = 1;
  
--All interpretation of userspace memory addresses by the kernel assumes
--an address tag of 0x00.
-+The kernel supports tags in pointer arguments (including pointers in
-+structures) of syscalls, however such pointers must point to memory ranges
-+obtained by anonymous mmap() or brk().
+ 	if (s->full)
+@@ -379,7 +380,7 @@ static int seq_print_user_ip(struct trace_seq *s, struct mm_struct *mm,
+ 		const struct vm_area_struct *vma;
  
--This includes, but is not limited to, addresses found in:
-+The kernel supports tags in user fault addresses. However the fault_address
-+field in the sigcontext struct will contain an untagged address.
- 
-- - pointer arguments to system calls, including pointers in structures
--   passed to system calls,
-+All other interpretations of userspace memory addresses by the kernel
-+assume an address tag of 0x00, in particular:
- 
-  - the stack pointer (sp), e.g. when interpreting it to deliver a
-    signal,
-@@ -33,11 +35,7 @@ This includes, but is not limited to, addresses found in:
- 
- Using non-zero address tags in any of these locations may result in an
- error code being returned, a (fatal) signal being raised, or other modes
--of failure.
--
--For these reasons, passing non-zero address tags to the kernel via
--system calls is forbidden, and using a non-zero address tag for sp is
--strongly discouraged.
-+of failure. Using a non-zero address tag for sp is strongly discouraged.
- 
- Programs maintaining a frame pointer and frame records that use non-zero
- address tags may suffer impaired or inaccurate debug and profiling
+ 		down_read(&mm->mmap_sem);
+-		vma = find_vma(mm, ip);
++		vma = find_vma(mm, untagged_ip);
+ 		if (vma) {
+ 			file = vma->vm_file;
+ 			vmstart = vma->vm_start;
+@@ -388,7 +389,7 @@ static int seq_print_user_ip(struct trace_seq *s, struct mm_struct *mm,
+ 			ret = trace_seq_path(s, &file->f_path);
+ 			if (ret)
+ 				trace_seq_printf(s, "[+0x%lx]",
+-						 ip - vmstart);
++						 untagged_ip - vmstart);
+ 		}
+ 		up_read(&mm->mmap_sem);
+ 	}
+diff --git a/p b/p
+new file mode 100644
+index 000000000000..9d6fa5386e55
+--- /dev/null
++++ b/p
+@@ -0,0 +1,45 @@
++commit 1fa6fadf644859e8a6a8ecce258444b49be8c7ee
++Author: Andrey Konovalov <andreyknvl@google.com>
++Date:   Mon Mar 4 17:20:32 2019 +0100
++
++    kasan: fix coccinelle warnings in kasan_p*_table
++    
++    kasan_p4d_table, kasan_pmd_table and kasan_pud_table are declared as
++    returning bool, but return 0 instead of false, which produces a coccinelle
++    warning. Fix it.
++    
++    Fixes: 0207df4fa1a8 ("kernel/memremap, kasan: make ZONE_DEVICE with work with KASAN")
++    Reported-by: kbuild test robot <lkp@intel.com>
++    Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
++
++diff --git a/mm/kasan/init.c b/mm/kasan/init.c
++index 45a1b5e38e1e..fcaa1ca03175 100644
++--- a/mm/kasan/init.c
+++++ b/mm/kasan/init.c
++@@ -42,7 +42,7 @@ static inline bool kasan_p4d_table(pgd_t pgd)
++ #else
++ static inline bool kasan_p4d_table(pgd_t pgd)
++ {
++-	return 0;
+++	return false;
++ }
++ #endif
++ #if CONFIG_PGTABLE_LEVELS > 3
++@@ -54,7 +54,7 @@ static inline bool kasan_pud_table(p4d_t p4d)
++ #else
++ static inline bool kasan_pud_table(p4d_t p4d)
++ {
++-	return 0;
+++	return false;
++ }
++ #endif
++ #if CONFIG_PGTABLE_LEVELS > 2
++@@ -66,7 +66,7 @@ static inline bool kasan_pmd_table(pud_t pud)
++ #else
++ static inline bool kasan_pmd_table(pud_t pud)
++ {
++-	return 0;
+++	return false;
++ }
++ #endif
++ pte_t kasan_early_shadow_pte[PTRS_PER_PTE] __page_aligned_bss;
 -- 
 2.21.0.360.g471c308f928-goog
 
