@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7CBDC10F0F
-	for <bpf@archiver.kernel.org>; Fri, 15 Mar 2019 19:53:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32762C10F10
+	for <bpf@archiver.kernel.org>; Fri, 15 Mar 2019 19:53:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 848122063F
+	by mail.kernel.org (Postfix) with ESMTP id E85FE218D4
 	for <bpf@archiver.kernel.org>; Fri, 15 Mar 2019 19:53:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HPKtN+Ac"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NsZbFgqg"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727318AbfCOTv4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Mar 2019 15:51:56 -0400
-Received: from mail-qt1-f202.google.com ([209.85.160.202]:56498 "EHLO
-        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727300AbfCOTvy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 Mar 2019 15:51:54 -0400
-Received: by mail-qt1-f202.google.com with SMTP id e1so9624429qth.23
-        for <bpf@vger.kernel.org>; Fri, 15 Mar 2019 12:51:53 -0700 (PDT)
+        id S1727210AbfCOTvs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 Mar 2019 15:51:48 -0400
+Received: from mail-io1-f73.google.com ([209.85.166.73]:32863 "EHLO
+        mail-io1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727170AbfCOTvr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Mar 2019 15:51:47 -0400
+Received: by mail-io1-f73.google.com with SMTP id n15so7897297ioc.0
+        for <bpf@vger.kernel.org>; Fri, 15 Mar 2019 12:51:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=yc2TKKK3uyNjx4k/SCg2YsIAkDocczWLqEwyHrZeSHg=;
-        b=HPKtN+AcCirGFFQHEZAu/mCbNrjYIKj90qShdg/IiFhxen49J0Qdpnr1pcKG7a6Z8e
-         JeJ2qVhpKVo0e4MFSlZbzLIR2woDetJaTNND5bdihZ/qbAWcocsa2cvfjheYeB4rsRtq
-         VupfRDNmC+dOLdGj40kTGJqU/K4oyQ4V3HkdkM9xosZcLU7jdIpJBpWnC76XUdwc2cRx
-         PrBSQsPpZWMh+HxdTYEIi4nHU5c8m+m6PJBso4DlJCsFDkKaGHF5sF+vigRkHjI5UG0U
-         RhfFgSuDuzmav8L6Qcw6zbyS+BybgMK3vA4F1h2a+P/7Y7SKXtGu14CbY9cr1/NstkUy
-         Z8Lw==
+        bh=7EwJOZO2FU3roQl0F5aaHfBG2l97MDWb8Nx8DHL3tHk=;
+        b=NsZbFgqg7rNL+MmKx3BQKEQu20uV5j38Y50xV/nkSWdpaI1ml/U6N36zAaOr/fw5UA
+         vw0RHRh7TFVUW8EczyoyJgPl2GwQ0O2Y3mdoA35Hyc638cKh6Ou6T8eYWBn4JvcpMD/p
+         rAobGvHGGcaX0d5KUxoitmIQyCm1jnvtMKLMyUhfKXJwo6H8C9LXAnbI3Vm9NBlauUvF
+         LSPFoGZmvnqqM1DaPRlnN62YYv9Ww/FkPY+qI6Xd7c1DGMrBJfACmaSSGw3vWzqTDpi4
+         0fO7tv8nv58nySaGO3aBtIsMUSYoC0bWVWTZpEnNl/6BuoGd6099E0jO7AssN7waL7VF
+         i1Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=yc2TKKK3uyNjx4k/SCg2YsIAkDocczWLqEwyHrZeSHg=;
-        b=hlC5p0nQCsOFHUtDTbgA5dDDv6pdzM2zyRxtaQhogS4TFH/lyyGvExl2ZuPbSwtOkS
-         RrHtdzwwUkQ+NSUCbG5oC5IOp7SZ4MgThaU7hL/T1oPDYIwLdzonU6s0sp+MtJRTBKxi
-         GL6ihDrHVKJJ6A53mUeG0C34ydWGXFhgR/iqmknQd0UZbVIAf4fGMO+/IzsmNYx5L/UE
-         i18iRMZUFSxRIKpwCBZRdknhq0DSU6VCgyOrabcdktBXFFbOnJCfTzXO92/pXui6JFO+
-         LUZx7OvNQK5i/JKvEZN5aFgOSq7QQFz16ws9aPtsae9GB7fI93TCVwgjHER4jfgcfDBu
-         3qKQ==
-X-Gm-Message-State: APjAAAVFsDOLs61iVODQ9ATPBKeP1z9c4L29gfzFTtetu9QSGni9hNpV
-        XFAV3OYCjwFl+RBTlUenvKqAX3B7Se+6vM/z
-X-Google-Smtp-Source: APXvYqxQt9HPpRfECab7LUPrHAbJSVnQOqRrkiVNkyIaCkT/+WBTjFpEfz28zU++TxipH2bwdLb5/hvYcjvCwg1k
-X-Received: by 2002:ac8:28c9:: with SMTP id j9mr3165248qtj.21.1552679513588;
- Fri, 15 Mar 2019 12:51:53 -0700 (PDT)
-Date:   Fri, 15 Mar 2019 20:51:27 +0100
+        bh=7EwJOZO2FU3roQl0F5aaHfBG2l97MDWb8Nx8DHL3tHk=;
+        b=oojuQS8QgSQb9+F5eSBW2uhEP4pMqAdDLtjAAVGxrLUhr5TDoPx8o9a289LFKQwmF2
+         LnMvoJqb4tUbLX8KeDbPZPXY5XhBX55t4VqjEIEPMc8UNR8isZ87896wp8Qigh9JyJkx
+         3MksIBbZMV5ZdvK1xPN0asaEZcCGZMgtihBsgUAbiMEm73p4MUFPxaLwXoJcDmYbS9TI
+         qxibBYT4i/ay/i2nqoZWx3LSObeNz6vebXMSRdMgpmwUTMz20T7OOpYSg4tms+IY+cO6
+         Ma8pHfFxH4FVY5LcN0eQBiXMl0DXTarqV9//PC/X2+jFTrkP71aVBO215kqTDqRcrmU4
+         TpFA==
+X-Gm-Message-State: APjAAAV6JwLKxAoXAHAUvyWTBLxzCMhfH5fH6c+ndExa/nSQDWvHnL2R
+        yzYDPfOiD6i20yOmwu+XkQhGRPqHCCvTA8Z1
+X-Google-Smtp-Source: APXvYqw3EhdS69JFOaj1SqCWxq2uMXIiNWdBlJ3prBk3wjQoeZqkO0NrFGiKQ0BULG0Vahh3MxRaQ9/Jyb5Vnlog
+X-Received: by 2002:a24:7bd3:: with SMTP id q202mr100068itc.32.1552679506915;
+ Fri, 15 Mar 2019 12:51:46 -0700 (PDT)
+Date:   Fri, 15 Mar 2019 20:51:25 +0100
 In-Reply-To: <cover.1552679409.git.andreyknvl@google.com>
-Message-Id: <f7fa36ec55ed4b45f61d841f9b726772a04cc0a5.1552679409.git.andreyknvl@google.com>
+Message-Id: <bee403f76b40f37c6790d144a4142f293e0a7d9f.1552679409.git.andreyknvl@google.com>
 Mime-Version: 1.0
 References: <cover.1552679409.git.andreyknvl@google.com>
 X-Mailer: git-send-email 2.21.0.360.g471c308f928-goog
-Subject: [PATCH v11 03/14] lib, arm64: untag user pointers in strn*_user
+Subject: [PATCH v11 01/14] uaccess: add untagged_addr definition for other arches
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will.deacon@arm.com>,
@@ -101,67 +101,34 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch is a part of a series that extends arm64 kernel ABI to allow to
-pass tagged user pointers (with the top byte set to something else other
-than 0x00) as syscall arguments.
+To allow arm64 syscalls to accept tagged pointers from userspace, we must
+untag them when they are passed to the kernel. Since untagging is done in
+generic parts of the kernel, the untagged_addr macro needs to be defined
+for all architectures.
 
-strncpy_from_user and strnlen_user accept user addresses as arguments, and
-do not go through the same path as copy_from_user and others, so here we
-need to handle the case of tagged user addresses separately.
+Define it as a noop for architectures other than arm64.
 
-Untag user pointers passed to these functions.
-
-Note, that this patch only temporarily untags the pointers to perform
-validity checks, but then uses them as is to perform user memory accesses.
-
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- lib/strncpy_from_user.c | 3 ++-
- lib/strnlen_user.c      | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ include/linux/mm.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/lib/strncpy_from_user.c b/lib/strncpy_from_user.c
-index 58eacd41526c..6209bb9507c7 100644
---- a/lib/strncpy_from_user.c
-+++ b/lib/strncpy_from_user.c
-@@ -6,6 +6,7 @@
- #include <linux/uaccess.h>
- #include <linux/kernel.h>
- #include <linux/errno.h>
-+#include <linux/mm.h>
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 76769749b5a5..4d674518d392 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -99,6 +99,10 @@ extern int mmap_rnd_compat_bits __read_mostly;
+ #include <asm/pgtable.h>
+ #include <asm/processor.h>
  
- #include <asm/byteorder.h>
- #include <asm/word-at-a-time.h>
-@@ -107,7 +108,7 @@ long strncpy_from_user(char *dst, const char __user *src, long count)
- 		return 0;
- 
- 	max_addr = user_addr_max();
--	src_addr = (unsigned long)src;
-+	src_addr = (unsigned long)untagged_addr(src);
- 	if (likely(src_addr < max_addr)) {
- 		unsigned long max = max_addr - src_addr;
- 		long retval;
-diff --git a/lib/strnlen_user.c b/lib/strnlen_user.c
-index 1c1a1b0e38a5..8ca3d2ac32ec 100644
---- a/lib/strnlen_user.c
-+++ b/lib/strnlen_user.c
-@@ -2,6 +2,7 @@
- #include <linux/kernel.h>
- #include <linux/export.h>
- #include <linux/uaccess.h>
-+#include <linux/mm.h>
- 
- #include <asm/word-at-a-time.h>
- 
-@@ -109,7 +110,7 @@ long strnlen_user(const char __user *str, long count)
- 		return 0;
- 
- 	max_addr = user_addr_max();
--	src_addr = (unsigned long)str;
-+	src_addr = (unsigned long)untagged_addr(str);
- 	if (likely(src_addr < max_addr)) {
- 		unsigned long max = max_addr - src_addr;
- 		long retval;
++#ifndef untagged_addr
++#define untagged_addr(addr) (addr)
++#endif
++
+ #ifndef __pa_symbol
+ #define __pa_symbol(x)  __pa(RELOC_HIDE((unsigned long)(x), 0))
+ #endif
 -- 
 2.21.0.360.g471c308f928-goog
 
