@@ -5,58 +5,58 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1610C10F00
-	for <bpf@archiver.kernel.org>; Fri, 15 Mar 2019 19:52:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98D42C43381
+	for <bpf@archiver.kernel.org>; Fri, 15 Mar 2019 19:52:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9010C21902
-	for <bpf@archiver.kernel.org>; Fri, 15 Mar 2019 19:52:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 675AF2063F
+	for <bpf@archiver.kernel.org>; Fri, 15 Mar 2019 19:52:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qeml8KMl"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FNIVGISA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727418AbfCOTwK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Mar 2019 15:52:10 -0400
-Received: from mail-oi1-f201.google.com ([209.85.167.201]:36862 "EHLO
-        mail-oi1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727449AbfCOTwK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 Mar 2019 15:52:10 -0400
-Received: by mail-oi1-f201.google.com with SMTP id x133so4511832oia.3
-        for <bpf@vger.kernel.org>; Fri, 15 Mar 2019 12:52:09 -0700 (PDT)
+        id S1727505AbfCOTwU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 Mar 2019 15:52:20 -0400
+Received: from mail-qk1-f202.google.com ([209.85.222.202]:32934 "EHLO
+        mail-qk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727522AbfCOTwT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Mar 2019 15:52:19 -0400
+Received: by mail-qk1-f202.google.com with SMTP id n64so8771835qkb.0
+        for <bpf@vger.kernel.org>; Fri, 15 Mar 2019 12:52:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=o99IPl+uG2EzV+A51yAxAJoGFkhXN8vGRgmKAMdYgSA=;
-        b=qeml8KMlP7rmAvIxGUwmqXR6s58tv3WFmWASkki2NWsIADrbc1k8lfVc0+MTWbLpzs
-         TVLOcfO6bk+g3/mT4x135nyZgaRh/a1cI0EJSPVigzGsRAp8PAEjxUHPFZAzqhmXZx4l
-         8Q3KL5oxK5OHSh9sOaBJzftYgvN7gNgSHSwrNoWatq8tKEtYq3SVrekzbwazA+QWLKeH
-         U6r1Zznc3OnEUZ0dR61U5DX56ScUlBeamodtGHalBVARU3JboxCMy3bCQIt/yf/PIiTQ
-         7ti2uUkzpKUEL7B+2/dvfA9GvioOMJDdEfC7KsiAuJ+0KTfpgnd+IOQxpTKu3Bl4+qOo
-         qSqQ==
+        bh=REP9LhKq3azFcE3epBwHjl0z4e4u8qSodB2K6JOUUqY=;
+        b=FNIVGISAdAEFbreSsDDijAXV7iz7bJ+nqAbnQIHGv5JyzeZ7lcBCJx59d3veVulKlh
+         7jE3udTRD8ZB4FsTnM9RGbtkCH/mbxzWvFL0H4sXjQx4qi2m5t5ro7oy5rhM45nSVVBP
+         5ClTpMIvyiu2q1I0rCYKPmV2nRUW01xZpnfJIxUQMHQ44ykxwcrzRx307eckpZorbuN3
+         6VEq4E+w7Q2yQVpjsHzE5SdEEFgZlQL/gXacFSIer7uFwLUhfH2E6+fmsaTjr28zvsU3
+         LxduxWE/YJsel6dur8r7Ne5zecAEIXKRCQ6ztsVh51aCO/ECwJBztr37RmWaHcFGyfRo
+         FPEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=o99IPl+uG2EzV+A51yAxAJoGFkhXN8vGRgmKAMdYgSA=;
-        b=Q4DrsUkaPHvJeZ7mHpnV3ShnddrkqPYWtEfhRd2iJujCnl1mQ0zu/Wk8Cr6RUslqEW
-         19P3201SSEiEX1KSVJp7mN0lB/Si4FOORtPPVf2GElcfvGUcZyVMpaT6E2cmPnCggnTX
-         1NNRWM4GUqg94c7y8+ptfneBNIrmHkxVGVntz8yfEEwF7YOYsGg6zkOFphRWxlc1tbcX
-         4M5A5V0fCVpoCrwcYRMtgJA9x/qNk4Ng5aTnA3AW9oOCEg28V8K74+PRmBzWLkp59h+u
-         tR/McKy7flzuekYcdXSe/8NfkBp+XkYl+AJMgEhm1kvfL7e5oezuoFAE3TlmkmW63BMQ
-         S5dA==
-X-Gm-Message-State: APjAAAV9OsvTAD5lwZD3yBytgq21bmXp/RXhNQpMU1FOWa9PswnxDU8J
-        +9xUTXdsh3AeI0Xy+LTMI2zM+isNcbGoouas
-X-Google-Smtp-Source: APXvYqxLoKEgsAEPjIF9NsjndQ5gVGqmokYLJoZMnp0FGqwROodj4iKJAPngQ8EF97Yh5xKIjIbFflxcHuXMaJlJ
-X-Received: by 2002:aca:2409:: with SMTP id n9mr3111631oic.19.1552679529309;
- Fri, 15 Mar 2019 12:52:09 -0700 (PDT)
-Date:   Fri, 15 Mar 2019 20:51:32 +0100
+        bh=REP9LhKq3azFcE3epBwHjl0z4e4u8qSodB2K6JOUUqY=;
+        b=BVFFZwkMJx6n/+y55Y6JYca/YHaSG8C5eNxHcoYaKlVuit5DSyTyIs67tQc2cfgZzv
+         Cp6lo/M6jRlSUc6s18Zm2LCefFx9JQ24CIhoL0lYzYaMz2xwJ3VoUChlTxMvpA4KAzds
+         +b9wzY8b27R1z36gpcAagVK5mxgvFGBbGWvJ3xXYqD/ePOXHHJCRs44xNj1nEAIgJnFB
+         md1ab4D2V14Wz0JPj1NF31mvG18aso6ghyEKhG14E5B3vYJ5Ksk/0CMv4U+oG7nHC/ap
+         fePDOC1QHiYnYaaU0FscSAFejqS+F0FOFsn8QrFmUJanMLQWpknxkP1rfKphuJIJ48/A
+         Fo5g==
+X-Gm-Message-State: APjAAAUFNezw32W9/DuY4XpBz6RUGbGVbgFk2Spov/7vt0jU1CA5okFz
+        CJjZFrlfCDIE3llRAUkb8erFlBFP+DPq8RH7
+X-Google-Smtp-Source: APXvYqwJcWbE90DsufpIchU1RWZDjZYiH/OdYEaqepbyMZK8dYdaYAIDqIiN21SA2dhnlvcWp5RKO708a/U1e0LV
+X-Received: by 2002:ac8:2d7c:: with SMTP id o57mr3149114qta.39.1552679538830;
+ Fri, 15 Mar 2019 12:52:18 -0700 (PDT)
+Date:   Fri, 15 Mar 2019 20:51:35 +0100
 In-Reply-To: <cover.1552679409.git.andreyknvl@google.com>
-Message-Id: <56d3373c1c5007d776fcd5de4523f4b9da341fb6.1552679409.git.andreyknvl@google.com>
+Message-Id: <a5fff68a32941ebce02dbe48f554a76a9c7a36ce.1552679409.git.andreyknvl@google.com>
 Mime-Version: 1.0
 References: <cover.1552679409.git.andreyknvl@google.com>
 X-Mailer: git-send-email 2.21.0.360.g471c308f928-goog
-Subject: [PATCH v11 08/14] net, arm64: untag user pointers in tcp_zerocopy_receive
+Subject: [PATCH v11 11/14] uprobes, arm64: untag user pointers in find_active_uprobe
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will.deacon@arm.com>,
@@ -105,29 +105,30 @@ This patch is a part of a series that extends arm64 kernel ABI to allow to
 pass tagged user pointers (with the top byte set to something else other
 than 0x00) as syscall arguments.
 
-tcp_zerocopy_receive() uses provided user pointers for vma lookups, which
-can only by done with untagged pointers.
+find_active_uprobe() uses provided user pointer (obtained via
+instruction_pointer(regs)) for vma lookups, which can only by done with
+untagged pointers.
 
-Untag user pointers in this function.
+Untag the user pointer in this function.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- net/ipv4/tcp.c | 2 ++
+ kernel/events/uprobes.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 6baa6dc1b13b..89db3b4fc753 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -1758,6 +1758,8 @@ static int tcp_zerocopy_receive(struct sock *sk,
- 	int inq;
- 	int ret;
+diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
+index c5cde87329c7..d3a2716a813a 100644
+--- a/kernel/events/uprobes.c
++++ b/kernel/events/uprobes.c
+@@ -1992,6 +1992,8 @@ static struct uprobe *find_active_uprobe(unsigned long bp_vaddr, int *is_swbp)
+ 	struct uprobe *uprobe = NULL;
+ 	struct vm_area_struct *vma;
  
-+	address = untagged_addr(address);
++	bp_vaddr = untagged_addr(bp_vaddr);
 +
- 	if (address & (PAGE_SIZE - 1) || address != zc->address)
- 		return -EINVAL;
- 
+ 	down_read(&mm->mmap_sem);
+ 	vma = find_vma(mm, bp_vaddr);
+ 	if (vma && vma->vm_start <= bp_vaddr) {
 -- 
 2.21.0.360.g471c308f928-goog
 
