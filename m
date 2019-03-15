@@ -3,61 +3,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5B7AC43381
-	for <bpf@archiver.kernel.org>; Fri, 15 Mar 2019 20:19:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69A07C43381
+	for <bpf@archiver.kernel.org>; Fri, 15 Mar 2019 20:25:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7229A21871
-	for <bpf@archiver.kernel.org>; Fri, 15 Mar 2019 20:19:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 378B0218A1
+	for <bpf@archiver.kernel.org>; Fri, 15 Mar 2019 20:25:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="nTY6LLUY"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="nCZIVT8p"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726661AbfCOUTD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Mar 2019 16:19:03 -0400
-Received: from mail-qk1-f172.google.com ([209.85.222.172]:35881 "EHLO
-        mail-qk1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726303AbfCOUTD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 Mar 2019 16:19:03 -0400
-Received: by mail-qk1-f172.google.com with SMTP id k130so6313497qke.3
-        for <bpf@vger.kernel.org>; Fri, 15 Mar 2019 13:19:02 -0700 (PDT)
+        id S1726292AbfCOUZ3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 Mar 2019 16:25:29 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:46166 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726097AbfCOUZ3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Mar 2019 16:25:29 -0400
+Received: by mail-qk1-f194.google.com with SMTP id i5so6287302qkd.13
+        for <bpf@vger.kernel.org>; Fri, 15 Mar 2019 13:25:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=date:from:to:cc:subject:message-id:in-reply-to:references
          :organization:mime-version:content-transfer-encoding;
-        bh=vNLDsK+ITLhpfAB6mtF9ySzLgKMY3pHfBPREp1xBa/I=;
-        b=nTY6LLUY6Ss4xi+HFpGgTfAAyaxyfwELjx1x25iG42LUXKh7K55P4S2gTla9zIji2m
-         9X3TbMuTMU7kJm/LmZ/l+dsJ1UsWXfS757w7UzMqRT529eAeADoc/rWhleyu5ONlznN6
-         sr7XfrvlW/SuKTey7p7Ch72g8OQ3FCzdWgEzlTcBo4wOy/V8yCFLT6Op+nUFB/0QZaKo
-         O1LaUbSbOWw+ECwEh5salOf2FsiP2HyeaojS4gEqFA/vJj1mu+pLMV8fWrV4+yBzN9yz
-         XCKNNenbfI+quZlDkteFyn6CqzhMFoZBfDxNjXEwETTkxHHDAW6hvNQQVcpPHoFnM0Ew
-         EgkQ==
+        bh=x/KeJ5HiD/0iEPonBBgI4iYyAQk3WhtlAj06JB/Hzx0=;
+        b=nCZIVT8pyBX7UdW4iMU571nrlxxqk7SPxaTvOipr3cP7tUQlPVuUTCxsmLPxhi4N14
+         qLKeJBM6d+HqGnac3yZclFj/4mIjG4JZbYsWYPSxJ1Sg1sWRRagBbv546oxqnSSfb44+
+         CBrUZEyyfwLa7OMvEqfs/xArFKUHBBTKbl4i5Orw27yzedrLs7uT9dQE+aG+w/owBeYq
+         cs77kiUT50gN86jy4rP144J+U4eTPUG/2ZLfUwZtgqdQ1/17+oNJbheHZMez0s8bb/YB
+         lDygEplA0LZykrza88lxUnqgbrKIRm/vOkHASl0HgLiMZ/ZKaTfuwKOlkOHixR0V7eyh
+         hRcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
          :references:organization:mime-version:content-transfer-encoding;
-        bh=vNLDsK+ITLhpfAB6mtF9ySzLgKMY3pHfBPREp1xBa/I=;
-        b=jUpN9ZR4zlrepQEaQF95BDOQH/FH3zgI1t4jGpExRvEUZt0DJz8ZmJ4Ap1kdnszgy7
-         Yi55zC29U8SPvXwRQQSRTztV6i3PzvWR+YHuhpWCf8BKPs7nRISnNPQfiJu/QHURrzlg
-         CaTbdVONDoczFIY7qs2ZUwmcpHpKo9zmb93r55SLQyuWOF7qAFy3nWMxNSxozeTbWbuJ
-         qwQbnDAM+GmJLB1hdYVclCQ8F+BAF3YGKWL4CA1meTaASnRAQicDBMur687w8d50lIbC
-         c/fYt9wSOrye9q4p/c5Y6S0Dlx1Gf4oudKjzy9ikXGKtHFYVuUFs1xBum17q75TcZN6y
-         b3/g==
-X-Gm-Message-State: APjAAAWT5cN8rpXGUBf2wg78qDuzex+B8AiN96dccV/30lCcjPAl6E5c
-        LzTg5sjR9N3JPZ1xtn6lEf76ZVDh87E=
-X-Google-Smtp-Source: APXvYqzY1rTB1OOveOworq4w6imnggaBei/dDYxE7HKZRVmdxy1bije06vWQLMiC/jYTmDjlSgSSVQ==
-X-Received: by 2002:a37:4cc3:: with SMTP id z186mr4325657qka.260.1552681142143;
-        Fri, 15 Mar 2019 13:19:02 -0700 (PDT)
+        bh=x/KeJ5HiD/0iEPonBBgI4iYyAQk3WhtlAj06JB/Hzx0=;
+        b=uDImOoa/INND73LiyZKf+pVa4LAST703D7s8dNjCw1g7n53YYxiwJ2tu7CpzJAxXlV
+         tn2nnhIF8j7JriXlsk9rDQeVqgtGx4VQILl17d2InlE70HO4FnYS1zniVZ3nzgNPoPlw
+         JTGLUco4OswVPj2d7CTyP6qzQeC4HxDRV7Y/z8trXBVMKIwBJEYG4VSnLoi/49dJrKQs
+         566SXHdq2sWOWsDYs/0vB3lG2gq0mvnVKYGuewV9P2oLbs0euE/xvq4IJf/RerMHDns2
+         Fq4MKCLZw4G4+WDbk34E1JSQ/kKJlkRFquZy1sChKLf3UbnNOgIbqeEj7TFhpxdz6Qit
+         irxw==
+X-Gm-Message-State: APjAAAX5JogrKy5vq/Yw9+8XWj+AdGY4/NGShKJZExmYXwqnTK1tOX8i
+        KKcVnMtBmsSF4rOLKjdKViqBaQ==
+X-Google-Smtp-Source: APXvYqy6HyPBNfKWj8NR5ydFNPbDkdvkGpVo8VrhO7RWHl00RGIhUJ67gV61Ejiin7NNqxJxvAcAqQ==
+X-Received: by 2002:a05:620a:1533:: with SMTP id n19mr4308373qkk.241.1552681528086;
+        Fri, 15 Mar 2019 13:25:28 -0700 (PDT)
 Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id h11sm2216650qth.13.2019.03.15.13.19.00
+        by smtp.gmail.com with ESMTPSA id o71sm1998672qka.18.2019.03.15.13.25.26
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 15 Mar 2019 13:19:01 -0700 (PDT)
-Date:   Fri, 15 Mar 2019 13:18:53 -0700
+        Fri, 15 Mar 2019 13:25:27 -0700 (PDT)
+Date:   Fri, 15 Mar 2019 13:25:23 -0700
 From:   Jakub Kicinski <jakub.kicinski@netronome.com>
 To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Quentin Monnet <quentin.monnet@netronome.com>,
+Cc:     Quentin Monnet <quentin.monnet@netronome.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Jiri Olsa <jolsa@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
@@ -68,11 +68,12 @@ Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
         Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
         netdev@vger.kernel.org
 Subject: Re: [PATCH 1/1] bpftool: Allow referring to maps by its name
-Message-ID: <20190315131853.13f45a70@cakuba.netronome.com>
-In-Reply-To: <20190315195142.GB22548@kernel.org>
+Message-ID: <20190315132523.74c69051@cakuba.netronome.com>
+In-Reply-To: <20190315194800.GA22548@kernel.org>
 References: <20190315183211.GB24482@kernel.org>
         <20190315121632.246824dc@cakuba.netronome.com>
-        <20190315195142.GB22548@kernel.org>
+        <9f6fefe5-0b9f-6257-4e84-19759dd72ab4@netronome.com>
+        <20190315194800.GA22548@kernel.org>
 Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -82,32 +83,63 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 15 Mar 2019 16:51:42 -0300, Arnaldo Carvalho de Melo wrote:
-> Em Fri, Mar 15, 2019 at 12:16:32PM -0700, Jakub Kicinski escreveu:
-> > Please do keep the current model of name val, IOW dump map *name* pids..  
+On Fri, 15 Mar 2019 16:48:00 -0300, Arnaldo Carvalho de Melo wrote:
+> Em Fri, Mar 15, 2019 at 07:41:35PM +0000, Quentin Monnet escreveu:
+> > 2019-03-15 12:16 UTC-0700 ~ Jakub Kicinski <jakub.kicinski@netronome.com>  
+> > > On Fri, 15 Mar 2019 15:41:41 -0300, Arnaldo Carvalho de Melo wrote:  
+> > > > While developing 'perf trace' and looking at BPF maps it puts in place I
+> > > > noticed that one needs to first use 'bpftool map' to lookup a map id to
+> > > > then use 'bpftool map dump map id <map-id-looked-up>'.
+> > > > 
+> > > > This is needed because everytime we restart 'perf trace' the map IDs
+> > > > gets changed so we need to do the ID lookup again.
+> > > > 
+> > > > To speed up this sequence, allow specifying just the map name, look up
+> > > > its ID and then use the existing routines as if the user had provided
+> > > > the map id.  
+> > > 
+> > > I can see how it could be useful for quick debug.  Names are not
+> > > guaranteed to be unique, though, do you not care about potential
+> > > duplicates?
+> > >   
+> > 
+> > Jakub beat me to it by a few seconds :). I discussed possible workarounds on
+> > that point with him though, so here are my two cents. I see two options:
+> > first one would be to return the ids of, and then dump info about all maps
+> > having that name. The second one would be to simply return an error if
+> > duplicate names are found.
+> > 
+> > We agreed that returning an error if there are duplicates is probably the
+> > best way to go, because dealing with several maps for anything else than
+> > "bpftool map show" would be problematic (clearly, we don't want to update
+> > all maps with a given name at once). Of course if you have other
+> > suggestions, feel free to propose :).  
 > 
-> I don't have a problem with that, but what would be the problem with
-> supporting both:
+> So, if there are dups, just tell that and print the ids, i.e. the
+> following, for any 'bpf map' command that finds dups, except for this
+> one:
 > 
->   bpftool map dump name pids_filtered
+> [root@quaco ~]# bpftool map list pids_filtered
+> 45: hash  name pids_filtered  flags 0x0
+> 	key 4B  value 1B  max_entries 64  memlock 8192B
+> 90: hash  name pids_filtered  flags 0x0
+> 	key 4B  value 80B  max_entries 512  memlock do-the-mathB
+> [root@quaco ~]#
 > 
-> and:
+> I.e. if there are multiple 'pids_filtered' maps, the output for, say,
+> 'dump' would be:
 > 
->   bpftool map dump pids_filtered
-> 
-> And for that matter, even:
-> 
->   bpftool map dump id 30
-> 
-> And
-> 
->   bpftool map dump 30
-> 
-> Ditto for 'pinned'?
-> 
-> I.e. less typing, the tool can be smart enough to figure out what is
-> that is being asked, i.e. is it a number? Try first it as an 'id', etc.
+> [root@quaco ~]# bpftool map dump pids_filtered
+> There are multiple maps with this name, use 'bpftool map dump id NR' to disambiguate:
+> -------------------------------------------------------------------------------------
+> 45: hash  name pids_filtered  flags 0x0
+> 	key 4B  value 1B  max_entries 64  memlock 8192B
+> 90: hash  name pids_filtered  flags 0x0
+> 	key 4B  value 80B  max_entries 512  memlock do-the-mathB
+> [root@quaco ~]#
 
-It's error prone, we have excellent bash completions and accept
-prefixing (bpftool m d n pids_filtered), so typing should not be 
-a problem.
+Yes, this looks good (modulo JSON output, which should probably be
+just a single "error" value).
+
+For simplicity I'd personally go for just always printing an error
+if name is duplicated and not bother with listing the options.
