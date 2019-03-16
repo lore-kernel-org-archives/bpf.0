@@ -7,53 +7,53 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D0F5C4360F
-	for <bpf@archiver.kernel.org>; Sat, 16 Mar 2019 08:08:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57849C43381
+	for <bpf@archiver.kernel.org>; Sat, 16 Mar 2019 08:08:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CDF43218E0
-	for <bpf@archiver.kernel.org>; Sat, 16 Mar 2019 08:08:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C34A218E0
+	for <bpf@archiver.kernel.org>; Sat, 16 Mar 2019 08:08:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iWAQwMC3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ltr3YEqu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727326AbfCPIHx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 16 Mar 2019 04:07:53 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:41106 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726571AbfCPIHw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 16 Mar 2019 04:07:52 -0400
-Received: by mail-pg1-f196.google.com with SMTP id k11so8000302pgb.8;
-        Sat, 16 Mar 2019 01:07:52 -0700 (PDT)
+        id S1727269AbfCPIHn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 16 Mar 2019 04:07:43 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:41087 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726099AbfCPIHm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 16 Mar 2019 04:07:42 -0400
+Received: by mail-pg1-f195.google.com with SMTP id k11so8000134pgb.8;
+        Sat, 16 Mar 2019 01:07:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Vtohn/46nQHw9sQoNVQFkQ9h5NPZSJ75DEIaxOp29FE=;
-        b=iWAQwMC3Fqa2BrnrYORcgjdyr03m+WxVz5Qb18fDBN5E6PRNwjfUXMsRJH0FSZ2Qof
-         WXxp3Yaht6ZCgUWa4zJhfutGxvcd4z77tntdUMemrnXIEPW/OvdW+cScPf2VQ3+qXF7r
-         6MIQtxI7tEmvYDn6UphmLehwacOjLbxhv3yLOXMUtTEZG5iR9HLkO1bzaneSz4sDweab
-         tB3V+uP7GRHBb2lKXh7sKs+7EG2WG1Y7icpXfXtUd4R/5DO09EKnXD8bDO9+y/7FrFsc
-         Z7K3rJ4L8yVAkRtaRDAo+XdJLfQoMbxXthDFrgCw4sLYKecIymzQEENdfY9zvfsefMJx
-         Bm/w==
+        bh=5EzK4LKKwccTvOLxoyZof2NFG0BikWOy/V1kU66U++U=;
+        b=Ltr3YEquGxDqrP1xQoTaF+iHmOWssG2wCscXaIMUzKMLg1H5qJkk6lKokTmJ3tPLkB
+         Wj3QievKtS6s5m03kFR9B5bmOPSc/dIusskzxgiCB1t3QLCxfmpImSStdKnCsTF2us93
+         c3+8nObdOp8JwnU7QmEh0eNDK1b1eYK7PUZMPPqNqwb55z0C9aoM24Cln4D+UI1lmgiN
+         dBl1+Hdsfo8QQXQqp8eXBZfTTSZ+yRUxiK1+8L9DFSJv42T9gt/oSzeRjvboWskl4ib4
+         p7c2X8hq4nfS2KSkiY0y3gwm5mcTHWtmrxMrTyxPT2vBV5TtsoUvrZ8L/IXtAoMmH0F2
+         XGOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Vtohn/46nQHw9sQoNVQFkQ9h5NPZSJ75DEIaxOp29FE=;
-        b=NbiuLWK15bZVTPJDMwCq6YXSX/7UCHAh5hPsjGLDJTXqpOnVW8KZKaK16+meG5JJly
-         YtPXwr00OTZBMAyDRnmbsNX/bappQzzJUs+y/2cXtqtQpt41RrK5MNaon4QleO2T8isr
-         nJ+8Jl2rffjILREgQfezsZZAzGELCFOXmvQxV9AQ0u+3/iXE7ME0/BpgwfwNdst4Ut5L
-         PlTn2SQmP0DEmHx5AMXZfYkQ197VGh00rgwnKG6CnPJxGHNGlDz8CYJZFgnA6KsPGdgR
-         dtmFEyRz9VzrvwDVumTHQpQYSoDcwb5zDsgZCma+XQv8FxIZZ7ZXnwA6jahjkYL61qNN
-         vPrA==
-X-Gm-Message-State: APjAAAXmB7HGJMvv5bin5nzEiyfi3xuk45noJg6+M8nRwARzUfZLgPnO
-        qF95l7Zd4YdAVdgc/woRsS4=
-X-Google-Smtp-Source: APXvYqzax8GEFrPC20FpUmxvCjN1HosZg5fxVKJVh6RGyABcrMO3QoGHKPNQosvZcOteTBFXR5xXKQ==
-X-Received: by 2002:a17:902:7e0f:: with SMTP id b15mr8271131plm.124.1552723672029;
-        Sat, 16 Mar 2019 01:07:52 -0700 (PDT)
+        bh=5EzK4LKKwccTvOLxoyZof2NFG0BikWOy/V1kU66U++U=;
+        b=uGCxZqGplUq1RExne0fkEmszzhUm29BK2itG62pQfm3na+NC1/Sdt5BzS6u/eavmzf
+         Qb0xAZcIfWJAZVb2xHTtz3NDDOsCf4t+ayhFTwX8bnmNgqrPln8Cj5b4cK2+nAPFQMMC
+         0IDj8f/jJEAbjv+pyb+OC+007vRsobvANJ9yQfbwANCIvMgEVBrQjiafIZ9lo+ePmnsc
+         6wOLAc0HjJ61aPHJFEmNs1OdpuVrXZqtPjvQwtAPbuRDACkSzakmllFP9EpHWyLblNN5
+         wkiPTwt6V79H6fzuhc8hDoArKwn2sAhx6CET/16dM+0hvQVMGz/KPfh7/Gs3j0tss6/h
+         pTFA==
+X-Gm-Message-State: APjAAAUoZYXF2BDmvf6oowK2i+dfw561cK9hoUPRnQ7lFx+Jr4y3TQ1h
+        aPNasziyKrJ22QjsHQSHYmo=
+X-Google-Smtp-Source: APXvYqw7VdmGv3UFGOFrubL8X09kTi6kttLLt38YYZjzD0L2euiPfqqhyNLON2MuLGgsMsuvBZtShg==
+X-Received: by 2002:a65:48c1:: with SMTP id o1mr7269303pgs.94.1552723661940;
+        Sat, 16 Mar 2019 01:07:41 -0700 (PDT)
 Received: from localhost.localdomain ([104.238.181.70])
-        by smtp.gmail.com with ESMTPSA id y14sm10690975pgs.47.2019.03.16.01.07.47
+        by smtp.gmail.com with ESMTPSA id y14sm10690975pgs.47.2019.03.16.01.07.36
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 16 Mar 2019 01:07:51 -0700 (PDT)
+        Sat, 16 Mar 2019 01:07:41 -0700 (PDT)
 From:   Changbin Du <changbin.du@gmail.com>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Jiri Olsa <jolsa@kernel.org>
@@ -63,9 +63,9 @@ Cc:     namhyung@kernel.org, Ingo Molnar <mingo@redhat.com>,
         Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         Changbin Du <changbin.du@gmail.com>
-Subject: [PATCH 15/16] perf: fix memory leak by expr__find_other
-Date:   Sat, 16 Mar 2019 16:05:55 +0800
-Message-Id: <20190316080556.3075-16-changbin.du@gmail.com>
+Subject: [PATCH 13/16] perf: free all counts in perf_evsel__exit
+Date:   Sat, 16 Mar 2019 16:05:53 +0800
+Message-Id: <20190316080556.3075-14-changbin.du@gmail.com>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190316080556.3075-1-changbin.du@gmail.com>
 References: <20190316080556.3075-1-changbin.du@gmail.com>
@@ -76,51 +76,137 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-=================================================================
-==7506==ERROR: LeakSanitizer: detected memory leaks
+Ensure that we have freed all allocated counts for struct perf_evsel.
 
-Direct leak of 13 byte(s) in 3 object(s) allocated from:
-    #0 0x7f03339d6070 in __interceptor_strdup (/usr/lib/x86_64-linux-gnu/libasan.so.5+0x3b070)
-    #1 0x5625e53aaef0 in expr__find_other util/expr.y:221
-    #2 0x5625e51bcd3f in test__expr tests/expr.c:52
-    #3 0x5625e51528e6 in run_test tests/builtin-test.c:358
-    #4 0x5625e5152baf in test_and_print tests/builtin-test.c:388
-    #5 0x5625e51543fe in __cmd_test tests/builtin-test.c:583
-    #6 0x5625e515572f in cmd_test tests/builtin-test.c:722
-    #7 0x5625e51c3fb8 in run_builtin /home/changbin/work/linux/tools/perf/perf.c:302
-    #8 0x5625e51c44f7 in handle_internal_command /home/changbin/work/linux/tools/perf/perf.c:354
-    #9 0x5625e51c48fb in run_argv /home/changbin/work/linux/tools/perf/perf.c:398
-    #10 0x5625e51c5069 in main /home/changbin/work/linux/tools/perf/perf.c:520
-    #11 0x7f033214d09a in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x2409a)
+=================================================================
+==7494==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 48 byte(s) in 1 object(s) allocated from:
+    #0 0x7f0333a89138 in calloc (/usr/lib/x86_64-linux-gnu/libasan.so.5+0xee138)
+    #1 0x5625e5330a5e in zalloc util/util.h:23
+    #2 0x5625e5330a9b in perf_counts__new util/counts.c:10
+    #3 0x5625e5330ca0 in perf_evsel__alloc_counts util/counts.c:47
+    #4 0x5625e520d8e5 in __perf_evsel__read_on_cpu util/evsel.c:1505
+    #5 0x5625e517a985 in perf_evsel__read_on_cpu /home/work/linux/tools/perf/util/evsel.h:347
+    #6 0x5625e517ad1a in test__openat_syscall_event tests/openat-syscall.c:47
+    #7 0x5625e51528e6 in run_test tests/builtin-test.c:358
+    #8 0x5625e5152baf in test_and_print tests/builtin-test.c:388
+    #9 0x5625e51543fe in __cmd_test tests/builtin-test.c:583
+    #10 0x5625e515572f in cmd_test tests/builtin-test.c:722
+    #11 0x5625e51c3fb8 in run_builtin /home/changbin/work/linux/tools/perf/perf.c:302
+    #12 0x5625e51c44f7 in handle_internal_command /home/changbin/work/linux/tools/perf/perf.c:354
+    #13 0x5625e51c48fb in run_argv /home/changbin/work/linux/tools/perf/perf.c:398
+    #14 0x5625e51c5069 in main /home/changbin/work/linux/tools/perf/perf.c:520
+    #15 0x7f033214d09a in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x2409a)
+
+Indirect leak of 72 byte(s) in 1 object(s) allocated from:
+    #0 0x7f0333a89138 in calloc (/usr/lib/x86_64-linux-gnu/libasan.so.5+0xee138)
+    #1 0x5625e532560d in zalloc util/util.h:23
+    #2 0x5625e532566b in xyarray__new util/xyarray.c:10
+    #3 0x5625e5330aba in perf_counts__new util/counts.c:15
+    #4 0x5625e5330ca0 in perf_evsel__alloc_counts util/counts.c:47
+    #5 0x5625e520d8e5 in __perf_evsel__read_on_cpu util/evsel.c:1505
+    #6 0x5625e517a985 in perf_evsel__read_on_cpu /home/work/linux/tools/perf/util/evsel.h:347
+    #7 0x5625e517ad1a in test__openat_syscall_event tests/openat-syscall.c:47
+    #8 0x5625e51528e6 in run_test tests/builtin-test.c:358
+    #9 0x5625e5152baf in test_and_print tests/builtin-test.c:388
+    #10 0x5625e51543fe in __cmd_test tests/builtin-test.c:583
+    #11 0x5625e515572f in cmd_test tests/builtin-test.c:722
+    #12 0x5625e51c3fb8 in run_builtin /home/changbin/work/linux/tools/perf/perf.c:302
+    #13 0x5625e51c44f7 in handle_internal_command /home/changbin/work/linux/tools/perf/perf.c:354
+    #14 0x5625e51c48fb in run_argv /home/changbin/work/linux/tools/perf/perf.c:398
+    #15 0x5625e51c5069 in main /home/changbin/work/linux/tools/perf/perf.c:520
+    #16 0x7f033214d09a in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x2409a)
 
 Signed-off-by: Changbin Du <changbin.du@gmail.com>
 ---
- tools/perf/tests/expr.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ tools/perf/util/counts.c | 18 ++++++++++++++++++
+ tools/perf/util/counts.h |  4 ++++
+ tools/perf/util/evsel.c  |  2 ++
+ tools/perf/util/stat.c   | 18 ------------------
+ 4 files changed, 24 insertions(+), 18 deletions(-)
 
-diff --git a/tools/perf/tests/expr.c b/tools/perf/tests/expr.c
-index 01f0706995a9..9acc1e80b936 100644
---- a/tools/perf/tests/expr.c
-+++ b/tools/perf/tests/expr.c
-@@ -19,7 +19,7 @@ int test__expr(struct test *t __maybe_unused, int subtest __maybe_unused)
- 	const char *p;
- 	const char **other;
- 	double val;
--	int ret;
-+	int i, ret;
- 	struct parse_ctx ctx;
- 	int num_other;
- 
-@@ -56,6 +56,9 @@ int test__expr(struct test *t __maybe_unused, int subtest __maybe_unused)
- 	TEST_ASSERT_VAL("find other", !strcmp(other[1], "BAZ"));
- 	TEST_ASSERT_VAL("find other", !strcmp(other[2], "BOZO"));
- 	TEST_ASSERT_VAL("find other", other[3] == NULL);
+diff --git a/tools/perf/util/counts.c b/tools/perf/util/counts.c
+index 03032b410c29..c5715d08b1f9 100644
+--- a/tools/perf/util/counts.c
++++ b/tools/perf/util/counts.c
+@@ -53,3 +53,21 @@ void perf_evsel__free_counts(struct perf_evsel *evsel)
+ 	perf_counts__delete(evsel->counts);
+ 	evsel->counts = NULL;
+ }
 +
-+	for (i = 0; i < num_other; i++)
-+		free((void *)other[i]);
- 	free((void *)other);
++int perf_evsel__alloc_prev_raw_counts(struct perf_evsel *evsel,
++				      int ncpus, int nthreads)
++{
++	struct perf_counts *counts;
++
++	counts = perf_counts__new(ncpus, nthreads);
++	if (counts)
++		evsel->prev_raw_counts = counts;
++
++	return counts ? 0 : -ENOMEM;
++}
++
++void perf_evsel__free_prev_raw_counts(struct perf_evsel *evsel)
++{
++	perf_counts__delete(evsel->prev_raw_counts);
++	evsel->prev_raw_counts = NULL;
++}
+diff --git a/tools/perf/util/counts.h b/tools/perf/util/counts.h
+index 0d1050ccc586..b8bdbff586bb 100644
+--- a/tools/perf/util/counts.h
++++ b/tools/perf/util/counts.h
+@@ -36,4 +36,8 @@ void perf_evsel__reset_counts(struct perf_evsel *evsel);
+ int perf_evsel__alloc_counts(struct perf_evsel *evsel, int ncpus, int nthreads);
+ void perf_evsel__free_counts(struct perf_evsel *evsel);
  
- 	return 0;
++int perf_evsel__alloc_prev_raw_counts(struct perf_evsel *evsel,
++				      int ncpus, int nthreads);
++void perf_evsel__free_prev_raw_counts(struct perf_evsel *evsel);
++
+ #endif /* __PERF_COUNTS_H */
+diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+index 3bbf73e979c0..8e0fbe34e5d9 100644
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -1294,6 +1294,8 @@ void perf_evsel__exit(struct perf_evsel *evsel)
+ 	assert(evsel->evlist == NULL);
+ 	perf_evsel__free_fd(evsel);
+ 	perf_evsel__free_id(evsel);
++	perf_evsel__free_counts(evsel);
++	perf_evsel__free_prev_raw_counts(evsel);
+ 	perf_evsel__free_config_terms(evsel);
+ 	cgroup__put(evsel->cgrp);
+ 	cpu_map__put(evsel->cpus);
+diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
+index 4d40515307b8..6a22842f76d2 100644
+--- a/tools/perf/util/stat.c
++++ b/tools/perf/util/stat.c
+@@ -136,24 +136,6 @@ static void perf_evsel__free_stat_priv(struct perf_evsel *evsel)
+ 	zfree(&evsel->stats);
+ }
+ 
+-static int perf_evsel__alloc_prev_raw_counts(struct perf_evsel *evsel,
+-					     int ncpus, int nthreads)
+-{
+-	struct perf_counts *counts;
+-
+-	counts = perf_counts__new(ncpus, nthreads);
+-	if (counts)
+-		evsel->prev_raw_counts = counts;
+-
+-	return counts ? 0 : -ENOMEM;
+-}
+-
+-static void perf_evsel__free_prev_raw_counts(struct perf_evsel *evsel)
+-{
+-	perf_counts__delete(evsel->prev_raw_counts);
+-	evsel->prev_raw_counts = NULL;
+-}
+-
+ static int perf_evsel__alloc_stats(struct perf_evsel *evsel, bool alloc_raw)
+ {
+ 	int ncpus = perf_evsel__nr_cpus(evsel);
 -- 
 2.19.1
 
