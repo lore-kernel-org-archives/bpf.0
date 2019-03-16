@@ -5,55 +5,55 @@ X-Spam-Level:
 X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FBF8C10F03
-	for <bpf@archiver.kernel.org>; Sat, 16 Mar 2019 08:06:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35412C43381
+	for <bpf@archiver.kernel.org>; Sat, 16 Mar 2019 08:07:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2F0FD21900
-	for <bpf@archiver.kernel.org>; Sat, 16 Mar 2019 08:06:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 05BED218E0
+	for <bpf@archiver.kernel.org>; Sat, 16 Mar 2019 08:07:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C5zBP7eP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LOCRn9zr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726767AbfCPIGg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 16 Mar 2019 04:06:36 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:43920 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725940AbfCPIGf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 16 Mar 2019 04:06:35 -0400
-Received: by mail-pg1-f195.google.com with SMTP id l11so7997599pgq.10;
-        Sat, 16 Mar 2019 01:06:35 -0700 (PDT)
+        id S1726465AbfCPIHs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 16 Mar 2019 04:07:48 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:45506 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726571AbfCPIHs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 16 Mar 2019 04:07:48 -0400
+Received: by mail-pf1-f193.google.com with SMTP id v21so7896120pfm.12;
+        Sat, 16 Mar 2019 01:07:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XgzEfOgCr8vqVuMIo/FFofdpmPOyzi7oCw3Jm8x3KtE=;
-        b=C5zBP7ePwtlYPJqO1Jk5YeMrp4ENlY5Z6BUTygKhVD74gGV2valvOaJcUBGcU9AjM0
-         /oE7r79Kq8bZ3mo7BrmlHDwEr3gQflh3zhwexu51xOQNFJulJbEgp4KQ/Kp1Ep5LaGWw
-         vht+JsOWRDXzKV190ypLU3pNaBW/zMGJfR3x5cDPxcdtr3sw081/uEc81Ntk1xs6Gjda
-         vw3usQBhq/cbWaxRCU3BQ2IvEpLsrCLDo+dzN5bcr1vbggnrgeMroeOBU+FXdnI0jQf2
-         SrOyY0bzdKzNFuRkECN/WfxPny6B/dkKMpBcrHXMXNgZaFGVetwsWfH/yWjcildr2DOi
-         +6iw==
+        bh=/6kM+Os+wJtP1DJ/zgE7532AFUvRcG1Y3Esg+ydUASo=;
+        b=LOCRn9zrjNJRcS0KAoxAtB+WPNeCe+4CHTyT6vWhoKQDAwbgtWP/xMCwe5mIZ7NRs8
+         rlo74l+zt4Yx3EH1Kj5Iv9seK23IgOjIS6eoTINTHDks5OM1fQ8djDhfP7zKLDxfFK1M
+         DTujwhYkXyh2K+BDDJGOQkfkyc03PtGEdRYEJEIExjEurm6mcD5AlmQB77r0YE5JwLw4
+         Kb2x01F4DpRAJ2vuMXdEWMxcKfQlV0e0li8/BXqHB6Eddfu/Ngz4aUcwKEPY3KqSCZ50
+         8oai9alUcIYMhrp5cJdmQDRgDAIgW7LR6qUH7MbWorzuxzWprZapV7XD+rJM7oE1R+u4
+         7oUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XgzEfOgCr8vqVuMIo/FFofdpmPOyzi7oCw3Jm8x3KtE=;
-        b=uRkUzyIAwb7f3XVBCdQz+fpsk150W81W1s29Gxyihg8s16ZWmq8mG06dVLCjbQmltU
-         2K+sAYF90vkE1qmNfvzgzTl9vHwk2jwoDJSZK4WdutnssxB8vb3zBAMYDPgDQ30VEU6F
-         HEkFPtJU38wpRg/myf7aplSmiThEo/gd+MkTHwjwgxtqJbUVrskXJAdNIa915oSHolGf
-         p2eMfI/hOX1DwyB6ZpWsTqh67IJW6jiArvBQget/rQ5Zd/NHqnqgdaMvNJWjoQJoIS/2
-         MkxLGCQH/RMucFUWcmmRsXBjoECyxUViWgP7u9P9eOPAd5nZN2VPQdPXfYpvBuqPVGtY
-         xD6w==
-X-Gm-Message-State: APjAAAWlPtJQEzS8iely/0KKHvYefLlu+0+Ub68LvpU5Tn2u/6ZjBnsQ
-        m1vA/8FlgwBUG/IViFvDvx4=
-X-Google-Smtp-Source: APXvYqy/CEmclWXHp+N1rdEw50IJ1fiLXRHH0nrAHL9D+2lKTWPi89qW73qG2DRmIaiWqXRbGrRR0Q==
-X-Received: by 2002:a63:35ce:: with SMTP id c197mr7430635pga.281.1552723594985;
-        Sat, 16 Mar 2019 01:06:34 -0700 (PDT)
+        bh=/6kM+Os+wJtP1DJ/zgE7532AFUvRcG1Y3Esg+ydUASo=;
+        b=cKx6LP0j5xmcyLRMjdd+IXvNQtPyzEwHbH6+P6Rb3NYhQ7SWzIGoMPQFw3m3A3arK3
+         nrseGE8czsAD9lAIOXFwcMxabIJg86oHKpJTjm1tYGBVD3JGEcaddaXX3amG7yBIVn5m
+         Gv/4ClPPll7fCG5mATcZ4pNl8eMH6DEZy7EcNePsiW705CW/uMe5g3s/WzGJOdgy3pno
+         gWk1gTQuebEq2wQd1/Lc37reU3kbC6PIES7HV9sM+DhH3GZoH2K1hElb891yDX1h+Hsu
+         V4xOinBOAeL99JIRSuszjUcUxEDqIP5Sm1i+yo8H+9USxaQxTH4vFvm7bI49XV8efK0v
+         wlNA==
+X-Gm-Message-State: APjAAAUfWILYW3eU7J0Cxxm+fkatz42i073lPlxzBeR0NHjGIKy6s6MK
+        FRMjugfbtcWsQ4h/yyee7p0=
+X-Google-Smtp-Source: APXvYqz4ofDhfvwOHwHwDpG5JK1/H2LO3jl9noDAtvER3jacQN4525MBaQCb3gpNEgzhIMFgr34/8A==
+X-Received: by 2002:a62:f201:: with SMTP id m1mr8292435pfh.97.1552723667095;
+        Sat, 16 Mar 2019 01:07:47 -0700 (PDT)
 Received: from localhost.localdomain ([104.238.181.70])
-        by smtp.gmail.com with ESMTPSA id y14sm10690975pgs.47.2019.03.16.01.06.29
+        by smtp.gmail.com with ESMTPSA id y14sm10690975pgs.47.2019.03.16.01.07.42
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 16 Mar 2019 01:06:34 -0700 (PDT)
+        Sat, 16 Mar 2019 01:07:46 -0700 (PDT)
 From:   Changbin Du <changbin.du@gmail.com>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Jiri Olsa <jolsa@kernel.org>
@@ -63,9 +63,9 @@ Cc:     namhyung@kernel.org, Ingo Molnar <mingo@redhat.com>,
         Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         Changbin Du <changbin.du@gmail.com>
-Subject: [PATCH 02/16] perf: list: fix memory leak in function is_event_supported
-Date:   Sat, 16 Mar 2019 16:05:42 +0800
-Message-Id: <20190316080556.3075-3-changbin.du@gmail.com>
+Subject: [PATCH 14/16] perf: fix a memory leak of cpu_map object
+Date:   Sat, 16 Mar 2019 16:05:54 +0800
+Message-Id: <20190316080556.3075-15-changbin.du@gmail.com>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190316080556.3075-1-changbin.du@gmail.com>
 References: <20190316080556.3075-1-changbin.du@gmail.com>
@@ -76,39 +76,53 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Don't forget to put the allocated thread_map.
+=================================================================
+==7497==ERROR: LeakSanitizer: detected memory leaks
 
-Direct leak of 2048 byte(s) in 64 object(s) allocated from:
-  6     #0 0x7f606512e370 in __interceptor_realloc (/usr/lib/x86_64-linux-gnu/libasan.so.5+0xee370)
-  7     #1 0x556b0f1d7ddd in thread_map__realloc util/thread_map.c:43
-  8     #2 0x556b0f1d84c7 in thread_map__new_by_tid util/thread_map.c:85
-  9     #3 0x556b0f0e045e in is_event_supported util/parse-events.c:2250
- 10     #4 0x556b0f0e1aa1 in print_hwcache_events util/parse-events.c:2382
- 11     #5 0x556b0f0e3231 in print_events util/parse-events.c:2514
- 12     #6 0x556b0ee0a66e in cmd_list /home/changbin/work/linux/tools/perf/builtin-list.c:58
- 13     #7 0x556b0f01e0ae in run_builtin /home/changbin/work/linux/tools/perf/perf.c:302
- 14     #8 0x556b0f01e859 in handle_internal_command /home/changbin/work/linux/tools/perf/perf.c:354
- 15     #9 0x556b0f01edc8 in run_argv /home/changbin/work/linux/tools/perf/perf.c:398
- 16     #10 0x556b0f01f71f in main /home/changbin/work/linux/tools/perf/perf.c:520
- 17     #11 0x7f6062ccf09a in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x2409a)
+Direct leak of 40 byte(s) in 1 object(s) allocated from:
+    #0 0x7f0333a88f30 in __interceptor_malloc (/usr/lib/x86_64-linux-gnu/libasan.so.5+0xedf30)
+    #1 0x5625e5326213 in cpu_map__trim_new util/cpumap.c:45
+    #2 0x5625e5326703 in cpu_map__read util/cpumap.c:103
+    #3 0x5625e53267ef in cpu_map__read_all_cpu_map util/cpumap.c:120
+    #4 0x5625e5326915 in cpu_map__new util/cpumap.c:135
+    #5 0x5625e517b355 in test__openat_syscall_event_on_all_cpus tests/openat-syscall-all-cpus.c:36
+    #6 0x5625e51528e6 in run_test tests/builtin-test.c:358
+    #7 0x5625e5152baf in test_and_print tests/builtin-test.c:388
+    #8 0x5625e51543fe in __cmd_test tests/builtin-test.c:583
+    #9 0x5625e515572f in cmd_test tests/builtin-test.c:722
+    #10 0x5625e51c3fb8 in run_builtin /home/changbin/work/linux/tools/perf/perf.c:302
+    #11 0x5625e51c44f7 in handle_internal_command /home/changbin/work/linux/tools/perf/perf.c:354
+    #12 0x5625e51c48fb in run_argv /home/changbin/work/linux/tools/perf/perf.c:398
+    #13 0x5625e51c5069 in main /home/changbin/work/linux/tools/perf/perf.c:520
+    #14 0x7f033214d09a in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x2409a)
 
 Signed-off-by: Changbin Du <changbin.du@gmail.com>
 ---
- tools/perf/util/parse-events.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/perf/tests/openat-syscall-all-cpus.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index 4dcc01b2532c..2e9035c4c252 100644
---- a/tools/perf/util/parse-events.c
-+++ b/tools/perf/util/parse-events.c
-@@ -2271,6 +2271,7 @@ static bool is_event_supported(u8 type, unsigned config)
- 		perf_evsel__delete(evsel);
+diff --git a/tools/perf/tests/openat-syscall-all-cpus.c b/tools/perf/tests/openat-syscall-all-cpus.c
+index c531e6deb104..493ecb611540 100644
+--- a/tools/perf/tests/openat-syscall-all-cpus.c
++++ b/tools/perf/tests/openat-syscall-all-cpus.c
+@@ -45,7 +45,7 @@ int test__openat_syscall_event_on_all_cpus(struct test *test __maybe_unused, int
+ 	if (IS_ERR(evsel)) {
+ 		tracing_path__strerror_open_tp(errno, errbuf, sizeof(errbuf), "syscalls", "sys_enter_openat");
+ 		pr_debug("%s\n", errbuf);
+-		goto out_thread_map_delete;
++		goto out_cpu_map_delete;
  	}
  
-+	thread_map__put(tmap);
- 	return ret;
- }
- 
+ 	if (perf_evsel__open(evsel, cpus, threads) < 0) {
+@@ -119,6 +119,8 @@ int test__openat_syscall_event_on_all_cpus(struct test *test __maybe_unused, int
+ 	perf_evsel__close_fd(evsel);
+ out_evsel_delete:
+ 	perf_evsel__delete(evsel);
++out_cpu_map_delete:
++	cpu_map__put(cpus);
+ out_thread_map_delete:
+ 	thread_map__put(threads);
+ 	return err;
 -- 
 2.19.1
 
