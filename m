@@ -1,112 +1,84 @@
-Return-Path: <SRS0=GcXc=RS=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=MJ0i=RT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D390C43381
-	for <bpf@archiver.kernel.org>; Fri, 15 Mar 2019 22:05:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FC23C43381
+	for <bpf@archiver.kernel.org>; Sat, 16 Mar 2019 00:31:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0BB28218D0
-	for <bpf@archiver.kernel.org>; Fri, 15 Mar 2019 22:05:56 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="ISb8iLfa"
+	by mail.kernel.org (Postfix) with ESMTP id 3F934218AC
+	for <bpf@archiver.kernel.org>; Sat, 16 Mar 2019 00:31:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727047AbfCOWF4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Mar 2019 18:05:56 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:36319 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726774AbfCOWF4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 Mar 2019 18:05:56 -0400
-Received: by mail-pf1-f195.google.com with SMTP id p10so429744pff.3
-        for <bpf@vger.kernel.org>; Fri, 15 Mar 2019 15:05:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=tZR3NvyvgI9FAd6NHSH76G6CMuZEuWEAU0R2dPeChg4=;
-        b=ISb8iLfa8FTnI885XEbGnSRWKny4r0Nn4JMF0T7kKBzWQ1rjJX9npj78erz3SO3uSD
-         oFmi9NF/9Jaxn0Bqw7lbP3rCWgOef++DEiY1rXTMHfS1DsaEQXEuVj377C0nH6gh+2s7
-         eDe6/laL3VispluO9nMQnkdCeJATO5+0QvJFWpMqeoinfyHLmTPxV0W46fcpfRyFl57r
-         PCkz1SjCa5812ZGfynTsIp32bILwIv6Owj2b9oTKuU6QCy77kgK79Zc/LiZMEgHKneCm
-         Mb/4Lw8X4szAg8C3nfAAO1pG5bM8HnG1Bs3OO+/rEclUki45hDf25aSN/TV/UFlATtcj
-         UISw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=tZR3NvyvgI9FAd6NHSH76G6CMuZEuWEAU0R2dPeChg4=;
-        b=odVuM02TvQCQmk3yX3rsrrGrkhGWh2V7+PNaYjEWrYoppSUZL7MCYYo3l+k6vereun
-         dacFbuiu5GiyzqaF4e8BQDqwBz8cUDP9GVLLsdy4HucqYDJWKufZpPLIzl52/jzCiSxL
-         ITfG+NeRfuzhs3ZTE5MojHkz8m0mGx/ibh2S2ysvsyJEtUqT5sLjOxDOQh7m3BYf0RXs
-         EHz0udYtRpBKgRlUIkJ90GrTYiFJMijotJY8uyNHVeNS9FVaJ8onGMHu6p4p7cwXsTAq
-         qLaJ2BgbBx/RlSjpTo+PD7LfKbL3pUg/QvOhoHucetMxfsWvW+ydbKsCqufN4Pd05VRc
-         4RZQ==
-X-Gm-Message-State: APjAAAWcElEEtwlsRVug3LiGOfZlhEQ/ErxH++30Sw0h3LTwHrFjorLR
-        342UmSgfIJMligWEsJVGgEn+RCdwR68=
-X-Google-Smtp-Source: APXvYqxtiVG38E4EKOUGJRR/kirQR3IXXnGELJWrHcdgCVK7SHRG7c0SB2xVpo8Tkum9Akl1tPICwA==
-X-Received: by 2002:a65:6554:: with SMTP id a20mr5632137pgw.170.1552687555620;
-        Fri, 15 Mar 2019 15:05:55 -0700 (PDT)
-Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
-        by smtp.gmail.com with ESMTPSA id q86sm8761255pfi.171.2019.03.15.15.05.54
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 15 Mar 2019 15:05:54 -0700 (PDT)
-Date:   Fri, 15 Mar 2019 15:05:54 -0700
-From:   Stanislav Fomichev <sdf@fomichev.me>
-To:     Ivan Vecera <ivecera@redhat.com>
-Cc:     netdev@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:BPF (Safe dynamic programs and tools)" 
-        <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next] selftests: bpf: modify urandom_read and link it
- non-statically
-Message-ID: <20190315220554.GA7431@mini-arch.hsd1.ca.comcast.net>
-References: <20190315200414.32346-1-ivecera@redhat.com>
- <20190315200847.GC5481@mini-arch.hsd1.ca.comcast.net>
- <2dcdc11c-4d04-4b0e-ddb7-04d969d04651@redhat.com>
- <20190315205652.GD5481@mini-arch.hsd1.ca.comcast.net>
- <1595006055.9467881.1552686646726.JavaMail.zimbra@redhat.com>
+        id S1726513AbfCPAbT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 Mar 2019 20:31:19 -0400
+Received: from www62.your-server.de ([213.133.104.62]:38266 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726444AbfCPAbT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Mar 2019 20:31:19 -0400
+Received: from [78.46.172.3] (helo=sslproxy06.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1h4xDu-00077H-6y; Sat, 16 Mar 2019 01:30:50 +0100
+Received: from [178.197.248.24] (helo=linux.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1h4xDu-000VZ9-0t; Sat, 16 Mar 2019 01:30:50 +0100
+Subject: Re: [PATCH] powerpc: bpf: Fix generation of load/store DW
+ instructions
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+References: <20190315145119.2776-1-naveen.n.rao@linux.vnet.ibm.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <acd52bd9-eef1-fd0b-f81d-83b653535839@iogearbox.net>
+Date:   Sat, 16 Mar 2019 01:30:49 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1595006055.9467881.1552686646726.JavaMail.zimbra@redhat.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <20190315145119.2776-1-naveen.n.rao@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.2/25389/Fri Mar 15 08:52:25 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 03/15, Ivan Vecera wrote:
+On 03/15/2019 03:51 PM, Naveen N. Rao wrote:
+> Yauheni Kaliuta pointed out that PTR_TO_STACK store/load verifier test
+> was failing on powerpc64 BE, and rightfully indicated that the PPC_LD()
+> macro is not masking away the last two bits of the offset per the ISA,
+> resulting in the generation of 'lwa' instruction instead of the intended
+> 'ld' instruction.
 > 
-> ----- Stanislav Fomichev <sdf@fomichev.me> wrote:
-> > On 03/15, Ivan Vecera wrote:
-> > > On 15. 03. 19 21:08, Stanislav Fomichev wrote:
-> > > > On 03/15, Ivan Vecera wrote:
-> > > > > After some experiences I found that urandom_read does not need to be
-> > > > > linked statically. When the 'read' syscall call is moved to separate
-> > > > > non-inlined function then bpf_get_stackid() is able to find
-> > > > > the executable in stack trace and extract its build_id from it.
-> > > > But why? Do you have some problems with it being linked statically?
-> > > > 
-> > > Dependency... you don't need to install static glibc to compile the bpf
-> > > samples. Shared libc is available everytime.
-> > Oh, the distros that do -devel _and_ -static packages :-)
-> > 
-> > So your patch essentially adds a call, that leaves a trace on the stack
-> > with our build-id. I guess that works as well.
+> Segher also pointed out that we can't simply mask away the last two bits
+> as that will result in loading/storing from/to a memory location that
+> was not intended.
 > 
-> Without that additional call this does not work and build_id selftest fails.
-Oh, yeah, I was just trying to clarify why it fails without -static and why
-your patch makes it work for non-static :-)
-You can put more details in the commit message; you'd have to resubmit
-whenever net-next/bpf-next opens anyway.
+> This patch addresses this by using ldx/stdx if the offset is not
+> word-aligned. We load the offset into a temporary register (TMP_REG_2)
+> and use that as the index register in a subsequent ldx/stdx. We fix
+> PPC_LD() macro to mask off the last two bits, but enhance PPC_BPF_LL()
+> and PPC_BPF_STL() to factor in the offset value and generate the proper
+> instruction sequence. We also convert all existing users of PPC_LD() and
+> PPC_STD() to use these macros. All existing uses of these macros have
+> been audited to ensure that TMP_REG_2 can be clobbered.
+> 
+> Fixes: 156d0e290e96 ("powerpc/ebpf/jit: Implement JIT compiler for extended BPF")
+> Cc: stable@vger.kernel.org # v4.9+
+> 
+> Reported-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
 
-> 
-> I.
+Applied, thanks!
