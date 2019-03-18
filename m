@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-14.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_IN_DEF_DKIM_WL
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A6FEC43381
-	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 16:54:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C52A6C43381
+	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 16:59:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5A29E2133F
-	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 16:54:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A79F20863
+	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 16:59:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qL2sbyGF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PM9OGKhX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727244AbfCRQyI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Mar 2019 12:54:08 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:38671 "EHLO
+        id S1727793AbfCRQ7R (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Mar 2019 12:59:17 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:40614 "EHLO
         mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726777AbfCRQyI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Mar 2019 12:54:08 -0400
-Received: by mail-pf1-f195.google.com with SMTP id n125so11656986pfn.5
-        for <bpf@vger.kernel.org>; Mon, 18 Mar 2019 09:54:07 -0700 (PDT)
+        with ESMTP id S1727089AbfCRQ7Q (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Mar 2019 12:59:16 -0400
+Received: by mail-pf1-f195.google.com with SMTP id c207so2675953pfc.7
+        for <bpf@vger.kernel.org>; Mon, 18 Mar 2019 09:59:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=oTTTDsmzZRxE0P4UD+1ikNPbtlS4Dyc6/3yBg27ixDQ=;
-        b=qL2sbyGFEclrtQPUA6LVmMhwOgE9ZrDgMW6Yf0szQXcjCN8uVFclD6Agav2oG/HaIH
-         tt+Y2mHDCoddFKSu8Zy4+3UpfZZ7SmbEpgE0cwANONzfIFjpTwwIM+e92N9XMSRRWHoH
-         PxF+RlzsqmGVQHybjhaImaimN17+872PGPB3vCwmBpKws2yHzSmXHY74ILhBEtFUAPZC
-         ZvI5cWjIE/Xp9Y+h7052jpM79vanjEebGQOinpddGY5fyw7tCnhdUPSnrMHlG9O0r3NS
-         7j+QGp+4xtUxFT/lBj7jefQ9mZPAHUuw6v1QjZFT5Vjqdwgm4b+IedSWlUu5f+FbiQK2
-         9n2w==
+        bh=1qSGcK0R5KM+dkjWC/kauJx8/g6gKZLlVh+46+vQTpk=;
+        b=PM9OGKhXVFOScoA0U0eJfjlATm68hBokDH3xW76dl2UrhKuLtWfcahYPG5tZzJpWHy
+         qPRj7SaRW915MTLp3nmMfjCTbwM9k49VLoIXbp7+HUtgJEDn41oJRmFHkmNkl0nGtUoV
+         uL6n5VvrW/nx/l25G3MiK/Y64jrg/oh9SDiXRheAs6X+GRPwJ/gs16ooPLZIU4YLCmlF
+         cuz29jZ/UPZ9B4rkBDhhfIYLxO4XIPmsS9g8nQNx0IIiabynJxMZ0OMey+jIZbTbZxlh
+         G7oAucvMP+3PhykgPsXecAODKhmrvPM7d48t1eWOqIDKXZrebPqEJ53C0aOsLnrMiwEC
+         GWyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=oTTTDsmzZRxE0P4UD+1ikNPbtlS4Dyc6/3yBg27ixDQ=;
-        b=lCE0aKbOj8ZbMe4k9JyitlzMmrydC1UHhQ9R/nilhuEeHfGFIt2i4IZrJxDw1awxmR
-         KO64Dxq0GKBpUhXirkR7O+H1H24bRXoUyXZHKJLFvJyyhLRMDp7E2c0SEHw3FKNH867H
-         Ig3KUZiS3vfoc+fszo3tfJ/oztXs8hx1QwDyvE+L0fbiFhoO0wgHMcihj05doQPF3PBl
-         eo3mAPYA52frYJWaDjMUKTb5dECJV2uAfU3Jice6QcuPa6BIIq8GOQkG5Pid8a3C+hJ/
-         5Q2O7EG92REnHQUgK9c2owP4gGa3i63rG0IqEFPztu1ylmhrKI2dgnguIVQGv2V/eS/K
-         KtDQ==
-X-Gm-Message-State: APjAAAVUDy+3q0IJ3AS+F36H8CY0FziCvPxgl3wLpxXcOAjTvdCfiNms
-        Qt7+I/ZZ3/oCC9Mkt47U29d7s/SRDXhQwuWpYZpMTw==
-X-Google-Smtp-Source: APXvYqwtoSENSqe0flkUh8DZSgYEqtIQ0XKdJGpbQGPZjtv967mBGLrNb/wGEHW2f3Co8+OtTDYgx1PZKLh949N1HIQ=
-X-Received: by 2002:a17:902:d24:: with SMTP id 33mr13090976plu.246.1552928047514;
- Mon, 18 Mar 2019 09:54:07 -0700 (PDT)
+        bh=1qSGcK0R5KM+dkjWC/kauJx8/g6gKZLlVh+46+vQTpk=;
+        b=j2D6hwHRmi+1T+WRDJO3wXvrQ3iTt8dSq7N+OyzpIsf7EzaFbfep1Bpcskbia/CMVG
+         8V/MbXiH1Wd5q66TBzusCT0njc/cxxfNpI5AEHrzYKkSCRvY+6mytzUcEyXiLhSgDlOB
+         hmiK9eqGjHgOW8NcW6JoX0tuJ0Ho/SFpXzMF0LWDU5MShR/nBSx8G/2tLA64vP39AOox
+         slfk9n1Ri0bMCkZq/twmxVkzTE12vwYguvu6DzN0y2/UqoLgNVMtDIXbiVFOURE4lIPb
+         agOsekBCjkSLp4h1V8oer30+9nuf2tQLHG0B+Ai4FxHEXJly7n6kAbebQ/hjM93lp9YR
+         eiaQ==
+X-Gm-Message-State: APjAAAUNZfBUSAWTnbJ2WOhc1Wb1IHOk3HRaIEQdZv7OxRkOxu0dArcU
+        7oQjuXF+JZ7jeuTtpZ3jcH27JPRCDoqnfN8CsWtKrw==
+X-Google-Smtp-Source: APXvYqw/WB6apBZfCC4Z3gtQWYzVAj6LMOzybqti6+WMrkpj4eKj2bUipEWmGt4Rw1lWbJw06V7FSeVN09pOsBX0P44=
+X-Received: by 2002:a17:902:8203:: with SMTP id x3mr20736629pln.159.1552928355544;
+ Mon, 18 Mar 2019 09:59:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1552679409.git.andreyknvl@google.com> <c4d65de9867cb3349af6800242da0de751260c6c.1552679409.git.andreyknvl@google.com>
- <96675b72-d325-0682-4864-b6a96f63f8fd@arm.com>
-In-Reply-To: <96675b72-d325-0682-4864-b6a96f63f8fd@arm.com>
+References: <cover.1552679409.git.andreyknvl@google.com> <bf0abceeaf32e6b9cdbc9dde45cc5966b5747ec4.1552679409.git.andreyknvl@google.com>
+ <81bc3110-b638-4545-1270-26baec3d59e7@arm.com>
+In-Reply-To: <81bc3110-b638-4545-1270-26baec3d59e7@arm.com>
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 18 Mar 2019 17:53:56 +0100
-Message-ID: <CAAeHK+wwpDX5pc2P++7noGU0b8qWWYVP5=O5Vr5Fqm6NRQJmFA@mail.gmail.com>
-Subject: Re: [PATCH v11 09/14] kernel, arm64: untag user pointers in prctl_set_mm*
+Date:   Mon, 18 Mar 2019 17:59:04 +0100
+Message-ID: <CAAeHK+yrAPOyuEyLCygrwQxCztb8P-9BBj-6RP6=iG-GGBkkQw@mail.gmail.com>
+Subject: Re: [PATCH v11 13/14] arm64: update Documentation/arm64/tagged-pointers.txt
 To:     Kevin Brodsky <kevin.brodsky@arm.com>
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will.deacon@arm.com>,
@@ -104,70 +104,69 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 18, 2019 at 12:47 PM Kevin Brodsky <kevin.brodsky@arm.com> wrote:
+On Mon, Mar 18, 2019 at 2:26 PM Kevin Brodsky <kevin.brodsky@arm.com> wrote:
 >
 > On 15/03/2019 19:51, Andrey Konovalov wrote:
 > > This patch is a part of a series that extends arm64 kernel ABI to allow to
 > > pass tagged user pointers (with the top byte set to something else other
 > > than 0x00) as syscall arguments.
 > >
-> > prctl_set_mm() and prctl_set_mm_map() use provided user pointers for vma
-> > lookups, which can only by done with untagged pointers.
-> >
-> > Untag user pointers in these functions.
+> > Document the ABI changes in Documentation/arm64/tagged-pointers.txt.
 > >
 > > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 > > ---
-> >   kernel/sys.c | 14 ++++++++++++++
-> >   1 file changed, 14 insertions(+)
+> >   Documentation/arm64/tagged-pointers.txt | 18 ++++++++----------
+> >   1 file changed, 8 insertions(+), 10 deletions(-)
 > >
-> > diff --git a/kernel/sys.c b/kernel/sys.c
-> > index 12df0e5434b8..8e56d87cc6db 100644
-> > --- a/kernel/sys.c
-> > +++ b/kernel/sys.c
-> > @@ -1993,6 +1993,18 @@ static int prctl_set_mm_map(int opt, const void __user *addr, unsigned long data
-> >       if (copy_from_user(&prctl_map, addr, sizeof(prctl_map)))
-> >               return -EFAULT;
+> > diff --git a/Documentation/arm64/tagged-pointers.txt b/Documentation/arm64/tagged-pointers.txt
+> > index a25a99e82bb1..07fdddeacad0 100644
+> > --- a/Documentation/arm64/tagged-pointers.txt
+> > +++ b/Documentation/arm64/tagged-pointers.txt
+> > @@ -17,13 +17,15 @@ this byte for application use.
+> >   Passing tagged addresses to the kernel
+> >   --------------------------------------
 > >
-> > +     prctl_map->start_code   = untagged_addr(prctl_map.start_code);
-> > +     prctl_map->end_code     = untagged_addr(prctl_map.end_code);
-> > +     prctl_map->start_data   = untagged_addr(prctl_map.start_data);
-> > +     prctl_map->end_data     = untagged_addr(prctl_map.end_data);
-> > +     prctl_map->start_brk    = untagged_addr(prctl_map.start_brk);
-> > +     prctl_map->brk          = untagged_addr(prctl_map.brk);
-> > +     prctl_map->start_stack  = untagged_addr(prctl_map.start_stack);
-> > +     prctl_map->arg_start    = untagged_addr(prctl_map.arg_start);
-> > +     prctl_map->arg_end      = untagged_addr(prctl_map.arg_end);
-> > +     prctl_map->env_start    = untagged_addr(prctl_map.env_start);
-> > +     prctl_map->env_end      = untagged_addr(prctl_map.env_end);
->
-> As the buildbot suggests, those -> should be . instead :) You might want to check
-> your local build with CONFIG_CHECKPOINT_RESTORE=y.
-
-Oops :)
-
->
-> > +
-> >       error = validate_prctl_map(&prctl_map);
-> >       if (error)
-> >               return error;
-> > @@ -2106,6 +2118,8 @@ static int prctl_set_mm(int opt, unsigned long addr,
-> >                             opt != PR_SET_MM_MAP_SIZE)))
-> >               return -EINVAL;
+> > -All interpretation of userspace memory addresses by the kernel assumes
+> > -an address tag of 0x00.
+> > +The kernel supports tags in pointer arguments (including pointers in
+> > +structures) of syscalls, however such pointers must point to memory ranges
+> > +obtained by anonymous mmap() or brk().
 > >
-> > +     addr = untagged_addr(addr);
+> > -This includes, but is not limited to, addresses found in:
+> > +The kernel supports tags in user fault addresses. However the fault_address
+> > +field in the sigcontext struct will contain an untagged address.
+> >
+> > - - pointer arguments to system calls, including pointers in structures
+> > -   passed to system calls,
+> > +All other interpretations of userspace memory addresses by the kernel
+> > +assume an address tag of 0x00, in particular:
+> >
+> >    - the stack pointer (sp), e.g. when interpreting it to deliver a
+> >      signal,
+> > @@ -33,11 +35,7 @@ This includes, but is not limited to, addresses found in:
+> >
+> >   Using non-zero address tags in any of these locations may result in an
+> >   error code being returned, a (fatal) signal being raised, or other modes
+> > -of failure.
+> > -
+> > -For these reasons, passing non-zero address tags to the kernel via
+> > -system calls is forbidden, and using a non-zero address tag for sp is
+> > -strongly discouraged.
+> > +of failure. Using a non-zero address tag for sp is strongly discouraged.
 >
-> This is a bit too coarse, addr is indeed used for find_vma() later on, but it is also
-> used to access memory, by prctl_set_mm_mmap() and prctl_set_auxv().
+> I don't understand why we should keep such a limitation. For MTE, tagging SP is
+> something we are definitely considering. This does bother userspace software in some
+> rare cases, but I'm not sure in what way it bothers the kernel.
 
-Yes, I wrote this patch before our Friday discussion and forgot about
-it. I'll fix it in v12, thanks!
+I don't mind allowing tagged sp as well, but it seems that it's
+another ABI relaxation that needs to be handled separately. I'm not
+sure if we want to include that into this patchset, which is supposed
+to allow tagged pointers to be passed to syscalls.
 
 >
 > Kevin
 >
-> > +
-> >   #ifdef CONFIG_CHECKPOINT_RESTORE
-> >       if (opt == PR_SET_MM_MAP || opt == PR_SET_MM_MAP_SIZE)
-> >               return prctl_set_mm_map(opt, (const void __user *)addr, arg4);
+> >
+> >   Programs maintaining a frame pointer and frame records that use non-zero
+> >   address tags may suffer impaired or inaccurate debug and profiling
 >
