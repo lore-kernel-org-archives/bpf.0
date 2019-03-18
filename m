@@ -7,56 +7,56 @@ X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25120C43381
-	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 17:19:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2343C10F00
+	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 17:19:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EC1BF20863
-	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 17:19:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 74C3820863
+	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 17:19:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZmesG1+v"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YkzThGw7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726959AbfCRRTR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Mar 2019 13:19:17 -0400
-Received: from mail-qk1-f201.google.com ([209.85.222.201]:53003 "EHLO
-        mail-qk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727912AbfCRRSI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Mar 2019 13:18:08 -0400
-Received: by mail-qk1-f201.google.com with SMTP id k21so15301786qkg.19
-        for <bpf@vger.kernel.org>; Mon, 18 Mar 2019 10:18:08 -0700 (PDT)
+        id S1727883AbfCRRSG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Mar 2019 13:18:06 -0400
+Received: from mail-qk1-f202.google.com ([209.85.222.202]:34873 "EHLO
+        mail-qk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727868AbfCRRSF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Mar 2019 13:18:05 -0400
+Received: by mail-qk1-f202.google.com with SMTP id t13so15350988qkm.2
+        for <bpf@vger.kernel.org>; Mon, 18 Mar 2019 10:18:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=/AfMcWXUpr8qOV9jNlH+KOvJdLIB2O2rWZvj+eGhaHk=;
-        b=ZmesG1+vdfvVJVysloZ/DvNyAHwl1NeoVDeZqmznyOpJWfePQRGjlMOaVKfDpQrgzs
-         J2EQbjkMYChUC5zNqacIMsL4hIDlSJ8LlP4Fmv1sBUKWq1gONhy9n6WlIdgh6miGrDT+
-         kxO+pObNRxAVLj1qO6umMp4FBt4KoE0pcjnUi2zV7lJYuNIAUHoun/OybTmy1PNaA5yQ
-         p3eG+Dhv94MxYowpcID5/Yi84v5cik+7L0zhfsc+N+0vCh3BkkQf0oPyRfu2qOWqEfLW
-         2tCSF4/OHp/EYgkB0s7TOad99Oui2rlmLjv/5KNArBSNE7FFiFH/+uNURIDaDJj0/jzV
-         BjkQ==
+        bh=LfpjTjIWpAUqgBuBr+ROlRDq3TWjVWHbA3wqyLv7Gqg=;
+        b=YkzThGw7U5bxwuGivZfG7gXjy3sbFeGI9LQQNwpjKesMWYXA6dWvmlyTVIDVds3jdT
+         99Hv46CfyNGepDjQmBrGdjnE8DmIFRJxBJqNXjHLIWC7+99xjXgyacIB4V4zSxrfGRS1
+         gCdVGS/MQBILBUagjA0XfHFo8FDflJm4SJEr94PsmlNdR79rNuZTcqAgPDOmgM2h8uU1
+         X27jM72pTPp4w4jfVrzQIbmq9wd3O59csXywpy8yafGddFfq57LOwhbAfJSUMg2BvGCJ
+         ay4PGD3jH0Ph4L+WAj6gW2ezv9U1Ktw+Hx+TJhzvpdvgFTaZaxSZHrZdwWAc4E0uG5zJ
+         mTGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=/AfMcWXUpr8qOV9jNlH+KOvJdLIB2O2rWZvj+eGhaHk=;
-        b=lLs1qKp8vFwk0esG0jJP8/vyzMRbDfX+jvNraYyUl67YZ3Sw7dW+AOJpDQxo+l9MiK
-         gPePAMRN68F8xRggWMPedL+/TFZ2UOALUA5ZWaJW27++XMY1pZLgxFLPgYg4v95IpY5c
-         C7D78FXLXpt9kRQPx9+IIrLqOnnAsuT7ayx6Q6PGM9cpwdAZfKn9A9AijCeFkRyivNn/
-         f3G3jClEGfVRo+oNtcAUHi+Ew5ZUGURA1eISbg+WdwZZza3Y8SrBMLXNoXKyspQ+5s9Y
-         aHI5y18GPgChcE0s85jja3mXbujeDEUFtIaLjC7Cnl27vCaLkGDGkujLGfIYk+S0jIg4
-         75gA==
-X-Gm-Message-State: APjAAAXaDCyILECwx7IrnfFKXPDvmwtF+JsuxKZygYH1tPkRRFxmKXed
-        pjsGYVtNCriEklWONBQ+jDTcwRhMBRf7TqfV
-X-Google-Smtp-Source: APXvYqzQcEeEWS2cRarzaICPGg9P+n5KYCEBV6zZ1LX2+H91hhlcnbntbKdJigMJk6uOOiOh4IgPE1iT+lDz1l6o
-X-Received: by 2002:ac8:2733:: with SMTP id g48mr11081110qtg.0.1552929487390;
- Mon, 18 Mar 2019 10:18:07 -0700 (PDT)
-Date:   Mon, 18 Mar 2019 18:17:38 +0100
+        bh=LfpjTjIWpAUqgBuBr+ROlRDq3TWjVWHbA3wqyLv7Gqg=;
+        b=B0FXXJOs7jRzxgKrmhSjSnLDqgbHcdthSMT4xrm6An0tIHRe405K/p71N0MMP0qhrJ
+         yJI7Lao7cCEa+ulN6qbykWOepZRmKlUmGlzL1ykplwY5tI6UeTbhL431LrFN/tKSmCux
+         MGW3s7m3WDoK4s390szdk9RBkEv3zljpGm/382sbY9O34FHdvhwFGiPISInxTk+ZU5EO
+         LvE9bYjPtW7gqSrJdIjD+0upuPQaB20lRUD8299QWewZ/96tlPGtICdgSrk0Dr58kDfU
+         Sg1+O2h4GUd2xVtyMtV01Q2k5CyqjCIbCdgExeqruaGR1F5tMNEsY/Ycogg/pQ8C6trR
+         KoAg==
+X-Gm-Message-State: APjAAAX54licYiC8cvg0NT6l7ixmb9jzdrOVClTM503JZZZhj29NqAOP
+        7queruqHrDS5qEDw5gb+vFr05du3y7IF5oKv
+X-Google-Smtp-Source: APXvYqwvaFpE6Rrk389WuFNgjhFYIoDJPXDJycXik4soUJpzaOpECOFFeWGr/7DmdYgwI9v4deSBDrsPhVpuummk
+X-Received: by 2002:aed:3a42:: with SMTP id n60mr10517091qte.62.1552929484433;
+ Mon, 18 Mar 2019 10:18:04 -0700 (PDT)
+Date:   Mon, 18 Mar 2019 18:17:37 +0100
 In-Reply-To: <cover.1552929301.git.andreyknvl@google.com>
-Message-Id: <e12d6b5008f63b530d25ad73b2e3491939005c22.1552929301.git.andreyknvl@google.com>
+Message-Id: <f46caf7bea6bdbb7e50f2abedc83df13d075735c.1552929301.git.andreyknvl@google.com>
 Mime-Version: 1.0
 References: <cover.1552929301.git.andreyknvl@google.com>
 X-Mailer: git-send-email 2.21.0.225.g810b269d1ac-goog
-Subject: [PATCH v12 06/13] fs, arm64: untag user pointers in copy_mount_options
+Subject: [PATCH v12 05/13] mm, arm64: untag user pointers in mm/gup.c
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will.deacon@arm.com>,
@@ -105,31 +105,39 @@ This patch is a part of a series that extends arm64 kernel ABI to allow to
 pass tagged user pointers (with the top byte set to something else other
 than 0x00) as syscall arguments.
 
-In copy_mount_options a user address is being subtracted from TASK_SIZE.
-If the address is lower than TASK_SIZE, the size is calculated to not
-allow the exact_copy_from_user() call to cross TASK_SIZE boundary.
-However if the address is tagged, then the size will be calculated
-incorrectly.
+mm/gup.c provides a kernel interface that accepts user addresses and
+manipulates user pages directly (for example get_user_pages, that is used
+by the futex syscall). Since a user can provided tagged addresses, we need
+to handle this case.
 
-Untag the address before subtracting.
+Add untagging to gup.c functions that use user addresses for vma lookups.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- fs/namespace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/gup.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/fs/namespace.c b/fs/namespace.c
-index c9cab307fa77..c27e5713bf04 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -2825,7 +2825,7 @@ void *copy_mount_options(const void __user * data)
- 	 * the remainder of the page.
- 	 */
- 	/* copy_from_user cannot cross TASK_SIZE ! */
--	size = TASK_SIZE - (unsigned long)data;
-+	size = TASK_SIZE - (unsigned long)untagged_addr(data);
- 	if (size > PAGE_SIZE)
- 		size = PAGE_SIZE;
+diff --git a/mm/gup.c b/mm/gup.c
+index f84e22685aaa..3192741e0b3a 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -686,6 +686,8 @@ static long __get_user_pages(struct task_struct *tsk, struct mm_struct *mm,
+ 	if (!nr_pages)
+ 		return 0;
+ 
++	start = untagged_addr(start);
++
+ 	VM_BUG_ON(!!pages != !!(gup_flags & FOLL_GET));
+ 
+ 	/*
+@@ -848,6 +850,8 @@ int fixup_user_fault(struct task_struct *tsk, struct mm_struct *mm,
+ 	struct vm_area_struct *vma;
+ 	vm_fault_t ret, major = 0;
+ 
++	address = untagged_addr(address);
++
+ 	if (unlocked)
+ 		fault_flags |= FAULT_FLAG_ALLOW_RETRY;
  
 -- 
 2.21.0.225.g810b269d1ac-goog
