@@ -2,143 +2,144 @@ Return-Path: <SRS0=JidB=RV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_MUTT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8D20C43381
-	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 20:08:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD504C10F00
+	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 22:55:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 98F5C20872
-	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 20:08:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7B4EB20989
+	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 22:55:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nhLGJfu9"
+	dkim=pass (2048-bit key) header.d=umn.edu header.i=@umn.edu header.b="IKdnQoG7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727174AbfCRUIU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Mar 2019 16:08:20 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:45545 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726728AbfCRUIT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Mar 2019 16:08:19 -0400
-Received: by mail-qt1-f195.google.com with SMTP id v20so19510374qtv.12;
-        Mon, 18 Mar 2019 13:08:19 -0700 (PDT)
+        id S1727000AbfCRWzW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Mar 2019 18:55:22 -0400
+Received: from mta-p6.oit.umn.edu ([134.84.196.206]:52282 "EHLO
+        mta-p6.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727127AbfCRWzQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Mar 2019 18:55:16 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p6.oit.umn.edu (Postfix) with ESMTP id 52225B38
+        for <bpf@vger.kernel.org>; Mon, 18 Mar 2019 22:55:15 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p6.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p6.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id BAcAeeQnw7Ee for <bpf@vger.kernel.org>;
+        Mon, 18 Mar 2019 17:55:15 -0500 (CDT)
+Received: from mail-it1-f200.google.com (mail-it1-f200.google.com [209.85.166.200])
+        (using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p6.oit.umn.edu (Postfix) with ESMTPS id 0FC8AB3B
+        for <bpf@vger.kernel.org>; Mon, 18 Mar 2019 17:55:15 -0500 (CDT)
+Received: by mail-it1-f200.google.com with SMTP id 190so15906590itl.7
+        for <bpf@vger.kernel.org>; Mon, 18 Mar 2019 15:55:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Ia36LD3bZfC9hmzTwGqx9+Mb5Jx8fVZmBcI2d4uY9ak=;
-        b=nhLGJfu9eZ4gjz2WMb4+0foBcVZdyJ5Bv29AhHJFGyUZAmImQ1IHW4g0pltxtDJKdM
-         ZEF15hshXGoDiStzbHRFiACbNyYHdSKQ0Jg2H+NmH8MYCyteVh5UMlb2GF2SScnuXKto
-         iNKzQ2CeRBH6K+S9bQfZ62koPSvUR2N5gdpTZicX/0PzZnRxpDu1CcLzF0+7Lb/voIKP
-         PDhdjVwEQZ32kKJFAUm8Mp9gZXsE3xxEL1AmLJ/Uaas0Y+z1IuHgl5Y4BLgAUkvZjgDo
-         TNCDqqeWH94kvfCvrFtu9AtCDosO93DwasOAccmoo9E4JNl2WlPMnOS+QBTD1/8qXlwP
-         pTPA==
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=ekgEiSdzFq4TTcMvB4m0KnKmaQJ4Bt4kfyIC02uEVFE=;
+        b=IKdnQoG783bjQDMPkChNhU+904HcFtJY8kRv5M/NTbdsRypmK2Ha3Dfg3Fa4YB4ivA
+         rtJKB9uVZSyNrPxOOau+pynu2nWK2lNxBlAqoL5tilzmZZki2RcPLyg//oOA/fXqiUFC
+         hTk6H9PAZoIVyQRdzgt+SQAFdLI2AwaVCGoaLw3bDb051k/zc9TXxGv8vola2Ivi6B5e
+         GLn06PkDXZ/hz5Jk+Q4LuMTdJQQQtirp8iBy19EKJKJGLxzvxZR7jwT5/wbv/KbQi59W
+         16IQeXYtCCrhrol6iYDJts1x+S1BUg562BfLP1km01j48USerurH7efwVqA6fW83PYH6
+         nwsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Ia36LD3bZfC9hmzTwGqx9+Mb5Jx8fVZmBcI2d4uY9ak=;
-        b=lT9iXfAEHeAqjCXpl/scy2S+scRvOJ70ikXJkI1a0tAA4GtLgI76/2S6EnOzOgLBz3
-         SzPT+X7I3ZiiDBREuB/FmBipnvk7qusvQissGpeshUDbsmCz5i07h1hUu7U+WwXnUjvQ
-         9YR4XSnRIS9uLbOqUBQ0gPG7hFbQRec8tAdlG2nzNn5DoXv7++87eqdQGTsdOC9gFedd
-         FFnqTBg7fwkVDuRNBu8ZdnlwU5z3+ceWy+SojSHSYYwNIlSm+0g3wPLy40PPUlsX19FK
-         a3ZZzh+eLWBLagGK4UuhBJuJ3PeFQ8h2HPqIrpMNABK5RPRfYsA7J+gqS6xvFSTS2vjP
-         8V9Q==
-X-Gm-Message-State: APjAAAUYeW2tZKCKdGUuzE6xToOJ9JELUMDTkMGHPgRoLimICkirYsBm
-        gswykvL2TFFVstSxKImPpEfuMjAY
-X-Google-Smtp-Source: APXvYqyosVeAPBmJFMhEAsr7+U2jMcwAFl/u4TpGwWiqIW6oQzDtKy+JMlZrLVCxC9jBHtpgZLp2WQ==
-X-Received: by 2002:a0c:89a3:: with SMTP id 32mr2570162qvr.116.1552939698655;
-        Mon, 18 Mar 2019 13:08:18 -0700 (PDT)
-Received: from quaco.ghostprotocols.net ([2804:1b1:210a:504f:5027:31fa:e70e:3668])
-        by smtp.gmail.com with ESMTPSA id i65sm15067250qki.32.2019.03.18.13.08.17
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 18 Mar 2019 13:08:17 -0700 (PDT)
-From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id BD8FA4039C; Mon, 18 Mar 2019 17:08:14 -0300 (-03)
-Date:   Mon, 18 Mar 2019 17:08:14 -0300
-To:     Changbin Du <changbin.du@gmail.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        namhyung@kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexei Starovoitov <ast@kernel.org>, rostedt@goodmis.org,
-        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 01/16] perf: add doc for how to build perf with Asan and
- UBSan
-Message-ID: <20190318200814.GD3967@kernel.org>
-References: <20190316080556.3075-1-changbin.du@gmail.com>
- <20190316080556.3075-2-changbin.du@gmail.com>
- <20190318100758.GA28556@krava>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190318100758.GA28556@krava>
-X-Url:  http://acmel.wordpress.com
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=ekgEiSdzFq4TTcMvB4m0KnKmaQJ4Bt4kfyIC02uEVFE=;
+        b=e3tMWCdSD4+YEBwUyacb3CgTLW1WODoWHNKm0QrEs6Y+i4T2kKRn4wKk7SWzDuKB0h
+         dCclme5eWcLs7jBxzFjw6O3rF84Sz9PVALrw4Req+QZPaqmz8aNjmMzjgqC9Ct57ufSe
+         BKZkE5e+0Ep5bcKbV/8ZCN7FTO5tTbsv0v8vUulCh0QkZLUe/B23s1GhHZGwkaXe2iQ0
+         2/g8jbqLm4RzS6A2eSVytWosPGM99RY8CvPJyEk63Q6IqvffCoL/2mVo74upCqmDJXTz
+         Vmv+0h05PIbC2s9iHNnM6klkLuSap3kquPvrUHafcGV/1Qf1W0Yl0d0Q6YKXRO8s+8H2
+         Wx4g==
+X-Gm-Message-State: APjAAAU1cWM6CxS/7+g13AAAISL/1xdyvXTfTPPf6SaHqCEGdZixGl56
+        kUEuUKj8WuC6u5OA5KsqZmwv+ACwDJByGdpQOPIcCMQZdPcjfyRnI6sxbzkF3trucZ4b4hJRBNf
+        40E9TZY3xn9v4nwJw
+X-Received: by 2002:a05:660c:2ca:: with SMTP id j10mr825122itd.151.1552949714623;
+        Mon, 18 Mar 2019 15:55:14 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqx1cC/KD1WTqoDDUMD3Ij2/KGLEj/VcgMi062V38Pod0ZpngskU1Qbco3YesIwR1VV7jNdo0g==
+X-Received: by 2002:a05:660c:2ca:: with SMTP id j10mr825100itd.151.1552949714026;
+        Mon, 18 Mar 2019 15:55:14 -0700 (PDT)
+Received: from lenovo-1.hsd1.mn.comcast.net (c-73-242-25-233.hsd1.mn.comcast.net. [73.242.25.233])
+        by smtp.googlemail.com with ESMTPSA id y3sm403420itb.2.2019.03.18.15.55.12
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 18 Mar 2019 15:55:13 -0700 (PDT)
+From:   Aditya Pakki <pakki001@umn.edu>
+To:     pakki001@umn.edu
+Cc:     kjlu@umn.edu, Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        xdp-newbies@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH] thunderbolt: xdomain: Fix to check return value of kmemdup
+Date:   Mon, 18 Mar 2019 17:55:08 -0500
+Message-Id: <20190318225508.7886-1-pakki001@umn.edu>
+X-Mailer: git-send-email 2.17.1
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Mon, Mar 18, 2019 at 11:07:58AM +0100, Jiri Olsa escreveu:
-> On Sat, Mar 16, 2019 at 04:05:41PM +0800, Changbin Du wrote:
-> > AddressSanitizer (or ASan) and UndefinedBehaviorSanitizer (or UBSan) are
-> > very useful tools to detect program bugs.
-> >  o AddressSanitizer (or ASan) is a GCC feature that detects memory
-> >    corruption bugs such as buffer overflows or memory leaks.
-> >  o UndefinedBehaviorSanitizer (or UBSan) is a fast undefined behavior
-> >    detector supprted by GCC. UBSan detect undefined behavior of programs
-> >    at runtime.
-> > 
-> > This patch adds doc for how to use them on perf. Later patches will fix
-> > some of the issues disclosed by them.
-> > 
-> > Signed-off-by: Changbin Du <changbin.du@gmail.com>
-> > ---
-> >  tools/perf/Documentation/Build.txt | 20 ++++++++++++++++++++
-> >  1 file changed, 20 insertions(+)
-> > 
-> > diff --git a/tools/perf/Documentation/Build.txt b/tools/perf/Documentation/Build.txt
-> > index f6fc6507ba55..cae6e1d9b901 100644
-> > --- a/tools/perf/Documentation/Build.txt
-> > +++ b/tools/perf/Documentation/Build.txt
-> > @@ -47,3 +47,23 @@ Those objects are then used in final linking:
-> >  
-> >  NOTE this description is omitting other libraries involved, only
-> >       focusing on build framework outcomes
-> 
-> thanks for adding doc, one nit:
-> 
-> > +
-> > +3) buld and install perf
-> 
-> there's already:
->  2) perf build
->  =============
-> 
-> please use something like 
-> 
->  3) perf build for ASan/UBSan
->  ============================
-> 
-> > +  $ cd tools/perf
-> > +  $ make DESTDIR=/usr
-> > +  $ make DESTDIR=/usr install
-> > +
-> > +4) build with ASan or UBSan
-> 
-> no need for this label
+kmemdup can fail and return a NULL pointer. The patch modifies the
+signature of tb_xdp_schedule_request and passes the failure error upstream.
 
-Did this and appart from the evsel->counts one that I fixed up, all
-applied as-is, I added all the Fixes: tags, please consider doing it
-next time.
+Signed-off-by: Aditya Pakki <pakki001@umn.edu>
+---
+ drivers/thunderbolt/xdomain.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-Please take a look after I push it to my perf/core branch.
+diff --git a/drivers/thunderbolt/xdomain.c b/drivers/thunderbolt/xdomain.c
+index e27dd8beb94b..b0e9cc30d708 100644
+--- a/drivers/thunderbolt/xdomain.c
++++ b/drivers/thunderbolt/xdomain.c
+@@ -526,7 +526,7 @@ static void tb_xdp_handle_request(struct work_struct *work)
+ 	kfree(xw);
+ }
+ 
+-static void
++static bool
+ tb_xdp_schedule_request(struct tb *tb, const struct tb_xdp_header *hdr,
+ 			size_t size)
+ {
+@@ -534,13 +534,16 @@ tb_xdp_schedule_request(struct tb *tb, const struct tb_xdp_header *hdr,
+ 
+ 	xw = kmalloc(sizeof(*xw), GFP_KERNEL);
+ 	if (!xw)
+-		return;
++		return false;
+ 
+ 	INIT_WORK(&xw->work, tb_xdp_handle_request);
+ 	xw->pkg = kmemdup(hdr, size, GFP_KERNEL);
++	if (!xw->pkg)
++		return false;
+ 	xw->tb = tb;
+ 
+ 	queue_work(tb->wq, &xw->work);
++	return true;
+ }
+ 
+ /**
+@@ -1417,8 +1420,7 @@ bool tb_xdomain_handle_request(struct tb *tb, enum tb_cfg_pkg_type type,
+ 	 */
+ 	if (uuid_equal(&hdr->uuid, &tb_xdp_uuid)) {
+ 		if (type == TB_CFG_PKG_XDOMAIN_REQ) {
+-			tb_xdp_schedule_request(tb, hdr, size);
+-			return true;
++			return tb_xdp_schedule_request(tb, hdr, size);
+ 		}
+ 		return false;
+ 	}
+-- 
+2.17.1
 
-Thanks,
-
-- Arnaldo
