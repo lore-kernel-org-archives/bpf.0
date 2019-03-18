@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-14.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_IN_DEF_DKIM_WL
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C705C43381
-	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 13:12:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5FDBC4360F
+	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 13:14:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3FB0A20863
-	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 13:12:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A736720857
+	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 13:14:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="P3PdHQt7"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oBTjxWG0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726763AbfCRNMB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Mar 2019 09:12:01 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:32816 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725973AbfCRNMB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Mar 2019 09:12:01 -0400
-Received: by mail-pg1-f195.google.com with SMTP id i7so8141658pgq.0
-        for <bpf@vger.kernel.org>; Mon, 18 Mar 2019 06:12:01 -0700 (PDT)
+        id S1727649AbfCRNOp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Mar 2019 09:14:45 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:43406 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727378AbfCRNOo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Mar 2019 09:14:44 -0400
+Received: by mail-pf1-f195.google.com with SMTP id c8so4582994pfd.10
+        for <bpf@vger.kernel.org>; Mon, 18 Mar 2019 06:14:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=epSZyqBe4Y/OKKkFIQZrTHU48PlN6fQS/KXlKAwvNCI=;
-        b=P3PdHQt7xFqZZ3OrRYOWBumt+a10yvZZMe1ahnZ2OGcnXfGyJJFIc2Nb8lvZ1eqff4
-         2Pf3/a37IMdsjTJvg8yZIdYlXXtA+u9R1nUXlnqxgvTcan5dBu3bKAFJ12vFUq8LYM69
-         rXxz45yqcaFS2CRPQ3W1ojfgDx8Sa0oilfDVLK6Yxc/nGYKhB1oOWK505pPCwQSxpwaR
-         EFKBroNNEWD6Oe94kwuZEJMakVgDICxInMsHhkEnvuZnJUNaYMUcJsseebsl58Kr62PY
-         r4/L9fjQ615HRjni091pU8NN0zsXcHSGyGGzPKRhhr27ZgOiVu1plt9p95gldYBxHQdQ
-         /jIA==
+        bh=1ivs9Ld1Cr5PW6vV2Rbbcl0Dzr7SZ2d3KOy8/STfF8A=;
+        b=oBTjxWG0FPo2AisxixE5yc78gPUfLiKvFgiqW/PaDdUDoiy6wl4lIVi3A/mTKnJ0Mi
+         zUOLSVZxC9hW893jS8ZhWErR02LcQZuEwaUehFiokdS3EeaxD01M//0i5N97fYoJ13hs
+         4G3IljxWh8BwJgGict+arC31MtC27jws/hHnyABdKhWEEiDGh7NKhLigUonEO6+KOlSL
+         3USQUM4iKqMTMbn2g6Ah+RFkp4aYcCJZ4BS8w7iWOrUqVYcWexIjpGAtdd3efZdlcCUO
+         p7CFeinhJ6NC8l+UdkOHPfrLASSKPleS1Ys2ekWEuevSk7fjYkyy2ScgbpNBmFCOUU6H
+         I79A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=epSZyqBe4Y/OKKkFIQZrTHU48PlN6fQS/KXlKAwvNCI=;
-        b=kvOBzT7Puwe3QQ4IxwXhP+kPtAqjjx1uA29Bl/pSh3V71Zgq0gpZcywi8/tADR6Sla
-         YaHVXm/c/CL9EDaVx9GcTAd8lGJegVfBpRju/XCYAoL5pRoaH4FWdPIgeGVUBlZBnaR8
-         2eTZ3t9iXXH7Vozkopav/3Px46XUKnkMY/gUswbSFNRt+Yt+kBGdO4Y4/tlS3Fvr0+7a
-         /Eju9BCNYneVQ8IS2yS5slALaO+8G57cFXW6+ZdllTmczF3gb/q2LktmCJDBV0DB7Wfv
-         sU3bp1khjv8c10OSkVJRwA/UPH2NkzwbvxHIQ9YgBymblAkyd7Is0j635bX7z/hz7NKX
-         2Hyg==
-X-Gm-Message-State: APjAAAVd3gg04hBIQVrQsblenTwfGSHQgIA58JJwB4yghW5lTT6pnute
-        t9i0CXi3ATkjlWCo0TRq47/usfnz7UHvmacIK71SLg==
-X-Google-Smtp-Source: APXvYqxkDF5fYpEH3Vs9ly9eilzCAQ4eFXUJCbCmr4F2nw4zNTdJM2I6GFk4D2mim2UUO7TV8sZWRVg+GwdnMP3xaNA=
-X-Received: by 2002:a65:6651:: with SMTP id z17mr16746057pgv.95.1552914720458;
- Mon, 18 Mar 2019 06:12:00 -0700 (PDT)
+        bh=1ivs9Ld1Cr5PW6vV2Rbbcl0Dzr7SZ2d3KOy8/STfF8A=;
+        b=beTUhsim1x63D+DB+YgGWoKx6gBPKt58SUJH8hVGhEIRKgjRexpg0fZ8CFx6FjynhU
+         NHNu7L7smoIhgoPOLzgQj3dFW3DQO01dWohnqie9k/3k1uF7HT3K5R/KMI1IylW6JV0R
+         PPqlcmueroxDi9uEPzePgeQRECE6zRVcZoAmOjK+KMZ0Bjzbn1wVqs54EgZLElPgG9tv
+         WNAKf0W7iwZPY2eLpEs0N36z7Lj7s8913FyD8azlyQE9tKc6VGxkYIBu+TZnmStXWNab
+         LUul+49qziDhi+1TAJzbldY7D7v0OQS2EGbQ76B5dIHrGmOZsSh6zlhGqVBseOgYvaRm
+         Pjzw==
+X-Gm-Message-State: APjAAAXmTCdTvJ6ArNXfEcWec13Besr9S7Qrg3osOXfI+KI47nqDnSyf
+        +XnatlnJES8XpTmiYlD72ZLP+bX2EvzUv2BHscq1lA==
+X-Google-Smtp-Source: APXvYqzzaA64U7KtW5o2Iu/H+zw+3YlvxqyrHvqmN+ESRE331EC2V1D1mVi9n99A6ltAqp+SQeSIw+RkaEm4xazCMNc=
+X-Received: by 2002:a63:68c9:: with SMTP id d192mr18023180pgc.264.1552914883949;
+ Mon, 18 Mar 2019 06:14:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1552679409.git.andreyknvl@google.com> <355e7c0dadaa2bb79d22e0b7aac7e4efc1114d49.1552679409.git.andreyknvl@google.com>
- <20190315161414.4b31fb03@gandalf.local.home>
-In-Reply-To: <20190315161414.4b31fb03@gandalf.local.home>
+References: <cover.1552679409.git.andreyknvl@google.com> <56d3373c1c5007d776fcd5de4523f4b9da341fb6.1552679409.git.andreyknvl@google.com>
+ <04c5b2de-7fde-7625-9d42-228160879ea0@gmail.com>
+In-Reply-To: <04c5b2de-7fde-7625-9d42-228160879ea0@gmail.com>
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 18 Mar 2019 14:11:48 +0100
-Message-ID: <CAAeHK+w5L+yD-9c94vgX3KcQuzyaKhoDemgGcZ8SJWpc7GhE9g@mail.gmail.com>
-Subject: Re: [PATCH v11 10/14] tracing, arm64: untag user pointers in seq_print_user_ip
-To:     Steven Rostedt <rostedt@goodmis.org>
+Date:   Mon, 18 Mar 2019 14:14:33 +0100
+Message-ID: <CAAeHK+xXLypBpF1EE73KuzQAo0E6Y=apS46wo+swo2AB6cy3YA@mail.gmail.com>
+Subject: Re: [PATCH v11 08/14] net, arm64: untag user pointers in tcp_zerocopy_receive
+To:     Eric Dumazet <eric.dumazet@gmail.com>
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will.deacon@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -75,6 +75,7 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         "David S. Miller" <davem@davemloft.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -104,114 +105,43 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Mar 15, 2019 at 9:14 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+On Fri, Mar 15, 2019 at 9:03 PM Eric Dumazet <eric.dumazet@gmail.com> wrote:
 >
-> On Fri, 15 Mar 2019 20:51:34 +0100
-> Andrey Konovalov <andreyknvl@google.com> wrote:
 >
+>
+> On 03/15/2019 12:51 PM, Andrey Konovalov wrote:
 > > This patch is a part of a series that extends arm64 kernel ABI to allow to
 > > pass tagged user pointers (with the top byte set to something else other
 > > than 0x00) as syscall arguments.
 > >
-> > seq_print_user_ip() uses provided user pointers for vma lookups, which
+> > tcp_zerocopy_receive() uses provided user pointers for vma lookups, which
 > > can only by done with untagged pointers.
 > >
 > > Untag user pointers in this function.
 > >
 > > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 > > ---
-> >  kernel/trace/trace_output.c |  5 +++--
-> >  p                           | 45 +++++++++++++++++++++++++++++++++++++
-> >  2 files changed, 48 insertions(+), 2 deletions(-)
-> >  create mode 100644 p
+> >  net/ipv4/tcp.c | 2 ++
+> >  1 file changed, 2 insertions(+)
 > >
-> > diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-> > index 54373d93e251..6376bee93c84 100644
-> > --- a/kernel/trace/trace_output.c
-> > +++ b/kernel/trace/trace_output.c
-> > @@ -370,6 +370,7 @@ static int seq_print_user_ip(struct trace_seq *s, struct mm_struct *mm,
-> >  {
-> >       struct file *file = NULL;
-> >       unsigned long vmstart = 0;
-> > +     unsigned long untagged_ip = untagged_addr(ip);
-> >       int ret = 1;
+> > diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> > index 6baa6dc1b13b..89db3b4fc753 100644
+> > --- a/net/ipv4/tcp.c
+> > +++ b/net/ipv4/tcp.c
+> > @@ -1758,6 +1758,8 @@ static int tcp_zerocopy_receive(struct sock *sk,
+> >       int inq;
+> >       int ret;
 > >
-> >       if (s->full)
-> > @@ -379,7 +380,7 @@ static int seq_print_user_ip(struct trace_seq *s, struct mm_struct *mm,
-> >               const struct vm_area_struct *vma;
-> >
-> >               down_read(&mm->mmap_sem);
-> > -             vma = find_vma(mm, ip);
-> > +             vma = find_vma(mm, untagged_ip);
-> >               if (vma) {
-> >                       file = vma->vm_file;
-> >                       vmstart = vma->vm_start;
-> > @@ -388,7 +389,7 @@ static int seq_print_user_ip(struct trace_seq *s, struct mm_struct *mm,
-> >                       ret = trace_seq_path(s, &file->f_path);
-> >                       if (ret)
-> >                               trace_seq_printf(s, "[+0x%lx]",
-> > -                                              ip - vmstart);
-> > +                                              untagged_ip - vmstart);
-> >               }
-> >               up_read(&mm->mmap_sem);
-> >       }
-> > diff --git a/p b/p
-> > new file mode 100644
-> > index 000000000000..9d6fa5386e55
-> > --- /dev/null
-> > +++ b/p
-> > @@ -0,0 +1,45 @@
-> > +commit 1fa6fadf644859e8a6a8ecce258444b49be8c7ee
-> > +Author: Andrey Konovalov <andreyknvl@google.com>
-> > +Date:   Mon Mar 4 17:20:32 2019 +0100
+> > +     address = untagged_addr(address);
 > > +
-> > +    kasan: fix coccinelle warnings in kasan_p*_table
-> > +
-> > +    kasan_p4d_table, kasan_pmd_table and kasan_pud_table are declared as
-> > +    returning bool, but return 0 instead of false, which produces a coccinelle
-> > +    warning. Fix it.
-> > +
-> > +    Fixes: 0207df4fa1a8 ("kernel/memremap, kasan: make ZONE_DEVICE with work with KASAN")
-> > +    Reported-by: kbuild test robot <lkp@intel.com>
-> > +    Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> >       if (address & (PAGE_SIZE - 1) || address != zc->address)
 >
-> Did you mean to append this commit to this patch?
+> The second test will fail, if the top bits are changed in address but not in zc->address
 
-No, did it by mistake. Will remove in v12, thanks for noticing!
+Will fix in v12, thanks Eric!
 
 >
-> -- Steve
->
-> > +
-> > +diff --git a/mm/kasan/init.c b/mm/kasan/init.c
-> > +index 45a1b5e38e1e..fcaa1ca03175 100644
-> > +--- a/mm/kasan/init.c
-> > ++++ b/mm/kasan/init.c
-> > +@@ -42,7 +42,7 @@ static inline bool kasan_p4d_table(pgd_t pgd)
-> > + #else
-> > + static inline bool kasan_p4d_table(pgd_t pgd)
-> > + {
-> > +-    return 0;
-> > ++    return false;
-> > + }
-> > + #endif
-> > + #if CONFIG_PGTABLE_LEVELS > 3
-> > +@@ -54,7 +54,7 @@ static inline bool kasan_pud_table(p4d_t p4d)
-> > + #else
-> > + static inline bool kasan_pud_table(p4d_t p4d)
-> > + {
-> > +-    return 0;
-> > ++    return false;
-> > + }
-> > + #endif
-> > + #if CONFIG_PGTABLE_LEVELS > 2
-> > +@@ -66,7 +66,7 @@ static inline bool kasan_pmd_table(pud_t pud)
-> > + #else
-> > + static inline bool kasan_pmd_table(pud_t pud)
-> > + {
-> > +-    return 0;
-> > ++    return false;
-> > + }
-> > + #endif
-> > + pte_t kasan_early_shadow_pte[PTRS_PER_PTE] __page_aligned_bss;
+> >               return -EINVAL;
+> >
+> >
 >
