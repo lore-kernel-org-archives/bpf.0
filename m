@@ -2,131 +2,130 @@ Return-Path: <SRS0=JidB=RV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NORMAL_HTTP_TO_IP,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28B3EC4360F
-	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 16:09:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5CDFC43381
+	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 16:16:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EED492087E
-	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 16:09:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 91D4220880
+	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 16:16:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oxnKC1Tg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gjgu8vSr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727194AbfCRQJA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Mar 2019 12:09:00 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:39216 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727251AbfCRQJA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Mar 2019 12:09:00 -0400
-Received: by mail-pg1-f193.google.com with SMTP id h8so11704635pgp.6
-        for <bpf@vger.kernel.org>; Mon, 18 Mar 2019 09:08:59 -0700 (PDT)
+        id S1727422AbfCRQQ0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Mar 2019 12:16:26 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:38744 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726663AbfCRQQZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Mar 2019 12:16:25 -0400
+Received: by mail-qt1-f195.google.com with SMTP id s1so18575125qte.5;
+        Mon, 18 Mar 2019 09:16:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4jnBV7KXAwRH/SBiWunplsgAO5XC9ZDTjIPOKm8iM+g=;
-        b=oxnKC1TgVy0AfRUFzdhntQ4TnaWjo/dHSXwb/USSzN9iByb1J8qb9RNkXwR6mHS+mw
-         U0ldrfn6mRkKtGFn2Svuia32YqyzgHr8lgGpA8Ip0euwMX1zgcj9IEez46oWi1IBddSU
-         gwBvQTSUaqVbn9YXiSr6jTBOA8Xv5UO8CN9pXByf2+OfL6o1mjVRgyqe5P+Xg2G+PiCf
-         NrrQ0yX3K59cnkolhi014Qa1wO07CtueVQk+/0EtrVmsp+hp6aDS9QuNbVuDWXjtk1vJ
-         lpuGAyImKDa6JNaKflwTKUzEOC9JqWe+LJv/B30MBc7OlHCI7rVxIEK1sErhlvMqw4PK
-         B6tw==
+        d=gmail.com; s=20161025;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=q3ou9Dxhuvf5KRW1H+9oyeG4WWjqEolSQ1k7nE0+tyE=;
+        b=Gjgu8vSrBe/LixfR2hHR22e+zgDVdNuyrYMR9cgkvOASYmg9LIElVQvwuOc7FGu2j8
+         830hoHwmS5HPWlAcD5iJL1P/x+V4TKwvmo99UmWqP2dR7N3leTmoU2UWYqAwJwmPx7me
+         TRoaq5swE8vSxm1f/mXaENONRJ7tcPbhiBjHZYKAAXr5/fl3hZ5Vjn180rO6JVFR5pz0
+         9pAjTM3ujHoPlVaTO10PjcwEyQcb7AAjIhsWGpdUilLjKHQWEieda1ptnrfGIa7AyqaT
+         2o9s54CZMqC6zgccEF77xNy5PR7yco9t2IFJN+aXbW2nH5U7qPJDl9O/USI3po5Qvget
+         M+Sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4jnBV7KXAwRH/SBiWunplsgAO5XC9ZDTjIPOKm8iM+g=;
-        b=fWp/MjmPiDbnFWxCckCWyLDsglPbbTv3ZMjP0FX+w0w5n9lDUm64u9xyJE0jx0Zea+
-         Y///lc/iNXaWrfVemAr0/N0nU83vymT9wVDRzy4uPQrImSW6gFYolIlT39oUTqllqAG4
-         DomSMju6xoqruFqnC8ThFhfjzb5zO/h3LihNACSPL3KJcJrQJ629KR0jceGHbgIONCt8
-         igF50fQVEtX252xSh2+ovKbXrHUf6wbY2RbYsUBlNvzCgPqXogQ0uUsqFCsYrNb+Y01Z
-         7CnvszLk4clBtwke+OD+nqqOPMS9uH4h88r2mGHd/3e3CpA5WvgJA4UxMMFm+sX1S1SZ
-         Q+bA==
-X-Gm-Message-State: APjAAAUDjEYDwX+FoqvAWpgVBUsRw/Ue73cvBVLFEWRVyI1r0BfubfT4
-        5fnYWtbL48HUsY1DGlXW+x3qZzO8jIdx0HheBfAlHw==
-X-Google-Smtp-Source: APXvYqz4X+86iXGnn3Nho9z6FaNxwbl9pQbIbD8Gz0QIEPwnGUaSMpR4psZ3WXMcGuMVMNFbcG/Runz5qQVKQSjPXF0=
-X-Received: by 2002:a62:4299:: with SMTP id h25mr19703730pfd.165.1552925338999;
- Mon, 18 Mar 2019 09:08:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1552679409.git.andreyknvl@google.com> <56d3373c1c5007d776fcd5de4523f4b9da341fb6.1552679409.git.andreyknvl@google.com>
- <04c5b2de-7fde-7625-9d42-228160879ea0@gmail.com> <CAAeHK+xXLypBpF1EE73KuzQAo0E6Y=apS46wo+swo2AB6cy3YA@mail.gmail.com>
- <CAAeHK+yxcG=KBjG0A5BicBA7Zwu6LR6t=g5b-9EAPXA8_Dfm2g@mail.gmail.com> <CANn89iJfjhNcDS_eHg-OUiGui-hyRL5iWQuu_U+BW_N9iSNbeA@mail.gmail.com>
-In-Reply-To: <CANn89iJfjhNcDS_eHg-OUiGui-hyRL5iWQuu_U+BW_N9iSNbeA@mail.gmail.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 18 Mar 2019 17:08:48 +0100
-Message-ID: <CAAeHK+w+koPnKP2=3yQsj5wCVY-c6+NLBnkKWQP8Q6M6pzO4dA@mail.gmail.com>
-Subject: Re: [PATCH v11 08/14] net, arm64: untag user pointers in tcp_zerocopy_receive
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Eric Dumazet <eric.dumazet@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=q3ou9Dxhuvf5KRW1H+9oyeG4WWjqEolSQ1k7nE0+tyE=;
+        b=Xtz2fQBApTmgNsAYtmBDmLtshzV4T7jhYUdhMveKOWA9tBuAn27+Bo/Lfd33caseDt
+         tSTZ3dko49GfKbCt68s4eyH24Pmcmxklx5dpMaYnlHavNWWlT84Q+V0myu4gl9/Sz21m
+         zy/HIEM+PLgSnYbgbAyq/DKRL+rVCvKcV3FKyw09pljEmi8EtZHznxPMJWuGAwfAKBRc
+         GKzLdRJO615L2BxSUSnjuBXn95qQRpbzJMK+4iuuzgu8kp+S898lPkaucwr8ZclK3N/V
+         N5h6mxD543qFqyTrhwEUfFzXo2NpGxh56cYD509o0pSTHgHKKbEVy4rrxSIIMCTk4Ovu
+         78Cw==
+X-Gm-Message-State: APjAAAV3M4pG8su7LzUbsPBpmJPWNFCrR+3mWoSY5ob9U6l6YaHE6eai
+        6lWLGFLuHRT5dKAWlPYwbCU=
+X-Google-Smtp-Source: APXvYqy4k1gQ20W6D/FLG3xgTZnJMtiGCp4VSgU+f7tliz6INdriTsYAkqA9uNn7zioF4s1oEMtNLQ==
+X-Received: by 2002:a0c:a424:: with SMTP id w33mr13710010qvw.5.1552925784633;
+        Mon, 18 Mar 2019 09:16:24 -0700 (PDT)
+Received: from quaco.ghostprotocols.net (179-240-164-38.3g.claro.net.br. [179.240.164.38])
+        by smtp.gmail.com with ESMTPSA id p46sm3439639qtc.41.2019.03.18.09.16.22
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 18 Mar 2019 09:16:23 -0700 (PDT)
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 833F44039C; Mon, 18 Mar 2019 13:16:19 -0300 (-03)
+Date:   Mon, 18 Mar 2019 13:16:19 -0300
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Changbin Du <changbin.du@gmail.com>, Jiri Olsa <jolsa@kernel.org>,
+        namhyung@kernel.org, Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Chintan Pandya <cpandya@codeaurora.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+        Alexei Starovoitov <ast@kernel.org>, rostedt@goodmis.org,
+        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 00/16] fix some perf issues detected by ASan
+Message-ID: <20190318161619.GD22548@kernel.org>
+References: <20190316080556.3075-1-changbin.du@gmail.com>
+ <20190318100812.GC28556@krava>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190318100812.GC28556@krava>
+X-Url:  http://acmel.wordpress.com
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 18, 2019 at 3:45 PM Eric Dumazet <edumazet@google.com> wrote:
->
-> On Mon, Mar 18, 2019 at 6:17 AM Andrey Konovalov <andreyknvl@google.com> wrote:
-> >
->
-> > Looking at the code, what's the point of this address != zc->address
-> > check? Should I just remove it?
->
-> No you must not remove it.
->
-> The test detects if a u64 ->unsigned long  conversion might have truncated bits.
->
-> Quite surprisingly some people still use 32bit kernels.
->
-> The ABI is 64bit only, because we did not want to have yet another compat layer.
->
-> struct tcp_zerocopy_receive {
->     __u64 address; /* in: address of mapping */
->     __u32 length; /* in/out: number of bytes to map/mapped */
->     __u32 recv_skip_hint; /* out: amount of bytes to skip */
-> };
+Em Mon, Mar 18, 2019 at 11:08:12AM +0100, Jiri Olsa escreveu:
+> On Sat, Mar 16, 2019 at 04:05:40PM +0800, Changbin Du wrote:
+> > AddressSanitizer (or ASan) and UndefinedBehaviorSanitizer (or UBSan) are
+> > very useful tools to detect program bugs. This series fixed some issues
+> > disclosed by ASan.
+> > 
+> > AddressSanitizer (or ASan) is a GCC feature that detects memory corruption bugs
+> > such as buffer overflows or memory leaks.
+> >   $ cd tools/perf
+> >   $ make DEBUG=1 EXTRA_CFLAGS='-fno-omit-frame-pointer -fsanitize=address'
+> >   $ ASAN_OPTIONS=log_path=asan.log ./perf record -a
+> > ASan outputs all detected issues into log file 'asan.log.<pid>'.
+> > 
+> > Note that this only fixes parts of the detected issues. There are many remaining
+> > to be fixed[1].
+> > 
+> > [1] http://104.238.181.70:8080/asan.log.32555.txt
+> > 
+> > Changbin Du (16):
+> >   perf: add doc for how to build perf with Asan and UBSan
+> >   perf: list: fix memory leak in function is_event_supported
+> >   perf: fix errors under optimization level '-Og'
+> >   perf: fix an error in config template
+> >   perf: fix a memory leak in collect_config
+> >   perf: fix memory leak in print_sdt_events()
+> >   perf: top: fix heap-use-after-free issue
+> >   perf: top: fix error handing in cmd_top()
+> >   perf: missed a map__put() in error case
+> >   perf: remove map from names tree in __maps__remove
+> >   perf: purge all maps from the names tree
+> >   perf: top: fix global-buffer-overflow issue
+> >   perf: free all counts in perf_evsel__exit
+> >   perf: fix a memory leak of cpu_map object
+> >   perf: fix memory leak by expr__find_other
+> >   perf: fix a memory leak in test__perf_evsel__tp_sched_test
+> 
+> awesome.. thanks a lot
+> 
+> Reviewed-by: Jiri Olsa <jolsa@redhat.com>
 
-Ah, got it, thanks! I'll add a comment here then, otherwise this looks
-confusing.
+Yeah, I'll go over all and apply, thanks a lot.
+
+If you plan to work on the others, please first submit the ones that are
+not related to the exit path, i.e. leave the ones that only take place
+when exiting perf for a second batch, this way we'll get the more
+important ones, that take place in normal operation, first.
+
+- Arnaldo
