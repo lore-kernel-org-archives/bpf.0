@@ -2,126 +2,146 @@ Return-Path: <SRS0=JidB=RV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA863C43381
-	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 14:45:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8808DC43381
+	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 15:09:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 88C9D2087E
-	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 14:45:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 576D52085A
+	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 15:09:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eUd7YMW/"
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="0Zies4gx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727710AbfCROpF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Mar 2019 10:45:05 -0400
-Received: from mail-yw1-f65.google.com ([209.85.161.65]:44130 "EHLO
-        mail-yw1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726846AbfCROpF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Mar 2019 10:45:05 -0400
-Received: by mail-yw1-f65.google.com with SMTP id c4so13072850ywa.11
-        for <bpf@vger.kernel.org>; Mon, 18 Mar 2019 07:45:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/+Gencg0JswbAigLpd/T2ItS1NnphPhR+c6rD3BwH/4=;
-        b=eUd7YMW/iwbeqVYkUaaw/cUWk71SOkrkn+hXu01mjWUDyol7Y3918h8Me2N/Lmwg82
-         BACBnVwkosRYGgNkB+MEv3CCkEWOrHu3xf7N5dwYHmmMELnYsQNqsOaeyK88/Ckff/ef
-         kh+B6RhAXAgdrluebHSVHeJbDqxICihTurm6Izpbs8uJk/KpMx9fOP+CQm89PWz1so10
-         k5Hy+rI3GiWNLVnAFbpLH1eywVv8873JwRYu/a9tdS5LPAoqYign21IdkWCo14GRLZpi
-         +1s6lB6RpgPoZI0uN8BuvtNMRbB8sYv/Hh/TeFFlme7Oddb+rSFYGGHMaF7cYJURP6Fs
-         tbhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/+Gencg0JswbAigLpd/T2ItS1NnphPhR+c6rD3BwH/4=;
-        b=AdQfdJ2S2MOmo1Jbx9oWSFVWe49a8wPqaYF0V9qwqT3HI/4lQuyEDRb/zoHngRyLxt
-         7Eh/xqo7JQ5+wjJqDqiCqNs/frhSiJf3r8gFsw2va4dmErmYmMvTnwsrw3VSRwtOmK1+
-         VPylrk6KUc8YgwqDKrfuagAJPQlZWYBduict2h/FiIRT1tTnbHFP7aAIFfE2cu2u12d7
-         7E9TRLwIU0PiJ/LN+7QiXSjhLxRcuBITupYT/6yBcsYMO1Ju2/fOSQLBaHD3AIIHSTE1
-         1Snz7z57ToBi2bL2MyCvhsX9Hrfqoo7yW11N3PQrKBfQG3oqsWmdJ1cksWOVvWp60fWj
-         g2+Q==
-X-Gm-Message-State: APjAAAXO6uE76Q2hIU+QXu6waLs6H6apdWM5zlzjnKLQ1wKy0GFZgx8p
-        0uH9woJYFwMQcpnprEBOKrbJXCUdIUJleu2t7cdKeQ==
-X-Google-Smtp-Source: APXvYqy/LrBuUxgMYxjRei67FuMQP0H17hpJ7z4CK4VwoXLf7Je3qt70qo9gwTM2VSIhDx1PncSnTBxTzploGurMk0s=
-X-Received: by 2002:a81:2843:: with SMTP id o64mr13821364ywo.441.1552920303807;
- Mon, 18 Mar 2019 07:45:03 -0700 (PDT)
+        id S1726844AbfCRPJZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Mar 2019 11:09:25 -0400
+Received: from out2-smtp.messagingengine.com ([66.111.4.26]:36017 "EHLO
+        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726757AbfCRPJY (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 18 Mar 2019 11:09:24 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2F4C822414;
+        Mon, 18 Mar 2019 11:09:23 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Mon, 18 Mar 2019 11:09:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=qPZtzvFiu/5ExqyuG
+        9Jy11sE5ua6cRfkmWpx5ufKrHc=; b=0Zies4gxtsoLmXkKzWoTbGxOjnhLAQmvM
+        weSuMMJ2kqebaOt5fpj9EqKWZexpaPFFnom4ZSbCEFRg5/bjMuMfdiq7mbbajLdn
+        zJD1Q9g9+kCRPRrzvHh8atoIn1gwyPN+JvhXqPQShQpUGCER68f9ZnrEGcYKeQN6
+        RTikRFnpi7MAs9IM92KiZvWq0xrNra7wH/wSlwMAzw+jSRgw7ulaA9344jtuDLYx
+        pPliIRwZ5PjvdIY4b3wYUsN3/MkQcxgoAEQNMbJ5J/n5Pv9LoSdUD5zhOkMJi9ZN
+        6yhhKmphfyfFKAPfWNMhL4Wg0WYzggmp6KKUEQ0/5XbkoCc7QGG9w==
+X-ME-Sender: <xms:orSPXOeQ9yC43MjkbK1Xn0WLuWnzg8GF0qThgqEqX1t62NKj9-ZFQA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedutddriedugdejfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffoggfgsedtkeertdertd
+    dtnecuhfhrohhmpeforghrthihnhgrshcurfhumhhpuhhtihhsuceomheslhgrmhgsuggr
+    rdhltheqnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudekkedrieefrd
+    dvtdejrddvfeehnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmsehlrghmsggurgdrlhht
+    necuvehluhhsthgvrhfuihiivgeptd
+X-ME-Proxy: <xmx:orSPXJjtXfpMe9_s_SDLL_Lkl6cdUrlN_Kc0HGi4ucUySkNDJgbi-Q>
+    <xmx:orSPXEK-w3CYV-syuCnmPMndb6-gpUg7DOI7EKvreWdASOAlO4fY_A>
+    <xmx:orSPXOr12itEYWGj8VKYKDtOdR10ismojYUUoSox_iwxaqMf971GiA>
+    <xmx:o7SPXD5IO7kSCKe8tBfJM2K45nx6O4oh_pqyAouSjRTQkNcPy4LNag>
+Received: from ceuse.home (235.207.63.188.dynamic.wline.res.cust.swisscom.ch [188.63.207.235])
+        by mail.messagingengine.com (Postfix) with ESMTPA id A890D10319;
+        Mon, 18 Mar 2019 11:09:20 -0400 (EDT)
+From:   Martynas Pumputis <m@lambda.lt>
+To:     netdev@vger.kernel.org
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        mhocko@suse.com, m@lambda.lt, Yonghong Song <yhs@fb.com>
+Subject: [PATCH v3 bpf] bpf: Try harder when allocating memory for large maps
+Date:   Mon, 18 Mar 2019 16:10:26 +0100
+Message-Id: <20190318151026.21539-1-m@lambda.lt>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-References: <cover.1552679409.git.andreyknvl@google.com> <56d3373c1c5007d776fcd5de4523f4b9da341fb6.1552679409.git.andreyknvl@google.com>
- <04c5b2de-7fde-7625-9d42-228160879ea0@gmail.com> <CAAeHK+xXLypBpF1EE73KuzQAo0E6Y=apS46wo+swo2AB6cy3YA@mail.gmail.com>
- <CAAeHK+yxcG=KBjG0A5BicBA7Zwu6LR6t=g5b-9EAPXA8_Dfm2g@mail.gmail.com>
-In-Reply-To: <CAAeHK+yxcG=KBjG0A5BicBA7Zwu6LR6t=g5b-9EAPXA8_Dfm2g@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 18 Mar 2019 07:44:52 -0700
-Message-ID: <CANn89iJfjhNcDS_eHg-OUiGui-hyRL5iWQuu_U+BW_N9iSNbeA@mail.gmail.com>
-Subject: Re: [PATCH v11 08/14] net, arm64: untag user pointers in tcp_zerocopy_receive
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Eric Dumazet <eric.dumazet@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Chintan Pandya <cpandya@codeaurora.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 18, 2019 at 6:17 AM Andrey Konovalov <andreyknvl@google.com> wrote:
->
+It has been observed that sometimes a higher order memory allocation
+for BPF maps fails when there is no obvious memory pressure in a system.
 
-> Looking at the code, what's the point of this address != zc->address
-> check? Should I just remove it?
+E.g. the map (BPF_MAP_TYPE_LRU_HASH, key=38, value=56, max_elems=524288)
+could not be created due to vmalloc unable to allocate 75497472B,
+when the system's memory consumption (in MB) was the following:
 
-No you must not remove it.
+    Total: 3942 Used: 837 (21.24%) Free: 138 Buffers: 239 Cached: 2727
 
-The test detects if a u64 ->unsigned long  conversion might have truncated bits.
+Later analysis [1] by Michal Hocko showed that the vmalloc was not trying
+to reclaim memory from the page cache and was failing prematurely due to
+__GFP_NORETRY.
 
-Quite surprisingly some people still use 32bit kernels.
+Considering dcda9b0471 ("mm, tree wide: replace __GFP_REPEAT by
+__GFP_RETRY_MAYFAIL with more useful semantic") and [1], we can replace
+__GFP_NORETRY with __GFP_RETRY_MAYFAIL, as it won't invoke OOM killer
+and will try harder to fulfil allocation requests.
 
-The ABI is 64bit only, because we did not want to have yet another compat layer.
+Unfortunately, replacing the body of the BPF map memory allocation
+function with the kvmalloc_node helper function is not an option at this
+point in time, given 1) kmalloc is non-optional for higher order
+allocations, and 2) passing __GFP_RETRY_MAYFAIL to the kmalloc would stress
+the slab allocator too much for large requests.
 
-struct tcp_zerocopy_receive {
-    __u64 address; /* in: address of mapping */
-    __u32 length; /* in/out: number of bytes to map/mapped */
-    __u32 recv_skip_hint; /* out: amount of bytes to skip */
-};
+The change has been tested with the workloads mentioned above and by
+observing oom_kill value from /proc/vmstat.
+
+[1]: https://lore.kernel.org/bpf/20190310071318.GW5232@dhcp22.suse.cz/
+
+Acked-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Martynas Pumputis <m@lambda.lt>
+---
+ kernel/bpf/syscall.c | 22 +++++++++++++++-------
+ 1 file changed, 15 insertions(+), 7 deletions(-)
+
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 62f6bced3a3c..afca36f53c49 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -136,21 +136,29 @@ static struct bpf_map *find_and_alloc_map(union bpf_attr *attr)
+ 
+ void *bpf_map_area_alloc(size_t size, int numa_node)
+ {
+-	/* We definitely need __GFP_NORETRY, so OOM killer doesn't
+-	 * trigger under memory pressure as we really just want to
+-	 * fail instead.
++	/* We really just want to fail instead of triggering OOM killer
++	 * under memory pressure, therefore we set __GFP_NORETRY to kmalloc,
++	 * which is used for lower order allocation requests.
++	 *
++	 * It has been observed that higher order allocation requests done by
++	 * vmalloc with __GFP_NORETRY being set might fail due to not trying
++	 * to reclaim memory from the page cache, thus we set
++	 * __GFP_RETRY_MAYFAIL to avoid such situations.
+ 	 */
+-	const gfp_t flags = __GFP_NOWARN | __GFP_NORETRY | __GFP_ZERO;
++
++	const gfp_t flags = __GFP_NOWARN | __GFP_ZERO;
+ 	void *area;
+ 
+ 	if (size <= (PAGE_SIZE << PAGE_ALLOC_COSTLY_ORDER)) {
+-		area = kmalloc_node(size, GFP_USER | flags, numa_node);
++		area = kmalloc_node(size, GFP_USER | __GFP_NORETRY | flags,
++				    numa_node);
+ 		if (area != NULL)
+ 			return area;
+ 	}
+ 
+-	return __vmalloc_node_flags_caller(size, numa_node, GFP_KERNEL | flags,
+-					   __builtin_return_address(0));
++	return __vmalloc_node_flags_caller(size, numa_node,
++					   GFP_KERNEL | __GFP_RETRY_MAYFAIL |
++					   flags, __builtin_return_address(0));
+ }
+ 
+ void bpf_map_area_free(void *area)
+-- 
+2.21.0
+
