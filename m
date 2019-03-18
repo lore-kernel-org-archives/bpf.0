@@ -2,31 +2,31 @@ Return-Path: <SRS0=JidB=RV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_MUTT
+X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,NORMAL_HTTP_TO_IP,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3FF2C10F00
-	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 10:08:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CD8DC43381
+	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 10:08:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BE87E2070D
-	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 10:08:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 06A8E20854
+	for <bpf@archiver.kernel.org>; Mon, 18 Mar 2019 10:08:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727402AbfCRKIB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Mar 2019 06:08:01 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:38080 "EHLO mx1.redhat.com"
+        id S1728104AbfCRKIT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Mar 2019 06:08:19 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:46914 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727196AbfCRKIB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Mar 2019 06:08:01 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        id S1727740AbfCRKIQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Mar 2019 06:08:16 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id EBFB43086207;
-        Mon, 18 Mar 2019 10:08:00 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id C32C388AA7;
+        Mon, 18 Mar 2019 10:08:15 +0000 (UTC)
 Received: from krava (unknown [10.43.17.124])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 73AAD177AE;
-        Mon, 18 Mar 2019 10:07:58 +0000 (UTC)
-Date:   Mon, 18 Mar 2019 11:07:58 +0100
+        by smtp.corp.redhat.com (Postfix) with SMTP id CE6F41001E89;
+        Mon, 18 Mar 2019 10:08:12 +0000 (UTC)
+Date:   Mon, 18 Mar 2019 11:08:12 +0100
 From:   Jiri Olsa <jolsa@redhat.com>
 To:     Changbin Du <changbin.du@gmail.com>
 Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -36,86 +36,85 @@ Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>, rostedt@goodmis.org,
         Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 01/16] perf: add doc for how to build perf with Asan and
- UBSan
-Message-ID: <20190318100758.GA28556@krava>
+Subject: Re: [PATCH 00/16] fix some perf issues detected by ASan
+Message-ID: <20190318100812.GC28556@krava>
 References: <20190316080556.3075-1-changbin.du@gmail.com>
- <20190316080556.3075-2-changbin.du@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190316080556.3075-2-changbin.du@gmail.com>
+In-Reply-To: <20190316080556.3075-1-changbin.du@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.42]); Mon, 18 Mar 2019 10:08:01 +0000 (UTC)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.26]); Mon, 18 Mar 2019 10:08:16 +0000 (UTC)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Mar 16, 2019 at 04:05:41PM +0800, Changbin Du wrote:
+On Sat, Mar 16, 2019 at 04:05:40PM +0800, Changbin Du wrote:
 > AddressSanitizer (or ASan) and UndefinedBehaviorSanitizer (or UBSan) are
-> very useful tools to detect program bugs.
->  o AddressSanitizer (or ASan) is a GCC feature that detects memory
->    corruption bugs such as buffer overflows or memory leaks.
->  o UndefinedBehaviorSanitizer (or UBSan) is a fast undefined behavior
->    detector supprted by GCC. UBSan detect undefined behavior of programs
->    at runtime.
+> very useful tools to detect program bugs. This series fixed some issues
+> disclosed by ASan.
 > 
-> This patch adds doc for how to use them on perf. Later patches will fix
-> some of the issues disclosed by them.
+> AddressSanitizer (or ASan) is a GCC feature that detects memory corruption bugs
+> such as buffer overflows or memory leaks.
+>   $ cd tools/perf
+>   $ make DEBUG=1 EXTRA_CFLAGS='-fno-omit-frame-pointer -fsanitize=address'
+>   $ ASAN_OPTIONS=log_path=asan.log ./perf record -a
+> ASan outputs all detected issues into log file 'asan.log.<pid>'.
 > 
-> Signed-off-by: Changbin Du <changbin.du@gmail.com>
-> ---
->  tools/perf/Documentation/Build.txt | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
+> Note that this only fixes parts of the detected issues. There are many remaining
+> to be fixed[1].
 > 
-> diff --git a/tools/perf/Documentation/Build.txt b/tools/perf/Documentation/Build.txt
-> index f6fc6507ba55..cae6e1d9b901 100644
-> --- a/tools/perf/Documentation/Build.txt
-> +++ b/tools/perf/Documentation/Build.txt
-> @@ -47,3 +47,23 @@ Those objects are then used in final linking:
->  
->  NOTE this description is omitting other libraries involved, only
->       focusing on build framework outcomes
+> [1] http://104.238.181.70:8080/asan.log.32555.txt
+> 
+> Changbin Du (16):
+>   perf: add doc for how to build perf with Asan and UBSan
+>   perf: list: fix memory leak in function is_event_supported
+>   perf: fix errors under optimization level '-Og'
+>   perf: fix an error in config template
+>   perf: fix a memory leak in collect_config
+>   perf: fix memory leak in print_sdt_events()
+>   perf: top: fix heap-use-after-free issue
+>   perf: top: fix error handing in cmd_top()
+>   perf: missed a map__put() in error case
+>   perf: remove map from names tree in __maps__remove
+>   perf: purge all maps from the names tree
+>   perf: top: fix global-buffer-overflow issue
+>   perf: free all counts in perf_evsel__exit
+>   perf: fix a memory leak of cpu_map object
+>   perf: fix memory leak by expr__find_other
+>   perf: fix a memory leak in test__perf_evsel__tp_sched_test
 
-thanks for adding doc, one nit:
+awesome.. thanks a lot
 
-> +
-> +3) buld and install perf
+Reviewed-by: Jiri Olsa <jolsa@redhat.com>
 
-there's already:
- 2) perf build
- =============
+jirka
 
-please use something like 
-
- 3) perf build for ASan/UBSan
- ============================
-
-> +  $ cd tools/perf
-> +  $ make DESTDIR=/usr
-> +  $ make DESTDIR=/usr install
-> +
-> +4) build with ASan or UBSan
-
-no need for this label
-
-> +AddressSanitizer (or ASan) is a GCC feature that detects memory corruption bugs
-> +such as buffer overflows or memory leaks.
-> +  $ cd tools/perf
-> +  $ make DEBUG=1 EXTRA_CFLAGS='-fno-omit-frame-pointer -fsanitize=address'
-> +  $ ASAN_OPTIONS=log_path=asan.log ./perf record -a
-> +ASan outputs all detected issues into log file 'asan.log.<pid>'.
-> +
-> +UndefinedBehaviorSanitizer (or UBSan) is a fast undefined behavior detector
-> +supprted by GCC. UBSan detect undefined behavior of programs at runtime.
-> +  $ cd tools/perf
-> +  $ make DEBUG=1 EXTRA_CFLAGS='-fno-omit-frame-pointer -fsanitize=undefined'
-> +  $ UBSAN_OPTIONS=print_stacktrace=1 ./perf record -a
-> +If UBSan detects any problem at runtime, it outputs a “runtime error:” message.
-> \ No newline at end of file
+> 
+>  tools/lib/bpf/libbpf.c                     |  2 +-
+>  tools/perf/Documentation/Build.txt         | 20 +++++++++
+>  tools/perf/Documentation/perf-config.txt   |  2 +-
+>  tools/perf/bench/epoll-ctl.c               |  2 +-
+>  tools/perf/bench/epoll-wait.c              |  2 +-
+>  tools/perf/builtin-top.c                   | 47 ++++++++++------------
+>  tools/perf/tests/backward-ring-buffer.c    |  2 +-
+>  tools/perf/tests/evsel-tp-sched.c          |  1 +
+>  tools/perf/tests/expr.c                    |  5 ++-
+>  tools/perf/tests/openat-syscall-all-cpus.c |  4 +-
+>  tools/perf/util/build-id.c                 |  1 +
+>  tools/perf/util/config.c                   |  3 +-
+>  tools/perf/util/counts.c                   | 18 +++++++++
+>  tools/perf/util/counts.h                   |  4 ++
+>  tools/perf/util/evsel.c                    |  2 +
+>  tools/perf/util/hist.c                     |  4 +-
+>  tools/perf/util/map.c                      | 18 +++++++++
+>  tools/perf/util/ordered-events.c           |  2 +
+>  tools/perf/util/parse-events.c             |  2 +
+>  tools/perf/util/stat.c                     | 18 ---------
+>  20 files changed, 106 insertions(+), 53 deletions(-)
+> 
 > -- 
 > 2.19.1
 > 
