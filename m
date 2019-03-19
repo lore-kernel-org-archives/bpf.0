@@ -2,191 +2,139 @@ Return-Path: <SRS0=wUMJ=RW=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E30D4C43381
-	for <bpf@archiver.kernel.org>; Tue, 19 Mar 2019 22:17:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFCC8C43381
+	for <bpf@archiver.kernel.org>; Tue, 19 Mar 2019 22:19:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AE5302175B
-	for <bpf@archiver.kernel.org>; Tue, 19 Mar 2019 22:17:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BC1A22175B
+	for <bpf@archiver.kernel.org>; Tue, 19 Mar 2019 22:19:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BqGJ0Rbf"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BvqXNq8A"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726875AbfCSWRl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Mar 2019 18:17:41 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:40088 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726686AbfCSWRl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Mar 2019 18:17:41 -0400
-Received: by mail-pf1-f196.google.com with SMTP id c207so363435pfc.7;
-        Tue, 19 Mar 2019 15:17:40 -0700 (PDT)
+        id S1727376AbfCSWTx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Mar 2019 18:19:53 -0400
+Received: from mail-ua1-f74.google.com ([209.85.222.74]:37588 "EHLO
+        mail-ua1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726912AbfCSWTx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Mar 2019 18:19:53 -0400
+Received: by mail-ua1-f74.google.com with SMTP id h9so61933uah.4
+        for <bpf@vger.kernel.org>; Tue, 19 Mar 2019 15:19:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=hM/0Ndv2d6yhCkMSgPd9gvpXlkA7F0d+OwTIN3prQbc=;
-        b=BqGJ0RbfOF0FM1ozu12zwWRv7s2xaB0ZB7LIpeBEaumaMf2LRo/NAe2ir+6N1F7xal
-         xOt2Rqe7h5H5q+jQlJECFJUoU05nyVq09UdC+w/JzYd8p8qoi/5ZvtIEYerUNAxGnxFh
-         4+FGb2NSxGfANvXs2US1OGdISIF9MCwaBVcrZ09M10raqYXK6IXq8L6EwSNNG9gl9IU5
-         Is9ZsWnHiD+ZygcLL/iKSTx23K8jGWtv/I44EtKDlhBBtS/HDbBOrt1TBCubE+dr24Nc
-         fFAw+o5OVDssMlIaQmHE8qiICShWgOLo/I5z8gpcqZi5VISnAWcTqDNbQeEe6s14t3+E
-         l73w==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Cuy4wFa51wcWdLukZFeiTuSUmejHRfPFpAu7Mcm3BIE=;
+        b=BvqXNq8AaksCp/A6Yd+Hj2W5oozjTK07sjFjoT/wcxco1NIS0KvyyfUXHWUh6bPBWR
+         Z1Enz9rkXTD5eOtofkvQJbuKKbMcMKqxzuIiwF2MqI5qWNHJ0R8lwdFu1G+R8aUIwwEj
+         E8gxdLqpeO6ab45qRmJ5LrqlTAVgI8gg9MuBWOuqTTjhFyoufDq4hwwyFbEHjtb8FfA5
+         335V2xmawIL1Cno9Zs4C+KaeJq4DM0fIKqNOlE8q2cDXKp4TRV45xTnV90NFiFXpjSPd
+         byEvvvmhKnfbd+zz0Vw56szND59HCsR18f806G0AE2sslPduANz5tdQinlmvK3GFGxBG
+         ptow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hM/0Ndv2d6yhCkMSgPd9gvpXlkA7F0d+OwTIN3prQbc=;
-        b=Lk4XAG7tRvfHmKcISV5QToCE2apnQgqhZtYnYTZZh2uslR3pxby/68oFnZUrX6FJ1P
-         +Se/zBzg9vQ5LqC/Dy6BfOVX6WN9jBLxX5Hqmlrn2UyzXvIrY11wJKheOH2hNPEGYgdN
-         30U53gEv/4//F2d81vXOlkrOvhzMIod7soQRNEL7jy/9WtpTiNGaK0z7jyBkzzzpzY4h
-         hrST5ggwfMAUjA5q40nV62sJi53rrQpMgjYFfoPvc4XR5OwYLgEWO6k0gi9ITAAlqdjV
-         BrlqdhHcBkHpANjv+L6mZf32ICcwP9/jv/6YuWrsUVWq/6KVq5Rx2XMkIRzIqkC0iwet
-         gM4g==
-X-Gm-Message-State: APjAAAXXm5XjRi3aWbnojsTvVxpeAX2BiM57iT2TdhHfA6dpiSo9m3mb
-        TS8YfxTLF1oZZ3i9T9xlqTw=
-X-Google-Smtp-Source: APXvYqznVGa+pANlneRF34mS2Ka0N/GO9gtIl5x1OZzduniCmCu1FXnxP91U2y+u/N99FJux8kGepg==
-X-Received: by 2002:a63:3f8b:: with SMTP id m133mr3924018pga.91.1553033859976;
-        Tue, 19 Mar 2019 15:17:39 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:200::7aa3])
-        by smtp.gmail.com with ESMTPSA id l19sm57038pff.185.2019.03.19.15.17.38
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 19 Mar 2019 15:17:39 -0700 (PDT)
-Date:   Tue, 19 Mar 2019 15:17:37 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Lorenz Bauer <lmb@cloudflare.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, kafai@fb.com
-Subject: Re: [PATCH v2 4/8] bpf: add helper to check for a valid SYN cookie
-Message-ID: <20190319221735.ycueci4ec4rvbkxf@ast-mbp.dhcp.thefacebook.com>
-References: <20190222095057.9442-1-lmb@cloudflare.com>
- <20190319102103.7380-1-lmb@cloudflare.com>
- <20190319102103.7380-5-lmb@cloudflare.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190319102103.7380-5-lmb@cloudflare.com>
-User-Agent: NeoMutt/20180223
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Cuy4wFa51wcWdLukZFeiTuSUmejHRfPFpAu7Mcm3BIE=;
+        b=WKNw1RArcBOIxi/3bmyK6qA5R/cWpNjLDKysivITL2YyegjeZL9JF8CJdn4i85/f7l
+         aUZq9tvRr0RSPUUsB2csWiRf7b6xjNRqXNtHCiW+E/Mf0MfZMqNYDMicQZbLzxzUpBlL
+         EFh5I56vzPWHlWJW0ntJiWd+7KK7tXDVVl/EgIUwp/+IwRdkDEsC4UuYXqFPf716zSev
+         i9c12K+Q/4RVhre2hdWj7Aq0eu+qhISCNfbWlTsOVdwydeUhtJDN9p4IRXhbmRy5ZOb/
+         ADLuyJxL1w/hi2O9jvY/aUmdVVHHxD/eq+uThmFbsMqL7y+WEH5NHN1ivmc2PgKLzN10
+         3flw==
+X-Gm-Message-State: APjAAAW/shQrZhOOaFeZpOSG2mRNg8WCn367PipAqt51ayJivtu/xIUU
+        B0CgGVqKPh2oRJ965ihiFcZwKR0=
+X-Google-Smtp-Source: APXvYqxangaAKpwKRPIwDFPxsXdAdZ42xI06m3HHXRmrhuVPrdATY3cecADEacIEU9PmmnxP1dXGH/8=
+X-Received: by 2002:a67:d10a:: with SMTP id u10mr4155822vsi.5.1553033991766;
+ Tue, 19 Mar 2019 15:19:51 -0700 (PDT)
+Date:   Tue, 19 Mar 2019 15:19:39 -0700
+Message-Id: <20190319221948.170441-1-sdf@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.21.0.225.g810b269d1ac-goog
+Subject: [RFC bpf-next v2 0/9] net: flow_dissector: trigger BPF hook when
+ called from eth_get_headlen
+From:   Stanislav Fomichev <sdf@google.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
+        simon.horman@netronome.com, willemb@google.com,
+        peterpenkov96@gmail.com, Stanislav Fomichev <sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 19, 2019 at 10:20:59AM +0000, Lorenz Bauer wrote:
-> Using bpf_skc_lookup_tcp it's possible to ascertain whether a packet
-> belongs to a known connection. However, there is one corner case: no
-> sockets are created if SYN cookies are active. This means that the final
-> ACK in the 3WHS is misclassified.
-> 
-> Using the helper, we can look up the listening socket via
-> bpf_skc_lookup_tcp and then check whether a packet is a valid SYN
-> cookie ACK.
-> 
-> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
-> ---
->  include/uapi/linux/bpf.h | 18 +++++++++-
->  net/core/filter.c        | 72 ++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 89 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 8e4f8276942a..587d7a3295bf 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -2391,6 +2391,21 @@ union bpf_attr {
->   *		Pointer to **struct bpf_sock**, or **NULL** in case of failure.
->   *		For sockets with reuseport option, the **struct bpf_sock**
->   *		result is from **reuse->socks**\ [] using the hash of the tuple.
-> + *
-> + * int bpf_tcp_check_syncookie(struct bpf_sock *sk, void *iph, u32 iph_len, struct tcphdr *th, u32 th_len)
-> + * 	Description
-> + * 		Check whether iph and th contain a valid SYN cookie ACK for
-> + * 		the listening socket in sk.
-> + *
-> + * 		iph points to the start of the IPv4 or IPv6 header, while
-> + * 		iph_len contains sizeof(struct iphdr) or sizeof(struct ip6hdr).
-> + *
-> + * 		th points to the start of the TCP header, while th_len contains
-> + * 		sizeof(struct tcphdr).
-> + *
-> + * 	Return
-> + * 		0 if iph and th are a valid SYN cookie ACK, or a negative error
-> + * 		otherwise.
->   */
->  #define __BPF_FUNC_MAPPER(FN)		\
->  	FN(unspec),			\
-> @@ -2492,7 +2507,8 @@ union bpf_attr {
->  	FN(tcp_sock),			\
->  	FN(skb_ecn_set_ce),		\
->  	FN(get_listener_sock),		\
-> -	FN(skc_lookup_tcp),
-> +	FN(skc_lookup_tcp),		\
-> +	FN(tcp_check_syncookie),
->  
->  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
->   * function eBPF program intends to call
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index f5210773cfd8..45a46fbe4ee0 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -5546,6 +5546,74 @@ static const struct bpf_func_proto bpf_skb_ecn_set_ce_proto = {
->  	.ret_type       = RET_INTEGER,
->  	.arg1_type      = ARG_PTR_TO_CTX,
->  };
-> +
-> +BPF_CALL_5(bpf_tcp_check_syncookie, struct sock *, sk, void *, iph, u32, iph_len,
-> +	   struct tcphdr *, th, u32, th_len)
+Currently, when eth_get_headlen calls flow dissector, it doesn't pass any
+skb. Because we use passed skb to lookup associated networking namespace
+to find whether we have a BPF program attached or not, we always use
+C-based flow dissector in this case.
 
-what was the reason to pass ip and tcp header pointers separately?
-Why not to pass 'void* iph' with len long enough to cover both?
-the helper can compute tcp header and can take into account variable length ipv4 hdr
-while checking that resulting ptr is within 'iph + len' validated by the verifier.
-Last patch example is buggy in that sense, since it's doing:
-tcph = data + sizeof(struct ethhdr) + sizeof(struct iphdr);
+The goal of this patch series is to add new networking namespace argument
+to the eth_get_headlen and make BPF flow dissector programs be able to
+work in the skb-less case.
 
-If we drop two args then there will be room for 'flags'.
-It can be used for example to indicate whether LINUX_MIB_SYNCOOKIESFAILED
-should be incremented or not.
-May be it shold be unconditionally?
+The series goes like this:
+1. introduce a bunch of skb initialization helpers; those will be used to
+   initialize temporary skb
+2. introduce skb_net which can be used to get networking namespace
+   associated with an skb
+3. add new optional network namespace argument to __skb_flow_dissect and
+   plumb through the callers
+4. prepare for new bpf flow dissector flavor, create some common routines
+   and do some renames
+5. restrict access to a limited set of __sk_buff fields from flow
+   dissector programs
+6. add new bpf_flow_dissect which uses temporary per-cpu skb and calls
+   BPF flow dissector program
+7. convert flow dissector BPF_PROG_TEST_RUN to skb-less mode to show that
+   it works
+8. add selftest that makes sure going over the packet bounds in
+   bpf_skb_load_bytes with shinfo-less skb doesn't cause any problems
+9. add new net namespace argument to eth_get_headlen and convert the
+   callers
 
-> +{
-> +#ifdef CONFIG_SYN_COOKIES
-> +	u32 cookie;
-> +	int ret;
-> +
-> +	if (unlikely(th_len < sizeof(*th)))
-> +		return -EINVAL;
-> +
-> +	/* sk_listener() allows TCP_NEW_SYN_RECV, which makes no sense here. */
-> +	if (sk->sk_protocol != IPPROTO_TCP || sk->sk_state != TCP_LISTEN)
-> +		return -EINVAL;
-> +
-> +	if (!sock_net(sk)->ipv4.sysctl_tcp_syncookies)
-> +		return -EINVAL;
-> +
-> +	if (!th->ack || th->rst || th->syn)
-> +		return -ENOENT;
-> +
-> +	if (tcp_synq_no_recent_overflow(sk))
-> +		return -ENOENT;
-> +
-> +	cookie = ntohl(th->ack_seq) - 1;
-> +
-> +	switch (sk->sk_family) {
-> +	case AF_INET:
-> +		if (unlikely(iph_len < sizeof(struct iphdr)))
-> +			return -EINVAL;
-> +
-> +		ret = __cookie_v4_check((struct iphdr *)iph, th, cookie);
-> +		break;
-> +
-> +#if IS_BUILTIN(CONFIG_IPV6)
-> +	case AF_INET6:
-> +		if (unlikely(iph_len < sizeof(struct ipv6hdr)))
-> +			return -EINVAL;
-> +
-> +		ret = __cookie_v6_check((struct ipv6hdr *)iph, th, cookie);
+v2:
+* moved temporary skb from stack into percpu (avoids memset of ~200 bytes
+  per packet)
+* tightened down access to __sk_buff fields from flow dissector programs to
+  avoid touching shinfo (whitelist only relevant fields)
+* addressed suggestions from Willem
 
-I guess this is fast path and you don't want indirect call via ipv6_bpf_stub ?
+Stanislav Fomichev (9):
+  net: introduce __init_skb{,_data,_shinfo} helpers
+  net: introduce skb_net helper
+  net: plumb network namespace into __skb_flow_dissect
+  net: flow_dissector: prepare for no-skb use case
+  flow_dissector: allow access only to a subset of __sk_buff fields
+  net: flow_dissector: handle no-skb use case
+  bpf: when doing BPF_PROG_TEST_RUN for flow dissector use no-skb mode
+  selftests/bpf: add flow dissector bpf_skb_load_bytes helper test
+  net: flow_dissector: pass net argument to the eth_get_headlen
 
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c     |   2 +-
+ drivers/net/ethernet/hisilicon/hns/hns_enet.c |   3 +-
+ .../net/ethernet/hisilicon/hns3/hns3_enet.c   |   3 +-
+ drivers/net/ethernet/intel/fm10k/fm10k_main.c |   2 +-
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c   |   3 +-
+ drivers/net/ethernet/intel/iavf/iavf_txrx.c   |   2 +-
+ drivers/net/ethernet/intel/ice/ice_txrx.c     |   2 +-
+ drivers/net/ethernet/intel/igb/igb_main.c     |   2 +-
+ drivers/net/ethernet/intel/igc/igc_main.c     |   2 +-
+ drivers/net/ethernet/intel/ixgbe/ixgbe_main.c |   2 +-
+ .../net/ethernet/intel/ixgbevf/ixgbevf_main.c |   3 +-
+ .../net/ethernet/mellanox/mlx5/core/en_tx.c   |   3 +-
+ drivers/net/tun.c                             |   3 +-
+ include/linux/etherdevice.h                   |   2 +-
+ include/linux/skbuff.h                        |  48 +++++--
+ net/bpf/test_run.c                            |  48 ++-----
+ net/core/filter.c                             |  13 +-
+ net/core/flow_dissector.c                     | 135 +++++++++++++-----
+ net/core/skbuff.c                             |  76 +++++-----
+ net/ethernet/eth.c                            |   8 +-
+ .../prog_tests/flow_dissector_load_bytes.c    |  50 +++++++
+ 21 files changed, 269 insertions(+), 143 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/flow_dissector_load_bytes.c
+
+-- 
+2.21.0.225.g810b269d1ac-goog
