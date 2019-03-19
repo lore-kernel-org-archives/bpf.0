@@ -5,59 +5,59 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9064C4360F
-	for <bpf@archiver.kernel.org>; Tue, 19 Mar 2019 22:20:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B82A1C10F03
+	for <bpf@archiver.kernel.org>; Tue, 19 Mar 2019 22:20:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B99032183E
-	for <bpf@archiver.kernel.org>; Tue, 19 Mar 2019 22:20:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 86A5A2183E
+	for <bpf@archiver.kernel.org>; Tue, 19 Mar 2019 22:20:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JcFRCZn5"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="u2Brv/hd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727584AbfCSWUN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Mar 2019 18:20:13 -0400
-Received: from mail-pg1-f201.google.com ([209.85.215.201]:33049 "EHLO
-        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727578AbfCSWUM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Mar 2019 18:20:12 -0400
-Received: by mail-pg1-f201.google.com with SMTP id y1so532548pgo.0
-        for <bpf@vger.kernel.org>; Tue, 19 Mar 2019 15:20:11 -0700 (PDT)
+        id S1727509AbfCSWUP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Mar 2019 18:20:15 -0400
+Received: from mail-it1-f201.google.com ([209.85.166.201]:51443 "EHLO
+        mail-it1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727579AbfCSWUP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Mar 2019 18:20:15 -0400
+Received: by mail-it1-f201.google.com with SMTP id e63so433252ita.1
+        for <bpf@vger.kernel.org>; Tue, 19 Mar 2019 15:20:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=0YbiokuD7mcfeLNVd8EwsFglMqhzlcAVUChF2fLflaU=;
-        b=JcFRCZn566Qs8elxcn1nOs0dSV6FfJwyJK4VVHfJ0Wm86xgpaK34z3+hsVY4nDsiSB
-         YsZMlHyC6MAvA2ZdBeN/oI0GVLbnE8pMBKBbLvQ4mCzml33K3DQoP8kKI8TEAkvqc3Dp
-         wUabccu2kdsH2J/jPhRa86/lT6QqXomHP2U3Rcp8I4H0BKI7HTlRzJsXAgERRd0w9xZY
-         Oxccre3o67uY/b/2PcydSVdRlJSpIWttZ2zSUmxx5LnkkQCE7th22KYDsoa+n7nbGiiI
-         hVL2Orl6x7sSQWpysK8HAl3PclvI8E7k/Z/lTIy4bDDIS6ajMnSnpZK32l7+Qs37/mYR
-         9URg==
+        bh=ZgxmUh6O3jlArRZafvyJugfH/u2Yb0sWHdTxAViVUGU=;
+        b=u2Brv/hd0MSAJK6kmTdG5AJ+0DeVrTxTiU65cwR24CQYxXL0OxvrkUMIufSBMODtru
+         4ja7OhoAh9jpG3UyhfiLUfQyOcDTb9QDoJGZN61AQ+lFB5vmU/qMF3QgYi7BonpTmqz7
+         bc9J0sJblQzxwIX2ngHz9QX0uCgLZ0JOw1bWKyDRzTvQa0Pvpy80H3o4OUAJCqygmm95
+         8LOmY9pM8p8/OVsdoEDufXoMCh7xijH9+QqdpYyREqRw5ZyiZISHxB7IjOINNUVugi34
+         CKbL6gWHvcZrntR4uOau91CFTF452NnrRmE8mmUmybSoqcFZX/P0vQp/2z0ONqLIviK9
+         8BwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=0YbiokuD7mcfeLNVd8EwsFglMqhzlcAVUChF2fLflaU=;
-        b=fM6ztsP1dCyntuorQoi7AOpfbuv/nOsL/a2JBEXuAcwafHf3ejaoy8AJulyngcwrBh
-         GznTzXmhATbAPKynLfI3JjjUynH70tusXscxfL2qsItjuazgzeO8AthiONekGEQwMPBE
-         GuhN1eWDdx8igyLb50coal11TRbF85eybUuPo3wWgKztgK16dwlvuNoH0+Ecs/dFgd/i
-         C4LnlhNyoIt55xZ1CbaPH7gRSgdYKeybDurJX4z4n/N10ROZZg8iOe64Mj5JWf8e0eyN
-         SRyPDiWKSKdKNQAhaAm9q7g5wHbwXR74SabeiWKeYZC/d3EUddHB8QdQqilR7ZfQ2qdu
-         1aHw==
-X-Gm-Message-State: APjAAAUwdltjwOD8dOdPWXmP87MBkMd7z+aPUByvDVonQSfO/u5GOMnr
-        W5lzmpxLZqlTKHeCHuc6gfHhspg=
-X-Google-Smtp-Source: APXvYqwpmBJEDcUXg5+km60N6MdyQl5WVr3dNBvFsjBWpWz8yUYCTaSBq2+vq8r/QfSrMVPCtpjO8z0=
-X-Received: by 2002:a17:902:18a:: with SMTP id b10mr7287182plb.139.1553034011552;
- Tue, 19 Mar 2019 15:20:11 -0700 (PDT)
-Date:   Tue, 19 Mar 2019 15:19:46 -0700
+        bh=ZgxmUh6O3jlArRZafvyJugfH/u2Yb0sWHdTxAViVUGU=;
+        b=YeuhadM+7idEei+UsAlKqWkqt1LvuP6ZHZpQXTNeGoOltNH5sde4RjK/qXuWXMfuza
+         g8Th8iT6X0H5Buy3avFmprWhT97UTEefJxTU550Ja+mtOzL5TE8KSsX/3pgruAk6yhJb
+         mBEzWU92f6rVaXNR1NHqt9t1lLNBuLPsT4urOTJbFqoX1I+JobORAtWmUBCqp/0/hzQ+
+         VSKwvTMwVkO7xQaP1hvHdRoVuCTaz7UnjuzpfmdCLoX2BzJcB1dnmYqyfnr8Oox31JNm
+         18F8tdspkLZWaAZnorwNcvxHJtiApBhTIeRSAbu2mO2j4Dzyn3lDO3WhbcCRAv4JONEM
+         Fs2g==
+X-Gm-Message-State: APjAAAVK4OjtNZPvL4S7ZBhFxcwVXCRMLoHI1fjChVw0QFv8CQcGzI/M
+        E6PR9QONsEtfSvpBetmaprXd4q4=
+X-Google-Smtp-Source: APXvYqyhtvxHjo2wTlZCy4mmtWrql2ONB9uJQ7970N/qlHB8mpCP6V2zeprX4A7qoqp6bD0JuPqNvck=
+X-Received: by 2002:a24:3608:: with SMTP id l8mr2683213itl.35.1553034014159;
+ Tue, 19 Mar 2019 15:20:14 -0700 (PDT)
+Date:   Tue, 19 Mar 2019 15:19:47 -0700
 In-Reply-To: <20190319221948.170441-1-sdf@google.com>
-Message-Id: <20190319221948.170441-8-sdf@google.com>
+Message-Id: <20190319221948.170441-9-sdf@google.com>
 Mime-Version: 1.0
 References: <20190319221948.170441-1-sdf@google.com>
 X-Mailer: git-send-email 2.21.0.225.g810b269d1ac-goog
-Subject: [RFC bpf-next v2 7/9] bpf: when doing BPF_PROG_TEST_RUN for flow
- dissector use no-skb mode
+Subject: [RFC bpf-next v2 8/9] selftests/bpf: add flow dissector
+ bpf_skb_load_bytes helper test
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
@@ -69,104 +69,72 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Now that we have __flow_bpf_dissect which works on raw data (by
-constructing temporary on-stack skb), use it when doing
-BPF_PROG_TEST_RUN for flow dissector.
-
-This should help us catch any possible bugs due to missing shinfo on
-the per-cpu skb.
-
-Note that existing __skb_flow_bpf_dissect swallows L2 headers and returns
-nhoff=0, we need to preserve the existing behavior.
+With the per-cpu skb, we want to make sure we don't trigger any
+shinfo access. Add small test which tries to read the data past
+the packet boundary.
 
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- net/bpf/test_run.c | 48 ++++++++++++++--------------------------------
- 1 file changed, 14 insertions(+), 34 deletions(-)
+ .../prog_tests/flow_dissector_load_bytes.c    | 50 +++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/flow_dissector_load_bytes.c
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 512773a95ad5..90f7eaf129c6 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -252,10 +252,8 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- 	u32 repeat = kattr->test.repeat;
- 	struct bpf_flow_keys flow_keys;
- 	u64 time_start, time_spent = 0;
--	struct bpf_skb_data_end *cb;
-+	const struct ethhdr *eth;
- 	u32 retval, duration;
--	struct sk_buff *skb;
--	struct sock *sk;
- 	void *data;
- 	int ret;
- 	u32 i;
-@@ -263,35 +261,14 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- 	if (prog->type != BPF_PROG_TYPE_FLOW_DISSECTOR)
- 		return -EINVAL;
- 
--	data = bpf_test_init(kattr, size, NET_SKB_PAD + NET_IP_ALIGN,
--			     SKB_DATA_ALIGN(sizeof(struct skb_shared_info)));
-+	if (size < ETH_HLEN)
-+		return -EINVAL;
+diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector_load_bytes.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector_load_bytes.c
+new file mode 100644
+index 000000000000..facf5734c915
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector_load_bytes.c
+@@ -0,0 +1,50 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
 +
-+	data = bpf_test_init(kattr, size, 0, 0);
- 	if (IS_ERR(data))
- 		return PTR_ERR(data);
- 
--	sk = kzalloc(sizeof(*sk), GFP_USER);
--	if (!sk) {
--		kfree(data);
--		return -ENOMEM;
--	}
--	sock_net_set(sk, current->nsproxy->net_ns);
--	sock_init_data(NULL, sk);
--
--	skb = build_skb(data, 0);
--	if (!skb) {
--		kfree(data);
--		kfree(sk);
--		return -ENOMEM;
--	}
--	skb->sk = sk;
--
--	skb_reserve(skb, NET_SKB_PAD + NET_IP_ALIGN);
--	__skb_put(skb, size);
--	skb->protocol = eth_type_trans(skb,
--				       current->nsproxy->net_ns->loopback_dev);
--	skb_reset_network_header(skb);
--
--	cb = (struct bpf_skb_data_end *)skb->cb;
--	cb->qdisc_cb.flow_keys = &flow_keys;
-+	eth = (struct ethhdr *)data;
- 
- 	if (!repeat)
- 		repeat = 1;
-@@ -300,9 +277,13 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- 	preempt_disable();
- 	time_start = ktime_get_ns();
- 	for (i = 0; i < repeat; i++) {
--		retval = bpf_flow_dissect_skb(prog, skb,
--					      &flow_keys_dissector,
--					      &flow_keys);
-+		retval = bpf_flow_dissect(prog, data, eth->h_proto, ETH_HLEN,
-+					  size, &flow_keys_dissector,
-+					  &flow_keys);
-+		if (flow_keys.nhoff >= ETH_HLEN)
-+			flow_keys.nhoff -= ETH_HLEN;
-+		if (flow_keys.thoff >= ETH_HLEN)
-+			flow_keys.thoff -= ETH_HLEN;
- 
- 		if (signal_pending(current)) {
- 			preempt_enable();
-@@ -335,7 +316,6 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- 			      retval, duration);
- 
- out:
--	kfree_skb(skb);
--	kfree(sk);
-+	kfree(data);
- 	return ret;
- }
++void test_flow_dissector_load_bytes(void)
++{
++	struct bpf_flow_keys flow_keys;
++	__u32 duration = 0, retval, size;
++	struct bpf_insn prog[] = {
++		// BPF_REG_1 - 1st argument: context
++		// BPF_REG_2 - 2nd argument: offset, start at last byte + 1
++		BPF_MOV64_IMM(BPF_REG_2, sizeof(pkt_v4)),
++		// BPF_REG_3 - 3rd argument: destination, reserve byte on stack
++		BPF_ALU64_REG(BPF_MOV, BPF_REG_3, BPF_REG_10),
++		BPF_ALU64_IMM(BPF_ADD, BPF_REG_3, -1),
++		// BPF_REG_4 - 4th argument: copy one byte
++		BPF_MOV64_IMM(BPF_REG_4, 1),
++		// bpf_skb_load_bytes(ctx, sizeof(pkt_v4), ptr, 1)
++		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0,
++			     BPF_FUNC_skb_load_bytes),
++		BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 2),
++		// if (ret == 0) return BPF_DROP (2)
++		BPF_MOV64_IMM(BPF_REG_0, BPF_DROP),
++		BPF_EXIT_INSN(),
++		// if (ret != 0) return BPF_OK (0)
++		BPF_MOV64_IMM(BPF_REG_0, BPF_OK),
++		BPF_EXIT_INSN(),
++	};
++	int fd, err;
++
++	/* make sure bpf_skb_load_bytes helper doesn't cause any
++	 * problems when used with the fake skb in the flow
++	 * dissector (try to read past the last byte)
++	 */
++	fd = bpf_load_program(BPF_PROG_TYPE_FLOW_DISSECTOR, prog,
++			      ARRAY_SIZE(prog), "GPL", 0, NULL, 0);
++	CHECK(fd < 0,
++	      "flow_dissector-bpf_skb_load_bytes-load",
++	      "fd %d errno %d\n",
++	      fd, errno);
++
++	err = bpf_prog_test_run(fd, 1, &pkt_v4, sizeof(pkt_v4),
++				&flow_keys, &size, &retval, &duration);
++	CHECK(size != sizeof(flow_keys) || err || retval != 1,
++	      "flow_dissector-bpf_skb_load_bytes",
++	      "err %d errno %d retval %d duration %d size %u/%lu\n",
++	      err, errno, retval, duration, size, sizeof(flow_keys));
++
++	if (fd >= -1)
++		close(fd);
++}
 -- 
 2.21.0.225.g810b269d1ac-goog
 
