@@ -2,176 +2,171 @@ Return-Path: <SRS0=wUMJ=RW=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-14.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_IN_DEF_DKIM_WL
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF28FC43381
-	for <bpf@archiver.kernel.org>; Tue, 19 Mar 2019 16:01:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B52AC10F03
+	for <bpf@archiver.kernel.org>; Tue, 19 Mar 2019 16:15:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B410F206B7
-	for <bpf@archiver.kernel.org>; Tue, 19 Mar 2019 16:01:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19EB720854
+	for <bpf@archiver.kernel.org>; Tue, 19 Mar 2019 16:15:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="DtEABpFi"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qxq7DiID"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727102AbfCSQBT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Mar 2019 12:01:19 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:46365 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726763AbfCSQBT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Mar 2019 12:01:19 -0400
-Received: by mail-pg1-f196.google.com with SMTP id a22so14122069pgg.13
-        for <bpf@vger.kernel.org>; Tue, 19 Mar 2019 09:01:18 -0700 (PDT)
+        id S1727739AbfCSQPF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Mar 2019 12:15:05 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:44237 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727405AbfCSQPA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Mar 2019 12:15:00 -0400
+Received: by mail-pf1-f195.google.com with SMTP id a3so14029036pff.11
+        for <bpf@vger.kernel.org>; Tue, 19 Mar 2019 09:14:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=SgZYRRELtQG8y/urfWvwSdwlCQCW9WSctv0L7J618BY=;
-        b=DtEABpFifeVhkG6R6gtahcQM/ajdrW6mtGQIGo1jWw2HLDURff4ASx9RKtJy2egz5l
-         /lWAhu7AMTTGOAQzgm/aieEhfBHEGHouZ3AyCMwUsNnmkgIDdErM0+O65dvr5PvDen6S
-         pA41brzF7YUh8YaNDiSXAI25OMAwcPWZ7vDj3sC97/zUdpdAaiVpOUmbNI4u64kzWJJZ
-         t89d3+bnLos0A0EMnM49gWwaAW5qtZyjVJIU4JTJ1NMybKIW7atzN6JlfrG7QEYHwoIT
-         fFqK5BBDizCzH0vuGw3gm3YEgsKI7QSLI/qeYevq73d+90bq7bzWfyDn9MpHKrX4joR5
-         Le0g==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PQgiC0kZ9u3Fy9QCp4MSDtSraYleFQhb/2xaBu2ZSrg=;
+        b=qxq7DiIDvuLMVQ34GJzbbwphhe3KaybKNLLIgWZcGxMMwPerSCP8RL7QKUW6OtyBKf
+         93s0/L1vzqFcVzh/gw7Cxoq5tPb1/WaJXpXJp3yNxXHHX+7WMTlqOagmGKRDtUxEMSKg
+         5DS0enSD5PzEjo4jy+UcwIsjiJOFl6BnvOboDUvPFYRjHX6Bkquppw7J1+eqRrui0XyJ
+         5KwS2/Yj9IcZSKFd33h7Wg5DbPnCVWpSh5pGJ75s8D7bMH8YcmfdqR842AAg13swxCOv
+         Kk2MxlHMbY3GoTWt8xmPsHQ5oVfatT1NEXrOp0w5gHtoFSTLFLhBqpyqHShIAnZJ8YpW
+         APtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=SgZYRRELtQG8y/urfWvwSdwlCQCW9WSctv0L7J618BY=;
-        b=FbNOCRbBSjq8R7A8mXBfSo+6Hq3fIXMJ+Fa0rw5bPSAn0smZOn8Z4KITH80PUOpEBp
-         3z69i7BUEI2zgB5RZ4cOozX4vwEuj1j0FhlW1lzD2odnx/cdTlpTiJhDs2JFmInrqtz1
-         WYlsNW5Ba2ykPVpwHnGiniY+49ENz5pQbqMH8vH+2gRBRHhwj4NyfuRLDLlDNAxOH7RR
-         bpxpUOnTRCl3BZtULWZR1MBcbhXKX7tv67En4ULwKUWhSB4lAinxErPOPiM8FhNfqjGW
-         8LTbutnHrXwODePo2j8sCNBdw9Hprb1uwiylKU8b6C140P0vO+0mquhi1KowyqgMKwSP
-         Qx+w==
-X-Gm-Message-State: APjAAAUSn18AdENJkr2ghm2a5QEsCD2SAHArmPBA+LgSCXqq4kiV0vGO
-        at8qyhKhbuAgPMkj6mYfO8V2qQ==
-X-Google-Smtp-Source: APXvYqwx1S2vhTSfBs6U06DVzOnDPbhnZoeD3g5reKIX9tjLJR7z/dXMD67YndScAGemi3hsloiWKQ==
-X-Received: by 2002:a63:d30b:: with SMTP id b11mr2536760pgg.116.1553011277566;
-        Tue, 19 Mar 2019 09:01:17 -0700 (PDT)
-Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
-        by smtp.gmail.com with ESMTPSA id g25sm10304757pfi.36.2019.03.19.09.01.16
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 19 Mar 2019 09:01:16 -0700 (PDT)
-Date:   Tue, 19 Mar 2019 09:01:15 -0700
-From:   Stanislav Fomichev <sdf@fomichev.me>
-To:     Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-Subject: Re: [PATCH] bpf, tests: tweak endianness selection
-Message-ID: <20190319160115.GD7431@mini-arch.hsd1.ca.comcast.net>
-References: <20190319023331.23207-1-sergey.senozhatsky@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PQgiC0kZ9u3Fy9QCp4MSDtSraYleFQhb/2xaBu2ZSrg=;
+        b=pvq3cTLbst5Nx7+U2brdJ8n2jWKA6jQeDb4uffLb+INkzVp07EN3MbEqKoGbjSznM3
+         GlpDg+d7ZTUrQ5Cq5h6daWuEOWW5DH5v0q+V/rAR7py4AhEv3mREJ84+6g69htXpGMzj
+         pg6YaaAfe4MrPmJtHuMoWEp/V7CIqJO9p2pCRn7B3rBFiDXeUd10UYINmrpYZ6m4Es7e
+         SpN76wILCvu/T3NC2hrHP70S8hyxSROhHc2feg3+CtjW8keGmFTMnOfJIAPDaDhGK2G1
+         HLg5ZEkg6KJAKH3sufLgzrOB8HwrHMsHWic76p/KkPDF2eEzAyUFP6eExQhb8RRy89cO
+         C3rA==
+X-Gm-Message-State: APjAAAW/uLHI/0IzjHbJRTKkXOLOWhF1F46GTeaUIVCvUmrJFsLCfIFd
+        p/TEmCHjsl9n6ycI+4vUozuJATptu8E5QSQJvuuykA==
+X-Google-Smtp-Source: APXvYqx361ALMb6OFk9w1BYTE4ilOTi6pgHPRxfVkFU9fEbW6rIBYMGJVoPW0XyRhBBEcWy7HAhjNpDB7rRiY+mc1bo=
+X-Received: by 2002:aa7:8b12:: with SMTP id f18mr3253945pfd.240.1553012098901;
+ Tue, 19 Mar 2019 09:14:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190319023331.23207-1-sergey.senozhatsky@gmail.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+References: <cover.1552929301.git.andreyknvl@google.com> <80e79c47dc7c5ee3572034a1d69bb724fbed2ecb.1552929301.git.andreyknvl@google.com>
+ <CANn89iJ4SeccE79gKiv5RFqaouFV8shFA+0dCS8+2D_1aRq_Kw@mail.gmail.com>
+In-Reply-To: <CANn89iJ4SeccE79gKiv5RFqaouFV8shFA+0dCS8+2D_1aRq_Kw@mail.gmail.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Tue, 19 Mar 2019 17:14:47 +0100
+Message-ID: <CAAeHK+xi4-6pgDYG8ypM8NsbhgncpsxgJeEXL1-BpkARXONvEQ@mail.gmail.com>
+Subject: Re: [PATCH v12 08/13] net, arm64: untag user pointers in tcp_zerocopy_receive
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Chintan Pandya <cpandya@codeaurora.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 03/19, Sergey Senozhatsky wrote:
-> Not all compilers have __builtin_bswap16() and __builtin_bswap32(),
-> thus not all compilers are able to compile the following code
-> (bpf_htons):
-> 
-> 	(__builtin_constant_p(x) ? \
-> 	 	___constant_swab16(x) : __builtin_bswap16(x))
-> 
-> That's why, for instance, bpf_htons() doesn't work on GCC < 4.8:
-> 
-> 	error: implicit declaration of function '__builtin_bswap16'
-> 
-> We can use __builtin_bswap16() only if compiler has this built-in,
-> that is, only if __HAVE_BUILTIN_BSWAP16__ is defined. Standard UAPI
-> __swab16()/__swab32() take care of that, and, additionally, handle
-> __builtin_constant_p() cases as well (if compiler doesn't provide
-> builtin bswap with constants folding):
-> 
->  #ifdef __HAVE_BUILTIN_BSWAP16__
->  #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
->  #else
->  #define __swab16(x)                             \
->          (__builtin_constant_p((__u16)(x)) ?     \
->          ___constant_swab16(x) :                 \
->          __fswab16(x))
->  #endif
-> 
-> So we can tweak selftests/bpf/bpf_endian.h and use UAPI
-> __swab16()/__swab32().
-> 
-> Signed-off-by: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-> ---
->  tools/testing/selftests/bpf/bpf_endian.h | 37 +++++-------------------
->  1 file changed, 8 insertions(+), 29 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/bpf_endian.h b/tools/testing/selftests/bpf/bpf_endian.h
-> index b25595ea4a78..ba06222963d5 100644
-> --- a/tools/testing/selftests/bpf/bpf_endian.h
-> +++ b/tools/testing/selftests/bpf/bpf_endian.h
-> @@ -20,38 +20,17 @@
->   * use different targets.
->   */
->  #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-> -# define __bpf_ntohs(x)			__builtin_bswap16(x)
-> -# define __bpf_htons(x)			__builtin_bswap16(x)
-> -# define __bpf_constant_ntohs(x)	___constant_swab16(x)
-> -# define __bpf_constant_htons(x)	___constant_swab16(x)
-This breaks the build until your next patch is applied (in other
-words, breaks bisection). Can we do it in three steps?
-Convert to swab (without breaking existing tests), convert the tests,
-remove unused __bpf_xyz defines?
+On Mon, Mar 18, 2019 at 6:35 PM Eric Dumazet <edumazet@google.com> wrote:
+>
+> On Mon, Mar 18, 2019 at 10:18 AM Andrey Konovalov <andreyknvl@google.com> wrote:
+> >
+> > This patch is a part of a series that extends arm64 kernel ABI to allow to
+> > pass tagged user pointers (with the top byte set to something else other
+> > than 0x00) as syscall arguments.
+> >
+> > tcp_zerocopy_receive() uses provided user pointers for vma lookups, which
+> > can only by done with untagged pointers.
+> >
+> > Untag user pointers in this function.
+> >
+> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> > ---
+> >  net/ipv4/tcp.c | 9 +++++++--
+> >  1 file changed, 7 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> > index 6baa6dc1b13b..e76beb5ff1ff 100644
+> > --- a/net/ipv4/tcp.c
+> > +++ b/net/ipv4/tcp.c
+> > @@ -1749,7 +1749,7 @@ EXPORT_SYMBOL(tcp_mmap);
+> >  static int tcp_zerocopy_receive(struct sock *sk,
+> >                                 struct tcp_zerocopy_receive *zc)
+> >  {
+> > -       unsigned long address = (unsigned long)zc->address;
+> > +       unsigned long address;
+> >         const skb_frag_t *frags = NULL;
+> >         u32 length = 0, seq, offset;
+> >         struct vm_area_struct *vma;
+> > @@ -1758,7 +1758,12 @@ static int tcp_zerocopy_receive(struct sock *sk,
+> >         int inq;
+> >         int ret;
+> >
+> > -       if (address & (PAGE_SIZE - 1) || address != zc->address)
+> > +       address = (unsigned long)untagged_addr(zc->address);
+> > +
+> > +       /* The second test in this if detects if the u64->unsigned long
+> > +        * conversion had any truncated bits.
+> > +        */
+> > +       if (address & (PAGE_SIZE - 1) || address != untagged_addr(zc->address))
+> >                 return -EINVAL;
+> >
+> >         if (sk->sk_state == TCP_LISTEN)
+>
+>
+> This is quite ugly, the comment does not really help nor belong to this patch.
+>
+> What about using  untagged_addr()  only once ?
+>
+> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> index 6baa6dc1b13b0b94b1da238668b93e167cf444fe..855a1f68c1ea9b0d07a92bd7f5e7c24840a99d3d
+> 100644
+> --- a/net/ipv4/tcp.c
+> +++ b/net/ipv4/tcp.c
+> @@ -1761,6 +1761,8 @@ static int tcp_zerocopy_receive(struct sock *sk,
+>         if (address & (PAGE_SIZE - 1) || address != zc->address)
+>                 return -EINVAL;
+>
+> +       address = untagged_addr(address);
+> +
+>         if (sk->sk_state == TCP_LISTEN)
+>                 return -ENOTCONN;
 
-Could you also send it as a series (git format-patch --thread)? Those
-patches depend on each other. And pls use [PATCH bpf-next] ... subj.
-
-> -# define __bpf_ntohl(x)			__builtin_bswap32(x)
-> -# define __bpf_htonl(x)			__builtin_bswap32(x)
-> -# define __bpf_constant_ntohl(x)	___constant_swab32(x)
-> -# define __bpf_constant_htonl(x)	___constant_swab32(x)
-> +# define bpf_ntohs(x)		__swab16(x)
-> +# define bpf_htons(x)		__swab16(x)
-> +# define bpf_ntohl(x)		__swab32(x)
-> +# define bpf_htonl(x)		__swab32(x)
->  #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-> -# define __bpf_ntohs(x)			(x)
-> -# define __bpf_htons(x)			(x)
-> -# define __bpf_constant_ntohs(x)	(x)
-> -# define __bpf_constant_htons(x)	(x)
-> -# define __bpf_ntohl(x)			(x)
-> -# define __bpf_htonl(x)			(x)
-> -# define __bpf_constant_ntohl(x)	(x)
-> -# define __bpf_constant_htonl(x)	(x)
-> +# define bpf_ntohs(x)		(x)
-> +# define bpf_htons(x)		(x)
-> +# define bpf_ntohl(x)		(x)
-> +# define bpf_htonl(x)		(x)
->  #else
->  # error "Fix your compiler's __BYTE_ORDER__?!"
->  #endif
->  
-> -#define bpf_htons(x)				\
-> -	(__builtin_constant_p(x) ?		\
-> -	 __bpf_constant_htons(x) : __bpf_htons(x))
-> -#define bpf_ntohs(x)				\
-> -	(__builtin_constant_p(x) ?		\
-> -	 __bpf_constant_ntohs(x) : __bpf_ntohs(x))
-> -#define bpf_htonl(x)				\
-> -	(__builtin_constant_p(x) ?		\
-> -	 __bpf_constant_htonl(x) : __bpf_htonl(x))
-> -#define bpf_ntohl(x)				\
-> -	(__builtin_constant_p(x) ?		\
-> -	 __bpf_constant_ntohl(x) : __bpf_ntohl(x))
-> -
->  #endif /* __BPF_ENDIAN__ */
-> -- 
-> 2.21.0
-> 
+Looks good, will do it like this in the next version. Thanks!
