@@ -7,56 +7,57 @@ X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2FD9C4360F
-	for <bpf@archiver.kernel.org>; Tue, 19 Mar 2019 22:20:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A61EC10F03
+	for <bpf@archiver.kernel.org>; Tue, 19 Mar 2019 22:20:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 703F9217F4
-	for <bpf@archiver.kernel.org>; Tue, 19 Mar 2019 22:20:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CA8CB217F9
+	for <bpf@archiver.kernel.org>; Tue, 19 Mar 2019 22:20:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hW6T0Btq"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Yqy3cxkS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727534AbfCSWUG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Mar 2019 18:20:06 -0400
-Received: from mail-io1-f73.google.com ([209.85.166.73]:48904 "EHLO
+        id S1727376AbfCSWUI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Mar 2019 18:20:08 -0400
+Received: from mail-io1-f73.google.com ([209.85.166.73]:40419 "EHLO
         mail-io1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727520AbfCSWUF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Mar 2019 18:20:05 -0400
-Received: by mail-io1-f73.google.com with SMTP id 186so207798iox.15
-        for <bpf@vger.kernel.org>; Tue, 19 Mar 2019 15:20:04 -0700 (PDT)
+        with ESMTP id S1727538AbfCSWUH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Mar 2019 18:20:07 -0400
+Received: by mail-io1-f73.google.com with SMTP id e72so221032iof.7
+        for <bpf@vger.kernel.org>; Tue, 19 Mar 2019 15:20:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=ot4YjTheNksiof68PiocLGjhL7teUjBqTTDotsScvGA=;
-        b=hW6T0BtqZIknv5F7vxjL/ozgDsf2H7j7jERccgvv9kIR1r+furQg6xoh2DlXhrLrrY
-         vtBBB7oSFXI4hvDtkxwK5xhRIN4M5ll63i4YOYsdbkXiJqVYGLqDr3VYhf6Wv6uzep1/
-         /aH9bOBaNUmPzLio5Nzl1lzUZ1ctt1/ZwJv79bOWmdy74zyc7HLPevwZz/23e1t6l/zD
-         s66cbbgVwPUQK4RLKT63rzWCMt50iHjOYBe/fzeJhLfwjg+XZOVhhbIRvDekd/gKmXms
-         KlR5DXYfkGfl7GR5hgVzbXm2q9txlrQSCIC1oCL4UTSvicceyN2KnGHiSBa3q4jgfews
-         uYQw==
+        bh=1vvC+4yB/9px9Z4pL9ov1KByJAvWQBmz/fblWWwJLE4=;
+        b=Yqy3cxkSMYDAOJrTji0+iqLsWLFk+uvL0DYi2TTtXNZV9vI0B5hLdGWyuUyaq6jtWK
+         k/WmVH+citO28CRvOPUXSqEHU07q2Vo0NUr2kVwiY3Hl7ysS01qCJc0pmEXrYtoiJkjc
+         Te20qd6tyFpNn05OzIZt3SOwB5hyw4cX2w8oNagw5iJM9OxUsKUcwvzvEC24SUPrs29l
+         zWBoHQQQly3PD4aZXqPt22byc9obv0//L73U2ON6XV48a1KoboQvq34P3FO0mq4N1LKJ
+         RKKZHR2mL7JI9xAEVYhIffIhVY6Dz0NlRv1yU1KyScsRfabSuFn/pu3SdS6HI5XXc9s8
+         9mAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=ot4YjTheNksiof68PiocLGjhL7teUjBqTTDotsScvGA=;
-        b=hp4N6WFox0+VL/M2flN1DFFxJLl0qbsy5O49nHu+AiG7iUrLe1RKj26eCfyvZrHoaC
-         VHZvpESkrrhXCrrzTVSyBSgPZwuglAngEtRHXv03qjqSo25a74Pychj41cbZ6LDBy3Yx
-         MyPJSkDtTVSBUZhPPLuqjGTFC4HEPRCsTDDs0IHRw8iy2eLeKsonQdDdUW6SCcxpodLs
-         Sg8U6m3jY0uklxFaBbIxBngkuiNN5ntbZNLk8t4wavSkiuRKhiJ3+CHem50wjQuI+kMv
-         w1jAwDv6Ve9xjO7hJXloYULZxPrFruQTLHkTAbOgyC52IUDR9PCjplyDLKYMJC5xInlh
-         Z+NQ==
-X-Gm-Message-State: APjAAAXv4cZCoRYyuxyXusNwqEmfmHI/U0kShjiBhPgTC/rgma4atu30
-        iaI9XcgLzJMWizSINT53uTRwxU8=
-X-Google-Smtp-Source: APXvYqxmRx1w6Z5kz8OG85qiGkgqBtxiz6Mq4hNOg25uYDMArtgsIagYP8J18LXjOP+WIozOG0e9XYs=
-X-Received: by 2002:a05:660c:48:: with SMTP id p8mr2809067itk.31.1553034003916;
- Tue, 19 Mar 2019 15:20:03 -0700 (PDT)
-Date:   Tue, 19 Mar 2019 15:19:43 -0700
+        bh=1vvC+4yB/9px9Z4pL9ov1KByJAvWQBmz/fblWWwJLE4=;
+        b=W4+tKo5D52+GHQOgchPZFJwaEWuboDtoI9SC4aVjvmIKohwNFpuo/anAoxDZ3XeGk9
+         Yji5ZMt+zZRXnvfkEgXXa5yQo9vqzLeTO8fbiqNErApey7QKWrYpSdZy/Z00sbeHgGHO
+         UDwtFNmHmjJ+sXcH4OCbXUVZiBAaiQr+DZRK3tdibqsvyATQzBSLFRNH0jcmO4v3tw4w
+         wo++9tA5MK06d781OR5nB1v1WGq0lgp4zil4hCu75Wpce+oD81aKIEBIgdmoaUxztkXJ
+         t7dsnaU1/NYWDmcLwR29VitYchA0JowbcEs52HLea0kBkR9t8Qy67K8/KPwjmS3YaggW
+         Rk9g==
+X-Gm-Message-State: APjAAAWokMf0OcbttkSw/G3QksrHNgeEvofzEy/PT+Va7WxNy0VDWfjj
+        iZ1DgkDutHymhMg3U7Y+gVJStTE=
+X-Google-Smtp-Source: APXvYqzt7jT3wjyvUc8GSsuVkcLrlTaB1kIShq08VOGAw4Bd+LYkH7WSg7dRSThZeQJ+kbAVdvr9NTk=
+X-Received: by 2002:a24:5c5:: with SMTP id 188mr3012475itl.3.1553034006660;
+ Tue, 19 Mar 2019 15:20:06 -0700 (PDT)
+Date:   Tue, 19 Mar 2019 15:19:44 -0700
 In-Reply-To: <20190319221948.170441-1-sdf@google.com>
-Message-Id: <20190319221948.170441-5-sdf@google.com>
+Message-Id: <20190319221948.170441-6-sdf@google.com>
 Mime-Version: 1.0
 References: <20190319221948.170441-1-sdf@google.com>
 X-Mailer: git-send-email 2.21.0.225.g810b269d1ac-goog
-Subject: [RFC bpf-next v2 4/9] net: flow_dissector: prepare for no-skb use case
+Subject: [RFC bpf-next v2 5/9] flow_dissector: allow access only to a subset
+ of __sk_buff fields
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
@@ -68,154 +69,49 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Create helpers that will be reused by both versions:
-* init_flow_keys - initialize flow keys
-* clamp_flow_keys - clam flow keys when done
+Use whitelist instead of a blacklist and allow only a small set of
+fields that might be relevant in the context of flow dissector:
+* len
+* protocol
+* vlan_present
+* vlan_tci
+* vlan_proto
+* cb
 
-Rename (to have consistent bpf_flow_ prefix):
-* __skb_flow_bpf_dissect to bpf_flow_dissect_skb
-* __skb_flow_bpf_to_target to bpf_flow_keys_to_target
+This is required for the eth_get_headlen case where we construct
+temporary skb which might not have full/consistent state to let flow
+dissector programs access all the fields (which are irrelevant in for
+flow dissector program type).
 
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- include/linux/skbuff.h    |  8 +++---
- net/bpf/test_run.c        |  6 ++---
- net/core/flow_dissector.c | 56 +++++++++++++++++++++++++--------------
- 3 files changed, 43 insertions(+), 27 deletions(-)
+ net/core/filter.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 4ca4c60cbacb..194dbc2985e5 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -1278,10 +1278,10 @@ static inline int skb_flow_dissector_bpf_prog_detach(const union bpf_attr *attr)
- struct net *skb_net(const struct sk_buff *skb);
- 
- struct bpf_flow_keys;
--bool __skb_flow_bpf_dissect(struct bpf_prog *prog,
--			    const struct sk_buff *skb,
--			    struct flow_dissector *flow_dissector,
--			    struct bpf_flow_keys *flow_keys);
-+bool bpf_flow_dissect_skb(struct bpf_prog *prog,
-+			  const struct sk_buff *skb,
-+			  struct flow_dissector *flow_dissector,
-+			  struct bpf_flow_keys *flow_keys);
- bool __skb_flow_dissect(struct net *net,
- 			const struct sk_buff *skb,
- 			struct flow_dissector *flow_dissector,
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index fab142b796ef..512773a95ad5 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -300,9 +300,9 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- 	preempt_disable();
- 	time_start = ktime_get_ns();
- 	for (i = 0; i < repeat; i++) {
--		retval = __skb_flow_bpf_dissect(prog, skb,
--						&flow_keys_dissector,
--						&flow_keys);
-+		retval = bpf_flow_dissect_skb(prog, skb,
-+					      &flow_keys_dissector,
-+					      &flow_keys);
- 
- 		if (signal_pending(current)) {
- 			preempt_enable();
-diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
-index e13165e7528c..ab43f9bd7ec4 100644
---- a/net/core/flow_dissector.c
-+++ b/net/core/flow_dissector.c
-@@ -629,9 +629,9 @@ static bool skb_flow_dissect_allowed(int *num_hdrs)
- 	return (*num_hdrs <= MAX_FLOW_DISSECT_HDRS);
- }
- 
--static void __skb_flow_bpf_to_target(const struct bpf_flow_keys *flow_keys,
--				     struct flow_dissector *flow_dissector,
--				     void *target_container)
-+static void bpf_flow_keys_to_target(const struct bpf_flow_keys *flow_keys,
-+				    struct flow_dissector *flow_dissector,
-+				    void *target_container)
- {
- 	struct flow_dissector_key_control *key_control;
- 	struct flow_dissector_key_basic *key_basic;
-@@ -683,10 +683,32 @@ static void __skb_flow_bpf_to_target(const struct bpf_flow_keys *flow_keys,
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 647c63a7b25b..5f413567ce8a 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -6632,11 +6632,14 @@ static bool flow_dissector_is_valid_access(int off, int size,
+ 	case bpf_ctx_range_ptr(struct __sk_buff, flow_keys):
+ 		info->reg_type = PTR_TO_FLOW_KEYS;
+ 		break;
+-	case bpf_ctx_range(struct __sk_buff, tc_classid):
+-	case bpf_ctx_range(struct __sk_buff, data_meta):
+-	case bpf_ctx_range_till(struct __sk_buff, family, local_port):
+-	case bpf_ctx_range(struct __sk_buff, tstamp):
+-	case bpf_ctx_range(struct __sk_buff, wire_len):
++	case bpf_ctx_range(struct __sk_buff, len):
++	case bpf_ctx_range(struct __sk_buff, protocol):
++	case bpf_ctx_range(struct __sk_buff, vlan_present):
++	case bpf_ctx_range(struct __sk_buff, vlan_tci):
++	case bpf_ctx_range(struct __sk_buff, vlan_proto):
++	case bpf_ctx_range_till(struct __sk_buff, cb[0], cb[4]):
++		break;
++	default:
+ 		return false;
  	}
- }
  
--bool __skb_flow_bpf_dissect(struct bpf_prog *prog,
--			    const struct sk_buff *skb,
--			    struct flow_dissector *flow_dissector,
--			    struct bpf_flow_keys *flow_keys)
-+static inline void init_flow_keys(struct bpf_flow_keys *flow_keys,
-+				  const struct sk_buff *skb, int nhoff)
-+{
-+	struct bpf_skb_data_end *cb = (struct bpf_skb_data_end *)skb->cb;
-+
-+	memset(cb, 0, sizeof(*cb));
-+	memset(flow_keys, 0, sizeof(*flow_keys));
-+
-+	flow_keys->nhoff = nhoff;
-+	flow_keys->thoff = nhoff;
-+
-+	cb->qdisc_cb.flow_keys = flow_keys;
-+}
-+
-+static inline void clamp_flow_keys(struct bpf_flow_keys *flow_keys,
-+				   int hlen)
-+{
-+	flow_keys->nhoff = clamp_t(u16, flow_keys->nhoff, 0, hlen);
-+	flow_keys->thoff = clamp_t(u16, flow_keys->thoff,
-+				   flow_keys->nhoff, hlen);
-+}
-+
-+bool bpf_flow_dissect_skb(struct bpf_prog *prog,
-+			  const struct sk_buff *skb,
-+			  struct flow_dissector *flow_dissector,
-+			  struct bpf_flow_keys *flow_keys)
- {
- 	struct bpf_skb_data_end cb_saved;
- 	struct bpf_skb_data_end *cb;
-@@ -702,13 +724,9 @@ bool __skb_flow_bpf_dissect(struct bpf_prog *prog,
- 
- 	/* Save Control Block */
- 	memcpy(&cb_saved, cb, sizeof(cb_saved));
--	memset(cb, 0, sizeof(*cb));
- 
- 	/* Pass parameters to the BPF program */
--	memset(flow_keys, 0, sizeof(*flow_keys));
--	cb->qdisc_cb.flow_keys = flow_keys;
--	flow_keys->nhoff = skb_network_offset(skb);
--	flow_keys->thoff = flow_keys->nhoff;
-+	init_flow_keys(flow_keys, skb, skb_network_offset(skb));
- 
- 	bpf_compute_data_pointers((struct sk_buff *)skb);
- 	result = BPF_PROG_RUN(prog, skb);
-@@ -716,9 +734,7 @@ bool __skb_flow_bpf_dissect(struct bpf_prog *prog,
- 	/* Restore state */
- 	memcpy(cb, &cb_saved, sizeof(cb_saved));
- 
--	flow_keys->nhoff = clamp_t(u16, flow_keys->nhoff, 0, skb->len);
--	flow_keys->thoff = clamp_t(u16, flow_keys->thoff,
--				   flow_keys->nhoff, skb->len);
-+	clamp_flow_keys(flow_keys, skb->len);
- 
- 	return result == BPF_OK;
- }
-@@ -806,11 +822,11 @@ bool __skb_flow_dissect(struct net *net,
- 			attached = rcu_dereference(net->flow_dissector_prog);
- 
- 		if (attached) {
--			ret = __skb_flow_bpf_dissect(attached, skb,
--						     flow_dissector,
--						     &flow_keys);
--			__skb_flow_bpf_to_target(&flow_keys, flow_dissector,
--						 target_container);
-+			ret = bpf_flow_dissect_skb(attached, skb,
-+						   flow_dissector,
-+						   &flow_keys);
-+			bpf_flow_keys_to_target(&flow_keys, flow_dissector,
-+						target_container);
- 			rcu_read_unlock();
- 			return ret;
- 		}
 -- 
 2.21.0.225.g810b269d1ac-goog
 
