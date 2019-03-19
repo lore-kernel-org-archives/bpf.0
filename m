@@ -2,158 +2,176 @@ Return-Path: <SRS0=wUMJ=RW=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_NEOMUTT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBB63C43381
-	for <bpf@archiver.kernel.org>; Tue, 19 Mar 2019 15:38:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF28FC43381
+	for <bpf@archiver.kernel.org>; Tue, 19 Mar 2019 16:01:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 98CB22083D
-	for <bpf@archiver.kernel.org>; Tue, 19 Mar 2019 15:38:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B410F206B7
+	for <bpf@archiver.kernel.org>; Tue, 19 Mar 2019 16:01:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jQpIsuan"
+	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="DtEABpFi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727270AbfCSPiM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Mar 2019 11:38:12 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:33957 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727054AbfCSPiM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Mar 2019 11:38:12 -0400
-Received: by mail-pg1-f194.google.com with SMTP id v12so14149435pgq.1;
-        Tue, 19 Mar 2019 08:38:11 -0700 (PDT)
+        id S1727102AbfCSQBT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Mar 2019 12:01:19 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:46365 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726763AbfCSQBT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Mar 2019 12:01:19 -0400
+Received: by mail-pg1-f196.google.com with SMTP id a22so14122069pgg.13
+        for <bpf@vger.kernel.org>; Tue, 19 Mar 2019 09:01:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=U+rDt+7dam2GClzpVRYyDgjfZoNsanw49Jbj5WxVGSI=;
-        b=jQpIsuanSZCEHHonEsLDfz4uYcPeucvWsIqhDm4LouleVM5oWzsDb2/dh8q+eO1cUk
-         k67WKnnsWwCa2Utea3YA/Ss1OsSIk0ftuCtL9UhEE+V6gPKMetsl9Bj6beoapd2cR9iS
-         QttkHOeQ4VwCe0buipfDgUCyYU/jITNqC+EGo/PvhZcVBXdiRo9QuSu74UJJr2hrV+Br
-         12tlpNJiGBTHj9d0TT3uWFIOIge/XwfGFZhVbeFUDyYlsSO1rBX/Yr5C4f1iIqDtDBlp
-         gZ7uoEVHbUO4jKXK2zk7y/vPLlikVzpYtrn6/m7D+s7qnKVfm+rcnnYa9//GxJ+7Toqb
-         3N2g==
+        bh=SgZYRRELtQG8y/urfWvwSdwlCQCW9WSctv0L7J618BY=;
+        b=DtEABpFifeVhkG6R6gtahcQM/ajdrW6mtGQIGo1jWw2HLDURff4ASx9RKtJy2egz5l
+         /lWAhu7AMTTGOAQzgm/aieEhfBHEGHouZ3AyCMwUsNnmkgIDdErM0+O65dvr5PvDen6S
+         pA41brzF7YUh8YaNDiSXAI25OMAwcPWZ7vDj3sC97/zUdpdAaiVpOUmbNI4u64kzWJJZ
+         t89d3+bnLos0A0EMnM49gWwaAW5qtZyjVJIU4JTJ1NMybKIW7atzN6JlfrG7QEYHwoIT
+         fFqK5BBDizCzH0vuGw3gm3YEgsKI7QSLI/qeYevq73d+90bq7bzWfyDn9MpHKrX4joR5
+         Le0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=U+rDt+7dam2GClzpVRYyDgjfZoNsanw49Jbj5WxVGSI=;
-        b=NLA3kwoOaM203QTHAkvtkGe1HuxXaWgJPcVZVjn6ee5ikt7VHKPFZMimHGj8806r4e
-         1aHM6GxEPG3LjY/k79GaoNPKSTNLCN9Dx2gCo8e1nY2bZDhSGGFpDdlUn29PrxJVoC8F
-         YS3FB2sUILLpMdZzffj4yeFhLJdJrQt08OUHnjPwIS/oNPkkn2dI3jXx8/Uivix746PQ
-         rzQosAbo4IJK16mC/IMLgBRDkTa6g9CI3pAD3X9dbFZK6X7QJMOExztCC75NhZLPENnS
-         GXU0J7Nq3ZCL8ocIDxH5Ldfy7Ew+iPpWKEFz3KuVLby7HjNdcx+7YfWh7RT5sHgikWEo
-         ViqA==
-X-Gm-Message-State: APjAAAWEIvcJZCeRKTsGFFMOwh8rLKJ+Kf0HPSydsD4BMvuMQCzXCosc
-        TaJgpRc3AtJ5mZJFNEXmuos=
-X-Google-Smtp-Source: APXvYqzE4i0Jce0Js/vX7YD8snpPyUDW0HNkyjMbc4QKWaFvo0Zn0lDcBCLRJXQdMK67hbplVco2Zg==
-X-Received: by 2002:a17:902:7103:: with SMTP id a3mr2704677pll.214.1553009891290;
-        Tue, 19 Mar 2019 08:38:11 -0700 (PDT)
-Received: from ast-mbp ([2603:3023:16e:5000:108a:d1df:38f5:ffa4])
-        by smtp.gmail.com with ESMTPSA id z128sm5275125pfz.107.2019.03.19.08.38.09
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 19 Mar 2019 08:38:10 -0700 (PDT)
-Date:   Tue, 19 Mar 2019 08:36:04 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Saeed Mahameed <saeedm@mellanox.com>
-Cc:     "songliubraving@fb.com" <songliubraving@fb.com>,
-        "toke@redhat.com" <toke@redhat.com>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrew.gospodarek@broadcom.com" <andrew.gospodarek@broadcom.com>,
-        "jesper.brouer@gmail.com" <jesper.brouer@gmail.com>,
-        "bblanco@gmail.com" <bblanco@gmail.com>,
-        "jakub.kicinski@netronome.com" <jakub.kicinski@netronome.com>,
-        "bjorn.topel@gmail.com" <bjorn.topel@gmail.com>,
-        "kafai@fb.com" <kafai@fb.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "iovisor-dev@lists.iovisor.org" <iovisor-dev@lists.iovisor.org>
-Subject: Re: [RFC][Proposal] BPF Control MAP
-Message-ID: <20190319153603.qfhp3nc5dxwgptlh@ast-mbp>
-References: <df010a2772ae07af29c9aac1c6d329b14203710c.camel@mellanox.com>
+        bh=SgZYRRELtQG8y/urfWvwSdwlCQCW9WSctv0L7J618BY=;
+        b=FbNOCRbBSjq8R7A8mXBfSo+6Hq3fIXMJ+Fa0rw5bPSAn0smZOn8Z4KITH80PUOpEBp
+         3z69i7BUEI2zgB5RZ4cOozX4vwEuj1j0FhlW1lzD2odnx/cdTlpTiJhDs2JFmInrqtz1
+         WYlsNW5Ba2ykPVpwHnGiniY+49ENz5pQbqMH8vH+2gRBRHhwj4NyfuRLDLlDNAxOH7RR
+         bpxpUOnTRCl3BZtULWZR1MBcbhXKX7tv67En4ULwKUWhSB4lAinxErPOPiM8FhNfqjGW
+         8LTbutnHrXwODePo2j8sCNBdw9Hprb1uwiylKU8b6C140P0vO+0mquhi1KowyqgMKwSP
+         Qx+w==
+X-Gm-Message-State: APjAAAUSn18AdENJkr2ghm2a5QEsCD2SAHArmPBA+LgSCXqq4kiV0vGO
+        at8qyhKhbuAgPMkj6mYfO8V2qQ==
+X-Google-Smtp-Source: APXvYqwx1S2vhTSfBs6U06DVzOnDPbhnZoeD3g5reKIX9tjLJR7z/dXMD67YndScAGemi3hsloiWKQ==
+X-Received: by 2002:a63:d30b:: with SMTP id b11mr2536760pgg.116.1553011277566;
+        Tue, 19 Mar 2019 09:01:17 -0700 (PDT)
+Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
+        by smtp.gmail.com with ESMTPSA id g25sm10304757pfi.36.2019.03.19.09.01.16
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 19 Mar 2019 09:01:16 -0700 (PDT)
+Date:   Tue, 19 Mar 2019 09:01:15 -0700
+From:   Stanislav Fomichev <sdf@fomichev.me>
+To:     Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+Subject: Re: [PATCH] bpf, tests: tweak endianness selection
+Message-ID: <20190319160115.GD7431@mini-arch.hsd1.ca.comcast.net>
+References: <20190319023331.23207-1-sergey.senozhatsky@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <df010a2772ae07af29c9aac1c6d329b14203710c.camel@mellanox.com>
-User-Agent: NeoMutt/20180223
+In-Reply-To: <20190319023331.23207-1-sergey.senozhatsky@gmail.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Mar 08, 2019 at 08:51:03PM +0000, Saeed Mahameed wrote:
+On 03/19, Sergey Senozhatsky wrote:
+> Not all compilers have __builtin_bswap16() and __builtin_bswap32(),
+> thus not all compilers are able to compile the following code
+> (bpf_htons):
 > 
-> Thoughts ?
-
-It's certainly an interesting idea. I think we need to agree on use cases
-and goals first before bikesheding on the solution.
-
+> 	(__builtin_constant_p(x) ? \
+> 	 	___constant_swab16(x) : __builtin_bswap16(x))
 > 
-> Example use cases (XDP only for now):
+> That's why, for instance, bpf_htons() doesn't work on GCC < 4.8:
 > 
-> 1) Query XDP stats of all XDP netdevs:
+> 	error: implicit declaration of function '__builtin_bswap16'
 > 
-> xdp_ctrl = bpf_create_map(BPF_MAP_TYPE_CONTROL, map_attr.ctrl_type =
-> XDP_STATS);
+> We can use __builtin_bswap16() only if compiler has this built-in,
+> that is, only if __HAVE_BUILTIN_BSWAP16__ is defined. Standard UAPI
+> __swab16()/__swab32() take care of that, and, additionally, handle
+> __builtin_constant_p() cases as well (if compiler doesn't provide
+> builtin bswap with constants folding):
 > 
-> while (bpf_map_get_next_key(xdp_ctrl, &ifindex, &next_ifindex) == 0) {
->         bpf_map_lookup_elem(xdp_ctrl, &next_ifindex, &stats);
->         // we don't even need to know stats format in this case
->         btf_pretty_print(xdp_ctrl->btf, &stats);
->         ifindex =  next_ifindex;
-> }
-
-this bit show cases advantage of BTF nicely.
-
-> 2) Setup XDP tx redirect resources on egress netdev (netdev with no XDP
-> program).
+>  #ifdef __HAVE_BUILTIN_BSWAP16__
+>  #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+>  #else
+>  #define __swab16(x)                             \
+>          (__builtin_constant_p((__u16)(x)) ?     \
+>          ___constant_swab16(x) :                 \
+>          __fswab16(x))
+>  #endif
 > 
-> xdp_ctrl = bpf_create_map(BPF_MAP_TYPE_CONTROL, map_attr.ctrl_type =
-> XDP_ATTR);
+> So we can tweak selftests/bpf/bpf_endian.h and use UAPI
+> __swab16()/__swab32().
 > 
-> xdp_attr->command = SETUP_REDIRECT;
-> xdp_attr->rings.num = 12;
-> xdp_attr->rings.size = 128;
-> bpf_map_update_elem(xdp_ctrl, &ifindex, &xdp_attr);
-
-this one starting to become a bit odd, since input arguments are split
-between key an value. ifindex is part of the key whereas command,
-rings.num and rings.size are part of the value.
-
-> 3) Turn On/Off XDP meta data offloads and retrieve meta data BTF format
-> of specific netdev/hardware:
+> Signed-off-by: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+> ---
+>  tools/testing/selftests/bpf/bpf_endian.h | 37 +++++-------------------
+>  1 file changed, 8 insertions(+), 29 deletions(-)
 > 
-> xdp_ctrl = bpf_create_map(BPF_MAP_TYPE_CONTROL, map_attr.ctrl_type =
-> XDP_ATTR);
+> diff --git a/tools/testing/selftests/bpf/bpf_endian.h b/tools/testing/selftests/bpf/bpf_endian.h
+> index b25595ea4a78..ba06222963d5 100644
+> --- a/tools/testing/selftests/bpf/bpf_endian.h
+> +++ b/tools/testing/selftests/bpf/bpf_endian.h
+> @@ -20,38 +20,17 @@
+>   * use different targets.
+>   */
+>  #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+> -# define __bpf_ntohs(x)			__builtin_bswap16(x)
+> -# define __bpf_htons(x)			__builtin_bswap16(x)
+> -# define __bpf_constant_ntohs(x)	___constant_swab16(x)
+> -# define __bpf_constant_htons(x)	___constant_swab16(x)
+This breaks the build until your next patch is applied (in other
+words, breaks bisection). Can we do it in three steps?
+Convert to swab (without breaking existing tests), convert the tests,
+remove unused __bpf_xyz defines?
+
+Could you also send it as a series (git format-patch --thread)? Those
+patches depend on each other. And pls use [PATCH bpf-next] ... subj.
+
+> -# define __bpf_ntohl(x)			__builtin_bswap32(x)
+> -# define __bpf_htonl(x)			__builtin_bswap32(x)
+> -# define __bpf_constant_ntohl(x)	___constant_swab32(x)
+> -# define __bpf_constant_htonl(x)	___constant_swab32(x)
+> +# define bpf_ntohs(x)		__swab16(x)
+> +# define bpf_htons(x)		__swab16(x)
+> +# define bpf_ntohl(x)		__swab32(x)
+> +# define bpf_htonl(x)		__swab32(x)
+>  #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+> -# define __bpf_ntohs(x)			(x)
+> -# define __bpf_htons(x)			(x)
+> -# define __bpf_constant_ntohs(x)	(x)
+> -# define __bpf_constant_htons(x)	(x)
+> -# define __bpf_ntohl(x)			(x)
+> -# define __bpf_htonl(x)			(x)
+> -# define __bpf_constant_ntohl(x)	(x)
+> -# define __bpf_constant_htonl(x)	(x)
+> +# define bpf_ntohs(x)		(x)
+> +# define bpf_htons(x)		(x)
+> +# define bpf_ntohl(x)		(x)
+> +# define bpf_htonl(x)		(x)
+>  #else
+>  # error "Fix your compiler's __BYTE_ORDER__?!"
+>  #endif
+>  
+> -#define bpf_htons(x)				\
+> -	(__builtin_constant_p(x) ?		\
+> -	 __bpf_constant_htons(x) : __bpf_htons(x))
+> -#define bpf_ntohs(x)				\
+> -	(__builtin_constant_p(x) ?		\
+> -	 __bpf_constant_ntohs(x) : __bpf_ntohs(x))
+> -#define bpf_htonl(x)				\
+> -	(__builtin_constant_p(x) ?		\
+> -	 __bpf_constant_htonl(x) : __bpf_htonl(x))
+> -#define bpf_ntohl(x)				\
+> -	(__builtin_constant_p(x) ?		\
+> -	 __bpf_constant_ntohl(x) : __bpf_ntohl(x))
+> -
+>  #endif /* __BPF_ENDIAN__ */
+> -- 
+> 2.21.0
 > 
-> xdp_attr->command = SETUP_MD;
-> xdp_attr->enable_md = 1;
-> err = bpf_map_update_elem(xdp_ctrl, &ifindex, &xdp_attr);
-> if (err) {
->       printf("XDP meta data is not supported on this netdev");
->       return;
-> }
-> // Query Meta data BTF
-> bpf_map_lookup_elem(xdp_ctrl, &ifindex, &xdp_attr);
-> md_btf = xdp_attr.md_btf;
-
-here it gets even weirder, since lookup arguments are also
-split between key and value.
-ifindex is inside the key while addition info is passed
-inside xdp_attr which is part of value.
-
-I wish we could do maps where every key would have different layout.
-Then such api would be suitable.
-The existing maps require all keys and values to be inform.
-I guess one can argue that such 'control map' can have one element
-and one value, but then what is the purpose of 'map_create'
-and 'map_delete==close(fd)' operations?
-
-I think we need something else here. Using BTF to describe
-output stats is nice, but using BTF to describe input query is problematic,
-since user cannot know before hand what kernel can and cannot accept.
-imo input should be stable uapi with fixed constants whereas
-stats-like output can be BTF based and vary from driver to driver
-and from one nic version to another.
-
