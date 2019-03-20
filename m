@@ -7,56 +7,56 @@ X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D6EBC43381
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 14:54:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C275C43381
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 14:55:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EE9B82146E
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 14:54:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6BC792146E
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 14:55:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="A+JYGhZ3"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aEInHw6B"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728443AbfCTOwG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Mar 2019 10:52:06 -0400
-Received: from mail-vs1-f73.google.com ([209.85.217.73]:52221 "EHLO
-        mail-vs1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728440AbfCTOwD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Mar 2019 10:52:03 -0400
-Received: by mail-vs1-f73.google.com with SMTP id g67so850230vsd.18
-        for <bpf@vger.kernel.org>; Wed, 20 Mar 2019 07:52:03 -0700 (PDT)
+        id S1728431AbfCTOwB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Mar 2019 10:52:01 -0400
+Received: from mail-yw1-f74.google.com ([209.85.161.74]:55173 "EHLO
+        mail-yw1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728417AbfCTOwA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Mar 2019 10:52:00 -0400
+Received: by mail-yw1-f74.google.com with SMTP id h3so3369363ywe.21
+        for <bpf@vger.kernel.org>; Wed, 20 Mar 2019 07:52:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=o/tjHBN+YdVOHlZBhUHSY9iDnhLS0V50uWJeHP43be4=;
-        b=A+JYGhZ3fQkhscb6lUBmQ1muz6oemHopDmPki/B278rzjZ0dk/UjohSsOxEu8keiCi
-         W5/VXLZ67gUh0RZN3rq5skpPYsUC7oWDq+tl+3khHwdNxCrmhkhxq7w99dcsLgc3Elx7
-         dmeBy427vSPfFNaJS7DfUhAb/Fwd/EACn2TYRVMksoGnObzxZTWUPnBuSuAiS/JRvPZA
-         f0EsOCj85jPSuENzq/Bg7zakYTOA4bo6fX1BKjPllZeRcF3GtXBJjjiVIF4U6HkOW9id
-         X49/giQrlJvYsmuoQtVxMGCVLZT2pR3apmEVULZaKks3LsI2Ip7Pr6oRl+H4swKOnmZR
-         D5tA==
+        bh=LfpjTjIWpAUqgBuBr+ROlRDq3TWjVWHbA3wqyLv7Gqg=;
+        b=aEInHw6BmCYYrnLC9PZfamaP8mF0QEG6bCjPXX9eR1nz2FAxuz8AakcoBGofdWpDDO
+         ecVj+WVvAcyIM/4jHbYKbWN9FEhIYhxx/aKOkZgY6J++xI42I0q0BxFc8HG1MgmsuX4p
+         FgBukYgteSls5KRVIf9LdhyXrtbiuThjGHXpsr95ebbSY1J3++E89dF2htIPvvI1/DzR
+         SYS+4UXKzfCBY88MgyuqrkPh/UK28DK8ANz0pzTScNriptvjxadnhKInYAl8KyI7hS2W
+         ag76Sj+PtN/agIm/Cl1LRWjUtui4zCqqh5CFVGbEGTMZA2YuLM4VLbRUKwjvD9UBYhzt
+         x9aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=o/tjHBN+YdVOHlZBhUHSY9iDnhLS0V50uWJeHP43be4=;
-        b=Ulz+6rzctCtb/DAmCxm8Ldu4tMWJjvNqHtkM0u7elIJFHpisBco0/jF+HhG3T/jeyM
-         +2A9sSVcfvNi+eQ0ortRWv0DfXDvYGGbsoAT39bGMa1zt94ueTVa/1/xcrqRNZ/4cgNb
-         ezcM8VCUiHBKXFCyoms0EtOoTTguRwH1Swr/uhWz2IBtlgEZzAl4U6KNm2gpOY5wdmTI
-         nM5EYl9L3yJLK5fPBJh3pOtQq8pFwbUnc8sHEiZ2tXAG08GhEw1M6dX3KSuo9H7gABmx
-         0ujGkrhSWV0kXcbF3BYsepiPRTdHWQ68R3tjjL+/MGwStZuMD8tVQ2l2pkJ/7uivIhHE
-         9L4A==
-X-Gm-Message-State: APjAAAVuV3euMUH0+fxdia7PV1MEaIsCCQx64inTEWOApEzBR2sStsAa
-        TT9crOHAeY1eTun2SvBsmd4YJqpb7LR2Om5E
-X-Google-Smtp-Source: APXvYqyHOngs34In5uhQcXPzOfQqpf0ARHPrNyLHXpzz5ogONfScZvSMOj1YE9ihREsOQQ2kQeo8TqNX7xzilecW
-X-Received: by 2002:a67:7651:: with SMTP id r78mr6363022vsc.39.1553093522664;
- Wed, 20 Mar 2019 07:52:02 -0700 (PDT)
-Date:   Wed, 20 Mar 2019 15:51:20 +0100
+        bh=LfpjTjIWpAUqgBuBr+ROlRDq3TWjVWHbA3wqyLv7Gqg=;
+        b=bCDZ2FaWtUcTDIvT/lja0F9QRBnXjkdWWlXFL57PBW73BpjKVVJUUfnpiTfFjs8mp5
+         6MknaQlAmCso+15Id8Lb6O53etbgJ4lOtyJdcQXg6oEJR5hQYXGcM+8XSWLXTk8S8Wu1
+         xqDFHJBYY9tCD3DoB1BH+0fs1qWeZi8MQtmnkNMpmCaSF0yyuOFBLf/BpRg0hZqhUOfJ
+         twmDhwnw3MoizTtFgi/RBlZXUj4OuLS5i6ohH5/DBgLiHnGiuYQD12vhuYShwW68bTea
+         WiNAjGdNu6Zlm5/wfcKGen46tv4IEjnTJjApOR8hOAUctGx/969Lu5W4P/FZY5VeGZJu
+         KcQQ==
+X-Gm-Message-State: APjAAAWZqbuK3xQPQxsIXYL5ejzGd7qZyQEXPTc8dw89casab2t1ayKB
+        L/0EbzMXZUpZVvic3awJSxqMvIChfOuSCN+d
+X-Google-Smtp-Source: APXvYqxWvfeu7/LSMKKYKhkYxK38R+2YVgnBYPzEJZ3bjv+W/V6SCf9AmAnMy/L0N0KnMLwcoOG80tlOQ6HUd2Ol
+X-Received: by 2002:a81:994d:: with SMTP id q74mr2209556ywg.18.1553093519515;
+ Wed, 20 Mar 2019 07:51:59 -0700 (PDT)
+Date:   Wed, 20 Mar 2019 15:51:19 +0100
 In-Reply-To: <cover.1553093420.git.andreyknvl@google.com>
-Message-Id: <e1430838d7393896ade87ffbcf109c7127881137.1553093421.git.andreyknvl@google.com>
+Message-Id: <a8766f523b5b46b7fa55a87ef55cd3fe6ab2d345.1553093421.git.andreyknvl@google.com>
 Mime-Version: 1.0
 References: <cover.1553093420.git.andreyknvl@google.com>
 X-Mailer: git-send-email 2.21.0.225.g810b269d1ac-goog
-Subject: [PATCH v13 06/20] mm, arm64: untag user pointers in get_vaddr_frames
+Subject: [PATCH v13 05/20] mm, arm64: untag user pointers in mm/gup.c
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will.deacon@arm.com>,
@@ -114,28 +114,40 @@ This patch is a part of a series that extends arm64 kernel ABI to allow to
 pass tagged user pointers (with the top byte set to something else other
 than 0x00) as syscall arguments.
 
-get_vaddr_frames uses provided user pointers for vma lookups, which can
-only by done with untagged pointers. Instead of locating and changing
-all callers of this function, perform untagging in it.
+mm/gup.c provides a kernel interface that accepts user addresses and
+manipulates user pages directly (for example get_user_pages, that is used
+by the futex syscall). Since a user can provided tagged addresses, we need
+to handle this case.
+
+Add untagging to gup.c functions that use user addresses for vma lookups.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- mm/frame_vector.c | 2 ++
- 1 file changed, 2 insertions(+)
+ mm/gup.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/mm/frame_vector.c b/mm/frame_vector.c
-index c64dca6e27c2..c431ca81dad5 100644
---- a/mm/frame_vector.c
-+++ b/mm/frame_vector.c
-@@ -46,6 +46,8 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
- 	if (WARN_ON_ONCE(nr_frames > vec->nr_allocated))
- 		nr_frames = vec->nr_allocated;
+diff --git a/mm/gup.c b/mm/gup.c
+index f84e22685aaa..3192741e0b3a 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -686,6 +686,8 @@ static long __get_user_pages(struct task_struct *tsk, struct mm_struct *mm,
+ 	if (!nr_pages)
+ 		return 0;
  
 +	start = untagged_addr(start);
 +
- 	down_read(&mm->mmap_sem);
- 	locked = 1;
- 	vma = find_vma_intersection(mm, start, start + 1);
+ 	VM_BUG_ON(!!pages != !!(gup_flags & FOLL_GET));
+ 
+ 	/*
+@@ -848,6 +850,8 @@ int fixup_user_fault(struct task_struct *tsk, struct mm_struct *mm,
+ 	struct vm_area_struct *vma;
+ 	vm_fault_t ret, major = 0;
+ 
++	address = untagged_addr(address);
++
+ 	if (unlocked)
+ 		fault_flags |= FAULT_FLAG_ALLOW_RETRY;
+ 
 -- 
 2.21.0.225.g810b269d1ac-goog
 
