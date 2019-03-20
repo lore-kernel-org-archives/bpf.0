@@ -2,134 +2,100 @@ Return-Path: <SRS0=US5c=RX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1878C43381
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 12:19:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0AFAC43381
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 12:27:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 80F242175B
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 12:19:19 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=codeaurora.org header.i=@codeaurora.org header.b="Tf02fvKl";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=codeaurora.org header.i=@codeaurora.org header.b="Vx/uDYBj"
+	by mail.kernel.org (Postfix) with ESMTP id 8A6652184D
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 12:27:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727437AbfCTMTM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Mar 2019 08:19:12 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:38310 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726366AbfCTMTM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Mar 2019 08:19:12 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id BF8C960C72; Wed, 20 Mar 2019 12:19:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1553084350;
-        bh=5Ow5BLiBktBFkLUKVHs84llgiP+XTfs7SDHTTiVLkYc=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Tf02fvKlJLsiHudL7TdwHWRR1izJjzu4lfLWXjAGZPxxM/jLnUnBj7K6HR473nStt
-         sAmS+RRd9ELfcsjLywo5y1Bxg8KENs7Vb7V6AIVuvDf37L6UJfezWAUAAVnMry3JVJ
-         4sgUEYtgG7a8NKqLZxpEuv+6urJJeyicHlnQEz3E=
-Received: from [10.204.79.83] (blr-c-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: mojha@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9BEA060237;
-        Wed, 20 Mar 2019 12:18:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1553084349;
-        bh=5Ow5BLiBktBFkLUKVHs84llgiP+XTfs7SDHTTiVLkYc=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Vx/uDYBjp6U17FUUTYYqf98xGmZqZiuLZuS2Q+1i5dfL9uBs/h+HX+O8tulWTFr4h
-         Rf+ftGvpUCjpaa1QOTBZxvTZv5zuGfXhZOR01wY9D3Arn1RJlGeha12MRUE+F+KXv4
-         H48THITo0urORMYqLfsRe9FypFKho/OK40gfAj9U=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 9BEA060237
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=mojha@codeaurora.org
-Subject: Re: [PATCH] thunderbolt: xdomain: Fix to check return value of
- kmemdup
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Aditya Pakki' <pakki001@umn.edu>
-Cc:     "kjlu@umn.edu" <kjlu@umn.edu>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        id S1727607AbfCTM17 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Mar 2019 08:27:59 -0400
+Received: from mx2.suse.de ([195.135.220.15]:41144 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725996AbfCTM17 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Mar 2019 08:27:59 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id AAC8BAD7B;
+        Wed, 20 Mar 2019 12:27:57 +0000 (UTC)
+From:   Michal Rostecki <mrostecki@opensuse.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "xdp-newbies@vger.kernel.org" <xdp-newbies@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-References: <20190318225508.7886-1-pakki001@umn.edu>
- <57793438545e41cc85d00beab7505143@AcuMS.aculab.com>
-From:   Mukesh Ojha <mojha@codeaurora.org>
-Message-ID: <034573d6-61dc-4555-2559-acb4aa86dabe@codeaurora.org>
-Date:   Wed, 20 Mar 2019 17:48:55 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.4.0
-MIME-Version: 1.0
-In-Reply-To: <57793438545e41cc85d00beab7505143@AcuMS.aculab.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     Michal Rostecki <mrostecki@opensuse.org>
+Subject: [PATCH bpf] libbpf: Check if map names are not NULL
+Date:   Wed, 20 Mar 2019 13:27:42 +0100
+Message-Id: <20190320122742.19311-1-mrostecki@opensuse.org>
+X-Mailer: git-send-email 2.16.4
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+BPF maps do not have to be named, so map names can be NULL. Map name
+pointers should be checked before doing any operations which cannot be
+done on NULL pointers.
 
-On 3/20/2019 4:27 PM, David Laight wrote:
-> From: Aditya Pakki
->> Sent: 18 March 2019 22:55
->>
->> kmemdup can fail and return a NULL pointer. The patch modifies the
->> signature of tb_xdp_schedule_request and passes the failure error upstream.
->>
->> Signed-off-by: Aditya Pakki <pakki001@umn.edu>
->> ---
->>   drivers/thunderbolt/xdomain.c | 10 ++++++----
->>   1 file changed, 6 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/thunderbolt/xdomain.c b/drivers/thunderbolt/xdomain.c
->> index e27dd8beb94b..b0e9cc30d708 100644
->> --- a/drivers/thunderbolt/xdomain.c
->> +++ b/drivers/thunderbolt/xdomain.c
->> @@ -526,7 +526,7 @@ static void tb_xdp_handle_request(struct work_struct *work)
->>   	kfree(xw);
->>   }
->>
->> -static void
->> +static bool
->>   tb_xdp_schedule_request(struct tb *tb, const struct tb_xdp_header *hdr,
->>   			size_t size)
->>   {
->> @@ -534,13 +534,16 @@ tb_xdp_schedule_request(struct tb *tb, const struct tb_xdp_header *hdr,
->>
->>   	xw = kmalloc(sizeof(*xw), GFP_KERNEL);
->>   	if (!xw)
->> -		return;
->> +		return false;
->>
->>   	INIT_WORK(&xw->work, tb_xdp_handle_request);
->>   	xw->pkg = kmemdup(hdr, size, GFP_KERNEL);
->> +	if (!xw->pkg)
->> +		return false;
-> You're leaking 'xw' here.
+This issue was detected by the following errors coming from bpftool
+built with AddressSanitizer:
 
+bpf.c:256:2: runtime error: null pointer passed as argument 2, which is declared to never be null
+bpf.c:92:2: runtime error: null pointer passed as argument 2, which is declared to never be null
+bpf.c:169:2: runtime error: null pointer passed as argument 2, which is declared to never be null
 
-Yes , Clean up is missing otherwise patch looks good.
+Fixes: 88cda1c9da02 ("bpf: libbpf: Provide basic API support to specify BPF obj name")
+Fixes: d7be143b67c2 ("libbpf: Support expected_attach_type at prog load")
+Fixes: 8a138aed4a80 ("bpf: btf: Add BTF support to libbpf")
+Signed-off-by: Michal Rostecki <mrostecki@opensuse.org>
+---
+ tools/lib/bpf/bpf.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-Mukesh
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 9cd015574e83..21484ff1cecb 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -89,8 +89,9 @@ int bpf_create_map_xattr(const struct bpf_create_map_attr *create_attr)
+ 	attr.value_size = create_attr->value_size;
+ 	attr.max_entries = create_attr->max_entries;
+ 	attr.map_flags = create_attr->map_flags;
+-	memcpy(attr.map_name, create_attr->name,
+-	       min(name_len, BPF_OBJ_NAME_LEN - 1));
++	if (create_attr->name)
++		memcpy(attr.map_name, create_attr->name,
++		       min(name_len, BPF_OBJ_NAME_LEN - 1));
+ 	attr.numa_node = create_attr->numa_node;
+ 	attr.btf_fd = create_attr->btf_fd;
+ 	attr.btf_key_type_id = create_attr->btf_key_type_id;
+@@ -166,7 +167,9 @@ int bpf_create_map_in_map_node(enum bpf_map_type map_type, const char *name,
+ 	attr.inner_map_fd = inner_map_fd;
+ 	attr.max_entries = max_entries;
+ 	attr.map_flags = map_flags;
+-	memcpy(attr.map_name, name, min(name_len, BPF_OBJ_NAME_LEN - 1));
++	if (name)
++		memcpy(attr.map_name, name,
++		       min(name_len, BPF_OBJ_NAME_LEN - 1));
+ 
+ 	if (node >= 0) {
+ 		attr.map_flags |= BPF_F_NUMA_NODE;
+@@ -253,8 +256,9 @@ int bpf_load_program_xattr(const struct bpf_load_program_attr *load_attr,
+ 	attr.line_info_rec_size = load_attr->line_info_rec_size;
+ 	attr.line_info_cnt = load_attr->line_info_cnt;
+ 	attr.line_info = ptr_to_u64(load_attr->line_info);
+-	memcpy(attr.prog_name, load_attr->name,
+-	       min(name_len, BPF_OBJ_NAME_LEN - 1));
++	if (load_attr->name)
++		memcpy(attr.prog_name, load_attr->name,
++		       min(name_len, BPF_OBJ_NAME_LEN - 1));
+ 
+ 	fd = sys_bpf_prog_load(&attr, sizeof(attr));
+ 	if (fd >= 0)
+-- 
+2.16.4
 
->
-> 	David
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
->
