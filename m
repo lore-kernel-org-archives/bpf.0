@@ -2,142 +2,152 @@ Return-Path: <SRS0=US5c=RX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F17AC43381
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 14:56:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 346E7C43381
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 16:47:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2228E2184E
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 14:56:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F16D5213F2
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 16:47:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fBgfxh9G"
+	dkim=pass (2048-bit key) header.d=umn.edu header.i=@umn.edu header.b="OOU1IZOV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727102AbfCTO4B (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Mar 2019 10:56:01 -0400
-Received: from mail-vk1-f201.google.com ([209.85.221.201]:47388 "EHLO
-        mail-vk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728307AbfCTOvr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Mar 2019 10:51:47 -0400
-Received: by mail-vk1-f201.google.com with SMTP id y132so1047945vkd.14
-        for <bpf@vger.kernel.org>; Wed, 20 Mar 2019 07:51:46 -0700 (PDT)
+        id S1726572AbfCTQrY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Mar 2019 12:47:24 -0400
+Received: from mta-p6.oit.umn.edu ([134.84.196.206]:48554 "EHLO
+        mta-p6.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726448AbfCTQrY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Mar 2019 12:47:24 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p6.oit.umn.edu (Postfix) with ESMTP id 04EA36CB
+        for <bpf@vger.kernel.org>; Wed, 20 Mar 2019 16:47:23 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p6.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p6.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id sUQAceW9FeD0 for <bpf@vger.kernel.org>;
+        Wed, 20 Mar 2019 11:47:22 -0500 (CDT)
+Received: from mail-it1-f199.google.com (mail-it1-f199.google.com [209.85.166.199])
+        (using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p6.oit.umn.edu (Postfix) with ESMTPS id B7A0BB00
+        for <bpf@vger.kernel.org>; Wed, 20 Mar 2019 11:47:22 -0500 (CDT)
+Received: by mail-it1-f199.google.com with SMTP id m70so2705232ita.2
+        for <bpf@vger.kernel.org>; Wed, 20 Mar 2019 09:47:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=20ADMBvUHCnrZbwN97RAJ/EQy38heFRI/sJcSeCbm08=;
-        b=fBgfxh9GgamRMHg2ccGZFUoBByz4GOt4sfGHL3tpn3ZQ1767xayTeCcyI3yXs2mSPo
-         9L9Z+nWnCgS1IkEZKl0L10t99Kxoazx3+kM5cwGHIxLejwB/C6WPwJK7TADmWr+R7zyk
-         SVEtWmrnvfwXlM1zlGyhZQZOBAu3t9jHBJl+/8o9qgFuWwu995t1w8VbhpR252WdIqRb
-         sE8Ml1x7tGBmVRlYQ2buPK+l8HSNYgOfT1+UtDa9CPF/KYM3j84TJNM8Ny+6EFQlptxm
-         +USjsypvXQxVHDirJ+TCg6zJChaLRFAlYddXbqGYhP/AQ/lMXeTl1LdpntucdrWI+Hfw
-         RS9A==
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=OCgBGZ9QjrlJl4iqs5f+O79+0bjbKr934DYkhHFKtlI=;
+        b=OOU1IZOV9kn1tAIKwAszR4rbr3YZUrdscvNFOXpdRgrs6/eYjIAoPUrjtJvcqQVcJf
+         A36wmRrtoTk5TPenXYIzTMciqQQ2sYJrbSISrXgcrl1H5X2FWGWCpLx2JQ8kXdDFrvSu
+         62M9xppkgs2x47romIPEU52RfQD8w9tXUBgxUhfAZlYaLauoET56ggrQWG3V7PZr24hH
+         fojdSk4F79VsAhYF5Q+z4E1onMTCdGou7QMySYKO+pUlZGVZ/2M/cm5E7LcxFk/OZI8S
+         yyp/VSf67HnGSgBxGiZXHRBiajTrdNcyVgur6cO8PI/A4/7M1YcDraPC2Rihi1G8mWQG
+         miEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=20ADMBvUHCnrZbwN97RAJ/EQy38heFRI/sJcSeCbm08=;
-        b=a7ouruH+KqZrflObFFqRNdlbv7jD12zBmdDGFhxSxvpi7kX2dHI8w4eN/TBvUpdzMF
-         cftSaca2nphxDvJLKevYG2MX+wgnMfeWqV+gA6h/BLIyz7OmIggfaBSi4i1zsofhfXye
-         udJcJFCnO1q8SUwfHHfSfqIx4Ig08oJsi9tRiQrUJoY88AcpN/izcyBYbiI3IQJKwFXb
-         QtvGUyAL14ZWMdg9/+VFM7cZ98U1eUF/pS5CtmvbvLtTRnrKY2WC1/HCz1GmDJYkMQ8A
-         EXrj9X+nTbq4qRxjKQRTGZURxFx0tbZb54iswN4fA4KZrKFH/zpa2oqR9LRFAZQeQnZA
-         7ZOg==
-X-Gm-Message-State: APjAAAUYTYJ60NRbAXdDZrkrxG0xhXtyQ/jooBtXJWPIbxPSqLez2H95
-        My1aHJ7zfJSCOTP55cPhTVf7zWoJSW6W7Pfl
-X-Google-Smtp-Source: APXvYqwYZ0q0Kqz4Z5cFxviM/RSvP8v992XNq+tHsBzIasT+5NuCnNNfSRat/OKpd5fkXdzMwZGbNS7t4SMgCBo4
-X-Received: by 2002:a1f:2a48:: with SMTP id q69mr16477241vkq.7.1553093506075;
- Wed, 20 Mar 2019 07:51:46 -0700 (PDT)
-Date:   Wed, 20 Mar 2019 15:51:15 +0100
-In-Reply-To: <cover.1553093420.git.andreyknvl@google.com>
-Message-Id: <7747d94301bcb30de0026e9434a1e1879f84aae7.1553093421.git.andreyknvl@google.com>
-Mime-Version: 1.0
-References: <cover.1553093420.git.andreyknvl@google.com>
-X-Mailer: git-send-email 2.21.0.225.g810b269d1ac-goog
-Subject: [PATCH v13 01/20] uaccess: add untagged_addr definition for other arches
-From:   Andrey Konovalov <andreyknvl@google.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=OCgBGZ9QjrlJl4iqs5f+O79+0bjbKr934DYkhHFKtlI=;
+        b=OQq171pQWo12UVL+QQ8GSQN4ZD8WRr+5SdpW9NUNnM3SHXsO7PFr2yykSxPRrFrfcx
+         NSzN1oxE1yyC/tJ6paxkPWz4Eas5iRryZnp+uT+hVfTQekSjP0MvouIP9KY6IXEIfrhC
+         9kCk9KYwAziyjO9OMneTQ9P5uEMlg/ZsAhO6O3weUGd0P63P0LAQKI4hDYEPhFm1seJp
+         L1y5NlxtIrt1qhkbm3XOUQtEuYmAODRRLWcOkRq+Lyf9fq8rD53Dx9mKBGV1jfX7l8W9
+         2q7xD8MhnqUZ2f5f/p+6DdstoqIOKrrJy3SU4iFwGYkZncKrj7IaAVIvKk3+QvA0P3cv
+         v5WA==
+X-Gm-Message-State: APjAAAWOepAm92WwvPoX0jTQ761bBKUrpgVyBBkCtZ+l8zy5uDGtGyXF
+        pfFjeLY8RgYQ9QEwMEDm3kmxnaERZcbunFe67kNPqhQS3CuHLhQOd4fqdfwNXqZErLqyRDhY65J
+        Paj4dkdp8Y3rzvCqs
+X-Received: by 2002:a02:224b:: with SMTP id o72mr6035564jao.16.1553100442381;
+        Wed, 20 Mar 2019 09:47:22 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqy+NDgp64O6AmEVq1LCbh8ES/jB1pQ+DbqegVXDMft241QSXQGu2eOSh7t51T3tQyvIPVoHEQ==
+X-Received: by 2002:a02:224b:: with SMTP id o72mr6035548jao.16.1553100442203;
+        Wed, 20 Mar 2019 09:47:22 -0700 (PDT)
+Received: from cs-u-syssec1.dtc.umn.edu (cs-u-syssec1.cs.umn.edu. [128.101.106.66])
+        by smtp.gmail.com with ESMTPSA id v4sm982480ios.10.2019.03.20.09.47.21
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 20 Mar 2019 09:47:21 -0700 (PDT)
+From:   Aditya Pakki <pakki001@umn.edu>
+To:     pakki001@umn.edu
+Cc:     kjlu@umn.edu, Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        "=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>,
-        "David (ChunMing) Zhou" <David1.Zhou@amd.com>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Chintan Pandya <cpandya@codeaurora.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        xdp-newbies@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH v2] thunderbolt: xdomain: Fix to check return value of kmemdup
+Date:   Wed, 20 Mar 2019 11:47:20 -0500
+Message-Id: <20190320164720.31264-1-pakki001@umn.edu>
+X-Mailer: git-send-email 2.17.1
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To allow arm64 syscalls to accept tagged pointers from userspace, we must
-untag them when they are passed to the kernel. Since untagging is done in
-generic parts of the kernel, the untagged_addr macro needs to be defined
-for all architectures.
+kmemdup can fail and return a NULL pointer. The patch modifies the
+signature of tb_xdp_schedule_request and passes the failure error upstream.
 
-Define it as a noop for architectures other than arm64.
+Signed-off-by: Aditya Pakki <pakki001@umn.edu>
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- include/linux/mm.h | 4 ++++
- 1 file changed, 4 insertions(+)
+v1: Missed clean up of xw in case of kmemdup failure, per David
+---
+ drivers/thunderbolt/xdomain.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 76769749b5a5..4d674518d392 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -99,6 +99,10 @@ extern int mmap_rnd_compat_bits __read_mostly;
- #include <asm/pgtable.h>
- #include <asm/processor.h>
+diff --git a/drivers/thunderbolt/xdomain.c b/drivers/thunderbolt/xdomain.c
+index e27dd8beb94b..316360109bea 100644
+--- a/drivers/thunderbolt/xdomain.c
++++ b/drivers/thunderbolt/xdomain.c
+@@ -526,7 +526,7 @@ static void tb_xdp_handle_request(struct work_struct *work)
+ 	kfree(xw);
+ }
  
-+#ifndef untagged_addr
-+#define untagged_addr(addr) (addr)
-+#endif
-+
- #ifndef __pa_symbol
- #define __pa_symbol(x)  __pa(RELOC_HIDE((unsigned long)(x), 0))
- #endif
+-static void
++static bool
+ tb_xdp_schedule_request(struct tb *tb, const struct tb_xdp_header *hdr,
+ 			size_t size)
+ {
+@@ -534,13 +534,18 @@ tb_xdp_schedule_request(struct tb *tb, const struct tb_xdp_header *hdr,
+ 
+ 	xw = kmalloc(sizeof(*xw), GFP_KERNEL);
+ 	if (!xw)
+-		return;
++		return false;
+ 
+ 	INIT_WORK(&xw->work, tb_xdp_handle_request);
+ 	xw->pkg = kmemdup(hdr, size, GFP_KERNEL);
++	if (!xw->pkg) {
++		kfree(xw);
++		return false;
++	}
+ 	xw->tb = tb;
+ 
+ 	queue_work(tb->wq, &xw->work);
++	return true;
+ }
+ 
+ /**
+@@ -1416,10 +1421,8 @@ bool tb_xdomain_handle_request(struct tb *tb, enum tb_cfg_pkg_type type,
+ 	 * handlers in turn.
+ 	 */
+ 	if (uuid_equal(&hdr->uuid, &tb_xdp_uuid)) {
+-		if (type == TB_CFG_PKG_XDOMAIN_REQ) {
+-			tb_xdp_schedule_request(tb, hdr, size);
+-			return true;
+-		}
++		if (type == TB_CFG_PKG_XDOMAIN_REQ)
++			return tb_xdp_schedule_request(tb, hdr, size);
+ 		return false;
+ 	}
+ 
 -- 
-2.21.0.225.g810b269d1ac-goog
+2.17.1
 
