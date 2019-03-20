@@ -2,38 +2,37 @@ Return-Path: <SRS0=US5c=RX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A7F9C43381
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 10:51:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 493D7C43381
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 10:56:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EE4992184E
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 10:51:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2269B2175B
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 10:56:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727716AbfCTKvK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Mar 2019 06:51:10 -0400
-Received: from mga04.intel.com ([192.55.52.120]:43267 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727126AbfCTKvK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Mar 2019 06:51:10 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Mar 2019 03:51:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,248,1549958400"; 
-   d="scan'208";a="328934759"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
-  by fmsmga006.fm.intel.com with SMTP; 20 Mar 2019 03:51:05 -0700
-Received: by lahna (sSMTP sendmail emulation); Wed, 20 Mar 2019 12:51:04 +0200
-Date:   Wed, 20 Mar 2019 12:51:04 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Aditya Pakki <pakki001@umn.edu>
-Cc:     kjlu@umn.edu, Andreas Noever <andreas.noever@gmail.com>,
+        id S1727728AbfCTK4z convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 20 Mar 2019 06:56:55 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:55224 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727012AbfCTK4z (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 20 Mar 2019 06:56:55 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-97-u-qw3I3fPsWFgZeY5gnTrg-1; Wed, 20 Mar 2019 10:56:51 +0000
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Wed, 20 Mar 2019 10:57:54 +0000
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Wed, 20 Mar 2019 10:57:54 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Aditya Pakki' <pakki001@umn.edu>
+CC:     "kjlu@umn.edu" <kjlu@umn.edu>,
+        Andreas Noever <andreas.noever@gmail.com>,
         Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Yehezkel Bernat <YehezkelShB@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -41,33 +40,76 @@ Cc:     kjlu@umn.edu, Andreas Noever <andreas.noever@gmail.com>,
         Jakub Kicinski <jakub.kicinski@netronome.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        xdp-newbies@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: xdomain: Fix to check return value of
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "xdp-newbies@vger.kernel.org" <xdp-newbies@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: RE: [PATCH] thunderbolt: xdomain: Fix to check return value of
  kmemdup
-Message-ID: <20190320105104.GS3622@lahna.fi.intel.com>
+Thread-Topic: [PATCH] thunderbolt: xdomain: Fix to check return value of
+ kmemdup
+Thread-Index: AQHU3d3P6yfm6q4n/EWUAqU+kGwm2qYUW5Hg
+Date:   Wed, 20 Mar 2019 10:57:54 +0000
+Message-ID: <57793438545e41cc85d00beab7505143@AcuMS.aculab.com>
 References: <20190318225508.7886-1-pakki001@umn.edu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <20190318225508.7886-1-pakki001@umn.edu>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.11.3 (2019-02-01)
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+X-MC-Unique: u-qw3I3fPsWFgZeY5gnTrg-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 18, 2019 at 05:55:08PM -0500, Aditya Pakki wrote:
-> @@ -1417,8 +1420,7 @@ bool tb_xdomain_handle_request(struct tb *tb, enum tb_cfg_pkg_type type,
->  	 */
->  	if (uuid_equal(&hdr->uuid, &tb_xdp_uuid)) {
->  		if (type == TB_CFG_PKG_XDOMAIN_REQ) {
-> -			tb_xdp_schedule_request(tb, hdr, size);
-> -			return true;
-> +			return tb_xdp_schedule_request(tb, hdr, size);
+From: Aditya Pakki
+> Sent: 18 March 2019 22:55
+> 
+> kmemdup can fail and return a NULL pointer. The patch modifies the
+> signature of tb_xdp_schedule_request and passes the failure error upstream.
+> 
+> Signed-off-by: Aditya Pakki <pakki001@umn.edu>
+> ---
+>  drivers/thunderbolt/xdomain.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/thunderbolt/xdomain.c b/drivers/thunderbolt/xdomain.c
+> index e27dd8beb94b..b0e9cc30d708 100644
+> --- a/drivers/thunderbolt/xdomain.c
+> +++ b/drivers/thunderbolt/xdomain.c
+> @@ -526,7 +526,7 @@ static void tb_xdp_handle_request(struct work_struct *work)
+>  	kfree(xw);
+>  }
+> 
+> -static void
+> +static bool
+>  tb_xdp_schedule_request(struct tb *tb, const struct tb_xdp_header *hdr,
+>  			size_t size)
+>  {
+> @@ -534,13 +534,16 @@ tb_xdp_schedule_request(struct tb *tb, const struct tb_xdp_header *hdr,
+> 
+>  	xw = kmalloc(sizeof(*xw), GFP_KERNEL);
+>  	if (!xw)
+> -		return;
+> +		return false;
+> 
+>  	INIT_WORK(&xw->work, tb_xdp_handle_request);
+>  	xw->pkg = kmemdup(hdr, size, GFP_KERNEL);
+> +	if (!xw->pkg)
+> +		return false;
 
-Please remove parens as well that there is only a single statement
-following the if-block.
+You're leaking 'xw' here.
 
-Otherwise looks fine.
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
