@@ -2,84 +2,86 @@ Return-Path: <SRS0=US5c=RX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEA25C10F05
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 12:56:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6888EC43381
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 12:57:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 71FCB2146E
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 12:56:26 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hD+f/vLS"
+	by mail.kernel.org (Postfix) with ESMTP id 3707F2146E
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 12:57:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727028AbfCTM4Y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Mar 2019 08:56:24 -0400
-Received: from mail-pg1-f178.google.com ([209.85.215.178]:40431 "EHLO
-        mail-pg1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727141AbfCTM4Y (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Mar 2019 08:56:24 -0400
-Received: by mail-pg1-f178.google.com with SMTP id u9so1744950pgo.7;
-        Wed, 20 Mar 2019 05:56:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=NKfckqdhcriPRZ8W45eiilObwgo0DkKsTgE/5NA7lbI=;
-        b=hD+f/vLShZo6W+GphXnJWyshSj4ume3DMxNzeaF4HWCbVR5g/UeH5tneoC9aNt6HkZ
-         +bh6ahkiTGJjFix7fdl6SMMQPzJFtjcox/1fWStNhaZZl6gVjEOxzVa+EdWGv3mqzAzk
-         iPqgo2ITmeBqtWyfrvRTEpZAbmxAl+ksb7xkf/86lILD6oxRmdHuWTaU3hW8J9WDqbe+
-         Ara91HWQqgkAbgbM9FFmGaPw8Seg2lDL1E6GtUxpMTrjC2J1Yic0RFWrexAkXoSz29eU
-         tCp7VGIqPieDEBSSqX24iLPF/8MjdjDLPeI/NhjEb3d9+x19QzBySnvFj6sKmpJ1I6Tf
-         q7UQ==
+        id S1726506AbfCTM5k (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Mar 2019 08:57:40 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:54431 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726362AbfCTM5j (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Mar 2019 08:57:39 -0400
+Received: by mail-wm1-f67.google.com with SMTP id f3so20642747wmj.4;
+        Wed, 20 Mar 2019 05:57:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NKfckqdhcriPRZ8W45eiilObwgo0DkKsTgE/5NA7lbI=;
-        b=GQJmHqdvepBTJmHQcOLi71yAmn3CvjClJ0QLhr+cCWi9HYtBuhRRLx1Al9npJa76Sq
-         wOxHBMn6WKmTZ3+52SqAnAqVxW/ZANzYPbXZDhIfJtiA0jP0rue9n+fhm09ubugAuVLX
-         98kX5q6UuvsRW7mGQ921dh3t7do4yJ+OXDYPhZJcOyeQgjBQDOgkNWUH5KXr71dcg3a7
-         mwZgLeEdGM0cBQwF/KqwL79Wy75dHH86n67WzhtYrdMi0nyaNM9Kypg/r2dMV3Gdihkl
-         zyTeL7Cs8S8iF7uAzPx4wBHHthYU3QiT4vWbPma9048L6EbE0dOWfjY+GtG+pK0H7FyK
-         OWKw==
-X-Gm-Message-State: APjAAAXMc9m3OrwMN/SH5Ew6d8x2Ro7vUiUDemZq0oD9eU2LR7u0Cunl
-        CxjmFotf6M5mgkWmYSpKtJc=
-X-Google-Smtp-Source: APXvYqyKobw0s0w8yvt+l8jq9qfwexZURLTt+6na3KkAw4iEodSGUBhsRRs8jX5Sn98DlEUyKcT5xA==
-X-Received: by 2002:a17:902:7610:: with SMTP id k16mr8371459pll.215.1553086583205;
-        Wed, 20 Mar 2019 05:56:23 -0700 (PDT)
-Received: from localhost ([121.137.63.184])
-        by smtp.gmail.com with ESMTPSA id h3sm2300442pgv.38.2019.03.20.05.56.21
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=DkbW7FRTPNZ/PdSKI8YlOSpOifsIFu2GCByHuB54Pvw=;
+        b=K5S5JOO+ZbfDtlIjsPK0tJgc/sJL1f6LAmczfwnFoBvY0e4cJEVQQpFvSyLFoZIn40
+         Q9jlminy3n9LcomrSuMT40La85+WS74gHlkH6WCcvdv+5FK4G/WW7Z6+Upr/cFlWGJVw
+         ks0hlZMh8tluxoCd07NVxCcqBtKI365FXHrEfdiYFzQb2ePgsrpZlyw3155gE8yHhruJ
+         /9sXlqETycPDzerp7ciEJc9YP28kRMwbsc/fHG+uullidx3HdvaksXxxjdoBHqYw0Uwq
+         D+R+FYvSxZLqwejIRt+JGB3cJxDfGSh6nvJhl3KFeMz5xhL+oKdFQoidtP/x6yOVzSQk
+         Oc+Q==
+X-Gm-Message-State: APjAAAXPV23v7aV4p8D0P0CjNyAKonMo0Vz5EuF5pykhtvItBKI/HtO/
+        kXhW4wD6y9GTsl80NCmon/g=
+X-Google-Smtp-Source: APXvYqy1od5X4bQJYZV+VJ99FGbAFnomBIC9RVAt0NciQLJFtFosMH5XhrhuYK4DeVqSvLqV3SoXng==
+X-Received: by 2002:a1c:f61a:: with SMTP id w26mr8621348wmc.70.1553086657998;
+        Wed, 20 Mar 2019 05:57:37 -0700 (PDT)
+Received: from Nover ([161.105.209.130])
+        by smtp.gmail.com with ESMTPSA id 132sm3558198wmd.27.2019.03.20.05.57.37
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 20 Mar 2019 05:56:22 -0700 (PDT)
-From:   Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-X-Google-Original-From: Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
-Date:   Wed, 20 Mar 2019 21:56:20 +0900
-To:     Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        Wed, 20 Mar 2019 05:57:37 -0700 (PDT)
+Date:   Wed, 20 Mar 2019 13:57:40 +0100
+From:   Paul Chaignon <paul.chaignon@orange.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: Re: [PATCHv2 bpf-next 2/3] bpf, tests: drop unused
- __bpf_constant_foo defines
-Message-ID: <20190320125620.GB11501@tigerII.localdomain>
-References: <20190320125335.19621-1-sergey.senozhatsky@gmail.com>
- <20190320125335.19621-2-sergey.senozhatsky@gmail.com>
+Cc:     xiao.han@orange.com, paul.chaignon@gmail.com,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
+Subject: [PATCH bpf-next 0/2] bpf: remove incorrect 'verifier bug' warning
+Message-ID: <cover.1553085539.git.paul.chaignon@orange.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190320125335.19621-2-sergey.senozhatsky@gmail.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-And this one is the last one  -  3/3.
+The BPF verifier checks the maximum number of call stack frames twice,
+first in the main CFG traversal (do_check) and then in a subsequent
+traversal (check_max_stack_depth).  If the second check fails, it logs a
+'verifier bug' warning and errors out, as the number of call stack frames
+should have been verified already.
 
-	-ss
+However, the second check may fail without indicating a verifier bug: if
+the excessive function calls reside in dead code, the main CFG traversal
+may not visit them; the subsequent traversal visits all instructions,
+including dead code.
+
+This case raises the question of how invalid dead code should be treated.
+The first patch implements the conservative option and rejects such code;
+the second adds a test case.
+
+Paul Chaignon (2):
+  bpf: remove incorrect 'verifier bug' warning
+  selftests/bpf: test case for invalid call stack in dead code
+
+ kernel/bpf/verifier.c                        |  5 +--
+ tools/testing/selftests/bpf/verifier/calls.c | 38 ++++++++++++++++++++
+ 2 files changed, 41 insertions(+), 2 deletions(-)
+
+-- 
+2.17.1
+
