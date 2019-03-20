@@ -2,114 +2,123 @@ Return-Path: <SRS0=US5c=RX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 493D7C43381
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 10:56:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AC10C43381
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 11:25:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2269B2175B
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 10:56:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 541B62175B
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 11:25:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727728AbfCTK4z convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 20 Mar 2019 06:56:55 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:55224 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727012AbfCTK4z (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 20 Mar 2019 06:56:55 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-97-u-qw3I3fPsWFgZeY5gnTrg-1; Wed, 20 Mar 2019 10:56:51 +0000
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Wed, 20 Mar 2019 10:57:54 +0000
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Wed, 20 Mar 2019 10:57:54 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Aditya Pakki' <pakki001@umn.edu>
-CC:     "kjlu@umn.edu" <kjlu@umn.edu>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        id S1727455AbfCTLZ5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Mar 2019 07:25:57 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:38328 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727154AbfCTLZ4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Mar 2019 07:25:56 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C199A1650;
+        Wed, 20 Mar 2019 04:25:55 -0700 (PDT)
+Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7C08D3F575;
+        Wed, 20 Mar 2019 04:25:49 -0700 (PDT)
+Date:   Wed, 20 Mar 2019 11:25:46 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "xdp-newbies@vger.kernel.org" <xdp-newbies@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: RE: [PATCH] thunderbolt: xdomain: Fix to check return value of
- kmemdup
-Thread-Topic: [PATCH] thunderbolt: xdomain: Fix to check return value of
- kmemdup
-Thread-Index: AQHU3d3P6yfm6q4n/EWUAqU+kGwm2qYUW5Hg
-Date:   Wed, 20 Mar 2019 10:57:54 +0000
-Message-ID: <57793438545e41cc85d00beab7505143@AcuMS.aculab.com>
-References: <20190318225508.7886-1-pakki001@umn.edu>
-In-Reply-To: <20190318225508.7886-1-pakki001@umn.edu>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Chintan Pandya <cpandya@codeaurora.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>, khalid.aziz@oracle.com
+Subject: Re: [PATCH v12 00/13] arm64: untag user pointers passed to the kernel
+Message-ID: <20190320112545.GB25040@arrakis.emea.arm.com>
+References: <cover.1552929301.git.andreyknvl@google.com>
+ <20190319113212.ca1d56301112454dfb5a39ba@linux-foundation.org>
 MIME-Version: 1.0
-X-MC-Unique: u-qw3I3fPsWFgZeY5gnTrg-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190319113212.ca1d56301112454dfb5a39ba@linux-foundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Aditya Pakki
-> Sent: 18 March 2019 22:55
+On Tue, Mar 19, 2019 at 11:32:12AM -0700, Andrew Morton wrote:
+> On Mon, 18 Mar 2019 18:17:32 +0100 Andrey Konovalov <andreyknvl@google.com> wrote:
+> > === Notes
+> > 
+> > This patchset is meant to be merged together with "arm64 relaxed ABI" [3].
 > 
-> kmemdup can fail and return a NULL pointer. The patch modifies the
-> signature of tb_xdp_schedule_request and passes the failure error upstream.
-> 
-> Signed-off-by: Aditya Pakki <pakki001@umn.edu>
-> ---
->  drivers/thunderbolt/xdomain.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/thunderbolt/xdomain.c b/drivers/thunderbolt/xdomain.c
-> index e27dd8beb94b..b0e9cc30d708 100644
-> --- a/drivers/thunderbolt/xdomain.c
-> +++ b/drivers/thunderbolt/xdomain.c
-> @@ -526,7 +526,7 @@ static void tb_xdp_handle_request(struct work_struct *work)
->  	kfree(xw);
->  }
-> 
-> -static void
-> +static bool
->  tb_xdp_schedule_request(struct tb *tb, const struct tb_xdp_header *hdr,
->  			size_t size)
->  {
-> @@ -534,13 +534,16 @@ tb_xdp_schedule_request(struct tb *tb, const struct tb_xdp_header *hdr,
-> 
->  	xw = kmalloc(sizeof(*xw), GFP_KERNEL);
->  	if (!xw)
-> -		return;
-> +		return false;
-> 
->  	INIT_WORK(&xw->work, tb_xdp_handle_request);
->  	xw->pkg = kmemdup(hdr, size, GFP_KERNEL);
-> +	if (!xw->pkg)
-> +		return false;
+> What does this mean, precisely?  That neither series is useful without
+> the other?  That either patchset will break things without the other?
 
-You're leaking 'xw' here.
+This series does the work of relaxing the ABI w.r.t. pointer syscall
+arguments for arm64 (while preserving backwards compatibility, we can't
+break this). Vincenzo's patches [1] document the ABI relaxation and
+introduce an AT_FLAG bit by which user space can check for the presence
+of such support. So I'd say [1] goes on top of this series.
 
-	David
+Once we agreed on the ABI definition, they should be posted as a single
+series.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+> Only a small fraction of these patches carry evidence of having been
+> reviewed.  Fixable?
 
+That's fixable, though the discussions go back to last summer mostly at
+a higher level: are we sure these are the only places that need
+patching? The outcome of such discussions was a document clarifying
+which pointers user can tag and pass to the kernel based on the origins
+of the memory range (e.g. anonymous mmap()).
+
+I'd very much like to get input from the SPARC ADI guys on these series
+(cc'ing Khalid). While currently for arm64 that's just a software
+feature (the hardware one, MTE - memory tagging extensions, is coming
+later), the ADI has similar requirements regarding the user ABI. AFAICT
+from the SPARC example code, the user is not allowed to pass a tagged
+pointers (non-zero top byte) into the kernel. Feedback from the Google
+hwasan guys is that such approach is not practical for a generic
+deployment of this feature (e.g. automatic tagging of heap allocations).
+
+> Which maintainer tree would be appropriate for carrying these patches?
+
+Given that the arm64 changes are fairly minimal, the -mm tree works for
+me (once I reviewed/acked the patches and, ideally, get the SPARC people
+onboard with such approach).
+
+[1] https://lkml.org/lkml/2019/3/18/819
+
+-- 
+Catalin
