@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D0C4C10F05
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 14:53:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C37D0C43381
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 14:53:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 592222146E
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 14:53:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8AC95206BA
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 14:53:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qURJbhCG"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qoeAL/PT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728701AbfCTOwv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1728220AbfCTOxB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Mar 2019 10:53:01 -0400
+Received: from mail-pf1-f201.google.com ([209.85.210.201]:39115 "EHLO
+        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727669AbfCTOwv (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 20 Mar 2019 10:52:51 -0400
-Received: from mail-io1-f73.google.com ([209.85.166.73]:32833 "EHLO
-        mail-io1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728691AbfCTOwr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Mar 2019 10:52:47 -0400
-Received: by mail-io1-f73.google.com with SMTP id n15so2278285ioc.0
-        for <bpf@vger.kernel.org>; Wed, 20 Mar 2019 07:52:46 -0700 (PDT)
+Received: by mail-pf1-f201.google.com with SMTP id u8so2764102pfm.6
+        for <bpf@vger.kernel.org>; Wed, 20 Mar 2019 07:52:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=cu+3rmCpd9l5R/y3h5ye/p2bAO3sj0NL49uODSAFDdE=;
-        b=qURJbhCG7KHqBQdB9/tW98IIzZBOYUsNCATGgXe4awlobm2aNwlvzelxDOnoumvmrK
-         b/mIN1JLFUKKEWmVODg3dQknY4u8cwFqoBa4ozFLzZZmudKVb83CGFLq+FRv9y/TTY/5
-         rSAaXeLT2zCRImT4RVHFaAYM6bwxS8DucSU4cUJk/3I0DGhDXWwcI81c67HCNpygji6O
-         BQV4zKGeru6kOZ2vSpeEayFmHj/NHgdIhgoL99CR9cRbaTnADs3WAujfChTy8IoPizRb
-         Mdk25Ol5EHmWTCbmZlyFv2SlYAe5UuS3bv3kmLeOg32bRFdSdDmDonpBZBZt7FJH+Ous
-         ilbA==
+        bh=SY+rnApq6/oVhWiUcTCOnBf6TcIl5V0rPtZOMhbp5Gs=;
+        b=qoeAL/PTMnTmhgXnl3RGCTw81JMF7TMbNpbYC6F1pr3TGPdCwVaIeU85uj/B77baMA
+         VAfUOVehMewxrlPBnMcvR10msEYwYWF8Hf58msk5Kne+FBqRyuY30tbXpt8IkSkZrha9
+         BopC5S+Fs8co9IFKm2kvowWttr/p77PwwjO1CLveVN2yF4PwY74t43GhYeQZYNqL2hkb
+         Lb66rbH+aemh2G4/5BTzrD1WRMcmhL2lokvByiGUsVSSzbRXBf7wNtl5qMTt1G6arf7d
+         2SGd6xj3du+G5dFYrDQjaku3ogveIBZkyDoiC7RnaR7D3ZV5QwX7GQmkBx2mnQVW5OQ5
+         WLOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=cu+3rmCpd9l5R/y3h5ye/p2bAO3sj0NL49uODSAFDdE=;
-        b=mghg9rn1ZXl3ZMYlzI2Xja0O2fqf6r2BU8XMgA8/HbhzqxDlx+IzDcGj8truvzYAcb
-         2M6eNqOAPvI04LJgTN+0vEsiTn+sJ8KcFdAJYabBaS9HR3hIhCukPLWOyFaYwSzWbjLo
-         zNilA7KP9s8pKD6nKRA0X9sYEwwhyfpfM0gERG82bD9pCARV2cHX0a2ElOjI+iUu56D7
-         7LphlUKKDtv4WzeFe+1wODjCH0AvJS+GXhVc0khvFbvIMcfau7ovDAf8XvCNFmYYDDSs
-         fg9uS886wCWJSSPD/dFvtsFBFgKEpWkP/eCzlHXMf6cB6zueuonDfLU9SA8x+7XdcjY/
-         XHUg==
-X-Gm-Message-State: APjAAAWyUFc2H7h6tF/AvNkYSyPJJpt19n+V+A7EGJNP2aLj+9fkGJrb
-        9iRbstmN5IkplzTyevIHzHfEb608D3y/V1/y
-X-Google-Smtp-Source: APXvYqzqObcBEgYzlcxCxTM9fSSNzVasJ/zSQwN6PhFl+/lgxd7D8DoZLa9+GTthl0M6pkpwMktv8E+fN9uDrpLf
-X-Received: by 2002:a05:660c:68d:: with SMTP id n13mr4682397itk.24.1553093566394;
- Wed, 20 Mar 2019 07:52:46 -0700 (PDT)
-Date:   Wed, 20 Mar 2019 15:51:33 +0100
+        bh=SY+rnApq6/oVhWiUcTCOnBf6TcIl5V0rPtZOMhbp5Gs=;
+        b=ejQlvyQhw6oZAof6lBlv1TTl1eigZoIeq3N1IipPi7zGZ+Y87boBEuIrHxYCqm3R7t
+         PKXo2K6Pc4iUVX2TchOMlD+ZrOwtmAC89z7VGt66vd58j6ZyitqAlB8rEG7MXwWAKNg8
+         c5EMyZChU5VC6W+BtAJK5ihMmA+AnNCvi20P2636eSWkoyQgWnblaCQFPfbBGDyA8My1
+         tm6pQunO6+EF25lmcwi8OCpQiEh0pKRBsHnERuy6+H1id0M2qOpMHSQddPIZ/Z6HZ4ud
+         y3jMmlCCPxtZL+0RMvfylWVUS2h8/Pqs4C09LOPHQgZULZuc2Tf5PetvvF/D+4c1huhq
+         3xWw==
+X-Gm-Message-State: APjAAAWiuFvnAyjiF7fw9+prvC8Oztp/AGc4CLJnQnwhVJkS/FotDDsc
+        M3Dc8TWgARiPTzUP6p1yulqmItzzlGpG+NIQ
+X-Google-Smtp-Source: APXvYqz6JBh3VPqVViw3H16uoW27hFqlC/o1l863wBn8e7Vx/uAhxhmqW+NafnSe+CxZM3eW2zA7LqhlL1qr07K2
+X-Received: by 2002:a63:5117:: with SMTP id f23mr5792228pgb.3.1553093569898;
+ Wed, 20 Mar 2019 07:52:49 -0700 (PDT)
+Date:   Wed, 20 Mar 2019 15:51:34 +0100
 In-Reply-To: <cover.1553093420.git.andreyknvl@google.com>
-Message-Id: <a49ac1a8e6d033dafd3beab0818900bde3d55860.1553093421.git.andreyknvl@google.com>
+Message-Id: <60757dd548eefd5cda129c73486dfac5e838084a.1553093421.git.andreyknvl@google.com>
 Mime-Version: 1.0
 References: <cover.1553093420.git.andreyknvl@google.com>
 X-Mailer: git-send-email 2.21.0.225.g810b269d1ac-goog
-Subject: [PATCH v13 19/20] vfio/type1, arm64: untag user pointers in vaddr_get_pfn
+Subject: [PATCH v13 20/20] selftests, arm64: add a selftest for passing tagged
+ pointers to kernel
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will.deacon@arm.com>,
@@ -114,29 +115,91 @@ This patch is a part of a series that extends arm64 kernel ABI to allow to
 pass tagged user pointers (with the top byte set to something else other
 than 0x00) as syscall arguments.
 
-vaddr_get_pfn() uses provided user pointers for vma lookups, which can
-only by done with untagged pointers.
-
-Untag user pointers in this function.
+This patch adds a simple test, that calls the uname syscall with a
+tagged user pointer as an argument. Without the kernel accepting tagged
+user pointers the test fails with EFAULT.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- drivers/vfio/vfio_iommu_type1.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/arm64/.gitignore      |  1 +
+ tools/testing/selftests/arm64/Makefile        | 11 ++++++++++
+ .../testing/selftests/arm64/run_tags_test.sh  | 12 +++++++++++
+ tools/testing/selftests/arm64/tags_test.c     | 21 +++++++++++++++++++
+ 4 files changed, 45 insertions(+)
+ create mode 100644 tools/testing/selftests/arm64/.gitignore
+ create mode 100644 tools/testing/selftests/arm64/Makefile
+ create mode 100755 tools/testing/selftests/arm64/run_tags_test.sh
+ create mode 100644 tools/testing/selftests/arm64/tags_test.c
 
-diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
-index 73652e21efec..e556caa64f83 100644
---- a/drivers/vfio/vfio_iommu_type1.c
-+++ b/drivers/vfio/vfio_iommu_type1.c
-@@ -376,6 +376,8 @@ static int vaddr_get_pfn(struct mm_struct *mm, unsigned long vaddr,
- 
- 	down_read(&mm->mmap_sem);
- 
-+	vaddr = untagged_addr(vaddr);
+diff --git a/tools/testing/selftests/arm64/.gitignore b/tools/testing/selftests/arm64/.gitignore
+new file mode 100644
+index 000000000000..e8fae8d61ed6
+--- /dev/null
++++ b/tools/testing/selftests/arm64/.gitignore
+@@ -0,0 +1 @@
++tags_test
+diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
+new file mode 100644
+index 000000000000..a61b2e743e99
+--- /dev/null
++++ b/tools/testing/selftests/arm64/Makefile
+@@ -0,0 +1,11 @@
++# SPDX-License-Identifier: GPL-2.0
 +
- 	vma = find_vma_intersection(mm, vaddr, vaddr + 1);
- 
- 	if (vma && vma->vm_flags & VM_PFNMAP) {
++# ARCH can be overridden by the user for cross compiling
++ARCH ?= $(shell uname -m 2>/dev/null || echo not)
++
++ifneq (,$(filter $(ARCH),aarch64 arm64))
++TEST_GEN_PROGS := tags_test
++TEST_PROGS := run_tags_test.sh
++endif
++
++include ../lib.mk
+diff --git a/tools/testing/selftests/arm64/run_tags_test.sh b/tools/testing/selftests/arm64/run_tags_test.sh
+new file mode 100755
+index 000000000000..745f11379930
+--- /dev/null
++++ b/tools/testing/selftests/arm64/run_tags_test.sh
+@@ -0,0 +1,12 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++
++echo "--------------------"
++echo "running tags test"
++echo "--------------------"
++./tags_test
++if [ $? -ne 0 ]; then
++	echo "[FAIL]"
++else
++	echo "[PASS]"
++fi
+diff --git a/tools/testing/selftests/arm64/tags_test.c b/tools/testing/selftests/arm64/tags_test.c
+new file mode 100644
+index 000000000000..2bd1830a7ebe
+--- /dev/null
++++ b/tools/testing/selftests/arm64/tags_test.c
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <stdint.h>
++#include <sys/utsname.h>
++
++#define SHIFT_TAG(tag)		((uint64_t)(tag) << 56)
++#define SET_TAG(ptr, tag)	(((uint64_t)(ptr) & ~SHIFT_TAG(0xff)) | \
++					SHIFT_TAG(tag))
++
++int main(void)
++{
++	struct utsname *ptr = (struct utsname *)malloc(sizeof(*ptr));
++	void *tagged_ptr = (void *)SET_TAG(ptr, 0x42);
++	int err = uname(tagged_ptr);
++
++	free(ptr);
++	return err;
++}
 -- 
 2.21.0.225.g810b269d1ac-goog
 
