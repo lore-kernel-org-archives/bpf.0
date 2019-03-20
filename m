@@ -2,152 +2,152 @@ Return-Path: <SRS0=US5c=RX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 346E7C43381
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 16:47:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60CDBC43381
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 16:49:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F16D5213F2
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 16:47:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 22FE4213F2
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 16:49:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=umn.edu header.i=@umn.edu header.b="OOU1IZOV"
+	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="YJxt4IiS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726572AbfCTQrY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Mar 2019 12:47:24 -0400
-Received: from mta-p6.oit.umn.edu ([134.84.196.206]:48554 "EHLO
-        mta-p6.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726448AbfCTQrY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Mar 2019 12:47:24 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p6.oit.umn.edu (Postfix) with ESMTP id 04EA36CB
-        for <bpf@vger.kernel.org>; Wed, 20 Mar 2019 16:47:23 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p6.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p6.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id sUQAceW9FeD0 for <bpf@vger.kernel.org>;
-        Wed, 20 Mar 2019 11:47:22 -0500 (CDT)
-Received: from mail-it1-f199.google.com (mail-it1-f199.google.com [209.85.166.199])
-        (using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p6.oit.umn.edu (Postfix) with ESMTPS id B7A0BB00
-        for <bpf@vger.kernel.org>; Wed, 20 Mar 2019 11:47:22 -0500 (CDT)
-Received: by mail-it1-f199.google.com with SMTP id m70so2705232ita.2
-        for <bpf@vger.kernel.org>; Wed, 20 Mar 2019 09:47:22 -0700 (PDT)
+        id S1726123AbfCTQtO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Mar 2019 12:49:14 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:40148 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726998AbfCTQtO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Mar 2019 12:49:14 -0400
+Received: by mail-pf1-f193.google.com with SMTP id c207so2335558pfc.7
+        for <bpf@vger.kernel.org>; Wed, 20 Mar 2019 09:49:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=OCgBGZ9QjrlJl4iqs5f+O79+0bjbKr934DYkhHFKtlI=;
-        b=OOU1IZOV9kn1tAIKwAszR4rbr3YZUrdscvNFOXpdRgrs6/eYjIAoPUrjtJvcqQVcJf
-         A36wmRrtoTk5TPenXYIzTMciqQQ2sYJrbSISrXgcrl1H5X2FWGWCpLx2JQ8kXdDFrvSu
-         62M9xppkgs2x47romIPEU52RfQD8w9tXUBgxUhfAZlYaLauoET56ggrQWG3V7PZr24hH
-         fojdSk4F79VsAhYF5Q+z4E1onMTCdGou7QMySYKO+pUlZGVZ/2M/cm5E7LcxFk/OZI8S
-         yyp/VSf67HnGSgBxGiZXHRBiajTrdNcyVgur6cO8PI/A4/7M1YcDraPC2Rihi1G8mWQG
-         miEA==
+        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=iJppJ+DCOMSINiUigIohl6LvvDcmeaH90di7WHLj7Jw=;
+        b=YJxt4IiSQO1IoBzt6R1VXkkBT6H/D5ZmENsvod5TzrrepJZ6mTGzCwiyOfzlZkzi4C
+         dZNQkGjywwwxkHlGQnoziR19O2+7zvqlNokPluXUVg3qSsez7zzioxewU6yfnaeCbg9i
+         LA4cJ7d+MbtHQdbhWmrVoGG2lliOmhqm81txuzUqzzFHmyBXqjH73MbwTU7qiAINzmK+
+         kAKp0B1JPUvNIeaJeYlYnZVlEwZzL6wVZg5pY5g74ffisyv8RkZCJnaHVaguhhn7xYHq
+         ZAPiZRvvwSLZonVHXzx0uhq7MIjML5eavlXowBa+lKPda0drT237SD3VspxC2rmP43V4
+         yL7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=OCgBGZ9QjrlJl4iqs5f+O79+0bjbKr934DYkhHFKtlI=;
-        b=OQq171pQWo12UVL+QQ8GSQN4ZD8WRr+5SdpW9NUNnM3SHXsO7PFr2yykSxPRrFrfcx
-         NSzN1oxE1yyC/tJ6paxkPWz4Eas5iRryZnp+uT+hVfTQekSjP0MvouIP9KY6IXEIfrhC
-         9kCk9KYwAziyjO9OMneTQ9P5uEMlg/ZsAhO6O3weUGd0P63P0LAQKI4hDYEPhFm1seJp
-         L1y5NlxtIrt1qhkbm3XOUQtEuYmAODRRLWcOkRq+Lyf9fq8rD53Dx9mKBGV1jfX7l8W9
-         2q7xD8MhnqUZ2f5f/p+6DdstoqIOKrrJy3SU4iFwGYkZncKrj7IaAVIvKk3+QvA0P3cv
-         v5WA==
-X-Gm-Message-State: APjAAAWOepAm92WwvPoX0jTQ761bBKUrpgVyBBkCtZ+l8zy5uDGtGyXF
-        pfFjeLY8RgYQ9QEwMEDm3kmxnaERZcbunFe67kNPqhQS3CuHLhQOd4fqdfwNXqZErLqyRDhY65J
-        Paj4dkdp8Y3rzvCqs
-X-Received: by 2002:a02:224b:: with SMTP id o72mr6035564jao.16.1553100442381;
-        Wed, 20 Mar 2019 09:47:22 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqy+NDgp64O6AmEVq1LCbh8ES/jB1pQ+DbqegVXDMft241QSXQGu2eOSh7t51T3tQyvIPVoHEQ==
-X-Received: by 2002:a02:224b:: with SMTP id o72mr6035548jao.16.1553100442203;
-        Wed, 20 Mar 2019 09:47:22 -0700 (PDT)
-Received: from cs-u-syssec1.dtc.umn.edu (cs-u-syssec1.cs.umn.edu. [128.101.106.66])
-        by smtp.gmail.com with ESMTPSA id v4sm982480ios.10.2019.03.20.09.47.21
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 20 Mar 2019 09:47:21 -0700 (PDT)
-From:   Aditya Pakki <pakki001@umn.edu>
-To:     pakki001@umn.edu
-Cc:     kjlu@umn.edu, Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=iJppJ+DCOMSINiUigIohl6LvvDcmeaH90di7WHLj7Jw=;
+        b=ix8PrMaMOBBydRv4l4uCzXKHBLmguHnKJVrs80hvz39sUTK1MVpNWuIoehjQoqiMkt
+         OmGrpK4yJ71W4nWBM4WOACzRMV6A7NHjONY/CiFkDEpkGl8sTuTO58DGKUy40LmMiszg
+         AV+HIbgwrnpGgJ6NQ/VwgH275zANTswFR/znhUHq6C0YM8WXSs9Q1W0y/1a2tpwdNI6l
+         5kWfH6PJaaC6gTgvwqslgnYDAvFUu2Ts9otTbjFa9r0o3xcRYSIOc/nKbqs6Y1OnvL+C
+         Vpxd8E+/HMAdMtnE8dL79LNJuIh8EpUu53JBrz6GU9y1KYx2Ug5McEmmTWTpYce7DQ9H
+         t8jg==
+X-Gm-Message-State: APjAAAVMmlLyxPDMjzXFiiVkudBjD8FNQco45pwY0SzNu22EkWUpw7K8
+        sY+PqD0fXsvMtAfmlWg0MJmoP4z5SFA=
+X-Google-Smtp-Source: APXvYqyoWDOOodHWPt0JZSxKNqfdBvDg4ixKmR3YX/xYgkQLB4uaJ49HXHkJsDGyBRYEp0/nFcBVkQ==
+X-Received: by 2002:a17:902:28a7:: with SMTP id f36mr9019645plb.169.1553100553708;
+        Wed, 20 Mar 2019 09:49:13 -0700 (PDT)
+Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
+        by smtp.gmail.com with ESMTPSA id u62sm8532952pfa.124.2019.03.20.09.49.12
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 20 Mar 2019 09:49:12 -0700 (PDT)
+Date:   Wed, 20 Mar 2019 09:49:11 -0700
+From:   Stanislav Fomichev <sdf@fomichev.me>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     Stanislav Fomichev <sdf@google.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf@vger.kernel.org, David Miller <davem@davemloft.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        xdp-newbies@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH v2] thunderbolt: xdomain: Fix to check return value of kmemdup
-Date:   Wed, 20 Mar 2019 11:47:20 -0500
-Message-Id: <20190320164720.31264-1-pakki001@umn.edu>
-X-Mailer: git-send-email 2.17.1
+        simon.horman@netronome.com, Willem de Bruijn <willemb@google.com>,
+        Petar Penkov <peterpenkov96@gmail.com>
+Subject: Re: [RFC bpf-next v2 2/9] net: introduce skb_net helper
+Message-ID: <20190320164911.GH7431@mini-arch.hsd1.ca.comcast.net>
+References: <20190319221948.170441-1-sdf@google.com>
+ <20190319221948.170441-3-sdf@google.com>
+ <CAF=yD-JbxFKSVGuXz0-LbzAzSkMR-wZFEQe0e1mck2EY6vn3vg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAF=yD-JbxFKSVGuXz0-LbzAzSkMR-wZFEQe0e1mck2EY6vn3vg@mail.gmail.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-kmemdup can fail and return a NULL pointer. The patch modifies the
-signature of tb_xdp_schedule_request and passes the failure error upstream.
+On 03/19, Willem de Bruijn wrote:
+> On Tue, Mar 19, 2019 at 6:20 PM Stanislav Fomichev <sdf@google.com> wrote:
+> >
+> > skb_net returns network namespace from the associated device or socket.
+> >
+> > This will be used in the next commit.
+> >
+> > I tried to inline it in skbuff.h, but I don't think it's feasible.
+> 
+> If so, is this helper necessary?
+> 
+> All existing cases that use it pass both skb_net(skb) and skb to the
+> flow dissector, so can continue to call it locally if new argument net
+> is NULL.
+> 
+> The new users are in patch 9/9 in the device drivers, but those should
+> pass the device pointer unconditionally.
+Good point, I can try to drop it.
 
-Signed-off-by: Aditya Pakki <pakki001@umn.edu>
 
----
-v1: Missed clean up of xw in case of kmemdup failure, per David
----
- drivers/thunderbolt/xdomain.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/thunderbolt/xdomain.c b/drivers/thunderbolt/xdomain.c
-index e27dd8beb94b..316360109bea 100644
---- a/drivers/thunderbolt/xdomain.c
-+++ b/drivers/thunderbolt/xdomain.c
-@@ -526,7 +526,7 @@ static void tb_xdp_handle_request(struct work_struct *work)
- 	kfree(xw);
- }
- 
--static void
-+static bool
- tb_xdp_schedule_request(struct tb *tb, const struct tb_xdp_header *hdr,
- 			size_t size)
- {
-@@ -534,13 +534,18 @@ tb_xdp_schedule_request(struct tb *tb, const struct tb_xdp_header *hdr,
- 
- 	xw = kmalloc(sizeof(*xw), GFP_KERNEL);
- 	if (!xw)
--		return;
-+		return false;
- 
- 	INIT_WORK(&xw->work, tb_xdp_handle_request);
- 	xw->pkg = kmemdup(hdr, size, GFP_KERNEL);
-+	if (!xw->pkg) {
-+		kfree(xw);
-+		return false;
-+	}
- 	xw->tb = tb;
- 
- 	queue_work(tb->wq, &xw->work);
-+	return true;
- }
- 
- /**
-@@ -1416,10 +1421,8 @@ bool tb_xdomain_handle_request(struct tb *tb, enum tb_cfg_pkg_type type,
- 	 * handlers in turn.
- 	 */
- 	if (uuid_equal(&hdr->uuid, &tb_xdp_uuid)) {
--		if (type == TB_CFG_PKG_XDOMAIN_REQ) {
--			tb_xdp_schedule_request(tb, hdr, size);
--			return true;
--		}
-+		if (type == TB_CFG_PKG_XDOMAIN_REQ)
-+			return tb_xdp_schedule_request(tb, hdr, size);
- 		return false;
- 	}
- 
--- 
-2.17.1
-
+> > It depends on 'net/sock.h' for sock_net() and 'linux/netdevice.h' for
+> > dev_net(), both of which we don't include from 'linux/skbuff.h' (but
+> > both sock.h and netdevice.h include skbuff.h). I though about doing
+> > it as a macro/putting it somewhere else, but we will have
+> > skb_flow_dissect{_xyz} use it in the next commits.
+> >
+> > Signed-off-by: Stanislav Fomichev <sdf@google.com>
+> > ---
+> >  include/linux/skbuff.h |  2 ++
+> >  net/core/skbuff.c      | 16 ++++++++++++++++
+> >  2 files changed, 18 insertions(+)
+> >
+> > diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> > index e8c1d5b97f96..75e1d4d73cca 100644
+> > --- a/include/linux/skbuff.h
+> > +++ b/include/linux/skbuff.h
+> > @@ -1275,6 +1275,8 @@ static inline int skb_flow_dissector_bpf_prog_detach(const union bpf_attr *attr)
+> >  }
+> >  #endif
+> >
+> > +struct net *skb_net(const struct sk_buff *skb);
+> > +
+> >  struct bpf_flow_keys;
+> >  bool __skb_flow_bpf_dissect(struct bpf_prog *prog,
+> >                             const struct sk_buff *skb,
+> > diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> > index b413354ee709..d81f3a95fb4e 100644
+> > --- a/net/core/skbuff.c
+> > +++ b/net/core/skbuff.c
+> > @@ -5725,3 +5725,19 @@ void __skb_ext_put(struct skb_ext *ext)
+> >  }
+> >  EXPORT_SYMBOL(__skb_ext_put);
+> >  #endif /* CONFIG_SKB_EXTENSIONS */
+> > +
+> > +/**
+> > + * skb_net - Return network namespace associated with skb.
+> > + * @skb: skb
+> > + *
+> > + * Returns pointer to struct net or NULL.
+> > + */
+> > +struct net *skb_net(const struct sk_buff *skb)
+> > +{
+> > +       if (skb->dev)
+> > +               return dev_net(skb->dev);
+> > +       else if (skb->sk)
+> > +               return sock_net(skb->sk);
+> > +       return NULL;
+> > +}
+> > +EXPORT_SYMBOL(skb_net);
+> > --
+> > 2.21.0.225.g810b269d1ac-goog
+> >
