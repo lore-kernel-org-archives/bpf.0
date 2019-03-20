@@ -2,89 +2,97 @@ Return-Path: <SRS0=US5c=RX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
+X-Spam-Status: No, score=-14.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 001A1C43381
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 07:06:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CB16C43381
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 10:10:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B86442146E
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 07:06:49 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Og6AX0iM"
+	by mail.kernel.org (Postfix) with ESMTP id 732822175B
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 10:10:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727109AbfCTHGt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Mar 2019 03:06:49 -0400
-Received: from mail-pg1-f201.google.com ([209.85.215.201]:35906 "EHLO
-        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726611AbfCTHGt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Mar 2019 03:06:49 -0400
-Received: by mail-pg1-f201.google.com with SMTP id m17so1814047pgk.3
-        for <bpf@vger.kernel.org>; Wed, 20 Mar 2019 00:06:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=O76ZRuh4ryFYFDKtXPrkcncLov68bX+7hcSJNmgQXec=;
-        b=Og6AX0iMnDJRf7AWFoTKrVtCDI/f05PIrGH/d4ZKNNd4qLScbf0fXitTPjrV3Bzgl9
-         r4x/eBhSn+MNcxVVj72R3EFoGQ6HmwgflhIuvhRW3oKhHCjvGaBe3hLGqpDbW75JZ6CU
-         xvLjgd77AT3aSkTudn6fW+Wc2zdCHPUeE7vtdjvLVlm7pQ2icsuwz73dnNosPg9UTk2B
-         MGi6BezVTOhXln19xVX91sDlgLuuWwrjpy6GA/Iu5LMaekh+U3ov0yFEEO6fgAbTrRYA
-         TJMfiTYkiUVq8W8OwTPg5EiZ8rUAX5TLkU7aaWiEx6HeKG8SVpvj6P989sNICNtV2VtT
-         gzeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=O76ZRuh4ryFYFDKtXPrkcncLov68bX+7hcSJNmgQXec=;
-        b=ORqSC/tfz96Pi0aqcW6A3TuHxpEcV0J2f4jXkg/F+HNbxOpOWjMOClpz7DdM5JtsxP
-         Q8515mYhEqBR8qKAqnHsXWfdd/i5+itihnYUZdHWNpQ/n9o/1m0MZ+e5gS5rai3EYi5M
-         OWTyZY7T02V48XFjAdSy2dKOZ0WlGd8JJuqGpmJUtQBR22rc6m6CZZBj0S2j4qdVmrNr
-         /RNmFdl2W3B/c+1XiKLAZ3IGmTL21AXweFcR0qlh4pwK6nhnk4JYxj5v0qCi7jqSS9xb
-         zc4NaBupO99L6fmGJuteOLYmUlf92d7vEU+Sc7oA+scvZ8ll/+Uu8Y7Lg4y9gQ9S4QG5
-         0yiA==
-X-Gm-Message-State: APjAAAVgOeLRHf0xe7xoLyrWWxzemE9Mz0hZAkZ596M8Ph3Yciqj/kIP
-        svFI+MRM0pK7Kb9RcXhSjhHwZnJg
-X-Google-Smtp-Source: APXvYqzA6/GPhcJb2COEhTL7mNiHxuymsjGXmqtk8F7k149LYSNyVOFJgYL/ZEag/JTNAUc7H1DEpREx
-X-Received: by 2002:a62:ac18:: with SMTP id v24mr4456042pfe.70.1553065608614;
- Wed, 20 Mar 2019 00:06:48 -0700 (PDT)
-Date:   Wed, 20 Mar 2019 00:06:40 -0700
-Message-Id: <20190320070640.102721-1-posk@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.21.0.225.g810b269d1ac-goog
-Subject: [PATCH bpf-next] bpf: make bpf_skb_ecn_set_ce callable from BPF_PROG_TYPE_SCHED_ACT
-From:   Peter Oskolkov <posk@google.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     Lawrence Brakmo <brakmo@fb.com>, Peter Oskolkov <posk@posk.io>,
-        Peter Oskolkov <posk@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726065AbfCTKKz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Mar 2019 06:10:55 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:41718 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725980AbfCTKKy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Mar 2019 06:10:54 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: aratiu)
+        with ESMTPSA id 16A2126C024
+From:   Adrian Ratiu <adrian.ratiu@collabora.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] selftests/bpf: Add arm target register definitions
+Date:   Wed, 20 Mar 2019 12:10:54 +0200
+Message-Id: <20190320101054.1880-1-adrian.ratiu@collabora.com>
+X-Mailer: git-send-email 2.21.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This helper is useful if a bpf tc filter sets skb->tstamp.
+eBPF "restricted C" code can be compiled with LLVM/clang using target
+triplets like armv7l-unknown-linux-gnueabihf and loaded/run with small
+cross-compiled gobpf/elf [1] programs without requiring a full BCC
+port which is also undesirable on small embedded systems due to its
+size footprint. The only missing pieces are these helper macros which
+otherwise have to be redefined by each eBPF arm program.
 
-Signed-off-by: Peter Oskolkov <posk@google.com>
+[1] https://github.com/iovisor/gobpf/tree/master/elf
+
+Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com>
 ---
- net/core/filter.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/bpf/bpf_helpers.h | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 647c63a7b25b..c6d016d9c4b8 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5719,6 +5719,8 @@ tc_cls_act_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_tcp_sock_proto;
- 	case BPF_FUNC_get_listener_sock:
- 		return &bpf_get_listener_sock_proto;
-+	case BPF_FUNC_skb_ecn_set_ce:
-+		return &bpf_skb_ecn_set_ce_proto;
- #endif
- 	default:
- 		return bpf_base_func_proto(func_id);
+diff --git a/tools/testing/selftests/bpf/bpf_helpers.h b/tools/testing/selftests/bpf/bpf_helpers.h
+index c81fc350f7ad..41f8a4b676a4 100644
+--- a/tools/testing/selftests/bpf/bpf_helpers.h
++++ b/tools/testing/selftests/bpf/bpf_helpers.h
+@@ -274,6 +274,9 @@ static int (*bpf_skb_adjust_room)(void *ctx, __s32 len_diff, __u32 mode,
+ #elif defined(__TARGET_ARCH_s930x)
+ 	#define bpf_target_s930x
+ 	#define bpf_target_defined
++#elif defined(__TARGET_ARCH_arm)
++	#define bpf_target_arm
++	#define bpf_target_defined
+ #elif defined(__TARGET_ARCH_arm64)
+ 	#define bpf_target_arm64
+ 	#define bpf_target_defined
+@@ -296,6 +299,8 @@ static int (*bpf_skb_adjust_room)(void *ctx, __s32 len_diff, __u32 mode,
+ 	#define bpf_target_x86
+ #elif defined(__s390x__)
+ 	#define bpf_target_s930x
++#elif defined(__arm__)
++	#define bpf_target_arm
+ #elif defined(__aarch64__)
+ 	#define bpf_target_arm64
+ #elif defined(__mips__)
+@@ -333,6 +338,19 @@ static int (*bpf_skb_adjust_room)(void *ctx, __s32 len_diff, __u32 mode,
+ #define PT_REGS_SP(x) ((x)->gprs[15])
+ #define PT_REGS_IP(x) ((x)->psw.addr)
+ 
++#elif defined(bpf_target_arm)
++
++#define PT_REGS_PARM1(x) ((x)->uregs[0])
++#define PT_REGS_PARM2(x) ((x)->uregs[1])
++#define PT_REGS_PARM3(x) ((x)->uregs[2])
++#define PT_REGS_PARM4(x) ((x)->uregs[3])
++#define PT_REGS_PARM5(x) ((x)->uregs[4])
++#define PT_REGS_RET(x) ((x)->uregs[14])
++#define PT_REGS_FP(x) ((x)->uregs[11]) /* Works only with CONFIG_FRAME_POINTER */
++#define PT_REGS_RC(x) ((x)->uregs[0])
++#define PT_REGS_SP(x) ((x)->uregs[13])
++#define PT_REGS_IP(x) ((x)->uregs[12])
++
+ #elif defined(bpf_target_arm64)
+ 
+ #define PT_REGS_PARM1(x) ((x)->regs[0])
 -- 
-2.21.0.225.g810b269d1ac-goog
+2.21.0
 
