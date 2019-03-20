@@ -7,56 +7,56 @@ X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 548A8C43381
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 14:53:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88F9CC43381
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 14:54:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2423A2184E
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 14:53:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 581742146E
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 14:54:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JN7peWS7"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VBRIEAm7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728604AbfCTOw2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Mar 2019 10:52:28 -0400
-Received: from mail-qk1-f202.google.com ([209.85.222.202]:41625 "EHLO
-        mail-qk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728560AbfCTOw1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Mar 2019 10:52:27 -0400
-Received: by mail-qk1-f202.google.com with SMTP id x18so20946234qkf.8
-        for <bpf@vger.kernel.org>; Wed, 20 Mar 2019 07:52:27 -0700 (PDT)
+        id S1728461AbfCTOyL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Mar 2019 10:54:11 -0400
+Received: from mail-pf1-f202.google.com ([209.85.210.202]:51139 "EHLO
+        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728565AbfCTOwY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Mar 2019 10:52:24 -0400
+Received: by mail-pf1-f202.google.com with SMTP id f19so2741081pfd.17
+        for <bpf@vger.kernel.org>; Wed, 20 Mar 2019 07:52:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=BhVJ8uqyuZN/RhYo8e4D2Wo6j82d4Ue7nF7755mNwHM=;
-        b=JN7peWS7Nez+2uGYBenvD1URtgpAIqAee70ib/k/sIrShjHTRTOTS60cMewca4/dl+
-         dG9NPJL3RBHz+jByCPy9VsQpiotQxDiag9Y5aB1mow2uCgebTPUHJtgOnmaSI9Vr/YIx
-         hQI/v/gR0GvyO5deZUXNGQI2iRQRxhpRf4qspE3jPUxJjXOAuD/wl6/iqPcyOgYmtLKK
-         MWpwP9BARDOkmKwS67XX82wJzNDDELNK9gdSeTBhBvMrWdTjib0F+nJEJKUwKFoB/pDB
-         SXeryLoUidHqjz93zv8BQ7DsI9WVz5TfwJy9iV6N2sA8iMykCz2Q8F38PNgxFh8B+8WB
-         8apg==
+        bh=TypqXDoyNXONz2oDo7T8C+4NlePqKxo9jFd/dN9OnUY=;
+        b=VBRIEAm79eYl13DjJG/iyvfKJYZY4JaqF0G4F5Q9Tdc02tcv3SWnQ7Xrt3SjBFfGvg
+         PcwgciJDQT6onqfPRyqhMrslyXsxz10zdr5FgA2LGaoQc9yos1AyT8UyusDzxef8QaZN
+         z/f2pc6v7A54U9tLiW8lNWS179RcuvzfHFAZzepf2J72aR6ktogxURSeTjnVYurpdTa1
+         B6f7t3ef6UHMUiBVLuaDIwpdpl0FL6sYq3LH523DSKALKUVOqO0tPAJ4+aeT4zaZmhz+
+         IrRrf0UOiKCQsyUUh28eTbRMIsy4aBjzHA3qkBs+V7Ol2Fi+w51237VJCFLw3aI3tuE3
+         QzOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=BhVJ8uqyuZN/RhYo8e4D2Wo6j82d4Ue7nF7755mNwHM=;
-        b=buupKbe13O3FyjxtVdh2fIC/GfjNtaHpI6ZzARywwvdr+kJif34cDW/WbcsOLF22uv
-         pD0SEJSby0REYpmUy2+ImMjivBIFZDJSuuphvNQwajoyhD2snTP1q7vBO4VizRSsqYxR
-         gF+4GBIv8vnTl5Smh/3YWmMbCuLeRC1jnYWG0VGtZWHta9VRD2+NIKVvFkkMONKuEWhX
-         BxlrP+jSMciqFgv24pf5MPA4izowsVfqcFMZHoJBg10VyVnekEAJGBTZg8hxjr9eQHgh
-         s1imZITlfc2ex38WidM7bx7NuB/CHI19zY4mgHQW9ADeCMKk41kkzQK3qHeO8hyDqE0m
-         ceGQ==
-X-Gm-Message-State: APjAAAUIewl2k7eL0jNudQlvfjfIENMZKtLHQMyy6/gPMT+qnSEPOY06
-        TeZwLSqCqpm9/JvIiV/qSfMGuJ5qT6asvnWA
-X-Google-Smtp-Source: APXvYqwzO9qScb+3DLKygLOG3z91c2IWDiaev09n3TsGmqkOq4NcQ5CsSt3t0f+AffnIIDyplmnedU704klPsHau
-X-Received: by 2002:a05:620a:15fa:: with SMTP id p26mr919440qkm.51.1553093546857;
- Wed, 20 Mar 2019 07:52:26 -0700 (PDT)
-Date:   Wed, 20 Mar 2019 15:51:27 +0100
+        bh=TypqXDoyNXONz2oDo7T8C+4NlePqKxo9jFd/dN9OnUY=;
+        b=i2emzlz7P9p+s5wX3DFixGj4IgWvjFY6Yw+OVy9xlznm7TMpjMr6CbuTsFzP/SUg5+
+         bYxS8zUfYj8aEIlQZGDt7OB8axK2q1vQy5S+y/pRxfvrzGhidYM++tH2fx1ZSCgIBkzt
+         lW62SHO+dkvn/teK2ik12rvyVqZKl07pqidLEZ+zcJJjZJllOvofD9cdsdOAbkOcDmBG
+         RmCsEJBtpiRNRULyR87sFP6KykHsDtoqrEdojx6j/dXtDSRlWSFcp1WQR9p9Rxa+X532
+         B6m0q2X7ONYcXMLxwauXV2P/Qpe+Yja4cHi0HLYX2chCn6P26IRQIVONnNxegwTg3AkU
+         bAnw==
+X-Gm-Message-State: APjAAAXUenWTDxG2uSdmXzlW+kEZiLc3z/YOllHxZtgaLIjqhp4Yf9Ei
+        WNdUgZnVCXRG046+3ztmydcwGYVhho5D7wND
+X-Google-Smtp-Source: APXvYqzAZyZyGva2EuPoJScM6UyEVyBDQ8rao6oUZ0kApC3+FesuzwO5WKxPmyM+dQi9tBAx2Re+64THdUBgYOfQ
+X-Received: by 2002:a17:902:8a98:: with SMTP id p24mr7507223plo.18.1553093543416;
+ Wed, 20 Mar 2019 07:52:23 -0700 (PDT)
+Date:   Wed, 20 Mar 2019 15:51:26 +0100
 In-Reply-To: <cover.1553093420.git.andreyknvl@google.com>
-Message-Id: <09d6b8e5c8275de85c7aba716578fbcb3cbce924.1553093421.git.andreyknvl@google.com>
+Message-Id: <88d5255400fc6536d6a6895dd2a3aef0f0ecc899.1553093421.git.andreyknvl@google.com>
 Mime-Version: 1.0
 References: <cover.1553093420.git.andreyknvl@google.com>
 X-Mailer: git-send-email 2.21.0.225.g810b269d1ac-goog
-Subject: [PATCH v13 13/20] bpf, arm64: untag user pointers in stack_map_get_build_id_offset
+Subject: [PATCH v13 12/20] uprobes, arm64: untag user pointers in find_active_uprobe
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will.deacon@arm.com>,
@@ -114,42 +114,30 @@ This patch is a part of a series that extends arm64 kernel ABI to allow to
 pass tagged user pointers (with the top byte set to something else other
 than 0x00) as syscall arguments.
 
-stack_map_get_build_id_offset() uses provided user pointers for vma
-lookups, which can only by done with untagged pointers.
+find_active_uprobe() uses user pointers (obtained via
+instruction_pointer(regs)) for vma lookups, which can only by done with
+untagged pointers.
 
-Untag user pointers in this function for doing the lookup and
-calculating the offset, but save as is in the bpf_stack_build_id
-struct.
+Untag user pointers in this function.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- kernel/bpf/stackmap.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ kernel/events/uprobes.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index 950ab2f28922..bb89341d3faf 100644
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -320,7 +320,9 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
- 	}
+diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
+index c5cde87329c7..d3a2716a813a 100644
+--- a/kernel/events/uprobes.c
++++ b/kernel/events/uprobes.c
+@@ -1992,6 +1992,8 @@ static struct uprobe *find_active_uprobe(unsigned long bp_vaddr, int *is_swbp)
+ 	struct uprobe *uprobe = NULL;
+ 	struct vm_area_struct *vma;
  
- 	for (i = 0; i < trace_nr; i++) {
--		vma = find_vma(current->mm, ips[i]);
-+		u64 untagged_ip = untagged_addr(ips[i]);
++	bp_vaddr = untagged_addr(bp_vaddr);
 +
-+		vma = find_vma(current->mm, untagged_ip);
- 		if (!vma || stack_map_get_build_id(vma, id_offs[i].build_id)) {
- 			/* per entry fall back to ips */
- 			id_offs[i].status = BPF_STACK_BUILD_ID_IP;
-@@ -328,7 +330,7 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
- 			memset(id_offs[i].build_id, 0, BPF_BUILD_ID_SIZE);
- 			continue;
- 		}
--		id_offs[i].offset = (vma->vm_pgoff << PAGE_SHIFT) + ips[i]
-+		id_offs[i].offset = (vma->vm_pgoff << PAGE_SHIFT) + untagged_ip
- 			- vma->vm_start;
- 		id_offs[i].status = BPF_STACK_BUILD_ID_VALID;
- 	}
+ 	down_read(&mm->mmap_sem);
+ 	vma = find_vma(mm, bp_vaddr);
+ 	if (vma && vma->vm_start <= bp_vaddr) {
 -- 
 2.21.0.225.g810b269d1ac-goog
 
