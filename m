@@ -2,123 +2,159 @@ Return-Path: <SRS0=US5c=RX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AC10C43381
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 11:25:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93B0AC43381
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 11:58:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 541B62175B
-	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 11:25:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5BCB32184E
+	for <bpf@archiver.kernel.org>; Wed, 20 Mar 2019 11:58:35 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xg8Fp8Ws"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727455AbfCTLZ5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Mar 2019 07:25:57 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:38328 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727154AbfCTLZ4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Mar 2019 07:25:56 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C199A1650;
-        Wed, 20 Mar 2019 04:25:55 -0700 (PDT)
-Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7C08D3F575;
-        Wed, 20 Mar 2019 04:25:49 -0700 (PDT)
-Date:   Wed, 20 Mar 2019 11:25:46 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
+        id S1726123AbfCTL6f (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Mar 2019 07:58:35 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:43401 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726093AbfCTL6e (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Mar 2019 07:58:34 -0400
+Received: by mail-pg1-f195.google.com with SMTP id l11so1630264pgq.10;
+        Wed, 20 Mar 2019 04:58:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=aQOcMLnOV4EHAGkfiD2kuMOsuoGF5VI2/H+F6nmERDU=;
+        b=Xg8Fp8WseloZq8wE1MdkM20jxlxoF41JsxjiEHRkmFDBbyEcCLjA6UQjNyY5QE88yM
+         ofYGP7vyuaEggubCvJs7Ymao57VGmIVxBMxfiN/gzwcsRr6v9izuhpix/V/LcdvRAtLW
+         dgqSD8/AtQmUQ5FZENW6ar1+IJwhvh/wyu+PLrOoY3YWPcT/kTixtpOV35QoRKnH+AFN
+         7o72UBGnSjFS+Deo/c0XTNfVAj4GWyE8B8TVd+jt+Q5R9lNmhxaaL29MQhQy7k+Prw9r
+         nQmOWDPWWnSciPKeB6XS1nWSIc0wZwNTN4Maa/Bo/612RfXmZOoU3wFMlh9XQ5jh47cT
+         q/nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=aQOcMLnOV4EHAGkfiD2kuMOsuoGF5VI2/H+F6nmERDU=;
+        b=IB2a3kDVBT3aiDGByCA+KZqxWJ5OPZ1zQ53z2wnfaRKz2SfZKnAlLU2NwI0wLaqS4j
+         /EhjiHO47//yX/xliVt0UOf5IV4d3QJkp+ItdIqBPJ7EV1PsTYXwlfOczYkQDNGpb6Mv
+         5adZSFGFxSkcRKKmRGDa6t4Xxhex1uzQxwVmztFK5xvd2BXO5hIdMDw63xA6iiGpzKil
+         Vigt2frcyK1VwyoHhbVa/Ks8RwFIKanH1l8PrMjnQlfdX5FSx/I6jkCSLfxIzzgK9LT6
+         Thi5+rS7Nr1JrXt5/x/cnEaEXThUMDknKxAqQ4C2UaNQSOdJY9REIm7pmxSOC5nLKFIj
+         nvLA==
+X-Gm-Message-State: APjAAAW/zx0nbQmAtsxjH97YAe3Y1MgPv4ASJMioBvqGRlHVACw62VrC
+        3UvNP9TCoOKfaR/39Z00LKo=
+X-Google-Smtp-Source: APXvYqzeJZDNL2ctvS4Z9h10kjjJODt3BnYguWj9pnYQ0AGCaCkqTb47WBmw5FGTmNxyjETm+0secQ==
+X-Received: by 2002:a63:c118:: with SMTP id w24mr6972166pgf.67.1553083113808;
+        Wed, 20 Mar 2019 04:58:33 -0700 (PDT)
+Received: from mail.google.com ([104.238.181.70])
+        by smtp.gmail.com with ESMTPSA id e8sm2609593pfn.103.2019.03.20.04.58.32
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 20 Mar 2019 04:58:33 -0700 (PDT)
+Date:   Wed, 20 Mar 2019 11:58:31 +0000
+From:   Changbin Du <changbin.du@gmail.com>
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Changbin Du <changbin.du@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, namhyung@kernel.org,
         Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Chintan Pandya <cpandya@codeaurora.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>, khalid.aziz@oracle.com
-Subject: Re: [PATCH v12 00/13] arm64: untag user pointers passed to the kernel
-Message-ID: <20190320112545.GB25040@arrakis.emea.arm.com>
-References: <cover.1552929301.git.andreyknvl@google.com>
- <20190319113212.ca1d56301112454dfb5a39ba@linux-foundation.org>
+        Alexei Starovoitov <ast@kernel.org>, rostedt@goodmis.org,
+        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 01/16] perf: add doc for how to build perf with Asan and
+ UBSan
+Message-ID: <20190320115830.za3swag662f6ht45@mail.google.com>
+References: <20190316080556.3075-1-changbin.du@gmail.com>
+ <20190316080556.3075-2-changbin.du@gmail.com>
+ <20190318100758.GA28556@krava>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190319113212.ca1d56301112454dfb5a39ba@linux-foundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190318100758.GA28556@krava>
+User-Agent: NeoMutt/20180716-508-7c9a6d
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 19, 2019 at 11:32:12AM -0700, Andrew Morton wrote:
-> On Mon, 18 Mar 2019 18:17:32 +0100 Andrey Konovalov <andreyknvl@google.com> wrote:
-> > === Notes
+Sorry for delay.
+
+On Mon, Mar 18, 2019 at 11:07:58AM +0100, Jiri Olsa wrote:
+> On Sat, Mar 16, 2019 at 04:05:41PM +0800, Changbin Du wrote:
+> > AddressSanitizer (or ASan) and UndefinedBehaviorSanitizer (or UBSan) are
+> > very useful tools to detect program bugs.
+> >  o AddressSanitizer (or ASan) is a GCC feature that detects memory
+> >    corruption bugs such as buffer overflows or memory leaks.
+> >  o UndefinedBehaviorSanitizer (or UBSan) is a fast undefined behavior
+> >    detector supprted by GCC. UBSan detect undefined behavior of programs
+> >    at runtime.
 > > 
-> > This patchset is meant to be merged together with "arm64 relaxed ABI" [3].
+> > This patch adds doc for how to use them on perf. Later patches will fix
+> > some of the issues disclosed by them.
+> > 
+> > Signed-off-by: Changbin Du <changbin.du@gmail.com>
+> > ---
+> >  tools/perf/Documentation/Build.txt | 20 ++++++++++++++++++++
+> >  1 file changed, 20 insertions(+)
+> > 
+> > diff --git a/tools/perf/Documentation/Build.txt b/tools/perf/Documentation/Build.txt
+> > index f6fc6507ba55..cae6e1d9b901 100644
+> > --- a/tools/perf/Documentation/Build.txt
+> > +++ b/tools/perf/Documentation/Build.txt
+> > @@ -47,3 +47,23 @@ Those objects are then used in final linking:
+> >  
+> >  NOTE this description is omitting other libraries involved, only
+> >       focusing on build framework outcomes
 > 
-> What does this mean, precisely?  That neither series is useful without
-> the other?  That either patchset will break things without the other?
+> thanks for adding doc, one nit:
+> 
+> > +
+> > +3) buld and install perf
+> 
+> there's already:
+>  2) perf build
+>  =============
+> 
+> please use something like 
+> 
+>  3) perf build for ASan/UBSan
+>  ============================
+> 
+> > +  $ cd tools/perf
+> > +  $ make DESTDIR=/usr
+> > +  $ make DESTDIR=/usr install
+> > +
+> > +4) build with ASan or UBSan
+> 
+> no need for this label
+> 
+Thanks, I saw Arnaldo already taked this change with your suggestion.
 
-This series does the work of relaxing the ABI w.r.t. pointer syscall
-arguments for arm64 (while preserving backwards compatibility, we can't
-break this). Vincenzo's patches [1] document the ABI relaxation and
-introduce an AT_FLAG bit by which user space can check for the presence
-of such support. So I'd say [1] goes on top of this series.
-
-Once we agreed on the ABI definition, they should be posted as a single
-series.
-
-> Only a small fraction of these patches carry evidence of having been
-> reviewed.  Fixable?
-
-That's fixable, though the discussions go back to last summer mostly at
-a higher level: are we sure these are the only places that need
-patching? The outcome of such discussions was a document clarifying
-which pointers user can tag and pass to the kernel based on the origins
-of the memory range (e.g. anonymous mmap()).
-
-I'd very much like to get input from the SPARC ADI guys on these series
-(cc'ing Khalid). While currently for arm64 that's just a software
-feature (the hardware one, MTE - memory tagging extensions, is coming
-later), the ADI has similar requirements regarding the user ABI. AFAICT
-from the SPARC example code, the user is not allowed to pass a tagged
-pointers (non-zero top byte) into the kernel. Feedback from the Google
-hwasan guys is that such approach is not practical for a generic
-deployment of this feature (e.g. automatic tagging of heap allocations).
-
-> Which maintainer tree would be appropriate for carrying these patches?
-
-Given that the arm64 changes are fairly minimal, the -mm tree works for
-me (once I reviewed/acked the patches and, ideally, get the SPARC people
-onboard with such approach).
-
-[1] https://lkml.org/lkml/2019/3/18/819
+> > +AddressSanitizer (or ASan) is a GCC feature that detects memory corruption bugs
+> > +such as buffer overflows or memory leaks.
+> > +  $ cd tools/perf
+> > +  $ make DEBUG=1 EXTRA_CFLAGS='-fno-omit-frame-pointer -fsanitize=address'
+> > +  $ ASAN_OPTIONS=log_path=asan.log ./perf record -a
+> > +ASan outputs all detected issues into log file 'asan.log.<pid>'.
+> > +
+> > +UndefinedBehaviorSanitizer (or UBSan) is a fast undefined behavior detector
+> > +supprted by GCC. UBSan detect undefined behavior of programs at runtime.
+> > +  $ cd tools/perf
+> > +  $ make DEBUG=1 EXTRA_CFLAGS='-fno-omit-frame-pointer -fsanitize=undefined'
+> > +  $ UBSAN_OPTIONS=print_stacktrace=1 ./perf record -a
+> > +If UBSan detects any problem at runtime, it outputs a “runtime error:” message.
+> > \ No newline at end of file
+> > -- 
+> > 2.19.1
+> > 
 
 -- 
-Catalin
+Cheers,
+Changbin Du
