@@ -2,91 +2,105 @@ Return-Path: <SRS0=yvf5=RY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABBADC43381
-	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 11:21:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7A25C43381
+	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 13:59:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7BC5421841
-	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 11:21:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 844C72183E
+	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 13:59:22 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pEidBysz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727870AbfCULVd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Mar 2019 07:21:33 -0400
-Received: from www62.your-server.de ([213.133.104.62]:60962 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727823AbfCULVd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Mar 2019 07:21:33 -0400
-Received: from [88.198.220.132] (helo=sslproxy03.your-server.de)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1h6vlK-0002DL-Tp; Thu, 21 Mar 2019 12:21:31 +0100
-Received: from [178.197.248.24] (helo=linux.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1h6vlK-0005Ow-L2; Thu, 21 Mar 2019 12:21:30 +0100
-Subject: Re: [PATCH v2] bpf: do not restore dst_reg when cur_state is freed
-To:     Xu Yu <xuyu@linux.alibaba.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <eec7905a71d207f7612e9d86e1bf59c43efc65a4.1553156792.git.xuyu@linux.alibaba.com>
- <ae7834dda12cb2a88dd8471132d6274a7d1ec5f0.1553161998.git.xuyu@linux.alibaba.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <cbcf0c58-b15f-c82d-1274-1a7d17d75799@iogearbox.net>
-Date:   Thu, 21 Mar 2019 12:21:29 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.3.0
+        id S1727934AbfCUN7W (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Mar 2019 09:59:22 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:34275 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727823AbfCUN7W (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Mar 2019 09:59:22 -0400
+Received: by mail-ed1-f65.google.com with SMTP id a16so5085153edn.1;
+        Thu, 21 Mar 2019 06:59:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lcdJQ9qZUng4s9pEni7EUzFHboSzbJdSTsJnxSIzmq4=;
+        b=pEidByszIRo+/n8cvZLY1zAQgcFHUsGzgDHbq1BnxuJXAmIWqTkbXPjBK37A+MrTan
+         qpcusNB7j4P4RtBxW7GigBdfuJftHixZLrd4QLwVZn6BF+fJSkNOFEvOhC+GjFLpYfE3
+         g4KSQoshyukF7zYzg4AFlHBxPfij27Gk2vlTaGZDYfkgmRuLeKBCf8agOHrfRqnUzM+H
+         b+XRb2yCfwsJtrnWicDz3sZ50CLaWfaptX+4kMy1Do8+fCKawT+CsXwuB3N2NQYmtokM
+         RWQ329Fw670vKMYK/7mSAsV419xHaVvEbrAr9EFjzLTGNLRrVerDxnpWaCbL/zjnaq5I
+         g5IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lcdJQ9qZUng4s9pEni7EUzFHboSzbJdSTsJnxSIzmq4=;
+        b=uWJ8geCf3ULOvPAPI4QklPPep/dfP5wd64wczQcT2/ek5V8QRlPdN18LwWJi5agajM
+         qD237z8u2v2EIuUizjxInK+XzArGRYwN6Cul3ZlBfwasFl87F6ONpuZubzEtZ+DYrGKn
+         MCuZquVS3GUuuAZI70o5UA2ObQoxoq/ldIAnjwmy85BL7x2+1NO8Nces16AGrpSvisvv
+         QGDSrqkwiGus4q8+xv1ORoARnYHkyaLpuG+VQqDKmRxpuDvSAZVKlGSMl6XPXkEg84Db
+         KHZ7YpIoNSkg++rRVc4ljze5+uCn2AMx7052I5u5TdyHs/20YyHBzAVCMO3lMINlmHQO
+         XYpg==
+X-Gm-Message-State: APjAAAUuX1cg0mFdBC2Npjkcprb5rljjN9l6cutV3PBxpXcyAuKRnHvh
+        6HmcudwvabJs/2c0dadTFq/cD3B3XgzkUy6chV8=
+X-Google-Smtp-Source: APXvYqwt3bSe6C0GVS9emgvTiIyZZ2qyycTdc3xP1x7/ScMYXwLgPpwQn5TB1Q8x5aKQD+saWymeoAX9pbWBlwEdb0g=
+X-Received: by 2002:a50:86c3:: with SMTP id 3mr2606656edu.143.1553176760109;
+ Thu, 21 Mar 2019 06:59:20 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <ae7834dda12cb2a88dd8471132d6274a7d1ec5f0.1553161998.git.xuyu@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.100.2/25395/Thu Mar 21 08:52:58 2019)
+References: <20190319221948.170441-1-sdf@google.com> <20190319221948.170441-2-sdf@google.com>
+ <20190321033941.bygpejl2krltkdmm@ast-mbp.dhcp.thefacebook.com> <6406eae2-4633-9b2a-1101-2de48d29f9dd@gmail.com>
+In-Reply-To: <6406eae2-4633-9b2a-1101-2de48d29f9dd@gmail.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Thu, 21 Mar 2019 09:58:44 -0400
+Message-ID: <CAF=yD-KFZ2-p8BWf_EBpqCbpzeqwLbqtZutio5WM6MP62G7wKQ@mail.gmail.com>
+Subject: Re: [RFC bpf-next v2 1/9] net: introduce __init_skb{,_data,_shinfo} helpers
+To:     Eric Dumazet <eric.dumazet@gmail.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf@vger.kernel.org, David Miller <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        simon.horman@netronome.com, Willem de Bruijn <willemb@google.com>,
+        Petar Penkov <peterpenkov96@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 03/21/2019 11:00 AM, Xu Yu wrote:
-> Syzkaller hit 'KASAN: use-after-free Write in sanitize_ptr_alu' bug.
-> Call trace:
->   dump_stack+0xbf/0x12e
->   print_address_description+0x6a/0x280
->   kasan_report+0x237/0x360
->   sanitize_ptr_alu+0x85a/0x8d0
->   adjust_ptr_min_max_vals+0x8f2/0x1ca0
->   adjust_reg_min_max_vals+0x8ed/0x22e0
->   do_check+0x1ca6/0x5d00
->   bpf_check+0x9ca/0x2570
->   bpf_prog_load+0xc91/0x1030
->   __se_sys_bpf+0x61e/0x1f00
->   do_syscall_64+0xc8/0x550
->   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> Fault injection trace:
->   kfree+0xea/0x290
->   free_func_state+0x4a/0x60
->   free_verifier_state+0x61/0xe0
->   push_stack+0x216/0x2f0	          <- inject failslab
->   sanitize_ptr_alu+0x2b1/0x8d0
->   adjust_ptr_min_max_vals+0x8f2/0x1ca0
->   adjust_reg_min_max_vals+0x8ed/0x22e0
->   do_check+0x1ca6/0x5d00
->   bpf_check+0x9ca/0x2570
->   bpf_prog_load+0xc91/0x1030
->   __se_sys_bpf+0x61e/0x1f00
->   do_syscall_64+0xc8/0x550
->   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> 
-> When kzalloc() fails in push_stack(), free_verifier_state() will free
-> current verifier state. As push_stack() returns, dst_reg was restored
-> if ptr_is_dst_reg is false. However, as member of the cur_state, dst_reg
-> is also freed, and error occurs when dereferencing dst_reg.
-> 
-> Simply fix it by testing ret of push_stack() before retoring dst_reg.
-> 
-> Signed-off-by: Xu Yu <xuyu@linux.alibaba.com>
+On Thu, Mar 21, 2019 at 12:45 AM Eric Dumazet <eric.dumazet@gmail.com> wrote:
+>
+>
+>
+> On 03/20/2019 08:39 PM, Alexei Starovoitov wrote:
+>
+> > I think you need to convince Dave and Eric that
+> > above surgery is necessary to do the hack in patch 6 with
+> > +static DEFINE_PER_CPU(struct sk_buff, bpf_flow_skb);
+> >
+>
+> Yes, this is a huge code churn.
 
-Applied, thanks!
+It touches a lot of lines. But it deduplicates logic that might become
+out of sync if we don't do that now.
+
+> Honestly I believe we are going too far in this series.
+>
+> > I think the better option it to introduce new prog type that works
+> > without skb. I think it can be pretty close to shape and form to xdp.
+> >
+
+That's an interesting alternative. The existing sample dissector
+does not access any skb fields aside from vlan. The interface could
+be superseded with one that has a more constrained context, like xdp.
+
+When parsing for headlen in the device driver rx path, a program could
+conceivably in the same pass also compute an rxhash in case the
+device did not supply an L4 one. And perhaps some hash (the same?)
+to speed up GRO flow lookup. This would require a few extra fields in
+bpf_flow_keys.
