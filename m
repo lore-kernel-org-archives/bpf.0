@@ -2,132 +2,170 @@ Return-Path: <SRS0=yvf5=RY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,
-	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDDB5C43381
-	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 21:13:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1057FC43381
+	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 21:34:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9A26F2183E
-	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 21:13:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BECD9218A5
+	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 21:34:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="qY2cYGO9"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="d14b965H"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726916AbfCUVN2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Mar 2019 17:13:28 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:39743 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726589AbfCUVN2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Mar 2019 17:13:28 -0400
-Received: by mail-pg1-f196.google.com with SMTP id h8so5044305pgp.6
-        for <bpf@vger.kernel.org>; Thu, 21 Mar 2019 14:13:27 -0700 (PDT)
+        id S1726621AbfCUVes (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Mar 2019 17:34:48 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:39997 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726533AbfCUVes (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Mar 2019 17:34:48 -0400
+Received: by mail-qk1-f194.google.com with SMTP id w20so37029qka.7
+        for <bpf@vger.kernel.org>; Thu, 21 Mar 2019 14:34:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Vdt5yEeVUhroyhs/HesFbUCcTh0Jt7YhpOQWIiUNQ1U=;
-        b=qY2cYGO9w8hYHObFqr2yDb5VzCxOOWkctsmCkayjF8ZxHOhlg7lt7zNf5Op9AgHfRV
-         EJY85lQ9OCexHljCaEHYTnrXSfULqWJigURR/rjZhO9MPuAWLmRjbKo+XR8a4AyzRgnb
-         aCGGUOcehAE9aCRaK4WojdAiRZg/4s0MLzFalt3qFXrwkdbqiaku3T6JCrbpPwgN+zuO
-         6XBbbP080CoETGELWs6l9RmYcWAZFbPhodn0j35c1klygZs8fua/O55vr+OAq2HUAjNE
-         VPOlNDJbf3Ey5F2ylByzioAzCw31VC21NxGdxWEGw3doJWS7vuMyFRztyQzEUhlm+orL
-         eCsg==
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xPmqZthdwamFgpgk8Nm1MsROkU5Qsb1IF3gzqfFkOLs=;
+        b=d14b965HNfqImu0TEaVEcbE5rv5bM7Zx353WNHWnMeqh9GbRHybiKXl55DR53r/KX6
+         eQEZw3Kn6MMuBqDU6QB2mHAIfBUGBbDx8rrckPA0B1aBe5dM7uPe9D0VQjOj4XO/UqMI
+         x9834vLcUD6ebscVzsB9ckOHBAhlHVUL2kv3i0eNcJJ4yUBppmgOKSpSBHU/Y9kV40Co
+         Z1vsIqEuh1m3yJsruyz61SxoMhORHTrfDk0TTSwuBMfVE7hr/F0iH9DVY4v/SvAXXQet
+         o+o4wT1gJFSoHH4WWjn+jN1Jt7jhS2ZKBpIOFICWb15eSNBgrG78ANPAQ2CRyyLb1Lts
+         MVtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Vdt5yEeVUhroyhs/HesFbUCcTh0Jt7YhpOQWIiUNQ1U=;
-        b=CYzaQrg56T9kKi5d4iWtwIZvl/MJSEwKGxv0G9RVAa81qhX5X8eCps2iOanG1zYSdv
-         H0+7SleIBi/n+2dh8/hPAm3mFEHWZt81Rsb6e6zQ3Q11r3bjRCfzEioxvloEaHFivOx6
-         BI6J8+miSV1Xma/iVFZF3riQjnRBx6l3QnX969AOXUneDf5/24f6hZ5LO4V0duCzW/SK
-         v6TYkISvLCjvh3wioVayGmKGK/VQVAcmDs+bstHqmrEC6XWVXWG7z+OfWzTf8p2dL6W4
-         HrnnFyD636NkrJzzH9LCcBBOlWL4b85xmA67mIdhXKlFQ2TPp/V4TpG31Qx67TcMJHNS
-         wa+w==
-X-Gm-Message-State: APjAAAXRMT8Nt2etuOoRV9vMHYEIFm/JVjCT++6s9Sd9yeBT+GEQfDF8
-        6b9rGEqG2UkXTo7hoZQ60cV0LQ==
-X-Google-Smtp-Source: APXvYqzNZ6zkRoqiyL7wTI9YAx9HXhQJT15PA7u7TuF6HkkasoNj9WDGgNrtmDEvH2R+CNpqWLd9lg==
-X-Received: by 2002:aa7:8059:: with SMTP id y25mr5333794pfm.74.1553202807032;
-        Thu, 21 Mar 2019 14:13:27 -0700 (PDT)
-Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
-        by smtp.gmail.com with ESMTPSA id 73sm6882012pga.19.2019.03.21.14.13.25
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 21 Mar 2019 14:13:26 -0700 (PDT)
-Date:   Thu, 21 Mar 2019 14:13:25 -0700
-From:   Stanislav Fomichev <sdf@fomichev.me>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, David Miller <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Simon Horman <simon.horman@netronome.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Petar Penkov <peterpenkov96@gmail.com>
-Subject: Re: [RFC bpf-next v2 1/9] net: introduce __init_skb{,_data,_shinfo}
- helpers
-Message-ID: <20190321211325.GU7431@mini-arch.hsd1.ca.comcast.net>
-References: <20190319221948.170441-1-sdf@google.com>
- <20190319221948.170441-2-sdf@google.com>
- <20190321033941.bygpejl2krltkdmm@ast-mbp.dhcp.thefacebook.com>
- <6406eae2-4633-9b2a-1101-2de48d29f9dd@gmail.com>
- <CAF=yD-KFZ2-p8BWf_EBpqCbpzeqwLbqtZutio5WM6MP62G7wKQ@mail.gmail.com>
- <20190321154433.GS7431@mini-arch.hsd1.ca.comcast.net>
- <20190321160057.57u7ahijddqwtfdd@ast-mbp.dhcp.thefacebook.com>
- <CAF=yD-+-aR7r2u+xEXQfn1u7e9-s2F9qmQXR4w-8Qw0BEvb6Pg@mail.gmail.com>
- <CAADnVQJ+_aEWnMe8FfDX6_5muxgXUPynPrpH62ezwjRORm5RgQ@mail.gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xPmqZthdwamFgpgk8Nm1MsROkU5Qsb1IF3gzqfFkOLs=;
+        b=JMu/OI3gfGgcIxcI4quTmtZM23601gt6y8w04slSOeEWqUdJKQMN8z301SORQxAGNl
+         aTJUkW7avsuGqs2wlyLFdjdxy5FvsJ5lJzW79l9u8fYbIOgSwReyLGyLQJGHT43N7Yg3
+         HYQQSsDRgKL7aXTZcYCDs0bvrw4TmkqT9gKiHDlOW0dVBrElL1mv4vf1+bx7SvJyPaDA
+         0PV9jnZxCs3I/0mTdNooUiXDllwP0UpzwI0EM2Gj3i7yVhvHwvCZnYKMAaIt3avbLAJQ
+         NBAH/pvzvmxHBr//Ug5+gOD7RwapCx5jso5vTnlBs5DTpTkzeBTYT8HN0SVLJbEaVydF
+         n0tQ==
+X-Gm-Message-State: APjAAAWxVw10kALZYCMSHO5QHidfllrOFvdFqslnO2Yg0yfkmqIYFT/J
+        ia+/4hMJHY/Du7jI1OwZVoelSiCu7Wg=
+X-Google-Smtp-Source: APXvYqxOYj/vndB/aa6bqRe4KASkLoGwRwfAsht4XcKjN3P1F4ZbcmfryV9kLKWw97SquZp0RCHbow==
+X-Received: by 2002:a05:620a:1424:: with SMTP id k4mr4650366qkj.17.1553204087221;
+        Thu, 21 Mar 2019 14:34:47 -0700 (PDT)
+Received: from jkicinski-Precision-T1700.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id y4sm3577239qke.41.2019.03.21.14.34.45
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 21 Mar 2019 14:34:46 -0700 (PDT)
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        oss-drivers@netronome.com,
+        Jakub Kicinski <jakub.kicinski@netronome.com>
+Subject: [PATCH bpf] bpf: verifier: propagate liveness on all frames
+Date:   Thu, 21 Mar 2019 14:34:36 -0700
+Message-Id: <20190321213436.22379-1-jakub.kicinski@netronome.com>
+X-Mailer: git-send-email 2.19.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQJ+_aEWnMe8FfDX6_5muxgXUPynPrpH62ezwjRORm5RgQ@mail.gmail.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 03/21, Alexei Starovoitov wrote:
-> On Thu, Mar 21, 2019 at 9:13 AM Willem de Bruijn
-> <willemdebruijn.kernel@gmail.com> wrote:
-> >
-> > On Thu, Mar 21, 2019 at 12:01 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Thu, Mar 21, 2019 at 08:44:33AM -0700, Stanislav Fomichev wrote:
-> > > >
-> > > > If we can agree that we switch everything to xpd-like, do we deprecate the
-> > > > skb-one?
-> > >
-> > > This whole discussion that have been going on for long time is an indication
-> > > that initial bpf flow dissector concept was not thought through
-> > > and I regret on merging it in the first place.
-> > > Adding more hacks on top of it with fake skbs is not going to make it any better.
-> > > Since it's been in the official release we cannot remove it now.
-> >
-> > This patch set addresses the only open issue.
-> >
-> > That said, if direction is towards an alternative interface, then it would
-> > make sense for the new interface to supplant the existing one for all
-> > use-cases, even if that existing one cannot be removed.
-> >
-> > Essentially a BPF_PROG_TYPE_FLOW_DISSECTOR_RAW that
-> > takes a simpler context than skb. And either that or a program of
-> > type BPF_PROG_TYPE_FLOW_DISSECTOR can be attached in
-> > skb_flow_dissector_bpf_prog_attach, but not both.
-> 
-> another idea is to keep 'struct __sk_buff' as a context,
-> but have kernel side to be something like struct xdp_buff
-> and disallow access to fields of __sk_buff depending on
-> attach_type.
-> and do different ctx rewrite for __sk_buff->foo
-> depending on attach_type.
-That's a great idea! The only problem that in this case, I guess, we
-need another attach_type and need to ask users explicitly attach to it.
+Commit 7640ead93924 ("bpf: verifier: make sure callees don't prune
+with caller differences") connected up parentage chains of all
+frames of the stack.  It didn't, however, ensure propagate_liveness()
+propagates all liveness information along those chains.
 
-What if we go a bit further: always have xdp_buff-like struct in the kernel?
-For the real skb it would have data..data_end point to linear packet data (or
-the first fragment). We would always prohibit access to most __sk_buff
-fields (like in patch #5 from this series). We'd have to write our
-own bpf_skb_load_bytes, but that doesn't sound like a big issue.
+This means pruning happening in the callee may generate explored
+states with incomplete liveness for the chains in lower frames
+of the stack.
+
+The included selftest is similar to the prior one from commit
+7640ead93924 ("bpf: verifier: make sure callees don't prune with
+caller differences"), where callee would prune regardless of the
+difference in r8 state.
+
+Now we also initialize r9 to 0 or 1 based on a result from get_random().
+r9 is never read so the walk with r9 = 0 gets pruned (correctly) after
+the walk with r9 = 1 completes.
+
+The selftest is so arranged that the pruning will happen in the
+callee.  Since callee does not propagate read marks of r8, the
+explored state at the pruning point prior to the callee will
+now ignore r8.
+
+Propagate liveness on all frames of the stack when pruning.
+
+Fixes: f4d7e40a5b71 ("bpf: introduce function calls (verification)")
+Signed-off-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+---
+ kernel/bpf/verifier.c                        | 20 +++++++++-------
+ tools/testing/selftests/bpf/verifier/calls.c | 25 ++++++++++++++++++++
+ 2 files changed, 36 insertions(+), 9 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index f52c1159e75d..b6de77664a8a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6078,15 +6078,17 @@ static int propagate_liveness(struct bpf_verifier_env *env,
+ 	}
+ 	/* Propagate read liveness of registers... */
+ 	BUILD_BUG_ON(BPF_REG_FP + 1 != MAX_BPF_REG);
+-	/* We don't need to worry about FP liveness because it's read-only */
+-	for (i = 0; i < BPF_REG_FP; i++) {
+-		if (vparent->frame[vparent->curframe]->regs[i].live & REG_LIVE_READ)
+-			continue;
+-		if (vstate->frame[vstate->curframe]->regs[i].live & REG_LIVE_READ) {
+-			err = mark_reg_read(env, &vstate->frame[vstate->curframe]->regs[i],
+-					    &vparent->frame[vstate->curframe]->regs[i]);
+-			if (err)
+-				return err;
++	for (frame = 0; frame <= vstate->curframe; frame++) {
++		/* We don't need to worry about FP liveness, it's read-only */
++		for (i = frame < vstate->curframe ? BPF_REG_6 : 0; i < BPF_REG_FP; i++) {
++			if (vparent->frame[frame]->regs[i].live & REG_LIVE_READ)
++				continue;
++			if (vstate->frame[frame]->regs[i].live & REG_LIVE_READ) {
++				err = mark_reg_read(env, &vstate->frame[frame]->regs[i],
++						    &vparent->frame[frame]->regs[i]);
++				if (err)
++					return err;
++			}
+ 		}
+ 	}
+ 
+diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
+index 4004891afa9c..f2ccae39ee66 100644
+--- a/tools/testing/selftests/bpf/verifier/calls.c
++++ b/tools/testing/selftests/bpf/verifier/calls.c
+@@ -1940,3 +1940,28 @@
+ 	.errstr = "!read_ok",
+ 	.result = REJECT,
+ },
++{
++	"calls: cross frame pruning - liveness propagation",
++	.insns = {
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_IMM(BPF_REG_8, 0),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1),
++	BPF_MOV64_IMM(BPF_REG_8, 1),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_IMM(BPF_REG_9, 0),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1),
++	BPF_MOV64_IMM(BPF_REG_9, 1),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 4),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_8, 1, 1),
++	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_SOCKET_FILTER,
++	.errstr_unpriv = "function calls to other bpf functions are allowed for root only",
++	.errstr = "!read_ok",
++	.result = REJECT,
++},
+-- 
+2.19.2
+
