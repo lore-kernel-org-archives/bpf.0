@@ -2,97 +2,91 @@ Return-Path: <SRS0=yvf5=RY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1564C4360F
-	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 10:00:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABBADC43381
+	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 11:21:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C718E218B0
-	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 10:00:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7BC5421841
+	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 11:21:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728284AbfCUKAq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Mar 2019 06:00:46 -0400
-Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:41844 "EHLO
-        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728325AbfCUKAq (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 21 Mar 2019 06:00:46 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R391e4;CH=green;DM=||false|;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e07487;MF=xuyu@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0TNGmqso_1553162437;
-Received: from localhost(mailfrom:xuyu@linux.alibaba.com fp:SMTPD_---0TNGmqso_1553162437)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 21 Mar 2019 18:00:43 +0800
-From:   Xu Yu <xuyu@linux.alibaba.com>
-To:     daniel@iogearbox.net, bpf@vger.kernel.org,
+        id S1727870AbfCULVd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Mar 2019 07:21:33 -0400
+Received: from www62.your-server.de ([213.133.104.62]:60962 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727823AbfCULVd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Mar 2019 07:21:33 -0400
+Received: from [88.198.220.132] (helo=sslproxy03.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1h6vlK-0002DL-Tp; Thu, 21 Mar 2019 12:21:31 +0100
+Received: from [178.197.248.24] (helo=linux.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1h6vlK-0005Ow-L2; Thu, 21 Mar 2019 12:21:30 +0100
+Subject: Re: [PATCH v2] bpf: do not restore dst_reg when cur_state is freed
+To:     Xu Yu <xuyu@linux.alibaba.com>, bpf@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2] bpf: do not restore dst_reg when cur_state is freed
-Date:   Thu, 21 Mar 2019 18:00:35 +0800
-Message-Id: <ae7834dda12cb2a88dd8471132d6274a7d1ec5f0.1553161998.git.xuyu@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <eec7905a71d207f7612e9d86e1bf59c43efc65a4.1553156792.git.xuyu@linux.alibaba.com>
 References: <eec7905a71d207f7612e9d86e1bf59c43efc65a4.1553156792.git.xuyu@linux.alibaba.com>
+ <ae7834dda12cb2a88dd8471132d6274a7d1ec5f0.1553161998.git.xuyu@linux.alibaba.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <cbcf0c58-b15f-c82d-1274-1a7d17d75799@iogearbox.net>
+Date:   Thu, 21 Mar 2019 12:21:29 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <ae7834dda12cb2a88dd8471132d6274a7d1ec5f0.1553161998.git.xuyu@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.2/25395/Thu Mar 21 08:52:58 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Syzkaller hit 'KASAN: use-after-free Write in sanitize_ptr_alu' bug.
-Call trace:
-  dump_stack+0xbf/0x12e
-  print_address_description+0x6a/0x280
-  kasan_report+0x237/0x360
-  sanitize_ptr_alu+0x85a/0x8d0
-  adjust_ptr_min_max_vals+0x8f2/0x1ca0
-  adjust_reg_min_max_vals+0x8ed/0x22e0
-  do_check+0x1ca6/0x5d00
-  bpf_check+0x9ca/0x2570
-  bpf_prog_load+0xc91/0x1030
-  __se_sys_bpf+0x61e/0x1f00
-  do_syscall_64+0xc8/0x550
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-Fault injection trace:
-  kfree+0xea/0x290
-  free_func_state+0x4a/0x60
-  free_verifier_state+0x61/0xe0
-  push_stack+0x216/0x2f0	          <- inject failslab
-  sanitize_ptr_alu+0x2b1/0x8d0
-  adjust_ptr_min_max_vals+0x8f2/0x1ca0
-  adjust_reg_min_max_vals+0x8ed/0x22e0
-  do_check+0x1ca6/0x5d00
-  bpf_check+0x9ca/0x2570
-  bpf_prog_load+0xc91/0x1030
-  __se_sys_bpf+0x61e/0x1f00
-  do_syscall_64+0xc8/0x550
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+On 03/21/2019 11:00 AM, Xu Yu wrote:
+> Syzkaller hit 'KASAN: use-after-free Write in sanitize_ptr_alu' bug.
+> Call trace:
+>   dump_stack+0xbf/0x12e
+>   print_address_description+0x6a/0x280
+>   kasan_report+0x237/0x360
+>   sanitize_ptr_alu+0x85a/0x8d0
+>   adjust_ptr_min_max_vals+0x8f2/0x1ca0
+>   adjust_reg_min_max_vals+0x8ed/0x22e0
+>   do_check+0x1ca6/0x5d00
+>   bpf_check+0x9ca/0x2570
+>   bpf_prog_load+0xc91/0x1030
+>   __se_sys_bpf+0x61e/0x1f00
+>   do_syscall_64+0xc8/0x550
+>   entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> Fault injection trace:
+>   kfree+0xea/0x290
+>   free_func_state+0x4a/0x60
+>   free_verifier_state+0x61/0xe0
+>   push_stack+0x216/0x2f0	          <- inject failslab
+>   sanitize_ptr_alu+0x2b1/0x8d0
+>   adjust_ptr_min_max_vals+0x8f2/0x1ca0
+>   adjust_reg_min_max_vals+0x8ed/0x22e0
+>   do_check+0x1ca6/0x5d00
+>   bpf_check+0x9ca/0x2570
+>   bpf_prog_load+0xc91/0x1030
+>   __se_sys_bpf+0x61e/0x1f00
+>   do_syscall_64+0xc8/0x550
+>   entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> 
+> When kzalloc() fails in push_stack(), free_verifier_state() will free
+> current verifier state. As push_stack() returns, dst_reg was restored
+> if ptr_is_dst_reg is false. However, as member of the cur_state, dst_reg
+> is also freed, and error occurs when dereferencing dst_reg.
+> 
+> Simply fix it by testing ret of push_stack() before retoring dst_reg.
+> 
+> Signed-off-by: Xu Yu <xuyu@linux.alibaba.com>
 
-When kzalloc() fails in push_stack(), free_verifier_state() will free
-current verifier state. As push_stack() returns, dst_reg was restored
-if ptr_is_dst_reg is false. However, as member of the cur_state, dst_reg
-is also freed, and error occurs when dereferencing dst_reg.
-
-Simply fix it by testing ret of push_stack() before retoring dst_reg.
-
-Signed-off-by: Xu Yu <xuyu@linux.alibaba.com>
----
- kernel/bpf/verifier.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ce166a0..cb1b874 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3368,7 +3368,7 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
- 		*dst_reg = *ptr_reg;
- 	}
- 	ret = push_stack(env, env->insn_idx + 1, env->insn_idx, true);
--	if (!ptr_is_dst_reg)
-+	if (!ptr_is_dst_reg && ret)
- 		*dst_reg = tmp;
- 	return !ret ? -EFAULT : 0;
- }
--- 
-1.8.3.1
-
+Applied, thanks!
