@@ -2,105 +2,97 @@ Return-Path: <SRS0=yvf5=RY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6C66C43381
-	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 09:33:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1564C4360F
+	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 10:00:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 91AC121873
-	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 09:33:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C718E218B0
+	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 10:00:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728138AbfCUJdF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Mar 2019 05:33:05 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:34366 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728191AbfCUJdF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Mar 2019 05:33:05 -0400
-Received: by mail-wr1-f65.google.com with SMTP id p10so5805919wrq.1;
-        Thu, 21 Mar 2019 02:33:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=gk/VKXqBsbEMILFxooKia4KIiWqSwI8S8szneldF/cY=;
-        b=q/4YQOzWXn+Ysq4bFwmEBHw3wi37RwUUz4pgUmV6SfcakM9zW8Jb5iMrXiqUIpj0V2
-         8F/MX6/adJ2q4cdZfii6V19WX7bu8AKRPzl6bAtuKVrHEtUjx58Rk470S4/EAb7D1hTn
-         m0SBRzHsSqI+41ljl8l1ys32HUpDX6bpeiJbvQr1DyKuqZbrF32oSt55VKpJRWn6H94M
-         ivLRNqjaYWBv+L8A+/tWuetaz+MEMV9sxqTdY3PdeDvYVHR8v1u9Tqz6vKSEWKgfsNCV
-         4xKzRB869s3gew/hqkalFoIv1bvgzz3OD/Mc5s5Hmv8G7whscN4dS3P1PwejNd1jdh1I
-         MzOw==
-X-Gm-Message-State: APjAAAVRKlNH92Tjfy3QS6H/J/vof2n18QOlAdMQhUnwpFuBI+EqZtJM
-        jP8RoIeSPJ7amNQVdHVJMZs=
-X-Google-Smtp-Source: APXvYqwXFUiVh9V9SDPoKmq1CjtN3mnnu0UHhwGx5fb9okbGpVaBx5YGxUFXDlam/UM/8NiwZN/2Ew==
-X-Received: by 2002:adf:ef0f:: with SMTP id e15mr1721671wro.323.1553160783068;
-        Thu, 21 Mar 2019 02:33:03 -0700 (PDT)
-Received: from Nover ([161.105.209.130])
-        by smtp.gmail.com with ESMTPSA id n11sm9806156wrt.63.2019.03.21.02.33.02
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 21 Mar 2019 02:33:02 -0700 (PDT)
-Date:   Thu, 21 Mar 2019 10:33:06 +0100
-From:   Paul Chaignon <paul.chaignon@orange.com>
-To:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     Jakub Kicinski <jakub.kicinski@netronome.com>, xiao.han@orange.com,
-        paul.chaignon@gmail.com, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>
-Subject: Re: [PATCH bpf-next 0/2] bpf: remove incorrect 'verifier bug' warning
-Message-ID: <20190321093304.GA1001@Nover>
-References: <cover.1553085539.git.paul.chaignon@orange.com>
- <e84ec4b3-ea21-a2ed-d6fb-1c899ef748d0@fb.com>
+        id S1728284AbfCUKAq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Mar 2019 06:00:46 -0400
+Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:41844 "EHLO
+        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728325AbfCUKAq (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 21 Mar 2019 06:00:46 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R391e4;CH=green;DM=||false|;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e07487;MF=xuyu@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0TNGmqso_1553162437;
+Received: from localhost(mailfrom:xuyu@linux.alibaba.com fp:SMTPD_---0TNGmqso_1553162437)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 21 Mar 2019 18:00:43 +0800
+From:   Xu Yu <xuyu@linux.alibaba.com>
+To:     daniel@iogearbox.net, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] bpf: do not restore dst_reg when cur_state is freed
+Date:   Thu, 21 Mar 2019 18:00:35 +0800
+Message-Id: <ae7834dda12cb2a88dd8471132d6274a7d1ec5f0.1553161998.git.xuyu@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <eec7905a71d207f7612e9d86e1bf59c43efc65a4.1553156792.git.xuyu@linux.alibaba.com>
+References: <eec7905a71d207f7612e9d86e1bf59c43efc65a4.1553156792.git.xuyu@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e84ec4b3-ea21-a2ed-d6fb-1c899ef748d0@fb.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Mar 20, 2019 at 11:31PM, Yonghong Song wrote:
-> On 3/20/19 5:57 AM, Paul Chaignon wrote:
-> > The BPF verifier checks the maximum number of call stack frames twice,
-> > first in the main CFG traversal (do_check) and then in a subsequent
-> > traversal (check_max_stack_depth).  If the second check fails, it logs a
-> > 'verifier bug' warning and errors out, as the number of call stack frames
-> > should have been verified already.
-> > 
-> > However, the second check may fail without indicating a verifier bug: if
-> > the excessive function calls reside in dead code, the main CFG traversal
-> > may not visit them; the subsequent traversal visits all instructions,
-> > including dead code.
-> > 
-> > This case raises the question of how invalid dead code should be treated.
-> 
-> Maybe we should do this check after dead code elimination to be 
-> consistent with do_check? There could some other kinds of illegal stuff
+Syzkaller hit 'KASAN: use-after-free Write in sanitize_ptr_alu' bug.
+Call trace:
+  dump_stack+0xbf/0x12e
+  print_address_description+0x6a/0x280
+  kasan_report+0x237/0x360
+  sanitize_ptr_alu+0x85a/0x8d0
+  adjust_ptr_min_max_vals+0x8f2/0x1ca0
+  adjust_reg_min_max_vals+0x8ed/0x22e0
+  do_check+0x1ca6/0x5d00
+  bpf_check+0x9ca/0x2570
+  bpf_prog_load+0xc91/0x1030
+  __se_sys_bpf+0x61e/0x1f00
+  do_syscall_64+0xc8/0x550
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+Fault injection trace:
+  kfree+0xea/0x290
+  free_func_state+0x4a/0x60
+  free_verifier_state+0x61/0xe0
+  push_stack+0x216/0x2f0	          <- inject failslab
+  sanitize_ptr_alu+0x2b1/0x8d0
+  adjust_ptr_min_max_vals+0x8f2/0x1ca0
+  adjust_reg_min_max_vals+0x8ed/0x22e0
+  do_check+0x1ca6/0x5d00
+  bpf_check+0x9ca/0x2570
+  bpf_prog_load+0xc91/0x1030
+  __se_sys_bpf+0x61e/0x1f00
+  do_syscall_64+0xc8/0x550
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
 
-To be clear, are you suggesting we run check_max_stack_depth after the
-dead code elimination?  That would indeed solve this issue, but Jakub made
-the exact reverse change not so long ago, in 9b38c40 ("bpf: verifier:
-reorder stack size check with dead code sanitization").  I think the idea
-was to avoid having code modifications in between code checks.
+When kzalloc() fails in push_stack(), free_verifier_state() will free
+current verifier state. As push_stack() returns, dst_reg was restored
+if ptr_is_dst_reg is false. However, as member of the cur_state, dst_reg
+is also freed, and error occurs when dereferencing dst_reg.
 
-> in the dead code, e.g., illegal/unsupported helpers, etc. I suppose we 
-> did not warn or reject the program, right?
+Simply fix it by testing ret of push_stack() before retoring dst_reg.
 
-As far as I know, we do not warn or reject the programs for other illegal
-stuff found in dead code, no.
+Signed-off-by: Xu Yu <xuyu@linux.alibaba.com>
+---
+ kernel/bpf/verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> > The first patch implements the conservative option and rejects such code;
-> > the second adds a test case.
-> > 
-> > Paul Chaignon (2):
-> >    bpf: remove incorrect 'verifier bug' warning
-> >    selftests/bpf: test case for invalid call stack in dead code
-> > 
-> >   kernel/bpf/verifier.c                        |  5 +--
-> >   tools/testing/selftests/bpf/verifier/calls.c | 38 ++++++++++++++++++++
-> >   2 files changed, 41 insertions(+), 2 deletions(-)
-> > 
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index ce166a0..cb1b874 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3368,7 +3368,7 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
+ 		*dst_reg = *ptr_reg;
+ 	}
+ 	ret = push_stack(env, env->insn_idx + 1, env->insn_idx, true);
+-	if (!ptr_is_dst_reg)
++	if (!ptr_is_dst_reg && ret)
+ 		*dst_reg = tmp;
+ 	return !ret ? -EFAULT : 0;
+ }
+-- 
+1.8.3.1
+
