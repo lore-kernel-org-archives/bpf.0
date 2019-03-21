@@ -2,84 +2,95 @@ Return-Path: <SRS0=yvf5=RY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 905D4C10F00
-	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 05:51:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 003BBC43381
+	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 08:32:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6244C218D3
-	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 05:51:11 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="uI8tNdMe"
+	by mail.kernel.org (Postfix) with ESMTP id C99CA218B0
+	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 08:32:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726914AbfCUFvK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Mar 2019 01:51:10 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:37349 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725993AbfCUFvK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Mar 2019 01:51:10 -0400
-Received: by mail-lf1-f68.google.com with SMTP id u2so3695732lfd.4;
-        Wed, 20 Mar 2019 22:51:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=v9DDQPYRs9CEXdr+NIvFh2fLOhQ616weVJYbihPm7A4=;
-        b=uI8tNdMeRzc5jtPoIEKBc3JH+Ls7hKN+sQa8tfsfLJatWktzOwJmCcfkYjwVeBziTc
-         cayV2iILGgkFx5W2f068b/i7yH8UDXrkWPOOTbkyhIhvaGQ6u/+SfbqggwWYcq4S8Syo
-         +ZiWFjeDrYJ9Nj2j3gJOlcbPfHpjO89astOE8TMIZKTVkIsg5MBR2pMdWHw1KG3X9JxV
-         UEEoSKSQnTAoJiFBTKwK51G6W8fgYLwmhEySO9KvtxJlRrNMjQuZb3w1i9KFBo0VN7aF
-         OwbAIp1MPqXnf5XKAfD+Mpe8HEumzvHDZgv4yI3oTOZP7tBSt2MYmK94Dsl1CCKySLx2
-         +rRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v9DDQPYRs9CEXdr+NIvFh2fLOhQ616weVJYbihPm7A4=;
-        b=YV6yWRTXcNyx8CjImd4vUeOymoLQDdpnnCM47+p3rbWR4tX+o/1gNq1IW9YMleDorW
-         2e3FUTOroYUhxW7RPUGSfwLfDhZERjMQli1B1i/WI6Cf2XnZhk0YavcJfsSCPseuwfBy
-         U9Qqm8Q2lc/c7GSrecu4W65pJ/cMO8inA/Yb59ktnIRIdV5KdsRNb8MfHMFt0tG5layB
-         GihIoh9YO2gSSGCcVL6MEYf57W4dWG6M7ULtQ3MyZ15X+dCFD+nukmZcwPDrRC+GFGZr
-         oWPLoFTaExXtXK+sima6ZgB/87oPaBuEb27yKBQH2EMl0dcKa3xFK9ef7RlmFYUmZ2AH
-         QNbQ==
-X-Gm-Message-State: APjAAAVqsR1IMeEE89fRZeHj3d5njmQwVo5Sp+lqh3F3PdO4WHd6YaDu
-        SV/o570R0KmWh9bqkGgT5SW6PFy0XvcQIks9MxQ=
-X-Google-Smtp-Source: APXvYqyNsCOvoThc3TKmUQAGCYBWYQVu8kUdWgWjjL65ppfaZeI5dPGiyQjJ54DK/RO9VosdTE1TVIvdLWY3k7FcQ8o=
-X-Received: by 2002:ac2:4ad1:: with SMTP id m17mr807811lfp.129.1553147468541;
- Wed, 20 Mar 2019 22:51:08 -0700 (PDT)
+        id S1727915AbfCUIcl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Mar 2019 04:32:41 -0400
+Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:6271 "EHLO
+        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727874AbfCUIcl (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 21 Mar 2019 04:32:41 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R971e4;CH=green;DM=||false|;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e07488;MF=xuyu@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0TNGaMx1_1553157149;
+Received: from localhost(mailfrom:xuyu@linux.alibaba.com fp:SMTPD_---0TNGaMx1_1553157149)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 21 Mar 2019 16:32:38 +0800
+From:   Xu Yu <xuyu@linux.alibaba.com>
+To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] bpf: do not restore dst_reg when cur_state is freed
+Date:   Thu, 21 Mar 2019 16:31:33 +0800
+Message-Id: <eec7905a71d207f7612e9d86e1bf59c43efc65a4.1553156792.git.xuyu@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-References: <20190222095057.9442-1-lmb@cloudflare.com> <20190319102103.7380-1-lmb@cloudflare.com>
- <20190319102103.7380-5-lmb@cloudflare.com> <20190319221735.ycueci4ec4rvbkxf@ast-mbp.dhcp.thefacebook.com>
- <CACAyw9_euySi4LWWD-789DdY-XYgMNLaNY+RrhJieoY7r0qcwQ@mail.gmail.com>
- <20190321030339.mr2jlxtyevfuegyf@ast-mbp.dhcp.thefacebook.com> <CACAyw986toY6X3_m=bo-0b8BQXfTJFBvpC+tYrk-iu3F8uf9QQ@mail.gmail.com>
-In-Reply-To: <CACAyw986toY6X3_m=bo-0b8BQXfTJFBvpC+tYrk-iu3F8uf9QQ@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 20 Mar 2019 22:50:56 -0700
-Message-ID: <CAADnVQK5ao0zCaKRcEp-UZdf2JUrD48aDKRF9zPWfekSwNVWUQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/8] bpf: add helper to check for a valid SYN cookie
-To:     Lorenz Bauer <lmb@cloudflare.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Martin Lau <kafai@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Mar 20, 2019 at 9:53 PM Lorenz Bauer <lmb@cloudflare.com> wrote:
-> >
-> > So please resubmit as-is.
-> > It doesn't apply cleanly yet.
->
-> Sorry about this. It requires Martin KaFai Lau's fix for the
-> bpf_tcp_sock reference
-> tracking, since it depends on sk_release on PTR_TO_SOCK_COMMON. How do I fix
-> this for bpf-next?
+Syzkaller hit 'KASAN: use-after-free Write in sanitize_ptr_alu' bug.
+Call trace:
+  dump_stack+0xbf/0x12e
+  print_address_description+0x6a/0x280
+  kasan_report+0x237/0x360
+  sanitize_ptr_alu+0x85a/0x8d0
+  adjust_ptr_min_max_vals+0x8f2/0x1ca0
+  adjust_reg_min_max_vals+0x8ed/0x22e0
+  do_check+0x1ca6/0x5d00
+  bpf_check+0x9ca/0x2570
+  bpf_prog_load+0xc91/0x1030
+  __se_sys_bpf+0x61e/0x1f00
+  do_syscall_64+0xc8/0x550
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+Fault injection trace:
+  kfree+0xea/0x290
+  free_func_state+0x4a/0x60
+  free_verifier_state+0x61/0xe0
+  push_stack+0x216/0x2f0	          <- inject failslab
+  sanitize_ptr_alu+0x2b1/0x8d0
+  adjust_ptr_min_max_vals+0x8f2/0x1ca0
+  adjust_reg_min_max_vals+0x8ed/0x22e0
+  do_check+0x1ca6/0x5d00
+  bpf_check+0x9ca/0x2570
+  bpf_prog_load+0xc91/0x1030
+  __se_sys_bpf+0x61e/0x1f00
+  do_syscall_64+0xc8/0x550
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
 
-Martin's fix is already in bpf-next.
-Just rebase, may be?
+When kzalloc() fails in push_stack(), free_verifier_state() will free
+current verifier state. As push_stack() returns, dst_reg was restored
+if ptr_is_dst_reg is false. However, as member of the cur_state, dst_reg
+is also freed, and error occurs when dereferencing dst_reg.
+
+Simply fix it by checking whether cur_state is NULL before retoring
+dst_reg.
+
+Signed-off-by: Xu Yu <xuyu@linux.alibaba.com>
+---
+ kernel/bpf/verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index ce166a0..018ce4f 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3368,7 +3368,7 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
+ 		*dst_reg = *ptr_reg;
+ 	}
+ 	ret = push_stack(env, env->insn_idx + 1, env->insn_idx, true);
+-	if (!ptr_is_dst_reg)
++	if (!ptr_is_dst_reg && env->cur_state)
+ 		*dst_reg = tmp;
+ 	return !ret ? -EFAULT : 0;
+ }
+-- 
+1.8.3.1
+
