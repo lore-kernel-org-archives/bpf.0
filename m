@@ -2,97 +2,89 @@ Return-Path: <SRS0=yvf5=RY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-10.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2253C43381
-	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 03:27:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47F17C43381
+	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 03:32:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6B7D4218AC
-	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 03:27:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C0F4218AC
+	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 03:32:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nviTUO2A"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BwoBvfFM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727614AbfCUD1T (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Mar 2019 23:27:19 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:45904 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727507AbfCUD1S (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Mar 2019 23:27:18 -0400
-Received: by mail-pf1-f194.google.com with SMTP id v21so3361594pfm.12;
-        Wed, 20 Mar 2019 20:27:18 -0700 (PDT)
+        id S1727551AbfCUDc6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Mar 2019 23:32:58 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:35102 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726914AbfCUDc6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Mar 2019 23:32:58 -0400
+Received: by mail-pg1-f194.google.com with SMTP id g8so3297812pgf.2;
+        Wed, 20 Mar 2019 20:32:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=I+4xUEA9CCoeNdyRVaBxXKOnawVI/sRmIEm1GsiNLLk=;
-        b=nviTUO2A3Abl6etcpGhk5j54PDTORjkT26Kqy5tfji0Yst6QC27Lz7dqQJXTtnx1mp
-         FoV/cyW7cb6GxVStJwaGmh7e+bAmm52tSCnFjbluMaQi1LT/22TI99LY4zsBUgPS8A/2
-         cMPZZUZffgu4CtQxs95vv6QgeGEspY6ykg+g8qyoJwk8Zbj+y/TjCahXU/BGKvAleBpK
-         9D5DQ/UjU2tx/Z6bY74Z2gLbWynMTovgmJ/t8WickIhNQGdrDXyShyIqsHrbFyl/RqsK
-         Fodbz80aOFnyxbS0VC9x020YEMVPnVEJxhS3TFkkLfFGOfMKQw756n11sGRMe/RyPUSf
-         NFpA==
+        bh=B5r6j8I2I+OzEPbQQ1uCH+FOL0KDb76b0jbq75BNqSY=;
+        b=BwoBvfFMZIi2wAGzhGGBtT7e47mkCDhqJi5HhIoYonMkwGpg3P4fkZHDCKGxzlOc3V
+         zFqFXRb5eRhpq477luRoRbC06H9BgBqsteqxfRS7LpfUNJXqQuZxowx/ZWw5g8Yww14F
+         AIM3On52XCp2K6OTWTekuIic4BGQb5F1Q8+S3KPCzK2248VB+5fHJ6IFdl1iYArx9mZ8
+         vhRdgvjmLgLfwPM0VJ7ypC1jmoE112M3O63lVNRuQKmPdsXQBOAQ38U4fZUwbsnPTUI6
+         oX0QJIltJDXWwf+t9lhTmi7b5wlgBsbG97H0Te9f6dBUIAKCCcHvXerXMFrqAPP9iTFS
+         vsqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=I+4xUEA9CCoeNdyRVaBxXKOnawVI/sRmIEm1GsiNLLk=;
-        b=TJCqeZ6SDQ0+cD0s9+rNuVZa+6pBnvSewK0SoM6xthiAcUN8Os3YmsSok0CSzBvNBQ
-         P6gilq8f2x6UalWOpYOqB7WTpuhXUldl/5Gckt8YFuGwBmwP7uqtE7P7FZm4KMGiJN7E
-         XnMr1sniZXYvDm6SvSVPXe08/btq0+jXa4S7D9eFdPwUWrUaHa90aB4V3640josnTC38
-         lSdrNzzdxuQ5+FAfBogEnvNcb6ngKMeJSglEMTH/oKWOZr5eO08n1s4Nr1fnJ9zHPCGX
-         pWTZcTYzc68587eYqmqho4eb7wNSqlwU/TEYhbeQOuUJDP9iIOLwgPJZViQKVInOZv3J
-         RO6w==
-X-Gm-Message-State: APjAAAUxPaX5VXEIVIa5qJYJAO5v4onjyUgmffn7Gqcnlrj6INCIWtgS
-        b565UmIjK7fXlvWLMRnLCJI=
-X-Google-Smtp-Source: APXvYqxZDa73O3lOgG5u1Q/dlhD9ItqwWfUB/fgDPPaAA5U1LWt/zthsE3/M1kFWYxRfaFtmGf5ApQ==
-X-Received: by 2002:a63:4e4e:: with SMTP id o14mr1382118pgl.254.1553138837962;
-        Wed, 20 Mar 2019 20:27:17 -0700 (PDT)
+        bh=B5r6j8I2I+OzEPbQQ1uCH+FOL0KDb76b0jbq75BNqSY=;
+        b=VOREgvfE7KC4OMysCfLVUtF5iOz6vJCCwmm+ZBM7NAlCi4d5jqeUOb+pEJyk7kF1HF
+         UaEgMH2Shjorvj6uX5x6vUOU1W3W1iuhAahaPOgJEg+ekZ34dYi7SPfr2dpvQ2E7fprF
+         7q6Icslm1Uoteu/8WdZQJ7IDQThzx3/EfpyyFR6uhL8Juk/OnrttwJAewpAtAFXk0lx5
+         47nJ+JUEOBdh6AXiONTHAJE33qHB7WCR7dG5O8pKT++ffdT7Ml32oxfAQBzV9qKxlrGJ
+         +78BfTX9VTSasFHZQfuL8kU800/l6LE/gDOAS2z4TKpAIQWSO3FfnAUfFpHr1ot8BUrV
+         RJtQ==
+X-Gm-Message-State: APjAAAWVk28zHs+E7iVAHYS1s2zeZkXxdRWz0Co5osyzbGKAIqczPb/D
+        10cX+K2EzO4CpS70t3sg0vTW11/H
+X-Google-Smtp-Source: APXvYqxJQVriP3gCxUd88AIy8GSXjVXZLtuwC5HfMQUTYt1+dUz1Mw4eyTfpsMAkC6xJxWdZ3UFvtQ==
+X-Received: by 2002:a17:902:56a:: with SMTP id 97mr1322797plf.320.1553139177561;
+        Wed, 20 Mar 2019 20:32:57 -0700 (PDT)
 Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:180::c891])
-        by smtp.gmail.com with ESMTPSA id u15sm5512230pfm.163.2019.03.20.20.27.16
+        by smtp.gmail.com with ESMTPSA id v1sm5092902pff.9.2019.03.20.20.32.56
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 20 Mar 2019 20:27:17 -0700 (PDT)
-Date:   Wed, 20 Mar 2019 20:27:15 -0700
+        Wed, 20 Mar 2019 20:32:56 -0700 (PDT)
+Date:   Wed, 20 Mar 2019 20:32:55 -0700
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Peter Oskolkov <posk@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Lawrence Brakmo <brakmo@fb.com>,
-        Peter Oskolkov <posk@posk.io>
-Subject: Re: [PATCH bpf-next] bpf: make bpf_skb_ecn_set_ce callable from
- BPF_PROG_TYPE_SCHED_ACT
-Message-ID: <20190321032714.7cnzxmuqb3jhu4zr@ast-mbp.dhcp.thefacebook.com>
-References: <20190320070640.102721-1-posk@google.com>
+To:     Adrian Ratiu <adrian.ratiu@collabora.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next] selftests/bpf: Add arm target register
+ definitions
+Message-ID: <20190321033253.24t6i36tbcujnrzo@ast-mbp.dhcp.thefacebook.com>
+References: <20190320101054.1880-1-adrian.ratiu@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190320070640.102721-1-posk@google.com>
+In-Reply-To: <20190320101054.1880-1-adrian.ratiu@collabora.com>
 User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Mar 20, 2019 at 12:06:40AM -0700, Peter Oskolkov wrote:
-> This helper is useful if a bpf tc filter sets skb->tstamp.
+On Wed, Mar 20, 2019 at 12:10:54PM +0200, Adrian Ratiu wrote:
+> eBPF "restricted C" code can be compiled with LLVM/clang using target
+> triplets like armv7l-unknown-linux-gnueabihf and loaded/run with small
+> cross-compiled gobpf/elf [1] programs without requiring a full BCC
+> port which is also undesirable on small embedded systems due to its
+> size footprint. The only missing pieces are these helper macros which
+> otherwise have to be redefined by each eBPF arm program.
 > 
-> Signed-off-by: Peter Oskolkov <posk@google.com>
-> ---
->  net/core/filter.c | 2 ++
->  1 file changed, 2 insertions(+)
+> [1] https://github.com/iovisor/gobpf/tree/master/elf
 > 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 647c63a7b25b..c6d016d9c4b8 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -5719,6 +5719,8 @@ tc_cls_act_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
->  		return &bpf_tcp_sock_proto;
->  	case BPF_FUNC_get_listener_sock:
->  		return &bpf_get_listener_sock_proto;
-> +	case BPF_FUNC_skb_ecn_set_ce:
-> +		return &bpf_skb_ecn_set_ce_proto;
+> Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com>
 
-makes sense, but I would like to see a selftest that it was tested properly.
+Applied, Thanks
 
