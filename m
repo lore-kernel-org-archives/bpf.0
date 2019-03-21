@@ -2,101 +2,97 @@ Return-Path: <SRS0=yvf5=RY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,
-	USER_AGENT_MUTT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_NEOMUTT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70C0CC43381
-	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 15:49:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77FB5C10F00
+	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 16:01:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3E9EC218E2
-	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 15:49:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4A53021874
+	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 16:01:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="eRTZ5yWU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CJUNwufz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728528AbfCUPtd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Mar 2019 11:49:33 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:40694 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728570AbfCUPtb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Mar 2019 11:49:31 -0400
-Received: by mail-pg1-f194.google.com with SMTP id u9so4463251pgo.7
-        for <bpf@vger.kernel.org>; Thu, 21 Mar 2019 08:49:30 -0700 (PDT)
+        id S1728072AbfCUQBD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Mar 2019 12:01:03 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:36106 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725985AbfCUQBD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Mar 2019 12:01:03 -0400
+Received: by mail-pf1-f193.google.com with SMTP id p10so4590234pff.3;
+        Thu, 21 Mar 2019 09:01:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
+        d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=5I+OlaKnQTe0DlSxwVdiOq8OWO2x7dsn0d2mdijCKto=;
-        b=eRTZ5yWUxu8cLzpcWc6uX3c9ZGG4IqqdpPxSKzK40yE54yk2uHoHbSV68Nmc0B/T93
-         DQhtrfSCB3q2cRIjlPLgeN97hdW8BMGKILm8GMVkY3/SEiwWKjyrOEP8ehSjAqZTwWu3
-         ZS+dtELU3fHUdX0Clav3Hhj+FCcKRevfAOw/vmXwAGVJNMojxwsh9LH/lIV6xJrkLDht
-         8YxU8QtJ6RMHAigfTA7YtzFdX+fyhrtT9egbkMYj7T839jSlSIAZYi9XHNrvLT98cJNS
-         jZrfxsdu0lZFb06bcuJ7sWdC3bgIlpTfDwrn0g4Bd6KR4u7RaDTvuot099cl2pSl/xVh
-         cQzQ==
+        bh=KL1bQD6rNQvDf/+sKwFsKfsh+pNLBvMkqEvy+oT0gsA=;
+        b=CJUNwufzEfR5BRh6mDtRtjDpgxbxkOh03KswZs+klTZm+e22goXdvsGRxLsjlnzJt4
+         SPMqGQZin6p1vH2KGrhJcX5R0K7CHeTL69XUQiZoz/Wlc2SmwksUElrGNoSYIPgmNlJK
+         Kuz1zAp+DPiNiAjFmJxwx3HnUuCmXb4kULzAv/DEbj+MK3CkpEuilp/R9XcLrLSy/Yrt
+         rV4MCJLdhPENvDRJekZutiTPFrpdQhhaA7kLrfPm7NZQ02e7iS6Yxu/b6W85W6IYIwy/
+         sksJJQwkgFaJ16ncgxc5Cz6LGRT0xuuumTcc+GQTg6fNBRtKB9Co4ctomrGn+hfjlnR/
+         j3gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=5I+OlaKnQTe0DlSxwVdiOq8OWO2x7dsn0d2mdijCKto=;
-        b=bBrI3H8oL7czeNe8oUx7ilDsnVlozW0joaCDMOajY1TCgaLB9YUiREOjlaNM396+4f
-         xoyMW14HBS3URY7xpEUxLQdvouF8n+3nPYqDSunuhf+9txrcLfPx0fdiKMd9LxxgtWyy
-         FmJ3lwqDm1SWgNwu6eklQ91pXOrJJnkiEHWgUhwkXGz+Y5HtT5VjAv+xO9/mLjmUJjbs
-         Mt2xw7dKAj/SphqX79UWyXbH4xwsa02Htk0b7f8ydSQr5mEOpMLl8KgnRuJYZQntEA8n
-         YWJpD8d7z9garfBsDLQkCDNkLNyH7a0T1bUsdMk146GePxngA93brzR/cIfdeAXZ44Ng
-         c6Kg==
-X-Gm-Message-State: APjAAAXNFgj0M8qLkBSxhL5BUgzR0yEzoJsaDdtjaculX+SJw1z7vYgY
-        cIzoLPFVVpH38Q35yfWvgx1jKw==
-X-Google-Smtp-Source: APXvYqzWAvvFE7RghX2cl0irv6No04B/cl2VKaVh5o7VxphZCSn+rkJ4AaKg6UguIYXAp0FJRGkt2w==
-X-Received: by 2002:a63:2bcd:: with SMTP id r196mr3833424pgr.355.1553183370088;
-        Thu, 21 Mar 2019 08:49:30 -0700 (PDT)
-Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
-        by smtp.gmail.com with ESMTPSA id d25sm493584pfn.152.2019.03.21.08.49.29
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 21 Mar 2019 08:49:29 -0700 (PDT)
-Date:   Thu, 21 Mar 2019 08:49:28 -0700
-From:   Stanislav Fomichev <sdf@fomichev.me>
-To:     Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        bh=KL1bQD6rNQvDf/+sKwFsKfsh+pNLBvMkqEvy+oT0gsA=;
+        b=M0rYhvvW+zaBLUUg98oj5aLzN5p3XV1JMAmolPrBixa5fvFbyM34cUdukF2D5e+OuP
+         UOoOS0bGAJK3Ovlt6rx9AIPEIMM8MYoRhCCtzwAAzL75C8E+PDGufaUZX8TXJF2RJAfj
+         Tg7A9TTPMuYa4fQJp9Vj7/zc1BlSscqZGVWAXithpY4lwOylPknORmD0cBNF2E0tT+sL
+         NEuMQi9eEpgnND6+Mo6F1jNcOLX8pVXKeDan3k80+YnALcM5OsrelErCs0Fdfhgx8QBS
+         EIMl7yi9xuazf9jDHGZbVRNzr0hNBocuKLU5B+8VCP6UCKmc9fTw8DDyiNQnFwnyekFE
+         JHuQ==
+X-Gm-Message-State: APjAAAUoMsiBuK88OrjqRJd5xxAyGrYXYNStxm3a4X4ZzNRPjuGtVqgq
+        BTNQQ/BynjLQNPL19Ndb5VlKdJYt
+X-Google-Smtp-Source: APXvYqzj355Rg5IGHy7lkSU4ih94LNCUS/6nJaFzDHnELnLIGmMpcSzXDab/TjK9NZrOWpAAHcbvGQ==
+X-Received: by 2002:a17:902:9893:: with SMTP id s19mr4317101plp.165.1553184062264;
+        Thu, 21 Mar 2019 09:01:02 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:180::d76d])
+        by smtp.gmail.com with ESMTPSA id y16sm6265972pfe.116.2019.03.21.09.01.00
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 21 Mar 2019 09:01:01 -0700 (PDT)
+Date:   Thu, 21 Mar 2019 09:00:59 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Stanislav Fomichev <sdf@fomichev.me>
+Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
         Stanislav Fomichev <sdf@google.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf@vger.kernel.org, David Miller <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCHv2 bpf-next 1/3] bpf, tests: tweak endianness selection
-Message-ID: <20190321154928.GT7431@mini-arch.hsd1.ca.comcast.net>
-References: <20190320125335.19621-1-sergey.senozhatsky@gmail.com>
- <20190321032429.2e7jddbltblaekjc@ast-mbp.dhcp.thefacebook.com>
- <20190321050852.GA1534@jagdpanzerIV>
+        simon.horman@netronome.com, Willem de Bruijn <willemb@google.com>,
+        Petar Penkov <peterpenkov96@gmail.com>
+Subject: Re: [RFC bpf-next v2 1/9] net: introduce __init_skb{,_data,_shinfo}
+ helpers
+Message-ID: <20190321160057.57u7ahijddqwtfdd@ast-mbp.dhcp.thefacebook.com>
+References: <20190319221948.170441-1-sdf@google.com>
+ <20190319221948.170441-2-sdf@google.com>
+ <20190321033941.bygpejl2krltkdmm@ast-mbp.dhcp.thefacebook.com>
+ <6406eae2-4633-9b2a-1101-2de48d29f9dd@gmail.com>
+ <CAF=yD-KFZ2-p8BWf_EBpqCbpzeqwLbqtZutio5WM6MP62G7wKQ@mail.gmail.com>
+ <20190321154433.GS7431@mini-arch.hsd1.ca.comcast.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190321050852.GA1534@jagdpanzerIV>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <20190321154433.GS7431@mini-arch.hsd1.ca.comcast.net>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 03/21, Sergey Senozhatsky wrote:
-> On (03/20/19 20:24), Alexei Starovoitov wrote:
-> > On Wed, Mar 20, 2019 at 09:53:33PM +0900, Sergey Senozhatsky wrote:
-> > > Not all compilers have __builtin_bswap16() and __builtin_bswap32(),
-> > > thus not all compilers are able to compile the following code:
-> > > 
-> > >         (__builtin_constant_p(x) ? \
-> > >                 ___constant_swab16(x) : __builtin_bswap16(x))
-> > > 
-> > > That's the reason why bpf_ntohl() doesn't work on GCC < 4.8, for
-> > > instance:
-> > 
-> > nack to fixes to support such old compilers.
+On Thu, Mar 21, 2019 at 08:44:33AM -0700, Stanislav Fomichev wrote:
 > 
-> Fair enough.
-What is too old? Documentation/process/changes.rst says that minimum
-supported gcc is 4.6, do we lift that requirement for the tests?
+> If we can agree that we switch everything to xpd-like, do we deprecate the
+> skb-one?
 
-> 	-ss
+This whole discussion that have been going on for long time is an indication
+that initial bpf flow dissector concept was not thought through
+and I regret on merging it in the first place.
+Adding more hacks on top of it with fake skbs is not going to make it any better.
+Since it's been in the official release we cannot remove it now.
+
