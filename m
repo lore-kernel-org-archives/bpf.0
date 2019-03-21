@@ -2,170 +2,114 @@ Return-Path: <SRS0=yvf5=RY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1057FC43381
-	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 21:34:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1C8EC4360F
+	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 22:01:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BECD9218A5
-	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 21:34:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9CE6A21917
+	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 22:01:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="d14b965H"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sEOGT1+5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726621AbfCUVes (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Mar 2019 17:34:48 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:39997 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726533AbfCUVes (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Mar 2019 17:34:48 -0400
-Received: by mail-qk1-f194.google.com with SMTP id w20so37029qka.7
-        for <bpf@vger.kernel.org>; Thu, 21 Mar 2019 14:34:47 -0700 (PDT)
+        id S1727530AbfCUWBP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Mar 2019 18:01:15 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:43017 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727528AbfCUWBO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Mar 2019 18:01:14 -0400
+Received: by mail-pg1-f194.google.com with SMTP id l11so5102179pgq.10;
+        Thu, 21 Mar 2019 15:01:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xPmqZthdwamFgpgk8Nm1MsROkU5Qsb1IF3gzqfFkOLs=;
-        b=d14b965HNfqImu0TEaVEcbE5rv5bM7Zx353WNHWnMeqh9GbRHybiKXl55DR53r/KX6
-         eQEZw3Kn6MMuBqDU6QB2mHAIfBUGBbDx8rrckPA0B1aBe5dM7uPe9D0VQjOj4XO/UqMI
-         x9834vLcUD6ebscVzsB9ckOHBAhlHVUL2kv3i0eNcJJ4yUBppmgOKSpSBHU/Y9kV40Co
-         Z1vsIqEuh1m3yJsruyz61SxoMhORHTrfDk0TTSwuBMfVE7hr/F0iH9DVY4v/SvAXXQet
-         o+o4wT1gJFSoHH4WWjn+jN1Jt7jhS2ZKBpIOFICWb15eSNBgrG78ANPAQ2CRyyLb1Lts
-         MVtg==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Rh/KxJwYqkqs8QKNm4MJro81RvcCr+q6ZyZLOLqt8mA=;
+        b=sEOGT1+56SJd7gYaZYAFDMI0AW+R0sX5HRjPTSx6LFMqa8Hqqso/pj1Q0BvTh0BNpt
+         uPr6MsScuwzJBGR05Qbjna1NZqrUPbf5G0lVAJkEiAKqGuq0J97t+4++VtJ02R8/+qvO
+         shcQ3Bz0oC88QcA1T4ej7M1kekjCft32fZDCFIOm4J4yHQJGhy+od91qtBPqXp02niLe
+         6cucD9vf2BPfgkOEcRAmwJF01pHtlM9Pbw3OJlpB2MzA5RFOM4jh1D0l2NldCjCPUpnR
+         T8Dj+0yAnDWeORU6VgITMrh0iWgeCQN9lCWYoxgbuVDATpuTmJloRL0/HmEQYcBoWWIm
+         gzBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xPmqZthdwamFgpgk8Nm1MsROkU5Qsb1IF3gzqfFkOLs=;
-        b=JMu/OI3gfGgcIxcI4quTmtZM23601gt6y8w04slSOeEWqUdJKQMN8z301SORQxAGNl
-         aTJUkW7avsuGqs2wlyLFdjdxy5FvsJ5lJzW79l9u8fYbIOgSwReyLGyLQJGHT43N7Yg3
-         HYQQSsDRgKL7aXTZcYCDs0bvrw4TmkqT9gKiHDlOW0dVBrElL1mv4vf1+bx7SvJyPaDA
-         0PV9jnZxCs3I/0mTdNooUiXDllwP0UpzwI0EM2Gj3i7yVhvHwvCZnYKMAaIt3avbLAJQ
-         NBAH/pvzvmxHBr//Ug5+gOD7RwapCx5jso5vTnlBs5DTpTkzeBTYT8HN0SVLJbEaVydF
-         n0tQ==
-X-Gm-Message-State: APjAAAWxVw10kALZYCMSHO5QHidfllrOFvdFqslnO2Yg0yfkmqIYFT/J
-        ia+/4hMJHY/Du7jI1OwZVoelSiCu7Wg=
-X-Google-Smtp-Source: APXvYqxOYj/vndB/aa6bqRe4KASkLoGwRwfAsht4XcKjN3P1F4ZbcmfryV9kLKWw97SquZp0RCHbow==
-X-Received: by 2002:a05:620a:1424:: with SMTP id k4mr4650366qkj.17.1553204087221;
-        Thu, 21 Mar 2019 14:34:47 -0700 (PDT)
-Received: from jkicinski-Precision-T1700.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id y4sm3577239qke.41.2019.03.21.14.34.45
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Rh/KxJwYqkqs8QKNm4MJro81RvcCr+q6ZyZLOLqt8mA=;
+        b=JKB4DjqmxfaT8qBxPZXvJPyaLHGvW4pQdmou7T9ECrkxecfs8WtxNFhCzqwocQEO0a
+         K9sC3U0dCYRMhdr2vEdRrN8JjSUKQJR4Rzp/M4oGUU83DN9CZGa/sNaqSPZJbzn1RkdO
+         XAxlTnaXyzqtj7H5JWULiVNlYVvX0rMD7piDBbH5c+D5oSVzIQEE1Mh2LdLz5oA8REEd
+         Ysj39wAidrUUEiJOJZwa6Oxymcm0g5D22JfDKPjNzDRAU6nRl4RHfPEGq64bu8PSl9rl
+         /ndOvhfuBChZHd+XyJUdNdsQEmk5wG2YewrkhtRypxavIE0d2lzK4kildsOcvPUrvp0J
+         UblQ==
+X-Gm-Message-State: APjAAAW7t3bqcvu7HN+elh/mloUG1Imym3gQ3VYiokauU1GGrUjQOYCV
+        xZXhZTLOXEiTfIXpEns9qqA=
+X-Google-Smtp-Source: APXvYqy84Xh5OAxXn19vUeGrmQVlRriLdLYVYhlcZzpJgJXe3UKjPKgdUUdUlvZmVXCowXMjRFYUdQ==
+X-Received: by 2002:a63:535c:: with SMTP id t28mr5578862pgl.128.1553205672928;
+        Thu, 21 Mar 2019 15:01:12 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:200::3:6115])
+        by smtp.gmail.com with ESMTPSA id l12sm11993084pgn.83.2019.03.21.15.01.11
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 21 Mar 2019 14:34:46 -0700 (PDT)
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        oss-drivers@netronome.com,
-        Jakub Kicinski <jakub.kicinski@netronome.com>
-Subject: [PATCH bpf] bpf: verifier: propagate liveness on all frames
-Date:   Thu, 21 Mar 2019 14:34:36 -0700
-Message-Id: <20190321213436.22379-1-jakub.kicinski@netronome.com>
-X-Mailer: git-send-email 2.19.2
+        Thu, 21 Mar 2019 15:01:12 -0700 (PDT)
+Date:   Thu, 21 Mar 2019 15:01:09 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Andrey Ignatov <rdna@fb.com>
+Cc:     "luca.boccassi@gmail.com" <luca.boccassi@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        bpf@vger.kernel.org, daniel@iogearbox.net
+Subject: Re: [PATCH bpf-next v4] tools/bpf: generate pkg-config file for
+ libbpf
+Message-ID: <20190321220107.pcvf6e23kun4gj7r@ast-mbp.dhcp.thefacebook.com>
+References: <20190319210639.6282-1-bluca@debian.org>
+ <20190321102531.31810-1-luca.boccassi@gmail.com>
+ <20190321160042.GB13709@rdna-mbp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190321160042.GB13709@rdna-mbp>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Commit 7640ead93924 ("bpf: verifier: make sure callees don't prune
-with caller differences") connected up parentage chains of all
-frames of the stack.  It didn't, however, ensure propagate_liveness()
-propagates all liveness information along those chains.
+On Thu, Mar 21, 2019 at 04:00:46PM +0000, Andrey Ignatov wrote:
+> luca.boccassi@gmail.com <luca.boccassi@gmail.com> [Thu, 2019-03-21 03:26 -0700]:
+> > From: Luca Boccassi <bluca@debian.org>
+> > 
+> > Generate a libbpf.pc file at build time so that users can rely
+> > on pkg-config to find the library, its CFLAGS and LDFLAGS.
+> > 
+> > Signed-off-by: Luca Boccassi <bluca@debian.org>
+...
+> > diff --git a/tools/lib/bpf/libbpf.pc.template b/tools/lib/bpf/libbpf.pc.template
+> > new file mode 100644
+> > index 000000000000..0ecd334c109f
+> > --- /dev/null
+> > +++ b/tools/lib/bpf/libbpf.pc.template
+> > @@ -0,0 +1,11 @@
+> > +prefix=@PREFIX@
+> > +libdir=@LIBDIR@
+> > +includedir=${prefix}/include
+> > +
+> > +Name: libbpf
+> > +URL: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> > +Description: Linux kernel BPF library
 
-This means pruning happening in the callee may generate explored
-states with incomplete liveness for the chains in lower frames
-of the stack.
+github/libbpf/libbpf is a true mirror of kernel's libbpf.
+I think if we start shipping libbpf.so from kernel and from github
+it will be very confusing to the users...
+Which one is the true libbpf?
+Also the package should mention the license.
+And the license for libbpf is dual lgpl/bsd.
+But if we point to the url above it will not make much sense.
+I think the packages URL should point to github/libbpf/libbpf
+and packaging scripts should be in github only.
 
-The included selftest is similar to the prior one from commit
-7640ead93924 ("bpf: verifier: make sure callees don't prune with
-caller differences"), where callee would prune regardless of the
-difference in r8 state.
-
-Now we also initialize r9 to 0 or 1 based on a result from get_random().
-r9 is never read so the walk with r9 = 0 gets pruned (correctly) after
-the walk with r9 = 1 completes.
-
-The selftest is so arranged that the pruning will happen in the
-callee.  Since callee does not propagate read marks of r8, the
-explored state at the pruning point prior to the callee will
-now ignore r8.
-
-Propagate liveness on all frames of the stack when pruning.
-
-Fixes: f4d7e40a5b71 ("bpf: introduce function calls (verification)")
-Signed-off-by: Jakub Kicinski <jakub.kicinski@netronome.com>
----
- kernel/bpf/verifier.c                        | 20 +++++++++-------
- tools/testing/selftests/bpf/verifier/calls.c | 25 ++++++++++++++++++++
- 2 files changed, 36 insertions(+), 9 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index f52c1159e75d..b6de77664a8a 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6078,15 +6078,17 @@ static int propagate_liveness(struct bpf_verifier_env *env,
- 	}
- 	/* Propagate read liveness of registers... */
- 	BUILD_BUG_ON(BPF_REG_FP + 1 != MAX_BPF_REG);
--	/* We don't need to worry about FP liveness because it's read-only */
--	for (i = 0; i < BPF_REG_FP; i++) {
--		if (vparent->frame[vparent->curframe]->regs[i].live & REG_LIVE_READ)
--			continue;
--		if (vstate->frame[vstate->curframe]->regs[i].live & REG_LIVE_READ) {
--			err = mark_reg_read(env, &vstate->frame[vstate->curframe]->regs[i],
--					    &vparent->frame[vstate->curframe]->regs[i]);
--			if (err)
--				return err;
-+	for (frame = 0; frame <= vstate->curframe; frame++) {
-+		/* We don't need to worry about FP liveness, it's read-only */
-+		for (i = frame < vstate->curframe ? BPF_REG_6 : 0; i < BPF_REG_FP; i++) {
-+			if (vparent->frame[frame]->regs[i].live & REG_LIVE_READ)
-+				continue;
-+			if (vstate->frame[frame]->regs[i].live & REG_LIVE_READ) {
-+				err = mark_reg_read(env, &vstate->frame[frame]->regs[i],
-+						    &vparent->frame[frame]->regs[i]);
-+				if (err)
-+					return err;
-+			}
- 		}
- 	}
- 
-diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
-index 4004891afa9c..f2ccae39ee66 100644
---- a/tools/testing/selftests/bpf/verifier/calls.c
-+++ b/tools/testing/selftests/bpf/verifier/calls.c
-@@ -1940,3 +1940,28 @@
- 	.errstr = "!read_ok",
- 	.result = REJECT,
- },
-+{
-+	"calls: cross frame pruning - liveness propagation",
-+	.insns = {
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
-+	BPF_MOV64_IMM(BPF_REG_8, 0),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1),
-+	BPF_MOV64_IMM(BPF_REG_8, 1),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
-+	BPF_MOV64_IMM(BPF_REG_9, 0),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1),
-+	BPF_MOV64_IMM(BPF_REG_9, 1),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 4),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_8, 1, 1),
-+	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_SOCKET_FILTER,
-+	.errstr_unpriv = "function calls to other bpf functions are allowed for root only",
-+	.errstr = "!read_ok",
-+	.result = REJECT,
-+},
--- 
-2.19.2
+Daniel,
+what do you think?
 
