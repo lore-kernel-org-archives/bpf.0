@@ -2,205 +2,118 @@ Return-Path: <SRS0=yvf5=RY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.5 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_PASS,USER_AGENT_MUTT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B837C43381
-	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 09:10:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82215C43381
+	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 09:28:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DD3D2218D4
-	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 09:10:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4F40121873
+	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 09:28:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728071AbfCUJKV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Mar 2019 05:10:21 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:39710 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728063AbfCUJKV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Mar 2019 05:10:21 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 3E37130BA36D;
-        Thu, 21 Mar 2019 09:10:20 +0000 (UTC)
-Received: from krava (ovpn-204-196.brq.redhat.com [10.40.204.196])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 6DCC760857;
-        Thu, 21 Mar 2019 09:10:17 +0000 (UTC)
-Date:   Thu, 21 Mar 2019 10:10:16 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        kernel-team@fb.com, peterz@infradead.org, acme@redhat.com,
-        jolsa@kernel.org, namhyung@kernel.org, sdf@fomichev.me
-Subject: Re: [PATCH v9 perf,bpf 00/15] perf annotation of BPF programs
-Message-ID: <20190321091016.GA30875@krava>
-References: <20190312053051.2690567-1-songliubraving@fb.com>
+        id S1727903AbfCUJ25 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Mar 2019 05:28:57 -0400
+Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:55345 "EHLO
+        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728022AbfCUJ25 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 21 Mar 2019 05:28:57 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01f04389;MF=xuyu@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0TNGmJqv_1553160524;
+Received: from ali-6c96cfe0d157.local(mailfrom:xuyu@linux.alibaba.com fp:SMTPD_---0TNGmJqv_1553160524)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 21 Mar 2019 17:28:54 +0800
+Subject: Re: [PATCH] bpf: do not restore dst_reg when cur_state is freed
+To:     Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <eec7905a71d207f7612e9d86e1bf59c43efc65a4.1553156792.git.xuyu@linux.alibaba.com>
+ <fe7367c5-b172-709f-1ba2-61136a74081e@iogearbox.net>
+From:   Yu Xu <xuyu@linux.alibaba.com>
+Message-ID: <b51889f6-6696-4e51-d63f-e5c70e109710@linux.alibaba.com>
+Date:   Thu, 21 Mar 2019 17:28:41 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:60.0)
+ Gecko/20100101 Thunderbird/60.5.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190312053051.2690567-1-songliubraving@fb.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.49]); Thu, 21 Mar 2019 09:10:20 +0000 (UTC)
+In-Reply-To: <fe7367c5-b172-709f-1ba2-61136a74081e@iogearbox.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 11, 2019 at 10:30:36PM -0700, Song Liu wrote:
-> Changes v8 to v9:
-> 1. Rebase on top of torvalds/master:
->     commit ea295481b6e313b4ea3ca2720ffcafd6005b5643 ;
-> 2. Change perf-record option --bpf-event to --no-bpf-event.
+On 3/21/19 4:50 PM, Daniel Borkmann wrote:
+> On 03/21/2019 09:31 AM, Xu Yu wrote:
+>> Syzkaller hit 'KASAN: use-after-free Write in sanitize_ptr_alu' bug.
+>> Call trace:
+>>    dump_stack+0xbf/0x12e
+>>    print_address_description+0x6a/0x280
+>>    kasan_report+0x237/0x360
+>>    sanitize_ptr_alu+0x85a/0x8d0
+>>    adjust_ptr_min_max_vals+0x8f2/0x1ca0
+>>    adjust_reg_min_max_vals+0x8ed/0x22e0
+>>    do_check+0x1ca6/0x5d00
+>>    bpf_check+0x9ca/0x2570
+>>    bpf_prog_load+0xc91/0x1030
+>>    __se_sys_bpf+0x61e/0x1f00
+>>    do_syscall_64+0xc8/0x550
+>>    entry_SYSCALL_64_after_hwframe+0x49/0xbe
+>> Fault injection trace:
+>>    kfree+0xea/0x290
+>>    free_func_state+0x4a/0x60
+>>    free_verifier_state+0x61/0xe0
+>>    push_stack+0x216/0x2f0	          <- inject failslab
+>>    sanitize_ptr_alu+0x2b1/0x8d0
+>>    adjust_ptr_min_max_vals+0x8f2/0x1ca0
+>>    adjust_reg_min_max_vals+0x8ed/0x22e0
+>>    do_check+0x1ca6/0x5d00
+>>    bpf_check+0x9ca/0x2570
+>>    bpf_prog_load+0xc91/0x1030
+>>    __se_sys_bpf+0x61e/0x1f00
+>>    do_syscall_64+0xc8/0x550
+>>    entry_SYSCALL_64_after_hwframe+0x49/0xbe
+>>
+>> When kzalloc() fails in push_stack(), free_verifier_state() will free
+>> current verifier state. As push_stack() returns, dst_reg was restored
+>> if ptr_is_dst_reg is false. However, as member of the cur_state, dst_reg
+>> is also freed, and error occurs when dereferencing dst_reg.
+>>
+>> Simply fix it by checking whether cur_state is NULL before retoring
+>> dst_reg.
+>>
+>> Signed-off-by: Xu Yu <xuyu@linux.alibaba.com>
+>> ---
+>>   kernel/bpf/verifier.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index ce166a0..018ce4f 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -3368,7 +3368,7 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
+>>   		*dst_reg = *ptr_reg;
+>>   	}
+>>   	ret = push_stack(env, env->insn_idx + 1, env->insn_idx, true);
+>> -	if (!ptr_is_dst_reg)
+>> +	if (!ptr_is_dst_reg && env->cur_state)
+>>   		*dst_reg = tmp;
 > 
-> Changes v7 to v8:
-> 1. Address issues suggested by Jiri and Stanislav.
+> Good catch, test should be more obvious rewritten as:
 > 
-> Changes v6 to v7:
-> 1. Fix minor issues suggested by Jiri.
+>    if (!ptr_is_dst_reg && ret)
 > 
-> Changes v5 to v6:
-> 1. Improve side band evlist interface;
-> 2. Minor style fixes.
-> 
-> Changes v4 to v5:
-> 1. Rebase to latest bpf-next;
-> 2. Add dependency of 94816add0005 from Arnaldo's tree;
-> 3. More details in change logs;
-> 4. Add perf_env__init() to init bpf related lock and rbtrees;
-> 5. Small clean ups.
-> 
-> Changes v3 to v4:
-> 1. Incorporate feedbacks from Jiri and Namhyung;
-> 2. Fixed compilation error with different feature-disassembler-four-args;
-> 3. Split some patches to smaller patches;
-> 4. Improved error handleing in symbol__disassemble_bpf();
-> 5. Made side band thread more generic;
-> 6. Added comments as suggested.
-> 
-> Changes v2 to v3:
-> 1. Remove unnecessary include in header files;
-> 2. Improved error handling;
-> 3. Better naming of functions, variables, etc.;
-> 4. Enable bpf events by default for perf-top.
-> 
-> Changes v1 to v2:
-> 1. Fix compilation error with different feature-disassembler-four-args;
-> 2. Fix a segfault in perf-record;
-> 3. Split patches 5/9 and 6/9 so that perf_env changes and perf.data changes
->    are in separate patches.
-> 
-> This series enables annotation of BPF programs in perf.
-> 
-> perf tool gathers information via sys_bpf and (optionally) stores them in
-> perf.data as headers.
-> 
-> Patch 1/15 changes --bpf-event option to --no-bpf-event;
-> Patch 2/15 to 4/15 introduce new helper functions and use them in perf and
->      bpftool;
-> Patch 5/15 to 9/15 saves information of bpf program in perf_env;
-> Patch 10/15 adds --bpf-event options to perf-top;
-> Patch 11/15 to 13/15 enables annotation of bpf progs based on information
->      gathered in 5/15 to 9/15;
-> Patch 14/15 introduces side band polling thread that gathers information
->      for special kernel events during perf-record or perf-top.
-> Patch 15/15 handles information of short living BPF program using the new
->      side band polling thread.
-> 
-> Commands tested during developments are perf-top, perf-record, perf-report,
-> and perf-annotate.
-> 
-> This set is also available at:
-> 
-> https://github.com/liu-song-6/linux/tree/bpf-annotation-v9
-> 
-> Thanks!!
-> 
-> Song Liu (15):
->   perf-record: replace option --bpf-event with --no-bpf-event
->   bpf: libbpf: introduce bpf_program__get_prog_info_linear()
->   bpf: bpftool: use bpf_program__get_prog_info_linear() in
->     prog.c:do_dump()
->   perf, bpf: synthesize bpf events with
->     bpf_program__get_prog_info_linear()
->   perf: change prototype of perf_event__synthesize_bpf_events()
->   perf, bpf: save bpf_prog_info in a rbtree in perf_env
->   perf, bpf: save bpf_prog_info information as headers to perf.data
->   perf, bpf: save btf in a rbtree in perf_env
->   perf, bpf: save btf information as headers to perf.data
->   perf-top: add option --no-bpf-event
->   perf: add -lopcodes to feature-libbfd
->   perf, bpf: enable annotation of bpf program
->   perf, bpf: process PERF_BPF_EVENT_PROG_LOAD for annotation
->   perf: introduce side band thread
->   perf, bpf: save bpf_prog_info and btf of short living bpf programs
+> Could you resubmit with that?
 
-it still crashes on standard user, like:
+sure, will send patch v2 later.
 
+thanks,
+Yu
 
-[jolsa@krava perf]$ ./perf record  ./perf bench sched messaging
-# Running 'sched/messaging' benchmark:
-# 20 sender and receiver processes per group
-# 10 groups == 400 processes run
-
-     Total time: 0.143 [sec]
-[ perf record: Woken up 1 times to write data ]
-[ perf record: Captured and wrote 0.282 MB perf.data (6341 samples) ]
-perf: Segmentation fault
-Obtained 14 stack frames.
-./perf(dump_stack+0x2d) [0x531f8b]
-./perf(sighandler_dump_stack+0x2d) [0x53206b]
-./perf() [0x444cd9]
-/lib64/libc.so.6(+0x36f2f) [0x7f64a0ef2f2f]
-/lib64/libpthread.so.0(+0x88bc) [0x7f64a32518bc]
-./perf(perf_evlist__stop_sb_thread+0x47) [0x4f30fc]
-./perf() [0x447909]
-./perf(cmd_record+0x815) [0x448afc]
-./perf() [0x4d4c52]
-./perf() [0x4d4ebf]
-./perf() [0x4d500e]
-./perf(main+0x267) [0x4d537a]
-/lib64/libc.so.6(__libc_start_main+0xea) [0x7f64a0edf11a]
-./perf(_start+0x29) [0x42cbd9]
-Segmentation fault (core dumped)
-
-
-the reason is that you try to open system wide counter
-and that's not allow for standard user.. so the thread
-won't get started, but there's code to stop it unconsidtionaly
-which crashes
-
-
-the patch below fixes that for me, but I guess we want
-to check if th eerror was -EACCESS, if not we should fail
-
-jirka
-
-
----
-diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-index 08832fdaa26b..766059bf26ee 100644
---- a/tools/perf/builtin-record.c
-+++ b/tools/perf/builtin-record.c
-@@ -1240,7 +1240,8 @@ static int __cmd_record(struct record *rec, int argc, const char **argv)
- 
- 	if (!opts->no_bpf_event)
- 		bpf_event__add_sb_event(&sb_evlist, &session->header.env);
--	perf_evlist__start_sb_thread(sb_evlist, &rec->opts.target);
-+	if (perf_evlist__start_sb_thread(sb_evlist, &rec->opts.target))
-+		opts->no_bpf_event = true;
- 
- 	err = record__synthesize(rec, false);
- 	if (err < 0)
-@@ -1493,7 +1494,8 @@ static int __cmd_record(struct record *rec, int argc, const char **argv)
- out_delete_session:
- 	perf_session__delete(session);
- 
--	perf_evlist__stop_sb_thread(sb_evlist);
-+	if (!opts->no_bpf_event)
-+		perf_evlist__stop_sb_thread(sb_evlist);
- 	return status;
- }
- 
+> 
+>>   	return !ret ? -EFAULT : 0;
+>>   }
+>>
+> 
+> Thanks,
+> Daniel
+> 
