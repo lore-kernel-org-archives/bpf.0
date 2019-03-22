@@ -1,135 +1,130 @@
-Return-Path: <SRS0=yvf5=RY=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=YBMC=RZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F2E5C43381
-	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 22:34:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24795C43381
+	for <bpf@archiver.kernel.org>; Fri, 22 Mar 2019 01:54:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2FB5B21916
-	for <bpf@archiver.kernel.org>; Thu, 21 Mar 2019 22:34:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DE31A218FC
+	for <bpf@archiver.kernel.org>; Fri, 22 Mar 2019 01:54:24 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Qj62yeeN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726370AbfCUWeu convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 21 Mar 2019 18:34:50 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:51099 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726068AbfCUWet (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Mar 2019 18:34:49 -0400
-Received: by mail-wm1-f66.google.com with SMTP id z11so361251wmi.0;
-        Thu, 21 Mar 2019 15:34:48 -0700 (PDT)
+        id S1727484AbfCVByY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Mar 2019 21:54:24 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:45012 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725999AbfCVByY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Mar 2019 21:54:24 -0400
+Received: by mail-pg1-f194.google.com with SMTP id i2so329822pgj.11
+        for <bpf@vger.kernel.org>; Thu, 21 Mar 2019 18:54:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=BbrqtsqiTytIzddjqtL0Hz/w19VokftbisNMDRGuDTA=;
+        b=Qj62yeeNj0exv5WnIr5wZ4qkIqIpmaEJtrFOcN13/Out589ytNqfqshqNqg0Sb1VK7
+         iO5884luSZ/aI1e2nP+WkR1KtRzFMnxiyrg9Pnbm0VP97LNMXMIljR153om+K0F13Ncq
+         OKOYdSHwU3ls3Xz9Rzi158NJCPJpvZcK9hnK8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=Gns+13VgxJz/q+t/aAGUVi/LwnQbj42C8Xpm7jAQue4=;
-        b=Rjc0LHF5peVQ9OYYbckQY/BzkGGhqhcVnJQhpwfdL8BN2IeRaAcIll7xWD5At4Sqh2
-         aoJNqHp3lbVHvfx7NXEjDTkiJ5QvAQitangPNQD73wHJc36rvHWAbnL4wVkRuAwskKAe
-         zONJFCL/bHMmTppbTGTAlzyaHG4/lgnOXaw6NaSIjrDbBqz+lv26LEqmy1VsQOYSlcpo
-         KtZhKRbwgNnDNprCyP14UkjVXapcg7VeRkijfcgJ/+yG82dqxxR/MdGs/0mVEcdUuZeb
-         Xuk25xILAzrrYELVqYcEwmXEfG3ILZf4Jarg4xECzOIulaQN8JFVeR7nxvcoaBekEHGn
-         jxjw==
-X-Gm-Message-State: APjAAAU72zMnhXWytSwejfBNy1CKQd+wAh1+mZ31YHCcZyGRTL0dzClk
-        zdluIIV/j+23QDtPTlNVvR4=
-X-Google-Smtp-Source: APXvYqwwN+/Ltq/ykJPSR2nM3Mp0XeBQzdj1WkTNE9iq83ge+x2eKGrYj5rgDWsxOP022+PzEJ4r3Q==
-X-Received: by 2002:a1c:c907:: with SMTP id f7mr924681wmb.39.1553207687515;
-        Thu, 21 Mar 2019 15:34:47 -0700 (PDT)
-Received: from localhost ([2a01:4b00:f419:6f00:b00c:66c8:99df:336])
-        by smtp.gmail.com with ESMTPSA id p12sm4472398wrt.4.2019.03.21.15.34.46
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 21 Mar 2019 15:34:46 -0700 (PDT)
-Message-ID: <1a8149d1327109cdd2d65c4d1674b9fa932ed3d8.camel@debian.org>
-Subject: Re: [PATCH bpf-next v4] tools/bpf: generate pkg-config file for
- libbpf
-From:   Luca Boccassi <bluca@debian.org>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Andrey Ignatov <rdna@fb.com>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=BbrqtsqiTytIzddjqtL0Hz/w19VokftbisNMDRGuDTA=;
+        b=oDd5m4P+DWhDwNV5Y8BYKMOkj/ge9WsjAeiy6B/IUUUCSnbzWfTS0ox21tl85Uk84V
+         pfXGL5aMmiIm5MquN4DGwp0lcrPWTC3dqAS09vk57AxTZbenAT2KAaKfosqdv0IdNFfU
+         9ez7Wrrhg+TL7dMtzt7bzigHEbmbDjaE0LZTKR4cxxBIBAow/b9PndVOM+rWal69/6LD
+         IOw7IvICy10RZNNOnlREfmC+KbH4juL8vAkYBcdxJgZWJnbYT+jP5xz9Bs8tiw2q/fDQ
+         HW5pgwjGVoSqBhVKJ0IrnHbjTMMjTow/IdRvyjYFICRJP+NV92R7N9Y3/8VAiqb3Q4R9
+         GV7g==
+X-Gm-Message-State: APjAAAXxH/OeoLzBpEkzntmhiMop+9lNuKFR9keeJ5FUH8TU6yAPQeRA
+        YjT5fr9nhmYDp/gRSxfv0x76UQ==
+X-Google-Smtp-Source: APXvYqzUzCs4OfxwBmUmD2esrEDXIF6F7o8HohvlJpEPBGORNm6QwM0wCmHZB6DbrFBdMiy/VrjSwg==
+X-Received: by 2002:a17:902:362:: with SMTP id 89mr6569791pld.172.1553219663431;
+        Thu, 21 Mar 2019 18:54:23 -0700 (PDT)
+Received: from localhost.localdomain ([157.120.241.186])
+        by smtp.gmail.com with ESMTPSA id i10sm7161799pgs.26.2019.03.21.18.54.20
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 21 Mar 2019 18:54:22 -0700 (PDT)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Thu, 21 Mar 2019 22:34:46 +0000
-In-Reply-To: <80186d7b-ff21-e81f-1320-5916ecfcc99b@iogearbox.net>
-References: <20190319210639.6282-1-bluca@debian.org>
-         <20190321102531.31810-1-luca.boccassi@gmail.com>
-         <20190321160042.GB13709@rdna-mbp>
-         <20190321220107.pcvf6e23kun4gj7r@ast-mbp.dhcp.thefacebook.com>
-         <80186d7b-ff21-e81f-1320-5916ecfcc99b@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.30.5-1 
+Cc:     kafai@fb.com, Lorenz Bauer <lmb@cloudflare.com>
+Subject: [PATCH bpf-next v3 0/8] Allow checking SYN cookies from XDP and tc cls act
+Date:   Fri, 22 Mar 2019 09:53:58 +0800
+Message-Id: <20190322015406.26453-1-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.19.1
+In-Reply-To: <20190319102103.7380-1-lmb@cloudflare.com>
+References: <20190319102103.7380-1-lmb@cloudflare.com>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 2019-03-21 at 23:19 +0100, Daniel Borkmann wrote:
-> On 03/21/2019 11:01 PM, Alexei Starovoitov wrote:
-> > On Thu, Mar 21, 2019 at 04:00:46PM +0000, Andrey Ignatov wrote:
-> > > luca.boccassi@gmail.com <luca.boccassi@gmail.com> [Thu, 2019-03-
-> > > 21 03:26 -0700]:
-> > > > From: Luca Boccassi <bluca@debian.org>
-> > > > 
-> > > > Generate a libbpf.pc file at build time so that users can rely
-> > > > on pkg-config to find the library, its CFLAGS and LDFLAGS.
-> > > > 
-> > > > Signed-off-by: Luca Boccassi <bluca@debian.org>
-> > ...
-> > > > diff --git a/tools/lib/bpf/libbpf.pc.template
-> > > > b/tools/lib/bpf/libbpf.pc.template
-> > > > new file mode 100644
-> > > > index 000000000000..0ecd334c109f
-> > > > --- /dev/null
-> > > > +++ b/tools/lib/bpf/libbpf.pc.template
-> > > > @@ -0,0 +1,11 @@
-> > > > +prefix=@PREFIX@
-> > > > +libdir=@LIBDIR@
-> > > > +includedir=${prefix}/include
-> > > > +
-> > > > +Name: libbpf
-> > > > +URL: 
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> > > > +Description: Linux kernel BPF library
-> > 
-> > github/libbpf/libbpf is a true mirror of kernel's libbpf.
-> > I think if we start shipping libbpf.so from kernel and from github
-> > it will be very confusing to the users...
-> > Which one is the true libbpf?
-> > Also the package should mention the license.
-> > And the license for libbpf is dual lgpl/bsd.
-> > But if we point to the url above it will not make much sense.
-> > I think the packages URL should point to github/libbpf/libbpf
-> > and packaging scripts should be in github only.
-> > 
-> > Daniel,
-> > what do you think?
-> 
-> Looking at [0], I don't see where license would be part of the
-> keyword. Given
-> this is just a pkg-config file where folks using it care mainly about
-> the
-> needed cflags/libs, it would make sense to me to ship it and have it
-> under
-> tools/lib/bpf/ in kernel tree (since this is distro independent). If
-> the URL
-> and Description causes confusion, I would probably just remove the
-> URL field
-> since it's not mandatory either. And description, I'd put something
-> like
-> 'official BPF library' or such, so it's generic enough.
-> 
->   [0] https://autotools.io/pkgconfig/file-format.html
->       https://dev.gentoo.org/~mgorny/pkg-config-spec.html#keywords
+This series adds the necessary helpers to determine wheter a given
+(encapsulated) TCP packet belongs to a connection known to the network stack.
 
-I assumed the license referred to the file itself, so I added the SDPX
-comment. It's not too uncommon for pc files to have the license comment
-at the top.
+* bpf_skc_lookup_tcp gives access to request and timewait sockets
+* bpf_tcp_check_syncookie identifies the final 3WHS ACK when syncookies
+  are enabled
 
-Removed URL and changed Descriptin in v6, thanks for reviewing!
+The goal is to be able to implement load-balancing approaches like
+glb-director [1] or Beamer [2] in pure eBPF. Specifically, we'd like to replace
+the functionality of the glb-redirect kernel module [3] by an XDP program or
+tc classifier.
 
--- 
-Kind regards,
-Luca Boccassi
+Changes in v3:
+* Fix missing check for ip4->ihl
+* Only cast to unsigned long in BPF_CALLs
+
+Changes in v2:
+* Rename bpf_sk_check_syncookie to bpf_tcp_check_syncookie.
+* Add bpf_skc_lookup_tcp. Without it bpf_tcp_check_syncookie doesn't make sense.
+* Check tcp_synq_no_recent_overflow() in bpf_tcp_check_syncookie.
+* Check th->syn in bpf_tcp_check_syncookie.
+* Require CONFIG_IPV6 to be a built in.
+
+1: https://github.com/github/glb-director
+2: https://www.usenix.org/conference/nsdi18/presentation/olteanu
+3: https://github.com/github/glb-director/tree/master/src/glb-redirect
+
+Lorenz Bauer (8):
+  bpf: track references based on is_acquire_func
+  bpf: allow helpers to return PTR_TO_SOCK_COMMON
+  bpf: add skc_lookup_tcp helper
+  bpf: add helper to check for a valid SYN cookie
+  tools: update include/uapi/linux/bpf.h
+  selftests/bpf: allow specifying helper for BPF_SK_LOOKUP
+  selftests/bpf: test references to sock_common
+  selftests/bpf: add tests for bpf_tcp_check_syncookie and
+    bpf_skc_lookup_tcp
+
+ include/linux/bpf.h                           |   1 +
+ include/uapi/linux/bpf.h                      |  36 ++-
+ kernel/bpf/verifier.c                         |  33 +--
+ net/core/filter.c                             | 216 ++++++++++++++++--
+ tools/include/uapi/linux/bpf.h                |  36 ++-
+ tools/testing/selftests/bpf/.gitignore        |   1 +
+ tools/testing/selftests/bpf/Makefile          |   5 +-
+ tools/testing/selftests/bpf/bpf_helpers.h     |   8 +
+ .../bpf/progs/test_tcp_check_syncookie_kern.c | 129 +++++++++++
+ .../selftests/bpf/test_tcp_check_syncookie.sh |  81 +++++++
+ .../bpf/test_tcp_check_syncookie_user.c       | 212 +++++++++++++++++
+ tools/testing/selftests/bpf/test_verifier.c   |   6 +-
+ .../selftests/bpf/verifier/ref_tracking.c     | 126 ++++++----
+ tools/testing/selftests/bpf/verifier/unpriv.c |   8 +-
+ 14 files changed, 811 insertions(+), 87 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c
+ create mode 100755 tools/testing/selftests/bpf/test_tcp_check_syncookie.sh
+ create mode 100644 tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
+
+--
+2.19.1
+
