@@ -2,58 +2,62 @@ Return-Path: <SRS0=YBMC=RZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FE74C43381
-	for <bpf@archiver.kernel.org>; Fri, 22 Mar 2019 19:59:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3F3AC43381
+	for <bpf@archiver.kernel.org>; Fri, 22 Mar 2019 19:59:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 39E1D21874
-	for <bpf@archiver.kernel.org>; Fri, 22 Mar 2019 19:59:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B43DC21874
+	for <bpf@archiver.kernel.org>; Fri, 22 Mar 2019 19:59:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EdhJmICG"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ryLukK2t"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726014AbfCVT7H (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Mar 2019 15:59:07 -0400
-Received: from mail-vk1-f202.google.com ([209.85.221.202]:43196 "EHLO
+        id S1726529AbfCVT7K (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Mar 2019 15:59:10 -0400
+Received: from mail-vk1-f202.google.com ([209.85.221.202]:55321 "EHLO
         mail-vk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725982AbfCVT7H (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Mar 2019 15:59:07 -0400
-Received: by mail-vk1-f202.google.com with SMTP id s11so1246729vkk.10
-        for <bpf@vger.kernel.org>; Fri, 22 Mar 2019 12:59:06 -0700 (PDT)
+        with ESMTP id S1726091AbfCVT7J (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Mar 2019 15:59:09 -0400
+Received: by mail-vk1-f202.google.com with SMTP id h131so1239218vke.22
+        for <bpf@vger.kernel.org>; Fri, 22 Mar 2019 12:59:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=zShM0RWqFlfrPUijnY1kNbwqoHuA2eXHgjycKhDvh0s=;
-        b=EdhJmICGrjMjQ74HOZdU1XqWykhqpWpKp5yiVOqHvYR9p7sxSmsKvqksqcxvjnqTFZ
-         f4VGTHkvfz+4l+0fIuetYkmNr9WMeF8lcP52QSoAGzhvyaJlTTV3iH+AF2tLtSM5zBhn
-         YrFsfXACQ0SYRZ8RMhnsLnXDPhyqQ3bijUGCv1inSigLOUBlSQziHLCF2zg+6L2TKioQ
-         abiltjF3FSacklfqYswbBlGiEdNTHjy98uXw2EdaoiJlUHkWFld8kwdelZcH4TjS35JE
-         BOxqdTTmzzbQJ28YwPObLorYyAgzrhyz7wDlEZRMWjst507ZJBpxXJ8whZSPPD9aKzHL
-         WbMQ==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=dvSFwX/cwTHRxA/HGGtK6nnCPtwgKpV/trwkfNlFVyQ=;
+        b=ryLukK2tFSWTS7CigBR714CUpNUMrblcn/zmr784wnCxbYE5HlVsfR79CQzgxefrgm
+         g2ohMw/ELbxAA0SlaMML8kke4Hmz88GuMZeQ3Tm1PnrlZ56TKdmCdeUUERAgTQsIWuMP
+         H4Mye2yM6x+0Zy4eyLV9YWt1U5WaJFjV27LMbGHtJprpIlF0cz4v5SjYQLzP9yHeGzLA
+         nyO3lE2MecEj6vtqdDapE3UUppwS/4glG/1w6Nna4z4h+wJ2BVBbti/Ds8krO5cKD3os
+         9Ne4VijjRhqq1+MmisLNSSH6nvSsSdXjCDOX9mlo5MLYqIElzIlKpf/O9UhkHeRJG3rZ
+         uUFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=zShM0RWqFlfrPUijnY1kNbwqoHuA2eXHgjycKhDvh0s=;
-        b=iZ+ptsylpZrbtTiHrES1ULkuz1eRyH2W/TaFnjy7hqd8STjWk+wd5VQyhZQxMFBmHL
-         llb5qmsCUsKwJUcQklh3DU3hjrUG5oeKkf0xvSVrOZsiy+L5ngOmzwFo1418FB/G81my
-         2wprD+Zn5jo7XeCwaH4zrBVgeCewte0bxKpPrOcFPoDqoDA65qL87qqi4IZK82wY5UvX
-         FaTmDK7xmFRUkiCatCtVtil38SThCWUWffR5LZxOco5+lCJPjpJ4KhIe1TayA3k+RERe
-         osl7yuBwvE83vwTX804O7IPn96AVVMxqSWfQ4RjTwFaoPiPdtZUMRiSHx68Vy+ONVPRR
-         SPFQ==
-X-Gm-Message-State: APjAAAUQPcZ15NAjXMY4igqIbjP9s7uJGsKE85R90NslyqeSuSA1BGEB
-        X3sRV0YtN0Ch4/HhvxbNUy0kGpU=
-X-Google-Smtp-Source: APXvYqwbT9vrnxL2qVpxaMcdS099gbZ3tMbbtGfnBSLK/UmqNuZQdi34IscES//P7lsIcVelgeWF9qs=
-X-Received: by 2002:a1f:1282:: with SMTP id 124mr7119344vks.45.1553284746270;
- Fri, 22 Mar 2019 12:59:06 -0700 (PDT)
-Date:   Fri, 22 Mar 2019 12:58:55 -0700
-Message-Id: <20190322195903.162516-1-sdf@google.com>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=dvSFwX/cwTHRxA/HGGtK6nnCPtwgKpV/trwkfNlFVyQ=;
+        b=SWXwguqzk8Rd1Ifc9yUlS5Bxwg9HxUcVO1n9q5swnHBwpRbiXJoNj6q4WzF/agDZ4b
+         zcVohmKp2HnCBIdm2kazQFmGHU7s+rP68S7rOEmp8zd+4NZ0mlioALBATjUB177+Z6ZH
+         5fqMONVmJBv8VSmnEWLWfds9NZDSA+3q+O+wKCOwspF1E1hnIw7bUXz81srrovDDPILa
+         8pF8CEGbM1V25D+XgtAJRePJR04bMoOirN/J9f1Z4dweMF/bchvqXECgO7bc+Jby0vng
+         BUdbsqY9y7zm/JK3CDNU8Q+pu4/2nRJsj3gtdmHN5qsUX029AtZB+I/a2qQ9eMvy2fYa
+         42jg==
+X-Gm-Message-State: APjAAAWpjy335kTdGQ0YGlURVu6xjKJNX44XObbFkyhu02XtlSW+EUJp
+        IqNZsfUoWBYObA4j9ZLnML/viDA=
+X-Google-Smtp-Source: APXvYqxSZhoOgr6Wtay6fTPzOWH6Q69yMg4NTnZEokDaF8i3d+nWTVdEjsLTAWQMkqDgL+ClG/AEZho=
+X-Received: by 2002:a67:f790:: with SMTP id j16mr7135940vso.232.1553284748746;
+ Fri, 22 Mar 2019 12:59:08 -0700 (PDT)
+Date:   Fri, 22 Mar 2019 12:58:56 -0700
+In-Reply-To: <20190322195903.162516-1-sdf@google.com>
+Message-Id: <20190322195903.162516-2-sdf@google.com>
 Mime-Version: 1.0
+References: <20190322195903.162516-1-sdf@google.com>
 X-Mailer: git-send-email 2.21.0.392.gf8f6787159e-goog
-Subject: [RFC bpf-next v3 0/8] net: flow_dissector: trigger BPF hook when
- called from eth_get_headlen
+Subject: [RFC bpf-next v3 1/8] flow_dissector: allow access only to a subset
+ of __sk_buff fields
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
@@ -65,78 +69,61 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, when eth_get_headlen calls flow dissector, it doesn't pass any
-skb. Because we use passed skb to lookup associated networking namespace
-to find whether we have a BPF program attached or not, we always use
-C-based flow dissector in this case.
+Use whitelist instead of a blacklist and allow only a small set of
+fields that might be relevant in the context of flow dissector:
+* protocol
+* vlan_present
+* vlan_tci
+* vlan_proto
 
-The goal of this patch series is to add new networking namespace argument
-to the eth_get_headlen and make BPF flow dissector programs be able to
-work in the skb-less case.
+This is required for the eth_get_headlen case where we have only a
+chunk of data to dissect (i.e. trying to read the other skb fields
+doesn't make sense).
 
-The series goes like this:
-1. restrict access to a limited set of __sk_buff fields from flow
-   dissector programs; in eth_get_headlen context, they don't
-   make sense (for skb-context, they are also not relevant for
-   flow dissector)
-2. switch kernel context to new xdp_buff-like structure (struct
-   bpf_flow_dissector) for flow dissector program
-3. minor fix for nhoff clamping; doesn't affect anything besides tests
-4. convert flow dissector BPF_PROG_TEST_RUN to skb-less mode to show that
-   it works
-5. add new optional network namespace argument to __skb_flow_dissect and
-   plumb through the callers
-6. handle __skb_flow_dissect with skb == NULL
-7. add new net namespace argument to eth_get_headlen and adjust all users
-8. add selftest that makes sure bpf_skb_load_bytes is prohibited in
-   skb-less context
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
+---
+ net/core/filter.c | 21 ++++++++-------------
+ 1 file changed, 8 insertions(+), 13 deletions(-)
 
-v3:
-* new kernel xdp_buff-like context per Alexey suggestion
-* drop skb_net helper
-* properly clamp flow_keys->nhoff
-
-v2:
-* moved temporary skb from stack into percpu (avoids memset of ~200 bytes
-  per packet)
-* tightened down access to __sk_buff fields from flow dissector programs to
-  avoid touching shinfo (whitelist only relevant fields)
-* addressed suggestions from Willem
-
-Stanislav Fomichev (8):
-  flow_dissector: allow access only to a subset of __sk_buff fields
-  flow_dissector: switch kernel context to struct bpf_flow_dissector
-  flow_dissector: fix clamping of BPF flow_keys for non-zero nhoff
-  bpf: when doing BPF_PROG_TEST_RUN for flow dissector use no-skb mode
-  net: plumb network namespace into __skb_flow_dissect
-  flow_dissector: handle no-skb use case
-  net: pass net argument to the eth_get_headlen
-  selftests/bpf: add flow dissector bpf_skb_load_bytes helper test
-
- drivers/net/ethernet/broadcom/bnxt/bnxt.c     |   2 +-
- drivers/net/ethernet/hisilicon/hns/hns_enet.c |   3 +-
- .../net/ethernet/hisilicon/hns3/hns3_enet.c   |   3 +-
- drivers/net/ethernet/intel/fm10k/fm10k_main.c |   2 +-
- drivers/net/ethernet/intel/i40e/i40e_txrx.c   |   3 +-
- drivers/net/ethernet/intel/iavf/iavf_txrx.c   |   3 +-
- drivers/net/ethernet/intel/ice/ice_txrx.c     |   2 +-
- drivers/net/ethernet/intel/igb/igb_main.c     |   3 +-
- drivers/net/ethernet/intel/igc/igc_main.c     |   3 +-
- drivers/net/ethernet/intel/ixgbe/ixgbe_main.c |   2 +-
- .../net/ethernet/intel/ixgbevf/ixgbevf_main.c |   3 +-
- .../net/ethernet/mellanox/mlx5/core/en_tx.c   |   3 +-
- drivers/net/tun.c                             |   3 +-
- include/linux/etherdevice.h                   |   2 +-
- include/linux/skbuff.h                        |  23 ++-
- include/net/flow_dissector.h                  |  11 ++
- include/net/sch_generic.h                     |  11 +-
- net/bpf/test_run.c                            |  51 ++----
- net/core/filter.c                             | 151 +++++++++++++-----
- net/core/flow_dissector.c                     |  85 +++++-----
- net/ethernet/eth.c                            |   8 +-
- .../prog_tests/flow_dissector_load_bytes.c    |  48 ++++++
- 22 files changed, 280 insertions(+), 145 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/flow_dissector_load_bytes.c
-
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 647c63a7b25b..62a7a2f50200 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -6613,14 +6613,8 @@ static bool flow_dissector_is_valid_access(int off, int size,
+ 					   const struct bpf_prog *prog,
+ 					   struct bpf_insn_access_aux *info)
+ {
+-	if (type == BPF_WRITE) {
+-		switch (off) {
+-		case bpf_ctx_range_till(struct __sk_buff, cb[0], cb[4]):
+-			break;
+-		default:
+-			return false;
+-		}
+-	}
++	if (type == BPF_WRITE)
++		return false;
+ 
+ 	switch (off) {
+ 	case bpf_ctx_range(struct __sk_buff, data):
+@@ -6632,11 +6626,12 @@ static bool flow_dissector_is_valid_access(int off, int size,
+ 	case bpf_ctx_range_ptr(struct __sk_buff, flow_keys):
+ 		info->reg_type = PTR_TO_FLOW_KEYS;
+ 		break;
+-	case bpf_ctx_range(struct __sk_buff, tc_classid):
+-	case bpf_ctx_range(struct __sk_buff, data_meta):
+-	case bpf_ctx_range_till(struct __sk_buff, family, local_port):
+-	case bpf_ctx_range(struct __sk_buff, tstamp):
+-	case bpf_ctx_range(struct __sk_buff, wire_len):
++	case bpf_ctx_range(struct __sk_buff, protocol):
++	case bpf_ctx_range(struct __sk_buff, vlan_present):
++	case bpf_ctx_range(struct __sk_buff, vlan_tci):
++	case bpf_ctx_range(struct __sk_buff, vlan_proto):
++		break;
++	default:
+ 		return false;
+ 	}
+ 
 -- 
 2.21.0.392.gf8f6787159e-goog
+
