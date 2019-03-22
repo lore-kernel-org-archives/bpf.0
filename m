@@ -2,97 +2,85 @@ Return-Path: <SRS0=YBMC=RZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C8B0C43381
-	for <bpf@archiver.kernel.org>; Fri, 22 Mar 2019 02:06:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59011C43381
+	for <bpf@archiver.kernel.org>; Fri, 22 Mar 2019 02:39:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 33DBC218FE
-	for <bpf@archiver.kernel.org>; Fri, 22 Mar 2019 02:06:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 260A6218FC
+	for <bpf@archiver.kernel.org>; Fri, 22 Mar 2019 02:39:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b128CVsF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RgLIpzE4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727373AbfCVCGw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Mar 2019 22:06:52 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:36128 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726460AbfCVCGw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Mar 2019 22:06:52 -0400
-Received: by mail-pf1-f195.google.com with SMTP id p10so411903pff.3;
-        Thu, 21 Mar 2019 19:06:51 -0700 (PDT)
+        id S1727404AbfCVCjo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Mar 2019 22:39:44 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:33309 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727162AbfCVCjo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Mar 2019 22:39:44 -0400
+Received: by mail-lf1-f67.google.com with SMTP id v14so408002lfi.0;
+        Thu, 21 Mar 2019 19:39:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ZRjPd4aDU+RKxbLwDfTQ6cIoFqwS+CnLbDrZEaCcBis=;
-        b=b128CVsFbVrPT/tWgnE1GHR5b8PfIhWp5SjuE4+TCIkR+pbWWWJTPabZZSPcqn/Y/F
-         DfVoIJy2s8yFcV95bv6/pES3iSyEAE6TkBOYyFDSVu5tlvediPOgSpoaUSwh70Et0fTs
-         46bTI7XDu0awkfgJTBJo5SbIGQsLuUCTDTQha3SbVSwh2FCeVNpHOlcVlFE398pD4FXQ
-         yD2BOu4WQY+gLlr8tV/HNyGv9+zoNKadF3PGhovwoD1pmwt92Tod5ohfnXzYpP1KYuAY
-         BYPvpdo50xU/HvMrOpxvszbfzhSlNWBs/RtYz/icCRH6hhL0JJh/KjnkmAbueT1B8cDQ
-         HBUA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pwD2RVsTxKa166T4kF+VoEuutBIKfhZxp4PVbEWn8wM=;
+        b=RgLIpzE4Rzbw90POerCf3ia0RQ/T5FNj317Gk0v3nSnmrgMQo4ZWziTGOcVjCvUY6a
+         FIPsIXOT9b1M9AewoQWQrJff1ttW+IO/kJJDMi6jqz31ge/oYpCgfLQUxq0C1DgXGqkS
+         XPcRNxWSCaMH5kGuhEpWICFYn/NeUVLUIs0cdUZKm6Ta3Tjt0vw4Hmdr+zGvazFI+dnP
+         Fdc93TO+VAx0FRv0LCpDkC1crooT4sPdTAKG9qiX9uE17hg37+YXMbzvWDS/QZ+qw/20
+         GBX6Ka6bXNnmFkwma9cvhqFLLvKsjq6YbIvrXD48gv+ARb/ZO0FHkFIxSNN4SIz7uNBd
+         Gv0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ZRjPd4aDU+RKxbLwDfTQ6cIoFqwS+CnLbDrZEaCcBis=;
-        b=XvDcB4ZDvCwm0t982E6qXDcVm1JmTkly7x32nqlDjeylzwJBDPYws/4Rz+IxMYmlAD
-         i9GYLFwT6IGPf3NxFE+VLrf1caZ1I8FhSGjUEIOBenJeodRIGUn/A4IX2Oyhsmwj5DjJ
-         DCmP+MD6G/I+VuJTswaO0d4fkPkbncrWNPY+Q1j3hNMTuURrmM+/eG30f19E1LmW5o5C
-         GE7IwFUD2gXPUeEe+dRwZFKP+t4m6PvGP80VQQvb0nTkscsHp5zBdOrI+1TxZZPbxPRn
-         BNOtIJwnH68UFceEp4rpsXSuAhSoL6pamSph+S18Rmf6kSetiQj/0GZ7fcz9WUgJpLQG
-         epjA==
-X-Gm-Message-State: APjAAAX4vAicHDugAojHShyVF0w2yOB6EBdsLZYS5RANTt7YDeeMwhfD
-        1/3grclubW2PR8d9grUnd/A=
-X-Google-Smtp-Source: APXvYqyqk6Pn/xjJDjXw4V4voSmNK6YF02I9FWPlLwyRQ90T4RSsC5dD8fslhiPJC6RQF2o5G9WEew==
-X-Received: by 2002:a17:902:8643:: with SMTP id y3mr6824577plt.195.1553220411467;
-        Thu, 21 Mar 2019 19:06:51 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:180::d464])
-        by smtp.gmail.com with ESMTPSA id n15sm13190919pgc.92.2019.03.21.19.06.49
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 21 Mar 2019 19:06:50 -0700 (PDT)
-Date:   Thu, 21 Mar 2019 19:06:48 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Lorenz Bauer <lmb@cloudflare.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, kafai@fb.com
-Subject: Re: [PATCH bpf-next v3 4/8] bpf: add helper to check for a valid SYN
- cookie
-Message-ID: <20190322020646.mnrpce2i2ooe6shi@ast-mbp.dhcp.thefacebook.com>
-References: <20190319102103.7380-1-lmb@cloudflare.com>
- <20190322015406.26453-1-lmb@cloudflare.com>
- <20190322015406.26453-5-lmb@cloudflare.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pwD2RVsTxKa166T4kF+VoEuutBIKfhZxp4PVbEWn8wM=;
+        b=M3XLkZJRsdkQ7s2VyQOyPSQf5aCrkErNPFwI5F+7VGvWB1RvdGC922f7lSg9A+xpC5
+         JA4hv0zB6ASR3pqWu02GgsOs3bFg9MNbQh6mJMDWHDGSGXI16uxwnau3nD/3FsbOpfEa
+         qbptLqKwIPOEssCnSsHiJ6L/ZXW9EOJ7i3NTzShb3aFhHuQAlH1ewvEhiPjGCoo2hboB
+         ttqDREthEP8xFLtKqIZN5f4SXnTtGpzZddf4SSH/QoM7NC5bJxjIPEjdL1XFH5/F2QCd
+         bj6ceV8iLiVmkhie7HT1MmvZQIHGDQkAjk1KRJO+Qhsvhi3e5jd/FfTmJvDHAC6qLkxH
+         3lKw==
+X-Gm-Message-State: APjAAAUwzQUm1EGKEi3q3z0/MwSJI24GgSBnGZf1dTFz7XGtXGRuEmzY
+        wuZtmSAHc+9nl/V1iwbAKUbPw93qDBHM5p5DnslKsQ==
+X-Google-Smtp-Source: APXvYqxSKxWM8/oA/8waV3x419LVmQh9cUX2H/hLzrUnhS/nr+ExMkCKUD+BpdAeit2gMClGMTapQ2/AFcaPzXqMReA=
+X-Received: by 2002:a19:40c8:: with SMTP id n191mr3730734lfa.22.1553222381597;
+ Thu, 21 Mar 2019 19:39:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190322015406.26453-5-lmb@cloudflare.com>
-User-Agent: NeoMutt/20180223
+References: <20190315200414.32346-1-ivecera@redhat.com>
+In-Reply-To: <20190315200414.32346-1-ivecera@redhat.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 21 Mar 2019 19:39:30 -0700
+Message-ID: <CAADnVQKBWXNzbDwAveUwgoBQe8TuHqTSH049JZmC9aBtnPGMhA@mail.gmail.com>
+Subject: Re: [PATCH net-next] selftests: bpf: modify urandom_read and link it non-statically
+To:     Ivan Vecera <ivecera@redhat.com>
+Cc:     Network Development <netdev@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Mar 22, 2019 at 09:54:02AM +0800, Lorenz Bauer wrote:
-> Using bpf_skc_lookup_tcp it's possible to ascertain whether a packet
-> belongs to a known connection. However, there is one corner case: no
-> sockets are created if SYN cookies are active. This means that the final
-> ACK in the 3WHS is misclassified.
-> 
-> Using the helper, we can look up the listening socket via
-> bpf_skc_lookup_tcp and then check whether a packet is a valid SYN
-> cookie ACK.
-> 
-> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
-...
-> +static const struct bpf_func_proto bpf_tcp_check_syncookie_proto = {
-> +	.func		= bpf_tcp_check_syncookie,
-> +	.gpl_only	= true,
+On Fri, Mar 15, 2019 at 1:04 PM Ivan Vecera <ivecera@redhat.com> wrote:
+>
+> After some experiences I found that urandom_read does not need to be
+> linked statically. When the 'read' syscall call is moved to separate
+> non-inlined function then bpf_get_stackid() is able to find
+> the executable in stack trace and extract its build_id from it.
+>
+> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
 
-you really want your employer to open source the load balancer :)
-Fine by me.
-
-The series applied to bpf-next.
-
+Applied. Thanks
