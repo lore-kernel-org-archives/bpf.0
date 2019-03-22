@@ -2,112 +2,99 @@ Return-Path: <SRS0=YBMC=RZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FC45C43381
-	for <bpf@archiver.kernel.org>; Fri, 22 Mar 2019 02:46:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BAF9C43381
+	for <bpf@archiver.kernel.org>; Fri, 22 Mar 2019 02:52:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5D58E218FE
-	for <bpf@archiver.kernel.org>; Fri, 22 Mar 2019 02:46:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EADC221900
+	for <bpf@archiver.kernel.org>; Fri, 22 Mar 2019 02:52:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LqEORLJn"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Kgx9nIsg"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727451AbfCVCq6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Mar 2019 22:46:58 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:33378 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725999AbfCVCq5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Mar 2019 22:46:57 -0400
-Received: by mail-pf1-f196.google.com with SMTP id i19so484797pfd.0;
-        Thu, 21 Mar 2019 19:46:57 -0700 (PDT)
+        id S1727524AbfCVCws (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Mar 2019 22:52:48 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:40474 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727248AbfCVCws (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Mar 2019 22:52:48 -0400
+Received: by mail-oi1-f196.google.com with SMTP id 3so645517oir.7
+        for <bpf@vger.kernel.org>; Thu, 21 Mar 2019 19:52:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=who9YPOO2VsQzz5k8vgRhc7mw9PFaOxvJ1BUC8DoORU=;
-        b=LqEORLJn0lQdr5JcVxUBOSp8CTzKMJXOCIltklBfz8owmy4b7Rt83XjLx/t5DlOmq9
-         Cyilv+EPT+pHYRp6jfrAJswvrPPMWOvvdMYf2Dgwt1BW+gWckyBwZosHewXNgmpumJ57
-         dni67draRgLa8Jyv0dHZOQWJ4L5kTjdq83Y6dPyWWdV/H8nWgiowdX76G4VDcjccNNo7
-         f02kNH4Ib2LjV+YVWLwy8xDw+ZCQlNtJoyMydHnOvHA4n9rM1z1qSy20ONIekbdRB9Or
-         xZFfoPCIHHM1gahOhEloHB0P+qHEk93YW5Nz4vLsCIiAdiwK4sfBnXKMnj/caV8PYs3j
-         tfjg==
+        d=cloudflare.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=S1Xnazlv7OVfL2ZW+APAAAZ3eQjve+f8ol79G8W2wYc=;
+        b=Kgx9nIsglrYbdVowwLjHbaLcv7a8CZVN07Kc6H8IwkxI02rIDyRsD7e7eoK+JQ+Rkl
+         ntUpVOMC2rinvtmv6VkbyT8xwwfIFRhBIW+1nSHmkUE2bbCSEvctj9gNLFbdFeGw6hNk
+         5+W5pXB3Tmh4GwDsJINymSfTx0G9MwgnarCIo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=who9YPOO2VsQzz5k8vgRhc7mw9PFaOxvJ1BUC8DoORU=;
-        b=VP8kwYkhcGyM3baGBc+LaHSSeLtAcjM6LdK5N7+GtyYxvQP345pFmvOyHEgRyaOSO/
-         ZzSUYEIg5mlN+zlmEjv+iHPZyxEnibu9JA2G0HwMtNkFNyMTqxVQul96GijzOk8PAqMj
-         KBWWHmYrSBopBJKvpMRSVLkaHsVFOnVAgu0zDR5Ra7m+xugIwB0WqmS/n1wMersl1R9b
-         5Y0y9TB4LJnH5GThqdGkUizExsQAtHctK4VKIrzHj+SE/Y9JqiTas3LQNXKgA/g7Hy2z
-         EmLucjMEMUlI8Y31vmhIy6TwWM2i7A8HP6bqUX0wHG9gKIgL4WC3ePWFkc5cWv32GBBf
-         Vofw==
-X-Gm-Message-State: APjAAAUBUTBxDwos2FzqQpysOQzwFL+39s47VqX4YOsTDdykxFmz+f2f
-        BWIk3d75Gzv0bEmQcLBw9gTwZGwt
-X-Google-Smtp-Source: APXvYqwdRZZnLu/81lH6uHza+wL4rhvPMYHWfWefdVYQnT7PH1IfnViScMFs3+LnTINLkWLDGNUnpQ==
-X-Received: by 2002:a63:ee04:: with SMTP id e4mr6617885pgi.310.1553222816394;
-        Thu, 21 Mar 2019 19:46:56 -0700 (PDT)
-Received: from localhost ([175.223.33.106])
-        by smtp.gmail.com with ESMTPSA id e2sm9238294pfa.64.2019.03.21.19.46.54
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 21 Mar 2019 19:46:55 -0700 (PDT)
-Date:   Fri, 22 Mar 2019 11:46:52 +0900
-From:   Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
-To:     Stanislav Fomichev <sdf@fomichev.me>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCHv2 bpf-next 1/3] bpf, tests: tweak endianness selection
-Message-ID: <20190322024652.GA3679@jagdpanzerIV>
-References: <20190320125335.19621-1-sergey.senozhatsky@gmail.com>
- <20190321032429.2e7jddbltblaekjc@ast-mbp.dhcp.thefacebook.com>
- <20190321050852.GA1534@jagdpanzerIV>
- <20190321154928.GT7431@mini-arch.hsd1.ca.comcast.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=S1Xnazlv7OVfL2ZW+APAAAZ3eQjve+f8ol79G8W2wYc=;
+        b=o/t4nlxMOdM1DkPQNmhMcL+q3IJ2qbeuGazbIPahi+AEBdJDGB6SQGa25nGPj4vAKC
+         k2sbuRxodko0aMOBh4fcC6ICvXyWJB/hrsrvqFDYwCC6MpZFOBAuaUaSkhk6qA5tBRE8
+         aUboyBMuTR0RmLBz6ggzUsq9yfFaMmxr7Cj56QqmNsOEWg86fjBtqh9Hctht29XdYFwT
+         eVFwjZLa1cJ9fenIg9wTdixJKjuBgKxr4h+kk8aR9ysJuq+lXi24pZRTage215k3i+85
+         Sa9/LgANdFm8lacejIgH57MYQsMPIoH3mGU4u9DvuFYrNwpFjr+Jhk8kO6ffYhbWUUlg
+         o63g==
+X-Gm-Message-State: APjAAAVNdCaV0HvTTCc0I1MbMLkkU1qfPcdIDhxdyuizpY9aawVHBcVH
+        n7ytZqZOTwzExdJkHGcc7k7T2g5fLf3V05K94rvvAQ==
+X-Google-Smtp-Source: APXvYqx7ZUr5njXWKbIl8ZFUayndT9hpHZ5y+AMn95gUYEoNnklFwqt9Mpore/RZ1kuoxs8tu4e5wxEDCWKOX//4AFo=
+X-Received: by 2002:aca:318a:: with SMTP id x132mr345546oix.172.1553223167584;
+ Thu, 21 Mar 2019 19:52:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190321154928.GT7431@mini-arch.hsd1.ca.comcast.net>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+References: <20190319102103.7380-1-lmb@cloudflare.com> <20190322015406.26453-1-lmb@cloudflare.com>
+ <20190322015406.26453-5-lmb@cloudflare.com> <20190322020646.mnrpce2i2ooe6shi@ast-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20190322020646.mnrpce2i2ooe6shi@ast-mbp.dhcp.thefacebook.com>
+From:   Lorenz Bauer <lmb@cloudflare.com>
+Date:   Fri, 22 Mar 2019 10:52:36 +0800
+Message-ID: <CACAyw98+yNdnajU7bWJ56=ZmfgaLpDN0E4VFDEWKq6=HP_Z2Vg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 4/8] bpf: add helper to check for a valid SYN cookie
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Martin Lau <kafai@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On (03/21/19 08:49), Stanislav Fomichev wrote:
-> On 03/21, Sergey Senozhatsky wrote:
-> > On (03/20/19 20:24), Alexei Starovoitov wrote:
-> > > On Wed, Mar 20, 2019 at 09:53:33PM +0900, Sergey Senozhatsky wrote:
-> > > > Not all compilers have __builtin_bswap16() and __builtin_bswap32(),
-> > > > thus not all compilers are able to compile the following code:
-> > > > 
-> > > >         (__builtin_constant_p(x) ? \
-> > > >                 ___constant_swab16(x) : __builtin_bswap16(x))
-> > > > 
-> > > > That's the reason why bpf_ntohl() doesn't work on GCC < 4.8, for
-> > > > instance:
-> > > 
-> > > nack to fixes to support such old compilers.
-> > 
-> > Fair enough.
-> What is too old? Documentation/process/changes.rst says that minimum
-> supported gcc is 4.6, do we lift that requirement for the tests?
+Ha! I did that because __cookie_v4(6)_check is marked GPL only. I'm
+happy for the helper to be more permissive if that is possible.
 
-Hmm, good point, Stanislav. I thought it was gcc 4.9 which introduced
-asm goto and hence 4.9 is the minimum supported version. But it seems
-that it was 4.5/4.6, so the min supported gcc version is 4.6. Which
-means that those bpf defines won't work on some compilers.
+On Fri, 22 Mar 2019 at 10:06, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Fri, Mar 22, 2019 at 09:54:02AM +0800, Lorenz Bauer wrote:
+> > Using bpf_skc_lookup_tcp it's possible to ascertain whether a packet
+> > belongs to a known connection. However, there is one corner case: no
+> > sockets are created if SYN cookies are active. This means that the final
+> > ACK in the 3WHS is misclassified.
+> >
+> > Using the helper, we can look up the listening socket via
+> > bpf_skc_lookup_tcp and then check whether a packet is a valid SYN
+> > cookie ACK.
+> >
+> > Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+> ...
+> > +static const struct bpf_func_proto bpf_tcp_check_syncookie_proto = {
+> > +     .func           = bpf_tcp_check_syncookie,
+> > +     .gpl_only       = true,
+>
+> you really want your employer to open source the load balancer :)
+> Fine by me.
+>
+> The series applied to bpf-next.
+>
 
-Alexei, does your NACK still stand?
 
-	-ss
+-- 
+Lorenz Bauer  |  Systems Engineer
+25 Lavington St., London SE1 0NZ
+
+www.cloudflare.com
