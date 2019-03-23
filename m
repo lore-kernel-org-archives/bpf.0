@@ -2,94 +2,110 @@ Return-Path: <SRS0=dHw9=R2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,
-	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
+	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4348C43381
-	for <bpf@archiver.kernel.org>; Sat, 23 Mar 2019 00:59:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE064C43381
+	for <bpf@archiver.kernel.org>; Sat, 23 Mar 2019 01:00:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ABDE62192D
-	for <bpf@archiver.kernel.org>; Sat, 23 Mar 2019 00:59:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA83821925
+	for <bpf@archiver.kernel.org>; Sat, 23 Mar 2019 01:00:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="qmhSxnQc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o+QFe/Td"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727526AbfCWA76 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Mar 2019 20:59:58 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:46896 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727519AbfCWA76 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Mar 2019 20:59:58 -0400
-Received: by mail-pg1-f193.google.com with SMTP id a22so2582678pgg.13
-        for <bpf@vger.kernel.org>; Fri, 22 Mar 2019 17:59:57 -0700 (PDT)
+        id S1727526AbfCWBAy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Mar 2019 21:00:54 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:41174 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727512AbfCWBAy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Mar 2019 21:00:54 -0400
+Received: by mail-pg1-f194.google.com with SMTP id k11so2598178pgb.8;
+        Fri, 22 Mar 2019 18:00:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
+        d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=v4eR9AXPwjo/zAdPH0W9i5VXZlciyXu7tlzn2PkmNlo=;
-        b=qmhSxnQcrS9pZALlYJZqWp8iPQLJSTtIVgvfjlIO24JQOX6snsIlgdhlfNUhRpCult
-         RrnmSV+miTN144kWywmaMfMw1FRipV9+/U5VUgBCTwVguU4Q88yMBitd+hp8gG98t3Ey
-         RJ9LqhNHYpIl5XFj/stR4bBYmY8Gr9Q9Kg3lu8OrG6Bvl9buSe/nmNykmOL/SwbO4MFo
-         vO9oXG9gac+h1TAw/4IWrSHx0HPcis9JZPL1niFRr4nCLmXdxPgLTbHjaxzaF8N/ZNsm
-         a1Q4N3KTaSBKE+yx7mN8FkG+kD/VX/XkfCf0B07/Rx0zumPhSYDll2NPHvY2YXWLzFIx
-         0S2A==
+        bh=qvwdtIA+pQCMq9atQt7nUwd1SQz7RGMjmH14hBR6014=;
+        b=o+QFe/Td6sLsG4vQ8soFa2llWnW46uLDKyA55EyNUgswTuTtjAgethhJHY3M4Jlpxn
+         jOS1d60CdvVs50UFmYc7lq4poEx0xr0qKNy7j8jx8oU4JDL2dRqqBxi0RxU1mWbGBOCr
+         M/IBeRB5YjD/vrypkoBYnx7l8bvEteovw7GVvsZHT+A3g9QI1nrByLgoQzgWgkZ3fyL9
+         Rl1sF2S2PWppjBiu5J9+JmGDOm1RnydZreo9dRzYaRSZUh6SPjEetuyKk9M4Bleo6LOC
+         UE9C86argGpg9lGkVhBTmOCxNFFEDQVYS24fVdnwSbS6k27v9Tv+nj9XKD/mrlVPVjrG
+         2k5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=v4eR9AXPwjo/zAdPH0W9i5VXZlciyXu7tlzn2PkmNlo=;
-        b=kOo/xqGFiLqv4LnPZxKVdTDHm+5IsWLbfUgV1c0NGrInDZrpqtiXwvFT17nxhMs3SB
-         zxwqlvoLHiK2C/s25MZsF9pHYCW/Uma8EeQ9b9RF9SEq9VUf+ezZkP03xXUkj9M8iUqA
-         jAYOfw7jGpQzJkNLStdKQHTVcLMLs19F7bVUDfdvZzjCab3VZu4LWTswzwSYISWGZbM2
-         5WMeJ9veSZ1Z0wmiIU4TpHgBws5GQRnr+a8uyFqkFky2+gZ3oRoxagyS5NrvMRPhwCm9
-         LHJ0YUyDhWc7XMhiFVVFX9nsz0LHDM4rcqAkvKlz3Ftz/dUlpMWPxd0H4ZD7VbarNabg
-         4b4g==
-X-Gm-Message-State: APjAAAVRu5h5HEft1BR+3ok/x4cWjOo+gDPTKYIJWLE5ypaTcX5y8aM+
-        iDIRQxT7nvtgOt9hL1BM5NJXTA==
-X-Google-Smtp-Source: APXvYqytCGVa6TSkemWu035kjrMYHG1cSAgUCikYwU3GzSa5RuBGSVErlcyrkGRZIwsO5Zdn9IXH0Q==
-X-Received: by 2002:a17:902:7892:: with SMTP id q18mr2539141pll.163.1553302797278;
-        Fri, 22 Mar 2019 17:59:57 -0700 (PDT)
-Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
-        by smtp.gmail.com with ESMTPSA id e2sm14331831pfa.64.2019.03.22.17.59.56
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 22 Mar 2019 17:59:56 -0700 (PDT)
-Date:   Fri, 22 Mar 2019 17:59:55 -0700
-From:   Stanislav Fomichev <sdf@fomichev.me>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     ast@kernel.org, sdf@google.com, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH bpf v2 0/2] libbpf fix up and clarify version info
-Message-ID: <20190323005955.GX7431@mini-arch.hsd1.ca.comcast.net>
-References: <20190323004911.604-1-daniel@iogearbox.net>
+        bh=qvwdtIA+pQCMq9atQt7nUwd1SQz7RGMjmH14hBR6014=;
+        b=GPeJwZ0JTVnK0HezzeoUzbtY2jQYud8TRR+L/tE4WJlgaiDRpdEmnyP1vDBYXdito9
+         IpxaESly67p4XDSmlW1S2gudSLEW5YTeA+LqOrOLKoY16dtMnXJKYOYj3DptTkcI1wjc
+         r7Gj6l6NUTFfN3NIpRbzPwNZgs3TxTRKmnnYcyNUE/52ilV7eCnUhkn90id+oKnJ7yRG
+         PpQNicy4Xwsv51e7FZjwpUFsSl+EjT2ftav6fOamo3fhPLsknZ0mvmUw+6PM2UDfyL4Y
+         jKp6Lk34mMARExFW/5/o9/+jYLNe4nNOBCS8yOtst/jiouCdFoWqqMDxsrw5FzRKUP8k
+         dJTw==
+X-Gm-Message-State: APjAAAWHQ1iVl6gBICxFgqTdam9eF69gtm4mVt4ZUNdHm1rf5w2yPoOE
+        SYOG5hFtgD1FmqO051ELh0A=
+X-Google-Smtp-Source: APXvYqzht0FYyN4xvvfuOFryMCZxhpgC3Vyo2/9OVEcDrN/46UD95tzxZV82YVRvQ3QZEuQ99zAgJA==
+X-Received: by 2002:a63:31ce:: with SMTP id x197mr11848962pgx.69.1553302852982;
+        Fri, 22 Mar 2019 18:00:52 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:200::e4e7])
+        by smtp.gmail.com with ESMTPSA id h3sm17092638pfb.31.2019.03.22.18.00.51
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 22 Mar 2019 18:00:52 -0700 (PDT)
+Date:   Fri, 22 Mar 2019 18:00:50 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
+        ast@kernel.org, daniel@iogearbox.net, simon.horman@netronome.com,
+        willemb@google.com, peterpenkov96@gmail.com
+Subject: Re: [RFC bpf-next v3 6/8] flow_dissector: handle no-skb use case
+Message-ID: <20190323010049.dbywat3n6kfelwth@ast-mbp.dhcp.thefacebook.com>
+References: <20190322195903.162516-1-sdf@google.com>
+ <20190322195903.162516-7-sdf@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190323004911.604-1-daniel@iogearbox.net>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <20190322195903.162516-7-sdf@google.com>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 03/23, Daniel Borkmann wrote:
-> First one is fixing version in Makefile and shared object and
-> second one clarifies bump in version. Thanks!
+On Fri, Mar 22, 2019 at 12:59:01PM -0700, Stanislav Fomichev wrote:
+> When called without skb, gather all required data from the
+> __skb_flow_dissect's arguments and use recently introduces
+> no-skb mode of bpf flow dissector.
 > 
-> v1 -> v2:
->   - Fix up soname, thanks Stanislav!
-LGTM, thank you for a quick fix! For the whole series:
+> Note: WARN_ON_ONCE(!net) will now trigger for eth_get_headlen users.
+> 
+> Signed-off-by: Stanislav Fomichev <sdf@google.com>
+> +			struct bpf_flow_keys flow_keys;
+> +			struct bpf_flow_dissector ctx = {
+> +				.flow_keys = &flow_keys,
+> +				.data = data,
+> +				.data_end = data + hlen,
+> +				.protocol = proto,
+> +			};
+> +
+> +			if (skb) {
+> +				ctx.skb = skb;
+> +				ctx.protocol = skb->protocol;
+> +				ctx.vlan_tci = skb->vlan_tci;
+> +				ctx.vlan_proto = skb->vlan_proto;
+> +				ctx.vlan_present = skb->vlan_present;
+> +			}
 
-Reviewed-by: Stanislav Fomichev <sdf@google.com>
+are you suggesting to have vlan* fields that only work properly for skb case?
+It means that progs/bpf_flow.c would not work as-is for eth_get_headlen.
+And to have unified program that works in both cases the program would need to rely
+on above internal implementation detail, like checking that ctx->protocol == 0 ?
+imo that is worse than having two different flow dissector program types.
 
-> 
-> Daniel Borkmann (2):
->   bpf, libbpf: fix version info and add it to shared object
->   bpf, libbpf: clarify bump in libbpf version info
-> 
->  tools/lib/bpf/Makefile   | 42 ++++++++++++++++++++++++++++--------------
->  tools/lib/bpf/README.rst |  1 +
->  2 files changed, 29 insertions(+), 14 deletions(-)
-> 
-> -- 
-> 2.9.5
-> 
+May be remove protocol and vlan* from ctx ?
+Then the only thing program can do is look at the packet data which is
+eth_get_headlen use case. For skb case the existence of vlan can be retrofitted into
+dissector results by the kernel after the program finished.
+
