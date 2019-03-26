@@ -2,138 +2,272 @@ Return-Path: <SRS0=dSBe=R5=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B306BC43381
-	for <bpf@archiver.kernel.org>; Tue, 26 Mar 2019 17:52:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E06FC43381
+	for <bpf@archiver.kernel.org>; Tue, 26 Mar 2019 18:06:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7D782206DF
-	for <bpf@archiver.kernel.org>; Tue, 26 Mar 2019 17:52:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E4E512082F
+	for <bpf@archiver.kernel.org>; Tue, 26 Mar 2019 18:06:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S0WrYjeH"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="rt4za1jL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727492AbfCZRwG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Mar 2019 13:52:06 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:37253 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726266AbfCZRwG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Mar 2019 13:52:06 -0400
-Received: by mail-ed1-f68.google.com with SMTP id v21so11580710edq.4;
-        Tue, 26 Mar 2019 10:52:04 -0700 (PDT)
+        id S1727492AbfCZSGg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Mar 2019 14:06:36 -0400
+Received: from mail-wr1-f41.google.com ([209.85.221.41]:40130 "EHLO
+        mail-wr1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732369AbfCZSGf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 Mar 2019 14:06:35 -0400
+Received: by mail-wr1-f41.google.com with SMTP id t5so15435081wri.7
+        for <bpf@vger.kernel.org>; Tue, 26 Mar 2019 11:06:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gmr5wpCD1eis4bGfIB+7WzDaH6mvbD8ZehNIQUcbOrI=;
-        b=S0WrYjeHhO5CKptaMoao0AfjeVaeK7h+NHSnP6Mt60Q4JkI3w25cyfYo0zd3qusQDr
-         330bVP6MqkB+2mE32SqHvcAnn3SvFmEja88FUoSNSz4Xrj9z37hsvtgDv7vBEM1Bmf+z
-         ofsbScEvM+FAkhaAIpz+BylU63Hk/G7AfPlYADXDK8ln+bXtTU1kOhGZzjhExx+LNkgp
-         TBUWBtrnvjXDCWalIKIRzG/3i5wqYoYNzB64vsOaCv82xDIBFN7sCU10/TNbyoClhhS3
-         Vm8LxVJR7VPoCW6cnZQ/Jd3RT53wp+HVl/RwlUk7QpNpP2B+/WPFlKs61w/vEYeB5lON
-         wvlg==
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IOikUeECF/r7GX29Pc2+VvZqIYMcB9McX9L7DZ5QQrE=;
+        b=rt4za1jLk6ISzW/ToMTCyXeVpR+EF19GmKPTkV8qcRQZHFE5Cjjzc5PcTzy4Ejh2lQ
+         oAD14y8iRCfl1O3onWJxTt70J1qC3MFqvJQMKnEr0AS24iAJwdWL8U6iEueoQXR/6ASq
+         poqgpLeDtCpX57nBuzGQwhtJvk5y61Lbjhl7Eju+BIcEcsXInHzQ7kLtWWTfoXazCJfA
+         /2Z9pXU3i5v5Q2le/oJJhYHQ2NWK6/YVFy//KTOl+/L/VjppRf8JRJtI/D3TPCY4oKzb
+         ho7Le4trGgKFcwWx6OTZgorL7yPDtzewmHUXNonU1+2ovLa8WFaLQ3iKFLP7gn5FrOe8
+         X9KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gmr5wpCD1eis4bGfIB+7WzDaH6mvbD8ZehNIQUcbOrI=;
-        b=KU5u7FmILHbaXn1xUmQutqXPm6sjFwkGGE3tnEd3nsvyYUl5vnSkKwPdC7qStPFMg4
-         mjgGMQkAtrausGSAWWETVS+yFt09xiTpE3kDOOeEQFlYijJhaD4pH3U3KBxAuUDG62uX
-         F0BuEUSsSHHeSjkSz2AU3eyLtZJgBdUGGJ/T1o1+50FB9v/bo3mmYAKpZrRg9gWCDsNN
-         xCng89GiE3h93tKehGAEnPCyVi2mZSE6KFTl6X4uaMA7DX7rHrWlDm/XG9SJlq1U54aF
-         rpJxpYqmK0BhKIIALczIQTbaDja7uhH2e62K4mch7/8ggt+oUIzRjuu562VAGYygSHMn
-         9kcg==
-X-Gm-Message-State: APjAAAX96d4xmVW5x/FyLL76ESIuYZWrdjI2gjaljr3P0mIKRAVKnimV
-        qspAOr4rq0FAHUproj7i/kyIsjiZQmVO4zQ/4s0=
-X-Google-Smtp-Source: APXvYqzA/HCVD5htkh5ciZ6uLV65mB2K35WXQAcgw6kdalSuTkVO1rn+yrHYkDa5pZWeMXh6ryafw5cD9iFgthkhi3Y=
-X-Received: by 2002:a50:f5f8:: with SMTP id x53mr21800929edm.2.1553622723905;
- Tue, 26 Mar 2019 10:52:03 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IOikUeECF/r7GX29Pc2+VvZqIYMcB9McX9L7DZ5QQrE=;
+        b=GGNDv5pT3/KBHvZQQcAjfIPhL1TIhMeE1QX6EWE3ClMeGYGI59RSgda0zBWnseqlUe
+         HVQdf4k6iSYh1LkL/79BEqfbSbfqkJNqNIVjCMd/Dwh/qUeBpoixLTZOZZbMnTVXUGOp
+         tyLkCF5w2/CDEhHFNSBqq8SGTPVj9FqLsF1B/bqtfvLGIKRS/Mf9vDwZyZKaIx376HYE
+         m9dMCGCEsyCDCUk2FnryU5YzHriNTAdLp7lWzGkuESmtXAWc6tdh64aDAH790MtUxsKP
+         njElHcHvF6m+lmcrAdw2EZU4w427VMlq8vYhzoYXCUHl3AL2r/o5ntSkgy0gM8ck9v8y
+         5n1g==
+X-Gm-Message-State: APjAAAWIMdaxmoWdvCErLJqSOGTQM4eWkKdLt+meD4n4OoinyQ+5ihO1
+        /GMp1bcerkrjuIl4r2NuCSm2VQ==
+X-Google-Smtp-Source: APXvYqwZDbKYIhXbA6xhvoeUwb4w8EIXRYupKmI9glHw3FBeLy1TLjdF3T7VtlhHOMaE00VVvitvRA==
+X-Received: by 2002:adf:e4c2:: with SMTP id v2mr17110758wrm.124.1553623593430;
+        Tue, 26 Mar 2019 11:06:33 -0700 (PDT)
+Received: from cbtest28.netronome.com ([217.38.71.146])
+        by smtp.gmail.com with ESMTPSA id i28sm36697534wrc.32.2019.03.26.11.06.32
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Tue, 26 Mar 2019 11:06:32 -0700 (PDT)
+From:   Jiong Wang <jiong.wang@netronome.com>
+To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        oss-drivers@netronome.com, Jiong Wang <jiong.wang@netronome.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Paul Burton <paul.burton@mips.com>,
+        Wang YanQing <udknight@gmail.com>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Shubham Bansal <illusionist.neo@gmail.com>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>
+Subject: [PATCH/RFC bpf-next 00/16] bpf: eliminate zero extensions for sub-register writes
+Date:   Tue, 26 Mar 2019 18:05:23 +0000
+Message-Id: <1553623539-15474-1-git-send-email-jiong.wang@netronome.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20190322195903.162516-1-sdf@google.com> <20190322195903.162516-7-sdf@google.com>
- <20190323010049.dbywat3n6kfelwth@ast-mbp.dhcp.thefacebook.com>
- <20190323011957.GY7431@mini-arch.hsd1.ca.comcast.net> <20190323014101.mxeey4tw3gt7o4yi@ast-mbp.dhcp.thefacebook.com>
- <20190323160531.GZ7431@mini-arch.hsd1.ca.comcast.net> <20190326003517.fuqb4mqsbqq4mtk5@ast-mbp>
- <20190326164529.GB7431@mini-arch.hsd1.ca.comcast.net> <20190326174802.jnhvtdephykfj6ku@ast-mbp>
-In-Reply-To: <20190326174802.jnhvtdephykfj6ku@ast-mbp>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Tue, 26 Mar 2019 13:51:27 -0400
-Message-ID: <CAF=yD-KzG1E0kL3s4TfYX+T8Bc3VeZw9siKK8iDHAN1uyYDyLA@mail.gmail.com>
-Subject: Re: [RFC bpf-next v3 6/8] flow_dissector: handle no-skb use case
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Stanislav Fomichev <sdf@fomichev.me>,
-        Stanislav Fomichev <sdf@google.com>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf@vger.kernel.org, David Miller <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        simon.horman@netronome.com, Willem de Bruijn <willemb@google.com>,
-        Petar Penkov <peterpenkov96@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 26, 2019 at 1:48 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Mar 26, 2019 at 09:45:29AM -0700, Stanislav Fomichev wrote:
-> > On 03/25, Alexei Starovoitov wrote:
-> > > On Sat, Mar 23, 2019 at 09:05:31AM -0700, Stanislav Fomichev wrote:
-> > > > On 03/22, Alexei Starovoitov wrote:
-> > > > > On Fri, Mar 22, 2019 at 06:19:57PM -0700, Stanislav Fomichev wrote:
-> > > > > > Are we ok with breaking api in this case? I'm all in on removing this
-> > > > > > extra information. We can always put it back if somebody complains (and
-> > > > > > manually parse in eth_get_headlen case).
-> > > > >
-> > > > > Fine. That seems to be the only way forward to clean it all up.
-> > > > > Could you submit patch 1 to bpf tree disallowing vlan fields?
-> > > > > Patch 3 looks like candidate as well?
-> > > > SGTM, will do. Let me also spend some time and do a simple test for
-> > > > the vlan case, to make sure I didn't miss something important.
-> > > > One question here though: would I need to wait for bpf and bpf-next
-> > > > to re-merge to continues the series? Or we can cherry-pick those
-> > > > patches to bpf-next as well (and git will work it out during the
-> > > > merge)?
-> > > >
-> > > > > > We can still have protocol, because in both skb/skb-less cases we have
-> > > > > > it.
-> > > > >
-> > > > > proto can work in both cases, but is it needed ? Does program benefit from it?
-> > > > > The kernel side burns extra bytes by copying it and extra branches to handle it.
-> > > > > May be drop it as well?
-> > > > I feel like the program benefits from it, there is no need to go back and
-> > > > re-parse that (and in the skb case, this data is already pulled). I was
-> > > > also thinking about re-purposing flow_keys->n_proto for that (instead
-> > > > of skb->protocol), so it functions as input and output, maybe that's a
-> > > > more clear way to do it.
-> > >
-> > > Are you saying that skb-less and skb flow dissector progs are looking
-> > > at different positions into the packet ?
-> > No, sorry for confusion, they are both called to parse (optional) L2-vlan
-> > and L3+ headers. However, with-skb case can be called with l2-vlan
-> > parsed (post RFS) or with l2-vlan unparsed (RFS). The vlan is pulled in
-> > __netif_receive_skb_core, but we can still invoke flow dissector prior to
-> > that when doing RFS (get_rps_cpu).
-> >
-> > That's why have this 'if skb->vlan_present' check in the bpf_flow.c program
-> > (and then also manually test for ETH_P_8021Q/ETH_P_8021AD).
-> >
-> > Let me try to post the patches to bpf tree somewhere this week, we
-> > can discuss the API changes there.
->
-> let's figure out what we disable for bpf/stable first.
-> Sound like skb->protocol isn't helping.
-> prog has to read it from eth header anyway. then let's drop it from ctx?
+eBPF ISA specification requires high 32-bit cleared when low 32-bit
+sub-register is written. This applies to destination register of
+ALU32/LD_H/B/W etc. JIT back-ends must guarantee this semantic when doing
+code-gen.
 
-The C flow dissector does not parse link layer headers It starts with
-proto either given as argument or derived from skb->protocol (or
-skb->vlan_proto).
+x86-64 and arm64 ISA has the same semantics, so the corresponding JIT
+back-end doesn't need to do extra work. However, 32-bit arches (arm, nfp
+etc.) and some other 64-bit arches (powerpc, sparc etc), need explicitly
+zero extension sequence to meet such semantic.
 
-The BPF flow dissector should work the same. It is fine to pass the
-data including ethernet header, but parsing can start at nhoff with
-proto explicitly passed.
+This is important, because for C code like the following:
 
-We should not assume Ethernet link layer.
+  u64_value = (u64) u32_value
+  ... other uses of u64_value
+
+compiler could exploit the semantic described above and save those zero
+extensions for extending u32_value to u64_value. Hardware, runtime, or BPF
+JIT back-ends, are responsible for guaranteeing this. Some benchmarks shows
+~40% sub-register writes out of total insns, meaning ~40% extra code-gen
+and could go up for arches requiring two shifts for zero extension. All
+these are because JIT back-end needs to do extra code-gen for all such
+instructions, always.
+
+However this is not always necessary in case u32 value is never cast into a
+u64, which is quite normal in real life program. So, it would be really
+good if we could identify those places where such type cast happened, and
+only do zero extensions for them, not for the others. This could save a lot
+of BPF code-gen.
+
+Algo
+====
+We could use insn scan based static analysis to tell whether one
+sub-register def doesn't need zero extension. However, using such static
+analysis, we must do conservative assumption at branching point where
+multiple uses could be introduced. So, for any sub-register def that is
+active at branching point, we need to mark it as needing zero extension.
+This could introducing quite a few false alarms, for example ~25% on
+Cilium bpf_lxc.
+
+It will be far better to use dynamic data-flow tracing which verifier
+fortunately already has and could be easily extend to serve the purpose of
+this patch set.
+
+ - Record indices of instructions that do sub-register def (write). And
+   these indices need to stay with function state so path pruning and bpf
+   to bpf function call could be handled properly.
+
+   These indices are kept up to date while doing insn walk.
+
+ - A full register read on an active sub-register def marks the def insn as
+   needing zero extension on dst register.
+
+ - A new sub-register write overrides the old one.
+
+   A new full register write makes the register free of zero extension on
+   dst register.
+
+ - When propagating register read64 during path pruning, it also marks def
+   insns whose defs are hanging active sub-register, if there is any read64
+   from shown from the equal state.
+
+ The core patch in this set is patch 4.
+
+Benchmark
+=========
+ - I estimate the JITed image could be 25% smaller on average on all these
+   affected arches (nfp, arm, x32, risv, ppc, sparc, s390).
+
+ - The implementation is based on existing register read liveness tracking
+   infrastructure, so it is dynamic tracking and would trace all possible
+   code paths, therefore, it shouldn't be any false alarm.
+
+   For Cilium bpf_lxc, there is ~11500 insns in the compiled binary (use
+   latest LLVM snapshot, and with -mcpu=v3 -mattr=+alu32 enabled), 4460 of
+   them has sub-register writes (~40%). Calculated by:
+
+    cat dump | grep -P "\tw" | wc -l       (ALU32)
+    cat dump | grep -P "r.*=.*u32" | wc -l (READ_W)
+    cat dump | grep -P "r.*=.*u16" | wc -l (READ_H)
+    cat dump | grep -P "r.*=.*u8" | wc -l  (READ_B)
+
+   After this patch set enabled, 647 out of those 4460 are identified as
+   really needing zero extension on the destination, then it is safe for
+   JIT back-ends to eliminate zero extension for all the other instructions
+   which is ~85% of all those sub-register write insns or 33% of total
+   insns. It is a significant save.
+
+   For those 647 insns marked as needing zero extension, part of them are
+   setting up u64 parameters for help calls, remaining ones are those whose
+   sub-register defs really have 64-bit reads.
+
+Tetsting
+========
+A couple of unit tests have been added including cases for path pruning
+etc. It would be great if any affected host arch could apply this patch set
+then test bpf selftest under sub-register code-gen mode, test_progs which
+contains quite a few C programs will be a very good coverage.
+
+ToDo
+====
+ - eBPF doesn't have zero extension instruction, so lshift and rshift are
+   used to do it, meaning two native insns while JIT back-ends could just
+   use one truncate insn if they understand the lshift + rshift is just
+   doing zero extension.
+
+   There are three approaches to fix this:
+
+     - Minor change on back-end JIT hook, also pass aux_insn information to
+       back-ends so they could have per insn information and they could do
+       zero extension for the marked insn themselves using the most
+       efficient native insn.
+
+    - Introduce zero extension insn for eBPF. Then verifier could insert
+      the new zext insn instead of lshift + rshift. zext could be JITed
+      more efficiently.
+
+      NOTE: existing MOV64 can't be used as zero extension insn, because
+            after zext optimization enabled, MOV64 doesn't necessarily
+            clear high 32-bit.
+
+    - Otherwise JIT back-ends need to do peephole to catch lshift + rshift
+      and turn them into native zext.
+
+ - In this set, for JIT back-ends except NFP, I have only enabled the
+   optimization for ALU32 instructions, while it could be easily enabled
+   for load instruction. I could do a follow up patch set for this.
+
+Reviews
+=======
+ - Fixed the missing handling on callee-saved for bpf-to-bpf call,
+   sub-register defs therefore moved to frame state. (Jakub Kicinski)
+ - Removed redundant "cross_reg". (Jakub Kicinski)
+ - Various coding styles & grammar fixes. (Jakub Kicinski, Quentin Monnet)
+
+Cc: David S. Miller <davem@davemloft.net>
+Cc: Paul Burton <paul.burton@mips.com>
+Cc: Wang YanQing <udknight@gmail.com>
+Cc: Zi Shen Lim <zlim.lnx@gmail.com>
+Cc: Shubham Bansal <illusionist.neo@gmail.com>
+Cc: Naveen N. Rao <naveen.n.rao@linux.ibm.com>
+Cc: Sandipan Das <sandipan@linux.ibm.com>
+Cc: Martin Schwidefsky <schwidefsky@de.ibm.com>
+Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
+Cc: Jakub Kicinski <jakub.kicinski@netronome.com>
+
+Jiong Wang (16):
+  bpf: turn "enum bpf_reg_liveness" into bit representation
+  bpf: refactor propagate_live implementation
+  bpf: split read liveness into REG_LIVE_READ64 and REG_LIVE_READ32
+  bpf: mark sub-register writes that really need zero extension to high
+    bits
+  bpf: reduce false alarm by refining "enum bpf_arg_type"
+  bpf: new sysctl "bpf_jit_32bit_opt"
+  bpf: insert explicit zero extension instructions when
+    bpf_jit_32bit_opt is true
+  arm: bpf: eliminate zero extension code-gen
+  powerpc: bpf: eliminate zero extension code-gen
+  s390: bpf: eliminate zero extension code-gen
+  sparc: bpf: eliminate zero extension code-gen
+  x32: bpf: eliminate zero extension code-gen
+  riscv: bpf: eliminate zero extension code-gen
+  nfp: bpf: eliminate zero extension code-gen
+  selftests: bpf: new field "xlated_insns" for insn scan test after
+    verification
+  selftests: bpf: unit testcases for zero extension insertion pass
+
+ Documentation/sysctl/net.txt                      |  15 +
+ arch/arm/net/bpf_jit_32.c                         |  22 +-
+ arch/powerpc/net/bpf_jit_comp64.c                 |   7 +-
+ arch/riscv/net/bpf_jit_comp.c                     |  32 +-
+ arch/s390/net/bpf_jit_comp.c                      |  13 +-
+ arch/sparc/net/bpf_jit_comp_64.c                  |   8 +-
+ arch/x86/net/bpf_jit_comp32.c                     |  32 +-
+ drivers/net/ethernet/netronome/nfp/bpf/jit.c      | 119 ++--
+ drivers/net/ethernet/netronome/nfp/bpf/main.h     |   2 +
+ drivers/net/ethernet/netronome/nfp/bpf/verifier.c |  12 +
+ include/linux/bpf.h                               |   4 +
+ include/linux/bpf_verifier.h                      |  23 +-
+ include/linux/filter.h                            |   2 +
+ kernel/bpf/core.c                                 |  18 +-
+ kernel/bpf/helpers.c                              |   2 +-
+ kernel/bpf/verifier.c                             | 216 +++++--
+ net/core/filter.c                                 |  28 +-
+ net/core/sysctl_net_core.c                        |   9 +
+ tools/testing/selftests/bpf/test_verifier.c       | 220 +++++++-
+ tools/testing/selftests/bpf/verifier/zext.c       | 651 ++++++++++++++++++++++
+ 20 files changed, 1286 insertions(+), 149 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/verifier/zext.c
+
+-- 
+2.7.4
+
