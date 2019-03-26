@@ -7,59 +7,59 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F5E4C10F06
-	for <bpf@archiver.kernel.org>; Tue, 26 Mar 2019 18:06:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F04A0C4360F
+	for <bpf@archiver.kernel.org>; Tue, 26 Mar 2019 18:06:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6911C20879
-	for <bpf@archiver.kernel.org>; Tue, 26 Mar 2019 18:06:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD1B42082F
+	for <bpf@archiver.kernel.org>; Tue, 26 Mar 2019 18:06:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="ZJNiYvf2"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="qCQ/JbIE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732369AbfCZSGg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Mar 2019 14:06:36 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:42014 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732399AbfCZSGg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Mar 2019 14:06:36 -0400
-Received: by mail-wr1-f65.google.com with SMTP id g3so12006696wrx.9
-        for <bpf@vger.kernel.org>; Tue, 26 Mar 2019 11:06:35 -0700 (PDT)
+        id S1732465AbfCZSGl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Mar 2019 14:06:41 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:42023 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732451AbfCZSGj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 Mar 2019 14:06:39 -0400
+Received: by mail-wr1-f68.google.com with SMTP id g3so12006891wrx.9
+        for <bpf@vger.kernel.org>; Tue, 26 Mar 2019 11:06:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=3a0ZAIs1IZIaNNbJanNqmr2UjvxD3jEqVyi+mpSkwGo=;
-        b=ZJNiYvf2Ytac3mXImIE87YhLmTGm0qrNlAGW74a9VVoh0wTwQoZPAh9SdE2wGyXXcQ
-         FEnStWSfJOxudcuLk4W/Tu46vaSB/CjD5Y5E74AJ7PIWdouSiaB1ZDDBMnNjcn54MT8E
-         55Tz95cR2Q424eaFUEFlup1r71XHcWYi66ttbbWcjuk4rZJHWpzEBrfJJLwztdMJRnvd
-         xAm6DCQRVQdFJNku8GF0VyeKzufDEg6kl0kLvxjWwTgdVLzaY+B7uuG223/q5AULzKgk
-         JBQuCwDm4bSHxmqUwz+TG8YAaG+X/+w/nONoXyFVM3OSsSWwT0TRtfq2E7tRuARxF607
-         rlmA==
+        bh=9WXitAHkulex430Kpiw9BHjYykl0TxdU8tfkPsWWgwE=;
+        b=qCQ/JbIEAvdU3/+D53teuOGKBWdAnKKyxoKNFO9ksD6Ii5XjwD5aMrytX2He0di1Rf
+         flCgUWClRCfOHSOmdR0itbKnHO8uis7neFNnGUAX6Qil+4GcuL7gY3dyYA7qpT5EbI65
+         rhCVpyNEEZeOGzO4NRjRsGIK9LJR1s2IYZU9oG3fQKHp+NVwjv1KzaWALYP1WaHm9dKf
+         bQLVnAkTtx/j8qavFRGuh/KntX8xV/yFliC9kyzR2yhAR/iK2yYIgHFRXWUn7ZrmdLEP
+         RY91imhTd1YK7mCJZFin7T/XABGqYx4eLWszhCGMlj1gWYOfc+NXz5nnNb6u/9Mglxpr
+         X20Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=3a0ZAIs1IZIaNNbJanNqmr2UjvxD3jEqVyi+mpSkwGo=;
-        b=KyUTIksf7TLw3UD1Fx+gBFtupc4TWofbCHhbqGyJlbmQlr1KXVpMIrjJWM3DrL8XGK
-         50qNAHs5wYkc7iX8xx9qRUSsRfpYjx85XjxiVb+egOxTdO5CIJuuPES/xE3XLQOnEvuR
-         ZlT3lc7XCocvgGmyJR1hw8oXfS43EmmBydfw3FyRMHC4t0mWTJzY77Odb2AHl99oG9EW
-         +Ue/36Ptipn/JPiFd0fkZmW+mJXTkReXHYv91MNwIQbwK/Bid99PmK7RrjZ/aY8e2vzF
-         /UchmcaIhMvtzFF6cSE+zTHheGvV94tF2iPhZgvNbPlzC7Z0Oy9UwzW31rgxbCxTvuZ0
-         N5CA==
-X-Gm-Message-State: APjAAAVdWTzJBFmCNeRZ63TTUuGjUvKamn6oveN0ns+EHE2f4LGlq8Ro
-        TvoAS7KjhQi4YyR+ieLZGWcZZUaqE9s=
-X-Google-Smtp-Source: APXvYqziSCtK0ryQY3PEKB6zX+OpEJZ+76wlReV8ZBova0k9UVj/uYPqHLqdi7+4tfSEG7DXVlVU+g==
-X-Received: by 2002:a5d:638d:: with SMTP id p13mr20001816wru.202.1553623595017;
-        Tue, 26 Mar 2019 11:06:35 -0700 (PDT)
+        bh=9WXitAHkulex430Kpiw9BHjYykl0TxdU8tfkPsWWgwE=;
+        b=ZK2nzSr5IRnK2Vm4g8ljsbvN26/VHkmypsPrptgjDoCxA44TRb3yl/Xp9Ty0fwBb8F
+         1sOKHJGJdm7F89eUtWEfYtBDHFHVOf5fwzbiRJfMMjfSQx+M+e53XK4cEmlWI5eL8RxC
+         bjDRgFNYulLla4HQzLixGNqvdbHQZgdpi2lK9GkxxSDnzFx4Tg6dUgWUYHt3ilVSzxRk
+         iewCHSgKxvjM3sTlHYJDi2zreUrCf+dEtIMLHd940Mdico3t4nV8vhHqkdkzlL/VPlhp
+         tQvg4M1NqV/dg81x4ZyVky4xoYWtbgZuLdRd5r500h3tb1mzINZXCx2vwLYV1S8dKHLH
+         yh9g==
+X-Gm-Message-State: APjAAAU1vvXGHKm0eBRNYCVidkuM7HPIV92GaUicCG7iWoQBXMp56xFS
+        vrEH4mYiRUWiCwM7taUtJtHdMQ==
+X-Google-Smtp-Source: APXvYqxUFmAnnGo5W0ha/TISBlXiZBH5Odotvyo2sIMLnQCV2JBlPq25kOzmcKHspWctr9p0GucbAg==
+X-Received: by 2002:adf:f1cc:: with SMTP id z12mr20443656wro.180.1553623597905;
+        Tue, 26 Mar 2019 11:06:37 -0700 (PDT)
 Received: from cbtest28.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id i28sm36697534wrc.32.2019.03.26.11.06.33
+        by smtp.gmail.com with ESMTPSA id i28sm36697534wrc.32.2019.03.26.11.06.36
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 26 Mar 2019 11:06:33 -0700 (PDT)
+        Tue, 26 Mar 2019 11:06:37 -0700 (PDT)
 From:   Jiong Wang <jiong.wang@netronome.com>
 To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         oss-drivers@netronome.com, Jiong Wang <jiong.wang@netronome.com>
-Subject: [PATCH/RFC bpf-next 01/16] bpf: turn "enum bpf_reg_liveness" into bit representation
-Date:   Tue, 26 Mar 2019 18:05:24 +0000
-Message-Id: <1553623539-15474-2-git-send-email-jiong.wang@netronome.com>
+Subject: [PATCH/RFC bpf-next 03/16] bpf: split read liveness into REG_LIVE_READ64 and REG_LIVE_READ32
+Date:   Tue, 26 Mar 2019 18:05:26 +0000
+Message-Id: <1553623539-15474-4-git-send-email-jiong.wang@netronome.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1553623539-15474-1-git-send-email-jiong.wang@netronome.com>
 References: <1553623539-15474-1-git-send-email-jiong.wang@netronome.com>
@@ -68,78 +68,140 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-"enum bpf_reg_liveness" is actually used as bit instead of integer. For
-example:
+In previous patch, we have split register arg type for sub-register read,
+but haven't touch read liveness.
 
-        if (live & (REG_LIVE_READ | REG_LIVE_WRITTEN | REG_LIVE_DONE))
+This patch further split read liveness into REG_LIVE_READ64 and
+REG_LIVE_READ32. Liveness propagation code are updated accordingly.
 
-Using enum to represent bit is error prone, better to use explicit bit
-macros.
+After this split, customized actions could be defined when propagating full
+register read (REG_LIVE_READ64) or sub-register read (REG_LIVE_READ32).
 
 Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
 ---
- include/linux/bpf_verifier.h | 16 +++++++++-------
- kernel/bpf/verifier.c        |  5 ++---
- 2 files changed, 11 insertions(+), 10 deletions(-)
+ include/linux/bpf_verifier.h |  9 ++++++---
+ kernel/bpf/verifier.c        | 30 +++++++++++++++++++++---------
+ 2 files changed, 27 insertions(+), 12 deletions(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 7d8228d..f03c86a 100644
+index f03c86a..27761ab 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -34,12 +34,14 @@
-  * but of the link between it and its parent.  See mark_reg_read() and
-  * mark_stack_slot_read() in kernel/bpf/verifier.c.
-  */
--enum bpf_reg_liveness {
--	REG_LIVE_NONE = 0, /* reg hasn't been read or written this branch */
--	REG_LIVE_READ, /* reg was read, so we're sensitive to initial value */
--	REG_LIVE_WRITTEN, /* reg was written first, screening off later reads */
--	REG_LIVE_DONE = 4, /* liveness won't be updating this register anymore */
--};
-+/* Reg hasn't been read or written this branch. */
-+#define REG_LIVE_NONE		0x0
-+/* Reg was read, so we're sensitive to initial value. */
-+#define REG_LIVE_READ		0x1
-+/* Reg was written first, screening off later reads. */
-+#define REG_LIVE_WRITTEN	0x2
-+/* Liveness won't be updating this register anymore. */
-+#define REG_LIVE_DONE		0x4
+@@ -37,11 +37,14 @@
+ /* Reg hasn't been read or written this branch. */
+ #define REG_LIVE_NONE		0x0
+ /* Reg was read, so we're sensitive to initial value. */
+-#define REG_LIVE_READ		0x1
++#define REG_LIVE_READ32		0x1
++/* Likewise, but full 64-bit content matters. */
++#define REG_LIVE_READ64		0x2
++#define REG_LIVE_READ		(REG_LIVE_READ32 | REG_LIVE_READ64)
+ /* Reg was written first, screening off later reads. */
+-#define REG_LIVE_WRITTEN	0x2
++#define REG_LIVE_WRITTEN	0x4
+ /* Liveness won't be updating this register anymore. */
+-#define REG_LIVE_DONE		0x4
++#define REG_LIVE_DONE		0x8
  
  struct bpf_reg_state {
  	/* Ordering of fields matters.  See states_equal() */
-@@ -131,7 +133,7 @@ struct bpf_reg_state {
- 	 * pointing to bpf_func_state.
- 	 */
- 	u32 frameno;
--	enum bpf_reg_liveness live;
-+	u8 live;
- };
- 
- enum bpf_stack_slot_type {
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index dffeec3..6cc8c38 100644
+index 245bb3c..b95c438 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -407,8 +407,7 @@ static char slot_type_char[] = {
- 	[STACK_ZERO]	= '0',
- };
- 
--static void print_liveness(struct bpf_verifier_env *env,
--			   enum bpf_reg_liveness live)
-+static void print_liveness(struct bpf_verifier_env *env, u8 live)
+@@ -1126,7 +1126,7 @@ static int check_subprogs(struct bpf_verifier_env *env)
+  */
+ static int mark_reg_read(struct bpf_verifier_env *env,
+ 			 const struct bpf_reg_state *state,
+-			 struct bpf_reg_state *parent)
++			 struct bpf_reg_state *parent, bool dw_read)
  {
- 	if (live & (REG_LIVE_READ | REG_LIVE_WRITTEN | REG_LIVE_DONE))
- 	    verbose(env, "_");
-@@ -5687,8 +5686,8 @@ static bool check_ids(u32 old_id, u32 cur_id, struct idpair *idmap)
- static void clean_func_state(struct bpf_verifier_env *env,
- 			     struct bpf_func_state *st)
- {
--	enum bpf_reg_liveness live;
- 	int i, j;
-+	u8 live;
+ 	bool writes = parent == state->parent; /* Observe write marks */
  
+@@ -1141,7 +1141,7 @@ static int mark_reg_read(struct bpf_verifier_env *env,
+ 			return -EFAULT;
+ 		}
+ 		/* ... then we depend on parent's value */
+-		parent->live |= REG_LIVE_READ;
++		parent->live |= dw_read ? REG_LIVE_READ64 : REG_LIVE_READ32;
+ 		state = parent;
+ 		parent = state->parent;
+ 		writes = true;
+@@ -1170,7 +1170,7 @@ static int check_reg_arg(struct bpf_verifier_env *env, u32 regno,
+ 		/* We don't need to worry about FP liveness because it's read-only */
+ 		if (regno != BPF_REG_FP)
+ 			return mark_reg_read(env, &regs[regno],
+-					     regs[regno].parent);
++					     regs[regno].parent, true);
+ 	} else {
+ 		/* check whether register used as dest operand can be written to */
+ 		if (regno == BPF_REG_FP) {
+@@ -1357,7 +1357,7 @@ static int check_stack_read(struct bpf_verifier_env *env,
+ 			state->regs[value_regno].live |= REG_LIVE_WRITTEN;
+ 		}
+ 		mark_reg_read(env, &reg_state->stack[spi].spilled_ptr,
+-			      reg_state->stack[spi].spilled_ptr.parent);
++			      reg_state->stack[spi].spilled_ptr.parent, true);
+ 		return 0;
+ 	} else {
+ 		int zeros = 0;
+@@ -1374,7 +1374,8 @@ static int check_stack_read(struct bpf_verifier_env *env,
+ 			return -EACCES;
+ 		}
+ 		mark_reg_read(env, &reg_state->stack[spi].spilled_ptr,
+-			      reg_state->stack[spi].spilled_ptr.parent);
++			      reg_state->stack[spi].spilled_ptr.parent,
++			      size == BPF_REG_SIZE);
+ 		if (value_regno >= 0) {
+ 			if (zeros == size) {
+ 				/* any size read into register is zero extended,
+@@ -2220,7 +2221,8 @@ static int check_stack_boundary(struct bpf_verifier_env *env, int regno,
+ 		 * the whole slot to be marked as 'read'
+ 		 */
+ 		mark_reg_read(env, &state->stack[spi].spilled_ptr,
+-			      state->stack[spi].spilled_ptr.parent);
++			      state->stack[spi].spilled_ptr.parent,
++			      access_size == BPF_REG_SIZE);
+ 	}
+ 	return update_stack_depth(env, state, off);
+ }
+@@ -6059,7 +6061,7 @@ static int propagate_liveness_reg(struct bpf_verifier_env *env,
+ 	if (parent_reg->live & flag || !(reg->live & flag))
+ 		return 0;
+ 
+-	err = mark_reg_read(env, reg, parent_reg);
++	err = mark_reg_read(env, reg, parent_reg, flag == REG_LIVE_READ64);
+ 	if (err)
+ 		return err;
+ 
+@@ -6092,7 +6094,12 @@ static int propagate_liveness(struct bpf_verifier_env *env,
+ 	regs = vstate->frame[vstate->curframe]->regs;
+ 	/* We don't need to worry about FP liveness because it's read-only */
  	for (i = 0; i < BPF_REG_FP; i++) {
- 		live = st->regs[i].live;
+-		err = propagate_liveness_reg(env, &regs[i], &parent_regs[i]);
++		err = propagate_liveness_reg(env, &regs[i], &parent_regs[i],
++					     REG_LIVE_READ64);
++		if (err < 0)
++			return err;
++		err = propagate_liveness_reg(env, &regs[i], &parent_regs[i],
++					     REG_LIVE_READ32);
+ 		if (err < 0)
+ 			return err;
+ 	}
+@@ -6107,7 +6114,12 @@ static int propagate_liveness(struct bpf_verifier_env *env,
+ 
+ 			parent_reg = &parent->stack[i].spilled_ptr;
+ 			reg = &state->stack[i].spilled_ptr;
+-			err = propagate_liveness_reg(env, reg, parent_reg);
++			err = propagate_liveness_reg(env, reg, parent_reg,
++						     REG_LIVE_READ64);
++			if (err < 0)
++				return err;
++			err = propagate_liveness_reg(env, reg, parent_reg,
++						     REG_LIVE_READ32);
+ 			if (err < 0)
+ 				return err;
+ 		}
 -- 
 2.7.4
 
