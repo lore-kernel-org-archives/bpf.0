@@ -4,61 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71DBFC43381
-	for <bpf@archiver.kernel.org>; Tue, 26 Mar 2019 18:06:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E404C43381
+	for <bpf@archiver.kernel.org>; Tue, 26 Mar 2019 18:06:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 47C772082F
-	for <bpf@archiver.kernel.org>; Tue, 26 Mar 2019 18:06:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 11EAB2082F
+	for <bpf@archiver.kernel.org>; Tue, 26 Mar 2019 18:06:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="VlLzt1gw"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="k8noji8Q"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732472AbfCZSGl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Mar 2019 14:06:41 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:37164 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732399AbfCZSGi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Mar 2019 14:06:38 -0400
-Received: by mail-wm1-f66.google.com with SMTP id v14so13991795wmf.2
-        for <bpf@vger.kernel.org>; Tue, 26 Mar 2019 11:06:37 -0700 (PDT)
+        id S1732531AbfCZSGy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Mar 2019 14:06:54 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:33248 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732519AbfCZSGw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 Mar 2019 14:06:52 -0400
+Received: by mail-wm1-f65.google.com with SMTP id z6so2988379wmi.0
+        for <bpf@vger.kernel.org>; Tue, 26 Mar 2019 11:06:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=LIVt0dF8T96GyCFFdLmKckPQiAfo4lzXRZU1y+SNemA=;
-        b=VlLzt1gwAX0AzFo5X/Aj75AjSCbf1ZJ8BVJRg9x1T3FnCJ13S2FPK0BZW7ONXFCrgO
-         6uxaw2Aa2KUO1rkPunjcBQZZJoT98l2RCdqUEudOT8aBHh8Gc8Z+DXAQnSyOmh7GnPh5
-         JZy9d92ZN4uFm46qy1y85V1bMdTlEvszNGT5LTAxWdIFvRbCoLqBVVMtO0NF8LsMaXbK
-         gJYmH+9/KF03zfMv5eU9QrRpofu/1X5Q8T9/oKu7mJBAhOB8a+LbwfORDx8E/JMnTHrg
-         ngtGlJ1K6oxJ8JTgpxoPzrEkOVyMeAZmWrJz5QphvN3UJIQapLhARnc2aNeXrT+g3qzG
-         aNiQ==
+        bh=esldtJjtJ7LjAyiBdO+8AWliqTz0U0S4jG86huzM9ss=;
+        b=k8noji8QmwO/ufvcMYhtIST6ndEfDeg/HD04iJrYn9FZDz6hj4HVJVMMsuNPp/EYwV
+         S13x3XSO6sgGSsAHJnCi8wjkaj0iuHd7opdu029/3h6iuHHx97T6AslAJto3wmZNVJf/
+         XAX73wWepIyN0hUgxxajNo3iiNcBb5tzH7Zfz6tfyyIpTfOfAUySYj+U1JlFyVsqdAq1
+         c6WaO+e0LcdUsEnBoGZ9ANeEYDGQ714Hbp/OkZu1Nykm6GmarLo08dln4YdNw/qoqiGN
+         rIdRSq1ipmvSnOc0Gftef+8+p+oiojNpHKSHRi+oeAyX56nlZCNnSXbMQb7lfsHSGU/P
+         veuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=LIVt0dF8T96GyCFFdLmKckPQiAfo4lzXRZU1y+SNemA=;
-        b=KVdavAXVNUgX/SVytbQr8Lz8ksj4OiKBii4wLdXSRyq2Yx/o6ixPOPRUG4egGQZirE
-         G8NCCbuOgWKbdAjXClSf335sHigBQ+1azHPZ9GZXopZPvj1LqL4Y5O5UQVNIhaKLuo2X
-         /sBkZzjtWqtBsP1C12U3za3CiNL0qUE4x7AvNfd77ddOG02JhBX8YF1Cpsl52Of/Esvk
-         vcrjnraPM7I6dImvPBpZKULL8GIN2Zg5mgoQMdc/UK1U8RAv2O3uF4H0Fj6NkDNvstxI
-         9DG4bH2sTDUNHWiZszE6Tk5IJFawmicleykl/qMVDL0MVt/V4j6/vSa/Aw22VFfzKDiQ
-         pyOQ==
-X-Gm-Message-State: APjAAAWEmcyyS+ewYuVHmd6RR/EuJaaYEHZCC+2hKrQ7bFwKO/WTTEFU
-        ZOZUb+fSvrtZ1YwIcxpXhvDWrg==
-X-Google-Smtp-Source: APXvYqwFTHtA2OtmuDEstdgpORaj0gGh74NGh3RCSQbg57GifQsbHcGu8lfqTDzgNAg6A5glXldkCA==
-X-Received: by 2002:a1c:988d:: with SMTP id a135mr9816994wme.24.1553623596490;
-        Tue, 26 Mar 2019 11:06:36 -0700 (PDT)
+        bh=esldtJjtJ7LjAyiBdO+8AWliqTz0U0S4jG86huzM9ss=;
+        b=SG2XzsuK6Ja+tNpvP8ecoasD6ylIwW4uufxQnKGBTUkodwK2PwrNuRoQONH8sXf4MF
+         SlzK/53SXML4il7luvVCXCnA2QIYEdE8CilNuoONO5qPTwJ0uLUUJqvJnPWjdF+0lt+C
+         p39qI0HXqSZxTwKe/B/W9MSSc2jtTXP8lSjL2bcx40JMEZNtG+31iUqkYOXx3xIJdush
+         ySFBstDYkRXGfKppoEEXEs8TibQrDitac/QEQqolAx2fn9dM4A59XV451En+jDauV2e4
+         pQH8VWP3iMZF8hDv7W914XS/fzxw1KAppFUx/hI8gdwsuxo98y97tg3PX7Sz06ZI3EiD
+         S2qA==
+X-Gm-Message-State: APjAAAWS/y97ibHTbj1G3qh83A5P1JR9/B9n53BBovH29Ncw7S6/Ha95
+        jMVf27kVdJTm3Ii883Wy+uiSYQ==
+X-Google-Smtp-Source: APXvYqyEtlLHLRihOask+JJDJ+7LuYwBN2xnI3Su4W7+V+AII9DiIfRbSdHZOe1mgHAH2+BfKIjKDA==
+X-Received: by 2002:a1c:7dcc:: with SMTP id y195mr1164740wmc.13.1553623610619;
+        Tue, 26 Mar 2019 11:06:50 -0700 (PDT)
 Received: from cbtest28.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id i28sm36697534wrc.32.2019.03.26.11.06.35
+        by smtp.gmail.com with ESMTPSA id i28sm36697534wrc.32.2019.03.26.11.06.49
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 26 Mar 2019 11:06:35 -0700 (PDT)
+        Tue, 26 Mar 2019 11:06:50 -0700 (PDT)
 From:   Jiong Wang <jiong.wang@netronome.com>
 To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        oss-drivers@netronome.com, Jiong Wang <jiong.wang@netronome.com>
-Subject: [PATCH/RFC bpf-next 02/16] bpf: refactor propagate_live implementation
-Date:   Tue, 26 Mar 2019 18:05:25 +0000
-Message-Id: <1553623539-15474-3-git-send-email-jiong.wang@netronome.com>
+        oss-drivers@netronome.com, Jiong Wang <jiong.wang@netronome.com>,
+        Wang YanQing <udknight@gmail.com>
+Subject: [PATCH/RFC bpf-next 12/16] x32: bpf: eliminate zero extension code-gen
+Date:   Tue, 26 Mar 2019 18:05:35 +0000
+Message-Id: <1553623539-15474-13-git-send-email-jiong.wang@netronome.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1553623539-15474-1-git-send-email-jiong.wang@netronome.com>
 References: <1553623539-15474-1-git-send-email-jiong.wang@netronome.com>
@@ -67,99 +68,121 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Some code inside current implementation of "propagate_liveness" is a little
-bit verbose.
-
-This patch refactor them so the code looks more simple and more clear.
-
-The redundant usage of "vparent->frame[vstate->curframe]" is removed as we
-are here. It is safe to do this because "state_equal" has guaranteed that
-vstate->curframe must be equal with vparent->curframe.
-
+Cc: Wang YanQing <udknight@gmail.com>
 Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
 ---
- kernel/bpf/verifier.c | 44 ++++++++++++++++++++++++++++++--------------
- 1 file changed, 30 insertions(+), 14 deletions(-)
+ arch/x86/net/bpf_jit_comp32.c | 32 ++++++++++++++++++++++----------
+ 1 file changed, 22 insertions(+), 10 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6cc8c38..245bb3c 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6050,6 +6050,22 @@ static bool states_equal(struct bpf_verifier_env *env,
- 	return true;
+diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
+index 0d9cdff..8c6cf22 100644
+--- a/arch/x86/net/bpf_jit_comp32.c
++++ b/arch/x86/net/bpf_jit_comp32.c
+@@ -567,7 +567,7 @@ static inline void emit_ia32_alu_r(const bool is64, const bool hi, const u8 op,
+ static inline void emit_ia32_alu_r64(const bool is64, const u8 op,
+ 				     const u8 dst[], const u8 src[],
+ 				     bool dstk,  bool sstk,
+-				     u8 **pprog)
++				     u8 **pprog, const struct bpf_prog_aux *aux)
+ {
+ 	u8 *prog = *pprog;
+ 
+@@ -575,7 +575,7 @@ static inline void emit_ia32_alu_r64(const bool is64, const u8 op,
+ 	if (is64)
+ 		emit_ia32_alu_r(is64, true, op, dst_hi, src_hi, dstk, sstk,
+ 				&prog);
+-	else
++	else if (aux->no_verifier_zext)
+ 		emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
+ 	*pprog = prog;
+ }
+@@ -666,7 +666,8 @@ static inline void emit_ia32_alu_i(const bool is64, const bool hi, const u8 op,
+ /* ALU operation (64 bit) */
+ static inline void emit_ia32_alu_i64(const bool is64, const u8 op,
+ 				     const u8 dst[], const u32 val,
+-				     bool dstk, u8 **pprog)
++				     bool dstk, u8 **pprog,
++				     const struct bpf_prog_aux *aux)
+ {
+ 	u8 *prog = *pprog;
+ 	u32 hi = 0;
+@@ -677,7 +678,7 @@ static inline void emit_ia32_alu_i64(const bool is64, const u8 op,
+ 	emit_ia32_alu_i(is64, false, op, dst_lo, val, dstk, &prog);
+ 	if (is64)
+ 		emit_ia32_alu_i(is64, true, op, dst_hi, hi, dstk, &prog);
+-	else
++	else if (aux->no_verifier_zext)
+ 		emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
+ 
+ 	*pprog = prog;
+@@ -1690,11 +1691,13 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 			switch (BPF_SRC(code)) {
+ 			case BPF_X:
+ 				emit_ia32_alu_r64(is64, BPF_OP(code), dst,
+-						  src, dstk, sstk, &prog);
++						  src, dstk, sstk, &prog,
++						  bpf_prog->aux);
+ 				break;
+ 			case BPF_K:
+ 				emit_ia32_alu_i64(is64, BPF_OP(code), dst,
+-						  imm32, dstk, &prog);
++						  imm32, dstk, &prog,
++						  bpf_prog->aux);
+ 				break;
+ 			}
+ 			break;
+@@ -1713,7 +1716,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 						false, &prog);
+ 				break;
+ 			}
+-			emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
++			if (bpf_prog->aux->no_verifier_zext)
++				emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
+ 			break;
+ 		case BPF_ALU | BPF_LSH | BPF_X:
+ 		case BPF_ALU | BPF_RSH | BPF_X:
+@@ -1733,7 +1737,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 						  &prog);
+ 				break;
+ 			}
+-			emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
++			if (bpf_prog->aux->no_verifier_zext)
++				emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
+ 			break;
+ 		/* dst = dst / src(imm) */
+ 		/* dst = dst % src(imm) */
+@@ -1755,7 +1760,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 						    &prog);
+ 				break;
+ 			}
+-			emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
++			if (bpf_prog->aux->no_verifier_zext)
++				emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
+ 			break;
+ 		case BPF_ALU64 | BPF_DIV | BPF_K:
+ 		case BPF_ALU64 | BPF_DIV | BPF_X:
+@@ -1772,7 +1778,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 			EMIT2_off32(0xC7, add_1reg(0xC0, IA32_ECX), imm32);
+ 			emit_ia32_shift_r(BPF_OP(code), dst_lo, IA32_ECX, dstk,
+ 					  false, &prog);
+-			emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
++			if (bpf_prog->aux->no_verifier_zext)
++				emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
+ 			break;
+ 		/* dst = dst << imm */
+ 		case BPF_ALU64 | BPF_LSH | BPF_K:
+@@ -2367,6 +2374,11 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 	return proglen;
  }
  
-+static int propagate_liveness_reg(struct bpf_verifier_env *env,
-+				  struct bpf_reg_state *reg,
-+				  struct bpf_reg_state *parent_reg, u8 flag)
++bool bpf_jit_hardware_zext(void)
 +{
-+	int err;
-+
-+	if (parent_reg->live & flag || !(reg->live & flag))
-+		return 0;
-+
-+	err = mark_reg_read(env, reg, parent_reg);
-+	if (err)
-+		return err;
-+
-+	return 1;
++	return false;
 +}
 +
- /* A write screens off any subsequent reads; but write marks come from the
-  * straight-line code between a state and its parent.  When we arrive at an
-  * equivalent state (jump target or such) we didn't arrive by the straight-line
-@@ -6061,8 +6077,9 @@ static int propagate_liveness(struct bpf_verifier_env *env,
- 			      const struct bpf_verifier_state *vstate,
- 			      struct bpf_verifier_state *vparent)
+ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
  {
--	int i, frame, err = 0;
-+	struct bpf_reg_state *regs, *parent_regs;
- 	struct bpf_func_state *state, *parent;
-+	int i, frame, err = 0;
- 
- 	if (vparent->curframe != vstate->curframe) {
- 		WARN(1, "propagate_live: parent frame %d current frame %d\n",
-@@ -6071,16 +6088,13 @@ static int propagate_liveness(struct bpf_verifier_env *env,
- 	}
- 	/* Propagate read liveness of registers... */
- 	BUILD_BUG_ON(BPF_REG_FP + 1 != MAX_BPF_REG);
-+	parent_regs = vparent->frame[vparent->curframe]->regs;
-+	regs = vstate->frame[vstate->curframe]->regs;
- 	/* We don't need to worry about FP liveness because it's read-only */
- 	for (i = 0; i < BPF_REG_FP; i++) {
--		if (vparent->frame[vparent->curframe]->regs[i].live & REG_LIVE_READ)
--			continue;
--		if (vstate->frame[vstate->curframe]->regs[i].live & REG_LIVE_READ) {
--			err = mark_reg_read(env, &vstate->frame[vstate->curframe]->regs[i],
--					    &vparent->frame[vstate->curframe]->regs[i]);
--			if (err)
--				return err;
--		}
-+		err = propagate_liveness_reg(env, &regs[i], &parent_regs[i]);
-+		if (err < 0)
-+			return err;
- 	}
- 
- 	/* ... and stack slots */
-@@ -6089,11 +6103,13 @@ static int propagate_liveness(struct bpf_verifier_env *env,
- 		parent = vparent->frame[frame];
- 		for (i = 0; i < state->allocated_stack / BPF_REG_SIZE &&
- 			    i < parent->allocated_stack / BPF_REG_SIZE; i++) {
--			if (parent->stack[i].spilled_ptr.live & REG_LIVE_READ)
--				continue;
--			if (state->stack[i].spilled_ptr.live & REG_LIVE_READ)
--				mark_reg_read(env, &state->stack[i].spilled_ptr,
--					      &parent->stack[i].spilled_ptr);
-+			struct bpf_reg_state *parent_reg, *reg;
-+
-+			parent_reg = &parent->stack[i].spilled_ptr;
-+			reg = &state->stack[i].spilled_ptr;
-+			err = propagate_liveness_reg(env, reg, parent_reg);
-+			if (err < 0)
-+				return err;
- 		}
- 	}
- 	return err;
+ 	struct bpf_binary_header *header = NULL;
 -- 
 2.7.4
 
