@@ -2,64 +2,64 @@ Return-Path: <SRS0=dSBe=R5=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-5.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS,UNWANTED_LANGUAGE_BODY,UPPERCASE_50_75,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E404C43381
-	for <bpf@archiver.kernel.org>; Tue, 26 Mar 2019 18:06:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32273C10F05
+	for <bpf@archiver.kernel.org>; Tue, 26 Mar 2019 18:07:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 11EAB2082F
-	for <bpf@archiver.kernel.org>; Tue, 26 Mar 2019 18:06:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E838520879
+	for <bpf@archiver.kernel.org>; Tue, 26 Mar 2019 18:06:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="k8noji8Q"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="ZcnN7tAx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732531AbfCZSGy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Mar 2019 14:06:54 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:33248 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732519AbfCZSGw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Mar 2019 14:06:52 -0400
-Received: by mail-wm1-f65.google.com with SMTP id z6so2988379wmi.0
-        for <bpf@vger.kernel.org>; Tue, 26 Mar 2019 11:06:51 -0700 (PDT)
+        id S1732496AbfCZSG7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Mar 2019 14:06:59 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:50295 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732550AbfCZSG7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 Mar 2019 14:06:59 -0400
+Received: by mail-wm1-f67.google.com with SMTP id z11so13781791wmi.0
+        for <bpf@vger.kernel.org>; Tue, 26 Mar 2019 11:06:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=esldtJjtJ7LjAyiBdO+8AWliqTz0U0S4jG86huzM9ss=;
-        b=k8noji8QmwO/ufvcMYhtIST6ndEfDeg/HD04iJrYn9FZDz6hj4HVJVMMsuNPp/EYwV
-         S13x3XSO6sgGSsAHJnCi8wjkaj0iuHd7opdu029/3h6iuHHx97T6AslAJto3wmZNVJf/
-         XAX73wWepIyN0hUgxxajNo3iiNcBb5tzH7Zfz6tfyyIpTfOfAUySYj+U1JlFyVsqdAq1
-         c6WaO+e0LcdUsEnBoGZ9ANeEYDGQ714Hbp/OkZu1Nykm6GmarLo08dln4YdNw/qoqiGN
-         rIdRSq1ipmvSnOc0Gftef+8+p+oiojNpHKSHRi+oeAyX56nlZCNnSXbMQb7lfsHSGU/P
-         veuQ==
+        bh=kp55HY6x50BAaP+YPYIVdE+fL/VPUW1VOJEZqQ4aFqs=;
+        b=ZcnN7tAxMjlVKdPXCQpGxSiqdIQInrI81QG/cIUaOL/WJ0pa6XvR7kNsfebeDQgKTB
+         LZG778KBAcpjt9WEoRPCit+KrBYxQS1mo8OG6EVK/HU58eHPcfUVMukpOTtEb7WtcI+T
+         REINnCzJdCj3AkxLJKmxAsR6puPPfGcnlcj+owVOUX4LlWRRdt0IV/15IQik1mKgfjkJ
+         Rejd9kCabwbBRmo2fFW+O5MN9jtxmZvKvdjvoyUy4tIppXFvHp2CXT+181IrEik5ARWh
+         l5jz2tpej8l0f4yqtiswh/Ek/jo+MDEGiujOlWUAkh35MK/Qx9kXgxpRd9YvrjW1Ggrw
+         6TpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=esldtJjtJ7LjAyiBdO+8AWliqTz0U0S4jG86huzM9ss=;
-        b=SG2XzsuK6Ja+tNpvP8ecoasD6ylIwW4uufxQnKGBTUkodwK2PwrNuRoQONH8sXf4MF
-         SlzK/53SXML4il7luvVCXCnA2QIYEdE8CilNuoONO5qPTwJ0uLUUJqvJnPWjdF+0lt+C
-         p39qI0HXqSZxTwKe/B/W9MSSc2jtTXP8lSjL2bcx40JMEZNtG+31iUqkYOXx3xIJdush
-         ySFBstDYkRXGfKppoEEXEs8TibQrDitac/QEQqolAx2fn9dM4A59XV451En+jDauV2e4
-         pQH8VWP3iMZF8hDv7W914XS/fzxw1KAppFUx/hI8gdwsuxo98y97tg3PX7Sz06ZI3EiD
-         S2qA==
-X-Gm-Message-State: APjAAAWS/y97ibHTbj1G3qh83A5P1JR9/B9n53BBovH29Ncw7S6/Ha95
-        jMVf27kVdJTm3Ii883Wy+uiSYQ==
-X-Google-Smtp-Source: APXvYqyEtlLHLRihOask+JJDJ+7LuYwBN2xnI3Su4W7+V+AII9DiIfRbSdHZOe1mgHAH2+BfKIjKDA==
-X-Received: by 2002:a1c:7dcc:: with SMTP id y195mr1164740wmc.13.1553623610619;
-        Tue, 26 Mar 2019 11:06:50 -0700 (PDT)
+        bh=kp55HY6x50BAaP+YPYIVdE+fL/VPUW1VOJEZqQ4aFqs=;
+        b=LELn4moqsNHerlM4gtx0GXyLa2GYP2R6+MWovyxTkY9WKO24xwE8ZoPCVECuiiJZoP
+         d0vhIpGYtVDJFnh3vIQghJv6AVaE9Aopx6lMKUyujW1V8SvQ2KNFFpoZu3h8yBZAzgO6
+         h9ZF2bIxK8VDJ7sspx98N0s+fvsaGLYPS/J2yXHFUF0SH8n5CDlYxwfNh+Ppzgwq8aVb
+         3zExAKp2s2hT4nLLuu3XDVjmXfTrn6eN4G4lXWqaxft0UoMyh5y6NdoNGGNmS1RL13M7
+         /XWAYZy45zi3m+NqJGvLRdimo3LwRr5iHBAqQYVnrpUubeVqwHQHx7fx83zQhjNWEIHw
+         kWoQ==
+X-Gm-Message-State: APjAAAUFKAlDN4wN3UESk+wa5Yz+0OKRHypWr2Io8LhKVmNyYCeYbIyc
+        TWbLVAcpMkd/wE78juCmqzNr8w==
+X-Google-Smtp-Source: APXvYqwZni5uwSB+SLC96uq94/quXkUn/BW/LivoEn/7OA65xKwxE4h20LnoVLnshCl3c6UqcbIlbg==
+X-Received: by 2002:a1c:6587:: with SMTP id z129mr15351423wmb.84.1553623616367;
+        Tue, 26 Mar 2019 11:06:56 -0700 (PDT)
 Received: from cbtest28.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id i28sm36697534wrc.32.2019.03.26.11.06.49
+        by smtp.gmail.com with ESMTPSA id i28sm36697534wrc.32.2019.03.26.11.06.54
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 26 Mar 2019 11:06:50 -0700 (PDT)
+        Tue, 26 Mar 2019 11:06:55 -0700 (PDT)
 From:   Jiong Wang <jiong.wang@netronome.com>
 To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        oss-drivers@netronome.com, Jiong Wang <jiong.wang@netronome.com>,
-        Wang YanQing <udknight@gmail.com>
-Subject: [PATCH/RFC bpf-next 12/16] x32: bpf: eliminate zero extension code-gen
-Date:   Tue, 26 Mar 2019 18:05:35 +0000
-Message-Id: <1553623539-15474-13-git-send-email-jiong.wang@netronome.com>
+        oss-drivers@netronome.com, Jiong Wang <jiong.wang@netronome.com>
+Subject: [PATCH/RFC bpf-next 16/16] selftests: bpf: unit testcases for zero extension insertion pass
+Date:   Tue, 26 Mar 2019 18:05:39 +0000
+Message-Id: <1553623539-15474-17-git-send-email-jiong.wang@netronome.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1553623539-15474-1-git-send-email-jiong.wang@netronome.com>
 References: <1553623539-15474-1-git-send-email-jiong.wang@netronome.com>
@@ -68,121 +68,678 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Cc: Wang YanQing <udknight@gmail.com>
+This patch adds some unit testcases.
+
+There are a couple of code paths inside verifier doing register read/write
+marking, therefore are the places that could trigger zero extension
+insertion logic. Create one test for each of them.
+
+A couple of testcases for complex CFG also included. They cover register
+read propagation during path pruning etc.
+
 Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
 ---
- arch/x86/net/bpf_jit_comp32.c | 32 ++++++++++++++++++++++----------
- 1 file changed, 22 insertions(+), 10 deletions(-)
+ tools/testing/selftests/bpf/verifier/zext.c | 651 ++++++++++++++++++++++++++++
+ 1 file changed, 651 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/verifier/zext.c
 
-diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
-index 0d9cdff..8c6cf22 100644
---- a/arch/x86/net/bpf_jit_comp32.c
-+++ b/arch/x86/net/bpf_jit_comp32.c
-@@ -567,7 +567,7 @@ static inline void emit_ia32_alu_r(const bool is64, const bool hi, const u8 op,
- static inline void emit_ia32_alu_r64(const bool is64, const u8 op,
- 				     const u8 dst[], const u8 src[],
- 				     bool dstk,  bool sstk,
--				     u8 **pprog)
-+				     u8 **pprog, const struct bpf_prog_aux *aux)
- {
- 	u8 *prog = *pprog;
- 
-@@ -575,7 +575,7 @@ static inline void emit_ia32_alu_r64(const bool is64, const u8 op,
- 	if (is64)
- 		emit_ia32_alu_r(is64, true, op, dst_hi, src_hi, dstk, sstk,
- 				&prog);
--	else
-+	else if (aux->no_verifier_zext)
- 		emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
- 	*pprog = prog;
- }
-@@ -666,7 +666,8 @@ static inline void emit_ia32_alu_i(const bool is64, const bool hi, const u8 op,
- /* ALU operation (64 bit) */
- static inline void emit_ia32_alu_i64(const bool is64, const u8 op,
- 				     const u8 dst[], const u32 val,
--				     bool dstk, u8 **pprog)
-+				     bool dstk, u8 **pprog,
-+				     const struct bpf_prog_aux *aux)
- {
- 	u8 *prog = *pprog;
- 	u32 hi = 0;
-@@ -677,7 +678,7 @@ static inline void emit_ia32_alu_i64(const bool is64, const u8 op,
- 	emit_ia32_alu_i(is64, false, op, dst_lo, val, dstk, &prog);
- 	if (is64)
- 		emit_ia32_alu_i(is64, true, op, dst_hi, hi, dstk, &prog);
--	else
-+	else if (aux->no_verifier_zext)
- 		emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
- 
- 	*pprog = prog;
-@@ -1690,11 +1691,13 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 			switch (BPF_SRC(code)) {
- 			case BPF_X:
- 				emit_ia32_alu_r64(is64, BPF_OP(code), dst,
--						  src, dstk, sstk, &prog);
-+						  src, dstk, sstk, &prog,
-+						  bpf_prog->aux);
- 				break;
- 			case BPF_K:
- 				emit_ia32_alu_i64(is64, BPF_OP(code), dst,
--						  imm32, dstk, &prog);
-+						  imm32, dstk, &prog,
-+						  bpf_prog->aux);
- 				break;
- 			}
- 			break;
-@@ -1713,7 +1716,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 						false, &prog);
- 				break;
- 			}
--			emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
-+			if (bpf_prog->aux->no_verifier_zext)
-+				emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
- 			break;
- 		case BPF_ALU | BPF_LSH | BPF_X:
- 		case BPF_ALU | BPF_RSH | BPF_X:
-@@ -1733,7 +1737,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 						  &prog);
- 				break;
- 			}
--			emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
-+			if (bpf_prog->aux->no_verifier_zext)
-+				emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
- 			break;
- 		/* dst = dst / src(imm) */
- 		/* dst = dst % src(imm) */
-@@ -1755,7 +1760,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 						    &prog);
- 				break;
- 			}
--			emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
-+			if (bpf_prog->aux->no_verifier_zext)
-+				emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
- 			break;
- 		case BPF_ALU64 | BPF_DIV | BPF_K:
- 		case BPF_ALU64 | BPF_DIV | BPF_X:
-@@ -1772,7 +1778,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 			EMIT2_off32(0xC7, add_1reg(0xC0, IA32_ECX), imm32);
- 			emit_ia32_shift_r(BPF_OP(code), dst_lo, IA32_ECX, dstk,
- 					  false, &prog);
--			emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
-+			if (bpf_prog->aux->no_verifier_zext)
-+				emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
- 			break;
- 		/* dst = dst << imm */
- 		case BPF_ALU64 | BPF_LSH | BPF_K:
-@@ -2367,6 +2374,11 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 	return proglen;
- }
- 
-+bool bpf_jit_hardware_zext(void)
+diff --git a/tools/testing/selftests/bpf/verifier/zext.c b/tools/testing/selftests/bpf/verifier/zext.c
+new file mode 100644
+index 0000000..b45a429
+--- /dev/null
++++ b/tools/testing/selftests/bpf/verifier/zext.c
+@@ -0,0 +1,651 @@
++/* There are a couple of code paths inside verifier doing register
++ * read/write marking. Create one test for each.
++ */
 +{
-+	return false;
-+}
-+
- struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- {
- 	struct bpf_binary_header *header = NULL;
++	"zext: basic 1",
++	.insns = {
++	BPF_LD_IMM64(BPF_REG_0, 0x100000000ULL),
++	BPF_MOV32_IMM(BPF_REG_0, 0),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_1),
++	BPF_EXIT_INSN(),
++	},
++	.xlated_insns = {
++	BPF_LD_IMM64(BPF_REG_0, 0x100000000ULL),
++	BPF_MOV32_IMM(BPF_REG_0, 0),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_0, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_1),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.retval = 0,
++},
++{
++	"zext: basic 2",
++	.insns = {
++	BPF_LD_IMM64(BPF_REG_0, 0x100000001ULL),
++	BPF_MOV32_IMM(BPF_REG_0, 1),
++	BPF_ALU64_IMM(BPF_NEG, BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.xlated_insns = {
++	BPF_LD_IMM64(BPF_REG_0, 0x100000001ULL),
++	BPF_MOV32_IMM(BPF_REG_0, 1),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_0, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_ALU64_IMM(BPF_NEG, BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.retval = -1,
++},
++{
++	"zext: basic 3",
++	.insns = {
++	BPF_LD_IMM64(BPF_REG_0, 0x100000000ULL),
++	BPF_MOV32_IMM(BPF_REG_0, 0),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_EXIT_INSN(),
++	},
++	.xlated_insns = {
++	BPF_LD_IMM64(BPF_REG_0, 0x100000000ULL),
++	BPF_MOV32_IMM(BPF_REG_0, 0),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_0, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.retval = 0,
++},
++{
++	"zext: basic 4",
++	.insns = {
++	BPF_LD_IMM64(BPF_REG_1, 0x300000001ULL),
++	BPF_MOV32_IMM(BPF_REG_1, 1),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_1, 32),
++	BPF_MOV32_IMM(BPF_REG_2, 2),
++	BPF_JMP_REG(BPF_JSLE, BPF_REG_1, BPF_REG_2, 2),
++	BPF_MOV64_IMM(BPF_REG_0, 3),
++	BPF_EXIT_INSN(),
++	BPF_MOV32_IMM(BPF_REG_0, 4),
++	BPF_EXIT_INSN(),
++	},
++	.xlated_insns = {
++	BPF_LD_IMM64(BPF_REG_1, 0x300000001ULL),
++	BPF_MOV32_IMM(BPF_REG_1, 1),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_1, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_1, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_1, 32),
++	BPF_MOV32_IMM(BPF_REG_2, 2),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_2, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_2, 32),
++	BPF_JMP_REG(BPF_JSLE, BPF_REG_1, BPF_REG_2, 2),
++	BPF_MOV64_IMM(BPF_REG_0, 3),
++	BPF_EXIT_INSN(),
++	BPF_MOV32_IMM(BPF_REG_0, 4),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.retval = 4,
++},
++{
++	"zext: basic 5",
++	.insns = {
++	BPF_LD_IMM64(BPF_REG_1, 0x100000001ULL),
++	BPF_MOV32_IMM(BPF_REG_1, 0),
++	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_1, -8),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_10, -8),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_EXIT_INSN(),
++	},
++	.xlated_insns = {
++	BPF_LD_IMM64(BPF_REG_1, 0x100000001ULL),
++	BPF_MOV32_IMM(BPF_REG_1, 0),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_1, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_1, 32),
++	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_1, -8),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_10, -8),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.retval = 0,
++},
++{
++	"zext: basic 6",
++	.insns = {
++	BPF_LD_IMM64(BPF_REG_0, 0x100000000ULL),
++	BPF_MOV32_IMM(BPF_REG_0, 0),
++	BPF_MOV32_IMM(BPF_REG_1, 1),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_1),
++	BPF_EXIT_INSN(),
++	},
++	.xlated_insns = {
++	BPF_LD_IMM64(BPF_REG_0, 0x100000000ULL),
++	BPF_MOV32_IMM(BPF_REG_0, 0),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_0, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_MOV32_IMM(BPF_REG_1, 1),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_1, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_1, 32),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_1),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.retval = 1,
++},
++{
++	"zext: ret from main",
++	.insns = {
++	BPF_LD_IMM64(BPF_REG_0, 0x100000001ULL),
++	BPF_MOV32_IMM(BPF_REG_0, 1),
++	BPF_EXIT_INSN(),
++	},
++	.xlated_insns = {
++	BPF_LD_IMM64(BPF_REG_0, 0x100000001ULL),
++	BPF_MOV32_IMM(BPF_REG_0, 1),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.retval = 1,
++},
++{
++	"zext: ret from helper",
++	.insns = {
++	BPF_MOV32_IMM(BPF_REG_0, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_IMM(BPF_REG_8, BPF_REG_0),
++	BPF_MOV32_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.xlated_insns = {
++	/* Shouldn't do zext. */
++	BPF_MOV32_IMM(BPF_REG_0, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_IMM(BPF_REG_8, BPF_REG_0),
++	BPF_MOV32_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.retval = 0,
++},
++{
++	"zext: xadd",
++	.insns = {
++	BPF_LD_IMM64(BPF_REG_0, 0x100000001ULL),
++	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -8),
++	BPF_MOV32_IMM(BPF_REG_0, 1),
++	BPF_STX_XADD(BPF_DW, BPF_REG_10, BPF_REG_0, -8),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_10, -8),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_EXIT_INSN(),
++	},
++	.xlated_insns = {
++	BPF_LD_IMM64(BPF_REG_0, 0x100000001ULL),
++	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -8),
++	BPF_MOV32_IMM(BPF_REG_0, 1),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_0, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_STX_XADD(BPF_DW, BPF_REG_10, BPF_REG_0, -8),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_10, -8),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++	.retval = 1,
++},
++{
++	"zext: ld_abs ind",
++	.insns = {
++	BPF_ALU64_REG(BPF_MOV, BPF_REG_6, BPF_REG_1),
++	BPF_LD_IMM64(BPF_REG_8, 0x100000000ULL),
++	BPF_MOV32_IMM(BPF_REG_8, 2),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_8, 32),
++	BPF_LD_IND(BPF_B, BPF_REG_8, 0),
++	BPF_EXIT_INSN(),
++	},
++	.xlated_insns = {
++	BPF_ALU64_REG(BPF_MOV, BPF_REG_6, BPF_REG_1),
++	BPF_LD_IMM64(BPF_REG_8, 0x100000000ULL),
++	BPF_MOV32_IMM(BPF_REG_8, 2),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_8, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_8, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_8, 32),
++	},
++	.data = {
++		10, 20, 30, 40, 50,
++	},
++	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++	.result = ACCEPT,
++	.retval = 10,
++},
++{
++	"zext: multi paths, all 32-bit use",
++	.insns = {
++	BPF_MOV32_IMM(BPF_REG_8, 2),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0, 2),
++	BPF_MOV32_REG(BPF_REG_0, BPF_REG_8),
++	BPF_EXIT_INSN(),
++	BPF_MOV32_REG(BPF_REG_7, BPF_REG_8),
++	BPF_MOV32_REG(BPF_REG_0, BPF_REG_7),
++	BPF_EXIT_INSN(),
++	},
++	.xlated_insns = {
++	BPF_MOV32_IMM(BPF_REG_8, 2),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0, 2),
++	BPF_MOV32_REG(BPF_REG_0, BPF_REG_8),
++	BPF_EXIT_INSN(),
++	BPF_MOV32_REG(BPF_REG_7, BPF_REG_8),
++	BPF_MOV32_REG(BPF_REG_0, BPF_REG_7),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.retval = 2,
++},
++{
++	"zext: multi paths, partial 64-bit use",
++	.insns = {
++	BPF_LD_IMM64(BPF_REG_8, 0x100000001ULL),
++	BPF_MOV32_IMM(BPF_REG_8, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0, 2),
++	BPF_MOV32_REG(BPF_REG_0, BPF_REG_8),
++	BPF_EXIT_INSN(),
++	BPF_MOV64_REG(BPF_REG_0, BPF_REG_8),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_EXIT_INSN(),
++	},
++	.xlated_insns = {
++	BPF_LD_IMM64(BPF_REG_8, 0x100000001ULL),
++	BPF_MOV32_IMM(BPF_REG_8, 0),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_8, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_8, 32),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0, 2),
++	BPF_MOV32_REG(BPF_REG_0, BPF_REG_8),
++	BPF_EXIT_INSN(),
++	BPF_MOV64_REG(BPF_REG_0, BPF_REG_8),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.retval = 0,
++},
++{
++	"zext: multi paths, 32-bit def override",
++	.insns = {
++	BPF_MOV32_IMM(BPF_REG_8, 2),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0, 3),
++	BPF_MOV32_IMM(BPF_REG_8, 2),
++	BPF_MOV32_REG(BPF_REG_0, BPF_REG_8),
++	BPF_EXIT_INSN(),
++	BPF_MOV32_IMM(BPF_REG_8, 2),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_8),
++	BPF_MOV32_REG(BPF_REG_0, BPF_REG_7),
++	BPF_EXIT_INSN(),
++	},
++	.xlated_insns = {
++	BPF_MOV32_IMM(BPF_REG_8, 2),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0, 3),
++	BPF_MOV32_IMM(BPF_REG_8, 2),
++	BPF_MOV32_REG(BPF_REG_0, BPF_REG_8),
++	BPF_EXIT_INSN(),
++	BPF_MOV32_IMM(BPF_REG_8, 2),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_8, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_8, 32),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_8),
++	BPF_MOV32_REG(BPF_REG_0, BPF_REG_7),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.retval = 2,
++},
++{
++	/* Diamond CFG
++	 *
++	 *          -----
++	 *         | BB0 |
++	 *          -----
++	 *           /\
++	 *          /  \
++	 *         /    \
++	 *      -----     -----
++	 *     | BB1 |   | BB2 | u32 def
++	 *      -----     -----
++	 *         \     /
++	 *          \   / -> pruned, but u64 read should propagate backward
++	 *           \ /
++	 *          -----
++	 *         | BB3 | u64 read
++	 *          -----
++	 */
++	"zext: complex cfg 1",
++	.insns = {
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0, 2),
++	/* BB1 */
++	BPF_MOV64_IMM(BPF_REG_8, 2),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 2),
++	/* BB2 */
++	BPF_MOV32_IMM(BPF_REG_8, 2),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 0),
++	/* BB3, 64-bit R8 read should be prop backward. */
++	BPF_MOV64_REG(BPF_REG_0, BPF_REG_8),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_EXIT_INSN(),
++	},
++	.xlated_insns = {
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0, 2),
++	/* BB1 */
++	BPF_MOV64_IMM(BPF_REG_8, 2),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 3),
++	/* BB2 */
++	BPF_MOV32_IMM(BPF_REG_8, 2),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_8, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_8, 32),
++	/* BB3 */
++	BPF_MOV64_REG(BPF_REG_0, BPF_REG_8),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.retval = 0,
++},
++{
++	/* Diamond CFG
++	 *
++	 *          -----
++	 *         | BB0 | u32 def
++	 *          -----
++	 *           /\
++	 *          /  \
++	 *         /    \
++	 *      -----     -----
++	 *     | BB1 |   | BB2 | u32 def
++	 *      -----     -----
++	 *         \     /
++	 *          \   / -> pruned, but u64 read should propagate backward
++	 *           \ /
++	 *          -----
++	 *         | BB3 | u64 read
++	 *          -----
++	 */
++	"zext: complex cfg 2",
++	.insns = {
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_MOV32_IMM(BPF_REG_6, 2),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0, 2),
++	/* BB1 */
++	BPF_MOV64_IMM(BPF_REG_8, 2),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 2),
++	/* BB2 */
++	BPF_MOV32_IMM(BPF_REG_8, 2),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 0),
++	/* BB3, 64-bit R8 read should be prop backward. */
++	BPF_MOV64_REG(BPF_REG_0, BPF_REG_8),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_6),
++	BPF_EXIT_INSN(),
++	},
++	.xlated_insns = {
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_MOV32_IMM(BPF_REG_6, 2),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_6, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_6, 32),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0, 2),
++	/* BB1 */
++	BPF_MOV64_IMM(BPF_REG_8, 2),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 3),
++	/* BB2 */
++	BPF_MOV32_IMM(BPF_REG_8, 2),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_8, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_8, 32),
++	/* BB3 */
++	BPF_MOV64_REG(BPF_REG_0, BPF_REG_8),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_6),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.retval = 2,
++},
++{
++	/* Diamond CFG
++	 *
++	 *                 -----
++	 *                | BB0 | u32 def A
++	 *                 -----
++	 *                  /\
++	 *                 /  \
++	 *                /    \
++	 *             -----    -----
++	 *  u64 def A | BB1 |  | BB2 | u32 def B
++	 *             -----    -----
++	 *                 \     /
++	 *                  \   /
++	 *                   \ /
++	 *                  -----
++	 *                 | BB3 | u64 read A and B
++	 *                  -----
++	 */
++	"zext: complex cfg 3",
++	.insns = {
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_MOV32_IMM(BPF_REG_6, 2),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0, 3),
++	/* BB1 */
++	BPF_MOV64_IMM(BPF_REG_8, 2),
++	BPF_MOV64_IMM(BPF_REG_6, 2),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 2),
++	/* BB2 */
++	BPF_MOV32_IMM(BPF_REG_8, 2),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 0),
++	/* BB3, 64-bit R8 read should be prop backward. */
++	BPF_MOV64_REG(BPF_REG_0, BPF_REG_8),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_6),
++	BPF_EXIT_INSN(),
++	},
++	.xlated_insns = {
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_MOV32_IMM(BPF_REG_6, 2),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_6, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_6, 32),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0, 3),
++	/* BB1 */
++	BPF_MOV64_IMM(BPF_REG_8, 2),
++	BPF_MOV64_IMM(BPF_REG_6, 2),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 3),
++	/* BB2 */
++	BPF_MOV32_IMM(BPF_REG_8, 2),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_8, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_8, 32),
++	/* BB3 */
++	BPF_MOV64_REG(BPF_REG_0, BPF_REG_8),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_6),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.retval = 2,
++},
++{
++	/* Diamond CFG
++	 *
++	 *                 -----
++	 *                | BB0 | u32 def A
++	 *                 -----
++	 *                  /\
++	 *                 /  \
++	 *                /    \
++	 *             -----    -----
++	 *  u64 def A | BB1 |  | BB2 | u64 def A and u32 def B
++	 *             -----    -----
++	 *                 \     /
++	 *                  \   /
++	 *                   \ /
++	 *                  -----
++	 *                 | BB3 | u64 read A and B
++	 *                  -----
++	 */
++	"zext: complex cfg 4",
++	.insns = {
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_MOV32_IMM(BPF_REG_6, 2),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0, 3),
++	/* BB1 */
++	BPF_MOV64_IMM(BPF_REG_8, 2),
++	BPF_MOV64_IMM(BPF_REG_6, 3),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 3),
++	/* BB2 */
++	BPF_MOV32_IMM(BPF_REG_8, 2),
++	BPF_MOV64_IMM(BPF_REG_6, 3),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 0),
++	/* BB3, 64-bit R8 read should be prop backward. */
++	BPF_MOV64_REG(BPF_REG_0, BPF_REG_8),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_6),
++	BPF_EXIT_INSN(),
++	},
++	.xlated_insns = {
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_MOV32_IMM(BPF_REG_6, 2),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0, 3),
++	/* BB1 */
++	BPF_MOV64_IMM(BPF_REG_8, 2),
++	BPF_MOV64_IMM(BPF_REG_6, 3),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 4),
++	/* BB2 */
++	BPF_MOV32_IMM(BPF_REG_8, 2),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_8, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_8, 32),
++	BPF_MOV64_IMM(BPF_REG_6, 3),
++	/* BB3 */
++	BPF_MOV64_REG(BPF_REG_0, BPF_REG_8),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_6),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.retval = 3,
++},
++{
++	"zext: callee-saved",
++	.insns = {
++	BPF_MOV32_IMM(BPF_REG_6, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 2),
++	BPF_MOV64_REG(BPF_REG_0, BPF_REG_6),
++	BPF_EXIT_INSN(),
++	/* callee */
++	BPF_MOV32_IMM(BPF_REG_6, 1),
++	BPF_EXIT_INSN(),
++	},
++	.xlated_insns = {
++	/* caller u32 def should be zero extended. */
++	BPF_MOV32_IMM(BPF_REG_6, 0),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_6, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_6, 32),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 2),
++	/* u64 use. */
++	BPF_MOV64_REG(BPF_REG_0, BPF_REG_6),
++	BPF_EXIT_INSN(),
++	/* callee u32 def shouldn't be affected. */
++	BPF_MOV32_IMM(BPF_REG_6, 1),
++	BPF_EXIT_INSN(),
++	},
++	.errstr_unpriv = "function calls to other bpf functions are allowed for root only",
++	.result_unpriv = REJECT,
++	.result = ACCEPT,
++	.retval = 0,
++},
++{
++	"zext: arg regs",
++	.insns = {
++	BPF_MOV32_IMM(BPF_REG_1, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 2),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	/* callee */
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
++	BPF_EXIT_INSN(),
++	},
++	.xlated_insns = {
++	/* caller u32 def should be zero extended. */
++	BPF_MOV32_IMM(BPF_REG_1, 0),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_1, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_1, 32),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 2),
++	/* u64 use. */
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	/* callee u64 use on caller-saved reg. */
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
++	BPF_EXIT_INSN(),
++	},
++	.errstr_unpriv = "function calls to other bpf functions are allowed for root only",
++	.result_unpriv = REJECT,
++	.result = ACCEPT,
++	.retval = 0,
++},
++{
++	"zext: return arg",
++	.insns = {
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 5),
++	BPF_ALU32_IMM(BPF_ADD, BPF_REG_0, 1),
++	BPF_MOV32_REG(BPF_REG_6, BPF_REG_0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 4),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_6),
++	BPF_EXIT_INSN(),
++	/* callee 1 */
++	BPF_MOV32_IMM(BPF_REG_0, 1),
++	BPF_EXIT_INSN(),
++	/* callee 2 */
++	BPF_MOV32_IMM(BPF_REG_0, 1),
++	BPF_EXIT_INSN(),
++	},
++	.xlated_insns = {
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 7),
++	BPF_ALU32_IMM(BPF_ADD, BPF_REG_0, 1),
++	BPF_MOV32_REG(BPF_REG_6, BPF_REG_0),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_6, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_6, 32),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 4),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_6),
++	BPF_EXIT_INSN(),
++	/* callee 1 */
++	BPF_MOV32_IMM(BPF_REG_0, 1),
++	BPF_EXIT_INSN(),
++	/* callee 2 */
++	BPF_MOV32_IMM(BPF_REG_0, 1),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_0, 32),
++	BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32),
++	BPF_EXIT_INSN(),
++	},
++	.errstr_unpriv = "function calls to other bpf functions are allowed for root only",
++	.result_unpriv = REJECT,
++	.result = ACCEPT,
++	.retval = 3,
++},
 -- 
 2.7.4
 
