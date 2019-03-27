@@ -2,109 +2,157 @@ Return-Path: <SRS0=YLVI=R6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-7.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_PASS,USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80D56C43381
-	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 01:24:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0355EC43381
+	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 01:41:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3C3DC2075E
-	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 01:24:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BBA772082F
+	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 01:41:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ArpMwuBt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iFkCV0bF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727500AbfC0BYs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Mar 2019 21:24:48 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:46367 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727483AbfC0BYr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Mar 2019 21:24:47 -0400
-Received: by mail-lf1-f68.google.com with SMTP id r25so10096787lfn.13
-        for <bpf@vger.kernel.org>; Tue, 26 Mar 2019 18:24:46 -0700 (PDT)
+        id S1732117AbfC0Bl1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Mar 2019 21:41:27 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:32938 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727500AbfC0Bl1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 Mar 2019 21:41:27 -0400
+Received: by mail-pf1-f194.google.com with SMTP id i19so288543pfd.0;
+        Tue, 26 Mar 2019 18:41:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/Zgy+tftiwcmnS91fclxH/E/8BYJ4r+DizxqgkTPmyk=;
-        b=ArpMwuBtv9UM/eznnc3QZqIsCCfTKviX+if22zCSb2mdCRe5n5/8kKxXuKzobsh/cw
-         4IH8w696n3Teyf1nvDDF9KWGb7LjfgiYMS46U6VT2rIMHl0X1xDLUVDrSupetkzSgYWz
-         iXKJv8GK9aFBkg9ZspsPGwyec9oTYDZQlFev4jZ0LrD4xUEp44HbFD4ZI8Mrn6mZgRTP
-         C6ZCBTi4qKx/0zECqH5E58ifLNDMcxp9PZmUD/ypCE7L3NjtwjwxkkMU4OEyenkAxdFo
-         0zj0EqaxQGETt2hO0i/qSAI8M6RlI3ZhLIDgWuyaFUPPoo3Bnpd4nNgQEeXGVHIciHFe
-         nrFg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=cSLpheXXbH8xheIDLfPAeNGZDwyrQAw9ZNkh9ZwjcuE=;
+        b=iFkCV0bFXZkrehbPR2cvj+vtHL/AUj4hwoDwRUBCtu5VhCLuDMZYuA4yKpRgEL0yyh
+         N8rkv8c5j5U/Knscj6dlN8ELQwmwS44kchKJmHzUMbYL/LmEBfZhO/wwIXC/cLT1YINe
+         N842jOss8/q84y0MEMJ6J4tNWc4CAqu5Jvw9beiQ1fUsdnLyDzdb3t3gTtNTnIDU4ME0
+         qwKWhK0w1YP835/TM7MhXCbC3hwKH+ZINcm6T3xLhFB69ZpVHFx+owU7gK6DKfD8YMmR
+         SPNKlVtJ/kiskdLf6Vc7YGI0ucwHBQiXMj29lByxTOAOgfWIJ7KcsTNWDSR7RlBPjLYz
+         YZUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/Zgy+tftiwcmnS91fclxH/E/8BYJ4r+DizxqgkTPmyk=;
-        b=uZTe+9r9ScV6lurnovTx4hh7XcFneEXA2QR5YfI06oV4mAyQoqG0Ufm9fJAQjfIrnm
-         OLIQqshKkcGHJjOIDFUC0S/cXK+fpNNQmTJldji+j215bQksPPe8iJBHJUuF5KgrNGsB
-         ZxSjmV7rCqv2ZckjXD/hMc2xXvlMG5Nw7HXkG9GiDUQVBMhns+LCRL7asR8Zz9l1W6vh
-         HmTWhd/pOGAAWVkS9+LnAf0KT3cu9TBiT4Yz5ulhl8YXPCivWs3mfg5pSl3n7U0u5cLJ
-         m8Sl2UN6+zqabwhO9dtTURFxRttSvLbOtYFfg4UjtfNekJsceKE73clYhUU4qFdEAAYB
-         hI1A==
-X-Gm-Message-State: APjAAAUu+lYmxWYUrXUm5FH67zxSSK42OpWQcg/ZNuMuJXnHj428uhQo
-        UWZUUXqw2x42aolH5hZWGWJROwIQmrRShrJu1po=
-X-Google-Smtp-Source: APXvYqym6SOZ4BrHyY3vtJiunZ0TuGdroIr5Iojhesh2irKY6K5ONTDUP/mfJY1H8NgyQLNyuz30xGql6zlj/y03up4=
-X-Received: by 2002:ac2:4304:: with SMTP id l4mr8837196lfh.168.1553649885526;
- Tue, 26 Mar 2019 18:24:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190315201749.556085-1-andriin@fb.com> <51e9776a-a0c2-fb69-6b8c-82b220c3e18f@fb.com>
-In-Reply-To: <51e9776a-a0c2-fb69-6b8c-82b220c3e18f@fb.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=cSLpheXXbH8xheIDLfPAeNGZDwyrQAw9ZNkh9ZwjcuE=;
+        b=Z9kCVWS85Wniuh5iSoBCCSjz1N09BaJ5j+kHoVx+ICR2lPWOpyJWBTXKpz1BHUIne+
+         ioDRPx2+9Ac0JM+Z8fgPWy9pZrO3qTFqCPc0XnMTtx2dRkGwUxROTVpkIk2lCZq1F59N
+         rdP9ONIyoFVWqR71V3i9AJkTVS//H3h62mp2NlQ8RK1BgnllqVzlcJSVeKCUNJBW+l+M
+         c6Nn6M0bJZgpUFcKkjcDncWW9aHeCEZXrgE7Bm+w3cAQMUrgjpOOVET2W2DmDBreQAxy
+         l3eucjzY++KfFEFmNfx9dklB3QJo63dAFnVLV4eSe6yjjNe94gQswSNUciPBBiBmnHjd
+         d5qg==
+X-Gm-Message-State: APjAAAUNH+32zxZNVxyfFKz10/SrComQkA2qjYhe0h66z2XUAgrdMx4P
+        X2D4LuGnp5QS8cVmJ3tQi8o=
+X-Google-Smtp-Source: APXvYqzIPLPBx6QmDbzMcpWNbBTgKNfTK3lx6oXn1b50pdWu+u4nhRHbEMzmnBQ4G4LPpzL4XrDIDw==
+X-Received: by 2002:a62:3849:: with SMTP id f70mr29536775pfa.46.1553650885846;
+        Tue, 26 Mar 2019 18:41:25 -0700 (PDT)
+Received: from ast-mbp ([2620:10d:c090:200::1:f1fc])
+        by smtp.gmail.com with ESMTPSA id e1sm25614441pfn.73.2019.03.26.18.41.24
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 26 Mar 2019 18:41:25 -0700 (PDT)
+Date:   Tue, 26 Mar 2019 18:41:23 -0700
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 26 Mar 2019 18:24:34 -0700
-Message-ID: <CAADnVQL=JjRx33xjikY6O34Gpy_7m5L_oN1mOPq9Q8R4rbaG5w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] kbuild: add ability to generate BTF type info
- for vmlinux
-To:     Masahiro Yamada <yamada.masahiro@socionext.com>
-Cc:     Andrii Nakryiko <andriin@fb.com>,
-        "andrii.nakryiko@gmail.com" <andrii.nakryiko@gmail.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
+To:     Stanislav Fomichev <sdf@fomichev.me>
+Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, David Miller <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Yonghong Song <yhs@fb.com>, Martin Lau <kafai@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+        Simon Horman <simon.horman@netronome.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Petar Penkov <peterpenkov96@gmail.com>
+Subject: Re: [RFC bpf-next v3 6/8] flow_dissector: handle no-skb use case
+Message-ID: <20190327014121.p45cblrgqgdyiu6z@ast-mbp>
+References: <20190323014101.mxeey4tw3gt7o4yi@ast-mbp.dhcp.thefacebook.com>
+ <20190323160531.GZ7431@mini-arch.hsd1.ca.comcast.net>
+ <20190326003517.fuqb4mqsbqq4mtk5@ast-mbp>
+ <20190326164529.GB7431@mini-arch.hsd1.ca.comcast.net>
+ <20190326174802.jnhvtdephykfj6ku@ast-mbp>
+ <CAF=yD-KzG1E0kL3s4TfYX+T8Bc3VeZw9siKK8iDHAN1uyYDyLA@mail.gmail.com>
+ <CAADnVQLiGZv=PzqFd=9f02spzo-vibrKBM7kRpTp29L=FeeooQ@mail.gmail.com>
+ <20190326181719.GC7431@mini-arch.hsd1.ca.comcast.net>
+ <20190326183011.jly4j3s332yohrj5@ast-mbp>
+ <20190326185456.GD7431@mini-arch.hsd1.ca.comcast.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190326185456.GD7431@mini-arch.hsd1.ca.comcast.net>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 25, 2019 at 8:59 AM Alexei Starovoitov <ast@fb.com> wrote:
->
-> On 3/15/19 1:17 PM, Andrii Nakryiko wrote:
-> > This patch adds new config option to trigger generation of BTF type
-> > information from DWARF debuginfo for vmlinux and kernel modules through
-> > pahole, which in turn relies on libbpf for btf_dedup() algorithm.
-> >
-> > The intent is to record compact type information of all types used
-> > inside kernel, including all the structs/unions/typedefs/etc. This
-> > enables BPF's compile-once-run-everywhere ([0]) approach, in which
-> > tracing programs that are inspecting kernel's internal data (e.g.,
-> > struct task_struct) can be compiled on a system running some kernel
-> > version, but would be possible to run on other kernel versions (and
-> > configurations) without recompilation, even if the layout of structs
-> > changed and/or some of the fields were added, removed, or renamed.
-> >
-> > This is only possible if BPF loader can get kernel type info to adjust
-> > all the offsets correctly. This patch is a first time in this direction,
-> > making sure that BTF type info is part of Linux kernel image in
-> > non-loadable ELF section.
-> >
-> > BTF deduplication ([1]) algorithm typically provides 100x savings
-> > compared to DWARF data, so resulting .BTF section is not big as is
-> > typically about 2MB in size.
-> >
-> > [0] http://vger.kernel.org/lpc-bpf2018.html#session-2
-> > [1] https://facebookmicrosites.github.io/bpf/blog/2018/11/14/btf-enhancement.html
-> >
-> > Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
->
-> Masahiro,
->
-> could you please review this patch?
-> It's been pending for 10 days!
+On Tue, Mar 26, 2019 at 11:54:56AM -0700, Stanislav Fomichev wrote:
+> On 03/26, Alexei Starovoitov wrote:
+> > On Tue, Mar 26, 2019 at 11:17:19AM -0700, Stanislav Fomichev wrote:
+> > > On 03/26, Alexei Starovoitov wrote:
+> > > > On Tue, Mar 26, 2019 at 10:52 AM Willem de Bruijn
+> > > > <willemdebruijn.kernel@gmail.com> wrote:
+> > > > > The BPF flow dissector should work the same. It is fine to pass the
+> > > > > data including ethernet header, but parsing can start at nhoff with
+> > > > > proto explicitly passed.
+> > > > >
+> > > > > We should not assume Ethernet link layer.
+> > > > 
+> > > > then skb-less dissector has to be different program type
+> > > > because semantics are different.
+> > > The semantics are the same as for c-based __skb_flow_dissect.
+> > > We just need to pass nhoff and proto that has been passed to
+> > > __skb_flow_dissect to the bpf program. In case of with-skb,
+> > > take this initial data from skb, like __skb_flow_dissect does (and don't
+> > > ask BPF program to do it essentially):
+> > > 
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/tree/net/core/flow_dissector.c#n763
+> > > 
+> > > I was thinking of passing proto as flow_keys->n_proto and we already
+> > > pass flow_keys->nhoff, so no need to do anything for it. With that,
+> > > BPF program doesn't need to look into skb and can parse optional vlan
+> > > and L3+ headers. The same way __skb_flow_dissect does that.
+> > 
+> > makes sense. then I'd also prefer for proto to be in flow_keys to
+> > high light this difference.
+> Maybe rename existing flow_keys->n_proto to flow_keys->proto?
+> That would match __skb_flow_dissect and remove ambiguity with both proto
+> and n_proto in flow_keys.
 
-Masahiro,
-Ping!
+disabling useless fields in ctx is one thing, since probability of breaking users
+is low, but renaming n_proto is imo too much.
+
+> > may be add vlan_proto/present/tci there as well?
+> > At least on the kernel side ctx rewriter will be the same for w/ & w/o skb cases.
+> Why do you think we need them? My understanding was that when
+> skb_vlan_tag_present(skb) (or skb->vlan_present) returns true, that means
+> that vlan info has been already parsed out of the packet and stored in
+> the vlan_tci/vlan_proto (where vlan_proto is 8021Q/8021AD); skb data
+> points to proper L3 header.
+> 
+> If that's correct, BPF flow dissector should not care about that. For
+> example, look at how C-based flow dissector does that:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/tree/net/core/flow_dissector.c#n944
+> 
+> If skb_vlan_tag_present(skb) returns true, we set proto to skb->protocol
+> and move on.
+> 
+> But, we would need vlan_proto/present/tci in the flow_keys in the future.
+> We don't currently return parsed vlan data from the BPF flow dissector.
+> But it feels like it's getting into bpf-next territory :-)
+
+Whether ctx->data points to L2 or L3 is uapi regardless whether
+progs/bpf_flow.c is relying on that or not.
+So far I think you're saying that in all three cases:
+no-skb, skb befor rfs, skb after rfs ctx->data points to L2, right?
+This has to be preserved.
+Only now after reading bpf_flow.c for Nth time I realized what semantics
+you gave to skb->vlan* and skb->protocol fields. All of them have
+to be kept as-is.
+For no-skb cases all of them should be available with the same logic
+and it has to documented, since it's different from other bpf progs
+that access these fields.
+
