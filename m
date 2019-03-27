@@ -6,46 +6,46 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EC1CC43381
-	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:26:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D228BC10F00
+	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:29:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C8CB0206C0
-	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:26:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 98BBA21738
+	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:29:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1553714809;
-	bh=u2gYrfJBu25SovInffio7GBUBKv8Fo1qUfGtX/mMjKc=;
+	s=default; t=1553714943;
+	bh=2K1NsZ8pgY0DBWjO3DAoYyXaNrz4IRlgOMiO/ylmQ8E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Li1H3J9yzqfjB3Ib049wCIvx8PIBPWOrqIvrhv5UU4p+j3prwo0DU1YeHMqz4mtvN
-	 ztBcBUvqMihGM81Hb5OAft8QRgSv0GWH79WJfRHdr9FeWGY5R8y+qYJbe3RnVk52cP
-	 P8RD/TBmuCxeQzsUjm2Nn3ndxvxxXc5ICvCGHNl4=
+	b=VBm8RZ15+CXBgkYEfBwFRKg/CRSFMscQ3AC17owHkzJgwiqPSs7F/C7Ap3Fd74gKY
+	 uJqsnrHl/nVnFDOAFUQFC1wdKJtg4LefVznXO3YOHtJ8rVnd/lsIkspHDcVIWdD31e
+	 R1E0FtSDsyQxMeRUPE5ZCYh847+/+IDwGmKtEC/E=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387526AbfC0SFA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Mar 2019 14:05:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45892 "EHLO mail.kernel.org"
+        id S1733237AbfC0T2z (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Mar 2019 15:28:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44544 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387515AbfC0SE5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Mar 2019 14:04:57 -0400
+        id S1733098AbfC0SEC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Mar 2019 14:04:02 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3596621738;
-        Wed, 27 Mar 2019 18:04:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id ECEDD21738;
+        Wed, 27 Mar 2019 18:04:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1553709897;
-        bh=u2gYrfJBu25SovInffio7GBUBKv8Fo1qUfGtX/mMjKc=;
+        s=default; t=1553709841;
+        bh=2K1NsZ8pgY0DBWjO3DAoYyXaNrz4IRlgOMiO/ylmQ8E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zuuvnBgrwA2+kHchUr4d6L3r7asylkRf+7IFlKMKE4q1cb72WMiCMrZ26W6zNeoYV
-         m3dC2HvaHc8W+3+V39HA60SZVG/LsrS4ySOPRu2IIHo1vFlQNKd+V/b6MOlRTZIJNd
-         GR8FLOBpTsFf0MD2AXR/NmksdVTCOdEAFn4ioick=
+        b=GJ6jy/Cs87GGh/X8LImttaagJEOFjdlO9Tq3Vh3shEGXB/NHQ2+dsuVmndNUsNYAi
+         fpg3fE/23MFIhRCwPVzlWz8ZmDmEC4t/EVPjGnld8piu3ba0NHuUun5NMDSJ+TEDJy
+         UTIF/aQsKDC5WNlXv0evSYOCEzKa4FQvL6rxfyQs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        xdp-newbies@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.0 095/262] veth: Fix -Wformat-truncation
-Date:   Wed, 27 Mar 2019 13:59:10 -0400
-Message-Id: <20190327180158.10245-95-sashal@kernel.org>
+Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.0 069/262] tools/bpf: selftests: add map lookup to test_map_in_map bpf prog
+Date:   Wed, 27 Mar 2019 13:58:44 -0400
+Message-Id: <20190327180158.10245-69-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190327180158.10245-1-sashal@kernel.org>
 References: <20190327180158.10245-1-sashal@kernel.org>
@@ -57,51 +57,61 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Florian Fainelli <f.fainelli@gmail.com>
+From: Yonghong Song <yhs@fb.com>
 
-[ Upstream commit abdf47aab4123ece48877cab4153db44fe4dc340 ]
+[ Upstream commit 9eca5083757b679b37f210092c871916c2c222d0 ]
 
-Provide a precision hint to snprintf() in order to eliminate a
--Wformat-truncation warning provided below. A maximum of 11 characters
-is allowed to reach a maximum of 32 - 1 characters given a possible
-maximum value of queues using up to UINT_MAX which occupies 10
-characters. Incidentally 11 is the number of characters for
-"xdp_packets" which is the largest string we append.
+The bpf_map_lookup_elem is added in the bpf program.
+Without previous patch, the test change will trigger the
+following error:
+  $ ./test_maps
+  ...
+  ; value_p = bpf_map_lookup_elem(map, &key);
+  20: (bf) r1 = r7
+  21: (bf) r2 = r8
+  22: (85) call bpf_map_lookup_elem#1
+  ; if (!value_p || *value_p != 123)
+  23: (15) if r0 == 0x0 goto pc+16
+   R0=map_value(id=2,off=0,ks=4,vs=4,imm=0) R6=inv1 R7=map_ptr(id=0,off=0,ks=4,vs=4,imm=0)
+   R8=fp-8,call_-1 R10=fp0,call_-1 fp-8=mmmmmmmm
+  ; if (!value_p || *value_p != 123)
+  24: (61) r1 = *(u32 *)(r0 +0)
+   R0=map_value(id=2,off=0,ks=4,vs=4,imm=0) R6=inv1 R7=map_ptr(id=0,off=0,ks=4,vs=4,imm=0)
+   R8=fp-8,call_-1 R10=fp0,call_-1 fp-8=mmmmmmmm
+  bpf_spin_lock cannot be accessed directly by load/store
 
-drivers/net/veth.c: In function 'veth_get_strings':
-drivers/net/veth.c:118:47: warning: '%s' directive output may be
-truncated writing up to 31 bytes into a region of size between 12 and 21
-[-Wformat-truncation=]
-     snprintf(p, ETH_GSTRING_LEN, "rx_queue_%u_%s",
-                                               ^~
-drivers/net/veth.c:118:5: note: 'snprintf' output between 12 and 52
-bytes into a destination of size 32
-     snprintf(p, ETH_GSTRING_LEN, "rx_queue_%u_%s",
-     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-       i, veth_rq_stats_desc[j].desc);
-       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+With the kernel fix in the previous commit, the error goes away.
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/veth.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_map_in_map.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index f412ea1cef18..b203d1867959 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -115,7 +115,8 @@ static void veth_get_strings(struct net_device *dev, u32 stringset, u8 *buf)
- 		p += sizeof(ethtool_stats_keys);
- 		for (i = 0; i < dev->real_num_rx_queues; i++) {
- 			for (j = 0; j < VETH_RQ_STATS_LEN; j++) {
--				snprintf(p, ETH_GSTRING_LEN, "rx_queue_%u_%s",
-+				snprintf(p, ETH_GSTRING_LEN,
-+					 "rx_queue_%u_%.11s",
- 					 i, veth_rq_stats_desc[j].desc);
- 				p += ETH_GSTRING_LEN;
- 			}
+diff --git a/tools/testing/selftests/bpf/test_map_in_map.c b/tools/testing/selftests/bpf/test_map_in_map.c
+index ce923e67e08e..2985f262846e 100644
+--- a/tools/testing/selftests/bpf/test_map_in_map.c
++++ b/tools/testing/selftests/bpf/test_map_in_map.c
+@@ -27,6 +27,7 @@ SEC("xdp_mimtest")
+ int xdp_mimtest0(struct xdp_md *ctx)
+ {
+ 	int value = 123;
++	int *value_p;
+ 	int key = 0;
+ 	void *map;
+ 
+@@ -35,6 +36,9 @@ int xdp_mimtest0(struct xdp_md *ctx)
+ 		return XDP_DROP;
+ 
+ 	bpf_map_update_elem(map, &key, &value, 0);
++	value_p = bpf_map_lookup_elem(map, &key);
++	if (!value_p || *value_p != 123)
++		return XDP_DROP;
+ 
+ 	map = bpf_map_lookup_elem(&mim_hash, &key);
+ 	if (!map)
 -- 
 2.19.1
 
