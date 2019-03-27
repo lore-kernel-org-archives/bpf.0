@@ -7,49 +7,50 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5137FC43381
-	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 18:48:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2305FC43381
+	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 18:59:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 22536205C9
-	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 18:48:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E613E206B7
+	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 18:59:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1553712486;
-	bh=WPZgv36tWCC9vlJyD3V4lnZXLLgrdvYbd2i1t8Fu8A4=;
+	s=default; t=1553713190;
+	bh=6709uOp69RMOUkuyrJ3Y7ObzWXNAD4dFwy6QQibu5kc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=OFamg7+/kPfCdLWyjo0Gh0kFZ3zrfu+ByR2mltzrEH/b11QmwlKqpn8BFGETowXB1
-	 qzdsc+s8qXrE1d2GbcDkRNU3BELKlRtzizkUUL7Ma+B/4qyQnIT3FQnOK69QuoGGb1
-	 alPzsxEuDn6E6fBgHXOSBANYI3bees+7XTX/nGVA=
+	b=oezdTvO1r3c8ZjM2cCxykFDIlK0OE1zeoBGuew1YLXN93HYWb57B/RjAAOa/haJ4q
+	 E3okxRarQnrDHf+jyo6KiNKfFwy4gNQ+e76q4fz67l0tj+NgQiw1bwBX8Xa/6kCJpw
+	 CSw886myuj2eBQVu6/VgADTK8oQyQNnFMZR2qQi0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390729AbfC0STf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Mar 2019 14:19:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36944 "EHLO mail.kernel.org"
+        id S2389742AbfC0SPC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Mar 2019 14:15:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58412 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389947AbfC0STe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Mar 2019 14:19:34 -0400
+        id S2389735AbfC0SPB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Mar 2019 14:15:01 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C3BF82087C;
-        Wed, 27 Mar 2019 18:19:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 22B392087C;
+        Wed, 27 Mar 2019 18:15:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1553710773;
-        bh=WPZgv36tWCC9vlJyD3V4lnZXLLgrdvYbd2i1t8Fu8A4=;
+        s=default; t=1553710501;
+        bh=6709uOp69RMOUkuyrJ3Y7ObzWXNAD4dFwy6QQibu5kc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nxvHEgJ3fIc2/Eq9h7kw8qGm3Ip9SOcv3nnB3dDii4vIDvjYCPOIPIEKolygI4+rQ
-         FDPJ8SLNQHFKRHfoVmeMuWZd7mjPGhog0lieHmqNM8bmqhnP95aN+4vdThsKrvMBiM
-         9dnue5gdaL/Ve/EUccarYo/S4hgZd6t6LLMh4r50=
+        b=v7y29M3xga+XrnRi7F72MG9UsIAfgGLFJgQOqKvrz36oWiqYZaLheg7anJmR28lIt
+         URc0ETbNIRqMUbuv5BpcmxVNGvfmYNyXH3fbi1OxtobFmz67HdYnT2znZIi1xacdEk
+         V40laqeNdw5J34NRG5iRBKGCgSi3D3+tfVOybrx8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Valdis Kletnieks <valdis.kletnieks@vt.edu>,
+Cc:     Stanislav Fomichev <sdf@google.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 094/123] bpf: fix missing prototype warnings
-Date:   Wed, 27 Mar 2019 14:15:58 -0400
-Message-Id: <20190327181628.15899-94-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 147/192] selftests/bpf: skip verifier tests for unsupported program types
+Date:   Wed, 27 Mar 2019 14:09:39 -0400
+Message-Id: <20190327181025.13507-147-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
-In-Reply-To: <20190327181628.15899-1-sashal@kernel.org>
-References: <20190327181628.15899-1-sashal@kernel.org>
+In-Reply-To: <20190327181025.13507-1-sashal@kernel.org>
+References: <20190327181025.13507-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -58,49 +59,71 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Valdis Kletnieks <valdis.kletnieks@vt.edu>
+From: Stanislav Fomichev <sdf@google.com>
 
-[ Upstream commit 116bfa96a255123ed209da6544f74a4f2eaca5da ]
+[ Upstream commit 8184d44c9a577a2f1842ed6cc844bfd4a9981d8e ]
 
-Compiling with W=1 generates warnings:
+Use recently introduced bpf_probe_prog_type() to skip tests in the
+test_verifier() if bpf_verify_program() fails. The skipped test is
+indicated in the output.
 
-  CC      kernel/bpf/core.o
-kernel/bpf/core.c:721:12: warning: no previous prototype for ?bpf_jit_alloc_exec_limit? [-Wmissing-prototypes]
-  721 | u64 __weak bpf_jit_alloc_exec_limit(void)
-      |            ^~~~~~~~~~~~~~~~~~~~~~~~
-kernel/bpf/core.c:757:14: warning: no previous prototype for ?bpf_jit_alloc_exec? [-Wmissing-prototypes]
-  757 | void *__weak bpf_jit_alloc_exec(unsigned long size)
-      |              ^~~~~~~~~~~~~~~~~~
-kernel/bpf/core.c:762:13: warning: no previous prototype for ?bpf_jit_free_exec? [-Wmissing-prototypes]
-  762 | void __weak bpf_jit_free_exec(void *addr)
-      |             ^~~~~~~~~~~~~~~~~
+Example:
 
-All three are weak functions that archs can override, provide
-proper prototypes for when a new arch provides their own.
+...
+679/p bpf_get_stack return R0 within range SKIP (unsupported program
+type 5)
+680/p ld_abs: invalid op 1 OK
+...
+Summary: 863 PASSED, 165 SKIPPED, 3 FAILED
 
-Signed-off-by: Valdis Kletnieks <valdis.kletnieks@vt.edu>
-Acked-by: Song Liu <songliubraving@fb.com>
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/filter.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_verifier.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 42197b16dd78..56d2cda9931b 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -741,7 +741,9 @@ bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
- 		     unsigned int alignment,
- 		     bpf_jit_fill_hole_t bpf_fill_ill_insns);
- void bpf_jit_binary_free(struct bpf_binary_header *hdr);
--
-+u64 bpf_jit_alloc_exec_limit(void);
-+void *bpf_jit_alloc_exec(unsigned long size);
-+void bpf_jit_free_exec(void *addr);
- void bpf_jit_free(struct bpf_prog *fp);
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index 9db5a7378f40..294fc18aba2a 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -32,6 +32,7 @@
+ #include <linux/if_ether.h>
  
- struct bpf_prog *bpf_jit_blind_constants(struct bpf_prog *fp);
+ #include <bpf/bpf.h>
++#include <bpf/libbpf.h>
+ 
+ #ifdef HAVE_GENHDR
+ # include "autoconf.h"
+@@ -56,6 +57,7 @@
+ 
+ #define UNPRIV_SYSCTL "kernel/unprivileged_bpf_disabled"
+ static bool unpriv_disabled = false;
++static int skips;
+ 
+ struct bpf_test {
+ 	const char *descr;
+@@ -12770,6 +12772,11 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 	fd_prog = bpf_verify_program(prog_type ? : BPF_PROG_TYPE_SOCKET_FILTER,
+ 				     prog, prog_len, test->flags & F_LOAD_WITH_STRICT_ALIGNMENT,
+ 				     "GPL", 0, bpf_vlog, sizeof(bpf_vlog), 1);
++	if (fd_prog < 0 && !bpf_probe_prog_type(prog_type, 0)) {
++		printf("SKIP (unsupported program type %d)\n", prog_type);
++		skips++;
++		goto close_fds;
++	}
+ 
+ 	expected_ret = unpriv && test->result_unpriv != UNDEF ?
+ 		       test->result_unpriv : test->result;
+@@ -12905,7 +12912,7 @@ static void get_unpriv_disabled()
+ 
+ static int do_test(bool unpriv, unsigned int from, unsigned int to)
+ {
+-	int i, passes = 0, errors = 0, skips = 0;
++	int i, passes = 0, errors = 0;
+ 
+ 	for (i = from; i < to; i++) {
+ 		struct bpf_test *test = &tests[i];
 -- 
 2.19.1
 
