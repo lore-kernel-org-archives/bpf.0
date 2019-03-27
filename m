@@ -2,57 +2,50 @@ Return-Path: <SRS0=YLVI=R6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12297C43381
-	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:22:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EC1CC43381
+	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:26:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CD19E206C0
-	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:22:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C8CB0206C0
+	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:26:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1553714568;
-	bh=QL4Jdhcm0T948hTOALqx0jaZgtEGuT2ddJmBJqKD1to=;
+	s=default; t=1553714809;
+	bh=u2gYrfJBu25SovInffio7GBUBKv8Fo1qUfGtX/mMjKc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=GDO+kh8einNxU5l0Ephx7/WXHmW5e5Dl/1I5i8WN9+C/yGh/tia/d0o+FEZbCrxFm
-	 TxCMs9sZHfSJJXx0KIJsBbLQoKpRWlkoLrrg3tK0troTualIoErYzEbWSK2oRmQRRm
-	 WAC2RvU/BYr3DZ0XhL2ImdWIilwAqUrTARwnzQlc=
+	b=Li1H3J9yzqfjB3Ib049wCIvx8PIBPWOrqIvrhv5UU4p+j3prwo0DU1YeHMqz4mtvN
+	 ztBcBUvqMihGM81Hb5OAft8QRgSv0GWH79WJfRHdr9FeWGY5R8y+qYJbe3RnVk52cP
+	 P8RD/TBmuCxeQzsUjm2Nn3ndxvxxXc5ICvCGHNl4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387879AbfC0SGR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Mar 2019 14:06:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47800 "EHLO mail.kernel.org"
+        id S2387526AbfC0SFA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Mar 2019 14:05:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45892 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387890AbfC0SGQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Mar 2019 14:06:16 -0400
+        id S2387515AbfC0SE5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Mar 2019 14:04:57 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CF335217F9;
-        Wed, 27 Mar 2019 18:06:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3596621738;
+        Wed, 27 Mar 2019 18:04:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1553709975;
-        bh=QL4Jdhcm0T948hTOALqx0jaZgtEGuT2ddJmBJqKD1to=;
+        s=default; t=1553709897;
+        bh=u2gYrfJBu25SovInffio7GBUBKv8Fo1qUfGtX/mMjKc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SCO2BoDAN750BWMVwVCYotmb39AC5DGlCWF89Yth6XnCAcfOtyPs2K45gtWohnrZL
-         o4W3OpnxJvBhHcbUVqDlP+OoVmffsBzV7dpLN2MYr2iCFYDRDqxc12COqiqInB8Ghi
-         laPmWdqWOdSVWpAISNHji1uQDM2diWy8FRAucfMo=
+        b=zuuvnBgrwA2+kHchUr4d6L3r7asylkRf+7IFlKMKE4q1cb72WMiCMrZ26W6zNeoYV
+         m3dC2HvaHc8W+3+V39HA60SZVG/LsrS4ySOPRu2IIHo1vFlQNKd+V/b6MOlRTZIJNd
+         GR8FLOBpTsFf0MD2AXR/NmksdVTCOdEAFn4ioick=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexei Starovoitov <ast@fb.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.0 140/262] tools build: Add test-reallocarray.c to test-all.c to fix the build
-Date:   Wed, 27 Mar 2019 13:59:55 -0400
-Message-Id: <20190327180158.10245-140-sashal@kernel.org>
+        xdp-newbies@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.0 095/262] veth: Fix -Wformat-truncation
+Date:   Wed, 27 Mar 2019 13:59:10 -0400
+Message-Id: <20190327180158.10245-95-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190327180158.10245-1-sashal@kernel.org>
 References: <20190327180158.10245-1-sashal@kernel.org>
@@ -64,188 +57,51 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Arnaldo Carvalho de Melo <acme@redhat.com>
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-[ Upstream commit a96c03e8cdcf123384319f312d0a08a7a760bb35 ]
+[ Upstream commit abdf47aab4123ece48877cab4153db44fe4dc340 ]
 
-When a test is in the FEATURE_TESTS_BASIC list in tools/build/Makefile.feature
-must be added to tools/build/feature/test-all.c, because the successfull
-compilation and linking of that test-all.bin file means that all the
-features listed in FEATURE_TESTS_BASIC are present in the system, so we
-don't have to go on feature by feature test building them.
+Provide a precision hint to snprintf() in order to eliminate a
+-Wformat-truncation warning provided below. A maximum of 11 characters
+is allowed to reach a maximum of 32 - 1 characters given a possible
+maximum value of queues using up to UINT_MAX which occupies 10
+characters. Incidentally 11 is the number of characters for
+"xdp_packets" which is the largest string we append.
 
-Since reallocarray() is expected to be present in modern systems, it has
-a place in FEATURE_TESTS_BASIC, so that we speed up the build process
-building just that file.
+drivers/net/veth.c: In function 'veth_get_strings':
+drivers/net/veth.c:118:47: warning: '%s' directive output may be
+truncated writing up to 31 bytes into a region of size between 12 and 21
+[-Wformat-truncation=]
+     snprintf(p, ETH_GSTRING_LEN, "rx_queue_%u_%s",
+                                               ^~
+drivers/net/veth.c:118:5: note: 'snprintf' output between 12 and 52
+bytes into a destination of size 32
+     snprintf(p, ETH_GSTRING_LEN, "rx_queue_%u_%s",
+     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       i, veth_rq_stats_desc[j].desc);
+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For older systems, such as ubuntu:16.04 (build failure reported by Jin
-Yao) debian:8, and for the current flagship RHEL distro, RHEL7, the
-build will fail as test-all.bin (without test-reallocarray.c included)
-passes but reallocarray() isn't present, making the build fail with:
-
-    CC       /tmp/build/perf/libbpf.o
-    MKDIR    /tmp/build/perf/fs/
-    CC       /tmp/build/perf/fs/tracing_path.o
-    LD       /tmp/build/perf/fd/libapi-in.o
-    CC       /tmp/build/perf/bpf.o
-  libbpf.c: In function 'bpf_object__add_program':
-  libbpf.c:367:10: error: implicit declaration of function 'reallocarray' [-Werror=implicit-function-declaration]
-    progs = reallocarray(progs, nr_progs + 1, sizeof(progs[0]));
-            ^
-  libbpf.c:367:2: error: nested extern declaration of 'reallocarray' [-Werror=nested-externs]
-    progs = reallocarray(progs, nr_progs + 1, sizeof(progs[0]));
-    ^
-  libbpf.c:367:8: error: assignment makes pointer from integer without a cast [-Werror=int-conversion]
-    progs = reallocarray(progs, nr_progs + 1, sizeof(progs[0]));
-          ^
-  libbpf.c: In function 'bpf_object__elf_collect':
-  libbpf.c:887:10: error: assignment makes pointer from integer without a cast [-Werror=int-conversion]
-      reloc = reallocarray(reloc, nr_reloc,
-            ^
-  libbpf.c: In function 'bpf_program__reloc_text':
-  libbpf.c:1394:12: error: assignment makes pointer from integer without a cast [-Werror=int-conversion]
-     new_insn = reallocarray(prog->insns, new_cnt, sizeof(*insn));
-              ^
-    CC       /tmp/build/perf/nlattr.o
-
-Even with:
-
-  $ grep reallocarray /tmp/build/perf/FEATURE-DUMP
-  feature-reallocarray=1
-  $
-
-Which ubuntu:16.04.5 LTS doesn't have:
-
-  perfbuilder@38a153a1bba8:/$ head -2 /etc/os-release
-  NAME="Ubuntu"
-  VERSION="16.04.5 LTS (Xenial Xerus)"
-  perfbuilder@38a153a1bba8:/$ find /usr/include/ -name "*.h" | xargs grep -w reallocarray
-  perfbuilder@38a153a1bba8:/$
-
-Fix it by including it to test-all.c, which ends up forcing the
-individual tests to be triggered and for the build process to notice
-that indeed reallocarray() is not there:
-
-  perfbuilder@38a153a1bba8:/$ cat /tmp/build/perf/feature/test-all.make.output
-  In file included from test-all.c:178:0:
-  test-reallocarray.c: In function 'main_test_reallocarray':
-  test-reallocarray.c:7:11: error: implicit declaration of function 'reallocarray' [-Werror=implicit-function-declaration]
-    return !!reallocarray(NULL, 1, 1);
-             ^
-  cc1: all warnings being treated as errors
-  perfbuilder@38a153a1bba8:/$
-
-That is the only test that is failing on Ubuntu 16.03.5 LTS, so all
-tests are forced:
-
-  perfbuilder@38a153a1bba8:/tmp/build/perf/feature$ ls -lSr *.make.output
-  <SNIP successful tests>
-  -rw-r--r--. 1 perfbuilder perfbuilder   0 Feb 14 15:00 test-dwarf.make.output
-  -rw-r--r--. 1 perfbuilder perfbuilder   0 Feb 14 14:16 test-cplus-demangle.make.output
-  -rw-r--r--. 1 perfbuilder perfbuilder   0 Feb 14 15:00 test-bpf.make.output
-  -rw-r--r--. 1 perfbuilder perfbuilder   0 Feb 14 15:00 test-backtrace.make.output
-  -rw-r--r--. 1 perfbuilder perfbuilder 104 Feb 14 15:00 test-bionic.make.output
-  -rw-r--r--. 1 perfbuilder perfbuilder 107 Feb 14 15:00 test-libunwind-x86.make.output
-  -rw-r--r--. 1 perfbuilder perfbuilder 115 Feb 14 15:00 test-libunwind-aarch64.make.output
-  -rw-r--r--. 1 perfbuilder perfbuilder 122 Feb 14 15:00 test-libbabeltrace.make.output
-  -rw-r--r--. 1 perfbuilder perfbuilder 254 Feb 14 15:00 test-reallocarray.make.output
-  -rw-r--r--. 1 perfbuilder perfbuilder 312 Feb 14 15:00 test-all.make.output
-  perfbuilder@38a153a1bba8:/tmp/build/perf/feature$
-
-And that reallocarray() one shows:
-
-  perfbuilder@38a153a1bba8:/tmp/build/perf/feature$ cat test-reallocarray.make.output
-  test-reallocarray.c: In function 'main':
-  test-reallocarray.c:7:11: error: implicit declaration of function 'reallocarray' [-Werror=implicit-function-declaration]
-    return !!reallocarray(NULL, 1, 1);
-             ^
-  cc1: all warnings being treated as errors
-  perfbuilder@38a153a1bba8:/tmp/build/perf/feature$
-
-Which now generates the expected result:
-
-  perfbuilder@38a153a1bba8:~$ grep reallocarray /tmp/build/perf/FEATURE-DUMP
-  feature-reallocarray=0
-  perfbuilder@38a153a1bba8:~$
-
-The fallback mechanism kicks in and libbpf and perf are again buildable
-in systems without reallocarray():
-
-  $ cat tools/include/tools/libc_compat.h
-  // SPDX-License-Identifier: (LGPL-2.0+ OR BSD-2-Clause)
-  /* Copyright (C) 2018 Netronome Systems, Inc. */
-
-  #ifndef __TOOLS_LIBC_COMPAT_H
-  #define __TOOLS_LIBC_COMPAT_H
-
-  #include <stdlib.h>
-  #include <linux/overflow.h>
-
-  #ifdef COMPAT_NEED_REALLOCARRAY
-  static inline void *reallocarray(void *ptr, size_t nmemb, size_t size)
-  {
-	  size_t bytes;
-
-	  if (unlikely(check_mul_overflow(nmemb, size, &bytes)))
-		  return NULL;
-	  return realloc(ptr, bytes);
-  }
-  #endif
-  #endif
-  $
-
-Reported-by: Jin Yao <yao.jin@linux.intel.com>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Alexei Starovoitov <ast@fb.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Jakub Kicinski <jakub.kicinski@netronome.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: Yonghong Song <yhs@fb.com>
-Fixes: 531b014e7a2f ("tools: bpf: make use of reallocarray")
-Link: https://lkml.kernel.org/n/tip-aonqku8axii8rxki5g11w40b@git.kernel.org
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/build/feature/test-all.c          | 5 +++++
- tools/build/feature/test-reallocarray.c | 2 ++
- 2 files changed, 7 insertions(+)
+ drivers/net/veth.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/build/feature/test-all.c b/tools/build/feature/test-all.c
-index 20cdaa4fc112..93f485098161 100644
---- a/tools/build/feature/test-all.c
-+++ b/tools/build/feature/test-all.c
-@@ -178,6 +178,10 @@
- # include "test-libaio.c"
- #undef main
- 
-+#define main main_test_reallocarray
-+# include "test-reallocarray.c"
-+#undef main
-+
- int main(int argc, char *argv[])
- {
- 	main_test_libpython();
-@@ -219,6 +223,7 @@ int main(int argc, char *argv[])
- 	main_test_setns();
- 	main_test_libopencsd();
- 	main_test_libaio();
-+	main_test_reallocarray();
- 
- 	return 0;
- }
-diff --git a/tools/build/feature/test-reallocarray.c b/tools/build/feature/test-reallocarray.c
-index 8170de35150d..8f6743e31da7 100644
---- a/tools/build/feature/test-reallocarray.c
-+++ b/tools/build/feature/test-reallocarray.c
-@@ -6,3 +6,5 @@ int main(void)
- {
- 	return !!reallocarray(NULL, 1, 1);
- }
-+
-+#undef _GNU_SOURCE
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index f412ea1cef18..b203d1867959 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -115,7 +115,8 @@ static void veth_get_strings(struct net_device *dev, u32 stringset, u8 *buf)
+ 		p += sizeof(ethtool_stats_keys);
+ 		for (i = 0; i < dev->real_num_rx_queues; i++) {
+ 			for (j = 0; j < VETH_RQ_STATS_LEN; j++) {
+-				snprintf(p, ETH_GSTRING_LEN, "rx_queue_%u_%s",
++				snprintf(p, ETH_GSTRING_LEN,
++					 "rx_queue_%u_%.11s",
+ 					 i, veth_rq_stats_desc[j].desc);
+ 				p += ETH_GSTRING_LEN;
+ 			}
 -- 
 2.19.1
 
