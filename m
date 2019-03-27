@@ -2,101 +2,101 @@ Return-Path: <SRS0=YLVI=R6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91FC5C43381
-	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:00:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9B73C43381
+	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:03:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 64E77206BA
-	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:00:14 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="Ofmje5At"
+	by mail.kernel.org (Postfix) with ESMTP id 70E28206B7
+	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:03:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1553713418;
+	bh=Ezq8V2Lo8P5a6dax5OsET3Uw0HGuTkr0Y3PliA8C/eY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=VtiS7spCX/7SAD3RAaMhuV2CHarJpvpJQ87wFATfKm19zRVeRlQ73NfupxMTZleVF
+	 PgRcEtedapSCQ2qy1+7KHr4CVwKOyzsoDjGtCJq4X6ZMpCODGVZc+OjNKx9QgnmFKB
+	 Dbcj8XzNbyr+kByEi62lVNIYy92lhPLZBZKkuEh4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389720AbfC0SO6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Mar 2019 14:14:58 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:37166 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389710AbfC0SO5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Mar 2019 14:14:57 -0400
-Received: by mail-qt1-f195.google.com with SMTP id z16so20018072qtn.4
-        for <bpf@vger.kernel.org>; Wed, 27 Mar 2019 11:14:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=/GQ3PoXyTSRUtE1BhjDpnMLjUgf+n2ekMVq0YuFfjJA=;
-        b=Ofmje5At1uBCTAvYa4Ci2jETuoPaMHv7iGQlVPbYHuuEc23giA3sFtE6B0YUKRxG2Y
-         LP7ILExr1YL+bhZln/f1sSjFWyezHaiRLeCTC05Aus4ox29UPbldbyGBio1s+rh7BRA2
-         +GpmMP8QRMqPvgcMZeegz07sjdVv0pKbbvN/FHO/tcq8i1OqmbxV30mwkIQYLpxwba8c
-         xCrXIcdaqx8mQLB8lRL9iRSGGl+fcrLWy/u63Z+qq5OWfVMkaynEOKMEE5bc60LwG7mQ
-         kAVIk9Q2IiSuvOlpPfLOc04Gi46DRN8rfm+wH7QMrpEG1ZCfy1Ljsyd2bndfAkEfaboC
-         kvlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=/GQ3PoXyTSRUtE1BhjDpnMLjUgf+n2ekMVq0YuFfjJA=;
-        b=icJsuKRMm3/8SnOIDR6NI+O0m8NIJv1wIaFihFdZjxuBkEWZ64+jyTBOmRej2S/Hkk
-         QQ9hIMblou+0e8SpqbhxTIChO7V7h9A7LdIk5Fsv2yaWYIRHjOgU5GStgQd/6Kk8NPcU
-         wOWebM6UXSPfFMpRU9aUCYcgu+r/00SGBsJhK+ahzfhcrofNKQRYtHQy3nyMrEYKBmxD
-         dsh7vMoVZEPtFYZmy4iI/JJrLIsvATcBAXsfrfSuZ+A3qo6tr4NZcZSREyMONO7Ob94e
-         Q9X2zHvBm0tEH31hbEunxcBIAGjDxv0dbGUr3usdbaU1ykp9CYeMaQK1glxOv21bqVoR
-         GdQg==
-X-Gm-Message-State: APjAAAUA4Yfu9kxF3ye+V6TkOyBN1AP6vkxAmxDhd2FaNs34Bq6yHlta
-        tsuqGWmLlrLdqZNP9yvSjdGDDw==
-X-Google-Smtp-Source: APXvYqxvImDs6yLw9cyOtwrI4l2k7I5+t+hMucuo2Aq8VcBmeWs3CDLnuXrGtv9arzeW3onNM6oBFg==
-X-Received: by 2002:ac8:2692:: with SMTP id 18mr31963871qto.343.1553710496568;
-        Wed, 27 Mar 2019 11:14:56 -0700 (PDT)
-Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id r201sm5912689qke.37.2019.03.27.11.14.55
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 27 Mar 2019 11:14:56 -0700 (PDT)
-Date:   Wed, 27 Mar 2019 11:14:52 -0700
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Jiong Wang <jiong.wang@netronome.com>,
-        Alexei Starovoitov <ast@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, oss-drivers@netronome.com
-Subject: Re: [oss-drivers] [PATCH AUTOSEL 5.0 192/262] nfp: bpf: correct the
- behavior for shifts by zero
-Message-ID: <20190327111452.379db173@cakuba.netronome.com>
-In-Reply-To: <20190327180158.10245-192-sashal@kernel.org>
-References: <20190327180158.10245-1-sashal@kernel.org>
-        <20190327180158.10245-192-sashal@kernel.org>
-Organization: Netronome Systems, Ltd.
+        id S2388509AbfC0SNY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Mar 2019 14:13:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56004 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389137AbfC0SNX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Mar 2019 14:13:23 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 730D52177E;
+        Wed, 27 Mar 2019 18:13:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1553710402;
+        bh=Ezq8V2Lo8P5a6dax5OsET3Uw0HGuTkr0Y3PliA8C/eY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=YJJNjuQMVpkKnuCgCoo1pitMOLevLXdB6Qn+SkGu1vaoEEb83nFJM4OlSwsi/6rM+
+         AKODZpvPR4nV8+qWbqZfUU/Xx9uiYBTtjHU/OK5xF37X7h/LK9sVgbofsDep2kVtHf
+         0LU9C0A8ZEIoKIpwwhx1mOHJkaUW6RNLYd9DXM5g=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Tycho Andersen <tycho@tycho.ws>, Shuah Khan <shuah@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 103/192] selftests: skip seccomp get_metadata test if not real root
+Date:   Wed, 27 Mar 2019 14:08:55 -0400
+Message-Id: <20190327181025.13507-103-sashal@kernel.org>
+X-Mailer: git-send-email 2.19.1
+In-Reply-To: <20190327181025.13507-1-sashal@kernel.org>
+References: <20190327181025.13507-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 27 Mar 2019 14:00:47 -0400, Sasha Levin wrote:
-> From: Jiong Wang <jiong.wang@netronome.com>
-> 
-> [ Upstream commit db0a4b3b6b83a081a9ec309cc8178e5c9b4706a5 ]
-> 
-> Shifts by zero do nothing, and should be treated as nops.
-> 
-> Even though compiler is not supposed to generate such instructions and
-> manual written assembly is unlikely to have them, but they are legal
-> instructions and have defined behavior.
-> 
-> This patch correct existing shifts code-gen to make sure they do nothing
-> when shift amount is zero except when the instruction is ALU32 for which
-> high bits need to be cleared.
-> 
-> For shift amount bigger than type size, already, NFP JIT back-end errors
-> out for immediate shift and only low 5 bits will be taken into account for
-> indirect shift which is the same as x86.
-> 
-> Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
-> Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+From: Tycho Andersen <tycho@tycho.ws>
 
-Nope.
+[ Upstream commit 3aa415dd2128e478ea3225b59308766de0e94d6b ]
+
+The get_metadata() test requires real root, so let's skip it if we're not
+real root.
+
+Note that I used XFAIL here because that's what the test does later if
+CONFIG_CHEKCKPOINT_RESTORE happens to not be enabled. After looking at the
+code, there doesn't seem to be a nice way to skip tests defined as TEST(),
+since there's no return code (I tried exit(KSFT_SKIP), but that didn't work
+either...). So let's do it this way to be consistent, and easier to fix
+when someone comes along and fixes it.
+
+Signed-off-by: Tycho Andersen <tycho@tycho.ws>
+Acked-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Shuah Khan <shuah@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 83057fa9d391..14cad657bc6a 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -2920,6 +2920,12 @@ TEST(get_metadata)
+ 	struct seccomp_metadata md;
+ 	long ret;
+ 
++	/* Only real root can get metadata. */
++	if (geteuid()) {
++		XFAIL(return, "get_metadata requires real root");
++		return;
++	}
++
+ 	ASSERT_EQ(0, pipe(pipefd));
+ 
+ 	pid = fork();
+-- 
+2.19.1
+
