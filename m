@@ -1,130 +1,110 @@
-Return-Path: <SRS0=dSBe=R5=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=YLVI=R6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C37DC43381
-	for <bpf@archiver.kernel.org>; Tue, 26 Mar 2019 20:51:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80D56C43381
+	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 01:24:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0D9892087C
-	for <bpf@archiver.kernel.org>; Tue, 26 Mar 2019 20:51:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3C3DC2075E
+	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 01:24:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="HSKraqn3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ArpMwuBt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732157AbfCZUvE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Mar 2019 16:51:04 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:38813 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726207AbfCZUvE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Mar 2019 16:51:04 -0400
-Received: by mail-wm1-f66.google.com with SMTP id a188so14415429wmf.3
-        for <bpf@vger.kernel.org>; Tue, 26 Mar 2019 13:51:03 -0700 (PDT)
+        id S1727500AbfC0BYs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Mar 2019 21:24:48 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:46367 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727483AbfC0BYr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 Mar 2019 21:24:47 -0400
+Received: by mail-lf1-f68.google.com with SMTP id r25so10096787lfn.13
+        for <bpf@vger.kernel.org>; Tue, 26 Mar 2019 18:24:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=WUWufCSMYpcuZ1Q8U5VJuhgr37Yg/XhDeh/+r3Sv10M=;
-        b=HSKraqn3SZcHLNFUJkumuEPmblFSGz8wVcgZaFj14FYIDpe651/GsNjhlUoVgug/Y7
-         L+AabMM7klnrVboYWvQgp89MBCMCCxdrJ5g68wLkOQGxdTtct1sHKVBh9+CJCT+rGTlW
-         xNnmGPgev9UKCIXaOgoZiTe8StH7PJFUqVMkvHZtyc2Lc6ZD1TgLmaeZRJ+A4tGXumOS
-         Wa6QRgwGAVCK9S7W48+NSh0nFOPK0kpmD+7DBEmS6hGFFadvT/yOJLaEdUfIhpZdzrZQ
-         u6IrlXICeonoQyKDG3EosK+Yuq04p43b/OnpCxJq89ke286oGER9zADR0f4vfasq/G/p
-         hgLQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/Zgy+tftiwcmnS91fclxH/E/8BYJ4r+DizxqgkTPmyk=;
+        b=ArpMwuBtv9UM/eznnc3QZqIsCCfTKviX+if22zCSb2mdCRe5n5/8kKxXuKzobsh/cw
+         4IH8w696n3Teyf1nvDDF9KWGb7LjfgiYMS46U6VT2rIMHl0X1xDLUVDrSupetkzSgYWz
+         iXKJv8GK9aFBkg9ZspsPGwyec9oTYDZQlFev4jZ0LrD4xUEp44HbFD4ZI8Mrn6mZgRTP
+         C6ZCBTi4qKx/0zECqH5E58ifLNDMcxp9PZmUD/ypCE7L3NjtwjwxkkMU4OEyenkAxdFo
+         0zj0EqaxQGETt2hO0i/qSAI8M6RlI3ZhLIDgWuyaFUPPoo3Bnpd4nNgQEeXGVHIciHFe
+         nrFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=WUWufCSMYpcuZ1Q8U5VJuhgr37Yg/XhDeh/+r3Sv10M=;
-        b=rq5te/d1YhvEVoFAz8NCaWm23aWFw8g8VnCKKouG3zbXRmiIAZZ1LHvSLEMKja+WXt
-         ZpNlYslH0SXaqlCEyyPSXz3bsjIcgFn1RvGCxUogn1MsKm2Z7+b64vSaxIvtmIzyn7u1
-         iTkuOwaR8VTaM+czeRgCyiNScPsMbIdYEacYIrjrT9cbJMT8cAYepoxb1owJ7kunKWXk
-         In0NFdEpAHT033rmSx0ehoQzJnsIJcYvcBELUywFLsAYtzrd/DXILgSIbYWn9BJ4g525
-         NYMxiL1kT5BYrwkGXXsdO/akeH2G0qkGNw/VhbTQlqrxhB6r2i26/kMiXc5Iwt1wUrKP
-         /d3w==
-X-Gm-Message-State: APjAAAWAxFrPnGEmNcI/hdI5XD8BH+diqKTV9w7+qNRM2z9A0bcajZtH
-        hBbMoujb+Z5Q9OOTDD98uBXiYA==
-X-Google-Smtp-Source: APXvYqyma+psEB1bMfpQ/yy+FKsL2GSXCDjid46x7kVdsWH3vpbzl6lXaGmhi9VGGPMPOTdssfJZDA==
-X-Received: by 2002:a1c:c4cd:: with SMTP id u196mr9962254wmf.70.1553633462992;
-        Tue, 26 Mar 2019 13:51:02 -0700 (PDT)
-Received: from LAPTOP-V3S7NLPL (cpc1-cmbg19-2-0-cust104.5-4.cable.virginm.net. [82.27.180.105])
-        by smtp.gmail.com with ESMTPSA id b204sm33714808wmh.29.2019.03.26.13.51.01
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 26 Mar 2019 13:51:02 -0700 (PDT)
-References: <1553623539-15474-1-git-send-email-jiong.wang@netronome.com> <1553623539-15474-4-git-send-email-jiong.wang@netronome.com> <CAG48ez0inUUF3wZw5P6o35T3CKQ=CEue1vo-H-dSLDKKo2OHow@mail.gmail.com>
-User-agent: mu4e 0.9.18; emacs 25.2.2
-From:   Jiong Wang <jiong.wang@netronome.com>
-To:     Jann Horn <jannh@google.com>
-Cc:     Jiong Wang <jiong.wang@netronome.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
-        Network Development <netdev@vger.kernel.org>,
-        oss-drivers@netronome.com
-Subject: Re: [PATCH/RFC bpf-next 03/16] bpf: split read liveness into REG_LIVE_READ64 and REG_LIVE_READ32
-In-reply-to: <CAG48ez0inUUF3wZw5P6o35T3CKQ=CEue1vo-H-dSLDKKo2OHow@mail.gmail.com>
-Date:   Tue, 26 Mar 2019 20:50:58 +0000
-Message-ID: <87lg114ax9.fsf@netronome.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/Zgy+tftiwcmnS91fclxH/E/8BYJ4r+DizxqgkTPmyk=;
+        b=uZTe+9r9ScV6lurnovTx4hh7XcFneEXA2QR5YfI06oV4mAyQoqG0Ufm9fJAQjfIrnm
+         OLIQqshKkcGHJjOIDFUC0S/cXK+fpNNQmTJldji+j215bQksPPe8iJBHJUuF5KgrNGsB
+         ZxSjmV7rCqv2ZckjXD/hMc2xXvlMG5Nw7HXkG9GiDUQVBMhns+LCRL7asR8Zz9l1W6vh
+         HmTWhd/pOGAAWVkS9+LnAf0KT3cu9TBiT4Yz5ulhl8YXPCivWs3mfg5pSl3n7U0u5cLJ
+         m8Sl2UN6+zqabwhO9dtTURFxRttSvLbOtYFfg4UjtfNekJsceKE73clYhUU4qFdEAAYB
+         hI1A==
+X-Gm-Message-State: APjAAAUu+lYmxWYUrXUm5FH67zxSSK42OpWQcg/ZNuMuJXnHj428uhQo
+        UWZUUXqw2x42aolH5hZWGWJROwIQmrRShrJu1po=
+X-Google-Smtp-Source: APXvYqym6SOZ4BrHyY3vtJiunZ0TuGdroIr5Iojhesh2irKY6K5ONTDUP/mfJY1H8NgyQLNyuz30xGql6zlj/y03up4=
+X-Received: by 2002:ac2:4304:: with SMTP id l4mr8837196lfh.168.1553649885526;
+ Tue, 26 Mar 2019 18:24:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20190315201749.556085-1-andriin@fb.com> <51e9776a-a0c2-fb69-6b8c-82b220c3e18f@fb.com>
+In-Reply-To: <51e9776a-a0c2-fb69-6b8c-82b220c3e18f@fb.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 26 Mar 2019 18:24:34 -0700
+Message-ID: <CAADnVQL=JjRx33xjikY6O34Gpy_7m5L_oN1mOPq9Q8R4rbaG5w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] kbuild: add ability to generate BTF type info
+ for vmlinux
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>,
+        "andrii.nakryiko@gmail.com" <andrii.nakryiko@gmail.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yonghong Song <yhs@fb.com>, Martin Lau <kafai@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-
-Jann Horn writes:
-
-> On Tue, Mar 26, 2019 at 7:06 PM Jiong Wang <jiong.wang@netronome.com> wrote:
->>
->> In previous patch, we have split register arg type for sub-register read,
->> but haven't touch read liveness.
->>
->> This patch further split read liveness into REG_LIVE_READ64 and
->> REG_LIVE_READ32. Liveness propagation code are updated accordingly.
->>
->> After this split, customized actions could be defined when propagating full
->> register read (REG_LIVE_READ64) or sub-register read (REG_LIVE_READ32).
->>
->> Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
-> [...]
->> @@ -1374,7 +1374,8 @@ static int check_stack_read(struct bpf_verifier_env *env,
->>                         return -EACCES;
->>                 }
->>                 mark_reg_read(env, &reg_state->stack[spi].spilled_ptr,
->> -                             reg_state->stack[spi].spilled_ptr.parent);
->> +                             reg_state->stack[spi].spilled_ptr.parent,
->> +                             size == BPF_REG_SIZE);
+On Mon, Mar 25, 2019 at 8:59 AM Alexei Starovoitov <ast@fb.com> wrote:
 >
-> Isn't it possible to use a 4-byte read on the upper half of an 8-byte
-> stack slot?
-
-I think that's fine, and is irrelevant with zero-extension on register.
-
-If it is a 8-byte stack slot comes from spill of register, then the
-definition of the register should have been marked as needing
-zero-extension if that register was generated by sub-register write.
-
-Regards,
-Jiong
-
+> On 3/15/19 1:17 PM, Andrii Nakryiko wrote:
+> > This patch adds new config option to trigger generation of BTF type
+> > information from DWARF debuginfo for vmlinux and kernel modules through
+> > pahole, which in turn relies on libbpf for btf_dedup() algorithm.
+> >
+> > The intent is to record compact type information of all types used
+> > inside kernel, including all the structs/unions/typedefs/etc. This
+> > enables BPF's compile-once-run-everywhere ([0]) approach, in which
+> > tracing programs that are inspecting kernel's internal data (e.g.,
+> > struct task_struct) can be compiled on a system running some kernel
+> > version, but would be possible to run on other kernel versions (and
+> > configurations) without recompilation, even if the layout of structs
+> > changed and/or some of the fields were added, removed, or renamed.
+> >
+> > This is only possible if BPF loader can get kernel type info to adjust
+> > all the offsets correctly. This patch is a first time in this direction,
+> > making sure that BTF type info is part of Linux kernel image in
+> > non-loadable ELF section.
+> >
+> > BTF deduplication ([1]) algorithm typically provides 100x savings
+> > compared to DWARF data, so resulting .BTF section is not big as is
+> > typically about 2MB in size.
+> >
+> > [0] http://vger.kernel.org/lpc-bpf2018.html#session-2
+> > [1] https://facebookmicrosites.github.io/bpf/blog/2018/11/14/btf-enhancement.html
+> >
+> > Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
 >
->>                 if (value_regno >= 0) {
->>                         if (zeros == size) {
->>                                 /* any size read into register is zero extended,
->> @@ -2220,7 +2221,8 @@ static int check_stack_boundary(struct bpf_verifier_env *env, int regno,
->>                  * the whole slot to be marked as 'read'
->>                  */
->>                 mark_reg_read(env, &state->stack[spi].spilled_ptr,
->> -                             state->stack[spi].spilled_ptr.parent);
->> +                             state->stack[spi].spilled_ptr.parent,
->> +                             access_size == BPF_REG_SIZE);
+> Masahiro,
 >
-> Same thing as above.
->
->>         }
->>         return update_stack_depth(env, state, off);
->>  }
-> [...]
+> could you please review this patch?
+> It's been pending for 10 days!
 
+Masahiro,
+Ping!
