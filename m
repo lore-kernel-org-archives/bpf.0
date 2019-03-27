@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CA71C43381
-	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:32:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EFFBC4360F
+	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:33:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3C1E42075C
-	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:32:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 14C8E2075C
+	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:33:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1553715172;
-	bh=QxT++6H9Ub1czxq143z5rjk+Ci+OD4P3uiOUB8xIhLQ=;
+	s=default; t=1553715226;
+	bh=GB/tzb7UrmxmQDwStdqyaUgKDv2/kefDkBPjoOdWj90=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=UrW2rODU0NmJrx4KEcVG+KMDZ/ZeJSu55kyMZ2UWL0wIu3hbVdix0AYlO1Bt4vYAG
-	 wd4np91fQxYXsmL6nFls5DrqJ52X8KnSucMm/n+q4iLwTOHbLcXJdZBtbFGkLsbqNY
-	 qOdjuxQWLsYQUxqhUgHqRel9GfSElnaLUY/dvV8U=
+	b=pLi9JuxKv0XdsTYP90Ry64wYmn5L9zot9zEG4UPt868Hk2EvltKUBcuAusHILJCN4
+	 KSysQ4HGF+lk2lgzvROkLKMv9A2T4f+ChMzMiAbzfBIXW7wGt0w8KvbqKecXID8md7
+	 5PQkSBsJkAnkr9Y3wGYPMbSSVuuMPCzacYSGLP+k=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730973AbfC0Tcn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Mar 2019 15:32:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42582 "EHLO mail.kernel.org"
+        id S1730485AbfC0SC1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Mar 2019 14:02:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42338 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731120AbfC0SCj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Mar 2019 14:02:39 -0400
+        id S1728329AbfC0SC1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Mar 2019 14:02:27 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A43142177E;
-        Wed, 27 Mar 2019 18:02:37 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AA6E72147C;
+        Wed, 27 Mar 2019 18:02:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1553709758;
-        bh=QxT++6H9Ub1czxq143z5rjk+Ci+OD4P3uiOUB8xIhLQ=;
+        s=default; t=1553709746;
+        bh=GB/tzb7UrmxmQDwStdqyaUgKDv2/kefDkBPjoOdWj90=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cKiBEVO4Rx/Y1e72mWPOh1pJMCp9flQ6DG8mSjcy35KnJob0t/nuzVjKHLDxyW8ZI
-         8I9jExA2T7ynALm48y/tOsykVC4jzVmOrB79XI8keNl02xSN5x879MKyYk2FxCkKXH
-         SWdvKpTTcJSUujjviz3orLJJio0kUuwevOwgWdHg=
+        b=ujTB8Heyiikv2PloWo9nS0lDUNTyqEPOXUnc10QXpTPDLCO0q8MGyYTJowkkBo6ko
+         pFYkBFh7s5WWjNZPK7iLdqENfg837DGUk57OFjNlSyIygpLQJk0+0kUYPbiIwkPJvB
+         lo7hA9Ua0cRED6KGW2JW+h85Uu1cvIUPeJqdh3RA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Stanislav Fomichev <sdf@google.com>,
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.0 024/262] libbpf: force fixdep compilation at the start of the build
-Date:   Wed, 27 Mar 2019 13:57:59 -0400
-Message-Id: <20190327180158.10245-24-sashal@kernel.org>
+        bpf@vger.kernel.org, xdp-newbies@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.0 016/262] xsk: fix to reject invalid flags in xsk_bind
+Date:   Wed, 27 Mar 2019 13:57:51 -0400
+Message-Id: <20190327180158.10245-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190327180158.10245-1-sashal@kernel.org>
 References: <20190327180158.10245-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -58,120 +58,50 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Stanislav Fomichev <sdf@google.com>
+From: Björn Töpel <bjorn.topel@intel.com>
 
-[ Upstream commit 8e2688876c7f7073d925e1f150e86b8ed3338f52 ]
+[ Upstream commit f54ba391d88f5a5d032175b4c308c176e34b80b7 ]
 
-libbpf targets don't explicitly depend on fixdep target, so when
-we do 'make -j$(nproc)', there is a high probability, that some
-objects will be built before fixdep binary is available.
+Passing a non-existing flag in the sxdp_flags member of struct
+sockaddr_xdp was, incorrectly, silently ignored. This patch addresses
+that behavior, and rejects any non-existing flags.
 
-Fix this by running sub-make; this makes sure that fixdep dependency
-is properly accounted for.
+We have examined existing user space code, and to our best knowledge,
+no one is relying on the current incorrect behavior. AF_XDP is still
+in its infancy, so from our perspective, the risk of breakage is very
+low, and addressing this problem now is important.
 
-For the same issue in perf, see commit abb26210a395 ("perf tools: Force
-fixdep compilation at the start of the build").
-
-Before:
-
-$ rm -rf /tmp/bld; mkdir /tmp/bld; make -j$(nproc) O=/tmp/bld -C tools/lib/bpf/
-
-Auto-detecting system features:
-...                        libelf: [ on  ]
-...                           bpf: [ on  ]
-
-  HOSTCC   /tmp/bld/fixdep.o
-  CC       /tmp/bld/libbpf.o
-  CC       /tmp/bld/bpf.o
-  CC       /tmp/bld/btf.o
-  CC       /tmp/bld/nlattr.o
-  CC       /tmp/bld/libbpf_errno.o
-  CC       /tmp/bld/str_error.o
-  CC       /tmp/bld/netlink.o
-  CC       /tmp/bld/bpf_prog_linfo.o
-  CC       /tmp/bld/libbpf_probes.o
-  CC       /tmp/bld/xsk.o
-  HOSTLD   /tmp/bld/fixdep-in.o
-  LINK     /tmp/bld/fixdep
-  LD       /tmp/bld/libbpf-in.o
-  LINK     /tmp/bld/libbpf.a
-  LINK     /tmp/bld/libbpf.so
-  LINK     /tmp/bld/test_libbpf
-
-$ head /tmp/bld/.libbpf.o.cmd
- # cannot find fixdep (/usr/local/google/home/sdf/src/linux/xxx//fixdep)
- # using basic dep data
-
-/tmp/bld/libbpf.o: libbpf.c /usr/include/stdc-predef.h \
- /usr/include/stdlib.h /usr/include/features.h \
- /usr/include/x86_64-linux-gnu/sys/cdefs.h \
- /usr/include/x86_64-linux-gnu/bits/wordsize.h \
- /usr/include/x86_64-linux-gnu/gnu/stubs.h \
- /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
- /usr/lib/gcc/x86_64-linux-gnu/7/include/stddef.h \
-
-After:
-
-$ rm -rf /tmp/bld; mkdir /tmp/bld; make -j$(nproc) O=/tmp/bld -C tools/lib/bpf/
-
-Auto-detecting system features:
-...                        libelf: [ on  ]
-...                           bpf: [ on  ]
-
-  HOSTCC   /tmp/bld/fixdep.o
-  HOSTLD   /tmp/bld/fixdep-in.o
-  LINK     /tmp/bld/fixdep
-  CC       /tmp/bld/libbpf.o
-  CC       /tmp/bld/bpf.o
-  CC       /tmp/bld/nlattr.o
-  CC       /tmp/bld/btf.o
-  CC       /tmp/bld/libbpf_errno.o
-  CC       /tmp/bld/str_error.o
-  CC       /tmp/bld/netlink.o
-  CC       /tmp/bld/bpf_prog_linfo.o
-  CC       /tmp/bld/libbpf_probes.o
-  CC       /tmp/bld/xsk.o
-  LD       /tmp/bld/libbpf-in.o
-  LINK     /tmp/bld/libbpf.a
-  LINK     /tmp/bld/libbpf.so
-  LINK     /tmp/bld/test_libbpf
-
-$ head /tmp/bld/.libbpf.o.cmd
-cmd_/tmp/bld/libbpf.o := gcc -Wp,-MD,/tmp/bld/.libbpf.o.d -Wp,-MT,/tmp/bld/libbpf.o -g -Wall -DHAVE_LIBELF_MMAP_SUPPORT -DCOMPAT_NEED_REALLOCARRAY -Wbad-function-cast -Wdeclaration-after-statement -Wformat-security -Wformat-y2k -Winit-self -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-system-headers -Wold-style-definition -Wpacked -Wredundant-decls -Wshadow -Wstrict-prototypes -Wswitch-default -Wswitch-enum -Wundef -Wwrite-strings -Wformat -Wstrict-aliasing=3 -Werror -Wall -fPIC -I. -I/usr/local/google/home/sdf/src/linux/tools/include -I/usr/local/google/home/sdf/src/linux/tools/arch/x86/include/uapi -I/usr/local/google/home/sdf/src/linux/tools/include/uapi -fvisibility=hidden -D"BUILD_STR(s)=$(pound)s" -c -o /tmp/bld/libbpf.o libbpf.c
-
-source_/tmp/bld/libbpf.o := libbpf.c
-
-deps_/tmp/bld/libbpf.o := \
-  /usr/include/stdc-predef.h \
-  /usr/include/stdlib.h \
-  /usr/include/features.h \
-  /usr/include/x86_64-linux-gnu/sys/cdefs.h \
-  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
-
-Fixes: 7c422f557266 ("tools build: Build fixdep helper from perf and basic libs")
-Reported-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
-Acked-by: Yonghong Song <yhs@fb.com>
+Fixes: 965a99098443 ("xsk: add support for bind for Rx")
+Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/xdp/xsk.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index 34d9c3619c96..78fd86b85087 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -162,7 +162,8 @@ endif
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 85e4fe4f18cc..f3031c8907d9 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -407,6 +407,10 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
+ 	if (sxdp->sxdp_family != AF_XDP)
+ 		return -EINVAL;
  
- TARGETS = $(CMD_TARGETS)
++	flags = sxdp->sxdp_flags;
++	if (flags & ~(XDP_SHARED_UMEM | XDP_COPY | XDP_ZEROCOPY))
++		return -EINVAL;
++
+ 	mutex_lock(&xs->mutex);
+ 	if (xs->dev) {
+ 		err = -EBUSY;
+@@ -425,7 +429,6 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
+ 	}
  
--all: fixdep all_cmd
-+all: fixdep
-+	$(Q)$(MAKE) all_cmd
+ 	qid = sxdp->sxdp_queue_id;
+-	flags = sxdp->sxdp_flags;
  
- all_cmd: $(CMD_TARGETS) check
- 
+ 	if (flags & XDP_SHARED_UMEM) {
+ 		struct xdp_sock *umem_xs;
 -- 
 2.19.1
 
