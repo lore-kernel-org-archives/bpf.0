@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D228BC10F00
-	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:29:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CA71C43381
+	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:32:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 98BBA21738
-	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:29:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3C1E42075C
+	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:32:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1553714943;
-	bh=2K1NsZ8pgY0DBWjO3DAoYyXaNrz4IRlgOMiO/ylmQ8E=;
+	s=default; t=1553715172;
+	bh=QxT++6H9Ub1czxq143z5rjk+Ci+OD4P3uiOUB8xIhLQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=VBm8RZ15+CXBgkYEfBwFRKg/CRSFMscQ3AC17owHkzJgwiqPSs7F/C7Ap3Fd74gKY
-	 uJqsnrHl/nVnFDOAFUQFC1wdKJtg4LefVznXO3YOHtJ8rVnd/lsIkspHDcVIWdD31e
-	 R1E0FtSDsyQxMeRUPE5ZCYh847+/+IDwGmKtEC/E=
+	b=UrW2rODU0NmJrx4KEcVG+KMDZ/ZeJSu55kyMZ2UWL0wIu3hbVdix0AYlO1Bt4vYAG
+	 wd4np91fQxYXsmL6nFls5DrqJ52X8KnSucMm/n+q4iLwTOHbLcXJdZBtbFGkLsbqNY
+	 qOdjuxQWLsYQUxqhUgHqRel9GfSElnaLUY/dvV8U=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733237AbfC0T2z (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Mar 2019 15:28:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44544 "EHLO mail.kernel.org"
+        id S1730973AbfC0Tcn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Mar 2019 15:32:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42582 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733098AbfC0SEC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Mar 2019 14:04:02 -0400
+        id S1731120AbfC0SCj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Mar 2019 14:02:39 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ECEDD21738;
-        Wed, 27 Mar 2019 18:04:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A43142177E;
+        Wed, 27 Mar 2019 18:02:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1553709841;
-        bh=2K1NsZ8pgY0DBWjO3DAoYyXaNrz4IRlgOMiO/ylmQ8E=;
+        s=default; t=1553709758;
+        bh=QxT++6H9Ub1czxq143z5rjk+Ci+OD4P3uiOUB8xIhLQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GJ6jy/Cs87GGh/X8LImttaagJEOFjdlO9Tq3Vh3shEGXB/NHQ2+dsuVmndNUsNYAi
-         fpg3fE/23MFIhRCwPVzlWz8ZmDmEC4t/EVPjGnld8piu3ba0NHuUun5NMDSJ+TEDJy
-         UTIF/aQsKDC5WNlXv0evSYOCEzKa4FQvL6rxfyQs=
+        b=cKiBEVO4Rx/Y1e72mWPOh1pJMCp9flQ6DG8mSjcy35KnJob0t/nuzVjKHLDxyW8ZI
+         8I9jExA2T7ynALm48y/tOsykVC4jzVmOrB79XI8keNl02xSN5x879MKyYk2FxCkKXH
+         SWdvKpTTcJSUujjviz3orLJJio0kUuwevOwgWdHg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+Cc:     Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.0 069/262] tools/bpf: selftests: add map lookup to test_map_in_map bpf prog
-Date:   Wed, 27 Mar 2019 13:58:44 -0400
-Message-Id: <20190327180158.10245-69-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.0 024/262] libbpf: force fixdep compilation at the start of the build
+Date:   Wed, 27 Mar 2019 13:57:59 -0400
+Message-Id: <20190327180158.10245-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190327180158.10245-1-sashal@kernel.org>
 References: <20190327180158.10245-1-sashal@kernel.org>
@@ -57,61 +58,120 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Yonghong Song <yhs@fb.com>
+From: Stanislav Fomichev <sdf@google.com>
 
-[ Upstream commit 9eca5083757b679b37f210092c871916c2c222d0 ]
+[ Upstream commit 8e2688876c7f7073d925e1f150e86b8ed3338f52 ]
 
-The bpf_map_lookup_elem is added in the bpf program.
-Without previous patch, the test change will trigger the
-following error:
-  $ ./test_maps
-  ...
-  ; value_p = bpf_map_lookup_elem(map, &key);
-  20: (bf) r1 = r7
-  21: (bf) r2 = r8
-  22: (85) call bpf_map_lookup_elem#1
-  ; if (!value_p || *value_p != 123)
-  23: (15) if r0 == 0x0 goto pc+16
-   R0=map_value(id=2,off=0,ks=4,vs=4,imm=0) R6=inv1 R7=map_ptr(id=0,off=0,ks=4,vs=4,imm=0)
-   R8=fp-8,call_-1 R10=fp0,call_-1 fp-8=mmmmmmmm
-  ; if (!value_p || *value_p != 123)
-  24: (61) r1 = *(u32 *)(r0 +0)
-   R0=map_value(id=2,off=0,ks=4,vs=4,imm=0) R6=inv1 R7=map_ptr(id=0,off=0,ks=4,vs=4,imm=0)
-   R8=fp-8,call_-1 R10=fp0,call_-1 fp-8=mmmmmmmm
-  bpf_spin_lock cannot be accessed directly by load/store
+libbpf targets don't explicitly depend on fixdep target, so when
+we do 'make -j$(nproc)', there is a high probability, that some
+objects will be built before fixdep binary is available.
 
-With the kernel fix in the previous commit, the error goes away.
+Fix this by running sub-make; this makes sure that fixdep dependency
+is properly accounted for.
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+For the same issue in perf, see commit abb26210a395 ("perf tools: Force
+fixdep compilation at the start of the build").
+
+Before:
+
+$ rm -rf /tmp/bld; mkdir /tmp/bld; make -j$(nproc) O=/tmp/bld -C tools/lib/bpf/
+
+Auto-detecting system features:
+...                        libelf: [ on  ]
+...                           bpf: [ on  ]
+
+  HOSTCC   /tmp/bld/fixdep.o
+  CC       /tmp/bld/libbpf.o
+  CC       /tmp/bld/bpf.o
+  CC       /tmp/bld/btf.o
+  CC       /tmp/bld/nlattr.o
+  CC       /tmp/bld/libbpf_errno.o
+  CC       /tmp/bld/str_error.o
+  CC       /tmp/bld/netlink.o
+  CC       /tmp/bld/bpf_prog_linfo.o
+  CC       /tmp/bld/libbpf_probes.o
+  CC       /tmp/bld/xsk.o
+  HOSTLD   /tmp/bld/fixdep-in.o
+  LINK     /tmp/bld/fixdep
+  LD       /tmp/bld/libbpf-in.o
+  LINK     /tmp/bld/libbpf.a
+  LINK     /tmp/bld/libbpf.so
+  LINK     /tmp/bld/test_libbpf
+
+$ head /tmp/bld/.libbpf.o.cmd
+ # cannot find fixdep (/usr/local/google/home/sdf/src/linux/xxx//fixdep)
+ # using basic dep data
+
+/tmp/bld/libbpf.o: libbpf.c /usr/include/stdc-predef.h \
+ /usr/include/stdlib.h /usr/include/features.h \
+ /usr/include/x86_64-linux-gnu/sys/cdefs.h \
+ /usr/include/x86_64-linux-gnu/bits/wordsize.h \
+ /usr/include/x86_64-linux-gnu/gnu/stubs.h \
+ /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
+ /usr/lib/gcc/x86_64-linux-gnu/7/include/stddef.h \
+
+After:
+
+$ rm -rf /tmp/bld; mkdir /tmp/bld; make -j$(nproc) O=/tmp/bld -C tools/lib/bpf/
+
+Auto-detecting system features:
+...                        libelf: [ on  ]
+...                           bpf: [ on  ]
+
+  HOSTCC   /tmp/bld/fixdep.o
+  HOSTLD   /tmp/bld/fixdep-in.o
+  LINK     /tmp/bld/fixdep
+  CC       /tmp/bld/libbpf.o
+  CC       /tmp/bld/bpf.o
+  CC       /tmp/bld/nlattr.o
+  CC       /tmp/bld/btf.o
+  CC       /tmp/bld/libbpf_errno.o
+  CC       /tmp/bld/str_error.o
+  CC       /tmp/bld/netlink.o
+  CC       /tmp/bld/bpf_prog_linfo.o
+  CC       /tmp/bld/libbpf_probes.o
+  CC       /tmp/bld/xsk.o
+  LD       /tmp/bld/libbpf-in.o
+  LINK     /tmp/bld/libbpf.a
+  LINK     /tmp/bld/libbpf.so
+  LINK     /tmp/bld/test_libbpf
+
+$ head /tmp/bld/.libbpf.o.cmd
+cmd_/tmp/bld/libbpf.o := gcc -Wp,-MD,/tmp/bld/.libbpf.o.d -Wp,-MT,/tmp/bld/libbpf.o -g -Wall -DHAVE_LIBELF_MMAP_SUPPORT -DCOMPAT_NEED_REALLOCARRAY -Wbad-function-cast -Wdeclaration-after-statement -Wformat-security -Wformat-y2k -Winit-self -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-system-headers -Wold-style-definition -Wpacked -Wredundant-decls -Wshadow -Wstrict-prototypes -Wswitch-default -Wswitch-enum -Wundef -Wwrite-strings -Wformat -Wstrict-aliasing=3 -Werror -Wall -fPIC -I. -I/usr/local/google/home/sdf/src/linux/tools/include -I/usr/local/google/home/sdf/src/linux/tools/arch/x86/include/uapi -I/usr/local/google/home/sdf/src/linux/tools/include/uapi -fvisibility=hidden -D"BUILD_STR(s)=$(pound)s" -c -o /tmp/bld/libbpf.o libbpf.c
+
+source_/tmp/bld/libbpf.o := libbpf.c
+
+deps_/tmp/bld/libbpf.o := \
+  /usr/include/stdc-predef.h \
+  /usr/include/stdlib.h \
+  /usr/include/features.h \
+  /usr/include/x86_64-linux-gnu/sys/cdefs.h \
+  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
+
+Fixes: 7c422f557266 ("tools build: Build fixdep helper from perf and basic libs")
+Reported-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/test_map_in_map.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/lib/bpf/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/test_map_in_map.c b/tools/testing/selftests/bpf/test_map_in_map.c
-index ce923e67e08e..2985f262846e 100644
---- a/tools/testing/selftests/bpf/test_map_in_map.c
-+++ b/tools/testing/selftests/bpf/test_map_in_map.c
-@@ -27,6 +27,7 @@ SEC("xdp_mimtest")
- int xdp_mimtest0(struct xdp_md *ctx)
- {
- 	int value = 123;
-+	int *value_p;
- 	int key = 0;
- 	void *map;
+diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+index 34d9c3619c96..78fd86b85087 100644
+--- a/tools/lib/bpf/Makefile
++++ b/tools/lib/bpf/Makefile
+@@ -162,7 +162,8 @@ endif
  
-@@ -35,6 +36,9 @@ int xdp_mimtest0(struct xdp_md *ctx)
- 		return XDP_DROP;
+ TARGETS = $(CMD_TARGETS)
  
- 	bpf_map_update_elem(map, &key, &value, 0);
-+	value_p = bpf_map_lookup_elem(map, &key);
-+	if (!value_p || *value_p != 123)
-+		return XDP_DROP;
+-all: fixdep all_cmd
++all: fixdep
++	$(Q)$(MAKE) all_cmd
  
- 	map = bpf_map_lookup_elem(&mim_hash, &key);
- 	if (!map)
+ all_cmd: $(CMD_TARGETS) check
+ 
 -- 
 2.19.1
 
