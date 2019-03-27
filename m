@@ -2,104 +2,85 @@ Return-Path: <SRS0=YLVI=R6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 902CCC43381
-	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 13:52:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 015D0C43381
+	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 15:04:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5C9A02075E
-	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 13:52:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C009A206B7
+	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 15:04:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UrZ12Ype"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rzs+IHIa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728197AbfC0Nwh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Mar 2019 09:52:37 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:36886 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726233AbfC0Nwg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Mar 2019 09:52:36 -0400
-Received: by mail-pl1-f194.google.com with SMTP id q6so3356396pll.4;
-        Wed, 27 Mar 2019 06:52:36 -0700 (PDT)
+        id S1725997AbfC0PEW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Mar 2019 11:04:22 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:43989 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728250AbfC0PEW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Mar 2019 11:04:22 -0400
+Received: by mail-lj1-f194.google.com with SMTP id f18so14692364lja.10;
+        Wed, 27 Mar 2019 08:04:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3JdAwqw+SZU37QvtZnlrcjekP9weXgvvYemjbEx20cs=;
-        b=UrZ12Ypex7bJLF7qmkEVFB/PSyN6HQij7XZAOsknZ4bxjZVSsz8+oHydbF4iy8cEUr
-         aRqv8GPuZmccdzLBuXK+p4TDIoJuawewXIunhw9/KhuwUb4LFz7AKW60k0Q7l3pQ5J7A
-         slxotPuRHe+QroACI1hgdqaMpORHxQu2IF21cvfHsCLuCfb/9fKTXmYvOPIToHWxFK+X
-         uIlCkVmRq9sy/D1fCd7zHCgBtDvF8FE8Cx5iW1XyxhWwMPPNxTJ2CoCm1io9ZRnlQMih
-         HTIYw+jq/kML1ZvPMn3TLtM3DIFdjO2lTeBjqIwJ9HBOKyGvKwXbgdyprWgHax35ckt3
-         OoLA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2AsoKoWTsDPROJhIOHvGqS7wKNVuxFIwdIE1Q2AXR9Q=;
+        b=rzs+IHIaAZBKPbsIenv8H/frFwL80H3g48/Tg1BbgI+D8AZbvs2MvAmH9Ct7o3HPCA
+         NLsfLpvVtMmju1QNHX5PR0lZC2cEd9vn8dFfcqGN+p0QbUudpi0U+b2jrnqyKXcU6SLh
+         mUmyDdIYvall2CATVytYLHsVdd6JxkGYFDrIxGM781jryirQY4i7RCITp7l3iJrBKog9
+         zbyftfKY7O2LBdLGbYzQ7Gexq6dYipFX2airWygR3+TmeceGed34SmrMX6VdiLO51z1q
+         RqfnKEW47lE1H5xC9ezzptJ0piJ7ceRCHJCiAWPYIfVB8Mf4fD0K8C9ScZ+vRVdQWaJI
+         tkxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3JdAwqw+SZU37QvtZnlrcjekP9weXgvvYemjbEx20cs=;
-        b=lee7bxrBLaGvCgoyDAiHpidZ5YBU2rOpYg8NgU6SU45q/S4UWv+ndRq4F9LUr0GydY
-         BdWwD8LGq1Q3+B6yHovzUuCAAwHrMdxinC2iy6qlaEksC+KiQBUIEXDWPTNuhtjs6zyB
-         P9I+8q+JOyk2oEZU1NNfhTmDOqI/eIjruIriKgFW7wPJ4mQ4uu3iDsJGGFcUg5sGIscX
-         d5BYLEf3kysMqvcRuOCLUV9QHZ+SfGkcfkxUJlp5Rz1i4qD8PFjUgBUmk8t06DFhQ2t0
-         P2z8jOM6rcAR5/Q4tDpywwbPMcYsINo0ZBsGcpVI1+D8qox+aMTGdzsV4IUhspwAACuw
-         KUNQ==
-X-Gm-Message-State: APjAAAXFbvcAWyL/EcipJTyYHMepik+SNf4vcmh2vdk4kwf4zfXPqoz1
-        AYWtBpTTeAE/gMooqgi4zco=
-X-Google-Smtp-Source: APXvYqwcPGBRSJNX+T6/6aPzRnKutqul4XGrRBk7dw40IgN5RR7bMNvqsEjU1A8lIsANEaQl7VPdNQ==
-X-Received: by 2002:a17:902:9306:: with SMTP id bc6mr36134663plb.59.1553694756298;
-        Wed, 27 Mar 2019 06:52:36 -0700 (PDT)
-Received: from btopel-mobl.ger.intel.com ([134.134.139.83])
-        by smtp.gmail.com with ESMTPSA id d15sm6823571pfo.34.2019.03.27.06.52.32
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 27 Mar 2019 06:52:35 -0700 (PDT)
-From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
-To:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org
-Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        magnus.karlsson@intel.com, bpf@vger.kernel.org,
-        xiaolong.ye@intel.com, qi.z.zhang@intel.com
-Subject: [PATCH bpf 2/2] libbpf: add libelf dependency to shared library build
-Date:   Wed, 27 Mar 2019 14:51:14 +0100
-Message-Id: <20190327135114.17026-3-bjorn.topel@gmail.com>
-X-Mailer: git-send-email 2.19.1
-In-Reply-To: <20190327135114.17026-1-bjorn.topel@gmail.com>
-References: <20190327135114.17026-1-bjorn.topel@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2AsoKoWTsDPROJhIOHvGqS7wKNVuxFIwdIE1Q2AXR9Q=;
+        b=YlsWlvBF7X/MmJwbzovV3HQv5+Q04fbp8uLGoG+hQ0aWVj9dIq19MN7sopGmKVpIOT
+         r666jZ3XOlLw0leIsA0X2Iso00+UpWUfjPwj+Yeg+uZ8wqYIQS6unlkmUf88YBhRW9H0
+         3Cr4s4XTjseeQ6Ky7sTw8aRG88zMYXK8+iW1TQ2Ic8S2zeOQ1yO9a5kESE+G+pTTCqet
+         rDwdsVU5h5Hcgx6zuYdHUNPq2rr2oxm6p+cDZjPmJyUNPGGLJMOJLajER8zaGQDEOTBm
+         bkkPsKVfuoWtDb6sz/fGGgjzvB5SFNZ2z7imQk2+eIXEtZHmGgnaq6H5r3pmu3eDq+u/
+         8gMg==
+X-Gm-Message-State: APjAAAXhVSBZiCzMxlyYZLVAith4U/ByazqMZnmc73mg9p0juSLAdpTw
+        A8N3zpb5dzsEHqS92/N/wJO4cmfxOvRTA4D64AASQQ==
+X-Google-Smtp-Source: APXvYqzaNzfGytjDgTVTM7btLPp+V+lLpBsm2N68aI8hx45T9PsmMTS2packjUykJTUCSU4/Ghcg48ZJO4MTxuqEUDI=
+X-Received: by 2002:a2e:a284:: with SMTP id k4mr18098817lja.99.1553699060239;
+ Wed, 27 Mar 2019 08:04:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20190327050007.2419746-1-andrii.nakryiko@gmail.com>
+In-Reply-To: <20190327050007.2419746-1-andrii.nakryiko@gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 27 Mar 2019 08:04:08 -0700
+Message-ID: <CAADnVQKbYyBLuhfWLOQgRQXHznHXCoeNLS9uBKVJhAm6YkzKJA@mail.gmail.com>
+Subject: Re: [PATCH bpf 0/2] fix btf_dedup()'s type graph equivalence check
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@fb.com>, Yonghong Song <yhs@fb.com>,
+        bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Kernel Team <kernel-team@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Björn Töpel <bjorn.topel@intel.com>
+On Tue, Mar 26, 2019 at 10:00 PM <andrii.nakryiko@gmail.com> wrote:
+>
+> From: Andrii Nakryiko <andriin@fb.com>
+>
+> This patch set fixes bug in btf_dedup_is_equiv() check mishandling equivalence
+> comparison between VOID kind in candidate type graph versus anonymous non-VOID
+> kind in canonical type graph.
+>
+> Patch #1 fixes bug, by comparing candidate and canonical kinds for equality,
+> before proceeding to kind-specific checks.
+> Patch #2 adds a test case testing this specific scenario.
 
-When libbpf was built was a shared library, libelf was not included in
-the linking phase. Since libelf is an internal depedency to libbpf,
-libeld should be included. This patch adds '-lelf' to resolve that.
-
-Fixes: 1b76c13e4b36 ("bpf tools: Introduce 'bpf' library and add bpf feature check")
-Suggested-by: Luca Boccassi <bluca@debian.org>
-Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
----
- tools/lib/bpf/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index 279589c29983..7beec4d5b522 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -177,7 +177,7 @@ $(OUTPUT)libbpf.so: $(OUTPUT)libbpf.so.$(LIBBPF_VERSION)
- 
- $(OUTPUT)libbpf.so.$(LIBBPF_VERSION): $(BPF_IN)
- 	$(QUIET_LINK)$(CC) --shared -Wl,-soname,libbpf.so.$(VERSION) \
--				    -Wl,--version-script=$(VERSION_SCRIPT) $^ -o $@
-+				    -Wl,--version-script=$(VERSION_SCRIPT) $^ -lelf -o $@
- 	@ln -sf $(@F) $(OUTPUT)libbpf.so
- 	@ln -sf $(@F) $(OUTPUT)libbpf.so.$(VERSION)
- 
--- 
-2.19.1
-
+Applied. Thanks
