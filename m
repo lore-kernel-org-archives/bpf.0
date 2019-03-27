@@ -2,60 +2,55 @@ Return-Path: <SRS0=YLVI=R6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8729C10F00
-	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:17:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C772C4360F
+	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:17:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9A6EE2064A
-	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:17:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E08B821734
+	for <bpf@archiver.kernel.org>; Wed, 27 Mar 2019 19:17:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1553714225;
-	bh=w+Vvd2y1B8Z3wlfT+W1UuXQPgU+xZDZrvTfZvP//Md4=;
+	s=default; t=1553714277;
+	bh=xLT6k7kjlNbFvtR7VLCfH2Eq2uRTmbS90p2bYbo4kbM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=fTpWSGIcnht0W+JF2gM8Jp+JEadwINW+P7Uex8l3B1umDLhjtgB6+ljgqtNuL2EBb
-	 +5Pax2Iv2vc8iw0evKAGltpr4ilKkbA1hbDp2ZuJPYMUDeM8E5ueKB1r3yn+FXj+m9
-	 /BZ78DKDjiwGZCNODsIbZdGzV1f1hTdykdzOS9ZM=
+	b=G8SyQB9WsZOSD9dkgCu8fFUj/PpJq7i21DgWS18rZMAzg0wnUjV0kejuxTCT61KuE
+	 TTfDWqlr13VbNPdGGmLLhlp9zsFLa9W3smavvCmZJRSr2fXDG/AxJzCFrSHBWdpH+q
+	 cGGFprInIXf++iCm7vfMBZIqxacux+i/xArp6T40=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388454AbfC0SI4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Mar 2019 14:08:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50696 "EHLO mail.kernel.org"
+        id S2388359AbfC0SIg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Mar 2019 14:08:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50356 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387999AbfC0SIz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Mar 2019 14:08:55 -0400
+        id S2388344AbfC0SId (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Mar 2019 14:08:33 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A47F52070B;
-        Wed, 27 Mar 2019 18:08:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2BB772063F;
+        Wed, 27 Mar 2019 18:08:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1553710134;
-        bh=w+Vvd2y1B8Z3wlfT+W1UuXQPgU+xZDZrvTfZvP//Md4=;
+        s=default; t=1553710112;
+        bh=xLT6k7kjlNbFvtR7VLCfH2Eq2uRTmbS90p2bYbo4kbM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iXxGSOiyNq4KaoWArVawHPQ+K2fOKYYgxrfOGj9tFJkiL84P/bWayXTkQxyPKUIN4
-         e833596Q0PLen+4u4twZkEZtsEdFJ6rzSiGx6XGghGaHHlfUFtmaLmhQTP6ITCJj+5
-         GeTc6AtyzyvPQ34k/VrpoVfBNBwPNtssukAsHpAY=
+        b=Qt80UJ/WRNp6kknph2wNyh60llhTFq7lsuY9QJUts+02pPu/5oDK4+OFymUCzGZQ7
+         5IYsOmhwFS4q5OY1NUPa6e03VyZQoCgMdA5byHTZYicqEXa4bmcm2vxciuYKbv1bV8
+         DridnQ/z4oxL7u/H3fvSi9lLbjiiXYOZd+xstfko=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        =?UTF-8?q?Luis=20Cl=C3=A1udio=20Gon=C3=A7alves?= 
-        <lclaudio@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-        Wang Nan <wangnan0@huawei.com>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+Cc:     Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.0 212/262] perf trace: Fixup etcsnoop example
-Date:   Wed, 27 Mar 2019 14:01:07 -0400
-Message-Id: <20190327180158.10245-212-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.0 201/262] selftests/bpf: skip verifier tests for unsupported program types
+Date:   Wed, 27 Mar 2019 14:00:56 -0400
+Message-Id: <20190327180158.10245-201-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190327180158.10245-1-sashal@kernel.org>
 References: <20190327180158.10245-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -63,48 +58,71 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Arnaldo Carvalho de Melo <acme@redhat.com>
+From: Stanislav Fomichev <sdf@google.com>
 
-[ Upstream commit 1d59cb1bbd4cbe5a8f8032242cdacea5658129cf ]
+[ Upstream commit 8184d44c9a577a2f1842ed6cc844bfd4a9981d8e ]
 
-Where we don't have "raw_syscalls:sys_enter", so we need to look for a
-"*syscalls:sys_enter*" to initialize the offsets for the
-__augmented_syscalls__ evsel, which is the case with etcsnoop, that was
-segfaulting, fixed:
+Use recently introduced bpf_probe_prog_type() to skip tests in the
+test_verifier() if bpf_verify_program() fails. The skipped test is
+indicated in the output.
 
-  # trace -e /home/acme/git/perf/tools/perf/examples/bpf/etcsnoop.c
-     0.000 (         ): gnome-shell/2105 openat(dfd: CWD, filename: "/etc/localtime")                       ...
-   631.834 (         ): cat/6521 openat(dfd: CWD, filename: "/etc/ld.so.cache", flags: RDONLY|CLOEXEC) ...
-   632.637 (         ): bash/6521 openat(dfd: CWD, filename: "/etc/passwd")                          ...
-  ^C#
+Example:
 
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Luis Cláudio Gonçalves <lclaudio@redhat.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Wang Nan <wangnan0@huawei.com>
-Fixes: b9b6a2ea2baf ("perf trace: Do not hardcode the size of the tracepoint common_ fields")
-Link: https://lkml.kernel.org/n/tip-0tjwcit8qitsmh4nyvf2b0jo@git.kernel.org
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+...
+679/p bpf_get_stack return R0 within range SKIP (unsupported program
+type 5)
+680/p ld_abs: invalid op 1 OK
+...
+Summary: 863 PASSED, 165 SKIPPED, 3 FAILED
+
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/perf/builtin-trace.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_verifier.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
-index 2776ff8c3e81..91cdbf504535 100644
---- a/tools/perf/builtin-trace.c
-+++ b/tools/perf/builtin-trace.c
-@@ -3868,7 +3868,8 @@ int cmd_trace(int argc, const char **argv)
- 				goto init_augmented_syscall_tp;
- 			}
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index 2fd90d456892..9a967983abed 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -34,6 +34,7 @@
+ #include <linux/if_ether.h>
  
--			if (strcmp(perf_evsel__name(evsel), "raw_syscalls:sys_enter") == 0) {
-+			if (trace.syscalls.events.augmented->priv == NULL &&
-+			    strstr(perf_evsel__name(evsel), "syscalls:sys_enter")) {
- 				struct perf_evsel *augmented = trace.syscalls.events.augmented;
- 				if (perf_evsel__init_augmented_syscall_tp(augmented, evsel) ||
- 				    perf_evsel__init_augmented_syscall_tp_args(augmented))
+ #include <bpf/bpf.h>
++#include <bpf/libbpf.h>
+ 
+ #ifdef HAVE_GENHDR
+ # include "autoconf.h"
+@@ -59,6 +60,7 @@
+ 
+ #define UNPRIV_SYSCTL "kernel/unprivileged_bpf_disabled"
+ static bool unpriv_disabled = false;
++static int skips;
+ 
+ struct bpf_test {
+ 	const char *descr;
+@@ -15946,6 +15948,11 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 		pflags |= BPF_F_ANY_ALIGNMENT;
+ 	fd_prog = bpf_verify_program(prog_type, prog, prog_len, pflags,
+ 				     "GPL", 0, bpf_vlog, sizeof(bpf_vlog), 1);
++	if (fd_prog < 0 && !bpf_probe_prog_type(prog_type, 0)) {
++		printf("SKIP (unsupported program type %d)\n", prog_type);
++		skips++;
++		goto close_fds;
++	}
+ 
+ 	expected_ret = unpriv && test->result_unpriv != UNDEF ?
+ 		       test->result_unpriv : test->result;
+@@ -16099,7 +16106,7 @@ static bool test_as_unpriv(struct bpf_test *test)
+ 
+ static int do_test(bool unpriv, unsigned int from, unsigned int to)
+ {
+-	int i, passes = 0, errors = 0, skips = 0;
++	int i, passes = 0, errors = 0;
+ 
+ 	for (i = from; i < to; i++) {
+ 		struct bpf_test *test = &tests[i];
 -- 
 2.19.1
 
