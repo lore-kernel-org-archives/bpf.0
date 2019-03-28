@@ -2,101 +2,116 @@ Return-Path: <SRS0=idkB=R7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FROM_EXCESS_BASE64,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D833C43381
-	for <bpf@archiver.kernel.org>; Thu, 28 Mar 2019 16:00:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DC69C43381
+	for <bpf@archiver.kernel.org>; Thu, 28 Mar 2019 16:00:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D6E0320823
-	for <bpf@archiver.kernel.org>; Thu, 28 Mar 2019 16:00:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D1A1F20823
+	for <bpf@archiver.kernel.org>; Thu, 28 Mar 2019 16:00:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A7rGY1JH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PTjc97/v"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726200AbfC1QAI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Mar 2019 12:00:08 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:35534 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726252AbfC1QAI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Mar 2019 12:00:08 -0400
-Received: by mail-qk1-f193.google.com with SMTP id a71so6176172qkg.2;
-        Thu, 28 Mar 2019 09:00:07 -0700 (PDT)
+        id S1726087AbfC1QAl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Mar 2019 12:00:41 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:35844 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726150AbfC1QAl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Mar 2019 12:00:41 -0400
+Received: by mail-oi1-f193.google.com with SMTP id t206so16147294oib.3;
+        Thu, 28 Mar 2019 09:00:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=1ANN3+Ang5qb++Fi9W3ZJhgbdN5eQJD0LAopSrOfW0w=;
-        b=A7rGY1JHZ32ZdpRsvX/xE/PegF+u1/HI0uyZc6Ybp5aj431o+cnbSVvjuU9QXZb+C6
-         1y0KYNF4x0S0CmBnZ5SL3AikGMpn83ATGBgBPEQt2IY0J1Vlthm89oFVP5JIaAzhwxOy
-         +PCbtVbDXeJZGhKtYxj7qXTh9ys1LmFgUo8UOk4haYx+GrGwJqVr/dPj4rgJsPWH5aXQ
-         Za08RN4hCBD5OtUPewVFNY08mDLwwDNWWfunGY6ZwzIXwGpuo9Y8f932DGN5F5C5ny+/
-         zIYh/jaqn/rXwq5t7CeQOCju3XmDK9n6HptB7O9MxnXPPdSqKOt/X8aUdNwSq+TRdXqb
-         jPJg==
+         :cc;
+        bh=mQr/r0q5vndvVzjmbd5cAnmJti91jyQI5WXEhITNxK8=;
+        b=PTjc97/vfMeRCNYFSfUo2R1WiUXnTkm6C9fZ7rwAxP6KL8hgDWEm3PJSpPNI5jcm3n
+         NJe0W2UkscKyWXKSkXDdC6ZLXN+qxksHX8LLchsBHcjwNoSilafuBvtwIY6wTpH7ETQD
+         O0I2gbELv7Z952JRo2MJo11NE1cAzsj2Lz9eGiB409H/oy30uxELnUXGEkhOCLKTo234
+         CuveZVeq6SMdZsHICZ9Wg951hv/MNKox5B/hMpChPbHKdWWeXP+oNnS3iZgNZJCCPJ7g
+         w67hzz6D86oKKBasC6mcBgJv6lP5IH9WOchZ2nLNwKFM/ONbQ0REEpzeVQgL4SufbAhF
+         I+0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=1ANN3+Ang5qb++Fi9W3ZJhgbdN5eQJD0LAopSrOfW0w=;
-        b=WbZwtksuvmk+vc9d1bNQxZ8I9iao+iFwSbPq7d/5qbqpriKq+XLHEOHu4Wqd+RE+h5
-         csVHxrp1ajqP5MihWtQt9lXPAW39PjgIMGaMiQptIpYWTkKsr9LTkjjUyz5057XCexlx
-         97nSSDsz3iOxREpU7WZ6rWC47GXQrkWNU07Oi22dcMzejgG354t5/75oQEodgj4Jqp1V
-         0sqQ57knNnbSmujuzQChCCG+nw14PRXZSvGF3nkiD6EDJ8q7re2z8f/yR4ygd8qhS15d
-         DY96EqIqREvmZvOlqU4dZiu+Hd5fslp9B7ug7fEEUbISjysXKpbtfrqCAZhc25VwK1ic
-         f+wg==
-X-Gm-Message-State: APjAAAUUdumW/IwQmCEyio4D2da3mHT9sKcdNDMkZ3RTek4r3/Q9M3Ax
-        F9gLszf/Q7EdM0rdnvsT+AoZugQheMncVHekOO0=
-X-Google-Smtp-Source: APXvYqy/zgMm8L72GRF9G6MbtDU0iFsfaFxYJnxReeCDAG6aUleH515sRJ4gjmr/SX/vLcJY1k0e9Dqwn0g6Zfy6Hw0=
-X-Received: by 2002:a37:478b:: with SMTP id u133mr34193283qka.280.1553788807480;
- Thu, 28 Mar 2019 09:00:07 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=mQr/r0q5vndvVzjmbd5cAnmJti91jyQI5WXEhITNxK8=;
+        b=f6R73Ae2NqRragmnKdHOvCT0O/gqBwhLtY1D3H0i4DdMVjrQouECBm1HKratPYPz3r
+         BmAgRfVbIGHGXWt3SCDQEST+71Y6jXgWHvU5PGjc9S21plIZ0rtDfr0VqLKGvlXW0HQw
+         bwBu54mCbAo+CtnFdO5LhgzxL7v29GfhWb6ktG94B4kXrK82cTELWmy54A61REZPxwnT
+         bFchKDo3KRbcPYgn2TmHJoSdmpGptMJRPbJGTXVdg7Nyi1RgOEzJPOVv6H8VGoxLO9Hq
+         DgXIW7P7l4p9KueB7NZEknwROmKM1sXAeanhgATuS1d/H7sOlyDufPdE03CchnZe/qeD
+         bzMw==
+X-Gm-Message-State: APjAAAW8SuWJt+JJIc3Ucw9q/kEo3Yi1nSQHF7FsrvESVbGobOQnAqkg
+        0GL3Sn/hzkDiiV0NPSf+MazuEcf02O5BMI6EWytXKw==
+X-Google-Smtp-Source: APXvYqxPTB5NOMHBfy5KvScLrXqrIh47qkYgytTe0G6k3i87vH/kAprSkkHga0A9TheiJjhnYhiaVff7p9Qiz49vdh4=
+X-Received: by 2002:aca:3254:: with SMTP id y81mr504569oiy.45.1553788840490;
+ Thu, 28 Mar 2019 09:00:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190327135114.17026-1-bjorn.topel@gmail.com> <4bca355e-379c-fb41-0168-1889dba912c4@iogearbox.net>
-In-Reply-To: <4bca355e-379c-fb41-0168-1889dba912c4@iogearbox.net>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Thu, 28 Mar 2019 16:59:55 +0100
-Message-ID: <CAJ+HfNiySCcZ+541Tunn3C=MeA-wysJcVor8z_xfrwowGYXqow@mail.gmail.com>
-Subject: Re: [PATCH bpf 0/2] libbpf: minor packaging fixes
+References: <9c98d4498ec2209a879b04a8f9385b70e28e2114.1553788223.git.daniel@iogearbox.net>
+In-Reply-To: <9c98d4498ec2209a879b04a8f9385b70e28e2114.1553788223.git.daniel@iogearbox.net>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 28 Mar 2019 09:00:29 -0700
+Message-ID: <CAEf4BzZ+iQhqdpz33HF3mA95x8+cokmqfL6peGZeicb=HtaWyQ@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf, libbpf: fix quiet install_headers
 To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        bpf <bpf@vger.kernel.org>, Ye Xiaolong <xiaolong.ye@intel.com>,
-        "Zhang, Qi Z" <qi.z.zhang@intel.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
+        Networking <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 28 Mar 2019 at 16:39, Daniel Borkmann <daniel@iogearbox.net> wrote:
+On Thu, Mar 28, 2019 at 8:54 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
 >
-> On 03/27/2019 02:51 PM, Bj=C3=B6rn T=C3=B6pel wrote:
-> > The DPDK project is moving forward with its AF_XDP PMD, and during
-> > that process some libbpf issues surfaced [1].
+> Both btf.h and xsk.h headers are not installed quietly due to
+> missing '\' for the call to QUIET_INSTALL. Lets fix it.
 >
-> Great to hear!
+> Before:
 >
-> > This series address two, minor, packaging issues for libbpf. The
-> > header file xsk.h was missing from the instal_headers target and
-> > libelf was not included in the libbpf.so (shared library) build.
-> >
-> >
-> > Thanks,
-> > Bj=C3=B6rn
-> >
-> > [1] https://patches.dpdk.org/patch/50704/#93571
-> >
-> > Bj=C3=B6rn T=C3=B6pel (2):
-> >   libbpf: add xsk.h to install_headers target
-> >   libbpf: add libelf dependency to shared library build
-> >
-> >  tools/lib/bpf/Makefile | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
+>   # make install_headers
+>     INSTALL  headers
+>   if [ ! -d '''/usr/local/include/bpf' ]; then install -d -m 755 '''/usr/local/include/bpf'; fi; install btf.h -m 644 '''/usr/local/include/bpf';
+>   if [ ! -d '''/usr/local/include/bpf' ]; then install -d -m 755 '''/usr/local/include/bpf'; fi; install xsk.h -m 644 '''/usr/local/include/bpf';
+>   # ls /usr/local/include/bpf/
+>   bpf.h  btf.h  libbpf.h  xsk.h
 >
-> Looks good, applied, thanks (also fixed up various typos in the commit
-> message while applying).
+> After:
+>
+>   # make install_headers
+>     INSTALL  headers
+>   # ls /usr/local/include/bpf/
+>   bpf.h  btf.h  libbpf.h  xsk.h
+>
+> Fixes: a493f5f9d8c2 ("libbpf: Install btf.h with libbpf")
+> Fixes: 379e2014c95b ("libbpf: add xsk.h to install_headers target")
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> ---
 
-Thank you for fixing the typos!
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+
+>  tools/lib/bpf/Makefile | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+> index 7beec4d..8e7c56e 100644
+> --- a/tools/lib/bpf/Makefile
+> +++ b/tools/lib/bpf/Makefile
+> @@ -220,8 +220,8 @@ install_lib: all_cmd
+>  install_headers:
+>         $(call QUIET_INSTALL, headers) \
+>                 $(call do_install,bpf.h,$(prefix)/include/bpf,644); \
+> -               $(call do_install,libbpf.h,$(prefix)/include/bpf,644);
+> -               $(call do_install,btf.h,$(prefix)/include/bpf,644);
+> +               $(call do_install,libbpf.h,$(prefix)/include/bpf,644); \
+> +               $(call do_install,btf.h,$(prefix)/include/bpf,644); \
+>                 $(call do_install,xsk.h,$(prefix)/include/bpf,644);
+>
+>  install: install_lib
+> --
+> 2.9.5
+>
