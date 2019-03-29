@@ -2,109 +2,116 @@ Return-Path: <SRS0=W4j7=SA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AED4C43381
-	for <bpf@archiver.kernel.org>; Fri, 29 Mar 2019 19:14:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D133C43381
+	for <bpf@archiver.kernel.org>; Fri, 29 Mar 2019 22:50:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0AD24218A3
-	for <bpf@archiver.kernel.org>; Fri, 29 Mar 2019 19:14:00 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GCPN4gvR"
+	by mail.kernel.org (Postfix) with ESMTP id 0C1E0217F5
+	for <bpf@archiver.kernel.org>; Fri, 29 Mar 2019 22:50:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729734AbfC2TN7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 29 Mar 2019 15:13:59 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:46051 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729483AbfC2TN7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 29 Mar 2019 15:13:59 -0400
-Received: by mail-lj1-f195.google.com with SMTP id y6so2892910ljd.12;
-        Fri, 29 Mar 2019 12:13:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IjmaW/Wo53nk/RCs1iL8RSH7UACY/tTFlxbrfLdM4Wk=;
-        b=GCPN4gvRHnQbcvG4HH8wXcD/WqCXlC0uWEDPgtdkGyrVIb3D6FMSZLNciBz1yl+YhE
-         Z7UMHzWEPBqNSoBIRE80+59BG+Rv26dnkGYrqW1rW15Z04Lus21PFGv3MlGUh4R+jLx9
-         fXWGFPI3ZseaBiK4sx+MD3aOWkee0U5ZteYex+xsRuQD8PkdHhOkNO0OPGDS2Xh9bpy+
-         sKU8CXnfNVGT2Iyh2pnCwxnGkBh+eX39WFChFERsALew1I7LEcmQVj0jvdmzW8fcSvW5
-         fk4t1q99G11U65A7cyRZbgLNEW69Epvl8XcGXazinUNbxPD4Qok8qAYTMac2EQdc5hq4
-         a3tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IjmaW/Wo53nk/RCs1iL8RSH7UACY/tTFlxbrfLdM4Wk=;
-        b=WrqINB8x4BKAkXQQE/6JcVuDpXxX4ZGzlhcp+KJvg6xabaJp0ppsmAq+xIiWjWg1bJ
-         eyX+jSqZLXIoC9RtkE7L69I9yd/2iDg3euFYFdtUaj9P1ra9bhUL90bR97rnVpU6wAuP
-         cJKBOJ7cvU7feDp9giLNqEP0seSP8J9B7Tunfx7SXr/9HgqLYXWm8xXITjch1tDt28jr
-         UvpCx+J15BQCtoLbBAsX02bEKtqg8UNrNR7T78X0RWSVb+oYhJrPLfJMxDpip5bW6LT+
-         gPVvCqC9PzKv5kgCqd9HobdQL+V8GbKkpGSfz3bZEJWiO6cPl2KyVnCZ9g/p4Ju5eL4F
-         t19w==
-X-Gm-Message-State: APjAAAXowWzHLJ65UbuntEQYBohBXYn5gaercgb9iXvAXG8YbaTVAXlP
-        2CXM3BHr4y9bRrRHNubYflGorU5LJj0n6gyg8y0=
-X-Google-Smtp-Source: APXvYqwjjmHWN4ScV3zyyKnfEc94wCyvQPbwTDyf3ufY7GMVtuB//c9ramTdk4KRiVBsLqq+e6UdLEW8+8Z1uHp03ZU=
-X-Received: by 2002:a2e:88c1:: with SMTP id a1mr26459915ljk.78.1553886837185;
- Fri, 29 Mar 2019 12:13:57 -0700 (PDT)
+        id S1730507AbfC2Wu4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 29 Mar 2019 18:50:56 -0400
+Received: from www62.your-server.de ([213.133.104.62]:43618 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730495AbfC2Wu4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 29 Mar 2019 18:50:56 -0400
+Received: from [178.197.248.24] (helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hA0Kp-0005v1-1X; Fri, 29 Mar 2019 23:50:51 +0100
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     davem@davemloft.net
+Cc:     daniel@iogearbox.net, ast@kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: pull-request: bpf 2019-03-29
+Date:   Fri, 29 Mar 2019 23:50:50 +0100
+Message-Id: <20190329225050.8819-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.9.5
 MIME-Version: 1.0
-References: <20190329053053.3968514-1-yhs@fb.com>
-In-Reply-To: <20190329053053.3968514-1-yhs@fb.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 29 Mar 2019 12:13:45 -0700
-Message-ID: <CAADnVQLL=enrrKixJRU=a6daGmj9TEKs-Qjx6yFRNusZPeRJHQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] [tools/bpf] add bpffs multi-dimensional array
- tests in test_btf
-To:     Yonghong Song <yhs@fb.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.2/25403/Fri Mar 29 08:55:56 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Mar 28, 2019 at 10:32 PM Yonghong Song <yhs@fb.com> wrote:
->
-> For multiple dimensional arrays like below,
->   int a[2][3]
-> both llvm and pahole generated one BTF_KIND_ARRAY type like
->   . element_type: int
->   . index_type: unsigned int
->   . number of elements: 6
->
-> Such a collapsed BTF_KIND_ARRAY type will cause the divergence
-> in BTF vs. the user code. In the compile-once-run-everywhere
-> project, the header file is generated from BTF and used for bpf
-> program, and the definition in the header file will be different
-> from what user expects.
->
-> But the kernel actually supports chained multi-dimensional array
-> types properly. The above "int a[2][3]" can be represented as
->   Type #n:
->     . element_type: int
->     . index_type: unsigned int
->     . number of elements: 3
->   Type #(n+1):
->     . element_type: type #n
->     . index_type: unsigned int
->     . number of elements: 2
->
-> The following llvm commit
->   https://reviews.llvm.org/rL357215
-> also enables llvm to generated proper chained multi-dimensional arrays.
->
-> The test_btf already has a raw test ("struct test #1") for chained
-> multi-dimensional arrays. This patch added amended bpffs test for
-> chained multi-dimensional arrays.
->
-> Acked-by: Martin KaFai Lau <kafai@fb.com>
-> Signed-off-by: Yonghong Song <yhs@fb.com>
+Hi David,
 
-Applied. Thanks
+The following pull-request contains BPF updates for your *net* tree.
+
+The main changes are:
+
+1) Bug fix in BTF deduplication that was mishandling an equivalence
+   comparison, from Andrii.
+
+2) libbpf Makefile fixes to properly link against libelf for the shared
+   object and to actually export AF_XDP's xsk.h header, from Björn.
+
+3) Fix use after free in bpf inode eviction, from Daniel.
+
+4) Fix a bug in skb creation out of cpumap redirect, from Jesper.
+
+5) Remove an unnecessary and triggerable WARN_ONCE() in max number
+   of call stack frames checking in verifier, from Paul.
+
+Please consider pulling these changes from:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+
+Thanks a lot!
+
+----------------------------------------------------------------
+
+The following changes since commit 27602e2c44da4091bef99e6c877e20c78b7f6e81:
+
+  Merge git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf (2019-03-24 23:45:35 -0400)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git 
+
+for you to fetch changes up to 676e4a6fe703f2dae699ee9d56f14516f9ada4ea:
+
+  xdp: fix cpumap redirect SKB creation bug (2019-03-29 12:15:02 -0700)
+
+----------------------------------------------------------------
+Alexei Starovoitov (2):
+      Merge branch 'fix-verifier-warning'
+      Merge branch 'fix-btf_dedup'
+
+Andrii Nakryiko (2):
+      libbpf: fix btf_dedup equivalence check handling of different kinds
+      selftests/bpf: add btf_dedup test for VOID equivalence check
+
+Björn Töpel (2):
+      libbpf: add xsk.h to install_headers target
+      libbpf: add libelf dependency to shared library build
+
+Daniel Borkmann (2):
+      bpf: fix use after free in bpf_evict_inode
+      bpf, libbpf: fix quiet install_headers
+
+Jesper Dangaard Brouer (2):
+      bpf, doc: fix BTF docs reflow of bullet list
+      xdp: fix cpumap redirect SKB creation bug
+
+Paul Chaignon (2):
+      bpf: remove incorrect 'verifier bug' warning
+      selftests/bpf: test case for invalid call stack in dead code
+
+ Documentation/bpf/btf.rst                    |  8 ++---
+ kernel/bpf/cpumap.c                          | 13 ++++++--
+ kernel/bpf/inode.c                           | 32 ++++++++++---------
+ kernel/bpf/verifier.c                        |  5 +--
+ tools/lib/bpf/Makefile                       |  7 +++--
+ tools/lib/bpf/btf.c                          |  3 ++
+ tools/testing/selftests/bpf/test_btf.c       | 47 ++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/verifier/calls.c | 38 ++++++++++++++++++++++
+ 8 files changed, 127 insertions(+), 26 deletions(-)
