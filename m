@@ -2,222 +2,199 @@ Return-Path: <SRS0=W4j7=SA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FC6AC43381
-	for <bpf@archiver.kernel.org>; Fri, 29 Mar 2019 05:30:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BFFD1C43381
+	for <bpf@archiver.kernel.org>; Fri, 29 Mar 2019 10:21:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3FAA52173C
-	for <bpf@archiver.kernel.org>; Fri, 29 Mar 2019 05:30:57 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="HBqJeU1l"
+	by mail.kernel.org (Postfix) with ESMTP id 90026206B7
+	for <bpf@archiver.kernel.org>; Fri, 29 Mar 2019 10:21:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728674AbfC2Fa4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 29 Mar 2019 01:30:56 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:59588 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726016AbfC2Fa4 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 29 Mar 2019 01:30:56 -0400
-Received: from pps.filterd (m0044008.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x2T5SLVO002003
-        for <bpf@vger.kernel.org>; Thu, 28 Mar 2019 22:30:55 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=JtmE7GZ3/nA/E6+3sYmcFgUtwxPpfaoxSfAqKNSFPN0=;
- b=HBqJeU1l/y6Ke3D4VNbQ3xYOoF2F/1mjqfHMCTVUPhijq25fiyeKlFG8USzx3A8UXfd8
- DzbUBa2CtVfCQtGh3w+mzscua6pbCxClO7JQ1+MI1lDmX7v4bsXLAMBmTNagL0UKIKNk
- 9mWWXLnpacxDgKlLFjuA0uiNtUEaxe4zTSg= 
-Received: from mail.thefacebook.com ([199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2rhb9wrdys-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 28 Mar 2019 22:30:55 -0700
-Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Thu, 28 Mar 2019 22:30:54 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id D433B3702C78; Thu, 28 Mar 2019 22:30:53 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Yonghong Song <yhs@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next] [tools/bpf] add bpffs multi-dimensional array tests in test_btf
-Date:   Thu, 28 Mar 2019 22:30:53 -0700
-Message-ID: <20190329053053.3968514-1-yhs@fb.com>
-X-Mailer: git-send-email 2.17.1
-X-FB-Internal: Safe
+        id S1728737AbfC2KVI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 29 Mar 2019 06:21:08 -0400
+Received: from mail-io1-f72.google.com ([209.85.166.72]:42177 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728500AbfC2KVI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 29 Mar 2019 06:21:08 -0400
+Received: by mail-io1-f72.google.com with SMTP id i1so1373266ioq.9
+        for <bpf@vger.kernel.org>; Fri, 29 Mar 2019 03:21:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=UmmF448XHdo5pxs//nvqZwGPRyIlFuZ0HrvD+OUJE5E=;
+        b=B1rjBam9rtaRVB0k2KyP5U2DcNg7zqqTF0451NtWUCk+9N4xn+Tv3izdsqYzLNZ1RU
+         hd3gwiRsb9q0k7zn9j5dFgCi/XQa3N5IPjVkK8SlAZQkJPXEvBmV23ZUUelnIGpJgSaN
+         CQLwv3P3O9CgS5pv7l6i8fiOLujmsEYeoZzE35TiwQOgJuvl3tH8BRy81/Pg6wDLvrGP
+         8RTLUZ64M4GJVEz7EfbAAwoiONlH2DL9CObgmNXVrgv4dSKVO8MXOExlxX15/QFcM7nI
+         udEddo/TOvrcHYjmlmfOTTr4U3iAhq7u/q/TuCRcL0oEYWRBdM4YB4aS1QhAB2TPlCe/
+         g6fg==
+X-Gm-Message-State: APjAAAWdTxGOvONxWGdSFuExbDl6BZYHPm7mWgh3BITIWlFpPESW6t8S
+        qs3ngfAdkncDPBbsnI834Mj70UBHanIkGNk7b+PT9CNV1h4o
+X-Google-Smtp-Source: APXvYqxsEo/hFHnS5Y+Ix6DoleqvV6bVeAe806Y1nFlfaW1z57VDpsKNzrS+/ucYFRxb/9abjHfn+QjaFAOCrjCYd+EN99dcLcJC
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-03-29_03:,,
- signatures=0
-X-Proofpoint-Spam-Reason: safe
-X-FB-Internal: Safe
+X-Received: by 2002:a6b:8f01:: with SMTP id r1mr5023337iod.27.1553854866598;
+ Fri, 29 Mar 2019 03:21:06 -0700 (PDT)
+Date:   Fri, 29 Mar 2019 03:21:06 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005b34690585390766@google.com>
+Subject: BUG: unable to handle kernel paging request in ip6_fragment
+From:   syzbot <syzbot+e8ce541d095e486074fc@syzkaller.appspotmail.com>
+To:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, kafai@fb.com, kuznet@ms2.inr.ac.ru,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com,
+        yoshfuji@linux-ipv6.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-For multiple dimensional arrays like below,
-  int a[2][3]
-both llvm and pahole generated one BTF_KIND_ARRAY type like
-  . element_type: int
-  . index_type: unsigned int
-  . number of elements: 6
+Hello,
 
-Such a collapsed BTF_KIND_ARRAY type will cause the divergence
-in BTF vs. the user code. In the compile-once-run-everywhere
-project, the header file is generated from BTF and used for bpf
-program, and the definition in the header file will be different
-from what user expects.
+syzbot found the following crash on:
 
-But the kernel actually supports chained multi-dimensional array
-types properly. The above "int a[2][3]" can be represented as
-  Type #n:
-    . element_type: int
-    . index_type: unsigned int
-    . number of elements: 3
-  Type #(n+1):
-    . element_type: type #n
-    . index_type: unsigned int
-    . number of elements: 2
+HEAD commit:    8c838f53 dpaa2-eth: fix race condition with bql frame acco..
+git tree:       net
+console output: https://syzkaller.appspot.com/x/log.txt?x=12b83a9b200000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f05902bca21d8935
+dashboard link: https://syzkaller.appspot.com/bug?extid=e8ce541d095e486074fc
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
-The following llvm commit
-  https://reviews.llvm.org/rL357215
-also enables llvm to generated proper chained multi-dimensional arrays.
+Unfortunately, I don't have any reproducer for this crash yet.
 
-The test_btf already has a raw test ("struct test #1") for chained
-multi-dimensional arrays. This patch added amended bpffs test for
-chained multi-dimensional arrays.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+e8ce541d095e486074fc@syzkaller.appspotmail.com
 
-Acked-by: Martin KaFai Lau <kafai@fb.com>
-Signed-off-by: Yonghong Song <yhs@fb.com>
+bridge0: received packet on bridge_slave_0 with own address as source  
+address (addr:aa:aa:aa:aa:aa:0c, vlan:0)
+bridge0: received packet on veth0_to_bridge with own address as source  
+address (addr:aa:aa:aa:aa:aa:0c, vlan:0)
+BUG: unable to handle kernel paging request at ffffed10184a61b2
+#PF error: [normal kernel read fault]
+PGD 21fff0067 P4D 21fff0067 PUD 12fff9067 PMD 0
+Oops: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 30201 Comm: syz-executor.3 Not tainted 5.0.0+ #139
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+RIP: 0010:ip6_fragment+0x17d3/0x3760 net/ipv6/ip6_output.c:830
+Code: 48 8b bd 70 ff ff ff 0f b7 c0 48 03 87 c0 00 00 00 48 29 c1 48 89 cf  
+48 01 f7 48 01 d7 48 89 f8 48 89 fa 48 c1 e8 03 83 e2 07 <42> 0f b6 04 20  
+38 d0 7f 08 84 c0 0f 85 b2 16 00 00 48 89 d8 c6 07
+RSP: 0018:ffff8880ae906cf8 EFLAGS: 00010206
+RAX: 1ffff110184a61b2 RBX: ffff888093e2c2b8 RCX: 000000002e704b06
+RDX: 0000000000000006 RSI: 0000000000000010 RDI: ffff8880c2530d96
+RBP: ffff8880ae906e50 R08: 1ffff110127c5852 R09: ffffed10127c5857
+R10: ffff8880982f0274 R11: ffff888093e2c2b7 R12: dffffc0000000000
+R13: ffff8880982f0080 R14: ffff8880982f0134 R15: ffff8880982f0132
+FS:  00007f45d3bce700(0000) GS:ffff8880ae900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffed10184a61b2 CR3: 000000004c0a7000 CR4: 00000000001406e0
+Call Trace:
+  <IRQ>
+  br_nf_dev_queue_xmit+0xc49/0x14c0 net/bridge/br_netfilter_hooks.c:766
+  NF_HOOK include/linux/netfilter.h:289 [inline]
+  NF_HOOK include/linux/netfilter.h:283 [inline]
+  br_nf_post_routing+0x7aa/0x1250 net/bridge/br_netfilter_hooks.c:818
+  nf_hook_entry_hookfn include/linux/netfilter.h:119 [inline]
+  nf_hook_slow+0xbf/0x1f0 net/netfilter/core.c:511
+  nf_hook include/linux/netfilter.h:244 [inline]
+  NF_HOOK include/linux/netfilter.h:287 [inline]
+  br_forward_finish+0x215/0x400 net/bridge/br_forward.c:69
+  br_nf_hook_thresh+0x2ec/0x380 net/bridge/br_netfilter_hooks.c:1006
+  br_nf_forward_finish+0x2eb/0x690 net/bridge/br_netfilter_hooks.c:540
+  NF_HOOK include/linux/netfilter.h:289 [inline]
+  NF_HOOK include/linux/netfilter.h:283 [inline]
+  br_nf_forward_ip net/bridge/br_netfilter_hooks.c:608 [inline]
+  br_nf_forward_ip+0x877/0x1630 net/bridge/br_netfilter_hooks.c:551
+  nf_hook_entry_hookfn include/linux/netfilter.h:119 [inline]
+  nf_hook_slow+0xbf/0x1f0 net/netfilter/core.c:511
+  nf_hook include/linux/netfilter.h:244 [inline]
+  NF_HOOK include/linux/netfilter.h:287 [inline]
+  __br_forward+0x393/0xb00 net/bridge/br_forward.c:113
+  deliver_clone+0x61/0xc0 net/bridge/br_forward.c:129
+  maybe_deliver net/bridge/br_forward.c:184 [inline]
+  maybe_deliver net/bridge/br_forward.c:172 [inline]
+  br_flood+0x4da/0x710 net/bridge/br_forward.c:226
+  br_handle_frame_finish+0xf4e/0x14c0 net/bridge/br_input.c:169
+  br_nf_hook_thresh+0x2ec/0x380 net/bridge/br_netfilter_hooks.c:1006
+  br_nf_pre_routing_finish_ipv6+0x700/0xdc0  
+net/bridge/br_netfilter_ipv6.c:210
+  NF_HOOK include/linux/netfilter.h:289 [inline]
+  br_nf_pre_routing_ipv6+0x437/0x810 net/bridge/br_netfilter_ipv6.c:240
+  br_nf_pre_routing+0xf2e/0x14b0 net/bridge/br_netfilter_hooks.c:482
+  nf_hook_entry_hookfn include/linux/netfilter.h:119 [inline]
+  nf_hook_slow+0xbf/0x1f0 net/netfilter/core.c:511
+  nf_hook include/linux/netfilter.h:244 [inline]
+  NF_HOOK include/linux/netfilter.h:287 [inline]
+  br_handle_frame+0x95b/0x1450 net/bridge/br_input.c:305
+  __netif_receive_skb_core+0xa96/0x3040 net/core/dev.c:4902
+  __netif_receive_skb_one_core+0xa8/0x1a0 net/core/dev.c:4971
+  __netif_receive_skb+0x2c/0x1c0 net/core/dev.c:5083
+  process_backlog+0x206/0x750 net/core/dev.c:5923
+  napi_poll net/core/dev.c:6346 [inline]
+  net_rx_action+0x4fa/0x1070 net/core/dev.c:6412
+  __do_softirq+0x266/0x95a kernel/softirq.c:293
+  do_softirq_own_stack+0x2a/0x40 arch/x86/entry/entry_64.S:1027
+  </IRQ>
+  do_softirq.part.0+0x11a/0x170 kernel/softirq.c:338
+  do_softirq kernel/softirq.c:330 [inline]
+  __local_bh_enable_ip+0x211/0x270 kernel/softirq.c:190
+  local_bh_enable include/linux/bottom_half.h:32 [inline]
+  rcu_read_unlock_bh include/linux/rcupdate.h:684 [inline]
+  ip6_finish_output2+0xbcf/0x2550 net/ipv6/ip6_output.c:121
+  ip6_finish_output+0x577/0xc30 net/ipv6/ip6_output.c:154
+  NF_HOOK_COND include/linux/netfilter.h:278 [inline]
+  ip6_output+0x235/0x7f0 net/ipv6/ip6_output.c:171
+  dst_output include/net/dst.h:444 [inline]
+  ip6_local_out+0xc4/0x1b0 net/ipv6/output_core.c:176
+  ip6_send_skb+0xbb/0x350 net/ipv6/ip6_output.c:1733
+  udp_v6_send_skb.isra.0+0x839/0x14f0 net/ipv6/udp.c:1179
+  udpv6_sendmsg+0x21e3/0x28d0 net/ipv6/udp.c:1476
+  inet_sendmsg+0x147/0x5d0 net/ipv4/af_inet.c:798
+  sock_sendmsg_nosec net/socket.c:651 [inline]
+  sock_sendmsg+0xdd/0x130 net/socket.c:661
+  __sys_sendto+0x262/0x380 net/socket.c:1932
+  __do_sys_sendto net/socket.c:1944 [inline]
+  __se_sys_sendto net/socket.c:1940 [inline]
+  __x64_sys_sendto+0xe1/0x1a0 net/socket.c:1940
+  do_syscall_64+0x103/0x610 arch/x86/entry/common.c:290
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x458209
+Code: ad b8 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7  
+48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 7b b8 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007f45d3bcdc78 EFLAGS: 00000246 ORIG_RAX: 000000000000002c
+RAX: ffffffffffffffda RBX: 0000000000000006 RCX: 0000000000458209
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
+RBP: 000000000073bf00 R08: 00000000200000c0 R09: 000000000000001c
+R10: 0000000024000000 R11: 0000000000000246 R12: 00007f45d3bce6d4
+R13: 00000000004c58c4 R14: 00000000004d9850 R15: 00000000ffffffff
+Modules linked in:
+CR2: ffffed10184a61b2
+---[ end trace 1b4a2dda4d31a4ee ]---
+RIP: 0010:ip6_fragment+0x17d3/0x3760 net/ipv6/ip6_output.c:830
+Code: 48 8b bd 70 ff ff ff 0f b7 c0 48 03 87 c0 00 00 00 48 29 c1 48 89 cf  
+48 01 f7 48 01 d7 48 89 f8 48 89 fa 48 c1 e8 03 83 e2 07 <42> 0f b6 04 20  
+38 d0 7f 08 84 c0 0f 85 b2 16 00 00 48 89 d8 c6 07
+RSP: 0018:ffff8880ae906cf8 EFLAGS: 00010206
+RAX: 1ffff110184a61b2 RBX: ffff888093e2c2b8 RCX: 000000002e704b06
+RDX: 0000000000000006 RSI: 0000000000000010 RDI: ffff8880c2530d96
+RBP: ffff8880ae906e50 R08: 1ffff110127c5852 R09: ffffed10127c5857
+R10: ffff8880982f0274 R11: ffff888093e2c2b7 R12: dffffc0000000000
+R13: ffff8880982f0080 R14: ffff8880982f0134 R15: ffff8880982f0132
+FS:  00007f45d3bce700(0000) GS:ffff8880ae900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffed10184a61b2 CR3: 000000004c0a7000 CR4: 00000000001406e0
+
+
 ---
- tools/testing/selftests/bpf/test_btf.c | 32 +++++++++++++++++++-------
- 1 file changed, 24 insertions(+), 8 deletions(-)
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/tools/testing/selftests/bpf/test_btf.c b/tools/testing/selftests/bpf/test_btf.c
-index 23e3b314ca60..5afc3f7dff81 100644
---- a/tools/testing/selftests/bpf/test_btf.c
-+++ b/tools/testing/selftests/bpf/test_btf.c
-@@ -3677,6 +3677,7 @@ struct pprint_mapv {
- 	} aenum;
- 	uint32_t ui32b;
- 	uint32_t bits2c:2;
-+	uint8_t si8_4[2][2];
- };
- 
- #ifdef __SIZEOF_INT128__
-@@ -3729,7 +3730,7 @@ static struct btf_raw_test pprint_test_template[] = {
- 		BTF_ENUM_ENC(NAME_TBD, 2),
- 		BTF_ENUM_ENC(NAME_TBD, 3),
- 		/* struct pprint_mapv */		/* [16] */
--		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 10), 40),
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 11), 40),
- 		BTF_MEMBER_ENC(NAME_TBD, 11, 0),	/* uint32_t ui32 */
- 		BTF_MEMBER_ENC(NAME_TBD, 10, 32),	/* uint16_t ui16 */
- 		BTF_MEMBER_ENC(NAME_TBD, 12, 64),	/* int32_t si32 */
-@@ -3740,9 +3741,12 @@ static struct btf_raw_test pprint_test_template[] = {
- 		BTF_MEMBER_ENC(NAME_TBD, 15, 192),	/* aenum */
- 		BTF_MEMBER_ENC(NAME_TBD, 11, 224),	/* uint32_t ui32b */
- 		BTF_MEMBER_ENC(NAME_TBD, 6, 256),	/* bits2c */
-+		BTF_MEMBER_ENC(NAME_TBD, 17, 264),	/* si8_4 */
-+		BTF_TYPE_ARRAY_ENC(18, 1, 2),		/* [17] */
-+		BTF_TYPE_ARRAY_ENC(1, 1, 2),		/* [18] */
- 		BTF_END_RAW,
- 	},
--	BTF_STR_SEC("\0unsigned char\0unsigned short\0unsigned int\0int\0unsigned long long\0uint8_t\0uint16_t\0uint32_t\0int32_t\0uint64_t\0ui64\0ui8a\0ENUM_ZERO\0ENUM_ONE\0ENUM_TWO\0ENUM_THREE\0pprint_mapv\0ui32\0ui16\0si32\0unused_bits2a\0bits28\0unused_bits2b\0aenum\0ui32b\0bits2c"),
-+	BTF_STR_SEC("\0unsigned char\0unsigned short\0unsigned int\0int\0unsigned long long\0uint8_t\0uint16_t\0uint32_t\0int32_t\0uint64_t\0ui64\0ui8a\0ENUM_ZERO\0ENUM_ONE\0ENUM_TWO\0ENUM_THREE\0pprint_mapv\0ui32\0ui16\0si32\0unused_bits2a\0bits28\0unused_bits2b\0aenum\0ui32b\0bits2c\0si8_4"),
- 	.key_size = sizeof(unsigned int),
- 	.value_size = sizeof(struct pprint_mapv),
- 	.key_type_id = 3,	/* unsigned int */
-@@ -3791,7 +3795,7 @@ static struct btf_raw_test pprint_test_template[] = {
- 		BTF_ENUM_ENC(NAME_TBD, 2),
- 		BTF_ENUM_ENC(NAME_TBD, 3),
- 		/* struct pprint_mapv */		/* [16] */
--		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 1, 10), 40),
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 1, 11), 40),
- 		BTF_MEMBER_ENC(NAME_TBD, 11, BTF_MEMBER_OFFSET(0, 0)),	/* uint32_t ui32 */
- 		BTF_MEMBER_ENC(NAME_TBD, 10, BTF_MEMBER_OFFSET(0, 32)),	/* uint16_t ui16 */
- 		BTF_MEMBER_ENC(NAME_TBD, 12, BTF_MEMBER_OFFSET(0, 64)),	/* int32_t si32 */
-@@ -3802,9 +3806,12 @@ static struct btf_raw_test pprint_test_template[] = {
- 		BTF_MEMBER_ENC(NAME_TBD, 15, BTF_MEMBER_OFFSET(0, 192)),	/* aenum */
- 		BTF_MEMBER_ENC(NAME_TBD, 11, BTF_MEMBER_OFFSET(0, 224)),	/* uint32_t ui32b */
- 		BTF_MEMBER_ENC(NAME_TBD, 6, BTF_MEMBER_OFFSET(2, 256)),	/* bits2c */
-+		BTF_MEMBER_ENC(NAME_TBD, 17, 264),	/* si8_4 */
-+		BTF_TYPE_ARRAY_ENC(18, 1, 2),		/* [17] */
-+		BTF_TYPE_ARRAY_ENC(1, 1, 2),		/* [18] */
- 		BTF_END_RAW,
- 	},
--	BTF_STR_SEC("\0unsigned char\0unsigned short\0unsigned int\0int\0unsigned long long\0uint8_t\0uint16_t\0uint32_t\0int32_t\0uint64_t\0ui64\0ui8a\0ENUM_ZERO\0ENUM_ONE\0ENUM_TWO\0ENUM_THREE\0pprint_mapv\0ui32\0ui16\0si32\0unused_bits2a\0bits28\0unused_bits2b\0aenum\0ui32b\0bits2c"),
-+	BTF_STR_SEC("\0unsigned char\0unsigned short\0unsigned int\0int\0unsigned long long\0uint8_t\0uint16_t\0uint32_t\0int32_t\0uint64_t\0ui64\0ui8a\0ENUM_ZERO\0ENUM_ONE\0ENUM_TWO\0ENUM_THREE\0pprint_mapv\0ui32\0ui16\0si32\0unused_bits2a\0bits28\0unused_bits2b\0aenum\0ui32b\0bits2c\0si8_4"),
- 	.key_size = sizeof(unsigned int),
- 	.value_size = sizeof(struct pprint_mapv),
- 	.key_type_id = 3,	/* unsigned int */
-@@ -3855,7 +3862,7 @@ static struct btf_raw_test pprint_test_template[] = {
- 		BTF_ENUM_ENC(NAME_TBD, 2),
- 		BTF_ENUM_ENC(NAME_TBD, 3),
- 		/* struct pprint_mapv */		/* [16] */
--		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 1, 10), 40),
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 1, 11), 40),
- 		BTF_MEMBER_ENC(NAME_TBD, 11, BTF_MEMBER_OFFSET(0, 0)),	/* uint32_t ui32 */
- 		BTF_MEMBER_ENC(NAME_TBD, 10, BTF_MEMBER_OFFSET(0, 32)),	/* uint16_t ui16 */
- 		BTF_MEMBER_ENC(NAME_TBD, 12, BTF_MEMBER_OFFSET(0, 64)),	/* int32_t si32 */
-@@ -3866,13 +3873,16 @@ static struct btf_raw_test pprint_test_template[] = {
- 		BTF_MEMBER_ENC(NAME_TBD, 15, BTF_MEMBER_OFFSET(0, 192)),	/* aenum */
- 		BTF_MEMBER_ENC(NAME_TBD, 11, BTF_MEMBER_OFFSET(0, 224)),	/* uint32_t ui32b */
- 		BTF_MEMBER_ENC(NAME_TBD, 17, BTF_MEMBER_OFFSET(2, 256)),	/* bits2c */
-+		BTF_MEMBER_ENC(NAME_TBD, 20, BTF_MEMBER_OFFSET(0, 264)),	/* si8_4 */
- 		/* typedef unsigned int ___int */	/* [17] */
- 		BTF_TYPEDEF_ENC(NAME_TBD, 18),
- 		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_VOLATILE, 0, 0), 6),	/* [18] */
- 		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_CONST, 0, 0), 15),	/* [19] */
-+		BTF_TYPE_ARRAY_ENC(21, 1, 2),					/* [20] */
-+		BTF_TYPE_ARRAY_ENC(1, 1, 2),					/* [21] */
- 		BTF_END_RAW,
- 	},
--	BTF_STR_SEC("\0unsigned char\0unsigned short\0unsigned int\0int\0unsigned long long\0uint8_t\0uint16_t\0uint32_t\0int32_t\0uint64_t\0ui64\0ui8a\0ENUM_ZERO\0ENUM_ONE\0ENUM_TWO\0ENUM_THREE\0pprint_mapv\0ui32\0ui16\0si32\0unused_bits2a\0bits28\0unused_bits2b\0aenum\0ui32b\0bits2c\0___int"),
-+	BTF_STR_SEC("\0unsigned char\0unsigned short\0unsigned int\0int\0unsigned long long\0uint8_t\0uint16_t\0uint32_t\0int32_t\0uint64_t\0ui64\0ui8a\0ENUM_ZERO\0ENUM_ONE\0ENUM_TWO\0ENUM_THREE\0pprint_mapv\0ui32\0ui16\0si32\0unused_bits2a\0bits28\0unused_bits2b\0aenum\0ui32b\0bits2c\0___int\0si8_4"),
- 	.key_size = sizeof(unsigned int),
- 	.value_size = sizeof(struct pprint_mapv),
- 	.key_type_id = 3,	/* unsigned int */
-@@ -4007,6 +4017,10 @@ static void set_pprint_mapv(enum pprint_mapv_kind_t mapv_kind,
- 			v->aenum = i & 0x03;
- 			v->ui32b = 4;
- 			v->bits2c = 1;
-+			v->si8_4[0][0] = (cpu + i) & 0xff;
-+			v->si8_4[0][1] = (cpu + i + 1) & 0xff;
-+			v->si8_4[1][0] = (cpu + i + 2) & 0xff;
-+			v->si8_4[1][1] = (cpu + i + 3) & 0xff;
- 			v = (void *)v + rounded_value_size;
- 		}
- 	}
-@@ -4040,7 +4054,7 @@ ssize_t get_pprint_expected_line(enum pprint_mapv_kind_t mapv_kind,
- 		nexpected_line = snprintf(expected_line, line_size,
- 					  "%s%u: {%u,0,%d,0x%x,0x%x,0x%x,"
- 					  "{%lu|[%u,%u,%u,%u,%u,%u,%u,%u]},%s,"
--					  "%u,0x%x}\n",
-+					  "%u,0x%x,[[%d,%d],[%d,%d]]}\n",
- 					  percpu_map ? "\tcpu" : "",
- 					  percpu_map ? cpu : next_key,
- 					  v->ui32, v->si32,
-@@ -4054,7 +4068,9 @@ ssize_t get_pprint_expected_line(enum pprint_mapv_kind_t mapv_kind,
- 					  v->ui8a[6], v->ui8a[7],
- 					  pprint_enum_str[v->aenum],
- 					  v->ui32b,
--					  v->bits2c);
-+					  v->bits2c,
-+					  v->si8_4[0][0], v->si8_4[0][1],
-+					  v->si8_4[1][0], v->si8_4[1][1]);
- 	}
- 
- #ifdef __SIZEOF_INT128__
--- 
-2.17.1
-
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
