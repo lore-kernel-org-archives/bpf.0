@@ -4,381 +4,151 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88B8DC10F05
-	for <bpf@archiver.kernel.org>; Sat, 30 Mar 2019 00:16:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94E79C10F05
+	for <bpf@archiver.kernel.org>; Sat, 30 Mar 2019 01:10:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4A6B321773
-	for <bpf@archiver.kernel.org>; Sat, 30 Mar 2019 00:16:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 66396218E2
+	for <bpf@archiver.kernel.org>; Sat, 30 Mar 2019 01:10:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1553904993;
-	bh=OdY7Mz4krwMGT9FYT6j9sIWcOcCM5uG/3AnZ99tRsU4=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=PI9ZBKb34npqHfAWzId+YBuJiaAzNewxfiCIChZ0nMXaborGDVekEzUc0AnVf4Stj
-	 SeSwlaYiMPbZ4G5NmOYHG+PiNiKqFv62zct+9TjnPxqNHmZQ1VxhrK3x++gOEXO98x
-	 3XkFJNu4ALpysqW0oSu8rBrkvmMQ0G8PKyOx9pqo=
+	s=default; t=1553908213;
+	bh=i9OHfaKdt902fOxWcLiII2y6JkxHZ4CLT9nKwNZ77eo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=hs1giD1syCxmIDxhLnyH5yojjcGbbLQKkYAizdcEFFHTxd7Z/n7t/FujqS2rKEcUJ
+	 O1nLS2Rf11AnNBSyoB76Nio7IOsXUviuVtU2DLO4n/k/zqyIosoQsKjoKhGmNqEp0v
+	 9c2xxbLv/mPq0RIS5LHJmsPNHRiCbGNYKjyicC9g=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730321AbfC3AQc convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 29 Mar 2019 20:16:32 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:49452 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730289AbfC3AQb (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 29 Mar 2019 20:16:31 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x2U0CcaN007152
-        for <bpf@vger.kernel.org>; Fri, 29 Mar 2019 17:16:29 -0700
-Received: from mail.thefacebook.com ([199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2rhwcag2tb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 29 Mar 2019 17:16:29 -0700
-Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::125) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Fri, 29 Mar 2019 17:16:28 -0700
-Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 2596E760BC0; Fri, 29 Mar 2019 17:16:27 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Alexei Starovoitov <ast@kernel.org>
-Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
-To:     <davem@davemloft.net>
-CC:     <daniel@iogearbox.net>, <jakub.kicinski@netronome.com>,
-        <jannh@google.com>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 7/7] selftests/bpf: add few verifier scale tests
-Date:   Fri, 29 Mar 2019 17:16:12 -0700
-Message-ID: <20190330001612.2354959-8-ast@kernel.org>
-X-Mailer: git-send-email 2.20.0
-In-Reply-To: <20190330001612.2354959-1-ast@kernel.org>
-References: <20190330001612.2354959-1-ast@kernel.org>
+        id S1730855AbfC3Av6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 29 Mar 2019 20:51:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58590 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730833AbfC3Av5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 29 Mar 2019 20:51:57 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1DF48206DD;
+        Sat, 30 Mar 2019 00:51:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1553907116;
+        bh=i9OHfaKdt902fOxWcLiII2y6JkxHZ4CLT9nKwNZ77eo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=2chQuqvm+PkQseV9hwBaivceoD1ekyzVEI4O8mdVSK4g79wgZBUOFiYxpVRH6jJFc
+         8bGz7VQHKpUDskxvDK4RhJB1TCNIp3tLCORQM3s1ucSGMIMbdsNOVvIzXcLN77AG69
+         01dzI6DaacCePqJhIF8veS32m8D3cfrWU8LQrPTA=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Changbin Du <changbin.du@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.0 35/67] perf tools: Fix errors under optimization level '-Og'
+Date:   Fri, 29 Mar 2019 20:50:15 -0400
+Message-Id: <20190330005047.25998-35-sashal@kernel.org>
+X-Mailer: git-send-email 2.19.1
+In-Reply-To: <20190330005047.25998-1-sashal@kernel.org>
+References: <20190330005047.25998-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-03-29_14:,,
- signatures=0
-X-Proofpoint-Spam-Reason: safe
-X-FB-Internal: Safe
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add 3 basic tests that stress verifier scalability.
+From: Changbin Du <changbin.du@gmail.com>
 
-test_verif_scale1.c calls non-inlined jhash() function 90 times on
-different position in the packet.
-This test simulates network packet parsing.
-jhash function is ~140 instructions and main program is ~1200 insns.
+[ Upstream commit 11c1ea6f1a9bc97bf857fd12f72eacb6c69794e2 ]
 
-test_verif_scale2.c force inlines jhash() function 90 times.
-This program is ~15k instructions long.
+Optimization level '-Og' offers a reasonable level of optimization while
+maintaining fast compilation and a good debugging experience. This patch
+tries to make it work.
 
-test_verif_scale3.c calls non-inlined jhash() function 90 times on
-But this time jhash has to process 32-bytes from the packet
-instead of 14-bytes in tests 1 and 2.
-jhash function is ~230 insns and main program is ~1200 insns.
+  $ make DEBUG=1 EXTRA_CFLAGS='-Og'
+  bench/epoll-ctl.c: In function ‘do_threads’:
+  bench/epoll-ctl.c:274:9: error: ‘ret’ may be used uninitialized in this function [-Werror=maybe-uninitialized]
+    return ret;
+           ^~~
+  ...
 
-$ test_progs -s
-can be used to see verifier stats.
-
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Changbin Du <changbin.du@gmail.com>
+Reviewed-by: Jiri Olsa <jolsa@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Link: http://lkml.kernel.org/r/20190316080556.3075-4-changbin.du@gmail.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../bpf/prog_tests/bpf_verif_scale.c          | 49 +++++++++++++
- .../testing/selftests/bpf/progs/test_jhash.h  | 70 +++++++++++++++++++
- .../selftests/bpf/progs/test_verif_scale1.c   | 30 ++++++++
- .../selftests/bpf/progs/test_verif_scale2.c   | 30 ++++++++
- .../selftests/bpf/progs/test_verif_scale3.c   | 30 ++++++++
- tools/testing/selftests/bpf/test_progs.c      |  6 +-
- tools/testing/selftests/bpf/test_progs.h      |  1 +
- 7 files changed, 215 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_jhash.h
- create mode 100644 tools/testing/selftests/bpf/progs/test_verif_scale1.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_verif_scale2.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_verif_scale3.c
+ tools/lib/bpf/libbpf.c                  | 2 +-
+ tools/perf/bench/epoll-ctl.c            | 2 +-
+ tools/perf/bench/epoll-wait.c           | 2 +-
+ tools/perf/tests/backward-ring-buffer.c | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-new file mode 100644
-index 000000000000..23b159d95c3f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-@@ -0,0 +1,49 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2019 Facebook
-+#include <test_progs.h>
-+static int libbpf_debug_print(enum libbpf_print_level level,
-+			      const char *format, va_list args)
-+{
-+	if (level != LIBBPF_DEBUG)
-+		return 0;
-+
-+	if (!strstr(format, "verifier log"))
-+		return 0;
-+	return vfprintf(stderr, "%s", args);
-+}
-+
-+static int check_load(const char *file)
-+{
-+	struct bpf_prog_load_attr attr;
-+	struct bpf_object *obj;
-+	int err, prog_fd;
-+
-+	memset(&attr, 0, sizeof(struct bpf_prog_load_attr));
-+	attr.file = file;
-+	attr.prog_type = BPF_PROG_TYPE_SCHED_CLS;
-+	attr.log_level = 4;
-+	err = bpf_prog_load_xattr(&attr, &obj, &prog_fd);
-+	bpf_object__close(obj);
-+	if (err)
-+		error_cnt++;
-+	return err;
-+}
-+
-+void test_bpf_verif_scale(void)
-+{
-+	const char *file1 = "./test_verif_scale1.o";
-+	const char *file2 = "./test_verif_scale2.o";
-+	const char *file3 = "./test_verif_scale3.o";
-+	int err;
-+
-+	if (verifier_stats)
-+		libbpf_set_print(libbpf_debug_print);
-+
-+	err = check_load(file1);
-+	err |= check_load(file2);
-+	err |= check_load(file3);
-+	if (!err)
-+		printf("test_verif_scale:OK\n");
-+	else
-+		printf("test_verif_scale:FAIL\n");
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_jhash.h b/tools/testing/selftests/bpf/progs/test_jhash.h
-new file mode 100644
-index 000000000000..3d12c11a8d47
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_jhash.h
-@@ -0,0 +1,70 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2019 Facebook
-+
-+typedef unsigned int u32;
-+
-+static __attribute__((always_inline)) u32 rol32(u32 word, unsigned int shift)
-+{
-+	return (word << shift) | (word >> ((-shift) & 31));
-+}
-+
-+#define __jhash_mix(a, b, c)			\
-+{						\
-+	a -= c;  a ^= rol32(c, 4);  c += b;	\
-+	b -= a;  b ^= rol32(a, 6);  a += c;	\
-+	c -= b;  c ^= rol32(b, 8);  b += a;	\
-+	a -= c;  a ^= rol32(c, 16); c += b;	\
-+	b -= a;  b ^= rol32(a, 19); a += c;	\
-+	c -= b;  c ^= rol32(b, 4);  b += a;	\
-+}
-+
-+#define __jhash_final(a, b, c)			\
-+{						\
-+	c ^= b; c -= rol32(b, 14);		\
-+	a ^= c; a -= rol32(c, 11);		\
-+	b ^= a; b -= rol32(a, 25);		\
-+	c ^= b; c -= rol32(b, 16);		\
-+	a ^= c; a -= rol32(c, 4);		\
-+	b ^= a; b -= rol32(a, 14);		\
-+	c ^= b; c -= rol32(b, 24);		\
-+}
-+
-+#define JHASH_INITVAL		0xdeadbeef
-+
-+static ATTR
-+u32 jhash(const void *key, u32 length, u32 initval)
-+{
-+	u32 a, b, c;
-+	const unsigned char *k = key;
-+
-+	a = b = c = JHASH_INITVAL + length + initval;
-+
-+	while (length > 12) {
-+		a += *(volatile u32 *)(k);
-+		b += *(volatile u32 *)(k + 4);
-+		c += *(volatile u32 *)(k + 8);
-+		__jhash_mix(a, b, c);
-+		length -= 12;
-+		k += 12;
-+	}
-+	switch (length) {
-+	case 12: c += (u32)k[11]<<24;
-+	case 11: c += (u32)k[10]<<16;
-+	case 10: c += (u32)k[9]<<8;
-+	case 9:  c += k[8];
-+	case 8:  b += (u32)k[7]<<24;
-+	case 7:  b += (u32)k[6]<<16;
-+	case 6:  b += (u32)k[5]<<8;
-+	case 5:  b += k[4];
-+	case 4:  a += (u32)k[3]<<24;
-+	case 3:  a += (u32)k[2]<<16;
-+	case 2:  a += (u32)k[1]<<8;
-+	case 1:  a += k[0];
-+		 c ^= a;
-+		 __jhash_final(a, b, c);
-+	case 0: /* Nothing left to add */
-+		break;
-+	}
-+
-+	return c;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_verif_scale1.c b/tools/testing/selftests/bpf/progs/test_verif_scale1.c
-new file mode 100644
-index 000000000000..f3236ce35f31
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_verif_scale1.c
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2019 Facebook
-+#include <linux/bpf.h>
-+#include "bpf_helpers.h"
-+#define ATTR __attribute__((noinline))
-+#include "test_jhash.h"
-+
-+SEC("scale90_noinline")
-+int balancer_ingress(struct __sk_buff *ctx)
-+{
-+	void *data_end = (void *)(long)ctx->data_end;
-+	void *data = (void *)(long)ctx->data;
-+	void *ptr;
-+	int ret = 0, nh_off, i = 0;
-+
-+	nh_off = 14;
-+
-+	/* pragma unroll doesn't work on large loops */
-+
-+#define C do { \
-+	ptr = data + i; \
-+	if (ptr + nh_off > data_end) \
-+		break; \
-+	ctx->tc_index = jhash(ptr, nh_off, ctx->cb[0] + i++); \
-+	} while (0);
-+#define C30 C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;
-+	C30;C30;C30; /* 90 calls */
-+	return 0;
-+}
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/test_verif_scale2.c b/tools/testing/selftests/bpf/progs/test_verif_scale2.c
-new file mode 100644
-index 000000000000..77830693eccb
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_verif_scale2.c
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2019 Facebook
-+#include <linux/bpf.h>
-+#include "bpf_helpers.h"
-+#define ATTR __attribute__((always_inline))
-+#include "test_jhash.h"
-+
-+SEC("scale90_inline")
-+int balancer_ingress(struct __sk_buff *ctx)
-+{
-+	void *data_end = (void *)(long)ctx->data_end;
-+	void *data = (void *)(long)ctx->data;
-+	void *ptr;
-+	int ret = 0, nh_off, i = 0;
-+
-+	nh_off = 14;
-+
-+	/* pragma unroll doesn't work on large loops */
-+
-+#define C do { \
-+	ptr = data + i; \
-+	if (ptr + nh_off > data_end) \
-+		break; \
-+	ctx->tc_index = jhash(ptr, nh_off, ctx->cb[0] + i++); \
-+	} while (0);
-+#define C30 C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;
-+	C30;C30;C30; /* 90 calls */
-+	return 0;
-+}
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/test_verif_scale3.c b/tools/testing/selftests/bpf/progs/test_verif_scale3.c
-new file mode 100644
-index 000000000000..1848da04ea41
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_verif_scale3.c
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2019 Facebook
-+#include <linux/bpf.h>
-+#include "bpf_helpers.h"
-+#define ATTR __attribute__((noinline))
-+#include "test_jhash.h"
-+
-+SEC("scale90_noinline32")
-+int balancer_ingress(struct __sk_buff *ctx)
-+{
-+	void *data_end = (void *)(long)ctx->data_end;
-+	void *data = (void *)(long)ctx->data;
-+	void *ptr;
-+	int ret = 0, nh_off, i = 0;
-+
-+	nh_off = 32;
-+
-+	/* pragma unroll doesn't work on large loops */
-+
-+#define C do { \
-+	ptr = data + i; \
-+	if (ptr + nh_off > data_end) \
-+		break; \
-+	ctx->tc_index = jhash(ptr, nh_off, ctx->cb[0] + i++); \
-+	} while (0);
-+#define C30 C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;C;
-+	C30;C30;C30; /* 90 calls */
-+	return 0;
-+}
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 5d10aee9e277..bf5c90998916 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -9,6 +9,7 @@
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 169e347c76f6..9ba1a2e1ed7a 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -627,7 +627,7 @@ bpf_object__init_maps(struct bpf_object *obj, int flags)
+ 	bool strict = !(flags & MAPS_RELAX_COMPAT);
+ 	int i, map_idx, map_def_sz, nr_maps = 0;
+ 	Elf_Scn *scn;
+-	Elf_Data *data;
++	Elf_Data *data = NULL;
+ 	Elf_Data *symbols = obj->efile.symbols;
  
- int error_cnt, pass_cnt;
- bool jit_enabled;
-+bool verifier_stats = false;
+ 	if (obj->efile.maps_shndx < 0)
+diff --git a/tools/perf/bench/epoll-ctl.c b/tools/perf/bench/epoll-ctl.c
+index 0c0a6e824934..2af067859966 100644
+--- a/tools/perf/bench/epoll-ctl.c
++++ b/tools/perf/bench/epoll-ctl.c
+@@ -224,7 +224,7 @@ static int do_threads(struct worker *worker, struct cpu_map *cpu)
+ 	pthread_attr_t thread_attr, *attrp = NULL;
+ 	cpu_set_t cpuset;
+ 	unsigned int i, j;
+-	int ret;
++	int ret = 0;
  
- struct ipv4_packet pkt_v4 = {
- 	.eth.h_proto = __bpf_constant_htons(ETH_P_IP),
-@@ -162,12 +163,15 @@ void *spin_lock_thread(void *arg)
- #include <prog_tests/tests.h>
- #undef DECLARE
+ 	if (!noaffinity)
+ 		pthread_attr_init(&thread_attr);
+diff --git a/tools/perf/bench/epoll-wait.c b/tools/perf/bench/epoll-wait.c
+index 5a11534e96a0..fe85448abd45 100644
+--- a/tools/perf/bench/epoll-wait.c
++++ b/tools/perf/bench/epoll-wait.c
+@@ -293,7 +293,7 @@ static int do_threads(struct worker *worker, struct cpu_map *cpu)
+ 	pthread_attr_t thread_attr, *attrp = NULL;
+ 	cpu_set_t cpuset;
+ 	unsigned int i, j;
+-	int ret, events = EPOLLIN;
++	int ret = 0, events = EPOLLIN;
  
--int main(void)
-+int main(int ac, char **av)
- {
- 	srand(time(NULL));
+ 	if (oneshot)
+ 		events |= EPOLLONESHOT;
+diff --git a/tools/perf/tests/backward-ring-buffer.c b/tools/perf/tests/backward-ring-buffer.c
+index 6d598cc071ae..1a9c3becf5ff 100644
+--- a/tools/perf/tests/backward-ring-buffer.c
++++ b/tools/perf/tests/backward-ring-buffer.c
+@@ -18,7 +18,7 @@ static void testcase(void)
+ 	int i;
  
- 	jit_enabled = is_jit_enabled();
+ 	for (i = 0; i < NR_ITERS; i++) {
+-		char proc_name[10];
++		char proc_name[15];
  
-+	if (ac == 2 && strcmp(av[1], "-s") == 0)
-+		verifier_stats = true;
-+
- #define CALL
- #include <prog_tests/tests.h>
- #undef CALL
-diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-index 51a07367cd43..f095e1d4c657 100644
---- a/tools/testing/selftests/bpf/test_progs.h
-+++ b/tools/testing/selftests/bpf/test_progs.h
-@@ -40,6 +40,7 @@ typedef __u16 __sum16;
- 
- extern int error_cnt, pass_cnt;
- extern bool jit_enabled;
-+extern bool verifier_stats;
- 
- #define MAGIC_BYTES 123
- 
+ 		snprintf(proc_name, sizeof(proc_name), "p:%d\n", i);
+ 		prctl(PR_SET_NAME, proc_name);
 -- 
-2.20.0
+2.19.1
 
