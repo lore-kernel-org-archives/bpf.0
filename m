@@ -2,149 +2,170 @@ Return-Path: <SRS0=8uh4=SB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2F93C10F05
-	for <bpf@archiver.kernel.org>; Sat, 30 Mar 2019 01:40:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE9B6C43381
+	for <bpf@archiver.kernel.org>; Sat, 30 Mar 2019 03:12:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A0B31218A6
-	for <bpf@archiver.kernel.org>; Sat, 30 Mar 2019 01:40:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1553910003;
-	bh=HCVAH2sr7l+ULzYinwOBQaGwyD8hEINZPE5Ym4L4tk8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=o3CsXJ5ddIsgtqEdra5UB2rdZhZt6/hiWau7gy28PcL+3wA7n00KB7GpyGR6kJj2h
-	 mvHSqW+LcSWc9EpRRepTuQvStm97Xm21PO0+zMIB9/wj3XTE4HLuPx5734Mn8wCiUF
-	 01G9z74AUPQWXlU2+MsGm2+8MaufMs5SxU0YLh+g=
+	by mail.kernel.org (Postfix) with ESMTP id 88C69218D8
+	for <bpf@archiver.kernel.org>; Sat, 30 Mar 2019 03:12:48 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="Sv9dNDgP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730831AbfC3Bj4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 29 Mar 2019 21:39:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36560 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731033AbfC3B3j (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 29 Mar 2019 21:29:39 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 67DEE217F5;
-        Sat, 30 Mar 2019 01:29:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1553909378;
-        bh=HCVAH2sr7l+ULzYinwOBQaGwyD8hEINZPE5Ym4L4tk8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2PfNlS2kkorLghQrjGAckBxott3S6/yCPXgw4Kt+mJzXGL5mr4ulBO0pcYpwU0INV
-         dm+S44ftZkKholE+Ix+fmxqdww7Pe2J2p9kVKwOmTcXZjtb0YNLe4yqBn8RMwsEKzl
-         QX8TeZxU/7iBNnMj84wJ6JZXgawnfJ+VnY1ft610=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Taehee Yoo <ap420073@gmail.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 22/57] netfilter: nf_flow_table: remove flowtable hook flush routine in netns exit routine
-Date:   Fri, 29 Mar 2019 21:28:15 -0400
-Message-Id: <20190330012854.32212-22-sashal@kernel.org>
-X-Mailer: git-send-email 2.19.1
-In-Reply-To: <20190330012854.32212-1-sashal@kernel.org>
-References: <20190330012854.32212-1-sashal@kernel.org>
+        id S1730322AbfC3DMr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 29 Mar 2019 23:12:47 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:35890 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730184AbfC3DMr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 29 Mar 2019 23:12:47 -0400
+Received: by mail-qk1-f195.google.com with SMTP id k130so2597291qke.3
+        for <bpf@vger.kernel.org>; Fri, 29 Mar 2019 20:12:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=XtCD5o0YDi6zWAKv673Y4VjewihhLV9oSCf+ivJG+xc=;
+        b=Sv9dNDgP1zV8t4hTSd7rPyhgQuk+llaXbUN+6Sc+p+t5ZPK6PD24jvpIQ+GnVFJN2U
+         ZNZRR9KkeOr/2kfxU9qmARzB6jAX/Q4C3Xt48peLWEZtvjO7C1Ua/Z5o943vAap9IhY7
+         dU2y9iSwRFzzokJwf6NKGzGxIM6CgGnFreCBvnxMzIlRnPw2v41cC7sBgnIhV2znusyc
+         tfNsV2kZeBoD8oj7srexoM8w3j/VxqKvnUNbukVHpuUUxPl/jw7lhg+k57toxwYgnJl4
+         56uTQdjaYYBsswttWYJXrCGJflrzczpGDUe/Vrc3WsipUelQVJEJ+U7A2XCmn2deTJs6
+         tKpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=XtCD5o0YDi6zWAKv673Y4VjewihhLV9oSCf+ivJG+xc=;
+        b=DtM7rae2a3kiBc3VM3vM0UTegq9aRpDo9JI/OLn1lE1TZgIi9dDlideKp157/+UuW9
+         Qq6DFmk0wrKc1mzhdHMFdhXC++nCTU3Ux4Y3P7sKN3zeSI5ojdzNqlTDtF0uAZdjxs0j
+         XRX/qjFndaLqAOJxArKsSTxZ5ThoGF19dpI/Xemg7CYkvhX5lAeb5ZUDKnBpgX01Qn9j
+         lvu62O0Yp/C2gWYyi+Stgi2/I++M2cV7d3xDCENRKxaa5SYvPfSORFVv8Olw2E2LBIb+
+         SkIr/obBzsTDNBUULRWCfyAh75VJHL92hYKvCKVuTxEaNkPUj4U22jzVZZUUzvT478rx
+         LHBA==
+X-Gm-Message-State: APjAAAUxYM2DbF0JFXnqWbRaTHZtiofe/rt2h1SijaNPIgLkV25Sk947
+        IXVcd9bf+WUkbLfFgrrTGyRXGA==
+X-Google-Smtp-Source: APXvYqxcodn7dI3R+y7yas8H/qlRyv7cdcytqTnGEUQZVq4ql9DCnok/nl0ujEtvUbUoPihdmFLoNg==
+X-Received: by 2002:a37:7ac7:: with SMTP id v190mr40628913qkc.275.1553915566244;
+        Fri, 29 Mar 2019 20:12:46 -0700 (PDT)
+Received: from cakuba.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id r64sm2029084qkb.60.2019.03.29.20.12.44
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 29 Mar 2019 20:12:45 -0700 (PDT)
+Date:   Fri, 29 Mar 2019 20:12:39 -0700
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Alexei Starovoitov <ast@kernel.org>
+Cc:     <davem@davemloft.net>, <daniel@iogearbox.net>, <jannh@google.com>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <kernel-team@fb.com>
+Subject: Re: [PATCH bpf-next 2/7] bpf: improve verification speed by droping
+ states
+Message-ID: <20190329201239.7736739e@cakuba.netronome.com>
+In-Reply-To: <20190330001612.2354959-3-ast@kernel.org>
+References: <20190330001612.2354959-1-ast@kernel.org>
+        <20190330001612.2354959-3-ast@kernel.org>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Taehee Yoo <ap420073@gmail.com>
+On Fri, 29 Mar 2019 17:16:07 -0700, Alexei Starovoitov wrote:
+> Branch instructions, branch targets and calls in a bpf program are
+> the places where the verifier remembers states that led to successful
+> verification of the program.
+> These states are used to prune brute force program analysis.
+> For unprivileged programs there is a limit of 64 states per such
+> 'branching' instructions (maximum length is tracked by max_states_per_insn
+> counter introduced in the previous patch).
+> Simply reducing this threshold to 32 or lower increases insn_processed
+> metric to the point that small valid programs get rejected.
+> For root programs there is no limit and cilium programs can have
+> max_states_per_insn to be 100 or higher.
+> Walking 100+ states multiplied by number of 'branching' insns during
+> verification consumes significant amount of cpu time.
+> Turned out simple LRU-like mechanism can be used to remove states
+> that unlikely will be helpful in future search pruning.
+> This patch introduces hit_cnt and miss_cnt counters:
+> hit_cnt - this many times this state successfully pruned the search
+> miss_cnt - this many times this state was not equivalent to other states
+> (and that other states were added to state list)
+> 
+> The heuristic introduced in this patch is:
+> if (sl->miss_cnt > sl->hit_cnt * 3 + 3)
+>   /* drop this state from future considerations */
+> 
+> Higher numbers increase max_states_per_insn (allow more states to be
+> considered for pruning) and slow verification speed, but do not meaningfully
+> reduce insn_processed metric.
+> Lower numbers drop too many states and insn_processed increases too much.
+> Many different formulas were considered.
+> This one is simple and works well enough in practice.
+> (the analysis was done on selftests/progs/* and on cilium programs)
+> 
+> The end result is this heuristic improves verification speed by 10 times.
+> Large synthetic programs that used to take a second more now take
+> 1/10 of a second.
+> In cases where max_states_per_insn used to be 100 or more, now it's ~10.
+> 
+> There is a slight increase in insn_processed for cilium progs:
+>                        before   after
+> bpf_lb-DLB_L3.o 	1831	1838
+> bpf_lb-DLB_L4.o 	3029	3218
+> bpf_lb-DUNKNOWN.o 	1064	1064
+> bpf_lxc-DDROP_ALL.o	26309	26935
+> bpf_lxc-DUNKNOWN.o	33517	34439
+> bpf_netdev.o		9713	9721
+> bpf_overlay.o		6184	6184
+> bpf_lcx_jit.o		37335	39389
+> And 2-3 times improvement in the verification speed.
+> 
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-[ Upstream commit b7f1a16d29b2e28d3dcbb070511bd703e306281b ]
+Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 
-When device is unregistered, flowtable flush routine is called
-by notifier_call(nf_tables_flowtable_event). and exit callback of
-nftables pernet_operation(nf_tables_exit_net) also has flowtable flush
-routine. but when network namespace is destroyed, both notifier_call
-and pernet_operation are called. hence flowtable flush routine in
-pernet_operation is unnecessary.
+> @@ -6182,8 +6185,35 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+>  				return err;
+>  			return 1;
+>  		}
+> -		sl = sl->next;
+>  		states_cnt++;
+> +		sl->miss_cnt++;
+> +		/* heuristic to determine whether this state is beneficial
+> +		 * to keep checking from state equivalence point of view.
+> +		 * Higher numbers increase max_states_per_insn and verification time,
+> +		 * but do not meaningfully decrease insn_processed.
+> +		 */
+> +		if (sl->miss_cnt > sl->hit_cnt * 3 + 3) {
+> +			/* the state is unlikely to be useful. Remove it to
+> +			 * speed up verification
+> +			 */
+> +			*pprev = sl->next;
+> +			if (sl->state.frame[0]->regs[0].live & REG_LIVE_DONE) {
+> +				free_verifier_state(&sl->state, false);
+> +				kfree(sl);
+> +				env->peak_states--;
 
-test commands:
-   %ip netns add vm1
-   %ip netns exec vm1 nft add table ip filter
-   %ip netns exec vm1 nft add flowtable ip filter w \
-	{ hook ingress priority 0\; devices = { lo }\; }
-   %ip netns del vm1
+nit: is peak_states always equal to number of states when verifier
+     exits?
 
-splat looks like:
-[  265.187019] WARNING: CPU: 0 PID: 87 at net/netfilter/core.c:309 nf_hook_entry_head+0xc7/0xf0
-[  265.187112] Modules linked in: nf_flow_table_ipv4 nf_flow_table nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 nf_tables nfnetlink ip_tables x_tables
-[  265.187390] CPU: 0 PID: 87 Comm: kworker/u4:2 Not tainted 4.19.0-rc3+ #5
-[  265.187453] Workqueue: netns cleanup_net
-[  265.187514] RIP: 0010:nf_hook_entry_head+0xc7/0xf0
-[  265.187546] Code: 8d 81 68 03 00 00 5b c3 89 d0 83 fa 04 48 8d 84 c7 e8 11 00 00 76 81 0f 0b 31 c0 e9 78 ff ff ff 0f 0b 48 83 c4 08 31 c0 5b c3 <0f> 0b 31 c0 e9 65 ff ff ff 0f 0b 31 c0 e9 5c ff ff ff 48 89 0c 24
-[  265.187573] RSP: 0018:ffff88011546f098 EFLAGS: 00010246
-[  265.187624] RAX: ffffffff8d90e135 RBX: 1ffff10022a8de1c RCX: 0000000000000000
-[  265.187645] RDX: 0000000000000000 RSI: 0000000000000005 RDI: ffff880116298040
-[  265.187645] RBP: ffff88010ea4c1a8 R08: 0000000000000000 R09: 0000000000000000
-[  265.187645] R10: ffff88011546f1d8 R11: ffffed0022c532c1 R12: ffff88010ea4c1d0
-[  265.187645] R13: 0000000000000005 R14: dffffc0000000000 R15: ffff88010ea4c1c4
-[  265.187645] FS:  0000000000000000(0000) GS:ffff88011b200000(0000) knlGS:0000000000000000
-[  265.187645] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  265.187645] CR2: 00007fdfb8d00000 CR3: 0000000057a16000 CR4: 00000000001006f0
-[  265.187645] Call Trace:
-[  265.187645]  __nf_unregister_net_hook+0xca/0x5d0
-[  265.187645]  ? nf_hook_entries_free.part.3+0x80/0x80
-[  265.187645]  ? save_trace+0x300/0x300
-[  265.187645]  nf_unregister_net_hooks+0x2e/0x40
-[  265.187645]  nf_tables_exit_net+0x479/0x1340 [nf_tables]
-[  265.187645]  ? find_held_lock+0x39/0x1c0
-[  265.187645]  ? nf_tables_abort+0x30/0x30 [nf_tables]
-[  265.187645]  ? inet_frag_destroy_rcu+0xd0/0xd0
-[  265.187645]  ? trace_hardirqs_on+0x93/0x210
-[  265.187645]  ? __bpf_trace_preemptirq_template+0x10/0x10
-[  265.187645]  ? inet_frag_destroy_rcu+0xd0/0xd0
-[  265.187645]  ? inet_frag_destroy_rcu+0xd0/0xd0
-[  265.187645]  ? __mutex_unlock_slowpath+0x17f/0x740
-[  265.187645]  ? wait_for_completion+0x710/0x710
-[  265.187645]  ? bucket_table_free+0xb2/0x1f0
-[  265.187645]  ? nested_table_free+0x130/0x130
-[  265.187645]  ? __lock_is_held+0xb4/0x140
-[  265.187645]  ops_exit_list.isra.10+0x94/0x140
-[  265.187645]  cleanup_net+0x45b/0x900
-[ ... ]
-
-This WARNING means that hook unregisteration is failed because
-all flowtables hooks are already unregistered by notifier_call.
-
-Network namespace exit routine guarantees that all devices will be
-unregistered first. then, other exit callbacks of pernet_operations
-are called. so that removing flowtable flush routine in exit callback of
-pernet_operation(nf_tables_exit_net) doesn't make flowtable leak.
-
-Signed-off-by: Taehee Yoo <ap420073@gmail.com>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- net/netfilter/nf_tables_api.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index 7d424fd27025..c06393fc716d 100644
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -7203,9 +7203,6 @@ static void __nft_release_tables(struct net *net)
- 
- 		list_for_each_entry(chain, &table->chains, list)
- 			nf_tables_unregister_hook(net, table, chain);
--		list_for_each_entry(flowtable, &table->flowtables, list)
--			nf_unregister_net_hooks(net, flowtable->ops,
--						flowtable->ops_len);
- 		/* No packets are walking on these chains anymore. */
- 		ctx.table = table;
- 		list_for_each_entry(chain, &table->chains, list) {
--- 
-2.19.1
-
+> +			} else {
+> +				/* cannot free this state, since parentage chain may
+> +				 * walk it later. Add it for free_list instead to
+> +				 * be freed at the end of verification
+> +				 */
+> +				sl->next = env->free_list;
+> +				env->free_list = sl;
+> +			}
+> +			sl = *pprev;
+> +			continue;
+> +		}
+> +		pprev = &sl->next;
+> +		sl = *pprev;
+>  	}
+>  
+>  	if (env->max_states_per_insn < states_cnt)
