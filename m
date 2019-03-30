@@ -2,42 +2,42 @@ Return-Path: <SRS0=8uh4=SB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADC7CC43381
-	for <bpf@archiver.kernel.org>; Sat, 30 Mar 2019 00:16:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DFAFC43381
+	for <bpf@archiver.kernel.org>; Sat, 30 Mar 2019 00:16:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 799E821773
-	for <bpf@archiver.kernel.org>; Sat, 30 Mar 2019 00:16:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D37BE21773
+	for <bpf@archiver.kernel.org>; Sat, 30 Mar 2019 00:16:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1553904977;
-	bh=XhioONOWds2O47ZkIndCsbQkZz+KJllW55+x2aFliC0=;
-	h=From:To:CC:Subject:Date:List-ID:From;
-	b=qGp1xpXMsgmHXJcmmMzwTuKR+nZHXDrfMBsmN9Qnj6K/jpEJ0sx6ocHoXdpEYONTk
-	 vZDJfO6T8JwqksKRSK9gxLmt3iRUnl9nOC/mi7QbYWJYY5hMaxj2OwaHQU5ENKuNEZ
-	 4nEk8dy8hayosYfc/qd85pE5uRFk619Piw30dnPw=
+	s=default; t=1553904979;
+	bh=WNUxtU7Lrno8e1QI0xR4jtIGLDaJILHJJpPfekF13fo=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=PIZi18c7QvBB6IN0TW+wd0ptL1GP7Ut5qxVvx52KiMTCDrB0Vdt7UhZp05fpQXNus
+	 Z919xZ42RL2V1QohYXzVKCx8Qvh3Bvl1ezCny2boKu3TnEyI8nB8LfvfX2myXWrjCv
+	 RmH4j8uEspYSQ8HtiYrIOB8Cz485xTAr7ObfvCfY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730050AbfC3AQR convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 29 Mar 2019 20:16:17 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:49462 "EHLO
+        id S1729982AbfC3AQS convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 29 Mar 2019 20:16:18 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:54238 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729771AbfC3AQR (ORCPT
+        by vger.kernel.org with ESMTP id S1730028AbfC3AQR (ORCPT
         <rfc822;bpf@vger.kernel.org>); Fri, 29 Mar 2019 20:16:17 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x2U0F1TU024981
-        for <bpf@vger.kernel.org>; Fri, 29 Mar 2019 17:16:15 -0700
-Received: from maileast.thefacebook.com ([199.201.65.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2rhwcr02b6-2
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x2U0Crj9002667
+        for <bpf@vger.kernel.org>; Fri, 29 Mar 2019 17:16:16 -0700
+Received: from mail.thefacebook.com ([199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2rhwcm82f1-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 29 Mar 2019 17:16:15 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a1:3::13) by
- mail.thefacebook.com (2620:10d:c021:18::176) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 29 Mar 2019 17:16:16 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Fri, 29 Mar 2019 17:16:14 -0700
+ Fri, 29 Mar 2019 17:16:15 -0700
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 8FB24760BC0; Fri, 29 Mar 2019 17:16:12 -0700 (PDT)
+        id DCE3F760BC0; Fri, 29 Mar 2019 17:16:14 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -46,10 +46,12 @@ CC:     <daniel@iogearbox.net>, <jakub.kicinski@netronome.com>,
         <jannh@google.com>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 0/7] bpf: improve verifier scalability
-Date:   Fri, 29 Mar 2019 17:16:05 -0700
-Message-ID: <20190330001612.2354959-1-ast@kernel.org>
+Subject: [PATCH bpf-next 1/7] bpf: add verifier stats and log_level bit 2
+Date:   Fri, 29 Mar 2019 17:16:06 -0700
+Message-ID: <20190330001612.2354959-2-ast@kernel.org>
 X-Mailer: git-send-email 2.20.0
+In-Reply-To: <20190330001612.2354959-1-ast@kernel.org>
+References: <20190330001612.2354959-1-ast@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
@@ -63,65 +65,281 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Realize two key ideas to speed up verification speed by ~20 times
-1. every 'branching' instructions records all verifier states.
-   not all of them are useful for search pruning.
-   add a simple heuristic to keep states that were successful in search pruning
-   and remove those that were not
-2. mark_reg_read walks parentage chain of registers to mark parents as LIVE_READ.
-   Once the register is marked there is no need to remark it again in the future.
-   Hence stop walking the chain once first LIVE_READ is seen.
+In order to understand the verifier bottlenecks add various stats
+and extend log_level:
+log_level 1 and 2 are kept as-is:
+bit 0 - level=1 - print every insn and verifier state at branch points
+bit 1 - level=2 - print every insn and verifier state at every insn
+bit 2 - level=4 - print verifier error and stats at the end of verification
 
-1st optimization gives 10x speed up on large programs
-and 2nd optimization reduces the cost of mark_reg_read from ~40% of cpu to <1%.
-Combined the deliver ~20x speedup on large programs.
+When verifier rejects the program the libbpf is trying to load the program twice.
+Once with log_level=0 (no messages, only error code is reported to user space)
+and second time with log_level=1 to tell the user why the verifier rejected it.
 
-Faster and bounded verification time allows to increase insn_processed
-limit to 1 million from 130k.
-Worst case it takes 1/10 of a second to process that many instructions
-and peak memory consumption is peak_states * sizeof(struct bpf_verifier_state)
-which is around ~5Mbyte.
+With introduction of bit 2 - level=4 the libbpf can choose to always use that
+level and load programs once, since the verification speed is not affected and
+in case of error the verbose message will be available.
 
-Increase insn_per_program limit for root to insn_processed limit.
+Note that the verifier stats are not part of uapi just like all other
+verbose messages. They're expected to change in the future.
 
-Add verification stats and stress tests for verifier scalability.
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ include/linux/bpf_verifier.h | 21 ++++++++++
+ kernel/bpf/verifier.c        | 76 ++++++++++++++++++++++++------------
+ 2 files changed, 73 insertions(+), 24 deletions(-)
 
-This patch set is the first step to be able to accept large programs.
-The verifier still suffers from its brute force algorithm and
-large programs can easily hit 1M insn_processed limit.
-A lot more work is necessary to be able to verify large programs.
-
-Alexei Starovoitov (7):
-  bpf: add verifier stats and log_level bit 2
-  bpf: improve verification speed by droping states
-  bpf: improve verification speed by not remarking live_read
-  bpf: increase complexity limit and maximum program size
-  bpf: increase verifier log limit
-  libbpf: teach libbpf about log_level bit 2
-  selftests/bpf: add few verifier scale tests
-
- include/linux/bpf.h                           |   1 +
- include/linux/bpf_verifier.h                  |  23 +++
- kernel/bpf/syscall.c                          |   3 +-
- kernel/bpf/verifier.c                         | 132 ++++++++++++++----
- tools/lib/bpf/bpf.c                           |   2 +-
- tools/lib/bpf/bpf.h                           |   2 +-
- tools/lib/bpf/libbpf.c                        |  16 ++-
- tools/lib/bpf/libbpf.h                        |   1 +
- .../bpf/prog_tests/bpf_verif_scale.c          |  49 +++++++
- .../testing/selftests/bpf/progs/test_jhash.h  |  70 ++++++++++
- .../selftests/bpf/progs/test_verif_scale1.c   |  30 ++++
- .../selftests/bpf/progs/test_verif_scale2.c   |  30 ++++
- .../selftests/bpf/progs/test_verif_scale3.c   |  30 ++++
- tools/testing/selftests/bpf/test_progs.c      |   6 +-
- tools/testing/selftests/bpf/test_progs.h      |   1 +
- 15 files changed, 361 insertions(+), 35 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_jhash.h
- create mode 100644 tools/testing/selftests/bpf/progs/test_verif_scale1.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_verif_scale2.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_verif_scale3.c
-
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 7d8228d1c898..f7e15eeb60bb 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -248,6 +248,12 @@ static inline bool bpf_verifier_log_full(const struct bpf_verifier_log *log)
+ 	return log->len_used >= log->len_total - 1;
+ }
+ 
++#define BPF_LOG_LEVEL1	1
++#define BPF_LOG_LEVEL2	2
++#define BPF_LOG_STATS	4
++#define BPF_LOG_LEVEL	(BPF_LOG_LEVEL1 | BPF_LOG_LEVEL2)
++#define BPF_LOG_MASK	(BPF_LOG_LEVEL | BPF_LOG_STATS)
++
+ static inline bool bpf_verifier_log_needed(const struct bpf_verifier_log *log)
+ {
+ 	return log->level && log->ubuf && !bpf_verifier_log_full(log);
+@@ -284,6 +290,21 @@ struct bpf_verifier_env {
+ 	struct bpf_verifier_log log;
+ 	struct bpf_subprog_info subprog_info[BPF_MAX_SUBPROGS + 1];
+ 	u32 subprog_cnt;
++	/* number of instructions analyzed by the verifier */
++	u32 insn_processed;
++	/* total verification time */
++	u64 verification_time;
++	/* maximum number of verifier states kept in 'branching' instructions */
++	u32 max_states_per_insn;
++	/* total number of allocated verifier states */
++	u32 total_states;
++	/* some states are freed during program analysis.
++	 * this is peak number of states. this number dominates kernel
++	 * memory consumption during verification
++	 */
++	u32 peak_states;
++	/* longest register parentage chain walked for liveness marking */
++	u32 longest_mark_read_walk;
+ };
+ 
+ __printf(2, 0) void bpf_verifier_vlog(struct bpf_verifier_log *log,
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 87221fda1321..2b5dcb2c6967 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1092,7 +1092,7 @@ static int check_subprogs(struct bpf_verifier_env *env)
+ 	 */
+ 	subprog[env->subprog_cnt].start = insn_cnt;
+ 
+-	if (env->log.level > 1)
++	if (env->log.level & BPF_LOG_LEVEL2)
+ 		for (i = 0; i < env->subprog_cnt; i++)
+ 			verbose(env, "func#%d @%d\n", i, subprog[i].start);
+ 
+@@ -1139,6 +1139,7 @@ static int mark_reg_read(struct bpf_verifier_env *env,
+ 			 struct bpf_reg_state *parent)
+ {
+ 	bool writes = parent == state->parent; /* Observe write marks */
++	int cnt = 0;
+ 
+ 	while (parent) {
+ 		/* if read wasn't screened by an earlier write ... */
+@@ -1155,7 +1156,11 @@ static int mark_reg_read(struct bpf_verifier_env *env,
+ 		state = parent;
+ 		parent = state->parent;
+ 		writes = true;
++		cnt++;
+ 	}
++
++	if (env->longest_mark_read_walk < cnt)
++		env->longest_mark_read_walk = cnt;
+ 	return 0;
+ }
+ 
+@@ -1455,7 +1460,7 @@ static int check_map_access(struct bpf_verifier_env *env, u32 regno,
+ 	 * need to try adding each of min_value and max_value to off
+ 	 * to make sure our theoretical access will be safe.
+ 	 */
+-	if (env->log.level)
++	if (env->log.level & BPF_LOG_LEVEL)
+ 		print_verifier_state(env, state);
+ 
+ 	/* The minimum value is only important with signed
+@@ -2938,7 +2943,7 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	/* and go analyze first insn of the callee */
+ 	*insn_idx = target_insn;
+ 
+-	if (env->log.level) {
++	if (env->log.level & BPF_LOG_LEVEL) {
+ 		verbose(env, "caller:\n");
+ 		print_verifier_state(env, caller);
+ 		verbose(env, "callee:\n");
+@@ -2978,7 +2983,7 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
+ 		return err;
+ 
+ 	*insn_idx = callee->callsite + 1;
+-	if (env->log.level) {
++	if (env->log.level & BPF_LOG_LEVEL) {
+ 		verbose(env, "returning from callee:\n");
+ 		print_verifier_state(env, callee);
+ 		verbose(env, "to caller at %d:\n", *insn_idx);
+@@ -5001,7 +5006,7 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+ 			insn->dst_reg);
+ 		return -EACCES;
+ 	}
+-	if (env->log.level)
++	if (env->log.level & BPF_LOG_LEVEL)
+ 		print_verifier_state(env, this_branch->frame[this_branch->curframe]);
+ 	return 0;
+ }
+@@ -6181,6 +6186,9 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 		states_cnt++;
+ 	}
+ 
++	if (env->max_states_per_insn < states_cnt)
++		env->max_states_per_insn = states_cnt;
++
+ 	if (!env->allow_ptr_leaks && states_cnt > BPF_COMPLEXITY_LIMIT_STATES)
+ 		return 0;
+ 
+@@ -6194,6 +6202,8 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 	new_sl = kzalloc(sizeof(struct bpf_verifier_state_list), GFP_KERNEL);
+ 	if (!new_sl)
+ 		return -ENOMEM;
++	env->total_states++;
++	env->peak_states++;
+ 
+ 	/* add new state to the head of linked list */
+ 	new = &new_sl->state;
+@@ -6278,8 +6288,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 	struct bpf_verifier_state *state;
+ 	struct bpf_insn *insns = env->prog->insnsi;
+ 	struct bpf_reg_state *regs;
+-	int insn_cnt = env->prog->len, i;
+-	int insn_processed = 0;
++	int insn_cnt = env->prog->len;
+ 	bool do_print_state = false;
+ 
+ 	env->prev_linfo = NULL;
+@@ -6314,10 +6323,10 @@ static int do_check(struct bpf_verifier_env *env)
+ 		insn = &insns[env->insn_idx];
+ 		class = BPF_CLASS(insn->code);
+ 
+-		if (++insn_processed > BPF_COMPLEXITY_LIMIT_INSNS) {
++		if (++env->insn_processed > BPF_COMPLEXITY_LIMIT_INSNS) {
+ 			verbose(env,
+ 				"BPF program is too large. Processed %d insn\n",
+-				insn_processed);
++				env->insn_processed);
+ 			return -E2BIG;
+ 		}
+ 
+@@ -6326,7 +6335,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 			return err;
+ 		if (err == 1) {
+ 			/* found equivalent state, can prune the search */
+-			if (env->log.level) {
++			if (env->log.level & BPF_LOG_LEVEL) {
+ 				if (do_print_state)
+ 					verbose(env, "\nfrom %d to %d%s: safe\n",
+ 						env->prev_insn_idx, env->insn_idx,
+@@ -6344,8 +6353,9 @@ static int do_check(struct bpf_verifier_env *env)
+ 		if (need_resched())
+ 			cond_resched();
+ 
+-		if (env->log.level > 1 || (env->log.level && do_print_state)) {
+-			if (env->log.level > 1)
++		if (env->log.level & BPF_LOG_LEVEL2 ||
++		    (env->log.level & BPF_LOG_LEVEL && do_print_state)) {
++			if (env->log.level & BPF_LOG_LEVEL2)
+ 				verbose(env, "%d:", env->insn_idx);
+ 			else
+ 				verbose(env, "\nfrom %d to %d%s:",
+@@ -6356,7 +6366,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 			do_print_state = false;
+ 		}
+ 
+-		if (env->log.level) {
++		if (env->log.level & BPF_LOG_LEVEL2) {
+ 			const struct bpf_insn_cbs cbs = {
+ 				.cb_print	= verbose,
+ 				.private_data	= env,
+@@ -6621,16 +6631,6 @@ static int do_check(struct bpf_verifier_env *env)
+ 		env->insn_idx++;
+ 	}
+ 
+-	verbose(env, "processed %d insns (limit %d), stack depth ",
+-		insn_processed, BPF_COMPLEXITY_LIMIT_INSNS);
+-	for (i = 0; i < env->subprog_cnt; i++) {
+-		u32 depth = env->subprog_info[i].stack_depth;
+-
+-		verbose(env, "%d", depth);
+-		if (i + 1 < env->subprog_cnt)
+-			verbose(env, "+");
+-	}
+-	verbose(env, "\n");
+ 	env->prog->aux->stack_depth = env->subprog_info[0].stack_depth;
+ 	return 0;
+ }
+@@ -7854,9 +7854,34 @@ static void free_states(struct bpf_verifier_env *env)
+ 	kfree(env->explored_states);
+ }
+ 
++static void print_verification_stats(struct bpf_verifier_env *env)
++{
++	int i;
++
++	if (env->log.level & BPF_LOG_STATS) {
++		verbose(env, "verification time %lld usec\n",
++			div_u64(env->verification_time, 1000));
++		verbose(env, "stack depth ");
++		for (i = 0; i < env->subprog_cnt; i++) {
++			u32 depth = env->subprog_info[i].stack_depth;
++
++			verbose(env, "%d", depth);
++			if (i + 1 < env->subprog_cnt)
++				verbose(env, "+");
++		}
++		verbose(env, "\n");
++	}
++	verbose(env, "processed %d insns (limit %d) max_states_per_insn %d "
++		"total_states %d peak_states %d mark_read %d\n",
++		env->insn_processed, BPF_COMPLEXITY_LIMIT_INSNS,
++		env->max_states_per_insn, env->total_states,
++		env->peak_states, env->longest_mark_read_walk);
++}
++
+ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
+ 	      union bpf_attr __user *uattr)
+ {
++	u64 start_time = ktime_get_ns();
+ 	struct bpf_verifier_env *env;
+ 	struct bpf_verifier_log *log;
+ 	int i, len, ret = -EINVAL;
+@@ -7899,7 +7924,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
+ 		ret = -EINVAL;
+ 		/* log attributes have to be sane */
+ 		if (log->len_total < 128 || log->len_total > UINT_MAX >> 8 ||
+-		    !log->level || !log->ubuf)
++		    !log->level || !log->ubuf || log->level & ~BPF_LOG_MASK)
+ 			goto err_unlock;
+ 	}
+ 
+@@ -7980,6 +8005,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
+ 	if (ret == 0)
+ 		ret = fixup_call_args(env);
+ 
++	env->verification_time = ktime_get_ns() - start_time;
++	print_verification_stats(env);
++
+ 	if (log->level && bpf_verifier_log_full(log))
+ 		ret = -ENOSPC;
+ 	if (log->level && !log->ubuf) {
 -- 
 2.20.0
 
