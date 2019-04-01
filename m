@@ -2,61 +2,61 @@ Return-Path: <SRS0=vda1=SD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26BC1C43381
-	for <bpf@archiver.kernel.org>; Mon,  1 Apr 2019 17:48:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88C21C10F05
+	for <bpf@archiver.kernel.org>; Mon,  1 Apr 2019 17:52:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EC90620883
-	for <bpf@archiver.kernel.org>; Mon,  1 Apr 2019 17:48:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4E72720830
+	for <bpf@archiver.kernel.org>; Mon,  1 Apr 2019 17:52:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jFkIcHZC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UY/f7ch4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733163AbfDARa5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 Apr 2019 13:30:57 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:40701 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733171AbfDARay (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Apr 2019 13:30:54 -0400
-Received: by mail-ed1-f65.google.com with SMTP id h22so8997938edw.7;
-        Mon, 01 Apr 2019 10:30:53 -0700 (PDT)
+        id S1732408AbfDAR0m (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 Apr 2019 13:26:42 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:40197 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732573AbfDAR0l (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Apr 2019 13:26:41 -0400
+Received: by mail-ed1-f67.google.com with SMTP id h22so8984492edw.7;
+        Mon, 01 Apr 2019 10:26:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=KYta5z14lA1IlUFd6p3Fhqnnv2Q/Ju/b5pYPjil6HpM=;
-        b=jFkIcHZCbKuCorbjg9eslhTwVb2crrFkJ+GPHeq43q/9FXcnEJVkzcFTiRtZKih5c9
-         D2hJG2WhClH7JkY49a0YF4R2q5BXIwWHbm7bxV7RLGswE5gTtwsDIXarZLMbok7Dhzsv
-         spEc1/bU4NUuuxz8gemJg9sphAa8IuEngrr54eAdhFgazGB257to3b7ykR7zDFKIV7zp
-         CjyYtNqnnnBPgcbP0WefA/G6KWlX2Yq4MNBRi4gxhLZw7BLpeuGHaFaWhYxrwNi2kW6X
-         O+q0Q3c0IFAWLsrb0IQWUjGCt0PhbgwSsS5VLZm4toN3kwSF4DB8m38KvEH9E5FHubZF
-         DLBA==
+        bh=DvrgK3phBe2cb14hN38nY9ORO5qe3i747GjYWn86zZM=;
+        b=UY/f7ch4nyonjZvNi9gN910LgE6vosEpWzpNLePf44pH+8wcf72a4t0Ysc7vJQxilK
+         Hl4T5aL7VtgJs7d6U9Pxn2qJv5CLSftOz00BGAK1n4KsL8tJAQZxxsGMGv3q2YCjpvpz
+         +XbwqR7lSuKtmcXcSdxSQEBY1R5zo7dt9YBy2lOfDBg0Ia+NkByFBrtctiElNChekHoG
+         ClDPAVpXx4Na/LXJG0ZYA28j4mROJHCKJjVyrDiVirDlIt0xuVu24IlPh6wY1JnqkcAh
+         Izi2j4CKRR68a8Dn2i6km4GJ4AT2dvHdN1WbLUhJjkeQcEnn+ErxWDxkP7EqG9M5btuE
+         437w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=KYta5z14lA1IlUFd6p3Fhqnnv2Q/Ju/b5pYPjil6HpM=;
-        b=BGVftolncecukGk91P0ncSwpUTDmHS73HhnQIsx9W57tI6javkl3a819GYBGLkg0Mm
-         BpdIHyUBlrhq9ZikVEKE1qSEcr3zzdnwG+xj6Z7I3hlglMS86HlmXuJYGtpamV0JNNRI
-         XQ0tqsuDc0G+M7smh+SBr19TxTbT0FWCpNB20o2ATYganW11kckgTWheUyYEh+dYZwRh
-         Qr5t2ey/AZbtcQtArGrgyriOmrvKPvZx94jhs50bCbw7OSx4wLUxcrfCTXxa408vCE9I
-         os7Dh8Lznr0ibSNj+VyGvUAOBMiE8m2zwlivNEsKu2U9mKd4OPPf5h+1oy5k43lBiQQL
-         EpAA==
-X-Gm-Message-State: APjAAAUU2zfGtliYnS2FeXjoUHAd/vMOhlIVS8SfNgLsudXmV8I9wIj3
-        rvLMJ0SP4sOv8d5HN+Fjab+2+Iu3IeHEl08MJfg=
-X-Google-Smtp-Source: APXvYqyMLECtnZc7Y0lOol4fEqv4dhlBlbkz2AhPC6UIhX2TX0InAxY3hXrrOvHtHiD/kEkhH6Cv/7p4UtA+tiyNeao=
-X-Received: by 2002:a50:ca0d:: with SMTP id d13mr23222349edi.72.1554139852842;
- Mon, 01 Apr 2019 10:30:52 -0700 (PDT)
+        bh=DvrgK3phBe2cb14hN38nY9ORO5qe3i747GjYWn86zZM=;
+        b=l023C+XHB+UffRjLGAPVDx9jfLxkoxgXX/doB5QE67rw/k3ZIoUzExkHSmcVhWLEpm
+         pMh1a98o7268pnT+ZcdE5UWdmWTdwTKf3APBAQh4+vlGFPKpon4GJWneglt54GqnLsjQ
+         sI5PM7Y8xuZfqVJDjUWVHEU0d2sgrIgIrIji6WFGMWu0E38xm9rwZAgraG9uDh1gwRg0
+         TciQv3ccB4a3rqQkXKDSRhwj0OyPvAJY90Dym2ztPPLtRL3cg4UeTk4+2QlW+ghZg+mg
+         mduNUDN1Hz7rojvJgkzncetqrdyKUf8W/kn9M/t8KdeNm6Ji3AMrtu2YT9Q27G359vgB
+         d3sA==
+X-Gm-Message-State: APjAAAUtDLWXIbFnqBaxLZK7+tXA0ELgK5rwStsnsZButEqsgo/HeO3+
+        0ealBRamry3VJvgbJXAVoISPQQSTaJMlCIUHYTo=
+X-Google-Smtp-Source: APXvYqxO+ywLXpeOKdZPLSHew7xIRh/C2hNLXTvfeI3vnxQAmbsHGEhLO7mutWm0X0p+vZKKuFa9YsKSg+9R4ZLDHiI=
+X-Received: by 2002:aa7:d6cb:: with SMTP id x11mr21268528edr.85.1554139598870;
+ Mon, 01 Apr 2019 10:26:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <1554132731-3095-1-git-send-email-alan.maguire@oracle.com> <1554132731-3095-3-git-send-email-alan.maguire@oracle.com>
-In-Reply-To: <1554132731-3095-3-git-send-email-alan.maguire@oracle.com>
+References: <1554132731-3095-1-git-send-email-alan.maguire@oracle.com> <1554132731-3095-2-git-send-email-alan.maguire@oracle.com>
+In-Reply-To: <1554132731-3095-2-git-send-email-alan.maguire@oracle.com>
 From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Mon, 1 Apr 2019 13:30:16 -0400
-Message-ID: <CAF=yD-KRFNiRk24CVkNsJBkfw=im8J67J5jCe2gkM28BXs_zSw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/4] bpf: add layer 2 encap support to bpf_skb_adjust_room
+Date:   Mon, 1 Apr 2019 13:26:02 -0400
+Message-ID: <CAF=yD-JpNaEa83cx08vgJ-GV0PimDX=xakDbW=T5AYHjEUXGYw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/4] selftests_bpf: extend test_tc_tunnel for UDP encap
 To:     Alan Maguire <alan.maguire@oracle.com>
 Cc:     Willem de Bruijn <willemb@google.com>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -74,78 +74,161 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Apr 1, 2019 at 11:33 AM Alan Maguire <alan.maguire@oracle.com> wrote:
->
 > In
 >
 > commit 868d523535c2 ("bpf: add bpf_skb_adjust_room encap flags")
 >
 > ...Willem introduced support to bpf_skb_adjust_room for GSO-friendly
-> GRE and UDP encapsulation.
->
-> For GSO to work for skbs, the inner headers (mac and network) need to
-> be marked.  For L3 encapsulation using bpf_skb_adjust_room, the mac
-> and network headers are identical.  Here we provide a way of specifying
-> the inner mac header length for cases where L2 encap is desired.  Such
-> an approach can support encapsulated ethernet headers, MPLS headers etc.
-> For example to convert from a packet of form [eth][ip][tcp] to
-> [eth][ip][udp][inner mac][ip][tcp], something like the following could
-> be done:
->
->         headroom = sizeof(iph) + sizeof(struct udphdr) + inner_maclen;
->
->         ret = bpf_skb_adjust_room(skb, headroom, BPF_ADJ_ROOM_MAC,
->                                   BPF_F_ADJ_ROOM_ENCAP_L4_UDP |
->                                   BPF_F_ADJ_ROOM_ENCAP_L3_IPV4 |
->                                   BPF_F_ADJ_ROOM_ENCAP_L2(inner_maclen));
+
+nit: please avoid unnecessary vertical whitespace. Explicit mention of
+author is also not very relevant. I suggest "Commit XXX ("..")
+introduced support [..]. Here and in other patches.
+
+> GRE and UDP encapsulation and later introduced associated test_tc_tunnel
+> tests.  Here those tests are extended to cover UDP encapsulation also.
 >
 > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
 
-> +#define        BPF_F_ADJ_ROOM_ENCAP_L2(len)    (((__u64)len & 0xff) << 56)
-
-Here ..
-
->
->  /* Mode for BPF_FUNC_skb_adjust_room helper. */
->  enum bpf_adj_room_mode {
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 22eb2ed..02ae8c0 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2969,14 +2969,16 @@ static u32 bpf_skb_net_base_len(const struct sk_buff *skb)
->  #define BPF_F_ADJ_ROOM_MASK            (BPF_F_ADJ_ROOM_FIXED_GSO | \
->                                          BPF_F_ADJ_ROOM_ENCAP_L3_MASK | \
->                                          BPF_F_ADJ_ROOM_ENCAP_L4_GRE | \
-> -                                        BPF_F_ADJ_ROOM_ENCAP_L4_UDP)
-> +                                        BPF_F_ADJ_ROOM_ENCAP_L4_UDP | \
-> +                                        BPF_F_ADJ_ROOM_ENCAP_L2(0xff))
-
-.. and here ..
->
->  static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
->                             u64 flags)
+> -static __always_inline int encap_ipv4(struct __sk_buff *skb, bool with_gre)
+> +static __always_inline int encap_ipv4(struct __sk_buff *skb, __u8 encap_proto)
 >  {
-> +       u16 mac_len = 0, inner_mac = 0, inner_net = 0, inner_trans = 0;
->         bool encap = flags & BPF_F_ADJ_ROOM_ENCAP_L3_MASK;
-> -       u16 mac_len = 0, inner_net = 0, inner_trans = 0;
->         unsigned int gso_type = SKB_GSO_DODGY;
-> +       u8 inner_mac_len = flags >> 56;
-
-.. and here: please do not use hardcoded constants. Define explicit
-constant integers or macros for readability and consistency.
-
->         int ret;
+> -       struct grev4hdr h_outer;
+>         struct iphdr iph_inner;
+> +       struct v4hdr h_outer;
+> +       struct udphdr *udph;
+>         struct tcphdr tcph;
+>         __u64 flags;
+>         int olen;
+> @@ -70,12 +83,29 @@ static __always_inline int encap_ipv4(struct __sk_buff *skb, bool with_gre)
+>         if (tcph.dest != __bpf_constant_htons(cfg_port))
+>                 return TC_ACT_OK;
 >
->         if (skb_is_gso(skb) && !skb_is_gso_tcp(skb)) {
-> @@ -3003,11 +3005,19 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
->                     flags & BPF_F_ADJ_ROOM_ENCAP_L4_UDP)
->                         return -EINVAL;
->
-> +               if (flags & BPF_F_ADJ_ROOM_ENCAP_L4_UDP &&
-> +                   flags & BPF_F_ADJ_ROOM_FIXED_GSO &&
-> +                   inner_mac_len > 0)
-> +                       return -EINVAL;
+> -       flags = BPF_F_ADJ_ROOM_FIXED_GSO | BPF_F_ADJ_ROOM_ENCAP_L3_IPV4;
+> -       if (with_gre) {
+> -               flags |= BPF_F_ADJ_ROOM_ENCAP_L4_GRE;
+> -               olen = sizeof(h_outer);
+> -       } else {
+> -               olen = sizeof(h_outer.ip);
+> +       olen = sizeof(h_outer.ip);
 > +
+> +       flags = BPF_F_ADJ_ROOM_ENCAP_L3_IPV4;
 
-Why is UDP encap with inner MAC (or MPLS) not allowed with fixed GSO?
+Please keep BPF_F_ADJ_ROOM_FIXED_GSO enabled on all variants. Here and in IPv6.
+
+> +       switch (encap_proto) {
+> +       case IPPROTO_GRE:
+> +               flags |= BPF_F_ADJ_ROOM_ENCAP_L4_GRE | BPF_F_ADJ_ROOM_FIXED_GSO;
+> +               olen += sizeof(h_outer.l4hdr.gre);
+> +               h_outer.l4hdr.gre.protocol = bpf_htons(ETH_P_IP);
+> +               h_outer.l4hdr.gre.flags = 0;
+> +               break;
+> +       case IPPROTO_UDP:
+> +               flags |= BPF_F_ADJ_ROOM_ENCAP_L4_UDP;
+> +               olen += sizeof(h_outer.l4hdr.udp);
+> +               h_outer.l4hdr.udp.source = __bpf_constant_htons(cfg_udp_src);
+> +               h_outer.l4hdr.udp.dest = __bpf_constant_htons(cfg_udp_dst);
+> +               h_outer.l4hdr.udp.check = 0;
+> +               h_outer.l4hdr.udp.len = bpf_htons(bpf_ntohs(iph_inner.tot_len) +
+> +                                                 sizeof(h_outer.l4hdr.udp));
+> +               break;
+> +       case IPPROTO_IPIP:
+> +               break;
+> +       default:
+> +               return TC_ACT_OK;
+
+> @@ -158,27 +175,46 @@ server_listen
+>  # serverside, insert decap module
+>  # server is still running
+>  # client can connect again
+> -ip netns exec "${ns2}" ip link add dev testtun0 type "${tuntype}" \
+> -       remote "${addr1}" local "${addr2}"
+> -# Because packets are decapped by the tunnel they arrive on testtun0 from
+> -# the IP stack perspective.  Ensure reverse path filtering is disabled
+> -# otherwise we drop the TCP SYN as arriving on testtun0 instead of the
+> -# expected veth2 (veth2 is where 192.168.1.2 is configured).
+> -ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.all.rp_filter=0
+> -# rp needs to be disabled for both all and testtun0 as the rp value is
+> -# selected as the max of the "all" and device-specific values.
+> -ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.testtun0.rp_filter=0
+> -ip netns exec "${ns2}" ip link set dev testtun0 up
+> -echo "test bpf encap with tunnel device decap"
+> -client_connect
+> -verify_data
+> +
+> +# Skip tunnel tests for ip6udp.  For IPv6, a UDP checksum is required
+> +# and there seems to be no way to tell a fou6 tunnel to allow 0
+> +# checksums.  Accordingly for both these cases, we skip tests against
+> +# tunnel peer, and test encap using BPF decap only.
+
+Checksum should not have to be verified over veth, when packets never
+leave the host, of course. Indeed, it is not for unencapsulated or
+inner packets. If the checksum has to be verified for upv6/udp
+tunnels, it would be interesting to understand why and whether that
+can be fixed. Not a prerequisite for this patchset, to be clear.
+
+I assume that this is the udp_lib_checksum_complete(skb) inside the
+udpv6_encap_needed_key static branch in udpv6_queue_rcv_one_skb.
+Shouldn't skb->ip_summed be CHECKSUM_PARTIAL here? I wonder if
+csum_start is now incorrectly set to the outer (tunnel) header, while
+it should continue to point to the inner tcp header.
+
+RFC 6935 and 6936 suggest extensions to IPv6 UDP to allow zero
+checksum in the narrow case of (some) tunnels. If this use case
+matches, I guess it is fine to support the mode even if fou6 decap
+does not. But if not, it would be better to make the test more
+realistic. For instance by setting up checksumming correctly. Perhaps
+with BPF_FUNC_l4_csum_replace or more interestingly by relying on the
+properties of local checksum offload to only have to compute a
+checksum over the headers (which we can do inline in the program, as
+length is fixed).
+
+> +if [[ "$tuntype" != "ip6udp" ]]; then
+
+Irrespective of the details above, can we avoid the code churn from
+indentation below. Just run the test as is, but only change the
+expectation of error code in client_connect on udp and skip
+verify_data on client_connect failure?
+
+
+> +       if [[ "$tuntype" == "udp" ]]; then
+> +               # Set up fou tunnel.
+> +               ttype=ipip
+> +               targs="encap fou encap-sport auto encap-dport $udpport"
+> +               # fou may be a module; allow this to fail.
+> +               modprobe fou ||true
+> +               ip netns exec "${ns2}" ip fou add port 5555 ipproto "${ipproto}"
+> +       else
+> +               ttype=$tuntype
+> +               targs=""
+> +       fi
+> +       ip netns exec "${ns2}" ip link add name testtun0 type "${ttype}" \
+> +               remote "${addr1}" local "${addr2}" $targs
+> +       # Because packets are decapped by the tunnel they arrive on testtun0
+> +       # from the IP stack perspective.  Ensure reverse path filtering is
+> +       # disabled otherwise we drop the TCP SYN as arriving on testtun0
+> +       # instead of the expected veth2 (veth2 is where 192.168.1.2 is
+> +       # configured).
+> +       ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.all.rp_filter=0
+> +       # rp needs to be disabled for both all and testtun0 as the rp value is
+> +       # selected as the max of the "all" and device-specific values.
+> +       ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.testtun0.rp_filter=0
+> +       ip netns exec "${ns2}" ip link set dev testtun0 up
+> +       echo "test bpf encap with tunnel device decap"
+> +       client_connect
+> +       verify_data
+> +       ip netns exec "${ns2}" ip link del dev testtun0
+> +       server_listen
+> +fi
+>
+>  # serverside, use BPF for decap
+> -ip netns exec "${ns2}" ip link del dev testtun0
+>  ip netns exec "${ns2}" tc qdisc add dev veth2 clsact
+>  ip netns exec "${ns2}" tc filter add dev veth2 ingress \
+>         bpf direct-action object-file ./test_tc_tunnel.o section decap
+> -server_listen
+>  echo "test bpf encap with bpf decap"
+>  client_connect
+>  verify_data
+> --
+> 1.8.3.1
+>
