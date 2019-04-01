@@ -2,76 +2,113 @@ Return-Path: <SRS0=vda1=SD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D5D4C43381
-	for <bpf@archiver.kernel.org>; Mon,  1 Apr 2019 14:18:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31E7FC43381
+	for <bpf@archiver.kernel.org>; Mon,  1 Apr 2019 15:33:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 51B6820883
-	for <bpf@archiver.kernel.org>; Mon,  1 Apr 2019 14:18:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EC77620880
+	for <bpf@archiver.kernel.org>; Mon,  1 Apr 2019 15:33:08 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="wSmOpCzs"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726882AbfDAOSG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 Apr 2019 10:18:06 -0400
-Received: from www62.your-server.de ([213.133.104.62]:41172 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726657AbfDAOSG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Apr 2019 10:18:06 -0400
-Received: from [78.46.172.2] (helo=sslproxy05.your-server.de)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1hAxl6-0002PO-Uy; Mon, 01 Apr 2019 16:17:57 +0200
-Received: from [178.197.248.24] (helo=linux.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1hAxl6-000Bhl-MD; Mon, 01 Apr 2019 16:17:56 +0200
-Subject: Re: [PATCH bpf-next 7/7] selftests/bpf: add few verifier scale tests
-To:     Alexei Starovoitov <ast@kernel.org>, davem@davemloft.net
-Cc:     jakub.kicinski@netronome.com, jannh@google.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, kernel-team@fb.com
-References: <20190330001612.2354959-1-ast@kernel.org>
- <20190330001612.2354959-8-ast@kernel.org>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <319e168a-6571-9a70-336a-6ecf8b61f040@iogearbox.net>
-Date:   Mon, 1 Apr 2019 16:17:55 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.3.0
-MIME-Version: 1.0
-In-Reply-To: <20190330001612.2354959-8-ast@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.100.3/25406/Mon Apr  1 09:55:53 2019)
+        id S1726754AbfDAPdI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 Apr 2019 11:33:08 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:42698 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726514AbfDAPdI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Apr 2019 11:33:08 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x31FTxJr043778;
+        Mon, 1 Apr 2019 15:32:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2018-07-02;
+ bh=hXd3JaN8fpRhH8lDhUnQvf5J1B/FBcY9Z8/cMX6ln8A=;
+ b=wSmOpCzsfqYM04mCT2Px9y7bQ5dTU8q+fP+6KsiDhASyHlbNijfVJqPFKp+sNokNbBC9
+ qAIll24hFSsPy+Y75qT2lKDBH4JLoB/XWySBf+znNSdmBQ3jzjQT4E2v1BHqE5iIE4Hc
+ e4GHlJbooPLjFEveMfag3QN9W53NEYi+K+byFiAyTscACGV5GN3yNUQNS5dfCWzhxuTU
+ kWdV388NTujroc4OUXXQ1RyLolu27idbVkZf8vzIKBZsw9U8dhFQL/WrjfcM9g82R+tD
+ iCg3mFHfywPobaadblm9VAnEHmP3oMjEInbOQwEI7gv/jdyjlXrw3IcxLljz+bd/DuLc UQ== 
+Received: from aserv0022.oracle.com (aserv0022.oracle.com [141.146.126.234])
+        by aserp2130.oracle.com with ESMTP id 2rhwycyxxb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 01 Apr 2019 15:32:36 +0000
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserv0022.oracle.com (8.14.4/8.14.4) with ESMTP id x31FWaQT015489
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 1 Apr 2019 15:32:36 GMT
+Received: from abhmp0022.oracle.com (abhmp0022.oracle.com [141.146.116.28])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x31FWYlU005770;
+        Mon, 1 Apr 2019 15:32:34 GMT
+Received: from dhcp-10-175-171-252.vpn.oracle.com (/10.175.171.252)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 01 Apr 2019 08:32:34 -0700
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     willemb@google.com, ast@kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, shuah@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, quentin.monnet@netronome.com,
+        john.fastabend@gmail.com, rdna@fb.com,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH bpf-next 0/4] L2 encap support for bpf_skb_adjust_room
+Date:   Mon,  1 Apr 2019 16:32:07 +0100
+Message-Id: <1554132731-3095-1-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9214 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=4 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=988 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1904010104
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 03/30/2019 01:16 AM, Alexei Starovoitov wrote:
-> Add 3 basic tests that stress verifier scalability.
-> 
-> test_verif_scale1.c calls non-inlined jhash() function 90 times on
-> different position in the packet.
-> This test simulates network packet parsing.
-> jhash function is ~140 instructions and main program is ~1200 insns.
-> 
-> test_verif_scale2.c force inlines jhash() function 90 times.
-> This program is ~15k instructions long.
-> 
-> test_verif_scale3.c calls non-inlined jhash() function 90 times on
-> But this time jhash has to process 32-bytes from the packet
-> instead of 14-bytes in tests 1 and 2.
-> jhash function is ~230 insns and main program is ~1200 insns.
-> 
-> $ test_progs -s
-> can be used to see verifier stats.
-> 
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Extend bpf_skb_adjust_room growth to mark inner MAC header so that
+L2 encapsulation can be used for tc tunnels.
 
-Do you also have some test cases with actual 1M insns resp. such that hit
-the new complexity limit to check timing / resources it consumes? I think
-these would be good to have as well as part of selftests.
+Patch #1 extends the existing test_tc_tunnel to support UDP
+encapsulation; later we want to be able to test MPLS over UDP and
+MPLS over GRE encapsulation.
+
+Patch #2 adds the BPF_F_ADJ_ROOM_ENCAP_L2(len) macro, which
+allows specification of inner mac length.  Other approaches were
+explored prior to taking this approach.  Specifically, I tried
+automatically computing the inner mac length on the basis of the
+specified flags (so inner maclen for GRE/IPv4 encap is the len_diff
+specified to bpf_skb_adjust_room minus GRE + IPv4 header length
+for example).  Problem with this is that we don't know for sure
+what form of GRE/UDP header we have; is it a full GRE header,
+or is it a FOU UDP header or generic UDP encap header? My fear
+here was we'd end up with an explosion of flags.  The other approach
+tried was to support inner L2 header marking as a separate room
+adjustment, i.e. adjust for L3/L4 encap, then call
+bpf_skb_adjust_room for L2 encap.  This can be made to work but
+because it imposed an order on operations, felt a bit clunky.
+
+Patch #3 syncs tools/ bpf.h.
+
+Patch #4 extends the tests again to support MPLSoverGRE and
+MPLSoverUDP encap, along with existing test coverage.
+
+Alan Maguire (4):
+  selftests_bpf: extend test_tc_tunnel for UDP encap
+  bpf: add layer 2 encap support to bpf_skb_adjust_room
+  bpf: sync bpf.h to tools/ for BPF_F_ADJ_ROOM_ENCAP_L2
+  selftests_bpf: extend test_tc_tunnel.sh test for L2 encap
+
+ include/uapi/linux/bpf.h                           |   5 +
+ net/core/filter.c                                  |  19 +-
+ tools/include/uapi/linux/bpf.h                     |   5 +
+ tools/testing/selftests/bpf/progs/test_tc_tunnel.c | 281 ++++++++++++++++-----
+ tools/testing/selftests/bpf/test_tc_tunnel.sh      | 105 +++++---
+ 5 files changed, 318 insertions(+), 97 deletions(-)
+
+-- 
+1.8.3.1
+
