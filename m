@@ -2,61 +2,61 @@ Return-Path: <SRS0=vda1=SD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88C21C10F05
-	for <bpf@archiver.kernel.org>; Mon,  1 Apr 2019 17:52:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7733C43381
+	for <bpf@archiver.kernel.org>; Mon,  1 Apr 2019 17:54:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4E72720830
-	for <bpf@archiver.kernel.org>; Mon,  1 Apr 2019 17:52:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B544420896
+	for <bpf@archiver.kernel.org>; Mon,  1 Apr 2019 17:54:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UY/f7ch4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CV+iZUkR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732408AbfDAR0m (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 Apr 2019 13:26:42 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:40197 "EHLO
+        id S1731994AbfDARX4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 Apr 2019 13:23:56 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:36110 "EHLO
         mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732573AbfDAR0l (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Apr 2019 13:26:41 -0400
-Received: by mail-ed1-f67.google.com with SMTP id h22so8984492edw.7;
-        Mon, 01 Apr 2019 10:26:39 -0700 (PDT)
+        with ESMTP id S1732179AbfDARXz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Apr 2019 13:23:55 -0400
+Received: by mail-ed1-f67.google.com with SMTP id s16so8986562edr.3;
+        Mon, 01 Apr 2019 10:23:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DvrgK3phBe2cb14hN38nY9ORO5qe3i747GjYWn86zZM=;
-        b=UY/f7ch4nyonjZvNi9gN910LgE6vosEpWzpNLePf44pH+8wcf72a4t0Ysc7vJQxilK
-         Hl4T5aL7VtgJs7d6U9Pxn2qJv5CLSftOz00BGAK1n4KsL8tJAQZxxsGMGv3q2YCjpvpz
-         +XbwqR7lSuKtmcXcSdxSQEBY1R5zo7dt9YBy2lOfDBg0Ia+NkByFBrtctiElNChekHoG
-         ClDPAVpXx4Na/LXJG0ZYA28j4mROJHCKJjVyrDiVirDlIt0xuVu24IlPh6wY1JnqkcAh
-         Izi2j4CKRR68a8Dn2i6km4GJ4AT2dvHdN1WbLUhJjkeQcEnn+ErxWDxkP7EqG9M5btuE
-         437w==
+        bh=lLsvpcEwyGjfec+Yj6QD6wJ4U4MEiuT5DMj7pFqAMDA=;
+        b=CV+iZUkRQjmT0Q+zfDdP3XzIi2vFTj3SoablqoSACFuni9WhW+3ZVm6C0FB7OLY8tb
+         KQU02l6izzRyAby6fwjBAnRrEdT4lH/ox0rAvUWmobuqJ38ipx+dBAg6+PU+MTFZQMJo
+         +Bvvej0cMcetHBj7tflWIAJuUyybyemNqm9P7KMNhqfv5C1b/CiTV6dlygImDPtn2ayX
+         VwAs+KsLaWQcCNfKN14LLveaezlQR5IjsY2vBU0OGVg6vSmSrlTHeqe123LB3Z+25dZm
+         CWFOwD9+C4e+FScKq12fDfX922gnzstUqMCQudVff6jsHIwkT/A1HlTZvLBkWkXUnoOQ
+         95QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DvrgK3phBe2cb14hN38nY9ORO5qe3i747GjYWn86zZM=;
-        b=l023C+XHB+UffRjLGAPVDx9jfLxkoxgXX/doB5QE67rw/k3ZIoUzExkHSmcVhWLEpm
-         pMh1a98o7268pnT+ZcdE5UWdmWTdwTKf3APBAQh4+vlGFPKpon4GJWneglt54GqnLsjQ
-         sI5PM7Y8xuZfqVJDjUWVHEU0d2sgrIgIrIji6WFGMWu0E38xm9rwZAgraG9uDh1gwRg0
-         TciQv3ccB4a3rqQkXKDSRhwj0OyPvAJY90Dym2ztPPLtRL3cg4UeTk4+2QlW+ghZg+mg
-         mduNUDN1Hz7rojvJgkzncetqrdyKUf8W/kn9M/t8KdeNm6Ji3AMrtu2YT9Q27G359vgB
-         d3sA==
-X-Gm-Message-State: APjAAAUtDLWXIbFnqBaxLZK7+tXA0ELgK5rwStsnsZButEqsgo/HeO3+
-        0ealBRamry3VJvgbJXAVoISPQQSTaJMlCIUHYTo=
-X-Google-Smtp-Source: APXvYqxO+ywLXpeOKdZPLSHew7xIRh/C2hNLXTvfeI3vnxQAmbsHGEhLO7mutWm0X0p+vZKKuFa9YsKSg+9R4ZLDHiI=
-X-Received: by 2002:aa7:d6cb:: with SMTP id x11mr21268528edr.85.1554139598870;
- Mon, 01 Apr 2019 10:26:38 -0700 (PDT)
+        bh=lLsvpcEwyGjfec+Yj6QD6wJ4U4MEiuT5DMj7pFqAMDA=;
+        b=c+LICPR4E3qiKmTJhe6TOT+hCMdlWX0iqUQxbvFwBVVkWKOWzLmJbFUOQ1jbwD6ygx
+         OzEbGSZBv5IHOvOOvaDmO2Rr4U7vAXLYPIVn0LhLSJaBHXkbXEeXzVn6KDzjbn5Uv19+
+         Xbg5E1zm2gl+YwCH4BWuv4e4XbcBmhwbEPmJY8nm/ePBgXLdMCw8OGmHuMRSpSoHXTvn
+         PyETDm7wNFsECwWj2rtp6y7uFVHHPNuxaF7gv8tBnMJLw2EdsyBP7y+o8WSpG5Pdk0pi
+         jr4sOWi0WkRN5WCRtEYZ9yaKp2x1nLgOV/+wTZgbSEIyplJE2mb59e+ZY2OeLbfoTHwe
+         fPAg==
+X-Gm-Message-State: APjAAAVRsGrCyIquSTQCITT1fFsJpxfc/c8JXGeWVWRKx0dYoaaNe2SG
+        pjVrkSwyFz7erZuUVgG+BzBQ/0fNwTklxTLzckY=
+X-Google-Smtp-Source: APXvYqx4ovlnjrVJXie/byEqyF5eAqfxRTU/aCydb2daPB4ut0bN+Ldc7xCCvuUqG+ercYcomtaCD++ObiJwXk4i2oc=
+X-Received: by 2002:a17:906:31cf:: with SMTP id f15mr33416162ejf.246.1554139433025;
+ Mon, 01 Apr 2019 10:23:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <1554132731-3095-1-git-send-email-alan.maguire@oracle.com> <1554132731-3095-2-git-send-email-alan.maguire@oracle.com>
-In-Reply-To: <1554132731-3095-2-git-send-email-alan.maguire@oracle.com>
+References: <1554132731-3095-1-git-send-email-alan.maguire@oracle.com>
+In-Reply-To: <1554132731-3095-1-git-send-email-alan.maguire@oracle.com>
 From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Mon, 1 Apr 2019 13:26:02 -0400
-Message-ID: <CAF=yD-JpNaEa83cx08vgJ-GV0PimDX=xakDbW=T5AYHjEUXGYw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/4] selftests_bpf: extend test_tc_tunnel for UDP encap
+Date:   Mon, 1 Apr 2019 13:23:17 -0400
+Message-ID: <CAF=yD-+YDxYXPhAG+yiEo7ZZXZNxmWXw91RZq6yoTBiR8CDy=A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/4] L2 encap support for bpf_skb_adjust_room
 To:     Alan Maguire <alan.maguire@oracle.com>
 Cc:     Willem de Bruijn <willemb@google.com>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -74,161 +74,67 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-> In
+On Mon, Apr 1, 2019 at 11:33 AM Alan Maguire <alan.maguire@oracle.com> wrote:
 >
-> commit 868d523535c2 ("bpf: add bpf_skb_adjust_room encap flags")
+> Extend bpf_skb_adjust_room growth to mark inner MAC header so that
+> L2 encapsulation can be used for tc tunnels.
 >
-> ...Willem introduced support to bpf_skb_adjust_room for GSO-friendly
-
-nit: please avoid unnecessary vertical whitespace. Explicit mention of
-author is also not very relevant. I suggest "Commit XXX ("..")
-introduced support [..]. Here and in other patches.
-
-> GRE and UDP encapsulation and later introduced associated test_tc_tunnel
-> tests.  Here those tests are extended to cover UDP encapsulation also.
+> Patch #1 extends the existing test_tc_tunnel to support UDP
+> encapsulation; later we want to be able to test MPLS over UDP and
+> MPLS over GRE encapsulation.
 >
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> Patch #2 adds the BPF_F_ADJ_ROOM_ENCAP_L2(len) macro, which
+> allows specification of inner mac length.  Other approaches were
+> explored prior to taking this approach.  Specifically, I tried
+> automatically computing the inner mac length on the basis of the
+> specified flags (so inner maclen for GRE/IPv4 encap is the len_diff
+> specified to bpf_skb_adjust_room minus GRE + IPv4 header length
+> for example).  Problem with this is that we don't know for sure
+> what form of GRE/UDP header we have; is it a full GRE header,
+> or is it a FOU UDP header or generic UDP encap header? My fear
+> here was we'd end up with an explosion of flags.
 
-> -static __always_inline int encap_ipv4(struct __sk_buff *skb, bool with_gre)
-> +static __always_inline int encap_ipv4(struct __sk_buff *skb, __u8 encap_proto)
->  {
-> -       struct grev4hdr h_outer;
->         struct iphdr iph_inner;
-> +       struct v4hdr h_outer;
-> +       struct udphdr *udph;
->         struct tcphdr tcph;
->         __u64 flags;
->         int olen;
-> @@ -70,12 +83,29 @@ static __always_inline int encap_ipv4(struct __sk_buff *skb, bool with_gre)
->         if (tcph.dest != __bpf_constant_htons(cfg_port))
->                 return TC_ACT_OK;
+Agreed.
+
+> The other approach
+> tried was to support inner L2 header marking as a separate room
+> adjustment, i.e. adjust for L3/L4 encap, then call
+> bpf_skb_adjust_room for L2 encap.  This can be made to work but
+> because it imposed an order on operations, felt a bit clunky.
+
+It seems slightly simpler to me. But this removes one extra call, so
+is fine, too. Given that there is prior art of encoding length fields
+in flags.
+
+That is, if it works for all cases of L2 encap: by itself, before and
+after L3 tunneling:
+
+- [eth] {mpls} [ip] [tcp] [payload]
+- [eth] {ip} {gre} {mpls} [ip] [tcp] [payload]
+- [eth] {mpls} {ip} {gre} [ip] [tcp] [payload]
+
+Less important, instead of encoding length inside flags, it is
+arguably cleaner to have a one-bit flag BPF_F_ADJ_ROOM_ENCAP_L2 plus a
+new argument l2_len.
+
+> Patch #3 syncs tools/ bpf.h.
 >
-> -       flags = BPF_F_ADJ_ROOM_FIXED_GSO | BPF_F_ADJ_ROOM_ENCAP_L3_IPV4;
-> -       if (with_gre) {
-> -               flags |= BPF_F_ADJ_ROOM_ENCAP_L4_GRE;
-> -               olen = sizeof(h_outer);
-> -       } else {
-> -               olen = sizeof(h_outer.ip);
-> +       olen = sizeof(h_outer.ip);
-> +
-> +       flags = BPF_F_ADJ_ROOM_ENCAP_L3_IPV4;
-
-Please keep BPF_F_ADJ_ROOM_FIXED_GSO enabled on all variants. Here and in IPv6.
-
-> +       switch (encap_proto) {
-> +       case IPPROTO_GRE:
-> +               flags |= BPF_F_ADJ_ROOM_ENCAP_L4_GRE | BPF_F_ADJ_ROOM_FIXED_GSO;
-> +               olen += sizeof(h_outer.l4hdr.gre);
-> +               h_outer.l4hdr.gre.protocol = bpf_htons(ETH_P_IP);
-> +               h_outer.l4hdr.gre.flags = 0;
-> +               break;
-> +       case IPPROTO_UDP:
-> +               flags |= BPF_F_ADJ_ROOM_ENCAP_L4_UDP;
-> +               olen += sizeof(h_outer.l4hdr.udp);
-> +               h_outer.l4hdr.udp.source = __bpf_constant_htons(cfg_udp_src);
-> +               h_outer.l4hdr.udp.dest = __bpf_constant_htons(cfg_udp_dst);
-> +               h_outer.l4hdr.udp.check = 0;
-> +               h_outer.l4hdr.udp.len = bpf_htons(bpf_ntohs(iph_inner.tot_len) +
-> +                                                 sizeof(h_outer.l4hdr.udp));
-> +               break;
-> +       case IPPROTO_IPIP:
-> +               break;
-> +       default:
-> +               return TC_ACT_OK;
-
-> @@ -158,27 +175,46 @@ server_listen
->  # serverside, insert decap module
->  # server is still running
->  # client can connect again
-> -ip netns exec "${ns2}" ip link add dev testtun0 type "${tuntype}" \
-> -       remote "${addr1}" local "${addr2}"
-> -# Because packets are decapped by the tunnel they arrive on testtun0 from
-> -# the IP stack perspective.  Ensure reverse path filtering is disabled
-> -# otherwise we drop the TCP SYN as arriving on testtun0 instead of the
-> -# expected veth2 (veth2 is where 192.168.1.2 is configured).
-> -ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.all.rp_filter=0
-> -# rp needs to be disabled for both all and testtun0 as the rp value is
-> -# selected as the max of the "all" and device-specific values.
-> -ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.testtun0.rp_filter=0
-> -ip netns exec "${ns2}" ip link set dev testtun0 up
-> -echo "test bpf encap with tunnel device decap"
-> -client_connect
-> -verify_data
-> +
-> +# Skip tunnel tests for ip6udp.  For IPv6, a UDP checksum is required
-> +# and there seems to be no way to tell a fou6 tunnel to allow 0
-> +# checksums.  Accordingly for both these cases, we skip tests against
-> +# tunnel peer, and test encap using BPF decap only.
-
-Checksum should not have to be verified over veth, when packets never
-leave the host, of course. Indeed, it is not for unencapsulated or
-inner packets. If the checksum has to be verified for upv6/udp
-tunnels, it would be interesting to understand why and whether that
-can be fixed. Not a prerequisite for this patchset, to be clear.
-
-I assume that this is the udp_lib_checksum_complete(skb) inside the
-udpv6_encap_needed_key static branch in udpv6_queue_rcv_one_skb.
-Shouldn't skb->ip_summed be CHECKSUM_PARTIAL here? I wonder if
-csum_start is now incorrectly set to the outer (tunnel) header, while
-it should continue to point to the inner tcp header.
-
-RFC 6935 and 6936 suggest extensions to IPv6 UDP to allow zero
-checksum in the narrow case of (some) tunnels. If this use case
-matches, I guess it is fine to support the mode even if fou6 decap
-does not. But if not, it would be better to make the test more
-realistic. For instance by setting up checksumming correctly. Perhaps
-with BPF_FUNC_l4_csum_replace or more interestingly by relying on the
-properties of local checksum offload to only have to compute a
-checksum over the headers (which we can do inline in the program, as
-length is fixed).
-
-> +if [[ "$tuntype" != "ip6udp" ]]; then
-
-Irrespective of the details above, can we avoid the code churn from
-indentation below. Just run the test as is, but only change the
-expectation of error code in client_connect on udp and skip
-verify_data on client_connect failure?
-
-
-> +       if [[ "$tuntype" == "udp" ]]; then
-> +               # Set up fou tunnel.
-> +               ttype=ipip
-> +               targs="encap fou encap-sport auto encap-dport $udpport"
-> +               # fou may be a module; allow this to fail.
-> +               modprobe fou ||true
-> +               ip netns exec "${ns2}" ip fou add port 5555 ipproto "${ipproto}"
-> +       else
-> +               ttype=$tuntype
-> +               targs=""
-> +       fi
-> +       ip netns exec "${ns2}" ip link add name testtun0 type "${ttype}" \
-> +               remote "${addr1}" local "${addr2}" $targs
-> +       # Because packets are decapped by the tunnel they arrive on testtun0
-> +       # from the IP stack perspective.  Ensure reverse path filtering is
-> +       # disabled otherwise we drop the TCP SYN as arriving on testtun0
-> +       # instead of the expected veth2 (veth2 is where 192.168.1.2 is
-> +       # configured).
-> +       ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.all.rp_filter=0
-> +       # rp needs to be disabled for both all and testtun0 as the rp value is
-> +       # selected as the max of the "all" and device-specific values.
-> +       ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.testtun0.rp_filter=0
-> +       ip netns exec "${ns2}" ip link set dev testtun0 up
-> +       echo "test bpf encap with tunnel device decap"
-> +       client_connect
-> +       verify_data
-> +       ip netns exec "${ns2}" ip link del dev testtun0
-> +       server_listen
-> +fi
+> Patch #4 extends the tests again to support MPLSoverGRE and
+> MPLSoverUDP encap, along with existing test coverage.
 >
->  # serverside, use BPF for decap
-> -ip netns exec "${ns2}" ip link del dev testtun0
->  ip netns exec "${ns2}" tc qdisc add dev veth2 clsact
->  ip netns exec "${ns2}" tc filter add dev veth2 ingress \
->         bpf direct-action object-file ./test_tc_tunnel.o section decap
-> -server_listen
->  echo "test bpf encap with bpf decap"
->  client_connect
->  verify_data
+> Alan Maguire (4):
+>   selftests_bpf: extend test_tc_tunnel for UDP encap
+>   bpf: add layer 2 encap support to bpf_skb_adjust_room
+>   bpf: sync bpf.h to tools/ for BPF_F_ADJ_ROOM_ENCAP_L2
+>   selftests_bpf: extend test_tc_tunnel.sh test for L2 encap
+>
+>  include/uapi/linux/bpf.h                           |   5 +
+>  net/core/filter.c                                  |  19 +-
+>  tools/include/uapi/linux/bpf.h                     |   5 +
+>  tools/testing/selftests/bpf/progs/test_tc_tunnel.c | 281 ++++++++++++++++-----
+>  tools/testing/selftests/bpf/test_tc_tunnel.sh      | 105 +++++---
+>  5 files changed, 318 insertions(+), 97 deletions(-)
+>
 > --
 > 1.8.3.1
 >
