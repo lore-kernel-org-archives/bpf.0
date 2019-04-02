@@ -2,71 +2,128 @@ Return-Path: <SRS0=V8Hm=SE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67C4BC4360F
-	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 21:19:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8DF4C4360F
+	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 22:44:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3F0862075E
-	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 21:19:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A76D12075E
+	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 22:44:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725857AbfDBVT0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Apr 2019 17:19:26 -0400
-Received: from www62.your-server.de ([213.133.104.62]:52690 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725842AbfDBVT0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Apr 2019 17:19:26 -0400
-Received: from [88.198.220.132] (helo=sslproxy03.your-server.de)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1hBQoV-0004VH-6d; Tue, 02 Apr 2019 23:19:23 +0200
-Received: from [178.197.248.24] (helo=linux.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1hBQoU-0002Cw-Ua; Tue, 02 Apr 2019 23:19:23 +0200
-Subject: Re: [PATCH bpf-next 0/4] selftests: bpf: support building selftests
- with clang and fix warnings
-To:     Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org
-References: <20190402170835.30732-1-sdf@google.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <4f126315-d385-0a5a-fbba-440ae519b9bf@iogearbox.net>
-Date:   Tue, 2 Apr 2019 23:19:21 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.3.0
+        id S1726199AbfDBWoH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Apr 2019 18:44:07 -0400
+Received: from mail-it1-f198.google.com ([209.85.166.198]:42674 "EHLO
+        mail-it1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726071AbfDBWoH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Apr 2019 18:44:07 -0400
+Received: by mail-it1-f198.google.com with SMTP id r186so4332317ita.7
+        for <bpf@vger.kernel.org>; Tue, 02 Apr 2019 15:44:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=xmy3gyFH9xvfaYYrOW4SvvnXS55oNN0QmuupKIMjt3w=;
+        b=uEMpjDWYr1DZSCXbfWLuL9fuYXaE3gM9ztBTqj4wDoBpRFfcTDeJfYeAXCbo4brGpL
+         RStH9leH8SPMoyHBpkGtAFE2fOOsm96wiCgKgiEPqOnANtgEI05ViQ2b00bL3dbSxTQd
+         asty3qRahbBNb3gUo5gEXvdE/PYu+eq6xHM3L5Lc567SKg8p4Vmj5Hs2S+zkHWjNfvgf
+         ELyB3xWO4pp0sd6n7nk96XI/O7y420ou7ygtNFmFaEducbHysoXWuW7YzIGBawBgu1hh
+         /qhMqMlSDX7CKIlsQfhrxldcu2bL6OIjaJS+wq2qjsAled3aU4AIdhv76XjzwZQ/s3WZ
+         RSdA==
+X-Gm-Message-State: APjAAAW22P6HRkFMasvPRwlg5QRrbNa8wuXlP7PCRX+ipUeooHs/emZq
+        NMpqwX0Pq9dqMYCfsy09/JZJsZhESeHHrFTCjThjrng741dH
+X-Google-Smtp-Source: APXvYqztGMucNJV1TbzA1fp7Pnp97Cm2bL0wyphgWGh6csQKL2auRoQkfhZoqXUrShbjFxvfgvYeHhgaTBzoRAIuBGazCZ6viFtS
 MIME-Version: 1.0
-In-Reply-To: <20190402170835.30732-1-sdf@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.100.3/25407/Tue Apr  2 09:54:31 2019)
+X-Received: by 2002:a24:390b:: with SMTP id l11mr8820804ita.20.1554245046246;
+ Tue, 02 Apr 2019 15:44:06 -0700 (PDT)
+Date:   Tue, 02 Apr 2019 15:44:06 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e02450058593df62@google.com>
+Subject: BUG: using __this_cpu_read() in preemptible code in ip6_finish_output
+From:   syzbot <syzbot+51471b4aae195285a4a3@syzkaller.appspotmail.com>
+To:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, kafai@fb.com, kuznet@ms2.inr.ac.ru,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com,
+        yoshfuji@linux-ipv6.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 04/02/2019 07:08 PM, Stanislav Fomichev wrote:
-> This series contains small fixes to make bpf selftests compile cleanly
-> with clangs. All of them are not real problems, but it's nice to have
-> an option to use clang for the tests themselves.
-> 
-> Stanislav Fomichev (4):
->   selftests: bpf: tests.h should depend on .c files, not the output
->   selftests: bpf: fix -Wformat-security warning for
->     flow_dissector_load.c
->   selftests: bpf: fix -Wformat-invalid-specifier for bpf_obj_id.c
->   selftests: bpf: remove duplicate .flags initialization in ctx_skb.c
-> 
->  tools/testing/selftests/bpf/Makefile                | 4 ++--
->  tools/testing/selftests/bpf/flow_dissector_load.c   | 2 +-
->  tools/testing/selftests/bpf/prog_tests/bpf_obj_id.c | 8 ++++----
->  tools/testing/selftests/bpf/verifier/ctx_skb.c      | 1 -
->  4 files changed, 7 insertions(+), 8 deletions(-)
-> 
+Hello,
 
-Applied, thanks!
+syzbot found the following crash on:
+
+HEAD commit:    e1427237 macsec: add noinline tag to avoid a frame size wa..
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=15594553200000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8e9bc94c16d346a6
+dashboard link: https://syzkaller.appspot.com/bug?extid=51471b4aae195285a4a3
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=156ffb07200000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14412673200000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+51471b4aae195285a4a3@syzkaller.appspotmail.com
+
+BUG: using __this_cpu_read() in preemptible [00000000] code:  
+syz-executor222/7596
+caller is dev_recursion_level include/linux/netdevice.h:3052 [inline]
+caller is ip6_skb_dst_mtu include/net/ip6_route.h:245 [inline]
+caller is ip6_finish_output+0x335/0xdc0 net/ipv6/ip6_output.c:149
+CPU: 1 PID: 7596 Comm: syz-executor222 Not tainted 5.1.0-rc2+ #118
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x172/0x1f0 lib/dump_stack.c:113
+  __this_cpu_preempt_check+0x246/0x270 lib/smp_processor_id.c:47
+  dev_recursion_level include/linux/netdevice.h:3052 [inline]
+  ip6_skb_dst_mtu include/net/ip6_route.h:245 [inline]
+  ip6_finish_output+0x335/0xdc0 net/ipv6/ip6_output.c:149
+  NF_HOOK_COND include/linux/netfilter.h:278 [inline]
+  ip6_output+0x235/0x7f0 net/ipv6/ip6_output.c:171
+  dst_output include/net/dst.h:433 [inline]
+  NF_HOOK include/linux/netfilter.h:289 [inline]
+  NF_HOOK include/linux/netfilter.h:283 [inline]
+  ip6_xmit+0xe41/0x20c0 net/ipv6/ip6_output.c:275
+  inet6_csk_xmit+0x2fb/0x5d0 net/ipv6/inet6_connection_sock.c:139
+  __tcp_transmit_skb+0x1a32/0x3750 net/ipv4/tcp_output.c:1155
+  tcp_transmit_skb net/ipv4/tcp_output.c:1171 [inline]
+  tcp_send_syn_data net/ipv4/tcp_output.c:3494 [inline]
+  tcp_connect+0x1e47/0x4280 net/ipv4/tcp_output.c:3533
+  tcp_v6_connect+0x150b/0x20a0 net/ipv6/tcp_ipv6.c:331
+  __inet_stream_connect+0x83f/0xea0 net/ipv4/af_inet.c:659
+  tcp_sendmsg_fastopen net/ipv4/tcp.c:1155 [inline]
+  tcp_sendmsg_locked+0x231f/0x37f0 net/ipv4/tcp.c:1197
+  tcp_sendmsg+0x30/0x50 net/ipv4/tcp.c:1431
+  inet_sendmsg+0x147/0x5e0 net/ipv4/af_inet.c:802
+  sock_sendmsg_nosec net/socket.c:651 [inline]
+  sock_sendmsg+0xdd/0x130 net/socket.c:661
+  __sys_sendto+0x262/0x380 net/socket.c:1932
+  __do_sys_sendto net/socket.c:1944 [inline]
+  __se_sys_sendto net/socket.c:1940 [inline]
+  __x64_sys_sendto+0xe1/0x1a0 net/socket.c:1940
+  do_syscall_64+0x103/0x610 arch/x86/entry/common.c:290
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x440189
+Code: 18 89 d0 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 48 89 f8 48 89 f7  
+48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 fb 13 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007ffed7abd1a8 EFLAGS: 00000246 ORIG_RAX: 000000000000002c
+RAX: ffffffffffffffda RBX: 00000000004002c8 RCX: 0000000000440189
+RDX: 0000000000000000 RSI: 0000000000000000 RD
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
