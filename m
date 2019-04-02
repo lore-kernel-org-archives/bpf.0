@@ -7,57 +7,57 @@ X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74350C4360F
-	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 17:08:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5740C4360F
+	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 17:08:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 43CF8205F4
-	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 17:08:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9E5522084C
+	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 17:08:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TXD3yUoC"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ElpRmnuv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731268AbfDBRIq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Apr 2019 13:08:46 -0400
-Received: from mail-pg1-f201.google.com ([209.85.215.201]:34851 "EHLO
-        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726558AbfDBRIp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Apr 2019 13:08:45 -0400
-Received: by mail-pg1-f201.google.com with SMTP id e12so10349839pgh.2
-        for <bpf@vger.kernel.org>; Tue, 02 Apr 2019 10:08:45 -0700 (PDT)
+        id S1731563AbfDBRIs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Apr 2019 13:08:48 -0400
+Received: from mail-yw1-f73.google.com ([209.85.161.73]:50392 "EHLO
+        mail-yw1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731227AbfDBRIs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Apr 2019 13:08:48 -0400
+Received: by mail-yw1-f73.google.com with SMTP id j66so886810ywa.17
+        for <bpf@vger.kernel.org>; Tue, 02 Apr 2019 10:08:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=ST7qE5kPE/qWQqGOd7QqqCfQQ2smSUwp3RhaJ5Tj5YI=;
-        b=TXD3yUoCQBA+wswDnHlvYrvWIuQ6F45igJI0IVqtzAn2DGAqpRFxnVUHZYzjBaTC3G
-         OePGusPfPp9wArfFli2ZT13S5MxX8Rsj2Um8xy2Hz7qPy//O6jyy4WbBnrE9w9aA4n3V
-         VcbnQW3FHjjsWvzMIvrnLI0ZLDd6PG8V4I3ltvMZgPRAAAjr7LZk8hPcazuxt93iJlWn
-         +FG70GVx8Sp4YalJyudXyx9RLMZ8+PopRBlVi0/xXHnbnnlFai+cXOJE9sz2aFghVQ+n
-         p16yFNZ9ufRQi/6n1KPA9FeUnSXruIwDiL64h07ZpEFDB1xKZvXracjUq/AMvXa2PqiA
-         emMA==
+        bh=Dnf6HLpesKRCQbDAqSAu7ljx2eWcXwb+4YVwCfEBDCM=;
+        b=ElpRmnuvPwtiGDlkywENORXowKLdOHSe4tW9uGtDuLwabmCoaWIJKAKj5sj3vE7z76
+         nyKN+eTf7dJy3LG3USugFEGUDzQCVhrfeZFG7A1Ka4C8SXatMt4aky50+lu9xO5qh1ZI
+         59XEwxWUKL13XIrH1MDdnmewI/OiaMFae33FQ636mnik/kkB+ucOtklzhq59V2u1atEL
+         oa5CVUQ9YzQce1hr3D7T778/07QpVxcK5cxyqFOIQ6BwOKSU/uebvCFey+kbBy4fre10
+         af5mvk1+D1xh+o1Vix2avK4YLpceKPu5jg9Hwp2uCUMUAz3zLr3e+GFYS7ZhO4hL+vSQ
+         S1hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=ST7qE5kPE/qWQqGOd7QqqCfQQ2smSUwp3RhaJ5Tj5YI=;
-        b=KRDzL7w7Hp0IDcG99k3s1inDku99GNAN1xo6mDcnvX7q6DI8IzXc6jKt9l/wZ2NRN7
-         GdUTJE0QmGcDyztRjDqledFKXzTEhsy/5m13jPTtyRa05jXSMFVzCFX67Th+iJb0g3UN
-         cjx2YTOxgoOJLUokFpjOe/vta6u+fbR8eJ6JBWICpv+0Hi5pCZuvzJVCypx+N+yPZLOh
-         E4wkOFdNCskQXI63cCQdVWRRJYtv+A5CDt8v8x4oCxM/V5AF+try2PWIW7jhDkYLWmgx
-         WKl4EAWQdkpPz+YGuDebGyimdSFNvad9KFT1g0DbbjtV+pN9wItZhuH1nX93lIACcWMn
-         uglg==
-X-Gm-Message-State: APjAAAU5jMeUUSxGMvaIy1eFLDvYmavvfo7yWWCWZozsGJyZSq5z6qiX
-        2uPTqyHm/D8PCpWeHD8h726YH1I=
-X-Google-Smtp-Source: APXvYqxIwPZgIEX5NjXKBU20SsUKfwFccyixDybgeyWfYQptxxWx3xkbRm1achT7lMPCJwr/rc0pu+0=
-X-Received: by 2002:a17:902:324:: with SMTP id 33mr2054206pld.26.1554224924915;
- Tue, 02 Apr 2019 10:08:44 -0700 (PDT)
-Date:   Tue,  2 Apr 2019 10:08:34 -0700
+        bh=Dnf6HLpesKRCQbDAqSAu7ljx2eWcXwb+4YVwCfEBDCM=;
+        b=nvDxnlcBgDeVieL4+zg+K2ACosG5G6CyboNuTBS9ZHFNezQh/9ztmjKwTEbS/LA3sm
+         KOtAvFuZMbqHP6jz9u3w937Q7E99ZmIsaq6wLlcroGwpyGZEuqdU1dnvU/oPjWGJ4xV8
+         cF1sYh/muCQ4BH7rywRbr05MA+5a/fOyU4ax+zkqK55DvU9J4c5ejgv5oLPaosIVgk9J
+         B7w2LQ1kPPzI5PAdHfSryA3HTUzHtqo+iasY3Ls00LQUDmWYq56nO45vlCQOAM3Rma12
+         B8admVOPw5PyjANahbG7H4v+CTezuEAX6H5zF947YR7GuxYydN4eQ4Fy6wrKHXYVhX6S
+         SY7A==
+X-Gm-Message-State: APjAAAXFTq7KtP2Mrq2x5JxhD3dCtSPUHdEwK7OBY7bOWemgSzZF3e4z
+        xdPEcu1a8ISiLcatJj75ziUHaXw=
+X-Google-Smtp-Source: APXvYqwSIulsDC2TsrgHk2a+1QwhHWMHX34DmDK5BAwRG7FHZK7NOVsG97AFBCfRTqsyU4ix0YKP5zw=
+X-Received: by 2002:a25:2182:: with SMTP id h124mr2860520ybh.70.1554224927168;
+ Tue, 02 Apr 2019 10:08:47 -0700 (PDT)
+Date:   Tue,  2 Apr 2019 10:08:35 -0700
 In-Reply-To: <20190402170835.30732-1-sdf@google.com>
-Message-Id: <20190402170835.30732-4-sdf@google.com>
+Message-Id: <20190402170835.30732-5-sdf@google.com>
 Mime-Version: 1.0
 References: <20190402170835.30732-1-sdf@google.com>
 X-Mailer: git-send-email 2.21.0.392.gf8f6787159e-goog
-Subject: [PATCH bpf-next 3/4] selftests: bpf: fix -Wformat-invalid-specifier
- for bpf_obj_id.c
+Subject: [PATCH bpf-next 4/4] selftests: bpf: remove duplicate .flags
+ initialization in ctx_skb.c
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
@@ -68,54 +68,27 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use standard C99 %zu for sizeof, not GCC's custom %Zu:
-bpf_obj_id.c:76:48: warning: invalid conversion specifier 'Z'
+verifier/ctx_skb.c:708:11: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+        .flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- tools/testing/selftests/bpf/prog_tests/bpf_obj_id.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/verifier/ctx_skb.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_obj_id.c b/tools/testing/selftests/bpf/prog_tests/bpf_obj_id.c
-index a64f7a02139c..cb827383db4d 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_obj_id.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_obj_id.c
-@@ -73,7 +73,7 @@ void test_bpf_obj_id(void)
- 			  info_len != sizeof(struct bpf_map_info) ||
- 			  strcmp((char *)map_infos[i].name, expected_map_name),
- 			  "get-map-info(fd)",
--			  "err %d errno %d type %d(%d) info_len %u(%Zu) key_size %u value_size %u max_entries %u map_flags %X name %s(%s)\n",
-+			  "err %d errno %d type %d(%d) info_len %u(%zu) key_size %u value_size %u max_entries %u map_flags %X name %s(%s)\n",
- 			  err, errno,
- 			  map_infos[i].type, BPF_MAP_TYPE_ARRAY,
- 			  info_len, sizeof(struct bpf_map_info),
-@@ -117,7 +117,7 @@ void test_bpf_obj_id(void)
- 			  *(int *)(long)prog_infos[i].map_ids != map_infos[i].id ||
- 			  strcmp((char *)prog_infos[i].name, expected_prog_name),
- 			  "get-prog-info(fd)",
--			  "err %d errno %d i %d type %d(%d) info_len %u(%Zu) jit_enabled %d jited_prog_len %u xlated_prog_len %u jited_prog %d xlated_prog %d load_time %lu(%lu) uid %u(%u) nr_map_ids %u(%u) map_id %u(%u) name %s(%s)\n",
-+			  "err %d errno %d i %d type %d(%d) info_len %u(%zu) jit_enabled %d jited_prog_len %u xlated_prog_len %u jited_prog %d xlated_prog %d load_time %lu(%lu) uid %u(%u) nr_map_ids %u(%u) map_id %u(%u) name %s(%s)\n",
- 			  err, errno, i,
- 			  prog_infos[i].type, BPF_PROG_TYPE_SOCKET_FILTER,
- 			  info_len, sizeof(struct bpf_prog_info),
-@@ -185,7 +185,7 @@ void test_bpf_obj_id(void)
- 		      memcmp(&prog_info, &prog_infos[i], info_len) ||
- 		      *(int *)(long)prog_info.map_ids != saved_map_id,
- 		      "get-prog-info(next_id->fd)",
--		      "err %d errno %d info_len %u(%Zu) memcmp %d map_id %u(%u)\n",
-+		      "err %d errno %d info_len %u(%zu) memcmp %d map_id %u(%u)\n",
- 		      err, errno, info_len, sizeof(struct bpf_prog_info),
- 		      memcmp(&prog_info, &prog_infos[i], info_len),
- 		      *(int *)(long)prog_info.map_ids, saved_map_id);
-@@ -231,7 +231,7 @@ void test_bpf_obj_id(void)
- 		      memcmp(&map_info, &map_infos[i], info_len) ||
- 		      array_value != array_magic_value,
- 		      "check get-map-info(next_id->fd)",
--		      "err %d errno %d info_len %u(%Zu) memcmp %d array_value %llu(%llu)\n",
-+		      "err %d errno %d info_len %u(%zu) memcmp %d array_value %llu(%llu)\n",
- 		      err, errno, info_len, sizeof(struct bpf_map_info),
- 		      memcmp(&map_info, &map_infos[i], info_len),
- 		      array_value, array_magic_value);
+diff --git a/tools/testing/selftests/bpf/verifier/ctx_skb.c b/tools/testing/selftests/bpf/verifier/ctx_skb.c
+index c660deb582f1..b0fda2877119 100644
+--- a/tools/testing/selftests/bpf/verifier/ctx_skb.c
++++ b/tools/testing/selftests/bpf/verifier/ctx_skb.c
+@@ -705,7 +705,6 @@
+ 	.errstr = "invalid bpf_context access",
+ 	.result = REJECT,
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+-	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
+ 	"check cb access: half, wrong type",
 -- 
 2.21.0.392.gf8f6787159e-goog
 
