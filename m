@@ -2,53 +2,47 @@ Return-Path: <SRS0=V8Hm=SE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA0E9C4360F
-	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 14:14:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53229C10F0B
+	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 14:37:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7FCD32070B
-	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 14:14:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2DC672146E
+	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 14:37:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726903AbfDBOOG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Apr 2019 10:14:06 -0400
-Received: from www62.your-server.de ([213.133.104.62]:46160 "EHLO
+        id S1729676AbfDBOhX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Apr 2019 10:37:23 -0400
+Received: from www62.your-server.de ([213.133.104.62]:52844 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726142AbfDBOOG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Apr 2019 10:14:06 -0400
-Received: from [78.46.172.2] (helo=sslproxy05.your-server.de)
+        with ESMTP id S1726558AbfDBOhW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Apr 2019 10:37:22 -0400
+Received: from [88.198.220.132] (helo=sslproxy03.your-server.de)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1hBKAo-0001pa-W7; Tue, 02 Apr 2019 16:13:59 +0200
+        id 1hBKXQ-00056A-Jn; Tue, 02 Apr 2019 16:37:20 +0200
 Received: from [178.197.248.24] (helo=linux.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89)
         (envelope-from <daniel@iogearbox.net>)
-        id 1hBKAo-000JU0-PC; Tue, 02 Apr 2019 16:13:58 +0200
-Subject: Re: [PATCH bpf-next 7/7] selftests/bpf: add few verifier scale tests
-To:     Alexei Starovoitov <ast@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>
-Cc:     "jakub.kicinski@netronome.com" <jakub.kicinski@netronome.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Kernel Team <Kernel-team@fb.com>
-References: <20190330001612.2354959-1-ast@kernel.org>
- <20190330001612.2354959-8-ast@kernel.org>
- <319e168a-6571-9a70-336a-6ecf8b61f040@iogearbox.net>
- <5753e047-163b-2a89-fb57-bdb1c01f1732@iogearbox.net>
- <b42e4d7f-a049-7487-98f7-4db901169ca3@fb.com>
+        id 1hBKXQ-0001tZ-7t; Tue, 02 Apr 2019 16:37:20 +0200
+Subject: Re: [PATCH bpf] bpf: report verifier bugs as warnings
+To:     Paul Chaignon <paul.chaignon@orange.com>,
+        Alexei Starovoitov <ast@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     Xiao Han <xiao.han@orange.com>, paul.chaignon@gmail.com,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
+References: <20190402115811.GA6303@Nover>
 From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <35a0246d-006f-8e18-8da7-49f8ca440846@iogearbox.net>
-Date:   Tue, 2 Apr 2019 16:13:58 +0200
+Message-ID: <a79d7f5e-637e-df0a-e99c-beea05eca1d7@iogearbox.net>
+Date:   Tue, 2 Apr 2019 16:37:19 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.3.0
 MIME-Version: 1.0
-In-Reply-To: <b42e4d7f-a049-7487-98f7-4db901169ca3@fb.com>
+In-Reply-To: <20190402115811.GA6303@Nover>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -59,62 +53,64 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 04/02/2019 04:08 AM, Alexei Starovoitov wrote:
-> On 4/1/19 9:35 AM, Daniel Borkmann wrote:
->> On 04/01/2019 04:17 PM, Daniel Borkmann wrote:
->>> On 03/30/2019 01:16 AM, Alexei Starovoitov wrote:
->>>> Add 3 basic tests that stress verifier scalability.
->>>>
->>>> test_verif_scale1.c calls non-inlined jhash() function 90 times on
->>>> different position in the packet.
->>>> This test simulates network packet parsing.
->>>> jhash function is ~140 instructions and main program is ~1200 insns.
->>>>
->>>> test_verif_scale2.c force inlines jhash() function 90 times.
->>>> This program is ~15k instructions long.
->>>>
->>>> test_verif_scale3.c calls non-inlined jhash() function 90 times on
->>>> But this time jhash has to process 32-bytes from the packet
->>>> instead of 14-bytes in tests 1 and 2.
->>>> jhash function is ~230 insns and main program is ~1200 insns.
->>>>
->>>> $ test_progs -s
->>>> can be used to see verifier stats.
->>>>
->>>> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
->>>
->>> Do you also have some test cases with actual 1M insns resp. such that hit
->>> the new complexity limit to check timing / resources it consumes? I think
->>> these would be good to have as well as part of selftests.
->>
->> (Another thought on why it would be good to have such tests would be to
->> see if we would otherwise break long jumps again due to offset truncation
->> which we had in the core as well as in JITs in the past.)
+On 04/02/2019 01:58 PM, Paul Chaignon wrote:
+> Three checks for verifier bugs were introduced in commit f4d7e40 ("bpf:
+> introduce function calls (verification)").  The bugs were reported as
+> incorrect programs instead of kernel warnings as the present patch
+> implements.
 > 
-> llvm truncates jump offsets for large programs.
-> Unfortunately we need to introduce JA instruction
-> with 32-bit offset on kernel side before we can fix llvm.
-> There are plenty of other scalability issues on the kernel side.
-> This patch set is the first step.
+> Signed-off-by: Paul Chaignon <paul.chaignon@orange.com>
 
-Right.
+Thanks for the patch, I think these WARN_ONCE() are a bit out of context though,
+meaning it lacks additional information about the program in kernel log once we
+actually manage to trigger it which we'd otherwise would potentially have had with
+the verbose() log. And from a program debugging pov, it makes it harder after this
+patch when verification log would suggest that all is fine. Looks like we already
+have a few WARN_ONCE() in verifier, they should probably be converted to verbose()
+as well to be consistent. If we really want to have a kernel warn, then lets add a
+helper macro verbose_and_warn(...) which will trigger a one-time warning, but keeps
+the verbose log intact as well.
 
-> Only non-jumpy program of 1m insn loads and works.
-> Realistically we're still far away from accepting large programs,
-> but to get there we need to bump the limit and experience these issues.
+> ---
+>  kernel/bpf/verifier.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 87221fda1321..12499e72b0d5 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -1145,9 +1145,9 @@ static int mark_reg_read(struct bpf_verifier_env *env,
+>  		if (writes && state->live & REG_LIVE_WRITTEN)
+>  			break;
+>  		if (parent->live & REG_LIVE_DONE) {
+> -			verbose(env, "verifier BUG type %s var_off %lld off %d\n",
+> -				reg_type_str[parent->type],
+> -				parent->var_off.value, parent->off);
+> +			WARN_ONCE(1, "verifier bug type %s var_off %lld off %d\n",
+> +				  reg_type_str[parent->type],
+> +				  parent->var_off.value, parent->off);
+>  			return -EFAULT;
+>  		}
+>  		/* ... then we depend on parent's value */
+> @@ -2888,15 +2888,15 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>  	target_insn = *insn_idx + insn->imm;
+>  	subprog = find_subprog(env, target_insn + 1);
+>  	if (subprog < 0) {
+> -		verbose(env, "verifier bug. No program starts at insn %d\n",
+> -			target_insn + 1);
+> +		WARN_ONCE(1, "verifier bug. No program starts at insn %d\n",
+> +			  target_insn + 1);
+>  		return -EFAULT;
+>  	}
+>  
+>  	caller = state->frame[state->curframe];
+>  	if (state->frame[state->curframe + 1]) {
+> -		verbose(env, "verifier bug. Frame %d already allocated\n",
+> -			state->curframe + 1);
+> +		WARN_ONCE(1, "verifier bug. Frame %d already allocated\n",
+> +			  state->curframe + 1);
+>  		return -EFAULT;
+>  	}
+>  
+> 
 
-I think my main worry is that if we're realistically still far away from
-accepting 1M insns programs and have potential unknown blockers in the
-road wrt verifying safety, then why lifting the limit for root to 1M
-today already?
-
-I think the complexity limit itself is fine, but why not being more
-conservative on the number of instructions to something we believe
-verifier can realistically handle /today/ wrt worst case consumptions in
-case of complexity attacks, and go further from there? Once it's on 1M in
-UAPI it's effectively frozen and then we'll be re-adding slightly similar
-upper limits again which caps the 1M to something much lower (though I
-doubt we'll see such large programs any time soon).
-
-Thanks,
-Daniel
