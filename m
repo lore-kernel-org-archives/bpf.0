@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7191AC43381
-	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 04:28:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48EC8C4360F
+	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 04:28:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4291B20857
-	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 04:28:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 18F7020883
+	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 04:28:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1554179283;
-	bh=jT3FWoy0+yGm/NyqnesiQ/XSF5/d+eDLFqKb1dKmqZk=;
+	s=default; t=1554179287;
+	bh=njhWFeKbUrEhTDMUsx/3r8U4dzXzXUyvaJwp5Q4zNsU=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=qUb8wK+viWDM+2HVQjz0W7vpNsOvRuiCXq+FZAAev4S0xxcnjSSEkjuL1YCgqgrMm
-	 m9o9xciceO4PkkQOoUP1V1CuOepCVLwgOQHEJYpgnFtGTw3MbhVRMpd4tAuvoUJDhd
-	 WSz/S9FZhTkeIYpEMpVT8y8pdNOYJOItKa6orRd0=
+	b=0BwTd5iIl1qyKdYkMViEB9eNmmr4neJ9ziSi4Fx6fmmSGaqZgGL/XLkkMryuacxnf
+	 olnZe1qZYWJO/asesjQYUNYte3AX4XV9KF3u73I7WXSbdUm2HlyPd6uOzHR/OEcKiz
+	 QIqXi3aVPJFvpeplh+K7PBR+T1L8IhR3o5F+8/E8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728863AbfDBE2C convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 2 Apr 2019 00:28:02 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:34402 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726858AbfDBE17 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 2 Apr 2019 00:27:59 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x324NNme013788
-        for <bpf@vger.kernel.org>; Mon, 1 Apr 2019 21:27:58 -0700
-Received: from maileast.thefacebook.com ([199.201.65.23])
-        by m0089730.ppops.net with ESMTP id 2rkuvyrse0-2
+        id S1728908AbfDBE2F convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 2 Apr 2019 00:28:05 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:42916 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728859AbfDBE2B (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 2 Apr 2019 00:28:01 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x324RoUs031546
+        for <bpf@vger.kernel.org>; Mon, 1 Apr 2019 21:28:00 -0700
+Received: from mail.thefacebook.com ([199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2rkysbr4jt-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 01 Apr 2019 21:27:58 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a1:3::13) by
- mail.thefacebook.com (2620:10d:c021:18::172) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 01 Apr 2019 21:28:00 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Mon, 1 Apr 2019 21:27:58 -0700
+ Mon, 1 Apr 2019 21:27:59 -0700
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id B6FAD760E11; Mon,  1 Apr 2019 21:27:57 -0700 (PDT)
+        id C306E760E11; Mon,  1 Apr 2019 21:27:59 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -46,9 +46,9 @@ CC:     <daniel@iogearbox.net>, <jakub.kicinski@netronome.com>,
         <jannh@google.com>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 04/10] bpf: convert temp arrays to kvcalloc
-Date:   Mon, 1 Apr 2019 21:27:43 -0700
-Message-ID: <20190402042749.3670015-5-ast@kernel.org>
+Subject: [PATCH v2 bpf-next 05/10] bpf: verbose jump offset overflow check
+Date:   Mon, 1 Apr 2019 21:27:44 -0700
+Message-ID: <20190402042749.3670015-6-ast@kernel.org>
 X-Mailer: git-send-email 2.20.0
 In-Reply-To: <20190402042749.3670015-1-ast@kernel.org>
 References: <20190402042749.3670015-1-ast@kernel.org>
@@ -65,64 +65,83 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Temporary arrays used during program verification need to be vmalloc-ed
-to support large bpf programs.
+Larger programs may trigger 16-bit jump offset overflow check
+during instruction patching. Make this error verbose otherwise
+users cannot decipher error code without printks in the verifier.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ kernel/bpf/core.c     | 11 ++++++-----
+ kernel/bpf/verifier.c |  7 ++++++-
+ 2 files changed, 12 insertions(+), 6 deletions(-)
 
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index ff09d32a8a1b..2966cb368bf4 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -438,6 +438,7 @@ struct bpf_prog *bpf_patch_insn_single(struct bpf_prog *prog, u32 off,
+ 	u32 insn_adj_cnt, insn_rest, insn_delta = len - 1;
+ 	const u32 cnt_max = S16_MAX;
+ 	struct bpf_prog *prog_adj;
++	int err;
+ 
+ 	/* Since our patchlet doesn't expand the image, we're done. */
+ 	if (insn_delta == 0) {
+@@ -453,8 +454,8 @@ struct bpf_prog *bpf_patch_insn_single(struct bpf_prog *prog, u32 off,
+ 	 * we afterwards may not fail anymore.
+ 	 */
+ 	if (insn_adj_cnt > cnt_max &&
+-	    bpf_adj_branches(prog, off, off + 1, off + len, true))
+-		return NULL;
++	    (err = bpf_adj_branches(prog, off, off + 1, off + len, true)))
++		return ERR_PTR(err);
+ 
+ 	/* Several new instructions need to be inserted. Make room
+ 	 * for them. Likely, there's no need for a new allocation as
+@@ -463,7 +464,7 @@ struct bpf_prog *bpf_patch_insn_single(struct bpf_prog *prog, u32 off,
+ 	prog_adj = bpf_prog_realloc(prog, bpf_prog_size(insn_adj_cnt),
+ 				    GFP_USER);
+ 	if (!prog_adj)
+-		return NULL;
++		return ERR_PTR(-ENOMEM);
+ 
+ 	prog_adj->len = insn_adj_cnt;
+ 
+@@ -1096,13 +1097,13 @@ struct bpf_prog *bpf_jit_blind_constants(struct bpf_prog *prog)
+ 			continue;
+ 
+ 		tmp = bpf_patch_insn_single(clone, i, insn_buff, rewritten);
+-		if (!tmp) {
++		if (IS_ERR(tmp)) {
+ 			/* Patching may have repointed aux->prog during
+ 			 * realloc from the original one, so we need to
+ 			 * fix it up here on error.
+ 			 */
+ 			bpf_jit_prog_release_other(prog, clone);
+-			return ERR_PTR(-ENOMEM);
++			return tmp;
+ 		}
+ 
+ 		clone = tmp;
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 94cf6efc5df6..ad3494a881da 100644
+index ad3494a881da..6dcfeb44bb8e 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -5313,13 +5313,13 @@ static int check_cfg(struct bpf_verifier_env *env)
- 	int ret = 0;
- 	int i, t;
+@@ -6932,8 +6932,13 @@ static struct bpf_prog *bpf_patch_insn_data(struct bpf_verifier_env *env, u32 of
+ 	struct bpf_prog *new_prog;
  
--	insn_state = kcalloc(insn_cnt, sizeof(int), GFP_KERNEL);
-+	insn_state = kvcalloc(insn_cnt, sizeof(int), GFP_KERNEL);
- 	if (!insn_state)
- 		return -ENOMEM;
- 
--	insn_stack = kcalloc(insn_cnt, sizeof(int), GFP_KERNEL);
-+	insn_stack = kvcalloc(insn_cnt, sizeof(int), GFP_KERNEL);
- 	if (!insn_stack) {
--		kfree(insn_state);
-+		kvfree(insn_state);
- 		return -ENOMEM;
- 	}
- 
-@@ -5417,8 +5417,8 @@ static int check_cfg(struct bpf_verifier_env *env)
- 	ret = 0; /* cfg looks good */
- 
- err_free:
--	kfree(insn_state);
--	kfree(insn_stack);
-+	kvfree(insn_state);
-+	kvfree(insn_stack);
- 	return ret;
- }
- 
-@@ -7898,7 +7898,7 @@ static void free_states(struct bpf_verifier_env *env)
- 			}
- 	}
- 
--	kfree(env->explored_states);
-+	kvfree(env->explored_states);
- }
- 
- static void print_verification_stats(struct bpf_verifier_env *env)
-@@ -7994,7 +7994,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
- 			goto skip_full_check;
- 	}
- 
--	env->explored_states = kcalloc(env->prog->len,
-+	env->explored_states = kvcalloc(env->prog->len,
- 				       sizeof(struct bpf_verifier_state_list *),
- 				       GFP_USER);
- 	ret = -ENOMEM;
+ 	new_prog = bpf_patch_insn_single(env->prog, off, patch, len);
+-	if (!new_prog)
++	if (IS_ERR(new_prog)) {
++		if (PTR_ERR(new_prog) == -ERANGE)
++			verbose(env,
++				"insn %d cannot be patched due to 16-bit range\n",
++				env->insn_aux_data[off].orig_idx);
+ 		return NULL;
++	}
+ 	if (adjust_insn_aux_data(env, new_prog->len, off, len))
+ 		return NULL;
+ 	adjust_subprog_starts(env, off, len);
 -- 
 2.20.0
 
