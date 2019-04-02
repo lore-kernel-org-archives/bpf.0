@@ -2,65 +2,63 @@ Return-Path: <SRS0=V8Hm=SE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07188C4360F
-	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 20:52:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFFE4C4360F
+	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 20:54:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C17702082C
-	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 20:52:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72E412084B
+	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 20:54:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GRuavD93"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RrwfWmJW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725965AbfDBUwZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Apr 2019 16:52:25 -0400
-Received: from mail-yb1-f193.google.com ([209.85.219.193]:38126 "EHLO
-        mail-yb1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725812AbfDBUwZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Apr 2019 16:52:25 -0400
-Received: by mail-yb1-f193.google.com with SMTP id r2so5457787ybl.5;
-        Tue, 02 Apr 2019 13:52:25 -0700 (PDT)
+        id S1726316AbfDBUye (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Apr 2019 16:54:34 -0400
+Received: from mail-yw1-f66.google.com ([209.85.161.66]:45562 "EHLO
+        mail-yw1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725842AbfDBUyd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Apr 2019 16:54:33 -0400
+Received: by mail-yw1-f66.google.com with SMTP id j128so5112147ywg.12;
+        Tue, 02 Apr 2019 13:54:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=HqqrAECT1ILD3F2uHKFt/siM2Vc70gc4L2L68y62cU8=;
-        b=GRuavD93YKr5me8HnTyb3iZreDSyTS0WDrJanML5F2FWth0V7NcSUKudRj7QsqscBW
-         LL6KqfeqR8kGT1eMNhJOZeOmo5X30Fl+OXDHtyVOuKdxJ3NuDjfUGt0+S+G1xcBNM72z
-         fFQwIPIDxHMWQw1NG7H+vp77M3NHMPo6/710V/Qvm+wYpaFbx7DOAqGFcHGjQu3ZB57O
-         SfM/M3R3pxrjBpXMzHkqG62yBSr1rUbvK/rFKU90NRPNTmb4F+uQuv3DRcOEwAL+iN4J
-         6s0HT0YsG+ps93sBvny5cEh4bh9Bdw9QganQGtdOebH+hzX+hwEXqEQqBHNOsNHCYd4U
-         W2LA==
+        bh=HJ5I1sBvjeM/q/+7j8YYGzaldxKFzu4GWoWtSr30Y/Q=;
+        b=RrwfWmJWsUWhlEmjE1CkWRQD2V0ldaE7l0zodjF/t2iQS4HMuOa6Or7VTCwdnMnLy9
+         XEQUh5SX8owLRlP3Kdt6mphQ48GNjdR+kmTTG/z34FI4YBwUjsDoKMc5czXdxwIYoA8K
+         uM/EwE+3k14KvGljyv7EL4rGNdegeiP+TIOR0dcm9KNXyus9y6z3UT0qhl41nVk/FTne
+         IWirqV8dyFTgugEcXPqXnCO3s4QMVMU4E1PgrxKABJbtDlPzOCrpSbvh+pw/gArLRrE4
+         WISmOZ7DsywFFQNN5YrMbiMfEdC4eRAuUHFz3H/G2A3KQmlDpttR4K6NU1JstDzWUND5
+         Mn9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=HqqrAECT1ILD3F2uHKFt/siM2Vc70gc4L2L68y62cU8=;
-        b=Z7ubtrH+C76z8jAFcWDmQhtzk3Gpw4Yob8hC7lIV3/vGmR0wnwR45uVm+j+DN5Pjm6
-         cFrhIj/tE7a7rSopOSD95XyuJB2ScEiANak7OzAbxjpqK2ByCOBxBKyzOxLW4olfgrxD
-         xZfU1+XkGUAw6WvtMTt7QT6QMG5o/bS4uyhT7Gb6O8tmFHIEF0ZoR2fOBkVVSDXbrXI/
-         WIeTz8an6hqD/4MMPVJ0AacPfAWGpZ3ssWhntuelihluS5Rpsdqbj42z80dp0rXiGuZ9
-         BkJN7gFoQtG4aI524xSBhiVQpFNAjweNYbqyTKKoRsZBmMbTQke5AeKjmunnd6zA28Pz
-         ebFA==
-X-Gm-Message-State: APjAAAV8rsSyN/sOalX8s0Y+mYuMVWXwdMFA+Jjpk2oEuXj2GhpDCzE3
-        PIkwcvx5d8yzEWFIw3rVkBOgMUhbRab936KxRNM=
-X-Google-Smtp-Source: APXvYqy6MaYAXEggqDNXrCnnK7cufKvkfByGlm9otFDsvwBuB5itNMH6HQ/WR6KdmQejGng7mdpl4HvAt58AYdso+K8=
-X-Received: by 2002:a25:3b44:: with SMTP id i65mr57926526yba.90.1554238344620;
- Tue, 02 Apr 2019 13:52:24 -0700 (PDT)
+        bh=HJ5I1sBvjeM/q/+7j8YYGzaldxKFzu4GWoWtSr30Y/Q=;
+        b=Pvefq9TXWnhdoRIwbSTrAFOYUGIKw8sWRePD8gv+wV7PsWAuOQITlNLpk/4oxlaBIQ
+         Q3SCxWgxX/4U/twlEltnlI+SHIJb0MR4gFOqm9S4f82Stv3m/cqtg8TVvKC1m2LBM4Im
+         43FWmwwLBd4EdEwoABxSIej4ynUHK0mfRmdvmQmbBZtoZA3CrjIQzpGbnAFvtAEjcjuQ
+         xfrpo1ofx6euLZvvO2ex7TjyblKlSI15bfQ8dc0gCiJLqV9yKLdbzC5s0bp93LpKSnfA
+         /nFP/P/atvln5pPJzNR1WGkfTukTnk96TYz1zQbF3O63fNrNGlueCB8OY3cxiOsUTTd6
+         8dNA==
+X-Gm-Message-State: APjAAAWDgCpGIcxjUqt7rO4lyi63XM/BuFAbCnoBfuRJd4PQbDCAbTEX
+        LsBbURDGfWZKldYOcm7R1IljHd73MXHKVQbkjgeknmpB
+X-Google-Smtp-Source: APXvYqyMODKC0lVHGu35IZ70Hfmq4zyPoSmy16OgJIhMVPCECWU78KF6YIk/LO8e7FTHyzyMZJftryW1Hp+wzKVz0B8=
+X-Received: by 2002:a0d:e252:: with SMTP id l79mr59247116ywe.248.1554238472534;
+ Tue, 02 Apr 2019 13:54:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190401205734.4400-1-sdf@google.com> <CAF=yD-JOZuJ4cg30Gcx-RU2KHZ5iy6gJ=okhVbcNybRkqRY+dw@mail.gmail.com>
-In-Reply-To: <CAF=yD-JOZuJ4cg30Gcx-RU2KHZ5iy6gJ=okhVbcNybRkqRY+dw@mail.gmail.com>
+References: <20190401205734.4400-1-sdf@google.com> <20190401205734.4400-6-sdf@google.com>
+In-Reply-To: <20190401205734.4400-6-sdf@google.com>
 From:   Petar Penkov <peterpenkov96@gmail.com>
-Date:   Tue, 2 Apr 2019 13:52:13 -0700
-Message-ID: <CA+DcSEg++t_+44_3Sn3zzaQD3sfoww8CdKGbpHGJkSjvNvQDMA@mail.gmail.com>
-Subject: Re: [PATCH bpf 0/5] flow_dissector: lay groundwork for calling BPF
- hook from eth_get_headlen
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     Stanislav Fomichev <sdf@google.com>,
-        Network Development <netdev@vger.kernel.org>,
+Date:   Tue, 2 Apr 2019 13:54:21 -0700
+Message-ID: <CA+DcSEgPWDBW1nnweb8pCeOjeLGj7LRgTei+YO-+JKY2VZDz1w@mail.gmail.com>
+Subject: Re: [PATCH bpf 5/5] flow_dissector: document BPF flow dissector environment
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Network Development <netdev@vger.kernel.org>,
         bpf <bpf@vger.kernel.org>, David Miller <davem@davemloft.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -72,49 +70,142 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 2, 2019 at 1:18 PM Willem de Bruijn
-<willemdebruijn.kernel@gmail.com> wrote:
+On Mon, Apr 1, 2019 at 1:57 PM Stanislav Fomichev <sdf@google.com> wrote:
 >
-> On Mon, Apr 1, 2019 at 4:57 PM Stanislav Fomichev <sdf@google.com> wrote:
-> >
-> > This patch series fixes the existing BPF flow dissector API to
-> > support calling BPF progs from the eth_get_headlen context (the support
-> > itself will be added in bpf-next tree).
-> >
-> > The summary of the changes:
-> >   * fix VLAN handling in bpf_flow.c, we don't need to peek back and look
-> >     at skb->vlan_present; add selftests
-> >   * pass and use flow_keys->n_proto instead of skb->protocol
-> >   * fix clamping of flow_keys->nhoff for packets with nhoff > 0
-> >   * prohibit access to most of the __sk_buff fields from BPF flow
-> >     dissector progs; only data/data_end/flow_keys are allowed (all input
-> >     is now passed via flow_keys)
-> >   * finally, document BPF flow dissector program environment
-> >
-> > Stanislav Fomichev (5):
-> >   selftests/bpf: fix vlan handling in flow dissector program
-> >   net/flow_dissector: pass flow_keys->n_proto to BPF programs
-> >   flow_dissector: fix clamping of BPF flow_keys for non-zero nhoff
-> >   flow_dissector: allow access only to a subset of __sk_buff fields
-> >   flow_dissector: document BPF flow dissector environment
+> Short doc on what BPF flow dissector should expect in the input
+> __sk_buff and flow_keys.
 >
-> For the series:
+> Signed-off-by: Stanislav Fomichev <sdf@google.com>
+> ---
+>  .../networking/bpf_flow_dissector.txt         | 115 ++++++++++++++++++
+>  1 file changed, 115 insertions(+)
+>  create mode 100644 Documentation/networking/bpf_flow_dissector.txt
 >
-> Acked-by: Willem de Bruijn <willemb@google.com>
->
-> This looks great to me. Thanks, Stan!
->
-Acked-by: Petar Penkov <peterpenkov96@gmail.com>
+> diff --git a/Documentation/networking/bpf_flow_dissector.txt b/Documentation/networking/bpf_flow_dissector.txt
+> new file mode 100644
+> index 000000000000..513be8e20afb
+> --- /dev/null
+> +++ b/Documentation/networking/bpf_flow_dissector.txt
+> @@ -0,0 +1,115 @@
+> +==================
+> +BPF Flow Dissector
+> +==================
+> +
+> +Overview
+> +========
+> +
+> +Flow dissector is a routine that parses metadata out of the packets. It's
+> +used in the various places in the networking subsystem (RFS, flow hash, etc).
+> +
+> +BPF flow dissector is an attempt to reimplement C-based flow dissector logic
+> +in BPF to gain all the benefits of BPF verifier (namely, limits on the
+> +number of instructions and tail calls).
+> +
+> +API
+> +===
+> +
+> +BPF flow dissector programs operate on an __sk_buff. However, only the
+> +limited set of fields is allowed: data, data_end and flow_keys. flow_keys
+> +is 'struct bpf_flow_keys' and contains flow dissector input and
+> +output arguments.
+> +
+> +The inputs are:
+> +  * nhoff - initial offset of the networking header
+> +  * thoff - initial offset of the transport header, initialized to nhoff
+> +  * n_proto - L3 protocol type, parsed out of L2 header
+> +
+> +Flow dissector BPF program should fill out the rest of the 'struct
+> +bpf_flow_keys' fields. Input arguments nhoff/thoff/n_proto should be also
+> +adjusted accordingly.
+> +
+> +The return code of the BPF program is either BPF_OK to indicate successful
+> +dissection, or BPF_DROP to indicate parsing error.
+I don't think this is actually enforced. I believe the current code
+just checks if the status is BPF_OK or not, rather than BPF_OK,
+BPF_DROP, or neither.
 
-Thanks, Stan!
-> >
-> >  .../networking/bpf_flow_dissector.txt         | 115 ++++++++++++++++++
-> >  net/core/filter.c                             |  16 +--
-> >  net/core/flow_dissector.c                     |   4 +-
-> >  .../selftests/bpf/prog_tests/flow_dissector.c |  68 +++++++++++
-> >  tools/testing/selftests/bpf/progs/bpf_flow.c  |  19 ++-
-> >  5 files changed, 196 insertions(+), 26 deletions(-)
-> >  create mode 100644 Documentation/networking/bpf_flow_dissector.txt
-> >
-> > --
-> > 2.21.0.392.gf8f6787159e-goog
+> +
+> +__sk_buff->data
+> +===============
+> +
+> +In the VLAN-less case, this is what the initial state of the BPF flow
+> +dissector looks like:
+> ++------+------+------------+-----------+
+> +| DMAC | SMAC | ETHER_TYPE | L3_HEADER |
+> ++------+------+------------+-----------+
+> +                            ^
+> +                            |
+> +                            +-- flow dissector starts here
+> +
+> +skb->data + flow_keys->nhoff point to the first byte of L3_HEADER.
+> +flow_keys->thoff = nhoff
+> +flow_keys->n_proto = ETHER_TYPE
+> +
+> +
+> +In case of VLAN, flow dissector can be called with the two different states.
+> +
+> +Pre-VLAN parsing:
+> ++------+------+------+-----+-----------+-----------+
+> +| DMAC | SMAC | TPID | TCI |ETHER_TYPE | L3_HEADER |
+> ++------+------+------+-----+-----------+-----------+
+> +                      ^
+> +                      |
+> +                      +-- flow dissector starts here
+> +
+> +skb->data + flow_keys->nhoff point the to first byte of TCI.
+> +flow_keys->thoff = nhoff
+> +flow_keys->n_proto = TPID
+> +
+> +Please note that TPID can be 802.1AD and, hence, BPF program would
+> +have to parse VLAN information twice for double tagged packets.
+> +
+> +
+> +Post-VLAN parsing:
+> ++------+------+------+-----+-----------+-----------+
+> +| DMAC | SMAC | TPID | TCI |ETHER_TYPE | L3_HEADER |
+> ++------+------+------+-----+-----------+-----------+
+> +                                        ^
+> +                                        |
+> +                                        +-- flow dissector starts here
+> +
+> +skb->data + flow_keys->nhoff point the to first byte of L3_HEADER.
+> +flow_keys->thoff = nhoff
+> +flow_keys->n_proto = ETHER_TYPE
+> +
+> +In this case VLAN information has been processed before the flow dissector
+> +and BPF flow dissector is not required to handle it.
+> +
+> +
+> +The takeaway here is as follows: BPF flow dissector program can be called with
+> +the optional VLAN header and should gracefully handle both cases: when single
+> +or double VLAN is present and when it is not present. The same program
+> +can be called for both cases and would have to be written carefully to
+> +handle both cases.
+> +
+> +
+> +Reference Implementation
+> +========================
+> +
+> +See tools/testing/selftests/bpf/progs/bpf_flow.c for the reference
+> +implementation and tools/testing/selftests/bpf/flow_dissector_load.[hc] for
+> +the loader. bpftool can be used to load BPF flow dissector program as well.
+> +
+> +The reference implementation is organized as follows:
+> +* jmp_table map that contains sub-programs for each supported L3 protocol
+> +* _dissect routine - entry point; it does input n_proto parsing and does
+> +  bpf_tail_call to the appropriate L3 handler
+> +
+> +Since BPF at this point doesn't support looping (or any jumping back),
+> +jmp_table is used instead to handle multiple levels of encapsulation (and
+> +IPv6 options).
+> +
+> +
+> +Current Limitations
+> +===================
+> +BPF flow dissector doesn't support exporting all the metadata that in-kernel
+> +C-based implementation can export. Notable example is single VLAN (802.1Q)
+> +and double VLAN (802.1AD) tags. Please refer to the 'struct bpf_flow_keys'
+> +for a set of information that's currently can be exported from the BPF context.
+> --
+> 2.21.0.392.gf8f6787159e-goog
+>
