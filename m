@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CCBFC43381
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C316BC10F00
 	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 04:28:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 29D04206B8
+	by mail.kernel.org (Postfix) with ESMTP id 916E5206B8
 	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 04:28:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1554179298;
-	bh=qBrrj9cfr7HNJZWcnnMI8YSjTfkxV+pSm6faP5dZ9aw=;
+	bh=JrUfXBh+Hfi5L2BM9JJ6TpvuPh2yJKWwbmFYWwsqajY=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=deHhvtqXqFwGRpGoV9WTZP2W+bDJitaKd97WVxRhwlMsd0YiCz4nTJMEv2sRhnSSG
-	 PI84+QrnHaPkpSLmZQTB8FViYYivUrgDCvpF0Gx+We//AS0qvMkBCXHVdnVUyXfqLb
-	 iIdOq8CyVYKEMsvXkBL/9+gQNoiol0QOcFZdGaSU=
+	b=sNcs3hGfBW2pWuo5XT/K+YUT7gAMBTpiXAKWCvmsDyJkYPEEH7Wy2Dag+Q0V+yRrX
+	 wEaoUk9Zq1t5RJ27W9l4kEerMlkZJT+pHf+whyklW57OR0N0+5BABxXNsmAl/v/73h
+	 88nyzZp0AluuGcgD9Bm1c3J4JwshXPQH2bS0irUM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728971AbfDBE2L convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 2 Apr 2019 00:28:11 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:34434 "EHLO
+        id S1728967AbfDBE2S convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 2 Apr 2019 00:28:18 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:40084 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728105AbfDBE2K (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 2 Apr 2019 00:28:10 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x324NPTT013795
-        for <bpf@vger.kernel.org>; Mon, 1 Apr 2019 21:28:09 -0700
-Received: from mail.thefacebook.com ([199.201.64.23])
-        by m0089730.ppops.net with ESMTP id 2rkuvyrseb-5
+        by vger.kernel.org with ESMTP id S1728949AbfDBE2L (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 2 Apr 2019 00:28:11 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x324R4Qf020328
+        for <bpf@vger.kernel.org>; Mon, 1 Apr 2019 21:28:10 -0700
+Received: from maileast.thefacebook.com ([199.201.65.23])
+        by m0001303.ppops.net with ESMTP id 2rkug60v43-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 01 Apr 2019 21:28:09 -0700
-Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::128) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 01 Apr 2019 21:28:10 -0700
+Received: from mx-out.facebook.com (2620:10d:c0a1:3::13) by
+ mail.thefacebook.com (2620:10d:c021:18::171) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Mon, 1 Apr 2019 21:28:07 -0700
+ Mon, 1 Apr 2019 21:28:10 -0700
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id CDDF1760E11; Mon,  1 Apr 2019 21:28:01 -0700 (PDT)
+        id 04058760E11; Mon,  1 Apr 2019 21:28:09 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -46,9 +46,9 @@ CC:     <daniel@iogearbox.net>, <jakub.kicinski@netronome.com>,
         <jannh@google.com>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 06/10] bpf: increase complexity limit and maximum program size
-Date:   Mon, 1 Apr 2019 21:27:45 -0700
-Message-ID: <20190402042749.3670015-7-ast@kernel.org>
+Subject: [PATCH v2 bpf-next 10/10] selftests/bpf: synthetic tests to push verifier limits
+Date:   Mon, 1 Apr 2019 21:27:49 -0700
+Message-ID: <20190402042749.3670015-11-ast@kernel.org>
 X-Mailer: git-send-email 2.20.0
 In-Reply-To: <20190402042749.3670015-1-ast@kernel.org>
 References: <20190402042749.3670015-1-ast@kernel.org>
@@ -65,87 +65,167 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Large verifier speed improvements allow to increase
-verifier complexity limit.
-Now regardless of the program composition and its size it takes
-little time for the verifier to hit insn_processed limit.
-On typical x86 machine non-debug kernel processes 1M instructions
-in 1/10 of a second.
-(before these speed improvements specially crafted programs
-could be hitting multi-second verification times)
-Full kasan kernel with debug takes ~1 second for the same 1M insns.
-Hence bump the BPF_COMPLEXITY_LIMIT_INSNS limit to 1M.
-Also increase the number of instructions per program
-from 4k to internal BPF_COMPLEXITY_LIMIT_INSNS limit.
-4k limit was confusing to users, since small programs with hundreds
-of insns could be hitting BPF_COMPLEXITY_LIMIT_INSNS limit.
-Sometimes adding more insns and bpf_trace_printk debug statements
-would make the verifier accept the program while removing
-code would make the verifier reject it.
-Some user space application started to add #define MAX_FOO to
-their programs and do:
-  MAX_FOO=100;
-again:
-  compile with MAX_FOO;
-  try to load;
-  if (fails_to_load) { reduce MAX_FOO; goto again; }
-to be able to fit maximum amount of processing into single program.
-Other users artificially split their single program into a set of programs
-and use all 32 iterations of tail_calls to increase compute limits.
-And the most advanced folks used unlimited tc-bpf filter list
-to execute many bpf programs.
-Essentially the users managed to workaround 4k insn limit.
-This patch removes the limit for root programs from uapi.
-BPF_COMPLEXITY_LIMIT_INSNS is the kernel internal limit
-and success to load the program no longer depends on program size,
-but on 'smartness' of the verifier only.
-The verifier will continue to get smarter with every kernel release.
+Add a test to generate 1m ld_imm64 insns to stress the verifier.
+
+Bump the size of fill_ld_abs_vlan_push_pop test from 4k to 29k
+and jump_around_ld_abs from 4k to 5.5k.
+Larger sizes are not possible due to 16-bit offset encoding
+in jump instructions.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf.h   | 1 +
- kernel/bpf/syscall.c  | 3 ++-
- kernel/bpf/verifier.c | 1 -
- 3 files changed, 3 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/test_verifier.c  | 35 +++++++++++++++-----
+ tools/testing/selftests/bpf/verifier/ld_dw.c |  9 +++++
+ 2 files changed, 35 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index f62897198844..a445194b5fb6 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -421,6 +421,7 @@ struct bpf_array {
- 	};
- };
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index 19b5d03acc2a..75ef63b42f2c 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -50,6 +50,7 @@
+ #include "../../../include/linux/filter.h"
  
-+#define BPF_COMPLEXITY_LIMIT_INSNS      1000000 /* yes. 1M insns */
- #define MAX_TAIL_CALL_CNT 32
+ #define MAX_INSNS	BPF_MAXINSNS
++#define MAX_TEST_INSNS	1000000
+ #define MAX_FIXUPS	8
+ #define MAX_NR_MAPS	14
+ #define MAX_TEST_RUNS	8
+@@ -66,6 +67,7 @@ static int skips;
+ struct bpf_test {
+ 	const char *descr;
+ 	struct bpf_insn	insns[MAX_INSNS];
++	struct bpf_insn	*fill_insns;
+ 	int fixup_map_hash_8b[MAX_FIXUPS];
+ 	int fixup_map_hash_48b[MAX_FIXUPS];
+ 	int fixup_map_hash_16b[MAX_FIXUPS];
+@@ -83,6 +85,7 @@ struct bpf_test {
+ 	const char *errstr;
+ 	const char *errstr_unpriv;
+ 	uint32_t retval, retval_unpriv, insn_processed;
++	int prog_len;
+ 	enum {
+ 		UNDEF,
+ 		ACCEPT,
+@@ -119,10 +122,11 @@ struct other_val {
  
- struct bpf_event_entry {
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index afca36f53c49..1d65e56594db 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1557,7 +1557,8 @@ static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
- 	/* eBPF programs must be GPL compatible to use GPL-ed functions */
- 	is_gpl = license_is_gpl_compatible(license);
+ static void bpf_fill_ld_abs_vlan_push_pop(struct bpf_test *self)
+ {
+-	/* test: {skb->data[0], vlan_push} x 68 + {skb->data[0], vlan_pop} x 68 */
++	/* test: {skb->data[0], vlan_push} x 51 + {skb->data[0], vlan_pop} x 51 */
+ #define PUSH_CNT 51
+-	unsigned int len = BPF_MAXINSNS;
+-	struct bpf_insn *insn = self->insns;
++	/* jump range is limited to 16 bit. PUSH_CNT of ld_abs needs room */
++	unsigned int len = (1 << 15) - PUSH_CNT * 2 * 5 * 6;
++	struct bpf_insn *insn = self->fill_insns;
+ 	int i = 0, j, k = 0;
  
--	if (attr->insn_cnt == 0 || attr->insn_cnt > BPF_MAXINSNS)
-+	if (attr->insn_cnt == 0 ||
-+	    attr->insn_cnt > (capable(CAP_SYS_ADMIN) ? BPF_COMPLEXITY_LIMIT_INSNS : BPF_MAXINSNS))
- 		return -E2BIG;
- 	if (type != BPF_PROG_TYPE_SOCKET_FILTER &&
- 	    type != BPF_PROG_TYPE_CGROUP_SKB &&
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6dcfeb44bb8e..b631e89e7a51 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -176,7 +176,6 @@ struct bpf_verifier_stack_elem {
- 	struct bpf_verifier_stack_elem *next;
- };
+ 	insn[i++] = BPF_MOV64_REG(BPF_REG_6, BPF_REG_1);
+@@ -156,12 +160,14 @@ static void bpf_fill_ld_abs_vlan_push_pop(struct bpf_test *self)
+ 	for (; i < len - 1; i++)
+ 		insn[i] = BPF_ALU32_IMM(BPF_MOV, BPF_REG_0, 0xbef);
+ 	insn[len - 1] = BPF_EXIT_INSN();
++	self->prog_len = len;
+ }
  
--#define BPF_COMPLEXITY_LIMIT_INSNS	131072
- #define BPF_COMPLEXITY_LIMIT_STACK	1024
- #define BPF_COMPLEXITY_LIMIT_STATES	64
+ static void bpf_fill_jump_around_ld_abs(struct bpf_test *self)
+ {
+-	struct bpf_insn *insn = self->insns;
+-	unsigned int len = BPF_MAXINSNS;
++	struct bpf_insn *insn = self->fill_insns;
++	/* jump range is limited to 16 bit. every ld_abs is replaced by 6 insns */
++	unsigned int len = (1 << 15) / 6;
+ 	int i = 0;
  
+ 	insn[i++] = BPF_MOV64_REG(BPF_REG_6, BPF_REG_1);
+@@ -171,11 +177,12 @@ static void bpf_fill_jump_around_ld_abs(struct bpf_test *self)
+ 	while (i < len - 1)
+ 		insn[i++] = BPF_LD_ABS(BPF_B, 1);
+ 	insn[i] = BPF_EXIT_INSN();
++	self->prog_len = i + 1;
+ }
+ 
+ static void bpf_fill_rand_ld_dw(struct bpf_test *self)
+ {
+-	struct bpf_insn *insn = self->insns;
++	struct bpf_insn *insn = self->fill_insns;
+ 	uint64_t res = 0;
+ 	int i = 0;
+ 
+@@ -193,6 +200,7 @@ static void bpf_fill_rand_ld_dw(struct bpf_test *self)
+ 	insn[i++] = BPF_ALU64_IMM(BPF_RSH, BPF_REG_1, 32);
+ 	insn[i++] = BPF_ALU64_REG(BPF_XOR, BPF_REG_0, BPF_REG_1);
+ 	insn[i] = BPF_EXIT_INSN();
++	self->prog_len = i + 1;
+ 	res ^= (res >> 32);
+ 	self->retval = (uint32_t)res;
+ }
+@@ -520,8 +528,10 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
+ 	int *fixup_percpu_cgroup_storage = test->fixup_percpu_cgroup_storage;
+ 	int *fixup_map_spin_lock = test->fixup_map_spin_lock;
+ 
+-	if (test->fill_helper)
++	if (test->fill_helper) {
++		test->fill_insns = calloc(MAX_TEST_INSNS, sizeof(struct bpf_insn));
+ 		test->fill_helper(test);
++	}
+ 
+ 	/* Allocating HTs with 1 elem is fine here, since we only test
+ 	 * for verifier and not do a runtime lookup, so the only thing
+@@ -718,12 +728,17 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 		prog_type = BPF_PROG_TYPE_SOCKET_FILTER;
+ 	fixup_skips = skips;
+ 	do_test_fixup(test, prog_type, prog, map_fds);
++	if (test->fill_insns) {
++		prog = test->fill_insns;
++		prog_len = test->prog_len;
++	} else {
++		prog_len = probe_filter_length(prog);
++	}
+ 	/* If there were some map skips during fixup due to missing bpf
+ 	 * features, skip this test.
+ 	 */
+ 	if (fixup_skips != skips)
+ 		return;
+-	prog_len = probe_filter_length(prog);
+ 
+ 	pflags = 0;
+ 	if (test->flags & F_LOAD_WITH_STRICT_ALIGNMENT)
+@@ -731,7 +746,7 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 	if (test->flags & F_NEEDS_EFFICIENT_UNALIGNED_ACCESS)
+ 		pflags |= BPF_F_ANY_ALIGNMENT;
+ 	fd_prog = bpf_verify_program(prog_type, prog, prog_len, pflags,
+-				     "GPL", 0, bpf_vlog, sizeof(bpf_vlog), 1);
++				     "GPL", 0, bpf_vlog, sizeof(bpf_vlog), 4);
+ 	if (fd_prog < 0 && !bpf_probe_prog_type(prog_type, 0)) {
+ 		printf("SKIP (unsupported program type %d)\n", prog_type);
+ 		skips++;
+@@ -830,6 +845,8 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 		goto fail_log;
+ 	}
+ close_fds:
++	if (test->fill_insns)
++		free(test->fill_insns);
+ 	close(fd_prog);
+ 	for (i = 0; i < MAX_NR_MAPS; i++)
+ 		close(map_fds[i]);
+diff --git a/tools/testing/selftests/bpf/verifier/ld_dw.c b/tools/testing/selftests/bpf/verifier/ld_dw.c
+index d2c75b889598..0f18e62f0099 100644
+--- a/tools/testing/selftests/bpf/verifier/ld_dw.c
++++ b/tools/testing/selftests/bpf/verifier/ld_dw.c
+@@ -34,3 +34,12 @@
+ 	.result = ACCEPT,
+ 	.retval = 5,
+ },
++{
++	"ld_dw: xor semi-random 64 bit imms, test 5",
++	.insns = { },
++	.data = { },
++	.fill_helper = bpf_fill_rand_ld_dw,
++	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++	.result = ACCEPT,
++	.retval = 1000000 - 6,
++},
 -- 
 2.20.0
 
