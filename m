@@ -1,203 +1,156 @@
-Return-Path: <SRS0=vda1=SD=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=V8Hm=SE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DFBDC43381
-	for <bpf@archiver.kernel.org>; Mon,  1 Apr 2019 20:57:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E003AC43381
+	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 02:08:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2AE60208E4
-	for <bpf@archiver.kernel.org>; Mon,  1 Apr 2019 20:57:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A3F3620830
+	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 02:08:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lPTIgcN7"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="IaRwSdP3";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="Ur/2y+Oy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728589AbfDAU5u (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 Apr 2019 16:57:50 -0400
-Received: from mail-vk1-f202.google.com ([209.85.221.202]:47412 "EHLO
-        mail-vk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728483AbfDAU5u (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Apr 2019 16:57:50 -0400
-Received: by mail-vk1-f202.google.com with SMTP id l11so5495761vkl.14
-        for <bpf@vger.kernel.org>; Mon, 01 Apr 2019 13:57:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=t6QR9vIQXRLcPI1RGVNVDsOCAaM45LnPAHzZuwRpXsA=;
-        b=lPTIgcN7TRB6DXtBaAdrQ4IkgnvNi1qbokVs/hfpqu2luGzVNm5Lobe6IGosyNBaPr
-         hs9FHVJ2HJw3Qb4uBwJXIZwZ4pNzpXC39/LT/dWajJH1ixYD008AuMn1ZP3ckAchZDse
-         am91xW5e0qly4P8iZikaJmZnEEdBWwopqd8asoiCFj+vcivUYKENicnEajgWKLOC6V2+
-         wTHkKU8N5kToBSHLSCKcc8YdbzKmjQYLRgRE54F4qMYHolSYb1pjOjWCCCZAgSyQ14Af
-         LPRLtFCbWdKW7V68RWWepSsc2MBOy018CePYthj35QVnitB8wkkZa32V1QcC+VT2wxyz
-         0rzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=t6QR9vIQXRLcPI1RGVNVDsOCAaM45LnPAHzZuwRpXsA=;
-        b=k4LtnLzewRZLAcFKyTcprTcAY9e/X/sbbBbRY1dQG+DnKF/YserwnrvIALHzIvDldG
-         HmvMUkIZrlyOnLOBdU+V8lG7TVzLygQhnzlJma3aaApnTtRn3mztH4Sa/ERq2ODoG9Qd
-         Jv1B66s2emLAfQoiCKDFb1fpDLJ65HgHxe+L9AHre9gFcsqFXBu8mLOxGElsYa0E/5fk
-         xxlpUMfa7BCmKOSO1Fvy1NB7GozsOWqLcG+iXgr8NF3UuGsD4aW1inLH6skol+/Fyllq
-         YHkQFMwtxDt+KHt+pRtgOtgrXeDADSFNCdlSG0RooWmQABkEArwIkTbwa4YUlgDufofO
-         Nr+g==
-X-Gm-Message-State: APjAAAW4R36S4cdsMxYOZBJ96j9lxc/IJD/a4QkOLpsrXolsQrXEtfFc
-        lRyM/Y+pjaLSwcpZnD/w+PHGrH8=
-X-Google-Smtp-Source: APXvYqyOQvo5lUhes1uQi1ZJC9keLUxYjwzvHP2Jkv2jgCCSOST+PrHYW4VAHW71SLuuOMa1efnt9nc=
-X-Received: by 2002:a67:ed47:: with SMTP id m7mr6840205vsp.26.1554152269150;
- Mon, 01 Apr 2019 13:57:49 -0700 (PDT)
-Date:   Mon,  1 Apr 2019 13:57:34 -0700
-In-Reply-To: <20190401205734.4400-1-sdf@google.com>
-Message-Id: <20190401205734.4400-6-sdf@google.com>
-Mime-Version: 1.0
-References: <20190401205734.4400-1-sdf@google.com>
-X-Mailer: git-send-email 2.21.0.392.gf8f6787159e-goog
-Subject: [PATCH bpf 5/5] flow_dissector: document BPF flow dissector environment
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        simon.horman@netronome.com, willemb@google.com,
-        peterpenkov96@gmail.com, Stanislav Fomichev <sdf@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726534AbfDBCIk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 Apr 2019 22:08:40 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:49370 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726269AbfDBCIk (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 1 Apr 2019 22:08:40 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3228Dqv020815;
+        Mon, 1 Apr 2019 19:08:13 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=ILMBu6OSrc42H8qUrybDpgJXvsh4n6UU7QiRMf5wz3w=;
+ b=IaRwSdP3blTQH99TRAGDiImwuqFPQHiy6yXVgEvv+a2ritvheCiRhlTXeeqX+bPthmXz
+ 5SQtLsFcnsqIzMSrke607wI7qVWjZ8X1iLhYsNpJWCuuYSD+BuWY1njMo/92kBavbCKf
+ taqsdwHAdn4yKeKyrj12Y5KEVvtVtGV8geY= 
+Received: from mail.thefacebook.com ([199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2rkv0r0fyg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Mon, 01 Apr 2019 19:08:13 -0700
+Received: from prn-mbx02.TheFacebook.com (2620:10d:c081:6::16) by
+ prn-hub03.TheFacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1713.5; Mon, 1 Apr 2019 19:08:13 -0700
+Received: from prn-hub06.TheFacebook.com (2620:10d:c081:35::130) by
+ prn-mbx02.TheFacebook.com (2620:10d:c081:6::16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1713.5; Mon, 1 Apr 2019 19:08:12 -0700
+Received: from NAM01-BY2-obe.outbound.protection.outlook.com (192.168.54.28)
+ by o365-in.thefacebook.com (192.168.16.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
+ via Frontend Transport; Mon, 1 Apr 2019 19:08:12 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector1-fb-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ILMBu6OSrc42H8qUrybDpgJXvsh4n6UU7QiRMf5wz3w=;
+ b=Ur/2y+Oy1Yuroz/wd/qyhpupzPO5koInWTP2YXpnXWwOg8Vd4VuE5CPnhgMXCEocHu70nqFt/xS9NmMUae+/muR7x+mliXflSpiptHuP2HmZLX4mDMs/RluvchWom/j4VVaQvHW6EHw3f+3V0zajA4/EFyeeuXgU6jBgV9+1D4E=
+Received: from BYAPR15MB2501.namprd15.prod.outlook.com (52.135.196.11) by
+ BYAPR15MB3462.namprd15.prod.outlook.com (20.179.60.10) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1750.17; Tue, 2 Apr 2019 02:08:09 +0000
+Received: from BYAPR15MB2501.namprd15.prod.outlook.com
+ ([fe80::fcb2:5ce:1804:28fd]) by BYAPR15MB2501.namprd15.prod.outlook.com
+ ([fe80::fcb2:5ce:1804:28fd%4]) with mapi id 15.20.1750.017; Tue, 2 Apr 2019
+ 02:08:09 +0000
+From:   Alexei Starovoitov <ast@fb.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>
+CC:     "jakub.kicinski@netronome.com" <jakub.kicinski@netronome.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Kernel Team <Kernel-team@fb.com>
+Subject: Re: [PATCH bpf-next 7/7] selftests/bpf: add few verifier scale tests
+Thread-Topic: [PATCH bpf-next 7/7] selftests/bpf: add few verifier scale tests
+Thread-Index: AQHU5o3v1+EsT8KZqkG8DkQf9yNQbKYnXkmAgAAmjYCAAJ/gAA==
+Date:   Tue, 2 Apr 2019 02:08:09 +0000
+Message-ID: <b42e4d7f-a049-7487-98f7-4db901169ca3@fb.com>
+References: <20190330001612.2354959-1-ast@kernel.org>
+ <20190330001612.2354959-8-ast@kernel.org>
+ <319e168a-6571-9a70-336a-6ecf8b61f040@iogearbox.net>
+ <5753e047-163b-2a89-fb57-bdb1c01f1732@iogearbox.net>
+In-Reply-To: <5753e047-163b-2a89-fb57-bdb1c01f1732@iogearbox.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BYAPR08CA0009.namprd08.prod.outlook.com
+ (2603:10b6:a03:100::22) To BYAPR15MB2501.namprd15.prod.outlook.com
+ (2603:10b6:a02:88::11)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2620:10d:c090:180::4669]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0474013f-81f8-4845-df1b-08d6b7100d16
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600139)(711020)(4605104)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:BYAPR15MB3462;
+x-ms-traffictypediagnostic: BYAPR15MB3462:
+x-microsoft-antispam-prvs: <BYAPR15MB3462337CD91FEAE17398E1ADD7560@BYAPR15MB3462.namprd15.prod.outlook.com>
+x-forefront-prvs: 0995196AA2
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(346002)(136003)(376002)(39860400002)(396003)(199004)(189003)(31696002)(316002)(186003)(5660300002)(97736004)(52116002)(14454004)(14444005)(6506007)(386003)(93886005)(256004)(53546011)(102836004)(46003)(486006)(99286004)(476003)(71200400001)(36756003)(110136005)(8936002)(446003)(8676002)(2616005)(11346002)(81166006)(6436002)(71190400001)(6512007)(53936002)(68736007)(6116002)(54906003)(478600001)(106356001)(31686004)(81156014)(6486002)(2906002)(25786009)(305945005)(7736002)(86362001)(2501003)(229853002)(76176011)(105586002)(4326008)(6246003);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB3462;H:BYAPR15MB2501.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 3AOa6QAT9PA34AglUBVQxbY2Uuji2ANfNLqJX5EBTUIM6ggSd3VcMw2QFCj2RpM6+VbDcDzQvXOzuNgCMYcuOYUIdrxo/k3FOaNTtU88YjoCMNR2ta1ZCi5N72XlbEtvnfJTktk/c/FKKcC91kvO3Xz+clt0XKLet2jvUJ8DOUd7rflvzr0yF8trY3StT1x/x0RVOVNb9Uydl0AIC2+V6B6d0jYINV49VncBdYWDzDwRdgrvHxZ8jj/Qv8nAgCasF7G5Iv9q3xKdzWYWQUWO4UH9Pn1ejRTIylcMQBLfKQZrwPACxlR/FmRiDQa4bn9Alj3SSorAH0R+co2nCQA10t8QrN/H8U0kiWTaG1nuaGl4H6/CKxLEPwwoYCZp07RuozPADbYWfKY20Wr17OLO5CH8ijhO8qNa0WREMHLDC74=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7A0E47A9A89F684A843C895984866088@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0474013f-81f8-4845-df1b-08d6b7100d16
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Apr 2019 02:08:09.2400
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3462
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-02_01:,,
+ signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Short doc on what BPF flow dissector should expect in the input
-__sk_buff and flow_keys.
-
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- .../networking/bpf_flow_dissector.txt         | 115 ++++++++++++++++++
- 1 file changed, 115 insertions(+)
- create mode 100644 Documentation/networking/bpf_flow_dissector.txt
-
-diff --git a/Documentation/networking/bpf_flow_dissector.txt b/Documentation/networking/bpf_flow_dissector.txt
-new file mode 100644
-index 000000000000..513be8e20afb
---- /dev/null
-+++ b/Documentation/networking/bpf_flow_dissector.txt
-@@ -0,0 +1,115 @@
-+==================
-+BPF Flow Dissector
-+==================
-+
-+Overview
-+========
-+
-+Flow dissector is a routine that parses metadata out of the packets. It's
-+used in the various places in the networking subsystem (RFS, flow hash, etc).
-+
-+BPF flow dissector is an attempt to reimplement C-based flow dissector logic
-+in BPF to gain all the benefits of BPF verifier (namely, limits on the
-+number of instructions and tail calls).
-+
-+API
-+===
-+
-+BPF flow dissector programs operate on an __sk_buff. However, only the
-+limited set of fields is allowed: data, data_end and flow_keys. flow_keys
-+is 'struct bpf_flow_keys' and contains flow dissector input and
-+output arguments.
-+
-+The inputs are:
-+  * nhoff - initial offset of the networking header
-+  * thoff - initial offset of the transport header, initialized to nhoff
-+  * n_proto - L3 protocol type, parsed out of L2 header
-+
-+Flow dissector BPF program should fill out the rest of the 'struct
-+bpf_flow_keys' fields. Input arguments nhoff/thoff/n_proto should be also
-+adjusted accordingly.
-+
-+The return code of the BPF program is either BPF_OK to indicate successful
-+dissection, or BPF_DROP to indicate parsing error.
-+
-+__sk_buff->data
-+===============
-+
-+In the VLAN-less case, this is what the initial state of the BPF flow
-+dissector looks like:
-++------+------+------------+-----------+
-+| DMAC | SMAC | ETHER_TYPE | L3_HEADER |
-++------+------+------------+-----------+
-+                            ^
-+                            |
-+                            +-- flow dissector starts here
-+
-+skb->data + flow_keys->nhoff point to the first byte of L3_HEADER.
-+flow_keys->thoff = nhoff
-+flow_keys->n_proto = ETHER_TYPE
-+
-+
-+In case of VLAN, flow dissector can be called with the two different states.
-+
-+Pre-VLAN parsing:
-++------+------+------+-----+-----------+-----------+
-+| DMAC | SMAC | TPID | TCI |ETHER_TYPE | L3_HEADER |
-++------+------+------+-----+-----------+-----------+
-+                      ^
-+                      |
-+                      +-- flow dissector starts here
-+
-+skb->data + flow_keys->nhoff point the to first byte of TCI.
-+flow_keys->thoff = nhoff
-+flow_keys->n_proto = TPID
-+
-+Please note that TPID can be 802.1AD and, hence, BPF program would
-+have to parse VLAN information twice for double tagged packets.
-+
-+
-+Post-VLAN parsing:
-++------+------+------+-----+-----------+-----------+
-+| DMAC | SMAC | TPID | TCI |ETHER_TYPE | L3_HEADER |
-++------+------+------+-----+-----------+-----------+
-+                                        ^
-+                                        |
-+                                        +-- flow dissector starts here
-+
-+skb->data + flow_keys->nhoff point the to first byte of L3_HEADER.
-+flow_keys->thoff = nhoff
-+flow_keys->n_proto = ETHER_TYPE
-+
-+In this case VLAN information has been processed before the flow dissector
-+and BPF flow dissector is not required to handle it.
-+
-+
-+The takeaway here is as follows: BPF flow dissector program can be called with
-+the optional VLAN header and should gracefully handle both cases: when single
-+or double VLAN is present and when it is not present. The same program
-+can be called for both cases and would have to be written carefully to
-+handle both cases.
-+
-+
-+Reference Implementation
-+========================
-+
-+See tools/testing/selftests/bpf/progs/bpf_flow.c for the reference
-+implementation and tools/testing/selftests/bpf/flow_dissector_load.[hc] for
-+the loader. bpftool can be used to load BPF flow dissector program as well.
-+
-+The reference implementation is organized as follows:
-+* jmp_table map that contains sub-programs for each supported L3 protocol
-+* _dissect routine - entry point; it does input n_proto parsing and does
-+  bpf_tail_call to the appropriate L3 handler
-+
-+Since BPF at this point doesn't support looping (or any jumping back),
-+jmp_table is used instead to handle multiple levels of encapsulation (and
-+IPv6 options).
-+
-+
-+Current Limitations
-+===================
-+BPF flow dissector doesn't support exporting all the metadata that in-kernel
-+C-based implementation can export. Notable example is single VLAN (802.1Q)
-+and double VLAN (802.1AD) tags. Please refer to the 'struct bpf_flow_keys'
-+for a set of information that's currently can be exported from the BPF context.
--- 
-2.21.0.392.gf8f6787159e-goog
-
+T24gNC8xLzE5IDk6MzUgQU0sIERhbmllbCBCb3JrbWFubiB3cm90ZToNCj4gT24gMDQvMDEvMjAx
+OSAwNDoxNyBQTSwgRGFuaWVsIEJvcmttYW5uIHdyb3RlOg0KPj4gT24gMDMvMzAvMjAxOSAwMTox
+NiBBTSwgQWxleGVpIFN0YXJvdm9pdG92IHdyb3RlOg0KPj4+IEFkZCAzIGJhc2ljIHRlc3RzIHRo
+YXQgc3RyZXNzIHZlcmlmaWVyIHNjYWxhYmlsaXR5Lg0KPj4+DQo+Pj4gdGVzdF92ZXJpZl9zY2Fs
+ZTEuYyBjYWxscyBub24taW5saW5lZCBqaGFzaCgpIGZ1bmN0aW9uIDkwIHRpbWVzIG9uDQo+Pj4g
+ZGlmZmVyZW50IHBvc2l0aW9uIGluIHRoZSBwYWNrZXQuDQo+Pj4gVGhpcyB0ZXN0IHNpbXVsYXRl
+cyBuZXR3b3JrIHBhY2tldCBwYXJzaW5nLg0KPj4+IGpoYXNoIGZ1bmN0aW9uIGlzIH4xNDAgaW5z
+dHJ1Y3Rpb25zIGFuZCBtYWluIHByb2dyYW0gaXMgfjEyMDAgaW5zbnMuDQo+Pj4NCj4+PiB0ZXN0
+X3ZlcmlmX3NjYWxlMi5jIGZvcmNlIGlubGluZXMgamhhc2goKSBmdW5jdGlvbiA5MCB0aW1lcy4N
+Cj4+PiBUaGlzIHByb2dyYW0gaXMgfjE1ayBpbnN0cnVjdGlvbnMgbG9uZy4NCj4+Pg0KPj4+IHRl
+c3RfdmVyaWZfc2NhbGUzLmMgY2FsbHMgbm9uLWlubGluZWQgamhhc2goKSBmdW5jdGlvbiA5MCB0
+aW1lcyBvbg0KPj4+IEJ1dCB0aGlzIHRpbWUgamhhc2ggaGFzIHRvIHByb2Nlc3MgMzItYnl0ZXMg
+ZnJvbSB0aGUgcGFja2V0DQo+Pj4gaW5zdGVhZCBvZiAxNC1ieXRlcyBpbiB0ZXN0cyAxIGFuZCAy
+Lg0KPj4+IGpoYXNoIGZ1bmN0aW9uIGlzIH4yMzAgaW5zbnMgYW5kIG1haW4gcHJvZ3JhbSBpcyB+
+MTIwMCBpbnNucy4NCj4+Pg0KPj4+ICQgdGVzdF9wcm9ncyAtcw0KPj4+IGNhbiBiZSB1c2VkIHRv
+IHNlZSB2ZXJpZmllciBzdGF0cy4NCj4+Pg0KPj4+IFNpZ25lZC1vZmYtYnk6IEFsZXhlaSBTdGFy
+b3ZvaXRvdiA8YXN0QGtlcm5lbC5vcmc+DQo+Pg0KPj4gRG8geW91IGFsc28gaGF2ZSBzb21lIHRl
+c3QgY2FzZXMgd2l0aCBhY3R1YWwgMU0gaW5zbnMgcmVzcC4gc3VjaCB0aGF0IGhpdA0KPj4gdGhl
+IG5ldyBjb21wbGV4aXR5IGxpbWl0IHRvIGNoZWNrIHRpbWluZyAvIHJlc291cmNlcyBpdCBjb25z
+dW1lcz8gSSB0aGluaw0KPj4gdGhlc2Ugd291bGQgYmUgZ29vZCB0byBoYXZlIGFzIHdlbGwgYXMg
+cGFydCBvZiBzZWxmdGVzdHMuDQo+IA0KPiAoQW5vdGhlciB0aG91Z2h0IG9uIHdoeSBpdCB3b3Vs
+ZCBiZSBnb29kIHRvIGhhdmUgc3VjaCB0ZXN0cyB3b3VsZCBiZSB0bw0KPiBzZWUgaWYgd2Ugd291
+bGQgb3RoZXJ3aXNlIGJyZWFrIGxvbmcganVtcHMgYWdhaW4gZHVlIHRvIG9mZnNldCB0cnVuY2F0
+aW9uDQo+IHdoaWNoIHdlIGhhZCBpbiB0aGUgY29yZSBhcyB3ZWxsIGFzIGluIEpJVHMgaW4gdGhl
+IHBhc3QuKQ0KDQpsbHZtIHRydW5jYXRlcyBqdW1wIG9mZnNldHMgZm9yIGxhcmdlIHByb2dyYW1z
+Lg0KVW5mb3J0dW5hdGVseSB3ZSBuZWVkIHRvIGludHJvZHVjZSBKQSBpbnN0cnVjdGlvbg0Kd2l0
+aCAzMi1iaXQgb2Zmc2V0IG9uIGtlcm5lbCBzaWRlIGJlZm9yZSB3ZSBjYW4gZml4IGxsdm0uDQpU
+aGVyZSBhcmUgcGxlbnR5IG9mIG90aGVyIHNjYWxhYmlsaXR5IGlzc3VlcyBvbiB0aGUga2VybmVs
+IHNpZGUuDQpUaGlzIHBhdGNoIHNldCBpcyB0aGUgZmlyc3Qgc3RlcC4NCk9ubHkgbm9uLWp1bXB5
+IHByb2dyYW0gb2YgMW0gaW5zbiBsb2FkcyBhbmQgd29ya3MuDQpSZWFsaXN0aWNhbGx5IHdlJ3Jl
+IHN0aWxsIGZhciBhd2F5IGZyb20gYWNjZXB0aW5nIGxhcmdlIHByb2dyYW1zLA0KYnV0IHRvIGdl
+dCB0aGVyZSB3ZSBuZWVkIHRvIGJ1bXAgdGhlIGxpbWl0IGFuZCBleHBlcmllbmNlIHRoZXNlIGlz
+c3Vlcy4NCkkgbm90aWNlZCBhIHR5cG8gaW4gcGF0Y2ggMSwgc28gd2lsbCByZXNwaW4gYW5kIHdp
+bGwgYWRkIGEgdGVzdC4NCg==
