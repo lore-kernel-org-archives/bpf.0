@@ -2,110 +2,119 @@ Return-Path: <SRS0=V8Hm=SE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32767C4360F
-	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 11:58:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA0E9C4360F
+	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 14:14:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0D63120883
-	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 11:58:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7FCD32070B
+	for <bpf@archiver.kernel.org>; Tue,  2 Apr 2019 14:14:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729252AbfDBL6V (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Apr 2019 07:58:21 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:40271 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725920AbfDBL6V (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Apr 2019 07:58:21 -0400
-Received: by mail-wm1-f67.google.com with SMTP id z24so3359320wmi.5;
-        Tue, 02 Apr 2019 04:58:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=/n+b2pRTGMG9DLfZAGrxGryM+KpQVtKNoEdo6fIx1tU=;
-        b=YT5q9pUCoB02HrjqGJqeyunamNmDkgi5JQAxUXJLZEzBClHz4O8NlTMQGxdjlD0Hj6
-         UUafF+UxARz3pC6xp7gm3v6r8FO4KbsqL16AmXTYS+EvBRfS/ojXCTlzFdwF29ej/Oid
-         TX0QHUPJHR0YR6z3PjNFY5jqKbiO1q/0JfA4UMNRsEOaRE/+BkgKNfA730MCdfZJuc+H
-         5ksizQ2ojHIhRofxUk0yDFFUpruOv9pCxm43XMMcuSHk9f5NEdYQb4K/2xaOVSlNFxu4
-         wh9DoCIk1d0C2UKIYuzEfbEHizqJ7X0oQ0SRklXrqbxa6kp11pRvYR5fnO/mVIExHLPM
-         nDJA==
-X-Gm-Message-State: APjAAAV+QN3AyntYhcL6AAwhsIj4gJeuREYB9ECWK6u0PdWiTJJE7oJP
-        Hbbtch8bglGPYw0U6uHnOsE=
-X-Google-Smtp-Source: APXvYqwSJMABHJQk64PdG3z4q69aPXUqKXcyICdZGXa6m7/z2DGIVissPGgOOseVa6Aml5njKj4y5g==
-X-Received: by 2002:a1c:2394:: with SMTP id j142mr3464273wmj.111.1554206299547;
-        Tue, 02 Apr 2019 04:58:19 -0700 (PDT)
-Received: from Nover ([161.105.209.130])
-        by smtp.gmail.com with ESMTPSA id d3sm12825065wmf.46.2019.04.02.04.58.18
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 02 Apr 2019 04:58:18 -0700 (PDT)
-Date:   Tue, 2 Apr 2019 13:58:14 +0200
-From:   Paul Chaignon <paul.chaignon@orange.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     Xiao Han <xiao.han@orange.com>, paul.chaignon@gmail.com,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
-Subject: [PATCH bpf] bpf: report verifier bugs as warnings
-Message-ID: <20190402115811.GA6303@Nover>
+        id S1726903AbfDBOOG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Apr 2019 10:14:06 -0400
+Received: from www62.your-server.de ([213.133.104.62]:46160 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726142AbfDBOOG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Apr 2019 10:14:06 -0400
+Received: from [78.46.172.2] (helo=sslproxy05.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hBKAo-0001pa-W7; Tue, 02 Apr 2019 16:13:59 +0200
+Received: from [178.197.248.24] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hBKAo-000JU0-PC; Tue, 02 Apr 2019 16:13:58 +0200
+Subject: Re: [PATCH bpf-next 7/7] selftests/bpf: add few verifier scale tests
+To:     Alexei Starovoitov <ast@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>
+Cc:     "jakub.kicinski@netronome.com" <jakub.kicinski@netronome.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Kernel Team <Kernel-team@fb.com>
+References: <20190330001612.2354959-1-ast@kernel.org>
+ <20190330001612.2354959-8-ast@kernel.org>
+ <319e168a-6571-9a70-336a-6ecf8b61f040@iogearbox.net>
+ <5753e047-163b-2a89-fb57-bdb1c01f1732@iogearbox.net>
+ <b42e4d7f-a049-7487-98f7-4db901169ca3@fb.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <35a0246d-006f-8e18-8da7-49f8ca440846@iogearbox.net>
+Date:   Tue, 2 Apr 2019 16:13:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <b42e4d7f-a049-7487-98f7-4db901169ca3@fb.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.3/25407/Tue Apr  2 09:54:31 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Three checks for verifier bugs were introduced in commit f4d7e40 ("bpf:
-introduce function calls (verification)").  The bugs were reported as
-incorrect programs instead of kernel warnings as the present patch
-implements.
+On 04/02/2019 04:08 AM, Alexei Starovoitov wrote:
+> On 4/1/19 9:35 AM, Daniel Borkmann wrote:
+>> On 04/01/2019 04:17 PM, Daniel Borkmann wrote:
+>>> On 03/30/2019 01:16 AM, Alexei Starovoitov wrote:
+>>>> Add 3 basic tests that stress verifier scalability.
+>>>>
+>>>> test_verif_scale1.c calls non-inlined jhash() function 90 times on
+>>>> different position in the packet.
+>>>> This test simulates network packet parsing.
+>>>> jhash function is ~140 instructions and main program is ~1200 insns.
+>>>>
+>>>> test_verif_scale2.c force inlines jhash() function 90 times.
+>>>> This program is ~15k instructions long.
+>>>>
+>>>> test_verif_scale3.c calls non-inlined jhash() function 90 times on
+>>>> But this time jhash has to process 32-bytes from the packet
+>>>> instead of 14-bytes in tests 1 and 2.
+>>>> jhash function is ~230 insns and main program is ~1200 insns.
+>>>>
+>>>> $ test_progs -s
+>>>> can be used to see verifier stats.
+>>>>
+>>>> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+>>>
+>>> Do you also have some test cases with actual 1M insns resp. such that hit
+>>> the new complexity limit to check timing / resources it consumes? I think
+>>> these would be good to have as well as part of selftests.
+>>
+>> (Another thought on why it would be good to have such tests would be to
+>> see if we would otherwise break long jumps again due to offset truncation
+>> which we had in the core as well as in JITs in the past.)
+> 
+> llvm truncates jump offsets for large programs.
+> Unfortunately we need to introduce JA instruction
+> with 32-bit offset on kernel side before we can fix llvm.
+> There are plenty of other scalability issues on the kernel side.
+> This patch set is the first step.
 
-Signed-off-by: Paul Chaignon <paul.chaignon@orange.com>
----
- kernel/bpf/verifier.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+Right.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 87221fda1321..12499e72b0d5 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1145,9 +1145,9 @@ static int mark_reg_read(struct bpf_verifier_env *env,
- 		if (writes && state->live & REG_LIVE_WRITTEN)
- 			break;
- 		if (parent->live & REG_LIVE_DONE) {
--			verbose(env, "verifier BUG type %s var_off %lld off %d\n",
--				reg_type_str[parent->type],
--				parent->var_off.value, parent->off);
-+			WARN_ONCE(1, "verifier bug type %s var_off %lld off %d\n",
-+				  reg_type_str[parent->type],
-+				  parent->var_off.value, parent->off);
- 			return -EFAULT;
- 		}
- 		/* ... then we depend on parent's value */
-@@ -2888,15 +2888,15 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	target_insn = *insn_idx + insn->imm;
- 	subprog = find_subprog(env, target_insn + 1);
- 	if (subprog < 0) {
--		verbose(env, "verifier bug. No program starts at insn %d\n",
--			target_insn + 1);
-+		WARN_ONCE(1, "verifier bug. No program starts at insn %d\n",
-+			  target_insn + 1);
- 		return -EFAULT;
- 	}
- 
- 	caller = state->frame[state->curframe];
- 	if (state->frame[state->curframe + 1]) {
--		verbose(env, "verifier bug. Frame %d already allocated\n",
--			state->curframe + 1);
-+		WARN_ONCE(1, "verifier bug. Frame %d already allocated\n",
-+			  state->curframe + 1);
- 		return -EFAULT;
- 	}
- 
--- 
-2.17.1
+> Only non-jumpy program of 1m insn loads and works.
+> Realistically we're still far away from accepting large programs,
+> but to get there we need to bump the limit and experience these issues.
 
+I think my main worry is that if we're realistically still far away from
+accepting 1M insns programs and have potential unknown blockers in the
+road wrt verifying safety, then why lifting the limit for root to 1M
+today already?
+
+I think the complexity limit itself is fine, but why not being more
+conservative on the number of instructions to something we believe
+verifier can realistically handle /today/ wrt worst case consumptions in
+case of complexity attacks, and go further from there? Once it's on 1M in
+UAPI it's effectively frozen and then we'll be re-adding slightly similar
+upper limits again which caps the 1M to something much lower (though I
+doubt we'll see such large programs any time soon).
+
+Thanks,
+Daniel
