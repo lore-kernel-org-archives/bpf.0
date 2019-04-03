@@ -2,60 +2,128 @@ Return-Path: <SRS0=5VBK=SF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67326C4360F
-	for <bpf@archiver.kernel.org>; Wed,  3 Apr 2019 11:54:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21642C4360F
+	for <bpf@archiver.kernel.org>; Wed,  3 Apr 2019 12:05:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3F3DD206DD
-	for <bpf@archiver.kernel.org>; Wed,  3 Apr 2019 11:54:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EC66C20830
+	for <bpf@archiver.kernel.org>; Wed,  3 Apr 2019 12:05:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726074AbfDCLy6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Apr 2019 07:54:58 -0400
-Received: from Chamillionaire.breakpoint.cc ([146.0.238.67]:33406 "EHLO
-        Chamillionaire.breakpoint.cc" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725941AbfDCLy5 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 3 Apr 2019 07:54:57 -0400
-Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.89)
-        (envelope-from <fw@strlen.de>)
-        id 1hBeTn-0000HN-LC; Wed, 03 Apr 2019 13:54:55 +0200
-Date:   Wed, 3 Apr 2019 13:54:55 +0200
-From:   Florian Westphal <fw@strlen.de>
-To:     syzbot <syzbot+537175332b212b4d885b@syzkaller.appspotmail.com>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: BUG: using __this_cpu_read() in preemptible code in sk_mc_loop
-Message-ID: <20190403115455.aqghw2n6yutnuc73@breakpoint.cc>
-References: <0000000000004bf9c805859e36d4@google.com>
+        id S1725990AbfDCMFL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Apr 2019 08:05:11 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:43916 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725941AbfDCMFL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Apr 2019 08:05:11 -0400
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 8239618DF7C;
+        Wed,  3 Apr 2019 12:05:10 +0000 (UTC)
+Received: from sandy.ghostprotocols.net (ovpn-112-16.phx2.redhat.com [10.3.112.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 824EE64032;
+        Wed,  3 Apr 2019 12:05:09 +0000 (UTC)
+Received: by sandy.ghostprotocols.net (Postfix, from userid 1000)
+        id C2324628D; Wed,  3 Apr 2019 09:05:06 -0300 (BRT)
+Date:   Wed, 3 Apr 2019 09:05:06 -0300
+From:   Arnaldo Carvalho de Melo <acme@redhat.com>
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>, andrii.nakryiko@gmail.com,
+        bpf@vger.kernel.org, netdev@vger.kernel.org, kernel-team@fb.com,
+        Andrii Nakryiko <andriin@fb.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Alexei Starovoitov <ast@fb.com>, Yonghong Song <yhs@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>
+Subject: Re: [PATCH bpf-next] kbuild: add ability to generate BTF type info
+ for vmlinux
+Message-ID: <20190403120506.GK2219@redhat.com>
+References: <20190402164950.429597-1-andrii.nakryiko@gmail.com>
+ <20190403084619.GA23855@krava>
+ <611b4f67-801e-1bab-7a43-a16d341187ba@iogearbox.net>
+ <20190403091258.GA24875@krava>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0000000000004bf9c805859e36d4@google.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20190403091258.GA24875@krava>
+X-Url:  http://acmel.wordpress.com
+User-Agent: Mutt/1.5.20 (2009-12-10)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.29]); Wed, 03 Apr 2019 12:05:10 +0000 (UTC)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-syzbot <syzbot+537175332b212b4d885b@syzkaller.appspotmail.com> wrote:
-> syzbot found the following crash on:
-
-> HEAD commit:    e1427237 macsec: add noinline tag to avoid a frame size wa..
-> git tree:       net-next
-[..]
-
-> The bug was bisected to:
+Em Wed, Apr 03, 2019 at 11:12:58AM +0200, Jiri Olsa escreveu:
+> On Wed, Apr 03, 2019 at 11:04:28AM +0200, Daniel Borkmann wrote:
+> > On 04/03/2019 10:46 AM, Jiri Olsa wrote:
+> > > On Tue, Apr 02, 2019 at 09:49:50AM -0700, andrii.nakryiko@gmail.com wrote:
+> > >> From: Andrii Nakryiko <andriin@fb.com>
+> > >>
+> > >> This patch adds new config option to trigger generation of BTF type
+> > >> information from DWARF debuginfo for vmlinux and kernel modules through
+> > >> pahole, which in turn relies on libbpf for btf_dedup() algorithm.
+> > >>
+> > >> The intent is to record compact type information of all types used
+> > >> inside kernel, including all the structs/unions/typedefs/etc. This
+> > >> enables BPF's compile-once-run-everywhere ([0]) approach, in which
+> > >> tracing programs that are inspecting kernel's internal data (e.g.,
+> > >> struct task_struct) can be compiled on a system running some kernel
+> > >> version, but would be possible to run on other kernel versions (and
+> > >> configurations) without recompilation, even if the layout of structs
+> > >> changed and/or some of the fields were added, removed, or renamed.
+> > >>
+> > >> This is only possible if BPF loader can get kernel type info to adjust
+> > >> all the offsets correctly. This patch is a first time in this direction,
+> > >> making sure that BTF type info is part of Linux kernel image in
+> > >> non-loadable ELF section.
+> > >>
+> > >> BTF deduplication ([1]) algorithm typically provides 100x savings
+> > >> compared to DWARF data, so resulting .BTF section is not big as is
+> > >> typically about 2MB in size.
+> > > 
+> > > hi,
+> > > I'm using the latest pahole from git tree:
+> > >   https://github.com/acmel/dwarves.git
+> > > 
+> > > and getting pahole crash:
+> > > 
+> > >   LD      vmlinux
+> > >   BTF     vmlinux
+> > > die__process_inline_expansion: DW_TAG_label (0xa) @ <0x3eef8> not handled!
+> > > scripts/link-vmlinux.sh: line 96: 31222 Segmentation fault      (core dumped) LLVM_OBJCOPY=${OBJCOPY} ${PAHOLE} -J ${1}
+> > > make[1]: *** [/home/jolsa/linux/Makefile:1025: vmlinux] Error 139
+> > > make: *** [Makefile:170: sub-make] Error 2
+> > > 
+> > > is there some other source/dependency I'm missing?
+> > 
+> > Yesterday night, I've tested with [0] but seems to have the same HEAD as
+> > the github repo you pointed out. Seems the above is coming from pahole's
+> > __die__process_tag() bailing out with default for DW_TAG_label?
+> > 
+> > On my side worked fine:
 > 
-> commit 97cdcf37b57e3f204be3000b9eab9686f38b4356
-> Author: Florian Westphal <fw@strlen.de>
-> Date:   Mon Apr 1 14:42:13 2019 +0000
-> 
->     net: place xmit recursion in softnet data
-[..]
-> BUG: using __this_cpu_read() in preemptible [00000000] code:
-> syz-executor284/7845
-> caller is dev_recursion_level include/linux/netdevice.h:3052 [inline]
+> hum, I also had to change the version of pahole in the patch to allow
+> version v1.12, because both latest pahole sources are on version 1.12,
+> did u have to do that? looks like there's v1.13 somewhere ;-)
 
-#syz dup: BUG: using __this_cpu_read() in preemptible code in ip6_finish_output
+I'll get the --reorganize algorithm simplified to cope with some
+internal changes needed for the BTF encoding/decoding and tag v1.13
+later today, max late this week. Then I'll go back adding the bitfield
+reorganization bits that will take a bit more work.
+
+Hopefully this way we get something to work with the Kbuild changes and
+have progress in that front.
+
+I'll look at the DW_TAG_label case too, please send me me in PVT the
+vmlinux file with that problem so that I can analyse it.
+ 
+> jirka
+> 
+> SNIP
+> 
+> > 
+> >   [0] https://git.kernel.org/pub/scm/devel/pahole/pahole.git/
