@@ -2,40 +2,36 @@ Return-Path: <SRS0=5VBK=SF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35737C10F0C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59791C3E8A3
 	for <bpf@archiver.kernel.org>; Wed,  3 Apr 2019 18:23:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1267321734
+	by mail.kernel.org (Postfix) with ESMTP id 350982147C
 	for <bpf@archiver.kernel.org>; Wed,  3 Apr 2019 18:23:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726436AbfDCSX3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1726193AbfDCSX3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Wed, 3 Apr 2019 14:23:29 -0400
-Received: from www62.your-server.de ([213.133.104.62]:55384 "EHLO
+Received: from www62.your-server.de ([213.133.104.62]:55382 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726399AbfDCSX3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1726337AbfDCSX3 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 3 Apr 2019 14:23:29 -0400
 Received: from [2a02:120b:c3fc:feb0:dda7:bd28:a848:50e2] (helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1hBkXi-0006CT-0Q; Wed, 03 Apr 2019 20:23:22 +0200
+        id 1hBkXg-0006CK-Jh; Wed, 03 Apr 2019 20:23:20 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     bpf@vger.kernel.org
 Cc:     ast@kernel.org, joe@wand.net.nz, yhs@fb.com,
         andrii.nakryiko@gmail.com, kafai@fb.com,
         Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v3 03/15] bpf: add syscall side map lock support
-Date:   Wed,  3 Apr 2019 20:22:54 +0200
-Message-Id: <f0ab2bf5c028817c3f686b6f6ed65d317e54ed75.1554314902.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next v3 00/15] BPF support for global data
+Date:   Wed,  3 Apr 2019 20:22:51 +0200
+Message-Id: <cover.1554314902.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.9.5
-In-Reply-To: <cover.1554314902.git.daniel@iogearbox.net>
-References: <cover.1554314902.git.daniel@iogearbox.net>
-In-Reply-To: <cover.1554314902.git.daniel@iogearbox.net>
-References: <cover.1554314902.git.daniel@iogearbox.net>
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 0.100.3/25408/Wed Apr  3 09:53:31 2019)
 Sender: bpf-owner@vger.kernel.org
@@ -43,221 +39,113 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds a new BPF_MAP_LOCK command which allows to lock the
-map globally as read-only/immutable from syscall side. Map permission
-handling has been refactored into map_get_sys_perms() and drops
-FMODE_CAN_WRITE in case of locked map. Main use case is to allow
-for setting up .rodata sections from the BPF ELF which are loaded
-into the kernel, meaning BPF loader first allocates map, sets up
-map value by copying .rodata section into it and once complete, it
-calls BPF_MAP_LOCK on the map fd to prevent further modifications.
-Given maps can be shared, we only grant the original creator of
-the map the ability to lock it as syscall-side read-only or only
-priviledged users otherwise.
+This series is a major rework of previously submitted libbpf
+patches [0] in order to add global data support for BPF. The
+kernel has been extended to add proper infrastructure that allows
+for full .bss/.data/.rodata sections on BPF loader side based
+upon feedback from LPC discussions [1]. Latter support is then
+also added into libbpf in this series which allows for more
+natural C-like programming of BPF programs. For more information
+on loader, please refer to 'bpf, libbpf: support global data/bss/
+rodata sections' patch in this series. Joint work with Joe Stringer.
 
-Right now BPF_MAP_LOCK only takes map fd as argument while remaining
-bpf_attr members are required to be zero. I didn't add write-only
-locking here as counterpart since I don't have a concrete use-case
-for it on my side, and I think it makes probably more sense to wait
-once there is actually one. In that case bpf_attr can be extended
-as usual with a flag field and/or others where flag 0 means that
-we lock the map read-only hence this doesn't prevent to add further
-extensions to BPF_MAP_LOCK upon need.
+Thanks a lot!
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- include/linux/bpf.h      |  5 +++-
- include/uapi/linux/bpf.h |  1 +
- kernel/bpf/syscall.c     | 72 ++++++++++++++++++++++++++++++++++++++++--------
- 3 files changed, 65 insertions(+), 13 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 214c0d2..15fc24f 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -87,7 +87,10 @@ struct bpf_map {
- 	struct btf *btf;
- 	u32 pages;
- 	bool unpriv_array;
--	/* 51 bytes hole */
-+	/* Next two members are write-once. */
-+	bool sys_immutable;
-+	struct task_struct *creator;
-+	/* 40 bytes hole */
- 
- 	/* The 3rd and 4th cacheline with misc members to avoid false sharing
- 	 * particularly with refcounting.
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 3735432..5cf9c74 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -105,6 +105,7 @@ enum bpf_cmd {
- 	BPF_BTF_GET_FD_BY_ID,
- 	BPF_TASK_FD_QUERY,
- 	BPF_MAP_LOOKUP_AND_DELETE_ELEM,
-+	BPF_MAP_LOCK,
- };
- 
- enum bpf_map_type {
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index e25a1cf..18bbe69 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -336,6 +336,8 @@ static int bpf_map_release(struct inode *inode, struct file *filp)
- {
- 	struct bpf_map *map = filp->private_data;
- 
-+	if (READ_ONCE(map->creator))
-+		cmpxchg(&map->creator, current, NULL);
- 	if (map->ops->map_release)
- 		map->ops->map_release(map, filp);
- 
-@@ -343,6 +345,18 @@ static int bpf_map_release(struct inode *inode, struct file *filp)
- 	return 0;
- }
- 
-+static fmode_t map_get_sys_perms(struct bpf_map *map, struct fd f)
-+{
-+	fmode_t mode = f.file->f_mode;
-+
-+	/* Our file permissions may have been overridden by global
-+	 * map permissions facing syscall side.
-+	 */
-+	if (READ_ONCE(map->sys_immutable))
-+		mode &= ~FMODE_CAN_WRITE;
-+	return mode;
-+}
-+
- #ifdef CONFIG_PROC_FS
- static void bpf_map_show_fdinfo(struct seq_file *m, struct file *filp)
- {
-@@ -364,14 +378,16 @@ static void bpf_map_show_fdinfo(struct seq_file *m, struct file *filp)
- 		   "max_entries:\t%u\n"
- 		   "map_flags:\t%#x\n"
- 		   "memlock:\t%llu\n"
--		   "map_id:\t%u\n",
-+		   "map_id:\t%u\n"
-+		   "sys_immutable:\t%u\n",
- 		   map->map_type,
- 		   map->key_size,
- 		   map->value_size,
- 		   map->max_entries,
- 		   map->map_flags,
- 		   map->pages * 1ULL << PAGE_SHIFT,
--		   map->id);
-+		   map->id,
-+		   READ_ONCE(map->sys_immutable));
- 
- 	if (owner_prog_type) {
- 		seq_printf(m, "owner_prog_type:\t%u\n",
-@@ -541,6 +557,7 @@ static int map_create(union bpf_attr *attr)
- 	if (err)
- 		goto free_map_nouncharge;
- 
-+	WRITE_ONCE(map->creator, current);
- 	atomic_set(&map->refcnt, 1);
- 	atomic_set(&map->usercnt, 1);
- 
-@@ -715,8 +732,7 @@ static int map_lookup_elem(union bpf_attr *attr)
- 	map = __bpf_map_get(f);
- 	if (IS_ERR(map))
- 		return PTR_ERR(map);
--
--	if (!(f.file->f_mode & FMODE_CAN_READ)) {
-+	if (!(map_get_sys_perms(map, f) & FMODE_CAN_READ)) {
- 		err = -EPERM;
- 		goto err_put;
- 	}
-@@ -845,8 +861,7 @@ static int map_update_elem(union bpf_attr *attr)
- 	map = __bpf_map_get(f);
- 	if (IS_ERR(map))
- 		return PTR_ERR(map);
--
--	if (!(f.file->f_mode & FMODE_CAN_WRITE)) {
-+	if (!(map_get_sys_perms(map, f) & FMODE_CAN_WRITE)) {
- 		err = -EPERM;
- 		goto err_put;
- 	}
-@@ -957,8 +972,7 @@ static int map_delete_elem(union bpf_attr *attr)
- 	map = __bpf_map_get(f);
- 	if (IS_ERR(map))
- 		return PTR_ERR(map);
--
--	if (!(f.file->f_mode & FMODE_CAN_WRITE)) {
-+	if (!(map_get_sys_perms(map, f) & FMODE_CAN_WRITE)) {
- 		err = -EPERM;
- 		goto err_put;
- 	}
-@@ -1009,8 +1023,7 @@ static int map_get_next_key(union bpf_attr *attr)
- 	map = __bpf_map_get(f);
- 	if (IS_ERR(map))
- 		return PTR_ERR(map);
--
--	if (!(f.file->f_mode & FMODE_CAN_READ)) {
-+	if (!(map_get_sys_perms(map, f) & FMODE_CAN_READ)) {
- 		err = -EPERM;
- 		goto err_put;
- 	}
-@@ -1077,8 +1090,7 @@ static int map_lookup_and_delete_elem(union bpf_attr *attr)
- 	map = __bpf_map_get(f);
- 	if (IS_ERR(map))
- 		return PTR_ERR(map);
--
--	if (!(f.file->f_mode & FMODE_CAN_WRITE)) {
-+	if (!(map_get_sys_perms(map, f) & FMODE_CAN_WRITE)) {
- 		err = -EPERM;
- 		goto err_put;
- 	}
-@@ -1120,6 +1132,39 @@ static int map_lookup_and_delete_elem(union bpf_attr *attr)
- 	return err;
- }
- 
-+#define BPF_MAP_LOCK_LAST_FIELD map_fd
-+
-+static int map_lock(const union bpf_attr *attr)
-+{
-+	int err = 0, ufd = attr->map_fd;
-+	struct bpf_map *map;
-+	struct fd f;
-+
-+	if (CHECK_ATTR(BPF_MAP_LOCK))
-+		return -EINVAL;
-+
-+	f = fdget(ufd);
-+	map = __bpf_map_get(f);
-+	if (IS_ERR(map))
-+		return PTR_ERR(map);
-+	if (READ_ONCE(map->sys_immutable)) {
-+		err = -EBUSY;
-+		goto err_put;
-+	}
-+	if (!(map_get_sys_perms(map, f) & FMODE_CAN_WRITE) ||
-+	    (!capable(CAP_SYS_ADMIN) &&
-+	     READ_ONCE(map->creator) != current)) {
-+		err = -EPERM;
-+		goto err_put;
-+	}
-+
-+	WRITE_ONCE(map->sys_immutable, true);
-+	synchronize_rcu();
-+err_put:
-+	fdput(f);
-+	return err;
-+}
-+
- static const struct bpf_prog_ops * const bpf_prog_types[] = {
- #define BPF_PROG_TYPE(_id, _name) \
- 	[_id] = & _name ## _prog_ops,
-@@ -2725,6 +2770,9 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, siz
- 	case BPF_MAP_GET_NEXT_KEY:
- 		err = map_get_next_key(&attr);
- 		break;
-+	case BPF_MAP_LOCK:
-+		err = map_lock(&attr);
-+		break;
- 	case BPF_PROG_LOAD:
- 		err = bpf_prog_load(&attr, uattr);
- 		break;
+Note, here's the current state now updated with full BTF support
+in bpftool to be able to inspect global data maps. I'm planning
+to do one last round on the series (at latest end of week), so
+don't apply yet. ;)
+
+  rfc v3 -> v3:
+   - Implement BTF support in kernel, libbpf, bpftool, add tests
+   - Fix idx + off conversion (Andrii)
+   - Document lower / higher bits for direct value access (Andrii)
+   - Add tests with small value size (Andrii)
+  v2 -> rfc v3:
+   - Add index selection into ldimm64 (Andrii)
+   - Fix missing fdput() (Jann)
+   - Reject invalid flags in BPF_F_*_PROG (Jakub)
+   - Complete rework of libbpf support, includes:
+    - Add objname to map name (Stanislav)
+    - Make .rodata map full read-only after setup (Andrii)
+    - Merge relocation handling into single one (Andrii)
+    - Store global maps into obj->maps array (Andrii, Alexei)
+    - Debug message when skipping section (Andrii)
+    - Reject non-static global data till we have
+      semantics for sharing them (Yonghong, Andrii, Alexei)
+    - More test cases and completely reworked prog test (Alexei)
+   - Fixes, cleanups, etc all over the set
+   - Not yet addressed:
+    - Make BTF mandatory for these maps (Alexei)
+    -> Waiting till BTF support for these lands first
+  v1 -> v2:
+    - Instead of 32-bit static data, implement full global
+      data support (Alexei)
+
+  [0] https://patchwork.ozlabs.org/cover/1040290/
+  [1] http://vger.kernel.org/lpc-bpf2018.html#session-3
+
+Daniel Borkmann (13):
+  bpf: implement lookup-free direct value access for maps
+  bpf: add program side {rd,wr}only support for maps
+  bpf: add syscall side map lock support
+  bpf: allow . char as part of the object name
+  bpf: add specification for BTF Var and DataSec kinds
+  bpf: kernel side support for BTF Var and DataSec
+  bpf: allow for key-less BTF in array map
+  bpf: sync {btf,bpf}.h uapi header from tools infrastructure
+  bpf, libbpf: support global data/bss/rodata sections
+  bpf, libbpf: add support for BTF Var and DataSec
+  bpf: bpftool support for dumping data/bss/rodata sections
+  bpf, selftest: test {rd,wr}only flags and direct value access
+  bpf, selftest: add test cases for BTF Var and DataSec
+
+Joe Stringer (2):
+  bpf, libbpf: refactor relocation handling
+  bpf, selftest: test global data/bss/rodata sections
+
+ Documentation/bpf/btf.rst                          |  57 +++
+ include/linux/bpf.h                                |  35 +-
+ include/linux/bpf_verifier.h                       |   4 +
+ include/linux/btf.h                                |   2 +
+ include/uapi/linux/bpf.h                           |  24 +-
+ include/uapi/linux/btf.h                           |  32 +-
+ kernel/bpf/arraymap.c                              |  47 +-
+ kernel/bpf/btf.c                                   | 400 ++++++++++++++-
+ kernel/bpf/core.c                                  |   3 +-
+ kernel/bpf/disasm.c                                |   5 +-
+ kernel/bpf/hashtab.c                               |   6 +-
+ kernel/bpf/local_storage.c                         |   8 +-
+ kernel/bpf/lpm_trie.c                              |   6 +-
+ kernel/bpf/queue_stack_maps.c                      |   6 +-
+ kernel/bpf/syscall.c                               | 126 ++++-
+ kernel/bpf/verifier.c                              | 155 ++++--
+ tools/bpf/bpftool/btf_dumper.c                     |  59 +++
+ tools/bpf/bpftool/map.c                            |  10 +-
+ tools/bpf/bpftool/xlated_dumper.c                  |   6 +
+ tools/include/linux/filter.h                       |  14 +
+ tools/include/uapi/linux/bpf.h                     |  24 +-
+ tools/include/uapi/linux/btf.h                     |  32 +-
+ tools/lib/bpf/bpf.c                                |  10 +
+ tools/lib/bpf/bpf.h                                |   1 +
+ tools/lib/bpf/btf.c                                |  97 +++-
+ tools/lib/bpf/btf.h                                |   3 +
+ tools/lib/bpf/libbpf.c                             | 537 ++++++++++++++++----
+ tools/lib/bpf/libbpf.h                             |   5 +
+ tools/lib/bpf/libbpf.map                           |   7 +
+ tools/testing/selftests/bpf/bpf_helpers.h          |   8 +-
+ .../testing/selftests/bpf/prog_tests/global_data.c | 157 ++++++
+ .../testing/selftests/bpf/progs/test_global_data.c | 106 ++++
+ tools/testing/selftests/bpf/test_btf.c             | 552 ++++++++++++++++++++-
+ tools/testing/selftests/bpf/test_verifier.c        |  53 +-
+ .../testing/selftests/bpf/verifier/array_access.c  | 159 ++++++
+ .../selftests/bpf/verifier/direct_value_access.c   | 262 ++++++++++
+ 36 files changed, 2812 insertions(+), 206 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/global_data.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_global_data.c
+ create mode 100644 tools/testing/selftests/bpf/verifier/direct_value_access.c
+
 -- 
 2.9.5
 
