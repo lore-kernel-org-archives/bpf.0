@@ -2,111 +2,93 @@ Return-Path: <SRS0=+eov=SG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_MUTT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1145BC10F05
-	for <bpf@archiver.kernel.org>; Thu,  4 Apr 2019 08:47:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB2EFC4360F
+	for <bpf@archiver.kernel.org>; Thu,  4 Apr 2019 12:24:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E1AE320882
-	for <bpf@archiver.kernel.org>; Thu,  4 Apr 2019 08:47:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AE499206C0
+	for <bpf@archiver.kernel.org>; Thu,  4 Apr 2019 12:24:37 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iwJ0FvOa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728794AbfDDIrZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 4 Apr 2019 04:47:25 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:38164 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728543AbfDDIrZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 4 Apr 2019 04:47:25 -0400
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id C21B081E19;
-        Thu,  4 Apr 2019 08:47:24 +0000 (UTC)
-Received: from krava (unknown [10.40.205.150])
-        by smtp.corp.redhat.com (Postfix) with SMTP id A09216C758;
-        Thu,  4 Apr 2019 08:47:21 +0000 (UTC)
-Date:   Thu, 4 Apr 2019 10:47:20 +0200
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Arnaldo Carvalho de Melo <acme@redhat.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>, andrii.nakryiko@gmail.com,
-        bpf@vger.kernel.org, netdev@vger.kernel.org, kernel-team@fb.com,
-        Andrii Nakryiko <andriin@fb.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Alexei Starovoitov <ast@fb.com>, Yonghong Song <yhs@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Subject: Re: [PATCH bpf-next] kbuild: add ability to generate BTF type info
- for vmlinux
-Message-ID: <20190404084720.GG32001@krava>
-References: <20190402164950.429597-1-andrii.nakryiko@gmail.com>
- <20190403084619.GA23855@krava>
- <611b4f67-801e-1bab-7a43-a16d341187ba@iogearbox.net>
- <20190403091258.GA24875@krava>
- <20190404004042.GA7400@redhat.com>
+        id S1729786AbfDDMY0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 4 Apr 2019 08:24:26 -0400
+Received: from mail-yb1-f193.google.com ([209.85.219.193]:42233 "EHLO
+        mail-yb1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727562AbfDDMYZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 4 Apr 2019 08:24:25 -0400
+Received: by mail-yb1-f193.google.com with SMTP id x84so903937ybg.9;
+        Thu, 04 Apr 2019 05:24:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=s3qpVVmxyOtu+1LyTKJENQDRUtah03qnRLReICoWpfQ=;
+        b=iwJ0FvOau3sebooPyMR1N0zFk8DyjSwl07Pmxc7tFDOK55SV6DHo0rVvw9oyGU9tvn
+         UldxEh3pekjqPCn9VK+2pZ5RaS+4uaDwzFDge9JQjC6E/D/wsZVt04mvcGYy3tX6x601
+         LDfKzMqL8WRl/1sZVRZIbaAFsTstfxTsm6au3x+0NV5gAJN16V5hzNtrzfDtGiGiwrpY
+         qSAmho7NXbqi8f6VBjgImWlILbAeAsHitmAVdFqUvgInnLyLxaN+z7aCZlc2QE/t14ZK
+         4dMQmPzsEg8DvcHJRaJZlf3TVavi9qf6peVHo5TWdQmK9lDH81cFs2/3qZiTwK5F1vhf
+         6DAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=s3qpVVmxyOtu+1LyTKJENQDRUtah03qnRLReICoWpfQ=;
+        b=jRGsIIcAH4jdFVNEwL7mUGLULMrHPpaZ4IjuBvpnocNFY3zNn4XghhtqIL/btfQdSQ
+         YM6IRnfYhdzhjTUCnCmY5Y9/6AJXDSHtxe75ttzBGnQ46akk7NLZicbVzK5KsAYk753t
+         DnwtR1O6dA/KZbcaUma/ucSlfrQFZG8AHLF96jOugDDuPCMVNSwpDpQn5ECpd3fjwghR
+         Cngx7YbspgUnYc2NrQf5oQIvB8ROmOm8O8n+x1xlPEdTcxbSjqeT7LtAFOSeoPO1byFz
+         NNo8wcAFGG1toFGI0j8Q9aNl7xbZf3JKKVkiHnO5EM7gfiqmsr0Iij8p1TE7e8L0FHin
+         4AbA==
+X-Gm-Message-State: APjAAAVWe2SKK1LSHQsa02iL3ig8DY17daxKRY7Yb+AJG2hIVxKbHtKG
+        rkvb4CfJm8lw/Jzv75PYdG/rm7uWlh+yc749t/E=
+X-Google-Smtp-Source: APXvYqwVPLJw8skjFVbPuYbFHg9pjK+SqOtxY0F7i8WzFyFtEKZWKj4ESFWV4/IfwlTN1+UZLSG8ZAYZ9qlIIHHEWys=
+X-Received: by 2002:a25:7492:: with SMTP id p140mr5159188ybc.394.1554380663980;
+ Thu, 04 Apr 2019 05:24:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190404004042.GA7400@redhat.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.25]); Thu, 04 Apr 2019 08:47:25 +0000 (UTC)
+References: <20190404081620.zx5rt2j2rjvdcglt@yubo-2> <af74fc26-2790-d83b-5320-bd4581e00585@gmail.com>
+In-Reply-To: <af74fc26-2790-d83b-5320-bd4581e00585@gmail.com>
+From:   Bo YU <tsu.yubo@gmail.com>
+Date:   Thu, 4 Apr 2019 20:24:13 +0800
+Message-ID: <CAKq8=3LNN1-KQ_33tRa8niQWT8YjD_0F_1qgzwPi35asaTQbBg@mail.gmail.com>
+Subject: Re: [PATCH] bpf:sample: fix field 'lock' has incomplete type in hbm.h
+To:     Eric Dumazet <eric.dumazet@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>, songliubraving@fb.com,
+        Netdev <netdev@vger.kernel.org>, Yonghong Song <yhs@fb.com>,
+        open list <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Apr 03, 2019 at 09:40:42PM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Wed, Apr 03, 2019 at 11:12:58AM +0200, Jiri Olsa escreveu:
-> > On Wed, Apr 03, 2019 at 11:04:28AM +0200, Daniel Borkmann wrote:
-> > > On 04/03/2019 10:46 AM, Jiri Olsa wrote:
-> > > > On Tue, Apr 02, 2019 at 09:49:50AM -0700, andrii.nakryiko@gmail.com wrote:
-> > > >> From: Andrii Nakryiko <andriin@fb.com>
-> > > >>
-> > > >> This patch adds new config option to trigger generation of BTF type
-> > > >> information from DWARF debuginfo for vmlinux and kernel modules through
-> > > >> pahole, which in turn relies on libbpf for btf_dedup() algorithm.
-> > > > I'm using the latest pahole from git tree:
-> 
-> > > >   https://github.com/acmel/dwarves.git
-> 
-> I've updated this oen as well, but the canonical one is at:
-> 
-> git://git.kernel.org/pub/scm/devel/pahole/pahole.git
-> 
-> See the fix below.
-> 
-> > > > and getting pahole crash:
-> 
-> > > >   LD      vmlinux
-> > > >   BTF     vmlinux
-> > > > die__process_inline_expansion: DW_TAG_label (0xa) @ <0x3eef8> not handled!
-> > > > scripts/link-vmlinux.sh: line 96: 31222 Segmentation fault      (core dumped) LLVM_OBJCOPY=${OBJCOPY} ${PAHOLE} -J ${1}
-> > > > make[1]: *** [/home/jolsa/linux/Makefile:1025: vmlinux] Error 139
-> > > > make: *** [Makefile:170: sub-make] Error 2
-> 
-> > > > is there some other source/dependency I'm missing?
-> 
-> > > Yesterday night, I've tested with [0] but seems to have the same HEAD as
-> > > the github repo you pointed out. Seems the above is coming from pahole's
-> > > __die__process_tag() bailing out with default for DW_TAG_label?
-> 
-> > > On my side worked fine:
->  
-> > hum, I also had to change the version of pahole in the patch to allow
-> > version v1.12, because both latest pahole sources are on version 1.12,
-> > did u have to do that? looks like there's v1.13 somewhere ;-)
-> 
-> So, I've reproduced the problem and fixed it, please pull my latest
-> master branch from git://git.kernel.org/pub/scm/devel/pahole/pahole.git,
-> please do the hack to make it expect v1.12, I'll try and relase v1.13
-> soon, if nothing else pops up soon.
-
-  ...
-  LD      vmlinux
-  BTF     vmlinux
-  SORTEX  vmlinux
-
-works nicely now, thanks ;-)
-
-jirka
+On Thu, Apr 4, 2019 at 4:30 PM Eric Dumazet <eric.dumazet@gmail.com> wrote:
+>
+>
+>
+> On 04/04/2019 01:16 AM, Bo YU wrote:
+> > When compiling sample/bpf:
+> >
+> > samples/bpf/hbm.h:12:23: error: field =E2=80=98lock=E2=80=99 has incomp=
+lete type
+> >  struct bpf_spin_lock lock;
+> >
+> > Fixes: 187d0738ff35(bpf: Sample HBM BPF program to limit egress bw)
+> > Signed-off-by: Bo YU <tsu.yubo@gmail.com>
+> > ---
+>
+> This patch makes absolutely no sense.
+>
+> Please carefully read samples/bpf/README.rst
+Ok, got it.
+Thanks,
+>
+>
