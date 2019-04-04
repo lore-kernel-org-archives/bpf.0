@@ -2,127 +2,93 @@ Return-Path: <SRS0=+eov=SG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_NEOMUTT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D878C10F05
-	for <bpf@archiver.kernel.org>; Thu,  4 Apr 2019 08:16:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33511C4360F
+	for <bpf@archiver.kernel.org>; Thu,  4 Apr 2019 08:29:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4DED22075E
-	for <bpf@archiver.kernel.org>; Thu,  4 Apr 2019 08:16:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EC49620674
+	for <bpf@archiver.kernel.org>; Thu,  4 Apr 2019 08:29:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U8I/KkTB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KC3RZeW7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727108AbfDDIQY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 4 Apr 2019 04:16:24 -0400
-Received: from mail-yw1-f66.google.com ([209.85.161.66]:35248 "EHLO
-        mail-yw1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725904AbfDDIQY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 4 Apr 2019 04:16:24 -0400
-Received: by mail-yw1-f66.google.com with SMTP id d132so656320ywa.2;
-        Thu, 04 Apr 2019 01:16:23 -0700 (PDT)
+        id S1727398AbfDDI3M (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 4 Apr 2019 04:29:12 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:36768 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727331AbfDDI3M (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 4 Apr 2019 04:29:12 -0400
+Received: by mail-wm1-f67.google.com with SMTP id h18so2245757wml.1;
+        Thu, 04 Apr 2019 01:29:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:mime-version
-         :content-disposition:content-transfer-encoding:user-agent;
-        bh=cDaTSDZgwH1tEyxeK1FWu9PQ+2EvkmR6IA94ykP8ez8=;
-        b=U8I/KkTB7UVhjNfpPCw3GwiL3pdRGT1ZlKaenHOQgoBse9ydTXqf4BFYxJ84DcDype
-         qjU1HGL5cllchRxEBNNnraPuOut+jiGfxBd2Oc6bYnkVLDcOb6t5ABicvoNeUGxgLRvg
-         9ecZckne18kSHudZvx8pegi7SkdU5GN3hwPjmZndIYVlWdxwFu6ZzsdKwoZx+A/MpZdn
-         6jHDVa1SQDZSkAwACFoeuEh0D5di1KeIB7s2y5oqHtjVpt4OoFEenM45tL6NmF7DT+bJ
-         W8ezQ8wy18EwLWA6Jvi5PqARmtpViTNj4yjcTPzGcdkd72JOlKfoj63Ik9EWxkQ5hQKD
-         FP5Q==
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=6rr1Q4Juu1NOSJC4GmN+YRZy+Y34ixA1m6mRTYvKEfQ=;
+        b=KC3RZeW7aj8ls/hkOARhnDkJEy5ncZIp92gWkLyYcbpBsbV8lYUioqbRPcaI0nDFNY
+         8MVh0DIv/JucxeiOowzX/y6TntmEDyYK0FUa/Scdk+TqlCblKJjxxnpJLK9Ud93y4twa
+         XA7SuLP5FmUlSEjO+DwJ6WGe/jFwQLN9ibNkUEw+apthCKPf1GsfeZVnwlwKLc31KEaX
+         3W0hV6eK6AtTZEhNfiHB34+nLnUd9173+ibGr4I1iz+W0J3HBBIwgyNJqGvd8aX16KC1
+         ygVnx7QSQqJUroUoQgDn5SOu4AFObXFY+rf+q5F2Dho2qMcJxwjITP+IJ/1ZNy2vYPn8
+         ZfVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:mime-version:content-disposition
-         :content-transfer-encoding:user-agent;
-        bh=cDaTSDZgwH1tEyxeK1FWu9PQ+2EvkmR6IA94ykP8ez8=;
-        b=c/2XkgJwRmNb/zKjsmkVUepE38+AffaaIjCalDL1bQ2LgFMuStUhO9lvYtBHQnJaZW
-         G4d62GYC0M1COX0j3GCA31Sdog/I2ZYw4cWOjqN/VCJZSni8thdpmlykU2CdB66yKnqf
-         ASK88GF+dYCv7kahxpMBVKefe15k4Chk2W8tzfbFxhldVNZZjnIP28TIj5l1huiMhD5f
-         FrfTa/6C9jUjbRlRL8cs8NHv8zIgxtqmFx57lIJ1doO0R4zh/g8vLsCTJt6opW5e0XTk
-         s999vl0KMrNfpow7mqGbDJ+AET7BkOmhKj2lPLzO8t4vC5GJzKaADq7x4fQWhIWdNtef
-         2oaA==
-X-Gm-Message-State: APjAAAV2UO9FD/OlpD6y5/qVZxklVQchwy94PUCmTrapYa67uJhBI5E5
-        NQgy+CcN6/Du3I1e+ImFr50=
-X-Google-Smtp-Source: APXvYqzo/uVNwd535ausfjPQgjH0/K8IpYbSdqfGpZQIQu6N37B2dvWXGeLN9pQTOI9FgU0mvD4m+w==
-X-Received: by 2002:a0d:eb13:: with SMTP id u19mr3459315ywe.110.1554365783343;
-        Thu, 04 Apr 2019 01:16:23 -0700 (PDT)
-Received: from yubo-2 ([191.101.9.198])
-        by smtp.gmail.com with ESMTPSA id 131sm7049810ywp.20.2019.04.04.01.16.22
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6rr1Q4Juu1NOSJC4GmN+YRZy+Y34ixA1m6mRTYvKEfQ=;
+        b=jD9tTz7SZTxgsFmdPsv8qhPDYXW4EB1DYs6J5NO18CyorhSZke7ksZRKGjGAsmyQEU
+         A5wlb9BGFraPFmjIKsH0IIkf6DqcaOQtez9zmIrSj2hflEstVaxUelijNV5yAcrcm/02
+         bNuPR537pa+wKacE9BH4lmoAQMGsuRhpwNqwacakWXkh5BZLy/zGb0Pfe5UuqDA8L+b5
+         Ldmx6spWSP2qAtsnV7EzVb9Ynh+Ty+xdZ1Tq9x52LEbyQqynM36XqkpoDGOMqxXpnTas
+         U//ZAOTO9qoJ+aElDOiEBbZpT4zzDAIXskg64S0CCe8KJ+sq28KTSqetif1dqjmCjTY+
+         JEUg==
+X-Gm-Message-State: APjAAAUMj7jZ9QUIaOQyIdvujfkopgXACcVVueqfay1qQis7cFSbqQLd
+        +q532zQ6BSoQ7eCgWgp4AwxEtVR2
+X-Google-Smtp-Source: APXvYqwrqBjr+KyIfDllXdGtRyt0u+8Jz8GsxNzgfTa1s+KMqJIJtWdvoJCo0U6U39KU8CJF4JdlKQ==
+X-Received: by 2002:a1c:d106:: with SMTP id i6mr2926434wmg.134.1554366550361;
+        Thu, 04 Apr 2019 01:29:10 -0700 (PDT)
+Received: from [192.168.8.147] (133.85.136.77.rev.sfr.net. [77.136.85.133])
+        by smtp.gmail.com with ESMTPSA id j64sm23149128wmb.36.2019.04.04.01.29.08
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 04 Apr 2019 01:16:23 -0700 (PDT)
-Date:   Thu, 4 Apr 2019 04:16:21 -0400
-From:   Bo YU <tsu.yubo@gmail.com>
+        Thu, 04 Apr 2019 01:29:09 -0700 (PDT)
+Subject: Re: [PATCH] bpf:sample: fix field 'lock' has incomplete type in hbm.h
 To:     ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
-        songliubraving@fb.com, netdev@vger.kernel.org, yhs@fb.com
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH] bpf:sample: fix field 'lock' has incomplete type in hbm.h
-Message-ID: <20190404081620.zx5rt2j2rjvdcglt@yubo-2>
-Mail-Followup-To: ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
         songliubraving@fb.com, netdev@vger.kernel.org, yhs@fb.com,
         linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+References: <20190404081620.zx5rt2j2rjvdcglt@yubo-2>
+From:   Eric Dumazet <eric.dumazet@gmail.com>
+Message-ID: <af74fc26-2790-d83b-5320-bd4581e00585@gmail.com>
+Date:   Thu, 4 Apr 2019 01:29:05 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
+In-Reply-To: <20190404081620.zx5rt2j2rjvdcglt@yubo-2>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-User-Agent: NeoMutt/20180512-62-03f98a
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When compiling sample/bpf:
 
-samples/bpf/hbm.h:12:23: error: field ‘lock’ has incomplete type
-  struct bpf_spin_lock lock;
 
-Fixes: 187d0738ff35(bpf: Sample HBM BPF program to limit egress bw)
-Signed-off-by: Bo YU <tsu.yubo@gmail.com>
----
- samples/bpf/hbm.h          | 2 +-
- samples/bpf/hbm_out_kern.c | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 04/04/2019 01:16 AM, Bo YU wrote:
+> When compiling sample/bpf:
+> 
+> samples/bpf/hbm.h:12:23: error: field ‘lock’ has incomplete type
+>  struct bpf_spin_lock lock;
+> 
+> Fixes: 187d0738ff35(bpf: Sample HBM BPF program to limit egress bw)
+> Signed-off-by: Bo YU <tsu.yubo@gmail.com>
+> ---
 
-diff --git a/samples/bpf/hbm.h b/samples/bpf/hbm.h
-index 518e8147d084..7ce18cb9e365 100644
---- a/samples/bpf/hbm.h
-+++ b/samples/bpf/hbm.h
-@@ -9,7 +9,7 @@
-  * Include file for Host Bandwidth Management (HBM) programs
-  */
- struct hbm_vqueue {
--	struct bpf_spin_lock lock;
-+	struct bpf_spin_lock *lock;
- 	/* 4 byte hole */
- 	unsigned long long lasttime;	/* In ns */
- 	int credit;			/* In bytes */
-diff --git a/samples/bpf/hbm_out_kern.c b/samples/bpf/hbm_out_kern.c
-index f806863d0b79..04c4f3d6ab9a 100644
---- a/samples/bpf/hbm_out_kern.c
-+++ b/samples/bpf/hbm_out_kern.c
-@@ -90,7 +90,7 @@ int _hbm_out_cg(struct __sk_buff *skb)
- 	curtime = bpf_ktime_get_ns();
+This patch makes absolutely no sense.
 
- 	// Begin critical section
--	bpf_spin_lock(&qdp->lock);
-+	bpf_spin_lock(qdp->lock);
- 	credit = qdp->credit;
- 	delta = curtime - qdp->lasttime;
- 	/* delta < 0 implies that another process with a curtime greater
-@@ -105,7 +105,7 @@ int _hbm_out_cg(struct __sk_buff *skb)
- 	}
- 	credit -= len;
- 	qdp->credit = credit;
--	bpf_spin_unlock(&qdp->lock);
-+	bpf_spin_unlock(qdp->lock);
- 	// End critical section
+Please carefully read samples/bpf/README.rst
 
- 	// Check if we should update rate
---
-2.11.0
 
