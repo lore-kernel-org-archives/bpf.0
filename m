@@ -2,93 +2,61 @@ Return-Path: <SRS0=+eov=SG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB2EFC4360F
-	for <bpf@archiver.kernel.org>; Thu,  4 Apr 2019 12:24:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B944C4360F
+	for <bpf@archiver.kernel.org>; Thu,  4 Apr 2019 13:27:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AE499206C0
-	for <bpf@archiver.kernel.org>; Thu,  4 Apr 2019 12:24:37 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iwJ0FvOa"
+	by mail.kernel.org (Postfix) with ESMTP id 3314E206B7
+	for <bpf@archiver.kernel.org>; Thu,  4 Apr 2019 13:27:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729786AbfDDMY0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 4 Apr 2019 08:24:26 -0400
-Received: from mail-yb1-f193.google.com ([209.85.219.193]:42233 "EHLO
-        mail-yb1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727562AbfDDMYZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 4 Apr 2019 08:24:25 -0400
-Received: by mail-yb1-f193.google.com with SMTP id x84so903937ybg.9;
-        Thu, 04 Apr 2019 05:24:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=s3qpVVmxyOtu+1LyTKJENQDRUtah03qnRLReICoWpfQ=;
-        b=iwJ0FvOau3sebooPyMR1N0zFk8DyjSwl07Pmxc7tFDOK55SV6DHo0rVvw9oyGU9tvn
-         UldxEh3pekjqPCn9VK+2pZ5RaS+4uaDwzFDge9JQjC6E/D/wsZVt04mvcGYy3tX6x601
-         LDfKzMqL8WRl/1sZVRZIbaAFsTstfxTsm6au3x+0NV5gAJN16V5hzNtrzfDtGiGiwrpY
-         qSAmho7NXbqi8f6VBjgImWlILbAeAsHitmAVdFqUvgInnLyLxaN+z7aCZlc2QE/t14ZK
-         4dMQmPzsEg8DvcHJRaJZlf3TVavi9qf6peVHo5TWdQmK9lDH81cFs2/3qZiTwK5F1vhf
-         6DAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=s3qpVVmxyOtu+1LyTKJENQDRUtah03qnRLReICoWpfQ=;
-        b=jRGsIIcAH4jdFVNEwL7mUGLULMrHPpaZ4IjuBvpnocNFY3zNn4XghhtqIL/btfQdSQ
-         YM6IRnfYhdzhjTUCnCmY5Y9/6AJXDSHtxe75ttzBGnQ46akk7NLZicbVzK5KsAYk753t
-         DnwtR1O6dA/KZbcaUma/ucSlfrQFZG8AHLF96jOugDDuPCMVNSwpDpQn5ECpd3fjwghR
-         Cngx7YbspgUnYc2NrQf5oQIvB8ROmOm8O8n+x1xlPEdTcxbSjqeT7LtAFOSeoPO1byFz
-         NNo8wcAFGG1toFGI0j8Q9aNl7xbZf3JKKVkiHnO5EM7gfiqmsr0Iij8p1TE7e8L0FHin
-         4AbA==
-X-Gm-Message-State: APjAAAVWe2SKK1LSHQsa02iL3ig8DY17daxKRY7Yb+AJG2hIVxKbHtKG
-        rkvb4CfJm8lw/Jzv75PYdG/rm7uWlh+yc749t/E=
-X-Google-Smtp-Source: APXvYqwVPLJw8skjFVbPuYbFHg9pjK+SqOtxY0F7i8WzFyFtEKZWKj4ESFWV4/IfwlTN1+UZLSG8ZAYZ9qlIIHHEWys=
-X-Received: by 2002:a25:7492:: with SMTP id p140mr5159188ybc.394.1554380663980;
- Thu, 04 Apr 2019 05:24:23 -0700 (PDT)
+        id S1729122AbfDDN1L (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 4 Apr 2019 09:27:11 -0400
+Received: from www62.your-server.de ([213.133.104.62]:51946 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726269AbfDDN1L (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 4 Apr 2019 09:27:11 -0400
+Received: from [78.46.172.3] (helo=sslproxy06.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hC2Oa-0003q5-EH; Thu, 04 Apr 2019 15:27:08 +0200
+Received: from [2a02:120b:c3fc:feb0:dda7:bd28:a848:50e2] (helo=linux.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hC2Oa-0004x4-8j; Thu, 04 Apr 2019 15:27:08 +0200
+Subject: Re: [PATCH bpf] flow_dissector: rst'ify documentation
+To:     Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     davem@davemloft.net, ast@kernel.org
+References: <20190403205318.123125-1-sdf@google.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <d7101fea-8235-5f3d-ebb8-edffce41c161@iogearbox.net>
+Date:   Thu, 4 Apr 2019 15:27:07 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.3.0
 MIME-Version: 1.0
-References: <20190404081620.zx5rt2j2rjvdcglt@yubo-2> <af74fc26-2790-d83b-5320-bd4581e00585@gmail.com>
-In-Reply-To: <af74fc26-2790-d83b-5320-bd4581e00585@gmail.com>
-From:   Bo YU <tsu.yubo@gmail.com>
-Date:   Thu, 4 Apr 2019 20:24:13 +0800
-Message-ID: <CAKq8=3LNN1-KQ_33tRa8niQWT8YjD_0F_1qgzwPi35asaTQbBg@mail.gmail.com>
-Subject: Re: [PATCH] bpf:sample: fix field 'lock' has incomplete type in hbm.h
-To:     Eric Dumazet <eric.dumazet@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>, songliubraving@fb.com,
-        Netdev <netdev@vger.kernel.org>, Yonghong Song <yhs@fb.com>,
-        open list <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190403205318.123125-1-sdf@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.3/25409/Thu Apr  4 09:53:59 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Apr 4, 2019 at 4:30 PM Eric Dumazet <eric.dumazet@gmail.com> wrote:
->
->
->
-> On 04/04/2019 01:16 AM, Bo YU wrote:
-> > When compiling sample/bpf:
-> >
-> > samples/bpf/hbm.h:12:23: error: field =E2=80=98lock=E2=80=99 has incomp=
-lete type
-> >  struct bpf_spin_lock lock;
-> >
-> > Fixes: 187d0738ff35(bpf: Sample HBM BPF program to limit egress bw)
-> > Signed-off-by: Bo YU <tsu.yubo@gmail.com>
-> > ---
->
-> This patch makes absolutely no sense.
->
-> Please carefully read samples/bpf/README.rst
-Ok, got it.
-Thanks,
->
->
+On 04/03/2019 10:53 PM, Stanislav Fomichev wrote:
+> Rename bpf_flow_dissector.txt to bpf_flow_dissector.rst and fix
+> formatting. Also, link it from the Documentation/networking/index.rst.
+> 
+> Tested with 'make htmldocs' to make sure it looks reasonable.
+> 
+> Fixes: ae82899bbe92 ("flow_dissector: document BPF flow dissector environment")
+> Signed-off-by: Stanislav Fomichev <sdf@google.com>
+
+Applied, thanks!
