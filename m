@@ -2,90 +2,90 @@ Return-Path: <SRS0=+eov=SG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C40B3C4360F
-	for <bpf@archiver.kernel.org>; Thu,  4 Apr 2019 15:05:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67F68C4360F
+	for <bpf@archiver.kernel.org>; Thu,  4 Apr 2019 15:21:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 965C520882
-	for <bpf@archiver.kernel.org>; Thu,  4 Apr 2019 15:05:23 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KZouWLEF"
+	by mail.kernel.org (Postfix) with ESMTP id 322E32147C
+	for <bpf@archiver.kernel.org>; Thu,  4 Apr 2019 15:21:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728040AbfDDPFX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 4 Apr 2019 11:05:23 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:36607 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726942AbfDDPFX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 4 Apr 2019 11:05:23 -0400
-Received: by mail-pg1-f194.google.com with SMTP id 85so1387246pgc.3;
-        Thu, 04 Apr 2019 08:05:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=i0GPMtIdS9HI8hPLb6G/yKs/AZfA+Fsy7NKeFFIZQ5I=;
-        b=KZouWLEFwtnGGt6COaBERFJuH2YpHA/QGz/nPVEyoRaqBJr6lHRGD0NAH8delTmaOS
-         WWhDuSsbto0ZSW/RtN3F9+nKhZasayKLWIXYHDoNKiMtyP3HSWimQr//8+Wl1dvpCPWe
-         CPEg6PrILWKG7TDmJrtuHLKBVSEE3bj6/XDNTg1IRIuhipL6jm4BzcDPLCR1b+IxLiSD
-         V+5CLJOtepG1Kmfq+cp+zBUscfxIn6Q/nvjX3WjP2rGX8eVGQ5wSNAolvTPWIbDvi1bQ
-         eyR3Dk2wC6fGPkoyn8Nj1pbLpNezTIttHxbEyd9zYfvzfn5YEFqEdPJTrT/jjmxL1rKJ
-         lTiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=i0GPMtIdS9HI8hPLb6G/yKs/AZfA+Fsy7NKeFFIZQ5I=;
-        b=jxiU0WPqEjLBSyPU6sJnetayfJNxKC+9pDryUIIo5m2qqW6nsIUh3EhkTqi3/T/p4C
-         4A7XpOadomkCHgK66Tr2lPgW2VGac38TO+puWzCjWAHhX4uMe05uvJEbdSmDruf4QF14
-         Fpryca1Pcn4htHtqPbHAX6ngSH2cBKbF/AfFIO45U5bUO0u9XLrgvO2lWkSvkvhLJlxt
-         oaq8dLSZcQJedwzHoVibTrFSqAhyrKImQL4Ge7nF1bDYiceiwL3n/cKT5H5shLnsRv0l
-         4nPhZduJ9e8UpK5sLVurBvkf2uEPmpZ4KcxArCN2C0XhhImTb/y4tiZS0CjNZNx21j0h
-         YNKw==
-X-Gm-Message-State: APjAAAWyryO9CU953HjtofXsP8MHftjr+/IxjSDByfN/WhmJ9Gd+OMkZ
-        25aSyXjKttkHH6hL6rjcM74=
-X-Google-Smtp-Source: APXvYqwZfcmWrd1a12+a7y8oe7nJ8zmZS6AavMEnckNCNm6iPRtU6Fb4wm6a+KRUY/gDgiz3Nbiyhw==
-X-Received: by 2002:a65:6295:: with SMTP id f21mr5882702pgv.129.1554390322511;
-        Thu, 04 Apr 2019 08:05:22 -0700 (PDT)
-Received: from ?IPv6:2601:282:800:fd80:c5a1:6d6:d92c:c7c1? ([2601:282:800:fd80:c5a1:6d6:d92c:c7c1])
-        by smtp.googlemail.com with ESMTPSA id s5sm22369684pgv.8.2019.04.04.08.05.20
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 04 Apr 2019 08:05:21 -0700 (PDT)
-Subject: Re: [PATCH bpf-next] selftests: bpf: add VRF test cases to
- lwt_ip_encap test.
-To:     Martin Lau <kafai@fb.com>, Peter Oskolkov <posk@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Peter Oskolkov <posk@posk.io>
-References: <20190403154338.29990-1-posk@google.com>
- <20190404050941.w3fegqpm4kmyx3n5@kafai-mbp.dhcp.thefacebook.com>
-From:   David Ahern <dsahern@gmail.com>
-Message-ID: <a6e18347-0b8e-067e-a1d2-972084d102de@gmail.com>
-Date:   Thu, 4 Apr 2019 09:05:19 -0600
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:52.0)
- Gecko/20100101 Thunderbird/52.9.1
-MIME-Version: 1.0
-In-Reply-To: <20190404050941.w3fegqpm4kmyx3n5@kafai-mbp.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1727165AbfDDPVo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 4 Apr 2019 11:21:44 -0400
+Received: from www62.your-server.de ([213.133.104.62]:47698 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726952AbfDDPVn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 4 Apr 2019 11:21:43 -0400
+Received: from [2a02:120b:c3fc:feb0:dda7:bd28:a848:50e2] (helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hC4BR-0006hY-GL; Thu, 04 Apr 2019 17:21:41 +0200
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     davem@davemloft.net
+Cc:     daniel@iogearbox.net, ast@kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: pull-request: bpf 2019-04-04
+Date:   Thu,  4 Apr 2019 17:21:41 +0200
+Message-Id: <20190404152141.19803-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.9.5
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.3/25409/Thu Apr  4 09:53:59 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 4/3/19 11:09 PM, Martin Lau wrote:
-> On Wed, Apr 03, 2019 at 08:43:38AM -0700, Peter Oskolkov wrote:
->> This patch adds tests validating that VRF and BPF-LWT
->> encap work together well, as requested by David Ahern.
-> LGTM.  David Ahern, please review also.
-> 
+Hi David,
 
-looked at it last night and hit some problems running the script. Will
-take another look today.
+The following pull-request contains BPF updates for your *net* tree.
+
+The main changes are:
+
+1) Batch of fixes to the existing BPF flow dissector API to support
+   calling BPF programs from the eth_get_headlen context (support for
+   latter is planned to be added in bpf-next), from Stanislav.
+
+Please consider pulling these changes from:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+
+Thanks a lot!
+
+----------------------------------------------------------------
+
+The following changes since commit b2e54b09a3d29c4db883b920274ca8dca4d9f04d:
+
+  ip6_tunnel: Match to ARPHRD_TUNNEL6 for dev type (2019-04-02 13:19:34 -0700)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git 
+
+for you to fetch changes up to 5eed7898626bedd6405421550c0c6e8ab9591bb2:
+
+  flow_dissector: rst'ify documentation (2019-04-04 15:25:23 +0200)
+
+----------------------------------------------------------------
+Daniel Borkmann (1):
+      Merge branch 'bpf-flow-dissector-fixes'
+
+Stanislav Fomichev (6):
+      selftests/bpf: fix vlan handling in flow dissector program
+      net/flow_dissector: pass flow_keys->n_proto to BPF programs
+      flow_dissector: fix clamping of BPF flow_keys for non-zero nhoff
+      flow_dissector: allow access only to a subset of __sk_buff fields
+      flow_dissector: document BPF flow dissector environment
+      flow_dissector: rst'ify documentation
+
+ Documentation/networking/bpf_flow_dissector.rst    | 126 +++++++++++++++++++++
+ Documentation/networking/index.rst                 |   1 +
+ net/core/filter.c                                  |  16 +--
+ net/core/flow_dissector.c                          |   4 +-
+ .../selftests/bpf/prog_tests/flow_dissector.c      |  68 +++++++++++
+ tools/testing/selftests/bpf/progs/bpf_flow.c       |  19 ++--
+ 6 files changed, 208 insertions(+), 26 deletions(-)
+ create mode 100644 Documentation/networking/bpf_flow_dissector.rst
