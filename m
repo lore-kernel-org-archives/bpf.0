@@ -6,31 +6,31 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D156BC282DC
-	for <bpf@archiver.kernel.org>; Fri,  5 Apr 2019 21:00:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FFB9C282DA
+	for <bpf@archiver.kernel.org>; Fri,  5 Apr 2019 21:00:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 83EA9218A6
-	for <bpf@archiver.kernel.org>; Fri,  5 Apr 2019 21:00:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7AB0C2175B
+	for <bpf@archiver.kernel.org>; Fri,  5 Apr 2019 21:00:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726774AbfDEVAT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 5 Apr 2019 17:00:19 -0400
-Received: from www62.your-server.de ([213.133.104.62]:55004 "EHLO
+        id S1726600AbfDEVAR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 5 Apr 2019 17:00:17 -0400
+Received: from www62.your-server.de ([213.133.104.62]:54916 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726599AbfDEVAT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 5 Apr 2019 17:00:19 -0400
+        with ESMTP id S1726605AbfDEVAD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 5 Apr 2019 17:00:03 -0400
 Received: from [178.197.248.24] (helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1hCVwO-00076x-1h; Fri, 05 Apr 2019 23:00:00 +0200
+        id 1hCVwM-00076Q-6j; Fri, 05 Apr 2019 22:59:58 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, ast@kernel.org, joe@wand.net.nz,
         yhs@fb.com, andrii.nakryiko@gmail.com, kafai@fb.com,
         Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v4 16/16] bpf, selftest: add test cases for BTF Var and DataSec
-Date:   Fri,  5 Apr 2019 22:59:42 +0200
-Message-Id: <725e487b87bd5645ea66ac5372b0baec17489fef.1554497408.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next v4 13/16] bpf: bpftool support for dumping data/bss/rodata sections
+Date:   Fri,  5 Apr 2019 22:59:39 +0200
+Message-Id: <affade98388455fffd1c63c1d9a1b7d898a05933.1554497408.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <cover.1554497408.git.daniel@iogearbox.net>
 References: <cover.1554497408.git.daniel@iogearbox.net>
@@ -43,731 +43,166 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Extend test_btf with various positive and negative tests around
-BTF verification of kind Var and DataSec. All passing as well:
+Add the ability to bpftool to handle BTF Var and DataSec kinds
+in order to dump them out of btf_dumper_type(). The value has a
+single object with the section name, which itself holds an array
+of variables it dumps. A single variable is an object by itself
+printed along with its name. From there further type information
+is dumped along with corresponding value information.
 
-  # ./test_btf
-  [...]
-  BTF raw test[4] (global data test #1): OK
-  BTF raw test[5] (global data test #2): OK
-  BTF raw test[6] (global data test #3): OK
-  BTF raw test[7] (global data test #4, unsupported linkage): OK
-  BTF raw test[8] (global data test #5, invalid var type): OK
-  BTF raw test[9] (global data test #6, invalid var type (fwd type)): OK
-  BTF raw test[10] (global data test #7, invalid var type (fwd type)): OK
-  BTF raw test[11] (global data test #8, invalid var size): OK
-  BTF raw test[12] (global data test #9, invalid var size): OK
-  BTF raw test[13] (global data test #10, invalid var size): OK
-  BTF raw test[14] (global data test #11, multiple section members): OK
-  BTF raw test[15] (global data test #12, invalid offset): OK
-  BTF raw test[16] (global data test #13, invalid offset): OK
-  BTF raw test[17] (global data test #14, invalid offset): OK
-  BTF raw test[18] (global data test #15, not var kind): OK
-  BTF raw test[19] (global data test #16, invalid var referencing sec): OK
-  BTF raw test[20] (global data test #17, invalid var referencing var): OK
-  BTF raw test[21] (global data test #18, invalid var loop): OK
-  BTF raw test[22] (global data test #19, invalid var referencing var): OK
-  BTF raw test[23] (global data test #20, invalid ptr referencing var): OK
-  BTF raw test[24] (global data test #21, var included in struct): OK
-  BTF raw test[25] (global data test #22, array of var): OK
-  [...]
-  PASS:167 SKIP:0 FAIL:0
+Example output from .rodata:
+
+  # ./bpftool m d i 150
+  [{
+          "value": {
+              ".rodata": [{
+                      "load_static_data.bar": 18446744073709551615
+                  },{
+                      "num2": 24
+                  },{
+                      "num5": 43947
+                  },{
+                      "num6": 171
+                  },{
+                      "str0": [97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,0,0,0,0,0,0
+                      ]
+                  },{
+                      "struct0": {
+                          "a": 42,
+                          "b": 4278120431,
+                          "c": 1229782938247303441
+                      }
+                  },{
+                      "struct2": {
+                          "a": 0,
+                          "b": 0,
+                          "c": 0
+                      }
+                  }
+              ]
+          }
+      }
+  ]
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- tools/testing/selftests/bpf/test_btf.c | 665 ++++++++++++++++++++++++++++++++-
- 1 file changed, 663 insertions(+), 2 deletions(-)
+ tools/bpf/bpftool/btf_dumper.c | 59 ++++++++++++++++++++++++++++++++++++++++++
+ tools/bpf/bpftool/map.c        | 10 ++++---
+ 2 files changed, 65 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_btf.c b/tools/testing/selftests/bpf/test_btf.c
-index 5afc3f7..08010e6 100644
---- a/tools/testing/selftests/bpf/test_btf.c
-+++ b/tools/testing/selftests/bpf/test_btf.c
-@@ -85,6 +85,11 @@ static int __base_pr(enum libbpf_print_level level __attribute__((unused)),
- #define BTF_UNION_ENC(name, nr_elems, sz)	\
- 	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_UNION, 0, nr_elems), sz)
+diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumper.c
+index e63bce0..8cafb9b 100644
+--- a/tools/bpf/bpftool/btf_dumper.c
++++ b/tools/bpf/bpftool/btf_dumper.c
+@@ -309,6 +309,48 @@ static int btf_dumper_struct(const struct btf_dumper *d, __u32 type_id,
+ 	return ret;
+ }
  
-+#define BTF_VAR_ENC(name, type, linkage)	\
-+	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_VAR, 0, 0), type), (linkage)
-+#define BTF_VAR_SECINFO_ENC(type, offset, size)	\
-+	(type), (offset), (size)
++static int btf_dumper_var(const struct btf_dumper *d, __u32 type_id,
++			  __u8 bit_offset, const void *data)
++{
++	const struct btf_type *t = btf__type_by_id(d->btf, type_id);
++	int ret;
 +
- #define BTF_MEMBER_ENC(name, type, bits_offset)	\
- 	(name), (type), (bits_offset)
- #define BTF_ENUM_ENC(name, val) (name), (val)
-@@ -291,7 +296,6 @@ static struct btf_raw_test raw_tests[] = {
- 	.value_type_id = 3,
- 	.max_entries = 4,
- },
--
++	jsonw_start_object(d->jw);
++	jsonw_name(d->jw, btf__name_by_offset(d->btf, t->name_off));
++	ret = btf_dumper_do_type(d, t->type, bit_offset, data);
++	jsonw_end_object(d->jw);
++
++	return ret;
++}
++
++static int btf_dumper_datasec(const struct btf_dumper *d, __u32 type_id,
++			      const void *data)
++{
++	struct btf_var_secinfo *vsi;
++	const struct btf_type *t;
++	int ret = 0, i, vlen;
++
++	t = btf__type_by_id(d->btf, type_id);
++	if (!t)
++		return -EINVAL;
++
++	vlen = BTF_INFO_VLEN(t->info);
++	vsi = (struct btf_var_secinfo *)(t + 1);
++
++	jsonw_start_object(d->jw);
++	jsonw_name(d->jw, btf__name_by_offset(d->btf, t->name_off));
++	jsonw_start_array(d->jw);
++	for (i = 0; i < vlen; i++) {
++		ret = btf_dumper_do_type(d, vsi[i].type, 0, data + vsi[i].offset);
++		if (ret)
++			break;
++	}
++	jsonw_end_array(d->jw);
++	jsonw_end_object(d->jw);
++
++	return ret;
++}
++
+ static int btf_dumper_do_type(const struct btf_dumper *d, __u32 type_id,
+ 			      __u8 bit_offset, const void *data)
  {
- 	.descr = "struct test #3 Invalid member offset",
- 	.raw_types = {
-@@ -319,7 +323,664 @@ static struct btf_raw_test raw_tests[] = {
- 	.btf_load_err = true,
- 	.err_str = "Invalid member bits_offset",
- },
--
-+/*
-+ * struct A {
-+ *	unsigned long long m;
-+ *	int n;
-+ *	char o;
-+ *	[3 bytes hole]
-+ *	int p[8];
-+ * };
-+ */
-+{
-+	.descr = "global data test #1",
-+	.raw_types = {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		/* unsigned long long */
-+		BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),		/* [2] */
-+		/* char */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 8, 1),	/* [3] */
-+		/* int[8] */
-+		BTF_TYPE_ARRAY_ENC(1, 1, 8),			/* [4] */
-+		/* struct A { */				/* [5] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 4), 48),
-+		BTF_MEMBER_ENC(NAME_TBD, 2, 0),	/* unsigned long long m;*/
-+		BTF_MEMBER_ENC(NAME_TBD, 1, 64),/* int n;		*/
-+		BTF_MEMBER_ENC(NAME_TBD, 3, 96),/* char o;		*/
-+		BTF_MEMBER_ENC(NAME_TBD, 4, 128),/* int p[8]		*/
-+		/* } */
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0A\0m\0n\0o\0p",
-+	.str_sec_size = sizeof("\0A\0m\0n\0o\0p"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = "struct_test1_map",
-+	.key_size = sizeof(int),
-+	.value_size = 48,
-+	.key_type_id = 1,
-+	.value_type_id = 5,
-+	.max_entries = 4,
-+},
-+/*
-+ * struct A {
-+ *	unsigned long long m;
-+ *	int n;
-+ *	char o;
-+ *	[3 bytes hole]
-+ *	int p[8];
-+ * };
-+ * static struct A t; <- in .bss
-+ */
-+{
-+	.descr = "global data test #2",
-+	.raw_types = {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		/* unsigned long long */
-+		BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),		/* [2] */
-+		/* char */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 8, 1),	/* [3] */
-+		/* int[8] */
-+		BTF_TYPE_ARRAY_ENC(1, 1, 8),			/* [4] */
-+		/* struct A { */				/* [5] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 4), 48),
-+		BTF_MEMBER_ENC(NAME_TBD, 2, 0),	/* unsigned long long m;*/
-+		BTF_MEMBER_ENC(NAME_TBD, 1, 64),/* int n;		*/
-+		BTF_MEMBER_ENC(NAME_TBD, 3, 96),/* char o;		*/
-+		BTF_MEMBER_ENC(NAME_TBD, 4, 128),/* int p[8]		*/
-+		/* } */
-+		/* static struct A t */
-+		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [6] */
-+		/* .bss section */				/* [7] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 48),
-+		BTF_VAR_SECINFO_ENC(6, 0, 48),
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0A\0m\0n\0o\0p\0t\0.bss",
-+	.str_sec_size = sizeof("\0A\0m\0n\0o\0p\0t\0.bss"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = 48,
-+	.key_type_id = 0,
-+	.value_type_id = 7,
-+	.max_entries = 1,
-+},
-+{
-+	.descr = "global data test #3",
-+	.raw_types = {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		/* static int t */
-+		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [2] */
-+		/* .bss section */				/* [3] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
-+		BTF_VAR_SECINFO_ENC(2, 0, 4),
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0t\0.bss",
-+	.str_sec_size = sizeof("\0t\0.bss"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = 4,
-+	.key_type_id = 0,
-+	.value_type_id = 3,
-+	.max_entries = 1,
-+},
-+{
-+	.descr = "global data test #4, unsupported linkage",
-+	.raw_types = {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		/* static int t */
-+		BTF_VAR_ENC(NAME_TBD, 1, 2),			/* [2] */
-+		/* .bss section */				/* [3] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
-+		BTF_VAR_SECINFO_ENC(2, 0, 4),
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0t\0.bss",
-+	.str_sec_size = sizeof("\0t\0.bss"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = 4,
-+	.key_type_id = 0,
-+	.value_type_id = 3,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Linkage not supported",
-+},
-+{
-+	.descr = "global data test #5, invalid var type",
-+	.raw_types = {
-+		/* static void t */
-+		BTF_VAR_ENC(NAME_TBD, 0, 0),			/* [1] */
-+		/* .bss section */				/* [2] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
-+		BTF_VAR_SECINFO_ENC(1, 0, 4),
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0t\0.bss",
-+	.str_sec_size = sizeof("\0t\0.bss"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = 4,
-+	.key_type_id = 0,
-+	.value_type_id = 2,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Invalid type_id",
-+},
-+{
-+	.descr = "global data test #6, invalid var type (fwd type)",
-+	.raw_types = {
-+		/* union A */
-+		BTF_TYPE_ENC(NAME_TBD,
-+			     BTF_INFO_ENC(BTF_KIND_FWD, 1, 0), 0), /* [1] */
-+		/* static union A t */
-+		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [2] */
-+		/* .bss section */				/* [3] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
-+		BTF_VAR_SECINFO_ENC(2, 0, 4),
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0A\0t\0.bss",
-+	.str_sec_size = sizeof("\0A\0t\0.bss"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = 4,
-+	.key_type_id = 0,
-+	.value_type_id = 2,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Invalid type",
-+},
-+{
-+	.descr = "global data test #7, invalid var type (fwd type)",
-+	.raw_types = {
-+		/* union A */
-+		BTF_TYPE_ENC(NAME_TBD,
-+			     BTF_INFO_ENC(BTF_KIND_FWD, 1, 0), 0), /* [1] */
-+		/* static union A t */
-+		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [2] */
-+		/* .bss section */				/* [3] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
-+		BTF_VAR_SECINFO_ENC(1, 0, 4),
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0A\0t\0.bss",
-+	.str_sec_size = sizeof("\0A\0t\0.bss"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = 4,
-+	.key_type_id = 0,
-+	.value_type_id = 2,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Invalid type",
-+},
-+{
-+	.descr = "global data test #8, invalid var size",
-+	.raw_types = {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		/* unsigned long long */
-+		BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),		/* [2] */
-+		/* char */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 8, 1),	/* [3] */
-+		/* int[8] */
-+		BTF_TYPE_ARRAY_ENC(1, 1, 8),			/* [4] */
-+		/* struct A { */				/* [5] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 4), 48),
-+		BTF_MEMBER_ENC(NAME_TBD, 2, 0),	/* unsigned long long m;*/
-+		BTF_MEMBER_ENC(NAME_TBD, 1, 64),/* int n;		*/
-+		BTF_MEMBER_ENC(NAME_TBD, 3, 96),/* char o;		*/
-+		BTF_MEMBER_ENC(NAME_TBD, 4, 128),/* int p[8]		*/
-+		/* } */
-+		/* static struct A t */
-+		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [6] */
-+		/* .bss section */				/* [7] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 48),
-+		BTF_VAR_SECINFO_ENC(6, 0, 47),
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0A\0m\0n\0o\0p\0t\0.bss",
-+	.str_sec_size = sizeof("\0A\0m\0n\0o\0p\0t\0.bss"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = 48,
-+	.key_type_id = 0,
-+	.value_type_id = 7,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Invalid size",
-+},
-+{
-+	.descr = "global data test #9, invalid var size",
-+	.raw_types = {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		/* unsigned long long */
-+		BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),		/* [2] */
-+		/* char */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 8, 1),	/* [3] */
-+		/* int[8] */
-+		BTF_TYPE_ARRAY_ENC(1, 1, 8),			/* [4] */
-+		/* struct A { */				/* [5] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 4), 48),
-+		BTF_MEMBER_ENC(NAME_TBD, 2, 0),	/* unsigned long long m;*/
-+		BTF_MEMBER_ENC(NAME_TBD, 1, 64),/* int n;		*/
-+		BTF_MEMBER_ENC(NAME_TBD, 3, 96),/* char o;		*/
-+		BTF_MEMBER_ENC(NAME_TBD, 4, 128),/* int p[8]		*/
-+		/* } */
-+		/* static struct A t */
-+		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [6] */
-+		/* .bss section */				/* [7] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 46),
-+		BTF_VAR_SECINFO_ENC(6, 0, 48),
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0A\0m\0n\0o\0p\0t\0.bss",
-+	.str_sec_size = sizeof("\0A\0m\0n\0o\0p\0t\0.bss"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = 48,
-+	.key_type_id = 0,
-+	.value_type_id = 7,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Invalid size",
-+},
-+{
-+	.descr = "global data test #10, invalid var size",
-+	.raw_types = {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		/* unsigned long long */
-+		BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),		/* [2] */
-+		/* char */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 8, 1),	/* [3] */
-+		/* int[8] */
-+		BTF_TYPE_ARRAY_ENC(1, 1, 8),			/* [4] */
-+		/* struct A { */				/* [5] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 4), 48),
-+		BTF_MEMBER_ENC(NAME_TBD, 2, 0),	/* unsigned long long m;*/
-+		BTF_MEMBER_ENC(NAME_TBD, 1, 64),/* int n;		*/
-+		BTF_MEMBER_ENC(NAME_TBD, 3, 96),/* char o;		*/
-+		BTF_MEMBER_ENC(NAME_TBD, 4, 128),/* int p[8]		*/
-+		/* } */
-+		/* static struct A t */
-+		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [6] */
-+		/* .bss section */				/* [7] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 46),
-+		BTF_VAR_SECINFO_ENC(6, 0, 46),
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0A\0m\0n\0o\0p\0t\0.bss",
-+	.str_sec_size = sizeof("\0A\0m\0n\0o\0p\0t\0.bss"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = 48,
-+	.key_type_id = 0,
-+	.value_type_id = 7,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Invalid size",
-+},
-+{
-+	.descr = "global data test #11, multiple section members",
-+	.raw_types = {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		/* unsigned long long */
-+		BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),		/* [2] */
-+		/* char */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 8, 1),	/* [3] */
-+		/* int[8] */
-+		BTF_TYPE_ARRAY_ENC(1, 1, 8),			/* [4] */
-+		/* struct A { */				/* [5] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 4), 48),
-+		BTF_MEMBER_ENC(NAME_TBD, 2, 0),	/* unsigned long long m;*/
-+		BTF_MEMBER_ENC(NAME_TBD, 1, 64),/* int n;		*/
-+		BTF_MEMBER_ENC(NAME_TBD, 3, 96),/* char o;		*/
-+		BTF_MEMBER_ENC(NAME_TBD, 4, 128),/* int p[8]		*/
-+		/* } */
-+		/* static struct A t */
-+		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [6] */
-+		/* static int u */
-+		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [7] */
-+		/* .bss section */				/* [8] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 2), 62),
-+		BTF_VAR_SECINFO_ENC(6, 10, 48),
-+		BTF_VAR_SECINFO_ENC(7, 58, 4),
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0A\0m\0n\0o\0p\0t\0u\0.bss",
-+	.str_sec_size = sizeof("\0A\0m\0n\0o\0p\0t\0u\0.bss"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = 62,
-+	.key_type_id = 0,
-+	.value_type_id = 8,
-+	.max_entries = 1,
-+},
-+{
-+	.descr = "global data test #12, invalid offset",
-+	.raw_types = {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		/* unsigned long long */
-+		BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),		/* [2] */
-+		/* char */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 8, 1),	/* [3] */
-+		/* int[8] */
-+		BTF_TYPE_ARRAY_ENC(1, 1, 8),			/* [4] */
-+		/* struct A { */				/* [5] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 4), 48),
-+		BTF_MEMBER_ENC(NAME_TBD, 2, 0),	/* unsigned long long m;*/
-+		BTF_MEMBER_ENC(NAME_TBD, 1, 64),/* int n;		*/
-+		BTF_MEMBER_ENC(NAME_TBD, 3, 96),/* char o;		*/
-+		BTF_MEMBER_ENC(NAME_TBD, 4, 128),/* int p[8]		*/
-+		/* } */
-+		/* static struct A t */
-+		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [6] */
-+		/* static int u */
-+		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [7] */
-+		/* .bss section */				/* [8] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 2), 62),
-+		BTF_VAR_SECINFO_ENC(6, 10, 48),
-+		BTF_VAR_SECINFO_ENC(7, 60, 4),
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0A\0m\0n\0o\0p\0t\0u\0.bss",
-+	.str_sec_size = sizeof("\0A\0m\0n\0o\0p\0t\0u\0.bss"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = 62,
-+	.key_type_id = 0,
-+	.value_type_id = 8,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Invalid offset+size",
-+},
-+{
-+	.descr = "global data test #13, invalid offset",
-+	.raw_types = {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		/* unsigned long long */
-+		BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),		/* [2] */
-+		/* char */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 8, 1),	/* [3] */
-+		/* int[8] */
-+		BTF_TYPE_ARRAY_ENC(1, 1, 8),			/* [4] */
-+		/* struct A { */				/* [5] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 4), 48),
-+		BTF_MEMBER_ENC(NAME_TBD, 2, 0),	/* unsigned long long m;*/
-+		BTF_MEMBER_ENC(NAME_TBD, 1, 64),/* int n;		*/
-+		BTF_MEMBER_ENC(NAME_TBD, 3, 96),/* char o;		*/
-+		BTF_MEMBER_ENC(NAME_TBD, 4, 128),/* int p[8]		*/
-+		/* } */
-+		/* static struct A t */
-+		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [6] */
-+		/* static int u */
-+		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [7] */
-+		/* .bss section */				/* [8] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 2), 62),
-+		BTF_VAR_SECINFO_ENC(6, 10, 48),
-+		BTF_VAR_SECINFO_ENC(7, 12, 4),
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0A\0m\0n\0o\0p\0t\0u\0.bss",
-+	.str_sec_size = sizeof("\0A\0m\0n\0o\0p\0t\0u\0.bss"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = 62,
-+	.key_type_id = 0,
-+	.value_type_id = 8,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Invalid offset",
-+},
-+{
-+	.descr = "global data test #14, invalid offset",
-+	.raw_types = {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		/* unsigned long long */
-+		BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),		/* [2] */
-+		/* char */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 8, 1),	/* [3] */
-+		/* int[8] */
-+		BTF_TYPE_ARRAY_ENC(1, 1, 8),			/* [4] */
-+		/* struct A { */				/* [5] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 4), 48),
-+		BTF_MEMBER_ENC(NAME_TBD, 2, 0),	/* unsigned long long m;*/
-+		BTF_MEMBER_ENC(NAME_TBD, 1, 64),/* int n;		*/
-+		BTF_MEMBER_ENC(NAME_TBD, 3, 96),/* char o;		*/
-+		BTF_MEMBER_ENC(NAME_TBD, 4, 128),/* int p[8]		*/
-+		/* } */
-+		/* static struct A t */
-+		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [6] */
-+		/* static int u */
-+		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [7] */
-+		/* .bss section */				/* [8] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 2), 62),
-+		BTF_VAR_SECINFO_ENC(7, 58, 4),
-+		BTF_VAR_SECINFO_ENC(6, 10, 48),
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0A\0m\0n\0o\0p\0t\0u\0.bss",
-+	.str_sec_size = sizeof("\0A\0m\0n\0o\0p\0t\0u\0.bss"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = 62,
-+	.key_type_id = 0,
-+	.value_type_id = 8,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Invalid offset",
-+},
-+{
-+	.descr = "global data test #15, not var kind",
-+	.raw_types = {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [2] */
-+		/* .bss section */				/* [3] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
-+		BTF_VAR_SECINFO_ENC(1, 0, 4),
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0A\0t\0.bss",
-+	.str_sec_size = sizeof("\0A\0t\0.bss"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = 4,
-+	.key_type_id = 0,
-+	.value_type_id = 3,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Not a VAR kind member",
-+},
-+{
-+	.descr = "global data test #16, invalid var referencing sec",
-+	.raw_types = {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [2] */
-+		BTF_VAR_ENC(NAME_TBD, 2, 0),			/* [3] */
-+		/* a section */					/* [4] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
-+		BTF_VAR_SECINFO_ENC(3, 0, 4),
-+		/* a section */					/* [5] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
-+		BTF_VAR_SECINFO_ENC(6, 0, 4),
-+		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [6] */
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0A\0t\0s\0a\0a",
-+	.str_sec_size = sizeof("\0A\0t\0s\0a\0a"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = 4,
-+	.key_type_id = 0,
-+	.value_type_id = 4,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Invalid type_id",
-+},
-+{
-+	.descr = "global data test #17, invalid var referencing var",
-+	.raw_types = {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [2] */
-+		BTF_VAR_ENC(NAME_TBD, 2, 0),			/* [3] */
-+		/* a section */					/* [4] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
-+		BTF_VAR_SECINFO_ENC(3, 0, 4),
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0A\0t\0s\0a\0a",
-+	.str_sec_size = sizeof("\0A\0t\0s\0a\0a"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = 4,
-+	.key_type_id = 0,
-+	.value_type_id = 4,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Invalid type_id",
-+},
-+{
-+	.descr = "global data test #18, invalid var loop",
-+	.raw_types = {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		BTF_VAR_ENC(NAME_TBD, 2, 0),			/* [2] */
-+		/* .bss section */				/* [3] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
-+		BTF_VAR_SECINFO_ENC(2, 0, 4),
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0A\0t\0aaa",
-+	.str_sec_size = sizeof("\0A\0t\0aaa"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = 4,
-+	.key_type_id = 0,
-+	.value_type_id = 4,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Invalid type_id",
-+},
-+{
-+	.descr = "global data test #19, invalid var referencing var",
-+	.raw_types = {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		BTF_VAR_ENC(NAME_TBD, 3, 0),			/* [2] */
-+		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [3] */
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0A\0t\0s\0a\0a",
-+	.str_sec_size = sizeof("\0A\0t\0s\0a\0a"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = 4,
-+	.key_type_id = 0,
-+	.value_type_id = 4,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Invalid type_id",
-+},
-+{
-+	.descr = "global data test #20, invalid ptr referencing var",
-+	.raw_types = {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		/* PTR type_id=3	*/			/* [2] */
-+		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_PTR, 0, 0), 3),
-+		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [3] */
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0A\0t\0s\0a\0a",
-+	.str_sec_size = sizeof("\0A\0t\0s\0a\0a"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = 4,
-+	.key_type_id = 0,
-+	.value_type_id = 4,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Invalid type_id",
-+},
-+{
-+	.descr = "global data test #21, var included in struct",
-+	.raw_types = {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		/* struct A { */				/* [2] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 2), sizeof(int) * 2),
-+		BTF_MEMBER_ENC(NAME_TBD, 1, 0),	/* int m; */
-+		BTF_MEMBER_ENC(NAME_TBD, 3, 32),/* VAR type_id=3; */
-+		/* } */
-+		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [3] */
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0A\0t\0s\0a\0a",
-+	.str_sec_size = sizeof("\0A\0t\0s\0a\0a"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = 4,
-+	.key_type_id = 0,
-+	.value_type_id = 4,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Invalid member",
-+},
-+{
-+	.descr = "global data test #22, array of var",
-+	.raw_types = {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		BTF_TYPE_ARRAY_ENC(3, 1, 4),			/* [2] */
-+		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [3] */
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0A\0t\0s\0a\0a",
-+	.str_sec_size = sizeof("\0A\0t\0s\0a\0a"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = 4,
-+	.key_type_id = 0,
-+	.value_type_id = 4,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Invalid elem",
-+},
- /* Test member exceeds the size of struct.
-  *
-  * struct A {
+@@ -341,6 +383,10 @@ static int btf_dumper_do_type(const struct btf_dumper *d, __u32 type_id,
+ 	case BTF_KIND_CONST:
+ 	case BTF_KIND_RESTRICT:
+ 		return btf_dumper_modifier(d, type_id, bit_offset, data);
++	case BTF_KIND_VAR:
++		return btf_dumper_var(d, type_id, bit_offset, data);
++	case BTF_KIND_DATASEC:
++		return btf_dumper_datasec(d, type_id, data);
+ 	default:
+ 		jsonw_printf(d->jw, "(unsupported-kind");
+ 		return -EINVAL;
+@@ -377,6 +423,7 @@ static int __btf_dumper_type_only(const struct btf *btf, __u32 type_id,
+ {
+ 	const struct btf_type *proto_type;
+ 	const struct btf_array *array;
++	const struct btf_var *var;
+ 	const struct btf_type *t;
+ 
+ 	if (!type_id) {
+@@ -440,6 +487,18 @@ static int __btf_dumper_type_only(const struct btf *btf, __u32 type_id,
+ 		if (pos == -1)
+ 			return -1;
+ 		break;
++	case BTF_KIND_VAR:
++		var = (struct btf_var *)(t + 1);
++		if (var->linkage == BTF_VAR_STATIC)
++			BTF_PRINT_ARG("static ");
++		BTF_PRINT_TYPE(t->type);
++		BTF_PRINT_ARG(" %s",
++			      btf__name_by_offset(btf, t->name_off));
++		break;
++	case BTF_KIND_DATASEC:
++		BTF_PRINT_ARG("section (\"%s\") ",
++			      btf__name_by_offset(btf, t->name_off));
++		break;
+ 	case BTF_KIND_UNKN:
+ 	default:
+ 		return -1;
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index e0c650d..e969030 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -153,11 +153,13 @@ static int do_dump_btf(const struct btf_dumper *d,
+ 	/* start of key-value pair */
+ 	jsonw_start_object(d->jw);
+ 
+-	jsonw_name(d->jw, "key");
++	if (map_info->btf_key_type_id) {
++		jsonw_name(d->jw, "key");
+ 
+-	ret = btf_dumper_type(d, map_info->btf_key_type_id, key);
+-	if (ret)
+-		goto err_end_obj;
++		ret = btf_dumper_type(d, map_info->btf_key_type_id, key);
++		if (ret)
++			goto err_end_obj;
++	}
+ 
+ 	if (!map_is_per_cpu(map_info->type)) {
+ 		jsonw_name(d->jw, "value");
 -- 
 2.9.5
 
