@@ -2,98 +2,118 @@ Return-Path: <SRS0=rZCH=SH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DDEAC4360F
-	for <bpf@archiver.kernel.org>; Fri,  5 Apr 2019 02:32:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56B3BC4360F
+	for <bpf@archiver.kernel.org>; Fri,  5 Apr 2019 07:00:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F0CA4206DF
-	for <bpf@archiver.kernel.org>; Fri,  5 Apr 2019 02:32:07 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="POtEVwma"
+	by mail.kernel.org (Postfix) with ESMTP id 199FE217D7
+	for <bpf@archiver.kernel.org>; Fri,  5 Apr 2019 07:00:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1554447638;
+	bh=Ie30lCRXiYZhrOWNXO5GOBb0ompZrFhf/1u8XKrTd2k=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=RCveWDX4SC0tes/xO8IT2/gBW767visns8f4hUW6nrIrFH7yCkp3Hh9KXyCyQGiRq
+	 fsuIcIQ515s5DsqU9w5u2pt2hcul/IoKQuvSLoqzF+4BtDNVmzeH1kw+Mby9u/5Iyd
+	 fTQaFDMyo6yy0NC3CCC90cB1gvdpgYsTM7cCFruU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728699AbfDECcH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 4 Apr 2019 22:32:07 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:33590 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727212AbfDECcH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 4 Apr 2019 22:32:07 -0400
-Received: by mail-pf1-f193.google.com with SMTP id i19so2411394pfd.0;
-        Thu, 04 Apr 2019 19:32:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=X/RcvfeihAEHnIX0rMeXDaPhJrQo03KNmi5ZbNwVdbA=;
-        b=POtEVwmaVecUba8V9ey5x91K7O6wg977B+dsAlU6/2+QDzVPnlOcG0gDQ71aWMFIff
-         DPObPy65O2g1Ij6DwUkr98nPq+mU5MLj2VL9G8rWpmCTF2uQiZWUmZADZxPyA9dtgK+X
-         0lgVW629wyi0i/sPk3qxBfALtnxDMdlMeCptDv3v9CdIYIuwaACpNkTO3nktm05BWAOS
-         mXBXRvZ9xeB9pCxxeGXFGZ5htIyzed7baVfqA0g9BwCWnoZz87ajkzeuWalGFLTGZq2g
-         xxPgEp0HjimalyiBZ6zS/CEc6TClCWIISITZ/7L4uDHGcpY953zCRCpWER1ZvQXSzW9v
-         fIeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=X/RcvfeihAEHnIX0rMeXDaPhJrQo03KNmi5ZbNwVdbA=;
-        b=uE56hjc8aJGDDmN8/sdNkZy6IRFvST4kR65C8Bcgx/EUmb8emTk0IGrHfuKwuv6S8a
-         MBy2ayHIm58mKUKUlVNKcnjtPuTtql+BOYafEcaTFI/xD2ikyQlBcIXnytltf5VXvBo+
-         XP+VI3lsAvlm99wOJdGAEk1143v78JWnbAY8/PDh2fT30ONnRiSWk5feeJjNED/RJm3E
-         8Jg2uq/XL2W+6oOUFhKzYkS4uMoakfsFvt8ynt3hVxBXYsB1ofJIjW7lC2X4zM/120Zl
-         5KlcLCayPSbAROVj0RJ6/T14+eLIefkXnz68ea0b/tUfo8nCQ07CrIpFihvt2var6MuC
-         bLAw==
-X-Gm-Message-State: APjAAAWxR2HJCO6g1BzMSEnZNOiVvSZ3sMA/nDXcvI5JtD0NNhoEKeSg
-        Jm7S3/3tlyjfQQzESjDaLvU=
-X-Google-Smtp-Source: APXvYqxTRU/oABZSPd2wweTa49DY0OSTuvFSwH/EkUocXOWE/eIjjaP/TVKS/YzPeFXld+t6D0NxEQ==
-X-Received: by 2002:a65:64cf:: with SMTP id t15mr9136594pgv.322.1554431526498;
-        Thu, 04 Apr 2019 19:32:06 -0700 (PDT)
-Received: from ?IPv6:2601:282:800:fd80:c5a1:6d6:d92c:c7c1? ([2601:282:800:fd80:c5a1:6d6:d92c:c7c1])
-        by smtp.googlemail.com with ESMTPSA id d15sm30266849pfo.34.2019.04.04.19.32.04
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 04 Apr 2019 19:32:05 -0700 (PDT)
-Subject: Re: [PATCH bpf-next] selftests: bpf: add VRF test cases to
- lwt_ip_encap test.
-To:     Peter Oskolkov <posk@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     Peter Oskolkov <posk@posk.io>
-References: <20190403154338.29990-1-posk@google.com>
-From:   David Ahern <dsahern@gmail.com>
-Message-ID: <89f72dd4-a3d8-3788-482b-578e18b7078d@gmail.com>
-Date:   Thu, 4 Apr 2019 20:32:03 -0600
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:52.0)
- Gecko/20100101 Thunderbird/52.9.1
+        id S1726806AbfDEHAh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 5 Apr 2019 03:00:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58366 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725955AbfDEHAh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 5 Apr 2019 03:00:37 -0400
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 29E482186A;
+        Fri,  5 Apr 2019 07:00:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1554447636;
+        bh=Ie30lCRXiYZhrOWNXO5GOBb0ompZrFhf/1u8XKrTd2k=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=I3Yn4mkZhHcIEsfQ0wibIbyDVwZpDJHKD8WK1f3UBSh0tJ1iMG07+RhoxjvxrAr8G
+         O9uwEfmMO7Y/nL5uKhluJ5UDyICAlPEOhCzd0Xty8M2wrPZwqSxRso9YpPwJaDlwlw
+         6dv1fkEZfqXW7AfyHNdTYO+3p+LSXa70/Lh0VhRQ=
+Received: by mail-lf1-f42.google.com with SMTP id 5so3572565lft.12;
+        Fri, 05 Apr 2019 00:00:36 -0700 (PDT)
+X-Gm-Message-State: APjAAAUW6jNUQ4Lw8qK2zf1qWUgPmbHbxQbVll90UImb5wcGqx0CNdQm
+        6PDso4Gs6GRIdrBoCUMVkBs3IsugQv2FoWMSWvs=
+X-Google-Smtp-Source: APXvYqy7Is9MCRmuZrBdZNrnxcuZ2fx1UJRgezzDdyo0cGs8iGhc1NFvRl/Xb+rdVJjHT7tKZ1x25WsVjeD4CJepCLQ=
+X-Received: by 2002:ac2:5110:: with SMTP id q16mr5934298lfb.44.1554447634382;
+ Fri, 05 Apr 2019 00:00:34 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190403154338.29990-1-posk@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <000000000000e02450058593df62@google.com> <000000000000db3c59058595f0ac@google.com>
+In-Reply-To: <000000000000db3c59058595f0ac@google.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Fri, 5 Apr 2019 09:00:23 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPcrimyMrK7LBbZLaqHGhS5dSCcBC1X01_pRY5evCD7n5Q@mail.gmail.com>
+Message-ID: <CAJKOXPcrimyMrK7LBbZLaqHGhS5dSCcBC1X01_pRY5evCD7n5Q@mail.gmail.com>
+Subject: Re: BUG: using __this_cpu_read() in preemptible code in ip6_finish_output
+To:     syzbot <syzbot+51471b4aae195285a4a3@syzkaller.appspotmail.com>
+Cc:     alexander.h.duyck@intel.com, amritha.nambiar@intel.com,
+        ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, ecree@solarflare.com, fw@strlen.de,
+        idosch@mellanox.com, jiri@mellanox.com, kafai@fb.com,
+        kuznet@ms2.inr.ac.ru, linux-kernel@vger.kernel.org,
+        lirongqing@baidu.com, netdev@vger.kernel.org, petrm@mellanox.com,
+        sd@queasysnail.net, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com,
+        yoshfuji@linux-ipv6.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 4/3/19 9:43 AM, Peter Oskolkov wrote:
-> This patch adds tests validating that VRF and BPF-LWT
-> encap work together well, as requested by David Ahern.
-> 
-> Signed-off-by: Peter Oskolkov <posk@google.com>
-> ---
->  .../selftests/bpf/test_lwt_ip_encap.sh        | 134 +++++++++++-------
->  1 file changed, 86 insertions(+), 48 deletions(-)
-> 
+On Wed, 3 Apr 2019 at 03:14, syzbot
+<syzbot+51471b4aae195285a4a3@syzkaller.appspotmail.com> wrote:
+>
+> syzbot has bisected this bug to:
+>
+> commit 97cdcf37b57e3f204be3000b9eab9686f38b4356
+> Author: Florian Westphal <fw@strlen.de>
+> Date:   Mon Apr 1 14:42:13 2019 +0000
+>
+>      net: place xmit recursion in softnet data
 
-I hit a wall with running this script. One problem is the different
-versions of nc for debian (stretch to be specific), and another problem
-is commands failing it is hard to figure out why (e.g., connect failures
-which seem like route lookup problems). I have been adding run_cmd and
-PAUSE_ON_FAIL options similar to what is in fib_tests.sh and the change
-I sent for pmtu.sh, but I have not finished.
+I am seeing this as well on ARMv7 board booted from NFS root (exynos_defconfig):
 
-I am traveling tomorrow and not sure how much time I'll get this weekend
-to come back to this. Might be early next week.
+[ 30.221238] BUG: using __this_cpu_read() in preemptible [00000000]
+code: systemd-network/236
+[ 30.228576] caller is ip6_output+0x68/0x3e8
+[ 30.232578] CPU: 1 PID: 236 Comm: systemd-network Not tainted
+5.1.0-rc3-next-20190405 #2
+[ 30.240657] Hardware name: SAMSUNG EXYNOS (Flattened Device Tree)
+[ 30.246719] [<c011238c>] (unwind_backtrace) from [<c010df50>]
+(show_stack+0x10/0x14)
+[ 30.254447] [<c010df50>] (show_stack) from [<c0a87270>] (dump_stack+0x98/0xc4)
+[ 30.261638] [<c0a87270>] (dump_stack) from [<c0494a94>]
+(__this_cpu_preempt_check+0x124/0x128)
+[ 30.270238] [<c0494a94>] (__this_cpu_preempt_check) from [<c08e486c>]
+(ip6_output+0x68/0x3e8)
+[ 30.278730] [<c08e486c>] (ip6_output) from [<c08e52ac>]
+(ip6_send_skb+0x30/0x1d0)
+[ 30.286180] [<c08e52ac>] (ip6_send_skb) from [<c0912798>]
+(rawv6_sendmsg+0x824/0x9c0)
+[ 30.294005] [<c0912798>] (rawv6_sendmsg) from [<c07d8ff8>]
+(sock_sendmsg+0x14/0x24)
+[ 30.301628] [<c07d8ff8>] (sock_sendmsg) from [<c07d97cc>]
+(___sys_sendmsg+0x230/0x244)
+[ 30.309514] [<c07d97cc>] (___sys_sendmsg) from [<c07da9f8>]
+(__sys_sendmsg+0x50/0x8c)
+[ 30.317316] [<c07da9f8>] (__sys_sendmsg) from [<c01011ac>]
+(__sys_trace_return+0x0/0x14)
+[ 30.325376] Exception stack(0xe79f9fa8 to 0xe79f9ff0)
+[ 30.330377] 9fa0: 00000000 b6f3da58 0000000b beeb2a6c 00000000 00000000
+[ 30.338560] 9fc0: 00000000 b6f3da58 004015ce 00000128 004b10c8
+00000000 020d28f9 00000000
+[ 30.346708] 9fe0: 004aeee0 beeb2a40 0047cbdc b6d27684
+
+Full log:
+https://krzk.eu/#/builders/22/builds/1055/steps/13/logs/serial0
+
+Best regards,
+Krzysztof Kozlowski
