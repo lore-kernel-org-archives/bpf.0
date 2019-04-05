@@ -3,34 +3,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDB01C282DC
-	for <bpf@archiver.kernel.org>; Fri,  5 Apr 2019 21:00:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A872C282DC
+	for <bpf@archiver.kernel.org>; Fri,  5 Apr 2019 21:00:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A62952175B
-	for <bpf@archiver.kernel.org>; Fri,  5 Apr 2019 21:00:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4335F21855
+	for <bpf@archiver.kernel.org>; Fri,  5 Apr 2019 21:00:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726545AbfDEU77 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 5 Apr 2019 16:59:59 -0400
-Received: from www62.your-server.de ([213.133.104.62]:54834 "EHLO
+        id S1726836AbfDEVAf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 5 Apr 2019 17:00:35 -0400
+Received: from www62.your-server.de ([213.133.104.62]:54846 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726310AbfDEU77 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 5 Apr 2019 16:59:59 -0400
+        with ESMTP id S1726419AbfDEVAA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 5 Apr 2019 17:00:00 -0400
 Received: from [178.197.248.24] (helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1hCVwH-000755-Ct; Fri, 05 Apr 2019 22:59:53 +0200
+        id 1hCVwF-00074N-Ku; Fri, 05 Apr 2019 22:59:51 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, ast@kernel.org, joe@wand.net.nz,
         yhs@fb.com, andrii.nakryiko@gmail.com, kafai@fb.com,
         Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v4 06/16] bpf: add specification for BTF Var and DataSec kinds
-Date:   Fri,  5 Apr 2019 22:59:32 +0200
-Message-Id: <9d210a6271f6f40c500107785dd88f965cfca714.1554497408.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next v4 03/16] bpf: add program side {rd,wr}only support for maps
+Date:   Fri,  5 Apr 2019 22:59:29 +0200
+Message-Id: <1ab1fb60d70f81adb5bed209dc65108fb7251465.1554497408.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <cover.1554497408.git.daniel@iogearbox.net>
 References: <cover.1554497408.git.daniel@iogearbox.net>
@@ -43,152 +43,332 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This adds the BTF specification and UAPI bits for supporting BTF Var
-and DataSec kinds. This is following LLVM upstream commit ac4082b77e07
-("[BPF] Add BTF Var and DataSec Support") which has been merged recently.
-Var itself is for describing a global variable and DataSec to describe
-ELF sections e.g. data/bss/rodata sections that hold one or multiple
-global variables.
+This work adds two new map creation flags BPF_F_RDONLY_PROG
+and BPF_F_WRONLY_PROG in order to allow for read-only or
+write-only BPF maps from a BPF program side.
+
+Today we have BPF_F_RDONLY and BPF_F_WRONLY, but this only
+applies to system call side, meaning the BPF program has full
+read/write access to the map as usual while bpf(2) calls with
+map fd can either only read or write into the map depending
+on the flags. BPF_F_RDONLY_PROG and BPF_F_WRONLY_PROG allows
+for the exact opposite such that verifier is going to reject
+program loads if write into a read-only map or a read into a
+write-only map is detected. For read-only map case also some
+helpers are forbidden for programs that would alter the map
+state such as map deletion, update, etc. As opposed to the two
+BPF_F_RDONLY / BPF_F_WRONLY flags, BPF_F_RDONLY_PROG as well
+as BPF_F_WRONLY_PROG really do correspond to the map lifetime.
+
+We've enabled this generic map extension to various non-special
+maps holding normal user data: array, hash, lru, lpm, local
+storage, queue and stack. Further generic map types could be
+followed up in future depending on use-case. Main use case
+here is to forbid writes into .rodata map values from verifier
+side.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- Documentation/bpf/btf.rst | 57 +++++++++++++++++++++++++++++++++++++++++++++++
- include/uapi/linux/btf.h  | 32 ++++++++++++++++++++++----
- 2 files changed, 85 insertions(+), 4 deletions(-)
+ include/linux/bpf.h           | 24 ++++++++++++++++++++++
+ include/uapi/linux/bpf.h      | 10 +++++++++-
+ kernel/bpf/arraymap.c         |  6 +++++-
+ kernel/bpf/hashtab.c          |  6 +++---
+ kernel/bpf/local_storage.c    |  6 +++---
+ kernel/bpf/lpm_trie.c         |  3 ++-
+ kernel/bpf/queue_stack_maps.c |  6 +++---
+ kernel/bpf/syscall.c          |  2 ++
+ kernel/bpf/verifier.c         | 46 +++++++++++++++++++++++++++++++++++++++++--
+ 9 files changed, 95 insertions(+), 14 deletions(-)
 
-diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
-index 9a60a5d..60d87d7 100644
---- a/Documentation/bpf/btf.rst
-+++ b/Documentation/bpf/btf.rst
-@@ -82,6 +82,8 @@ sequentially and type id is assigned to each recognized type starting from id
-     #define BTF_KIND_RESTRICT       11      /* Restrict     */
-     #define BTF_KIND_FUNC           12      /* Function     */
-     #define BTF_KIND_FUNC_PROTO     13      /* Function Proto       */
-+    #define BTF_KIND_VAR            14      /* Variable     */
-+    #define BTF_KIND_DATASEC        15      /* Section      */
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 0e4db35..25bf0a7 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -430,6 +430,30 @@ struct bpf_array {
+ #define BPF_COMPLEXITY_LIMIT_INSNS      1000000 /* yes. 1M insns */
+ #define MAX_TAIL_CALL_CNT 32
  
- Note that the type section encodes debug info, not just pure types.
- ``BTF_KIND_FUNC`` is not a type, and it represents a defined subprogram.
-@@ -393,6 +395,61 @@ refers to parameter type.
- If the function has variable arguments, the last parameter is encoded with
- ``name_off = 0`` and ``type = 0``.
++#define BPF_MAP_CAN_READ	BIT(0)
++#define BPF_MAP_CAN_WRITE	BIT(1)
++
++static inline u32 bpf_map_flags_to_cap(struct bpf_map *map)
++{
++	u32 access_flags = map->map_flags & (BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG);
++
++	/* Combination of BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG is
++	 * not possible.
++	 */
++	if (access_flags & BPF_F_RDONLY_PROG)
++		return BPF_MAP_CAN_READ;
++	else if (access_flags & BPF_F_WRONLY_PROG)
++		return BPF_MAP_CAN_WRITE;
++	else
++		return BPF_MAP_CAN_READ | BPF_MAP_CAN_WRITE;
++}
++
++static inline bool bpf_map_flags_access_ok(u32 access_flags)
++{
++	return (access_flags & (BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG)) !=
++	       (BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG);
++}
++
+ struct bpf_event_entry {
+ 	struct perf_event *event;
+ 	struct file *perf_file;
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index d8a963c..3735432 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -294,7 +294,7 @@ enum bpf_attach_type {
  
-+2.2.14 BTF_KIND_VAR
-+~~~~~~~~~~~~~~~~~~~
-+
-+``struct btf_type`` encoding requirement:
-+  * ``name_off``: offset to a valid C identifier
-+  * ``info.kind_flag``: 0
-+  * ``info.kind``: BTF_KIND_VAR
-+  * ``info.vlen``: 0
-+  * ``type``: the type of the variable
-+
-+``btf_type`` is followed by a single ``struct btf_variable`` with the
-+following data::
-+
-+    struct btf_var {
-+        __u32   linkage;
-+    };
-+
-+``struct btf_var`` encoding:
-+  * ``linkage``: currently only static variable 0, or globally allocated
-+                 variable in ELF sections 1
-+
-+Not all type of global variables are supported by LLVM at this point.
-+The following is currently available:
-+
-+  * static variables with or without section attributes
-+  * global variables with section attributes
-+
-+The latter is for future extraction of map key/value type id's from a
-+map definition.
-+
-+2.2.15 BTF_KIND_DATASEC
-+~~~~~~~~~~~~~~~~~~~~~~~
-+
-+``struct btf_type`` encoding requirement:
-+  * ``name_off``: offset to a valid name associated with a variable or
-+                  one of .data/.bss/.rodata
-+  * ``info.kind_flag``: 0
-+  * ``info.kind``: BTF_KIND_DATASEC
-+  * ``info.vlen``: # of variables
-+  * ``size``: total section size in bytes (0 at compilation time, patched
-+              to actual size by BPF loaders such as libbpf)
-+
-+``btf_type`` is followed by ``info.vlen`` number of ``struct btf_var_secinfo``.::
-+
-+    struct btf_var_secinfo {
-+        __u32   type;
-+        __u32   offset;
-+        __u32   size;
-+    };
-+
-+``struct btf_var_secinfo`` encoding:
-+  * ``type``: the type of the BTF_KIND_VAR variable
-+  * ``offset``: the in-section offset of the variable
-+  * ``size``: the size of the variable in bytes
-+
- 3. BTF Kernel API
- *****************
+ #define BPF_OBJ_NAME_LEN 16U
  
-diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
-index 7b7475e..9310652 100644
---- a/include/uapi/linux/btf.h
-+++ b/include/uapi/linux/btf.h
-@@ -39,11 +39,11 @@ struct btf_type {
- 	 *             struct, union and fwd
- 	 */
- 	__u32 info;
--	/* "size" is used by INT, ENUM, STRUCT and UNION.
-+	/* "size" is used by INT, ENUM, STRUCT, UNION and DATASEC.
- 	 * "size" tells the size of the type it is describing.
- 	 *
- 	 * "type" is used by PTR, TYPEDEF, VOLATILE, CONST, RESTRICT,
--	 * FUNC and FUNC_PROTO.
-+	 * FUNC, FUNC_PROTO and VAR.
- 	 * "type" is a type_id referring to another type.
- 	 */
- 	union {
-@@ -70,8 +70,10 @@ struct btf_type {
- #define BTF_KIND_RESTRICT	11	/* Restrict	*/
- #define BTF_KIND_FUNC		12	/* Function	*/
- #define BTF_KIND_FUNC_PROTO	13	/* Function Proto	*/
--#define BTF_KIND_MAX		13
--#define NR_BTF_KINDS		14
-+#define BTF_KIND_VAR		14	/* Variable	*/
-+#define BTF_KIND_DATASEC	15	/* Section	*/
-+#define BTF_KIND_MAX		BTF_KIND_DATASEC
-+#define NR_BTF_KINDS		(BTF_KIND_MAX + 1)
+-/* Flags for accessing BPF object */
++/* Flags for accessing BPF object from syscall side. */
+ #define BPF_F_RDONLY		(1U << 3)
+ #define BPF_F_WRONLY		(1U << 4)
  
- /* For some specific BTF_KIND, "struct btf_type" is immediately
-  * followed by extra data.
-@@ -138,4 +140,26 @@ struct btf_param {
- 	__u32	type;
- };
+@@ -304,6 +304,14 @@ enum bpf_attach_type {
+ /* Zero-initialize hash function seed. This should only be used for testing. */
+ #define BPF_F_ZERO_SEED		(1U << 6)
  
-+enum {
-+	BTF_VAR_STATIC = 0,
-+	BTF_VAR_GLOBAL_ALLOCATED,
-+};
++/* Flags for accessing BPF object from program side. */
++#define BPF_F_RDONLY_PROG	(1U << 7)
++#define BPF_F_WRONLY_PROG	(1U << 8)
++#define BPF_F_ACCESS_MASK	(BPF_F_RDONLY |		\
++				 BPF_F_RDONLY_PROG |	\
++				 BPF_F_WRONLY |		\
++				 BPF_F_WRONLY_PROG)
 +
-+/* BTF_KIND_VAR is followed by a single "struct btf_var" to describe
-+ * additional information related to the variable such as its linkage.
-+ */
-+struct btf_var {
-+	__u32	linkage;
-+};
+ /* flags for BPF_PROG_QUERY */
+ #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
+ 
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index de4e50f..37c6b7f 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -22,7 +22,7 @@
+ #include "map_in_map.h"
+ 
+ #define ARRAY_CREATE_FLAG_MASK \
+-	(BPF_F_NUMA_NODE | BPF_F_RDONLY | BPF_F_WRONLY)
++	(BPF_F_NUMA_NODE | BPF_F_ACCESS_MASK)
+ 
+ static void bpf_array_free_percpu(struct bpf_array *array)
+ {
+@@ -63,6 +63,7 @@ int array_map_alloc_check(union bpf_attr *attr)
+ 	if (attr->max_entries == 0 || attr->key_size != 4 ||
+ 	    attr->value_size == 0 ||
+ 	    attr->map_flags & ~ARRAY_CREATE_FLAG_MASK ||
++	    !bpf_map_flags_access_ok(attr->map_flags) ||
+ 	    (percpu && numa_node != NUMA_NO_NODE))
+ 		return -EINVAL;
+ 
+@@ -469,6 +470,9 @@ static int fd_array_map_alloc_check(union bpf_attr *attr)
+ 	/* only file descriptors can be stored in this type of map */
+ 	if (attr->value_size != sizeof(u32))
+ 		return -EINVAL;
++	/* Program read-only/write-only not supported for special maps yet. */
++	if (attr->map_flags & (BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG))
++		return -EINVAL;
+ 	return array_map_alloc_check(attr);
+ }
+ 
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index fed15cf..192d32e 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -23,7 +23,7 @@
+ 
+ #define HTAB_CREATE_FLAG_MASK						\
+ 	(BPF_F_NO_PREALLOC | BPF_F_NO_COMMON_LRU | BPF_F_NUMA_NODE |	\
+-	 BPF_F_RDONLY | BPF_F_WRONLY | BPF_F_ZERO_SEED)
++	 BPF_F_ACCESS_MASK | BPF_F_ZERO_SEED)
+ 
+ struct bucket {
+ 	struct hlist_nulls_head head;
+@@ -262,8 +262,8 @@ static int htab_map_alloc_check(union bpf_attr *attr)
+ 		/* Guard against local DoS, and discourage production use. */
+ 		return -EPERM;
+ 
+-	if (attr->map_flags & ~HTAB_CREATE_FLAG_MASK)
+-		/* reserved bits should not be used */
++	if (attr->map_flags & ~HTAB_CREATE_FLAG_MASK ||
++	    !bpf_map_flags_access_ok(attr->map_flags))
+ 		return -EINVAL;
+ 
+ 	if (!lru && percpu_lru)
+diff --git a/kernel/bpf/local_storage.c b/kernel/bpf/local_storage.c
+index 6b572e2..980e8f1 100644
+--- a/kernel/bpf/local_storage.c
++++ b/kernel/bpf/local_storage.c
+@@ -14,7 +14,7 @@ DEFINE_PER_CPU(struct bpf_cgroup_storage*, bpf_cgroup_storage[MAX_BPF_CGROUP_STO
+ #ifdef CONFIG_CGROUP_BPF
+ 
+ #define LOCAL_STORAGE_CREATE_FLAG_MASK					\
+-	(BPF_F_NUMA_NODE | BPF_F_RDONLY | BPF_F_WRONLY)
++	(BPF_F_NUMA_NODE | BPF_F_ACCESS_MASK)
+ 
+ struct bpf_cgroup_storage_map {
+ 	struct bpf_map map;
+@@ -282,8 +282,8 @@ static struct bpf_map *cgroup_storage_map_alloc(union bpf_attr *attr)
+ 	if (attr->value_size > PAGE_SIZE)
+ 		return ERR_PTR(-E2BIG);
+ 
+-	if (attr->map_flags & ~LOCAL_STORAGE_CREATE_FLAG_MASK)
+-		/* reserved bits should not be used */
++	if (attr->map_flags & ~LOCAL_STORAGE_CREATE_FLAG_MASK ||
++	    !bpf_map_flags_access_ok(attr->map_flags))
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	if (attr->max_entries)
+diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+index 93a5cbb..e61630c 100644
+--- a/kernel/bpf/lpm_trie.c
++++ b/kernel/bpf/lpm_trie.c
+@@ -538,7 +538,7 @@ static int trie_delete_elem(struct bpf_map *map, void *_key)
+ #define LPM_KEY_SIZE_MIN	LPM_KEY_SIZE(LPM_DATA_SIZE_MIN)
+ 
+ #define LPM_CREATE_FLAG_MASK	(BPF_F_NO_PREALLOC | BPF_F_NUMA_NODE |	\
+-				 BPF_F_RDONLY | BPF_F_WRONLY)
++				 BPF_F_ACCESS_MASK)
+ 
+ static struct bpf_map *trie_alloc(union bpf_attr *attr)
+ {
+@@ -553,6 +553,7 @@ static struct bpf_map *trie_alloc(union bpf_attr *attr)
+ 	if (attr->max_entries == 0 ||
+ 	    !(attr->map_flags & BPF_F_NO_PREALLOC) ||
+ 	    attr->map_flags & ~LPM_CREATE_FLAG_MASK ||
++	    !bpf_map_flags_access_ok(attr->map_flags) ||
+ 	    attr->key_size < LPM_KEY_SIZE_MIN ||
+ 	    attr->key_size > LPM_KEY_SIZE_MAX ||
+ 	    attr->value_size < LPM_VAL_SIZE_MIN ||
+diff --git a/kernel/bpf/queue_stack_maps.c b/kernel/bpf/queue_stack_maps.c
+index b384ea9..0b140d2 100644
+--- a/kernel/bpf/queue_stack_maps.c
++++ b/kernel/bpf/queue_stack_maps.c
+@@ -11,8 +11,7 @@
+ #include "percpu_freelist.h"
+ 
+ #define QUEUE_STACK_CREATE_FLAG_MASK \
+-	(BPF_F_NUMA_NODE | BPF_F_RDONLY | BPF_F_WRONLY)
+-
++	(BPF_F_NUMA_NODE | BPF_F_ACCESS_MASK)
+ 
+ struct bpf_queue_stack {
+ 	struct bpf_map map;
+@@ -52,7 +51,8 @@ static int queue_stack_map_alloc_check(union bpf_attr *attr)
+ 	/* check sanity of attributes */
+ 	if (attr->max_entries == 0 || attr->key_size != 0 ||
+ 	    attr->value_size == 0 ||
+-	    attr->map_flags & ~QUEUE_STACK_CREATE_FLAG_MASK)
++	    attr->map_flags & ~QUEUE_STACK_CREATE_FLAG_MASK ||
++	    !bpf_map_flags_access_ok(attr->map_flags))
+ 		return -EINVAL;
+ 
+ 	if (attr->value_size > KMALLOC_MAX_SIZE)
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index ddce0e2..d96ceb4 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -501,6 +501,8 @@ static int map_check_btf(struct bpf_map *map, const struct btf *btf,
+ 	map->spin_lock_off = btf_find_spin_lock(btf, value_type);
+ 
+ 	if (map_value_has_spin_lock(map)) {
++		if (map->map_flags & BPF_F_RDONLY_PROG)
++			return -EACCES;
+ 		if (map->map_type != BPF_MAP_TYPE_HASH &&
+ 		    map->map_type != BPF_MAP_TYPE_ARRAY &&
+ 		    map->map_type != BPF_MAP_TYPE_CGROUP_STORAGE)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index bd1f6b5..70704d4 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1439,6 +1439,28 @@ static int check_stack_access(struct bpf_verifier_env *env,
+ 	return 0;
+ }
+ 
++static int check_map_access_type(struct bpf_verifier_env *env, u32 regno,
++				 int off, int size, enum bpf_access_type type)
++{
++	struct bpf_reg_state *regs = cur_regs(env);
++	struct bpf_map *map = regs[regno].map_ptr;
++	u32 cap = bpf_map_flags_to_cap(map);
 +
-+/* BTF_KIND_DATASEC is followed by multiple "struct btf_var_secinfo"
-+ * to describe all BTF_KIND_VAR types it contains along with it's
-+ * in-section offset as well as size.
-+ */
-+struct btf_var_secinfo {
-+	__u32	type;
-+	__u32	offset;
-+	__u32	size;
-+};
++	if (type == BPF_WRITE && !(cap & BPF_MAP_CAN_WRITE)) {
++		verbose(env, "write into map forbidden, value_size=%d off=%d size=%d\n",
++			map->value_size, off, size);
++		return -EACCES;
++	}
 +
- #endif /* _UAPI__LINUX_BTF_H__ */
++	if (type == BPF_READ && !(cap & BPF_MAP_CAN_READ)) {
++		verbose(env, "read from map forbidden, value_size=%d off=%d size=%d\n",
++			map->value_size, off, size);
++		return -EACCES;
++	}
++
++	return 0;
++}
++
+ /* check read/write into map element returned by bpf_map_lookup_elem() */
+ static int __check_map_access(struct bpf_verifier_env *env, u32 regno, int off,
+ 			      int size, bool zero_size_allowed)
+@@ -2024,7 +2046,9 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
+ 			verbose(env, "R%d leaks addr into map\n", value_regno);
+ 			return -EACCES;
+ 		}
+-
++		err = check_map_access_type(env, regno, off, size, t);
++		if (err)
++			return err;
+ 		err = check_map_access(env, regno, off, size, false);
+ 		if (!err && t == BPF_READ && value_regno >= 0)
+ 			mark_reg_unknown(env, regs, value_regno);
+@@ -2327,6 +2351,10 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
+ 		return check_packet_access(env, regno, reg->off, access_size,
+ 					   zero_size_allowed);
+ 	case PTR_TO_MAP_VALUE:
++		if (check_map_access_type(env, regno, reg->off, access_size,
++					  meta && meta->raw_mode ? BPF_WRITE :
++					  BPF_READ))
++			return -EACCES;
+ 		return check_map_access(env, regno, reg->off, access_size,
+ 					zero_size_allowed);
+ 	default: /* scalar_value|ptr_to_stack or invalid ptr */
+@@ -3059,6 +3087,7 @@ record_func_map(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
+ 		int func_id, int insn_idx)
+ {
+ 	struct bpf_insn_aux_data *aux = &env->insn_aux_data[insn_idx];
++	struct bpf_map *map = meta->map_ptr;
+ 
+ 	if (func_id != BPF_FUNC_tail_call &&
+ 	    func_id != BPF_FUNC_map_lookup_elem &&
+@@ -3069,11 +3098,24 @@ record_func_map(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
+ 	    func_id != BPF_FUNC_map_peek_elem)
+ 		return 0;
+ 
+-	if (meta->map_ptr == NULL) {
++	if (map == NULL) {
+ 		verbose(env, "kernel subsystem misconfigured verifier\n");
+ 		return -EINVAL;
+ 	}
+ 
++	/* In case of read-only, some additional restrictions
++	 * need to be applied in order to prevent altering the
++	 * state of the map from program side.
++	 */
++	if ((map->map_flags & BPF_F_RDONLY_PROG) &&
++	    (func_id == BPF_FUNC_map_delete_elem ||
++	     func_id == BPF_FUNC_map_update_elem ||
++	     func_id == BPF_FUNC_map_push_elem ||
++	     func_id == BPF_FUNC_map_pop_elem)) {
++		verbose(env, "write into map forbidden\n");
++		return -EACCES;
++	}
++
+ 	if (!BPF_MAP_PTR(aux->map_state))
+ 		bpf_map_ptr_store(aux, meta->map_ptr,
+ 				  meta->map_ptr->unpriv_array);
 -- 
 2.9.5
 
