@@ -6,31 +6,31 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85AB8C282DA
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDB01C282DC
 	for <bpf@archiver.kernel.org>; Fri,  5 Apr 2019 21:00:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5270E2175B
+	by mail.kernel.org (Postfix) with ESMTP id A62952175B
 	for <bpf@archiver.kernel.org>; Fri,  5 Apr 2019 21:00:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726568AbfDEVAA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 5 Apr 2019 17:00:00 -0400
-Received: from www62.your-server.de ([213.133.104.62]:54838 "EHLO
+        id S1726545AbfDEU77 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 5 Apr 2019 16:59:59 -0400
+Received: from www62.your-server.de ([213.133.104.62]:54834 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726316AbfDEU77 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1726310AbfDEU77 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 5 Apr 2019 16:59:59 -0400
 Received: from [178.197.248.24] (helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1hCVwG-00074g-CD; Fri, 05 Apr 2019 22:59:52 +0200
+        id 1hCVwH-000755-Ct; Fri, 05 Apr 2019 22:59:53 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, ast@kernel.org, joe@wand.net.nz,
         yhs@fb.com, andrii.nakryiko@gmail.com, kafai@fb.com,
         Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v4 04/16] bpf: add syscall side map freeze support
-Date:   Fri,  5 Apr 2019 22:59:30 +0200
-Message-Id: <20cc940fa9f68c00b8a7c3ce2a5428f9c30dae22.1554497408.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next v4 06/16] bpf: add specification for BTF Var and DataSec kinds
+Date:   Fri,  5 Apr 2019 22:59:32 +0200
+Message-Id: <9d210a6271f6f40c500107785dd88f965cfca714.1554497408.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <cover.1554497408.git.daniel@iogearbox.net>
 References: <cover.1554497408.git.daniel@iogearbox.net>
@@ -43,221 +43,152 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds a new BPF_MAP_FREEZE command which allows to
-"freeze" the map globally as read-only / immutable from syscall
-side.
-
-Map permission handling has been refactored into map_get_sys_perms()
-and drops FMODE_CAN_WRITE in case of locked map. Main use case is
-to allow for setting up .rodata sections from the BPF ELF which
-are loaded into the kernel, meaning BPF loader first allocates
-map, sets up map value by copying .rodata section into it and once
-complete, it calls BPF_MAP_FREEZE on the map fd to prevent further
-modifications.
-
-Right now BPF_MAP_FREEZE only takes map fd as argument while remaining
-bpf_attr members are required to be zero. I didn't add write-only
-locking here as counterpart since I don't have a concrete use-case
-for it on my side, and I think it makes probably more sense to wait
-once there is actually one. In that case bpf_attr can be extended
-as usual with a flag field and/or others where flag 0 means that
-we lock the map read-only hence this doesn't prevent to add further
-extensions to BPF_MAP_FREEZE upon need.
-
-A map creation flag like BPF_F_WRONCE was not considered for couple
-of reasons: i) in case of a generic implementation, a map can consist
-of more than just one element, thus there could be multiple map
-updates needed to set the map into a state where it can then be
-made immutable, ii) WRONCE indicates exact one-time write before
-it is then set immutable. A generic implementation would set a bit
-atomically on map update entry (if unset), indicating that every
-subsequent update from then onwards will need to bail out there.
-However, map updates can fail, so upon failure that flag would need
-to be unset again and the update attempt would need to be repeated
-for it to be eventually made immutable. While this can be made
-race-free, this approach feels less clean and in combination with
-reason i), it's not generic enough. A dedicated BPF_MAP_FREEZE
-command directly sets the flag, allows all pending operations to
-finish and caller has the guarantee that map is immutable from
-syscall side upon successful return, which is also more intuitive
-from an API point of view. A command name such as BPF_MAP_LOCK has
-been avoided as it's too close with BPF map spin locks (which already
-has BPF_F_LOCK flag). BPF_MAP_FREEZE is so far only enabled for
-privileged users.
+This adds the BTF specification and UAPI bits for supporting BTF Var
+and DataSec kinds. This is following LLVM upstream commit ac4082b77e07
+("[BPF] Add BTF Var and DataSec Support") which has been merged recently.
+Var itself is for describing a global variable and DataSec to describe
+ELF sections e.g. data/bss/rodata sections that hold one or multiple
+global variables.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- include/linux/bpf.h      |  3 ++-
- include/uapi/linux/bpf.h |  1 +
- kernel/bpf/syscall.c     | 67 +++++++++++++++++++++++++++++++++++++++---------
- 3 files changed, 58 insertions(+), 13 deletions(-)
+ Documentation/bpf/btf.rst | 57 +++++++++++++++++++++++++++++++++++++++++++++++
+ include/uapi/linux/btf.h  | 32 ++++++++++++++++++++++----
+ 2 files changed, 85 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 25bf0a7..3d4e22a 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -87,7 +87,8 @@ struct bpf_map {
- 	struct btf *btf;
- 	u32 pages;
- 	bool unpriv_array;
--	/* 51 bytes hole */
-+	bool frozen; /* write-once */
-+	/* 48 bytes hole */
+diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
+index 9a60a5d..60d87d7 100644
+--- a/Documentation/bpf/btf.rst
++++ b/Documentation/bpf/btf.rst
+@@ -82,6 +82,8 @@ sequentially and type id is assigned to each recognized type starting from id
+     #define BTF_KIND_RESTRICT       11      /* Restrict     */
+     #define BTF_KIND_FUNC           12      /* Function     */
+     #define BTF_KIND_FUNC_PROTO     13      /* Function Proto       */
++    #define BTF_KIND_VAR            14      /* Variable     */
++    #define BTF_KIND_DATASEC        15      /* Section      */
  
- 	/* The 3rd and 4th cacheline with misc members to avoid false sharing
- 	 * particularly with refcounting.
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 3735432..92588db 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -105,6 +105,7 @@ enum bpf_cmd {
- 	BPF_BTF_GET_FD_BY_ID,
- 	BPF_TASK_FD_QUERY,
- 	BPF_MAP_LOOKUP_AND_DELETE_ELEM,
-+	BPF_MAP_FREEZE,
+ Note that the type section encodes debug info, not just pure types.
+ ``BTF_KIND_FUNC`` is not a type, and it represents a defined subprogram.
+@@ -393,6 +395,61 @@ refers to parameter type.
+ If the function has variable arguments, the last parameter is encoded with
+ ``name_off = 0`` and ``type = 0``.
+ 
++2.2.14 BTF_KIND_VAR
++~~~~~~~~~~~~~~~~~~~
++
++``struct btf_type`` encoding requirement:
++  * ``name_off``: offset to a valid C identifier
++  * ``info.kind_flag``: 0
++  * ``info.kind``: BTF_KIND_VAR
++  * ``info.vlen``: 0
++  * ``type``: the type of the variable
++
++``btf_type`` is followed by a single ``struct btf_variable`` with the
++following data::
++
++    struct btf_var {
++        __u32   linkage;
++    };
++
++``struct btf_var`` encoding:
++  * ``linkage``: currently only static variable 0, or globally allocated
++                 variable in ELF sections 1
++
++Not all type of global variables are supported by LLVM at this point.
++The following is currently available:
++
++  * static variables with or without section attributes
++  * global variables with section attributes
++
++The latter is for future extraction of map key/value type id's from a
++map definition.
++
++2.2.15 BTF_KIND_DATASEC
++~~~~~~~~~~~~~~~~~~~~~~~
++
++``struct btf_type`` encoding requirement:
++  * ``name_off``: offset to a valid name associated with a variable or
++                  one of .data/.bss/.rodata
++  * ``info.kind_flag``: 0
++  * ``info.kind``: BTF_KIND_DATASEC
++  * ``info.vlen``: # of variables
++  * ``size``: total section size in bytes (0 at compilation time, patched
++              to actual size by BPF loaders such as libbpf)
++
++``btf_type`` is followed by ``info.vlen`` number of ``struct btf_var_secinfo``.::
++
++    struct btf_var_secinfo {
++        __u32   type;
++        __u32   offset;
++        __u32   size;
++    };
++
++``struct btf_var_secinfo`` encoding:
++  * ``type``: the type of the BTF_KIND_VAR variable
++  * ``offset``: the in-section offset of the variable
++  * ``size``: the size of the variable in bytes
++
+ 3. BTF Kernel API
+ *****************
+ 
+diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
+index 7b7475e..9310652 100644
+--- a/include/uapi/linux/btf.h
++++ b/include/uapi/linux/btf.h
+@@ -39,11 +39,11 @@ struct btf_type {
+ 	 *             struct, union and fwd
+ 	 */
+ 	__u32 info;
+-	/* "size" is used by INT, ENUM, STRUCT and UNION.
++	/* "size" is used by INT, ENUM, STRUCT, UNION and DATASEC.
+ 	 * "size" tells the size of the type it is describing.
+ 	 *
+ 	 * "type" is used by PTR, TYPEDEF, VOLATILE, CONST, RESTRICT,
+-	 * FUNC and FUNC_PROTO.
++	 * FUNC, FUNC_PROTO and VAR.
+ 	 * "type" is a type_id referring to another type.
+ 	 */
+ 	union {
+@@ -70,8 +70,10 @@ struct btf_type {
+ #define BTF_KIND_RESTRICT	11	/* Restrict	*/
+ #define BTF_KIND_FUNC		12	/* Function	*/
+ #define BTF_KIND_FUNC_PROTO	13	/* Function Proto	*/
+-#define BTF_KIND_MAX		13
+-#define NR_BTF_KINDS		14
++#define BTF_KIND_VAR		14	/* Variable	*/
++#define BTF_KIND_DATASEC	15	/* Section	*/
++#define BTF_KIND_MAX		BTF_KIND_DATASEC
++#define NR_BTF_KINDS		(BTF_KIND_MAX + 1)
+ 
+ /* For some specific BTF_KIND, "struct btf_type" is immediately
+  * followed by extra data.
+@@ -138,4 +140,26 @@ struct btf_param {
+ 	__u32	type;
  };
  
- enum bpf_map_type {
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index d96ceb4..8b00ee3 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -355,6 +355,18 @@ static int bpf_map_release(struct inode *inode, struct file *filp)
- 	return 0;
- }
- 
-+static fmode_t map_get_sys_perms(struct bpf_map *map, struct fd f)
-+{
-+	fmode_t mode = f.file->f_mode;
++enum {
++	BTF_VAR_STATIC = 0,
++	BTF_VAR_GLOBAL_ALLOCATED,
++};
 +
-+	/* Our file permissions may have been overridden by global
-+	 * map permissions facing syscall side.
-+	 */
-+	if (READ_ONCE(map->frozen))
-+		mode &= ~FMODE_CAN_WRITE;
-+	return mode;
-+}
++/* BTF_KIND_VAR is followed by a single "struct btf_var" to describe
++ * additional information related to the variable such as its linkage.
++ */
++struct btf_var {
++	__u32	linkage;
++};
 +
- #ifdef CONFIG_PROC_FS
- static void bpf_map_show_fdinfo(struct seq_file *m, struct file *filp)
- {
-@@ -376,14 +388,16 @@ static void bpf_map_show_fdinfo(struct seq_file *m, struct file *filp)
- 		   "max_entries:\t%u\n"
- 		   "map_flags:\t%#x\n"
- 		   "memlock:\t%llu\n"
--		   "map_id:\t%u\n",
-+		   "map_id:\t%u\n"
-+		   "frozen:\t%u\n",
- 		   map->map_type,
- 		   map->key_size,
- 		   map->value_size,
- 		   map->max_entries,
- 		   map->map_flags,
- 		   map->pages * 1ULL << PAGE_SHIFT,
--		   map->id);
-+		   map->id,
-+		   READ_ONCE(map->frozen));
- 
- 	if (owner_prog_type) {
- 		seq_printf(m, "owner_prog_type:\t%u\n",
-@@ -727,8 +741,7 @@ static int map_lookup_elem(union bpf_attr *attr)
- 	map = __bpf_map_get(f);
- 	if (IS_ERR(map))
- 		return PTR_ERR(map);
--
--	if (!(f.file->f_mode & FMODE_CAN_READ)) {
-+	if (!(map_get_sys_perms(map, f) & FMODE_CAN_READ)) {
- 		err = -EPERM;
- 		goto err_put;
- 	}
-@@ -857,8 +870,7 @@ static int map_update_elem(union bpf_attr *attr)
- 	map = __bpf_map_get(f);
- 	if (IS_ERR(map))
- 		return PTR_ERR(map);
--
--	if (!(f.file->f_mode & FMODE_CAN_WRITE)) {
-+	if (!(map_get_sys_perms(map, f) & FMODE_CAN_WRITE)) {
- 		err = -EPERM;
- 		goto err_put;
- 	}
-@@ -969,8 +981,7 @@ static int map_delete_elem(union bpf_attr *attr)
- 	map = __bpf_map_get(f);
- 	if (IS_ERR(map))
- 		return PTR_ERR(map);
--
--	if (!(f.file->f_mode & FMODE_CAN_WRITE)) {
-+	if (!(map_get_sys_perms(map, f) & FMODE_CAN_WRITE)) {
- 		err = -EPERM;
- 		goto err_put;
- 	}
-@@ -1021,8 +1032,7 @@ static int map_get_next_key(union bpf_attr *attr)
- 	map = __bpf_map_get(f);
- 	if (IS_ERR(map))
- 		return PTR_ERR(map);
--
--	if (!(f.file->f_mode & FMODE_CAN_READ)) {
-+	if (!(map_get_sys_perms(map, f) & FMODE_CAN_READ)) {
- 		err = -EPERM;
- 		goto err_put;
- 	}
-@@ -1089,8 +1099,7 @@ static int map_lookup_and_delete_elem(union bpf_attr *attr)
- 	map = __bpf_map_get(f);
- 	if (IS_ERR(map))
- 		return PTR_ERR(map);
--
--	if (!(f.file->f_mode & FMODE_CAN_WRITE)) {
-+	if (!(map_get_sys_perms(map, f) & FMODE_CAN_WRITE)) {
- 		err = -EPERM;
- 		goto err_put;
- 	}
-@@ -1132,6 +1141,37 @@ static int map_lookup_and_delete_elem(union bpf_attr *attr)
- 	return err;
- }
- 
-+#define BPF_MAP_FREEZE_LAST_FIELD map_fd
++/* BTF_KIND_DATASEC is followed by multiple "struct btf_var_secinfo"
++ * to describe all BTF_KIND_VAR types it contains along with it's
++ * in-section offset as well as size.
++ */
++struct btf_var_secinfo {
++	__u32	type;
++	__u32	offset;
++	__u32	size;
++};
 +
-+static int map_freeze(const union bpf_attr *attr)
-+{
-+	int err = 0, ufd = attr->map_fd;
-+	struct bpf_map *map;
-+	struct fd f;
-+
-+	if (CHECK_ATTR(BPF_MAP_FREEZE))
-+		return -EINVAL;
-+
-+	f = fdget(ufd);
-+	map = __bpf_map_get(f);
-+	if (IS_ERR(map))
-+		return PTR_ERR(map);
-+	if (READ_ONCE(map->frozen)) {
-+		err = -EBUSY;
-+		goto err_put;
-+	}
-+	if (!capable(CAP_SYS_ADMIN)) {
-+		err = -EPERM;
-+		goto err_put;
-+	}
-+
-+	WRITE_ONCE(map->frozen, true);
-+	synchronize_rcu();
-+err_put:
-+	fdput(f);
-+	return err;
-+}
-+
- static const struct bpf_prog_ops * const bpf_prog_types[] = {
- #define BPF_PROG_TYPE(_id, _name) \
- 	[_id] = & _name ## _prog_ops,
-@@ -2738,6 +2778,9 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, siz
- 	case BPF_MAP_GET_NEXT_KEY:
- 		err = map_get_next_key(&attr);
- 		break;
-+	case BPF_MAP_FREEZE:
-+		err = map_freeze(&attr);
-+		break;
- 	case BPF_PROG_LOAD:
- 		err = bpf_prog_load(&attr, uattr);
- 		break;
+ #endif /* _UAPI__LINUX_BTF_H__ */
 -- 
 2.9.5
 
