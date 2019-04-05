@@ -4,33 +4,33 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E035CC282DD
-	for <bpf@archiver.kernel.org>; Fri,  5 Apr 2019 21:00:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C0C3C282DA
+	for <bpf@archiver.kernel.org>; Fri,  5 Apr 2019 21:00:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B83E92175B
-	for <bpf@archiver.kernel.org>; Fri,  5 Apr 2019 21:00:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D8F6F2175B
+	for <bpf@archiver.kernel.org>; Fri,  5 Apr 2019 21:00:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726623AbfDEVAD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 5 Apr 2019 17:00:03 -0400
-Received: from www62.your-server.de ([213.133.104.62]:54872 "EHLO
+        id S1726605AbfDEVAS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 5 Apr 2019 17:00:18 -0400
+Received: from www62.your-server.de ([213.133.104.62]:54866 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726353AbfDEVAA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1726535AbfDEVAA (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 5 Apr 2019 17:00:00 -0400
 Received: from [178.197.248.24] (helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1hCVwJ-00075Z-Bi; Fri, 05 Apr 2019 22:59:55 +0200
+        id 1hCVwI-00075O-Qx; Fri, 05 Apr 2019 22:59:55 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, ast@kernel.org, joe@wand.net.nz,
         yhs@fb.com, andrii.nakryiko@gmail.com, kafai@fb.com,
         Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v4 09/16] bpf: sync {btf,bpf}.h uapi header from tools infrastructure
-Date:   Fri,  5 Apr 2019 22:59:35 +0200
-Message-Id: <e7d2f32680f308ec8452e7569518b5854c528cd2.1554497408.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next v4 08/16] bpf: allow for key-less BTF in array map
+Date:   Fri,  5 Apr 2019 22:59:34 +0200
+Message-Id: <45635681bf04b1ef60c66f44edade00e91591e09.1554497408.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <cover.1554497408.git.daniel@iogearbox.net>
 References: <cover.1554497408.git.daniel@iogearbox.net>
@@ -43,130 +43,119 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Pull in latest changes from both headers, so we can make use of
-them in libbpf.
+Given we'll be reusing BPF array maps for global data/bss/rodata
+sections, we need a way to associate BTF DataSec type as its map
+value type. In usual cases we have this ugly BPF_ANNOTATE_KV_PAIR()
+macro hack e.g. via 38d5d3b3d5db ("bpf: Introduce BPF_ANNOTATE_KV_PAIR")
+to get initial map to type association going. While more use cases
+for it are discouraged, this also won't work for global data since
+the use of array map is a BPF loader detail and therefore unknown
+at compilation time. For array maps with just a single entry we make
+an exception in terms of BTF in that key type is declared optional
+if value type is of DataSec type. The latter LLVM is guaranteed to
+emit and it also aligns with how we regard global data maps as just
+a plain buffer area reusing existing map facilities for allowing
+things like introspection with existing tools.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- tools/include/uapi/linux/bpf.h | 24 ++++++++++++++++++++++--
- tools/include/uapi/linux/btf.h | 32 ++++++++++++++++++++++++++++----
- 2 files changed, 50 insertions(+), 6 deletions(-)
+ include/linux/btf.h   |  1 +
+ kernel/bpf/arraymap.c | 15 ++++++++++++++-
+ kernel/bpf/btf.c      |  2 +-
+ kernel/bpf/syscall.c  | 15 +++++++++++----
+ 4 files changed, 27 insertions(+), 6 deletions(-)
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 8370245..92588db 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -105,6 +105,7 @@ enum bpf_cmd {
- 	BPF_BTF_GET_FD_BY_ID,
- 	BPF_TASK_FD_QUERY,
- 	BPF_MAP_LOOKUP_AND_DELETE_ELEM,
-+	BPF_MAP_FREEZE,
- };
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index 455d31b..64cdf2a 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -51,6 +51,7 @@ bool btf_member_is_reg_int(const struct btf *btf, const struct btf_type *s,
+ 			   const struct btf_member *m,
+ 			   u32 expected_offset, u32 expected_size);
+ int btf_find_spin_lock(const struct btf *btf, const struct btf_type *t);
++bool btf_type_is_void(const struct btf_type *t);
  
- enum bpf_map_type {
-@@ -255,8 +256,19 @@ enum bpf_attach_type {
-  */
- #define BPF_F_ANY_ALIGNMENT	(1U << 1)
+ #ifdef CONFIG_BPF_SYSCALL
+ const struct btf_type *btf_type_by_id(const struct btf *btf, u32 type_id);
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 37c6b7f..7dd1549 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -388,7 +388,8 @@ static void array_map_seq_show_elem(struct bpf_map *map, void *key,
+ 		return;
+ 	}
  
--/* when bpf_ldimm64->src_reg == BPF_PSEUDO_MAP_FD, bpf_ldimm64->imm == fd */
-+/* When BPF ldimm64's insn[0].src_reg != 0 then this can have
-+ * two extensions:
-+ *
-+ * insn[0].src_reg:  BPF_PSEUDO_MAP_FD   BPF_PSEUDO_MAP_VALUE
-+ * insn[0].imm:      map fd              map fd
-+ * insn[1].imm:      0                   offset into value
-+ * insn[0].off:      0                   lower 16 bit of map index
-+ * insn[1].off:      0                   higher 16 bit of map index
-+ * ldimm64 rewrite:  address of map      address of map[index]+offset
-+ * verifier type:    CONST_PTR_TO_MAP    PTR_TO_MAP_VALUE
-+ */
- #define BPF_PSEUDO_MAP_FD	1
-+#define BPF_PSEUDO_MAP_VALUE	2
+-	seq_printf(m, "%u: ", *(u32 *)key);
++	if (map->btf_key_type_id)
++		seq_printf(m, "%u: ", *(u32 *)key);
+ 	btf_type_seq_show(map->btf, map->btf_value_type_id, value, m);
+ 	seq_puts(m, "\n");
  
- /* when bpf_call->src_reg == BPF_PSEUDO_CALL, bpf_call->imm == pc-relative
-  * offset to another bpf function
-@@ -283,7 +295,7 @@ enum bpf_attach_type {
+@@ -425,6 +426,18 @@ static int array_map_check_btf(const struct bpf_map *map,
+ {
+ 	u32 int_data;
  
- #define BPF_OBJ_NAME_LEN 16U
- 
--/* Flags for accessing BPF object */
-+/* Flags for accessing BPF object from syscall side. */
- #define BPF_F_RDONLY		(1U << 3)
- #define BPF_F_WRONLY		(1U << 4)
- 
-@@ -293,6 +305,14 @@ enum bpf_attach_type {
- /* Zero-initialize hash function seed. This should only be used for testing. */
- #define BPF_F_ZERO_SEED		(1U << 6)
- 
-+/* Flags for accessing BPF object from program side. */
-+#define BPF_F_RDONLY_PROG	(1U << 7)
-+#define BPF_F_WRONLY_PROG	(1U << 8)
-+#define BPF_F_ACCESS_MASK	(BPF_F_RDONLY |		\
-+				 BPF_F_RDONLY_PROG |	\
-+				 BPF_F_WRONLY |		\
-+				 BPF_F_WRONLY_PROG)
++	/* One exception for keyless BTF: .bss/.data/.rodata map */
++	if (btf_type_is_void(key_type)) {
++		if (map->map_type != BPF_MAP_TYPE_ARRAY ||
++		    map->max_entries != 1)
++			return -EINVAL;
 +
- /* flags for BPF_PROG_QUERY */
- #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
- 
-diff --git a/tools/include/uapi/linux/btf.h b/tools/include/uapi/linux/btf.h
-index 7b7475e..9310652 100644
---- a/tools/include/uapi/linux/btf.h
-+++ b/tools/include/uapi/linux/btf.h
-@@ -39,11 +39,11 @@ struct btf_type {
- 	 *             struct, union and fwd
- 	 */
- 	__u32 info;
--	/* "size" is used by INT, ENUM, STRUCT and UNION.
-+	/* "size" is used by INT, ENUM, STRUCT, UNION and DATASEC.
- 	 * "size" tells the size of the type it is describing.
- 	 *
- 	 * "type" is used by PTR, TYPEDEF, VOLATILE, CONST, RESTRICT,
--	 * FUNC and FUNC_PROTO.
-+	 * FUNC, FUNC_PROTO and VAR.
- 	 * "type" is a type_id referring to another type.
- 	 */
- 	union {
-@@ -70,8 +70,10 @@ struct btf_type {
- #define BTF_KIND_RESTRICT	11	/* Restrict	*/
- #define BTF_KIND_FUNC		12	/* Function	*/
- #define BTF_KIND_FUNC_PROTO	13	/* Function Proto	*/
--#define BTF_KIND_MAX		13
--#define NR_BTF_KINDS		14
-+#define BTF_KIND_VAR		14	/* Variable	*/
-+#define BTF_KIND_DATASEC	15	/* Section	*/
-+#define BTF_KIND_MAX		BTF_KIND_DATASEC
-+#define NR_BTF_KINDS		(BTF_KIND_MAX + 1)
- 
- /* For some specific BTF_KIND, "struct btf_type" is immediately
-  * followed by extra data.
-@@ -138,4 +140,26 @@ struct btf_param {
- 	__u32	type;
- };
- 
-+enum {
-+	BTF_VAR_STATIC = 0,
-+	BTF_VAR_GLOBAL_ALLOCATED,
-+};
++		if (BTF_INFO_KIND(value_type->info) != BTF_KIND_DATASEC)
++			return -EINVAL;
 +
-+/* BTF_KIND_VAR is followed by a single "struct btf_var" to describe
-+ * additional information related to the variable such as its linkage.
-+ */
-+struct btf_var {
-+	__u32	linkage;
-+};
++		return 0;
++	}
 +
-+/* BTF_KIND_DATASEC is followed by multiple "struct btf_var_secinfo"
-+ * to describe all BTF_KIND_VAR types it contains along with it's
-+ * in-section offset as well as size.
-+ */
-+struct btf_var_secinfo {
-+	__u32	type;
-+	__u32	offset;
-+	__u32	size;
-+};
-+
- #endif /* _UAPI__LINUX_BTF_H__ */
+ 	if (BTF_INFO_KIND(key_type->info) != BTF_KIND_INT)
+ 		return -EINVAL;
+ 
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 0cecf6b..cad0985 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -326,7 +326,7 @@ static bool btf_type_is_modifier(const struct btf_type *t)
+ 	return false;
+ }
+ 
+-static bool btf_type_is_void(const struct btf_type *t)
++bool btf_type_is_void(const struct btf_type *t)
+ {
+ 	return t == &btf_void;
+ }
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 7bac02b..c6893fb 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -504,9 +504,16 @@ static int map_check_btf(struct bpf_map *map, const struct btf *btf,
+ 	u32 key_size, value_size;
+ 	int ret = 0;
+ 
+-	key_type = btf_type_id_size(btf, &btf_key_id, &key_size);
+-	if (!key_type || key_size != map->key_size)
+-		return -EINVAL;
++	/* Some maps allow key to be unspecified. */
++	if (btf_key_id) {
++		key_type = btf_type_id_size(btf, &btf_key_id, &key_size);
++		if (!key_type || key_size != map->key_size)
++			return -EINVAL;
++	} else {
++		key_type = btf_type_by_id(btf, 0);
++		if (!map->ops->map_check_btf)
++			return -EINVAL;
++	}
+ 
+ 	value_type = btf_type_id_size(btf, &btf_value_id, &value_size);
+ 	if (!value_type || value_size != map->value_size)
+@@ -573,7 +580,7 @@ static int map_create(union bpf_attr *attr)
+ 	if (attr->btf_key_type_id || attr->btf_value_type_id) {
+ 		struct btf *btf;
+ 
+-		if (!attr->btf_key_type_id || !attr->btf_value_type_id) {
++		if (!attr->btf_value_type_id) {
+ 			err = -EINVAL;
+ 			goto free_map_nouncharge;
+ 		}
 -- 
 2.9.5
 
