@@ -1,237 +1,105 @@
-Return-Path: <SRS0=rZCH=SH=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=Rhtb=SI=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_NEOMUTT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA041C282CE
-	for <bpf@archiver.kernel.org>; Fri,  5 Apr 2019 23:57:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BFAA9C282CE
+	for <bpf@archiver.kernel.org>; Sat,  6 Apr 2019 01:56:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B442D21726
-	for <bpf@archiver.kernel.org>; Fri,  5 Apr 2019 23:57:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8D5BD2146F
+	for <bpf@archiver.kernel.org>; Sat,  6 Apr 2019 01:56:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="QGACJq8i"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lezRaI4B"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726271AbfDEX5Q (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 5 Apr 2019 19:57:16 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:47686 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726223AbfDEX5K (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 5 Apr 2019 19:57:10 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x35Nt3hh022716;
-        Fri, 5 Apr 2019 16:56:12 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=hrmkK86CLcUqI7FOsA7WTDumNlH5nTqSdid1LV/cbvQ=;
- b=QGACJq8ioJNkbFtLtLdJrY9O7P3qC/uK9tl+NQtdJ3pVbvHgcI+VFB0LPXub6vbhE0aD
- ZG/Fw/1205ed0EG9H5ZLWfdrR+NDA/3BLBt+nFcom+EHmMOxj+qgqPFBo5RrxccbIkKb
- 7haZjB7QPi7+lv3n+NC6+8jruFMcyfBF8vA= 
-Received: from maileast.thefacebook.com ([199.201.65.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2rp9r5hnp8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 05 Apr 2019 16:56:12 -0700
-Received: from mmullins-1.thefacebook.com (2620:10d:c0a1:3::13) by
- mail.thefacebook.com (2620:10d:c021:18::176) with Microsoft SMTP Server id
- 15.1.1713.5; Fri, 5 Apr 2019 16:56:09 -0700
-From:   Matt Mullins <mmullins@fb.com>
-To:     <hall@fb.com>, <mmullins@fb.com>, <ast@kernel.org>,
-        <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        "Jens Axboe" <axboe@kernel.dk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        <linux-block@vger.kernel.org>, <nbd@other.debian.org>
-Subject: [PATCH bpf-next v2 3/5] nbd: add tracepoints for send/receive timing
-Date:   Fri, 5 Apr 2019 16:55:04 -0700
-Message-ID: <20190405235506.29236-4-mmullins@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190405235506.29236-1-mmullins@fb.com>
-References: <20190405235506.29236-1-mmullins@fb.com>
+        id S1726271AbfDFB41 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 5 Apr 2019 21:56:27 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:34502 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726204AbfDFB40 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 5 Apr 2019 21:56:26 -0400
+Received: by mail-pf1-f193.google.com with SMTP id b3so4236775pfd.1;
+        Fri, 05 Apr 2019 18:56:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=HuTifu+DzLJLZ1sqf4f961WZhFuy2LPUTW36R7yvYG4=;
+        b=lezRaI4BFIfu37wd/K3NN3DKweSnhhTgZf3GcBhLtd3wFZejiN0Ex+ePq7Er1pESMm
+         lJxuyaGWXodScftLurxQoGvdROqfZAT/t5c9/Gxu1gDjbL+AQQj8tLjV+tc4eiOPrdBL
+         uu44/uOfSgQWW121Hm1RdZN7f5QlH51FUCHDMdmZVGsFSAiudHy748ajvpSZBeAYogvo
+         nYpxh4oAFPMuxwr+7yV+G9RUmN0qw/Du1pq14NC5wQRqN9k4/Jx9ytixrdbcpYt1A15E
+         IeGQ3zsr1CnQEixsY4fODZUpT/oSgES8I9pp6TH6Oz9lNa/djgOmShZgmRP8EF6bzpK/
+         GMsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=HuTifu+DzLJLZ1sqf4f961WZhFuy2LPUTW36R7yvYG4=;
+        b=UpVBl+prDnxuzplsTFuZuMrD2yG2hbLHnEZ11vPMxIU4WE0skxfZK1J42dG/+3MXwW
+         KZNxB9SOWrXaSMUYBcL8vXsM2vB0O7g7PlYnCHw+BVUHxEiWmFuid+oeGjRvwl39SH9X
+         qyWh9WpGOre6SRaGw1PMtdOaNbmyrXpiZIqmwoIaBP3xXmIf6wPwm01308uInezTlIkZ
+         skz64rS1BgxOtj6E3hrPd90o47gkEbiRQtnkARSGx1u9YEG7V7CRNloHCFdbyxH2zqC5
+         +ajXLfZEQZSHSrabaDG6nJrWxfsJZaVrEzhqxN1RSxI+kGQ5hUonnRrhEZuUsR/wIqnJ
+         C6zg==
+X-Gm-Message-State: APjAAAXMfBk3OGZz+pP0xKVUb7YwWuB+jonZt3tQrZVPsshhpOYYeSNE
+        mnCqWVEy2Xn5/1wY63YZAwM=
+X-Google-Smtp-Source: APXvYqxxDwYTBzvuUQOVlYBJxoiYJIGaatECw0UB9NgotjUmSJabVfd976cg5Aqf8P7At7pUgfR1/A==
+X-Received: by 2002:a65:4343:: with SMTP id k3mr15239995pgq.384.1554515785851;
+        Fri, 05 Apr 2019 18:56:25 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:180::6bee])
+        by smtp.gmail.com with ESMTPSA id s4sm26202870pgp.89.2019.04.05.18.56.24
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 05 Apr 2019 18:56:25 -0700 (PDT)
+Date:   Fri, 5 Apr 2019 18:56:23 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@kernel.org,
+        joe@wand.net.nz, yhs@fb.com, andrii.nakryiko@gmail.com,
+        kafai@fb.com
+Subject: Re: [PATCH bpf-next v4 01/16] bpf: implement lookup-free direct
+ value access for maps
+Message-ID: <20190406015621.4yrcolqkweg3c2xy@ast-mbp.dhcp.thefacebook.com>
+References: <cover.1554497408.git.daniel@iogearbox.net>
+ <777f5dda5ef99c1a1cb30dec46f64c1bc814552e.1554497408.git.daniel@iogearbox.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [2620:10d:c0a1:3::13]
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-05_17:,,
- signatures=0
-X-Proofpoint-Spam-Reason: safe
-X-FB-Internal: Safe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <777f5dda5ef99c1a1cb30dec46f64c1bc814552e.1554497408.git.daniel@iogearbox.net>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrew Hall <hall@fb.com>
+On Fri, Apr 05, 2019 at 10:59:27PM +0200, Daniel Borkmann wrote:
+>  
+> -/* when bpf_ldimm64->src_reg == BPF_PSEUDO_MAP_FD, bpf_ldimm64->imm == fd */
+> +/* When BPF ldimm64's insn[0].src_reg != 0 then this can have
+> + * two extensions:
+> + *
+> + * insn[0].src_reg:  BPF_PSEUDO_MAP_FD   BPF_PSEUDO_MAP_VALUE
+> + * insn[0].imm:      map fd              map fd
+> + * insn[1].imm:      0                   offset into value
+> + * insn[0].off:      0                   lower 16 bit of map index
+> + * insn[1].off:      0                   higher 16 bit of map index
+> + * ldimm64 rewrite:  address of map      address of map[index]+offset
+> + * verifier type:    CONST_PTR_TO_MAP    PTR_TO_MAP_VALUE
+...
+> +	else if (insn->src_reg == BPF_PSEUDO_MAP_VALUE)
+> +		snprintf(dd->scratch_buff, sizeof(dd->scratch_buff),
+> +			 "map[id:%u][%u]+%u", insn->imm,
+> +			 ((__u32)(__u16)insn[0].off) |
+> +			 ((__u32)(__u16)insn[1].off) << 16,
+> +			 (insn + 1)->imm);
 
-This adds four tracepoints to nbd, enabling separate tracing of payload
-and header sending/receipt.
-
-In the send path for headers that have already been sent, we also
-explicitly initialize the handle so it can be referenced by the later
-tracepoint.
-
-Signed-off-by: Andrew Hall <hall@fb.com>
-Signed-off-by: Matt Mullins <mmullins@fb.com>
----
- drivers/block/nbd.c        |  8 ++++
- include/trace/events/nbd.h | 92 ++++++++++++++++++++++++++++++++++++++
- 2 files changed, 100 insertions(+)
-
-diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-index 7393d04d255c..d3d914620f66 100644
---- a/drivers/block/nbd.c
-+++ b/drivers/block/nbd.c
-@@ -513,6 +513,10 @@ static int nbd_send_cmd(struct nbd_device *nbd, struct nbd_cmd *cmd, int index)
- 	if (sent) {
- 		if (sent >= sizeof(request)) {
- 			skip = sent - sizeof(request);
-+
-+			// initialize handle for tracing purposes
-+			handle = nbd_cmd_handle(cmd);
-+
- 			goto send_pages;
- 		}
- 		iov_iter_advance(&from, sent);
-@@ -536,6 +540,7 @@ static int nbd_send_cmd(struct nbd_device *nbd, struct nbd_cmd *cmd, int index)
- 		(unsigned long long)blk_rq_pos(req) << 9, blk_rq_bytes(req));
- 	result = sock_xmit(nbd, index, 1, &from,
- 			(type == NBD_CMD_WRITE) ? MSG_MORE : 0, &sent);
-+	trace_nbd_header_sent(req, handle);
- 	if (result <= 0) {
- 		if (was_interrupted(result)) {
- 			/* If we havne't sent anything we can just return BUSY,
-@@ -608,6 +613,7 @@ static int nbd_send_cmd(struct nbd_device *nbd, struct nbd_cmd *cmd, int index)
- 		bio = next;
- 	}
- out:
-+	trace_nbd_payload_sent(req, handle);
- 	nsock->pending = NULL;
- 	nsock->sent = 0;
- 	return 0;
-@@ -655,6 +661,7 @@ static struct nbd_cmd *nbd_read_stat(struct nbd_device *nbd, int index)
- 			tag, req);
- 		return ERR_PTR(-ENOENT);
- 	}
-+	trace_nbd_header_received(req, handle);
- 	cmd = blk_mq_rq_to_pdu(req);
- 
- 	mutex_lock(&cmd->lock);
-@@ -708,6 +715,7 @@ static struct nbd_cmd *nbd_read_stat(struct nbd_device *nbd, int index)
- 		}
- 	}
- out:
-+	trace_nbd_payload_received(req, handle);
- 	mutex_unlock(&cmd->lock);
- 	return ret ? ERR_PTR(ret) : cmd;
- }
-diff --git a/include/trace/events/nbd.h b/include/trace/events/nbd.h
-index 5928255ed02e..eef476fef95a 100644
---- a/include/trace/events/nbd.h
-+++ b/include/trace/events/nbd.h
-@@ -7,6 +7,98 @@
- 
- #include <linux/tracepoint.h>
- 
-+TRACE_EVENT(nbd_header_sent,
-+
-+	TP_PROTO(struct request *req, u64 handle),
-+
-+	TP_ARGS(req, handle),
-+
-+	TP_STRUCT__entry(
-+		__field(struct request *, req)
-+		__field(u64, handle)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->req = req;
-+		__entry->handle = handle;
-+	),
-+
-+	TP_printk(
-+		"nbd header sent: request %p, handle 0x%016llx",
-+		__entry->req,
-+		__entry->handle
-+	)
-+);
-+
-+TRACE_EVENT(nbd_payload_sent,
-+
-+	TP_PROTO(struct request *req, u64 handle),
-+
-+	TP_ARGS(req, handle),
-+
-+	TP_STRUCT__entry(
-+		__field(struct request *, req)
-+		__field(u64, handle)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->req = req;
-+		__entry->handle = handle;
-+	),
-+
-+	TP_printk(
-+		"nbd payload sent: request %p, handle 0x%016llx",
-+		__entry->req,
-+		__entry->handle
-+	)
-+);
-+
-+TRACE_EVENT(nbd_header_received,
-+
-+	TP_PROTO(struct request *req, u64 handle),
-+
-+	TP_ARGS(req, handle),
-+
-+	TP_STRUCT__entry(
-+		__field(struct request *, req)
-+		__field(u64, handle)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->req = req;
-+		__entry->handle = handle;
-+	),
-+
-+	TP_printk(
-+		"nbd header received: request %p, handle 0x%016llx",
-+		__entry->req,
-+		__entry->handle
-+	)
-+);
-+
-+TRACE_EVENT(nbd_payload_received,
-+
-+	TP_PROTO(struct request *req, u64 handle),
-+
-+	TP_ARGS(req, handle),
-+
-+	TP_STRUCT__entry(
-+		__field(struct request *, req)
-+		__field(u64, handle)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->req = req;
-+		__entry->handle = handle;
-+	),
-+
-+	TP_printk(
-+		"nbd payload received: request %p, handle 0x%016llx",
-+		__entry->req,
-+		__entry->handle
-+	)
-+);
-+
- DECLARE_EVENT_CLASS(nbd_send_request,
- 
- 	TP_PROTO(struct nbd_request *nbd_request, int index,
--- 
-2.17.1
+Hopefully one last nit...
+Do we really need to allow this odd split index support?
+Later patches enforce array of 1 element and libbpf only uses that.
+This index feature feels too quirky and not really useful at this moment.
+Can we enforce that insn[0|1].off == 0 instead ?
+Later we can extend it to mean index without breaking anything.
 
