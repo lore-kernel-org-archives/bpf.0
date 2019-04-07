@@ -2,187 +2,243 @@ Return-Path: <SRS0=hr/i=SJ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_NEOMUTT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 249F8C282DC
-	for <bpf@archiver.kernel.org>; Sun,  7 Apr 2019 00:14:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CBF4C282DA
+	for <bpf@archiver.kernel.org>; Sun,  7 Apr 2019 02:51:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E02A72171F
-	for <bpf@archiver.kernel.org>; Sun,  7 Apr 2019 00:14:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1534A2171F
+	for <bpf@archiver.kernel.org>; Sun,  7 Apr 2019 02:51:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda-com.20150623.gappssmtp.com header.i=@toxicpanda-com.20150623.gappssmtp.com header.b="ssNMnh4U"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ue3VLsDD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726202AbfDGAOA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 6 Apr 2019 20:14:00 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:34922 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726144AbfDGAN7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 6 Apr 2019 20:13:59 -0400
-Received: by mail-qk1-f196.google.com with SMTP id a71so5989697qkg.2
-        for <bpf@vger.kernel.org>; Sat, 06 Apr 2019 17:13:59 -0700 (PDT)
+        id S1726199AbfDGCvd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 6 Apr 2019 22:51:33 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:34611 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726053AbfDGCvd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 6 Apr 2019 22:51:33 -0400
+Received: by mail-pf1-f193.google.com with SMTP id b3so5542221pfd.1;
+        Sat, 06 Apr 2019 19:51:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda-com.20150623.gappssmtp.com; s=20150623;
+        d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=xpLDkw+BUdZ0Aj8067Cc92iF94gR3dOyLGJxS0j9kLY=;
-        b=ssNMnh4Ux5zm12pMOJInWXjgczb1a71FwaOwUL5r9ybbVVoubuFUPDUG20DJAenx9t
-         ihKq1PkZPTJuGuRbptQS7gu5/NsIAsu81SozFMXxAFgjd75YRPs0PuC2sR0QmzQHzPg0
-         g8HEeztXHSAQ2CnTTAkTluPeF0TfrJKRdoFE8SP+7ri8MDHQ6lY+xb8w32Ye30CeoBSo
-         OzZ5WotSF7Y0Uyu9z4eBdSCLg3GqrfjH0QfVbeVlDQqGvBmgckJFjqn9iuhdXGhIKNd9
-         aiwku8Dlc6vshk/R41UA94Zvubqv0fH9SfvxKo6qG0kJm3EkygzVzrRxa7Z5dD3fhG/6
-         ZZlg==
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=q6n+yGxeOv6TDeSaZLNLoCXeT14MGMyKjlzRscTfaSQ=;
+        b=ue3VLsDDz5mJVQOF7207OuXTs4VJ6H824TlE797xJgmRr/AcvZ5JvebMyedd+Z9Mex
+         N+2Mf2TXyD4XaO40KGnmGv3uTe0V03mWs4c8t8fODe3i/f+bJIyW8krUUPyOWPm6gQxu
+         yBGW0UEAtnvM8xgjwtK6LBsGUBG2ozR+cEgLGo0NVc7IaktFDD4SlnwgWU2nVFhr0RDl
+         ZxwWO6zC92C3aCaM29i/kRxIX5JMXOET56xXqKNDPz5mPxKAO/CRrnQA4BbN7RzlwF9K
+         jw5QfWBbyglte3o8W4RwlGJr8k+2YHYRyzLHBB/qhP8R++fLCok+8DFxHbtKVWN4Vdgo
+         2+Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=xpLDkw+BUdZ0Aj8067Cc92iF94gR3dOyLGJxS0j9kLY=;
-        b=RNjBhMfEdHQvsz5FZb2BXYrMlbtHVHkkmORVMPLCiODMvaPHAF3Pnyx1lqI99APmvo
-         P84l3svZPaS7aWz1teXYEN1YeA9xAColUa2xZIDbTQEzesvVPBPIchpx1PQ1EYu50nfD
-         aQFikl67Y6VTKgnjC6acKu8CbHV+iMn2t9w8ee/a7T8b3+gDp19LsWGZMX9kKVcPcLyt
-         Rs1UVY+3J5v5irAbWaTRcW/hODCHVmzcrcinbErhGD8ovR7tCrISbkhRVv4smr8EymeG
-         tupXmxWjq4jIOW1IZHGFhew9a7iDcpAQdUcrBEqo/D6/PhU5EH+phKxj1mcLfk4Pcmq+
-         Y3aA==
-X-Gm-Message-State: APjAAAV3JeG5+MOuHgsn+bH6TUcjsgjLKmClCIkHaDvpqlIUzBzuEdNV
-        YGQARkJTE9Xqgz67fzlsstzOmg==
-X-Google-Smtp-Source: APXvYqyskA+ifTEpO2ehgVnIwr9CZmubBcIqLpE8D/C1XUG20vKjKG0jSm423CqHZrrP29natDJIOA==
-X-Received: by 2002:a37:6814:: with SMTP id d20mr17113928qkc.102.1554596038610;
-        Sat, 06 Apr 2019 17:13:58 -0700 (PDT)
-Received: from localhost ([107.15.81.208])
-        by smtp.gmail.com with ESMTPSA id f20sm16471992qtk.14.2019.04.06.17.13.57
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=q6n+yGxeOv6TDeSaZLNLoCXeT14MGMyKjlzRscTfaSQ=;
+        b=FleBTghRj4OXEaouy7qVN5h5lBTBH1Tq9lsg4JyRL1GrzruZ08ikUJX3Im86LSMn2G
+         XJUCm9f8coNqv2rtkOvY9UynoHBR0oca0McK6tPMs27EiuFMZuNQQ+Av+lSg0A31YCdm
+         7StQ+tCok1Rxorg3UBf9yoYBznnWFghfcomvW/57YLOWi14MeS0tdJJ0z87QErXtQvpw
+         nJh18gBAY0Omy30BT6bb534lvrxNm4JYGFL733t8Yd68hEV0JQpeeV3toL5mggMYOXnZ
+         p4h3MSknSds5pKjR5+Oa2Wf/F8diKGBsV6HJDWZI+7MdQFweKUxuIb4u5YiadZpXtHU9
+         gv/g==
+X-Gm-Message-State: APjAAAW1j4+fZ/Gv/XukfktwGaGbye5OXcvo/ulBPVNL429FC92PgqkR
+        +ZI0vttIxOKvZnByrCjBhkSQk1gL
+X-Google-Smtp-Source: APXvYqw1+auDlzbc7xzjdvmm7tRJQj6qZaki9bmIrlRdIw0rG9FRJ+xakqccJq6f7/wUkuTy2W9TfQ==
+X-Received: by 2002:a65:5941:: with SMTP id g1mr21276745pgu.51.1554605492335;
+        Sat, 06 Apr 2019 19:51:32 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:180::ac9e])
+        by smtp.gmail.com with ESMTPSA id 4sm34661243pfn.159.2019.04.06.19.51.30
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 06 Apr 2019 17:13:57 -0700 (PDT)
-Date:   Sat, 6 Apr 2019 20:13:56 -0400
-From:   Josef Bacik <josef@toxicpanda.com>
-To:     Matt Mullins <mmullins@fb.com>
-Cc:     hall@fb.com, ast@kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        linux-block@vger.kernel.org, nbd@other.debian.org
-Subject: Re: [PATCH bpf-next v2 3/5] nbd: add tracepoints for send/receive
- timing
-Message-ID: <20190407001355.4zyulck2z2vggqbi@MacBook-Pro-91.local>
-References: <20190405235506.29236-1-mmullins@fb.com>
- <20190405235506.29236-4-mmullins@fb.com>
+        Sat, 06 Apr 2019 19:51:31 -0700 (PDT)
+Date:   Sat, 6 Apr 2019 19:51:29 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Jiong Wang <jiong.wang@netronome.com>
+Cc:     Edward Cree <ecree@solarflare.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, oss-drivers@netronome.com
+Subject: Re: [PATCH/RFC bpf-next 04/16] bpf: mark sub-register writes that
+ really need zero extension to high bits
+Message-ID: <20190407025128.zeiyn2gslwy4ngxo@ast-mbp.dhcp.thefacebook.com>
+References: <1553623539-15474-1-git-send-email-jiong.wang@netronome.com>
+ <1553623539-15474-5-git-send-email-jiong.wang@netronome.com>
+ <4a397d16-2ee4-e58e-0091-9df7a20b07b9@solarflare.com>
+ <CF673672-983B-4848-B97C-1344309C1E8D@netronome.com>
+ <20190406034110.o2qzjyl57ypzal3z@ast-mbp.dhcp.thefacebook.com>
+ <87r2afd3l2.fsf@netronome.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190405235506.29236-4-mmullins@fb.com>
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87r2afd3l2.fsf@netronome.com>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Apr 05, 2019 at 04:55:04PM -0700, Matt Mullins wrote:
-> From: Andrew Hall <hall@fb.com>
+On Sat, Apr 06, 2019 at 07:56:25AM +0100, Jiong Wang wrote:
 > 
-> This adds four tracepoints to nbd, enabling separate tracing of payload
-> and header sending/receipt.
+> Alexei Starovoitov writes:
 > 
-> In the send path for headers that have already been sent, we also
-> explicitly initialize the handle so it can be referenced by the later
-> tracepoint.
+> > On Fri, Apr 05, 2019 at 09:44:49PM +0100, Jiong Wang wrote:
+> >> 
+> >> > On 26 Mar 2019, at 18:44, Edward Cree <ecree@solarflare.com> wrote:
+> >> > 
+> >> > On 26/03/2019 18:05, Jiong Wang wrote:
+> >> >> eBPF ISA specification requires high 32-bit cleared when low 32-bit
+> >> >> sub-register is written. This applies to destination register of ALU32 etc.
+> >> >> JIT back-ends must guarantee this semantic when doing code-gen.
+> >> >> 
+> >> >> x86-64 and arm64 ISA has the same semantic, so the corresponding JIT
+> >> >> back-end doesn't need to do extra work. However, 32-bit arches (arm, nfp
+> >> >> etc.) and some other 64-bit arches (powerpc, sparc etc), need explicit zero
+> >> >> extension sequence to meet such semantic.
+> >> >> 
+> >> >> This is important, because for code the following:
+> >> >> 
+> >> >>  u64_value = (u64) u32_value
+> >> >>  ... other uses of u64_value
+> >> >> 
+> >> >> compiler could exploit the semantic described above and save those zero
+> >> >> extensions for extending u32_value to u64_value. Hardware, runtime, or BPF
+> >> >> JIT back-ends, are responsible for guaranteeing this. Some benchmarks show
+> >> >> ~40% sub-register writes out of total insns, meaning ~40% extra code-gen (
+> >> >> could go up to more for some arches which requires two shifts for zero
+> >> >> extension) because JIT back-end needs to do extra code-gen for all such
+> >> >> instructions.
+> >> >> 
+> >> >> However this is not always necessary in case u32_value is never cast into
+> >> >> a u64, which is quite normal in real life program. So, it would be really
+> >> >> good if we could identify those places where such type cast happened, and
+> >> >> only do zero extensions for them, not for the others. This could save a lot
+> >> >> of BPF code-gen.
+> >> >> 
+> >> >> Algo:
+> >> >> - Record indices of instructions that do sub-register def (write). And
+> >> >>   these indices need to stay with function state so path pruning and bpf
+> >> >>   to bpf function call could be handled properly.
+> >> >> 
+> >> >>   These indices are kept up to date while doing insn walk.
+> >> >> 
+> >> >> - A full register read on an active sub-register def marks the def insn as
+> >> >>   needing zero extension on dst register.
+> >> >> 
+> >> >> - A new sub-register write overrides the old one.
+> >> >> 
+> >> >>   A new full register write makes the register free of zero extension on
+> >> >>   dst register.
+> >> >> 
+> >> >> - When propagating register read64 during path pruning, it also marks def
+> >> >>   insns whose defs are hanging active sub-register, if there is any read64
+> >> >>   from shown from the equal state.
+> >> >> 
+> >> >> Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+> >> >> Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
+> >> >> ---
+> >> >> include/linux/bpf_verifier.h |  4 +++
+> >> >> kernel/bpf/verifier.c        | 85 +++++++++++++++++++++++++++++++++++++++++---
+> >> >> 2 files changed, 84 insertions(+), 5 deletions(-)
+> >> >> 
+> >> >> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> >> >> index 27761ab..0ae9a3f 100644
+> >> >> --- a/include/linux/bpf_verifier.h
+> >> >> +++ b/include/linux/bpf_verifier.h
+> >> >> @@ -181,6 +181,9 @@ struct bpf_func_state {
+> >> >> 	 */
+> >> >> 	u32 subprogno;
+> >> >> 
+> >> >> +	/* tracks subreg definition. */
+> >> > Ideally this comment should mention that the stored value is the insn_idx
+> >> >  of the writing insn.  Perhaps also that this is safe because patching
+> >> >  (bpf_patch_insn_data()) only happens after main verification completes.
+> >> 
+> >> During full x86_64 host tests, found one new issue.                                    
+> >>                                                                                          
+> >> “convert_ctx_accesses” will change load size, A BPF_W load could be transformed          
+> >> into BPF_DW or kept as BPF_W depending on the underlying ctx field size. And             
+> >> “convert_ctx_accesses” happens after zero extension insertion.                           
+> >>                                                                                          
+> >> So, a BPF_W load could have been marked and zero extensions inserted after               
+> >> it, however, the later happened “convert_ctx_accesses” then figured out it’s             
+> >> transformed load size is actually BPF_DW then re-write to that. But the                  
+> >> previously inserted zero extensions then break things, the high 32 bits are              
+> >> wrongly cleared. For example:
+> >> 
+> >> 1: r2 = *(u32 *)(r1 + 80)                                                                
+> >> 2: r1 = *(u32 *)(r1 + 76)                                                                
+> >> 3: r3 = r1                                                                               
+> >> 4: r3 += 14                                                                              
+> >> 5: if r3 > r2 goto +35                                                                   
+> >>                                                                                          
+> >> insn 1 and 2 could be turned into BPF_DW load if they are loading xdp “data"
+> >> and “data_end". There shouldn’t be zero-extension inserted after them will
+> >> will destroy the pointer. However they are treated as 32-bit load initially,
+> >> and later due to 64-bit use at insn 3 and 5, they are marked as needing zero
+> >> extension.                                                                        
+> >>                                                                                          
+> >> I am thinking normally the field sizes in *_md inside uapi/linux/bpf.h are
+> >> the same those in real underlying context, only when one field is pointer
+> >> type, then it could be possible be a u32 to u64 conversion. So, I guess
+> >> we just need to mark the dst register as a full 64-bit register write 
+> >> inside check_mem_access when for PTR_TO_CTX, the reg type of the dust reg
+> >> returned by check_ctx_access is ptr type.
+> >
+> > Since the register containing ctx->data was used later in the load insn and
+> > it's type was pointer the analysis should have marked it as 64-bit access.
+> >
+> > It feels that there is an issue in propagating 64-bit access through
+> > parentage chain. Since insn 5 above recognized r2 as 64-bit access
+> > then how come insn 1 was still allowed to poison upper bits?
 > 
-> Signed-off-by: Andrew Hall <hall@fb.com>
-> Signed-off-by: Matt Mullins <mmullins@fb.com>
-> ---
->  drivers/block/nbd.c        |  8 ++++
->  include/trace/events/nbd.h | 92 ++++++++++++++++++++++++++++++++++++++
->  2 files changed, 100 insertions(+)
+> Guess my description was misleading. The high bits of insn 1 was not
+> poisoned, they are truncated, the analysis pass is correct here.
 > 
-> diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-> index 7393d04d255c..d3d914620f66 100644
-> --- a/drivers/block/nbd.c
-> +++ b/drivers/block/nbd.c
-> @@ -513,6 +513,10 @@ static int nbd_send_cmd(struct nbd_device *nbd, struct nbd_cmd *cmd, int index)
->  	if (sent) {
->  		if (sent >= sizeof(request)) {
->  			skip = sent - sizeof(request);
-> +
-> +			// initialize handle for tracing purposes
-> +			handle = nbd_cmd_handle(cmd);
-> +
+> It is a BPF_W (4-byte) load, so initially it is marked as a sub-register
+> def and JIT compiler doesn't need to guarantee high 32-bit cleared. However
+> later insn 5 found it has a 64-bit use (as 64-bit operand in the
+> comparison), so it become mandatory to guarantee high 32-bit cleared, so
+> sequence transformed into:
+> 
+> 1: r2 = *(u32 *)(r1 + 80)
+> 2. r2 <<= 32
+> 3. r2 >>= 32
+> 4: r1 = *(u32 *)(r1 + 76)
+> 5: r1 <<=  32
+> 6: r1 >>= 32
+> 5: r3 = r1                                                                               
+> 6: r3 += 14                                                                              
+> 7: if r3 > r2 goto +35
+> 
+> After the zero extension insertion, later in convert_ctx_access, it will
+> be further transformed into something like:
+> 
+> 1: r2 = *(u64 *)(r1 + 80)
+> 2. r2 <<= 32
+> 3. r2 >>= 32
+> 
+> However, the inserted zero extension (insn 2/3) is still there and will
+> clear the high 32-bit of the loaded 64-bit value.
+> 
+> This issue should have been exposed before. But as described in the cover
+> letter, the opt is disabled on x86, my previous test methodology on x86 was
+> forcing it on through sysctl for a couple of insn matching unit tests only,
+> and was hoping other host arches like ppc could give it a full run on bpf
+> selftest before which the correctness of the opt was not verified by full
+> bpf selftest. I have done full run of some internal offload tests which
+> could be a good coverage, but the offload handles PTR_TO_CTX in a different
+> way so this issue was not caught.
+> 
+> Now as you suggested, the test methodology switched to poisoning high
+> 32-bit on x86, so full test on bpf selftest is able to be enabled on x86
+> test and this issue is caught.
 
-Don't use c++ style commenting.
+Got it. Yes. checking that check_ctx_access returns ptr type will be enough.
 
->  			goto send_pages;
->  		}
->  		iov_iter_advance(&from, sent);
-> @@ -536,6 +540,7 @@ static int nbd_send_cmd(struct nbd_device *nbd, struct nbd_cmd *cmd, int index)
->  		(unsigned long long)blk_rq_pos(req) << 9, blk_rq_bytes(req));
->  	result = sock_xmit(nbd, index, 1, &from,
->  			(type == NBD_CMD_WRITE) ? MSG_MORE : 0, &sent);
-> +	trace_nbd_header_sent(req, handle);
->  	if (result <= 0) {
->  		if (was_interrupted(result)) {
->  			/* If we havne't sent anything we can just return BUSY,
-> @@ -608,6 +613,7 @@ static int nbd_send_cmd(struct nbd_device *nbd, struct nbd_cmd *cmd, int index)
->  		bio = next;
->  	}
->  out:
-> +	trace_nbd_payload_sent(req, handle);
->  	nsock->pending = NULL;
->  	nsock->sent = 0;
->  	return 0;
-> @@ -655,6 +661,7 @@ static struct nbd_cmd *nbd_read_stat(struct nbd_device *nbd, int index)
->  			tag, req);
->  		return ERR_PTR(-ENOENT);
->  	}
-> +	trace_nbd_header_received(req, handle);
->  	cmd = blk_mq_rq_to_pdu(req);
->  
->  	mutex_lock(&cmd->lock);
-> @@ -708,6 +715,7 @@ static struct nbd_cmd *nbd_read_stat(struct nbd_device *nbd, int index)
->  		}
->  	}
->  out:
-> +	trace_nbd_payload_received(req, handle);
->  	mutex_unlock(&cmd->lock);
->  	return ret ? ERR_PTR(ret) : cmd;
->  }
-> diff --git a/include/trace/events/nbd.h b/include/trace/events/nbd.h
-> index 5928255ed02e..eef476fef95a 100644
-> --- a/include/trace/events/nbd.h
-> +++ b/include/trace/events/nbd.h
-> @@ -7,6 +7,98 @@
->  
->  #include <linux/tracepoint.h>
->  
-> +TRACE_EVENT(nbd_header_sent,
-> +
-> +	TP_PROTO(struct request *req, u64 handle),
-> +
-> +	TP_ARGS(req, handle),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(struct request *, req)
-> +		__field(u64, handle)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->req = req;
-> +		__entry->handle = handle;
-> +	),
-> +
-> +	TP_printk(
-> +		"nbd header sent: request %p, handle 0x%016llx",
-> +		__entry->req,
-> +		__entry->handle
-> +	)
-> +);
-> +
-
-These are all the same, use DECLARE_EVENT_CLASS() and then just DEFINE_EVENT()
-for each individual event.  Also no pointers, we don't want to leak pointers to
-userspace for stuff.  Thanks,
-
-Josef
