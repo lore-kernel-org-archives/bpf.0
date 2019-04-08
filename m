@@ -6,31 +6,31 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 882C0C282CE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9D28C10F14
 	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 13:54:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 642ED20663
+	by mail.kernel.org (Postfix) with ESMTP id 9D69B20663
 	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 13:54:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726885AbfDHNyF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Apr 2019 09:54:05 -0400
-Received: from www62.your-server.de ([213.133.104.62]:46102 "EHLO
+        id S1726902AbfDHNyG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Apr 2019 09:54:06 -0400
+Received: from www62.your-server.de ([213.133.104.62]:46124 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726813AbfDHNyF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1726874AbfDHNyF (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 8 Apr 2019 09:54:05 -0400
 Received: from [178.197.248.24] (helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1hDUij-0003g9-Mi; Mon, 08 Apr 2019 15:53:57 +0200
+        id 1hDUil-0003h0-9S; Mon, 08 Apr 2019 15:53:59 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, ast@kernel.org, joe@wand.net.nz,
         yhs@fb.com, andrii.nakryiko@gmail.com, kafai@fb.com,
         Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v5 06/16] bpf: add specification for BTF Var and DataSec kinds
-Date:   Mon,  8 Apr 2019 15:53:38 +0200
-Message-Id: <4a4225f60dcb0ab9b726229f3a59980989aaaedb.1554731339.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next v5 09/16] bpf: sync {btf, bpf}.h uapi header from tools infrastructure
+Date:   Mon,  8 Apr 2019 15:53:41 +0200
+Message-Id: <6d055eb6c79b145dc9e76a373cb6128ab81121b2.1554731339.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <cover.1554731339.git.daniel@iogearbox.net>
 References: <cover.1554731339.git.daniel@iogearbox.net>
@@ -43,99 +43,73 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This adds the BTF specification and UAPI bits for supporting BTF Var
-and DataSec kinds. This is following LLVM upstream commit ac4082b77e07
-("[BPF] Add BTF Var and DataSec Support") which has been merged recently.
-Var itself is for describing a global variable and DataSec to describe
-ELF sections e.g. data/bss/rodata sections that hold one or multiple
-global variables.
+Pull in latest changes from both headers, so we can make use of
+them in libbpf.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Acked-by: Martin KaFai Lau <kafai@fb.com>
 ---
- Documentation/bpf/btf.rst | 57 +++++++++++++++++++++++++++++++++++++++++++++++
- include/uapi/linux/btf.h  | 32 ++++++++++++++++++++++----
- 2 files changed, 85 insertions(+), 4 deletions(-)
+ tools/include/uapi/linux/bpf.h | 20 ++++++++++++++++++--
+ tools/include/uapi/linux/btf.h | 32 ++++++++++++++++++++++++++++----
+ 2 files changed, 46 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
-index 9a60a5d..60d87d7 100644
---- a/Documentation/bpf/btf.rst
-+++ b/Documentation/bpf/btf.rst
-@@ -82,6 +82,8 @@ sequentially and type id is assigned to each recognized type starting from id
-     #define BTF_KIND_RESTRICT       11      /* Restrict     */
-     #define BTF_KIND_FUNC           12      /* Function     */
-     #define BTF_KIND_FUNC_PROTO     13      /* Function Proto       */
-+    #define BTF_KIND_VAR            14      /* Variable     */
-+    #define BTF_KIND_DATASEC        15      /* Section      */
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 8370245..af1cbd9 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -105,6 +105,7 @@ enum bpf_cmd {
+ 	BPF_BTF_GET_FD_BY_ID,
+ 	BPF_TASK_FD_QUERY,
+ 	BPF_MAP_LOOKUP_AND_DELETE_ELEM,
++	BPF_MAP_FREEZE,
+ };
  
- Note that the type section encodes debug info, not just pure types.
- ``BTF_KIND_FUNC`` is not a type, and it represents a defined subprogram.
-@@ -393,6 +395,61 @@ refers to parameter type.
- If the function has variable arguments, the last parameter is encoded with
- ``name_off = 0`` and ``type = 0``.
+ enum bpf_map_type {
+@@ -255,8 +256,19 @@ enum bpf_attach_type {
+  */
+ #define BPF_F_ANY_ALIGNMENT	(1U << 1)
  
-+2.2.14 BTF_KIND_VAR
-+~~~~~~~~~~~~~~~~~~~
-+
-+``struct btf_type`` encoding requirement:
-+  * ``name_off``: offset to a valid C identifier
-+  * ``info.kind_flag``: 0
-+  * ``info.kind``: BTF_KIND_VAR
-+  * ``info.vlen``: 0
-+  * ``type``: the type of the variable
-+
-+``btf_type`` is followed by a single ``struct btf_variable`` with the
-+following data::
-+
-+    struct btf_var {
-+        __u32   linkage;
-+    };
-+
-+``struct btf_var`` encoding:
-+  * ``linkage``: currently only static variable 0, or globally allocated
-+                 variable in ELF sections 1
-+
-+Not all type of global variables are supported by LLVM at this point.
-+The following is currently available:
-+
-+  * static variables with or without section attributes
-+  * global variables with section attributes
-+
-+The latter is for future extraction of map key/value type id's from a
-+map definition.
-+
-+2.2.15 BTF_KIND_DATASEC
-+~~~~~~~~~~~~~~~~~~~~~~~
-+
-+``struct btf_type`` encoding requirement:
-+  * ``name_off``: offset to a valid name associated with a variable or
-+                  one of .data/.bss/.rodata
-+  * ``info.kind_flag``: 0
-+  * ``info.kind``: BTF_KIND_DATASEC
-+  * ``info.vlen``: # of variables
-+  * ``size``: total section size in bytes (0 at compilation time, patched
-+              to actual size by BPF loaders such as libbpf)
-+
-+``btf_type`` is followed by ``info.vlen`` number of ``struct btf_var_secinfo``.::
-+
-+    struct btf_var_secinfo {
-+        __u32   type;
-+        __u32   offset;
-+        __u32   size;
-+    };
-+
-+``struct btf_var_secinfo`` encoding:
-+  * ``type``: the type of the BTF_KIND_VAR variable
-+  * ``offset``: the in-section offset of the variable
-+  * ``size``: the size of the variable in bytes
-+
- 3. BTF Kernel API
- *****************
+-/* when bpf_ldimm64->src_reg == BPF_PSEUDO_MAP_FD, bpf_ldimm64->imm == fd */
++/* When BPF ldimm64's insn[0].src_reg != 0 then this can have
++ * two extensions:
++ *
++ * insn[0].src_reg:  BPF_PSEUDO_MAP_FD   BPF_PSEUDO_MAP_VALUE
++ * insn[0].imm:      map fd              map fd
++ * insn[1].imm:      0                   offset into value
++ * insn[0].off:      0                   0
++ * insn[1].off:      0                   0
++ * ldimm64 rewrite:  address of map      address of map[0]+offset
++ * verifier type:    CONST_PTR_TO_MAP    PTR_TO_MAP_VALUE
++ */
+ #define BPF_PSEUDO_MAP_FD	1
++#define BPF_PSEUDO_MAP_VALUE	2
  
-diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
+ /* when bpf_call->src_reg == BPF_PSEUDO_CALL, bpf_call->imm == pc-relative
+  * offset to another bpf function
+@@ -283,7 +295,7 @@ enum bpf_attach_type {
+ 
+ #define BPF_OBJ_NAME_LEN 16U
+ 
+-/* Flags for accessing BPF object */
++/* Flags for accessing BPF object from syscall side. */
+ #define BPF_F_RDONLY		(1U << 3)
+ #define BPF_F_WRONLY		(1U << 4)
+ 
+@@ -293,6 +305,10 @@ enum bpf_attach_type {
+ /* Zero-initialize hash function seed. This should only be used for testing. */
+ #define BPF_F_ZERO_SEED		(1U << 6)
+ 
++/* Flags for accessing BPF object from program side. */
++#define BPF_F_RDONLY_PROG	(1U << 7)
++#define BPF_F_WRONLY_PROG	(1U << 8)
++
+ /* flags for BPF_PROG_QUERY */
+ #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
+ 
+diff --git a/tools/include/uapi/linux/btf.h b/tools/include/uapi/linux/btf.h
 index 7b7475e..9310652 100644
---- a/include/uapi/linux/btf.h
-+++ b/include/uapi/linux/btf.h
+--- a/tools/include/uapi/linux/btf.h
++++ b/tools/include/uapi/linux/btf.h
 @@ -39,11 +39,11 @@ struct btf_type {
  	 *             struct, union and fwd
  	 */
