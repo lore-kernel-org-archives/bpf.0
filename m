@@ -3,34 +3,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFF5DC282E2
-	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 13:54:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57739C282DE
+	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 13:54:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CE62A20663
-	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 13:54:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 338A6214C6
+	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 13:54:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726892AbfDHNyF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Apr 2019 09:54:05 -0400
-Received: from www62.your-server.de ([213.133.104.62]:46098 "EHLO
+        id S1726993AbfDHNyd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Apr 2019 09:54:33 -0400
+Received: from www62.your-server.de ([213.133.104.62]:46130 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726584AbfDHNyF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1726876AbfDHNyF (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 8 Apr 2019 09:54:05 -0400
 Received: from [178.197.248.24] (helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1hDUih-0003fa-Ml; Mon, 08 Apr 2019 15:53:55 +0200
+        id 1hDUih-0003fW-7z; Mon, 08 Apr 2019 15:53:55 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, ast@kernel.org, joe@wand.net.nz,
         yhs@fb.com, andrii.nakryiko@gmail.com, kafai@fb.com,
         Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v5 03/16] bpf: add program side {rd, wr}only support for maps
-Date:   Mon,  8 Apr 2019 15:53:35 +0200
-Message-Id: <34577fa59610c8350fb89e653a9c8e360675de6c.1554731339.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next v5 02/16] bpf: do not retain flags that are not tied to map lifetime
+Date:   Mon,  8 Apr 2019 15:53:34 +0200
+Message-Id: <f875133bf543513049dba8e4687274a4a5ee7d0a.1554731339.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <cover.1554731339.git.daniel@iogearbox.net>
 References: <cover.1554731339.git.daniel@iogearbox.net>
@@ -43,334 +43,56 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This work adds two new map creation flags BPF_F_RDONLY_PROG
-and BPF_F_WRONLY_PROG in order to allow for read-only or
-write-only BPF maps from a BPF program side.
+Both BPF_F_WRONLY / BPF_F_RDONLY flags are tied to the map file
+descriptor, but not to the map object itself! Meaning, at map
+creation time BPF_F_RDONLY can be set to make the map read-only
+from syscall side, but this holds only for the returned fd, so
+any other fd either retrieved via bpf file system or via map id
+for the very same underlying map object can have read-write access
+instead.
 
-Today we have BPF_F_RDONLY and BPF_F_WRONLY, but this only
-applies to system call side, meaning the BPF program has full
-read/write access to the map as usual while bpf(2) calls with
-map fd can either only read or write into the map depending
-on the flags. BPF_F_RDONLY_PROG and BPF_F_WRONLY_PROG allows
-for the exact opposite such that verifier is going to reject
-program loads if write into a read-only map or a read into a
-write-only map is detected. For read-only map case also some
-helpers are forbidden for programs that would alter the map
-state such as map deletion, update, etc. As opposed to the two
-BPF_F_RDONLY / BPF_F_WRONLY flags, BPF_F_RDONLY_PROG as well
-as BPF_F_WRONLY_PROG really do correspond to the map lifetime.
-
-We've enabled this generic map extension to various non-special
-maps holding normal user data: array, hash, lru, lpm, local
-storage, queue and stack. Further generic map types could be
-followed up in future depending on use-case. Main use case
-here is to forbid writes into .rodata map values from verifier
-side.
+Given that, keeping the two flags around in the map_flags attribute
+and exposing them to user space upon map dump is misleading and
+may lead to false conclusions. Since these two flags are not
+tied to the map object lets also not store them as map property.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Acked-by: Martin KaFai Lau <kafai@fb.com>
 ---
- include/linux/bpf.h           | 29 +++++++++++++++++++++++++++
- include/uapi/linux/bpf.h      |  6 +++++-
- kernel/bpf/arraymap.c         |  6 +++++-
- kernel/bpf/hashtab.c          |  6 +++---
- kernel/bpf/local_storage.c    |  6 +++---
- kernel/bpf/lpm_trie.c         |  3 ++-
- kernel/bpf/queue_stack_maps.c |  6 +++---
- kernel/bpf/syscall.c          |  2 ++
- kernel/bpf/verifier.c         | 46 +++++++++++++++++++++++++++++++++++++++++--
- 9 files changed, 96 insertions(+), 14 deletions(-)
+ kernel/bpf/syscall.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index bd93a59..be20804 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -430,6 +430,35 @@ struct bpf_array {
- #define BPF_COMPLEXITY_LIMIT_INSNS      1000000 /* yes. 1M insns */
- #define MAX_TAIL_CALL_CNT 32
- 
-+#define BPF_F_ACCESS_MASK	(BPF_F_RDONLY |		\
-+				 BPF_F_RDONLY_PROG |	\
-+				 BPF_F_WRONLY |		\
-+				 BPF_F_WRONLY_PROG)
-+
-+#define BPF_MAP_CAN_READ	BIT(0)
-+#define BPF_MAP_CAN_WRITE	BIT(1)
-+
-+static inline u32 bpf_map_flags_to_cap(struct bpf_map *map)
-+{
-+	u32 access_flags = map->map_flags & (BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG);
-+
-+	/* Combination of BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG is
-+	 * not possible.
-+	 */
-+	if (access_flags & BPF_F_RDONLY_PROG)
-+		return BPF_MAP_CAN_READ;
-+	else if (access_flags & BPF_F_WRONLY_PROG)
-+		return BPF_MAP_CAN_WRITE;
-+	else
-+		return BPF_MAP_CAN_READ | BPF_MAP_CAN_WRITE;
-+}
-+
-+static inline bool bpf_map_flags_access_ok(u32 access_flags)
-+{
-+	return (access_flags & (BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG)) !=
-+	       (BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG);
-+}
-+
- struct bpf_event_entry {
- 	struct perf_event *event;
- 	struct file *perf_file;
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 26cfb5b..d275446 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -294,7 +294,7 @@ enum bpf_attach_type {
- 
- #define BPF_OBJ_NAME_LEN 16U
- 
--/* Flags for accessing BPF object */
-+/* Flags for accessing BPF object from syscall side. */
- #define BPF_F_RDONLY		(1U << 3)
- #define BPF_F_WRONLY		(1U << 4)
- 
-@@ -304,6 +304,10 @@ enum bpf_attach_type {
- /* Zero-initialize hash function seed. This should only be used for testing. */
- #define BPF_F_ZERO_SEED		(1U << 6)
- 
-+/* Flags for accessing BPF object from program side. */
-+#define BPF_F_RDONLY_PROG	(1U << 7)
-+#define BPF_F_WRONLY_PROG	(1U << 8)
-+
- /* flags for BPF_PROG_QUERY */
- #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
- 
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 1a6e986..217b10b 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -22,7 +22,7 @@
- #include "map_in_map.h"
- 
- #define ARRAY_CREATE_FLAG_MASK \
--	(BPF_F_NUMA_NODE | BPF_F_RDONLY | BPF_F_WRONLY)
-+	(BPF_F_NUMA_NODE | BPF_F_ACCESS_MASK)
- 
- static void bpf_array_free_percpu(struct bpf_array *array)
- {
-@@ -63,6 +63,7 @@ int array_map_alloc_check(union bpf_attr *attr)
- 	if (attr->max_entries == 0 || attr->key_size != 4 ||
- 	    attr->value_size == 0 ||
- 	    attr->map_flags & ~ARRAY_CREATE_FLAG_MASK ||
-+	    !bpf_map_flags_access_ok(attr->map_flags) ||
- 	    (percpu && numa_node != NUMA_NO_NODE))
- 		return -EINVAL;
- 
-@@ -472,6 +473,9 @@ static int fd_array_map_alloc_check(union bpf_attr *attr)
- 	/* only file descriptors can be stored in this type of map */
- 	if (attr->value_size != sizeof(u32))
- 		return -EINVAL;
-+	/* Program read-only/write-only not supported for special maps yet. */
-+	if (attr->map_flags & (BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG))
-+		return -EINVAL;
- 	return array_map_alloc_check(attr);
- }
- 
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index fed15cf..192d32e 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -23,7 +23,7 @@
- 
- #define HTAB_CREATE_FLAG_MASK						\
- 	(BPF_F_NO_PREALLOC | BPF_F_NO_COMMON_LRU | BPF_F_NUMA_NODE |	\
--	 BPF_F_RDONLY | BPF_F_WRONLY | BPF_F_ZERO_SEED)
-+	 BPF_F_ACCESS_MASK | BPF_F_ZERO_SEED)
- 
- struct bucket {
- 	struct hlist_nulls_head head;
-@@ -262,8 +262,8 @@ static int htab_map_alloc_check(union bpf_attr *attr)
- 		/* Guard against local DoS, and discourage production use. */
- 		return -EPERM;
- 
--	if (attr->map_flags & ~HTAB_CREATE_FLAG_MASK)
--		/* reserved bits should not be used */
-+	if (attr->map_flags & ~HTAB_CREATE_FLAG_MASK ||
-+	    !bpf_map_flags_access_ok(attr->map_flags))
- 		return -EINVAL;
- 
- 	if (!lru && percpu_lru)
-diff --git a/kernel/bpf/local_storage.c b/kernel/bpf/local_storage.c
-index 6b572e2..980e8f1 100644
---- a/kernel/bpf/local_storage.c
-+++ b/kernel/bpf/local_storage.c
-@@ -14,7 +14,7 @@ DEFINE_PER_CPU(struct bpf_cgroup_storage*, bpf_cgroup_storage[MAX_BPF_CGROUP_STO
- #ifdef CONFIG_CGROUP_BPF
- 
- #define LOCAL_STORAGE_CREATE_FLAG_MASK					\
--	(BPF_F_NUMA_NODE | BPF_F_RDONLY | BPF_F_WRONLY)
-+	(BPF_F_NUMA_NODE | BPF_F_ACCESS_MASK)
- 
- struct bpf_cgroup_storage_map {
- 	struct bpf_map map;
-@@ -282,8 +282,8 @@ static struct bpf_map *cgroup_storage_map_alloc(union bpf_attr *attr)
- 	if (attr->value_size > PAGE_SIZE)
- 		return ERR_PTR(-E2BIG);
- 
--	if (attr->map_flags & ~LOCAL_STORAGE_CREATE_FLAG_MASK)
--		/* reserved bits should not be used */
-+	if (attr->map_flags & ~LOCAL_STORAGE_CREATE_FLAG_MASK ||
-+	    !bpf_map_flags_access_ok(attr->map_flags))
- 		return ERR_PTR(-EINVAL);
- 
- 	if (attr->max_entries)
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index 93a5cbb..e61630c 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -538,7 +538,7 @@ static int trie_delete_elem(struct bpf_map *map, void *_key)
- #define LPM_KEY_SIZE_MIN	LPM_KEY_SIZE(LPM_DATA_SIZE_MIN)
- 
- #define LPM_CREATE_FLAG_MASK	(BPF_F_NO_PREALLOC | BPF_F_NUMA_NODE |	\
--				 BPF_F_RDONLY | BPF_F_WRONLY)
-+				 BPF_F_ACCESS_MASK)
- 
- static struct bpf_map *trie_alloc(union bpf_attr *attr)
- {
-@@ -553,6 +553,7 @@ static struct bpf_map *trie_alloc(union bpf_attr *attr)
- 	if (attr->max_entries == 0 ||
- 	    !(attr->map_flags & BPF_F_NO_PREALLOC) ||
- 	    attr->map_flags & ~LPM_CREATE_FLAG_MASK ||
-+	    !bpf_map_flags_access_ok(attr->map_flags) ||
- 	    attr->key_size < LPM_KEY_SIZE_MIN ||
- 	    attr->key_size > LPM_KEY_SIZE_MAX ||
- 	    attr->value_size < LPM_VAL_SIZE_MIN ||
-diff --git a/kernel/bpf/queue_stack_maps.c b/kernel/bpf/queue_stack_maps.c
-index b384ea9..0b140d2 100644
---- a/kernel/bpf/queue_stack_maps.c
-+++ b/kernel/bpf/queue_stack_maps.c
-@@ -11,8 +11,7 @@
- #include "percpu_freelist.h"
- 
- #define QUEUE_STACK_CREATE_FLAG_MASK \
--	(BPF_F_NUMA_NODE | BPF_F_RDONLY | BPF_F_WRONLY)
--
-+	(BPF_F_NUMA_NODE | BPF_F_ACCESS_MASK)
- 
- struct bpf_queue_stack {
- 	struct bpf_map map;
-@@ -52,7 +51,8 @@ static int queue_stack_map_alloc_check(union bpf_attr *attr)
- 	/* check sanity of attributes */
- 	if (attr->max_entries == 0 || attr->key_size != 0 ||
- 	    attr->value_size == 0 ||
--	    attr->map_flags & ~QUEUE_STACK_CREATE_FLAG_MASK)
-+	    attr->map_flags & ~QUEUE_STACK_CREATE_FLAG_MASK ||
-+	    !bpf_map_flags_access_ok(attr->map_flags))
- 		return -EINVAL;
- 
- 	if (attr->value_size > KMALLOC_MAX_SIZE)
 diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 56b4b0e..0c9276b 100644
+index 828518b..56b4b0e 100644
 --- a/kernel/bpf/syscall.c
 +++ b/kernel/bpf/syscall.c
-@@ -501,6 +501,8 @@ static int map_check_btf(struct bpf_map *map, const struct btf *btf,
- 	map->spin_lock_off = btf_find_spin_lock(btf, value_type);
- 
- 	if (map_value_has_spin_lock(map)) {
-+		if (map->map_flags & BPF_F_RDONLY_PROG)
-+			return -EACCES;
- 		if (map->map_type != BPF_MAP_TYPE_HASH &&
- 		    map->map_type != BPF_MAP_TYPE_ARRAY &&
- 		    map->map_type != BPF_MAP_TYPE_CGROUP_STORAGE)
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6ab7a23..b747434 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1439,6 +1439,28 @@ static int check_stack_access(struct bpf_verifier_env *env,
- 	return 0;
+@@ -166,13 +166,25 @@ void bpf_map_area_free(void *area)
+ 	kvfree(area);
  }
  
-+static int check_map_access_type(struct bpf_verifier_env *env, u32 regno,
-+				 int off, int size, enum bpf_access_type type)
++static u32 bpf_map_flags_retain_permanent(u32 flags)
 +{
-+	struct bpf_reg_state *regs = cur_regs(env);
-+	struct bpf_map *map = regs[regno].map_ptr;
-+	u32 cap = bpf_map_flags_to_cap(map);
-+
-+	if (type == BPF_WRITE && !(cap & BPF_MAP_CAN_WRITE)) {
-+		verbose(env, "write into map forbidden, value_size=%d off=%d size=%d\n",
-+			map->value_size, off, size);
-+		return -EACCES;
-+	}
-+
-+	if (type == BPF_READ && !(cap & BPF_MAP_CAN_READ)) {
-+		verbose(env, "read from map forbidden, value_size=%d off=%d size=%d\n",
-+			map->value_size, off, size);
-+		return -EACCES;
-+	}
-+
-+	return 0;
++	/* Some map creation flags are not tied to the map object but
++	 * rather to the map fd instead, so they have no meaning upon
++	 * map object inspection since multiple file descriptors with
++	 * different (access) properties can exist here. Thus, given
++	 * this has zero meaning for the map itself, lets clear these
++	 * from here.
++	 */
++	return flags & ~(BPF_F_RDONLY | BPF_F_WRONLY);
 +}
 +
- /* check read/write into map element returned by bpf_map_lookup_elem() */
- static int __check_map_access(struct bpf_verifier_env *env, u32 regno, int off,
- 			      int size, bool zero_size_allowed)
-@@ -2024,7 +2046,9 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
- 			verbose(env, "R%d leaks addr into map\n", value_regno);
- 			return -EACCES;
- 		}
--
-+		err = check_map_access_type(env, regno, off, size, t);
-+		if (err)
-+			return err;
- 		err = check_map_access(env, regno, off, size, false);
- 		if (!err && t == BPF_READ && value_regno >= 0)
- 			mark_reg_unknown(env, regs, value_regno);
-@@ -2327,6 +2351,10 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
- 		return check_packet_access(env, regno, reg->off, access_size,
- 					   zero_size_allowed);
- 	case PTR_TO_MAP_VALUE:
-+		if (check_map_access_type(env, regno, reg->off, access_size,
-+					  meta && meta->raw_mode ? BPF_WRITE :
-+					  BPF_READ))
-+			return -EACCES;
- 		return check_map_access(env, regno, reg->off, access_size,
- 					zero_size_allowed);
- 	default: /* scalar_value|ptr_to_stack or invalid ptr */
-@@ -3059,6 +3087,7 @@ record_func_map(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
- 		int func_id, int insn_idx)
+ void bpf_map_init_from_attr(struct bpf_map *map, union bpf_attr *attr)
  {
- 	struct bpf_insn_aux_data *aux = &env->insn_aux_data[insn_idx];
-+	struct bpf_map *map = meta->map_ptr;
+ 	map->map_type = attr->map_type;
+ 	map->key_size = attr->key_size;
+ 	map->value_size = attr->value_size;
+ 	map->max_entries = attr->max_entries;
+-	map->map_flags = attr->map_flags;
++	map->map_flags = bpf_map_flags_retain_permanent(attr->map_flags);
+ 	map->numa_node = bpf_map_attr_numa_node(attr);
+ }
  
- 	if (func_id != BPF_FUNC_tail_call &&
- 	    func_id != BPF_FUNC_map_lookup_elem &&
-@@ -3069,11 +3098,24 @@ record_func_map(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
- 	    func_id != BPF_FUNC_map_peek_elem)
- 		return 0;
- 
--	if (meta->map_ptr == NULL) {
-+	if (map == NULL) {
- 		verbose(env, "kernel subsystem misconfigured verifier\n");
- 		return -EINVAL;
- 	}
- 
-+	/* In case of read-only, some additional restrictions
-+	 * need to be applied in order to prevent altering the
-+	 * state of the map from program side.
-+	 */
-+	if ((map->map_flags & BPF_F_RDONLY_PROG) &&
-+	    (func_id == BPF_FUNC_map_delete_elem ||
-+	     func_id == BPF_FUNC_map_update_elem ||
-+	     func_id == BPF_FUNC_map_push_elem ||
-+	     func_id == BPF_FUNC_map_pop_elem)) {
-+		verbose(env, "write into map forbidden\n");
-+		return -EACCES;
-+	}
-+
- 	if (!BPF_MAP_PTR(aux->map_state))
- 		bpf_map_ptr_store(aux, meta->map_ptr,
- 				  meta->map_ptr->unpriv_array);
 -- 
 2.9.5
 
