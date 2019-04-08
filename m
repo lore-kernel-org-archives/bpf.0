@@ -6,31 +6,31 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9D28C10F14
-	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 13:54:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F4D8C10F13
+	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 13:54:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9D69B20663
-	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 13:54:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0CD7E20663
+	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 13:54:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726902AbfDHNyG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Apr 2019 09:54:06 -0400
-Received: from www62.your-server.de ([213.133.104.62]:46124 "EHLO
+        id S1726725AbfDHNyI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Apr 2019 09:54:08 -0400
+Received: from www62.your-server.de ([213.133.104.62]:46142 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726874AbfDHNyF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Apr 2019 09:54:05 -0400
+        with ESMTP id S1726838AbfDHNyH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Apr 2019 09:54:07 -0400
 Received: from [178.197.248.24] (helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1hDUil-0003h0-9S; Mon, 08 Apr 2019 15:53:59 +0200
+        id 1hDUil-0003hH-O2; Mon, 08 Apr 2019 15:53:59 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, ast@kernel.org, joe@wand.net.nz,
         yhs@fb.com, andrii.nakryiko@gmail.com, kafai@fb.com,
         Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v5 09/16] bpf: sync {btf, bpf}.h uapi header from tools infrastructure
-Date:   Mon,  8 Apr 2019 15:53:41 +0200
-Message-Id: <6d055eb6c79b145dc9e76a373cb6128ab81121b2.1554731339.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next v5 10/16] bpf, libbpf: refactor relocation handling
+Date:   Mon,  8 Apr 2019 15:53:42 +0200
+Message-Id: <45516fc398d655f9cc28cea25d3c55c6642db71c.1554731339.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <cover.1554731339.git.daniel@iogearbox.net>
 References: <cover.1554731339.git.daniel@iogearbox.net>
@@ -43,127 +43,111 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Pull in latest changes from both headers, so we can make use of
-them in libbpf.
+From: Joe Stringer <joe@wand.net.nz>
 
+Adjust the code for relocations slightly with no functional changes,
+so that upcoming patches that will introduce support for relocations
+into the .data, .rodata and .bss sections can be added independent
+of these changes.
+
+Signed-off-by: Joe Stringer <joe@wand.net.nz>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 Acked-by: Martin KaFai Lau <kafai@fb.com>
 ---
- tools/include/uapi/linux/bpf.h | 20 ++++++++++++++++++--
- tools/include/uapi/linux/btf.h | 32 ++++++++++++++++++++++++++++----
- 2 files changed, 46 insertions(+), 6 deletions(-)
+ tools/lib/bpf/libbpf.c | 62 ++++++++++++++++++++++++++------------------------
+ 1 file changed, 32 insertions(+), 30 deletions(-)
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 8370245..af1cbd9 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -105,6 +105,7 @@ enum bpf_cmd {
- 	BPF_BTF_GET_FD_BY_ID,
- 	BPF_TASK_FD_QUERY,
- 	BPF_MAP_LOOKUP_AND_DELETE_ELEM,
-+	BPF_MAP_FREEZE,
- };
- 
- enum bpf_map_type {
-@@ -255,8 +256,19 @@ enum bpf_attach_type {
-  */
- #define BPF_F_ANY_ALIGNMENT	(1U << 1)
- 
--/* when bpf_ldimm64->src_reg == BPF_PSEUDO_MAP_FD, bpf_ldimm64->imm == fd */
-+/* When BPF ldimm64's insn[0].src_reg != 0 then this can have
-+ * two extensions:
-+ *
-+ * insn[0].src_reg:  BPF_PSEUDO_MAP_FD   BPF_PSEUDO_MAP_VALUE
-+ * insn[0].imm:      map fd              map fd
-+ * insn[1].imm:      0                   offset into value
-+ * insn[0].off:      0                   0
-+ * insn[1].off:      0                   0
-+ * ldimm64 rewrite:  address of map      address of map[0]+offset
-+ * verifier type:    CONST_PTR_TO_MAP    PTR_TO_MAP_VALUE
-+ */
- #define BPF_PSEUDO_MAP_FD	1
-+#define BPF_PSEUDO_MAP_VALUE	2
- 
- /* when bpf_call->src_reg == BPF_PSEUDO_CALL, bpf_call->imm == pc-relative
-  * offset to another bpf function
-@@ -283,7 +295,7 @@ enum bpf_attach_type {
- 
- #define BPF_OBJ_NAME_LEN 16U
- 
--/* Flags for accessing BPF object */
-+/* Flags for accessing BPF object from syscall side. */
- #define BPF_F_RDONLY		(1U << 3)
- #define BPF_F_WRONLY		(1U << 4)
- 
-@@ -293,6 +305,10 @@ enum bpf_attach_type {
- /* Zero-initialize hash function seed. This should only be used for testing. */
- #define BPF_F_ZERO_SEED		(1U << 6)
- 
-+/* Flags for accessing BPF object from program side. */
-+#define BPF_F_RDONLY_PROG	(1U << 7)
-+#define BPF_F_WRONLY_PROG	(1U << 8)
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 1ebfe79..6dba0f0 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -871,20 +871,20 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
+ 				obj->efile.symbols = data;
+ 				obj->efile.strtabidx = sh.sh_link;
+ 			}
+-		} else if ((sh.sh_type == SHT_PROGBITS) &&
+-			   (sh.sh_flags & SHF_EXECINSTR) &&
+-			   (data->d_size > 0)) {
+-			if (strcmp(name, ".text") == 0)
+-				obj->efile.text_shndx = idx;
+-			err = bpf_object__add_program(obj, data->d_buf,
+-						      data->d_size, name, idx);
+-			if (err) {
+-				char errmsg[STRERR_BUFSIZE];
+-				char *cp = libbpf_strerror_r(-err, errmsg,
+-							     sizeof(errmsg));
+-
+-				pr_warning("failed to alloc program %s (%s): %s",
+-					   name, obj->path, cp);
++		} else if (sh.sh_type == SHT_PROGBITS && data->d_size > 0) {
++			if (sh.sh_flags & SHF_EXECINSTR) {
++				if (strcmp(name, ".text") == 0)
++					obj->efile.text_shndx = idx;
++				err = bpf_object__add_program(obj, data->d_buf,
++							      data->d_size, name, idx);
++				if (err) {
++					char errmsg[STRERR_BUFSIZE];
++					char *cp = libbpf_strerror_r(-err, errmsg,
++								     sizeof(errmsg));
 +
- /* flags for BPF_PROG_QUERY */
- #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
++					pr_warning("failed to alloc program %s (%s): %s",
++						   name, obj->path, cp);
++				}
+ 			}
+ 		} else if (sh.sh_type == SHT_REL) {
+ 			void *reloc = obj->efile.reloc;
+@@ -1046,24 +1046,26 @@ bpf_program__collect_reloc(struct bpf_program *prog, GElf_Shdr *shdr,
+ 			return -LIBBPF_ERRNO__RELOC;
+ 		}
  
-diff --git a/tools/include/uapi/linux/btf.h b/tools/include/uapi/linux/btf.h
-index 7b7475e..9310652 100644
---- a/tools/include/uapi/linux/btf.h
-+++ b/tools/include/uapi/linux/btf.h
-@@ -39,11 +39,11 @@ struct btf_type {
- 	 *             struct, union and fwd
- 	 */
- 	__u32 info;
--	/* "size" is used by INT, ENUM, STRUCT and UNION.
-+	/* "size" is used by INT, ENUM, STRUCT, UNION and DATASEC.
- 	 * "size" tells the size of the type it is describing.
- 	 *
- 	 * "type" is used by PTR, TYPEDEF, VOLATILE, CONST, RESTRICT,
--	 * FUNC and FUNC_PROTO.
-+	 * FUNC, FUNC_PROTO and VAR.
- 	 * "type" is a type_id referring to another type.
- 	 */
- 	union {
-@@ -70,8 +70,10 @@ struct btf_type {
- #define BTF_KIND_RESTRICT	11	/* Restrict	*/
- #define BTF_KIND_FUNC		12	/* Function	*/
- #define BTF_KIND_FUNC_PROTO	13	/* Function Proto	*/
--#define BTF_KIND_MAX		13
--#define NR_BTF_KINDS		14
-+#define BTF_KIND_VAR		14	/* Variable	*/
-+#define BTF_KIND_DATASEC	15	/* Section	*/
-+#define BTF_KIND_MAX		BTF_KIND_DATASEC
-+#define NR_BTF_KINDS		(BTF_KIND_MAX + 1)
+-		/* TODO: 'maps' is sorted. We can use bsearch to make it faster. */
+-		for (map_idx = 0; map_idx < nr_maps; map_idx++) {
+-			if (maps[map_idx].offset == sym.st_value) {
+-				pr_debug("relocation: find map %zd (%s) for insn %u\n",
+-					 map_idx, maps[map_idx].name, insn_idx);
+-				break;
++		if (sym.st_shndx == maps_shndx) {
++			/* TODO: 'maps' is sorted. We can use bsearch to make it faster. */
++			for (map_idx = 0; map_idx < nr_maps; map_idx++) {
++				if (maps[map_idx].offset == sym.st_value) {
++					pr_debug("relocation: find map %zd (%s) for insn %u\n",
++						 map_idx, maps[map_idx].name, insn_idx);
++					break;
++				}
+ 			}
+-		}
  
- /* For some specific BTF_KIND, "struct btf_type" is immediately
-  * followed by extra data.
-@@ -138,4 +140,26 @@ struct btf_param {
- 	__u32	type;
- };
+-		if (map_idx >= nr_maps) {
+-			pr_warning("bpf relocation: map_idx %d large than %d\n",
+-				   (int)map_idx, (int)nr_maps - 1);
+-			return -LIBBPF_ERRNO__RELOC;
+-		}
++			if (map_idx >= nr_maps) {
++				pr_warning("bpf relocation: map_idx %d large than %d\n",
++					   (int)map_idx, (int)nr_maps - 1);
++				return -LIBBPF_ERRNO__RELOC;
++			}
  
-+enum {
-+	BTF_VAR_STATIC = 0,
-+	BTF_VAR_GLOBAL_ALLOCATED,
-+};
-+
-+/* BTF_KIND_VAR is followed by a single "struct btf_var" to describe
-+ * additional information related to the variable such as its linkage.
-+ */
-+struct btf_var {
-+	__u32	linkage;
-+};
-+
-+/* BTF_KIND_DATASEC is followed by multiple "struct btf_var_secinfo"
-+ * to describe all BTF_KIND_VAR types it contains along with it's
-+ * in-section offset as well as size.
-+ */
-+struct btf_var_secinfo {
-+	__u32	type;
-+	__u32	offset;
-+	__u32	size;
-+};
-+
- #endif /* _UAPI__LINUX_BTF_H__ */
+-		prog->reloc_desc[i].type = RELO_LD64;
+-		prog->reloc_desc[i].insn_idx = insn_idx;
+-		prog->reloc_desc[i].map_idx = map_idx;
++			prog->reloc_desc[i].type = RELO_LD64;
++			prog->reloc_desc[i].insn_idx = insn_idx;
++			prog->reloc_desc[i].map_idx = map_idx;
++		}
+ 	}
+ 	return 0;
+ }
+@@ -1425,7 +1427,7 @@ bpf_program__relocate(struct bpf_program *prog, struct bpf_object *obj)
+ 			}
+ 			insns[insn_idx].src_reg = BPF_PSEUDO_MAP_FD;
+ 			insns[insn_idx].imm = obj->maps[map_idx].fd;
+-		} else {
++		} else if (prog->reloc_desc[i].type == RELO_CALL) {
+ 			err = bpf_program__reloc_text(prog, obj,
+ 						      &prog->reloc_desc[i]);
+ 			if (err)
 -- 
 2.9.5
 
