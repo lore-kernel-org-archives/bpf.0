@@ -5,59 +5,59 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D00FC10F14
-	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 16:04:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46BB6C10F13
+	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 16:04:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F1D4020857
-	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 16:04:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E68C20857
+	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 16:04:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sH2xkoEX"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fxbh9XPd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727348AbfDHQEi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Apr 2019 12:04:38 -0400
-Received: from mail-pg1-f201.google.com ([209.85.215.201]:35908 "EHLO
-        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728626AbfDHQEi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Apr 2019 12:04:38 -0400
-Received: by mail-pg1-f201.google.com with SMTP id l13so10488943pgp.3
-        for <bpf@vger.kernel.org>; Mon, 08 Apr 2019 09:04:37 -0700 (PDT)
+        id S1728697AbfDHQEn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Apr 2019 12:04:43 -0400
+Received: from mail-ua1-f73.google.com ([209.85.222.73]:49467 "EHLO
+        mail-ua1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727263AbfDHQEk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Apr 2019 12:04:40 -0400
+Received: by mail-ua1-f73.google.com with SMTP id y1so1664048uaq.16
+        for <bpf@vger.kernel.org>; Mon, 08 Apr 2019 09:04:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=TPX6cTYh61RNjrelF8pt2tCkW6NVS4y5gHCKwdw0Nmw=;
-        b=sH2xkoEX91xB0GoEJlFiyihE548rQV7YzkKuDFIYVkOn0T+vkkPfMHR7bBUYTidknv
-         olQrdcPQp2FAR/r6mJl+/NEu2jjxOR+VVGzjkH/hGzl7lCTa2dTEbMRMWaQfnaz8OCmc
-         gad3Qmo/iACpH5IjtArJ6WzOoBXt9R+bV2gYEQLJaoZf6NZU7o6/hpL8P7tsfZFdSHf4
-         LTNMiEiX5wOZ97sOHCpAWPPx5untFRyyDe78a1dKZ5jfEC1G3V27Nag4QHmi9aQLzyAl
-         CeMOTeTqGockZ4h3Y8T1tJOUYb+5oWYwUic1BlrQC+OPiRIzw2RC4ZfRSej3MQTuytEE
-         aarQ==
+        bh=UGkvoUGvalrE4O9PVqzTvRKhxc7cE1P5JFCWJIKCuWs=;
+        b=fxbh9XPdlDOaJC8XUJxnKcNfry3+J8FLiZ20tBYGW8yPYs84nfWC/fxdbV/a20PCaJ
+         oYyY2LYuUIhfZufKl/JDucU4bLhxw/6onrRxW9Dh/uMWDw1ti9YqbMBdkHr0od3DjvHY
+         T8ADTaT0GKbXkHnKeZwd6vrJbbr8VUsiynIt8oo39B59swvvWLMkt8an9WlXXLk314BT
+         +Ha2JKgo1XiMgAs+v7/YM7maaF7bOCSfi4aLWIBHzz/tA9NLUW51H30ynnS1br1VsJPY
+         AZYGQD36uhhNOol5BxQ9XOpPcWdUXYIbJlA5pZp8uw+CQQ6gbsGIAI2ldBE61FGEg7AJ
+         uabg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=TPX6cTYh61RNjrelF8pt2tCkW6NVS4y5gHCKwdw0Nmw=;
-        b=pDTyMKKawjquv60Q1zNFIeXLJJD2Xehl25NMfxrWHMr9m6Y6VVixE3FFAP0HgHZi3y
-         58ZRxsBc7697VGrKjya0QErW/dIAZqJcPefmEpZT37knrI1d5meHeVWFCWJYrWO9tE2M
-         9I0aHk8yS0AMqtkMx+ZLVh4Uqkuc2iodyGYwqQjO1pxu1VRG7dYVvrowNeGpn2qjc53Q
-         Jms1lJTMq0BmGIjCalAnQo5bmysW6NkEQyr5+5e8gQG567JWdpsjjL2jQIZY9fUkf8dN
-         H9qn+2uYXr/21EsHu2yoKXyEPGF6nigKgSetaBHNIPLain6sSv2natBM8YZH1ozQlv70
-         kYGw==
-X-Gm-Message-State: APjAAAWMrI2YtRRcQ5jsDb2wv8F5Zo3Sv8OeVs9xMTMfTVyCdMBxSxfC
-        a7RiWvAKQFd9yAxQmXkKRAvpWLg=
-X-Google-Smtp-Source: APXvYqwlKjRBYlzlwBDcq48YfTlMTQPRwBknb6333Cys5QHRVKaalRAjjvcOrOX6Zpr5vm6TEHD7+2M=
-X-Received: by 2002:a17:902:1004:: with SMTP id b4mr1517901pla.102.1554739477102;
- Mon, 08 Apr 2019 09:04:37 -0700 (PDT)
-Date:   Mon,  8 Apr 2019 09:04:31 -0700
+        bh=UGkvoUGvalrE4O9PVqzTvRKhxc7cE1P5JFCWJIKCuWs=;
+        b=gH4pRQ2HXJVX8m8YdfrBlj7mxIl1DiTY4Alj5awoHgMFWxAL8QHmOTzsGkTlssk5du
+         U9kgnIg1CGHmQrULREdynlJhirNrUuy4eI+O8E65qT9OWZaDKVIdjp3es53lKkwWO2lZ
+         BWHTC/MkygBZvHpIz0WHUjE+tb5RSFYJsdpMCJs8S5Qn0QJQsTFVQGLYmu92VUCpYaRz
+         tTVYo7K2rAl5aKuju35xYzwlaZatScCmYRSlj3+jG9kUFsIov8769fRIHJwO2F9TMTJ9
+         Q1mrnuwsRRYZooEO5tbFC0A5q38s/mSE7KA9V/THo5eLlw368O8vIhQMTISAyAHbSmPj
+         XNwg==
+X-Gm-Message-State: APjAAAV+0ukTqzOpUmOHDnPUZGJUV1kk5ybKVxlTw2ZB2VvkVE43cUTd
+        pppAvfqLtjrCb46TX7mLkRQfJgI=
+X-Google-Smtp-Source: APXvYqzKanfDADmrg7RY6tfAaNVtQasx9KY7EMfTigyA7F7RY7yHyVouSOFYRX4ONojXM88VMCAPzx4=
+X-Received: by 2002:ab0:6893:: with SMTP id t19mr3028311uar.24.1554739479661;
+ Mon, 08 Apr 2019 09:04:39 -0700 (PDT)
+Date:   Mon,  8 Apr 2019 09:04:32 -0700
 In-Reply-To: <20190408160432.151478-1-sdf@google.com>
-Message-Id: <20190408160432.151478-2-sdf@google.com>
+Message-Id: <20190408160432.151478-3-sdf@google.com>
 Mime-Version: 1.0
 References: <20190408160432.151478-1-sdf@google.com>
 X-Mailer: git-send-email 2.21.0.392.gf8f6787159e-goog
-Subject: [PATCH bpf-next v2 2/3] libbpf: add support for ctx_{size,}_{in,out}
- in BPF_PROG_TEST_RUN
+Subject: [PATCH bpf-next v2 3/3] selftests: bpf: add selftest for __sk_buff
+ context in BPF_PROG_TEST_RUN
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
@@ -68,72 +68,147 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Support recently introduced input/output context for test runs.
-We extend only bpf_prog_test_run_xattr. bpf_prog_test_run is
-unextendable and left as is.
+Simple test that sets cb to {1,2,3,4,5} and priority to 6, runs bpf
+program that fails if cb is not what we expect and increments cb[i] and
+priority. When the test finishes, we check that cb is now {2,3,4,5,6}
+and priority is 7.
+
+We also test the sanity checks:
+* ctx_in is provided, but ctx_size_in is zero (same for
+  ctx_out/ctx_size_out)
+* unexpected non-zero fields in __sk_buff return EINVAL
 
 Cc: Martin Lau <kafai@fb.com>
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- tools/include/uapi/linux/bpf.h | 7 +++++++
- tools/lib/bpf/bpf.c            | 5 +++++
- tools/lib/bpf/bpf.h            | 5 +++++
- 3 files changed, 17 insertions(+)
+ .../selftests/bpf/prog_tests/skb_ctx.c        | 89 +++++++++++++++++++
+ .../selftests/bpf/progs/test_skb_ctx.c        | 21 +++++
+ 2 files changed, 110 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/skb_ctx.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_skb_ctx.c
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 837024512baf..8e96f99cebf8 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -396,6 +396,13 @@ union bpf_attr {
- 		__aligned_u64	data_out;
- 		__u32		repeat;
- 		__u32		duration;
-+		__u32		ctx_size_in;	/* input: len of ctx_in */
-+		__u32		ctx_size_out;	/* input/output: len of ctx_out
-+						 *   returns ENOSPC if ctx_out
-+						 *   is too small.
-+						 */
-+		__aligned_u64	ctx_in;
-+		__aligned_u64	ctx_out;
- 	} test;
- 
- 	struct { /* anonymous struct used by BPF_*_GET_*_ID */
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index a1db869a6fda..d740da7ae1d3 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -545,10 +545,15 @@ int bpf_prog_test_run_xattr(struct bpf_prog_test_run_attr *test_attr)
- 	attr.test.data_out = ptr_to_u64(test_attr->data_out);
- 	attr.test.data_size_in = test_attr->data_size_in;
- 	attr.test.data_size_out = test_attr->data_size_out;
-+	attr.test.ctx_in = ptr_to_u64(test_attr->ctx_in);
-+	attr.test.ctx_out = ptr_to_u64(test_attr->ctx_out);
-+	attr.test.ctx_size_in = test_attr->ctx_size_in;
-+	attr.test.ctx_size_out = test_attr->ctx_size_out;
- 	attr.test.repeat = test_attr->repeat;
- 
- 	ret = sys_bpf(BPF_PROG_TEST_RUN, &attr, sizeof(attr));
- 	test_attr->data_size_out = attr.test.data_size_out;
-+	test_attr->ctx_size_out = attr.test.ctx_size_out;
- 	test_attr->retval = attr.test.retval;
- 	test_attr->duration = attr.test.duration;
- 	return ret;
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index e2c0df7b831f..385418a6d54b 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -135,6 +135,11 @@ struct bpf_prog_test_run_attr {
- 			      * out: length of data_out */
- 	__u32 retval;        /* out: return code of the BPF program */
- 	__u32 duration;      /* out: average per repetition in ns */
-+	const void *ctx_in; /* optional */
-+	__u32 ctx_size_in;
-+	void *ctx_out;      /* optional */
-+	__u32 ctx_size_out; /* in: max length of ctx_out
-+			     * out: length of cxt_out */
- };
- 
- LIBBPF_API int bpf_prog_test_run_xattr(struct bpf_prog_test_run_attr *test_attr);
+diff --git a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
+new file mode 100644
+index 000000000000..e95baa32e277
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
+@@ -0,0 +1,89 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++
++void test_skb_ctx(void)
++{
++	struct __sk_buff skb = {
++		.cb[0] = 1,
++		.cb[1] = 2,
++		.cb[2] = 3,
++		.cb[3] = 4,
++		.cb[4] = 5,
++		.priority = 6,
++	};
++	struct bpf_prog_test_run_attr tattr = {
++		.data_in = &pkt_v4,
++		.data_size_in = sizeof(pkt_v4),
++		.ctx_in = &skb,
++		.ctx_size_in = sizeof(skb),
++		.ctx_out = &skb,
++		.ctx_size_out = sizeof(skb),
++	};
++	struct bpf_object *obj;
++	int err;
++	int i;
++
++	err = bpf_prog_load("./test_skb_ctx.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
++			    &tattr.prog_fd);
++	if (CHECK_ATTR(err, "load", "err %d errno %d\n", err, errno))
++		return;
++
++	/* ctx_in != NULL, ctx_size_in == 0 */
++
++	tattr.ctx_size_in = 0;
++	err = bpf_prog_test_run_xattr(&tattr);
++	CHECK_ATTR(err == 0, "ctx_size_in", "err %d errno %d\n", err, errno);
++	tattr.ctx_size_in = sizeof(skb);
++
++	/* ctx_out != NULL, ctx_size_out == 0 */
++
++	tattr.ctx_size_out = 0;
++	err = bpf_prog_test_run_xattr(&tattr);
++	CHECK_ATTR(err == 0, "ctx_size_out", "err %d errno %d\n", err, errno);
++	tattr.ctx_size_out = sizeof(skb);
++
++	/* non-zero [len, tc_index] fields should be rejected*/
++
++	skb.len = 1;
++	err = bpf_prog_test_run_xattr(&tattr);
++	CHECK_ATTR(err == 0, "len", "err %d errno %d\n", err, errno);
++	skb.len = 0;
++
++	skb.tc_index = 1;
++	err = bpf_prog_test_run_xattr(&tattr);
++	CHECK_ATTR(err == 0, "tc_index", "err %d errno %d\n", err, errno);
++	skb.tc_index = 0;
++
++	/* non-zero [hash, sk] fields should be rejected */
++
++	skb.hash = 1;
++	err = bpf_prog_test_run_xattr(&tattr);
++	CHECK_ATTR(err == 0, "hash", "err %d errno %d\n", err, errno);
++	skb.hash = 0;
++
++	skb.sk = (struct bpf_sock *)1;
++	err = bpf_prog_test_run_xattr(&tattr);
++	CHECK_ATTR(err == 0, "sk", "err %d errno %d\n", err, errno);
++	skb.sk = 0;
++
++	err = bpf_prog_test_run_xattr(&tattr);
++	CHECK_ATTR(err != 0 || tattr.retval,
++		   "run",
++		   "err %d errno %d retval %d\n",
++		   err, errno, tattr.retval);
++
++	CHECK_ATTR(tattr.ctx_size_out != sizeof(skb),
++		   "ctx_size_out",
++		   "incorrect output size, want %lu have %u\n",
++		   sizeof(skb), tattr.ctx_size_out);
++
++	for (i = 0; i < 5; i++)
++		CHECK_ATTR(skb.cb[i] != i + 2,
++			   "ctx_out_cb",
++			   "skb->cb[i] == %d, expected %d\n",
++			   skb.cb[i], i + 2);
++	CHECK_ATTR(skb.priority != 7,
++		   "ctx_out_priority",
++		   "skb->priority == %d, expected %d\n",
++		   skb.priority, 7);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_skb_ctx.c b/tools/testing/selftests/bpf/progs/test_skb_ctx.c
+new file mode 100644
+index 000000000000..7a80960d7df1
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_skb_ctx.c
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/bpf.h>
++#include "bpf_helpers.h"
++
++int _version SEC("version") = 1;
++char _license[] SEC("license") = "GPL";
++
++SEC("skb_ctx")
++int process(struct __sk_buff *skb)
++{
++	#pragma clang loop unroll(full)
++	for (int i = 0; i < 5; i++) {
++		if (skb->cb[i] != i + 1)
++			return 1;
++		skb->cb[i]++;
++	}
++	skb->priority++;
++
++	return 0;
++}
 -- 
 2.21.0.392.gf8f6787159e-goog
 
