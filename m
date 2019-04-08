@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AC44C10F14
-	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 16:58:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D529C10F14
+	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 16:59:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2D6B0214C6
-	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 16:58:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2645E20880
+	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 16:59:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="j7FIOGn5"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Gb/y5Krx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729246AbfDHQ6z (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Apr 2019 12:58:55 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:52054 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729320AbfDHQ6q (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Apr 2019 12:58:46 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x38GnJ3S046047;
-        Mon, 8 Apr 2019 16:58:16 GMT
+        id S1729377AbfDHQ66 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Apr 2019 12:58:58 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:57982 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729031AbfDHQ65 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Apr 2019 12:58:57 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x38GnLkt040637;
+        Mon, 8 Apr 2019 16:58:29 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=corp-2018-07-02;
- bh=qJ22uhlA9Bbrf/4QO7sQyIebZNyASQlo0KHV/9l8gGU=;
- b=j7FIOGn5imvuJe9eNFJ7iJLvBMdEjlNqMhcYVMMJr6CV6PxqDAUOjJOU3yYz6LJF3u2n
- tO/5RebbGaQes7LXHgPn2vYqaEVaZpYQtk+ex7uVc4YO7YfnEesdcmJAYsNaAeXew6cj
- nrEdeTy3JxONs+WQi0FGe/y4ObdIfINrIWlZx9knhDmBXp/N7SVOLU7I0hxLbkwA4hQV
- NaIoYNJyHGpETaLadLd4C+98iHkgbe3ucVKdi+W6xlar3Br4P7j+hX1Qs1OkkYBkWbXi
- sq5OTdoqLvP9fT8U/f5lAwreHD8IyDL2arVpk63UtUNBrOiI09Ug9jPLyMFXxVJJB1bC pQ== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2130.oracle.com with ESMTP id 2rphme7ymr-1
+ bh=JRgP6cRBzWIjR9nHTj9H1X7uBvaZQidnD1V1h4KPsc8=;
+ b=Gb/y5Krxcy1ryZR7fLpBy6fDNPX+MbtBQYMSCqR0LoxBTu2jeL+UlV08uptJEolqGoKA
+ dEYPF9l2XpaZPom1GG9AhBF2h2+hmxgr7KQEyUZ7Aq45zadihXbi30+awaWG/SiVVmFh
+ 80kN9y4MDRAz6IllMdjaFxQThP1oVKT29ikPYAX5iGYJRB8VMetxZGuB6cWyOyd9U9j/
+ luavCXPB8HfHDtg/6/sollZByQmDVPIYkPZwJj6nT6Pl7wFVkLkbljXNul71Z+p+rSJA
+ L3KcaYZAXB4z/8DvYU6bU2KsHUdIlC+AEmWPpBB1Gi3vuNDGMAOdWRgzU04xh3ZszMl4 mg== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 2rpkhsqtp6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 08 Apr 2019 16:58:16 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x38GvnXQ008269;
-        Mon, 8 Apr 2019 16:58:15 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 2rpkehtmae-1
+        Mon, 08 Apr 2019 16:58:29 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x38GwPWE019551;
+        Mon, 8 Apr 2019 16:58:28 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 2rph7s46t6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 08 Apr 2019 16:58:15 +0000
+        Mon, 08 Apr 2019 16:58:28 +0000
 Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x38GwEPu001778;
-        Mon, 8 Apr 2019 16:58:14 GMT
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x38GwRKw004265;
+        Mon, 8 Apr 2019 16:58:27 GMT
 Received: from dhcp-10-175-203-155.vpn.oracle.com (/10.175.203.155)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 08 Apr 2019 09:58:14 -0700
+        with ESMTP ; Mon, 08 Apr 2019 09:58:27 -0700
 From:   Alan Maguire <alan.maguire@oracle.com>
 To:     willemb@google.com, ast@kernel.org, daniel@iogearbox.net,
         davem@davemloft.net, shuah@kernel.org, kafai@fb.com,
@@ -57,9 +57,9 @@ To:     willemb@google.com, ast@kernel.org, daniel@iogearbox.net,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
 Cc:     Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v2 bpf-next 1/4] selftests_bpf: add UDP encap to test_tc_tunnel
-Date:   Mon,  8 Apr 2019 17:57:45 +0100
-Message-Id: <1554742668-28313-2-git-send-email-alan.maguire@oracle.com>
+Subject: [PATCH v2 bpf-next 4/4] selftests_bpf: add L2 encap to test_tc_tunnel
+Date:   Mon,  8 Apr 2019 17:57:48 +0100
+Message-Id: <1554742668-28313-5-git-send-email-alan.maguire@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1554742668-28313-1-git-send-email-alan.maguire@oracle.com>
 References: <1554742668-28313-1-git-send-email-alan.maguire@oracle.com>
@@ -79,390 +79,654 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-commit 868d523535c2 ("bpf: add bpf_skb_adjust_room encap flags")
-introduced support to bpf_skb_adjust_room for GSO-friendly GRE
-and UDP encapsulation and later introduced associated test_tc_tunnel
-tests.  Here those tests are extended to cover UDP encapsulation also.
+Update test_tc_tunnel to verify adding inner L2 header
+encapsulation (an MPLS label or ethernet header) works.
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- tools/testing/selftests/bpf/progs/test_tc_tunnel.c | 141 +++++++++++++++------
- tools/testing/selftests/bpf/test_tc_tunnel.sh      |  60 +++++++--
- 2 files changed, 147 insertions(+), 54 deletions(-)
+ tools/testing/selftests/bpf/progs/test_tc_tunnel.c | 232 ++++++++++++++++++---
+ tools/testing/selftests/bpf/test_tc_tunnel.sh      | 121 +++++++----
+ 2 files changed, 286 insertions(+), 67 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/progs/test_tc_tunnel.c b/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
-index f541c2d..7745a12 100644
+index 7745a12..86c5a4e 100644
 --- a/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
 +++ b/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
-@@ -12,6 +12,7 @@
+@@ -11,6 +11,7 @@
+ #include <linux/in.h>
  #include <linux/ip.h>
  #include <linux/ipv6.h>
++#include <linux/mpls.h>
  #include <linux/tcp.h>
-+#include <linux/udp.h>
+ #include <linux/udp.h>
  #include <linux/pkt_cls.h>
- #include <linux/types.h>
+@@ -23,6 +24,15 @@
  
-@@ -20,16 +21,27 @@
- 
- static const int cfg_port = 8000;
- 
--struct grev4hdr {
--	struct iphdr ip;
-+static const int cfg_udp_src = 20000;
-+static const int cfg_udp_dst = 5555;
+ static const int cfg_udp_src = 20000;
+ static const int cfg_udp_dst = 5555;
++/* MPLSoverUDP */
++#define MPLS_OVER_UDP_PORT 6635
++static const int cfg_mplsudp_dst = MPLS_OVER_UDP_PORT;
++#define	ETH_OVER_UDP_PORT 7777
++static const int cfg_ethudp_dst = ETH_OVER_UDP_PORT;
 +
-+struct gre_hdr {
++/* MPLS label 1000 with S bit (last label) set and ttl of 255. */
++static const __u32 mpls_label = __bpf_constant_htonl(1000 << 12 |
++						     MPLS_LS_S_MASK | 0xff);
+ 
+ struct gre_hdr {
  	__be16 flags;
- 	__be16 protocol;
+@@ -37,11 +47,13 @@ struct gre_hdr {
+ struct v4hdr {
+ 	struct iphdr ip;
+ 	union l4hdr l4hdr;
++	__u8 pad[16];		/* enough space for l2 header */
  } __attribute__((packed));
  
--struct grev6hdr {
-+union l4hdr {
-+	struct udphdr udp;
-+	struct gre_hdr gre;
-+};
-+
-+struct v4hdr {
-+	struct iphdr ip;
-+	union l4hdr l4hdr;
-+} __attribute__((packed));
-+
-+struct v6hdr {
+ struct v6hdr {
  	struct ipv6hdr ip;
--	__be16 flags;
--	__be16 protocol;
-+	union l4hdr l4hdr;
+ 	union l4hdr l4hdr;
++	__u8 pad[16];		/* enough space for l2 header */
  } __attribute__((packed));
  
  static __always_inline void set_ipv4_csum(struct iphdr *iph)
-@@ -47,10 +59,11 @@ static __always_inline void set_ipv4_csum(struct iphdr *iph)
+@@ -59,14 +71,16 @@ static __always_inline void set_ipv4_csum(struct iphdr *iph)
  	iph->check = ~((csum & 0xffff) + (csum >> 16));
  }
  
--static __always_inline int encap_ipv4(struct __sk_buff *skb, bool with_gre)
-+static __always_inline int encap_ipv4(struct __sk_buff *skb, __u8 encap_proto)
+-static __always_inline int encap_ipv4(struct __sk_buff *skb, __u8 encap_proto)
++static __always_inline int encap_ipv4(struct __sk_buff *skb, __u8 encap_proto,
++				      __u16 l2_proto)
  {
--	struct grev4hdr h_outer;
++	__u32 udp_dst = cfg_udp_dst;
  	struct iphdr iph_inner;
-+	struct v4hdr h_outer;
-+	struct udphdr *udph;
+ 	struct v4hdr h_outer;
+ 	struct udphdr *udph;
  	struct tcphdr tcph;
++	int olen, l2_len;
  	__u64 flags;
- 	int olen;
-@@ -70,12 +83,29 @@ static __always_inline int encap_ipv4(struct __sk_buff *skb, bool with_gre)
- 	if (tcph.dest != __bpf_constant_htons(cfg_port))
+-	int olen;
+ 
+ 	if (bpf_skb_load_bytes(skb, ETH_HLEN, &iph_inner,
+ 			       sizeof(iph_inner)) < 0)
+@@ -84,23 +98,38 @@ static __always_inline int encap_ipv4(struct __sk_buff *skb, __u8 encap_proto)
  		return TC_ACT_OK;
  
-+	olen = sizeof(h_outer.ip);
-+
+ 	olen = sizeof(h_outer.ip);
++	l2_len = 0;
+ 
  	flags = BPF_F_ADJ_ROOM_FIXED_GSO | BPF_F_ADJ_ROOM_ENCAP_L3_IPV4;
--	if (with_gre) {
-+	switch (encap_proto) {
-+	case IPPROTO_GRE:
- 		flags |= BPF_F_ADJ_ROOM_ENCAP_L4_GRE;
--		olen = sizeof(h_outer);
--	} else {
--		olen = sizeof(h_outer.ip);
-+		olen += sizeof(h_outer.l4hdr.gre);
-+		h_outer.l4hdr.gre.protocol = bpf_htons(ETH_P_IP);
-+		h_outer.l4hdr.gre.flags = 0;
-+		break;
-+	case IPPROTO_UDP:
-+		flags |= BPF_F_ADJ_ROOM_ENCAP_L4_UDP;
-+		olen += sizeof(h_outer.l4hdr.udp);
-+		h_outer.l4hdr.udp.source = __bpf_constant_htons(cfg_udp_src);
-+		h_outer.l4hdr.udp.dest = __bpf_constant_htons(cfg_udp_dst);
-+		h_outer.l4hdr.udp.check = 0;
-+		h_outer.l4hdr.udp.len = bpf_htons(bpf_ntohs(iph_inner.tot_len) +
-+						  sizeof(h_outer.l4hdr.udp));
-+		break;
-+	case IPPROTO_IPIP:
-+		break;
-+	default:
-+		return TC_ACT_OK;
- 	}
- 
- 	/* add room between mac and network header */
-@@ -85,16 +115,10 @@ static __always_inline int encap_ipv4(struct __sk_buff *skb, bool with_gre)
- 	/* prepare new outer network header */
- 	h_outer.ip = iph_inner;
- 	h_outer.ip.tot_len = bpf_htons(olen +
--				      bpf_htons(h_outer.ip.tot_len));
--	if (with_gre) {
--		h_outer.ip.protocol = IPPROTO_GRE;
--		h_outer.protocol = bpf_htons(ETH_P_IP);
--		h_outer.flags = 0;
--	} else {
--		h_outer.ip.protocol = IPPROTO_IPIP;
--	}
-+				       bpf_htons(h_outer.ip.tot_len));
-+	h_outer.ip.protocol = encap_proto;
- 
--	set_ipv4_csum((void *)&h_outer.ip);
-+	set_ipv4_csum(&h_outer.ip);
- 
- 	/* store new outer network header */
- 	if (bpf_skb_store_bytes(skb, ETH_HLEN, &h_outer, olen,
-@@ -104,11 +128,12 @@ static __always_inline int encap_ipv4(struct __sk_buff *skb, bool with_gre)
- 	return TC_ACT_OK;
- }
- 
--static __always_inline int encap_ipv6(struct __sk_buff *skb, bool with_gre)
-+static __always_inline int encap_ipv6(struct __sk_buff *skb, __u8 encap_proto)
- {
- 	struct ipv6hdr iph_inner;
--	struct grev6hdr h_outer;
-+	struct v6hdr h_outer;
- 	struct tcphdr tcph;
-+	__u16 tot_len;
- 	__u64 flags;
- 	int olen;
- 
-@@ -124,15 +149,32 @@ static __always_inline int encap_ipv6(struct __sk_buff *skb, bool with_gre)
- 	if (tcph.dest != __bpf_constant_htons(cfg_port))
- 		return TC_ACT_OK;
- 
-+	olen = sizeof(h_outer.ip);
 +
- 	flags = BPF_F_ADJ_ROOM_FIXED_GSO | BPF_F_ADJ_ROOM_ENCAP_L3_IPV6;
--	if (with_gre) {
-+	switch (encap_proto) {
-+	case IPPROTO_GRE:
++	switch (l2_proto) {
++	case ETH_P_MPLS_UC:
++		l2_len = sizeof(mpls_label);
++		udp_dst = cfg_mplsudp_dst;
++		break;
++	case ETH_P_TEB:
++		l2_len = ETH_HLEN;
++		udp_dst = cfg_ethudp_dst;
++		break;
++	}
++	flags |= BPF_F_ADJ_ROOM_ENCAP_L2(l2_len);
++
+ 	switch (encap_proto) {
+ 	case IPPROTO_GRE:
  		flags |= BPF_F_ADJ_ROOM_ENCAP_L4_GRE;
--		olen = sizeof(h_outer);
--	} else {
--		olen = sizeof(h_outer.ip);
-+		olen += sizeof(h_outer.l4hdr.gre);
-+		h_outer.l4hdr.gre.protocol = bpf_htons(ETH_P_IPV6);
-+		h_outer.l4hdr.gre.flags = 0;
-+		break;
-+	case IPPROTO_UDP:
-+		flags |= BPF_F_ADJ_ROOM_ENCAP_L4_UDP;
-+		olen += sizeof(h_outer.l4hdr.udp);
-+		h_outer.l4hdr.udp.source = __bpf_constant_htons(cfg_udp_src);
-+		h_outer.l4hdr.udp.dest = __bpf_constant_htons(cfg_udp_dst);
-+		tot_len = bpf_ntohs(iph_inner.payload_len) + sizeof(iph_inner) +
-+			  sizeof(h_outer.l4hdr.udp);
-+		h_outer.l4hdr.udp.check = 0;
-+		h_outer.l4hdr.udp.len = bpf_htons(tot_len);
-+		break;
-+	case IPPROTO_IPV6:
-+		break;
-+	default:
-+		return TC_ACT_OK;
+ 		olen += sizeof(h_outer.l4hdr.gre);
+-		h_outer.l4hdr.gre.protocol = bpf_htons(ETH_P_IP);
++		h_outer.l4hdr.gre.protocol = bpf_htons(l2_proto);
+ 		h_outer.l4hdr.gre.flags = 0;
+ 		break;
+ 	case IPPROTO_UDP:
+ 		flags |= BPF_F_ADJ_ROOM_ENCAP_L4_UDP;
+ 		olen += sizeof(h_outer.l4hdr.udp);
+ 		h_outer.l4hdr.udp.source = __bpf_constant_htons(cfg_udp_src);
+-		h_outer.l4hdr.udp.dest = __bpf_constant_htons(cfg_udp_dst);
++		h_outer.l4hdr.udp.dest = bpf_htons(udp_dst);
+ 		h_outer.l4hdr.udp.check = 0;
+ 		h_outer.l4hdr.udp.len = bpf_htons(bpf_ntohs(iph_inner.tot_len) +
+-						  sizeof(h_outer.l4hdr.udp));
++						  sizeof(h_outer.l4hdr.udp) +
++						  l2_len);
+ 		break;
+ 	case IPPROTO_IPIP:
+ 		break;
+@@ -108,6 +137,20 @@ static __always_inline int encap_ipv4(struct __sk_buff *skb, __u8 encap_proto)
+ 		return TC_ACT_OK;
  	}
  
--
++	/* add L2 encap (if specified) */
++	switch (l2_proto) {
++	case ETH_P_MPLS_UC:
++		*((__u32 *)((__u8 *)&h_outer + olen)) = mpls_label;
++		break;
++	case ETH_P_TEB:
++		if (bpf_skb_load_bytes(skb, 0, (__u8 *)&h_outer + olen,
++				       ETH_HLEN))
++			return TC_ACT_SHOT;
++		break;
++	}
++
++	olen += l2_len;
++
  	/* add room between mac and network header */
  	if (bpf_skb_adjust_room(skb, olen, BPF_ADJ_ROOM_MAC, flags))
  		return TC_ACT_SHOT;
-@@ -141,13 +183,8 @@ static __always_inline int encap_ipv6(struct __sk_buff *skb, bool with_gre)
+@@ -115,7 +158,7 @@ static __always_inline int encap_ipv4(struct __sk_buff *skb, __u8 encap_proto)
+ 	/* prepare new outer network header */
+ 	h_outer.ip = iph_inner;
+ 	h_outer.ip.tot_len = bpf_htons(olen +
+-				       bpf_htons(h_outer.ip.tot_len));
++				       bpf_ntohs(h_outer.ip.tot_len));
+ 	h_outer.ip.protocol = encap_proto;
+ 
+ 	set_ipv4_csum(&h_outer.ip);
+@@ -128,14 +171,16 @@ static __always_inline int encap_ipv4(struct __sk_buff *skb, __u8 encap_proto)
+ 	return TC_ACT_OK;
+ }
+ 
+-static __always_inline int encap_ipv6(struct __sk_buff *skb, __u8 encap_proto)
++static __always_inline int encap_ipv6(struct __sk_buff *skb, __u8 encap_proto,
++				      __u16 l2_proto)
+ {
++	__u16 udp_dst = cfg_udp_dst;
+ 	struct ipv6hdr iph_inner;
+ 	struct v6hdr h_outer;
+ 	struct tcphdr tcph;
++	int olen, l2_len;
+ 	__u16 tot_len;
+ 	__u64 flags;
+-	int olen;
+ 
+ 	if (bpf_skb_load_bytes(skb, ETH_HLEN, &iph_inner,
+ 			       sizeof(iph_inner)) < 0)
+@@ -150,20 +195,34 @@ static __always_inline int encap_ipv6(struct __sk_buff *skb, __u8 encap_proto)
+ 		return TC_ACT_OK;
+ 
+ 	olen = sizeof(h_outer.ip);
++	l2_len = 0;
+ 
+ 	flags = BPF_F_ADJ_ROOM_FIXED_GSO | BPF_F_ADJ_ROOM_ENCAP_L3_IPV6;
++
++	switch (l2_proto) {
++	case ETH_P_MPLS_UC:
++		l2_len = sizeof(mpls_label);
++		udp_dst = cfg_mplsudp_dst;
++		break;
++	case ETH_P_TEB:
++		l2_len = ETH_HLEN;
++		udp_dst = cfg_ethudp_dst;
++		break;
++	}
++	flags |= BPF_F_ADJ_ROOM_ENCAP_L2(l2_len);
++
+ 	switch (encap_proto) {
+ 	case IPPROTO_GRE:
+ 		flags |= BPF_F_ADJ_ROOM_ENCAP_L4_GRE;
+ 		olen += sizeof(h_outer.l4hdr.gre);
+-		h_outer.l4hdr.gre.protocol = bpf_htons(ETH_P_IPV6);
++		h_outer.l4hdr.gre.protocol = bpf_htons(l2_proto);
+ 		h_outer.l4hdr.gre.flags = 0;
+ 		break;
+ 	case IPPROTO_UDP:
+ 		flags |= BPF_F_ADJ_ROOM_ENCAP_L4_UDP;
+ 		olen += sizeof(h_outer.l4hdr.udp);
+ 		h_outer.l4hdr.udp.source = __bpf_constant_htons(cfg_udp_src);
+-		h_outer.l4hdr.udp.dest = __bpf_constant_htons(cfg_udp_dst);
++		h_outer.l4hdr.udp.dest = bpf_htons(udp_dst);
+ 		tot_len = bpf_ntohs(iph_inner.payload_len) + sizeof(iph_inner) +
+ 			  sizeof(h_outer.l4hdr.udp);
+ 		h_outer.l4hdr.udp.check = 0;
+@@ -175,6 +234,20 @@ static __always_inline int encap_ipv6(struct __sk_buff *skb, __u8 encap_proto)
+ 		return TC_ACT_OK;
+ 	}
+ 
++	/* add L2 encap (if specified) */
++	switch (l2_proto) {
++	case ETH_P_MPLS_UC:
++		*((__u32 *)((__u8 *)&h_outer + olen)) = mpls_label;
++		break;
++	case ETH_P_TEB:
++		if (bpf_skb_load_bytes(skb, 0, (__u8 *)&h_outer + olen,
++				       ETH_HLEN))
++			return TC_ACT_SHOT;
++		break;
++	}
++
++	olen += l2_len;
++
+ 	/* add room between mac and network header */
+ 	if (bpf_skb_adjust_room(skb, olen, BPF_ADJ_ROOM_MAC, flags))
+ 		return TC_ACT_SHOT;
+@@ -182,7 +255,7 @@ static __always_inline int encap_ipv6(struct __sk_buff *skb, __u8 encap_proto)
+ 	/* prepare new outer network header */
  	h_outer.ip = iph_inner;
  	h_outer.ip.payload_len = bpf_htons(olen +
- 					   bpf_ntohs(h_outer.ip.payload_len));
--	if (with_gre) {
--		h_outer.ip.nexthdr = IPPROTO_GRE;
--		h_outer.protocol = bpf_htons(ETH_P_IPV6);
--		h_outer.flags = 0;
--	} else {
--		h_outer.ip.nexthdr = IPPROTO_IPV6;
--	}
-+
-+	h_outer.ip.nexthdr = encap_proto;
+-					   bpf_ntohs(h_outer.ip.payload_len));
++					   bpf_ntohs(iph_inner.payload_len));
  
- 	/* store new outer network header */
- 	if (bpf_skb_store_bytes(skb, ETH_HLEN, &h_outer, olen,
-@@ -161,7 +198,7 @@ static __always_inline int encap_ipv6(struct __sk_buff *skb, bool with_gre)
- int __encap_ipip(struct __sk_buff *skb)
- {
- 	if (skb->protocol == __bpf_constant_htons(ETH_P_IP))
--		return encap_ipv4(skb, false);
-+		return encap_ipv4(skb, IPPROTO_IPIP);
- 	else
- 		return TC_ACT_OK;
+ 	h_outer.ip.nexthdr = encap_proto;
+ 
+@@ -194,63 +267,138 @@ static __always_inline int encap_ipv6(struct __sk_buff *skb, __u8 encap_proto)
+ 	return TC_ACT_OK;
  }
-@@ -170,7 +207,16 @@ int __encap_ipip(struct __sk_buff *skb)
- int __encap_gre(struct __sk_buff *skb)
- {
- 	if (skb->protocol == __bpf_constant_htons(ETH_P_IP))
--		return encap_ipv4(skb, true);
-+		return encap_ipv4(skb, IPPROTO_GRE);
-+	else
-+		return TC_ACT_OK;
-+}
-+
-+SEC("encap_udp")
-+int __encap_udp(struct __sk_buff *skb)
+ 
+-SEC("encap_ipip")
+-int __encap_ipip(struct __sk_buff *skb)
++SEC("encap_ipip_none")
++int __encap_ipip_none(struct __sk_buff *skb)
 +{
 +	if (skb->protocol == __bpf_constant_htons(ETH_P_IP))
-+		return encap_ipv4(skb, IPPROTO_UDP);
- 	else
- 		return TC_ACT_OK;
- }
-@@ -179,7 +225,7 @@ int __encap_gre(struct __sk_buff *skb)
- int __encap_ip6tnl(struct __sk_buff *skb)
- {
- 	if (skb->protocol == __bpf_constant_htons(ETH_P_IPV6))
--		return encap_ipv6(skb, false);
-+		return encap_ipv6(skb, IPPROTO_IPV6);
- 	else
- 		return TC_ACT_OK;
- }
-@@ -188,23 +234,34 @@ int __encap_ip6tnl(struct __sk_buff *skb)
- int __encap_ip6gre(struct __sk_buff *skb)
- {
- 	if (skb->protocol == __bpf_constant_htons(ETH_P_IPV6))
--		return encap_ipv6(skb, true);
-+		return encap_ipv6(skb, IPPROTO_GRE);
++		return encap_ipv4(skb, IPPROTO_IPIP, ETH_P_IP);
 +	else
 +		return TC_ACT_OK;
 +}
 +
-+SEC("encap_ip6udp")
-+int __encap_ip6udp(struct __sk_buff *skb)
-+{
-+	if (skb->protocol == __bpf_constant_htons(ETH_P_IPV6))
-+		return encap_ipv6(skb, IPPROTO_UDP);
++SEC("encap_gre_none")
++int __encap_gre_none(struct __sk_buff *skb)
+ {
+ 	if (skb->protocol == __bpf_constant_htons(ETH_P_IP))
+-		return encap_ipv4(skb, IPPROTO_IPIP);
++		return encap_ipv4(skb, IPPROTO_GRE, ETH_P_IP);
  	else
  		return TC_ACT_OK;
  }
  
- static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
+-SEC("encap_gre")
+-int __encap_gre(struct __sk_buff *skb)
++SEC("encap_gre_mpls")
++int __encap_gre_mpls(struct __sk_buff *skb)
  {
--	char buf[sizeof(struct grev6hdr)];
--	int olen;
-+	char buf[sizeof(struct v6hdr)];
-+	int olen = len;
+ 	if (skb->protocol == __bpf_constant_htons(ETH_P_IP))
+-		return encap_ipv4(skb, IPPROTO_GRE);
++		return encap_ipv4(skb, IPPROTO_GRE, ETH_P_MPLS_UC);
+ 	else
+ 		return TC_ACT_OK;
+ }
+ 
+-SEC("encap_udp")
+-int __encap_udp(struct __sk_buff *skb)
++SEC("encap_gre_eth")
++int __encap_gre_eth(struct __sk_buff *skb)
+ {
+ 	if (skb->protocol == __bpf_constant_htons(ETH_P_IP))
+-		return encap_ipv4(skb, IPPROTO_UDP);
++		return encap_ipv4(skb, IPPROTO_GRE, ETH_P_TEB);
++	else
++		return TC_ACT_OK;
++}
++
++SEC("encap_udp_none")
++int __encap_udp_none(struct __sk_buff *skb)
++{
++	if (skb->protocol == __bpf_constant_htons(ETH_P_IP))
++		return encap_ipv4(skb, IPPROTO_UDP, ETH_P_IP);
++	else
++		return TC_ACT_OK;
++}
++
++SEC("encap_udp_mpls")
++int __encap_udp_mpls(struct __sk_buff *skb)
++{
++	if (skb->protocol == __bpf_constant_htons(ETH_P_IP))
++		return encap_ipv4(skb, IPPROTO_UDP, ETH_P_MPLS_UC);
++	else
++		return TC_ACT_OK;
++}
++
++SEC("encap_udp_eth")
++int __encap_udp_eth(struct __sk_buff *skb)
++{
++	if (skb->protocol == __bpf_constant_htons(ETH_P_IP))
++		return encap_ipv4(skb, IPPROTO_UDP, ETH_P_TEB);
++	else
++		return TC_ACT_OK;
++}
++
++SEC("encap_ip6tnl_none")
++int __encap_ip6tnl_none(struct __sk_buff *skb)
++{
++	if (skb->protocol == __bpf_constant_htons(ETH_P_IPV6))
++		return encap_ipv6(skb, IPPROTO_IPV6, ETH_P_IPV6);
++	else
++		return TC_ACT_OK;
++}
++
++SEC("encap_ip6gre_none")
++int __encap_ip6gre_none(struct __sk_buff *skb)
++{
++	if (skb->protocol == __bpf_constant_htons(ETH_P_IPV6))
++		return encap_ipv6(skb, IPPROTO_GRE, ETH_P_IPV6);
++	else
++		return TC_ACT_OK;
++}
++
++SEC("encap_ip6gre_mpls")
++int __encap_ip6gre_mpls(struct __sk_buff *skb)
++{
++	if (skb->protocol == __bpf_constant_htons(ETH_P_IPV6))
++		return encap_ipv6(skb, IPPROTO_GRE, ETH_P_MPLS_UC);
++	else
++		return TC_ACT_OK;
++}
++
++SEC("encap_ip6gre_eth")
++int __encap_ip6gre_eth(struct __sk_buff *skb)
++{
++	if (skb->protocol == __bpf_constant_htons(ETH_P_IPV6))
++		return encap_ipv6(skb, IPPROTO_GRE, ETH_P_TEB);
+ 	else
+ 		return TC_ACT_OK;
+ }
+ 
+-SEC("encap_ip6tnl")
+-int __encap_ip6tnl(struct __sk_buff *skb)
++SEC("encap_ip6udp_none")
++int __encap_ip6udp_none(struct __sk_buff *skb)
+ {
+ 	if (skb->protocol == __bpf_constant_htons(ETH_P_IPV6))
+-		return encap_ipv6(skb, IPPROTO_IPV6);
++		return encap_ipv6(skb, IPPROTO_UDP, ETH_P_IPV6);
+ 	else
+ 		return TC_ACT_OK;
+ }
+ 
+-SEC("encap_ip6gre")
+-int __encap_ip6gre(struct __sk_buff *skb)
++SEC("encap_ip6udp_mpls")
++int __encap_ip6udp_mpls(struct __sk_buff *skb)
+ {
+ 	if (skb->protocol == __bpf_constant_htons(ETH_P_IPV6))
+-		return encap_ipv6(skb, IPPROTO_GRE);
++		return encap_ipv6(skb, IPPROTO_UDP, ETH_P_MPLS_UC);
+ 	else
+ 		return TC_ACT_OK;
+ }
+ 
+-SEC("encap_ip6udp")
+-int __encap_ip6udp(struct __sk_buff *skb)
++SEC("encap_ip6udp_eth")
++int __encap_ip6udp_eth(struct __sk_buff *skb)
+ {
+ 	if (skb->protocol == __bpf_constant_htons(ETH_P_IPV6))
+-		return encap_ipv6(skb, IPPROTO_UDP);
++		return encap_ipv6(skb, IPPROTO_UDP, ETH_P_TEB);
+ 	else
+ 		return TC_ACT_OK;
+ }
+ 
+-static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
++static __always_inline int decap_internal(struct __sk_buff *skb, int off,
++					  int len, char proto)
+ {
+ 	char buf[sizeof(struct v6hdr)];
++	struct gre_hdr greh;
++	struct udphdr udph;
+ 	int olen = len;
  
  	switch (proto) {
- 	case IPPROTO_IPIP:
- 	case IPPROTO_IPV6:
--		olen = len;
+@@ -259,9 +407,29 @@ static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
  		break;
  	case IPPROTO_GRE:
--		olen = len + 4 /* gre hdr */;
-+		olen += sizeof(struct gre_hdr);
-+		break;
-+	case IPPROTO_UDP:
-+		olen += sizeof(struct udphdr);
+ 		olen += sizeof(struct gre_hdr);
++		if (bpf_skb_load_bytes(skb, off + len, &greh, sizeof(greh)) < 0)
++			return TC_ACT_OK;
++		switch (bpf_ntohs(greh.protocol)) {
++		case ETH_P_MPLS_UC:
++			olen += sizeof(mpls_label);
++			break;
++		case ETH_P_TEB:
++			olen += ETH_HLEN;
++			break;
++		}
+ 		break;
+ 	case IPPROTO_UDP:
+ 		olen += sizeof(struct udphdr);
++		if (bpf_skb_load_bytes(skb, off + len, &udph, sizeof(udph)) < 0)
++			return TC_ACT_OK;
++		switch (bpf_ntohs(udph.dest)) {
++		case MPLS_OVER_UDP_PORT:
++			olen += sizeof(mpls_label);
++			break;
++		case ETH_OVER_UDP_PORT:
++			olen += ETH_HLEN;
++			break;
++		}
  		break;
  	default:
  		return TC_ACT_OK;
+@@ -274,7 +442,7 @@ static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
+ 	return TC_ACT_OK;
+ }
+ 
+-static int decap_ipv4(struct __sk_buff *skb)
++static __always_inline int decap_ipv4(struct __sk_buff *skb)
+ {
+ 	struct iphdr iph_outer;
+ 
+@@ -289,7 +457,7 @@ static int decap_ipv4(struct __sk_buff *skb)
+ 			      iph_outer.protocol);
+ }
+ 
+-static int decap_ipv6(struct __sk_buff *skb)
++static __always_inline int decap_ipv6(struct __sk_buff *skb)
+ {
+ 	struct ipv6hdr iph_outer;
+ 
 diff --git a/tools/testing/selftests/bpf/test_tc_tunnel.sh b/tools/testing/selftests/bpf/test_tc_tunnel.sh
-index c805adb..f87d645 100755
+index f87d645..385d16b 100755
 --- a/tools/testing/selftests/bpf/test_tc_tunnel.sh
 +++ b/tools/testing/selftests/bpf/test_tc_tunnel.sh
-@@ -15,6 +15,9 @@ readonly ns2_v4=192.168.1.2
- readonly ns1_v6=fd::1
- readonly ns2_v6=fd::2
+@@ -17,6 +17,9 @@ readonly ns2_v6=fd::2
  
-+# Must match port used by bpf program
-+readonly udpport=5555
-+
+ # Must match port used by bpf program
+ readonly udpport=5555
++# MPLSoverUDP
++readonly mplsudpport=6635
++readonly mplsproto=137
+ 
  readonly infile="$(mktemp)"
  readonly outfile="$(mktemp)"
- 
-@@ -38,8 +41,8 @@ setup() {
+@@ -41,8 +44,8 @@ setup() {
  	# clamp route to reserve room for tunnel headers
  	ip -netns "${ns1}" -4 route flush table main
  	ip -netns "${ns1}" -6 route flush table main
--	ip -netns "${ns1}" -4 route add "${ns2_v4}" mtu 1476 dev veth1
--	ip -netns "${ns1}" -6 route add "${ns2_v6}" mtu 1456 dev veth1
-+	ip -netns "${ns1}" -4 route add "${ns2_v4}" mtu 1472 dev veth1
-+	ip -netns "${ns1}" -6 route add "${ns2_v6}" mtu 1452 dev veth1
+-	ip -netns "${ns1}" -4 route add "${ns2_v4}" mtu 1472 dev veth1
+-	ip -netns "${ns1}" -6 route add "${ns2_v6}" mtu 1452 dev veth1
++	ip -netns "${ns1}" -4 route add "${ns2_v4}" mtu 1458 dev veth1
++	ip -netns "${ns1}" -6 route add "${ns2_v6}" mtu 1438 dev veth1
  
  	sleep 1
  
-@@ -103,6 +106,18 @@ if [[ "$#" -eq "0" ]]; then
- 	echo "ip6 gre gso"
- 	$0 ipv6 ip6gre 2000
+@@ -89,42 +92,44 @@ set -e
+ # no arguments: automated test, run all
+ if [[ "$#" -eq "0" ]]; then
+ 	echo "ipip"
+-	$0 ipv4 ipip 100
++	$0 ipv4 ipip none 100
  
-+	echo "ip udp"
-+	$0 ipv4 udp 100
-+
-+	echo "ip6 udp"
-+	$0 ipv6 ip6udp 100
-+
-+	echo "ip udp gso"
-+	$0 ipv4 udp 2000
-+
-+	echo "ip6 udp gso"
-+	$0 ipv6 ip6udp 2000
-+
+ 	echo "ip6ip6"
+-	$0 ipv6 ip6tnl 100
++	$0 ipv6 ip6tnl none 100
+ 
+-	echo "ip gre"
+-	$0 ipv4 gre 100
++	for mac in none mpls eth ; do
++		echo "ip gre"
++		$0 ipv4 gre $mac 100
+ 
+-	echo "ip6 gre"
+-	$0 ipv6 ip6gre 100
++		echo "ip6 gre"
++		$0 ipv6 ip6gre $mac 100
+ 
+-	echo "ip gre gso"
+-	$0 ipv4 gre 2000
++		echo "ip gre $mac gso"
++		$0 ipv4 gre $mac 2000
+ 
+-	echo "ip6 gre gso"
+-	$0 ipv6 ip6gre 2000
++		echo "ip6 gre $mac gso"
++		$0 ipv6 ip6gre $mac 2000
+ 
+-	echo "ip udp"
+-	$0 ipv4 udp 100
++		echo "ip udp $mac"
++		$0 ipv4 udp $mac 100
+ 
+-	echo "ip6 udp"
+-	$0 ipv6 ip6udp 100
++		echo "ip6 udp $mac"
++		$0 ipv6 ip6udp $mac 100
+ 
+-	echo "ip udp gso"
+-	$0 ipv4 udp 2000
++		echo "ip udp $mac gso"
++		$0 ipv4 udp $mac 2000
+ 
+-	echo "ip6 udp gso"
+-	$0 ipv6 ip6udp 2000
++		echo "ip6 udp $mac gso"
++		$0 ipv6 ip6udp $mac 2000
++	done
+ 
  	echo "OK. All tests passed"
  	exit 0
  fi
-@@ -117,12 +132,20 @@ case "$1" in
- "ipv4")
- 	readonly addr1="${ns1_v4}"
- 	readonly addr2="${ns2_v4}"
--	readonly netcat_opt=-4
-+	readonly ipproto=4
-+	readonly netcat_opt=-${ipproto}
-+	readonly foumod=fou
-+	readonly foutype=ipip
-+	readonly fouproto=4
+ 
+-if [[ "$#" -ne "3" ]]; then
++if [[ "$#" -ne "4" ]]; then
+ 	echo "Usage: $0"
+-	echo "   or: $0 <ipv4|ipv6> <tuntype> <data_len>"
++	echo "   or: $0 <ipv4|ipv6> <tuntype> <none|mpls> <data_len>"
+ 	exit 1
+ fi
+ 
+@@ -137,6 +142,8 @@ case "$1" in
+ 	readonly foumod=fou
+ 	readonly foutype=ipip
+ 	readonly fouproto=4
++	readonly fouproto_mpls=${mplsproto}
++	readonly gretaptype=gretap
  	;;
  "ipv6")
  	readonly addr1="${ns1_v6}"
- 	readonly addr2="${ns2_v6}"
--	readonly netcat_opt=-6
-+	readonly ipproto=6
-+	readonly netcat_opt=-${ipproto}
-+	readonly foumod=fou6
-+	readonly foutype=ip6tnl
-+	readonly fouproto="41 -6"
+@@ -146,6 +153,8 @@ case "$1" in
+ 	readonly foumod=fou6
+ 	readonly foutype=ip6tnl
+ 	readonly fouproto="41 -6"
++	readonly fouproto_mpls="${mplsproto} -6"
++	readonly gretaptype=ip6gretap
  	;;
  *)
  	echo "unknown arg: $1"
-@@ -158,12 +181,25 @@ server_listen
- # serverside, insert decap module
+@@ -154,9 +163,10 @@ case "$1" in
+ esac
+ 
+ readonly tuntype=$2
+-readonly datalen=$3
++readonly mac=$3
++readonly datalen=$4
+ 
+-echo "encap ${addr1} to ${addr2}, type ${tuntype}, len ${datalen}"
++echo "encap ${addr1} to ${addr2}, type ${tuntype}, mac ${mac} len ${datalen}"
+ 
+ trap cleanup EXIT
+ 
+@@ -173,7 +183,7 @@ verify_data
+ ip netns exec "${ns1}" tc qdisc add dev veth1 clsact
+ ip netns exec "${ns1}" tc filter add dev veth1 egress \
+ 	bpf direct-action object-file ./test_tc_tunnel.o \
+-	section "encap_${tuntype}"
++	section "encap_${tuntype}_${mac}"
+ echo "test bpf encap without decap (expect failure)"
+ server_listen
+ ! client_connect
+@@ -182,19 +192,54 @@ server_listen
  # server is still running
  # client can connect again
--ip netns exec "${ns2}" ip link add dev testtun0 type "${tuntype}" \
--	remote "${addr1}" local "${addr2}"
--# Because packets are decapped by the tunnel they arrive on testtun0 from
--# the IP stack perspective.  Ensure reverse path filtering is disabled
--# otherwise we drop the TCP SYN as arriving on testtun0 instead of the
--# expected veth2 (veth2 is where 192.168.1.2 is configured).
-+
-+if [[ "$tuntype" =~ "udp" ]]; then
-+	# Set up fou tunnel.
-+	ttype="${foutype}"
-+	targs="encap fou encap-sport auto encap-dport $udpport"
-+	# fou may be a module; allow this to fail.
-+	modprobe "${foumod}" ||true
-+	ip netns exec "${ns2}" ip fou add port 5555 ipproto ${fouproto}
-+else
-+	ttype=$tuntype
-+	targs=""
-+fi
-+ip netns exec "${ns2}" ip link add name testtun0 type "${ttype}" \
-+	remote "${addr1}" local "${addr2}" $targs
-+# Because packets are decapped by the tunnel they arrive on testtun0
-+# from the IP stack perspective.  Ensure reverse path filtering is
-+# disabled otherwise we drop the TCP SYN as arriving on testtun0
-+# instead of the expected veth2 (veth2 is where 192.168.1.2 is
-+# configured).
- ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.all.rp_filter=0
- # rp needs to be disabled for both all and testtun0 as the rp value is
- # selected as the max of the "all" and device-specific values.
-@@ -172,13 +208,13 @@ ip netns exec "${ns2}" ip link set dev testtun0 up
- echo "test bpf encap with tunnel device decap"
- client_connect
- verify_data
-+ip netns exec "${ns2}" ip link del dev testtun0
  
-+server_listen
++tmode=""
++targs=""
++
+ if [[ "$tuntype" =~ "udp" ]]; then
+-	# Set up fou tunnel.
+-	ttype="${foutype}"
+-	targs="encap fou encap-sport auto encap-dport $udpport"
+ 	# fou may be a module; allow this to fail.
+ 	modprobe "${foumod}" ||true
+-	ip netns exec "${ns2}" ip fou add port 5555 ipproto ${fouproto}
++	if [[ "$mac" == "mpls" ]]; then
++		dport=${mplsudpport}
++		dproto=${fouproto_mpls}
++		tmode="mode any ttl 255"
++	else
++		dport=${udpport}
++		dproto=${fouproto}
++	fi
++	ip netns exec "${ns2}" ip fou add port $dport ipproto ${dproto}
++	ttype="${foutype}"
++	targs="encap fou encap-sport auto encap-dport $dport"
++elif [[ "$tuntype" =~ "gre" && "$mac" == "eth" ]]; then
++	ttype=$gretaptype
+ else
+ 	ttype=$tuntype
+-	targs=""
+ fi
+ ip netns exec "${ns2}" ip link add name testtun0 type "${ttype}" \
+-	remote "${addr1}" local "${addr2}" $targs
++	${tmode} remote "${addr1}" local "${addr2}" $targs
++
++expect_tun_fail=0
++
++if [[ "$tuntype" == "ip6udp" && "$mac" == "mpls" ]]; then
++	# No support for MPLS IPv6 fou tunnel; expect failure.
++	expect_tun_fail=1
++elif [[ "$tuntype" =~ "udp" && "$mac" == "eth" ]]; then
++	# No support for TEB fou tunnel; expect failure.
++	expect_tun_fail=1
++elif [[ "$tuntype" =~ "gre" && "$mac" == "eth" ]]; then
++	# Share ethernet address between tunnel/veth2 so L2 decap works.
++	ethaddr=$(ip netns exec "${ns2}" ip link show veth2 | \
++		  awk '/ether/ { print $2 }')
++	ip netns exec "${ns2}" ip link set testtun0 address $ethaddr
++elif [[ "$mac" == "mpls" ]]; then
++	modprobe mpls_iptunnel ||true
++	modprobe mpls_gso ||true
++	ip netns exec "${ns2}" sysctl -qw net.mpls.platform_labels=65536
++	ip netns exec "${ns2}" ip -f mpls route add 1000 dev lo
++	ip netns exec "${ns2}" ip link set lo up
++	ip netns exec "${ns2}" sysctl -qw net.mpls.conf.testtun0.input=1
++	ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.lo.rp_filter=0
++fi
++
+ # Because packets are decapped by the tunnel they arrive on testtun0
+ # from the IP stack perspective.  Ensure reverse path filtering is
+ # disabled otherwise we drop the TCP SYN as arriving on testtun0
+@@ -205,12 +250,18 @@ ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.all.rp_filter=0
+ # selected as the max of the "all" and device-specific values.
+ ip netns exec "${ns2}" sysctl -qw net.ipv4.conf.testtun0.rp_filter=0
+ ip netns exec "${ns2}" ip link set dev testtun0 up
+-echo "test bpf encap with tunnel device decap"
+-client_connect
+-verify_data
++if [[ "$expect_tun_fail" == 1 ]]; then
++	# This tunnel mode is not supported, so we expect failure.
++	echo "test bpf encap with tunnel device decap (expect failure)"
++	! client_connect
++else
++	echo "test bpf encap with tunnel device decap"
++	client_connect
++	verify_data
++	server_listen
++fi
+ ip netns exec "${ns2}" ip link del dev testtun0
+ 
+-server_listen
  # serverside, use BPF for decap
--ip netns exec "${ns2}" ip link del dev testtun0
  ip netns exec "${ns2}" tc qdisc add dev veth2 clsact
  ip netns exec "${ns2}" tc filter add dev veth2 ingress \
- 	bpf direct-action object-file ./test_tc_tunnel.o section decap
--server_listen
- echo "test bpf encap with bpf decap"
- client_connect
- verify_data
 -- 
 1.8.3.1
 
