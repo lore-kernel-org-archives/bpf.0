@@ -2,118 +2,139 @@ Return-Path: <SRS0=xPz+=SK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27FB2C10F13
-	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 16:11:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4A1AC10F14
+	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 16:58:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ECA7920857
-	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 16:11:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B524F20880
+	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 16:58:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Ofu7aiGX"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="GV0xxfZA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727023AbfDHQLA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Apr 2019 12:11:00 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:57264 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726926AbfDHQLA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Apr 2019 12:11:00 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x38G9EwJ009438;
-        Mon, 8 Apr 2019 16:10:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2018-07-02;
- bh=F4QG1s8Kx7ws0XV1EK389cHsed8N1K97YCQiXWZC7Z0=;
- b=Ofu7aiGXiZl7SkmWjmADOpNTwMybmPYJfjxzrj7eXmTU+lwC+5edUgfAfBMU/LuiMait
- 0SH2eVbVWWki/fbOcFU39M0dH3gE52EUYawIvBo1OMuIP6wQKbx+n4gkmzajHfudVltU
- CbJYWYMu5qrqssIjifQAzkzm8hxRH3ASIjO8DYA6dUmOHn8vXCYbeL/Td6Jsm/XcZPtX
- yNHzYD5HLuTfS3UU5qoTbHBi0kyCPI5VHqNTn3GqjUV9O5ZsfkfIS/d9snJLZCYAGzX5
- KjHTAfWH36H2QPBSyGPMlijnaMpR+pdeeKhJPVcy4Qwx6bn0JcGkeCNgwjNf4ZcT4m/b rA== 
+        id S1729356AbfDHQ6v (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Apr 2019 12:58:51 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:53114 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729246AbfDHQ6u (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Apr 2019 12:58:50 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x38GnJ8U049226;
+        Mon, 8 Apr 2019 16:58:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2018-07-02;
+ bh=/W6XDopVPqLlHvDQfOV/bIYHl5Wckpc4KGcPgxu3wxE=;
+ b=GV0xxfZAlS1XLH3UVNEimrrU1r9OPLJqnv/ihGXzAitgpKezhhJb6kJCd4qb93TJLBnK
+ SacdXGtq7B7DtGSEjbvFNAdWpt2xKHlgVVSZokUDPdUtjxzVoOg7cJ/QMVUCNJ5F3BIp
+ phrMmwLhK0FVMLCLfH+yPGrJOkDRfbYAY81AoTs369b3e/N+bi0vwsNhi1p8MUwgbjik
+ fLV9xRMlfiYLM4n0IcBLDZQd6X75DYIhiBnSqQhaOotn0cCcbjIcqLrxOw8Hptri4Iwq
+ R2O4EcXLpueyIrXTR2lRwMgI3wyqwHTWweVdhoUesLlPJ5aU14NExZuBiow1fZthvo7z OA== 
 Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2130.oracle.com with ESMTP id 2rphme7q58-1
+        by userp2120.oracle.com with ESMTP id 2rpmrpyq3g-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 08 Apr 2019 16:10:56 +0000
+        Mon, 08 Apr 2019 16:58:12 +0000
 Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x38GAPBm093443;
-        Mon, 8 Apr 2019 16:10:55 GMT
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x38GvWtW016530;
+        Mon, 8 Apr 2019 16:58:12 GMT
 Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3030.oracle.com with ESMTP id 2rph7s3exf-1
+        by userp3030.oracle.com with ESMTP id 2rph7s46p8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 08 Apr 2019 16:10:55 +0000
-Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x38GAsgI006394;
-        Mon, 8 Apr 2019 16:10:54 GMT
-Received: from localhost (/10.159.211.98)
+        Mon, 08 Apr 2019 16:58:12 +0000
+Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x38Gw9Ss003823;
+        Mon, 8 Apr 2019 16:58:09 GMT
+Received: from dhcp-10-175-203-155.vpn.oracle.com (/10.175.203.155)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 08 Apr 2019 09:10:54 -0700
-Date:   Mon, 8 Apr 2019 12:10:52 -0400
-From:   Kris Van Hees <kris.van.hees@oracle.com>
-To:     lsf-pc@lists.linux-foundation.org, bpf@vger.kernel.org
-Cc:     Elena Zannoni <elena.zannoni@oracle.com>
-Subject: Re: [LSF/MM TOPIC] BPF: Extending eBPF as a generic tracing engine
-Message-ID: <20190408161052.GC11622@oracle.com>
-References: <20190223042412.GV25582@oracle.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190223042412.GV25582@oracle.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+        with ESMTP ; Mon, 08 Apr 2019 09:58:09 -0700
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     willemb@google.com, ast@kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, shuah@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, quentin.monnet@netronome.com,
+        john.fastabend@gmail.com, rdna@fb.com,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v2 bpf-next 0/4] L2 encap support for bpf_skb_adjust_room
+Date:   Mon,  8 Apr 2019 17:57:44 +0100
+Message-Id: <1554742668-28313-1-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
 X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9221 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=4 malwarescore=0
  phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1904080131
+ engine=8.0.1-1810050000 definitions=main-1904080137
 X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9221 signatures=668685
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ suspectscore=4 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
  lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1904080131
+ definitions=main-1904080136
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+Extend bpf_skb_adjust_room growth to mark inner MAC header so that
+L2 encapsulation can be used for tc tunnels.
 
-I have not heard any reply to the topic I proosed for the BPF track?  Could
-you please let me know by when notification can be expected on whether the
-proposal is accepted or not?
+Patch #1 extends the existing test_tc_tunnel to support UDP
+encapsulation; later we want to be able to test MPLS over UDP and
+MPLS over GRE encapsulation.
 
-	Cheers,
-	Kris
+Patch #2 adds the BPF_F_ADJ_ROOM_ENCAP_L2(len) macro, which
+allows specification of inner mac length.  Other approaches were
+explored prior to taking this approach.  Specifically, I tried
+automatically computing the inner mac length on the basis of the
+specified flags (so inner maclen for GRE/IPv4 encap is the len_diff
+specified to bpf_skb_adjust_room minus GRE + IPv4 header length
+for example).  Problem with this is that we don't know for sure
+what form of GRE/UDP header we have; is it a full GRE header,
+or is it a FOU UDP header or generic UDP encap header? My fear
+here was we'd end up with an explosion of flags.  The other approach
+tried was to support inner L2 header marking as a separate room
+adjustment, i.e. adjust for L3/L4 encap, then call
+bpf_skb_adjust_room for L2 encap.  This can be made to work but
+because it imposed an order on operations, felt a bit clunky.
 
-On Fri, Feb 22, 2019 at 11:24:12PM -0500, Kris Van Hees wrote:
-> Topic: Extending eBPF as a generic tracing engine
-> 
-> My presentation covers a few new features to the eBPF implementation in
-> support of tracing tools.  The main goal is to allow tracing tools the
-> ability to encode actions with probes/events, beyond the context of what
-> the current probes/events provide.
-> 
-> The features to discuss are:
-> 
->     - Allowing BPF-to-BPF tail-calling between BPF programs of different
->       program types (ussing a context conversion/casting mechanism that
->       BPF program types can provide.  This patch is being posted to the
->       netdev group this weekend, along with an example on how to use it.
->     - Using the context conversion mechanism to associate task info with
->       probe/event context, and have a BPF program operate on that, which
->       reduces the dependency (or need) for helper functions.
->     - Consider the option of having BPF program sub-types (for some program
->       types), which could even provide for loadable modules to implement
->       some specific extensions to a more generic BPF program type.
->     - Extending the context handling code and access checking to allow
->       for pointer references to auxilliary structs (to an arbitrary depth).
->       This makes it possible to do a lot more with contexts, such as
->       having it store a pointer to a trace output buffer so you can have
->       BPF instructions store to it directly.
-> 
-> The talk will focus on why this will help tracing a lot, and how it will
-> advance BPF as a tracing facility.  I want to solicit feedback on these
-> features so there can be common road forward to enhancing tracing based on
-> BPF.
+Patch #3 syncs tools/ bpf.h.
+
+Patch #4 extends the tests again to support MPLSoverGRE,
+MPLSoverUDP, and transparent ethernet bridging (TEB) where
+the inner L2 header is an ethernet header.  Testing of BPF
+encap against tunnels is done for cases where configuration
+of such tunnels is possible (MPLSoverGRE[6], MPLSoverUDP,
+gre[6]tap), and skipped otherwise.  Testing of BPF encap/decap
+is always carried out.
+
+Changes since v1:
+ - fixed formatting of commit references.
+ - BPF_F_ADJ_ROOM_FIXED_GSO flag enabled on all variants (patch 1)
+ - fixed fou6 options for UDP encap; checksum errors observed were
+   due to the fact fou6 tunnel was not set up with correct ipproto
+   options (41 -6).  0 checksums work fine (patch 1)
+ - added definitions for mask and shift used in setting L2 length
+   (patch 2)
+ - allow udp encap with fixed GSO (patch 2)
+ - changed "elen" to "l2_len" to be more descriptive (patch 4)
+ - added support for ethernet L2 encap to tests; testing against
+   gre[6]tap tunnels (patch 4).
+
+Alan Maguire (4):
+  selftests_bpf: add UDP encap to test_tc_tunnel
+  bpf: add layer 2 encap support to bpf_skb_adjust_room
+  bpf: sync bpf.h to tools/ for BPF_F_ADJ_ROOM_ENCAP_L2
+  selftests_bpf: add L2 encap to test_tc_tunnel
+
+ include/uapi/linux/bpf.h                           |  10 +
+ net/core/filter.c                                  |  15 +-
+ tools/include/uapi/linux/bpf.h                     |  10 +
+ tools/testing/selftests/bpf/progs/test_tc_tunnel.c | 335 +++++++++++++++++----
+ tools/testing/selftests/bpf/test_tc_tunnel.sh      | 147 +++++++--
+ 5 files changed, 427 insertions(+), 90 deletions(-)
+
+-- 
+1.8.3.1
+
