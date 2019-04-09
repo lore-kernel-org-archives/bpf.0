@@ -2,106 +2,132 @@ Return-Path: <SRS0=Zphp=SL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34C53C10F0E
-	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 07:36:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76F91C10F0E
+	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 09:11:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 06D9A2083E
-	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 07:36:50 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CJATPsXQ"
+	by mail.kernel.org (Postfix) with ESMTP id 4F48F20651
+	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 09:11:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726510AbfDIHgt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Apr 2019 03:36:49 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:41311 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726001AbfDIHgt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Apr 2019 03:36:49 -0400
-Received: by mail-pf1-f196.google.com with SMTP id 188so9181388pfd.8;
-        Tue, 09 Apr 2019 00:36:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=9bEy5XG2sC3I8z9cfzh5IJXe7CaSLjpMHO9QO+hf0Tg=;
-        b=CJATPsXQJpxEH7KprBLLawEhmA2fZ6GiGwQdxGCL2n6PfseNTcEI6XfCY17EuHGC9d
-         P5XODUE19v1i1kVNZjNN7K09l3j7H06l+7uJjg9nhWdD0Zn0COFy9SRoEkTIfYoM3Q9B
-         S78b4ymV1t4A2dj5nUnloAv3Tp3R/SJMlEhSkkAtsMsjNXO4mzS2QAh2wWFgc7/4tt5w
-         j+HGkk4sVqVfRe69BEY7d1GdwsuVVHjblO+KyfY0dE5UkK/IwNGw4F/rYlg4USMOmeuw
-         YL9PP6gyOA/PhTMveCEiqAPiNXOZIk3WgQsBfyPlydJnUAHk0xqvkFlfUL7026zhJl2Q
-         0uRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=9bEy5XG2sC3I8z9cfzh5IJXe7CaSLjpMHO9QO+hf0Tg=;
-        b=lUSizg6y3ss47Y3nY62NR/55iwZtlJIeiCXC4xYyFP9xCYd7dX3mUC4r1+G5fQSJck
-         1xcBKdfgr5+DizxiZiJqYBc9fUPpUgaddDBWuNZJ4YbzTSgzlcq2/OplMyx+GgXj3fD7
-         spVQQHp/fPTrjoeIGVaNm9NlCzDEK/kON12pDx0/CZNO82fRVpgcM41V0cDbOuLCwWQf
-         5W1XQskYpV9TKjwOfuEv4K30JDUOIFQ+/OVkpP/IlfgkorsnHtlE5MLJhSMqbddC1crU
-         YsQ5vF2pJiYmlghCN5CxyVKsk2z79JJuyI47mvvZ8DTOZA0OrvBd4NJqDRn4HyrbS9+B
-         4J5Q==
-X-Gm-Message-State: APjAAAVgkLr/YFH5a/yrRS6FLwi2rKOIFkQyWvf9wgBWUkUaRNk75lZc
-        5pXFCFsnirCQgdStg3g5hXw=
-X-Google-Smtp-Source: APXvYqyij7GwvRqzOquOBiQ16Ms1tcqjlGsVYk6+rmpcmOGrAZtcwrQKwMGPFQBS5h8b9PRrtqkwMQ==
-X-Received: by 2002:aa7:8096:: with SMTP id v22mr5873344pff.94.1554795408852;
-        Tue, 09 Apr 2019 00:36:48 -0700 (PDT)
-Received: from shadowsocks.asia-east1-b.c.nth-highlander-219506.internal. (191.202.194.35.bc.googleusercontent.com. [35.194.202.191])
-        by smtp.gmail.com with ESMTPSA id j14sm32862446pfa.57.2019.04.09.00.36.44
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Apr 2019 00:36:47 -0700 (PDT)
-From:   Huang Rui <huangruippp@gmail.com>
-X-Google-Original-From: Huang Rui <huangruiPPP@gmail.com>
-To:     davem@davemloft.net
-Cc:     ast@kernel.org, daniel@iogearbox.net, jakub.kicinski@netronome.com,
-        hawk@kernel.org, john.fastabend@gmail.com, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, jiri@mellanox.com,
-        ecree@solarflare.com, idosch@mellanox.com, petrm@mellanox.com,
-        alexander.h.duyck@intel.com, amritha.nambiar@intel.com,
-        lirongqing@baidu.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xdp-newbies@vger.kernel.org,
-        bpf@vger.kernel.org, huangruiPPP@gmail.com
-Subject: [PATCH] net:bridge:bridge mtu auto tuning does not always work
-Date:   Tue,  9 Apr 2019 07:36:42 +0000
-Message-Id: <20190409073642.12953-1-huangruiPPP@gmail.com>
-X-Mailer: git-send-email 2.11.0
+        id S1726205AbfDIJLH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Apr 2019 05:11:07 -0400
+Received: from www62.your-server.de ([213.133.104.62]:57588 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726079AbfDIJLG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Apr 2019 05:11:06 -0400
+Received: from [78.46.172.2] (helo=sslproxy05.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hDmmS-00074t-Rm; Tue, 09 Apr 2019 11:11:00 +0200
+Received: from [178.197.248.24] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hDmmS-000Kh5-IF; Tue, 09 Apr 2019 11:11:00 +0200
+Subject: Re: [PATCH bpf 2/2] libbpf: remove dependency on barrier.h in xsk.h
+To:     Magnus Karlsson <magnus.karlsson@intel.com>, bjorn.topel@intel.com,
+        ast@kernel.org, netdev@vger.kernel.org
+Cc:     bpf@vger.kernel.org, bruce.richardson@intel.com,
+        ciara.loftus@intel.com, ilias.apalodimas@linaro.org,
+        xiaolong.ye@intel.com, ferruh.yigit@intel.com,
+        qi.z.zhang@intel.com, georgmueller@gmx.net, will.deacon@arm.com
+References: <1554792253-27081-1-git-send-email-magnus.karlsson@intel.com>
+ <1554792253-27081-3-git-send-email-magnus.karlsson@intel.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <621a9d70-5397-da90-a68c-6f12f5cbd3b2@iogearbox.net>
+Date:   Tue, 9 Apr 2019 11:10:59 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.3.0
+MIME-Version: 1.0
+In-Reply-To: <1554792253-27081-3-git-send-email-magnus.karlsson@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.3/25414/Tue Apr  9 09:53:33 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-If someone setup a bridge and add a port(for example: eth0)
-into the bridge, but configure the bridge's mtu which is equal
-to eth0's mtu, the auto tuning flag will not be set true. But
-the meaning of the auto tuning flag is that it will be set true
-if a user configure bridge's mtu.
+On 04/09/2019 08:44 AM, Magnus Karlsson wrote:
+> The use of smp_rmb() and smp_wmb() creates a Linux header dependency
+> on barrier.h that is uneccessary in most parts. This patch implements
+> the two small defines that are needed from barrier.h. As a bonus, the
+> new implementations are faster than the default ones as they default
+> to sfence and lfence for x86, while we only need a compiler barrier in
+> our case. Just as it is when the same ring access code is compiled in
+> the kernel.
+> 
+> Fixes: 1cad07884239 ("libbpf: add support for using AF_XDP sockets")
+> Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+> ---
+>  tools/lib/bpf/xsk.h | 19 +++++++++++++++++--
+>  1 file changed, 17 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/lib/bpf/xsk.h b/tools/lib/bpf/xsk.h
+> index 3638147..317b44f 100644
+> --- a/tools/lib/bpf/xsk.h
+> +++ b/tools/lib/bpf/xsk.h
+> @@ -39,6 +39,21 @@ DEFINE_XSK_RING(xsk_ring_cons);
+>  struct xsk_umem;
+>  struct xsk_socket;
+>  
+> +#if !defined bpf_smp_rmb && !defined bpf_smp_wmb
+> +# if defined(__i386__) || defined(__x86_64__)
+> +#  define bpf_smp_rmb() asm volatile("" : : : "memory")
+> +#  define bpf_smp_wmb() asm volatile("" : : : "memory")
+> +# elif defined(__aarch64__)
+> +#  define bpf_smp_rmb() asm volatile("dmb ishld" : : : "memory")
+> +#  define bpf_smp_wmb() asm volatile("dmb ishst" : : : "memory")
+> +# elif defined(__arm__)
+> +#  define bpf_smp_rmb() asm volatile("dmb ish" : : : "memory")
+> +#  define bpf_smp_wmb() asm volatile("dmb ishst" : : : "memory")
+> +# else
+> +#  error Architecture not supported by the XDP socket code in libbpf.
+> +# endif
+> +#endif
 
-Signed-off-by: Huang Rui <huangruiPPP@gmail.com>
----
- net/core/dev.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Hmm, bit unfortunate, but I can see why it's needed inside the header here
+as it's installed into the system and needs to be included by applications.
+Fine with me. In any case, I still think we should also fix it for tooling
+infra to avoid others running into the same issue, lemme resurrect [0] from
+back in the days.
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 2b67f2a..ba410d7 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -7670,8 +7670,12 @@ int dev_set_mtu_ext(struct net_device *dev, int new_mtu,
- {
- 	int err, orig_mtu;
- 
--	if (new_mtu == dev->mtu)
--		return 0;
-+	if (new_mtu == dev->mtu) {
-+		if (dev->priv_flags & IFF_EBRIDGE)
-+			return __dev_set_mtu(dev, new_mtu);
-+		else
-+			return 0;
-+	}
- 
- 	/* MTU must be positive, and in range */
- 	if (new_mtu < 0 || new_mtu < dev->min_mtu) {
--- 
-1.8.3.1
+One question though regarding above arm32 implementation. You match these
+barriers against the ones from af_xdp in kernel. So smp_* variants from the
+arch/arm/include/asm/barrier.h header need to be matched. This selects the
+dmb(ish) and dmb(ishst) variant. The implementation of dmb() however is
+quite CPU dependent, the above assumes to match with __LINUX_ARM_ARCH__ >= 7.
+Perhaps this assumption needs at minimum a comment to make it clear for
+developers.
+
+  [0] https://lore.kernel.org/netdev/20181017144156.16639-2-daniel@iogearbox.net/
+
+>  static inline __u64 *xsk_ring_prod__fill_addr(struct xsk_ring_prod *fill,
+>  					      __u32 idx)
+>  {
+> @@ -119,7 +134,7 @@ static inline void xsk_ring_prod__submit(struct xsk_ring_prod *prod, size_t nb)
+>  	/* Make sure everything has been written to the ring before signalling
+>  	 * this to the kernel.
+>  	 */
+> -	smp_wmb();
+> +	bpf_smp_wmb();
+>  
+>  	*prod->producer += nb;
+>  }
+> @@ -133,7 +148,7 @@ static inline size_t xsk_ring_cons__peek(struct xsk_ring_cons *cons,
+>  		/* Make sure we do not speculatively read the data before
+>  		 * we have received the packet buffers from the ring.
+>  		 */
+> -		smp_rmb();
+> +		bpf_smp_rmb();
+>  
+>  		*idx = cons->cached_cons;
+>  		cons->cached_cons += entries;
+> 
 
