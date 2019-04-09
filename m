@@ -2,213 +2,254 @@ Return-Path: <SRS0=Zphp=SL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB72AC282DA
-	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 17:27:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0ACC9C10F0E
+	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 18:25:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7CB8620857
-	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 17:27:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B4B202077C
+	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 18:25:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="k25hOwzp"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="V9/R3gKL";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="GGj4cq8r"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726708AbfDIR1s (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Apr 2019 13:27:48 -0400
-Received: from mail-qk1-f202.google.com ([209.85.222.202]:49769 "EHLO
-        mail-qk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726785AbfDIR1r (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Apr 2019 13:27:47 -0400
-Received: by mail-qk1-f202.google.com with SMTP id 23so15061877qkl.16
-        for <bpf@vger.kernel.org>; Tue, 09 Apr 2019 10:27:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=UGkvoUGvalrE4O9PVqzTvRKhxc7cE1P5JFCWJIKCuWs=;
-        b=k25hOwzpBUAYswSu5bY3u2BQFNi2BlNtfkeHNl4OxNvbuNrgVmA7o6B5qNMNvvIClN
-         yE4XfRHcHtLLM+4tTN28TeiOfEQFT0+mfoqwOfOR/2Pc+Jm8NA3Q5Pba8AivbUiCx6hF
-         yirXoWUSn1HYadMB2HxWUiB+RLrU/sDcOyDa8N+n2wFl8XRTFNzbbVhCUqa9mVb+9WXt
-         cffXtcc5jYaW8GdL1/kPQsbTYA/RciW0d5X8zeNKUxyhKwAXGlHqMG5Ys4GB4Pao8Q6R
-         StGYJwNiPB0FIi3gg1qrvV8KreUTcEVT+xgxPPNn3iUKHy8vMtjUeuo8tYBedF4IG47c
-         Kfxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=UGkvoUGvalrE4O9PVqzTvRKhxc7cE1P5JFCWJIKCuWs=;
-        b=He7yRfqvqKyxa5FoA0rhDoFsrkhc14VjbLpS2VZ9qWBLsnjIn4P3CKYZ1G8xRpoGrK
-         7HwgSTgkCQKfcRyHxdFLgdr/bjlnnpnrGQB6fCqhVboexVz0jAI0W9Nk6DILkrmqk72c
-         MOeLm+R59tH5AjFNwhy+JHrirEH9FP/WCogt6wVmzZfDedWe3UtUIYgSEDR8p9yh0BXj
-         QwOrrjHN4wa0sQhAX6yL2dARvRZIbLZYyTN2rtzT5kMbUPQX3CKzEbeRcZPhihkWE4SI
-         EEr7qPIrjnY0ddMIRgvdS+rHxq8qJs8z3fNqNtesDpAFjDZoiSd9oc2ARFSMIe/F5v0k
-         ZPjA==
-X-Gm-Message-State: APjAAAXsZEnSfSHp8aROwVbZv2rzCqnWqG/hympr6ZQ5ujYgRaDs4d+/
-        gJKouKWnPHTJlYAxbdB0cJWhgiA=
-X-Google-Smtp-Source: APXvYqz7Sfl0RT+hHe8aiREQ9UEp6KD6b9m/kyk0SWszMhmI0ugQSxdhY3Z0acm4F/J+7CvRWhcMM5I=
-X-Received: by 2002:ac8:277d:: with SMTP id h58mr5011892qth.31.1554830866241;
- Tue, 09 Apr 2019 10:27:46 -0700 (PDT)
-Date:   Tue,  9 Apr 2019 10:27:39 -0700
-In-Reply-To: <20190409172739.242389-1-sdf@google.com>
-Message-Id: <20190409172739.242389-3-sdf@google.com>
-Mime-Version: 1.0
+        id S1726680AbfDISZb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Apr 2019 14:25:31 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:33560 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726383AbfDISZa (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 9 Apr 2019 14:25:30 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x39IGn5k019965;
+        Tue, 9 Apr 2019 11:25:05 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=LGZuwLOpsYq/BaJjn3FVR3xDlb2m3cfGk6RnFt6ITCk=;
+ b=V9/R3gKLhYaRIpZmm8WHYlT5l/R5tftV317eysvECQIHr7kv8PAN1srZfN36gYaTgBNA
+ Z0krWf+T0cr/lWZ5H7f4qR4TKVOQnC6m1EMJITlXHoeRna93nbTpytCuRTDihh7yEzXj
+ vSbOAU8mnrMZlryGzWVGDQYBu8mPAlYUkuY= 
+Received: from mail.thefacebook.com ([199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2rrwca0ymn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Tue, 09 Apr 2019 11:25:05 -0700
+Received: from prn-mbx08.TheFacebook.com (2620:10d:c081:6::22) by
+ prn-hub05.TheFacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1713.5; Tue, 9 Apr 2019 11:25:04 -0700
+Received: from prn-hub02.TheFacebook.com (2620:10d:c081:35::126) by
+ prn-mbx08.TheFacebook.com (2620:10d:c081:6::22) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1713.5; Tue, 9 Apr 2019 11:25:04 -0700
+Received: from NAM05-BY2-obe.outbound.protection.outlook.com (192.168.54.28)
+ by o365-in.thefacebook.com (192.168.16.26) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
+ via Frontend Transport; Tue, 9 Apr 2019 11:25:04 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector1-fb-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LGZuwLOpsYq/BaJjn3FVR3xDlb2m3cfGk6RnFt6ITCk=;
+ b=GGj4cq8rojVBJy5ECKSDP9Y3H7aJlphrPyQFUTSEFTF4E4DF+g7Ew7iWiL2CeopLQQMtmO+GDn9ZYi7FWaS9xXF8+ChUuq4zrBpuoSxbBtDka9ajxe5iGVSJyTvhFTGPFw5l5X4zXFm0qnEyxk4TbLjlhG9hIcj3zH/ZiTIE0+g=
+Received: from MWHPR15MB1790.namprd15.prod.outlook.com (10.174.255.19) by
+ MWHPR15MB1440.namprd15.prod.outlook.com (10.173.234.142) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1771.16; Tue, 9 Apr 2019 18:25:02 +0000
+Received: from MWHPR15MB1790.namprd15.prod.outlook.com
+ ([fe80::d13:8c3d:9110:b44a]) by MWHPR15MB1790.namprd15.prod.outlook.com
+ ([fe80::d13:8c3d:9110:b44a%8]) with mapi id 15.20.1771.021; Tue, 9 Apr 2019
+ 18:25:02 +0000
+From:   Martin Lau <kafai@fb.com>
+To:     Stanislav Fomichev <sdf@google.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>
+Subject: Re: [PATCH bpf-next v3 1/3] bpf: support input __sk_buff context in
+ BPF_PROG_TEST_RUN
+Thread-Topic: [PATCH bpf-next v3 1/3] bpf: support input __sk_buff context in
+ BPF_PROG_TEST_RUN
+Thread-Index: AQHU7vmXZoWOQe8RskaIzAVsSLH2WqY0JSIA
+Date:   Tue, 9 Apr 2019 18:25:02 +0000
+Message-ID: <20190409182500.ezvhvgfrcbdvhd6o@kafai-mbp>
 References: <20190409172739.242389-1-sdf@google.com>
-X-Mailer: git-send-email 2.21.0.392.gf8f6787159e-goog
-Subject: [PATCH bpf-next v3 3/3] selftests: bpf: add selftest for __sk_buff
- context in BPF_PROG_TEST_RUN
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        Stanislav Fomichev <sdf@google.com>, Martin Lau <kafai@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190409172739.242389-1-sdf@google.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: MWHPR2201CA0093.namprd22.prod.outlook.com
+ (2603:10b6:301:5e::46) To MWHPR15MB1790.namprd15.prod.outlook.com
+ (2603:10b6:301:4e::19)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2620:10d:c090:200::8c82]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 352c0b93-2732-4381-490c-08d6bd18ae65
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600139)(711020)(4605104)(2017052603328)(7193020);SRVR:MWHPR15MB1440;
+x-ms-traffictypediagnostic: MWHPR15MB1440:
+x-microsoft-antispam-prvs: <MWHPR15MB144091EFF43066EDDF8A11F7D52D0@MWHPR15MB1440.namprd15.prod.outlook.com>
+x-forefront-prvs: 000227DA0C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(7916004)(396003)(136003)(346002)(376002)(366004)(39860400002)(189003)(199004)(54906003)(5660300002)(102836004)(106356001)(4326008)(97736004)(52116002)(305945005)(8676002)(186003)(25786009)(86362001)(8936002)(6506007)(105586002)(256004)(316002)(6436002)(9686003)(6512007)(53936002)(386003)(7736002)(81156014)(229853002)(71190400001)(99286004)(71200400001)(81166006)(6916009)(68736007)(33716001)(1076003)(11346002)(478600001)(46003)(2906002)(76176011)(486006)(476003)(6116002)(446003)(6486002)(14454004)(6246003);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR15MB1440;H:MWHPR15MB1790.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: EBDeJPnhmruf2iheHUwdsaz7go2O/YOf+RcwHXuZ3Hrt+914LtBUWgLMtmcxBZFlBHmB8mdkWnrlF3+lhkNJzIrOiB8CJnuoUlSyZHw5DZlMhH3KAi3LQBMBZJi3Y9Njh4+KCJrI7DFwd3rdE25FGBqNwEN4Vo6SKJtN3rBZ/ASbhH0xEir5BTYs7QIva8kF9Z84pstUs9BIZaPAkRwNHjKYEoxOliLexPJ0lF/Go4/p6VHAoJDenWH5V2akkRPnWsGYKBvszSJXXSPLNoFMRA+lX8q8KV7KuL5O47VUo7BRNWhuvCVy3McA7xx9wklsBCUdoN/8G7rhYTch8iuOKCXg0Qmg3IY1gs2G4nqDeAB9gZ6dbEQMW514raqITDNIQ7ZiqxUdA1p1tEk7mjFFsRze4uXylJ6e9aAizbZuLTU=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <A96706F4DAD30C4A95CBBA53FA76EA0D@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 352c0b93-2732-4381-490c-08d6bd18ae65
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Apr 2019 18:25:02.5684
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR15MB1440
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-09_09:,,
+ signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Simple test that sets cb to {1,2,3,4,5} and priority to 6, runs bpf
-program that fails if cb is not what we expect and increments cb[i] and
-priority. When the test finishes, we check that cb is now {2,3,4,5,6}
-and priority is 7.
+On Tue, Apr 09, 2019 at 10:27:37AM -0700, Stanislav Fomichev wrote:
+> Add new set of arguments to bpf_attr for BPF_PROG_TEST_RUN:
+> * ctx_in/ctx_size_in - input context
+> * ctx_out/ctx_size_out - output context
+>=20
+> The intended use case is to pass some meta data to the test runs that
+> operate on skb (this has being brought up on recent LPC).
+>=20
+> For programs that use bpf_prog_test_run_skb, support __sk_buff input and
+> output. Initially, from input __sk_buff, copy _only_ cb and priority into
+> skb, all other non-zero fields are prohibited (with EINVAL).
+> If the user has set ctx_out/ctx_size_out, copy the potentially modified
+> __sk_buff back to the userspace.
+>=20
+> We require all fields of input __sk_buff except the ones we explicitly
+> support to be set to zero. The expectation is that in the future we might
+> add support for more fields and we want to fail explicitly if the user
+> runs the program on the kernel where we don't yet support them.
+>=20
+> The API is intentionally vague (i.e. we don't explicitly add __sk_buff
+> to bpf_attr, but ctx_in) to potentially let other test_run types use
+> this interface in the future (this can be xdp_md for xdp types for
+> example).
+>=20
+> v3:
+>   * handle case where ctx_in is NULL, but ctx_out is not [Martin]
+>   * convert size=3D=3D0 checks to ptr=3D=3DNULL checks and add some extra=
+ ptr
+>     checks [Martin]
+>=20
+> v2:
+>   * Addressed comments from Martin Lau
+>=20
+> Cc: Martin Lau <kafai@fb.com>
+> Signed-off-by: Stanislav Fomichev <sdf@google.com>
+> ---
+>  include/uapi/linux/bpf.h |   7 ++
+>  kernel/bpf/syscall.c     |  10 ++-
+>  net/bpf/test_run.c       | 142 ++++++++++++++++++++++++++++++++++++---
+>  3 files changed, 150 insertions(+), 9 deletions(-)
+>=20
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 837024512baf..8e96f99cebf8 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -396,6 +396,13 @@ union bpf_attr {
+>  		__aligned_u64	data_out;
+>  		__u32		repeat;
+>  		__u32		duration;
+> +		__u32		ctx_size_in;	/* input: len of ctx_in */
+> +		__u32		ctx_size_out;	/* input/output: len of ctx_out
+> +						 *   returns ENOSPC if ctx_out
+> +						 *   is too small.
+> +						 */
+> +		__aligned_u64	ctx_in;
+> +		__aligned_u64	ctx_out;
+>  	} test;
+> =20
+>  	struct { /* anonymous struct used by BPF_*_GET_*_ID */
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 1d65e56594db..5bb963e8f9b0 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -1949,7 +1949,7 @@ static int bpf_prog_query(const union bpf_attr *att=
+r,
+>  	return cgroup_bpf_prog_query(attr, uattr);
+>  }
+> =20
+> -#define BPF_PROG_TEST_RUN_LAST_FIELD test.duration
+> +#define BPF_PROG_TEST_RUN_LAST_FIELD test.ctx_out
+> =20
+>  static int bpf_prog_test_run(const union bpf_attr *attr,
+>  			     union bpf_attr __user *uattr)
+> @@ -1962,6 +1962,14 @@ static int bpf_prog_test_run(const union bpf_attr =
+*attr,
+>  	if (CHECK_ATTR(BPF_PROG_TEST_RUN))
+>  		return -EINVAL;
+> =20
+> +	if ((attr->test.ctx_size_in && !attr->test.ctx_in) ||
+> +	    (!attr->test.ctx_size_in && attr->test.ctx_in))
+> +		return -EINVAL;
+> +
+> +	if ((attr->test.ctx_size_out && !attr->test.ctx_out) ||
+> +	    (!attr->test.ctx_size_out && attr->test.ctx_out))
+> +		return -EINVAL;
+> +
+>  	prog =3D bpf_prog_get(attr->test.prog_fd);
+>  	if (IS_ERR(prog))
+>  		return PTR_ERR(prog);
+> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> index fab142b796ef..2023d8841c6d 100644
+> --- a/net/bpf/test_run.c
+> +++ b/net/bpf/test_run.c
+> @@ -123,12 +123,125 @@ static void *bpf_test_init(const union bpf_attr *k=
+attr, u32 size,
+>  	return data;
+>  }
+> =20
+> +static void *bpf_ctx_init(const union bpf_attr *kattr, u32 max_size)
+> +{
+> +	void __user *data_in =3D u64_to_user_ptr(kattr->test.ctx_in);
+> +	void __user *data_out =3D u64_to_user_ptr(kattr->test.ctx_out);
+> +	u32 size =3D kattr->test.ctx_size_in;
+> +	void *data;
+> +	int err;
+> +
+> +	if (!data_in && !data_out)
+> +		return NULL;
+> +
+> +	data =3D kzalloc(max_size, GFP_USER);
+> +	if (!data)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	if (data_in) {
+> +		err =3D bpf_check_uarg_tail_zero(data_in, max_size, size);
+> +		if (err) {
+> +			kfree(data);
+> +			return ERR_PTR(err);
+> +		}
+> +
+> +		if (copy_from_user(data, data_in, size)) {
+A min_t is needed:
+		size =3D min_t(u32, max_size, size);
+		if (copy_from_user(data, data_in, size)) {
 
-We also test the sanity checks:
-* ctx_in is provided, but ctx_size_in is zero (same for
-  ctx_out/ctx_size_out)
-* unexpected non-zero fields in __sk_buff return EINVAL
+Others lgtm,
 
-Cc: Martin Lau <kafai@fb.com>
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- .../selftests/bpf/prog_tests/skb_ctx.c        | 89 +++++++++++++++++++
- .../selftests/bpf/progs/test_skb_ctx.c        | 21 +++++
- 2 files changed, 110 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/skb_ctx.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_skb_ctx.c
+Acked-by: Martin KaFai Lau <kafai@fb.com>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-new file mode 100644
-index 000000000000..e95baa32e277
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-@@ -0,0 +1,89 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+
-+void test_skb_ctx(void)
-+{
-+	struct __sk_buff skb = {
-+		.cb[0] = 1,
-+		.cb[1] = 2,
-+		.cb[2] = 3,
-+		.cb[3] = 4,
-+		.cb[4] = 5,
-+		.priority = 6,
-+	};
-+	struct bpf_prog_test_run_attr tattr = {
-+		.data_in = &pkt_v4,
-+		.data_size_in = sizeof(pkt_v4),
-+		.ctx_in = &skb,
-+		.ctx_size_in = sizeof(skb),
-+		.ctx_out = &skb,
-+		.ctx_size_out = sizeof(skb),
-+	};
-+	struct bpf_object *obj;
-+	int err;
-+	int i;
-+
-+	err = bpf_prog_load("./test_skb_ctx.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
-+			    &tattr.prog_fd);
-+	if (CHECK_ATTR(err, "load", "err %d errno %d\n", err, errno))
-+		return;
-+
-+	/* ctx_in != NULL, ctx_size_in == 0 */
-+
-+	tattr.ctx_size_in = 0;
-+	err = bpf_prog_test_run_xattr(&tattr);
-+	CHECK_ATTR(err == 0, "ctx_size_in", "err %d errno %d\n", err, errno);
-+	tattr.ctx_size_in = sizeof(skb);
-+
-+	/* ctx_out != NULL, ctx_size_out == 0 */
-+
-+	tattr.ctx_size_out = 0;
-+	err = bpf_prog_test_run_xattr(&tattr);
-+	CHECK_ATTR(err == 0, "ctx_size_out", "err %d errno %d\n", err, errno);
-+	tattr.ctx_size_out = sizeof(skb);
-+
-+	/* non-zero [len, tc_index] fields should be rejected*/
-+
-+	skb.len = 1;
-+	err = bpf_prog_test_run_xattr(&tattr);
-+	CHECK_ATTR(err == 0, "len", "err %d errno %d\n", err, errno);
-+	skb.len = 0;
-+
-+	skb.tc_index = 1;
-+	err = bpf_prog_test_run_xattr(&tattr);
-+	CHECK_ATTR(err == 0, "tc_index", "err %d errno %d\n", err, errno);
-+	skb.tc_index = 0;
-+
-+	/* non-zero [hash, sk] fields should be rejected */
-+
-+	skb.hash = 1;
-+	err = bpf_prog_test_run_xattr(&tattr);
-+	CHECK_ATTR(err == 0, "hash", "err %d errno %d\n", err, errno);
-+	skb.hash = 0;
-+
-+	skb.sk = (struct bpf_sock *)1;
-+	err = bpf_prog_test_run_xattr(&tattr);
-+	CHECK_ATTR(err == 0, "sk", "err %d errno %d\n", err, errno);
-+	skb.sk = 0;
-+
-+	err = bpf_prog_test_run_xattr(&tattr);
-+	CHECK_ATTR(err != 0 || tattr.retval,
-+		   "run",
-+		   "err %d errno %d retval %d\n",
-+		   err, errno, tattr.retval);
-+
-+	CHECK_ATTR(tattr.ctx_size_out != sizeof(skb),
-+		   "ctx_size_out",
-+		   "incorrect output size, want %lu have %u\n",
-+		   sizeof(skb), tattr.ctx_size_out);
-+
-+	for (i = 0; i < 5; i++)
-+		CHECK_ATTR(skb.cb[i] != i + 2,
-+			   "ctx_out_cb",
-+			   "skb->cb[i] == %d, expected %d\n",
-+			   skb.cb[i], i + 2);
-+	CHECK_ATTR(skb.priority != 7,
-+		   "ctx_out_priority",
-+		   "skb->priority == %d, expected %d\n",
-+		   skb.priority, 7);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_skb_ctx.c b/tools/testing/selftests/bpf/progs/test_skb_ctx.c
-new file mode 100644
-index 000000000000..7a80960d7df1
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_skb_ctx.c
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include "bpf_helpers.h"
-+
-+int _version SEC("version") = 1;
-+char _license[] SEC("license") = "GPL";
-+
-+SEC("skb_ctx")
-+int process(struct __sk_buff *skb)
-+{
-+	#pragma clang loop unroll(full)
-+	for (int i = 0; i < 5; i++) {
-+		if (skb->cb[i] != i + 1)
-+			return 1;
-+		skb->cb[i]++;
-+	}
-+	skb->priority++;
-+
-+	return 0;
-+}
--- 
-2.21.0.392.gf8f6787159e-goog
-
+> +			kfree(data);
+> +			return ERR_PTR(-EFAULT);
+> +		}
+> +	}
+> +	return data;
+> +}
