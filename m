@@ -4,33 +4,33 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71DAEC282CE
-	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 21:20:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBF90C282CE
+	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 21:20:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3408B20820
-	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 21:20:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 86A3A20833
+	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 21:20:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726826AbfDIVUq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Apr 2019 17:20:46 -0400
-Received: from www62.your-server.de ([213.133.104.62]:52142 "EHLO
+        id S1726857AbfDIVUv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Apr 2019 17:20:51 -0400
+Received: from www62.your-server.de ([213.133.104.62]:52156 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726800AbfDIVUq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Apr 2019 17:20:46 -0400
+        with ESMTP id S1726760AbfDIVUs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Apr 2019 17:20:48 -0400
 Received: from [178.197.248.24] (helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1hDyAa-0001ez-Ez; Tue, 09 Apr 2019 23:20:40 +0200
+        id 1hDyAb-0001fe-Ox; Tue, 09 Apr 2019 23:20:41 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, ast@kernel.org, joe@wand.net.nz,
         yhs@fb.com, andrii.nakryiko@gmail.com, kafai@fb.com,
         jannh@google.com, Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v6 14/16] bpf, selftest: test {rd, wr}only flags and direct value access
-Date:   Tue,  9 Apr 2019 23:20:16 +0200
-Message-Id: <20190409212018.32423-15-daniel@iogearbox.net>
+Subject: [PATCH bpf-next v6 16/16] bpf, selftest: add test cases for BTF Var and DataSec
+Date:   Tue,  9 Apr 2019 23:20:18 +0200
+Message-Id: <20190409212018.32423-17-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <20190409212018.32423-1-daniel@iogearbox.net>
 References: <20190409212018.32423-1-daniel@iogearbox.net>
@@ -41,686 +41,732 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Extend test_verifier with various test cases around the two kernel
-extensions, that is, {rd,wr}only map support as well as direct map
-value access. All passing, one skipped due to xskmap not present
-on test machine:
+Extend test_btf with various positive and negative tests around
+BTF verification of kind Var and DataSec. All passing as well:
 
-  # ./test_verifier
+  # ./test_btf
   [...]
-  #948/p XDP pkt read, pkt_meta' <= pkt_data, bad access 1 OK
-  #949/p XDP pkt read, pkt_meta' <= pkt_data, bad access 2 OK
-  #950/p XDP pkt read, pkt_data <= pkt_meta', good access OK
-  #951/p XDP pkt read, pkt_data <= pkt_meta', bad access 1 OK
-  #952/p XDP pkt read, pkt_data <= pkt_meta', bad access 2 OK
-  Summary: 1410 PASSED, 1 SKIPPED, 0 FAILED
+  BTF raw test[4] (global data test #1): OK
+  BTF raw test[5] (global data test #2): OK
+  BTF raw test[6] (global data test #3): OK
+  BTF raw test[7] (global data test #4, unsupported linkage): OK
+  BTF raw test[8] (global data test #5, invalid var type): OK
+  BTF raw test[9] (global data test #6, invalid var type (fwd type)): OK
+  BTF raw test[10] (global data test #7, invalid var type (fwd type)): OK
+  BTF raw test[11] (global data test #8, invalid var size): OK
+  BTF raw test[12] (global data test #9, invalid var size): OK
+  BTF raw test[13] (global data test #10, invalid var size): OK
+  BTF raw test[14] (global data test #11, multiple section members): OK
+  BTF raw test[15] (global data test #12, invalid offset): OK
+  BTF raw test[16] (global data test #13, invalid offset): OK
+  BTF raw test[17] (global data test #14, invalid offset): OK
+  BTF raw test[18] (global data test #15, not var kind): OK
+  BTF raw test[19] (global data test #16, invalid var referencing sec): OK
+  BTF raw test[20] (global data test #17, invalid var referencing var): OK
+  BTF raw test[21] (global data test #18, invalid var loop): OK
+  BTF raw test[22] (global data test #19, invalid var referencing var): OK
+  BTF raw test[23] (global data test #20, invalid ptr referencing var): OK
+  BTF raw test[24] (global data test #21, var included in struct): OK
+  BTF raw test[25] (global data test #22, array of var): OK
+  [...]
+  PASS:167 SKIP:0 FAIL:0
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Acked-by: Martin KaFai Lau <kafai@fb.com>
 ---
- tools/include/linux/filter.h                  |  21 +-
- tools/testing/selftests/bpf/test_verifier.c   |  51 ++-
- .../selftests/bpf/verifier/array_access.c     | 159 ++++++++
- .../bpf/verifier/direct_value_access.c        | 347 ++++++++++++++++++
- 4 files changed, 573 insertions(+), 5 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/verifier/direct_value_access.c
+ tools/testing/selftests/bpf/test_btf.c | 665 ++++++++++++++++++++++++-
+ 1 file changed, 663 insertions(+), 2 deletions(-)
 
-diff --git a/tools/include/linux/filter.h b/tools/include/linux/filter.h
-index cce0b02c0e28..ca28b6ab8db7 100644
---- a/tools/include/linux/filter.h
-+++ b/tools/include/linux/filter.h
-@@ -278,10 +278,29 @@
- 		.off   = 0,					\
- 		.imm   = ((__u64) (IMM)) >> 32 })
+diff --git a/tools/testing/selftests/bpf/test_btf.c b/tools/testing/selftests/bpf/test_btf.c
+index 5afc3f7dff81..08010e619a1c 100644
+--- a/tools/testing/selftests/bpf/test_btf.c
++++ b/tools/testing/selftests/bpf/test_btf.c
+@@ -85,6 +85,11 @@ static int __base_pr(enum libbpf_print_level level __attribute__((unused)),
+ #define BTF_UNION_ENC(name, nr_elems, sz)	\
+ 	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_UNION, 0, nr_elems), sz)
  
-+#define BPF_LD_IMM64_RAW_FULL(DST, SRC, OFF1, OFF2, IMM1, IMM2)	\
-+	((struct bpf_insn) {					\
-+		.code  = BPF_LD | BPF_DW | BPF_IMM,		\
-+		.dst_reg = DST,					\
-+		.src_reg = SRC,					\
-+		.off   = OFF1,					\
-+		.imm   = IMM1 }),				\
-+	((struct bpf_insn) {					\
-+		.code  = 0, /* zero is reserved opcode */	\
-+		.dst_reg = 0,					\
-+		.src_reg = 0,					\
-+		.off   = OFF2,					\
-+		.imm   = IMM2 })
++#define BTF_VAR_ENC(name, type, linkage)	\
++	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_VAR, 0, 0), type), (linkage)
++#define BTF_VAR_SECINFO_ENC(type, offset, size)	\
++	(type), (offset), (size)
 +
- /* pseudo BPF_LD_IMM64 insn used to refer to process-local map_fd */
- 
- #define BPF_LD_MAP_FD(DST, MAP_FD)				\
--	BPF_LD_IMM64_RAW(DST, BPF_PSEUDO_MAP_FD, MAP_FD)
-+	BPF_LD_IMM64_RAW_FULL(DST, BPF_PSEUDO_MAP_FD, 0, 0,	\
-+			      MAP_FD, 0)
-+
-+#define BPF_LD_MAP_VALUE(DST, MAP_FD, VALUE_OFF)		\
-+	BPF_LD_IMM64_RAW_FULL(DST, BPF_PSEUDO_MAP_VALUE, 0, 0,	\
-+			      MAP_FD, VALUE_OFF)
- 
- /* Relative call */
- 
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index 75ef63b42f2c..e2ebcaddbe78 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -52,7 +52,7 @@
- #define MAX_INSNS	BPF_MAXINSNS
- #define MAX_TEST_INSNS	1000000
- #define MAX_FIXUPS	8
--#define MAX_NR_MAPS	14
-+#define MAX_NR_MAPS	16
- #define MAX_TEST_RUNS	8
- #define POINTER_VALUE	0xcafe4all
- #define TEST_DATA_LEN	64
-@@ -82,6 +82,9 @@ struct bpf_test {
- 	int fixup_cgroup_storage[MAX_FIXUPS];
- 	int fixup_percpu_cgroup_storage[MAX_FIXUPS];
- 	int fixup_map_spin_lock[MAX_FIXUPS];
-+	int fixup_map_array_ro[MAX_FIXUPS];
-+	int fixup_map_array_wo[MAX_FIXUPS];
-+	int fixup_map_array_small[MAX_FIXUPS];
- 	const char *errstr;
- 	const char *errstr_unpriv;
- 	uint32_t retval, retval_unpriv, insn_processed;
-@@ -285,13 +288,15 @@ static bool skip_unsupported_map(enum bpf_map_type map_type)
- 	return false;
- }
- 
--static int create_map(uint32_t type, uint32_t size_key,
--		      uint32_t size_value, uint32_t max_elem)
-+static int __create_map(uint32_t type, uint32_t size_key,
-+			uint32_t size_value, uint32_t max_elem,
-+			uint32_t extra_flags)
- {
- 	int fd;
- 
- 	fd = bpf_create_map(type, size_key, size_value, max_elem,
--			    type == BPF_MAP_TYPE_HASH ? BPF_F_NO_PREALLOC : 0);
-+			    (type == BPF_MAP_TYPE_HASH ?
-+			     BPF_F_NO_PREALLOC : 0) | extra_flags);
- 	if (fd < 0) {
- 		if (skip_unsupported_map(type))
- 			return -1;
-@@ -301,6 +306,12 @@ static int create_map(uint32_t type, uint32_t size_key,
- 	return fd;
- }
- 
-+static int create_map(uint32_t type, uint32_t size_key,
-+		      uint32_t size_value, uint32_t max_elem)
-+{
-+	return __create_map(type, size_key, size_value, max_elem, 0);
-+}
-+
- static void update_map(int fd, int index)
- {
- 	struct test_val value = {
-@@ -527,6 +538,9 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
- 	int *fixup_cgroup_storage = test->fixup_cgroup_storage;
- 	int *fixup_percpu_cgroup_storage = test->fixup_percpu_cgroup_storage;
- 	int *fixup_map_spin_lock = test->fixup_map_spin_lock;
-+	int *fixup_map_array_ro = test->fixup_map_array_ro;
-+	int *fixup_map_array_wo = test->fixup_map_array_wo;
-+	int *fixup_map_array_small = test->fixup_map_array_small;
- 
- 	if (test->fill_helper) {
- 		test->fill_insns = calloc(MAX_TEST_INSNS, sizeof(struct bpf_insn));
-@@ -652,6 +666,35 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
- 			fixup_map_spin_lock++;
- 		} while (*fixup_map_spin_lock);
- 	}
-+	if (*fixup_map_array_ro) {
-+		map_fds[14] = __create_map(BPF_MAP_TYPE_ARRAY, sizeof(int),
-+					   sizeof(struct test_val), 1,
-+					   BPF_F_RDONLY_PROG);
-+		update_map(map_fds[14], 0);
-+		do {
-+			prog[*fixup_map_array_ro].imm = map_fds[14];
-+			fixup_map_array_ro++;
-+		} while (*fixup_map_array_ro);
-+	}
-+	if (*fixup_map_array_wo) {
-+		map_fds[15] = __create_map(BPF_MAP_TYPE_ARRAY, sizeof(int),
-+					   sizeof(struct test_val), 1,
-+					   BPF_F_WRONLY_PROG);
-+		update_map(map_fds[15], 0);
-+		do {
-+			prog[*fixup_map_array_wo].imm = map_fds[15];
-+			fixup_map_array_wo++;
-+		} while (*fixup_map_array_wo);
-+	}
-+	if (*fixup_map_array_small) {
-+		map_fds[16] = __create_map(BPF_MAP_TYPE_ARRAY, sizeof(int),
-+					   1, 1, 0);
-+		update_map(map_fds[16], 0);
-+		do {
-+			prog[*fixup_map_array_small].imm = map_fds[16];
-+			fixup_map_array_small++;
-+		} while (*fixup_map_array_small);
-+	}
- }
- 
- static int set_admin(bool admin)
-diff --git a/tools/testing/selftests/bpf/verifier/array_access.c b/tools/testing/selftests/bpf/verifier/array_access.c
-index 0dcecaf3ec6f..bcb83196e459 100644
---- a/tools/testing/selftests/bpf/verifier/array_access.c
-+++ b/tools/testing/selftests/bpf/verifier/array_access.c
-@@ -217,3 +217,162 @@
- 	.result = REJECT,
- 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ #define BTF_MEMBER_ENC(name, type, bits_offset)	\
+ 	(name), (type), (bits_offset)
+ #define BTF_ENUM_ENC(name, val) (name), (val)
+@@ -291,7 +296,6 @@ static struct btf_raw_test raw_tests[] = {
+ 	.value_type_id = 3,
+ 	.max_entries = 4,
  },
+-
+ {
+ 	.descr = "struct test #3 Invalid member offset",
+ 	.raw_types = {
+@@ -319,7 +323,664 @@ static struct btf_raw_test raw_tests[] = {
+ 	.btf_load_err = true,
+ 	.err_str = "Invalid member bits_offset",
+ },
+-
++/*
++ * struct A {
++ *	unsigned long long m;
++ *	int n;
++ *	char o;
++ *	[3 bytes hole]
++ *	int p[8];
++ * };
++ */
 +{
-+	"valid read map access into a read-only array 1",
-+	.insns = {
-+	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
++	.descr = "global data test #1",
++	.raw_types = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		/* unsigned long long */
++		BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),		/* [2] */
++		/* char */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 8, 1),	/* [3] */
++		/* int[8] */
++		BTF_TYPE_ARRAY_ENC(1, 1, 8),			/* [4] */
++		/* struct A { */				/* [5] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 4), 48),
++		BTF_MEMBER_ENC(NAME_TBD, 2, 0),	/* unsigned long long m;*/
++		BTF_MEMBER_ENC(NAME_TBD, 1, 64),/* int n;		*/
++		BTF_MEMBER_ENC(NAME_TBD, 3, 96),/* char o;		*/
++		BTF_MEMBER_ENC(NAME_TBD, 4, 128),/* int p[8]		*/
++		/* } */
++		BTF_END_RAW,
 +	},
-+	.fixup_map_array_ro = { 3 },
-+	.result = ACCEPT,
-+	.retval = 28,
++	.str_sec = "\0A\0m\0n\0o\0p",
++	.str_sec_size = sizeof("\0A\0m\0n\0o\0p"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = "struct_test1_map",
++	.key_size = sizeof(int),
++	.value_size = 48,
++	.key_type_id = 1,
++	.value_type_id = 5,
++	.max_entries = 4,
++},
++/*
++ * struct A {
++ *	unsigned long long m;
++ *	int n;
++ *	char o;
++ *	[3 bytes hole]
++ *	int p[8];
++ * };
++ * static struct A t; <- in .bss
++ */
++{
++	.descr = "global data test #2",
++	.raw_types = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		/* unsigned long long */
++		BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),		/* [2] */
++		/* char */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 8, 1),	/* [3] */
++		/* int[8] */
++		BTF_TYPE_ARRAY_ENC(1, 1, 8),			/* [4] */
++		/* struct A { */				/* [5] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 4), 48),
++		BTF_MEMBER_ENC(NAME_TBD, 2, 0),	/* unsigned long long m;*/
++		BTF_MEMBER_ENC(NAME_TBD, 1, 64),/* int n;		*/
++		BTF_MEMBER_ENC(NAME_TBD, 3, 96),/* char o;		*/
++		BTF_MEMBER_ENC(NAME_TBD, 4, 128),/* int p[8]		*/
++		/* } */
++		/* static struct A t */
++		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [6] */
++		/* .bss section */				/* [7] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 48),
++		BTF_VAR_SECINFO_ENC(6, 0, 48),
++		BTF_END_RAW,
++	},
++	.str_sec = "\0A\0m\0n\0o\0p\0t\0.bss",
++	.str_sec_size = sizeof("\0A\0m\0n\0o\0p\0t\0.bss"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = 48,
++	.key_type_id = 0,
++	.value_type_id = 7,
++	.max_entries = 1,
 +},
 +{
-+	"valid read map access into a read-only array 2",
-+	.insns = {
-+	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 6),
-+
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
-+	BPF_MOV64_IMM(BPF_REG_2, 4),
-+	BPF_MOV64_IMM(BPF_REG_3, 0),
-+	BPF_MOV64_IMM(BPF_REG_4, 0),
-+	BPF_MOV64_IMM(BPF_REG_5, 0),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0,
-+		     BPF_FUNC_csum_diff),
-+	BPF_EXIT_INSN(),
++	.descr = "global data test #3",
++	.raw_types = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		/* static int t */
++		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [2] */
++		/* .bss section */				/* [3] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
++		BTF_VAR_SECINFO_ENC(2, 0, 4),
++		BTF_END_RAW,
 +	},
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.fixup_map_array_ro = { 3 },
-+	.result = ACCEPT,
-+	.retval = -29,
++	.str_sec = "\0t\0.bss",
++	.str_sec_size = sizeof("\0t\0.bss"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = 4,
++	.key_type_id = 0,
++	.value_type_id = 3,
++	.max_entries = 1,
 +},
 +{
-+	"invalid write map access into a read-only array 1",
-+	.insns = {
-+	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 1),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_0, 0, 42),
-+	BPF_EXIT_INSN(),
++	.descr = "global data test #4, unsupported linkage",
++	.raw_types = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		/* static int t */
++		BTF_VAR_ENC(NAME_TBD, 1, 2),			/* [2] */
++		/* .bss section */				/* [3] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
++		BTF_VAR_SECINFO_ENC(2, 0, 4),
++		BTF_END_RAW,
 +	},
-+	.fixup_map_array_ro = { 3 },
-+	.result = REJECT,
-+	.errstr = "write into map forbidden",
++	.str_sec = "\0t\0.bss",
++	.str_sec_size = sizeof("\0t\0.bss"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = 4,
++	.key_type_id = 0,
++	.value_type_id = 3,
++	.max_entries = 1,
++	.btf_load_err = true,
++	.err_str = "Linkage not supported",
 +},
 +{
-+	"invalid write map access into a read-only array 2",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 5),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
-+	BPF_MOV64_IMM(BPF_REG_2, 0),
-+	BPF_MOV64_REG(BPF_REG_3, BPF_REG_0),
-+	BPF_MOV64_IMM(BPF_REG_4, 8),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0,
-+		     BPF_FUNC_skb_load_bytes),
-+	BPF_EXIT_INSN(),
++	.descr = "global data test #5, invalid var type",
++	.raw_types = {
++		/* static void t */
++		BTF_VAR_ENC(NAME_TBD, 0, 0),			/* [1] */
++		/* .bss section */				/* [2] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
++		BTF_VAR_SECINFO_ENC(1, 0, 4),
++		BTF_END_RAW,
 +	},
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.fixup_map_array_ro = { 4 },
-+	.result = REJECT,
-+	.errstr = "write into map forbidden",
++	.str_sec = "\0t\0.bss",
++	.str_sec_size = sizeof("\0t\0.bss"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = 4,
++	.key_type_id = 0,
++	.value_type_id = 2,
++	.max_entries = 1,
++	.btf_load_err = true,
++	.err_str = "Invalid type_id",
 +},
 +{
-+	"valid write map access into a write-only array 1",
-+	.insns = {
-+	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 1),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_0, 0, 42),
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
++	.descr = "global data test #6, invalid var type (fwd type)",
++	.raw_types = {
++		/* union A */
++		BTF_TYPE_ENC(NAME_TBD,
++			     BTF_INFO_ENC(BTF_KIND_FWD, 1, 0), 0), /* [1] */
++		/* static union A t */
++		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [2] */
++		/* .bss section */				/* [3] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
++		BTF_VAR_SECINFO_ENC(2, 0, 4),
++		BTF_END_RAW,
 +	},
-+	.fixup_map_array_wo = { 3 },
-+	.result = ACCEPT,
-+	.retval = 1,
++	.str_sec = "\0A\0t\0.bss",
++	.str_sec_size = sizeof("\0A\0t\0.bss"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = 4,
++	.key_type_id = 0,
++	.value_type_id = 2,
++	.max_entries = 1,
++	.btf_load_err = true,
++	.err_str = "Invalid type",
 +},
 +{
-+	"valid write map access into a write-only array 2",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 5),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
-+	BPF_MOV64_IMM(BPF_REG_2, 0),
-+	BPF_MOV64_REG(BPF_REG_3, BPF_REG_0),
-+	BPF_MOV64_IMM(BPF_REG_4, 8),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0,
-+		     BPF_FUNC_skb_load_bytes),
-+	BPF_EXIT_INSN(),
++	.descr = "global data test #7, invalid var type (fwd type)",
++	.raw_types = {
++		/* union A */
++		BTF_TYPE_ENC(NAME_TBD,
++			     BTF_INFO_ENC(BTF_KIND_FWD, 1, 0), 0), /* [1] */
++		/* static union A t */
++		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [2] */
++		/* .bss section */				/* [3] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
++		BTF_VAR_SECINFO_ENC(1, 0, 4),
++		BTF_END_RAW,
 +	},
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.fixup_map_array_wo = { 4 },
-+	.result = ACCEPT,
-+	.retval = 0,
++	.str_sec = "\0A\0t\0.bss",
++	.str_sec_size = sizeof("\0A\0t\0.bss"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = 4,
++	.key_type_id = 0,
++	.value_type_id = 2,
++	.max_entries = 1,
++	.btf_load_err = true,
++	.err_str = "Invalid type",
 +},
 +{
-+	"invalid read map access into a write-only array 1",
-+	.insns = {
-+	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
++	.descr = "global data test #8, invalid var size",
++	.raw_types = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		/* unsigned long long */
++		BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),		/* [2] */
++		/* char */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 8, 1),	/* [3] */
++		/* int[8] */
++		BTF_TYPE_ARRAY_ENC(1, 1, 8),			/* [4] */
++		/* struct A { */				/* [5] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 4), 48),
++		BTF_MEMBER_ENC(NAME_TBD, 2, 0),	/* unsigned long long m;*/
++		BTF_MEMBER_ENC(NAME_TBD, 1, 64),/* int n;		*/
++		BTF_MEMBER_ENC(NAME_TBD, 3, 96),/* char o;		*/
++		BTF_MEMBER_ENC(NAME_TBD, 4, 128),/* int p[8]		*/
++		/* } */
++		/* static struct A t */
++		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [6] */
++		/* .bss section */				/* [7] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 48),
++		BTF_VAR_SECINFO_ENC(6, 0, 47),
++		BTF_END_RAW,
 +	},
-+	.fixup_map_array_wo = { 3 },
-+	.result = REJECT,
-+	.errstr = "read from map forbidden",
++	.str_sec = "\0A\0m\0n\0o\0p\0t\0.bss",
++	.str_sec_size = sizeof("\0A\0m\0n\0o\0p\0t\0.bss"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = 48,
++	.key_type_id = 0,
++	.value_type_id = 7,
++	.max_entries = 1,
++	.btf_load_err = true,
++	.err_str = "Invalid size",
 +},
 +{
-+	"invalid read map access into a write-only array 2",
-+	.insns = {
-+	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 6),
-+
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
-+	BPF_MOV64_IMM(BPF_REG_2, 4),
-+	BPF_MOV64_IMM(BPF_REG_3, 0),
-+	BPF_MOV64_IMM(BPF_REG_4, 0),
-+	BPF_MOV64_IMM(BPF_REG_5, 0),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0,
-+		     BPF_FUNC_csum_diff),
-+	BPF_EXIT_INSN(),
++	.descr = "global data test #9, invalid var size",
++	.raw_types = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		/* unsigned long long */
++		BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),		/* [2] */
++		/* char */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 8, 1),	/* [3] */
++		/* int[8] */
++		BTF_TYPE_ARRAY_ENC(1, 1, 8),			/* [4] */
++		/* struct A { */				/* [5] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 4), 48),
++		BTF_MEMBER_ENC(NAME_TBD, 2, 0),	/* unsigned long long m;*/
++		BTF_MEMBER_ENC(NAME_TBD, 1, 64),/* int n;		*/
++		BTF_MEMBER_ENC(NAME_TBD, 3, 96),/* char o;		*/
++		BTF_MEMBER_ENC(NAME_TBD, 4, 128),/* int p[8]		*/
++		/* } */
++		/* static struct A t */
++		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [6] */
++		/* .bss section */				/* [7] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 46),
++		BTF_VAR_SECINFO_ENC(6, 0, 48),
++		BTF_END_RAW,
 +	},
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.fixup_map_array_wo = { 3 },
-+	.result = REJECT,
-+	.errstr = "read from map forbidden",
-+},
-diff --git a/tools/testing/selftests/bpf/verifier/direct_value_access.c b/tools/testing/selftests/bpf/verifier/direct_value_access.c
-new file mode 100644
-index 000000000000..b9fb28e8e224
---- /dev/null
-+++ b/tools/testing/selftests/bpf/verifier/direct_value_access.c
-@@ -0,0 +1,347 @@
-+{
-+	"direct map access, write test 1",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 4242),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = ACCEPT,
-+	.retval = 1,
++	.str_sec = "\0A\0m\0n\0o\0p\0t\0.bss",
++	.str_sec_size = sizeof("\0A\0m\0n\0o\0p\0t\0.bss"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = 48,
++	.key_type_id = 0,
++	.value_type_id = 7,
++	.max_entries = 1,
++	.btf_load_err = true,
++	.err_str = "Invalid size",
 +},
 +{
-+	"direct map access, write test 2",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 8),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 4242),
-+	BPF_EXIT_INSN(),
++	.descr = "global data test #10, invalid var size",
++	.raw_types = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		/* unsigned long long */
++		BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),		/* [2] */
++		/* char */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 8, 1),	/* [3] */
++		/* int[8] */
++		BTF_TYPE_ARRAY_ENC(1, 1, 8),			/* [4] */
++		/* struct A { */				/* [5] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 4), 48),
++		BTF_MEMBER_ENC(NAME_TBD, 2, 0),	/* unsigned long long m;*/
++		BTF_MEMBER_ENC(NAME_TBD, 1, 64),/* int n;		*/
++		BTF_MEMBER_ENC(NAME_TBD, 3, 96),/* char o;		*/
++		BTF_MEMBER_ENC(NAME_TBD, 4, 128),/* int p[8]		*/
++		/* } */
++		/* static struct A t */
++		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [6] */
++		/* .bss section */				/* [7] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 46),
++		BTF_VAR_SECINFO_ENC(6, 0, 46),
++		BTF_END_RAW,
 +	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = ACCEPT,
-+	.retval = 1,
++	.str_sec = "\0A\0m\0n\0o\0p\0t\0.bss",
++	.str_sec_size = sizeof("\0A\0m\0n\0o\0p\0t\0.bss"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = 48,
++	.key_type_id = 0,
++	.value_type_id = 7,
++	.max_entries = 1,
++	.btf_load_err = true,
++	.err_str = "Invalid size",
 +},
 +{
-+	"direct map access, write test 3",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 8),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, 8, 4242),
-+	BPF_EXIT_INSN(),
++	.descr = "global data test #11, multiple section members",
++	.raw_types = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		/* unsigned long long */
++		BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),		/* [2] */
++		/* char */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 8, 1),	/* [3] */
++		/* int[8] */
++		BTF_TYPE_ARRAY_ENC(1, 1, 8),			/* [4] */
++		/* struct A { */				/* [5] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 4), 48),
++		BTF_MEMBER_ENC(NAME_TBD, 2, 0),	/* unsigned long long m;*/
++		BTF_MEMBER_ENC(NAME_TBD, 1, 64),/* int n;		*/
++		BTF_MEMBER_ENC(NAME_TBD, 3, 96),/* char o;		*/
++		BTF_MEMBER_ENC(NAME_TBD, 4, 128),/* int p[8]		*/
++		/* } */
++		/* static struct A t */
++		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [6] */
++		/* static int u */
++		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [7] */
++		/* .bss section */				/* [8] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 2), 62),
++		BTF_VAR_SECINFO_ENC(6, 10, 48),
++		BTF_VAR_SECINFO_ENC(7, 58, 4),
++		BTF_END_RAW,
 +	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = ACCEPT,
-+	.retval = 1,
++	.str_sec = "\0A\0m\0n\0o\0p\0t\0u\0.bss",
++	.str_sec_size = sizeof("\0A\0m\0n\0o\0p\0t\0u\0.bss"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = 62,
++	.key_type_id = 0,
++	.value_type_id = 8,
++	.max_entries = 1,
 +},
 +{
-+	"direct map access, write test 4",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 40),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 4242),
-+	BPF_EXIT_INSN(),
++	.descr = "global data test #12, invalid offset",
++	.raw_types = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		/* unsigned long long */
++		BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),		/* [2] */
++		/* char */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 8, 1),	/* [3] */
++		/* int[8] */
++		BTF_TYPE_ARRAY_ENC(1, 1, 8),			/* [4] */
++		/* struct A { */				/* [5] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 4), 48),
++		BTF_MEMBER_ENC(NAME_TBD, 2, 0),	/* unsigned long long m;*/
++		BTF_MEMBER_ENC(NAME_TBD, 1, 64),/* int n;		*/
++		BTF_MEMBER_ENC(NAME_TBD, 3, 96),/* char o;		*/
++		BTF_MEMBER_ENC(NAME_TBD, 4, 128),/* int p[8]		*/
++		/* } */
++		/* static struct A t */
++		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [6] */
++		/* static int u */
++		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [7] */
++		/* .bss section */				/* [8] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 2), 62),
++		BTF_VAR_SECINFO_ENC(6, 10, 48),
++		BTF_VAR_SECINFO_ENC(7, 60, 4),
++		BTF_END_RAW,
 +	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = ACCEPT,
-+	.retval = 1,
++	.str_sec = "\0A\0m\0n\0o\0p\0t\0u\0.bss",
++	.str_sec_size = sizeof("\0A\0m\0n\0o\0p\0t\0u\0.bss"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = 62,
++	.key_type_id = 0,
++	.value_type_id = 8,
++	.max_entries = 1,
++	.btf_load_err = true,
++	.err_str = "Invalid offset+size",
 +},
 +{
-+	"direct map access, write test 5",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 32),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, 8, 4242),
-+	BPF_EXIT_INSN(),
++	.descr = "global data test #13, invalid offset",
++	.raw_types = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		/* unsigned long long */
++		BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),		/* [2] */
++		/* char */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 8, 1),	/* [3] */
++		/* int[8] */
++		BTF_TYPE_ARRAY_ENC(1, 1, 8),			/* [4] */
++		/* struct A { */				/* [5] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 4), 48),
++		BTF_MEMBER_ENC(NAME_TBD, 2, 0),	/* unsigned long long m;*/
++		BTF_MEMBER_ENC(NAME_TBD, 1, 64),/* int n;		*/
++		BTF_MEMBER_ENC(NAME_TBD, 3, 96),/* char o;		*/
++		BTF_MEMBER_ENC(NAME_TBD, 4, 128),/* int p[8]		*/
++		/* } */
++		/* static struct A t */
++		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [6] */
++		/* static int u */
++		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [7] */
++		/* .bss section */				/* [8] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 2), 62),
++		BTF_VAR_SECINFO_ENC(6, 10, 48),
++		BTF_VAR_SECINFO_ENC(7, 12, 4),
++		BTF_END_RAW,
 +	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = ACCEPT,
-+	.retval = 1,
++	.str_sec = "\0A\0m\0n\0o\0p\0t\0u\0.bss",
++	.str_sec_size = sizeof("\0A\0m\0n\0o\0p\0t\0u\0.bss"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = 62,
++	.key_type_id = 0,
++	.value_type_id = 8,
++	.max_entries = 1,
++	.btf_load_err = true,
++	.err_str = "Invalid offset",
 +},
 +{
-+	"direct map access, write test 6",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 40),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, 4, 4242),
-+	BPF_EXIT_INSN(),
++	.descr = "global data test #14, invalid offset",
++	.raw_types = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		/* unsigned long long */
++		BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),		/* [2] */
++		/* char */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 8, 1),	/* [3] */
++		/* int[8] */
++		BTF_TYPE_ARRAY_ENC(1, 1, 8),			/* [4] */
++		/* struct A { */				/* [5] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 4), 48),
++		BTF_MEMBER_ENC(NAME_TBD, 2, 0),	/* unsigned long long m;*/
++		BTF_MEMBER_ENC(NAME_TBD, 1, 64),/* int n;		*/
++		BTF_MEMBER_ENC(NAME_TBD, 3, 96),/* char o;		*/
++		BTF_MEMBER_ENC(NAME_TBD, 4, 128),/* int p[8]		*/
++		/* } */
++		/* static struct A t */
++		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [6] */
++		/* static int u */
++		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [7] */
++		/* .bss section */				/* [8] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 2), 62),
++		BTF_VAR_SECINFO_ENC(7, 58, 4),
++		BTF_VAR_SECINFO_ENC(6, 10, 48),
++		BTF_END_RAW,
 +	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = REJECT,
-+	.errstr = "R1 min value is outside of the array range",
++	.str_sec = "\0A\0m\0n\0o\0p\0t\0u\0.bss",
++	.str_sec_size = sizeof("\0A\0m\0n\0o\0p\0t\0u\0.bss"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = 62,
++	.key_type_id = 0,
++	.value_type_id = 8,
++	.max_entries = 1,
++	.btf_load_err = true,
++	.err_str = "Invalid offset",
 +},
 +{
-+	"direct map access, write test 7",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_VALUE(BPF_REG_1, 0, -1),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, 4, 4242),
-+	BPF_EXIT_INSN(),
++	.descr = "global data test #15, not var kind",
++	.raw_types = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [2] */
++		/* .bss section */				/* [3] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
++		BTF_VAR_SECINFO_ENC(1, 0, 4),
++		BTF_END_RAW,
 +	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = REJECT,
-+	.errstr = "direct value offset of 4294967295 is not allowed",
++	.str_sec = "\0A\0t\0.bss",
++	.str_sec_size = sizeof("\0A\0t\0.bss"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = 4,
++	.key_type_id = 0,
++	.value_type_id = 3,
++	.max_entries = 1,
++	.btf_load_err = true,
++	.err_str = "Not a VAR kind member",
 +},
 +{
-+	"direct map access, write test 8",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 1),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, -1, 4242),
-+	BPF_EXIT_INSN(),
++	.descr = "global data test #16, invalid var referencing sec",
++	.raw_types = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [2] */
++		BTF_VAR_ENC(NAME_TBD, 2, 0),			/* [3] */
++		/* a section */					/* [4] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
++		BTF_VAR_SECINFO_ENC(3, 0, 4),
++		/* a section */					/* [5] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
++		BTF_VAR_SECINFO_ENC(6, 0, 4),
++		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [6] */
++		BTF_END_RAW,
 +	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = ACCEPT,
-+	.retval = 1,
++	.str_sec = "\0A\0t\0s\0a\0a",
++	.str_sec_size = sizeof("\0A\0t\0s\0a\0a"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = 4,
++	.key_type_id = 0,
++	.value_type_id = 4,
++	.max_entries = 1,
++	.btf_load_err = true,
++	.err_str = "Invalid type_id",
 +},
 +{
-+	"direct map access, write test 9",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 48),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 4242),
-+	BPF_EXIT_INSN(),
++	.descr = "global data test #17, invalid var referencing var",
++	.raw_types = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [2] */
++		BTF_VAR_ENC(NAME_TBD, 2, 0),			/* [3] */
++		/* a section */					/* [4] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
++		BTF_VAR_SECINFO_ENC(3, 0, 4),
++		BTF_END_RAW,
 +	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = REJECT,
-+	.errstr = "invalid access to map value pointer",
++	.str_sec = "\0A\0t\0s\0a\0a",
++	.str_sec_size = sizeof("\0A\0t\0s\0a\0a"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = 4,
++	.key_type_id = 0,
++	.value_type_id = 4,
++	.max_entries = 1,
++	.btf_load_err = true,
++	.err_str = "Invalid type_id",
 +},
 +{
-+	"direct map access, write test 10",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 47),
-+	BPF_ST_MEM(BPF_B, BPF_REG_1, 0, 4),
-+	BPF_EXIT_INSN(),
++	.descr = "global data test #18, invalid var loop",
++	.raw_types = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		BTF_VAR_ENC(NAME_TBD, 2, 0),			/* [2] */
++		/* .bss section */				/* [3] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
++		BTF_VAR_SECINFO_ENC(2, 0, 4),
++		BTF_END_RAW,
 +	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = ACCEPT,
-+	.retval = 1,
++	.str_sec = "\0A\0t\0aaa",
++	.str_sec_size = sizeof("\0A\0t\0aaa"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = 4,
++	.key_type_id = 0,
++	.value_type_id = 4,
++	.max_entries = 1,
++	.btf_load_err = true,
++	.err_str = "Invalid type_id",
 +},
 +{
-+	"direct map access, write test 11",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 48),
-+	BPF_ST_MEM(BPF_B, BPF_REG_1, 0, 4),
-+	BPF_EXIT_INSN(),
++	.descr = "global data test #19, invalid var referencing var",
++	.raw_types = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		BTF_VAR_ENC(NAME_TBD, 3, 0),			/* [2] */
++		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [3] */
++		BTF_END_RAW,
 +	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = REJECT,
-+	.errstr = "invalid access to map value pointer",
++	.str_sec = "\0A\0t\0s\0a\0a",
++	.str_sec_size = sizeof("\0A\0t\0s\0a\0a"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = 4,
++	.key_type_id = 0,
++	.value_type_id = 4,
++	.max_entries = 1,
++	.btf_load_err = true,
++	.err_str = "Invalid type_id",
 +},
 +{
-+	"direct map access, write test 12",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_VALUE(BPF_REG_1, 0, (1<<29)),
-+	BPF_ST_MEM(BPF_B, BPF_REG_1, 0, 4),
-+	BPF_EXIT_INSN(),
++	.descr = "global data test #20, invalid ptr referencing var",
++	.raw_types = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		/* PTR type_id=3	*/			/* [2] */
++		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_PTR, 0, 0), 3),
++		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [3] */
++		BTF_END_RAW,
 +	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = REJECT,
-+	.errstr = "direct value offset of 536870912 is not allowed",
++	.str_sec = "\0A\0t\0s\0a\0a",
++	.str_sec_size = sizeof("\0A\0t\0s\0a\0a"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = 4,
++	.key_type_id = 0,
++	.value_type_id = 4,
++	.max_entries = 1,
++	.btf_load_err = true,
++	.err_str = "Invalid type_id",
 +},
 +{
-+	"direct map access, write test 13",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_VALUE(BPF_REG_1, 0, (1<<29)-1),
-+	BPF_ST_MEM(BPF_B, BPF_REG_1, 0, 4),
-+	BPF_EXIT_INSN(),
++	.descr = "global data test #21, var included in struct",
++	.raw_types = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		/* struct A { */				/* [2] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 2), sizeof(int) * 2),
++		BTF_MEMBER_ENC(NAME_TBD, 1, 0),	/* int m; */
++		BTF_MEMBER_ENC(NAME_TBD, 3, 32),/* VAR type_id=3; */
++		/* } */
++		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [3] */
++		BTF_END_RAW,
 +	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = REJECT,
-+	.errstr = "invalid access to map value pointer, value_size=48 off=536870911",
++	.str_sec = "\0A\0t\0s\0a\0a",
++	.str_sec_size = sizeof("\0A\0t\0s\0a\0a"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = 4,
++	.key_type_id = 0,
++	.value_type_id = 4,
++	.max_entries = 1,
++	.btf_load_err = true,
++	.err_str = "Invalid member",
 +},
 +{
-+	"direct map access, write test 14",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 47),
-+	BPF_LD_MAP_VALUE(BPF_REG_2, 0, 46),
-+	BPF_ST_MEM(BPF_H, BPF_REG_2, 0, 0xffff),
-+	BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1, 0),
-+	BPF_EXIT_INSN(),
++	.descr = "global data test #22, array of var",
++	.raw_types = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		BTF_TYPE_ARRAY_ENC(3, 1, 4),			/* [2] */
++		BTF_VAR_ENC(NAME_TBD, 1, 0),			/* [3] */
++		BTF_END_RAW,
 +	},
-+	.fixup_map_array_48b = { 1, 3 },
-+	.result = ACCEPT,
-+	.retval = 0xff,
++	.str_sec = "\0A\0t\0s\0a\0a",
++	.str_sec_size = sizeof("\0A\0t\0s\0a\0a"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = 4,
++	.key_type_id = 0,
++	.value_type_id = 4,
++	.max_entries = 1,
++	.btf_load_err = true,
++	.err_str = "Invalid elem",
 +},
-+{
-+	"direct map access, write test 15",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 46),
-+	BPF_LD_MAP_VALUE(BPF_REG_2, 0, 46),
-+	BPF_ST_MEM(BPF_H, BPF_REG_2, 0, 0xffff),
-+	BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_array_48b = { 1, 3 },
-+	.result = ACCEPT,
-+	.retval = 0xffff,
-+},
-+{
-+	"direct map access, write test 16",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 46),
-+	BPF_LD_MAP_VALUE(BPF_REG_2, 0, 47),
-+	BPF_ST_MEM(BPF_H, BPF_REG_2, 0, 0xffff),
-+	BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_array_48b = { 1, 3 },
-+	.result = REJECT,
-+	.errstr = "invalid access to map value, value_size=48 off=47 size=2",
-+},
-+{
-+	"direct map access, write test 17",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 46),
-+	BPF_LD_MAP_VALUE(BPF_REG_2, 0, 46),
-+	BPF_ST_MEM(BPF_H, BPF_REG_2, 1, 0xffff),
-+	BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_array_48b = { 1, 3 },
-+	.result = REJECT,
-+	.errstr = "invalid access to map value, value_size=48 off=47 size=2",
-+},
-+{
-+	"direct map access, write test 18",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0),
-+	BPF_ST_MEM(BPF_H, BPF_REG_1, 0, 42),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_array_small = { 1 },
-+	.result = REJECT,
-+	.errstr = "R1 min value is outside of the array range",
-+},
-+{
-+	"direct map access, write test 19",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0),
-+	BPF_ST_MEM(BPF_B, BPF_REG_1, 0, 42),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_array_small = { 1 },
-+	.result = ACCEPT,
-+	.retval = 1,
-+},
-+{
-+	"direct map access, write test 20",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_VALUE(BPF_REG_1, 0, 1),
-+	BPF_ST_MEM(BPF_B, BPF_REG_1, 0, 42),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_array_small = { 1 },
-+	.result = REJECT,
-+	.errstr = "invalid access to map value pointer",
-+},
-+{
-+	"direct map access, invalid insn test 1",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_VALUE, 0, 1, 0, 47),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = REJECT,
-+	.errstr = "invalid bpf_ld_imm64 insn",
-+},
-+{
-+	"direct map access, invalid insn test 2",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_VALUE, 1, 0, 0, 47),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = REJECT,
-+	.errstr = "BPF_LD_IMM64 uses reserved fields",
-+},
-+{
-+	"direct map access, invalid insn test 3",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_VALUE, ~0, 0, 0, 47),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = REJECT,
-+	.errstr = "BPF_LD_IMM64 uses reserved fields",
-+},
-+{
-+	"direct map access, invalid insn test 4",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_VALUE, 0, ~0, 0, 47),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = REJECT,
-+	.errstr = "invalid bpf_ld_imm64 insn",
-+},
-+{
-+	"direct map access, invalid insn test 5",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_VALUE, ~0, ~0, 0, 47),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = REJECT,
-+	.errstr = "invalid bpf_ld_imm64 insn",
-+},
-+{
-+	"direct map access, invalid insn test 6",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_FD, ~0, 0, 0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = REJECT,
-+	.errstr = "BPF_LD_IMM64 uses reserved fields",
-+},
-+{
-+	"direct map access, invalid insn test 7",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_FD, 0, ~0, 0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = REJECT,
-+	.errstr = "invalid bpf_ld_imm64 insn",
-+},
-+{
-+	"direct map access, invalid insn test 8",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_FD, ~0, ~0, 0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = REJECT,
-+	.errstr = "invalid bpf_ld_imm64 insn",
-+},
-+{
-+	"direct map access, invalid insn test 9",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_FD, 0, 0, 0, 47),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_array_48b = { 1 },
-+	.result = REJECT,
-+	.errstr = "unrecognized bpf_ld_imm64 insn",
-+},
+ /* Test member exceeds the size of struct.
+  *
+  * struct A {
 -- 
 2.17.1
 
