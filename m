@@ -4,33 +4,33 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56259C282DA
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC363C282DE
 	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 21:20:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2DCE520820
+	by mail.kernel.org (Postfix) with ESMTP id A342F20820
 	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 21:20:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726777AbfDIVUl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Apr 2019 17:20:41 -0400
-Received: from www62.your-server.de ([213.133.104.62]:52084 "EHLO
+        id S1726879AbfDIVU5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Apr 2019 17:20:57 -0400
+Received: from www62.your-server.de ([213.133.104.62]:52096 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726755AbfDIVUk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Apr 2019 17:20:40 -0400
+        with ESMTP id S1726768AbfDIVUl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Apr 2019 17:20:41 -0400
 Received: from [178.197.248.24] (helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1hDyAT-0001dG-5g; Tue, 09 Apr 2019 23:20:33 +0200
+        id 1hDyAW-0001en-4d; Tue, 09 Apr 2019 23:20:36 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, ast@kernel.org, joe@wand.net.nz,
         yhs@fb.com, andrii.nakryiko@gmail.com, kafai@fb.com,
         jannh@google.com, Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v6 09/16] bpf: sync {btf, bpf}.h uapi header from tools infrastructure
-Date:   Tue,  9 Apr 2019 23:20:11 +0200
-Message-Id: <20190409212018.32423-10-daniel@iogearbox.net>
+Subject: [PATCH bpf-next v6 13/16] bpf: bpftool support for dumping data/bss/rodata sections
+Date:   Tue,  9 Apr 2019 23:20:15 +0200
+Message-Id: <20190409212018.32423-14-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <20190409212018.32423-1-daniel@iogearbox.net>
 References: <20190409212018.32423-1-daniel@iogearbox.net>
@@ -41,127 +41,167 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Pull in latest changes from both headers, so we can make use of
-them in libbpf.
+Add the ability to bpftool to handle BTF Var and DataSec kinds
+in order to dump them out of btf_dumper_type(). The value has a
+single object with the section name, which itself holds an array
+of variables it dumps. A single variable is an object by itself
+printed along with its name. From there further type information
+is dumped along with corresponding value information.
+
+Example output from .rodata:
+
+  # ./bpftool m d i 150
+  [{
+          "value": {
+              ".rodata": [{
+                      "load_static_data.bar": 18446744073709551615
+                  },{
+                      "num2": 24
+                  },{
+                      "num5": 43947
+                  },{
+                      "num6": 171
+                  },{
+                      "str0": [97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,0,0,0,0,0,0
+                      ]
+                  },{
+                      "struct0": {
+                          "a": 42,
+                          "b": 4278120431,
+                          "c": 1229782938247303441
+                      }
+                  },{
+                      "struct2": {
+                          "a": 0,
+                          "b": 0,
+                          "c": 0
+                      }
+                  }
+              ]
+          }
+      }
+  ]
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Acked-by: Martin KaFai Lau <kafai@fb.com>
 ---
- tools/include/uapi/linux/bpf.h | 20 ++++++++++++++++++--
- tools/include/uapi/linux/btf.h | 32 ++++++++++++++++++++++++++++----
- 2 files changed, 46 insertions(+), 6 deletions(-)
+ tools/bpf/bpftool/btf_dumper.c | 59 ++++++++++++++++++++++++++++++++++
+ tools/bpf/bpftool/map.c        | 10 +++---
+ 2 files changed, 65 insertions(+), 4 deletions(-)
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 837024512baf..af1cbd951f26 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -105,6 +105,7 @@ enum bpf_cmd {
- 	BPF_BTF_GET_FD_BY_ID,
- 	BPF_TASK_FD_QUERY,
- 	BPF_MAP_LOOKUP_AND_DELETE_ELEM,
-+	BPF_MAP_FREEZE,
- };
+diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumper.c
+index e63bce0755eb..8cafb9b31467 100644
+--- a/tools/bpf/bpftool/btf_dumper.c
++++ b/tools/bpf/bpftool/btf_dumper.c
+@@ -309,6 +309,48 @@ static int btf_dumper_struct(const struct btf_dumper *d, __u32 type_id,
+ 	return ret;
+ }
  
- enum bpf_map_type {
-@@ -255,8 +256,19 @@ enum bpf_attach_type {
-  */
- #define BPF_F_ANY_ALIGNMENT	(1U << 1)
- 
--/* when bpf_ldimm64->src_reg == BPF_PSEUDO_MAP_FD, bpf_ldimm64->imm == fd */
-+/* When BPF ldimm64's insn[0].src_reg != 0 then this can have
-+ * two extensions:
-+ *
-+ * insn[0].src_reg:  BPF_PSEUDO_MAP_FD   BPF_PSEUDO_MAP_VALUE
-+ * insn[0].imm:      map fd              map fd
-+ * insn[1].imm:      0                   offset into value
-+ * insn[0].off:      0                   0
-+ * insn[1].off:      0                   0
-+ * ldimm64 rewrite:  address of map      address of map[0]+offset
-+ * verifier type:    CONST_PTR_TO_MAP    PTR_TO_MAP_VALUE
-+ */
- #define BPF_PSEUDO_MAP_FD	1
-+#define BPF_PSEUDO_MAP_VALUE	2
- 
- /* when bpf_call->src_reg == BPF_PSEUDO_CALL, bpf_call->imm == pc-relative
-  * offset to another bpf function
-@@ -283,7 +295,7 @@ enum bpf_attach_type {
- 
- #define BPF_OBJ_NAME_LEN 16U
- 
--/* Flags for accessing BPF object */
-+/* Flags for accessing BPF object from syscall side. */
- #define BPF_F_RDONLY		(1U << 3)
- #define BPF_F_WRONLY		(1U << 4)
- 
-@@ -293,6 +305,10 @@ enum bpf_attach_type {
- /* Zero-initialize hash function seed. This should only be used for testing. */
- #define BPF_F_ZERO_SEED		(1U << 6)
- 
-+/* Flags for accessing BPF object from program side. */
-+#define BPF_F_RDONLY_PROG	(1U << 7)
-+#define BPF_F_WRONLY_PROG	(1U << 8)
++static int btf_dumper_var(const struct btf_dumper *d, __u32 type_id,
++			  __u8 bit_offset, const void *data)
++{
++	const struct btf_type *t = btf__type_by_id(d->btf, type_id);
++	int ret;
 +
- /* flags for BPF_PROG_QUERY */
- #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
- 
-diff --git a/tools/include/uapi/linux/btf.h b/tools/include/uapi/linux/btf.h
-index 7b7475ef2f17..9310652ca4f9 100644
---- a/tools/include/uapi/linux/btf.h
-+++ b/tools/include/uapi/linux/btf.h
-@@ -39,11 +39,11 @@ struct btf_type {
- 	 *             struct, union and fwd
- 	 */
- 	__u32 info;
--	/* "size" is used by INT, ENUM, STRUCT and UNION.
-+	/* "size" is used by INT, ENUM, STRUCT, UNION and DATASEC.
- 	 * "size" tells the size of the type it is describing.
- 	 *
- 	 * "type" is used by PTR, TYPEDEF, VOLATILE, CONST, RESTRICT,
--	 * FUNC and FUNC_PROTO.
-+	 * FUNC, FUNC_PROTO and VAR.
- 	 * "type" is a type_id referring to another type.
- 	 */
- 	union {
-@@ -70,8 +70,10 @@ struct btf_type {
- #define BTF_KIND_RESTRICT	11	/* Restrict	*/
- #define BTF_KIND_FUNC		12	/* Function	*/
- #define BTF_KIND_FUNC_PROTO	13	/* Function Proto	*/
--#define BTF_KIND_MAX		13
--#define NR_BTF_KINDS		14
-+#define BTF_KIND_VAR		14	/* Variable	*/
-+#define BTF_KIND_DATASEC	15	/* Section	*/
-+#define BTF_KIND_MAX		BTF_KIND_DATASEC
-+#define NR_BTF_KINDS		(BTF_KIND_MAX + 1)
- 
- /* For some specific BTF_KIND, "struct btf_type" is immediately
-  * followed by extra data.
-@@ -138,4 +140,26 @@ struct btf_param {
- 	__u32	type;
- };
- 
-+enum {
-+	BTF_VAR_STATIC = 0,
-+	BTF_VAR_GLOBAL_ALLOCATED,
-+};
++	jsonw_start_object(d->jw);
++	jsonw_name(d->jw, btf__name_by_offset(d->btf, t->name_off));
++	ret = btf_dumper_do_type(d, t->type, bit_offset, data);
++	jsonw_end_object(d->jw);
 +
-+/* BTF_KIND_VAR is followed by a single "struct btf_var" to describe
-+ * additional information related to the variable such as its linkage.
-+ */
-+struct btf_var {
-+	__u32	linkage;
-+};
++	return ret;
++}
 +
-+/* BTF_KIND_DATASEC is followed by multiple "struct btf_var_secinfo"
-+ * to describe all BTF_KIND_VAR types it contains along with it's
-+ * in-section offset as well as size.
-+ */
-+struct btf_var_secinfo {
-+	__u32	type;
-+	__u32	offset;
-+	__u32	size;
-+};
++static int btf_dumper_datasec(const struct btf_dumper *d, __u32 type_id,
++			      const void *data)
++{
++	struct btf_var_secinfo *vsi;
++	const struct btf_type *t;
++	int ret = 0, i, vlen;
 +
- #endif /* _UAPI__LINUX_BTF_H__ */
++	t = btf__type_by_id(d->btf, type_id);
++	if (!t)
++		return -EINVAL;
++
++	vlen = BTF_INFO_VLEN(t->info);
++	vsi = (struct btf_var_secinfo *)(t + 1);
++
++	jsonw_start_object(d->jw);
++	jsonw_name(d->jw, btf__name_by_offset(d->btf, t->name_off));
++	jsonw_start_array(d->jw);
++	for (i = 0; i < vlen; i++) {
++		ret = btf_dumper_do_type(d, vsi[i].type, 0, data + vsi[i].offset);
++		if (ret)
++			break;
++	}
++	jsonw_end_array(d->jw);
++	jsonw_end_object(d->jw);
++
++	return ret;
++}
++
+ static int btf_dumper_do_type(const struct btf_dumper *d, __u32 type_id,
+ 			      __u8 bit_offset, const void *data)
+ {
+@@ -341,6 +383,10 @@ static int btf_dumper_do_type(const struct btf_dumper *d, __u32 type_id,
+ 	case BTF_KIND_CONST:
+ 	case BTF_KIND_RESTRICT:
+ 		return btf_dumper_modifier(d, type_id, bit_offset, data);
++	case BTF_KIND_VAR:
++		return btf_dumper_var(d, type_id, bit_offset, data);
++	case BTF_KIND_DATASEC:
++		return btf_dumper_datasec(d, type_id, data);
+ 	default:
+ 		jsonw_printf(d->jw, "(unsupported-kind");
+ 		return -EINVAL;
+@@ -377,6 +423,7 @@ static int __btf_dumper_type_only(const struct btf *btf, __u32 type_id,
+ {
+ 	const struct btf_type *proto_type;
+ 	const struct btf_array *array;
++	const struct btf_var *var;
+ 	const struct btf_type *t;
+ 
+ 	if (!type_id) {
+@@ -440,6 +487,18 @@ static int __btf_dumper_type_only(const struct btf *btf, __u32 type_id,
+ 		if (pos == -1)
+ 			return -1;
+ 		break;
++	case BTF_KIND_VAR:
++		var = (struct btf_var *)(t + 1);
++		if (var->linkage == BTF_VAR_STATIC)
++			BTF_PRINT_ARG("static ");
++		BTF_PRINT_TYPE(t->type);
++		BTF_PRINT_ARG(" %s",
++			      btf__name_by_offset(btf, t->name_off));
++		break;
++	case BTF_KIND_DATASEC:
++		BTF_PRINT_ARG("section (\"%s\") ",
++			      btf__name_by_offset(btf, t->name_off));
++		break;
+ 	case BTF_KIND_UNKN:
+ 	default:
+ 		return -1;
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index e0c650d91784..e96903078991 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -153,11 +153,13 @@ static int do_dump_btf(const struct btf_dumper *d,
+ 	/* start of key-value pair */
+ 	jsonw_start_object(d->jw);
+ 
+-	jsonw_name(d->jw, "key");
++	if (map_info->btf_key_type_id) {
++		jsonw_name(d->jw, "key");
+ 
+-	ret = btf_dumper_type(d, map_info->btf_key_type_id, key);
+-	if (ret)
+-		goto err_end_obj;
++		ret = btf_dumper_type(d, map_info->btf_key_type_id, key);
++		if (ret)
++			goto err_end_obj;
++	}
+ 
+ 	if (!map_is_per_cpu(map_info->type)) {
+ 		jsonw_name(d->jw, "value");
 -- 
 2.17.1
 
