@@ -4,33 +4,33 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC5D7C282CE
-	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 21:10:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8C8CC282DA
+	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 21:10:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A519720857
-	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 21:10:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 67E3920857
+	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 21:10:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726709AbfDIVKa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1726725AbfDIVKa (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 9 Apr 2019 17:10:30 -0400
-Received: from www62.your-server.de ([213.133.104.62]:49758 "EHLO
+Received: from www62.your-server.de ([213.133.104.62]:49760 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726685AbfDIVK2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1726529AbfDIVK2 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 9 Apr 2019 17:10:28 -0400
 Received: from [178.197.248.24] (helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1hDy0a-0000E7-I9; Tue, 09 Apr 2019 23:10:20 +0200
+        id 1hDy0c-0000Eg-9e; Tue, 09 Apr 2019 23:10:22 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, ast@kernel.org, joe@wand.net.nz,
         yhs@fb.com, andrii.nakryiko@gmail.com, kafai@fb.com,
         jannh@google.com, Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v6 03/16] bpf: add program side {rd, wr}only support for maps
-Date:   Tue,  9 Apr 2019 23:08:57 +0200
-Message-Id: <20190409210910.32048-4-daniel@iogearbox.net>
+Subject: [PATCH bpf-next v6 07/16] bpf: kernel side support for BTF Var and DataSec
+Date:   Tue,  9 Apr 2019 23:09:01 +0200
+Message-Id: <20190409210910.32048-8-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <20190409210910.32048-1-daniel@iogearbox.net>
 References: <20190409210910.32048-1-daniel@iogearbox.net>
@@ -41,334 +41,632 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This work adds two new map creation flags BPF_F_RDONLY_PROG
-and BPF_F_WRONLY_PROG in order to allow for read-only or
-write-only BPF maps from a BPF program side.
+This work adds kernel-side verification, logging and seq_show dumping
+of BTF Var and DataSec kinds which are emitted with latest LLVM. The
+following constraints apply:
 
-Today we have BPF_F_RDONLY and BPF_F_WRONLY, but this only
-applies to system call side, meaning the BPF program has full
-read/write access to the map as usual while bpf(2) calls with
-map fd can either only read or write into the map depending
-on the flags. BPF_F_RDONLY_PROG and BPF_F_WRONLY_PROG allows
-for the exact opposite such that verifier is going to reject
-program loads if write into a read-only map or a read into a
-write-only map is detected. For read-only map case also some
-helpers are forbidden for programs that would alter the map
-state such as map deletion, update, etc. As opposed to the two
-BPF_F_RDONLY / BPF_F_WRONLY flags, BPF_F_RDONLY_PROG as well
-as BPF_F_WRONLY_PROG really do correspond to the map lifetime.
+BTF Var must have:
 
-We've enabled this generic map extension to various non-special
-maps holding normal user data: array, hash, lru, lpm, local
-storage, queue and stack. Further generic map types could be
-followed up in future depending on use-case. Main use case
-here is to forbid writes into .rodata map values from verifier
-side.
+- Its kind_flag is 0
+- Its vlen is 0
+- Must point to a valid type
+- Type must not resolve to a forward type
+- Size of underlying type must be > 0
+- Must have a valid name
+- Can only be a source type, not sink or intermediate one
+- Name may include dots (e.g. in case of static variables
+  inside functions)
+- Cannot be a member of a struct/union
+- Linkage so far can either only be static or global/allocated
+
+BTF DataSec must have:
+
+- Its kind_flag is 0
+- Its vlen cannot be 0
+- Its size cannot be 0
+- Must have a valid name
+- Can only be a source type, not sink or intermediate one
+- Name may include dots (e.g. to represent .bss, .data, .rodata etc)
+- Cannot be a member of a struct/union
+- Inner btf_var_secinfo array with {type,offset,size} triple
+  must be sorted by offset in ascending order
+- Type must always point to BTF Var
+- BTF resolved size of Var must be <= size provided by triple
+- DataSec size must be >= sum of triple sizes (thus holes
+  are allowed)
+
+btf_var_resolve(), btf_ptr_resolve() and btf_modifier_resolve()
+are on a high level quite similar but each come with slight,
+subtle differences. They could potentially be a bit refactored
+in future which hasn't been done here to ease review.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Acked-by: Martin KaFai Lau <kafai@fb.com>
 ---
- include/linux/bpf.h           | 29 ++++++++++++++++++++++
- include/uapi/linux/bpf.h      |  6 ++++-
- kernel/bpf/arraymap.c         |  6 ++++-
- kernel/bpf/hashtab.c          |  6 ++---
- kernel/bpf/local_storage.c    |  6 ++---
- kernel/bpf/lpm_trie.c         |  3 ++-
- kernel/bpf/queue_stack_maps.c |  6 ++---
- kernel/bpf/syscall.c          |  2 ++
- kernel/bpf/verifier.c         | 46 +++++++++++++++++++++++++++++++++--
- 9 files changed, 96 insertions(+), 14 deletions(-)
+ kernel/bpf/btf.c | 417 ++++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 397 insertions(+), 20 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index bd93a592dd29..be20804631b5 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -430,6 +430,35 @@ struct bpf_array {
- #define BPF_COMPLEXITY_LIMIT_INSNS      1000000 /* yes. 1M insns */
- #define MAX_TAIL_CALL_CNT 32
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index bd3921b1514b..0cecf6bab61b 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -185,6 +185,16 @@
+ 	     i < btf_type_vlen(struct_type);				\
+ 	     i++, member++)
  
-+#define BPF_F_ACCESS_MASK	(BPF_F_RDONLY |		\
-+				 BPF_F_RDONLY_PROG |	\
-+				 BPF_F_WRONLY |		\
-+				 BPF_F_WRONLY_PROG)
++#define for_each_vsi(i, struct_type, member)			\
++	for (i = 0, member = btf_type_var_secinfo(struct_type);	\
++	     i < btf_type_vlen(struct_type);			\
++	     i++, member++)
 +
-+#define BPF_MAP_CAN_READ	BIT(0)
-+#define BPF_MAP_CAN_WRITE	BIT(1)
++#define for_each_vsi_from(i, from, struct_type, member)				\
++	for (i = from, member = btf_type_var_secinfo(struct_type) + from;	\
++	     i < btf_type_vlen(struct_type);					\
++	     i++, member++)
 +
-+static inline u32 bpf_map_flags_to_cap(struct bpf_map *map)
-+{
-+	u32 access_flags = map->map_flags & (BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG);
-+
-+	/* Combination of BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG is
-+	 * not possible.
-+	 */
-+	if (access_flags & BPF_F_RDONLY_PROG)
-+		return BPF_MAP_CAN_READ;
-+	else if (access_flags & BPF_F_WRONLY_PROG)
-+		return BPF_MAP_CAN_WRITE;
-+	else
-+		return BPF_MAP_CAN_READ | BPF_MAP_CAN_WRITE;
-+}
-+
-+static inline bool bpf_map_flags_access_ok(u32 access_flags)
-+{
-+	return (access_flags & (BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG)) !=
-+	       (BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG);
-+}
-+
- struct bpf_event_entry {
- 	struct perf_event *event;
- 	struct file *perf_file;
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 26cfb5b2c964..d275446d807c 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -294,7 +294,7 @@ enum bpf_attach_type {
+ static DEFINE_IDR(btf_idr);
+ static DEFINE_SPINLOCK(btf_idr_lock);
  
- #define BPF_OBJ_NAME_LEN 16U
+@@ -262,6 +272,8 @@ static const char * const btf_kind_str[NR_BTF_KINDS] = {
+ 	[BTF_KIND_RESTRICT]	= "RESTRICT",
+ 	[BTF_KIND_FUNC]		= "FUNC",
+ 	[BTF_KIND_FUNC_PROTO]	= "FUNC_PROTO",
++	[BTF_KIND_VAR]		= "VAR",
++	[BTF_KIND_DATASEC]	= "DATASEC",
+ };
  
--/* Flags for accessing BPF object */
-+/* Flags for accessing BPF object from syscall side. */
- #define BPF_F_RDONLY		(1U << 3)
- #define BPF_F_WRONLY		(1U << 4)
- 
-@@ -304,6 +304,10 @@ enum bpf_attach_type {
- /* Zero-initialize hash function seed. This should only be used for testing. */
- #define BPF_F_ZERO_SEED		(1U << 6)
- 
-+/* Flags for accessing BPF object from program side. */
-+#define BPF_F_RDONLY_PROG	(1U << 7)
-+#define BPF_F_WRONLY_PROG	(1U << 8)
-+
- /* flags for BPF_PROG_QUERY */
- #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
- 
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 1a6e9861d554..217b10bd9f48 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -22,7 +22,7 @@
- #include "map_in_map.h"
- 
- #define ARRAY_CREATE_FLAG_MASK \
--	(BPF_F_NUMA_NODE | BPF_F_RDONLY | BPF_F_WRONLY)
-+	(BPF_F_NUMA_NODE | BPF_F_ACCESS_MASK)
- 
- static void bpf_array_free_percpu(struct bpf_array *array)
- {
-@@ -63,6 +63,7 @@ int array_map_alloc_check(union bpf_attr *attr)
- 	if (attr->max_entries == 0 || attr->key_size != 4 ||
- 	    attr->value_size == 0 ||
- 	    attr->map_flags & ~ARRAY_CREATE_FLAG_MASK ||
-+	    !bpf_map_flags_access_ok(attr->map_flags) ||
- 	    (percpu && numa_node != NUMA_NO_NODE))
- 		return -EINVAL;
- 
-@@ -472,6 +473,9 @@ static int fd_array_map_alloc_check(union bpf_attr *attr)
- 	/* only file descriptors can be stored in this type of map */
- 	if (attr->value_size != sizeof(u32))
- 		return -EINVAL;
-+	/* Program read-only/write-only not supported for special maps yet. */
-+	if (attr->map_flags & (BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG))
-+		return -EINVAL;
- 	return array_map_alloc_check(attr);
+ struct btf_kind_operations {
+@@ -375,13 +387,36 @@ static bool btf_type_is_int(const struct btf_type *t)
+ 	return BTF_INFO_KIND(t->info) == BTF_KIND_INT;
  }
  
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index fed15cf94dca..192d32e77db3 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -23,7 +23,7 @@
- 
- #define HTAB_CREATE_FLAG_MASK						\
- 	(BPF_F_NO_PREALLOC | BPF_F_NO_COMMON_LRU | BPF_F_NUMA_NODE |	\
--	 BPF_F_RDONLY | BPF_F_WRONLY | BPF_F_ZERO_SEED)
-+	 BPF_F_ACCESS_MASK | BPF_F_ZERO_SEED)
- 
- struct bucket {
- 	struct hlist_nulls_head head;
-@@ -262,8 +262,8 @@ static int htab_map_alloc_check(union bpf_attr *attr)
- 		/* Guard against local DoS, and discourage production use. */
- 		return -EPERM;
- 
--	if (attr->map_flags & ~HTAB_CREATE_FLAG_MASK)
--		/* reserved bits should not be used */
-+	if (attr->map_flags & ~HTAB_CREATE_FLAG_MASK ||
-+	    !bpf_map_flags_access_ok(attr->map_flags))
- 		return -EINVAL;
- 
- 	if (!lru && percpu_lru)
-diff --git a/kernel/bpf/local_storage.c b/kernel/bpf/local_storage.c
-index 6b572e2de7fb..980e8f1f6cb5 100644
---- a/kernel/bpf/local_storage.c
-+++ b/kernel/bpf/local_storage.c
-@@ -14,7 +14,7 @@ DEFINE_PER_CPU(struct bpf_cgroup_storage*, bpf_cgroup_storage[MAX_BPF_CGROUP_STO
- #ifdef CONFIG_CGROUP_BPF
- 
- #define LOCAL_STORAGE_CREATE_FLAG_MASK					\
--	(BPF_F_NUMA_NODE | BPF_F_RDONLY | BPF_F_WRONLY)
-+	(BPF_F_NUMA_NODE | BPF_F_ACCESS_MASK)
- 
- struct bpf_cgroup_storage_map {
- 	struct bpf_map map;
-@@ -282,8 +282,8 @@ static struct bpf_map *cgroup_storage_map_alloc(union bpf_attr *attr)
- 	if (attr->value_size > PAGE_SIZE)
- 		return ERR_PTR(-E2BIG);
- 
--	if (attr->map_flags & ~LOCAL_STORAGE_CREATE_FLAG_MASK)
--		/* reserved bits should not be used */
-+	if (attr->map_flags & ~LOCAL_STORAGE_CREATE_FLAG_MASK ||
-+	    !bpf_map_flags_access_ok(attr->map_flags))
- 		return ERR_PTR(-EINVAL);
- 
- 	if (attr->max_entries)
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index 93a5cbbde421..e61630c2e50b 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -538,7 +538,7 @@ static int trie_delete_elem(struct bpf_map *map, void *_key)
- #define LPM_KEY_SIZE_MIN	LPM_KEY_SIZE(LPM_DATA_SIZE_MIN)
- 
- #define LPM_CREATE_FLAG_MASK	(BPF_F_NO_PREALLOC | BPF_F_NUMA_NODE |	\
--				 BPF_F_RDONLY | BPF_F_WRONLY)
-+				 BPF_F_ACCESS_MASK)
- 
- static struct bpf_map *trie_alloc(union bpf_attr *attr)
- {
-@@ -553,6 +553,7 @@ static struct bpf_map *trie_alloc(union bpf_attr *attr)
- 	if (attr->max_entries == 0 ||
- 	    !(attr->map_flags & BPF_F_NO_PREALLOC) ||
- 	    attr->map_flags & ~LPM_CREATE_FLAG_MASK ||
-+	    !bpf_map_flags_access_ok(attr->map_flags) ||
- 	    attr->key_size < LPM_KEY_SIZE_MIN ||
- 	    attr->key_size > LPM_KEY_SIZE_MAX ||
- 	    attr->value_size < LPM_VAL_SIZE_MIN ||
-diff --git a/kernel/bpf/queue_stack_maps.c b/kernel/bpf/queue_stack_maps.c
-index b384ea9f3254..0b140d236889 100644
---- a/kernel/bpf/queue_stack_maps.c
-+++ b/kernel/bpf/queue_stack_maps.c
-@@ -11,8 +11,7 @@
- #include "percpu_freelist.h"
- 
- #define QUEUE_STACK_CREATE_FLAG_MASK \
--	(BPF_F_NUMA_NODE | BPF_F_RDONLY | BPF_F_WRONLY)
++static bool btf_type_is_var(const struct btf_type *t)
++{
++	return BTF_INFO_KIND(t->info) == BTF_KIND_VAR;
++}
++
++static bool btf_type_is_datasec(const struct btf_type *t)
++{
++	return BTF_INFO_KIND(t->info) == BTF_KIND_DATASEC;
++}
++
++/* Types that act only as a source, not sink or intermediate
++ * type when resolving.
++ */
++static bool btf_type_is_resolve_source_only(const struct btf_type *t)
++{
++	return btf_type_is_var(t) ||
++	       btf_type_is_datasec(t);
++}
++
+ /* What types need to be resolved?
+  *
+  * btf_type_is_modifier() is an obvious one.
+  *
+  * btf_type_is_struct() because its member refers to
+  * another type (through member->type).
 -
-+	(BPF_F_NUMA_NODE | BPF_F_ACCESS_MASK)
++ *
++ * btf_type_is_var() because the variable refers to
++ * another type. btf_type_is_datasec() holds multiple
++ * btf_type_is_var() types that need resolving.
++ *
+  * btf_type_is_array() because its element (array->type)
+  * refers to another type.  Array can be thought of a
+  * special case of struct while array just has the same
+@@ -390,9 +425,11 @@ static bool btf_type_is_int(const struct btf_type *t)
+ static bool btf_type_needs_resolve(const struct btf_type *t)
+ {
+ 	return btf_type_is_modifier(t) ||
+-		btf_type_is_ptr(t) ||
+-		btf_type_is_struct(t) ||
+-		btf_type_is_array(t);
++	       btf_type_is_ptr(t) ||
++	       btf_type_is_struct(t) ||
++	       btf_type_is_array(t) ||
++	       btf_type_is_var(t) ||
++	       btf_type_is_datasec(t);
+ }
  
- struct bpf_queue_stack {
- 	struct bpf_map map;
-@@ -52,7 +51,8 @@ static int queue_stack_map_alloc_check(union bpf_attr *attr)
- 	/* check sanity of attributes */
- 	if (attr->max_entries == 0 || attr->key_size != 0 ||
- 	    attr->value_size == 0 ||
--	    attr->map_flags & ~QUEUE_STACK_CREATE_FLAG_MASK)
-+	    attr->map_flags & ~QUEUE_STACK_CREATE_FLAG_MASK ||
-+	    !bpf_map_flags_access_ok(attr->map_flags))
+ /* t->size can be used */
+@@ -403,6 +440,7 @@ static bool btf_type_has_size(const struct btf_type *t)
+ 	case BTF_KIND_STRUCT:
+ 	case BTF_KIND_UNION:
+ 	case BTF_KIND_ENUM:
++	case BTF_KIND_DATASEC:
+ 		return true;
+ 	}
+ 
+@@ -467,6 +505,16 @@ static const struct btf_enum *btf_type_enum(const struct btf_type *t)
+ 	return (const struct btf_enum *)(t + 1);
+ }
+ 
++static const struct btf_var *btf_type_var(const struct btf_type *t)
++{
++	return (const struct btf_var *)(t + 1);
++}
++
++static const struct btf_var_secinfo *btf_type_var_secinfo(const struct btf_type *t)
++{
++	return (const struct btf_var_secinfo *)(t + 1);
++}
++
+ static const struct btf_kind_operations *btf_type_ops(const struct btf_type *t)
+ {
+ 	return kind_ops[BTF_INFO_KIND(t->info)];
+@@ -478,23 +526,31 @@ static bool btf_name_offset_valid(const struct btf *btf, u32 offset)
+ 		offset < btf->hdr.str_len;
+ }
+ 
+-/* Only C-style identifier is permitted. This can be relaxed if
+- * necessary.
+- */
+-static bool btf_name_valid_identifier(const struct btf *btf, u32 offset)
++static bool __btf_name_char_ok(char c, bool first, bool dot_ok)
++{
++	if ((first ? !isalpha(c) :
++		     !isalnum(c)) &&
++	    c != '_' &&
++	    ((c == '.' && !dot_ok) ||
++	      c != '.'))
++		return false;
++	return true;
++}
++
++static bool __btf_name_valid(const struct btf *btf, u32 offset, bool dot_ok)
+ {
+ 	/* offset must be valid */
+ 	const char *src = &btf->strings[offset];
+ 	const char *src_limit;
+ 
+-	if (!isalpha(*src) && *src != '_')
++	if (!__btf_name_char_ok(*src, true, dot_ok))
+ 		return false;
+ 
+ 	/* set a limit on identifier length */
+ 	src_limit = src + KSYM_NAME_LEN;
+ 	src++;
+ 	while (*src && src < src_limit) {
+-		if (!isalnum(*src) && *src != '_')
++		if (!__btf_name_char_ok(*src, false, dot_ok))
+ 			return false;
+ 		src++;
+ 	}
+@@ -502,6 +558,19 @@ static bool btf_name_valid_identifier(const struct btf *btf, u32 offset)
+ 	return !*src;
+ }
+ 
++/* Only C-style identifier is permitted. This can be relaxed if
++ * necessary.
++ */
++static bool btf_name_valid_identifier(const struct btf *btf, u32 offset)
++{
++	return __btf_name_valid(btf, offset, false);
++}
++
++static bool btf_name_valid_section(const struct btf *btf, u32 offset)
++{
++	return __btf_name_valid(btf, offset, true);
++}
++
+ static const char *__btf_name_by_offset(const struct btf *btf, u32 offset)
+ {
+ 	if (!offset)
+@@ -697,6 +766,32 @@ static void btf_verifier_log_member(struct btf_verifier_env *env,
+ 	__btf_verifier_log(log, "\n");
+ }
+ 
++__printf(4, 5)
++static void btf_verifier_log_vsi(struct btf_verifier_env *env,
++				 const struct btf_type *datasec_type,
++				 const struct btf_var_secinfo *vsi,
++				 const char *fmt, ...)
++{
++	struct bpf_verifier_log *log = &env->log;
++	va_list args;
++
++	if (!bpf_verifier_log_needed(log))
++		return;
++	if (env->phase != CHECK_META)
++		btf_verifier_log_type(env, datasec_type, NULL);
++
++	__btf_verifier_log(log, "\t type_id=%u offset=%u size=%u",
++			   vsi->type, vsi->offset, vsi->size);
++	if (fmt && *fmt) {
++		__btf_verifier_log(log, " ");
++		va_start(args, fmt);
++		bpf_verifier_vlog(log, fmt, args);
++		va_end(args);
++	}
++
++	__btf_verifier_log(log, "\n");
++}
++
+ static void btf_verifier_log_hdr(struct btf_verifier_env *env,
+ 				 u32 btf_data_size)
+ {
+@@ -974,7 +1069,8 @@ const struct btf_type *btf_type_id_size(const struct btf *btf,
+ 	} else if (btf_type_is_ptr(size_type)) {
+ 		size = sizeof(void *);
+ 	} else {
+-		if (WARN_ON_ONCE(!btf_type_is_modifier(size_type)))
++		if (WARN_ON_ONCE(!btf_type_is_modifier(size_type) &&
++				 !btf_type_is_var(size_type)))
+ 			return NULL;
+ 
+ 		size = btf->resolved_sizes[size_type_id];
+@@ -1509,7 +1605,7 @@ static int btf_modifier_resolve(struct btf_verifier_env *env,
+ 	u32 next_type_size = 0;
+ 
+ 	next_type = btf_type_by_id(btf, next_type_id);
+-	if (!next_type) {
++	if (!next_type || btf_type_is_resolve_source_only(next_type)) {
+ 		btf_verifier_log_type(env, v->t, "Invalid type_id");
  		return -EINVAL;
- 
- 	if (attr->value_size > KMALLOC_MAX_SIZE)
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 56b4b0e08b3b..0c9276b54c88 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -501,6 +501,8 @@ static int map_check_btf(struct bpf_map *map, const struct btf *btf,
- 	map->spin_lock_off = btf_find_spin_lock(btf, value_type);
- 
- 	if (map_value_has_spin_lock(map)) {
-+		if (map->map_flags & BPF_F_RDONLY_PROG)
-+			return -EACCES;
- 		if (map->map_type != BPF_MAP_TYPE_HASH &&
- 		    map->map_type != BPF_MAP_TYPE_ARRAY &&
- 		    map->map_type != BPF_MAP_TYPE_CGROUP_STORAGE)
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6ab7a23fc924..b747434df89c 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1439,6 +1439,28 @@ static int check_stack_access(struct bpf_verifier_env *env,
+ 	}
+@@ -1542,6 +1638,53 @@ static int btf_modifier_resolve(struct btf_verifier_env *env,
  	return 0;
  }
  
-+static int check_map_access_type(struct bpf_verifier_env *env, u32 regno,
-+				 int off, int size, enum bpf_access_type type)
++static int btf_var_resolve(struct btf_verifier_env *env,
++			   const struct resolve_vertex *v)
 +{
-+	struct bpf_reg_state *regs = cur_regs(env);
-+	struct bpf_map *map = regs[regno].map_ptr;
-+	u32 cap = bpf_map_flags_to_cap(map);
++	const struct btf_type *next_type;
++	const struct btf_type *t = v->t;
++	u32 next_type_id = t->type;
++	struct btf *btf = env->btf;
++	u32 next_type_size;
 +
-+	if (type == BPF_WRITE && !(cap & BPF_MAP_CAN_WRITE)) {
-+		verbose(env, "write into map forbidden, value_size=%d off=%d size=%d\n",
-+			map->value_size, off, size);
-+		return -EACCES;
++	next_type = btf_type_by_id(btf, next_type_id);
++	if (!next_type || btf_type_is_resolve_source_only(next_type)) {
++		btf_verifier_log_type(env, v->t, "Invalid type_id");
++		return -EINVAL;
 +	}
 +
-+	if (type == BPF_READ && !(cap & BPF_MAP_CAN_READ)) {
-+		verbose(env, "read from map forbidden, value_size=%d off=%d size=%d\n",
-+			map->value_size, off, size);
-+		return -EACCES;
++	if (!env_type_is_resolve_sink(env, next_type) &&
++	    !env_type_is_resolved(env, next_type_id))
++		return env_stack_push(env, next_type, next_type_id);
++
++	if (btf_type_is_modifier(next_type)) {
++		const struct btf_type *resolved_type;
++		u32 resolved_type_id;
++
++		resolved_type_id = next_type_id;
++		resolved_type = btf_type_id_resolve(btf, &resolved_type_id);
++
++		if (btf_type_is_ptr(resolved_type) &&
++		    !env_type_is_resolve_sink(env, resolved_type) &&
++		    !env_type_is_resolved(env, resolved_type_id))
++			return env_stack_push(env, resolved_type,
++					      resolved_type_id);
 +	}
++
++	/* We must resolve to something concrete at this point, no
++	 * forward types or similar that would resolve to size of
++	 * zero is allowed.
++	 */
++	if (!btf_type_id_size(btf, &next_type_id, &next_type_size)) {
++		btf_verifier_log_type(env, v->t, "Invalid type_id");
++		return -EINVAL;
++	}
++
++	env_stack_pop_resolved(env, next_type_id, next_type_size);
 +
 +	return 0;
 +}
 +
- /* check read/write into map element returned by bpf_map_lookup_elem() */
- static int __check_map_access(struct bpf_verifier_env *env, u32 regno, int off,
- 			      int size, bool zero_size_allowed)
-@@ -2024,7 +2046,9 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
- 			verbose(env, "R%d leaks addr into map\n", value_regno);
- 			return -EACCES;
- 		}
--
-+		err = check_map_access_type(env, regno, off, size, t);
-+		if (err)
-+			return err;
- 		err = check_map_access(env, regno, off, size, false);
- 		if (!err && t == BPF_READ && value_regno >= 0)
- 			mark_reg_unknown(env, regs, value_regno);
-@@ -2327,6 +2351,10 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
- 		return check_packet_access(env, regno, reg->off, access_size,
- 					   zero_size_allowed);
- 	case PTR_TO_MAP_VALUE:
-+		if (check_map_access_type(env, regno, reg->off, access_size,
-+					  meta && meta->raw_mode ? BPF_WRITE :
-+					  BPF_READ))
-+			return -EACCES;
- 		return check_map_access(env, regno, reg->off, access_size,
- 					zero_size_allowed);
- 	default: /* scalar_value|ptr_to_stack or invalid ptr */
-@@ -3059,6 +3087,7 @@ record_func_map(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
- 		int func_id, int insn_idx)
+ static int btf_ptr_resolve(struct btf_verifier_env *env,
+ 			   const struct resolve_vertex *v)
  {
- 	struct bpf_insn_aux_data *aux = &env->insn_aux_data[insn_idx];
-+	struct bpf_map *map = meta->map_ptr;
+@@ -1551,7 +1694,7 @@ static int btf_ptr_resolve(struct btf_verifier_env *env,
+ 	struct btf *btf = env->btf;
  
- 	if (func_id != BPF_FUNC_tail_call &&
- 	    func_id != BPF_FUNC_map_lookup_elem &&
-@@ -3069,11 +3098,24 @@ record_func_map(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
- 	    func_id != BPF_FUNC_map_peek_elem)
- 		return 0;
- 
--	if (meta->map_ptr == NULL) {
-+	if (map == NULL) {
- 		verbose(env, "kernel subsystem misconfigured verifier\n");
+ 	next_type = btf_type_by_id(btf, next_type_id);
+-	if (!next_type) {
++	if (!next_type || btf_type_is_resolve_source_only(next_type)) {
+ 		btf_verifier_log_type(env, v->t, "Invalid type_id");
  		return -EINVAL;
  	}
+@@ -1609,6 +1752,15 @@ static void btf_modifier_seq_show(const struct btf *btf,
+ 	btf_type_ops(t)->seq_show(btf, t, type_id, data, bits_offset, m);
+ }
  
-+	/* In case of read-only, some additional restrictions
-+	 * need to be applied in order to prevent altering the
-+	 * state of the map from program side.
-+	 */
-+	if ((map->map_flags & BPF_F_RDONLY_PROG) &&
-+	    (func_id == BPF_FUNC_map_delete_elem ||
-+	     func_id == BPF_FUNC_map_update_elem ||
-+	     func_id == BPF_FUNC_map_push_elem ||
-+	     func_id == BPF_FUNC_map_pop_elem)) {
-+		verbose(env, "write into map forbidden\n");
-+		return -EACCES;
++static void btf_var_seq_show(const struct btf *btf, const struct btf_type *t,
++			     u32 type_id, void *data, u8 bits_offset,
++			     struct seq_file *m)
++{
++	t = btf_type_id_resolve(btf, &type_id);
++
++	btf_type_ops(t)->seq_show(btf, t, type_id, data, bits_offset, m);
++}
++
+ static void btf_ptr_seq_show(const struct btf *btf, const struct btf_type *t,
+ 			     u32 type_id, void *data, u8 bits_offset,
+ 			     struct seq_file *m)
+@@ -1776,7 +1928,8 @@ static int btf_array_resolve(struct btf_verifier_env *env,
+ 	/* Check array->index_type */
+ 	index_type_id = array->index_type;
+ 	index_type = btf_type_by_id(btf, index_type_id);
+-	if (btf_type_nosize_or_null(index_type)) {
++	if (btf_type_is_resolve_source_only(index_type) ||
++	    btf_type_nosize_or_null(index_type)) {
+ 		btf_verifier_log_type(env, v->t, "Invalid index");
+ 		return -EINVAL;
+ 	}
+@@ -1795,7 +1948,8 @@ static int btf_array_resolve(struct btf_verifier_env *env,
+ 	/* Check array->type */
+ 	elem_type_id = array->type;
+ 	elem_type = btf_type_by_id(btf, elem_type_id);
+-	if (btf_type_nosize_or_null(elem_type)) {
++	if (btf_type_is_resolve_source_only(elem_type) ||
++	    btf_type_nosize_or_null(elem_type)) {
+ 		btf_verifier_log_type(env, v->t,
+ 				      "Invalid elem");
+ 		return -EINVAL;
+@@ -2016,7 +2170,8 @@ static int btf_struct_resolve(struct btf_verifier_env *env,
+ 		const struct btf_type *member_type = btf_type_by_id(env->btf,
+ 								member_type_id);
+ 
+-		if (btf_type_nosize_or_null(member_type)) {
++		if (btf_type_is_resolve_source_only(member_type) ||
++		    btf_type_nosize_or_null(member_type)) {
+ 			btf_verifier_log_member(env, v->t, member,
+ 						"Invalid member");
+ 			return -EINVAL;
+@@ -2411,6 +2566,222 @@ static struct btf_kind_operations func_ops = {
+ 	.seq_show = btf_df_seq_show,
+ };
+ 
++static s32 btf_var_check_meta(struct btf_verifier_env *env,
++			      const struct btf_type *t,
++			      u32 meta_left)
++{
++	const struct btf_var *var;
++	u32 meta_needed = sizeof(*var);
++
++	if (meta_left < meta_needed) {
++		btf_verifier_log_basic(env, t,
++				       "meta_left:%u meta_needed:%u",
++				       meta_left, meta_needed);
++		return -EINVAL;
 +	}
 +
- 	if (!BPF_MAP_PTR(aux->map_state))
- 		bpf_map_ptr_store(aux, meta->map_ptr,
- 				  meta->map_ptr->unpriv_array);
++	if (btf_type_vlen(t)) {
++		btf_verifier_log_type(env, t, "vlen != 0");
++		return -EINVAL;
++	}
++
++	if (btf_type_kflag(t)) {
++		btf_verifier_log_type(env, t, "Invalid btf_info kind_flag");
++		return -EINVAL;
++	}
++
++	if (!t->name_off ||
++	    !__btf_name_valid(env->btf, t->name_off, true)) {
++		btf_verifier_log_type(env, t, "Invalid name");
++		return -EINVAL;
++	}
++
++	/* A var cannot be in type void */
++	if (!t->type || !BTF_TYPE_ID_VALID(t->type)) {
++		btf_verifier_log_type(env, t, "Invalid type_id");
++		return -EINVAL;
++	}
++
++	var = btf_type_var(t);
++	if (var->linkage != BTF_VAR_STATIC &&
++	    var->linkage != BTF_VAR_GLOBAL_ALLOCATED) {
++		btf_verifier_log_type(env, t, "Linkage not supported");
++		return -EINVAL;
++	}
++
++	btf_verifier_log_type(env, t, NULL);
++
++	return meta_needed;
++}
++
++static void btf_var_log(struct btf_verifier_env *env, const struct btf_type *t)
++{
++	const struct btf_var *var = btf_type_var(t);
++
++	btf_verifier_log(env, "type_id=%u linkage=%u", t->type, var->linkage);
++}
++
++static const struct btf_kind_operations var_ops = {
++	.check_meta		= btf_var_check_meta,
++	.resolve		= btf_var_resolve,
++	.check_member		= btf_df_check_member,
++	.check_kflag_member	= btf_df_check_kflag_member,
++	.log_details		= btf_var_log,
++	.seq_show		= btf_var_seq_show,
++};
++
++static s32 btf_datasec_check_meta(struct btf_verifier_env *env,
++				  const struct btf_type *t,
++				  u32 meta_left)
++{
++	const struct btf_var_secinfo *vsi;
++	u64 last_vsi_end_off = 0, sum = 0;
++	u32 i, meta_needed;
++
++	meta_needed = btf_type_vlen(t) * sizeof(*vsi);
++	if (meta_left < meta_needed) {
++		btf_verifier_log_basic(env, t,
++				       "meta_left:%u meta_needed:%u",
++				       meta_left, meta_needed);
++		return -EINVAL;
++	}
++
++	if (!btf_type_vlen(t)) {
++		btf_verifier_log_type(env, t, "vlen == 0");
++		return -EINVAL;
++	}
++
++	if (!t->size) {
++		btf_verifier_log_type(env, t, "size == 0");
++		return -EINVAL;
++	}
++
++	if (btf_type_kflag(t)) {
++		btf_verifier_log_type(env, t, "Invalid btf_info kind_flag");
++		return -EINVAL;
++	}
++
++	if (!t->name_off ||
++	    !btf_name_valid_section(env->btf, t->name_off)) {
++		btf_verifier_log_type(env, t, "Invalid name");
++		return -EINVAL;
++	}
++
++	btf_verifier_log_type(env, t, NULL);
++
++	for_each_vsi(i, t, vsi) {
++		/* A var cannot be in type void */
++		if (!vsi->type || !BTF_TYPE_ID_VALID(vsi->type)) {
++			btf_verifier_log_vsi(env, t, vsi,
++					     "Invalid type_id");
++			return -EINVAL;
++		}
++
++		if (vsi->offset < last_vsi_end_off || vsi->offset >= t->size) {
++			btf_verifier_log_vsi(env, t, vsi,
++					     "Invalid offset");
++			return -EINVAL;
++		}
++
++		if (!vsi->size || vsi->size > t->size) {
++			btf_verifier_log_vsi(env, t, vsi,
++					     "Invalid size");
++			return -EINVAL;
++		}
++
++		last_vsi_end_off = vsi->offset + vsi->size;
++		if (last_vsi_end_off > t->size) {
++			btf_verifier_log_vsi(env, t, vsi,
++					     "Invalid offset+size");
++			return -EINVAL;
++		}
++
++		btf_verifier_log_vsi(env, t, vsi, NULL);
++		sum += vsi->size;
++	}
++
++	if (t->size < sum) {
++		btf_verifier_log_type(env, t, "Invalid btf_info size");
++		return -EINVAL;
++	}
++
++	return meta_needed;
++}
++
++static int btf_datasec_resolve(struct btf_verifier_env *env,
++			       const struct resolve_vertex *v)
++{
++	const struct btf_var_secinfo *vsi;
++	struct btf *btf = env->btf;
++	u16 i;
++
++	for_each_vsi_from(i, v->next_member, v->t, vsi) {
++		u32 var_type_id = vsi->type, type_id, type_size = 0;
++		const struct btf_type *var_type = btf_type_by_id(env->btf,
++								 var_type_id);
++		if (!var_type || !btf_type_is_var(var_type)) {
++			btf_verifier_log_vsi(env, v->t, vsi,
++					     "Not a VAR kind member");
++			return -EINVAL;
++		}
++
++		if (!env_type_is_resolve_sink(env, var_type) &&
++		    !env_type_is_resolved(env, var_type_id)) {
++			env_stack_set_next_member(env, i + 1);
++			return env_stack_push(env, var_type, var_type_id);
++		}
++
++		type_id = var_type->type;
++		if (!btf_type_id_size(btf, &type_id, &type_size)) {
++			btf_verifier_log_vsi(env, v->t, vsi, "Invalid type");
++			return -EINVAL;
++		}
++
++		if (vsi->size < type_size) {
++			btf_verifier_log_vsi(env, v->t, vsi, "Invalid size");
++			return -EINVAL;
++		}
++	}
++
++	env_stack_pop_resolved(env, 0, 0);
++	return 0;
++}
++
++static void btf_datasec_log(struct btf_verifier_env *env,
++			    const struct btf_type *t)
++{
++	btf_verifier_log(env, "size=%u vlen=%u", t->size, btf_type_vlen(t));
++}
++
++static void btf_datasec_seq_show(const struct btf *btf,
++				 const struct btf_type *t, u32 type_id,
++				 void *data, u8 bits_offset,
++				 struct seq_file *m)
++{
++	const struct btf_var_secinfo *vsi;
++	const struct btf_type *var;
++	u32 i;
++
++	seq_printf(m, "section (\"%s\") = {", __btf_name_by_offset(btf, t->name_off));
++	for_each_vsi(i, t, vsi) {
++		var = btf_type_by_id(btf, vsi->type);
++		if (i)
++			seq_puts(m, ",");
++		btf_type_ops(var)->seq_show(btf, var, vsi->type,
++					    data + vsi->offset, bits_offset, m);
++	}
++	seq_puts(m, "}");
++}
++
++static const struct btf_kind_operations datasec_ops = {
++	.check_meta		= btf_datasec_check_meta,
++	.resolve		= btf_datasec_resolve,
++	.check_member		= btf_df_check_member,
++	.check_kflag_member	= btf_df_check_kflag_member,
++	.log_details		= btf_datasec_log,
++	.seq_show		= btf_datasec_seq_show,
++};
++
+ static int btf_func_proto_check(struct btf_verifier_env *env,
+ 				const struct btf_type *t)
+ {
+@@ -2542,6 +2913,8 @@ static const struct btf_kind_operations * const kind_ops[NR_BTF_KINDS] = {
+ 	[BTF_KIND_RESTRICT] = &modifier_ops,
+ 	[BTF_KIND_FUNC] = &func_ops,
+ 	[BTF_KIND_FUNC_PROTO] = &func_proto_ops,
++	[BTF_KIND_VAR] = &var_ops,
++	[BTF_KIND_DATASEC] = &datasec_ops,
+ };
+ 
+ static s32 btf_check_meta(struct btf_verifier_env *env,
+@@ -2622,13 +2995,17 @@ static bool btf_resolve_valid(struct btf_verifier_env *env,
+ 	if (!env_type_is_resolved(env, type_id))
+ 		return false;
+ 
+-	if (btf_type_is_struct(t))
++	if (btf_type_is_struct(t) || btf_type_is_datasec(t))
+ 		return !btf->resolved_ids[type_id] &&
+-			!btf->resolved_sizes[type_id];
++		       !btf->resolved_sizes[type_id];
+ 
+-	if (btf_type_is_modifier(t) || btf_type_is_ptr(t)) {
++	if (btf_type_is_modifier(t) || btf_type_is_ptr(t) ||
++	    btf_type_is_var(t)) {
+ 		t = btf_type_id_resolve(btf, &type_id);
+-		return t && !btf_type_is_modifier(t);
++		return t &&
++		       !btf_type_is_modifier(t) &&
++		       !btf_type_is_var(t) &&
++		       !btf_type_is_datasec(t);
+ 	}
+ 
+ 	if (btf_type_is_array(t)) {
 -- 
 2.17.1
 
