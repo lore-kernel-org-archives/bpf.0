@@ -2,119 +2,160 @@ Return-Path: <SRS0=Zphp=SL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FBC1C10F0E
-	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 20:50:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88445C10F0E
+	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 21:09:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EE3962084B
-	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 20:50:28 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="GuwEaEV7";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="f8I/u/0o"
+	by mail.kernel.org (Postfix) with ESMTP id 592EF20830
+	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 21:09:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726517AbfDIUu2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Apr 2019 16:50:28 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:48654 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726337AbfDIUu2 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 9 Apr 2019 16:50:28 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x39Ko27i002128;
-        Tue, 9 Apr 2019 13:50:04 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=7fwmMTiDsqqCdLxmc70RKXBRv/Gb7Z5WQYJHsy7PEyw=;
- b=GuwEaEV7G363RSxgqXatqhgd2+7CDdrCup7YFZdgYNFajoCby6wcJpVJ3RCD0AlQ1XT5
- n4NFR6bGHSELvTyH0JkXpVexB2e3jEsu9F8bNiObdJVFy2hwCBH8HD4KPGpTZ+bE3mQy
- 59hnbrrOS3T/9Yb4PPRqRE2SkmjWzoMN9Uc= 
-Received: from maileast.thefacebook.com ([199.201.65.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2rrynxrv70-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 09 Apr 2019 13:50:03 -0700
-Received: from frc-hub04.TheFacebook.com (2620:10d:c021:18::174) by
- frc-hub06.TheFacebook.com (2620:10d:c021:18::176) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1713.5; Tue, 9 Apr 2019 13:50:03 -0700
-Received: from NAM01-BY2-obe.outbound.protection.outlook.com (192.168.183.28)
- by o365-in.thefacebook.com (192.168.177.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
- via Frontend Transport; Tue, 9 Apr 2019 13:50:03 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector1-fb-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7fwmMTiDsqqCdLxmc70RKXBRv/Gb7Z5WQYJHsy7PEyw=;
- b=f8I/u/0ofQqUXpa0UrlWLNi0o15ULjMKqhrVR16B/fqEGO2lUVYrlmfti80ZDEMArG4s7DznpeSo/kpPDF15kzKMyvvuatfdq9e4RjO22FGv2+dxY6itfV0YvUPPoLxy4FAEMXAo65Z/rEjXpMVhT3MtKKY8f394RQe6/45aqE0=
-Received: from MWHPR15MB1790.namprd15.prod.outlook.com (10.174.255.19) by
- MWHPR15MB1486.namprd15.prod.outlook.com (10.173.235.7) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1771.21; Tue, 9 Apr 2019 20:50:01 +0000
-Received: from MWHPR15MB1790.namprd15.prod.outlook.com
- ([fe80::d13:8c3d:9110:b44a]) by MWHPR15MB1790.namprd15.prod.outlook.com
- ([fe80::d13:8c3d:9110:b44a%8]) with mapi id 15.20.1771.021; Tue, 9 Apr 2019
- 20:50:01 +0000
-From:   Martin Lau <kafai@fb.com>
-To:     Stanislav Fomichev <sdf@google.com>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>
-Subject: Re: [PATCH bpf-next v4 1/3] bpf: support input __sk_buff context in
- BPF_PROG_TEST_RUN
-Thread-Topic: [PATCH bpf-next v4 1/3] bpf: support input __sk_buff context in
- BPF_PROG_TEST_RUN
-Thread-Index: AQHU7wT5Gl8oMT/IrU21ycO0HKdZLaY0TYcA
-Date:   Tue, 9 Apr 2019 20:50:01 +0000
-Message-ID: <20190409204954.z567zman56o3yzsg@kafai-mbp.dhcp.thefacebook.com>
-References: <20190409184911.97485-1-sdf@google.com>
-In-Reply-To: <20190409184911.97485-1-sdf@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: MWHPR02CA0010.namprd02.prod.outlook.com
- (2603:10b6:300:4b::20) To MWHPR15MB1790.namprd15.prod.outlook.com
- (2603:10b6:301:4e::19)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [2620:10d:c090:200::3:8cf5]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f7ebc67e-1e2a-4a4c-5c68-08d6bd2cef00
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600139)(711020)(4605104)(2017052603328)(7193020);SRVR:MWHPR15MB1486;
-x-ms-traffictypediagnostic: MWHPR15MB1486:
-x-microsoft-antispam-prvs: <MWHPR15MB14869763EDAA770D6790F447D52D0@MWHPR15MB1486.namprd15.prod.outlook.com>
-x-forefront-prvs: 000227DA0C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(979002)(376002)(366004)(346002)(39860400002)(396003)(136003)(189003)(199004)(71190400001)(446003)(476003)(53936002)(97736004)(14454004)(102836004)(46003)(6486002)(6506007)(11346002)(386003)(76176011)(186003)(4326008)(1076003)(86362001)(71200400001)(6246003)(478600001)(558084003)(316002)(6116002)(54906003)(25786009)(52116002)(9686003)(81166006)(7736002)(81156014)(8936002)(6512007)(229853002)(6436002)(6916009)(305945005)(68736007)(105586002)(8676002)(99286004)(2906002)(106356001)(256004)(5660300002)(486006)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR15MB1486;H:MWHPR15MB1790.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: XWM9IkoB6OZUJ67nnOmq+ah3nQd7OiztwfZdS47F6OoparMd+MCatp09bKiIdNGZ+D33Fu4X+Dy1CIyiVnvO7LWQ55oHyzcTNsC3fZcrDgdRsp6VJXMFhB61j2bho5YpbIId7fuamkjPVJ+Es+A4GwhV7e3aZvVZyYtMdOWBBOy8Dj9rKZBC4tK0Yw2SI96KyHudwYeTFsaXDaqFQgTowhKkabB+0g85m57Hy3vTiICKXC7RlNd/i+lPmKiUcwRZSLMMr8+vgTks6kYtMCJoT5tcD1os5+jPZWUQZKX7Mef1meTLRQM8DTPRNj6J+PmArVWCbaMeGNJLBi2dV3OxyaXs5skQSkQZZEpgcGdoOEc5EuPobnNljxFAD+RNOIaqPVKN8TbqoPpte5nNbFjqQJVYGnWWGkh4q+UeFDdHlwI=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <BB612F3ACC45794889D11B25BC5EBBD7@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: f7ebc67e-1e2a-4a4c-5c68-08d6bd2cef00
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Apr 2019 20:50:01.0787
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR15MB1486
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-09_11:,,
- signatures=0
-X-Proofpoint-Spam-Reason: safe
-X-FB-Internal: Safe
+        id S1726479AbfDIVJa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Apr 2019 17:09:30 -0400
+Received: from www62.your-server.de ([213.133.104.62]:49420 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726333AbfDIVJa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Apr 2019 17:09:30 -0400
+Received: from [178.197.248.24] (helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hDxzd-0008HH-TN; Tue, 09 Apr 2019 23:09:22 +0200
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, ast@kernel.org, joe@wand.net.nz,
+        yhs@fb.com, andrii.nakryiko@gmail.com, kafai@fb.com,
+        jannh@google.com, Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH bpf-next v6 00/16] BPF support for global data
+Date:   Tue,  9 Apr 2019 23:08:54 +0200
+Message-Id: <20190409210910.32048-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.9.5
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.3/25414/Tue Apr  9 09:53:33 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 09, 2019 at 11:49:09AM -0700, Stanislav Fomichev wrote:
-> Add new set of arguments to bpf_attr for BPF_PROG_TEST_RUN:
-> * ctx_in/ctx_size_in - input context
-> * ctx_out/ctx_size_out - output context
-Acked-by: Martin KaFai Lau <kafai@fb.com>
+This series is a major rework of previously submitted libbpf
+patches [0] in order to add global data support for BPF. The
+kernel has been extended to add proper infrastructure that allows
+for full .bss/.data/.rodata sections on BPF loader side based
+upon feedback from LPC discussions [1]. Latter support is then
+also added into libbpf in this series which allows for more
+natural C-like programming of BPF programs. For more information
+on loader, please refer to 'bpf, libbpf: support global data/bss/
+rodata sections' patch in this series.
+
+Thanks a lot!
+
+  v5 -> v6:
+   - Removed synchronize_rcu() from map freeze (Jann)
+   - Rest as-is
+  v4 -> v5:
+   - Removed index selection again for ldimm64 (Alexei)
+   - Adapted related test cases and added new ones to test
+     rejection of off != 0
+  v3 -> v4:
+   - Various fixes in BTF verification e.g. to disallow
+     Var and DataSec to be an intermediate type during resolve (Martin)
+   - More BTF test cases added
+   - Few cleanups in key-less BTF commit (Martin)
+   - Bump libbpf minor version from 2 to 3
+   - Renamed and simplified read-only locking
+   - Various minor improvements all over the place
+  v2 -> v3:
+   - Implement BTF support in kernel, libbpf, bpftool, add tests
+   - Fix idx + off conversion (Andrii)
+   - Document lower / higher bits for direct value access (Andrii)
+   - Add tests with small value size (Andrii)
+   - Add index selection into ldimm64 (Andrii)
+   - Fix missing fdput() (Jann)
+   - Reject invalid flags in BPF_F_*_PROG (Jakub)
+   - Complete rework of libbpf support, includes:
+    - Add objname to map name (Stanislav)
+    - Make .rodata map full read-only after setup (Andrii)
+    - Merge relocation handling into single one (Andrii)
+    - Store global maps into obj->maps array (Andrii, Alexei)
+    - Debug message when skipping section (Andrii)
+    - Reject non-static global data till we have
+      semantics for sharing them (Yonghong, Andrii, Alexei)
+    - More test cases and completely reworked prog test (Alexei)
+   - Fixes, cleanups, etc all over the set
+   - Not yet addressed:
+    - Make BTF mandatory for these maps (Alexei)
+    -> Waiting till BTF support for these lands first
+  v1 -> v2:
+    - Instead of 32-bit static data, implement full global
+      data support (Alexei)
+
+  [0] https://patchwork.ozlabs.org/cover/1040290/
+  [1] http://vger.kernel.org/lpc-bpf2018.html#session-3
+
+Daniel Borkmann (14):
+  bpf: implement lookup-free direct value access for maps
+  bpf: do not retain flags that are not tied to map lifetime
+  bpf: add program side {rd, wr}only support for maps
+  bpf: add syscall side map freeze support
+  bpf: allow . char as part of the object name
+  bpf: add specification for BTF Var and DataSec kinds
+  bpf: kernel side support for BTF Var and DataSec
+  bpf: allow for key-less BTF in array map
+  bpf: sync {btf, bpf}.h uapi header from tools infrastructure
+  bpf, libbpf: support global data/bss/rodata sections
+  bpf, libbpf: add support for BTF Var and DataSec
+  bpf: bpftool support for dumping data/bss/rodata sections
+  bpf, selftest: test {rd, wr}only flags and direct value access
+  bpf, selftest: add test cases for BTF Var and DataSec
+
+Joe Stringer (2):
+  bpf, libbpf: refactor relocation handling
+  bpf, selftest: test global data/bss/rodata sections
+
+ Documentation/bpf/btf.rst                     |  57 ++
+ include/linux/bpf.h                           |  38 +-
+ include/linux/bpf_verifier.h                  |   4 +
+ include/linux/btf.h                           |   1 +
+ include/uapi/linux/bpf.h                      |  20 +-
+ include/uapi/linux/btf.h                      |  32 +-
+ kernel/bpf/arraymap.c                         |  53 +-
+ kernel/bpf/btf.c                              | 419 ++++++++++-
+ kernel/bpf/core.c                             |   3 +-
+ kernel/bpf/disasm.c                           |   5 +-
+ kernel/bpf/hashtab.c                          |   6 +-
+ kernel/bpf/local_storage.c                    |   6 +-
+ kernel/bpf/lpm_trie.c                         |   3 +-
+ kernel/bpf/queue_stack_maps.c                 |   6 +-
+ kernel/bpf/syscall.c                          | 131 +++-
+ kernel/bpf/verifier.c                         | 132 +++-
+ tools/bpf/bpftool/btf_dumper.c                |  59 ++
+ tools/bpf/bpftool/map.c                       |  10 +-
+ tools/bpf/bpftool/xlated_dumper.c             |   3 +
+ tools/include/linux/filter.h                  |  21 +-
+ tools/include/uapi/linux/bpf.h                |  20 +-
+ tools/include/uapi/linux/btf.h                |  32 +-
+ tools/lib/bpf/Makefile                        |   2 +-
+ tools/lib/bpf/bpf.c                           |  10 +
+ tools/lib/bpf/bpf.h                           |   1 +
+ tools/lib/bpf/btf.c                           |  97 ++-
+ tools/lib/bpf/btf.h                           |   3 +
+ tools/lib/bpf/libbpf.c                        | 546 +++++++++++---
+ tools/lib/bpf/libbpf.h                        |   5 +
+ tools/lib/bpf/libbpf.map                      |   7 +
+ tools/testing/selftests/bpf/bpf_helpers.h     |   8 +-
+ .../selftests/bpf/prog_tests/global_data.c    | 157 +++++
+ .../selftests/bpf/progs/test_global_data.c    | 106 +++
+ tools/testing/selftests/bpf/test_btf.c        | 665 +++++++++++++++++-
+ tools/testing/selftests/bpf/test_verifier.c   |  51 +-
+ .../selftests/bpf/verifier/array_access.c     | 159 +++++
+ .../bpf/verifier/direct_value_access.c        | 347 +++++++++
+ 37 files changed, 3018 insertions(+), 207 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/global_data.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_global_data.c
+ create mode 100644 tools/testing/selftests/bpf/verifier/direct_value_access.c
+
+-- 
+2.17.1
+
