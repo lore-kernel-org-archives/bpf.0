@@ -1,122 +1,111 @@
-Return-Path: <SRS0=xPz+=SK=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=Zphp=SL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE668C10F13
-	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 21:31:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10ABDC10F0E
+	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 05:27:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 68AEE20857
-	for <bpf@archiver.kernel.org>; Mon,  8 Apr 2019 21:31:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BDDA220833
+	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 05:27:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="kqW0n6h4";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="Cm2tcnVx"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="OH2AKFoF";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="PwVDY/0F"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726826AbfDHVbe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Apr 2019 17:31:34 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:59840 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726741AbfDHVbd (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 8 Apr 2019 17:31:33 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x38LSTYL025260;
-        Mon, 8 Apr 2019 14:30:32 -0700
+        id S1727256AbfDIF1s (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Apr 2019 01:27:48 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:34536 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727178AbfDIF1s (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 9 Apr 2019 01:27:48 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x395RLnB012460;
+        Mon, 8 Apr 2019 22:27:21 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : references : in-reply-to : content-type : content-id
  : content-transfer-encoding : mime-version; s=facebook;
- bh=T23SFj+yPeCOZ6q/Sxi2nEla/t7b5lEV11qQHtBamq8=;
- b=kqW0n6h4P8yMNOF5jfStCwhrCOigQluPrVk6lKG6sOhC4sKg4c75cq/VcLwHRTKW1Vcu
- kseHyHwkGGSC3jSZv/nu6r/S5EKLGwxwt6u1VFvOqHKT8PJGxekYRqhGnIGTr34lphbD
- m07PxSXw/Dd0Vx45BRejmO7Go6fU88rj/sw= 
-Received: from mail.thefacebook.com ([199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2rraew12da-2
+ bh=IpyJosn9lixr//jA0K5I8fLPLNo8MkD3tPTeVn5iTW0=;
+ b=OH2AKFoF3Vamc/e1J1ergC6Xe2JuR2WjUp5MT0NKRlyWGoKR5OpZNgd+J/pEeyKkz3+4
+ Q1UuirCKDZIWdub++lVeNZu18Tynujru0UxlYniwcB/w0EMFLbu+JdGqy7vRtIAyg6jM
+ 7w0sAzNgAzry6YeFr7LN+hTte317spU3VMc= 
+Received: from maileast.thefacebook.com ([199.201.65.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2rrdhe9ect-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 08 Apr 2019 14:30:32 -0700
-Received: from prn-mbx06.TheFacebook.com (2620:10d:c081:6::20) by
- prn-hub05.TheFacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
+        Mon, 08 Apr 2019 22:27:21 -0700
+Received: from frc-hub03.TheFacebook.com (2620:10d:c021:18::173) by
+ frc-hub06.TheFacebook.com (2620:10d:c021:18::176) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1713.5; Mon, 8 Apr 2019 14:30:32 -0700
-Received: from prn-hub01.TheFacebook.com (2620:10d:c081:35::125) by
- prn-mbx06.TheFacebook.com (2620:10d:c081:6::20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1713.5; Mon, 8 Apr 2019 14:30:31 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (192.168.54.28)
- by o365-in.thefacebook.com (192.168.16.25) with Microsoft SMTP Server
+ 15.1.1713.5; Mon, 8 Apr 2019 22:27:20 -0700
+Received: from NAM01-BY2-obe.outbound.protection.outlook.com (192.168.183.28)
+ by o365-in.thefacebook.com (192.168.177.73) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
- via Frontend Transport; Mon, 8 Apr 2019 14:30:31 -0700
+ via Frontend Transport; Mon, 8 Apr 2019 22:27:20 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
  s=selector1-fb-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=T23SFj+yPeCOZ6q/Sxi2nEla/t7b5lEV11qQHtBamq8=;
- b=Cm2tcnVxEzkrlZNedE9OSSt2pVwwnKrFvyfa1nwIM2ZTBNkv+++7DXu+w6ImJeWd8Eq3StBfqJLti7Z+1zCbFy0oI/mCrgxfzZjywgbQB8c7jbbrRbpGSoxQeaHUO/ADEAAOqxm2eNC6KoV0/NQvT4IyjIn/U+Pn32iKvslg4D0=
-Received: from MWHPR15MB1262.namprd15.prod.outlook.com (10.175.3.12) by
- MWHPR15MB1630.namprd15.prod.outlook.com (10.175.135.140) with Microsoft SMTP
+ bh=IpyJosn9lixr//jA0K5I8fLPLNo8MkD3tPTeVn5iTW0=;
+ b=PwVDY/0FBL7iXdzpL56nCg2aDQLc8CCmhR7G/dA04qRVLRBjwrLfKdVKPddjz4m876eRvd+D8MKRVW3n0l0kD9GmIjSEz18wxGsWr43NwwyFCOogLjkdRjqdke4Jyz9nAdjevmF1LQMUHp/bdT8BxGvVu0P2AUaCuC5YgiuedHY=
+Received: from MWHPR15MB1790.namprd15.prod.outlook.com (10.174.255.19) by
+ MWHPR15MB1184.namprd15.prod.outlook.com (10.175.2.138) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1771.16; Mon, 8 Apr 2019 21:30:29 +0000
-Received: from MWHPR15MB1262.namprd15.prod.outlook.com
- ([fe80::d08:5fd8:f1b5:5840]) by MWHPR15MB1262.namprd15.prod.outlook.com
- ([fe80::d08:5fd8:f1b5:5840%4]) with mapi id 15.20.1771.014; Mon, 8 Apr 2019
- 21:30:29 +0000
-From:   Matt Mullins <mmullins@fb.com>
-To:     "josef@toxicpanda.com" <josef@toxicpanda.com>
-CC:     Song Liu <songliubraving@fb.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ 15.20.1771.16; Tue, 9 Apr 2019 05:27:18 +0000
+Received: from MWHPR15MB1790.namprd15.prod.outlook.com
+ ([fe80::d13:8c3d:9110:b44a]) by MWHPR15MB1790.namprd15.prod.outlook.com
+ ([fe80::d13:8c3d:9110:b44a%8]) with mapi id 15.20.1771.021; Tue, 9 Apr 2019
+ 05:27:18 +0000
+From:   Martin Lau <kafai@fb.com>
+To:     Stanislav Fomichev <sdf@google.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Andrew Hall <hall@fb.com>, "axboe@kernel.dk" <axboe@kernel.dk>,
-        "mchehab+samsung@kernel.org" <mchehab+samsung@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Martin Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
         "davem@davemloft.net" <davem@davemloft.net>,
-        "nbd@other.debian.org" <nbd@other.debian.org>,
-        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>
-Subject: Re: [PATCH bpf-next v2 2/5] nbd: trace sending nbd requests
-Thread-Topic: [PATCH bpf-next v2 2/5] nbd: trace sending nbd requests
-Thread-Index: AQHU7AsxHZ52PwHfXkyVeGXr0eWfqKYv1JsAgAL334A=
-Date:   Mon, 8 Apr 2019 21:30:29 +0000
-Message-ID: <370f1a299dba40bfe31459293b72d89ba0fd72c4.camel@fb.com>
-References: <20190405235506.29236-1-mmullins@fb.com>
-         <20190405235506.29236-3-mmullins@fb.com>
-         <20190407001045.vbmwrzaokqb4ufww@MacBook-Pro-91.local>
-In-Reply-To: <20190407001045.vbmwrzaokqb4ufww@MacBook-Pro-91.local>
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>
+Subject: Re: [PATCH bpf-next v2 1/3] bpf: support input __sk_buff context in
+ BPF_PROG_TEST_RUN
+Thread-Topic: [PATCH bpf-next v2 1/3] bpf: support input __sk_buff context in
+ BPF_PROG_TEST_RUN
+Thread-Index: AQHU7iTFVkTXAz8v906Z0KMDyxwwG6YzTX6A
+Date:   Tue, 9 Apr 2019 05:27:17 +0000
+Message-ID: <20190409052715.fwd3wmabo6yssjgv@kafai-mbp.dhcp.thefacebook.com>
+References: <20190408160432.151478-1-sdf@google.com>
+In-Reply-To: <20190408160432.151478-1-sdf@google.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-x-originating-ip: [2620:10d:c090:200::3:82f0]
+x-clientproxiedby: MWHPR15CA0047.namprd15.prod.outlook.com
+ (2603:10b6:300:ad::33) To MWHPR15MB1790.namprd15.prod.outlook.com
+ (2603:10b6:301:4e::19)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2620:10d:c090:180::bb46]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5c7dac6d-10c8-4022-e819-08d6bc696c6b
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600139)(711020)(4605104)(2017052603328)(7193020);SRVR:MWHPR15MB1630;
-x-ms-traffictypediagnostic: MWHPR15MB1630:
-x-microsoft-antispam-prvs: <MWHPR15MB163087252BFB3E1DAB9A4FB5B02C0@MWHPR15MB1630.namprd15.prod.outlook.com>
-x-forefront-prvs: 0001227049
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(366004)(39860400002)(376002)(396003)(346002)(189003)(199004)(25786009)(305945005)(5660300002)(71190400001)(71200400001)(86362001)(256004)(14444005)(102836004)(53936002)(6436002)(316002)(6116002)(36756003)(5640700003)(486006)(2906002)(54906003)(476003)(2616005)(6486002)(97736004)(118296001)(6512007)(81156014)(8676002)(1730700003)(81166006)(7736002)(446003)(99286004)(229853002)(11346002)(6916009)(186003)(50226002)(76176011)(2501003)(14454004)(6506007)(6246003)(478600001)(8936002)(68736007)(106356001)(105586002)(4326008)(7416002)(2351001)(46003)(99106002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR15MB1630;H:MWHPR15MB1262.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+x-ms-office365-filtering-correlation-id: 3e462c5b-f1bc-455d-ffeb-08d6bcac07e3
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600139)(711020)(4605104)(2017052603328)(7193020);SRVR:MWHPR15MB1184;
+x-ms-traffictypediagnostic: MWHPR15MB1184:
+x-microsoft-antispam-prvs: <MWHPR15MB11848AD36324DFB009E62390D52D0@MWHPR15MB1184.namprd15.prod.outlook.com>
+x-forefront-prvs: 000227DA0C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(136003)(376002)(39860400002)(366004)(346002)(199004)(189003)(6436002)(76176011)(6246003)(486006)(6116002)(6486002)(53936002)(6916009)(99286004)(229853002)(1076003)(9686003)(6512007)(5660300002)(97736004)(46003)(52116002)(7736002)(86362001)(14444005)(71200400001)(71190400001)(256004)(14454004)(305945005)(6506007)(102836004)(186003)(81156014)(446003)(68736007)(11346002)(4326008)(8676002)(476003)(8936002)(316002)(2906002)(81166006)(106356001)(105586002)(478600001)(25786009)(54906003)(386003);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR15MB1184;H:MWHPR15MB1790.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: fb.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: XQ8gBQDIXG3xsrc7ENG7HYS72gq32Ja73h/pU0+TSALweb0Um5EYt3hDR8shu2SgZhhLo1Eep1NvOnSgcRKSumQwRUJViaNDUwtQ7P8EE4HuBRiFAkDBLSSwMwnj/RhwAP0YNg6t/0pBfB/9vX2ODH50pxoQCLrJoxN42V+/ieTuWanq3JhAH4YZr+KqzGthWu6yZRuIXrR1xd/Se/b/KTcpewXG1eJqLpaxcV7akxJf17XZ3v9glMb5t0ADsYez4hqpg7KRhj7SiHa2NSQ9a0lMyRBAJ7gKJKZA7Q/97dkXLNhxNUncPH64bjWwgct6xsqZmpVXGnsef8pQiYGJ3yPtKd0wIGw1RRWATxaPLYhGSqtI24h28yejaBZahMk/D62dFGMWrSL8IdhBr1FdaOm3nWBL6upl/oypiRHbFUM=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <80E294868D891A46B11C46CF5A75AD40@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: base64
+x-microsoft-antispam-message-info: wHK7NpZh2zCRaLob5/VencLUGtSC+yNT7TFmowLKT+EVKRzWMcKzQQvK/egvJ9jI38nt9leWlf+8eq5m7oOFhurYPfXsnoNjXZO94pVnf3svEDp8d1bee4M9pQrc1ngagEAHweTYIoTQ+i5EP6Z8JUnYhLUnEogEEP6bsmRc+OJKBLHXcxYOGq6R9H4cZOPNDEty52dqUJVlmSzguxL5s0ClqxdheFJIr7QWQTD8qy1Ve1i8xFW0sP2vwS6TWbMry8gESyre2o463Ncmn65kV52LUX47atKffQoSSvzxSLYH7gEJ1ypmVvmPUX2A2OLLvaAL+qNyp39exWAmpw0nhxVptVrsXJ/nm3Dyvvt+ieyAhfFINtVJOEDCTSdySQG+Qp524Rf5Sm+Lzo1/AoRo9zA3B078kZP3EqAW9bsHjog=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <A784793E4BA7754CA20E930BA75E7A64@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c7dac6d-10c8-4022-e819-08d6bc696c6b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Apr 2019 21:30:29.4751
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3e462c5b-f1bc-455d-ffeb-08d6bcac07e3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Apr 2019 05:27:18.0560
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR15MB1630
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR15MB1184
 X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-08_09:,,
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-09_03:,,
  signatures=0
 X-Proofpoint-Spam-Reason: safe
 X-FB-Internal: Safe
@@ -125,48 +114,257 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-T24gU2F0LCAyMDE5LTA0LTA2IGF0IDIwOjEwIC0wNDAwLCBKb3NlZiBCYWNpayB3cm90ZToNCj4g
-T24gRnJpLCBBcHIgMDUsIDIwMTkgYXQgMDQ6NTU6MDNQTSAtMDcwMCwgTWF0dCBNdWxsaW5zIHdy
-b3RlOg0KPiA+IFRoaXMgYWRkcyBhIHRyYWNlcG9pbnQgdGhhdCBjYW4gYm90aCBvYnNlcnZlIHRo
-ZSBuYmQgcmVxdWVzdCBiZWluZyBzZW50DQo+ID4gdG8gdGhlIHNlcnZlciwgYXMgd2VsbCBhcyBt
-b2RpZnkgdGhhdCByZXF1ZXN0ICwgZS5nLiwgc2V0dGluZyBhIGZsYWcgaW4NCj4gPiB0aGUgcmVx
-dWVzdCB0aGF0IHdpbGwgY2F1c2UgdGhlIHNlcnZlciB0byBjb2xsZWN0IGRldGFpbGVkIHRyYWNp
-bmcgZGF0YS4NCj4gPiANCj4gPiBUaGUgc3RydWN0IHJlcXVlc3QgKiBiZWluZyBoYW5kbGVkIGlz
-IGluY2x1ZGVkIHRvIHBlcm1pdCBjb3JyZWxhdGlvbg0KPiA+IHdpdGggdGhlIGJsb2NrIHRyYWNl
-cG9pbnRzLg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IE1hdHQgTXVsbGlucyA8bW11bGxpbnNA
-ZmIuY29tPg0KPiA+IC0tLQ0KPiA+ICBNQUlOVEFJTkVSUyAgICAgICAgICAgICAgICB8ICAxICsN
-Cj4gPiAgZHJpdmVycy9ibG9jay9uYmQuYyAgICAgICAgfCAgNSArKysrDQo+ID4gIGluY2x1ZGUv
-dHJhY2UvZXZlbnRzL25iZC5oIHwgNTYgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysNCj4gPiAgMyBmaWxlcyBjaGFuZ2VkLCA2MiBpbnNlcnRpb25zKCspDQo+ID4gIGNyZWF0
-ZSBtb2RlIDEwMDY0NCBpbmNsdWRlL3RyYWNlL2V2ZW50cy9uYmQuaA0KPiA+IA0KPiA+IGRpZmYg
-LS1naXQgYS9NQUlOVEFJTkVSUyBiL01BSU5UQUlORVJTDQo+ID4gaW5kZXggZTE3ZWJmNzBiNTQ4
-Li42ZGI1ODNkMmIwZWEgMTAwNjQ0DQo+ID4gLS0tIGEvTUFJTlRBSU5FUlMNCj4gPiArKysgYi9N
-QUlOVEFJTkVSUw0KPiA+IEBAIC0xMDczNyw2ICsxMDczNyw3IEBAIEw6CWxpbnV4LWJsb2NrQHZn
-ZXIua2VybmVsLm9yZw0KPiA+ICBMOgluYmRAb3RoZXIuZGViaWFuLm9yZw0KPiA+ICBGOglEb2N1
-bWVudGF0aW9uL2Jsb2NrZGV2L25iZC50eHQNCj4gPiAgRjoJZHJpdmVycy9ibG9jay9uYmQuYw0K
-PiA+ICtGOglpbmNsdWRlL3RyYWNlL2V2ZW50cy9uYmQuaA0KPiA+ICBGOglpbmNsdWRlL3VhcGkv
-bGludXgvbmJkLmgNCj4gPiAgDQo+ID4gIE5FVFdPUksgRFJPUCBNT05JVE9SDQo+ID4gZGlmZiAt
-LWdpdCBhL2RyaXZlcnMvYmxvY2svbmJkLmMgYi9kcml2ZXJzL2Jsb2NrL25iZC5jDQo+ID4gaW5k
-ZXggOTBiYTlmNGMwM2YzLi43MzkzZDA0ZDI1NWMgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9i
-bG9jay9uYmQuYw0KPiA+ICsrKyBiL2RyaXZlcnMvYmxvY2svbmJkLmMNCj4gPiBAQCAtNDQsNiAr
-NDQsOSBAQA0KPiA+ICAjaW5jbHVkZSA8bGludXgvbmJkLW5ldGxpbmsuaD4NCj4gPiAgI2luY2x1
-ZGUgPG5ldC9nZW5ldGxpbmsuaD4NCj4gPiAgDQo+ID4gKyNkZWZpbmUgQ1JFQVRFX1RSQUNFX1BP
-SU5UUw0KPiA+ICsjaW5jbHVkZSA8dHJhY2UvZXZlbnRzL25iZC5oPg0KPiA+ICsNCj4gPiAgc3Rh
-dGljIERFRklORV9JRFIobmJkX2luZGV4X2lkcik7DQo+ID4gIHN0YXRpYyBERUZJTkVfTVVURVgo
-bmJkX2luZGV4X211dGV4KTsNCj4gPiAgc3RhdGljIGludCBuYmRfdG90YWxfZGV2aWNlcyA9IDA7
-DQo+ID4gQEAgLTUyNiw2ICs1MjksOCBAQCBzdGF0aWMgaW50IG5iZF9zZW5kX2NtZChzdHJ1Y3Qg
-bmJkX2RldmljZSAqbmJkLCBzdHJ1Y3QgbmJkX2NtZCAqY21kLCBpbnQgaW5kZXgpDQo+ID4gIAlo
-YW5kbGUgPSBuYmRfY21kX2hhbmRsZShjbWQpOw0KPiA+ICAJbWVtY3B5KHJlcXVlc3QuaGFuZGxl
-LCAmaGFuZGxlLCBzaXplb2YoaGFuZGxlKSk7DQo+ID4gIA0KPiA+ICsJdHJhY2VfbmJkX3NlbmRf
-cmVxdWVzdCgmcmVxdWVzdCwgbmJkLT5pbmRleCwgYmxrX21xX3JxX2Zyb21fcGR1KGNtZCkpOw0K
-PiA+ICsNCj4gDQo+IEp1c3QgdXNlIHRoZSBoYW5kbGUsIG5vdCB0aGUgcG9pbnRlci4gIFRoYW5r
-cywNCg0KQXNzdW1pbmcgeW91J3JlIHRhbGtpbmcgYWJvdXQgdGhlIHN0cnVjdCByZXF1ZXN0ICos
-IHdlIGFyZSB0cmFjaW5nDQp0aGluZ3MgdGhyb3VnaCBmcm9tIGJsa19tcV9zdGFydF9yZXF1ZXN0
-LCB3aGljaCBlbWl0cyB0cmFjZXBvaW50cyBsaWtlDQoNCkRFRklORV9FVkVOVChibG9ja19ycSwg
-YmxvY2tfcnFfaXNzdWUsDQoJVFBfUFJPVE8oc3RydWN0IHJlcXVlc3RfcXVldWUgKnEsIHN0cnVj
-dCByZXF1ZXN0ICpycSksDQoNCldlIG5lZWQgYXQgbGVhc3Qgb25lIG9mIHRoZSB0cmFjZXBvaW50
-cyB0byBvYnNlcnZlIGEgY29ycmVsYXRpb24NCmJldHdlZW4gTkJEIGhhbmRsZSAoaW4gdGhpcyBj
-YXNlLCBlbWJlZGRlZCBpbiB0aGUgc3RydWN0IG5iZF9yZXF1ZXN0KQ0KYW5kIHRoZSBzdHJ1Y3Qg
-cmVxdWVzdC4gIFRoYXQgc2FpZCwgSSBkb24ndCBhY3R1YWxseSBtaW5kIGlmIHRoZXkncmUNCnRo
-ZSBoYXNoZWQga2luZCBvZiBwb2ludGVycywgYXMgbG9uZyBhcyB0aGUgcmVzdCBvZiB0aGUgYmxv
-Y2sNCnRyYWNlcG9pbnRzIGRvIHRoZSBzYW1lLi4uDQo=
+On Mon, Apr 08, 2019 at 09:04:30AM -0700, Stanislav Fomichev wrote:
+> Add new set of arguments to bpf_attr for BPF_PROG_TEST_RUN:
+> * ctx_in/ctx_size_in - input context
+> * ctx_out/ctx_size_out - output context
+>=20
+> The intended use case is to pass some meta data to the test runs that
+> operate on skb (this has being brought up on recent LPC).
+>=20
+> For programs that use bpf_prog_test_run_skb, support __sk_buff input and
+> output. Initially, from input __sk_buff, copy _only_ cb and priority into
+> skb, all other non-zero fields are prohibited (with EINVAL).
+> If the user has set ctx_out/ctx_size_out, copy the potentially modified
+> __sk_buff back to the userspace.
+>=20
+> We require all fields of input __sk_buff except the ones we explicitly
+> support to be set to zero. The expectation is that in the future we might
+> add support for more fields and we want to fail explicitly if the user
+> runs the program on the kernel where we don't yet support them.
+>=20
+> The API is intentionally vague (i.e. we don't explicitly add __sk_buff
+> to bpf_attr, but ctx_in) to potentially let other test_run types use
+> this interface in the future (this can be xdp_md for xdp types for
+> example).
+>=20
+> v2:
+>   * Addressed comments from Martin Lau
+>=20
+> Cc: Martin Lau <kafai@fb.com>
+> Signed-off-by: Stanislav Fomichev <sdf@google.com>
+> ---
+>  include/uapi/linux/bpf.h |   7 ++
+>  kernel/bpf/syscall.c     |  10 ++-
+>  net/bpf/test_run.c       | 135 ++++++++++++++++++++++++++++++++++++---
+>  3 files changed, 143 insertions(+), 9 deletions(-)
+>=20
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 837024512baf..8e96f99cebf8 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -396,6 +396,13 @@ union bpf_attr {
+>  		__aligned_u64	data_out;
+>  		__u32		repeat;
+>  		__u32		duration;
+> +		__u32		ctx_size_in;	/* input: len of ctx_in */
+> +		__u32		ctx_size_out;	/* input/output: len of ctx_out
+> +						 *   returns ENOSPC if ctx_out
+> +						 *   is too small.
+> +						 */
+> +		__aligned_u64	ctx_in;
+> +		__aligned_u64	ctx_out;
+>  	} test;
+> =20
+>  	struct { /* anonymous struct used by BPF_*_GET_*_ID */
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 1d65e56594db..5bb963e8f9b0 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -1949,7 +1949,7 @@ static int bpf_prog_query(const union bpf_attr *att=
+r,
+>  	return cgroup_bpf_prog_query(attr, uattr);
+>  }
+> =20
+> -#define BPF_PROG_TEST_RUN_LAST_FIELD test.duration
+> +#define BPF_PROG_TEST_RUN_LAST_FIELD test.ctx_out
+> =20
+>  static int bpf_prog_test_run(const union bpf_attr *attr,
+>  			     union bpf_attr __user *uattr)
+> @@ -1962,6 +1962,14 @@ static int bpf_prog_test_run(const union bpf_attr =
+*attr,
+>  	if (CHECK_ATTR(BPF_PROG_TEST_RUN))
+>  		return -EINVAL;
+> =20
+> +	if ((attr->test.ctx_size_in && !attr->test.ctx_in) ||
+> +	    (!attr->test.ctx_size_in && attr->test.ctx_in))
+> +		return -EINVAL;
+> +
+> +	if ((attr->test.ctx_size_out && !attr->test.ctx_out) ||
+> +	    (!attr->test.ctx_size_out && attr->test.ctx_out))
+> +		return -EINVAL;
+> +
+>  	prog =3D bpf_prog_get(attr->test.prog_fd);
+>  	if (IS_ERR(prog))
+>  		return PTR_ERR(prog);
+> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> index fab142b796ef..3c6e3855c886 100644
+> --- a/net/bpf/test_run.c
+> +++ b/net/bpf/test_run.c
+> @@ -123,12 +123,118 @@ static void *bpf_test_init(const union bpf_attr *k=
+attr, u32 size,
+>  	return data;
+>  }
+> =20
+> +static void *bpf_ctx_init(const union bpf_attr *kattr, u32 max_size)
+> +{
+> +	void __user *data_in =3D u64_to_user_ptr(kattr->test.ctx_in);
+> +	u32 size =3D kattr->test.ctx_size_in;
+> +	void *data;
+> +
+> +	if (!size)
+> +		return NULL;
+A note for a later comment in bpf_prog_test_run_skb().
+This function may return NULL.
+
+> +
+> +	if (size > max_size)
+If should be fine if the kernel unsupported bytes are zeros
+(i.e. tailing zeros in data_in).
+Please refer to the existing bpf_check_uarg_tail_zero() usages
+or also CHECK_ATTR() in syscall.c. Something like this if
+bpf_check_uarg_tail_zero() is used,
+
+	err =3D bpf_check_uarg_tail_zero(data_in, max_size, size));
+	if (err)
+		return ERR_PTR(err);
+
+> +		return ERR_PTR(-E2BIG);
+> +
+> +	data =3D kzalloc(max_size, GFP_USER);
+> +	if (!data)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	if (copy_from_user(data, data_in, size)) {
+> +		kfree(data);
+> +		return ERR_PTR(-EFAULT);
+> +	}
+> +	return data;
+> +}
+> +
+> +static int bpf_ctx_finish(const union bpf_attr *kattr,
+> +			  union bpf_attr __user *uattr, const void *data,
+> +			  u32 size)
+> +{
+> +	void __user *data_out =3D u64_to_user_ptr(kattr->test.ctx_out);
+> +	int err =3D -EFAULT;
+> +	u32 copy_size =3D size;
+> +
+data is not checked for NULL here.
+
+> +	if (!kattr->test.ctx_size_out)
+> +		return 0;
+> +
+> +	if (copy_size > kattr->test.ctx_size_out) {
+> +		copy_size =3D kattr->test.ctx_size_out;
+> +		err =3D -ENOSPC;
+> +	}
+> +
+> +	if (copy_to_user(data_out, data, copy_size))
+> +		goto out;
+> +	if (copy_to_user(&uattr->test.ctx_size_out, &size, sizeof(size)))
+> +		goto out;
+> +	if (err !=3D -ENOSPC)
+> +		err =3D 0;
+> +out:
+> +	return err;
+> +}
+
+[ ... ]
+
+>  int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *k=
+attr,
+>  			  union bpf_attr __user *uattr)
+>  {
+>  	bool is_l2 =3D false, is_direct_pkt_access =3D false;
+>  	u32 size =3D kattr->test.data_size_in;
+>  	u32 repeat =3D kattr->test.repeat;
+> +	struct __sk_buff *ctx =3D NULL;
+>  	u32 retval, duration;
+>  	int hh_len =3D ETH_HLEN;
+>  	struct sk_buff *skb;
+> @@ -141,6 +247,12 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, con=
+st union bpf_attr *kattr,
+>  	if (IS_ERR(data))
+>  		return PTR_ERR(data);
+> =20
+> +	ctx =3D bpf_ctx_init(kattr, sizeof(struct __sk_buff));
+> +	if (IS_ERR(ctx)) {
+> +		kfree(data);
+> +		return PTR_ERR(ctx);
+> +	}
+> +
+>  	switch (prog->type) {
+>  	case BPF_PROG_TYPE_SCHED_CLS:
+>  	case BPF_PROG_TYPE_SCHED_ACT:
+> @@ -158,6 +270,7 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, cons=
+t union bpf_attr *kattr,
+>  	sk =3D kzalloc(sizeof(struct sock), GFP_USER);
+>  	if (!sk) {
+>  		kfree(data);
+> +		kfree(ctx);
+>  		return -ENOMEM;
+>  	}
+>  	sock_net_set(sk, current->nsproxy->net_ns);
+> @@ -166,6 +279,7 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, cons=
+t union bpf_attr *kattr,
+>  	skb =3D build_skb(data, 0);
+>  	if (!skb) {
+>  		kfree(data);
+> +		kfree(ctx);
+>  		kfree(sk);
+>  		return -ENOMEM;
+>  	}
+> @@ -180,32 +294,37 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, co=
+nst union bpf_attr *kattr,
+>  		__skb_push(skb, hh_len);
+>  	if (is_direct_pkt_access)
+>  		bpf_compute_data_pointers(skb);
+> +	ret =3D convert___skb_to_skb(skb, ctx);
+> +	if (ret)
+> +		goto out;
+>  	ret =3D bpf_test_run(prog, skb, repeat, &retval, &duration);
+> -	if (ret) {
+> -		kfree_skb(skb);
+> -		kfree(sk);
+> -		return ret;
+> -	}
+> +	if (ret)
+> +		goto out;
+>  	if (!is_l2) {
+>  		if (skb_headroom(skb) < hh_len) {
+>  			int nhead =3D HH_DATA_ALIGN(hh_len - skb_headroom(skb));
+> =20
+>  			if (pskb_expand_head(skb, nhead, 0, GFP_USER)) {
+> -				kfree_skb(skb);
+> -				kfree(sk);
+> -				return -ENOMEM;
+> +				ret =3D -ENOMEM;
+> +				goto out;
+>  			}
+>  		}
+>  		memset(__skb_push(skb, hh_len), 0, hh_len);
+>  	}
+> +	convert_skb_to___skb(skb, ctx);
+> =20
+>  	size =3D skb->len;
+>  	/* bpf program can never convert linear skb to non-linear */
+>  	if (WARN_ON_ONCE(skb_is_nonlinear(skb)))
+>  		size =3D skb_headlen(skb);
+>  	ret =3D bpf_test_finish(kattr, uattr, skb->data, size, retval, duration=
+);
+> +	if (!ret)
+> +		ret =3D bpf_ctx_finish(kattr, uattr, ctx,
+ctx is not checked for NULL in here either.
+
+> +				     sizeof(struct __sk_buff));
+> +out:
+>  	kfree_skb(skb);
+>  	kfree(sk);
+> +	kfree(ctx);
+>  	return ret;
+>  }
+> =20
+> --=20
+> 2.21.0.392.gf8f6787159e-goog
+>=20
