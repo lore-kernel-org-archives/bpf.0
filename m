@@ -2,129 +2,158 @@ Return-Path: <SRS0=J20p=SM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B63F2C10F0E
-	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 00:10:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5F08C10F0E
+	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 00:37:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8273821741
-	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 00:10:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C9FB20874
+	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 00:37:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M0QbR3TV"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Lhsjt7GG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726640AbfDJAKr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Apr 2019 20:10:47 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:35645 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726592AbfDJAKr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Apr 2019 20:10:47 -0400
-Received: by mail-lj1-f195.google.com with SMTP id t4so408728ljc.2;
-        Tue, 09 Apr 2019 17:10:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lLVdpZt0xs5Tq6oUvQQqIz5leWcf5Bpd6abDo8EfAQE=;
-        b=M0QbR3TV5X47c3/0xlG3d3W/5PbRKM4uIHL48fxqxm424kwEPZht9W8YDfoMHTETGJ
-         Lxk7dORDbNIjd/7GRViofTT+4szJy+/FYJFiODrZZ+JzvUy1bAnET1yBp/bKQQTVMmff
-         hvBLPVKZQD/2MAwG10iUWTLnR4tYNfB+oSWQq6UK9yQiyxA4hkZwqOHIIYdUYAybMZ5w
-         lAtjcOzXinWJX6nUnkVOCZiPx50XFbCs0VlhUecChjQ67BS8kNzm+w0xE4TDnyHlxLlR
-         6HsDh91V37ogzJeuhZHrbVLD6dB57WBFxF1zB2xWju37SHt+B8uy/zQ0zFO3acW8MseR
-         nlBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lLVdpZt0xs5Tq6oUvQQqIz5leWcf5Bpd6abDo8EfAQE=;
-        b=bluzhb1c4fdaco+0Gg9lzdHSpK6r4BRapXKpBWBvHY1quDQbUAvdle1PvzobgH7Tjp
-         IxfinwIJ6puzLmOuK7huHQaR2AqN+2Cajbj0bm/E2Ped2RgVa4MWU+ibFOhejgvjljn2
-         koQN3NiGy5STgv0jcEiGQxTb8PU4Em4XgPd6OsMWoOeZX3sreLTVJcJo44hZrv/NyS5j
-         GTNcEHtYSzAoQKY2IkcELihxaoPvtpb75aFKbgaEH4kSwtjmBgdZdixqA+XnEr7QkPzr
-         1VxCPRzYr5I4C82H5t4W2wS0bRTBz55oD8GYXA7T6//LUask1vxq6+cGlnPjUJgOKj/H
-         SIfA==
-X-Gm-Message-State: APjAAAU5qYbjgKe3XsK23zHlR4A9NduySqUyGF2zl0uSFR3c5bP+XA1S
-        lkYq35pzTPi0y89zNgQlyVNxloin5uTo8RS0l/g=
-X-Google-Smtp-Source: APXvYqyNj+4iesEpQxspGNqhYnRK+IbC1HZsAhG/M9DOkbQEDjEX7YNauJKudc68izB9gjFzLiOY4WdpOa0eWvaQrnU=
-X-Received: by 2002:a2e:864f:: with SMTP id i15mr22697451ljj.99.1554855044897;
- Tue, 09 Apr 2019 17:10:44 -0700 (PDT)
+        id S1726766AbfDJAhs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Apr 2019 20:37:48 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:59930 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726755AbfDJAhp (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 9 Apr 2019 20:37:45 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x3A0aXMC016897
+        for <bpf@vger.kernel.org>; Tue, 9 Apr 2019 17:37:43 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=cFA4Taqa81ZVBpnFhFjB+BIuM9J0UBMJ8BdLml4mTa0=;
+ b=Lhsjt7GGt0bhnS0HPIUh1fjCG+jNo4EQBVYMh0aulJruTUeIFXTbYi8FFIP+p8p2IwZm
+ L4raopzr9RVGp/7Q0gjA5Qw3OH6zI+qBP+xq09Fg71DTRqSjvKAZTFk5zcqiasZnRr8z
+ NXoFFdmUST+ZeAdj2mZTPWFXN5aEOoBZLxw= 
+Received: from mail.thefacebook.com ([199.201.64.23])
+        by m0001303.ppops.net with ESMTP id 2rs3fr0j48-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 09 Apr 2019 17:37:43 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::125) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Tue, 9 Apr 2019 17:37:42 -0700
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id AF1003702B28; Tue,  9 Apr 2019 17:37:41 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Yonghong Song <yhs@fb.com>
+Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        Yonghong Song <yhs@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next] [tools/bpf] fix a few ubsan warning
+Date:   Tue, 9 Apr 2019 17:37:41 -0700
+Message-ID: <20190410003741.1855113-1-yhs@fb.com>
+X-Mailer: git-send-email 2.17.1
+X-FB-Internal: Safe
 MIME-Version: 1.0
-References: <20190409210910.32048-1-daniel@iogearbox.net>
-In-Reply-To: <20190409210910.32048-1-daniel@iogearbox.net>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 9 Apr 2019 17:10:33 -0700
-Message-ID: <CAADnVQKaPEi5-vjG_fvt0o8e9b9wAC665++3s48sD2h0qLhoiQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 00/16] BPF support for global data
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Joe Stringer <joe@wand.net.nz>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>, Jann Horn <jannh@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-09_14:,,
+ signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 9, 2019 at 2:09 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->
-> This series is a major rework of previously submitted libbpf
-> patches [0] in order to add global data support for BPF. The
-> kernel has been extended to add proper infrastructure that allows
-> for full .bss/.data/.rodata sections on BPF loader side based
-> upon feedback from LPC discussions [1]. Latter support is then
-> also added into libbpf in this series which allows for more
-> natural C-like programming of BPF programs. For more information
-> on loader, please refer to 'bpf, libbpf: support global data/bss/
-> rodata sections' patch in this series.
->
-> Thanks a lot!
->
->   v5 -> v6:
->    - Removed synchronize_rcu() from map freeze (Jann)
->    - Rest as-is
->   v4 -> v5:
->    - Removed index selection again for ldimm64 (Alexei)
->    - Adapted related test cases and added new ones to test
->      rejection of off != 0
->   v3 -> v4:
->    - Various fixes in BTF verification e.g. to disallow
->      Var and DataSec to be an intermediate type during resolve (Martin)
->    - More BTF test cases added
->    - Few cleanups in key-less BTF commit (Martin)
->    - Bump libbpf minor version from 2 to 3
->    - Renamed and simplified read-only locking
->    - Various minor improvements all over the place
->   v2 -> v3:
->    - Implement BTF support in kernel, libbpf, bpftool, add tests
->    - Fix idx + off conversion (Andrii)
->    - Document lower / higher bits for direct value access (Andrii)
->    - Add tests with small value size (Andrii)
->    - Add index selection into ldimm64 (Andrii)
->    - Fix missing fdput() (Jann)
->    - Reject invalid flags in BPF_F_*_PROG (Jakub)
->    - Complete rework of libbpf support, includes:
->     - Add objname to map name (Stanislav)
->     - Make .rodata map full read-only after setup (Andrii)
->     - Merge relocation handling into single one (Andrii)
->     - Store global maps into obj->maps array (Andrii, Alexei)
->     - Debug message when skipping section (Andrii)
->     - Reject non-static global data till we have
->       semantics for sharing them (Yonghong, Andrii, Alexei)
->     - More test cases and completely reworked prog test (Alexei)
->    - Fixes, cleanups, etc all over the set
->    - Not yet addressed:
->     - Make BTF mandatory for these maps (Alexei)
->     -> Waiting till BTF support for these lands first
->   v1 -> v2:
->     - Instead of 32-bit static data, implement full global
->       data support (Alexei)
->
->   [0] https://patchwork.ozlabs.org/cover/1040290/
->   [1] http://vger.kernel.org/lpc-bpf2018.html#session-3
+The issue is reported at https://github.com/libbpf/libbpf/issues/28.
 
-Applied to bpf-next. Thanks!
+Basically, per C standard, for
+  void *memcpy(void *dest, const void *src, size_t n)
+if "dest" or "src" is NULL, regardless of whether "n" is 0 or not,
+the result of memcpy is undefined. clang ubsan reported three such
+instances in bpf.c with the following pattern:
+  memcpy(dest, 0, 0).
+
+Although in practice, no known compiler will cause issues when
+copy size is 0. Let us still fix the issue to silence ubsan
+warnings.
+
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ tools/lib/bpf/bpf.c | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
+
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index a1db869a6fda..78f2400dd2d1 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -79,7 +79,6 @@ static inline int sys_bpf_prog_load(union bpf_attr *attr, unsigned int size)
+ 
+ int bpf_create_map_xattr(const struct bpf_create_map_attr *create_attr)
+ {
+-	__u32 name_len = create_attr->name ? strlen(create_attr->name) : 0;
+ 	union bpf_attr attr;
+ 
+ 	memset(&attr, '\0', sizeof(attr));
+@@ -89,8 +88,9 @@ int bpf_create_map_xattr(const struct bpf_create_map_attr *create_attr)
+ 	attr.value_size = create_attr->value_size;
+ 	attr.max_entries = create_attr->max_entries;
+ 	attr.map_flags = create_attr->map_flags;
+-	memcpy(attr.map_name, create_attr->name,
+-	       min(name_len, BPF_OBJ_NAME_LEN - 1));
++	if (create_attr->name)
++		memcpy(attr.map_name, create_attr->name,
++		       min(strlen(create_attr->name), BPF_OBJ_NAME_LEN - 1));
+ 	attr.numa_node = create_attr->numa_node;
+ 	attr.btf_fd = create_attr->btf_fd;
+ 	attr.btf_key_type_id = create_attr->btf_key_type_id;
+@@ -155,7 +155,6 @@ int bpf_create_map_in_map_node(enum bpf_map_type map_type, const char *name,
+ 			       int key_size, int inner_map_fd, int max_entries,
+ 			       __u32 map_flags, int node)
+ {
+-	__u32 name_len = name ? strlen(name) : 0;
+ 	union bpf_attr attr;
+ 
+ 	memset(&attr, '\0', sizeof(attr));
+@@ -166,7 +165,9 @@ int bpf_create_map_in_map_node(enum bpf_map_type map_type, const char *name,
+ 	attr.inner_map_fd = inner_map_fd;
+ 	attr.max_entries = max_entries;
+ 	attr.map_flags = map_flags;
+-	memcpy(attr.map_name, name, min(name_len, BPF_OBJ_NAME_LEN - 1));
++	if (name)
++		memcpy(attr.map_name, name,
++		       min(strlen(name), BPF_OBJ_NAME_LEN - 1));
+ 
+ 	if (node >= 0) {
+ 		attr.map_flags |= BPF_F_NUMA_NODE;
+@@ -216,7 +217,6 @@ int bpf_load_program_xattr(const struct bpf_load_program_attr *load_attr,
+ 	void *finfo = NULL, *linfo = NULL;
+ 	union bpf_attr attr;
+ 	__u32 log_level;
+-	__u32 name_len;
+ 	int fd;
+ 
+ 	if (!load_attr || !log_buf != !log_buf_sz)
+@@ -226,8 +226,6 @@ int bpf_load_program_xattr(const struct bpf_load_program_attr *load_attr,
+ 	if (log_level > (4 | 2 | 1) || (log_level && !log_buf))
+ 		return -EINVAL;
+ 
+-	name_len = load_attr->name ? strlen(load_attr->name) : 0;
+-
+ 	memset(&attr, 0, sizeof(attr));
+ 	attr.prog_type = load_attr->prog_type;
+ 	attr.expected_attach_type = load_attr->expected_attach_type;
+@@ -253,8 +251,9 @@ int bpf_load_program_xattr(const struct bpf_load_program_attr *load_attr,
+ 	attr.line_info_rec_size = load_attr->line_info_rec_size;
+ 	attr.line_info_cnt = load_attr->line_info_cnt;
+ 	attr.line_info = ptr_to_u64(load_attr->line_info);
+-	memcpy(attr.prog_name, load_attr->name,
+-	       min(name_len, BPF_OBJ_NAME_LEN - 1));
++	if (load_attr->name)
++		memcpy(attr.prog_name, load_attr->name,
++		       min(strlen(load_attr->name), BPF_OBJ_NAME_LEN - 1));
+ 
+ 	fd = sys_bpf_prog_load(&attr, sizeof(attr));
+ 	if (fd >= 0)
+-- 
+2.17.1
+
