@@ -1,157 +1,130 @@
-Return-Path: <SRS0=Zphp=SL=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=J20p=SM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5656CC10F0E
-	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 22:47:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B63F2C10F0E
+	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 00:10:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2563320820
-	for <bpf@archiver.kernel.org>; Tue,  9 Apr 2019 22:47:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8273821741
+	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 00:10:47 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M0QbR3TV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726627AbfDIWrD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Apr 2019 18:47:03 -0400
-Received: from www62.your-server.de ([213.133.104.62]:37650 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726592AbfDIWrD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Apr 2019 18:47:03 -0400
-Received: from [88.198.220.132] (helo=sslproxy03.your-server.de)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1hDzW7-00088v-Rr; Wed, 10 Apr 2019 00:46:59 +0200
-Received: from [178.197.248.24] (helo=linux.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1hDzW7-0005da-Hq; Wed, 10 Apr 2019 00:46:59 +0200
-Subject: Re: [PATCH bpf 2/2] libbpf: remove dependency on barrier.h in xsk.h
-To:     =?UTF-8?Q?Georg_M=c3=bcller?= <georgmueller@gmx.net>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>
-Cc:     Magnus Karlsson <magnus.karlsson@intel.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf@vger.kernel.org, bruce.richardson@intel.com,
-        ciara.loftus@intel.com, ilias.apalodimas@linaro.org,
-        Ye Xiaolong <xiaolong.ye@intel.com>, ferruh.yigit@intel.com,
-        "Zhang, Qi Z" <qi.z.zhang@intel.com>, will.deacon@arm.com
-References: <1554792253-27081-1-git-send-email-magnus.karlsson@intel.com>
- <1554792253-27081-3-git-send-email-magnus.karlsson@intel.com>
- <621a9d70-5397-da90-a68c-6f12f5cbd3b2@iogearbox.net>
- <CAJ8uoz2Cxkfv++znzzjZJ2=D0YbTJkf+BOH=y2nBEByiW8stdA@mail.gmail.com>
- <3d30cbdc-23d6-8305-4089-0a3eacfa55cc@gmx.net>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <563ad58c-25cd-eab3-3a18-97c0b53f080d@iogearbox.net>
-Date:   Wed, 10 Apr 2019 00:46:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.3.0
+        id S1726640AbfDJAKr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Apr 2019 20:10:47 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:35645 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726592AbfDJAKr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Apr 2019 20:10:47 -0400
+Received: by mail-lj1-f195.google.com with SMTP id t4so408728ljc.2;
+        Tue, 09 Apr 2019 17:10:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lLVdpZt0xs5Tq6oUvQQqIz5leWcf5Bpd6abDo8EfAQE=;
+        b=M0QbR3TV5X47c3/0xlG3d3W/5PbRKM4uIHL48fxqxm424kwEPZht9W8YDfoMHTETGJ
+         Lxk7dORDbNIjd/7GRViofTT+4szJy+/FYJFiODrZZ+JzvUy1bAnET1yBp/bKQQTVMmff
+         hvBLPVKZQD/2MAwG10iUWTLnR4tYNfB+oSWQq6UK9yQiyxA4hkZwqOHIIYdUYAybMZ5w
+         lAtjcOzXinWJX6nUnkVOCZiPx50XFbCs0VlhUecChjQ67BS8kNzm+w0xE4TDnyHlxLlR
+         6HsDh91V37ogzJeuhZHrbVLD6dB57WBFxF1zB2xWju37SHt+B8uy/zQ0zFO3acW8MseR
+         nlBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lLVdpZt0xs5Tq6oUvQQqIz5leWcf5Bpd6abDo8EfAQE=;
+        b=bluzhb1c4fdaco+0Gg9lzdHSpK6r4BRapXKpBWBvHY1quDQbUAvdle1PvzobgH7Tjp
+         IxfinwIJ6puzLmOuK7huHQaR2AqN+2Cajbj0bm/E2Ped2RgVa4MWU+ibFOhejgvjljn2
+         koQN3NiGy5STgv0jcEiGQxTb8PU4Em4XgPd6OsMWoOeZX3sreLTVJcJo44hZrv/NyS5j
+         GTNcEHtYSzAoQKY2IkcELihxaoPvtpb75aFKbgaEH4kSwtjmBgdZdixqA+XnEr7QkPzr
+         1VxCPRzYr5I4C82H5t4W2wS0bRTBz55oD8GYXA7T6//LUask1vxq6+cGlnPjUJgOKj/H
+         SIfA==
+X-Gm-Message-State: APjAAAU5qYbjgKe3XsK23zHlR4A9NduySqUyGF2zl0uSFR3c5bP+XA1S
+        lkYq35pzTPi0y89zNgQlyVNxloin5uTo8RS0l/g=
+X-Google-Smtp-Source: APXvYqyNj+4iesEpQxspGNqhYnRK+IbC1HZsAhG/M9DOkbQEDjEX7YNauJKudc68izB9gjFzLiOY4WdpOa0eWvaQrnU=
+X-Received: by 2002:a2e:864f:: with SMTP id i15mr22697451ljj.99.1554855044897;
+ Tue, 09 Apr 2019 17:10:44 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <3d30cbdc-23d6-8305-4089-0a3eacfa55cc@gmx.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.100.3/25414/Tue Apr  9 09:53:33 2019)
+References: <20190409210910.32048-1-daniel@iogearbox.net>
+In-Reply-To: <20190409210910.32048-1-daniel@iogearbox.net>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 9 Apr 2019 17:10:33 -0700
+Message-ID: <CAADnVQKaPEi5-vjG_fvt0o8e9b9wAC665++3s48sD2h0qLhoiQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 00/16] BPF support for global data
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Joe Stringer <joe@wand.net.nz>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>, Jann Horn <jannh@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 04/10/2019 12:28 AM, Georg Müller wrote:
-> Am 09.04.19 um 13:29 schrieb Magnus Karlsson:
->> On Tue, Apr 9, 2019 at 11:11 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
->>> On 04/09/2019 08:44 AM, Magnus Karlsson wrote:
->>>> The use of smp_rmb() and smp_wmb() creates a Linux header dependency
->>>> on barrier.h that is uneccessary in most parts. This patch implements
->>>> the two small defines that are needed from barrier.h. As a bonus, the
->>>> new implementations are faster than the default ones as they default
->>>> to sfence and lfence for x86, while we only need a compiler barrier in
->>>> our case. Just as it is when the same ring access code is compiled in
->>>> the kernel.
->>>>
->>>> Fixes: 1cad07884239 ("libbpf: add support for using AF_XDP sockets")
->>>> Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
->>>> ---
->>>>  tools/lib/bpf/xsk.h | 19 +++++++++++++++++--
->>>>  1 file changed, 17 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/tools/lib/bpf/xsk.h b/tools/lib/bpf/xsk.h
->>>> index 3638147..317b44f 100644
->>>> --- a/tools/lib/bpf/xsk.h
->>>> +++ b/tools/lib/bpf/xsk.h
->>>> @@ -39,6 +39,21 @@ DEFINE_XSK_RING(xsk_ring_cons);
->>>>  struct xsk_umem;
->>>>  struct xsk_socket;
->>>>
->>>> +#if !defined bpf_smp_rmb && !defined bpf_smp_wmb
->>>> +# if defined(__i386__) || defined(__x86_64__)
->>>> +#  define bpf_smp_rmb() asm volatile("" : : : "memory")
->>>> +#  define bpf_smp_wmb() asm volatile("" : : : "memory")
->>>> +# elif defined(__aarch64__)
->>>> +#  define bpf_smp_rmb() asm volatile("dmb ishld" : : : "memory")
->>>> +#  define bpf_smp_wmb() asm volatile("dmb ishst" : : : "memory")
->>>> +# elif defined(__arm__)
->>>> +#  define bpf_smp_rmb() asm volatile("dmb ish" : : : "memory")
->>>> +#  define bpf_smp_wmb() asm volatile("dmb ishst" : : : "memory")
->>>> +# else
->>>> +#  error Architecture not supported by the XDP socket code in libbpf.
->>>> +# endif
->>>> +#endif
->>>
->>> Hmm, bit unfortunate, but I can see why it's needed inside the header here
->>> as it's installed into the system and needs to be included by applications.
->>> Fine with me. In any case, I still think we should also fix it for tooling
->>> infra to avoid others running into the same issue, lemme resurrect [0] from
->>> back in the days.
->>>
->>> One question though regarding above arm32 implementation. You match these
->>> barriers against the ones from af_xdp in kernel. So smp_* variants from the
->>> arch/arm/include/asm/barrier.h header need to be matched. This selects the
->>> dmb(ish) and dmb(ishst) variant. The implementation of dmb() however is
->>> quite CPU dependent, the above assumes to match with __LINUX_ARM_ARCH__ >= 7.
->>> Perhaps this assumption needs at minimum a comment to make it clear for
->>> developers.
->>
->> Good idea. I will put a comment in there to clarify this.
-> 
-> Since this is a userspace library, what about using the C11 atomic_thread_fence()
-> from stdatomic.h - wouldn't that be sufficient?
+On Tue, Apr 9, 2019 at 2:09 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> This series is a major rework of previously submitted libbpf
+> patches [0] in order to add global data support for BPF. The
+> kernel has been extended to add proper infrastructure that allows
+> for full .bss/.data/.rodata sections on BPF loader side based
+> upon feedback from LPC discussions [1]. Latter support is then
+> also added into libbpf in this series which allows for more
+> natural C-like programming of BPF programs. For more information
+> on loader, please refer to 'bpf, libbpf: support global data/bss/
+> rodata sections' patch in this series.
+>
+> Thanks a lot!
+>
+>   v5 -> v6:
+>    - Removed synchronize_rcu() from map freeze (Jann)
+>    - Rest as-is
+>   v4 -> v5:
+>    - Removed index selection again for ldimm64 (Alexei)
+>    - Adapted related test cases and added new ones to test
+>      rejection of off != 0
+>   v3 -> v4:
+>    - Various fixes in BTF verification e.g. to disallow
+>      Var and DataSec to be an intermediate type during resolve (Martin)
+>    - More BTF test cases added
+>    - Few cleanups in key-less BTF commit (Martin)
+>    - Bump libbpf minor version from 2 to 3
+>    - Renamed and simplified read-only locking
+>    - Various minor improvements all over the place
+>   v2 -> v3:
+>    - Implement BTF support in kernel, libbpf, bpftool, add tests
+>    - Fix idx + off conversion (Andrii)
+>    - Document lower / higher bits for direct value access (Andrii)
+>    - Add tests with small value size (Andrii)
+>    - Add index selection into ldimm64 (Andrii)
+>    - Fix missing fdput() (Jann)
+>    - Reject invalid flags in BPF_F_*_PROG (Jakub)
+>    - Complete rework of libbpf support, includes:
+>     - Add objname to map name (Stanislav)
+>     - Make .rodata map full read-only after setup (Andrii)
+>     - Merge relocation handling into single one (Andrii)
+>     - Store global maps into obj->maps array (Andrii, Alexei)
+>     - Debug message when skipping section (Andrii)
+>     - Reject non-static global data till we have
+>       semantics for sharing them (Yonghong, Andrii, Alexei)
+>     - More test cases and completely reworked prog test (Alexei)
+>    - Fixes, cleanups, etc all over the set
+>    - Not yet addressed:
+>     - Make BTF mandatory for these maps (Alexei)
+>     -> Waiting till BTF support for these lands first
+>   v1 -> v2:
+>     - Instead of 32-bit static data, implement full global
+>       data support (Alexei)
+>
+>   [0] https://patchwork.ozlabs.org/cover/1040290/
+>   [1] http://vger.kernel.org/lpc-bpf2018.html#session-3
 
-These are paired with smp_{w,r}mb() in AF_XDP's kernel code, therefore they
-would need the exact same counterpart in user space. We had similar discussion
-earlier wrt perf ring buffer, conclusion was: the C11 memory model doesn't
-generally align with the kernel's, but even if it would emit the same code,
-it's still implementation dependent from compiler side, so one would need to
-have a guarantee that the mapping from supported compilers must be compatible
-at all times to the kernels for the various supported archs.
-
->>>   [0] https://lore.kernel.org/netdev/20181017144156.16639-2-daniel@iogearbox.net/
->>>
->>>>  static inline __u64 *xsk_ring_prod__fill_addr(struct xsk_ring_prod *fill,
->>>>                                             __u32 idx)
->>>>  {
->>>> @@ -119,7 +134,7 @@ static inline void xsk_ring_prod__submit(struct xsk_ring_prod *prod, size_t nb)
->>>>       /* Make sure everything has been written to the ring before signalling
->>>>        * this to the kernel.
->>>>        */
->>>> -     smp_wmb();
->>>> +     bpf_smp_wmb();
->>>>
->>>>       *prod->producer += nb;
->>>>  }
->>>> @@ -133,7 +148,7 @@ static inline size_t xsk_ring_cons__peek(struct xsk_ring_cons *cons,
->>>>               /* Make sure we do not speculatively read the data before
->>>>                * we have received the packet buffers from the ring.
->>>>                */
->>>> -             smp_rmb();
->>>> +             bpf_smp_rmb();
->>>>
->>>>               *idx = cons->cached_cons;
->>>>               cons->cached_cons += entries;
->>>>
->>>
-
+Applied to bpf-next. Thanks!
