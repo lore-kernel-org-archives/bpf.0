@@ -5,58 +5,58 @@ X-Spam-Level:
 X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BE47C10F11
-	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 23:30:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CD46C10F11
+	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 23:34:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 41FF020850
-	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 23:30:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CB05C20645
+	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 23:34:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Da9IF6EL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nTHmWDij"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726014AbfDJXaO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Apr 2019 19:30:14 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:34534 "EHLO
+        id S1726551AbfDJXel (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Apr 2019 19:34:41 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:37090 "EHLO
         mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725982AbfDJXaO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 10 Apr 2019 19:30:14 -0400
-Received: by mail-qt1-f193.google.com with SMTP id k2so5068125qtm.1;
-        Wed, 10 Apr 2019 16:30:13 -0700 (PDT)
+        with ESMTP id S1726106AbfDJXel (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 10 Apr 2019 19:34:41 -0400
+Received: by mail-qt1-f193.google.com with SMTP id z16so5052887qtn.4;
+        Wed, 10 Apr 2019 16:34:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=dGVEKVS3aOuGjiOBvj0E5UKu83/QrOxk2weTIBMNNGk=;
-        b=Da9IF6ELlhE8giza8uQ4sMv1WvuUErO32ocamgyb2QH6IuBhA0aZmb2uqrXN7L03SV
-         fX9m/lHC7+FZ4RKvN2uGGsNOCe8L3NrUPZIt+wexlO/Paz23ep0OrJl5YrnOLlTnTrJU
-         tV+sYVOHk1KJGX0cOG7yf9V++cBqrrgkLpnjuYLQOnMyKod1eBPAX+x0c/4/f0IDD/xZ
-         q/OW0DxcVYXbQaczlsl6N5c5uHGnxgLwC8O9dQ7GO3DaOcue4rFewbKH76VrezmBHtYr
-         BpcogpeNZqo/vIlU8HUmVhS9jmd/t8WunnYPR95UBBfaTdNW151QkSDGzIgiQFD8H4BA
-         44pw==
+        bh=wboZM5tSrUKoxl5yWqXoJzjsFvqiilh8fe/9lpBu+3w=;
+        b=nTHmWDij2fJuUrTeKpi1/jd6WWPzSGNV/XCtOTf/UD5fwbo4SpzTTpSa6BVk+a748D
+         SxVIEh+mfbPgu/gEZJKINwEHw/xNiMCVSxVehM22sRXWIXVVZM3GI+lOSvx3sskHGuZI
+         ceptGicVykuNPpF4rvXtMby/Q/PfUwNxk1u2aWi/Kzy935g0jrnXUYaaAjp5q5o+YL2G
+         ezkhUzxWsQqkCuLPtbPJXWiuY/9vWbd8kqosqG5/t16LqNJCEOnBRttVM//GO+SsauVO
+         AWpzAQ1mToEG/U/EjuFNNuzqv79Oq4K579P97jh6tFxZmrVZMrq3bRLdNQXReTEXU+ny
+         kF8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=dGVEKVS3aOuGjiOBvj0E5UKu83/QrOxk2weTIBMNNGk=;
-        b=FKXqa1j2Sio2b9AyiYCuDWArXy0Xi92sFEMydMXh6dBakFmSoX/grGrCOpIZII+Njb
-         ijJo6Mr3hGQJEbJNz+IeoCsjozxMUlM/+puZE0/jzMgW+FscwHr61WH8H4js56jHuqDr
-         /9In1n6JYdE5vT8V8zeClymVtxv+yoVQNJ4l3jyhRl3McdOH2xLtK5btxKSg1gRaVuo2
-         OVXGiU5CnSU2Z2sEq2tQ4WuiLQMhhxriiwru8CdbFvakJXN9aTOEr6VWMJN3XZJuusMk
-         SUh1/fuvno+MmSlZj56Z7HDG+9DwpMVAew4hrUmjO3F11Hu5O8iUy96SkCZVjr2/WC03
-         RMlQ==
-X-Gm-Message-State: APjAAAUoBl3AsmfG84mIM+7fMeWBC3B0rf6r2jkuSV5KpZcSp/WFpXGX
-        bcynxtM/s9qGLIK/ElTBHoGB9xNhy9C3eIeeVtQ=
-X-Google-Smtp-Source: APXvYqwSK45XBWefKOMlrmPmPY5L5igfAMMDsQQOBEJQhydqMvNhOey7cWuH6gXeWieottoyyv7calZwpEQw8s3N8cA=
-X-Received: by 2002:aed:3ba9:: with SMTP id r38mr40330517qte.135.1554939013105;
- Wed, 10 Apr 2019 16:30:13 -0700 (PDT)
+        bh=wboZM5tSrUKoxl5yWqXoJzjsFvqiilh8fe/9lpBu+3w=;
+        b=colZ1EOCtt4RPaixezJ4xRiTp3i46ahf4yQfEHxDcttH4yvbAxZ2nFsFq74/yM/XrQ
+         D+N4w13plrbzfWDoPQ+iCqdGmyIhdglT9VQ3NkSrFXQB4bPWdibSzqTJtKVM6msUQiMs
+         YLWY1z0PGjB25ljueOJ/9Pj2vX1sAac9p0B536cRdkWCKzYJFqufqZHJ1DqvWjpToQJx
+         pw1ekYexWnwIjCpBXC92hr+LzE37IrG7QoRoq/U6r70tLwhq/bLxJIafGINUMqud7HUg
+         j4ZIFGEipI49t4iULHx8ANtRm6b51QfIzVG/NTTqfBpiwhhSV42UTSJbHq06De6WkN00
+         urBQ==
+X-Gm-Message-State: APjAAAWKXyS/kzJ7eLDa4dOU0hjqZws50eRoHu6iE8eODaBETcxLDOOs
+        CH4dvUWAFwz1dSIv3KTFIpG1FaLJAV5NM5bhv1A=
+X-Google-Smtp-Source: APXvYqyzofh/2Q+mt2sELTh0tglj/2sl/mKuemrKtNdD7nZjll99CwCdx4XOK3Mr/PuvipqEckKrlAW9uP1QCz1F4b0=
+X-Received: by 2002:ac8:30a1:: with SMTP id v30mr38854266qta.176.1554939279900;
+ Wed, 10 Apr 2019 16:34:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <155489659290.20826.1108770347511292618.stgit@firesoul> <155489663300.20826.4588027365135744445.stgit@firesoul>
-In-Reply-To: <155489663300.20826.4588027365135744445.stgit@firesoul>
+References: <155489659290.20826.1108770347511292618.stgit@firesoul> <155489662793.20826.5533583763088193882.stgit@firesoul>
+In-Reply-To: <155489662793.20826.5533583763088193882.stgit@firesoul>
 From:   Song Liu <liu.song.a23@gmail.com>
-Date:   Wed, 10 Apr 2019 16:30:01 -0700
-Message-ID: <CAPhsuW6FLsPeKT=3puVyCnuKGPRq5SntrM4nHELyfNvEfuQtLw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 4/5] bpf: cpumap do bulk allocation of SKBs
+Date:   Wed, 10 Apr 2019 16:34:29 -0700
+Message-ID: <CAPhsuW6K+TVaAuD3e6g7oE9zhpBAVx5u3V4NZJgH9E0qM2_ZDg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/5] net: core: introduce build_skb_around
 To:     Jesper Dangaard Brouer <brouer@redhat.com>
 Cc:     Networking <netdev@vger.kernel.org>,
         Daniel Borkmann <borkmann@iogearbox.net>,
@@ -74,90 +74,142 @@ X-Mailing-List: bpf@vger.kernel.org
 On Wed, Apr 10, 2019 at 6:02 AM Jesper Dangaard Brouer
 <brouer@redhat.com> wrote:
 >
-> As cpumap now batch consume xdp_frame's from the ptr_ring, it knows how many
-> SKBs it need to allocate. Thus, lets bulk allocate these SKBs via
-> kmem_cache_alloc_bulk() API, and use the previously introduced function
-> build_skb_around().
+> The function build_skb() also have the responsibility to allocate and clear
+> the SKB structure. Introduce a new function build_skb_around(), that moves
+> the responsibility of allocation and clearing to the caller. This allows
+> caller to use kmem_cache (slab/slub) bulk allocation API.
 >
-> Notice that the flag __GFP_ZERO asks the slab/slub allocator to clear the
-> memory for us. This does clear a larger area than needed, but my micro
-> benchmarks on Intel CPUs show that this is slightly faster due to being a
-> cacheline aligned area is cleared for the SKBs. (For SLUB allocator, there
-> is a future optimization potential, because SKBs will with high probability
-> originate from same page. If we can find/identify continuous memory areas
-> then the Intel CPU memset rep stos will have a real performance gain.)
+> Next patch use this function combined with kmem_cache_alloc_bulk.
 >
 > Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-
-Acked-by: Song Liu <songliubraving@fb.com>
-
 > ---
->  kernel/bpf/cpumap.c |   22 +++++++++++++++-------
->  1 file changed, 15 insertions(+), 7 deletions(-)
+>  include/linux/skbuff.h |    2 +
+>  net/core/skbuff.c      |   71 +++++++++++++++++++++++++++++++++++-------------
+>  2 files changed, 54 insertions(+), 19 deletions(-)
 >
-> diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-> index cb93df200cd0..b82a11556ad5 100644
-> --- a/kernel/bpf/cpumap.c
-> +++ b/kernel/bpf/cpumap.c
-> @@ -160,12 +160,12 @@ static void cpu_map_kthread_stop(struct work_struct *work)
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index 9027a8c4219f..c40ffab8a9b0 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -1044,6 +1044,8 @@ struct sk_buff *__alloc_skb(unsigned int size, gfp_t priority, int flags,
+>                             int node);
+>  struct sk_buff *__build_skb(void *data, unsigned int frag_size);
+>  struct sk_buff *build_skb(void *data, unsigned int frag_size);
+> +struct sk_buff *build_skb_around(struct sk_buff *skb,
+> +                                void *data, unsigned int frag_size);
+>
+>  /**
+>   * alloc_skb - allocate a network buffer
+> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> index 4782f9354dd1..d904b6e5fe08 100644
+> --- a/net/core/skbuff.c
+> +++ b/net/core/skbuff.c
+> @@ -258,6 +258,33 @@ struct sk_buff *__alloc_skb(unsigned int size, gfp_t gfp_mask,
 >  }
+>  EXPORT_SYMBOL(__alloc_skb);
 >
->  static struct sk_buff *cpu_map_build_skb(struct bpf_cpu_map_entry *rcpu,
-> -                                        struct xdp_frame *xdpf)
-> +                                        struct xdp_frame *xdpf,
-> +                                        struct sk_buff *skb)
+> +/* Caller must provide SKB that is memset cleared */
+> +static struct sk_buff *__build_skb_around(struct sk_buff *skb,
+> +                                         void *data, unsigned int frag_size)
+> +{
+> +       struct skb_shared_info *shinfo;
+> +       unsigned int size = frag_size ? : ksize(data);
+> +
+> +       size -= SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+> +
+> +       /* Assumes caller memset cleared SKB */
+> +       skb->truesize = SKB_TRUESIZE(size);
+> +       refcount_set(&skb->users, 1);
+> +       skb->head = data;
+> +       skb->data = data;
+> +       skb_reset_tail_pointer(skb);
+> +       skb->end = skb->tail + size;
+> +       skb->mac_header = (typeof(skb->mac_header))~0U;
+> +       skb->transport_header = (typeof(skb->transport_header))~0U;
+> +
+> +       /* make sure we initialize shinfo sequentially */
+> +       shinfo = skb_shinfo(skb);
+> +       memset(shinfo, 0, offsetof(struct skb_shared_info, dataref));
+> +       atomic_set(&shinfo->dataref, 1);
+> +
+> +       return skb;
+> +}
+> +
+>  /**
+>   * __build_skb - build a network buffer
+>   * @data: data buffer provided by caller
+> @@ -279,32 +306,15 @@ EXPORT_SYMBOL(__alloc_skb);
+>   */
+>  struct sk_buff *__build_skb(void *data, unsigned int frag_size)
 >  {
->         unsigned int hard_start_headroom;
->         unsigned int frame_size;
->         void *pkt_data_start;
-> -       struct sk_buff *skb;
+> -       struct skb_shared_info *shinfo;
+>         struct sk_buff *skb;
+> -       unsigned int size = frag_size ? : ksize(data);
 >
->         /* Part of headroom was reserved to xdpf */
->         hard_start_headroom = sizeof(struct xdp_frame) +  xdpf->headroom;
-> @@ -191,8 +191,8 @@ static struct sk_buff *cpu_map_build_skb(struct bpf_cpu_map_entry *rcpu,
->                 SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
->
->         pkt_data_start = xdpf->data - hard_start_headroom;
-> -       skb = build_skb(pkt_data_start, frame_size);
+>         skb = kmem_cache_alloc(skbuff_head_cache, GFP_ATOMIC);
 > -       if (!skb)
-> +       skb = build_skb_around(skb, pkt_data_start, frame_size);
 > +       if (unlikely(!skb))
 >                 return NULL;
 >
->         skb_reserve(skb, hard_start_headroom);
-> @@ -256,8 +256,10 @@ static int cpu_map_kthread_run(void *data)
->         while (!kthread_should_stop() || !__ptr_ring_empty(rcpu->queue)) {
->                 unsigned int drops = 0, sched = 0;
->                 void *frames[CPUMAP_BATCH];
-> +               void *skbs[CPUMAP_BATCH];
->                 struct list_head skb_list;
-> -               int i, n;
-> +               gfp_t gfp = __GFP_ZERO | GFP_ATOMIC;
-> +               int i, n, m;
+> -       size -= SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+> -
+>         memset(skb, 0, offsetof(struct sk_buff, tail));
+> -       skb->truesize = SKB_TRUESIZE(size);
+> -       refcount_set(&skb->users, 1);
+> -       skb->head = data;
+> -       skb->data = data;
+> -       skb_reset_tail_pointer(skb);
+> -       skb->end = skb->tail + size;
+> -       skb->mac_header = (typeof(skb->mac_header))~0U;
+> -       skb->transport_header = (typeof(skb->transport_header))~0U;
 >
->                 /* Release CPU reschedule checks */
->                 if (__ptr_ring_empty(rcpu->queue)) {
-> @@ -279,14 +281,20 @@ static int cpu_map_kthread_run(void *data)
->                  * consume side valid as no-resize allowed of queue.
->                  */
->                 n = ptr_ring_consume_batched(rcpu->queue, frames, CPUMAP_BATCH);
-> +               m = kmem_cache_alloc_bulk(skbuff_head_cache, gfp, n, skbs);
-> +               if (unlikely(m == 0)) {
-> +                       for (i = 0; i < n; i++)
-> +                               skbs[i] = NULL; /* effect: xdp_return_frame */
-> +                       drops = n;
-> +               }
+> -       /* make sure we initialize shinfo sequentially */
+> -       shinfo = skb_shinfo(skb);
+> -       memset(shinfo, 0, offsetof(struct skb_shared_info, dataref));
+> -       atomic_set(&shinfo->dataref, 1);
+> -
+> -       return skb;
+> +       return __build_skb_around(skb, data, frag_size);
+>  }
 >
->                 INIT_LIST_HEAD(&skb_list);
+>  /* build_skb() is wrapper over __build_skb(), that specifically
+> @@ -325,6 +335,29 @@ struct sk_buff *build_skb(void *data, unsigned int frag_size)
+>  }
+>  EXPORT_SYMBOL(build_skb);
 >
->                 for (i = 0; i < n; i++) {
->                         struct xdp_frame *xdpf = frames[i];
-> -                       struct sk_buff *skb;
-> +                       struct sk_buff *skb = skbs[i];
+> +/**
+> + * build_skb_around - build a network buffer around provided skb
+> + * @skb: sk_buff provide by caller, must be memset cleared
+> + * @data: data buffer provided by caller
+> + * @frag_size: size of data, or 0 if head was kmalloced
+> + */
+> +struct sk_buff *build_skb_around(struct sk_buff *skb,
+> +                                void *data, unsigned int frag_size)
+> +{
+> +       if (unlikely(!skb))
+> +               return NULL;
+> +
+> +       skb = __build_skb_around(skb, data, frag_size);
+
+
+> +
+> +       if (skb && frag_size) {
+> +               skb->head_frag = 1;
+> +               if (page_is_pfmemalloc(virt_to_head_page(data)))
+> +                       skb->pfmemalloc = 1;
+> +       }
+
+I didn't find any explanation of this part (head_frag, pfmemalloc).
+Shall we split it out to a separate patch?
+
+Thanks,
+Song
+
+> +       return skb;
+> +}
+> +EXPORT_SYMBOL(build_skb_around);
+> +
+>  #define NAPI_SKB_CACHE_SIZE    64
 >
-> -                       skb = cpu_map_build_skb(rcpu, xdpf);
-> +                       skb = cpu_map_build_skb(rcpu, xdpf, skb);
->                         if (!skb) {
->                                 xdp_return_frame(xdpf);
->                                 continue;
+>  struct napi_alloc_cache {
 >
