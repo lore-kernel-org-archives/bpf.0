@@ -2,165 +2,186 @@ Return-Path: <SRS0=J20p=SM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67F2AC10F11
-	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 18:36:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4B08C10F11
+	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 18:56:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 330102082A
-	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 18:36:17 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="TmBD14DM";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="C1abG0Jy"
+	by mail.kernel.org (Postfix) with ESMTP id 9FBEF2070D
+	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 18:56:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731147AbfDJSgR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Apr 2019 14:36:17 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:38262 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730931AbfDJSgQ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 10 Apr 2019 14:36:16 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3AIUdCp026394;
-        Wed, 10 Apr 2019 11:35:24 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=q6EV6JKGBrZYgasFTNMpi9jrX6H+jlEtnGWQe6RZiFg=;
- b=TmBD14DMa61MBPlaMSw3NHotHlS8vg2cP1QjEtXMIagqhyGsmUm+mlsN1Pz3Y16Uazbt
- nFUvHE7FmspZ0zYS9/woVPfuxpvDDjuhYuxPiQlyNp5Tnx/2dEdT6XeniTfdooPAx7OM
- EyqKZi7GelDjnATACGsvGPnJsrJ90reboz4= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2rsmdwrehp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 10 Apr 2019 11:35:24 -0700
-Received: from prn-hub06.TheFacebook.com (2620:10d:c081:35::130) by
- prn-hub05.TheFacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1713.5; Wed, 10 Apr 2019 11:35:23 -0700
-Received: from NAM05-CO1-obe.outbound.protection.outlook.com (192.168.54.28)
- by o365-in.thefacebook.com (192.168.16.30) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
- via Frontend Transport; Wed, 10 Apr 2019 11:35:23 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector1-fb-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q6EV6JKGBrZYgasFTNMpi9jrX6H+jlEtnGWQe6RZiFg=;
- b=C1abG0JyR0Ot8YFe/ZTiubM0bq4JgUqFMZaHj1+PYXTTAD2DQ1hBRG2xI8yIw0C4H2aYCSz8RRvJr8i5SaVS5I9dIpRBs4c2wSbvkysSOaDc4I+yKzX3bYQHIJG5E7MkIuRcN/BE7VW+xf2EErGynGCP1Zp7NmYh+buGaEIVAtE=
-Received: from BYAPR15MB3384.namprd15.prod.outlook.com (20.179.59.17) by
- BYAPR15MB3512.namprd15.prod.outlook.com (20.179.60.28) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1771.13; Wed, 10 Apr 2019 18:35:22 +0000
-Received: from BYAPR15MB3384.namprd15.prod.outlook.com
- ([fe80::38bf:bbed:e968:767e]) by BYAPR15MB3384.namprd15.prod.outlook.com
- ([fe80::38bf:bbed:e968:767e%5]) with mapi id 15.20.1792.009; Wed, 10 Apr 2019
- 18:35:22 +0000
-From:   Yonghong Song <yhs@fb.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Borkmann <daniel@iogearbox.net>
-CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Steven Rostedt" <rostedt@goodmis.org>
-Subject: Re: [PATCH 1/3] bpf: Use spinlock_t in bpf_lru_list
-Thread-Topic: [PATCH 1/3] bpf: Use spinlock_t in bpf_lru_list
-Thread-Index: AQHU76oCY0hWPKPN/k284b75C7IYIKY1K1yAgAB4aYCAAAcQAIAADiKA
-Date:   Wed, 10 Apr 2019 18:35:21 +0000
-Message-ID: <a3777ba4-467d-b24e-ec7c-91da09c10f10@fb.com>
-References: <20190410143025.11997-1-bigeasy@linutronix.de>
- <813645e9-6a09-4aa4-0e2e-9b68359b83db@fb.com>
- <4150a0db-18f9-aa93-cdb4-8cf047093740@iogearbox.net>
- <20190410174444.26ebmnwpsiw6eicz@linutronix.de>
-In-Reply-To: <20190410174444.26ebmnwpsiw6eicz@linutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: MWHPR04CA0033.namprd04.prod.outlook.com
- (2603:10b6:300:ee::19) To BYAPR15MB3384.namprd15.prod.outlook.com
- (2603:10b6:a03:10e::17)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [2620:10d:c090:200::1:61dc]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ba4a819e-0ec2-4c89-5ba7-08d6bde349f2
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600139)(711020)(4605104)(2017052603328)(7193020);SRVR:BYAPR15MB3512;
-x-ms-traffictypediagnostic: BYAPR15MB3512:
-x-microsoft-antispam-prvs: <BYAPR15MB35124EFC72ABAED8FD9F7915D32E0@BYAPR15MB3512.namprd15.prod.outlook.com>
-x-forefront-prvs: 00032065B2
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(346002)(136003)(366004)(39860400002)(376002)(199004)(189003)(52314003)(8676002)(6116002)(31696002)(478600001)(99286004)(305945005)(110136005)(68736007)(71200400001)(71190400001)(14454004)(105586002)(2906002)(7736002)(316002)(93886005)(106356001)(97736004)(54906003)(6486002)(229853002)(6436002)(256004)(53546011)(76176011)(14444005)(52116002)(102836004)(4326008)(46003)(53936002)(31686004)(6506007)(36756003)(86362001)(476003)(186003)(486006)(6246003)(11346002)(81166006)(446003)(6512007)(81156014)(2616005)(386003)(8936002)(25786009)(5660300002);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB3512;H:BYAPR15MB3384.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: maVagpr8TpaA+9VrivZ27F9B9x2M6O1ejII7taje4c8NSkC92Yg6VRUP0YBNKrRYu/WpqCDhP6gyeO9w3zBhkfG9L8BIUQtbkTYO/t3Q/wVZPCs9INNO+KTsdJJ7U2TC9GLM4cP2u/B3z2hx02EBU0tEV245cq8z2Sp6dU5LaT1hOqyrdeCwxnHI19ncZdgYLNpP5FYNNrcBNJp7rgmCHKx97saoDAZhPjETLW2sTINGOqg7QhcYXJi0Cc1yu9nfBnlLW0sgXx3wtKrdVyMjdsyq3Md4+PlT3jfSlaG1+ycg+ue7m7Z4xwLl+xXc4qR9dP+mWu3uPRHyPBSHBguRoEodlUc5P7B0y5yVB25E7FVeMUdH78BoTekpunnuiRugF5HVT7AlKa5UdELDs5f9oDY/GsEYtWDx1Nlx15+TwVU=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F0DA1DFEDA6FFD45AE1DE12DAD3BFA09@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1726215AbfDJS4i (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Apr 2019 14:56:38 -0400
+Received: from dispatch1-us1.ppe-hosted.com ([67.231.154.164]:35000 "EHLO
+        dispatch1-us1.ppe-hosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725981AbfDJS4h (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 10 Apr 2019 14:56:37 -0400
+X-Virus-Scanned: Proofpoint Essentials engine
+Received: from webmail.solarflare.com (webmail.solarflare.com [12.187.104.26])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1-us2.ppe-hosted.com (Proofpoint Essentials ESMTP Server) with ESMTPS id EA4EF80069;
+        Wed, 10 Apr 2019 18:56:33 +0000 (UTC)
+Received: from [10.17.20.203] (10.17.20.203) by ocex03.SolarFlarecom.com
+ (10.20.40.36) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 10 Apr
+ 2019 11:56:29 -0700
+Subject: Re: [PATCH bpf-next 2/5] bpf: cpumap use netif_receive_skb_list
+To:     Jesper Dangaard Brouer <brouer@redhat.com>,
+        <netdev@vger.kernel.org>, Daniel Borkmann <borkmann@iogearbox.net>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+CC:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        <bpf@vger.kernel.org>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>
+References: <155489659290.20826.1108770347511292618.stgit@firesoul>
+ <155489662285.20826.2411693802215419579.stgit@firesoul>
+From:   Edward Cree <ecree@solarflare.com>
+Message-ID: <3e1973ea-3304-bec8-46f3-536994f9e5fd@solarflare.com>
+Date:   Wed, 10 Apr 2019 19:56:28 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba4a819e-0ec2-4c89-5ba7-08d6bde349f2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Apr 2019 18:35:21.8481
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3512
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-10_08:,,
- signatures=0
-X-Proofpoint-Spam-Reason: safe
-X-FB-Internal: Safe
+In-Reply-To: <155489662285.20826.2411693802215419579.stgit@firesoul>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Content-Language: en-GB
+X-Originating-IP: [10.17.20.203]
+X-TM-AS-Product-Ver: SMEX-12.5.0.1300-8.5.1010-24542.005
+X-TM-AS-Result: No-6.463400-4.000000-10
+X-TMASE-MatchedRID: eVEkOcJu0F6HYS4ybQtcOia1MaKuob8PC/ExpXrHizyJ5xZahLul5JPD
+        bikkMnICsXzLumsEQ3LwC+yY/IpROKLCTO1UKypvv1vPAPz22Fmy4iyjvVWTomHZ+cd7VyKX+r4
+        ksoUQ8wXT01A2vEikVnPL3KdKFhM8wdbU3akH5Ay+dJWHbg4ITpKLNrbpy/A0FAsTXoyZ8MsIqG
+        5TetjhMNOzjHdBEheNbCcQdI7TJskPRVepDWIjx+0/o+/4D7DzFqhQk68kpacaUFNX+UFygD+ro
+        IwmQ1LV+7M9+8OvngujNIrIg5n4kP/8uo2LJpjtEgwM8US/pTEHgh3sKJBzP2/Fw+PM2volwRge
+        clnEWH2h1BRkgqaEc7gtnN6cOEY/v1l2Uvx6idpWdFebWIc3VsRB0bsfrpPInxMyeYT53Rn/dvF
+        FQCvI+yYcvKjVSozR3E59IcyyqbHVsikrEe980vuPzj2OClt4ks1Oi4kjl5X58+J/QG5iMq5txV
+        P8sEoA+lXwaI9uovvUNewp4E2/TgSpmVYGQlZ3sxk1kV1Ja8cbbCVMcs1jUlZca9RSYo/b
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--6.463400-4.000000
+X-TMASE-Version: SMEX-12.5.0.1300-8.5.1010-24542.005
+X-MDID: 1554922596-BM2bdfihwUrl
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-DQoNCk9uIDQvMTAvMTkgMTA6NDQgQU0sIFNlYmFzdGlhbiBBbmRyemVqIFNpZXdpb3Igd3JvdGU6
-DQo+IE9uIDIwMTktMDQtMTAgMTk6MTk6MjcgWyswMjAwXSwgRGFuaWVsIEJvcmttYW5uIHdyb3Rl
-Og0KPj4gT24gMDQvMTAvMjAxOSAwNzowOCBQTSwgWW9uZ2hvbmcgU29uZyB3cm90ZToNCj4+PiBP
-biA0LzEwLzE5IDc6MzAgQU0sIFNlYmFzdGlhbiBBbmRyemVqIFNpZXdpb3Igd3JvdGU6DQo+Pj4+
-IFRoZXJlIGlzIG5vIGRpZmZlcmVuY2UgYmV0d2VlbiBzcGlubG9ja190IGFuZCByYXdfc3Bpbmxv
-Y2tfdCBmb3IgIVJUDQo+Pj4+IGtlcm5lbHMuIEl0IGlzIHBvc3NpYmxlIHRoYXQgYnBmX2xydV9s
-aXN0X3BvcF9mcmVlX3RvX2xvY2FsKCkgaW52b2tlcw0KPj4+PiBhdCBsZWFzdCB0aHJlZSBsaXN0
-IHdhbGtzIHdoaWNoIGxvb2sgdW5ib3VuZGVkIGl0IHByb2JhYmx5IG1ha2VzIHNlbnNlDQo+Pj4+
-IHRvIHVzZSBzcGlubG9ja190Lg0KPj4+Pg0KPj4+PiBNYWtlIGJwZl9scnVfbGlzdCB1c2UgYSBz
-cGlubG9ja190Lg0KPj4+DQo+Pj4gQ291bGQgeW91IGFkZCBhIGNvdmVyIGxldHRlciBmb3IgdGhl
-IHBhdGNoIHNldCBzaW5jZSB5b3UgaGF2ZQ0KPj4+IG1vcmUgdGhhbiBvbmUgcGF0Y2g/DQo+IA0K
-PiB5ZXMuDQo+IA0KPj4+PiBTaWduZWQtb2ZmLWJ5OiBTZWJhc3RpYW4gQW5kcnplaiBTaWV3aW9y
-IDxiaWdlYXN5QGxpbnV0cm9uaXguZGU+DQo+Pj4+IC0tLQ0KPj4+PiAgICBrZXJuZWwvYnBmL2Jw
-Zl9scnVfbGlzdC5jIHwgMzggKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0tLS0tLS0N
-Cj4+Pj4gICAga2VybmVsL2JwZi9icGZfbHJ1X2xpc3QuaCB8ICA0ICsrLS0NCj4+Pj4gICAgMiBm
-aWxlcyBjaGFuZ2VkLCAyMSBpbnNlcnRpb25zKCspLCAyMSBkZWxldGlvbnMoLSkNCj4+Pj4NCj4+
-Pj4gZGlmZiAtLWdpdCBhL2tlcm5lbC9icGYvYnBmX2xydV9saXN0LmMgYi9rZXJuZWwvYnBmL2Jw
-Zl9scnVfbGlzdC5jDQo+Pj4+IGluZGV4IGU2ZWY0NDAxYTEzODAuLjQwZjQ3MjEwYzM4MTcgMTAw
-NjQ0DQo+Pj4+IC0tLSBhL2tlcm5lbC9icGYvYnBmX2xydV9saXN0LmMNCj4+Pj4gKysrIGIva2Vy
-bmVsL2JwZi9icGZfbHJ1X2xpc3QuYw0KPj4+PiBAQCAtMzEzLDkgKzMxMyw5IEBAIHN0YXRpYyB2
-b2lkIGJwZl9scnVfbGlzdF9wdXNoX2ZyZWUoc3RydWN0IGJwZl9scnVfbGlzdCAqbCwNCj4+Pj4g
-ICAgCWlmIChXQVJOX09OX09OQ0UoSVNfTE9DQUxfTElTVF9UWVBFKG5vZGUtPnR5cGUpKSkNCj4+
-Pj4gICAgCQlyZXR1cm47DQo+Pj4+ICAgIA0KPj4+PiAtCXJhd19zcGluX2xvY2tfaXJxc2F2ZSgm
-bC0+bG9jaywgZmxhZ3MpOw0KPj4+PiArCXNwaW5fbG9ja19pcnFzYXZlKCZsLT5sb2NrLCBmbGFn
-cyk7DQo+Pj4+ICAgIAlfX2JwZl9scnVfbm9kZV9tb3ZlKGwsIG5vZGUsIEJQRl9MUlVfTElTVF9U
-X0ZSRUUpOw0KPj4+PiAtCXJhd19zcGluX3VubG9ja19pcnFyZXN0b3JlKCZsLT5sb2NrLCBmbGFn
-cyk7DQo+Pj4+ICsJc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmbC0+bG9jaywgZmxhZ3MpOw0KPj4+
-PiAgICB9DQo+Pj4NCj4+PiBUaGlzIGZ1bmN0aW9uIChwbHVzIG1hbnkgb3RoZXJzKSBpcyBjYWxs
-ZWQgYnkgYnBmIHByb2dyYW0gaGVscGVycyB3aGljaA0KPj4+IGNhbm5vdCBzbGVlcC4gSXMgaXQg
-cG9zc2libGUgdGhhdCB1bmRlciBSVCBzcGluX2xvY2tfaXJxc2F2ZSgpIGNvdWxkDQo+Pj4gc2xl
-ZXAgYW5kIHRoaXMgd2lsbCBtYWtlIGJwZiBzdWJzeXN0ZW0gY2Fubm90IGJlIHVzZWQgdW5kZXIg
-UlQ/DQo+Pg0KPj4gQmFjayB0aGVuIGluIGFjMDA4ODFmOTIyMSAoImJwZjogY29udmVydCBoYXNo
-dGFiIGxvY2sgdG8gcmF3IGxvY2siKQ0KPj4gWWFuZyBTaGkgY29udmVydGVkIHNwaW5sb2NrX3Qg
-dG8gcmF3X3NwaW5sb2NrX3QgZHVlIHRvIGV4YWN0bHkgdGhlDQo+PiBhYm92ZSBtZW50aW9uZWQg
-aXNzdWUuIEkgcHJlc3VtZSB0aGF0IGhhc24ndCBjaGFuZ2VkLCByaWdodD8NCj4gDQo+IEFoLiBJ
-IGNoZWNrZWQgb25lIG9yIHR3byBvZiB0aG9zZSBhbmQgaXQgbG9va2VkIGxpa2UgaXQgd2FzIHJh
-dyBzaW5jZQ0KPiB0aGUgYmVnaW5uaW5nLiBBbnl3YXksIGl0IHdvdWxkIGJlIG5pY2UgdG8gQ2M6
-IHRoZSBSVCBkZXZlbG9wZXIgd2hpbGUNCj4gZmlkZGxpbmcgd2l0aCBzb21ldGhpbmcgdGhhdCBv
-bmx5IGNvbmNlcm5zIFJULg0KPiANCj4gVGhhdCB1c2FnZSBwYXR0ZXJuIHRoYXQgaXMgbWVudGlv
-bmVkIGluIGFjMDA4ODFmOTIyMSwgaXMgaXQgdHJ1ZSBmb3IgYWxsDQo+IGRhdGEgc3RydWN0dXJl
-IGFsZ29yaXRobXM/IEluIGJwZl9scnVfbGlzdCBJIHdhcyBjb25jZXJuZWQgYWJvdXQgdGhlDQo+
-IGxpc3QgbG9vcHMuIA0KRm9yIHNvbWUgc2tld2VkIGhhc2ggdGFibGVzIHdpdGggYSBsb3Qgb2Yg
-ZWxlbWVudHMsIHllcywgaXQgaXMgcG9zc2libGUNCnRpbWUgdG8gdHJhdmVyc2UgdGhlIGxvb3Ag
-Y291bGQgYmUgYSBsaXR0bGUgYml0IGxvbmdlci4uLg0KDQo+IEhvd2V2ZXIgaGFzaHRhYiBhbmQg
-bHBtX3RyaWUgbWF5IHBlcmZvcm0gbWVtb3J5IGFsbG9jYXRpb25zDQo+IHdoaWxlIGhvbGRpbmcg
-dGhlIGxvY2sgYW5kIHRoaXMgaXNuJ3QgZ29pbmcgdG8gd29yay4NCg0KVGhlIG1lbW9yeSBhbGxv
-Y2F0aW9uIGluIHRoZXNlIHR3byBwbGFjZXMgdXNlcyBHRlBfQVRPTUlDIHdoaWNoIHNob3VsZCAN
-Cm5vdCBzbGVlcC9ibG9jay4NCg0KPiANCj4gU2ViYXN0aWFuDQo+IA0K
+On 10/04/2019 12:43, Jesper Dangaard Brouer wrote:
+> Reduce BH-disable period further by moving cpu_map_build_skb()
+> outside/before invoking the network stack.  And build up a
+> skb_list that is used for netif_receive_skb_list. This is also
+> an I-cache optimization.
+>
+> When injecting packets into the network stack, cpumap uses a special
+> function named netif_receive_skb_core(), and we create a equivalent list
+> version  named netif_receive_skb_list_core().
+>
+> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+> ---
+>  include/linux/netdevice.h |    1 +
+>  kernel/bpf/cpumap.c       |   17 ++++++++++-------
+>  net/core/dev.c            |   18 ++++++++++++++++++
+>  3 files changed, 29 insertions(+), 7 deletions(-)
+>
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index 166fdc0a78b4..37e78dc9f30a 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -3621,6 +3621,7 @@ int netif_rx_ni(struct sk_buff *skb);
+>  int netif_receive_skb(struct sk_buff *skb);
+>  int netif_receive_skb_core(struct sk_buff *skb);
+>  void netif_receive_skb_list(struct list_head *head);
+> +void netif_receive_skb_list_core(struct list_head *head);
+>  gro_result_t napi_gro_receive(struct napi_struct *napi, struct sk_buff *skb);
+>  void napi_gro_flush(struct napi_struct *napi, bool flush_old);
+>  struct sk_buff *napi_get_frags(struct napi_struct *napi);
+> diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+> index 430103e182a0..cb93df200cd0 100644
+> --- a/kernel/bpf/cpumap.c
+> +++ b/kernel/bpf/cpumap.c
+> @@ -256,6 +256,7 @@ static int cpu_map_kthread_run(void *data)
+>  	while (!kthread_should_stop() || !__ptr_ring_empty(rcpu->queue)) {
+>  		unsigned int drops = 0, sched = 0;
+>  		void *frames[CPUMAP_BATCH];
+> +		struct list_head skb_list;
+>  		int i, n;
+>  
+>  		/* Release CPU reschedule checks */
+> @@ -279,23 +280,25 @@ static int cpu_map_kthread_run(void *data)
+>  		 */
+>  		n = ptr_ring_consume_batched(rcpu->queue, frames, CPUMAP_BATCH);
+>  
+> -		local_bh_disable();
+> +		INIT_LIST_HEAD(&skb_list);
+> +
+>  		for (i = 0; i < n; i++) {
+>  			struct xdp_frame *xdpf = frames[i];
+>  			struct sk_buff *skb;
+> -			int ret;
+>  
+>  			skb = cpu_map_build_skb(rcpu, xdpf);
+>  			if (!skb) {
+>  				xdp_return_frame(xdpf);
+>  				continue;
+>  			}
+> -
+> -			/* Inject into network stack */
+> -			ret = netif_receive_skb_core(skb);
+> -			if (ret == NET_RX_DROP)
+> -				drops++;
+You're losing this `drops` incrementation and not doing anything to
+ replace it...
+> +			list_add_tail(&skb->list, &skb_list);
+>  		}
+> +
+> +		local_bh_disable();
+> +
+> +		/* Inject into network stack */
+> +		netif_receive_skb_list_core(&skb_list);
+> +
+>  		/* Feedback loop via tracepoint */
+>  		trace_xdp_cpumap_kthread(rcpu->map_id, n, drops, sched);
+... yet still feeding it to the tracepoint here.
+
+I ran into something similar with my list-GRO patches (callers wanted to
+ know how many packets from the list were received vs. dropped); check
+ those to see how I wired that counting all the way through the listified
+ stack.
+
+Apart from that, I like this!
+
+-Ed
+>  
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 9ca2d3abfd1a..1dee7bd895a0 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -5297,6 +5297,24 @@ void netif_receive_skb_list(struct list_head *head)
+>  }
+>  EXPORT_SYMBOL(netif_receive_skb_list);
+>  
+> +/**
+> + *	netif_receive_skb_list_core - special version of netif_receive_skb_list
+> + *	@head: list of skbs to process.
+> + *
+> + *	More direct receive version of netif_receive_skb_list().  It should
+> + *	only be used by callers that have a need to skip RPS and Generic XDP.
+> + *
+> + *	This function may only be called from softirq context and interrupts
+> + *	should be enabled.
+> + */
+> +void netif_receive_skb_list_core(struct list_head *head)
+> +{
+> +	rcu_read_lock();
+> +	__netif_receive_skb_list(head);
+> +	rcu_read_unlock();
+> +}
+> +EXPORT_SYMBOL(netif_receive_skb_list_core);
+> +
+>  DEFINE_PER_CPU(struct work_struct, flush_works);
+>  
+>  /* Network device is going away, flush any packets still pending */
+>
+
