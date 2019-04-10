@@ -2,62 +2,61 @@ Return-Path: <SRS0=J20p=SM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBAD7C10F11
-	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 17:56:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BC43C10F11
+	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 18:14:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 90C1E2063F
-	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 17:56:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3B17F2075B
+	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 18:14:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sbmyiplh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IJP65qZ8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730717AbfDJR4q (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Apr 2019 13:56:46 -0400
-Received: from mail-it1-f193.google.com ([209.85.166.193]:52765 "EHLO
-        mail-it1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730130AbfDJR4q (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 10 Apr 2019 13:56:46 -0400
-Received: by mail-it1-f193.google.com with SMTP id x132so4956478itf.2;
-        Wed, 10 Apr 2019 10:56:45 -0700 (PDT)
+        id S1729512AbfDJSOS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Apr 2019 14:14:18 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:37614 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728685AbfDJSOR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 10 Apr 2019 14:14:17 -0400
+Received: by mail-io1-f66.google.com with SMTP id x7so3013368ioh.4;
+        Wed, 10 Apr 2019 11:14:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=CI++n8e93qOP1o7/g2eCZuXEogyWMwpxtbomw0f6SaM=;
-        b=Sbmyiplh0E5tGipusXh5zlErJDEG+TY5QaXJ8NC/HCuTUulTj7uIkVcx1dA8UMhrx8
-         zqaaHtWCqmTnQTcrNKLDtdnGmNKpDrHsZay8sbpFXvtyUwCHaUk/iyEXLn6+xqYcy1CA
-         iuIeNbVLeVtcPHQfG8pp5Szw5quTnQ7Cdt+p+VF201u9mz3XLEcvENsOqrVgi439FDr3
-         fqjKZnmQBlvu+muM87wU35ABuyenVNR3la6QHRogMjMwXF/Od7dmJ6sYDQD/iK7wJy8Q
-         VBKgdDqSpEAYlkrLphX8CO4E6dBE2vC/+ClpkBmQhpwT4Ra0M6iALWZtKFeIofV2fuwm
-         TI2w==
+        bh=mSsnw2vCti/yt6Ow7Xn7ll2uWPjgYf7faKvb+HAVBfY=;
+        b=IJP65qZ89dGUPet9t3ulzHVe8TN66abzsiXszdMDlovN3tCZzaTYWvRLIVrrEU0RUt
+         F5KLKBy0wONYsGo2nkEGbWLFskZt+5q49B75R87QKTJxktm5ield6iqugGBqcKSIdrXq
+         vtF4IGRz6hHZxueqNuMPPTegMi2t8/NxP71+GyI0hlXyVUliZkY4r+CZpPo8hFtIc3/d
+         F7ck4AvqvMPGaIuVh96mmw+Oka3DJL6/xQ/McTdm6BlCqwi/0TmkzDXjiYpRJeonTL3V
+         IiCVv+thVvyhm/X6LWIiG2LSXmtEI9bU+T9n2ttl85wKyUePhtep/JLH90UpIran2YEe
+         TUXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=CI++n8e93qOP1o7/g2eCZuXEogyWMwpxtbomw0f6SaM=;
-        b=cC7TKf8bE3iYMQiEU1juP2IrU80PzWAEL/iXSmZzdanJEoO0Q4B1MzgiIBiKha8yla
-         ktcWqPATHB4yCZ7qyrKOcuBTSfOQ4BVmyursZleP0j1PtV1iGJztj7VV2W21Gulw7HpX
-         ju0ZUNvO5ft79StGB8GKwORlnRWxHZ+kRCh3gAvgUOZHHJzQwNEA4E+J3dAnflR1C/gX
-         mzdfUfu6iD8dKd5toTR+hKpY5XvPrMAvuS33ClaeZm6zHRSGZNn4HXONffbgaLCQcRBL
-         FmQrFsnTK3S7+uUNMcpLIGdJmFlIf9mU0XjVfiMQsZOi45szamSvpMB74KKaXN/Et771
-         VL6w==
-X-Gm-Message-State: APjAAAVyvdos6dR+TzIZ3XX7puG9RbvQtsCpZNQNzEO1Fmo2TDODsFh3
-        IBFI+w2O2S/vLVgsiH63iBArmfBee5ngALWlU9s=
-X-Google-Smtp-Source: APXvYqwgfZUPlZpEr47vN/MH7gPCG3JHqAeS0dOauko/KUzGcUeve/4ud+JWzcw82n1PVn/DRQoJ0IeRyF9TKXQoJGs=
-X-Received: by 2002:a24:4702:: with SMTP id t2mr4214969itb.105.1554919005267;
- Wed, 10 Apr 2019 10:56:45 -0700 (PDT)
+        bh=mSsnw2vCti/yt6Ow7Xn7ll2uWPjgYf7faKvb+HAVBfY=;
+        b=soTGzqMe5zylUoNlIAro53YXOoe1VUXuZYBKJyh9mnyS3VuzY/ndC8Hb8idtBybZa/
+         pIYAoQf2uOec1dU658y8PkvdTRW0TDfDCS1P8TqBKI23b0R6IPw2uXyIn0tiv/vsPRGp
+         U7kdGrdCNuGRLr7POUdKpB+ZarK9rXp86xEAZGXdSEoIyjkjad51L5eHad776gZITBCx
+         lo1w2HDLDXEs7jGCFUnS8R5vPkUY4s8jYwC7vRD3ByipfCEe6PewuJtVzP9Tm7ILdFWe
+         3LXPcjcvgjgMKcBxw/Ph8HgjgK6ofO0FlMH5lHQIKCVUZM77aRR8WdnFDQ9e26zdZCoK
+         A2fw==
+X-Gm-Message-State: APjAAAXhFKcv3sqUb5BFRdo635T2VKgOr0b7sFwbF7cPg/rSAEDUQuYJ
+        V+HkHEKmiEaMr1K3wWBRhBOsF08tiNnMQdNOTwE=
+X-Google-Smtp-Source: APXvYqw4iVRg+57lq/nJMvSvMP7VgkjetZ+AcRzmfhb9CzhLLoZaRS9/KEveyVHRXzUEufFpckv/M0R8rP3jU9J7S2s=
+X-Received: by 2002:a5d:9584:: with SMTP id a4mr27645172ioo.17.1554920056688;
+ Wed, 10 Apr 2019 11:14:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <1554880154-30791-1-git-send-email-magnus.karlsson@intel.com> <1554880154-30791-2-git-send-email-magnus.karlsson@intel.com>
-In-Reply-To: <1554880154-30791-2-git-send-email-magnus.karlsson@intel.com>
+References: <1554880154-30791-1-git-send-email-magnus.karlsson@intel.com> <1554880154-30791-3-git-send-email-magnus.karlsson@intel.com>
+In-Reply-To: <1554880154-30791-3-git-send-email-magnus.karlsson@intel.com>
 From:   Y Song <ys114321@gmail.com>
-Date:   Wed, 10 Apr 2019 10:56:09 -0700
-Message-ID: <CAH3MdRXwK3=8z=CNK-=vvL5dY4nvT1ZCWXDOUWLR8f65zydS2Q@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 1/2] libbpf: remove likely/unlikely in xsk.h
+Date:   Wed, 10 Apr 2019 11:13:40 -0700
+Message-ID: <CAH3MdRX64deNto0avW3XfexMLhNS+r75x3yea6ko+hmHrOE3aw@mail.gmail.com>
+Subject: Re: [PATCH bpf v2 2/2] libbpf: remove dependency on barrier.h in xsk.h
 To:     Magnus Karlsson <magnus.karlsson@intel.com>
 Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -75,55 +74,79 @@ X-Mailing-List: bpf@vger.kernel.org
 On Wed, Apr 10, 2019 at 12:21 AM Magnus Karlsson
 <magnus.karlsson@intel.com> wrote:
 >
-> This patch removes the use of likely and unlikely in xsk.h since they
-> create a dependency on Linux headers as reported by several
-> users. There have also been reports that the use of these decreases
-> performance as the compiler puts the code on two different cache lines
-> instead of on a single one. All in all, I think we are better off
-> without them.
-
-The change looks good to me.
-  Acked-by: Yonghong Song <yhs@fb.com>
-
-libbpf repo (https://github.com/libbpf/libbpf/) solved this issue by
-providing some customer
-implementation just to satisfying compilatioins. I guess users here do
-not use libbpf repo and they
-directly extract kernel source and try to build?
-
-Just curious. do you have detailed info about which code in two
-different cache lines instead
-of one cache line and how much performance degradation?
-
+> The use of smp_rmb() and smp_wmb() creates a Linux header dependency
+> on barrier.h that is uneccessary in most parts. This patch implements
+> the two small defines that are needed from barrier.h. As a bonus, the
+> new implementations are faster than the default ones as they default
+> to sfence and lfence for x86, while we only need a compiler barrier in
+> our case. Just as it is when the same ring access code is compiled in
+> the kernel.
 >
 > Fixes: 1cad07884239 ("libbpf: add support for using AF_XDP sockets")
 > Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
 > ---
->  tools/lib/bpf/xsk.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  tools/lib/bpf/xsk.h | 20 ++++++++++++++++++--
+>  1 file changed, 18 insertions(+), 2 deletions(-)
 >
 > diff --git a/tools/lib/bpf/xsk.h b/tools/lib/bpf/xsk.h
-> index a497f00..3638147 100644
+> index 3638147..69136d9 100644
 > --- a/tools/lib/bpf/xsk.h
 > +++ b/tools/lib/bpf/xsk.h
-> @@ -105,7 +105,7 @@ static inline __u32 xsk_cons_nb_avail(struct xsk_ring_cons *r, __u32 nb)
->  static inline size_t xsk_ring_prod__reserve(struct xsk_ring_prod *prod,
->                                             size_t nb, __u32 *idx)
->  {
-> -       if (unlikely(xsk_prod_nb_free(prod, nb) < nb))
-> +       if (xsk_prod_nb_free(prod, nb) < nb)
->                 return 0;
+> @@ -39,6 +39,22 @@ DEFINE_XSK_RING(xsk_ring_cons);
+>  struct xsk_umem;
+>  struct xsk_socket;
 >
->         *idx = prod->cached_prod;
-> @@ -129,7 +129,7 @@ static inline size_t xsk_ring_cons__peek(struct xsk_ring_cons *cons,
+> +#if !defined bpf_smp_rmb && !defined bpf_smp_wmb
+
+Maybe add some comments to explain the different between bpf_smp_{r,w}mb
+and smp_{r,w}mb so later users will have a better idea which to pick?
+
+> +# if defined(__i386__) || defined(__x86_64__)
+> +#  define bpf_smp_rmb() asm volatile("" : : : "memory")
+> +#  define bpf_smp_wmb() asm volatile("" : : : "memory")
+> +# elif defined(__aarch64__)
+> +#  define bpf_smp_rmb() asm volatile("dmb ishld" : : : "memory")
+> +#  define bpf_smp_wmb() asm volatile("dmb ishst" : : : "memory")
+> +# elif defined(__arm__)
+> +/* These are only valid for armv7 and above */
+> +#  define bpf_smp_rmb() asm volatile("dmb ish" : : : "memory")
+> +#  define bpf_smp_wmb() asm volatile("dmb ishst" : : : "memory")
+> +# else
+> +#  error Architecture not supported by the XDP socket code in libbpf.
+> +# endif
+> +#endif
+
+Since this is generic enough and could be used by other files as well,
+maybe put it into libbpf_util.h?
+
+> +
+>  static inline __u64 *xsk_ring_prod__fill_addr(struct xsk_ring_prod *fill,
+>                                               __u32 idx)
 >  {
->         size_t entries = xsk_cons_nb_avail(cons, nb);
+> @@ -119,7 +135,7 @@ static inline void xsk_ring_prod__submit(struct xsk_ring_prod *prod, size_t nb)
+>         /* Make sure everything has been written to the ring before signalling
+>          * this to the kernel.
+>          */
+> -       smp_wmb();
+> +       bpf_smp_wmb();
 >
-> -       if (likely(entries > 0)) {
-> +       if (entries > 0) {
+>         *prod->producer += nb;
+>  }
+> @@ -133,7 +149,7 @@ static inline size_t xsk_ring_cons__peek(struct xsk_ring_cons *cons,
 >                 /* Make sure we do not speculatively read the data before
 >                  * we have received the packet buffers from the ring.
 >                  */
+> -               smp_rmb();
+> +               bpf_smp_rmb();
+
+Could you explain why a compiler barrier is good enough here on x86? Note that
+the load cons->cached_cons could be reordered with earlier
+non-overlapping stores
+at runtime.
+
+>
+>                 *idx = cons->cached_cons;
+>                 cons->cached_cons += entries;
 > --
 > 2.7.4
 >
