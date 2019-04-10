@@ -6,30 +6,30 @@ X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00B2FC10F11
-	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 11:43:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACF9FC10F11
+	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 11:43:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C7F1F20820
-	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 11:43:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 829D420820
+	for <bpf@archiver.kernel.org>; Wed, 10 Apr 2019 11:43:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731453AbfDJLns (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Apr 2019 07:43:48 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:48482 "EHLO mx1.redhat.com"
+        id S1730103AbfDJLnw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Apr 2019 07:43:52 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:40538 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730103AbfDJLns (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 10 Apr 2019 07:43:48 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        id S1729949AbfDJLnw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 10 Apr 2019 07:43:52 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 4592A3082E4C;
-        Wed, 10 Apr 2019 11:43:47 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id 65180306D321;
+        Wed, 10 Apr 2019 11:43:51 +0000 (UTC)
 Received: from firesoul.localdomain (ovpn-200-48.brq.redhat.com [10.40.200.48])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BB89A605CF;
-        Wed, 10 Apr 2019 11:43:43 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CF39110694E8;
+        Wed, 10 Apr 2019 11:43:48 +0000 (UTC)
 Received: from [10.10.10.1] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id E0B7131256FC5;
-        Wed, 10 Apr 2019 13:43:42 +0200 (CEST)
-Subject: [PATCH bpf-next 2/5] bpf: cpumap use netif_receive_skb_list
+        by firesoul.localdomain (Postfix) with ESMTP id F393831256FC5;
+        Wed, 10 Apr 2019 13:43:47 +0200 (CEST)
+Subject: [PATCH bpf-next 3/5] net: core: introduce build_skb_around
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     netdev@vger.kernel.org, Daniel Borkmann <borkmann@iogearbox.net>,
         Alexei Starovoitov <alexei.starovoitov@gmail.com>,
@@ -38,121 +38,148 @@ Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
         bpf@vger.kernel.org,
         Toke =?utf-8?q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
         Jesper Dangaard Brouer <brouer@redhat.com>
-Date:   Wed, 10 Apr 2019 13:43:42 +0200
-Message-ID: <155489662285.20826.2411693802215419579.stgit@firesoul>
+Date:   Wed, 10 Apr 2019 13:43:47 +0200
+Message-ID: <155489662793.20826.5533583763088193882.stgit@firesoul>
 In-Reply-To: <155489659290.20826.1108770347511292618.stgit@firesoul>
 References: <155489659290.20826.1108770347511292618.stgit@firesoul>
 User-Agent: StGit/0.17.1-dirty
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.46]); Wed, 10 Apr 2019 11:43:47 +0000 (UTC)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.47]); Wed, 10 Apr 2019 11:43:51 +0000 (UTC)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Reduce BH-disable period further by moving cpu_map_build_skb()
-outside/before invoking the network stack.  And build up a
-skb_list that is used for netif_receive_skb_list. This is also
-an I-cache optimization.
+The function build_skb() also have the responsibility to allocate and clear
+the SKB structure. Introduce a new function build_skb_around(), that moves
+the responsibility of allocation and clearing to the caller. This allows
+caller to use kmem_cache (slab/slub) bulk allocation API.
 
-When injecting packets into the network stack, cpumap uses a special
-function named netif_receive_skb_core(), and we create a equivalent list
-version  named netif_receive_skb_list_core().
+Next patch use this function combined with kmem_cache_alloc_bulk.
 
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 ---
- include/linux/netdevice.h |    1 +
- kernel/bpf/cpumap.c       |   17 ++++++++++-------
- net/core/dev.c            |   18 ++++++++++++++++++
- 3 files changed, 29 insertions(+), 7 deletions(-)
+ include/linux/skbuff.h |    2 +
+ net/core/skbuff.c      |   71 +++++++++++++++++++++++++++++++++++-------------
+ 2 files changed, 54 insertions(+), 19 deletions(-)
 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 166fdc0a78b4..37e78dc9f30a 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -3621,6 +3621,7 @@ int netif_rx_ni(struct sk_buff *skb);
- int netif_receive_skb(struct sk_buff *skb);
- int netif_receive_skb_core(struct sk_buff *skb);
- void netif_receive_skb_list(struct list_head *head);
-+void netif_receive_skb_list_core(struct list_head *head);
- gro_result_t napi_gro_receive(struct napi_struct *napi, struct sk_buff *skb);
- void napi_gro_flush(struct napi_struct *napi, bool flush_old);
- struct sk_buff *napi_get_frags(struct napi_struct *napi);
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 430103e182a0..cb93df200cd0 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -256,6 +256,7 @@ static int cpu_map_kthread_run(void *data)
- 	while (!kthread_should_stop() || !__ptr_ring_empty(rcpu->queue)) {
- 		unsigned int drops = 0, sched = 0;
- 		void *frames[CPUMAP_BATCH];
-+		struct list_head skb_list;
- 		int i, n;
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index 9027a8c4219f..c40ffab8a9b0 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -1044,6 +1044,8 @@ struct sk_buff *__alloc_skb(unsigned int size, gfp_t priority, int flags,
+ 			    int node);
+ struct sk_buff *__build_skb(void *data, unsigned int frag_size);
+ struct sk_buff *build_skb(void *data, unsigned int frag_size);
++struct sk_buff *build_skb_around(struct sk_buff *skb,
++				 void *data, unsigned int frag_size);
  
- 		/* Release CPU reschedule checks */
-@@ -279,23 +280,25 @@ static int cpu_map_kthread_run(void *data)
- 		 */
- 		n = ptr_ring_consume_batched(rcpu->queue, frames, CPUMAP_BATCH);
- 
--		local_bh_disable();
-+		INIT_LIST_HEAD(&skb_list);
-+
- 		for (i = 0; i < n; i++) {
- 			struct xdp_frame *xdpf = frames[i];
- 			struct sk_buff *skb;
--			int ret;
- 
- 			skb = cpu_map_build_skb(rcpu, xdpf);
- 			if (!skb) {
- 				xdp_return_frame(xdpf);
- 				continue;
- 			}
--
--			/* Inject into network stack */
--			ret = netif_receive_skb_core(skb);
--			if (ret == NET_RX_DROP)
--				drops++;
-+			list_add_tail(&skb->list, &skb_list);
- 		}
-+
-+		local_bh_disable();
-+
-+		/* Inject into network stack */
-+		netif_receive_skb_list_core(&skb_list);
-+
- 		/* Feedback loop via tracepoint */
- 		trace_xdp_cpumap_kthread(rcpu->map_id, n, drops, sched);
- 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 9ca2d3abfd1a..1dee7bd895a0 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -5297,6 +5297,24 @@ void netif_receive_skb_list(struct list_head *head)
+ /**
+  * alloc_skb - allocate a network buffer
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 4782f9354dd1..d904b6e5fe08 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -258,6 +258,33 @@ struct sk_buff *__alloc_skb(unsigned int size, gfp_t gfp_mask,
  }
- EXPORT_SYMBOL(netif_receive_skb_list);
+ EXPORT_SYMBOL(__alloc_skb);
+ 
++/* Caller must provide SKB that is memset cleared */
++static struct sk_buff *__build_skb_around(struct sk_buff *skb,
++					  void *data, unsigned int frag_size)
++{
++	struct skb_shared_info *shinfo;
++	unsigned int size = frag_size ? : ksize(data);
++
++	size -= SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
++
++	/* Assumes caller memset cleared SKB */
++	skb->truesize = SKB_TRUESIZE(size);
++	refcount_set(&skb->users, 1);
++	skb->head = data;
++	skb->data = data;
++	skb_reset_tail_pointer(skb);
++	skb->end = skb->tail + size;
++	skb->mac_header = (typeof(skb->mac_header))~0U;
++	skb->transport_header = (typeof(skb->transport_header))~0U;
++
++	/* make sure we initialize shinfo sequentially */
++	shinfo = skb_shinfo(skb);
++	memset(shinfo, 0, offsetof(struct skb_shared_info, dataref));
++	atomic_set(&shinfo->dataref, 1);
++
++	return skb;
++}
++
+ /**
+  * __build_skb - build a network buffer
+  * @data: data buffer provided by caller
+@@ -279,32 +306,15 @@ EXPORT_SYMBOL(__alloc_skb);
+  */
+ struct sk_buff *__build_skb(void *data, unsigned int frag_size)
+ {
+-	struct skb_shared_info *shinfo;
+ 	struct sk_buff *skb;
+-	unsigned int size = frag_size ? : ksize(data);
+ 
+ 	skb = kmem_cache_alloc(skbuff_head_cache, GFP_ATOMIC);
+-	if (!skb)
++	if (unlikely(!skb))
+ 		return NULL;
+ 
+-	size -= SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+-
+ 	memset(skb, 0, offsetof(struct sk_buff, tail));
+-	skb->truesize = SKB_TRUESIZE(size);
+-	refcount_set(&skb->users, 1);
+-	skb->head = data;
+-	skb->data = data;
+-	skb_reset_tail_pointer(skb);
+-	skb->end = skb->tail + size;
+-	skb->mac_header = (typeof(skb->mac_header))~0U;
+-	skb->transport_header = (typeof(skb->transport_header))~0U;
+ 
+-	/* make sure we initialize shinfo sequentially */
+-	shinfo = skb_shinfo(skb);
+-	memset(shinfo, 0, offsetof(struct skb_shared_info, dataref));
+-	atomic_set(&shinfo->dataref, 1);
+-
+-	return skb;
++	return __build_skb_around(skb, data, frag_size);
+ }
+ 
+ /* build_skb() is wrapper over __build_skb(), that specifically
+@@ -325,6 +335,29 @@ struct sk_buff *build_skb(void *data, unsigned int frag_size)
+ }
+ EXPORT_SYMBOL(build_skb);
  
 +/**
-+ *	netif_receive_skb_list_core - special version of netif_receive_skb_list
-+ *	@head: list of skbs to process.
-+ *
-+ *	More direct receive version of netif_receive_skb_list().  It should
-+ *	only be used by callers that have a need to skip RPS and Generic XDP.
-+ *
-+ *	This function may only be called from softirq context and interrupts
-+ *	should be enabled.
++ * build_skb_around - build a network buffer around provided skb
++ * @skb: sk_buff provide by caller, must be memset cleared
++ * @data: data buffer provided by caller
++ * @frag_size: size of data, or 0 if head was kmalloced
 + */
-+void netif_receive_skb_list_core(struct list_head *head)
++struct sk_buff *build_skb_around(struct sk_buff *skb,
++				 void *data, unsigned int frag_size)
 +{
-+	rcu_read_lock();
-+	__netif_receive_skb_list(head);
-+	rcu_read_unlock();
-+}
-+EXPORT_SYMBOL(netif_receive_skb_list_core);
++	if (unlikely(!skb))
++		return NULL;
 +
- DEFINE_PER_CPU(struct work_struct, flush_works);
++	skb = __build_skb_around(skb, data, frag_size);
++
++	if (skb && frag_size) {
++		skb->head_frag = 1;
++		if (page_is_pfmemalloc(virt_to_head_page(data)))
++			skb->pfmemalloc = 1;
++	}
++	return skb;
++}
++EXPORT_SYMBOL(build_skb_around);
++
+ #define NAPI_SKB_CACHE_SIZE	64
  
- /* Network device is going away, flush any packets still pending */
+ struct napi_alloc_cache {
 
