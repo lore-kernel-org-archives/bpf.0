@@ -7,59 +7,61 @@ X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BE43C282CE
-	for <bpf@archiver.kernel.org>; Thu, 11 Apr 2019 11:20:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBF8EC10F13
+	for <bpf@archiver.kernel.org>; Thu, 11 Apr 2019 11:22:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4AD6321904
-	for <bpf@archiver.kernel.org>; Thu, 11 Apr 2019 11:20:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A35F2084D
+	for <bpf@archiver.kernel.org>; Thu, 11 Apr 2019 11:22:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="Pkh91gcQ"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="zcpw6xQt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726830AbfDKLUH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 11 Apr 2019 07:20:07 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:39485 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726137AbfDKLUG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 11 Apr 2019 07:20:06 -0400
-Received: by mail-wr1-f67.google.com with SMTP id j9so6827683wrn.6
-        for <bpf@vger.kernel.org>; Thu, 11 Apr 2019 04:20:05 -0700 (PDT)
+        id S1726230AbfDKLW7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Apr 2019 07:22:59 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:45501 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726517AbfDKLW6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 11 Apr 2019 07:22:58 -0400
+Received: by mail-wr1-f66.google.com with SMTP id s15so6785937wra.12
+        for <bpf@vger.kernel.org>; Thu, 11 Apr 2019 04:22:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=to:cc:references:from:openpgp:autocrypt:subject:message-id:date
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=ijgbhRucMxZTJRjq92yZSHzAVXXbU0/XRWoL+h4hS/w=;
-        b=Pkh91gcQ8TNIRyRL0NG2IwaMt6bF8OEyMhaRHVc8Py1FMDn90XB9iuVyGHSkMreRfa
-         RBIUcfTHN9E1DzW7hSginWZmQIbGoUaqxVL/jzw0qpRzKe6QJncxtmlgqLeppqXqFQyl
-         U4Rr8+VRnuBmJSYAjWNrPmMsEXQO54TbJZ1s+LixAyDlTnw+ePUcjJugb62gmg+AeYGy
-         RffB9ceZ2ykG3U3zN+q4qlb32BdHwaODD1y47x22pkB7cZy6dgyb8QV3FRqUjuQLXRrs
-         Dl621puAznDpbPW4xfz1DTU/GR045IZ7Q9T4/AoOzfWytGIofC7QH8IEgHSq0jCQIYS0
-         Za4Q==
+        bh=hbgGZ/ioe6qCqVuTNLgV9MkeZW2n7OkxXnas0MQbh64=;
+        b=zcpw6xQtlTzJ5iexfRc1T5XwhKzLDqCTxZT6YiSI7eu8XQjE/15Rt78V81555dedSG
+         HIJibV+KdB7GzNCgApZurLVeD0t1A12RnLtMqv9pavkvI1khLrU7KMxNiqEdmSFyA7Kj
+         M6cUTow7rT222FXEFlSFMoEOzxjt62iGH0kukxRfnuLIZFd5s5AN6Y4cM/x1bJgusxu7
+         PbsHR4OX/36Cc4kPcGkUH1ZZ1D5FU2DRARUGHXzNkVe8njNq8JqgYwIFZCaBUMOJKEuw
+         EMVvv8YXG6fhiWNYX+i7mV6b0grmUl7G53qqsj9ye7db3prj1bc4kJov9jJFg5u1h8r6
+         Zfgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:openpgp:autocrypt:subject
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=ijgbhRucMxZTJRjq92yZSHzAVXXbU0/XRWoL+h4hS/w=;
-        b=AvBVuFTRClEzxF0jjuAyUgb60c5bcR2PhLTwqXcdYLqcU04uXSCVuh7pH89LpZZZ6H
-         AJlAHQ+/+FmF96dwhc+gJ3Zi8dXJ8rh7eH90BE7dSEB+olfSv25Usm+NCzlYwdK2Z4OS
-         jdzoZ9YKBLOgLmYXmyUxhgKdyKB2JbnuTXr4LzU7MqNddnJ/atckNDW9DvC3nZvlXLYW
-         cPz7B2y51ycU5rltJSz3zMMkdGIzNDX6I4ObOoLj66yBivuCQHCn/4tpJfK4OmWfo84t
-         qCdE0Ku3ukeC0t4+ajZ2Eo4NBit0Fjmh0OJ0meNXsU8/DFRcwD5eVXzLg1S6lj55oVCa
-         I+QA==
-X-Gm-Message-State: APjAAAVcRYg8gnKv+/war09jANv1stBSpbGpQQrZ1E4w1EeeOzTk2xwa
-        nV1lnNnP5OzBbWleF080Md1bwLtJSpo=
-X-Google-Smtp-Source: APXvYqyY7FjfdtTSh0a5GmEyu6YdevBy9edDJQOBMABop1wZn4XjSTdNrxtKV3VQ4V5j6YlIK3++Fg==
-X-Received: by 2002:a5d:62c4:: with SMTP id o4mr10197816wrv.282.1554981604527;
-        Thu, 11 Apr 2019 04:20:04 -0700 (PDT)
+        bh=hbgGZ/ioe6qCqVuTNLgV9MkeZW2n7OkxXnas0MQbh64=;
+        b=qfGlBfDvaCbzEqr90Wpd60TLA1HwvzDQn/Vk2bik1WscQhFrXqAbuz2JhiCmTfB31y
+         2xvr/3l3TVQOSTaZunQIN+FQ3uieFwaTKK7PUc8+EGa3Qg18tVt4qgN57FaHsxnvfZrg
+         uEP7roxc+E46NE1JQWwAGArPckOGazFDyRWGLtCqe3zhNwUiFgWtrnMKR0rmLfENwVrD
+         PunvEX4LnH3exMnv/2kQiui1m0FxRKTPhOU1AnYTQl2ztbcH25E5SoVoRbpR4srwwM5s
+         V2e6r+SBAl7S3FHhvgZDFrd4tGjt8ADK5LXmSpL4bqqMnXm+reHjHhiSMIuf8s5DE8kj
+         4iGw==
+X-Gm-Message-State: APjAAAX8ZdHfo7B7cBsq/ALbvgMYaNkw0I9HHuX4XP3V+Vgywwk5EQia
+        HEO3a6ZOF5QG0oYs8eP1DUBflg==
+X-Google-Smtp-Source: APXvYqyeDVC+TNrJ1CkUztCvVQQhP48xfgbMUXJMQj2gD+bb1rjPuexL0iiLcH1E4l3vDHpwhk389g==
+X-Received: by 2002:adf:f90c:: with SMTP id b12mr6646106wrr.63.1554981776347;
+        Thu, 11 Apr 2019 04:22:56 -0700 (PDT)
 Received: from [172.20.1.104] ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id u17sm8226656wmu.36.2019.04.11.04.20.03
+        by smtp.gmail.com with ESMTPSA id q4sm53634433wrx.25.2019.04.11.04.22.55
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 11 Apr 2019 04:20:03 -0700 (PDT)
+        Thu, 11 Apr 2019 04:22:55 -0700 (PDT)
+Subject: Re: [PATCH bpf] bpftool: Fix errno variable usage
 To:     Benjamin Poirier <bpoirier@suse.com>,
         Daniel Borkmann <daniel@iogearbox.net>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org
-References: <20190411082700.26888-1-bpoirier@suse.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        David Ahern <dsahern@gmail.com>
+References: <20190411080332.24574-1-bpoirier@suse.com>
 From:   Quentin Monnet <quentin.monnet@netronome.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=quentin.monnet@netronome.com; prefer-encrypt=mutual; keydata=
@@ -105,117 +107,44 @@ Autocrypt: addr=quentin.monnet@netronome.com; prefer-encrypt=mutual; keydata=
  oHhplrRgXwPBSOkMMlLKu+FJsmYVFeLAJ81sfmFuTTliRb3Fl2Q27cEr7kNKlsz/t6vLSEN2
  j8x+tWD8x53SEOSn94g2AyJA9Txh2xBhWGuZ9CpBuXjtPrnRSd8xdrw36AL53goTt/NiLHUd
  RHhSHGnKaQ6MfrTge5Q0h5A=
-Subject: Re: [PATCH bpf-next] bpftool: Exit early when it's not possible to
- dump a REUSEPORT_SOCKARRAY map
-Message-ID: <240116cf-0e74-e9fb-5100-00965c578e72@netronome.com>
-Date:   Thu, 11 Apr 2019 12:20:02 +0100
+Message-ID: <2589b64c-0ed1-7815-dde2-aee1b48602ba@netronome.com>
+Date:   Thu, 11 Apr 2019 12:22:54 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190411082700.26888-1-bpoirier@suse.com>
+In-Reply-To: <20190411080332.24574-1-bpoirier@suse.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-2019-04-11 17:27 UTC+0900 ~ Benjamin Poirier <bpoirier@suse.com>
-> avoids outputting a series of
-> 	value:
-> 	No space left on device
+2019-04-11 17:03 UTC+0900 ~ Benjamin Poirier <bpoirier@suse.com>
+> The test meant to use the saved value of errno. Given the current code, it
+> makes no practical difference however.
 > 
-> The value itself is not wrong but bpf_fd_reuseport_array_lookup_elem() can
-> only return it if the map was created with value_size = 8. There's nothing
-> bpftool can do about it. Instead of repeating this error for every key in
-> the map, print the error once, print an explanatory message and exit.
-> 
+> Fixes: bf598a8f0f77 ("bpftool: Improve handling of ENOENT on map dumps")
 > Signed-off-by: Benjamin Poirier <bpoirier@suse.com>
 > ---
-> 
-> Note that this will lead to a merge conflict if the patch "bpftool: Fix
-> errno variable usage" is merged in the bpf branch:
-> 
-> <<<<<<< HEAD
->                 if (lookup_errno == ENOENT)
-> =======
->                 if (errno == ENOENT) {
->>>>>>>> bpf-next
-> 
-> The resolution should be trivial:
->                 if (lookup_errno == ENOENT) {
-> 
->  tools/bpf/bpftool/map.c | 21 +++++++++++++++------
->  1 file changed, 15 insertions(+), 6 deletions(-)
+>  tools/bpf/bpftool/map.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-> index e96903078991..bb648e42923c 100644
+> index e0c650d91784..05b029b934a6 100644
 > --- a/tools/bpf/bpftool/map.c
 > +++ b/tools/bpf/bpftool/map.c
-> @@ -684,7 +684,6 @@ static int dump_map_elem(int fd, void *key, void *value,
->  			 struct bpf_map_info *map_info, struct btf *btf,
->  			 json_writer_t *btf_wtr)
->  {
-> -	int num_elems = 0;
->  	int lookup_errno;
->  
->  	if (!bpf_map_lookup_elem(fd, key, value)) {
-> @@ -702,9 +701,8 @@ static int dump_map_elem(int fd, void *key, void *value,
->  			} else {
->  				print_entry_plain(map_info, key, value);
->  			}
-> -			num_elems++;
->  		}
-> -		return num_elems;
-> +		return 1;
->  	}
->  
->  	/* lookup error handling */
-> @@ -722,11 +720,13 @@ static int dump_map_elem(int fd, void *key, void *value,
+> @@ -720,7 +720,7 @@ static int dump_map_elem(int fd, void *key, void *value,
 >  		jsonw_string_field(json_wtr, "error", strerror(lookup_errno));
 >  		jsonw_end_object(json_wtr);
 >  	} else {
 > -		if (errno == ENOENT)
-> +		if (errno == ENOENT) {
+> +		if (lookup_errno == ENOENT)
 >  			print_entry_plain(map_info, key, NULL);
-> -		else
-> +		} else {
+>  		else
 >  			print_entry_error(map_info, key,
->  					  strerror(lookup_errno));
-> +			return -lookup_errno;
+> 
 
-Hi, thanks! One comment: if we return -lookup_errno here...
 
-> +		}
->  	}
->  
->  	return 0;
-> @@ -787,7 +787,16 @@ static int do_dump(int argc, char **argv)
->  				err = 0;
->  			break;
->  		}
-> -		num_elems += dump_map_elem(fd, key, value, &info, btf, btf_wtr);
-> +		err = dump_map_elem(fd, key, value, &info, btf, btf_wtr);
-> +		/* bpf_fd_reuseport_array_lookup_elem() can only return a
-> +		 * value if the map's value_size == 8
-> +		 */
-> +		if (info.type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY &&
-> +		    info.value_size != 8 && err == -ENOSPC) {
-> +			p_err("cannot dump REUSEPORT_SOCKARRAY map with value_size != 8");
-> +			goto exit_free;
-> +		}
-> +		num_elems += err;
-
-... I think we can have a negative err value here (if we're not in the
-case of reuseport_sockarray with wrong map size)? In that case, the
-function could print something like "Found -1 elements"?
-
-So maybe update num_elems only if err is positive? Although I'd like
-even better if we could somehow find a way to move this error handling
-along with the rest of it in dump_map_elem(), and avoid making that
-function return either a number of elements or an error depending on the
-result from the lookup.
-
-Best regards,
-Quentin
+Reviewed-by: Quentin Monnet <quentin.monnet@netronome.com>
