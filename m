@@ -2,91 +2,124 @@ Return-Path: <SRS0=sRBR=SN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0032FC10F13
-	for <bpf@archiver.kernel.org>; Thu, 11 Apr 2019 08:05:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B8FEC10F13
+	for <bpf@archiver.kernel.org>; Thu, 11 Apr 2019 08:27:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C10242083E
-	for <bpf@archiver.kernel.org>; Thu, 11 Apr 2019 08:05:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 515A22083E
+	for <bpf@archiver.kernel.org>; Thu, 11 Apr 2019 08:27:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726160AbfDKIFH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 11 Apr 2019 04:05:07 -0400
-Received: from www62.your-server.de ([213.133.104.62]:37948 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725793AbfDKIFH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 11 Apr 2019 04:05:07 -0400
-Received: from [78.46.172.2] (helo=sslproxy05.your-server.de)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1hEUhh-0002im-1w; Thu, 11 Apr 2019 10:05:01 +0200
-Received: from [178.197.249.32] (helo=linux.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1hEUhg-000Hb1-PE; Thu, 11 Apr 2019 10:05:00 +0200
-Subject: Re: [PATCH bpf-next v4 1/3] bpf: support input __sk_buff context in
- BPF_PROG_TEST_RUN
-To:     Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, Martin Lau <kafai@fb.com>
-References: <20190409184911.97485-1-sdf@google.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <7b6c75c9-ef33-ba99-9108-ff674289e009@iogearbox.net>
-Date:   Thu, 11 Apr 2019 10:04:59 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.3.0
+        id S1726137AbfDKI1K (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Apr 2019 04:27:10 -0400
+Received: from mx2.suse.de ([195.135.220.15]:58992 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725793AbfDKI1K (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 11 Apr 2019 04:27:10 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 887CEAC69;
+        Thu, 11 Apr 2019 08:27:09 +0000 (UTC)
+From:   Benjamin Poirier <bpoirier@suse.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH bpf-next] bpftool: Exit early when it's not possible to dump a REUSEPORT_SOCKARRAY map
+Date:   Thu, 11 Apr 2019 17:27:00 +0900
+Message-Id: <20190411082700.26888-1-bpoirier@suse.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-In-Reply-To: <20190409184911.97485-1-sdf@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.100.3/25415/Wed Apr 10 09:53:39 2019)
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 04/09/2019 08:49 PM, Stanislav Fomichev wrote:
-> Add new set of arguments to bpf_attr for BPF_PROG_TEST_RUN:
-> * ctx_in/ctx_size_in - input context
-> * ctx_out/ctx_size_out - output context
-> 
-> The intended use case is to pass some meta data to the test runs that
-> operate on skb (this has being brought up on recent LPC).
-> 
-> For programs that use bpf_prog_test_run_skb, support __sk_buff input and
-> output. Initially, from input __sk_buff, copy _only_ cb and priority into
-> skb, all other non-zero fields are prohibited (with EINVAL).
-> If the user has set ctx_out/ctx_size_out, copy the potentially modified
-> __sk_buff back to the userspace.
-> 
-> We require all fields of input __sk_buff except the ones we explicitly
-> support to be set to zero. The expectation is that in the future we might
-> add support for more fields and we want to fail explicitly if the user
-> runs the program on the kernel where we don't yet support them.
-> 
-> The API is intentionally vague (i.e. we don't explicitly add __sk_buff
-> to bpf_attr, but ctx_in) to potentially let other test_run types use
-> this interface in the future (this can be xdp_md for xdp types for
-> example).
-> 
-> v4:
->   * don't copy more than allowed in bpf_ctx_init [Martin]
-> 
-> v3:
->   * handle case where ctx_in is NULL, but ctx_out is not [Martin]
->   * convert size==0 checks to ptr==NULL checks and add some extra ptr
->     checks [Martin]
-> 
-> v2:
->   * Addressed comments from Martin Lau
-> 
-> Cc: Martin Lau <kafai@fb.com>
-> Signed-off-by: Stanislav Fomichev <sdf@google.com>
+avoids outputting a series of
+	value:
+	No space left on device
 
-Series applied, thanks!
+The value itself is not wrong but bpf_fd_reuseport_array_lookup_elem() can
+only return it if the map was created with value_size = 8. There's nothing
+bpftool can do about it. Instead of repeating this error for every key in
+the map, print the error once, print an explanatory message and exit.
+
+Signed-off-by: Benjamin Poirier <bpoirier@suse.com>
+---
+
+Note that this will lead to a merge conflict if the patch "bpftool: Fix
+errno variable usage" is merged in the bpf branch:
+
+<<<<<<< HEAD
+                if (lookup_errno == ENOENT)
+=======
+                if (errno == ENOENT) {
+>>>>>>> bpf-next
+
+The resolution should be trivial:
+                if (lookup_errno == ENOENT) {
+
+ tools/bpf/bpftool/map.c | 21 +++++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
+
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index e96903078991..bb648e42923c 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -684,7 +684,6 @@ static int dump_map_elem(int fd, void *key, void *value,
+ 			 struct bpf_map_info *map_info, struct btf *btf,
+ 			 json_writer_t *btf_wtr)
+ {
+-	int num_elems = 0;
+ 	int lookup_errno;
+ 
+ 	if (!bpf_map_lookup_elem(fd, key, value)) {
+@@ -702,9 +701,8 @@ static int dump_map_elem(int fd, void *key, void *value,
+ 			} else {
+ 				print_entry_plain(map_info, key, value);
+ 			}
+-			num_elems++;
+ 		}
+-		return num_elems;
++		return 1;
+ 	}
+ 
+ 	/* lookup error handling */
+@@ -722,11 +720,13 @@ static int dump_map_elem(int fd, void *key, void *value,
+ 		jsonw_string_field(json_wtr, "error", strerror(lookup_errno));
+ 		jsonw_end_object(json_wtr);
+ 	} else {
+-		if (errno == ENOENT)
++		if (errno == ENOENT) {
+ 			print_entry_plain(map_info, key, NULL);
+-		else
++		} else {
+ 			print_entry_error(map_info, key,
+ 					  strerror(lookup_errno));
++			return -lookup_errno;
++		}
+ 	}
+ 
+ 	return 0;
+@@ -787,7 +787,16 @@ static int do_dump(int argc, char **argv)
+ 				err = 0;
+ 			break;
+ 		}
+-		num_elems += dump_map_elem(fd, key, value, &info, btf, btf_wtr);
++		err = dump_map_elem(fd, key, value, &info, btf, btf_wtr);
++		/* bpf_fd_reuseport_array_lookup_elem() can only return a
++		 * value if the map's value_size == 8
++		 */
++		if (info.type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY &&
++		    info.value_size != 8 && err == -ENOSPC) {
++			p_err("cannot dump REUSEPORT_SOCKARRAY map with value_size != 8");
++			goto exit_free;
++		}
++		num_elems += err;
+ 		prev_key = key;
+ 	}
+ 
+-- 
+2.21.0
+
