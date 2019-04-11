@@ -6,65 +6,65 @@ X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,
 	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94848C10F13
-	for <bpf@archiver.kernel.org>; Thu, 11 Apr 2019 16:53:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A292C10F13
+	for <bpf@archiver.kernel.org>; Thu, 11 Apr 2019 17:22:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 599A72133D
-	for <bpf@archiver.kernel.org>; Thu, 11 Apr 2019 16:53:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D81E20693
+	for <bpf@archiver.kernel.org>; Thu, 11 Apr 2019 17:22:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="k056Z0DP"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="DVmlB/dD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726964AbfDKQxa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 11 Apr 2019 12:53:30 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:52368 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726874AbfDKQx3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 11 Apr 2019 12:53:29 -0400
-Received: by mail-wm1-f68.google.com with SMTP id a184so7608611wma.2
-        for <bpf@vger.kernel.org>; Thu, 11 Apr 2019 09:53:28 -0700 (PDT)
+        id S1726800AbfDKRWS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Apr 2019 13:22:18 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:36240 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726750AbfDKRWR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 11 Apr 2019 13:22:17 -0400
+Received: by mail-wr1-f68.google.com with SMTP id y13so8415251wrd.3
+        for <bpf@vger.kernel.org>; Thu, 11 Apr 2019 10:22:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:subject:from:in-reply-to:date:cc
          :content-transfer-encoding:message-id:references:to;
-        bh=wfDrDROTvjACr08Dm+67uQv3MomG9SwdFcYtNDNZrDc=;
-        b=k056Z0DPNUfZFJxrOjQSYcXTK+aWj5psGJQl9GI6rkZi/CUAcRaEwZBfai/A84Ja26
-         X/src9T/gEmNRlCvtqzczI7o+OvvwqxHh2olQgqCGH7Q4zthPsHKhdO3ENI66l7a/Oul
-         kLzwPt2J0gbIt1dVqw/smVfGTeBc7a1u/TGraketjVbyqMaeXqk/a0F7Ll0QGVDDrTcA
-         g7HaNx5sutk9wJxuSAUmFytfGTUlF4hXgGU5EYyX0XGFHjk+E4TsuRn1ZIvpf1GvI1lV
-         RbErlxxG2R6Bp/ZX6YKgA/8+T+q+VCUWxVUvh4tMrDZNbkKwnbp0nGtX1diQZxVmd7RY
-         O5kw==
+        bh=75IrDBHz2Eg4TUIshPKuQX4kkcUDWaCjt7/qTQ2bhyY=;
+        b=DVmlB/dD4elN40yTOjGrJ3NXH6Pl79Ml0/qEHmFED04fw/zPGKBrAso3dDi3HQ9+hX
+         DiGxJcmmTGesnbNMBkFFRvfqyBX4tw59Xlys3qzSZqZc4eQPCR/KvgJUNjSX3jF62+tk
+         1jF3JLIYeqSY1QeYiCskdZOA/lU7VuNsmECBihRG/ZIqf+QyBy1S2RoixAze20SM7oOa
+         iPOpAze6deyX8tieu5TLibwzzt4pMK346Uirws1s20jH7C+CT0Z3P5veq/wIvD6MNPZB
+         5nszdvnytUdGcPsax5l6BYwd812B+vXkrYk9N7IU+kNTWGYTdHxHQtHmA5XaOhxPBTVk
+         2I3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
          :content-transfer-encoding:message-id:references:to;
-        bh=wfDrDROTvjACr08Dm+67uQv3MomG9SwdFcYtNDNZrDc=;
-        b=YSjXIpUyngnnH1lZ+ccw+CHIQi+DrkB0GvZABSJbTQ7BPcqTyk/2ooNRXD1KFk7fbO
-         ANvxD8TJ7t2pfiPaV6OFgxZuQ+xDoD/yudtFzbbEx6LTqJt/JI4UcVa5J7TMgBRHTRd1
-         tKManxqAcX6cqaOa/Rr/MGgBk1s3rW6ulKVDarRqhIbRYzXAMXWnEPri0wa2F1PQEn3P
-         NJTsukRV1rWnm+SVFsHhrqs2QJds+bKv0BtXzC6U5BswEqBoTRkxR4V/L3dpom23wzQh
-         et28JcX4OKtXRZPimrW+IrRRiB12qHvVmE1lB5ipMFBVQ8IncKGM2+SUJndnd9nToxJm
-         Eq1A==
-X-Gm-Message-State: APjAAAXF7YFj5a7tlFlMrmJGDQATTM6GZHuqkhp67BgGAp4M0L7rpWVZ
-        +CKSJV1hUBtsmjLkGHVcT8219g==
-X-Google-Smtp-Source: APXvYqyYduBh/47gnohCbEyb/lNAvTzylOIELuFcvk6p7RHTD/RyRt9XSlXNNTx7RGTYSqyPux/jJA==
-X-Received: by 2002:a1c:1d49:: with SMTP id d70mr7582025wmd.36.1555001607988;
-        Thu, 11 Apr 2019 09:53:27 -0700 (PDT)
+        bh=75IrDBHz2Eg4TUIshPKuQX4kkcUDWaCjt7/qTQ2bhyY=;
+        b=lP6/FMK9lsUot2FyXBP2YBkvt7kWo1wwp7K8sjRIY5RJUR7oCubBt7/ZestEiEVOmY
+         mO3pexNXpjwyfRRH0BGJaG16YDCDJzYbptxJOrwJg773c+njLbCuATppPIeBDsmQEHUI
+         S7qqz4W1iLNSxptkiiNvIOYMsvS61nRYAaceZW9+f0tvQKc4qsDq332bFWV0/OmhcVDY
+         0WeiHq8Nn/bLiQdW5X3RJImIcWR5UCaN5NK4ZbFKY878l8+E88dn5L6E+FHEvC4Zqj/0
+         7nXZM+QFq8TbpSOJJY6RECHY3xX42+0YWKcKZQPVyciL296vWCdZ39lIVGwojM6YVwPh
+         /cYQ==
+X-Gm-Message-State: APjAAAUQYwQh146XDIYqRUAWipbg+srGJjxzLswbFDTVl6EcxhfQZjYk
+        Ol2vKx9Va2GHTj4wE7T+Y8RiPxgeaxU=
+X-Google-Smtp-Source: APXvYqyZJEW86fS1AWamQwGnPsYSxpeGQ3zYL9n3ennD50iIvftWjqxoWAMjEH228V275QaptgdgQg==
+X-Received: by 2002:adf:e648:: with SMTP id b8mr31604955wrn.132.1555003336384;
+        Thu, 11 Apr 2019 10:22:16 -0700 (PDT)
 Received: from [192.168.0.23] (cpc1-cmbg19-2-0-cust104.5-4.cable.virginm.net. [82.27.180.105])
-        by smtp.gmail.com with ESMTPSA id v16sm73201837wro.48.2019.04.11.09.53.26
+        by smtp.gmail.com with ESMTPSA id r30sm124834372wrr.46.2019.04.11.10.22.15
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 11 Apr 2019 09:53:27 -0700 (PDT)
+        Thu, 11 Apr 2019 10:22:15 -0700 (PDT)
 Content-Type: text/plain; charset=utf-8
 Mime-Version: 1.0 (Mac OS X Mail 10.3 \(3273\))
 Subject: Re: [oss-drivers] Re: [PATCH/RFC v2 bpf-next 05/19] bpf: split read
  liveness into REG_LIVE_READ64 and REG_LIVE_READ32
 From:   Jiong Wang <jiong.wang@netronome.com>
 In-Reply-To: <20190411094456.1fabc52d@cakuba.netronome.com>
-Date:   Thu, 11 Apr 2019 17:53:27 +0100
+Date:   Thu, 11 Apr 2019 18:22:16 +0100
 Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
         daniel@iogearbox.net, bpf@vger.kernel.org, netdev@vger.kernel.org,
         oss-drivers@netronome.com
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <078E22BB-54CD-4AA2-A240-1FD822189B44@netronome.com>
+Message-Id: <70F0E85E-B8B3-49AB-ACA7-906A9D529240@netronome.com>
 References: <1554925833-7333-1-git-send-email-jiong.wang@netronome.com>
  <1554925833-7333-6-git-send-email-jiong.wang@netronome.com>
  <20190410195218.303d4a6c@cakuba.netronome.com>
@@ -105,21 +105,6 @@ this in this
 > The entire if clause is an optimization.  I'm saying you can maintain =
 it
 > as more aggressive.
-
-What I mean is I suspect the read width could be quite consistent in =
-real program,
-the percentage for doing extra check on read64 could actually be mishit =
-for
-most of the time, if the propagation iterations is big the extra check =
-done each
-time may overcome the propagation pruned.
-
-I will do some benchmarking on this to see the real gain.
-
-Regards,
-Jiong
-
-
 >=20
 >>>> @@ -6196,12 +6286,19 @@ static int propagate_liveness_reg(struct =
 bpf_verifier_env *env,
@@ -154,4 +139,12 @@ we don=E2=80=99t want to
 > 	u8 bits_prop =3D bits_diff & bits;
 >=20
 > Maybe you're talking about some patch down the line..
+
+Ack, indeed, !bits_prop is always true if !bits_diff is true, will =
+remove the
+redundant check.
+
+Thanks,
+Regards,
+Jiong
 
