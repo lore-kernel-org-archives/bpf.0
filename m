@@ -2,124 +2,119 @@ Return-Path: <SRS0=sRBR=SN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DA4CC10F13
-	for <bpf@archiver.kernel.org>; Thu, 11 Apr 2019 05:47:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8BCEC10F13
+	for <bpf@archiver.kernel.org>; Thu, 11 Apr 2019 06:02:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DE34E20850
-	for <bpf@archiver.kernel.org>; Thu, 11 Apr 2019 05:47:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 583C820693
+	for <bpf@archiver.kernel.org>; Thu, 11 Apr 2019 06:02:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KuhgQQOo"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="Wis/ADDV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726814AbfDKFru (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 11 Apr 2019 01:47:50 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:52753 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725782AbfDKFru (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 11 Apr 2019 01:47:50 -0400
-Received: by mail-wm1-f65.google.com with SMTP id a184so5010466wma.2
-        for <bpf@vger.kernel.org>; Wed, 10 Apr 2019 22:47:49 -0700 (PDT)
+        id S1726137AbfDKGCs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Apr 2019 02:02:48 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:39722 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725782AbfDKGCr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 11 Apr 2019 02:02:47 -0400
+Received: by mail-wr1-f66.google.com with SMTP id j9so5593607wrn.6
+        for <bpf@vger.kernel.org>; Wed, 10 Apr 2019 23:02:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=NsCapcvrCzX4whjtOibbL7+C3EUhdfca/Vmv19BdkYA=;
-        b=KuhgQQOovM8ZUnMHr91dNUFWsLmMjt6SNVGtnMCNsfOAehl+nE26yjO3TX+mXx7J8k
-         FSIOVM9lcIEauIjoPZvUCDOZtjleedlcAv1BxCnopqexB2huze9ztO/N/ug/1d8BFMqv
-         TJwRt9IyHgSgnvHwNwwR5SWocX/wtGhi7ZyBizey0KTgP5YT4N2VxZyysmYEKVsbklK9
-         Thq6YmnmbLW6ax34mdwyE5qKWP2vYKIDCavXxJeXVkbfbzB42269tnc0MxFiJKFUGKRM
-         /C32+RBIIQw9DMCBIoeBAmZOPgTJYOK5/3P26B8JkUwN24hSeWdx2KMfMohxHusluZHo
-         JtZg==
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=Zg3kUMdyEGkfbUO6z7WZ0PycXeHTLdNbqeAjUhFBweM=;
+        b=Wis/ADDV0NgYzvEmaSA9gvGrYNRS57uSogh2FY6ID2zQPW0PCF4Hte4ZBePIByiUvA
+         T9255ddjmaXFOBhxBYEPqRiz2uEJFBG3hkj33vqDCj2cQh1rjiRAU+m/rqNVQtT3a8Kh
+         +1qroPY2zBSqcPGwU/b7qYTVToC8kr6sq1ZLQ5/6H0mG5Z4JT/8Hd5e6J0SINzqCVpxb
+         LNOY5HbB+JE6+pSA1YxEGTH+TxZTZfyq5zV4dHemWkFSx9OMUd+5HilO1owvc1J9iHXR
+         18JgRxXh3jVVTkMzZE1gBeDRlpCeuMB7bd2gDJeN1bsRtNYhdpjYv03+Gda6usD/BG61
+         iTCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NsCapcvrCzX4whjtOibbL7+C3EUhdfca/Vmv19BdkYA=;
-        b=LrGluBBhFz9S9OrfdM9VaHXaWSiaZnXEIo06cPg9/XyxNLd6rEyATpvMvejahPDUXW
-         uHeHFDdU7P68/irXZ5CnU4UgkI8Xr3Rmk2OZM5V6TM6iI5Sk6vuEMJnZCtdKzTRbdtCO
-         KPWjYKdZ2MeWjCzNJ7COLzWPd/Gj1tDhe6EehOhVCE9MhyIjO9wTx+eSMYNWBR7lPZGM
-         X2lUogz2epnbYfJGE+Sbjpvi3hSxGh0MCQ+KSLv34nSc2s7uXIYGPARFQNwkvuzF11D+
-         3CtTks2OvWVLen+zzuVXz/ZRhZzkAxz1E8/9fXZVfMvJf5y62HZfWqgYD5jQ9CeMJT/N
-         R0hQ==
-X-Gm-Message-State: APjAAAUxJjM/dYlMbYlCXuPAy0DyFoo+mCtiq3sTht8kQcS6RDJHs/Eu
-        NuFjBDMK+eU7hkDyk7dj6CyRDg==
-X-Google-Smtp-Source: APXvYqxI60J1J/+/+Wnw+jr7v5BFYK8Vy3XwCLZEqT4/0TQ+dvXmFZXOBIjLi0J1zcQfhdrDHfJylw==
-X-Received: by 2002:a1c:7512:: with SMTP id o18mr5429967wmc.68.1554961668574;
-        Wed, 10 Apr 2019 22:47:48 -0700 (PDT)
-Received: from apalos (athedsl-165181.home.otenet.gr. [85.75.188.219])
-        by smtp.gmail.com with ESMTPSA id n6sm9677429wmn.48.2019.04.10.22.47.47
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=Zg3kUMdyEGkfbUO6z7WZ0PycXeHTLdNbqeAjUhFBweM=;
+        b=a/v5tlGKyNP5UprbpX774QFeRPZfshiCn6Y1IX7ctG0rS8gAbKqFmJzhyQk2GmkjwQ
+         8xWcwohgFs02nTtldC6GejymPzoRm1JaTjRckIr50zc660Vsk/LtX2TzyC9vqMNnHY1D
+         lzTcrkCCtB88HInZlbPSW6CQEfwZX0FQzwa+vyRidsZ0NG6CyE0qL3frRDiwCx4kr/8i
+         zmvB7js1OKWqR/3eab9owxxfaH4a6sMQXE5PQ3ijBP/iQ4rtpYqNr6sGBOl6rMBKCVu3
+         wzvDEemq8+58nD9pDmNBLEZ13TRHRGInG+8Wf3TZ42HI80d9m4hATLwsXZ59tWDTalw+
+         H+TA==
+X-Gm-Message-State: APjAAAVP9DUvy8BnI3KdJGDqJh3wLNqwCoFHkts3kns+y8GhDvN2UTFU
+        HN4EvSVuGtMhTQzBBkCzXYtM3A==
+X-Google-Smtp-Source: APXvYqwH3S9CYfsLbzUTIj1U6wDElgQCZp9TL3cWw8zP26eo/rGgIwuglPJe4kBkvVmxlKJCjf0rug==
+X-Received: by 2002:adf:cc85:: with SMTP id p5mr26446885wrj.101.1554962566129;
+        Wed, 10 Apr 2019 23:02:46 -0700 (PDT)
+Received: from [192.168.0.23] (cpc1-cmbg19-2-0-cust104.5-4.cable.virginm.net. [82.27.180.105])
+        by smtp.gmail.com with ESMTPSA id j9sm44684397wrr.93.2019.04.10.23.02.44
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 10 Apr 2019 22:47:47 -0700 (PDT)
-Date:   Thu, 11 Apr 2019 08:47:45 +0300
-From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
-To:     Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     netdev@vger.kernel.org, Daniel Borkmann <borkmann@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>, bpf@vger.kernel.org,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@toke.dk>
-Subject: Re: [PATCH bpf-next 5/5] bpf: cpumap memory prefetchw optimizations
- for struct page
-Message-ID: <20190411054745.GA1763@apalos>
-References: <155489659290.20826.1108770347511292618.stgit@firesoul>
- <155489663807.20826.15883373865371166146.stgit@firesoul>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <155489663807.20826.15883373865371166146.stgit@firesoul>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        Wed, 10 Apr 2019 23:02:45 -0700 (PDT)
+Content-Type: text/plain; charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 10.3 \(3273\))
+Subject: Re: [PATCH/RFC v2 bpf-next 06/19] bpf: mark lo32 writes that should
+ be zero extended into hi32
+From:   Jiong Wang <jiong.wang@netronome.com>
+In-Reply-To: <20190410201302.4e67d48f@cakuba.netronome.com>
+Date:   Thu, 11 Apr 2019 07:02:44 +0100
+Cc:     alexei.starovoitov@gmail.com, daniel@iogearbox.net,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        oss-drivers@netronome.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <8CDB95C6-91FB-4F6D-82E1-61F6132A2DE1@netronome.com>
+References: <1554925833-7333-1-git-send-email-jiong.wang@netronome.com>
+ <1554925833-7333-7-git-send-email-jiong.wang@netronome.com>
+ <20190410201302.4e67d48f@cakuba.netronome.com>
+To:     Jakub Kicinski <jakub.kicinski@netronome.com>
+X-Mailer: Apple Mail (2.3273)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Apr 10, 2019 at 01:43:58PM +0200, Jesper Dangaard Brouer wrote:
-> A lot of the performance gain comes from this patch.
-> 
-> While analysing performance overhead it was found that the largest CPU
-> stalls were caused when touching the struct page area. It is first read with
-> a READ_ONCE from build_skb_around via page_is_pfmemalloc(), and when freed
-> written by page_frag_free() call.
-> 
-> Measurements show that the prefetchw (W) variant operation is needed to
-> achieve the performance gain. We believe this optimization it two fold,
-> first the W-variant saves one step in the cache-coherency protocol, and
-> second it helps us to avoid the non-temporal prefetch HW optimizations and
-> bring this into all cache-levels. It might be worth investigating if
-> prefetch into L2 will have the same benefit.
-> 
-> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-> ---
->  kernel/bpf/cpumap.c |   12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-> index b82a11556ad5..4758482ab5b9 100644
-> --- a/kernel/bpf/cpumap.c
-> +++ b/kernel/bpf/cpumap.c
-> @@ -281,6 +281,18 @@ static int cpu_map_kthread_run(void *data)
->  		 * consume side valid as no-resize allowed of queue.
->  		 */
->  		n = ptr_ring_consume_batched(rcpu->queue, frames, CPUMAP_BATCH);
-> +
-> +		for (i = 0; i < n; i++) {
-> +			void *f = frames[i];
-> +			struct page *page = virt_to_page(f);
-> +
-> +			/* Bring struct page memory area to curr CPU. Read by
-> +			 * build_skb_around via page_is_pfmemalloc(), and when
-> +			 * freed written by page_frag_free call.
-> +			 */
-> +			prefetchw(page);
-> +		}
-> +
->  		m = kmem_cache_alloc_bulk(skbuff_head_cache, gfp, n, skbs);
->  		if (unlikely(m == 0)) {
->  			for (i = 0; i < n; i++)
-> 
-LGTM 
 
-Acked-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+> On 11 Apr 2019, at 04:13, Jakub Kicinski =
+<jakub.kicinski@netronome.com> wrote:
+>=20
+> On Wed, 10 Apr 2019 20:50:20 +0100, Jiong Wang wrote:
+>> @@ -2169,6 +2188,12 @@ static int check_mem_access(struct =
+bpf_verifier_env *env, int insn_idx, u32 regn
+>> 						    value_regno);
+>> 				if (reg_type_may_be_null(reg_type))
+>> 					regs[value_regno].id =3D =
+++env->id_gen;
+>> +				/* A load of ctx field could have =
+different
+>> +				 * actual load size with the one encoded =
+in the
+>> +				 * insn. When the dst is PTR, it is for =
+sure not
+>> +				 * a sub-register.
+>> +				 */
+>> +				regs[value_regno].subreg_def =3D =
+DEF_NOT_SUBREG;
+>=20
+> Can't the rewrite generate a 32bit load?  E.g. reading skb->len will =
+be
+> LDX | W, we still gotta clear the top bits in that case, no?
+
+No. for 32-bit load, I think the type won=E2=80=99t be ptr type. This =
+override is
+gated by !SCALAR_VALUE.
+
+Regards,
+Jiong
+
+>=20
+> I can't find the explanation of this case with a quick scan of the =
+code
+> and cover letter..
+>=20
+>> 			}
+>> 			regs[value_regno].type =3D reg_type;
+>> 		}
+>=20
+
