@@ -2,101 +2,80 @@ Return-Path: <SRS0=9Oao=SO=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_NEOMUTT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23A03C10F14
-	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 15:07:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54A8AC10F0E
+	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 15:38:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F1CF42083E
-	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 15:07:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2D70E2171F
+	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 15:38:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727032AbfDLPHx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Apr 2019 11:07:53 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:50810 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727020AbfDLPHv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 12 Apr 2019 11:07:51 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 6396530718CE;
-        Fri, 12 Apr 2019 15:07:51 +0000 (UTC)
-Received: from firesoul.localdomain (ovpn-200-48.brq.redhat.com [10.40.200.48])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F370519747;
-        Fri, 12 Apr 2019 15:07:48 +0000 (UTC)
-Received: from [10.10.10.1] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 2154E31256FC7;
-        Fri, 12 Apr 2019 17:07:48 +0200 (CEST)
-Subject: [PATCH bpf-next V2 4/4] bpf: cpumap memory prefetchw optimizations
- for struct page
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     netdev@vger.kernel.org, Daniel Borkmann <borkmann@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     songliubraving@fb.com,
-        Toke =?utf-8?q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        ecree@solarflare.com, bpf@vger.kernel.org
-Date:   Fri, 12 Apr 2019 17:07:48 +0200
-Message-ID: <155508166807.23650.1698718263344400653.stgit@firesoul>
-In-Reply-To: <155508158877.23650.13330504000013024259.stgit@firesoul>
-References: <155508158877.23650.13330504000013024259.stgit@firesoul>
-User-Agent: StGit/0.17.1-dirty
+        id S1726785AbfDLPiX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Apr 2019 11:38:23 -0400
+Received: from Galois.linutronix.de ([146.0.238.70]:37676 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726327AbfDLPiX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 12 Apr 2019 11:38:23 -0400
+Received: from bigeasy by Galois.linutronix.de with local (Exim 4.80)
+        (envelope-from <bigeasy@linutronix.de>)
+        id 1hEyFv-0006qt-Dn; Fri, 12 Apr 2019 17:38:19 +0200
+Date:   Fri, 12 Apr 2019 17:38:19 +0200
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH 1/3] bpf: Use spinlock_t in bpf_lru_list
+Message-ID: <20190412153819.6sh2b2cwddpgnepq@linutronix.de>
+References: <20190410143025.11997-1-bigeasy@linutronix.de>
+ <813645e9-6a09-4aa4-0e2e-9b68359b83db@fb.com>
+ <4150a0db-18f9-aa93-cdb4-8cf047093740@iogearbox.net>
+ <20190410174444.26ebmnwpsiw6eicz@linutronix.de>
+ <a3777ba4-467d-b24e-ec7c-91da09c10f10@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.40]); Fri, 12 Apr 2019 15:07:51 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a3777ba4-467d-b24e-ec7c-91da09c10f10@fb.com>
+User-Agent: NeoMutt/20180716
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A lot of the performance gain comes from this patch.
+On 2019-04-10 18:35:21 [+0000], Yonghong Song wrote:
+> > Ah. I checked one or two of those and it looked like it was raw since
+> > the beginning. Anyway, it would be nice to Cc: the RT developer while
+> > fiddling with something that only concerns RT.
+> > 
+> > That usage pattern that is mentioned in ac00881f9221, is it true for all
+> > data structure algorithms? In bpf_lru_list I was concerned about the
+> > list loops. 
+> For some skewed hash tables with a lot of elements, yes, it is possible
+> time to traverse the loop could be a little bit longer...
 
-While analysing performance overhead it was found that the largest CPU
-stalls were caused when touching the struct page area. It is first read with
-a READ_ONCE from build_skb_around via page_is_pfmemalloc(), and when freed
-written by page_frag_free() call.
+okay. So all that adds to your max latency which we try to keep low. If
+this is debugging only one could argue that it is okay. However if it is
+intended to be used in production then we usually try to keep as low as
+possible (i.e. have an upper limit).
 
-Measurements show that the prefetchw (W) variant operation is needed to
-achieve the performance gain. We believe this optimization it two fold,
-first the W-variant saves one step in the cache-coherency protocol, and
-second it helps us to avoid the non-temporal prefetch HW optimizations and
-bring this into all cache-levels. It might be worth investigating if
-prefetch into L2 will have the same benefit.
+> > However hashtab and lpm_trie may perform memory allocations
+> > while holding the lock and this isn't going to work.
+> 
+> The memory allocation in these two places uses GFP_ATOMIC which should 
+> not sleep/block.
 
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Acked-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Acked-by: Song Liu <songliubraving@fb.com>
----
- kernel/bpf/cpumap.c |   12 ++++++++++++
- 1 file changed, 12 insertions(+)
+That is not true for -RT usage. GFP_ATOMIC enables the usage of
+emergency memory pools (which are in general precious) and won't
+schedule() in order to free memory. This doesn't change on -RT.
+However, SLUB may call into the page allocator in order to get a fresh
+page and this is not working on -RT. This means you can't allocate
+memory from a preempt_disable() / local_irq_disable() section which
+includes your raw_spin_lock(). It works from spin_lock_irq() because
+that one is a sleeping lock on -RT.
 
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 732d6ced3987..cf727d77c6c6 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -280,6 +280,18 @@ static int cpu_map_kthread_run(void *data)
- 		 * consume side valid as no-resize allowed of queue.
- 		 */
- 		n = ptr_ring_consume_batched(rcpu->queue, frames, CPUMAP_BATCH);
-+
-+		for (i = 0; i < n; i++) {
-+			void *f = frames[i];
-+			struct page *page = virt_to_page(f);
-+
-+			/* Bring struct page memory area to curr CPU. Read by
-+			 * build_skb_around via page_is_pfmemalloc(), and when
-+			 * freed written by page_frag_free call.
-+			 */
-+			prefetchw(page);
-+		}
-+
- 		m = kmem_cache_alloc_bulk(skbuff_head_cache, gfp, n, skbs);
- 		if (unlikely(m == 0)) {
- 			for (i = 0; i < n; i++)
-
+Sebastian
