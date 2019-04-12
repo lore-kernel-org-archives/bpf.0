@@ -7,61 +7,61 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15D9BC282DE
-	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 13:29:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D862BC282CE
+	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 13:29:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CF78C2171F
-	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 13:29:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A84942186A
+	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 13:29:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="SAGKKXoP"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="t6/nkDN9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726970AbfDLN3z (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Apr 2019 09:29:55 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:40541 "EHLO
+        id S1726958AbfDLN37 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Apr 2019 09:29:59 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:54157 "EHLO
         mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726244AbfDLN3y (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 12 Apr 2019 09:29:54 -0400
-Received: by mail-wm1-f66.google.com with SMTP id z24so11122731wmi.5
-        for <bpf@vger.kernel.org>; Fri, 12 Apr 2019 06:29:53 -0700 (PDT)
+        with ESMTP id S1726973AbfDLN36 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 12 Apr 2019 09:29:58 -0400
+Received: by mail-wm1-f66.google.com with SMTP id q16so11254131wmj.3
+        for <bpf@vger.kernel.org>; Fri, 12 Apr 2019 06:29:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Gj0f+g6Nl3MHCIF1zHqXaLIJ4ZP9uKspx8+x3phHaDI=;
-        b=SAGKKXoPGCKN7hzNDNUjnQCG9MD03IJ0nelRegA72POLFWLmI1wOIzYWepXp3JiqUA
-         GPl8dkOhZgoZFsvx5XxDJzGp63vibGbNN+R7udII3X2bG1Mf9GcZC6FUKONaIZpatTXp
-         nWTNItNrJfX1ZsEYbgQhURkrcJ8G52NqDS18ipiejYNKc1hj2kgzwt3k1mXxfTRZAMUz
-         joguCftPCVhvo8vBucOHXfi5IqzxERx75tA9aZEOWFTEgiWJm5sVQCoCneI1RJR57O62
-         LAIgOLY4SEtWP7HxsSZOkf6EtNKxNlj8ehC75eyxyFBPqCyVrJ3o1psF+2qZsZPQGiHP
-         eAzg==
+        bh=JT+XJcUgsRhwQ7fFVvxtks0i0ze/Hbl2a7DoaC1Za8Q=;
+        b=t6/nkDN9Cpd/oCXuur7CVS5UXJrz1ynaADv65WRrBhOL8RwxF5CQax/mM9mCtYeyAj
+         FCQZZoIpZ3wV8/EXBiEVpaRwRH94OrHE98HcTYWmNoHdycSfcFm04/jredls16YTlPBM
+         ykmXOKN0mM8sDdnwvbfayu27LGRpMhVoFW4BMAZtjYvDih85KMbH5n6cMM6QobaV1ZKZ
+         pLOUp3oozBM6KhzW8RDxgLEKvgudXkfGliIS8JCav1vhbupKI98311pYpMQA+f57k/Uw
+         YLSHPDaYUMzsXA+rv4L/D13+40tDcE/Kk5XMSaXfuEO3K0JhE4hbCwU3KTrZKH7G1OuU
+         Krkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=Gj0f+g6Nl3MHCIF1zHqXaLIJ4ZP9uKspx8+x3phHaDI=;
-        b=BJjwCDOIg4kDr/YO0afdvmB1al7NOaQKnHCWhktpEtvH/5xmkclzPyWm/caUR76/52
-         3djvZ1iuGwCTXNc1Jvzexy6p44ojFA8ZxCBKxw2u7I3ozYJQoURqQTd/wpC1XiQTzIyn
-         AK0KmkMdEMJZY2dT0KI95Wi4icK0LsEUZPdfGmAw7goXyus4JYZFyuVS3G0vma1DIp1h
-         7kjCZ6LyspnAK3QJCNCq0fJ035m1v4z1xZ/SS6NlP0O3ITbNcL1N1Io8pPHTBNXTRLyH
-         pbuI6NOBz3Ih8HYMNENXi/BTS8rPFzlekOyinNCCJlAe+YkZzbM45KeZNJi1V/RnaGnp
-         IkkA==
-X-Gm-Message-State: APjAAAUpPZSK5cmDwTeHJapQlQCC4ESd9whANPnuAyt9yXmuRti3giHX
-        dIA3Loc6TwJHUpGLgQ8oCMayNQ==
-X-Google-Smtp-Source: APXvYqxcbdGrs49yUZ65WEZv/bVZAMzVQLWuPurpojm7lHTXPvitfIISl9T+EoDyhLtLzQBpn6MD0Q==
-X-Received: by 2002:a1c:808c:: with SMTP id b134mr10926591wmd.16.1555075792876;
-        Fri, 12 Apr 2019 06:29:52 -0700 (PDT)
+        bh=JT+XJcUgsRhwQ7fFVvxtks0i0ze/Hbl2a7DoaC1Za8Q=;
+        b=Qll2EWR/MOAqBBP7QD2DPf4fI6F8qT+CW+/xk7ZJBdHv242smjidwkE7JP68sb1cUU
+         C2+rs2+d2t6SbRjoPBmyEhB+7EDkQd5qbVII1X0HfdWbhOBz1SsRzRbo+fNTFlUWtEPz
+         VF5CBrTcEjWZhOOzSNj+HuzX8WnY1c2FeIxWIwIv5w3ZtY7nViVraToTtfGeGaCWlvqS
+         O3C4oeWlitCWwoshxIueJeRAcA/druUaZ5zgGnCD+BhEwrr4/Ul6g3Io+kIbwRQsecDe
+         g2IEV1LtR/qOzHAUz8USrlOy1sJt9vD+P2Aa9sP9pVr/EDE4BeeWOEGqdMb3pfhaJKD/
+         nAWg==
+X-Gm-Message-State: APjAAAXtEG4+vTOGiCEaX1UKmYKaABzmj9cYB1fvQKkkduX+Qpk2BQf/
+        BE/+qlDtBhwmZZrdH/wu8Pgb/g==
+X-Google-Smtp-Source: APXvYqx2C18w4oWPctwL/F1IXEV/uC9jw0lw13qYLzzJItnox1RIPzoG6phrAEg89b7fplC47UNpCg==
+X-Received: by 2002:a1c:81c9:: with SMTP id c192mr10954374wmd.124.1555075796665;
+        Fri, 12 Apr 2019 06:29:56 -0700 (PDT)
 Received: from cbtest32.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id v184sm15752915wma.6.2019.04.12.06.29.51
+        by smtp.gmail.com with ESMTPSA id v184sm15752915wma.6.2019.04.12.06.29.52
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 12 Apr 2019 06:29:52 -0700 (PDT)
+        Fri, 12 Apr 2019 06:29:53 -0700 (PDT)
 From:   Quentin Monnet <quentin.monnet@netronome.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         oss-drivers@netronome.com,
         Quentin Monnet <quentin.monnet@netronome.com>
-Subject: [PATCH bpf-next 2/5] tools: bpftool: reset errno for "bpftool cgroup tree"
-Date:   Fri, 12 Apr 2019 14:29:35 +0100
-Message-Id: <20190412132938.9044-3-quentin.monnet@netronome.com>
+Subject: [PATCH bpf-next 3/5] tools: bpftool: fix man page documentation for "pinmaps" keyword
+Date:   Fri, 12 Apr 2019 14:29:36 +0100
+Message-Id: <20190412132938.9044-4-quentin.monnet@netronome.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190412132938.9044-1-quentin.monnet@netronome.com>
 References: <20190412132938.9044-1-quentin.monnet@netronome.com>
@@ -70,48 +70,30 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When trying to dump the tree of all cgroups under a given root node,
-bpftool attempts to query programs of all available attach types. Some
-of those attach types do not support queries, therefore several of the
-calls are actually expected to fail.
-
-Those calls set errno to EINVAL, which has no consequence for dumping
-the rest of the tree. It does have consequences however if errno is
-inspected at a later time. For example, bpftool batch mode relies on
-errno to determine whether a command has succeeded, and whether it
-should carry on with the next command. Setting errno to EINVAL when
-everything worked as expected would therefore make such command fail:
-
-        # echo 'cgroup tree \n net show' | \
-                bpftool batch file -
-
-To improve this, reset errno when its value is EINVAL after attempting
-to show programs for all existing attach types in do_show_tree_fn().
+The "pinmaps" keyword is present in the man page, in the verbose
+description of the "bpftool prog load" command. However, it is missing
+from the summary of available commands at the beginning of the file. Add
+it there as well.
 
 Signed-off-by: Quentin Monnet <quentin.monnet@netronome.com>
 Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 ---
- tools/bpf/bpftool/cgroup.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ tools/bpf/bpftool/Documentation/bpftool-prog.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/bpf/bpftool/cgroup.c b/tools/bpf/bpftool/cgroup.c
-index 4b5c8da2a7c0..a81b34343eb8 100644
---- a/tools/bpf/bpftool/cgroup.c
-+++ b/tools/bpf/bpftool/cgroup.c
-@@ -248,6 +248,13 @@ static int do_show_tree_fn(const char *fpath, const struct stat *sb,
- 	for (type = 0; type < __MAX_BPF_ATTACH_TYPE; type++)
- 		show_attached_bpf_progs(cgroup_fd, type, ftw->level);
- 
-+	if (errno == EINVAL)
-+		/* Last attach type does not support query.
-+		 * Do not report an error for this, especially because batch
-+		 * mode would stop processing commands.
-+		 */
-+		errno = 0;
-+
- 	if (json_output) {
- 		jsonw_end_array(json_wtr);
- 		jsonw_end_object(json_wtr);
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+index 9386bd6e0396..49c33939239f 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+@@ -25,7 +25,7 @@ PROG COMMANDS
+ |	**bpftool** **prog dump xlated** *PROG* [{**file** *FILE* | **opcodes** | **visual** | **linum**}]
+ |	**bpftool** **prog dump jited**  *PROG* [{**file** *FILE* | **opcodes** | **linum**}]
+ |	**bpftool** **prog pin** *PROG* *FILE*
+-|	**bpftool** **prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*]
++|	**bpftool** **prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
+ |	**bpftool** **prog attach** *PROG* *ATTACH_TYPE* [*MAP*]
+ |	**bpftool** **prog detach** *PROG* *ATTACH_TYPE* [*MAP*]
+ |	**bpftool** **prog tracelog**
 -- 
 2.17.1
 
