@@ -2,112 +2,129 @@ Return-Path: <SRS0=9Oao=SO=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67E09C10F0E
-	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 18:06:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FAA7C10F0E
+	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 18:07:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3071320850
-	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 18:06:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6039320850
+	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 18:07:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HVFw4uFa"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eHixQhHw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726765AbfDLSG1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Apr 2019 14:06:27 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:33194 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726685AbfDLSG1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 12 Apr 2019 14:06:27 -0400
-Received: by mail-qk1-f194.google.com with SMTP id k189so6218288qkc.0;
-        Fri, 12 Apr 2019 11:06:26 -0700 (PDT)
+        id S1726857AbfDLSHq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Apr 2019 14:07:46 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:46284 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726685AbfDLSHq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 12 Apr 2019 14:07:46 -0400
+Received: by mail-qt1-f196.google.com with SMTP id z17so12215763qts.13;
+        Fri, 12 Apr 2019 11:07:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=0rEAAlm76Jv7C5QVkbo2DLulQ4Wnsu93erTggjrSIXA=;
-        b=HVFw4uFavhDOh0muLJCC7J8VsOX6pxrjf1EXiKpKOMSjGBlM0KOOp4V6cgIxynjfGo
-         NscXzuBUPO8pOZ1N0QaI4T5clfOgn4KwhL7xia1OWm5v41cHLUMAoiBFj+vyrddwRXYN
-         lYbBrh+6O8eGgL9sVwZA3nrZL1hK2tJpQdYYnX+9vyFyxxbW1+P492gHwEmxT19tCngq
-         tr5z9gwEo5/zGci+ejOGvH1HqTcq0EfNPOm/wOTbOflI8E2IXjoxz4b9VakFwagtEOvu
-         Uktr5l+OQIlCGUZeO63NZQ6UY/PXva955FRW6UI2vtCbCOGuZSf5UIoID4ZOVQ8qcu2R
-         WIQA==
+        bh=pp9ClMaBMXR/SmhwrxlZqs/SXnIO6aLteUAuDWQUrl4=;
+        b=eHixQhHw8Ps0tY3JzGNX4Oox6mL596mtYp6fPgksOLoa6Gke74ltjf3kso3o004VRF
+         R7j/TOg6DhnGSocSqBxADitmtOrj6LfhtUOJeBSl8XQ9InXd/Qar146t9jbhVwCLNhQH
+         Aqs88wrUCMkJ/ikvDprJawyJxeTZKHdM4al4YdilpGS1zoEMSks4QEE+aW+mdvmlKaPy
+         Ca7xgqYfhT9hXkd2gH46yXTqVzdVlwghiiDesUBd9Eq4nF/cEosrPOtGEhJU9F0EFWAx
+         QHxwAm33Dgr3CfMh5AtsPhzGTWf53s3dSf0NqkWrbl1FYsVpY//Qt9oeUDIGqljmswn1
+         ThfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0rEAAlm76Jv7C5QVkbo2DLulQ4Wnsu93erTggjrSIXA=;
-        b=lbkIFEYsLX4sdMahG7djLB6PZW5FV1X6e9KElosr9zT6oukgBcr5ezGKSs5ViUrNfp
-         LKVg6KrSqXyoo3RGT7xbgjuPQQNp6uSM5DxCoaj8OPptnGTZ9vb3DIyvmzJq0p40AWjo
-         +WAyRwIXMk92JiyKwNlsoOM+CxiBPeOk0kluWlO4v5q4r+HGdQ6Qv+ZA4vwQONWpV+zU
-         4aGQ6hN/rM1IXHUi0kYSx5V4beonea9DHQ1k3hyueBX2GL/KvTnNl4DTol7FgB2tMdKE
-         8ebqwlXOdyUq0uBEhFHw8EY9DRKmg+iiqSuuuJ6lLRDafiApF4xJnaDyHkdDfzEV33Yl
-         96bw==
-X-Gm-Message-State: APjAAAUmz2twOhedPeBLQwjrDyMCWgZ1CkavTs8hSw1WijLTjhoKQHY9
-        9WikukdU5H0xJBbnYvmbLl+82HGOEpWbyGgudxkRjYY6
-X-Google-Smtp-Source: APXvYqxVsNA6HldHdORe92t6c0SMP1a6Zw+C/zyP6t3JBIaC0mTrYa+vJNliZUAeT7ZUj5qFK2HAwR4tFTrYJUZpT28=
-X-Received: by 2002:a37:a841:: with SMTP id r62mr45409376qke.16.1555092386415;
- Fri, 12 Apr 2019 11:06:26 -0700 (PDT)
+        bh=pp9ClMaBMXR/SmhwrxlZqs/SXnIO6aLteUAuDWQUrl4=;
+        b=ZkIt2TZQEbysCGiFQ0xL2NnBEHIQOYL/8JFFO4NBIFt+CgSsHkXGnP8AAcWr22WW/j
+         RknKXetcfcLqrA9WATVZlLVJZt86ta7/zQo0OgskZH9oLpV+J7HBto66M47ChXSPh+OB
+         OAZ+8x39Esmv6J9DquYZiyLZumO+IkGMOOtA2n/4imdzBXJjU0lzTx7RywVcxFHQGW+6
+         uYMT/g0l7B5vIszpqzg3ZOnOoS1gJc+gyeY8bIP7f5ONxbJBmoB0bE6H1k3DvtFkHTmi
+         l9+z0a54akGU+tv6wHgqpRIxlAmFZwocxG2DC9NasQZ8O7MRxx8vG4eQ2vkhF2TvZ2au
+         at+A==
+X-Gm-Message-State: APjAAAUP/U2fwRyE/RxfNb7MvQkhnSljvhLlX08QphUvMClEmMT1ds0+
+        OPt6IdHvPur3yQpZm+WUh16Komra9p6s7E25+tM=
+X-Google-Smtp-Source: APXvYqyLIc/gxmMRQTSd4sGD4kXCpk5Pldzd4ZbWzLsHnOlXuzQl5W29CZ2JF4UTdr+9amiFuMEOpV19PDibIWsvQxI=
+X-Received: by 2002:ac8:1876:: with SMTP id n51mr48097546qtk.234.1555092465264;
+ Fri, 12 Apr 2019 11:07:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190412132938.9044-1-quentin.monnet@netronome.com>
-In-Reply-To: <20190412132938.9044-1-quentin.monnet@netronome.com>
+References: <20190412124050.32120-1-alban@kinvolk.io> <8fb1d2e0-f8c0-4e01-ddf8-158c9e80558c@netronome.com>
+In-Reply-To: <8fb1d2e0-f8c0-4e01-ddf8-158c9e80558c@netronome.com>
 From:   Song Liu <liu.song.a23@gmail.com>
-Date:   Fri, 12 Apr 2019 11:06:15 -0700
-Message-ID: <CAPhsuW7w0MobM9N9DEj9xfZjWBB4+PA4wPHh2gfBHhg2tPYK9g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/5] tools: bpftool: fix minor issues in bpftool
- and its documentation
+Date:   Fri, 12 Apr 2019 11:07:34 -0700
+Message-ID: <CAPhsuW4KENxuuafRFx9ak5rS4mf_i9yO2tN9WqGcB0nM01KiuA@mail.gmail.com>
+Subject: Re: [PATCH bpf v2] tools: bpftool: fix infinite loop in map create
 To:     Quentin Monnet <quentin.monnet@netronome.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+Cc:     Alban Crequy <alban.crequy@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        oss-drivers@netronome.com
+        open list <linux-kernel@vger.kernel.org>, alban@kinvolk.io,
+        iago@kinvolk.io
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Apr 12, 2019 at 6:30 AM Quentin Monnet
+On Fri, Apr 12, 2019 at 6:21 AM Quentin Monnet
 <quentin.monnet@netronome.com> wrote:
 >
-> Hi,
-> This series brings a number of small fixes to bpftool and the related
-> manual pages.
->
-> The first two patches are on bpftool itself (remove blank lines when
-> dumping programs, do not set errno when showing a tree of cgroup programs).
->
-> The next two patches are fixes for the manual pages (missing keyword, wrong
-> option name for showing bpftool version). The last one is not exactly a
-> fix, but rather an addition to the man page, explaining how to dump program
-> statistics.
-
-For the set:
+> 2019-04-12 14:40 UTC+0200 ~ Alban Crequy <alban.crequy@gmail.com>
+> > From: Alban Crequy <alban@kinvolk.io>
+> >
+> > "bpftool map create" has an infinite loop on "while (argc)". The error
+> > case is missing.
+> >
+> > Symptoms: when forgetting to type the keyword 'type' in front of 'hash':
+> > $ sudo bpftool map create /sys/fs/bpf/dir/foobar hash key 8 value 8 entries 128
+> > (infinite loop, taking all the CPU)
+> > ^C
+> >
+> > After the patch:
+> > $ sudo bpftool map create /sys/fs/bpf/dir/foobar hash key 8 value 8 entries 128
+> > Error: unknown arg hash
+> >
+> > Fixes: 0b592b5a01be ("tools: bpftool: add map create command")
+> > Signed-off-by: Alban Crequy <alban@kinvolk.io>
 
 Acked-by: Song Liu <songliubraving@fb.com>
 
+Thanks for the fix!
+
+> >
+> > ---
+> >
+> > Changes in v2:
+> > - Explain the cause of the bug in commitmsg
+> > - Add the "fixes" line in the commitmsg (Jakub's review)
+> > - Rebase on the bpf tree
+> >
+> > v1 was initially based on bpf-next and submitted on
+> > https://marc.info/?l=linux-kernel&m=155310327709613&w=2
+> > ---
+> >  tools/bpf/bpftool/map.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+> > index 05b029b934a6..1ccc38718458 100644
+> > --- a/tools/bpf/bpftool/map.c
+> > +++ b/tools/bpf/bpftool/map.c
+> > @@ -1151,6 +1151,9 @@ static int do_create(int argc, char **argv)
+> >                               return -1;
+> >                       }
+> >                       NEXT_ARG();
+> > +             } else {
+> > +                     p_err("unknown arg %s", *argv);
+> > +                     return -1;
+> >               }
+> >       }
+> >
+> >
 >
-> Quentin Monnet (5):
->   tools: bpftool: remove blank line after btf_id when listing programs
->   tools: bpftool: reset errno for "bpftool cgroup tree"
->   tools: bpftool: fix man page documentation for "pinmaps" keyword
->   tools: bpftool: fix short option name for printing version in man
->     pages
->   tools: bpftool: add a note on program statistics in man page
+> Reviewed-by: Quentin Monnet <quentin.monnet@netronome.com>
 >
->  tools/bpf/bpftool/Documentation/bpftool-cgroup.rst  |  2 +-
->  tools/bpf/bpftool/Documentation/bpftool-feature.rst |  2 +-
->  tools/bpf/bpftool/Documentation/bpftool-map.rst     |  2 +-
->  tools/bpf/bpftool/Documentation/bpftool-net.rst     |  2 +-
->  tools/bpf/bpftool/Documentation/bpftool-perf.rst    |  2 +-
->  tools/bpf/bpftool/Documentation/bpftool-prog.rst    | 12 ++++++++++--
->  tools/bpf/bpftool/Documentation/bpftool.rst         |  2 +-
->  tools/bpf/bpftool/cgroup.c                          |  7 +++++++
->  tools/bpf/bpftool/prog.c                            |  2 +-
->  9 files changed, 24 insertions(+), 9 deletions(-)
->
-> --
-> 2.17.1
->
+> Thanks Alban!
