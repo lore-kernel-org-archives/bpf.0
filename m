@@ -4,208 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DCB6C282CE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3ADDCC10F14
 	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 22:00:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D183B218A3
-	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 22:00:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A560218D2
+	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 22:00:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="EMfVPShx"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="BoHHBDqS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727311AbfDLWAb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Apr 2019 18:00:31 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:36169 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727300AbfDLWAX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 12 Apr 2019 18:00:23 -0400
-Received: by mail-wr1-f65.google.com with SMTP id y13so13761476wrd.3
-        for <bpf@vger.kernel.org>; Fri, 12 Apr 2019 15:00:22 -0700 (PDT)
+        id S1727302AbfDLWAW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Apr 2019 18:00:22 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:36885 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727285AbfDLWAU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 12 Apr 2019 18:00:20 -0400
+Received: by mail-wr1-f66.google.com with SMTP id w10so13753040wrm.4
+        for <bpf@vger.kernel.org>; Fri, 12 Apr 2019 15:00:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=pNHJxDIKLsiKxKEQK4Ngr2CSz1DZ9y91uELS2TzjMyw=;
-        b=EMfVPShx+E699tBHUlWyNGadB9lysg0dcgBrpGLzcJlqr5zSQG/ndyb4zvd+/rMQST
-         SGoHHFzwycp75ZHwdOrVGtIB6oNrSauLYowzOBzLQnSiPCjZP2DjDwA2EDTYE//4HlQ1
-         73BSefIPWFIZUVPvI9WIBQlYyGB28LIKCa+b4A8m2DDHj4hw2nfvyPUcz74Exg9cbEX+
-         fsN46mFciva5ZqFHpvojbp2nQxlTceYH55NqzDEYIDZxKov3ynNoT/kLAbG0/8buqPtw
-         ttgDo9EwQ7ZAW/baaqDrAUQOXBM6g+qtWbBIfpDKnLjyH1hhxB/YaQLmbumEnLqjL92X
-         mGpA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=/wylRhv97waN1hLNQRjtw5HFd7aLKXwfbfkeZTfcGns=;
+        b=BoHHBDqSo9hYv0bkI611gzs7drYaYY98UgiHOhpRkui7YtSrsec1ln6rGGvug6NAYQ
+         sps7qnbUecCFq81vL5n50ALFCCJiNkmrxyc1zqjo1sdjBcVUP/1GCTUPW/cN+kfQlfvF
+         ZvQ/6n3300/0iqhWAmFna7p1h3BCi7P2XeQarh79q393JlCnIGhsMs0sIKqhgMHgGoHk
+         bvIhvXVOvVWANqv/YnBq7cik2mzFgnOnXf/Vr64Z1D+IpDi85/hdTPCdusBop+HQlHqB
+         2bF1sFqjrM+YRzaJMtdkK9q2Edjic9YBVKlQRARPululNxm/Y5gcXEGso2IxN+5lK/HY
+         TmSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=pNHJxDIKLsiKxKEQK4Ngr2CSz1DZ9y91uELS2TzjMyw=;
-        b=oDog87bIIBLKJ5k8q/9u8jfVleruIQ5jaVQmKprvZq/BUaMz8UUXPgzvqQsSTcEm+Z
-         043hSCves2/1CDu73ELCROWrzi0AqR9vHfzv8MwdwoCwVRTmoD8UZYlSVOB+hcTsv1G3
-         pEsRIP2N9v0p3eY7Fuifw6EIulbfIGqmFXQ8YZxKv5Wtmj9db7DM9ePFsNuU+8HqFMEo
-         QtGKn0l/uqa9KaydH8XcKLbrkP0GztFv2B4e0vjD+AkUy0+vW2gTdGEHzi7C+aM2zHdD
-         Qkr6kc0D43XzQDXhr4JqdmSdo7bOPIp3gxIlLSAVeS4qaqYkVIuTMteuPB6XjbXTJIsv
-         sO7A==
-X-Gm-Message-State: APjAAAWhyAfrG5mfO16YpgPbXgy87DbZyZo70ejAfXedlu/vNUDuSLkt
-        5BtHPq0Y0+lAT6SuXoF0fCMong==
-X-Google-Smtp-Source: APXvYqxrA35/+k8SBLu8Kmb6jgsSMvZw5NiiAHLCSavGjxP0E+CjzosStqeUG+oU2bKuBmUgBMdA5g==
-X-Received: by 2002:a5d:530f:: with SMTP id e15mr39994616wrv.19.1555106421626;
-        Fri, 12 Apr 2019 15:00:21 -0700 (PDT)
+         :references;
+        bh=/wylRhv97waN1hLNQRjtw5HFd7aLKXwfbfkeZTfcGns=;
+        b=aXEVkAeKjucN9djH4On/pgRo0qB16US9H1nPPTJxcT4Jo/IgooT9o1YYwxnHvutI7F
+         Z2eM3pvWe05xuxBHPGNMxxx95/jmrcgP/OyEcyHNPFaeoaqVxQ7RNAaK9FwVV/q4AyaW
+         0Kl3lHyQtuoLi/CwwN7Pk7xePNAW/TUQVn1ON8RE7JR7e/MaH2sZHc4u/28S/LyxkiK4
+         ebY4esC+YlOafC+ag5lUfkj3wGW6+py2l9dIFjCzhR4glyjKx9y4J0t8HS2c+M3vFNTK
+         3wckynBbkpZP1T0Ay462lqGth0eP3bv42Qr5Z0jN24MRM+IwAsiuHq2utH2yXLcRlU24
+         bc5w==
+X-Gm-Message-State: APjAAAWzDf1v4AbW8xt4VuMHrbn34AuaOHeYV7TO+Fu6Gtw8p4/ZxkPZ
+        H7ORT4xtGoVHQ828qw5a6VSnug==
+X-Google-Smtp-Source: APXvYqzrxDF22KbtqLIyFMfNsKL/hMb0KNXMx9QPeLg6JA5ur1aUZwyF1It0qkQSPIBfhk5gQpHUwg==
+X-Received: by 2002:adf:ea88:: with SMTP id s8mr12063138wrm.300.1555106418532;
+        Fri, 12 Apr 2019 15:00:18 -0700 (PDT)
 Received: from cbtest28.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id f1sm8490764wml.28.2019.04.12.15.00.20
+        by smtp.gmail.com with ESMTPSA id f1sm8490764wml.28.2019.04.12.15.00.17
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 12 Apr 2019 15:00:20 -0700 (PDT)
+        Fri, 12 Apr 2019 15:00:17 -0700 (PDT)
 From:   Jiong Wang <jiong.wang@netronome.com>
 To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         oss-drivers@netronome.com, Jiong Wang <jiong.wang@netronome.com>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
-Subject: [PATCH v3 bpf-next 18/19] riscv: bpf: eliminate zero extension code-gen
-Date:   Fri, 12 Apr 2019 22:59:51 +0100
-Message-Id: <1555106392-20117-19-git-send-email-jiong.wang@netronome.com>
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>
+Subject: [PATCH v3 bpf-next 15/19] s390: bpf: eliminate zero extension code-gen
+Date:   Fri, 12 Apr 2019 22:59:48 +0100
+Message-Id: <1555106392-20117-16-git-send-email-jiong.wang@netronome.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1555106392-20117-1-git-send-email-jiong.wang@netronome.com>
 References: <1555106392-20117-1-git-send-email-jiong.wang@netronome.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-CC: Björn Töpel <bjorn.topel@gmail.com>
+Cc: Martin Schwidefsky <schwidefsky@de.ibm.com>
+Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
 Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
 ---
- arch/riscv/net/bpf_jit_comp.c | 32 +++++++++++++++++++-------------
- 1 file changed, 19 insertions(+), 13 deletions(-)
+ arch/s390/net/bpf_jit_comp.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/arch/riscv/net/bpf_jit_comp.c b/arch/riscv/net/bpf_jit_comp.c
-index 80b12aa..9cba262 100644
---- a/arch/riscv/net/bpf_jit_comp.c
-+++ b/arch/riscv/net/bpf_jit_comp.c
-@@ -731,6 +731,7 @@ static int emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- {
- 	bool is64 = BPF_CLASS(insn->code) == BPF_ALU64 ||
- 		    BPF_CLASS(insn->code) == BPF_JMP;
-+	struct bpf_prog_aux *aux = ctx->prog->aux;
- 	int rvoff, i = insn - ctx->prog->insnsi;
- 	u8 rd = -1, rs = -1, code = insn->code;
- 	s16 off = insn->off;
-@@ -743,7 +744,7 @@ static int emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_ALU | BPF_MOV | BPF_X:
- 	case BPF_ALU64 | BPF_MOV | BPF_X:
- 		emit(is64 ? rv_addi(rd, rs, 0) : rv_addiw(rd, rs, 0), ctx);
--		if (!is64)
-+		if (!is64 && aux->no_verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
+diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
+index 51dd026..59592d7 100644
+--- a/arch/s390/net/bpf_jit_comp.c
++++ b/arch/s390/net/bpf_jit_comp.c
+@@ -299,9 +299,11 @@ static inline void reg_set_seen(struct bpf_jit *jit, u32 b1)
  
-@@ -771,19 +772,19 @@ static int emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_ALU | BPF_MUL | BPF_X:
- 	case BPF_ALU64 | BPF_MUL | BPF_X:
- 		emit(is64 ? rv_mul(rd, rd, rs) : rv_mulw(rd, rd, rs), ctx);
--		if (!is64)
-+		if (!is64 && aux->no_verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
- 	case BPF_ALU | BPF_DIV | BPF_X:
- 	case BPF_ALU64 | BPF_DIV | BPF_X:
- 		emit(is64 ? rv_divu(rd, rd, rs) : rv_divuw(rd, rd, rs), ctx);
--		if (!is64)
-+		if (!is64 && aux->no_verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
- 	case BPF_ALU | BPF_MOD | BPF_X:
- 	case BPF_ALU64 | BPF_MOD | BPF_X:
- 		emit(is64 ? rv_remu(rd, rd, rs) : rv_remuw(rd, rd, rs), ctx);
--		if (!is64)
-+		if (!is64 && aux->no_verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
- 	case BPF_ALU | BPF_LSH | BPF_X:
-@@ -867,7 +868,7 @@ static int emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_ALU | BPF_MOV | BPF_K:
- 	case BPF_ALU64 | BPF_MOV | BPF_K:
- 		emit_imm(rd, imm, ctx);
--		if (!is64)
-+		if (!is64 && aux->no_verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
+ #define EMIT_ZERO(b1)						\
+ ({								\
+-	/* llgfr %dst,%dst (zero extend to 64 bit) */		\
+-	EMIT4(0xb9160000, b1, b1);				\
+-	REG_SET_SEEN(b1);					\
++	if (fp->aux->no_verifier_zext) {			\
++		/* llgfr %dst,%dst (zero extend to 64 bit) */	\
++		EMIT4(0xb9160000, b1, b1);			\
++		REG_SET_SEEN(b1);				\
++	}							\
+ })
  
-@@ -882,7 +883,7 @@ static int emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			emit(is64 ? rv_add(rd, rd, RV_REG_T1) :
- 			     rv_addw(rd, rd, RV_REG_T1), ctx);
- 		}
--		if (!is64)
-+		if (!is64 && aux->no_verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
- 	case BPF_ALU | BPF_SUB | BPF_K:
-@@ -895,7 +896,7 @@ static int emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			emit(is64 ? rv_sub(rd, rd, RV_REG_T1) :
- 			     rv_subw(rd, rd, RV_REG_T1), ctx);
- 		}
--		if (!is64)
-+		if (!is64 && aux->no_verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
- 	case BPF_ALU | BPF_AND | BPF_K:
-@@ -906,7 +907,7 @@ static int emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			emit_imm(RV_REG_T1, imm, ctx);
- 			emit(rv_and(rd, rd, RV_REG_T1), ctx);
- 		}
--		if (!is64)
-+		if (!is64 && aux->no_verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
- 	case BPF_ALU | BPF_OR | BPF_K:
-@@ -917,7 +918,7 @@ static int emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			emit_imm(RV_REG_T1, imm, ctx);
- 			emit(rv_or(rd, rd, RV_REG_T1), ctx);
- 		}
--		if (!is64)
-+		if (!is64 && aux->no_verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
- 	case BPF_ALU | BPF_XOR | BPF_K:
-@@ -928,7 +929,7 @@ static int emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			emit_imm(RV_REG_T1, imm, ctx);
- 			emit(rv_xor(rd, rd, RV_REG_T1), ctx);
- 		}
--		if (!is64)
-+		if (!is64 && aux->no_verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
- 	case BPF_ALU | BPF_MUL | BPF_K:
-@@ -936,7 +937,7 @@ static int emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		emit_imm(RV_REG_T1, imm, ctx);
- 		emit(is64 ? rv_mul(rd, rd, RV_REG_T1) :
- 		     rv_mulw(rd, rd, RV_REG_T1), ctx);
--		if (!is64)
-+		if (!is64 && aux->no_verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
- 	case BPF_ALU | BPF_DIV | BPF_K:
-@@ -944,7 +945,7 @@ static int emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		emit_imm(RV_REG_T1, imm, ctx);
- 		emit(is64 ? rv_divu(rd, rd, RV_REG_T1) :
- 		     rv_divuw(rd, rd, RV_REG_T1), ctx);
--		if (!is64)
-+		if (!is64 && aux->no_verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
- 	case BPF_ALU | BPF_MOD | BPF_K:
-@@ -952,7 +953,7 @@ static int emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		emit_imm(RV_REG_T1, imm, ctx);
- 		emit(is64 ? rv_remu(rd, rd, RV_REG_T1) :
- 		     rv_remuw(rd, rd, RV_REG_T1), ctx);
--		if (!is64)
-+		if (!is64 && aux->no_verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
- 	case BPF_ALU | BPF_LSH | BPF_K:
-@@ -1503,6 +1504,11 @@ static void bpf_flush_icache(void *start, void *end)
- 	flush_icache_range((unsigned long)start, (unsigned long)end);
+ /*
+@@ -1282,6 +1284,11 @@ static int bpf_jit_prog(struct bpf_jit *jit, struct bpf_prog *fp)
+ 	return 0;
  }
  
 +bool bpf_jit_hardware_zext(void)
@@ -213,9 +105,9 @@ index 80b12aa..9cba262 100644
 +	return false;
 +}
 +
- struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- {
- 	bool tmp_blinded = false, extra_pass = false;
+ /*
+  * Compile eBPF program "fp"
+  */
 -- 
 2.7.4
 
