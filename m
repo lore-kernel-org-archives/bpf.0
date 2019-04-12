@@ -2,67 +2,71 @@ Return-Path: <SRS0=9Oao=SO=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2434C10F0E
-	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 23:45:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36EBDC282CE
+	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 23:53:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 70A3E218AF
-	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 23:45:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 03EFE2084E
+	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 23:53:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="Yq7rl/Ks"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="TzMRpWtv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726902AbfDLXpO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Apr 2019 19:45:14 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:32811 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726884AbfDLXpO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 12 Apr 2019 19:45:14 -0400
-Received: by mail-qt1-f193.google.com with SMTP id k14so13284871qtb.0
-        for <bpf@vger.kernel.org>; Fri, 12 Apr 2019 16:45:13 -0700 (PDT)
+        id S1726902AbfDLXx0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Apr 2019 19:53:26 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:34070 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726898AbfDLXxY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 12 Apr 2019 19:53:24 -0400
+Received: by mail-qk1-f195.google.com with SMTP id n68so6739367qka.1
+        for <bpf@vger.kernel.org>; Fri, 12 Apr 2019 16:53:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=date:from:to:cc:subject:message-id:in-reply-to:references
          :organization:mime-version:content-transfer-encoding;
-        bh=gMsKQF+1fBuG9KQIpk6GXNpTDQgZWxP6lz1tunnwBlA=;
-        b=Yq7rl/KsFb5DY2T5MNQI8x61ibtypVu8I2B3xFQVnor+LCzBINHFvcq8qVOlQDG2Ax
-         OU0KWndeLyGzk6fB+KuCpn08xidgOpRwZt/Whkpc84o+jHaFgozCk1x9TCILUuktUUL2
-         IcAjtzvTvu4vgmuc1iPI15fQXodyfCPQBp0FGOCs4ICYeR9EMIw2vf5gAM+LT5fd0LPi
-         ftjPmv42PkZ3RN8quHeeuWiByZ6j3XM7NW09gYii07EZRpJkRf//d/9g+yvn6jw/Kr7H
-         pGRyBPsS9nkLs4wyvrLT39m9XXDXFalNnXqMw28jEsC7u1WHFo+4ByaMBJIIMpujEQ/M
-         Pgxg==
+        bh=8sOmxLmmjAUY3g336Xbrt7cJqZbf51aFYEIiJOAF5Uw=;
+        b=TzMRpWtvuIlNLT0GHP/sd+0aYPUD/sejixhohFBxEbXOA4fvqAhUTsFESQZ46momWy
+         tTKMGg6FTi0jnAFDRy9r9v/yiIXVepGOmAv1zSDLFOXNXto1HBE1ATx6guK4ex2PvCr3
+         bY6CubQaBn8Q8yhtlYImPil9uFpXSuEPwdH5T4+ye4BwekPNnTs0Gq17AAq/WXRF78LV
+         06phnLLebeCUfbvawXr5PVwhJLrjnptIU/5vZVeehjn0CXmy+9gFAwNHEXEYv/8qZafD
+         3VsY1qd72HOuNRaUGBWXh/ahRWvme9DrykypLAPAaTScosNk+F6JutVtXj19QYTrqsMN
+         H74w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
          :references:organization:mime-version:content-transfer-encoding;
-        bh=gMsKQF+1fBuG9KQIpk6GXNpTDQgZWxP6lz1tunnwBlA=;
-        b=tiHKWP85M6QrMT8E+9DJB10gV9foMgtw+8BGPuxNe9O227s+jg1v2Hvy5mu6oqmZWd
-         OHecY5NiSKnp4j3kNXUiximS4cWiJZIazEX+WNHz6hkt1vcJMqZupvfVSqRGK6ANEGW4
-         t9MqvU8CoNN+v6TJGSFQSwa7mqmnxbYAPRVZ1shw379xgp+Jn1G/mjNOYEerw7pPYvzr
-         zsstw7gIlRvQNCFk3WKt3dKDWBFY35pZZDB9+irVaOd2/EcMdc2EKfFFJdoJe9doeZit
-         0C/N7KOGK8Vlh733h4dkwUPdSbdkj0fdOcpNky6xdxFM1WGuHwt0bApGp2HOwD1A7mJ/
-         Ot8Q==
-X-Gm-Message-State: APjAAAVRejOfI/mFZ6PdbaFq+2qRwDeLMMU2VzKXgZnxuRII3lAvernb
-        9RTajkSnXoEx9P3CsH9UCu0Nbw==
-X-Google-Smtp-Source: APXvYqzYX7gzkCt4QrIxsqKzr5SSEWhOhHaTofBKl5KacKMknTsMMLBpVbn4w8zOWhs583jcV0TJAw==
-X-Received: by 2002:a0c:b8a8:: with SMTP id y40mr48972264qvf.27.1555112713474;
-        Fri, 12 Apr 2019 16:45:13 -0700 (PDT)
+        bh=8sOmxLmmjAUY3g336Xbrt7cJqZbf51aFYEIiJOAF5Uw=;
+        b=o7HTU521aphXW/vYyPJqYtnNo5sVdoiK/H032goerOT+qTKkwNR8YTwIF8UpyWucE2
+         QTqku+sss+FdzDT4uruPVK8fEoylgiUWHR7dM9c8IHPNJtVO58Rc7ceNaWu60zNfJEH2
+         LnmOxPaeqzzgDmxRFKOBAWjwX0GujQ5T2NtUWCxO6vLnN/BUQpM90Xx0R4xxoTE5ilMx
+         tq7ItQKfuMzyzz8/Rtu5VHo4vxnd8g1Gqy2FucR+UobVuju9oLsQAjsS6soSLpDr/A2O
+         Er7SFYsi7ve+WASsDa1ewIa2WSEA3qLB0h84f3F0+oa9Tz8Xv2wv5ggdg/gBv571xhCu
+         xlFg==
+X-Gm-Message-State: APjAAAXkOfETWBoXthvyDwMiuhEf1yhZ5fDO5Xt1Dtl0HPsjdSFVmNwU
+        yvFhzYyX6K2ZTes9Ik5p5eWm2g==
+X-Google-Smtp-Source: APXvYqxg/Ira5McPX/mUPcK5qGiruf5WZoyEjXBF9/8i2tvudkoEW0UGvqnmFAilDVhkzt2e5oyUiA==
+X-Received: by 2002:a05:620a:1490:: with SMTP id w16mr46547899qkj.26.1555113203435;
+        Fri, 12 Apr 2019 16:53:23 -0700 (PDT)
 Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id t35sm29133218qtc.10.2019.04.12.16.45.11
+        by smtp.gmail.com with ESMTPSA id m93sm26403624qte.74.2019.04.12.16.53.22
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 12 Apr 2019 16:45:13 -0700 (PDT)
-Date:   Fri, 12 Apr 2019 16:45:08 -0700
+        Fri, 12 Apr 2019 16:53:23 -0700 (PDT)
+Date:   Fri, 12 Apr 2019 16:53:18 -0700
 From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     Alban Crequy <alban.crequy@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alban@kinvolk.io, iago@kinvolk.io
-Subject: Re: [PATCH bpf v2] tools: bpftool: fix infinite loop in map create
-Message-ID: <20190412164508.0f5ed5b3@cakuba.netronome.com>
-In-Reply-To: <20190412124050.32120-1-alban@kinvolk.io>
-References: <20190412124050.32120-1-alban@kinvolk.io>
+To:     Benjamin Poirier <bpoirier@suse.com>
+Cc:     Quentin Monnet <quentin.monnet@netronome.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, David Ahern <dsahern@gmail.com>
+Subject: Re: [PATCH v2 bpf-next 1/2] bpftool: Use print_entry_error() in
+ case of ENOENT when dumping
+Message-ID: <20190412165301.1c4b7390@cakuba.netronome.com>
+In-Reply-To: <20190412224924.GA21826@f1>
+References: <20190411082700.26888-1-bpoirier@suse.com>
+        <20190412030322.15494-1-bpoirier@suse.com>
+        <44958814-3145-717f-366e-ecc52f2145b9@netronome.com>
+        <20190412224924.GA21826@f1>
 Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -72,22 +76,11 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 12 Apr 2019 14:40:50 +0200, Alban Crequy wrote:
-> From: Alban Crequy <alban@kinvolk.io>
-> 
-> "bpftool map create" has an infinite loop on "while (argc)". The error
-> case is missing.
-> 
-> Symptoms: when forgetting to type the keyword 'type' in front of 'hash':
-> $ sudo bpftool map create /sys/fs/bpf/dir/foobar hash key 8 value 8 entries 128
-> (infinite loop, taking all the CPU)
-> ^C
-> 
-> After the patch:
-> $ sudo bpftool map create /sys/fs/bpf/dir/foobar hash key 8 value 8 entries 128
-> Error: unknown arg hash
-> 
-> Fixes: 0b592b5a01be ("tools: bpftool: add map create command")
-> Signed-off-by: Alban Crequy <alban@kinvolk.io>
+On Sat, 13 Apr 2019 07:49:24 +0900, Benjamin Poirier wrote:
+> To be honest, I don't think the formatting in those print_entry_*
+> functions should change according to the length in any case. I think the
+> key and value for each entry should always be on the same line for ease
+> of grepping. A followup patch maybe...
 
-Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+No, no, please never grep bpftool output.  We have JSON output,
+please use JQ: http://manpages.ubuntu.com/manpages/bionic/man1/jq.1.html
