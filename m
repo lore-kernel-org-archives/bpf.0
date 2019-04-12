@@ -2,131 +2,118 @@ Return-Path: <SRS0=9Oao=SO=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIM_ADSP_CUSTOM_MED,
+	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF686C10F0E
-	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 11:28:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5C3BC10F0E
+	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 12:41:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B5A492171F
-	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 11:28:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B62BD2171F
+	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 12:41:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Rr6yF1pC"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pCGPDuwp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726697AbfDLL22 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Apr 2019 07:28:28 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:38376 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726682AbfDLL22 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 12 Apr 2019 07:28:28 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x3CBOO5b053207;
-        Fri, 12 Apr 2019 11:28:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2018-07-02;
- bh=RBMO7aRrKZHF30Oq6PAhQrV9e2RFKnQ6x7Wu/3j9WGc=;
- b=Rr6yF1pCv+vFYWgZuqceey9xEa/ObbtZdJsuR2BaXEtKPEQEDZJoAlgOE6neEl8O2/W2
- pvMZtSl/VWtgDMNCKiJ/SwYN/cBCTKDa378fayp97D8LPNlTIe9OVJcZ+pRfCASYYxTo
- NPpCzV2UjzWNgQqL+mvtf+u0h0YAbACLK2Iv1Wj5FY+o4WedCWzdFiyhitnaKyj6lDn1
- ZFCgEPbmfSdZz4Ns/O+RBkhO/xgO8tTSImZPzBhNEedwjssj8q7zYIdo6GrhVddiplfN
- hYHBm+IP6acQw+FeaS+78h+pRqKveonDUCCGvdeiY9ZCPGgAAdy0Gpm4YqV1c+cAp3/C EA== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 2rpkhtdygn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 12 Apr 2019 11:28:05 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x3CBQkmS083250;
-        Fri, 12 Apr 2019 11:28:05 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 2rtqnp1jg7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 12 Apr 2019 11:28:05 +0000
-Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x3CBS34i021197;
-        Fri, 12 Apr 2019 11:28:03 GMT
-Received: from dhcp-10-175-178-216.vpn.oracle.com (/10.175.178.216)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 12 Apr 2019 04:28:03 -0700
-From:   Alan Maguire <alan.maguire@oracle.com>
+        id S1726244AbfDLMlh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Apr 2019 08:41:37 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:43874 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726714AbfDLMlg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 12 Apr 2019 08:41:36 -0400
+Received: by mail-ed1-f65.google.com with SMTP id w3so8186911edu.10;
+        Fri, 12 Apr 2019 05:41:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=p52kOXmhLGjtcvgfeEttPUaATcwSZrXTsAytCT5CZmQ=;
+        b=pCGPDuwptJ2I02bpn583M+2mWoR5p0Bj85+dt6yO2eDZOc2c/27NsCieV1RbsVbZvW
+         nVJYVpslVlrX0nAYFVH3fdkbIcnMppAEccBOoEGqF1Tgt0svQ81d2WhZGh4Xmb6cir04
+         YPnd4UYYwzzSF+ulH6Br046oszVKcxRdPL6D1/RuHvVNFz0H/7kG+L9k/UmMsSDBdJ5P
+         YtCoiCWwt1T7QdO08F1kCl4YbRUfK2rwzhW5fwXn6ESPVJBs0v+lZsQLPyNgrvC4argd
+         J86y00mn+9Peg8g9stLaHchC/QIVQxwaSttRn/Cc70cPiL/DQkLNixvs8Eji3nLVlnes
+         mJBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=p52kOXmhLGjtcvgfeEttPUaATcwSZrXTsAytCT5CZmQ=;
+        b=koItXI+E1KgqPxixBBO/AUTLmmUbai309t61JrD8k+drAIqOt/Lks8jIvBlI3UJB3q
+         TXdYBwbIICQYMjKf0ZNKpPwZoAVku1Tq+o4V91Kj2f++Yo8pQfeeWv1ImkBvsJ3m9t4W
+         b/sLzqBzqFtHE0e2a7JvzM7dBLllesL8/IAhtW+7KbE4W+VNupP9rEDccMitIa/Z9gwP
+         o1QMUsgT8C9F6NBDlYmVOWHxq3jAWtCK8a2YGl6crzD0MHEs+pIMllZLvk2RUXF9ozTq
+         hZd0YozSeLt3Y9UDuzClmiB5c7GAC+p9PYWa/v/bMRFbojhWoBjEan7U2nnyqJOgriPr
+         VbHA==
+X-Gm-Message-State: APjAAAWotH0qJLtaGl9dF3q52EREnjpGNx1qAut51MvKv0F2AAj+Qt7O
+        aCHyB+bDwP0Z8CgeSCND5LRE47Kstvc=
+X-Google-Smtp-Source: APXvYqy8sjC0pySVqST7XNDKMLX0gEt6WWTT7FPfQkJZs5ct+8oiU+fWgZVyPH/VqQum+yD2fJfGfA==
+X-Received: by 2002:a50:cb0a:: with SMTP id g10mr19987032edi.41.1555072894261;
+        Fri, 12 Apr 2019 05:41:34 -0700 (PDT)
+Received: from neptune.fritz.box ([178.19.216.175])
+        by smtp.gmail.com with ESMTPSA id b3sm5070487ejp.80.2019.04.12.05.41.32
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 12 Apr 2019 05:41:33 -0700 (PDT)
+From:   Alban Crequy <alban.crequy@gmail.com>
+X-Google-Original-From: Alban Crequy <alban@kinvolk.io>
 To:     ast@kernel.org, daniel@iogearbox.net
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        quentin.monnet@netronome.com, john.fastabend@gmail.com,
-        rdna@fb.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH bpf-next] bpf: fix whitespace for ENCAP_L2 defines in bpf.h
-Date:   Fri, 12 Apr 2019 12:27:34 +0100
-Message-Id: <1555068454-27894-1-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9224 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=669
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1904120075
-X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9224 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=3 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=697 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1904120075
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alban@kinvolk.io, iago@kinvolk.io
+Subject: [PATCH bpf v2] tools: bpftool: fix infinite loop in map create
+Date:   Fri, 12 Apr 2019 14:40:50 +0200
+Message-Id: <20190412124050.32120-1-alban@kinvolk.io>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-replace tab after #define with space in line with rest of definitions
+From: Alban Crequy <alban@kinvolk.io>
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+"bpftool map create" has an infinite loop on "while (argc)". The error
+case is missing.
+
+Symptoms: when forgetting to type the keyword 'type' in front of 'hash':
+$ sudo bpftool map create /sys/fs/bpf/dir/foobar hash key 8 value 8 entries 128
+(infinite loop, taking all the CPU)
+^C
+
+After the patch:
+$ sudo bpftool map create /sys/fs/bpf/dir/foobar hash key 8 value 8 entries 128
+Error: unknown arg hash
+
+Fixes: 0b592b5a01be ("tools: bpftool: add map create command")
+Signed-off-by: Alban Crequy <alban@kinvolk.io>
+
 ---
- include/uapi/linux/bpf.h       | 6 +++---
- tools/include/uapi/linux/bpf.h | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 2e96d0b..dacf3fc 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -2668,14 +2668,14 @@ enum bpf_func_id {
- /* BPF_FUNC_skb_adjust_room flags. */
- #define BPF_F_ADJ_ROOM_FIXED_GSO	(1ULL << 0)
- 
--#define	BPF_ADJ_ROOM_ENCAP_L2_MASK	0xff
--#define	BPF_ADJ_ROOM_ENCAP_L2_SHIFT	56
-+#define BPF_ADJ_ROOM_ENCAP_L2_MASK	0xff
-+#define BPF_ADJ_ROOM_ENCAP_L2_SHIFT	56
- 
- #define BPF_F_ADJ_ROOM_ENCAP_L3_IPV4	(1ULL << 1)
- #define BPF_F_ADJ_ROOM_ENCAP_L3_IPV6	(1ULL << 2)
- #define BPF_F_ADJ_ROOM_ENCAP_L4_GRE	(1ULL << 3)
- #define BPF_F_ADJ_ROOM_ENCAP_L4_UDP	(1ULL << 4)
--#define	BPF_F_ADJ_ROOM_ENCAP_L2(len)	(((__u64)len & \
-+#define BPF_F_ADJ_ROOM_ENCAP_L2(len)	(((__u64)len & \
- 					  BPF_ADJ_ROOM_ENCAP_L2_MASK) \
- 					 << BPF_ADJ_ROOM_ENCAP_L2_SHIFT)
- 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 2e96d0b..dacf3fc 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -2668,14 +2668,14 @@ enum bpf_func_id {
- /* BPF_FUNC_skb_adjust_room flags. */
- #define BPF_F_ADJ_ROOM_FIXED_GSO	(1ULL << 0)
- 
--#define	BPF_ADJ_ROOM_ENCAP_L2_MASK	0xff
--#define	BPF_ADJ_ROOM_ENCAP_L2_SHIFT	56
-+#define BPF_ADJ_ROOM_ENCAP_L2_MASK	0xff
-+#define BPF_ADJ_ROOM_ENCAP_L2_SHIFT	56
- 
- #define BPF_F_ADJ_ROOM_ENCAP_L3_IPV4	(1ULL << 1)
- #define BPF_F_ADJ_ROOM_ENCAP_L3_IPV6	(1ULL << 2)
- #define BPF_F_ADJ_ROOM_ENCAP_L4_GRE	(1ULL << 3)
- #define BPF_F_ADJ_ROOM_ENCAP_L4_UDP	(1ULL << 4)
--#define	BPF_F_ADJ_ROOM_ENCAP_L2(len)	(((__u64)len & \
-+#define BPF_F_ADJ_ROOM_ENCAP_L2(len)	(((__u64)len & \
- 					  BPF_ADJ_ROOM_ENCAP_L2_MASK) \
- 					 << BPF_ADJ_ROOM_ENCAP_L2_SHIFT)
+Changes in v2:
+- Explain the cause of the bug in commitmsg
+- Add the "fixes" line in the commitmsg (Jakub's review)
+- Rebase on the bpf tree
+
+v1 was initially based on bpf-next and submitted on
+https://marc.info/?l=linux-kernel&m=155310327709613&w=2
+---
+ tools/bpf/bpftool/map.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index 05b029b934a6..1ccc38718458 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -1151,6 +1151,9 @@ static int do_create(int argc, char **argv)
+ 				return -1;
+ 			}
+ 			NEXT_ARG();
++		} else {
++			p_err("unknown arg %s", *argv);
++			return -1;
+ 		}
+ 	}
  
 -- 
-1.8.3.1
+2.20.1
 
