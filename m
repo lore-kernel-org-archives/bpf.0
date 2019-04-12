@@ -4,62 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D2DDC282CE
-	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 22:00:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00EB0C10F0E
+	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 22:00:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6350E2084D
+	by mail.kernel.org (Postfix) with ESMTP id C7C892084D
 	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 22:00:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="X7hc/3Gk"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="SDh96Nim"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727338AbfDLWAm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1727259AbfDLWAm (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 12 Apr 2019 18:00:42 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:46627 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727199AbfDLWAJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 12 Apr 2019 18:00:09 -0400
-Received: by mail-wr1-f67.google.com with SMTP id t17so13678481wrw.13
-        for <bpf@vger.kernel.org>; Fri, 12 Apr 2019 15:00:08 -0700 (PDT)
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:34082 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727232AbfDLWAO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 12 Apr 2019 18:00:14 -0400
+Received: by mail-wr1-f66.google.com with SMTP id p10so13758540wrq.1
+        for <bpf@vger.kernel.org>; Fri, 12 Apr 2019 15:00:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=0Bth1/39lYXfmckbmsiuKqNidJbiikbB2x6UCWPFtnE=;
-        b=X7hc/3GkhiE2EOcLELr74UaCPhQ5nCRpptUAks8871eObf54Y4+G/SrERs1q0NEU0D
-         ssSibwaCGLdCBNOGLiwUVrub655Lj50wXi7cO6q6PlQjdETwn/juLkAELh9P6Xqbeo5f
-         qhewwAyF6jDwlEzKMIKT2PzHawTDlgVF1Vg1f6qbdIte74RCF9h5qKhIqQkhvNO+eNRP
-         MnwwmBVSm/91wi16EUDSMzZ91GrgYfAmxhBE3pmxEACvp8riCz9FJ7t/aK1cOe7js3wl
-         6z6oxIG7sHWvaDYhT7uO+2/b+PmxnbLRb9WCqPQc4p53bmEF2TzHy+AziOkpRuTHL79k
-         Xy7w==
+        bh=J0YL3VY81ZYkLm7FFiGr50XaGEO0Un8tKpiZShOimgc=;
+        b=SDh96NimQGVnmCD3G9uU2gLWVqjy9PUzYzOKCNA6GsUdgbpKHh1HXSxq2//xnxe2kq
+         bae3Mb6V5JVSgLVbS81jJElc8tXGib5xL3QCGfgDT5OsJhK7pV0uD10aS67CQqGOEmwb
+         Wgf94ETAYN5ZKh1rAFfUGqvdN6iaX49o063lfDMkp1kqbrV1IstcaEaLGMYfkg9EShp4
+         vInfSrheI4VLH6mgzkECRduXU9JPOLbqeKLd4t+CVXBJoEscKds60Lgmxy9MT4yQKWzC
+         qVwKITwc9TXnce39DbY893xlsxGHwpi3e9K3L7QBr8Bm73enR+itsq31ujGt9KQ9HuDg
+         H2cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=0Bth1/39lYXfmckbmsiuKqNidJbiikbB2x6UCWPFtnE=;
-        b=Y0sNAVufBBTfkswaiekW4gNKnRmx7TatQDaT81y7W5iup7fugK74D4znpBSkGUjhYJ
-         h6t8VGxJ4RE5GGq68939JDE1F3pnpd7olNiAtrVq2TLnoFD5xQUDGhBGgm2x5dfnSFrD
-         +5aNY88Hy3OzgAV28xZ2uku+kxQgFjk5JXWO8bihzAdFH2JBKt2BOjaX+Yh6nO3C7/8S
-         Ywbc/pHxIa+0+HDp4+w31nac5s0SeE9U6FRfriFkNZyLV8wkm0iDgL/mJyeieTUSAxBg
-         FDd7vtcWYfnYQizvkLqh2LNYgKkLf1zIT3dhTURWUTKtkZUbmnkWJ7P0uH0NBG8UmTsW
-         vcJw==
-X-Gm-Message-State: APjAAAWrDxljf5B8awqL67V3ONLcpHEzHLnIz8Ey7FJ8Y1ksOJSH7cbr
-        uuZS23St51TjZElLX8Qh/D6zBw==
-X-Google-Smtp-Source: APXvYqyfYVqH5BF4Cv1X5yIPKccmmEYQ967wfBjuRLAl2H8J8kPitchXYk+vrvTL6b5G9LvRSNdY/A==
-X-Received: by 2002:adf:ce8c:: with SMTP id r12mr18363426wrn.60.1555106407407;
-        Fri, 12 Apr 2019 15:00:07 -0700 (PDT)
+        bh=J0YL3VY81ZYkLm7FFiGr50XaGEO0Un8tKpiZShOimgc=;
+        b=hzfSlOPz2Tk+PK1ZrLY2zObTWLutt43gEsgFVtaCm1PLVgJLE87zbRF1gZyV1REHlv
+         gX0nnGsCHL/Rpw+xb6HoctjkMHHDi1EfGsDy5KJ9vDw5EZptRT4MwPrNutuBxEVgJPUU
+         av3LPfQm2ucpGwP+75FeObWmngtN0f+VMqX8DXEi6kJbL6LCkiMnmhF0uCUKlxmPYFFT
+         eFKQ4zKO5SxrtWj8oIHaSId3W0kJed0u88OrdDcP1LGnwtFDq0eYazDrCDhSiMOjOb2Z
+         qoDwPyWMO5E+gzLrRf/HEBp2O+crs/LY+iGITx5ya9cElSwuL2rozHcBrLU1TMBOaH6L
+         sn3g==
+X-Gm-Message-State: APjAAAWDkLX37HVE4LDfF3YcPD/LPeZJKqABG0AlH5N4/iIoDvPdDVaN
+        NpemuBuKhwOYJVcWl4yYNJOldg==
+X-Google-Smtp-Source: APXvYqyXd9E5Vkbz6d0Fzbn/JzQzT/dPfV/l1mQlr1XZLg08V7PQp2BfBlAq1/bw/DW+iC8ZYMyz9w==
+X-Received: by 2002:adf:fec3:: with SMTP id q3mr38000727wrs.173.1555106412288;
+        Fri, 12 Apr 2019 15:00:12 -0700 (PDT)
 Received: from cbtest28.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id f1sm8490764wml.28.2019.04.12.15.00.06
+        by smtp.gmail.com with ESMTPSA id f1sm8490764wml.28.2019.04.12.15.00.11
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 12 Apr 2019 15:00:06 -0700 (PDT)
+        Fri, 12 Apr 2019 15:00:11 -0700 (PDT)
 From:   Jiong Wang <jiong.wang@netronome.com>
 To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         oss-drivers@netronome.com, Jiong Wang <jiong.wang@netronome.com>
-Subject: [PATCH v3 bpf-next 05/19] bpf: split read liveness into REG_LIVE_READ64 and REG_LIVE_READ32
-Date:   Fri, 12 Apr 2019 22:59:38 +0100
-Message-Id: <1555106392-20117-6-git-send-email-jiong.wang@netronome.com>
+Subject: [PATCH v3 bpf-next 09/19] bpf: introduce new bpf prog load flags "BPF_F_TEST_RND_HI32"
+Date:   Fri, 12 Apr 2019 22:59:42 +0100
+Message-Id: <1555106392-20117-10-git-send-email-jiong.wang@netronome.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1555106392-20117-1-git-send-email-jiong.wang@netronome.com>
 References: <1555106392-20117-1-git-send-email-jiong.wang@netronome.com>
@@ -68,248 +68,101 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Register liveness infrastructure doesn't track register read width at the
-moment, while the width information will be needed for the later 32-bit
-safety analysis pass.
+x86_64 and AArch64 perhaps are two arches that running bpf testsuite
+frequently, however the zero extension insertion pass is not enabled for
+them because of their hardware support.
 
-This patch take the first step to split read liveness into REG_LIVE_READ64
-and REG_LIVE_READ32.
+It is critical to guarantee the pass correction as it is supposed to be
+enabled at default for a couple of other arches, for example PowerPC,
+SPARC, arm, NFP etc. Therefore, it would be very useful if there is a way
+to test this pass on for example x86_64.
 
-Liveness propagation code are updated accordingly. They are taught to
-understand how to propagate REG_LIVE_READ64 and REG_LIVE_READ32 at the same
-propagation iteration. For example, "mark_reg_read" now propagate "flags"
-which could be multiple read bits instead of the single REG_LIVE_READ64.
+The test methodology employed by this set is "poisoning" useless bits. High
+32-bit of a definition is randomized if it is identified as not used by any
+later instructions. Such randomization is only enabled under testing mode
+which is gated by the new bpf prog load flags "BPF_F_TEST_RND_HI32".
 
-A write still screen off all width of reads.
-
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
 ---
- include/linux/bpf_verifier.h |   8 +--
- kernel/bpf/verifier.c        | 119 +++++++++++++++++++++++++++++++++++++++----
- 2 files changed, 113 insertions(+), 14 deletions(-)
+ include/uapi/linux/bpf.h       | 18 ++++++++++++++++++
+ kernel/bpf/syscall.c           |  4 +++-
+ tools/include/uapi/linux/bpf.h | 18 ++++++++++++++++++
+ 3 files changed, 39 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index b3ab61f..fba0ebb 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -36,9 +36,11 @@
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index c26be24..89c85a3 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -258,6 +258,24 @@ enum bpf_attach_type {
   */
- enum bpf_reg_liveness {
- 	REG_LIVE_NONE = 0, /* reg hasn't been read or written this branch */
--	REG_LIVE_READ, /* reg was read, so we're sensitive to initial value */
--	REG_LIVE_WRITTEN, /* reg was written first, screening off later reads */
--	REG_LIVE_DONE = 4, /* liveness won't be updating this register anymore */
-+	REG_LIVE_READ32 = 0x1, /* reg was read, so we're sensitive to initial value */
-+	REG_LIVE_READ64 = 0x2, /* likewise, but full 64-bit content matters */
-+	REG_LIVE_READ = REG_LIVE_READ32 | REG_LIVE_READ64,
-+	REG_LIVE_WRITTEN = 0x4, /* reg was written first, screening off later reads */
-+	REG_LIVE_DONE = 0x8, /* liveness won't be updating this register anymore */
- };
+ #define BPF_F_ANY_ALIGNMENT	(1U << 1)
  
- struct bpf_reg_state {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c722015..3c5ca00 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1135,7 +1135,7 @@ static int check_subprogs(struct bpf_verifier_env *env)
-  */
- static int mark_reg_read(struct bpf_verifier_env *env,
- 			 const struct bpf_reg_state *state,
--			 struct bpf_reg_state *parent)
-+			 struct bpf_reg_state *parent, u8 flags)
- {
- 	bool writes = parent == state->parent; /* Observe write marks */
- 	int cnt = 0;
-@@ -1150,17 +1150,17 @@ static int mark_reg_read(struct bpf_verifier_env *env,
- 				parent->var_off.value, parent->off);
- 			return -EFAULT;
- 		}
--		if (parent->live & REG_LIVE_READ)
-+		if ((parent->live & REG_LIVE_READ) == flags)
- 			/* The parentage chain never changes and
--			 * this parent was already marked as LIVE_READ.
-+			 * this parent was already marked with all read bits.
- 			 * There is no need to keep walking the chain again and
--			 * keep re-marking all parents as LIVE_READ.
-+			 * keep re-marking all parents with reads bits in flags.
- 			 * This case happens when the same register is read
- 			 * multiple times without writes into it in-between.
- 			 */
- 			break;
- 		/* ... then we depend on parent's value */
--		parent->live |= REG_LIVE_READ;
-+		parent->live |= flags;
- 		state = parent;
- 		parent = state->parent;
- 		writes = true;
-@@ -1172,12 +1172,95 @@ static int mark_reg_read(struct bpf_verifier_env *env,
- 	return 0;
- }
- 
-+/* This function is supposed to be used by the following 32-bit optimization
-+ * code only. It returns TRUE if the source or destination register operates
-+ * on 64-bit, otherwise return FALSE.
++/* BPF_F_TEST_RND_HI32 is used in BPF_PROG_LOAD command for testing purpose.
++ * Verifier does sub-register def/use analysis and identifies instructions whose
++ * def only matters for low 32-bit, high 32-bit is never referenced later
++ * through implicit zero extension. Therefore verifier notifies JIT back-ends
++ * that it is safe to ignore clearing high 32-bit for these instructions. This
++ * saves some back-ends a lot of code-gen. However such optimization is not
++ * necessary on some arches, for example x86_64, arm64 etc, whose JIT back-ends
++ * hence hasn't used verifier's analysis result. But, we really want to have a
++ * way to be able to verify the correctness of the described optimization on
++ * x86_64 on which testsuites are frequently exercised.
++ *
++ * So, this flag is introduced. Once it is set, verifier will randomize high
++ * 32-bit for those instructions who has been identified as safe to ignore them.
++ * Then, if verifier is not doing correct analysis, such randomization will
++ * regress tests to expose bugs.
 + */
-+static bool is_reg64(struct bpf_insn *insn, u32 regno,
-+		     struct bpf_reg_state *reg, enum reg_arg_type t)
-+{
-+	u8 code, class, op;
++#define BPF_F_TEST_RND_HI32	(1U << 2)
 +
-+	code = insn->code;
-+	class = BPF_CLASS(code);
-+	op = BPF_OP(code);
-+	if (class == BPF_JMP) {
-+		/* BPF_EXIT will reach here because of return value readability
-+		 * test for "main" which has s32 return value.
-+		 */
-+		if (op == BPF_EXIT)
-+			return false;
-+		if (op == BPF_CALL) {
-+			/* BPF to BPF call will reach here because of marking
-+			 * caller saved clobber with DST_OP_NO_MARK for which we
-+			 * don't care the register def because they are anyway
-+			 * marked as NOT_INIT already.
-+			 */
-+			if (insn->src_reg == BPF_PSEUDO_CALL)
-+				return false;
-+			/* Helper call will reach here because of arg type
-+			 * check. Conservatively marking all args as 64-bit.
-+			 */
-+			return true;
-+		}
-+	}
-+
-+	if (class == BPF_ALU64 || class == BPF_JMP ||
-+	    /* BPF_END always use BPF_ALU class. */
-+	    (class == BPF_ALU && op == BPF_END && insn->imm == 64))
-+		return true;
-+
-+	if (class == BPF_ALU || class == BPF_JMP32)
-+		return false;
-+
-+	if (class == BPF_LDX) {
-+		if (t != SRC_OP)
-+			return BPF_SIZE(code) == BPF_DW;
-+		/* LDX source must be ptr. */
-+		return true;
-+	}
-+
-+	if (class == BPF_STX) {
-+		if (reg->type != SCALAR_VALUE)
-+			return true;
-+		return BPF_SIZE(code) == BPF_DW;
-+	}
-+
-+	if (class == BPF_LD) {
-+		u8 mode = BPF_MODE(code);
-+
-+		/* LD_IMM64 */
-+		if (mode == BPF_IMM)
-+			return true;
-+
-+		/* Both LD_IND and LD_ABS return 32-bit data. */
-+		if (t != SRC_OP)
-+			return  false;
-+
-+		/* Implicit ctx ptr. */
-+		if (regno == BPF_REG_6)
-+			return true;
-+
-+		/* Explicit source could be any width. */
-+		return true;
-+	}
-+
-+	if (class == BPF_ST)
-+		/* The only source register for BPF_ST is a ptr. */
-+		return true;
-+
-+	/* Conservatively return true at default. */
-+	return true;
-+}
-+
- static int check_reg_arg(struct bpf_verifier_env *env, u32 regno,
- 			 enum reg_arg_type t)
- {
- 	struct bpf_verifier_state *vstate = env->cur_state;
- 	struct bpf_func_state *state = vstate->frame[vstate->curframe];
-+	struct bpf_insn *insn = env->prog->insnsi + env->insn_idx;
- 	struct bpf_reg_state *reg, *regs = state->regs;
-+	bool rw64;
+ /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
+  * two extensions:
+  *
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 92c9b8a..abe2804 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1600,7 +1600,9 @@ static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
+ 	if (CHECK_ATTR(BPF_PROG_LOAD))
+ 		return -EINVAL;
  
- 	if (regno >= MAX_BPF_REG) {
- 		verbose(env, "R%d is invalid\n", regno);
-@@ -1185,6 +1268,7 @@ static int check_reg_arg(struct bpf_verifier_env *env, u32 regno,
- 	}
+-	if (attr->prog_flags & ~(BPF_F_STRICT_ALIGNMENT | BPF_F_ANY_ALIGNMENT))
++	if (attr->prog_flags & ~(BPF_F_STRICT_ALIGNMENT |
++				 BPF_F_ANY_ALIGNMENT |
++				 BPF_F_TEST_RND_HI32))
+ 		return -EINVAL;
  
- 	reg = &regs[regno];
-+	rw64 = is_reg64(insn, regno, reg, t);
- 	if (t == SRC_OP) {
- 		/* check whether register used as source operand can be read */
- 		if (reg->type == NOT_INIT) {
-@@ -1195,7 +1279,8 @@ static int check_reg_arg(struct bpf_verifier_env *env, u32 regno,
- 		if (regno == BPF_REG_FP)
- 			return 0;
+ 	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) &&
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index c26be24..89c85a3 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -258,6 +258,24 @@ enum bpf_attach_type {
+  */
+ #define BPF_F_ANY_ALIGNMENT	(1U << 1)
  
--		return mark_reg_read(env, reg, reg->parent);
-+		return mark_reg_read(env, reg, reg->parent,
-+				     rw64 ? REG_LIVE_READ64 : REG_LIVE_READ32);
- 	} else {
- 		/* check whether register used as dest operand can be written to */
- 		if (regno == BPF_REG_FP) {
-@@ -1382,7 +1467,8 @@ static int check_stack_read(struct bpf_verifier_env *env,
- 			state->regs[value_regno].live |= REG_LIVE_WRITTEN;
- 		}
- 		mark_reg_read(env, &reg_state->stack[spi].spilled_ptr,
--			      reg_state->stack[spi].spilled_ptr.parent);
-+			      reg_state->stack[spi].spilled_ptr.parent,
-+			      REG_LIVE_READ64);
- 		return 0;
- 	} else {
- 		int zeros = 0;
-@@ -1399,7 +1485,9 @@ static int check_stack_read(struct bpf_verifier_env *env,
- 			return -EACCES;
- 		}
- 		mark_reg_read(env, &reg_state->stack[spi].spilled_ptr,
--			      reg_state->stack[spi].spilled_ptr.parent);
-+			      reg_state->stack[spi].spilled_ptr.parent,
-+			      size == BPF_REG_SIZE
-+			      ? REG_LIVE_READ64 : REG_LIVE_READ32);
- 		if (value_regno >= 0) {
- 			if (zeros == size) {
- 				/* any size read into register is zero extended,
-@@ -2337,7 +2425,9 @@ static int check_stack_boundary(struct bpf_verifier_env *env, int regno,
- 		 * the whole slot to be marked as 'read'
- 		 */
- 		mark_reg_read(env, &state->stack[spi].spilled_ptr,
--			      state->stack[spi].spilled_ptr.parent);
-+			      state->stack[spi].spilled_ptr.parent,
-+			      access_size == BPF_REG_SIZE
-+			      ? REG_LIVE_READ64 : REG_LIVE_READ32);
- 	}
- 	return update_stack_depth(env, state, min_off);
- }
-@@ -6227,12 +6317,19 @@ static int propagate_liveness_reg(struct bpf_verifier_env *env,
- 				  struct bpf_reg_state *reg,
- 				  struct bpf_reg_state *parent_reg)
- {
-+	u8 parent_bits = parent_reg->live & REG_LIVE_READ;
-+	u8 bits = reg->live & REG_LIVE_READ;
-+	u8 bits_diff = parent_bits ^ bits;
-+	u8 bits_prop = bits_diff & bits;
- 	int err;
- 
--	if (parent_reg->live & REG_LIVE_READ || !(reg->live & REG_LIVE_READ))
-+	/* "reg" and "parent_reg" has the same read bits, or the bit doesn't
-+	 * belong to "reg".
-+	 */
-+	if (!bits_diff || !bits_prop)
- 		return 0;
- 
--	err = mark_reg_read(env, reg, parent_reg);
-+	err = mark_reg_read(env, reg, parent_reg, bits_prop);
- 	if (err)
- 		return err;
- 
++/* BPF_F_TEST_RND_HI32 is used in BPF_PROG_LOAD command for testing purpose.
++ * Verifier does sub-register def/use analysis and identifies instructions whose
++ * def only matters for low 32-bit, high 32-bit is never referenced later
++ * through implicit zero extension. Therefore verifier notifies JIT back-ends
++ * that it is safe to ignore clearing high 32-bit for these instructions. This
++ * saves some back-ends a lot of code-gen. However such optimization is not
++ * necessary on some arches, for example x86_64, arm64 etc, whose JIT back-ends
++ * hence hasn't used verifier's analysis result. But, we really want to have a
++ * way to be able to verify the correctness of the described optimization on
++ * x86_64 on which testsuites are frequently exercised.
++ *
++ * So, this flag is introduced. Once it is set, verifier will randomize high
++ * 32-bit for those instructions who has been identified as safe to ignore them.
++ * Then, if verifier is not doing correct analysis, such randomization will
++ * regress tests to expose bugs.
++ */
++#define BPF_F_TEST_RND_HI32	(1U << 2)
++
+ /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
+  * two extensions:
+  *
 -- 
 2.7.4
 
