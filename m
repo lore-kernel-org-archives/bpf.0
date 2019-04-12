@@ -2,118 +2,172 @@ Return-Path: <SRS0=9Oao=SO=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIM_ADSP_CUSTOM_MED,
-	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5C3BC10F0E
-	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 12:41:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53BEDC10F0E
+	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 13:20:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B62BD2171F
-	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 12:41:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D3582054F
+	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 13:20:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pCGPDuwp"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="lADMS5s4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726244AbfDLMlh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Apr 2019 08:41:37 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:43874 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726714AbfDLMlg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 12 Apr 2019 08:41:36 -0400
-Received: by mail-ed1-f65.google.com with SMTP id w3so8186911edu.10;
-        Fri, 12 Apr 2019 05:41:34 -0700 (PDT)
+        id S1726836AbfDLNUv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Apr 2019 09:20:51 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:45277 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726832AbfDLNUv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 12 Apr 2019 09:20:51 -0400
+Received: by mail-wr1-f65.google.com with SMTP id s15so11893301wra.12
+        for <bpf@vger.kernel.org>; Fri, 12 Apr 2019 06:20:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=p52kOXmhLGjtcvgfeEttPUaATcwSZrXTsAytCT5CZmQ=;
-        b=pCGPDuwptJ2I02bpn583M+2mWoR5p0Bj85+dt6yO2eDZOc2c/27NsCieV1RbsVbZvW
-         nVJYVpslVlrX0nAYFVH3fdkbIcnMppAEccBOoEGqF1Tgt0svQ81d2WhZGh4Xmb6cir04
-         YPnd4UYYwzzSF+ulH6Br046oszVKcxRdPL6D1/RuHvVNFz0H/7kG+L9k/UmMsSDBdJ5P
-         YtCoiCWwt1T7QdO08F1kCl4YbRUfK2rwzhW5fwXn6ESPVJBs0v+lZsQLPyNgrvC4argd
-         J86y00mn+9Peg8g9stLaHchC/QIVQxwaSttRn/Cc70cPiL/DQkLNixvs8Eji3nLVlnes
-         mJBA==
+        bh=RD5e3nY4gSGKvY1dPERdEJF3Duo6Im/qEyST4NxZfjk=;
+        b=lADMS5s4NQBE+2YJwhMzPXbp57vD/aJJRK4khgoEdAMfrGPZ/T5LNmO38/dpLX4Wb8
+         TYbp5rUzNGLEwXb8k6bzsIWByMzGM0ZtEMGAf41oPifQY17lise8NjwKLlfHIsKAGiK5
+         9h3Hiudmr9YPlkYn8KzR/XGfbp/G4JNhYFtS4QRMGGzUQ/ykF2QSChcXSmTH+x8hSHmh
+         khpdJThC+gdcoUKh3w3mCB8KQPH3TV0gsbwNwmnWnfXtriMXL3UWI6qP0bV7uL9g1MUH
+         5uIEeuvntDToS03YT1Yq9HTxxAm8dD4Ip3sTgPuN87IpzHq6B3WhxSpQBCUU/Ukxk/u3
+         LJfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=p52kOXmhLGjtcvgfeEttPUaATcwSZrXTsAytCT5CZmQ=;
-        b=koItXI+E1KgqPxixBBO/AUTLmmUbai309t61JrD8k+drAIqOt/Lks8jIvBlI3UJB3q
-         TXdYBwbIICQYMjKf0ZNKpPwZoAVku1Tq+o4V91Kj2f++Yo8pQfeeWv1ImkBvsJ3m9t4W
-         b/sLzqBzqFtHE0e2a7JvzM7dBLllesL8/IAhtW+7KbE4W+VNupP9rEDccMitIa/Z9gwP
-         o1QMUsgT8C9F6NBDlYmVOWHxq3jAWtCK8a2YGl6crzD0MHEs+pIMllZLvk2RUXF9ozTq
-         hZd0YozSeLt3Y9UDuzClmiB5c7GAC+p9PYWa/v/bMRFbojhWoBjEan7U2nnyqJOgriPr
-         VbHA==
-X-Gm-Message-State: APjAAAWotH0qJLtaGl9dF3q52EREnjpGNx1qAut51MvKv0F2AAj+Qt7O
-        aCHyB+bDwP0Z8CgeSCND5LRE47Kstvc=
-X-Google-Smtp-Source: APXvYqy8sjC0pySVqST7XNDKMLX0gEt6WWTT7FPfQkJZs5ct+8oiU+fWgZVyPH/VqQum+yD2fJfGfA==
-X-Received: by 2002:a50:cb0a:: with SMTP id g10mr19987032edi.41.1555072894261;
-        Fri, 12 Apr 2019 05:41:34 -0700 (PDT)
-Received: from neptune.fritz.box ([178.19.216.175])
-        by smtp.gmail.com with ESMTPSA id b3sm5070487ejp.80.2019.04.12.05.41.32
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 12 Apr 2019 05:41:33 -0700 (PDT)
-From:   Alban Crequy <alban.crequy@gmail.com>
-X-Google-Original-From: Alban Crequy <alban@kinvolk.io>
-To:     ast@kernel.org, daniel@iogearbox.net
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=RD5e3nY4gSGKvY1dPERdEJF3Duo6Im/qEyST4NxZfjk=;
+        b=PU4n1eYXZo3c6Nopy3fMiUV3P7wVW77mKhG2hDvaCWg4u74s2xjK16HOnqlUyHXMfG
+         leC0bruncNeAY9oXIjApxhGA9hd3n1z3Av2EE/1Q5NSI6k0t0M9JjkMXFHYuMvcExHh0
+         qc+BdqbIK9OPZoaKHWTFsjbDfOouH6dy8UPhKFddhv7NJ/cb89s7hFTNc2wYcF7281/e
+         Kp+MxzQNCUIuULXM4brlwpnDeNdBBt5M5JO5VacYAmRrbrNSDTt8z5AcUHzbBGOtQ5V8
+         hGvli00L1NO62317KvshYU/zsmIkqdYKIuAMxTQzliCTAOBtS4e8m4Br+ZQF2f7oTgPG
+         f/dA==
+X-Gm-Message-State: APjAAAVZ/RXvcyrC3FN4lyNDESURump/E/+Eb5bBgjW/cQVglXZyEJVZ
+        AMNpXjsOkXdxJwYk5NOpg5WX0A==
+X-Google-Smtp-Source: APXvYqwglRDtPCIJqP4n6Ram6jkt9NTn1qATEQw1wmoVddpNIOAjDnh11N/UTfIUh0RGPiQTXBTsZg==
+X-Received: by 2002:adf:eb84:: with SMTP id t4mr8579724wrn.43.1555075249195;
+        Fri, 12 Apr 2019 06:20:49 -0700 (PDT)
+Received: from [172.20.1.104] ([217.38.71.146])
+        by smtp.gmail.com with ESMTPSA id w130sm11051415wma.36.2019.04.12.06.20.48
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 12 Apr 2019 06:20:48 -0700 (PDT)
+Subject: Re: [PATCH bpf v2] tools: bpftool: fix infinite loop in map create
+To:     Alban Crequy <alban.crequy@gmail.com>, ast@kernel.org,
+        daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, alban@kinvolk.io, iago@kinvolk.io
-Subject: [PATCH bpf v2] tools: bpftool: fix infinite loop in map create
-Date:   Fri, 12 Apr 2019 14:40:50 +0200
-Message-Id: <20190412124050.32120-1-alban@kinvolk.io>
-X-Mailer: git-send-email 2.20.1
+References: <20190412124050.32120-1-alban@kinvolk.io>
+From:   Quentin Monnet <quentin.monnet@netronome.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=quentin.monnet@netronome.com; prefer-encrypt=mutual; keydata=
+ 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
+ RHhSHGnKaQ6MfrTge5Q0h5A=
+Message-ID: <8fb1d2e0-f8c0-4e01-ddf8-158c9e80558c@netronome.com>
+Date:   Fri, 12 Apr 2019 14:20:48 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190412124050.32120-1-alban@kinvolk.io>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Alban Crequy <alban@kinvolk.io>
+2019-04-12 14:40 UTC+0200 ~ Alban Crequy <alban.crequy@gmail.com>
+> From: Alban Crequy <alban@kinvolk.io>
+> 
+> "bpftool map create" has an infinite loop on "while (argc)". The error
+> case is missing.
+> 
+> Symptoms: when forgetting to type the keyword 'type' in front of 'hash':
+> $ sudo bpftool map create /sys/fs/bpf/dir/foobar hash key 8 value 8 entries 128
+> (infinite loop, taking all the CPU)
+> ^C
+> 
+> After the patch:
+> $ sudo bpftool map create /sys/fs/bpf/dir/foobar hash key 8 value 8 entries 128
+> Error: unknown arg hash
+> 
+> Fixes: 0b592b5a01be ("tools: bpftool: add map create command")
+> Signed-off-by: Alban Crequy <alban@kinvolk.io>
+> 
+> ---
+> 
+> Changes in v2:
+> - Explain the cause of the bug in commitmsg
+> - Add the "fixes" line in the commitmsg (Jakub's review)
+> - Rebase on the bpf tree
+> 
+> v1 was initially based on bpf-next and submitted on
+> https://marc.info/?l=linux-kernel&m=155310327709613&w=2
+> ---
+>  tools/bpf/bpftool/map.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+> index 05b029b934a6..1ccc38718458 100644
+> --- a/tools/bpf/bpftool/map.c
+> +++ b/tools/bpf/bpftool/map.c
+> @@ -1151,6 +1151,9 @@ static int do_create(int argc, char **argv)
+>  				return -1;
+>  			}
+>  			NEXT_ARG();
+> +		} else {
+> +			p_err("unknown arg %s", *argv);
+> +			return -1;
+>  		}
+>  	}
+>  
+> 
 
-"bpftool map create" has an infinite loop on "while (argc)". The error
-case is missing.
+Reviewed-by: Quentin Monnet <quentin.monnet@netronome.com>
 
-Symptoms: when forgetting to type the keyword 'type' in front of 'hash':
-$ sudo bpftool map create /sys/fs/bpf/dir/foobar hash key 8 value 8 entries 128
-(infinite loop, taking all the CPU)
-^C
-
-After the patch:
-$ sudo bpftool map create /sys/fs/bpf/dir/foobar hash key 8 value 8 entries 128
-Error: unknown arg hash
-
-Fixes: 0b592b5a01be ("tools: bpftool: add map create command")
-Signed-off-by: Alban Crequy <alban@kinvolk.io>
-
----
-
-Changes in v2:
-- Explain the cause of the bug in commitmsg
-- Add the "fixes" line in the commitmsg (Jakub's review)
-- Rebase on the bpf tree
-
-v1 was initially based on bpf-next and submitted on
-https://marc.info/?l=linux-kernel&m=155310327709613&w=2
----
- tools/bpf/bpftool/map.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index 05b029b934a6..1ccc38718458 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -1151,6 +1151,9 @@ static int do_create(int argc, char **argv)
- 				return -1;
- 			}
- 			NEXT_ARG();
-+		} else {
-+			p_err("unknown arg %s", *argv);
-+			return -1;
- 		}
- 	}
- 
--- 
-2.20.1
-
+Thanks Alban!
