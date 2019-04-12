@@ -2,63 +2,64 @@ Return-Path: <SRS0=9Oao=SO=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-4.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FAA7C10F0E
-	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 18:07:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1306C10F0E
+	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 18:16:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6039320850
-	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 18:07:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 80D57218C3
+	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 18:16:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eHixQhHw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K2mjXBhW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726857AbfDLSHq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Apr 2019 14:07:46 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:46284 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726685AbfDLSHq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 12 Apr 2019 14:07:46 -0400
-Received: by mail-qt1-f196.google.com with SMTP id z17so12215763qts.13;
-        Fri, 12 Apr 2019 11:07:45 -0700 (PDT)
+        id S1726933AbfDLSQb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Apr 2019 14:16:31 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:38765 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726920AbfDLSQb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 12 Apr 2019 14:16:31 -0400
+Received: by mail-qk1-f193.google.com with SMTP id g1so6218268qki.5;
+        Fri, 12 Apr 2019 11:16:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=pp9ClMaBMXR/SmhwrxlZqs/SXnIO6aLteUAuDWQUrl4=;
-        b=eHixQhHw8Ps0tY3JzGNX4Oox6mL596mtYp6fPgksOLoa6Gke74ltjf3kso3o004VRF
-         R7j/TOg6DhnGSocSqBxADitmtOrj6LfhtUOJeBSl8XQ9InXd/Qar146t9jbhVwCLNhQH
-         Aqs88wrUCMkJ/ikvDprJawyJxeTZKHdM4al4YdilpGS1zoEMSks4QEE+aW+mdvmlKaPy
-         Ca7xgqYfhT9hXkd2gH46yXTqVzdVlwghiiDesUBd9Eq4nF/cEosrPOtGEhJU9F0EFWAx
-         QHxwAm33Dgr3CfMh5AtsPhzGTWf53s3dSf0NqkWrbl1FYsVpY//Qt9oeUDIGqljmswn1
-         ThfA==
+        bh=FmUdBgaJZh+Gngkzif7g8W2IFkXxCNDKMNrS5dHh2z0=;
+        b=K2mjXBhWJOJb2vwiEKxfbQwRCEmAu/g5naIL2fHOEtaYMEcMaClcjKoG40AW5t/zCi
+         0vekJYU0FRfKPUOYlXXuwb9vAKQmRWnM3CrpZi2VyPQ7Mz6OpEFBpnwlFXQbAiiAQcxJ
+         zuCYmdheQlJFP1/xOtiMWeDTPBWYDnh8H8eUarU8MrxWXZ07HTRs4txyQtwsk9aO5UTE
+         oiTmSCh/R9fSWVbZujtUhiHNUmRsa4+7uixOx9BIybB49QXi3y2hB2/xEFv0IGyjkim8
+         pNdL6z7yj4INXM4VWsIn/5mvZmqksnJ44IjVw8MAIvpqZEPcYVd3r08GCCpmGlyRIZNn
+         JxxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=pp9ClMaBMXR/SmhwrxlZqs/SXnIO6aLteUAuDWQUrl4=;
-        b=ZkIt2TZQEbysCGiFQ0xL2NnBEHIQOYL/8JFFO4NBIFt+CgSsHkXGnP8AAcWr22WW/j
-         RknKXetcfcLqrA9WATVZlLVJZt86ta7/zQo0OgskZH9oLpV+J7HBto66M47ChXSPh+OB
-         OAZ+8x39Esmv6J9DquYZiyLZumO+IkGMOOtA2n/4imdzBXJjU0lzTx7RywVcxFHQGW+6
-         uYMT/g0l7B5vIszpqzg3ZOnOoS1gJc+gyeY8bIP7f5ONxbJBmoB0bE6H1k3DvtFkHTmi
-         l9+z0a54akGU+tv6wHgqpRIxlAmFZwocxG2DC9NasQZ8O7MRxx8vG4eQ2vkhF2TvZ2au
-         at+A==
-X-Gm-Message-State: APjAAAUP/U2fwRyE/RxfNb7MvQkhnSljvhLlX08QphUvMClEmMT1ds0+
-        OPt6IdHvPur3yQpZm+WUh16Komra9p6s7E25+tM=
-X-Google-Smtp-Source: APXvYqyLIc/gxmMRQTSd4sGD4kXCpk5Pldzd4ZbWzLsHnOlXuzQl5W29CZ2JF4UTdr+9amiFuMEOpV19PDibIWsvQxI=
-X-Received: by 2002:ac8:1876:: with SMTP id n51mr48097546qtk.234.1555092465264;
- Fri, 12 Apr 2019 11:07:45 -0700 (PDT)
+        bh=FmUdBgaJZh+Gngkzif7g8W2IFkXxCNDKMNrS5dHh2z0=;
+        b=fElPPvTmKtbXEqvr4Ghl1STTVnvOLJpNqC0IcdlnZJVd4ZjvkQM9rlspCDM4IvX9FH
+         aLQ16LSC3DEdBjHNyQWVJ95Ho2IUgng63J7FgMhvam66i07fwPyTWSb28g/0eYcusiCM
+         OfYS5YD9qZyrZKrJ8Ayh2z3Ok4h93tbGrdZgPYIG+GpTYGEeowilFNYxx7M0vcJ1Gpx3
+         QLctuYqOKWI8wCy4ihl5BAupWW4KPzvTH/bT+PoYSZsKiS3/KMsdxcTaHjrA6HnOS9Fw
+         GPoCpjJ+snhCN3eZc1Iebpzty3w6DtsnMLKdxtjfqk/y26HRD05rJ5cgty1QAIpSqvFD
+         aJtA==
+X-Gm-Message-State: APjAAAUCtZWEQnKoJF9l3ktIhpDncGe+ccfhkJhm/tFKY3YjvatGv90K
+        O9pV4M09ZFXafZldUGKaXDO7XUXJwc4Nb7WlF6A8AtQr
+X-Google-Smtp-Source: APXvYqzg3+WRNYkw1el8uQySnJ7ld890dG7Qt7n/84w9ekqluxDnBk9/OhpCRHrE81Fp215/Y9XBsYMCuiYVy14dGwo=
+X-Received: by 2002:a05:620a:1597:: with SMTP id d23mr44170928qkk.226.1555092990542;
+ Fri, 12 Apr 2019 11:16:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190412124050.32120-1-alban@kinvolk.io> <8fb1d2e0-f8c0-4e01-ddf8-158c9e80558c@netronome.com>
-In-Reply-To: <8fb1d2e0-f8c0-4e01-ddf8-158c9e80558c@netronome.com>
+References: <20190412100018.20852-1-alban@kinvolk.io>
+In-Reply-To: <20190412100018.20852-1-alban@kinvolk.io>
 From:   Song Liu <liu.song.a23@gmail.com>
-Date:   Fri, 12 Apr 2019 11:07:34 -0700
-Message-ID: <CAPhsuW4KENxuuafRFx9ak5rS4mf_i9yO2tN9WqGcB0nM01KiuA@mail.gmail.com>
-Subject: Re: [PATCH bpf v2] tools: bpftool: fix infinite loop in map create
-To:     Quentin Monnet <quentin.monnet@netronome.com>
-Cc:     Alban Crequy <alban.crequy@gmail.com>,
+Date:   Fri, 12 Apr 2019 11:16:19 -0700
+Message-ID: <CAPhsuW7FJ5DWMA9RzO2SH0whcYdTt5oiYHLAMZzSnXTkY0h+wQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/2] bpf: sock ops: add netns in bpf context
+To:     Alban Crequy <alban.crequy@gmail.com>
+Cc:     John Fastabend <john.fastabend@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
@@ -70,61 +71,96 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Apr 12, 2019 at 6:21 AM Quentin Monnet
-<quentin.monnet@netronome.com> wrote:
+On Fri, Apr 12, 2019 at 3:02 AM Alban Crequy <alban.crequy@gmail.com> wrote:
 >
-> 2019-04-12 14:40 UTC+0200 ~ Alban Crequy <alban.crequy@gmail.com>
-> > From: Alban Crequy <alban@kinvolk.io>
-> >
-> > "bpftool map create" has an infinite loop on "while (argc)". The error
-> > case is missing.
-> >
-> > Symptoms: when forgetting to type the keyword 'type' in front of 'hash':
-> > $ sudo bpftool map create /sys/fs/bpf/dir/foobar hash key 8 value 8 entries 128
-> > (infinite loop, taking all the CPU)
-> > ^C
-> >
-> > After the patch:
-> > $ sudo bpftool map create /sys/fs/bpf/dir/foobar hash key 8 value 8 entries 128
-> > Error: unknown arg hash
-> >
-> > Fixes: 0b592b5a01be ("tools: bpftool: add map create command")
-> > Signed-off-by: Alban Crequy <alban@kinvolk.io>
+> From: Alban Crequy <alban@kinvolk.io>
+>
+> sockops programs can now access the network namespace inode via
+> (struct bpf_sock_ops)->netns. This can be useful to apply different
+> policies on different network namespaces.
+>
+> In the unlikely case where network namespaces are not compiled in
+> (CONFIG_NET_NS=n), the verifier will not allow access to ->netns.
+>
+> Signed-off-by: Alban Crequy <alban@kinvolk.io>
 
 Acked-by: Song Liu <songliubraving@fb.com>
 
-Thanks for the fix!
-
-> >
-> > ---
-> >
-> > Changes in v2:
-> > - Explain the cause of the bug in commitmsg
-> > - Add the "fixes" line in the commitmsg (Jakub's review)
-> > - Rebase on the bpf tree
-> >
-> > v1 was initially based on bpf-next and submitted on
-> > https://marc.info/?l=linux-kernel&m=155310327709613&w=2
-> > ---
-> >  tools/bpf/bpftool/map.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-> > index 05b029b934a6..1ccc38718458 100644
-> > --- a/tools/bpf/bpftool/map.c
-> > +++ b/tools/bpf/bpftool/map.c
-> > @@ -1151,6 +1151,9 @@ static int do_create(int argc, char **argv)
-> >                               return -1;
-> >                       }
-> >                       NEXT_ARG();
-> > +             } else {
-> > +                     p_err("unknown arg %s", *argv);
-> > +                     return -1;
-> >               }
-> >       }
-> >
-> >
+> ---
+>  include/uapi/linux/bpf.h |  1 +
+>  net/core/filter.c        | 40 ++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 41 insertions(+)
 >
-> Reviewed-by: Quentin Monnet <quentin.monnet@netronome.com>
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 31a27dd337dc..5afaab25f205 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -3069,6 +3069,7 @@ struct bpf_sock_ops {
+>         __u32 sk_txhash;
+>         __u64 bytes_received;
+>         __u64 bytes_acked;
+> +       __u64 netns;
+>  };
 >
-> Thanks Alban!
+>  /* Definitions for bpf_sock_ops_cb_flags */
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 22eb2edf5573..f5e75b6fecb2 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -6758,6 +6758,14 @@ static bool sock_ops_is_valid_access(int off, int size,
+>                 }
+>         } else {
+>                 switch (off) {
+> +               case offsetof(struct bpf_sock_ops, netns):
+> +#ifdef CONFIG_NET_NS
+> +                       if (size != sizeof(__u64))
+> +                               return false;
+> +#else
+> +                       return false;
+> +#endif
+> +                       break;
+>                 case bpf_ctx_range_till(struct bpf_sock_ops, bytes_received,
+>                                         bytes_acked):
+>                         if (size != sizeof(__u64))
+> @@ -7908,6 +7916,38 @@ static u32 sock_ops_convert_ctx_access(enum bpf_access_type type,
+>                 SOCK_OPS_GET_OR_SET_FIELD(sk_txhash, sk_txhash,
+>                                           struct sock, type);
+>                 break;
+> +
+> +       case offsetof(struct bpf_sock_ops, netns):
+> +#ifdef CONFIG_NET_NS
+> +               /* Loading: sk_ops->sk->__sk_common.skc_net.net->ns.inum
+> +                * Type: (struct bpf_sock_ops_kern *)
+> +                *       ->(struct sock *)
+> +                *       ->(struct sock_common)
+> +                *       .possible_net_t
+> +                *       .(struct net *)
+> +                *       ->(struct ns_common)
+> +                *       .(unsigned int)
+> +                */
+> +               BUILD_BUG_ON(offsetof(struct sock, __sk_common) != 0);
+> +               BUILD_BUG_ON(offsetof(possible_net_t, net) != 0);
+> +               *insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(
+> +                                               struct bpf_sock_ops_kern, sk),
+> +                                     si->dst_reg, si->src_reg,
+> +                                     offsetof(struct bpf_sock_ops_kern, sk));
+> +               *insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(
+> +                                               possible_net_t, net),
+> +                                     si->dst_reg, si->dst_reg,
+> +                                     offsetof(struct sock_common, skc_net));
+> +               *insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(
+> +                                               struct ns_common, inum),
+> +                                     si->dst_reg, si->dst_reg,
+> +                                     offsetof(struct net, ns) +
+> +                                     offsetof(struct ns_common, inum));
+> +#else
+> +               *insn++ = BPF_MOV64_IMM(si->dst_reg, 0);
+> +#endif
+> +               break;
+> +
+>         }
+>         return insn - insn_buf;
+>  }
+> --
+> 2.20.1
+>
