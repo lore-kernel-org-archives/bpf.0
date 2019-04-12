@@ -2,180 +2,98 @@ Return-Path: <SRS0=9Oao=SO=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 762DAC10F0E
-	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 21:41:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 841B1C10F0E
+	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 22:00:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3DEC120850
-	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 21:41:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1555105299;
-	bh=wWuDfUmc35Nvz/zunKJ9BIH+iDjKJGnNlkNWRuVCQpI=;
-	h=From:To:CC:Subject:Date:List-ID:From;
-	b=o076ZzAx9kWzj7fXxeRPWPzrnzR39qLWbeayK3Czdb/6JB8KpIaZvXMSIFeCt9UA9
-	 gz9o9fjkkEkewpPjgdsSpo8w9vyWNuM6qY4kIU57Xpo7e0wIJKpKextWHS17UaBZaM
-	 Fdgd8FpewG/AVhrkurmSt2PquJNz7oxwvY91sSLA=
+	by mail.kernel.org (Postfix) with ESMTP id 52FCC2084D
+	for <bpf@archiver.kernel.org>; Fri, 12 Apr 2019 22:00:04 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="cMMj6xev"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726931AbfDLVlj convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 12 Apr 2019 17:41:39 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:33508 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726898AbfDLVli (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 12 Apr 2019 17:41:38 -0400
-Received: from pps.filterd (m0044008.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3CLYdSR005125
-        for <bpf@vger.kernel.org>; Fri, 12 Apr 2019 14:41:37 -0700
-Received: from maileast.thefacebook.com ([199.201.65.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2rtw0ws6y3-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 12 Apr 2019 14:41:37 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a1:3::13) by
- mail.thefacebook.com (2620:10d:c021:18::172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Fri, 12 Apr 2019 14:41:36 -0700
-Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 9803F7609DB; Fri, 12 Apr 2019 14:41:32 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Alexei Starovoitov <ast@kernel.org>
-Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
-To:     <davem@davemloft.net>
-CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next] selftests/bpf: two scale tests
-Date:   Fri, 12 Apr 2019 14:41:32 -0700
-Message-ID: <20190412214132.2726285-1-ast@kernel.org>
-X-Mailer: git-send-email 2.20.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-12_11:,,
- signatures=0
-X-Proofpoint-Spam-Reason: safe
-X-FB-Internal: Safe
+        id S1727157AbfDLWAD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Apr 2019 18:00:03 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:45036 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727156AbfDLWAD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 12 Apr 2019 18:00:03 -0400
+Received: by mail-wr1-f68.google.com with SMTP id y7so13695496wrn.11
+        for <bpf@vger.kernel.org>; Fri, 12 Apr 2019 15:00:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=wbnW/wYBeGzIP4i/h68N60AU3yOwxgPsQoXdv9s68Zc=;
+        b=cMMj6xevEeuxBZj/8A5Dscp228TrbWGQUjJXVsozApd7l1N1LNCeEDDCg8c8KWHKk1
+         7THK7ULupH+gO7RDW/wpdenP5KdKs6Q0dnXQwX9FGcrQRELq9C86Ic2XdVMGs2aWK4MQ
+         h9tOSCg33mEhrKUxS6nL1h8cd+mzqyR03Qwle6xmZYCtlRYzg4c7kLm0Rx8wl+OwxCKu
+         xF13lI+dmKE7yZ2A/8egMlqHhk8cV0pKnbHGpx2W3mMG9NdlhUXIb+XRamp9dwWXfBkq
+         CF168QCegv14jnWEfti7y0WRGsNig+Pys8m2pvHNSUmzbBpEm3cnCnjrehqZbHjrcjJv
+         /nAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=wbnW/wYBeGzIP4i/h68N60AU3yOwxgPsQoXdv9s68Zc=;
+        b=BqY0fE0CEq7B6dW1WS8IJ3ajnJNVHyIJ7LcRB4woeDcz6k2S03xXwSDFroKU3sF9VM
+         84oj31ZVj5CvN884wjy7Wznflw4Jfs5sFDpUruK6If6dvEG78rJbrtMc+MltZSzoMVj7
+         DUyuun+ugF0EM0mWAOinyVHJl622RL6Dw20Hqzf/Hsp7bgoHC2uNOMP6vZ6mH7WJ16Al
+         ER6/8I5eoJFbxZ93z/e1iQkyiVEaRfNIwavM6Akay7G6DjQGXyIIcCKNhP9eAO43VHTh
+         49TBQP8Lz3hAIjnTGaErvKVg2xkh8UInWLcVdbmDtCvtHtRkAEkhxVsuWBgmktNgbJBI
+         yrRg==
+X-Gm-Message-State: APjAAAUF2c2np+HSJPzwAHETm8z51ItQJt3oi7LNVmogpPqi9xWsp0zX
+        jXdW0SxQw2FAqLficS31E1f70A==
+X-Google-Smtp-Source: APXvYqxYLoQJKhWphQMtw444nwtwRECXpzxKObCwb0cYtptGlIPAxsdUVgJlKgGh6TrjEtKRznxaBA==
+X-Received: by 2002:adf:eb84:: with SMTP id t4mr10284618wrn.43.1555106401617;
+        Fri, 12 Apr 2019 15:00:01 -0700 (PDT)
+Received: from cbtest28.netronome.com ([217.38.71.146])
+        by smtp.gmail.com with ESMTPSA id f1sm8490764wml.28.2019.04.12.15.00.00
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Fri, 12 Apr 2019 15:00:01 -0700 (PDT)
+From:   Jiong Wang <jiong.wang@netronome.com>
+To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        oss-drivers@netronome.com, Jiong Wang <jiong.wang@netronome.com>
+Subject: [PATCH v3 bpf-next 01/19] bpf: refactor propagate_liveness to eliminate duplicated for loop
+Date:   Fri, 12 Apr 2019 22:59:34 +0100
+Message-Id: <1555106392-20117-2-git-send-email-jiong.wang@netronome.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1555106392-20117-1-git-send-email-jiong.wang@netronome.com>
+References: <1555106392-20117-1-git-send-email-jiong.wang@netronome.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add two tests to check that sequence of 1024 jumps is verifiable.
+Propagation for register and stack slot are finished in separate for loop,
+while they are perfect to be put into a single loop.
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+This could also let them share some common variables in later patches.
+
+Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
 ---
- tools/testing/selftests/bpf/test_verifier.c  | 70 ++++++++++++++++++++
- tools/testing/selftests/bpf/verifier/scale.c | 18 +++++
- 2 files changed, 88 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/verifier/scale.c
+ kernel/bpf/verifier.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index e2ebcaddbe78..6cb6a1074fd1 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -208,6 +208,76 @@ static void bpf_fill_rand_ld_dw(struct bpf_test *self)
- 	self->retval = (uint32_t)res;
- }
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 15ab6fa..da285df 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6254,10 +6254,8 @@ static int propagate_liveness(struct bpf_verifier_env *env,
+ 					return err;
+ 			}
+ 		}
+-	}
  
-+/* test the sequence of 1k jumps */
-+static void bpf_fill_scale1(struct bpf_test *self)
-+{
-+	struct bpf_insn *insn = self->fill_insns;
-+	int i = 0, k = 0;
-+
-+	insn[i++] = BPF_MOV64_REG(BPF_REG_6, BPF_REG_1);
-+	/* test to check that the sequence of 1024 jumps is acceptable */
-+	while (k++ < 1024) {
-+		insn[i++] = BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0,
-+					 BPF_FUNC_get_prandom_u32);
-+		insn[i++] = BPF_JMP_IMM(BPF_JGT, BPF_REG_0, bpf_semi_rand_get(), 2);
-+		insn[i++] = BPF_MOV64_REG(BPF_REG_1, BPF_REG_10);
-+		insn[i++] = BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_6,
-+					-8 * (k % 64 + 1));
-+	}
-+	/* every jump adds 1024 steps to insn_processed, so to stay exactly
-+	 * within 1m limit add MAX_TEST_INSNS - 1025 MOVs and 1 EXIT
-+	 */
-+	while (i < MAX_TEST_INSNS - 1025)
-+		insn[i++] = BPF_ALU32_IMM(BPF_MOV, BPF_REG_0, 42);
-+	insn[i] = BPF_EXIT_INSN();
-+	self->prog_len = i + 1;
-+	self->retval = 42;
-+}
-+
-+/* test the sequence of 1k jumps in inner most function (function depth 8)*/
-+static void bpf_fill_scale2(struct bpf_test *self)
-+{
-+	struct bpf_insn *insn = self->fill_insns;
-+	int i = 0, k = 0;
-+
-+#define FUNC_NEST 7
-+	for (k = 0; k < FUNC_NEST; k++) {
-+		insn[i++] = BPF_CALL_REL(1);
-+		insn[i++] = BPF_EXIT_INSN();
-+	}
-+	insn[i++] = BPF_MOV64_REG(BPF_REG_6, BPF_REG_1);
-+	/* test to check that the sequence of 1024 jumps is acceptable */
-+	while (k++ < 1024) {
-+		insn[i++] = BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0,
-+					 BPF_FUNC_get_prandom_u32);
-+		insn[i++] = BPF_JMP_IMM(BPF_JGT, BPF_REG_0, bpf_semi_rand_get(), 2);
-+		insn[i++] = BPF_MOV64_REG(BPF_REG_1, BPF_REG_10);
-+		insn[i++] = BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_6,
-+					-8 * (k % (64 - 4 * FUNC_NEST) + 1));
-+	}
-+	/* every jump adds 1024 steps to insn_processed, so to stay exactly
-+	 * within 1m limit add MAX_TEST_INSNS - 1025 MOVs and 1 EXIT
-+	 */
-+	while (i < MAX_TEST_INSNS - 1025)
-+		insn[i++] = BPF_ALU32_IMM(BPF_MOV, BPF_REG_0, 42);
-+	insn[i] = BPF_EXIT_INSN();
-+	self->prog_len = i + 1;
-+	self->retval = 42;
-+}
-+
-+static void bpf_fill_scale(struct bpf_test *self)
-+{
-+	switch (self->retval) {
-+	case 1:
-+		return bpf_fill_scale1(self);
-+	case 2:
-+		return bpf_fill_scale2(self);
-+	default:
-+		self->prog_len = 0;
-+		break;
-+	}
-+}
-+
- /* BPF_SK_LOOKUP contains 13 instructions, if you need to fix up maps */
- #define BPF_SK_LOOKUP(func)						\
- 	/* struct bpf_sock_tuple tuple = {} */				\
-diff --git a/tools/testing/selftests/bpf/verifier/scale.c b/tools/testing/selftests/bpf/verifier/scale.c
-new file mode 100644
-index 000000000000..7f868d4802e0
---- /dev/null
-+++ b/tools/testing/selftests/bpf/verifier/scale.c
-@@ -0,0 +1,18 @@
-+{
-+	"scale: scale test 1",
-+	.insns = { },
-+	.data = { },
-+	.fill_helper = bpf_fill_scale,
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.result = ACCEPT,
-+	.retval = 1,
-+},
-+{
-+	"scale: scale test 2",
-+	.insns = { },
-+	.data = { },
-+	.fill_helper = bpf_fill_scale,
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.result = ACCEPT,
-+	.retval = 2,
-+},
+-	/* ... and stack slots */
+-	for (frame = 0; frame <= vstate->curframe; frame++) {
++		/* Propagate stack slots. */
+ 		state = vstate->frame[frame];
+ 		parent = vparent->frame[frame];
+ 		for (i = 0; i < state->allocated_stack / BPF_REG_SIZE &&
 -- 
-2.20.0
+2.7.4
 
