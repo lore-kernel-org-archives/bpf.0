@@ -3,68 +3,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-4.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3752C282CE
-	for <bpf@archiver.kernel.org>; Sat, 13 Apr 2019 06:39:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59E41C10F11
+	for <bpf@archiver.kernel.org>; Sat, 13 Apr 2019 07:01:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8B618218AF
-	for <bpf@archiver.kernel.org>; Sat, 13 Apr 2019 06:39:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 20BB52084E
+	for <bpf@archiver.kernel.org>; Sat, 13 Apr 2019 07:01:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="qelO1SEL"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="iR0x19fp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726930AbfDMGjy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 13 Apr 2019 02:39:54 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:44782 "EHLO
+        id S1726297AbfDMHBI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 13 Apr 2019 03:01:08 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:41549 "EHLO
         mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726918AbfDMGjy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 13 Apr 2019 02:39:54 -0400
-Received: by mail-wr1-f68.google.com with SMTP id y7so14651627wrn.11
-        for <bpf@vger.kernel.org>; Fri, 12 Apr 2019 23:39:53 -0700 (PDT)
+        with ESMTP id S1726175AbfDMHBI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 13 Apr 2019 03:01:08 -0400
+Received: by mail-wr1-f68.google.com with SMTP id r4so14676733wrq.8
+        for <bpf@vger.kernel.org>; Sat, 13 Apr 2019 00:01:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=references:user-agent:from:to:cc:subject:in-reply-to:date
          :message-id:mime-version;
-        bh=/YEuMPuAL1nenMEY3PEyo1evLU8Kef6/R2XR/9VgccU=;
-        b=qelO1SELp51RjMuoYVq/4jdruRkyIHzkp8jjICpR0idHo0xI2Of9EaT1UbbyEtTYJb
-         WYICz4EwAJuMoFbJEcWqeNaYsF2OhokvoHEwtATp2qxOGnnDyUbfqsw5MzlKAEYxVewB
-         s4ij8XvajciS6oMFby+ghNe3zivet/jUVrqEGuebdedVYbdPBfAOGqQduZeYKv6qPKr7
-         rsGFyMeAoSazQNjIqyiVzRSFwGbBpdo4D/TO2NGvmmL//bUXMHpObD8r6ZGUC0LWvJ/I
-         UZrl6IfURLH4FSkCfarQWHPZZhp79kH3dLtPclFn+1VW/u/a5YTA5Tq7tXaPHd3WGtIc
-         xslQ==
+        bh=thjMR0EyiW9LFv1xwKYp6fxWicZp5zGMpl4OYWQWltM=;
+        b=iR0x19fp0GC2L61GzBp8uhMeE7EyWxvHVuwoj7SiJA7gLzqLmEiDRuXXAYrpRqpR5c
+         IQ4O8BnFEHNJ41ZMaL9nfnasa+bcugYe32zbDVMANyRxdCkUZ69vcpQOVKnlFjKHsiA9
+         wnv1JbQ8O2HibhTTmEJ5RoXz+3wCLuuErN32eXspWYGm8SoaPimjTjpk11ZWofU8Lj2p
+         ATpy8binRpi4XfQcN59Gl8Gdj8evUPyFjNj4ZYfonwOf4xcb50ggqkjtySDIWflcWBeN
+         Tx3IgQC0TCGcBFhUL1UeWh70oqxOZwza6jMu08nqFzrYngd1vdUTbkAZaTK9ZcWUrx9y
+         DN5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:references:user-agent:from:to:cc:subject
          :in-reply-to:date:message-id:mime-version;
-        bh=/YEuMPuAL1nenMEY3PEyo1evLU8Kef6/R2XR/9VgccU=;
-        b=tCmq3YRPGnAwT0DXxgyCskaCDaTa/hsgTz8yZX4tnz5CxxznhRo6rCnm4te5bDpCwn
-         flKMLbXQC2u2EoxFidDx2TW6yW2zC7PcIpto/wJIkuxVReLXS4oW4iZ50ZUGmn4ZYa0n
-         iY++sevNt7HXL6Ag1K74WaB1z0z5JFS+PEXDBfTeIoVeWH5xtzjZuz/PqbJuPsIUVOmo
-         T9Fot7qxV3i9VvUFJIGF326R2M9pCVxWMP6Tw57BEK1x3SOhJo4AD05IR1RhcFm0tWHy
-         Sf1jXWkv1Oi3Ld3crrH70tLg13w3yMBH0kuweCLpj6yuyAGDu+YCDHnNqIa64qPjZbgM
-         BFXA==
-X-Gm-Message-State: APjAAAXF7eCRw3NYDb5I1jt5NsXNz36Plzw8gj7AxI2mkApidYUGshWt
-        VZt81sGkbl+EOB2l3JPJk/2jmQ==
-X-Google-Smtp-Source: APXvYqzz0Dx4bB0lcHvQ+DsOeWXLSaxQNLUGFhdI7Ue94ecwujYlkUVdDeglrANun3WKpHJmrY2u/g==
-X-Received: by 2002:adf:c60e:: with SMTP id n14mr39764498wrg.127.1555137593034;
-        Fri, 12 Apr 2019 23:39:53 -0700 (PDT)
+        bh=thjMR0EyiW9LFv1xwKYp6fxWicZp5zGMpl4OYWQWltM=;
+        b=YjDLKlTPGSrEYT6b1x/iJnMOLTzUkyxPYRlaIGdT6X5mi02wFNQs52WsuVMziBqq1z
+         idh+f4iPB9zcicu005fnYptVBomJ6+i8AxFlEk+bIqg3Mh9Tmd8AWNnzUYXxN/raRkHU
+         ZCfrUtFxPcvcDf2wkAl/Nzh7c+Svy9q4+o0p67AmWDU3M3ohTEe/kgxuVVdHVjGOnh8O
+         l7++8678AskdGww6KbwO+3Mwq2UL5HFdeZSka4cGXFYcEsbrwkoDX7vdLWspTKyPyPdY
+         ZLB25KsFxC6wjED1xbGebgwujxQA8K65f1Xv9NGgZVePMoAek/ZkBaMW5061uQUcZ/aS
+         W52Q==
+X-Gm-Message-State: APjAAAV51jWv9qkYvFD2nagns4nP/jLgAu6ecKv1gO0O9QdvjapcJGB2
+        JgEgH+QH23Sc2zxvCYXMagYUmA==
+X-Google-Smtp-Source: APXvYqyeWNcV56d48pH22mwVWTA743iDImd2viklUPIZyFthNwiHeTBqQg3Y2+VvpKxY3GLbdGAu6w==
+X-Received: by 2002:adf:f451:: with SMTP id f17mr40963993wrp.272.1555138866513;
+        Sat, 13 Apr 2019 00:01:06 -0700 (PDT)
 Received: from LAPTOP-V3S7NLPL (cpc1-cmbg19-2-0-cust104.5-4.cable.virginm.net. [82.27.180.105])
-        by smtp.gmail.com with ESMTPSA id t81sm19600180wmb.5.2019.04.12.23.39.51
+        by smtp.gmail.com with ESMTPSA id 204sm16633413wmc.1.2019.04.13.00.01.05
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 12 Apr 2019 23:39:52 -0700 (PDT)
-References: <1555106392-20117-1-git-send-email-jiong.wang@netronome.com> <1555106392-20117-6-git-send-email-jiong.wang@netronome.com> <20190412180734.2f863fbe@cakuba.netronome.com>
+        Sat, 13 Apr 2019 00:01:05 -0700 (PDT)
+References: <1555106392-20117-1-git-send-email-jiong.wang@netronome.com> <1555106392-20117-5-git-send-email-jiong.wang@netronome.com> <20190413001241.fiuiyd64l7vuntz5@ast-mbp.dhcp.thefacebook.com>
 User-agent: mu4e 0.9.18; emacs 25.2.2
 From:   Jiong Wang <jiong.wang@netronome.com>
-To:     Jakub Kicinski <jakub.kicinski@netronome.com>
-Cc:     Jiong Wang <jiong.wang@netronome.com>,
-        alexei.starovoitov@gmail.com, daniel@iogearbox.net,
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jiong Wang <jiong.wang@netronome.com>, daniel@iogearbox.net,
         bpf@vger.kernel.org, netdev@vger.kernel.org,
         oss-drivers@netronome.com
-Subject: Re: [PATCH v3 bpf-next 05/19] bpf: split read liveness into REG_LIVE_READ64 and REG_LIVE_READ32
-In-reply-to: <20190412180734.2f863fbe@cakuba.netronome.com>
-Date:   Sat, 13 Apr 2019 07:39:45 +0100
-Message-ID: <87h8b2flxq.fsf@netronome.com>
+Subject: Re: [PATCH v3 bpf-next 04/19] bpf: refactor "check_reg_arg" to eliminate code redundancy
+In-reply-to: <20190413001241.fiuiyd64l7vuntz5@ast-mbp.dhcp.thefacebook.com>
+Date:   Sat, 13 Apr 2019 08:00:59 +0100
+Message-ID: <87ftqmfkyc.fsf@netronome.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 Sender: bpf-owner@vger.kernel.org
@@ -73,73 +72,40 @@ List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 
-Jakub Kicinski writes:
+Alexei Starovoitov writes:
 
-> On Fri, 12 Apr 2019 22:59:38 +0100, Jiong Wang wrote:
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index c722015..3c5ca00 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -1135,7 +1135,7 @@ static int check_subprogs(struct bpf_verifier_env *env)
->>   */
->>  static int mark_reg_read(struct bpf_verifier_env *env,
->>  			 const struct bpf_reg_state *state,
->> -			 struct bpf_reg_state *parent)
->> +			 struct bpf_reg_state *parent, u8 flags)
->>  {
->>  	bool writes = parent == state->parent; /* Observe write marks */
->>  	int cnt = 0;
->> @@ -1150,17 +1150,17 @@ static int mark_reg_read(struct bpf_verifier_env *env,
->>  				parent->var_off.value, parent->off);
->>  			return -EFAULT;
->>  		}
->> -		if (parent->live & REG_LIVE_READ)
->> +		if ((parent->live & REG_LIVE_READ) == flags)
->>  			/* The parentage chain never changes and
->> -			 * this parent was already marked as LIVE_READ.
->> +			 * this parent was already marked with all read bits.
+> On Fri, Apr 12, 2019 at 10:59:37PM +0100, Jiong Wang wrote:
+>> There are a few "regs[regno]" here are there across "check_reg_arg", this
+>> patch factor it out into a simple "reg" pointer. The intention is to
+>> simplify code indentation and make the later patches in this set look
+>> cleaner.
+>> 
+>> Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+>> Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
 >
-> No big deal, but I though said you'd modify this patch here...
+> The first 4 patches look great, so I've applied them to bpf-next.
 
-Ouch, sorry, I created one internal branch before start the test
-changes. Looks like the branch is v10 which listed before v2~v9 that
-somehow later I switched v9 for the test changing thought it is the latest
-branch.
+Thanks.
+
+> The rest needs more careful review that we'll do soon.
+
+No problem and agree they need very careful review. I understand once
+landed the optimization will be always on for a couple of targets like Arm,
+PowerPC and SPARC etc, so the correctness is critical.
+
+Patch 5 has two comments from Jakub not addressed, they are not about
+correctness so should not affect the review, I will fix them together with
+the other new comments.
+
+One good thing is high 32-bit randomization does catch a couple of corner
+case bugs so prove to be very powerful and efficient for exposing bugs. In
+v3, it is enabled on all possible tests under bpf selftests, and I haven't
+noticed regressions (my local machine configure may caused some tests
+skipped, but majority of the testsuite, especially all tests under
+test_progs/test_progs_32/test_verifier ran without failure), this is a good
+assurance of correctness.
+
+Thanks.
 
 Regards,
 Jiong
-
->
->>  			 * There is no need to keep walking the chain again and
->> -			 * keep re-marking all parents as LIVE_READ.
->> +			 * keep re-marking all parents with reads bits in flags.
->>  			 * This case happens when the same register is read
->>  			 * multiple times without writes into it in-between.
->>  			 */
->>  			break;
->>  		/* ... then we depend on parent's value */
->> -		parent->live |= REG_LIVE_READ;
->> +		parent->live |= flags;
->>  		state = parent;
->>  		parent = state->parent;
->>  		writes = true;
->
->> @@ -6227,12 +6317,19 @@ static int propagate_liveness_reg(struct bpf_verifier_env *env,
->>  				  struct bpf_reg_state *reg,
->>  				  struct bpf_reg_state *parent_reg)
->>  {
->> +	u8 parent_bits = parent_reg->live & REG_LIVE_READ;
->> +	u8 bits = reg->live & REG_LIVE_READ;
->> +	u8 bits_diff = parent_bits ^ bits;
->> +	u8 bits_prop = bits_diff & bits;
->>  	int err;
->>  
->> -	if (parent_reg->live & REG_LIVE_READ || !(reg->live & REG_LIVE_READ))
->> +	/* "reg" and "parent_reg" has the same read bits, or the bit doesn't
->> +	 * belong to "reg".
->> +	 */
->> +	if (!bits_diff || !bits_prop)
->>  		return 0;
->
-> .. and here?
-
