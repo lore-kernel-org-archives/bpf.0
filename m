@@ -2,138 +2,146 @@ Return-Path: <SRS0=hTM0=SQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIM_ADSP_CUSTOM_MED,
+	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BBDAC10F14
-	for <bpf@archiver.kernel.org>; Sun, 14 Apr 2019 09:15:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58175C10F13
+	for <bpf@archiver.kernel.org>; Sun, 14 Apr 2019 17:00:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1046C20850
-	for <bpf@archiver.kernel.org>; Sun, 14 Apr 2019 09:15:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 26DB020880
+	for <bpf@archiver.kernel.org>; Sun, 14 Apr 2019 17:00:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="Vx6SC+WB"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OIC6dQt7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726740AbfDNJPh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 14 Apr 2019 05:15:37 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:46888 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726533AbfDNJPg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 14 Apr 2019 05:15:36 -0400
-Received: by mail-pg1-f196.google.com with SMTP id q1so7152387pgv.13
-        for <bpf@vger.kernel.org>; Sun, 14 Apr 2019 02:15:36 -0700 (PDT)
+        id S1726283AbfDNRAR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 14 Apr 2019 13:00:17 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:33548 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726127AbfDNRAR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 14 Apr 2019 13:00:17 -0400
+Received: by mail-ed1-f66.google.com with SMTP id d55so11722411ede.0;
+        Sun, 14 Apr 2019 10:00:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=nQJrrbue7c3N84Cd6mFZPA1Y1o7acbXS4cTb2nznlGA=;
-        b=Vx6SC+WBX6kmXBT4OP7H4eDk8pZHoU/6bnBya6zmdqnkmojK/Kyegi8oINArN7IYSn
-         +1/yKPRCgEiPL2mbV0UVrKN/5WOq6lk9U0eM7lknJ/LesMvOvavOIaIHTDuaUm2Sal0B
-         6L2RJwK2Dz0nII5LmzT4mcUBTnjEOkw+KlIkA=
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ssMaGZRioh3Tphw5NqaiTGI5HreidLvqtXve6fx9Qg8=;
+        b=OIC6dQt7mp0q4bf/l9FI6aGZzU6mjZa2tx9p5NyoHwwG6XS450wu8P/EoNBs8817n4
+         hrY7FBdB/cHpGq8xTfStfEjG9HDOBhOpwv4AvQKB3BMA20FLtqFLi5Sx3VAhkHNUDkCV
+         Z38U2RZ8PhV74S6YE9eGcQvz1nfwljkfufF3ZjBLMXfglk7GYLDV1bSidgdzZwKKO9As
+         yKXi7/BFOcg8z5X7hTpUtGSMzRQNrjRxz6OCZJFMkoj6b2bzWH95fHXG2eHLBogkntTT
+         jqD7bcwElt0KIfbRQqU/HuLXbCt0MJHNlV7v6nlDkuBdtieZk9A1eT3YwHcsVSRwisfi
+         Liag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=nQJrrbue7c3N84Cd6mFZPA1Y1o7acbXS4cTb2nznlGA=;
-        b=enBdtKZn0xt6YUSFsmb4iSPoojGmBucJHfWAVZaCvEk1RhSzqp4mrGGfQcomhFhvBp
-         YtKekYM61t6WmnyFEz+asVajqo62v9mAw2qT0TiD0mhAyiaxhGt4jZpIqFGTlyO7aekT
-         JvZ9HbjtZg30lshuXSjEKCtoN0U16nBLsGjf2z2Y6auH/7qD0u5p2wL+u13JJockYocy
-         j2/oXqdxHS2H1AWGkm+Zb9CxuDYn5lE/7nI39QglevPf+dnRE2WVb4D3i2QPPS5XLuMm
-         bokbp5nZRaLsEQFU7P8BznEPbdRKgkkhDu+gvCLfR2pjWOqqW4X59MSarRIChCgp7zDt
-         GkOQ==
-X-Gm-Message-State: APjAAAV8X3w3gw3x1P4jHHqt+JnG3FUKKrKe7yrG183JmzIiKda9zlRd
-        E+Ger+D0JsLjEAcwcujj8Ve9Eg==
-X-Google-Smtp-Source: APXvYqzJvZI8cg4NBQ48Y2+PvRZTxzZuXgdmiA69lcI6ZO8t6W2tPumqwfHBphvyyz1mE1fpT8Y3Og==
-X-Received: by 2002:a63:3188:: with SMTP id x130mr61423347pgx.64.1555233335889;
-        Sun, 14 Apr 2019 02:15:35 -0700 (PDT)
-Received: from localhost.localdomain ([42.111.19.105])
-        by smtp.googlemail.com with ESMTPSA id g10sm31344767pgq.54.2019.04.14.02.15.28
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 14 Apr 2019 02:15:35 -0700 (PDT)
-From:   Shyam Saini <shyam.saini@amarulasolutions.com>
-To:     kernel-hardening@lists.openwall.com
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        keescook@chromium.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        netdev@vger.kernel.org, linux-ext4@vger.kernel.org,
-        devel@lists.orangefs.org, linux-mm@kvack.org,
-        linux-sctp@vger.kernel.org, bpf@vger.kernel.org,
-        kvm@vger.kernel.org, mayhs11saini@gmail.com,
-        Shyam Saini <shyam.saini@amarulasolutions.com>
-Subject: [PATCH 2/2] include: linux: Remove unused macros and their defination
-Date:   Sun, 14 Apr 2019 14:44:52 +0530
-Message-Id: <20190414091452.22275-2-shyam.saini@amarulasolutions.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190414091452.22275-1-shyam.saini@amarulasolutions.com>
-References: <20190414091452.22275-1-shyam.saini@amarulasolutions.com>
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=ssMaGZRioh3Tphw5NqaiTGI5HreidLvqtXve6fx9Qg8=;
+        b=ZOiWr1V/1x4hki5lMxj1gP6eow1DOmHn6QdwlmYB8L1vn6wRiana+B36kDOfXFIx5G
+         XzYBkoaKH89QA7+g3QoenhNb6CMfX73QssVtMl/kRxtLD9YYYbyRJtBE0BI3Ph1QYIw0
+         wcRHiued81AhP/P8J1Pr4Oi0tmhHOmmqe0T4rohPTyn0M3dn5QHrM5XYD/dK10lqzIDk
+         +1I1a7JPdKhvVRMCHWLxII+//KCFRUBSbEG/RYpb6dufFmqxLKFfH/iP/7JssOHSyP7D
+         bthfef/W6ho0X12jAWxCGn4r7zVEPYR5j8hmt8rxqZjif21JE+Z8ZAHqAPo5mUmm/Z5L
+         9HcA==
+X-Gm-Message-State: APjAAAXbdlZb8m9e178VhQtQcX8QXQiq1Ho6QH2s28LPf+D+QOs3g9Tt
+        gMDHKRoiduh7pHu9R9OVkv8=
+X-Google-Smtp-Source: APXvYqxBEaEGPOx/7O6LblX5WxRwp+/++on2aH6DqMX0vwazEERFh6TsZfWGi5xUQKREEbE9f96iFw==
+X-Received: by 2002:a17:906:7e47:: with SMTP id z7mr6855407ejr.248.1555261215106;
+        Sun, 14 Apr 2019 10:00:15 -0700 (PDT)
+Received: from localhost.localdomain (ip5b402483.dynamic.kabel-deutschland.de. [91.64.36.131])
+        by smtp.gmail.com with ESMTPSA id o9sm8828926ejb.26.2019.04.14.10.00.13
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 14 Apr 2019 10:00:14 -0700 (PDT)
+From:   Alban Crequy <alban.crequy@gmail.com>
+X-Google-Original-From: Alban Crequy <alban@kinvolk.io>
+To:     ast@kernel.org, daniel@iogearbox.net
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alban@kinvolk.io, iago@kinvolk.io,
+        Mauricio Vasquez B <mauricio.vasquez@polito.it>
+Subject: [PATCH bpf-next v1] bpf: add map helper functions push,pop,peek in more BPF programs
+Date:   Sun, 14 Apr 2019 18:58:46 +0200
+Message-Id: <20190414165846.22107-1-alban@kinvolk.io>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In favour of FIELD_SIZEOF, lets deprecate other two similar macros
-sizeof_field and SIZEOF_FIELD, and remove them completely.
+From: Alban Crequy <alban@kinvolk.io>
 
-Signed-off-by: Shyam Saini <shyam.saini@amarulasolutions.com>
+commit f1a2e44a3aec ("bpf: add queue and stack maps") introduced new BPF
+helper functions:
+- BPF_FUNC_map_push_elem
+- BPF_FUNC_map_pop_elem
+- BPF_FUNC_map_peek_elem
+
+but they were made available only for network BPF programs. This patch
+makes them available for tracepoint, cgroup and lirc programs.
+
+Signed-off-by: Alban Crequy <alban@kinvolk.io>
+Cc: Mauricio Vasquez B <mauricio.vasquez@polito.it>
 ---
- arch/mips/cavium-octeon/executive/cvmx-bootmem.c | 7 -------
- include/linux/stddef.h                           | 8 --------
- tools/testing/selftests/bpf/bpf_util.h           | 4 ----
- 3 files changed, 19 deletions(-)
+ drivers/media/rc/bpf-lirc.c | 6 ++++++
+ kernel/bpf/cgroup.c         | 6 ++++++
+ kernel/trace/bpf_trace.c    | 6 ++++++
+ 3 files changed, 18 insertions(+)
 
-diff --git a/arch/mips/cavium-octeon/executive/cvmx-bootmem.c b/arch/mips/cavium-octeon/executive/cvmx-bootmem.c
-index fc754d155002..44b506a14666 100644
---- a/arch/mips/cavium-octeon/executive/cvmx-bootmem.c
-+++ b/arch/mips/cavium-octeon/executive/cvmx-bootmem.c
-@@ -45,13 +45,6 @@ static struct cvmx_bootmem_desc *cvmx_bootmem_desc;
- /* See header file for descriptions of functions */
- 
- /**
-- * This macro returns the size of a member of a structure.
-- * Logically it is the same as "sizeof(s::field)" in C++, but
-- * C lacks the "::" operator.
-- */
--#define SIZEOF_FIELD(s, field) sizeof(((s *)NULL)->field)
--
--/**
-  * This macro returns a member of the
-  * cvmx_bootmem_named_block_desc_t structure. These members can't
-  * be directly addressed as they might be in memory not directly
-diff --git a/include/linux/stddef.h b/include/linux/stddef.h
-index 63f2302bc406..b888eb7795a1 100644
---- a/include/linux/stddef.h
-+++ b/include/linux/stddef.h
-@@ -29,14 +29,6 @@ enum {
- #define FIELD_SIZEOF(t, f) (sizeof(((t *)0)->f))
- 
- /**
-- * sizeof_field(TYPE, MEMBER)
-- *
-- * @TYPE: The structure containing the field of interest
-- * @MEMBER: The field to return the size of
-- */
--#define sizeof_field(TYPE, MEMBER) sizeof((((TYPE *)0)->MEMBER))
--
--/**
-  * offsetofend(TYPE, MEMBER)
-  *
-  * @TYPE: The type of the structure
-diff --git a/tools/testing/selftests/bpf/bpf_util.h b/tools/testing/selftests/bpf/bpf_util.h
-index 2e90a4315b55..815e7b48fa37 100644
---- a/tools/testing/selftests/bpf/bpf_util.h
-+++ b/tools/testing/selftests/bpf/bpf_util.h
-@@ -67,10 +67,6 @@ static inline unsigned int bpf_num_possible_cpus(void)
-  */
- #define FIELD_SIZEOF(t, f) (sizeof(((t *)0)->f))
- 
--#ifndef sizeof_field
--#define sizeof_field(TYPE, MEMBER) sizeof((((TYPE *)0)->MEMBER))
--#endif
--
- #ifndef offsetofend
- #define offsetofend(TYPE, MEMBER) \
- 	(offsetof(TYPE, MEMBER)	+ FIELD_SIZEOF(TYPE, MEMBER))
+diff --git a/drivers/media/rc/bpf-lirc.c b/drivers/media/rc/bpf-lirc.c
+index 390a722e6211..ee657003c1a1 100644
+--- a/drivers/media/rc/bpf-lirc.c
++++ b/drivers/media/rc/bpf-lirc.c
+@@ -97,6 +97,12 @@ lirc_mode2_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_map_update_elem_proto;
+ 	case BPF_FUNC_map_delete_elem:
+ 		return &bpf_map_delete_elem_proto;
++	case BPF_FUNC_map_push_elem:
++		return &bpf_map_push_elem_proto;
++	case BPF_FUNC_map_pop_elem:
++		return &bpf_map_pop_elem_proto;
++	case BPF_FUNC_map_peek_elem:
++		return &bpf_map_peek_elem_proto;
+ 	case BPF_FUNC_ktime_get_ns:
+ 		return &bpf_ktime_get_ns_proto;
+ 	case BPF_FUNC_tail_call:
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index e58a6c247f56..fcde0f7b2585 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -713,6 +713,12 @@ cgroup_base_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_map_update_elem_proto;
+ 	case BPF_FUNC_map_delete_elem:
+ 		return &bpf_map_delete_elem_proto;
++	case BPF_FUNC_map_push_elem:
++		return &bpf_map_push_elem_proto;
++	case BPF_FUNC_map_pop_elem:
++		return &bpf_map_pop_elem_proto;
++	case BPF_FUNC_map_peek_elem:
++		return &bpf_map_peek_elem_proto;
+ 	case BPF_FUNC_get_current_uid_gid:
+ 		return &bpf_get_current_uid_gid_proto;
+ 	case BPF_FUNC_get_local_storage:
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index d64c00afceb5..91800be0c8eb 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -569,6 +569,12 @@ tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_map_update_elem_proto;
+ 	case BPF_FUNC_map_delete_elem:
+ 		return &bpf_map_delete_elem_proto;
++	case BPF_FUNC_map_push_elem:
++		return &bpf_map_push_elem_proto;
++	case BPF_FUNC_map_pop_elem:
++		return &bpf_map_pop_elem_proto;
++	case BPF_FUNC_map_peek_elem:
++		return &bpf_map_peek_elem_proto;
+ 	case BPF_FUNC_probe_read:
+ 		return &bpf_probe_read_proto;
+ 	case BPF_FUNC_ktime_get_ns:
 -- 
-2.11.0
+2.20.1
 
