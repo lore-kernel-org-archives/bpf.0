@@ -6,66 +6,67 @@ X-Spam-Status: No, score=-4.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFB1AC10F0E
-	for <bpf@archiver.kernel.org>; Mon, 15 Apr 2019 18:38:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A35CDC10F0E
+	for <bpf@archiver.kernel.org>; Mon, 15 Apr 2019 18:38:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9424C20880
-	for <bpf@archiver.kernel.org>; Mon, 15 Apr 2019 18:38:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 707FD20880
+	for <bpf@archiver.kernel.org>; Mon, 15 Apr 2019 18:38:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="gTY0ZEYc"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="zX0DUs/F"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727647AbfDOSi3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Apr 2019 14:38:29 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:32822 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726182AbfDOSi3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Apr 2019 14:38:29 -0400
-Received: by mail-qt1-f196.google.com with SMTP id k14so20396349qtb.0
-        for <bpf@vger.kernel.org>; Mon, 15 Apr 2019 11:38:29 -0700 (PDT)
+        id S1727922AbfDOSiw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Apr 2019 14:38:52 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:33804 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727447AbfDOSiw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Apr 2019 14:38:52 -0400
+Received: by mail-qk1-f196.google.com with SMTP id n68so10521508qka.1
+        for <bpf@vger.kernel.org>; Mon, 15 Apr 2019 11:38:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=date:from:to:cc:subject:message-id:in-reply-to:references
          :organization:mime-version:content-transfer-encoding;
-        bh=56w5f22EtjrVypvs36ZpGyPRA6eQcLxT7hki1kmi4u8=;
-        b=gTY0ZEYc6BY7+crA4GMRglqH6K2+37USpUTp5jWcwHZiUQyJn99mlWOm6MSLppViw5
-         mEqdp4RHcooL6il1MQJYtuqW/hLiF89dMwdDS+Dh42hTGZ+xsgQa+09LCZo5hHmvwL9X
-         NJ7R9CwkGPznSxdekb7BNJoiFg1RZJ7w6M8J2U7pLyOIE6aWYsGpz+rCYB7gwMTYOFbD
-         mXKEfdNI1GUhcFDfJQCyTtm4B45lOCdwOU8rJTBkb+IzTelYC1aFoxGIBiUiXScTCg5o
-         zvzmWWCcQXTgrbHUuGXKprADXeBNm/Ae8HD/NhzMUyFYDBrU2grXZS9NmKzaFyyhvlYU
-         JcSQ==
+        bh=EQeMgyOWF37J+OfhkBm9SuoEClB5hgmAmK1vSnM9Jtg=;
+        b=zX0DUs/FZ6Cv/WePWYITFUX6Mjo+E2oXl1zq7LsWj8iZH8bf22KKGWyYdWOGuA6vD0
+         +DKMXLUJIfytdeGDNNswpLH0P99NVXoEJxAsc2ucWz7dYZj8v6xWZla+i5mfTT80k1Rw
+         7gYYiYA6fI6j7NxvppLZaRJiSKiMrtzNT47nwszHdh1F6sqsVMimsQ/Ymae12fW2kJYv
+         BbWRz0sFMguEIn8vY9/edYEoDUc0CSjKP/qe5/6k4Ox3TRrxdutzKlhc5AeE9nZ5G2/i
+         We6FXN9JtQIB73+Yjd17rOu4W2F5g6qXwp0hceP0DSyIbmZhlnM+FOn9kcrZStOQeHbp
+         9YmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
          :references:organization:mime-version:content-transfer-encoding;
-        bh=56w5f22EtjrVypvs36ZpGyPRA6eQcLxT7hki1kmi4u8=;
-        b=s/loG85c8iOefJAj/zPprYzGxbndvpXMMfrq4tG8uaIYXAoNtGLeYCrbv3qGEWk1e9
-         xjTLpGhbZ7xaH0c5uxs5Cd68FqHszy/TebrqiyCC0YpApscCueNnX+z2snKiG4tTCTjz
-         9L2+kEfQYrjxN6qsaV1iiFxIP4V1c3EghwWOwvL0jMRsxO4cXBytJgGVkDQ76I5KJs7v
-         J1vwX/pHTP6GrI17GGUqdFMtJG49eHxguz4WLO5uk6U0wBQgPAvWUXg55G6B+N/weir7
-         aGLfhouMTtW+i78zTcPDRmUoqSr5UTXsXDnvngySwcJBH/mGHX9xxfqwAU6h0qV3AC/Y
-         EXRA==
-X-Gm-Message-State: APjAAAWT9iXQ8MmmNT1H8TqCTKK0w9+ABgLBJJNeXU0IIMQilCTM/a9a
-        DW0aqFIcQMbfSDsmruE2IKJzcQ==
-X-Google-Smtp-Source: APXvYqy6+X+P8AWxDnO48g9NZr8pRbhpWxxIca85fVpl2dfJXqsW2Max7ilKiAX2kZKvdm+zmeaO0g==
-X-Received: by 2002:ac8:3767:: with SMTP id p36mr63660983qtb.280.1555353508602;
-        Mon, 15 Apr 2019 11:38:28 -0700 (PDT)
+        bh=EQeMgyOWF37J+OfhkBm9SuoEClB5hgmAmK1vSnM9Jtg=;
+        b=ZMungd6B5FGFCRLlcnPEhxepyY/8OOFSplF5d5e9YGnVOoM+YqkSx4wJK7HpFKa7Oj
+         1XpvVzx//AVCWraHzI1Q/SKzvAz00gjLhDk9dxTprl7b+p4xCtBnJxnUdILtO5HvHVbo
+         koW86I48PFsaMozBbi6dJajliVzjGVxN7dv10vpbGwjlhu5HcCuCbgvs/wON6nGuyZz/
+         Af5nExhL2C1y/4+74W1+l+u02zWdOMXAHs9ucM+zKVUAQNyPWJJ8wGTk5gdwgryCBu4M
+         Funw3cvnKHho4cpdHHjAY3c3udzBpu0KhIt1S6jWi02oyTMWXBFyvjctqi5Ek7VvMGhd
+         mryg==
+X-Gm-Message-State: APjAAAUxA3QMod02HNDR+5JIbkx2Z6jEaeGRovTlPResccTzIhm4Pdpv
+        jBFZhGZtSseOit4ITwDjRKSzOg==
+X-Google-Smtp-Source: APXvYqzENyeHh1XoGF7mKx/4tX9Yegyog02rT0q7v5PTRmTPSXYV0kZNqLphXL7asNg7DboWJllVGg==
+X-Received: by 2002:a37:a310:: with SMTP id m16mr17089255qke.140.1555353531379;
+        Mon, 15 Apr 2019 11:38:51 -0700 (PDT)
 Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id v30sm24786672qta.4.2019.04.15.11.38.27
+        by smtp.gmail.com with ESMTPSA id i24sm34441722qti.76.2019.04.15.11.38.50
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 15 Apr 2019 11:38:28 -0700 (PDT)
-Date:   Mon, 15 Apr 2019 11:38:24 -0700
+        Mon, 15 Apr 2019 11:38:51 -0700 (PDT)
+Date:   Mon, 15 Apr 2019 11:38:47 -0700
 From:   Jakub Kicinski <jakub.kicinski@netronome.com>
 To:     Benjamin Poirier <bpoirier@suse.com>
 Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Quentin Monnet <quentin.monnet@netronome.com>,
         David Ahern <dsahern@gmail.com>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: Re: [PATCH v3 bpf-next 1/2] bpftool: Use print_entry_error() in
- case of ENOENT when dumping
-Message-ID: <20190415113824.3fba6dd1@cakuba.netronome.com>
-In-Reply-To: <20190415071536.19287-1-bpoirier@suse.com>
+Subject: Re: [PATCH v3 bpf-next 2/2] bpftool: Improve handling of ENOSPC on
+ reuseport_array map dumps
+Message-ID: <20190415113847.2c1dd062@cakuba.netronome.com>
+In-Reply-To: <20190415071536.19287-2-bpoirier@suse.com>
 References: <20190412030322.15494-1-bpoirier@suse.com>
         <20190415071536.19287-1-bpoirier@suse.com>
+        <20190415071536.19287-2-bpoirier@suse.com>
 Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -75,19 +76,37 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 15 Apr 2019 16:15:35 +0900, Benjamin Poirier wrote:
-> Commit bf598a8f0f77 ("bpftool: Improve handling of ENOENT on map dumps")
-> used print_entry_plain() in case of ENOENT. However, that commit introduces
-> dead code. Per-cpu maps are zero-filled. When reading them, it's all or
-> nothing. There will never be a case where some cpus have an entry and
-> others don't.
+On Mon, 15 Apr 2019 16:15:36 +0900, Benjamin Poirier wrote:
+> avoids outputting a series of
+> 	value:
+> 	No space left on device
 > 
-> The truth is that ENOENT is an error case. Use print_entry_error() to
-> output the desired message. That function's "value" parameter is also
-> renamed to indicate that we never use it for an actual map value.
+> The value itself is not wrong but bpf_fd_reuseport_array_lookup_elem() can
+> only return it if the map was created with value_size = 8. There's nothing
+> bpftool can do about it. Instead of repeating this error for every key in
+> the map, print an explanatory warning and a specialized error.
 > 
-> The output format is unchanged.
+> example before:
+> key: 00 00 00 00
+> value:
+> No space left on device
+> key: 01 00 00 00
+> value:
+> No space left on device
+> key: 02 00 00 00
+> value:
+> No space left on device
+> Found 0 elements
+> 
+> example after:
+> Warning: cannot read values from reuseport_sockarray map with value_size != 8
+> key: 00 00 00 00  value: <cannot read>
+> key: 01 00 00 00  value: <cannot read>
+> key: 02 00 00 00  value: <cannot read>
+> Found 0 elements
 > 
 > Signed-off-by: Benjamin Poirier <bpoirier@suse.com>
 
 Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+
+Thank you!!
