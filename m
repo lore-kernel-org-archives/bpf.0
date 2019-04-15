@@ -2,98 +2,151 @@ Return-Path: <SRS0=RZwz=SR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A021C10F0E
-	for <bpf@archiver.kernel.org>; Mon, 15 Apr 2019 05:59:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15FC8C10F0E
+	for <bpf@archiver.kernel.org>; Mon, 15 Apr 2019 06:06:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3CF2D20874
-	for <bpf@archiver.kernel.org>; Mon, 15 Apr 2019 05:59:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D6F8620825
+	for <bpf@archiver.kernel.org>; Mon, 15 Apr 2019 06:06:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c1Qg7Zmu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EiqN6WEu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725779AbfDOF7V (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Apr 2019 01:59:21 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:36264 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725777AbfDOF7U (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Apr 2019 01:59:20 -0400
-Received: by mail-qk1-f196.google.com with SMTP id k130so9159047qke.3;
-        Sun, 14 Apr 2019 22:59:20 -0700 (PDT)
+        id S1725798AbfDOGGV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Apr 2019 02:06:21 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:34355 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725796AbfDOGGV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Apr 2019 02:06:21 -0400
+Received: by mail-qt1-f193.google.com with SMTP id k2so17866570qtm.1;
+        Sun, 14 Apr 2019 23:06:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=d0YCiaK1n9JusruGFdQ84tr6jUY9diMWGa+Y3Qfwwx8=;
-        b=c1Qg7ZmuNH0QSpIcgQIxuMJ0c7D+3prATDa1qv+MqDO2RKHE02jEM96qb/Xh4Ge7J+
-         ZGXv2KMMSDb7UA+mBgLyCas+3gFXeccQcAQ3PfS5qeaUmuxQSer4ZInhWXMuVJUshBeB
-         3BvAqYB1kjKzjnyjc3dWXkgVjc+/G9bvgE1HOJn36qxo35CewpAxAk+tZo9ynJo41J6K
-         bBXRxuJcZvHW6EESt7qktatc4Zhno7qdotz0EG37nZmxcUexpa2ty+eKjc40mtyiI+BI
-         8mD3eHQvx+xVvTbnb/SrfbiWeU+dMXaSMw2EQqz69Eem9NjmYtEJyXnyv1En5wq71orh
-         l9fg==
+        bh=4/UChsdU2amoRbbLoVMCMK2p9TTZvTcx10ZikRtGm24=;
+        b=EiqN6WEuQ7w2WOycYPKRU9KXiG1v+VQRQM/+/nFzZHTQ6KW6G/+a/OEALtxlPjHAmM
+         y1pql/BD0O6Z2t//Y6i0o7fI3sx8z0Kmp0+0xl+c7bH4mjQXdgluRs0ByzMeaL3kUbn2
+         /44K0XLZBskvKuRYgfyuvdSJShxWLiRAdk6OP89ZG6vo2oYo5ASqB5J4Lm4NHYqb1LAt
+         nC89Dj7XLRxAi6QHgG6HXNbL2MmGq/aE8DR1kXMmr+xPwW/Ycc7MNUZVcRpdBKz6k63w
+         Q160/6aQ1ktS/VFr5cBpHycEwsfH243k092RyqPkiXaXXZuuusz8KoMs6D5wqq3fZYJ8
+         aUzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=d0YCiaK1n9JusruGFdQ84tr6jUY9diMWGa+Y3Qfwwx8=;
-        b=fxCcKESM9CdNG8Kk+fji6vp7evDjYN8FDBkcCijCM9+U5KwVxGz/JGdvB2lkdBSv8Y
-         xFXPVm4UiJ8xczA+N0b6VuR/30RjUmhmzf8HOWax94jub/h+J2gCwnbY5HXm9gWOYxcz
-         lUsHy0iUMNWhBsN07lM3zcnWSeJwTMG4+7SV5E2VY9/RgwdkducZgmMIXg6zbNwSrhYP
-         U4q3z9uf4C4PgL4XsIOC3uryAQ63vrQhqlJy6pEO/nwwzLEJQBwiHGvMrADCXnmkAyZm
-         VRbJPjUO6pzXjdNSb7VZgd29Pk001EMjd8EvQ5DcbdEDGju7wRfideIYJhwi6dkuLWeW
-         tQNA==
-X-Gm-Message-State: APjAAAUxM3hV/SJerIW7z36SrCdeC412Z6y0jtgKsRlYPRn0PtGfKXW+
-        10sOh6du+ciwKqwDrIROcx9JPPk3tSvVgDNqhcSrAA==
-X-Google-Smtp-Source: APXvYqy/rScPYX9xmqKSJpTxZFIEz9r5qmxcskckBJLph00lJJLYnCS+UDMw6PIARpes/9m8GzVPrsoaVHSS1GOd+/g=
-X-Received: by 2002:a37:a841:: with SMTP id r62mr55481564qke.16.1555307959666;
- Sun, 14 Apr 2019 22:59:19 -0700 (PDT)
+        bh=4/UChsdU2amoRbbLoVMCMK2p9TTZvTcx10ZikRtGm24=;
+        b=pZJD9oo6A2bo7sxB1EVFXDqhgLp9O27X5KTtAYRVgLjtmIyUEanOw1t03IUXBHB8NB
+         U3HigEC5H3eAF4zVov3uxeSwiuw1n6uXu5VY/28ePAAGTYUV87vFszowmitDnDJJKmPF
+         yyDBj60Q/GufZeHLNAI9jQfuc1sd/LD1Ted2PM/2lCF8y1dnRdPF7B+Qzt9LWCyTIstT
+         5451P0O6Q8LPaHfZWFLAFaoHHx9WIiZLIbZCcBJhIUVCN+wCoyifehaZX7iMlODSqGDq
+         C93RZSyjZOiv3xrRlapnQmCb+t/59dqhV35ue/roKDioEjaGjWlbNGQmWAm6p3chFGkg
+         FnTA==
+X-Gm-Message-State: APjAAAX4b0UjO4lIeog64G8a2/YvX8+t4gZVisa/87cmTFcd2xFdZw4P
+        iqvr7L8qUJI44aPlEYtmuWkn5dBUzNAMVeITp2Y=
+X-Google-Smtp-Source: APXvYqy5lPQlScbOE1dPv5eOdwKtocoKLud4KGI3RZ6PWfesfoMLtCvv9qMKqgniQy7T7xLapXj3bOaLAnVFQLnvYw0=
+X-Received: by 2002:a0c:8b4a:: with SMTP id d10mr58195957qvc.29.1555308379845;
+ Sun, 14 Apr 2019 23:06:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190412214132.2726285-1-ast@kernel.org> <CAPhsuW7qxRywrDQ8PLWiFwHtfSsc+24LD1dPBnsO+jpQf8adfA@mail.gmail.com>
- <20190412233248.iik56fgcnmyk3pm7@ast-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20190412233248.iik56fgcnmyk3pm7@ast-mbp.dhcp.thefacebook.com>
+References: <20190414165846.22107-1-alban@kinvolk.io>
+In-Reply-To: <20190414165846.22107-1-alban@kinvolk.io>
 From:   Song Liu <liu.song.a23@gmail.com>
-Date:   Sun, 14 Apr 2019 22:59:08 -0700
-Message-ID: <CAPhsuW5kh_rQxBncvtknRRDKZgUkayNCQDej+3EF_7WggC4UVw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: two scale tests
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sun, 14 Apr 2019 23:06:09 -0700
+Message-ID: <CAPhsuW67c73LfJOj1uZs26awMeE8VpUMtjYGRgLSezVM0DZ=fg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1] bpf: add map helper functions push,pop,peek
+ in more BPF programs
+To:     Alban Crequy <alban.crequy@gmail.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Kernel Team <kernel-team@fb.com>
+        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "Alban Crequy (Kinvolk)" <alban@kinvolk.io>, iago@kinvolk.io,
+        Mauricio Vasquez B <mauricio.vasquez@polito.it>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Apr 12, 2019 at 4:32 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Sun, Apr 14, 2019 at 10:00 AM Alban Crequy <alban.crequy@gmail.com> wrote:
 >
-> On Fri, Apr 12, 2019 at 04:24:51PM -0700, Song Liu wrote:
-> > On Fri, Apr 12, 2019 at 2:41 PM Alexei Starovoitov <ast@kernel.org> wrote:
-> > >
-> > > Add two tests to check that sequence of 1024 jumps is verifiable.
-> > >
-> > > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> >
-> > Acked-by: Song Liu <songliubraving@fb.com>
-> >
-> > Shall we add a test that go beyond the 1M limit?
+> From: Alban Crequy <alban@kinvolk.io>
 >
-> 1m is not uapi limit. I'm working on the doc patch to stress that point.
-> Adding a test to check that it fails at 1m would kinda imply
-> that it is uapi and I very much want to avoid that.
+> commit f1a2e44a3aec ("bpf: add queue and stack maps") introduced new BPF
+> helper functions:
+> - BPF_FUNC_map_push_elem
+> - BPF_FUNC_map_pop_elem
+> - BPF_FUNC_map_peek_elem
 >
-> The purpose of these tests is to stress the verifier to its
-> internal limits, but not more.
-> In particular in these two tests 1024, 8, 512, and another 1M
-> are limits too.
+> but they were made available only for network BPF programs. This patch
+> makes them available for tracepoint, cgroup and lirc programs.
 >
+> Signed-off-by: Alban Crequy <alban@kinvolk.io>
+> Cc: Mauricio Vasquez B <mauricio.vasquez@polito.it>
 
-Yeah, this makes sense. Thanks for the explanation.
+Acked-by: Song Liu <songliubraving@fb.com>
 
-Song
+
+> ---
+>  drivers/media/rc/bpf-lirc.c | 6 ++++++
+>  kernel/bpf/cgroup.c         | 6 ++++++
+>  kernel/trace/bpf_trace.c    | 6 ++++++
+>  3 files changed, 18 insertions(+)
+>
+> diff --git a/drivers/media/rc/bpf-lirc.c b/drivers/media/rc/bpf-lirc.c
+> index 390a722e6211..ee657003c1a1 100644
+> --- a/drivers/media/rc/bpf-lirc.c
+> +++ b/drivers/media/rc/bpf-lirc.c
+> @@ -97,6 +97,12 @@ lirc_mode2_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>                 return &bpf_map_update_elem_proto;
+>         case BPF_FUNC_map_delete_elem:
+>                 return &bpf_map_delete_elem_proto;
+> +       case BPF_FUNC_map_push_elem:
+> +               return &bpf_map_push_elem_proto;
+> +       case BPF_FUNC_map_pop_elem:
+> +               return &bpf_map_pop_elem_proto;
+> +       case BPF_FUNC_map_peek_elem:
+> +               return &bpf_map_peek_elem_proto;
+>         case BPF_FUNC_ktime_get_ns:
+>                 return &bpf_ktime_get_ns_proto;
+>         case BPF_FUNC_tail_call:
+> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> index e58a6c247f56..fcde0f7b2585 100644
+> --- a/kernel/bpf/cgroup.c
+> +++ b/kernel/bpf/cgroup.c
+> @@ -713,6 +713,12 @@ cgroup_base_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>                 return &bpf_map_update_elem_proto;
+>         case BPF_FUNC_map_delete_elem:
+>                 return &bpf_map_delete_elem_proto;
+> +       case BPF_FUNC_map_push_elem:
+> +               return &bpf_map_push_elem_proto;
+> +       case BPF_FUNC_map_pop_elem:
+> +               return &bpf_map_pop_elem_proto;
+> +       case BPF_FUNC_map_peek_elem:
+> +               return &bpf_map_peek_elem_proto;
+>         case BPF_FUNC_get_current_uid_gid:
+>                 return &bpf_get_current_uid_gid_proto;
+>         case BPF_FUNC_get_local_storage:
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index d64c00afceb5..91800be0c8eb 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -569,6 +569,12 @@ tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>                 return &bpf_map_update_elem_proto;
+>         case BPF_FUNC_map_delete_elem:
+>                 return &bpf_map_delete_elem_proto;
+> +       case BPF_FUNC_map_push_elem:
+> +               return &bpf_map_push_elem_proto;
+> +       case BPF_FUNC_map_pop_elem:
+> +               return &bpf_map_pop_elem_proto;
+> +       case BPF_FUNC_map_peek_elem:
+> +               return &bpf_map_peek_elem_proto;
+>         case BPF_FUNC_probe_read:
+>                 return &bpf_probe_read_proto;
+>         case BPF_FUNC_ktime_get_ns:
+> --
+> 2.20.1
+>
