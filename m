@@ -2,186 +2,228 @@ Return-Path: <SRS0=RZwz=SR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EB29C10F0E
-	for <bpf@archiver.kernel.org>; Mon, 15 Apr 2019 17:38:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66377C10F0E
+	for <bpf@archiver.kernel.org>; Mon, 15 Apr 2019 17:58:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 511412073F
-	for <bpf@archiver.kernel.org>; Mon, 15 Apr 2019 17:38:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2C97920818
+	for <bpf@archiver.kernel.org>; Mon, 15 Apr 2019 17:58:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CegL8Ujf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wsb9tMnE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728057AbfDORiP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Apr 2019 13:38:15 -0400
-Received: from mail-pl1-f202.google.com ([209.85.214.202]:53028 "EHLO
-        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728050AbfDORiO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Apr 2019 13:38:14 -0400
-Received: by mail-pl1-f202.google.com with SMTP id 3so11705638ple.19
-        for <bpf@vger.kernel.org>; Mon, 15 Apr 2019 10:38:14 -0700 (PDT)
+        id S1726980AbfDOR6L (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Apr 2019 13:58:11 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:35840 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725813AbfDOR6L (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Apr 2019 13:58:11 -0400
+Received: by mail-pg1-f193.google.com with SMTP id 85so8957877pgc.3;
+        Mon, 15 Apr 2019 10:58:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=0dmYm9+nEHpqvszkX2uaTkae3FO3I0na87yAXSFM4m8=;
-        b=CegL8Ujff6pWbn7SsV+4hZC4derPpkjCBxAlEPS70Jq72xT9S6cEqPA9JVvKQcEM1S
-         1NgYiIY8LyGvkHsnesQSDVZu8Y244oo1B/JuTBJSjtCmuYLEZR4+jwLukQck1YgaSjmC
-         quqhyrSqm0x2LnjOnNg8bEI17wsEaTyPiPtVyziaV709cjRg4/jZHKeUc1iSANRC5uNo
-         DsK0Ztm9ZFS6K0OHlCee4VoPxI23jD5bUDznPSfdjgFjuQRhhKPpilmr8RMlq6okMT8j
-         n7pZrWbgocadq22cHNyFLVgOIFSxmEhlgI1CvWeWelts1nDtnQz187amyCkDljATlaLK
-         x9dA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=wyjBHUGs9nRHhi4YHfsvzYQZuspbT39TbXZjj8zA84c=;
+        b=Wsb9tMnE+KjS2UmW8be8JXFjeB14Z12wfq6c45hJxY8s8WaTXpDNrkCcQclOQlcMAe
+         /LWQkGibfhMoiDa1E6UBTHz/Gf3I65WhuyMuKMRwZ0nxZ5ZmcisDiANze54TlzeT0vBb
+         UKIzfhChV/KBXjBCj6xzv1cgYGO/hDDhcFei2GUUaeElpl+u8soD2cj8nWYdlKhWICZc
+         WdIBEQNR0gF8rN244l+HxHnGlODK5E5Q3p+ndGOoLD1gmtRNr9Wu9mQQWdIwCncCZ3Pv
+         5JI0HfY2gnmQVHDNfzITGwOvPzS07vmA+zxFPdfM96nxn03rSeliQFvwzReYw8nXr9/j
+         dgUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=0dmYm9+nEHpqvszkX2uaTkae3FO3I0na87yAXSFM4m8=;
-        b=PjEo1yaU0B6P4g3olS4Qe7I1Gn0DyDrRsRsirZA2ktWemDi3y5EW20YIgTPCZ2vk3I
-         d2+IoCMU5i1D5ZODT1D0qNEjCSwiQ1Ac9J6IIZg79Hgan//Kw8dXSzll5SwSSk+liH6u
-         8bWbJBFpd6zF4iSoZrQv4cDm31T18netOueihGBwv1qlIYisnZaJV3uXTTeX4w6Acmxx
-         J/No+NOOSG/Le93cYf8N2vGit33LPcBN+8aaRia7+Z30O9yFMuZxTW7Ix6iU7o2NW5u/
-         Cj+g47Re12p9+PYproBOdrV9VT5g+6Nk9bMd9DvYqDY3XC8rnNYSJjSHlh5ebwK6wtP0
-         MRtw==
-X-Gm-Message-State: APjAAAWMEOAkjKcd2E4K+z+YVChFF0xahd3XoeEjAayLfBc1/UH1hKbk
-        aTXFIEfa3iYWnXH4q1S1/j79Acs=
-X-Google-Smtp-Source: APXvYqyVwrJFvrSbfUv3GXOKwiHv78fgHfEbB3DpSNvDTqLogfIPipEJzj6wyHONZLXcCnzIfpPRNBQ=
-X-Received: by 2002:a17:902:4601:: with SMTP id o1mr971901pld.33.1555349893571;
- Mon, 15 Apr 2019 10:38:13 -0700 (PDT)
-Date:   Mon, 15 Apr 2019 10:37:59 -0700
-In-Reply-To: <20190415173801.257254-1-sdf@google.com>
-Message-Id: <20190415173801.257254-5-sdf@google.com>
-Mime-Version: 1.0
-References: <20190415173801.257254-1-sdf@google.com>
-X-Mailer: git-send-email 2.21.0.392.gf8f6787159e-goog
-Subject: [PATCH bpf-next v5 4/6] flow_dissector: handle no-skb use case
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        simon.horman@netronome.com, willemb@google.com,
-        peterpenkov96@gmail.com, Stanislav Fomichev <sdf@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=wyjBHUGs9nRHhi4YHfsvzYQZuspbT39TbXZjj8zA84c=;
+        b=Rq2RqoOZ/rApa8SdMz0vhyJyeQAhEqmDg6Vg80IW6X7gXdSyr0BqmAITDKaV63cRX1
+         ieu9mFcq/2jZMoXOkRls3iV+Sp/H1TNHSuaTETIuUDIgH++wLYXHxt2DpEJ4rwZxVYy/
+         CNxC5L85L6TIU4zcFo5KsYYD3TXOxo9xBLn6x7EXBUTn6pRjWNBhcgVuS7xXsVdoE52G
+         60wE8ZXyMqwq+rRfiv9EKODndqkVjNuRs6z8km4dMZZLmH4IaYqdXLuD5j94LYzRcBoW
+         94G2ro7dc4LQ13Bl5mZWpXTnR4dFpzA9zbjGIggyYMCHfC7NS4H9EuwZxa4HIsaL793k
+         a0jw==
+X-Gm-Message-State: APjAAAXrezlqZ9Y3nmyy34Odrc1pLGn4m6ighgW25rpUAnGhmNIU6n5L
+        waZ356h7WzS03V1lOs9bKrY=
+X-Google-Smtp-Source: APXvYqxi+bsOyxo9QrQOSP+Roz15RsqXgasJCouy8V455NmoS/gxP915zYUa1RzGdFvsz1FLKZIlbA==
+X-Received: by 2002:aa7:8453:: with SMTP id r19mr78508448pfn.44.1555351090632;
+        Mon, 15 Apr 2019 10:58:10 -0700 (PDT)
+Received: from [172.20.164.229] ([2620:10d:c090:180::9deb])
+        by smtp.gmail.com with ESMTPSA id m69sm72740105pfi.151.2019.04.15.10.58.08
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 15 Apr 2019 10:58:09 -0700 (PDT)
+From:   "Jonathan Lemon" <jonathan.lemon@gmail.com>
+To:     "Jesper Dangaard Brouer" <brouer@redhat.com>
+Cc:     "=?utf-8?b?QmrDtnJuIFTDtnBlbA==?=" <bjorn.topel@intel.com>,
+        "=?utf-8?b?QmrDtnJuIFTDtnBlbA==?=" <bjorn.topel@gmail.com>,
+        ilias.apalodimas@linaro.org, toke@redhat.com,
+        magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
+        "Jason Wang" <jasowang@redhat.com>,
+        "Alexei Starovoitov" <ast@fb.com>,
+        "Daniel Borkmann" <borkmann@iogearbox.net>,
+        "Jakub Kicinski" <jakub.kicinski@netronome.com>,
+        "John Fastabend" <john.fastabend@gmail.com>,
+        "David Miller" <davem@davemloft.net>,
+        "Andy Gospodarek" <andy@greyhouse.net>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, "Thomas Graf" <tgraf@suug.ch>,
+        "Thomas Monjalon" <thomas@monjalon.net>
+Subject: Re: Per-queue XDP programs, thoughts
+Date:   Mon, 15 Apr 2019 10:58:07 -0700
+X-Mailer: MailMate (1.12.4r5594)
+Message-ID: <467AEB5A-DE90-4460-84EF-AFA33A7D6CD1@gmail.com>
+In-Reply-To: <20190415183258.36dcee9a@carbon>
+References: <20190405131745.24727-1-bjorn.topel@gmail.com>
+ <20190405131745.24727-2-bjorn.topel@gmail.com>
+ <64259723-f0d8-8ade-467e-ad865add4908@intel.com>
+ <20190415183258.36dcee9a@carbon>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When called without skb, gather all required data from the
-__skb_flow_dissect's arguments and use recently introduces
-no-skb mode of bpf flow dissector.
 
-Note: WARN_ON_ONCE(!net) will now trigger for eth_get_headlen users.
+On 15 Apr 2019, at 9:32, Jesper Dangaard Brouer wrote:
 
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- include/linux/skbuff.h    |  5 ----
- net/core/flow_dissector.c | 52 +++++++++++++++++++--------------------
- 2 files changed, 25 insertions(+), 32 deletions(-)
+> On Mon, 15 Apr 2019 13:59:03 +0200 Bj=C3=B6rn T=C3=B6pel =
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 60cdbcde751b..0bfc16d719b5 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -1277,11 +1277,6 @@ struct bpf_flow_dissector;
- bool bpf_flow_dissect(struct bpf_prog *prog, struct bpf_flow_dissector *ctx,
- 		      __be16 proto, int nhoff, int hlen);
- 
--struct bpf_flow_keys;
--bool __skb_flow_bpf_dissect(struct bpf_prog *prog,
--			    const struct sk_buff *skb,
--			    struct flow_dissector *flow_dissector,
--			    struct bpf_flow_keys *flow_keys);
- bool __skb_flow_dissect(const struct net *net,
- 			const struct sk_buff *skb,
- 			struct flow_dissector *flow_dissector,
-diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
-index f32c7e737fc6..fac712cee9d5 100644
---- a/net/core/flow_dissector.c
-+++ b/net/core/flow_dissector.c
-@@ -683,22 +683,6 @@ static void __skb_flow_bpf_to_target(const struct bpf_flow_keys *flow_keys,
- 	}
- }
- 
--bool __skb_flow_bpf_dissect(struct bpf_prog *prog,
--			    const struct sk_buff *skb,
--			    struct flow_dissector *flow_dissector,
--			    struct bpf_flow_keys *flow_keys)
--{
--	struct bpf_flow_dissector ctx = {
--		.flow_keys = flow_keys,
--		.skb = skb,
--		.data = skb->data,
--		.data_end = skb->data + skb_headlen(skb),
--	};
--
--	return bpf_flow_dissect(prog, &ctx, skb->protocol,
--				skb_network_offset(skb), skb_headlen(skb));
--}
--
- bool bpf_flow_dissect(struct bpf_prog *prog, struct bpf_flow_dissector *ctx,
- 		      __be16 proto, int nhoff, int hlen)
- {
-@@ -753,6 +737,7 @@ bool __skb_flow_dissect(const struct net *net,
- 	struct flow_dissector_key_icmp *key_icmp;
- 	struct flow_dissector_key_tags *key_tags;
- 	struct flow_dissector_key_vlan *key_vlan;
-+	struct bpf_prog *attached = NULL;
- 	enum flow_dissect_ret fdret;
- 	enum flow_dissector_key_id dissector_vlan = FLOW_DISSECTOR_KEY_MAX;
- 	int num_hdrs = 0;
-@@ -795,26 +780,39 @@ bool __skb_flow_dissect(const struct net *net,
- 					      target_container);
- 
- 	if (skb) {
--		struct bpf_flow_keys flow_keys;
--		struct bpf_prog *attached = NULL;
--
--		rcu_read_lock();
- 		if (!net) {
- 			if (skb->dev)
- 				net = dev_net(skb->dev);
- 			else if (skb->sk)
- 				net = sock_net(skb->sk);
--			else
--				WARN_ON_ONCE(1);
- 		}
-+	}
- 
--		if (net)
--			attached = rcu_dereference(net->flow_dissector_prog);
-+	WARN_ON_ONCE(!net);
-+	if (net) {
-+		rcu_read_lock();
-+		attached = rcu_dereference(net->flow_dissector_prog);
- 
- 		if (attached) {
--			ret = __skb_flow_bpf_dissect(attached, skb,
--						     flow_dissector,
--						     &flow_keys);
-+			struct bpf_flow_keys flow_keys;
-+			struct bpf_flow_dissector ctx = {
-+				.flow_keys = &flow_keys,
-+				.data = data,
-+				.data_end = data + hlen,
-+			};
-+			__be16 n_proto = proto;
-+
-+			if (skb) {
-+				ctx.skb = skb;
-+				/* we can't use 'proto' in the skb case
-+				 * because it might be set to skb->vlan_proto
-+				 * which has been pulled from the data
-+				 */
-+				n_proto = skb->protocol;
-+			}
-+
-+			ret = bpf_flow_dissect(attached, &ctx, n_proto, nhoff,
-+					       hlen);
- 			__skb_flow_bpf_to_target(&flow_keys, flow_dissector,
- 						 target_container);
- 			rcu_read_unlock();
--- 
-2.21.0.392.gf8f6787159e-goog
+> <bjorn.topel@intel.com> wrote:
+>
+>> Hi,
+>>
+>> As you probably can derive from the amount of time this is taking, =
 
+>> I'm
+>> not really satisfied with the design of per-queue XDP program. (That,
+>> plus I'm a terribly slow hacker... ;-)) I'll try to expand my =
+
+>> thinking
+>> in this mail!
+>>
+>> Beware, it's kind of a long post, and it's all over the place.
+>
+> Cc'ing all the XDP-maintainers (and netdev).
+>
+>> There are a number of ways of setting up flows in the kernel, e.g.
+>>
+>> * Connecting/accepting a TCP socket (in-band)
+>> * Using tc-flower (out-of-band)
+>> * ethtool (out-of-band)
+>> * ...
+>>
+>> The first acts on sockets, the second on netdevs. Then there's =
+
+>> ethtool
+>> to configure RSS, and the RSS-on-steriods rxhash/ntuple that can =
+
+>> steer
+>> to queues. Most users care about sockets and netdevices. Queues is
+>> more of an implementation detail of Rx or for QoS on the Tx side.
+>
+> Let me first acknowledge that the current Linux tools to administrator
+> HW filters is lacking (well sucks).  We know the hardware is capable,
+> as DPDK have an full API for this called rte_flow[1]. If nothing else
+> you/we can use the DPDK API to create a program to configure the
+> hardware, examples here[2]
+>
+>  [1] https://doc.dpdk.org/guides/prog_guide/rte_flow.html
+>  [2] https://doc.dpdk.org/guides/howto/rte_flow.html
+>
+>> XDP is something that we can attach to a netdevice. Again, very
+>> natural from a user perspective. As for XDP sockets, the current
+>> mechanism is that we attach to an existing netdevice queue. Ideally
+>> what we'd like is to *remove* the queue concept. A better approach
+>> would be creating the socket and set it up -- but not binding it to a
+>> queue. Instead just binding it to a netdevice (or crazier just
+>> creating a socket without a netdevice).
+>
+> Let me just remind everybody that the AF_XDP performance gains comes
+> from binding the resource, which allow for lock-free semantics, as
+> explained here[3].
+>
+> [3] =
+
+> https://github.com/xdp-project/xdp-tutorial/tree/master/advanced03-AF_X=
+DP#where-does-af_xdp-performance-come-from
+>
+>
+>> The socket is an endpoint, where I'd like data to end up (or get sent
+>> from). If the kernel can attach the socket to a hardware queue,
+>> there's zerocopy if not, copy-mode. Dito for Tx.
+>
+> Well XDP programs per RXQ is just a building block to achieve this.
+>
+> As Van Jacobson explain[4], sockets or applications "register" a
+> "transport signature", and gets back a "channel".   In our case, the
+> netdev-global XDP program is our way to register/program these =
+
+> transport
+> signatures and redirect (e.g. into the AF_XDP socket).
+> This requires some work in software to parse and match transport
+> signatures to sockets.  The XDP programs per RXQ is a way to get
+> hardware to perform this filtering for us.
+>
+>  [4] http://www.lemis.com/grog/Documentation/vj/lca06vj.pdf
+>
+>
+>> Does a user (control plane) want/need to care about queues? Just
+>> create a flow to a socket (out-of-band or inband) or to a netdevice
+>> (out-of-band).
+>
+> A userspace "control-plane" program, could hide the setup and use what
+> the system/hardware can provide of optimizations.  VJ[4] e.g. suggest
+> that the "listen" socket first register the transport signature (with
+> the driver) on "accept()".   If the HW supports DPDK-rte_flow API we
+> can register a 5-tuple (or create TC-HW rules) and load our
+> "transport-signature" XDP prog on the queue number we choose.  If not,
+> when our netdev-global XDP prog need a hash-table with 5-tuple and do
+> 5-tuple parsing.
+>
+> Creating netdevices via HW filter into queues is an interesting idea.
+> DPDK have an example here[5], on how to per flow (via ethtool filter
+> setup even!) send packets to queues, that endup in SRIOV devices.
+>
+>  [5] https://doc.dpdk.org/guides/howto/flow_bifurcation.html
+>
+>
+>> Do we envison any other uses for per-queue XDP other than AF_XDP? If
+>> not, it would make *more* sense to attach the XDP program to the
+>> socket (e.g. if the endpoint would like to use kernel data structures
+>> via XDP).
+>
+> As demonstrated in [5] you can use (ethtool) hardware filters to
+> redirect packets into VFs (Virtual Functions).
+>
+> I also want us to extend XDP to allow for redirect from a PF (Physical
+> Function) into a VF (Virtual Function).  First the netdev-global
+> XDP-prog need to support this (maybe extend xdp_rxq_info with PF + VF
+> info).  Next configure HW filter to queue# and load XDP prog on that
+> queue# that only "redirect" to a single VF.  Now if driver+HW supports
+> it, it can "eliminate" the per-queue XDP-prog and do everything in HW.
+
+One thing I'd like to see is have RSS distribute incoming traffic
+across a set of queues.  The application would open a set of xsk's which
+are bound to those queues.
+
+I'm not seeing how a transport signature would achieve this.  The =
+
+current
+tooling seems to treat the queue as the basic building block, which =
+
+seems
+generally appropriate.
+
+Whittling things down (receiving packets only for a specific flow) could
+be achieved by creating a queue which only contains those packets which
+atched via some form of classification (or perhaps steered to a VF =
+
+device),
+aka [5] above.   Exposing multiple queues allows load distribution for
+those apps which care about it.
+-- =
+
+Jonathan
