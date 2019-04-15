@@ -4,62 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B472EC282DA
-	for <bpf@archiver.kernel.org>; Mon, 15 Apr 2019 17:27:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 539E3C282DA
+	for <bpf@archiver.kernel.org>; Mon, 15 Apr 2019 17:27:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8622F20656
-	for <bpf@archiver.kernel.org>; Mon, 15 Apr 2019 17:27:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1AB5620656
+	for <bpf@archiver.kernel.org>; Mon, 15 Apr 2019 17:27:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="hgVYZkU1"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="iJJel91Y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727980AbfDOR0r (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1727975AbfDOR0r (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Mon, 15 Apr 2019 13:26:47 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:36099 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727963AbfDOR0p (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Apr 2019 13:26:45 -0400
-Received: by mail-wr1-f67.google.com with SMTP id y13so23045831wrd.3
-        for <bpf@vger.kernel.org>; Mon, 15 Apr 2019 10:26:44 -0700 (PDT)
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:44457 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727949AbfDOR0q (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Apr 2019 13:26:46 -0400
+Received: by mail-wr1-f68.google.com with SMTP id y7so22971828wrn.11
+        for <bpf@vger.kernel.org>; Mon, 15 Apr 2019 10:26:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=MpCitH7OitwdS3gEZKicgK34bxZPlB54bkEREbm5EmI=;
-        b=hgVYZkU1VQccgkXXo3AG63bkgg41x9wm9w2OorzWerLWjDFmbl+bi5iquy4xDNYeaU
-         RZG3MfTQkVQgekOIy/Np3sqfnZnm5TkvvWNuuLz61VV9l653Ooqvrm6l1c6Kv7MQ6cJm
-         gjADICaOsjJqyRDDaQd+0POrVTVDoimtaHRYGaFsT+SokNL8DrS0DuvXh+55C5J7FjOs
-         6NdH6HX9eJeqLJ8RrZbWU2dJ+bstZ0qVW0wv9UMkhahSFzphORdqS5+vB8Gq+E9tWLkk
-         J+pZ2Q13oxKKXciu/YdLQDANDBBiYqRc/7j2Fyj0k7A2Aj+mDIYHgrW7fUW3bQuORa7w
-         n6qw==
+        bh=WoOM3rYmPYJxVZhgrctnlEaRiC1Bq/772bv5PR4BN8E=;
+        b=iJJel91Y2TA5ejvhac46Xw4zjN8ycYObw85MUC3wbXYtRk+UyWE4MCZcAO7ATDRaBB
+         ssDhgqvREH++U5Q4p1Qk20bT0pyIsWOT+ScdiLrT9fUK0ac4byJias9zEXtqpnZWk4WE
+         u35SrdrhjRQciR9GTiJIC0rV6nMh189fE8J2S6x8qUh7bDHlJ5S2o4uGn9ZCif+kHJJi
+         YaefmCoq3zLVadVSHsbDORA1bpGzRp7qw4e+3dR03VK4h0TOccOQjHCH++yhWmtY1JZN
+         2q1ZR0Y31yAtbrfjgVkgUkvUWDwVX9pLGhkYXZKR1WKjE9ub+isTNtS9/YjzX4ke36xb
+         N2GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=MpCitH7OitwdS3gEZKicgK34bxZPlB54bkEREbm5EmI=;
-        b=pg/hmZvR78HZGxoy6t8HZ8c/zihKzi7w7KTqzZm1UsLUNcSfcaeFApz8Na2vMd6T5b
-         z1recYafljUViqK6+aU3Kl7o/jJxaBaK4R5GoSYQchxIkR4XCk/0SR50ZcNf59fZyTrj
-         oQ/6fr2uka02eMXwhCOdSTqVCu4X9cKi/qrZAJdXxMeWRe5iFrJ0k0kK3eOP91WsT6v8
-         RmgWBbOh6ZsLbqNgYx1RqAdgtBfqFaZ+ALIoPPq7inqKuQU8Nx9IyK2pYBhRlqeAgWkh
-         wll7rMH8xgTGJ6YRqknzdeNLzjWO/NCgnH4Mbii2Sjd/d1u6u1XviiqncPgdy4HbnwWT
-         aqYw==
-X-Gm-Message-State: APjAAAUgm211iOXQYS+axg0sh4FIuN5cfvJTyP6MgEfh71IYgD/0KkZI
-        fSNpM2WI9347b1qyyAWmKaXstQ==
-X-Google-Smtp-Source: APXvYqzSj0NqAivAVT89Q7Lh1tNCDtSzP5a4oPosEbgN7u38qYgEaAFA46urjcfT8gdtovRlC7pJCw==
-X-Received: by 2002:adf:f102:: with SMTP id r2mr32977826wro.136.1555349204047;
+        bh=WoOM3rYmPYJxVZhgrctnlEaRiC1Bq/772bv5PR4BN8E=;
+        b=QubbbJb5H04G1r9wDaBjHPbYFHCs5r4oG8nOhgLrVUGzwIFe3ZNqPyeCrz4YID3DD0
+         81GCk0UyZOzIGHuoX8Nh2uw71Y5XEYJXnzjGRPSI0/2rankW852iDdAIHHN0756fBS/d
+         6MUXL7tlknsmW4r+mxSq3iaq4/05sXgz40A+Un2bqZePFIzFiNMd6KoWZk9+2NqqJxcQ
+         Ssro7MxEUu0sFhs55ArmeDAz0uveTcPlxTKLSMx90B2nAZPi+Kj5X5wDve3nYSB88BSN
+         yzqWtcYhblQLG6LIX8KpMPchkXOQegStzlb7j3aUM/esPklAtUKxaZT5owonaGVg1F1C
+         3GyA==
+X-Gm-Message-State: APjAAAUWrlqyaudVWCdpePF2iALBhZVkDEucgUeGfPYfhmeeRn/A/Wn4
+        4JbYJh8hlcULvhIpks3gqYuA48sjU3k=
+X-Google-Smtp-Source: APXvYqwsVklPaW9y6FZIypjPe7VpwzVjDynGpiF933iZ8ByUuz5LxfwJq19Fuq9SK4LTsvcmy6jnDA==
+X-Received: by 2002:a05:6000:1292:: with SMTP id f18mr4986551wrx.115.1555349204988;
         Mon, 15 Apr 2019 10:26:44 -0700 (PDT)
 Received: from cbtest28.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id v190sm27094232wme.18.2019.04.15.10.26.43
+        by smtp.gmail.com with ESMTPSA id v190sm27094232wme.18.2019.04.15.10.26.44
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 15 Apr 2019 10:26:43 -0700 (PDT)
+        Mon, 15 Apr 2019 10:26:44 -0700 (PDT)
 From:   Jiong Wang <jiong.wang@netronome.com>
 To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         oss-drivers@netronome.com, Jiong Wang <jiong.wang@netronome.com>
-Subject: [PATCH v4 bpf-next 07/15] libbpf: add "prog_flags" to bpf_program/bpf_prog_load_attr/bpf_load_program_attr
-Date:   Mon, 15 Apr 2019 18:26:17 +0100
-Message-Id: <1555349185-12508-8-git-send-email-jiong.wang@netronome.com>
+Subject: [PATCH v4 bpf-next 08/15] selftests: enable hi32 randomization for all tests
+Date:   Mon, 15 Apr 2019 18:26:18 +0100
+Message-Id: <1555349185-12508-9-git-send-email-jiong.wang@netronome.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1555349185-12508-1-git-send-email-jiong.wang@netronome.com>
 References: <1555349185-12508-1-git-send-email-jiong.wang@netronome.com>
@@ -68,86 +68,224 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-libbpf doesn't allow passing "prog_flags" during bpf program load in a
-couple of load related APIs, "bpf_load_program_xattr", "load_program" and
-"bpf_prog_load_xattr".
+The previous libbpf patch allows user to specify "prog_flags" to bpf
+program load APIs. To enable high 32-bit randomization for a test, we need
+to set BPF_F_TEST_RND_HI32 in "prog_flags".
 
-It makes sense to allow passing "prog_flags" which is useful for
-customizing program loading.
+To enable such randomization for all tests, we need to make sure all places
+are passing BPF_F_TEST_RND_HI32. Changing them one by one is not
+convenient, also, it would be better if a test could be switched to
+"normal" running mode without code change.
 
-Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+Given the program load APIs used across bpf selftests are mostly:
+  bpf_prog_load:      load from file
+  bpf_load_program:   load from raw insns
+
+A test_stub.c is implemented for bpf seltests, it offers two functions for
+testing purpose:
+
+  bpf_prog_test_load
+  bpf_test_load_program
+
+The are the same as "bpf_prog_load" and "bpf_load_program", except they
+also set BPF_F_TEST_RND_HI32. Given *_xattr functions are the APIs to
+customize any "prog_flags", it makes little sense to put these two
+functions into libbpf.
+
+Then, the following CFLAGS are passed to compilations for host programs:
+  -Dbpf_prog_load=bpf_prog_test_load
+  -Dbpf_load_program=bpf_test_load_program
+
+They migrate the used load APIs to the test version, hence enable high
+32-bit randomization for these tests without changing source code.
+
+"test_verifier" is using bpf_verify_program which supports passing
+"prog_flags" already, so we are fine. But, two unit tests needs to be
+adjusted due to there will be 16-bit jump distance overflow:
+  - "ld_abs: vlan + abs, test1"
+    The function "bpf_fill_ld_abs_vlan_push_pop" inside test_verifier.c
+    needs to use ALU64 to avoid insertion of hi32 randomization sequence
+    that would overflow the sequence.
+  - bpf_fill_jump_around_ld_abs needs to consider hi32 randomization to the
+    load dst of ld_abs.
+
+Besides all these, there are several testcases are using
+"bpf_prog_load_attr" directly, their call sites are updated to pass
+BPF_F_TEST_RND_HI32.
+
 Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
 ---
- tools/lib/bpf/bpf.c    | 1 +
- tools/lib/bpf/bpf.h    | 1 +
- tools/lib/bpf/libbpf.c | 3 +++
- tools/lib/bpf/libbpf.h | 1 +
- 4 files changed, 6 insertions(+)
+ tools/testing/selftests/bpf/Makefile               | 10 +++---
+ .../selftests/bpf/prog_tests/bpf_verif_scale.c     |  1 +
+ tools/testing/selftests/bpf/test_sock_addr.c       |  1 +
+ tools/testing/selftests/bpf/test_sock_fields.c     |  1 +
+ tools/testing/selftests/bpf/test_socket_cookie.c   |  1 +
+ tools/testing/selftests/bpf/test_stub.c            | 40 ++++++++++++++++++++++
+ tools/testing/selftests/bpf/test_verifier.c        |  6 ++--
+ 7 files changed, 53 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/test_stub.c
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 955191c..f79ec49 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -254,6 +254,7 @@ int bpf_load_program_xattr(const struct bpf_load_program_attr *load_attr,
- 	if (load_attr->name)
- 		memcpy(attr.prog_name, load_attr->name,
- 		       min(strlen(load_attr->name), BPF_OBJ_NAME_LEN - 1));
-+	attr.prog_flags = load_attr->prog_flags;
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index f9d83ba..f2accf6 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -15,7 +15,9 @@ LLC		?= llc
+ LLVM_OBJCOPY	?= llvm-objcopy
+ LLVM_READELF	?= llvm-readelf
+ BTF_PAHOLE	?= pahole
+-CFLAGS += -Wall -O2 -I$(APIDIR) -I$(LIBDIR) -I$(BPFDIR) -I$(GENDIR) $(GENFLAGS) -I../../../include
++CFLAGS += -Wall -O2 -I$(APIDIR) -I$(LIBDIR) -I$(BPFDIR) -I$(GENDIR) $(GENFLAGS) -I../../../include \
++	  -Dbpf_prog_load=bpf_prog_test_load \
++	  -Dbpf_load_program=bpf_test_load_program
+ LDLIBS += -lcap -lelf -lrt -lpthread
  
- 	fd = sys_bpf_prog_load(&attr, sizeof(attr));
- 	if (fd >= 0)
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index bc30783..a983442 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -86,6 +86,7 @@ struct bpf_load_program_attr {
- 	const void *line_info;
- 	__u32 line_info_cnt;
- 	__u32 log_level;
-+	__u32 prog_flags;
- };
+ # Order correspond to 'make run_tests' order
+@@ -76,9 +78,9 @@ $(OUTPUT)/urandom_read: $(OUTPUT)/%: %.c
  
- /* Flags to direct loading requirements */
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index e5b77ad..e0affd0 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -182,6 +182,7 @@ struct bpf_program {
- 	void *line_info;
- 	__u32 line_info_rec_size;
- 	__u32 line_info_cnt;
-+	__u32 prog_flags;
- };
+ BPFOBJ := $(OUTPUT)/libbpf.a
  
- enum libbpf_map_type {
-@@ -1876,6 +1877,7 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
- 	load_attr.line_info_rec_size = prog->line_info_rec_size;
- 	load_attr.line_info_cnt = prog->line_info_cnt;
- 	load_attr.log_level = prog->log_level;
-+	load_attr.prog_flags = prog->prog_flags;
- 	if (!load_attr.insns || !load_attr.insns_cnt)
- 		return -EINVAL;
+-$(TEST_GEN_PROGS): $(BPFOBJ)
++$(TEST_GEN_PROGS): test_stub.o $(BPFOBJ)
  
-@@ -3320,6 +3322,7 @@ int bpf_prog_load_xattr(const struct bpf_prog_load_attr *attr,
- 						      expected_attach_type);
+-$(TEST_GEN_PROGS_EXTENDED): $(OUTPUT)/libbpf.a
++$(TEST_GEN_PROGS_EXTENDED): test_stub.o $(OUTPUT)/libbpf.a
  
- 		prog->log_level = attr->log_level;
-+		prog->prog_flags = attr->prog_flags;
- 		if (!first_prog)
- 			first_prog = prog;
- 	}
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index c5ff005..5abc237 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -320,6 +320,7 @@ struct bpf_prog_load_attr {
- 	enum bpf_attach_type expected_attach_type;
- 	int ifindex;
- 	int log_level;
-+	int prog_flags;
- };
+ $(OUTPUT)/test_dev_cgroup: cgroup_helpers.c
+ $(OUTPUT)/test_skb_cgroup_id_user: cgroup_helpers.c
+@@ -174,7 +176,7 @@ $(ALU32_BUILD_DIR)/test_progs_32: test_progs.c $(OUTPUT)/libbpf.a\
+ 						$(ALU32_BUILD_DIR)/urandom_read
+ 	$(CC) $(TEST_PROGS_CFLAGS) $(CFLAGS) \
+ 		-o $(ALU32_BUILD_DIR)/test_progs_32 \
+-		test_progs.c trace_helpers.c prog_tests/*.c \
++		test_progs.c test_stub.c trace_helpers.c prog_tests/*.c \
+ 		$(OUTPUT)/libbpf.a $(LDLIBS)
  
- LIBBPF_API int bpf_prog_load_xattr(const struct bpf_prog_load_attr *attr,
+ $(ALU32_BUILD_DIR)/test_progs_32: $(PROG_TESTS_H)
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
+index 23b159d..2623d15 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
+@@ -22,6 +22,7 @@ static int check_load(const char *file)
+ 	attr.file = file;
+ 	attr.prog_type = BPF_PROG_TYPE_SCHED_CLS;
+ 	attr.log_level = 4;
++	attr.prog_flags = BPF_F_TEST_RND_HI32;
+ 	err = bpf_prog_load_xattr(&attr, &obj, &prog_fd);
+ 	bpf_object__close(obj);
+ 	if (err)
+diff --git a/tools/testing/selftests/bpf/test_sock_addr.c b/tools/testing/selftests/bpf/test_sock_addr.c
+index 3f110ea..5d0c4f0 100644
+--- a/tools/testing/selftests/bpf/test_sock_addr.c
++++ b/tools/testing/selftests/bpf/test_sock_addr.c
+@@ -745,6 +745,7 @@ static int load_path(const struct sock_addr_test *test, const char *path)
+ 	attr.file = path;
+ 	attr.prog_type = BPF_PROG_TYPE_CGROUP_SOCK_ADDR;
+ 	attr.expected_attach_type = test->expected_attach_type;
++	attr.prog_flags = BPF_F_TEST_RND_HI32;
+ 
+ 	if (bpf_prog_load_xattr(&attr, &obj, &prog_fd)) {
+ 		if (test->expected_result != LOAD_REJECT)
+diff --git a/tools/testing/selftests/bpf/test_sock_fields.c b/tools/testing/selftests/bpf/test_sock_fields.c
+index dcae7f6..f08c8ee 100644
+--- a/tools/testing/selftests/bpf/test_sock_fields.c
++++ b/tools/testing/selftests/bpf/test_sock_fields.c
+@@ -339,6 +339,7 @@ int main(int argc, char **argv)
+ 	struct bpf_prog_load_attr attr = {
+ 		.file = "test_sock_fields_kern.o",
+ 		.prog_type = BPF_PROG_TYPE_CGROUP_SKB,
++		.prog_flags = BPF_F_TEST_RND_HI32,
+ 	};
+ 	int cgroup_fd, egress_fd, ingress_fd, err;
+ 	struct bpf_program *ingress_prog;
+diff --git a/tools/testing/selftests/bpf/test_socket_cookie.c b/tools/testing/selftests/bpf/test_socket_cookie.c
+index e51d637..cac8ee5 100644
+--- a/tools/testing/selftests/bpf/test_socket_cookie.c
++++ b/tools/testing/selftests/bpf/test_socket_cookie.c
+@@ -148,6 +148,7 @@ static int run_test(int cgfd)
+ 	memset(&attr, 0, sizeof(attr));
+ 	attr.file = SOCKET_COOKIE_PROG;
+ 	attr.prog_type = BPF_PROG_TYPE_UNSPEC;
++	attr.prog_flags = BPF_F_TEST_RND_HI32;
+ 
+ 	err = bpf_prog_load_xattr(&attr, &pobj, &prog_fd);
+ 	if (err) {
+diff --git a/tools/testing/selftests/bpf/test_stub.c b/tools/testing/selftests/bpf/test_stub.c
+new file mode 100644
+index 0000000..84e81a8
+--- /dev/null
++++ b/tools/testing/selftests/bpf/test_stub.c
+@@ -0,0 +1,40 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++/* Copyright (C) 2019 Netronome Systems, Inc. */
++
++#include <bpf/bpf.h>
++#include <bpf/libbpf.h>
++#include <string.h>
++
++int bpf_prog_test_load(const char *file, enum bpf_prog_type type,
++		       struct bpf_object **pobj, int *prog_fd)
++{
++	struct bpf_prog_load_attr attr;
++
++	memset(&attr, 0, sizeof(struct bpf_prog_load_attr));
++	attr.file = file;
++	attr.prog_type = type;
++	attr.expected_attach_type = 0;
++	attr.prog_flags = BPF_F_TEST_RND_HI32;
++
++	return bpf_prog_load_xattr(&attr, pobj, prog_fd);
++}
++
++int bpf_test_load_program(enum bpf_prog_type type, const struct bpf_insn *insns,
++			  size_t insns_cnt, const char *license,
++			  __u32 kern_version, char *log_buf,
++		     size_t log_buf_sz)
++{
++	struct bpf_load_program_attr load_attr;
++
++	memset(&load_attr, 0, sizeof(struct bpf_load_program_attr));
++	load_attr.prog_type = type;
++	load_attr.expected_attach_type = 0;
++	load_attr.name = NULL;
++	load_attr.insns = insns;
++	load_attr.insns_cnt = insns_cnt;
++	load_attr.license = license;
++	load_attr.kern_version = kern_version;
++	load_attr.prog_flags = BPF_F_TEST_RND_HI32;
++
++	return bpf_load_program_xattr(&load_attr, log_buf, log_buf_sz);
++}
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index e2ebcad..a5eacc8 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -161,7 +161,7 @@ static void bpf_fill_ld_abs_vlan_push_pop(struct bpf_test *self)
+ 		goto loop;
+ 
+ 	for (; i < len - 1; i++)
+-		insn[i] = BPF_ALU32_IMM(BPF_MOV, BPF_REG_0, 0xbef);
++		insn[i] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 0xbef);
+ 	insn[len - 1] = BPF_EXIT_INSN();
+ 	self->prog_len = len;
+ }
+@@ -170,7 +170,7 @@ static void bpf_fill_jump_around_ld_abs(struct bpf_test *self)
+ {
+ 	struct bpf_insn *insn = self->fill_insns;
+ 	/* jump range is limited to 16 bit. every ld_abs is replaced by 6 insns */
+-	unsigned int len = (1 << 15) / 6;
++	unsigned int len = (1 << 15) / 9;
+ 	int i = 0;
+ 
+ 	insn[i++] = BPF_MOV64_REG(BPF_REG_6, BPF_REG_1);
+@@ -783,7 +783,7 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 	if (fixup_skips != skips)
+ 		return;
+ 
+-	pflags = 0;
++	pflags = BPF_F_TEST_RND_HI32;
+ 	if (test->flags & F_LOAD_WITH_STRICT_ALIGNMENT)
+ 		pflags |= BPF_F_STRICT_ALIGNMENT;
+ 	if (test->flags & F_NEEDS_EFFICIENT_UNALIGNED_ACCESS)
 -- 
 2.7.4
 
