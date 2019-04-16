@@ -2,261 +2,326 @@ Return-Path: <SRS0=hZ0g=SS=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FROM_EXCESS_BASE64,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3E78C10F13
-	for <bpf@archiver.kernel.org>; Tue, 16 Apr 2019 07:39:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FC16C10F13
+	for <bpf@archiver.kernel.org>; Tue, 16 Apr 2019 07:44:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B3F3820857
-	for <bpf@archiver.kernel.org>; Tue, 16 Apr 2019 07:39:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E59A82086A
+	for <bpf@archiver.kernel.org>; Tue, 16 Apr 2019 07:44:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="KngUPd1J"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qTFhTuw1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726783AbfDPHjW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Apr 2019 03:39:22 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:39141 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728422AbfDPHjW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Apr 2019 03:39:22 -0400
-Received: by mail-wr1-f68.google.com with SMTP id j9so25503289wrn.6
-        for <bpf@vger.kernel.org>; Tue, 16 Apr 2019 00:39:20 -0700 (PDT)
+        id S1727883AbfDPHow (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Apr 2019 03:44:52 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:41886 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726775AbfDPHow (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Apr 2019 03:44:52 -0400
+Received: by mail-qt1-f196.google.com with SMTP id w30so22218840qta.8;
+        Tue, 16 Apr 2019 00:44:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=ZWBXiub6Zs2swN703HKt1PtSOStUtBlcnng44838RaU=;
-        b=KngUPd1JkBP6v+KbFKzuz5ayP28GbOv7s7bEMg4S9zlKg8ZALV4yCy2YOPGsAQEexf
-         uFEj+5zwU+Posar8zDkoAmwk7eYWm+Sc8Gd5oBrVVHIsYyZ8TrjJNRRXuo0LX/kjcdPU
-         AP/iw5Vx0O/GReXIXdc8T5lvteBdqhfH8JMWEMOFE3XutOjf64FYn4klgd1x3hcD+0lC
-         k42V9Q4ci7QVR+rnGe9lTZDKkvy0Gmbr3eec4l48UlPqkUVqv+kO4qnR++MGKkJ64maA
-         yN2hBjQgCgbBNR4ZcjQ+i53tGZniVUlg2rlAH1b7byIRT/gFSRbibz6wo2luVFtf2MBD
-         A4BQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=86k4dTrhX4YQjdbrirGQri+XtUO30T7nrC0me+m+IXg=;
+        b=qTFhTuw13l8ee6B0AZnOv4ltooPQDcDhonT1ewf6bOLR4YjQ2v7rO0gOWzunrw5Q7V
+         hfRFH3sAE3o2xV3QD/q6Dnbg444GO8fjB+jwQ49MIc5IgRKY2FVmtdwdnisg87Rw0Xw5
+         lN9ezrfBN4Z7TVebuWYdQNMW/TBZAgeYhgX0UucrlB8IzU5ktIZcDBmDPp2va+UrNVGD
+         TgMXSr8tIubdc3L97yG8QV/3QDErHNvwNvhknCrLMwu34L1Yc7Xz5r7E+xQV6hgHQ//F
+         MGApBO3tNJ6QMst5W/4h5ZGIVhN8mjY/9knP01efl5PI9Tr5/tlC+ewRMRuGl8yQdw00
+         T6AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=ZWBXiub6Zs2swN703HKt1PtSOStUtBlcnng44838RaU=;
-        b=CLlfmD+pTXxhvZRUGhlY9hnXtsBWHDf+dOMek5VM5i77vBNRotx+mv/W+YhW1w1pfo
-         vGghJOWmrb5zhb8JEsfeSRAtNvaQQXWymJd8oBKKHKTAYmE+VEuFlXOdXRCj0dEx6Zjr
-         Jf3gFTHQEWwGrP37V34pexvZK6bsecgNnQ0SGRNIshSsmPpdSeqk8g33M7AUp4kaUyPe
-         pI9CRz4vp5nsAcwBmxN8VfhZAMBe2Q1+upvWFIEp7jNtnEOfC5zgbXoVJ/M5y9jMclW2
-         y+1wTJ3OQSxMog+fqxzNyuXIE25OWB6BkzSgTwG0hr8r7EkHQmTWCH0uEmCGG6gv35KE
-         y2Jw==
-X-Gm-Message-State: APjAAAUPY5xJl262mWxJC0oujVBqIs5aa1fkFraV+CRydPrDHdsNFKgW
-        sgNshBqSGQcpqHNXQRwBetAmDg==
-X-Google-Smtp-Source: APXvYqzmLIutYV1+PQs4R3+BLS54w6J8M5dHy8PCoagNHo2S7CM2xER2qtW0Lgiu3xA8kVjB9fuOyA==
-X-Received: by 2002:a05:6000:2:: with SMTP id h2mr32658346wrx.76.1555400359329;
-        Tue, 16 Apr 2019 00:39:19 -0700 (PDT)
-Received: from cb-macbook.local (cpc1-cmbg19-2-0-cust104.5-4.cable.virginm.net. [82.27.180.105])
-        by smtp.gmail.com with ESMTPSA id r16sm40252889wrx.37.2019.04.16.00.39.17
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 16 Apr 2019 00:39:18 -0700 (PDT)
-References: <1555349185-12508-1-git-send-email-jiong.wang@netronome.com> <1555349185-12508-2-git-send-email-jiong.wang@netronome.com> <20190416012608.2iahgakw5uqobv6z@ast-mbp.dhcp.thefacebook.com>
-User-agent: mu4e 1.0; emacs 26.1
-From:   Jiong Wang <jiong.wang@netronome.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jiong Wang <jiong.wang@netronome.com>, daniel@iogearbox.net,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        oss-drivers@netronome.com
-Subject: Re: [PATCH v4 bpf-next 01/15] bpf: split read liveness into REG_LIVE_READ64 and REG_LIVE_READ32
-In-reply-to: <20190416012608.2iahgakw5uqobv6z@ast-mbp.dhcp.thefacebook.com>
-Date:   Tue, 16 Apr 2019 08:39:30 +0100
-Message-ID: <lyimveo0ul.fsf@netronome.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=86k4dTrhX4YQjdbrirGQri+XtUO30T7nrC0me+m+IXg=;
+        b=Cwu05g4eY8VOes69D3/viL+j2NcOLIRsCi3HqAUnOAJ7ddLfzFKSPosDNAmpjxtVB7
+         +rYysJNx5MYgAczRb9te4qT4P9aOq2N7rtiA3YF9M2Aj3UY+h8ArR9/PLYi2laCc10d6
+         uXRdftp1021YcuEVqvpiUCo5wgTwDftMIKWcq34OXvhWu3K9UEOIIu/1ohIOv2HbVyeC
+         sMQiDRSyQOwgb4hTy8S8/dRpIUV5wNAqJNBQlhtTDjkrB8p5N8sHkDEHWdsqEqIWhna4
+         mzGeKzbUYa5snrUQ9wBA01Ki5f9cy//sPH6gFFjZnM+ogelAPwVG5S8ROCtQAyKaYtwe
+         G4PQ==
+X-Gm-Message-State: APjAAAX+7jVKREli7LDQ9qrKuCSFf2rUuBAjBknncxPB09tA3MoXFiUI
+        up4nPFYAaWZRTTcFHfmk0R7VrGDynz/u70jgEng=
+X-Google-Smtp-Source: APXvYqy77fxnNbU0ySEMGYLRSAU/KJTgLR+sbfYYRb2coLWfI/x05YJLeyUDUROvs/2TbdciONwjBNxBfdiQgUkdf64=
+X-Received: by 2002:ac8:2dc3:: with SMTP id q3mr63772399qta.19.1555400690724;
+ Tue, 16 Apr 2019 00:44:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20190405131745.24727-1-bjorn.topel@gmail.com> <20190405131745.24727-2-bjorn.topel@gmail.com>
+ <64259723-f0d8-8ade-467e-ad865add4908@intel.com> <20190415183258.36dcee9a@carbon>
+In-Reply-To: <20190415183258.36dcee9a@carbon>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Date:   Tue, 16 Apr 2019 09:44:38 +0200
+Message-ID: <CAJ+HfNj63QcLY8=y1fF93PZd3XcfiGSrbbWdiGByjTzZQydSSg@mail.gmail.com>
+Subject: Re: Per-queue XDP programs, thoughts
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        maciej.fijalkowski@intel.com, Jason Wang <jasowang@redhat.com>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <borkmann@iogearbox.net>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        David Miller <davem@davemloft.net>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Thomas Graf <tgraf@suug.ch>,
+        Thomas Monjalon <thomas@monjalon.net>,
+        Jonathan Lemon <bsd@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-
-Alexei Starovoitov writes:
-
-> On Mon, Apr 15, 2019 at 06:26:11PM +0100, Jiong Wang wrote:
->> Register liveness infrastructure doesn't track register read width at the
->> moment, while the width information will be needed for the later 32-bit
->> safety analysis pass.
->> 
->> This patch take the first step to split read liveness into REG_LIVE_READ64
->> and REG_LIVE_READ32.
->> 
->> Liveness propagation code are updated accordingly. They are taught to
->> understand how to propagate REG_LIVE_READ64 and REG_LIVE_READ32 at the same
->> propagation iteration. For example, "mark_reg_read" now propagate "flags"
->> which could be multiple read bits instead of the single REG_LIVE_READ64.
->> 
->> A write still screen off all width of reads.
->> 
->> Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
->> ---
->>  include/linux/bpf_verifier.h |   8 +--
->>  kernel/bpf/verifier.c        | 119 +++++++++++++++++++++++++++++++++++++++----
->>  2 files changed, 115 insertions(+), 12 deletions(-)
->> 
->> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
->> index b3ab61f..fba0ebb 100644
->> --- a/include/linux/bpf_verifier.h
->> +++ b/include/linux/bpf_verifier.h
->> @@ -36,9 +36,11 @@
->>   */
->>  enum bpf_reg_liveness {
->>  	REG_LIVE_NONE = 0, /* reg hasn't been read or written this branch */
->> -	REG_LIVE_READ, /* reg was read, so we're sensitive to initial value */
->> -	REG_LIVE_WRITTEN, /* reg was written first, screening off later reads */
->> -	REG_LIVE_DONE = 4, /* liveness won't be updating this register anymore */
->> +	REG_LIVE_READ32 = 0x1, /* reg was read, so we're sensitive to initial value */
->> +	REG_LIVE_READ64 = 0x2, /* likewise, but full 64-bit content matters */
->> +	REG_LIVE_READ = REG_LIVE_READ32 | REG_LIVE_READ64,
->> +	REG_LIVE_WRITTEN = 0x4, /* reg was written first, screening off later reads */
->> +	REG_LIVE_DONE = 0x8, /* liveness won't be updating this register anymore */
->>  };
->>  
->>  struct bpf_reg_state {
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index c722015..5784b279 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -1135,7 +1135,7 @@ static int check_subprogs(struct bpf_verifier_env *env)
->>   */
->>  static int mark_reg_read(struct bpf_verifier_env *env,
->>  			 const struct bpf_reg_state *state,
->> -			 struct bpf_reg_state *parent)
->> +			 struct bpf_reg_state *parent, u8 flags)
->>  {
->>  	bool writes = parent == state->parent; /* Observe write marks */
->>  	int cnt = 0;
->> @@ -1150,17 +1150,23 @@ static int mark_reg_read(struct bpf_verifier_env *env,
->>  				parent->var_off.value, parent->off);
->>  			return -EFAULT;
->>  		}
->> -		if (parent->live & REG_LIVE_READ)
->> +		/* The first condition is much more likely to be true than the
->> +		 * second, make it checked first.
->> +		 */
->> +		if ((parent->live & REG_LIVE_READ) == flags ||
->> +		    parent->live & REG_LIVE_READ64)
->>  			/* The parentage chain never changes and
->>  			 * this parent was already marked as LIVE_READ.
->>  			 * There is no need to keep walking the chain again and
->>  			 * keep re-marking all parents as LIVE_READ.
->>  			 * This case happens when the same register is read
->>  			 * multiple times without writes into it in-between.
->> +			 * Also, if parent has REG_LIVE_READ64 set, then no need
->> +			 * to set the weak REG_LIVE_READ32.
->>  			 */
->>  			break;
->>  		/* ... then we depend on parent's value */
->> -		parent->live |= REG_LIVE_READ;
->> +		parent->live |= flags;
->>  		state = parent;
->>  		parent = state->parent;
->>  		writes = true;
->> @@ -1172,12 +1178,95 @@ static int mark_reg_read(struct bpf_verifier_env *env,
->>  	return 0;
->>  }
->>  
->> +/* This function is supposed to be used by the following 32-bit optimization
->> + * code only. It returns TRUE if the source or destination register operates
->> + * on 64-bit, otherwise return FALSE.
->> + */
->> +static bool is_reg64(struct bpf_insn *insn, u32 regno,
->> +		     struct bpf_reg_state *reg, enum reg_arg_type t)
->> +{
->> +	u8 code, class, op;
->> +
+On Mon, 15 Apr 2019 at 18:33, Jesper Dangaard Brouer <brouer@redhat.com> wr=
+ote:
 >
-> why is it called for case when t != SRC_OP ?
-> this patch is using the return value only in t == SRC_OP case
-> and other patches don't use is_reg64() at all.
-
-It is used for case when t == DST*, in patch 2/15, please search "rw64" in
-that patch.
-
-And "is_reg64" aims to return TRUE if it is 64-bit read when T == SRC_OP,
-and return TRUE if it is 64-bit write when T = DST*. 
-
->> +	code = insn->code;
->> +	class = BPF_CLASS(code);
->> +	op = BPF_OP(code);
->> +	if (class == BPF_JMP) {
->> +		/* BPF_EXIT will reach here because of return value readability
->> +		 * test for "main" which has s32 return value.
->> +		 */
->> +		if (op == BPF_EXIT)
->> +			return false;
 >
-> That's not incorrect. bpf2bpf calls return 64-bit values.
-
-bpf2bpf calls has all instructions exposed to insn walker, so the data-flow
-is naturally tracked. For example:
-  
-callee:
-  w0 = w2
-  exit
-
-caller:
-  call callee2
-  r2 = r0
-  
-insn walker should have marked REG_0 is a sub-register define in callee's
-frame, and such marker is naturally propagetd back to caller's frame inside
-"prepare_func_exit" which is doing:
-
-  /* return to the caller whatever r0 had in the callee */                 
-  caller->regs[BPF_REG_0] = *r0;
-
-This copies parentage chain, and also copies the sub-register definition
-information as we have merged it into reg state.
-
-> bpf abi is such that all bpf progs return 64-bit values.
-> Historically we truncate to 32-bit in BPF_PROG_RUN,
-> but some future bpf hook might use all 64 bits of return value.
-
-hmm, was thinking bpf main always return 32-bit, so safe to return FALSE
-here. If we could have 64-bit main return, then perhaps for main, always do
-zero-extension on r0 if it comes from sub-register def, this seems a little
-bit unnecessary, given there is prog_type available during the check, using
-which we can known whether whether return value is 64-bit or not.
-
-thoughts?
-
->> +		if (op == BPF_CALL) {
->> +			/* BPF to BPF call will reach here because of marking
->> +			 * caller saved clobber with DST_OP_NO_MARK for which we
->> +			 * don't care the register def because they are anyway
->> +			 * marked as NOT_INIT already.
->> +			 */
+> On Mon, 15 Apr 2019 13:59:03 +0200 Bj=C3=B6rn T=C3=B6pel <bjorn.topel@int=
+el.com> wrote:
 >
-> the comment doesn't seem to match the code. why return anything here?
-
-It is to handle the case like:
-
-  check_reg_arg(env, caller_saved[i], DST_OP_NO_MARK);
-
-which is called inside "check_func_call" for call insn. I think for caller
-saved register, return anything is fine. They must have new def inside
-callee before used. And when returned to caller, they must be restored
-before used otherwise the prog will be rejected due to their status is
-marked as NOT_INIT.
-
-So, for all cases, they are tracked insn walker accurately.
-
-> The return value won't be used anyway.
+> > Hi,
+> >
+> > As you probably can derive from the amount of time this is taking, I'm
+> > not really satisfied with the design of per-queue XDP program. (That,
+> > plus I'm a terribly slow hacker... ;-)) I'll try to expand my thinking
+> > in this mail!
+> >
+> > Beware, it's kind of a long post, and it's all over the place.
 >
-> If is_reg64() is inside check_reg_arg() under if (t == SRC_OP)
-> all these corner cases wouldn't cause review headaches and can be converted
-> to WARN_ONCE.
+> Cc'ing all the XDP-maintainers (and netdev).
 >
-> What am I missing?
+> > There are a number of ways of setting up flows in the kernel, e.g.
+> >
+> > * Connecting/accepting a TCP socket (in-band)
+> > * Using tc-flower (out-of-band)
+> > * ethtool (out-of-band)
+> > * ...
+> >
+> > The first acts on sockets, the second on netdevs. Then there's ethtool
+> > to configure RSS, and the RSS-on-steriods rxhash/ntuple that can steer
+> > to queues. Most users care about sockets and netdevices. Queues is
+> > more of an implementation detail of Rx or for QoS on the Tx side.
+>
+> Let me first acknowledge that the current Linux tools to administrator
+> HW filters is lacking (well sucks).  We know the hardware is capable,
+> as DPDK have an full API for this called rte_flow[1]. If nothing else
+> you/we can use the DPDK API to create a program to configure the
+> hardware, examples here[2]
+>
+>  [1] https://doc.dpdk.org/guides/prog_guide/rte_flow.html
+>  [2] https://doc.dpdk.org/guides/howto/rte_flow.html
+>
+> > XDP is something that we can attach to a netdevice. Again, very
+> > natural from a user perspective. As for XDP sockets, the current
+> > mechanism is that we attach to an existing netdevice queue. Ideally
+> > what we'd like is to *remove* the queue concept. A better approach
+> > would be creating the socket and set it up -- but not binding it to a
+> > queue. Instead just binding it to a netdevice (or crazier just
+> > creating a socket without a netdevice).
+>
+> Let me just remind everybody that the AF_XDP performance gains comes
+> from binding the resource, which allow for lock-free semantics, as
+> explained here[3].
+>
+> [3] https://github.com/xdp-project/xdp-tutorial/tree/master/advanced03-AF=
+_XDP#where-does-af_xdp-performance-come-from
+>
 
-As explained, is_reg64 could be used by both t == SRC_OP and DST*. And is
-will be called for instructions with implicit register usage for example
-CALL, and we need to return access width for those implicitly used register
-here as well.
+Yes, but leaving the "binding to queue" to the kernel wouldn't really
+change much. It would mostly be that the *user* doesn't need to care
+about hardware details. My concern is about "what is a good
+abstraction".
 
-Make sense?
+>
+> > The socket is an endpoint, where I'd like data to end up (or get sent
+> > from). If the kernel can attach the socket to a hardware queue,
+> > there's zerocopy if not, copy-mode. Dito for Tx.
+>
+> Well XDP programs per RXQ is just a building block to achieve this.
+>
+> As Van Jacobson explain[4], sockets or applications "register" a
+> "transport signature", and gets back a "channel".   In our case, the
+> netdev-global XDP program is our way to register/program these transport
+> signatures and redirect (e.g. into the AF_XDP socket).
+> This requires some work in software to parse and match transport
+> signatures to sockets.  The XDP programs per RXQ is a way to get
+> hardware to perform this filtering for us.
+>
+>  [4] http://www.lemis.com/grog/Documentation/vj/lca06vj.pdf
+>
 
-Regards,
-Jiong
+There are a lot of things that are missing to build what you're
+describing above. Yes, we need a better way to program the HW from
+Linux userland (old topic); What I fail to see is how per-queue XDP is
+a way to get hardware to perform filtering. Could you give a
+longer/complete example (obviously with non-existing features :-)), so
+I get a better view what you're aiming for?
+
+
+>
+> > Does a user (control plane) want/need to care about queues? Just
+> > create a flow to a socket (out-of-band or inband) or to a netdevice
+> > (out-of-band).
+>
+> A userspace "control-plane" program, could hide the setup and use what
+> the system/hardware can provide of optimizations.  VJ[4] e.g. suggest
+> that the "listen" socket first register the transport signature (with
+> the driver) on "accept()".   If the HW supports DPDK-rte_flow API we
+> can register a 5-tuple (or create TC-HW rules) and load our
+> "transport-signature" XDP prog on the queue number we choose.  If not,
+> when our netdev-global XDP prog need a hash-table with 5-tuple and do
+> 5-tuple parsing.
+>
+> Creating netdevices via HW filter into queues is an interesting idea.
+> DPDK have an example here[5], on how to per flow (via ethtool filter
+> setup even!) send packets to queues, that endup in SRIOV devices.
+>
+>  [5] https://doc.dpdk.org/guides/howto/flow_bifurcation.html
+>
+>
+> > Do we envison any other uses for per-queue XDP other than AF_XDP? If
+> > not, it would make *more* sense to attach the XDP program to the
+> > socket (e.g. if the endpoint would like to use kernel data structures
+> > via XDP).
+>
+> As demonstrated in [5] you can use (ethtool) hardware filters to
+> redirect packets into VFs (Virtual Functions).
+>
+> I also want us to extend XDP to allow for redirect from a PF (Physical
+> Function) into a VF (Virtual Function).  First the netdev-global
+> XDP-prog need to support this (maybe extend xdp_rxq_info with PF + VF
+> info).  Next configure HW filter to queue# and load XDP prog on that
+> queue# that only "redirect" to a single VF.  Now if driver+HW supports
+> it, it can "eliminate" the per-queue XDP-prog and do everything in HW.
+>
+
+Again, let's try to be more concrete! So, one (non-existing) mechanism
+to program filtering to HW queues, and then attaching a per-queue
+program to that HW queue, which can in some cases be elided? I'm not
+opposing the idea of per-queue, I'm just trying to figure out
+*exactly* what we're aiming for.
+
+My concern is, again, mainly that is a queue abstraction something
+we'd like to introduce to userland. It's not there (well, no really
+:-)) today. And from an AF_XDP userland perspective that's painful.
+"Oh, you need to fix your RSS hashing/flow." E.g. if I read what
+Jonathan is looking for, it's more of something like what Jiri Pirko
+suggested in [1] (slide 9, 10).
+
+Hey, maybe I just need to see the fuller picture. :-) AF_XDP is too
+tricky to use from XDP IMO. Per-queue XDP program would *optimize*
+AF_XDP, but not solving the filtering. Maybe starting in the
+filtering/metadata offload path end of things, and then see what we're
+missing.
+
+>
+> > If we'd like to slice a netdevice into multiple queues. Isn't macvlan
+> > or similar *virtual* netdevices a better path, instead of introducing
+> > yet another abstraction?
+>
+> XDP redirect a more generic abstraction that allow us to implement
+> macvlan.  Except macvlan driver is missing ndo_xdp_xmit. Again first I
+> write this as global-netdev XDP-prog, that does a lookup in a BPF-map.
+> Next I configure HW filters that match the MAC-addr into a queue# and
+> attach simpler XDP-prog to queue#, that redirect into macvlan device.
+>
+
+Just for context; I was thinking something like macvlan with
+ndo_dfwd_add/del_station functionality. "A virtual interface that is
+simply is a view of a physical". A per-queue program would then mean
+"create a netdev for that queue".
+
+>
+> > Further, is queue/socket a good abstraction for all devices? Wifi? By
+> > just viewing sockets as an endpoint, we leave it up to the kernel to
+> > figure out the best way. "Here's an endpoint. Give me data **here**."
+> >
+> > The OpenFlow protocol does however support the concept of queues per
+> > port, but do we want to introduce that into the kernel?
+> >
+> > So, if per-queue XDP programs is only for AF_XDP, I think it's better
+> > to stick the program to the socket. For me per-queue is sort of a
+> > leaky abstraction...
+> >
+> > More thoughts. If we go the route of per-queue XDP programs. Would it
+> > be better to leave the setup to XDP -- i.e. the XDP program is
+> > controlling the per-queue programs (think tail-calls, but a map with
+> > per-q programs). Instead of the netlink layer. This is part of a
+> > bigger discussion, namely should XDP really implement the control
+> > plane?
+> >
+> > I really like that a software switch/router can be implemented
+> > effectively with XDP, but ideally I'd like it to be offloaded by
+> > hardware -- using the same control/configuration plane. Can we do it
+> > in hardware, do that. If not, emulate via XDP.
+>
+> That is actually the reason I want XDP per-queue, as it is a way to
+> offload the filtering to the hardware.  And if the per-queue XDP-prog
+> becomes simple enough, the hardware can eliminate and do everything in
+> hardware (hopefully).
+>
+>
+> > The control plane should IMO be outside of the XDP program.
+> >
+> > Ok, please convince me! :-D
+>
+> I tried to above...
+>
+> --
+> Best regards,
+>   Jesper Dangaard Brouer
+>   MSc.CS, Principal Kernel Engineer at Red Hat
+>   LinkedIn: http://www.linkedin.com/in/brouer
+>
+>
+> More use-cases for per-queue XDP-prog:
+>
+> XDP for containers
+> ------------------
+> XDP can redirect into veth, used for containers.  So, I want to
+> implement container protection/isolation in XDP layer.  E.g. I only
+> want my container to talk to 1 external src-IP to my container dst-IP
+> on port 80.  I can implement that check in netdev-global XDP BPF-code.
+> But I can also hardware "offload" this simple filter (via ethtool or
+> rte_flow) and simplify the per-queue XDP-prog.  Given the queue now
+> only receives traffic that match my desc, I have now protected/isolated
+> the traffic to my container.
+>
+
+And are you sure that you'd like this at a queue granularity, and not
+netdevice or socket?
+
+>
+> DPDK using per-queue AF_XDP
+> ---------------------------
+> AFAIK an AF_XDP PMD driver have been merged in DPDK (but I've not
+> looked at the code).
+>
+> It would be very natural for DPDK to load per-queue XDP-progs for
+> interfacing with AF_XDP, as they already have rte_flow API (see
+> [1]+[2]) for configuring HW filters.  And loading per-queue XDP-progs
+> would also avoid disturbing other users of XDP on same machine (if we
+> choose the semantics defined in [6]).
+>
+
+Yes, here it would definitely help the PMD, but having a socket
+without per-queue (bound directly w/o XDP ala the "built-in" path)
+would help even more. I guess this part of the "does per-queue XDP
+programs make sense for anyone else but AF_XDP".
+
+> [6] https://github.com/xdp-project/xdp-project/blob/master/areas/core/xdp=
+_per_rxq01.org#proposal-rxq-prog-takes-precedence
+
+
+Bj=C3=B6rn
+
+[1] https://www.netdevconf.org/0.1/docs/pirko-ovstc-slides.pdf
