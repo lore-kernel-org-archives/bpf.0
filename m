@@ -2,169 +2,179 @@ Return-Path: <SRS0=hZ0g=SS=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FROM_EXCESS_BASE64,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02AE5C10F13
-	for <bpf@archiver.kernel.org>; Tue, 16 Apr 2019 06:41:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A6E7C10F14
+	for <bpf@archiver.kernel.org>; Tue, 16 Apr 2019 07:19:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CBD352073F
-	for <bpf@archiver.kernel.org>; Tue, 16 Apr 2019 06:41:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6B56C2073F
+	for <bpf@archiver.kernel.org>; Tue, 16 Apr 2019 07:19:53 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="vZZpGBC7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728412AbfDPGlb convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 16 Apr 2019 02:41:31 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:46896 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727569AbfDPGlb (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 16 Apr 2019 02:41:31 -0400
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3G6esBo074168
-        for <bpf@vger.kernel.org>; Tue, 16 Apr 2019 02:41:30 -0400
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2rw870m8fw-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 16 Apr 2019 02:41:29 -0400
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <bpf@vger.kernel.org> from <naveen.n.rao@linux.vnet.ibm.com>;
-        Tue, 16 Apr 2019 07:41:27 +0100
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 16 Apr 2019 07:41:25 +0100
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x3G6fOgs42926098
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 Apr 2019 06:41:24 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8B7ED52051;
-        Tue, 16 Apr 2019 06:41:24 +0000 (GMT)
-Received: from localhost (unknown [9.77.127.191])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 37DD25204F;
-        Tue, 16 Apr 2019 06:41:24 +0000 (GMT)
-Date:   Tue, 16 Apr 2019 12:11:22 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH v3 bpf-next 08/19] bpf: insert explicit zero extension
- insn when hardware doesn't do it implicitly
-To:     Jiong Wang <jiong.wang@netronome.com>
-Cc:     alexei.starovoitov@gmail.com, bpf@vger.kernel.org,
-        daniel@iogearbox.net, netdev@vger.kernel.org,
-        oss-drivers@netronome.com
-References: <1555106392-20117-1-git-send-email-jiong.wang@netronome.com>
-        <1555106392-20117-9-git-send-email-jiong.wang@netronome.com>
-        <1555321893.44its0xa9r.naveen@linux.ibm.com>
-        <1555322953.xj35xt2bjs.naveen@linux.ibm.com> <874l6zfr4f.fsf@netronome.com>
-        <1555352013.198bf870q9.naveen@linux.ibm.com>
-        <51F46782-5453-4A5F-A4E4-F53DBF4712AD@netronome.com>
-In-Reply-To: <51F46782-5453-4A5F-A4E4-F53DBF4712AD@netronome.com>
-User-Agent: astroid/0.14.0 (https://github.com/astroidmail/astroid)
+        id S1727845AbfDPHTg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Apr 2019 03:19:36 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:46423 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726988AbfDPHTg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Apr 2019 03:19:36 -0400
+Received: by mail-pl1-f195.google.com with SMTP id y6so9846580pll.13;
+        Tue, 16 Apr 2019 00:19:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=maYTJPDFiAHM03bcmvj+XEQpkIXIEFZsaqZU0DcmWyQ=;
+        b=vZZpGBC7HcEWmDBeVyBsg0NlJvFIpTlwlRoBfnJ4++0yRgFhZdTQVhWJ9A0fsGWKLm
+         MiQUPtc/FI+jfXgLUbHrQx2dD4NbcJUY0uBL6tPnGFaFIWunIDva+i9cFOnbyw790NKP
+         ruPlFJZ+vqrLdORfE7mCQf4k+5tC4tpnMGOGgcLNIwhuAv4DIEDTv2Bt+RoYfKlJ0IjZ
+         zJjiBdyntfu6jRivl1IYeZ6Il+0iebx65SPNqXS4o4LyN82SDF19RP36jNwrMMEuy00W
+         tM45hLcvbF+/PIOR5svPPNwpbNZ4LrJtzx9FnpQ8DInNVj9FvCaLc9uekTnhF1J+I71G
+         nmeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=maYTJPDFiAHM03bcmvj+XEQpkIXIEFZsaqZU0DcmWyQ=;
+        b=svD4gY51Jo7CRlGmvtikuf2kBrv/HLmXDheZY4OD2h0QA/L+tjrSsWVHSz2D0mITW2
+         CVuAlYvaqYUZWXNTd9GHkyRdI0Vap3bhgAmryGQAcKGr2KHZAFKz8dxsyBUntM2hbfw6
+         e0Lr9a3VTki9SdnpoR0pLp+oYQwKc1xr+qvvy7d6r002m4aRI8d4s7q678A0XODMdjKL
+         S5+91J1A9Pp/e073H2X3258UMTAWV4H1pUogVKl+hxyajMn44eJXcBqYP8gOwhVypqOE
+         JuVQ5mHeOKwzck1v944E+pK+Dz8PRTqYXseY7zp8vreHoZ7Al5B5SsR/MYblhaO6xd4O
+         Cg/g==
+X-Gm-Message-State: APjAAAXcA5sO+YwIzJT99otFkv5/Zag1FSvgT/U+7DckNJUh5U3Bl8xC
+        2bLDL6g3T0D561oLoJu1AJuYNHR8yDtqHVtjeaU=
+X-Google-Smtp-Source: APXvYqxS4nPAuMmDHVjo9KtqOrzWZ87wMsOs640s14Bg6TTb6KsZx8O9mevgTCzhUBwkunplrqvqbtHZNCUOqxN36pE=
+X-Received: by 2002:a17:902:106:: with SMTP id 6mr37322071plb.98.1555399174959;
+ Tue, 16 Apr 2019 00:19:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8BIT
-X-TM-AS-GCONF: 00
-x-cbid: 19041606-0028-0000-0000-000003614283
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19041606-0029-0000-0000-000024207866
-Message-Id: <1555396526.uk89zrw6ri.naveen@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-16_02:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1904160047
+References: <20190410023208.25435-1-huangruiPPP@gmail.com> <20190409193911.2d68a64d@shemminger-XPS-13-9360>
+ <87y34ijgil.fsf@mellanox.com> <b8c233dd-2ade-2305-47c6-731396a6f591@cumulusnetworks.com>
+In-Reply-To: <b8c233dd-2ade-2305-47c6-731396a6f591@cumulusnetworks.com>
+From:   =?UTF-8?B?6buE552/?= <huangruippp@gmail.com>
+Date:   Tue, 16 Apr 2019 15:19:23 +0800
+Message-ID: <CAKx2cEQCm4WrE7eu4+Q7Yc8QLB45fAjjiQdBNBvhWZZcridVTg@mail.gmail.com>
+Subject: Re: [PATCH] net:bridge:always disable auto-tuning when the user
+ specified MTU
+To:     Nikolay Aleksandrov <nikolay@cumulusnetworks.com>
+Cc:     Petr Machata <petrm@mellanox.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "jakub.kicinski@netronome.com" <jakub.kicinski@netronome.com>,
+        "hawk@kernel.org" <hawk@kernel.org>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "kafai@fb.com" <kafai@fb.com>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        "yhs@fb.com" <yhs@fb.com>, Jiri Pirko <jiri@mellanox.com>,
+        "ecree@solarflare.com" <ecree@solarflare.com>,
+        Ido Schimmel <idosch@mellanox.com>,
+        "alexander.h.duyck@intel.com" <alexander.h.duyck@intel.com>,
+        "amritha.nambiar@intel.com" <amritha.nambiar@intel.com>,
+        Li Rongqing <lirongqing@baidu.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "xdp-newbies@vger.kernel.org" <xdp-newbies@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "roopa@cumulusnetworks.com" <roopa@cumulusnetworks.com>,
+        "bridge@lists.linux-foundation.org" 
+        <bridge@lists.linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Jiong Wang wrote:
-> 
->> On 15 Apr 2019, at 19:21, Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com> wrote:
->> 
->> Jiong Wang wrote:
->>> It will be great if you could test the latest set on PowerPC to see if
->>> there is any regression for example for those under test_progs and
->>> test_verifier.
->> 
->> With test_bpf, I am seeing a few failures with this patchset.
->> 
->>> And it will be even greater if you also use latest llvm snapshot for the
->>> testing, which then will enable test_progs_32 etc.
->> 
->> Is a newer llvm a dependency? Or, is this also expected to work with older llvm levels?
-> 
-> There is no newer LLVM dependency. This set should work with older llvm.        
->                                                                                 
-> It is just newer LLVM has better sub-register code-gen support that could       
-> the generate bpf program contains more elimination opportunities for verifier.
+Whether use the current method to configure bridge's MTU or
+add a notification in bridge's internal code and send a notification
+when modify the bridge's MTU, we all need to add an additional
+judgement in dev_set_mtu_ext's first if statement for bridge to
+let the process not return early.
 
-Ok, I will try and get to that by next week (busy with other things 
-right now).
+By the way, whether it is the expected result or the current result,
+the MTU of the bridge will not be larger than the interface in the bridge.
+Which scene will cause frame drop.
 
-> 
->> 
->> The set of tests that are failing are listed further below. I looked into MUL_X2 and it looks like zero extension for the two initial ALU32 loads (-1) are being removed, resulting in the failure.
->> 
->> I didn't get to look into this in detail -- am I missing something?
-> 
-> Hmm, I guess the issue is:
->                                                                                 
->   1. test_bpf.c is a testsuite running inside kernel space, it is calling some
->      kernel eBPF jit interface directly without calling verifier first, so this
->      set actually hasn’t been triggered.
-
-Ah, indeed.
-
-> 
->   2. However, the elimination information at the moment is passed from verifier
->      to JIT backend through
-> 
->        fp->aux->no_verifier_zext
-> 
->      “no_verifier_zext” is initially false, and once verifier inserted zero
->      extension, it will be set to true.
-> 
->      Now, for test_bpf, because it doesn’t go through verifier at all, so
->      “no_verifier_zext” is left at default value which is false, meaning
->      verifier has inserted zero-extension, so PPC backend then thinks it is
->      safe to eliminate zero-extension by himself.
-> 
->      Perhaps should change “no_verifier_zext” to “verifier_zext”, then default
->      is false and will only be true when verifier really has inserted zext.
-
-Yes, that's probably better.
-
->       
->      Was thinking, this will cause JIT backend writing the check like
->         if (no_verifier_zext)
->           insert_zext_by_JIT
->      
->      is better than:
->         
->         if (!verifier_zext)
->           insert_zext_by_JIT
-> 
-> BTW, does test_progs and test_verifier has a full pass on PowerPC?
-> On arch without hardware zext like PowerPC, verifier will insert zext and test
-> mode will still randomisation high 32-bit for those sub-registers not zext,
-> this is very stressful test.
-
-test_verfier is throwing up one failure with this patchset:
-#569/p ld_abs: vlan + abs, test 1 FAIL
-Failed to load prog 'Success'!
-insn 2463 cannot be patched due to 16-bit range
-verification time 172602 usec
-stack depth 0
-processed 30728 insns (limit 1000000) max_states_per_insn 1 total_states 1022 peak_states 1022 mark_read 1
-
-This test passes with bpf-next/master. Btw, I tried with your v4 patches 
-though I am replying here...
-
-test_progs has no regression, but has 15 failures even without these 
-patches that I need to look into.
-
-
-- Naveen
-
-
+Nikolay Aleksandrov <nikolay@cumulusnetworks.com> =E4=BA=8E2019=E5=B9=B44=
+=E6=9C=8810=E6=97=A5=E5=91=A8=E4=B8=89 =E4=B8=8B=E5=8D=887:05=E5=86=99=E9=
+=81=93=EF=BC=9A
+>
+> On 10/04/2019 13:34, Petr Machata wrote:
+> >
+> > Stephen Hemminger <stephen@networkplumber.org> writes:
+> >
+> >> On Wed, 10 Apr 2019 02:32:08 +0000
+> >> Huang Rui <huangruippp@gmail.com> wrote:
+> >>
+> >>> For example.
+> >>> My purpose is to create a bridge br0 and join eth0 into br0.
+> >>> if we use this following way, the auto-tuning flag will not be disabl=
+ed.
+> >>>
+> >>> If eth0's mtu is 1200
+> >>> step 1.brctl addbr br0
+> >>> step 2.brctl addif br0 eth0
+> >>> step 3.ifconfig br0 mtu 1200
+> >>> step 4.ifconfig eth0 mtu 1500
+> >>>
+> >>> Result:
+> >>> br0's MTU: 1500, eth0's MTU: 1500
+> >>>
+> >>> Expected:
+> >>> br0's MTU: 1200, eth0's MTU: 1500
+> >>>
+> >>> I have specified br0's MTU,  but auto-min policy works. So the MTU is
+> >>> not the result what we expected.
+> >>> As expected, if i have specified bridge's MTU, it will set the flag:
+> >>> BROPT_MTU_SET_BY_USER in net_bridge_opts disabled and auto-min/max
+> >>> policy will not work.But in this case, because the dev_set_mtu return
+> >>> early, the BROPT_MTU_SET_BY_USER flag will not be disabled and
+> >>> auto-min/max policy will still work.
+> >>>
+> >>> Signed-off-by: Huang Rui <huangruiPPP@gmail.com>
+> >>
+> >> A bridge like this going to drop frames.
+> >> A frame received with MTU of 1200 will get dropped.
+> >
+> > That's true even if above you set br0's MTU to 1201, but then the
+> > auto-tuning is disabled as expected. The problem is that setting MTU to
+> > 1200 is perceived as a non-change, whereas it should instead be
+> > perceived as a signal that the user takes over the MTU management.
+> >
+> >> The proper way to do this is to change MTU of both interfaces to match=
+.
+>
+> The only problem is a lot of the network configuration software these day=
+s
+> sets the MTU by default and that would lead to disabling auto-tune by def=
+ault.
+> And since you haven't received a notification it means nothing has change=
+d,
+> but in this case state has changed for the bridge quietly. It could break=
+ setups
+> which rely on the auto-tune and it would do it quietly which won't be eas=
+y to debug.
+>
+> Also as I said in my previously, I really don't like adding bridge-specif=
+ic
+> code in there. Another more ambitious approach would be to maybe always p=
+ass the
+> value to the drivers and let them deal with it, that would require going =
+through all
+> ndo_change_mtu users and also would still not solve the problem of not se=
+nding
+> a notification when there has been a state change (the bridge no longer a=
+uto-tunes).
+> Thus the bridge will probably have to emit *some* notification by itself.
+>
+> Perhaps this should've been a bridge option from the start instead of aut=
+omatic
+> decision but it's late for that now.
+>
+> Thanks,
+>  Nik
