@@ -2,131 +2,126 @@ Return-Path: <SRS0=hZ0g=SS=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 849F6C10F13
-	for <bpf@archiver.kernel.org>; Tue, 16 Apr 2019 21:28:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B241C10F13
+	for <bpf@archiver.kernel.org>; Tue, 16 Apr 2019 21:34:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4CB9C2075B
-	for <bpf@archiver.kernel.org>; Tue, 16 Apr 2019 21:28:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E06182075B
+	for <bpf@archiver.kernel.org>; Tue, 16 Apr 2019 21:34:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="g9MK7Hr8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FXE6OB/e"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728678AbfDPV2S (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Apr 2019 17:28:18 -0400
-Received: from mail-qt1-f180.google.com ([209.85.160.180]:39918 "EHLO
-        mail-qt1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726986AbfDPV2R (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Apr 2019 17:28:17 -0400
-Received: by mail-qt1-f180.google.com with SMTP id t28so25106428qte.6
-        for <bpf@vger.kernel.org>; Tue, 16 Apr 2019 14:28:17 -0700 (PDT)
+        id S1727136AbfDPVer (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Apr 2019 17:34:47 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:38201 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726986AbfDPVer (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Apr 2019 17:34:47 -0400
+Received: by mail-qk1-f193.google.com with SMTP id g1so13131962qki.5;
+        Tue, 16 Apr 2019 14:34:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=39g6Hhllvi1gCzbEu1a/yyesKfhE72xLHmScXalWd/w=;
-        b=g9MK7Hr8smvyXYSofzC3Uchubpqipw4oW6ELhkJ0xpicaI6ZBLHAMkn0KufWgFHZr2
-         CAdE24f9gfzppcLOKjST/ql29uDWLe0uBlXkD6arpiGJnUB2QUmt9BoKI+EGda0kci3x
-         j4Uv4Ly1nGZWDzYXu27NiADcJCvRi4zUXsDaFVgZYJ14NY04h6cVfBO4r1FlQ7GTa26e
-         YOxiltCZQQ00B6OrXBanB8NsAmnyXEjkGajQfC5VCxN6bxs45YOpkRq/rcpbj9bloN94
-         s6D+ENcakpDf4Xee6J+CZLpuBd2h05FbbiNN4nqcGwY2vclQbRVSNpao+FmVoj3xfxo0
-         9QsQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vZOuUpDP+oEE8zDag4TP7D7kvRREI+1dnU6iGVWD2sU=;
+        b=FXE6OB/ezKLiHvoQ0/xaHOaSD0SWvQJpKsvHzjQ3qihM6Zp4EklHykA/oDlbIVKvhd
+         a56h0vTB8BorLrOQiMaIHVnZ1OvidMLdwqw20WezQyec0GRG5aOCmEAupU/tsz4A0IMW
+         zgxT7tln40r8COh3oIhIQUCefg6LKCJYdrYv/ohVjYS+X8AIJA0IVlLjlQ7zjYRmKb1V
+         BxGPKEJjnVHVKueoSpDdvkijE6oprlQPgah7Vl1COZ9YX0G/St6Dac1eFtq+UaB8pUTc
+         9yfAAGu3bDxwwUZGRkzz5aLs4knhKGOM9D6D3c6Jflqz8oI590DlDxH1c9Wp5kplFI9m
+         WRKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=39g6Hhllvi1gCzbEu1a/yyesKfhE72xLHmScXalWd/w=;
-        b=RyBshwnWOr2yYgKw6xFrzhsYQWNwhggZCWgbeE3JT7G2KGPyZ2n5qJ3mAs+NPoAZ2G
-         skmIoP0xgtBp/+yUYJtc3VLsv0GxtiuQjUZbfsWvCA0md1xKsF9ErZX7wiZqmWZaTA5N
-         pB8SRVpRjXHCUvuK9FHcw+A4dJEBR//YyLlBDpVURcPMmY0FBwO0ZzlL0ej+btxtE6p3
-         wgPmECw5rGX8yncvIuEXqZwAz7sd425naebjQVJ9lsq5zuei4KIgSZFeE4TZy4YUrFdv
-         g04ui4B1g+2KM4D5GAZOWyiIGQ2nVNvSgRBWGk6IGSBgLQzSqiBHsj1MpeUAh8vcj07b
-         vydA==
-X-Gm-Message-State: APjAAAWGAlNeyzIBi2P2wd7Hw8V99UF2bSyiAj8vaHLyUMcge70UGP9i
-        nZ+RvsZfhEXlfm9CpiFmi8BIuA==
-X-Google-Smtp-Source: APXvYqzbumkJtSkVnI1AQmqB8LkoDBJRYFWgmraivx78sDNdUVJUSNKBiww2Zl9YxKkAXWK2yD6fVg==
-X-Received: by 2002:a0c:874a:: with SMTP id 10mr69777453qvi.164.1555450097036;
-        Tue, 16 Apr 2019 14:28:17 -0700 (PDT)
-Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id y55sm35084276qtk.13.2019.04.16.14.28.15
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 16 Apr 2019 14:28:16 -0700 (PDT)
-Date:   Tue, 16 Apr 2019 14:28:11 -0700
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        ilias.apalodimas@linaro.org, toke@redhat.com,
-        magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
-        Jason Wang <jasowang@redhat.com>,
-        Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <borkmann@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        David Miller <davem@davemloft.net>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        bpf@vger.kernel.org, Thomas Graf <tgraf@suug.ch>,
-        Thomas Monjalon <thomas@monjalon.net>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
-Subject: Re: Per-queue XDP programs, thoughts
-Message-ID: <20190416142811.3b3e3c16@cakuba.netronome.com>
-In-Reply-To: <20190416155446.00472ad1@carbon>
-References: <20190405131745.24727-1-bjorn.topel@gmail.com>
-        <20190405131745.24727-2-bjorn.topel@gmail.com>
-        <64259723-f0d8-8ade-467e-ad865add4908@intel.com>
-        <20190415183258.36dcee9a@carbon>
-        <20190415154932.79bc3b57@cakuba.netronome.com>
-        <20190416155446.00472ad1@carbon>
-Organization: Netronome Systems, Ltd.
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vZOuUpDP+oEE8zDag4TP7D7kvRREI+1dnU6iGVWD2sU=;
+        b=M0Rz+SGFMk2WikanAq0sOoIJQ6sYhLN6DlJw+PFnEorvgzXPA5/bHCbc971TnDhuGJ
+         jRVCpMFOen0z1ZHZtqimfoUnMCD6JhzqN1ab/piUsi3yfCfLth2ePZqgAmO+f0IRRIbM
+         ikpd0IcSqSycDCnIIcU3hrkFCJZ/kajFBHxfPVFRpzG0Y6Jhl0Qg3vtf1Udo3gTmEpVz
+         iYjLdQuZhba7GPCXLKf35FL7zZ7Ysc5rApnN9NUb/1OqgQLHdfQ269p+1xcNd5qKI0vO
+         c1DUg4ky5wC2W6Je3h6KQfmGN4KL4zPA1K3xVoInZnSXSaAf1Q6zJmDbn6dvzy81rJsK
+         t7vQ==
+X-Gm-Message-State: APjAAAV1Un8fY1Lm+Zzlje+u9v3A4nO57LyfIn5tzB7+OhADsz88vB6b
+        VDOvXPZn/p/LiI0xapyLvIcWD2kodXE047MIHeY=
+X-Google-Smtp-Source: APXvYqwTWzQSxDLkqfcRhDCYTP38ecfFberjeHFzDz1rWDT0McEstnZpZVd8Xsp7ktBGmF5B6eY6j6KlGguw6AATZi8=
+X-Received: by 2002:a05:620a:16c5:: with SMTP id a5mr66496802qkn.212.1555450486494;
+ Tue, 16 Apr 2019 14:34:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+References: <20190416174900.GT2217@ZenIV.linux.org.uk> <20190416175340.21068-1-viro@ZenIV.linux.org.uk>
+ <20190416175340.21068-44-viro@ZenIV.linux.org.uk> <CAADnVQJTQXcxckKMZQ4Lg9R++=618wEsymjTUsVQVMce7CfdZg@mail.gmail.com>
+In-Reply-To: <CAADnVQJTQXcxckKMZQ4Lg9R++=618wEsymjTUsVQVMce7CfdZg@mail.gmail.com>
+From:   Song Liu <liu.song.a23@gmail.com>
+Date:   Tue, 16 Apr 2019 14:34:35 -0700
+Message-ID: <CAPhsuW5+7SdYERewTQFjp7pDSwzP9p9j=K71Cf4O96vxCqAf-Q@mail.gmail.com>
+Subject: Re: [RFC PATCH 44/62] bpf: switch to ->free_inode()
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 16 Apr 2019 15:55:23 +0200, Jesper Dangaard Brouer wrote:
-> On Mon, 15 Apr 2019 15:49:32 -0700
-> Jakub Kicinski <jakub.kicinski@netronome.com> wrote:
->=20
-> > On Mon, 15 Apr 2019 18:32:58 +0200, Jesper Dangaard Brouer wrote: =20
-> > > On Mon, 15 Apr 2019 13:59:03 +0200 Bj=C3=B6rn T=C3=B6pel <bjorn.topel=
-@intel.com> wrote:   =20
-> > > > Hi,
-> > > >=20
-> > > > As you probably can derive from the amount of time this is taking, =
-I'm
-> > > > not really satisfied with the design of per-queue XDP program. (Tha=
-t,
-> > > > plus I'm a terribly slow hacker... ;-)) I'll try to expand my think=
-ing
-> > > > in this mail!   =20
-> >=20
-> > Jesper was advocating per-queue progs since very early days of XDP.
-> > If it was easy to implement cleanly we would've already gotten it ;) =20
->=20
-> (I cannot help to feel offended here...  IMHO that statement is BS,
-> that is not how upstream development work, and sure, I am to blame as
-> I've simply been to lazy or busy with other stuff to implement it.
+On Tue, Apr 16, 2019 at 11:07 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Tue, Apr 16, 2019 at 10:55 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> >
+> > From: Al Viro <viro@zeniv.linux.org.uk>
+> >
+> > Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+>
+> Acked-by: Alexei Starovoitov <ast@kernel.org>
 
-Sincere apologies, definitely not what I was trying to say.
+Acked-by: Song Liu <songliubraving@fb.com>
 
-> It is not that hard to send down a queue# together with the XDP attach
-> command.)=20
-
-That part is not hard, agreed.
-
-> I've been advocating for per-queue progs from day-1, since this is an
-> obvious performance advantage, given the programmer can specialize the
-> BPF/XDP-prog to the filtered traffic.  I hope/assume we are on the same
-> pages here, that per-queue progs is a performance optimization.
->=20
-> I guess the rest of the discussion in this thread is (1) if we can
-> convince each-other that someone will actually use this optimization,
-> and (2) if we can abstract this away from the user.
-
-Yes, agreed.
-
+>
+> > ---
+> >  kernel/bpf/inode.c | 10 ++--------
+> >  1 file changed, 2 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
+> > index 4a8f390a2b82..bc53e5b20ddc 100644
+> > --- a/kernel/bpf/inode.c
+> > +++ b/kernel/bpf/inode.c
+> > @@ -566,9 +566,8 @@ static int bpf_show_options(struct seq_file *m, struct dentry *root)
+> >         return 0;
+> >  }
+> >
+> > -static void bpf_destroy_inode_deferred(struct rcu_head *head)
+> > +static void bpf_free_inode(struct inode *inode)
+> >  {
+> > -       struct inode *inode = container_of(head, struct inode, i_rcu);
+> >         enum bpf_type type;
+> >
+> >         if (S_ISLNK(inode->i_mode))
+> > @@ -578,16 +577,11 @@ static void bpf_destroy_inode_deferred(struct rcu_head *head)
+> >         free_inode_nonrcu(inode);
+> >  }
+> >
+> > -static void bpf_destroy_inode(struct inode *inode)
+> > -{
+> > -       call_rcu(&inode->i_rcu, bpf_destroy_inode_deferred);
+> > -}
+> > -
+> >  static const struct super_operations bpf_super_ops = {
+> >         .statfs         = simple_statfs,
+> >         .drop_inode     = generic_delete_inode,
+> >         .show_options   = bpf_show_options,
+> > -       .destroy_inode  = bpf_destroy_inode,
+> > +       .free_inode     = bpf_free_inode,
+> >  };
+> >
+> >  enum {
+> > --
+> > 2.11.0
+> >
