@@ -1,145 +1,114 @@
-Return-Path: <SRS0=RZwz=SR=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=hZ0g=SS=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=DKIM_ADSP_CUSTOM_MED,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C5FBC10F0E
-	for <bpf@archiver.kernel.org>; Mon, 15 Apr 2019 23:48:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C503C10F0E
+	for <bpf@archiver.kernel.org>; Tue, 16 Apr 2019 01:01:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 54C8E20848
-	for <bpf@archiver.kernel.org>; Mon, 15 Apr 2019 23:48:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1659B20818
+	for <bpf@archiver.kernel.org>; Tue, 16 Apr 2019 01:01:40 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gOfzBauF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727720AbfDOXsU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Apr 2019 19:48:20 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:37120 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727456AbfDOXsN (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 15 Apr 2019 19:48:13 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3FNdntr027942
-        for <bpf@vger.kernel.org>; Mon, 15 Apr 2019 16:48:13 -0700
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2rvvdu9t5q-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 15 Apr 2019 16:48:12 -0700
-Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::126) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Mon, 15 Apr 2019 16:48:11 -0700
-Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 4D95286177B; Mon, 15 Apr 2019 16:48:10 -0700 (PDT)
-Smtp-Origin-Hostprefix: dev
-From:   <andrii.nakryiko@gmail.com>
-Smtp-Origin-Hostname: dev101.prn2.facebook.com
-To:     <andrii.nakryiko@gmail.com>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <kernel-team@fb.com>
-CC:     Andrii Nakryiko <andriin@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@fb.com>
-Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH bpf-next 2/2] selftests/btf: add VAR and DATASEC case for dedup tests
-Date:   Mon, 15 Apr 2019 16:48:08 -0700
-Message-ID: <20190415234808.2225360-3-andrii.nakryiko@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190415234808.2225360-1-andrii.nakryiko@gmail.com>
-References: <20190415234808.2225360-1-andrii.nakryiko@gmail.com>
-X-FB-Internal: Safe
+        id S1726527AbfDPBBj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Apr 2019 21:01:39 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:40341 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727202AbfDPBBj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Apr 2019 21:01:39 -0400
+Received: by mail-lf1-f67.google.com with SMTP id a28so14564733lfo.7
+        for <bpf@vger.kernel.org>; Mon, 15 Apr 2019 18:01:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=cbZQQd1qzv5/7tHmKeT/sLzmIszu1MsPHCnJkgTHUy0=;
+        b=gOfzBauFFQTxupAMYEhwdrASfzvzwV0CuIMYSkoHDpjazzbl7YYfVdkpExqfv/IUAJ
+         KISmasE1E4YcqSCTlea2HfeT5CNSS/yaox6G6ffbei1DMAB6LtnRBWVeOdZx5NFcgSzs
+         tascJ/k4P7u4YDHiKiJNrWYvDXhy3gHHB1OE5qqyhblWBQvarXXN47QlClYRH75/rZZ2
+         r9kQ9hR0QUIGYfFvYVD0piNJ2WiuQmYqhJTjCKq/uDuNZRQQ/VegOZOXWEa+pBnKt11r
+         JI89YyA42kw8Ei+tz0pvmuTTWMtZkEgP3YLlN3T96U7l4uknhhYyOgmxXLbE9jWlou86
+         ixjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=cbZQQd1qzv5/7tHmKeT/sLzmIszu1MsPHCnJkgTHUy0=;
+        b=s5P5brpKiT+wag96DE1cESryLpgJY6w8HGIhHLqNFSFaO2KQWdLvEhL3efSpJ0e8u9
+         SMsV5cBs4W9Lb1jDKARHI3J2PNv4oXq1/QEAPounoXaDQFvhrlAo4Er1kUumgmRahlw0
+         3beArKsityAbwSG5wKE6gNb0G1UiYUQEs+cTRDlojlu5XKNdXDvylooW0YQDJGm5s28Q
+         B1mD0FZ8cY+BlIkvmJEOGtisPvjaBZ2EBj7D2ZvSbkayqglVOVFtebDovlsMKABr7D7Z
+         uNXhHBqJkkDZ+qv2MubP/oX/PXe3C07FGxuu83DgWWWWht4G2WMgX1HVOq0q2B7Z1zJQ
+         WZzA==
+X-Gm-Message-State: APjAAAVc1Mootsv36hqmL3ebjvFDP1xKDaV5t2kGB6ppwa7bxa2ViU0I
+        ++httfIjUcRuaNC3xMuaqjfCOaQaufn89IzcySk=
+X-Google-Smtp-Source: APXvYqz6CWYsAvB0xFxIPOXmArnPuL9pMYe6v5iSEdZ3bWJCtiPDG4brg2jaMawG3edBTfUMFJ6omQuIbXyV+sEzpjk=
+X-Received: by 2002:ac2:592b:: with SMTP id v11mr18563345lfi.85.1555376497078;
+ Mon, 15 Apr 2019 18:01:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-15_08:,,
- signatures=0
-X-Proofpoint-Spam-Reason: safe
-X-FB-Internal: Safe
+References: <2601191342CEEE43887BDE71AB9772580148A95A96@irsmsx105.ger.corp.intel.com>
+ <2601191342CEEE43887BDE71AB9772580148A97E27@irsmsx105.ger.corp.intel.com>
+In-Reply-To: <2601191342CEEE43887BDE71AB9772580148A97E27@irsmsx105.ger.corp.intel.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 15 Apr 2019 18:01:25 -0700
+Message-ID: <CAADnVQJoo7vSaCCFGpTgrQmCw4Cq-FcLhPtzr=YNaZ7y31ahLg@mail.gmail.com>
+Subject: Re: FW: BPF_PSEUDO_CALL question
+To:     "Ananyev, Konstantin" <konstantin.ananyev@intel.com>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrii Nakryiko <andriin@fb.com>
+On Mon, Apr 15, 2019 at 5:13 AM Ananyev, Konstantin
+<konstantin.ananyev@intel.com> wrote:
+>
+> Hi Alexei,
+> I posted the question below on llvm-dev mailing list, but there is no answer so far.
+> As you seems the author of BPF_PSEUDO_CALL in LLVM (and linux kernel) thought might
+> be you know the answer?
+> I looked through the patches, but didn't spot anything myself.
+> Thanks
+> Konstantin
+>
+> -----Original Message-----
+> From: llvm-dev [mailto:llvm-dev-bounces@lists.llvm.org] On Behalf Of Ananyev, Konstantin via llvm-dev
+> Sent: Wednesday, April 10, 2019 7:37 PM
+> To: llvm-dev@lists.llvm.org
+> Subject: [llvm-dev] BPF_PSEUDO_CALL question
+>
+>
+> Hi everyone,
+> with clang 6.0 and onwards, for the following code:
+> $ cat t6.c
+>
+> #include <stdint.h>
+>
+> extern int ffx1(const void *p);
+>
+> uint64_t entry(const void *p)
+> {
+>         return ffx1(p);
+> }
+>
+> clang -O2  -target bpfel -c t6.c
+> generates for the call BPF_PSEUDO_CALL instruction:
+> entry:
+>        0:       85 10 00 00 ff ff ff ff         call -1
+>        1:       67 00 00 00 20 00 00 00         r0 <<= 32
+>        2:       c7 00 00 00 20 00 00 00         r0 s>>= 32
+>        3:       95 00 00 00 00 00 00 00         exit
+>
+> Is there any way to force clang to generate proper BPF_CALL instruction,
+> i.e: 85 00 00 00 ff ff ff ff (as it did in older versions)?
 
-Add test case verifying that dedup happens (INTs are deduped in this
-case) and VAR/DATASEC types are not deduped, but have their referenced
-type IDs adjusted correctly.
-
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: Alexei Starovoitov <ast@fb.com>
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/testing/selftests/bpf/test_btf.c | 49 ++++++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/test_btf.c b/tools/testing/selftests/bpf/test_btf.c
-index 44cd3378d216..f8eb7987b794 100644
---- a/tools/testing/selftests/bpf/test_btf.c
-+++ b/tools/testing/selftests/bpf/test_btf.c
-@@ -6642,6 +6642,51 @@ const struct btf_dedup_test dedup_tests[] = {
- 		.dont_resolve_fwds = false,
- 	},
- },
-+{
-+	.descr = "dedup: datasec and vars pass-through",
-+	.input = {
-+		.raw_types = {
-+			/* int */
-+			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+			/* static int t */
-+			BTF_VAR_ENC(NAME_NTH(2), 1, 0),			/* [2] */
-+			/* .bss section */				/* [3] */
-+			BTF_TYPE_ENC(NAME_NTH(1), BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
-+			BTF_VAR_SECINFO_ENC(2, 0, 4),
-+			/* int, referenced from [5] */
-+			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [4] */
-+			/* another static int t */
-+			BTF_VAR_ENC(NAME_NTH(2), 4, 0),			/* [5] */
-+			/* another .bss section */			/* [6] */
-+			BTF_TYPE_ENC(NAME_NTH(1), BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
-+			BTF_VAR_SECINFO_ENC(5, 0, 4),
-+			BTF_END_RAW,
-+		},
-+		BTF_STR_SEC("\0.bss\0t"),
-+	},
-+	.expect = {
-+		.raw_types = {
-+			/* int */
-+			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+			/* static int t */
-+			BTF_VAR_ENC(NAME_NTH(2), 1, 0),			/* [2] */
-+			/* .bss section */				/* [3] */
-+			BTF_TYPE_ENC(NAME_NTH(1), BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
-+			BTF_VAR_SECINFO_ENC(2, 0, 4),
-+			/* another static int t */
-+			BTF_VAR_ENC(NAME_NTH(2), 1, 0),			/* [4] */
-+			/* another .bss section */			/* [5] */
-+			BTF_TYPE_ENC(NAME_NTH(1), BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
-+			BTF_VAR_SECINFO_ENC(4, 0, 4),
-+			BTF_END_RAW,
-+		},
-+		BTF_STR_SEC("\0.bss\0t"),
-+	},
-+	.opts = {
-+		.dont_resolve_fwds = false,
-+		.dedup_table_size = 1
-+	},
-+},
- 
- };
- 
-@@ -6671,6 +6716,10 @@ static int btf_type_size(const struct btf_type *t)
- 		return base_size + vlen * sizeof(struct btf_member);
- 	case BTF_KIND_FUNC_PROTO:
- 		return base_size + vlen * sizeof(struct btf_param);
-+	case BTF_KIND_VAR:
-+		return base_size + sizeof(struct btf_var);
-+	case BTF_KIND_DATASEC:
-+		return base_size + vlen * sizeof(struct btf_var_secinfo);
- 	default:
- 		fprintf(stderr, "Unsupported BTF_KIND:%u\n", kind);
- 		return -EINVAL;
--- 
-2.17.1
-
+older version of llvm generated broken code.
+there are only two call flavors:
+- call imm -> calling particular kernel helper where imm==helper_id
+- call pseudo +-off -> call another bpf function
+there is no arbitrary call support yet.
