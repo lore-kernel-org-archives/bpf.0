@@ -2,174 +2,225 @@ Return-Path: <SRS0=qXn4=SU=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.2 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIM_ADSP_CUSTOM_MED,
+	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 471C6C10F0E
-	for <bpf@archiver.kernel.org>; Thu, 18 Apr 2019 12:42:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFD64C10F14
+	for <bpf@archiver.kernel.org>; Thu, 18 Apr 2019 15:57:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 08A382183E
-	for <bpf@archiver.kernel.org>; Thu, 18 Apr 2019 12:42:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1555591363;
-	bh=h9qyoCxbFTiFLg18zOHH1LOvqUQw+0hkZKUNirVyBWA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=gMK+5oaqQZJJpRwjiL9AhoBVVLERFrhNqdTqXjmjxGHQjmoQhkqrz1dhcibn2HcCp
-	 qYpaO9Se5yMLsLrl/BthhOzIkRksLjlb7WD7Q1iafnWx8D8FzUn9/zbay4wDZPlDjN
-	 9opB0pP/9o0Bvxp7vm9rl7W73+nzVeWDCB2arbkQ=
+	by mail.kernel.org (Postfix) with ESMTP id B719C217D7
+	for <bpf@archiver.kernel.org>; Thu, 18 Apr 2019 15:57:23 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QipZTpMb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733205AbfDRMmm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Apr 2019 08:42:42 -0400
-Received: from casper.infradead.org ([85.118.1.10]:49308 "EHLO
-        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726162AbfDRMmm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 18 Apr 2019 08:42:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=FVaqqPnygq1+XAL2fV0XyKGzQwLVOq4vtfOZzXdI+DY=; b=mhYX69b7VKfQqcoKdU0MCUDY48
-        wz7J5q7ip7jfFijvK+A2ZbRvvIroxJe506D3ZMQrb3CoLvm9xyPHHWa/5V6VVBpMznpOnG3TfkBul
-        kz42uT6vbsEoSWFDuxWpELrhXI3brxwrB2rUkFxbS3l/dQ1clL/hYTVu4waRAQlFVAZ3+DkBqFnzm
-        gqZN/EwyZolsR5K1343i6maSxSww63KZgfyNN3MAFzgqy9B9T+AHfzMgzbhHjdvpwUt4XzdVhma0k
-        h/lt7McRzt4geBfeCA+wuguIFyeSB89NrhZTxPp/AqEhMrzdLLhaX7EmpBQ/MpRtZ2kCWwpclFQTQ
-        +L6+vL3A==;
-Received: from 177.132.233.55.dynamic.adsl.gvt.net.br ([177.132.233.55] helo=coco.lan)
-        by casper.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hH6N8-0000gI-FO; Thu, 18 Apr 2019 12:42:35 +0000
-Date:   Thu, 18 Apr 2019 09:42:23 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-fbdev@vger.kernel.org, linux-s390@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-watchdog@vger.kernel.org, xdp-newbies@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, bpf@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-pm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-scsi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        x86@kernel.org, dm-devel@redhat.com, target-devel@vger.kernel.org,
-        netdev@vger.kernel.org, kexec@lists.infradead.org,
-        linux-fpga@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        linux-security-module@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Avoiding merge conflicts while adding new docs - Was: Re: [PATCH
- 00/57] Convert files to ReST
-Message-ID: <20190418091526.00e074d1@coco.lan>
-In-Reply-To: <cover.1555382110.git.mchehab+samsung@kernel.org>
-References: <cover.1555382110.git.mchehab+samsung@kernel.org>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S2388495AbfDRP5R (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Apr 2019 11:57:17 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:36581 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731317AbfDRP5Q (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 18 Apr 2019 11:57:16 -0400
+Received: by mail-ed1-f67.google.com with SMTP id u57so2234272edm.3;
+        Thu, 18 Apr 2019 08:57:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mRIa7YtbcBQn0bTD/QeYRSxAmMEbW6gakCQU+eJmUrM=;
+        b=QipZTpMbL3qfg5Cvba0enefPaLwhFSwiZLz9v42+AD9CDIZl9C/78gdXAVlrqxyAfF
+         HW1MrLIVK6sGaqb1TjmElO4hijQlOBtuVePA2WuP4RYinOE3E1p7HrVMYPoj9viQkrnt
+         a4HWNsfWNzpiGF3qXx6KDeo9BMObMCaEVN+wT9QLm2kzvXp9qIcmao5GwHxbsj3QD4pk
+         w2DNkxwud99SEzF9or8FUdMn0uiWkf1HSUKY1yO9GmvihkFyhke9wTQ3R5Vmxyh8GoZe
+         RTna5jKuMkTgnGNGUO987xIUF8U32NXCheBHymyeaFIjY8KrFBypdGVcXfam2iMqyWqn
+         60tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=mRIa7YtbcBQn0bTD/QeYRSxAmMEbW6gakCQU+eJmUrM=;
+        b=jbjLQdIGzmowxNjNJl9D7GuEhQ6l5nNhoAr9QcrqtRyXiuc3GY4Os/7tctvgmReEHY
+         ot76EXm6XtdgOVVmwWW597DJiqRvTo0Nee8eRH4wmW2wMEgeQUSqcaTJb6D0ReK7TVrD
+         CtuL9qFYM/6GbPH0s/954cwytFXF0dh4xaXCZtaWuklTAx7+ujOTUC155vb6Ixn5mSa4
+         boYfgXeUu56HHwQA0StdYfif7KBJYOcY6JKX7NnNMviSBcPAw+DGAcx7212HH/3GIGz1
+         eAG682rNbcVtmWf89roSAvbIFaQt8jTVfP10RHxcv+SyDLWq9jbCXw+ZuA50p99cbYYH
+         dH+Q==
+X-Gm-Message-State: APjAAAXg+9nkYjt3k6tngfWtuDxL/GLajo3/j/PKi4XgxlKenYcwsT8j
+        T7Ch1s5vr/zEvPDa5XA159c=
+X-Google-Smtp-Source: APXvYqz07Be+E6TFm1SXIu3H1LWJLYQXDCwLaRvS1Q5PbQL1B58Y/8ze1eksh7yhe41YLViHkuQyAw==
+X-Received: by 2002:a50:e61a:: with SMTP id y26mr46513128edm.157.1555603033989;
+        Thu, 18 Apr 2019 08:57:13 -0700 (PDT)
+Received: from neptune.fritz.box ([178.19.216.175])
+        by smtp.gmail.com with ESMTPSA id 31sm591274edf.18.2019.04.18.08.57.12
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 18 Apr 2019 08:57:13 -0700 (PDT)
+From:   Alban Crequy <alban.crequy@gmail.com>
+X-Google-Original-From: Alban Crequy <alban@kinvolk.io>
+To:     john.fastabend@gmail.com, ast@kernel.org, daniel@iogearbox.net
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alban@kinvolk.io, iago@kinvolk.io
+Subject: [PATCH bpf-next v2 1/3] bpf: sock ops: add netns ino and dev in bpf context
+Date:   Thu, 18 Apr 2019 17:56:50 +0200
+Message-Id: <20190418155652.22181-1-alban@kinvolk.io>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Jon,
+From: Alban Crequy <alban@kinvolk.io>
 
-Em Mon, 15 Apr 2019 23:55:25 -0300
-Mauro Carvalho Chehab <mchehab+samsung@kernel.org> escreveu:
+sockops programs can now access the network namespace inode and device
+via (struct bpf_sock_ops)->netns_ino and ->netns_dev. This can be useful
+to apply different policies on different network namespaces.
 
-> I have a separate patch series with do the actual rename and
-> adjustment of references. I opted to submit this first, as it
-> sounds easier to merge this way, as each subsystem maintainer
-> can apply the conversion directly on their trees (or at docs
-> tree), avoiding merge conflects.
+In the unlikely case where network namespaces are not compiled in
+(CONFIG_NET_NS=n), the verifier will not allow access to ->netns_*.
 
-Based on the number of feedbacks we have about this, I'm
-considering to submit a second version of my conversion patch
-series that would be doing the rename together with each patch,
-adding the rst files to an index file.
+The generated BPF bytecode for netns_ino is loading the correct inode
+number at the time of execution.
 
-However, doing that would produce lots of warnings. We have
-already lots of those at linux-next:
+However, the generated BPF bytecode for netns_dev is loading an
+immediate value determined at BPF-load-time by looking at the initial
+network namespace. In practice, this works because all netns currently
+use the same virtual device. If this was to change, this code would need
+to be updated too.
 
-	checking consistency... 
+Signed-off-by: Alban Crequy <alban@kinvolk.io>
 
-	docs/Documentation/accelerators/ocxl.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/admin-guide/mm/numaperf.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/filesystems/ext4/allocators.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/filesystems/ext4/attributes.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/filesystems/ext4/bigalloc.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/filesystems/ext4/bitmaps.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/filesystems/ext4/blockgroup.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/filesystems/ext4/blocks.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/filesystems/ext4/checksums.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/filesystems/ext4/directory.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/filesystems/ext4/eainode.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/filesystems/ext4/group_descr.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/filesystems/ext4/ifork.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/filesystems/ext4/inlinedata.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/filesystems/ext4/inodes.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/filesystems/ext4/journal.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/filesystems/ext4/mmp.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/filesystems/ext4/special_inodes.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/filesystems/ext4/super.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/fmc/index.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/gpu/msm-crash-dump.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/interconnect/interconnect.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/laptops/lg-laptop.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/virtual/kvm/amd-memory-encryption.rst: WARNING: document isn't included in any toctree
-	docs/Documentation/virtual/kvm/vcpu-requests.rst: WARNING: document isn't included in any toctree
+---
 
-After thinking a little bit and doing some tests, I think a good solution
-would be to add ":orphan:" markup to the new .rst files that were not
-added yet into the main body (e. g. something like the enclosed example).
+Changes since v1:
+- add netns_dev (review from Alexei)
+---
+ include/uapi/linux/bpf.h |  2 ++
+ net/core/filter.c        | 70 ++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 72 insertions(+)
 
-That will make Sphinx suppress the:
-	"WARNING: document isn't included in any toctree"
-warning for the new files, while they're not included at the main indexes.
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index eaf2d3284248..f4f841dde42c 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -3213,6 +3213,8 @@ struct bpf_sock_ops {
+ 	__u32 sk_txhash;
+ 	__u64 bytes_received;
+ 	__u64 bytes_acked;
++	__u64 netns_dev;
++	__u64 netns_ino;
+ };
+ 
+ /* Definitions for bpf_sock_ops_cb_flags */
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 1833926a63fc..93e3429603d7 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -75,6 +75,8 @@
+ #include <net/seg6_local.h>
+ #include <net/lwtunnel.h>
+ #include <net/ipv6_stubs.h>
++#include <linux/kdev_t.h>
++#include <linux/proc_ns.h>
+ 
+ /**
+  *	sk_filter_trim_cap - run a packet through a socket filter
+@@ -6774,6 +6776,15 @@ static bool sock_ops_is_valid_access(int off, int size,
+ 		}
+ 	} else {
+ 		switch (off) {
++		case offsetof(struct bpf_sock_ops, netns_dev):
++		case offsetof(struct bpf_sock_ops, netns_ino):
++#ifdef CONFIG_NET_NS
++			if (size != sizeof(__u64))
++				return false;
++#else
++			return false;
++#endif
++			break;
+ 		case bpf_ctx_range_till(struct bpf_sock_ops, bytes_received,
+ 					bytes_acked):
+ 			if (size != sizeof(__u64))
+@@ -7660,6 +7671,11 @@ static u32 sock_addr_convert_ctx_access(enum bpf_access_type type,
+ 	return insn - insn_buf;
+ }
+ 
++static struct ns_common *sockops_netns_cb(void *private_data)
++{
++	return &init_net.ns;
++}
++
+ static u32 sock_ops_convert_ctx_access(enum bpf_access_type type,
+ 				       const struct bpf_insn *si,
+ 				       struct bpf_insn *insn_buf,
+@@ -7668,6 +7684,10 @@ static u32 sock_ops_convert_ctx_access(enum bpf_access_type type,
+ {
+ 	struct bpf_insn *insn = insn_buf;
+ 	int off;
++	struct inode *ns_inode;
++	struct path ns_path;
++	__u64 netns_dev;
++	void *res;
+ 
+ /* Helper macro for adding read access to tcp_sock or sock fields. */
+ #define SOCK_OPS_GET_FIELD(BPF_FIELD, OBJ_FIELD, OBJ)			      \
+@@ -7914,6 +7934,56 @@ static u32 sock_ops_convert_ctx_access(enum bpf_access_type type,
+ 		SOCK_OPS_GET_OR_SET_FIELD(sk_txhash, sk_txhash,
+ 					  struct sock, type);
+ 		break;
++
++	case offsetof(struct bpf_sock_ops, netns_dev):
++#ifdef CONFIG_NET_NS
++		/* We get the netns_dev at BPF-load-time and not at
++		 * BPF-exec-time. We assume that netns_dev is a constant.
++		 */
++		res = ns_get_path_cb(&ns_path, sockops_netns_cb, NULL);
++		if (IS_ERR(res)) {
++			netns_dev = 0;
++		} else {
++			ns_inode = ns_path.dentry->d_inode;
++			netns_dev = new_encode_dev(ns_inode->i_sb->s_dev);
++		}
++#else
++		netns_dev = 0;
++#endif
++		*insn++ = BPF_MOV64_IMM(si->dst_reg, netns_dev);
++		break;
++
++	case offsetof(struct bpf_sock_ops, netns_ino):
++#ifdef CONFIG_NET_NS
++		/* Loading: sk_ops->sk->__sk_common.skc_net.net->ns.inum
++		 * Type: (struct bpf_sock_ops_kern *)
++		 *       ->(struct sock *)
++		 *       ->(struct sock_common)
++		 *       .possible_net_t
++		 *       .(struct net *)
++		 *       ->(struct ns_common)
++		 *       .(unsigned int)
++		 */
++		BUILD_BUG_ON(offsetof(struct sock, __sk_common) != 0);
++		BUILD_BUG_ON(offsetof(possible_net_t, net) != 0);
++		*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(
++						struct bpf_sock_ops_kern, sk),
++				      si->dst_reg, si->src_reg,
++				      offsetof(struct bpf_sock_ops_kern, sk));
++		*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(
++						possible_net_t, net),
++				      si->dst_reg, si->dst_reg,
++				      offsetof(struct sock_common, skc_net));
++		*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(
++						struct ns_common, inum),
++				      si->dst_reg, si->dst_reg,
++				      offsetof(struct net, ns) +
++				      offsetof(struct ns_common, inum));
++#else
++		*insn++ = BPF_MOV64_IMM(si->dst_reg, 0);
++#endif
++		break;
++
+ 	}
+ 	return insn - insn_buf;
+ }
+-- 
+2.20.1
 
-This way, maintainers can do all the hard work of doing/applying the ReST
-file conversion/addition patch series on their own trees, and, once
-everything gets merged, submit a patch against the latest docs-next
-tree, removing the :orphan: tag and add them to the common index.rst
-files.
-
-That should largely avoid merging conflicts.
-
-For example, assuming that someone converts the stuff at
-Documentation/accounting and rename the text files there to
-RST (I'm actually doing that), he could add the enclosed change on
-the top of its index file:
-
-	diff --git a/Documentation/accounting/index.rst b/Documentation/accounting/index.rst
-	index e7dda5afa73f..e1f6284b5ff3 100644
-	--- a/Documentation/accounting/index.rst
-	+++ b/Documentation/accounting/index.rst
-	@@ -1,3 +1,5 @@
-	+:orphan:
-	+
-	 ==========
-	 Accounting
-	 ==========
-
-With would make Sphinx to ignore the subdir index file while
-reporting errors. It will still build the documentation, allowing
-the developer to test the changes.
-
-One of the advantages is that checking the orphaned docs is as
-easy as running:
-
-	$ git grep -l ":orphan:" Documentation/
-	...
-	Documentation/accounting/index.rst
-	...
-
-Making easy for people to check the orphaned files and send a fixup
-patch if something got orphaned after the merge window and send a
-fixes patches to be applied upstream.
-
-What do you think?
-
-Regards,
-Mauro
