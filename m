@@ -2,124 +2,319 @@ Return-Path: <SRS0=qXn4=SU=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A04DFC10F14
-	for <bpf@archiver.kernel.org>; Thu, 18 Apr 2019 23:47:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38334C10F14
+	for <bpf@archiver.kernel.org>; Thu, 18 Apr 2019 23:57:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6BDC0206B6
-	for <bpf@archiver.kernel.org>; Thu, 18 Apr 2019 23:47:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DD5C92083D
+	for <bpf@archiver.kernel.org>; Thu, 18 Apr 2019 23:57:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YYUCmsZ9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YPzpekff"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727083AbfDRXr4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Apr 2019 19:47:56 -0400
-Received: from mail-pf1-f201.google.com ([209.85.210.201]:45994 "EHLO
-        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727075AbfDRXrz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 18 Apr 2019 19:47:55 -0400
-Received: by mail-pf1-f201.google.com with SMTP id u78so2321440pfa.12
-        for <bpf@vger.kernel.org>; Thu, 18 Apr 2019 16:47:55 -0700 (PDT)
+        id S1725975AbfDRX5x (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Apr 2019 19:57:53 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:33644 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725894AbfDRX5x (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 18 Apr 2019 19:57:53 -0400
+Received: by mail-pl1-f193.google.com with SMTP id t16so1871982plo.0;
+        Thu, 18 Apr 2019 16:57:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=q5zeOZoLuoH2wTeHxii/R19XNZLtjB7l+Dxusrt2mNs=;
-        b=YYUCmsZ9fWhHSfLimqKWx24mlwEFWVBokrAlbnXb7/61q11wScxIhjQZAc1X7R9nSJ
-         dv7u2I8LRF8gk7jF67yNsHaSBJ50Ar+uirMGHrUSQnz9iQU0N0nYTGIqEehT5ht8qvyt
-         Nw6BMOfy0OWDs2jDCzk2olwStG+JMxuHEZEKYYiw2HQjFZqk6RJEOBjCuM6YuCyX7Lrz
-         OeqLyooM7akeEiCfxv3r7VfL8wqokaavDRqwf+cgk8Qs3dUpXWmbzwhg4UmzF+CL7IZv
-         fizyAGbXCBo4yKDtjl5pHXTQFimaS1SkxFP2y4RdecexDpinvg4H3OnsQn1DONrjToOP
-         d5JA==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=C81N3SrKdMzhaIwnU/sT9Ye4tBcGdex3mPvJ6ps0R64=;
+        b=YPzpekffO3iXx6Ix0UXtMnPnZaPGdZfoHFh+ui9S88eZI0pEMdPCXzFyZAfUWYELZj
+         b1ygz9dHvEH0E+GpWgRmo3rrh1dR8zgSRSECgutasi5huWlySUwoJzB9y1zq6nbV8PaQ
+         pGNZsYVUJJrO5xCrECuQL+v26lZHytscjMsFub08W5qjMuLPs7j3WYRDvOMOIid3Roby
+         mRVa5mqgyHjVdKQ2BMj62KBHzBQXEofv+fPUTA+KVEMsnfvxn8tRE+YaJnVYQjCgJy7g
+         lyiv3bCjcCwj1utHaEkJUPCnnPcsG50mPViBfAO+r0JgLD1TgUX4gEYjl0C61I+H1yNk
+         0P3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=q5zeOZoLuoH2wTeHxii/R19XNZLtjB7l+Dxusrt2mNs=;
-        b=DIqYvaBvODVZN1RAJP3yJdYaCcLVo/IoEI4SkwRnqcILnMmBtPVBMMnwhV3V/0dcqC
-         B72kUYKtDPcc5cUkGnzqAsquba6jhwSF3lUeykZUq5nYP1TUaBkeuefv8aMPu7/RiA9F
-         srt1RCAsuyA+Wq/zTEMIDhc+gxcVcUiS/4tsCnqsC3LOiM3Ztn87W5Ss8ac3TxKXSJ6l
-         Uk0IQ20bPj0Enu9Z30pI5RZdcUGfM2vJ4pDbAsdJ9DQPgSKLuyQVqYUrZN3L8G3Dw5vF
-         7vXjy7yTHrkW9BVr9a1TDs0ue1ERLUnJSRyq0XpQ21UoLoOQIvYt18AtuOpa3A7a9gCR
-         kpdg==
-X-Gm-Message-State: APjAAAVZKTJUqjYI8YPhdMs3xPGBbVqWGTMZK0+NpwmrGXLsUoDvZpP/
-        eNqqxEyaCV1nKmySqfiOSgeNFF4=
-X-Google-Smtp-Source: APXvYqyj57c7S8mWL24e0KVT/M/pfl+vrEx8kZirBsL0Gfp3jfHJ3fzTmlCvq4UHN4x+rFRU6ePBlEc=
-X-Received: by 2002:a63:8848:: with SMTP id l69mr734089pgd.137.1555631274703;
- Thu, 18 Apr 2019 16:47:54 -0700 (PDT)
-Date:   Thu, 18 Apr 2019 16:47:52 -0700
-Message-Id: <20190418234752.214364-1-sdf@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.21.0.392.gf8f6787159e-goog
-Subject: [PATCH bpf-next] bpf: move BPF_PROG_TYPE_FLOW_DISSECTOR documentation
- to a new common place
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        Stanislav Fomichev <sdf@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=C81N3SrKdMzhaIwnU/sT9Ye4tBcGdex3mPvJ6ps0R64=;
+        b=mToNGqgwAllvJCCm85dOj1WUPpFc9C1tSA52uaFMv73LO0YZHFx0NS27QcXAotZuGu
+         ky/kWDHamJeIz4/b7KXtvd5lCAhxi/2xNoMQzCKcGlUxYMYFEWDCmjOP/ihBS/KpMJgA
+         e0RnYZoM8dxcIEDtmtw8swir228B3A52ht8a1r46VrggXBScBUD6JEi8e4HsDGip/IjP
+         dOncj3n4Vb3gkv97vCErp3jhPGQV73+NhKTTzX+xb27knQaYaJl4alOGpucfHlZlxE2M
+         egsnP0ev1RpQvORklSMwXzsnO7eHrBrnHHO/Ts2rJ83B7+NzFixHyBQFOzO0hMOqShaB
+         IL0Q==
+X-Gm-Message-State: APjAAAUlzZAKZoFxCHsF3zZzJzrAYAgcQ7kEKhtU2jc/KX5WkSaASCVC
+        LkejsWDTAHXFcjv09HhH4b0=
+X-Google-Smtp-Source: APXvYqyZhpQckJM1rXmYifDdMQTP8WRA2/jm0BKiEIYlprT6Wkt6/McwQZlieL8t563bkrUeSyPa8w==
+X-Received: by 2002:a17:902:7d91:: with SMTP id a17mr493821plm.338.1555631872145;
+        Thu, 18 Apr 2019 16:57:52 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:200::1:99e3])
+        by smtp.gmail.com with ESMTPSA id p9sm4842436pfi.186.2019.04.18.16.57.50
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 18 Apr 2019 16:57:51 -0700 (PDT)
+Date:   Thu, 18 Apr 2019 16:57:50 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Jiong Wang <jiong.wang@netronome.com>
+Cc:     daniel@iogearbox.net, bpf@vger.kernel.org, netdev@vger.kernel.org,
+        oss-drivers@netronome.com
+Subject: Re: [PATCH v4 bpf-next 02/15] bpf: mark lo32 writes that should be
+ zero extended into hi32
+Message-ID: <20190418235747.jv4yocuf6fgwahli@ast-mbp.dhcp.thefacebook.com>
+References: <1555349185-12508-1-git-send-email-jiong.wang@netronome.com>
+ <1555349185-12508-3-git-send-email-jiong.wang@netronome.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1555349185-12508-3-git-send-email-jiong.wang@netronome.com>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In commit da7031491786 ("bpf: Document BPF_PROG_TYPE_CGROUP_SYSCTL")
-Andrey proposes to put per-prog type docs under Documentation/bpf/
+On Mon, Apr 15, 2019 at 06:26:12PM +0100, Jiong Wang wrote:
+> eBPF ISA specification requires high 32-bit cleared when low 32-bit
+> sub-register is written. This applies to destination register of ALU32 etc.
+> JIT back-ends must guarantee this semantic when doing code-gen.
+> 
+> x86-64 and arm64 ISA has the same semantic, so the corresponding JIT
+> back-end doesn't need to do extra work. However, 32-bit arches (arm, nfp
+> etc.) and some other 64-bit arches (powerpc, sparc etc), need explicit zero
+> extension sequence to meet such semantic.
+> 
+> This is important, because for code the following:
+> 
+>   u64_value = (u64) u32_value
+>   ... other uses of u64_value
+> 
+> compiler could exploit the semantic described above and save those zero
+> extensions for extending u32_value to u64_value. Hardware, runtime, or BPF
+> JIT back-ends, are responsible for guaranteeing this. Some benchmarks show
+> ~40% sub-register writes out of total insns, meaning ~40% extra code-gen (
+> could go up to more for some arches which requires two shifts for zero
+> extension) because JIT back-end needs to do extra code-gen for all such
+> instructions.
+> 
+> However this is not always necessary in case u32_value is never cast into
+> a u64, which is quite normal in real life program. So, it would be really
+> good if we could identify those places where such type cast happened, and
+> only do zero extensions for them, not for the others. This could save a lot
+> of BPF code-gen.
+> 
+> Algo:
+>  - Record indices of instructions that do sub-register def (write). And
+>    these indices need to stay with reg state so path pruning and bpf
+>    to bpf function call could be handled properly.
+> 
+>    These indices are kept up to date while doing insn walk.
+> 
+>  - A full register read on an active sub-register def marks the def insn as
+>    needing zero extension on dst register.
+> 
+>  - A new sub-register write overrides the old one.
+> 
+>    A new full register write makes the register free of zero extension on
+>    dst register.
+> 
+>  - When propagating read64 during path pruning, also marks def insns whose
+>    defs are hanging active sub-register.
+> 
+> Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+> Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
+> ---
+>  include/linux/bpf_verifier.h |  6 ++++++
+>  kernel/bpf/verifier.c        | 45 ++++++++++++++++++++++++++++++++++++++++----
+>  2 files changed, 47 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index fba0ebb..c1923a5 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -133,6 +133,11 @@ struct bpf_reg_state {
+>  	 * pointing to bpf_func_state.
+>  	 */
+>  	u32 frameno;
+> +	/* Tracks subreg definition. The stored value is the insn_idx of the
+> +	 * writing insn. This is safe because subreg_def is used before any insn
+> +	 * patching which only happens after main verification finished.
+> +	 */
+> +	s32 subreg_def;
 
-Let's move flow dissector documentation there as well.
+could you use u32 instead ?
+DEF_NOT_SUBREG==0 and valid subreg_def = insn_idx + 1 ?
 
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- Documentation/bpf/index.rst                                 | 1 +
- .../bpf_flow_dissector.rst => bpf/prog_flow_dissector.rst}  | 6 +++---
- Documentation/networking/index.rst                          | 1 -
- 3 files changed, 4 insertions(+), 4 deletions(-)
- rename Documentation/{networking/bpf_flow_dissector.rst => bpf/prog_flow_dissector.rst} (98%)
+Then if we miss regs[i].subreg_def = DEF_NOT_SUBREG; somewhere
+it will still be conservative.
 
-diff --git a/Documentation/bpf/index.rst b/Documentation/bpf/index.rst
-index dadcaa9a9f5f..d3fe4cac0c90 100644
---- a/Documentation/bpf/index.rst
-+++ b/Documentation/bpf/index.rst
-@@ -43,6 +43,7 @@ Program types
-    :maxdepth: 1
- 
-    prog_cgroup_sysctl
-+   prog_flow_dissector
- 
- 
- .. Links:
-diff --git a/Documentation/networking/bpf_flow_dissector.rst b/Documentation/bpf/prog_flow_dissector.rst
-similarity index 98%
-rename from Documentation/networking/bpf_flow_dissector.rst
-rename to Documentation/bpf/prog_flow_dissector.rst
-index b375ae2ec2c4..ed343abe541e 100644
---- a/Documentation/networking/bpf_flow_dissector.rst
-+++ b/Documentation/bpf/prog_flow_dissector.rst
-@@ -1,8 +1,8 @@
- .. SPDX-License-Identifier: GPL-2.0
- 
--==================
--BPF Flow Dissector
--==================
-+============================
-+BPF_PROG_TYPE_FLOW_DISSECTOR
-+============================
- 
- Overview
- ========
-diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
-index 984e68f9e026..5449149be496 100644
---- a/Documentation/networking/index.rst
-+++ b/Documentation/networking/index.rst
-@@ -9,7 +9,6 @@ Linux Networking Documentation
-    netdev-FAQ
-    af_xdp
-    batman-adv
--   bpf_flow_dissector
-    can
-    can_ucan_protocol
-    device_drivers/freescale/dpaa2/index
--- 
-2.21.0.392.gf8f6787159e-goog
+>  	enum bpf_reg_liveness live;
+>  };
+>  
+> @@ -234,6 +239,7 @@ struct bpf_insn_aux_data {
+>  	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
+>  	int sanitize_stack_off; /* stack slot to be cleared */
+>  	bool seen; /* this insn was processed by the verifier */
+> +	bool zext_dst; /* this insn zero extend dst reg */
+>  	u8 alu_state; /* used in combination with alu_limit */
+>  	unsigned int orig_idx; /* original instruction index */
+>  };
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 5784b279..d5cc167 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -980,6 +980,7 @@ static void mark_reg_not_init(struct bpf_verifier_env *env,
+>  	__mark_reg_not_init(regs + regno);
+>  }
+>  
+> +#define DEF_NOT_SUBREG	(-1)
+>  static void init_reg_state(struct bpf_verifier_env *env,
+>  			   struct bpf_func_state *state)
+>  {
+> @@ -990,6 +991,7 @@ static void init_reg_state(struct bpf_verifier_env *env,
+>  		mark_reg_not_init(env, regs, i);
+>  		regs[i].live = REG_LIVE_NONE;
+>  		regs[i].parent = NULL;
+> +		regs[i].subreg_def = DEF_NOT_SUBREG;
+>  	}
+>  
+>  	/* frame pointer */
+> @@ -1259,6 +1261,19 @@ static bool is_reg64(struct bpf_insn *insn, u32 regno,
+>  	return true;
+>  }
+>  
+> +static void mark_insn_zext(struct bpf_verifier_env *env,
+> +			   struct bpf_reg_state *reg)
+> +{
+> +	s32 def_idx = reg->subreg_def;
+> +
+> +	if (def_idx == DEF_NOT_SUBREG)
+> +		return;
+> +
+> +	env->insn_aux_data[def_idx].zext_dst = true;
+> +	/* The dst will be zero extended, so won't be sub-register anymore. */
+> +	reg->subreg_def = DEF_NOT_SUBREG;
+> +}
+> +
+>  static int check_reg_arg(struct bpf_verifier_env *env, u32 regno,
+>  			 enum reg_arg_type t)
+>  {
+> @@ -1285,6 +1300,9 @@ static int check_reg_arg(struct bpf_verifier_env *env, u32 regno,
+>  		if (regno == BPF_REG_FP)
+>  			return 0;
+>  
+> +		if (rw64)
+> +			mark_insn_zext(env, reg);
+> +
+>  		return mark_reg_read(env, reg, reg->parent,
+>  				     rw64 ? REG_LIVE_READ64 : REG_LIVE_READ32);
+>  	} else {
+> @@ -1294,6 +1312,7 @@ static int check_reg_arg(struct bpf_verifier_env *env, u32 regno,
+>  			return -EACCES;
+>  		}
+>  		reg->live |= REG_LIVE_WRITTEN;
+> +		reg->subreg_def = rw64 ? DEF_NOT_SUBREG : env->insn_idx;
+>  		if (t == DST_OP)
+>  			mark_reg_unknown(env, regs, regno);
+>  	}
+> @@ -2176,6 +2195,12 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
+>  						    value_regno);
+>  				if (reg_type_may_be_null(reg_type))
+>  					regs[value_regno].id = ++env->id_gen;
+> +				/* A load of ctx field could have different
+> +				 * actual load size with the one encoded in the
+> +				 * insn. When the dst is PTR, it is for sure not
+> +				 * a sub-register.
+> +				 */
+> +				regs[value_regno].subreg_def = DEF_NOT_SUBREG;
+>  			}
+>  			regs[value_regno].type = reg_type;
+>  		}
+> @@ -3376,6 +3401,9 @@ static int check_helper_call(struct bpf_verifier_env *env, int func_id, int insn
+>  		check_reg_arg(env, caller_saved[i], DST_OP_NO_MARK);
+>  	}
+>  
+> +	/* helper call must return full 64-bit R0. */
+> +	regs[BPF_REG_0].subreg_def = DEF_NOT_SUBREG;
+> +
+>  	/* update return register (already marked as written above) */
+>  	if (fn->ret_type == RET_INTEGER) {
+>  		/* sets type to SCALAR_VALUE */
+> @@ -4307,6 +4335,7 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
+>  				 */
+>  				*dst_reg = *src_reg;
+>  				dst_reg->live |= REG_LIVE_WRITTEN;
+> +				dst_reg->subreg_def = DEF_NOT_SUBREG;
+>  			} else {
+>  				/* R1 = (u32) R2 */
+>  				if (is_pointer_value(env, insn->src_reg)) {
+> @@ -4317,6 +4346,7 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
+>  				} else if (src_reg->type == SCALAR_VALUE) {
+>  					*dst_reg = *src_reg;
+>  					dst_reg->live |= REG_LIVE_WRITTEN;
+> +					dst_reg->subreg_def = env->insn_idx;
+>  				} else {
+>  					mark_reg_unknown(env, regs,
+>  							 insn->dst_reg);
+> @@ -5380,6 +5410,8 @@ static int check_ld_abs(struct bpf_verifier_env *env, struct bpf_insn *insn)
+>  	 * Already marked as written above.
+>  	 */
+>  	mark_reg_unknown(env, regs, BPF_REG_0);
+> +	/* ld_abs load up to 32-bit skb data. */
+> +	regs[BPF_REG_0].subreg_def = env->insn_idx;
+>  	return 0;
+>  }
+>  
+> @@ -6319,6 +6351,9 @@ static bool states_equal(struct bpf_verifier_env *env,
+>  	return true;
+>  }
+>  
+> +/* Return 0 if no propagation happened. Return negative error code if error
+> + * happened. Otherwise, return the propagated bits.
+> + */
+>  static int propagate_liveness_reg(struct bpf_verifier_env *env,
+>  				  struct bpf_reg_state *reg,
+>  				  struct bpf_reg_state *parent_reg)
+> @@ -6337,7 +6372,7 @@ static int propagate_liveness_reg(struct bpf_verifier_env *env,
+>  	if (err)
+>  		return err;
+>  
+> -	return 0;
+> +	return bits_prop;
+>  }
+>  
+>  /* A write screens off any subsequent reads; but write marks come from the
+> @@ -6371,8 +6406,10 @@ static int propagate_liveness(struct bpf_verifier_env *env,
+>  		for (i = frame < vstate->curframe ? BPF_REG_6 : 0; i < BPF_REG_FP; i++) {
+>  			err = propagate_liveness_reg(env, &state_reg[i],
+>  						     &parent_reg[i]);
+> -			if (err)
+> +			if (err < 0)
+>  				return err;
+> +			if (err & REG_LIVE_READ64)
+> +				mark_insn_zext(env, &parent_reg[i]);
+
+I'm not quite following why it's parent_reg here instead of state_reg.
+
+If I understood the code the liveness can have all three states:
+REG_LIVE_READ64 | REG_LIVE_READ32
+REG_LIVE_READ64
+REG_LIVE_READ32
+whereas 2 is a superset of 3, so 1 should never be seen.
+
+If so, why in propagate_liveness we have this dance:
++       u8 parent_bits = parent_reg->live & REG_LIVE_READ;
++       u8 bits = reg->live & REG_LIVE_READ;
++       u8 bits_diff = parent_bits ^ bits;
++       u8 bits_prop = bits_diff & bits;
+        int err;
+
+-       if (parent_reg->live & REG_LIVE_READ || !(reg->live & REG_LIVE_READ))
++       /* No diff bit comes from "reg". */
++       if (!bits_prop)
+
+I'm struggling to see through all 3 combinations in respect to above diff.
+Shouldn't propagation of REG_LIVE_READ64 remove REG_LIVE_READ32 bit
+and clear subreg_def during mark_reg_read() instead of
+once in propagate_liveness() ?
 
