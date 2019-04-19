@@ -2,102 +2,86 @@ Return-Path: <SRS0=ErZJ=SV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20F02C282DF
-	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 19:32:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B7E8C282DF
+	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 19:35:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DDF6321479
-	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 19:32:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 57FEA217D7
+	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 19:35:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jHc/irp9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tLmNmNct"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727711AbfDSTcM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Apr 2019 15:32:12 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:41111 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727684AbfDSTcM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Apr 2019 15:32:12 -0400
-Received: by mail-pf1-f193.google.com with SMTP id 188so2935574pfd.8;
-        Fri, 19 Apr 2019 12:32:11 -0700 (PDT)
+        id S1727933AbfDSTfH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Apr 2019 15:35:07 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:34824 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726248AbfDSTfH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Apr 2019 15:35:07 -0400
+Received: by mail-qt1-f194.google.com with SMTP id h39so6455430qte.2;
+        Fri, 19 Apr 2019 12:35:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=M6tbljeHE4eiEGxW9I1MhSY8pUa+BRkr5mo/j+3PYxk=;
-        b=jHc/irp9JxFZk559LxkrP0p83XGEHQWuM9fDCIRTmu+epE6/JsZpKRQTHd8FIzuJS3
-         HaJhf1ZYK/SS6J9fHWSCxXGKtCnOwkWTtB9XFd8QuKQFC5IuS6+4FcjwMk5LcksnyQGF
-         Ab8e6OalQJc7mO3jNOQdP/ttbjyUeDMyd5CIEgqMAYGNGSvuiXFLNAxRYfGoEfmbZwJb
-         DtMuYgBkiSG+SW66bbG/u+Hw4m0nlWS/ZwGEmP7QCl7PHz9gVyzc/Pey1GgB0vfK6Wts
-         yOnTXwv1CW/oFatajX8oK4a0KPbQC4SozzA2plL72YErLyT85cITtbk7aw8/mSF2lW8Y
-         bkEg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jg4w/KUWhZqoxw2fU+Vk09jXeyyeAB0h73RKIPrePvg=;
+        b=tLmNmNctw/ylSrvlBy74HcCotwi97QMG2fhzYzVvvRYRIk++4e+vAncEwytKxGY02q
+         PMj3n6ytYGnAeh/nD4r7go5bq0PTvY9ZY13AdzrZuDCvdIS9VfYJzEOZKXeZnQZVYOFx
+         xKhNzH1gDt4FWIq9fE/QQJvaWI7Q2Kq62txsF2KFFpvwsBJV8phpfsyF4bXI0d6J752g
+         fRx888Mv/QSorJeXj22XZcEXdAh91Z2m5Q6WVcABN4Y+FzLtv3IdOvf0CfSrH4w0b5ZT
+         IwX22TeDX9uZBDkQE9K3qomvnrL4n+XoDK3cbkFQcQlRfETx0z1zr1yM4ctys1Kwb3Xp
+         CjOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=M6tbljeHE4eiEGxW9I1MhSY8pUa+BRkr5mo/j+3PYxk=;
-        b=ks3bFpSiRjWOW19kPbT/62VaRghZPPa7duEB5qEzcgYsm+lnNRXWGh/2DlPcxlkf+I
-         ar/us3klcP8wxWidv0geKbOgablpModEPWc+qlshfk0UeebscL7pQZRQy2BBWCSc/15p
-         4+kXb2zWjLupgyPzf6MahZ+i/pTfA6I24tWuo1z78cq/XuXc4C8YpVp334BPH5ISkqMP
-         urqqgItRfDs3aYCKaR7ksy5Uk4zRnHF1QLsbFvcLUHBD5iaH9XV65lzRoEUNM30+4vH/
-         AfF3CNMcfxcAgBe/FHRo4/gr0IWnYl2ntbvT+H3HhZWaIHBb3d7sOIryLsx3hDI+vS2R
-         DXpw==
-X-Gm-Message-State: APjAAAUwQE0XO9hSHAb6Tb443QiB0AqCfTSPnAjRw1nLDYwhBIsZ7Iv8
-        N9RLDapcINbjnEyCsVh/PBs=
-X-Google-Smtp-Source: APXvYqydBoxioG2JhDvwH/6m3FJXCbSoIUmnB1Gby7/TcXSFC7brkJBU750O5rbUUNrtBRRXQ7hXJA==
-X-Received: by 2002:a63:6e09:: with SMTP id j9mr5575787pgc.416.1555702331437;
-        Fri, 19 Apr 2019 12:32:11 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:200::6f64])
-        by smtp.gmail.com with ESMTPSA id p66sm13027340pfb.4.2019.04.19.12.32.10
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 19 Apr 2019 12:32:10 -0700 (PDT)
-Date:   Fri, 19 Apr 2019 12:32:08 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     robert.mccabe@rockwellcollins.com
-Cc:     netdev@vger.kernel.org, robertjmccabe@gmail.com,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next] libbpf: fix BPF_LOG_BUF_SIZE off-by-one error
-Message-ID: <20190419193206.gtu4ubv7aiu3xmge@ast-mbp.dhcp.thefacebook.com>
-References: <20190419164745.3122-1-robert.mccabe@rockwellcollins.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jg4w/KUWhZqoxw2fU+Vk09jXeyyeAB0h73RKIPrePvg=;
+        b=kcr5nN3F0CK5U23yqE2jydr6DOFJjNeWKbH6soISjZtEoCeUCP1MoFQbNPyzoFKM0o
+         kZa1+uKLMlOjLJdrTzu5m/EVn1GXF6f9qpOOCkrPhdQOQh/xtdHU+mCaj3swO9jEZm11
+         zqjLU26GarKd2/ie7F8jVDIFf6b4y8NTfYAAzO8SJ+7cPY5cYlF1jpwVoa2KYtIA1mXs
+         PbBXSVpRva0Yr2FblItmZDBZETL60On6VS3DxJ36sLrti7MPThVQWUUcL5/PTMh/eH+F
+         pFzsQ9uJBiW7CdtyxB8uvjAYmSF8pQlKgvRTvBttaSfN5CvgJ8eoOQbKSiAkxV5Hp4dC
+         GtFA==
+X-Gm-Message-State: APjAAAUOfQNWq+Uw5ZdVwbbt9+NP5w6gCQ1lotmBDiZX1FUuSrZaC6yS
+        LpoAtXwXZ53QYJSl7S95gdkPi8OpmGaixSYgb5Y=
+X-Google-Smtp-Source: APXvYqy2klhP0XeuCelMWASgVU/VLYQLQpU8+yV68Hzoztz7usd5dq7QnuF3BqSQ/VZyfdbCE1ga+TJmDNUG9GCJ2Es=
+X-Received: by 2002:a0c:a9d7:: with SMTP id c23mr4747911qvb.11.1555702506093;
+ Fri, 19 Apr 2019 12:35:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190419164745.3122-1-robert.mccabe@rockwellcollins.com>
-User-Agent: NeoMutt/20180223
+References: <20190419144455.853134-1-ast@kernel.org>
+In-Reply-To: <20190419144455.853134-1-ast@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 19 Apr 2019 12:34:54 -0700
+Message-ID: <CAEf4BzZ7W+6v=hqcO=40BXgT0BYd6haVeqPU1HZTdP8srE4tMg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/2] bpf: parallel verification
+To:     Alexei Starovoitov <ast@kernel.org>
+Cc:     davem@davemloft.net, Daniel Borkmann <daniel@iogearbox.net>,
+        Networking <netdev@vger.kernel.org>, bpf@vger.kernel.org,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Apr 19, 2019 at 11:47:45AM -0500, robert.mccabe@rockwellcollins.com wrote:
-> From: "McCabe, Robert J" <Robert.McCabe@rockwellcollins.com>
-> 
-> The BPF_PROG_LOAD condition for kernel version <= 5.1 is
-> 
->    log->len_total > UINT_MAX >> 8 /* (16 * 1024 * 1024) - 1 */
-> 
-> Signed-off-by: rjmccabe3701 <robert.mccabe@rockwellcollins.com>
-> ---
->  tools/lib/bpf/bpf.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-> index bc30783d1403..62d67caa7aea 100644
-> --- a/tools/lib/bpf/bpf.h
-> +++ b/tools/lib/bpf/bpf.h
-> @@ -92,7 +92,7 @@ struct bpf_load_program_attr {
->  #define MAPS_RELAX_COMPAT	0x01
-> 
->  /* Recommend log buffer size */
-> -#define BPF_LOG_BUF_SIZE (16 * 1024 * 1024) /* verifier maximum in kernels <= 5.1 */
-> +#define BPF_LOG_BUF_SIZE ((16 * 1024 * 1024) - 1) /* verifier maximum in kernels <= 5.1 */
+On Fri, Apr 19, 2019 at 11:24 AM Alexei Starovoitov <ast@kernel.org> wrote:
+>
+> Allow the bpf verifier to run in parallel for root.
+>
+> Alexei Starovoitov (2):
+>   bpf: remove global variables
+>   bpf: drop bpf_verifier_lock
+>
+>  include/linux/bpf_verifier.h |  5 +++++
+>  kernel/bpf/verifier.c        | 33 ++++++++++++++++++---------------
+>  2 files changed, 23 insertions(+), 15 deletions(-)
+>
+> --
+> 2.20.0
+>
+lgtm, for the set:
 
-thanks. good catch.
-please replace with (UINT32_MAX >> 8)
-
-sending one patch was enough. no need to spam 5 times.
-
+Acked-by: Andrii Nakryiko <andriin@fb.com>
