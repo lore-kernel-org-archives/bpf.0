@@ -2,100 +2,105 @@ Return-Path: <SRS0=ErZJ=SV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FBD6C282E0
-	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 21:16:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66DFFC282E0
+	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 21:33:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 38E1D208C0
-	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 21:16:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 311AF21736
+	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 21:33:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda-com.20150623.gappssmtp.com header.i=@toxicpanda-com.20150623.gappssmtp.com header.b="RL68ayPa"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="DdepZrJp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727305AbfDSVQc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Apr 2019 17:16:32 -0400
-Received: from mail-yw1-f66.google.com ([209.85.161.66]:34782 "EHLO
-        mail-yw1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726174AbfDSVQb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Apr 2019 17:16:31 -0400
-Received: by mail-yw1-f66.google.com with SMTP id u14so480603ywe.1
-        for <bpf@vger.kernel.org>; Fri, 19 Apr 2019 14:16:31 -0700 (PDT)
+        id S1727709AbfDSVdQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Apr 2019 17:33:16 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:34943 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727691AbfDSVdP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Apr 2019 17:33:15 -0400
+Received: by mail-qt1-f196.google.com with SMTP id h39so6697593qte.2
+        for <bpf@vger.kernel.org>; Fri, 19 Apr 2019 14:33:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=hvjN0788XGTPoZtwwgzsU9oW2wWbr/UmTq8LI6v2CVA=;
-        b=RL68ayPa2YsbLU6MnLBfcRWRyySgigQQ+2wKw/aeS98Ca0eStyJU+b8CemMx+WDxGm
-         CUHW3bDAJJSiXr8VXDM3Y1HoDgewiZyRqV5bHiTo1KHLnqp0r7fH/coso9hehnjNpc/V
-         V8s7DpbjJl8cc4rs66TSQBja/zB11lC4Ia7l1DIgqkOqUQ5pRH6zKq4hKdY0GtpBvcQ1
-         RY/6xBaG9ecHD/lxGaXY7s7zrL0s8sev9/zoQUyBG0z2VlNbtw8db8DiJkTj4Y5excI/
-         4Yt8jML3G05kgrVtmPS7rwoFnOS0t4YyQDztF2grRD94zk88aKF43PeGol9JDMAYq1IQ
-         SmVw==
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=ZpQBvk7zCNUFbvz2C+GE7Q0Mns/KASImiLm7Gow9pps=;
+        b=DdepZrJpfPvyPfKdOKa2vGSmqcIIS/2U7nQC7r150wf6w7p0xaYqIRQH7ix9Xz+KHo
+         wyXgARKb79bD7uQrj9Sw5AeKUAgmYoN43CnYmINd0v8nLTzux925StP5AAdb2LBkoJ9+
+         fjuAvmOvSSYKM2lQtUNFl4Xkgv0QLWEle7BMz/9LlKoHTYy8e7Bo9A3EO5JrZM59A9GT
+         /VKIdyydtjPZjFOK8TLi0PQvhivVp9Za8x92g18X5uC90uMixHOwYzXgVzH25zSYbHlM
+         fQxetJ3WYSNs5R5iQ6pSxtd5BWuQ/5jahRq/cSGzfke8rGLGg5uv5A0WMEi3G5yj+Ooz
+         5Gsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hvjN0788XGTPoZtwwgzsU9oW2wWbr/UmTq8LI6v2CVA=;
-        b=mOylreocWAP7d+zIdaooKWHw5fuRzhEJp5Gxx4aUAunAEayIJrJM0316t2YE+0o1hg
-         YnJrqnS1FYqTBJTcUgCh5eWF5SznW3QiquQpfP2r88ouRIcEkC9hAO6cfPPueV8ViZXx
-         gTGEphaOGOa7OMBHoY7RKvexhjMxn2PivOyOx7EgGRwzYZ55U93EjBNQjeIJSX08fz3s
-         6y5gGaPHJgKXN+ahug/sRLF4K8+AtGwJCXAGThgaJDrRO9E8+HPYlyHhU9CjD9W/e3lM
-         2RE8y7xQUWHI2Jkn8Be3HXgELkQw+jwscN97M7WmS5CL3oBJtImMTTU/P9PrR+Vvcor7
-         dUcQ==
-X-Gm-Message-State: APjAAAWunWld9HFc8ojzUBbRKcy8JlO0uq6jRVLyvpufJhvIuNxc2Sdw
-        zjoxa0Z7RIHRViyAcNrWHYrjFQ==
-X-Google-Smtp-Source: APXvYqz710yg1aQnyb5hmsYcYpihRMyNYyWsjmr/3Dh9dhywgaW2sTDOHiGcj+12FPtouBkVUNS7wQ==
-X-Received: by 2002:a81:1b53:: with SMTP id b80mr4745472ywb.443.1555708590972;
-        Fri, 19 Apr 2019 14:16:30 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:180::1c6c])
-        by smtp.gmail.com with ESMTPSA id i206sm2138455ywi.99.2019.04.19.14.16.30
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 19 Apr 2019 14:16:30 -0700 (PDT)
-Date:   Fri, 19 Apr 2019 17:16:29 -0400
-From:   Josef Bacik <josef@toxicpanda.com>
-To:     Matt Mullins <mmullins@fb.com>
-Cc:     hall@fb.com, ast@kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        linux-block@vger.kernel.org, nbd@other.debian.org
-Subject: Re: [PATCH bpf-next v3 3/5] nbd: add tracepoints for send/receive
- timing
-Message-ID: <20190419211628.zzn42bfpqelfq52p@macbook-pro-91.dhcp.thefacebook.com>
-References: <20190419210409.5021-1-mmullins@fb.com>
- <20190419210409.5021-4-mmullins@fb.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=ZpQBvk7zCNUFbvz2C+GE7Q0Mns/KASImiLm7Gow9pps=;
+        b=gm2d1DU6zBziiWkoT0IJRpTi61KJHmycAoUzSj8x40FzohWVHQbZqqBZXa779jG8Jo
+         FRu7XxKSA87Y5Fj8U6AulHAZu1yL6vFKYcqhf5OYbkcMhXU1dXawnLbhmBEhnzsduJxz
+         EJxm8a49YFZv0230HhAK3jERMlDeY4SMWgvergmMpcX5YBIGRfhTlKdrVlmud6KAkPeu
+         p2R5xzYNVv1+g9TfmOawzxpAdtV2dTeVuXj6qbVyR+29u7J/U7PJMT0BKqHmBzBQRZuS
+         qlCcXXb7NxDfrCE5hmrkOYZYYdULb1V+wVQV7Axs2gmnNXKwPapNZg5OaOfhM+f4SDKx
+         GAPg==
+X-Gm-Message-State: APjAAAUPSWTpUYsBUIpxl2cpeqet+OObNg2XDheHcuhyQFFXhZrPTnF9
+        TSUYdFmwX6RZ32CZlgYGngRyymQal7A=
+X-Google-Smtp-Source: APXvYqyEFKHwim6CfT6O8iP/RmjEjdj0bjbM8IV0oHS8V3KgWWY0mvJqih5pe+cJ4PD1Z3DYtU2oBA==
+X-Received: by 2002:a0c:afb0:: with SMTP id s45mr5076253qvc.151.1555709594817;
+        Fri, 19 Apr 2019 14:33:14 -0700 (PDT)
+Received: from cakuba.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id e128sm3159780qkd.79.2019.04.19.14.33.13
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 19 Apr 2019 14:33:14 -0700 (PDT)
+Date:   Fri, 19 Apr 2019 14:33:10 -0700
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jiong Wang <jiong.wang@netronome.com>, daniel@iogearbox.net,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        oss-drivers@netronome.com
+Subject: Re: [PATCH v4 bpf-next 02/15] bpf: mark lo32 writes that should be
+ zero extended into hi32
+Message-ID: <20190419143310.6c749160@cakuba.netronome.com>
+In-Reply-To: <20190419211403.6iovh26bu6cg2x36@ast-mbp.dhcp.thefacebook.com>
+References: <1555349185-12508-1-git-send-email-jiong.wang@netronome.com>
+        <1555349185-12508-3-git-send-email-jiong.wang@netronome.com>
+        <20190418235747.jv4yocuf6fgwahli@ast-mbp.dhcp.thefacebook.com>
+        <20190419134051.71eeea08@cakuba.netronome.com>
+        <20190419211403.6iovh26bu6cg2x36@ast-mbp.dhcp.thefacebook.com>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190419210409.5021-4-mmullins@fb.com>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Apr 19, 2019 at 02:04:07PM -0700, Matt Mullins wrote:
-> From: Andrew Hall <hall@fb.com>
+On Fri, 19 Apr 2019 14:14:05 -0700, Alexei Starovoitov wrote:
+> > This reminds me, I'm not entirely clear on the need to propagate the
+> > zext through stack slots...  Pointers are guaranteed to be 64bit, we
+> > don't save parentage on scalars (AFAICT),  
 > 
-> This adds four tracepoints to nbd, enabling separate tracing of payload
-> and header sending/receipt.
+> scalars have parentage chain too.
+> we don't track them precisely when they're spilled to stack.
+> That actually caused an issue recently when valid program was rejected,
+> so we might add a feature to track full contents of scalars in the stack.
+
+Interesting..
+
+> > why not pass REG_LIVE_READ
+> > or READ64 to mark_reg_read() from stack_read?  
 > 
-> In the send path for headers that have already been sent, we also
-> explicitly initialize the handle so it can be referenced by the later
-> tracepoint.
-> 
-> Signed-off-by: Andrew Hall <hall@fb.com>
+> can we agree on only two states first ? ;)
 
-Reviewed-by: Josef Bacik <josef@toxicpanda.com>
+Yess, the LIVE_READ was thought to be more of a mask for those accesses
+that only care about "any read" being set, to be honest.  As you said
+read64 is a strict superset of read32.  Keeping the name REG_LIVE_READ,
+rather than REG_LIVE_READ_ANY or _MASK let us leave some of the
+existing code untouched.
 
-Thanks,
+Jiong's original idea was to add a read32, and have read mean read64.
 
-Josef
+I think you said we should have read32 and read64 flags, but clear
+read32 once read64 gets set?  SGTM!
