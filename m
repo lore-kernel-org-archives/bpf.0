@@ -2,114 +2,120 @@ Return-Path: <SRS0=ErZJ=SV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07A73C282DF
-	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 18:49:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE7A1C282DA
+	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 18:55:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C94D420645
-	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 18:49:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A81E220663
+	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 18:55:19 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P4AK3XC7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727517AbfDSStv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Apr 2019 14:49:51 -0400
-Received: from mga14.intel.com ([192.55.52.115]:11707 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726345AbfDSSts (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Apr 2019 14:49:48 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Apr 2019 04:16:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,369,1549958400"; 
-   d="scan'208";a="137141603"
-Received: from irsmsx105.ger.corp.intel.com ([163.33.3.28])
-  by orsmga006.jf.intel.com with ESMTP; 19 Apr 2019 04:16:33 -0700
-Received: from irsmsx156.ger.corp.intel.com (10.108.20.68) by
- irsmsx105.ger.corp.intel.com (163.33.3.28) with Microsoft SMTP Server (TLS)
- id 14.3.408.0; Fri, 19 Apr 2019 12:16:32 +0100
-Received: from irsmsx105.ger.corp.intel.com ([169.254.7.31]) by
- IRSMSX156.ger.corp.intel.com ([169.254.3.53]) with mapi id 14.03.0415.000;
- Fri, 19 Apr 2019 12:16:32 +0100
-From:   "Ananyev, Konstantin" <konstantin.ananyev@intel.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     bpf <bpf@vger.kernel.org>
-Subject: RE: FW: BPF_PSEUDO_CALL question
-Thread-Topic: FW: BPF_PSEUDO_CALL question
-Thread-Index: AdTvzEMj1sREBxpSRtWTDzCNV9r61ADt743gABjhvIAAHmjtsAABa1SAAI48uVA=
-Date:   Fri, 19 Apr 2019 11:16:31 +0000
-Message-ID: <2601191342CEEE43887BDE71AB9772580148A99F8B@irsmsx105.ger.corp.intel.com>
-References: <2601191342CEEE43887BDE71AB9772580148A95A96@irsmsx105.ger.corp.intel.com>
- <2601191342CEEE43887BDE71AB9772580148A97E27@irsmsx105.ger.corp.intel.com>
- <CAADnVQJoo7vSaCCFGpTgrQmCw4Cq-FcLhPtzr=YNaZ7y31ahLg@mail.gmail.com>
- <2601191342CEEE43887BDE71AB9772580148A9869C@irsmsx105.ger.corp.intel.com>
- <CAADnVQKuwL2j7-gOB9fEJ3CQydkPPgr8fT7FT_pzrOTBE=b5Cg@mail.gmail.com>
-In-Reply-To: <CAADnVQKuwL2j7-gOB9fEJ3CQydkPPgr8fT7FT_pzrOTBE=b5Cg@mail.gmail.com>
-Accept-Language: en-IE, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiOWJhYWUyYzEtMDVhNS00NzhmLWFlY2QtOWE4NjczZTllMGFiIiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiSlwvd1wvNWRKWjZnMzNhQ0dmdmdLWUVLbVJYVlwvbXNSS3BcL0xXcGhpQXJCZWVmczdFQURXTHZoaHphSVVmc1gzWVIifQ==
-x-ctpclassification: CTP_NT
-dlp-product: dlpe-windows
-dlp-version: 11.0.600.7
-dlp-reaction: no-action
-x-originating-ip: [163.33.239.182]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1728619AbfDSSzT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Apr 2019 14:55:19 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:39712 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728623AbfDSSzS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Apr 2019 14:55:18 -0400
+Received: by mail-pl1-f196.google.com with SMTP id e92so1186182plb.6;
+        Fri, 19 Apr 2019 11:55:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=MOI0el+WCM+k0jaNElx1lOnObArB9OosKrYtHOAeyks=;
+        b=P4AK3XC70vzjtft4P4Ee5QFnw3RW+oFs8qngOpwOzgXWeynFkRKdMv/4WcpazeYGt4
+         QctcSi74dcD5e0CVw5Cxd8C76g5dLNrsfH7KDYhq3mkbTcnnIWap7yv9+WESuLGSM46i
+         r6TMbhzzxZs4t5azi+s3BUlgCuN/8ATsHQi6Lj3chemVGsUexnZ4vcaHw+G8va54GyWA
+         fJfhXyziOzZA/7QLdl/iPGdaZ+eb2ZFy9O7uvrk+Mc+hTpflfYFdYP53yYmksOkRE821
+         G4FvteoLmGhyoYJD9a0tsubBjKLW/xugIhjm89hxg+6/d12AVjFUmprTE5nH2ONnhSQJ
+         xMGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=MOI0el+WCM+k0jaNElx1lOnObArB9OosKrYtHOAeyks=;
+        b=eh29BsUpkdErodeuAOqzkGy83mHf7SAprHsbtBTEsgR3czEKH2hX2TVsmnUbsG4e3V
+         E2+sgMLYe6ueUjxbNiBwkXYGfvLEwcbH7URL/nj1GTEdscrdLZj+1PUN9GKWy3OePhzF
+         sKnJ25IkgaTKb2AyfErxU+Zjo/DJOn4J+44dGla4WnZbsQAnfE/z0f77dH5SiEGe3whG
+         bGPqC7bHAcKb2FxJnfiZQS7E/CQJBtQ5cV8KrcCx69yYtQSeeHrJKtLguESNzxhEHaGB
+         t5/EDeqBU/FL8ER8PlQkxFKC7BHWSW1Usdn7nGXLWt0CO7emfSH5zV8ar9/MeP3I1C2i
+         wLkw==
+X-Gm-Message-State: APjAAAX/iyZo+GfiyWD+oKDzItStCq/1VpxhimCefpS5BO0Rhe1Nxyz1
+        pruiFR2dCvtl78bgWI8eQxBWbVyS
+X-Google-Smtp-Source: APXvYqy4ZcSZ7rUYr5N3RTOQd4X+B/NSoQ2ZfnXMFUDFNKneUyM4mFfoRm0IpLhx9dwpaKxKi4dtBg==
+X-Received: by 2002:a17:902:7794:: with SMTP id o20mr1635537pll.189.1555649431428;
+        Thu, 18 Apr 2019 21:50:31 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:180::78c8])
+        by smtp.gmail.com with ESMTPSA id l88sm6550433pfb.104.2019.04.18.21.50.29
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 18 Apr 2019 21:50:30 -0700 (PDT)
+Date:   Thu, 18 Apr 2019 21:50:28 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Stanislav Fomichev <sdf@fomichev.me>
+Cc:     Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, davem@davemloft.net, ast@kernel.org,
+        daniel@iogearbox.net, simon.horman@netronome.com,
+        willemb@google.com, peterpenkov96@gmail.com,
+        Maxim Krasnyansky <maxk@qti.qualcomm.com>,
+        Saeed Mahameed <saeedm@mellanox.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        intel-wired-lan@lists.osuosl.org,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Michael Chan <michael.chan@broadcom.com>,
+        Igor Russkikh <igor.russkikh@aquantia.com>
+Subject: Re: [PATCH bpf-next v5 5/6] net: pass net argument to the
+ eth_get_headlen
+Message-ID: <20190419045026.ayalgmunvizwxc7j@ast-mbp.dhcp.thefacebook.com>
+References: <20190415173801.257254-1-sdf@google.com>
+ <20190415173801.257254-6-sdf@google.com>
+ <20190419002851.7efgfnyo3swvtwvo@ast-mbp.dhcp.thefacebook.com>
+ <20190419004350.GC8631@mini-arch.hsd1.ca.comcast.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190419004350.GC8631@mini-arch.hsd1.ca.comcast.net>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-DQoNCj4gPiA+ID4NCj4gPiA+ID4gSGkgQWxleGVpLA0KPiA+ID4gPiBJIHBvc3RlZCB0aGUgcXVl
-c3Rpb24gYmVsb3cgb24gbGx2bS1kZXYgbWFpbGluZyBsaXN0LCBidXQgdGhlcmUgaXMgbm8gYW5z
-d2VyIHNvIGZhci4NCj4gPiA+ID4gQXMgeW91IHNlZW1zIHRoZSBhdXRob3Igb2YgQlBGX1BTRVVE
-T19DQUxMIGluIExMVk0gKGFuZCBsaW51eCBrZXJuZWwpIHRob3VnaHQgbWlnaHQNCj4gPiA+ID4g
-YmUgeW91IGtub3cgdGhlIGFuc3dlcj8NCj4gPiA+ID4gSSBsb29rZWQgdGhyb3VnaCB0aGUgcGF0
-Y2hlcywgYnV0IGRpZG4ndCBzcG90IGFueXRoaW5nIG15c2VsZi4NCj4gPiA+ID4gVGhhbmtzDQo+
-ID4gPiA+IEtvbnN0YW50aW4NCj4gPiA+ID4NCj4gPiA+ID4gLS0tLS1PcmlnaW5hbCBNZXNzYWdl
-LS0tLS0NCj4gPiA+ID4gRnJvbTogbGx2bS1kZXYgW21haWx0bzpsbHZtLWRldi1ib3VuY2VzQGxp
-c3RzLmxsdm0ub3JnXSBPbiBCZWhhbGYgT2YgQW5hbnlldiwgS29uc3RhbnRpbiB2aWEgbGx2bS1k
-ZXYNCj4gPiA+ID4gU2VudDogV2VkbmVzZGF5LCBBcHJpbCAxMCwgMjAxOSA3OjM3IFBNDQo+ID4g
-PiA+IFRvOiBsbHZtLWRldkBsaXN0cy5sbHZtLm9yZw0KPiA+ID4gPiBTdWJqZWN0OiBbbGx2bS1k
-ZXZdIEJQRl9QU0VVRE9fQ0FMTCBxdWVzdGlvbg0KPiA+ID4gPg0KPiA+ID4gPg0KPiA+ID4gPiBI
-aSBldmVyeW9uZSwNCj4gPiA+ID4gd2l0aCBjbGFuZyA2LjAgYW5kIG9ud2FyZHMsIGZvciB0aGUg
-Zm9sbG93aW5nIGNvZGU6DQo+ID4gPiA+ICQgY2F0IHQ2LmMNCj4gPiA+ID4NCj4gPiA+ID4gI2lu
-Y2x1ZGUgPHN0ZGludC5oPg0KPiA+ID4gPg0KPiA+ID4gPiBleHRlcm4gaW50IGZmeDEoY29uc3Qg
-dm9pZCAqcCk7DQo+ID4gPiA+DQo+ID4gPiA+IHVpbnQ2NF90IGVudHJ5KGNvbnN0IHZvaWQgKnAp
-DQo+ID4gPiA+IHsNCj4gPiA+ID4gICAgICAgICByZXR1cm4gZmZ4MShwKTsNCj4gPiA+ID4gfQ0K
-PiA+ID4gPg0KPiA+ID4gPiBjbGFuZyAtTzIgIC10YXJnZXQgYnBmZWwgLWMgdDYuYw0KPiA+ID4g
-PiBnZW5lcmF0ZXMgZm9yIHRoZSBjYWxsIEJQRl9QU0VVRE9fQ0FMTCBpbnN0cnVjdGlvbjoNCj4g
-PiA+ID4gZW50cnk6DQo+ID4gPiA+ICAgICAgICAwOiAgICAgICA4NSAxMCAwMCAwMCBmZiBmZiBm
-ZiBmZiAgICAgICAgIGNhbGwgLTENCj4gPiA+ID4gICAgICAgIDE6ICAgICAgIDY3IDAwIDAwIDAw
-IDIwIDAwIDAwIDAwICAgICAgICAgcjAgPDw9IDMyDQo+ID4gPiA+ICAgICAgICAyOiAgICAgICBj
-NyAwMCAwMCAwMCAyMCAwMCAwMCAwMCAgICAgICAgIHIwIHM+Pj0gMzINCj4gPiA+ID4gICAgICAg
-IDM6ICAgICAgIDk1IDAwIDAwIDAwIDAwIDAwIDAwIDAwICAgICAgICAgZXhpdA0KPiA+ID4gPg0K
-PiA+ID4gPiBJcyB0aGVyZSBhbnkgd2F5IHRvIGZvcmNlIGNsYW5nIHRvIGdlbmVyYXRlIHByb3Bl
-ciBCUEZfQ0FMTCBpbnN0cnVjdGlvbiwNCj4gPiA+ID4gaS5lOiA4NSAwMCAwMCAwMCBmZiBmZiBm
-ZiBmZiAoYXMgaXQgZGlkIGluIG9sZGVyIHZlcnNpb25zKT8NCj4gPiA+DQo+ID4gPiBvbGRlciB2
-ZXJzaW9uIG9mIGxsdm0gZ2VuZXJhdGVkIGJyb2tlbiBjb2RlLg0KPiA+ID4gdGhlcmUgYXJlIG9u
-bHkgdHdvIGNhbGwgZmxhdm9yczoNCj4gPiA+IC0gY2FsbCBpbW0gLT4gY2FsbGluZyBwYXJ0aWN1
-bGFyIGtlcm5lbCBoZWxwZXIgd2hlcmUgaW1tPT1oZWxwZXJfaWQNCj4gPg0KPiA+IE9rIGJ1dCBp
-biB0aGUgZXhhbXBsZSBhYm92ZSwgaXMgaXQgcG9zc2libGUgdGVsbCB0byB0aGUgbGx2bSB0aGF0
-DQo+ID4gZmZ4MSgpIGlzIGFjdHVhbGx5IGEga2VybmVsIGhlbHBlciB3aXRoIGlkPT1YPw0KPiAN
-Cj4gaGVyZSBpcyBob3cgaXQgd29ya3MgZm9yIGhlbHBlcnM6DQo+IHN0YXRpYyB2b2lkICooKmJw
-Zl9tYXBfbG9va3VwX2VsZW0pKHZvaWQgKm1hcCwgY29uc3Qgdm9pZCAqa2V5KSA9DQo+ICAgICAg
-ICAgKHZvaWQgKikgQlBGX0ZVTkNfbWFwX2xvb2t1cF9lbGVtOw0KPiANCj4gVXNlciBzcGFjZSBj
-YW4gaGFjayBzaW1pbGFyIHRoaW5nIGZvciBhbnkgaW50ZWdlciBhbmQgYW55IG5hbWUuDQoNClRo
-YW5rcyBhIGxvdC4NClllcywgc3VjaCBhcHByb2FjaCB3b3VsZCB3b3JrLg0KVGhvdWdoIGl0IG1l
-YW5zIHRoYXQgdXNlciB3aWxsIG5lZWQgdG8gZGVmaW5lIGV4YWN0IGlkIGZvciB0aGUgZWFjaCAg
-aGVscGVyIGZ1bmN0aW9uDQphbmQga2VlcCBpdCBhbHdheXMgaW4gc3luYyBiZXR3ZWVuIGJwZiBw
-cm9ncmFtcyBhbmQgYnBmIGV4ZWN1dGlvbiBlbnZpcm9ubWVudC4gDQpQcm9iYWJseSBub3QgYSBi
-aWcgZGVhbCBmb3Iga2VybmVsIHdoZW4gYWxsIGhlbHBlcnMgYXJlIHdlbGwgZGVmaW5lZCBhbmQg
-cmVzdHJpY3RlZCwNCmJ1dCBtaWdodCBiZWNvbWUgbWVzc3kgZm9yIHVzZXItc3BhY2Ugd2hlcmUg
-ZWFjaCBhcHAgbWlnaHQgd2FudCB0byBoYXZlIGl0J3MNCm93biBzZXQgb2YgaGVscGVycy4NCk15
-IHRob3VnaHQgd2FzIC0gbWlnaHQgYmUgaXQgaXMgcG9zc2libGUgdG8gc2F5IHRvIGxsdm0gdGhh
-dCBpdCBpcyBhIGhlbHBlciBmdW5jdGlvbg0KYnV0IHdpdGggdW5rbm93biBpZCB0aGF0IHdpbGwg
-YmUgcmVzb2x2ZWQgZHluYW1pY2FsbHkgYXQgYnBmIGxvYWQgdGltZS4NCkkgcHJlc3VtZSB0aGUg
-YW5zd2VyIGlzICdubycsIGJ1dCB3YW50ZWQgdG8gZG91YmxlLWNoZWNrIHRoYXQgSSBhbSBub3Qg
-bWlzc2luZw0Kc29tZXRoaW5nIG9idmlvdXMgaGVyZS4NCktvbnN0YW50aW4gIA0KDQo=
+On Thu, Apr 18, 2019 at 05:43:50PM -0700, Stanislav Fomichev wrote:
+> On 04/18, Alexei Starovoitov wrote:
+> > On Mon, Apr 15, 2019 at 10:38:00AM -0700, Stanislav Fomichev wrote:
+> > > Update all users eth_get_headlen to pass network namespace
+> > > and pass it down to the flow dissector. This commit is a noop
+> > > until administrator inserts BPF flow dissector program.
+> > > 
+> > > Cc: Maxim Krasnyansky <maxk@qti.qualcomm.com>
+> > > Cc: Saeed Mahameed <saeedm@mellanox.com>
+> > > Cc: Jeff Kirsher <jeffrey.t.kirsher@intel.com>
+> > > Cc: intel-wired-lan@lists.osuosl.org
+> > > Cc: Yisen Zhuang <yisen.zhuang@huawei.com>
+> > > Cc: Salil Mehta <salil.mehta@huawei.com>
+> > > Cc: Michael Chan <michael.chan@broadcom.com>
+> > > Cc: Igor Russkikh <igor.russkikh@aquantia.com>
+> > > Signed-off-by: Stanislav Fomichev <sdf@google.com>
+... 
+> > Also please add C based test for skb-less flow_dissector.
+> > Current test_flow_dissector.sh doesn't seem to cover it.
+> It doesn't look like we can exercise skb-less flow dissector from
+> test_flow_dissector.sh; we need to trigger some driver code, which is
+> hard when we send the packets on the localhost in
+> test_flow_dissector.sh.
+> 
+> To test skb-less dissector I convert BPF_PROG_TEST_RUN to always use skb-less
+> mode. test_flow_dissector.sh tests skb-mode, prog_tests/flow_dissector.c
+> tests skb-less mode.
+
+I saw that but I'm afraid it's not enough.
+tun_get_user() is calling it, so it should be possible to test
+skb-less mode via tun.
+
