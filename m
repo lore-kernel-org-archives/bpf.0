@@ -2,76 +2,292 @@ Return-Path: <SRS0=ErZJ=SV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.2 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=DATE_IN_PAST_06_12,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9205C282DF
-	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 18:24:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8E7BC282DA
+	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 18:40:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7796C20652
-	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 18:24:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1555698276;
-	bh=FW32HnFNlnPxVBsIj85M3ajruzhCc6NMImzWIVvehYQ=;
-	h=From:To:CC:Subject:Date:List-ID:From;
-	b=SJ/uHfPvTj2aZsE6sOGpDUYEElQPFftIA0lUc6yqnCcQzRyy61DvbytmRdTGBpiZq
-	 Q4j52VBmEHiOg6bHVJmZFwTd2/d7o6YrrajpDVW0H9smOFwufsrU+CRkQR7B171sNB
-	 MAHo6+rcCKgbATpu+gxwAhx0hJXFxV/YYHl+TPT0=
+	by mail.kernel.org (Postfix) with ESMTP id 6BA02204FD
+	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 18:40:27 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=kinvolk.io header.i=@kinvolk.io header.b="lS4guyEj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727033AbfDSSYf convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 19 Apr 2019 14:24:35 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:37724 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727100AbfDSSYb (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 19 Apr 2019 14:24:31 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3JEj86M023535
-        for <bpf@vger.kernel.org>; Fri, 19 Apr 2019 07:45:29 -0700
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2rxyd0tv1c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 19 Apr 2019 07:45:29 -0700
-Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Fri, 19 Apr 2019 07:44:56 -0700
-Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 77A577605DE; Fri, 19 Apr 2019 07:44:55 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Alexei Starovoitov <ast@kernel.org>
-Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
-To:     <davem@davemloft.net>
-CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 0/2] bpf: parallel verification
-Date:   Fri, 19 Apr 2019 07:44:53 -0700
-Message-ID: <20190419144455.853134-1-ast@kernel.org>
-X-Mailer: git-send-email 2.20.0
+        id S1727380AbfDSSk0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Apr 2019 14:40:26 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:46496 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725844AbfDSSk0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Apr 2019 14:40:26 -0400
+Received: by mail-ot1-f68.google.com with SMTP id s24so4955198otk.13
+        for <bpf@vger.kernel.org>; Fri, 19 Apr 2019 11:40:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kinvolk.io; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gQ1OLQuUyf7zoPs/qRTP7vFrHHjp78fRi3tvzv8ZqbY=;
+        b=lS4guyEjVn2wJpj2XmtHtPyIt4u+T27qEpkOiNgd0ApwGOGfruYf3foKIDPmiAesyj
+         Rpu2uN57aihGqk2uYMnqD3e5qjtpLPlGJud6clSCBY9kZkG/B/Mqe2sUPRlCkzgqyvgk
+         E17M8EsxCVqEGqD1iouNf0bwaLrQLslFhLCVQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gQ1OLQuUyf7zoPs/qRTP7vFrHHjp78fRi3tvzv8ZqbY=;
+        b=JktC+99GNiFLT5sG4/FdcbNRZ6Ck2QhacaoUGUxjQ2Y1+fGmMesy9l0q8QHWwiisD2
+         EzHid3x7mYdaPjT5gp3MjWEk5ZdiTxCOpX6MiX4rQTTfMI7cBVkIu5YcwLFPwnJuJx2R
+         B3bTV3eaMG32PSDbR++rgiiAGFF6WEovvPK8Mi/c78UAIYg5HqSgBAe1GlXPBqyEOSen
+         qwIp05YiJN5n9iC/UW555L1cwqcoNGKH9IKeaJqa8pnTEsNLbDw3KimNj6ROwT5vqhog
+         KH+lUzN+5G9bPGOoRtJVGh042b6btz6xob/4Yl6BdCcgIJ/ZEmoZOhx0Xeftp3LuspKg
+         7MNQ==
+X-Gm-Message-State: APjAAAU7xRmDPJjkz0C1QTdzSEK6CG09Uvks0+NCN0a5u1LeOfExN8r/
+        vhFxaPOCAovHeWR+Q6ZcVyrTCLFf2U3WIdFuidsG7sZPkQM=
+X-Google-Smtp-Source: APXvYqwHY1voNH2CeyZ/3+Ob/1Rp2t5SWWUKHGMyoGPrM1BsMI8AbRSRlnwBmogvi4615SFQEHxP5mk3Rl26z4r7PRc=
+X-Received: by 2002:a9d:7f89:: with SMTP id t9mr1741319otp.169.1555674676864;
+ Fri, 19 Apr 2019 04:51:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-19_08:,,
- signatures=0
-X-Proofpoint-Spam-Reason: safe
-X-FB-Internal: Safe
+References: <20190418155652.22181-1-alban@kinvolk.io> <CAH3MdRUMavDst+KssmV=EtwQTudq12ZvXhiP-qiBb+24R8vpGA@mail.gmail.com>
+In-Reply-To: <CAH3MdRUMavDst+KssmV=EtwQTudq12ZvXhiP-qiBb+24R8vpGA@mail.gmail.com>
+From:   Alban Crequy <alban@kinvolk.io>
+Date:   Fri, 19 Apr 2019 13:51:05 +0200
+Message-ID: <CADZs7q6XahoWDKWu90xEais_kJ1rKekcXWd2Lh+WyvKiJCtG1w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/3] bpf: sock ops: add netns ino and dev in
+ bpf context
+To:     Y Song <ys114321@gmail.com>
+Cc:     Alban Crequy <alban.crequy@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alban Crequy <alban@kinvolk.io>,
+        =?UTF-8?Q?Iago_L=C3=B3pez_Galeiras?= <iago@kinvolk.io>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Allow the bpf verifier to run in parallel for root.
+On Thu, Apr 18, 2019 at 11:31 PM Y Song <ys114321@gmail.com> wrote:
+>
+> On Thu, Apr 18, 2019 at 8:58 AM Alban Crequy <alban.crequy@gmail.com> wrote:
+> >
+> > From: Alban Crequy <alban@kinvolk.io>
+> >
+> > sockops programs can now access the network namespace inode and device
+> > via (struct bpf_sock_ops)->netns_ino and ->netns_dev. This can be useful
+> > to apply different policies on different network namespaces.
+> >
+> > In the unlikely case where network namespaces are not compiled in
+> > (CONFIG_NET_NS=n), the verifier will not allow access to ->netns_*.
+> >
+> > The generated BPF bytecode for netns_ino is loading the correct inode
+> > number at the time of execution.
+> >
+> > However, the generated BPF bytecode for netns_dev is loading an
+> > immediate value determined at BPF-load-time by looking at the initial
+> > network namespace. In practice, this works because all netns currently
+> > use the same virtual device. If this was to change, this code would need
+> > to be updated too.
+> >
+> > Signed-off-by: Alban Crequy <alban@kinvolk.io>
+> >
+> > ---
+> >
+> > Changes since v1:
+> > - add netns_dev (review from Alexei)
+> > ---
+> >  include/uapi/linux/bpf.h |  2 ++
+> >  net/core/filter.c        | 70 ++++++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 72 insertions(+)
+> >
+> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > index eaf2d3284248..f4f841dde42c 100644
+> > --- a/include/uapi/linux/bpf.h
+> > +++ b/include/uapi/linux/bpf.h
+> > @@ -3213,6 +3213,8 @@ struct bpf_sock_ops {
+> >         __u32 sk_txhash;
+> >         __u64 bytes_received;
+> >         __u64 bytes_acked;
+> > +       __u64 netns_dev;
+> > +       __u64 netns_ino;
+>
+> Maybe we can define netns_dev as __u32?
+>    __u64 netns_ino;
+>    __u32 netns_dev;
+>
+> There is a hole at the end which can be used if the next
+> field to be added in the future is a __u32.
+>
+> From
+> static inline u32 new_encode_dev(dev_t dev)
+> {
+>         unsigned major = MAJOR(dev);
+>         unsigned minor = MINOR(dev);
+>         return (minor & 0xff) | (major << 8) | ((minor & ~0xff) << 12);
+> }
+>
+> device num is encoded in a u32.
 
-Alexei Starovoitov (2):
-  bpf: remove global variables
-  bpf: drop bpf_verifier_lock
+I could do that but there are already two occurrences of "__u64
+netns_dev" in bpf.h:
+- struct bpf_prog_info
+- struct bpf_map_info
 
- include/linux/bpf_verifier.h |  5 +++++
- kernel/bpf/verifier.c        | 33 ++++++++++++++++++---------------
- 2 files changed, 23 insertions(+), 15 deletions(-)
+Should I keep it a u64 for consistency with the rest of bpf.h, or
+change it to u32?
 
--- 
-2.20.0
+> >  };
+> >
+> >  /* Definitions for bpf_sock_ops_cb_flags */
+> > diff --git a/net/core/filter.c b/net/core/filter.c
+> > index 1833926a63fc..93e3429603d7 100644
+> > --- a/net/core/filter.c
+> > +++ b/net/core/filter.c
+> > @@ -75,6 +75,8 @@
+> >  #include <net/seg6_local.h>
+> >  #include <net/lwtunnel.h>
+> >  #include <net/ipv6_stubs.h>
+> > +#include <linux/kdev_t.h>
+> > +#include <linux/proc_ns.h>
+> >
+> >  /**
+> >   *     sk_filter_trim_cap - run a packet through a socket filter
+> > @@ -6774,6 +6776,15 @@ static bool sock_ops_is_valid_access(int off, int size,
+> >                 }
+> >         } else {
+> >                 switch (off) {
+> > +               case offsetof(struct bpf_sock_ops, netns_dev):
+> > +               case offsetof(struct bpf_sock_ops, netns_ino):
+> > +#ifdef CONFIG_NET_NS
+> > +                       if (size != sizeof(__u64))
+> > +                               return false;
+>
+> for netns_dev, looks like we have encoding like
+>    (minor & 0xff) | (major << 8) | ((minor & ~0xff) << 12)
+>
+> it is possible user may access like:
+>    u16 dev = sk->netns_dev;
+> the compiler may translate into a 2-byte load
+> or even
+>   u8 major = (sk->netns_dev >> 8) & 0xf
+> the compiler may translate to a byte load of &sk->netns_dev + 1 or 3
+> depends on endianness.
+> I suggest we relax the access pattern now to avoid patch later.
 
+Ok, I can do that.
+
+My use case was to compare (struct bpf_sock_ops)->netns_dev/netns_ino
+with the value from a map prepared from userspace, i.e. the value of
+netns_dev/ino is an opaque buffer for the BPF program, so the problem
+is unlikely. But I've got bitten by a similar thing before (struct
+sk_msg_md->remote_port/local_port was read in one go as a u64) so we
+can improve this a bit.
+
+Thanks for the review, I'll do the rest of the requested changes
+probably end of next week.
+
+> > +#else
+> > +                       return false;
+> > +#endif
+> > +                       break;
+> >                 case bpf_ctx_range_till(struct bpf_sock_ops, bytes_received,
+> >                                         bytes_acked):
+> >                         if (size != sizeof(__u64))
+> > @@ -7660,6 +7671,11 @@ static u32 sock_addr_convert_ctx_access(enum bpf_access_type type,
+> >         return insn - insn_buf;
+> >  }
+> >
+> > +static struct ns_common *sockops_netns_cb(void *private_data)
+> > +{
+> > +       return &init_net.ns;
+> > +}
+> > +
+> >  static u32 sock_ops_convert_ctx_access(enum bpf_access_type type,
+> >                                        const struct bpf_insn *si,
+> >                                        struct bpf_insn *insn_buf,
+> > @@ -7668,6 +7684,10 @@ static u32 sock_ops_convert_ctx_access(enum bpf_access_type type,
+> >  {
+> >         struct bpf_insn *insn = insn_buf;
+> >         int off;
+> > +       struct inode *ns_inode;
+> > +       struct path ns_path;
+> > +       __u64 netns_dev;
+>
+> Although there are a few discrepancies,  I suggest to use u64 for
+> kernel as __u64 is typically
+> used in user space.
+>
+> > +       void *res;
+> >
+> >  /* Helper macro for adding read access to tcp_sock or sock fields. */
+> >  #define SOCK_OPS_GET_FIELD(BPF_FIELD, OBJ_FIELD, OBJ)                        \
+> > @@ -7914,6 +7934,56 @@ static u32 sock_ops_convert_ctx_access(enum bpf_access_type type,
+> >                 SOCK_OPS_GET_OR_SET_FIELD(sk_txhash, sk_txhash,
+> >                                           struct sock, type);
+> >                 break;
+> > +
+> > +       case offsetof(struct bpf_sock_ops, netns_dev):
+> > +#ifdef CONFIG_NET_NS
+> > +               /* We get the netns_dev at BPF-load-time and not at
+> > +                * BPF-exec-time. We assume that netns_dev is a constant.
+> > +                */
+> > +               res = ns_get_path_cb(&ns_path, sockops_netns_cb, NULL);
+> > +               if (IS_ERR(res)) {
+> > +                       netns_dev = 0;
+> > +               } else {
+> > +                       ns_inode = ns_path.dentry->d_inode;
+> > +                       netns_dev = new_encode_dev(ns_inode->i_sb->s_dev);
+> > +               }
+> > +#else
+> > +               netns_dev = 0;
+>
+> The #else branch is not needed. During is_valid_access check, if CONFIG_NET_NS
+> is not defined, the program should have been rejected.
+>
+> > +#endif
+> > +               *insn++ = BPF_MOV64_IMM(si->dst_reg, netns_dev);
+> > +               break;
+> > +
+> > +       case offsetof(struct bpf_sock_ops, netns_ino):
+> > +#ifdef CONFIG_NET_NS
+> > +               /* Loading: sk_ops->sk->__sk_common.skc_net.net->ns.inum
+> > +                * Type: (struct bpf_sock_ops_kern *)
+> > +                *       ->(struct sock *)
+> > +                *       ->(struct sock_common)
+> > +                *       .possible_net_t
+> > +                *       .(struct net *)
+> > +                *       ->(struct ns_common)
+> > +                *       .(unsigned int)
+> > +                */
+> > +               BUILD_BUG_ON(offsetof(struct sock, __sk_common) != 0);
+> > +               BUILD_BUG_ON(offsetof(possible_net_t, net) != 0);
+> > +               *insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(
+> > +                                               struct bpf_sock_ops_kern, sk),
+> > +                                     si->dst_reg, si->src_reg,
+> > +                                     offsetof(struct bpf_sock_ops_kern, sk));
+> > +               *insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(
+> > +                                               possible_net_t, net),
+> > +                                     si->dst_reg, si->dst_reg,
+> > +                                     offsetof(struct sock_common, skc_net));
+> > +               *insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(
+> > +                                               struct ns_common, inum),
+> > +                                     si->dst_reg, si->dst_reg,
+> > +                                     offsetof(struct net, ns) +
+> > +                                     offsetof(struct ns_common, inum));
+> > +#else
+> > +               *insn++ = BPF_MOV64_IMM(si->dst_reg, 0);
+>
+> The same as above, this else branch is not needed.
+>
+> > +#endif
+> > +               break;
+> > +
+> >         }
+> >         return insn - insn_buf;
+> >  }
+> > --
+> > 2.20.1
+> >
