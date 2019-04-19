@@ -2,124 +2,123 @@ Return-Path: <SRS0=ErZJ=SV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.2 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1127EC282E2
-	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 20:40:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E514AC282E0
+	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 21:04:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BA036208C0
-	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 20:40:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B023E2171F
+	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 21:04:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="eB+xPhCf"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Ky+hF2vS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726179AbfDSUk4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Apr 2019 16:40:56 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:45107 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725897AbfDSUk4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Apr 2019 16:40:56 -0400
-Received: by mail-qt1-f196.google.com with SMTP id v20so6543037qtv.12
-        for <bpf@vger.kernel.org>; Fri, 19 Apr 2019 13:40:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=1XI5MijFbdUoBwKKN+708JO/+ViWWFaqhxvrhFYXz1E=;
-        b=eB+xPhCfsgdpr9B0qWzEwryfBJESkr+ZBkNazqpVRaw8WBPMrheopdX0fVs0I27C0s
-         77/6Cr4BMCLp3I8fGHn/Y0Ds+iQYgbksgf7vxt/VihFNjyAUrFT2phtoGqBVMf3ttBbx
-         Qig99z7P0wbNPVokEXDMMaSkruV48MJhfX48IS9diaCZnhUZtJKOiowrSa+GTHmP+Pe9
-         DpsvUE8m3y7i8+zERSlECH1pXXE+bv2p6syABlBAdCWBxjToQQFLHPLJJrzNvr7sbNGI
-         Rds82zgYt5PB4ujG4g0/E6ewguZsQPk3ICa5+qGYC4tOGc7kIIAFUDhzP1K3Dk31Ps8v
-         eZdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=1XI5MijFbdUoBwKKN+708JO/+ViWWFaqhxvrhFYXz1E=;
-        b=m1iUvxM7rdNoeWUX6Sa60Au5vgIgmywjD9Om412H9DOYKuRYy2l5Tk2OEwuGdzJzWL
-         lpxgMf77snnVP+Jj3ZC+m6TSiUf2wjjXAiXHIO/vgBwQ/NocEsfdPlg2XIH/RvK3vdT2
-         ggVbGU91TewEJZigVS1cuVZZBR8hwW0f7doo8BHoxQtLe8pJ7T3pTDrdVz188+qq3Uwe
-         pi3K0osXsXuBq3l1iegV2VCv4YPF/kdO1KMMniAuqXJhMhyeUED7C/2t8FGZZwYb2R2t
-         XACFYmxPeoLZ724VzWbLGU5sOJybZ+iGv/JY8/HSDhmZOWr7H3CBHDinW4tVYdStgeJZ
-         HnsA==
-X-Gm-Message-State: APjAAAWyfv9F7FvVBanrhgcmp3NXAP50yJ+zKmShloiVnelQAWFS/Km2
-        lqIArbIUg8VwNUZvBdVFm1K1kA==
-X-Google-Smtp-Source: APXvYqwPUXEl3h+uAAGR/BGOtDNIU7i//AxJUi0RpTo/Do4l1/ZasygoOYI2/kd2Vtj+yOyGDjwfTQ==
-X-Received: by 2002:ac8:19e5:: with SMTP id s34mr4977531qtk.385.1555706455322;
-        Fri, 19 Apr 2019 13:40:55 -0700 (PDT)
-Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id y34sm3737526qta.96.2019.04.19.13.40.54
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 19 Apr 2019 13:40:55 -0700 (PDT)
-Date:   Fri, 19 Apr 2019 13:40:51 -0700
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Jiong Wang <jiong.wang@netronome.com>
-Cc:     daniel@iogearbox.net, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        oss-drivers@netronome.com
-Subject: Re: [PATCH v4 bpf-next 02/15] bpf: mark lo32 writes that should be
- zero extended into hi32
-Message-ID: <20190419134051.71eeea08@cakuba.netronome.com>
-In-Reply-To: <20190418235747.jv4yocuf6fgwahli@ast-mbp.dhcp.thefacebook.com>
-References: <1555349185-12508-1-git-send-email-jiong.wang@netronome.com>
-        <1555349185-12508-3-git-send-email-jiong.wang@netronome.com>
-        <20190418235747.jv4yocuf6fgwahli@ast-mbp.dhcp.thefacebook.com>
-Organization: Netronome Systems, Ltd.
+        id S1727351AbfDSVEq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Apr 2019 17:04:46 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:48210 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726000AbfDSVEq (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 19 Apr 2019 17:04:46 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3JKtfjB005451;
+        Fri, 19 Apr 2019 14:04:26 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=facebook;
+ bh=T6L/3SHst05vC8yOgMlzjsRIbhRS9KrakWKP5A8GJoc=;
+ b=Ky+hF2vS0rtHMq9kbL3Om3jMhbIozMY/4r0gAn1grHb8O59NYH3VqPUOQkVHpe2C3akF
+ zgbKZmZHiGEsc6sMHfY5IMD0yCYXKVesuzgLmG4mcKNTnwhk6UYY3YF+NGikQ72zXfC5
+ jwfZRKSpq73z3OQkgJjT39KMiwhh4vk8H5w= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2ryjv7gyqh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Fri, 19 Apr 2019 14:04:26 -0700
+Received: from mmullins-1.thefacebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server id
+ 15.1.1713.5; Fri, 19 Apr 2019 14:04:25 -0700
+From:   Matt Mullins <mmullins@fb.com>
+To:     <hall@fb.com>, <mmullins@fb.com>, <ast@kernel.org>,
+        <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, "Yonghong Song" <yhs@fb.com>
+Subject: [PATCH bpf-next v3 0/5] writable contexts for bpf raw tracepoints
+Date:   Fri, 19 Apr 2019 14:04:04 -0700
+Message-ID: <20190419210409.5021-1-mmullins@fb.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [2620:10d:c081:10::13]
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-19_12:,,
+ signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 18 Apr 2019 16:57:50 -0700, Alexei Starovoitov wrote:
-> > @@ -6371,8 +6406,10 @@ static int propagate_liveness(struct bpf_verifier_env *env,
-> >  		for (i = frame < vstate->curframe ? BPF_REG_6 : 0; i < BPF_REG_FP; i++) {
-> >  			err = propagate_liveness_reg(env, &state_reg[i],
-> >  						     &parent_reg[i]);
-> > -			if (err)
-> > +			if (err < 0)
-> >  				return err;
-> > +			if (err & REG_LIVE_READ64)
-> > +				mark_insn_zext(env, &parent_reg[i]);  
-> 
-> I'm not quite following why it's parent_reg here instead of state_reg.
+This adds an opt-in interface for tracepoints to expose a writable context to
+BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE programs that are attached, while
+supporting read-only access from existing BPF_PROG_TYPE_RAW_TRACEPOINT
+programs, as well as from non-BPF-based tracepoints.
 
-Perhaps we should rename the parameters to something else than parent
-here?  I always have to do some mental gymnastics looking at this code..
-"explored" and "current"?
+The initial motivation is to support tracing that can be observed from the
+remote end of an NBD socket, e.g. by adding flags to the struct nbd_request
+header.  Earlier attempts included adding an NBD-specific tracepoint fd, but in
+code review, I was recommended to implement it more generically -- as a result,
+this patchset is far simpler than my initial try.
 
-The current state is parent, the "next" state that pruned the search
-is "state".  So we check if the reads under state X need 64bit, if so
-have to propagate back to writes on current (which is called parent
-here, even though it won't become state's parent, ugh.)
+v2->v3:
+  * Andrew addressed Josef's comments:
+    * C-style commenting in nbd.c
+    * Collapsed identical events into a single DECLARE_EVENT_CLASS.
+      This saves about 2kB of kernel text
 
-> If I understood the code the liveness can have all three states:
-> REG_LIVE_READ64 | REG_LIVE_READ32
-> REG_LIVE_READ64
-> REG_LIVE_READ32
-> whereas 2 is a superset of 3, so 1 should never be seen.
-> 
-> If so, why in propagate_liveness we have this dance:
-> +       u8 parent_bits = parent_reg->live & REG_LIVE_READ;
-> +       u8 bits = reg->live & REG_LIVE_READ;
-> +       u8 bits_diff = parent_bits ^ bits;
-> +       u8 bits_prop = bits_diff & bits;
->         int err;
-> 
-> -       if (parent_reg->live & REG_LIVE_READ || !(reg->live & REG_LIVE_READ))
-> +       /* No diff bit comes from "reg". */
-> +       if (!bits_prop)
-> 
-> I'm struggling to see through all 3 combinations in respect to above diff.
-> Shouldn't propagation of REG_LIVE_READ64 remove REG_LIVE_READ32 bit
-> and clear subreg_def during mark_reg_read() instead of
-> once in propagate_liveness() ?
+v1->v2:
+  * add selftests
+    * sync tools/include/uapi/linux/bpf.h
+  * reject variable offset into the buffer
+  * add string representation of PTR_TO_TP_BUFFER to reg_type_str
 
-This reminds me, I'm not entirely clear on the need to propagate the
-zext through stack slots...  Pointers are guaranteed to be 64bit, we
-don't save parentage on scalars (AFAICT), why not pass REG_LIVE_READ
-or READ64 to mark_reg_read() from stack_read?
+Andrew Hall (1):
+  nbd: add tracepoints for send/receive timing
+
+Matt Mullins (4):
+  bpf: add writable context for raw tracepoints
+  nbd: trace sending nbd requests
+  tools: sync bpf.h
+  selftests: bpf: test writable buffers in raw tps
+
+ MAINTAINERS                                   |   1 +
+ drivers/block/nbd.c                           |  13 +++
+ include/linux/bpf.h                           |   2 +
+ include/linux/bpf_types.h                     |   1 +
+ include/linux/tracepoint-defs.h               |   1 +
+ include/trace/bpf_probe.h                     |  27 ++++-
+ include/trace/events/bpf_test_run.h           |  50 ++++++++
+ include/trace/events/nbd.h                    | 107 ++++++++++++++++++
+ include/uapi/linux/bpf.h                      |   1 +
+ kernel/bpf/syscall.c                          |   8 +-
+ kernel/bpf/verifier.c                         |  31 +++++
+ kernel/trace/bpf_trace.c                      |  21 ++++
+ net/bpf/test_run.c                            |   4 +
+ tools/include/uapi/linux/bpf.h                |   1 +
+ tools/lib/bpf/libbpf.c                        |   1 +
+ tools/lib/bpf/libbpf_probes.c                 |   1 +
+ .../raw_tp_writable_reject_nbd_invalid.c      |  40 +++++++
+ .../bpf/prog_tests/raw_tp_writable_test_run.c |  80 +++++++++++++
+ .../selftests/bpf/verifier/raw_tp_writable.c  |  34 ++++++
+ 19 files changed, 420 insertions(+), 4 deletions(-)
+ create mode 100644 include/trace/events/bpf_test_run.h
+ create mode 100644 include/trace/events/nbd.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_run.c
+ create mode 100644 tools/testing/selftests/bpf/verifier/raw_tp_writable.c
+
+-- 
+2.17.1
+
