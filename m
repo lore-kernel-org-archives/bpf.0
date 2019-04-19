@@ -2,179 +2,76 @@ Return-Path: <SRS0=ErZJ=SV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.7 required=3.0 tests=FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.2 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F909C282DA
-	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 03:45:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9205C282DF
+	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 18:24:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1686321736
-	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 03:45:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7796C20652
+	for <bpf@archiver.kernel.org>; Fri, 19 Apr 2019 18:24:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1555698276;
+	bh=FW32HnFNlnPxVBsIj85M3ajruzhCc6NMImzWIVvehYQ=;
+	h=From:To:CC:Subject:Date:List-ID:From;
+	b=SJ/uHfPvTj2aZsE6sOGpDUYEElQPFftIA0lUc6yqnCcQzRyy61DvbytmRdTGBpiZq
+	 Q4j52VBmEHiOg6bHVJmZFwTd2/d7o6YrrajpDVW0H9smOFwufsrU+CRkQR7B171sNB
+	 MAHo6+rcCKgbATpu+gxwAhx0hJXFxV/YYHl+TPT0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727254AbfDSDpG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Apr 2019 23:45:06 -0400
-Received: from mail-it1-f198.google.com ([209.85.166.198]:59697 "EHLO
-        mail-it1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727205AbfDSDpG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 18 Apr 2019 23:45:06 -0400
-Received: by mail-it1-f198.google.com with SMTP id 75so4305666itz.9
-        for <bpf@vger.kernel.org>; Thu, 18 Apr 2019 20:45:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=G2sSzzWtu5hqwMXpUY/ZwUzvofMXxnWS2eXRGgy8sVE=;
-        b=cTqQYUJvFdZ5ns4RxP4HVnybMZJx4OWP2OS/KRJLtLTyKce8wg2L/LupxpcoJlEiNy
-         x0UXk2KXfuBXA0wBBftoJulMbQpFJ2kV7Jz8IKwUa1PvFeB9gfECFtY/l+/b9gHZj5M/
-         52igtOifRtgG0dwRGQyPPuxSbNmWjVpHduHkgFvzf686XQCOlFGnXE1lIfCfX9x+5ar1
-         4tiwl6fcBrHMYKzZ2BCEQd4ih1VlRJ0kO24CEZXkxp/qKJhHW6MWE3Jyziym1bkIyVaf
-         4yIqhThaBm+9baaonyRVcKnPdBMYoF0Dp/lwU+XbiJwVaa5c+HYPOijRKynQNx5A4OXB
-         NwNQ==
-X-Gm-Message-State: APjAAAXM41WP8kqsCEFF40SeM/+WqwcpvyXOlAe2PQays27qGbHMOID6
-        9OxUNnuFC2VjhXUN26AII2Gl2qCbJyaHkHTnoGB4p5vuys7h
-X-Google-Smtp-Source: APXvYqxs1X3zR/MAXk4CZ9M4boIZRlpWE5tSS50nuQ36DPYw6/PZNR/Baa2OHOu0ZZEzPgfOIg2HcaHQ0lozP6wtXztavMfOak0f
+        id S1727033AbfDSSYf convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 19 Apr 2019 14:24:35 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:37724 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727100AbfDSSYb (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 19 Apr 2019 14:24:31 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3JEj86M023535
+        for <bpf@vger.kernel.org>; Fri, 19 Apr 2019 07:45:29 -0700
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2rxyd0tv1c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 19 Apr 2019 07:45:29 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Fri, 19 Apr 2019 07:44:56 -0700
+Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
+        id 77A577605DE; Fri, 19 Apr 2019 07:44:55 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Alexei Starovoitov <ast@kernel.org>
+Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
+To:     <davem@davemloft.net>
+CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <kernel-team@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next 0/2] bpf: parallel verification
+Date:   Fri, 19 Apr 2019 07:44:53 -0700
+Message-ID: <20190419144455.853134-1-ast@kernel.org>
+X-Mailer: git-send-email 2.20.0
 MIME-Version: 1.0
-X-Received: by 2002:a5d:899a:: with SMTP id m26mr1424176iol.268.1555645505345;
- Thu, 18 Apr 2019 20:45:05 -0700 (PDT)
-Date:   Thu, 18 Apr 2019 20:45:05 -0700
-In-Reply-To: <0000000000004a6d7c057e77e97e@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000be25710586d9f15a@google.com>
-Subject: Re: KASAN: use-after-free Read in refcount_sub_and_test_checked (2)
-From:   syzbot <syzbot+b0775615fa4c4479b691@syzkaller.appspotmail.com>
-To:     -O-request@vger.kernel.org, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, andrew.hendry@gmail.com,
-        ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-        davem@davemloft.net, dvlasenk@redhat.com,
-        gregkh@linuxfoundation.org, jolsa@redhat.com, kafai@fb.com,
-        linux-kernel@vger.kernel.org, linux-x25@vger.kernel.org,
-        mingo@redhat.com, ms@dev.tdt.de, namhyung@kernel.org,
-        netdev@vger.kernel.org, peterz@infradead.org,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-19_08:,,
+ signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-syzbot has found a reproducer for the following crash on:
+Allow the bpf verifier to run in parallel for root.
 
-HEAD commit:    6d906f99 Merge tag 'arm64-fixes' of git://git.kernel.org/p..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=129b4003200000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=856fc6d0fbbeede9
-dashboard link: https://syzkaller.appspot.com/bug?extid=b0775615fa4c4479b691
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15df396b200000
+Alexei Starovoitov (2):
+  bpf: remove global variables
+  bpf: drop bpf_verifier_lock
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+b0775615fa4c4479b691@syzkaller.appspotmail.com
+ include/linux/bpf_verifier.h |  5 +++++
+ kernel/bpf/verifier.c        | 33 ++++++++++++++++++---------------
+ 2 files changed, 23 insertions(+), 15 deletions(-)
 
-==================================================================
-BUG: KASAN: use-after-free in atomic_read  
-include/asm-generic/atomic-instrumented.h:26 [inline]
-BUG: KASAN: use-after-free in refcount_sub_and_test_checked+0x87/0x200  
-lib/refcount.c:182
-Read of size 4 at addr ffff8880a8d5e060 by task syz-executor.0/31157
-
-CPU: 0 PID: 31157 Comm: syz-executor.0 Not tainted 5.1.0-rc5+ #74
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0x172/0x1f0 lib/dump_stack.c:113
-  print_address_description.cold+0x7c/0x20d mm/kasan/report.c:187
-  kasan_report.cold+0x1b/0x40 mm/kasan/report.c:317
-  check_memory_region_inline mm/kasan/generic.c:185 [inline]
-  check_memory_region+0x123/0x190 mm/kasan/generic.c:191
-  kasan_check_read+0x11/0x20 mm/kasan/common.c:102
-  atomic_read include/asm-generic/atomic-instrumented.h:26 [inline]
-  refcount_sub_and_test_checked+0x87/0x200 lib/refcount.c:182
-  refcount_dec_and_test_checked+0x1b/0x20 lib/refcount.c:220
-  put_task_struct include/linux/sched/task.h:97 [inline]
-  _free_event+0x3d7/0x13b0 kernel/events/core.c:4460
-  free_event+0x5f/0xd0 kernel/events/core.c:4481
-  perf_event_release_kernel+0x5b2/0xbe0 kernel/events/core.c:4642
-  perf_release+0x37/0x50 kernel/events/core.c:4656
-  __fput+0x2e5/0x8d0 fs/file_table.c:278
-  ____fput+0x16/0x20 fs/file_table.c:309
-  task_work_run+0x14a/0x1c0 kernel/task_work.c:113
-  tracehook_notify_resume include/linux/tracehook.h:188 [inline]
-  exit_to_usermode_loop+0x273/0x2c0 arch/x86/entry/common.c:166
-  prepare_exit_to_usermode arch/x86/entry/common.c:197 [inline]
-  syscall_return_slowpath arch/x86/entry/common.c:268 [inline]
-  do_syscall_64+0x52d/0x610 arch/x86/entry/common.c:293
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x4129e1
-Code: 75 14 b8 03 00 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 e4 1a 00 00 c3 48  
-83 ec 08 e8 0a fc ff ff 48 89 04 24 b8 03 00 00 00 0f 05 <48> 8b 3c 24 48  
-89 c2 e8 53 fc ff ff 48 89 d0 48 83 c4 08 48 3d 01
-RSP: 002b:00007ffc793703e0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 0000000000000004 RCX: 00000000004129e1
-RDX: 0000000000000000 RSI: 0000000000000081 RDI: 0000000000000003
-RBP: 0000000000741220 R08: 0000000000741218 R09: 000000000002c9b0
-R10: 00007ffc793704a0 R11: 0000000000000293 R12: 0000000000000000
-R13: 0000000000000001 R14: 0000000000000003 R15: 000000000073bfac
-
-Allocated by task 31160:
-  save_stack+0x45/0xd0 mm/kasan/common.c:75
-  set_track mm/kasan/common.c:87 [inline]
-  __kasan_kmalloc mm/kasan/common.c:497 [inline]
-  __kasan_kmalloc.constprop.0+0xcf/0xe0 mm/kasan/common.c:470
-  kasan_slab_alloc+0xf/0x20 mm/kasan/common.c:505
-  slab_post_alloc_hook mm/slab.h:437 [inline]
-  slab_alloc_node mm/slab.c:3337 [inline]
-  kmem_cache_alloc_node+0x131/0x710 mm/slab.c:3647
-  alloc_task_struct_node kernel/fork.c:157 [inline]
-  dup_task_struct kernel/fork.c:844 [inline]
-  copy_process.part.0+0x1d08/0x7980 kernel/fork.c:1752
-  copy_process kernel/fork.c:1709 [inline]
-  _do_fork+0x257/0xfd0 kernel/fork.c:2226
-  __do_sys_clone kernel/fork.c:2333 [inline]
-  __se_sys_clone kernel/fork.c:2327 [inline]
-  __x64_sys_clone+0xbf/0x150 kernel/fork.c:2327
-  do_syscall_64+0x103/0x610 arch/x86/entry/common.c:290
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-
-Freed by task 31160:
-  save_stack+0x45/0xd0 mm/kasan/common.c:75
-  set_track mm/kasan/common.c:87 [inline]
-  __kasan_slab_free+0x102/0x150 mm/kasan/common.c:459
-  kasan_slab_free+0xe/0x10 mm/kasan/common.c:467
-  __cache_free mm/slab.c:3500 [inline]
-  kmem_cache_free+0x86/0x260 mm/slab.c:3766
-  free_task_struct kernel/fork.c:162 [inline]
-  free_task+0xdd/0x120 kernel/fork.c:457
-  copy_process.part.0+0x1a3a/0x7980 kernel/fork.c:2158
-  copy_process kernel/fork.c:1709 [inline]
-  _do_fork+0x257/0xfd0 kernel/fork.c:2226
-  __do_sys_clone kernel/fork.c:2333 [inline]
-  __se_sys_clone kernel/fork.c:2327 [inline]
-  __x64_sys_clone+0xbf/0x150 kernel/fork.c:2327
-  do_syscall_64+0x103/0x610 arch/x86/entry/common.c:290
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-
-The buggy address belongs to the object at ffff8880a8d5e040
-  which belongs to the cache task_struct(44:syz0) of size 6080
-The buggy address is located 32 bytes inside of
-  6080-byte region [ffff8880a8d5e040, ffff8880a8d5f800)
-The buggy address belongs to the page:
-page:ffffea0002a35780 count:1 mapcount:0 mapping:ffff88808b2adcc0 index:0x0  
-compound_mapcount: 0
-flags: 0x1fffc0000010200(slab|head)
-raw: 01fffc0000010200 ffffea0002301808 ffffea0002171f08 ffff88808b2adcc0
-raw: 0000000000000000 ffff8880a8d5e040 0000000100000001 ffff888085710580
-page dumped because: kasan: bad access detected
-page->mem_cgroup:ffff888085710580
-
-Memory state around the buggy address:
-  ffff8880a8d5df00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-  ffff8880a8d5df80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> ffff8880a8d5e000: fc fc fc fc fc fc fc fc fb fb fb fb fb fb fb fb
-                                                        ^
-  ffff8880a8d5e080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff8880a8d5e100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+-- 
+2.20.0
 
