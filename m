@@ -3,52 +3,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_MUTT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48D7BC282DD
-	for <bpf@archiver.kernel.org>; Sat, 20 Apr 2019 12:40:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72A8BC282DD
+	for <bpf@archiver.kernel.org>; Sat, 20 Apr 2019 12:40:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1F9602183F
-	for <bpf@archiver.kernel.org>; Sat, 20 Apr 2019 12:40:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 495222183F
+	for <bpf@archiver.kernel.org>; Sat, 20 Apr 2019 12:40:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726082AbfDTMkJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 20 Apr 2019 08:40:09 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:39704 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725815AbfDTMkJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 20 Apr 2019 08:40:09 -0400
-Received: by mail-wr1-f65.google.com with SMTP id j9so10025890wrn.6;
-        Sat, 20 Apr 2019 05:40:08 -0700 (PDT)
+        id S1726082AbfDTMkh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 20 Apr 2019 08:40:37 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:38376 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725815AbfDTMkh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 20 Apr 2019 08:40:37 -0400
+Received: by mail-wm1-f67.google.com with SMTP id w15so9129387wmc.3;
+        Sat, 20 Apr 2019 05:40:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=2zUdyrXjB8zSmFinaD8juGVP7dY0GPuIVrNW+lzoEfA=;
-        b=lJz9xrFpQC2GBhJslhkjoXGK5AGt6zxSt/4H29fhFCyLiOqBEdL4qVusvWWcMZpfSU
-         VycBYcoHvUhAXBQGvO32+JXOpYJIVpNkCt3EonIsya11jbD76sO+w0oPW8PAmXUxxT1A
-         u4JgJjh0I7kSRDrmfDYArXBaSSz4bz1EMcb+bYtbExfptvEZk9l0fwbQBnsMkXhkqP1N
-         tg8Uxiam08j8+GrPgfYP8HztOXxdc5PK0TG4ychk7ZPkdb8xX7rUITjgq3g/DOea7Egb
-         QJ1jM+AH6/8frheDFcboizlnsVOBu6sm/hgHDA2unuG7Wins+HhQ3dJKvwuAUp4cEgsu
-         OwaA==
-X-Gm-Message-State: APjAAAVwxOi3cydWmLs3c+8dIoxP5iZOd70cQJSrBniM2TVdSJJzEKfW
-        BmJpLRPqAK5yzoQTE0J9+/E=
-X-Google-Smtp-Source: APXvYqzjmJjN6j1GE1fkAtzqm+4gp9yQqQrxa14oxaxOVZNBdg2WwODyBccMZkriTjTWLD8yNCNEFg==
-X-Received: by 2002:a5d:6a03:: with SMTP id m3mr6768483wru.88.1555764007617;
-        Sat, 20 Apr 2019 05:40:07 -0700 (PDT)
+        bh=ClcVW4nCI1l5GPqid8mIK0QFGmp1UaerpT4ClQAxa6A=;
+        b=ITAPC207ERZWMGd9hTtKuj0i+v5RJLawC2xvVe9ddtaDPDxffva22vm4ptW8Quya3K
+         zEHD60YG7I3f91DLqrjpatQC9dqZHhFzu9lK25zyETZ6+B51bG5NgpyOJjOzZgdu8Aw6
+         gpuIksjoII8hIHCpSPxQW3GF/hzCqC7Yr06meNBuWJQ6eBUj3FiZMMOipjRzgJczyQbo
+         cF4pcyLoiIqmkisfPVCtq+QTrHQ6btfHFlx6Xq8+5QUALRpMzY18X57BQGiPXEBdcnr4
+         ehaBkbb74S+npWKdephuDg7vGm6W1rC6vk3M5F8729nxiApJdYSVD3o/ibbfxUsjjUuy
+         jRgQ==
+X-Gm-Message-State: APjAAAVS5sw+BplnK3WHn7MfgmE/rx3+/JPRNqssDLMnNDShJYwfxxtX
+        QpYyUGloNqPU4CPbE9WFNI50Aktyawg=
+X-Google-Smtp-Source: APXvYqxTIaY4Bi0yFjCed2+2ysWVNVc8k1+sB1DKoCs6TlabOwSD6qEvZTH3ml/HJr18BFZNpKWlgQ==
+X-Received: by 2002:a7b:c3d7:: with SMTP id t23mr5803735wmj.62.1555764035672;
+        Sat, 20 Apr 2019 05:40:35 -0700 (PDT)
 Received: from Nover ([161.105.209.130])
-        by smtp.gmail.com with ESMTPSA id s2sm4816531wrr.50.2019.04.20.05.40.06
+        by smtp.gmail.com with ESMTPSA id d4sm7179868wrv.42.2019.04.20.05.40.35
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 20 Apr 2019 05:40:06 -0700 (PDT)
-Date:   Sat, 20 Apr 2019 14:39:55 +0200
+        Sat, 20 Apr 2019 05:40:35 -0700 (PDT)
+Date:   Sat, 20 Apr 2019 14:40:24 +0200
 From:   Paul Chaignon <paul.chaignon@orange.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
 Cc:     Xiao Han <xiao.han@orange.com>, Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
-Subject: [PATCH bpf 1/2] bpf: mark registers as safe or unknown in all frames
-Message-ID: <06e9f9c4c3cb780459fa22e552fe65328726e55c.1555761008.git.paul.chaignon@orange.com>
+Subject: [PATCH bpf 2/2] selftests/bpf: test case for pointer null check in
+ subprog
+Message-ID: <cc1b8cd3588b12701edd5a5177c47b52d27d3090.1555761008.git.paul.chaignon@orange.com>
 References: <cover.1555761008.git.paul.chaignon@orange.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -60,13 +61,9 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In case of a null check on a pointer inside a subprog, we should mark all
-registers with this pointer as either safe or unknown, in both the current
-and previous frames.  Currently, only spilled registers and registers in
-the current frame are marked.  This patch also marks registers in previous
-frames.
-
-A good reproducer looks as follow:
+This test case is equivalent to the following pseudo-code.  It checks that
+the verifier does not complain on line 6 and recognizes that ptr isn't
+null.
 
 1: ptr = bpf_map_lookup_elem(map, &key);
 2: ret = subprog(ptr) {
@@ -75,50 +72,47 @@ A good reproducer looks as follow:
 5: if (ret)
 6:   value = *ptr;
 
-With the above, the verifier will complain on line 6 because it sees ptr
-as map_value_or_null despite the null check in subprog 1.
-
-Note that this patch fixes another resulting bug when using
-bpf_sk_release():
-
-1: sk = bpf_sk_lookup_tcp();
-2: subprog(sk) {
-3:   if (sk)
-4:     bpf_sk_release(sk, 0);
-5: }
-6: if (!sk)
-7:   return 0;
-8: return sk;
-
-In the above, mark_ptr_or_null_regs will warn on line 6 because it will
-try to free the reference state, even though it was already freed on
-line 3.
-
-Fixes: f4d7e40a5b71 ("bpf: introduce function calls (verification)")
 Signed-off-by: Paul Chaignon <paul.chaignon@orange.com>
 ---
- kernel/bpf/verifier.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/verifier/calls.c | 25 ++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index db301e9b5295..777970d8c245 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4876,11 +4876,11 @@ static void mark_ptr_or_null_regs(struct bpf_verifier_state *vstate, u32 regno,
- 		 */
- 		WARN_ON_ONCE(release_reference_state(state, id));
- 
--	for (i = 0; i < MAX_BPF_REG; i++)
--		mark_ptr_or_null_reg(state, &regs[i], id, is_null);
--
- 	for (j = 0; j <= vstate->curframe; j++) {
- 		state = vstate->frame[j];
-+		for (i = 0; i < MAX_BPF_REG; i++)
-+			mark_ptr_or_null_reg(state, &state->regs[i], id,
-+					     is_null);
- 		bpf_for_each_spilled_reg(i, state, reg) {
- 			if (!reg)
- 				continue;
+diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
+index fb11240b758b..9093a8f64dc6 100644
+--- a/tools/testing/selftests/bpf/verifier/calls.c
++++ b/tools/testing/selftests/bpf/verifier/calls.c
+@@ -374,6 +374,31 @@
+ 	.prog_type = BPF_PROG_TYPE_XDP,
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
++{
++	"calls: ptr null check in subprog",
++	.insns = {
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 3),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 1),
++	BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_6, 0),
++	BPF_EXIT_INSN(),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0, 1),
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_EXIT_INSN(),
++	},
++	.errstr_unpriv = "function calls to other bpf functions are allowed for root only",
++	.fixup_map_hash_48b = { 3 },
++	.result_unpriv = REJECT,
++	.result = ACCEPT,
++	.retval = 0,
++},
+ {
+ 	"calls: two calls with args",
+ 	.insns = {
 -- 
 2.17.1
 
