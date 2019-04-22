@@ -7,56 +7,57 @@ X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A62AC10F11
-	for <bpf@archiver.kernel.org>; Mon, 22 Apr 2019 15:56:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 546E7C282CE
+	for <bpf@archiver.kernel.org>; Mon, 22 Apr 2019 15:56:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6AB5520881
-	for <bpf@archiver.kernel.org>; Mon, 22 Apr 2019 15:56:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2672D2077C
+	for <bpf@archiver.kernel.org>; Mon, 22 Apr 2019 15:56:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aaXmj3kS"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AOlzQS5h"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728067AbfDVP4R (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Apr 2019 11:56:17 -0400
-Received: from mail-qt1-f202.google.com ([209.85.160.202]:45694 "EHLO
-        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728053AbfDVP4Q (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 22 Apr 2019 11:56:16 -0400
-Received: by mail-qt1-f202.google.com with SMTP id n1so11995734qte.12
-        for <bpf@vger.kernel.org>; Mon, 22 Apr 2019 08:56:16 -0700 (PDT)
+        id S1728055AbfDVP4T (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Apr 2019 11:56:19 -0400
+Received: from mail-qk1-f202.google.com ([209.85.222.202]:35511 "EHLO
+        mail-qk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728047AbfDVP4T (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 22 Apr 2019 11:56:19 -0400
+Received: by mail-qk1-f202.google.com with SMTP id q127so10757230qkd.2
+        for <bpf@vger.kernel.org>; Mon, 22 Apr 2019 08:56:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=CTIFoZD1NpSBhLZTX7ZFgMBi6RqUbXh0M8HABmMEVRk=;
-        b=aaXmj3kSzBlOU9AuIRFbqiA/pUfFMpKLgobnYfD4mbiHYab4Za/EqmgNWonztNImZL
-         X9/nltDapnpgtI0TVk/UJHYwur+6cIY7BrBu57xU1ktkFAwkMERoIZ7xui/msIAy7TCL
-         ptG9/E6X6AQOmNPwLJkqzSZCkjQ3Jwp5MWgzTJHweIakD4W82aQFuY7xxnvSBxHR1ydU
-         HXbl2leaEXVvbVqNM6zdePev4kqjPfRU9fXZV/2+bjHnqw+gwnTgH9VSsJemSikYECmQ
-         yz1m1XOHAQHE6smwyYCa82aihTHkn/wCBolMl5PTx44aQ3dKMc8Yy1oIjGRuztpar+Ch
-         4cYQ==
+        bh=2fq2MMPORxZhGH38KpOKAFN5yOd/xNa7oBRTzknpJ5U=;
+        b=AOlzQS5hX8Sxxlt6DzU4QY7DhZ10GmA8QHZdxC1/MKhcyARpADOThQ1o4WiyzK+BsI
+         xylyEbiILqNE+O+eFqQ0pprc3BnF7WoAcAWxadDu7RfkqPq1ySDi6tbHDwWDbvrGu/E2
+         IC1TqZthvWti7++0uXrAohOb+j6sGyfLTj60xEpXuU8/iEN6r/K8RtSUJ+YIH0ycqc2Z
+         duHx6iXY1rOpoNlpEeOR80+4DIu6qYMXvzcV9+Eaflp3HvFJxe2IWw3u5UUmszYvqhR5
+         iJg86poR+nDiAauKoN8MKKwYIpGtvQKN9OZeIAK82zsRMlAbB4WuRmpwacQl+nRueTvy
+         Ri+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=CTIFoZD1NpSBhLZTX7ZFgMBi6RqUbXh0M8HABmMEVRk=;
-        b=ix351l6nSuPiDEev8CkhGvMhLUR6W5MeN67cLR6teViAMVqr/qdnD0va47KLHjRzWs
-         mDlEqvlQI0t0QQJZnSHhLdM+s9P0kd5RLIQKEX9V3AOg2puXWKl6lMnZEyhERWlvvSHD
-         1fWhxG85o5QGyHJdWWmU8u2GuPInQcUHHru70qF0QixPNoVsGwirutxwV6bVMPZo+cPw
-         KF08dK2kanawpzmAie1zCfaq1PKjgejWBnrme0oSFneYJJYw6/dhAa837coW7t9pfL+j
-         8mwyoC1ILfJxOKqZXcdjqzm7Zl7/v4kZemlykk0wDr2hIlozcwkY3n9odUOO9LfyrZB8
-         ldqg==
-X-Gm-Message-State: APjAAAWlkmHTtz64LHfMCMxCN39VfIgRdkVF7qNLD7ErNKEPzgscqLNy
-        WsrXlGJVU6/cisG5ec5gTOkhoS0=
-X-Google-Smtp-Source: APXvYqwCgr3LiQhooxyScLA8eG5E/VTPp+79szVOQACdoY/+CV5o2/uKx1u8cH7h5E9BwHd4pm76Qiw=
-X-Received: by 2002:ac8:170d:: with SMTP id w13mr15886237qtj.220.1555948575727;
- Mon, 22 Apr 2019 08:56:15 -0700 (PDT)
-Date:   Mon, 22 Apr 2019 08:55:51 -0700
+        bh=2fq2MMPORxZhGH38KpOKAFN5yOd/xNa7oBRTzknpJ5U=;
+        b=r2LzWoqXEonLjcWftJ5V2yYqVJvLoV+a8hlAznrKmi/GyfKqAxktd+73xMeTU/WD/l
+         hxmnjOU9A+3PoJku3Lb5YxUDuUft+U8vNw2MZ1ekJzVPE3YzPBO+UPVFhy3cH7m/rsVZ
+         jv+c72WxTc9dGy0lz4lacQD/wQBspisV2sbacVW9duubuPN8eizqlbya5vazfb+Nib6H
+         mW9pn9XBvHUjYc51pvzuzuTvFwjvkujfLvjrSLaX5nIw4BRyZ6v+La/x77EzO+TJ+vyS
+         gYzF8qCC3sXi39VIN32ODyHC9Ekx7h5rDvX3mGk7OZzf2NZ2cF//C1+EoPQq3haPJDJd
+         BZ0w==
+X-Gm-Message-State: APjAAAXl9j3fJCuHJXE1WkSVWxOzQ/UaDKECdwEtSwBOBizgQkL+p350
+        SGG1kXej4x/6qzEOqjryutMTaps=
+X-Google-Smtp-Source: APXvYqzss4K0+engY8HcqG8cPrN2suej+CR1oahbqo1xVwsaoC4kAtlThrrk8z+hWVs8kY4PIOTtmwM=
+X-Received: by 2002:a0c:9e9a:: with SMTP id r26mr16061457qvd.57.1555948578271;
+ Mon, 22 Apr 2019 08:56:18 -0700 (PDT)
+Date:   Mon, 22 Apr 2019 08:55:52 -0700
 In-Reply-To: <20190422155552.222910-1-sdf@google.com>
-Message-Id: <20190422155552.222910-9-sdf@google.com>
+Message-Id: <20190422155552.222910-10-sdf@google.com>
 Mime-Version: 1.0
 References: <20190422155552.222910-1-sdf@google.com>
 X-Mailer: git-send-email 2.21.0.593.g511ec345e18-goog
-Subject: [PATCH bpf-next v6 8/9] selftests/bpf: properly return error from bpf_flow_load
+Subject: [PATCH bpf-next v6 9/9] bpf/flow_dissector: don't adjust nhoff by
+ ETH_HLEN in BPF_PROG_TEST_RUN
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
@@ -68,42 +69,103 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Right now we incorrectly return 'ret' which is always zero at that
-point.
+Now that we use skb-less flow dissector let's return true nhoff and
+thoff. We used to adjust them by ETH_HLEN because that's how it was
+done in the skb case. For VLAN tests that looks confusing: nhoff is
+pointing to vlan parts :-\
+
+Warning, this is an API change for BPF_PROG_TEST_RUN! Feel free to drop
+if you think that it's too late at this point to fix it.
 
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- tools/testing/selftests/bpf/flow_dissector_load.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ net/bpf/test_run.c                            |  3 ---
+ .../selftests/bpf/prog_tests/flow_dissector.c | 23 ++++++++-----------
+ 2 files changed, 9 insertions(+), 17 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/flow_dissector_load.h b/tools/testing/selftests/bpf/flow_dissector_load.h
-index eeb48b6fc827..daeaeb518894 100644
---- a/tools/testing/selftests/bpf/flow_dissector_load.h
-+++ b/tools/testing/selftests/bpf/flow_dissector_load.h
-@@ -25,19 +25,19 @@ static inline int bpf_flow_load(struct bpf_object **obj,
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index db2ec88ab129..8606e5aef0b6 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -418,9 +418,6 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
+ 		retval = bpf_flow_dissect(prog, &ctx, eth->h_proto, ETH_HLEN,
+ 					  size);
  
- 	main_prog = bpf_object__find_program_by_title(*obj, section_name);
- 	if (!main_prog)
--		return ret;
-+		return -1;
+-		flow_keys.nhoff -= ETH_HLEN;
+-		flow_keys.thoff -= ETH_HLEN;
+-
+ 		if (signal_pending(current)) {
+ 			preempt_enable();
+ 			rcu_read_unlock();
+diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+index 51758a0ca55e..8b54adfd6264 100644
+--- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
++++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+@@ -82,8 +82,8 @@ struct test tests[] = {
+ 			.tcp.doff = 5,
+ 		},
+ 		.keys = {
+-			.nhoff = 0,
+-			.thoff = sizeof(struct iphdr),
++			.nhoff = ETH_HLEN,
++			.thoff = ETH_HLEN + sizeof(struct iphdr),
+ 			.addr_proto = ETH_P_IP,
+ 			.ip_proto = IPPROTO_TCP,
+ 			.n_proto = __bpf_constant_htons(ETH_P_IP),
+@@ -98,8 +98,8 @@ struct test tests[] = {
+ 			.tcp.doff = 5,
+ 		},
+ 		.keys = {
+-			.nhoff = 0,
+-			.thoff = sizeof(struct ipv6hdr),
++			.nhoff = ETH_HLEN,
++			.thoff = ETH_HLEN + sizeof(struct ipv6hdr),
+ 			.addr_proto = ETH_P_IPV6,
+ 			.ip_proto = IPPROTO_TCP,
+ 			.n_proto = __bpf_constant_htons(ETH_P_IPV6),
+@@ -116,8 +116,8 @@ struct test tests[] = {
+ 			.tcp.doff = 5,
+ 		},
+ 		.keys = {
+-			.nhoff = VLAN_HLEN,
+-			.thoff = VLAN_HLEN + sizeof(struct iphdr),
++			.nhoff = ETH_HLEN + VLAN_HLEN,
++			.thoff = ETH_HLEN + VLAN_HLEN + sizeof(struct iphdr),
+ 			.addr_proto = ETH_P_IP,
+ 			.ip_proto = IPPROTO_TCP,
+ 			.n_proto = __bpf_constant_htons(ETH_P_IP),
+@@ -134,8 +134,9 @@ struct test tests[] = {
+ 			.tcp.doff = 5,
+ 		},
+ 		.keys = {
+-			.nhoff = VLAN_HLEN * 2,
+-			.thoff = VLAN_HLEN * 2 + sizeof(struct ipv6hdr),
++			.nhoff = ETH_HLEN + VLAN_HLEN * 2,
++			.thoff = ETH_HLEN + VLAN_HLEN * 2 +
++				sizeof(struct ipv6hdr),
+ 			.addr_proto = ETH_P_IPV6,
+ 			.ip_proto = IPPROTO_TCP,
+ 			.n_proto = __bpf_constant_htons(ETH_P_IPV6),
+@@ -238,9 +239,6 @@ void test_flow_dissector(void)
+ 	 * We use a known path in the net/tun driver that calls
+ 	 * eth_get_headlen and we manually export bpf_flow_keys
+ 	 * via BPF map in this case.
+-	 *
+-	 * Note, that since eth_get_headlen operates on a L2 level,
+-	 * we adjust exported nhoff/thoff by ETH_HLEN.
+ 	 */
  
- 	*prog_fd = bpf_program__fd(main_prog);
- 	if (*prog_fd < 0)
--		return ret;
-+		return -1;
+ 	err = bpf_prog_attach(prog_fd, 0, BPF_FLOW_DISSECTOR, 0);
+@@ -262,9 +260,6 @@ void test_flow_dissector(void)
+ 		err = bpf_map_lookup_elem(keys_fd, &key, &flow_keys);
+ 		CHECK_ATTR(err, tests[i].name, "bpf_map_lookup_elem %d\n", err);
  
- 	prog_array = bpf_object__find_map_by_name(*obj, map_name);
- 	if (!prog_array)
--		return ret;
-+		return -1;
- 
- 	prog_array_fd = bpf_map__fd(prog_array);
- 	if (prog_array_fd < 0)
--		return ret;
-+		return -1;
- 
- 	if (keys_map_name && keys_fd) {
- 		keys = bpf_object__find_map_by_name(*obj, keys_map_name);
+-		flow_keys.nhoff -= ETH_HLEN;
+-		flow_keys.thoff -= ETH_HLEN;
+-
+ 		CHECK_ATTR(err, tests[i].name, "skb-less err %d\n", err);
+ 		CHECK_FLOW_KEYS(tests[i].name, flow_keys, tests[i].keys);
+ 	}
 -- 
 2.21.0.593.g511ec345e18-goog
 
