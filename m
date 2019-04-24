@@ -2,125 +2,136 @@ Return-Path: <SRS0=W3SG=S2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09823C282CE
-	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 19:02:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9912FC10F11
+	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 19:07:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CE93520835
-	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 19:02:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6885B20835
+	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 19:07:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="yeq/pi/Y"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ViqkAqCn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388732AbfDXTCw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Apr 2019 15:02:52 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:52918 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726531AbfDXTCw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Apr 2019 15:02:52 -0400
-Received: by mail-wm1-f66.google.com with SMTP id j13so6041189wmh.2
-        for <bpf@vger.kernel.org>; Wed, 24 Apr 2019 12:02:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=2SrtIqVi6N/CDzfoGks7RKJ0ApZRQBPN1BqiEtG0HUg=;
-        b=yeq/pi/YFi+uLs7q5oHGRX8J9qpid5BVnElCOfHDXQu8VsYKqbHw7AQv+wY1qc1Oxx
-         ojG6u0ObVw2QcICNaFluP5kgFJr9WhCenUzReonnlgaPo6QbHVsKzpudD4ZlmcXnRMGa
-         FJSh42/MZBk3S7mjIDDQGywEMuuBJ9BcQlzRHfPMQCNeSUtHCMP2Nvhahvnj4B5pVTTf
-         2+gCevEDarwzhZWEI/8s2YOfQf3zz15iSsy9eSYhAEQCM1jhYTvo7iOW7HyMu2PwiHGn
-         nFo2uOFofjuEk4y8qseEB2So3JTa2VJZ3//9uTsvlK7aQ60GB/Q+/10QpaZQ2W+H0qpa
-         37Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2SrtIqVi6N/CDzfoGks7RKJ0ApZRQBPN1BqiEtG0HUg=;
-        b=H+p4KZ4u8RFYNPw1XQQ3REOz3r9xE6+bbAEBB88IB8N7Vh/WKaskMt0rsSy5xok1PR
-         6ksw2yRHrzk+Qpyt59/6h4OBBmyOm1JMQZRXT7NGzhJ5f29MEFtzQasdXuaYlIN3ct/M
-         wAEC9d5Ztqw75TLdnyrkWCF/DvsOvRvnkiRK8yIXyVTCr21BXH2GStHdHniz4hVPnUKr
-         Zllueif2XhGqSdRzJ5Io0eqRNNDafa72EQt//Qqu75JyNsyYGlnHelWkD/k7wtiU+Wns
-         pfo+46VttRm66Flsb7FD5jwabts7cSTYBHWo0aMNdjHMl2zhds2t7EzwziOaeoG0lhcR
-         IRYw==
-X-Gm-Message-State: APjAAAUeZq5Luc0onw6XKKYOABX6RbmFatmtEdr3ilrlTfceOOG3jZFO
-        KnefmhANIz+91SeQocqqR12pDw==
-X-Google-Smtp-Source: APXvYqwuaFlrQncO/ecJaWVjyp4jA81KdRkItS9C1/xsInsVbND/ZafxpvOffKtXSgDtgZz7/EKJPQ==
-X-Received: by 2002:a1c:7e0e:: with SMTP id z14mr397949wmc.95.1556132569977;
-        Wed, 24 Apr 2019 12:02:49 -0700 (PDT)
-Received: from [192.168.1.2] ([194.53.186.213])
-        by smtp.gmail.com with ESMTPSA id d14sm2880832wre.78.2019.04.24.12.02.48
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 24 Apr 2019 12:02:49 -0700 (PDT)
-Subject: Re: [PATCH bpf-next v3 2/2] bpftool: show flow_dissector attachment
- status
-To:     Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        jakub.kicinski@netronome.com
-References: <20190424185230.251550-1-sdf@google.com>
- <20190424185230.251550-2-sdf@google.com>
-From:   Quentin Monnet <quentin.monnet@netronome.com>
-Message-ID: <144dc3c2-5230-8c0a-eb7b-46520f381e3b@netronome.com>
-Date:   Wed, 24 Apr 2019 20:02:48 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727504AbfDXTH5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Apr 2019 15:07:57 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:36960 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730531AbfDXTH5 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 24 Apr 2019 15:07:57 -0400
+Received: from pps.filterd (m0001255.ppops.net [127.0.0.1])
+        by mx0b-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3OJ3O4V018909;
+        Wed, 24 Apr 2019 12:07:37 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=facebook;
+ bh=yAtvfpbreo1+TQY+KrNZG9h3fZsfDQzNvha7lc7f0tg=;
+ b=ViqkAqCnwtAAmeWqpQ06th31RtukqC/1gdWj87zEUGBgdiMgjnUe7keCJdrugGvgfeJZ
+ u+v/EINijhckJE8SKCsCjIjJNSFGE2+LKnh1qZ+VhRxa/vevge/YfSjtNd8GiNMsNICJ
+ Q2byitxj4WrjfF76JX7Co47PBEgWJ2TCCEs= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0b-00082601.pphosted.com with ESMTP id 2s27u3w3kk-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 24 Apr 2019 12:07:37 -0700
+Received: from mmullins-1.thefacebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server id
+ 15.1.1713.5; Wed, 24 Apr 2019 12:07:30 -0700
+From:   Matt Mullins <mmullins@fb.com>
+To:     <hall@fb.com>, <mmullins@fb.com>, <ast@kernel.org>,
+        <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, "Yonghong Song" <yhs@fb.com>
+Subject: [PATCH bpf-next v4 0/5] writable contexts for bpf raw tracepoints
+Date:   Wed, 24 Apr 2019 12:07:16 -0700
+Message-ID: <20190424190721.24453-1-mmullins@fb.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <20190424185230.251550-2-sdf@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [2620:10d:c081:10::13]
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-24_12:,,
+ signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-2019-04-24 11:52 UTC-0700 ~ Stanislav Fomichev <sdf@google.com>
-> Right now there is no way to query whether BPF flow_dissector program
-> is attached to a network namespace or not. In previous commit, I added
-> support for querying that info, show it when doing `bpftool net`:
-> 
-> $ bpftool prog loadall ./bpf_flow.o \
-> 	/sys/fs/bpf/flow type flow_dissector \
-> 	pinmaps /sys/fs/bpf/flow
-> $ bpftool prog
-> 3: flow_dissector  name _dissect  tag 8c9e917b513dd5cc  gpl
->          loaded_at 2019-04-23T16:14:48-0700  uid 0
->          xlated 656B  jited 461B  memlock 4096B  map_ids 1,2
->          btf_id 1
-> ...
-> 
-> $ bpftool net -j
-> [{"xdp":[],"tc":[],"flow_dissector":[]}]
-> 
-> $ bpftool prog attach pinned \
-> 	/sys/fs/bpf/flow/flow_dissector flow_dissector
-> $ bpftool net -j
-> [{"xdp":[],"tc":[],"flow_dissector":["id":3]}]
-> 
-> Doesn't show up in a different net namespace:
-> $ ip netns add test
-> $ ip netns exec test bpftool net -j
-> [{"xdp":[],"tc":[],"flow_dissector":[]}]
-> 
-> Non-json output:
-> $ bpftool net
-> xdp:
-> 
-> tc:
-> 
-> flow_dissector:
-> id 3
-> 
-> v2:
-> * initialization order (Jakub Kicinski)
-> * clear errno for batch mode (Quentin Monnet)
-> 
-> Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> ---
+This adds an opt-in interface for tracepoints to expose a writable context to
+BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE programs that are attached, while
+supporting read-only access from existing BPF_PROG_TYPE_RAW_TRACEPOINT
+programs, as well as from non-BPF-based tracepoints.
 
-Reviewed-by: Quentin Monnet <quentin.monnet@netronome.com>
+The initial motivation is to support tracing that can be observed from the
+remote end of an NBD socket, e.g. by adding flags to the struct nbd_request
+header.  Earlier attempts included adding an NBD-specific tracepoint fd, but in
+code review, I was recommended to implement it more generically -- as a result,
+this patchset is far simpler than my initial try.
 
-Thanks!
+v3->v4:
+  * fixed a silly copy/paste typo in include/trace/events/bpf_test_run.h
+    (_TRACE_NBD_H -> _TRACE_BPF_TEST_RUN_H)
+  * fixed incorrect/misleading wording in patch 1's commit message,
+    since the pointer cannot be directly dereferenced in a
+    BPF_PROG_TYPE_RAW_TRACEPOINT
+  * cleaned up the error message wording if the prog_tests fail
+  * Addressed feedback from Yonghong
+    * reject non-pointer-sized accesses to the buffer pointer
+    * use sizeof(struct nbd_request) as one-byte-past-the-end in
+      raw_tp_writable_reject_nbd_invalid.c
+    * use BPF_MOV64_IMM instead of BPF_LD_IMM64
+
+v2->v3:
+  * Andrew addressed Josef's comments:
+    * C-style commenting in nbd.c
+    * Collapsed identical events into a single DECLARE_EVENT_CLASS.
+      This saves about 2kB of kernel text
+
+v1->v2:
+  * add selftests
+    * sync tools/include/uapi/linux/bpf.h
+  * reject variable offset into the buffer
+  * add string representation of PTR_TO_TP_BUFFER to reg_type_str
+
+Andrew Hall (1):
+  nbd: add tracepoints for send/receive timing
+
+Matt Mullins (4):
+  bpf: add writable context for raw tracepoints
+  nbd: trace sending nbd requests
+  tools: sync bpf.h
+  selftests: bpf: test writable buffers in raw tps
+
+ MAINTAINERS                                   |   1 +
+ drivers/block/nbd.c                           |  13 +++
+ include/linux/bpf.h                           |   2 +
+ include/linux/bpf_types.h                     |   1 +
+ include/linux/tracepoint-defs.h               |   1 +
+ include/trace/bpf_probe.h                     |  27 ++++-
+ include/trace/events/bpf_test_run.h           |  50 ++++++++
+ include/trace/events/nbd.h                    | 107 ++++++++++++++++++
+ include/uapi/linux/bpf.h                      |   1 +
+ kernel/bpf/syscall.c                          |   8 +-
+ kernel/bpf/verifier.c                         |  31 +++++
+ kernel/trace/bpf_trace.c                      |  24 ++++
+ net/bpf/test_run.c                            |   4 +
+ tools/include/uapi/linux/bpf.h                |   1 +
+ tools/lib/bpf/libbpf.c                        |   1 +
+ tools/lib/bpf/libbpf_probes.c                 |   1 +
+ .../raw_tp_writable_reject_nbd_invalid.c      |  42 +++++++
+ .../bpf/prog_tests/raw_tp_writable_test_run.c |  80 +++++++++++++
+ .../selftests/bpf/verifier/raw_tp_writable.c  |  34 ++++++
+ 19 files changed, 425 insertions(+), 4 deletions(-)
+ create mode 100644 include/trace/events/bpf_test_run.h
+ create mode 100644 include/trace/events/nbd.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_run.c
+ create mode 100644 tools/testing/selftests/bpf/verifier/raw_tp_writable.c
+
+-- 
+2.17.1
+
