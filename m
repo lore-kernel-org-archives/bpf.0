@@ -2,109 +2,187 @@ Return-Path: <SRS0=W3SG=S2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A404BC282E1
-	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 14:57:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14438C282CE
+	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 15:42:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6B5D621904
-	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 14:57:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1556117877;
-	bh=whJrikFU8Itb+EdI/4GjOvnT7vFfmZ25PfXvzCOP8Cg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=bh7PWsaWVIm8GAQoQX0xUXzQ8AnIBDC/ffRttMWbW7fSoYZbDsXFRckXZ6IFd0ci4
-	 DBPBEgEYo4xBaXtWKi9b0XV5K022ao9NWJIZBauiUY9sXA1RIgkMM0eTrrjL1bc8GP
-	 728uLi08YbQZXxzNykMXcZadV/TvoM9NHGU/3fSk=
+	by mail.kernel.org (Postfix) with ESMTP id D601D21773
+	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 15:42:09 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="Le6zSC4J"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731912AbfDXOru (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Apr 2019 10:47:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47432 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732325AbfDXOrt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Apr 2019 10:47:49 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AF08821902;
-        Wed, 24 Apr 2019 14:47:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556117268;
-        bh=whJrikFU8Itb+EdI/4GjOvnT7vFfmZ25PfXvzCOP8Cg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=btzvLskhtuwcnMJXoK8/L3bXF2aWRwpJHvXlGeso3XgzdAV8gnlcgUpZCLpEC/Vik
-         4O5KPB2DGc1rFeEqa9Tv20TiZCwlfm8fDpGRaoRA5+QqsSbFptBazzbmoYe3Yi4XAj
-         cURbYxVfr//jW1YHq4tl8/B2jU4fdy5n1D2bQCKk=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Sasha Levin <sashal@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 17/35] debugfs: fix use-after-free on symlink traversal
-Date:   Wed, 24 Apr 2019 10:46:51 -0400
-Message-Id: <20190424144709.30215-17-sashal@kernel.org>
-X-Mailer: git-send-email 2.19.1
-In-Reply-To: <20190424144709.30215-1-sashal@kernel.org>
-References: <20190424144709.30215-1-sashal@kernel.org>
+        id S1731312AbfDXPmJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Apr 2019 11:42:09 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:41538 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730765AbfDXPmJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Apr 2019 11:42:09 -0400
+Received: by mail-pg1-f193.google.com with SMTP id f6so9559485pgs.8
+        for <bpf@vger.kernel.org>; Wed, 24 Apr 2019 08:42:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=MQdd9eOfOhmscSdRZrlX9EuClR1SERHeGHLgz18WGxM=;
+        b=Le6zSC4JjyCPHJgr/0XeugpBA9BpeCDKsqFuZehzPLYDdFmVwDJJ01UaAfkioQPGnY
+         Ird3SkdVfSDtTdEKB3UeS5jWZNb1USOB4e3u/m/dmwzFZiK/GEEoHVmBJ6h5SeQC5l6q
+         mRhxpAIGgeYopF2zK/NgO+8IW26jFJtLFxShm7+4nFTOj66oAd2dou8biKFdhrDJJgM1
+         dyCqjHldrkE3fAXtCM1c4CG3vg5pwNjWfKUxswbJJViGz4CPlE6BEQCVaFC2Q+TO5GbW
+         D0ymUKZl5yloHgDZ0smvmJk3mS9NrL8zBqF0P9c2OcFwyAXVquObLzi4l+1gqY4Kyxnk
+         RFOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=MQdd9eOfOhmscSdRZrlX9EuClR1SERHeGHLgz18WGxM=;
+        b=kWHF6GUVu+6Gc/7uikdUYKepqEVn/4luUgZ6nH/5LyEvxAp87OSv8kP4ntLyBqZ2Rp
+         7HWsHND0QejwgCjtEEnaSz9bso6zQkpdysHjeNkhcrR82wyJ9Jb/JpZUa3nea1/qCfsW
+         uKx1vhCrUKWIuHAjkvxKdiEMZ1YC9imYLpF3YeNzSRwM7sYaZ45vvtcigrKdHFagveAL
+         JAOOEmQ8Dy7EgE2uKAjFCO5Sv3h+WoqGQOBEP/8/bGs2Ph7sP72OpqheKWseG4ILhps0
+         jIJj0vtttLtAygGmbKSMCNlvrkNPyem7NkriEOOpsIQ1GRMIseUXfn0zVSAPcTHTSzwq
+         7x1A==
+X-Gm-Message-State: APjAAAWr5xQRv95RXDst+z/OSeJUkEoVeH3oAzFXQzVgwMyMt5S5Cltp
+        UoulJB8MKABAJ978psMyYWYJTA==
+X-Google-Smtp-Source: APXvYqxqUs76Ge7qBjOu3msm886b+/pHbupq8os8vAuDD/kVCr+zhnmDXJOnsl3RoY6zXCApA/0cSw==
+X-Received: by 2002:a63:e20b:: with SMTP id q11mr32201109pgh.263.1556120528382;
+        Wed, 24 Apr 2019 08:42:08 -0700 (PDT)
+Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
+        by smtp.gmail.com with ESMTPSA id m131sm45058402pga.3.2019.04.24.08.42.07
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 24 Apr 2019 08:42:07 -0700 (PDT)
+Date:   Wed, 24 Apr 2019 08:42:06 -0700
+From:   Stanislav Fomichev <sdf@fomichev.me>
+To:     Quentin Monnet <quentin.monnet@netronome.com>
+Cc:     Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, davem@davemloft.net, ast@kernel.org,
+        daniel@iogearbox.net, jakub.kicinski@netronome.com
+Subject: Re: [PATCH bpf-next 2/2] bpftool: show flow_dissector attachment
+ status
+Message-ID: <20190424154206.GC1247@mini-arch>
+References: <20190423232200.101627-1-sdf@google.com>
+ <20190423232200.101627-2-sdf@google.com>
+ <b0713532-87b8-bbba-ba65-dd8778a5ca59@netronome.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b0713532-87b8-bbba-ba65-dd8778a5ca59@netronome.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Al Viro <viro@zeniv.linux.org.uk>
+On 04/24, Quentin Monnet wrote:
+> 2019-04-23 16:22 UTC-0700 ~ Stanislav Fomichev <sdf@google.com>
+> > Right now there is no way to query whether BPF flow_dissector program
+> > is attached to a network namespace or not. In previous commit, I added
+> > support for querying that info, show it when doing `bpftool net`:
+> > 
+> > $ bpftool prog loadall ./bpf_flow.o \
+> > 	/sys/fs/bpf/flow type flow_dissector \
+> > 	pinmaps /sys/fs/bpf/flow
+> > $ bpftool prog
+> > 3: flow_dissector  name _dissect  tag 8c9e917b513dd5cc  gpl
+> >          loaded_at 2019-04-23T16:14:48-0700  uid 0
+> >          xlated 656B  jited 461B  memlock 4096B  map_ids 1,2
+> >          btf_id 1
+> > ...
+> > 
+> > $ bpftool net -j
+> > [{"xdp":[],"tc":[],"flow_dissector":[]}]
+> > 
+> > $ bpftool prog attach pinned \
+> > 	/sys/fs/bpf/flow/flow_dissector flow_dissector
+> > $ bpftool net -j
+> > [{"xdp":[],"tc":[],"flow_dissector":["id":3]}]
+> > 
+> > Doesn't show up in a different net namespace:
+> > $ ip netns add test
+> > $ ip netns exec test bpftool net -j
+> > [{"xdp":[],"tc":[],"flow_dissector":[]}]
+> > 
+> > Non-json output:
+> > $ bpftool net
+> > xdp:
+> > 
+> > tc:
+> > 
+> > flow_dissector:
+> > id 3
+> > 
+> > Signed-off-by: Stanislav Fomichev <sdf@google.com>
+> > ---
+> >   tools/bpf/bpftool/net.c | 52 +++++++++++++++++++++++++++++++++++++++++
+> >   1 file changed, 52 insertions(+)
+> > 
+> > diff --git a/tools/bpf/bpftool/net.c b/tools/bpf/bpftool/net.c
+> > index db0e7de49d49..afe0903201e2 100644
+> > --- a/tools/bpf/bpftool/net.c
+> > +++ b/tools/bpf/bpftool/net.c
+> 
+> > @@ -48,6 +51,10 @@ struct bpf_filter_t {
+> >   	int		ifindex;
+> >   };
+> > +struct bpf_attach_info {
+> > +	__u32 flow_dissector_id;
+> > +};
+> > +
+> >   static int dump_link_nlmsg(void *cookie, void *msg, struct nlattr **tb)
+> >   {
+> >   	struct bpf_netdev_t *netinfo = cookie;
+> > @@ -180,8 +187,43 @@ static int show_dev_tc_bpf(int sock, unsigned int nl_pid,
+> >   	return 0;
+> >   }
+> > +static int query_flow_dissector(struct bpf_attach_info *attach_info)
+> > +{
+> > +	__u32 prog_ids[1] = {0};
+> > +	__u32 prog_cnt = ARRAY_SIZE(prog_ids);
+> > +	__u32 attach_flags;
+> > +	int fd;
+> > +	int err;
+> > +
+> > +	fd = open("/proc/self/ns/net", O_RDONLY);
+> > +	if (fd < 0) {
+> > +		p_err("can't open /proc/self/ns/net: %d",
+> > +		      strerror(errno));
+> > +		return -1;
+> > +	}
+> > +	err = bpf_prog_query(fd, BPF_FLOW_DISSECTOR, 0,
+> > +			     &attach_flags, prog_ids, &prog_cnt);
+> > +	close(fd);
+> > +	if (err) {
+> > +		if (errno == EINVAL) {
+> > +			/* Older kernel's don't support querying
+> > +			 * flow dissector programs.
+> > +			 */
+> > +			return 0;
+> 
+> Hi Stanislav,
+> 
+> If we handle the "error" gracefully here, should we maybe reset errno to 0
+> before returning? Batch mode, for example, stops processing commands when it
+> sees that errno is set, but we probably want it to continue in the current
+> case (commit 39c9f10639a3 addressed something similar for "bpftool cgroup
+> tree").
+Oh, I didn't know that. Sure, will do!
 
-[ Upstream commit 93b919da64c15b90953f96a536e5e61df896ca57 ]
-
-symlink body shouldn't be freed without an RCU delay.  Switch debugfs to
-->destroy_inode() and use of call_rcu(); free both the inode and symlink
-body in the callback.  Similar to solution for bpf, only here it's even
-more obvious that ->evict_inode() can be dropped.
-
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/debugfs/inode.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/fs/debugfs/inode.c b/fs/debugfs/inode.c
-index ccfe1e1cb6bc..f4df6feec271 100644
---- a/fs/debugfs/inode.c
-+++ b/fs/debugfs/inode.c
-@@ -170,19 +170,24 @@ static int debugfs_show_options(struct seq_file *m, struct dentry *root)
- 	return 0;
- }
- 
--static void debugfs_evict_inode(struct inode *inode)
-+static void debugfs_i_callback(struct rcu_head *head)
- {
--	truncate_inode_pages_final(&inode->i_data);
--	clear_inode(inode);
-+	struct inode *inode = container_of(head, struct inode, i_rcu);
- 	if (S_ISLNK(inode->i_mode))
- 		kfree(inode->i_link);
-+	free_inode_nonrcu(inode);
-+}
-+
-+static void debugfs_destroy_inode(struct inode *inode)
-+{
-+	call_rcu(&inode->i_rcu, debugfs_i_callback);
- }
- 
- static const struct super_operations debugfs_super_operations = {
- 	.statfs		= simple_statfs,
- 	.remount_fs	= debugfs_remount,
- 	.show_options	= debugfs_show_options,
--	.evict_inode	= debugfs_evict_inode,
-+	.destroy_inode	= debugfs_destroy_inode,
- };
- 
- static struct vfsmount *debugfs_automount(struct path *path)
--- 
-2.19.1
-
+> > +		}
+> > +		p_err("can't query prog: %s", strerror(errno));
+> > +		return -1;
+> > +	}
+> > +
+> > +	if (prog_cnt == 1)
+> > +		attach_info->flow_dissector_id = prog_ids[0];
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >   static int do_show(int argc, char **argv)
+> >   {
+> > +	struct bpf_attach_info attach_info = {};
+> >   	int i, sock, ret, filter_idx = -1;
+> >   	struct bpf_netdev_t dev_array;
+> >   	unsigned int nl_pid;
