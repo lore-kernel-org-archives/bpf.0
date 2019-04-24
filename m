@@ -5,58 +5,58 @@ X-Spam-Level:
 X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3496C282E1
-	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 18:13:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1624FC282E1
+	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 18:17:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B457320685
-	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 18:13:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D165820685
+	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 18:17:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tPYvH8GU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LzsjECaL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387997AbfDXSM7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Apr 2019 14:12:59 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:41417 "EHLO
+        id S1733274AbfDXSRC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Apr 2019 14:17:02 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:47020 "EHLO
         mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387916AbfDXSM7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Apr 2019 14:12:59 -0400
-Received: by mail-qk1-f196.google.com with SMTP id l199so1751469qke.8;
-        Wed, 24 Apr 2019 11:12:58 -0700 (PDT)
+        with ESMTP id S1732944AbfDXSRC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Apr 2019 14:17:02 -0400
+Received: by mail-qk1-f196.google.com with SMTP id w73so9268692qkb.13;
+        Wed, 24 Apr 2019 11:17:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=xqMByqdoSGjeWKq3qP9GG935RK9Cr2q1RzPsKeyvz+c=;
-        b=tPYvH8GUH4bVf12f4ewkrS43mGIRW5G8a3lVY5z4OUsvj4CedCZKU5JmlCaT6RdD2I
-         i+hX7/E1l0F32L9IemSgfHm8OG24am1hUBrZrXwoPXIzfdUVXWWNkFxTckxkgIA6TrNu
-         zVMW0OEFATjQs1eqHEm4FFWRYjUQYaG26VlDcHQW1gw+Mcmr663KidiDZx7s2J2Yqmxx
-         0k1sObq6201yr6zLr9iIdgp6n1W0kZ3Cy24BMB5VSH/KPD9kAA81nZMjpFNYRyqTNl5G
-         rbESB8K0MVZCGGRIZnI9W1eLhSfmpQolCZlJtmvYeauHVgxyP0PeoE+9M2zDLyW1Tg8x
-         zCfg==
+        bh=iJ13m2JAt52dn3hlEQov4A1vri+FEKsuux71s6SxwnQ=;
+        b=LzsjECaLNgYKvgQccnBaWThlzLgw16q7bQ8PWvp9iL0Wyf86+Hp9/NC+DMUoqusJOJ
+         zwqZSNmbrQ0ofcFPTgnjZosLr9MqknuOPVutpQviVXCnP+T5BN67cJvLRzemKLoaqozP
+         Nv01pSZVC/Y+053qqcfAax4Tpga6KVcXMQ6rGnhop0n2pN1FdmopKJ6H/41l6MaLJrhv
+         7DtHduS1E/KNDKZ/s4GBUkQKjfIsdLzONrUNjEnfkXzL+d2BaOy3romYJwdDUj10cqmk
+         k17yPCyDV0qSTR/HSZ6o1ehKG+hxs6E24dsiW5gfqh8gGbfr8VxH+OKyl4oakE/v8TWu
+         9aow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=xqMByqdoSGjeWKq3qP9GG935RK9Cr2q1RzPsKeyvz+c=;
-        b=ayPMLe+Yykf0OOnItchqN8C+q3y85jpm4BsS7gZXEcNKYdaToP7XGt9xL/07LD/mFd
-         U697E0i7mTiUsQCtzRqKL2Z/CzO3VBnijuK+rZ4+XXOnyxnwy8E3Ld3XLPpLFoXFXITI
-         Xxa5wLjXakCIZEOZmewmZl+ZI2SMKhJtmlzanTZiey2nG2u26+CxiQkdldV7r+0V71GH
-         SClbGbpASTO2VdgObJoDUL8QRLLOv62Y+boc1BPzGZ/Hflsxl3DXkKOwLkuSjNW3RVus
-         ZhEA+Sqwtu1+QlcNIG/h5Fqim/qKKegMWW2p+xb6l/IZdQBd4ARF6qL1apprwU7iC7Qz
-         AkwQ==
-X-Gm-Message-State: APjAAAXZd2FSPhtrBtvs6ehqh8rzwCTRvFiivaIhYeCNaZgqxqwA4m5V
-        VpXDaXFftw6PSRqahh4vd3FKy/uxP329UbFBkRpgF2q3lvs=
-X-Google-Smtp-Source: APXvYqy6cNDH4FMsI/UCvgSQA/Uy/pr+jrHDelm4Jl1x8VMTu4g9wmsWbYt3eSRVPxmCME0Vthc5KMja8PoOpaEKkw4=
-X-Received: by 2002:a37:8c44:: with SMTP id o65mr8776611qkd.189.1556129577626;
- Wed, 24 Apr 2019 11:12:57 -0700 (PDT)
+        bh=iJ13m2JAt52dn3hlEQov4A1vri+FEKsuux71s6SxwnQ=;
+        b=iv5HVGtKPktwB8KlL4u2ct1ijJznJ44q8+XCMGi8Yq7Y8jQDlLgQYN0IYewfKwIlWl
+         OBOxnZVf3DslZCslX+BRY1rB5n99ErFuDCNH4ClNHb8M6dhraJ6LYVqpat7LyW6iLUFJ
+         uuC7N6L/TrOp6iidH+X9T/0YnS5cwpBidGZZ6gTMOwoJZ5/7GFinv06EOo1BPJ8wI4q4
+         JAkr08jIZTnvoOE5E9QayP1hOMV37YzcXMAwzPL6N3H61ctTXWB5sxkTUZLaBK8OTINT
+         SpTexSAEjNKDCU5hK2ZmNbzbbTvG29aqu31NCGfgyxWVjYLIRdQvxL0lpC9HJWsCdjtX
+         D7Xg==
+X-Gm-Message-State: APjAAAUsv24KayXcPXTOUHuN1sssutZeZAKIKH9lQgFAcuSx4Q/GQBRo
+        hBsMixfqRGrU1Tydugxlf4+NLK7P/fBQ/Pxl2wU=
+X-Google-Smtp-Source: APXvYqzLG4d667HyFXy0yjM0OuIcFgzn/LJOHo+WkhK9TEt3LJOSI539ALMJGOTZJ4PNKBlEpK2mlyqLdBxKH1hS3y4=
+X-Received: by 2002:ae9:f30f:: with SMTP id p15mr26583636qkg.182.1556129820912;
+ Wed, 24 Apr 2019 11:17:00 -0700 (PDT)
 MIME-Version: 1.0
 References: <20190424052200.1625142-1-andrii.nakryiko@gmail.com>
- <20190424052200.1625142-2-andrii.nakryiko@gmail.com> <94852017-ca8e-78c1-9b98-bdc6b9852e76@fb.com>
-In-Reply-To: <94852017-ca8e-78c1-9b98-bdc6b9852e76@fb.com>
+ <20190424052200.1625142-2-andrii.nakryiko@gmail.com> <c149c047-7b6a-bb8b-d472-6ea01a9e4caa@fb.com>
+In-Reply-To: <c149c047-7b6a-bb8b-d472-6ea01a9e4caa@fb.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 24 Apr 2019 11:12:46 -0700
-Message-ID: <CAEf4BzYXzQH50BsZQ5VoYQxiZ1N2Fz5BamKbzOD5aLgj1_ozQA@mail.gmail.com>
+Date:   Wed, 24 Apr 2019 11:16:48 -0700
+Message-ID: <CAEf4BzYaeWZEHQCJHfoYs6MT3emYbTfFQwLnXgudp7w9YDyrDA@mail.gmail.com>
 Subject: Re: [PATCH bpf-next 1/2] bpftool: add ability to dump BTF types
 To:     Yonghong Song <yhs@fb.com>
 Cc:     Kernel Team <Kernel-team@fb.com>,
@@ -74,7 +74,7 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Apr 24, 2019 at 10:12 AM Yonghong Song <yhs@fb.com> wrote:
+On Wed, Apr 24, 2019 at 10:17 AM Yonghong Song <yhs@fb.com> wrote:
 >
 >
 >
@@ -89,7 +89,6 @@ On Wed, Apr 24, 2019 at 10:12 AM Yonghong Song <yhs@fb.com> wrote:
 > >    - from MAP, if it has associated BTF data; it's possible to narrow
 > >      down types to either key type, value type, both, or all BTF types;
 > >    - from ELF file (.BTF section).
-> This is great. Thanks!
 > >
 > > Output format mostly follows BPF verifier log format with few notable
 > > exceptions:
@@ -134,157 +133,184 @@ On Wed, Apr 24, 2019 at 10:12 AM Yonghong Song <yhs@fb.com> wrote:
 > > +#include <bpf.h>
 > > +#include <linux/btf.h>
 > > +
-> [.....]
+> > +#include "btf.h"
+> > +#include "json_writer.h"
+> > +#include "main.h"
 > > +
-> > +static int do_dump(int argc, char **argv)
+> > +static const char * const btf_kind_str[NR_BTF_KINDS] = {
+> > +     [BTF_KIND_UNKN]         = "UNKNOWN",
+> > +     [BTF_KIND_INT]          = "INT",
+> > +     [BTF_KIND_PTR]          = "PTR",
+> > +     [BTF_KIND_ARRAY]        = "ARRAY",
+> > +     [BTF_KIND_STRUCT]       = "STRUCT",
+> > +     [BTF_KIND_UNION]        = "UNION",
+> > +     [BTF_KIND_ENUM]         = "ENUM",
+> > +     [BTF_KIND_FWD]          = "FWD",
+> > +     [BTF_KIND_TYPEDEF]      = "TYPEDEF",
+> > +     [BTF_KIND_VOLATILE]     = "VOLATILE",
+> > +     [BTF_KIND_CONST]        = "CONST",
+> > +     [BTF_KIND_RESTRICT]     = "RESTRICT",
+> > +     [BTF_KIND_FUNC]         = "FUNC",
+> > +     [BTF_KIND_FUNC_PROTO]   = "FUNC_PROTO",
+> > +     [BTF_KIND_VAR]          = "VAR",
+> > +     [BTF_KIND_DATASEC]      = "DATASEC",
+> > +};
+> > +
+> > +static const char *btf_int_enc_str(__u8 encoding)
 > > +{
-> > +     struct btf *btf = NULL;
-> > +     __u32 root_type_ids[2];
-> > +     int root_type_cnt = 0;
-> > +     __u32 btf_id = -1;
-> > +     const char *src;
-> > +     int fd = -1;
-> > +     int err;
+> > +     switch (encoding) {
+> > +     case 0:
+> > +             return "(none)";
+> > +     case BTF_INT_SIGNED:
+> > +             return "SIGNED";
+> > +     case BTF_INT_CHAR:
+> > +             return "CHAR";
+> > +     case BTF_INT_BOOL:
+> > +             return "BOOL";
+> > +     default:
+> > +             return "UNKN";
+> > +     }
+> > +}
 > > +
-> > +     if (!REQ_ARGS(2)) {
-> > +             usage();
+> > +static const char *btf_var_linkage_str(__u32 linkage)
+> > +{
+> > +     switch (linkage) {
+> > +     case BTF_VAR_STATIC:
+> > +             return "static";
+> > +     case BTF_VAR_GLOBAL_ALLOCATED:
+> > +             return "global-alloc";
+> > +     default:
+> > +             return "(unknown)";
+> > +     }
+> > +}
+> > +
+> [...]
+> > +
+> > +static bool check_btf_endianness(GElf_Ehdr *ehdr)
+> > +{
+> > +     static unsigned int const endian = 1;
+> > +
+> > +     switch (ehdr->e_ident[EI_DATA]) {
+> > +     case ELFDATA2LSB:
+> > +             return *(unsigned char const *)&endian == 1;
+> > +     case ELFDATA2MSB:
+> > +             return *(unsigned char const *)&endian == 0;
+> > +     default:
+> > +             return 0;
+> > +     }
+> > +}
+> > +
+> > +static int btf_load_from_elf(const char *path, struct btf **btf)
+> > +{
+> > +     int err = -1, fd = -1, idx = 0;
+> > +     Elf_Data *btf_data = NULL;
+> > +     Elf_Scn *scn = NULL;
+> > +     Elf *elf = NULL;
+> > +     GElf_Ehdr ehdr;
+> > +
+> > +     if (elf_version(EV_CURRENT) == EV_NONE) {
+> > +             p_err("failed to init libelf for %s", path);
 > > +             return -1;
 > > +     }
-> > +     src = GET_ARG();
 > > +
-> > +     if (is_prefix(src, "map")) {
-> > +             struct bpf_map_info info = {};
-> > +             __u32 len = sizeof(info);
-> > +
-> > +             if (!REQ_ARGS(2)) {
-> > +                     usage();
-> > +                     return -1;
-> > +             }
-> > +
-> > +             fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
-> > +             if (fd < 0)
-> > +                     return -1;
-> > +
-> > +             btf_id = info.btf_id;
-> > +             if (argc && is_prefix(*argv, "key")) {
-> > +                     root_type_ids[root_type_cnt++] = info.btf_key_type_id;
-> > +                     NEXT_ARG();
-> > +             } else if (argc && is_prefix(*argv, "value")) {
-> > +                     root_type_ids[root_type_cnt++] = info.btf_value_type_id;
-> > +                     NEXT_ARG();
-> > +             } else if (argc && is_prefix(*argv, "all")) {
-> > +                     NEXT_ARG();
-> > +             } else if (argc && is_prefix(*argv, "kv")) {
-> > +                     root_type_ids[root_type_cnt++] = info.btf_key_type_id;
-> > +                     root_type_ids[root_type_cnt++] = info.btf_value_type_id;
-> > +                     NEXT_ARG();
-> > +             } else {
-> > +                     root_type_ids[root_type_cnt++] = info.btf_key_type_id;
-> > +                     root_type_ids[root_type_cnt++] = info.btf_value_type_id;
-> > +             }
-> > +     } else if (is_prefix(src, "prog")) {
-> > +             struct bpf_prog_info info = {};
-> > +             __u32 len = sizeof(info);
-> > +
-> > +             if (!REQ_ARGS(2)) {
-> > +                     usage();
-> > +                     return -1;
-> > +             }
-> > +
-> > +             fd = prog_parse_fd(&argc, &argv);
-> > +             if (fd < 0)
-> > +                     return -1;
-> > +
-> > +             err = bpf_obj_get_info_by_fd(fd, &info, &len);
-> > +             if (err) {
-> > +                     p_err("can't get prog info: %s", strerror(errno));
-> > +                     goto done;
-> > +             }
-> > +
-> > +             btf_id = info.btf_id;
-> > +     } else if (is_prefix(src, "id")) {
-> > +             char *endptr;
-> > +
-> > +             btf_id = strtoul(*argv, &endptr, 0);
-> > +             if (*endptr) {
-> > +                     p_err("can't parse %s as ID", **argv);
-> > +                     return -1;
-> > +             }
-> > +             NEXT_ARG();
-> > +     } else if (is_prefix(src, "file")) {
-> > +             err = btf_load_from_elf(*argv, &btf);
-> > +             if (err)
-> > +                     goto done;
-> > +             NEXT_ARG();
+> > +     fd = open(path, O_RDONLY);
+> > +     if (fd < 0) {
+> > +             p_err("failed to open %s: %s", path, strerror(errno));
+> > +             return -1;
 > > +     }
->
-> Another "else" branch here to handle wrong prefix? Otherwise, it will
-> fall down to "can't find btf with ID (4294967295)" where "4294967295 ==
-> -1) which is a little misleading for users.
-
-Yep, makes sense, will add, not sure why I haven't done that in the
-first place...
-
->
 > > +
-> > +     if (!btf) {
-> > +             err = btf__get_from_id(btf_id, &btf);
-> > +             if (err) {
-> > +                     p_err("get btf by id (%u): %s", btf_id, strerror(err));
+> > +     elf = elf_begin(fd, ELF_C_READ, NULL);
+> > +     if (!elf) {
+> > +             p_err("failed to open %s as ELF file", path);
+> > +             goto done;
+> > +     }
+> > +     if (!gelf_getehdr(elf, &ehdr)) {
+> > +             p_err("failed to get EHDR from %s", path);
+> > +             goto done;
+> > +     }
+> > +     if (!check_btf_endianness(&ehdr)) {
+> > +             p_err("non-native ELF endianness is not supported");
+>
+> We should relex this. It is possible that for some embedded system,
+> bpftool is running on some x86 server examining a objfile file used
+> for an embedded system.
+
+I agree, but I think that should be done in libbpf. I've been meaning
+to add that for a while now, but never got around to that, it's still
+on my TODO list.
+
+My intent is to teach btf__new to look at BTF header, and if it's
+endianness is not native, convert all the integers to native
+endianness. That way, struct btf is always of native endianness in
+memory and won't require any extra checks from other code. I'll do it
+some time soonish at which point both pahole (which handles this
+explicitly right now) and bpftool can greatly benefit from that. How
+does that sound?
+
+>
+> > +             goto done;
+> > +     }
+> > +     if (!elf_rawdata(elf_getscn(elf, ehdr.e_shstrndx), NULL)) {
+> > +             p_err("failed to get e_shstrndx from %s\n", path);
+> > +             goto done;
+> > +     }
+> > +
+> > +     while ((scn = elf_nextscn(elf, scn)) != NULL) {
+> > +             GElf_Shdr sh;
+> > +             char *name;
+> > +
+> > +             idx++;
+> > +             if (gelf_getshdr(scn, &sh) != &sh) {
+> > +                     p_err("failed to get section(%d) header from %s",
+> > +                           idx, path);
 > > +                     goto done;
 > > +             }
-> > +             if (!btf) {
-> > +                     err = ENOENT;
-> > +                     p_err("can't find btf with ID (%u)", btf_id);
+> > +             name = elf_strptr(elf, ehdr.e_shstrndx, sh.sh_name);
+> > +             if (!name) {
+> > +                     p_err("failed to get section(%d) name from %s",
+> > +                           idx, path);
 > > +                     goto done;
+> > +             }
+> > +             if (strcmp(name, BTF_ELF_SEC) == 0) {
+> > +                     btf_data = elf_getdata(scn, 0);
+> > +                     if (!btf_data) {
+> > +                             p_err("failed to get section(%d, %s) data from %s",
+> > +                                   idx, name, path);
+> > +                             goto done;
+> > +                     }
+> > +                     break;
 > > +             }
 > > +     }
 > > +
-> > +     dump_btf_raw(btf, root_type_ids, root_type_cnt);
+> > +     if (!btf_data) {
+> > +             p_err("%s ELF section not found in %s", BTF_ELF_SEC, path);
+> > +             goto done;
+> > +     }
 > > +
+> > +     *btf = btf__new(btf_data->d_buf, btf_data->d_size);
+> > +     if (IS_ERR(*btf)) {
+> > +             err = PTR_ERR(*btf);
+> > +             *btf = NULL;
+> > +             p_err("failed to load BTF data from %s: %s",
+> > +                   path, strerror(err));
+> > +             goto done;
+> > +     }
+> > +
+> > +     err = 0;
 > > +done:
+> > +     if (err) {
+> > +             if (*btf) {
+> > +                     btf__free(*btf);
+> > +                     *btf = NULL;
+> > +             }
+> > +     }
+> > +     if (elf)
+> > +             elf_end(elf);
 > > +     close(fd);
-> > +     btf__free(btf);
 > > +     return err;
 > > +}
 > > +
-> > +static int do_help(int argc, char **argv)
-> > +{
-> > +     if (json_output) {
-> > +             jsonw_null(json_wtr);
-> > +             return 0;
-> > +     }
-> > +
-> > +     fprintf(stderr,
-> > +             "Usage: %s btf dump       BTF_SRC\n"
-> > +             "       %s btf help\n"
-> > +             "\n"
-> > +             "       BTF_SRC := { id BTF_ID | prog PROG | map MAP [{key | value | kv | all}] | elf FILE }\n"
->
-> "elf FILE" is not consistent with implementation. The implementation
-> uses "file FILE". I prefer to use "file FILE".
-
-Oops, yep, it should be file.
-
->
-> > +             "       " HELP_SPEC_MAP "\n"
-> > +             "       " HELP_SPEC_PROGRAM "\n"
-> > +             "       " HELP_SPEC_OPTIONS "\n"
-> > +             "",
-> > +             bin_name, bin_name);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static const struct cmd cmds[] = {
-> > +     { "help",       do_help },
-> > +     { "dump",       do_dump },
-> > +     { 0 }
-> > +};
-> > +
-> > +int do_btf(int argc, char **argv)
-> > +{
-> > +     return cmd_select(cmds, argc, argv, do_help);
+> [...]
 > > +}
 > > diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
 > > index a9d5e9e6a732..eba56edd7c77 100644
