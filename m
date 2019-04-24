@@ -2,189 +2,109 @@ Return-Path: <SRS0=W3SG=S2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6709EC10F11
-	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 08:12:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAFD3C10F11
+	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 14:39:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2C4F2206A3
-	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 08:12:51 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="P+l10IZL"
+	by mail.kernel.org (Postfix) with ESMTP id 9708F218FE
+	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 14:39:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1556116746;
+	bh=+a3uMyxXBT8XRn1KsgiM7jtVc6BioHrrcNiCFQhJN0E=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=ZFwk4kUzQFuDvvbwEI9KUsPWpzWhXNgYtxPYbnCcOARw4Hn1tOU0n5HbpXFSs5+To
+	 Sfqo3U4PbxRvdPHjnuYc7JQ3ZP4R1HTdT57pZI5U628HCpK7qklmIbX01L3HQI/P7Q
+	 MVP2bJXiyVJpccjOIBKH704x/4ZMyqdoE4XLERIM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727779AbfDXIMu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Apr 2019 04:12:50 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:42258 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726031AbfDXIMu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Apr 2019 04:12:50 -0400
-Received: by mail-wr1-f67.google.com with SMTP id g3so23775148wrx.9
-        for <bpf@vger.kernel.org>; Wed, 24 Apr 2019 01:12:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=MN5tsUCDhOQbbWXuOyczXN5c7bdLKqBenm7bH3PXVVU=;
-        b=P+l10IZLbfcyIwpEI1DBzmdhyJP943S5nmIXrufC0HSbmtGOoE5PiMXU/oDLfTT32b
-         i98WCacqP1zFhA5WZjMSqnHKBcHgDbmSvRrArhI9SgXsvpFfwc82kvDGOJjjp1mSnN18
-         9CCLE06iVBNF5hR6OFd/ZWPX0VCvqjom1qyZoa0xyKlUf1hrnhtj4+hrX7/W+XqQh2/M
-         iIZbKJpe4L75P8ulcfLmg3FLH3D5xUgGINZE/UZUnfRvdvGKXTl2uGCplJMR/UJ8QraV
-         iBivlvPd5o2R13/zjyURyvBDvh6YRx4cpxYUtK3gTraVz0mC5bvYYE8qosPgyyVP9XPC
-         YYBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=MN5tsUCDhOQbbWXuOyczXN5c7bdLKqBenm7bH3PXVVU=;
-        b=NzpI3Fhr5Wwmdv5T38MV1u0z7L2VzsYkFYWN5Zl9j5LdlOAvoAIB463NXnwtiI48XT
-         HQEqpg/82XJO5+t9Gq4Xhj6xx53LcigHtvpmIYOisdrcwNjS1H0/SpBWd9gNMhU41hr1
-         Ad55xXZ/cSWGjCMZyjyO68fQ4pHuW0+1sVNFh0PD5pN/hYRq3WCo2DnRwti82Y/L0h/s
-         WFQeAKzDxTGCUqaDMgb7uoYFzp2fUYGjBd9lBrMm6HGDB7KQT8iBmVjvS3bY5ZA4gRTP
-         Z3DMADL8DJmhJiiSQMj956jF2MSYUMF1fyVIkzp59tDYGd5qlyzIpjDMUtdC+za6aPo2
-         xYCw==
-X-Gm-Message-State: APjAAAW5Bzv0l1bSGYKlRPuFGsXjxpH0XlJ17tA2JMV+g02HgOEaJXRD
-        3JMVtl0EWgX6keAlJDRZSO08hBWFWw4=
-X-Google-Smtp-Source: APXvYqyPgy9JbMo21u3Idg58NV9cRWp+KRHXfpq+E2cA1NLBjTipcgHTrEHwABNpoJ6DZgnSmVfgiQ==
-X-Received: by 2002:a5d:698b:: with SMTP id g11mr19864000wru.65.1556093568506;
-        Wed, 24 Apr 2019 01:12:48 -0700 (PDT)
-Received: from [192.168.1.2] ([194.53.186.213])
-        by smtp.gmail.com with ESMTPSA id r196sm15527191wmf.22.2019.04.24.01.12.47
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 24 Apr 2019 01:12:47 -0700 (PDT)
-Subject: Re: [PATCH bpf-next 2/2] bpftool: show flow_dissector attachment
- status
-To:     Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        jakub.kicinski@netronome.com
-References: <20190423232200.101627-1-sdf@google.com>
- <20190423232200.101627-2-sdf@google.com>
-From:   Quentin Monnet <quentin.monnet@netronome.com>
-Message-ID: <b0713532-87b8-bbba-ba65-dd8778a5ca59@netronome.com>
-Date:   Wed, 24 Apr 2019 09:12:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1731284AbfDXOfI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Apr 2019 10:35:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38922 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731267AbfDXOfH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Apr 2019 10:35:07 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 07753218FD;
+        Wed, 24 Apr 2019 14:35:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1556116506;
+        bh=+a3uMyxXBT8XRn1KsgiM7jtVc6BioHrrcNiCFQhJN0E=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=S9mPwb8HHPwNIyXmrfMvYEE16NOtcNTJIrdNcGY+thm6tCXcTf8b+6NIefkkoydYD
+         2Qj1g5jC6A9qt70iJ5FDHcIUycHOzSXiI01DbsonGJ8jcI0vHgXnXz0y7F9kq1mhjF
+         3RMUW8ENr4Euikndcy1SQCGFv4hR942RGM5CJu4E=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Al Viro <viro@zeniv.linux.org.uk>, Sasha Levin <sashal@kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.0 34/66] debugfs: fix use-after-free on symlink traversal
+Date:   Wed, 24 Apr 2019 10:33:08 -0400
+Message-Id: <20190424143341.27665-34-sashal@kernel.org>
+X-Mailer: git-send-email 2.19.1
+In-Reply-To: <20190424143341.27665-1-sashal@kernel.org>
+References: <20190424143341.27665-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20190423232200.101627-2-sdf@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-2019-04-23 16:22 UTC-0700 ~ Stanislav Fomichev <sdf@google.com>
-> Right now there is no way to query whether BPF flow_dissector program
-> is attached to a network namespace or not. In previous commit, I added
-> support for querying that info, show it when doing `bpftool net`:
-> 
-> $ bpftool prog loadall ./bpf_flow.o \
-> 	/sys/fs/bpf/flow type flow_dissector \
-> 	pinmaps /sys/fs/bpf/flow
-> $ bpftool prog
-> 3: flow_dissector  name _dissect  tag 8c9e917b513dd5cc  gpl
->          loaded_at 2019-04-23T16:14:48-0700  uid 0
->          xlated 656B  jited 461B  memlock 4096B  map_ids 1,2
->          btf_id 1
-> ...
-> 
-> $ bpftool net -j
-> [{"xdp":[],"tc":[],"flow_dissector":[]}]
-> 
-> $ bpftool prog attach pinned \
-> 	/sys/fs/bpf/flow/flow_dissector flow_dissector
-> $ bpftool net -j
-> [{"xdp":[],"tc":[],"flow_dissector":["id":3]}]
-> 
-> Doesn't show up in a different net namespace:
-> $ ip netns add test
-> $ ip netns exec test bpftool net -j
-> [{"xdp":[],"tc":[],"flow_dissector":[]}]
-> 
-> Non-json output:
-> $ bpftool net
-> xdp:
-> 
-> tc:
-> 
-> flow_dissector:
-> id 3
-> 
-> Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> ---
->   tools/bpf/bpftool/net.c | 52 +++++++++++++++++++++++++++++++++++++++++
->   1 file changed, 52 insertions(+)
-> 
-> diff --git a/tools/bpf/bpftool/net.c b/tools/bpf/bpftool/net.c
-> index db0e7de49d49..afe0903201e2 100644
-> --- a/tools/bpf/bpftool/net.c
-> +++ b/tools/bpf/bpftool/net.c
+From: Al Viro <viro@zeniv.linux.org.uk>
 
-> @@ -48,6 +51,10 @@ struct bpf_filter_t {
->   	int		ifindex;
->   };
->   
-> +struct bpf_attach_info {
-> +	__u32 flow_dissector_id;
-> +};
-> +
->   static int dump_link_nlmsg(void *cookie, void *msg, struct nlattr **tb)
->   {
->   	struct bpf_netdev_t *netinfo = cookie;
-> @@ -180,8 +187,43 @@ static int show_dev_tc_bpf(int sock, unsigned int nl_pid,
->   	return 0;
->   }
->   
-> +static int query_flow_dissector(struct bpf_attach_info *attach_info)
-> +{
-> +	__u32 prog_ids[1] = {0};
-> +	__u32 prog_cnt = ARRAY_SIZE(prog_ids);
-> +	__u32 attach_flags;
-> +	int fd;
-> +	int err;
-> +
-> +	fd = open("/proc/self/ns/net", O_RDONLY);
-> +	if (fd < 0) {
-> +		p_err("can't open /proc/self/ns/net: %d",
-> +		      strerror(errno));
-> +		return -1;
-> +	}
-> +	err = bpf_prog_query(fd, BPF_FLOW_DISSECTOR, 0,
-> +			     &attach_flags, prog_ids, &prog_cnt);
-> +	close(fd);
-> +	if (err) {
-> +		if (errno == EINVAL) {
-> +			/* Older kernel's don't support querying
-> +			 * flow dissector programs.
-> +			 */
-> +			return 0;
+[ Upstream commit 93b919da64c15b90953f96a536e5e61df896ca57 ]
 
-Hi Stanislav,
+symlink body shouldn't be freed without an RCU delay.  Switch debugfs to
+->destroy_inode() and use of call_rcu(); free both the inode and symlink
+body in the callback.  Similar to solution for bpf, only here it's even
+more obvious that ->evict_inode() can be dropped.
 
-If we handle the "error" gracefully here, should we maybe reset errno to 
-0 before returning? Batch mode, for example, stops processing commands 
-when it sees that errno is set, but we probably want it to continue in 
-the current case (commit 39c9f10639a3 addressed something similar for 
-"bpftool cgroup tree").
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Sasha Levin (Microsoft) <sashal@kernel.org>
+---
+ fs/debugfs/inode.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-> +		}
-> +		p_err("can't query prog: %s", strerror(errno));
-> +		return -1;
-> +	}
-> +
-> +	if (prog_cnt == 1)
-> +		attach_info->flow_dissector_id = prog_ids[0];
-> +
-> +	return 0;
-> +}
-> +
->   static int do_show(int argc, char **argv)
->   {
-> +	struct bpf_attach_info attach_info = {};
->   	int i, sock, ret, filter_idx = -1;
->   	struct bpf_netdev_t dev_array;
->   	unsigned int nl_pid;
+diff --git a/fs/debugfs/inode.c b/fs/debugfs/inode.c
+index 29c68c5d44d5..c4a4fc6f1a95 100644
+--- a/fs/debugfs/inode.c
++++ b/fs/debugfs/inode.c
+@@ -163,19 +163,24 @@ static int debugfs_show_options(struct seq_file *m, struct dentry *root)
+ 	return 0;
+ }
+ 
+-static void debugfs_evict_inode(struct inode *inode)
++static void debugfs_i_callback(struct rcu_head *head)
+ {
+-	truncate_inode_pages_final(&inode->i_data);
+-	clear_inode(inode);
++	struct inode *inode = container_of(head, struct inode, i_rcu);
+ 	if (S_ISLNK(inode->i_mode))
+ 		kfree(inode->i_link);
++	free_inode_nonrcu(inode);
++}
++
++static void debugfs_destroy_inode(struct inode *inode)
++{
++	call_rcu(&inode->i_rcu, debugfs_i_callback);
+ }
+ 
+ static const struct super_operations debugfs_super_operations = {
+ 	.statfs		= simple_statfs,
+ 	.remount_fs	= debugfs_remount,
+ 	.show_options	= debugfs_show_options,
+-	.evict_inode	= debugfs_evict_inode,
++	.destroy_inode	= debugfs_destroy_inode,
+ };
+ 
+ static void debugfs_release_dentry(struct dentry *dentry)
+-- 
+2.19.1
+
