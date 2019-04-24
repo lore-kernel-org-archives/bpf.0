@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18217C10F11
-	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 14:55:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A404BC282E1
+	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 14:57:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D45172084F
-	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 14:55:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6B5D621904
+	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 14:57:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1556117752;
-	bh=P5cMsm+lgjxwbG1JVA3HQOf7GE0Pc5JvTYfPJ/z+bWw=;
+	s=default; t=1556117877;
+	bh=whJrikFU8Itb+EdI/4GjOvnT7vFfmZ25PfXvzCOP8Cg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=oHy+8g1F4X6zfc3OYGkyYlJGwVhZSLQQwiIY7RmaKFmBNYkKjsIgZG2aagf12Jo/g
-	 aF4mOXeetdXWYR7QAvLNIyByg2HIJQpDevn9eYoJn5xdQ5WTonWZqSL5O0c0jk5TZw
-	 PyjO9ke7nzA4hx2eazQH+btj7G43ZZbGknt0jKVk=
+	b=bh7PWsaWVIm8GAQoQX0xUXzQ8AnIBDC/ffRttMWbW7fSoYZbDsXFRckXZ6IFd0ci4
+	 DBPBEgEYo4xBaXtWKi9b0XV5K022ao9NWJIZBauiUY9sXA1RIgkMM0eTrrjL1bc8GP
+	 728uLi08YbQZXxzNykMXcZadV/TvoM9NHGU/3fSk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732283AbfDXOuu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Apr 2019 10:50:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50028 "EHLO mail.kernel.org"
+        id S1731912AbfDXOru (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Apr 2019 10:47:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47432 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732690AbfDXOut (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Apr 2019 10:50:49 -0400
+        id S1732325AbfDXOrt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Apr 2019 10:47:49 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CBFCC218FC;
-        Wed, 24 Apr 2019 14:50:46 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AF08821902;
+        Wed, 24 Apr 2019 14:47:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556117448;
-        bh=P5cMsm+lgjxwbG1JVA3HQOf7GE0Pc5JvTYfPJ/z+bWw=;
+        s=default; t=1556117268;
+        bh=whJrikFU8Itb+EdI/4GjOvnT7vFfmZ25PfXvzCOP8Cg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zEQIhlvIB8BfM2YMFVt4BCxtjuhCTABK46dJzzJHbM7bpJbpymaPef3t5mLDEwVDn
-         sKUaJ6AAtVqCD8O2n52l+4xHmRQVwh+MGUgPB4EXqWIwYPfSqsXgR9uCeWnz0OOJ6t
-         wjl7B6VmIcvRWPzYtf/CkZRkzYKTFRXJOWIYCdCo=
+        b=btzvLskhtuwcnMJXoK8/L3bXF2aWRwpJHvXlGeso3XgzdAV8gnlcgUpZCLpEC/Vik
+         4O5KPB2DGc1rFeEqa9Tv20TiZCwlfm8fDpGRaoRA5+QqsSbFptBazzbmoYe3Yi4XAj
+         cURbYxVfr//jW1YHq4tl8/B2jU4fdy5n1D2bQCKk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Al Viro <viro@zeniv.linux.org.uk>, Sasha Levin <sashal@kernel.org>,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 15/28] debugfs: fix use-after-free on symlink traversal
-Date:   Wed, 24 Apr 2019 10:49:59 -0400
-Message-Id: <20190424145012.30886-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 17/35] debugfs: fix use-after-free on symlink traversal
+Date:   Wed, 24 Apr 2019 10:46:51 -0400
+Message-Id: <20190424144709.30215-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
-In-Reply-To: <20190424145012.30886-1-sashal@kernel.org>
-References: <20190424145012.30886-1-sashal@kernel.org>
+In-Reply-To: <20190424144709.30215-1-sashal@kernel.org>
+References: <20190424144709.30215-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -73,7 +73,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 9 insertions(+), 4 deletions(-)
 
 diff --git a/fs/debugfs/inode.c b/fs/debugfs/inode.c
-index 77e9cd7a0137..20ee612017bf 100644
+index ccfe1e1cb6bc..f4df6feec271 100644
 --- a/fs/debugfs/inode.c
 +++ b/fs/debugfs/inode.c
 @@ -170,19 +170,24 @@ static int debugfs_show_options(struct seq_file *m, struct dentry *root)
