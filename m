@@ -2,187 +2,168 @@ Return-Path: <SRS0=W3SG=S2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14438C282CE
-	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 15:42:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4CEAC282E1
+	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 16:09:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D601D21773
-	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 15:42:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A6341208E4
+	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 16:09:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="Le6zSC4J"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l7hLhP5M"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731312AbfDXPmJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Apr 2019 11:42:09 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:41538 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730765AbfDXPmJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Apr 2019 11:42:09 -0400
-Received: by mail-pg1-f193.google.com with SMTP id f6so9559485pgs.8
-        for <bpf@vger.kernel.org>; Wed, 24 Apr 2019 08:42:08 -0700 (PDT)
+        id S1731356AbfDXQJz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Apr 2019 12:09:55 -0400
+Received: from mail-yb1-f202.google.com ([209.85.219.202]:48510 "EHLO
+        mail-yb1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731189AbfDXQJz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Apr 2019 12:09:55 -0400
+Received: by mail-yb1-f202.google.com with SMTP id 133so6841448yby.15
+        for <bpf@vger.kernel.org>; Wed, 24 Apr 2019 09:09:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=MQdd9eOfOhmscSdRZrlX9EuClR1SERHeGHLgz18WGxM=;
-        b=Le6zSC4JjyCPHJgr/0XeugpBA9BpeCDKsqFuZehzPLYDdFmVwDJJ01UaAfkioQPGnY
-         Ird3SkdVfSDtTdEKB3UeS5jWZNb1USOB4e3u/m/dmwzFZiK/GEEoHVmBJ6h5SeQC5l6q
-         mRhxpAIGgeYopF2zK/NgO+8IW26jFJtLFxShm7+4nFTOj66oAd2dou8biKFdhrDJJgM1
-         dyCqjHldrkE3fAXtCM1c4CG3vg5pwNjWfKUxswbJJViGz4CPlE6BEQCVaFC2Q+TO5GbW
-         D0ymUKZl5yloHgDZ0smvmJk3mS9NrL8zBqF0P9c2OcFwyAXVquObLzi4l+1gqY4Kyxnk
-         RFOQ==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=6+nh+Oe/DxBT521/rRdIEfM736FsnAmMOm07mS27pIc=;
+        b=l7hLhP5MouJr2Wduv1OVMnd3EoCdUF0Z+QY0F7INm9y2ETXusUaVhRAkUKRYkMzD9n
+         FpK6JdoEJ7B8MSxvRGataMfdb5uV3fm/zMkedd4Ble/+BdC0O08YyGVcp4iaH0/5e6r5
+         6o6QMyyuw+uPGqvRTqFSmNe9M3uuGyAZlTLs4j0dt9do9oUiohgbqZKjgRaPUo9rI8gm
+         AN8xMXvtUhBWJDOyQMhst6KWQHiY+YhVCJBxmna/D/PFl0C6IUJz0MACKJ7kGsockE8j
+         45G4kmP4nmnJ9bMTTUpJEBi/rzVrG8Vm1gvyEEZZu3dtoQ+9hu0hRrS5QHQy5yJmtx5T
+         Hf1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=MQdd9eOfOhmscSdRZrlX9EuClR1SERHeGHLgz18WGxM=;
-        b=kWHF6GUVu+6Gc/7uikdUYKepqEVn/4luUgZ6nH/5LyEvxAp87OSv8kP4ntLyBqZ2Rp
-         7HWsHND0QejwgCjtEEnaSz9bso6zQkpdysHjeNkhcrR82wyJ9Jb/JpZUa3nea1/qCfsW
-         uKx1vhCrUKWIuHAjkvxKdiEMZ1YC9imYLpF3YeNzSRwM7sYaZ45vvtcigrKdHFagveAL
-         JAOOEmQ8Dy7EgE2uKAjFCO5Sv3h+WoqGQOBEP/8/bGs2Ph7sP72OpqheKWseG4ILhps0
-         jIJj0vtttLtAygGmbKSMCNlvrkNPyem7NkriEOOpsIQ1GRMIseUXfn0zVSAPcTHTSzwq
-         7x1A==
-X-Gm-Message-State: APjAAAWr5xQRv95RXDst+z/OSeJUkEoVeH3oAzFXQzVgwMyMt5S5Cltp
-        UoulJB8MKABAJ978psMyYWYJTA==
-X-Google-Smtp-Source: APXvYqxqUs76Ge7qBjOu3msm886b+/pHbupq8os8vAuDD/kVCr+zhnmDXJOnsl3RoY6zXCApA/0cSw==
-X-Received: by 2002:a63:e20b:: with SMTP id q11mr32201109pgh.263.1556120528382;
-        Wed, 24 Apr 2019 08:42:08 -0700 (PDT)
-Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
-        by smtp.gmail.com with ESMTPSA id m131sm45058402pga.3.2019.04.24.08.42.07
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 24 Apr 2019 08:42:07 -0700 (PDT)
-Date:   Wed, 24 Apr 2019 08:42:06 -0700
-From:   Stanislav Fomichev <sdf@fomichev.me>
-To:     Quentin Monnet <quentin.monnet@netronome.com>
-Cc:     Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, davem@davemloft.net, ast@kernel.org,
-        daniel@iogearbox.net, jakub.kicinski@netronome.com
-Subject: Re: [PATCH bpf-next 2/2] bpftool: show flow_dissector attachment
- status
-Message-ID: <20190424154206.GC1247@mini-arch>
-References: <20190423232200.101627-1-sdf@google.com>
- <20190423232200.101627-2-sdf@google.com>
- <b0713532-87b8-bbba-ba65-dd8778a5ca59@netronome.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b0713532-87b8-bbba-ba65-dd8778a5ca59@netronome.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=6+nh+Oe/DxBT521/rRdIEfM736FsnAmMOm07mS27pIc=;
+        b=iOxl99y8TY4/qGq2n31vVU0igHoZ0kHqiwpPmJbuDqxxAyMxYs2Eo7PQVn1C4NSiyA
+         l/po0Y/VIxpMvIhJQOi13BTm5Vue6K64q6RR+Ybt8lUWbz/LZbtN3iE9vAKcaHhIgOu2
+         ES5td8+ppZdze09YYRPOWm60V8m9D22cZwGZyVn+gtDxTY10MRLIkrw+QcGJHE661PCe
+         37tsIVv27tu4Z/dQ9lqKXX8RWTdLm8zWsNPyOMGR3oW1eRur2cDXFBF4dGRVAgSc8wpr
+         7FV3gStaBiAzmMhxw04xorUi1ZozLfAyOAR6pCg2ucNLG4r2ueeEtG+0N0fSQ+ybzSpB
+         x31w==
+X-Gm-Message-State: APjAAAWNYuzGjG/PMuDCiZN3s0oMXMJaa2vm8dYHSHxaxyjDX7vl86Rt
+        L7k45/P1HljVCKkMJaDT2RxuSrw=
+X-Google-Smtp-Source: APXvYqyywZVqOiYI4eOoPxsZGElfdVF+drfJsD/zSYEoK3LKi45RcD6kvZrytfDvHu3GRfCrpEkYuQ4=
+X-Received: by 2002:a25:6544:: with SMTP id z65mr28151520ybb.66.1556122194158;
+ Wed, 24 Apr 2019 09:09:54 -0700 (PDT)
+Date:   Wed, 24 Apr 2019 09:09:50 -0700
+Message-Id: <20190424160951.45865-1-sdf@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.21.0.593.g511ec345e18-goog
+Subject: [PATCH bpf-next v2 1/2] bpf: support BPF_PROG_QUERY for
+ BPF_FLOW_DISSECTOR attach_type
+From:   Stanislav Fomichev <sdf@google.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
+        jakub.kicinski@netronome.com, quentin.monnet@netronome.com,
+        Stanislav Fomichev <sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 04/24, Quentin Monnet wrote:
-> 2019-04-23 16:22 UTC-0700 ~ Stanislav Fomichev <sdf@google.com>
-> > Right now there is no way to query whether BPF flow_dissector program
-> > is attached to a network namespace or not. In previous commit, I added
-> > support for querying that info, show it when doing `bpftool net`:
-> > 
-> > $ bpftool prog loadall ./bpf_flow.o \
-> > 	/sys/fs/bpf/flow type flow_dissector \
-> > 	pinmaps /sys/fs/bpf/flow
-> > $ bpftool prog
-> > 3: flow_dissector  name _dissect  tag 8c9e917b513dd5cc  gpl
-> >          loaded_at 2019-04-23T16:14:48-0700  uid 0
-> >          xlated 656B  jited 461B  memlock 4096B  map_ids 1,2
-> >          btf_id 1
-> > ...
-> > 
-> > $ bpftool net -j
-> > [{"xdp":[],"tc":[],"flow_dissector":[]}]
-> > 
-> > $ bpftool prog attach pinned \
-> > 	/sys/fs/bpf/flow/flow_dissector flow_dissector
-> > $ bpftool net -j
-> > [{"xdp":[],"tc":[],"flow_dissector":["id":3]}]
-> > 
-> > Doesn't show up in a different net namespace:
-> > $ ip netns add test
-> > $ ip netns exec test bpftool net -j
-> > [{"xdp":[],"tc":[],"flow_dissector":[]}]
-> > 
-> > Non-json output:
-> > $ bpftool net
-> > xdp:
-> > 
-> > tc:
-> > 
-> > flow_dissector:
-> > id 3
-> > 
-> > Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> > ---
-> >   tools/bpf/bpftool/net.c | 52 +++++++++++++++++++++++++++++++++++++++++
-> >   1 file changed, 52 insertions(+)
-> > 
-> > diff --git a/tools/bpf/bpftool/net.c b/tools/bpf/bpftool/net.c
-> > index db0e7de49d49..afe0903201e2 100644
-> > --- a/tools/bpf/bpftool/net.c
-> > +++ b/tools/bpf/bpftool/net.c
-> 
-> > @@ -48,6 +51,10 @@ struct bpf_filter_t {
-> >   	int		ifindex;
-> >   };
-> > +struct bpf_attach_info {
-> > +	__u32 flow_dissector_id;
-> > +};
-> > +
-> >   static int dump_link_nlmsg(void *cookie, void *msg, struct nlattr **tb)
-> >   {
-> >   	struct bpf_netdev_t *netinfo = cookie;
-> > @@ -180,8 +187,43 @@ static int show_dev_tc_bpf(int sock, unsigned int nl_pid,
-> >   	return 0;
-> >   }
-> > +static int query_flow_dissector(struct bpf_attach_info *attach_info)
-> > +{
-> > +	__u32 prog_ids[1] = {0};
-> > +	__u32 prog_cnt = ARRAY_SIZE(prog_ids);
-> > +	__u32 attach_flags;
-> > +	int fd;
-> > +	int err;
-> > +
-> > +	fd = open("/proc/self/ns/net", O_RDONLY);
-> > +	if (fd < 0) {
-> > +		p_err("can't open /proc/self/ns/net: %d",
-> > +		      strerror(errno));
-> > +		return -1;
-> > +	}
-> > +	err = bpf_prog_query(fd, BPF_FLOW_DISSECTOR, 0,
-> > +			     &attach_flags, prog_ids, &prog_cnt);
-> > +	close(fd);
-> > +	if (err) {
-> > +		if (errno == EINVAL) {
-> > +			/* Older kernel's don't support querying
-> > +			 * flow dissector programs.
-> > +			 */
-> > +			return 0;
-> 
-> Hi Stanislav,
-> 
-> If we handle the "error" gracefully here, should we maybe reset errno to 0
-> before returning? Batch mode, for example, stops processing commands when it
-> sees that errno is set, but we probably want it to continue in the current
-> case (commit 39c9f10639a3 addressed something similar for "bpftool cgroup
-> tree").
-Oh, I didn't know that. Sure, will do!
+target_fd is target namespace. If there is a flow dissector BPF program
+attached to that namespace, its (single) id is returned.
 
-> > +		}
-> > +		p_err("can't query prog: %s", strerror(errno));
-> > +		return -1;
-> > +	}
-> > +
-> > +	if (prog_cnt == 1)
-> > +		attach_info->flow_dissector_id = prog_ids[0];
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >   static int do_show(int argc, char **argv)
-> >   {
-> > +	struct bpf_attach_info attach_info = {};
-> >   	int i, sock, ret, filter_idx = -1;
-> >   	struct bpf_netdev_t dev_array;
-> >   	unsigned int nl_pid;
+v2:
+* don't sleep in rcu critical section (Jakub Kicinski)
+* check input prog_cnt (exit early)
+
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
+---
+ include/linux/skbuff.h    |  8 ++++++++
+ kernel/bpf/syscall.c      |  2 ++
+ net/core/flow_dissector.c | 37 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 47 insertions(+)
+
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index 998256c2820b..9f499c0ac53b 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -1258,11 +1258,19 @@ void skb_flow_dissector_init(struct flow_dissector *flow_dissector,
+ 			     unsigned int key_count);
+ 
+ #ifdef CONFIG_NET
++int skb_flow_dissector_prog_query(const union bpf_attr *attr,
++				  union bpf_attr __user *uattr);
+ int skb_flow_dissector_bpf_prog_attach(const union bpf_attr *attr,
+ 				       struct bpf_prog *prog);
+ 
+ int skb_flow_dissector_bpf_prog_detach(const union bpf_attr *attr);
+ #else
++static int skb_flow_dissector_prog_query(const union bpf_attr *attr,
++					 union bpf_attr __user *uattr)
++{
++	return -EOPNOTSUPP;
++}
++
+ static inline int skb_flow_dissector_bpf_prog_attach(const union bpf_attr *attr,
+ 						     struct bpf_prog *prog)
+ {
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 92c9b8a32b50..b0de49598341 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2009,6 +2009,8 @@ static int bpf_prog_query(const union bpf_attr *attr,
+ 		break;
+ 	case BPF_LIRC_MODE2:
+ 		return lirc_prog_query(attr, uattr);
++	case BPF_FLOW_DISSECTOR:
++		return skb_flow_dissector_prog_query(attr, uattr);
+ 	default:
+ 		return -EINVAL;
+ 	}
+diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
+index fac712cee9d5..12b92c7d1eae 100644
+--- a/net/core/flow_dissector.c
++++ b/net/core/flow_dissector.c
+@@ -65,6 +65,43 @@ void skb_flow_dissector_init(struct flow_dissector *flow_dissector,
+ }
+ EXPORT_SYMBOL(skb_flow_dissector_init);
+ 
++int skb_flow_dissector_prog_query(const union bpf_attr *attr,
++				  union bpf_attr __user *uattr)
++{
++	__u32 __user *prog_ids = u64_to_user_ptr(attr->query.prog_ids);
++	u32 prog_id, prog_cnt = 0, flags = 0;
++	struct bpf_prog *attached;
++	struct net *net;
++
++	if (attr->query.query_flags)
++		return -EINVAL;
++
++	net = get_net_ns_by_fd(attr->query.target_fd);
++	if (IS_ERR(net))
++		return PTR_ERR(net);
++
++	rcu_read_lock();
++	attached = rcu_dereference(net->flow_dissector_prog);
++	if (attached) {
++		prog_cnt = 1;
++		prog_id = attached->aux->id;
++	}
++	rcu_read_unlock();
++
++	if (copy_to_user(&uattr->query.attach_flags, &flags, sizeof(flags)))
++		return -EFAULT;
++	if (copy_to_user(&uattr->query.prog_cnt, &prog_cnt, sizeof(prog_cnt)))
++		return -EFAULT;
++
++	if (!attr->query.prog_cnt || !prog_ids || !prog_cnt)
++		return 0;
++
++	if (copy_to_user(prog_ids, &prog_id, sizeof(u32)))
++		return -EFAULT;
++
++	return 0;
++}
++
+ int skb_flow_dissector_bpf_prog_attach(const union bpf_attr *attr,
+ 				       struct bpf_prog *prog)
+ {
+-- 
+2.21.0.593.g511ec345e18-goog
+
