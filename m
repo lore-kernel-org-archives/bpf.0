@@ -2,64 +2,68 @@ Return-Path: <SRS0=W3SG=S2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1624FC282E1
-	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 18:17:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE031C10F11
+	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 18:41:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D165820685
-	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 18:17:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 99C89205ED
+	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 18:41:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LzsjECaL"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="iu3A3oQi";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="TE0gJA2R"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733274AbfDXSRC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Apr 2019 14:17:02 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:47020 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732944AbfDXSRC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Apr 2019 14:17:02 -0400
-Received: by mail-qk1-f196.google.com with SMTP id w73so9268692qkb.13;
-        Wed, 24 Apr 2019 11:17:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iJ13m2JAt52dn3hlEQov4A1vri+FEKsuux71s6SxwnQ=;
-        b=LzsjECaLNgYKvgQccnBaWThlzLgw16q7bQ8PWvp9iL0Wyf86+Hp9/NC+DMUoqusJOJ
-         zwqZSNmbrQ0ofcFPTgnjZosLr9MqknuOPVutpQviVXCnP+T5BN67cJvLRzemKLoaqozP
-         Nv01pSZVC/Y+053qqcfAax4Tpga6KVcXMQ6rGnhop0n2pN1FdmopKJ6H/41l6MaLJrhv
-         7DtHduS1E/KNDKZ/s4GBUkQKjfIsdLzONrUNjEnfkXzL+d2BaOy3romYJwdDUj10cqmk
-         k17yPCyDV0qSTR/HSZ6o1ehKG+hxs6E24dsiW5gfqh8gGbfr8VxH+OKyl4oakE/v8TWu
-         9aow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iJ13m2JAt52dn3hlEQov4A1vri+FEKsuux71s6SxwnQ=;
-        b=iv5HVGtKPktwB8KlL4u2ct1ijJznJ44q8+XCMGi8Yq7Y8jQDlLgQYN0IYewfKwIlWl
-         OBOxnZVf3DslZCslX+BRY1rB5n99ErFuDCNH4ClNHb8M6dhraJ6LYVqpat7LyW6iLUFJ
-         uuC7N6L/TrOp6iidH+X9T/0YnS5cwpBidGZZ6gTMOwoJZ5/7GFinv06EOo1BPJ8wI4q4
-         JAkr08jIZTnvoOE5E9QayP1hOMV37YzcXMAwzPL6N3H61ctTXWB5sxkTUZLaBK8OTINT
-         SpTexSAEjNKDCU5hK2ZmNbzbbTvG29aqu31NCGfgyxWVjYLIRdQvxL0lpC9HJWsCdjtX
-         D7Xg==
-X-Gm-Message-State: APjAAAUsv24KayXcPXTOUHuN1sssutZeZAKIKH9lQgFAcuSx4Q/GQBRo
-        hBsMixfqRGrU1Tydugxlf4+NLK7P/fBQ/Pxl2wU=
-X-Google-Smtp-Source: APXvYqzLG4d667HyFXy0yjM0OuIcFgzn/LJOHo+WkhK9TEt3LJOSI539ALMJGOTZJ4PNKBlEpK2mlyqLdBxKH1hS3y4=
-X-Received: by 2002:ae9:f30f:: with SMTP id p15mr26583636qkg.182.1556129820912;
- Wed, 24 Apr 2019 11:17:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190424052200.1625142-1-andrii.nakryiko@gmail.com>
- <20190424052200.1625142-2-andrii.nakryiko@gmail.com> <c149c047-7b6a-bb8b-d472-6ea01a9e4caa@fb.com>
-In-Reply-To: <c149c047-7b6a-bb8b-d472-6ea01a9e4caa@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 24 Apr 2019 11:16:48 -0700
-Message-ID: <CAEf4BzYaeWZEHQCJHfoYs6MT3emYbTfFQwLnXgudp7w9YDyrDA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpftool: add ability to dump BTF types
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Kernel Team <Kernel-team@fb.com>,
+        id S1727964AbfDXSlS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Apr 2019 14:41:18 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:58176 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726543AbfDXSlS (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 24 Apr 2019 14:41:18 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3OIbNuq023649;
+        Wed, 24 Apr 2019 11:40:51 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=kvydMvDbsbS7T1RKxnkyqciCBImdFdM9pn8ywl7++Ho=;
+ b=iu3A3oQifKpsgwg2gWKvBPgo2tXgMWLM6TL777MFmMgrPVvu2PNNJALPrOFmFjSCzJvc
+ A+xEZ4n5xgthU83n4Z/6/9oL62CYtSexZ7oWMgbl9NF9rOv+XsCfEywJZSiS266XOibd
+ HcLzMw/ibxZeBaoEkFahlbvky2u1yAR4INE= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2s2rkf9a6k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 24 Apr 2019 11:40:51 -0700
+Received: from prn-mbx04.TheFacebook.com (2620:10d:c081:6::18) by
+ prn-hub03.TheFacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1713.5; Wed, 24 Apr 2019 11:40:50 -0700
+Received: from prn-hub03.TheFacebook.com (2620:10d:c081:35::127) by
+ prn-mbx04.TheFacebook.com (2620:10d:c081:6::18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1713.5; Wed, 24 Apr 2019 11:40:50 -0700
+Received: from NAM03-CO1-obe.outbound.protection.outlook.com (192.168.54.28)
+ by o365-in.thefacebook.com (192.168.16.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
+ via Frontend Transport; Wed, 24 Apr 2019 11:40:50 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector1-fb-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kvydMvDbsbS7T1RKxnkyqciCBImdFdM9pn8ywl7++Ho=;
+ b=TE0gJA2RgXick0JYb/PHkjj5fvN15G5xLnD/EfdGCSmMtq91RKgHV1qJ5SmErRT6XNGe9rJ9Ew+sbbKBNmq9ch3RoxQewJHobPt5PYb5J18n6ErS3oZ8GZ1b5OZpqOD+avLIdwrp6B4ipkwV4PhHVkRDK0j37V1BvMnN+dw0dKQ=
+Received: from BYAPR15MB3384.namprd15.prod.outlook.com (20.179.59.17) by
+ BYAPR15MB2742.namprd15.prod.outlook.com (20.179.157.147) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1813.14; Wed, 24 Apr 2019 18:40:47 +0000
+Received: from BYAPR15MB3384.namprd15.prod.outlook.com
+ ([fe80::750c:2d8e:bf62:4d0d]) by BYAPR15MB3384.namprd15.prod.outlook.com
+ ([fe80::750c:2d8e:bf62:4d0d%5]) with mapi id 15.20.1835.010; Wed, 24 Apr 2019
+ 18:40:47 +0000
+From:   Yonghong Song <yhs@fb.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+CC:     Kernel Team <Kernel-team@fb.com>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
         Alexei Starovoitov <ast@fb.com>,
@@ -68,272 +72,224 @@ Cc:     Kernel Team <Kernel-team@fb.com>,
         "acme@kernel.org" <acme@kernel.org>,
         Andrii Nakryiko <andriin@fb.com>,
         Arnaldo Carvalho de Melo <acme@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH bpf-next 1/2] bpftool: add ability to dump BTF types
+Thread-Topic: [PATCH bpf-next 1/2] bpftool: add ability to dump BTF types
+Thread-Index: AQHU+l5mzy/JVefHY02PsB35pRYTrqZLGQWAgACGAQCAAAawAA==
+Date:   Wed, 24 Apr 2019 18:40:47 +0000
+Message-ID: <4f8cb8a6-451e-2a33-adcf-b5f0e5331cce@fb.com>
+References: <20190424052200.1625142-1-andrii.nakryiko@gmail.com>
+ <20190424052200.1625142-2-andrii.nakryiko@gmail.com>
+ <c149c047-7b6a-bb8b-d472-6ea01a9e4caa@fb.com>
+ <CAEf4BzYaeWZEHQCJHfoYs6MT3emYbTfFQwLnXgudp7w9YDyrDA@mail.gmail.com>
+In-Reply-To: <CAEf4BzYaeWZEHQCJHfoYs6MT3emYbTfFQwLnXgudp7w9YDyrDA@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: MWHPR11CA0001.namprd11.prod.outlook.com
+ (2603:10b6:301:1::11) To BYAPR15MB3384.namprd15.prod.outlook.com
+ (2603:10b6:a03:10e::17)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2620:10d:c090:200::3:5d4c]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1d94693d-3276-406e-4742-08d6c8e45def
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:BYAPR15MB2742;
+x-ms-traffictypediagnostic: BYAPR15MB2742:
+x-microsoft-antispam-prvs: <BYAPR15MB2742D86FBBCAC7453D74175ED33C0@BYAPR15MB2742.namprd15.prod.outlook.com>
+x-forefront-prvs: 00179089FD
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(346002)(39860400002)(396003)(366004)(376002)(189003)(199004)(51444003)(76176011)(54906003)(6116002)(478600001)(6486002)(229853002)(6436002)(99286004)(97736004)(6506007)(8936002)(11346002)(81156014)(86362001)(81166006)(31696002)(14454004)(6916009)(8676002)(52116002)(53546011)(386003)(6246003)(476003)(2616005)(446003)(102836004)(5660300002)(486006)(68736007)(46003)(186003)(66946007)(36756003)(316002)(53936002)(25786009)(6512007)(256004)(64756008)(71200400001)(73956011)(66556008)(66476007)(2906002)(305945005)(14444005)(31686004)(7736002)(71190400001)(93886005)(66446008)(4326008);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB2742;H:BYAPR15MB3384.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: Fo2ErPbkiBph60MdlxUnJ8CdBC3KAoVa6ThEfgdTB4ebFkkP8da9f3fxro74xwto3G7DLwtTJU3cBfYcImOhc07Nzv86GRKB9m9DGJCVwB/q0+PmuiGnNrjtSOrMZJuDVZtxCmXgmYqZ3FDxQTGijFCDifIJLKC04WLtc2y3DYHpbBMj4iMd5/f70qGU87E04NgFdSTn3X2Djqv+sVD91JRHNUAHTLI/yUdSMVIQsUZc71vfo0AT1HGZIxtmRtrdItv1bnu2CHKZoVYnEk0i1dld9YRrZAgbCgTPmLz9BXnHgfeIcX1516DaTgIycHDS7lOlzOqarPG9yEkJoFLvP8s5hF9Kvn0LVlSdqkzkEAr2VLRDumHT1lznTTbBP14TwO484XKV+GkSfPfYUiVxYR5SbJ7pZEzfLQAUi73kS8g=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <545D0797A205804797E68130FB4D3771@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1d94693d-3276-406e-4742-08d6c8e45def
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Apr 2019 18:40:47.6937
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2742
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-24_12:,,
+ signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Apr 24, 2019 at 10:17 AM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 4/23/19 10:21 PM, andrii.nakryiko@gmail.com wrote:
-> > From: Andrii Nakryiko <andriin@fb.com>
-> >
-> > Add new `btf dump` sub-command to bpftool. It allows to dump
-> > human-readable low-level BTF types representation of BTF types. BTF can
-> > be retrieved from few different sources:
-> >    - from BTF object by ID;
-> >    - from PROG, if it has associated BTF;
-> >    - from MAP, if it has associated BTF data; it's possible to narrow
-> >      down types to either key type, value type, both, or all BTF types;
-> >    - from ELF file (.BTF section).
-> >
-> > Output format mostly follows BPF verifier log format with few notable
-> > exceptions:
-> >    - all the type/field/param/etc names are enclosed in single quotes to
-> >      allow easier grepping and to stand out a little bit more;
-> >    - FUNC_PROTO output follows STRUCT/UNION/ENUM format of having one
-> >      line per each argument; this is more uniform and allows easy
-> >      grepping, as opposed to succinct, but inconvenient format that BPF
-> >      verifier log is using.
-> >
-> > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > Cc: Alexei Starovoitov <ast@fb.com>
-> > Cc: Yonghong Song <yhs@fb.com>
-> > Cc: Martin KaFai Lau <kafai@fb.com>
-> > Cc: Song Liu <songliubraving@fb.com>
-> > Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-> > ---
-> >   tools/bpf/bpftool/btf.c  | 576 +++++++++++++++++++++++++++++++++++++++
-> >   tools/bpf/bpftool/main.c |   1 +
-> >   tools/bpf/bpftool/main.h |   1 +
-> >   3 files changed, 578 insertions(+)
-> >   create mode 100644 tools/bpf/bpftool/btf.c
-> >
-> > diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-> > new file mode 100644
-> > index 000000000000..afe5cb7bab0c
-> > --- /dev/null
-> > +++ b/tools/bpf/bpftool/btf.c
-> > @@ -0,0 +1,576 @@
-> > +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +/* Copyright (C) 2019 Facebook */
-> > +
-> > +#include <errno.h>
-> > +#include <fcntl.h>
-> > +#include <linux/err.h>
-> > +#include <stdbool.h>
-> > +#include <stdio.h>
-> > +#include <string.h>
-> > +#include <unistd.h>
-> > +#include <gelf.h>
-> > +#include <bpf.h>
-> > +#include <linux/btf.h>
-> > +
-> > +#include "btf.h"
-> > +#include "json_writer.h"
-> > +#include "main.h"
-> > +
-> > +static const char * const btf_kind_str[NR_BTF_KINDS] = {
-> > +     [BTF_KIND_UNKN]         = "UNKNOWN",
-> > +     [BTF_KIND_INT]          = "INT",
-> > +     [BTF_KIND_PTR]          = "PTR",
-> > +     [BTF_KIND_ARRAY]        = "ARRAY",
-> > +     [BTF_KIND_STRUCT]       = "STRUCT",
-> > +     [BTF_KIND_UNION]        = "UNION",
-> > +     [BTF_KIND_ENUM]         = "ENUM",
-> > +     [BTF_KIND_FWD]          = "FWD",
-> > +     [BTF_KIND_TYPEDEF]      = "TYPEDEF",
-> > +     [BTF_KIND_VOLATILE]     = "VOLATILE",
-> > +     [BTF_KIND_CONST]        = "CONST",
-> > +     [BTF_KIND_RESTRICT]     = "RESTRICT",
-> > +     [BTF_KIND_FUNC]         = "FUNC",
-> > +     [BTF_KIND_FUNC_PROTO]   = "FUNC_PROTO",
-> > +     [BTF_KIND_VAR]          = "VAR",
-> > +     [BTF_KIND_DATASEC]      = "DATASEC",
-> > +};
-> > +
-> > +static const char *btf_int_enc_str(__u8 encoding)
-> > +{
-> > +     switch (encoding) {
-> > +     case 0:
-> > +             return "(none)";
-> > +     case BTF_INT_SIGNED:
-> > +             return "SIGNED";
-> > +     case BTF_INT_CHAR:
-> > +             return "CHAR";
-> > +     case BTF_INT_BOOL:
-> > +             return "BOOL";
-> > +     default:
-> > +             return "UNKN";
-> > +     }
-> > +}
-> > +
-> > +static const char *btf_var_linkage_str(__u32 linkage)
-> > +{
-> > +     switch (linkage) {
-> > +     case BTF_VAR_STATIC:
-> > +             return "static";
-> > +     case BTF_VAR_GLOBAL_ALLOCATED:
-> > +             return "global-alloc";
-> > +     default:
-> > +             return "(unknown)";
-> > +     }
-> > +}
-> > +
-> [...]
-> > +
-> > +static bool check_btf_endianness(GElf_Ehdr *ehdr)
-> > +{
-> > +     static unsigned int const endian = 1;
-> > +
-> > +     switch (ehdr->e_ident[EI_DATA]) {
-> > +     case ELFDATA2LSB:
-> > +             return *(unsigned char const *)&endian == 1;
-> > +     case ELFDATA2MSB:
-> > +             return *(unsigned char const *)&endian == 0;
-> > +     default:
-> > +             return 0;
-> > +     }
-> > +}
-> > +
-> > +static int btf_load_from_elf(const char *path, struct btf **btf)
-> > +{
-> > +     int err = -1, fd = -1, idx = 0;
-> > +     Elf_Data *btf_data = NULL;
-> > +     Elf_Scn *scn = NULL;
-> > +     Elf *elf = NULL;
-> > +     GElf_Ehdr ehdr;
-> > +
-> > +     if (elf_version(EV_CURRENT) == EV_NONE) {
-> > +             p_err("failed to init libelf for %s", path);
-> > +             return -1;
-> > +     }
-> > +
-> > +     fd = open(path, O_RDONLY);
-> > +     if (fd < 0) {
-> > +             p_err("failed to open %s: %s", path, strerror(errno));
-> > +             return -1;
-> > +     }
-> > +
-> > +     elf = elf_begin(fd, ELF_C_READ, NULL);
-> > +     if (!elf) {
-> > +             p_err("failed to open %s as ELF file", path);
-> > +             goto done;
-> > +     }
-> > +     if (!gelf_getehdr(elf, &ehdr)) {
-> > +             p_err("failed to get EHDR from %s", path);
-> > +             goto done;
-> > +     }
-> > +     if (!check_btf_endianness(&ehdr)) {
-> > +             p_err("non-native ELF endianness is not supported");
->
-> We should relex this. It is possible that for some embedded system,
-> bpftool is running on some x86 server examining a objfile file used
-> for an embedded system.
-
-I agree, but I think that should be done in libbpf. I've been meaning
-to add that for a while now, but never got around to that, it's still
-on my TODO list.
-
-My intent is to teach btf__new to look at BTF header, and if it's
-endianness is not native, convert all the integers to native
-endianness. That way, struct btf is always of native endianness in
-memory and won't require any extra checks from other code. I'll do it
-some time soonish at which point both pahole (which handles this
-explicitly right now) and bpftool can greatly benefit from that. How
-does that sound?
-
->
-> > +             goto done;
-> > +     }
-> > +     if (!elf_rawdata(elf_getscn(elf, ehdr.e_shstrndx), NULL)) {
-> > +             p_err("failed to get e_shstrndx from %s\n", path);
-> > +             goto done;
-> > +     }
-> > +
-> > +     while ((scn = elf_nextscn(elf, scn)) != NULL) {
-> > +             GElf_Shdr sh;
-> > +             char *name;
-> > +
-> > +             idx++;
-> > +             if (gelf_getshdr(scn, &sh) != &sh) {
-> > +                     p_err("failed to get section(%d) header from %s",
-> > +                           idx, path);
-> > +                     goto done;
-> > +             }
-> > +             name = elf_strptr(elf, ehdr.e_shstrndx, sh.sh_name);
-> > +             if (!name) {
-> > +                     p_err("failed to get section(%d) name from %s",
-> > +                           idx, path);
-> > +                     goto done;
-> > +             }
-> > +             if (strcmp(name, BTF_ELF_SEC) == 0) {
-> > +                     btf_data = elf_getdata(scn, 0);
-> > +                     if (!btf_data) {
-> > +                             p_err("failed to get section(%d, %s) data from %s",
-> > +                                   idx, name, path);
-> > +                             goto done;
-> > +                     }
-> > +                     break;
-> > +             }
-> > +     }
-> > +
-> > +     if (!btf_data) {
-> > +             p_err("%s ELF section not found in %s", BTF_ELF_SEC, path);
-> > +             goto done;
-> > +     }
-> > +
-> > +     *btf = btf__new(btf_data->d_buf, btf_data->d_size);
-> > +     if (IS_ERR(*btf)) {
-> > +             err = PTR_ERR(*btf);
-> > +             *btf = NULL;
-> > +             p_err("failed to load BTF data from %s: %s",
-> > +                   path, strerror(err));
-> > +             goto done;
-> > +     }
-> > +
-> > +     err = 0;
-> > +done:
-> > +     if (err) {
-> > +             if (*btf) {
-> > +                     btf__free(*btf);
-> > +                     *btf = NULL;
-> > +             }
-> > +     }
-> > +     if (elf)
-> > +             elf_end(elf);
-> > +     close(fd);
-> > +     return err;
-> > +}
-> > +
-> [...]
-> > +}
-> > diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-> > index a9d5e9e6a732..eba56edd7c77 100644
-> > --- a/tools/bpf/bpftool/main.c
-> > +++ b/tools/bpf/bpftool/main.c
-> > @@ -188,6 +188,7 @@ static const struct cmd cmds[] = {
-> >       { "perf",       do_perf },
-> >       { "net",        do_net },
-> >       { "feature",    do_feature },
-> > +     { "btf",        do_btf },
-> >       { "version",    do_version },
-> >       { 0 }
-> >   };
-> > diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-> > index 1ccc46169a19..3d63feb7f852 100644
-> > --- a/tools/bpf/bpftool/main.h
-> > +++ b/tools/bpf/bpftool/main.h
-> > @@ -150,6 +150,7 @@ int do_perf(int argc, char **arg);
-> >   int do_net(int argc, char **arg);
-> >   int do_tracelog(int argc, char **arg);
-> >   int do_feature(int argc, char **argv);
-> > +int do_btf(int argc, char **argv);
-> >
-> >   int parse_u32_arg(int *argc, char ***argv, __u32 *val, const char *what);
-> >   int prog_parse_fd(int *argc, char ***argv);
-> >
+DQoNCk9uIDQvMjQvMTkgMTE6MTYgQU0sIEFuZHJpaSBOYWtyeWlrbyB3cm90ZToNCj4gT24gV2Vk
+LCBBcHIgMjQsIDIwMTkgYXQgMTA6MTcgQU0gWW9uZ2hvbmcgU29uZyA8eWhzQGZiLmNvbT4gd3Jv
+dGU6DQo+Pg0KPj4NCj4+DQo+PiBPbiA0LzIzLzE5IDEwOjIxIFBNLCBhbmRyaWkubmFrcnlpa29A
+Z21haWwuY29tIHdyb3RlOg0KPj4+IEZyb206IEFuZHJpaSBOYWtyeWlrbyA8YW5kcmlpbkBmYi5j
+b20+DQo+Pj4NCj4+PiBBZGQgbmV3IGBidGYgZHVtcGAgc3ViLWNvbW1hbmQgdG8gYnBmdG9vbC4g
+SXQgYWxsb3dzIHRvIGR1bXANCj4+PiBodW1hbi1yZWFkYWJsZSBsb3ctbGV2ZWwgQlRGIHR5cGVz
+IHJlcHJlc2VudGF0aW9uIG9mIEJURiB0eXBlcy4gQlRGIGNhbg0KPj4+IGJlIHJldHJpZXZlZCBm
+cm9tIGZldyBkaWZmZXJlbnQgc291cmNlczoNCj4+PiAgICAgLSBmcm9tIEJURiBvYmplY3QgYnkg
+SUQ7DQo+Pj4gICAgIC0gZnJvbSBQUk9HLCBpZiBpdCBoYXMgYXNzb2NpYXRlZCBCVEY7DQo+Pj4g
+ICAgIC0gZnJvbSBNQVAsIGlmIGl0IGhhcyBhc3NvY2lhdGVkIEJURiBkYXRhOyBpdCdzIHBvc3Np
+YmxlIHRvIG5hcnJvdw0KPj4+ICAgICAgIGRvd24gdHlwZXMgdG8gZWl0aGVyIGtleSB0eXBlLCB2
+YWx1ZSB0eXBlLCBib3RoLCBvciBhbGwgQlRGIHR5cGVzOw0KPj4+ICAgICAtIGZyb20gRUxGIGZp
+bGUgKC5CVEYgc2VjdGlvbikuDQo+Pj4NCj4+PiBPdXRwdXQgZm9ybWF0IG1vc3RseSBmb2xsb3dz
+IEJQRiB2ZXJpZmllciBsb2cgZm9ybWF0IHdpdGggZmV3IG5vdGFibGUNCj4+PiBleGNlcHRpb25z
+Og0KPj4+ICAgICAtIGFsbCB0aGUgdHlwZS9maWVsZC9wYXJhbS9ldGMgbmFtZXMgYXJlIGVuY2xv
+c2VkIGluIHNpbmdsZSBxdW90ZXMgdG8NCj4+PiAgICAgICBhbGxvdyBlYXNpZXIgZ3JlcHBpbmcg
+YW5kIHRvIHN0YW5kIG91dCBhIGxpdHRsZSBiaXQgbW9yZTsNCj4+PiAgICAgLSBGVU5DX1BST1RP
+IG91dHB1dCBmb2xsb3dzIFNUUlVDVC9VTklPTi9FTlVNIGZvcm1hdCBvZiBoYXZpbmcgb25lDQo+
+Pj4gICAgICAgbGluZSBwZXIgZWFjaCBhcmd1bWVudDsgdGhpcyBpcyBtb3JlIHVuaWZvcm0gYW5k
+IGFsbG93cyBlYXN5DQo+Pj4gICAgICAgZ3JlcHBpbmcsIGFzIG9wcG9zZWQgdG8gc3VjY2luY3Qs
+IGJ1dCBpbmNvbnZlbmllbnQgZm9ybWF0IHRoYXQgQlBGDQo+Pj4gICAgICAgdmVyaWZpZXIgbG9n
+IGlzIHVzaW5nLg0KPj4+DQo+Pj4gQ2M6IERhbmllbCBCb3JrbWFubiA8ZGFuaWVsQGlvZ2VhcmJv
+eC5uZXQ+DQo+Pj4gQ2M6IEFsZXhlaSBTdGFyb3ZvaXRvdiA8YXN0QGZiLmNvbT4NCj4+PiBDYzog
+WW9uZ2hvbmcgU29uZyA8eWhzQGZiLmNvbT4NCj4+PiBDYzogTWFydGluIEthRmFpIExhdSA8a2Fm
+YWlAZmIuY29tPg0KPj4+IENjOiBTb25nIExpdSA8c29uZ2xpdWJyYXZpbmdAZmIuY29tPg0KPj4+
+IENjOiBBcm5hbGRvIENhcnZhbGhvIGRlIE1lbG8gPGFjbWVAcmVkaGF0LmNvbT4NCj4+PiBTaWdu
+ZWQtb2ZmLWJ5OiBBbmRyaWkgTmFrcnlpa28gPGFuZHJpaW5AZmIuY29tPg0KPj4+IC0tLQ0KPj4+
+ICAgIHRvb2xzL2JwZi9icGZ0b29sL2J0Zi5jICB8IDU3NiArKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKysNCj4+PiAgICB0b29scy9icGYvYnBmdG9vbC9tYWluLmMgfCAgIDEg
+Kw0KPj4+ICAgIHRvb2xzL2JwZi9icGZ0b29sL21haW4uaCB8ICAgMSArDQo+Pj4gICAgMyBmaWxl
+cyBjaGFuZ2VkLCA1NzggaW5zZXJ0aW9ucygrKQ0KPj4+ICAgIGNyZWF0ZSBtb2RlIDEwMDY0NCB0
+b29scy9icGYvYnBmdG9vbC9idGYuYw0KPj4+DQo+Pj4gZGlmZiAtLWdpdCBhL3Rvb2xzL2JwZi9i
+cGZ0b29sL2J0Zi5jIGIvdG9vbHMvYnBmL2JwZnRvb2wvYnRmLmMNCj4+PiBuZXcgZmlsZSBtb2Rl
+IDEwMDY0NA0KPj4+IGluZGV4IDAwMDAwMDAwMDAwMC4uYWZlNWNiN2JhYjBjDQo+Pj4gLS0tIC9k
+ZXYvbnVsbA0KPj4+ICsrKyBiL3Rvb2xzL2JwZi9icGZ0b29sL2J0Zi5jDQo+Pj4gQEAgLTAsMCAr
+MSw1NzYgQEANCj4+PiArLy8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IChHUEwtMi4wLW9ubHkg
+T1IgQlNELTItQ2xhdXNlKQ0KPj4+ICsvKiBDb3B5cmlnaHQgKEMpIDIwMTkgRmFjZWJvb2sgKi8N
+Cj4+PiArDQo+Pj4gKyNpbmNsdWRlIDxlcnJuby5oPg0KPj4+ICsjaW5jbHVkZSA8ZmNudGwuaD4N
+Cj4+PiArI2luY2x1ZGUgPGxpbnV4L2Vyci5oPg0KPj4+ICsjaW5jbHVkZSA8c3RkYm9vbC5oPg0K
+Pj4+ICsjaW5jbHVkZSA8c3RkaW8uaD4NCj4+PiArI2luY2x1ZGUgPHN0cmluZy5oPg0KPj4+ICsj
+aW5jbHVkZSA8dW5pc3RkLmg+DQo+Pj4gKyNpbmNsdWRlIDxnZWxmLmg+DQo+Pj4gKyNpbmNsdWRl
+IDxicGYuaD4NCj4+PiArI2luY2x1ZGUgPGxpbnV4L2J0Zi5oPg0KPj4+ICsNCj4+PiArI2luY2x1
+ZGUgImJ0Zi5oIg0KPj4+ICsjaW5jbHVkZSAianNvbl93cml0ZXIuaCINCj4+PiArI2luY2x1ZGUg
+Im1haW4uaCINCj4+PiArDQo+Pj4gK3N0YXRpYyBjb25zdCBjaGFyICogY29uc3QgYnRmX2tpbmRf
+c3RyW05SX0JURl9LSU5EU10gPSB7DQo+Pj4gKyAgICAgW0JURl9LSU5EX1VOS05dICAgICAgICAg
+PSAiVU5LTk9XTiIsDQo+Pj4gKyAgICAgW0JURl9LSU5EX0lOVF0gICAgICAgICAgPSAiSU5UIiwN
+Cj4+PiArICAgICBbQlRGX0tJTkRfUFRSXSAgICAgICAgICA9ICJQVFIiLA0KPj4+ICsgICAgIFtC
+VEZfS0lORF9BUlJBWV0gICAgICAgID0gIkFSUkFZIiwNCj4+PiArICAgICBbQlRGX0tJTkRfU1RS
+VUNUXSAgICAgICA9ICJTVFJVQ1QiLA0KPj4+ICsgICAgIFtCVEZfS0lORF9VTklPTl0gICAgICAg
+ID0gIlVOSU9OIiwNCj4+PiArICAgICBbQlRGX0tJTkRfRU5VTV0gICAgICAgICA9ICJFTlVNIiwN
+Cj4+PiArICAgICBbQlRGX0tJTkRfRldEXSAgICAgICAgICA9ICJGV0QiLA0KPj4+ICsgICAgIFtC
+VEZfS0lORF9UWVBFREVGXSAgICAgID0gIlRZUEVERUYiLA0KPj4+ICsgICAgIFtCVEZfS0lORF9W
+T0xBVElMRV0gICAgID0gIlZPTEFUSUxFIiwNCj4+PiArICAgICBbQlRGX0tJTkRfQ09OU1RdICAg
+ICAgICA9ICJDT05TVCIsDQo+Pj4gKyAgICAgW0JURl9LSU5EX1JFU1RSSUNUXSAgICAgPSAiUkVT
+VFJJQ1QiLA0KPj4+ICsgICAgIFtCVEZfS0lORF9GVU5DXSAgICAgICAgID0gIkZVTkMiLA0KPj4+
+ICsgICAgIFtCVEZfS0lORF9GVU5DX1BST1RPXSAgID0gIkZVTkNfUFJPVE8iLA0KPj4+ICsgICAg
+IFtCVEZfS0lORF9WQVJdICAgICAgICAgID0gIlZBUiIsDQo+Pj4gKyAgICAgW0JURl9LSU5EX0RB
+VEFTRUNdICAgICAgPSAiREFUQVNFQyIsDQo+Pj4gK307DQo+Pj4gKw0KPj4+ICtzdGF0aWMgY29u
+c3QgY2hhciAqYnRmX2ludF9lbmNfc3RyKF9fdTggZW5jb2RpbmcpDQo+Pj4gK3sNCj4+PiArICAg
+ICBzd2l0Y2ggKGVuY29kaW5nKSB7DQo+Pj4gKyAgICAgY2FzZSAwOg0KPj4+ICsgICAgICAgICAg
+ICAgcmV0dXJuICIobm9uZSkiOw0KPj4+ICsgICAgIGNhc2UgQlRGX0lOVF9TSUdORUQ6DQo+Pj4g
+KyAgICAgICAgICAgICByZXR1cm4gIlNJR05FRCI7DQo+Pj4gKyAgICAgY2FzZSBCVEZfSU5UX0NI
+QVI6DQo+Pj4gKyAgICAgICAgICAgICByZXR1cm4gIkNIQVIiOw0KPj4+ICsgICAgIGNhc2UgQlRG
+X0lOVF9CT09MOg0KPj4+ICsgICAgICAgICAgICAgcmV0dXJuICJCT09MIjsNCj4+PiArICAgICBk
+ZWZhdWx0Og0KPj4+ICsgICAgICAgICAgICAgcmV0dXJuICJVTktOIjsNCj4+PiArICAgICB9DQo+
+Pj4gK30NCj4+PiArDQo+Pj4gK3N0YXRpYyBjb25zdCBjaGFyICpidGZfdmFyX2xpbmthZ2Vfc3Ry
+KF9fdTMyIGxpbmthZ2UpDQo+Pj4gK3sNCj4+PiArICAgICBzd2l0Y2ggKGxpbmthZ2UpIHsNCj4+
+PiArICAgICBjYXNlIEJURl9WQVJfU1RBVElDOg0KPj4+ICsgICAgICAgICAgICAgcmV0dXJuICJz
+dGF0aWMiOw0KPj4+ICsgICAgIGNhc2UgQlRGX1ZBUl9HTE9CQUxfQUxMT0NBVEVEOg0KPj4+ICsg
+ICAgICAgICAgICAgcmV0dXJuICJnbG9iYWwtYWxsb2MiOw0KPj4+ICsgICAgIGRlZmF1bHQ6DQo+
+Pj4gKyAgICAgICAgICAgICByZXR1cm4gIih1bmtub3duKSI7DQo+Pj4gKyAgICAgfQ0KPj4+ICt9
+DQo+Pj4gKw0KPj4gWy4uLl0NCj4+PiArDQo+Pj4gK3N0YXRpYyBib29sIGNoZWNrX2J0Zl9lbmRp
+YW5uZXNzKEdFbGZfRWhkciAqZWhkcikNCj4+PiArew0KPj4+ICsgICAgIHN0YXRpYyB1bnNpZ25l
+ZCBpbnQgY29uc3QgZW5kaWFuID0gMTsNCj4+PiArDQo+Pj4gKyAgICAgc3dpdGNoIChlaGRyLT5l
+X2lkZW50W0VJX0RBVEFdKSB7DQo+Pj4gKyAgICAgY2FzZSBFTEZEQVRBMkxTQjoNCj4+PiArICAg
+ICAgICAgICAgIHJldHVybiAqKHVuc2lnbmVkIGNoYXIgY29uc3QgKikmZW5kaWFuID09IDE7DQo+
+Pj4gKyAgICAgY2FzZSBFTEZEQVRBMk1TQjoNCj4+PiArICAgICAgICAgICAgIHJldHVybiAqKHVu
+c2lnbmVkIGNoYXIgY29uc3QgKikmZW5kaWFuID09IDA7DQo+Pj4gKyAgICAgZGVmYXVsdDoNCj4+
+PiArICAgICAgICAgICAgIHJldHVybiAwOw0KPj4+ICsgICAgIH0NCj4+PiArfQ0KPj4+ICsNCj4+
+PiArc3RhdGljIGludCBidGZfbG9hZF9mcm9tX2VsZihjb25zdCBjaGFyICpwYXRoLCBzdHJ1Y3Qg
+YnRmICoqYnRmKQ0KPj4+ICt7DQo+Pj4gKyAgICAgaW50IGVyciA9IC0xLCBmZCA9IC0xLCBpZHgg
+PSAwOw0KPj4+ICsgICAgIEVsZl9EYXRhICpidGZfZGF0YSA9IE5VTEw7DQo+Pj4gKyAgICAgRWxm
+X1NjbiAqc2NuID0gTlVMTDsNCj4+PiArICAgICBFbGYgKmVsZiA9IE5VTEw7DQo+Pj4gKyAgICAg
+R0VsZl9FaGRyIGVoZHI7DQo+Pj4gKw0KPj4+ICsgICAgIGlmIChlbGZfdmVyc2lvbihFVl9DVVJS
+RU5UKSA9PSBFVl9OT05FKSB7DQo+Pj4gKyAgICAgICAgICAgICBwX2VycigiZmFpbGVkIHRvIGlu
+aXQgbGliZWxmIGZvciAlcyIsIHBhdGgpOw0KPj4+ICsgICAgICAgICAgICAgcmV0dXJuIC0xOw0K
+Pj4+ICsgICAgIH0NCj4+PiArDQo+Pj4gKyAgICAgZmQgPSBvcGVuKHBhdGgsIE9fUkRPTkxZKTsN
+Cj4+PiArICAgICBpZiAoZmQgPCAwKSB7DQo+Pj4gKyAgICAgICAgICAgICBwX2VycigiZmFpbGVk
+IHRvIG9wZW4gJXM6ICVzIiwgcGF0aCwgc3RyZXJyb3IoZXJybm8pKTsNCj4+PiArICAgICAgICAg
+ICAgIHJldHVybiAtMTsNCj4+PiArICAgICB9DQo+Pj4gKw0KPj4+ICsgICAgIGVsZiA9IGVsZl9i
+ZWdpbihmZCwgRUxGX0NfUkVBRCwgTlVMTCk7DQo+Pj4gKyAgICAgaWYgKCFlbGYpIHsNCj4+PiAr
+ICAgICAgICAgICAgIHBfZXJyKCJmYWlsZWQgdG8gb3BlbiAlcyBhcyBFTEYgZmlsZSIsIHBhdGgp
+Ow0KPj4+ICsgICAgICAgICAgICAgZ290byBkb25lOw0KPj4+ICsgICAgIH0NCj4+PiArICAgICBp
+ZiAoIWdlbGZfZ2V0ZWhkcihlbGYsICZlaGRyKSkgew0KPj4+ICsgICAgICAgICAgICAgcF9lcnIo
+ImZhaWxlZCB0byBnZXQgRUhEUiBmcm9tICVzIiwgcGF0aCk7DQo+Pj4gKyAgICAgICAgICAgICBn
+b3RvIGRvbmU7DQo+Pj4gKyAgICAgfQ0KPj4+ICsgICAgIGlmICghY2hlY2tfYnRmX2VuZGlhbm5l
+c3MoJmVoZHIpKSB7DQo+Pj4gKyAgICAgICAgICAgICBwX2Vycigibm9uLW5hdGl2ZSBFTEYgZW5k
+aWFubmVzcyBpcyBub3Qgc3VwcG9ydGVkIik7DQo+Pg0KPj4gV2Ugc2hvdWxkIHJlbGV4IHRoaXMu
+IEl0IGlzIHBvc3NpYmxlIHRoYXQgZm9yIHNvbWUgZW1iZWRkZWQgc3lzdGVtLA0KPj4gYnBmdG9v
+bCBpcyBydW5uaW5nIG9uIHNvbWUgeDg2IHNlcnZlciBleGFtaW5pbmcgYSBvYmpmaWxlIGZpbGUg
+dXNlZA0KPj4gZm9yIGFuIGVtYmVkZGVkIHN5c3RlbS4NCj4gDQo+IEkgYWdyZWUsIGJ1dCBJIHRo
+aW5rIHRoYXQgc2hvdWxkIGJlIGRvbmUgaW4gbGliYnBmLiBJJ3ZlIGJlZW4gbWVhbmluZw0KPiB0
+byBhZGQgdGhhdCBmb3IgYSB3aGlsZSBub3csIGJ1dCBuZXZlciBnb3QgYXJvdW5kIHRvIHRoYXQs
+IGl0J3Mgc3RpbGwNCj4gb24gbXkgVE9ETyBsaXN0Lg0KPiANCj4gTXkgaW50ZW50IGlzIHRvIHRl
+YWNoIGJ0Zl9fbmV3IHRvIGxvb2sgYXQgQlRGIGhlYWRlciwgYW5kIGlmIGl0J3MNCj4gZW5kaWFu
+bmVzcyBpcyBub3QgbmF0aXZlLCBjb252ZXJ0IGFsbCB0aGUgaW50ZWdlcnMgdG8gbmF0aXZlDQo+
+IGVuZGlhbm5lc3MuIFRoYXQgd2F5LCBzdHJ1Y3QgYnRmIGlzIGFsd2F5cyBvZiBuYXRpdmUgZW5k
+aWFubmVzcyBpbg0KPiBtZW1vcnkgYW5kIHdvbid0IHJlcXVpcmUgYW55IGV4dHJhIGNoZWNrcyBm
+cm9tIG90aGVyIGNvZGUuIEknbGwgZG8gaXQNCj4gc29tZSB0aW1lIHNvb25pc2ggYXQgd2hpY2gg
+cG9pbnQgYm90aCBwYWhvbGUgKHdoaWNoIGhhbmRsZXMgdGhpcw0KPiBleHBsaWNpdGx5IHJpZ2h0
+IG5vdykgYW5kIGJwZnRvb2wgY2FuIGdyZWF0bHkgYmVuZWZpdCBmcm9tIHRoYXQuIEhvdw0KPiBk
+b2VzIHRoYXQgc291bmQ/DQoNClRoaXMgc291bmRzIGdvb2QuIGxpYmJwZiBzZWVtcyB0aGUgcmln
+aHQgcGxhY2UgdG8gZ28uDQoNCj4gDQo+Pg0KPj4+ICsgICAgICAgICAgICAgZ290byBkb25lOw0K
+Pj4+ICsgICAgIH0NCj4+PiArICAgICBpZiAoIWVsZl9yYXdkYXRhKGVsZl9nZXRzY24oZWxmLCBl
+aGRyLmVfc2hzdHJuZHgpLCBOVUxMKSkgew0KPj4+ICsgICAgICAgICAgICAgcF9lcnIoImZhaWxl
+ZCB0byBnZXQgZV9zaHN0cm5keCBmcm9tICVzXG4iLCBwYXRoKTsNCj4+PiArICAgICAgICAgICAg
+IGdvdG8gZG9uZTsNCj4+PiArICAgICB9DQo+Pj4gKw0KPj4+ICsgICAgIHdoaWxlICgoc2NuID0g
+ZWxmX25leHRzY24oZWxmLCBzY24pKSAhPSBOVUxMKSB7DQo+Pj4gKyAgICAgICAgICAgICBHRWxm
+X1NoZHIgc2g7DQo+Pj4gKyAgICAgICAgICAgICBjaGFyICpuYW1lOw0KPj4+ICsNCj4+PiArICAg
+ICAgICAgICAgIGlkeCsrOw0KPj4+ICsgICAgICAgICAgICAgaWYgKGdlbGZfZ2V0c2hkcihzY24s
+ICZzaCkgIT0gJnNoKSB7DQo+Pj4gKyAgICAgICAgICAgICAgICAgICAgIHBfZXJyKCJmYWlsZWQg
+dG8gZ2V0IHNlY3Rpb24oJWQpIGhlYWRlciBmcm9tICVzIiwNCj4+PiArICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgaWR4LCBwYXRoKTsNCj4+PiArICAgICAgICAgICAgICAgICAgICAgZ290byBk
+b25lOw0KPj4+ICsgICAgICAgICAgICAgfQ0KPj4+ICsgICAgICAgICAgICAgbmFtZSA9IGVsZl9z
+dHJwdHIoZWxmLCBlaGRyLmVfc2hzdHJuZHgsIHNoLnNoX25hbWUpOw0KPj4+ICsgICAgICAgICAg
+ICAgaWYgKCFuYW1lKSB7DQo+Pj4gKyAgICAgICAgICAgICAgICAgICAgIHBfZXJyKCJmYWlsZWQg
+dG8gZ2V0IHNlY3Rpb24oJWQpIG5hbWUgZnJvbSAlcyIsDQo+Pj4gKyAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIGlkeCwgcGF0aCk7DQo+Pj4gKyAgICAgICAgICAgICAgICAgICAgIGdvdG8gZG9u
+ZTsNCj4+PiArICAgICAgICAgICAgIH0NCj4+PiArICAgICAgICAgICAgIGlmIChzdHJjbXAobmFt
+ZSwgQlRGX0VMRl9TRUMpID09IDApIHsNCj4+PiArICAgICAgICAgICAgICAgICAgICAgYnRmX2Rh
+dGEgPSBlbGZfZ2V0ZGF0YShzY24sIDApOw0KPj4+ICsgICAgICAgICAgICAgICAgICAgICBpZiAo
+IWJ0Zl9kYXRhKSB7DQo+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcF9lcnIoImZh
+aWxlZCB0byBnZXQgc2VjdGlvbiglZCwgJXMpIGRhdGEgZnJvbSAlcyIsDQo+Pj4gKyAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgaWR4LCBuYW1lLCBwYXRoKTsNCj4+PiArICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICBnb3RvIGRvbmU7DQo+Pj4gKyAgICAgICAgICAgICAgICAg
+ICAgIH0NCj4+PiArICAgICAgICAgICAgICAgICAgICAgYnJlYWs7DQo+Pj4gKyAgICAgICAgICAg
+ICB9DQo+Pj4gKyAgICAgfQ0KPj4+ICsNCj4+PiArICAgICBpZiAoIWJ0Zl9kYXRhKSB7DQo+Pj4g
+KyAgICAgICAgICAgICBwX2VycigiJXMgRUxGIHNlY3Rpb24gbm90IGZvdW5kIGluICVzIiwgQlRG
+X0VMRl9TRUMsIHBhdGgpOw0KPj4+ICsgICAgICAgICAgICAgZ290byBkb25lOw0KPj4+ICsgICAg
+IH0NCj4+PiArDQo+Pj4gKyAgICAgKmJ0ZiA9IGJ0Zl9fbmV3KGJ0Zl9kYXRhLT5kX2J1ZiwgYnRm
+X2RhdGEtPmRfc2l6ZSk7DQo+Pj4gKyAgICAgaWYgKElTX0VSUigqYnRmKSkgew0KPj4+ICsgICAg
+ICAgICAgICAgZXJyID0gUFRSX0VSUigqYnRmKTsNCj4+PiArICAgICAgICAgICAgICpidGYgPSBO
+VUxMOw0KPj4+ICsgICAgICAgICAgICAgcF9lcnIoImZhaWxlZCB0byBsb2FkIEJURiBkYXRhIGZy
+b20gJXM6ICVzIiwNCj4+PiArICAgICAgICAgICAgICAgICAgIHBhdGgsIHN0cmVycm9yKGVycikp
+Ow0KPj4+ICsgICAgICAgICAgICAgZ290byBkb25lOw0KPj4+ICsgICAgIH0NCj4+PiArDQo+Pj4g
+KyAgICAgZXJyID0gMDsNCj4+PiArZG9uZToNCj4+PiArICAgICBpZiAoZXJyKSB7DQo+Pj4gKyAg
+ICAgICAgICAgICBpZiAoKmJ0Zikgew0KPj4+ICsgICAgICAgICAgICAgICAgICAgICBidGZfX2Zy
+ZWUoKmJ0Zik7DQo+Pj4gKyAgICAgICAgICAgICAgICAgICAgICpidGYgPSBOVUxMOw0KPj4+ICsg
+ICAgICAgICAgICAgfQ0KPj4+ICsgICAgIH0NCj4+PiArICAgICBpZiAoZWxmKQ0KPj4+ICsgICAg
+ICAgICAgICAgZWxmX2VuZChlbGYpOw0KPj4+ICsgICAgIGNsb3NlKGZkKTsNCj4+PiArICAgICBy
+ZXR1cm4gZXJyOw0KPj4+ICt9DQo+Pj4gKw0KPj4gWy4uLl0NCj4+PiArfQ0KPj4+IGRpZmYgLS1n
+aXQgYS90b29scy9icGYvYnBmdG9vbC9tYWluLmMgYi90b29scy9icGYvYnBmdG9vbC9tYWluLmMN
+Cj4+PiBpbmRleCBhOWQ1ZTllNmE3MzIuLmViYTU2ZWRkN2M3NyAxMDA2NDQNCj4+PiAtLS0gYS90
+b29scy9icGYvYnBmdG9vbC9tYWluLmMNCj4+PiArKysgYi90b29scy9icGYvYnBmdG9vbC9tYWlu
+LmMNCj4+PiBAQCAtMTg4LDYgKzE4OCw3IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgY21kIGNtZHNb
+XSA9IHsNCj4+PiAgICAgICAgeyAicGVyZiIsICAgICAgIGRvX3BlcmYgfSwNCj4+PiAgICAgICAg
+eyAibmV0IiwgICAgICAgIGRvX25ldCB9LA0KPj4+ICAgICAgICB7ICJmZWF0dXJlIiwgICAgZG9f
+ZmVhdHVyZSB9LA0KPj4+ICsgICAgIHsgImJ0ZiIsICAgICAgICBkb19idGYgfSwNCj4+PiAgICAg
+ICAgeyAidmVyc2lvbiIsICAgIGRvX3ZlcnNpb24gfSwNCj4+PiAgICAgICAgeyAwIH0NCj4+PiAg
+ICB9Ow0KPj4+IGRpZmYgLS1naXQgYS90b29scy9icGYvYnBmdG9vbC9tYWluLmggYi90b29scy9i
+cGYvYnBmdG9vbC9tYWluLmgNCj4+PiBpbmRleCAxY2NjNDYxNjlhMTkuLjNkNjNmZWI3Zjg1MiAx
+MDA2NDQNCj4+PiAtLS0gYS90b29scy9icGYvYnBmdG9vbC9tYWluLmgNCj4+PiArKysgYi90b29s
+cy9icGYvYnBmdG9vbC9tYWluLmgNCj4+PiBAQCAtMTUwLDYgKzE1MCw3IEBAIGludCBkb19wZXJm
+KGludCBhcmdjLCBjaGFyICoqYXJnKTsNCj4+PiAgICBpbnQgZG9fbmV0KGludCBhcmdjLCBjaGFy
+ICoqYXJnKTsNCj4+PiAgICBpbnQgZG9fdHJhY2Vsb2coaW50IGFyZ2MsIGNoYXIgKiphcmcpOw0K
+Pj4+ICAgIGludCBkb19mZWF0dXJlKGludCBhcmdjLCBjaGFyICoqYXJndik7DQo+Pj4gK2ludCBk
+b19idGYoaW50IGFyZ2MsIGNoYXIgKiphcmd2KTsNCj4+Pg0KPj4+ICAgIGludCBwYXJzZV91MzJf
+YXJnKGludCAqYXJnYywgY2hhciAqKiphcmd2LCBfX3UzMiAqdmFsLCBjb25zdCBjaGFyICp3aGF0
+KTsNCj4+PiAgICBpbnQgcHJvZ19wYXJzZV9mZChpbnQgKmFyZ2MsIGNoYXIgKioqYXJndik7DQo+
+Pj4NCg==
