@@ -4,44 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B0A4C282CE
-	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 22:40:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D601AC282CE
+	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 22:40:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 52D58208E4
-	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 22:40:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A57C7208E4
+	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 22:40:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="YmX/r/BT"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="lLsOGZYR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726608AbfDXWj7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Apr 2019 18:39:59 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:46254 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726418AbfDXWj7 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 24 Apr 2019 18:39:59 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x3OMbZTE022073
-        for <bpf@vger.kernel.org>; Wed, 24 Apr 2019 15:39:58 -0700
+        id S1726651AbfDXWkI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Apr 2019 18:40:08 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:34330 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726571AbfDXWkI (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 24 Apr 2019 18:40:08 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3OMTscW032678
+        for <bpf@vger.kernel.org>; Wed, 24 Apr 2019 15:40:07 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=+oPsSOn+pIk4gf3tgUx0XBuNz30ff8CHDwPdIYVbnzk=;
- b=YmX/r/BTRdN40s5DSTxbYuMfzSoBah5ymUwULq2Krwn1Y3QZDx9+r6G4a9aoa0/hM9p3
- AxB53SLHL18vj7/Fr6b1C9I4xY/QHOcKANERqxsaXIPcwRKy+Fhf1pWwBPHlJM6Qptql
- it1qffN78goQs2asoP5LVU4+kk4LEcakxts= 
-Authentication-Results: fb.com;
-        spf=pass smtp.mailfrom=kafai@fb.com
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 2s28ke5jbp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 24 Apr 2019 15:39:58 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 24 Apr 2019 15:39:57 -0700
+ content-type; s=facebook; bh=FyY/OEEU1JAxalKeXCHhyYCGQe3/J3CNnBGRqm0YXBY=;
+ b=lLsOGZYRrF0v/4s+ZeW6Y2d1ZW2soKMhjkAy3XcSld561sPO9Nb5R+cyOc3CwUaC5fql
+ ijHLPvRu3XuIWwDNUpyJke9l8XIiGGBp12Ubo+Bo/OTjqMsXGTzjaGaps550AqzncTXX
+ fiTBkerDvEcsVgbLpCpyiZcnxTtAFrOrUxc= 
+Received: from maileast.thefacebook.com ([199.201.65.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2s2x8e8xp2-7
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 24 Apr 2019 15:40:07 -0700
+Received: from mx-out.facebook.com (2620:10d:c0a1:3::13) by
+ mail.thefacebook.com (2620:10d:c021:18::176) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Wed, 24 Apr 2019 15:39:52 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 90D4829421BD; Wed, 24 Apr 2019 15:39:56 -0700 (PDT)
+        id 2C6D629421BD; Wed, 24 Apr 2019 15:39:52 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
@@ -51,9 +49,9 @@ CC:     Alexei Starovoitov <ast@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         <kernel-team@fb.com>, Yonghong Song <yhs@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 4/6] bpf: Add verifier tests for the bpf_sk_storage
-Date:   Wed, 24 Apr 2019 15:39:56 -0700
-Message-ID: <20190424223956.517186-1-kafai@fb.com>
+Subject: [PATCH bpf-next 2/6] bpf: Sync bpf.h to tools
+Date:   Wed, 24 Apr 2019 15:39:52 -0700
+Message-ID: <20190424223952.516950-1-kafai@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190424223948.516788-1-kafai@fb.com>
 References: <20190424223948.516788-1-kafai@fb.com>
@@ -62,241 +60,96 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-24_14:,,
  signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=8 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1904240155
-X-FB-Internal: deliver
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds verifier tests for the bpf_sk_storage:
-1. ARG_PTR_TO_MAP_VALUE_OR_NULL
-2. Map and helper compatibility (e.g. disallow bpf_map_loookup_elem)
-
-It also takes this chance to remove the unused struct btf_raw_data.
+This patch sync the bpf.h to tools/.
 
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- tools/testing/selftests/bpf/test_verifier.c |  42 +++++--
- tools/testing/selftests/bpf/verifier/sock.c | 116 ++++++++++++++++++++
- 2 files changed, 151 insertions(+), 7 deletions(-)
+ tools/include/uapi/linux/bpf.h | 44 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 43 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index ed9e894afef3..bff28b68f387 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -52,7 +52,7 @@
- #define MAX_INSNS	BPF_MAXINSNS
- #define MAX_TEST_INSNS	1000000
- #define MAX_FIXUPS	8
--#define MAX_NR_MAPS	17
-+#define MAX_NR_MAPS	18
- #define MAX_TEST_RUNS	8
- #define POINTER_VALUE	0xcafe4all
- #define TEST_DATA_LEN	64
-@@ -85,6 +85,7 @@ struct bpf_test {
- 	int fixup_map_array_ro[MAX_FIXUPS];
- 	int fixup_map_array_wo[MAX_FIXUPS];
- 	int fixup_map_array_small[MAX_FIXUPS];
-+	int fixup_sk_storage_map[MAX_FIXUPS];
- 	const char *errstr;
- 	const char *errstr_unpriv;
- 	uint32_t retval, retval_unpriv, insn_processed;
-@@ -509,12 +510,6 @@ static int create_cgroup_storage(bool percpu)
- #define BTF_MEMBER_ENC(name, type, bits_offset) \
- 	(name), (type), (bits_offset)
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 704bb69514a2..be08ef00b2c8 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -133,6 +133,7 @@ enum bpf_map_type {
+ 	BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE,
+ 	BPF_MAP_TYPE_QUEUE,
+ 	BPF_MAP_TYPE_STACK,
++	BPF_MAP_TYPE_SK_STORAGE,
+ };
  
--struct btf_raw_data {
--	__u32 raw_types[64];
--	const char *str_sec;
--	__u32 str_sec_size;
--};
--
- /* struct bpf_spin_lock {
-  *   int val;
-  * };
-@@ -589,6 +584,31 @@ static int create_map_spin_lock(void)
- 	return fd;
- }
+ /* Note that tracing related programs such as
+@@ -2622,6 +2623,42 @@ union bpf_attr {
+  *		was provided.
+  *
+  *		**-ERANGE** if resulting value was out of range.
++ *
++ * void *bpf_sk_storage_get(struct bpf_map *map, struct bpf_sock *sk, void *value, u64 flags)
++ *	Description
++ *		Get a bpf-local-storage from a sk.
++ *
++ *		Logically, it could be thought of getting the value from
++ *		a *map* with *sk* as the **key**.  From this
++ *		perspective,  the usage is not much different from
++ *		**bpf_map_lookup_elem(map, &sk)** except this
++ *		helper enforces the key must be a **bpf_fullsock()**
++ *		and the map must be a BPF_MAP_TYPE_SK_STORAGE also.
++ *
++ *		Underneath, the value is stored locally at *sk* instead of
++ *		the map.  The *map* is used as the bpf-local-storage **type**.
++ *		The bpf-local-storage **type** (i.e. the *map*) is searched
++ *		against all bpf-local-storages residing at sk.
++ *
++ *		An optional *flags* (BPF_SK_STORAGE_GET_F_CREATE) can be
++ *		used such that a new bpf-local-storage will be
++ *		created if one does not exist.  *value* can be used
++ *		together with BPF_SK_STORAGE_GET_F_CREATE to specify
++ *		the initial value of a bpf-local-storage.  If *value* is
++ *		NULL, the new bpf-local-storage will be zero initialized.
++ *	Return
++ *		A bpf-local-storage pointer is returned on success.
++ *
++ *		**NULL** if not found or there was an error in adding
++ *		a new bpf-local-storage.
++ *
++ * int bpf_sk_storage_delete(struct bpf_map *map, struct bpf_sock *sk)
++ *	Description
++ *		Delete a bpf-local-storage from a sk.
++ *	Return
++ *		0 on success.
++ *
++ *		**-ENOENT** if the bpf-local-storage cannot be found.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -2730,7 +2767,9 @@ union bpf_attr {
+ 	FN(sysctl_get_new_value),	\
+ 	FN(sysctl_set_new_value),	\
+ 	FN(strtol),			\
+-	FN(strtoul),
++	FN(strtoul),			\
++	FN(sk_storage_get),		\
++	FN(sk_storage_delete),
  
-+static int create_sk_storage_map(void)
-+{
-+	struct bpf_create_map_attr attr = {
-+		.name = "test_map",
-+		.map_type = BPF_MAP_TYPE_SK_STORAGE,
-+		.key_size = 4,
-+		.value_size = 8,
-+		.max_entries = 0,
-+		.map_flags = BPF_F_NO_PREALLOC,
-+		.btf_key_type_id = 1,
-+		.btf_value_type_id = 3,
-+	};
-+	int fd, btf_fd;
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+  * function eBPF program intends to call
+@@ -2806,6 +2845,9 @@ enum bpf_func_id {
+ /* BPF_FUNC_sysctl_get_name flags. */
+ #define BPF_F_SYSCTL_BASE_NAME		(1ULL << 0)
+ 
++/* BPF_FUNC_sk_storage_get flags */
++#define BPF_SK_STORAGE_GET_F_CREATE	(1ULL << 0)
 +
-+	btf_fd = load_btf();
-+	if (btf_fd < 0)
-+		return -1;
-+	attr.btf_fd = btf_fd;
-+	fd = bpf_create_map_xattr(&attr);
-+	close(attr.btf_fd);
-+	if (fd < 0)
-+		printf("Failed to create sk_storage_map\n");
-+	return fd;
-+}
-+
- static char bpf_vlog[UINT_MAX >> 8];
- 
- static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
-@@ -611,6 +631,7 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
- 	int *fixup_map_array_ro = test->fixup_map_array_ro;
- 	int *fixup_map_array_wo = test->fixup_map_array_wo;
- 	int *fixup_map_array_small = test->fixup_map_array_small;
-+	int *fixup_sk_storage_map = test->fixup_sk_storage_map;
- 
- 	if (test->fill_helper) {
- 		test->fill_insns = calloc(MAX_TEST_INSNS, sizeof(struct bpf_insn));
-@@ -765,6 +786,13 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
- 			fixup_map_array_small++;
- 		} while (*fixup_map_array_small);
- 	}
-+	if (*fixup_sk_storage_map) {
-+		map_fds[17] = create_sk_storage_map();
-+		do {
-+			prog[*fixup_sk_storage_map].imm = map_fds[17];
-+			fixup_sk_storage_map++;
-+		} while (*fixup_sk_storage_map);
-+	}
- }
- 
- static int set_admin(bool admin)
-diff --git a/tools/testing/selftests/bpf/verifier/sock.c b/tools/testing/selftests/bpf/verifier/sock.c
-index 416436231fab..b31cd2cf50d0 100644
---- a/tools/testing/selftests/bpf/verifier/sock.c
-+++ b/tools/testing/selftests/bpf/verifier/sock.c
-@@ -382,3 +382,119 @@
- 	.result = REJECT,
- 	.errstr = "reference has not been acquired before",
- },
-+{
-+	"sk_storage_get(map, skb->sk, NULL, 0): value == NULL",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, offsetof(struct __sk_buff, sk)),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_1, 0, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	BPF_EMIT_CALL(BPF_FUNC_sk_fullsock),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_IMM(BPF_REG_4, 0),
-+	BPF_MOV64_IMM(BPF_REG_3, 0),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	BPF_EMIT_CALL(BPF_FUNC_sk_storage_get),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_sk_storage_map = { 11 },
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.result = ACCEPT,
-+},
-+{
-+	"sk_storage_get(map, skb->sk, 1, 1): value == 1",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, offsetof(struct __sk_buff, sk)),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_1, 0, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	BPF_EMIT_CALL(BPF_FUNC_sk_fullsock),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_IMM(BPF_REG_4, 1),
-+	BPF_MOV64_IMM(BPF_REG_3, 1),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	BPF_EMIT_CALL(BPF_FUNC_sk_storage_get),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_sk_storage_map = { 11 },
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.result = REJECT,
-+	.errstr = "R3 type=inv expected=fp",
-+},
-+{
-+	"sk_storage_get(map, skb->sk, &stack_value, 1): stack_value",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_2, 0),
-+	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_2, -8),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, offsetof(struct __sk_buff, sk)),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_1, 0, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	BPF_EMIT_CALL(BPF_FUNC_sk_fullsock),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_IMM(BPF_REG_4, 1),
-+	BPF_MOV64_REG(BPF_REG_3, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_3, -8),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	BPF_EMIT_CALL(BPF_FUNC_sk_storage_get),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_sk_storage_map = { 14 },
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.result = ACCEPT,
-+},
-+{
-+	"sk_storage_get(map, skb->sk, &stack_value, 1): partially init stack_value",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_2, 0),
-+	BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_2, -8),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, offsetof(struct __sk_buff, sk)),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_1, 0, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	BPF_EMIT_CALL(BPF_FUNC_sk_fullsock),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_IMM(BPF_REG_4, 1),
-+	BPF_MOV64_REG(BPF_REG_3, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_3, -8),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	BPF_EMIT_CALL(BPF_FUNC_sk_storage_get),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_sk_storage_map = { 14 },
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.result = REJECT,
-+	.errstr = "invalid indirect read from stack",
-+},
-+{
-+	"bpf_map_lookup_elem(smap, &key)",
-+	.insns = {
-+	BPF_ST_MEM(BPF_W, BPF_REG_10, -4, 0),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -4),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_sk_storage_map = { 3 },
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.result = REJECT,
-+	.errstr = "cannot pass map_type 24 into func bpf_map_lookup_elem",
-+},
+ /* Mode for BPF_FUNC_skb_adjust_room helper. */
+ enum bpf_adj_room_mode {
+ 	BPF_ADJ_ROOM_NET,
 -- 
 2.17.1
 
