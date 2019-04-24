@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAFD3C10F11
-	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 14:39:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C415AC10F11
+	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 14:43:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9708F218FE
-	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 14:39:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 89A19218B0
+	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 14:43:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1556116746;
-	bh=+a3uMyxXBT8XRn1KsgiM7jtVc6BioHrrcNiCFQhJN0E=;
+	s=default; t=1556117010;
+	bh=lgU7kDLSmpTYZYjq8q4p1VJCawtqgnJLVbSbxeC69b8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ZFwk4kUzQFuDvvbwEI9KUsPWpzWhXNgYtxPYbnCcOARw4Hn1tOU0n5HbpXFSs5+To
-	 Sfqo3U4PbxRvdPHjnuYc7JQ3ZP4R1HTdT57pZI5U628HCpK7qklmIbX01L3HQI/P7Q
-	 MVP2bJXiyVJpccjOIBKH704x/4ZMyqdoE4XLERIM=
+	b=IAfkv1bD5B2zzAKXTzJ1pWw4LqO0IEq/VdXr4OGyS20Ln8+pkdUAdB5r3D0NBUN6S
+	 Jxx4P4fnibvx99d+Knq5eS1BLoVpyG4QHoW1+xsb4pSwK0AH/BbiDxKSE3go9cYxtN
+	 /bFSI4GizVLLtxbzzq4STdl+n+6DWc+XRU9ebPJE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731284AbfDXOfI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Apr 2019 10:35:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38922 "EHLO mail.kernel.org"
+        id S1731891AbfDXOkM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Apr 2019 10:40:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42690 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731267AbfDXOfH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Apr 2019 10:35:07 -0400
+        id S1731883AbfDXOkM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Apr 2019 10:40:12 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 07753218FD;
-        Wed, 24 Apr 2019 14:35:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 98DC521901;
+        Wed, 24 Apr 2019 14:40:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556116506;
-        bh=+a3uMyxXBT8XRn1KsgiM7jtVc6BioHrrcNiCFQhJN0E=;
+        s=default; t=1556116811;
+        bh=lgU7kDLSmpTYZYjq8q4p1VJCawtqgnJLVbSbxeC69b8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S9mPwb8HHPwNIyXmrfMvYEE16NOtcNTJIrdNcGY+thm6tCXcTf8b+6NIefkkoydYD
-         2Qj1g5jC6A9qt70iJ5FDHcIUycHOzSXiI01DbsonGJ8jcI0vHgXnXz0y7F9kq1mhjF
-         3RMUW8ENr4Euikndcy1SQCGFv4hR942RGM5CJu4E=
+        b=ElEiNKur5knxQvLwVT1gfIzM6BiqWMTqfw3/ioFDivCWEqJoUU5lN8DlaGBFTDNlq
+         WKorVYqGe/EjV23JirosOwlKXwwWRK6F0R/OZYd5rx1H4MYecwm1jZ7mydiam4v5KX
+         /hqUBYxGoZq8AK6AkEcvDx0+OvA1HX3CHRN7eMOo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Al Viro <viro@zeniv.linux.org.uk>, Sasha Levin <sashal@kernel.org>,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.0 34/66] debugfs: fix use-after-free on symlink traversal
-Date:   Wed, 24 Apr 2019 10:33:08 -0400
-Message-Id: <20190424143341.27665-34-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 26/52] debugfs: fix use-after-free on symlink traversal
+Date:   Wed, 24 Apr 2019 10:38:44 -0400
+Message-Id: <20190424143911.28890-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
-In-Reply-To: <20190424143341.27665-1-sashal@kernel.org>
-References: <20190424143341.27665-1-sashal@kernel.org>
+In-Reply-To: <20190424143911.28890-1-sashal@kernel.org>
+References: <20190424143911.28890-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -67,13 +67,13 @@ body in the callback.  Similar to solution for bpf, only here it's even
 more obvious that ->evict_inode() can be dropped.
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Sasha Levin (Microsoft) <sashal@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
  fs/debugfs/inode.c | 13 +++++++++----
  1 file changed, 9 insertions(+), 4 deletions(-)
 
 diff --git a/fs/debugfs/inode.c b/fs/debugfs/inode.c
-index 29c68c5d44d5..c4a4fc6f1a95 100644
+index 41ef452c1fcf..e5126fad57c5 100644
 --- a/fs/debugfs/inode.c
 +++ b/fs/debugfs/inode.c
 @@ -163,19 +163,24 @@ static int debugfs_show_options(struct seq_file *m, struct dentry *root)
