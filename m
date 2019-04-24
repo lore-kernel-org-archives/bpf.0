@@ -2,219 +2,115 @@ Return-Path: <SRS0=W3SG=S2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,USER_AGENT_MUTT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1565C282CE
-	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 16:11:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99BF6C10F11
+	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 16:31:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8ABDC21900
-	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 16:11:25 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jPcxQxT4"
+	by mail.kernel.org (Postfix) with ESMTP id 6D928218B0
+	for <bpf@archiver.kernel.org>; Wed, 24 Apr 2019 16:31:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731574AbfDXQJ6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Apr 2019 12:09:58 -0400
-Received: from mail-ot1-f73.google.com ([209.85.210.73]:55508 "EHLO
-        mail-ot1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731336AbfDXQJ5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Apr 2019 12:09:57 -0400
-Received: by mail-ot1-f73.google.com with SMTP id m15so3363052otf.22
-        for <bpf@vger.kernel.org>; Wed, 24 Apr 2019 09:09:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=y26YYpJo+j197/H/WL3uSeQSfcjK7Ir/q88rFZ9QbXk=;
-        b=jPcxQxT4lLro8gf2p5qPrvFOco4gzcV4BG9z7Z4V/btQ3OMk7CwWOk/k/R7ndqojYG
-         T7Nh/x25x4Q/g5u50z/fpPbV9P00Bdun1Fra7JCuUF6JtgquWLHOcNxGjG4Vkc7IUI7I
-         9/XlhQDgJ4LhukqhzD4CKYr+Z1ARnGXXKSvd42az4mwPWGN+R53QGb8OeeFNiQuxxkQK
-         7E46eteAFOeopbHVu4asvGtx9IkzRPSNsM6Y/0Fci3VuRPEo64Z2QJjFXRWXwrVuT3aM
-         sL199LbqHW7Jop2hlBfjl5pS78CQMmqMM9ledoEXUZT9GwuKxI0mgaBdxCm5NB94UrO1
-         agUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=y26YYpJo+j197/H/WL3uSeQSfcjK7Ir/q88rFZ9QbXk=;
-        b=k4kx1ut/OAjq9TbBPdUpegRe/e+ZWwC6m477iMTnmkVGfZ3qjGy/S8ZNdjB3HAFESK
-         QEFtnsHlueIzJUqJQxi/SDQRnqOb5RcMlDSssRCwZeWOvbh8z+o0vaFRT/3GBI6Ak19y
-         ldbtpAePNoOAIct7/vLNP+3PUooN+e9KvtTyxmyH8izDafyebRmoMgBvLapsGCyoyC6h
-         fldFj1veT07CtAY1lSdXBEGA7Of0ag2QWchtuMMVLmL/Gok3Og1fChLt2cKj46wCXwtv
-         OPl1Pzi8XTBFrAQS6LYY1KiTHH8Ld2NDIKwBlixk4e+LvDF/hoZGvXzIXliFfwlj9v44
-         wTCQ==
-X-Gm-Message-State: APjAAAUC2I1lzKDZ7nGIOdABbpLjuWIl+HVgWHQxbn1nfjHL5/G++Q35
-        8TpvC6l61ZXIOQRcjYCWE0SlQZc=
-X-Google-Smtp-Source: APXvYqx0fNKhCiRiA1c/7VdAK/4ZgvB873H642JnR37aGk6ayMZX1is142qxnNtLjOzF9EuZ5wXIIL4=
-X-Received: by 2002:a9d:6b15:: with SMTP id g21mr20815745otp.266.1556122196488;
- Wed, 24 Apr 2019 09:09:56 -0700 (PDT)
-Date:   Wed, 24 Apr 2019 09:09:51 -0700
-In-Reply-To: <20190424160951.45865-1-sdf@google.com>
-Message-Id: <20190424160951.45865-2-sdf@google.com>
-Mime-Version: 1.0
-References: <20190424160951.45865-1-sdf@google.com>
-X-Mailer: git-send-email 2.21.0.593.g511ec345e18-goog
-Subject: [PATCH bpf-next v2 2/2] bpftool: show flow_dissector attachment status
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        jakub.kicinski@netronome.com, quentin.monnet@netronome.com,
-        Stanislav Fomichev <sdf@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1731026AbfDXQbl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Apr 2019 12:31:41 -0400
+Received: from mga02.intel.com ([134.134.136.20]:17998 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730794AbfDXQbl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Apr 2019 12:31:41 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Apr 2019 09:31:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.60,390,1549958400"; 
+   d="scan'208";a="226315297"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 24 Apr 2019 09:31:38 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1hJKo6-0001oH-07; Thu, 25 Apr 2019 00:31:37 +0800
+Date:   Thu, 25 Apr 2019 00:31:01 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Jiong Wang <jiong.wang@netronome.com>
+Cc:     kbuild-all@01.org, alexei.starovoitov@gmail.com,
+        daniel@iogearbox.net, bpf@vger.kernel.org, netdev@vger.kernel.org,
+        oss-drivers@netronome.com, Jiong Wang <jiong.wang@netronome.com>
+Subject: Re: [PATCH v4 bpf-next 15/15] nfp: bpf: eliminate zero extension
+ code-gen
+Message-ID: <201904250050.Z0Q6veLQ%lkp@intel.com>
+References: <1555349185-12508-16-git-send-email-jiong.wang@netronome.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1555349185-12508-16-git-send-email-jiong.wang@netronome.com>
+X-Patchwork-Hint: ignore
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Right now there is no way to query whether BPF flow_dissector program
-is attached to a network namespace or not. In previous commit, I added
-support for querying that info, show it when doing `bpftool net`:
+Hi Jiong,
 
-$ bpftool prog loadall ./bpf_flow.o \
-	/sys/fs/bpf/flow type flow_dissector \
-	pinmaps /sys/fs/bpf/flow
-$ bpftool prog
-3: flow_dissector  name _dissect  tag 8c9e917b513dd5cc  gpl
-        loaded_at 2019-04-23T16:14:48-0700  uid 0
-        xlated 656B  jited 461B  memlock 4096B  map_ids 1,2
-        btf_id 1
-...
+Thank you for the patch! Perhaps something to improve:
 
-$ bpftool net -j
-[{"xdp":[],"tc":[],"flow_dissector":[]}]
+[auto build test WARNING on bpf-next/master]
 
-$ bpftool prog attach pinned \
-	/sys/fs/bpf/flow/flow_dissector flow_dissector
-$ bpftool net -j
-[{"xdp":[],"tc":[],"flow_dissector":["id":3]}]
+url:    https://github.com/0day-ci/linux/commits/Jiong-Wang/bpf-eliminate-zero-extensions-for-sub-register-writes/20190416-191711
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+reproduce:
+        # apt-get install sparse
+        make ARCH=x86_64 allmodconfig
+        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
 
-Doesn't show up in a different net namespace:
-$ ip netns add test
-$ ip netns exec test bpftool net -j
-[{"xdp":[],"tc":[],"flow_dissector":[]}]
+If you fix the issue, kindly add following tag
+Reported-by: kbuild test robot <lkp@intel.com>
 
-Non-json output:
-$ bpftool net
-xdp:
+sparse warnings: (new ones prefixed by >>)
 
-tc:
+>> drivers/net/ethernet/netronome/nfp/bpf/jit.c:2654:34: sparse: sparse: incorrect type in argument 3 (different base types) @@    expected unsigned char [usertype] dst @@    got resunsigned char [usertype] dst @@
+>> drivers/net/ethernet/netronome/nfp/bpf/jit.c:2654:34: sparse:    expected unsigned char [usertype] dst
+>> drivers/net/ethernet/netronome/nfp/bpf/jit.c:2654:34: sparse:    got restricted swreg [usertype] dst
+   drivers/net/ethernet/netronome/nfp/bpf/jit.c:2680:34: sparse: sparse: incorrect type in argument 3 (different base types) @@    expected unsigned char [usertype] dst @@    got resunsigned char [usertype] dst @@
+   drivers/net/ethernet/netronome/nfp/bpf/jit.c:2680:34: sparse:    expected unsigned char [usertype] dst
+   drivers/net/ethernet/netronome/nfp/bpf/jit.c:2680:34: sparse:    got restricted swreg [usertype] dst
 
-flow_dissector:
-id 3
+vim +2654 drivers/net/ethernet/netronome/nfp/bpf/jit.c
 
-v2:
-* initialization order (Jakub Kicinski)
-* clear errno for batch mode (Quentin Monnet)
+  2627	
+  2628	static int mem_ldx_skb(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta,
+  2629			       u8 size)
+  2630	{
+  2631		swreg dst = reg_both(meta->insn.dst_reg * 2);
+  2632	
+  2633		switch (meta->insn.off) {
+  2634		case offsetof(struct __sk_buff, len):
+  2635			if (size != FIELD_SIZEOF(struct __sk_buff, len))
+  2636				return -EOPNOTSUPP;
+  2637			wrp_mov(nfp_prog, dst, plen_reg(nfp_prog));
+  2638			break;
+  2639		case offsetof(struct __sk_buff, data):
+  2640			if (size != FIELD_SIZEOF(struct __sk_buff, data))
+  2641				return -EOPNOTSUPP;
+  2642			wrp_mov(nfp_prog, dst, pptr_reg(nfp_prog));
+  2643			break;
+  2644		case offsetof(struct __sk_buff, data_end):
+  2645			if (size != FIELD_SIZEOF(struct __sk_buff, data_end))
+  2646				return -EOPNOTSUPP;
+  2647			emit_alu(nfp_prog, dst,
+  2648				 plen_reg(nfp_prog), ALU_OP_ADD, pptr_reg(nfp_prog));
+  2649			break;
+  2650		default:
+  2651			return -EOPNOTSUPP;
+  2652		}
+  2653	
+> 2654		wrp_zext(nfp_prog, meta, dst);
+  2655	
+  2656		return 0;
+  2657	}
+  2658	
 
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- tools/bpf/bpftool/net.c | 54 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
-
-diff --git a/tools/bpf/bpftool/net.c b/tools/bpf/bpftool/net.c
-index db0e7de49d49..67e99c56bc88 100644
---- a/tools/bpf/bpftool/net.c
-+++ b/tools/bpf/bpftool/net.c
-@@ -3,6 +3,7 @@
- 
- #define _GNU_SOURCE
- #include <errno.h>
-+#include <fcntl.h>
- #include <stdlib.h>
- #include <string.h>
- #include <unistd.h>
-@@ -12,6 +13,8 @@
- #include <linux/rtnetlink.h>
- #include <linux/tc_act/tc_bpf.h>
- #include <sys/socket.h>
-+#include <sys/stat.h>
-+#include <sys/types.h>
- 
- #include <bpf.h>
- #include <nlattr.h>
-@@ -48,6 +51,10 @@ struct bpf_filter_t {
- 	int		ifindex;
- };
- 
-+struct bpf_attach_info {
-+	__u32 flow_dissector_id;
-+};
-+
- static int dump_link_nlmsg(void *cookie, void *msg, struct nlattr **tb)
- {
- 	struct bpf_netdev_t *netinfo = cookie;
-@@ -180,8 +187,45 @@ static int show_dev_tc_bpf(int sock, unsigned int nl_pid,
- 	return 0;
- }
- 
-+static int query_flow_dissector(struct bpf_attach_info *attach_info)
-+{
-+	__u32 attach_flags;
-+	__u32 prog_ids[1];
-+	__u32 prog_cnt;
-+	int err;
-+	int fd;
-+
-+	fd = open("/proc/self/ns/net", O_RDONLY);
-+	if (fd < 0) {
-+		p_err("can't open /proc/self/ns/net: %d",
-+		      strerror(errno));
-+		return -1;
-+	}
-+	prog_cnt = ARRAY_SIZE(prog_ids);
-+	err = bpf_prog_query(fd, BPF_FLOW_DISSECTOR, 0,
-+			     &attach_flags, prog_ids, &prog_cnt);
-+	close(fd);
-+	if (err) {
-+		if (errno == EINVAL) {
-+			/* Older kernel's don't support querying
-+			 * flow dissector programs.
-+			 */
-+			errno = 0;
-+			return 0;
-+		}
-+		p_err("can't query prog: %s", strerror(errno));
-+		return -1;
-+	}
-+
-+	if (prog_cnt == 1)
-+		attach_info->flow_dissector_id = prog_ids[0];
-+
-+	return 0;
-+}
-+
- static int do_show(int argc, char **argv)
- {
-+	struct bpf_attach_info attach_info = {};
- 	int i, sock, ret, filter_idx = -1;
- 	struct bpf_netdev_t dev_array;
- 	unsigned int nl_pid;
-@@ -199,6 +243,10 @@ static int do_show(int argc, char **argv)
- 		usage();
- 	}
- 
-+	ret = query_flow_dissector(&attach_info);
-+	if (ret)
-+		return -1;
-+
- 	sock = libbpf_netlink_open(&nl_pid);
- 	if (sock < 0) {
- 		fprintf(stderr, "failed to open netlink sock\n");
-@@ -227,6 +275,12 @@ static int do_show(int argc, char **argv)
- 		}
- 		NET_END_ARRAY("\n");
- 	}
-+
-+	NET_START_ARRAY("flow_dissector", "%s:\n");
-+	if (attach_info.flow_dissector_id > 0)
-+		NET_DUMP_UINT("id", "id %u", attach_info.flow_dissector_id);
-+	NET_END_ARRAY("\n");
-+
- 	NET_END_OBJECT;
- 	if (json_output)
- 		jsonw_end_array(json_wtr);
--- 
-2.21.0.593.g511ec345e18-goog
-
+0-DAY kernel test infrastructure                Open Source Technology Center
+https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
