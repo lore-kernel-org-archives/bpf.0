@@ -2,125 +2,113 @@ Return-Path: <SRS0=aERf=S3=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D650C43218
-	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 19:21:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68ADEC43218
+	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 19:29:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3BF57206BA
-	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 19:21:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8C31120717
+	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 19:29:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="RvFbqvFv"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="qkU2+Zr9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727579AbfDYTVM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Apr 2019 15:21:12 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:39693 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727718AbfDYTVM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 25 Apr 2019 15:21:12 -0400
-Received: by mail-wr1-f68.google.com with SMTP id a9so923093wrp.6
-        for <bpf@vger.kernel.org>; Thu, 25 Apr 2019 12:21:11 -0700 (PDT)
+        id S1729575AbfDYT3P (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Apr 2019 15:29:15 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:33086 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727504AbfDYT3P (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 25 Apr 2019 15:29:15 -0400
+Received: by mail-qt1-f193.google.com with SMTP id g7so1502546qtc.0
+        for <bpf@vger.kernel.org>; Thu, 25 Apr 2019 12:29:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=8+yXTIgdSbDmJCEuOcmq+CWwS5sw4fIomBYcrR+NVR0=;
-        b=RvFbqvFv+dQsLsBGSHYRCqWCEQkmHJU8K5Rtt3xVwjTXx3CAkR4B+VBTZ7MER3dG6x
-         goVgPATPNGLub3ZZ2d1jJll6FFdJXqMJtEnG8Om1e2+bSuKRCm0gsGO+lC2OMCxluUsV
-         sxagcGxndZMnKhMtwDSVDoU+31OP+AV6kloJN2LG9zF6Kf+GZsj6kebI7YzwQbWRyBOp
-         yTihssP201bQ5cc4UAPfFP/dyvXlXskontRzZ7hy4EQtZZ1FM0PowfgIKzA6gtn6NdJ7
-         WWr/iigPauz8UZY/X+uRjcz4LeLq6E6csDbcetjnSw+pBG+BGIAC7bAjPMqJVRupAXHr
-         HNTg==
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=V64eqLfnNiiUQhGeCK2Ks+H0ucLAHdDbqBo2j5uTyg8=;
+        b=qkU2+Zr9gZ23xh1GtWk5K+0eMSqUoi7Kt5sc3YYIxMqTyONzmuY3V1AH5YoKaUO4M5
+         hyi2r60YEwkupMBmmi1Svhdwn9VrgluiCCzkx4X1K0Sf26Ghr6Mzl4yLAeFi6NkQtssm
+         8azwHGN2CzGyPX0suf1FxD/v2q5xLPGLf37ImaXP0VdVNoC9ELhWp8t8Z33oNgHuZDC/
+         vYlhjAdObjd/161i2IRUZCOEz180LdMZ6BJihLJ7qEwAiszmTmOOI/xrRZ8KNJSYdMJH
+         hPwVETg/nsMBI1J54x5J7tiaWt+kh124CLvue+qFjr4LnHvNIZgW/KgJZBQuujhps8fm
+         pEyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8+yXTIgdSbDmJCEuOcmq+CWwS5sw4fIomBYcrR+NVR0=;
-        b=Z5Tobzetf76jSlMKJvJTk8GnxTGxWIyCnkRG+z/0sRQlp3n/zqjC3D9NCDg6KlXHFO
-         +5l17t8AJpuyL6N+UM36tg3NhvnZIYY8XzI7EQ7goW6MwfxrzAyDlt6DAKCz38zKyANA
-         J/NiDWib97uN8JLvpqk4UPi2EzuaN6wS0yCSTvhToNvBcH6uYv4NF1NaCGthzkQu4w+g
-         wQYdzUTexfbgjFV+o7X9x+nIF8QwZfsdsJBrLGUxn4rzbkg3s2LysXAfLK4XyCPEl2z1
-         8igoquotBc1FN5OQPoAhEyhZNDcX+8tpjGesAItHJbciVhRRdezQ3CIEmKKCBHIGFkZR
-         N6Zw==
-X-Gm-Message-State: APjAAAXLLNpi9MnOhkxco1B/0ACFp5M9zDw+b6nzMlsdqbv9R2whzqcq
-        q8dyTX3iaiZLDmboDqxuImeP3g==
-X-Google-Smtp-Source: APXvYqwYtJhRrYu4t2KHQEW//DHw4KRHoSu2KzFegRsqcChehnRSm2mhlk7j0BKVn2yid3rG9HS90w==
-X-Received: by 2002:adf:fc47:: with SMTP id e7mr28631323wrs.100.1556220070660;
-        Thu, 25 Apr 2019 12:21:10 -0700 (PDT)
-Received: from [192.168.1.2] ([194.53.186.213])
-        by smtp.gmail.com with ESMTPSA id u14sm21857732wrr.1.2019.04.25.12.21.09
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 25 Apr 2019 12:21:10 -0700 (PDT)
-Subject: Re: [PATCH v3 bpf-next 4/4] bpftool: fix indendation in
- bash-completion/bpftool
-To:     Andrii Nakryiko <andriin@fb.com>, andrii.nakryiko@gmail.com,
-        kernel-team@fb.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        ast@fb.com, daniel@iogearbox.net, yhs@fb.com,
-        songliubraving@fb.com, kafai@fb.com, acme@kernel.org
-References: <20190425165539.3317350-1-andriin@fb.com>
- <20190425165539.3317350-5-andriin@fb.com>
-From:   Quentin Monnet <quentin.monnet@netronome.com>
-Message-ID: <74389a6e-2a72-2ee1-b5c9-c94ece3a7581@netronome.com>
-Date:   Thu, 25 Apr 2019 20:21:09 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=V64eqLfnNiiUQhGeCK2Ks+H0ucLAHdDbqBo2j5uTyg8=;
+        b=DSJzt+25LiUst3tr49LC3TYIOp4HEomSi2qWKaUYGiklPyCFLQ+NC0qi1FBXzan8zv
+         BVk79pClS4BEGnzZvBl4AmKeQiV1mlvdNCYXXOGJyDN/Kzir9BLNbdSAovMNdnGINVs+
+         PJsl4t91EfLLqPhRzT1vUmyRxLIKlb7Y5pwYCFHmd7Vl34NZn2VFRNY/8kIONWui/YFb
+         xQR/SyhOSe+CdRNT45OJd05wSoDuXnPrV2G8gGXy/Ut+CAvJNEj1/5Y5+FSwREhIx3cX
+         oAno+RlCh62raEXoR8gJF2dzrYTme87HnEyGMfhcU8mfADqUXj8nTfcDGtlG80LTV2NP
+         ZqZA==
+X-Gm-Message-State: APjAAAVDN+moEkKjcpeCNKdir3vUvjnVYXKpNFaBgl7cJMsf9mO5hcew
+        VQicsraA+x8EJrxlnQMd9WaGlCLuBps=
+X-Google-Smtp-Source: APXvYqzr64xQEZ0SQNq577Ao+orJEyS/K6OcMVY3aGT+8NQp/ngcWT0HmLvG75q4fdfGJRId4ZTxCQ==
+X-Received: by 2002:a0c:946f:: with SMTP id i44mr32642850qvi.113.1556220554065;
+        Thu, 25 Apr 2019 12:29:14 -0700 (PDT)
+Received: from cakuba.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id t188sm12250678qkf.81.2019.04.25.12.29.13
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 25 Apr 2019 12:29:13 -0700 (PDT)
+Date:   Thu, 25 Apr 2019 12:29:08 -0700
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [bpf PATCH v2 1/3] bpf: tls, implement unhash to avoid
+ transition out of ESTABLISHED
+Message-ID: <20190425122908.68b8d759@cakuba.netronome.com>
+In-Reply-To: <155620818860.22884.14832636768748270693.stgit@john-XPS-13-9360>
+References: <155620799743.22884.8046772841813554446.stgit@john-XPS-13-9360>
+        <155620818860.22884.14832636768748270693.stgit@john-XPS-13-9360>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-In-Reply-To: <20190425165539.3317350-5-andriin@fb.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-2019-04-25 09:55 UTC-0700 ~ Andrii Nakryiko <andriin@fb.com>
-> Fix misaligned default case branch for `prog dump` sub-command.
-> 
-> Reported-by: Quentin Monnet <quentin.monnet@netronome.com>
-> Cc: Yonghong Song <yhs@fb.com>
-> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-> ---
->   tools/bpf/bpftool/bash-completion/bpftool | 22 +++++++++++-----------
->   1 file changed, 11 insertions(+), 11 deletions(-)
-> 
-> diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-> index bca91d04ed35..50e402a5a9c8 100644
-> --- a/tools/bpf/bpftool/bash-completion/bpftool
-> +++ b/tools/bpf/bpftool/bash-completion/bpftool
-> @@ -273,17 +273,17 @@ _bpftool()
->                                   "$cur" ) )
->                               return 0
->                               ;;
-> -                    *)
-> -                        _bpftool_once_attr 'file'
-> -                        if _bpftool_search_list 'xlated'; then
-> -                            COMPREPLY+=( $( compgen -W 'opcodes visual linum' -- \
-> -                                "$cur" ) )
-> -                        else
-> -                            COMPREPLY+=( $( compgen -W 'opcodes linum' -- \
-> -                                "$cur" ) )
-> -                        fi
-> -                        return 0
-> -                        ;;
-> +                        *)
-> +                            _bpftool_once_attr 'file'
-> +                            if _bpftool_search_list 'xlated'; then
-> +                                COMPREPLY+=( $( compgen -W 'opcodes visual linum' -- \
-> +                                    "$cur" ) )
-> +                            else
-> +                                COMPREPLY+=( $( compgen -W 'opcodes linum' -- \
-> +                                    "$cur" ) )
-> +                            fi
-> +                            return 0
-> +                            ;;
->                       esac
->                       ;;
->                   pin)
-> 
+On Thu, 25 Apr 2019 09:03:08 -0700, John Fastabend wrote:
+> +static void tls_sk_proto_unhash(struct sock *sk)
+> +{
+> +	struct tls_context *ctx = tls_get_ctx(sk);
+> +	void (*sk_proto_unhash)(struct sock *sk);
+> +	bool free_ctx;
+> +
+> +	if (!ctx)
+> +		return sk->sk_prot->unhash(sk);
+> +	sk_proto_unhash = ctx->sk_proto_unhash;
+> +	free_ctx = tls_sk_proto_destroy(sk, ctx, false);
+> +	tls_put_ctx(sk);
 
-Thanks for that!
-Reviewed-by: Quentin Monnet <quentin.monnet@netronome.com>
+Oh, I think you can't put_ctx() unconditionally,
+when free_ctx is false, tls_device_sk_destruct() 
+needs it the ctx pointer.
+
+I think this explains the offload crashing.
+
+> +	if (sk_proto_unhash)
+> +		sk_proto_unhash(sk);
+> +	if (free_ctx)
+> +		tls_ctx_free(ctx);
+> +}
+>  
+> -skip_tx_cleanup:
+> +static void tls_sk_proto_close(struct sock *sk, long timeout)
+> +{
+> +	void (*sk_proto_close)(struct sock *sk, long timeout);
+> +	struct tls_context *ctx = tls_get_ctx(sk);
+> +	bool free_ctx;
+> +
+> +	if (!ctx)
+> +		return sk->sk_prot->destroy(sk);
+> +
+> +	lock_sock(sk);
+> +	sk_proto_close = ctx->sk_proto_close;
+> +	free_ctx = tls_sk_proto_destroy(sk, ctx, true);
+> +	tls_put_ctx(sk);
