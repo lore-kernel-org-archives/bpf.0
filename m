@@ -2,74 +2,82 @@ Return-Path: <SRS0=aERf=S3=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECF1EC43219
-	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 20:55:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7634AC43218
+	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 21:04:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E8DE02089E
-	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 20:55:19 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FFxMFgHk"
+	by mail.kernel.org (Postfix) with ESMTP id 878BB206BF
+	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 21:04:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727302AbfDYUzT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Apr 2019 16:55:19 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:33672 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726360AbfDYUzT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 25 Apr 2019 16:55:19 -0400
-Received: by mail-lf1-f68.google.com with SMTP id j11so849325lfm.0;
-        Thu, 25 Apr 2019 13:55:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=z/MO0Q8E7Llrq9ti3SuADVY3l7bhy3s7VDLDjG8/IPQ=;
-        b=FFxMFgHk3a/0flwa6maAEIsUnTFR0Xo8PiHKRKMJr77ayfPwoo3XCvqFheUP0xKmEs
-         A9RXrxKH1PQ7SRjfNj2EndvciTolBBT2YVJd9VeUc5Q//yeoZUApb353dHVHTurI4PEs
-         1szpbJGycBVXqaaOY/u34QRMoH3x3ljlhEMiLsX23ure3i1SU7Q+eUAm134zROyuHWen
-         skGTDKM8aAlLeUAnhQj7ddDQ0jby/Euy5uhGh9Djwpx/1bXUy07w+SmnzahnyAWRGR5C
-         mTBpdKQ4Yyu1VLqC/XnHn0WHFVYNFibLEZ0cqBwwl+1Sw9fPMuLne9/VhMiaz/K4t8wm
-         QQrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=z/MO0Q8E7Llrq9ti3SuADVY3l7bhy3s7VDLDjG8/IPQ=;
-        b=o/vzKu6za6cA3ug+VRM3+4zIjWT6deDyWjbJNnVV9nfyOEoNAc9zPC88GNzYmQfLrX
-         ynSXuOd3PUnL3ITWLYeLLDWp1QMarcw+MzhsVGxOGmWRCE1DS57dd1cLCsGKiyaLasGl
-         TNeju7USUttVGSEFo4s1E0aNbxMdXO2aLS0DGir1+MMzMdRDYfbFSVMTD9Vj5DWEQp61
-         bmMV3ceQV3e8Yebs/w6jlRwjJvnm75RqyvgXbcBHpDfva4aQPHG0wAzZIG/4YlYczfYl
-         FF+oz11NKapehZuG61jOXlhjCGWZT4xueq2zxOhU7gTp+oU+C9xOGBB/4KHH+AZV6wyM
-         7msA==
-X-Gm-Message-State: APjAAAVQrflouPVlmWE2LKY24ew26f/cQt6M23uYV6Uv91DUFXaTv931
-        EmRYl7PaFp1bT+vOk5czwN7o89VLlojgrnJLCvs=
-X-Google-Smtp-Source: APXvYqzCNwHp0c+VjESKD7BCgHCiw5wF2pPgO+/W6DdUoS/LK92uysyLEvAuhOM1AL60aGS0Do9sMFE7EMFPUH7HN4I=
-X-Received: by 2002:ac2:54a9:: with SMTP id w9mr22174997lfk.125.1556225717177;
- Thu, 25 Apr 2019 13:55:17 -0700 (PDT)
+        id S1726452AbfDYVEm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Apr 2019 17:04:42 -0400
+Received: from www62.your-server.de ([213.133.104.62]:49764 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726317AbfDYVEm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 25 Apr 2019 17:04:42 -0400
+Received: from [78.46.172.2] (helo=sslproxy05.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hJlXr-0003Da-6L; Thu, 25 Apr 2019 23:04:39 +0200
+Received: from [178.199.41.31] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hJlXr-0008zP-0C; Thu, 25 Apr 2019 23:04:39 +0200
+Subject: Re: [PATCH bpf v3 0/2] bpf: mark registers in all frames after
+ pkt/null checks
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Paul Chaignon <paul.chaignon@orange.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Xiao Han <xiao.han@orange.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
+References: <cover.1556127905.git.paul.chaignon@orange.com>
+ <20190425204601.wbymvydzahiti4id@ast-mbp.dhcp.thefacebook.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <e1cb783a-efd5-f972-5f8a-4db84a8a617b@iogearbox.net>
+Date:   Thu, 25 Apr 2019 23:04:38 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.3.0
 MIME-Version: 1.0
-References: <cover.1556059361.git.daniel@iogearbox.net>
-In-Reply-To: <cover.1556059361.git.daniel@iogearbox.net>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 25 Apr 2019 13:54:43 -0700
-Message-ID: <CAADnVQL=OmaUXpO5tA9y0EmMaEdZbHogB7hVe-_T-VwH+rKsPQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/2] Two libbpf fixes
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190425204601.wbymvydzahiti4id@ast-mbp.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.3/25430/Thu Apr 25 09:58:44 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 23, 2019 at 3:46 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->
-> Two small fixes in relation to global data handling. Thanks!
+On 04/25/2019 10:46 PM, Alexei Starovoitov wrote:
+> On Wed, Apr 24, 2019 at 09:49:58PM +0200, Paul Chaignon wrote:
+>> In case of a null check on a pointer inside a subprog, we should mark all
+>> registers with this pointer as either safe or unknown, in both the current
+>> and previous frames.  Currently, only spilled registers and registers in
+>> the current frame are marked.  Packet bound checks in subprogs have the
+>> same issue.  The first patch fixes it to mark registers in previous frames
+>> as well.
+[...]
+>>
+>> Changelogs:
+>>   Changes in v3:
+>>     - Fix same issue in find_good_pkt_pointers().
+>>     - Add test case for find_good_pkt_pointers() issue.
+>>     - Change title to account for the above change. Old title was
+>>       "bpf: mark registers as safe or unknown in all frames".
+>>     - Refactor find_good_pkt_pointers and mark_ptr_or_null_regs.
 
-Applied. Thanks!
+Sorry for the delay, looks good to me, thanks!
+
+>>     - I did not keep Yonghong's ack because of the above changes.
+>>   Changes in v2:
+>>     - Fix example codes in commit message.
+> 
+> Applied to bpf tree, thanks!
+> 
+
