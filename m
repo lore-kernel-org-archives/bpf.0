@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD8B9C4321A
-	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 22:30:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35950C4321B
+	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 22:30:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CBD0720717
-	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 22:30:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 51C4420717
+	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 22:30:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="OtvE39+l"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ZLk75E3A"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728972AbfDYWaU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Apr 2019 18:30:20 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:49478 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728369AbfDYWaT (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 25 Apr 2019 18:30:19 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x3PMSk1b013983
-        for <bpf@vger.kernel.org>; Thu, 25 Apr 2019 15:30:18 -0700
+        id S1729008AbfDYWaW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Apr 2019 18:30:22 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:58526 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726126AbfDYWaV (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 25 Apr 2019 18:30:21 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3PMSnMg020852
+        for <bpf@vger.kernel.org>; Thu, 25 Apr 2019 15:30:20 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : subject :
  date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=q5FCxubGIaUTJw8oDMvUYdGgPjWOIDh9kOOzIN0gg8M=;
- b=OtvE39+lqnIjWSGjEhLmqT/dt1OnzhMIj8VDGWp8mlNTBWuAdMBygCrZtXtKE6X6n+YD
- 0LNcp0FFiI1JyKMN5ar7lrFrN41dpHe+EfLcuTDsv/TbxTDcIXzEx50ZO89kV6M26a/h
- 9x/cZ4smykRo5TQW1pZ+pO1DJ3D/Gfviddg= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 2s3jrt8q2d-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 25 Apr 2019 15:30:18 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 25 Apr 2019 15:30:16 -0700
+ content-type; s=facebook; bh=nMyYTDbx5Aq0JenjU5Gn/+WocOKnb4O6DRmWLQLFez0=;
+ b=ZLk75E3A9WS5gyWSWATN48MyhErf36KyYI/SrqboDvozABtlWcbk6lQ1+YIrLtqmquAH
+ FD+sx8nNwRf2/bQNnl/H3i1kfRllizPRrp7vrO9ddp19ave3mTVrDld1nbsX56z/oqCx
+ XfojGGF/fPrr7vVGtRyyhySgWMGDDEXoPTo= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2s3jt40pt5-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 25 Apr 2019 15:30:20 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::126) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Thu, 25 Apr 2019 15:30:18 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 077148615AE; Thu, 25 Apr 2019 15:30:16 -0700 (PDT)
+        id 0C6868615AE; Thu, 25 Apr 2019 15:30:18 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
 To:     <andrii.nakryiko@gmail.com>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v4 bpf-next 2/4] bpftool/docs: add btf sub-command documentation
-Date:   Thu, 25 Apr 2019 15:30:09 -0700
-Message-ID: <20190425223011.284686-3-andriin@fb.com>
+Subject: [PATCH v4 bpf-next 3/4] bpftool: add bash completions for btf command
+Date:   Thu, 25 Apr 2019 15:30:10 -0700
+Message-ID: <20190425223011.284686-4-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190425223011.284686-1-andriin@fb.com>
 References: <20190425223011.284686-1-andriin@fb.com>
@@ -57,344 +57,89 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-25_18:,,
  signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1904250138
-X-FB-Internal: deliver
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Document usage and sample output format for `btf dump` sub-command.
+Add full support for btf command in bash-completion script.
 
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Alexei Starovoitov <ast@fb.com>
+Cc: Quentin Monnet <quentin.monnet@netronome.com>
 Cc: Yonghong Song <yhs@fb.com>
-Cc: Martin KaFai Lau <kafai@fb.com>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
-Acked-by: Yonghong Song <yhs@fb.com>
+Cc: Alexei Starovoitov <ast@fb.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Reviewed-by: Quentin Monnet <quentin.monnet@netronome.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- .../bpf/bpftool/Documentation/bpftool-btf.rst | 222 ++++++++++++++++++
- .../bpftool/Documentation/bpftool-cgroup.rst  |   3 +-
- .../bpftool/Documentation/bpftool-feature.rst |   3 +-
- .../bpf/bpftool/Documentation/bpftool-map.rst |   3 +-
- .../bpf/bpftool/Documentation/bpftool-net.rst |   3 +-
- .../bpftool/Documentation/bpftool-perf.rst    |   3 +-
- .../bpftool/Documentation/bpftool-prog.rst    |   3 +-
- tools/bpf/bpftool/Documentation/bpftool.rst   |   3 +-
- 8 files changed, 236 insertions(+), 7 deletions(-)
- create mode 100644 tools/bpf/bpftool/Documentation/bpftool-btf.rst
+ tools/bpf/bpftool/bash-completion/bpftool | 46 +++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-btf.rst b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-new file mode 100644
-index 000000000000..2dbc1413fabd
---- /dev/null
-+++ b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-@@ -0,0 +1,222 @@
-+================
-+bpftool-btf
-+================
-+-------------------------------------------------------------------------------
-+tool for inspection of BTF data
-+-------------------------------------------------------------------------------
-+
-+:Manual section: 8
-+
-+SYNOPSIS
-+========
-+
-+	**bpftool** [*OPTIONS*] **btf** *COMMAND*
-+
-+	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] }
-+
-+	*COMMANDS* := { **dump** | **help** }
-+
-+BTF COMMANDS
-+=============
-+
-+|	**bpftool** **btf dump** *BTF_SRC*
-+|	**bpftool** **btf help**
-+|
-+|	*BTF_SRC* := { **id** *BTF_ID* | **prog** *PROG* | **map** *MAP* [{**key** | **value** | **kv** | **all**}] | **file** *FILE* }
-+|	*MAP* := { **id** *MAP_ID* | **pinned** *FILE* }
-+|	*PROG* := { **id** *PROG_ID* | **pinned** *FILE* | **tag** *PROG_TAG* }
-+
-+DESCRIPTION
-+===========
-+	**bpftool btf dump** *BTF_SRC*
-+		  Dump BTF entries from a given *BTF_SRC*.
-+
-+                  When **id** is specified, BTF object with that ID will be
-+                  loaded and all its BTF types emitted.
-+
-+                  When **map** is provided, it's expected that map has
-+                  associated BTF object with BTF types describing key and
-+                  value. It's possible to select whether to dump only BTF
-+                  type(s) associated with key (**key**), value (**value**),
-+                  both key and value (**kv**), or all BTF types present in
-+                  associated BTF object (**all**). If not specified, **kv**
-+                  is assumed.
-+
-+                  When **prog** is provided, it's expected that program has
-+                  associated BTF object with BTF types.
-+
-+                  When specifying *FILE*, an ELF file is expected, containing
-+                  .BTF section with well-defined BTF binary format data,
-+                  typically produced by clang or pahole.
-+
-+	**bpftool btf help**
-+		  Print short help message.
-+
-+OPTIONS
-+=======
-+	-h, --help
-+		  Print short generic help message (similar to **bpftool help**).
-+
-+	-V, --version
-+		  Print version number (similar to **bpftool version**).
-+
-+	-j, --json
-+		  Generate JSON output. For commands that cannot produce JSON, this
-+		  option has no effect.
-+
-+	-p, --pretty
-+		  Generate human-readable JSON output. Implies **-j**.
-+
-+EXAMPLES
-+========
-+**# bpftool btf dump id 1226**
-+::
-+
-+  [1] PTR '(anon)' type_id=2
-+  [2] STRUCT 'dummy_tracepoint_args' size=16 vlen=2
-+          'pad' type_id=3 bits_offset=0
-+          'sock' type_id=4 bits_offset=64
-+  [3] INT 'long long unsigned int' size=8 bits_offset=0 nr_bits=64 encoding=(none)
-+  [4] PTR '(anon)' type_id=5
-+  [5] FWD 'sock' fwd_kind=union
-+
-+This gives an example of default output for all supported BTF kinds.
-+
-+**$ cat prog.c**
-+::
-+
-+  struct fwd_struct;
-+
-+  enum my_enum {
-+          VAL1 = 3,
-+          VAL2 = 7,
-+  };
-+
-+  typedef struct my_struct my_struct_t;
-+
-+  struct my_struct {
-+          const unsigned int const_int_field;
-+          int bitfield_field: 4;
-+          char arr_field[16];
-+          const struct fwd_struct *restrict fwd_field;
-+          enum my_enum enum_field;
-+          volatile my_struct_t *typedef_ptr_field;
-+  };
-+
-+  union my_union {
-+          int a;
-+          struct my_struct b;
-+  };
-+
-+  struct my_struct struct_global_var __attribute__((section("data_sec"))) = {
-+          .bitfield_field = 3,
-+          .enum_field = VAL1,
-+  };
-+  int global_var __attribute__((section("data_sec"))) = 7;
-+
-+  __attribute__((noinline))
-+  int my_func(union my_union *arg1, int arg2)
-+  {
-+          static int static_var __attribute__((section("data_sec"))) = 123;
-+          static_var++;
-+          return static_var;
-+  }
-+
-+**$ bpftool btf dump file prog.o**
-+::
-+
-+  [1] PTR '(anon)' type_id=2
-+  [2] UNION 'my_union' size=48 vlen=2
-+          'a' type_id=3 bits_offset=0
-+          'b' type_id=4 bits_offset=0
-+  [3] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
-+  [4] STRUCT 'my_struct' size=48 vlen=6
-+          'const_int_field' type_id=5 bits_offset=0
-+          'bitfield_field' type_id=3 bits_offset=32 bitfield_size=4
-+          'arr_field' type_id=8 bits_offset=40
-+          'fwd_field' type_id=10 bits_offset=192
-+          'enum_field' type_id=14 bits_offset=256
-+          'typedef_ptr_field' type_id=15 bits_offset=320
-+  [5] CONST '(anon)' type_id=6
-+  [6] INT 'unsigned int' size=4 bits_offset=0 nr_bits=32 encoding=(none)
-+  [7] INT 'char' size=1 bits_offset=0 nr_bits=8 encoding=SIGNED
-+  [8] ARRAY '(anon)' type_id=7 index_type_id=9 nr_elems=16
-+  [9] INT '__ARRAY_SIZE_TYPE__' size=4 bits_offset=0 nr_bits=32 encoding=(none)
-+  [10] RESTRICT '(anon)' type_id=11
-+  [11] PTR '(anon)' type_id=12
-+  [12] CONST '(anon)' type_id=13
-+  [13] FWD 'fwd_struct' fwd_kind=union
-+  [14] ENUM 'my_enum' size=4 vlen=2
-+          'VAL1' val=3
-+          'VAL2' val=7
-+  [15] PTR '(anon)' type_id=16
-+  [16] VOLATILE '(anon)' type_id=17
-+  [17] TYPEDEF 'my_struct_t' type_id=4
-+  [18] FUNC_PROTO '(anon)' ret_type_id=3 vlen=2
-+          'arg1' type_id=1
-+          'arg2' type_id=3
-+  [19] FUNC 'my_func' type_id=18
-+  [20] VAR 'struct_global_var' type_id=4, linkage=global-alloc
-+  [21] VAR 'global_var' type_id=3, linkage=global-alloc
-+  [22] VAR 'my_func.static_var' type_id=3, linkage=static
-+  [23] DATASEC 'data_sec' size=0 vlen=3
-+          type_id=20 offset=0 size=48
-+          type_id=21 offset=0 size=4
-+          type_id=22 offset=52 size=4
-+
-+The following commands print BTF types associated with specified map's key,
-+value, both key and value, and all BTF types, respectively. By default, both
-+key and value types will be printed.
-+
-+**# bpftool btf dump map id 123 key**
-+
-+::
-+
-+  [39] TYPEDEF 'u32' type_id=37
-+
-+**# bpftool btf dump map id 123 value**
-+
-+::
-+
-+  [86] PTR '(anon)' type_id=87
-+
-+**# bpftool btf dump map id 123 kv**
-+
-+::
-+
-+  [39] TYPEDEF 'u32' type_id=37
-+  [86] PTR '(anon)' type_id=87
-+
-+**# bpftool btf dump map id 123 all**
-+
-+::
-+
-+  [1] PTR '(anon)' type_id=0
-+  .
-+  .
-+  .
-+  [2866] ARRAY '(anon)' type_id=52 index_type_id=51 nr_elems=4
-+
-+All the standard ways to specify map or program are supported:
-+
-+**# bpftool btf dump map id 123**
-+
-+**# bpftool btf dump map pinned /sys/fs/bpf/map_name**
-+
-+**# bpftool btf dump prog id 456**
-+
-+**# bpftool btf dump prog tag b88e0a09b1d9759d**
-+
-+**# bpftool btf dump prog pinned /sys/fs/bpf/prog_name**
-+
-+SEE ALSO
-+========
-+	**bpf**\ (2),
-+	**bpf-helpers**\ (7),
-+	**bpftool**\ (8),
-+	**bpftool-map**\ (8),
-+	**bpftool-prog**\ (8),
-+	**bpftool-cgroup**\ (8),
-+	**bpftool-feature**\ (8),
-+	**bpftool-net**\ (8),
-+	**bpftool-perf**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-index 89b6b10e2183..ac26876389c2 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-@@ -145,4 +145,5 @@ SEE ALSO
- 	**bpftool-map**\ (8),
- 	**bpftool-feature**\ (8),
- 	**bpftool-net**\ (8),
--	**bpftool-perf**\ (8)
-+	**bpftool-perf**\ (8),
-+	**bpftool-btf**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-feature.rst b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-index 10177343b7ce..14180e887082 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-@@ -82,4 +82,5 @@ SEE ALSO
- 	**bpftool-map**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-net**\ (8),
--	**bpftool-perf**\ (8)
-+	**bpftool-perf**\ (8),
-+	**bpftool-btf**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-index 55ecf80ca03e..13ef27b39f20 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-@@ -258,4 +258,5 @@ SEE ALSO
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
- 	**bpftool-net**\ (8),
--	**bpftool-perf**\ (8)
-+	**bpftool-perf**\ (8),
-+	**bpftool-btf**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-net.rst b/tools/bpf/bpftool/Documentation/bpftool-net.rst
-index 6b692b428373..934580850f42 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-net.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-net.rst
-@@ -143,4 +143,5 @@ SEE ALSO
- 	**bpftool-map**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
--	**bpftool-perf**\ (8)
-+	**bpftool-perf**\ (8),
-+	**bpftool-btf**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-perf.rst b/tools/bpf/bpftool/Documentation/bpftool-perf.rst
-index 86154740fabb..0c7576523a21 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-perf.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-perf.rst
-@@ -85,4 +85,5 @@ SEE ALSO
- 	**bpftool-map**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
--	**bpftool-net**\ (8)
-+	**bpftool-net**\ (8),
-+	**bpftool-btf**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-index 2f183ffd8351..e8118544d118 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-@@ -271,4 +271,5 @@ SEE ALSO
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
- 	**bpftool-net**\ (8),
--	**bpftool-perf**\ (8)
-+	**bpftool-perf**\ (8),
-+	**bpftool-btf**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool.rst b/tools/bpf/bpftool/Documentation/bpftool.rst
-index deb2ca911ddf..3e562d7fd56f 100644
---- a/tools/bpf/bpftool/Documentation/bpftool.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool.rst
-@@ -76,4 +76,5 @@ SEE ALSO
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
- 	**bpftool-net**\ (8),
--	**bpftool-perf**\ (8)
-+	**bpftool-perf**\ (8),
-+	**bpftool-btf**\ (8)
+diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
+index 9f3ffe1e26ab..bca91d04ed35 100644
+--- a/tools/bpf/bpftool/bash-completion/bpftool
++++ b/tools/bpf/bpftool/bash-completion/bpftool
+@@ -217,6 +217,7 @@ _bpftool()
+     done
+     cur=${words[cword]}
+     prev=${words[cword - 1]}
++    pprev=${words[cword - 2]}
+ 
+     local object=${words[1]} command=${words[2]}
+ 
+@@ -607,6 +608,51 @@ _bpftool()
+                     ;;
+             esac
+             ;;
++        btf)
++            local PROG_TYPE='id pinned tag'
++            local MAP_TYPE='id pinned'
++            case $command in
++                dump)
++                    case $prev in
++                        $command)
++                            COMPREPLY+=( $( compgen -W "id map prog file" -- \
++                                "$cur" ) )
++                            return 0
++                            ;;
++                        prog)
++                            COMPREPLY=( $( compgen -W "$PROG_TYPE" -- "$cur" ) )
++                            return 0
++                            ;;
++                        map)
++                            COMPREPLY=( $( compgen -W "$MAP_TYPE" -- "$cur" ) )
++                            return 0
++                            ;;
++                        id)
++                            case $pprev in
++                                prog)
++                                    _bpftool_get_prog_ids
++                                    ;;
++                                map)
++                                    _bpftool_get_map_ids
++                                    ;;
++                            esac
++                            return 0
++                            ;;
++                        *)
++                            if [[ $cword == 6 ]] && [[ ${words[3]} == "map" ]]; then
++                                 COMPREPLY+=( $( compgen -W 'key value kv all' -- \
++                                     "$cur" ) )
++                            fi
++                            return 0
++                            ;;
++                    esac
++                    ;;
++                *)
++                    [[ $prev == $object ]] && \
++                        COMPREPLY=( $( compgen -W 'dump help' -- "$cur" ) )
++                    ;;
++            esac
++            ;;
+         cgroup)
+             case $command in
+                 show|list)
 -- 
 2.17.1
 
