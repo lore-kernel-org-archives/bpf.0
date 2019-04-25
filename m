@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2EEDC43219
-	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 22:30:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD8B9C4321A
+	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 22:30:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E16E520717
-	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 22:30:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CBD0720717
+	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 22:30:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="BEAOSVcv"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="OtvE39+l"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727874AbfDYWaR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Apr 2019 18:30:17 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:47514 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726126AbfDYWaR (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 25 Apr 2019 18:30:17 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3PMT7SX006147
-        for <bpf@vger.kernel.org>; Thu, 25 Apr 2019 15:30:15 -0700
+        id S1728972AbfDYWaU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Apr 2019 18:30:20 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:49478 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728369AbfDYWaT (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 25 Apr 2019 18:30:19 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x3PMSk1b013983
+        for <bpf@vger.kernel.org>; Thu, 25 Apr 2019 15:30:18 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : subject :
  date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=3H1+yCO+26sB2ZhV3EgaQFHWZrceDoTAOLwYz1UQvbM=;
- b=BEAOSVcvJm43Y/VvD9okfSUwPF/7jUAPvnCxAUYtjtHu9nUwpXzGVi3+1zM2ojVhpGKa
- kPUaoA/JDH4J3slsUzTfwzyeOU1KnPcitFekVQvjYnUZjUt+IU5x6xSapspNa38ayCt5
- ejF6iHaNAyApIEENqi/mudT/EwGKjMJhZgQ= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2s3fen1jt0-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 25 Apr 2019 15:30:15 -0700
-Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Thu, 25 Apr 2019 15:30:14 -0700
+ content-type; s=facebook; bh=q5FCxubGIaUTJw8oDMvUYdGgPjWOIDh9kOOzIN0gg8M=;
+ b=OtvE39+lqnIjWSGjEhLmqT/dt1OnzhMIj8VDGWp8mlNTBWuAdMBygCrZtXtKE6X6n+YD
+ 0LNcp0FFiI1JyKMN5ar7lrFrN41dpHe+EfLcuTDsv/TbxTDcIXzEx50ZO89kV6M26a/h
+ 9x/cZ4smykRo5TQW1pZ+pO1DJ3D/Gfviddg= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net with ESMTP id 2s3jrt8q2d-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 25 Apr 2019 15:30:18 -0700
+Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Thu, 25 Apr 2019 15:30:16 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 0009B8615AE; Thu, 25 Apr 2019 15:30:13 -0700 (PDT)
+        id 077148615AE; Thu, 25 Apr 2019 15:30:16 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
 To:     <andrii.nakryiko@gmail.com>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v4 bpf-next 1/4] bpftool: add ability to dump BTF types
-Date:   Thu, 25 Apr 2019 15:30:08 -0700
-Message-ID: <20190425223011.284686-2-andriin@fb.com>
+Subject: [PATCH v4 bpf-next 2/4] bpftool/docs: add btf sub-command documentation
+Date:   Thu, 25 Apr 2019 15:30:09 -0700
+Message-ID: <20190425223011.284686-3-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190425223011.284686-1-andriin@fb.com>
 References: <20190425223011.284686-1-andriin@fb.com>
@@ -57,30 +57,18 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-25_18:,,
  signatures=0
-X-Proofpoint-Spam-Reason: safe
-X-FB-Internal: Safe
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1904250138
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add new `btf dump` sub-command to bpftool. It allows to dump
-human-readable low-level BTF types representation of BTF types. BTF can
-be retrieved from few different sources:
-  - from BTF object by ID;
-  - from PROG, if it has associated BTF;
-  - from MAP, if it has associated BTF data; it's possible to narrow
-    down types to either key type, value type, both, or all BTF types;
-  - from ELF file (.BTF section).
-
-Output format mostly follows BPF verifier log format with few notable
-exceptions:
-  - all the type/field/param/etc names are enclosed in single quotes to
-    allow easier grepping and to stand out a little bit more;
-  - FUNC_PROTO output follows STRUCT/UNION/ENUM format of having one
-    line per each argument; this is more uniform and allows easy
-    grepping, as opposed to succinct, but inconvenient format that BPF
-    verifier log is using.
+Document usage and sample output format for `btf dump` sub-command.
 
 Cc: Daniel Borkmann <daniel@iogearbox.net>
 Cc: Alexei Starovoitov <ast@fb.com>
@@ -91,637 +79,322 @@ Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
 Acked-by: Yonghong Song <yhs@fb.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/bpf/bpftool/btf.c  | 586 +++++++++++++++++++++++++++++++++++++++
- tools/bpf/bpftool/main.c |   3 +-
- tools/bpf/bpftool/main.h |   1 +
- 3 files changed, 589 insertions(+), 1 deletion(-)
- create mode 100644 tools/bpf/bpftool/btf.c
+ .../bpf/bpftool/Documentation/bpftool-btf.rst | 222 ++++++++++++++++++
+ .../bpftool/Documentation/bpftool-cgroup.rst  |   3 +-
+ .../bpftool/Documentation/bpftool-feature.rst |   3 +-
+ .../bpf/bpftool/Documentation/bpftool-map.rst |   3 +-
+ .../bpf/bpftool/Documentation/bpftool-net.rst |   3 +-
+ .../bpftool/Documentation/bpftool-perf.rst    |   3 +-
+ .../bpftool/Documentation/bpftool-prog.rst    |   3 +-
+ tools/bpf/bpftool/Documentation/bpftool.rst   |   3 +-
+ 8 files changed, 236 insertions(+), 7 deletions(-)
+ create mode 100644 tools/bpf/bpftool/Documentation/bpftool-btf.rst
 
-diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-btf.rst b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
 new file mode 100644
-index 000000000000..58a2cd002a4b
+index 000000000000..2dbc1413fabd
 --- /dev/null
-+++ b/tools/bpf/bpftool/btf.c
-@@ -0,0 +1,586 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+/* Copyright (C) 2019 Facebook */
++++ b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+@@ -0,0 +1,222 @@
++================
++bpftool-btf
++================
++-------------------------------------------------------------------------------
++tool for inspection of BTF data
++-------------------------------------------------------------------------------
 +
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/err.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <gelf.h>
-+#include <bpf.h>
-+#include <linux/btf.h>
++:Manual section: 8
 +
-+#include "btf.h"
-+#include "json_writer.h"
-+#include "main.h"
++SYNOPSIS
++========
 +
-+static const char * const btf_kind_str[NR_BTF_KINDS] = {
-+	[BTF_KIND_UNKN]		= "UNKNOWN",
-+	[BTF_KIND_INT]		= "INT",
-+	[BTF_KIND_PTR]		= "PTR",
-+	[BTF_KIND_ARRAY]	= "ARRAY",
-+	[BTF_KIND_STRUCT]	= "STRUCT",
-+	[BTF_KIND_UNION]	= "UNION",
-+	[BTF_KIND_ENUM]		= "ENUM",
-+	[BTF_KIND_FWD]		= "FWD",
-+	[BTF_KIND_TYPEDEF]	= "TYPEDEF",
-+	[BTF_KIND_VOLATILE]	= "VOLATILE",
-+	[BTF_KIND_CONST]	= "CONST",
-+	[BTF_KIND_RESTRICT]	= "RESTRICT",
-+	[BTF_KIND_FUNC]		= "FUNC",
-+	[BTF_KIND_FUNC_PROTO]	= "FUNC_PROTO",
-+	[BTF_KIND_VAR]		= "VAR",
-+	[BTF_KIND_DATASEC]	= "DATASEC",
-+};
++	**bpftool** [*OPTIONS*] **btf** *COMMAND*
 +
-+static const char *btf_int_enc_str(__u8 encoding)
-+{
-+	switch (encoding) {
-+	case 0:
-+		return "(none)";
-+	case BTF_INT_SIGNED:
-+		return "SIGNED";
-+	case BTF_INT_CHAR:
-+		return "CHAR";
-+	case BTF_INT_BOOL:
-+		return "BOOL";
-+	default:
-+		return "UNKN";
-+	}
-+}
++	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] }
 +
-+static const char *btf_var_linkage_str(__u32 linkage)
-+{
-+	switch (linkage) {
-+	case BTF_VAR_STATIC:
-+		return "static";
-+	case BTF_VAR_GLOBAL_ALLOCATED:
-+		return "global-alloc";
-+	default:
-+		return "(unknown)";
-+	}
-+}
++	*COMMANDS* := { **dump** | **help** }
 +
-+static const char *btf_str(const struct btf *btf, __u32 off)
-+{
-+	if (!off)
-+		return "(anon)";
-+	return btf__name_by_offset(btf, off) ? : "(invalid)";
-+}
++BTF COMMANDS
++=============
 +
-+static int dump_btf_type(const struct btf *btf, __u32 id,
-+			 const struct btf_type *t)
-+{
-+	json_writer_t *w = json_wtr;
-+	int kind, safe_kind;
++|	**bpftool** **btf dump** *BTF_SRC*
++|	**bpftool** **btf help**
++|
++|	*BTF_SRC* := { **id** *BTF_ID* | **prog** *PROG* | **map** *MAP* [{**key** | **value** | **kv** | **all**}] | **file** *FILE* }
++|	*MAP* := { **id** *MAP_ID* | **pinned** *FILE* }
++|	*PROG* := { **id** *PROG_ID* | **pinned** *FILE* | **tag** *PROG_TAG* }
 +
-+	kind = BTF_INFO_KIND(t->info);
-+	safe_kind = kind <= BTF_KIND_MAX ? kind : BTF_KIND_UNKN;
++DESCRIPTION
++===========
++	**bpftool btf dump** *BTF_SRC*
++		  Dump BTF entries from a given *BTF_SRC*.
 +
-+	if (json_output) {
-+		jsonw_start_object(w);
-+		jsonw_uint_field(w, "id", id);
-+		jsonw_string_field(w, "kind", btf_kind_str[safe_kind]);
-+		jsonw_string_field(w, "name", btf_str(btf, t->name_off));
-+	} else {
-+		printf("[%u] %s '%s'", id, btf_kind_str[safe_kind],
-+		       btf_str(btf, t->name_off));
-+	}
++                  When **id** is specified, BTF object with that ID will be
++                  loaded and all its BTF types emitted.
 +
-+	switch (BTF_INFO_KIND(t->info)) {
-+	case BTF_KIND_INT: {
-+		__u32 v = *(__u32 *)(t + 1);
-+		const char *enc;
++                  When **map** is provided, it's expected that map has
++                  associated BTF object with BTF types describing key and
++                  value. It's possible to select whether to dump only BTF
++                  type(s) associated with key (**key**), value (**value**),
++                  both key and value (**kv**), or all BTF types present in
++                  associated BTF object (**all**). If not specified, **kv**
++                  is assumed.
 +
-+		enc = btf_int_enc_str(BTF_INT_ENCODING(v));
++                  When **prog** is provided, it's expected that program has
++                  associated BTF object with BTF types.
 +
-+		if (json_output) {
-+			jsonw_uint_field(w, "size", t->size);
-+			jsonw_uint_field(w, "bits_offset", BTF_INT_OFFSET(v));
-+			jsonw_uint_field(w, "nr_bits", BTF_INT_BITS(v));
-+			jsonw_string_field(w, "encoding", enc);
-+		} else {
-+			printf(" size=%u bits_offset=%u nr_bits=%u encoding=%s",
-+			       t->size, BTF_INT_OFFSET(v), BTF_INT_BITS(v),
-+			       enc);
-+		}
-+		break;
-+	}
-+	case BTF_KIND_PTR:
-+	case BTF_KIND_CONST:
-+	case BTF_KIND_VOLATILE:
-+	case BTF_KIND_RESTRICT:
-+	case BTF_KIND_TYPEDEF:
-+		if (json_output)
-+			jsonw_uint_field(w, "type_id", t->type);
-+		else
-+			printf(" type_id=%u", t->type);
-+		break;
-+	case BTF_KIND_ARRAY: {
-+		const struct btf_array *arr = (const void *)(t + 1);
++                  When specifying *FILE*, an ELF file is expected, containing
++                  .BTF section with well-defined BTF binary format data,
++                  typically produced by clang or pahole.
 +
-+		if (json_output) {
-+			jsonw_uint_field(w, "type_id", arr->type);
-+			jsonw_uint_field(w, "index_type_id", arr->index_type);
-+			jsonw_uint_field(w, "nr_elems", arr->nelems);
-+		} else {
-+			printf(" type_id=%u index_type_id=%u nr_elems=%u",
-+			       arr->type, arr->index_type, arr->nelems);
-+		}
-+		break;
-+	}
-+	case BTF_KIND_STRUCT:
-+	case BTF_KIND_UNION: {
-+		const struct btf_member *m = (const void *)(t + 1);
-+		__u16 vlen = BTF_INFO_VLEN(t->info);
-+		int i;
++	**bpftool btf help**
++		  Print short help message.
 +
-+		if (json_output) {
-+			jsonw_uint_field(w, "size", t->size);
-+			jsonw_uint_field(w, "vlen", vlen);
-+			jsonw_name(w, "members");
-+			jsonw_start_array(w);
-+		} else {
-+			printf(" size=%u vlen=%u", t->size, vlen);
-+		}
-+		for (i = 0; i < vlen; i++, m++) {
-+			const char *name = btf_str(btf, m->name_off);
-+			__u32 bit_off, bit_sz;
++OPTIONS
++=======
++	-h, --help
++		  Print short generic help message (similar to **bpftool help**).
 +
-+			if (BTF_INFO_KFLAG(t->info)) {
-+				bit_off = BTF_MEMBER_BIT_OFFSET(m->offset);
-+				bit_sz = BTF_MEMBER_BITFIELD_SIZE(m->offset);
-+			} else {
-+				bit_off = m->offset;
-+				bit_sz = 0;
-+			}
++	-V, --version
++		  Print version number (similar to **bpftool version**).
 +
-+			if (json_output) {
-+				jsonw_start_object(w);
-+				jsonw_string_field(w, "name", name);
-+				jsonw_uint_field(w, "type_id", m->type);
-+				jsonw_uint_field(w, "bits_offset", bit_off);
-+				if (bit_sz) {
-+					jsonw_uint_field(w, "bitfield_size",
-+							 bit_sz);
-+				}
-+				jsonw_end_object(w);
-+			} else {
-+				printf("\n\t'%s' type_id=%u bits_offset=%u",
-+				       name, m->type, bit_off);
-+				if (bit_sz)
-+					printf(" bitfield_size=%u", bit_sz);
-+			}
-+		}
-+		if (json_output)
-+			jsonw_end_array(w);
-+		break;
-+	}
-+	case BTF_KIND_ENUM: {
-+		const struct btf_enum *v = (const void *)(t + 1);
-+		__u16 vlen = BTF_INFO_VLEN(t->info);
-+		int i;
++	-j, --json
++		  Generate JSON output. For commands that cannot produce JSON, this
++		  option has no effect.
 +
-+		if (json_output) {
-+			jsonw_uint_field(w, "size", t->size);
-+			jsonw_uint_field(w, "vlen", vlen);
-+			jsonw_name(w, "values");
-+			jsonw_start_array(w);
-+		} else {
-+			printf(" size=%u vlen=%u", t->size, vlen);
-+		}
-+		for (i = 0; i < vlen; i++, v++) {
-+			const char *name = btf_str(btf, v->name_off);
++	-p, --pretty
++		  Generate human-readable JSON output. Implies **-j**.
 +
-+			if (json_output) {
-+				jsonw_start_object(w);
-+				jsonw_string_field(w, "name", name);
-+				jsonw_uint_field(w, "val", v->val);
-+				jsonw_end_object(w);
-+			} else {
-+				printf("\n\t'%s' val=%u", name, v->val);
-+			}
-+		}
-+		if (json_output)
-+			jsonw_end_array(w);
-+		break;
-+	}
-+	case BTF_KIND_FWD: {
-+		const char *fwd_kind = BTF_INFO_KIND(t->info) ? "union"
-+							      : "struct";
++EXAMPLES
++========
++**# bpftool btf dump id 1226**
++::
 +
-+		if (json_output)
-+			jsonw_string_field(w, "fwd_kind", fwd_kind);
-+		else
-+			printf(" fwd_kind=%s", fwd_kind);
-+		break;
-+	}
-+	case BTF_KIND_FUNC:
-+		if (json_output)
-+			jsonw_uint_field(w, "type_id", t->type);
-+		else
-+			printf(" type_id=%u", t->type);
-+		break;
-+	case BTF_KIND_FUNC_PROTO: {
-+		const struct btf_param *p = (const void *)(t + 1);
-+		__u16 vlen = BTF_INFO_VLEN(t->info);
-+		int i;
++  [1] PTR '(anon)' type_id=2
++  [2] STRUCT 'dummy_tracepoint_args' size=16 vlen=2
++          'pad' type_id=3 bits_offset=0
++          'sock' type_id=4 bits_offset=64
++  [3] INT 'long long unsigned int' size=8 bits_offset=0 nr_bits=64 encoding=(none)
++  [4] PTR '(anon)' type_id=5
++  [5] FWD 'sock' fwd_kind=union
 +
-+		if (json_output) {
-+			jsonw_uint_field(w, "ret_type_id", t->type);
-+			jsonw_uint_field(w, "vlen", vlen);
-+			jsonw_name(w, "params");
-+			jsonw_start_array(w);
-+		} else {
-+			printf(" ret_type_id=%u vlen=%u", t->type, vlen);
-+		}
-+		for (i = 0; i < vlen; i++, p++) {
-+			const char *name = btf_str(btf, p->name_off);
++This gives an example of default output for all supported BTF kinds.
 +
-+			if (json_output) {
-+				jsonw_start_object(w);
-+				jsonw_string_field(w, "name", name);
-+				jsonw_uint_field(w, "type_id", p->type);
-+				jsonw_end_object(w);
-+			} else {
-+				printf("\n\t'%s' type_id=%u", name, p->type);
-+			}
-+		}
-+		if (json_output)
-+			jsonw_end_array(w);
-+		break;
-+	}
-+	case BTF_KIND_VAR: {
-+		const struct btf_var *v = (const void *)(t + 1);
-+		const char *linkage;
++**$ cat prog.c**
++::
 +
-+		linkage = btf_var_linkage_str(v->linkage);
++  struct fwd_struct;
 +
-+		if (json_output) {
-+			jsonw_uint_field(w, "type_id", t->type);
-+			jsonw_string_field(w, "linkage", linkage);
-+		} else {
-+			printf(" type_id=%u, linkage=%s", t->type, linkage);
-+		}
-+		break;
-+	}
-+	case BTF_KIND_DATASEC: {
-+		const struct btf_var_secinfo *v = (const void *)(t+1);
-+		__u16 vlen = BTF_INFO_VLEN(t->info);
-+		int i;
++  enum my_enum {
++          VAL1 = 3,
++          VAL2 = 7,
++  };
 +
-+		if (json_output) {
-+			jsonw_uint_field(w, "size", t->size);
-+			jsonw_uint_field(w, "vlen", vlen);
-+			jsonw_name(w, "vars");
-+			jsonw_start_array(w);
-+		} else {
-+			printf(" size=%u vlen=%u", t->size, vlen);
-+		}
-+		for (i = 0; i < vlen; i++, v++) {
-+			if (json_output) {
-+				jsonw_start_object(w);
-+				jsonw_uint_field(w, "type_id", v->type);
-+				jsonw_uint_field(w, "offset", v->offset);
-+				jsonw_uint_field(w, "size", v->size);
-+				jsonw_end_object(w);
-+			} else {
-+				printf("\n\ttype_id=%u offset=%u size=%u",
-+				       v->type, v->offset, v->size);
-+			}
-+		}
-+		if (json_output)
-+			jsonw_end_array(w);
-+		break;
-+	}
-+	default:
-+		break;
-+	}
++  typedef struct my_struct my_struct_t;
 +
-+	if (json_output)
-+		jsonw_end_object(json_wtr);
-+	else
-+		printf("\n");
++  struct my_struct {
++          const unsigned int const_int_field;
++          int bitfield_field: 4;
++          char arr_field[16];
++          const struct fwd_struct *restrict fwd_field;
++          enum my_enum enum_field;
++          volatile my_struct_t *typedef_ptr_field;
++  };
 +
-+	return 0;
-+}
++  union my_union {
++          int a;
++          struct my_struct b;
++  };
 +
-+static int dump_btf_raw(const struct btf *btf,
-+			__u32 *root_type_ids, int root_type_cnt)
-+{
-+	const struct btf_type *t;
-+	int i;
++  struct my_struct struct_global_var __attribute__((section("data_sec"))) = {
++          .bitfield_field = 3,
++          .enum_field = VAL1,
++  };
++  int global_var __attribute__((section("data_sec"))) = 7;
 +
-+	if (json_output) {
-+		jsonw_start_object(json_wtr);
-+		jsonw_name(json_wtr, "types");
-+		jsonw_start_array(json_wtr);
-+	}
++  __attribute__((noinline))
++  int my_func(union my_union *arg1, int arg2)
++  {
++          static int static_var __attribute__((section("data_sec"))) = 123;
++          static_var++;
++          return static_var;
++  }
 +
-+	if (root_type_cnt) {
-+		for (i = 0; i < root_type_cnt; i++) {
-+			t = btf__type_by_id(btf, root_type_ids[i]);
-+			dump_btf_type(btf, root_type_ids[i], t);
-+		}
-+	} else {
-+		int cnt = btf__get_nr_types(btf);
++**$ bpftool btf dump file prog.o**
++::
 +
-+		for (i = 1; i <= cnt; i++) {
-+			t = btf__type_by_id(btf, i);
-+			dump_btf_type(btf, i, t);
-+		}
-+	}
++  [1] PTR '(anon)' type_id=2
++  [2] UNION 'my_union' size=48 vlen=2
++          'a' type_id=3 bits_offset=0
++          'b' type_id=4 bits_offset=0
++  [3] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
++  [4] STRUCT 'my_struct' size=48 vlen=6
++          'const_int_field' type_id=5 bits_offset=0
++          'bitfield_field' type_id=3 bits_offset=32 bitfield_size=4
++          'arr_field' type_id=8 bits_offset=40
++          'fwd_field' type_id=10 bits_offset=192
++          'enum_field' type_id=14 bits_offset=256
++          'typedef_ptr_field' type_id=15 bits_offset=320
++  [5] CONST '(anon)' type_id=6
++  [6] INT 'unsigned int' size=4 bits_offset=0 nr_bits=32 encoding=(none)
++  [7] INT 'char' size=1 bits_offset=0 nr_bits=8 encoding=SIGNED
++  [8] ARRAY '(anon)' type_id=7 index_type_id=9 nr_elems=16
++  [9] INT '__ARRAY_SIZE_TYPE__' size=4 bits_offset=0 nr_bits=32 encoding=(none)
++  [10] RESTRICT '(anon)' type_id=11
++  [11] PTR '(anon)' type_id=12
++  [12] CONST '(anon)' type_id=13
++  [13] FWD 'fwd_struct' fwd_kind=union
++  [14] ENUM 'my_enum' size=4 vlen=2
++          'VAL1' val=3
++          'VAL2' val=7
++  [15] PTR '(anon)' type_id=16
++  [16] VOLATILE '(anon)' type_id=17
++  [17] TYPEDEF 'my_struct_t' type_id=4
++  [18] FUNC_PROTO '(anon)' ret_type_id=3 vlen=2
++          'arg1' type_id=1
++          'arg2' type_id=3
++  [19] FUNC 'my_func' type_id=18
++  [20] VAR 'struct_global_var' type_id=4, linkage=global-alloc
++  [21] VAR 'global_var' type_id=3, linkage=global-alloc
++  [22] VAR 'my_func.static_var' type_id=3, linkage=static
++  [23] DATASEC 'data_sec' size=0 vlen=3
++          type_id=20 offset=0 size=48
++          type_id=21 offset=0 size=4
++          type_id=22 offset=52 size=4
 +
-+	if (json_output) {
-+		jsonw_end_array(json_wtr);
-+		jsonw_end_object(json_wtr);
-+	}
-+	return 0;
-+}
++The following commands print BTF types associated with specified map's key,
++value, both key and value, and all BTF types, respectively. By default, both
++key and value types will be printed.
 +
-+static bool check_btf_endianness(GElf_Ehdr *ehdr)
-+{
-+	static unsigned int const endian = 1;
++**# bpftool btf dump map id 123 key**
 +
-+	switch (ehdr->e_ident[EI_DATA]) {
-+	case ELFDATA2LSB:
-+		return *(unsigned char const *)&endian == 1;
-+	case ELFDATA2MSB:
-+		return *(unsigned char const *)&endian == 0;
-+	default:
-+		return 0;
-+	}
-+}
++::
 +
-+static int btf_load_from_elf(const char *path, struct btf **btf)
-+{
-+	int err = -1, fd = -1, idx = 0;
-+	Elf_Data *btf_data = NULL;
-+	Elf_Scn *scn = NULL;
-+	Elf *elf = NULL;
-+	GElf_Ehdr ehdr;
++  [39] TYPEDEF 'u32' type_id=37
 +
-+	if (elf_version(EV_CURRENT) == EV_NONE) {
-+		p_err("failed to init libelf for %s", path);
-+		return -1;
-+	}
++**# bpftool btf dump map id 123 value**
 +
-+	fd = open(path, O_RDONLY);
-+	if (fd < 0) {
-+		p_err("failed to open %s: %s", path, strerror(errno));
-+		return -1;
-+	}
++::
 +
-+	elf = elf_begin(fd, ELF_C_READ, NULL);
-+	if (!elf) {
-+		p_err("failed to open %s as ELF file", path);
-+		goto done;
-+	}
-+	if (!gelf_getehdr(elf, &ehdr)) {
-+		p_err("failed to get EHDR from %s", path);
-+		goto done;
-+	}
-+	if (!check_btf_endianness(&ehdr)) {
-+		p_err("non-native ELF endianness is not supported");
-+		goto done;
-+	}
-+	if (!elf_rawdata(elf_getscn(elf, ehdr.e_shstrndx), NULL)) {
-+		p_err("failed to get e_shstrndx from %s\n", path);
-+		goto done;
-+	}
++  [86] PTR '(anon)' type_id=87
 +
-+	while ((scn = elf_nextscn(elf, scn)) != NULL) {
-+		GElf_Shdr sh;
-+		char *name;
++**# bpftool btf dump map id 123 kv**
 +
-+		idx++;
-+		if (gelf_getshdr(scn, &sh) != &sh) {
-+			p_err("failed to get section(%d) header from %s",
-+			      idx, path);
-+			goto done;
-+		}
-+		name = elf_strptr(elf, ehdr.e_shstrndx, sh.sh_name);
-+		if (!name) {
-+			p_err("failed to get section(%d) name from %s",
-+			      idx, path);
-+			goto done;
-+		}
-+		if (strcmp(name, BTF_ELF_SEC) == 0) {
-+			btf_data = elf_getdata(scn, 0);
-+			if (!btf_data) {
-+				p_err("failed to get section(%d, %s) data from %s",
-+				      idx, name, path);
-+				goto done;
-+			}
-+			break;
-+		}
-+	}
++::
 +
-+	if (!btf_data) {
-+		p_err("%s ELF section not found in %s", BTF_ELF_SEC, path);
-+		goto done;
-+	}
++  [39] TYPEDEF 'u32' type_id=37
++  [86] PTR '(anon)' type_id=87
 +
-+	*btf = btf__new(btf_data->d_buf, btf_data->d_size);
-+	if (IS_ERR(*btf)) {
-+		err = PTR_ERR(*btf);
-+		*btf = NULL;
-+		p_err("failed to load BTF data from %s: %s",
-+		      path, strerror(err));
-+		goto done;
-+	}
++**# bpftool btf dump map id 123 all**
 +
-+	err = 0;
-+done:
-+	if (err) {
-+		if (*btf) {
-+			btf__free(*btf);
-+			*btf = NULL;
-+		}
-+	}
-+	if (elf)
-+		elf_end(elf);
-+	close(fd);
-+	return err;
-+}
++::
 +
-+static int do_dump(int argc, char **argv)
-+{
-+	struct btf *btf = NULL;
-+	__u32 root_type_ids[2];
-+	int root_type_cnt = 0;
-+	__u32 btf_id = -1;
-+	const char *src;
-+	int fd = -1;
-+	int err;
++  [1] PTR '(anon)' type_id=0
++  .
++  .
++  .
++  [2866] ARRAY '(anon)' type_id=52 index_type_id=51 nr_elems=4
 +
-+	if (!REQ_ARGS(2)) {
-+		usage();
-+		return -1;
-+	}
-+	src = GET_ARG();
++All the standard ways to specify map or program are supported:
 +
-+	if (is_prefix(src, "map")) {
-+		struct bpf_map_info info = {};
-+		__u32 len = sizeof(info);
++**# bpftool btf dump map id 123**
 +
-+		if (!REQ_ARGS(2)) {
-+			usage();
-+			return -1;
-+		}
++**# bpftool btf dump map pinned /sys/fs/bpf/map_name**
 +
-+		fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
-+		if (fd < 0)
-+			return -1;
++**# bpftool btf dump prog id 456**
 +
-+		btf_id = info.btf_id;
-+		if (argc && is_prefix(*argv, "key")) {
-+			root_type_ids[root_type_cnt++] = info.btf_key_type_id;
-+			NEXT_ARG();
-+		} else if (argc && is_prefix(*argv, "value")) {
-+			root_type_ids[root_type_cnt++] = info.btf_value_type_id;
-+			NEXT_ARG();
-+		} else if (argc && is_prefix(*argv, "all")) {
-+			NEXT_ARG();
-+		} else if (argc && is_prefix(*argv, "kv")) {
-+			root_type_ids[root_type_cnt++] = info.btf_key_type_id;
-+			root_type_ids[root_type_cnt++] = info.btf_value_type_id;
-+			NEXT_ARG();
-+		} else {
-+			root_type_ids[root_type_cnt++] = info.btf_key_type_id;
-+			root_type_ids[root_type_cnt++] = info.btf_value_type_id;
-+		}
-+	} else if (is_prefix(src, "prog")) {
-+		struct bpf_prog_info info = {};
-+		__u32 len = sizeof(info);
++**# bpftool btf dump prog tag b88e0a09b1d9759d**
 +
-+		if (!REQ_ARGS(2)) {
-+			usage();
-+			return -1;
-+		}
++**# bpftool btf dump prog pinned /sys/fs/bpf/prog_name**
 +
-+		fd = prog_parse_fd(&argc, &argv);
-+		if (fd < 0)
-+			return -1;
-+
-+		err = bpf_obj_get_info_by_fd(fd, &info, &len);
-+		if (err) {
-+			p_err("can't get prog info: %s", strerror(errno));
-+			goto done;
-+		}
-+
-+		btf_id = info.btf_id;
-+	} else if (is_prefix(src, "id")) {
-+		char *endptr;
-+
-+		btf_id = strtoul(*argv, &endptr, 0);
-+		if (*endptr) {
-+			p_err("can't parse %s as ID", **argv);
-+			return -1;
-+		}
-+		NEXT_ARG();
-+	} else if (is_prefix(src, "file")) {
-+		err = btf_load_from_elf(*argv, &btf);
-+		if (err)
-+			goto done;
-+		NEXT_ARG();
-+	} else {
-+		err = -1;
-+		p_err("unrecognized BTF source specifier: '%s'", src);
-+		goto done;
-+	}
-+
-+	if (!btf) {
-+		err = btf__get_from_id(btf_id, &btf);
-+		if (err) {
-+			p_err("get btf by id (%u): %s", btf_id, strerror(err));
-+			goto done;
-+		}
-+		if (!btf) {
-+			err = ENOENT;
-+			p_err("can't find btf with ID (%u)", btf_id);
-+			goto done;
-+		}
-+	}
-+
-+	dump_btf_raw(btf, root_type_ids, root_type_cnt);
-+
-+done:
-+	close(fd);
-+	btf__free(btf);
-+	return err;
-+}
-+
-+static int do_help(int argc, char **argv)
-+{
-+	if (json_output) {
-+		jsonw_null(json_wtr);
-+		return 0;
-+	}
-+
-+	fprintf(stderr,
-+		"Usage: %s btf dump BTF_SRC\n"
-+		"       %s btf help\n"
-+		"\n"
-+		"       BTF_SRC := { id BTF_ID | prog PROG | map MAP [{key | value | kv | all}] | file FILE }\n"
-+		"       " HELP_SPEC_MAP "\n"
-+		"       " HELP_SPEC_PROGRAM "\n"
-+		"       " HELP_SPEC_OPTIONS "\n"
-+		"",
-+		bin_name, bin_name);
-+
-+	return 0;
-+}
-+
-+static const struct cmd cmds[] = {
-+	{ "help",	do_help },
-+	{ "dump",	do_dump },
-+	{ 0 }
-+};
-+
-+int do_btf(int argc, char **argv)
-+{
-+	return cmd_select(cmds, argc, argv, do_help);
-+}
-diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-index a9d5e9e6a732..1ac1fc520e6a 100644
---- a/tools/bpf/bpftool/main.c
-+++ b/tools/bpf/bpftool/main.c
-@@ -56,7 +56,7 @@ static int do_help(int argc, char **argv)
- 		"       %s batch file FILE\n"
- 		"       %s version\n"
- 		"\n"
--		"       OBJECT := { prog | map | cgroup | perf | net | feature }\n"
-+		"       OBJECT := { prog | map | cgroup | perf | net | feature | btf }\n"
- 		"       " HELP_SPEC_OPTIONS "\n"
- 		"",
- 		bin_name, bin_name, bin_name);
-@@ -188,6 +188,7 @@ static const struct cmd cmds[] = {
- 	{ "perf",	do_perf },
- 	{ "net",	do_net },
- 	{ "feature",	do_feature },
-+	{ "btf",	do_btf },
- 	{ "version",	do_version },
- 	{ 0 }
- };
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 1ccc46169a19..3d63feb7f852 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -150,6 +150,7 @@ int do_perf(int argc, char **arg);
- int do_net(int argc, char **arg);
- int do_tracelog(int argc, char **arg);
- int do_feature(int argc, char **argv);
-+int do_btf(int argc, char **argv);
- 
- int parse_u32_arg(int *argc, char ***argv, __u32 *val, const char *what);
- int prog_parse_fd(int *argc, char ***argv);
++SEE ALSO
++========
++	**bpf**\ (2),
++	**bpf-helpers**\ (7),
++	**bpftool**\ (8),
++	**bpftool-map**\ (8),
++	**bpftool-prog**\ (8),
++	**bpftool-cgroup**\ (8),
++	**bpftool-feature**\ (8),
++	**bpftool-net**\ (8),
++	**bpftool-perf**\ (8)
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
+index 89b6b10e2183..ac26876389c2 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
+@@ -145,4 +145,5 @@ SEE ALSO
+ 	**bpftool-map**\ (8),
+ 	**bpftool-feature**\ (8),
+ 	**bpftool-net**\ (8),
+-	**bpftool-perf**\ (8)
++	**bpftool-perf**\ (8),
++	**bpftool-btf**\ (8)
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-feature.rst b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
+index 10177343b7ce..14180e887082 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-feature.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
+@@ -82,4 +82,5 @@ SEE ALSO
+ 	**bpftool-map**\ (8),
+ 	**bpftool-cgroup**\ (8),
+ 	**bpftool-net**\ (8),
+-	**bpftool-perf**\ (8)
++	**bpftool-perf**\ (8),
++	**bpftool-btf**\ (8)
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+index 55ecf80ca03e..13ef27b39f20 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+@@ -258,4 +258,5 @@ SEE ALSO
+ 	**bpftool-cgroup**\ (8),
+ 	**bpftool-feature**\ (8),
+ 	**bpftool-net**\ (8),
+-	**bpftool-perf**\ (8)
++	**bpftool-perf**\ (8),
++	**bpftool-btf**\ (8)
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-net.rst b/tools/bpf/bpftool/Documentation/bpftool-net.rst
+index 6b692b428373..934580850f42 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-net.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-net.rst
+@@ -143,4 +143,5 @@ SEE ALSO
+ 	**bpftool-map**\ (8),
+ 	**bpftool-cgroup**\ (8),
+ 	**bpftool-feature**\ (8),
+-	**bpftool-perf**\ (8)
++	**bpftool-perf**\ (8),
++	**bpftool-btf**\ (8)
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-perf.rst b/tools/bpf/bpftool/Documentation/bpftool-perf.rst
+index 86154740fabb..0c7576523a21 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-perf.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-perf.rst
+@@ -85,4 +85,5 @@ SEE ALSO
+ 	**bpftool-map**\ (8),
+ 	**bpftool-cgroup**\ (8),
+ 	**bpftool-feature**\ (8),
+-	**bpftool-net**\ (8)
++	**bpftool-net**\ (8),
++	**bpftool-btf**\ (8)
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+index 2f183ffd8351..e8118544d118 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+@@ -271,4 +271,5 @@ SEE ALSO
+ 	**bpftool-cgroup**\ (8),
+ 	**bpftool-feature**\ (8),
+ 	**bpftool-net**\ (8),
+-	**bpftool-perf**\ (8)
++	**bpftool-perf**\ (8),
++	**bpftool-btf**\ (8)
+diff --git a/tools/bpf/bpftool/Documentation/bpftool.rst b/tools/bpf/bpftool/Documentation/bpftool.rst
+index deb2ca911ddf..3e562d7fd56f 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool.rst
+@@ -76,4 +76,5 @@ SEE ALSO
+ 	**bpftool-cgroup**\ (8),
+ 	**bpftool-feature**\ (8),
+ 	**bpftool-net**\ (8),
+-	**bpftool-perf**\ (8)
++	**bpftool-perf**\ (8),
++	**bpftool-btf**\ (8)
 -- 
 2.17.1
 
