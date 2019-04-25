@@ -2,228 +2,159 @@ Return-Path: <SRS0=aERf=S3=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 426CEC282E1
-	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 11:15:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 992BFC43218
+	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 15:27:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0A357218D3
-	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 11:15:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BAA0C206C0
+	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 15:27:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="xzzfhU85"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="EIr/2m5t";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="ak3A56uE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730304AbfDYLPZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Apr 2019 07:15:25 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:35058 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730800AbfDYLPZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 25 Apr 2019 07:15:25 -0400
-Received: by mail-wr1-f67.google.com with SMTP id f7so7149628wrs.2
-        for <bpf@vger.kernel.org>; Thu, 25 Apr 2019 04:15:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=to:cc:references:from:openpgp:autocrypt:subject:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=lnG81G4031qn8c4Nkyqs9MsmfJNfsvo74etgMYujIxU=;
-        b=xzzfhU85i80CXcXH+kJOFva0MbTePhcwPxV3OqZWJLqLpaDLVFv8zaE1IkmEYwVq6s
-         QTOnXp0rZbyL4FEqlvlUCiV6NA9by+ct0Oylk0qle6ETp5gKo2nLHGLrv6BFP5wfwWQX
-         LhpXILXWEuaCndenmX20x8SueP13OcWe69q4kmlwhZr3RQHefnyoZonRyEaOFlvIypvz
-         ToSjQJ6mmHgPGC4snzLS3l7kE4OeW7QCsmMqrOBClqrwVWvUya0tnhzWVWurfdO8DmrP
-         8xAiTwF6EU4urSDMhL2b1lqdaeOSOKRa11PWJfDqyi1HfiMlqqj2k4eqB7yxDmjZcqBr
-         4TCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:openpgp:autocrypt:subject
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=lnG81G4031qn8c4Nkyqs9MsmfJNfsvo74etgMYujIxU=;
-        b=rURSIIX3o6T4RE2SGhcedkHSD+EsePDhNlIzcRkMw+GgcXQ2FPqPWUHlEmgSlWev5U
-         /1IcQwT/QJlnjs6NQTXq/CA34Kz8bkmb9ljZyLvr7Z+ATDznu6NGiAGJy71FRZ+E7bB+
-         3v5PW2b9LBWD4nAaGIUN5tgO/pWH5ZtURZELxEl6eqCxcqi/CcyPEGivRcDOJ72gKEAQ
-         fHYg1YI/VdURcJaoxqlGHvCqpin+7wky7LKN9mv7sIHWmFgz/X4YxY837m7/HZVaQLgI
-         BZ1ugOWFQrVP1LfN4/eyOJmPJnmvhQdaYJvgmG9qszbwtK03Zj4wL9Z+JXHggpLSWlsI
-         Nj8Q==
-X-Gm-Message-State: APjAAAUukHvb0Kf8jrwfaoIbybMnP2QWdQyTm6xs1KTRUkzMfHNjgn0U
-        GNJ7v5iMRTEIxAcSkkf1XrXYjw==
-X-Google-Smtp-Source: APXvYqyk755e8/2WddF82F0QQ50dojm98DFKBfoHtEnNF5ejvNtEJUSmSyTjfwQp6dtqoL7CKHbUjQ==
-X-Received: by 2002:adf:fb09:: with SMTP id c9mr2844822wrr.137.1556190923329;
-        Thu, 25 Apr 2019 04:15:23 -0700 (PDT)
-Received: from [172.20.1.250] ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id c11sm13816001wrs.86.2019.04.25.04.15.22
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 25 Apr 2019 04:15:22 -0700 (PDT)
-To:     andrii.nakryiko@gmail.com, kernel-team@fb.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, ast@fb.com,
-        daniel@iogearbox.net, yhs@fb.com, songliubraving@fb.com,
-        kafai@fb.com, acme@kernel.org
-Cc:     Andrii Nakryiko <andriin@fb.com>
-References: <20190425050355.1359736-1-andrii.nakryiko@gmail.com>
- <20190425050355.1359736-4-andrii.nakryiko@gmail.com>
-From:   Quentin Monnet <quentin.monnet@netronome.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=quentin.monnet@netronome.com; prefer-encrypt=mutual; keydata=
- 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
- RHhSHGnKaQ6MfrTge5Q0h5A=
-Subject: Re: [PATCH v2 bpf-next 3/3] bpftool: add bash completions for btf
- command
-Message-ID: <b2eda1ce-4362-4b2a-0c60-7815dd8bb8d4@netronome.com>
-Date:   Thu, 25 Apr 2019 12:15:21 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1728059AbfDYP1a (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Apr 2019 11:27:30 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:46920 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726964AbfDYP13 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 25 Apr 2019 11:27:29 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x3PFKaVH032394;
+        Thu, 25 Apr 2019 08:27:07 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=T1O/7F8ViMHaYaLNpAluEy2lIsiYVjwFmT43+9c19Yk=;
+ b=EIr/2m5tzm2ks9tsHgQmX0ij50w80/6UluQS7cdVTh2oO6/pVZ1TZwrNMzHp0i329LUK
+ +gyrB0ziZDGwMUnT6jcnC1+SO7dn4M0ZiivSwDBzhtCmRHk1hp3jrXkSnHB7G4M4Bc8N
+ 3XnGc+HdNymY9Bqj4O64JRYRCr+/FBoor3A= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by m0089730.ppops.net with ESMTP id 2s35gc22q9-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Thu, 25 Apr 2019 08:27:07 -0700
+Received: from prn-mbx05.TheFacebook.com (2620:10d:c081:6::19) by
+ prn-hub04.TheFacebook.com (2620:10d:c081:35::128) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1713.5; Thu, 25 Apr 2019 08:27:02 -0700
+Received: from prn-hub01.TheFacebook.com (2620:10d:c081:35::125) by
+ prn-mbx05.TheFacebook.com (2620:10d:c081:6::19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1713.5; Thu, 25 Apr 2019 08:27:01 -0700
+Received: from NAM05-CO1-obe.outbound.protection.outlook.com (192.168.54.28)
+ by o365-in.thefacebook.com (192.168.16.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
+ via Frontend Transport; Thu, 25 Apr 2019 08:27:01 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector1-fb-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=T1O/7F8ViMHaYaLNpAluEy2lIsiYVjwFmT43+9c19Yk=;
+ b=ak3A56uEU/kZdB4FdllL2golps0+jqb2phjzYbugnpGrnYkMnzNv3Xl+HtPxBoL3sL90qe5PWEZQzszuFtIA0auPEkdmz3YlFy0U7Rj0vZtvyGpDyZNMmGfJyfLJ+P6v2H8KE/Ub6yD6cQL985ncMXi0qcTLTpyBdojGtLbQdDE=
+Received: from BYAPR15MB3384.namprd15.prod.outlook.com (20.179.59.17) by
+ BYAPR15MB3365.namprd15.prod.outlook.com (20.179.58.212) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1835.12; Thu, 25 Apr 2019 15:27:00 +0000
+Received: from BYAPR15MB3384.namprd15.prod.outlook.com
+ ([fe80::750c:2d8e:bf62:4d0d]) by BYAPR15MB3384.namprd15.prod.outlook.com
+ ([fe80::750c:2d8e:bf62:4d0d%5]) with mapi id 15.20.1835.010; Thu, 25 Apr 2019
+ 15:27:00 +0000
+From:   Yonghong Song <yhs@fb.com>
+To:     Paul Chaignon <paul.chaignon@orange.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+CC:     Xiao Han <xiao.han@orange.com>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>
+Subject: Re: [PATCH bpf v3 0/2] bpf: mark registers in all frames after
+ pkt/null checks
+Thread-Topic: [PATCH bpf v3 0/2] bpf: mark registers in all frames after
+ pkt/null checks
+Thread-Index: AQHU+3tTK3+Qh1XjLUSwm2v4zZEb6w==
+Date:   Thu, 25 Apr 2019 15:27:00 +0000
+Message-ID: <233bca7b-6412-bb07-8185-71a6f86ec003@fb.com>
+References: <cover.1556127905.git.paul.chaignon@orange.com>
+In-Reply-To: <cover.1556127905.git.paul.chaignon@orange.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: CO2PR04CA0127.namprd04.prod.outlook.com
+ (2603:10b6:104:7::29) To BYAPR15MB3384.namprd15.prod.outlook.com
+ (2603:10b6:a03:10e::17)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2620:10d:c090:200::3:a55d]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: aee27dc5-de7a-4770-8430-08d6c99275b2
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:BYAPR15MB3365;
+x-ms-traffictypediagnostic: BYAPR15MB3365:
+x-microsoft-antispam-prvs: <BYAPR15MB336595ADA3478A604ABDDCAED33D0@BYAPR15MB3365.namprd15.prod.outlook.com>
+x-forefront-prvs: 0018A2705B
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(366004)(346002)(396003)(136003)(39860400002)(54534003)(199004)(189003)(54906003)(66946007)(6512007)(6436002)(110136005)(446003)(386003)(53546011)(6506007)(73956011)(53936002)(66476007)(66556008)(66446008)(36756003)(6486002)(64756008)(4326008)(476003)(186003)(5660300002)(2501003)(2616005)(102836004)(71200400001)(71190400001)(14454004)(7736002)(305945005)(229853002)(2201001)(97736004)(8936002)(86362001)(46003)(81156014)(81166006)(31696002)(478600001)(8676002)(31686004)(52116002)(14444005)(256004)(11346002)(68736007)(6246003)(486006)(99286004)(25786009)(6116002)(2906002)(316002)(76176011);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB3365;H:BYAPR15MB3384.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: avXyN88Z/jRQLO+9IVvNgco6YPeMj2CSpyNjdTTXKdSDxXnT6Xzk23bn8iLvxb83krnmYVP8ipvumc2eB0Ijp6wdXvTEskbD3ySiwB+W9wjw+OtB8pNS6AZ4Qsw09/qA5oaXxDtXXcdm6lHbttPULogRo3InoArZZXZkBREyOyUCmspsT8mD2fXZeWNWVyZ4zt3GOqSzsBqmY80jp7W6Sn5azUQ4agZP+5LzHUeLRyLMF+Dw4Y/Fa0iBJuiY7JkL9LUKONEC+iDGP0l/yBMqyZtNL5Dr4xSSWy0YuBG4jskIMjYckJVrW1WdOXFtwHC53a4RbE4U8+UoFtFgxExe0nFOlUuYZITkmHdLUujmb7EnYQYwXo8blTGcnpVFTDaC8jCRJxFiL6Yk6IeQqTbLeQMzscEZjOhiX9/5zu4RyEE=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7ACCDEBEE1015A4DB3ED7B1C67993485@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <20190425050355.1359736-4-andrii.nakryiko@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-Network-Message-Id: aee27dc5-de7a-4770-8430-08d6c99275b2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Apr 2019 15:27:00.2269
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3365
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-25_12:,,
+ signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-2019-04-24 22:03 UTC-0700 ~ <andrii.nakryiko@gmail.com>
-> From: Andrii Nakryiko <andriin@fb.com>
-> 
-> Add full support for btf command in bash-completion script.
-> 
-> Cc: Quentin Monnet <quentin.monnet@netronome.com>
-> Cc: Yonghong Song <yhs@fb.com>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Alexei Starovoitov <ast@fb.com>
-> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-> ---
->  tools/bpf/bpftool/bash-completion/bpftool | 46 +++++++++++++++++++++++
->  1 file changed, 46 insertions(+)
-> 
-> diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-> index 9f3ffe1e26ab..030f81bdec6a 100644
-> --- a/tools/bpf/bpftool/bash-completion/bpftool
-> +++ b/tools/bpf/bpftool/bash-completion/bpftool
-> @@ -217,6 +217,7 @@ _bpftool()
->      done
->      cur=${words[cword]}
->      prev=${words[cword - 1]}
-> +    pprev=${words[cword - 2]}
->  
->      local object=${words[1]} command=${words[2]}
->  
-> @@ -607,6 +608,51 @@ _bpftool()
->                      ;;
->              esac
->              ;;
-> +        btf)
-> +            local PROG_TYPE='id pinned tag'
-> +            local MAP_TYPE='id pinned'
-> +            case $command in
-> +                dump)
-> +                    case $prev in
-> +                        $command)
-> +                            COMPREPLY+=( $( compgen -W "id map prog file" -- \
-> +                                "$cur" ) )
-> +                            return 0
-> +                            ;;
-> +                        prog)
-> +                            COMPREPLY=( $( compgen -W "$PROG_TYPE" -- "$cur" ) )
-> +                            return 0
-> +                            ;;
-> +                        map)
-> +                            COMPREPLY=( $( compgen -W "$MAP_TYPE" -- "$cur" ) )
-> +                            return 0
-> +                            ;;
-> +                        id)
-> +                            case $pprev in
-> +                                prog)
-> +                                    _bpftool_get_prog_ids
-> +                                    ;;
-> +                                map)
-> +                                    _bpftool_get_map_ids
-> +                                    ;;
-> +                            esac
-> +                            return 0
-> +                            ;;
-> +                    *)
-> +                        if _bpftool_search_list 'map'; then
-> +                            COMPREPLY+=( $( compgen -W 'key value kv all' -- \
-> +                                "$cur" ) )
-
-Hi Andrii,
-
-This COMPREPLY will suggest completion for "key|value|kv|all", even if
-one of those words has been used on the command line before already (I
-do not believe this is expected?). What about the following instead?
-
-                            _bpftool_one_of_list 'key value kv all'
-
-> +                        fi
-> +                        return 0
-> +                        ;;
-
-Nit: It seems that the last bloc (the case when $prev matches on "*") is
-not correctly indented, it should be aligned with $command/prog/map/id?
-
-Other than this the completion seems good to me.
-
-But note that I did not receive all of your patches, only the cover
-letters (for v1 and v2 of the set) and this one (because I'm directly
-CC-ed?). It looks like the other patches for both v1 and v2 did not make
-it to the mailing lists or to patchwork, so you might want to double
-check and resend if necessary.
-
-Best,
-Quentin
-
-> +                    esac
-> +                    ;;
-> +                *)
-> +                    [[ $prev == $object ]] && \
-> +                        COMPREPLY=( $( compgen -W 'dump help' -- "$cur" ) )
-> +                    ;;
-> +            esac
-> +            ;;
->          cgroup)
->              case $command in
->                  show|list)
-> 
-
+DQoNCk9uIDQvMjQvMTkgMTI6NDkgUE0sIFBhdWwgQ2hhaWdub24gd3JvdGU6DQo+IEluIGNhc2Ug
+b2YgYSBudWxsIGNoZWNrIG9uIGEgcG9pbnRlciBpbnNpZGUgYSBzdWJwcm9nLCB3ZSBzaG91bGQg
+bWFyayBhbGwNCj4gcmVnaXN0ZXJzIHdpdGggdGhpcyBwb2ludGVyIGFzIGVpdGhlciBzYWZlIG9y
+IHVua25vd24sIGluIGJvdGggdGhlIGN1cnJlbnQNCj4gYW5kIHByZXZpb3VzIGZyYW1lcy4gIEN1
+cnJlbnRseSwgb25seSBzcGlsbGVkIHJlZ2lzdGVycyBhbmQgcmVnaXN0ZXJzIGluDQo+IHRoZSBj
+dXJyZW50IGZyYW1lIGFyZSBtYXJrZWQuICBQYWNrZXQgYm91bmQgY2hlY2tzIGluIHN1YnByb2dz
+IGhhdmUgdGhlDQo+IHNhbWUgaXNzdWUuICBUaGUgZmlyc3QgcGF0Y2ggZml4ZXMgaXQgdG8gbWFy
+ayByZWdpc3RlcnMgaW4gcHJldmlvdXMgZnJhbWVzDQo+IGFzIHdlbGwuDQo+IA0KPiBBIGdvb2Qg
+cmVwcm9kdWNlciBmb3IgbnVsbCBjaGVja3MgbG9va3MgYXMgZm9sbG93Og0KPiANCj4gMTogcHRy
+ID0gYnBmX21hcF9sb29rdXBfZWxlbShtYXAsICZrZXkpOw0KPiAyOiByZXQgPSBzdWJwcm9nKHB0
+cikgew0KPiAzOiAgIHJldHVybiBwdHIgIT0gTlVMTDsNCj4gNDogfQ0KPiA1OiBpZiAocmV0KQ0K
+PiA2OiAgIHZhbHVlID0gKnB0cjsNCj4gDQo+IFdpdGggdGhlIGFib3ZlLCB0aGUgdmVyaWZpZXIg
+d2lsbCBjb21wbGFpbiBvbiBsaW5lIDYgYmVjYXVzZSBpdCBzZWVzIHB0cg0KPiBhcyBtYXBfdmFs
+dWVfb3JfbnVsbCBkZXNwaXRlIHRoZSBudWxsIGNoZWNrIGluIHN1YnByb2cgMS4gIFRoZSBzZWNv
+bmQNCj4gcGF0Y2ggaW1wbGVtZW50cyB0aGUgYWJvdmUgYXMgYSBuZXcgdGVzdCBjYXNlLg0KPiAN
+Cj4gTm90ZSB0aGF0IHRoaXMgcGF0Y2ggZml4ZXMgYW5vdGhlciByZXN1bHRpbmcgYnVnIHdoZW4g
+dXNpbmcNCj4gYnBmX3NrX3JlbGVhc2UoKToNCj4gDQo+IDE6IHNrID0gYnBmX3NrX2xvb2t1cF90
+Y3AoLi4uKTsNCj4gMjogc3VicHJvZyhzaykgew0KPiAzOiAgIGlmIChzaykNCj4gNDogICAgIGJw
+Zl9za19yZWxlYXNlKHNrKTsNCj4gNTogfQ0KPiA2OiBpZiAoIXNrKQ0KPiA3OiAgIHJldHVybiAw
+Ow0KPiA4OiByZXR1cm4gMTsNCj4gDQo+IEluIHRoZSBhYm92ZSwgbWFya19wdHJfb3JfbnVsbF9y
+ZWdzIHdpbGwgd2FybiBvbiBsaW5lIDYgYmVjYXVzZSBpdCB3aWxsDQo+IHRyeSB0byBmcmVlIHRo
+ZSByZWZlcmVuY2Ugc3RhdGUsIGV2ZW4gdGhvdWdoIGl0IHdhcyBhbHJlYWR5IGZyZWVkIG9uDQo+
+IGxpbmUgMy4NCj4gDQo+IENoYW5nZWxvZ3M6DQo+ICAgIENoYW5nZXMgaW4gdjM6DQo+ICAgICAg
+LSBGaXggc2FtZSBpc3N1ZSBpbiBmaW5kX2dvb2RfcGt0X3BvaW50ZXJzKCkuDQo+ICAgICAgLSBB
+ZGQgdGVzdCBjYXNlIGZvciBmaW5kX2dvb2RfcGt0X3BvaW50ZXJzKCkgaXNzdWUuDQo+ICAgICAg
+LSBDaGFuZ2UgdGl0bGUgdG8gYWNjb3VudCBmb3IgdGhlIGFib3ZlIGNoYW5nZS4gT2xkIHRpdGxl
+IHdhcw0KPiAgICAgICAgImJwZjogbWFyayByZWdpc3RlcnMgYXMgc2FmZSBvciB1bmtub3duIGlu
+IGFsbCBmcmFtZXMiLg0KPiAgICAgIC0gUmVmYWN0b3IgZmluZF9nb29kX3BrdF9wb2ludGVycyBh
+bmQgbWFya19wdHJfb3JfbnVsbF9yZWdzLg0KPiAgICAgIC0gSSBkaWQgbm90IGtlZXAgWW9uZ2hv
+bmcncyBhY2sgYmVjYXVzZSBvZiB0aGUgYWJvdmUgY2hhbmdlcy4NCj4gICAgQ2hhbmdlcyBpbiB2
+MjoNCj4gICAgICAtIEZpeCBleGFtcGxlIGNvZGVzIGluIGNvbW1pdCBtZXNzYWdlLg0KPiANCj4g
+UGF1bCBDaGFpZ25vbiAoMik6DQo+ICAgIGJwZjogbWFyayByZWdpc3RlcnMgaW4gYWxsIGZyYW1l
+cyBhZnRlciBwa3QvbnVsbCBjaGVja3MNCj4gICAgc2VsZnRlc3RzL2JwZjogdGVzdCBjYXNlcyBm
+b3IgcGt0L251bGwgY2hlY2tzIGluIHN1YnByb2dzDQo+IA0KPiAgIGtlcm5lbC9icGYvdmVyaWZp
+ZXIuYyAgICAgICAgICAgICAgICAgICAgICAgICB8IDc2ICsrKysrKysrKysrLS0tLS0tLS0NCj4g
+ICB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvdmVyaWZpZXIvY2FsbHMuYyAgfCAyNSArKysr
+KysNCj4gICAuLi4vYnBmL3ZlcmlmaWVyL2RpcmVjdF9wYWNrZXRfYWNjZXNzLmMgICAgICAgfCAy
+MiArKysrKysNCj4gICAzIGZpbGVzIGNoYW5nZWQsIDkzIGluc2VydGlvbnMoKyksIDMwIGRlbGV0
+aW9ucygtKQ0KDQpBY2sgZm9yIHRoZSB3aG9sZSBzZXJpZXMuDQpBY2tlZC1ieTogWW9uZ2hvbmcg
+U29uZyA8eWhzQGZiLmNvbT4NCg==
