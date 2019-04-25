@@ -7,220 +7,142 @@ X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEAAFC43219
-	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 16:44:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D46AFC43218
+	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 17:34:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 165F7206BF
-	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 16:44:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 64A5F206BF
+	for <bpf@archiver.kernel.org>; Thu, 25 Apr 2019 17:34:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AyBUVLmV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cwO7KZc+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726280AbfDYQon (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Apr 2019 12:44:43 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:43688 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726071AbfDYQon (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 25 Apr 2019 12:44:43 -0400
-Received: by mail-qt1-f193.google.com with SMTP id g4so798939qtq.10;
-        Thu, 25 Apr 2019 09:44:42 -0700 (PDT)
+        id S1727340AbfDYReq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Apr 2019 13:34:46 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:44519 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727001AbfDYReq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 25 Apr 2019 13:34:46 -0400
+Received: by mail-qt1-f196.google.com with SMTP id s10so979009qtc.11;
+        Thu, 25 Apr 2019 10:34:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=5U4NcU3WQUrdc7FKzdv7bVZ+jm1XDLR4piEP5uZUIeU=;
-        b=AyBUVLmVDlp4fKiC4+Uc0BLgGzXCdYprx0ZVDI/7qx2zyOuQaQV/iE2U1jRR05Io8j
-         cdrpsuHIH5qtEz+ybBtvex5PVqfc/ZidhZegSH3yPsDltMBg/MXi/skHC+cvqcWqY7fI
-         ZRkiDZJxp0FkxnzSP6jXZQO86YvlYCjrK0ktko7pMFKcXRbZrr4rxVUmsdZq7Au6sFBc
-         04No0kTXtZWi8BMz02znEElkJyn291RFRo5RxFP4Fy5/ya8nsq+6IjAyjG207tuGRfMb
-         NaDpJGsoRMBsNxp8EYW72jgy3FA0S91LaqqRvwaEy8PURjoU5Gdg2K93UsMMyuid9B87
-         oGjQ==
+         :cc;
+        bh=fZ4OJXcUKD2iFARS9oIuhkOlaXdIEcLt6qWirrgSTwY=;
+        b=cwO7KZc+ELBryflRD6Pxr1b+GuTdCFETqof3GrZOD1gEZlOXXEu0q+7Ku6Cyn2f1eJ
+         FYKhuSnEm58PuIub/T3bTKDuHzzgR79Bp7ns6XaCBreHtO23k7l0TnT27J4+H1onbWyO
+         Sb0mKLditGNWRUeyFFfayv4q6M4Vip99ElJQnYjvNsaCNCbPp58oL+MJJR5oOfAgWJQ8
+         7poLJbMtTbVo4za1fNcwhfy/EMURZMXtwZrqf4BL1LbyXQ4r9tnzWtAgb26gkKEKM8/+
+         geJufwGExfxwFyVTM6Lh5fATL1PHy7mXaR5K72PjXb7/+iTLHnh4zDhT1gLoeKpcNlN5
+         81Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5U4NcU3WQUrdc7FKzdv7bVZ+jm1XDLR4piEP5uZUIeU=;
-        b=cxYz0aqvO1fNR6cyKzRBNfNulwfZFbu8FgQKmKAbdQT+5xIjxmtfdaLps74fMLrSgE
-         SERcTzF5A7qR4A/hEMk4DfIlwqo8CTgUJqkC652Z2ukO/jf8sGePPsnhoNblILRCll4T
-         QnKWdOhOn952iFl5xljccaFZ1SajIyRrVqTeZJjFUM2un9vb0x09MZMhMPVGBo+1Eb4d
-         Xk9WpOuxTZtvL+lib+A91+azQWZjwBTKDqlU4fYt4oHjCvusgjgw3e2YbGzBsZUrjxs0
-         KHlsVkrVkevj81/XZbTFJABwNdnEBeMIRpN37c56Eav9WeVCFoY1zaQqqMWf7z1C7xHf
-         vwoQ==
-X-Gm-Message-State: APjAAAXxmwnY2ExAzrUa3hmQLVgmESuTGGTpoXC09kqsGRmmLgEB58Qu
-        XKT+DiF/20JtzAUH8C6Tu6CQng4G8av5rZ3RlFs=
-X-Google-Smtp-Source: APXvYqwOMukPNxJD6NopimwbLsGIN3kGQb7l0f46x5sbGEzRiuZ0nGiPBAO5nhQs0h6UiOg/95g+i4Mk5uIr/g6zCCE=
-X-Received: by 2002:a0c:d1fa:: with SMTP id k55mr31463256qvh.229.1556210681634;
- Thu, 25 Apr 2019 09:44:41 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=fZ4OJXcUKD2iFARS9oIuhkOlaXdIEcLt6qWirrgSTwY=;
+        b=nw0zUF24Bv3SnQZeDdiF2fEJYVCiOR6KZfJijuLGkBHGMcdluFv2IzaLdiBl/CEa6o
+         X5ZPvzM8gP8F7ezpbLa5kldvrsUpdTIUZ3i1Fi1jPnO1oMo/ECQIt/faHJykGfvX+o54
+         yqMVhyWjugx9lefHr21kmj1qHzY+MOIh/ua3rd4eANYU4CIRb6Qn8W5o97LYY7XbxBNc
+         QHEM4yfPaeAuQDHGiBIroV167EXdP2jMuYkaBrOH3jSGI6veA+ziSvcXZAtVba5CfGhE
+         ExQ5+LHUbBsmxiHwZ30qMO1St0jBj0b9vXO+4o0SWCfT5w1NrhMbTPUr22UvTaD4UyE6
+         Dstg==
+X-Gm-Message-State: APjAAAVaaykZJTxEKuTyeajUlXQvrSvT5aNWOIEPL/UaXy7Nw3CmUShY
+        se9X+blW1L/FUA1xEepAtupdndLO22O4DoENY7Q=
+X-Google-Smtp-Source: APXvYqw7yzE8drQpqQnO5mVBiwv3EvhHa3WOnFQLYJOOsxquoy5Z9pvYFhE3R7Tp6npp8rjg/Fqs84/vtWrb4tGpe7g=
+X-Received: by 2002:ac8:311a:: with SMTP id g26mr20212839qtb.27.1556213685125;
+ Thu, 25 Apr 2019 10:34:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190425050355.1359736-1-andrii.nakryiko@gmail.com>
- <20190425050355.1359736-4-andrii.nakryiko@gmail.com> <b2eda1ce-4362-4b2a-0c60-7815dd8bb8d4@netronome.com>
- <CAEf4BzZF7zWGP24H7YJzCD3LLy4HVmsyKL-f2+1_N1+wq=ejQw@mail.gmail.com> <7bac058b-ca3c-5e20-ed6e-667a6602db7e@netronome.com>
-In-Reply-To: <7bac058b-ca3c-5e20-ed6e-667a6602db7e@netronome.com>
+References: <155614416551.29379.12486744636513956469.stgit@john-XPS-13-9360>
+In-Reply-To: <155614416551.29379.12486744636513956469.stgit@john-XPS-13-9360>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 25 Apr 2019 09:44:30 -0700
-Message-ID: <CAEf4BzZhinUWSMdVthBM=gWDxHTojbXE15xA63QgcJkZ9d8pig@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 3/3] bpftool: add bash completions for btf command
-To:     Quentin Monnet <quentin.monnet@netronome.com>
-Cc:     Kernel Team <kernel-team@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@fb.com>,
+Date:   Thu, 25 Apr 2019 10:34:34 -0700
+Message-ID: <CAEf4Bza3CMqp5pqtkEFh+3GAHcH+qcKYJhbL02jbauWjD_K0Xg@mail.gmail.com>
+Subject: Re: [bpf-next PATCH] bpf: sockmap, test tool support to skip cgroup arg
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>,
-        Martin Lau <kafai@fb.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>
+        Networking <netdev@vger.kernel.org>, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Apr 25, 2019 at 9:33 AM Quentin Monnet
-<quentin.monnet@netronome.com> wrote:
+On Thu, Apr 25, 2019 at 12:19 AM John Fastabend
+<john.fastabend@gmail.com> wrote:
 >
-> 2019-04-25 09:14 UTC-0700 ~ Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> > On Thu, Apr 25, 2019 at 4:15 AM Quentin Monnet
-> > <quentin.monnet@netronome.com> wrote:
-> >>
-> >> 2019-04-24 22:03 UTC-0700 ~ <andrii.nakryiko@gmail.com>
-> >>> From: Andrii Nakryiko <andriin@fb.com>
-> >>>
-> >>> Add full support for btf command in bash-completion script.
-> >>>
-> >>> Cc: Quentin Monnet <quentin.monnet@netronome.com>
-> >>> Cc: Yonghong Song <yhs@fb.com>
-> >>> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> >>> Cc: Alexei Starovoitov <ast@fb.com>
-> >>> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-> >>> ---
-> >>>  tools/bpf/bpftool/bash-completion/bpftool | 46 +++++++++++++++++++++=
-++
-> >>>  1 file changed, 46 insertions(+)
-> >>>
-> >>> diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bp=
-ftool/bash-completion/bpftool
-> >>> index 9f3ffe1e26ab..030f81bdec6a 100644
-> >>> --- a/tools/bpf/bpftool/bash-completion/bpftool
-> >>> +++ b/tools/bpf/bpftool/bash-completion/bpftool
-> >>> @@ -217,6 +217,7 @@ _bpftool()
-> >>>      done
-> >>>      cur=3D${words[cword]}
-> >>>      prev=3D${words[cword - 1]}
-> >>> +    pprev=3D${words[cword - 2]}
-> >>>
-> >>>      local object=3D${words[1]} command=3D${words[2]}
-> >>>
-> >>> @@ -607,6 +608,51 @@ _bpftool()
-> >>>                      ;;
-> >>>              esac
-> >>>              ;;
-> >>> +        btf)
-> >>> +            local PROG_TYPE=3D'id pinned tag'
-> >>> +            local MAP_TYPE=3D'id pinned'
-> >>> +            case $command in
-> >>> +                dump)
-> >>> +                    case $prev in
-> >>> +                        $command)
-> >>> +                            COMPREPLY+=3D( $( compgen -W "id map pro=
-g file" -- \
-> >>> +                                "$cur" ) )
-> >>> +                            return 0
-> >>> +                            ;;
-> >>> +                        prog)
-> >>> +                            COMPREPLY=3D( $( compgen -W "$PROG_TYPE"=
- -- "$cur" ) )
-> >>> +                            return 0
-> >>> +                            ;;
-> >>> +                        map)
-> >>> +                            COMPREPLY=3D( $( compgen -W "$MAP_TYPE" =
--- "$cur" ) )
-> >>> +                            return 0
-> >>> +                            ;;
-> >>> +                        id)
-> >>> +                            case $pprev in
-> >>> +                                prog)
-> >>> +                                    _bpftool_get_prog_ids
-> >>> +                                    ;;
-> >>> +                                map)
-> >>> +                                    _bpftool_get_map_ids
-> >>> +                                    ;;
-> >>> +                            esac
-> >>> +                            return 0
-> >>> +                            ;;
-> >>> +                    *)
-> >>> +                        if _bpftool_search_list 'map'; then
-> >>> +                            COMPREPLY+=3D( $( compgen -W 'key value =
-kv all' -- \
-> >>> +                                "$cur" ) )
-> >>
-> >> Hi Andrii,
-> >>
-> >> This COMPREPLY will suggest completion for "key|value|kv|all", even if
-> >> one of those words has been used on the command line before already (I
-> >> do not believe this is expected?). What about the following instead?
-> >>
-> >>                             _bpftool_one_of_list 'key value kv all'
-> >
-> > I'll make it more precise and correct. key|value|kv|all should go only
-> > after `bpftool btf dump map id <id> <here>`, I'll do match based on
-> > number of workds, similar to how it's done in prog attach/detach
-> > handling.
+> Its handy to not have to setup a cgroup environment when running
+> test_sockmap with user specified options. This patch setups a cgroup
+> environment, similar to how it is done with the auto test suite, when
+> the user does not provide a cgroup arg.
 >
-> I think that bit was mostly correct. What you have is =E2=80=9Cif we're a=
-fter
-> map and it's not prog/map/id, always complete with key/value/kv/all=E2=80=
-=9D.
+> Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+> ---
+>  tools/testing/selftests/bpf/test_sockmap.c |   24 +++++++++++++++++++++---
+>  1 file changed, 21 insertions(+), 3 deletions(-)
 >
-> What I'm proposing is =E2=80=9C[in the same context], complete just once =
-with
-> only one of key/value/kv/all=E2=80=9D. Like this:
+> diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
+> index 3845144e2c91..11dfb1f10e15 100644
+> --- a/tools/testing/selftests/bpf/test_sockmap.c
+> +++ b/tools/testing/selftests/bpf/test_sockmap.c
+> @@ -1734,6 +1734,7 @@ int main(int argc, char **argv)
+>         int opt, longindex, err, cg_fd = 0;
+>         char *bpf_file = BPF_SOCKMAP_FILENAME;
+>         int test = PING_PONG;
+> +       bool cleanup = true;
 >
->         *)
->                 if _bpftool_search_list 'map'; then
->                         _bpftool_one_of_list 'key value kv all'
->                 fi
->
-> With that you probably do not have to change it for word numbers.
-> Although if you wish to go for them, it's fine too.
+>         if (argc < 2)
+>                 return test_suite(-1);
+> @@ -1773,6 +1774,7 @@ int main(int argc, char **argv)
+>                                         cg_fd, optarg);
+>                                 return cg_fd;
+>                         }
+> +                       cleanup = false;
+>                         break;
+>                 case 'r':
+>                         rate = atoi(optarg);
+> @@ -1818,9 +1820,23 @@ int main(int argc, char **argv)
 
-I still changed it, because in my follow up patches I'll add extra
-options (e.g., to output BTF as compilable C), at which point this
-script will start suggesting key|value|kv|all in the wrong place:
+Code one line above this, assumes that tool in non-test mode always
+has argc > 3. With --cgroup being optional, that's not true anymore,
+right? Or am I missing how it's supposed to be used?
 
-bpftool btf dump map id 111 compilable <cursor-is-here-now>
-
-Now it will suggest `key value kv all`, but it's incorrect, so I want
-to make sure those for go only after `map (id|pinned) <value> <here>`.
-
+>                 return test_suite(cg_fd);
 >
-> >
-> >
-> >>
-> >>> +                        fi
-> >>> +                        return 0
-> >>> +                        ;;
-> >>
-> >> Nit: It seems that the last bloc (the case when $prev matches on "*") =
-is
-> >> not correctly indented, it should be aligned with $command/prog/map/id=
-?
-> >
-> > Copy/pasted from `prog dump`, I wasn't sure if that was intentional,
-> > will fix both.
-> >
-> >>
-> >> Other than this the completion seems good to me.
-> >>
-> >> But note that I did not receive all of your patches, only the cover
-> >> letters (for v1 and v2 of the set) and this one (because I'm directly
-> >> CC-ed?). It looks like the other patches for both v1 and v2 did not ma=
-ke
-> >> it to the mailing lists or to patchwork, so you might want to double
-> >> check and resend if necessary.
-> >
-> > Hm.. yeah, you are right, not sure what happened there. Neither bfp@
-> > and netdev@ didn't get it, while other recipients did. I'll send out
-> > v3 and will see if that still happens.
+>         if (!cg_fd) {
+> -               fprintf(stderr, "%s requires cgroup option: --cgroup <path>\n",
+> -                       argv[0]);
+
+Now that --cgroup is optional, would it make sense to update usage
+function at line 121 to remove "--cgroup <cgroup_path>"?
+
+> -               return -1;
+> +               if (setup_cgroup_environment()) {
+> +                       fprintf(stderr, "ERROR: cgroup env failed\n");
+> +                       return -EINVAL;
+> +               }
+> +
+> +               cg_fd = create_and_get_cgroup(CG_PATH);
+> +               if (cg_fd < 0) {
+> +                       fprintf(stderr,
+> +                               "ERROR: (%i) open cg path failed: %s\n",
+> +                               cg_fd, optarg);
+> +                       return cg_fd;
+> +               }
+> +
+> +               if (join_cgroup(CG_PATH)) {
+> +                       fprintf(stderr, "ERROR: failed to join cgroup\n");
+> +                       return -EINVAL;
+> +               }
+>         }
 >
-> Cool, thanks!
-> Quentin
+>         err = populate_progs(bpf_file);
+> @@ -1839,6 +1855,8 @@ int main(int argc, char **argv)
+>         options.rate = rate;
+>
+>         err = run_options(&options, cg_fd, test);
+> +       if (cleanup)
+> +               cleanup_cgroup_environment();
+>         close(cg_fd);
+>         return err;
+>  }
+>
