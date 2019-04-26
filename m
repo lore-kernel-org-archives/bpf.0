@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8734BC43218
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE45FC4321A
 	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 17:11:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 45D9F212F5
+	by mail.kernel.org (Postfix) with ESMTP id 8F0962146E
 	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 17:11:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="kMOU8pY+"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="fEdKVVgw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726455AbfDZRLS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1726394AbfDZRLS (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 26 Apr 2019 13:11:18 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:35792 "EHLO
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:32988 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726410AbfDZRLN (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 26 Apr 2019 13:11:13 -0400
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3QH2XHq027120
-        for <bpf@vger.kernel.org>; Fri, 26 Apr 2019 10:11:12 -0700
+        by vger.kernel.org with ESMTP id S1726191AbfDZRLQ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 26 Apr 2019 13:11:16 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3QHAis1010533
+        for <bpf@vger.kernel.org>; Fri, 26 Apr 2019 10:11:15 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=+oPsSOn+pIk4gf3tgUx0XBuNz30ff8CHDwPdIYVbnzk=;
- b=kMOU8pY+bfx6ynhV/RaJYCZh8jSf4Ps+sFFDn0NWC1aDLYRwkjMHITiph/C5OtLmYP06
- BxSwENEBObAE/Am+eKfjiechq33DKpiA3/KLiiMUGokOlnnWxBYT2fqJno/Q4//6J5UQ
- LcNH4BnQCGaNYInKHC/heH/ujmcjjJGbvTU= 
+ content-type; s=facebook; bh=bjNd1/9qeyQadGJhQujhAYurPPALMbwB+hEuHsqbwe0=;
+ b=fEdKVVgwbvo5x+CRyhWiDkDfy6Q8+XSw53He0Q197XzEHq8IyFjJf1pN8yNqMReAEuCe
+ 7c+NfuV3d0UfO0l31RYuyQqOeG9ILYWz89mqc6qTjeTPJD3hTYan3WNZBJx3GmTbxqKj
+ jofxN/Xwg3T9QQFUpKLtWNlxUcv2t8HOjEI= 
 Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2s443dgft4-4
+        by mx0a-00082601.pphosted.com with ESMTP id 2s3uwmhvhp-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 26 Apr 2019 10:11:12 -0700
+        for <bpf@vger.kernel.org>; Fri, 26 Apr 2019 10:11:15 -0700
 Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
  mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Fri, 26 Apr 2019 10:11:11 -0700
+ Fri, 26 Apr 2019 10:11:13 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 2D2B329421AA; Fri, 26 Apr 2019 10:11:10 -0700 (PDT)
+        id 5D6ED29421AA; Fri, 26 Apr 2019 10:11:12 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
@@ -49,9 +49,9 @@ CC:     Alexei Starovoitov <ast@fb.com>, Andrii Nakryiko <andriin@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         <kernel-team@fb.com>, Yonghong Song <yhs@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v3 bpf-next 4/6] bpf: Add verifier tests for the bpf_sk_storage
-Date:   Fri, 26 Apr 2019 10:11:10 -0700
-Message-ID: <20190426171110.62344-1-kafai@fb.com>
+Subject: [PATCH v3 bpf-next 5/6] bpf: Add BPF_MAP_TYPE_SK_STORAGE test to test_maps
+Date:   Fri, 26 Apr 2019 10:11:12 -0700
+Message-ID: <20190426171112.62405-1-kafai@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190426171102.61757-1-kafai@fb.com>
 References: <20190426171102.61757-1-kafai@fb.com>
@@ -67,230 +67,786 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds verifier tests for the bpf_sk_storage:
-1. ARG_PTR_TO_MAP_VALUE_OR_NULL
-2. Map and helper compatibility (e.g. disallow bpf_map_loookup_elem)
-
-It also takes this chance to remove the unused struct btf_raw_data.
+This patch adds BPF_MAP_TYPE_SK_STORAGE test to test_maps.
+The src file is rather long, so it is put into another dir map_tests/
+and compile like the current prog_tests/ does.  Other existing
+tests in test_maps can also be re-factored into map_tests/ in the
+future.
 
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- tools/testing/selftests/bpf/test_verifier.c |  42 +++++--
- tools/testing/selftests/bpf/verifier/sock.c | 116 ++++++++++++++++++++
- 2 files changed, 151 insertions(+), 7 deletions(-)
+ tools/testing/selftests/bpf/Makefile          |  25 +-
+ .../selftests/bpf/map_tests/sk_storage_map.c  | 638 ++++++++++++++++++
+ tools/testing/selftests/bpf/test_maps.c       |  18 +-
+ tools/testing/selftests/bpf/test_maps.h       |  17 +
+ 4 files changed, 688 insertions(+), 10 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/map_tests/sk_storage_map.c
+ create mode 100644 tools/testing/selftests/bpf/test_maps.h
 
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index ed9e894afef3..bff28b68f387 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -52,7 +52,7 @@
- #define MAX_INSNS	BPF_MAXINSNS
- #define MAX_TEST_INSNS	1000000
- #define MAX_FIXUPS	8
--#define MAX_NR_MAPS	17
-+#define MAX_NR_MAPS	18
- #define MAX_TEST_RUNS	8
- #define POINTER_VALUE	0xcafe4all
- #define TEST_DATA_LEN	64
-@@ -85,6 +85,7 @@ struct bpf_test {
- 	int fixup_map_array_ro[MAX_FIXUPS];
- 	int fixup_map_array_wo[MAX_FIXUPS];
- 	int fixup_map_array_small[MAX_FIXUPS];
-+	int fixup_sk_storage_map[MAX_FIXUPS];
- 	const char *errstr;
- 	const char *errstr_unpriv;
- 	uint32_t retval, retval_unpriv, insn_processed;
-@@ -509,12 +510,6 @@ static int create_cgroup_storage(bool percpu)
- #define BTF_MEMBER_ENC(name, type, bits_offset) \
- 	(name), (type), (bits_offset)
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index f9d83ba7843e..66f2dca1dee1 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -74,6 +74,8 @@ all: $(TEST_CUSTOM_PROGS)
+ $(OUTPUT)/urandom_read: $(OUTPUT)/%: %.c
+ 	$(CC) -o $@ $< -Wl,--build-id
  
--struct btf_raw_data {
--	__u32 raw_types[64];
--	const char *str_sec;
--	__u32 str_sec_size;
--};
--
- /* struct bpf_spin_lock {
-  *   int val;
-  * };
-@@ -589,6 +584,31 @@ static int create_map_spin_lock(void)
- 	return fd;
- }
- 
-+static int create_sk_storage_map(void)
-+{
-+	struct bpf_create_map_attr attr = {
-+		.name = "test_map",
-+		.map_type = BPF_MAP_TYPE_SK_STORAGE,
-+		.key_size = 4,
-+		.value_size = 8,
-+		.max_entries = 0,
-+		.map_flags = BPF_F_NO_PREALLOC,
-+		.btf_key_type_id = 1,
-+		.btf_value_type_id = 3,
-+	};
-+	int fd, btf_fd;
++$(OUTPUT)/test_maps: map_tests/*.c
 +
-+	btf_fd = load_btf();
-+	if (btf_fd < 0)
-+		return -1;
-+	attr.btf_fd = btf_fd;
-+	fd = bpf_create_map_xattr(&attr);
-+	close(attr.btf_fd);
-+	if (fd < 0)
-+		printf("Failed to create sk_storage_map\n");
-+	return fd;
+ BPFOBJ := $(OUTPUT)/libbpf.a
+ 
+ $(TEST_GEN_PROGS): $(BPFOBJ)
+@@ -232,6 +234,27 @@ $(PROG_TESTS_H): $(PROG_TESTS_DIR) $(PROG_TESTS_FILES)
+ 		  echo '#endif' \
+ 		 ) > $(PROG_TESTS_H))
+ 
++TEST_MAPS_CFLAGS := -I. -I$(OUTPUT)
++MAP_TESTS_DIR = $(OUTPUT)/map_tests
++$(MAP_TESTS_DIR):
++	mkdir -p $@
++MAP_TESTS_H := $(MAP_TESTS_DIR)/tests.h
++test_maps.c: $(MAP_TESTS_H)
++$(OUTPUT)/test_maps: CFLAGS += $(TEST_MAPS_CFLAGS)
++MAP_TESTS_FILES := $(wildcard map_tests/*.c)
++$(MAP_TESTS_H): $(MAP_TESTS_DIR) $(MAP_TESTS_FILES)
++	$(shell ( cd map_tests/; \
++		  echo '/* Generated header, do not edit */'; \
++		  echo '#ifdef DECLARE'; \
++		  ls *.c 2> /dev/null | \
++			sed -e 's@\([^\.]*\)\.c@extern void test_\1(void);@'; \
++		  echo '#endif'; \
++		  echo '#ifdef CALL'; \
++		  ls *.c 2> /dev/null | \
++			sed -e 's@\([^\.]*\)\.c@test_\1();@'; \
++		  echo '#endif' \
++		 ) > $(MAP_TESTS_H))
++
+ VERIFIER_TESTS_H := $(OUTPUT)/verifier/tests.h
+ test_verifier.c: $(VERIFIER_TESTS_H)
+ $(OUTPUT)/test_verifier: CFLAGS += $(TEST_VERIFIER_CFLAGS)
+@@ -251,4 +274,4 @@ $(OUTPUT)/verifier/tests.h: $(VERIFIER_TESTS_DIR) $(VERIFIER_TEST_FILES)
+ 		 ) > $(VERIFIER_TESTS_H))
+ 
+ EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(ALU32_BUILD_DIR) \
+-	$(VERIFIER_TESTS_H) $(PROG_TESTS_H)
++	$(VERIFIER_TESTS_H) $(PROG_TESTS_H) $(MAP_TESTS_H)
+diff --git a/tools/testing/selftests/bpf/map_tests/sk_storage_map.c b/tools/testing/selftests/bpf/map_tests/sk_storage_map.c
+new file mode 100644
+index 000000000000..f66e4a3ee6e4
+--- /dev/null
++++ b/tools/testing/selftests/bpf/map_tests/sk_storage_map.c
+@@ -0,0 +1,638 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2019 Facebook  */
++#include <linux/compiler.h>
++#include <linux/err.h>
++
++#include <sys/resource.h>
++#include <sys/socket.h>
++#include <sys/types.h>
++#include <linux/btf.h>
++#include <unistd.h>
++#include <signal.h>
++#include <errno.h>
++#include <string.h>
++#include <pthread.h>
++
++#include <bpf/bpf.h>
++#include <bpf/libbpf.h>
++
++#include <test_maps.h>
++
++static struct bpf_create_map_attr xattr = {
++	.name = "sk_storage_map",
++	.map_type = BPF_MAP_TYPE_SK_STORAGE,
++	.map_flags = BPF_F_NO_PREALLOC,
++	.max_entries = 0,
++	.key_size = 4,
++	.value_size = 8,
++	.btf_key_type_id = 1,
++	.btf_value_type_id = 3,
++	.btf_fd = -1,
++};
++
++static unsigned int nr_sk_threads_done;
++static unsigned int nr_sk_threads_err;
++static unsigned int nr_sk_per_thread = 4096;
++static unsigned int nr_sk_threads = 4;
++static int sk_storage_map = -1;
++static unsigned int stop;
++static int runtime_s = 5;
++
++static bool is_stopped(void)
++{
++	return READ_ONCE(stop);
 +}
 +
- static char bpf_vlog[UINT_MAX >> 8];
- 
- static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
-@@ -611,6 +631,7 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
- 	int *fixup_map_array_ro = test->fixup_map_array_ro;
- 	int *fixup_map_array_wo = test->fixup_map_array_wo;
- 	int *fixup_map_array_small = test->fixup_map_array_small;
-+	int *fixup_sk_storage_map = test->fixup_sk_storage_map;
- 
- 	if (test->fill_helper) {
- 		test->fill_insns = calloc(MAX_TEST_INSNS, sizeof(struct bpf_insn));
-@@ -765,6 +786,13 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
- 			fixup_map_array_small++;
- 		} while (*fixup_map_array_small);
- 	}
-+	if (*fixup_sk_storage_map) {
-+		map_fds[17] = create_sk_storage_map();
-+		do {
-+			prog[*fixup_sk_storage_map].imm = map_fds[17];
-+			fixup_sk_storage_map++;
-+		} while (*fixup_sk_storage_map);
++static unsigned int threads_err(void)
++{
++	return READ_ONCE(nr_sk_threads_err);
++}
++
++static void notify_thread_err(void)
++{
++	__sync_add_and_fetch(&nr_sk_threads_err, 1);
++}
++
++static bool wait_for_threads_err(void)
++{
++	while (!is_stopped() && !threads_err())
++		usleep(500);
++
++	return !is_stopped();
++}
++
++static unsigned int threads_done(void)
++{
++	return READ_ONCE(nr_sk_threads_done);
++}
++
++static void notify_thread_done(void)
++{
++	__sync_add_and_fetch(&nr_sk_threads_done, 1);
++}
++
++static void notify_thread_redo(void)
++{
++	__sync_sub_and_fetch(&nr_sk_threads_done, 1);
++}
++
++static bool wait_for_threads_done(void)
++{
++	while (threads_done() != nr_sk_threads && !is_stopped() &&
++	       !threads_err())
++		usleep(50);
++
++	return !is_stopped() && !threads_err();
++}
++
++static bool wait_for_threads_redo(void)
++{
++	while (threads_done() && !is_stopped() && !threads_err())
++		usleep(50);
++
++	return !is_stopped() && !threads_err();
++}
++
++static bool wait_for_map(void)
++{
++	while (READ_ONCE(sk_storage_map) == -1 && !is_stopped())
++		usleep(50);
++
++	return !is_stopped();
++}
++
++static bool wait_for_map_close(void)
++{
++	while (READ_ONCE(sk_storage_map) != -1 && !is_stopped())
++		;
++
++	return !is_stopped();
++}
++
++static int load_btf(void)
++{
++#define BTF_INFO_ENC(kind, kind_flag, vlen) \
++	((!!(kind_flag) << 31) | ((kind) << 24) | ((vlen) & BTF_MAX_VLEN))
++#define BTF_TYPE_ENC(name, info, size_or_type) \
++	(name), (info), (size_or_type)
++#define BTF_INT_ENC(encoding, bits_offset, nr_bits) \
++	((encoding) << 24 | (bits_offset) << 16 | (nr_bits))
++#define BTF_TYPE_INT_ENC(name, encoding, bits_offset, bits, sz) \
++	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_INT, 0, 0), sz),	\
++	BTF_INT_ENC(encoding, bits_offset, bits)
++#define BTF_MEMBER_ENC(name, type, bits_offset) \
++	(name), (type), (bits_offset)
++
++	const char btf_str_sec[] = "\0bpf_spin_lock\0val\0cnt\0l";
++	__u32 btf_raw_types[] = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),  /* [1] */
++		/* struct bpf_spin_lock */                      /* [2] */
++		BTF_TYPE_ENC(1, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 1), 4),
++		BTF_MEMBER_ENC(15, 1, 0), /* int val; */
++		/* struct val */                                /* [3] */
++		BTF_TYPE_ENC(15, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 2), 8),
++		BTF_MEMBER_ENC(19, 1, 0), /* int cnt; */
++		BTF_MEMBER_ENC(23, 2, 32),/* struct bpf_spin_lock l; */
++	};
++	struct btf_header btf_hdr = {
++		.magic = BTF_MAGIC,
++		.version = BTF_VERSION,
++		.hdr_len = sizeof(struct btf_header),
++		.type_len = sizeof(btf_raw_types),
++		.str_off = sizeof(btf_raw_types),
++		.str_len = sizeof(btf_str_sec),
++	};
++	__u8 raw_btf[sizeof(struct btf_header) + sizeof(btf_raw_types) +
++		     sizeof(btf_str_sec)];
++
++	memcpy(raw_btf, &btf_hdr, sizeof(btf_hdr));
++	memcpy(raw_btf + sizeof(btf_hdr), btf_raw_types, sizeof(btf_raw_types));
++	memcpy(raw_btf + sizeof(btf_hdr) + sizeof(btf_raw_types),
++	       btf_str_sec, sizeof(btf_str_sec));
++
++	return bpf_load_btf(raw_btf, sizeof(raw_btf), 0, 0, 0);
++}
++
++static int create_sk_storage_map(void)
++{
++	int btf_fd, map_fd;
++
++	btf_fd = load_btf();
++	CHECK(btf_fd == -1, "bpf_load_btf", "btf_fd:%d errno:%d\n",
++	      btf_fd, errno);
++	xattr.btf_fd = btf_fd;
++
++	map_fd = bpf_create_map_xattr(&xattr);
++	xattr.btf_fd = -1;
++	close(btf_fd);
++	CHECK(map_fd == -1,
++	      "bpf_create_map_xattr()", "errno:%d\n", errno);
++
++	return map_fd;
++}
++
++static void *insert_close_thread(void *arg)
++{
++	struct {
++		int cnt;
++		int lock;
++	} value = { .cnt = 0xeB9F, .lock = 0, };
++	int i, map_fd, err, *sk_fds;
++
++	sk_fds = malloc(sizeof(*sk_fds) * nr_sk_per_thread);
++	if (!sk_fds) {
++		notify_thread_err();
++		return ERR_PTR(-ENOMEM);
 +	}
++
++	for (i = 0; i < nr_sk_per_thread; i++)
++		sk_fds[i] = -1;
++
++	while (!is_stopped()) {
++		if (!wait_for_map())
++			goto close_all;
++
++		map_fd = READ_ONCE(sk_storage_map);
++		for (i = 0; i < nr_sk_per_thread && !is_stopped(); i++) {
++			sk_fds[i] = socket(AF_INET6, SOCK_STREAM, 0);
++			if (sk_fds[i] == -1) {
++				err = -errno;
++				fprintf(stderr, "socket(): errno:%d\n", errno);
++				goto errout;
++			}
++			err = bpf_map_update_elem(map_fd, &sk_fds[i], &value,
++						  BPF_NOEXIST);
++			if (err) {
++				err = -errno;
++				fprintf(stderr,
++					"bpf_map_update_elem(): errno:%d\n",
++					errno);
++				goto errout;
++			}
++		}
++
++		notify_thread_done();
++		wait_for_map_close();
++
++close_all:
++		for (i = 0; i < nr_sk_per_thread; i++) {
++			close(sk_fds[i]);
++			sk_fds[i] = -1;
++		}
++
++		notify_thread_redo();
++	}
++
++	free(sk_fds);
++	return NULL;
++
++errout:
++	for (i = 0; i < nr_sk_per_thread && sk_fds[i] != -1; i++)
++		close(sk_fds[i]);
++	free(sk_fds);
++	notify_thread_err();
++	return ERR_PTR(err);
++}
++
++static int do_sk_storage_map_stress_free(void)
++{
++	int i, map_fd = -1, err = 0, nr_threads_created = 0;
++	pthread_t *sk_thread_ids;
++	void *thread_ret;
++
++	sk_thread_ids = malloc(sizeof(pthread_t) * nr_sk_threads);
++	if (!sk_thread_ids) {
++		fprintf(stderr, "malloc(sk_threads): NULL\n");
++		return -ENOMEM;
++	}
++
++	for (i = 0; i < nr_sk_threads; i++) {
++		err = pthread_create(&sk_thread_ids[i], NULL,
++				     insert_close_thread, NULL);
++		if (err) {
++			err = -errno;
++			goto done;
++		}
++		nr_threads_created++;
++	}
++
++	while (!is_stopped()) {
++		map_fd = create_sk_storage_map();
++		WRITE_ONCE(sk_storage_map, map_fd);
++
++		if (!wait_for_threads_done())
++			break;
++
++		WRITE_ONCE(sk_storage_map, -1);
++		close(map_fd);
++		map_fd = -1;
++
++		if (!wait_for_threads_redo())
++			break;
++	}
++
++done:
++	WRITE_ONCE(stop, 1);
++	for (i = 0; i < nr_threads_created; i++) {
++		pthread_join(sk_thread_ids[i], &thread_ret);
++		if (IS_ERR(thread_ret) && !err) {
++			err = PTR_ERR(thread_ret);
++			fprintf(stderr, "threads#%u: err:%d\n", i, err);
++		}
++	}
++	free(sk_thread_ids);
++
++	if (map_fd != -1)
++		close(map_fd);
++
++	return err;
++}
++
++static void *update_thread(void *arg)
++{
++	struct {
++		int cnt;
++		int lock;
++	} value = { .cnt = 0xeB9F, .lock = 0, };
++	int map_fd = READ_ONCE(sk_storage_map);
++	int sk_fd = *(int *)arg;
++	int err = 0; /* Suppress compiler false alarm */
++
++	while (!is_stopped()) {
++		err = bpf_map_update_elem(map_fd, &sk_fd, &value, 0);
++		if (err && errno != EAGAIN) {
++			err = -errno;
++			fprintf(stderr, "bpf_map_update_elem: %d %d\n",
++				err, errno);
++			break;
++		}
++	}
++
++	if (!is_stopped()) {
++		notify_thread_err();
++		return ERR_PTR(err);
++	}
++
++	return NULL;
++}
++
++static void *delete_thread(void *arg)
++{
++	int map_fd = READ_ONCE(sk_storage_map);
++	int sk_fd = *(int *)arg;
++	int err = 0; /* Suppress compiler false alarm */
++
++	while (!is_stopped()) {
++		err = bpf_map_delete_elem(map_fd, &sk_fd);
++		if (err && errno != ENOENT) {
++			err = -errno;
++			fprintf(stderr, "bpf_map_delete_elem: %d %d\n",
++				err, errno);
++			break;
++		}
++	}
++
++	if (!is_stopped()) {
++		notify_thread_err();
++		return ERR_PTR(err);
++	}
++
++	return NULL;
++}
++
++static int do_sk_storage_map_stress_change(void)
++{
++	int i, sk_fd, map_fd = -1, err = 0, nr_threads_created = 0;
++	pthread_t *sk_thread_ids;
++	void *thread_ret;
++
++	sk_thread_ids = malloc(sizeof(pthread_t) * nr_sk_threads);
++	if (!sk_thread_ids) {
++		fprintf(stderr, "malloc(sk_threads): NULL\n");
++		return -ENOMEM;
++	}
++
++	sk_fd = socket(AF_INET6, SOCK_STREAM, 0);
++	if (sk_fd == -1) {
++		err = -errno;
++		goto done;
++	}
++
++	map_fd = create_sk_storage_map();
++	WRITE_ONCE(sk_storage_map, map_fd);
++
++	for (i = 0; i < nr_sk_threads; i++) {
++		if (i & 0x1)
++			err = pthread_create(&sk_thread_ids[i], NULL,
++					     update_thread, &sk_fd);
++		else
++			err = pthread_create(&sk_thread_ids[i], NULL,
++					     delete_thread, &sk_fd);
++		if (err) {
++			err = -errno;
++			goto done;
++		}
++		nr_threads_created++;
++	}
++
++	wait_for_threads_err();
++
++done:
++	WRITE_ONCE(stop, 1);
++	for (i = 0; i < nr_threads_created; i++) {
++		pthread_join(sk_thread_ids[i], &thread_ret);
++		if (IS_ERR(thread_ret) && !err) {
++			err = PTR_ERR(thread_ret);
++			fprintf(stderr, "threads#%u: err:%d\n", i, err);
++		}
++	}
++	free(sk_thread_ids);
++
++	if (sk_fd != -1)
++		close(sk_fd);
++	close(map_fd);
++
++	return err;
++}
++
++static void stop_handler(int signum)
++{
++	if (signum != SIGALRM)
++		printf("stopping...\n");
++	WRITE_ONCE(stop, 1);
++}
++
++#define BPF_SK_STORAGE_MAP_TEST_NR_THREADS "BPF_SK_STORAGE_MAP_TEST_NR_THREADS"
++#define BPF_SK_STORAGE_MAP_TEST_SK_PER_THREAD "BPF_SK_STORAGE_MAP_TEST_SK_PER_THREAD"
++#define BPF_SK_STORAGE_MAP_TEST_RUNTIME_S "BPF_SK_STORAGE_MAP_TEST_RUNTIME_S"
++#define BPF_SK_STORAGE_MAP_TEST_NAME "BPF_SK_STORAGE_MAP_TEST_NAME"
++
++static void test_sk_storage_map_stress_free(void)
++{
++	struct rlimit rlim_old, rlim_new = {};
++	const char *env_opt;
++	int err;
++
++	getrlimit(RLIMIT_NOFILE, &rlim_old);
++
++	env_opt = getenv(BPF_SK_STORAGE_MAP_TEST_NR_THREADS);
++	if (env_opt)
++		nr_sk_threads = atoi(env_opt);
++
++	env_opt = getenv(BPF_SK_STORAGE_MAP_TEST_SK_PER_THREAD);
++	if (env_opt)
++		nr_sk_per_thread = atoi(env_opt);
++
++	env_opt = getenv(BPF_SK_STORAGE_MAP_TEST_RUNTIME_S);
++	if (env_opt)
++		runtime_s = atoi(env_opt);
++
++	signal(SIGTERM, stop_handler);
++	signal(SIGINT, stop_handler);
++	if (runtime_s > 0) {
++		signal(SIGALRM, stop_handler);
++		alarm(runtime_s);
++	}
++
++	if (rlim_old.rlim_cur < nr_sk_threads * nr_sk_per_thread) {
++		rlim_new.rlim_cur = nr_sk_threads * nr_sk_per_thread + 128;
++		rlim_new.rlim_max = rlim_new.rlim_cur + 128;
++		err = setrlimit(RLIMIT_NOFILE, &rlim_new);
++		CHECK(err, "setrlimit(RLIMIT_NOFILE)", "rlim_new:%lu errno:%d",
++		      rlim_new.rlim_cur, errno);
++	}
++
++	err = do_sk_storage_map_stress_free();
++
++	signal(SIGTERM, SIG_DFL);
++	signal(SIGINT, SIG_DFL);
++	if (runtime_s > 0) {
++		signal(SIGALRM, SIG_DFL);
++		alarm(0);
++	}
++
++	if (rlim_new.rlim_cur)
++		setrlimit(RLIMIT_NOFILE, &rlim_old);
++
++	CHECK(err, "test_sk_storage_map_stress_free", "err:%d\n", err);
++}
++
++static void test_sk_storage_map_stress_change(void)
++{
++	const char *env_opt;
++	int err;
++
++	env_opt = getenv(BPF_SK_STORAGE_MAP_TEST_NR_THREADS);
++	if (env_opt)
++		nr_sk_threads = atoi(env_opt);
++
++	env_opt = getenv(BPF_SK_STORAGE_MAP_TEST_RUNTIME_S);
++	if (env_opt)
++		runtime_s = atoi(env_opt);
++
++	signal(SIGTERM, stop_handler);
++	signal(SIGINT, stop_handler);
++	if (runtime_s > 0) {
++		signal(SIGALRM, stop_handler);
++		alarm(runtime_s);
++	}
++
++	err = do_sk_storage_map_stress_change();
++
++	signal(SIGTERM, SIG_DFL);
++	signal(SIGINT, SIG_DFL);
++	if (runtime_s > 0) {
++		signal(SIGALRM, SIG_DFL);
++		alarm(0);
++	}
++
++	CHECK(err, "test_sk_storage_map_stress_change", "err:%d\n", err);
++}
++
++static void test_sk_storage_map_basic(void)
++{
++	struct {
++		int cnt;
++		int lock;
++	} value = { .cnt = 0xeB9f, .lock = 0, }, lookup_value;
++	struct bpf_create_map_attr bad_xattr;
++	int btf_fd, map_fd, sk_fd, err;
++
++	btf_fd = load_btf();
++	CHECK(btf_fd == -1, "bpf_load_btf", "btf_fd:%d errno:%d\n",
++	      btf_fd, errno);
++	xattr.btf_fd = btf_fd;
++
++	sk_fd = socket(AF_INET6, SOCK_STREAM, 0);
++	CHECK(sk_fd == -1, "socket()", "sk_fd:%d errno:%d\n",
++	      sk_fd, errno);
++
++	map_fd = bpf_create_map_xattr(&xattr);
++	CHECK(map_fd == -1, "bpf_create_map_xattr(good_xattr)",
++	      "map_fd:%d errno:%d\n", map_fd, errno);
++
++	/* Add new elem */
++	memcpy(&lookup_value, &value, sizeof(value));
++	err = bpf_map_update_elem(map_fd, &sk_fd, &value,
++				  BPF_NOEXIST | BPF_F_LOCK);
++	CHECK(err, "bpf_map_update_elem(BPF_NOEXIST|BPF_F_LOCK)",
++	      "err:%d errno:%d\n", err, errno);
++	err = bpf_map_lookup_elem_flags(map_fd, &sk_fd, &lookup_value,
++					BPF_F_LOCK);
++	CHECK(err || lookup_value.cnt != value.cnt,
++	      "bpf_map_lookup_elem_flags(BPF_F_LOCK)",
++	      "err:%d errno:%d cnt:%x(%x)\n",
++	      err, errno, lookup_value.cnt, value.cnt);
++
++	/* Bump the cnt and update with BPF_EXIST | BPF_F_LOCK */
++	value.cnt += 1;
++	err = bpf_map_update_elem(map_fd, &sk_fd, &value,
++				  BPF_EXIST | BPF_F_LOCK);
++	CHECK(err, "bpf_map_update_elem(BPF_EXIST|BPF_F_LOCK)",
++	      "err:%d errno:%d\n", err, errno);
++	err = bpf_map_lookup_elem_flags(map_fd, &sk_fd, &lookup_value,
++					BPF_F_LOCK);
++	CHECK(err || lookup_value.cnt != value.cnt,
++	      "bpf_map_lookup_elem_flags(BPF_F_LOCK)",
++	      "err:%d errno:%d cnt:%x(%x)\n",
++	      err, errno, lookup_value.cnt, value.cnt);
++
++	/* Bump the cnt and update with BPF_EXIST */
++	value.cnt += 1;
++	err = bpf_map_update_elem(map_fd, &sk_fd, &value, BPF_EXIST);
++	CHECK(err, "bpf_map_update_elem(BPF_EXIST)",
++	      "err:%d errno:%d\n", err, errno);
++	err = bpf_map_lookup_elem_flags(map_fd, &sk_fd, &lookup_value,
++					BPF_F_LOCK);
++	CHECK(err || lookup_value.cnt != value.cnt,
++	      "bpf_map_lookup_elem_flags(BPF_F_LOCK)",
++	      "err:%d errno:%d cnt:%x(%x)\n",
++	      err, errno, lookup_value.cnt, value.cnt);
++
++	/* Update with BPF_NOEXIST */
++	value.cnt += 1;
++	err = bpf_map_update_elem(map_fd, &sk_fd, &value,
++				  BPF_NOEXIST | BPF_F_LOCK);
++	CHECK(!err || errno != EEXIST,
++	      "bpf_map_update_elem(BPF_NOEXIST|BPF_F_LOCK)",
++	      "err:%d errno:%d\n", err, errno);
++	err = bpf_map_update_elem(map_fd, &sk_fd, &value, BPF_NOEXIST);
++	CHECK(!err || errno != EEXIST, "bpf_map_update_elem(BPF_NOEXIST)",
++	      "err:%d errno:%d\n", err, errno);
++	value.cnt -= 1;
++	err = bpf_map_lookup_elem_flags(map_fd, &sk_fd, &lookup_value,
++					BPF_F_LOCK);
++	CHECK(err || lookup_value.cnt != value.cnt,
++	      "bpf_map_lookup_elem_flags(BPF_F_LOCK)",
++	      "err:%d errno:%d cnt:%x(%x)\n",
++	      err, errno, lookup_value.cnt, value.cnt);
++
++	/* Bump the cnt again and update with map_flags == 0 */
++	value.cnt += 1;
++	err = bpf_map_update_elem(map_fd, &sk_fd, &value, 0);
++	CHECK(err, "bpf_map_update_elem()", "err:%d errno:%d\n",
++	      err, errno);
++	err = bpf_map_lookup_elem_flags(map_fd, &sk_fd, &lookup_value,
++					BPF_F_LOCK);
++	CHECK(err || lookup_value.cnt != value.cnt,
++	      "bpf_map_lookup_elem_flags(BPF_F_LOCK)",
++	      "err:%d errno:%d cnt:%x(%x)\n",
++	      err, errno, lookup_value.cnt, value.cnt);
++
++	/* Test delete elem */
++	err = bpf_map_delete_elem(map_fd, &sk_fd);
++	CHECK(err, "bpf_map_delete_elem()", "err:%d errno:%d\n",
++	      err, errno);
++	err = bpf_map_lookup_elem_flags(map_fd, &sk_fd, &lookup_value,
++					BPF_F_LOCK);
++	CHECK(!err || errno != ENOENT,
++	      "bpf_map_lookup_elem_flags(BPF_F_LOCK)",
++	      "err:%d errno:%d\n", err, errno);
++	err = bpf_map_delete_elem(map_fd, &sk_fd);
++	CHECK(!err || errno != ENOENT, "bpf_map_delete_elem()",
++	      "err:%d errno:%d\n", err, errno);
++
++	memcpy(&bad_xattr, &xattr, sizeof(xattr));
++	bad_xattr.btf_key_type_id = 0;
++	err = bpf_create_map_xattr(&bad_xattr);
++	CHECK(!err || errno != EINVAL, "bap_create_map_xattr(bad_xattr)",
++	      "err:%d errno:%d\n", err, errno);
++
++	memcpy(&bad_xattr, &xattr, sizeof(xattr));
++	bad_xattr.btf_key_type_id = 3;
++	err = bpf_create_map_xattr(&bad_xattr);
++	CHECK(!err || errno != EINVAL, "bap_create_map_xattr(bad_xattr)",
++	      "err:%d errno:%d\n", err, errno);
++
++	memcpy(&bad_xattr, &xattr, sizeof(xattr));
++	bad_xattr.max_entries = 1;
++	err = bpf_create_map_xattr(&bad_xattr);
++	CHECK(!err || errno != EINVAL, "bap_create_map_xattr(bad_xattr)",
++	      "err:%d errno:%d\n", err, errno);
++
++	memcpy(&bad_xattr, &xattr, sizeof(xattr));
++	bad_xattr.map_flags = 0;
++	err = bpf_create_map_xattr(&bad_xattr);
++	CHECK(!err || errno != EINVAL, "bap_create_map_xattr(bad_xattr)",
++	      "err:%d errno:%d\n", err, errno);
++
++	xattr.btf_fd = -1;
++	close(btf_fd);
++	close(map_fd);
++	close(sk_fd);
++}
++
++void test_sk_storage_map(void)
++{
++	const char *test_name;
++
++	test_name = getenv(BPF_SK_STORAGE_MAP_TEST_NAME);
++
++	if (!test_name || !strcmp(test_name, "basic"))
++		test_sk_storage_map_basic();
++	if (!test_name || !strcmp(test_name, "stress_free"))
++		test_sk_storage_map_stress_free();
++	if (!test_name || !strcmp(test_name, "stress_change"))
++		test_sk_storage_map_stress_change();
++}
+diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+index 3c627771f965..246f745cb006 100644
+--- a/tools/testing/selftests/bpf/test_maps.c
++++ b/tools/testing/selftests/bpf/test_maps.c
+@@ -27,6 +27,7 @@
+ 
+ #include "bpf_util.h"
+ #include "bpf_rlimit.h"
++#include "test_maps.h"
+ 
+ #ifndef ENOTSUPP
+ #define ENOTSUPP 524
+@@ -36,15 +37,6 @@ static int skips;
+ 
+ static int map_flags;
+ 
+-#define CHECK(condition, tag, format...) ({				\
+-	int __ret = !!(condition);					\
+-	if (__ret) {							\
+-		printf("%s(%d):FAIL:%s ", __func__, __LINE__, tag);	\
+-		printf(format);						\
+-		exit(-1);						\
+-	}								\
+-})
+-
+ static void test_hashmap(unsigned int task, void *data)
+ {
+ 	long long key, next_key, first_key, value;
+@@ -1703,6 +1695,10 @@ static void run_all_tests(void)
+ 	test_map_in_map();
  }
  
- static int set_admin(bool admin)
-diff --git a/tools/testing/selftests/bpf/verifier/sock.c b/tools/testing/selftests/bpf/verifier/sock.c
-index 416436231fab..b31cd2cf50d0 100644
---- a/tools/testing/selftests/bpf/verifier/sock.c
-+++ b/tools/testing/selftests/bpf/verifier/sock.c
-@@ -382,3 +382,119 @@
- 	.result = REJECT,
- 	.errstr = "reference has not been acquired before",
- },
-+{
-+	"sk_storage_get(map, skb->sk, NULL, 0): value == NULL",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, offsetof(struct __sk_buff, sk)),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_1, 0, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	BPF_EMIT_CALL(BPF_FUNC_sk_fullsock),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_IMM(BPF_REG_4, 0),
-+	BPF_MOV64_IMM(BPF_REG_3, 0),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	BPF_EMIT_CALL(BPF_FUNC_sk_storage_get),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_sk_storage_map = { 11 },
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.result = ACCEPT,
-+},
-+{
-+	"sk_storage_get(map, skb->sk, 1, 1): value == 1",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, offsetof(struct __sk_buff, sk)),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_1, 0, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	BPF_EMIT_CALL(BPF_FUNC_sk_fullsock),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_IMM(BPF_REG_4, 1),
-+	BPF_MOV64_IMM(BPF_REG_3, 1),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	BPF_EMIT_CALL(BPF_FUNC_sk_storage_get),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_sk_storage_map = { 11 },
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.result = REJECT,
-+	.errstr = "R3 type=inv expected=fp",
-+},
-+{
-+	"sk_storage_get(map, skb->sk, &stack_value, 1): stack_value",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_2, 0),
-+	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_2, -8),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, offsetof(struct __sk_buff, sk)),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_1, 0, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	BPF_EMIT_CALL(BPF_FUNC_sk_fullsock),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_IMM(BPF_REG_4, 1),
-+	BPF_MOV64_REG(BPF_REG_3, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_3, -8),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	BPF_EMIT_CALL(BPF_FUNC_sk_storage_get),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_sk_storage_map = { 14 },
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.result = ACCEPT,
-+},
-+{
-+	"sk_storage_get(map, skb->sk, &stack_value, 1): partially init stack_value",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_2, 0),
-+	BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_2, -8),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, offsetof(struct __sk_buff, sk)),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_1, 0, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	BPF_EMIT_CALL(BPF_FUNC_sk_fullsock),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_IMM(BPF_REG_4, 1),
-+	BPF_MOV64_REG(BPF_REG_3, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_3, -8),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	BPF_EMIT_CALL(BPF_FUNC_sk_storage_get),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_sk_storage_map = { 14 },
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.result = REJECT,
-+	.errstr = "invalid indirect read from stack",
-+},
-+{
-+	"bpf_map_lookup_elem(smap, &key)",
-+	.insns = {
-+	BPF_ST_MEM(BPF_W, BPF_REG_10, -4, 0),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -4),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_sk_storage_map = { 3 },
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.result = REJECT,
-+	.errstr = "cannot pass map_type 24 into func bpf_map_lookup_elem",
-+},
++#define DECLARE
++#include <map_tests/tests.h>
++#undef DECLARE
++
+ int main(void)
+ {
+ 	srand(time(NULL));
+@@ -1713,6 +1709,10 @@ int main(void)
+ 	map_flags = BPF_F_NO_PREALLOC;
+ 	run_all_tests();
+ 
++#define CALL
++#include <map_tests/tests.h>
++#undef CALL
++
+ 	printf("test_maps: OK, %d SKIPPED\n", skips);
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/test_maps.h b/tools/testing/selftests/bpf/test_maps.h
+new file mode 100644
+index 000000000000..77d8587ac4ed
+--- /dev/null
++++ b/tools/testing/selftests/bpf/test_maps.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _TEST_MAPS_H
++#define _TEST_MAPS_H
++
++#include <stdio.h>
++#include <stdlib.h>
++
++#define CHECK(condition, tag, format...) ({				\
++	int __ret = !!(condition);					\
++	if (__ret) {							\
++		printf("%s(%d):FAIL:%s ", __func__, __LINE__, tag);	\
++		printf(format);						\
++		exit(-1);						\
++	}								\
++})
++
++#endif
 -- 
 2.17.1
 
