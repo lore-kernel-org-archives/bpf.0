@@ -7,48 +7,51 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D90E2C43218
-	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 18:50:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 569F8C43219
+	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 18:51:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A350920B7C
-	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 18:50:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1F38A20B7C
+	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 18:51:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Xq6zYcWv"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="XUb5ijWd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726552AbfDZSul (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Apr 2019 14:50:41 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:40232 "EHLO
+        id S1726710AbfDZSvV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Apr 2019 14:51:21 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:34742 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726271AbfDZSuk (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 26 Apr 2019 14:50:40 -0400
-Received: from pps.filterd (m0044008.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3QImuI6025391;
-        Fri, 26 Apr 2019 11:50:00 -0700
+        by vger.kernel.org with ESMTP id S1726608AbfDZSvQ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 26 Apr 2019 14:51:16 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3QIgXwE014422;
+        Fri, 26 Apr 2019 11:50:26 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=iYvrHh31r4RkmVfAl1N2cJRjkUovX7jeYbJajprhayk=;
- b=Xq6zYcWvY4It1XT28fq/z0DEtC4QrEtYjIaD/D8s4egcW7f8zTGJISYIbV+WW+PZ8dbj
- df4Xw7chDvrl4AHAghWtBFfYbr0RYQI1uo9yTKxn2BsCfdOMo65IbVvlV3ebBAQQKTjJ
- tAb5XFFMF96hAs1Xk8s95MfPrv1IpgZPYlY= 
+ content-type; s=facebook; bh=2P8zZluCCPmFb5vpX+uRLkiZZZNtb2vtI6LHSKFo8uQ=;
+ b=XUb5ijWdht7DTmhpRFuj8icPHCRRvELPPKJ0WcMHU3zs/YpNyvAsV7uTB4O23qVHFu+1
+ 48MtOJblwVQ1hzQ7lNE2n6/GKHVX3OW4FyldOG2iBnJQLJZOR2Wxg9LTWNS5BjZrOvvY
+ uWn4BB6mG0RNrU1CIRgCNpbBkECpvP5ZF24= 
 Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2s45aa0g72-4
+        by mx0a-00082601.pphosted.com with ESMTP id 2s443dgtam-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 26 Apr 2019 11:50:00 -0700
+        Fri, 26 Apr 2019 11:50:26 -0700
 Received: from mmullins-1.thefacebook.com (2620:10d:c081:10::13) by
  mail.thefacebook.com (2620:10d:c081:35::125) with Microsoft SMTP Server id
- 15.1.1713.5; Fri, 26 Apr 2019 11:49:58 -0700
+ 15.1.1713.5; Fri, 26 Apr 2019 11:50:24 -0700
 From:   Matt Mullins <mmullins@fb.com>
 To:     <hall@fb.com>, <mmullins@fb.com>, <ast@kernel.org>,
         <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     <linux-kernel@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, "Yonghong Song" <yhs@fb.com>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: [PATCH bpf-next v5 1/5] bpf: add writable context for raw tracepoints
-Date:   Fri, 26 Apr 2019 11:49:47 -0700
-Message-ID: <20190426184951.21812-2-mmullins@fb.com>
+        "Ingo Molnar" <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "Martin KaFai Lau" <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Shuah Khan <shuah@kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+Subject: [PATCH bpf-next v5 5/5] selftests: bpf: test writable buffers in raw tps
+Date:   Fri, 26 Apr 2019 11:49:51 -0700
+Message-ID: <20190426184951.21812-6-mmullins@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190426184951.21812-1-mmullins@fb.com>
 References: <20190426184951.21812-1-mmullins@fb.com>
@@ -64,259 +67,280 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This is an opt-in interface that allows a tracepoint to provide a safe
-buffer that can be written from a BPF_PROG_TYPE_RAW_TRACEPOINT program.
-The size of the buffer must be a compile-time constant, and is checked
-before allowing a BPF program to attach to a tracepoint that uses this
-feature.
-
-The pointer to this buffer will be the first argument of tracepoints
-that opt in; the pointer is valid and can be bpf_probe_read() by both
-BPF_PROG_TYPE_RAW_TRACEPOINT and BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE
-programs that attach to such a tracepoint, but the buffer to which it
-points may only be written by the latter.
+This tests that:
+  * a BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE cannot be attached if it
+    uses either:
+    * a variable offset to the tracepoint buffer, or
+    * an offset beyond the size of the tracepoint buffer
+  * a tracer can modify the buffer provided when attached to a writable
+    tracepoint in bpf_prog_test_run
 
 Signed-off-by: Matt Mullins <mmullins@fb.com>
 Acked-by: Yonghong Song <yhs@fb.com>
 ---
- include/linux/bpf.h             |  2 ++
- include/linux/bpf_types.h       |  1 +
- include/linux/tracepoint-defs.h |  1 +
- include/trace/bpf_probe.h       | 27 +++++++++++++++++++++++++--
- include/uapi/linux/bpf.h        |  1 +
- kernel/bpf/syscall.c            |  8 ++++++--
- kernel/bpf/verifier.c           | 31 +++++++++++++++++++++++++++++++
- kernel/trace/bpf_trace.c        | 24 ++++++++++++++++++++++++
- 8 files changed, 91 insertions(+), 4 deletions(-)
+ include/trace/events/bpf_test_run.h           | 50 ++++++++++++
+ net/bpf/test_run.c                            |  4 +
+ .../raw_tp_writable_reject_nbd_invalid.c      | 42 ++++++++++
+ .../bpf/prog_tests/raw_tp_writable_test_run.c | 80 +++++++++++++++++++
+ .../selftests/bpf/verifier/raw_tp_writable.c  | 34 ++++++++
+ 5 files changed, 210 insertions(+)
+ create mode 100644 include/trace/events/bpf_test_run.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_run.c
+ create mode 100644 tools/testing/selftests/bpf/verifier/raw_tp_writable.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index f15432d90728..cd6341eabd74 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -272,6 +272,7 @@ enum bpf_reg_type {
- 	PTR_TO_SOCK_COMMON_OR_NULL, /* reg points to sock_common or NULL */
- 	PTR_TO_TCP_SOCK,	 /* reg points to struct tcp_sock */
- 	PTR_TO_TCP_SOCK_OR_NULL, /* reg points to struct tcp_sock or NULL */
-+	PTR_TO_TP_BUFFER,	 /* reg points to a writable raw tp's buffer */
- };
- 
- /* The information passed from prog-specific *_is_valid_access
-@@ -361,6 +362,7 @@ struct bpf_prog_aux {
- 	u32 used_map_cnt;
- 	u32 max_ctx_offset;
- 	u32 max_pkt_offset;
-+	u32 max_tp_access;
- 	u32 stack_depth;
- 	u32 id;
- 	u32 func_cnt; /* used by non-func prog as the number of func progs */
-diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
-index d26991a16894..a10d37bce364 100644
---- a/include/linux/bpf_types.h
-+++ b/include/linux/bpf_types.h
-@@ -25,6 +25,7 @@ BPF_PROG_TYPE(BPF_PROG_TYPE_KPROBE, kprobe)
- BPF_PROG_TYPE(BPF_PROG_TYPE_TRACEPOINT, tracepoint)
- BPF_PROG_TYPE(BPF_PROG_TYPE_PERF_EVENT, perf_event)
- BPF_PROG_TYPE(BPF_PROG_TYPE_RAW_TRACEPOINT, raw_tracepoint)
-+BPF_PROG_TYPE(BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE, raw_tracepoint_writable)
- #endif
- #ifdef CONFIG_CGROUP_BPF
- BPF_PROG_TYPE(BPF_PROG_TYPE_CGROUP_DEVICE, cg_dev)
-diff --git a/include/linux/tracepoint-defs.h b/include/linux/tracepoint-defs.h
-index 49ba9cde7e4b..b29950a19205 100644
---- a/include/linux/tracepoint-defs.h
-+++ b/include/linux/tracepoint-defs.h
-@@ -45,6 +45,7 @@ struct bpf_raw_event_map {
- 	struct tracepoint	*tp;
- 	void			*bpf_func;
- 	u32			num_args;
-+	u32			writable_size;
- } __aligned(32);
- 
- #endif
-diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
-index 505dae0bed80..d6e556c0a085 100644
---- a/include/trace/bpf_probe.h
-+++ b/include/trace/bpf_probe.h
-@@ -69,8 +69,7 @@ __bpf_trace_##call(void *__data, proto)					\
-  * to make sure that if the tracepoint handling changes, the
-  * bpf probe will fail to compile unless it too is updated.
-  */
--#undef DEFINE_EVENT
--#define DEFINE_EVENT(template, call, proto, args)			\
-+#define __DEFINE_EVENT(template, call, proto, args, size)		\
- static inline void bpf_test_probe_##call(void)				\
- {									\
- 	check_trace_callback_type_##call(__bpf_trace_##template);	\
-@@ -81,12 +80,36 @@ __bpf_trace_tp_map_##call = {						\
- 	.tp		= &__tracepoint_##call,				\
- 	.bpf_func	= (void *)__bpf_trace_##template,		\
- 	.num_args	= COUNT_ARGS(args),				\
-+	.writable_size	= size,						\
- };
- 
-+#define FIRST(x, ...) x
+diff --git a/include/trace/events/bpf_test_run.h b/include/trace/events/bpf_test_run.h
+new file mode 100644
+index 000000000000..265447e3f71a
+--- /dev/null
++++ b/include/trace/events/bpf_test_run.h
+@@ -0,0 +1,50 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM bpf_test_run
 +
-+#undef DEFINE_EVENT_WRITABLE
-+#define DEFINE_EVENT_WRITABLE(template, call, proto, args, size)	\
-+static inline void bpf_test_buffer_##call(void)				\
-+{									\
-+	/* BUILD_BUG_ON() is ignored if the code is completely eliminated, but \
-+	 * BUILD_BUG_ON_ZERO() uses a different mechanism that is not	\
-+	 * dead-code-eliminated.					\
-+	 */								\
-+	FIRST(proto);							\
-+	(void)BUILD_BUG_ON_ZERO(size != sizeof(*FIRST(args)));		\
-+}									\
-+__DEFINE_EVENT(template, call, PARAMS(proto), PARAMS(args), size)
++#if !defined(_TRACE_BPF_TEST_RUN_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_BPF_TEST_RUN_H
 +
-+#undef DEFINE_EVENT
-+#define DEFINE_EVENT(template, call, proto, args)			\
-+	__DEFINE_EVENT(template, call, PARAMS(proto), PARAMS(args), 0)
- 
- #undef DEFINE_EVENT_PRINT
- #define DEFINE_EVENT_PRINT(template, name, proto, args, print)	\
- 	DEFINE_EVENT(template, name, PARAMS(proto), PARAMS(args))
- 
- #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
++#include <linux/tracepoint.h>
 +
-+#undef DEFINE_EVENT_WRITABLE
-+#undef __DEFINE_EVENT
-+#undef FIRST
++DECLARE_EVENT_CLASS(bpf_test_finish,
 +
- #endif /* CONFIG_BPF_EVENTS */
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index eaf2d3284248..f7fa7a34a62d 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -168,6 +168,7 @@ enum bpf_prog_type {
- 	BPF_PROG_TYPE_SK_REUSEPORT,
- 	BPF_PROG_TYPE_FLOW_DISSECTOR,
- 	BPF_PROG_TYPE_CGROUP_SYSCTL,
-+	BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE,
- };
++	TP_PROTO(int *err),
++
++	TP_ARGS(err),
++
++	TP_STRUCT__entry(
++		__field(int, err)
++	),
++
++	TP_fast_assign(
++		__entry->err = *err;
++	),
++
++	TP_printk("bpf_test_finish with err=%d", __entry->err)
++);
++
++#ifdef DEFINE_EVENT_WRITABLE
++#undef BPF_TEST_RUN_DEFINE_EVENT
++#define BPF_TEST_RUN_DEFINE_EVENT(template, call, proto, args, size)	\
++	DEFINE_EVENT_WRITABLE(template, call, PARAMS(proto),		\
++			      PARAMS(args), size)
++#else
++#undef BPF_TEST_RUN_DEFINE_EVENT
++#define BPF_TEST_RUN_DEFINE_EVENT(template, call, proto, args, size)	\
++	DEFINE_EVENT(template, call, PARAMS(proto), PARAMS(args))
++#endif
++
++BPF_TEST_RUN_DEFINE_EVENT(bpf_test_finish, bpf_test_finish,
++
++	TP_PROTO(int *err),
++
++	TP_ARGS(err),
++
++	sizeof(int)
++);
++
++#endif
++
++/* This part must be outside protection */
++#include <trace/define_trace.h>
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 8606e5aef0b6..6c4694ae4241 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -13,6 +13,9 @@
+ #include <net/sock.h>
+ #include <net/tcp.h>
  
- enum bpf_attach_type {
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index b0de49598341..ae141e745f92 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1789,12 +1789,16 @@ static int bpf_raw_tracepoint_open(const union bpf_attr *attr)
- 	}
- 	raw_tp->btp = btp;
- 
--	prog = bpf_prog_get_type(attr->raw_tracepoint.prog_fd,
--				 BPF_PROG_TYPE_RAW_TRACEPOINT);
-+	prog = bpf_prog_get(attr->raw_tracepoint.prog_fd);
- 	if (IS_ERR(prog)) {
- 		err = PTR_ERR(prog);
- 		goto out_free_tp;
- 	}
-+	if (prog->type != BPF_PROG_TYPE_RAW_TRACEPOINT &&
-+	    prog->type != BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE) {
-+		err = -EINVAL;
-+		goto out_put_prog;
-+	}
- 
- 	err = bpf_probe_register(raw_tp->btp, prog);
- 	if (err)
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 423f242a5efb..2ef442c62c0e 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -405,6 +405,7 @@ static const char * const reg_type_str[] = {
- 	[PTR_TO_SOCK_COMMON_OR_NULL] = "sock_common_or_null",
- 	[PTR_TO_TCP_SOCK]	= "tcp_sock",
- 	[PTR_TO_TCP_SOCK_OR_NULL] = "tcp_sock_or_null",
-+	[PTR_TO_TP_BUFFER]	= "tp_buffer",
- };
- 
- static char slot_type_char[] = {
-@@ -1993,6 +1994,32 @@ static int check_ctx_reg(struct bpf_verifier_env *env,
- 	return 0;
++#define CREATE_TRACE_POINTS
++#include <trace/events/bpf_test_run.h>
++
+ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
+ 			u32 *retval, u32 *time)
+ {
+@@ -100,6 +103,7 @@ static int bpf_test_finish(const union bpf_attr *kattr,
+ 	if (err != -ENOSPC)
+ 		err = 0;
+ out:
++	trace_bpf_test_finish(&err);
+ 	return err;
  }
  
-+static int check_tp_buffer_access(struct bpf_verifier_env *env,
-+				  const struct bpf_reg_state *reg,
-+				  int regno, int off, int size)
+diff --git a/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
+new file mode 100644
+index 000000000000..9807336a3016
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
+@@ -0,0 +1,42 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++#include <linux/nbd.h>
++
++void test_raw_tp_writable_reject_nbd_invalid(void)
 +{
-+	if (off < 0) {
-+		verbose(env,
-+			"R%d invalid tracepoint buffer access: off=%d, size=%d",
-+			regno, off, size);
-+		return -EACCES;
-+	}
-+	if (!tnum_is_const(reg->var_off) || reg->var_off.value) {
-+		char tn_buf[48];
++	__u32 duration = 0;
++	char error[4096];
++	int bpf_fd = -1, tp_fd = -1;
 +
-+		tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
-+		verbose(env,
-+			"R%d invalid variable buffer offset: off=%d, var_off=%s",
-+			regno, off, tn_buf);
-+		return -EACCES;
-+	}
-+	if (off + size > env->prog->aux->max_tp_access)
-+		env->prog->aux->max_tp_access = off + size;
++	const struct bpf_insn program[] = {
++		/* r6 is our tp buffer */
++		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
++		/* one byte beyond the end of the nbd_request struct */
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_6,
++			    sizeof(struct nbd_request)),
++		BPF_EXIT_INSN(),
++	};
 +
-+	return 0;
++	struct bpf_load_program_attr load_attr = {
++		.prog_type = BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE,
++		.license = "GPL v2",
++		.insns = program,
++		.insns_cnt = sizeof(program) / sizeof(struct bpf_insn),
++		.log_level = 2,
++	};
++
++	bpf_fd = bpf_load_program_xattr(&load_attr, error, sizeof(error));
++	if (CHECK(bpf_fd < 0, "bpf_raw_tracepoint_writable load",
++		  "failed: %d errno %d\n", bpf_fd, errno))
++		return;
++
++	tp_fd = bpf_raw_tracepoint_open("nbd_send_request", bpf_fd);
++	if (CHECK(tp_fd >= 0, "bpf_raw_tracepoint_writable open",
++		  "erroneously succeeded\n"))
++		goto out_bpffd;
++
++	close(tp_fd);
++out_bpffd:
++	close(bpf_fd);
 +}
+diff --git a/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_run.c b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_run.c
+new file mode 100644
+index 000000000000..5c45424cac5f
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_run.c
+@@ -0,0 +1,80 @@
++// SPDX-License-Identifier: GPL-2.0
 +
++#include <test_progs.h>
++#include <linux/nbd.h>
 +
- /* truncate register to smaller size (in bytes)
-  * must be called with size < BPF_REG_SIZE
-  */
-@@ -2137,6 +2164,10 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
- 		err = check_sock_access(env, insn_idx, regno, off, size, t);
- 		if (!err && value_regno >= 0)
- 			mark_reg_unknown(env, regs, value_regno);
-+	} else if (reg->type == PTR_TO_TP_BUFFER) {
-+		err = check_tp_buffer_access(env, reg, regno, off, size);
-+		if (!err && t == BPF_READ && value_regno >= 0)
-+			mark_reg_unknown(env, regs, value_regno);
- 	} else {
- 		verbose(env, "R%d invalid mem access '%s'\n", regno,
- 			reg_type_str[reg->type]);
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 91800be0c8eb..8607aba1d882 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -915,6 +915,27 @@ const struct bpf_verifier_ops raw_tracepoint_verifier_ops = {
- const struct bpf_prog_ops raw_tracepoint_prog_ops = {
- };
- 
-+static bool raw_tp_writable_prog_is_valid_access(int off, int size,
-+						 enum bpf_access_type type,
-+						 const struct bpf_prog *prog,
-+						 struct bpf_insn_access_aux *info)
++void test_raw_tp_writable_test_run(void)
 +{
-+	if (off == 0) {
-+		if (size != sizeof(u64) || type != BPF_READ)
-+			return false;
-+		info->reg_type = PTR_TO_TP_BUFFER;
-+	}
-+	return raw_tp_prog_is_valid_access(off, size, type, prog, info);
++	__u32 duration = 0;
++	char error[4096];
++
++	const struct bpf_insn trace_program[] = {
++		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_6, 0),
++		BPF_MOV64_IMM(BPF_REG_0, 42),
++		BPF_STX_MEM(BPF_W, BPF_REG_6, BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++
++	struct bpf_load_program_attr load_attr = {
++		.prog_type = BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE,
++		.license = "GPL v2",
++		.insns = trace_program,
++		.insns_cnt = sizeof(trace_program) / sizeof(struct bpf_insn),
++		.log_level = 2,
++	};
++
++	int bpf_fd = bpf_load_program_xattr(&load_attr, error, sizeof(error));
++	if (CHECK(bpf_fd < 0, "bpf_raw_tracepoint_writable loaded",
++		  "failed: %d errno %d\n", bpf_fd, errno))
++		return;
++
++	const struct bpf_insn skb_program[] = {
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++
++	struct bpf_load_program_attr skb_load_attr = {
++		.prog_type = BPF_PROG_TYPE_SOCKET_FILTER,
++		.license = "GPL v2",
++		.insns = skb_program,
++		.insns_cnt = sizeof(skb_program) / sizeof(struct bpf_insn),
++	};
++
++	int filter_fd =
++		bpf_load_program_xattr(&skb_load_attr, error, sizeof(error));
++	if (CHECK(filter_fd < 0, "test_program_loaded", "failed: %d errno %d\n",
++		  filter_fd, errno))
++		goto out_bpffd;
++
++	int tp_fd = bpf_raw_tracepoint_open("bpf_test_finish", bpf_fd);
++	if (CHECK(tp_fd < 0, "bpf_raw_tracepoint_writable opened",
++		  "failed: %d errno %d\n", tp_fd, errno))
++		goto out_filterfd;
++
++	char test_skb[128] = {
++		0,
++	};
++
++	__u32 prog_ret;
++	int err = bpf_prog_test_run(filter_fd, 1, test_skb, sizeof(test_skb), 0,
++				    0, &prog_ret, 0);
++	CHECK(err != 42, "test_run",
++	      "tracepoint did not modify return value\n");
++	CHECK(prog_ret != 0, "test_run_ret",
++	      "socket_filter did not return 0\n");
++
++	close(tp_fd);
++
++	err = bpf_prog_test_run(filter_fd, 1, test_skb, sizeof(test_skb), 0, 0,
++				&prog_ret, 0);
++	CHECK(err != 0, "test_run_notrace",
++	      "test_run failed with %d errno %d\n", err, errno);
++	CHECK(prog_ret != 0, "test_run_ret_notrace",
++	      "socket_filter did not return 0\n");
++
++out_filterfd:
++	close(filter_fd);
++out_bpffd:
++	close(bpf_fd);
 +}
+diff --git a/tools/testing/selftests/bpf/verifier/raw_tp_writable.c b/tools/testing/selftests/bpf/verifier/raw_tp_writable.c
+new file mode 100644
+index 000000000000..95b5d70a1dc1
+--- /dev/null
++++ b/tools/testing/selftests/bpf/verifier/raw_tp_writable.c
+@@ -0,0 +1,34 @@
++{
++	"raw_tracepoint_writable: reject variable offset",
++	.insns = {
++		/* r6 is our tp buffer */
++		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
 +
-+const struct bpf_verifier_ops raw_tracepoint_writable_verifier_ops = {
-+	.get_func_proto  = raw_tp_prog_func_proto,
-+	.is_valid_access = raw_tp_writable_prog_is_valid_access,
-+};
++		BPF_LD_MAP_FD(BPF_REG_1, 0),
++		/* move the key (== 0) to r10-8 */
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++		BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++		BPF_STX_MEM(BPF_DW, BPF_REG_2, BPF_REG_0, 0),
++		/* lookup in the map */
++		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0,
++			     BPF_FUNC_map_lookup_elem),
 +
-+const struct bpf_prog_ops raw_tracepoint_writable_prog_ops = {
-+};
++		/* exit clean if null */
++		BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1),
++		BPF_EXIT_INSN(),
 +
- static bool pe_prog_is_valid_access(int off, int size, enum bpf_access_type type,
- 				    const struct bpf_prog *prog,
- 				    struct bpf_insn_access_aux *info)
-@@ -1204,6 +1225,9 @@ static int __bpf_probe_register(struct bpf_raw_event_map *btp, struct bpf_prog *
- 	if (prog->aux->max_ctx_offset > btp->num_args * sizeof(u64))
- 		return -EINVAL;
- 
-+	if (prog->aux->max_tp_access > btp->writable_size)
-+		return -EINVAL;
++		/* shift the buffer pointer to a variable location */
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_0, 0),
++		BPF_ALU64_REG(BPF_ADD, BPF_REG_6, BPF_REG_0),
++		/* clobber whatever's there */
++		BPF_MOV64_IMM(BPF_REG_7, 4242),
++		BPF_STX_MEM(BPF_DW, BPF_REG_6, BPF_REG_7, 0),
 +
- 	return tracepoint_probe_register(tp, (void *)btp->bpf_func, prog);
- }
- 
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.fixup_map_hash_8b = { 1, },
++	.prog_type = BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE,
++	.errstr = "R6 invalid variable buffer offset: off=0, var_off=(0x0; 0xffffffff)",
++},
 -- 
 2.17.1
 
