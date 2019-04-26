@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EF5FC43219
-	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 17:11:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75320C4321B
+	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 17:11:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2AF632146E
-	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 17:11:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 418312146E
+	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 17:11:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ftEhitq6"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="U1MqH2PS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726353AbfDZRLI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Apr 2019 13:11:08 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:39960 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726224AbfDZRLH (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 26 Apr 2019 13:11:07 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3QH8B9b031723
-        for <bpf@vger.kernel.org>; Fri, 26 Apr 2019 10:11:06 -0700
+        id S1726428AbfDZRLQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Apr 2019 13:11:16 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:41830 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726409AbfDZRLM (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 26 Apr 2019 13:11:12 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x3QH5hXW015399
+        for <bpf@vger.kernel.org>; Fri, 26 Apr 2019 10:11:11 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=FyY/OEEU1JAxalKeXCHhyYCGQe3/J3CNnBGRqm0YXBY=;
- b=ftEhitq6P+r+A3i2QPGdhpRGyg8rOL+Eqg+0dcMi1vOjnw7ITKtzzjg5LkL+cLJJ5i4g
- 1GFMJMfpkANule2cNZ7iiSBsBMVI8D/WLqPf/DG/8aqb7KLCKH9j6jNww+SYfXdGRCpQ
- E5h4FrvsTFklEJJ+yO1txYdiZ2HFyGRHl48= 
+ content-type; s=facebook; bh=p8OHjDU4tm9Gb0EjPO+5G++0K4z7lJwZuKj7F/6rxf4=;
+ b=U1MqH2PSEQab+TIf3IVRQ9aVJSmSDv7qOaf0H0UvMAT7mBUJPm4wt6zzu66zmZRa4A3V
+ Mr+YDbqq4SCx9iXo4nV+JuuCd259DmSjGLMdF4ADFmZlCgK4pcyIRrSLDdEfy6PvFqe3
+ nHExwywsemggge4r5piZd4X0B0TA7ToVr2g= 
 Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2s42qprsnv-1
+        by m0001303.ppops.net with ESMTP id 2s3bspn72x-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 26 Apr 2019 10:11:06 -0700
+        for <bpf@vger.kernel.org>; Fri, 26 Apr 2019 10:11:11 -0700
 Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c081:35::125) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Fri, 26 Apr 2019 10:11:06 -0700
+ Fri, 26 Apr 2019 10:11:09 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id B2EEA29421AA; Fri, 26 Apr 2019 10:11:05 -0700 (PDT)
+        id EE7E929421AA; Fri, 26 Apr 2019 10:11:07 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
@@ -49,9 +49,9 @@ CC:     Alexei Starovoitov <ast@fb.com>, Andrii Nakryiko <andriin@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         <kernel-team@fb.com>, Yonghong Song <yhs@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v3 bpf-next 2/6] bpf: Sync bpf.h to tools
-Date:   Fri, 26 Apr 2019 10:11:05 -0700
-Message-ID: <20190426171105.62130-1-kafai@fb.com>
+Subject: [PATCH v3 bpf-next 3/6] bpf: Support BPF_MAP_TYPE_SK_STORAGE in bpf map probing
+Date:   Fri, 26 Apr 2019 10:11:07 -0700
+Message-ID: <20190426171107.62279-1-kafai@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190426171102.61757-1-kafai@fb.com>
 References: <20190426171102.61757-1-kafai@fb.com>
@@ -67,89 +67,143 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch sync the bpf.h to tools/.
+This patch supports probing for the new BPF_MAP_TYPE_SK_STORAGE.
+BPF_MAP_TYPE_SK_STORAGE enforces BTF usage, so the new probe
+requires to create and load a BTF also.
 
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- tools/include/uapi/linux/bpf.h | 44 +++++++++++++++++++++++++++++++++-
- 1 file changed, 43 insertions(+), 1 deletion(-)
+ tools/bpf/bpftool/map.c       |  1 +
+ tools/lib/bpf/libbpf_probes.c | 74 ++++++++++++++++++++++++++++++++++-
+ 2 files changed, 74 insertions(+), 1 deletion(-)
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 704bb69514a2..be08ef00b2c8 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -133,6 +133,7 @@ enum bpf_map_type {
- 	BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE,
- 	BPF_MAP_TYPE_QUEUE,
- 	BPF_MAP_TYPE_STACK,
-+	BPF_MAP_TYPE_SK_STORAGE,
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index 10b6c9d3e525..693ab3da37de 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -46,6 +46,7 @@ const char * const map_type_name[] = {
+ 	[BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE]	= "percpu_cgroup_storage",
+ 	[BPF_MAP_TYPE_QUEUE]			= "queue",
+ 	[BPF_MAP_TYPE_STACK]			= "stack",
++	[BPF_MAP_TYPE_SK_STORAGE]		= "sk_storage",
  };
  
- /* Note that tracing related programs such as
-@@ -2622,6 +2623,42 @@ union bpf_attr {
-  *		was provided.
-  *
-  *		**-ERANGE** if resulting value was out of range.
-+ *
-+ * void *bpf_sk_storage_get(struct bpf_map *map, struct bpf_sock *sk, void *value, u64 flags)
-+ *	Description
-+ *		Get a bpf-local-storage from a sk.
-+ *
-+ *		Logically, it could be thought of getting the value from
-+ *		a *map* with *sk* as the **key**.  From this
-+ *		perspective,  the usage is not much different from
-+ *		**bpf_map_lookup_elem(map, &sk)** except this
-+ *		helper enforces the key must be a **bpf_fullsock()**
-+ *		and the map must be a BPF_MAP_TYPE_SK_STORAGE also.
-+ *
-+ *		Underneath, the value is stored locally at *sk* instead of
-+ *		the map.  The *map* is used as the bpf-local-storage **type**.
-+ *		The bpf-local-storage **type** (i.e. the *map*) is searched
-+ *		against all bpf-local-storages residing at sk.
-+ *
-+ *		An optional *flags* (BPF_SK_STORAGE_GET_F_CREATE) can be
-+ *		used such that a new bpf-local-storage will be
-+ *		created if one does not exist.  *value* can be used
-+ *		together with BPF_SK_STORAGE_GET_F_CREATE to specify
-+ *		the initial value of a bpf-local-storage.  If *value* is
-+ *		NULL, the new bpf-local-storage will be zero initialized.
-+ *	Return
-+ *		A bpf-local-storage pointer is returned on success.
-+ *
-+ *		**NULL** if not found or there was an error in adding
-+ *		a new bpf-local-storage.
-+ *
-+ * int bpf_sk_storage_delete(struct bpf_map *map, struct bpf_sock *sk)
-+ *	Description
-+ *		Delete a bpf-local-storage from a sk.
-+ *	Return
-+ *		0 on success.
-+ *
-+ *		**-ENOENT** if the bpf-local-storage cannot be found.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -2730,7 +2767,9 @@ union bpf_attr {
- 	FN(sysctl_get_new_value),	\
- 	FN(sysctl_set_new_value),	\
- 	FN(strtol),			\
--	FN(strtoul),
-+	FN(strtoul),			\
-+	FN(sk_storage_get),		\
-+	FN(sk_storage_delete),
+ const size_t map_type_name_size = ARRAY_SIZE(map_type_name);
+diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
+index 0f25541632e3..2e26ddb005e4 100644
+--- a/tools/lib/bpf/libbpf_probes.c
++++ b/tools/lib/bpf/libbpf_probes.c
+@@ -9,6 +9,7 @@
+ #include <net/if.h>
+ #include <sys/utsname.h>
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-  * function eBPF program intends to call
-@@ -2806,6 +2845,9 @@ enum bpf_func_id {
- /* BPF_FUNC_sysctl_get_name flags. */
- #define BPF_F_SYSCTL_BASE_NAME		(1ULL << 0)
++#include <linux/btf.h>
+ #include <linux/filter.h>
+ #include <linux/kernel.h>
  
-+/* BPF_FUNC_sk_storage_get flags */
-+#define BPF_SK_STORAGE_GET_F_CREATE	(1ULL << 0)
+@@ -130,11 +131,65 @@ bool bpf_probe_prog_type(enum bpf_prog_type prog_type, __u32 ifindex)
+ 	return errno != EINVAL && errno != EOPNOTSUPP;
+ }
+ 
++static int load_btf(void)
++{
++#define BTF_INFO_ENC(kind, kind_flag, vlen) \
++	((!!(kind_flag) << 31) | ((kind) << 24) | ((vlen) & BTF_MAX_VLEN))
++#define BTF_TYPE_ENC(name, info, size_or_type) \
++	(name), (info), (size_or_type)
++#define BTF_INT_ENC(encoding, bits_offset, nr_bits) \
++	((encoding) << 24 | (bits_offset) << 16 | (nr_bits))
++#define BTF_TYPE_INT_ENC(name, encoding, bits_offset, bits, sz) \
++	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_INT, 0, 0), sz), \
++	BTF_INT_ENC(encoding, bits_offset, bits)
++#define BTF_MEMBER_ENC(name, type, bits_offset) \
++	(name), (type), (bits_offset)
 +
- /* Mode for BPF_FUNC_skb_adjust_room helper. */
- enum bpf_adj_room_mode {
- 	BPF_ADJ_ROOM_NET,
++	const char btf_str_sec[] = "\0bpf_spin_lock\0val\0cnt\0l";
++	/* struct bpf_spin_lock {
++	 *   int val;
++	 * };
++	 * struct val {
++	 *   int cnt;
++	 *   struct bpf_spin_lock l;
++	 * };
++	 */
++	__u32 btf_raw_types[] = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),  /* [1] */
++		/* struct bpf_spin_lock */                      /* [2] */
++		BTF_TYPE_ENC(1, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 1), 4),
++		BTF_MEMBER_ENC(15, 1, 0), /* int val; */
++		/* struct val */                                /* [3] */
++		BTF_TYPE_ENC(15, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 2), 8),
++		BTF_MEMBER_ENC(19, 1, 0), /* int cnt; */
++		BTF_MEMBER_ENC(23, 2, 32),/* struct bpf_spin_lock l; */
++	};
++	struct btf_header btf_hdr = {
++		.magic = BTF_MAGIC,
++		.version = BTF_VERSION,
++		.hdr_len = sizeof(struct btf_header),
++		.type_len = sizeof(btf_raw_types),
++		.str_off = sizeof(btf_raw_types),
++		.str_len = sizeof(btf_str_sec),
++	};
++	__u8 raw_btf[sizeof(struct btf_header) + sizeof(btf_raw_types) +
++		     sizeof(btf_str_sec)];
++
++	memcpy(raw_btf, &btf_hdr, sizeof(btf_hdr));
++	memcpy(raw_btf + sizeof(btf_hdr), btf_raw_types, sizeof(btf_raw_types));
++	memcpy(raw_btf + sizeof(btf_hdr) + sizeof(btf_raw_types),
++	       btf_str_sec, sizeof(btf_str_sec));
++
++	return bpf_load_btf(raw_btf, sizeof(raw_btf), 0, 0, 0);
++}
++
+ bool bpf_probe_map_type(enum bpf_map_type map_type, __u32 ifindex)
+ {
+ 	int key_size, value_size, max_entries, map_flags;
++	__u32 btf_key_type_id = 0, btf_value_type_id = 0;
+ 	struct bpf_create_map_attr attr = {};
+-	int fd = -1, fd_inner;
++	int fd = -1, btf_fd = -1, fd_inner;
+ 
+ 	key_size	= sizeof(__u32);
+ 	value_size	= sizeof(__u32);
+@@ -160,6 +215,16 @@ bool bpf_probe_map_type(enum bpf_map_type map_type, __u32 ifindex)
+ 	case BPF_MAP_TYPE_STACK:
+ 		key_size	= 0;
+ 		break;
++	case BPF_MAP_TYPE_SK_STORAGE:
++		btf_key_type_id = 1;
++		btf_value_type_id = 3;
++		value_size = 8;
++		max_entries = 0;
++		map_flags = BPF_F_NO_PREALLOC;
++		btf_fd = load_btf();
++		if (btf_fd < 0)
++			return false;
++		break;
+ 	case BPF_MAP_TYPE_UNSPEC:
+ 	case BPF_MAP_TYPE_HASH:
+ 	case BPF_MAP_TYPE_ARRAY:
+@@ -205,11 +270,18 @@ bool bpf_probe_map_type(enum bpf_map_type map_type, __u32 ifindex)
+ 		attr.max_entries = max_entries;
+ 		attr.map_flags = map_flags;
+ 		attr.map_ifindex = ifindex;
++		if (btf_fd >= 0) {
++			attr.btf_fd = btf_fd;
++			attr.btf_key_type_id = btf_key_type_id;
++			attr.btf_value_type_id = btf_value_type_id;
++		}
+ 
+ 		fd = bpf_create_map_xattr(&attr);
+ 	}
+ 	if (fd >= 0)
+ 		close(fd);
++	if (btf_fd >= 0)
++		close(btf_fd);
+ 
+ 	return fd >= 0;
+ }
 -- 
 2.17.1
 
