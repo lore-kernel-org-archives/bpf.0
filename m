@@ -2,45 +2,44 @@ Return-Path: <SRS0=D5ks=S4=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DED8EC43218
-	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 23:39:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B824C43219
+	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 23:39:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A607C206C1
+	by mail.kernel.org (Postfix) with ESMTP id F0615206C1
 	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 23:39:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Y1WKNgHs"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Jx3j/Y72"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727086AbfDZXjm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Apr 2019 19:39:42 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:39056 "EHLO
+        id S1727177AbfDZXjp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Apr 2019 19:39:45 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:50188 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727131AbfDZXjm (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 26 Apr 2019 19:39:42 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3QNZI3A030708
-        for <bpf@vger.kernel.org>; Fri, 26 Apr 2019 16:39:41 -0700
+        by vger.kernel.org with ESMTP id S1727193AbfDZXjp (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 26 Apr 2019 19:39:45 -0400
+Received: from pps.filterd (m0044008.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3QNZEPO003590
+        for <bpf@vger.kernel.org>; Fri, 26 Apr 2019 16:39:44 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type :
- content-transfer-encoding; s=facebook;
- bh=t4hMaLwKYijOLUQTrpSXG4oy3L9TjXvmBqMlCDN+UCY=;
- b=Y1WKNgHspJFa0DvQwKnbUP6AlukHn1I6033lz8fm5lUHPOkWuYfCau08L+GTbDfoWJkc
- pQODyKfYXUVSfaXqGBn/GEYiK0wmnaj1XTyM3nyCELMDLYbhNKiPc/jNd5IjOrpjuT1g
- 5ra2UD6GY+ohxdJd5pS8EdNEwdmSIuN3XzA= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2s48c9rmxc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 26 Apr 2019 16:39:41 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 26 Apr 2019 16:39:39 -0700
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=FyY/OEEU1JAxalKeXCHhyYCGQe3/J3CNnBGRqm0YXBY=;
+ b=Jx3j/Y72BwmNKV/CruNO/YL5FiTu6JlVRbyebltKUxektQg7wC+NTbE2mNka0m2PXM/D
+ +ZaBpNmo7l7P4W728LePuDP5dan2U3ZVK5HT8UPQ/kXvh9cLgwWK4uZMYY1Cv1q7gSoc
+ c8Is0dKk8WiOi5ROsX8jgGjWoTPsXRxlsEY= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2s45aa1auy-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 26 Apr 2019 16:39:44 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::128) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Fri, 26 Apr 2019 16:39:43 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 24CD629425A9; Fri, 26 Apr 2019 16:39:38 -0700 (PDT)
+        id 4B92E29425A9; Fri, 26 Apr 2019 16:39:42 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
@@ -51,87 +50,107 @@ CC:     Alexei Starovoitov <ast@fb.com>, Andrii Nakryiko <andriin@fb.com>,
         <kernel-team@fb.com>, Stanislav Fomichev <sdf@fomichev.me>,
         Yonghong Song <yhs@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v4 bpf-next 0/7] BPF sk local storage
-Date:   Fri, 26 Apr 2019 16:39:38 -0700
-Message-ID: <20190426233938.1330361-1-kafai@fb.com>
+Subject: [PATCH v4 bpf-next 2/7] bpf: Sync bpf.h to tools
+Date:   Fri, 26 Apr 2019 16:39:42 -0700
+Message-ID: <20190426233942.1330516-1-kafai@fb.com>
 X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190426233938.1330361-1-kafai@fb.com>
+References: <20190426233938.1330361-1-kafai@fb.com>
 X-FB-Internal: Safe
+MIME-Version: 1.0
+Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-26_15:,,
  signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=8 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=604 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1904260150
-X-FB-Internal: deliver
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-v4:
-- Move checks to map_alloc_check in patch 1 (Stanislav Fomichev)
-- Refactor BTF encoding macros to test_btf.h at
-  a new patch 4 (Stanislav Fomichev)
-- Refactor getenv and add print PASS message at the
-  end of the test in patch 6 (Yonghong Song)
+This patch sync the bpf.h to tools/.
 
-v3:
-- Replace spinlock_types.h with spinlock.h in patch 1
-  (kbuild test robot <lkp@intel.com>)
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+---
+ tools/include/uapi/linux/bpf.h | 44 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 43 insertions(+), 1 deletion(-)
 
-v2:
-- Add the "test_maps.h" file in patch 5
-
-This series introduces the BPF sk local storage.  The
-details is in the patch 1 commit message.
-
-Martin KaFai Lau (7):
-  bpf: Introduce bpf sk local storage
-  bpf: Sync bpf.h to tools
-  bpf: Support BPF_MAP_TYPE_SK_STORAGE in bpf map probing
-  bpf: Refactor BTF encoding macro to test_btf.h
-  bpf: Add verifier tests for the bpf_sk_storage
-  bpf: Add BPF_MAP_TYPE_SK_STORAGE test to test_maps
-  bpf: Add ene-to-end test for bpf_sk_storage_* helpers
-
- include/linux/bpf.h                           |   2 +
- include/linux/bpf_types.h                     |   1 +
- include/net/bpf_sk_storage.h                  |  13 +
- include/net/sock.h                            |   5 +
- include/uapi/linux/bpf.h                      |  44 +-
- kernel/bpf/syscall.c                          |   3 +-
- kernel/bpf/verifier.c                         |  27 +-
- net/bpf/test_run.c                            |   2 +
- net/core/Makefile                             |   1 +
- net/core/bpf_sk_storage.c                     | 804 ++++++++++++++++++
- net/core/filter.c                             |  12 +
- net/core/sock.c                               |   5 +
- tools/bpf/bpftool/map.c                       |   1 +
- tools/include/uapi/linux/bpf.h                |  44 +-
- tools/lib/bpf/libbpf_probes.c                 |  74 +-
- tools/testing/selftests/bpf/Makefile          |  25 +-
- tools/testing/selftests/bpf/bpf_helpers.h     |   5 +
- .../selftests/bpf/map_tests/sk_storage_map.c  | 629 ++++++++++++++
- .../bpf/progs/test_sock_fields_kern.c         |  53 ++
- tools/testing/selftests/bpf/test_btf.c        |  63 +-
- tools/testing/selftests/bpf/test_btf.h        |  69 ++
- tools/testing/selftests/bpf/test_maps.c       |  18 +-
- tools/testing/selftests/bpf/test_maps.h       |  17 +
- .../testing/selftests/bpf/test_sock_fields.c  | 115 ++-
- tools/testing/selftests/bpf/test_verifier.c   |  55 +-
- tools/testing/selftests/bpf/verifier/sock.c   | 116 +++
- 26 files changed, 2089 insertions(+), 114 deletions(-)
- create mode 100644 include/net/bpf_sk_storage.h
- create mode 100644 net/core/bpf_sk_storage.c
- create mode 100644 tools/testing/selftests/bpf/map_tests/sk_storage_map.=
-c
- create mode 100644 tools/testing/selftests/bpf/test_btf.h
- create mode 100644 tools/testing/selftests/bpf/test_maps.h
-
---=20
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 704bb69514a2..be08ef00b2c8 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -133,6 +133,7 @@ enum bpf_map_type {
+ 	BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE,
+ 	BPF_MAP_TYPE_QUEUE,
+ 	BPF_MAP_TYPE_STACK,
++	BPF_MAP_TYPE_SK_STORAGE,
+ };
+ 
+ /* Note that tracing related programs such as
+@@ -2622,6 +2623,42 @@ union bpf_attr {
+  *		was provided.
+  *
+  *		**-ERANGE** if resulting value was out of range.
++ *
++ * void *bpf_sk_storage_get(struct bpf_map *map, struct bpf_sock *sk, void *value, u64 flags)
++ *	Description
++ *		Get a bpf-local-storage from a sk.
++ *
++ *		Logically, it could be thought of getting the value from
++ *		a *map* with *sk* as the **key**.  From this
++ *		perspective,  the usage is not much different from
++ *		**bpf_map_lookup_elem(map, &sk)** except this
++ *		helper enforces the key must be a **bpf_fullsock()**
++ *		and the map must be a BPF_MAP_TYPE_SK_STORAGE also.
++ *
++ *		Underneath, the value is stored locally at *sk* instead of
++ *		the map.  The *map* is used as the bpf-local-storage **type**.
++ *		The bpf-local-storage **type** (i.e. the *map*) is searched
++ *		against all bpf-local-storages residing at sk.
++ *
++ *		An optional *flags* (BPF_SK_STORAGE_GET_F_CREATE) can be
++ *		used such that a new bpf-local-storage will be
++ *		created if one does not exist.  *value* can be used
++ *		together with BPF_SK_STORAGE_GET_F_CREATE to specify
++ *		the initial value of a bpf-local-storage.  If *value* is
++ *		NULL, the new bpf-local-storage will be zero initialized.
++ *	Return
++ *		A bpf-local-storage pointer is returned on success.
++ *
++ *		**NULL** if not found or there was an error in adding
++ *		a new bpf-local-storage.
++ *
++ * int bpf_sk_storage_delete(struct bpf_map *map, struct bpf_sock *sk)
++ *	Description
++ *		Delete a bpf-local-storage from a sk.
++ *	Return
++ *		0 on success.
++ *
++ *		**-ENOENT** if the bpf-local-storage cannot be found.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -2730,7 +2767,9 @@ union bpf_attr {
+ 	FN(sysctl_get_new_value),	\
+ 	FN(sysctl_set_new_value),	\
+ 	FN(strtol),			\
+-	FN(strtoul),
++	FN(strtoul),			\
++	FN(sk_storage_get),		\
++	FN(sk_storage_delete),
+ 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+  * function eBPF program intends to call
+@@ -2806,6 +2845,9 @@ enum bpf_func_id {
+ /* BPF_FUNC_sysctl_get_name flags. */
+ #define BPF_F_SYSCTL_BASE_NAME		(1ULL << 0)
+ 
++/* BPF_FUNC_sk_storage_get flags */
++#define BPF_SK_STORAGE_GET_F_CREATE	(1ULL << 0)
++
+ /* Mode for BPF_FUNC_skb_adjust_room helper. */
+ enum bpf_adj_room_mode {
+ 	BPF_ADJ_ROOM_NET,
+-- 
 2.17.1
 
