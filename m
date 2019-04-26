@@ -2,932 +2,535 @@ Return-Path: <SRS0=D5ks=S4=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-7.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F2E5C43219
-	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 21:36:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF3E9C43219
+	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 22:40:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B49D62084F
-	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 21:36:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 82EB6206E0
+	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 22:40:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="nHMDn8QI";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="W5e17P3k"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qcpYq0FP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726343AbfDZVgn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Apr 2019 17:36:43 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:36440 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726169AbfDZVgn (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 26 Apr 2019 17:36:43 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3QLXh20030358;
-        Fri, 26 Apr 2019 14:36:23 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=tcJLLpWK2iGpZfPZmqS/uY2sTPCq48V4cCJ1s+CzdQE=;
- b=nHMDn8QIUErKGnKWf2LbTSjJ1rrc3op8zPt6ZiV0+jMYGSHiMUgh6WtX5OHzgz6QE2ip
- 0wQLHWxDdXtpAIXHF4/iokYSIla5rHjUConMNIn5dRloWhGzoKh6IcoCw8x59sxQWZ+L
- ipCV5NtioAJUBJbbfkAIXMzywwGL1ZbxE3c= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2s4a0500dn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 26 Apr 2019 14:36:23 -0700
-Received: from ash-exhub101.TheFacebook.com (2620:10d:c0a8:82::e) by
- ash-exhub103.TheFacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 26 Apr 2019 14:36:22 -0700
-Received: from NAM04-SN1-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.35.173) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5
- via Frontend Transport; Fri, 26 Apr 2019 14:36:22 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector1-fb-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tcJLLpWK2iGpZfPZmqS/uY2sTPCq48V4cCJ1s+CzdQE=;
- b=W5e17P3kuy9W/Ve82XaMe1t7dEPFXo5ggW75mCOxOc509mH+YhcRDNxivP6p2P/M7UEk1IwiFDA2tZsE9MDJP7dNUUV5KS200lHDqtDNtdQvoPMWEGCnbuRB9rBmSRzTXtAcuMU48Yb7+yRrkf01M7nOcPof6uaPGeVuD/TifYw=
-Received: from MWHPR15MB1790.namprd15.prod.outlook.com (10.174.255.19) by
- MWHPR15MB1854.namprd15.prod.outlook.com (10.174.255.146) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1835.13; Fri, 26 Apr 2019 21:36:20 +0000
-Received: from MWHPR15MB1790.namprd15.prod.outlook.com
- ([fe80::d13:8c3d:9110:b44a]) by MWHPR15MB1790.namprd15.prod.outlook.com
- ([fe80::d13:8c3d:9110:b44a%8]) with mapi id 15.20.1835.010; Fri, 26 Apr 2019
- 21:36:20 +0000
-From:   Martin Lau <kafai@fb.com>
+        id S1726696AbfDZWku (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Apr 2019 18:40:50 -0400
+Received: from mail-qt1-f177.google.com ([209.85.160.177]:34037 "EHLO
+        mail-qt1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726410AbfDZWkt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 26 Apr 2019 18:40:49 -0400
+Received: by mail-qt1-f177.google.com with SMTP id j6so5987271qtq.1
+        for <bpf@vger.kernel.org>; Fri, 26 Apr 2019 15:40:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=Y4/+q9dFH2P4indRi/AfhEV7U3/CbSXDwP8xhX77U0Q=;
+        b=qcpYq0FP/FMc+F5JC76Vuk0+6fcD6GISwH/oLM5yaoZocM7gur1qCCpAIK1EqeN9LJ
+         gWPKvBE7NUaX8YrygEmBKc4qeDNfqiQa79Dpxn66+ZUBvKK7Ba6Uj+Hmi9MLXDh8fsJc
+         VBsYtA9VHOcgOm1kPOyG/KGT19/wVPfe9xqDco/CgEFYRmj8fZNSBHBiHGKimhJVs7M9
+         7ZHuUzwqmiqvSGGtlTk+EBgpnx1R/nh1wICic/egbGdpIJ/wW/iGlsdH0lAl8V9FY7/h
+         v2Y8Qv6J2asK44cgvjtfPb22PL9FY/K31Im9RnXLN3Y9b4lIZxvbuvmr+1p8UezfzBDS
+         aWGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=Y4/+q9dFH2P4indRi/AfhEV7U3/CbSXDwP8xhX77U0Q=;
+        b=FfK6HHdmEaW1uvbY1oclc/evlhEUvTMJgD0kntlzEBgz36yrb1X81hSWPR6YdkYQ4A
+         JpW/iS0wMvTwYbWf6hqhQ6N33gckn+TbWA8I03pDyg63XFdPQs1PJQ8cyas4QzkMhPwm
+         JsN7eCIXHb5uudRxj3d27ZBED2JyERx+k5j+d0gD1ghMjmpHVpsB+K0cbkJQmdeAoLlY
+         CYbdK/I0Z9njs3RRJlxLsrWEiWvgPUeWDrkLh9JCBFuQn+4xVS7vX0dAHgF06AdHht7E
+         jvObGVsUsXLYQqvHd6MG1ChBAkSJF+YI25iy50Wf3rmcnte9W8KijT7+XvymnD1ortQS
+         HZNw==
+X-Gm-Message-State: APjAAAU6OabCIxn/byoAJi47nqaVIYsjHC5BI95T+vg2ES0tWheieBjf
+        LHQIrwGcDDC98x8yF91/eLjtco5w
+X-Google-Smtp-Source: APXvYqyF45s9rCyZ+dfGkwtuG7u3iE4RxykwaxQHhZNzytFInuQalN4n44FkNhSmm94J3wmgc1obpA==
+X-Received: by 2002:ac8:169b:: with SMTP id r27mr24479270qtj.235.1556318447878;
+        Fri, 26 Apr 2019 15:40:47 -0700 (PDT)
+Received: from quaco.ghostprotocols.net ([179.97.35.11])
+        by smtp.gmail.com with ESMTPSA id g50sm3452441qtg.83.2019.04.26.15.40.44
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 26 Apr 2019 15:40:45 -0700 (PDT)
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 845EF4111F; Fri, 26 Apr 2019 19:40:42 -0300 (-03)
+Date:   Fri, 26 Apr 2019 19:40:42 -0300
 To:     Yonghong Song <yhs@fb.com>
-CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Song Liu <songliubraving@fb.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Kernel Team <Kernel-team@fb.com>
-Subject: Re: [PATCH v3 bpf-next 5/6] bpf: Add BPF_MAP_TYPE_SK_STORAGE test to
- test_maps
-Thread-Topic: [PATCH v3 bpf-next 5/6] bpf: Add BPF_MAP_TYPE_SK_STORAGE test to
- test_maps
-Thread-Index: AQHU/FMf46Ax1/7Jm0CpUFJ1GkXNbaZOxAaAgAAzfQA=
-Date:   Fri, 26 Apr 2019 21:36:20 +0000
-Message-ID: <20190426213618.utfybnbzk3essirh@kafai-mbp.dhcp.thefacebook.com>
-References: <20190426171102.61757-1-kafai@fb.com>
- <20190426171112.62405-1-kafai@fb.com>
- <09d7ea96-641f-9692-686f-03c5f44774e8@fb.com>
-In-Reply-To: <09d7ea96-641f-9692-686f-03c5f44774e8@fb.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: CO2PR04CA0080.namprd04.prod.outlook.com
- (2603:10b6:102:1::48) To MWHPR15MB1790.namprd15.prod.outlook.com
- (2603:10b6:301:4e::19)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [2620:10d:c090:200::3:7ae1]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fe264e15-f6af-4b54-c0fa-08d6ca8f38b6
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:MWHPR15MB1854;
-x-ms-traffictypediagnostic: MWHPR15MB1854:
-x-microsoft-antispam-prvs: <MWHPR15MB1854A076C6642DBB868DDAB4D53E0@MWHPR15MB1854.namprd15.prod.outlook.com>
-x-forefront-prvs: 001968DD50
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(136003)(39860400002)(346002)(376002)(396003)(189003)(199004)(76176011)(46003)(305945005)(97736004)(7736002)(102836004)(186003)(53546011)(5660300002)(6506007)(386003)(316002)(73956011)(14454004)(229853002)(71190400001)(66556008)(64756008)(66446008)(52116002)(71200400001)(66946007)(6246003)(66476007)(6862004)(2906002)(6512007)(86362001)(9686003)(68736007)(53936002)(486006)(4326008)(53946003)(6116002)(11346002)(446003)(478600001)(1076003)(81156014)(30864003)(81166006)(14444005)(54906003)(25786009)(6486002)(6436002)(256004)(8676002)(99286004)(8936002)(6636002)(476003)(579004);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR15MB1854;H:MWHPR15MB1790.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: ymD9TD+yWrZ3EFaYtbHYkpDuEb4ps8vdnOuWV+lMATTkSimz4xn5/HofPR6USBZ3RjFooWsjNlcaRcyxLcvwCwG+gHHs3tb4P7+fASM9nCR/xjToF78il5OEDL0ptJ2CPGktDJ77oY9ZTpDQCtIf3yGPBDmUTvRUWF6LG2Q4fnn6zY4iBnVYoAT8czsfRd5zagWWDK8UEBRa0lTvAUb406LZmoOOE6qaI5077jRqSI+V/fzOV/GdOwnsv2gBkteInVKUBL0T/joP/+sEhBxM1sOq7OhE8WYvYODbWwu5Be5YgmidvQBfXdYrgmamY/OKKOHhnSpUdLyil+kqOP5PMGYCtfsbkdW0U6dF/Aoh/+EQ/gf2RuwnOerefHciifD6xVDjsFkmtr7cSjDkKfLcOTqq3MVYQXeAHfHFpg/vbWw=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <4607BE514ACB9A4092D2B7970D67F226@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: Re: perf BPF annotation output validation
+Message-ID: <20190426224042.GA7857@kernel.org>
+References: <20190426183707.GE23426@kernel.org>
+ <6F8B5202-17A9-48B8-AEC2-FB116EC6F74F@fb.com>
+ <20190426192611.GA28586@kernel.org>
+ <1e4d3cad-70d1-bcc2-611c-f32d4d299099@fb.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: fe264e15-f6af-4b54-c0fa-08d6ca8f38b6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Apr 2019 21:36:20.4932
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR15MB1854
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-26_14:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1904260141
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1e4d3cad-70d1-bcc2-611c-f32d4d299099@fb.com>
+X-Url:  http://acmel.wordpress.com
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Apr 26, 2019 at 11:32:01AM -0700, Yonghong Song wrote:
->=20
->=20
-> On 4/26/19 10:11 AM, Martin KaFai Lau wrote:
-> > This patch adds BPF_MAP_TYPE_SK_STORAGE test to test_maps.
-> > The src file is rather long, so it is put into another dir map_tests/
-> > and compile like the current prog_tests/ does.  Other existing
-> > tests in test_maps can also be re-factored into map_tests/ in the
-> > future.
-> >=20
-> > Signed-off-by: Martin KaFai Lau <kafai@fb.com>
-> > ---
-> >   tools/testing/selftests/bpf/Makefile          |  25 +-
-> >   .../selftests/bpf/map_tests/sk_storage_map.c  | 638 +++++++++++++++++=
-+
-> >   tools/testing/selftests/bpf/test_maps.c       |  18 +-
-> >   tools/testing/selftests/bpf/test_maps.h       |  17 +
-> >   4 files changed, 688 insertions(+), 10 deletions(-)
-> >   create mode 100644 tools/testing/selftests/bpf/map_tests/sk_storage_m=
-ap.c
-> >   create mode 100644 tools/testing/selftests/bpf/test_maps.h
-> >=20
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selft=
-ests/bpf/Makefile
-> > index f9d83ba7843e..66f2dca1dee1 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
-> > @@ -74,6 +74,8 @@ all: $(TEST_CUSTOM_PROGS)
-> >   $(OUTPUT)/urandom_read: $(OUTPUT)/%: %.c
-> >   	$(CC) -o $@ $< -Wl,--build-id
-> >  =20
-> > +$(OUTPUT)/test_maps: map_tests/*.c
-> > +
-> >   BPFOBJ :=3D $(OUTPUT)/libbpf.a
-> >  =20
-> >   $(TEST_GEN_PROGS): $(BPFOBJ)
-> > @@ -232,6 +234,27 @@ $(PROG_TESTS_H): $(PROG_TESTS_DIR) $(PROG_TESTS_FI=
-LES)
-> >   		  echo '#endif' \
-> >   		 ) > $(PROG_TESTS_H))
-> >  =20
-> > +TEST_MAPS_CFLAGS :=3D -I. -I$(OUTPUT)
-> > +MAP_TESTS_DIR =3D $(OUTPUT)/map_tests
-> > +$(MAP_TESTS_DIR):
-> > +	mkdir -p $@
-> > +MAP_TESTS_H :=3D $(MAP_TESTS_DIR)/tests.h
-> > +test_maps.c: $(MAP_TESTS_H)
-> > +$(OUTPUT)/test_maps: CFLAGS +=3D $(TEST_MAPS_CFLAGS)
-> > +MAP_TESTS_FILES :=3D $(wildcard map_tests/*.c)
-> > +$(MAP_TESTS_H): $(MAP_TESTS_DIR) $(MAP_TESTS_FILES)
-> > +	$(shell ( cd map_tests/; \
-> > +		  echo '/* Generated header, do not edit */'; \
-> > +		  echo '#ifdef DECLARE'; \
-> > +		  ls *.c 2> /dev/null | \
-> > +			sed -e 's@\([^\.]*\)\.c@extern void test_\1(void);@'; \
-> > +		  echo '#endif'; \
-> > +		  echo '#ifdef CALL'; \
-> > +		  ls *.c 2> /dev/null | \
-> > +			sed -e 's@\([^\.]*\)\.c@test_\1();@'; \
-> > +		  echo '#endif' \
-> > +		 ) > $(MAP_TESTS_H))
-> > +
-> >   VERIFIER_TESTS_H :=3D $(OUTPUT)/verifier/tests.h
-> >   test_verifier.c: $(VERIFIER_TESTS_H)
-> >   $(OUTPUT)/test_verifier: CFLAGS +=3D $(TEST_VERIFIER_CFLAGS)
-> > @@ -251,4 +274,4 @@ $(OUTPUT)/verifier/tests.h: $(VERIFIER_TESTS_DIR) $=
-(VERIFIER_TEST_FILES)
-> >   		 ) > $(VERIFIER_TESTS_H))
-> >  =20
-> >   EXTRA_CLEAN :=3D $(TEST_CUSTOM_PROGS) $(ALU32_BUILD_DIR) \
-> > -	$(VERIFIER_TESTS_H) $(PROG_TESTS_H)
-> > +	$(VERIFIER_TESTS_H) $(PROG_TESTS_H) $(MAP_TESTS_H)
-> > diff --git a/tools/testing/selftests/bpf/map_tests/sk_storage_map.c b/t=
-ools/testing/selftests/bpf/map_tests/sk_storage_map.c
-> > new file mode 100644
-> > index 000000000000..f66e4a3ee6e4
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/map_tests/sk_storage_map.c
-> > @@ -0,0 +1,638 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/* Copyright (c) 2019 Facebook  */
-> > +#include <linux/compiler.h>
-> > +#include <linux/err.h>
-> > +
-> > +#include <sys/resource.h>
-> > +#include <sys/socket.h>
-> > +#include <sys/types.h>
-> > +#include <linux/btf.h>
-> > +#include <unistd.h>
-> > +#include <signal.h>
-> > +#include <errno.h>
-> > +#include <string.h>
-> > +#include <pthread.h>
-> > +
-> > +#include <bpf/bpf.h>
-> > +#include <bpf/libbpf.h>
-> > +
-> > +#include <test_maps.h>
-> > +
-> > +static struct bpf_create_map_attr xattr =3D {
-> > +	.name =3D "sk_storage_map",
-> > +	.map_type =3D BPF_MAP_TYPE_SK_STORAGE,
-> > +	.map_flags =3D BPF_F_NO_PREALLOC,
-> > +	.max_entries =3D 0,
-> > +	.key_size =3D 4,
-> > +	.value_size =3D 8,
-> > +	.btf_key_type_id =3D 1,
-> > +	.btf_value_type_id =3D 3,
-> > +	.btf_fd =3D -1,
-> > +};
-> > +
-> > +static unsigned int nr_sk_threads_done;
-> > +static unsigned int nr_sk_threads_err;
-> > +static unsigned int nr_sk_per_thread =3D 4096;
-> > +static unsigned int nr_sk_threads =3D 4;
-> > +static int sk_storage_map =3D -1;
-> > +static unsigned int stop;
-> > +static int runtime_s =3D 5;
-> > +
-> > +static bool is_stopped(void)
-> > +{
-> > +	return READ_ONCE(stop);
-> > +}
-> > +
-> > +static unsigned int threads_err(void)
-> > +{
-> > +	return READ_ONCE(nr_sk_threads_err);
-> > +}
-> > +
-> > +static void notify_thread_err(void)
-> > +{
-> > +	__sync_add_and_fetch(&nr_sk_threads_err, 1);
-> > +}
-> > +
-> > +static bool wait_for_threads_err(void)
-> > +{
-> > +	while (!is_stopped() && !threads_err())
-> > +		usleep(500);
-> > +
-> > +	return !is_stopped();
-> > +}
-> > +
-> > +static unsigned int threads_done(void)
-> > +{
-> > +	return READ_ONCE(nr_sk_threads_done);
-> > +}
-> > +
-> > +static void notify_thread_done(void)
-> > +{
-> > +	__sync_add_and_fetch(&nr_sk_threads_done, 1);
-> > +}
-> > +
-> > +static void notify_thread_redo(void)
-> > +{
-> > +	__sync_sub_and_fetch(&nr_sk_threads_done, 1);
-> > +}
-> > +
-> > +static bool wait_for_threads_done(void)
-> > +{
-> > +	while (threads_done() !=3D nr_sk_threads && !is_stopped() &&
-> > +	       !threads_err())
-> > +		usleep(50);
-> > +
-> > +	return !is_stopped() && !threads_err();
-> > +}
-> > +
-> > +static bool wait_for_threads_redo(void)
-> > +{
-> > +	while (threads_done() && !is_stopped() && !threads_err())
-> > +		usleep(50);
-> > +
-> > +	return !is_stopped() && !threads_err();
-> > +}
-> > +
-> > +static bool wait_for_map(void)
-> > +{
-> > +	while (READ_ONCE(sk_storage_map) =3D=3D -1 && !is_stopped())
-> > +		usleep(50);
-> > +
-> > +	return !is_stopped();
-> > +}
-> > +
-> > +static bool wait_for_map_close(void)
-> > +{
-> > +	while (READ_ONCE(sk_storage_map) !=3D -1 && !is_stopped())
-> > +		;
-> > +
-> > +	return !is_stopped();
-> > +}
-> > +
-> > +static int load_btf(void)
-> > +{
-> > +#define BTF_INFO_ENC(kind, kind_flag, vlen) \
-> > +	((!!(kind_flag) << 31) | ((kind) << 24) | ((vlen) & BTF_MAX_VLEN))
-> > +#define BTF_TYPE_ENC(name, info, size_or_type) \
-> > +	(name), (info), (size_or_type)
-> > +#define BTF_INT_ENC(encoding, bits_offset, nr_bits) \
-> > +	((encoding) << 24 | (bits_offset) << 16 | (nr_bits))
-> > +#define BTF_TYPE_INT_ENC(name, encoding, bits_offset, bits, sz) \
-> > +	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_INT, 0, 0), sz),	\
-> > +	BTF_INT_ENC(encoding, bits_offset, bits)
-> > +#define BTF_MEMBER_ENC(name, type, bits_offset) \
-> > +	(name), (type), (bits_offset)
-> > +
-> > +	const char btf_str_sec[] =3D "\0bpf_spin_lock\0val\0cnt\0l";
-> > +	__u32 btf_raw_types[] =3D {
-> > +		/* int */
-> > +		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),  /* [1] */
-> > +		/* struct bpf_spin_lock */                      /* [2] */
-> > +		BTF_TYPE_ENC(1, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 1), 4),
-> > +		BTF_MEMBER_ENC(15, 1, 0), /* int val; */
-> > +		/* struct val */                                /* [3] */
-> > +		BTF_TYPE_ENC(15, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 2), 8),
-> > +		BTF_MEMBER_ENC(19, 1, 0), /* int cnt; */
-> > +		BTF_MEMBER_ENC(23, 2, 32),/* struct bpf_spin_lock l; */
-> > +	};
-> > +	struct btf_header btf_hdr =3D {
-> > +		.magic =3D BTF_MAGIC,
-> > +		.version =3D BTF_VERSION,
-> > +		.hdr_len =3D sizeof(struct btf_header),
-> > +		.type_len =3D sizeof(btf_raw_types),
-> > +		.str_off =3D sizeof(btf_raw_types),
-> > +		.str_len =3D sizeof(btf_str_sec),
-> > +	};
-> > +	__u8 raw_btf[sizeof(struct btf_header) + sizeof(btf_raw_types) +
-> > +		     sizeof(btf_str_sec)];
-> > +
-> > +	memcpy(raw_btf, &btf_hdr, sizeof(btf_hdr));
-> > +	memcpy(raw_btf + sizeof(btf_hdr), btf_raw_types, sizeof(btf_raw_types=
-));
-> > +	memcpy(raw_btf + sizeof(btf_hdr) + sizeof(btf_raw_types),
-> > +	       btf_str_sec, sizeof(btf_str_sec));
-> > +
-> > +	return bpf_load_btf(raw_btf, sizeof(raw_btf), 0, 0, 0);
-> > +}
-> > +
-> > +static int create_sk_storage_map(void)
-> > +{
-> > +	int btf_fd, map_fd;
-> > +
-> > +	btf_fd =3D load_btf();
-> > +	CHECK(btf_fd =3D=3D -1, "bpf_load_btf", "btf_fd:%d errno:%d\n",
-> > +	      btf_fd, errno);
-> > +	xattr.btf_fd =3D btf_fd;
-> > +
-> > +	map_fd =3D bpf_create_map_xattr(&xattr);
-> > +	xattr.btf_fd =3D -1;
-> > +	close(btf_fd);
-> > +	CHECK(map_fd =3D=3D -1,
-> > +	      "bpf_create_map_xattr()", "errno:%d\n", errno);
-> > +
-> > +	return map_fd;
-> > +}
-> > +
-> > +static void *insert_close_thread(void *arg)
-> > +{
-> > +	struct {
-> > +		int cnt;
-> > +		int lock;
-> > +	} value =3D { .cnt =3D 0xeB9F, .lock =3D 0, };
-> > +	int i, map_fd, err, *sk_fds;
-> > +
-> > +	sk_fds =3D malloc(sizeof(*sk_fds) * nr_sk_per_thread);
-> > +	if (!sk_fds) {
-> > +		notify_thread_err();
-> > +		return ERR_PTR(-ENOMEM);
-> > +	}
-> > +
-> > +	for (i =3D 0; i < nr_sk_per_thread; i++)
-> > +		sk_fds[i] =3D -1;
-> > +
-> > +	while (!is_stopped()) {
-> > +		if (!wait_for_map())
-> > +			goto close_all;
-> > +
-> > +		map_fd =3D READ_ONCE(sk_storage_map);
-> > +		for (i =3D 0; i < nr_sk_per_thread && !is_stopped(); i++) {
-> > +			sk_fds[i] =3D socket(AF_INET6, SOCK_STREAM, 0);
-> > +			if (sk_fds[i] =3D=3D -1) {
-> > +				err =3D -errno;
-> > +				fprintf(stderr, "socket(): errno:%d\n", errno);
-> > +				goto errout;
-> > +			}
-> > +			err =3D bpf_map_update_elem(map_fd, &sk_fds[i], &value,
-> > +						  BPF_NOEXIST);
-> > +			if (err) {
-> > +				err =3D -errno;
-> > +				fprintf(stderr,
-> > +					"bpf_map_update_elem(): errno:%d\n",
-> > +					errno);
-> > +				goto errout;
-> > +			}
-> > +		}
-> > +
-> > +		notify_thread_done();
-> > +		wait_for_map_close();
-> > +
-> > +close_all:
-> > +		for (i =3D 0; i < nr_sk_per_thread; i++) {
-> > +			close(sk_fds[i]);
-> > +			sk_fds[i] =3D -1;
-> > +		}
-> > +
-> > +		notify_thread_redo();
-> > +	}
-> > +
-> > +	free(sk_fds);
-> > +	return NULL;
-> > +
-> > +errout:
-> > +	for (i =3D 0; i < nr_sk_per_thread && sk_fds[i] !=3D -1; i++)
-> > +		close(sk_fds[i]);
-> > +	free(sk_fds);
-> > +	notify_thread_err();
-> > +	return ERR_PTR(err);
-> > +}
-> > +
-> > +static int do_sk_storage_map_stress_free(void)
-> > +{
-> > +	int i, map_fd =3D -1, err =3D 0, nr_threads_created =3D 0;
-> > +	pthread_t *sk_thread_ids;
-> > +	void *thread_ret;
-> > +
-> > +	sk_thread_ids =3D malloc(sizeof(pthread_t) * nr_sk_threads);
-> > +	if (!sk_thread_ids) {
-> > +		fprintf(stderr, "malloc(sk_threads): NULL\n");
-> > +		return -ENOMEM;
-> > +	}
-> > +
-> > +	for (i =3D 0; i < nr_sk_threads; i++) {
-> > +		err =3D pthread_create(&sk_thread_ids[i], NULL,
-> > +				     insert_close_thread, NULL);
-> > +		if (err) {
-> > +			err =3D -errno;
-> > +			goto done;
-> > +		}
-> > +		nr_threads_created++;
-> > +	}
-> > +
-> > +	while (!is_stopped()) {
-> > +		map_fd =3D create_sk_storage_map();
-> > +		WRITE_ONCE(sk_storage_map, map_fd);
-> > +
-> > +		if (!wait_for_threads_done())
-> > +			break;
-> > +
-> > +		WRITE_ONCE(sk_storage_map, -1);
-> > +		close(map_fd);
-> > +		map_fd =3D -1;
-> > +
-> > +		if (!wait_for_threads_redo())
-> > +			break;
-> > +	}
-> > +
-> > +done:
-> > +	WRITE_ONCE(stop, 1);
-> > +	for (i =3D 0; i < nr_threads_created; i++) {
-> > +		pthread_join(sk_thread_ids[i], &thread_ret);
-> > +		if (IS_ERR(thread_ret) && !err) {
-> > +			err =3D PTR_ERR(thread_ret);
-> > +			fprintf(stderr, "threads#%u: err:%d\n", i, err);
-> > +		}
-> > +	}
-> > +	free(sk_thread_ids);
-> > +
-> > +	if (map_fd !=3D -1)
-> > +		close(map_fd);
-> > +
-> > +	return err;
-> > +}
-> > +
-> > +static void *update_thread(void *arg)
-> > +{
-> > +	struct {
-> > +		int cnt;
-> > +		int lock;
-> > +	} value =3D { .cnt =3D 0xeB9F, .lock =3D 0, };
-> > +	int map_fd =3D READ_ONCE(sk_storage_map);
-> > +	int sk_fd =3D *(int *)arg;
-> > +	int err =3D 0; /* Suppress compiler false alarm */
-> > +
-> > +	while (!is_stopped()) {
-> > +		err =3D bpf_map_update_elem(map_fd, &sk_fd, &value, 0);
-> > +		if (err && errno !=3D EAGAIN) {
-> > +			err =3D -errno;
-> > +			fprintf(stderr, "bpf_map_update_elem: %d %d\n",
-> > +				err, errno);
-> > +			break;
-> > +		}
-> > +	}
-> > +
-> > +	if (!is_stopped()) {
-> > +		notify_thread_err();
-> > +		return ERR_PTR(err);
-> > +	}
-> > +
-> > +	return NULL;
-> > +}
-> > +
-> > +static void *delete_thread(void *arg)
-> > +{
-> > +	int map_fd =3D READ_ONCE(sk_storage_map);
-> > +	int sk_fd =3D *(int *)arg;
-> > +	int err =3D 0; /* Suppress compiler false alarm */
-> > +
-> > +	while (!is_stopped()) {
-> > +		err =3D bpf_map_delete_elem(map_fd, &sk_fd);
-> > +		if (err && errno !=3D ENOENT) {
-> > +			err =3D -errno;
-> > +			fprintf(stderr, "bpf_map_delete_elem: %d %d\n",
-> > +				err, errno);
-> > +			break;
-> > +		}
-> > +	}
-> > +
-> > +	if (!is_stopped()) {
-> > +		notify_thread_err();
-> > +		return ERR_PTR(err);
-> > +	}
-> > +
-> > +	return NULL;
-> > +}
-> > +
-> > +static int do_sk_storage_map_stress_change(void)
-> > +{
-> > +	int i, sk_fd, map_fd =3D -1, err =3D 0, nr_threads_created =3D 0;
-> > +	pthread_t *sk_thread_ids;
-> > +	void *thread_ret;
-> > +
-> > +	sk_thread_ids =3D malloc(sizeof(pthread_t) * nr_sk_threads);
-> > +	if (!sk_thread_ids) {
-> > +		fprintf(stderr, "malloc(sk_threads): NULL\n");
-> > +		return -ENOMEM;
-> > +	}
-> > +
-> > +	sk_fd =3D socket(AF_INET6, SOCK_STREAM, 0);
-> > +	if (sk_fd =3D=3D -1) {
-> > +		err =3D -errno;
-> > +		goto done;
-> > +	}
-> > +
-> > +	map_fd =3D create_sk_storage_map();
-> > +	WRITE_ONCE(sk_storage_map, map_fd);
-> > +
-> > +	for (i =3D 0; i < nr_sk_threads; i++) {
-> > +		if (i & 0x1)
-> > +			err =3D pthread_create(&sk_thread_ids[i], NULL,
-> > +					     update_thread, &sk_fd);
-> > +		else
-> > +			err =3D pthread_create(&sk_thread_ids[i], NULL,
-> > +					     delete_thread, &sk_fd);
-> > +		if (err) {
-> > +			err =3D -errno;
-> > +			goto done;
-> > +		}
-> > +		nr_threads_created++;
-> > +	}
-> > +
-> > +	wait_for_threads_err();
-> > +
-> > +done:
-> > +	WRITE_ONCE(stop, 1);
-> > +	for (i =3D 0; i < nr_threads_created; i++) {
-> > +		pthread_join(sk_thread_ids[i], &thread_ret);
-> > +		if (IS_ERR(thread_ret) && !err) {
-> > +			err =3D PTR_ERR(thread_ret);
-> > +			fprintf(stderr, "threads#%u: err:%d\n", i, err);
-> > +		}
-> > +	}
-> > +	free(sk_thread_ids);
-> > +
-> > +	if (sk_fd !=3D -1)
-> > +		close(sk_fd);
-> > +	close(map_fd);
-> > +
-> > +	return err;
-> > +}
-> > +
-> > +static void stop_handler(int signum)
-> > +{
-> > +	if (signum !=3D SIGALRM)
-> > +		printf("stopping...\n");
-> > +	WRITE_ONCE(stop, 1);
-> > +}
-> > +
-> > +#define BPF_SK_STORAGE_MAP_TEST_NR_THREADS "BPF_SK_STORAGE_MAP_TEST_NR=
-_THREADS"
-> > +#define BPF_SK_STORAGE_MAP_TEST_SK_PER_THREAD "BPF_SK_STORAGE_MAP_TEST=
-_SK_PER_THREAD"
-> > +#define BPF_SK_STORAGE_MAP_TEST_RUNTIME_S "BPF_SK_STORAGE_MAP_TEST_RUN=
-TIME_S"
-> > +#define BPF_SK_STORAGE_MAP_TEST_NAME "BPF_SK_STORAGE_MAP_TEST_NAME"
-> > +
-> > +static void test_sk_storage_map_stress_free(void)
-> > +{
-> > +	struct rlimit rlim_old, rlim_new =3D {};
-> > +	const char *env_opt;
-> > +	int err;
-> > +
-> > +	getrlimit(RLIMIT_NOFILE, &rlim_old);
-> > +
-> > +	env_opt =3D getenv(BPF_SK_STORAGE_MAP_TEST_NR_THREADS);
-> > +	if (env_opt)
-> > +		nr_sk_threads =3D atoi(env_opt);
-> > +
-> > +	env_opt =3D getenv(BPF_SK_STORAGE_MAP_TEST_SK_PER_THREAD);
-> > +	if (env_opt)
-> > +		nr_sk_per_thread =3D atoi(env_opt);
-> > +
-> > +	env_opt =3D getenv(BPF_SK_STORAGE_MAP_TEST_RUNTIME_S);
-> > +	if (env_opt)
-> > +		runtime_s =3D atoi(env_opt);
->=20
-> I see these env variables are getenv'd by multiple times.
-> Maybe put all these into one routine before running the test.
-Will do.
+Em Fri, Apr 26, 2019 at 08:51:09PM +0000, Yonghong Song escreveu:
+> On 4/26/19 12:26 PM, Arnaldo Carvalho de Melo wrote:
+> > Em Fri, Apr 26, 2019 at 07:11:37PM +0000, Song Liu escreveu:
+> >>> On Apr 26, 2019, at 11:37 AM, Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com> wrote:
+> >>>
+> >>> tldr; more to the end there are some annotation for all sorts of cache level
+> >>> misses trying to validate the 'perf annotation' output for disassembled
+> >>> BPF programs.
+> >>>
+> >>> [root@quaco ~]# uname -a
+> >>> Linux quaco 5.1.0-rc5+ #4 SMP Wed Apr 17 19:33:00 -03 2019 x86_64 x86_64 x86_64 GNU/Linux
+> >>>
+> >>> Running perf trace with:
+> >>>
+> >>> [root@quaco ~]# cat ~/.perfconfig
+> >>> [llvm]
+> >>> 	dump-obj = true
+> >>> 	clang-opt = -g
+> >>> [trace]
+> >>> 	add_events = /home/acme/git/perf/tools/perf/examples/bpf/augmented_raw_syscalls.c
+> >>> 	#add_events = /wb/augmented_raw_syscalls.o
+> >>> 	show_zeros = yes
+> >>> 	show_duration = no
+> >>> 	no_inherit = yes
+> >>> 	show_timestamp = no
+> >>> 	show_arg_names = no
+> >>> 	args_alignment = 40
+> >>> 	show_prefix = yes
+> >>>
+> >>> [annotate]
+> >>>
+> >>> 	hide_src_code = false
+> >>> [root@quaco ~]#
+> >>>
+> >>> clang/llvm 9:
+> >>>
+> >>> [root@quaco perf]# eu-readelf -winfo /home/acme/git/perf/tools/perf/examples/bpf/augmented_raw_syscalls.o | grep compile_unit
+> >>> [     b]  compile_unit         abbrev: 1
+> >>> [root@quaco perf]# eu-readelf -winfo /home/acme/git/perf/tools/perf/examples/bpf/augmented_raw_syscalls.o | grep compile_unit -B1 -A10
+> >>> Version: 4, Abbreviation section offset: 0, Address size: 8, Offset size: 4
+> >>> [     b]  compile_unit         abbrev: 1
+> >>>            producer             (strp) "clang version 9.0.0 (https://urldefense.proofpoint.com/v2/url?u=https-3A__git.llvm.org_git_clang.git_&d=DwIDaQ&c=5VD0RTtNlTh3ycd41b3MUw&r=dR8692q0_uaizy0jkrBJQM5k2hfm4CiFxYT8KaysFrg&m=8ymLhVNE6vfRn0KCyz7xlPkm7i1H4ttMrMYmeHEP1Cg&s=3_k_sPaZo7mwxQMoYhgd4hBUmCoS3TboKrw15yws6mA&e= 7906282d3afec5dfdc2b27943fd6c0309086c507) (https://urldefense.proofpoint.com/v2/url?u=https-3A__git.llvm.org_git_llvm.git_&d=DwIDaQ&c=5VD0RTtNlTh3ycd41b3MUw&r=dR8692q0_uaizy0jkrBJQM5k2hfm4CiFxYT8KaysFrg&m=8ymLhVNE6vfRn0KCyz7xlPkm7i1H4ttMrMYmeHEP1Cg&s=jutQ4xaAa5FePXthz5gHAgdx6kVlrPI64pnpqWWt59Q&e= a1b5de1ff8ae8bc79dc8e86e1f82565229bd0500)"
+> >>>            language             (data2) C99 (12)
+> >>>            name                 (strp) "/home/acme/git/perf/tools/perf/examples/bpf/augmented_raw_syscalls.c"
+> >>>            stmt_list            (sec_offset) 0
+> >>>            comp_dir             (strp) "/root"
+> >>>            low_pc               (addr) raw_syscalls:sys_enter+000000000000000000 <sys_enter>
+> >>>            ranges               (sec_offset) range list [     0]
+> >>> [    2a]    variable             abbrev: 2
+> >>>              name                 (strp) "__augmented_syscalls__"
+> >>>              type                 (ref4) [    3f]
+> >>> [root@quaco perf]#
+> >>>
+> >>> I then leave  this running doing system wide syscall tracing using that
+> >>> augmented_raw_syscalls.c eBPF program hooked into the syscall enter and
+> >>> exit tracepoints, so that I have something to profile and further test
+> >>> the BPF support in perf top/annotate/report (slides for LSFMM anyone?
+> >>> :-)) then I get:
+> >>>
+> >>> # perf trace -a sleep 100h
+> >>
+> >> wow, I never tried to run sleep with "100h". ;-)
+> > 
+> > This is me dreaming of the long night sleeps I don't have for about 3.3
+> > years by now ;-)
+> >   
+> >>> <SNIP>
+> >>> tmux: server/11597 ioctl(8</dev/ptmx>, TIOCLINUX, 0x7ffe1b49abf8) = 0
+> >>> tmux: server/11597 readv(8, 0x7ffe1b49ac00, 1)             = 101
+> >>> tmux: server/11597 ioctl(8</dev/ptmx>, TIOCSPGRP, 0x7ffe1b49a9f4) = 0
+> >>> tmux: server/11597 openat(AT_FDCWD, "/proc/30339/cmdline", O_RDONLY) = 5
+> >>> tmux: server/11597 fstat(5, 0x7ffe1b49a8e0)                = 0
+> >>> tmux: server/11597 read(5, 0x5571aaeb2c10, 1024)           = 10
+> >>> tmux: server/11597 close(5)                                = 0
+> >>> gnome-shell/19195  ... [continued]: ioctl())              = 0
+> >>> tmux: server/11597 poll(0x5571aad38e50, 6, 11997)       ...
+> >>> gnome-shell/19195 ioctl(11</dev/dri/card0>, DRM_MODE_RMFB, 0x7ffc2129c25c) = 0
+> >>> gnome-shell/19195 recvmsg(39<socket:[18671390]>, 0x7ffc2129c440, NONE) = -1 EAGAIN (Resource temporarily unavailable)
+> >>> <SNIP>
+> >>>
+> >>> With that running, I do:
+> >>>
+> >>> [root@quaco perf]# perf record -a sleep 2s
+> >>> [ perf record: Woken up 1 times to write data ]
+> >>> [ perf record: Captured and wrote 1.647 MB perf.data (3698 samples) ]
+> >>> [root@quaco perf]#
+> >>>
+> >>> I.e. collect 2 seconds worth of CPU cycles samples, system wide.
+> >>>
+> >>> [root@quaco perf]# perf record -a sleep 2s
+> >>> [ perf record: Woken up 1 times to write data ]
+> >>> [ perf record: Captured and wrote 2.328 MB perf.data (17764 samples) ]
+> >>> [root@quaco perf]# perf report --header-only perf.data | grep -i b[pt]f
+> >>> # event : name = cycles, , id = { 266608, 266609, 266610, 266611, 266612, 266613, 266614, 266615 }, size = 112, { sample_period, sample_freq } = 4000, sample_type = IP|TID|TIME|CPU|PERIOD, read_format = ID, disabled = 1, inherit = 1, mmap = 1, comm = 1, freq = 1, task = 1, precise_ip = 3, sample_id_all = 1, exclude_guest = 1, mmap2 = 1, comm_exec = 1, ksymbol = 1, bpf_event = 1
+> >>> # bpf_prog_info 13: bpf_prog_7be49e3934a125ba addr 0xffffffffc0437f01 size 229
+> >>> # bpf_prog_info 14: bpf_prog_2a142ef67aaad174 addr 0xffffffffc04393cd size 229
+> >>> # bpf_prog_info 17: bpf_prog_7be49e3934a125ba addr 0xffffffffc052ca3c size 229
+> >>> # bpf_prog_info 18: bpf_prog_2a142ef67aaad174 addr 0xffffffffc0531218 size 229
+> >>> # bpf_prog_info 21: bpf_prog_7be49e3934a125ba addr 0xffffffffc0cb8010 size 229
+> >>> # bpf_prog_info 22: bpf_prog_2a142ef67aaad174 addr 0xffffffffc0cba8be size 229
+> >>> # bpf_prog_info 65: bpf_prog_7be49e3934a125ba addr 0xffffffffc03f6bc2 size 229
+> >>> # bpf_prog_info 66: bpf_prog_2a142ef67aaad174 addr 0xffffffffc03f87f6 size 229
+> >>> # bpf_prog_info 125: bpf_prog_819967866022f1e1_sys_enter addr 0xffffffffc0c6e5a1 size 381
+> >>> # bpf_prog_info 126: bpf_prog_c1bd85c092d6e4aa_sys_exit addr 0xffffffffc0c953a8 size 191
+> >>> [root@quaco perf]#
+> >>>
+> >>> So everything seems in order, but then:
+> >>>
+> >>> [root@quaco perf]# perf report | grep bpf_prog
+> >>>      0.14%  perf             bpf_prog_c1bd85c092d6e4aa_sys_exit   [k] bpf_prog_c1bd85c092d6e4aa_sys_exit
+> >>>      0.08%  gnome-terminal-  bpf_prog_819967866022f1e1_sys_enter  [k] bpf_prog_819967866022f1e1_sys_enter
+> >>>      0.06%  perf             bpf_prog_819967866022f1e1_sys_enter  [k] bpf_prog_819967866022f1e1_sys_enter
+> >>>      0.04%  gnome-terminal-  bpf_prog_c1bd85c092d6e4aa_sys_exit   [k] bpf_prog_c1bd85c092d6e4aa_sys_exit
+> >>>      0.01%  alsa-sink-ALC25  bpf_prog_819967866022f1e1_sys_enter  [k] bpf_prog_819967866022f1e1_sys_enter
+> >>>      0.01%  Web Content      bpf_prog_c1bd85c092d6e4aa_sys_exit   [k] bpf_prog_c1bd85c092d6e4aa_sys_exit
+> >>>      0.01%  lvmetad          bpf_prog_819967866022f1e1_sys_enter  [k] bpf_prog_819967866022f1e1_sys_enter
+> >>>      0.00%  alsa-sink-ALC25  bpf_prog_c1bd85c092d6e4aa_sys_exit   [k] bpf_prog_c1bd85c092d6e4aa_sys_exit
+> >>>      0.00%  sssd_kcm         bpf_prog_c1bd85c092d6e4aa_sys_exit   [k] bpf_prog_c1bd85c092d6e4aa_sys_exit
+> >>>      0.00%  gnome-shell      bpf_prog_819967866022f1e1_sys_enter  [k] bpf_prog_819967866022f1e1_sys_enter
+> >>>      0.00%  firefox          bpf_prog_c1bd85c092d6e4aa_sys_exit   [k] bpf_prog_c1bd85c092d6e4aa_sys_exit
+> >>>      0.00%  weechat          bpf_prog_c1bd85c092d6e4aa_sys_exit   [k] bpf_prog_c1bd85c092d6e4aa_sys_exit
+> >>>      0.00%  WebExtensions    bpf_prog_c1bd85c092d6e4aa_sys_exit   [k] bpf_prog_c1bd85c092d6e4aa_sys_exit
+> >>>      0.00%  Timer            bpf_prog_819967866022f1e1_sys_enter  [k] bpf_prog_819967866022f1e1_sys_enter
+> >>>      0.00%  Web Content      bpf_prog_819967866022f1e1_sys_enter  [k] bpf_prog_819967866022f1e1_sys_enter
+> >>> [root@quaco perf]#
+> >>>
+> >>> Ok, lets check that bpf_prog_819967866022f1e1_sys_enter symbol, 38% of
+> >>> the samples at just at that %rbp, more in a previous run...
+> >>>
+> >>> [root@quaco perf]# perf annotate --stdio2 bpf_prog_819967866022f1e1_sys_enter
+> >>> Samples: 25  of event 'cycles', 4000 Hz, Event count (approx.): 7248318, [percent: local period]
+> >>> bpf_prog_819967866022f1e1_sys_enter() bpf_prog_819967866022f1e1_sys_enter
+> >>> 38.00         push   %rbp
+> >>>
+> >>>   2.72         mov    %rsp,%rbp
+> >>>                sub    $0x170,%rsp
+> >>> 13.19         sub    $0x28,%rbp
+> >>>   3.30         mov    %rbx,0x0(%rbp)
+> >>> 20.33         mov    %r13,0x8(%rbp)
+> >>>                mov    %r14,0x10(%rbp)
+> >>>                mov    %r15,0x18(%rbp)
+> >>>                xor    %eax,%eax
+> >>>                mov    %rax,0x20(%rbp)
+> >>>                mov    %rdi,%rbx
+> >>> 13.34       → callq  *ffffffffd359487f
+> >>>                mov    %eax,-0x148(%rbp)
+> >>>
+> >>> So I ended up trying with a event group to check what could be that:
+> >>>
+> >>> [root@quaco perf]# perf record -a -e '{cycles,instructions,cache-misses}' sleep 2s
+> >>> [ perf record: Woken up 18 times to write data ]
+> >>> [ perf record: Captured and wrote 6.619 MB perf.data (91964 samples) ]
+> >>> [root@quaco perf]# perf annotate --stdio2 bpf_prog_819967866022f1e1_sys_enter
+> >>> Samples: 314  of events 'anon group { cycles, instructions, cache-misses }', 4000 Hz, Event count (approx.): 118106063, [percent: local period]
+> >>> bpf_prog_819967866022f1e1_sys_enter() bpf_prog_819967866022f1e1_sys_enter
+> >>> 20.88  24.58  49.11         push   %rbp
+> >>>
+> >>> 47.37  31.62  26.71         mov    %rsp,%rbp
+> >>>   1.16   0.00   0.00         sub    $0x170,%rsp
+> >>>                              sub    $0x28,%rbp
+> >>>   0.58   2.48   0.00         mov    %rbx,0x0(%rbp)
+> >>>   7.10   5.92   0.00         mov    %r13,0x8(%rbp)
+> >>>   0.51   0.96   7.96         mov    %r14,0x10(%rbp)
+> >>>   0.00   1.10   0.00         mov    %r15,0x18(%rbp)
+> >>>   0.58   0.00   0.00         xor    %eax,%eax
+> >>>                              mov    %rax,0x20(%rbp)
+> >>>   2.39   0.85   0.00         mov    %rdi,%rbx
+> >>>   0.58   1.96   0.00       → callq  *ffffffffd359487f
+> >>>                              mov    %eax,-0x148(%rbp)
+> >>>   2.88   0.89   3.50         mov    %rbp,%rsi
+> >>>                              add    $0xfffffffffffffeb8,%rsi
+> >>>
+> >>> So seems ok? I.e. that big cost at right the start of the BPF program is
+> >>> just cache pressure, probably, right?
+> >>>
+> >>>
+> >>> [root@quaco perf]# perf record -a -e '{L1-icache-load-misses,L1-dcache-load-misses}' sleep 2s
+> >>> [ perf record: Woken up 14 times to write data ]
+> >>> [ perf record: Captured and wrote 5.557 MB perf.data (72026 samples) ]
+> >>> [root@quaco perf]# perf annotate --stdio2 bpf_prog_819967866022f1e1_sys_enter
+> >>> Samples: 376  of events 'anon group { L1-icache-load-misses, L1-dcache-load-misses }', 4000 Hz, Event count (approx.): 3715276, [percent: local p>
+> >>> bpf_prog_819967866022f1e1_sys_enter() bpf_prog_819967866022f1e1_sys_enter
+> >>>   1.54  63.01         push   %rbp
+> >>>
+> >>> 53.09  28.13         mov    %rsp,%rbp
+> >>>   0.58   0.00         sub    $0x170,%rsp
+> >>>   0.00   0.55         sub    $0x28,%rbp
+> >>>   6.96   0.00         mov    %rbx,0x0(%rbp)
+> >>> 10.25   0.00         mov    %r13,0x8(%rbp)
+> >>>   0.73   0.00         mov    %r14,0x10(%rbp)
+> >>>   3.04   0.00         mov    %r15,0x18(%rbp)
+> >>>
+> >>> Looks like. furthermore:
+> >>>
+> >>> [root@quaco perf]# perf record -a -e '{L1-icache-load-misses,L1-dcache-load-misses,dTLB-load-misses,iTLB-load-misses}' sleep 2s
+> >>> [ perf record: Woken up 21 times to write data ]
+> >>> [ perf record: Captured and wrote 7.708 MB perf.data (112323 samples) ]
+> >>> [root@quaco perf]# perf annotate --stdio2 bpf_prog_819967866022f1e1_sys_enter
+> >>> Samples: 391  of events 'anon group { L1-icache-load-misses, L1-dcache-load-misses, dTLB-load-misses, iTLB-load-misses }', 4000 Hz, Event count (>
+> >>> bpf_prog_819967866022f1e1_sys_enter() bpf_prog_819967866022f1e1_sys_enter
+> >>>   1.98  64.42 100.00  13.66         push   %rbp
+> >>>
+> >>> 50.79  23.91   0.00  82.23         mov    %rsp,%rbp
+> >>>                                     sub    $0x170,%rsp
+> >>>   0.24   0.00   0.00   0.00         sub    $0x28,%rbp
+> >>>   7.73   0.00   0.00   0.00         mov    %rbx,0x0(%rbp)
+> >>> 11.13   0.44   0.00   0.00         mov    %r13,0x8(%rbp)
+> >>>                                     mov    %r14,0x10(%rbp)
+> >>>   1.64   0.46   0.00   0.00         mov    %r15,0x18(%rbp)
+> >>>
+> >>> Do these numbers look sane to you guys?
+> >>
+> >>  From my experiments, mov is often the top time consumer. But
+> >>
+> >>     mov %rsp,%rbp
+> >>
+> >> is a little weird. It does not access cache, right?
+> > 
+> > Right, but its like the code for bpf_prog_819967866022f1e1_sys_enter is
+> > being sucked into L1 icache at that point, no?
+> 
+> do you need to enable pebs (precise event-based sampling)?
 
->=20
-> > +
-> > +	signal(SIGTERM, stop_handler);
-> > +	signal(SIGINT, stop_handler);
-> > +	if (runtime_s > 0) {
-> > +		signal(SIGALRM, stop_handler);
-> > +		alarm(runtime_s);
-> > +	}
-> > +
-> > +	if (rlim_old.rlim_cur < nr_sk_threads * nr_sk_per_thread) {
-> > +		rlim_new.rlim_cur =3D nr_sk_threads * nr_sk_per_thread + 128;
-> > +		rlim_new.rlim_max =3D rlim_new.rlim_cur + 128;
-> > +		err =3D setrlimit(RLIMIT_NOFILE, &rlim_new);
-> > +		CHECK(err, "setrlimit(RLIMIT_NOFILE)", "rlim_new:%lu errno:%d",
-> > +		      rlim_new.rlim_cur, errno);
-> > +	}
-> > +
-> > +	err =3D do_sk_storage_map_stress_free();
-> > +
-> > +	signal(SIGTERM, SIG_DFL);
-> > +	signal(SIGINT, SIG_DFL);
-> > +	if (runtime_s > 0) {
-> > +		signal(SIGALRM, SIG_DFL);
-> > +		alarm(0);
-> > +	}
-> > +
-> > +	if (rlim_new.rlim_cur)
-> > +		setrlimit(RLIMIT_NOFILE, &rlim_old);
-> > +
-> > +	CHECK(err, "test_sk_storage_map_stress_free", "err:%d\n", err);
-> > +}
-> > +
-> > +static void test_sk_storage_map_stress_change(void)
-> > +{
-> > +	const char *env_opt;
-> > +	int err;
-> > +
-> > +	env_opt =3D getenv(BPF_SK_STORAGE_MAP_TEST_NR_THREADS);
-> > +	if (env_opt)
-> > +		nr_sk_threads =3D atoi(env_opt);
-> > +
-> > +	env_opt =3D getenv(BPF_SK_STORAGE_MAP_TEST_RUNTIME_S);
-> > +	if (env_opt)
-> > +		runtime_s =3D atoi(env_opt);
-> > +
-> > +	signal(SIGTERM, stop_handler);
-> > +	signal(SIGINT, stop_handler);
-> > +	if (runtime_s > 0) {
-> > +		signal(SIGALRM, stop_handler);
-> > +		alarm(runtime_s);
-> > +	}
-> > +
-> > +	err =3D do_sk_storage_map_stress_change();
-> > +
-> > +	signal(SIGTERM, SIG_DFL);
-> > +	signal(SIGINT, SIG_DFL);
-> > +	if (runtime_s > 0) {
-> > +		signal(SIGALRM, SIG_DFL);
-> > +		alarm(0);
-> > +	}
-> > +
-> > +	CHECK(err, "test_sk_storage_map_stress_change", "err:%d\n", err);
-> > +}
-> > +
-> > +static void test_sk_storage_map_basic(void)
-> > +{
-> > +	struct {
-> > +		int cnt;
-> > +		int lock;
-> > +	} value =3D { .cnt =3D 0xeB9f, .lock =3D 0, }, lookup_value;
-> > +	struct bpf_create_map_attr bad_xattr;
-> > +	int btf_fd, map_fd, sk_fd, err;
-> > +
-> > +	btf_fd =3D load_btf();
-> > +	CHECK(btf_fd =3D=3D -1, "bpf_load_btf", "btf_fd:%d errno:%d\n",
-> > +	      btf_fd, errno);
-> > +	xattr.btf_fd =3D btf_fd;
-> > +
-> > +	sk_fd =3D socket(AF_INET6, SOCK_STREAM, 0);
-> > +	CHECK(sk_fd =3D=3D -1, "socket()", "sk_fd:%d errno:%d\n",
-> > +	      sk_fd, errno);
-> > +
-> > +	map_fd =3D bpf_create_map_xattr(&xattr);
-> > +	CHECK(map_fd =3D=3D -1, "bpf_create_map_xattr(good_xattr)",
-> > +	      "map_fd:%d errno:%d\n", map_fd, errno);
-> > +
-> > +	/* Add new elem */
-> > +	memcpy(&lookup_value, &value, sizeof(value));
-> > +	err =3D bpf_map_update_elem(map_fd, &sk_fd, &value,
-> > +				  BPF_NOEXIST | BPF_F_LOCK);
-> > +	CHECK(err, "bpf_map_update_elem(BPF_NOEXIST|BPF_F_LOCK)",
-> > +	      "err:%d errno:%d\n", err, errno);
-> > +	err =3D bpf_map_lookup_elem_flags(map_fd, &sk_fd, &lookup_value,
-> > +					BPF_F_LOCK);
-> > +	CHECK(err || lookup_value.cnt !=3D value.cnt,
-> > +	      "bpf_map_lookup_elem_flags(BPF_F_LOCK)",
-> > +	      "err:%d errno:%d cnt:%x(%x)\n",
-> > +	      err, errno, lookup_value.cnt, value.cnt);
-> > +
-> > +	/* Bump the cnt and update with BPF_EXIST | BPF_F_LOCK */
-> > +	value.cnt +=3D 1;
-> > +	err =3D bpf_map_update_elem(map_fd, &sk_fd, &value,
-> > +				  BPF_EXIST | BPF_F_LOCK);
-> > +	CHECK(err, "bpf_map_update_elem(BPF_EXIST|BPF_F_LOCK)",
-> > +	      "err:%d errno:%d\n", err, errno);
-> > +	err =3D bpf_map_lookup_elem_flags(map_fd, &sk_fd, &lookup_value,
-> > +					BPF_F_LOCK);
-> > +	CHECK(err || lookup_value.cnt !=3D value.cnt,
-> > +	      "bpf_map_lookup_elem_flags(BPF_F_LOCK)",
-> > +	      "err:%d errno:%d cnt:%x(%x)\n",
-> > +	      err, errno, lookup_value.cnt, value.cnt);
-> > +
-> > +	/* Bump the cnt and update with BPF_EXIST */
-> > +	value.cnt +=3D 1;
-> > +	err =3D bpf_map_update_elem(map_fd, &sk_fd, &value, BPF_EXIST);
-> > +	CHECK(err, "bpf_map_update_elem(BPF_EXIST)",
-> > +	      "err:%d errno:%d\n", err, errno);
-> > +	err =3D bpf_map_lookup_elem_flags(map_fd, &sk_fd, &lookup_value,
-> > +					BPF_F_LOCK);
-> > +	CHECK(err || lookup_value.cnt !=3D value.cnt,
-> > +	      "bpf_map_lookup_elem_flags(BPF_F_LOCK)",
-> > +	      "err:%d errno:%d cnt:%x(%x)\n",
-> > +	      err, errno, lookup_value.cnt, value.cnt);
-> > +
-> > +	/* Update with BPF_NOEXIST */
-> > +	value.cnt +=3D 1;
-> > +	err =3D bpf_map_update_elem(map_fd, &sk_fd, &value,
-> > +				  BPF_NOEXIST | BPF_F_LOCK);
-> > +	CHECK(!err || errno !=3D EEXIST,
-> > +	      "bpf_map_update_elem(BPF_NOEXIST|BPF_F_LOCK)",
-> > +	      "err:%d errno:%d\n", err, errno);
-> > +	err =3D bpf_map_update_elem(map_fd, &sk_fd, &value, BPF_NOEXIST);
-> > +	CHECK(!err || errno !=3D EEXIST, "bpf_map_update_elem(BPF_NOEXIST)",
-> > +	      "err:%d errno:%d\n", err, errno);
-> > +	value.cnt -=3D 1;
-> > +	err =3D bpf_map_lookup_elem_flags(map_fd, &sk_fd, &lookup_value,
-> > +					BPF_F_LOCK);
-> > +	CHECK(err || lookup_value.cnt !=3D value.cnt,
-> > +	      "bpf_map_lookup_elem_flags(BPF_F_LOCK)",
-> > +	      "err:%d errno:%d cnt:%x(%x)\n",
-> > +	      err, errno, lookup_value.cnt, value.cnt);
-> > +
-> > +	/* Bump the cnt again and update with map_flags =3D=3D 0 */
-> > +	value.cnt +=3D 1;
-> > +	err =3D bpf_map_update_elem(map_fd, &sk_fd, &value, 0);
-> > +	CHECK(err, "bpf_map_update_elem()", "err:%d errno:%d\n",
-> > +	      err, errno);
-> > +	err =3D bpf_map_lookup_elem_flags(map_fd, &sk_fd, &lookup_value,
-> > +					BPF_F_LOCK);
-> > +	CHECK(err || lookup_value.cnt !=3D value.cnt,
-> > +	      "bpf_map_lookup_elem_flags(BPF_F_LOCK)",
-> > +	      "err:%d errno:%d cnt:%x(%x)\n",
-> > +	      err, errno, lookup_value.cnt, value.cnt);
-> > +
-> > +	/* Test delete elem */
-> > +	err =3D bpf_map_delete_elem(map_fd, &sk_fd);
-> > +	CHECK(err, "bpf_map_delete_elem()", "err:%d errno:%d\n",
-> > +	      err, errno);
-> > +	err =3D bpf_map_lookup_elem_flags(map_fd, &sk_fd, &lookup_value,
-> > +					BPF_F_LOCK);
-> > +	CHECK(!err || errno !=3D ENOENT,
-> > +	      "bpf_map_lookup_elem_flags(BPF_F_LOCK)",
-> > +	      "err:%d errno:%d\n", err, errno);
-> > +	err =3D bpf_map_delete_elem(map_fd, &sk_fd);
-> > +	CHECK(!err || errno !=3D ENOENT, "bpf_map_delete_elem()",
-> > +	      "err:%d errno:%d\n", err, errno);
-> > +
-> > +	memcpy(&bad_xattr, &xattr, sizeof(xattr));
-> > +	bad_xattr.btf_key_type_id =3D 0;
-> > +	err =3D bpf_create_map_xattr(&bad_xattr);
-> > +	CHECK(!err || errno !=3D EINVAL, "bap_create_map_xattr(bad_xattr)",
-> > +	      "err:%d errno:%d\n", err, errno);
-> > +
-> > +	memcpy(&bad_xattr, &xattr, sizeof(xattr));
-> > +	bad_xattr.btf_key_type_id =3D 3;
-> > +	err =3D bpf_create_map_xattr(&bad_xattr);
-> > +	CHECK(!err || errno !=3D EINVAL, "bap_create_map_xattr(bad_xattr)",
-> > +	      "err:%d errno:%d\n", err, errno);
-> > +
-> > +	memcpy(&bad_xattr, &xattr, sizeof(xattr));
-> > +	bad_xattr.max_entries =3D 1;
-> > +	err =3D bpf_create_map_xattr(&bad_xattr);
-> > +	CHECK(!err || errno !=3D EINVAL, "bap_create_map_xattr(bad_xattr)",
-> > +	      "err:%d errno:%d\n", err, errno);
-> > +
-> > +	memcpy(&bad_xattr, &xattr, sizeof(xattr));
-> > +	bad_xattr.map_flags =3D 0;
-> > +	err =3D bpf_create_map_xattr(&bad_xattr);
-> > +	CHECK(!err || errno !=3D EINVAL, "bap_create_map_xattr(bad_xattr)",
-> > +	      "err:%d errno:%d\n", err, errno);
-> > +
-> > +	xattr.btf_fd =3D -1;
-> > +	close(btf_fd);
-> > +	close(map_fd);
-> > +	close(sk_fd);
-> > +}
-> > +
-> > +void test_sk_storage_map(void)
-> > +{
-> > +	const char *test_name;
-> > +
-> > +	test_name =3D getenv(BPF_SK_STORAGE_MAP_TEST_NAME);
-> > +
-> > +	if (!test_name || !strcmp(test_name, "basic"))
-> > +		test_sk_storage_map_basic();
-> > +	if (!test_name || !strcmp(test_name, "stress_free"))
-> > +		test_sk_storage_map_stress_free();
-> > +	if (!test_name || !strcmp(test_name, "stress_change"))
-> > +		test_sk_storage_map_stress_change();
->=20
-> Maybe add a single line to print out whether the test_sk_storage_map=20
-> successful or not?
-Ok.
+So, when you don't specify a event, 'perf record' will use cycles:P,
+which is the highest level of (PEBS, on x86) precision available. But
+then that has some limitations, I'll try to check this later, to see if
+cache events can be counted that way, how many events, etc.
 
->=20
-> > +}
-> > diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/se=
-lftests/bpf/test_maps.c
-> > index 3c627771f965..246f745cb006 100644
-> > --- a/tools/testing/selftests/bpf/test_maps.c
-> > +++ b/tools/testing/selftests/bpf/test_maps.c
-> > @@ -27,6 +27,7 @@
-> >  =20
-> >   #include "bpf_util.h"
-> >   #include "bpf_rlimit.h"
-> > +#include "test_maps.h"
-> >  =20
-> >   #ifndef ENOTSUPP
-> >   #define ENOTSUPP 524
-> > @@ -36,15 +37,6 @@ static int skips;
-> >  =20
-> >   static int map_flags;
-> >  =20
-> > -#define CHECK(condition, tag, format...) ({				\
-> > -	int __ret =3D !!(condition);					\
-> > -	if (__ret) {							\
-> > -		printf("%s(%d):FAIL:%s ", __func__, __LINE__, tag);	\
-> > -		printf(format);						\
-> > -		exit(-1);						\
-> > -	}								\
-> > -})
-> > -
-> >   static void test_hashmap(unsigned int task, void *data)
-> >   {
-> >   	long long key, next_key, first_key, value;
-> > @@ -1703,6 +1695,10 @@ static void run_all_tests(void)
-> >   	test_map_in_map();
-> >   }
-> >  =20
-> > +#define DECLARE
-> > +#include <map_tests/tests.h>
-> > +#undef DECLARE
-> > +
-> >   int main(void)
-> >   {
-> >   	srand(time(NULL));
-> > @@ -1713,6 +1709,10 @@ int main(void)
-> >   	map_flags =3D BPF_F_NO_PREALLOC;
-> >   	run_all_tests();
-> >  =20
-> > +#define CALL
-> > +#include <map_tests/tests.h>
-> > +#undef CALL
-> > +
-> >   	printf("test_maps: OK, %d SKIPPED\n", skips);
-> >   	return 0;
-> >   }
-> > diff --git a/tools/testing/selftests/bpf/test_maps.h b/tools/testing/se=
-lftests/bpf/test_maps.h
-> > new file mode 100644
-> > index 000000000000..77d8587ac4ed
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/test_maps.h
-> > @@ -0,0 +1,17 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +#ifndef _TEST_MAPS_H
-> > +#define _TEST_MAPS_H
-> > +
-> > +#include <stdio.h>
-> > +#include <stdlib.h>
-> > +
-> > +#define CHECK(condition, tag, format...) ({				\
-> > +	int __ret =3D !!(condition);					\
-> > +	if (__ret) {							\
-> > +		printf("%s(%d):FAIL:%s ", __func__, __LINE__, tag);	\
-> > +		printf(format);						\
-> > +		exit(-1);						\
-> > +	}								\
-> > +})
-> > +
-> > +#endif
-> >=20
+But I think that knowing that is on the first or second instruction is
+enough, i.e. it seems that somehow the eBPF program is not staying in
+the CPU cache all the time, which ends up making transferring control
+to them cause cache misses?
+
+That was the reason for my message, to validate if this is the case or
+if the BPF perf annotation or sample address resolution are buggy.
+
+> >>> Song, I also noticed that source code is not being intermixed for the
+> >>> --stdio annotation, while it works, to some degree, for '--tui', i.e.
+> >>> when you do 'perf top', press '/bpf' to show just symbols with that
+> >>> substring and then press enter or 'A' to annotate, we can see the
+> >>> original C source code for the BPF program, but it is mangling the
+> >>> screen sometimes, I need to try and fix, please take a look if you have
+> >>> the time.
+> >>
+> >> I will take a look at this, most likely after LSFMM.
+> > 
+> > mmkay
+> >   
+> >>> Also things like the callq targets need some work to tell what function
+> >>> is that, which as I said isn't appearing on the --stdio2 output, but
+> >>> appears on the --tui, i.e. we need to resolve that symbol to check how
+> >>> to map back to a BPF helper or any othe callq target.
+> >   
+> >> I am aware of missing callq symbol. I was thinking they are less critical
+> >> with source code.
+> > 
+> > Some people dislikes intermixing C and assembly, Linus is one, IIRC, so
+> > if we can augment the assembly resolving those addresses to the helper,
+> > that would be best.
+> >   
+> >>> Also, what about those 'je 0', i.e. the target is being misinterpreted
+> >>> or is this some BPF construct I should've know about? :)
+> >>
+> >> I didn't notice the je 0 before. Let me try reproduce it.
+> 
+> Did you see these `je 0` when you use bpftool dump jited instructions?
+> With dumping source annotated jited/xlated instructions, you can get 
+> rough idea where this `je 0` is coming from. Want to give a try?
+
+So, here is a fresh record:
+
+[root@quaco ~]# perf annotate --stdio2 bpf_prog_819967866022f1e1_sys_enter
+Samples: 40  of event 'cycles', 4000 Hz, Event count (approx.): 12152834, [percent: local period]
+bpf_prog_819967866022f1e1_sys_enter() bpf_prog_819967866022f1e1_sys_enter
+ 69.13         push   %rbp
+
+               mov    %rsp,%rbp
+               sub    $0x170,%rsp
+               sub    $0x28,%rbp
+ 19.07         mov    %rbx,0x0(%rbp)
+  2.08         mov    %r13,0x8(%rbp)
+               mov    %r14,0x10(%rbp)
+               mov    %r15,0x18(%rbp)
+               xor    %eax,%eax
+               mov    %rax,0x20(%rbp)
+               mov    %rdi,%rbx
+             → callq  *ffffffffd356dda0
+  3.03         mov    %eax,-0x148(%rbp)
+               mov    %rbp,%rsi
+               add    $0xfffffffffffffeb8,%rsi
+               movabs $0xffff9d5b7133a400,%rdi
+
+  1.17       → callq  *ffffffffd356f050
+               cmp    $0x0,%rax
+             → je     0
+               add    $0x38,%rax
+               xor    %r13d,%r13d
+               cmp    $0x0,%rax
+             → jne    0
+               mov    %rbp,%rdi
+               add    $0xfffffffffffffeb8,%rdi
+               mov    $0x40,%esi
+               mov    %rbx,%rdx
+             → callq  *ffffffffd354e490
+               mov    %rbp,%rsi
+               add    $0xfffffffffffffec0,%rsi
+               movabs $0xffff9d5b6fe1e000,%rdi
+
+[root@quaco ~]#
+
+Plus the bpf prog dump jit, we're probably just parsing 32-bits, the
+zeroed part...
+
+[root@quaco ~]# bpftool prog | tail -6
+129: tracepoint  name sys_enter  tag 819967866022f1e1  gpl
+	loaded_at 2019-04-26T19:31:10-0300  uid 0
+	xlated 528B  jited 381B  memlock 4096B  map_ids 119,118,117
+130: tracepoint  name sys_exit  tag c1bd85c092d6e4aa  gpl
+	loaded_at 2019-04-26T19:31:10-0300  uid 0
+	xlated 256B  jited 191B  memlock 4096B  map_ids 119,118
+[root@quaco ~]# bpftool prog dump jit id 129
+0xffffffffc0c95080:
+   0:	push   %rbp
+   1:	mov    %rsp,%rbp
+   4:	sub    $0x170,%rsp
+   b:	sub    $0x28,%rbp
+   f:	mov    %rbx,0x0(%rbp)
+  13:	mov    %r13,0x8(%rbp)
+  17:	mov    %r14,0x10(%rbp)
+  1b:	mov    %r15,0x18(%rbp)
+  1f:	xor    %eax,%eax
+  21:	mov    %rax,0x20(%rbp)
+  25:	mov    %rdi,%rbx
+  28:	callq  0xffffffffd356dda0
+  2d:	mov    %eax,-0x148(%rbp)
+  33:	mov    %rbp,%rsi
+  36:	add    $0xfffffffffffffeb8,%rsi
+  3d:	movabs $0xffff9d5b7133a400,%rdi
+  47:	callq  0xffffffffd356f050
+  4c:	cmp    $0x0,%rax
+  50:	je     0x0000000000000056
+  52:	add    $0x38,%rax
+  56:	xor    %r13d,%r13d
+  59:	cmp    $0x0,%rax
+  5d:	jne    0x0000000000000164
+  63:	mov    %rbp,%rdi
+  66:	add    $0xfffffffffffffeb8,%rdi
+  6d:	mov    $0x40,%esi
+  72:	mov    %rbx,%rdx
+  75:	callq  0xffffffffd354e490
+  7a:	mov    %rbp,%rsi
+  7d:	add    $0xfffffffffffffec0,%rsi
+  84:	movabs $0xffff9d5b6fe1e000,%rdi
+  8e:	add    $0xd0,%rdi
+  95:	mov    0x0(%rsi),%eax
+  98:	cmp    $0x200,%rax
+  9f:	jae    0x00000000000000aa
+  a1:	shl    $0x3,%rax
+  a5:	add    %rdi,%rax
+  a8:	jmp    0x00000000000000ac
+  aa:	xor    %eax,%eax
+  ac:	cmp    $0x0,%rax
+  b0:	je     0x0000000000000164
+  b6:	movzbq 0x0(%rax),%rdi
+  bb:	cmp    $0x0,%rdi
+  bf:	je     0x0000000000000164
+  c5:	mov    $0x40,%r8d
+  cb:	mov    -0x140(%rbp),%rdi
+  d2:	cmp    $0x2,%rdi
+  d6:	je     0x00000000000000e7
+  d8:	cmp    $0x101,%rdi
+  df:	je     0x00000000000000ed
+  e1:	cmp    $0x15,%rdi
+  e5:	jne    0x0000000000000140
+  e7:	mov    0x10(%rbx),%rdx
+  eb:	jmp    0x00000000000000f1
+  ed:	mov    0x18(%rbx),%rdx
+  f1:	cmp    $0x0,%rdx
+  f5:	je     0x0000000000000140
+  f7:	xor    %edi,%edi
+  f9:	mov    %edi,-0x104(%rbp)
+  ff:	mov    %rbp,%rdi
+ 102:	add    $0xffffffffffffff00,%rdi
+ 109:	mov    $0x100,%esi
+ 10e:	callq  0xffffffffd354e520
+ 113:	mov    $0x148,%r8d
+ 119:	mov    %eax,-0x108(%rbp)
+ 11f:	mov    %rax,%rdi
+ 122:	shl    $0x20,%rdi
+ 126:	shr    $0x20,%rdi
+ 12a:	cmp    $0xff,%rdi
+ 131:	ja     0x0000000000000140
+ 133:	add    $0x48,%rax
+ 137:	and    $0xff,%rax
+ 13d:	mov    %rax,%r8
+ 140:	mov    %rbp,%rcx
+ 143:	add    $0xfffffffffffffeb8,%rcx
+ 14a:	mov    %rbx,%rdi
+ 14d:	movabs $0xffff9d58126aac00,%rsi
+ 157:	mov    $0xffffffff,%edx
+ 15c:	callq  0xffffffffd354eb60
+ 161:	mov    %rax,%r13
+ 164:	mov    %r13,%rax
+ 167:	mov    0x0(%rbp),%rbx
+ 16b:	mov    0x8(%rbp),%r13
+ 16f:	mov    0x10(%rbp),%r14
+ 173:	mov    0x18(%rbp),%r15
+ 177:	add    $0x28,%rbp
+ 17b:	leaveq 
+ 17c:	retq   
+
+[root@quaco ~]# 
+
+ 
+> > 
+> > Ok!
+> >   
+> >> Thanks,
+> >> Song
+> >>
+> >>>
+> >>>   2.68   0.00   0.00   0.00         mov    %rdi,%rbx
+> >>>                                   → callq  *ffffffffd359487f
+> >>>                                     mov    %eax,-0x148(%rbp)
+> >>>   9.61   0.00   0.00   0.00         mov    %rbp,%rsi
+> >>>                                     add    $0xfffffffffffffeb8,%rsi
+> >>>                                     movabs $0xffff9d556c776c00,%rdi
+> >>>
+> >>>                                   → callq  *ffffffffd3595b2f
+> >>>                                     cmp    $0x0,%rax
+> >>>                                   → je     0
+> >>>   0.00   1.25   0.00   0.00         add    $0x38,%rax
+> >>>   0.80   0.21   0.00   0.00         xor    %r13d,%r13d
+> >>>                                     cmp    $0x0,%rax
+> >>>                                   → jne    0
+> >>>                                     mov    %rbp,%rdi
+> >>>                                     add    $0xfffffffffffffeb8,%rdi
+> >>>
+> >>> - Arnaldo
+> >>
+> > 
+
+-- 
+
+- Arnaldo
