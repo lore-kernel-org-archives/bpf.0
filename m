@@ -2,125 +2,85 @@ Return-Path: <SRS0=D5ks=S4=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD9D3C43218
-	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 00:27:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A701C43219
+	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 00:32:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7DED020878
-	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 00:27:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1556238466;
-	bh=Wqnk4oLsRyTScs9xtvymh571oWjBhUgwVKpTOLxSimQ=;
-	h=From:To:CC:Subject:Date:List-ID:From;
-	b=hpqTBPKtfdY5LT76yiYLJmge7RLAd5RejKxyZhL4rwFxtaCWV2inWL6XkJuI7iGna
-	 wx3p3Ba+sPXlBuUKPeph15Bw0jv1ont93226udGJE/7sdJ6tIBA1VQk5UFgkkVtKPP
-	 r3cZ7eFbBUOCQ/rWNs7NiBtnrRIgzCzfUqLk/F88=
+	by mail.kernel.org (Postfix) with ESMTP id 6DAD5206C1
+	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 00:32:22 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mg6XykZQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726303AbfDZA1q convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 25 Apr 2019 20:27:46 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:44844 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726086AbfDZA1p (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 25 Apr 2019 20:27:45 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x3Q0E7x3001148
-        for <bpf@vger.kernel.org>; Thu, 25 Apr 2019 17:27:44 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 2s3jrt92bd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 25 Apr 2019 17:27:44 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 25 Apr 2019 17:27:43 -0700
-Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 84FB6760BB5; Thu, 25 Apr 2019 17:27:39 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Alexei Starovoitov <ast@kernel.org>
-Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
-To:     <davem@davemloft.net>
-CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: pull-request: bpf 2019-04-25
-Date:   Thu, 25 Apr 2019 17:27:39 -0700
-Message-ID: <20190426002739.1101826-1-ast@kernel.org>
-X-Mailer: git-send-email 2.20.0
+        id S1729057AbfDZAcV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Apr 2019 20:32:21 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:40309 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727509AbfDZAcV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 25 Apr 2019 20:32:21 -0400
+Received: by mail-lj1-f196.google.com with SMTP id t10so233259ljg.7;
+        Thu, 25 Apr 2019 17:32:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=odbF+ib3Wwf/+adbhjmij/5/rXO6/3XmcDYe0ik657o=;
+        b=mg6XykZQwFkDH83EOTJ30dQHF3GwtM0LkHlxPgUpua6WYCLJxAeTsmeBvZObDYy6QP
+         amjLtHzTdaBshpypTriw69FD43Za59uizbf9XlXCoRViiCV9t8p2KskbqX76z9FJyPKr
+         Dyc6IXgaz4F1Qo/9Y1ZMmN35NR4Dxj0QOAfKQYnmwXTRXCPp5xYdCU8sPJiTbATo9kTG
+         7sfXYpGU0e5NLYK/KIIf/ruquNtWIYRJINrYl1902Wv0SF6jRkPINLz8WjkBiGkQKiy5
+         CIViq56EezUrDMq8DuaD+l7jEwS0bv3+gccU9mSNuEeH0bmHdMMz/c3gh9Fo5/D/ebFH
+         44nA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=odbF+ib3Wwf/+adbhjmij/5/rXO6/3XmcDYe0ik657o=;
+        b=fIyqZuaGWTiIDmo3Wnsj0excaKo2Y+oCMomXPRO9qlUelhSriq5VMLrUsJuUU+ru20
+         D2Hd9P1G3l4cevw5Ua/b1ndJnH/CoO0COSwOSzrLv2HnRSaTVuzRVqsnZCEn2vZcvwim
+         7bPsD+Cfx2AE21TZEUbzYxYM24oLMom4EzDkx2bmgU+AqkTUjkZZViLAuC39NXJrrrfj
+         XT+EdHJJ3ma6iSm4dyWFmEfM6fh1rqFoFfjZ0gl8l6F+hSSpQhHOmbCLRPfhIoQPEG9i
+         9S0KZPK1uoPBG3dyi8adVDOeEuihlKV5WBTAr6/yC0GtEXVCpgjuFoX9wWixY95Ps+uA
+         QTwg==
+X-Gm-Message-State: APjAAAVCdAFaxyFKUzPgo/TNTiQZ0Nxt5dfEumz+GQqT37rL9BIw19lT
+        Pu02Ba4eoDLKs2ZetH3Uehn/KCx0W8jKI6wW6GPUgCRf
+X-Google-Smtp-Source: APXvYqxogh0V4fnX9nrXP09GVdg9lTVQn7dCWuD9Y4MZX8B6T7EsPQGQLqJIdoO+MtNIoS1CkoHaweBowRYj960eudI=
+X-Received: by 2002:a2e:96d9:: with SMTP id d25mr8752777ljj.78.1556238739256;
+ Thu, 25 Apr 2019 17:32:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-25_19:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=759 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1904260001
-X-FB-Internal: deliver
+References: <20190411080332.24574-1-bpoirier@suse.com> <626302de-83fc-8c6f-4b55-de0bad746240@iogearbox.net>
+In-Reply-To: <626302de-83fc-8c6f-4b55-de0bad746240@iogearbox.net>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 25 Apr 2019 17:32:07 -0700
+Message-ID: <CAADnVQKnyJvURTHHxpgJ+WWpq5nsuHt-CpxSMc-LvC4sy16NiA@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpftool: Fix errno variable usage
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Benjamin Poirier <bpoirier@suse.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, David Ahern <dsahern@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi David,
+On Thu, Apr 11, 2019 at 12:56 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 04/11/2019 10:03 AM, Benjamin Poirier wrote:
+> > The test meant to use the saved value of errno. Given the current code, it
+> > makes no practical difference however.
+> >
+> > Fixes: bf598a8f0f77 ("bpftool: Improve handling of ENOENT on map dumps")
+> > Signed-off-by: Benjamin Poirier <bpoirier@suse.com>
+>
+> Applied, thanks!
 
-The following pull-request contains BPF updates for your *net* tree.
+I removed this commit from bpf tree and re-applied to bpf-next.
+Benjamin, next time please target such cleanups consistently
+to bpf-next tree only to avoid merge conflicts.
 
-The main changes are:
-
-1) the bpf verifier fix to properly mark registers in all stack frames, from Paul.
-
-2) preempt_enable_no_resched->preempt_enable fix, from Peter.
-
-3) other misc fixes.
-
-Please consider pulling these changes from:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-
-Thanks a lot!
-
-----------------------------------------------------------------
-
-The following changes since commit c5b493ce192bd7a4e7bd073b5685aad121eeef82:
-
-  net: bridge: multicast: use rcu to access port list from br_multicast_start_querier (2019-04-11 11:13:51 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git 
-
-for you to fetch changes up to 0edd6b64d1939e9e9168ff27947995bb7751db5d:
-
-  bpf: Fix preempt_enable_no_resched() abuse (2019-04-25 17:20:06 -0700)
-
-----------------------------------------------------------------
-Alban Crequy (1):
-      tools: bpftool: fix infinite loop in map create
-
-Matteo Croce (1):
-      libbpf: add binary to gitignore
-
-Paul Chaignon (2):
-      bpf: mark registers in all frames after pkt/null checks
-      selftests/bpf: test cases for pkt/null checks in subprogs
-
-Peter Zijlstra (1):
-      bpf: Fix preempt_enable_no_resched() abuse
-
-YueHaibing (1):
-      MIPS: eBPF: Make ebpf_to_mips_reg() static
-
- arch/mips/net/ebpf_jit.c                           |  5 +-
- include/linux/bpf.h                                |  2 +-
- kernel/bpf/verifier.c                              | 76 +++++++++++++---------
- tools/bpf/bpftool/map.c                            |  3 +
- tools/lib/bpf/.gitignore                           |  1 +
- tools/testing/selftests/bpf/verifier/calls.c       | 25 +++++++
- .../selftests/bpf/verifier/direct_packet_access.c  | 22 +++++++
- 7 files changed, 101 insertions(+), 33 deletions(-)
+Thanks
