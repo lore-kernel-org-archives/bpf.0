@@ -2,161 +2,120 @@ Return-Path: <SRS0=D5ks=S4=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_ADSP_CUSTOM_MED,
-	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05909C43218
-	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 15:50:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5FF6C43219
+	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 17:11:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C7D8F208CB
-	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 15:50:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72EC421479
+	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 17:11:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K1ilNNQC"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="gl6YqLx3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726769AbfDZPuL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Apr 2019 11:50:11 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:35450 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726679AbfDZPuL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Apr 2019 11:50:11 -0400
-Received: by mail-ed1-f65.google.com with SMTP id y67so3597022ede.2;
-        Fri, 26 Apr 2019 08:50:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=MyGoYsy0dN3k8pVgiEb5o4itS/U7KcJ870ynPtHnyhQ=;
-        b=K1ilNNQCMQQKNCY99Cmw6FKmayssrBL3yGMyAV61HXIXAcRiXpBiabGeW8/ESULGzy
-         AIwD97CRurWve6MlVOkphjj+yx1InUa75L3icz7TlS+dtskDdwzqZol65vz7NKaKuD1I
-         +W86bd/3hp0TXwMybc/M2pAm2imbnDimb0MZS861s625SU0ynxzhK/xDLG5rYjSU4eXI
-         MTytB+qJ4xybq1KdZ0TXpmCepCaZIVRcuGSnnCrAzgv7vRF9ZDFUDkzayv3TROfnM7Gt
-         S+u4VdzRmUJbHV6UP5csVJJ/MMNuV3Kpg2tMa26/Skb7Q9fYzdK7YC04JkVGHu3Z+Atn
-         CxAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=MyGoYsy0dN3k8pVgiEb5o4itS/U7KcJ870ynPtHnyhQ=;
-        b=hgQqq4IEVXQtHy8qHtvEJwfmy9pohdrDAYbJZ0T3xUcAuV0+gjHso2ZGesX/wQS6S7
-         g8BHVBlsyUOUTmNp1qENl0CjvQwOdKkzxT/MDX0dXUTCsdQXBFfplZeED2/l6EwWP+e+
-         YRq5YixlufQeUBV1KyB20whvEaeVMlb9U+/5meCYwLecuoxyIgUtpcHEPmpl9ZP5y/61
-         uD8fLF4dLXFIK6OE4ArWA7FYaR8EAfiAnL0ZpqQbTjbMjVOkQWy+IXR+aJN8eoFqVInS
-         ylzyb0+QD3fV+jNK4EU41FbvkafVB1EWHo9i8R3wlETBUgg8o47xyGJT1GiUpVueosCo
-         suxA==
-X-Gm-Message-State: APjAAAX9eh7EZYNnyt8/nBc80JB/JnFz4jN/Ai4ZudDk6fMqgpzuzASk
-        MFJjYcNzbpgVCqzc1G4jPBM5BS5I+bofZg==
-X-Google-Smtp-Source: APXvYqzvaNCingq2Ttd9LAxHj34fnVAyEpKKEZJCkLNSuRurmhUt75z5aO68SWaCp1nu1FdsnVF7lQ==
-X-Received: by 2002:a05:6402:1557:: with SMTP id p23mr28290291edx.27.1556293809326;
-        Fri, 26 Apr 2019 08:50:09 -0700 (PDT)
-Received: from neptune.fritz.box ([178.19.216.175])
-        by smtp.gmail.com with ESMTPSA id f15sm4603002eja.39.2019.04.26.08.50.06
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 26 Apr 2019 08:50:07 -0700 (PDT)
-From:   Alban Crequy <alban.crequy@gmail.com>
-X-Google-Original-From: Alban Crequy <alban@kinvolk.io>
-To:     john.fastabend@gmail.com, ast@kernel.org, daniel@iogearbox.net
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alban@kinvolk.io, iago@kinvolk.io
-Subject: [PATCH bpf-next v3 4/4] selftests: bpf: verifier: read netns_dev and netns_ino from struct bpf_sock_ops
-Date:   Fri, 26 Apr 2019 17:48:48 +0200
-Message-Id: <20190426154848.23490-4-alban@kinvolk.io>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190426154848.23490-1-alban@kinvolk.io>
-References: <20190426154848.23490-1-alban@kinvolk.io>
+        id S1726065AbfDZRLH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Apr 2019 13:11:07 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:39362 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726170AbfDZRLH (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 26 Apr 2019 13:11:07 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3QH3OHu002170
+        for <bpf@vger.kernel.org>; Fri, 26 Apr 2019 10:11:06 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=facebook;
+ bh=eolrUtjttQLdmQLUbYVmlKc0ar3pgQwRUJEVk7nGgLU=;
+ b=gl6YqLx37fNXxuoqi5oOTL5V49KvCqTAOIoL4xLvjjAo4Qyzph5KgWso5zSgT9WkqEA1
+ wL2kUR9XUvtL3UgKOqnRRp3RxmNmrUXOCc3THJOnnTwVlIZ4nswneG2n8dnfRKBz9/ux
+ +p0+GeYh5fyaovo9Kus3PSsvDUW+kQI360g= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2s3mcc35er-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 26 Apr 2019 10:11:06 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::125) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Fri, 26 Apr 2019 10:11:04 -0700
+Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
+        id 4FD6229421AA; Fri, 26 Apr 2019 10:11:02 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Martin KaFai Lau <kafai@fb.com>
+Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@fb.com>, Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        <kernel-team@fb.com>, Yonghong Song <yhs@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH v3 bpf-next 0/6] BPF sk local storage
+Date:   Fri, 26 Apr 2019 10:11:02 -0700
+Message-ID: <20190426171102.61757-1-kafai@fb.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-26_11:,,
+ signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Alban Crequy <alban@kinvolk.io>
+v3:
+- Replace spinlock_types.h with spinlock.h in patch 1
+  (kbuild test robot <lkp@intel.com>)
 
-Tested with:
-> $ sudo ./test_verifier
-> ...
-> #905/p sockops accessing bpf_sock_ops->netns_dev, ok OK
-> #906/p sockops accessing bpf_sock_ops->netns_ino, ok OK
-> ...
-> Summary: 1421 PASSED, 0 SKIPPED, 0 FAILED
+v2:
+- Add the "test_maps.h" file in patch 5
 
-Signed-off-by: Alban Crequy <alban@kinvolk.io>
+This series introduces the BPF sk local storage.  The
+details is in the patch 1 commit message.
 
----
+Martin KaFai Lau (6):
+  bpf: Introduce bpf sk local storage
+  bpf: Sync bpf.h to tools
+  bpf: Support BPF_MAP_TYPE_SK_STORAGE in bpf map probing
+  bpf: Add verifier tests for the bpf_sk_storage
+  bpf: Add BPF_MAP_TYPE_SK_STORAGE test to test_maps
+  bpf: Add ene-to-end test for bpf_sk_storage_* helpers
 
-Changes since v1:
-- This is a new selftest (review from Song)
+ include/linux/bpf.h                           |   2 +
+ include/linux/bpf_types.h                     |   1 +
+ include/net/bpf_sk_storage.h                  |  13 +
+ include/net/sock.h                            |   5 +
+ include/uapi/linux/bpf.h                      |  44 +-
+ kernel/bpf/syscall.c                          |   3 +-
+ kernel/bpf/verifier.c                         |  27 +-
+ net/bpf/test_run.c                            |   2 +
+ net/core/Makefile                             |   1 +
+ net/core/bpf_sk_storage.c                     | 796 ++++++++++++++++++
+ net/core/filter.c                             |  12 +
+ net/core/sock.c                               |   5 +
+ tools/bpf/bpftool/map.c                       |   1 +
+ tools/include/uapi/linux/bpf.h                |  44 +-
+ tools/lib/bpf/libbpf_probes.c                 |  74 +-
+ tools/testing/selftests/bpf/Makefile          |  25 +-
+ tools/testing/selftests/bpf/bpf_helpers.h     |   5 +
+ .../selftests/bpf/map_tests/sk_storage_map.c  | 638 ++++++++++++++
+ .../bpf/progs/test_sock_fields_kern.c         |  49 ++
+ tools/testing/selftests/bpf/test_maps.c       |  18 +-
+ tools/testing/selftests/bpf/test_maps.h       |  17 +
+ .../testing/selftests/bpf/test_sock_fields.c  | 115 ++-
+ tools/testing/selftests/bpf/test_verifier.c   |  42 +-
+ tools/testing/selftests/bpf/verifier/sock.c   | 116 +++
+ 24 files changed, 2015 insertions(+), 40 deletions(-)
+ create mode 100644 include/net/bpf_sk_storage.h
+ create mode 100644 net/core/bpf_sk_storage.c
+ create mode 100644 tools/testing/selftests/bpf/map_tests/sk_storage_map.=
+c
+ create mode 100644 tools/testing/selftests/bpf/test_maps.h
 
-Changes since v2:
-- test partial reads on netns_dev (review from Y Song)
-- split in two tests
----
- .../testing/selftests/bpf/verifier/var_off.c  | 53 +++++++++++++++++++
- 1 file changed, 53 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/verifier/var_off.c b/tools/testing/selftests/bpf/verifier/var_off.c
-index 8504ac937809..9e4c6c78eb9d 100644
---- a/tools/testing/selftests/bpf/verifier/var_off.c
-+++ b/tools/testing/selftests/bpf/verifier/var_off.c
-@@ -246,3 +246,56 @@
- 	.result = ACCEPT,
- 	.prog_type = BPF_PROG_TYPE_LWT_IN,
- },
-+{
-+	"sockops accessing bpf_sock_ops->netns_dev, ok",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_4, BPF_REG_1, offsetof(struct bpf_sock_ops,
-+							   netns_dev)),
-+
-+	BPF_LDX_MEM(BPF_W, BPF_REG_4, BPF_REG_1, offsetof(struct bpf_sock_ops,
-+							   netns_dev)),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_4, BPF_REG_1, offsetof(struct bpf_sock_ops,
-+							   netns_dev) + 4),
-+
-+	BPF_LDX_MEM(BPF_H, BPF_REG_4, BPF_REG_1, offsetof(struct bpf_sock_ops,
-+							   netns_dev)),
-+	BPF_LDX_MEM(BPF_H, BPF_REG_4, BPF_REG_1, offsetof(struct bpf_sock_ops,
-+							   netns_dev) + 2),
-+	BPF_LDX_MEM(BPF_H, BPF_REG_4, BPF_REG_1, offsetof(struct bpf_sock_ops,
-+							   netns_dev) + 4),
-+	BPF_LDX_MEM(BPF_H, BPF_REG_4, BPF_REG_1, offsetof(struct bpf_sock_ops,
-+							   netns_dev) + 6),
-+
-+	BPF_LDX_MEM(BPF_B, BPF_REG_4, BPF_REG_1, offsetof(struct bpf_sock_ops,
-+							   netns_dev)),
-+	BPF_LDX_MEM(BPF_B, BPF_REG_4, BPF_REG_1, offsetof(struct bpf_sock_ops,
-+							   netns_dev) + 1),
-+	BPF_LDX_MEM(BPF_B, BPF_REG_4, BPF_REG_1, offsetof(struct bpf_sock_ops,
-+							   netns_dev) + 2),
-+	BPF_LDX_MEM(BPF_B, BPF_REG_4, BPF_REG_1, offsetof(struct bpf_sock_ops,
-+							   netns_dev) + 3),
-+	BPF_LDX_MEM(BPF_B, BPF_REG_4, BPF_REG_1, offsetof(struct bpf_sock_ops,
-+							   netns_dev) + 4),
-+	BPF_LDX_MEM(BPF_B, BPF_REG_4, BPF_REG_1, offsetof(struct bpf_sock_ops,
-+							   netns_dev) + 5),
-+	BPF_LDX_MEM(BPF_B, BPF_REG_4, BPF_REG_1, offsetof(struct bpf_sock_ops,
-+							   netns_dev) + 6),
-+	BPF_LDX_MEM(BPF_B, BPF_REG_4, BPF_REG_1, offsetof(struct bpf_sock_ops,
-+							   netns_dev) + 7),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_SOCK_OPS,
-+},
-+{
-+	"sockops accessing bpf_sock_ops->netns_ino, ok",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_4, BPF_REG_1, offsetof(struct bpf_sock_ops,
-+							   netns_ino)),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_SOCK_OPS,
-+},
--- 
-2.20.1
+--=20
+2.17.1
 
