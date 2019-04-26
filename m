@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACF38C4321A
-	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 23:39:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A643C4321A
+	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 23:39:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 707B2206C1
-	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 23:39:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 39A6820869
+	for <bpf@archiver.kernel.org>; Fri, 26 Apr 2019 23:39:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="P9pSd4AO"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="TcgFFPd1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727131AbfDZXju (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Apr 2019 19:39:50 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:49288 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727215AbfDZXjr (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 26 Apr 2019 19:39:47 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3QNUkS5005484
-        for <bpf@vger.kernel.org>; Fri, 26 Apr 2019 16:39:46 -0700
+        id S1727224AbfDZXjx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Apr 2019 19:39:53 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:53748 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727194AbfDZXjv (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 26 Apr 2019 19:39:51 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x3QNYXQT016525
+        for <bpf@vger.kernel.org>; Fri, 26 Apr 2019 16:39:50 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=5fzmDOFntj9xwXeI6ugO6g6nv4jQI/bsRSqC2RKhbIE=;
- b=P9pSd4AO3vjIC+O0V4l9Q9vnoxkOj5LqNXsISCCu4BRVKKP0HE9nyyLwRgWyAhmxV6y+
- 2qC+Ig1Pfjct2mts7LA2JPG9FQOLg87/IplJwDQr/iFF53LOPBGYNCsIAAB21k+Lv+Nv
- 3j+hiPOaWR5+yZ/nAAij+Yo+iF4azE/eGR8= 
+ content-type; s=facebook; bh=BB//rPv3drHd4TNZsH/ERVDG4lK9bpVssnH3aqIfAPw=;
+ b=TcgFFPd1KxIlSBH+0i5lwxSZbc6lzRKzjdxvwJsEHIJLvXsMeNMR9I2bzDDPT+lYPex7
+ oXjtzJsLmBcqQWQiG91fIRaOlKGzahrpoHsRKHxnEuDcP2nUbHwrQw5P7NiAy2J9HEA2
+ oK2DHWaTfNIEg43WV2uLcz8qeOLhIwRliBo= 
 Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2s447r1k0s-4
+        by m0089730.ppops.net with ESMTP id 2s44jgsf1a-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 26 Apr 2019 16:39:46 -0700
+        for <bpf@vger.kernel.org>; Fri, 26 Apr 2019 16:39:50 -0700
 Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c081:35::126) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Fri, 26 Apr 2019 16:39:45 -0700
+ Fri, 26 Apr 2019 16:39:48 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 8AE3329425A9; Fri, 26 Apr 2019 16:39:44 -0700 (PDT)
+        id AECCE29425A9; Fri, 26 Apr 2019 16:39:46 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
@@ -50,9 +50,9 @@ CC:     Alexei Starovoitov <ast@fb.com>, Andrii Nakryiko <andriin@fb.com>,
         <kernel-team@fb.com>, Stanislav Fomichev <sdf@fomichev.me>,
         Yonghong Song <yhs@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v4 bpf-next 3/7] bpf: Support BPF_MAP_TYPE_SK_STORAGE in bpf map probing
-Date:   Fri, 26 Apr 2019 16:39:44 -0700
-Message-ID: <20190426233944.1330591-1-kafai@fb.com>
+Subject: [PATCH v4 bpf-next 4/7] bpf: Refactor BTF encoding macro to test_btf.h
+Date:   Fri, 26 Apr 2019 16:39:46 -0700
+Message-ID: <20190426233946.1330696-1-kafai@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190426233938.1330361-1-kafai@fb.com>
 References: <20190426233938.1330361-1-kafai@fb.com>
@@ -68,143 +68,173 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch supports probing for the new BPF_MAP_TYPE_SK_STORAGE.
-BPF_MAP_TYPE_SK_STORAGE enforces BTF usage, so the new probe
-requires to create and load a BTF also.
+Refactor common BTF encoding macros for other tests to use.
+The libbpf may reuse some of them in the future  which requires
+some more thoughts before publishing as a libbpf API.
 
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- tools/bpf/bpftool/map.c       |  1 +
- tools/lib/bpf/libbpf_probes.c | 74 ++++++++++++++++++++++++++++++++++-
- 2 files changed, 74 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_btf.c | 63 +----------------------
+ tools/testing/selftests/bpf/test_btf.h | 69 ++++++++++++++++++++++++++
+ 2 files changed, 70 insertions(+), 62 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/test_btf.h
 
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index e6dcb3653a77..e951d45c0131 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -46,6 +46,7 @@ const char * const map_type_name[] = {
- 	[BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE]	= "percpu_cgroup_storage",
- 	[BPF_MAP_TYPE_QUEUE]			= "queue",
- 	[BPF_MAP_TYPE_STACK]			= "stack",
-+	[BPF_MAP_TYPE_SK_STORAGE]		= "sk_storage",
- };
+diff --git a/tools/testing/selftests/bpf/test_btf.c b/tools/testing/selftests/bpf/test_btf.c
+index f8eb7987b794..42c1ce988945 100644
+--- a/tools/testing/selftests/bpf/test_btf.c
++++ b/tools/testing/selftests/bpf/test_btf.c
+@@ -24,6 +24,7 @@
  
- const size_t map_type_name_size = ARRAY_SIZE(map_type_name);
-diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
-index 0f25541632e3..2e26ddb005e4 100644
---- a/tools/lib/bpf/libbpf_probes.c
-+++ b/tools/lib/bpf/libbpf_probes.c
-@@ -9,6 +9,7 @@
- #include <net/if.h>
- #include <sys/utsname.h>
+ #include "bpf_rlimit.h"
+ #include "bpf_util.h"
++#include "test_btf.h"
  
-+#include <linux/btf.h>
- #include <linux/filter.h>
- #include <linux/kernel.h>
- 
-@@ -130,11 +131,65 @@ bool bpf_probe_prog_type(enum bpf_prog_type prog_type, __u32 ifindex)
- 	return errno != EINVAL && errno != EOPNOTSUPP;
+ #define MAX_INSNS	512
+ #define MAX_SUBPROGS	16
+@@ -58,68 +59,6 @@ static int __base_pr(enum libbpf_print_level level __attribute__((unused)),
+ 	return vfprintf(stderr, format, args);
  }
  
-+static int load_btf(void)
-+{
-+#define BTF_INFO_ENC(kind, kind_flag, vlen) \
+-#define BTF_INFO_ENC(kind, kind_flag, vlen)			\
+-	((!!(kind_flag) << 31) | ((kind) << 24) | ((vlen) & BTF_MAX_VLEN))
+-
+-#define BTF_TYPE_ENC(name, info, size_or_type)	\
+-	(name), (info), (size_or_type)
+-
+-#define BTF_INT_ENC(encoding, bits_offset, nr_bits)	\
+-	((encoding) << 24 | (bits_offset) << 16 | (nr_bits))
+-#define BTF_TYPE_INT_ENC(name, encoding, bits_offset, bits, sz)	\
+-	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_INT, 0, 0), sz),	\
+-	BTF_INT_ENC(encoding, bits_offset, bits)
+-
+-#define BTF_FWD_ENC(name, kind_flag) \
+-	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_FWD, kind_flag, 0), 0)
+-
+-#define BTF_ARRAY_ENC(type, index_type, nr_elems)	\
+-	(type), (index_type), (nr_elems)
+-#define BTF_TYPE_ARRAY_ENC(type, index_type, nr_elems) \
+-	BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_ARRAY, 0, 0), 0), \
+-	BTF_ARRAY_ENC(type, index_type, nr_elems)
+-
+-#define BTF_STRUCT_ENC(name, nr_elems, sz)	\
+-	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, nr_elems), sz)
+-
+-#define BTF_UNION_ENC(name, nr_elems, sz)	\
+-	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_UNION, 0, nr_elems), sz)
+-
+-#define BTF_VAR_ENC(name, type, linkage)	\
+-	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_VAR, 0, 0), type), (linkage)
+-#define BTF_VAR_SECINFO_ENC(type, offset, size)	\
+-	(type), (offset), (size)
+-
+-#define BTF_MEMBER_ENC(name, type, bits_offset)	\
+-	(name), (type), (bits_offset)
+-#define BTF_ENUM_ENC(name, val) (name), (val)
+-#define BTF_MEMBER_OFFSET(bitfield_size, bits_offset) \
+-	((bitfield_size) << 24 | (bits_offset))
+-
+-#define BTF_TYPEDEF_ENC(name, type) \
+-	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_TYPEDEF, 0, 0), type)
+-
+-#define BTF_PTR_ENC(type) \
+-	BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_PTR, 0, 0), type)
+-
+-#define BTF_CONST_ENC(type) \
+-	BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_CONST, 0, 0), type)
+-
+-#define BTF_VOLATILE_ENC(type) \
+-	BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_VOLATILE, 0, 0), type)
+-
+-#define BTF_RESTRICT_ENC(type) \
+-	BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_RESTRICT, 0, 0), type)
+-
+-#define BTF_FUNC_PROTO_ENC(ret_type, nargs) \
+-	BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_FUNC_PROTO, 0, nargs), ret_type)
+-
+-#define BTF_FUNC_PROTO_ARG_ENC(name, type) \
+-	(name), (type)
+-
+-#define BTF_FUNC_ENC(name, func_proto) \
+-	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_FUNC, 0, 0), func_proto)
+-
+ #define BTF_END_RAW 0xdeadbeef
+ #define NAME_TBD 0xdeadb33f
+ 
+diff --git a/tools/testing/selftests/bpf/test_btf.h b/tools/testing/selftests/bpf/test_btf.h
+new file mode 100644
+index 000000000000..2023725f1962
+--- /dev/null
++++ b/tools/testing/selftests/bpf/test_btf.h
+@@ -0,0 +1,69 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (c) 2019 Facebook */
++
++#ifndef _TEST_BTF_H
++#define _TEST_BTF_H
++
++#define BTF_INFO_ENC(kind, kind_flag, vlen)			\
 +	((!!(kind_flag) << 31) | ((kind) << 24) | ((vlen) & BTF_MAX_VLEN))
-+#define BTF_TYPE_ENC(name, info, size_or_type) \
++
++#define BTF_TYPE_ENC(name, info, size_or_type)	\
 +	(name), (info), (size_or_type)
-+#define BTF_INT_ENC(encoding, bits_offset, nr_bits) \
++
++#define BTF_INT_ENC(encoding, bits_offset, nr_bits)	\
 +	((encoding) << 24 | (bits_offset) << 16 | (nr_bits))
-+#define BTF_TYPE_INT_ENC(name, encoding, bits_offset, bits, sz) \
-+	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_INT, 0, 0), sz), \
++#define BTF_TYPE_INT_ENC(name, encoding, bits_offset, bits, sz)	\
++	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_INT, 0, 0), sz),	\
 +	BTF_INT_ENC(encoding, bits_offset, bits)
-+#define BTF_MEMBER_ENC(name, type, bits_offset) \
++
++#define BTF_FWD_ENC(name, kind_flag) \
++	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_FWD, kind_flag, 0), 0)
++
++#define BTF_ARRAY_ENC(type, index_type, nr_elems)	\
++	(type), (index_type), (nr_elems)
++#define BTF_TYPE_ARRAY_ENC(type, index_type, nr_elems) \
++	BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_ARRAY, 0, 0), 0), \
++	BTF_ARRAY_ENC(type, index_type, nr_elems)
++
++#define BTF_STRUCT_ENC(name, nr_elems, sz)	\
++	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, nr_elems), sz)
++
++#define BTF_UNION_ENC(name, nr_elems, sz)	\
++	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_UNION, 0, nr_elems), sz)
++
++#define BTF_VAR_ENC(name, type, linkage)	\
++	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_VAR, 0, 0), type), (linkage)
++#define BTF_VAR_SECINFO_ENC(type, offset, size)	\
++	(type), (offset), (size)
++
++#define BTF_MEMBER_ENC(name, type, bits_offset)	\
 +	(name), (type), (bits_offset)
++#define BTF_ENUM_ENC(name, val) (name), (val)
++#define BTF_MEMBER_OFFSET(bitfield_size, bits_offset) \
++	((bitfield_size) << 24 | (bits_offset))
 +
-+	const char btf_str_sec[] = "\0bpf_spin_lock\0val\0cnt\0l";
-+	/* struct bpf_spin_lock {
-+	 *   int val;
-+	 * };
-+	 * struct val {
-+	 *   int cnt;
-+	 *   struct bpf_spin_lock l;
-+	 * };
-+	 */
-+	__u32 btf_raw_types[] = {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),  /* [1] */
-+		/* struct bpf_spin_lock */                      /* [2] */
-+		BTF_TYPE_ENC(1, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 1), 4),
-+		BTF_MEMBER_ENC(15, 1, 0), /* int val; */
-+		/* struct val */                                /* [3] */
-+		BTF_TYPE_ENC(15, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 2), 8),
-+		BTF_MEMBER_ENC(19, 1, 0), /* int cnt; */
-+		BTF_MEMBER_ENC(23, 2, 32),/* struct bpf_spin_lock l; */
-+	};
-+	struct btf_header btf_hdr = {
-+		.magic = BTF_MAGIC,
-+		.version = BTF_VERSION,
-+		.hdr_len = sizeof(struct btf_header),
-+		.type_len = sizeof(btf_raw_types),
-+		.str_off = sizeof(btf_raw_types),
-+		.str_len = sizeof(btf_str_sec),
-+	};
-+	__u8 raw_btf[sizeof(struct btf_header) + sizeof(btf_raw_types) +
-+		     sizeof(btf_str_sec)];
++#define BTF_TYPEDEF_ENC(name, type) \
++	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_TYPEDEF, 0, 0), type)
 +
-+	memcpy(raw_btf, &btf_hdr, sizeof(btf_hdr));
-+	memcpy(raw_btf + sizeof(btf_hdr), btf_raw_types, sizeof(btf_raw_types));
-+	memcpy(raw_btf + sizeof(btf_hdr) + sizeof(btf_raw_types),
-+	       btf_str_sec, sizeof(btf_str_sec));
++#define BTF_PTR_ENC(type) \
++	BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_PTR, 0, 0), type)
 +
-+	return bpf_load_btf(raw_btf, sizeof(raw_btf), 0, 0, 0);
-+}
++#define BTF_CONST_ENC(type) \
++	BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_CONST, 0, 0), type)
 +
- bool bpf_probe_map_type(enum bpf_map_type map_type, __u32 ifindex)
- {
- 	int key_size, value_size, max_entries, map_flags;
-+	__u32 btf_key_type_id = 0, btf_value_type_id = 0;
- 	struct bpf_create_map_attr attr = {};
--	int fd = -1, fd_inner;
-+	int fd = -1, btf_fd = -1, fd_inner;
- 
- 	key_size	= sizeof(__u32);
- 	value_size	= sizeof(__u32);
-@@ -160,6 +215,16 @@ bool bpf_probe_map_type(enum bpf_map_type map_type, __u32 ifindex)
- 	case BPF_MAP_TYPE_STACK:
- 		key_size	= 0;
- 		break;
-+	case BPF_MAP_TYPE_SK_STORAGE:
-+		btf_key_type_id = 1;
-+		btf_value_type_id = 3;
-+		value_size = 8;
-+		max_entries = 0;
-+		map_flags = BPF_F_NO_PREALLOC;
-+		btf_fd = load_btf();
-+		if (btf_fd < 0)
-+			return false;
-+		break;
- 	case BPF_MAP_TYPE_UNSPEC:
- 	case BPF_MAP_TYPE_HASH:
- 	case BPF_MAP_TYPE_ARRAY:
-@@ -205,11 +270,18 @@ bool bpf_probe_map_type(enum bpf_map_type map_type, __u32 ifindex)
- 		attr.max_entries = max_entries;
- 		attr.map_flags = map_flags;
- 		attr.map_ifindex = ifindex;
-+		if (btf_fd >= 0) {
-+			attr.btf_fd = btf_fd;
-+			attr.btf_key_type_id = btf_key_type_id;
-+			attr.btf_value_type_id = btf_value_type_id;
-+		}
- 
- 		fd = bpf_create_map_xattr(&attr);
- 	}
- 	if (fd >= 0)
- 		close(fd);
-+	if (btf_fd >= 0)
-+		close(btf_fd);
- 
- 	return fd >= 0;
- }
++#define BTF_VOLATILE_ENC(type) \
++	BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_VOLATILE, 0, 0), type)
++
++#define BTF_RESTRICT_ENC(type) \
++	BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_RESTRICT, 0, 0), type)
++
++#define BTF_FUNC_PROTO_ENC(ret_type, nargs) \
++	BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_FUNC_PROTO, 0, nargs), ret_type)
++
++#define BTF_FUNC_PROTO_ARG_ENC(name, type) \
++	(name), (type)
++
++#define BTF_FUNC_ENC(name, func_proto) \
++	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_FUNC, 0, 0), func_proto)
++
++#endif /* _TEST_BTF_H */
 -- 
 2.17.1
 
