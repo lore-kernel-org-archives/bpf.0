@@ -2,154 +2,247 @@ Return-Path: <SRS0=Xozv=S6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2879CC43218
-	for <bpf@archiver.kernel.org>; Sun, 28 Apr 2019 02:33:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D0A0C43219
+	for <bpf@archiver.kernel.org>; Sun, 28 Apr 2019 10:59:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E1D9920874
-	for <bpf@archiver.kernel.org>; Sun, 28 Apr 2019 02:33:49 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZBSt/SG+"
+	by mail.kernel.org (Postfix) with ESMTP id BF93B206BF
+	for <bpf@archiver.kernel.org>; Sun, 28 Apr 2019 10:59:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726224AbfD1Cdt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 27 Apr 2019 22:33:49 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:35628 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726112AbfD1Cdt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 27 Apr 2019 22:33:49 -0400
-Received: by mail-pg1-f194.google.com with SMTP id h1so3455536pgs.2;
-        Sat, 27 Apr 2019 19:33:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:mime-version
-         :content-disposition:user-agent;
-        bh=8pdP/pIbSMTEUfQnT+0vcRdQjYsBt7dW9GatpOSe0b0=;
-        b=ZBSt/SG+mbZSNJMGMysW1W8y1DcfuWBMt+y1GCEjXy45Ycibqoks6g1MWKq1/HxzMP
-         bSlln+KNPYYYwpZv7PvIRsaW1DmrTKl7wOG2dRigldgxY0d5jg/rMNUa8Fttst7kmURM
-         CgUVb7R6OqNx2s/1InmJ10P36fc9r5L1v0fh8M7V8kJYQWLtsIE2hWF/bfchdJBbJkSz
-         2exaE1RAInpyMPe89byC/3o45z3ldMmNJDU4APVDKtcq7R9B33YH6Q3om2WeIawN9AeS
-         wdn5FTbGhmPb5FbTpL2arESdEiGE5ja9ngXB/3d3oPy3E4NmVNqoDVPgclnYTf+7THQ2
-         YnHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:mime-version:content-disposition:user-agent;
-        bh=8pdP/pIbSMTEUfQnT+0vcRdQjYsBt7dW9GatpOSe0b0=;
-        b=oHQqRSrreZ6ZdUk/2md3Qm7KUyTjOfZgxh9ZU9M6VDVeV1kuJSSnikQ0onKgVLMjHE
-         NZZ4qJaW6Z4P6szvuqwVz7ruLLGBoQjog5UhL093gPuJqkQMxBBTpVLT5RJakYI/VzxE
-         WSSPo1m4lvmm/fBkH8FAOWEKRwqZNa4j59zBEB/07Y0DKeGVfYv1lb1gDksRm1WtrVjU
-         59A888kY0QRcQe2ympT9svfPDS5wlBeOel/bilk3s70bJEtqv3vDHb/PzIG6gOEBNHuo
-         n1C4lUxaFg1g3+4yluf+cujC0B33HPWb5eyBeLyzxY5fJIGyvJmEP/8znw8ntM7ldy1P
-         XshQ==
-X-Gm-Message-State: APjAAAU3oYfCdyIkUtT88v53XutPQEb7/mIf0dBVi+bC1arAIKUFGbye
-        FK8oqBewfPP9FT7YZI0ZxJg=
-X-Google-Smtp-Source: APXvYqxZvLvOc3rGYU2DbViR+D8bUUYIlr9cbTBVek3/r2LkNuOFbboTkGmUNKlIo85ASnXVLCgCbQ==
-X-Received: by 2002:a63:d512:: with SMTP id c18mr11227831pgg.252.1556418828679;
-        Sat, 27 Apr 2019 19:33:48 -0700 (PDT)
-Received: from udknight.localhost ([183.250.89.86])
-        by smtp.gmail.com with ESMTPSA id l19sm39348312pff.1.2019.04.27.19.33.47
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 27 Apr 2019 19:33:48 -0700 (PDT)
-Received: from udknight.localhost (localhost [127.0.0.1])
-        by udknight.localhost (8.14.9/8.14.4) with ESMTP id x3S2XLSf029356;
-        Sun, 28 Apr 2019 10:33:23 +0800
-Received: (from root@localhost)
-        by udknight.localhost (8.14.9/8.14.9/Submit) id x3S2X293029347;
-        Sun, 28 Apr 2019 10:33:02 +0800
-Date:   Sun, 28 Apr 2019 10:33:02 +0800
-From:   Wang YanQing <udknight@gmail.com>
-To:     daniel@iogearbox.net
-Cc:     ast@kernel.org, davem@davemloft.net, kuznet@ms2.inr.ac.ru,
-        tglx@linutronix.de, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] bpf, x32: Fix bug for BPF_ALU64 | BPF_NEG
-Message-ID: <20190428023302.GA29326@udknight>
-Mail-Followup-To: Wang YanQing <udknight@gmail.com>, daniel@iogearbox.net,
-        ast@kernel.org, davem@davemloft.net, kuznet@ms2.inr.ac.ru,
-        tglx@linutronix.de, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.7.1 (2016-10-04)
+        id S1726414AbfD1K7Q (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 28 Apr 2019 06:59:16 -0400
+Received: from www62.your-server.de ([213.133.104.62]:38484 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726317AbfD1K7Q (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 28 Apr 2019 06:59:16 -0400
+Received: from [80.254.69.30] (helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hKhWY-0005ci-1h; Sun, 28 Apr 2019 12:59:10 +0200
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     davem@davemloft.net
+Cc:     daniel@iogearbox.net, ast@kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: pull-request: bpf-next 2019-04-28
+Date:   Sun, 28 Apr 2019 12:59:09 +0200
+Message-Id: <20190428105909.9248-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.9.5
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.3/25433/Sun Apr 28 09:57:23 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The current implementation has two errors:
-1: The second xor instruction will clear carry flag which
-   is necessary for following sbb instruction.
-2: The select coding for sbb instruction is wrong, the coding
-   is "sbb dreg_hi,ecx", but what we need is "sbb ecx,dreg_hi".
+Hi David,
 
-This patch rewrites the implementation and fixes the errors.
+The following pull-request contains BPF updates for your *net-next* tree.
 
-This patch fixes below errors reported by bpf/test_verifier in x32
-platform when the jit is enabled:
-"
-0: (b4) w1 = 4
-1: (b4) w2 = 4
-2: (1f) r2 -= r1
-3: (4f) r2 |= r1
-4: (87) r2 = -r2
-5: (c7) r2 s>>= 63
-6: (5f) r1 &= r2
-7: (bf) r0 = r1
-8: (95) exit
-processed 9 insns (limit 131072), stack depth 0
-0: (b4) w1 = 4
-1: (b4) w2 = 4
-2: (1f) r2 -= r1
-3: (4f) r2 |= r1
-4: (87) r2 = -r2
-5: (c7) r2 s>>= 63
-6: (5f) r1 &= r2
-7: (bf) r0 = r1
-8: (95) exit
-processed 9 insns (limit 131072), stack depth 0
-......
-Summary: 1189 PASSED, 125 SKIPPED, 15 FAILED
-"
+The main changes are:
 
-Signed-off-by: Wang YanQing <udknight@gmail.com>
----
- arch/x86/net/bpf_jit_comp32.c | 19 ++++++-------------
- 1 file changed, 6 insertions(+), 13 deletions(-)
+1) Introduce BPF socket local storage map so that BPF programs can store
+   private data they associate with a socket (instead of e.g. separate hash
+   table), from Martin.
 
-diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
-index 8097b88..b29e82f 100644
---- a/arch/x86/net/bpf_jit_comp32.c
-+++ b/arch/x86/net/bpf_jit_comp32.c
-@@ -700,19 +700,12 @@ static inline void emit_ia32_neg64(const u8 dst[], bool dstk, u8 **pprog)
- 		      STACK_VAR(dst_hi));
- 	}
- 
--	/* xor ecx,ecx */
--	EMIT2(0x31, add_2reg(0xC0, IA32_ECX, IA32_ECX));
--	/* sub dreg_lo,ecx */
--	EMIT2(0x2B, add_2reg(0xC0, dreg_lo, IA32_ECX));
--	/* mov dreg_lo,ecx */
--	EMIT2(0x89, add_2reg(0xC0, dreg_lo, IA32_ECX));
--
--	/* xor ecx,ecx */
--	EMIT2(0x31, add_2reg(0xC0, IA32_ECX, IA32_ECX));
--	/* sbb dreg_hi,ecx */
--	EMIT2(0x19, add_2reg(0xC0, dreg_hi, IA32_ECX));
--	/* mov dreg_hi,ecx */
--	EMIT2(0x89, add_2reg(0xC0, dreg_hi, IA32_ECX));
-+	/* neg dreg_lo */
-+	EMIT2(0xF7, add_1reg(0xD8, dreg_lo));
-+	/* adc dreg_hi,0x0 */
-+	EMIT3(0x83, add_1reg(0xD0, dreg_hi), 0x00);
-+	/* neg dreg_hi */
-+	EMIT2(0xF7, add_1reg(0xD8, dreg_hi));
- 
- 	if (dstk) {
- 		/* mov dword ptr [ebp+off],dreg_lo */
--- 
-1.8.5.6.2.g3d8a54e.dirty
+2) Add support for bpftool to dump BTF types. This is done through a new
+   `bpftool btf dump` sub-command, from Andrii.
+
+3) Enable BPF-based flow dissector for skb-less eth_get_headlen() calls which
+   was currently not supported since skb was used to lookup netns, from Stanislav.
+
+4) Add an opt-in interface for tracepoints to expose a writable context
+   for attached BPF programs, used here for NBD sockets, from Matt.
+
+5) BPF xadd related arm64 JIT fixes and scalability improvements, from Daniel.
+
+6) Change the skb->protocol for bpf_skb_adjust_room() helper in order to
+   support tunnels such as sit. Add selftests as well, from Willem.
+
+7) Various smaller misc fixes.
+
+Please consider pulling these changes from:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+
+Thanks a lot!
+
+----------------------------------------------------------------
+
+The following changes since commit 7e6e185c74dd8a8dc539300c079adc6bc27045d6:
+
+  net: systemport: Remove need for DMA descriptor (2019-04-22 22:20:15 -0700)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git 
+
+for you to fetch changes up to 9076c49bdca2aa68c805f2677b2bccc4bde2bac1:
+
+  Merge branch 'sk-local-storage' (2019-04-27 09:07:49 -0700)
+
+----------------------------------------------------------------
+Alexei Starovoitov (4):
+      Merge branch 'libbpf-fixes'
+      Merge branch 'btf-dump'
+      Merge branch 'writeable-bpf-tracepoints'
+      Merge branch 'sk-local-storage'
+
+Andrew Hall (1):
+      nbd: add tracepoints for send/receive timing
+
+Andrii Nakryiko (4):
+      bpftool: add ability to dump BTF types
+      bpftool/docs: add btf sub-command documentation
+      bpftool: add bash completions for btf command
+      bpftool: fix indendation in bash-completion/bpftool
+
+Benjamin Poirier (1):
+      bpftool: Fix errno variable usage
+
+Daniel Borkmann (6):
+      Merge branch 'bpf-eth-get-headlen'
+      Merge branch 'bpf-proto-fixes'
+      bpf, libbpf: handle old kernels more graceful wrt global data sections
+      bpf, libbpf: fix segfault in bpf_object__init_maps' pr_debug statement
+      bpf, arm64: remove prefetch insn in xadd mapping
+      bpf, arm64: use more scalable stadd over ldxr / stxr loop in xadd
+
+Daniel T. Lee (2):
+      libbpf: fix samples/bpf build failure due to undefined UINT32_MAX
+      samples: bpf: add hbm sample to .gitignore
+
+Martin KaFai Lau (7):
+      bpf: Introduce bpf sk local storage
+      bpf: Sync bpf.h to tools
+      bpf: Support BPF_MAP_TYPE_SK_STORAGE in bpf map probing
+      bpf: Refactor BTF encoding macro to test_btf.h
+      bpf: Add verifier tests for the bpf_sk_storage
+      bpf: Add BPF_MAP_TYPE_SK_STORAGE test to test_maps
+      bpf: Add ene-to-end test for bpf_sk_storage_* helpers
+
+Matt Mullins (4):
+      bpf: add writable context for raw tracepoints
+      nbd: trace sending nbd requests
+      tools: sync bpf.h
+      selftests: bpf: test writable buffers in raw tps
+
+Stanislav Fomichev (11):
+      flow_dissector: switch kernel context to struct bpf_flow_dissector
+      bpf: when doing BPF_PROG_TEST_RUN for flow dissector use no-skb mode
+      net: plumb network namespace into __skb_flow_dissect
+      flow_dissector: handle no-skb use case
+      net: pass net_device argument to the eth_get_headlen
+      selftests/bpf: add flow dissector bpf_skb_load_bytes helper test
+      selftests/bpf: run flow dissector tests in skb-less mode
+      selftests/bpf: properly return error from bpf_flow_load
+      bpf/flow_dissector: don't adjust nhoff by ETH_HLEN in BPF_PROG_TEST_RUN
+      bpf: support BPF_PROG_QUERY for BPF_FLOW_DISSECTOR attach_type
+      bpftool: show flow_dissector attachment status
+
+Willem de Bruijn (2):
+      bpf: update skb->protocol in bpf_skb_net_grow
+      selftests/bpf: expand test_tc_tunnel with SIT encap
+
+ MAINTAINERS                                        |   1 +
+ arch/arm64/include/asm/insn.h                      |   8 +
+ arch/arm64/kernel/insn.c                           |  40 +
+ arch/arm64/net/bpf_jit.h                           |   8 +-
+ arch/arm64/net/bpf_jit_comp.c                      |  29 +-
+ drivers/block/nbd.c                                |  13 +
+ drivers/net/ethernet/aquantia/atlantic/aq_ring.c   |   3 +-
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c          |   2 +-
+ drivers/net/ethernet/hisilicon/hns/hns_enet.c      |   2 +-
+ drivers/net/ethernet/hisilicon/hns3/hns3_enet.c    |   2 +-
+ drivers/net/ethernet/intel/fm10k/fm10k_main.c      |   2 +-
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c        |   3 +-
+ drivers/net/ethernet/intel/iavf/iavf_txrx.c        |   2 +-
+ drivers/net/ethernet/intel/ice/ice_txrx.c          |   2 +-
+ drivers/net/ethernet/intel/igb/igb_main.c          |   2 +-
+ drivers/net/ethernet/intel/igc/igc_main.c          |   2 +-
+ drivers/net/ethernet/intel/ixgbe/ixgbe_main.c      |   2 +-
+ drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c  |   3 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en_tx.c    |   2 +-
+ drivers/net/tun.c                                  |   3 +-
+ include/linux/bpf.h                                |   4 +
+ include/linux/bpf_types.h                          |   2 +
+ include/linux/etherdevice.h                        |   2 +-
+ include/linux/skbuff.h                             |  36 +-
+ include/linux/tracepoint-defs.h                    |   1 +
+ include/net/bpf_sk_storage.h                       |  13 +
+ include/net/flow_dissector.h                       |   7 +
+ include/net/sch_generic.h                          |  11 +-
+ include/net/sock.h                                 |   5 +
+ include/trace/bpf_probe.h                          |  27 +-
+ include/trace/events/bpf_test_run.h                |  50 ++
+ include/trace/events/nbd.h                         | 107 +++
+ include/uapi/linux/bpf.h                           |  45 +-
+ kernel/bpf/syscall.c                               |  13 +-
+ kernel/bpf/verifier.c                              |  58 +-
+ kernel/trace/bpf_trace.c                           |  24 +
+ net/bpf/test_run.c                                 |  54 +-
+ net/core/Makefile                                  |   1 +
+ net/core/bpf_sk_storage.c                          | 804 +++++++++++++++++++++
+ net/core/filter.c                                  | 125 +++-
+ net/core/flow_dissector.c                          | 129 ++--
+ net/core/sock.c                                    |   5 +
+ net/ethernet/eth.c                                 |   8 +-
+ samples/bpf/.gitignore                             |   1 +
+ tools/bpf/bpftool/Documentation/bpftool-btf.rst    | 222 ++++++
+ tools/bpf/bpftool/Documentation/bpftool-cgroup.rst |   3 +-
+ .../bpf/bpftool/Documentation/bpftool-feature.rst  |   3 +-
+ tools/bpf/bpftool/Documentation/bpftool-map.rst    |   3 +-
+ tools/bpf/bpftool/Documentation/bpftool-net.rst    |   3 +-
+ tools/bpf/bpftool/Documentation/bpftool-perf.rst   |   3 +-
+ tools/bpf/bpftool/Documentation/bpftool-prog.rst   |   3 +-
+ tools/bpf/bpftool/Documentation/bpftool.rst        |   3 +-
+ tools/bpf/bpftool/bash-completion/bpftool          |  68 +-
+ tools/bpf/bpftool/btf.c                            | 586 +++++++++++++++
+ tools/bpf/bpftool/main.c                           |   3 +-
+ tools/bpf/bpftool/main.h                           |   1 +
+ tools/bpf/bpftool/map.c                            |   3 +-
+ tools/bpf/bpftool/net.c                            |  54 ++
+ tools/include/uapi/linux/bpf.h                     |  54 +-
+ tools/lib/bpf/bpf.h                                |   1 +
+ tools/lib/bpf/libbpf.c                             | 106 ++-
+ tools/lib/bpf/libbpf_probes.c                      |  75 +-
+ tools/testing/selftests/bpf/Makefile               |  25 +-
+ tools/testing/selftests/bpf/bpf_helpers.h          |   5 +
+ tools/testing/selftests/bpf/config                 |   1 +
+ tools/testing/selftests/bpf/flow_dissector_load.c  |   2 +-
+ tools/testing/selftests/bpf/flow_dissector_load.h  |  24 +-
+ .../selftests/bpf/map_tests/sk_storage_map.c       | 629 ++++++++++++++++
+ .../selftests/bpf/prog_tests/flow_dissector.c      | 113 ++-
+ .../bpf/prog_tests/flow_dissector_load_bytes.c     |  48 ++
+ .../raw_tp_writable_reject_nbd_invalid.c           |  42 ++
+ .../bpf/prog_tests/raw_tp_writable_test_run.c      |  80 ++
+ tools/testing/selftests/bpf/progs/bpf_flow.c       |  79 +-
+ .../selftests/bpf/progs/test_sock_fields_kern.c    |  53 ++
+ tools/testing/selftests/bpf/progs/test_tc_tunnel.c |  64 +-
+ tools/testing/selftests/bpf/test_btf.c             |  63 +-
+ tools/testing/selftests/bpf/test_btf.h             |  69 ++
+ tools/testing/selftests/bpf/test_maps.c            |  18 +-
+ tools/testing/selftests/bpf/test_maps.h            |  17 +
+ tools/testing/selftests/bpf/test_sock_fields.c     | 115 ++-
+ tools/testing/selftests/bpf/test_tc_tunnel.sh      |  20 +-
+ tools/testing/selftests/bpf/test_verifier.c        |  55 +-
+ .../selftests/bpf/verifier/raw_tp_writable.c       |  34 +
+ tools/testing/selftests/bpf/verifier/sock.c        | 116 +++
+ 84 files changed, 4168 insertions(+), 361 deletions(-)
+ create mode 100644 include/net/bpf_sk_storage.h
+ create mode 100644 include/trace/events/bpf_test_run.h
+ create mode 100644 include/trace/events/nbd.h
+ create mode 100644 net/core/bpf_sk_storage.c
+ create mode 100644 tools/bpf/bpftool/Documentation/bpftool-btf.rst
+ create mode 100644 tools/bpf/bpftool/btf.c
+ create mode 100644 tools/testing/selftests/bpf/map_tests/sk_storage_map.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/flow_dissector_load_bytes.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_run.c
+ create mode 100644 tools/testing/selftests/bpf/test_btf.h
+ create mode 100644 tools/testing/selftests/bpf/test_maps.h
+ create mode 100644 tools/testing/selftests/bpf/verifier/raw_tp_writable.c
