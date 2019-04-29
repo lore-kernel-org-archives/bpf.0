@@ -4,63 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9ED7FC46460
-	for <bpf@archiver.kernel.org>; Mon, 29 Apr 2019 09:52:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13923C04A6B
+	for <bpf@archiver.kernel.org>; Mon, 29 Apr 2019 09:52:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6420F21473
-	for <bpf@archiver.kernel.org>; Mon, 29 Apr 2019 09:52:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D638620449
+	for <bpf@archiver.kernel.org>; Mon, 29 Apr 2019 09:52:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="OlPzI37w"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="my8m0mRe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727843AbfD2Jwq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Apr 2019 05:52:46 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:54721 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727537AbfD2Jwp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Apr 2019 05:52:45 -0400
-Received: by mail-wm1-f68.google.com with SMTP id b10so500358wmj.4
-        for <bpf@vger.kernel.org>; Mon, 29 Apr 2019 02:52:44 -0700 (PDT)
+        id S1727868AbfD2Jww (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Apr 2019 05:52:52 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:36211 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727856AbfD2Jws (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Apr 2019 05:52:48 -0400
+Received: by mail-wr1-f68.google.com with SMTP id o4so3126844wra.3
+        for <bpf@vger.kernel.org>; Mon, 29 Apr 2019 02:52:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=eUEvq1ZZP5fAahJx3cvB+6G7/DCNm265wzSKCNJscfc=;
-        b=OlPzI37wp5Q8kwqaYmuSWrTMVDmWNqOZcIGD5lEDtKoMm+dn44RGYcaOdz+n0OFzqA
-         htOQuaJkTsvIJleuoJ9lA63jBJUYNLJTtdYhvkjDQVskjINfuzlpIroJaxPr+IVs/FbM
-         1RAN4omqKALTA3n9YSoG0YzrrX6yxVsYZthRmWgaVrAUy0QeQ+v7OlhcWCfR4CnsZHW0
-         xI76ZLzadwTzlvzPi09n+TBqc0N065TJis34KpBCvpCq8suokDZDrh4dpom2d8p9nwzD
-         upPFIGg8HYkLAXb/7xAgDL7QfdysVRCA+MAWkOhUk1TZVfKqMjJD/dVjY4gE0exacuwt
-         2Rkw==
+        bh=vV5IIF8H0WuMd2J5w6doIbRMaPgBbSK0Xirjfj1X1Pk=;
+        b=my8m0mReTHmyo4fn7jJxDhUQY8e9Zh0juPFuK5oJ3YBpDjT+aHHIUh1MN5f9s/wBVW
+         kZ9Plw7/IcLth6gsmtyPY5j06Bnzgw4zclqFSZuYmqX2oduf5t4z4YyDDAAeiinJUB4c
+         KOCznbPSE+qXrkOT93ry2+vAIlzghZC2S0QQoEQD0MjIVp/WQZJHUoB8/5XsCGRm4s+p
+         4eOFJgIS32CA/+Y5N/7ZKODhG5SJxtM0yfr6BYgZI4mN4F9S+paa4641o7bx3coFoe4U
+         OHL4Vuf/gZNVmP1yUCG1ikmPFrIus4uyURVCAc+g4J7IyxPNJN8g/FtaIDGh1/FHmrD8
+         20ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=eUEvq1ZZP5fAahJx3cvB+6G7/DCNm265wzSKCNJscfc=;
-        b=YdAS2k+NqXKTR8c05zcbuYVyzQCOSF4jmtWBIaL+RMxBgQXQWkDQQY7ZigBcjVO3Wj
-         7S3Alvao03d6A6Fxg4HVJg6ohj0zZK0DS+eL+DQN0oxT5hvLyRnAwO8VByHLAPlAk5AX
-         5d4KZfKpo+MWdNuu+IorQKoO5o5rqlsi3sRuywU5Owqzf9R5p76vAfYYgeMR9emeL34X
-         wPJ7/UhxI/Llr/yPuwwQAxARsRqINRoopzBMDV3QNTxU+iqcAJ84CRaUcsPyCWoQCJW0
-         4kYL1AtVD8daqcnrB0G864qJysWs/+lfxO9K8zds6m9/n37J5/I5wS/30rVp6KD0443/
-         ikew==
-X-Gm-Message-State: APjAAAXVsi36958oph44UcvAqgcOw7dmBACj4h8fgLsTsC1HKKnTFn5W
-        fEPYt62oKZQ/2bGjLEIX7b9aMg==
-X-Google-Smtp-Source: APXvYqwjyPaHA773c2VUFVGYPa5REgr1zOLKI+SnkrCi5OvNSeKthl4bSSsD31mS1wQGNzj6T1mR1w==
-X-Received: by 2002:a1c:d7:: with SMTP id 206mr17976344wma.69.1556531563666;
-        Mon, 29 Apr 2019 02:52:43 -0700 (PDT)
+        bh=vV5IIF8H0WuMd2J5w6doIbRMaPgBbSK0Xirjfj1X1Pk=;
+        b=FgYMp0yxquyTqDvgVwTSwlkXC68Kv1kh8vvQhav+Dm0WVpwmJAkwT/UrpP54VK6nqA
+         sZ69q7+WB0Ay/L7ipq8PXskSXYQ3f3CIK8XftNs3rpmBM5eKRvzYLWY4eQ96f7blcnWy
+         +e9A5lA4MKORJLGAKdEdbKku7RaKrP9cgukdU/9zzT5onjUL6FmCNd/5W8Zvv5S2Fci8
+         rVG+40MEaqDNBM4gtapIImzQFvPJk043/swunV8wzxuUpjV1GLQgNYj0KiqzxD0UTYnM
+         dwzWI/fJKcdx2iKZgMVS7yKz7kcH/Lp+6ZrBFJ++3vkY/GbWc106O98VPtWyiOSKfGcg
+         9RsQ==
+X-Gm-Message-State: APjAAAVBZhIs49cmtet1c6QyLC6Cd3ODPiOu/uvJcAGFZg6wZVqqajXs
+        FVhGrDkISrJErDVd2nwESWUV6Z0ALC3bkQ==
+X-Google-Smtp-Source: APXvYqxNm30s9yu5w5vYvnLkD72BT9dAUzdeQCF48MFULg0qUGNGBSa+x3YtI3bN2qKu0/ZcPt3YFw==
+X-Received: by 2002:a5d:6a03:: with SMTP id m3mr13081906wru.135.1556531566508;
+        Mon, 29 Apr 2019 02:52:46 -0700 (PDT)
 Received: from cbtest32.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id x20sm11241535wrg.29.2019.04.29.02.52.42
+        by smtp.gmail.com with ESMTPSA id x20sm11241535wrg.29.2019.04.29.02.52.45
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Apr 2019 02:52:42 -0700 (PDT)
+        Mon, 29 Apr 2019 02:52:45 -0700 (PDT)
 From:   Quentin Monnet <quentin.monnet@netronome.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         oss-drivers@netronome.com,
         Quentin Monnet <quentin.monnet@netronome.com>
-Subject: [PATCH bpf-next 2/6] tools: bpftool: add --log-all option to print all possible log info
-Date:   Mon, 29 Apr 2019 10:52:23 +0100
-Message-Id: <20190429095227.9745-3-quentin.monnet@netronome.com>
+Subject: [PATCH bpf-next 5/6] tools: bpf: report latest changes from BPF UAPI header to tools
+Date:   Mon, 29 Apr 2019 10:52:26 +0100
+Message-Id: <20190429095227.9745-6-quentin.monnet@netronome.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190429095227.9745-1-quentin.monnet@netronome.com>
 References: <20190429095227.9745-1-quentin.monnet@netronome.com>
@@ -69,82 +69,31 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The --log-all option is a shortcut for "--log-libbpf warn,info,debug".
-It tells bpftool to print all possible logs from libbpf, and may be
-extended in the future to set other log levels from other components as
-well.
-
-This option has a short name: "-l".
+BPF verifier log level flags were moved from an internal header to the
+UAPI header file. Report the changes accordingly.
 
 Signed-off-by: Quentin Monnet <quentin.monnet@netronome.com>
 Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 ---
- tools/bpf/bpftool/Documentation/bpftool-prog.rst | 4 ++++
- tools/bpf/bpftool/bash-completion/bpftool        | 3 ++-
- tools/bpf/bpftool/main.c                         | 7 ++++++-
- 3 files changed, 12 insertions(+), 2 deletions(-)
+ tools/include/uapi/linux/bpf.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-index 77d9570488d1..0525275f79f1 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-@@ -180,6 +180,10 @@ OPTIONS
- 		  levels of information to print, which can be **warn**,
- 		  **info** or **debug**. The default is **warn,info**.
- 
-+	-l, --log-all
-+		  Print all possible log information. This is a shortcut for
-+		  **--log-libbpf warn,info,debug**.
-+
- EXAMPLES
- ========
- **# bpftool prog show**
-diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-index a232da1b158d..f4ad75c6b243 100644
---- a/tools/bpf/bpftool/bash-completion/bpftool
-+++ b/tools/bpf/bpftool/bash-completion/bpftool
-@@ -209,7 +209,8 @@ _bpftool()
- 
-     # Deal with options
-     if [[ ${words[cword]} == -* ]]; then
--        local c='--version --json --pretty --bpffs --mapcompat --log-libbpf'
-+        local c='--version --json --pretty --bpffs --mapcompat \
-+            --log-libbpf --log-all'
-         COMPREPLY=( $( compgen -W "$c" -- "$cur" ) )
-         return 0
-     fi
-diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-index 6318be6feb5c..417cff76c7a1 100644
---- a/tools/bpf/bpftool/main.c
-+++ b/tools/bpf/bpftool/main.c
-@@ -360,6 +360,7 @@ int main(int argc, char **argv)
- 		{ "mapcompat",	no_argument,		NULL,	'm' },
- 		{ "nomount",	no_argument,		NULL,	'n' },
- 		{ "log-libbpf",	required_argument,	NULL,	'd' },
-+		{ "log-all",	no_argument,		NULL,	'l' },
- 		{ 0 }
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 72336bac7573..f8e3e764aff4 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -335,6 +335,11 @@ struct bpf_stack_build_id {
  	};
- 	int opt, ret;
-@@ -375,7 +376,7 @@ int main(int argc, char **argv)
- 	hash_init(map_table.table);
+ };
  
- 	opterr = 0;
--	while ((opt = getopt_long(argc, argv, "Vhpjfmn",
-+	while ((opt = getopt_long(argc, argv, "Vhpjfmnl",
- 				  options, NULL)) >= 0) {
- 		switch (opt) {
- 		case 'V':
-@@ -409,6 +410,10 @@ int main(int argc, char **argv)
- 			if (set_libbpf_loglevel(optarg))
- 				return -1;
- 			break;
-+		case 'l':
-+			if (set_libbpf_loglevel("warn,info,debug"))
-+				return -1;
-+			break;
- 		default:
- 			p_err("unrecognized option '%s'", argv[optind - 1]);
- 			if (json_output)
++/* verifier log_level values for loading programs, can be combined */
++#define BPF_LOG_LEVEL1	1
++#define BPF_LOG_LEVEL2	2
++#define BPF_LOG_STATS	4
++
+ union bpf_attr {
+ 	struct { /* anonymous struct used by BPF_MAP_CREATE command */
+ 		__u32	map_type;	/* one of enum bpf_map_type */
 -- 
 2.17.1
 
