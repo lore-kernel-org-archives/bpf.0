@@ -2,115 +2,109 @@ Return-Path: <SRS0=t7Jq=TB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.2 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48A58C004C9
-	for <bpf@archiver.kernel.org>; Wed,  1 May 2019 06:56:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24BDDC43219
+	for <bpf@archiver.kernel.org>; Wed,  1 May 2019 13:47:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 174BF2081C
-	for <bpf@archiver.kernel.org>; Wed,  1 May 2019 06:56:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DA5EE20866
+	for <bpf@archiver.kernel.org>; Wed,  1 May 2019 13:47:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="L7Idok9w"
+	dkim=pass (2048-bit key) header.d=nifty.com header.i=@nifty.com header.b="Si7Jr3+R"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726014AbfEAG41 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 May 2019 02:56:27 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:43910 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726074AbfEAG40 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 1 May 2019 02:56:26 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x416mW8b023292
-        for <bpf@vger.kernel.org>; Tue, 30 Apr 2019 23:56:25 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=USqjk3EJGRFLoec6O+/rFlqnlw84fmAE9AWomwTX9J0=;
- b=L7Idok9w7QrEKwo12wiW0vvwMGi3wfF7wXc0sHNdDJ8xpCaiitILSBs9uka6mspLvGfP
- xPuVHdQ77HufK2Gh+g6+mBlM+lbSyOvo/q/l0CE/YZnjFpUTxmNfItCmyWbBlBn09Udb
- kBiXXZbbiDu/UrWXumJJ5kUk4hgsIj9pxbk= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2s6xhnh71v-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 30 Apr 2019 23:56:25 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 30 Apr 2019 23:56:24 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 51F9C3702FB8; Tue, 30 Apr 2019 23:56:23 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Yonghong Song <yhs@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [RFC PATCH bpf-next 2/3] tools/bpf: sync bpf uapi header bpf.h
-Date:   Tue, 30 Apr 2019 23:56:23 -0700
-Message-ID: <20190501065623.2599923-1-yhs@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190501065621.2599742-1-yhs@fb.com>
-References: <20190501065621.2599742-1-yhs@fb.com>
-X-FB-Internal: Safe
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-01_03:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=8 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=856 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905010048
-X-FB-Internal: deliver
+        id S1726512AbfEANrd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 May 2019 09:47:33 -0400
+Received: from conuserg-11.nifty.com ([210.131.2.78]:29860 "EHLO
+        conuserg-11.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726497AbfEANrd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 1 May 2019 09:47:33 -0400
+Received: from grover.flets-west.jp (softbank126125154137.bbtec.net [126.125.154.137]) (authenticated)
+        by conuserg-11.nifty.com with ESMTP id x41DkAqH006908;
+        Wed, 1 May 2019 22:46:10 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com x41DkAqH006908
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1556718371;
+        bh=r0tKWu4K0FaqMQsDo16rqksf/YsVt69hJkPu3of5sNs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Si7Jr3+R+5NB5DAbMoi+oNJUQEhichvJc7P6ya+mg1vm6/5aK6WVp9kpY8a1C7Oth
+         ILQAa6yO0t1uWDOFYJeOOHH7SZHzMgJcuFOkTdCoYNDs/C4g3v9c0bDHkWvxP++nuY
+         jRuHdh627B42W8JzIZiZVjagvzZNr2yFf/B3nUtI4moG7spsHrXAueqn5F93lgsc0h
+         xJLRW4w6lEA9utgwsZG49UGerJ6pkdxFhV28p/zihvr6RCKeNvozRQSh+a6rSQPhtF
+         9NgzNE4qWZw0ePK4JiB+3NsmmVKr1nRVT6Qskl+EslWk5ZCxaLXzKXxzMDCS4Bj1NL
+         u2EfE5O1cd7xA==
+X-Nifty-SrcIP: [126.125.154.137]
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Quentin Monnet <quentin.monnet@netronome.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Sirio Balmelli <sirio@b-ad.ch>,
+        Song Liu <songliubraving@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>, netdev@vger.kernel.org,
+        Yonghong Song <yhs@fb.com>,
+        Taeung Song <treeze.taeung@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Martin KaFai Lau <kafai@fb.com>, bpf@vger.kernel.org
+Subject: [PATCH v2] bpftool: exclude bash-completion/bpftool from .gitignore pattern
+Date:   Wed,  1 May 2019 22:45:59 +0900
+Message-Id: <1556718359-1598-1-git-send-email-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.7.4
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-sync bpf uapi header bpf.h to tools directory.
+tools/bpf/bpftool/.gitignore has the "bpftool" pattern, which is
+intended to ignore the following build artifact:
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
+  tools/bpf/bpftool/bpftool
+
+However, the .gitignore entry is effective not only for the current
+directory, but also for any sub-directories.
+
+So, from the point of .gitignore grammar, the following check-in file
+is also considered to be ignored:
+
+  tools/bpf/bpftool/bash-completion/bpftool
+
+As the manual gitignore(5) says "Files already tracked by Git are not
+affected", this is not a problem as far as Git is concerned.
+
+However, Git is not the only program that parses .gitignore because
+.gitignore is useful to distinguish build artifacts from source files.
+
+For example, tar(1) supports the --exclude-vcs-ignore option. As of
+writing, this option does not work perfectly, but it intends to create
+a tarball excluding files specified by .gitignore.
+
+So, I believe it is better to fix this issue.
+
+You can fix it by prefixing the pattern with a slash; the leading slash
+means the specified pattern is relative to the current directory.
+
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
 ---
- tools/include/uapi/linux/bpf.h | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 72336bac7573..e3e824848335 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -2667,6 +2667,18 @@ union bpf_attr {
-  *		0 on success.
-  *
-  *		**-ENOENT** if the bpf-local-storage cannot be found.
-+ *
-+ * int bpf_send_signal(u32 pid, u32 sig)
-+ *	Description
-+ *		Send signal *sig* to *pid*.
-+ *	Return
-+ *		0 on success or successfully queued.
-+ *
-+ *		**-ENOENT** if *pid* cannot be found.
-+ *
-+ *		**-EBUSY** if work queue under nmi is full.
-+ *
-+ * 		Other negative values for actual signal sending errors.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -2777,7 +2789,8 @@ union bpf_attr {
- 	FN(strtol),			\
- 	FN(strtoul),			\
- 	FN(sk_storage_get),		\
--	FN(sk_storage_delete),
-+	FN(sk_storage_delete),		\
-+	FN(send_signal),
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-  * function eBPF program intends to call
+Changes in v2:
+  - Add more information to the commit log to clarify my main motivation
+  - Touch "bpftool" pattern only
+
+ tools/bpf/bpftool/.gitignore | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/bpf/bpftool/.gitignore b/tools/bpf/bpftool/.gitignore
+index 67167e4..8248b8d 100644
+--- a/tools/bpf/bpftool/.gitignore
++++ b/tools/bpf/bpftool/.gitignore
+@@ -1,5 +1,5 @@
+ *.d
+-bpftool
++/bpftool
+ bpftool*.8
+ bpf-helpers.*
+ FEATURE-DUMP.bpftool
 -- 
-2.17.1
+2.7.4
 
