@@ -7,59 +7,59 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7992EC43219
-	for <bpf@archiver.kernel.org>; Wed,  1 May 2019 14:44:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0D4BC43219
+	for <bpf@archiver.kernel.org>; Wed,  1 May 2019 14:44:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 48731208C3
-	for <bpf@archiver.kernel.org>; Wed,  1 May 2019 14:44:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 837DD208C3
+	for <bpf@archiver.kernel.org>; Wed,  1 May 2019 14:44:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="uNmq26oo"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="M+FIjdbG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726859AbfEAOou (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 May 2019 10:44:50 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:40146 "EHLO
+        id S1726953AbfEAOoQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 May 2019 10:44:16 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:41611 "EHLO
         mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726948AbfEAOoR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 May 2019 10:44:17 -0400
-Received: by mail-wr1-f68.google.com with SMTP id h4so24825821wre.7
-        for <bpf@vger.kernel.org>; Wed, 01 May 2019 07:44:15 -0700 (PDT)
+        with ESMTP id S1726944AbfEAOoP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 1 May 2019 10:44:15 -0400
+Received: by mail-wr1-f68.google.com with SMTP id c12so24800473wrt.8
+        for <bpf@vger.kernel.org>; Wed, 01 May 2019 07:44:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=wjsUR3bZtuM+5tkWFlotkJIwtlwooutuXP6XZgmFU9M=;
-        b=uNmq26oojFGqyxanskgHGX+nXNIoBMIXDTQ1X8Qp+942svsibomNSIWNOolu61ODBj
-         Xxf3dMgpIcghcgbNZBxw29PYIFh2y++KzhzFIu9dBok7NxmYYKFL9zTV/Jm3iUmzK0oQ
-         GB71DG6cKzJHFl6hYKJyItguP+aA6NZPkaJzSrqbWPMHGcnP//0skwS0ObJoTd9VhwZ2
-         RCXlmrEN14/v0xWMHEZNVPVjf7/lT1vC07QaR+WixhK42VEvlOgMta6Ug4sHoFct3BtF
-         LsliTrXzI82peuFN6UcSFFVh1KTRs0cDuMqn3TXC8A/TNzOBVRta+CyFB+v0Bo/rkV8s
-         uTow==
+        bh=5gmdeCiumoo/+nRb5YIHgrhrVRpVHEnPYiT7ekQtPGI=;
+        b=M+FIjdbGTZ1NOQyz89Sh4H79MO5GYfgMBj1x9D5597WEGpk/43BjKeLcBOet9CZZkh
+         uyQYEFr3FXKrnItTOjsbV+OohdO9LckTv+XVI2BGgXFSMVi9Wp4zLQfATu62QB+OiZWV
+         1wywX1Yq/5FHj6JS9OzCEOV5+DlcIGKeGgQS/IxP6FKf0z+OkPRmAtHkwr1JUHV6dutI
+         1TCAoJlyWsmnIPTDPWwEFVxgMjVPHubRRKUUruFtgiCCkoi6dUNXbHSD72aElmo+76/Q
+         4jJ2AgPG5QzrNp4aVVur2pwgJDcXYr+BI8RQm5E2UCZuzLLLHb0nVR5rghkkOzOiWkjY
+         tiUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=wjsUR3bZtuM+5tkWFlotkJIwtlwooutuXP6XZgmFU9M=;
-        b=kn93Jw2K0xLxfrJylbhmCFx+xxR5PXToFL0L/mE/35XoZ/J1Gma3CEeg5ksAUUIN2D
-         VBaUQ1AFz0X/QzDEmqR//KlVh7TKcJQYYJhEyDuCt7iNiXqLeoDa7e7VD5jiX5WsHRPw
-         E+XpWZtIvTUENh7AMF39fJ3EfJcEV68XW9f9chDjQ7F+cDICOsz8Pj5AlA9Te6vr8C8y
-         ZCacx5u6gvP2Tyc8j7QRHTD7JBrxMSHOQQQFNu6ozZq3ridN0cOR8PxIca0qdPcY7cos
-         fcBW3McS2dIzZwxomWWokjH3HXXMbVe9TkxsBKY/IbGyn5LoSLTQpcmCA4O/GGgztbnc
-         xRXg==
-X-Gm-Message-State: APjAAAV37LuHbin2v9C02wz9Iq/7JbGa4eYbDzS0jzdEsZWU0KLr2/8v
-        iNIMbvFQpnI5w0Swqg+pefT6rA==
-X-Google-Smtp-Source: APXvYqyF4tWUWNdsxoXz6Ow8Z9o+yLbdB0jVmQrvKrw05G9o8PpupD6Ea/6jdPPBiB3IghQJ3llc+Q==
-X-Received: by 2002:adf:ef43:: with SMTP id c3mr15475614wrp.141.1556721855058;
-        Wed, 01 May 2019 07:44:15 -0700 (PDT)
+        bh=5gmdeCiumoo/+nRb5YIHgrhrVRpVHEnPYiT7ekQtPGI=;
+        b=LSqHCXSdDg/PxjPs2T+aynyD1KJbtumw8f/7PgapzYvsHF/qFG/LBgUFuCNHoiJb3z
+         DBSenQ/KVY7wxqMVzEjfjTMRvbxMQgEqhrBhor3361LU1wqybeISLQU5rHdEE2Gdvgv5
+         q0KimoXs+gDHONSeSYxVcSAPIbldm9EVWTwKLHhUY0ufR+Po3Ef29H5zWJBf381DE4QF
+         tPDGQlOJYEh1tUnnEhiVHpO04+2+3ismIqXW4ZRP2jAbzxQRsuAa2B4kTWgu9jvqPetv
+         xNMQzRcAB7oULf5h6BVYMSo8/paUN5JY9q5nGMgJK3KJDYTZ82BxNcufpOaSv/9hSbRH
+         fkUQ==
+X-Gm-Message-State: APjAAAWasWbVQKwwG+0ORdj2ucb7n52L9JinldYp4Dw4HaDheR2loo1y
+        wwh833y7JFVoWnZKjOKHuHOwWw==
+X-Google-Smtp-Source: APXvYqyB+dZRD1cCmcincSoQ/vVlb5zboKvqC7seyejLkJX0mzXxVCjnptfvaSJ3JtihB0m62QI+0A==
+X-Received: by 2002:adf:dd12:: with SMTP id a18mr28127132wrm.188.1556721852933;
+        Wed, 01 May 2019 07:44:12 -0700 (PDT)
 Received: from cbtest28.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id g10sm36164976wrq.2.2019.05.01.07.44.13
+        by smtp.gmail.com with ESMTPSA id g10sm36164976wrq.2.2019.05.01.07.44.12
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 01 May 2019 07:44:14 -0700 (PDT)
+        Wed, 01 May 2019 07:44:12 -0700 (PDT)
 From:   Jiong Wang <jiong.wang@netronome.com>
 To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         oss-drivers@netronome.com, Jiong Wang <jiong.wang@netronome.com>
-Subject: [PATCH v5 bpf-next 05/17] bpf: verifier: insert BPF_ZEXT according to zext analysis result
-Date:   Wed,  1 May 2019 15:43:50 +0100
-Message-Id: <1556721842-29836-6-git-send-email-jiong.wang@netronome.com>
+Subject: [PATCH v5 bpf-next 03/17] bpf: verifier: mark patched-insn with sub-register zext flag
+Date:   Wed,  1 May 2019 15:43:48 +0100
+Message-Id: <1556721842-29836-4-git-send-email-jiong.wang@netronome.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1556721842-29836-1-git-send-email-jiong.wang@netronome.com>
 References: <1556721842-29836-1-git-send-email-jiong.wang@netronome.com>
@@ -68,144 +68,93 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-After previous patches, verifier has marked those instructions that really
-need zero extension on dst_reg.
+Patched insns do not go through generic verification, therefore doesn't has
+zero extension information collected during insn walking.
 
-It is then for all back-ends to decide how to use such information to
-eliminate unnecessary zero extension code-gen during JIT compilation.
+We don't bother analyze them at the moment, for any sub-register def comes
+from them, just conservatively mark it as needing zero extension.
 
-One approach is:
-  1. Verifier insert explicit zero extension for those instructions that
-     need zero extension.
-  2. All JIT back-ends do NOT generate zero extension for sub-register
-     write any more.
-
-The good thing for this approach is no major change on JIT back-end
-interface, all back-ends could get this optimization.
-
-However, only those back-ends that do not have hardware zero extension
-want this optimization. For back-ends like x86_64 and AArch64, there is
-hardware support, so zext insertion should be disabled.
-
-This patch introduces new target hook "bpf_jit_hardware_zext" which is
-default true, meaning the underlying hardware will do zero extension
-implicitly, therefore zext insertion by verifier will be disabled. Once a
-back-end overrides this hook to false, then verifier will insert BPF_ZEXT
-to clear high 32-bit of definitions when necessary.
-
-Offload targets do not use this native target hook, instead, they could
-get the optimization results using bpf_prog_offload_ops.finalize.
-
-Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
 ---
- include/linux/bpf.h    |  1 +
- include/linux/filter.h |  1 +
- kernel/bpf/core.c      |  8 ++++++++
- kernel/bpf/verifier.c  | 40 ++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 50 insertions(+)
+ kernel/bpf/verifier.c | 37 +++++++++++++++++++++++++++++++++----
+ 1 file changed, 33 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 11a5fb9..cf3c3f3 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -373,6 +373,7 @@ struct bpf_prog_aux {
- 	u32 id;
- 	u32 func_cnt; /* used by non-func prog as the number of func progs */
- 	u32 func_idx; /* 0 for non-func prog, the index in func array for func prog */
-+	bool verifier_zext; /* Zero extensions has been inserted by verifier. */
- 	bool offload_requested;
- 	struct bpf_prog **func;
- 	void *jit_data; /* JIT specific data. arch dependent */
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index fb0edad..8750657 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -821,6 +821,7 @@ u64 __bpf_call_base(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
- 
- struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog);
- void bpf_jit_compile(struct bpf_prog *prog);
-+bool bpf_jit_hardware_zext(void);
- bool bpf_helper_changes_pkt_data(void *func);
- 
- static inline bool bpf_dump_raw_ok(void)
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index ee8703d..9754346 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2095,6 +2095,14 @@ bool __weak bpf_helper_changes_pkt_data(void *func)
- 	return false;
- }
- 
-+/* Return TRUE is the target hardware of JIT will do zero extension to high bits
-+ * when writing to low 32-bit of one register. Otherwise, return FALSE.
-+ */
-+bool __weak bpf_jit_hardware_zext(void)
-+{
-+	return true;
-+}
-+
- /* To execute LD_ABS/LD_IND instructions __bpf_prog_run() may call
-  * skb_copy_bits(), so provide a weak definition of it for NET-less config.
-  */
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index b75913c..66aaaa0 100644
+index 6e62cc8..b75913c 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -7648,6 +7648,37 @@ static int opt_remove_nops(struct bpf_verifier_env *env)
- 	return 0;
+@@ -1303,6 +1303,24 @@ static bool is_reg64(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	return true;
  }
  
-+static int opt_subreg_zext_lo32(struct bpf_verifier_env *env)
++/* Return TRUE if INSN doesn't have explicit value define. */
++static bool insn_no_def(struct bpf_insn *insn)
 +{
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+	struct bpf_insn *insns = env->prog->insnsi;
-+	int i, delta = 0, len = env->prog->len;
-+	struct bpf_insn zext_patch[2];
-+	struct bpf_prog *new_prog;
++	u8 class = BPF_CLASS(insn->code);
 +
-+	zext_patch[1] = BPF_ALU32_IMM(BPF_ZEXT, 0, 0);
-+	for (i = 0; i < len; i++) {
-+		int adj_idx = i + delta;
-+		struct bpf_insn insn;
-+
-+		if (!aux[adj_idx].zext_dst)
-+			continue;
-+
-+		insn = insns[adj_idx];
-+		zext_patch[0] = insn;
-+		zext_patch[1].dst_reg = insn.dst_reg;
-+		new_prog = bpf_patch_insn_data(env, adj_idx, zext_patch, 2);
-+		if (!new_prog)
-+			return -ENOMEM;
-+		env->prog = new_prog;
-+		insns = new_prog->insnsi;
-+		aux = env->insn_aux_data;
-+		delta += 2;
-+	}
-+
-+	return 0;
++	return (class == BPF_JMP || class == BPF_JMP32 ||
++		class == BPF_STX || class == BPF_ST);
 +}
 +
- /* convert load instructions that access fields of a context type into a
-  * sequence of instructions that access fields of the underlying structure:
-  *     struct __sk_buff    -> struct sk_buff
-@@ -8499,6 +8530,15 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
- 	if (ret == 0)
- 		ret = fixup_bpf_calls(env);
- 
-+	/* do 32-bit optimization after insn patching has done so those patched
-+	 * insns could be handled correctly.
-+	 */
-+	if (ret == 0 && !bpf_jit_hardware_zext() &&
-+	    !bpf_prog_is_dev_bound(env->prog->aux)) {
-+		ret = opt_subreg_zext_lo32(env);
-+		env->prog->aux->verifier_zext = !ret;
-+	}
++/* Return TRUE if INSN has defined any 32-bit value explicitly. */
++static bool insn_has_def32(struct bpf_verifier_env *env, struct bpf_insn *insn)
++{
++	if (insn_no_def(insn))
++		return false;
 +
- 	if (ret == 0)
- 		ret = fixup_call_args(env);
++	return !is_reg64(env, insn, insn->dst_reg, NULL, DST_OP);
++}
++
+ static void mark_insn_zext(struct bpf_verifier_env *env,
+ 			   struct bpf_reg_state *reg)
+ {
+@@ -7306,14 +7324,23 @@ static void convert_pseudo_ld_imm64(struct bpf_verifier_env *env)
+  * insni[off, off + cnt).  Adjust corresponding insn_aux_data by copying
+  * [0, off) and [off, end) to new locations, so the patched range stays zero
+  */
+-static int adjust_insn_aux_data(struct bpf_verifier_env *env, u32 prog_len,
+-				u32 off, u32 cnt)
++static int adjust_insn_aux_data(struct bpf_verifier_env *env,
++				struct bpf_prog *new_prog, u32 off, u32 cnt)
+ {
+ 	struct bpf_insn_aux_data *new_data, *old_data = env->insn_aux_data;
++	struct bpf_insn *insn = new_prog->insnsi;
++	u32 prog_len;
+ 	int i;
  
++	/* aux info at OFF always needs adjustment, no matter fast path
++	 * (cnt == 1) is taken or not. There is no guarantee INSN at OFF is the
++	 * original insn at old prog.
++	 */
++	old_data[off].zext_dst = insn_has_def32(env, insn + off + cnt - 1);
++
+ 	if (cnt == 1)
+ 		return 0;
++	prog_len = new_prog->len;
+ 	new_data = vzalloc(array_size(prog_len,
+ 				      sizeof(struct bpf_insn_aux_data)));
+ 	if (!new_data)
+@@ -7321,8 +7348,10 @@ static int adjust_insn_aux_data(struct bpf_verifier_env *env, u32 prog_len,
+ 	memcpy(new_data, old_data, sizeof(struct bpf_insn_aux_data) * off);
+ 	memcpy(new_data + off + cnt - 1, old_data + off,
+ 	       sizeof(struct bpf_insn_aux_data) * (prog_len - off - cnt + 1));
+-	for (i = off; i < off + cnt - 1; i++)
++	for (i = off; i < off + cnt - 1; i++) {
+ 		new_data[i].seen = true;
++		new_data[i].zext_dst = insn_has_def32(env, insn + i);
++	}
+ 	env->insn_aux_data = new_data;
+ 	vfree(old_data);
+ 	return 0;
+@@ -7355,7 +7384,7 @@ static struct bpf_prog *bpf_patch_insn_data(struct bpf_verifier_env *env, u32 of
+ 				env->insn_aux_data[off].orig_idx);
+ 		return NULL;
+ 	}
+-	if (adjust_insn_aux_data(env, new_prog->len, off, len))
++	if (adjust_insn_aux_data(env, new_prog, off, len))
+ 		return NULL;
+ 	adjust_subprog_starts(env, off, len);
+ 	return new_prog;
 -- 
 2.7.4
 
