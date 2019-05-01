@@ -2,166 +2,105 @@ Return-Path: <SRS0=t7Jq=TB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE9A0C43219
-	for <bpf@archiver.kernel.org>; Wed,  1 May 2019 14:44:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EA01C04AA8
+	for <bpf@archiver.kernel.org>; Wed,  1 May 2019 14:59:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AD72C217D6
-	for <bpf@archiver.kernel.org>; Wed,  1 May 2019 14:44:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 423CE21734
+	for <bpf@archiver.kernel.org>; Wed,  1 May 2019 14:59:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="gVw6VbES"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="A7Any30y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727065AbfEAOoy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 May 2019 10:44:54 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:39315 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726945AbfEAOoQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 May 2019 10:44:16 -0400
-Received: by mail-wr1-f68.google.com with SMTP id a9so24831888wrp.6
-        for <bpf@vger.kernel.org>; Wed, 01 May 2019 07:44:14 -0700 (PDT)
+        id S1726481AbfEAO7i (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 May 2019 10:59:38 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:33060 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726842AbfEAO7i (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 1 May 2019 10:59:38 -0400
+Received: by mail-wm1-f68.google.com with SMTP id b188so1496469wmb.0
+        for <bpf@vger.kernel.org>; Wed, 01 May 2019 07:59:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=K4gLqJ4SgDOsgXMmICWdVA0zCxYikPtUo1d3XLqhgFA=;
-        b=gVw6VbES46XLZdd8b3uLEiFoKT3v3WflQffUMx/vxZQTf0+fyQnsCPTsmCJooprTk0
-         v3exsBY38qssZRNTV/SSJkJYmdRiNjmFcytZa4nOq1ScFYq6fMEVSUJE0KGc7O7WUpL5
-         jzvw5F5rgUhVK0k05RTvIkaLTgXwWDcN0eEmjPfZIaTkaGjdhrfp3QfC5/zGoIWQKWip
-         0SazZNrmqwKpgJuk64nzj0GlA/m+4eu1P/HSbskV2cAgjE43rpwThIUXjToy0XDNJcRw
-         7EwIJaztBNCGc4k1YzzO/rq4JRQ6MPmI5oTJ1TVFWa7x4LU3uSp/TdtjjdUxg6SUJ5Sg
-         DCfA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZwZ6MdL5R5AOerbVDItJqenvqXbPYw3Q89hSGLypnfM=;
+        b=A7Any30y+Ixmf+Ti12t1rhXwX2O0gO0UWQdiQn6QI93upvjR4Kwm7YLr6FD7pAJrvF
+         NVVpOPacWFu1v/qyeSm8nIGBnOOBfkZAKd52940lplB3Ql5ZZMILEppZUbvPZ1ulY98T
+         yHskaCo+N9hjxNRUues88jFU7yQUTGwA9pLeC157ONj5agcljACRHDv28kkvAJvBhV/w
+         8yTf+v5Fwv7BHcyDwyCHYETEoQ0tphjlzZAglWWFgeCILVH/qziO7wCW0IkyZLOfDOdB
+         SLZ2qyNSxnOm2ZNci/BpJRaheHCc3ePdyEZ4ceD/KDoHXCcqkMXHsuMC9vq3HAOQ3rzB
+         Oj3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=K4gLqJ4SgDOsgXMmICWdVA0zCxYikPtUo1d3XLqhgFA=;
-        b=VSQVA3TWZHb2M5OurC2h16EmnBFM9FtPuOgQ3ia0TBGwtSMzKWdQGCZ62g73zS5TLT
-         I84IZuQF6i8+1w8zR6h429PkKcIbAidbPpcOhWMjgdWOiPBvUcqDCyrh/hbLtRnediem
-         F9PZuTP33jtckoWWP1Ki9uPGRPH5ayz2daAUOfhajw6EAminlhnktC1O+pu7SfF1Sa2t
-         HgGk/vk/aE2Z5v5SarR434yntD08KC2zjMhFfKJsv7uwvE5uK1GhXHctAphHrFrgsh/4
-         QA1Bz2bgFISdjQ9idTedtnMgDq9PMUxvioiJ0/EXwUFS8U4TCEGmD8ttRrNpHLlF1cMT
-         AjAw==
-X-Gm-Message-State: APjAAAU/TYgoDz3h+RCT6WTjwAfw0mfxbjyqmmivf/BqXMaKOd+dngd+
-        BK8MdZDwifh4E8gU670k/oRFCuvsYIc=
-X-Google-Smtp-Source: APXvYqwc9tGZL5fZiZ1uX9UHtpeG3SYZNVw7wRli/9ijMCGMFK3dl0f5g9V9i0s7bmHnSOBoRHtUSA==
-X-Received: by 2002:adf:e387:: with SMTP id e7mr4633925wrm.17.1556721853950;
-        Wed, 01 May 2019 07:44:13 -0700 (PDT)
-Received: from cbtest28.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id g10sm36164976wrq.2.2019.05.01.07.44.12
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 01 May 2019 07:44:13 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZwZ6MdL5R5AOerbVDItJqenvqXbPYw3Q89hSGLypnfM=;
+        b=aAzsvpMhVv0DAItHJHqlCw3npE6DndGm3f0sjeREYFUsEOgXbArKaWyWGJHOcf6+zh
+         j8TH+5xIylBjxkdkjQGwgfy7mSS2/mpW0vAS2SIIcjgRoySZh3lft2QAaRkcc58VH3UZ
+         vWqTWYSUgcwiicK6mtUX6I1MjbmvkKDp2bXmCtf6Zx7BAVZVOhz0taHMS83WfiWH+Qem
+         /YCtBUElyhw1SO0sY4C5+enLeWoVyx4zRgdjMKHUZwDAp+N13FmPiMLehkpUaExHFzK5
+         G+4O/Km4+wIo8NUcE5KG3xIlbMxQp7Ya/Ztp+naQZZJOS419mFgvKuSDP4B5n3CdyJT7
+         9Z3A==
+X-Gm-Message-State: APjAAAXymX3M6F2bhAmBgR4YGQgv2a3vaDYg44r03W1bq2S2rIHa8PZZ
+        rNNnjaFLETZbIQl1El8dhlTjFmFMGtgfT+l5AK+OJg==
+X-Google-Smtp-Source: APXvYqxupOpdlAgq4mdMFssyDUB6fHCFkMjNBzRsPQDZ+ywudw0oP++fFWfCkpUGDgb51g73ZVV83nqftjInNrc4Er8=
+X-Received: by 2002:a1c:35c3:: with SMTP id c186mr7433197wma.135.1556722775680;
+ Wed, 01 May 2019 07:59:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190412214132.2726285-1-ast@kernel.org> <lyimv3hujp.fsf@netronome.com>
+ <20190425043347.pxrz5ln4m7khebt6@ast-mbp.dhcp.thefacebook.com>
+ <lylfzyeebr.fsf@netronome.com> <20190425221021.ov2jj4piann7wmid@ast-mbp.dhcp.thefacebook.com>
+ <lyk1fgrk4m.fsf@netronome.com> <20190427030512.zs3tfdudjbfpyawh@ast-mbp> <760D400C-2548-41B6-AE34-F89A66397A75@netronome.com>
+In-Reply-To: <760D400C-2548-41B6-AE34-F89A66397A75@netronome.com>
 From:   Jiong Wang <jiong.wang@netronome.com>
-To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        oss-drivers@netronome.com, Jiong Wang <jiong.wang@netronome.com>
-Subject: [PATCH v5 bpf-next 04/17] bpf: introduce new alu insn BPF_ZEXT for explicit zero extension
-Date:   Wed,  1 May 2019 15:43:49 +0100
-Message-Id: <1556721842-29836-5-git-send-email-jiong.wang@netronome.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1556721842-29836-1-git-send-email-jiong.wang@netronome.com>
-References: <1556721842-29836-1-git-send-email-jiong.wang@netronome.com>
+Date:   Wed, 1 May 2019 15:59:22 +0100
+Message-ID: <CAMsOgNDumbU7EWmOpwUoXdM5QWZ8h=W5nG3_JTFU5Tju-ofg_A@mail.gmail.com>
+Subject: Re: 32-bit zext time complexity (Was Re: [PATCH bpf-next]
+ selftests/bpf: two scale tests)
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Networking <netdev@vger.kernel.org>, bpf@vger.kernel.org,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        "oss-drivers@netronome.com" <oss-drivers@netronome.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch introduce new alu32 insn BPF_ZEXT, and allocate the unused
-opcode 0xe0 to it.
+> > if you can craft a test that shows patch_insn issue before your set,
+> > then it's ok to hack bpf_fill_scale1 to use alu64.
+>
+> As described above, does the test_verifier 732 + jit blinding looks convincing?
+>
+> > I would also prefer to go with option 2 (new zext insn) for JITs.
+>
+> Got it.
 
-Compared with the other alu32 insns, zero extension on low 32-bit is the
-only semantics for this instruction. It also allows various JIT back-ends
-to do optimal zero extension code-gen.
+I followed option 2 and have sent out v5 with latests changes/fixes:
 
-BPF_ZEXT is supposed to be encoded with BPF_ALU only, and is supposed to be
-generated by the latter 32-bit optimization code inside verifier for those
-arches that do not support hardware implicit zero extension only.
+The major changes are:
+  - introduced BPF_ZEXT, even though it doesn't resolve insn patch in-efficient,
+    but could let JIT back-ends do optimal code-gen, and the change is small,
+    so perhap just better to support it in this set.
+  - while look insn patch code, I feel patched-insn need to be conservatiely
+    marked if any insn inside patch buffer define sub-register.
+  - Also fixed helper function return value handling bug. I am thinking helper
+    function should have accurate return value type description, otherwise
+    there could be bug. For example arm32 back-end just executes the native
+    helper functions and doesn't do anything special on the return value. So
+    a function returns u32 would only set native reg r0, not r1 in the pair.
+    Then if the outside eBPF insn is casting it into u64, there needs to be
+    zext.
+  - adjusted test_verifier to make sure it could pass on hosts w and w/o hw
+    zext.
 
-It is not supposed to be used in user's program directly at the moment.
-Therefore, no need to recognize it inside generic verification code. It
-just need to be supported for execution on interpreter or related JIT
-back-ends.
+For more info, please see the cover letter and patch description at v5.
 
-Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
----
- Documentation/networking/filter.txt | 10 ++++++++++
- include/uapi/linux/bpf.h            |  3 +++
- kernel/bpf/core.c                   |  4 ++++
- tools/include/uapi/linux/bpf.h      |  3 +++
- 4 files changed, 20 insertions(+)
-
-diff --git a/Documentation/networking/filter.txt b/Documentation/networking/filter.txt
-index 319e5e0..1cb3e42 100644
---- a/Documentation/networking/filter.txt
-+++ b/Documentation/networking/filter.txt
-@@ -903,6 +903,16 @@ If BPF_CLASS(code) == BPF_ALU or BPF_ALU64 [ in eBPF ], BPF_OP(code) is one of:
-   BPF_MOV   0xb0  /* eBPF only: mov reg to reg */
-   BPF_ARSH  0xc0  /* eBPF only: sign extending shift right */
-   BPF_END   0xd0  /* eBPF only: endianness conversion */
-+  BPF_ZEXT  0xe0  /* eBPF BPF_ALU only: zero-extends low 32-bit */
-+
-+Compared with BPF_ALU | BPF_MOV which zero-extends low 32-bit implicitly,
-+BPF_ALU | BPF_ZEXT zero-extends low 32-bit explicitly. Such zero extension is
-+not the main semantics for the prior, but is for the latter. Therefore, JIT
-+optimizer could optimize out the zero extension for the prior when it is
-+concluded safe to do so, but should never do such optimization for the latter.
-+LLVM compiler won't generate BPF_ZEXT, and hand written assembly is not supposed
-+to use it. Verifier 32-bit optimization pass, which removes zero extension
-+semantics from the other BPF_ALU instructions, is the only place generates it.
- 
- If BPF_CLASS(code) == BPF_JMP or BPF_JMP32 [ in eBPF ], BPF_OP(code) is one of:
- 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 72336ba..22ccdf4 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -32,6 +32,9 @@
- #define BPF_FROM_LE	BPF_TO_LE
- #define BPF_FROM_BE	BPF_TO_BE
- 
-+/* zero extend low 32-bit */
-+#define BPF_ZEXT	0xe0
-+
- /* jmp encodings */
- #define BPF_JNE		0x50	/* jump != */
- #define BPF_JLT		0xa0	/* LT is unsigned, '<' */
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 2792eda..ee8703d 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1152,6 +1152,7 @@ EXPORT_SYMBOL_GPL(__bpf_call_base);
- 	INSN_2(ALU, NEG),			\
- 	INSN_3(ALU, END, TO_BE),		\
- 	INSN_3(ALU, END, TO_LE),		\
-+	INSN_2(ALU, ZEXT),			\
- 	/*   Immediate based. */		\
- 	INSN_3(ALU, ADD,  K),			\
- 	INSN_3(ALU, SUB,  K),			\
-@@ -1352,6 +1353,9 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
- 	ALU64_NEG:
- 		DST = -DST;
- 		CONT;
-+	ALU_ZEXT:
-+		DST = (u32) DST;
-+		CONT;
- 	ALU_MOV_X:
- 		DST = (u32) SRC;
- 		CONT;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 72336ba..22ccdf4 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -32,6 +32,9 @@
- #define BPF_FROM_LE	BPF_TO_LE
- #define BPF_FROM_BE	BPF_TO_BE
- 
-+/* zero extend low 32-bit */
-+#define BPF_ZEXT	0xe0
-+
- /* jmp encodings */
- #define BPF_JNE		0x50	/* jump != */
- #define BPF_JLT		0xa0	/* LT is unsigned, '<' */
--- 
-2.7.4
-
+Thanks.
+Regards,
+Jiong
