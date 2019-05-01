@@ -2,105 +2,91 @@ Return-Path: <SRS0=t7Jq=TB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EA01C04AA8
-	for <bpf@archiver.kernel.org>; Wed,  1 May 2019 14:59:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2AB5C04AA8
+	for <bpf@archiver.kernel.org>; Wed,  1 May 2019 21:44:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 423CE21734
-	for <bpf@archiver.kernel.org>; Wed,  1 May 2019 14:59:39 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="A7Any30y"
+	by mail.kernel.org (Postfix) with ESMTP id CA241208C3
+	for <bpf@archiver.kernel.org>; Wed,  1 May 2019 21:44:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726481AbfEAO7i (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 May 2019 10:59:38 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:33060 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726842AbfEAO7i (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 May 2019 10:59:38 -0400
-Received: by mail-wm1-f68.google.com with SMTP id b188so1496469wmb.0
-        for <bpf@vger.kernel.org>; Wed, 01 May 2019 07:59:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZwZ6MdL5R5AOerbVDItJqenvqXbPYw3Q89hSGLypnfM=;
-        b=A7Any30y+Ixmf+Ti12t1rhXwX2O0gO0UWQdiQn6QI93upvjR4Kwm7YLr6FD7pAJrvF
-         NVVpOPacWFu1v/qyeSm8nIGBnOOBfkZAKd52940lplB3Ql5ZZMILEppZUbvPZ1ulY98T
-         yHskaCo+N9hjxNRUues88jFU7yQUTGwA9pLeC157ONj5agcljACRHDv28kkvAJvBhV/w
-         8yTf+v5Fwv7BHcyDwyCHYETEoQ0tphjlzZAglWWFgeCILVH/qziO7wCW0IkyZLOfDOdB
-         SLZ2qyNSxnOm2ZNci/BpJRaheHCc3ePdyEZ4ceD/KDoHXCcqkMXHsuMC9vq3HAOQ3rzB
-         Oj3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZwZ6MdL5R5AOerbVDItJqenvqXbPYw3Q89hSGLypnfM=;
-        b=aAzsvpMhVv0DAItHJHqlCw3npE6DndGm3f0sjeREYFUsEOgXbArKaWyWGJHOcf6+zh
-         j8TH+5xIylBjxkdkjQGwgfy7mSS2/mpW0vAS2SIIcjgRoySZh3lft2QAaRkcc58VH3UZ
-         vWqTWYSUgcwiicK6mtUX6I1MjbmvkKDp2bXmCtf6Zx7BAVZVOhz0taHMS83WfiWH+Qem
-         /YCtBUElyhw1SO0sY4C5+enLeWoVyx4zRgdjMKHUZwDAp+N13FmPiMLehkpUaExHFzK5
-         G+4O/Km4+wIo8NUcE5KG3xIlbMxQp7Ya/Ztp+naQZZJOS419mFgvKuSDP4B5n3CdyJT7
-         9Z3A==
-X-Gm-Message-State: APjAAAXymX3M6F2bhAmBgR4YGQgv2a3vaDYg44r03W1bq2S2rIHa8PZZ
-        rNNnjaFLETZbIQl1El8dhlTjFmFMGtgfT+l5AK+OJg==
-X-Google-Smtp-Source: APXvYqxupOpdlAgq4mdMFssyDUB6fHCFkMjNBzRsPQDZ+ywudw0oP++fFWfCkpUGDgb51g73ZVV83nqftjInNrc4Er8=
-X-Received: by 2002:a1c:35c3:: with SMTP id c186mr7433197wma.135.1556722775680;
- Wed, 01 May 2019 07:59:35 -0700 (PDT)
+        id S1726282AbfEAVoG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 May 2019 17:44:06 -0400
+Received: from www62.your-server.de ([213.133.104.62]:42956 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726231AbfEAVoF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 1 May 2019 17:44:05 -0400
+Received: from [78.46.172.2] (helo=sslproxy05.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hLx14-0008OJ-3n; Wed, 01 May 2019 23:43:50 +0200
+Received: from [173.228.226.134] (helo=localhost.localdomain)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hLx13-000M1d-Ia; Wed, 01 May 2019 23:43:49 +0200
+Subject: Re: [PATCH] bpf, x32: Fix bug for BPF_ALU64 | BPF_NEG
+To:     Wang YanQing <udknight@gmail.com>, ast@kernel.org,
+        davem@davemloft.net, kuznet@ms2.inr.ac.ru, tglx@linutronix.de,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20190428023302.GA29326@udknight>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <091c2ed4-a07f-cc75-7b18-1c7cb7068652@iogearbox.net>
+Date:   Wed, 1 May 2019 23:43:45 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.3.0
 MIME-Version: 1.0
-References: <20190412214132.2726285-1-ast@kernel.org> <lyimv3hujp.fsf@netronome.com>
- <20190425043347.pxrz5ln4m7khebt6@ast-mbp.dhcp.thefacebook.com>
- <lylfzyeebr.fsf@netronome.com> <20190425221021.ov2jj4piann7wmid@ast-mbp.dhcp.thefacebook.com>
- <lyk1fgrk4m.fsf@netronome.com> <20190427030512.zs3tfdudjbfpyawh@ast-mbp> <760D400C-2548-41B6-AE34-F89A66397A75@netronome.com>
-In-Reply-To: <760D400C-2548-41B6-AE34-F89A66397A75@netronome.com>
-From:   Jiong Wang <jiong.wang@netronome.com>
-Date:   Wed, 1 May 2019 15:59:22 +0100
-Message-ID: <CAMsOgNDumbU7EWmOpwUoXdM5QWZ8h=W5nG3_JTFU5Tju-ofg_A@mail.gmail.com>
-Subject: Re: 32-bit zext time complexity (Was Re: [PATCH bpf-next]
- selftests/bpf: two scale tests)
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Networking <netdev@vger.kernel.org>, bpf@vger.kernel.org,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        "oss-drivers@netronome.com" <oss-drivers@netronome.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190428023302.GA29326@udknight>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.3/25436/Wed May  1 09:58:19 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-> > if you can craft a test that shows patch_insn issue before your set,
-> > then it's ok to hack bpf_fill_scale1 to use alu64.
->
-> As described above, does the test_verifier 732 + jit blinding looks convincing?
->
-> > I would also prefer to go with option 2 (new zext insn) for JITs.
->
-> Got it.
+On 04/28/2019 04:33 AM, Wang YanQing wrote:
+> The current implementation has two errors:
+> 1: The second xor instruction will clear carry flag which
+>    is necessary for following sbb instruction.
+> 2: The select coding for sbb instruction is wrong, the coding
+>    is "sbb dreg_hi,ecx", but what we need is "sbb ecx,dreg_hi".
+> 
+> This patch rewrites the implementation and fixes the errors.
+> 
+> This patch fixes below errors reported by bpf/test_verifier in x32
+> platform when the jit is enabled:
+> "
+> 0: (b4) w1 = 4
+> 1: (b4) w2 = 4
+> 2: (1f) r2 -= r1
+> 3: (4f) r2 |= r1
+> 4: (87) r2 = -r2
+> 5: (c7) r2 s>>= 63
+> 6: (5f) r1 &= r2
+> 7: (bf) r0 = r1
+> 8: (95) exit
+> processed 9 insns (limit 131072), stack depth 0
+> 0: (b4) w1 = 4
+> 1: (b4) w2 = 4
+> 2: (1f) r2 -= r1
+> 3: (4f) r2 |= r1
+> 4: (87) r2 = -r2
+> 5: (c7) r2 s>>= 63
+> 6: (5f) r1 &= r2
+> 7: (bf) r0 = r1
+> 8: (95) exit
+> processed 9 insns (limit 131072), stack depth 0
+> ......
+> Summary: 1189 PASSED, 125 SKIPPED, 15 FAILED
+> "
+> 
+> Signed-off-by: Wang YanQing <udknight@gmail.com>
 
-I followed option 2 and have sent out v5 with latests changes/fixes:
-
-The major changes are:
-  - introduced BPF_ZEXT, even though it doesn't resolve insn patch in-efficient,
-    but could let JIT back-ends do optimal code-gen, and the change is small,
-    so perhap just better to support it in this set.
-  - while look insn patch code, I feel patched-insn need to be conservatiely
-    marked if any insn inside patch buffer define sub-register.
-  - Also fixed helper function return value handling bug. I am thinking helper
-    function should have accurate return value type description, otherwise
-    there could be bug. For example arm32 back-end just executes the native
-    helper functions and doesn't do anything special on the return value. So
-    a function returns u32 would only set native reg r0, not r1 in the pair.
-    Then if the outside eBPF insn is casting it into u64, there needs to be
-    zext.
-  - adjusted test_verifier to make sure it could pass on hosts w and w/o hw
-    zext.
-
-For more info, please see the cover letter and patch description at v5.
-
-Thanks.
-Regards,
-Jiong
+Applied, thanks!
