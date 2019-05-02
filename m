@@ -2,351 +2,101 @@ Return-Path: <SRS0=Ujkv=TC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,T_DKIMWL_WL_HIGH,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A6A4C43219
-	for <bpf@archiver.kernel.org>; Thu,  2 May 2019 08:44:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 789DCC43219
+	for <bpf@archiver.kernel.org>; Thu,  2 May 2019 15:50:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 397B52075E
-	for <bpf@archiver.kernel.org>; Thu,  2 May 2019 08:44:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D386204EC
+	for <bpf@archiver.kernel.org>; Thu,  2 May 2019 15:50:17 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="b+XIq+Gk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725951AbfEBIoD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 May 2019 04:44:03 -0400
-Received: from mga02.intel.com ([134.134.136.20]:64537 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726482AbfEBIoC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 May 2019 04:44:02 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 May 2019 01:40:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,421,1549958400"; 
-   d="scan'208";a="296322445"
-Received: from mkarlsso-mobl.ger.corp.intel.com (HELO VM.isw.intel.com) ([10.103.211.43])
-  by orsmga004.jf.intel.com with ESMTP; 02 May 2019 01:39:56 -0700
-From:   Magnus Karlsson <magnus.karlsson@intel.com>
-To:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
-        daniel@iogearbox.net, netdev@vger.kernel.org, brouer@redhat.com
-Cc:     bpf@vger.kernel.org, bruce.richardson@intel.com,
-        ciara.loftus@intel.com, jakub.kicinski@netronome.com,
-        xiaolong.ye@intel.com, qi.z.zhang@intel.com, maximmi@mellanox.com,
-        sridhar.samudrala@intel.com, kevin.laatz@intel.com
-Subject: [RFC bpf-next 5/7] net: add busy-poll support for XDP sockets
-Date:   Thu,  2 May 2019 10:39:21 +0200
-Message-Id: <1556786363-28743-6-git-send-email-magnus.karlsson@intel.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1556786363-28743-1-git-send-email-magnus.karlsson@intel.com>
-References: <1556786363-28743-1-git-send-email-magnus.karlsson@intel.com>
+        id S1726300AbfEBPuN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 May 2019 11:50:13 -0400
+Received: from mail-yw1-f68.google.com ([209.85.161.68]:43943 "EHLO
+        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726512AbfEBPuM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 May 2019 11:50:12 -0400
+Received: by mail-yw1-f68.google.com with SMTP id w196so1908282ywd.10
+        for <bpf@vger.kernel.org>; Thu, 02 May 2019 08:50:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fJQ31N3hZaG9+3EMTDqJhUCYotKpMS/dVZKKtxe+Og4=;
+        b=b+XIq+GkTKcoCtZ1Lz6WL/o+5eaVjTufTLPMjk6cgvBoVcK+e7DcW40qAtLOoRvmJm
+         BD75qUetNXmeihMBZQioG1xv1IJVge2ZYfUgciXnNb8sCZaAxE7mkbG1jvySB0HdLpf8
+         8US/PmFeJiavVyTEJDZaHx3+B/emxIR8vrMVg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fJQ31N3hZaG9+3EMTDqJhUCYotKpMS/dVZKKtxe+Og4=;
+        b=HaZ2X2LSXf5zcXApRUoTtiRzXfgRl5h9PqEMjW0fBpXtLsTu/OqYtd26aOBRt5Yb6O
+         nt8Mjc70GSYFLjrUNopKT0k0oOaxvbjl10BxNUAms7M+npw0p4VPd8CjfI4NBQ5M9UPI
+         9Et+B0/Ky0IxaMCA9jWelTi0MiMY1R5etzmspl4FSEm11IuOaPK5h7L0U2u9N28dgkrP
+         Z3BF5RWMxxpbqYttQZckLB97n+Yh6KsMgn5Tl7FWNowt6xl2VylH0ynr71c9DnbmJijg
+         aTGuIJ/NoEhSKLB0GO7ebSEsLLPXpM3X5Hwwg73v0B5UHWAIK3beKyquxMvargROOzSL
+         QC6g==
+X-Gm-Message-State: APjAAAWFlM0W1ASVaBfol52rtiEutU5LYQHc12x44OPPj5q6+u2eNgLx
+        lyB8NavY+xqdN2C1PEeFDBEol2eFu7CacA==
+X-Google-Smtp-Source: APXvYqwfb0PKIVIU25pzoxPKrevwD/g/zS0h2bxI7g00FVabFLPLw3S5mto5v9w14ae5HQJenNSmdA==
+X-Received: by 2002:a25:a20a:: with SMTP id b10mr3857534ybi.431.1556812210579;
+        Thu, 02 May 2019 08:50:10 -0700 (PDT)
+Received: from localhost.localdomain (adsl-173-228-226-134.prtc.net. [173.228.226.134])
+        by smtp.gmail.com with ESMTPSA id g7sm18913724ywg.31.2019.05.02.08.50.09
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 02 May 2019 08:50:09 -0700 (PDT)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net
+Cc:     Lorenz Bauer <lmb@cloudflare.com>
+Subject: [PATCH bpf] libbpf: always NULL out pobj in bpf_prog_load_xattr
+Date:   Thu,  2 May 2019 11:49:32 -0400
+Message-Id: <20190502154932.14698-1-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.19.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds busy-poll support for XDP sockets (AF_XDP). With
-busy-poll, the driver is executed in process context by calling the
-poll() syscall. The main advantage with this is that all processing
-occurs on a single core. This eliminates the core-to-core cache
-transfers that occur between the application and the softirqd
-processing on another core, that occurs without busy-poll. From a
-systems point of view, it also provides an advatage that we do not
-have to provision extra cores in the system to handle
-ksoftirqd/softirq processing, as all processing is done on the single
-core that executes the application. The drawback of busy-poll is that
-max throughput seen from a single application will be lower (due to
-the syscall), but on a per core basis it will often be higher as the
-normal mode runs on two cores and busy-poll on a single one.
+Currently, code like the following segfaults if bpf_prog_load_xattr
+returns an error:
 
-The semantics of busy-poll from the application point of view are the
-following:
+    struct bpf_object *obj;
 
-* The application is required to call poll() to drive rx and tx
-  processing. There is no guarantee that softirq and interrupts will
-  do this for you.
+    err = bpf_prog_load_xattr(&attr, &obj, &prog_fd);
+    bpf_object__close(obj);
+    if (err)
+        ...
 
-* It should be enabled on a per socket basis. No global enablement, i.e.
-  the XDP socket busy-poll will not care about the current
-  /proc/sys/net/core/busy_poll and busy_read global enablement
-  mechanisms.
+Unconditionally reset pobj to NULL at the start of the function
+to fix this.
 
-* The batch size (how many packets that are processed every time the
-  napi function in the driver is called, i.e. the weight parameter)
-  should be configurable. Currently, the busy-poll size of AF_INET
-  sockets is set to 8, but for AF_XDP sockets this is too small as the
-  amount of processing per packet is much smaller with AF_XDP. This
-  should be configurable on a per socket basis.
-
-* If you put multiple AF_XDP busy-poll enabled sockets into a poll()
-  call the napi contexts of all of them should be executed. This is in
-  contrast to the AF_INET busy-poll that quits after the fist one that
-  finds any packets. We need all napi contexts to be executed due to
-  the first requirement in this list. The behaviour we want is much more
-  like regular sockets in that all of them are checked in the poll
-  call.
-
-* Should be possible to mix AF_XDP busy-poll sockets with any other
-  sockets including busy-poll AF_INET ones in a single poll() call
-  without any change to semantics or the behaviour of any of those
-  socket types.
-
-* As suggested by Maxim Mikityanskiy, poll() will in the busy-poll
-  mode return POLLERR if the fill ring is empty or the completion
-  queue is full.
-
-Busy-poll support is enabled by calling a new setsockopt called
-XDP_BUSY_POLL_BATCH_SIZE that takes batch size as an argument. A value
-between 1 and NAPI_WEIGHT (64) will turn it on, 0 will turn it off and
-any other value will return an error.
-
-A typical packet processing rxdrop loop with busy-poll will look something
-like this:
-
-for (i = 0; i < num_socks; i++) {
-    fds[i].fd = xsk_socket__fd(xsks[i]->xsk);
-    fds[i].events = POLLIN;
-}
-
-for (;;) {
-    ret = poll(fds, num_socks, 0);
-    if (ret <= 0)
-            continue;
-
-    for (i = 0; i < num_socks; i++)
-        rx_drop(xsks[i], fds); /* The actual application */
-}
-
-Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
 ---
- include/net/xdp_sock.h |   3 ++
- net/xdp/Kconfig        |   1 +
- net/xdp/xsk.c          | 122 ++++++++++++++++++++++++++++++++++++++++++++++++-
- net/xdp/xsk_queue.h    |  18 ++++++--
- 4 files changed, 138 insertions(+), 6 deletions(-)
+ tools/lib/bpf/libbpf.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
-index d074b6d..2e956b37 100644
---- a/include/net/xdp_sock.h
-+++ b/include/net/xdp_sock.h
-@@ -57,7 +57,10 @@ struct xdp_sock {
- 	struct net_device *dev;
- 	struct xdp_umem *umem;
- 	struct list_head flush_node;
-+	unsigned int napi_id_rx;
-+	unsigned int napi_id_tx;
- 	u16 queue_id;
-+	u16 bp_batch_size;
- 	struct xsk_queue *tx ____cacheline_aligned_in_smp;
- 	struct list_head list;
- 	bool zc;
-diff --git a/net/xdp/Kconfig b/net/xdp/Kconfig
-index 0255b33..219baaa 100644
---- a/net/xdp/Kconfig
-+++ b/net/xdp/Kconfig
-@@ -1,6 +1,7 @@
- config XDP_SOCKETS
- 	bool "XDP sockets"
- 	depends on BPF_SYSCALL
-+	select NET_RX_BUSY_POLL
- 	default n
- 	help
- 	  XDP sockets allows a channel between XDP programs and
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index a14e886..bd3d0fe 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -22,6 +22,7 @@
- #include <linux/net.h>
- #include <linux/netdevice.h>
- #include <linux/rculist.h>
-+#include <net/busy_poll.h>
- #include <net/xdp_sock.h>
- #include <net/xdp.h>
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 11a65db4b93f..2ddf3212b8f7 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -3363,6 +3363,8 @@ int bpf_prog_load_xattr(const struct bpf_prog_load_attr *attr,
+ 	struct bpf_map *map;
+ 	int err;
  
-@@ -302,16 +303,107 @@ static int xsk_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
- 	return (xs->zc) ? xsk_zc_xmit(sk) : xsk_generic_xmit(sk, m, total_len);
- }
- 
-+static unsigned int xsk_check_rx_poll_err(struct xdp_sock *xs)
-+{
-+	return xskq_consumer_empty(xs->umem->fq) ? POLLERR : 0;
-+}
++	*pobj = NULL;
 +
-+static unsigned int xsk_check_tx_poll_err(struct xdp_sock *xs)
-+{
-+	return xskq_producer_full(xs->umem->cq) ? POLLERR : 0;
-+}
-+
-+static bool xsk_busy_loop_end(void *p, unsigned long start_time)
-+{
-+	return true;
-+}
-+
-+static unsigned int xsk_get_napi_id_rx(struct xdp_sock *xs)
-+{
-+	if (xs->napi_id_rx)
-+		return xs->napi_id_rx;
-+	if (xs->dev->_rx[xs->queue_id].xdp_rxq.napi_id) {
-+		xs->napi_id_rx = xdp_rxq_info_get(xs->dev,
-+						  xs->queue_id)->napi_id;
-+		return xs->napi_id_rx;
-+	}
-+
-+	WARN_ON_ONCE(true);
-+	return 0;
-+}
-+
-+static unsigned int xsk_get_napi_id_tx(struct xdp_sock *xs)
-+{
-+	if (xs->napi_id_tx)
-+		return xs->napi_id_tx;
-+	if (xs->dev->_tx[xs->queue_id].xdp_txq.napi_id) {
-+		xs->napi_id_tx = xdp_txq_info_get(xs->dev,
-+						  xs->queue_id)->napi_id;
-+		return xs->napi_id_tx;
-+	}
-+
-+	WARN_ON_ONCE(true);
-+	return 0;
-+}
-+
-+static void xsk_exec_poll_generic(struct sock *sk, struct xdp_sock *xs,
-+				  __poll_t events)
-+{
-+	if (events & (POLLIN | POLLRDNORM))
-+		/* NAPI id filled in by the generic XDP code */
-+		napi_busy_loop(xsk_get_napi_id_rx(xs), xsk_busy_loop_end, NULL,
-+			       xs->bp_batch_size);
-+	if (events & (POLLOUT | POLLWRNORM))
-+		/* Use the regular send path as we do not have any
-+		 * NAPI id for the Tx path. It is only in the driver
-+		 * and not communicated upwards in the skb case.
-+		 */
-+		xsk_generic_xmit(sk, NULL, 0);
-+}
-+
-+static void xsk_exec_poll_zc(struct xdp_sock *xs, __poll_t events)
-+{
-+	unsigned int napi_id_rx = xsk_get_napi_id_rx(xs);
-+	unsigned int napi_id_tx = xsk_get_napi_id_tx(xs);
-+
-+	if (events & (POLLIN | POLLRDNORM))
-+		napi_busy_loop(xs->napi_id_rx, xsk_busy_loop_end, NULL,
-+			       xs->bp_batch_size);
-+	if (napi_id_rx != napi_id_tx)
-+		if (events & (POLLOUT | POLLWRNORM))
-+			/* Tx has its own napi so we need to call it too */
-+			napi_busy_loop(xs->napi_id_tx, xsk_busy_loop_end, NULL,
-+				       xs->bp_batch_size);
-+}
-+
- static unsigned int xsk_poll(struct file *file, struct socket *sock,
- 			     struct poll_table_struct *wait)
- {
- 	unsigned int mask = datagram_poll(file, sock, wait);
- 	struct sock *sk = sock->sk;
- 	struct xdp_sock *xs = xdp_sk(sk);
-+	__poll_t events = poll_requested_events(wait);
-+
-+	if (xs->bp_batch_size) {
-+		if (xs->zc)
-+			xsk_exec_poll_zc(xs, events);
-+		else
-+			xsk_exec_poll_generic(sk, xs, events);
-+
-+		if (events & (POLLIN | POLLRDNORM))
-+			mask |= xsk_check_rx_poll_err(xs);
-+		if (events & (POLLOUT | POLLWRNORM))
-+			mask |= xsk_check_tx_poll_err(xs);
-+
-+		/* Clear the busy_loop flag so that any further fds in
-+		 * the pollfd struct will have their napis scheduled.
-+		 */
-+		mask &= ~POLL_BUSY_LOOP;
-+	}
- 
--	if (xs->rx && !xskq_empty_desc(xs->rx))
-+	if (xs->rx && !xskq_producer_empty(xs->rx))
- 		mask |= POLLIN | POLLRDNORM;
--	if (xs->tx && !xskq_full_desc(xs->tx))
-+	if (xs->tx && !xskq_consumer_full(xs->tx))
- 		mask |= POLLOUT | POLLWRNORM;
- 
- 	return mask;
-@@ -572,6 +664,21 @@ static int xsk_setsockopt(struct socket *sock, int level, int optname,
- 		mutex_unlock(&xs->mutex);
- 		return err;
- 	}
-+	case XDP_BUSY_POLL_BATCH_SIZE:
-+	{
-+		u16 batch_size;
-+
-+		if (copy_from_user(&batch_size, optval, sizeof(batch_size)))
-+			return -EFAULT;
-+
-+		if (batch_size == 0 || batch_size > NAPI_POLL_WEIGHT)
-+			return -EINVAL;
-+
-+		mutex_lock(&xs->mutex);
-+		xs->bp_batch_size = batch_size;
-+		mutex_unlock(&xs->mutex);
-+		return 0;
-+	}
- 	default:
- 		break;
- 	}
-@@ -644,6 +751,17 @@ static int xsk_getsockopt(struct socket *sock, int level, int optname,
- 
- 		return 0;
- 	}
-+	case XDP_BUSY_POLL_BATCH_SIZE:
-+		if (len < sizeof(xs->bp_batch_size))
-+			return -EINVAL;
-+
-+		if (copy_to_user(optval, &xs->bp_batch_size,
-+				 sizeof(xs->bp_batch_size)))
-+			return -EFAULT;
-+		if (put_user(sizeof(xs->bp_batch_size), optlen))
-+			return -EFAULT;
-+
-+		return 0;
- 	default:
- 		break;
- 	}
-diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
-index 88b9ae2..ebbd996 100644
---- a/net/xdp/xsk_queue.h
-+++ b/net/xdp/xsk_queue.h
-@@ -292,14 +292,24 @@ static inline void xskq_produce_flush_desc(struct xsk_queue *q)
- 	WRITE_ONCE(q->ring->producer, q->prod_tail);
- }
- 
--static inline bool xskq_full_desc(struct xsk_queue *q)
-+static inline bool xskq_consumer_full(struct xsk_queue *q)
- {
--	return xskq_nb_avail(q, q->nentries) == q->nentries;
-+	return READ_ONCE(q->ring->producer) - q->cons_tail == q->nentries;
- }
- 
--static inline bool xskq_empty_desc(struct xsk_queue *q)
-+static inline bool xskq_producer_empty(struct xsk_queue *q)
- {
--	return xskq_nb_free(q, q->prod_tail, q->nentries) == q->nentries;
-+	return READ_ONCE(q->ring->consumer) == q->prod_tail;
-+}
-+
-+static inline bool xskq_consumer_empty(struct xsk_queue *q)
-+{
-+	return READ_ONCE(q->ring->producer) == q->cons_tail;
-+}
-+
-+static inline bool xskq_producer_full(struct xsk_queue *q)
-+{
-+	return q->prod_tail - READ_ONCE(q->ring->consumer) == q->nentries;
- }
- 
- void xskq_set_umem(struct xsk_queue *q, u64 size, u64 chunk_mask);
+ 	if (!attr)
+ 		return -EINVAL;
+ 	if (!attr->file)
 -- 
-2.7.4
+2.19.1
 
