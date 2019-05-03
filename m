@@ -4,62 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A625C43219
-	for <bpf@archiver.kernel.org>; Fri,  3 May 2019 10:44:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79E8DC04AAA
+	for <bpf@archiver.kernel.org>; Fri,  3 May 2019 10:44:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6AB6C2081C
-	for <bpf@archiver.kernel.org>; Fri,  3 May 2019 10:44:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 498692081C
+	for <bpf@archiver.kernel.org>; Fri,  3 May 2019 10:44:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="rNyO6h4P"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="oJ/kkam9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727556AbfECKoL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 3 May 2019 06:44:11 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:34199 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727501AbfECKoA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 3 May 2019 06:44:00 -0400
-Received: by mail-wr1-f68.google.com with SMTP id e9so7290589wrc.1
-        for <bpf@vger.kernel.org>; Fri, 03 May 2019 03:43:58 -0700 (PDT)
+        id S1727602AbfECKn6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 3 May 2019 06:43:58 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:38043 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727501AbfECKnx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 3 May 2019 06:43:53 -0400
+Received: by mail-wr1-f66.google.com with SMTP id k16so7263241wrn.5
+        for <bpf@vger.kernel.org>; Fri, 03 May 2019 03:43:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=XP0RwQbziCxRtw0HK+xAhkTdFI68wuwmjjzs474PFlM=;
-        b=rNyO6h4PPVEd5LaW8uo+Hd9Gva2gPEgs+27p47gm0YHntR3EHW33cAjYQ5eqKMB/jZ
-         ZMXRQf1RQcmoFqKXUggTCuztk1f7dNCggtNsW5Yz9p5caGPkPmLxLd+7cHyYYlUJ6p3t
-         L08rRUD4eWU8CO9s2+IYns08RCHD/2f2TxlSdXtYEA5lcyBcGceVymA4/EsoAEzVjihO
-         cr6SXmoGa1/vQkbfswlAQmCZjM05N/ZRmgzksocw6ZVR0qcgDhSsB4dw+Rtjr94ZRu3V
-         719rzDuZ+2fURgvXD7Mnm4R1EVmuE7wDIzJ18O1JSBeeBjx9XAYXgwDDS8pylksnPRx3
-         O/ZA==
+        bh=NA7Zmed3nLQuw1MNsM252lDKOYqIIWGI4OywzuFN9TQ=;
+        b=oJ/kkam9bs/yjmdpEULbSM7b6BZr/9Hn+TTNPfQI0x9t+CDGrQg5E5Q1sqkeh/LxyU
+         kjmaf2a2jBXqpEw2OjVDj8HF5Dx3l6WKWRi6OMtA41ZvcjmFeAakWYCmvSTDvLRUxcuj
+         df18dF45bRV2zz5kRjDln06UuzUxGcwiOb9M10dMVH0WMisVV+J5AEJEbXLGK9BNxXKZ
+         +f3LZl50bc9wLLydrRGb536/YBfsdNNWU5Y04iiwW04O13pdA4gFvz7+tEk7NdT+okRY
+         +xPGmFeR+OOGgFhkxNHDf0cNXmzSPMoIpjQh6eGBfhj94NWRmRzaVJanPdF7OmykSTwL
+         53hQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=XP0RwQbziCxRtw0HK+xAhkTdFI68wuwmjjzs474PFlM=;
-        b=cf4HvcjyAHuuL2t2jcyeZUr/l+7rT3HzwXHAVuks7F5slvj12yY2ar4AEBfZIJ+omq
-         ovdiUgge8kD1mvqpsQeN782U948D8VrthHVYei9NY4ndhUI/3uugunbBlVpJAAfLXgBL
-         4FhCGienXcbQ4ZF+3EFZV2f19MCYncBZPxPhjW6lPMHzeIA/SyWltbYRbD5tyJ5oKDny
-         PYJj5s/DEtWCEyxrAfxgoLp8gCe9ctRJrwCvhN0jGBJOmx8ZX+PIrEFEW++Sz6RiWrw5
-         aqig51B9hWoqNBHsx00Z7paQsRdNnI77WNSQtjlZwwI6NDTh6MTCsHSmBXDdbpTQh9EH
-         Xx+A==
-X-Gm-Message-State: APjAAAXq5/t4V9Hr8bCojPhNjrCv37ylSct2xdoYive1C1LwvTYpv/91
-        2A5PHnjELANvXVOA5Ht8sim67g==
-X-Google-Smtp-Source: APXvYqzbnZ1JAE+CniEsw6ea0nVorWFG8Rlfh2hpHw3PlZj63X3b0PMFKjAtokjYND9xpxLYoBY5bw==
-X-Received: by 2002:a5d:5501:: with SMTP id b1mr2673789wrv.196.1556880238328;
-        Fri, 03 May 2019 03:43:58 -0700 (PDT)
+        bh=NA7Zmed3nLQuw1MNsM252lDKOYqIIWGI4OywzuFN9TQ=;
+        b=SxhcvQb5p9elKi17utj6mw6Wckc8wNux7t10KuxYeuwrPRFh5nAyGxt2C7F6Vq0mmN
+         OUOwHbDqLaUtwpScn8E7ica7HQ35NHPEFYjy52gMXBHrN1mjdiTyu/jpiJ084bbYu+fa
+         pqN4f1/J/R1GunftpeXowr0Mj2aerPiJz2n6kg9ioOtFjOrsbh1dGESgJfLHR0/G8yMm
+         gedR6XIC8zJPna+bRddqaqBtJcaCpS3CVLrISiXNvr+9d75cDXuNrT4FvcRmxFBNrKdl
+         EaKsseJH4kCyfMe1N3YueidyTM4ioARwFCoDWrtHEtbXjW8AW42A8hlIpha/8RtJryho
+         rR3A==
+X-Gm-Message-State: APjAAAVd1mngL4FMTawewh2jt5og0opJgVrJHJ/jzVkcxOYKBrubGeZ7
+        oj4ic1/NOSMT7ym7XdVnRHJ14g==
+X-Google-Smtp-Source: APXvYqyJEKh1xPoG/mg/1jP4cw49utwLfxPf0zIQY1DbGyrmgUS5pxRAbbGjqdEl0KTaz9MKBc80Rw==
+X-Received: by 2002:a5d:54c7:: with SMTP id x7mr315384wrv.253.1556880231739;
+        Fri, 03 May 2019 03:43:51 -0700 (PDT)
 Received: from cbtest28.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id r29sm1716999wra.56.2019.05.03.03.43.57
+        by smtp.gmail.com with ESMTPSA id r29sm1716999wra.56.2019.05.03.03.43.50
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 03 May 2019 03:43:57 -0700 (PDT)
+        Fri, 03 May 2019 03:43:51 -0700 (PDT)
 From:   Jiong Wang <jiong.wang@netronome.com>
 To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        oss-drivers@netronome.com, Jiong Wang <jiong.wang@netronome.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: [PATCH v6 bpf-next 14/17] sparc: bpf: eliminate zero extension code-gen
-Date:   Fri,  3 May 2019 11:42:41 +0100
-Message-Id: <1556880164-10689-15-git-send-email-jiong.wang@netronome.com>
+        oss-drivers@netronome.com, Jiong Wang <jiong.wang@netronome.com>
+Subject: [PATCH v6 bpf-next 08/17] libbpf: add "prog_flags" to bpf_program/bpf_prog_load_attr/bpf_load_program_attr
+Date:   Fri,  3 May 2019 11:42:35 +0100
+Message-Id: <1556880164-10689-9-git-send-email-jiong.wang@netronome.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1556880164-10689-1-git-send-email-jiong.wang@netronome.com>
 References: <1556880164-10689-1-git-send-email-jiong.wang@netronome.com>
@@ -68,49 +67,86 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Cc: David S. Miller <davem@davemloft.net>
+libbpf doesn't allow passing "prog_flags" during bpf program load in a
+couple of load related APIs, "bpf_load_program_xattr", "load_program" and
+"bpf_prog_load_xattr".
+
+It makes sense to allow passing "prog_flags" which is useful for
+customizing program loading.
+
+Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
 ---
- arch/sparc/net/bpf_jit_comp_64.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ tools/lib/bpf/bpf.c    | 1 +
+ tools/lib/bpf/bpf.h    | 1 +
+ tools/lib/bpf/libbpf.c | 3 +++
+ tools/lib/bpf/libbpf.h | 1 +
+ 4 files changed, 6 insertions(+)
 
-diff --git a/arch/sparc/net/bpf_jit_comp_64.c b/arch/sparc/net/bpf_jit_comp_64.c
-index 65428e7..8bac761 100644
---- a/arch/sparc/net/bpf_jit_comp_64.c
-+++ b/arch/sparc/net/bpf_jit_comp_64.c
-@@ -905,6 +905,10 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 		ctx->saw_frame_pointer = true;
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 955191c..f79ec49 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -254,6 +254,7 @@ int bpf_load_program_xattr(const struct bpf_load_program_attr *load_attr,
+ 	if (load_attr->name)
+ 		memcpy(attr.prog_name, load_attr->name,
+ 		       min(strlen(load_attr->name), BPF_OBJ_NAME_LEN - 1));
++	attr.prog_flags = load_attr->prog_flags;
  
- 	switch (code) {
-+	/* dst = (u32) dst */
-+	case BPF_ALU | BPF_ZEXT:
-+		emit_alu_K(SRL, dst, 0, ctx);
-+		break;
- 	/* dst = src */
- 	case BPF_ALU | BPF_MOV | BPF_X:
- 		emit_alu3_K(SRL, src, 0, dst, ctx);
-@@ -1144,7 +1148,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 		break;
+ 	fd = sys_bpf_prog_load(&attr, sizeof(attr));
+ 	if (fd >= 0)
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 9593fec..ff42ca0 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -87,6 +87,7 @@ struct bpf_load_program_attr {
+ 	const void *line_info;
+ 	__u32 line_info_cnt;
+ 	__u32 log_level;
++	__u32 prog_flags;
+ };
  
- 	do_alu32_trunc:
--		if (BPF_CLASS(code) == BPF_ALU)
-+		if (BPF_CLASS(code) == BPF_ALU &&
-+		    !ctx->prog->aux->verifier_zext)
- 			emit_alu_K(SRL, dst, 0, ctx);
- 		break;
+ /* Flags to direct loading requirements */
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 11a65db..debca21 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -184,6 +184,7 @@ struct bpf_program {
+ 	void *line_info;
+ 	__u32 line_info_rec_size;
+ 	__u32 line_info_cnt;
++	__u32 prog_flags;
+ };
  
-@@ -1432,6 +1437,11 @@ static void jit_fill_hole(void *area, unsigned int size)
- 		*ptr++ = 0x91d02005; /* ta 5 */
- }
+ enum libbpf_map_type {
+@@ -1949,6 +1950,7 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+ 	load_attr.line_info_rec_size = prog->line_info_rec_size;
+ 	load_attr.line_info_cnt = prog->line_info_cnt;
+ 	load_attr.log_level = prog->log_level;
++	load_attr.prog_flags = prog->prog_flags;
+ 	if (!load_attr.insns || !load_attr.insns_cnt)
+ 		return -EINVAL;
  
-+bool bpf_jit_hardware_zext(void)
-+{
-+	return false;
-+}
-+
- struct sparc64_jit_data {
- 	struct bpf_binary_header *header;
- 	u8 *image;
+@@ -3394,6 +3396,7 @@ int bpf_prog_load_xattr(const struct bpf_prog_load_attr *attr,
+ 						      expected_attach_type);
+ 
+ 		prog->log_level = attr->log_level;
++		prog->prog_flags = attr->prog_flags;
+ 		if (!first_prog)
+ 			first_prog = prog;
+ 	}
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index c5ff005..5abc237 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -320,6 +320,7 @@ struct bpf_prog_load_attr {
+ 	enum bpf_attach_type expected_attach_type;
+ 	int ifindex;
+ 	int log_level;
++	int prog_flags;
+ };
+ 
+ LIBBPF_API int bpf_prog_load_xattr(const struct bpf_prog_load_attr *attr,
 -- 
 2.7.4
 
