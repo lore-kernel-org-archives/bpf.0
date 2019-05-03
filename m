@@ -4,62 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2B14C04AAA
-	for <bpf@archiver.kernel.org>; Fri,  3 May 2019 10:44:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD2C7C43219
+	for <bpf@archiver.kernel.org>; Fri,  3 May 2019 10:44:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 933D92081C
-	for <bpf@archiver.kernel.org>; Fri,  3 May 2019 10:44:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D6D82081C
+	for <bpf@archiver.kernel.org>; Fri,  3 May 2019 10:44:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="Xu/mKHeY"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="gCmkMzLq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727592AbfECKn6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 3 May 2019 06:43:58 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:38048 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727398AbfECKn5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 3 May 2019 06:43:57 -0400
-Received: by mail-wr1-f67.google.com with SMTP id k16so7263405wrn.5
-        for <bpf@vger.kernel.org>; Fri, 03 May 2019 03:43:55 -0700 (PDT)
+        id S1726396AbfECKoY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 3 May 2019 06:44:24 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:52353 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727491AbfECKnx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 3 May 2019 06:43:53 -0400
+Received: by mail-wm1-f65.google.com with SMTP id y26so1392892wma.2
+        for <bpf@vger.kernel.org>; Fri, 03 May 2019 03:43:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=mT1oHrlzqJHZYZWe7z3ygTdI3TkFROq27Kd1TlYleYw=;
-        b=Xu/mKHeY2SalJuj/CJXKbIpcoMrtNoU3BWxTESigtgDs+/3ypGo/R1ednRUlHBnSI/
-         XbC27h9t9o5pTyP2iaJWbeMsJdmqPxaHqbhb6qzBOZ+2+vwAL1XrBbSj2xEgaCGH7QAB
-         LeOVNffThGOlondG8Bosrjr75YxAtNez17cKfFw9rI5497/ZJJotuHIl/RnBYOeSYZ1Q
-         tMl9uhcVCvDEYMexQWkcxps2lKroUb56zU0LMEaN9KYfgQqUKRMxqpdkzrlXv9loDEhs
-         70uiK3QDwodzdv/54rH0FoQGAlxEEMnzGkJBNn+mhvARiIYp4oUkkRB+1t8EMlGXtvjd
-         YV1A==
+        bh=URszv7/t7QfVZUhW0Uggw2iCKFbU+bZsnFS6vq2iMu0=;
+        b=gCmkMzLq+4d8OMDZcK3SuIIpZzR7oeVaJw1sj/oswdNSztjGHDJdTDhaLkww9nT4dL
+         9+WJL2XdIvGLmai/O07m6j8g3hXTwNsZMYRnBXXF1s8MJImuA8YwS1bt831ocV0hlN/U
+         PUmFXJOkD7avuNBCmmhI8yrvjZ42ErTMLpPFSpGG29YmjKwBXtK/tqFkd4dsSP/m6bgN
+         yxDu2mD+SHVPjbp0mZJacf/wRTHoQ7WK1GzLm0FnWppH83zHw6RQvVoGXRZeE1OcqhFW
+         3DaLc4AvbAy0EVGveDplOuOlcsd2ANlhBjNtz9UOnO6qz9pIZ02IN0eJnemhyd/LzZdH
+         /Zyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=mT1oHrlzqJHZYZWe7z3ygTdI3TkFROq27Kd1TlYleYw=;
-        b=X8WR9psOfUVGwSF/vjxltEq9ag8N0KFIpm/SPXYo/IqxmynWzyITK3vP01l3+QSoPy
-         wO/40OexBP9shIGJqwYNRLw3Ny79vtBWAlG+9341+roBqyxDsew1L7NVMur3N9Glx/5D
-         FY9EcAhmtJy2ovuiulD9aT0kIV2kCMXqVxSMas4324+grhD1v1y1Ztl8KJ9nvWEcdHbn
-         bt89m2/QdvaJ30d3Mapdvo7xbae3lZOQmDySAUak5K9cBSWcJLjCviB1+Q9e+mkAlaf2
-         kDBkEMCnUQCYbTpbhnV4F5OzI9nqdWLC2jWo5fIq6rRCCuGXncxBXFdeX1EMFuPRcZMA
-         ycyA==
-X-Gm-Message-State: APjAAAUWgnxo/DmRK2ezVlJ3Xu3RFsNeCUxmLUwxsl8Bv+o0yL4OJJdk
-        SpRPzESA1ygZp7dTQmWXwRr84k5IDX0=
-X-Google-Smtp-Source: APXvYqza0zCmjCkdvz0N2XG/mgvOsWoA8+k9/mYxMJzo8uOVEliiqUhhAQvsdeU6X974UrzLbkOV5Q==
-X-Received: by 2002:a5d:4942:: with SMTP id r2mr6158071wrs.159.1556880235036;
-        Fri, 03 May 2019 03:43:55 -0700 (PDT)
+        bh=URszv7/t7QfVZUhW0Uggw2iCKFbU+bZsnFS6vq2iMu0=;
+        b=RtAB+lc3SV90Bf5PSaCi8O6/jQGatfT7/KJ//iI3aTQLNkbY3SzRy8CUA/5klwp05n
+         QQ/4Bjn+chvi2uCqS2xsgdBQKxEM0KhjA2D9zYpDE9gLbcggJ6qJX0pLlf3azDCxa1ac
+         nadANQS93i/qfSNCe1hmP1UT/bQA6Eq0B0ajo9/tWnqZFHDaKRcMCNXbG7sVWkWQ5q8N
+         YRc3TTqUDS/C14+tkDkuCBk92kjyaRo+u2Z/37veSczIyuW1cRiBCmLru2LTaWtjYB5v
+         yDy4VSJIrNcd9qYGWqZDDxdsaviHIvkQxAxISzQm9PCoJW2NR71LFN/99AjNGprN1oJT
+         fD8A==
+X-Gm-Message-State: APjAAAUWpCD0ZTY3fxoTFobBAEfcffwWI0pEGYsv4dYtK9uxpVNZi8Sv
+        Xx0EIEyfQ7EqI+rHI2sADRd8Lg==
+X-Google-Smtp-Source: APXvYqx5/wFlr9efZAyheV4bxwliZnPxzHL3nwMdWviqU7NPlMuG8DD6eBF70unGFB1L8YoYasXbUg==
+X-Received: by 2002:a1c:f901:: with SMTP id x1mr5987805wmh.136.1556880230835;
+        Fri, 03 May 2019 03:43:50 -0700 (PDT)
 Received: from cbtest28.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id r29sm1716999wra.56.2019.05.03.03.43.54
+        by smtp.gmail.com with ESMTPSA id r29sm1716999wra.56.2019.05.03.03.43.49
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 03 May 2019 03:43:54 -0700 (PDT)
+        Fri, 03 May 2019 03:43:49 -0700 (PDT)
 From:   Jiong Wang <jiong.wang@netronome.com>
 To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        oss-drivers@netronome.com, Jiong Wang <jiong.wang@netronome.com>,
-        Shubham Bansal <illusionist.neo@gmail.com>
-Subject: [PATCH v6 bpf-next 11/17] arm: bpf: eliminate zero extension code-gen
-Date:   Fri,  3 May 2019 11:42:38 +0100
-Message-Id: <1556880164-10689-12-git-send-email-jiong.wang@netronome.com>
+        oss-drivers@netronome.com, Jiong Wang <jiong.wang@netronome.com>
+Subject: [PATCH v6 bpf-next 07/17] bpf: verifier: randomize high 32-bit when BPF_F_TEST_RND_HI32 is set
+Date:   Fri,  3 May 2019 11:42:34 +0100
+Message-Id: <1556880164-10689-8-git-send-email-jiong.wang@netronome.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1556880164-10689-1-git-send-email-jiong.wang@netronome.com>
 References: <1556880164-10689-1-git-send-email-jiong.wang@netronome.com>
@@ -68,115 +67,125 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Cc: Shubham Bansal <illusionist.neo@gmail.com>
+This patch randomizes high 32-bit of a definition when BPF_F_TEST_RND_HI32
+is set.
+
+It does this once the flag set no matter there is hardware zero extension
+support or not. Because this is a test feature and we want to deliver the
+most stressful test.
+
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
 ---
- arch/arm/net/bpf_jit_32.c | 35 ++++++++++++++++++++++++++---------
- 1 file changed, 26 insertions(+), 9 deletions(-)
+ kernel/bpf/verifier.c | 69 +++++++++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 58 insertions(+), 11 deletions(-)
 
-diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
-index c8bfbbf..a6f78c8 100644
---- a/arch/arm/net/bpf_jit_32.c
-+++ b/arch/arm/net/bpf_jit_32.c
-@@ -736,7 +736,8 @@ static inline void emit_a32_alu_r64(const bool is64, const s8 dst[],
- 
- 		/* ALU operation */
- 		emit_alu_r(rd[1], rs, true, false, op, ctx);
--		emit_a32_mov_i(rd[0], 0, ctx);
-+		if (!ctx->prog->aux->verifier_zext)
-+			emit_a32_mov_i(rd[0], 0, ctx);
- 	}
- 
- 	arm_bpf_put_reg64(dst, rd, ctx);
-@@ -758,8 +759,9 @@ static inline void emit_a32_mov_r64(const bool is64, const s8 dst[],
- 				  struct jit_ctx *ctx) {
- 	if (!is64) {
- 		emit_a32_mov_r(dst_lo, src_lo, ctx);
--		/* Zero out high 4 bytes */
--		emit_a32_mov_i(dst_hi, 0, ctx);
-+		if (!ctx->prog->aux->verifier_zext)
-+			/* Zero out high 4 bytes */
-+			emit_a32_mov_i(dst_hi, 0, ctx);
- 	} else if (__LINUX_ARM_ARCH__ < 6 &&
- 		   ctx->cpu_architecture < CPU_ARCH_ARMv5TE) {
- 		/* complete 8 byte move */
-@@ -1060,17 +1062,20 @@ static inline void emit_ldx_r(const s8 dst[], const s8 src,
- 	case BPF_B:
- 		/* Load a Byte */
- 		emit(ARM_LDRB_I(rd[1], rm, off), ctx);
--		emit_a32_mov_i(rd[0], 0, ctx);
-+		if (!ctx->prog->aux->verifier_zext)
-+			emit_a32_mov_i(rd[0], 0, ctx);
- 		break;
- 	case BPF_H:
- 		/* Load a HalfWord */
- 		emit(ARM_LDRH_I(rd[1], rm, off), ctx);
--		emit_a32_mov_i(rd[0], 0, ctx);
-+		if (!ctx->prog->aux->verifier_zext)
-+			emit_a32_mov_i(rd[0], 0, ctx);
- 		break;
- 	case BPF_W:
- 		/* Load a Word */
- 		emit(ARM_LDR_I(rd[1], rm, off), ctx);
--		emit_a32_mov_i(rd[0], 0, ctx);
-+		if (!ctx->prog->aux->verifier_zext)
-+			emit_a32_mov_i(rd[0], 0, ctx);
- 		break;
- 	case BPF_DW:
- 		/* Load a Double Word */
-@@ -1352,6 +1357,10 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 	switch (code) {
- 	/* ALU operations */
- 
-+	/* dst = (u32) dst */
-+	case BPF_ALU | BPF_ZEXT:
-+		emit_a32_mov_i(dst_hi, 0, ctx);
-+		break;
- 	/* dst = src */
- 	case BPF_ALU | BPF_MOV | BPF_K:
- 	case BPF_ALU | BPF_MOV | BPF_X:
-@@ -1438,7 +1447,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 		}
- 		emit_udivmod(rd_lo, rd_lo, rt, ctx, BPF_OP(code));
- 		arm_bpf_put_reg32(dst_lo, rd_lo, ctx);
--		emit_a32_mov_i(dst_hi, 0, ctx);
-+		if (!ctx->prog->aux->verifier_zext)
-+			emit_a32_mov_i(dst_hi, 0, ctx);
- 		break;
- 	case BPF_ALU64 | BPF_DIV | BPF_K:
- 	case BPF_ALU64 | BPF_DIV | BPF_X:
-@@ -1453,7 +1463,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 			return -EINVAL;
- 		if (imm)
- 			emit_a32_alu_i(dst_lo, imm, ctx, BPF_OP(code));
--		emit_a32_mov_i(dst_hi, 0, ctx);
-+		if (!ctx->prog->aux->verifier_zext)
-+			emit_a32_mov_i(dst_hi, 0, ctx);
- 		break;
- 	/* dst = dst << imm */
- 	case BPF_ALU64 | BPF_LSH | BPF_K:
-@@ -1488,7 +1499,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 	/* dst = ~dst */
- 	case BPF_ALU | BPF_NEG:
- 		emit_a32_alu_i(dst_lo, 0, ctx, BPF_OP(code));
--		emit_a32_mov_i(dst_hi, 0, ctx);
-+		if (!ctx->prog->aux->verifier_zext)
-+			emit_a32_mov_i(dst_hi, 0, ctx);
- 		break;
- 	/* dst = ~dst (64 bit) */
- 	case BPF_ALU64 | BPF_NEG:
-@@ -1838,6 +1850,11 @@ void bpf_jit_compile(struct bpf_prog *prog)
- 	/* Nothing to do here. We support Internal BPF. */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 999da02..31ffbef 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7648,32 +7648,79 @@ static int opt_remove_nops(struct bpf_verifier_env *env)
+ 	return 0;
  }
  
-+bool bpf_jit_hardware_zext(void)
-+{
-+	return false;
-+}
-+
- struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+-static int opt_subreg_zext_lo32(struct bpf_verifier_env *env)
++static int opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
++					 const union bpf_attr *attr)
  {
- 	struct bpf_prog *tmp, *orig_prog = prog;
++	struct bpf_insn *patch, zext_patch[2], rnd_hi32_patch[4];
+ 	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	int i, patch_len, delta = 0, len = env->prog->len;
+ 	struct bpf_insn *insns = env->prog->insnsi;
+-	int i, delta = 0, len = env->prog->len;
+-	struct bpf_insn zext_patch[2];
+ 	struct bpf_prog *new_prog;
++	bool rnd_hi32;
++
++	rnd_hi32 = attr->prog_flags & BPF_F_TEST_RND_HI32;
+ 
+ 	zext_patch[1] = BPF_ALU32_IMM(BPF_ZEXT, 0, 0);
++	rnd_hi32_patch[1] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_AX, 0);
++	rnd_hi32_patch[2] = BPF_ALU64_IMM(BPF_LSH, BPF_REG_AX, 32);
++	rnd_hi32_patch[3] = BPF_ALU64_REG(BPF_OR, 0, BPF_REG_AX);
+ 	for (i = 0; i < len; i++) {
+ 		int adj_idx = i + delta;
+ 		struct bpf_insn insn;
+ 
+-		if (!aux[adj_idx].zext_dst)
++		insn = insns[adj_idx];
++		if (!aux[adj_idx].zext_dst) {
++			u8 code, class;
++			u32 imm_rnd;
++
++			if (!rnd_hi32)
++				continue;
++
++			code = insn.code;
++			class = BPF_CLASS(code);
++			if (insn_no_def(&insn))
++				continue;
++
++			/* NOTE: arg "reg" (the fourth one) is only used for
++			 *       BPF_STX which has been ruled out in above
++			 *       check, it is safe to pass NULL here.
++			 */
++			if (is_reg64(env, &insn, insn.dst_reg, NULL, DST_OP)) {
++				if (class == BPF_LD &&
++				    BPF_MODE(code) == BPF_IMM)
++					i++;
++				continue;
++			}
++
++			/* ctx load could be transformed into wider load. */
++			if (class == BPF_LDX &&
++			    aux[adj_idx].ptr_type == PTR_TO_CTX)
++				continue;
++
++			imm_rnd = get_random_int();
++			rnd_hi32_patch[0] = insn;
++			rnd_hi32_patch[1].imm = imm_rnd;
++			rnd_hi32_patch[3].dst_reg = insn.dst_reg;
++			patch = rnd_hi32_patch;
++			patch_len = 4;
++			goto apply_patch_buffer;
++		}
++
++		if (bpf_jit_hardware_zext())
+ 			continue;
+ 
+-		insn = insns[adj_idx];
+ 		zext_patch[0] = insn;
+ 		zext_patch[1].dst_reg = insn.dst_reg;
+-		new_prog = bpf_patch_insn_data(env, adj_idx, zext_patch, 2);
++		patch = zext_patch;
++		patch_len = 2;
++apply_patch_buffer:
++		new_prog = bpf_patch_insn_data(env, adj_idx, patch, patch_len);
+ 		if (!new_prog)
+ 			return -ENOMEM;
+ 		env->prog = new_prog;
+ 		insns = new_prog->insnsi;
+ 		aux = env->insn_aux_data;
+-		delta += 2;
++		delta += patch_len - 1;
+ 	}
+ 
+ 	return 0;
+@@ -8533,10 +8580,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
+ 	/* do 32-bit optimization after insn patching has done so those patched
+ 	 * insns could be handled correctly.
+ 	 */
+-	if (ret == 0 && !bpf_jit_hardware_zext() &&
+-	    !bpf_prog_is_dev_bound(env->prog->aux)) {
+-		ret = opt_subreg_zext_lo32(env);
+-		env->prog->aux->verifier_zext = !ret;
++	if (ret == 0 && !bpf_prog_is_dev_bound(env->prog->aux)) {
++		ret = opt_subreg_zext_lo32_rnd_hi32(env, attr);
++		env->prog->aux->verifier_zext =
++			bpf_jit_hardware_zext() ? false : !ret;
+ 	}
+ 
+ 	if (ret == 0)
 -- 
 2.7.4
 
