@@ -2,112 +2,129 @@ Return-Path: <SRS0=eGwH=TD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	T_DKIMWL_WL_HIGH,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8F66C43219
-	for <bpf@archiver.kernel.org>; Fri,  3 May 2019 00:26:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90A7AC43219
+	for <bpf@archiver.kernel.org>; Fri,  3 May 2019 06:35:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B08D12087F
-	for <bpf@archiver.kernel.org>; Fri,  3 May 2019 00:26:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1556843207;
-	bh=E51g641q2MwftWilIwtdgawIewraRUot0Q8Lmt+r1bc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=xY9B4+9IQrwWuZxDcZdCD/uiR//lj4eRDdBi3NNNDYBqyjGF+NXsD/YQszntGv6TG
-	 XkVFvDZdrl2sJpvoFIBye1zBRuIKFR1l6AgKjd4pKFlAJbRqp5FSg1PYHLTJAheqbv
-	 kob7K+1SQHtjH5sQU1qewHYZ1N8g8pm5Mo08C5DU=
+	by mail.kernel.org (Postfix) with ESMTP id 613C5206DF
+	for <bpf@archiver.kernel.org>; Fri,  3 May 2019 06:35:21 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RlrR+Oys"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726416AbfECAZu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 May 2019 20:25:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43754 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726022AbfECAZt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 May 2019 20:25:49 -0400
-Received: from quaco.ghostprotocols.net (adsl-173-228-226-134.prtc.net [173.228.226.134])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AA1D520C01;
-        Fri,  3 May 2019 00:25:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556843148;
-        bh=E51g641q2MwftWilIwtdgawIewraRUot0Q8Lmt+r1bc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S6O6Nxwn10nX/JWXRbiE5Ldez9d3j9hsajA+zxkczgfs7O/DA6aVzUAP/3ALvsjmZ
-         E4dpPJKUNDN6/qgx9BsMwAWrH1otbiYf9go9pl8T0H4piKgXXsExAgWXCdmHhYssBl
-         KyfR1EWdwZ0RrXBCqASyCkX8ON18L3Fy0EuOxUAA=
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-        Clark Williams <williams@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Bo YU <tsu.yubo@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        id S1725793AbfECGfV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 3 May 2019 02:35:21 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:33553 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725775AbfECGfV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 3 May 2019 02:35:21 -0400
+Received: by mail-oi1-f196.google.com with SMTP id l1so3674328oib.0;
+        Thu, 02 May 2019 23:35:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BEAd59dVTBb7JX1e5IJJHVPVgNFvByWVyR7Ir5EuEkQ=;
+        b=RlrR+OysHJuvDp8JmrpOZfuDMoF3d6jclawxzlaSQw2d//TFDlVbg1FB7PnOFg6VbP
+         XoM8LIODUSCdZ6lQL+8rBWZx6LvtHW1KCjes0XxNRA/BIEffXv1v0jN5qmwhgOowDcIo
+         SUVeREHtVaC0magZQV0Zj3BAw8cQ73uIjP9n6kmVTYrVIz0WXveISdKzhQQkps5mGM+7
+         /fIPTqPfXyONnqJAZgngPetDLID1YTopnW9AJGv2UOmO5EeqGGlRYHXvdODOLbU4TsK8
+         r4f9Xu8l+2mwjcAnrdtF2gtASVS2L9tuo2dLNZmX+GPfXN4nGI4Vtq8a3oAlUHkPItDu
+         1oIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BEAd59dVTBb7JX1e5IJJHVPVgNFvByWVyR7Ir5EuEkQ=;
+        b=l7HZTV9wEHh+QdD0GosnfTyFy2bwb3btY5o7pbNCh1L3X0vGwqsDWgmbOJw07MzBDf
+         2ySQczP4K7HB3vLrgjuFVwKpO1aQSMjfVeFgsaL+sdjS7pE55Q7z9xuEW+cY7ooLMpU6
+         Zq5wUEE6TScfVf1kbn0VkLBNu8CUdOFWoHH6Yv0rlFz/aMXnkiZOTijj38RoqFnk0bMp
+         qebt4ePcZhfWuY195QhgOSMNXK7eCecpGQzLCRgJXScz3p2HerqfzKLEdecQXuu8RK8H
+         4e79T5bdtznRDRZFzat88Mxg3frAt0/bGiIB+X9kEHP7gv7X7yPEf/Q+ieHNMCSVRI0l
+         19jg==
+X-Gm-Message-State: APjAAAWiIEXeb/gdm7cF3r4xzjZEetubaoT5EnBJuucLu4VpTnTbHaD2
+        9NmEZsupHIoIFW8Pzg9iBAJYgt67HJ1rIARNQsA=
+X-Google-Smtp-Source: APXvYqyw5yXGoS6JlTtrm5wFhnaLtXkwnt3rYw7U+j5pypLLZ5rTjdcnyp7DfZj/ZUm9qSzinudt8SHSfFDBpVmIDjI=
+X-Received: by 2002:aca:4482:: with SMTP id r124mr5201355oia.39.1556865320017;
+ Thu, 02 May 2019 23:35:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <1556786363-28743-1-git-send-email-magnus.karlsson@intel.com>
+ <1556786363-28743-5-git-send-email-magnus.karlsson@intel.com> <762e74a9-24d6-b6a6-da61-139056fda0e5@intel.com>
+In-Reply-To: <762e74a9-24d6-b6a6-da61-139056fda0e5@intel.com>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Fri, 3 May 2019 08:35:08 +0200
+Message-ID: <CAJ8uoz2iVinaXZZ18Z1G=+bw6Q-JCmvDPiVJd=6ykv-XKseNSg@mail.gmail.com>
+Subject: Re: [RFC bpf-next 4/7] netdevice: introduce busy-poll setsockopt for AF_XDP
+To:     "Samudrala, Sridhar" <sridhar.samudrala@intel.com>
+Cc:     Magnus Karlsson <magnus.karlsson@intel.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 01/11] perf bpf: Return value with unlocking in perf_env__find_btf()
-Date:   Thu,  2 May 2019 20:25:23 -0400
-Message-Id: <20190503002533.29359-2-acme@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190503002533.29359-1-acme@kernel.org>
-References: <20190503002533.29359-1-acme@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Network Development <netdev@vger.kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        bpf@vger.kernel.org, bruce.richardson@intel.com,
+        ciara.loftus@intel.com,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Ye Xiaolong <xiaolong.ye@intel.com>,
+        "Zhang, Qi Z" <qi.z.zhang@intel.com>,
+        Maxim Mikityanskiy <maximmi@mellanox.com>,
+        kevin.laatz@intel.com, ilias.apalodimas@linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Bo YU <tsu.yubo@gmail.com>
+On Fri, May 3, 2019 at 2:26 AM Samudrala, Sridhar
+<sridhar.samudrala@intel.com> wrote:
+>
+>
+>
+> On 5/2/2019 1:39 AM, Magnus Karlsson wrote:
+> > This patch introduces a new setsockopt that enables busy-poll for XDP
+> > sockets. It is called XDP_BUSY_POLL_BATCH_SIZE and takes batch size as
+> > an argument. A value between 1 and NAPI_WEIGHT (64) will turn it on, 0
+> > will turn it off and any other value will return an error. There is
+> > also a corresponding getsockopt implementation.
+>
+> I think this socket option should also allow specifying a timeout value
+> when using blocking poll() calls.
+> OR can we use SO_BUSY_POLL to specify this timeout value?
 
-In perf_env__find_btf(), we're returning without unlocking
-"env->bpf_progs.lock". There may be cause lockdep issue.
+I think you are correct in that we need to be able to specify the
+timeout. The current approach of always having a timeout of zero was
+optimized for the high throughput case. But Ilias and others often
+talk about using AF_XDP for time sensitive networking, and in that
+case spinning in the kernel (for a max period of the timeout) waiting
+for a packet would provide better latency. And with a configurable
+value, we could support both cases, so why not.
 
-Detected by CoversityScan, CID# 1444762:(program hangs(LOCK))
+I will add the timeout value to the new setsockopt I introduced, so it
+will take both a batch size and a timeout value. I will also call it
+something else since it should not have batch_size in its name
+anymore.
 
-Signed-off-by: Bo YU <tsu.yubo@gmail.com>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Martin KaFai Lau <kafai@fb.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Fixes: 2db7b1e0bd49d: (perf bpf: Return NULL when RB tree lookup fails in perf_env__find_btf())
-Link: http://lkml.kernel.org/r/20190422080138.10088-1-tsu.yubo@gmail.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/perf/util/env.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks: Magnus
 
-diff --git a/tools/perf/util/env.c b/tools/perf/util/env.c
-index 9494f9dc61ec..6a3eaf7d9353 100644
---- a/tools/perf/util/env.c
-+++ b/tools/perf/util/env.c
-@@ -115,8 +115,8 @@ struct btf_node *perf_env__find_btf(struct perf_env *env, __u32 btf_id)
- 	}
- 	node = NULL;
- 
--	up_read(&env->bpf_progs.lock);
- out:
-+	up_read(&env->bpf_progs.lock);
- 	return node;
- }
- 
--- 
-2.20.1
-
+> >
+> > Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+> > ---
+> >   include/uapi/linux/if_xdp.h | 1 +
+> >   1 file changed, 1 insertion(+)
+> >
+> > diff --git a/include/uapi/linux/if_xdp.h b/include/uapi/linux/if_xdp.h
+> > index caed8b1..be28a78 100644
+> > --- a/include/uapi/linux/if_xdp.h
+> > +++ b/include/uapi/linux/if_xdp.h
+> > @@ -46,6 +46,7 @@ struct xdp_mmap_offsets {
+> >   #define XDP_UMEM_FILL_RING          5
+> >   #define XDP_UMEM_COMPLETION_RING    6
+> >   #define XDP_STATISTICS                      7
+> > +#define XDP_BUSY_POLL_BATCH_SIZE     8
+> >
+> >   struct xdp_umem_reg {
+> >       __u64 addr; /* Start of packet data area */
+> >
