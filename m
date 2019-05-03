@@ -4,62 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F412CC04AAA
-	for <bpf@archiver.kernel.org>; Fri,  3 May 2019 10:43:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B61AEC43219
+	for <bpf@archiver.kernel.org>; Fri,  3 May 2019 10:43:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C3614208C3
-	for <bpf@archiver.kernel.org>; Fri,  3 May 2019 10:43:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 762602081C
+	for <bpf@archiver.kernel.org>; Fri,  3 May 2019 10:43:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="tGQ4pI/n"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="BPQmM9eg"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727314AbfECKns (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 3 May 2019 06:43:48 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:40715 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726932AbfECKnq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 3 May 2019 06:43:46 -0400
-Received: by mail-wr1-f66.google.com with SMTP id h4so7248020wre.7
-        for <bpf@vger.kernel.org>; Fri, 03 May 2019 03:43:43 -0700 (PDT)
+        id S1727428AbfECKnv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 3 May 2019 06:43:51 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:45378 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726932AbfECKnu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 3 May 2019 06:43:50 -0400
+Received: by mail-wr1-f68.google.com with SMTP id s15so7209018wra.12
+        for <bpf@vger.kernel.org>; Fri, 03 May 2019 03:43:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=psOqrEx4MC1dIQwoRVOh9n1QoRI5gEPVeRgtzc+dkzs=;
-        b=tGQ4pI/nSUKbdzaSgYP39GqmzfcJvWguCp5zRdElguae4pLg35VXpoefDOvEOP11OI
-         nkWm3chH/vMA+dG5bqbSCdIFivMjMURasEA3rK3TYFbUz4l3ckWPJ7KRZufNuBPpUvT9
-         TG0oW4ihvNngWoD6NMhVoVSXXDskmPqPOu+wVeEtXT930X99IPkAkEW+usTYGSK5M/j8
-         q/9RyfiNz9DFcY9dcpv92BdILneNiX4h7OfM3RmANRoT6Gg62J9hwc2NBhZixXlf1vHR
-         zfA8a+vobF517F9hEszMPJz3C/5LTfgLYr5t+dFXhXgj2wsmAFEZVZbPcRkgSp23bomC
-         aiYQ==
+        bh=o6b5gCI0kQsMVMTRnly2wwGRw9RnWLxNorJTJW60taw=;
+        b=BPQmM9egHcjPaM66UAArqH6p6Z/HPl6MCnPrHPkE9wr+vYaUuBjemmgniyQjTd8p64
+         2q12e6eh5/C9/xDqNcpsZ+/WUsZ7/HcxxkmWY3n44dBp1S/S1T8TZpQwEgAPzpa2WcVP
+         QEdcM0aHjpINIX/JSXMxNSdFaLKZSmE0FF7BzLhzltDuX08247OBffzJOY1fvtLdPZ4K
+         NQ78+HprHh9ydnoPJOer0V1fxZNAVpVLFic82B1Rcdesg8V+l7UzndQ3W4KTTLMcBTry
+         0ZKNujs4mL9yM/wrtIelXTuI52O8eAIx7ltJvHJILLZZpV0ujKgCrr9m6lwArHpTYJXK
+         pCGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=psOqrEx4MC1dIQwoRVOh9n1QoRI5gEPVeRgtzc+dkzs=;
-        b=NWB9NXcPIE/ms9zKSDDa5rUv9nUxEHpHXGMk+Ec8dhW7LR4+mmcfx26yYLFJ8xbWC+
-         R36gqlZbhsmMbKAxBDmWVhcbB4Uu2vDy35shTZJ7oFXaAEByVH2G52nCBd/2/6nJDf5J
-         PJpocZ0RzDxLwsbBaL9VN1LXfFGMtGiF8eSzZYG6hgdqEpoW6vazXqviD8lQsx9zbjes
-         q4HLaqwXaQ8HJ0borAXU0eoZjxmvIZhC34+C5jaknJtO4J3JDmSlfUlrABWwJPuJ3Llt
-         96dGfXTkMMf5L64ZcLo8NULOD8UM18umtiNdpDLe5crXW5pFMgVAVPxDelLUX2r5u26R
-         DRhQ==
-X-Gm-Message-State: APjAAAU7zocL34lHVjgVhFHWmMOoA6/c5HV8qkSMOaaZ1bK+EVGCSrFy
-        8P3rxCqnl/UHGff2hBatda8z6Q==
-X-Google-Smtp-Source: APXvYqyRPirJPUnn3Vj9lT+mqr60g/cyo7gGexDA1w4rYsD+NL+Q/0EJ1Ww+iq6SaWc6A4MW7SqC5w==
-X-Received: by 2002:adf:e8c4:: with SMTP id k4mr6777589wrn.9.1556880222732;
-        Fri, 03 May 2019 03:43:42 -0700 (PDT)
+        bh=o6b5gCI0kQsMVMTRnly2wwGRw9RnWLxNorJTJW60taw=;
+        b=WJWVzfaXFflBJ2Z4Q0Rk8c4umAumJh7dXGihPyjcHp2mB/1blv2MApGKZpBitI+BM0
+         a0gep4ovc6zVPINaAeTPXyfgV4vEAm5Tfb8ygYrCmWH2Goq8NbxLeqRnIF0W/enL3e34
+         2l3vbRZ+9+ICiEz5q6Ak7qNqReCZqVgU9HgXzwd4f8chtRS57TuA6hMCQQzlpv2smoZh
+         ync0jlRQykkZ7TI46rSPu5vy+Wij8KRo4EA+wROLNlgLNHc9MEpWsrqjY0RE0JdjFjUr
+         DZW2JRVZMELNXcgrbPGIKfAp8Mk314uUHpgx3FpwKVkPe1JEoBgSg1FObu3lS8wBWdwl
+         e3Uw==
+X-Gm-Message-State: APjAAAUILVwxUZVmzuUxnSXSB6HZpTd5WcRK9qY4AtQdYowAQpvdTFQ1
+        c1/pVfOJ3Svtz+OjCdlTBw3FDg==
+X-Google-Smtp-Source: APXvYqymzev1szgI437Z8oEdFLBAFsO5nuGw1E6XOdwamRjM1CvQ4pzTO08Voc7rJ+sIrUWYLKhxRw==
+X-Received: by 2002:a5d:67cb:: with SMTP id n11mr6397395wrw.3.1556880228379;
+        Fri, 03 May 2019 03:43:48 -0700 (PDT)
 Received: from cbtest28.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id r29sm1716999wra.56.2019.05.03.03.43.41
+        by smtp.gmail.com with ESMTPSA id r29sm1716999wra.56.2019.05.03.03.43.47
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 03 May 2019 03:43:41 -0700 (PDT)
+        Fri, 03 May 2019 03:43:47 -0700 (PDT)
 From:   Jiong Wang <jiong.wang@netronome.com>
 To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         oss-drivers@netronome.com, Jiong Wang <jiong.wang@netronome.com>
-Subject: [PATCH v6 bpf-next 01/17] bpf: verifier: offer more accurate helper function arg and return type
-Date:   Fri,  3 May 2019 11:42:28 +0100
-Message-Id: <1556880164-10689-2-git-send-email-jiong.wang@netronome.com>
+Subject: [PATCH v6 bpf-next 05/17] bpf: verifier: insert BPF_ZEXT according to zext analysis result
+Date:   Fri,  3 May 2019 11:42:32 +0100
+Message-Id: <1556880164-10689-6-git-send-email-jiong.wang@netronome.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1556880164-10689-1-git-send-email-jiong.wang@netronome.com>
 References: <1556880164-10689-1-git-send-email-jiong.wang@netronome.com>
@@ -68,364 +68,143 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-BPF helper call transfers execution from eBPF insns to native functions
-while verifier insn walker only walks eBPF insns. So, verifier can only
-knows argument and return value types from explicit helper function
-prototype descriptions.
+After previous patches, verifier has marked those instructions that really
+need zero extension on dst_reg.
 
-For 32-bit optimization, it is important to know whether argument (register
-use from eBPF insn) and return value (register define from external
-function) is 32-bit or 64-bit, so corresponding registers could be
-zero-extended correctly.
+It is then for all back-ends to decide how to use such information to
+eliminate unnecessary zero extension code-gen during JIT compilation.
 
-For arguments, they are register uses, we conservatively treat all of them
-as 64-bit at default, while the following new bpf_arg_type are added so we
-could start to mark those frequently used helper functions with more
-accurate argument type.
+One approach is:
+  1. Verifier insert explicit zero extension for those instructions that
+     need zero extension.
+  2. All JIT back-ends do NOT generate zero extension for sub-register
+     write any more.
 
-  ARG_CONST_SIZE32
-  ARG_CONST_SIZE32_OR_ZERO
-  ARG_ANYTHING32
+The good thing for this approach is no major change on JIT back-end
+interface, all back-ends could get this optimization.
 
-A few helper functions shown up frequently inside Cilium bpf program are
-updated using these new types.
+However, only those back-ends that do not have hardware zero extension
+want this optimization. For back-ends like x86_64 and AArch64, there is
+hardware support, so zext insertion should be disabled.
 
-For return values, they are register defs, we need to know accurate width
-for correct zero extensions. Given most of the helper functions returning
-integers return 32-bit value, a new RET_INTEGER64 is added to make those
-functions return 64-bit value. All related helper functions are updated.
+This patch introduces new target hook "bpf_jit_hardware_zext" which is
+default true, meaning the underlying hardware will do zero extension
+implicitly, therefore zext insertion by verifier will be disabled. Once a
+back-end overrides this hook to false, then verifier will insert BPF_ZEXT
+to clear high 32-bit of definitions when necessary.
 
+Offload targets do not use this native target hook, instead, they could
+get the optimization results using bpf_prog_offload_ops.finalize.
+
+Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
 ---
- include/linux/bpf.h      |  6 +++++-
- kernel/bpf/core.c        |  2 +-
- kernel/bpf/helpers.c     | 10 +++++-----
- kernel/bpf/verifier.c    | 15 ++++++++++-----
- kernel/trace/bpf_trace.c |  4 ++--
- net/core/filter.c        | 38 +++++++++++++++++++-------------------
- 6 files changed, 42 insertions(+), 33 deletions(-)
+ include/linux/bpf.h    |  1 +
+ include/linux/filter.h |  1 +
+ kernel/bpf/core.c      |  8 ++++++++
+ kernel/bpf/verifier.c  | 40 ++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 50 insertions(+)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 9a21848..11a5fb9 100644
+index 11a5fb9..cf3c3f3 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -198,9 +198,12 @@ enum bpf_arg_type {
+@@ -373,6 +373,7 @@ struct bpf_prog_aux {
+ 	u32 id;
+ 	u32 func_cnt; /* used by non-func prog as the number of func progs */
+ 	u32 func_idx; /* 0 for non-func prog, the index in func array for func prog */
++	bool verifier_zext; /* Zero extensions has been inserted by verifier. */
+ 	bool offload_requested;
+ 	struct bpf_prog **func;
+ 	void *jit_data; /* JIT specific data. arch dependent */
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index fb0edad..8750657 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -821,6 +821,7 @@ u64 __bpf_call_base(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
  
- 	ARG_CONST_SIZE,		/* number of bytes accessed from memory */
- 	ARG_CONST_SIZE_OR_ZERO,	/* number of bytes accessed from memory or 0 */
-+	ARG_CONST_SIZE32,	/* Likewise, but size fits into 32-bit */
-+	ARG_CONST_SIZE32_OR_ZERO,	/* Ditto */
+ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog);
+ void bpf_jit_compile(struct bpf_prog *prog);
++bool bpf_jit_hardware_zext(void);
+ bool bpf_helper_changes_pkt_data(void *func);
  
- 	ARG_PTR_TO_CTX,		/* pointer to context */
- 	ARG_ANYTHING,		/* any (initialized) argument is ok */
-+	ARG_ANYTHING32,		/* Likewise, but it is a 32-bit argument */
- 	ARG_PTR_TO_SPIN_LOCK,	/* pointer to bpf_spin_lock */
- 	ARG_PTR_TO_SOCK_COMMON,	/* pointer to sock_common */
- 	ARG_PTR_TO_INT,		/* pointer to int */
-@@ -210,7 +213,8 @@ enum bpf_arg_type {
- 
- /* type of values returned from helper functions */
- enum bpf_return_type {
--	RET_INTEGER,			/* function returns integer */
-+	RET_INTEGER,			/* function returns 32-bit integer */
-+	RET_INTEGER64,			/* function returns 64-bit integer */
- 	RET_VOID,			/* function doesn't return anything */
- 	RET_PTR_TO_MAP_VALUE,		/* returns a pointer to map elem value */
- 	RET_PTR_TO_MAP_VALUE_OR_NULL,	/* returns a pointer to map elem value or NULL */
+ static inline bool bpf_dump_raw_ok(void)
 diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index ace8c22..2792eda 100644
+index ee8703d..9754346 100644
 --- a/kernel/bpf/core.c
 +++ b/kernel/bpf/core.c
-@@ -2067,7 +2067,7 @@ const struct bpf_func_proto bpf_tail_call_proto = {
- 	.ret_type	= RET_VOID,
- 	.arg1_type	= ARG_PTR_TO_CTX,
- 	.arg2_type	= ARG_CONST_MAP_PTR,
--	.arg3_type	= ARG_ANYTHING,
-+	.arg3_type	= ARG_ANYTHING32,
- };
- 
- /* Stub for JITs that only support cBPF. eBPF programs are interpreted.
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 4266ffd..60f6e31 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -157,7 +157,7 @@ BPF_CALL_0(bpf_ktime_get_ns)
- const struct bpf_func_proto bpf_ktime_get_ns_proto = {
- 	.func		= bpf_ktime_get_ns,
- 	.gpl_only	= true,
--	.ret_type	= RET_INTEGER,
-+	.ret_type	= RET_INTEGER64,
- };
- 
- BPF_CALL_0(bpf_get_current_pid_tgid)
-@@ -173,7 +173,7 @@ BPF_CALL_0(bpf_get_current_pid_tgid)
- const struct bpf_func_proto bpf_get_current_pid_tgid_proto = {
- 	.func		= bpf_get_current_pid_tgid,
- 	.gpl_only	= false,
--	.ret_type	= RET_INTEGER,
-+	.ret_type	= RET_INTEGER64,
- };
- 
- BPF_CALL_0(bpf_get_current_uid_gid)
-@@ -193,7 +193,7 @@ BPF_CALL_0(bpf_get_current_uid_gid)
- const struct bpf_func_proto bpf_get_current_uid_gid_proto = {
- 	.func		= bpf_get_current_uid_gid,
- 	.gpl_only	= false,
--	.ret_type	= RET_INTEGER,
-+	.ret_type	= RET_INTEGER64,
- };
- 
- BPF_CALL_2(bpf_get_current_comm, char *, buf, u32, size)
-@@ -221,7 +221,7 @@ const struct bpf_func_proto bpf_get_current_comm_proto = {
- 	.gpl_only	= false,
- 	.ret_type	= RET_INTEGER,
- 	.arg1_type	= ARG_PTR_TO_UNINIT_MEM,
--	.arg2_type	= ARG_CONST_SIZE,
-+	.arg2_type	= ARG_CONST_SIZE32,
- };
- 
- #if defined(CONFIG_QUEUED_SPINLOCKS) || defined(CONFIG_BPF_ARCH_SPINLOCK)
-@@ -331,7 +331,7 @@ BPF_CALL_0(bpf_get_current_cgroup_id)
- const struct bpf_func_proto bpf_get_current_cgroup_id_proto = {
- 	.func		= bpf_get_current_cgroup_id,
- 	.gpl_only	= false,
--	.ret_type	= RET_INTEGER,
-+	.ret_type	= RET_INTEGER64,
- };
- 
- #ifdef CONFIG_CGROUP_BPF
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2717172..07ab563 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2492,7 +2492,9 @@ static bool arg_type_is_mem_ptr(enum bpf_arg_type type)
- static bool arg_type_is_mem_size(enum bpf_arg_type type)
- {
- 	return type == ARG_CONST_SIZE ||
--	       type == ARG_CONST_SIZE_OR_ZERO;
-+	       type == ARG_CONST_SIZE_OR_ZERO ||
-+	       type == ARG_CONST_SIZE32 ||
-+	       type == ARG_CONST_SIZE32_OR_ZERO;
+@@ -2095,6 +2095,14 @@ bool __weak bpf_helper_changes_pkt_data(void *func)
+ 	return false;
  }
  
- static bool arg_type_is_int_ptr(enum bpf_arg_type type)
-@@ -2526,7 +2528,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 regno,
- 	if (err)
- 		return err;
++/* Return TRUE is the target hardware of JIT will do zero extension to high bits
++ * when writing to low 32-bit of one register. Otherwise, return FALSE.
++ */
++bool __weak bpf_jit_hardware_zext(void)
++{
++	return true;
++}
++
+ /* To execute LD_ABS/LD_IND instructions __bpf_prog_run() may call
+  * skb_copy_bits(), so provide a weak definition of it for NET-less config.
+  */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index b43e8a2..999da02 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7648,6 +7648,37 @@ static int opt_remove_nops(struct bpf_verifier_env *env)
+ 	return 0;
+ }
  
--	if (arg_type == ARG_ANYTHING) {
-+	if (arg_type == ARG_ANYTHING || arg_type == ARG_ANYTHING32) {
- 		if (is_pointer_value(env, regno)) {
- 			verbose(env, "R%d leaks addr into helper function\n",
- 				regno);
-@@ -2554,7 +2556,9 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 regno,
- 			 type != expected_type)
- 			goto err_type;
- 	} else if (arg_type == ARG_CONST_SIZE ||
--		   arg_type == ARG_CONST_SIZE_OR_ZERO) {
-+		   arg_type == ARG_CONST_SIZE_OR_ZERO ||
-+		   arg_type == ARG_CONST_SIZE32 ||
-+		   arg_type == ARG_CONST_SIZE32_OR_ZERO) {
- 		expected_type = SCALAR_VALUE;
- 		if (type != expected_type)
- 			goto err_type;
-@@ -2660,7 +2664,8 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 regno,
- 					      meta->map_ptr->value_size, false,
- 					      meta);
- 	} else if (arg_type_is_mem_size(arg_type)) {
--		bool zero_size_allowed = (arg_type == ARG_CONST_SIZE_OR_ZERO);
-+		bool zero_size_allowed = (arg_type == ARG_CONST_SIZE_OR_ZERO ||
-+					  arg_type == ARG_CONST_SIZE32_OR_ZERO);
++static int opt_subreg_zext_lo32(struct bpf_verifier_env *env)
++{
++	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	struct bpf_insn *insns = env->prog->insnsi;
++	int i, delta = 0, len = env->prog->len;
++	struct bpf_insn zext_patch[2];
++	struct bpf_prog *new_prog;
++
++	zext_patch[1] = BPF_ALU32_IMM(BPF_ZEXT, 0, 0);
++	for (i = 0; i < len; i++) {
++		int adj_idx = i + delta;
++		struct bpf_insn insn;
++
++		if (!aux[adj_idx].zext_dst)
++			continue;
++
++		insn = insns[adj_idx];
++		zext_patch[0] = insn;
++		zext_patch[1].dst_reg = insn.dst_reg;
++		new_prog = bpf_patch_insn_data(env, adj_idx, zext_patch, 2);
++		if (!new_prog)
++			return -ENOMEM;
++		env->prog = new_prog;
++		insns = new_prog->insnsi;
++		aux = env->insn_aux_data;
++		delta += 2;
++	}
++
++	return 0;
++}
++
+ /* convert load instructions that access fields of a context type into a
+  * sequence of instructions that access fields of the underlying structure:
+  *     struct __sk_buff    -> struct sk_buff
+@@ -8499,6 +8530,15 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
+ 	if (ret == 0)
+ 		ret = fixup_bpf_calls(env);
  
- 		/* remember the mem_size which may be used later
- 		 * to refine return values.
-@@ -3333,7 +3338,7 @@ static int check_helper_call(struct bpf_verifier_env *env, int func_id, int insn
- 	}
- 
- 	/* update return register (already marked as written above) */
--	if (fn->ret_type == RET_INTEGER) {
-+	if (fn->ret_type == RET_INTEGER || fn->ret_type == RET_INTEGER64) {
- 		/* sets type to SCALAR_VALUE */
- 		mark_reg_unknown(env, regs, BPF_REG_0);
- 	} else if (fn->ret_type == RET_VOID) {
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 8607aba..f300b68 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -370,7 +370,7 @@ BPF_CALL_2(bpf_perf_event_read, struct bpf_map *, map, u64, flags)
- static const struct bpf_func_proto bpf_perf_event_read_proto = {
- 	.func		= bpf_perf_event_read,
- 	.gpl_only	= true,
--	.ret_type	= RET_INTEGER,
-+	.ret_type	= RET_INTEGER64,
- 	.arg1_type	= ARG_CONST_MAP_PTR,
- 	.arg2_type	= ARG_ANYTHING,
- };
-@@ -503,7 +503,7 @@ BPF_CALL_0(bpf_get_current_task)
- static const struct bpf_func_proto bpf_get_current_task_proto = {
- 	.func		= bpf_get_current_task,
- 	.gpl_only	= true,
--	.ret_type	= RET_INTEGER,
-+	.ret_type	= RET_INTEGER64,
- };
- 
- BPF_CALL_2(bpf_current_task_under_cgroup, struct bpf_map *, map, u32, idx)
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 55bfc94..72f2abe 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -1695,9 +1695,9 @@ static const struct bpf_func_proto bpf_skb_store_bytes_proto = {
- 	.gpl_only	= false,
- 	.ret_type	= RET_INTEGER,
- 	.arg1_type	= ARG_PTR_TO_CTX,
--	.arg2_type	= ARG_ANYTHING,
-+	.arg2_type	= ARG_ANYTHING32,
- 	.arg3_type	= ARG_PTR_TO_MEM,
--	.arg4_type	= ARG_CONST_SIZE,
-+	.arg4_type	= ARG_CONST_SIZE32,
- 	.arg5_type	= ARG_ANYTHING,
- };
- 
-@@ -1760,9 +1760,9 @@ static const struct bpf_func_proto bpf_flow_dissector_load_bytes_proto = {
- 	.gpl_only	= false,
- 	.ret_type	= RET_INTEGER,
- 	.arg1_type	= ARG_PTR_TO_CTX,
--	.arg2_type	= ARG_ANYTHING,
-+	.arg2_type	= ARG_ANYTHING32,
- 	.arg3_type	= ARG_PTR_TO_UNINIT_MEM,
--	.arg4_type	= ARG_CONST_SIZE,
-+	.arg4_type	= ARG_CONST_SIZE32,
- };
- 
- BPF_CALL_5(bpf_skb_load_bytes_relative, const struct sk_buff *, skb,
-@@ -1911,7 +1911,7 @@ static const struct bpf_func_proto bpf_l3_csum_replace_proto = {
- 	.gpl_only	= false,
- 	.ret_type	= RET_INTEGER,
- 	.arg1_type	= ARG_PTR_TO_CTX,
--	.arg2_type	= ARG_ANYTHING,
-+	.arg2_type	= ARG_ANYTHING32,
- 	.arg3_type	= ARG_ANYTHING,
- 	.arg4_type	= ARG_ANYTHING,
- 	.arg5_type	= ARG_ANYTHING,
-@@ -1964,7 +1964,7 @@ static const struct bpf_func_proto bpf_l4_csum_replace_proto = {
- 	.gpl_only	= false,
- 	.ret_type	= RET_INTEGER,
- 	.arg1_type	= ARG_PTR_TO_CTX,
--	.arg2_type	= ARG_ANYTHING,
-+	.arg2_type	= ARG_ANYTHING32,
- 	.arg3_type	= ARG_ANYTHING,
- 	.arg4_type	= ARG_ANYTHING,
- 	.arg5_type	= ARG_ANYTHING,
-@@ -2003,9 +2003,9 @@ static const struct bpf_func_proto bpf_csum_diff_proto = {
- 	.pkt_access	= true,
- 	.ret_type	= RET_INTEGER,
- 	.arg1_type	= ARG_PTR_TO_MEM_OR_NULL,
--	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
-+	.arg2_type	= ARG_CONST_SIZE32_OR_ZERO,
- 	.arg3_type	= ARG_PTR_TO_MEM_OR_NULL,
--	.arg4_type	= ARG_CONST_SIZE_OR_ZERO,
-+	.arg4_type	= ARG_CONST_SIZE32_OR_ZERO,
- 	.arg5_type	= ARG_ANYTHING,
- };
- 
-@@ -2186,7 +2186,7 @@ static const struct bpf_func_proto bpf_redirect_proto = {
- 	.func           = bpf_redirect,
- 	.gpl_only       = false,
- 	.ret_type       = RET_INTEGER,
--	.arg1_type      = ARG_ANYTHING,
-+	.arg1_type      = ARG_ANYTHING32,
- 	.arg2_type      = ARG_ANYTHING,
- };
- 
-@@ -2964,7 +2964,7 @@ static const struct bpf_func_proto bpf_skb_change_proto_proto = {
- 	.gpl_only	= false,
- 	.ret_type	= RET_INTEGER,
- 	.arg1_type	= ARG_PTR_TO_CTX,
--	.arg2_type	= ARG_ANYTHING,
-+	.arg2_type	= ARG_ANYTHING32,
- 	.arg3_type	= ARG_ANYTHING,
- };
- 
-@@ -2984,7 +2984,7 @@ static const struct bpf_func_proto bpf_skb_change_type_proto = {
- 	.gpl_only	= false,
- 	.ret_type	= RET_INTEGER,
- 	.arg1_type	= ARG_PTR_TO_CTX,
--	.arg2_type	= ARG_ANYTHING,
-+	.arg2_type	= ARG_ANYTHING32,
- };
- 
- static u32 bpf_skb_net_base_len(const struct sk_buff *skb)
-@@ -3287,7 +3287,7 @@ static const struct bpf_func_proto bpf_skb_change_tail_proto = {
- 	.gpl_only	= false,
- 	.ret_type	= RET_INTEGER,
- 	.arg1_type	= ARG_PTR_TO_CTX,
--	.arg2_type	= ARG_ANYTHING,
-+	.arg2_type	= ARG_ANYTHING32,
- 	.arg3_type	= ARG_ANYTHING,
- };
- 
-@@ -3883,7 +3883,7 @@ static const struct bpf_func_proto bpf_skb_get_tunnel_key_proto = {
- 	.ret_type	= RET_INTEGER,
- 	.arg1_type	= ARG_PTR_TO_CTX,
- 	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
--	.arg3_type	= ARG_CONST_SIZE,
-+	.arg3_type	= ARG_CONST_SIZE32,
- 	.arg4_type	= ARG_ANYTHING,
- };
- 
-@@ -3992,7 +3992,7 @@ static const struct bpf_func_proto bpf_skb_set_tunnel_key_proto = {
- 	.ret_type	= RET_INTEGER,
- 	.arg1_type	= ARG_PTR_TO_CTX,
- 	.arg2_type	= ARG_PTR_TO_MEM,
--	.arg3_type	= ARG_CONST_SIZE,
-+	.arg3_type	= ARG_CONST_SIZE32,
- 	.arg4_type	= ARG_ANYTHING,
- };
- 
-@@ -4091,7 +4091,7 @@ BPF_CALL_1(bpf_skb_cgroup_id, const struct sk_buff *, skb)
- static const struct bpf_func_proto bpf_skb_cgroup_id_proto = {
- 	.func           = bpf_skb_cgroup_id,
- 	.gpl_only       = false,
--	.ret_type       = RET_INTEGER,
-+	.ret_type       = RET_INTEGER64,
- 	.arg1_type      = ARG_PTR_TO_CTX,
- };
- 
-@@ -4116,7 +4116,7 @@ BPF_CALL_2(bpf_skb_ancestor_cgroup_id, const struct sk_buff *, skb, int,
- static const struct bpf_func_proto bpf_skb_ancestor_cgroup_id_proto = {
- 	.func           = bpf_skb_ancestor_cgroup_id,
- 	.gpl_only       = false,
--	.ret_type       = RET_INTEGER,
-+	.ret_type       = RET_INTEGER64,
- 	.arg1_type      = ARG_PTR_TO_CTX,
- 	.arg2_type      = ARG_ANYTHING,
- };
-@@ -4162,7 +4162,7 @@ BPF_CALL_1(bpf_get_socket_cookie, struct sk_buff *, skb)
- static const struct bpf_func_proto bpf_get_socket_cookie_proto = {
- 	.func           = bpf_get_socket_cookie,
- 	.gpl_only       = false,
--	.ret_type       = RET_INTEGER,
-+	.ret_type       = RET_INTEGER64,
- 	.arg1_type      = ARG_PTR_TO_CTX,
- };
- 
-@@ -4174,7 +4174,7 @@ BPF_CALL_1(bpf_get_socket_cookie_sock_addr, struct bpf_sock_addr_kern *, ctx)
- static const struct bpf_func_proto bpf_get_socket_cookie_sock_addr_proto = {
- 	.func		= bpf_get_socket_cookie_sock_addr,
- 	.gpl_only	= false,
--	.ret_type	= RET_INTEGER,
-+	.ret_type	= RET_INTEGER64,
- 	.arg1_type	= ARG_PTR_TO_CTX,
- };
- 
-@@ -4186,7 +4186,7 @@ BPF_CALL_1(bpf_get_socket_cookie_sock_ops, struct bpf_sock_ops_kern *, ctx)
- static const struct bpf_func_proto bpf_get_socket_cookie_sock_ops_proto = {
- 	.func		= bpf_get_socket_cookie_sock_ops,
- 	.gpl_only	= false,
--	.ret_type	= RET_INTEGER,
-+	.ret_type	= RET_INTEGER64,
- 	.arg1_type	= ARG_PTR_TO_CTX,
- };
++	/* do 32-bit optimization after insn patching has done so those patched
++	 * insns could be handled correctly.
++	 */
++	if (ret == 0 && !bpf_jit_hardware_zext() &&
++	    !bpf_prog_is_dev_bound(env->prog->aux)) {
++		ret = opt_subreg_zext_lo32(env);
++		env->prog->aux->verifier_zext = !ret;
++	}
++
+ 	if (ret == 0)
+ 		ret = fixup_call_args(env);
  
 -- 
 2.7.4
