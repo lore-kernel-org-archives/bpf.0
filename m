@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7CB9C04A6B
-	for <bpf@archiver.kernel.org>; Mon,  6 May 2019 18:31:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EBE6C04A6B
+	for <bpf@archiver.kernel.org>; Mon,  6 May 2019 18:31:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AE500214AF
-	for <bpf@archiver.kernel.org>; Mon,  6 May 2019 18:31:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 07D8920C01
+	for <bpf@archiver.kernel.org>; Mon,  6 May 2019 18:31:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="pR/MhP0a"
+	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="EIe86cQ7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727053AbfEFSbh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 6 May 2019 14:31:37 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:34506 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727022AbfEFSbf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 6 May 2019 14:31:35 -0400
-Received: by mail-pf1-f193.google.com with SMTP id b3so7221898pfd.1
-        for <bpf@vger.kernel.org>; Mon, 06 May 2019 11:31:35 -0700 (PDT)
+        id S1726949AbfEFSbd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 6 May 2019 14:31:33 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:45193 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726924AbfEFSbc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 6 May 2019 14:31:32 -0400
+Received: by mail-pg1-f196.google.com with SMTP id i21so6861372pgi.12
+        for <bpf@vger.kernel.org>; Mon, 06 May 2019 11:31:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=joelfernandes.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=FstzZCVNUourlCPKszpn9bb32SRAhjzysdw+vvrIXh4=;
-        b=pR/MhP0a8C/4rn7h7f6KtuHjujH8POlivDuB+aDU36Q/jBPgBiGAw25b/1zZc0eej7
-         7Ajb5YGFegbSah/Cp8WVamV5HEN4l9ncLTSHyHyMBunw5IWSkTQQO0kqrbQkws1H3O8c
-         laukCErcKX4QcuBnE+nI1FvS2ri9wE2SScG78=
+        bh=IfCUWTvSpe/ObcPM/LvXdQ0XKYCGSq77k0PD73RxjWI=;
+        b=EIe86cQ7K8TderF8T7VdJ9IfpOXHbQ4Dzy2wT0wXDDyf6obptddgHxnwhoZi+ehABK
+         yOmUlKW35Oo/Alh8q2aCAPAxQyxZ/AoBBlb1QCOj3Df7DId59pn45lc+9Tf4jXpF0Yd4
+         PloBwXKn79IsNG6avU6/JP0r8IicZzIyVLyOU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=FstzZCVNUourlCPKszpn9bb32SRAhjzysdw+vvrIXh4=;
-        b=Z64ELRDh/j+cJknxkhXelKNnnYMubB4Pu/Z55nJbxfyR9vb/AVZMt0ll9p6rMlGFnA
-         74a8KiGAqVEANb4JFJ2H0CZmfzmqcJfUYgzQSF1W0ECagfxtTUj9Kax3bCLLh+yRrMhJ
-         d4m0vXxaQgLKZC5Fz67MWOa0A+McwxhJQOQHTF57c++uyA3IgcWRZ51i6ia+f6fufhBM
-         SKnxQb6Vnfkzj77n7ul2659uw1Hckb7NurT8cdae1Q/1acVKVAJJ/iReO3gi+eEzSjBL
-         j0+Fscr3o5j2IehmnX6zRO6OX+NtregHFYsek1I6VdAcH+3bRgPJMA9oRXLkPO2CWK9M
-         8I0w==
-X-Gm-Message-State: APjAAAV9BHA3bd7uOq0fjHTMQ+vN5Q9jlrBsVpfRVh1OaPrmizo8+o8o
-        sQiiarMQwhl1xbY2M3Vi3mCfBg==
-X-Google-Smtp-Source: APXvYqxk6tRHGmBNl5Y4dp6RElXceV2g0n+bZh4+P9RLG8k4yfZ4SvrflzQxvSoywiXAsYl8f2R6Lg==
-X-Received: by 2002:a62:4697:: with SMTP id o23mr35488531pfi.224.1557167494792;
-        Mon, 06 May 2019 11:31:34 -0700 (PDT)
+        bh=IfCUWTvSpe/ObcPM/LvXdQ0XKYCGSq77k0PD73RxjWI=;
+        b=JbnTzajHavor3aNLexZoYq5dDU6Ae0pSLb1cf9QVbxqKigC1KOUVaoIA3VV5Ig3LAY
+         x9fLJ29wdvmwFcU+5UZBtPknYWPeNBS0CbQdhf+eoKHVzFI9S6wC5d7YoDEXjnc7jq58
+         y5O0o6mGrCwUu3y06uplvztautxOeEgLrJ06LLIr5xZwJdMZ9uVrUClV+easM+Q0PdSP
+         QbsWEl0NXLd26DTp7F/5++bU+kMwK+DZhyou48oz0AxoxeONjZ2yyaOyXD/WZw6uLpai
+         5FdT2GBRlMRBnckoS1URWr+KXWwqoTDmHaoga0wM0YK5tSdOaqBfoZ8ub+td97uG3gac
+         Rtow==
+X-Gm-Message-State: APjAAAVMCwbp9Fe7sQHjCptEp8NHTyxfNDn0cHWmnrKtek+GpK7Snm45
+        PQtOkb4lsw9puoBvhBEQWlZaUQ==
+X-Google-Smtp-Source: APXvYqw87aBaFaX0JfldiFHxy8FnYx3ibxSNeKODs8Fn08SOhD4IlfvMrdf+aewDAAvL101n3sCA7A==
+X-Received: by 2002:a63:a18:: with SMTP id 24mr33507004pgk.332.1557167491372;
+        Mon, 06 May 2019 11:31:31 -0700 (PDT)
 Received: from joelaf.cam.corp.google.com ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id h30sm21412414pgi.38.2019.05.06.11.31.31
+        by smtp.gmail.com with ESMTPSA id h30sm21412414pgi.38.2019.05.06.11.31.28
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 06 May 2019 11:31:33 -0700 (PDT)
+        Mon, 06 May 2019 11:31:30 -0700 (PDT)
 From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
@@ -74,9 +74,9 @@ Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Tamir Carmeli <carmeli.tamir@gmail.com>,
         Yonghong Song <yhs@fb.com>
-Subject: [PATCH v2 4/4] tools: Sync uapi headers with new bpf function calls
-Date:   Mon,  6 May 2019 14:31:16 -0400
-Message-Id: <20190506183116.33014-4-joel@joelfernandes.org>
+Subject: [PATCH v2 3/4] bpf: Add warning when program uses deprecated bpf_probe_read
+Date:   Mon,  6 May 2019 14:31:15 -0400
+Message-Id: <20190506183116.33014-3-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.21.0.1020.gf2820cf01a-goog
 In-Reply-To: <20190506183116.33014-1-joel@joelfernandes.org>
 References: <20190506183116.33014-1-joel@joelfernandes.org>
@@ -87,48 +87,30 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The uapi in tools/ needs an update after support for new bpf function
-calls were added. This commit does the same.
+bpf_probe_read is deprecated and ambiguous. Add a warning if programs
+still use it, so that they may be moved to not use it. After sufficient
+time, the warning can be removed.
 
 Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 ---
- tools/include/uapi/linux/bpf.h | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ kernel/bpf/verifier.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 929c8e537a14..05af4e1151d3 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -2431,6 +2431,18 @@ union bpf_attr {
-  *	Return
-  *		A **struct bpf_sock** pointer on success, or **NULL** in
-  *		case of failure.
-+ *
-+ * int bpf_probe_read_user(void *dst, int size, void *src)
-+ *     Description
-+ *             Read a userspace pointer safely.
-+ *     Return
-+ *             0 on success or negative error
-+ *
-+ * int bpf_probe_read_kernel(void *dst, int size, void *src)
-+ *     Description
-+ *             Read a kernel pointer safely.
-+ *     Return
-+ *             0 on success or negative error
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -2531,7 +2543,9 @@ union bpf_attr {
- 	FN(sk_fullsock),		\
- 	FN(tcp_sock),			\
- 	FN(skb_ecn_set_ce),		\
--	FN(get_listener_sock),
-+	FN(get_listener_sock),		\
-+	FN(probe_read_user),		\
-+	FN(probe_read_kernel),
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 09d5d972c9ff..f8cc77e85b48 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7656,6 +7656,10 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
+ 		if (insn->src_reg == BPF_PSEUDO_CALL)
+ 			continue;
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-  * function eBPF program intends to call
++		if (insn->imm == BPF_FUNC_probe_read)
++			pr_warn_once("bpf_probe_read is deprecated, please use "
++				     "bpf_probe_read_{kernel,user} in eBPF programs.\n");
++
+ 		if (insn->imm == BPF_FUNC_get_route_realm)
+ 			prog->dst_needed = 1;
+ 		if (insn->imm == BPF_FUNC_get_prandom_u32)
 -- 
 2.21.0.1020.gf2820cf01a-goog
 
