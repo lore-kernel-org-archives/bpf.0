@@ -2,208 +2,159 @@ Return-Path: <SRS0=YueQ=TN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06445C04AAA
-	for <bpf@archiver.kernel.org>; Mon, 13 May 2019 23:35:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A422C04AA7
+	for <bpf@archiver.kernel.org>; Mon, 13 May 2019 23:45:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CBF452084F
-	for <bpf@archiver.kernel.org>; Mon, 13 May 2019 23:35:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3638620850
+	for <bpf@archiver.kernel.org>; Mon, 13 May 2019 23:45:38 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="edP2unho"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726700AbfEMXfB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 May 2019 19:35:01 -0400
-Received: from mga04.intel.com ([192.55.52.120]:39736 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726511AbfEMXfB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 13 May 2019 19:35:01 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 May 2019 16:30:58 -0700
-X-ExtLoop1: 1
-Received: from samudral-mobl1.amr.corp.intel.com (HELO [134.134.177.79]) ([134.134.177.79])
-  by orsmga007.jf.intel.com with ESMTP; 13 May 2019 16:30:58 -0700
-Subject: Re: [RFC bpf-next 0/7] busy poll support for AF_XDP sockets
-To:     Jonathan Lemon <bsd@fb.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Magnus Karlsson <magnus.karlsson@intel.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Network Development <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>
-References: <1556786363-28743-1-git-send-email-magnus.karlsson@intel.com>
- <20190506163135.blyqrxitmk5yrw7c@ast-mbp>
- <CAJ8uoz2MFtoXwuhAp5A0teMmwU2v623pHf2k0WSFi0kovJYjtw@mail.gmail.com>
- <20190507182435.6f2toprk7jus6jid@ast-mbp>
- <D40B5C89-53F8-4EC1-AB35-FB7C395864DE@fb.com>
-From:   "Samudrala, Sridhar" <sridhar.samudrala@intel.com>
-Message-ID: <d55253dd-42b4-9cb1-ddc9-4f74c06ec845@intel.com>
-Date:   Mon, 13 May 2019 16:30:58 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726551AbfEMXpi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 May 2019 19:45:38 -0400
+Received: from mail-yw1-f67.google.com ([209.85.161.67]:41854 "EHLO
+        mail-yw1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726233AbfEMXph (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 13 May 2019 19:45:37 -0400
+Received: by mail-yw1-f67.google.com with SMTP id o65so12470383ywd.8
+        for <bpf@vger.kernel.org>; Mon, 13 May 2019 16:45:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=I61dv/srKkbPr0MSpNNyf5HMVuXv4XnCDZMGZoEsBtg=;
+        b=edP2unho3JGfLVtRf4xIIeNbT/1DKDyqQVTwvP5XUpMVKx5NqhxzehVcbDKHzP6RC2
+         dV1+g8QZah6EIbPImPJIGmLn0c+8Gq7azQ+fl0CcULfpfJsnhdODBzNXSgHawHmMR2x3
+         RP3kG+SJf47u611zaWk0uB4C0OLU3JJ5tCLEzP48lELR9A6YNbipT2rIXjROr/YAiABB
+         wXJsu1kd8qhiHxSJxcEW7auCj6xPGrxFE4+90qvoBRwxlHZ0uaLJhuX6GFExFV7Gth0G
+         CcgUw48M2f3YB/cWWjKB7lmNGtYpn+C4xSt47jmsj/qFklkQ6P3pAmslQaT1CKvrVnh2
+         gdWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I61dv/srKkbPr0MSpNNyf5HMVuXv4XnCDZMGZoEsBtg=;
+        b=mY22JTfaP0gIy5YNSqywEYb1C7oVtXk+VuYalVQmNEIhMon5dUk5KsvAl5GiHetwas
+         64K6EKdpM3830q03dkPg0kYU6py0BbBoYdBA84ku/6H7bgF1NDFbunf2g+EdWlByWw4/
+         hCNrnWy1z0ARPFG3Ef0/76SBQIS6K3lXp8NJyNuWdG8VTmnaVrZyhJxfisGe1uMAuZHS
+         udCSg9tZicKByffu6IRfrLTFP7Yyt3ClS0Ypj2QSh000UrOVq1DR6RNjs/Dzvj+QR3Xd
+         sJFvC700FWkiilaAxj6tOu1a7VZ9sk9Qr+dPFImLwNTaK44mVKrhA99PbaZ5viEs/Vid
+         y1SA==
+X-Gm-Message-State: APjAAAV+CKsnh2TpzXpppavNLBbmBt/j8IqJFrx8ILBF45NkYnkTQC+g
+        tbVHzrmKFYaJ1Zc7fUTICrPLtr4Q
+X-Google-Smtp-Source: APXvYqxxnJT1ugPDT0lzKtpAFQXHJvQanNBo4/Q3UycxJ2gvtttVKJGmJYNpo4x6mD0rmvkrACZbOQ==
+X-Received: by 2002:a25:d196:: with SMTP id i144mr14928630ybg.241.1557791136278;
+        Mon, 13 May 2019 16:45:36 -0700 (PDT)
+Received: from mail-yw1-f47.google.com (mail-yw1-f47.google.com. [209.85.161.47])
+        by smtp.gmail.com with ESMTPSA id 136sm1166583yww.63.2019.05.13.16.45.34
+        for <bpf@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 13 May 2019 16:45:35 -0700 (PDT)
+Received: by mail-yw1-f47.google.com with SMTP id 186so12481049ywo.4
+        for <bpf@vger.kernel.org>; Mon, 13 May 2019 16:45:34 -0700 (PDT)
+X-Received: by 2002:a0d:e386:: with SMTP id m128mr16039351ywe.283.1557791134580;
+ Mon, 13 May 2019 16:45:34 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <D40B5C89-53F8-4EC1-AB35-FB7C395864DE@fb.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190513185402.220122-1-sdf@google.com> <CAF=yD-LO6o=uZ-aT-J9uPiBcO4f2Zc9uyGZ+f7M7mPtRSB44gA@mail.gmail.com>
+ <20190513210239.GC24057@mini-arch> <CAF=yD-JKbzuoF_q7gPRjMNCBexn4pxgQ6pTeQSRfPXmwWk5dzg@mail.gmail.com>
+ <CAF=yD-Lg16ETT09=fRd2FTx2FJoGZ9K0s-JHrhv-9OMTqE+5BQ@mail.gmail.com>
+ <20190513230513.GA10244@mini-arch> <CAKH8qBvG00EJVQ+YqNDOP-YuCRACB0q0c9G51Dgow9a1uzZnGQ@mail.gmail.com>
+In-Reply-To: <CAKH8qBvG00EJVQ+YqNDOP-YuCRACB0q0c9G51Dgow9a1uzZnGQ@mail.gmail.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Mon, 13 May 2019 19:44:58 -0400
+X-Gmail-Original-Message-ID: <CA+FuTScvioH_f2Gew0e9Qh48bWYYBzAdVV4Hk3roGNEmLE8rfQ@mail.gmail.com>
+Message-ID: <CA+FuTScvioH_f2Gew0e9Qh48bWYYBzAdVV4Hk3roGNEmLE8rfQ@mail.gmail.com>
+Subject: Re: [PATCH bpf 1/2] flow_dissector: support FLOW_DISSECTOR_KEY_ETH_ADDRS
+ with BPF
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Stanislav Fomichev <sdf@fomichev.me>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, David Miller <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Petar Penkov <ppenkov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 5/13/2019 1:42 PM, Jonathan Lemon wrote:
-> Tossing in my .02 cents:
-> 
-> 
-> I anticipate that most users of AF_XDP will want packet processing
-> for a given RX queue occurring on a single core - otherwise we end
-> up with cache delays.  The usual model is one thread, one socket,
-> one core, but this isn't enforced anywhere in the AF_XDP code and is
-> up to the user to set this up.
+From: Stanislav Fomichev <sdf@google.com>
+Date: Mon, May 13, 2019 at 7:21 PM
+To: Stanislav Fomichev
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Network
+Development, bpf, David Miller, Alexei Starovoitov, Daniel Borkmann,
+Willem de Bruijn <willemb@google.com>, Petar Penkov
 
-AF_XDP with busypoll should allow a single thread to poll a given RX
-queue and use a single core.
+> > On 05/13, Willem de Bruijn wrote:
+> > > On Mon, May 13, 2019 at 5:21 PM Willem de Bruijn
+> > > <willemdebruijn.kernel@gmail.com> wrote:
+> > > >
+> > > > On Mon, May 13, 2019 at 5:02 PM Stanislav Fomichev <sdf@fomichev.me> wrote:
+> > > > >
+> > > > > On 05/13, Willem de Bruijn wrote:
+> > > > > > On Mon, May 13, 2019 at 3:53 PM Stanislav Fomichev <sdf@google.com> wrote:
+> > > > > > >
+> > > > > > > If we have a flow dissector BPF program attached to the namespace,
+> > > > > > > FLOW_DISSECTOR_KEY_ETH_ADDRS won't trigger because we exit early.
+> > > > > >
+> > > > > > I suppose that this is true for a variety of keys? For instance, also
+> > > > > > FLOW_DISSECTOR_KEY_IPV4_ADDRS.
+> > > >
+> > > > > I though the intent was to support most of the basic stuff (eth/ip/tcp/udp)
+> > > > > without any esoteric protocols.
+> > > >
+> > > > Indeed. But this applies both to protocols and the feature set. Both
+> > > > are more limited.
+> > > >
+> > > > > Not sure about FLOW_DISSECTOR_KEY_IPV4_ADDRS,
+> > > > > looks like we support that (except FLOW_DISSECTOR_KEY_TIPC part).
+> > > >
+> > > > Ah, I chose a bad example then.
+> > > >
+> > > > > > We originally intended BPF flow dissection for all paths except
+> > > > > > tc_flower. As that catches all the vulnerable cases on the ingress
+> > > > > > path on the one hand and it is infeasible to support all the
+> > > > > > flower features, now and future. I think that is the real fix.
+> > > >
+> > > > > Sorry, didn't get what you meant by the real fix.
+> > > > > Don't care about tc_flower? Just support a minimal set of features
+> > > > > needed by selftests?
+> > > >
+> > > > I do mean exclude BPF flow dissector (only) for tc_flower, as we
+> > > > cannot guarantee that the BPF program can fully implement the
+> > > > requested feature.
+> > >
+> > > Though, the user inserting the BPF flow dissector is the same as the
+> > > user inserting the flower program, the (per netns) admin. So arguably
+> > > is aware of the constraints incurred by BPF flow dissection. And else
+> > > can still detect when a feature is not supported from the (lack of)
+> > > output, as in this case of Ethernet address. I don't think we want to
+> > > mix BPF and non-BPF flow dissection though. That subverts the safety
+> > > argument of switching to BPF for flow dissection.
+> > Yes, we cannot completely avoid tc_flower because we use it to do
+> > the end-to-end testing. That's why I was trying to make sure "basic"
+> > stuff works (it might feel confusing that tc_flower {src,dst}_mac
+> > stop working with a bpf program installed).
+> >
+> > TBH, I'd not call this particular piece of code that exports src/dst
+> > addresses a dissection. At this point, it's a well-formed skb with
+> > a proper l2 header and we just copy the addresses out. It's probably
+> > part of the reason the original patch didn't include any skb->protocol
+> > checks.
 
-> 
-> On 7 May 2019, at 11:24, Alexei Starovoitov wrote:
->> I'm not saying that we shouldn't do busy-poll. I'm saying it's
->> complimentary, but in all cases single core per af_xdp rq queue
->> with user thread pinning is preferred.
-> 
-> So I think we're on the same page here.
-> 
->> Stack rx queues and af_xdp rx queues should look almost the same from
->> napi point of view. Stack -> normal napi in softirq. af_xdp -> new
->> kthread
->> to work with both poll and busy-poll. The only difference between
->> poll and busy-poll will be the running context: new kthread vs user
->> task.
-> ...
->> A burst of 64 packets on stack queues or some other work in softirqd
->> will spike the latency for af_xdp queues if softirq is shared.
-> 
-> True, but would it be shared?  This goes back to the current model,
-> which
-> as used by Intel is:
-> 
->      (channel == RX, TX, softirq)
-> 
-> MLX, on the other hand, wants:
-> 
->      (channel == RX.stack, RX.AF_XDP, TX.stack, TX.AF_XDP, softirq)
-> 
-> Which would indeed lead to sharing.  The more I look at the above, the
-> stronger I start to dislike it.  Perhaps this should be disallowed?
-> 
-> I believe there was some mention at LSF/MM that the 'channel' concept
-> was something specific to HW and really shouldn't be part of the SW API.
-> 
->> Hence the proposal for new napi_kthreads:
->> - user creates af_xdp socket and binds to _CPU_ X then
->> - driver allocates single af_xdp rq queue (queue ID doesn't need to be
->> exposed)
->> - spawns kthread pinned to cpu X
->> - configures irq for that af_xdp queue to fire on cpu X
->> - user space with the help of libbpf pins its processing thread to
->> that cpu X
->> - repeat above for as many af_xdp sockets as there as cpus
->>    (its also ok to pick the same cpu X for different af_xdp socket
->>    then new kthread is shared)
->> - user space configures hw to RSS to these set of af_xdp sockets.
->>    since ethtool api is a mess I propose to use af_xdp api to do this
->> rss config
-> 
-> 
->   From a high level point of view, this sounds quite sensible, but does
-> need
-> some details ironed out.  The model above essentially enforces a model
-> of:
-> 
->      (af_xdp = RX.af_xdp + bound_cpu)
->        (bound_cpu = hw.cpu + af_xdp.kthread + hw.irq)
-> 
-> (temporarily ignoring TX for right now)
-> 
-> 
-> I forsee two issues with the above approach:
->     1. hardware limitations in the number of queues/rings
->     2. RSS/steering rules
-> 
->> - user creates af_xdp socket and binds to _CPU_ X then
->> - driver allocates single af_xdp rq queue (queue ID doesn't need to be
->> exposed)
-> 
-> Here, the driver may not be able to create an arbitrary RQ, but may need
-> to
-> tear down/reuse an existing one used by the stack.  This may not be an
-> issue
-> for modern hardware.
-> 
->> - user space configures hw to RSS to these set of af_xdp sockets.
->>    since ethtool api is a mess I propose to use af_xdp api to do this
->> rss config
-> 
-> Currently, RSS only steers default traffic.  On a system with shared
-> stack/af_xdp queues, there should be a way to split the traffic types,
-> unless we're talking about a model where all traffic goes to AF_XDP.
-> 
-> This classification has to be done by the NIC, since it comes before RSS
-> steering - which currently means sending flow match rules to the NIC,
-> which
-> is less than ideal.  I agree that the ethtool interface is non optimal,
-> but
-> it does make things clear to the user what's going on.
+But it is not guaranteed to be an Ethernet link layer device. Making
+this a good example of why when moving to BPF for safety we should not
+keep any C dissection code in the path at all.
 
-'tc' provides another interface to split NIC queues into groups of
-queues each with its own RSS. For ex:
-tc qdisc add dev <i/f> root mqprio num_tc 3 map 0 1 2 queues 2@0 32@2 
-8@34 hw 1 mode channel
-will split NIC queues into 3 groups of 2, 32 and 8 queues.
+> On the other hand, we can probably follow a simple rule:
+> if it's not exported via bpf_flow_keys (and src/dsc mac is not),
+> tc_flower is not supported as well.
 
-By default all the packets goto only the first queue group with 2 
-queues. Filters can be added to redirect packets to the other queues groups.
-
-tc filter add dev <i/f> protocol ip ingress prio 1 flower dst_ip 
-192.168.0.2 ip_proto tcp dst_port 1234 skip_sw hw_tc 1
-tc filter add dev <i/f> protocol ip ingress prio 1 flower dst_ip 
-192.168.0.3 ip_proto tcp dst_port 1234 skip_sw hw_tc 2
-
-Here hw_tc indicates the queue group.
-
-It should be possible to run AF_XDP on queue group 3 by creating 8 
-af-xdp sockets and binding them to queues 34-42.
-
-Does this look like a reasonable model to use a subset of nic queues for 
-af-xdp applications?
-
-
-> 
-> Perhaps an af_xdp library that does some bookkeeping:
->     - open af_xdp socket
->     - define af_xdp_set as (classification, steering rules, other?)
->     - bind socket to (cpu, af_xdp_set)
->     - kernel:
->       - pins calling thread to cpu
->       - creates kthread if one doesn't exist, binds to irq and cpu
->       - has driver create RQ.af_xdp, possibly replacing RQ.stack
->       - applies (af_xdp_set) to NIC.
-> 
-> Seems workable, but a little complicated?  The complexity could be moved
-> into a separate library.
-> 
-> 
->> imo that would be the simplest and performant way of using af_xdp.
->> All configuration apis are under libbpf (or libxdp if we choose to
->> fork it)
->> End result is one af_xdp rx queue - one napi - one kthread - one user
->> thread.
->> All pinned to the same cpu with irq on that cpu.
->> Both poll and busy-poll approaches will not bounce data between cpus.
->> No 'shadow' queues to speak of and should solve the issues that
->> folks were bringing up in different threads.
-> 
-> Sounds like a sensible model from my POV.
-> 
+Agreed. I was using that as point of reference just now, too.
