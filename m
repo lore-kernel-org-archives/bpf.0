@@ -2,117 +2,98 @@ Return-Path: <SRS0=32pG=TQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0323CC46470
-	for <bpf@archiver.kernel.org>; Thu, 16 May 2019 21:54:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 473FEC04E84
+	for <bpf@archiver.kernel.org>; Thu, 16 May 2019 22:26:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C5A5520848
-	for <bpf@archiver.kernel.org>; Thu, 16 May 2019 21:54:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E61720848
+	for <bpf@archiver.kernel.org>; Thu, 16 May 2019 22:26:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=networkplumber-org.20150623.gappssmtp.com header.i=@networkplumber-org.20150623.gappssmtp.com header.b="gHkbTo/d"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="MTf1wNO6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728899AbfEPVyb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 May 2019 17:54:31 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:44590 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728890AbfEPVy3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 May 2019 17:54:29 -0400
-Received: by mail-pf1-f196.google.com with SMTP id g9so2522515pfo.11
-        for <bpf@vger.kernel.org>; Thu, 16 May 2019 14:54:29 -0700 (PDT)
+        id S1726464AbfEPW0J (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 May 2019 18:26:09 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:38863 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727510AbfEPW0J (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 May 2019 18:26:09 -0400
+Received: by mail-qt1-f194.google.com with SMTP id d13so5899917qth.5
+        for <bpf@vger.kernel.org>; Thu, 16 May 2019 15:26:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1E3N0zT9A+r2im6QpOgDPD+XgR8M/OLuBEDLlf3Z7+c=;
-        b=gHkbTo/dzg62EsHuFOEqzE4zD0Awx6QMgcAVIz/QDckgP8FbVYM+OnrKQVNxdWE0gX
-         QKCSUSA/5MtU2Sh8txLOvLtyG4AbSahniQnaAFLf/nYHtbFzkha6QBUUHIwqdaAQ4Kgk
-         1deRntqeIqPhsdF+aTx7HcXFte1XoPJz3t73ctR67DoLXakKCZLv/0Fvy4UTaf48V38i
-         Qg4zypj/7GDSaP8zDKz2rHdFXDEB4hsddy7VtJ1Yu/ZTEN49nhygcMkJCpvXO+L2Z5pw
-         tCDFBuEKrBZaZMCL2KnVBs5qRKvhGlpGEP/Pss70wox83tzVtngnivANiEWDIb2Bt53s
-         z9iw==
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=z+lMxg6moxmVTJd4xVQUIKrnB2Pe9tq+zxdTiVlja5w=;
+        b=MTf1wNO6dvAlBq4uNVTjRNWaxh4yaUhpjLTjAZNM9kE8rSBohB9ikhQ3Owr1aXlcoW
+         M5peoCV2r+v3J6nIlgGCXGgeqZKLAPOTKACuGmx0SEehA3V+ZS+IR8EQWvVlJXcqvAbj
+         gHauAt2j/yDWNyFDydZcguKWQmG5qvJO77ytYBpVNaQOtzqaKQAzZryooTDnD66TbAEq
+         tx9aSyREjjUQ0OVW+dPm8CyJjfbL9JhnYdvAKZ3WqXY1MB0tQIGpTBeWMMxGlwn1VeXx
+         EXevU+vnSoNtvmGvZH3YY4e8lvq/8h9pM0tZNa9zsWa2Xfp0P3tuX4ZrlxX+efULz3jT
+         /3Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1E3N0zT9A+r2im6QpOgDPD+XgR8M/OLuBEDLlf3Z7+c=;
-        b=Twb6qZpR+4+S0I0FNaer5ElymHYdq1siFh3f+4CQtqrjeM2VSOXKUp/a0trk81cH4Q
-         gNu4IkF+xhGeFuqZaQ2GMo/w9lShaP/4VQ78ILZqt9C8gLkx5QgxdEStLJKeFQ2fYDyQ
-         TGED5rvnMGXAkc34Hwogj1csRurlx62B8k+iv1km2wOUm74oPQqnZFW+ExP9P2Yj1Vap
-         z647tUZVAoMETIGSxR8Hnq2hKVJtaETBlOoC5jk+X1r0Ao/MJxfjZNSU/4n0Z9omIBFy
-         lyDairsLQQor+nbRzURQkfBpEiFCJGYEEtwFyQn0TvPNKfL8vsoJb742DkDpLqhbiZWd
-         1Ihw==
-X-Gm-Message-State: APjAAAXXN56eWZUfxOvv3mzr1wkXqHKoLr9O9ZhYR7tLGG+4Hqipz375
-        AiYK23Nrg1AlYQCrm6ZFoxeJ5g==
-X-Google-Smtp-Source: APXvYqyFTs+tyVssS57cMOZTZJEMcnxAqM0IxUaMpyARtuJ/MrI3oWy5+iENt2ct906kPow0o/zKJw==
-X-Received: by 2002:a62:528b:: with SMTP id g133mr56806059pfb.246.1558043668893;
-        Thu, 16 May 2019 14:54:28 -0700 (PDT)
-Received: from hermes.lan (204-195-22-127.wavecable.com. [204.195.22.127])
-        by smtp.gmail.com with ESMTPSA id d15sm19842506pfm.186.2019.05.16.14.54.27
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 16 May 2019 14:54:28 -0700 (PDT)
-From:   Stephen Hemminger <stephen@networkplumber.org>
-X-Google-Original-From: Stephen Hemminger <sthemmin@microsoft.com>
-To:     netdev@vger.kernel.org, davem@davemloft.net
-Cc:     xdp-newbies@vger.kernel.org, bpf@vger.kernel.org,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Jason Wang <jasowang@redhat.com>
-Subject: [PATCH net 2/3] net: core: generic XDP support for stacked device
-Date:   Thu, 16 May 2019 14:54:22 -0700
-Message-Id: <20190516215423.14185-3-sthemmin@microsoft.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190516215423.14185-1-sthemmin@microsoft.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=z+lMxg6moxmVTJd4xVQUIKrnB2Pe9tq+zxdTiVlja5w=;
+        b=qMqBG1nQ1bseWxv93N9DLhDFnp2VowZgOv7y3g80m1EC1vLKOU3zoQQz5UHnCI0qLe
+         4B6reB3EsI2Sdl2iWuXQP1FnuenTw8wDY/aS0U0aQVgylL/1JA11pWof7qFAAGoMbEyi
+         P8A0DkC84HU5D12pL70M7v+coAmhiuG8v/OgSqXuwvFo2bdn5XAUg8bMvw/Ez9peMhQY
+         DLf/Mm8KClj6CwxS/7T5ZsxgMmozEVC0DrldbU4DGCLQLLUE0QXkQcrctkudcOgOnAus
+         gLLETKW63B9UAObY1FT/su+PxoM8FsFxRb0IyFFZ97AWAR8bwrm4kxvHcuciDpneKygN
+         xMQA==
+X-Gm-Message-State: APjAAAUMOZ2vdHtpozVksZsCT/UnfvvwrXCVUQYxWHoDP/5RyKxLn7WP
+        mp+RTEC26RflaVQOphEjWtCAdw==
+X-Google-Smtp-Source: APXvYqwx6f05U0rLdKo7dKtBI03oGXhaY7wNIC+vWT/02Xp80EXjqg9DD+ESWOMJaOFeVF1ArVj8hw==
+X-Received: by 2002:a0c:89e8:: with SMTP id 37mr9622340qvs.190.1558045567951;
+        Thu, 16 May 2019 15:26:07 -0700 (PDT)
+Received: from cakuba.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id w195sm3369737qkb.54.2019.05.16.15.26.07
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 16 May 2019 15:26:07 -0700 (PDT)
+Date:   Thu, 16 May 2019 15:25:43 -0700
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Stephen Hemminger <stephen@networkplumber.org>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        xdp-newbies@vger.kernel.org, bpf@vger.kernel.org,
+        Stephen Hemminger <sthemmin@microsoft.com>
+Subject: Re: [PATCH net 3/3] netdevice: clarify meaning of rx_handler_result
+Message-ID: <20190516152543.729c6cb0@cakuba.netronome.com>
+In-Reply-To: <20190516215423.14185-4-sthemmin@microsoft.com>
 References: <20190516215423.14185-1-sthemmin@microsoft.com>
+        <20190516215423.14185-4-sthemmin@microsoft.com>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When a device is stacked like (team, bonding, failsafe or netvsc) the
-XDP generic program for the parent device is not called.  In these
-cases, the rx handler changes skb->dev to its own in the receive
-handler, and returns RX_HANDLER_ANOTHER.  Fix this by calling
-do_xdp_generic if necessary before starting another round.
+On Thu, 16 May 2019 14:54:23 -0700, Stephen Hemminger wrote:
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index 44b47e9df94a..56f613561909 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -374,10 +374,10 @@ typedef enum gro_result gro_result_t;
+>  
+>  /*
+>   * enum rx_handler_result - Possible return values for rx_handlers.
+> - * @RX_HANDLER_CONSUMED: skb was consumed by rx_handler, do not process it
+> - * further.
+> - * @RX_HANDLER_ANOTHER: Do another round in receive path. This is indicated in
+> - * case skb->dev was changed by rx_handler.
+> + * @RX_HANDLER_CONSUMED: skb was consumed by rx_handler.
+> + *  Do not process it further.
+> + * @RX_HANDLER_ANOTHER: skb->dev was modified by rx_handler,
+> + *  Do another round in receive path. This is indicated in
 
-Review of all the places RX_HANDLER_ANOTHER is returned
-show that the current devices do correctly change skb->dev.
+s/ This is indicated in//
 
-There was an older patch that got abandoned that did the
-same thing, this is just a rewrite.
-
-Suggested-by: Jason Wang <jasowang@redhat.com>
-Fixes: d445516966dc ("net: xdp: support xdp generic on virtual devices")
-Signed-off-by: Stephen Hemminger <sthemmin@microsoft.com>
----
- net/core/dev.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 108ac8137b9b..9165fd3c9e90 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -4921,6 +4921,16 @@ static int __netif_receive_skb_core(struct sk_buff *skb, bool pfmemalloc,
- 			ret = NET_RX_SUCCESS;
- 			goto out;
- 		case RX_HANDLER_ANOTHER:
-+			if (static_branch_unlikely(&generic_xdp_needed_key)) {
-+				struct bpf_prog *xdp_prog;
-+
-+				xdp_prog = rcu_dereference(skb->dev->xdp_prog);
-+				ret = do_xdp_generic(xdp_prog, skb);
-+				if (ret != XDP_PASS) {
-+					ret = NET_RX_SUCCESS;
-+					goto out;
-+				}
-+			}
- 			goto another_round;
- 		case RX_HANDLER_EXACT:
- 			deliver_exact = true;
--- 
-2.20.1
+>   * @RX_HANDLER_EXACT: Force exact delivery, no wildcard.
+>   * @RX_HANDLER_PASS: Do nothing, pass the skb as if no rx_handler was called.
+>   *
 
