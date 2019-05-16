@@ -2,153 +2,255 @@ Return-Path: <SRS0=32pG=TQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB0A4C04AAF
-	for <bpf@archiver.kernel.org>; Thu, 16 May 2019 16:54:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E807DC04AAF
+	for <bpf@archiver.kernel.org>; Thu, 16 May 2019 17:02:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7EE8C20815
-	for <bpf@archiver.kernel.org>; Thu, 16 May 2019 16:54:59 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="w8X3UASC"
+	by mail.kernel.org (Postfix) with ESMTP id B9EF520815
+	for <bpf@archiver.kernel.org>; Thu, 16 May 2019 17:02:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727206AbfEPQyy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 May 2019 12:54:54 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:39431 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727229AbfEPQyy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 May 2019 12:54:54 -0400
-Received: by mail-qk1-f196.google.com with SMTP id z128so2698646qkb.6
-        for <bpf@vger.kernel.org>; Thu, 16 May 2019 09:54:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=RSXji2gu6PTmCCcGE3ApJyZXicrhpNir4c6ptrlMBZw=;
-        b=w8X3UASCEUM3vJvJ4NqGiATkR0s8WmNbhjJJSUDD4HQ5v2XUQijD5IJAoCIwFIhnIj
-         yNJkhZYd7EOu7n7SoaVlYcXwxxjQKwyi/SFjLgKx66liMvMlrocYvplC/NEHCFvtfN1k
-         Lhu4GdtukplsBg9cVyo/2p/lF/duxEKZhUOyrWibtP6yVb/v7XY3D179ye4XGcdRUpvw
-         VBtXRW73769UYS9SMc3eo16qzfMNhEBSNnpV/FNMxkacKLujZ4mbEiM4GLZfmWc/0mh6
-         8V2onWzspsxdE4pGSB/44M+XrNRnL3RHDWgg+m1CIMruHaQFLlgAPhErMXplm+cg6ZnC
-         pT+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=RSXji2gu6PTmCCcGE3ApJyZXicrhpNir4c6ptrlMBZw=;
-        b=c5VQT6O0VP9jIWoV8AEG9M3MydzuRvmvD+/UO6ZlAIKbDUHCRisPexCcLueXXhl0XF
-         G3AIzKVXBabIOPtII+xMlGOHrjkl+4MCMcFPIEzQvhY6LjuCuTRtEyQTbjNe1X7xmOyD
-         y7GMtFroZpNl+GxUv2Kl1sIf/P+9cVuN0ZUNcLi7csLA/apw+lm2AaNIeNrNocrowfoS
-         HVL49eBjBR2Pq0RKZB8MXTwcw5G4viKrMoBxrYfhD/ePR92VhgXI7FN8jZnOBoL8g/zr
-         PisYB2rpcWhcyE6ljFakcFKgQVrAorxqmDho6AGtAf0+BsUI/9TH0LDBM7vkGv2/JLZ2
-         dU9g==
-X-Gm-Message-State: APjAAAXYYATB4rn3G73ZEN3DvWShldefsNTlL6UuO0ebOk1NXb6KYS0F
-        igHTTvtBbLGSwfRJD+vN3CDpJg==
-X-Google-Smtp-Source: APXvYqzFFPIoAoCXHLuAi3qkHjprBS7BtRM/qvWx3GdjcQWNy0cAs5xxZ7wEPTSo5KalHZN4PMzVWQ==
-X-Received: by 2002:a05:620a:144c:: with SMTP id i12mr12814987qkl.243.1558025693089;
-        Thu, 16 May 2019 09:54:53 -0700 (PDT)
-Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id 91sm2696400qte.38.2019.05.16.09.54.51
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 16 May 2019 09:54:52 -0700 (PDT)
-Date:   Thu, 16 May 2019 09:54:26 -0700
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     Krzesimir Nowak <krzesimir@kinvolk.io>
-Cc:     bpf@vger.kernel.org,
-        Iago =?UTF-8?B?TMOzcGV6?= Galeiras <iago@kinvolk.io>,
-        "Alban Crequy (Kinvolk)" <alban@kinvolk.io>,
+        id S1728771AbfEPRC0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 May 2019 13:02:26 -0400
+Received: from mx2.suse.de ([195.135.220.15]:44918 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728747AbfEPRCY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 May 2019 13:02:24 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 61B7FAF25;
+        Thu, 16 May 2019 17:02:22 +0000 (UTC)
+From:   Michal Rostecki <mrostecki@opensuse.org>
+Cc:     Michal Rostecki <mrostecki@opensuse.org>,
         Shuah Khan <shuah@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrey Ignatov <rdna@fb.com>, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ogerlitz@mellanox.com
-Subject: Re: [PATCH bpf v1 2/3] selftests/bpf: Print a message when tester
- could not run a program
-Message-ID: <20190516095426.2e0d838f@cakuba.netronome.com>
-In-Reply-To: <CAGGp+cEFxzbH-8vnSAK3sZkM-u3WN4HGnkYvhFwBp85yVtD7Xg@mail.gmail.com>
-References: <20190515134731.12611-1-krzesimir@kinvolk.io>
-        <20190515134731.12611-3-krzesimir@kinvolk.io>
-        <20190515144537.57f559e7@cakuba.netronome.com>
-        <CAGGp+cGN+YYVjJee5ba84HstSrHGurBvwmKmzNsFRvb344Df3A@mail.gmail.com>
-        <20190516085035.3cdb0ae6@cakuba.netronome.com>
-        <CAGGp+cEFxzbH-8vnSAK3sZkM-u3WN4HGnkYvhFwBp85yVtD7Xg@mail.gmail.com>
-Organization: Netronome Systems, Ltd.
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xdp-newbies@vger.kernel.org
+Subject: [PATCH bpf-next v2 2/2] samples: bpf: Do not define bpf_printk macro
+Date:   Thu, 16 May 2019 19:01:53 +0200
+Message-Id: <20190516170152.24542-3-mrostecki@opensuse.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190516170152.24542-1-mrostecki@opensuse.org>
+References: <20190516170152.24542-1-mrostecki@opensuse.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 16 May 2019 18:21:32 +0200, Krzesimir Nowak wrote:
-> On Thu, May 16, 2019 at 5:51 PM Jakub Kicinski wrote:
-> > On Thu, 16 May 2019 11:29:39 +0200, Krzesimir Nowak wrote:  
-> > > > > diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-> > > > > index ccd896b98cac..bf0da03f593b 100644
-> > > > > --- a/tools/testing/selftests/bpf/test_verifier.c
-> > > > > +++ b/tools/testing/selftests/bpf/test_verifier.c
-> > > > > @@ -825,11 +825,20 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
-> > > > >                               tmp, &size_tmp, &retval, NULL);
-> > > > >       if (unpriv)
-> > > > >               set_admin(false);
-> > > > > -     if (err && errno != 524/*ENOTSUPP*/ && errno != EPERM) {
-> > > > > -             printf("Unexpected bpf_prog_test_run error ");
-> > > > > -             return err;
-> > > > > +     if (err) {
-> > > > > +             switch (errno) {
-> > > > > +             case 524/*ENOTSUPP*/:
-> > > > > +                     printf("Did not run the program (not supported) ");
-> > > > > +                     return 0;
-> > > > > +             case EPERM:
-> > > > > +                     printf("Did not run the program (no permission) ");
-> > > > > +                     return 0;  
-> > > >
-> > > > Perhaps use strerror(errno)?  
-> > >
-> > > As I said in the commit message, I open-coded those messages because
-> > > strerror for ENOTSUPP returns "Unknown error 524".  
-> >
-> > Ah, sorry, missed that.  I wonder if that's something worth addressing
-> > in libc, since the BPF subsystem uses ENOTSUPP a lot.  
-> 
-> The "not supported" errno situation seems to be a mess. There is an
-> ENOTSUP define in libc. ENOTSUP is usually defined to be EOPNOTSUPP
-> (taken from kernel), which in turn seems to have a different value
-> (95) than kernel's ENOTSUPP (524). Adding ENOTSUPP (with two Ps) to
-> libc would only add to the confusion. So it's kind of meh and I guess
-> people just moved on with workarounds.
+The bpf_printk macro was moved to bpf_helpers.h which is included in all
+example programs.
 
-Yes, ENOTSUP is never used in the kernel, but it's a mess.
+Signed-off-by: Michal Rostecki <mrostecki@opensuse.org>
+---
+ samples/bpf/hbm_kern.h             | 11 ++---------
+ samples/bpf/tcp_basertt_kern.c     |  7 -------
+ samples/bpf/tcp_bufs_kern.c        |  7 -------
+ samples/bpf/tcp_clamp_kern.c       |  7 -------
+ samples/bpf/tcp_cong_kern.c        |  7 -------
+ samples/bpf/tcp_iw_kern.c          |  7 -------
+ samples/bpf/tcp_rwnd_kern.c        |  7 -------
+ samples/bpf/tcp_synrto_kern.c      |  7 -------
+ samples/bpf/tcp_tos_reflect_kern.c |  7 -------
+ samples/bpf/xdp_sample_pkts_kern.c |  7 -------
+ 10 files changed, 2 insertions(+), 72 deletions(-)
 
-This commit a while ago said ENOTSUPP is from NFS:
+diff --git a/samples/bpf/hbm_kern.h b/samples/bpf/hbm_kern.h
+index c5635d924193..41384be233b9 100644
+--- a/samples/bpf/hbm_kern.h
++++ b/samples/bpf/hbm_kern.h
+@@ -30,15 +30,8 @@
+ #define ALLOW_PKT	1
+ #define TCP_ECN_OK	1
+ 
+-#define HBM_DEBUG 0  // Set to 1 to enable debugging
+-#if HBM_DEBUG
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	char ____fmt[] = fmt;					\
+-	bpf_trace_printk(____fmt, sizeof(____fmt),		\
+-			 ##__VA_ARGS__);			\
+-})
+-#else
++#ifndef HBM_DEBUG  // Define HBM_DEBUG to enable debugging
++#undef bpf_printk
+ #define bpf_printk(fmt, ...)
+ #endif
+ 
+diff --git a/samples/bpf/tcp_basertt_kern.c b/samples/bpf/tcp_basertt_kern.c
+index 6ef1625e8b2c..9dba48c2b920 100644
+--- a/samples/bpf/tcp_basertt_kern.c
++++ b/samples/bpf/tcp_basertt_kern.c
+@@ -21,13 +21,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_basertt(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/tcp_bufs_kern.c b/samples/bpf/tcp_bufs_kern.c
+index e03e204739fa..af8486f33771 100644
+--- a/samples/bpf/tcp_bufs_kern.c
++++ b/samples/bpf/tcp_bufs_kern.c
+@@ -22,13 +22,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_bufs(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/tcp_clamp_kern.c b/samples/bpf/tcp_clamp_kern.c
+index a0dc2d254aca..26c0fd091f3c 100644
+--- a/samples/bpf/tcp_clamp_kern.c
++++ b/samples/bpf/tcp_clamp_kern.c
+@@ -22,13 +22,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_clamp(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/tcp_cong_kern.c b/samples/bpf/tcp_cong_kern.c
+index 4fd3ca979a06..6d4dc4c7dd1e 100644
+--- a/samples/bpf/tcp_cong_kern.c
++++ b/samples/bpf/tcp_cong_kern.c
+@@ -21,13 +21,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_cong(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/tcp_iw_kern.c b/samples/bpf/tcp_iw_kern.c
+index 9b139ec69560..da61d53378b3 100644
+--- a/samples/bpf/tcp_iw_kern.c
++++ b/samples/bpf/tcp_iw_kern.c
+@@ -22,13 +22,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_iw(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/tcp_rwnd_kern.c b/samples/bpf/tcp_rwnd_kern.c
+index cc71ee96e044..d011e38b80d2 100644
+--- a/samples/bpf/tcp_rwnd_kern.c
++++ b/samples/bpf/tcp_rwnd_kern.c
+@@ -21,13 +21,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_rwnd(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/tcp_synrto_kern.c b/samples/bpf/tcp_synrto_kern.c
+index ca87ed34f896..720d1950322d 100644
+--- a/samples/bpf/tcp_synrto_kern.c
++++ b/samples/bpf/tcp_synrto_kern.c
+@@ -21,13 +21,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_synrto(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/tcp_tos_reflect_kern.c b/samples/bpf/tcp_tos_reflect_kern.c
+index de788be6f862..369faca70a15 100644
+--- a/samples/bpf/tcp_tos_reflect_kern.c
++++ b/samples/bpf/tcp_tos_reflect_kern.c
+@@ -20,13 +20,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_basertt(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/xdp_sample_pkts_kern.c b/samples/bpf/xdp_sample_pkts_kern.c
+index f7ca8b850978..6c7c7e0aaeda 100644
+--- a/samples/bpf/xdp_sample_pkts_kern.c
++++ b/samples/bpf/xdp_sample_pkts_kern.c
+@@ -7,13 +7,6 @@
+ #define SAMPLE_SIZE 64ul
+ #define MAX_CPUS 128
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ struct bpf_map_def SEC("maps") my_map = {
+ 	.type = BPF_MAP_TYPE_PERF_EVENT_ARRAY,
+ 	.key_size = sizeof(int),
+-- 
+2.21.0
 
-commit 423b3aecf29085a52530d4f9167c56a84b081042
-Author: Or Gerlitz <ogerlitz@mellanox.com>
-Date:   Thu Feb 23 12:02:41 2017 +0200
-
-    net/mlx4: Change ENOTSUPP to EOPNOTSUPP
-    
-    As ENOTSUPP is specific to NFS, change the return error value to
-    EOPNOTSUPP in various places in the mlx4 driver.
-    
-    Signed-off-by: Or Gerlitz <ogerlitz@mellanox.com>
-    Suggested-by: Yotam Gigi <yotamg@mellanox.com>
-    Reviewed-by: Matan Barak <matanb@mellanox.com>
-    Signed-off-by: Tariq Toukan <tariqt@mellanox.com>
-    Signed-off-by: David S. Miller <davem@davemloft.net>
-
-But it's spreading throughout the kernel like a wildfire, I counted 1364
-in my tree :/  Some are in tools/, but still.  My understanding was that
-system calls should never return values above 512, but I'm probably
-wrong about that.
-
-Given the popularity, and the fact its an ABI at this point, we
-probably have no choice but to add it to libc, but to be clear IMO it's
-not a blocker for your patches.
