@@ -2,126 +2,99 @@ Return-Path: <SRS0=32pG=TQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F29E0C04AAF
-	for <bpf@archiver.kernel.org>; Thu, 16 May 2019 16:21:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99CC7C04AAF
+	for <bpf@archiver.kernel.org>; Thu, 16 May 2019 16:47:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C66EF20818
-	for <bpf@archiver.kernel.org>; Thu, 16 May 2019 16:21:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 68D7B2087B
+	for <bpf@archiver.kernel.org>; Thu, 16 May 2019 16:47:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kinvolk.io header.i=@kinvolk.io header.b="ArCqLQ+m"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gIHWeF95"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726440AbfEPQVq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 May 2019 12:21:46 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:38618 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726339AbfEPQVq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 May 2019 12:21:46 -0400
-Received: by mail-lj1-f195.google.com with SMTP id 14so3664875ljj.5
-        for <bpf@vger.kernel.org>; Thu, 16 May 2019 09:21:45 -0700 (PDT)
+        id S1728606AbfEPQrB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 May 2019 12:47:01 -0400
+Received: from mail-ot1-f74.google.com ([209.85.210.74]:46166 "EHLO
+        mail-ot1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728611AbfEPQrA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 May 2019 12:47:00 -0400
+Received: by mail-ot1-f74.google.com with SMTP id a2so1926583otk.13
+        for <bpf@vger.kernel.org>; Thu, 16 May 2019 09:47:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kinvolk.io; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=2e5Do/kWandKX1Zbza7sapR2anoZAP3eXmyFdlVoIKA=;
-        b=ArCqLQ+mQc4Jf+7VG1OdMWx31L6sOXF2Y4z/qL7fxHo0l/XOMLxlZhFvmSO9hV7WSy
-         6RJy27G0BLy0i2xPqrJIdetwNB9Q4Spb89sBui0GkTfheyp1uV6bp0C+WzQPpw197YmW
-         Dt+Sg/qBSz6e625LoIace3EjYmevysKHUexhc=
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=VRRoQgT2pSAeSBNdY+Ic0qvRHWDT7jPstuRbjVm+VUM=;
+        b=gIHWeF95y5G0LC4OqfE6q+iPD+UYeh1Ct0xJXWIHapebxYYJo45B6sJkLEcH8511ic
+         1QC5GCQ7k8GooxA9yDxPqisqMXAZZigStN2OzTtVdiUFji1laiphQT2M0JsM8I0Zfk/s
+         FZaza5PGfLD2ms6eHS8jNAP6pWGJ0xnddtmpOhXnhsHrWhlxfck8DDOZaTgGiU5/saPG
+         QH0HwpT6xnfwH7VtCBOUUGQMT4PiKZkwSBMht/Gm/4PgW2XwznE9Ylx8jjhoBwjBLeLQ
+         mOR4fs/Lmpwd3vM0IRnDMPiPHLZyivpmcIgxgp+edE0aXx4PasateSSbnkRLWiqS7xWx
+         Rhxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2e5Do/kWandKX1Zbza7sapR2anoZAP3eXmyFdlVoIKA=;
-        b=IsdQ3VRz27eMJL302mXoTExZ1FU0+M5XQWX2JJw0CNJVqimjYXfBAUOvjYLIqBHFbu
-         bt5pE635tokv4j2xeZwk4h6R3u1zc7xFLLm/UFQQd1li7s8CNKe6FEItGB3ZKNjw3YLV
-         zTSdUmGHdVO/AIhAEJhqSHbshe4MsGxa0r4yDFZzSILMck4p+0ZkdmIB9Fpszdr0olVf
-         sUjThcW1iCOljILg/8Ox+fMz3OKYEDNu0Q1nKIUoMVCqpCMPKgbG5HpwyHGlB6pZqRLt
-         MBosoquz6lvAMKdp5rAf3H0YcWMTEeSYHZb3V1uTbzQSqz9KBE+qFtfeIAPO2KCeO8y1
-         09Fg==
-X-Gm-Message-State: APjAAAXYPieEMdaDO9VR5rUFjJpQUQeYggL+eZvsEXc6Y7pa776BS3ue
-        V972yU2A1pdF5Pv0oOgAKT3TbFUqIr8Sw0VssOHB+w==
-X-Google-Smtp-Source: APXvYqyqHiyH4AeBft1evepIQq8xBjLJiWFn//O/FH36CylnD2Em3MeZL1D22OC+4X2lB0bbci0VypEz679vdXG/w5Q=
-X-Received: by 2002:a2e:88ce:: with SMTP id a14mr18017256ljk.122.1558023704266;
- Thu, 16 May 2019 09:21:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190515134731.12611-1-krzesimir@kinvolk.io> <20190515134731.12611-3-krzesimir@kinvolk.io>
- <20190515144537.57f559e7@cakuba.netronome.com> <CAGGp+cGN+YYVjJee5ba84HstSrHGurBvwmKmzNsFRvb344Df3A@mail.gmail.com>
- <20190516085035.3cdb0ae6@cakuba.netronome.com>
-In-Reply-To: <20190516085035.3cdb0ae6@cakuba.netronome.com>
-From:   Krzesimir Nowak <krzesimir@kinvolk.io>
-Date:   Thu, 16 May 2019 18:21:32 +0200
-Message-ID: <CAGGp+cEFxzbH-8vnSAK3sZkM-u3WN4HGnkYvhFwBp85yVtD7Xg@mail.gmail.com>
-Subject: Re: [PATCH bpf v1 2/3] selftests/bpf: Print a message when tester
- could not run a program
-To:     Jakub Kicinski <jakub.kicinski@netronome.com>
-Cc:     bpf@vger.kernel.org,
-        =?UTF-8?Q?Iago_L=C3=B3pez_Galeiras?= <iago@kinvolk.io>,
-        "Alban Crequy (Kinvolk)" <alban@kinvolk.io>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrey Ignatov <rdna@fb.com>, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=VRRoQgT2pSAeSBNdY+Ic0qvRHWDT7jPstuRbjVm+VUM=;
+        b=YgAYSm44lIv1CfZeorQFiw7fG0tfL1MxQXBMEFahXbeJHnno7Zz0IQd46SrFjK1M9w
+         kB5ht3M7fSy4wHs4dd4oIVDgj+HJJmkCbtUwwk/trzRNygLR2ym7a1UdEjnEcVVdMnVV
+         WeGhMGhamZ/TwoXO5wOxEbH9kk3G8SLPqzHl3DjCJc1Ww5AZ3uaO+fEaGciL0IWqrRUT
+         D40mmSOaI1kvr7ObC6gtM7dUxVjjvcT9+pnvT1P+H6v1GRAUHWFifa8RMSAL7fI+i5Ik
+         yN4uWCtMxk9J+hM1YNDLtTsM9985zrdOFeIYKULXebvAYniQ5NrDjSkWZw8rFZ+h2oo0
+         L9uA==
+X-Gm-Message-State: APjAAAWj1S8lNs79HuA4smtUG9WE7kefmaC6F3j0XlRhE3hDhuHlzf3l
+        +UGCHHVffbPFZyocXo2+d/732Tk=
+X-Google-Smtp-Source: APXvYqw/lUesacHjsLEtrBm64TCjuF4CLaab6gxB1pVwoRiIsAF9wdNtMabD+bf5c5yHMoHzMb+z15k=
+X-Received: by 2002:aca:5785:: with SMTP id l127mr10150621oib.48.1558025220100;
+ Thu, 16 May 2019 09:47:00 -0700 (PDT)
+Date:   Thu, 16 May 2019 09:46:57 -0700
+Message-Id: <20190516164657.225320-1-sdf@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.21.0.1020.gf2820cf01a-goog
+Subject: [PATCH bpf] selftests/bpf: add test_sysctl and map_tests/tests.h to .gitignore
+From:   Stanislav Fomichev <sdf@google.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
+        Stanislav Fomichev <sdf@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, May 16, 2019 at 5:51 PM Jakub Kicinski
-<jakub.kicinski@netronome.com> wrote:
->
-> On Thu, 16 May 2019 11:29:39 +0200, Krzesimir Nowak wrote:
-> > > > diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/te=
-sting/selftests/bpf/test_verifier.c
-> > > > index ccd896b98cac..bf0da03f593b 100644
-> > > > --- a/tools/testing/selftests/bpf/test_verifier.c
-> > > > +++ b/tools/testing/selftests/bpf/test_verifier.c
-> > > > @@ -825,11 +825,20 @@ static int do_prog_test_run(int fd_prog, bool=
- unpriv, uint32_t expected_val,
-> > > >                               tmp, &size_tmp, &retval, NULL);
-> > > >       if (unpriv)
-> > > >               set_admin(false);
-> > > > -     if (err && errno !=3D 524/*ENOTSUPP*/ && errno !=3D EPERM) {
-> > > > -             printf("Unexpected bpf_prog_test_run error ");
-> > > > -             return err;
-> > > > +     if (err) {
-> > > > +             switch (errno) {
-> > > > +             case 524/*ENOTSUPP*/:
-> > > > +                     printf("Did not run the program (not supporte=
-d) ");
-> > > > +                     return 0;
-> > > > +             case EPERM:
-> > > > +                     printf("Did not run the program (no permissio=
-n) ");
-> > > > +                     return 0;
-> > >
-> > > Perhaps use strerror(errno)?
-> >
-> > As I said in the commit message, I open-coded those messages because
-> > strerror for ENOTSUPP returns "Unknown error 524".
->
-> Ah, sorry, missed that.  I wonder if that's something worth addressing
-> in libc, since the BPF subsystem uses ENOTSUPP a lot.
+Missing files are:
+* tools/testing/selftests/bpf/map_tests/tests.h - autogenerated
+* tools/testing/selftests/bpf/test_sysctl - binary
 
-The "not supported" errno situation seems to be a mess. There is an
-ENOTSUP define in libc. ENOTSUP is usually defined to be EOPNOTSUPP
-(taken from kernel), which in turn seems to have a different value
-(95) than kernel's ENOTSUPP (524). Adding ENOTSUPP (with two Ps) to
-libc would only add to the confusion. So it's kind of meh and I guess
-people just moved on with workarounds.
+Fixes: 51a0e301a563 ("bpf: Add BPF_MAP_TYPE_SK_STORAGE test to test_maps")
+Fixes: 1f5fa9ab6e2e ("selftests/bpf: Test BPF_CGROUP_SYSCTL")
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
+---
+ tools/testing/selftests/bpf/.gitignore           | 1 +
+ tools/testing/selftests/bpf/map_tests/.gitignore | 1 +
+ 2 files changed, 2 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/map_tests/.gitignore
 
---=20
-Kinvolk GmbH | Adalbertstr.6a, 10999 Berlin | tel: +491755589364
-Gesch=C3=A4ftsf=C3=BChrer/Directors: Alban Crequy, Chris K=C3=BChl, Iago L=
-=C3=B3pez Galeiras
-Registergericht/Court of registration: Amtsgericht Charlottenburg
-Registernummer/Registration number: HRB 171414 B
-Ust-ID-Nummer/VAT ID number: DE302207000
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+index a877803e4ba8..dd5d69529382 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -31,6 +31,7 @@ test_section_names
+ test_tcpnotify_user
+ test_libbpf
+ test_tcp_check_syncookie_user
++test_sysctl
+ alu32
+ libbpf.pc
+ libbpf.so.*
+diff --git a/tools/testing/selftests/bpf/map_tests/.gitignore b/tools/testing/selftests/bpf/map_tests/.gitignore
+new file mode 100644
+index 000000000000..45984a364647
+--- /dev/null
++++ b/tools/testing/selftests/bpf/map_tests/.gitignore
+@@ -0,0 +1 @@
++tests.h
+-- 
+2.21.0.1020.gf2820cf01a-goog
+
