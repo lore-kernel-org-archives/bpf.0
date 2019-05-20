@@ -1,91 +1,119 @@
-Return-Path: <SRS0=ys+a=TT=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=HgPz=TU=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A39C8C04AB4
-	for <bpf@archiver.kernel.org>; Sun, 19 May 2019 18:53:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D81FCC04AAF
+	for <bpf@archiver.kernel.org>; Mon, 20 May 2019 03:54:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6213E20644
-	for <bpf@archiver.kernel.org>; Sun, 19 May 2019 18:53:03 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=networkplumber-org.20150623.gappssmtp.com header.i=@networkplumber-org.20150623.gappssmtp.com header.b="KOqSfn2T"
+	by mail.kernel.org (Postfix) with ESMTP id B341520851
+	for <bpf@archiver.kernel.org>; Mon, 20 May 2019 03:54:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727319AbfESSxD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 19 May 2019 14:53:03 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:37077 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727007AbfESSxD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 19 May 2019 14:53:03 -0400
-Received: by mail-pg1-f196.google.com with SMTP id n27so3081058pgm.4
-        for <bpf@vger.kernel.org>; Sun, 19 May 2019 11:53:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=snVSccL/g5/3VjQbFQWWeEdO0X3Tn7Z02WtSfT8gC4E=;
-        b=KOqSfn2TEcn7I+rykidhylNFj80cMmM6u+725tV03qqaTVSqWAcs7Q0TGCaLSXt19W
-         nSMQQ5yJZk+aQWReTQTtHVOvSL62pNptRpvv5YlbrwRLD9Di7zBXYwNmONPVvef/gDNS
-         qCpnpgMDdQXFWLQ6TC9be80V+e7U9oj8t22sGsMroeN+UcjftDWFjeFHOnjKoLTqdHZf
-         B+tQwV+CWWz+2NCz0nHtzgU67fkHOzHbWn3i949TErIgvS9K/4/X3w6rCsde6wFqB/3T
-         0+i3ZNHUSVWqSjCCbdAulqoiaK20oMnz+bxKk6CCDajueYOJNWqjQKqH4/q2Y0Djx1JZ
-         3FoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=snVSccL/g5/3VjQbFQWWeEdO0X3Tn7Z02WtSfT8gC4E=;
-        b=GzjnGocfH+RA7pi/s3WGSFi1uiOhAuuldBiLRGP2Gez2/IF9Zw4F+dLQ0V1dfZzCzC
-         te3GxKNNt9K+u+Wfu4jX1LyCuMdvu+g9+vAes+H6YWMjNkonO1NUOvxOr/CgeG2CBLQ+
-         nIYQMAy3D9YEzo/r3WWRPzitiiqskXh5zdTkuWFqxf1bRf/3mkfOqj0U2cHv+7HGBOMb
-         UVi75ZhNrKc/2H0jspGddVVEENc7f3n2mAlOZfk8V5gZNz97su6rm/tFhHXgvpdVdirI
-         Is8k+hYLYEmUm3xCT8yFLeGufHM8V5lOAGMMzdTn7sLJMAUpSJnxCYAcF/Iza58imNxU
-         yffg==
-X-Gm-Message-State: APjAAAUjQs9zcboOg543KziAf5KZ/01szwd8LlCnc/XC9oK3CR4dfrnx
-        QhitiU8/8YpEKdfJ886H3ExELQ==
-X-Google-Smtp-Source: APXvYqyM1t20YTUzYTzVxR3DfuC+MZRju4hp7/a+q1wejy6bTEywFj6NDLWou73xRc7ZKAYzgwTS+w==
-X-Received: by 2002:a62:1a51:: with SMTP id a78mr70917175pfa.133.1558235449704;
-        Sat, 18 May 2019 20:10:49 -0700 (PDT)
-Received: from hermes.lan (204-195-22-127.wavecable.com. [204.195.22.127])
-        by smtp.gmail.com with ESMTPSA id s80sm39049604pfs.117.2019.05.18.20.10.48
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 18 May 2019 20:10:48 -0700 (PDT)
-From:   Stephen Hemminger <stephen@networkplumber.org>
-X-Google-Original-From: Stephen Hemminger <sthemmin@microsoft.com>
-To:     netdev@vger.kernel.org, davem@davemloft.net
-Cc:     xdp-newbies@vger.kernel.org, bpf@vger.kernel.org,
-        Stephen Hemminger <sthemmin@microsoft.com>
-Subject: [PATCH v2 net 0/2] XDP generic related fixes
-Date:   Sat, 18 May 2019 20:10:44 -0700
-Message-Id: <20190519031046.4049-1-sthemmin@microsoft.com>
-X-Mailer: git-send-email 2.20.1
+        id S1727733AbfETDyn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 19 May 2019 23:54:43 -0400
+Received: from mga06.intel.com ([134.134.136.31]:57644 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727057AbfETDyn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 19 May 2019 23:54:43 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 May 2019 20:54:41 -0700
+X-ExtLoop1: 1
+Received: from orsmsx105.amr.corp.intel.com ([10.22.225.132])
+  by FMSMGA003.fm.intel.com with ESMTP; 19 May 2019 20:54:41 -0700
+Received: from orsmsx157.amr.corp.intel.com (10.22.240.23) by
+ ORSMSX105.amr.corp.intel.com (10.22.225.132) with Microsoft SMTP Server (TLS)
+ id 14.3.408.0; Sun, 19 May 2019 20:54:40 -0700
+Received: from orsmsx112.amr.corp.intel.com ([169.254.3.79]) by
+ ORSMSX157.amr.corp.intel.com ([169.254.9.37]) with mapi id 14.03.0415.000;
+ Sun, 19 May 2019 20:54:40 -0700
+From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+To:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+CC:     "bp@alien8.de" <bp@alien8.de>, "mroos@linux.ee" <mroos@linux.ee>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "namit@vmware.com" <namit@vmware.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "mingo@redhat.com" <mingo@redhat.com>
+Subject: Re: [PATCH 1/1] vmalloc: Fix issues with flush flag
+Thread-Topic: [PATCH 1/1] vmalloc: Fix issues with flush flag
+Thread-Index: AQHVDPQ89Mk/2ntUo0SzbjfhLaw0JaZz2GuA
+Date:   Mon, 20 May 2019 03:54:40 +0000
+Message-ID: <371f4eab57d4fa919b33cf4c3b6e5e0eb9eabc20.camel@intel.com>
+References: <20190517210123.5702-1-rick.p.edgecombe@intel.com>
+         <20190517210123.5702-2-rick.p.edgecombe@intel.com>
+In-Reply-To: <20190517210123.5702-2-rick.p.edgecombe@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.30.1 (3.30.1-1.fc29) 
+x-originating-ip: [10.254.94.129]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <91FB6DBB8B06D942BDD652676B3D5840@intel.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This set of patches came about while investigating XDP
-generic on Azure. The split brain nature of the accelerated
-networking exposed issues with the stack device model.
-
-The real fix is in the second patch which is a redo
-of earlier patch from Jason Wang.
-
-v2 - hold off the comment fixes for net-next
-
-Stephen Hemminger (2):
-  netvsc: unshare skb in VF rx handler
-  net: core: generic XDP support for stacked device
-
- drivers/net/hyperv/netvsc_drv.c |  6 ++++++
- net/core/dev.c                  | 10 ++++++++++
- 2 files changed, 16 insertions(+)
-
--- 
-2.20.1
-
+SGksDQoNCkFmdGVyIGludmVzdGlnYXRpbmcgdGhpcyBtb3JlLCBJIGFtIG5vdCBwb3NpdGl2ZSB3
+aHkgdGhpcyBmaXhlcyB0aGUNCmlzc3VlIG9uIHNwYXJjLiBJIHdpbGwgY29udGludWUgdG8gaW52
+ZXN0aWdhdGUgYXMgYmVzdCBJIGNhbiwgYnV0IHdvdWxkDQpsaWtlIHRvIHJlcXVlc3QgaGVscCBm
+cm9tIHNvbWUgc3BhcmMgZXhwZXJ0cyBvbiBldmFsdWF0aW5nIG15IGxpbmUgb2YNCnRoaW5raW5n
+LiBJIHRoaW5rIHRoZSBjaGFuZ2VzIGluIHRoaXMgcGF0Y2ggYXJlIHN0aWxsIHZlcnkgd29ydGh3
+aGlsZQ0KZ2VuZXJhbGx5IHRob3VnaC4NCg0KDQpCZXNpZGVzIGZpeGluZyB0aGUgc3BhcmMgaXNz
+dWU6DQoNCjEuIFRoZSBmaXhlcyBmb3IgdGhlIGNhbGN1bGF0aW9uIG9mIHRoZSBkaXJlY3QgbWFw
+IGFkZHJlc3MgcmFuZ2UgYXJlDQppbXBvcnRhbnQgb24geDg2IGluIGNhc2UgYSBSTyBkaXJlY3Qg
+bWFwIGFsaWFzIGV2ZXIgZ2V0cyBsb2FkZWQgaW50bw0KdGhlIFRMQi4gVGhpcyBzaG91bGRuJ3Qg
+bm9ybWFsbHkgaGFwcGVuLCBidXQgaXQgY291bGQgY2F1c2UgdGhlDQpwZXJtaXNzaW9ucyB0byBu
+b3QgZ2V0IHJlc2V0IG9uIHRoZSBkaXJlY3QgbWFwIGFsaWFzLCBhbmQgdGhlbiB0aGUgcGFnZQ0K
+d291bGQgcmV0dXJuIGZyb20gdGhlIHBhZ2UgYWxsb2NhdG9yIHRvIHNvbWUgb3RoZXIgY29tcG9u
+ZW50IGFzIFJPIGFuZA0KY2F1c2UgYSBjcmFzaC4gVGhpcyB3YXMgbW9zdGx5IGJyb2tlbiBpbXBs
+ZW1lbnRpbmcgYSBzdHlsZSBzdWdnZXN0aW9uDQpsYXRlIGluIHRoZSBkZXZlbG9wbWVudC4gQXMg
+YmVzdCBJIGNhbiB0ZWxsLCBpdCBzaG91bGRuJ3QgaGF2ZSBhbnkNCmVmZmVjdCBvbiBzcGFyYy4N
+Cg0KMi4gU2ltcGx5IGZsdXNoaW5nIHRoZSBUTEIgaW5zdGVhZCBvZiB0aGUgd2hvbGUgdm1fdW5t
+YXBfYWxpYXMoKQ0Kb3BlcmF0aW9uIG1ha2VzIHRoZSBmcmVlcyBmYXN0ZXIgYW5kIHB1c2hlcyB0
+aGUgaGVhdnkgd29yayB0byBoYXBwZW4gb24NCmFsbG9jYXRpb24gd2hlcmUgaXQgd291bGQgYmUg
+bW9yZSBleHBlY3RlZC4gdm1fdW5tYXBfYWxpYXMoKSB0YWtlcyBzb21lDQpsb2NrcyBpbmNsdWRp
+bmcgYSBsb25nIGhvbGQgb2Ygdm1hcF9wdXJnZV9sb2NrLCB3aGljaCB3aWxsIG1ha2UgYWxsDQpv
+dGhlciBWTV9GTFVTSF9SRVNFVF9QRVJNUyB2ZnJlZXMgd2FpdCB3aGlsZSB0aGUgcHVyZ2Ugb3Bl
+cmF0aW9uDQpoYXBwZW5zLg0KDQoNClRoZSBpc3N1ZSBvYnNlcnZlZCBvbiBhbiBVbHRyYVNwYXJj
+IElJSSBzeXN0ZW0gd2FzIGEgaGFuZyBvbiBib290LiBUaGUNCm9ubHkgc2lnbmlmaWNhbnQgZGlm
+ZmVyZW5jZSBJIGNhbiBmaW5kIGluIGhvdyBTcGFyYyB3b3JrcyBpbiB0aGlzIGFyZWENCmlzIHRo
+YXQgdGhlcmUgaXMgYWN0dWFsbHkgc3BlY2lhbCBvcHRpbWl6YXRpb24gaW4gdGhlIFRMQiBmbHVz
+aCBmb3INCmhhbmRsaW5nIHZtYWxsb2MgbGF6eSBwdXJnZSBvcGVyYXRpb25zLg0KDQpTb21lIGZp
+cm13YXJlIG1hcHBpbmdzIGxpdmUgYmV0d2VlbiB0aGUgbW9kdWxlcyBhbmQgdm1hbGxvYyByYW5n
+ZXMsIGFuZA0KaWYgdGhlaXIgdHJhbnNsYXRpb25zIGFyZSBmbHVzaGVkIGNhbiBjYXVzZSAiaGFy
+ZCBoYW5ncyBhbmQgY3Jhc2hlcw0KWzFdLiBBZGRpdGlvbmFsbHkgaW4gdGhlIG1peCwgInNwYXJj
+NjQga2VybmVsIGxlYXJucyBhYm91dA0Kb3BlbmZpcm13YXJlJ3MgZHluYW1pYyBtYXBwaW5ncyBp
+biB0aGlzIHJlZ2lvbiBlYXJseSBpbiB0aGUgYm9vdCwgYW5kDQp0aGVuIHNlcnZpY2VzIFRMQiBt
+aXNzZXMgaW4gdGhpcyBhcmVhIi5bMV0gVGhlIGZpcm13YXJlIHByb3RlY3Rpb24NCmxvZ2ljIHNl
+ZW1zIHRvIGJlIGluIHBsYWNlLCBob3dldmVyIGxhdGVyIGFub3RoZXIgY2hhbmdlIHdhcyBtYWRl
+IGluDQp0aGUgbG93ZXIgYXNtIHRvIGRvIGEgImZsdXNoIGFsbCIgaWYgdGhlIHJhbmdlIHdhcyBi
+aWcgZW5vdWdoIG9uIHRoaXMNCmNwdSBbMl0uIFdpdGggdGhlIGFkdmVudCBvZiB0aGUgY2hhbmdl
+IHRoaXMgcGF0Y2ggYWRkcmVzc2VzLCB0aGUgcHVyZ2UNCm9wZXJhdGlvbnMgd291bGQgYmUgaGFw
+cGVuaW5nIG11Y2ggZWFybGllciB0aGFuIGJlZm9yZSwgd2l0aCB0aGUgZmlyc3QNCnNwZWNpYWwg
+cGVybWlzc2lvbmVkIHZmcmVlLCBpbnN0ZWFkIG9mIGFmdGVyIHRoZSBtYWNoaW5lIGhhcyBiZWVu
+DQpydW5uaW5nIGZvciBzb21lIHRpbWUgYW5kIHRoZSB2bWFsbG9jIHNwYWNlcyBoYWQgYmVjb21l
+IGZyYWdtZW50ZWQuDQoNClNvIG15IGJlc3QgdGhlb3J5IGlzIHRoYXQgdGhlIGhpc3Rvcnkgb2Yg
+dm1hbGxvYyBsYXp5IHB1cmdlcyBjYXVzaW5nDQpoYW5ncyBvbiB0aGUgc3BhcmMgaGFzIGNvbWUg
+aW50byBwbGF5IGhlcmUgc29tZWhvdywgdHJpZ2dlcmVkIGJ5IHRoYXQNCndlIHdlcmUgZG9pbmcg
+dGhlIHB1cmdlcyBtdWNoIGVhcmxpZXIuIElmIGl0IHdhcyBzb21ldGhpbmcgbGlrZSB0aGlzLA0K
+dGhlIGZhY3QgdGhhdCB3ZSBpbnN0ZWFkIG9ubHkgZmx1c2ggdGhlIHNtYWxsIGFsbG9jYXRpb24g
+aXRzZWxmIG9uDQpzcGFyYyBhZnRlciB0aGlzIHBhdGNoIHdvdWxkIGJlIHRoZSByZWFzb24gd2h5
+IGl0IGZpeGVzIGl0Lg0KDQpBZG1pdHRlZGx5LCB0aGVyZSBhcmUgc29tZSBtaXNzaW5nIHBpZWNl
+cyBpbiB0aGUgdGhlb3J5LiBJZiB0aGVyZSBhcmUNCmFueSBzcGFyYyBhcmNoaXRlY3R1cmUgZXhw
+ZXJ0cyB0aGF0IGNhbiBoZWxwIGVubGlnaHRlbiBtZSBpZiB0aGlzDQpzb3VuZHMgcmVhc29uYWJs
+ZSBhdCBhbGwgSSB3b3VsZCByZWFsbHkgYXBwcmVjaWF0ZSBpdC4NCg0KVGhhbmtzLA0KDQpSaWNr
+DQoNClsxXSBodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3BhdGNoLzM3NjUyMy8NClsyXSBo
+dHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3BhdGNoLzY4Nzc4MC8gDQoNCg==
