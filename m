@@ -2,119 +2,97 @@ Return-Path: <SRS0=hCIb=TV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBCE1C072B5
-	for <bpf@archiver.kernel.org>; Tue, 21 May 2019 20:42:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71F76C072B5
+	for <bpf@archiver.kernel.org>; Tue, 21 May 2019 20:48:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9D9FC217D7
-	for <bpf@archiver.kernel.org>; Tue, 21 May 2019 20:42:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F7AB2182B
+	for <bpf@archiver.kernel.org>; Tue, 21 May 2019 20:48:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="O8kjLWp4"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="hi11wg5d"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727493AbfEUUmc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 May 2019 16:42:32 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:59260 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726907AbfEUUmc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 21 May 2019 16:42:32 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4LKdJWv008336;
-        Tue, 21 May 2019 20:41:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id :
- mime-version : date : from : to : cc : subject : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2018-07-02;
- bh=O+tJxqlUjzABw3lOkORNAtDMSCN0ydyzH7rxMfH7MEg=;
- b=O8kjLWp4wdQwI/AUeRdGw/paIxJqB1nRHg2QYhKWKVeFWuKMIQNmzfPbmtjEFHMY/SZW
- fhzu/bg2Q9lBd6fO+JvlCvEmF6Wn6yrzJjmc02/0JQmmPkKc5pn8dbCnbv2wQzefV4wk
- MIyV+boNfBW7mB5qEqvEiddzVVND4qSLe7GKqE/aYjEwpfkB9NnrBLeWFIjvh4LyZxbu
- g3S2o345fper3ass/alVCmnacg7aODmPdhD22xRkPMaXwG2BPgVBbuhCIzV3WJW2Fn3P
- gzOcaBawCGRMYOFu4c2sqTOvfCXc2IbjWrNvHpF9t+a+lnQtgPYi8ec4Bph/pAgFNjmm Rg== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2130.oracle.com with ESMTP id 2sj7jdr7p9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 May 2019 20:41:47 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4LKcvXa078542;
-        Tue, 21 May 2019 20:39:46 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3030.oracle.com with ESMTP id 2skudbknqk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 May 2019 20:39:46 +0000
-Received: from userp3030.oracle.com (userp3030.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x4LKdjLl080451;
-        Tue, 21 May 2019 20:39:45 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 2skudbknqd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 May 2019 20:39:45 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x4LKdiiu023260;
-        Tue, 21 May 2019 20:39:44 GMT
-Message-Id: <201905212039.x4LKdiiu023260@aserv0121.oracle.com>
-Received: from localhost (/10.159.211.99) by default (Oracle Beehive Gateway
- v4.0) with ESMTP ; Tue, 21 May 2019 20:39:44 +0000
+        id S1727362AbfEUUsV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 May 2019 16:48:21 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:48362 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727222AbfEUUsU (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 21 May 2019 16:48:20 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4LKlPk0030378
+        for <bpf@vger.kernel.org>; Tue, 21 May 2019 13:48:19 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=gXtQ5o2xO00nWLwMn6/HQC5ELcxFd8dno/KGqwEyWn4=;
+ b=hi11wg5dkOis8h1p5ZcRZQDM4LnYRuRMbWj9yu/hc3Pp+DO2keB416WzwuKcAwB3oUmt
+ P0CDVW+h2iPceAUyITp9Vy8vRGvy5/Xol/Vg+w27VfDNvU9jf/e/lLQSfuwu9kmZHD9p
+ 2PhqNSepVrj0Hshx5eHDhZtKJh3RPacyEoc= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2smb4mjv5d-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 21 May 2019 13:48:19 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Tue, 21 May 2019 13:48:18 -0700
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id C8DF762E2BFE; Tue, 21 May 2019 13:48:16 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Song Liu <songliubraving@fb.com>
+Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
+To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+CC:     <kernel-team@fb.com>, Song Liu <songliubraving@fb.com>,
+        Kairui Song <kasong@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH] perf/x86: always include regs->ip in callchain
+Date:   Tue, 21 May 2019 13:48:13 -0700
+Message-ID: <20190521204813.1167784-1-songliubraving@fb.com>
+X-Mailer: git-send-email 2.17.1
+X-FB-Internal: Safe
 MIME-Version: 1.0
-Date:   Tue, 21 May 2019 20:39:44 +0000 (UTC)
-From:   Kris Van Hees <kris.van.hees@oracle.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        dtrace-devel@oss.oracle.com, linux-kernel@vger.kernel.org
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org, acme@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net
-Subject: [RFC PATCH 05/11] trace: update Kconfig and Makefile to include
- DTrace
-In-Reply-To: <201905202347.x4KNl0cs030532@aserv0121.oracle.com>
 Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9264 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=971 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1905210129
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-21_05:,,
+ signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-FB-Internal: Safe
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This commit adds the dtrace implementation in kernel/trace/dtrace to
-the trace Kconfig and Makefile.
+Commit d15d356887e7 removes regs->ip for !perf_hw_regs(regs) case. This
+breaks tests like test_stacktrace_map from selftests/bpf/tests_prog.
 
-Signed-off-by: Kris Van Hees <kris.van.hees@oracle.com>
-Reviewed-by: Nick Alcock <nick.alcock@oracle.com>
+This patch adds regs->ip back.
+
+Fixes: d15d356887e7 ("perf/x86: Make perf callchains work without CONFIG_FRAME_POINTER")
+Cc: Kairui Song <kasong@redhat.com>
+Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
- kernel/trace/Kconfig  | 2 ++
- kernel/trace/Makefile | 1 +
- 2 files changed, 3 insertions(+)
+ arch/x86/events/core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-index 5d965cef6c77..59c3bdfbaffc 100644
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@ -786,6 +786,8 @@ config GCOV_PROFILE_FTRACE
- 	  Note that on a kernel compiled with this config, ftrace will
- 	  run significantly slower.
+diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+index f315425d8468..7b8a9eb4d5fd 100644
+--- a/arch/x86/events/core.c
++++ b/arch/x86/events/core.c
+@@ -2402,9 +2402,9 @@ perf_callchain_kernel(struct perf_callchain_entry_ctx *entry, struct pt_regs *re
+ 		return;
+ 	}
  
-+source "kernel/trace/dtrace/Kconfig"
-+
- endif # FTRACE
- 
- endif # TRACING_SUPPORT
-diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
-index c2b2148bb1d2..e643c4eac8f6 100644
---- a/kernel/trace/Makefile
-+++ b/kernel/trace/Makefile
-@@ -82,6 +82,7 @@ endif
- obj-$(CONFIG_DYNAMIC_EVENTS) += trace_dynevent.o
- obj-$(CONFIG_PROBE_EVENTS) += trace_probe.o
- obj-$(CONFIG_UPROBE_EVENTS) += trace_uprobe.o
-+obj-$(CONFIG_DTRACE) += dtrace/
- 
- obj-$(CONFIG_TRACEPOINT_BENCHMARK) += trace_benchmark.o
- 
++	if (perf_callchain_store(entry, regs->ip))
++		return;
+ 	if (perf_hw_regs(regs)) {
+-		if (perf_callchain_store(entry, regs->ip))
+-			return;
+ 		unwind_start(&state, current, regs, NULL);
+ 	} else {
+ 		unwind_start(&state, current, NULL, (void *)regs->sp);
 -- 
-2.20.1
+2.17.1
 
