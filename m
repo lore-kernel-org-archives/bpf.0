@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65C8DC282DD
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 18:56:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94BC7C282DD
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 18:56:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 324A021773
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 18:56:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 64F642173C
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 18:56:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="gaNUG1uw"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="zhE46Ev3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728734AbfEVS4O (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 May 2019 14:56:14 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:42177 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729771AbfEVS4J (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 May 2019 14:56:09 -0400
-Received: by mail-wr1-f68.google.com with SMTP id l2so3465472wrb.9
-        for <bpf@vger.kernel.org>; Wed, 22 May 2019 11:56:07 -0700 (PDT)
+        id S1729771AbfEVS4P (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 May 2019 14:56:15 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:46689 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729761AbfEVS4G (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 May 2019 14:56:06 -0400
+Received: by mail-wr1-f65.google.com with SMTP id r7so3447722wrr.13
+        for <bpf@vger.kernel.org>; Wed, 22 May 2019 11:56:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=P5M/sOCzka2qT+p4DDAjrnnn2G6z55p/ok/4haADAMQ=;
-        b=gaNUG1uwtbvPobVRRWgOlPAFobYj6VzGJQs+RLTUsJKKLvXwKcydEzeJWuBbfYXkWp
-         EyAKl+fB6RugluFPETCrJYH8CPXMSUL3vXpLFXjSwLVuv9UF35tZUOOczkqAH2K365eb
-         RkygOBmzmtNVmL/sAN8dqKiyITjk5g0ie3TFZwyNF4omIDJSPoelADjY5Tx7F3iKbnLB
-         ONd57cPoDEQIFAAuxsK7rny+GXESx7DWPI8lalORoM29ItIUFA2e7bYti9IWc4PnazzJ
-         C9vr0PlIMSTVk7RU/ZK0yxSclDfeSNsJqLAn8g/Y8VnPXJCB+SQTr5k/w5GKi+IJ5br8
-         CZeg==
+        bh=t5QoTAKj6gWs22LRKizXuguuwC9VDKWN26JI1/YClLc=;
+        b=zhE46Ev3EijwN/xMvO0zTtCmfJgDHsKCXoaNNJbQIKXtyuhsZVVhAEIwJH6Enfzk0e
+         kxXpur5SgZGw0Ds0TiiylQgxnVx2Y0RuGA1YIvFj9wI0AIuZvUIeAyVXCBoJB9ubauRG
+         s4DkSTxUCRKwtdU3CGGVhTZxN7xa4Rck77hCokHThqKt7kl+2jCxhUHetqzbRncNucvG
+         WVuVaSnSwuo7C3yY7UiwR41gbJX20pF1THh9zASUH4DczlusBvbA2VD0Kjmv7WQNvUPw
+         otVO9OuKk+JRIZeqBGsDaCBbIecgVGVV9sbthzkMRLOgUm5MPAgJHhMZ4y0+EZETao0E
+         c5Nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=P5M/sOCzka2qT+p4DDAjrnnn2G6z55p/ok/4haADAMQ=;
-        b=ZfMMh+NiZMCc4PRvJXQmhYVhs9072FY3BNVsjb90JKcRLFqaPtfX7ctS2qRo9Xg9S2
-         zNLOUgVUzoQr6Sfzt/Cq1VSMXJ9F3OzAVXwJDlEEOei4T3MEoedQJkhSMOeEeeghJBiQ
-         mB7FwpkNfJMwiw9l67QOC4Bf3BsJkjlsdDEa0fuTe9CneMLghni4u1KaisSjSXTWYF6U
-         KkF9j4M3PJJ9ptBJSoHLBQ2PQR4eSuQbFZAd2jasHsIATkfSXU+28L+q/xH5X6e2JdZa
-         I+HwSS0jCw7iDcQCqPAX3XTQwh5TqqLy3M94fDQMCQR4NK95X1utATp2z9JOM6VgLNT/
-         ofDg==
-X-Gm-Message-State: APjAAAWtKBynfEllVoQb/zCvX2qFbJk+4UaMMaHxbjsvHvbRH9I7vmEp
-        CsWFoq3PCtXoxGegiN4WxR2FmQ==
-X-Google-Smtp-Source: APXvYqydkqWWbfq5UvfMurrIgg5fvMJYiu4JrQ6eEGDH9L3tDKczRFK1zOBFPzhpY9RzJ9i14NNXOA==
-X-Received: by 2002:adf:dc8e:: with SMTP id r14mr40630016wrj.121.1558551366756;
-        Wed, 22 May 2019 11:56:06 -0700 (PDT)
+        bh=t5QoTAKj6gWs22LRKizXuguuwC9VDKWN26JI1/YClLc=;
+        b=jWcgF0d2fl5HI5xqCX5CyoiBls+cR4m8/Ye5DmlvJ9TlKp+w/vE5sf0TsnnFBEEQhJ
+         nqc7ZJW2WhMPhlMEXr/Bzj3fYc71lBfwOqTp5Lp9gNGNcqAanbfTcq/LzTCEhFqCfSsE
+         yYeMZ6JkqDDpM4EvAn/u65VzlVxyyFUPCe07v5NKg8feGaky4aZiD45WhXfPr1bEyf/U
+         Gi6Cc1pCw9a4CYyumacOG8Fibiz6NVDszxAz7zE79Hxe2qzU/L30H+e3MPqgJKbQhyHk
+         CWIkvsMgRhrzIZNwqlF2UlwL74lh1oB0xtbhT+5WDz3yVrC6swA5FoTxhy983ij5Tsj/
+         ZpcQ==
+X-Gm-Message-State: APjAAAVT69Mwh7T2CaZ61+j0ZOOpr7KoKxIKDttGOHKLYEbdwWKmmJqt
+        Kda5ZHgFegiG8345VqJyW0wH4A==
+X-Google-Smtp-Source: APXvYqwJXOebFS9ab9YqK1iGTiKnylV5akLFZs3YBFLF5X28IR6Z5tzwzHYo1N51ZHiIHF1Vc2dsZw==
+X-Received: by 2002:a5d:4946:: with SMTP id r6mr5106755wrs.310.1558551364661;
+        Wed, 22 May 2019 11:56:04 -0700 (PDT)
 Received: from cbtest28.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id t12sm16328801wro.2.2019.05.22.11.56.05
+        by smtp.gmail.com with ESMTPSA id t12sm16328801wro.2.2019.05.22.11.56.03
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 22 May 2019 11:56:06 -0700 (PDT)
+        Wed, 22 May 2019 11:56:04 -0700 (PDT)
 From:   Jiong Wang <jiong.wang@netronome.com>
 To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
@@ -62,9 +62,9 @@ Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         sandipan@linux.ibm.com, schwidefsky@de.ibm.com,
         heiko.carstens@de.ibm.com, jakub.kicinski@netronome.com,
         Jiong Wang <jiong.wang@netronome.com>
-Subject: [PATCH v7 bpf-next 16/16] nfp: bpf: eliminate zero extension code-gen
-Date:   Wed, 22 May 2019 19:55:12 +0100
-Message-Id: <1558551312-17081-17-git-send-email-jiong.wang@netronome.com>
+Subject: [PATCH v7 bpf-next 14/16] x32: bpf: eliminate zero extension code-gen
+Date:   Wed, 22 May 2019 19:55:10 +0100
+Message-Id: <1558551312-17081-15-git-send-email-jiong.wang@netronome.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1558551312-17081-1-git-send-email-jiong.wang@netronome.com>
 References: <1558551312-17081-1-git-send-email-jiong.wang@netronome.com>
@@ -73,425 +73,252 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch eliminate zero extension code-gen for instructions including
-both alu and load/store. The only exception is for ctx load, because
-offload target doesn't go through host ctx convert logic so we do
-customized load and ignores zext flag set by verifier.
-
-Cc: Jakub Kicinski <jakub.kicinski@netronome.com>
-Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+Cc: Wang YanQing <udknight@gmail.com>
+Tested-by: Wang YanQing <udknight@gmail.com>
 Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
 ---
- drivers/net/ethernet/netronome/nfp/bpf/jit.c      | 115 +++++++++++++---------
- drivers/net/ethernet/netronome/nfp/bpf/main.h     |   2 +
- drivers/net/ethernet/netronome/nfp/bpf/verifier.c |  12 +++
- 3 files changed, 81 insertions(+), 48 deletions(-)
+ arch/x86/net/bpf_jit_comp32.c | 83 +++++++++++++++++++++++++++++--------------
+ 1 file changed, 56 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/net/ethernet/netronome/nfp/bpf/jit.c b/drivers/net/ethernet/netronome/nfp/bpf/jit.c
-index d4bf0e6..4054b70 100644
---- a/drivers/net/ethernet/netronome/nfp/bpf/jit.c
-+++ b/drivers/net/ethernet/netronome/nfp/bpf/jit.c
-@@ -623,6 +623,13 @@ static void wrp_immed(struct nfp_prog *nfp_prog, swreg dst, u32 imm)
+diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
+index b29e82f..133433d 100644
+--- a/arch/x86/net/bpf_jit_comp32.c
++++ b/arch/x86/net/bpf_jit_comp32.c
+@@ -253,13 +253,14 @@ static inline void emit_ia32_mov_r(const u8 dst, const u8 src, bool dstk,
+ /* dst = src */
+ static inline void emit_ia32_mov_r64(const bool is64, const u8 dst[],
+ 				     const u8 src[], bool dstk,
+-				     bool sstk, u8 **pprog)
++				     bool sstk, u8 **pprog,
++				     const struct bpf_prog_aux *aux)
+ {
+ 	emit_ia32_mov_r(dst_lo, src_lo, dstk, sstk, pprog);
+ 	if (is64)
+ 		/* complete 8 byte move */
+ 		emit_ia32_mov_r(dst_hi, src_hi, dstk, sstk, pprog);
+-	else
++	else if (!aux->verifier_zext)
+ 		/* zero out high 4 bytes */
+ 		emit_ia32_mov_i(dst_hi, 0, dstk, pprog);
+ }
+@@ -313,7 +314,8 @@ static inline void emit_ia32_mul_r(const u8 dst, const u8 src, bool dstk,
  }
  
- static void
-+wrp_zext(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta, u8 dst)
+ static inline void emit_ia32_to_le_r64(const u8 dst[], s32 val,
+-					 bool dstk, u8 **pprog)
++					 bool dstk, u8 **pprog,
++					 const struct bpf_prog_aux *aux)
+ {
+ 	u8 *prog = *pprog;
+ 	int cnt = 0;
+@@ -334,12 +336,14 @@ static inline void emit_ia32_to_le_r64(const u8 dst[], s32 val,
+ 		 */
+ 		EMIT2(0x0F, 0xB7);
+ 		EMIT1(add_2reg(0xC0, dreg_lo, dreg_lo));
+-		/* xor dreg_hi,dreg_hi */
+-		EMIT2(0x33, add_2reg(0xC0, dreg_hi, dreg_hi));
++		if (!aux->verifier_zext)
++			/* xor dreg_hi,dreg_hi */
++			EMIT2(0x33, add_2reg(0xC0, dreg_hi, dreg_hi));
+ 		break;
+ 	case 32:
+-		/* xor dreg_hi,dreg_hi */
+-		EMIT2(0x33, add_2reg(0xC0, dreg_hi, dreg_hi));
++		if (!aux->verifier_zext)
++			/* xor dreg_hi,dreg_hi */
++			EMIT2(0x33, add_2reg(0xC0, dreg_hi, dreg_hi));
+ 		break;
+ 	case 64:
+ 		/* nop */
+@@ -358,7 +362,8 @@ static inline void emit_ia32_to_le_r64(const u8 dst[], s32 val,
+ }
+ 
+ static inline void emit_ia32_to_be_r64(const u8 dst[], s32 val,
+-				       bool dstk, u8 **pprog)
++				       bool dstk, u8 **pprog,
++				       const struct bpf_prog_aux *aux)
+ {
+ 	u8 *prog = *pprog;
+ 	int cnt = 0;
+@@ -380,16 +385,18 @@ static inline void emit_ia32_to_be_r64(const u8 dst[], s32 val,
+ 		EMIT2(0x0F, 0xB7);
+ 		EMIT1(add_2reg(0xC0, dreg_lo, dreg_lo));
+ 
+-		/* xor dreg_hi,dreg_hi */
+-		EMIT2(0x33, add_2reg(0xC0, dreg_hi, dreg_hi));
++		if (!aux->verifier_zext)
++			/* xor dreg_hi,dreg_hi */
++			EMIT2(0x33, add_2reg(0xC0, dreg_hi, dreg_hi));
+ 		break;
+ 	case 32:
+ 		/* Emit 'bswap eax' to swap lower 4 bytes */
+ 		EMIT1(0x0F);
+ 		EMIT1(add_1reg(0xC8, dreg_lo));
+ 
+-		/* xor dreg_hi,dreg_hi */
+-		EMIT2(0x33, add_2reg(0xC0, dreg_hi, dreg_hi));
++		if (!aux->verifier_zext)
++			/* xor dreg_hi,dreg_hi */
++			EMIT2(0x33, add_2reg(0xC0, dreg_hi, dreg_hi));
+ 		break;
+ 	case 64:
+ 		/* Emit 'bswap eax' to swap lower 4 bytes */
+@@ -569,7 +576,7 @@ static inline void emit_ia32_alu_r(const bool is64, const bool hi, const u8 op,
+ static inline void emit_ia32_alu_r64(const bool is64, const u8 op,
+ 				     const u8 dst[], const u8 src[],
+ 				     bool dstk,  bool sstk,
+-				     u8 **pprog)
++				     u8 **pprog, const struct bpf_prog_aux *aux)
+ {
+ 	u8 *prog = *pprog;
+ 
+@@ -577,7 +584,7 @@ static inline void emit_ia32_alu_r64(const bool is64, const u8 op,
+ 	if (is64)
+ 		emit_ia32_alu_r(is64, true, op, dst_hi, src_hi, dstk, sstk,
+ 				&prog);
+-	else
++	else if (!aux->verifier_zext)
+ 		emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
+ 	*pprog = prog;
+ }
+@@ -668,7 +675,8 @@ static inline void emit_ia32_alu_i(const bool is64, const bool hi, const u8 op,
+ /* ALU operation (64 bit) */
+ static inline void emit_ia32_alu_i64(const bool is64, const u8 op,
+ 				     const u8 dst[], const u32 val,
+-				     bool dstk, u8 **pprog)
++				     bool dstk, u8 **pprog,
++				     const struct bpf_prog_aux *aux)
+ {
+ 	u8 *prog = *pprog;
+ 	u32 hi = 0;
+@@ -679,7 +687,7 @@ static inline void emit_ia32_alu_i64(const bool is64, const u8 op,
+ 	emit_ia32_alu_i(is64, false, op, dst_lo, val, dstk, &prog);
+ 	if (is64)
+ 		emit_ia32_alu_i(is64, true, op, dst_hi, hi, dstk, &prog);
+-	else
++	else if (!aux->verifier_zext)
+ 		emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
+ 
+ 	*pprog = prog;
+@@ -1713,8 +1721,13 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 		case BPF_ALU64 | BPF_MOV | BPF_X:
+ 			switch (BPF_SRC(code)) {
+ 			case BPF_X:
+-				emit_ia32_mov_r64(is64, dst, src, dstk,
+-						  sstk, &prog);
++				if (imm32 == 1) {
++					/* Special mov32 for zext. */
++					emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
++					break;
++				}
++				emit_ia32_mov_r64(is64, dst, src, dstk, sstk,
++						  &prog, bpf_prog->aux);
+ 				break;
+ 			case BPF_K:
+ 				/* Sign-extend immediate value to dst reg */
+@@ -1754,11 +1767,13 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 			switch (BPF_SRC(code)) {
+ 			case BPF_X:
+ 				emit_ia32_alu_r64(is64, BPF_OP(code), dst,
+-						  src, dstk, sstk, &prog);
++						  src, dstk, sstk, &prog,
++						  bpf_prog->aux);
+ 				break;
+ 			case BPF_K:
+ 				emit_ia32_alu_i64(is64, BPF_OP(code), dst,
+-						  imm32, dstk, &prog);
++						  imm32, dstk, &prog,
++						  bpf_prog->aux);
+ 				break;
+ 			}
+ 			break;
+@@ -1777,7 +1792,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 						false, &prog);
+ 				break;
+ 			}
+-			emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
++			if (!bpf_prog->aux->verifier_zext)
++				emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
+ 			break;
+ 		case BPF_ALU | BPF_LSH | BPF_X:
+ 		case BPF_ALU | BPF_RSH | BPF_X:
+@@ -1797,7 +1813,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 						  &prog);
+ 				break;
+ 			}
+-			emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
++			if (!bpf_prog->aux->verifier_zext)
++				emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
+ 			break;
+ 		/* dst = dst / src(imm) */
+ 		/* dst = dst % src(imm) */
+@@ -1819,7 +1836,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 						    &prog);
+ 				break;
+ 			}
+-			emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
++			if (!bpf_prog->aux->verifier_zext)
++				emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
+ 			break;
+ 		case BPF_ALU64 | BPF_DIV | BPF_K:
+ 		case BPF_ALU64 | BPF_DIV | BPF_X:
+@@ -1836,7 +1854,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 			EMIT2_off32(0xC7, add_1reg(0xC0, IA32_ECX), imm32);
+ 			emit_ia32_shift_r(BPF_OP(code), dst_lo, IA32_ECX, dstk,
+ 					  false, &prog);
+-			emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
++			if (!bpf_prog->aux->verifier_zext)
++				emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
+ 			break;
+ 		/* dst = dst << imm */
+ 		case BPF_ALU64 | BPF_LSH | BPF_K:
+@@ -1872,7 +1891,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 		case BPF_ALU | BPF_NEG:
+ 			emit_ia32_alu_i(is64, false, BPF_OP(code),
+ 					dst_lo, 0, dstk, &prog);
+-			emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
++			if (!bpf_prog->aux->verifier_zext)
++				emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
+ 			break;
+ 		/* dst = ~dst (64 bit) */
+ 		case BPF_ALU64 | BPF_NEG:
+@@ -1892,11 +1912,13 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 			break;
+ 		/* dst = htole(dst) */
+ 		case BPF_ALU | BPF_END | BPF_FROM_LE:
+-			emit_ia32_to_le_r64(dst, imm32, dstk, &prog);
++			emit_ia32_to_le_r64(dst, imm32, dstk, &prog,
++					    bpf_prog->aux);
+ 			break;
+ 		/* dst = htobe(dst) */
+ 		case BPF_ALU | BPF_END | BPF_FROM_BE:
+-			emit_ia32_to_be_r64(dst, imm32, dstk, &prog);
++			emit_ia32_to_be_r64(dst, imm32, dstk, &prog,
++					    bpf_prog->aux);
+ 			break;
+ 		/* dst = imm64 */
+ 		case BPF_LD | BPF_IMM | BPF_DW: {
+@@ -2051,6 +2073,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 			case BPF_B:
+ 			case BPF_H:
+ 			case BPF_W:
++				if (!bpf_prog->aux->verifier_zext)
++					break;
+ 				if (dstk) {
+ 					EMIT3(0xC7, add_1reg(0x40, IA32_EBP),
+ 					      STACK_VAR(dst_hi));
+@@ -2475,6 +2499,11 @@ emit_cond_jmp:		jmp_cond = get_cond_jmp_opcode(BPF_OP(code), false);
+ 	return proglen;
+ }
+ 
++bool bpf_jit_needs_zext(void)
 +{
-+	if (meta->flags & FLAG_INSN_DO_ZEXT)
-+		wrp_immed(nfp_prog, reg_both(dst + 1), 0);
++	return true;
 +}
 +
-+static void
- wrp_immed_relo(struct nfp_prog *nfp_prog, swreg dst, u32 imm,
- 	       enum nfp_relo_type relo)
+ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
  {
-@@ -858,7 +865,8 @@ static int nfp_cpp_memcpy(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
- }
- 
- static int
--data_ld(struct nfp_prog *nfp_prog, swreg offset, u8 dst_gpr, int size)
-+data_ld(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta, swreg offset,
-+	u8 dst_gpr, int size)
- {
- 	unsigned int i;
- 	u16 shift, sz;
-@@ -881,14 +889,15 @@ data_ld(struct nfp_prog *nfp_prog, swreg offset, u8 dst_gpr, int size)
- 			wrp_mov(nfp_prog, reg_both(dst_gpr + i), reg_xfer(i));
- 
- 	if (i < 2)
--		wrp_immed(nfp_prog, reg_both(dst_gpr + 1), 0);
-+		wrp_zext(nfp_prog, meta, dst_gpr);
- 
- 	return 0;
- }
- 
- static int
--data_ld_host_order(struct nfp_prog *nfp_prog, u8 dst_gpr,
--		   swreg lreg, swreg rreg, int size, enum cmd_mode mode)
-+data_ld_host_order(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta,
-+		   u8 dst_gpr, swreg lreg, swreg rreg, int size,
-+		   enum cmd_mode mode)
- {
- 	unsigned int i;
- 	u8 mask, sz;
-@@ -911,33 +920,34 @@ data_ld_host_order(struct nfp_prog *nfp_prog, u8 dst_gpr,
- 			wrp_mov(nfp_prog, reg_both(dst_gpr + i), reg_xfer(i));
- 
- 	if (i < 2)
--		wrp_immed(nfp_prog, reg_both(dst_gpr + 1), 0);
-+		wrp_zext(nfp_prog, meta, dst_gpr);
- 
- 	return 0;
- }
- 
- static int
--data_ld_host_order_addr32(struct nfp_prog *nfp_prog, u8 src_gpr, swreg offset,
--			  u8 dst_gpr, u8 size)
-+data_ld_host_order_addr32(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta,
-+			  u8 src_gpr, swreg offset, u8 dst_gpr, u8 size)
- {
--	return data_ld_host_order(nfp_prog, dst_gpr, reg_a(src_gpr), offset,
--				  size, CMD_MODE_32b);
-+	return data_ld_host_order(nfp_prog, meta, dst_gpr, reg_a(src_gpr),
-+				  offset, size, CMD_MODE_32b);
- }
- 
- static int
--data_ld_host_order_addr40(struct nfp_prog *nfp_prog, u8 src_gpr, swreg offset,
--			  u8 dst_gpr, u8 size)
-+data_ld_host_order_addr40(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta,
-+			  u8 src_gpr, swreg offset, u8 dst_gpr, u8 size)
- {
- 	swreg rega, regb;
- 
- 	addr40_offset(nfp_prog, src_gpr, offset, &rega, &regb);
- 
--	return data_ld_host_order(nfp_prog, dst_gpr, rega, regb,
-+	return data_ld_host_order(nfp_prog, meta, dst_gpr, rega, regb,
- 				  size, CMD_MODE_40b_BA);
- }
- 
- static int
--construct_data_ind_ld(struct nfp_prog *nfp_prog, u16 offset, u16 src, u8 size)
-+construct_data_ind_ld(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta,
-+		      u16 offset, u16 src, u8 size)
- {
- 	swreg tmp_reg;
- 
-@@ -953,10 +963,12 @@ construct_data_ind_ld(struct nfp_prog *nfp_prog, u16 offset, u16 src, u8 size)
- 	emit_br_relo(nfp_prog, BR_BLO, BR_OFF_RELO, 0, RELO_BR_GO_ABORT);
- 
- 	/* Load data */
--	return data_ld(nfp_prog, imm_b(nfp_prog), 0, size);
-+	return data_ld(nfp_prog, meta, imm_b(nfp_prog), 0, size);
- }
- 
--static int construct_data_ld(struct nfp_prog *nfp_prog, u16 offset, u8 size)
-+static int
-+construct_data_ld(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta,
-+		  u16 offset, u8 size)
- {
- 	swreg tmp_reg;
- 
-@@ -967,7 +979,7 @@ static int construct_data_ld(struct nfp_prog *nfp_prog, u16 offset, u8 size)
- 
- 	/* Load data */
- 	tmp_reg = re_load_imm_any(nfp_prog, offset, imm_b(nfp_prog));
--	return data_ld(nfp_prog, tmp_reg, 0, size);
-+	return data_ld(nfp_prog, meta, tmp_reg, 0, size);
- }
- 
- static int
-@@ -1204,7 +1216,7 @@ mem_op_stack(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta,
- 	}
- 
- 	if (clr_gpr && size < 8)
--		wrp_immed(nfp_prog, reg_both(gpr + 1), 0);
-+		wrp_zext(nfp_prog, meta, gpr);
- 
- 	while (size) {
- 		u32 slice_end;
-@@ -1305,9 +1317,10 @@ wrp_alu32_imm(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta,
- 	      enum alu_op alu_op)
- {
- 	const struct bpf_insn *insn = &meta->insn;
-+	u8 dst = insn->dst_reg * 2;
- 
--	wrp_alu_imm(nfp_prog, insn->dst_reg * 2, alu_op, insn->imm);
--	wrp_immed(nfp_prog, reg_both(insn->dst_reg * 2 + 1), 0);
-+	wrp_alu_imm(nfp_prog, dst, alu_op, insn->imm);
-+	wrp_zext(nfp_prog, meta, dst);
- 
- 	return 0;
- }
-@@ -1319,7 +1332,7 @@ wrp_alu32_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta,
- 	u8 dst = meta->insn.dst_reg * 2, src = meta->insn.src_reg * 2;
- 
- 	emit_alu(nfp_prog, reg_both(dst), reg_a(dst), alu_op, reg_b(src));
--	wrp_immed(nfp_prog, reg_both(meta->insn.dst_reg * 2 + 1), 0);
-+	wrp_zext(nfp_prog, meta, dst);
- 
- 	return 0;
- }
-@@ -2396,12 +2409,14 @@ static int neg_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
- 	u8 dst = meta->insn.dst_reg * 2;
- 
- 	emit_alu(nfp_prog, reg_both(dst), reg_imm(0), ALU_OP_SUB, reg_b(dst));
--	wrp_immed(nfp_prog, reg_both(meta->insn.dst_reg * 2 + 1), 0);
-+	wrp_zext(nfp_prog, meta, dst);
- 
- 	return 0;
- }
- 
--static int __ashr_imm(struct nfp_prog *nfp_prog, u8 dst, u8 shift_amt)
-+static int
-+__ashr_imm(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta, u8 dst,
-+	   u8 shift_amt)
- {
- 	if (shift_amt) {
- 		/* Set signedness bit (MSB of result). */
-@@ -2410,7 +2425,7 @@ static int __ashr_imm(struct nfp_prog *nfp_prog, u8 dst, u8 shift_amt)
- 		emit_shf(nfp_prog, reg_both(dst), reg_none(), SHF_OP_ASHR,
- 			 reg_b(dst), SHF_SC_R_SHF, shift_amt);
- 	}
--	wrp_immed(nfp_prog, reg_both(dst + 1), 0);
-+	wrp_zext(nfp_prog, meta, dst);
- 
- 	return 0;
- }
-@@ -2425,7 +2440,7 @@ static int ashr_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
- 	umin = meta->umin_src;
- 	umax = meta->umax_src;
- 	if (umin == umax)
--		return __ashr_imm(nfp_prog, dst, umin);
-+		return __ashr_imm(nfp_prog, meta, dst, umin);
- 
- 	src = insn->src_reg * 2;
- 	/* NOTE: the first insn will set both indirect shift amount (source A)
-@@ -2434,7 +2449,7 @@ static int ashr_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
- 	emit_alu(nfp_prog, reg_none(), reg_a(src), ALU_OP_OR, reg_b(dst));
- 	emit_shf_indir(nfp_prog, reg_both(dst), reg_none(), SHF_OP_ASHR,
- 		       reg_b(dst), SHF_SC_R_SHF);
--	wrp_immed(nfp_prog, reg_both(dst + 1), 0);
-+	wrp_zext(nfp_prog, meta, dst);
- 
- 	return 0;
- }
-@@ -2444,15 +2459,17 @@ static int ashr_imm(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
- 	const struct bpf_insn *insn = &meta->insn;
- 	u8 dst = insn->dst_reg * 2;
- 
--	return __ashr_imm(nfp_prog, dst, insn->imm);
-+	return __ashr_imm(nfp_prog, meta, dst, insn->imm);
- }
- 
--static int __shr_imm(struct nfp_prog *nfp_prog, u8 dst, u8 shift_amt)
-+static int
-+__shr_imm(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta, u8 dst,
-+	  u8 shift_amt)
- {
- 	if (shift_amt)
- 		emit_shf(nfp_prog, reg_both(dst), reg_none(), SHF_OP_NONE,
- 			 reg_b(dst), SHF_SC_R_SHF, shift_amt);
--	wrp_immed(nfp_prog, reg_both(dst + 1), 0);
-+	wrp_zext(nfp_prog, meta, dst);
- 	return 0;
- }
- 
-@@ -2461,7 +2478,7 @@ static int shr_imm(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
- 	const struct bpf_insn *insn = &meta->insn;
- 	u8 dst = insn->dst_reg * 2;
- 
--	return __shr_imm(nfp_prog, dst, insn->imm);
-+	return __shr_imm(nfp_prog, meta, dst, insn->imm);
- }
- 
- static int shr_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
-@@ -2474,22 +2491,24 @@ static int shr_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
- 	umin = meta->umin_src;
- 	umax = meta->umax_src;
- 	if (umin == umax)
--		return __shr_imm(nfp_prog, dst, umin);
-+		return __shr_imm(nfp_prog, meta, dst, umin);
- 
- 	src = insn->src_reg * 2;
- 	emit_alu(nfp_prog, reg_none(), reg_a(src), ALU_OP_OR, reg_imm(0));
- 	emit_shf_indir(nfp_prog, reg_both(dst), reg_none(), SHF_OP_NONE,
- 		       reg_b(dst), SHF_SC_R_SHF);
--	wrp_immed(nfp_prog, reg_both(dst + 1), 0);
-+	wrp_zext(nfp_prog, meta, dst);
- 	return 0;
- }
- 
--static int __shl_imm(struct nfp_prog *nfp_prog, u8 dst, u8 shift_amt)
-+static int
-+__shl_imm(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta, u8 dst,
-+	  u8 shift_amt)
- {
- 	if (shift_amt)
- 		emit_shf(nfp_prog, reg_both(dst), reg_none(), SHF_OP_NONE,
- 			 reg_b(dst), SHF_SC_L_SHF, shift_amt);
--	wrp_immed(nfp_prog, reg_both(dst + 1), 0);
-+	wrp_zext(nfp_prog, meta, dst);
- 	return 0;
- }
- 
-@@ -2498,7 +2517,7 @@ static int shl_imm(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
- 	const struct bpf_insn *insn = &meta->insn;
- 	u8 dst = insn->dst_reg * 2;
- 
--	return __shl_imm(nfp_prog, dst, insn->imm);
-+	return __shl_imm(nfp_prog, meta, dst, insn->imm);
- }
- 
- static int shl_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
-@@ -2511,11 +2530,11 @@ static int shl_reg(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
- 	umin = meta->umin_src;
- 	umax = meta->umax_src;
- 	if (umin == umax)
--		return __shl_imm(nfp_prog, dst, umin);
-+		return __shl_imm(nfp_prog, meta, dst, umin);
- 
- 	src = insn->src_reg * 2;
- 	shl_reg64_lt32_low(nfp_prog, dst, src);
--	wrp_immed(nfp_prog, reg_both(dst + 1), 0);
-+	wrp_zext(nfp_prog, meta, dst);
- 	return 0;
- }
- 
-@@ -2577,34 +2596,34 @@ static int imm_ld8(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
- 
- static int data_ld1(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
- {
--	return construct_data_ld(nfp_prog, meta->insn.imm, 1);
-+	return construct_data_ld(nfp_prog, meta, meta->insn.imm, 1);
- }
- 
- static int data_ld2(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
- {
--	return construct_data_ld(nfp_prog, meta->insn.imm, 2);
-+	return construct_data_ld(nfp_prog, meta, meta->insn.imm, 2);
- }
- 
- static int data_ld4(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
- {
--	return construct_data_ld(nfp_prog, meta->insn.imm, 4);
-+	return construct_data_ld(nfp_prog, meta, meta->insn.imm, 4);
- }
- 
- static int data_ind_ld1(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
- {
--	return construct_data_ind_ld(nfp_prog, meta->insn.imm,
-+	return construct_data_ind_ld(nfp_prog, meta, meta->insn.imm,
- 				     meta->insn.src_reg * 2, 1);
- }
- 
- static int data_ind_ld2(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
- {
--	return construct_data_ind_ld(nfp_prog, meta->insn.imm,
-+	return construct_data_ind_ld(nfp_prog, meta, meta->insn.imm,
- 				     meta->insn.src_reg * 2, 2);
- }
- 
- static int data_ind_ld4(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta)
- {
--	return construct_data_ind_ld(nfp_prog, meta->insn.imm,
-+	return construct_data_ind_ld(nfp_prog, meta, meta->insn.imm,
- 				     meta->insn.src_reg * 2, 4);
- }
- 
-@@ -2682,7 +2701,7 @@ mem_ldx_data(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta,
- 
- 	tmp_reg = re_load_imm_any(nfp_prog, meta->insn.off, imm_b(nfp_prog));
- 
--	return data_ld_host_order_addr32(nfp_prog, meta->insn.src_reg * 2,
-+	return data_ld_host_order_addr32(nfp_prog, meta, meta->insn.src_reg * 2,
- 					 tmp_reg, meta->insn.dst_reg * 2, size);
- }
- 
-@@ -2694,7 +2713,7 @@ mem_ldx_emem(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta,
- 
- 	tmp_reg = re_load_imm_any(nfp_prog, meta->insn.off, imm_b(nfp_prog));
- 
--	return data_ld_host_order_addr40(nfp_prog, meta->insn.src_reg * 2,
-+	return data_ld_host_order_addr40(nfp_prog, meta, meta->insn.src_reg * 2,
- 					 tmp_reg, meta->insn.dst_reg * 2, size);
- }
- 
-@@ -2755,7 +2774,7 @@ mem_ldx_data_from_pktcache_unaligned(struct nfp_prog *nfp_prog,
- 	wrp_reg_subpart(nfp_prog, dst_lo, src_lo, len_lo, off);
- 
- 	if (!len_mid) {
--		wrp_immed(nfp_prog, dst_hi, 0);
-+		wrp_zext(nfp_prog, meta, dst_gpr);
- 		return 0;
- 	}
- 
-@@ -2763,7 +2782,7 @@ mem_ldx_data_from_pktcache_unaligned(struct nfp_prog *nfp_prog,
- 
- 	if (size <= REG_WIDTH) {
- 		wrp_reg_or_subpart(nfp_prog, dst_lo, src_mid, len_mid, len_lo);
--		wrp_immed(nfp_prog, dst_hi, 0);
-+		wrp_zext(nfp_prog, meta, dst_gpr);
- 	} else {
- 		swreg src_hi = reg_xfer(idx + 2);
- 
-@@ -2794,10 +2813,10 @@ mem_ldx_data_from_pktcache_aligned(struct nfp_prog *nfp_prog,
- 
- 	if (size < REG_WIDTH) {
- 		wrp_reg_subpart(nfp_prog, dst_lo, src_lo, size, 0);
--		wrp_immed(nfp_prog, dst_hi, 0);
-+		wrp_zext(nfp_prog, meta, dst_gpr);
- 	} else if (size == REG_WIDTH) {
- 		wrp_mov(nfp_prog, dst_lo, src_lo);
--		wrp_immed(nfp_prog, dst_hi, 0);
-+		wrp_zext(nfp_prog, meta, dst_gpr);
- 	} else {
- 		swreg src_hi = reg_xfer(idx + 1);
- 
-diff --git a/drivers/net/ethernet/netronome/nfp/bpf/main.h b/drivers/net/ethernet/netronome/nfp/bpf/main.h
-index e54d1ac..57d6ff5 100644
---- a/drivers/net/ethernet/netronome/nfp/bpf/main.h
-+++ b/drivers/net/ethernet/netronome/nfp/bpf/main.h
-@@ -238,6 +238,8 @@ struct nfp_bpf_reg_state {
- #define FLAG_INSN_SKIP_PREC_DEPENDENT		BIT(4)
- /* Instruction is optimized by the verifier */
- #define FLAG_INSN_SKIP_VERIFIER_OPT		BIT(5)
-+/* Instruction needs to zero extend to high 32-bit */
-+#define FLAG_INSN_DO_ZEXT			BIT(6)
- 
- #define FLAG_INSN_SKIP_MASK		(FLAG_INSN_SKIP_NOOP | \
- 					 FLAG_INSN_SKIP_PREC_DEPENDENT | \
-diff --git a/drivers/net/ethernet/netronome/nfp/bpf/verifier.c b/drivers/net/ethernet/netronome/nfp/bpf/verifier.c
-index 36f56eb..e92ee51 100644
---- a/drivers/net/ethernet/netronome/nfp/bpf/verifier.c
-+++ b/drivers/net/ethernet/netronome/nfp/bpf/verifier.c
-@@ -744,6 +744,17 @@ static unsigned int nfp_bpf_get_stack_usage(struct nfp_prog *nfp_prog)
- 	goto continue_subprog;
- }
- 
-+static void nfp_bpf_insn_flag_zext(struct nfp_prog *nfp_prog,
-+				   struct bpf_insn_aux_data *aux)
-+{
-+	struct nfp_insn_meta *meta;
-+
-+	list_for_each_entry(meta, &nfp_prog->insns, l) {
-+		if (aux[meta->n].zext_dst)
-+			meta->flags |= FLAG_INSN_DO_ZEXT;
-+	}
-+}
-+
- int nfp_bpf_finalize(struct bpf_verifier_env *env)
- {
- 	struct bpf_subprog_info *info;
-@@ -784,6 +795,7 @@ int nfp_bpf_finalize(struct bpf_verifier_env *env)
- 		return -EOPNOTSUPP;
- 	}
- 
-+	nfp_bpf_insn_flag_zext(nfp_prog, env->insn_aux_data);
- 	return 0;
- }
- 
+ 	struct bpf_binary_header *header = NULL;
 -- 
 2.7.4
 
