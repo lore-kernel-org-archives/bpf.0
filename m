@@ -2,112 +2,214 @@ Return-Path: <SRS0=789D=TW=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D54DC282CE
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:55:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 553D1C282CE
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:56:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6F7E6217D4
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:55:33 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HvudDPF+"
+	by mail.kernel.org (Postfix) with ESMTP id 242B720856
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:56:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1558554979;
+	bh=mSgBzsCqRJVr6Xx09Q4IcLnTyAapWOkvr8gx2ssDtCU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=vcmuzusePWvKJQYn/J4FdlsJxfjznqfOi8N37r4cBWJ+RMANF5HLZS+kcpu2S67Nx
+	 IcQkGZg/Um3isUARyvAH/2wmSt6nR5cW0goA8gX+N3TccDy3MuB5rfcs8vNWKkpF7A
+	 uTaAUqjtdeewFHiY/Qd3elpRxTsozGBIxoCvi5mo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730783AbfEVTzc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 May 2019 15:55:32 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:41857 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730197AbfEVTzb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 May 2019 15:55:31 -0400
-Received: by mail-pf1-f193.google.com with SMTP id q17so1869182pfq.8;
-        Wed, 22 May 2019 12:55:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=dkz+uMfQ4vVtX4Z57u9xC58rrVWkexD1pHBhDv3CnWw=;
-        b=HvudDPF+KevQPPLS50w5VVfYbTyT/HSSccgs7KNEDiQlGjjGVza2G1drC4CnVs+CcJ
-         K2WQk3HlAiAiK7afohlFEfA7AmqIsaVgAEOb/bSfWVKDDnXCAaJzofoV15AGCWxN6UbC
-         wU60jUxa/ajyydKuvPWfILaGtLw7J25wuxlFfSpdELB0YHwA3v/NCE6BQsOVBzc2dky/
-         Aeb8EvG8EnI6Xwzx3V+dvOodQz1+jxAKvxPsaJwBrq5xzUX1ENgbt42IC3NE2T1OBVYp
-         u9AgscgfhH2vNiCQCKMtlrbj4WMghTu8RuMmZV2v5rvP4fGyM+PdThKoOAA9ad+orqQM
-         0pGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=dkz+uMfQ4vVtX4Z57u9xC58rrVWkexD1pHBhDv3CnWw=;
-        b=pCf3Wd6KgnBpoNYz8d6JYt2ZboL1hqmdiVufxpIfck1cjSrGxIiluuDlXb+u6ut7/s
-         9kh2BQqCqHu88DpRoxK25uJQ9yp3Kbta1UJAjmJMxcrv3Gtiq4NLeTjBbb0rwvG2PkWY
-         3TRgLPDk77i7OWvqCLaGuxoWLP1MrigWvHLgJRe7Xxgv/fYk8YuL+H/Ig/jwzI73o0La
-         84VJHKxnT7tmcfmjHw4OxnFwVg+AsGQyTC6vddb4G0zqSbAmmi7Il5HRfclmGcPciAkQ
-         ekkvpIzF8ybyjSogFu2lXoCPDWHgiPXilkiebQnJZP6SpI177y6R09+0cOEGSZ6g+hNY
-         q9Ng==
-X-Gm-Message-State: APjAAAUM2halQ+f2U0DdRgYQjfpxf5gC1j74b70NiJ7lgggdPYBnMn3s
-        EflODPgW0Y56bMUSzST5i0oMzSbH
-X-Google-Smtp-Source: APXvYqzuFNwwqWce3oARO3MYbQ8QDsnhxBa3bPsJce9d8mfJhpoeRGDAkM1CNEoTvjLbDrHsL1Pbjw==
-X-Received: by 2002:a63:7413:: with SMTP id p19mr89950878pgc.259.1558554930988;
-        Wed, 22 May 2019 12:55:30 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:180::6565])
-        by smtp.gmail.com with ESMTPSA id x18sm32697904pfj.17.2019.05.22.12.55.29
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 May 2019 12:55:30 -0700 (PDT)
-Date:   Wed, 22 May 2019 12:55:27 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Kris Van Hees <kris.van.hees@oracle.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, dtrace-devel@oss.oracle.com,
-        linux-kernel@vger.kernel.org, rostedt@goodmis.org,
-        mhiramat@kernel.org, acme@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net
-Subject: Re: [RFC PATCH 00/11] bpf, trace, dtrace: DTrace BPF program type
- implementation and sample use
-Message-ID: <20190522195526.mayamzc7gstqzcpr@ast-mbp.dhcp.thefacebook.com>
-References: <201905202347.x4KNl0cs030532@aserv0121.oracle.com>
- <20190521175617.ipry6ue7o24a2e6n@ast-mbp.dhcp.thefacebook.com>
- <20190522142531.GE16275@worktop.programming.kicks-ass.net>
- <20190522182215.GO2422@oracle.com>
+        id S1731652AbfEVT4L (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 May 2019 15:56:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46300 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731483AbfEVTZE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 May 2019 15:25:04 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3D56A21473;
+        Wed, 22 May 2019 19:25:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1558553103;
+        bh=mSgBzsCqRJVr6Xx09Q4IcLnTyAapWOkvr8gx2ssDtCU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DABZGeY4txe2UFSlJ+moRKPeKXJN5ZYccZWRYahmlwXLrOCYiS0B+hVLTxafI5Z97
+         98POWl8j3kjG2+UvqYHP1SD3Ld/yaQZ/MurLlzkOobCN8FKdiJC5vW9vjERelDeeL0
+         uaUeHXFsHFBv9Jum9xWNFYYclt70Y5fswrUmysq8=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Nadav Amit <namit@vmware.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        akpm@linux-foundation.org, ard.biesheuvel@linaro.org,
+        deneen.t.dock@intel.com, kernel-hardening@lists.openwall.com,
+        kristen@linux.intel.com, linux_dti@icloud.com, will.deacon@arm.com,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Jessica Yu <jeyu@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.0 048/317] x86/modules: Avoid breaking W^X while loading modules
+Date:   Wed, 22 May 2019 15:19:09 -0400
+Message-Id: <20190522192338.23715-48-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190522192338.23715-1-sashal@kernel.org>
+References: <20190522192338.23715-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190522182215.GO2422@oracle.com>
-User-Agent: NeoMutt/20180223
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, May 22, 2019 at 02:22:15PM -0400, Kris Van Hees wrote:
-> On Wed, May 22, 2019 at 04:25:32PM +0200, Peter Zijlstra wrote:
-> > On Tue, May 21, 2019 at 10:56:18AM -0700, Alexei Starovoitov wrote:
-> > 
-> > > and no changes are necessary in kernel/events/ring_buffer.c either.
-> > 
-> > Let me just NAK them on the principle that I don't see them in my inbox.
-> 
-> My apologies for failing to include you on the Cc for the patches.  That was
-> an oversight on my end and certainly not intentional.
-> 
-> > Let me further NAK it for adding all sorts of garbage to the code --
-> > we're not going to do gaps and stay_in_page nonsense.
-> 
-> Could you give some guidance in terms of an alternative?  The ring buffer code
-> provides both non-contiguous page allocation support and a vmalloc-based
-> allocation, and the vmalloc version certainly would avoid the entire gap and
-> page boundary stuff.  But since the allocator is chosen at build time based on
-> the arch capabilities, there is no way to select a specific memory allocator.
-> I'd be happy to use an alternative approach that allows direct writing into
-> the ring buffer.
+From: Nadav Amit <namit@vmware.com>
 
-You do not _need_ direct write from bpf prog.
-dtrace language doesn't mandate direct write.
-'direct write into ring buffer form bpf prog' is an interesting idea and
-may be nice performance optimization, but in no way it's a blocker for dtrace scripts.
-Also it's far from clear that it actually brings performance benefits.
-Letting bpf progs write directly into ring buffer comes with
-a lot of corner cases. It's something to carefully analyze.
-I suggest to proceed with user space dtrace conversion to bpf
-without introducing kernel changes.
+[ Upstream commit f2c65fb3221adc6b73b0549fc7ba892022db9797 ]
+
+When modules and BPF filters are loaded, there is a time window in
+which some memory is both writable and executable. An attacker that has
+already found another vulnerability (e.g., a dangling pointer) might be
+able to exploit this behavior to overwrite kernel code. Prevent having
+writable executable PTEs in this stage.
+
+In addition, avoiding having W+X mappings can also slightly simplify the
+patching of modules code on initialization (e.g., by alternatives and
+static-key), as would be done in the next patch. This was actually the
+main motivation for this patch.
+
+To avoid having W+X mappings, set them initially as RW (NX) and after
+they are set as RO set them as X as well. Setting them as executable is
+done as a separate step to avoid one core in which the old PTE is cached
+(hence writable), and another which sees the updated PTE (executable),
+which would break the W^X protection.
+
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Suggested-by: Andy Lutomirski <luto@amacapital.net>
+Signed-off-by: Nadav Amit <namit@vmware.com>
+Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: <akpm@linux-foundation.org>
+Cc: <ard.biesheuvel@linaro.org>
+Cc: <deneen.t.dock@intel.com>
+Cc: <kernel-hardening@lists.openwall.com>
+Cc: <kristen@linux.intel.com>
+Cc: <linux_dti@icloud.com>
+Cc: <will.deacon@arm.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@intel.com>
+Cc: H. Peter Anvin <hpa@zytor.com>
+Cc: Jessica Yu <jeyu@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Rik van Riel <riel@surriel.com>
+Link: https://lkml.kernel.org/r/20190426001143.4983-12-namit@vmware.com
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/x86/kernel/alternative.c | 28 +++++++++++++++++++++-------
+ arch/x86/kernel/module.c      |  2 +-
+ include/linux/filter.h        |  1 +
+ kernel/module.c               |  5 +++++
+ 4 files changed, 28 insertions(+), 8 deletions(-)
+
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index ebeac487a20c7..2db985513917a 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -666,15 +666,29 @@ void __init alternative_instructions(void)
+  * handlers seeing an inconsistent instruction while you patch.
+  */
+ void *__init_or_module text_poke_early(void *addr, const void *opcode,
+-					      size_t len)
++				       size_t len)
+ {
+ 	unsigned long flags;
+-	local_irq_save(flags);
+-	memcpy(addr, opcode, len);
+-	local_irq_restore(flags);
+-	sync_core();
+-	/* Could also do a CLFLUSH here to speed up CPU recovery; but
+-	   that causes hangs on some VIA CPUs. */
++
++	if (boot_cpu_has(X86_FEATURE_NX) &&
++	    is_module_text_address((unsigned long)addr)) {
++		/*
++		 * Modules text is marked initially as non-executable, so the
++		 * code cannot be running and speculative code-fetches are
++		 * prevented. Just change the code.
++		 */
++		memcpy(addr, opcode, len);
++	} else {
++		local_irq_save(flags);
++		memcpy(addr, opcode, len);
++		local_irq_restore(flags);
++		sync_core();
++
++		/*
++		 * Could also do a CLFLUSH here to speed up CPU recovery; but
++		 * that causes hangs on some VIA CPUs.
++		 */
++	}
+ 	return addr;
+ }
+ 
+diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
+index b052e883dd8cc..cfa3106faee42 100644
+--- a/arch/x86/kernel/module.c
++++ b/arch/x86/kernel/module.c
+@@ -87,7 +87,7 @@ void *module_alloc(unsigned long size)
+ 	p = __vmalloc_node_range(size, MODULE_ALIGN,
+ 				    MODULES_VADDR + get_module_load_offset(),
+ 				    MODULES_END, GFP_KERNEL,
+-				    PAGE_KERNEL_EXEC, 0, NUMA_NO_NODE,
++				    PAGE_KERNEL, 0, NUMA_NO_NODE,
+ 				    __builtin_return_address(0));
+ 	if (p && (kasan_module_alloc(p, size) < 0)) {
+ 		vfree(p);
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 3358646a8e7a7..42513fa6846c9 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -709,6 +709,7 @@ static inline void bpf_prog_unlock_ro(struct bpf_prog *fp)
+ static inline void bpf_jit_binary_lock_ro(struct bpf_binary_header *hdr)
+ {
+ 	set_memory_ro((unsigned long)hdr, hdr->pages);
++	set_memory_x((unsigned long)hdr, hdr->pages);
+ }
+ 
+ static inline void bpf_jit_binary_unlock_ro(struct bpf_binary_header *hdr)
+diff --git a/kernel/module.c b/kernel/module.c
+index 2ad1b52399109..ae1b77da6a200 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -1950,8 +1950,13 @@ void module_enable_ro(const struct module *mod, bool after_init)
+ 		return;
+ 
+ 	frob_text(&mod->core_layout, set_memory_ro);
++	frob_text(&mod->core_layout, set_memory_x);
++
+ 	frob_rodata(&mod->core_layout, set_memory_ro);
++
+ 	frob_text(&mod->init_layout, set_memory_ro);
++	frob_text(&mod->init_layout, set_memory_x);
++
+ 	frob_rodata(&mod->init_layout, set_memory_ro);
+ 
+ 	if (after_init)
+-- 
+2.20.1
 
