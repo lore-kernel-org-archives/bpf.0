@@ -2,44 +2,44 @@ Return-Path: <SRS0=789D=TW=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68333C282DC
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:51:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E88F1C282CE
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:51:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 342A020856
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:51:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A414F20856
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:51:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="E9EGmSyr"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="iOrUwu/7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732398AbfEVTu7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 May 2019 15:50:59 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:59822 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2387895AbfEVTu6 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 May 2019 15:50:58 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x4MJlLXg023905
-        for <bpf@vger.kernel.org>; Wed, 22 May 2019 12:50:57 -0700
+        id S1732231AbfEVTvL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 May 2019 15:51:11 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:35350 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732163AbfEVTvK (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 22 May 2019 15:51:10 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4MJibA1020018
+        for <bpf@vger.kernel.org>; Wed, 22 May 2019 12:51:09 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=fVdcKk701UmWd0bJeAU0VAf/QzGizTnrH7kqg2MVfLQ=;
- b=E9EGmSyrsbNtAuarRhTHm0tff4kaNTJAWiYtAtK04eTizI8IQm41ek9RYLo+x7FJs98i
- 6x9rb6oSJb3wzcBndQN5UjAEf1JBs5OAJQT+/uPOKd/FqybAutGhpH+hR/w95rxcnDm5
- F+Faoc8CwZGeZU7DJWePlaV0RM6G8amGOqM= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 2sn5ta1rm8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 22 May 2019 12:50:57 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 22 May 2019 12:50:56 -0700
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=6IkGN47itqvsDgU54e9J/eyqJ7CWK9rhsQzcXCsnF8Q=;
+ b=iOrUwu/7/bG+qx0bYM/CSRudK4CZbYqqiuhkOngbEUQ/5nzKxDH+nnVYwM4fDwwA7r32
+ 7JIUll3OZNhMI1J/dUtDjmXOmlMwIXSe8OOblf4Kwgzp9Vu18J1u/23hGG9JM+G7awk0
+ 622uW23Jq73VqkmvtWU8CLAovvhmtt7SjJw= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2sncpwr1u2-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 22 May 2019 12:51:08 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Wed, 22 May 2019 12:51:08 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 0FED0862334; Wed, 22 May 2019 12:50:55 -0700 (PDT)
+        id 4B4E7862334; Wed, 22 May 2019 12:51:07 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,17 +48,19 @@ To:     <andrii.nakryiko@gmail.com>, <ast@fb.com>, <daniel@iogearbox.net>,
         <kernel-team@fb.com>
 CC:     Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH bpf-next 00/12] BTF-to-C converter
-Date:   Wed, 22 May 2019 12:50:41 -0700
-Message-ID: <20190522195053.4017624-1-andriin@fb.com>
+Subject: [PATCH bpf-next 06/12] selftests/bpf: add tests for libbpf's hashmap
+Date:   Wed, 22 May 2019 12:50:47 -0700
+Message-ID: <20190522195053.4017624-7-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190522195053.4017624-1-andriin@fb.com>
+References: <20190522195053.4017624-1-andriin@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-22_11:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
  mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1810050000 definitions=main-1905220138
@@ -68,106 +70,426 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set adds BTF-to-C dumping APIs to libbpf, allowing to output
-a subset of BTF types as a compilable C type definitions. This is useful by
-itself, as raw BTF output is not easy to inspect and comprehend. But it's also
-a big part of BPF CO-RE (compile once - run everywhere) initiative aimed at
-allowing to write relocatable BPF programs, that won't require on-the-host
-kernel headers (and would be able to inspect internal kernel structures, not
-exposed through kernel headers).
+Test all APIs for internal hashmap implementation.
 
-This patch set consists of three groups of patches and one pre-patch, with the
-BTF-to-C dumper API depending on the first two groups.
-
-Pre-patch #1 fixes issue with libbpf_internal.h.
-
-btf__parse_elf() API patches:
-- patch #2 adds btf__parse_elf() API to libbpf, allowing to load BTF and/or
-  BTF.ext from ELF file;
-- patch #3 utilizies btf__parse_elf() from bpftool for `btf dump file` command;
-- patch #4 switches test_btf.c to use btf__parse_elf() to check for presence
-  of BTF data in object file.
-
-libbpf's internal hashmap patches:
-- patch #5 adds resizeable non-thread safe generic hashmap to libbpf;
-- patch #6 adds tests for that hashmap;
-- patch #7 migrates btf_dedup()'s dedup_table to use hashmap w/ APPEND.
-
-BTF-to-C dumper API patches:
-- patch #8 adds btf_dump APIs with all the logic for laying out type
-  definitions in correct order and emitting C syntax for them;
-- patch #9 adds lots of tests for common and quirky parts of C type system;
-- patch #10 adds support for C-syntax btf dumping to bpftool;
-- patch #11 updates bpftool documentation to mention C-syntax dump option;
-- patch #12 update bash-completion for btf dump sub-command.
-
-v0->v1:
-- fix bug in hashmap__for_each_bucket_entry() not handling empty hashmap;
-- removed `btf dump`-specific libbpf logging hook up (Quentin has more generic
-  patchset);
-- change btf__parse_elf() to always load .BTF and return it as a result, with
-  .BTF.ext being optional and returned through struct btf_ext** arg (Alexei);
-- endianness check to use __BYTE_ORDER__ (Alexei);
-- bool:1 to __u8:1 in type_aux_state (Alexei);
-- added HASHMAP_APPEND strategy to hashmap, changed
-  hashmap__for_each_key_entry() to also check for key equality during
-  iteration (multimap iteration for key);
-- added new tests for empty hashmap and hashmap as a multimap;
-- tried to clarify weak/strong dependency ordering comments (Alexei)
-- btf dump test's expected output - support better commenting aproach (Alexei);
-- added bash-completion for a new "c" option (Alexei).
-
-Andrii Nakryiko (12):
-  libbpf: ensure libbpf.h is included along libbpf_internal.h
-  libbpf: add btf__parse_elf API to load .BTF and .BTF.ext
-  bpftool: use libbpf's btf__parse_elf API
-  selftests/bpf: use btf__parse_elf to check presence of BTF/BTF.ext
-  libbpf: add resizable non-thread safe internal hashmap
-  selftests/bpf: add tests for libbpf's hashmap
-  libbpf: switch btf_dedup() to hashmap for dedup table
-  libbpf: add btf_dump API for BTF-to-C conversion
-  selftests/bpf: add btf_dump BTF-to-C conversion tests
-  bpftool: add C output format option to btf dump subcommand
-  bpftool/docs: add description of btf dump C option
-  bpftool: update bash-completion w/ new c option for btf dump
-
- .../bpf/bpftool/Documentation/bpftool-btf.rst |    5 +-
- tools/bpf/bpftool/bash-completion/bpftool     |   22 +-
- tools/bpf/bpftool/btf.c                       |  150 +-
- tools/lib/bpf/Build                           |    4 +-
- tools/lib/bpf/btf.c                           |  330 ++--
- tools/lib/bpf/btf.h                           |   19 +
- tools/lib/bpf/btf_dump.c                      | 1336 +++++++++++++++++
- tools/lib/bpf/hashmap.c                       |  229 +++
- tools/lib/bpf/hashmap.h                       |  173 +++
- tools/lib/bpf/libbpf.map                      |    4 +
- tools/lib/bpf/libbpf_internal.h               |    2 +
- tools/testing/selftests/bpf/.gitignore        |    2 +
- tools/testing/selftests/bpf/Makefile          |    3 +-
- .../bpf/progs/btf_dump_test_case_bitfields.c  |   92 ++
- .../bpf/progs/btf_dump_test_case_multidim.c   |   35 +
- .../progs/btf_dump_test_case_namespacing.c    |   73 +
- .../bpf/progs/btf_dump_test_case_ordering.c   |   63 +
- .../bpf/progs/btf_dump_test_case_packing.c    |   75 +
- .../bpf/progs/btf_dump_test_case_padding.c    |  111 ++
- .../bpf/progs/btf_dump_test_case_syntax.c     |  229 +++
- tools/testing/selftests/bpf/test_btf.c        |   71 +-
- tools/testing/selftests/bpf/test_btf_dump.c   |  143 ++
- tools/testing/selftests/bpf/test_hashmap.c    |  382 +++++
- 23 files changed, 3275 insertions(+), 278 deletions(-)
- create mode 100644 tools/lib/bpf/btf_dump.c
- create mode 100644 tools/lib/bpf/hashmap.c
- create mode 100644 tools/lib/bpf/hashmap.h
- create mode 100644 tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf_dump_test_case_multidim.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf_dump_test_case_namespacing.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf_dump_test_case_ordering.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
- create mode 100644 tools/testing/selftests/bpf/test_btf_dump.c
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/testing/selftests/bpf/.gitignore     |   1 +
+ tools/testing/selftests/bpf/Makefile       |   2 +-
+ tools/testing/selftests/bpf/test_hashmap.c | 382 +++++++++++++++++++++
+ 3 files changed, 384 insertions(+), 1 deletion(-)
  create mode 100644 tools/testing/selftests/bpf/test_hashmap.c
 
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+index dd5d69529382..138b6c063916 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -35,3 +35,4 @@ test_sysctl
+ alu32
+ libbpf.pc
+ libbpf.so.*
++test_hashmap
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 66f2dca1dee1..ddae06498a00 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -23,7 +23,7 @@ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test
+ 	test_align test_verifier_log test_dev_cgroup test_tcpbpf_user \
+ 	test_sock test_btf test_sockmap test_lirc_mode2_user get_cgroup_id_user \
+ 	test_socket_cookie test_cgroup_storage test_select_reuseport test_section_names \
+-	test_netcnt test_tcpnotify_user test_sock_fields test_sysctl
++	test_netcnt test_tcpnotify_user test_sock_fields test_sysctl test_hashmap
+ 
+ BPF_OBJ_FILES = $(patsubst %.c,%.o, $(notdir $(wildcard progs/*.c)))
+ TEST_GEN_FILES = $(BPF_OBJ_FILES)
+diff --git a/tools/testing/selftests/bpf/test_hashmap.c b/tools/testing/selftests/bpf/test_hashmap.c
+new file mode 100644
+index 000000000000..b64094c981e3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/test_hashmap.c
+@@ -0,0 +1,382 @@
++// SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
++
++/*
++ * Tests for libbpf's hashmap.
++ *
++ * Copyright (c) 2019 Facebook
++ */
++#include <stdio.h>
++#include <errno.h>
++#include <linux/err.h>
++#include "hashmap.h"
++
++#define CHECK(condition, format...) ({					\
++	int __ret = !!(condition);					\
++	if (__ret) {							\
++		fprintf(stderr, "%s:%d:FAIL ", __func__, __LINE__);	\
++		fprintf(stderr, format);				\
++	}								\
++	__ret;								\
++})
++
++size_t hash_fn(const void *k, void *ctx)
++{
++	return (long)k;
++}
++
++bool equal_fn(const void *a, const void *b, void *ctx)
++{
++	return (long)a == (long)b;
++}
++
++static inline size_t next_pow_2(size_t n)
++{
++	size_t r = 1;
++
++	while (r < n)
++		r <<= 1;
++	return r;
++}
++
++static inline size_t exp_cap(size_t sz)
++{
++	size_t r = next_pow_2(sz);
++
++	if (sz * 4 / 3 > r)
++		r <<= 1;
++	return r;
++}
++
++#define ELEM_CNT 62
++
++int test_hashmap_generic(void)
++{
++	struct hashmap_entry *entry, *tmp;
++	int err, bkt, found_cnt, i;
++	long long found_msk;
++	struct hashmap *map;
++
++	fprintf(stderr, "%s: ", __func__);
++
++	map = hashmap__new(hash_fn, equal_fn, NULL);
++	if (CHECK(IS_ERR(map), "failed to create map: %ld\n", PTR_ERR(map)))
++		return 1;
++
++	for (i = 0; i < ELEM_CNT; i++) {
++		const void *oldk, *k = (const void *)(long)i;
++		void *oldv, *v = (void *)(long)(1024 + i);
++
++		err = hashmap__update(map, k, v, &oldk, &oldv);
++		if (CHECK(err != -ENOENT, "unexpected result: %d\n", err))
++			return 1;
++
++		if (i % 2) {
++			err = hashmap__add(map, k, v);
++		} else {
++			err = hashmap__set(map, k, v, &oldk, &oldv);
++			if (CHECK(oldk != NULL || oldv != NULL,
++				  "unexpected k/v: %p=%p\n", oldk, oldv))
++				return 1;
++		}
++
++		if (CHECK(err, "failed to add k/v %ld = %ld: %d\n",
++			       (long)k, (long)v, err))
++			return 1;
++
++		if (CHECK(!hashmap__find(map, k, &oldv),
++			  "failed to find key %ld\n", (long)k))
++			return 1;
++		if (CHECK(oldv != v, "found value is wrong: %ld\n", (long)oldv))
++			return 1;
++	}
++
++	if (CHECK(hashmap__size(map) != ELEM_CNT,
++		  "invalid map size: %zu\n", hashmap__size(map)))
++		return 1;
++	if (CHECK(hashmap__capacity(map) != exp_cap(hashmap__size(map)),
++		  "unexpected map capacity: %zu\n", hashmap__capacity(map)))
++		return 1;
++
++	found_msk = 0;
++	hashmap__for_each_entry(map, entry, bkt) {
++		long k = (long)entry->key;
++		long v = (long)entry->value;
++
++		found_msk |= 1ULL << k;
++		if (CHECK(v - k != 1024, "invalid k/v pair: %ld = %ld\n", k, v))
++			return 1;
++	}
++	if (CHECK(found_msk != (1ULL << ELEM_CNT) - 1,
++		  "not all keys iterated: %llx\n", found_msk))
++		return 1;
++
++	for (i = 0; i < ELEM_CNT; i++) {
++		const void *oldk, *k = (const void *)(long)i;
++		void *oldv, *v = (void *)(long)(256 + i);
++
++		err = hashmap__add(map, k, v);
++		if (CHECK(err != -EEXIST, "unexpected add result: %d\n", err))
++			return 1;
++
++		if (i % 2)
++			err = hashmap__update(map, k, v, &oldk, &oldv);
++		else
++			err = hashmap__set(map, k, v, &oldk, &oldv);
++
++		if (CHECK(err, "failed to update k/v %ld = %ld: %d\n",
++			       (long)k, (long)v, err))
++			return 1;
++		if (CHECK(!hashmap__find(map, k, &oldv),
++			  "failed to find key %ld\n", (long)k))
++			return 1;
++		if (CHECK(oldv != v, "found value is wrong: %ld\n", (long)oldv))
++			return 1;
++	}
++
++	if (CHECK(hashmap__size(map) != ELEM_CNT,
++		  "invalid updated map size: %zu\n", hashmap__size(map)))
++		return 1;
++	if (CHECK(hashmap__capacity(map) != exp_cap(hashmap__size(map)),
++		  "unexpected map capacity: %zu\n", hashmap__capacity(map)))
++		return 1;
++
++	found_msk = 0;
++	hashmap__for_each_entry_safe(map, entry, tmp, bkt) {
++		long k = (long)entry->key;
++		long v = (long)entry->value;
++
++		found_msk |= 1ULL << k;
++		if (CHECK(v - k != 256,
++			  "invalid updated k/v pair: %ld = %ld\n", k, v))
++			return 1;
++	}
++	if (CHECK(found_msk != (1ULL << ELEM_CNT) - 1,
++		  "not all keys iterated after update: %llx\n", found_msk))
++		return 1;
++
++	found_cnt = 0;
++	hashmap__for_each_key_entry(map, entry, (void *)0) {
++		found_cnt++;
++	}
++	if (CHECK(!found_cnt, "didn't find any entries for key 0\n"))
++		return 1;
++
++	found_msk = 0;
++	found_cnt = 0;
++	hashmap__for_each_key_entry_safe(map, entry, tmp, (void *)0) {
++		const void *oldk, *k;
++		void *oldv, *v;
++
++		k = entry->key;
++		v = entry->value;
++
++		found_cnt++;
++		found_msk |= 1ULL << (long)k;
++
++		if (CHECK(!hashmap__delete(map, k, &oldk, &oldv),
++			  "failed to delete k/v %ld = %ld\n",
++			  (long)k, (long)v))
++			return 1;
++		if (CHECK(oldk != k || oldv != v,
++			  "invalid deleted k/v: expected %ld = %ld, got %ld = %ld\n",
++			  (long)k, (long)v, (long)oldk, (long)oldv))
++			return 1;
++		if (CHECK(hashmap__delete(map, k, &oldk, &oldv),
++			  "unexpectedly deleted k/v %ld = %ld\n",
++			  (long)oldk, (long)oldv))
++			return 1;
++	}
++
++	if (CHECK(!found_cnt || !found_msk,
++		  "didn't delete any key entries\n"))
++		return 1;
++	if (CHECK(hashmap__size(map) != ELEM_CNT - found_cnt,
++		  "invalid updated map size (already deleted: %d): %zu\n",
++		  found_cnt, hashmap__size(map)))
++		return 1;
++	if (CHECK(hashmap__capacity(map) != exp_cap(hashmap__size(map)),
++		  "unexpected map capacity: %zu\n", hashmap__capacity(map)))
++		return 1;
++
++	hashmap__for_each_entry_safe(map, entry, tmp, bkt) {
++		const void *oldk, *k;
++		void *oldv, *v;
++
++		k = entry->key;
++		v = entry->value;
++
++		found_cnt++;
++		found_msk |= 1ULL << (long)k;
++
++		if (CHECK(!hashmap__delete(map, k, &oldk, &oldv),
++			  "failed to delete k/v %ld = %ld\n",
++			  (long)k, (long)v))
++			return 1;
++		if (CHECK(oldk != k || oldv != v,
++			  "invalid old k/v: expect %ld = %ld, got %ld = %ld\n",
++			  (long)k, (long)v, (long)oldk, (long)oldv))
++			return 1;
++		if (CHECK(hashmap__delete(map, k, &oldk, &oldv),
++			  "unexpectedly deleted k/v %ld = %ld\n",
++			  (long)k, (long)v))
++			return 1;
++	}
++
++	if (CHECK(found_cnt != ELEM_CNT || found_msk != (1ULL << ELEM_CNT) - 1,
++		  "not all keys were deleted: found_cnt:%d, found_msk:%llx\n",
++		  found_cnt, found_msk))
++		return 1;
++	if (CHECK(hashmap__size(map) != 0,
++		  "invalid updated map size (already deleted: %d): %zu\n",
++		  found_cnt, hashmap__size(map)))
++		return 1;
++
++	found_cnt = 0;
++	hashmap__for_each_entry(map, entry, bkt) {
++		CHECK(false, "unexpected map entries left: %ld = %ld\n",
++			     (long)entry->key, (long)entry->value);
++		return 1;
++	}
++
++	hashmap__free(map);
++	hashmap__for_each_entry(map, entry, bkt) {
++		CHECK(false, "unexpected map entries left: %ld = %ld\n",
++			     (long)entry->key, (long)entry->value);
++		return 1;
++	}
++
++	fprintf(stderr, "OK\n");
++	return 0;
++}
++
++size_t collision_hash_fn(const void *k, void *ctx)
++{
++	return 0;
++}
++
++int test_hashmap_multimap(void)
++{
++	void *k1 = (void *)0, *k2 = (void *)1;
++	struct hashmap_entry *entry;
++	struct hashmap *map;
++	long found_msk;
++	int err, bkt;
++
++	fprintf(stderr, "%s: ", __func__);
++
++	/* force collisions */
++	map = hashmap__new(collision_hash_fn, equal_fn, NULL);
++	if (CHECK(IS_ERR(map), "failed to create map: %ld\n", PTR_ERR(map)))
++		return 1;
++
++
++	/* set up multimap:
++	 * [0] -> 1, 2, 4;
++	 * [1] -> 8, 16, 32;
++	 */
++	err = hashmap__append(map, k1, (void *)1);
++	if (CHECK(err, "failed to add k/v: %d\n", err))
++		return 1;
++	err = hashmap__append(map, k1, (void *)2);
++	if (CHECK(err, "failed to add k/v: %d\n", err))
++		return 1;
++	err = hashmap__append(map, k1, (void *)4);
++	if (CHECK(err, "failed to add k/v: %d\n", err))
++		return 1;
++
++	err = hashmap__append(map, k2, (void *)8);
++	if (CHECK(err, "failed to add k/v: %d\n", err))
++		return 1;
++	err = hashmap__append(map, k2, (void *)16);
++	if (CHECK(err, "failed to add k/v: %d\n", err))
++		return 1;
++	err = hashmap__append(map, k2, (void *)32);
++	if (CHECK(err, "failed to add k/v: %d\n", err))
++		return 1;
++
++	if (CHECK(hashmap__size(map) != 6,
++		  "invalid map size: %zu\n", hashmap__size(map)))
++		return 1;
++
++	/* verify global iteration still works and sees all values */
++	found_msk = 0;
++	hashmap__for_each_entry(map, entry, bkt) {
++		found_msk |= (long)entry->value;
++	}
++	if (CHECK(found_msk != (1 << 6) - 1,
++		  "not all keys iterated: %lx\n", found_msk))
++		return 1;
++
++	/* iterate values for key 1 */
++	found_msk = 0;
++	hashmap__for_each_key_entry(map, entry, k1) {
++		found_msk |= (long)entry->value;
++	}
++	if (CHECK(found_msk != (1 | 2 | 4),
++		  "invalid k1 values: %lx\n", found_msk))
++		return 1;
++
++	/* iterate values for key 2 */
++	found_msk = 0;
++	hashmap__for_each_key_entry(map, entry, k2) {
++		found_msk |= (long)entry->value;
++	}
++	if (CHECK(found_msk != (8 | 16 | 32),
++		  "invalid k2 values: %lx\n", found_msk))
++		return 1;
++
++	fprintf(stderr, "OK\n");
++	return 0;
++}
++
++int test_hashmap_empty()
++{
++	struct hashmap_entry *entry;
++	int bkt;
++	struct hashmap *map;
++	void *k = (void *)0;
++
++	fprintf(stderr, "%s: ", __func__);
++
++	/* force collisions */
++	map = hashmap__new(hash_fn, equal_fn, NULL);
++	if (CHECK(IS_ERR(map), "failed to create map: %ld\n", PTR_ERR(map)))
++		return 1;
++
++	if (CHECK(hashmap__size(map) != 0,
++		  "invalid map size: %zu\n", hashmap__size(map)))
++		return 1;
++	if (CHECK(hashmap__capacity(map) != 0,
++		  "invalid map capacity: %zu\n", hashmap__capacity(map)))
++		return 1;
++	if (CHECK(hashmap__find(map, k, NULL), "unexpected find\n"))
++		return 1;
++	if (CHECK(hashmap__delete(map, k, NULL, NULL), "unexpected delete\n"))
++		return 1;
++
++	hashmap__for_each_entry(map, entry, bkt) {
++		CHECK(false, "unexpected iterated entry\n");
++		return 1;
++	}
++	hashmap__for_each_key_entry(map, entry, k) {
++		CHECK(false, "unexpected key entry\n");
++		return 1;
++	}
++
++	fprintf(stderr, "OK\n");
++	return 0;
++}
++
++int main(int argc, char **argv)
++{
++	bool failed = false;
++
++	if (test_hashmap_generic())
++		failed = true;
++	if (test_hashmap_multimap())
++		failed = true;
++	if (test_hashmap_empty())
++		failed = true;
++
++	return failed;
++}
 -- 
 2.17.1
 
