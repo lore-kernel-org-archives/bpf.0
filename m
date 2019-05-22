@@ -3,104 +3,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB1D9C282CE
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:50:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 065C7C282DD
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:51:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 745642081C
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:50:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1558554619;
-	bh=UBMVhekPV7BTpiroIPnru4aWsTCiB2h1mOv7e9uwsaY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=LsLtm6DseU01IPjnbVRiet26N0Td53aI23YVwksOCraNsK6R50hcCGsPWzrwa/dlB
-	 dvRWlg78XNzUM/CEnzJJs70TnckUKcN9o/rKYJGnsMBTubknKmvFUBTwnYKoQHEgj+
-	 BzaiMQMR6hWnLekxKr58tdws5MRpE9ReYRaQR0Xg=
+	by mail.kernel.org (Postfix) with ESMTP id BE7B120856
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:51:04 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="nL5G/HTv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730974AbfEVTuN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 May 2019 15:50:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48302 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732073AbfEVT0m (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 May 2019 15:26:42 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7F33F21872;
-        Wed, 22 May 2019 19:26:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558553201;
-        bh=UBMVhekPV7BTpiroIPnru4aWsTCiB2h1mOv7e9uwsaY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iOlugxb5fJFZLSiHle/9NpQq9IAvMbzWzW6rYceizV1c/qUWLaYHeZyBGk45X5JLY
-         e0ER5VfYSCtvapWHNffO01vbjUWt0vBV+h+PI5mxoSfMercp2T0yaFRvVpiEa2Yu42
-         kQ76kVuc2Nu+xvwKJmm7W80pspfkTQe4ndATTCNA=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vineet Gupta <Vineet.Gupta1@synopsys.com>,
-        Vineet Gupta <vgupta@synopsys.com>, Yonghong Song <yhs@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 008/244] tools/bpf: fix perf build error with uClibc (seen on ARC)
-Date:   Wed, 22 May 2019 15:22:34 -0400
-Message-Id: <20190522192630.24917-8-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190522192630.24917-1-sashal@kernel.org>
-References: <20190522192630.24917-1-sashal@kernel.org>
+        id S2387920AbfEVTvA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 May 2019 15:51:00 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:43222 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387853AbfEVTu7 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 22 May 2019 15:50:59 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4MJlQeT028378
+        for <bpf@vger.kernel.org>; Wed, 22 May 2019 12:50:58 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=i9KJsPXfMKWMU4yGosGCauJyd8EPlc91lPI8FQHp2j0=;
+ b=nL5G/HTv6zm9HexK+QvCpZOmi6P2BVfdbtBReuAs3D3DeMqlGMmOiNV4tVJfxaH4Lh5Q
+ dhyNtlXEsh8jKK7HRh/P6UjZwkSfwZZRA+7uxlGvxQAibSO8r4t+Q55rfAQQHo+LFBFb
+ YddIhNR3dAJN2nX1WxXB0As2xWVBm29HExc= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2sn9bgryrc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 22 May 2019 12:50:58 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Wed, 22 May 2019 12:50:57 -0700
+Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
+        id 18F66862334; Wed, 22 May 2019 12:50:57 -0700 (PDT)
+Smtp-Origin-Hostprefix: dev
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: dev101.prn2.facebook.com
+To:     <andrii.nakryiko@gmail.com>, <ast@fb.com>, <daniel@iogearbox.net>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <kernel-team@fb.com>
+CC:     Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: prn2c23
+Subject: [PATCH bpf-next 01/12] libbpf: ensure libbpf.h is included along libbpf_internal.h
+Date:   Wed, 22 May 2019 12:50:42 -0700
+Message-ID: <20190522195053.4017624-2-andriin@fb.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190522195053.4017624-1-andriin@fb.com>
+References: <20190522195053.4017624-1-andriin@fb.com>
+X-FB-Internal: Safe
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-22_11:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=782 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905220138
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
+libbpf_internal.h expects a bunch of stuff defined in libbpf.h to be
+defined. This patch makes sure that libbpf.h is always included.
 
-[ Upstream commit ca31ca8247e2d3807ff5fa1d1760616a2292001c ]
-
-When build perf for ARC recently, there was a build failure due to lack
-of __NR_bpf.
-
-| Auto-detecting system features:
-|
-| ...                     get_cpuid: [ OFF ]
-| ...                           bpf: [ on  ]
-|
-| #  error __NR_bpf not defined. libbpf does not support your arch.
-    ^~~~~
-| bpf.c: In function 'sys_bpf':
-| bpf.c:66:17: error: '__NR_bpf' undeclared (first use in this function)
-|  return syscall(__NR_bpf, cmd, attr, size);
-|                 ^~~~~~~~
-|                 sys_bpf
-
-Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
-Acked-by: Yonghong Song <yhs@fb.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/bpf.c | 2 ++
+ tools/lib/bpf/libbpf_internal.h | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 7a0014794bff7..dd0b68d1f4be0 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -53,6 +53,8 @@
- #  define __NR_bpf 349
- # elif defined(__s390__)
- #  define __NR_bpf 351
-+# elif defined(__arc__)
-+#  define __NR_bpf 280
- # else
- #  error __NR_bpf not defined. libbpf does not support your arch.
- # endif
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index f3025b4d90e1..850f7bdec5cb 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -9,6 +9,8 @@
+ #ifndef __LIBBPF_LIBBPF_INTERNAL_H
+ #define __LIBBPF_LIBBPF_INTERNAL_H
+ 
++#include "libbpf.h"
++
+ #define BTF_INFO_ENC(kind, kind_flag, vlen) \
+ 	((!!(kind_flag) << 31) | ((kind) << 24) | ((vlen) & BTF_MAX_VLEN))
+ #define BTF_TYPE_ENC(name, info, size_or_type) (name), (info), (size_or_type)
 -- 
-2.20.1
+2.17.1
 
