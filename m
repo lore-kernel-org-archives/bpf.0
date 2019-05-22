@@ -2,102 +2,124 @@ Return-Path: <SRS0=789D=TW=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D689BC282CE
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 22:58:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A72F8C282CE
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 23:16:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7B50D206BA
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 22:58:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1558565928;
-	bh=nEugDwf/wtH0hi1R2CDVdQ+nuIGLUwIF34TRtXKLwP4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=zmmBQbNkGgidJX6UwEE/Jo7KupWyl7yyYbB2G+7G888c6bnoKTad9eI86vlFNnPYb
-	 qiAP5MNGLsEjOqJuToSVgqOc3CmB4frE4jKIyeej0wZaO3FUJsuvS1aRa1Hrsv4NIl
-	 UNPHqaRmeKNWG6vex4Dw7LWUPxUWhbCToFucVPCI=
+	by mail.kernel.org (Postfix) with ESMTP id 4DA702075E
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 23:16:40 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Jsv1FHGI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727802AbfEVW6s (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 May 2019 18:58:48 -0400
-Received: from mail-lf1-f44.google.com ([209.85.167.44]:40155 "EHLO
-        mail-lf1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727365AbfEVW6s (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 May 2019 18:58:48 -0400
-Received: by mail-lf1-f44.google.com with SMTP id h13so2923133lfc.7
-        for <bpf@vger.kernel.org>; Wed, 22 May 2019 15:58:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eiPzMyOs63Y3bxLy+vXT5x7xyRvI6hSbEVGCGU88yC4=;
-        b=e2qQHdYny//6XgV1qInDJKyzy3lKA4vNtPGobrytTzIE5Zt1tJWFnLSorBYItO5L2r
-         djaLoKDryHAkr7+vT1ccUSj37CnuuNWiH2gaJF3kh44ruw7xmTKsLuaDnrHoBquRTwaR
-         GauDd5nCf/U1Bkr2RsNGvQYVeqwPQChdN9428=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eiPzMyOs63Y3bxLy+vXT5x7xyRvI6hSbEVGCGU88yC4=;
-        b=gSaKQVEa7v5QPGw32UmbReIff4PcaHWBnwYJ//UFGsWEocCm+xtdLJMWy4lOoIvMHq
-         +Ix+vVM148PKbNGNRj6pA+EOsfuv/7cUzaAUHaC4wN5yLbXvY3zu561ags2GVpWKp9ZL
-         qbuf1kRqoyP/4OhgdwoTo1FrVxte6yrqiTmRWrCyJhjA4QwGPaJtoWRGGl+mlInB7UHQ
-         UZPMUeDttjvXPgKZlW5ke3pM7m0SIQW92lTasWrY5M8N3amz2FvvLRLtp6HgOQHnedi2
-         nFZvFwIXXnv55pHF371qQYuRe33TNnSExSZwLPD2+n+yB3x1rWZ5Cs/1etft3srKxAuT
-         6e1Q==
-X-Gm-Message-State: APjAAAVoILvVsVWbR7PyblBuIJsWwk0D1vCMUWNm/SyxNXVOj0GANllF
-        QrlKj7z47E2/iT1PRzwDU1h85LDXbhQ=
-X-Google-Smtp-Source: APXvYqyN9tOoPzskzQZhyJniXn5VgYKErIXqtkkG6xWLaqde9pWMkNk9dCAU8WkjsYXFZ5t38yafag==
-X-Received: by 2002:ac2:533c:: with SMTP id f28mr34274468lfh.81.1558565925353;
-        Wed, 22 May 2019 15:58:45 -0700 (PDT)
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com. [209.85.167.44])
-        by smtp.gmail.com with ESMTPSA id q12sm530422lfo.42.2019.05.22.15.58.43
-        for <bpf@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 May 2019 15:58:44 -0700 (PDT)
-Received: by mail-lf1-f44.google.com with SMTP id y13so2908018lfh.9
-        for <bpf@vger.kernel.org>; Wed, 22 May 2019 15:58:43 -0700 (PDT)
-X-Received: by 2002:a19:7d42:: with SMTP id y63mr38374010lfc.54.1558565923584;
- Wed, 22 May 2019 15:58:43 -0700 (PDT)
+        id S1727634AbfEVXQk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 May 2019 19:16:40 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:53172 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726553AbfEVXQk (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 22 May 2019 19:16:40 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x4MNE7Rk008822
+        for <bpf@vger.kernel.org>; Wed, 22 May 2019 16:16:38 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=VAP7RW6kLEPq7xxLOz5/cFo4CW5c3WKUDeDL8FIuJPI=;
+ b=Jsv1FHGI20K0c3A7VX0yrhckeMVClWZZ5S+2SLXZTB+EWAFlU9nMk6xz6m0BVIao6nZI
+ zje8ESV9KB0QoIOnAkL/R+3aQ3nx4ZiU6dDxc7WDRzjZe9tLUXL/CvWq6AO2TvTi5hEA
+ 312x4+kAV+6UwnJBge/JFXjvkEs/adooLy4= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by m0089730.ppops.net with ESMTP id 2sne3v0bsb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 22 May 2019 16:16:38 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Wed, 22 May 2019 16:16:37 -0700
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id A19873702482; Wed, 22 May 2019 16:16:36 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Yonghong Song <yhs@fb.com>
+Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Yonghong Song <yhs@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next v3 0/3] bpf: implement bpf_send_signal() helper
+Date:   Wed, 22 May 2019 16:16:36 -0700
+Message-ID: <20190522231636.505712-1-yhs@fb.com>
+X-Mailer: git-send-email 2.17.1
+X-FB-Internal: Safe
 MIME-Version: 1.0
-References: <000000000000fd342e05791cc86f@google.com> <000000000000e7e3a5058980ee7b@google.com>
-In-Reply-To: <000000000000e7e3a5058980ee7b@google.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 22 May 2019 15:58:27 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjq3q6ey_S41R0kzR0BwYBrg=h4G+x_TAJregrnkKK6=A@mail.gmail.com>
-Message-ID: <CAHk-=wjq3q6ey_S41R0kzR0BwYBrg=h4G+x_TAJregrnkKK6=A@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in sk_psock_unlink
-To:     syzbot <syzbot+3acd9f67a6a15766686e@syzkaller.appspotmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Miller <davem@davemloft.net>, john.fastabend@gmail.com,
-        kafai@fb.com,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, songliubraving@fb.com,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-22_14:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ malwarescore=0 suspectscore=8 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=940 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905220162
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, May 22, 2019 at 2:49 PM syzbot
-<syzbot+3acd9f67a6a15766686e@syzkaller.appspotmail.com> wrote:
->
-> syzbot has bisected this bug to:
->
-> commit 48a3c64b4649 ("Merge tag 'drm-fixes-2018-06-29' of  git://anongit.freedesktop.org/drm/drm")
+This patch tries to solve the following specific use case.
+ 
+Currently, bpf program can already collect stack traces
+through kernel function get_perf_callchain()
+when certain events happens (e.g., cache miss counter or
+cpu clock counter overflows). But such stack traces are
+not enough for jitted programs, e.g., hhvm (jited php). 
+To get real stack trace, jit engine internal data structures
+need to be traversed in order to get the real user functions.
 
-That looks very unlikely indeed. I strongly suspect your bisection is broken.
+bpf program itself may not be the best place to traverse
+the jit engine as the traversing logic could be complex and 
+it is not a stable interface either.
 
-Looking at the bisection log, the problem sometimes happens only once
-out of the ten tries. Presumably it then happened zero times a couple
-of times, and the bisection went off into the weeds.
+Instead, hhvm implements a signal handler,
+e.g. for SIGALARM, and a set of program locations which
+it can dump stack traces. When it receives a signal, it will 
+dump the stack in next such program location.
 
-Any possibility of re-doing the bisection (the ones marked "bad" are
-clearly bad, so you don't need to redo it _all_) with many more runs
-for each test point?
+This patch implements bpf_send_signal() helper to send
+a signal to hhvm in real time, resulting in intended stack traces.
+ 
+Patch #1 implemented the bpf_send_helper() in the kernel.
+Patch #2 synced uapi header bpf.h to tools directory.
+Patch #3 added a self test which covers tracepoint
+and perf_event bpf programs.
 
-                 Linus
+Changelogs:
+  v2 => v3:
+    . change the standalone test to be part of prog_tests.
+  RFC v1 => v2:
+    . previous version allows to send signal to an arbitrary
+      pid. This version just sends the signal to current
+      task to avoid unstable pid and potential races between 
+      sending signals and task state changes for the pid.
+
+Yonghong Song (3):
+  bpf: implement bpf_send_signal() helper
+  tools/bpf: sync bpf uapi header bpf.h to tools directory
+  tools/bpf: add selftest in test_progs for bpf_send_signal() helper
+
+ include/uapi/linux/bpf.h                      |  17 +-
+ kernel/trace/bpf_trace.c                      |  67 ++++++
+ tools/include/uapi/linux/bpf.h                |  17 +-
+ tools/testing/selftests/bpf/bpf_helpers.h     |   1 +
+ .../selftests/bpf/prog_tests/send_signal.c    | 193 ++++++++++++++++++
+ .../bpf/progs/test_send_signal_kern.c         |  51 +++++
+ 6 files changed, 344 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/send_signal.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_send_signal_kern.c
+
+-- 
+2.17.1
+
