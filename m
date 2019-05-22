@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEFDCC282DD
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 18:55:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A44AC282CE
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 18:56:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B54E0217D4
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 18:55:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0534C2173C
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 18:56:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="axaxDQWn"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="B5FtgXXa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729700AbfEVSz5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 May 2019 14:55:57 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:54628 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729685AbfEVSz5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 May 2019 14:55:57 -0400
-Received: by mail-wm1-f68.google.com with SMTP id i3so3264106wml.4
-        for <bpf@vger.kernel.org>; Wed, 22 May 2019 11:55:56 -0700 (PDT)
+        id S1729702AbfEVSz6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 May 2019 14:55:58 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:54053 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729658AbfEVSz4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 May 2019 14:55:56 -0400
+Received: by mail-wm1-f67.google.com with SMTP id 198so3273349wme.3
+        for <bpf@vger.kernel.org>; Wed, 22 May 2019 11:55:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Ncqbrt/07UxSSRx11KfiCqsSMYm+iMTRE09QQPITNZE=;
-        b=axaxDQWnKToE0QyxZlKW0MKYmtmzujKfebY3ogIT21rp2pn1EYtxgq6GG8Isy6lsPI
-         3KaPwNZTMff1gGNcnxxGf/Hc+pXA29/drDgBqHTJulJ0EIJmBQ5PJkZOqql4J0gCEdNv
-         EjxRw67zA1/vmweqPPlQ37cPgrcDzaRyS6fIntSD1C59juReHCUBzmzF08CpNwG8GwxR
-         FTF1BizH3J0/xW+1rp2tJyzFh8mH71cAR6daPCCiHjihWNXMyIz3cedNGgUAAeJFx1f6
-         0QbepybanwGy1UpCwbZ1k5S8r0mmn73QBujWX7Fo1wWiEoNavtn96e9QbjwMkzKQASYe
-         Cb0A==
+        bh=S+W2odUo3nSc6T3Sfm6jiUu8ReAEI7X0SKf4MDUNqvQ=;
+        b=B5FtgXXasfYdwdHUxmczJhbrWCPI7lWZisr4A/sAPxS6M6w6k2+6dBmHG/eV7gVISC
+         B0svG3JGk4caXJ/KT4SkKjrnElBacv6KFa58YZa4ZB8zn2SagDSABW8y2bcVxqw2thPK
+         BADy99sX/nQ/AdkUB0mlgGkdH9VonAbKIQOjIOzbiviw12TjDkzD17dod7YHabL8WYMK
+         b+k2zvlMlMZPCphshZvzBbDYjiBcn7vZFIUmWwG1T/e/YfETsCCPivFDJXXEN0/yLpcE
+         zVNi2dBJglI5KGjdM4YMX6NjTp+jWLOSD5/54WGPRU2ZgPEdAJhN8GX6u4ztj2sHvIyo
+         OI1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=Ncqbrt/07UxSSRx11KfiCqsSMYm+iMTRE09QQPITNZE=;
-        b=CHw4fUYcjDwQbirfmGHmje/ffAywxr2XOLdkO5RRZ75MkH0LxorqJf4guot+af1EdR
-         W9qZ1qyoZDjgZZKUA870hy8Zl66GZN1XBrigFg7r/deMOPIByLGVsNMQfb3ZzKNh9GJy
-         Nvy+PjY+dN+vMTxaKngL9YNPlrPj56YOPmSe2ZTda3KiRaCyCaEDhEUxfR/okLFK2tgY
-         F0ia2nxxY5g5OgesMU0bXC6d4hDYSXUArzu0fm4uvv3dk9gfckdyKZ2Cfsb6cE41VCAK
-         0MaivTPD/uiCiP08TKYDfUbOa24R0cfuBBGKx7uQXgFdCmxcROcQuf7omiX8wL36CWSl
-         C1YA==
-X-Gm-Message-State: APjAAAVLxMS/efpxgS8MS47WAMWvjq9kPNXbeL9vMVvlzJsR6a3Ym2bq
-        9r0o+DPXwRRkfuQidw7sYZ/50A==
-X-Google-Smtp-Source: APXvYqyiPS8Ia/Qph5I07WpwV9NCzJovkoSkcusTXVfbRIAVxPEMXjI1FzHsqeDlP0y5U0L5aH5BhA==
-X-Received: by 2002:a1c:200a:: with SMTP id g10mr8841759wmg.121.1558551355598;
-        Wed, 22 May 2019 11:55:55 -0700 (PDT)
+        bh=S+W2odUo3nSc6T3Sfm6jiUu8ReAEI7X0SKf4MDUNqvQ=;
+        b=MqqVJqYeVbLiMOhSjrJoGqnwEnK7HM7EKg3fKGx1VU1pUf5T44Cu6eE8i9zvJBWb13
+         FsZGi4z/6Padyyuzp+IP9Gt1tWvRrhrIVnMPxcl5A2KF3xfH+DOV7qJDcTxpeN5huAkd
+         zbBTnxr9Ge/faf5wXG2kxE2Z83RbLgBgtFNP64MQ+xjM49IjIOazrMYc2k8bsD0Z0ihB
+         Qg9KYIzQj2wiUFeuQwjCf5Dpspz7CgGrZul97xJ1iSoAiYqKoBrSogizxKeMYewgStPW
+         SBzk/mh1TpU0tSXOdMEcjCkdUdvzyRrrCmFv37Ud2tByDVqw5OYa82L+AgW5F6LGV7z2
+         WcFg==
+X-Gm-Message-State: APjAAAXe+wijKUVAwEYZB/e0nWfxVN5witp/LCyGl0U3o+OPzgWYuRWf
+        5ZZbFtv5QlltUXUloTDceN+SyQ==
+X-Google-Smtp-Source: APXvYqxgol2lbkT3TLS4hpBRwuNzyaEKpTvGh7z1osobbh5+OU4Y0+KGInmjinShKizCMyAwUDqNlA==
+X-Received: by 2002:a1c:238d:: with SMTP id j135mr9257697wmj.46.1558551353587;
+        Wed, 22 May 2019 11:55:53 -0700 (PDT)
 Received: from cbtest28.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id t12sm16328801wro.2.2019.05.22.11.55.54
+        by smtp.gmail.com with ESMTPSA id t12sm16328801wro.2.2019.05.22.11.55.52
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 22 May 2019 11:55:54 -0700 (PDT)
+        Wed, 22 May 2019 11:55:53 -0700 (PDT)
 From:   Jiong Wang <jiong.wang@netronome.com>
 To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
@@ -62,9 +62,9 @@ Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         sandipan@linux.ibm.com, schwidefsky@de.ibm.com,
         heiko.carstens@de.ibm.com, jakub.kicinski@netronome.com,
         Jiong Wang <jiong.wang@netronome.com>
-Subject: [PATCH v7 bpf-next 06/16] bpf: verifier: randomize high 32-bit when BPF_F_TEST_RND_HI32 is set
-Date:   Wed, 22 May 2019 19:55:02 +0100
-Message-Id: <1558551312-17081-7-git-send-email-jiong.wang@netronome.com>
+Subject: [PATCH v7 bpf-next 04/16] bpf: verifier: insert zero extension according to analysis result
+Date:   Wed, 22 May 2019 19:55:00 +0100
+Message-Id: <1558551312-17081-5-git-send-email-jiong.wang@netronome.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1558551312-17081-1-git-send-email-jiong.wang@netronome.com>
 References: <1558551312-17081-1-git-send-email-jiong.wang@netronome.com>
@@ -73,121 +73,150 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch randomizes high 32-bit of a definition when BPF_F_TEST_RND_HI32
-is set.
+After previous patches, verifier will mark a insn if it really needs zero
+extension on dst_reg.
 
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
+It is then for back-ends to decide how to use such information to eliminate
+unnecessary zero extension code-gen during JIT compilation.
+
+One approach is verifier insert explicit zero extension for those insns
+that need zero extension in a generic way, JIT back-ends then do not
+generate zero extension for sub-register write at default.
+
+However, only those back-ends which do not have hardware zero extension
+want this optimization. Back-ends like x86_64 and AArch64 have hardware
+zero extension support that the insertion should be disabled.
+
+This patch introduces new target hook "bpf_jit_needs_zext" which returns
+false at default, meaning verifier zero extension insertion is disabled at
+default. A back-end could override this hook to return true if it doesn't
+have hardware support and want verifier insert zero extension explicitly.
+
+Offload targets do not use this native target hook, instead, they could
+get the optimization results using bpf_prog_offload_ops.finalize.
+
+NOTE: arches could have diversified features, it is possible for one arch
+to have hardware zero extension support for some sub-register write insns
+but not for all. For example, PowerPC, SPARC have zero extended loads, but
+not for alu32. So when verifier zero extension insertion enabled, these JIT
+back-ends need to peephole insns to remove those zero extension inserted
+for insn that actually has hardware zero extension support. The peephole
+could be as simple as looking the next insn, if it is a special zero
+extension insn then it is safe to eliminate it if the current insn has
+hardware zero extension support.
+
+Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
 ---
- kernel/bpf/verifier.c | 68 ++++++++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 57 insertions(+), 11 deletions(-)
+ include/linux/bpf.h    |  1 +
+ include/linux/filter.h |  1 +
+ kernel/bpf/core.c      |  9 +++++++++
+ kernel/bpf/verifier.c  | 41 +++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 52 insertions(+)
 
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 4fb3aa2..d98141e 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -370,6 +370,7 @@ struct bpf_prog_aux {
+ 	u32 id;
+ 	u32 func_cnt; /* used by non-func prog as the number of func progs */
+ 	u32 func_idx; /* 0 for non-func prog, the index in func array for func prog */
++	bool verifier_zext; /* Zero extensions has been inserted by verifier. */
+ 	bool offload_requested;
+ 	struct bpf_prog **func;
+ 	void *jit_data; /* JIT specific data. arch dependent */
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index bb10ffb..ba8b6527 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -825,6 +825,7 @@ u64 __bpf_call_base(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
+ 
+ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog);
+ void bpf_jit_compile(struct bpf_prog *prog);
++bool bpf_jit_needs_zext(void);
+ bool bpf_helper_changes_pkt_data(void *func);
+ 
+ static inline bool bpf_dump_raw_ok(void)
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 242a643..3675b19 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2090,6 +2090,15 @@ bool __weak bpf_helper_changes_pkt_data(void *func)
+ 	return false;
+ }
+ 
++/* Return TRUE if the JIT backend wants verifier to enable sub-register usage
++ * analysis code and wants explicit zero extension inserted by verifier.
++ * Otherwise, return FALSE.
++ */
++bool __weak bpf_jit_needs_zext(void)
++{
++	return false;
++}
++
+ /* To execute LD_ABS/LD_IND instructions __bpf_prog_run() may call
+  * skb_copy_bits(), so provide a weak definition of it for NET-less config.
+  */
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 560e17d..0a8cab8 100644
+index 16d8ed9..560e17d 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -7621,33 +7621,79 @@ static int opt_remove_nops(struct bpf_verifier_env *env)
+@@ -7621,6 +7621,38 @@ static int opt_remove_nops(struct bpf_verifier_env *env)
  	return 0;
  }
  
--static int opt_subreg_zext_lo32(struct bpf_verifier_env *env)
-+static int opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
-+					 const union bpf_attr *attr)
- {
-+	struct bpf_insn *patch, zext_patch[2], rnd_hi32_patch[4];
- 	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+	int i, patch_len, delta = 0, len = env->prog->len;
- 	struct bpf_insn *insns = env->prog->insnsi;
--	int i, delta = 0, len = env->prog->len;
--	struct bpf_insn zext_patch[2];
- 	struct bpf_prog *new_prog;
-+	bool rnd_hi32;
- 
-+	rnd_hi32 = attr->prog_flags & BPF_F_TEST_RND_HI32;
- 	zext_patch[1] = BPF_ZEXT_REG(0);
-+	rnd_hi32_patch[1] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_AX, 0);
-+	rnd_hi32_patch[2] = BPF_ALU64_IMM(BPF_LSH, BPF_REG_AX, 32);
-+	rnd_hi32_patch[3] = BPF_ALU64_REG(BPF_OR, 0, BPF_REG_AX);
- 	for (i = 0; i < len; i++) {
- 		int adj_idx = i + delta;
- 		struct bpf_insn insn;
- 
--		if (!aux[adj_idx].zext_dst)
++static int opt_subreg_zext_lo32(struct bpf_verifier_env *env)
++{
++	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	struct bpf_insn *insns = env->prog->insnsi;
++	int i, delta = 0, len = env->prog->len;
++	struct bpf_insn zext_patch[2];
++	struct bpf_prog *new_prog;
++
++	zext_patch[1] = BPF_ZEXT_REG(0);
++	for (i = 0; i < len; i++) {
++		int adj_idx = i + delta;
++		struct bpf_insn insn;
++
++		if (!aux[adj_idx].zext_dst)
++			continue;
++
 +		insn = insns[adj_idx];
-+		if (!aux[adj_idx].zext_dst) {
-+			u8 code, class;
-+			u32 imm_rnd;
++		zext_patch[0] = insn;
++		zext_patch[1].dst_reg = insn.dst_reg;
++		zext_patch[1].src_reg = insn.dst_reg;
++		new_prog = bpf_patch_insn_data(env, adj_idx, zext_patch, 2);
++		if (!new_prog)
++			return -ENOMEM;
++		env->prog = new_prog;
++		insns = new_prog->insnsi;
++		aux = env->insn_aux_data;
++		delta += 2;
++	}
 +
-+			if (!rnd_hi32)
-+				continue;
++	return 0;
++}
 +
-+			code = insn.code;
-+			class = BPF_CLASS(code);
-+			if (insn_no_def(&insn))
-+				continue;
-+
-+			/* NOTE: arg "reg" (the fourth one) is only used for
-+			 *       BPF_STX which has been ruled out in above
-+			 *       check, it is safe to pass NULL here.
-+			 */
-+			if (is_reg64(env, &insn, insn.dst_reg, NULL, DST_OP)) {
-+				if (class == BPF_LD &&
-+				    BPF_MODE(code) == BPF_IMM)
-+					i++;
-+				continue;
-+			}
-+
-+			/* ctx load could be transformed into wider load. */
-+			if (class == BPF_LDX &&
-+			    aux[adj_idx].ptr_type == PTR_TO_CTX)
-+				continue;
-+
-+			imm_rnd = get_random_int();
-+			rnd_hi32_patch[0] = insn;
-+			rnd_hi32_patch[1].imm = imm_rnd;
-+			rnd_hi32_patch[3].dst_reg = insn.dst_reg;
-+			patch = rnd_hi32_patch;
-+			patch_len = 4;
-+			goto apply_patch_buffer;
-+		}
-+
-+		if (!bpf_jit_needs_zext())
- 			continue;
- 
--		insn = insns[adj_idx];
- 		zext_patch[0] = insn;
- 		zext_patch[1].dst_reg = insn.dst_reg;
- 		zext_patch[1].src_reg = insn.dst_reg;
--		new_prog = bpf_patch_insn_data(env, adj_idx, zext_patch, 2);
-+		patch = zext_patch;
-+		patch_len = 2;
-+apply_patch_buffer:
-+		new_prog = bpf_patch_insn_data(env, adj_idx, patch, patch_len);
- 		if (!new_prog)
- 			return -ENOMEM;
- 		env->prog = new_prog;
- 		insns = new_prog->insnsi;
- 		aux = env->insn_aux_data;
--		delta += 2;
-+		delta += patch_len - 1;
- 	}
- 
- 	return 0;
-@@ -8507,10 +8553,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
- 	/* do 32-bit optimization after insn patching has done so those patched
- 	 * insns could be handled correctly.
- 	 */
--	if (ret == 0 && bpf_jit_needs_zext() &&
--	    !bpf_prog_is_dev_bound(env->prog->aux)) {
--		ret = opt_subreg_zext_lo32(env);
--		env->prog->aux->verifier_zext = !ret;
-+	if (ret == 0 && !bpf_prog_is_dev_bound(env->prog->aux)) {
-+		ret = opt_subreg_zext_lo32_rnd_hi32(env, attr);
-+		env->prog->aux->verifier_zext = bpf_jit_needs_zext() ? !ret
-+								     : false;
- 	}
- 
+ /* convert load instructions that access fields of a context type into a
+  * sequence of instructions that access fields of the underlying structure:
+  *     struct __sk_buff    -> struct sk_buff
+@@ -8472,6 +8504,15 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
  	if (ret == 0)
+ 		ret = fixup_bpf_calls(env);
+ 
++	/* do 32-bit optimization after insn patching has done so those patched
++	 * insns could be handled correctly.
++	 */
++	if (ret == 0 && bpf_jit_needs_zext() &&
++	    !bpf_prog_is_dev_bound(env->prog->aux)) {
++		ret = opt_subreg_zext_lo32(env);
++		env->prog->aux->verifier_zext = !ret;
++	}
++
+ 	if (ret == 0)
+ 		ret = fixup_call_args(env);
+ 
 -- 
 2.7.4
 
