@@ -2,115 +2,62 @@ Return-Path: <SRS0=789D=TW=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A1B3C282CE
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 23:20:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1EACC282DC
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 23:21:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AA7892075E
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 23:20:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 877DE2075E
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 23:21:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="mtXW+JcN";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="Q8qBK66g"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="EjwRlqSU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728027AbfEVXUY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 May 2019 19:20:24 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:54992 "EHLO
+        id S1729779AbfEVXVA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 May 2019 19:21:00 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:45682 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727936AbfEVXUY (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 May 2019 19:20:24 -0400
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4MNDMJU015106;
-        Wed, 22 May 2019 16:20:03 -0700
+        by vger.kernel.org with ESMTP id S1729763AbfEVXVA (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 22 May 2019 19:21:00 -0400
+Received: from pps.filterd (m0044008.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4MNEGmQ008450
+        for <bpf@vger.kernel.org>; Wed, 22 May 2019 16:20:59 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=neuB7kOtjPjVNsQiYpjxhh4qw6MP1AxSqcWVcBpfwiI=;
- b=mtXW+JcNh2NX0GnCTMJofk/Y3w91D9GsJdd8aQZVl4NO19SrVFSl5myiNTbBWc/n4qq4
- 40n7g6AEakParC2VkpG6lkDc3VXXf/tA4PMRlmC582hA73RCcy7SyGVP3bxCTt5Xk93p
- vseqUC5O7NmRNGEpXpc2zoOGNonuMbSE300= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2sn8rt9sgm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 22 May 2019 16:20:03 -0700
-Received: from prn-mbx07.TheFacebook.com (2620:10d:c081:6::21) by
- prn-hub05.TheFacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1713.5; Wed, 22 May 2019 16:20:02 -0700
-Received: from prn-hub06.TheFacebook.com (2620:10d:c081:35::130) by
- prn-mbx07.TheFacebook.com (2620:10d:c081:6::21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1713.5; Wed, 22 May 2019 16:20:02 -0700
-Received: from NAM05-DM3-obe.outbound.protection.outlook.com (192.168.54.28)
- by o365-in.thefacebook.com (192.168.16.30) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
- via Frontend Transport; Wed, 22 May 2019 16:20:02 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector1-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=neuB7kOtjPjVNsQiYpjxhh4qw6MP1AxSqcWVcBpfwiI=;
- b=Q8qBK66gzprMTHerkNx2TZAop3X7fHpJY+1CCOh22T+ZYadlW/WmN/IS9xiWtw1JvLGFyTmBfzGmcBqkTlAFRKsyPiyFTAsn2i1gHCQQRzwc5H6gZmWHeOAl0Qu1OwGxIDF/ktU0A+aWcycYbKIBMZfpOT4A99sXTnVHop0eAYQ=
-Received: from BYAPR15MB2631.namprd15.prod.outlook.com (20.179.156.24) by
- BYAPR15MB2615.namprd15.prod.outlook.com (20.179.155.220) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1922.16; Wed, 22 May 2019 23:20:00 +0000
-Received: from BYAPR15MB2631.namprd15.prod.outlook.com
- ([fe80::d4f6:b485:69ee:fd9a]) by BYAPR15MB2631.namprd15.prod.outlook.com
- ([fe80::d4f6:b485:69ee:fd9a%7]) with mapi id 15.20.1900.020; Wed, 22 May 2019
- 23:20:00 +0000
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=4TamBFhMxI7eVZDyeQik75QRP7s+XDIcj/PxFC9FCqI=;
+ b=EjwRlqSUzwth/d7gIg+3PmVPyStmKXYUWFtcDnjN3KL3lFdE2ESL3gCr5tYjsMMtD3CO
+ Uzu2ZajEZsYavVV6h7k8UFU2PMbwSDgmOaDjgIE8+Ls5ejEPa3qlXAi60PQsL7/ft0XE
+ bEh0kxQ2d1A5flMveGH+XFngwEAhrL7i7jo= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2sn8b0svms-6
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 22 May 2019 16:20:59 -0700
+Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 22 May 2019 16:20:55 -0700
+Received: by devvm2643.prn2.facebook.com (Postfix, from userid 111017)
+        id E6E0012526D48; Wed, 22 May 2019 16:20:53 -0700 (PDT)
+Smtp-Origin-Hostprefix: devvm
 From:   Roman Gushchin <guro@fb.com>
-To:     Stanislav Fomichev <sdf@fomichev.me>
-CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Tejun Heo <tj@kernel.org>, Kernel Team <Kernel-team@fb.com>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 4/4] selftests/bpf: add auto-detach test
-Thread-Topic: [PATCH bpf-next 4/4] selftests/bpf: add auto-detach test
-Thread-Index: AQHVEOV6qenHistAZ0WXzSfuc95yzqZ3uH0AgAAPcQA=
-Date:   Wed, 22 May 2019 23:19:59 +0000
-Message-ID: <20190522231954.GB20167@tower.DHCP.thefacebook.com>
-References: <20190522212932.2646247-1-guro@fb.com>
- <20190522212932.2646247-5-guro@fb.com> <20190522222438.GB3032@mini-arch>
-In-Reply-To: <20190522222438.GB3032@mini-arch>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: MWHPR2201CA0036.namprd22.prod.outlook.com
- (2603:10b6:301:28::49) To BYAPR15MB2631.namprd15.prod.outlook.com
- (2603:10b6:a03:152::24)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [2620:10d:c090:200::7d4f]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 59f8b9b6-3e8e-4cfb-3179-08d6df0c0290
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:BYAPR15MB2615;
-x-ms-traffictypediagnostic: BYAPR15MB2615:
-x-microsoft-antispam-prvs: <BYAPR15MB2615DDF4664F685BD2EFF7F6BE000@BYAPR15MB2615.namprd15.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 0045236D47
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(136003)(376002)(39860400002)(396003)(346002)(199004)(189003)(229853002)(46003)(54906003)(53936002)(2906002)(6246003)(478600001)(8936002)(81166006)(81156014)(6436002)(9686003)(186003)(6486002)(8676002)(6916009)(11346002)(33656002)(446003)(6116002)(486006)(316002)(476003)(6512007)(305945005)(99286004)(5660300002)(6506007)(71190400001)(14444005)(68736007)(71200400001)(7736002)(76176011)(102836004)(5024004)(386003)(73956011)(52116002)(4326008)(86362001)(1076003)(14454004)(25786009)(66556008)(66446008)(64756008)(66476007)(66946007)(256004);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB2615;H:BYAPR15MB2631.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: xktschjKKGgfm8e6zZlXkNI/IFyUQg94Guow49gf+pPwmnyjjmAWx7i4/3HqSLZTkmsY0MmuHW8TTGb4m0+ETSTH7YtXvLTGaLrA/GfvA8zJJxLMvnaoyElY0dQBSNbZc7UYFooFlA10HTvSp1YMCTSReTS+t03CS9DTkobZPHU/m0BDEUne6EhYenNHJdaC/pKGwIuPYAFk9+UpdCigK6Afhj3CDajUuaQxOkMoU3cCv0lTjhtU1HdDDJ7et+igHrPiiWZ7JeU8wTkvqD7ITW2m4Dd2o0jhoamODFKb3wCl+t6wPHZscXkUzmS2MQul3dYtfr5dxbndfMf1Ekc6KVGOVULJjK6jBB6aHa47NFoAn5WLjm2rzIf41NUXwseWQBFSD+C7Ld0Rb6dgKgfD0I8VgIGFKfw+gvYGPW47QK0=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <EE6BDDC0F0D64B4B934848EF010D42BF@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+Smtp-Origin-Hostname: devvm2643.prn2.facebook.com
+To:     Alexei Starovoitov <ast@kernel.org>, <bpf@vger.kernel.org>
+CC:     Daniel Borkmann <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
+        Tejun Heo <tj@kernel.org>, <kernel-team@fb.com>,
+        <cgroups@vger.kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+        <linux-kernel@vger.kernel.org>, Roman Gushchin <guro@fb.com>
+Smtp-Origin-Cluster: prn2c23
+Subject: [PATCH v2 bpf-next 2/4] selftests/bpf: convert test_cgrp2_attach2 example into kselftest
+Date:   Wed, 22 May 2019 16:20:49 -0700
+Message-ID: <20190522232051.2938491-3-guro@fb.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190522232051.2938491-1-guro@fb.com>
+References: <20190522232051.2938491-1-guro@fb.com>
+X-FB-Internal: Safe
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 59f8b9b6-3e8e-4cfb-3179-08d6df0c0290
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 May 2019 23:19:59.8347
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2615
-X-OriginatorOrg: fb.com
+Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-22_14:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
@@ -124,115 +71,202 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, May 22, 2019 at 03:24:38PM -0700, Stanislav Fomichev wrote:
-> On 05/22, Roman Gushchin wrote:
-> > Add a kselftest to cover bpf auto-detachment functionality.
-> > The test creates a cgroup, associates some resources with it,
-> > attaches a couple of bpf programs and deletes the cgroup.
-> >=20
-> > Then it checks that bpf programs are going away in 5 seconds.
-> >=20
-> > Expected output:
-> >   $ ./test_cgroup_attach
-> >   #override:PASS
-> >   #multi:PASS
-> >   #autodetach:PASS
-> >   test_cgroup_attach:PASS
-> >=20
-> > On a kernel without auto-detaching:
-> >   $ ./test_cgroup_attach
-> >   #override:PASS
-> >   #multi:PASS
-> >   #autodetach:FAIL
-> >   test_cgroup_attach:FAIL
-> >=20
-> > Signed-off-by: Roman Gushchin <guro@fb.com>
-> > ---
-> >  .../selftests/bpf/test_cgroup_attach.c        | 108 +++++++++++++++++-
-> >  1 file changed, 107 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/tools/testing/selftests/bpf/test_cgroup_attach.c b/tools/t=
-esting/selftests/bpf/test_cgroup_attach.c
-> > index 93d4fe295e7d..36441fd0f392 100644
-> > --- a/tools/testing/selftests/bpf/test_cgroup_attach.c
-> > +++ b/tools/testing/selftests/bpf/test_cgroup_attach.c
-> > @@ -456,9 +456,115 @@ static int test_multiprog(void)
-> >  	return rc;
-> >  }
-> > =20
-> > +static int test_autodetach(void)
-> > +{
-> > +	__u32 prog_cnt =3D 4, attach_flags;
-> > +	int allow_prog[2] =3D {0};
-> > +	__u32 prog_ids[2] =3D {0};
-> > +	int cg =3D 0, i, rc =3D -1;
-> > +	void *ptr =3D NULL;
-> > +	int attempts;
-> > +
-> > +
-> > +	for (i =3D 0; i < ARRAY_SIZE(allow_prog); i++) {
-> > +		allow_prog[i] =3D prog_load_cnt(1, 1 << i);
-> > +		if (!allow_prog[i])
-> > +			goto err;
-> > +	}
-> > +
-> > +	if (setup_cgroup_environment())
-> > +		goto err;
-> > +
-> > +	/* create a cgroup, attach two programs and remember their ids */
-> > +	cg =3D create_and_get_cgroup("/cg_autodetach");
-> > +	if (cg < 0)
-> > +		goto err;
-> > +
-> > +	if (join_cgroup("/cg_autodetach"))
-> > +		goto err;
-> > +
-> > +	for (i =3D 0; i < ARRAY_SIZE(allow_prog); i++) {
-> > +		if (bpf_prog_attach(allow_prog[i], cg, BPF_CGROUP_INET_EGRESS,
-> > +				    BPF_F_ALLOW_MULTI)) {
-> > +			log_err("Attaching prog[%d] to cg:egress", i);
-> > +			goto err;
-> > +		}
-> > +	}
-> > +
-> > +	/* make sure that programs are attached and run some traffic */
-> > +	assert(bpf_prog_query(cg, BPF_CGROUP_INET_EGRESS, 0, &attach_flags,
-> > +			      prog_ids, &prog_cnt) =3D=3D 0);
-> > +	assert(system(PING_CMD) =3D=3D 0);
-> > +
-> > +	/* allocate some memory (4Mb) to pin the original cgroup */
-> > +	ptr =3D malloc(4 * (1 << 20));
-> > +	if (!ptr)
-> > +		goto err;
-> > +
-> > +	/* close programs and cgroup fd */
-> > +	for (i =3D 0; i < ARRAY_SIZE(allow_prog); i++) {
-> > +		close(allow_prog[i]);
-> > +		allow_prog[i] =3D 0;
-> > +	}
-> > +
-> > +	close(cg);
-> > +	cg =3D 0;
-> > +
-> > +	/* leave the cgroup and remove it. don't detach programs */
-> > +	cleanup_cgroup_environment();
-> > +
->=20
-> [..]
-> > +	/* programs must stay pinned by the allocated memory */
-> > +	for (i =3D 0; i < ARRAY_SIZE(prog_ids); i++) {
-> > +		int fd =3D bpf_prog_get_fd_by_id(prog_ids[i]);
-> > +
-> > +		if (fd < 0)
-> > +			goto err;
-> > +		close(fd);
-> > +	}
-> This looks a bit flaky. It's essentially the same check you later
-> do in a for loop. I guess there is a chance that async auto-detach
-> might happen right after cleanup_cgroup_environment and before this for l=
-oop?
+Convert test_cgrp2_attach2 example into a proper test_cgroup_attach
+kselftest. It's better because we do run kselftest on a constant
+basis, so there are better chances to spot a potential regression.
 
-Ah, this section remained from an earlier version which had another step.
-I'll remove it completely, it's totally useless now.
+Also make it slightly less verbose to conform kselftests output style.
 
-Thanks!
+Output example:
+  $ ./test_cgroup_attach
+  #override:PASS
+  #multi:PASS
+  test_cgroup_attach:PASS
+
+Signed-off-by: Roman Gushchin <guro@fb.com>
+---
+ samples/bpf/Makefile                          |  2 -
+ tools/testing/selftests/bpf/Makefile          |  4 +-
+ .../selftests/bpf/test_cgroup_attach.c        | 48 ++++++++++++-------
+ 3 files changed, 35 insertions(+), 19 deletions(-)
+ rename samples/bpf/test_cgrp2_attach2.c => tools/testing/selftests/bpf/test_cgroup_attach.c (92%)
+
+diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+index 4f0a1cdbfe7c..253e5a2856be 100644
+--- a/samples/bpf/Makefile
++++ b/samples/bpf/Makefile
+@@ -26,7 +26,6 @@ hostprogs-y += map_perf_test
+ hostprogs-y += test_overhead
+ hostprogs-y += test_cgrp2_array_pin
+ hostprogs-y += test_cgrp2_attach
+-hostprogs-y += test_cgrp2_attach2
+ hostprogs-y += test_cgrp2_sock
+ hostprogs-y += test_cgrp2_sock2
+ hostprogs-y += xdp1
+@@ -81,7 +80,6 @@ map_perf_test-objs := bpf_load.o map_perf_test_user.o
+ test_overhead-objs := bpf_load.o test_overhead_user.o
+ test_cgrp2_array_pin-objs := test_cgrp2_array_pin.o
+ test_cgrp2_attach-objs := test_cgrp2_attach.o
+-test_cgrp2_attach2-objs := test_cgrp2_attach2.o $(CGROUP_HELPERS)
+ test_cgrp2_sock-objs := test_cgrp2_sock.o
+ test_cgrp2_sock2-objs := bpf_load.o test_cgrp2_sock2.o
+ xdp1-objs := xdp1_user.o
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 66f2dca1dee1..e09f419f4d7e 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -23,7 +23,8 @@ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test
+ 	test_align test_verifier_log test_dev_cgroup test_tcpbpf_user \
+ 	test_sock test_btf test_sockmap test_lirc_mode2_user get_cgroup_id_user \
+ 	test_socket_cookie test_cgroup_storage test_select_reuseport test_section_names \
+-	test_netcnt test_tcpnotify_user test_sock_fields test_sysctl
++	test_netcnt test_tcpnotify_user test_sock_fields test_sysctl \
++	test_cgroup_attach
+ 
+ BPF_OBJ_FILES = $(patsubst %.c,%.o, $(notdir $(wildcard progs/*.c)))
+ TEST_GEN_FILES = $(BPF_OBJ_FILES)
+@@ -96,6 +97,7 @@ $(OUTPUT)/test_cgroup_storage: cgroup_helpers.c
+ $(OUTPUT)/test_netcnt: cgroup_helpers.c
+ $(OUTPUT)/test_sock_fields: cgroup_helpers.c
+ $(OUTPUT)/test_sysctl: cgroup_helpers.c
++$(OUTPUT)/test_cgroup_attach: cgroup_helpers.c
+ 
+ .PHONY: force
+ 
+diff --git a/samples/bpf/test_cgrp2_attach2.c b/tools/testing/selftests/bpf/test_cgroup_attach.c
+similarity index 92%
+rename from samples/bpf/test_cgrp2_attach2.c
+rename to tools/testing/selftests/bpf/test_cgroup_attach.c
+index 0bb6507256b7..93d4fe295e7d 100644
+--- a/samples/bpf/test_cgrp2_attach2.c
++++ b/tools/testing/selftests/bpf/test_cgroup_attach.c
+@@ -1,3 +1,5 @@
++// SPDX-License-Identifier: GPL-2.0
++
+ /* eBPF example program:
+  *
+  * - Creates arraymap in kernel with 4 bytes keys and 8 byte values
+@@ -25,20 +27,27 @@
+ #include <sys/resource.h>
+ #include <sys/time.h>
+ #include <unistd.h>
++#include <linux/filter.h>
+ 
+ #include <linux/bpf.h>
+ #include <bpf/bpf.h>
+ 
+-#include "bpf_insn.h"
++#include "bpf_util.h"
+ #include "bpf_rlimit.h"
+ #include "cgroup_helpers.h"
+ 
+ #define FOO		"/foo"
+ #define BAR		"/foo/bar/"
+-#define PING_CMD	"ping -c1 -w1 127.0.0.1 > /dev/null"
++#define PING_CMD	"ping -q -c1 -w1 127.0.0.1 > /dev/null"
+ 
+ char bpf_log_buf[BPF_LOG_BUF_SIZE];
+ 
++#ifdef DEBUG
++#define debug(args...) printf(args)
++#else
++#define debug(args...)
++#endif
++
+ static int prog_load(int verdict)
+ {
+ 	int ret;
+@@ -89,7 +98,7 @@ static int test_foo_bar(void)
+ 		goto err;
+ 	}
+ 
+-	printf("Attached DROP prog. This ping in cgroup /foo should fail...\n");
++	debug("Attached DROP prog. This ping in cgroup /foo should fail...\n");
+ 	assert(system(PING_CMD) != 0);
+ 
+ 	/* Create cgroup /foo/bar, get fd, and join it */
+@@ -100,7 +109,7 @@ static int test_foo_bar(void)
+ 	if (join_cgroup(BAR))
+ 		goto err;
+ 
+-	printf("Attached DROP prog. This ping in cgroup /foo/bar should fail...\n");
++	debug("Attached DROP prog. This ping in cgroup /foo/bar should fail...\n");
+ 	assert(system(PING_CMD) != 0);
+ 
+ 	if (bpf_prog_attach(allow_prog, bar, BPF_CGROUP_INET_EGRESS,
+@@ -109,7 +118,7 @@ static int test_foo_bar(void)
+ 		goto err;
+ 	}
+ 
+-	printf("Attached PASS prog. This ping in cgroup /foo/bar should pass...\n");
++	debug("Attached PASS prog. This ping in cgroup /foo/bar should pass...\n");
+ 	assert(system(PING_CMD) == 0);
+ 
+ 	if (bpf_prog_detach(bar, BPF_CGROUP_INET_EGRESS)) {
+@@ -117,7 +126,7 @@ static int test_foo_bar(void)
+ 		goto err;
+ 	}
+ 
+-	printf("Detached PASS from /foo/bar while DROP is attached to /foo.\n"
++	debug("Detached PASS from /foo/bar while DROP is attached to /foo.\n"
+ 	       "This ping in cgroup /foo/bar should fail...\n");
+ 	assert(system(PING_CMD) != 0);
+ 
+@@ -132,7 +141,7 @@ static int test_foo_bar(void)
+ 		goto err;
+ 	}
+ 
+-	printf("Attached PASS from /foo/bar and detached DROP from /foo.\n"
++	debug("Attached PASS from /foo/bar and detached DROP from /foo.\n"
+ 	       "This ping in cgroup /foo/bar should pass...\n");
+ 	assert(system(PING_CMD) == 0);
+ 
+@@ -199,9 +208,9 @@ static int test_foo_bar(void)
+ 	close(bar);
+ 	cleanup_cgroup_environment();
+ 	if (!rc)
+-		printf("### override:PASS\n");
++		printf("#override:PASS\n");
+ 	else
+-		printf("### override:FAIL\n");
++		printf("#override:FAIL\n");
+ 	return rc;
+ }
+ 
+@@ -441,19 +450,26 @@ static int test_multiprog(void)
+ 	close(cg5);
+ 	cleanup_cgroup_environment();
+ 	if (!rc)
+-		printf("### multi:PASS\n");
++		printf("#multi:PASS\n");
+ 	else
+-		printf("### multi:FAIL\n");
++		printf("#multi:FAIL\n");
+ 	return rc;
+ }
+ 
+ int main(int argc, char **argv)
+ {
+-	int rc = 0;
++	int (*tests[])(void) = {test_foo_bar, test_multiprog};
++	int errors = 0;
++	int i;
+ 
+-	rc = test_foo_bar();
+-	if (rc)
+-		return rc;
++	for (i = 0; i < ARRAY_SIZE(tests); i++)
++		if (tests[i]())
++			errors++;
++
++	if (errors)
++		printf("test_cgroup_attach:FAIL\n");
++	else
++		printf("test_cgroup_attach:PASS\n");
+ 
+-	return test_multiprog();
++	return errors ? EXIT_FAILURE : EXIT_SUCCESS;
+ }
+-- 
+2.20.1
+
