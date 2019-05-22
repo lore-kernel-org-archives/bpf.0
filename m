@@ -2,121 +2,112 @@ Return-Path: <SRS0=789D=TW=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9426C282CE
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:54:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D54DC282CE
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:55:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B9B6D20856
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:54:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1558554886;
-	bh=8TQcUMQCZVzH7mNHS/hd5ONN6+PvdivAyMMx2MV8PqA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=M8YlD7Cg0OuAU/GxZOD7t1GyILY++17Y59tECfDoqC8cPHmLlwtLgkRA71ekY8CfC
-	 yVFvCjsx7CjX+5UUG50C7O9zX/qMTbuUEJMXpW4TjsBwVFCN2F6O7+7RF8OgVqaem8
-	 alBxwsBrwPL9ab/237NjDjiwERaQ3Z6Em9zddbSo=
+	by mail.kernel.org (Postfix) with ESMTP id 6F7E6217D4
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:55:33 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HvudDPF+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731681AbfEVTyd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 May 2019 15:54:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47012 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731671AbfEVTZj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 May 2019 15:25:39 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 890E421851;
-        Wed, 22 May 2019 19:25:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558553138;
-        bh=8TQcUMQCZVzH7mNHS/hd5ONN6+PvdivAyMMx2MV8PqA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GVLWUMjQ0PcfJwGCGz29z233f1hIITsz7zLn/3CNOyVCIWtVeib8v2WNlKct9RviT
-         XmonaZIzCtxaG2lgtWqAqQto4KfDiHiieeoELaYAVblIXRWVuHbEJ1nMTlKscUuJcS
-         TEgTQIv9G26deK0v3EqmsJQkQMgLRhBxvwUQ2OsM=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Daniel T. Lee" <danieltimlee@gmail.com>,
-        Yonghong Song <yhs@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.0 068/317] libbpf: fix samples/bpf build failure due to undefined UINT32_MAX
-Date:   Wed, 22 May 2019 15:19:29 -0400
-Message-Id: <20190522192338.23715-68-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190522192338.23715-1-sashal@kernel.org>
-References: <20190522192338.23715-1-sashal@kernel.org>
+        id S1730783AbfEVTzc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 May 2019 15:55:32 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:41857 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730197AbfEVTzb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 May 2019 15:55:31 -0400
+Received: by mail-pf1-f193.google.com with SMTP id q17so1869182pfq.8;
+        Wed, 22 May 2019 12:55:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=dkz+uMfQ4vVtX4Z57u9xC58rrVWkexD1pHBhDv3CnWw=;
+        b=HvudDPF+KevQPPLS50w5VVfYbTyT/HSSccgs7KNEDiQlGjjGVza2G1drC4CnVs+CcJ
+         K2WQk3HlAiAiK7afohlFEfA7AmqIsaVgAEOb/bSfWVKDDnXCAaJzofoV15AGCWxN6UbC
+         wU60jUxa/ajyydKuvPWfILaGtLw7J25wuxlFfSpdELB0YHwA3v/NCE6BQsOVBzc2dky/
+         Aeb8EvG8EnI6Xwzx3V+dvOodQz1+jxAKvxPsaJwBrq5xzUX1ENgbt42IC3NE2T1OBVYp
+         u9AgscgfhH2vNiCQCKMtlrbj4WMghTu8RuMmZV2v5rvP4fGyM+PdThKoOAA9ad+orqQM
+         0pGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=dkz+uMfQ4vVtX4Z57u9xC58rrVWkexD1pHBhDv3CnWw=;
+        b=pCf3Wd6KgnBpoNYz8d6JYt2ZboL1hqmdiVufxpIfck1cjSrGxIiluuDlXb+u6ut7/s
+         9kh2BQqCqHu88DpRoxK25uJQ9yp3Kbta1UJAjmJMxcrv3Gtiq4NLeTjBbb0rwvG2PkWY
+         3TRgLPDk77i7OWvqCLaGuxoWLP1MrigWvHLgJRe7Xxgv/fYk8YuL+H/Ig/jwzI73o0La
+         84VJHKxnT7tmcfmjHw4OxnFwVg+AsGQyTC6vddb4G0zqSbAmmi7Il5HRfclmGcPciAkQ
+         ekkvpIzF8ybyjSogFu2lXoCPDWHgiPXilkiebQnJZP6SpI177y6R09+0cOEGSZ6g+hNY
+         q9Ng==
+X-Gm-Message-State: APjAAAUM2halQ+f2U0DdRgYQjfpxf5gC1j74b70NiJ7lgggdPYBnMn3s
+        EflODPgW0Y56bMUSzST5i0oMzSbH
+X-Google-Smtp-Source: APXvYqzuFNwwqWce3oARO3MYbQ8QDsnhxBa3bPsJce9d8mfJhpoeRGDAkM1CNEoTvjLbDrHsL1Pbjw==
+X-Received: by 2002:a63:7413:: with SMTP id p19mr89950878pgc.259.1558554930988;
+        Wed, 22 May 2019 12:55:30 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:180::6565])
+        by smtp.gmail.com with ESMTPSA id x18sm32697904pfj.17.2019.05.22.12.55.29
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 22 May 2019 12:55:30 -0700 (PDT)
+Date:   Wed, 22 May 2019 12:55:27 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Kris Van Hees <kris.van.hees@oracle.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, dtrace-devel@oss.oracle.com,
+        linux-kernel@vger.kernel.org, rostedt@goodmis.org,
+        mhiramat@kernel.org, acme@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net
+Subject: Re: [RFC PATCH 00/11] bpf, trace, dtrace: DTrace BPF program type
+ implementation and sample use
+Message-ID: <20190522195526.mayamzc7gstqzcpr@ast-mbp.dhcp.thefacebook.com>
+References: <201905202347.x4KNl0cs030532@aserv0121.oracle.com>
+ <20190521175617.ipry6ue7o24a2e6n@ast-mbp.dhcp.thefacebook.com>
+ <20190522142531.GE16275@worktop.programming.kicks-ass.net>
+ <20190522182215.GO2422@oracle.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190522182215.GO2422@oracle.com>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: "Daniel T. Lee" <danieltimlee@gmail.com>
+On Wed, May 22, 2019 at 02:22:15PM -0400, Kris Van Hees wrote:
+> On Wed, May 22, 2019 at 04:25:32PM +0200, Peter Zijlstra wrote:
+> > On Tue, May 21, 2019 at 10:56:18AM -0700, Alexei Starovoitov wrote:
+> > 
+> > > and no changes are necessary in kernel/events/ring_buffer.c either.
+> > 
+> > Let me just NAK them on the principle that I don't see them in my inbox.
+> 
+> My apologies for failing to include you on the Cc for the patches.  That was
+> an oversight on my end and certainly not intentional.
+> 
+> > Let me further NAK it for adding all sorts of garbage to the code --
+> > we're not going to do gaps and stay_in_page nonsense.
+> 
+> Could you give some guidance in terms of an alternative?  The ring buffer code
+> provides both non-contiguous page allocation support and a vmalloc-based
+> allocation, and the vmalloc version certainly would avoid the entire gap and
+> page boundary stuff.  But since the allocator is chosen at build time based on
+> the arch capabilities, there is no way to select a specific memory allocator.
+> I'd be happy to use an alternative approach that allows direct writing into
+> the ring buffer.
 
-[ Upstream commit 32e621e55496a0009f44fe4914cd4a23cade4984 ]
-
-Currently, building bpf samples will cause the following error.
-
-    ./tools/lib/bpf/bpf.h:132:27: error: 'UINT32_MAX' undeclared here (not in a function) ..
-     #define BPF_LOG_BUF_SIZE (UINT32_MAX >> 8) /* verifier maximum in kernels <= 5.1 */
-                               ^
-    ./samples/bpf/bpf_load.h:31:25: note: in expansion of macro 'BPF_LOG_BUF_SIZE'
-     extern char bpf_log_buf[BPF_LOG_BUF_SIZE];
-                             ^~~~~~~~~~~~~~~~
-
-Due to commit 4519efa6f8ea ("libbpf: fix BPF_LOG_BUF_SIZE off-by-one error")
-hard-coded size of BPF_LOG_BUF_SIZE has been replaced with UINT32_MAX which is
-defined in <stdint.h> header.
-
-Even with this change, bpf selftests are running fine since these are built
-with clang and it includes header(-idirafter) from clang/6.0.0/include.
-(it has <stdint.h>)
-
-    clang -I. -I./include/uapi -I../../../include/uapi -idirafter /usr/local/include -idirafter /usr/include \
-    -idirafter /usr/lib/llvm-6.0/lib/clang/6.0.0/include -idirafter /usr/include/x86_64-linux-gnu \
-    -Wno-compare-distinct-pointer-types -O2 -target bpf -emit-llvm -c progs/test_sysctl_prog.c -o - | \
-    llc -march=bpf -mcpu=generic  -filetype=obj -o /linux/tools/testing/selftests/bpf/test_sysctl_prog.o
-
-But bpf samples are compiled with GCC, and it only searches and includes
-headers declared at the target file. As '#include <stdint.h>' hasn't been
-declared in tools/lib/bpf/bpf.h, it causes build failure of bpf samples.
-
-    gcc -Wp,-MD,./samples/bpf/.sockex3_user.o.d -Wall -Wmissing-prototypes -Wstrict-prototypes \
-    -O2 -fomit-frame-pointer -std=gnu89 -I./usr/include -I./tools/lib/ -I./tools/testing/selftests/bpf/ \
-    -I./tools/  lib/ -I./tools/include -I./tools/perf -c -o ./samples/bpf/sockex3_user.o ./samples/bpf/sockex3_user.c;
-
-This commit add declaration of '#include <stdint.h>' to tools/lib/bpf/bpf.h
-to fix this problem.
-
-Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
-Acked-by: Yonghong Song <yhs@fb.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/lib/bpf/bpf.h | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 8f09de482839e..64762a62c008d 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -26,6 +26,7 @@
- #include <linux/bpf.h>
- #include <stdbool.h>
- #include <stddef.h>
-+#include <stdint.h>
- 
- #ifdef __cplusplus
- extern "C" {
--- 
-2.20.1
+You do not _need_ direct write from bpf prog.
+dtrace language doesn't mandate direct write.
+'direct write into ring buffer form bpf prog' is an interesting idea and
+may be nice performance optimization, but in no way it's a blocker for dtrace scripts.
+Also it's far from clear that it actually brings performance benefits.
+Letting bpf progs write directly into ring buffer comes with
+a lot of corner cases. It's something to carefully analyze.
+I suggest to proceed with user space dtrace conversion to bpf
+without introducing kernel changes.
 
