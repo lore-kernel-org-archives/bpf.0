@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7815CC282CE
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:33:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B437C282CE
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:35:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4B4592081C
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:33:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C8BE20675
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:35:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1558553604;
+	s=default; t=1558553737;
 	bh=bUV7btzIiYVMzojYWVtdJYvd+jQvuHheVwfOPfUHK5o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=jQQFhjzJT0ed4jaaKJlYTXybJpj4VZUyy4g0Nv0eBlBMAfhHPizbHmAW3qswVlirh
-	 +kVTHcDe2nPRS/vPF4FXRnMlgIJlMKfox8EdY2j6w/59Vgg+Z6Q2mZ3JEZlkfwiTR7
-	 qHMf9HbooXiS8nhhRi9CsGp0aGlPiL9jx6vM9s1E=
+	b=xIeOiNfLPa0tgHr1PqivIgrYdXdojfYWmYGIMjYyMC4LKZ2KlPYKxY2QReVwNf9XG
+	 dACTXZMk1dZLyy8NyQs11fNvaeaggVj+drKU0taBW965YCQiI4MhRd1efHq00anN6g
+	 nsIPEpJzzBdeu4IKNzMJRul6bP+rgD5hk31SXkz0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387668AbfEVTbz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 May 2019 15:31:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55554 "EHLO mail.kernel.org"
+        id S1732352AbfEVTf0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 May 2019 15:35:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54470 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733271AbfEVTby (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 May 2019 15:31:54 -0400
+        id S1733000AbfEVTbA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 May 2019 15:31:00 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8378F204FD;
-        Wed, 22 May 2019 19:31:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DC6BC20879;
+        Wed, 22 May 2019 19:30:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558553513;
+        s=default; t=1558553458;
         bh=bUV7btzIiYVMzojYWVtdJYvd+jQvuHheVwfOPfUHK5o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OAIIH4ioS+xbRg2GDAeKgi/7RYVMzhrCKzAk+eiQ+t7vxq2RZbrzeKWnQEj2SBZZM
-         9Ac07vaNELS3TFQhaJHoA5EOLhlDtjv7ljTzoxbq457btaTr+nbjgbrlFkI6uX8WA0
-         B/iVV9xYDCU0PqynaV8Er65GNJh4cD635TztcPHs=
+        b=owoVJJFW0NgUAlYQ2tqSml05tb/1ohZ4Py2sw4DlhCZPfjKWxc2P0fYfa2bhFG5Xo
+         gRcT2aFBWWYKHUwK7pE0q1waVw0heGwJieChjUGdsP5IbSUB5iGJX26qOk9MJ//Eu3
+         t7aUOS/SY/20oVNzzRnJlz7H+nJedkCtYf+wj7Bs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     YueHaibing <yuehaibing@huawei.com>, Hulk Robot <hulkci@huawei.com>,
@@ -45,12 +45,12 @@ Cc:     YueHaibing <yuehaibing@huawei.com>, Hulk Robot <hulkci@huawei.com>,
         Sasha Levin <sashal@kernel.org>,
         linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 17/92] ssb: Fix possible NULL pointer dereference in ssb_host_pcmcia_exit
-Date:   Wed, 22 May 2019 15:30:12 -0400
-Message-Id: <20190522193127.27079-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 026/114] ssb: Fix possible NULL pointer dereference in ssb_host_pcmcia_exit
+Date:   Wed, 22 May 2019 15:28:49 -0400
+Message-Id: <20190522193017.26567-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190522193127.27079-1-sashal@kernel.org>
-References: <20190522193127.27079-1-sashal@kernel.org>
+In-Reply-To: <20190522193017.26567-1-sashal@kernel.org>
+References: <20190522193017.26567-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
