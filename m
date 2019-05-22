@@ -5,41 +5,41 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CEF05C282DC
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:51:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8778C282CE
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:51:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A061B2081C
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:51:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BA3612081C
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:51:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="golMVzdu"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="hNY5D1aE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731385AbfEVTv0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 May 2019 15:51:26 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:43358 "EHLO
+        id S2388006AbfEVTv1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 May 2019 15:51:27 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:43348 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732101AbfEVTvX (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 May 2019 15:51:23 -0400
+        by vger.kernel.org with ESMTP id S1732477AbfEVTvU (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 22 May 2019 15:51:20 -0400
 Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4MJlQed028378
-        for <bpf@vger.kernel.org>; Wed, 22 May 2019 12:51:22 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4MJlQea028378
+        for <bpf@vger.kernel.org>; Wed, 22 May 2019 12:51:20 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=zadAt1aXztVRcYLP4/pIlA8/YTNS3mRm3Oc6W03zeiU=;
- b=golMVzduOoKGqg0/wfEKOVO3ls/4T7NKq9QTlGDzdJMw9lCIixTpLlt+Cm2d4i0IVytH
- HUHPleMAvsHrGuT9KRq5vkRu/CRqbIvU31HfcPX++xuw0B4MaP3K+Cyj8jLOtAUwEdvo
- hWXCiBP1bkjxOXmPzOGTrVfSaKa3ScyqqWY= 
+ content-type; s=facebook; bh=AsDvLBZU1SWFkqR/OC0wH/KfUVSFTHKxsataFqcf92o=;
+ b=hNY5D1aEf63/vsARuzln6z+fW8R6mPGu5Xw+JnAWeiHlI1HzjiX/wSdGelco/bdxC2y8
+ 10uJmocXN9cgKhlTCaQZXTpJhwvW3A6V2K50wCSH9GTW0WY87+/r862MUUvsegGmNVyC
+ e7s8nespS0viY6riynZqdkpu5ixI1btxTcs= 
 Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2sn9bgrysr-2
+        by mx0a-00082601.pphosted.com with ESMTP id 2sn9bgrysk-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 22 May 2019 12:51:22 -0700
+        for <bpf@vger.kernel.org>; Wed, 22 May 2019 12:51:20 -0700
 Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c081:35::128) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Wed, 22 May 2019 12:51:21 -0700
+ Wed, 22 May 2019 12:51:18 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 8E488862334; Wed, 22 May 2019 12:51:19 -0700 (PDT)
+        id 83ED2862334; Wed, 22 May 2019 12:51:17 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,9 +48,9 @@ To:     <andrii.nakryiko@gmail.com>, <ast@fb.com>, <daniel@iogearbox.net>,
         <kernel-team@fb.com>
 CC:     Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH bpf-next 12/12] bpftool: update bash-completion w/ new c option for btf dump
-Date:   Wed, 22 May 2019 12:50:53 -0700
-Message-ID: <20190522195053.4017624-13-andriin@fb.com>
+Subject: [PATCH bpf-next 11/12] bpftool/docs: add description of btf dump C option
+Date:   Wed, 22 May 2019 12:50:52 -0700
+Message-ID: <20190522195053.4017624-12-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190522195053.4017624-1-andriin@fb.com>
 References: <20190522195053.4017624-1-andriin@fb.com>
@@ -62,7 +62,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
  malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=979 adultscore=0 classifier=spam adjust=0 reason=mlx
+ mlxlogscore=833 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1810050000 definitions=main-1905220138
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -70,46 +70,36 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add bash completion for new C btf dump option.
+Document optional **c** option for btf dump subcommand.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/bpf/bpftool/bash-completion/bpftool | 22 ++++++++++++++++++----
- 1 file changed, 18 insertions(+), 4 deletions(-)
+ tools/bpf/bpftool/Documentation/bpftool-btf.rst | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-index 50e402a5a9c8..391ded1df8cd 100644
---- a/tools/bpf/bpftool/bash-completion/bpftool
-+++ b/tools/bpf/bpftool/bash-completion/bpftool
-@@ -639,10 +639,24 @@ _bpftool()
-                             return 0
-                             ;;
-                         *)
--                            if [[ $cword == 6 ]] && [[ ${words[3]} == "map" ]]; then
--                                 COMPREPLY+=( $( compgen -W 'key value kv all' -- \
--                                     "$cur" ) )
--                            fi
-+                            # emit extra options
-+                            case ${words[3]} in
-+                                id|file)
-+                                    if [[ $cword > 4 ]]; then
-+                                        _bpftool_once_attr 'c'
-+                                    fi
-+                                    ;;
-+                                map|prog)
-+                                    if [[ ${words[3]} == "map" ]] && [[ $cword == 6 ]]; then
-+                                        COMPREPLY+=( $( compgen -W "key value kv all" -- "$cur" ) )
-+                                    fi
-+                                    if [[ $cword > 5 ]]; then
-+                                        _bpftool_once_attr 'c'
-+                                    fi
-+                                    ;;
-+                                *)
-+                                    ;;
-+                            esac
-                             return 0
-                             ;;
-                     esac
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-btf.rst b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+index 2dbc1413fabd..3d0bdb90383b 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-btf.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+@@ -19,7 +19,7 @@ SYNOPSIS
+ BTF COMMANDS
+ =============
+ 
+-|	**bpftool** **btf dump** *BTF_SRC*
++|	**bpftool** **btf dump** *BTF_SRC* [**c**]
+ |	**bpftool** **btf help**
+ |
+ |	*BTF_SRC* := { **id** *BTF_ID* | **prog** *PROG* | **map** *MAP* [{**key** | **value** | **kv** | **all**}] | **file** *FILE* }
+@@ -49,6 +49,9 @@ DESCRIPTION
+                   .BTF section with well-defined BTF binary format data,
+                   typically produced by clang or pahole.
+ 
++                  If **c** option is specified, BTF contents will be output in
++                  compilable C syntax.
++
+ 	**bpftool btf help**
+ 		  Print short help message.
+ 
 -- 
 2.17.1
 
