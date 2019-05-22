@@ -2,44 +2,44 @@ Return-Path: <SRS0=789D=TW=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1A0AC282DD
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:51:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68333C282DC
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:51:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BD0CD20856
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:51:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 342A020856
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:51:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="e8uiXc14"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="E9EGmSyr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731292AbfEVTvE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 May 2019 15:51:04 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:59838 "EHLO
+        id S1732398AbfEVTu7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 May 2019 15:50:59 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:59822 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2387918AbfEVTvD (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 May 2019 15:51:03 -0400
+        by vger.kernel.org with ESMTP id S2387895AbfEVTu6 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 22 May 2019 15:50:58 -0400
 Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x4MJlH5T023849
-        for <bpf@vger.kernel.org>; Wed, 22 May 2019 12:51:01 -0700
+        by m0001303.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x4MJlLXg023905
+        for <bpf@vger.kernel.org>; Wed, 22 May 2019 12:50:57 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=09zR1jbBVhYXt9NleKvpqzItnvPFECoeoIX74novJLM=;
- b=e8uiXc14dRpCusBDkd/TqDkECUt9/EywF9tF9Lh5+wO4rvFSLkYXxEifzp8gkmUDuP2W
- exbQncadJcxFe2UBaR0El5a8WM1D9TkpX/37GumGoLyt7QQM8cPJHl7iYuFQu893eEgm
- M4yytghVOGZvWwNv1Won3E7j/hpXyLthOuQ= 
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=fVdcKk701UmWd0bJeAU0VAf/QzGizTnrH7kqg2MVfLQ=;
+ b=E9EGmSyrsbNtAuarRhTHm0tff4kaNTJAWiYtAtK04eTizI8IQm41ek9RYLo+x7FJs98i
+ 6x9rb6oSJb3wzcBndQN5UjAEf1JBs5OAJQT+/uPOKd/FqybAutGhpH+hR/w95rxcnDm5
+ F+Faoc8CwZGeZU7DJWePlaV0RM6G8amGOqM= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 2sn5ta1rme-1
+        by m0001303.ppops.net with ESMTP id 2sn5ta1rm8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 22 May 2019 12:51:01 -0700
+        for <bpf@vger.kernel.org>; Wed, 22 May 2019 12:50:57 -0700
 Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 22 May 2019 12:51:00 -0700
+ 15.1.1713.5; Wed, 22 May 2019 12:50:56 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 23E3E862334; Wed, 22 May 2019 12:50:59 -0700 (PDT)
+        id 0FED0862334; Wed, 22 May 2019 12:50:55 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,19 +48,17 @@ To:     <andrii.nakryiko@gmail.com>, <ast@fb.com>, <daniel@iogearbox.net>,
         <kernel-team@fb.com>
 CC:     Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH bpf-next 02/12] libbpf: add btf__parse_elf API to load .BTF and .BTF.ext
-Date:   Wed, 22 May 2019 12:50:43 -0700
-Message-ID: <20190522195053.4017624-3-andriin@fb.com>
+Subject: [PATCH bpf-next 00/12] BTF-to-C converter
+Date:   Wed, 22 May 2019 12:50:41 -0700
+Message-ID: <20190522195053.4017624-1-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190522195053.4017624-1-andriin@fb.com>
-References: <20190522195053.4017624-1-andriin@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-22_11:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
  mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1810050000 definitions=main-1905220138
@@ -70,194 +68,106 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Loading BTF and BTF.ext from ELF file is a common need. Instead of
-requiring every user to re-implement it, let's provide this API from
-libbpf itself. It's mostly copy/paste from `bpftool btf dump`
-implementation, which will be switched to libbpf's version in next
-patch. btf__parse_elf allows to load BTF and optionally BTF.ext.
-This is also useful for tests that need to load/work with BTF, loaded
-from test ELF files.
+This patch set adds BTF-to-C dumping APIs to libbpf, allowing to output
+a subset of BTF types as a compilable C type definitions. This is useful by
+itself, as raw BTF output is not easy to inspect and comprehend. But it's also
+a big part of BPF CO-RE (compile once - run everywhere) initiative aimed at
+allowing to write relocatable BPF programs, that won't require on-the-host
+kernel headers (and would be able to inspect internal kernel structures, not
+exposed through kernel headers).
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/lib/bpf/btf.c      | 128 +++++++++++++++++++++++++++++++++++++++
- tools/lib/bpf/btf.h      |   2 +
- tools/lib/bpf/libbpf.map |   1 +
- 3 files changed, 131 insertions(+)
+This patch set consists of three groups of patches and one pre-patch, with the
+BTF-to-C dumper API depending on the first two groups.
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 03348c4d6bd4..6139550810a1 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -4,10 +4,12 @@
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
-+#include <fcntl.h>
- #include <unistd.h>
- #include <errno.h>
- #include <linux/err.h>
- #include <linux/btf.h>
-+#include <gelf.h>
- #include "btf.h"
- #include "bpf.h"
- #include "libbpf.h"
-@@ -417,6 +419,132 @@ struct btf *btf__new(__u8 *data, __u32 size)
- 	return btf;
- }
- 
-+static bool btf_check_endianness(const GElf_Ehdr *ehdr)
-+{
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+	return ehdr->e_ident[EI_DATA] == ELFDATA2LSB;
-+#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-+	return ehdr->e_ident[EI_DATA] == ELFDATA2MSB;
-+#else
-+# error "Unrecognized __BYTE_ORDER__"
-+#endif
-+}
-+
-+struct btf *btf__parse_elf(const char *path, struct btf_ext **btf_ext)
-+{
-+	Elf_Data *btf_data = NULL, *btf_ext_data = NULL;
-+	int err = 0, fd = -1, idx = 0;
-+	struct btf *btf = NULL;
-+	Elf_Scn *scn = NULL;
-+	Elf *elf = NULL;
-+	GElf_Ehdr ehdr;
-+
-+	if (elf_version(EV_CURRENT) == EV_NONE) {
-+		pr_warning("failed to init libelf for %s\n", path);
-+		return ERR_PTR(-LIBBPF_ERRNO__LIBELF);
-+	}
-+
-+	fd = open(path, O_RDONLY);
-+	if (fd < 0) {
-+		err = -errno;
-+		pr_warning("failed to open %s: %s\n", path, strerror(errno));
-+		return ERR_PTR(err);
-+	}
-+
-+	err = -LIBBPF_ERRNO__FORMAT;
-+
-+	elf = elf_begin(fd, ELF_C_READ, NULL);
-+	if (!elf) {
-+		pr_warning("failed to open %s as ELF file\n", path);
-+		goto done;
-+	}
-+	if (!gelf_getehdr(elf, &ehdr)) {
-+		pr_warning("failed to get EHDR from %s\n", path);
-+		goto done;
-+	}
-+	if (!btf_check_endianness(&ehdr)) {
-+		pr_warning("non-native ELF endianness is not supported\n");
-+		goto done;
-+	}
-+	if (!elf_rawdata(elf_getscn(elf, ehdr.e_shstrndx), NULL)) {
-+		pr_warning("failed to get e_shstrndx from %s\n", path);
-+		goto done;
-+	}
-+
-+	while ((scn = elf_nextscn(elf, scn)) != NULL) {
-+		GElf_Shdr sh;
-+		char *name;
-+
-+		idx++;
-+		if (gelf_getshdr(scn, &sh) != &sh) {
-+			pr_warning("failed to get section(%d) header from %s\n",
-+				   idx, path);
-+			goto done;
-+		}
-+		name = elf_strptr(elf, ehdr.e_shstrndx, sh.sh_name);
-+		if (!name) {
-+			pr_warning("failed to get section(%d) name from %s\n",
-+				   idx, path);
-+			goto done;
-+		}
-+		if (strcmp(name, BTF_ELF_SEC) == 0) {
-+			btf_data = elf_getdata(scn, 0);
-+			if (!btf_data) {
-+				pr_warning("failed to get section(%d, %s) data from %s\n",
-+					   idx, name, path);
-+				goto done;
-+			}
-+			continue;
-+		} else if (btf_ext && strcmp(name, BTF_EXT_ELF_SEC) == 0) {
-+			btf_ext_data = elf_getdata(scn, 0);
-+			if (!btf_ext_data) {
-+				pr_warning("failed to get section(%d, %s) data from %s\n",
-+					   idx, name, path);
-+				goto done;
-+			}
-+			continue;
-+		}
-+	}
-+
-+	err = 0;
-+
-+	if (!btf_data) {
-+		err = -ENOENT;
-+		goto done;
-+	}
-+	btf = btf__new(btf_data->d_buf, btf_data->d_size);
-+	if (IS_ERR(btf))
-+		goto done;
-+
-+	if (btf_ext && btf_ext_data) {
-+		*btf_ext = btf_ext__new(btf_ext_data->d_buf,
-+					btf_ext_data->d_size);
-+		if (IS_ERR(*btf_ext))
-+			goto done;
-+	} else if (btf_ext) {
-+		*btf_ext = NULL;
-+	}
-+done:
-+	if (elf)
-+		elf_end(elf);
-+	close(fd);
-+
-+	if (err)
-+		return ERR_PTR(err);
-+	/*
-+	 * btf is always parsed before btf_ext, so no need to clean up
-+	 * btf_ext, if btf loading failed
-+	 */
-+	if (IS_ERR(btf))
-+		return btf;
-+	if (btf_ext && IS_ERR(*btf_ext)) {
-+		btf__free(btf);
-+		err = PTR_ERR(*btf_ext);
-+		return ERR_PTR(err);
-+	}
-+	return btf;
-+}
-+
- static int compare_vsi_off(const void *_a, const void *_b)
- {
- 	const struct btf_var_secinfo *a = _a;
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index c7b399e81fce..bded210df9e8 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -59,6 +59,8 @@ struct btf_ext_header {
- 
- LIBBPF_API void btf__free(struct btf *btf);
- LIBBPF_API struct btf *btf__new(__u8 *data, __u32 size);
-+LIBBPF_API struct btf *btf__parse_elf(const char *path,
-+				      struct btf_ext **btf_ext);
- LIBBPF_API int btf__finalize_data(struct bpf_object *obj, struct btf *btf);
- LIBBPF_API int btf__load(struct btf *btf);
- LIBBPF_API __s32 btf__find_by_name(const struct btf *btf,
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 673001787cba..e0ec3fa52255 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -163,4 +163,5 @@ LIBBPF_0.0.3 {
- 		bpf_map__is_internal;
- 		bpf_map_freeze;
- 		btf__finalize_data;
-+		btf__parse_elf;
- } LIBBPF_0.0.2;
+Pre-patch #1 fixes issue with libbpf_internal.h.
+
+btf__parse_elf() API patches:
+- patch #2 adds btf__parse_elf() API to libbpf, allowing to load BTF and/or
+  BTF.ext from ELF file;
+- patch #3 utilizies btf__parse_elf() from bpftool for `btf dump file` command;
+- patch #4 switches test_btf.c to use btf__parse_elf() to check for presence
+  of BTF data in object file.
+
+libbpf's internal hashmap patches:
+- patch #5 adds resizeable non-thread safe generic hashmap to libbpf;
+- patch #6 adds tests for that hashmap;
+- patch #7 migrates btf_dedup()'s dedup_table to use hashmap w/ APPEND.
+
+BTF-to-C dumper API patches:
+- patch #8 adds btf_dump APIs with all the logic for laying out type
+  definitions in correct order and emitting C syntax for them;
+- patch #9 adds lots of tests for common and quirky parts of C type system;
+- patch #10 adds support for C-syntax btf dumping to bpftool;
+- patch #11 updates bpftool documentation to mention C-syntax dump option;
+- patch #12 update bash-completion for btf dump sub-command.
+
+v0->v1:
+- fix bug in hashmap__for_each_bucket_entry() not handling empty hashmap;
+- removed `btf dump`-specific libbpf logging hook up (Quentin has more generic
+  patchset);
+- change btf__parse_elf() to always load .BTF and return it as a result, with
+  .BTF.ext being optional and returned through struct btf_ext** arg (Alexei);
+- endianness check to use __BYTE_ORDER__ (Alexei);
+- bool:1 to __u8:1 in type_aux_state (Alexei);
+- added HASHMAP_APPEND strategy to hashmap, changed
+  hashmap__for_each_key_entry() to also check for key equality during
+  iteration (multimap iteration for key);
+- added new tests for empty hashmap and hashmap as a multimap;
+- tried to clarify weak/strong dependency ordering comments (Alexei)
+- btf dump test's expected output - support better commenting aproach (Alexei);
+- added bash-completion for a new "c" option (Alexei).
+
+Andrii Nakryiko (12):
+  libbpf: ensure libbpf.h is included along libbpf_internal.h
+  libbpf: add btf__parse_elf API to load .BTF and .BTF.ext
+  bpftool: use libbpf's btf__parse_elf API
+  selftests/bpf: use btf__parse_elf to check presence of BTF/BTF.ext
+  libbpf: add resizable non-thread safe internal hashmap
+  selftests/bpf: add tests for libbpf's hashmap
+  libbpf: switch btf_dedup() to hashmap for dedup table
+  libbpf: add btf_dump API for BTF-to-C conversion
+  selftests/bpf: add btf_dump BTF-to-C conversion tests
+  bpftool: add C output format option to btf dump subcommand
+  bpftool/docs: add description of btf dump C option
+  bpftool: update bash-completion w/ new c option for btf dump
+
+ .../bpf/bpftool/Documentation/bpftool-btf.rst |    5 +-
+ tools/bpf/bpftool/bash-completion/bpftool     |   22 +-
+ tools/bpf/bpftool/btf.c                       |  150 +-
+ tools/lib/bpf/Build                           |    4 +-
+ tools/lib/bpf/btf.c                           |  330 ++--
+ tools/lib/bpf/btf.h                           |   19 +
+ tools/lib/bpf/btf_dump.c                      | 1336 +++++++++++++++++
+ tools/lib/bpf/hashmap.c                       |  229 +++
+ tools/lib/bpf/hashmap.h                       |  173 +++
+ tools/lib/bpf/libbpf.map                      |    4 +
+ tools/lib/bpf/libbpf_internal.h               |    2 +
+ tools/testing/selftests/bpf/.gitignore        |    2 +
+ tools/testing/selftests/bpf/Makefile          |    3 +-
+ .../bpf/progs/btf_dump_test_case_bitfields.c  |   92 ++
+ .../bpf/progs/btf_dump_test_case_multidim.c   |   35 +
+ .../progs/btf_dump_test_case_namespacing.c    |   73 +
+ .../bpf/progs/btf_dump_test_case_ordering.c   |   63 +
+ .../bpf/progs/btf_dump_test_case_packing.c    |   75 +
+ .../bpf/progs/btf_dump_test_case_padding.c    |  111 ++
+ .../bpf/progs/btf_dump_test_case_syntax.c     |  229 +++
+ tools/testing/selftests/bpf/test_btf.c        |   71 +-
+ tools/testing/selftests/bpf/test_btf_dump.c   |  143 ++
+ tools/testing/selftests/bpf/test_hashmap.c    |  382 +++++
+ 23 files changed, 3275 insertions(+), 278 deletions(-)
+ create mode 100644 tools/lib/bpf/btf_dump.c
+ create mode 100644 tools/lib/bpf/hashmap.c
+ create mode 100644 tools/lib/bpf/hashmap.h
+ create mode 100644 tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf_dump_test_case_multidim.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf_dump_test_case_namespacing.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf_dump_test_case_ordering.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+ create mode 100644 tools/testing/selftests/bpf/test_btf_dump.c
+ create mode 100644 tools/testing/selftests/bpf/test_hashmap.c
+
 -- 
 2.17.1
 
