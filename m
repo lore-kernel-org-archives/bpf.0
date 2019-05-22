@@ -2,172 +2,402 @@ Return-Path: <SRS0=789D=TW=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-5.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_MUTT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E8BCC282CE
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 18:56:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECB29C282CE
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:10:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7519F21773
-	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 18:56:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A6CA420868
+	for <bpf@archiver.kernel.org>; Wed, 22 May 2019 19:10:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="Mz7ysbNm"
+	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="WX1aKVNW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729688AbfEVSz4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 May 2019 14:55:56 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:38641 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729672AbfEVSz4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 May 2019 14:55:56 -0400
-Received: by mail-wm1-f68.google.com with SMTP id t5so3300980wmh.3
-        for <bpf@vger.kernel.org>; Wed, 22 May 2019 11:55:55 -0700 (PDT)
+        id S1729506AbfEVTKJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 May 2019 15:10:09 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:46702 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728761AbfEVTKJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 May 2019 15:10:09 -0400
+Received: by mail-pl1-f195.google.com with SMTP id r18so1506407pls.13
+        for <bpf@vger.kernel.org>; Wed, 22 May 2019 12:10:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=DX8u14woMWB0/T1N/svKd1Gm9eJRtJGFELY8NQbCyRY=;
-        b=Mz7ysbNmLaE5gXN/Po+j5Ryh+3M1HCEftgGzCvxwZKFPUdCHAk/lkQzfKqDf/m4R95
-         PGynSLOuCH3N/kiowCR6PVWvl08QXWvgQMVlYmmv8ZNeglq4QqDIkrMHCiK9v6bjBwlf
-         JQCz0/vq6UvFk78DIHDJvPg4KovxNQZ8mzA6In2bjxe2NLJzix1hAUeTqY5hP71dLfEo
-         2acX/Cj/SYIJvKyPl67x0s1PqsdfxGNArNBl2xjs/F9K7Chm8Zm/eJGU28IZRXwgakY/
-         nZJ1K1y2gf7Z587FAkK5QLd+KvG10qCZVHgr8vAffv+Z6zruohEckDHXCg/Gk5HAHbYM
-         pbiQ==
+        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=b+Db0Ho967KIuB480AsX6/OKFU0wLR6Q1jk2wQ0DXCQ=;
+        b=WX1aKVNW/YnkYXQJzyC6vSeafONarW/j2n+CRF5tH2BTfoilsWZjgSOCVWOciORDjl
+         HPQuZuykB77k7JD5vQW4h/PEjS1ZK1fM+l/UyvHWAV/kWbZHmxBP0ALLiMJqEGtUPAkA
+         Xw4uOtngkdyt1c7P4pVI/duXphdOodJcSVlQHgVUDIl4Nr1+GTwSVtVwvlIEvADKqmvB
+         tP0/yzkXm+uy9LgKMKOHwDV/Ksfer9/26DxeVbVOeZw+XDY/M9pFbArKDQlC7laNeeqQ
+         SB3NbhS6sVycv+HD8qDiBDV1L0YASIUSBkr87NwtSPTpVPH8GHeX1SK/zChsHDg6zi4D
+         j9yA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=DX8u14woMWB0/T1N/svKd1Gm9eJRtJGFELY8NQbCyRY=;
-        b=AEmUQqkgALUEyHaLCodbaCHeWLZ8g840WcPdnr+kJxi6S5WVdrpl8r6IQj62g6ktmX
-         3kdXY7QWv0mmtGlCpFS+uKu+dbjTemSegSpn9wRFOKkIk3MPW+PYitvrn9AKC90untEB
-         yOZ3iiToeMB1MMypjPd/Al9pA7MJzBO5jivayvbJpoUSB7sWdgUrdrC0sukBFnGqoAhO
-         T8yeGG+IUTmYfo1SYTmN5s8NP2Q55KzT7/6O7zGIkWln5u1naUWawe+LDJ1NW8TVlYG5
-         yKE/g6BFvBxvC+qRgya60s5NSrT1clR2YmhWlqI1pUVkcBcBGK2+CsC1VPAvhVxSJkHB
-         OguA==
-X-Gm-Message-State: APjAAAURTzxgDmEXtSDHVX8dkD/W5+PWzaPceChI8Os9r8hWYRWhSrzB
-        CiGF6jA7z7y0D0tDMAMK4pLXqg==
-X-Google-Smtp-Source: APXvYqx+Q4YYoHPEBaixzN8UXhyR6bv0r+b41ChEEjMTzEYLzWFAvcxECeHrTyDklxvdJpTtj1qGmw==
-X-Received: by 2002:a1c:9d0f:: with SMTP id g15mr8580188wme.97.1558551354525;
-        Wed, 22 May 2019 11:55:54 -0700 (PDT)
-Received: from cbtest28.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id t12sm16328801wro.2.2019.05.22.11.55.53
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 22 May 2019 11:55:53 -0700 (PDT)
-From:   Jiong Wang <jiong.wang@netronome.com>
-To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=b+Db0Ho967KIuB480AsX6/OKFU0wLR6Q1jk2wQ0DXCQ=;
+        b=LH8hcDv1WArRu8h6CGT/bhDYXdx/atqEofFS/JJfAhs1tL/f2oUdsRns6YmH16msMW
+         f6I/VvrD9Y7sbemhxfv8XRYsLyeXIoBRnG8V4YUSpkOLWLxj80ERtqv9BnZ8FfCbQg35
+         cjAD7WOyNm27rTSyfvSMjagDLl1y++hBLj0sxaZFvLKdm0BFsqsNRUIOrAM4FvgkY69O
+         2+2h3mN0RIONvLswzYeiT1TOmO5EY01CSXXV3Yh8pRqTBLxdd2xKJi4w2gAPGpmbHPjI
+         jW93yZuypXRGb8Ll9tE9iPVrLAO2W1j3pZMMxNjJ+fIl9UFynrH2B1rSkzlY+tN2POWz
+         3zpA==
+X-Gm-Message-State: APjAAAUAgX4GyBr/7OSi6Ok57Yun+ia2P6+uuATd/JqkGtJWaMMeRyS/
+        33sOFQIrgP1IiJmKQoqkNJnbKw==
+X-Google-Smtp-Source: APXvYqwQH0q3LLA0opfCF1qW2MqmJcSagCew0hGSv2HZ4Jp770S60C6UTtZ9L6EXPEEAvPYjM+7XNQ==
+X-Received: by 2002:a17:902:b58a:: with SMTP id a10mr62595282pls.83.1558552208085;
+        Wed, 22 May 2019 12:10:08 -0700 (PDT)
+Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
+        by smtp.gmail.com with ESMTPSA id j10sm26042127pgk.37.2019.05.22.12.10.07
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 22 May 2019 12:10:07 -0700 (PDT)
+Date:   Wed, 22 May 2019 12:10:06 -0700
+From:   Stanislav Fomichev <sdf@fomichev.me>
+To:     Yonghong Song <yhs@fb.com>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        oss-drivers@netronome.com, davem@davemloft.net,
-        paul.burton@mips.com, udknight@gmail.com, zlim.lnx@gmail.com,
-        illusionist.neo@gmail.com, naveen.n.rao@linux.ibm.com,
-        sandipan@linux.ibm.com, schwidefsky@de.ibm.com,
-        heiko.carstens@de.ibm.com, jakub.kicinski@netronome.com,
-        Jiong Wang <jiong.wang@netronome.com>
-Subject: [PATCH v7 bpf-next 05/16] bpf: introduce new bpf prog load flags "BPF_F_TEST_RND_HI32"
-Date:   Wed, 22 May 2019 19:55:01 +0100
-Message-Id: <1558551312-17081-6-git-send-email-jiong.wang@netronome.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1558551312-17081-1-git-send-email-jiong.wang@netronome.com>
-References: <1558551312-17081-1-git-send-email-jiong.wang@netronome.com>
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH bpf-next v2 3/3] tools/bpf: add a selftest for
+ bpf_send_signal() helper
+Message-ID: <20190522191006.GN10244@mini-arch>
+References: <20190522053900.1663459-1-yhs@fb.com>
+ <20190522053903.1663924-1-yhs@fb.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190522053903.1663924-1-yhs@fb.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-x86_64 and AArch64 perhaps are two arches that running bpf testsuite
-frequently, however the zero extension insertion pass is not enabled for
-them because of their hardware support.
+On 05/21, Yonghong Song wrote:
+> The test covered both nmi and tracepoint perf events.
+>   $ ./test_send_signal_user
+>   test_send_signal (tracepoint): OK
+>   test_send_signal (perf_event): OK
+> 
+> Signed-off-by: Yonghong Song <yhs@fb.com>
+> ---
+>  tools/testing/selftests/bpf/Makefile          |   3 +-
+>  tools/testing/selftests/bpf/bpf_helpers.h     |   1 +
+>  .../bpf/progs/test_send_signal_kern.c         |  51 +++++
+>  .../selftests/bpf/test_send_signal_user.c     | 212 ++++++++++++++++++
+>  4 files changed, 266 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_send_signal_kern.c
+>  create mode 100644 tools/testing/selftests/bpf/test_send_signal_user.c
+> 
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 66f2dca1dee1..5eb6368a96a2 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -23,7 +23,8 @@ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test
+>  	test_align test_verifier_log test_dev_cgroup test_tcpbpf_user \
+>  	test_sock test_btf test_sockmap test_lirc_mode2_user get_cgroup_id_user \
+>  	test_socket_cookie test_cgroup_storage test_select_reuseport test_section_names \
+> -	test_netcnt test_tcpnotify_user test_sock_fields test_sysctl
+> +	test_netcnt test_tcpnotify_user test_sock_fields test_sysctl \
+> +	test_send_signal_user
+>  
+>  BPF_OBJ_FILES = $(patsubst %.c,%.o, $(notdir $(wildcard progs/*.c)))
+>  TEST_GEN_FILES = $(BPF_OBJ_FILES)
+> diff --git a/tools/testing/selftests/bpf/bpf_helpers.h b/tools/testing/selftests/bpf/bpf_helpers.h
+> index 5f6f9e7aba2a..cb02521b8e58 100644
+> --- a/tools/testing/selftests/bpf/bpf_helpers.h
+> +++ b/tools/testing/selftests/bpf/bpf_helpers.h
+> @@ -216,6 +216,7 @@ static void *(*bpf_sk_storage_get)(void *map, struct bpf_sock *sk,
+>  	(void *) BPF_FUNC_sk_storage_get;
+>  static int (*bpf_sk_storage_delete)(void *map, struct bpf_sock *sk) =
+>  	(void *)BPF_FUNC_sk_storage_delete;
+> +static int (*bpf_send_signal)(unsigned sig) = (void *)BPF_FUNC_send_signal;
+>  
+>  /* llvm builtin functions that eBPF C program may use to
+>   * emit BPF_LD_ABS and BPF_LD_IND instructions
+> diff --git a/tools/testing/selftests/bpf/progs/test_send_signal_kern.c b/tools/testing/selftests/bpf/progs/test_send_signal_kern.c
+> new file mode 100644
+> index 000000000000..45a1a1a2c345
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_send_signal_kern.c
+> @@ -0,0 +1,51 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +// Copyright (c) 2019 Facebook
+> +#include <linux/bpf.h>
+> +#include <linux/version.h>
+> +#include "bpf_helpers.h"
+> +
+> +struct bpf_map_def SEC("maps") info_map = {
+> +	.type = BPF_MAP_TYPE_ARRAY,
+> +	.key_size = sizeof(__u32),
+> +	.value_size = sizeof(__u64),
+> +	.max_entries = 1,
+> +};
+> +
+> +BPF_ANNOTATE_KV_PAIR(info_map, __u32, __u64);
+> +
+> +struct bpf_map_def SEC("maps") status_map = {
+> +	.type = BPF_MAP_TYPE_ARRAY,
+> +	.key_size = sizeof(__u32),
+> +	.value_size = sizeof(__u64),
+> +	.max_entries = 1,
+> +};
+> +
+> +BPF_ANNOTATE_KV_PAIR(status_map, __u32, __u64);
+> +
+> +SEC("send_signal_demo")
+> +int bpf_send_signal_test(void *ctx)
+> +{
+> +	__u64 *info_val, *status_val;
+> +	__u32 key = 0, pid, sig;
+> +	int ret;
+> +
+> +	status_val = bpf_map_lookup_elem(&status_map, &key);
+> +	if (!status_val || *status_val != 0)
+> +		return 0;
+> +
+> +	info_val = bpf_map_lookup_elem(&info_map, &key);
+> +	if (!info_val || *info_val == 0)
+> +		return 0;
+> +
+> +	sig = *info_val >> 32;
+> +	pid = *info_val & 0xffffFFFF;
+> +
+> +	if ((bpf_get_current_pid_tgid() >> 32) == pid) {
+> +		ret = bpf_send_signal(sig);
+> +		if (ret == 0)
+> +			*status_val = 1;
+> +	}
+> +
+> +	return 0;
+> +}
+> +char __license[] SEC("license") = "GPL";
+> diff --git a/tools/testing/selftests/bpf/test_send_signal_user.c b/tools/testing/selftests/bpf/test_send_signal_user.c
+> new file mode 100644
+> index 000000000000..0bd0f7674860
+> --- /dev/null
+[..]
+> +++ b/tools/testing/selftests/bpf/test_send_signal_user.c
+Any reason you didn't put it under bpf/prog_tests?
+That way you don't need to define your own CHECK macro and
+care about the includes.
 
-It is critical to guarantee the pass correction as it is supposed to be
-enabled at default for a couple of other arches, for example PowerPC,
-SPARC, arm, NFP etc. Therefore, it would be very useful if there is a way
-to test this pass on for example x86_64.
-
-The test methodology employed by this set is "poisoning" useless bits. High
-32-bit of a definition is randomized if it is identified as not used by any
-later insn. Such randomization is only enabled under testing mode which is
-gated by the new bpf prog load flags "BPF_F_TEST_RND_HI32".
-
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
----
- include/uapi/linux/bpf.h       | 18 ++++++++++++++++++
- kernel/bpf/syscall.c           |  4 +++-
- tools/include/uapi/linux/bpf.h | 18 ++++++++++++++++++
- 3 files changed, 39 insertions(+), 1 deletion(-)
-
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 63e0cf6..daac8df 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -260,6 +260,24 @@ enum bpf_attach_type {
-  */
- #define BPF_F_ANY_ALIGNMENT	(1U << 1)
- 
-+/* BPF_F_TEST_RND_HI32 is used in BPF_PROG_LOAD command for testing purpose.
-+ * Verifier does sub-register def/use analysis and identifies instructions whose
-+ * def only matters for low 32-bit, high 32-bit is never referenced later
-+ * through implicit zero extension. Therefore verifier notifies JIT back-ends
-+ * that it is safe to ignore clearing high 32-bit for these instructions. This
-+ * saves some back-ends a lot of code-gen. However such optimization is not
-+ * necessary on some arches, for example x86_64, arm64 etc, whose JIT back-ends
-+ * hence hasn't used verifier's analysis result. But, we really want to have a
-+ * way to be able to verify the correctness of the described optimization on
-+ * x86_64 on which testsuites are frequently exercised.
-+ *
-+ * So, this flag is introduced. Once it is set, verifier will randomize high
-+ * 32-bit for those instructions who has been identified as safe to ignore them.
-+ * Then, if verifier is not doing correct analysis, such randomization will
-+ * regress tests to expose bugs.
-+ */
-+#define BPF_F_TEST_RND_HI32	(1U << 2)
-+
- /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
-  * two extensions:
-  *
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index cb5440b..3d546b6 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1604,7 +1604,9 @@ static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
- 	if (CHECK_ATTR(BPF_PROG_LOAD))
- 		return -EINVAL;
- 
--	if (attr->prog_flags & ~(BPF_F_STRICT_ALIGNMENT | BPF_F_ANY_ALIGNMENT))
-+	if (attr->prog_flags & ~(BPF_F_STRICT_ALIGNMENT |
-+				 BPF_F_ANY_ALIGNMENT |
-+				 BPF_F_TEST_RND_HI32))
- 		return -EINVAL;
- 
- 	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) &&
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 63e0cf6..daac8df 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -260,6 +260,24 @@ enum bpf_attach_type {
-  */
- #define BPF_F_ANY_ALIGNMENT	(1U << 1)
- 
-+/* BPF_F_TEST_RND_HI32 is used in BPF_PROG_LOAD command for testing purpose.
-+ * Verifier does sub-register def/use analysis and identifies instructions whose
-+ * def only matters for low 32-bit, high 32-bit is never referenced later
-+ * through implicit zero extension. Therefore verifier notifies JIT back-ends
-+ * that it is safe to ignore clearing high 32-bit for these instructions. This
-+ * saves some back-ends a lot of code-gen. However such optimization is not
-+ * necessary on some arches, for example x86_64, arm64 etc, whose JIT back-ends
-+ * hence hasn't used verifier's analysis result. But, we really want to have a
-+ * way to be able to verify the correctness of the described optimization on
-+ * x86_64 on which testsuites are frequently exercised.
-+ *
-+ * So, this flag is introduced. Once it is set, verifier will randomize high
-+ * 32-bit for those instructions who has been identified as safe to ignore them.
-+ * Then, if verifier is not doing correct analysis, such randomization will
-+ * regress tests to expose bugs.
-+ */
-+#define BPF_F_TEST_RND_HI32	(1U << 2)
-+
- /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
-  * two extensions:
-  *
--- 
-2.7.4
-
+> @@ -0,0 +1,212 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <errno.h>
+> +#include <signal.h>
+> +#include <syscall.h>
+> +#include <sys/ioctl.h>
+> +#include <sys/types.h>
+> +#include <sys/stat.h>
+> +#include <sys/wait.h>
+> +#include <fcntl.h>
+> +#include <unistd.h>
+> +
+> +#include <linux/perf_event.h>
+> +#include <bpf/bpf.h>
+> +#include <bpf/libbpf.h>
+> +
+> +#include "bpf_rlimit.h"
+> +
+> +#define CHECK(condition, tag, format...) ({				\
+> +	int __ret = !!(condition);					\
+> +	if (__ret) {							\
+> +		printf("%s(%d):FAIL:%s ", __func__, __LINE__, tag);	\
+> +		printf(format);						\
+> +		printf("\n");						\
+> +	}								\
+> +	__ret;								\
+> +})
+> +
+> +static volatile int signal_received = 0;
+> +
+> +static void sigusr1_handler(int signum)
+> +{
+> +	signal_received++;
+> +}
+> +
+> +static void test_common(struct perf_event_attr *attr, int prog_type,
+> +			const char *test_name)
+> +{
+> +	int pmu_fd, prog_fd, info_map_fd, status_map_fd;
+> +	const char *file = "./test_send_signal_kern.o";
+> +	struct bpf_object *obj = NULL;
+> +	int pipe_c2p[2], pipe_p2c[2];
+> +	char buf[256];
+> +	int err = 0;
+> +	u32 key = 0;
+> +	pid_t pid;
+> +	u64 val;
+> +
+> +	if (CHECK(pipe(pipe_c2p), test_name,
+> +		  "pipe pipe_c2p error: %s", strerror(errno)))
+> +		return;
+> +
+> +	if (CHECK(pipe(pipe_p2c), test_name,
+> +		  "pipe pipe_p2c error: %s", strerror(errno))) {
+> +		close(pipe_c2p[0]);
+> +		close(pipe_c2p[1]);
+> +		return;
+> +	}
+> +
+> +	pid = fork();
+> +	if (CHECK(pid < 0, test_name, "fork error: %s", strerror(errno))) {
+> +		close(pipe_c2p[0]);
+> +		close(pipe_c2p[1]);
+> +		close(pipe_p2c[0]);
+> +		close(pipe_p2c[1]);
+> +		return;
+> +	}
+> +
+> +	if (pid == 0) {
+> +		/* install signal handler and notify parent */
+> +		signal(SIGUSR1, sigusr1_handler);
+> +
+> +		close(pipe_c2p[0]); /* close read */
+> +		close(pipe_p2c[1]); /* close write */
+> +
+> +		/* notify parent signal handler is installed */
+> +		write(pipe_c2p[1], buf, 1);
+> +
+> +		/* make sense parent enabled bpf program to send_signal */
+> +		read(pipe_p2c[0], buf, 1);
+> +
+> +		/* wait a little for signal handler */
+> +		sleep(1);
+> +
+> +		if (signal_received)
+> +			write(pipe_c2p[1], "2", 1);
+> +		else
+> +			write(pipe_c2p[1], "0", 1);
+> +
+> +		/* wait for parent notification and exit */
+> +		read(pipe_p2c[0], buf, 1);
+> +
+> +		close(pipe_c2p[1]);
+> +		close(pipe_p2c[0]);
+> +		exit(0);
+> +	}
+> +
+> +	close(pipe_c2p[1]); /* close write */
+> +	close(pipe_p2c[0]); /* close read */
+> +
+> +	err = bpf_prog_load(file, prog_type, &obj, &prog_fd);
+> +	if (CHECK(err < 0, test_name, "bpf_prog_load error: %s",
+> +		  strerror(errno)))
+> +		goto prog_load_failure;
+> +
+> +	pmu_fd = syscall(__NR_perf_event_open, attr, pid, -1,
+> +			 -1 /* group id */, 0 /* flags */);
+> +	if (CHECK(pmu_fd < 0, test_name, "perf_event_open error: %s",
+> +		  strerror(errno)))
+> +		goto close_prog;
+> +
+> +	err = ioctl(pmu_fd, PERF_EVENT_IOC_ENABLE, 0);
+> +	if (CHECK(err < 0, test_name, "ioctl perf_event_ioc_enable error: %s",
+> +		  strerror(errno)))
+> +		goto disable_pmu;
+> +
+> +	err = ioctl(pmu_fd, PERF_EVENT_IOC_SET_BPF, prog_fd);
+> +	if (CHECK(err < 0, test_name, "ioctl perf_event_ioc_set_bpf error: %s",
+> +		  strerror(errno)))
+> +		goto disable_pmu;
+> +
+> +	info_map_fd = bpf_object__find_map_fd_by_name(obj, "info_map");
+> +	if (CHECK(info_map_fd < 0, test_name, "find map %s error", "info_map"))
+> +		goto disable_pmu;
+> +
+> +	status_map_fd = bpf_object__find_map_fd_by_name(obj, "status_map");
+> +	if (CHECK(status_map_fd < 0, test_name, "find map %s error", "status_map"))
+> +		goto disable_pmu;
+> +
+> +	/* wait until child signal handler installed */
+> +	read(pipe_c2p[0], buf, 1);
+> +
+> +	/* trigger the bpf send_signal */
+> +	key = 0;
+> +	val = (((u64)(SIGUSR1)) << 32) | pid;
+> +	bpf_map_update_elem(info_map_fd, &key, &val, 0);
+> +
+> +	/* notify child that bpf program can send_signal now */
+> +	write(pipe_p2c[1], buf, 1);
+> +
+> +	/* wait for result */
+> +	read(pipe_c2p[0], buf, 1);
+> +
+> +	if (buf[0] == '2')
+> +		printf("test_send_signal (%s): OK\n", test_name);
+> +	else
+> +		printf("test_send_signal (%s): FAIL\n", test_name);
+> +
+> +	/* notify child safe to exit */
+> +	write(pipe_p2c[1], buf, 1);
+> +
+> +disable_pmu:
+> +	close(pmu_fd);
+> +close_prog:
+> +	bpf_object__close(obj);
+> +prog_load_failure:
+> +	close(pipe_c2p[0]);
+> +	close(pipe_p2c[1]);
+> +	wait(NULL);
+> +}
+> +
+> +static void test_tracepoint(void)
+> +{
+> +	struct perf_event_attr attr = {
+> +		.type = PERF_TYPE_TRACEPOINT,
+> +		.sample_type = PERF_SAMPLE_RAW | PERF_SAMPLE_CALLCHAIN,
+> +		.sample_period = 1,
+> +		.wakeup_events = 1,
+> +	};
+> +	int bytes, efd;
+> +	char buf[256];
+> +
+> +	snprintf(buf, sizeof(buf),
+> +		 "/sys/kernel/debug/tracing/events/syscalls/sys_enter_nanosleep/id");
+> +	efd = open(buf, O_RDONLY, 0);
+> +	if (CHECK(efd < 0, "tracepoint",
+> +		  "open syscalls/sys_enter_nanosleep/id failure: %s",
+> +		  strerror(errno)))
+> +		return;
+> +
+> +	bytes = read(efd, buf, sizeof(buf));
+> +	close(efd);
+> +	if (CHECK(bytes <= 0 || bytes >= sizeof(buf), "tracepoint",
+> +		  "read syscalls/sys_enter_nanosleep/id failure: %s",
+> +		  strerror(errno)))
+> +		return;
+> +
+> +	attr.config = strtol(buf, NULL, 0);
+> +
+> +	test_common(&attr, BPF_PROG_TYPE_TRACEPOINT, "tracepoint");
+> +}
+> +
+> +static void test_nmi_perf_event(void)
+> +{
+> +	struct perf_event_attr attr = {
+> +		.sample_freq = 50,
+> +		.freq = 1,
+> +		.type = PERF_TYPE_HARDWARE,
+> +		.config = PERF_COUNT_HW_CPU_CYCLES,
+> +	};
+> +
+> +	test_common(&attr, BPF_PROG_TYPE_PERF_EVENT, "perf_event");
+> +}
+> +
+> +int main(void)
+> +{
+> +	test_tracepoint();
+> +	test_nmi_perf_event();
+> +	return 0;
+> +}
+> -- 
+> 2.17.1
+> 
