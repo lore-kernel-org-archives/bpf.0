@@ -2,253 +2,159 @@ Return-Path: <SRS0=Im41=TX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD3EAC282DD
-	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 16:48:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9AC2C282DD
+	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 17:14:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7ECF02070D
-	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 16:48:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 98B6A20815
+	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 17:14:01 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="oLgS+NZy";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="hQ+PeJ7J"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730951AbfEWQsv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 May 2019 12:48:51 -0400
-Received: from www62.your-server.de ([213.133.104.62]:52604 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730899AbfEWQsv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 May 2019 12:48:51 -0400
-Received: from [78.46.172.2] (helo=sslproxy05.your-server.de)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1hTqZz-0008OR-DD; Thu, 23 May 2019 18:28:31 +0200
-Received: from [178.197.249.12] (helo=linux.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1hTqZz-000WCz-7N; Thu, 23 May 2019 18:28:31 +0200
-Subject: Re: [PATCH bpf-next v2 1/3] bpf: implement bpf_send_signal() helper
-To:     Yonghong Song <yhs@fb.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Cc:     Alexei Starovoitov <ast@fb.com>, Kernel Team <Kernel-team@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20190522053900.1663459-1-yhs@fb.com>
- <20190522053900.1663537-1-yhs@fb.com>
- <2c07890b-9da5-b4e8-dc94-35def14470ad@iogearbox.net>
- <6041511a-1628-868f-b4b1-e567c234a4a5@fb.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <d863ad02-5151-3e3c-a276-404c9dc957b2@iogearbox.net>
-Date:   Thu, 23 May 2019 18:28:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.3.0
-MIME-Version: 1.0
-In-Reply-To: <6041511a-1628-868f-b4b1-e567c234a4a5@fb.com>
-Content-Type: text/plain; charset=utf-8
+        id S1731157AbfEWROB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 May 2019 13:14:01 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:56550 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731138AbfEWROB (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 23 May 2019 13:14:01 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4NGjY12015831;
+        Thu, 23 May 2019 09:51:41 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=tO72be5dkTfIBrFIHCx5/fmWZPSTEXtAW1gzuX1OJGs=;
+ b=oLgS+NZywjwV4vhTdT51r3BqrISrhV97fitW/wGiJtBiG6HJE+uT07kUc37jKIK0ur1f
+ JcR7ywJOyyaNBJMn1hKiAPcwNQQac1A26LImZoZUKJqQdCuVJODzvXXCmW0OJpr/rBnQ
+ UUpktTzu9Gd0qxwTgOsOwfEFEQsNRp7JVwI= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2snxsv0538-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 23 May 2019 09:51:41 -0700
+Received: from ash-exhub204.TheFacebook.com (2620:10d:c0a8:83::4) by
+ ash-exhub204.TheFacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Thu, 23 May 2019 09:51:38 -0700
+Received: from NAM01-SN1-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5
+ via Frontend Transport; Thu, 23 May 2019 09:51:38 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector1-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tO72be5dkTfIBrFIHCx5/fmWZPSTEXtAW1gzuX1OJGs=;
+ b=hQ+PeJ7Jfii6AcTCTYN8CwUN/pGgkmq2kA4SlipuUb+oMKDKGBbCQzEgn3+tYtS9ssJyGKAANMNmHn/lOZaSXmLg9r1po1HNkv03nOAWRTp+iWu34SgEawlgaANrhQ14oxyn3CUQikuJ6kNZzbd1f3oR3An7aL3XRu/pVUTkFnY=
+Received: from BYAPR15MB3384.namprd15.prod.outlook.com (20.179.59.17) by
+ BYAPR15MB2629.namprd15.prod.outlook.com (20.179.156.22) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1922.16; Thu, 23 May 2019 16:51:20 +0000
+Received: from BYAPR15MB3384.namprd15.prod.outlook.com
+ ([fe80::956e:28a4:f18d:b698]) by BYAPR15MB3384.namprd15.prod.outlook.com
+ ([fe80::956e:28a4:f18d:b698%3]) with mapi id 15.20.1900.020; Thu, 23 May 2019
+ 16:51:20 +0000
+From:   Yonghong Song <yhs@fb.com>
+To:     Michal Rostecki <mrostecki@opensuse.org>
+CC:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        Martin Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Jakub Kicinski" <jakub.kicinski@netronome.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+        "open list:XDP (eXpress Data Path)" <xdp-newbies@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2 RESEND 0/2] Move bpf_printk to bpf_helpers.h
+Thread-Topic: [PATCH bpf-next v2 RESEND 0/2] Move bpf_printk to bpf_helpers.h
+Thread-Index: AQHVEWZ9tKZLQB45uky5/KKE/VBBiKZ47KwA
+Date:   Thu, 23 May 2019 16:51:20 +0000
+Message-ID: <4642ca96-22ab-ad61-a6a1-1d2ef7239cb8@fb.com>
+References: <20190523125355.18437-1-mrostecki@opensuse.org>
+In-Reply-To: <20190523125355.18437-1-mrostecki@opensuse.org>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.100.3/25458/Thu May 23 09:58:32 2019)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: MWHPR22CA0021.namprd22.prod.outlook.com
+ (2603:10b6:300:ef::31) To BYAPR15MB3384.namprd15.prod.outlook.com
+ (2603:10b6:a03:10e::17)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2620:10d:c090:200::d011]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 05c4d72b-7041-4e4a-59d5-08d6df9ee15c
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:BYAPR15MB2629;
+x-ms-traffictypediagnostic: BYAPR15MB2629:
+x-microsoft-antispam-prvs: <BYAPR15MB26290CAF1D766E076074FC31D3010@BYAPR15MB2629.namprd15.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4303;
+x-forefront-prvs: 00462943DE
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(396003)(136003)(346002)(366004)(39860400002)(199004)(189003)(81156014)(81166006)(52116002)(86362001)(102836004)(36756003)(8676002)(386003)(6506007)(14454004)(99286004)(25786009)(71190400001)(71200400001)(478600001)(2906002)(229853002)(305945005)(46003)(7736002)(5660300002)(54906003)(31696002)(76176011)(53546011)(186003)(316002)(68736007)(446003)(11346002)(2616005)(476003)(486006)(53936002)(7416002)(256004)(8936002)(66556008)(64756008)(66446008)(6916009)(6512007)(6246003)(66946007)(66476007)(31686004)(73956011)(6116002)(6436002)(6486002)(4326008);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB2629;H:BYAPR15MB3384.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: +Zq4turRfNZQX0W7axyVBgUhzhxgdXftvnYCC/4EHawTCPQOBxx4Qx227Ml4hMjFXC3iyT1yvn4WHVO/Oc6U1ZKNvsPkdbg2Ex1vJjfzg2Mr/XMo5ZH3iJLyq7/B+/sR1lGMx+87zQwyoNhyLcCV1UHuIlr5tDAuQqAFtklKIDgDVnXBpH9lXF0v7L+pfmhHZ4l8EFxqGZ2Mes9l/HqF5I4x65MEewWnqamGWp+PuFOVapoAPdNx42pYsHMI2XSZibmrchNwclAR6jNhWYJbqOvFtH1/M6/252gvpfAcOleyIzufhF6vBw/mqZfYaLm0aQ7Z5XO8ZdNX9eSfnDqgLvbNeYdDQynrRZlvy8fyelaoOmhU5BY3x4yiqHI6ePau6/La7TZQBjJ2TEQ9odPSOyRcdg3FXpjCKjUajAQz9gA=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <BD6A272AAD7B7F488C08810609D42B8E@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 05c4d72b-7041-4e4a-59d5-08d6df9ee15c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2019 16:51:20.1274
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2629
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-23_13:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905230114
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 05/23/2019 05:58 PM, Yonghong Song wrote:
-> On 5/23/19 8:41 AM, Daniel Borkmann wrote:
->> On 05/22/2019 07:39 AM, Yonghong Song wrote:
->>> This patch tries to solve the following specific use case.
->>>
->>> Currently, bpf program can already collect stack traces
->>> through kernel function get_perf_callchain()
->>> when certain events happens (e.g., cache miss counter or
->>> cpu clock counter overflows). But such stack traces are
->>> not enough for jitted programs, e.g., hhvm (jited php).
->>> To get real stack trace, jit engine internal data structures
->>> need to be traversed in order to get the real user functions.
->>>
->>> bpf program itself may not be the best place to traverse
->>> the jit engine as the traversing logic could be complex and
->>> it is not a stable interface either.
->>>
->>> Instead, hhvm implements a signal handler,
->>> e.g. for SIGALARM, and a set of program locations which
->>> it can dump stack traces. When it receives a signal, it will
->>> dump the stack in next such program location.
->>>
->>> Such a mechanism can be implemented in the following way:
->>>    . a perf ring buffer is created between bpf program
->>>      and tracing app.
->>>    . once a particular event happens, bpf program writes
->>>      to the ring buffer and the tracing app gets notified.
->>>    . the tracing app sends a signal SIGALARM to the hhvm.
->>>
->>> But this method could have large delays and causing profiling
->>> results skewed.
->>>
->>> This patch implements bpf_send_signal() helper to send
->>> a signal to hhvm in real time, resulting in intended stack traces.
->>>
->>> Signed-off-by: Yonghong Song <yhs@fb.com>
->>> ---
->>>   include/uapi/linux/bpf.h | 17 +++++++++-
->>>   kernel/trace/bpf_trace.c | 67 ++++++++++++++++++++++++++++++++++++++++
->>>   2 files changed, 83 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
->>> index 63e0cf66f01a..68d4470523a0 100644
->>> --- a/include/uapi/linux/bpf.h
->>> +++ b/include/uapi/linux/bpf.h
->>> @@ -2672,6 +2672,20 @@ union bpf_attr {
->>>    *		0 on success.
->>>    *
->>>    *		**-ENOENT** if the bpf-local-storage cannot be found.
->>> + *
->>> + * int bpf_send_signal(u32 sig)
->>> + *	Description
->>> + *		Send signal *sig* to the current task.
->>> + *	Return
->>> + *		0 on success or successfully queued.
->>> + *
->>> + *		**-EBUSY** if work queue under nmi is full.
->>> + *
->>> + *		**-EINVAL** if *sig* is invalid.
->>> + *
->>> + *		**-EPERM** if no permission to send the *sig*.
->>> + *
->>> + *		**-EAGAIN** if bpf program can try again.
->>>    */
->>>   #define __BPF_FUNC_MAPPER(FN)		\
->>>   	FN(unspec),			\
->>> @@ -2782,7 +2796,8 @@ union bpf_attr {
->>>   	FN(strtol),			\
->>>   	FN(strtoul),			\
->>>   	FN(sk_storage_get),		\
->>> -	FN(sk_storage_delete),
->>> +	FN(sk_storage_delete),		\
->>> +	FN(send_signal),
->>>   
->>>   /* integer value in 'imm' field of BPF_CALL instruction selects which helper
->>>    * function eBPF program intends to call
->>> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
->>> index f92d6ad5e080..f8cd0db7289f 100644
->>> --- a/kernel/trace/bpf_trace.c
->>> +++ b/kernel/trace/bpf_trace.c
->>> @@ -567,6 +567,58 @@ static const struct bpf_func_proto bpf_probe_read_str_proto = {
->>>   	.arg3_type	= ARG_ANYTHING,
->>>   };
->>>   
->>> +struct send_signal_irq_work {
->>> +	struct irq_work irq_work;
->>> +	u32 sig;
->>> +};
->>> +
->>> +static DEFINE_PER_CPU(struct send_signal_irq_work, send_signal_work);
->>> +
->>> +static void do_bpf_send_signal(struct irq_work *entry)
->>> +{
->>> +	struct send_signal_irq_work *work;
->>> +
->>> +	work = container_of(entry, struct send_signal_irq_work, irq_work);
->>> +	group_send_sig_info(work->sig, SEND_SIG_PRIV, current, PIDTYPE_TGID);
->>> +}
->>> +
->>> +BPF_CALL_1(bpf_send_signal, u32, sig)
->>> +{
->>> +	struct send_signal_irq_work *work = NULL;
->>> +
->>> +	/* Similar to bpf_probe_write_user, task needs to be
->>> +	 * in a sound condition and kernel memory access be
->>> +	 * permitted in order to send signal to the current
->>> +	 * task.
->>> +	 */
->>> +	if (unlikely(current->flags & (PF_KTHREAD | PF_EXITING)))
->>> +		return -EPERM;
->>> +	if (unlikely(uaccess_kernel()))
->>> +		return -EPERM;
->>> +	if (unlikely(!nmi_uaccess_okay()))
->>> +		return -EPERM;
->>> +
->>> +	if (in_nmi()) {
->>
->> Hm, bit confused, can't this only be done out of process context in
->> general since only there current points to e.g. hhvm? I'm probably
->> missing something. Could you elaborate?
-> 
-> That is true. If in nmi, it is out of process context and in nmi 
-> context, we use an irq_work here since group_send_sig_info() has
-> spinlock inside. The bpf program (e.g., a perf_event program) needs to 
-> check it is with right current (e.g., by pid) before calling
-> this helper.
-> 
-> Does this address your question?
-
-Hm, but how is it guaranteed that 'current' inside the callback is still
-the very same you intend to send the signal to?
-
-What happens if you're in softirq and send SIGKILL to yourself? Is this
-ignored/handled gracefully in such case?
-
-I think some more elaborate comment in the code would definitely be help.
-
-Btw, you probably need to wrap it under #ifdef CONFIG_IRQ_WORK.
-
->>> +		work = this_cpu_ptr(&send_signal_work);
->>> +		if (work->irq_work.flags & IRQ_WORK_BUSY)
->>> +			return -EBUSY;
->>> +
->>> +		work->sig = sig;
->>> +		irq_work_queue(&work->irq_work);
->>> +		return 0;
->>> +	}
->>> +
->>> +	return group_send_sig_info(sig, SEND_SIG_PRIV, current, PIDTYPE_TGID);
->>> +
->>
->> Nit: extra newline slipped in
-> Thanks. Will remove this in the next revision.
->>
->>> +}
->>> +
->>> +static const struct bpf_func_proto bpf_send_signal_proto = {
->>> +	.func		= bpf_send_signal,
->>> +	.gpl_only	= false,
->>> +	.ret_type	= RET_INTEGER,
->>> +	.arg1_type	= ARG_ANYTHING,
->>> +};
->>> +
->>>   static const struct bpf_func_proto *
->>>   tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
->>>   {
->>> @@ -617,6 +669,8 @@ tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
->>>   	case BPF_FUNC_get_current_cgroup_id:
->>>   		return &bpf_get_current_cgroup_id_proto;
->>>   #endif
->>> +	case BPF_FUNC_send_signal:
->>> +		return &bpf_send_signal_proto;
->>>   	default:
->>>   		return NULL;
->>>   	}
->>> @@ -1343,5 +1397,18 @@ static int __init bpf_event_init(void)
->>>   	return 0;
->>>   }
->>>   
->>> +static int __init send_signal_irq_work_init(void)
->>> +{
->>> +	int cpu;
->>> +	struct send_signal_irq_work *work;
->>> +
->>> +	for_each_possible_cpu(cpu) {
->>> +		work = per_cpu_ptr(&send_signal_work, cpu);
->>> +		init_irq_work(&work->irq_work, do_bpf_send_signal);
->>> +	}
->>> +	return 0;
->>> +}
->>> +
->>>   fs_initcall(bpf_event_init);
->>> +subsys_initcall(send_signal_irq_work_init);
->>>   #endif /* CONFIG_MODULES */
->>>
->>
-
+DQoNCk9uIDUvMjMvMTkgNTo1MyBBTSwgTWljaGFsIFJvc3RlY2tpIHdyb3RlOg0KPiBUaGlzIHNl
+cmllcyBvZiBwYXRjaGVzIG1vdmUgdGhlIGNvbW1vbmx5IHVzZWQgYnBmX3ByaW50ayBtYWNybyB0
+bw0KPiBicGZfaGVscGVycy5oIHdoaWNoIGlzIGFscmVhZHkgaW5jbHVkZWQgaW4gYWxsIEJQRiBw
+cm9ncmFtcyB3aGljaA0KPiBkZWZpbmVkIHRoYXQgbWFjcm8gb24gdGhlaXIgb3duLg0KPiANCj4g
+djEtPnYyOg0KPiAtIElmIEhCTV9ERUJVRyBpcyBub3QgZGVmaW5lZCBpbiBoYm0gc2FtcGxlLCB1
+bmRlZmluZSBicGZfcHJpbnRrIGFuZCBzZXQNCj4gICAgYW4gZW1wdHkgbWFjcm8gZm9yIGl0Lg0K
+PiANCj4gTWljaGFsIFJvc3RlY2tpICgyKToNCj4gICAgc2VsZnRlc3RzOiBicGY6IE1vdmUgYnBm
+X3ByaW50ayB0byBicGZfaGVscGVycy5oDQo+ICAgIHNhbXBsZXM6IGJwZjogRG8gbm90IGRlZmlu
+ZSBicGZfcHJpbnRrIG1hY3JvDQo+IA0KPiAgIHNhbXBsZXMvYnBmL2hibV9rZXJuLmggICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIHwgMTEgKystLS0tLS0tLS0NCj4gICBzYW1wbGVzL2Jw
+Zi90Y3BfYmFzZXJ0dF9rZXJuLmMgICAgICAgICAgICAgICAgICAgICAgICB8ICA3IC0tLS0tLS0N
+Cj4gICBzYW1wbGVzL2JwZi90Y3BfYnVmc19rZXJuLmMgICAgICAgICAgICAgICAgICAgICAgICAg
+ICB8ICA3IC0tLS0tLS0NCj4gICBzYW1wbGVzL2JwZi90Y3BfY2xhbXBfa2Vybi5jICAgICAgICAg
+ICAgICAgICAgICAgICAgICB8ICA3IC0tLS0tLS0NCj4gICBzYW1wbGVzL2JwZi90Y3BfY29uZ19r
+ZXJuLmMgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA3IC0tLS0tLS0NCj4gICBzYW1wbGVz
+L2JwZi90Y3BfaXdfa2Vybi5jICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA3IC0tLS0t
+LS0NCj4gICBzYW1wbGVzL2JwZi90Y3BfcnduZF9rZXJuLmMgICAgICAgICAgICAgICAgICAgICAg
+ICAgICB8ICA3IC0tLS0tLS0NCj4gICBzYW1wbGVzL2JwZi90Y3Bfc3lucnRvX2tlcm4uYyAgICAg
+ICAgICAgICAgICAgICAgICAgICB8ICA3IC0tLS0tLS0NCj4gICBzYW1wbGVzL2JwZi90Y3BfdG9z
+X3JlZmxlY3Rfa2Vybi5jICAgICAgICAgICAgICAgICAgICB8ICA3IC0tLS0tLS0NCj4gICBzYW1w
+bGVzL2JwZi94ZHBfc2FtcGxlX3BrdHNfa2Vybi5jICAgICAgICAgICAgICAgICAgICB8ICA3IC0t
+LS0tLS0NCj4gICB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvYnBmX2hlbHBlcnMuaCAgICAg
+ICAgICAgICB8ICA4ICsrKysrKysrDQo+ICAgLi4uL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9n
+cy9zb2NrbWFwX3BhcnNlX3Byb2cuYyAgfCAgNyAtLS0tLS0tDQo+ICAgLi4uL3NlbGZ0ZXN0cy9i
+cGYvcHJvZ3Mvc29ja21hcF90Y3BfbXNnX3Byb2cuYyAgICAgICAgfCAgNyAtLS0tLS0tDQo+ICAg
+Li4uL3NlbGZ0ZXN0cy9icGYvcHJvZ3Mvc29ja21hcF92ZXJkaWN0X3Byb2cuYyAgICAgICAgfCAg
+NyAtLS0tLS0tDQo+ICAgLi4uL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9ncy90ZXN0X2x3dF9z
+ZWc2bG9jYWwuYyAgfCAgNyAtLS0tLS0tDQo+ICAgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBm
+L3Byb2dzL3Rlc3RfeGRwX25vaW5saW5lLmMgfCAgNyAtLS0tLS0tDQo+ICAgdG9vbHMvdGVzdGlu
+Zy9zZWxmdGVzdHMvYnBmL3Rlc3Rfc29ja21hcF9rZXJuLmggICAgICAgfCAgNyAtLS0tLS0tDQo+
+ICAgMTcgZmlsZXMgY2hhbmdlZCwgMTAgaW5zZXJ0aW9ucygrKSwgMTE0IGRlbGV0aW9ucygtKQ0K
+DQpBY2sgZm9yIHRoZSB3aG9sZSBzZXJpZXMuDQpBY2tlZC1ieTogWW9uZ2hvbmcgU29uZyA8eWhz
+QGZiLmNvbT4NCg==
