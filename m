@@ -2,197 +2,253 @@ Return-Path: <SRS0=Im41=TX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FC2CC282DD
-	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 16:42:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD3EAC282DD
+	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 16:48:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D1E982175B
-	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 16:42:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7ECF02070D
+	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 16:48:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731156AbfEWQmM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 May 2019 12:42:12 -0400
-Received: from mail-it1-f196.google.com ([209.85.166.196]:53666 "EHLO
-        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730893AbfEWQmM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 May 2019 12:42:12 -0400
-Received: by mail-it1-f196.google.com with SMTP id m141so10831323ita.3
-        for <bpf@vger.kernel.org>; Thu, 23 May 2019 09:42:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6h5Gv6+Yt9f8QV63xDQZtQKCEMQicjrYgqtB5ciLH/o=;
-        b=OvJ8kkaM7BH0a1TWiKuCvGWq6RoblL0kAsFPFanO+MtFkmiHQ9BboniskqpfchhCfb
-         qLKE98s6n2Z5wYcTCGRwMXpBiJ+eDZZknbRHgHzcHUA9Km9zib3WfYrSnzY9+sYI5vNP
-         kbm8zSs9xNqT5OXrSQktZCGrETS2VvS01vT095d7oxVpNcOZvblw/2lZXDwMe8PM8+CA
-         T24o0GxIhESu7SFXWj9IDIjhxnUxLpuXd0iE/DaBLkcTm0L2ageitpb9OTYXDP+n9ewc
-         hw7mtbiCNPKvF219Q035ZUffEbm4odqLHHJJCr4DLR5m39EqSRbxnfX0fL+KFD+ERQJl
-         gJQw==
-X-Gm-Message-State: APjAAAVkr6Urp+hwpcD0EsjnDQhC9o8mEn1sjnaDS64QrBhIdR2eFVNU
-        o5yVLYt6Mbp/VeCkqd/lTZg/sHWvvCj8K//GGQBr5fyf6NJ7fIXa
-X-Google-Smtp-Source: APXvYqxTZQkYgbBDIvoFkw/ZTDfJz6cpIlSoNKA34ueI1+BGLDPWDqNKplP2eh4Nb/zUp7AWKX8x3jaCM2nKGrpPFYk=
-X-Received: by 2002:a24:2e8c:: with SMTP id i134mr13991636ita.9.1558629731329;
- Thu, 23 May 2019 09:42:11 -0700 (PDT)
+        id S1730951AbfEWQsv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 May 2019 12:48:51 -0400
+Received: from www62.your-server.de ([213.133.104.62]:52604 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730899AbfEWQsv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 May 2019 12:48:51 -0400
+Received: from [78.46.172.2] (helo=sslproxy05.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hTqZz-0008OR-DD; Thu, 23 May 2019 18:28:31 +0200
+Received: from [178.197.249.12] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hTqZz-000WCz-7N; Thu, 23 May 2019 18:28:31 +0200
+Subject: Re: [PATCH bpf-next v2 1/3] bpf: implement bpf_send_signal() helper
+To:     Yonghong Song <yhs@fb.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Cc:     Alexei Starovoitov <ast@fb.com>, Kernel Team <Kernel-team@fb.com>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20190522053900.1663459-1-yhs@fb.com>
+ <20190522053900.1663537-1-yhs@fb.com>
+ <2c07890b-9da5-b4e8-dc94-35def14470ad@iogearbox.net>
+ <6041511a-1628-868f-b4b1-e567c234a4a5@fb.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <d863ad02-5151-3e3c-a276-404c9dc957b2@iogearbox.net>
+Date:   Thu, 23 May 2019 18:28:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.3.0
 MIME-Version: 1.0
-References: <CACPcB9cB5n1HOmZcVpusJq8rAV5+KfmZ-Lxv3tgsSoy7vNrk7w@mail.gmail.com>
- <20190517091044.GM2606@hirez.programming.kicks-ass.net> <CACPcB9cpNp5CBqoRs+XMCwufzAFa8Pj-gbmj9fb+g5wVdue=ig@mail.gmail.com>
- <20190522140233.GC16275@worktop.programming.kicks-ass.net>
- <ab047883-69f6-1175-153f-5ad9462c6389@fb.com> <20190522174517.pbdopvookggen3d7@treble>
- <20190522234635.a47bettklcf5gt7c@treble> <CACPcB9dRJ89YAMDQdKoDMU=vFfpb5AaY0mWC_Xzw1ZMTFBf6ng@mail.gmail.com>
- <20190523133253.tad6ywzzexks6hrp@treble> <CACPcB9fQKg7xhzhCZaF4UGi=EQs1HLTFgg-C_xJQaUfho3yMyA@mail.gmail.com>
- <20190523152413.m2pbnamihu3s2c5s@treble>
-In-Reply-To: <20190523152413.m2pbnamihu3s2c5s@treble>
-From:   Kairui Song <kasong@redhat.com>
-Date:   Fri, 24 May 2019 00:41:59 +0800
-Message-ID: <CACPcB9e0mL6jdNWfH-2K-rkvmQiz=G6mtLiZ+AEmp3-V0x+Z8A@mail.gmail.com>
-Subject: Re: Getting empty callchain from perf_callchain_kernel()
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Alexei Starovoitov <ast@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Song Liu <songliubraving@fb.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <6041511a-1628-868f-b4b1-e567c234a4a5@fb.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.3/25458/Thu May 23 09:58:32 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
- On Thu, May 23, 2019 at 11:24 PM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
->
-> On Thu, May 23, 2019 at 10:50:24PM +0800, Kairui Song wrote:
-> > > > Hi Josh, this still won't fix the problem.
-> > > >
-> > > > Problem is not (or not only) with ___bpf_prog_run, what actually went
-> > > > wrong is with the JITed bpf code.
-> > >
-> > > There seem to be a bunch of issues.  My patch at least fixes the failing
-> > > selftest reported by Alexei for ORC.
-> > >
-> > > How can I recreate your issue?
-> >
-> > Hmm, I used bcc's example to attach bpf to trace point, and with that
-> > fix stack trace is still invalid.
-> >
-> > CMD I used with bcc:
-> > python3 ./tools/stackcount.py t:sched:sched_fork
->
-> I've had problems in the past getting bcc to build, so I was hoping it
-> was reproducible with a standalone selftest.
->
-> > And I just had another try applying your patch, self test is also failing.
->
-> Is it the same selftest reported by Alexei?
->
->   test_stacktrace_map:FAIL:compare_map_keys stackid_hmap vs. stackmap err -1 errno 2
->
-> > I'm applying on my local master branch, a few days older than
-> > upstream, I can update and try again, am I missing anything?
->
-> The above patch had some issues, so with some configs you might see an
-> objtool warning for ___bpf_prog_run(), in which case the patch doesn't
-> fix the test_stacktrace_map selftest.
->
-> Here's the latest version which should fix it in all cases (based on
-> tip/master):
->
->   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/commit/?h=bpf-orc-fix
+On 05/23/2019 05:58 PM, Yonghong Song wrote:
+> On 5/23/19 8:41 AM, Daniel Borkmann wrote:
+>> On 05/22/2019 07:39 AM, Yonghong Song wrote:
+>>> This patch tries to solve the following specific use case.
+>>>
+>>> Currently, bpf program can already collect stack traces
+>>> through kernel function get_perf_callchain()
+>>> when certain events happens (e.g., cache miss counter or
+>>> cpu clock counter overflows). But such stack traces are
+>>> not enough for jitted programs, e.g., hhvm (jited php).
+>>> To get real stack trace, jit engine internal data structures
+>>> need to be traversed in order to get the real user functions.
+>>>
+>>> bpf program itself may not be the best place to traverse
+>>> the jit engine as the traversing logic could be complex and
+>>> it is not a stable interface either.
+>>>
+>>> Instead, hhvm implements a signal handler,
+>>> e.g. for SIGALARM, and a set of program locations which
+>>> it can dump stack traces. When it receives a signal, it will
+>>> dump the stack in next such program location.
+>>>
+>>> Such a mechanism can be implemented in the following way:
+>>>    . a perf ring buffer is created between bpf program
+>>>      and tracing app.
+>>>    . once a particular event happens, bpf program writes
+>>>      to the ring buffer and the tracing app gets notified.
+>>>    . the tracing app sends a signal SIGALARM to the hhvm.
+>>>
+>>> But this method could have large delays and causing profiling
+>>> results skewed.
+>>>
+>>> This patch implements bpf_send_signal() helper to send
+>>> a signal to hhvm in real time, resulting in intended stack traces.
+>>>
+>>> Signed-off-by: Yonghong Song <yhs@fb.com>
+>>> ---
+>>>   include/uapi/linux/bpf.h | 17 +++++++++-
+>>>   kernel/trace/bpf_trace.c | 67 ++++++++++++++++++++++++++++++++++++++++
+>>>   2 files changed, 83 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+>>> index 63e0cf66f01a..68d4470523a0 100644
+>>> --- a/include/uapi/linux/bpf.h
+>>> +++ b/include/uapi/linux/bpf.h
+>>> @@ -2672,6 +2672,20 @@ union bpf_attr {
+>>>    *		0 on success.
+>>>    *
+>>>    *		**-ENOENT** if the bpf-local-storage cannot be found.
+>>> + *
+>>> + * int bpf_send_signal(u32 sig)
+>>> + *	Description
+>>> + *		Send signal *sig* to the current task.
+>>> + *	Return
+>>> + *		0 on success or successfully queued.
+>>> + *
+>>> + *		**-EBUSY** if work queue under nmi is full.
+>>> + *
+>>> + *		**-EINVAL** if *sig* is invalid.
+>>> + *
+>>> + *		**-EPERM** if no permission to send the *sig*.
+>>> + *
+>>> + *		**-EAGAIN** if bpf program can try again.
+>>>    */
+>>>   #define __BPF_FUNC_MAPPER(FN)		\
+>>>   	FN(unspec),			\
+>>> @@ -2782,7 +2796,8 @@ union bpf_attr {
+>>>   	FN(strtol),			\
+>>>   	FN(strtoul),			\
+>>>   	FN(sk_storage_get),		\
+>>> -	FN(sk_storage_delete),
+>>> +	FN(sk_storage_delete),		\
+>>> +	FN(send_signal),
+>>>   
+>>>   /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+>>>    * function eBPF program intends to call
+>>> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+>>> index f92d6ad5e080..f8cd0db7289f 100644
+>>> --- a/kernel/trace/bpf_trace.c
+>>> +++ b/kernel/trace/bpf_trace.c
+>>> @@ -567,6 +567,58 @@ static const struct bpf_func_proto bpf_probe_read_str_proto = {
+>>>   	.arg3_type	= ARG_ANYTHING,
+>>>   };
+>>>   
+>>> +struct send_signal_irq_work {
+>>> +	struct irq_work irq_work;
+>>> +	u32 sig;
+>>> +};
+>>> +
+>>> +static DEFINE_PER_CPU(struct send_signal_irq_work, send_signal_work);
+>>> +
+>>> +static void do_bpf_send_signal(struct irq_work *entry)
+>>> +{
+>>> +	struct send_signal_irq_work *work;
+>>> +
+>>> +	work = container_of(entry, struct send_signal_irq_work, irq_work);
+>>> +	group_send_sig_info(work->sig, SEND_SIG_PRIV, current, PIDTYPE_TGID);
+>>> +}
+>>> +
+>>> +BPF_CALL_1(bpf_send_signal, u32, sig)
+>>> +{
+>>> +	struct send_signal_irq_work *work = NULL;
+>>> +
+>>> +	/* Similar to bpf_probe_write_user, task needs to be
+>>> +	 * in a sound condition and kernel memory access be
+>>> +	 * permitted in order to send signal to the current
+>>> +	 * task.
+>>> +	 */
+>>> +	if (unlikely(current->flags & (PF_KTHREAD | PF_EXITING)))
+>>> +		return -EPERM;
+>>> +	if (unlikely(uaccess_kernel()))
+>>> +		return -EPERM;
+>>> +	if (unlikely(!nmi_uaccess_okay()))
+>>> +		return -EPERM;
+>>> +
+>>> +	if (in_nmi()) {
+>>
+>> Hm, bit confused, can't this only be done out of process context in
+>> general since only there current points to e.g. hhvm? I'm probably
+>> missing something. Could you elaborate?
+> 
+> That is true. If in nmi, it is out of process context and in nmi 
+> context, we use an irq_work here since group_send_sig_info() has
+> spinlock inside. The bpf program (e.g., a perf_event program) needs to 
+> check it is with right current (e.g., by pid) before calling
+> this helper.
+> 
+> Does this address your question?
 
-Hmm, I still get the failure:
-test_stacktrace_map:FAIL:compare_map_keys stackid_hmap vs. stackmap
-err -1 errno 2
+Hm, but how is it guaranteed that 'current' inside the callback is still
+the very same you intend to send the signal to?
 
-And I didn't see how this will fix the issue. As long as ORC need to
-unwind through the JITed code it will fail. And that will happen
-before reaching ___bpf_prog_run.
+What happens if you're in softirq and send SIGKILL to yourself? Is this
+ignored/handled gracefully in such case?
 
->
-> > > > For frame pointer unwinder, it seems the JITed bpf code will have a
-> > > > shifted "BP" register? (arch/x86/net/bpf_jit_comp.c:217), so if we can
-> > > > unshift it properly then it will work.
-> > >
-> > > Yeah, that looks like a frame pointer bug in emit_prologue().
-> > >
-> > > > I tried below code, and problem is fixed (only for frame pointer
-> > > > unwinder though). Need to find a better way to detect and do any
-> > > > similar trick for bpf part, if this is a feasible way to fix it:
-> > > >
-> > > > diff --git a/arch/x86/kernel/unwind_frame.c b/arch/x86/kernel/unwind_frame.c
-> > > > index 9b9fd4826e7a..2c0fa2aaa7e4 100644
-> > > > --- a/arch/x86/kernel/unwind_frame.c
-> > > > +++ b/arch/x86/kernel/unwind_frame.c
-> > > > @@ -330,8 +330,17 @@ bool unwind_next_frame(struct unwind_state *state)
-> > > >         }
-> > > >
-> > > >         /* Move to the next frame if it's safe: */
-> > > > -       if (!update_stack_state(state, next_bp))
-> > > > -               goto bad_address;
-> > > > +       if (!update_stack_state(state, next_bp)) {
-> > > > +               // Try again with shifted BP
-> > > > +               state->bp += 5; // see AUX_STACK_SPACE
-> > > > +               next_bp = (unsigned long
-> > > > *)READ_ONCE_TASK_STACK(state->task, *state->bp);
-> > > > +               // Clean and refetch stack info, it's marked as error outed
-> > > > +               state->stack_mask = 0;
-> > > > +               get_stack_info(next_bp, state->task,
-> > > > &state->stack_info, &state->stack_mask);
-> > > > +               if (!update_stack_state(state, next_bp)) {
-> > > > +                       goto bad_address;
-> > > > +               }
-> > > > +       }
-> > > >
-> > > >         return true;
-> > >
-> > > Nack.
-> > >
-> > > > For ORC unwinder, I think the unwinder can't find any info about the
-> > > > JITed part. Maybe if can let it just skip the JITed part and go to
-> > > > kernel context, then should be good enough.
-> > >
-> > > If it's starting from a fake pt_regs then that's going to be a
-> > > challenge.
-> > >
-> > > Will the JIT code always have the same stack layout?  If so then we
-> > > could hard code that knowledge in ORC.  Or even better, create a generic
-> > > interface for ORC to query the creator of the generated code about the
-> > > stack layout.
-> >
-> > I think yes.
-> >
-> > Not sure why we have the BP shift yet, if the prolog code could be
-> > tweaked to work with frame pointer unwinder it will be good to have.
-> > But still not for ORC.
-> >
-> > Will it be a good idea to have a region reserved for the JITed code?
-> > Currently it shares the region with "module mapping space". If let it
-> > have a separate region, when the unwinder meet any code in that region
-> > it will know it's JITed code and then can do something special about
-> > it.
-> >
-> > This should make it much easier for both frame pointer and ORC unwinder to work.
->
-> There's no need to put special cases in the FP unwinder when we can
-> instead just fix the frame pointer usage in the JIT code.
->
-> For ORC, I'm thinking we may be able to just require that all generated
-> code (BPF and others) always use frame pointers.  Then when ORC doesn't
-> recognize a code address, it could try using the frame pointer as a
-> fallback.
+I think some more elaborate comment in the code would definitely be help.
 
-Right, this sounds the right way to fix it, I believe this can fix
-everything well.
+Btw, you probably need to wrap it under #ifdef CONFIG_IRQ_WORK.
 
->
-> Once I get a reproducer I can do the patches for all that.
->
-> --
-> Josh
---
-Best Regards,
-Kairui Song
+>>> +		work = this_cpu_ptr(&send_signal_work);
+>>> +		if (work->irq_work.flags & IRQ_WORK_BUSY)
+>>> +			return -EBUSY;
+>>> +
+>>> +		work->sig = sig;
+>>> +		irq_work_queue(&work->irq_work);
+>>> +		return 0;
+>>> +	}
+>>> +
+>>> +	return group_send_sig_info(sig, SEND_SIG_PRIV, current, PIDTYPE_TGID);
+>>> +
+>>
+>> Nit: extra newline slipped in
+> Thanks. Will remove this in the next revision.
+>>
+>>> +}
+>>> +
+>>> +static const struct bpf_func_proto bpf_send_signal_proto = {
+>>> +	.func		= bpf_send_signal,
+>>> +	.gpl_only	= false,
+>>> +	.ret_type	= RET_INTEGER,
+>>> +	.arg1_type	= ARG_ANYTHING,
+>>> +};
+>>> +
+>>>   static const struct bpf_func_proto *
+>>>   tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>>>   {
+>>> @@ -617,6 +669,8 @@ tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>>>   	case BPF_FUNC_get_current_cgroup_id:
+>>>   		return &bpf_get_current_cgroup_id_proto;
+>>>   #endif
+>>> +	case BPF_FUNC_send_signal:
+>>> +		return &bpf_send_signal_proto;
+>>>   	default:
+>>>   		return NULL;
+>>>   	}
+>>> @@ -1343,5 +1397,18 @@ static int __init bpf_event_init(void)
+>>>   	return 0;
+>>>   }
+>>>   
+>>> +static int __init send_signal_irq_work_init(void)
+>>> +{
+>>> +	int cpu;
+>>> +	struct send_signal_irq_work *work;
+>>> +
+>>> +	for_each_possible_cpu(cpu) {
+>>> +		work = per_cpu_ptr(&send_signal_work, cpu);
+>>> +		init_irq_work(&work->irq_work, do_bpf_send_signal);
+>>> +	}
+>>> +	return 0;
+>>> +}
+>>> +
+>>>   fs_initcall(bpf_event_init);
+>>> +subsys_initcall(send_signal_irq_work_init);
+>>>   #endif /* CONFIG_MODULES */
+>>>
+>>
+
