@@ -5,41 +5,41 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E23DC282DD
-	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 20:42:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58D64C282DD
+	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 20:42:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1290E20673
-	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 20:42:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0DE1220645
+	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 20:42:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Y7r1Jl8A"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="PJZXEeXl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388254AbfEWUmo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 May 2019 16:42:44 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:48606 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2388225AbfEWUmo (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 23 May 2019 16:42:44 -0400
-Received: from pps.filterd (m0001255.ppops.net [127.0.0.1])
-        by mx0b-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4NKcXDx002881
-        for <bpf@vger.kernel.org>; Thu, 23 May 2019 13:42:42 -0700
+        id S2388257AbfEWUmq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 May 2019 16:42:46 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:60142 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387832AbfEWUmj (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 23 May 2019 16:42:39 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4NKYjcv016470
+        for <bpf@vger.kernel.org>; Thu, 23 May 2019 13:42:38 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=nwRY6bB2KmFJNhIVVdEQ+lk3y+vmqoe0Io5USgS79nc=;
- b=Y7r1Jl8A6i48D6HKccrYZYoQ6mCZQB8+otaFRuAh7AsIH0Va0eebYrYLBviquPsLZpJD
- MBtMdxWGwwlgd12y1iYzL3Jf9Yjeh4gQcp3LQ9hVjL/5EI5+4Igbp5JEMBLQFxeWRRd0
- VFllrDpGJyuOUhB/8Uc3rhwVkbUFfd9DUEk= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0b-00082601.pphosted.com with ESMTP id 2snu991qyk-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 23 May 2019 13:42:42 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 23 May 2019 13:42:41 -0700
+ content-type; s=facebook; bh=H9S3WRNKI8dXxl65kpQ6+TyRUXHKLt+ypUjtKZL29oo=;
+ b=PJZXEeXltHKiOzB91vKNULinXBzz9dqCwu0kTminiG0x/elOOtmD/hofBpGxjJbiVdzw
+ eIcWRxYqssJoPQDJRAimjCM8nKLKWdTOsdvNmK0TsH758VB5TlxiQj7zsKZMcXo9TrM5
+ aq+fkvs7Q10/ZA0Or0bnq8ZexZ+L/SrCqP8= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2sp15ngc3k-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 23 May 2019 13:42:38 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Thu, 23 May 2019 13:42:37 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id EC9BA861799; Thu, 23 May 2019 13:42:39 -0700 (PDT)
+        id D589B861799; Thu, 23 May 2019 13:42:35 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,21 +48,21 @@ To:     <andrii.nakryiko@gmail.com>, <netdev@vger.kernel.org>,
         <kernel-team@fb.com>
 CC:     Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v2 bpf-next 07/12] libbpf: switch btf_dedup() to hashmap for dedup table
-Date:   Thu, 23 May 2019 13:42:17 -0700
-Message-ID: <20190523204222.3998365-8-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 05/12] libbpf: add resizable non-thread safe internal hashmap
+Date:   Thu, 23 May 2019 13:42:15 -0700
+Message-ID: <20190523204222.3998365-6-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190523204222.3998365-1-andriin@fb.com>
 References: <20190523204222.3998365-1-andriin@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-23_16:,,
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-23_17:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
  malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ mlxlogscore=837 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1810050000 definitions=main-1905230133
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -70,474 +70,458 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Utilize libbpf's hashmap as a multimap fof dedup_table implementation.
+There is a need for fast point lookups inside libbpf for multiple use
+cases (e.g., name resolution for BTF-to-C conversion, by-name lookups in
+BTF for upcoming BPF CO-RE relocation support, etc). This patch
+implements simple resizable non-thread safe hashmap using single linked
+list chains.
+
+Four different insert strategies are supported:
+ - HASHMAP_ADD - only add key/value if key doesn't exist yet;
+ - HASHMAP_SET - add key/value pair if key doesn't exist yet; otherwise,
+   update value;
+ - HASHMAP_UPDATE - update value, if key already exists; otherwise, do
+   nothing and return -ENOENT;
+ - HASHMAP_APPEND - always add key/value pair, even if key already exists.
+   This turns hashmap into a multimap by allowing multiple values to be
+   associated with the same key. Most useful read API for such hashmap is
+   hashmap__for_each_key_entry() iteration. If hashmap__find() is still
+   used, it will return last inserted key/value entry (first in a bucket
+   chain).
+
+For HASHMAP_SET and HASHMAP_UPDATE, old key/value pair is returned, so
+that calling code can handle proper memory management, if necessary.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/btf.c | 201 +++++++++++++++++++-------------------------
- 1 file changed, 85 insertions(+), 116 deletions(-)
+ tools/lib/bpf/Build     |   2 +-
+ tools/lib/bpf/hashmap.c | 229 ++++++++++++++++++++++++++++++++++++++++
+ tools/lib/bpf/hashmap.h | 173 ++++++++++++++++++++++++++++++
+ 3 files changed, 403 insertions(+), 1 deletion(-)
+ create mode 100644 tools/lib/bpf/hashmap.c
+ create mode 100644 tools/lib/bpf/hashmap.h
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 6139550810a1..b2478e98c367 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -14,6 +14,7 @@
- #include "bpf.h"
- #include "libbpf.h"
- #include "libbpf_internal.h"
+diff --git a/tools/lib/bpf/Build b/tools/lib/bpf/Build
+index ee9d5362f35b..dcf0d36598e0 100644
+--- a/tools/lib/bpf/Build
++++ b/tools/lib/bpf/Build
+@@ -1 +1 @@
+-libbpf-y := libbpf.o bpf.o nlattr.o btf.o libbpf_errno.o str_error.o netlink.o bpf_prog_linfo.o libbpf_probes.o xsk.o
++libbpf-y := libbpf.o bpf.o nlattr.o btf.o libbpf_errno.o str_error.o netlink.o bpf_prog_linfo.o libbpf_probes.o xsk.o hashmap.o
+diff --git a/tools/lib/bpf/hashmap.c b/tools/lib/bpf/hashmap.c
+new file mode 100644
+index 000000000000..6122272943e6
+--- /dev/null
++++ b/tools/lib/bpf/hashmap.c
+@@ -0,0 +1,229 @@
++// SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
++
++/*
++ * Generic non-thread safe hash map implementation.
++ *
++ * Copyright (c) 2019 Facebook
++ */
++#include <stdint.h>
++#include <stdlib.h>
++#include <stdio.h>
++#include <errno.h>
++#include <linux/err.h>
 +#include "hashmap.h"
- 
- #define max(a, b) ((a) > (b) ? (a) : (b))
- #define min(a, b) ((a) < (b) ? (a) : (b))
-@@ -1293,16 +1294,9 @@ int btf__dedup(struct btf *btf, struct btf_ext *btf_ext,
- 	return err;
- }
- 
--#define BTF_DEDUP_TABLE_DEFAULT_SIZE (1 << 14)
--#define BTF_DEDUP_TABLE_MAX_SIZE_LOG 31
- #define BTF_UNPROCESSED_ID ((__u32)-1)
- #define BTF_IN_PROGRESS_ID ((__u32)-2)
- 
--struct btf_dedup_node {
--	struct btf_dedup_node *next;
--	__u32 type_id;
--};
--
- struct btf_dedup {
- 	/* .BTF section to be deduped in-place */
- 	struct btf *btf;
-@@ -1318,7 +1312,7 @@ struct btf_dedup {
- 	 * candidates, which is fine because we rely on subsequent
- 	 * btf_xxx_equal() checks to authoritatively verify type equality.
- 	 */
--	struct btf_dedup_node **dedup_table;
-+	struct hashmap *dedup_table;
- 	/* Canonical types map */
- 	__u32 *map;
- 	/* Hypothetical mapping, used during type graph equivalence checks */
-@@ -1343,30 +1337,18 @@ struct btf_str_ptrs {
- 	__u32 cap;
- };
- 
--static inline __u32 hash_combine(__u32 h, __u32 value)
-+static long hash_combine(long h, long value)
- {
--/* 2^31 + 2^29 - 2^25 + 2^22 - 2^19 - 2^16 + 1 */
--#define GOLDEN_RATIO_PRIME 0x9e370001UL
--	return h * 37 + value * GOLDEN_RATIO_PRIME;
--#undef GOLDEN_RATIO_PRIME
-+	return h * 31 + value;
- }
- 
--#define for_each_dedup_cand(d, hash, node) \
--	for (node = d->dedup_table[hash & (d->opts.dedup_table_size - 1)]; \
--	     node;							   \
--	     node = node->next)
-+#define for_each_dedup_cand(d, node, hash) \
-+	hashmap__for_each_key_entry(d->dedup_table, node, (void *)hash)
- 
--static int btf_dedup_table_add(struct btf_dedup *d, __u32 hash, __u32 type_id)
-+static int btf_dedup_table_add(struct btf_dedup *d, long hash, __u32 type_id)
- {
--	struct btf_dedup_node *node = malloc(sizeof(struct btf_dedup_node));
--	int bucket = hash & (d->opts.dedup_table_size - 1);
--
--	if (!node)
--		return -ENOMEM;
--	node->type_id = type_id;
--	node->next = d->dedup_table[bucket];
--	d->dedup_table[bucket] = node;
--	return 0;
-+	return hashmap__append(d->dedup_table,
-+			       (void *)hash, (void *)(long)type_id);
- }
- 
- static int btf_dedup_hypot_map_add(struct btf_dedup *d,
-@@ -1395,36 +1377,10 @@ static void btf_dedup_clear_hypot_map(struct btf_dedup *d)
- 	d->hypot_cnt = 0;
- }
- 
--static void btf_dedup_table_free(struct btf_dedup *d)
--{
--	struct btf_dedup_node *head, *tmp;
--	int i;
--
--	if (!d->dedup_table)
--		return;
--
--	for (i = 0; i < d->opts.dedup_table_size; i++) {
--		while (d->dedup_table[i]) {
--			tmp = d->dedup_table[i];
--			d->dedup_table[i] = tmp->next;
--			free(tmp);
--		}
--
--		head = d->dedup_table[i];
--		while (head) {
--			tmp = head;
--			head = head->next;
--			free(tmp);
--		}
--	}
--
--	free(d->dedup_table);
--	d->dedup_table = NULL;
--}
--
- static void btf_dedup_free(struct btf_dedup *d)
- {
--	btf_dedup_table_free(d);
-+	hashmap__free(d->dedup_table);
-+	d->dedup_table = NULL;
- 
- 	free(d->map);
- 	d->map = NULL;
-@@ -1438,40 +1394,43 @@ static void btf_dedup_free(struct btf_dedup *d)
- 	free(d);
- }
- 
--/* Find closest power of two >= to size, capped at 2^max_size_log */
--static __u32 roundup_pow2_max(__u32 size, int max_size_log)
-+static size_t btf_dedup_identity_hash_fn(const void *key, void *ctx)
- {
--	int i;
-+	return (size_t)key;
-+}
- 
--	for (i = 0; i < max_size_log  && (1U << i) < size;  i++)
--		;
--	return 1U << i;
-+static size_t btf_dedup_collision_hash_fn(const void *key, void *ctx)
++
++/* start with 4 buckets */
++#define HASHMAP_MIN_CAP_BITS 2
++
++static void hashmap_add_entry(struct hashmap_entry **pprev,
++			      struct hashmap_entry *entry)
 +{
++	entry->next = *pprev;
++	*pprev = entry;
++}
++
++static void hashmap_del_entry(struct hashmap_entry **pprev,
++			      struct hashmap_entry *entry)
++{
++	*pprev = entry->next;
++	entry->next = NULL;
++}
++
++void hashmap__init(struct hashmap *map, hashmap_hash_fn hash_fn,
++		   hashmap_equal_fn equal_fn, void *ctx)
++{
++	map->hash_fn = hash_fn;
++	map->equal_fn = equal_fn;
++	map->ctx = ctx;
++
++	map->buckets = NULL;
++	map->cap = 0;
++	map->cap_bits = 0;
++	map->sz = 0;
++}
++
++struct hashmap *hashmap__new(hashmap_hash_fn hash_fn,
++			     hashmap_equal_fn equal_fn,
++			     void *ctx)
++{
++	struct hashmap *map = malloc(sizeof(struct hashmap));
++
++	if (!map)
++		return ERR_PTR(-ENOMEM);
++	hashmap__init(map, hash_fn, equal_fn, ctx);
++	return map;
++}
++
++void hashmap__clear(struct hashmap *map)
++{
++	free(map->buckets);
++	map->cap = map->cap_bits = map->sz = 0;
++}
++
++void hashmap__free(struct hashmap *map)
++{
++	if (!map)
++		return;
++
++	hashmap__clear(map);
++	free(map);
++}
++
++size_t hashmap__size(const struct hashmap *map)
++{
++	return map->sz;
++}
++
++size_t hashmap__capacity(const struct hashmap *map)
++{
++	return map->cap;
++}
++
++static bool hashmap_needs_to_grow(struct hashmap *map)
++{
++	/* grow if empty or more than 75% filled */
++	return (map->cap == 0) || ((map->sz + 1) * 4 / 3 > map->cap);
++}
++
++static int hashmap_grow(struct hashmap *map)
++{
++	struct hashmap_entry **new_buckets;
++	struct hashmap_entry *cur, *tmp;
++	size_t new_cap_bits, new_cap;
++	size_t h;
++	int bkt;
++
++	new_cap_bits = map->cap_bits + 1;
++	if (new_cap_bits < HASHMAP_MIN_CAP_BITS)
++		new_cap_bits = HASHMAP_MIN_CAP_BITS;
++
++	new_cap = 1UL << new_cap_bits;
++	new_buckets = calloc(new_cap, sizeof(new_buckets[0]));
++	if (!new_buckets)
++		return -ENOMEM;
++
++	hashmap__for_each_entry_safe(map, cur, tmp, bkt) {
++		h = hash_bits(map->hash_fn(cur->key, map->ctx), new_cap_bits);
++		hashmap_add_entry(&new_buckets[h], cur);
++	}
++
++	map->cap = new_cap;
++	map->cap_bits = new_cap_bits;
++	free(map->buckets);
++	map->buckets = new_buckets;
++
 +	return 0;
- }
- 
-+static bool btf_dedup_equal_fn(const void *k1, const void *k2, void *ctx)
-+{
-+	return k1 == k2;
 +}
- 
- static struct btf_dedup *btf_dedup_new(struct btf *btf, struct btf_ext *btf_ext,
- 				       const struct btf_dedup_opts *opts)
- {
- 	struct btf_dedup *d = calloc(1, sizeof(struct btf_dedup));
-+	hashmap_hash_fn hash_fn = btf_dedup_identity_hash_fn;
- 	int i, err = 0;
--	__u32 sz;
- 
- 	if (!d)
- 		return ERR_PTR(-ENOMEM);
- 
- 	d->opts.dont_resolve_fwds = opts && opts->dont_resolve_fwds;
--	sz = opts && opts->dedup_table_size ? opts->dedup_table_size
--					    : BTF_DEDUP_TABLE_DEFAULT_SIZE;
--	sz = roundup_pow2_max(sz, BTF_DEDUP_TABLE_MAX_SIZE_LOG);
--	d->opts.dedup_table_size = sz;
-+	/* dedup_table_size is now used only to force collisions in tests */
-+	if (opts && opts->dedup_table_size == 1)
-+		hash_fn = btf_dedup_collision_hash_fn;
- 
- 	d->btf = btf;
- 	d->btf_ext = btf_ext;
- 
--	d->dedup_table = calloc(d->opts.dedup_table_size,
--				sizeof(struct btf_dedup_node *));
--	if (!d->dedup_table) {
--		err = -ENOMEM;
-+	d->dedup_table = hashmap__new(hash_fn, btf_dedup_equal_fn, NULL);
-+	if (IS_ERR(d->dedup_table)) {
-+		err = PTR_ERR(d->dedup_table);
-+		d->dedup_table = NULL;
- 		goto done;
- 	}
- 
-@@ -1790,9 +1749,9 @@ static int btf_dedup_strings(struct btf_dedup *d)
- 	return err;
- }
- 
--static __u32 btf_hash_common(struct btf_type *t)
-+static long btf_hash_common(struct btf_type *t)
- {
--	__u32 h;
-+	long h;
- 
- 	h = hash_combine(0, t->name_off);
- 	h = hash_combine(h, t->info);
-@@ -1808,10 +1767,10 @@ static bool btf_equal_common(struct btf_type *t1, struct btf_type *t2)
- }
- 
- /* Calculate type signature hash of INT. */
--static __u32 btf_hash_int(struct btf_type *t)
-+static long btf_hash_int(struct btf_type *t)
- {
- 	__u32 info = *(__u32 *)(t + 1);
--	__u32 h;
-+	long h;
- 
- 	h = btf_hash_common(t);
- 	h = hash_combine(h, info);
-@@ -1831,9 +1790,9 @@ static bool btf_equal_int(struct btf_type *t1, struct btf_type *t2)
- }
- 
- /* Calculate type signature hash of ENUM. */
--static __u32 btf_hash_enum(struct btf_type *t)
-+static long btf_hash_enum(struct btf_type *t)
- {
--	__u32 h;
-+	long h;
- 
- 	/* don't hash vlen and enum members to support enum fwd resolving */
- 	h = hash_combine(0, t->name_off);
-@@ -1885,11 +1844,11 @@ static bool btf_compat_enum(struct btf_type *t1, struct btf_type *t2)
-  * as referenced type IDs equivalence is established separately during type
-  * graph equivalence check algorithm.
-  */
--static __u32 btf_hash_struct(struct btf_type *t)
-+static long btf_hash_struct(struct btf_type *t)
- {
- 	struct btf_member *member = (struct btf_member *)(t + 1);
- 	__u32 vlen = BTF_INFO_VLEN(t->info);
--	__u32 h = btf_hash_common(t);
-+	long h = btf_hash_common(t);
- 	int i;
- 
- 	for (i = 0; i < vlen; i++) {
-@@ -1932,10 +1891,10 @@ static bool btf_shallow_equal_struct(struct btf_type *t1, struct btf_type *t2)
-  * under assumption that they were already resolved to canonical type IDs and
-  * are not going to change.
-  */
--static __u32 btf_hash_array(struct btf_type *t)
-+static long btf_hash_array(struct btf_type *t)
- {
- 	struct btf_array *info = (struct btf_array *)(t + 1);
--	__u32 h = btf_hash_common(t);
-+	long h = btf_hash_common(t);
- 
- 	h = hash_combine(h, info->type);
- 	h = hash_combine(h, info->index_type);
-@@ -1986,11 +1945,11 @@ static bool btf_compat_array(struct btf_type *t1, struct btf_type *t2)
-  * under assumption that they were already resolved to canonical type IDs and
-  * are not going to change.
-  */
--static inline __u32 btf_hash_fnproto(struct btf_type *t)
-+static long btf_hash_fnproto(struct btf_type *t)
- {
- 	struct btf_param *member = (struct btf_param *)(t + 1);
- 	__u16 vlen = BTF_INFO_VLEN(t->info);
--	__u32 h = btf_hash_common(t);
-+	long h = btf_hash_common(t);
- 	int i;
- 
- 	for (i = 0; i < vlen; i++) {
-@@ -2008,7 +1967,7 @@ static inline __u32 btf_hash_fnproto(struct btf_type *t)
-  * This function is called during reference types deduplication to compare
-  * FUNC_PROTO to potential canonical representative.
-  */
--static inline bool btf_equal_fnproto(struct btf_type *t1, struct btf_type *t2)
-+static bool btf_equal_fnproto(struct btf_type *t1, struct btf_type *t2)
- {
- 	struct btf_param *m1, *m2;
- 	__u16 vlen;
-@@ -2034,7 +1993,7 @@ static inline bool btf_equal_fnproto(struct btf_type *t1, struct btf_type *t2)
-  * IDs. This check is performed during type graph equivalence check and
-  * referenced types equivalence is checked separately.
-  */
--static inline bool btf_compat_fnproto(struct btf_type *t1, struct btf_type *t2)
-+static bool btf_compat_fnproto(struct btf_type *t1, struct btf_type *t2)
- {
- 	struct btf_param *m1, *m2;
- 	__u16 vlen;
-@@ -2065,11 +2024,12 @@ static inline bool btf_compat_fnproto(struct btf_type *t1, struct btf_type *t2)
- static int btf_dedup_prim_type(struct btf_dedup *d, __u32 type_id)
- {
- 	struct btf_type *t = d->btf->types[type_id];
-+	struct hashmap_entry *hash_entry;
- 	struct btf_type *cand;
--	struct btf_dedup_node *cand_node;
- 	/* if we don't find equivalent type, then we are canonical */
- 	__u32 new_id = type_id;
--	__u32 h;
-+	__u32 cand_id;
-+	long h;
- 
- 	switch (BTF_INFO_KIND(t->info)) {
- 	case BTF_KIND_CONST:
-@@ -2088,10 +2048,11 @@ static int btf_dedup_prim_type(struct btf_dedup *d, __u32 type_id)
- 
- 	case BTF_KIND_INT:
- 		h = btf_hash_int(t);
--		for_each_dedup_cand(d, h, cand_node) {
--			cand = d->btf->types[cand_node->type_id];
-+		for_each_dedup_cand(d, hash_entry, h) {
-+			cand_id = (__u32)(long)hash_entry->value;
-+			cand = d->btf->types[cand_id];
- 			if (btf_equal_int(t, cand)) {
--				new_id = cand_node->type_id;
-+				new_id = cand_id;
- 				break;
- 			}
- 		}
-@@ -2099,10 +2060,11 @@ static int btf_dedup_prim_type(struct btf_dedup *d, __u32 type_id)
- 
- 	case BTF_KIND_ENUM:
- 		h = btf_hash_enum(t);
--		for_each_dedup_cand(d, h, cand_node) {
--			cand = d->btf->types[cand_node->type_id];
-+		for_each_dedup_cand(d, hash_entry, h) {
-+			cand_id = (__u32)(long)hash_entry->value;
-+			cand = d->btf->types[cand_id];
- 			if (btf_equal_enum(t, cand)) {
--				new_id = cand_node->type_id;
-+				new_id = cand_id;
- 				break;
- 			}
- 			if (d->opts.dont_resolve_fwds)
-@@ -2110,21 +2072,22 @@ static int btf_dedup_prim_type(struct btf_dedup *d, __u32 type_id)
- 			if (btf_compat_enum(t, cand)) {
- 				if (btf_is_enum_fwd(t)) {
- 					/* resolve fwd to full enum */
--					new_id = cand_node->type_id;
-+					new_id = cand_id;
- 					break;
- 				}
- 				/* resolve canonical enum fwd to full enum */
--				d->map[cand_node->type_id] = type_id;
-+				d->map[cand_id] = type_id;
- 			}
- 		}
- 		break;
- 
- 	case BTF_KIND_FWD:
- 		h = btf_hash_common(t);
--		for_each_dedup_cand(d, h, cand_node) {
--			cand = d->btf->types[cand_node->type_id];
-+		for_each_dedup_cand(d, hash_entry, h) {
-+			cand_id = (__u32)(long)hash_entry->value;
-+			cand = d->btf->types[cand_id];
- 			if (btf_equal_common(t, cand)) {
--				new_id = cand_node->type_id;
-+				new_id = cand_id;
- 				break;
- 			}
- 		}
-@@ -2525,12 +2488,12 @@ static void btf_dedup_merge_hypot_map(struct btf_dedup *d)
-  */
- static int btf_dedup_struct_type(struct btf_dedup *d, __u32 type_id)
- {
--	struct btf_dedup_node *cand_node;
- 	struct btf_type *cand_type, *t;
-+	struct hashmap_entry *hash_entry;
- 	/* if we don't find equivalent type, then we are canonical */
- 	__u32 new_id = type_id;
- 	__u16 kind;
--	__u32 h;
-+	long h;
- 
- 	/* already deduped or is in process of deduping (loop detected) */
- 	if (d->map[type_id] <= BTF_MAX_NR_TYPES)
-@@ -2543,7 +2506,8 @@ static int btf_dedup_struct_type(struct btf_dedup *d, __u32 type_id)
- 		return 0;
- 
- 	h = btf_hash_struct(t);
--	for_each_dedup_cand(d, h, cand_node) {
-+	for_each_dedup_cand(d, hash_entry, h) {
-+		__u32 cand_id = (__u32)(long)hash_entry->value;
- 		int eq;
- 
- 		/*
-@@ -2556,17 +2520,17 @@ static int btf_dedup_struct_type(struct btf_dedup *d, __u32 type_id)
- 		 * creating a loop (FWD -> STRUCT and STRUCT -> FWD), because
- 		 * FWD and compatible STRUCT/UNION are considered equivalent.
- 		 */
--		cand_type = d->btf->types[cand_node->type_id];
-+		cand_type = d->btf->types[cand_id];
- 		if (!btf_shallow_equal_struct(t, cand_type))
- 			continue;
- 
- 		btf_dedup_clear_hypot_map(d);
--		eq = btf_dedup_is_equiv(d, type_id, cand_node->type_id);
-+		eq = btf_dedup_is_equiv(d, type_id, cand_id);
- 		if (eq < 0)
- 			return eq;
- 		if (!eq)
- 			continue;
--		new_id = cand_node->type_id;
-+		new_id = cand_id;
- 		btf_dedup_merge_hypot_map(d);
- 		break;
- 	}
-@@ -2616,12 +2580,12 @@ static int btf_dedup_struct_types(struct btf_dedup *d)
-  */
- static int btf_dedup_ref_type(struct btf_dedup *d, __u32 type_id)
- {
--	struct btf_dedup_node *cand_node;
-+	struct hashmap_entry *hash_entry;
-+	__u32 new_id = type_id, cand_id;
- 	struct btf_type *t, *cand;
- 	/* if we don't find equivalent type, then we are representative type */
--	__u32 new_id = type_id;
- 	int ref_type_id;
--	__u32 h;
-+	long h;
- 
- 	if (d->map[type_id] == BTF_IN_PROGRESS_ID)
- 		return -ELOOP;
-@@ -2644,10 +2608,11 @@ static int btf_dedup_ref_type(struct btf_dedup *d, __u32 type_id)
- 		t->type = ref_type_id;
- 
- 		h = btf_hash_common(t);
--		for_each_dedup_cand(d, h, cand_node) {
--			cand = d->btf->types[cand_node->type_id];
-+		for_each_dedup_cand(d, hash_entry, h) {
-+			cand_id = (__u32)(long)hash_entry->value;
-+			cand = d->btf->types[cand_id];
- 			if (btf_equal_common(t, cand)) {
--				new_id = cand_node->type_id;
-+				new_id = cand_id;
- 				break;
- 			}
- 		}
-@@ -2667,10 +2632,11 @@ static int btf_dedup_ref_type(struct btf_dedup *d, __u32 type_id)
- 		info->index_type = ref_type_id;
- 
- 		h = btf_hash_array(t);
--		for_each_dedup_cand(d, h, cand_node) {
--			cand = d->btf->types[cand_node->type_id];
-+		for_each_dedup_cand(d, hash_entry, h) {
-+			cand_id = (__u32)(long)hash_entry->value;
-+			cand = d->btf->types[cand_id];
- 			if (btf_equal_array(t, cand)) {
--				new_id = cand_node->type_id;
-+				new_id = cand_id;
- 				break;
- 			}
- 		}
-@@ -2698,10 +2664,11 @@ static int btf_dedup_ref_type(struct btf_dedup *d, __u32 type_id)
- 		}
- 
- 		h = btf_hash_fnproto(t);
--		for_each_dedup_cand(d, h, cand_node) {
--			cand = d->btf->types[cand_node->type_id];
-+		for_each_dedup_cand(d, hash_entry, h) {
-+			cand_id = (__u32)(long)hash_entry->value;
-+			cand = d->btf->types[cand_id];
- 			if (btf_equal_fnproto(t, cand)) {
--				new_id = cand_node->type_id;
-+				new_id = cand_id;
- 				break;
- 			}
- 		}
-@@ -2728,7 +2695,9 @@ static int btf_dedup_ref_types(struct btf_dedup *d)
- 		if (err < 0)
- 			return err;
- 	}
--	btf_dedup_table_free(d);
-+	/* we won't need d->dedup_table anymore */
-+	hashmap__free(d->dedup_table);
-+	d->dedup_table = NULL;
- 	return 0;
- }
- 
++
++static bool hashmap_find_entry(const struct hashmap *map,
++			       const void *key, size_t hash,
++			       struct hashmap_entry ***pprev,
++			       struct hashmap_entry **entry)
++{
++	struct hashmap_entry *cur, **prev_ptr;
++
++	if (!map->buckets)
++		return false;
++
++	for (prev_ptr = &map->buckets[hash], cur = *prev_ptr;
++	     cur;
++	     prev_ptr = &cur->next, cur = cur->next) {
++		if (map->equal_fn(cur->key, key, map->ctx)) {
++			if (pprev)
++				*pprev = prev_ptr;
++			*entry = cur;
++			return true;
++		}
++	}
++
++	return false;
++}
++
++int hashmap__insert(struct hashmap *map, const void *key, void *value,
++		    enum hashmap_insert_strategy strategy,
++		    const void **old_key, void **old_value)
++{
++	struct hashmap_entry *entry;
++	size_t h;
++	int err;
++
++	if (old_key)
++		*old_key = NULL;
++	if (old_value)
++		*old_value = NULL;
++
++	h = hash_bits(map->hash_fn(key, map->ctx), map->cap_bits);
++	if (strategy != HASHMAP_APPEND &&
++	    hashmap_find_entry(map, key, h, NULL, &entry)) {
++		if (old_key)
++			*old_key = entry->key;
++		if (old_value)
++			*old_value = entry->value;
++
++		if (strategy == HASHMAP_SET || strategy == HASHMAP_UPDATE) {
++			entry->key = key;
++			entry->value = value;
++			return 0;
++		} else if (strategy == HASHMAP_ADD) {
++			return -EEXIST;
++		}
++	}
++
++	if (strategy == HASHMAP_UPDATE)
++		return -ENOENT;
++
++	if (hashmap_needs_to_grow(map)) {
++		err = hashmap_grow(map);
++		if (err)
++			return err;
++		h = hash_bits(map->hash_fn(key, map->ctx), map->cap_bits);
++	}
++
++	entry = malloc(sizeof(struct hashmap_entry));
++	if (!entry)
++		return -ENOMEM;
++
++	entry->key = key;
++	entry->value = value;
++	hashmap_add_entry(&map->buckets[h], entry);
++	map->sz++;
++
++	return 0;
++}
++
++bool hashmap__find(const struct hashmap *map, const void *key, void **value)
++{
++	struct hashmap_entry *entry;
++	size_t h;
++
++	h = hash_bits(map->hash_fn(key, map->ctx), map->cap_bits);
++	if (!hashmap_find_entry(map, key, h, NULL, &entry))
++		return false;
++
++	if (value)
++		*value = entry->value;
++	return true;
++}
++
++bool hashmap__delete(struct hashmap *map, const void *key,
++		     const void **old_key, void **old_value)
++{
++	struct hashmap_entry **pprev, *entry;
++	size_t h;
++
++	h = hash_bits(map->hash_fn(key, map->ctx), map->cap_bits);
++	if (!hashmap_find_entry(map, key, h, &pprev, &entry))
++		return false;
++
++	if (old_key)
++		*old_key = entry->key;
++	if (old_value)
++		*old_value = entry->value;
++
++	hashmap_del_entry(pprev, entry);
++	free(entry);
++	map->sz--;
++
++	return true;
++}
++
+diff --git a/tools/lib/bpf/hashmap.h b/tools/lib/bpf/hashmap.h
+new file mode 100644
+index 000000000000..03748a742146
+--- /dev/null
++++ b/tools/lib/bpf/hashmap.h
+@@ -0,0 +1,173 @@
++/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
++
++/*
++ * Generic non-thread safe hash map implementation.
++ *
++ * Copyright (c) 2019 Facebook
++ */
++#ifndef __LIBBPF_HASHMAP_H
++#define __LIBBPF_HASHMAP_H
++
++#include <stdbool.h>
++#include <stddef.h>
++#include "libbpf_internal.h"
++
++static inline size_t hash_bits(size_t h, int bits)
++{
++	/* shuffle bits and return requested number of upper bits */
++	return (h * 11400714819323198485llu) >> (__WORDSIZE - bits);
++}
++
++typedef size_t (*hashmap_hash_fn)(const void *key, void *ctx);
++typedef bool (*hashmap_equal_fn)(const void *key1, const void *key2, void *ctx);
++
++struct hashmap_entry {
++	const void *key;
++	void *value;
++	struct hashmap_entry *next;
++};
++
++struct hashmap {
++	hashmap_hash_fn hash_fn;
++	hashmap_equal_fn equal_fn;
++	void *ctx;
++
++	struct hashmap_entry **buckets;
++	size_t cap;
++	size_t cap_bits;
++	size_t sz;
++};
++
++#define HASHMAP_INIT(hash_fn, equal_fn, ctx) {	\
++	.hash_fn = (hash_fn),			\
++	.equal_fn = (equal_fn),			\
++	.ctx = (ctx),				\
++	.buckets = NULL,			\
++	.cap = 0,				\
++	.cap_bits = 0,				\
++	.sz = 0,				\
++}
++
++void hashmap__init(struct hashmap *map, hashmap_hash_fn hash_fn,
++		   hashmap_equal_fn equal_fn, void *ctx);
++struct hashmap *hashmap__new(hashmap_hash_fn hash_fn,
++			     hashmap_equal_fn equal_fn,
++			     void *ctx);
++void hashmap__clear(struct hashmap *map);
++void hashmap__free(struct hashmap *map);
++
++size_t hashmap__size(const struct hashmap *map);
++size_t hashmap__capacity(const struct hashmap *map);
++
++/*
++ * Hashmap insertion strategy:
++ * - HASHMAP_ADD - only add key/value if key doesn't exist yet;
++ * - HASHMAP_SET - add key/value pair if key doesn't exist yet; otherwise,
++ *   update value;
++ * - HASHMAP_UPDATE - update value, if key already exists; otherwise, do
++ *   nothing and return -ENOENT;
++ * - HASHMAP_APPEND - always add key/value pair, even if key already exists.
++ *   This turns hashmap into a multimap by allowing multiple values to be
++ *   associated with the same key. Most useful read API for such hashmap is
++ *   hashmap__for_each_key_entry() iteration. If hashmap__find() is still
++ *   used, it will return last inserted key/value entry (first in a bucket
++ *   chain).
++ */
++enum hashmap_insert_strategy {
++	HASHMAP_ADD,
++	HASHMAP_SET,
++	HASHMAP_UPDATE,
++	HASHMAP_APPEND,
++};
++
++/*
++ * hashmap__insert() adds key/value entry w/ various semantics, depending on
++ * provided strategy value. If a given key/value pair replaced already
++ * existing key/value pair, both old key and old value will be returned
++ * through old_key and old_value to allow calling code do proper memory
++ * management.
++ */
++int hashmap__insert(struct hashmap *map, const void *key, void *value,
++		    enum hashmap_insert_strategy strategy,
++		    const void **old_key, void **old_value);
++
++static inline int hashmap__add(struct hashmap *map,
++			       const void *key, void *value)
++{
++	return hashmap__insert(map, key, value, HASHMAP_ADD, NULL, NULL);
++}
++
++static inline int hashmap__set(struct hashmap *map,
++			       const void *key, void *value,
++			       const void **old_key, void **old_value)
++{
++	return hashmap__insert(map, key, value, HASHMAP_SET,
++			       old_key, old_value);
++}
++
++static inline int hashmap__update(struct hashmap *map,
++				  const void *key, void *value,
++				  const void **old_key, void **old_value)
++{
++	return hashmap__insert(map, key, value, HASHMAP_UPDATE,
++			       old_key, old_value);
++}
++
++static inline int hashmap__append(struct hashmap *map,
++				  const void *key, void *value)
++{
++	return hashmap__insert(map, key, value, HASHMAP_APPEND, NULL, NULL);
++}
++
++bool hashmap__delete(struct hashmap *map, const void *key,
++		     const void **old_key, void **old_value);
++
++bool hashmap__find(const struct hashmap *map, const void *key, void **value);
++
++/*
++ * hashmap__for_each_entry - iterate over all entries in hashmap
++ * @map: hashmap to iterate
++ * @cur: struct hashmap_entry * used as a loop cursor
++ * @bkt: integer used as a bucket loop cursor
++ */
++#define hashmap__for_each_entry(map, cur, bkt)				    \
++	for (bkt = 0; bkt < map->cap; bkt++)				    \
++		for (cur = map->buckets[bkt]; cur; cur = cur->next)
++
++/*
++ * hashmap__for_each_entry_safe - iterate over all entries in hashmap, safe
++ * against removals
++ * @map: hashmap to iterate
++ * @cur: struct hashmap_entry * used as a loop cursor
++ * @tmp: struct hashmap_entry * used as a temporary next cursor storage
++ * @bkt: integer used as a bucket loop cursor
++ */
++#define hashmap__for_each_entry_safe(map, cur, tmp, bkt)		    \
++	for (bkt = 0; bkt < map->cap; bkt++)				    \
++		for (cur = map->buckets[bkt];				    \
++		     cur && ({tmp = cur->next; true; });		    \
++		     cur = tmp)
++
++/*
++ * hashmap__for_each_key_entry - iterate over entries associated with given key
++ * @map: hashmap to iterate
++ * @cur: struct hashmap_entry * used as a loop cursor
++ * @key: key to iterate entries for
++ */
++#define hashmap__for_each_key_entry(map, cur, _key)			    \
++	for (cur = ({ size_t bkt = hash_bits(map->hash_fn((_key), map->ctx),\
++					     map->cap_bits);		    \
++		     map->buckets ? map->buckets[bkt] : NULL; });	    \
++	     cur;							    \
++	     cur = cur->next)						    \
++		if (map->equal_fn(cur->key, (_key), map->ctx))
++
++#define hashmap__for_each_key_entry_safe(map, cur, tmp, _key)		    \
++	for (cur = ({ size_t bkt = hash_bits(map->hash_fn((_key), map->ctx),\
++					     map->cap_bits);		    \
++		     cur = map->buckets ? map->buckets[bkt] : NULL; });	    \
++	     cur && ({ tmp = cur->next; true; });			    \
++	     cur = tmp)							    \
++		if (map->equal_fn(cur->key, (_key), map->ctx))
++
++#endif /* __LIBBPF_HASHMAP_H */
 -- 
 2.17.1
 
