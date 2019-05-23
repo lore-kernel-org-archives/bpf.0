@@ -2,231 +2,545 @@ Return-Path: <SRS0=Im41=TX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8E61C282DD
-	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 15:59:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97074C282DD
+	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 16:04:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6F46320879
-	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 15:59:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4A92520879
+	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 16:04:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="PbptGX9x";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="BOLDV0E+"
+	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="R30OvcqG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731140AbfEWP7X (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 May 2019 11:59:23 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:39924 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730752AbfEWP7W (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 23 May 2019 11:59:22 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4NFqHZ1022719;
-        Thu, 23 May 2019 08:58:53 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=mPS3QnLyeL4yilpepGuMPeVpA7leH0T4HsfjGIXB3Ks=;
- b=PbptGX9xiBkWZ0VhD9whsvfdJ4xhokiJmF9NeKWJnep42z2zQI4Y1WFu+ZpKRYAq0B6x
- nY16froXl3e2mexx4FVs8PjhUMKiPV6Qi2nJwIo0+ckJlnMIWQyhnTZjgwd9bZxBrQPN
- jzffLugJgPfgWnAAfOkRDmYXi0R9QTAaKCo= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2snx7s83eq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 23 May 2019 08:58:53 -0700
-Received: from prn-hub01.TheFacebook.com (2620:10d:c081:35::125) by
- prn-hub06.TheFacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1713.5; Thu, 23 May 2019 08:58:51 -0700
-Received: from NAM03-CO1-obe.outbound.protection.outlook.com (192.168.54.28)
- by o365-in.thefacebook.com (192.168.16.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
- via Frontend Transport; Thu, 23 May 2019 08:58:51 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector1-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mPS3QnLyeL4yilpepGuMPeVpA7leH0T4HsfjGIXB3Ks=;
- b=BOLDV0E+uQQutLeggZXYCxcl7qwoWxM0EkSG3zyfwXnO1pbOcpLN4PFC7abp8rnFK7YXpovxf4jfXYCJyVBhIW3TWd9ZPhzAHrBZSdlBW0TA5PREdByfKNc+pICnuxkMWzXe/I6Sy85HFml1iPdyCO2tjNTqBRvskeDsGbU5PfM=
-Received: from BYAPR15MB3384.namprd15.prod.outlook.com (20.179.59.17) by
- BYAPR15MB3079.namprd15.prod.outlook.com (20.178.239.17) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1922.16; Thu, 23 May 2019 15:58:50 +0000
-Received: from BYAPR15MB3384.namprd15.prod.outlook.com
- ([fe80::956e:28a4:f18d:b698]) by BYAPR15MB3384.namprd15.prod.outlook.com
- ([fe80::956e:28a4:f18d:b698%3]) with mapi id 15.20.1900.020; Thu, 23 May 2019
- 15:58:49 +0000
-From:   Yonghong Song <yhs@fb.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@fb.com>, Kernel Team <Kernel-team@fb.com>,
-        "Peter Zijlstra" <peterz@infradead.org>
-Subject: Re: [PATCH bpf-next v2 1/3] bpf: implement bpf_send_signal() helper
-Thread-Topic: [PATCH bpf-next v2 1/3] bpf: implement bpf_send_signal() helper
-Thread-Index: AQHVEGCw/a92LjZUiEmjMwkqdycEvaZ42yyAgAAE34A=
-Date:   Thu, 23 May 2019 15:58:48 +0000
-Message-ID: <6041511a-1628-868f-b4b1-e567c234a4a5@fb.com>
-References: <20190522053900.1663459-1-yhs@fb.com>
- <20190522053900.1663537-1-yhs@fb.com>
- <2c07890b-9da5-b4e8-dc94-35def14470ad@iogearbox.net>
-In-Reply-To: <2c07890b-9da5-b4e8-dc94-35def14470ad@iogearbox.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: MWHPR11CA0033.namprd11.prod.outlook.com
- (2603:10b6:300:115::19) To BYAPR15MB3384.namprd15.prod.outlook.com
- (2603:10b6:a03:10e::17)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [2620:10d:c090:200::d011]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 66666c1a-1229-4148-cbe1-08d6df978a69
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:BYAPR15MB3079;
-x-ms-traffictypediagnostic: BYAPR15MB3079:
-x-microsoft-antispam-prvs: <BYAPR15MB3079266C50C0A93A75859CD5D3010@BYAPR15MB3079.namprd15.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 00462943DE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(39860400002)(346002)(366004)(136003)(396003)(199004)(189003)(68736007)(6116002)(14454004)(2501003)(99286004)(446003)(2906002)(86362001)(31696002)(6486002)(53546011)(476003)(2201001)(53936002)(81156014)(71200400001)(71190400001)(316002)(52116002)(8936002)(110136005)(81166006)(11346002)(6436002)(102836004)(76176011)(54906003)(4326008)(25786009)(305945005)(8676002)(66946007)(36756003)(66476007)(2616005)(66446008)(73956011)(64756008)(66556008)(46003)(486006)(478600001)(6512007)(186003)(6506007)(386003)(5660300002)(256004)(14444005)(7736002)(229853002)(31686004)(6246003);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB3079;H:BYAPR15MB3384.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 5MXaAUDq1Ot5bUr6w6QhD/C30T2M2/P5lmthZxwh1jKbyXWYFjY98uD/lj/v/V418sPoa74xJsN6vTp5DBbIpV0lLcOgODf6uNDct8mpCm2blFG0f3dWOaSv1LvQPDo9FtVF3GquYnIz1FG8qc8hkLeyhHXwG64dAO6K8xgjX5ip3TbbWyj/7kn0e+w3ZWeRbtF6/S7u7lyfj5WFTYThFWwDcgVSj03dHdbETcalSEBvMahP4vbUOGHfKAhU45tm1SOkkMk5Hxd8RsucbAaeB8kdPRj0B6WP0eQUNWuwE4cvw03KwEEFWacJBdBSJs6tAkxK27gvxg/0fJ+MrOZEuOOs3ncS2MEjX7UeG3XOQ31Xc5ZTHT1B/w1m1uDG3ovTv4jXe181lSczUivW7P4oQfSw+X4wtNihZ2Io+7jN6Bs=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0BD707FAB1167244A03840708C3A3C84@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1731107AbfEWQEq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 May 2019 12:04:46 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:45843 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730987AbfEWQEq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 May 2019 12:04:46 -0400
+Received: by mail-pf1-f196.google.com with SMTP id s11so3474019pfm.12
+        for <bpf@vger.kernel.org>; Thu, 23 May 2019 09:04:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=s5nKHbDfRdCHu1qdsH05/sS8/7rvhYcG4D5PCbAC5+s=;
+        b=R30OvcqGwdOPZZjQ4reagJOXFgiZkHoW6erWu0uJXLHIe8axsTkXEt+Xso1L5I1pKC
+         lOgKsB3EAxhgxaqlNXN0ONr+tM4zODNbR60xdWZgwZmP57PQ/NjYhh6Z7uCqk+jod6+P
+         Z74ecHcUgX1yMd5AgZy5tdq40takEnQ8TlY6N+7CeUpa/tMLsVg6ASK+bGliw7lGuWT4
+         sGOb7Aw6HkvjFbmurZMHn8ayT1NXfjb7DPzP8BUicMwdnZVCyswiTcXhYWqhrZovsrND
+         ypD+sBlDjHCJRoSGPgV9pPtTzm7gjevma3NqVt6cVcOnm2VXwBZGop5butdxA1pBq795
+         taig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=s5nKHbDfRdCHu1qdsH05/sS8/7rvhYcG4D5PCbAC5+s=;
+        b=BJoH8GcDZ0sH6zGqEs0bOLYy9BbsXKFRkCI0U8aWtnPvsaUoCFvDRAYGZgT+WujZO0
+         B78WoyxKCz0BtnX2zmxPMP9jo56ZH71Hvn5FOiSafrsr5/X7EY1kRHKunLT/0pzdnBI9
+         htWQ0TYrhxQycsJx++Al082NGLVOIJ3doaBwIWvFXYG0ZvrwQhJaMzzejHA9GHMt4Prq
+         q9nJaJz8FJJvOww6qOgkrMm1H4SdbTMc0fuX3/4cX5ECkR72bPyNtozjHnyIsmCUwl+U
+         zrHdhW/t6vAIrebAyx1BDDGCLcnPVTk+2fF8fQAyDUzClsMNQl0E3jNx1h5FVFVdqC+m
+         sQFg==
+X-Gm-Message-State: APjAAAXfTWY1cs3INT8oloNI5/FafgndkonCWnLBfV09zGy9RYmdvCzt
+        JlC5rcHdDKRJ2hx7pUTGLk6sOQ==
+X-Google-Smtp-Source: APXvYqya2y7BlbQgpgE1yapcGy2qp6r0oy6YNSOblWku8VSY7UdFId9iQej+1JhtCy+mgo7Lax/kFA==
+X-Received: by 2002:a65:520b:: with SMTP id o11mr44338628pgp.184.1558627485380;
+        Thu, 23 May 2019 09:04:45 -0700 (PDT)
+Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
+        by smtp.gmail.com with ESMTPSA id x10sm40762148pfj.136.2019.05.23.09.04.44
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 23 May 2019 09:04:44 -0700 (PDT)
+Date:   Thu, 23 May 2019 09:04:43 -0700
+From:   Stanislav Fomichev <sdf@fomichev.me>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>, Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Networking <netdev@vger.kernel.org>, bpf@vger.kernel.org,
+        Kernel Team <kernel-team@fb.com>
+Subject: Re: [PATCH bpf-next 06/12] selftests/bpf: add tests for libbpf's
+ hashmap
+Message-ID: <20190523160443.GD3032@mini-arch>
+References: <20190522195053.4017624-1-andriin@fb.com>
+ <20190522195053.4017624-7-andriin@fb.com>
+ <20190522203146.GP10244@mini-arch>
+ <CAEf4Bzb-JH2PhNPmZ9s=9BNVUrsdL+6ZLZ5rm-xHOGnKnQJQvA@mail.gmail.com>
+ <CAEf4BzaxDNCEqPMN7nciS67onxnxWURoS_N0X4FV=w-qY4voww@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 66666c1a-1229-4148-cbe1-08d6df978a69
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2019 15:58:49.3188
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3079
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-23_13:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905230108
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzaxDNCEqPMN7nciS67onxnxWURoS_N0X4FV=w-qY4voww@mail.gmail.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-DQoNCk9uIDUvMjMvMTkgODo0MSBBTSwgRGFuaWVsIEJvcmttYW5uIHdyb3RlOg0KPiBPbiAwNS8y
-Mi8yMDE5IDA3OjM5IEFNLCBZb25naG9uZyBTb25nIHdyb3RlOg0KPj4gVGhpcyBwYXRjaCB0cmll
-cyB0byBzb2x2ZSB0aGUgZm9sbG93aW5nIHNwZWNpZmljIHVzZSBjYXNlLg0KPj4NCj4+IEN1cnJl
-bnRseSwgYnBmIHByb2dyYW0gY2FuIGFscmVhZHkgY29sbGVjdCBzdGFjayB0cmFjZXMNCj4+IHRo
-cm91Z2gga2VybmVsIGZ1bmN0aW9uIGdldF9wZXJmX2NhbGxjaGFpbigpDQo+PiB3aGVuIGNlcnRh
-aW4gZXZlbnRzIGhhcHBlbnMgKGUuZy4sIGNhY2hlIG1pc3MgY291bnRlciBvcg0KPj4gY3B1IGNs
-b2NrIGNvdW50ZXIgb3ZlcmZsb3dzKS4gQnV0IHN1Y2ggc3RhY2sgdHJhY2VzIGFyZQ0KPj4gbm90
-IGVub3VnaCBmb3Igaml0dGVkIHByb2dyYW1zLCBlLmcuLCBoaHZtIChqaXRlZCBwaHApLg0KPj4g
-VG8gZ2V0IHJlYWwgc3RhY2sgdHJhY2UsIGppdCBlbmdpbmUgaW50ZXJuYWwgZGF0YSBzdHJ1Y3R1
-cmVzDQo+PiBuZWVkIHRvIGJlIHRyYXZlcnNlZCBpbiBvcmRlciB0byBnZXQgdGhlIHJlYWwgdXNl
-ciBmdW5jdGlvbnMuDQo+Pg0KPj4gYnBmIHByb2dyYW0gaXRzZWxmIG1heSBub3QgYmUgdGhlIGJl
-c3QgcGxhY2UgdG8gdHJhdmVyc2UNCj4+IHRoZSBqaXQgZW5naW5lIGFzIHRoZSB0cmF2ZXJzaW5n
-IGxvZ2ljIGNvdWxkIGJlIGNvbXBsZXggYW5kDQo+PiBpdCBpcyBub3QgYSBzdGFibGUgaW50ZXJm
-YWNlIGVpdGhlci4NCj4+DQo+PiBJbnN0ZWFkLCBoaHZtIGltcGxlbWVudHMgYSBzaWduYWwgaGFu
-ZGxlciwNCj4+IGUuZy4gZm9yIFNJR0FMQVJNLCBhbmQgYSBzZXQgb2YgcHJvZ3JhbSBsb2NhdGlv
-bnMgd2hpY2gNCj4+IGl0IGNhbiBkdW1wIHN0YWNrIHRyYWNlcy4gV2hlbiBpdCByZWNlaXZlcyBh
-IHNpZ25hbCwgaXQgd2lsbA0KPj4gZHVtcCB0aGUgc3RhY2sgaW4gbmV4dCBzdWNoIHByb2dyYW0g
-bG9jYXRpb24uDQo+Pg0KPj4gU3VjaCBhIG1lY2hhbmlzbSBjYW4gYmUgaW1wbGVtZW50ZWQgaW4g
-dGhlIGZvbGxvd2luZyB3YXk6DQo+PiAgICAuIGEgcGVyZiByaW5nIGJ1ZmZlciBpcyBjcmVhdGVk
-IGJldHdlZW4gYnBmIHByb2dyYW0NCj4+ICAgICAgYW5kIHRyYWNpbmcgYXBwLg0KPj4gICAgLiBv
-bmNlIGEgcGFydGljdWxhciBldmVudCBoYXBwZW5zLCBicGYgcHJvZ3JhbSB3cml0ZXMNCj4+ICAg
-ICAgdG8gdGhlIHJpbmcgYnVmZmVyIGFuZCB0aGUgdHJhY2luZyBhcHAgZ2V0cyBub3RpZmllZC4N
-Cj4+ICAgIC4gdGhlIHRyYWNpbmcgYXBwIHNlbmRzIGEgc2lnbmFsIFNJR0FMQVJNIHRvIHRoZSBo
-aHZtLg0KPj4NCj4+IEJ1dCB0aGlzIG1ldGhvZCBjb3VsZCBoYXZlIGxhcmdlIGRlbGF5cyBhbmQg
-Y2F1c2luZyBwcm9maWxpbmcNCj4+IHJlc3VsdHMgc2tld2VkLg0KPj4NCj4+IFRoaXMgcGF0Y2gg
-aW1wbGVtZW50cyBicGZfc2VuZF9zaWduYWwoKSBoZWxwZXIgdG8gc2VuZA0KPj4gYSBzaWduYWwg
-dG8gaGh2bSBpbiByZWFsIHRpbWUsIHJlc3VsdGluZyBpbiBpbnRlbmRlZCBzdGFjayB0cmFjZXMu
-DQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogWW9uZ2hvbmcgU29uZyA8eWhzQGZiLmNvbT4NCj4+IC0t
-LQ0KPj4gICBpbmNsdWRlL3VhcGkvbGludXgvYnBmLmggfCAxNyArKysrKysrKystDQo+PiAgIGtl
-cm5lbC90cmFjZS9icGZfdHJhY2UuYyB8IDY3ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysNCj4+ICAgMiBmaWxlcyBjaGFuZ2VkLCA4MyBpbnNlcnRpb25zKCspLCAxIGRl
-bGV0aW9uKC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvdWFwaS9saW51eC9icGYuaCBi
-L2luY2x1ZGUvdWFwaS9saW51eC9icGYuaA0KPj4gaW5kZXggNjNlMGNmNjZmMDFhLi42OGQ0NDcw
-NTIzYTAgMTAwNjQ0DQo+PiAtLS0gYS9pbmNsdWRlL3VhcGkvbGludXgvYnBmLmgNCj4+ICsrKyBi
-L2luY2x1ZGUvdWFwaS9saW51eC9icGYuaA0KPj4gQEAgLTI2NzIsNiArMjY3MiwyMCBAQCB1bmlv
-biBicGZfYXR0ciB7DQo+PiAgICAqCQkwIG9uIHN1Y2Nlc3MuDQo+PiAgICAqDQo+PiAgICAqCQkq
-Ki1FTk9FTlQqKiBpZiB0aGUgYnBmLWxvY2FsLXN0b3JhZ2UgY2Fubm90IGJlIGZvdW5kLg0KPj4g
-KyAqDQo+PiArICogaW50IGJwZl9zZW5kX3NpZ25hbCh1MzIgc2lnKQ0KPj4gKyAqCURlc2NyaXB0
-aW9uDQo+PiArICoJCVNlbmQgc2lnbmFsICpzaWcqIHRvIHRoZSBjdXJyZW50IHRhc2suDQo+PiAr
-ICoJUmV0dXJuDQo+PiArICoJCTAgb24gc3VjY2VzcyBvciBzdWNjZXNzZnVsbHkgcXVldWVkLg0K
-Pj4gKyAqDQo+PiArICoJCSoqLUVCVVNZKiogaWYgd29yayBxdWV1ZSB1bmRlciBubWkgaXMgZnVs
-bC4NCj4+ICsgKg0KPj4gKyAqCQkqKi1FSU5WQUwqKiBpZiAqc2lnKiBpcyBpbnZhbGlkLg0KPj4g
-KyAqDQo+PiArICoJCSoqLUVQRVJNKiogaWYgbm8gcGVybWlzc2lvbiB0byBzZW5kIHRoZSAqc2ln
-Ki4NCj4+ICsgKg0KPj4gKyAqCQkqKi1FQUdBSU4qKiBpZiBicGYgcHJvZ3JhbSBjYW4gdHJ5IGFn
-YWluLg0KPj4gICAgKi8NCj4+ICAgI2RlZmluZSBfX0JQRl9GVU5DX01BUFBFUihGTikJCVwNCj4+
-ICAgCUZOKHVuc3BlYyksCQkJXA0KPj4gQEAgLTI3ODIsNyArMjc5Niw4IEBAIHVuaW9uIGJwZl9h
-dHRyIHsNCj4+ICAgCUZOKHN0cnRvbCksCQkJXA0KPj4gICAJRk4oc3RydG91bCksCQkJXA0KPj4g
-ICAJRk4oc2tfc3RvcmFnZV9nZXQpLAkJXA0KPj4gLQlGTihza19zdG9yYWdlX2RlbGV0ZSksDQo+
-PiArCUZOKHNrX3N0b3JhZ2VfZGVsZXRlKSwJCVwNCj4+ICsJRk4oc2VuZF9zaWduYWwpLA0KPj4g
-ICANCj4+ICAgLyogaW50ZWdlciB2YWx1ZSBpbiAnaW1tJyBmaWVsZCBvZiBCUEZfQ0FMTCBpbnN0
-cnVjdGlvbiBzZWxlY3RzIHdoaWNoIGhlbHBlcg0KPj4gICAgKiBmdW5jdGlvbiBlQlBGIHByb2dy
-YW0gaW50ZW5kcyB0byBjYWxsDQo+PiBkaWZmIC0tZ2l0IGEva2VybmVsL3RyYWNlL2JwZl90cmFj
-ZS5jIGIva2VybmVsL3RyYWNlL2JwZl90cmFjZS5jDQo+PiBpbmRleCBmOTJkNmFkNWUwODAuLmY4
-Y2QwZGI3Mjg5ZiAxMDA2NDQNCj4+IC0tLSBhL2tlcm5lbC90cmFjZS9icGZfdHJhY2UuYw0KPj4g
-KysrIGIva2VybmVsL3RyYWNlL2JwZl90cmFjZS5jDQo+PiBAQCAtNTY3LDYgKzU2Nyw1OCBAQCBz
-dGF0aWMgY29uc3Qgc3RydWN0IGJwZl9mdW5jX3Byb3RvIGJwZl9wcm9iZV9yZWFkX3N0cl9wcm90
-byA9IHsNCj4+ICAgCS5hcmczX3R5cGUJPSBBUkdfQU5ZVEhJTkcsDQo+PiAgIH07DQo+PiAgIA0K
-Pj4gK3N0cnVjdCBzZW5kX3NpZ25hbF9pcnFfd29yayB7DQo+PiArCXN0cnVjdCBpcnFfd29yayBp
-cnFfd29yazsNCj4+ICsJdTMyIHNpZzsNCj4+ICt9Ow0KPj4gKw0KPj4gK3N0YXRpYyBERUZJTkVf
-UEVSX0NQVShzdHJ1Y3Qgc2VuZF9zaWduYWxfaXJxX3dvcmssIHNlbmRfc2lnbmFsX3dvcmspOw0K
-Pj4gKw0KPj4gK3N0YXRpYyB2b2lkIGRvX2JwZl9zZW5kX3NpZ25hbChzdHJ1Y3QgaXJxX3dvcmsg
-KmVudHJ5KQ0KPj4gK3sNCj4+ICsJc3RydWN0IHNlbmRfc2lnbmFsX2lycV93b3JrICp3b3JrOw0K
-Pj4gKw0KPj4gKwl3b3JrID0gY29udGFpbmVyX29mKGVudHJ5LCBzdHJ1Y3Qgc2VuZF9zaWduYWxf
-aXJxX3dvcmssIGlycV93b3JrKTsNCj4+ICsJZ3JvdXBfc2VuZF9zaWdfaW5mbyh3b3JrLT5zaWcs
-IFNFTkRfU0lHX1BSSVYsIGN1cnJlbnQsIFBJRFRZUEVfVEdJRCk7DQo+PiArfQ0KPj4gKw0KPj4g
-K0JQRl9DQUxMXzEoYnBmX3NlbmRfc2lnbmFsLCB1MzIsIHNpZykNCj4+ICt7DQo+PiArCXN0cnVj
-dCBzZW5kX3NpZ25hbF9pcnFfd29yayAqd29yayA9IE5VTEw7DQo+PiArDQo+PiArCS8qIFNpbWls
-YXIgdG8gYnBmX3Byb2JlX3dyaXRlX3VzZXIsIHRhc2sgbmVlZHMgdG8gYmUNCj4+ICsJICogaW4g
-YSBzb3VuZCBjb25kaXRpb24gYW5kIGtlcm5lbCBtZW1vcnkgYWNjZXNzIGJlDQo+PiArCSAqIHBl
-cm1pdHRlZCBpbiBvcmRlciB0byBzZW5kIHNpZ25hbCB0byB0aGUgY3VycmVudA0KPj4gKwkgKiB0
-YXNrLg0KPj4gKwkgKi8NCj4+ICsJaWYgKHVubGlrZWx5KGN1cnJlbnQtPmZsYWdzICYgKFBGX0tU
-SFJFQUQgfCBQRl9FWElUSU5HKSkpDQo+PiArCQlyZXR1cm4gLUVQRVJNOw0KPj4gKwlpZiAodW5s
-aWtlbHkodWFjY2Vzc19rZXJuZWwoKSkpDQo+PiArCQlyZXR1cm4gLUVQRVJNOw0KPj4gKwlpZiAo
-dW5saWtlbHkoIW5taV91YWNjZXNzX29rYXkoKSkpDQo+PiArCQlyZXR1cm4gLUVQRVJNOw0KPj4g
-Kw0KPj4gKwlpZiAoaW5fbm1pKCkpIHsNCj4gDQo+IEhtLCBiaXQgY29uZnVzZWQsIGNhbid0IHRo
-aXMgb25seSBiZSBkb25lIG91dCBvZiBwcm9jZXNzIGNvbnRleHQgaW4NCj4gZ2VuZXJhbCBzaW5j
-ZSBvbmx5IHRoZXJlIGN1cnJlbnQgcG9pbnRzIHRvIGUuZy4gaGh2bT8gSSdtIHByb2JhYmx5DQo+
-IG1pc3Npbmcgc29tZXRoaW5nLiBDb3VsZCB5b3UgZWxhYm9yYXRlPw0KDQpUaGF0IGlzIHRydWUu
-IElmIGluIG5taSwgaXQgaXMgb3V0IG9mIHByb2Nlc3MgY29udGV4dCBhbmQgaW4gbm1pIA0KY29u
-dGV4dCwgd2UgdXNlIGFuIGlycV93b3JrIGhlcmUgc2luY2UgZ3JvdXBfc2VuZF9zaWdfaW5mbygp
-IGhhcw0Kc3BpbmxvY2sgaW5zaWRlLiBUaGUgYnBmIHByb2dyYW0gKGUuZy4sIGEgcGVyZl9ldmVu
-dCBwcm9ncmFtKSBuZWVkcyB0byANCmNoZWNrIGl0IGlzIHdpdGggcmlnaHQgY3VycmVudCAoZS5n
-LiwgYnkgcGlkKSBiZWZvcmUgY2FsbGluZw0KdGhpcyBoZWxwZXIuDQoNCkRvZXMgdGhpcyBhZGRy
-ZXNzIHlvdXIgcXVlc3Rpb24/DQoNCj4gDQo+PiArCQl3b3JrID0gdGhpc19jcHVfcHRyKCZzZW5k
-X3NpZ25hbF93b3JrKTsNCj4+ICsJCWlmICh3b3JrLT5pcnFfd29yay5mbGFncyAmIElSUV9XT1JL
-X0JVU1kpDQo+PiArCQkJcmV0dXJuIC1FQlVTWTsNCj4+ICsNCj4+ICsJCXdvcmstPnNpZyA9IHNp
-ZzsNCj4+ICsJCWlycV93b3JrX3F1ZXVlKCZ3b3JrLT5pcnFfd29yayk7DQo+PiArCQlyZXR1cm4g
-MDsNCj4+ICsJfQ0KPj4gKw0KPj4gKwlyZXR1cm4gZ3JvdXBfc2VuZF9zaWdfaW5mbyhzaWcsIFNF
-TkRfU0lHX1BSSVYsIGN1cnJlbnQsIFBJRFRZUEVfVEdJRCk7DQo+PiArDQo+IA0KPiBOaXQ6IGV4
-dHJhIG5ld2xpbmUgc2xpcHBlZCBpbg0KVGhhbmtzLiBXaWxsIHJlbW92ZSB0aGlzIGluIHRoZSBu
-ZXh0IHJldmlzaW9uLg0KPiANCj4+ICt9DQo+PiArDQo+PiArc3RhdGljIGNvbnN0IHN0cnVjdCBi
-cGZfZnVuY19wcm90byBicGZfc2VuZF9zaWduYWxfcHJvdG8gPSB7DQo+PiArCS5mdW5jCQk9IGJw
-Zl9zZW5kX3NpZ25hbCwNCj4+ICsJLmdwbF9vbmx5CT0gZmFsc2UsDQo+PiArCS5yZXRfdHlwZQk9
-IFJFVF9JTlRFR0VSLA0KPj4gKwkuYXJnMV90eXBlCT0gQVJHX0FOWVRISU5HLA0KPj4gK307DQo+
-PiArDQo+PiAgIHN0YXRpYyBjb25zdCBzdHJ1Y3QgYnBmX2Z1bmNfcHJvdG8gKg0KPj4gICB0cmFj
-aW5nX2Z1bmNfcHJvdG8oZW51bSBicGZfZnVuY19pZCBmdW5jX2lkLCBjb25zdCBzdHJ1Y3QgYnBm
-X3Byb2cgKnByb2cpDQo+PiAgIHsNCj4+IEBAIC02MTcsNiArNjY5LDggQEAgdHJhY2luZ19mdW5j
-X3Byb3RvKGVudW0gYnBmX2Z1bmNfaWQgZnVuY19pZCwgY29uc3Qgc3RydWN0IGJwZl9wcm9nICpw
-cm9nKQ0KPj4gICAJY2FzZSBCUEZfRlVOQ19nZXRfY3VycmVudF9jZ3JvdXBfaWQ6DQo+PiAgIAkJ
-cmV0dXJuICZicGZfZ2V0X2N1cnJlbnRfY2dyb3VwX2lkX3Byb3RvOw0KPj4gICAjZW5kaWYNCj4+
-ICsJY2FzZSBCUEZfRlVOQ19zZW5kX3NpZ25hbDoNCj4+ICsJCXJldHVybiAmYnBmX3NlbmRfc2ln
-bmFsX3Byb3RvOw0KPj4gICAJZGVmYXVsdDoNCj4+ICAgCQlyZXR1cm4gTlVMTDsNCj4+ICAgCX0N
-Cj4+IEBAIC0xMzQzLDUgKzEzOTcsMTggQEAgc3RhdGljIGludCBfX2luaXQgYnBmX2V2ZW50X2lu
-aXQodm9pZCkNCj4+ICAgCXJldHVybiAwOw0KPj4gICB9DQo+PiAgIA0KPj4gK3N0YXRpYyBpbnQg
-X19pbml0IHNlbmRfc2lnbmFsX2lycV93b3JrX2luaXQodm9pZCkNCj4+ICt7DQo+PiArCWludCBj
-cHU7DQo+PiArCXN0cnVjdCBzZW5kX3NpZ25hbF9pcnFfd29yayAqd29yazsNCj4+ICsNCj4+ICsJ
-Zm9yX2VhY2hfcG9zc2libGVfY3B1KGNwdSkgew0KPj4gKwkJd29yayA9IHBlcl9jcHVfcHRyKCZz
-ZW5kX3NpZ25hbF93b3JrLCBjcHUpOw0KPj4gKwkJaW5pdF9pcnFfd29yaygmd29yay0+aXJxX3dv
-cmssIGRvX2JwZl9zZW5kX3NpZ25hbCk7DQo+PiArCX0NCj4+ICsJcmV0dXJuIDA7DQo+PiArfQ0K
-Pj4gKw0KPj4gICBmc19pbml0Y2FsbChicGZfZXZlbnRfaW5pdCk7DQo+PiArc3Vic3lzX2luaXRj
-YWxsKHNlbmRfc2lnbmFsX2lycV93b3JrX2luaXQpOw0KPj4gICAjZW5kaWYgLyogQ09ORklHX01P
-RFVMRVMgKi8NCj4+DQo+IA0K
+On 05/22, Andrii Nakryiko wrote:
+> On Wed, May 22, 2019 at 3:15 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Wed, May 22, 2019 at 1:31 PM Stanislav Fomichev <sdf@fomichev.me> wrote:
+> > >
+> > > On 05/22, Andrii Nakryiko wrote:
+> > > > Test all APIs for internal hashmap implementation.
+> > > >
+> > > > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> > > > ---
+> > > >  tools/testing/selftests/bpf/.gitignore     |   1 +
+> > > >  tools/testing/selftests/bpf/Makefile       |   2 +-
+> > > >  tools/testing/selftests/bpf/test_hashmap.c | 382 +++++++++++++++++++++
+> > > >  3 files changed, 384 insertions(+), 1 deletion(-)
+> > > >  create mode 100644 tools/testing/selftests/bpf/test_hashmap.c
+> > > >
+> > > > diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+> > > > index dd5d69529382..138b6c063916 100644
+> > > > --- a/tools/testing/selftests/bpf/.gitignore
+> > > > +++ b/tools/testing/selftests/bpf/.gitignore
+> > > > @@ -35,3 +35,4 @@ test_sysctl
+> > > >  alu32
+> > > >  libbpf.pc
+> > > >  libbpf.so.*
+> > > > +test_hashmap
+> > > > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> > > > index 66f2dca1dee1..ddae06498a00 100644
+> > > > --- a/tools/testing/selftests/bpf/Makefile
+> > > > +++ b/tools/testing/selftests/bpf/Makefile
+> > > > @@ -23,7 +23,7 @@ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test
+> > > >       test_align test_verifier_log test_dev_cgroup test_tcpbpf_user \
+> > > >       test_sock test_btf test_sockmap test_lirc_mode2_user get_cgroup_id_user \
+> > > >       test_socket_cookie test_cgroup_storage test_select_reuseport test_section_names \
+> > > > -     test_netcnt test_tcpnotify_user test_sock_fields test_sysctl
+> > > > +     test_netcnt test_tcpnotify_user test_sock_fields test_sysctl test_hashmap
+> > > >
+> > > >  BPF_OBJ_FILES = $(patsubst %.c,%.o, $(notdir $(wildcard progs/*.c)))
+> > > >  TEST_GEN_FILES = $(BPF_OBJ_FILES)
+> > > > diff --git a/tools/testing/selftests/bpf/test_hashmap.c b/tools/testing/selftests/bpf/test_hashmap.c
+> > > > new file mode 100644
+> > > > index 000000000000..b64094c981e3
+> > > > --- /dev/null
+> > > [..]
+> > > > +++ b/tools/testing/selftests/bpf/test_hashmap.c
+> > > Any reason against putting it in bpf/prog_tests? No need for your own
+> > > CHECK macro and no Makefile changes.
+> >
+> > I didn't know they are special and I assumed they are mostly for
+> > loading BPF programs and testing them. I'll check that set up and will
+> > move there, if it makes sense.
+> 
+> Seems like my assumption was right. I converted these hashmap tests to
+> progs_test, and each CHECK usage emits either SUCCESS or FAIL message,
+> spamming output like this:
+> 
+> test_hashmap_generic:PASS:test_hashmap_generic 0 nsec
+> test_hashmap_generic:PASS:test_hashmap_generic 0 nsec
+> test_hashmap_generic:PASS:test_hashmap_generic 0 nsec
+> test_hashmap_generic:PASS:test_hashmap_generic 0 nsec
+> test_hashmap_generic:PASS:test_hashmap_generic 0 nsec
+> test_hashmap_generic:PASS:test_hashmap_generic 0 nsec
+> test_hashmap_generic:PASS:test_hashmap_generic 0 nsec
+> test_hashmap_generic:PASS:test_hashmap_generic 0 nsec
+> test_hashmap_generic:PASS:test_hashmap_generic 0 nsec
+> test_hashmap_generic:PASS:test_hashmap_generic 0 nsec
+> 
+> 
+> CHECK also expects __u32 duration to be in the scope, so I need to add
+> it just to make macro happy.
+> 
+> It feels like at the moment this "framework" is not yet well-suited
+> for generic tests, but more towards loading BPF program and checking
+> (once per BPF program) that everything went fine. I'll keep it as is
+> for now. It won't be hard to convert it into prog_tests, once we
+> develop it a bit more.
+Oh, yeah, it's mostly for the tests which do bpf_prog_test_run.
+Might not be a good fit if you're not loading any bpf progs, agreed.
+
+> > > > @@ -0,0 +1,382 @@
+> > > > +// SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
+> > > > +
+> > > > +/*
+> > > > + * Tests for libbpf's hashmap.
+> > > > + *
+> > > > + * Copyright (c) 2019 Facebook
+> > > > + */
+> > > > +#include <stdio.h>
+> > > > +#include <errno.h>
+> > > > +#include <linux/err.h>
+> > > > +#include "hashmap.h"
+> > > > +
+> > > > +#define CHECK(condition, format...) ({                                       \
+> > > > +     int __ret = !!(condition);                                      \
+> > > > +     if (__ret) {                                                    \
+> > > > +             fprintf(stderr, "%s:%d:FAIL ", __func__, __LINE__);     \
+> > > > +             fprintf(stderr, format);                                \
+> > > > +     }                                                               \
+> > > > +     __ret;                                                          \
+> > > > +})
+> > > > +
+> > > > +size_t hash_fn(const void *k, void *ctx)
+> > > > +{
+> > > > +     return (long)k;
+> > > > +}
+> > > > +
+> > > > +bool equal_fn(const void *a, const void *b, void *ctx)
+> > > > +{
+> > > > +     return (long)a == (long)b;
+> > > > +}
+> > > > +
+> > > > +static inline size_t next_pow_2(size_t n)
+> > > > +{
+> > > > +     size_t r = 1;
+> > > > +
+> > > > +     while (r < n)
+> > > > +             r <<= 1;
+> > > > +     return r;
+> > > > +}
+> > > > +
+> > > > +static inline size_t exp_cap(size_t sz)
+> > > > +{
+> > > > +     size_t r = next_pow_2(sz);
+> > > > +
+> > > > +     if (sz * 4 / 3 > r)
+> > > > +             r <<= 1;
+> > > > +     return r;
+> > > > +}
+> > > > +
+> > > > +#define ELEM_CNT 62
+> > > > +
+> > > > +int test_hashmap_generic(void)
+> > > > +{
+> > > > +     struct hashmap_entry *entry, *tmp;
+> > > > +     int err, bkt, found_cnt, i;
+> > > > +     long long found_msk;
+> > > > +     struct hashmap *map;
+> > > > +
+> > > > +     fprintf(stderr, "%s: ", __func__);
+> > > > +
+> > > > +     map = hashmap__new(hash_fn, equal_fn, NULL);
+> > > > +     if (CHECK(IS_ERR(map), "failed to create map: %ld\n", PTR_ERR(map)))
+> > > > +             return 1;
+> > > > +
+> > > > +     for (i = 0; i < ELEM_CNT; i++) {
+> > > > +             const void *oldk, *k = (const void *)(long)i;
+> > > > +             void *oldv, *v = (void *)(long)(1024 + i);
+> > > > +
+> > > > +             err = hashmap__update(map, k, v, &oldk, &oldv);
+> > > > +             if (CHECK(err != -ENOENT, "unexpected result: %d\n", err))
+> > > > +                     return 1;
+> > > > +
+> > > > +             if (i % 2) {
+> > > > +                     err = hashmap__add(map, k, v);
+> > > > +             } else {
+> > > > +                     err = hashmap__set(map, k, v, &oldk, &oldv);
+> > > > +                     if (CHECK(oldk != NULL || oldv != NULL,
+> > > > +                               "unexpected k/v: %p=%p\n", oldk, oldv))
+> > > > +                             return 1;
+> > > > +             }
+> > > > +
+> > > > +             if (CHECK(err, "failed to add k/v %ld = %ld: %d\n",
+> > > > +                            (long)k, (long)v, err))
+> > > > +                     return 1;
+> > > > +
+> > > > +             if (CHECK(!hashmap__find(map, k, &oldv),
+> > > > +                       "failed to find key %ld\n", (long)k))
+> > > > +                     return 1;
+> > > > +             if (CHECK(oldv != v, "found value is wrong: %ld\n", (long)oldv))
+> > > > +                     return 1;
+> > > > +     }
+> > > > +
+> > > > +     if (CHECK(hashmap__size(map) != ELEM_CNT,
+> > > > +               "invalid map size: %zu\n", hashmap__size(map)))
+> > > > +             return 1;
+> > > > +     if (CHECK(hashmap__capacity(map) != exp_cap(hashmap__size(map)),
+> > > > +               "unexpected map capacity: %zu\n", hashmap__capacity(map)))
+> > > > +             return 1;
+> > > > +
+> > > > +     found_msk = 0;
+> > > > +     hashmap__for_each_entry(map, entry, bkt) {
+> > > > +             long k = (long)entry->key;
+> > > > +             long v = (long)entry->value;
+> > > > +
+> > > > +             found_msk |= 1ULL << k;
+> > > > +             if (CHECK(v - k != 1024, "invalid k/v pair: %ld = %ld\n", k, v))
+> > > > +                     return 1;
+> > > > +     }
+> > > > +     if (CHECK(found_msk != (1ULL << ELEM_CNT) - 1,
+> > > > +               "not all keys iterated: %llx\n", found_msk))
+> > > > +             return 1;
+> > > > +
+> > > > +     for (i = 0; i < ELEM_CNT; i++) {
+> > > > +             const void *oldk, *k = (const void *)(long)i;
+> > > > +             void *oldv, *v = (void *)(long)(256 + i);
+> > > > +
+> > > > +             err = hashmap__add(map, k, v);
+> > > > +             if (CHECK(err != -EEXIST, "unexpected add result: %d\n", err))
+> > > > +                     return 1;
+> > > > +
+> > > > +             if (i % 2)
+> > > > +                     err = hashmap__update(map, k, v, &oldk, &oldv);
+> > > > +             else
+> > > > +                     err = hashmap__set(map, k, v, &oldk, &oldv);
+> > > > +
+> > > > +             if (CHECK(err, "failed to update k/v %ld = %ld: %d\n",
+> > > > +                            (long)k, (long)v, err))
+> > > > +                     return 1;
+> > > > +             if (CHECK(!hashmap__find(map, k, &oldv),
+> > > > +                       "failed to find key %ld\n", (long)k))
+> > > > +                     return 1;
+> > > > +             if (CHECK(oldv != v, "found value is wrong: %ld\n", (long)oldv))
+> > > > +                     return 1;
+> > > > +     }
+> > > > +
+> > > > +     if (CHECK(hashmap__size(map) != ELEM_CNT,
+> > > > +               "invalid updated map size: %zu\n", hashmap__size(map)))
+> > > > +             return 1;
+> > > > +     if (CHECK(hashmap__capacity(map) != exp_cap(hashmap__size(map)),
+> > > > +               "unexpected map capacity: %zu\n", hashmap__capacity(map)))
+> > > > +             return 1;
+> > > > +
+> > > > +     found_msk = 0;
+> > > > +     hashmap__for_each_entry_safe(map, entry, tmp, bkt) {
+> > > > +             long k = (long)entry->key;
+> > > > +             long v = (long)entry->value;
+> > > > +
+> > > > +             found_msk |= 1ULL << k;
+> > > > +             if (CHECK(v - k != 256,
+> > > > +                       "invalid updated k/v pair: %ld = %ld\n", k, v))
+> > > > +                     return 1;
+> > > > +     }
+> > > > +     if (CHECK(found_msk != (1ULL << ELEM_CNT) - 1,
+> > > > +               "not all keys iterated after update: %llx\n", found_msk))
+> > > > +             return 1;
+> > > > +
+> > > > +     found_cnt = 0;
+> > > > +     hashmap__for_each_key_entry(map, entry, (void *)0) {
+> > > > +             found_cnt++;
+> > > > +     }
+> > > > +     if (CHECK(!found_cnt, "didn't find any entries for key 0\n"))
+> > > > +             return 1;
+> > > > +
+> > > > +     found_msk = 0;
+> > > > +     found_cnt = 0;
+> > > > +     hashmap__for_each_key_entry_safe(map, entry, tmp, (void *)0) {
+> > > > +             const void *oldk, *k;
+> > > > +             void *oldv, *v;
+> > > > +
+> > > > +             k = entry->key;
+> > > > +             v = entry->value;
+> > > > +
+> > > > +             found_cnt++;
+> > > > +             found_msk |= 1ULL << (long)k;
+> > > > +
+> > > > +             if (CHECK(!hashmap__delete(map, k, &oldk, &oldv),
+> > > > +                       "failed to delete k/v %ld = %ld\n",
+> > > > +                       (long)k, (long)v))
+> > > > +                     return 1;
+> > > > +             if (CHECK(oldk != k || oldv != v,
+> > > > +                       "invalid deleted k/v: expected %ld = %ld, got %ld = %ld\n",
+> > > > +                       (long)k, (long)v, (long)oldk, (long)oldv))
+> > > > +                     return 1;
+> > > > +             if (CHECK(hashmap__delete(map, k, &oldk, &oldv),
+> > > > +                       "unexpectedly deleted k/v %ld = %ld\n",
+> > > > +                       (long)oldk, (long)oldv))
+> > > > +                     return 1;
+> > > > +     }
+> > > > +
+> > > > +     if (CHECK(!found_cnt || !found_msk,
+> > > > +               "didn't delete any key entries\n"))
+> > > > +             return 1;
+> > > > +     if (CHECK(hashmap__size(map) != ELEM_CNT - found_cnt,
+> > > > +               "invalid updated map size (already deleted: %d): %zu\n",
+> > > > +               found_cnt, hashmap__size(map)))
+> > > > +             return 1;
+> > > > +     if (CHECK(hashmap__capacity(map) != exp_cap(hashmap__size(map)),
+> > > > +               "unexpected map capacity: %zu\n", hashmap__capacity(map)))
+> > > > +             return 1;
+> > > > +
+> > > > +     hashmap__for_each_entry_safe(map, entry, tmp, bkt) {
+> > > > +             const void *oldk, *k;
+> > > > +             void *oldv, *v;
+> > > > +
+> > > > +             k = entry->key;
+> > > > +             v = entry->value;
+> > > > +
+> > > > +             found_cnt++;
+> > > > +             found_msk |= 1ULL << (long)k;
+> > > > +
+> > > > +             if (CHECK(!hashmap__delete(map, k, &oldk, &oldv),
+> > > > +                       "failed to delete k/v %ld = %ld\n",
+> > > > +                       (long)k, (long)v))
+> > > > +                     return 1;
+> > > > +             if (CHECK(oldk != k || oldv != v,
+> > > > +                       "invalid old k/v: expect %ld = %ld, got %ld = %ld\n",
+> > > > +                       (long)k, (long)v, (long)oldk, (long)oldv))
+> > > > +                     return 1;
+> > > > +             if (CHECK(hashmap__delete(map, k, &oldk, &oldv),
+> > > > +                       "unexpectedly deleted k/v %ld = %ld\n",
+> > > > +                       (long)k, (long)v))
+> > > > +                     return 1;
+> > > > +     }
+> > > > +
+> > > > +     if (CHECK(found_cnt != ELEM_CNT || found_msk != (1ULL << ELEM_CNT) - 1,
+> > > > +               "not all keys were deleted: found_cnt:%d, found_msk:%llx\n",
+> > > > +               found_cnt, found_msk))
+> > > > +             return 1;
+> > > > +     if (CHECK(hashmap__size(map) != 0,
+> > > > +               "invalid updated map size (already deleted: %d): %zu\n",
+> > > > +               found_cnt, hashmap__size(map)))
+> > > > +             return 1;
+> > > > +
+> > > > +     found_cnt = 0;
+> > > > +     hashmap__for_each_entry(map, entry, bkt) {
+> > > > +             CHECK(false, "unexpected map entries left: %ld = %ld\n",
+> > > > +                          (long)entry->key, (long)entry->value);
+> > > > +             return 1;
+> > > > +     }
+> > > > +
+> > > > +     hashmap__free(map);
+> > > > +     hashmap__for_each_entry(map, entry, bkt) {
+> > > > +             CHECK(false, "unexpected map entries left: %ld = %ld\n",
+> > > > +                          (long)entry->key, (long)entry->value);
+> > > > +             return 1;
+> > > > +     }
+> > > > +
+> > > > +     fprintf(stderr, "OK\n");
+> > > > +     return 0;
+> > > > +}
+> > > > +
+> > > > +size_t collision_hash_fn(const void *k, void *ctx)
+> > > > +{
+> > > > +     return 0;
+> > > > +}
+> > > > +
+> > > > +int test_hashmap_multimap(void)
+> > > > +{
+> > > > +     void *k1 = (void *)0, *k2 = (void *)1;
+> > > > +     struct hashmap_entry *entry;
+> > > > +     struct hashmap *map;
+> > > > +     long found_msk;
+> > > > +     int err, bkt;
+> > > > +
+> > > > +     fprintf(stderr, "%s: ", __func__);
+> > > > +
+> > > > +     /* force collisions */
+> > > > +     map = hashmap__new(collision_hash_fn, equal_fn, NULL);
+> > > > +     if (CHECK(IS_ERR(map), "failed to create map: %ld\n", PTR_ERR(map)))
+> > > > +             return 1;
+> > > > +
+> > > > +
+> > > > +     /* set up multimap:
+> > > > +      * [0] -> 1, 2, 4;
+> > > > +      * [1] -> 8, 16, 32;
+> > > > +      */
+> > > > +     err = hashmap__append(map, k1, (void *)1);
+> > > > +     if (CHECK(err, "failed to add k/v: %d\n", err))
+> > > > +             return 1;
+> > > > +     err = hashmap__append(map, k1, (void *)2);
+> > > > +     if (CHECK(err, "failed to add k/v: %d\n", err))
+> > > > +             return 1;
+> > > > +     err = hashmap__append(map, k1, (void *)4);
+> > > > +     if (CHECK(err, "failed to add k/v: %d\n", err))
+> > > > +             return 1;
+> > > > +
+> > > > +     err = hashmap__append(map, k2, (void *)8);
+> > > > +     if (CHECK(err, "failed to add k/v: %d\n", err))
+> > > > +             return 1;
+> > > > +     err = hashmap__append(map, k2, (void *)16);
+> > > > +     if (CHECK(err, "failed to add k/v: %d\n", err))
+> > > > +             return 1;
+> > > > +     err = hashmap__append(map, k2, (void *)32);
+> > > > +     if (CHECK(err, "failed to add k/v: %d\n", err))
+> > > > +             return 1;
+> > > > +
+> > > > +     if (CHECK(hashmap__size(map) != 6,
+> > > > +               "invalid map size: %zu\n", hashmap__size(map)))
+> > > > +             return 1;
+> > > > +
+> > > > +     /* verify global iteration still works and sees all values */
+> > > > +     found_msk = 0;
+> > > > +     hashmap__for_each_entry(map, entry, bkt) {
+> > > > +             found_msk |= (long)entry->value;
+> > > > +     }
+> > > > +     if (CHECK(found_msk != (1 << 6) - 1,
+> > > > +               "not all keys iterated: %lx\n", found_msk))
+> > > > +             return 1;
+> > > > +
+> > > > +     /* iterate values for key 1 */
+> > > > +     found_msk = 0;
+> > > > +     hashmap__for_each_key_entry(map, entry, k1) {
+> > > > +             found_msk |= (long)entry->value;
+> > > > +     }
+> > > > +     if (CHECK(found_msk != (1 | 2 | 4),
+> > > > +               "invalid k1 values: %lx\n", found_msk))
+> > > > +             return 1;
+> > > > +
+> > > > +     /* iterate values for key 2 */
+> > > > +     found_msk = 0;
+> > > > +     hashmap__for_each_key_entry(map, entry, k2) {
+> > > > +             found_msk |= (long)entry->value;
+> > > > +     }
+> > > > +     if (CHECK(found_msk != (8 | 16 | 32),
+> > > > +               "invalid k2 values: %lx\n", found_msk))
+> > > > +             return 1;
+> > > > +
+> > > > +     fprintf(stderr, "OK\n");
+> > > > +     return 0;
+> > > > +}
+> > > > +
+> > > > +int test_hashmap_empty()
+> > > > +{
+> > > > +     struct hashmap_entry *entry;
+> > > > +     int bkt;
+> > > > +     struct hashmap *map;
+> > > > +     void *k = (void *)0;
+> > > > +
+> > > > +     fprintf(stderr, "%s: ", __func__);
+> > > > +
+> > > > +     /* force collisions */
+> > > > +     map = hashmap__new(hash_fn, equal_fn, NULL);
+> > > > +     if (CHECK(IS_ERR(map), "failed to create map: %ld\n", PTR_ERR(map)))
+> > > > +             return 1;
+> > > > +
+> > > > +     if (CHECK(hashmap__size(map) != 0,
+> > > > +               "invalid map size: %zu\n", hashmap__size(map)))
+> > > > +             return 1;
+> > > > +     if (CHECK(hashmap__capacity(map) != 0,
+> > > > +               "invalid map capacity: %zu\n", hashmap__capacity(map)))
+> > > > +             return 1;
+> > > > +     if (CHECK(hashmap__find(map, k, NULL), "unexpected find\n"))
+> > > > +             return 1;
+> > > > +     if (CHECK(hashmap__delete(map, k, NULL, NULL), "unexpected delete\n"))
+> > > > +             return 1;
+> > > > +
+> > > > +     hashmap__for_each_entry(map, entry, bkt) {
+> > > > +             CHECK(false, "unexpected iterated entry\n");
+> > > > +             return 1;
+> > > > +     }
+> > > > +     hashmap__for_each_key_entry(map, entry, k) {
+> > > > +             CHECK(false, "unexpected key entry\n");
+> > > > +             return 1;
+> > > > +     }
+> > > > +
+> > > > +     fprintf(stderr, "OK\n");
+> > > > +     return 0;
+> > > > +}
+> > > > +
+> > > > +int main(int argc, char **argv)
+> > > > +{
+> > > > +     bool failed = false;
+> > > > +
+> > > > +     if (test_hashmap_generic())
+> > > > +             failed = true;
+> > > > +     if (test_hashmap_multimap())
+> > > > +             failed = true;
+> > > > +     if (test_hashmap_empty())
+> > > > +             failed = true;
+> > > > +
+> > > > +     return failed;
+> > > > +}
+> > > > --
+> > > > 2.17.1
+> > > >
