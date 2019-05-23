@@ -5,41 +5,41 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F1BEC282E1
-	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 20:42:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D7B3C46470
+	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 20:42:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0229620645
-	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 20:42:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1A8722075B
+	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 20:42:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="MCbHL3YF"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="LLM/TA3S"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388229AbfEWUml (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 May 2019 16:42:41 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:51038 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2388196AbfEWUmj (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 23 May 2019 16:42:39 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x4NKdw6C012002
-        for <bpf@vger.kernel.org>; Thu, 23 May 2019 13:42:38 -0700
+        id S2388230AbfEWUmm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 May 2019 16:42:42 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:60178 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2388225AbfEWUmm (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 23 May 2019 16:42:42 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4NKYeSg016431
+        for <bpf@vger.kernel.org>; Thu, 23 May 2019 13:42:40 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=+mILvYwWaBUx7FgpXAhY0YoQRQqTm6Z7WFLbUfSA5hQ=;
- b=MCbHL3YFEb+ufWkDP/HObOGuANYyn5+YBXg6f1NaDqebchDek62XzBBv0hqnoSmU0sJv
- RGHyUrvGP6gArdo2Q2M1/stoMG2dCq5LyyGI50QNq9C4GmjXZtJvfWN9rLefSXcCzfXq
- pkenxqlDC/Joda8dC+krxTqn4IYdAZxuU9U= 
+ content-type; s=facebook; bh=6IkGN47itqvsDgU54e9J/eyqJ7CWK9rhsQzcXCsnF8Q=;
+ b=LLM/TA3SkSvJftZdr6EpqNuMbUn7OUzKf5p1/FFYpmb+u5y1LQrcLGBQrzjbd6LGkEIm
+ SKlsvo9TjOuk0yUiMyvuJis9l7Moeo6nzBLnyYamG5jf9j4LIfrgk6B//cLSxI3j+aJp
+ bvOuOoEtDQPCE3THs4aHOVR+gBFt5469Fck= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 2snwyh94wg-2
+        by mx0a-00082601.pphosted.com with ESMTP id 2sp15ngc3s-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 23 May 2019 13:42:38 -0700
+        for <bpf@vger.kernel.org>; Thu, 23 May 2019 13:42:40 -0700
 Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 23 May 2019 13:42:34 -0700
+ 15.1.1713.5; Thu, 23 May 2019 13:42:39 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id BE9D7861799; Thu, 23 May 2019 13:42:31 -0700 (PDT)
+        id E2166861799; Thu, 23 May 2019 13:42:37 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,16 +48,16 @@ To:     <andrii.nakryiko@gmail.com>, <netdev@vger.kernel.org>,
         <kernel-team@fb.com>
 CC:     Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v2 bpf-next 03/12] bpftool: use libbpf's btf__parse_elf API
-Date:   Thu, 23 May 2019 13:42:13 -0700
-Message-ID: <20190523204222.3998365-4-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 06/12] selftests/bpf: add tests for libbpf's hashmap
+Date:   Thu, 23 May 2019 13:42:16 -0700
+Message-ID: <20190523204222.3998365-7-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190523204222.3998365-1-andriin@fb.com>
 References: <20190523204222.3998365-1-andriin@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-23_16:,,
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-23_17:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
  malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
@@ -70,158 +70,426 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use btf__parse_elf() API, provided by libbpf, instead of implementing
-ELF parsing by itself.
+Test all APIs for internal hashmap implementation.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/bpf/bpftool/btf.c | 117 +++-------------------------------------
- 1 file changed, 8 insertions(+), 109 deletions(-)
+ tools/testing/selftests/bpf/.gitignore     |   1 +
+ tools/testing/selftests/bpf/Makefile       |   2 +-
+ tools/testing/selftests/bpf/test_hashmap.c | 382 +++++++++++++++++++++
+ 3 files changed, 384 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/test_hashmap.c
 
-diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index 7317438ecd9e..a22ef6587ebe 100644
---- a/tools/bpf/bpftool/btf.c
-+++ b/tools/bpf/bpftool/btf.c
-@@ -8,8 +8,8 @@
- #include <stdio.h>
- #include <string.h>
- #include <unistd.h>
--#include <gelf.h>
- #include <bpf.h>
-+#include <libbpf.h>
- #include <linux/btf.h>
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+index dd5d69529382..138b6c063916 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -35,3 +35,4 @@ test_sysctl
+ alu32
+ libbpf.pc
+ libbpf.so.*
++test_hashmap
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 66f2dca1dee1..ddae06498a00 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -23,7 +23,7 @@ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test
+ 	test_align test_verifier_log test_dev_cgroup test_tcpbpf_user \
+ 	test_sock test_btf test_sockmap test_lirc_mode2_user get_cgroup_id_user \
+ 	test_socket_cookie test_cgroup_storage test_select_reuseport test_section_names \
+-	test_netcnt test_tcpnotify_user test_sock_fields test_sysctl
++	test_netcnt test_tcpnotify_user test_sock_fields test_sysctl test_hashmap
  
- #include "btf.h"
-@@ -340,112 +340,6 @@ static int dump_btf_raw(const struct btf *btf,
- 	return 0;
- }
- 
--static bool check_btf_endianness(GElf_Ehdr *ehdr)
--{
--	static unsigned int const endian = 1;
--
--	switch (ehdr->e_ident[EI_DATA]) {
--	case ELFDATA2LSB:
--		return *(unsigned char const *)&endian == 1;
--	case ELFDATA2MSB:
--		return *(unsigned char const *)&endian == 0;
--	default:
--		return 0;
--	}
--}
--
--static int btf_load_from_elf(const char *path, struct btf **btf)
--{
--	int err = -1, fd = -1, idx = 0;
--	Elf_Data *btf_data = NULL;
--	Elf_Scn *scn = NULL;
--	Elf *elf = NULL;
--	GElf_Ehdr ehdr;
--
--	if (elf_version(EV_CURRENT) == EV_NONE) {
--		p_err("failed to init libelf for %s", path);
--		return -1;
--	}
--
--	fd = open(path, O_RDONLY);
--	if (fd < 0) {
--		p_err("failed to open %s: %s", path, strerror(errno));
--		return -1;
--	}
--
--	elf = elf_begin(fd, ELF_C_READ, NULL);
--	if (!elf) {
--		p_err("failed to open %s as ELF file", path);
--		goto done;
--	}
--	if (!gelf_getehdr(elf, &ehdr)) {
--		p_err("failed to get EHDR from %s", path);
--		goto done;
--	}
--	if (!check_btf_endianness(&ehdr)) {
--		p_err("non-native ELF endianness is not supported");
--		goto done;
--	}
--	if (!elf_rawdata(elf_getscn(elf, ehdr.e_shstrndx), NULL)) {
--		p_err("failed to get e_shstrndx from %s\n", path);
--		goto done;
--	}
--
--	while ((scn = elf_nextscn(elf, scn)) != NULL) {
--		GElf_Shdr sh;
--		char *name;
--
--		idx++;
--		if (gelf_getshdr(scn, &sh) != &sh) {
--			p_err("failed to get section(%d) header from %s",
--			      idx, path);
--			goto done;
--		}
--		name = elf_strptr(elf, ehdr.e_shstrndx, sh.sh_name);
--		if (!name) {
--			p_err("failed to get section(%d) name from %s",
--			      idx, path);
--			goto done;
--		}
--		if (strcmp(name, BTF_ELF_SEC) == 0) {
--			btf_data = elf_getdata(scn, 0);
--			if (!btf_data) {
--				p_err("failed to get section(%d, %s) data from %s",
--				      idx, name, path);
--				goto done;
--			}
--			break;
--		}
--	}
--
--	if (!btf_data) {
--		p_err("%s ELF section not found in %s", BTF_ELF_SEC, path);
--		goto done;
--	}
--
--	*btf = btf__new(btf_data->d_buf, btf_data->d_size);
--	if (IS_ERR(*btf)) {
--		err = PTR_ERR(*btf);
--		*btf = NULL;
--		p_err("failed to load BTF data from %s: %s",
--		      path, strerror(err));
--		goto done;
--	}
--
--	err = 0;
--done:
--	if (err) {
--		if (*btf) {
--			btf__free(*btf);
--			*btf = NULL;
--		}
--	}
--	if (elf)
--		elf_end(elf);
--	close(fd);
--	return err;
--}
--
- static int do_dump(int argc, char **argv)
- {
- 	struct btf *btf = NULL;
-@@ -522,9 +416,14 @@ static int do_dump(int argc, char **argv)
- 		}
- 		NEXT_ARG();
- 	} else if (is_prefix(src, "file")) {
--		err = btf_load_from_elf(*argv, &btf);
--		if (err)
-+		btf = btf__parse_elf(*argv, NULL);
-+		if (IS_ERR(btf)) {
-+			err = PTR_ERR(btf);
-+			btf = NULL;
-+			p_err("failed to load BTF from %s: %s", 
-+			      *argv, strerror(err));
- 			goto done;
+ BPF_OBJ_FILES = $(patsubst %.c,%.o, $(notdir $(wildcard progs/*.c)))
+ TEST_GEN_FILES = $(BPF_OBJ_FILES)
+diff --git a/tools/testing/selftests/bpf/test_hashmap.c b/tools/testing/selftests/bpf/test_hashmap.c
+new file mode 100644
+index 000000000000..b64094c981e3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/test_hashmap.c
+@@ -0,0 +1,382 @@
++// SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
++
++/*
++ * Tests for libbpf's hashmap.
++ *
++ * Copyright (c) 2019 Facebook
++ */
++#include <stdio.h>
++#include <errno.h>
++#include <linux/err.h>
++#include "hashmap.h"
++
++#define CHECK(condition, format...) ({					\
++	int __ret = !!(condition);					\
++	if (__ret) {							\
++		fprintf(stderr, "%s:%d:FAIL ", __func__, __LINE__);	\
++		fprintf(stderr, format);				\
++	}								\
++	__ret;								\
++})
++
++size_t hash_fn(const void *k, void *ctx)
++{
++	return (long)k;
++}
++
++bool equal_fn(const void *a, const void *b, void *ctx)
++{
++	return (long)a == (long)b;
++}
++
++static inline size_t next_pow_2(size_t n)
++{
++	size_t r = 1;
++
++	while (r < n)
++		r <<= 1;
++	return r;
++}
++
++static inline size_t exp_cap(size_t sz)
++{
++	size_t r = next_pow_2(sz);
++
++	if (sz * 4 / 3 > r)
++		r <<= 1;
++	return r;
++}
++
++#define ELEM_CNT 62
++
++int test_hashmap_generic(void)
++{
++	struct hashmap_entry *entry, *tmp;
++	int err, bkt, found_cnt, i;
++	long long found_msk;
++	struct hashmap *map;
++
++	fprintf(stderr, "%s: ", __func__);
++
++	map = hashmap__new(hash_fn, equal_fn, NULL);
++	if (CHECK(IS_ERR(map), "failed to create map: %ld\n", PTR_ERR(map)))
++		return 1;
++
++	for (i = 0; i < ELEM_CNT; i++) {
++		const void *oldk, *k = (const void *)(long)i;
++		void *oldv, *v = (void *)(long)(1024 + i);
++
++		err = hashmap__update(map, k, v, &oldk, &oldv);
++		if (CHECK(err != -ENOENT, "unexpected result: %d\n", err))
++			return 1;
++
++		if (i % 2) {
++			err = hashmap__add(map, k, v);
++		} else {
++			err = hashmap__set(map, k, v, &oldk, &oldv);
++			if (CHECK(oldk != NULL || oldv != NULL,
++				  "unexpected k/v: %p=%p\n", oldk, oldv))
++				return 1;
 +		}
- 		NEXT_ARG();
- 	} else {
- 		err = -1;
++
++		if (CHECK(err, "failed to add k/v %ld = %ld: %d\n",
++			       (long)k, (long)v, err))
++			return 1;
++
++		if (CHECK(!hashmap__find(map, k, &oldv),
++			  "failed to find key %ld\n", (long)k))
++			return 1;
++		if (CHECK(oldv != v, "found value is wrong: %ld\n", (long)oldv))
++			return 1;
++	}
++
++	if (CHECK(hashmap__size(map) != ELEM_CNT,
++		  "invalid map size: %zu\n", hashmap__size(map)))
++		return 1;
++	if (CHECK(hashmap__capacity(map) != exp_cap(hashmap__size(map)),
++		  "unexpected map capacity: %zu\n", hashmap__capacity(map)))
++		return 1;
++
++	found_msk = 0;
++	hashmap__for_each_entry(map, entry, bkt) {
++		long k = (long)entry->key;
++		long v = (long)entry->value;
++
++		found_msk |= 1ULL << k;
++		if (CHECK(v - k != 1024, "invalid k/v pair: %ld = %ld\n", k, v))
++			return 1;
++	}
++	if (CHECK(found_msk != (1ULL << ELEM_CNT) - 1,
++		  "not all keys iterated: %llx\n", found_msk))
++		return 1;
++
++	for (i = 0; i < ELEM_CNT; i++) {
++		const void *oldk, *k = (const void *)(long)i;
++		void *oldv, *v = (void *)(long)(256 + i);
++
++		err = hashmap__add(map, k, v);
++		if (CHECK(err != -EEXIST, "unexpected add result: %d\n", err))
++			return 1;
++
++		if (i % 2)
++			err = hashmap__update(map, k, v, &oldk, &oldv);
++		else
++			err = hashmap__set(map, k, v, &oldk, &oldv);
++
++		if (CHECK(err, "failed to update k/v %ld = %ld: %d\n",
++			       (long)k, (long)v, err))
++			return 1;
++		if (CHECK(!hashmap__find(map, k, &oldv),
++			  "failed to find key %ld\n", (long)k))
++			return 1;
++		if (CHECK(oldv != v, "found value is wrong: %ld\n", (long)oldv))
++			return 1;
++	}
++
++	if (CHECK(hashmap__size(map) != ELEM_CNT,
++		  "invalid updated map size: %zu\n", hashmap__size(map)))
++		return 1;
++	if (CHECK(hashmap__capacity(map) != exp_cap(hashmap__size(map)),
++		  "unexpected map capacity: %zu\n", hashmap__capacity(map)))
++		return 1;
++
++	found_msk = 0;
++	hashmap__for_each_entry_safe(map, entry, tmp, bkt) {
++		long k = (long)entry->key;
++		long v = (long)entry->value;
++
++		found_msk |= 1ULL << k;
++		if (CHECK(v - k != 256,
++			  "invalid updated k/v pair: %ld = %ld\n", k, v))
++			return 1;
++	}
++	if (CHECK(found_msk != (1ULL << ELEM_CNT) - 1,
++		  "not all keys iterated after update: %llx\n", found_msk))
++		return 1;
++
++	found_cnt = 0;
++	hashmap__for_each_key_entry(map, entry, (void *)0) {
++		found_cnt++;
++	}
++	if (CHECK(!found_cnt, "didn't find any entries for key 0\n"))
++		return 1;
++
++	found_msk = 0;
++	found_cnt = 0;
++	hashmap__for_each_key_entry_safe(map, entry, tmp, (void *)0) {
++		const void *oldk, *k;
++		void *oldv, *v;
++
++		k = entry->key;
++		v = entry->value;
++
++		found_cnt++;
++		found_msk |= 1ULL << (long)k;
++
++		if (CHECK(!hashmap__delete(map, k, &oldk, &oldv),
++			  "failed to delete k/v %ld = %ld\n",
++			  (long)k, (long)v))
++			return 1;
++		if (CHECK(oldk != k || oldv != v,
++			  "invalid deleted k/v: expected %ld = %ld, got %ld = %ld\n",
++			  (long)k, (long)v, (long)oldk, (long)oldv))
++			return 1;
++		if (CHECK(hashmap__delete(map, k, &oldk, &oldv),
++			  "unexpectedly deleted k/v %ld = %ld\n",
++			  (long)oldk, (long)oldv))
++			return 1;
++	}
++
++	if (CHECK(!found_cnt || !found_msk,
++		  "didn't delete any key entries\n"))
++		return 1;
++	if (CHECK(hashmap__size(map) != ELEM_CNT - found_cnt,
++		  "invalid updated map size (already deleted: %d): %zu\n",
++		  found_cnt, hashmap__size(map)))
++		return 1;
++	if (CHECK(hashmap__capacity(map) != exp_cap(hashmap__size(map)),
++		  "unexpected map capacity: %zu\n", hashmap__capacity(map)))
++		return 1;
++
++	hashmap__for_each_entry_safe(map, entry, tmp, bkt) {
++		const void *oldk, *k;
++		void *oldv, *v;
++
++		k = entry->key;
++		v = entry->value;
++
++		found_cnt++;
++		found_msk |= 1ULL << (long)k;
++
++		if (CHECK(!hashmap__delete(map, k, &oldk, &oldv),
++			  "failed to delete k/v %ld = %ld\n",
++			  (long)k, (long)v))
++			return 1;
++		if (CHECK(oldk != k || oldv != v,
++			  "invalid old k/v: expect %ld = %ld, got %ld = %ld\n",
++			  (long)k, (long)v, (long)oldk, (long)oldv))
++			return 1;
++		if (CHECK(hashmap__delete(map, k, &oldk, &oldv),
++			  "unexpectedly deleted k/v %ld = %ld\n",
++			  (long)k, (long)v))
++			return 1;
++	}
++
++	if (CHECK(found_cnt != ELEM_CNT || found_msk != (1ULL << ELEM_CNT) - 1,
++		  "not all keys were deleted: found_cnt:%d, found_msk:%llx\n",
++		  found_cnt, found_msk))
++		return 1;
++	if (CHECK(hashmap__size(map) != 0,
++		  "invalid updated map size (already deleted: %d): %zu\n",
++		  found_cnt, hashmap__size(map)))
++		return 1;
++
++	found_cnt = 0;
++	hashmap__for_each_entry(map, entry, bkt) {
++		CHECK(false, "unexpected map entries left: %ld = %ld\n",
++			     (long)entry->key, (long)entry->value);
++		return 1;
++	}
++
++	hashmap__free(map);
++	hashmap__for_each_entry(map, entry, bkt) {
++		CHECK(false, "unexpected map entries left: %ld = %ld\n",
++			     (long)entry->key, (long)entry->value);
++		return 1;
++	}
++
++	fprintf(stderr, "OK\n");
++	return 0;
++}
++
++size_t collision_hash_fn(const void *k, void *ctx)
++{
++	return 0;
++}
++
++int test_hashmap_multimap(void)
++{
++	void *k1 = (void *)0, *k2 = (void *)1;
++	struct hashmap_entry *entry;
++	struct hashmap *map;
++	long found_msk;
++	int err, bkt;
++
++	fprintf(stderr, "%s: ", __func__);
++
++	/* force collisions */
++	map = hashmap__new(collision_hash_fn, equal_fn, NULL);
++	if (CHECK(IS_ERR(map), "failed to create map: %ld\n", PTR_ERR(map)))
++		return 1;
++
++
++	/* set up multimap:
++	 * [0] -> 1, 2, 4;
++	 * [1] -> 8, 16, 32;
++	 */
++	err = hashmap__append(map, k1, (void *)1);
++	if (CHECK(err, "failed to add k/v: %d\n", err))
++		return 1;
++	err = hashmap__append(map, k1, (void *)2);
++	if (CHECK(err, "failed to add k/v: %d\n", err))
++		return 1;
++	err = hashmap__append(map, k1, (void *)4);
++	if (CHECK(err, "failed to add k/v: %d\n", err))
++		return 1;
++
++	err = hashmap__append(map, k2, (void *)8);
++	if (CHECK(err, "failed to add k/v: %d\n", err))
++		return 1;
++	err = hashmap__append(map, k2, (void *)16);
++	if (CHECK(err, "failed to add k/v: %d\n", err))
++		return 1;
++	err = hashmap__append(map, k2, (void *)32);
++	if (CHECK(err, "failed to add k/v: %d\n", err))
++		return 1;
++
++	if (CHECK(hashmap__size(map) != 6,
++		  "invalid map size: %zu\n", hashmap__size(map)))
++		return 1;
++
++	/* verify global iteration still works and sees all values */
++	found_msk = 0;
++	hashmap__for_each_entry(map, entry, bkt) {
++		found_msk |= (long)entry->value;
++	}
++	if (CHECK(found_msk != (1 << 6) - 1,
++		  "not all keys iterated: %lx\n", found_msk))
++		return 1;
++
++	/* iterate values for key 1 */
++	found_msk = 0;
++	hashmap__for_each_key_entry(map, entry, k1) {
++		found_msk |= (long)entry->value;
++	}
++	if (CHECK(found_msk != (1 | 2 | 4),
++		  "invalid k1 values: %lx\n", found_msk))
++		return 1;
++
++	/* iterate values for key 2 */
++	found_msk = 0;
++	hashmap__for_each_key_entry(map, entry, k2) {
++		found_msk |= (long)entry->value;
++	}
++	if (CHECK(found_msk != (8 | 16 | 32),
++		  "invalid k2 values: %lx\n", found_msk))
++		return 1;
++
++	fprintf(stderr, "OK\n");
++	return 0;
++}
++
++int test_hashmap_empty()
++{
++	struct hashmap_entry *entry;
++	int bkt;
++	struct hashmap *map;
++	void *k = (void *)0;
++
++	fprintf(stderr, "%s: ", __func__);
++
++	/* force collisions */
++	map = hashmap__new(hash_fn, equal_fn, NULL);
++	if (CHECK(IS_ERR(map), "failed to create map: %ld\n", PTR_ERR(map)))
++		return 1;
++
++	if (CHECK(hashmap__size(map) != 0,
++		  "invalid map size: %zu\n", hashmap__size(map)))
++		return 1;
++	if (CHECK(hashmap__capacity(map) != 0,
++		  "invalid map capacity: %zu\n", hashmap__capacity(map)))
++		return 1;
++	if (CHECK(hashmap__find(map, k, NULL), "unexpected find\n"))
++		return 1;
++	if (CHECK(hashmap__delete(map, k, NULL, NULL), "unexpected delete\n"))
++		return 1;
++
++	hashmap__for_each_entry(map, entry, bkt) {
++		CHECK(false, "unexpected iterated entry\n");
++		return 1;
++	}
++	hashmap__for_each_key_entry(map, entry, k) {
++		CHECK(false, "unexpected key entry\n");
++		return 1;
++	}
++
++	fprintf(stderr, "OK\n");
++	return 0;
++}
++
++int main(int argc, char **argv)
++{
++	bool failed = false;
++
++	if (test_hashmap_generic())
++		failed = true;
++	if (test_hashmap_multimap())
++		failed = true;
++	if (test_hashmap_empty())
++		failed = true;
++
++	return failed;
++}
 -- 
 2.17.1
 
