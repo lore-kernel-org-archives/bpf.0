@@ -2,119 +2,109 @@ Return-Path: <SRS0=Im41=TX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B44EC282E1
-	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 21:48:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19BF2C282E1
+	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 23:02:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5B4AE20868
-	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 21:48:10 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="bSSWdgxv"
+	by mail.kernel.org (Postfix) with ESMTP id D917321841
+	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 23:02:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388145AbfEWVsI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 May 2019 17:48:08 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:51704 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388232AbfEWVsI (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 23 May 2019 17:48:08 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4NLm1QA016495
-        for <bpf@vger.kernel.org>; Thu, 23 May 2019 14:48:07 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=Bi9Mn61+4n9xVTAhzeOUaTg2ujYDpOLQ8R/WnJq6Jj4=;
- b=bSSWdgxvT/NrLQ0GcyjHsRJGhhIb3UYpPmAQufYFiOTO53d+2GiStcQU8vxuzAFTF6ZN
- QVbfCignX+Q4S45+ZzLH9neAk/9SqOCf91LNsWqXBMWNZ0OYCk/EFn5QRnaEXcTX/rqH
- 2eZ7WD1pMxvbhBfNky+aJS80+JI3WFNGL48= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2snx7s99k1-13
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 23 May 2019 14:48:06 -0700
-Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::126) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Thu, 23 May 2019 14:47:48 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id A24273701F86; Thu, 23 May 2019 14:47:46 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Yonghong Song <yhs@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v5 2/3] tools/bpf: sync bpf uapi header bpf.h to tools directory
-Date:   Thu, 23 May 2019 14:47:46 -0700
-Message-ID: <20190523214746.854484-1-yhs@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190523214745.854300-1-yhs@fb.com>
-References: <20190523214745.854300-1-yhs@fb.com>
-X-FB-Internal: Safe
+        id S2387935AbfEWXCr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 May 2019 19:02:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43256 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387725AbfEWXCr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 May 2019 19:02:47 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1A7832175B;
+        Thu, 23 May 2019 23:02:45 +0000 (UTC)
+Date:   Thu, 23 May 2019 19:02:43 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Kris Van Hees <kris.van.hees@oracle.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, dtrace-devel@oss.oracle.com,
+        linux-kernel@vger.kernel.org, mhiramat@kernel.org, acme@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, peterz@infradead.org
+Subject: Re: [RFC PATCH 00/11] bpf, trace, dtrace: DTrace BPF program type
+ implementation and sample use
+Message-ID: <20190523190243.54221053@gandalf.local.home>
+In-Reply-To: <20190523211330.hng74yi75ixmcznc@ast-mbp.dhcp.thefacebook.com>
+References: <201905202347.x4KNl0cs030532@aserv0121.oracle.com>
+        <20190521175617.ipry6ue7o24a2e6n@ast-mbp.dhcp.thefacebook.com>
+        <20190521184137.GH2422@oracle.com>
+        <20190521205533.evfszcjvdouby7vp@ast-mbp.dhcp.thefacebook.com>
+        <20190521173618.2ebe8c1f@gandalf.local.home>
+        <20190521214325.rr7emn5z3b7wqiiy@ast-mbp.dhcp.thefacebook.com>
+        <20190521174757.74ec8937@gandalf.local.home>
+        <20190522052327.GN2422@oracle.com>
+        <20190522205329.uu26oq2saj56og5m@ast-mbp.dhcp.thefacebook.com>
+        <20190523054610.GR2422@oracle.com>
+        <20190523211330.hng74yi75ixmcznc@ast-mbp.dhcp.thefacebook.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-23_17:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=8 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=950 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905230139
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The bpf uapi header include/uapi/linux/bpf.h is sync'ed
-to tools/include/uapi/linux/bpf.h.
+On Thu, 23 May 2019 14:13:31 -0700
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- tools/include/uapi/linux/bpf.h | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+> > In DTrace, people write scripts based on UAPI-style interfaces and they don't
+> > have to concern themselves with e.g. knowing how to get the value of the 3rd
+> > argument that was passed by the firing probe.  All they need to know is that
+> > the probe will have a 3rd argument, and that the 3rd argument to *any* probe
+> > can be accessed as 'arg2' (or args[2] for typed arguments, if the provider is
+> > capable of providing that).  Different probes have different ways of passing
+> > arguments, and only the provider code for each probe type needs to know how
+> > to retrieve the argument values.
+> > 
+> > Does this help bring clarity to the reasons why an abstract (generic) probe
+> > concept is part of DTrace's design?  
+> 
+> It actually sounds worse than I thought.
+> If dtrace script reads some kernel field it's considered to be uapi?! ouch.
+> It means dtrace development philosophy is incompatible with the linux kernel.
+> There is no way kernel is going to bend itself to make dtrace scripts
+> runnable if that means that all dtrace accessible fields become uapi.
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 63e0cf66f01a..68d4470523a0 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -2672,6 +2672,20 @@ union bpf_attr {
-  *		0 on success.
-  *
-  *		**-ENOENT** if the bpf-local-storage cannot be found.
-+ *
-+ * int bpf_send_signal(u32 sig)
-+ *	Description
-+ *		Send signal *sig* to the current task.
-+ *	Return
-+ *		0 on success or successfully queued.
-+ *
-+ *		**-EBUSY** if work queue under nmi is full.
-+ *
-+ *		**-EINVAL** if *sig* is invalid.
-+ *
-+ *		**-EPERM** if no permission to send the *sig*.
-+ *
-+ *		**-EAGAIN** if bpf program can try again.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -2782,7 +2796,8 @@ union bpf_attr {
- 	FN(strtol),			\
- 	FN(strtoul),			\
- 	FN(sk_storage_get),		\
--	FN(sk_storage_delete),
-+	FN(sk_storage_delete),		\
-+	FN(send_signal),
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-  * function eBPF program intends to call
--- 
-2.17.1
+Now from what I'm reading, it seams that the Dtrace layer may be
+abstracting out fields from the kernel. This is actually something I
+have been thinking about to solve the "tracepoint abi" issue. There's
+usually basic ideas that happen. An interrupt goes off, there's a
+handler, etc. We could abstract that out that we trace when an
+interrupt goes off and the handler happens, and record the vector
+number, and/or what device it was for. We have tracepoints in the
+kernel that do this, but they do depend a bit on the implementation.
+Now, if we could get a layer that abstracts this information away from
+the implementation, then I think that's a *good* thing.
 
+
+> 
+> In stark contrast to dtrace all of bpf tracing scripts (bcc scripts
+> and bpftrace scripts) are written for specific kernel with intimate
+> knowledge of kernel details. They do break all the time when kernel changes.
+> kprobe and tracepoints are NOT uapi. All of them can change.
+> tracepoints are a bit more stable than kprobes, but they are not uapi.
+
+I wish that was totally true, but tracepoints *can* be an abi. I had
+code reverted because powertop required one to be a specific format. To
+this day, the wakeup event has a "success" field that writes in a
+hardcoded "1", because there's tools that depend on it, and they only
+work if there's a success field and the value is 1.
+
+I do definitely agree with you that the Dtrace code shall *never* keep
+the kernel from changing. That is, if Dtrace depends on something that
+changes (let's say we record priority of a task, but someday priority
+is replaced by something else), then Dtrace must cope with it. It must
+not be a blocker like user space applications can be.
+
+
+-- Steve
