@@ -2,94 +2,128 @@ Return-Path: <SRS0=Im41=TX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,T_DKIMWL_WL_HIGH,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51F1BC04AAC
-	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 06:07:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B2EFC04AAC
+	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 06:11:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2A5D92075E
-	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 06:07:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EA2D920881
+	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 06:11:11 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="FQqIn82F"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726310AbfEWGG4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 May 2019 02:06:56 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:46384 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726309AbfEWGG4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 May 2019 02:06:56 -0400
-Received: by mail-io1-f66.google.com with SMTP id q21so3867603iog.13
-        for <bpf@vger.kernel.org>; Wed, 22 May 2019 23:06:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dNUktpedBrxulRohJ67/ZQIyhajUGPsEgfYnIkyhhQ8=;
-        b=HM6nNxVsxbmg6BTcWjOSOQZ0R4+DK8z68uG6aFpspVFzgQOLQOWz0AEylxAmLxh+3h
-         d6Xlce4iycy2laKCz+h4hmefIR4y1rxyNsvFgWGYsBSoz6R54h+SjhQjgsGyIC+U+W3x
-         Fo2grzxG+qGfog9dukvUGxSUgm2Nixa3rq7NAr6Bx/hUyUI/LlyebRhmonuiUFItbnEj
-         39nHGr8+TUJRflsRA6EC51Jccu3xQwaS1PTqRwYp2SYbmm8SL1aHtAKAxmKu9nThBfQU
-         vGW+y4EiiI2vPi1zgGR8dS9vCw4bMqRHO5X1E4Qh5bGedYYDTqp1YMF5AZDktsc8Veqe
-         l7fw==
-X-Gm-Message-State: APjAAAVR8Wnx2o5Y677rKYsHBziRAhiTGnYB0bftjuxqm07Qozmkw6UQ
-        lw/A7x2zujifjdCFkUnrAbIzBPYqU4SN4K/9yuWy8A==
-X-Google-Smtp-Source: APXvYqwL+rTJ8coX0NZseJHhduGDusNE2IYZsftgMszlpkAqf1otdDBkRNtA+47vpccRttGr3CjHVW1lepULvMCFt/g=
-X-Received: by 2002:a6b:7d0d:: with SMTP id c13mr10557094ioq.249.1558591616008;
- Wed, 22 May 2019 23:06:56 -0700 (PDT)
+        id S1726310AbfEWGLL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 May 2019 02:11:11 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:43540 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726081AbfEWGLL (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 23 May 2019 02:11:11 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4N641sL017404
+        for <bpf@vger.kernel.org>; Wed, 22 May 2019 23:11:10 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=9suoeC2cbzWYfcGeDKDExrarzBDrL8T48xeTxEIYcHo=;
+ b=FQqIn82FZ7rWTzlWHF5nRWcsUVWpyyH72BULhcdWEteG53XEZdhaCp29i6B0cerh+r3x
+ TDfJ/Bmg/LPokBsTJmt40n8T6omXW+vPBTTxQCcQoorGqVH7TRhokSuKgb5ZChurslaL
+ 6+G3P3zgLTIwcjLXLyVQUmNAyYaUV7zmX2U= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2snbj8hwy1-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 22 May 2019 23:11:09 -0700
+Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 22 May 2019 23:11:08 -0700
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id 855A33702BC2; Wed, 22 May 2019 23:11:07 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Yonghong Song <yhs@fb.com>
+Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Yonghong Song <yhs@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next v4 0/3] bpf: implement bpf_send_signal() helper
+Date:   Wed, 22 May 2019 23:11:07 -0700
+Message-ID: <20190523061107.1779896-1-yhs@fb.com>
+X-Mailer: git-send-email 2.17.1
+X-FB-Internal: Safe
 MIME-Version: 1.0
-References: <20190523053429.3567376-1-songliubraving@fb.com>
-In-Reply-To: <20190523053429.3567376-1-songliubraving@fb.com>
-From:   Kairui Song <kasong@redhat.com>
-Date:   Thu, 23 May 2019 14:06:44 +0800
-Message-ID: <CACPcB9cXUEhn1a14mq_axJfkR13dna4OfgDZ=YEr=LVKn8K5tg@mail.gmail.com>
-Subject: Re: [PATCH v2] perf/x86: always include regs->ip in callchain
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf@vger.kernel.org, Kernel Team <kernel-team@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-23_06:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ malwarescore=0 suspectscore=8 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905230043
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, May 23, 2019 at 1:34 PM Song Liu <songliubraving@fb.com> wrote:
->
-> Commit d15d356887e7 removes regs->ip for !perf_hw_regs(regs) case. This
-> patch adds regs->ip back.
->
-> Fixes: d15d356887e7 ("perf/x86: Make perf callchains work without CONFIG_FRAME_POINTER")
-> Cc: Kairui Song <kasong@redhat.com>
-> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Signed-off-by: Song Liu <songliubraving@fb.com>
-> ---
->  arch/x86/events/core.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-> index f315425d8468..7b8a9eb4d5fd 100644
-> --- a/arch/x86/events/core.c
-> +++ b/arch/x86/events/core.c
-> @@ -2402,9 +2402,9 @@ perf_callchain_kernel(struct perf_callchain_entry_ctx *entry, struct pt_regs *re
->                 return;
->         }
->
-> +       if (perf_callchain_store(entry, regs->ip))
-> +               return;
->         if (perf_hw_regs(regs)) {
-> -               if (perf_callchain_store(entry, regs->ip))
-> -                       return;
->                 unwind_start(&state, current, regs, NULL);
->         } else {
->                 unwind_start(&state, current, NULL, (void *)regs->sp);
-> --
-> 2.17.1
->
+This patch tries to solve the following specific use case.
 
-Hi, this will make !perf_hw_regs(regs) case print a double first level
-stack trace, which is wrong. And the actual problem that unwinder give
-empty calltrace in bpf is still not fixed.
+Currently, bpf program can already collect stack traces
+through kernel function get_perf_callchain()
+when certain events happens (e.g., cache miss counter or
+cpu clock counter overflows). But such stack traces are
+not enough for jitted programs, e.g., hhvm (jited php).
+To get real stack trace, jit engine internal data structures
+need to be traversed in order to get the real user functions.
+
+bpf program itself may not be the best place to traverse
+the jit engine as the traversing logic could be complex and
+it is not a stable interface either.
+ 
+Instead, hhvm implements a signal handler,
+e.g. for SIGALARM, and a set of program locations which
+it can dump stack traces. When it receives a signal, it will
+dump the stack in next such program location.
+
+This patch implements bpf_send_signal() helper to send
+a signal to hhvm in real time, resulting in intended stack traces.
+
+Patch #1 implemented the bpf_send_helper() in the kernel.
+Patch #2 synced uapi header bpf.h to tools directory.
+Patch #3 added a self test which covers tracepoint
+and perf_event bpf programs.
+
+Changelogs:
+  v3 => v4:
+    . fix one typo and declare "const char *id_path = ..."
+      to avoid directly use the long string in the func body
+      in Patch #3.
+  v2 => v3:
+    . change the standalone test to be part of prog_tests.
+  RFC v1 => v2:
+    . previous version allows to send signal to an arbitrary
+      pid. This version just sends the signal to current
+      task to avoid unstable pid and potential races between
+      sending signals and task state changes for the pid.
+
+Yonghong Song (3):
+  bpf: implement bpf_send_signal() helper
+  tools/bpf: sync bpf uapi header bpf.h to tools directory
+  tools/bpf: add selftest in test_progs for bpf_send_signal() helper
+
+ include/uapi/linux/bpf.h                      |  17 +-
+ kernel/trace/bpf_trace.c                      |  67 ++++++
+ tools/include/uapi/linux/bpf.h                |  17 +-
+ tools/testing/selftests/bpf/bpf_helpers.h     |   1 +
+ .../selftests/bpf/prog_tests/send_signal.c    | 192 ++++++++++++++++++
+ .../bpf/progs/test_send_signal_kern.c         |  51 +++++
+ 6 files changed, 343 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/send_signal.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_send_signal_kern.c
 
 -- 
-Best Regards,
-Kairui Song
+2.17.1
+
