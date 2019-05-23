@@ -2,85 +2,152 @@ Return-Path: <SRS0=Im41=TX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6754C282DD
-	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 12:53:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AEF29C282DD
+	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 13:12:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B704F21019
-	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 12:53:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 886202168B
+	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 13:12:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730734AbfEWMw5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 May 2019 08:52:57 -0400
-Received: from mx2.suse.de ([195.135.220.15]:39478 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730323AbfEWMw4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 May 2019 08:52:56 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 17DE1AF96;
-        Thu, 23 May 2019 12:52:55 +0000 (UTC)
-From:   Michal Rostecki <mrostecki@opensuse.org>
-Cc:     Michal Rostecki <mrostecki@opensuse.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        id S1730601AbfEWNMs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 May 2019 09:12:48 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:47432 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729430AbfEWNMr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 May 2019 09:12:47 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 6C99ACA1FF;
+        Thu, 23 May 2019 13:12:47 +0000 (UTC)
+Received: from carbon (ovpn-200-45.brq.redhat.com [10.40.200.45])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CC186620D2;
+        Thu, 23 May 2019 13:12:39 +0000 (UTC)
+Date:   Thu, 23 May 2019 15:12:37 +0200
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Toshiaki Makita <makita.toshiaki@lab.ntt.co.jp>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <jakub.kicinski@netronome.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-        netdev@vger.kernel.org (open list:BPF (Safe dynamic programs and tools)),
-        bpf@vger.kernel.org (open list:BPF (Safe dynamic programs and tools)),
-        linux-kernel@vger.kernel.org (open list),
-        xdp-newbies@vger.kernel.org (open list:XDP (eXpress Data Path))
-Subject: [PATCH bpf-next v2 RESEND 0/2] Move bpf_printk to bpf_helpers.h
-Date:   Thu, 23 May 2019 14:53:53 +0200
-Message-Id: <20190523125355.18437-1-mrostecki@opensuse.org>
-X-Mailer: git-send-email 2.21.0
+        netdev@vger.kernel.org, xdp-newbies@vger.kernel.org,
+        bpf@vger.kernel.org, brouer@redhat.com
+Subject: Re: [PATCH bpf-next 2/3] xdp: Add tracepoint for bulk XDP_TX
+Message-ID: <20190523151237.190fe76e@carbon>
+In-Reply-To: <1558609008-2590-3-git-send-email-makita.toshiaki@lab.ntt.co.jp>
+References: <1558609008-2590-1-git-send-email-makita.toshiaki@lab.ntt.co.jp>
+        <1558609008-2590-3-git-send-email-makita.toshiaki@lab.ntt.co.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.38]); Thu, 23 May 2019 13:12:47 +0000 (UTC)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series of patches move the commonly used bpf_printk macro to
-bpf_helpers.h which is already included in all BPF programs which
-defined that macro on their own.
+On Thu, 23 May 2019 19:56:47 +0900
+Toshiaki Makita <makita.toshiaki@lab.ntt.co.jp> wrote:
 
-v1->v2:
-- If HBM_DEBUG is not defined in hbm sample, undefine bpf_printk and set
-  an empty macro for it.
+> This is introduced for admins to check what is happening on XDP_TX when
+> bulk XDP_TX is in use.
+> 
+> Signed-off-by: Toshiaki Makita <makita.toshiaki@lab.ntt.co.jp>
+> ---
+>  include/trace/events/xdp.h | 25 +++++++++++++++++++++++++
+>  kernel/bpf/core.c          |  1 +
+>  2 files changed, 26 insertions(+)
+> 
+> diff --git a/include/trace/events/xdp.h b/include/trace/events/xdp.h
+> index e95cb86..e06ea65 100644
+> --- a/include/trace/events/xdp.h
+> +++ b/include/trace/events/xdp.h
+> @@ -50,6 +50,31 @@
+>  		  __entry->ifindex)
+>  );
+>  
+> +TRACE_EVENT(xdp_bulk_tx,
+> +
 
-Michal Rostecki (2):
-  selftests: bpf: Move bpf_printk to bpf_helpers.h
-  samples: bpf: Do not define bpf_printk macro
+You are using this tracepoint like/instead of trace_xdp_devmap_xmit if
+I understand correctly?  Or maybe the trace_xdp_redirect tracepoint.
 
- samples/bpf/hbm_kern.h                                | 11 ++---------
- samples/bpf/tcp_basertt_kern.c                        |  7 -------
- samples/bpf/tcp_bufs_kern.c                           |  7 -------
- samples/bpf/tcp_clamp_kern.c                          |  7 -------
- samples/bpf/tcp_cong_kern.c                           |  7 -------
- samples/bpf/tcp_iw_kern.c                             |  7 -------
- samples/bpf/tcp_rwnd_kern.c                           |  7 -------
- samples/bpf/tcp_synrto_kern.c                         |  7 -------
- samples/bpf/tcp_tos_reflect_kern.c                    |  7 -------
- samples/bpf/xdp_sample_pkts_kern.c                    |  7 -------
- tools/testing/selftests/bpf/bpf_helpers.h             |  8 ++++++++
- .../testing/selftests/bpf/progs/sockmap_parse_prog.c  |  7 -------
- .../selftests/bpf/progs/sockmap_tcp_msg_prog.c        |  7 -------
- .../selftests/bpf/progs/sockmap_verdict_prog.c        |  7 -------
- .../testing/selftests/bpf/progs/test_lwt_seg6local.c  |  7 -------
- tools/testing/selftests/bpf/progs/test_xdp_noinline.c |  7 -------
- tools/testing/selftests/bpf/test_sockmap_kern.h       |  7 -------
- 17 files changed, 10 insertions(+), 114 deletions(-)
+The point is that is will be good if the tracepoints can share the
+TP_STRUCT layout beginning, as it allows for attaching and reusing eBPF
+code that is only interested in the top part of the struct.
+
+I would also want to see some identifier, that trace programs can use
+to group and corrolate these events, you do have ifindex, but most
+other XDP tracepoints also have "prog_id".
+
+> +	TP_PROTO(const struct net_device *dev,
+> +		 int sent, int drops, int err),
+> +
+> +	TP_ARGS(dev, sent, drops, err),
+> +
+> +	TP_STRUCT__entry(
+> +		__field(int, ifindex)
+> +		__field(int, drops)
+> +		__field(int, sent)
+> +		__field(int, err)
+> +	),
+
+The xdp_redirect_template have:
+
+	TP_STRUCT__entry(
+		__field(int, prog_id)
+		__field(u32, act)
+		__field(int, ifindex)
+		__field(int, err)
+		__field(int, to_ifindex)
+		__field(u32, map_id)
+		__field(int, map_index)
+	),
+
+And e.g. TRACE_EVENT xdp_exception have:
+
+	TP_STRUCT__entry(
+		__field(int, prog_id)
+		__field(u32, act)
+		__field(int, ifindex)
+	),
+
+
+> +
+> +	TP_fast_assign(
+> +		__entry->ifindex	= dev->ifindex;
+> +		__entry->drops		= drops;
+> +		__entry->sent		= sent;
+> +		__entry->err		= err;
+> +	),
+> +
+> +	TP_printk("ifindex=%d sent=%d drops=%d err=%d",
+> +		  __entry->ifindex, __entry->sent, __entry->drops, __entry->err)
+> +);
+> +
+>  DECLARE_EVENT_CLASS(xdp_redirect_template,
+>  
+>  	TP_PROTO(const struct net_device *dev,
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 242a643..7687488 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -2108,3 +2108,4 @@ int __weak skb_copy_bits(const struct sk_buff *skb, int offset, void *to,
+>  #include <linux/bpf_trace.h>
+>  
+>  EXPORT_TRACEPOINT_SYMBOL_GPL(xdp_exception);
+> +EXPORT_TRACEPOINT_SYMBOL_GPL(xdp_bulk_tx);
+
+
 
 -- 
-2.21.0
-
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
