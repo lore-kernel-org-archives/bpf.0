@@ -2,131 +2,258 @@ Return-Path: <SRS0=Im41=TX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FC91C282DD
-	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 12:18:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3556EC282DD
+	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 12:53:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1869920879
-	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 12:18:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C4FD21019
+	for <bpf@archiver.kernel.org>; Thu, 23 May 2019 12:53:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729762AbfEWMS3 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 23 May 2019 08:18:29 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:40996 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729430AbfEWMS3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 May 2019 08:18:29 -0400
-Received: by mail-ed1-f67.google.com with SMTP id m4so8920968edd.8
-        for <bpf@vger.kernel.org>; Thu, 23 May 2019 05:18:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=rxZARgzyKwvZhDguBljxBhZmaZ0ydLiz2MNhp2FjDYk=;
-        b=lRamFdofYe9Olxh4t/cUM9j7ZEAmSRKl/MnEwsg9+3g285CbvK7fe9x0HAy9m6GJZS
-         9v/SUFaf5krgthYd94fQLr2yyOn6tBLOO6Q0+yr6KZvH7sBjRHhy5PspJpFEdcMfhq2R
-         FcsPVLXFTrnVemx8eteYM11jVWm7TPE3kR78I2hV3P6c8OfwCjQDUwXqoEeMpr+1jb0p
-         VSO/JPHQJrnMTSFz2kogYujiqboBJMTY7Bn/Ry4RtbI4QttHvdi/a4eV+R2z95saeZVh
-         ZPep0VH4s+3bhaeYq+3pscsKZut3kKzC9xbn3JdwPFGHG+XATyFcIGabqggFq3XFW56C
-         ba+Q==
-X-Gm-Message-State: APjAAAW2iE45Nxmn65cH9U4JXQNJwOSYkzmdliZoVYcV3XfuDDt0154S
-        bIrEJq4MsYjMF7pxJSl4opExoQ==
-X-Google-Smtp-Source: APXvYqyTF7KNLpdOMrkV3L1clEepiBJZdg9h5zWlcFGTYRVw+Kx24+mH8rqcRJqJdNDp7dLPB9GMIQ==
-X-Received: by 2002:a50:ab1d:: with SMTP id s29mr97141900edc.56.1558613907938;
-        Thu, 23 May 2019 05:18:27 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
-        by smtp.gmail.com with ESMTPSA id s23sm1127982edb.12.2019.05.23.05.18.27
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 23 May 2019 05:18:27 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 7E4671800B1; Thu, 23 May 2019 14:18:25 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Toshiaki Makita <makita.toshiaki@lab.ntt.co.jp>,
+        id S1730323AbfEWMxC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 May 2019 08:53:02 -0400
+Received: from mx2.suse.de ([195.135.220.15]:39542 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730756AbfEWMxC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 May 2019 08:53:02 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 9C379AFA1;
+        Thu, 23 May 2019 12:52:59 +0000 (UTC)
+From:   Michal Rostecki <mrostecki@opensuse.org>
+Cc:     Michal Rostecki <mrostecki@opensuse.org>,
+        Shuah Khan <shuah@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <jakub.kicinski@netronome.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     netdev@vger.kernel.org, xdp-newbies@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next 3/3] veth: Support bulk XDP_TX
-In-Reply-To: <599302b2-96d2-b571-01ee-f4914acaf765@lab.ntt.co.jp>
-References: <1558609008-2590-1-git-send-email-makita.toshiaki@lab.ntt.co.jp> <1558609008-2590-4-git-send-email-makita.toshiaki@lab.ntt.co.jp> <87zhnd1kg9.fsf@toke.dk> <599302b2-96d2-b571-01ee-f4914acaf765@lab.ntt.co.jp>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Thu, 23 May 2019 14:18:25 +0200
-Message-ID: <87sgt51i0e.fsf@toke.dk>
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+        netdev@vger.kernel.org (open list:BPF (Safe dynamic programs and tools)),
+        bpf@vger.kernel.org (open list:BPF (Safe dynamic programs and tools)),
+        linux-kernel@vger.kernel.org (open list),
+        xdp-newbies@vger.kernel.org (open list:XDP (eXpress Data Path))
+Subject: [PATCH bpf-next v2 RESEND 2/2] samples: bpf: Do not define bpf_printk macro
+Date:   Thu, 23 May 2019 14:53:55 +0200
+Message-Id: <20190523125355.18437-3-mrostecki@opensuse.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190523125355.18437-1-mrostecki@opensuse.org>
+References: <20190523125355.18437-1-mrostecki@opensuse.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Toshiaki Makita <makita.toshiaki@lab.ntt.co.jp> writes:
+The bpf_printk macro was moved to bpf_helpers.h which is included in all
+example programs.
 
-> On 2019/05/23 20:25, Toke Høiland-Jørgensen wrote:
->> Toshiaki Makita <makita.toshiaki@lab.ntt.co.jp> writes:
->> 
->>> This improves XDP_TX performance by about 8%.
->>>
->>> Here are single core XDP_TX test results. CPU consumptions are taken
->>> from "perf report --no-child".
->>>
->>> - Before:
->>>
->>>   7.26 Mpps
->>>
->>>   _raw_spin_lock  7.83%
->>>   veth_xdp_xmit  12.23%
->>>
->>> - After:
->>>
->>>   7.84 Mpps
->>>
->>>   _raw_spin_lock  1.17%
->>>   veth_xdp_xmit   6.45%
->>>
->>> Signed-off-by: Toshiaki Makita <makita.toshiaki@lab.ntt.co.jp>
->>> ---
->>>  drivers/net/veth.c | 26 +++++++++++++++++++++++++-
->>>  1 file changed, 25 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
->>> index 52110e5..4edc75f 100644
->>> --- a/drivers/net/veth.c
->>> +++ b/drivers/net/veth.c
->>> @@ -442,6 +442,23 @@ static int veth_xdp_xmit(struct net_device *dev, int n,
->>>  	return ret;
->>>  }
->>>  
->>> +static void veth_xdp_flush_bq(struct net_device *dev)
->>> +{
->>> +	struct xdp_tx_bulk_queue *bq = this_cpu_ptr(&xdp_tx_bq);
->>> +	int sent, i, err = 0;
->>> +
->>> +	sent = veth_xdp_xmit(dev, bq->count, bq->q, 0);
->> 
->> Wait, veth_xdp_xmit() is just putting frames on a pointer ring. So
->> you're introducing an additional per-cpu bulk queue, only to avoid lock
->> contention around the existing pointer ring. But the pointer ring is
->> per-rq, so if you have lock contention, this means you must have
->> multiple CPUs servicing the same rq, no?
->
-> Yes, it's possible. Not recommended though.
->
->> So why not just fix that instead?
->
-> The queues are shared with packets from stack sent from peer. That's
-> because I needed the lock. I have tried to separate the queues, one for
-> redirect and one for stack, but receiver side got too complicated and it
-> ended up with worse performance.
+Signed-off-by: Michal Rostecki <mrostecki@opensuse.org>
+---
+ samples/bpf/hbm_kern.h             | 11 ++---------
+ samples/bpf/tcp_basertt_kern.c     |  7 -------
+ samples/bpf/tcp_bufs_kern.c        |  7 -------
+ samples/bpf/tcp_clamp_kern.c       |  7 -------
+ samples/bpf/tcp_cong_kern.c        |  7 -------
+ samples/bpf/tcp_iw_kern.c          |  7 -------
+ samples/bpf/tcp_rwnd_kern.c        |  7 -------
+ samples/bpf/tcp_synrto_kern.c      |  7 -------
+ samples/bpf/tcp_tos_reflect_kern.c |  7 -------
+ samples/bpf/xdp_sample_pkts_kern.c |  7 -------
+ 10 files changed, 2 insertions(+), 72 deletions(-)
 
-I meant fix it with configuration. Now many receive queues are you
-running on the veth device in your benchmarks, and how have you
-configured the RPS?
+diff --git a/samples/bpf/hbm_kern.h b/samples/bpf/hbm_kern.h
+index c5635d924193..41384be233b9 100644
+--- a/samples/bpf/hbm_kern.h
++++ b/samples/bpf/hbm_kern.h
+@@ -30,15 +30,8 @@
+ #define ALLOW_PKT	1
+ #define TCP_ECN_OK	1
+ 
+-#define HBM_DEBUG 0  // Set to 1 to enable debugging
+-#if HBM_DEBUG
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	char ____fmt[] = fmt;					\
+-	bpf_trace_printk(____fmt, sizeof(____fmt),		\
+-			 ##__VA_ARGS__);			\
+-})
+-#else
++#ifndef HBM_DEBUG  // Define HBM_DEBUG to enable debugging
++#undef bpf_printk
+ #define bpf_printk(fmt, ...)
+ #endif
+ 
+diff --git a/samples/bpf/tcp_basertt_kern.c b/samples/bpf/tcp_basertt_kern.c
+index 6ef1625e8b2c..9dba48c2b920 100644
+--- a/samples/bpf/tcp_basertt_kern.c
++++ b/samples/bpf/tcp_basertt_kern.c
+@@ -21,13 +21,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_basertt(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/tcp_bufs_kern.c b/samples/bpf/tcp_bufs_kern.c
+index e03e204739fa..af8486f33771 100644
+--- a/samples/bpf/tcp_bufs_kern.c
++++ b/samples/bpf/tcp_bufs_kern.c
+@@ -22,13 +22,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_bufs(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/tcp_clamp_kern.c b/samples/bpf/tcp_clamp_kern.c
+index a0dc2d254aca..26c0fd091f3c 100644
+--- a/samples/bpf/tcp_clamp_kern.c
++++ b/samples/bpf/tcp_clamp_kern.c
+@@ -22,13 +22,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_clamp(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/tcp_cong_kern.c b/samples/bpf/tcp_cong_kern.c
+index 4fd3ca979a06..6d4dc4c7dd1e 100644
+--- a/samples/bpf/tcp_cong_kern.c
++++ b/samples/bpf/tcp_cong_kern.c
+@@ -21,13 +21,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_cong(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/tcp_iw_kern.c b/samples/bpf/tcp_iw_kern.c
+index 9b139ec69560..da61d53378b3 100644
+--- a/samples/bpf/tcp_iw_kern.c
++++ b/samples/bpf/tcp_iw_kern.c
+@@ -22,13 +22,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_iw(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/tcp_rwnd_kern.c b/samples/bpf/tcp_rwnd_kern.c
+index cc71ee96e044..d011e38b80d2 100644
+--- a/samples/bpf/tcp_rwnd_kern.c
++++ b/samples/bpf/tcp_rwnd_kern.c
+@@ -21,13 +21,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_rwnd(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/tcp_synrto_kern.c b/samples/bpf/tcp_synrto_kern.c
+index ca87ed34f896..720d1950322d 100644
+--- a/samples/bpf/tcp_synrto_kern.c
++++ b/samples/bpf/tcp_synrto_kern.c
+@@ -21,13 +21,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_synrto(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/tcp_tos_reflect_kern.c b/samples/bpf/tcp_tos_reflect_kern.c
+index de788be6f862..369faca70a15 100644
+--- a/samples/bpf/tcp_tos_reflect_kern.c
++++ b/samples/bpf/tcp_tos_reflect_kern.c
+@@ -20,13 +20,6 @@
+ 
+ #define DEBUG 1
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ SEC("sockops")
+ int bpf_basertt(struct bpf_sock_ops *skops)
+ {
+diff --git a/samples/bpf/xdp_sample_pkts_kern.c b/samples/bpf/xdp_sample_pkts_kern.c
+index f7ca8b850978..6c7c7e0aaeda 100644
+--- a/samples/bpf/xdp_sample_pkts_kern.c
++++ b/samples/bpf/xdp_sample_pkts_kern.c
+@@ -7,13 +7,6 @@
+ #define SAMPLE_SIZE 64ul
+ #define MAX_CPUS 128
+ 
+-#define bpf_printk(fmt, ...)					\
+-({								\
+-	       char ____fmt[] = fmt;				\
+-	       bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				##__VA_ARGS__);			\
+-})
+-
+ struct bpf_map_def SEC("maps") my_map = {
+ 	.type = BPF_MAP_TYPE_PERF_EVENT_ARRAY,
+ 	.key_size = sizeof(int),
+-- 
+2.21.0
 
--Toke
