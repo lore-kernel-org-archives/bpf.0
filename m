@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3A64C282E3
-	for <bpf@archiver.kernel.org>; Fri, 24 May 2019 18:59:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C715C282E1
+	for <bpf@archiver.kernel.org>; Fri, 24 May 2019 18:59:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A368C21851
+	by mail.kernel.org (Postfix) with ESMTP id D926621848
 	for <bpf@archiver.kernel.org>; Fri, 24 May 2019 18:59:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="OpB2867k"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="EtRgzQ1h"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403992AbfEXS7b (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 24 May 2019 14:59:31 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:48920 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2403938AbfEXS73 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 24 May 2019 14:59:29 -0400
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4OIwHs3007455
-        for <bpf@vger.kernel.org>; Fri, 24 May 2019 11:59:29 -0700
+        id S2404122AbfEXS7q (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 24 May 2019 14:59:46 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:37880 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2404026AbfEXS7h (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 24 May 2019 14:59:37 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4OIvS5l003588
+        for <bpf@vger.kernel.org>; Fri, 24 May 2019 11:59:35 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=nwRY6bB2KmFJNhIVVdEQ+lk3y+vmqoe0Io5USgS79nc=;
- b=OpB2867kwN/BuN/2j4+af5kHHAjHBPhWXl88Qw0uaA38bQ0uPoVMFJRwUwxYODPhPA0h
- Uhb6zAGn9+n2sDq0qPT8DlvgarIr0STpkGI4j9FJUTdgD3W78wgkqH6v3N6m00KfQGL7
- gmZlDU76zF/+F62klUaHkWo+oVJ/xJGj3yI= 
+ content-type; s=facebook; bh=8GLJIPXxTpLKr0PkMeecKUuUYeUhiyoUQ0QfDgUYVQk=;
+ b=EtRgzQ1hQdZya1E0b18ZF1itjLBHW2DVHVLo2fuihuQDJbr0XgD8HnBb/o7P4XoC2Z6f
+ AJJLxCMacrKquFfiX7YYuREGkEe2a1xZzAWXyZEjeGSYrLblpWywqfKXjcrxNh0YmGGM
+ 2nYTIFcejONp4obXsg+KRiVEtPPfmUS86Tc= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2spepuspd9-1
+        by mx0a-00082601.pphosted.com with ESMTP id 2spk3u8rt6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 24 May 2019 11:59:29 -0700
+        for <bpf@vger.kernel.org>; Fri, 24 May 2019 11:59:35 -0700
 Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 24 May 2019 11:59:27 -0700
+ 15.1.1713.5; Fri, 24 May 2019 11:59:34 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 705078613DC; Fri, 24 May 2019 11:59:25 -0700 (PDT)
+        id E77B98613DC; Fri, 24 May 2019 11:59:31 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,9 +48,9 @@ To:     <andrii.nakryiko@gmail.com>, <ast@fb.com>, <daniel@iogearbox.net>,
         <kernel-team@fb.com>
 CC:     Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v3 bpf-next 07/12] libbpf: switch btf_dedup() to hashmap for dedup table
-Date:   Fri, 24 May 2019 11:59:02 -0700
-Message-ID: <20190524185908.3562231-8-andriin@fb.com>
+Subject: [PATCH v3 bpf-next 10/12] bpftool: add C output format option to btf dump subcommand
+Date:   Fri, 24 May 2019 11:59:05 -0700
+Message-ID: <20190524185908.3562231-11-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190524185908.3562231-1-andriin@fb.com>
 References: <20190524185908.3562231-1-andriin@fb.com>
@@ -70,474 +70,129 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Utilize libbpf's hashmap as a multimap fof dedup_table implementation.
+Utilize new libbpf's btf_dump API to emit BTF as a C definitions.
 
+Acked-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/btf.c | 201 +++++++++++++++++++-------------------------
- 1 file changed, 85 insertions(+), 116 deletions(-)
+ tools/bpf/bpftool/btf.c | 75 +++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 73 insertions(+), 2 deletions(-)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 6139550810a1..b2478e98c367 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -14,6 +14,7 @@
- #include "bpf.h"
- #include "libbpf.h"
- #include "libbpf_internal.h"
-+#include "hashmap.h"
- 
- #define max(a, b) ((a) > (b) ? (a) : (b))
- #define min(a, b) ((a) < (b) ? (a) : (b))
-@@ -1293,16 +1294,9 @@ int btf__dedup(struct btf *btf, struct btf_ext *btf_ext,
- 	return err;
- }
- 
--#define BTF_DEDUP_TABLE_DEFAULT_SIZE (1 << 14)
--#define BTF_DEDUP_TABLE_MAX_SIZE_LOG 31
- #define BTF_UNPROCESSED_ID ((__u32)-1)
- #define BTF_IN_PROGRESS_ID ((__u32)-2)
- 
--struct btf_dedup_node {
--	struct btf_dedup_node *next;
--	__u32 type_id;
--};
--
- struct btf_dedup {
- 	/* .BTF section to be deduped in-place */
- 	struct btf *btf;
-@@ -1318,7 +1312,7 @@ struct btf_dedup {
- 	 * candidates, which is fine because we rely on subsequent
- 	 * btf_xxx_equal() checks to authoritatively verify type equality.
- 	 */
--	struct btf_dedup_node **dedup_table;
-+	struct hashmap *dedup_table;
- 	/* Canonical types map */
- 	__u32 *map;
- 	/* Hypothetical mapping, used during type graph equivalence checks */
-@@ -1343,30 +1337,18 @@ struct btf_str_ptrs {
- 	__u32 cap;
- };
- 
--static inline __u32 hash_combine(__u32 h, __u32 value)
-+static long hash_combine(long h, long value)
- {
--/* 2^31 + 2^29 - 2^25 + 2^22 - 2^19 - 2^16 + 1 */
--#define GOLDEN_RATIO_PRIME 0x9e370001UL
--	return h * 37 + value * GOLDEN_RATIO_PRIME;
--#undef GOLDEN_RATIO_PRIME
-+	return h * 31 + value;
- }
- 
--#define for_each_dedup_cand(d, hash, node) \
--	for (node = d->dedup_table[hash & (d->opts.dedup_table_size - 1)]; \
--	     node;							   \
--	     node = node->next)
-+#define for_each_dedup_cand(d, node, hash) \
-+	hashmap__for_each_key_entry(d->dedup_table, node, (void *)hash)
- 
--static int btf_dedup_table_add(struct btf_dedup *d, __u32 hash, __u32 type_id)
-+static int btf_dedup_table_add(struct btf_dedup *d, long hash, __u32 type_id)
- {
--	struct btf_dedup_node *node = malloc(sizeof(struct btf_dedup_node));
--	int bucket = hash & (d->opts.dedup_table_size - 1);
--
--	if (!node)
--		return -ENOMEM;
--	node->type_id = type_id;
--	node->next = d->dedup_table[bucket];
--	d->dedup_table[bucket] = node;
--	return 0;
-+	return hashmap__append(d->dedup_table,
-+			       (void *)hash, (void *)(long)type_id);
- }
- 
- static int btf_dedup_hypot_map_add(struct btf_dedup *d,
-@@ -1395,36 +1377,10 @@ static void btf_dedup_clear_hypot_map(struct btf_dedup *d)
- 	d->hypot_cnt = 0;
- }
- 
--static void btf_dedup_table_free(struct btf_dedup *d)
--{
--	struct btf_dedup_node *head, *tmp;
--	int i;
--
--	if (!d->dedup_table)
--		return;
--
--	for (i = 0; i < d->opts.dedup_table_size; i++) {
--		while (d->dedup_table[i]) {
--			tmp = d->dedup_table[i];
--			d->dedup_table[i] = tmp->next;
--			free(tmp);
--		}
--
--		head = d->dedup_table[i];
--		while (head) {
--			tmp = head;
--			head = head->next;
--			free(tmp);
--		}
--	}
--
--	free(d->dedup_table);
--	d->dedup_table = NULL;
--}
--
- static void btf_dedup_free(struct btf_dedup *d)
- {
--	btf_dedup_table_free(d);
-+	hashmap__free(d->dedup_table);
-+	d->dedup_table = NULL;
- 
- 	free(d->map);
- 	d->map = NULL;
-@@ -1438,40 +1394,43 @@ static void btf_dedup_free(struct btf_dedup *d)
- 	free(d);
- }
- 
--/* Find closest power of two >= to size, capped at 2^max_size_log */
--static __u32 roundup_pow2_max(__u32 size, int max_size_log)
-+static size_t btf_dedup_identity_hash_fn(const void *key, void *ctx)
- {
--	int i;
-+	return (size_t)key;
-+}
- 
--	for (i = 0; i < max_size_log  && (1U << i) < size;  i++)
--		;
--	return 1U << i;
-+static size_t btf_dedup_collision_hash_fn(const void *key, void *ctx)
-+{
-+	return 0;
- }
- 
-+static bool btf_dedup_equal_fn(const void *k1, const void *k2, void *ctx)
-+{
-+	return k1 == k2;
-+}
- 
- static struct btf_dedup *btf_dedup_new(struct btf *btf, struct btf_ext *btf_ext,
- 				       const struct btf_dedup_opts *opts)
- {
- 	struct btf_dedup *d = calloc(1, sizeof(struct btf_dedup));
-+	hashmap_hash_fn hash_fn = btf_dedup_identity_hash_fn;
- 	int i, err = 0;
--	__u32 sz;
- 
- 	if (!d)
- 		return ERR_PTR(-ENOMEM);
- 
- 	d->opts.dont_resolve_fwds = opts && opts->dont_resolve_fwds;
--	sz = opts && opts->dedup_table_size ? opts->dedup_table_size
--					    : BTF_DEDUP_TABLE_DEFAULT_SIZE;
--	sz = roundup_pow2_max(sz, BTF_DEDUP_TABLE_MAX_SIZE_LOG);
--	d->opts.dedup_table_size = sz;
-+	/* dedup_table_size is now used only to force collisions in tests */
-+	if (opts && opts->dedup_table_size == 1)
-+		hash_fn = btf_dedup_collision_hash_fn;
- 
- 	d->btf = btf;
- 	d->btf_ext = btf_ext;
- 
--	d->dedup_table = calloc(d->opts.dedup_table_size,
--				sizeof(struct btf_dedup_node *));
--	if (!d->dedup_table) {
--		err = -ENOMEM;
-+	d->dedup_table = hashmap__new(hash_fn, btf_dedup_equal_fn, NULL);
-+	if (IS_ERR(d->dedup_table)) {
-+		err = PTR_ERR(d->dedup_table);
-+		d->dedup_table = NULL;
- 		goto done;
- 	}
- 
-@@ -1790,9 +1749,9 @@ static int btf_dedup_strings(struct btf_dedup *d)
- 	return err;
- }
- 
--static __u32 btf_hash_common(struct btf_type *t)
-+static long btf_hash_common(struct btf_type *t)
- {
--	__u32 h;
-+	long h;
- 
- 	h = hash_combine(0, t->name_off);
- 	h = hash_combine(h, t->info);
-@@ -1808,10 +1767,10 @@ static bool btf_equal_common(struct btf_type *t1, struct btf_type *t2)
- }
- 
- /* Calculate type signature hash of INT. */
--static __u32 btf_hash_int(struct btf_type *t)
-+static long btf_hash_int(struct btf_type *t)
- {
- 	__u32 info = *(__u32 *)(t + 1);
--	__u32 h;
-+	long h;
- 
- 	h = btf_hash_common(t);
- 	h = hash_combine(h, info);
-@@ -1831,9 +1790,9 @@ static bool btf_equal_int(struct btf_type *t1, struct btf_type *t2)
- }
- 
- /* Calculate type signature hash of ENUM. */
--static __u32 btf_hash_enum(struct btf_type *t)
-+static long btf_hash_enum(struct btf_type *t)
- {
--	__u32 h;
-+	long h;
- 
- 	/* don't hash vlen and enum members to support enum fwd resolving */
- 	h = hash_combine(0, t->name_off);
-@@ -1885,11 +1844,11 @@ static bool btf_compat_enum(struct btf_type *t1, struct btf_type *t2)
-  * as referenced type IDs equivalence is established separately during type
-  * graph equivalence check algorithm.
-  */
--static __u32 btf_hash_struct(struct btf_type *t)
-+static long btf_hash_struct(struct btf_type *t)
- {
- 	struct btf_member *member = (struct btf_member *)(t + 1);
- 	__u32 vlen = BTF_INFO_VLEN(t->info);
--	__u32 h = btf_hash_common(t);
-+	long h = btf_hash_common(t);
- 	int i;
- 
- 	for (i = 0; i < vlen; i++) {
-@@ -1932,10 +1891,10 @@ static bool btf_shallow_equal_struct(struct btf_type *t1, struct btf_type *t2)
-  * under assumption that they were already resolved to canonical type IDs and
-  * are not going to change.
-  */
--static __u32 btf_hash_array(struct btf_type *t)
-+static long btf_hash_array(struct btf_type *t)
- {
- 	struct btf_array *info = (struct btf_array *)(t + 1);
--	__u32 h = btf_hash_common(t);
-+	long h = btf_hash_common(t);
- 
- 	h = hash_combine(h, info->type);
- 	h = hash_combine(h, info->index_type);
-@@ -1986,11 +1945,11 @@ static bool btf_compat_array(struct btf_type *t1, struct btf_type *t2)
-  * under assumption that they were already resolved to canonical type IDs and
-  * are not going to change.
-  */
--static inline __u32 btf_hash_fnproto(struct btf_type *t)
-+static long btf_hash_fnproto(struct btf_type *t)
- {
- 	struct btf_param *member = (struct btf_param *)(t + 1);
- 	__u16 vlen = BTF_INFO_VLEN(t->info);
--	__u32 h = btf_hash_common(t);
-+	long h = btf_hash_common(t);
- 	int i;
- 
- 	for (i = 0; i < vlen; i++) {
-@@ -2008,7 +1967,7 @@ static inline __u32 btf_hash_fnproto(struct btf_type *t)
-  * This function is called during reference types deduplication to compare
-  * FUNC_PROTO to potential canonical representative.
-  */
--static inline bool btf_equal_fnproto(struct btf_type *t1, struct btf_type *t2)
-+static bool btf_equal_fnproto(struct btf_type *t1, struct btf_type *t2)
- {
- 	struct btf_param *m1, *m2;
- 	__u16 vlen;
-@@ -2034,7 +1993,7 @@ static inline bool btf_equal_fnproto(struct btf_type *t1, struct btf_type *t2)
-  * IDs. This check is performed during type graph equivalence check and
-  * referenced types equivalence is checked separately.
-  */
--static inline bool btf_compat_fnproto(struct btf_type *t1, struct btf_type *t2)
-+static bool btf_compat_fnproto(struct btf_type *t1, struct btf_type *t2)
- {
- 	struct btf_param *m1, *m2;
- 	__u16 vlen;
-@@ -2065,11 +2024,12 @@ static inline bool btf_compat_fnproto(struct btf_type *t1, struct btf_type *t2)
- static int btf_dedup_prim_type(struct btf_dedup *d, __u32 type_id)
- {
- 	struct btf_type *t = d->btf->types[type_id];
-+	struct hashmap_entry *hash_entry;
- 	struct btf_type *cand;
--	struct btf_dedup_node *cand_node;
- 	/* if we don't find equivalent type, then we are canonical */
- 	__u32 new_id = type_id;
--	__u32 h;
-+	__u32 cand_id;
-+	long h;
- 
- 	switch (BTF_INFO_KIND(t->info)) {
- 	case BTF_KIND_CONST:
-@@ -2088,10 +2048,11 @@ static int btf_dedup_prim_type(struct btf_dedup *d, __u32 type_id)
- 
- 	case BTF_KIND_INT:
- 		h = btf_hash_int(t);
--		for_each_dedup_cand(d, h, cand_node) {
--			cand = d->btf->types[cand_node->type_id];
-+		for_each_dedup_cand(d, hash_entry, h) {
-+			cand_id = (__u32)(long)hash_entry->value;
-+			cand = d->btf->types[cand_id];
- 			if (btf_equal_int(t, cand)) {
--				new_id = cand_node->type_id;
-+				new_id = cand_id;
- 				break;
- 			}
- 		}
-@@ -2099,10 +2060,11 @@ static int btf_dedup_prim_type(struct btf_dedup *d, __u32 type_id)
- 
- 	case BTF_KIND_ENUM:
- 		h = btf_hash_enum(t);
--		for_each_dedup_cand(d, h, cand_node) {
--			cand = d->btf->types[cand_node->type_id];
-+		for_each_dedup_cand(d, hash_entry, h) {
-+			cand_id = (__u32)(long)hash_entry->value;
-+			cand = d->btf->types[cand_id];
- 			if (btf_equal_enum(t, cand)) {
--				new_id = cand_node->type_id;
-+				new_id = cand_id;
- 				break;
- 			}
- 			if (d->opts.dont_resolve_fwds)
-@@ -2110,21 +2072,22 @@ static int btf_dedup_prim_type(struct btf_dedup *d, __u32 type_id)
- 			if (btf_compat_enum(t, cand)) {
- 				if (btf_is_enum_fwd(t)) {
- 					/* resolve fwd to full enum */
--					new_id = cand_node->type_id;
-+					new_id = cand_id;
- 					break;
- 				}
- 				/* resolve canonical enum fwd to full enum */
--				d->map[cand_node->type_id] = type_id;
-+				d->map[cand_id] = type_id;
- 			}
- 		}
- 		break;
- 
- 	case BTF_KIND_FWD:
- 		h = btf_hash_common(t);
--		for_each_dedup_cand(d, h, cand_node) {
--			cand = d->btf->types[cand_node->type_id];
-+		for_each_dedup_cand(d, hash_entry, h) {
-+			cand_id = (__u32)(long)hash_entry->value;
-+			cand = d->btf->types[cand_id];
- 			if (btf_equal_common(t, cand)) {
--				new_id = cand_node->type_id;
-+				new_id = cand_id;
- 				break;
- 			}
- 		}
-@@ -2525,12 +2488,12 @@ static void btf_dedup_merge_hypot_map(struct btf_dedup *d)
-  */
- static int btf_dedup_struct_type(struct btf_dedup *d, __u32 type_id)
- {
--	struct btf_dedup_node *cand_node;
- 	struct btf_type *cand_type, *t;
-+	struct hashmap_entry *hash_entry;
- 	/* if we don't find equivalent type, then we are canonical */
- 	__u32 new_id = type_id;
- 	__u16 kind;
--	__u32 h;
-+	long h;
- 
- 	/* already deduped or is in process of deduping (loop detected) */
- 	if (d->map[type_id] <= BTF_MAX_NR_TYPES)
-@@ -2543,7 +2506,8 @@ static int btf_dedup_struct_type(struct btf_dedup *d, __u32 type_id)
- 		return 0;
- 
- 	h = btf_hash_struct(t);
--	for_each_dedup_cand(d, h, cand_node) {
-+	for_each_dedup_cand(d, hash_entry, h) {
-+		__u32 cand_id = (__u32)(long)hash_entry->value;
- 		int eq;
- 
- 		/*
-@@ -2556,17 +2520,17 @@ static int btf_dedup_struct_type(struct btf_dedup *d, __u32 type_id)
- 		 * creating a loop (FWD -> STRUCT and STRUCT -> FWD), because
- 		 * FWD and compatible STRUCT/UNION are considered equivalent.
- 		 */
--		cand_type = d->btf->types[cand_node->type_id];
-+		cand_type = d->btf->types[cand_id];
- 		if (!btf_shallow_equal_struct(t, cand_type))
- 			continue;
- 
- 		btf_dedup_clear_hypot_map(d);
--		eq = btf_dedup_is_equiv(d, type_id, cand_node->type_id);
-+		eq = btf_dedup_is_equiv(d, type_id, cand_id);
- 		if (eq < 0)
- 			return eq;
- 		if (!eq)
- 			continue;
--		new_id = cand_node->type_id;
-+		new_id = cand_id;
- 		btf_dedup_merge_hypot_map(d);
- 		break;
- 	}
-@@ -2616,12 +2580,12 @@ static int btf_dedup_struct_types(struct btf_dedup *d)
-  */
- static int btf_dedup_ref_type(struct btf_dedup *d, __u32 type_id)
- {
--	struct btf_dedup_node *cand_node;
-+	struct hashmap_entry *hash_entry;
-+	__u32 new_id = type_id, cand_id;
- 	struct btf_type *t, *cand;
- 	/* if we don't find equivalent type, then we are representative type */
--	__u32 new_id = type_id;
- 	int ref_type_id;
--	__u32 h;
-+	long h;
- 
- 	if (d->map[type_id] == BTF_IN_PROGRESS_ID)
- 		return -ELOOP;
-@@ -2644,10 +2608,11 @@ static int btf_dedup_ref_type(struct btf_dedup *d, __u32 type_id)
- 		t->type = ref_type_id;
- 
- 		h = btf_hash_common(t);
--		for_each_dedup_cand(d, h, cand_node) {
--			cand = d->btf->types[cand_node->type_id];
-+		for_each_dedup_cand(d, hash_entry, h) {
-+			cand_id = (__u32)(long)hash_entry->value;
-+			cand = d->btf->types[cand_id];
- 			if (btf_equal_common(t, cand)) {
--				new_id = cand_node->type_id;
-+				new_id = cand_id;
- 				break;
- 			}
- 		}
-@@ -2667,10 +2632,11 @@ static int btf_dedup_ref_type(struct btf_dedup *d, __u32 type_id)
- 		info->index_type = ref_type_id;
- 
- 		h = btf_hash_array(t);
--		for_each_dedup_cand(d, h, cand_node) {
--			cand = d->btf->types[cand_node->type_id];
-+		for_each_dedup_cand(d, hash_entry, h) {
-+			cand_id = (__u32)(long)hash_entry->value;
-+			cand = d->btf->types[cand_id];
- 			if (btf_equal_array(t, cand)) {
--				new_id = cand_node->type_id;
-+				new_id = cand_id;
- 				break;
- 			}
- 		}
-@@ -2698,10 +2664,11 @@ static int btf_dedup_ref_type(struct btf_dedup *d, __u32 type_id)
- 		}
- 
- 		h = btf_hash_fnproto(t);
--		for_each_dedup_cand(d, h, cand_node) {
--			cand = d->btf->types[cand_node->type_id];
-+		for_each_dedup_cand(d, hash_entry, h) {
-+			cand_id = (__u32)(long)hash_entry->value;
-+			cand = d->btf->types[cand_id];
- 			if (btf_equal_fnproto(t, cand)) {
--				new_id = cand_node->type_id;
-+				new_id = cand_id;
- 				break;
- 			}
- 		}
-@@ -2728,7 +2695,9 @@ static int btf_dedup_ref_types(struct btf_dedup *d)
- 		if (err < 0)
- 			return err;
- 	}
--	btf_dedup_table_free(d);
-+	/* we won't need d->dedup_table anymore */
-+	hashmap__free(d->dedup_table);
-+	d->dedup_table = NULL;
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index a22ef6587ebe..1b8ec91899e6 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -340,11 +340,49 @@ static int dump_btf_raw(const struct btf *btf,
  	return 0;
  }
  
++static void __printf(2, 0) btf_dump_printf(void *ctx,
++					   const char *fmt, va_list args)
++{
++	vfprintf(stdout, fmt, args);
++}
++
++static int dump_btf_c(const struct btf *btf,
++		      __u32 *root_type_ids, int root_type_cnt)
++{
++	struct btf_dump *d;
++	int err = 0, i;
++
++	d = btf_dump__new(btf, NULL, NULL, btf_dump_printf);
++	if (IS_ERR(d))
++		return PTR_ERR(d);
++
++	if (root_type_cnt) {
++		for (i = 0; i < root_type_cnt; i++) {
++			err = btf_dump__dump_type(d, root_type_ids[i]);
++			if (err)
++				goto done;
++		}
++	} else {
++		int cnt = btf__get_nr_types(btf);
++
++		for (i = 1; i <= cnt; i++) {
++			err = btf_dump__dump_type(d, i);
++			if (err)
++				goto done;
++		}
++	}
++
++done:
++	btf_dump__free(d);
++	return err;
++}
++
+ static int do_dump(int argc, char **argv)
+ {
+ 	struct btf *btf = NULL;
+ 	__u32 root_type_ids[2];
+ 	int root_type_cnt = 0;
++	bool dump_c = false;
+ 	__u32 btf_id = -1;
+ 	const char *src;
+ 	int fd = -1;
+@@ -431,6 +469,29 @@ static int do_dump(int argc, char **argv)
+ 		goto done;
+ 	}
+ 
++	while (argc) {
++		if (is_prefix(*argv, "format")) {
++			NEXT_ARG();
++			if (argc < 1) {
++				p_err("expecting value for 'format' option\n");
++				goto done;
++			}
++			if (strcmp(*argv, "c") == 0) {
++				dump_c = true;
++			} else if (strcmp(*argv, "raw") == 0) {
++				dump_c = false;
++			} else {
++				p_err("unrecognized format specifier: '%s', possible values: raw, c",
++				      *argv);
++				goto done;
++			}
++			NEXT_ARG();
++		} else {
++			p_err("unrecognized option: '%s'", *argv);
++			goto done;
++		}
++	}
++
+ 	if (!btf) {
+ 		err = btf__get_from_id(btf_id, &btf);
+ 		if (err) {
+@@ -444,7 +505,16 @@ static int do_dump(int argc, char **argv)
+ 		}
+ 	}
+ 
+-	dump_btf_raw(btf, root_type_ids, root_type_cnt);
++	if (dump_c) {
++		if (json_output) {
++			p_err("JSON output for C-syntax dump is not supported");
++			err = -ENOTSUP;
++			goto done;
++		}
++		err = dump_btf_c(btf, root_type_ids, root_type_cnt);
++	} else {
++		err = dump_btf_raw(btf, root_type_ids, root_type_cnt);
++	}
+ 
+ done:
+ 	close(fd);
+@@ -460,10 +530,11 @@ static int do_help(int argc, char **argv)
+ 	}
+ 
+ 	fprintf(stderr,
+-		"Usage: %s btf dump BTF_SRC\n"
++		"Usage: %s btf dump BTF_SRC [format FORMAT]\n"
+ 		"       %s btf help\n"
+ 		"\n"
+ 		"       BTF_SRC := { id BTF_ID | prog PROG | map MAP [{key | value | kv | all}] | file FILE }\n"
++		"       FORMAT  := { raw | c }\n"
+ 		"       " HELP_SPEC_MAP "\n"
+ 		"       " HELP_SPEC_PROGRAM "\n"
+ 		"       " HELP_SPEC_OPTIONS "\n"
 -- 
 2.17.1
 
