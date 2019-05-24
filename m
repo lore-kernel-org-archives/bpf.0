@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F5BAC46460
-	for <bpf@archiver.kernel.org>; Fri, 24 May 2019 11:36:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24644C46470
+	for <bpf@archiver.kernel.org>; Fri, 24 May 2019 11:36:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 07E2A217F9
-	for <bpf@archiver.kernel.org>; Fri, 24 May 2019 11:36:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F1022217F9
+	for <bpf@archiver.kernel.org>; Fri, 24 May 2019 11:36:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="OAHmQE5S"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="t1TgPjC3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391188AbfEXLgN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 24 May 2019 07:36:13 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:36207 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391093AbfEXLgA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 24 May 2019 07:36:00 -0400
-Received: by mail-wm1-f66.google.com with SMTP id v22so1621099wml.1
-        for <bpf@vger.kernel.org>; Fri, 24 May 2019 04:35:58 -0700 (PDT)
+        id S2391143AbfEXLf5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 24 May 2019 07:35:57 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:38180 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391124AbfEXLf4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 24 May 2019 07:35:56 -0400
+Received: by mail-wm1-f67.google.com with SMTP id t5so8866034wmh.3
+        for <bpf@vger.kernel.org>; Fri, 24 May 2019 04:35:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=yGy9vVwcf47uOzfAeIIrqS3ZrrEp99x8AnIzVOxK0w0=;
-        b=OAHmQE5SHhE1cQucJNnokbRlXC5BxlgbV3AtHlJ1Z5ETywK0jYIFTeRcSpxc1a/cIn
-         RAFRr72YzAg2x2c1gIz5xEIGioPDpXxhB78Em6SONXVtaWU57ApzKiECrj7lSujfsRfk
-         Bf2Ep2EBKHVL0tw7PkguEzhHMrQVLOQXpzNmqQhVQ8cFOKLU42Ifm0wuwJfzLZLvGTuk
-         MgR/z9UHCHg8HFHL5WKTWbCbQqM7gXcPyyPqVg0XpgTuYbYJShWDE45CICf6HFaMRFJo
-         PuGV502FN5q6RmdSS/yPe9u5cX2pOB3qbcJsvJPNhgZjpiZddTpLCMfq2KXmnzT1/O26
-         1YOA==
+        bh=1ltC0XV47uD9Ss4Mv4UBpU2RzQzY2ir2n8PLOTN4Pg4=;
+        b=t1TgPjC3VDUhBc1Ma0/Yt+K+ysU7yqa805qYamXVQSO2/Ggh9TFc53No+P9QiC/wP2
+         w1pXHuvKAJw3KtyGwy+nvZQlOEgRMHQXr5vjq3aUh5XLTqlUhXRVbY4SyAVL+Vx+QjNb
+         usAfI8fhXcqsdu35V1nps1ycI6X4kOY/FMapqX6M0x23DkbKBmXhs/wD2nGtuM0sB4LL
+         kYdaPEnHTxSGdQgTd2o+BATRqEy7wq5fSwDmb9fsPGwV1GK6oQN8/poBpkg89KbUpSoO
+         Yf3++wbD/36jA2ES8XD3YZw6xp9SKRBq8yHZ6+Ut/HQBLJSoH1AY0oXtneJuYR5iJUOj
+         g/sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=yGy9vVwcf47uOzfAeIIrqS3ZrrEp99x8AnIzVOxK0w0=;
-        b=UK//McD9q6IseC4Aa6qI0kIxEwfOEw5fdaAcmr75qQ6+/+tN7P5pg4EizC5tgQftw8
-         UzDPFuww1elyinPBwye/JeKDVteVza12rr30P8QV8TcwIRBcr4Uzv3cJlW0rQIOfQxAe
-         CEK4ulCjtI+Dj1gKtTJ6Uxk2HriHQVJrzClB+f3bz5pa3MlHinf6i7dc/hCuZx6BG1zi
-         8n6amOEsPJCHRWhsPTBFfrK5U2wxFPrPvLRQ5bAIl+CsBFbIAU1YEifK2WA9ztWhufwP
-         r5toeT7CQZ1Qry2GiWtKhZHcYtOzL/rDQP3j+H01Y3MWwBEhOkgISHB3ZV792Fb52Z/n
-         mFWw==
-X-Gm-Message-State: APjAAAWWtKx1Tlh48vUAtssAWjhXlldtjxL4NRj3Wy5uzbSE4wIRJ9wS
-        JctTk1Fo3eAnGXIuOPynnKysSg==
-X-Google-Smtp-Source: APXvYqzG+qo381sXubWcj9KqRqmQlAnhexn2lLM/MN8IKEwSFx1IWSQr9l9dfyN6OaQ11sYiakNsVw==
-X-Received: by 2002:a1c:a684:: with SMTP id p126mr15771846wme.101.1558697757816;
-        Fri, 24 May 2019 04:35:57 -0700 (PDT)
+        bh=1ltC0XV47uD9Ss4Mv4UBpU2RzQzY2ir2n8PLOTN4Pg4=;
+        b=HJTdIndQjLKyURWDwMTQFDXEztzXd3luo03vKS//kHuNFLQ4Z0kD3s4sDW7x5X99rW
+         +APtXgo6AnXKWhMrj9Hvf+XHEQu7UGkyU975yUwN8i713oKVkiqBJG/Wk4wsOfWIZ2pf
+         zTTAgvCQKK7tu0eC6vjHL0Rr1CzDXKxOGN7L0IvvuypfA24bG+UKKSl7vk3ida0ed1by
+         IY9GG29Vd06YeaKIS8EBNE0bkWyto26SmWcHYvcttLVRatm/HRAToM79i8AJAx4l5ht2
+         b3WxmjTxpjxA+DrpuwgI1cRp1IghuYh5AEPNro8bYzxVVw7dVWI8r5gpEexjHiArnuZ9
+         niyw==
+X-Gm-Message-State: APjAAAVFWatAfe4N4zol+djjU2M4FBctgguDboBtK/A4XmrTZy1/uaQx
+        nG9kZffweG4SS9JvoBMvcLGMBw==
+X-Google-Smtp-Source: APXvYqy2pqXk1y+0mda/71ruhME633JfzwLg/H4SmqlitWD37csQVtzzLNzC1Kd9GQlLcVd+doQ9pQ==
+X-Received: by 2002:a1c:4045:: with SMTP id n66mr15703769wma.142.1558697754433;
+        Fri, 24 May 2019 04:35:54 -0700 (PDT)
 Received: from cbtest28.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id x22sm2462902wmi.4.2019.05.24.04.35.56
+        by smtp.gmail.com with ESMTPSA id x22sm2462902wmi.4.2019.05.24.04.35.53
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 24 May 2019 04:35:57 -0700 (PDT)
+        Fri, 24 May 2019 04:35:53 -0700 (PDT)
 From:   Jiong Wang <jiong.wang@netronome.com>
 To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
@@ -62,9 +62,9 @@ Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         sandipan@linux.ibm.com, schwidefsky@de.ibm.com,
         heiko.carstens@de.ibm.com, jakub.kicinski@netronome.com,
         Jiong Wang <jiong.wang@netronome.com>
-Subject: [PATCH v8 bpf-next 10/16] arm: bpf: eliminate zero extension code-gen
-Date:   Fri, 24 May 2019 12:35:20 +0100
-Message-Id: <1558697726-4058-11-git-send-email-jiong.wang@netronome.com>
+Subject: [PATCH v8 bpf-next 07/16] libbpf: add "prog_flags" to bpf_program/bpf_prog_load_attr/bpf_load_program_attr
+Date:   Fri, 24 May 2019 12:35:17 +0100
+Message-Id: <1558697726-4058-8-git-send-email-jiong.wang@netronome.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1558697726-4058-1-git-send-email-jiong.wang@netronome.com>
 References: <1558697726-4058-1-git-send-email-jiong.wang@netronome.com>
@@ -73,132 +73,86 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Cc: Shubham Bansal <illusionist.neo@gmail.com>
+libbpf doesn't allow passing "prog_flags" during bpf program load in a
+couple of load related APIs, "bpf_load_program_xattr", "load_program" and
+"bpf_prog_load_xattr".
+
+It makes sense to allow passing "prog_flags" which is useful for
+customizing program loading.
+
+Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
 ---
- arch/arm/net/bpf_jit_32.c | 42 +++++++++++++++++++++++++++++++-----------
- 1 file changed, 31 insertions(+), 11 deletions(-)
+ tools/lib/bpf/bpf.c    | 1 +
+ tools/lib/bpf/bpf.h    | 1 +
+ tools/lib/bpf/libbpf.c | 3 +++
+ tools/lib/bpf/libbpf.h | 1 +
+ 4 files changed, 6 insertions(+)
 
-diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
-index c8bfbbf..97a6b4b 100644
---- a/arch/arm/net/bpf_jit_32.c
-+++ b/arch/arm/net/bpf_jit_32.c
-@@ -736,7 +736,8 @@ static inline void emit_a32_alu_r64(const bool is64, const s8 dst[],
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index c4a4808..0d4b4fe 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -256,6 +256,7 @@ int bpf_load_program_xattr(const struct bpf_load_program_attr *load_attr,
+ 	if (load_attr->name)
+ 		memcpy(attr.prog_name, load_attr->name,
+ 		       min(strlen(load_attr->name), BPF_OBJ_NAME_LEN - 1));
++	attr.prog_flags = load_attr->prog_flags;
  
- 		/* ALU operation */
- 		emit_alu_r(rd[1], rs, true, false, op, ctx);
--		emit_a32_mov_i(rd[0], 0, ctx);
-+		if (!ctx->prog->aux->verifier_zext)
-+			emit_a32_mov_i(rd[0], 0, ctx);
+ 	fd = sys_bpf_prog_load(&attr, sizeof(attr));
+ 	if (fd >= 0)
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 9593fec..ff42ca0 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -87,6 +87,7 @@ struct bpf_load_program_attr {
+ 	const void *line_info;
+ 	__u32 line_info_cnt;
+ 	__u32 log_level;
++	__u32 prog_flags;
+ };
+ 
+ /* Flags to direct loading requirements */
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 197b574..ff14937 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -188,6 +188,7 @@ struct bpf_program {
+ 	void *line_info;
+ 	__u32 line_info_rec_size;
+ 	__u32 line_info_cnt;
++	__u32 prog_flags;
+ };
+ 
+ enum libbpf_map_type {
+@@ -2076,6 +2077,7 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+ 	load_attr.line_info_rec_size = prog->line_info_rec_size;
+ 	load_attr.line_info_cnt = prog->line_info_cnt;
+ 	load_attr.log_level = prog->log_level;
++	load_attr.prog_flags = prog->prog_flags;
+ 	if (!load_attr.insns || !load_attr.insns_cnt)
+ 		return -EINVAL;
+ 
+@@ -3521,6 +3523,7 @@ int bpf_prog_load_xattr(const struct bpf_prog_load_attr *attr,
+ 						      expected_attach_type);
+ 
+ 		prog->log_level = attr->log_level;
++		prog->prog_flags = attr->prog_flags;
+ 		if (!first_prog)
+ 			first_prog = prog;
  	}
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index c5ff005..5abc237 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -320,6 +320,7 @@ struct bpf_prog_load_attr {
+ 	enum bpf_attach_type expected_attach_type;
+ 	int ifindex;
+ 	int log_level;
++	int prog_flags;
+ };
  
- 	arm_bpf_put_reg64(dst, rd, ctx);
-@@ -758,8 +759,9 @@ static inline void emit_a32_mov_r64(const bool is64, const s8 dst[],
- 				  struct jit_ctx *ctx) {
- 	if (!is64) {
- 		emit_a32_mov_r(dst_lo, src_lo, ctx);
--		/* Zero out high 4 bytes */
--		emit_a32_mov_i(dst_hi, 0, ctx);
-+		if (!ctx->prog->aux->verifier_zext)
-+			/* Zero out high 4 bytes */
-+			emit_a32_mov_i(dst_hi, 0, ctx);
- 	} else if (__LINUX_ARM_ARCH__ < 6 &&
- 		   ctx->cpu_architecture < CPU_ARCH_ARMv5TE) {
- 		/* complete 8 byte move */
-@@ -1060,17 +1062,20 @@ static inline void emit_ldx_r(const s8 dst[], const s8 src,
- 	case BPF_B:
- 		/* Load a Byte */
- 		emit(ARM_LDRB_I(rd[1], rm, off), ctx);
--		emit_a32_mov_i(rd[0], 0, ctx);
-+		if (!ctx->prog->aux->verifier_zext)
-+			emit_a32_mov_i(rd[0], 0, ctx);
- 		break;
- 	case BPF_H:
- 		/* Load a HalfWord */
- 		emit(ARM_LDRH_I(rd[1], rm, off), ctx);
--		emit_a32_mov_i(rd[0], 0, ctx);
-+		if (!ctx->prog->aux->verifier_zext)
-+			emit_a32_mov_i(rd[0], 0, ctx);
- 		break;
- 	case BPF_W:
- 		/* Load a Word */
- 		emit(ARM_LDR_I(rd[1], rm, off), ctx);
--		emit_a32_mov_i(rd[0], 0, ctx);
-+		if (!ctx->prog->aux->verifier_zext)
-+			emit_a32_mov_i(rd[0], 0, ctx);
- 		break;
- 	case BPF_DW:
- 		/* Load a Double Word */
-@@ -1359,6 +1364,11 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 	case BPF_ALU64 | BPF_MOV | BPF_X:
- 		switch (BPF_SRC(code)) {
- 		case BPF_X:
-+			if (imm == 1) {
-+				/* Special mov32 for zext */
-+				emit_a32_mov_i(dst_hi, 0, ctx);
-+				break;
-+			}
- 			emit_a32_mov_r64(is64, dst, src, ctx);
- 			break;
- 		case BPF_K:
-@@ -1438,7 +1448,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 		}
- 		emit_udivmod(rd_lo, rd_lo, rt, ctx, BPF_OP(code));
- 		arm_bpf_put_reg32(dst_lo, rd_lo, ctx);
--		emit_a32_mov_i(dst_hi, 0, ctx);
-+		if (!ctx->prog->aux->verifier_zext)
-+			emit_a32_mov_i(dst_hi, 0, ctx);
- 		break;
- 	case BPF_ALU64 | BPF_DIV | BPF_K:
- 	case BPF_ALU64 | BPF_DIV | BPF_X:
-@@ -1453,7 +1464,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 			return -EINVAL;
- 		if (imm)
- 			emit_a32_alu_i(dst_lo, imm, ctx, BPF_OP(code));
--		emit_a32_mov_i(dst_hi, 0, ctx);
-+		if (!ctx->prog->aux->verifier_zext)
-+			emit_a32_mov_i(dst_hi, 0, ctx);
- 		break;
- 	/* dst = dst << imm */
- 	case BPF_ALU64 | BPF_LSH | BPF_K:
-@@ -1488,7 +1500,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 	/* dst = ~dst */
- 	case BPF_ALU | BPF_NEG:
- 		emit_a32_alu_i(dst_lo, 0, ctx, BPF_OP(code));
--		emit_a32_mov_i(dst_hi, 0, ctx);
-+		if (!ctx->prog->aux->verifier_zext)
-+			emit_a32_mov_i(dst_hi, 0, ctx);
- 		break;
- 	/* dst = ~dst (64 bit) */
- 	case BPF_ALU64 | BPF_NEG:
-@@ -1544,11 +1557,13 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- #else /* ARMv6+ */
- 			emit(ARM_UXTH(rd[1], rd[1]), ctx);
- #endif
--			emit(ARM_EOR_R(rd[0], rd[0], rd[0]), ctx);
-+			if (!ctx->prog->aux->verifier_zext)
-+				emit(ARM_EOR_R(rd[0], rd[0], rd[0]), ctx);
- 			break;
- 		case 32:
- 			/* zero-extend 32 bits into 64 bits */
--			emit(ARM_EOR_R(rd[0], rd[0], rd[0]), ctx);
-+			if (!ctx->prog->aux->verifier_zext)
-+				emit(ARM_EOR_R(rd[0], rd[0], rd[0]), ctx);
- 			break;
- 		case 64:
- 			/* nop */
-@@ -1838,6 +1853,11 @@ void bpf_jit_compile(struct bpf_prog *prog)
- 	/* Nothing to do here. We support Internal BPF. */
- }
- 
-+bool bpf_jit_needs_zext(void)
-+{
-+	return true;
-+}
-+
- struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- {
- 	struct bpf_prog *tmp, *orig_prog = prog;
+ LIBBPF_API int bpf_prog_load_xattr(const struct bpf_prog_load_attr *attr,
 -- 
 2.7.4
 
