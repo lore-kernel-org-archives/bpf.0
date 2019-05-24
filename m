@@ -2,199 +2,164 @@ Return-Path: <SRS0=P0Qj=TY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD202C072B5
-	for <bpf@archiver.kernel.org>; Fri, 24 May 2019 11:22:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54F2BC282E3
+	for <bpf@archiver.kernel.org>; Fri, 24 May 2019 11:35:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9A2002075B
-	for <bpf@archiver.kernel.org>; Fri, 24 May 2019 11:22:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2D61D21841
+	for <bpf@archiver.kernel.org>; Fri, 24 May 2019 11:35:51 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="VwEgRji+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390944AbfEXLWX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 24 May 2019 07:22:23 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:45020 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390772AbfEXLWX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 24 May 2019 07:22:23 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 7CD8181112;
-        Fri, 24 May 2019 11:22:22 +0000 (UTC)
-Received: from carbon (ovpn-200-45.brq.redhat.com [10.40.200.45])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6F702691B1;
-        Fri, 24 May 2019 11:22:17 +0000 (UTC)
-Date:   Fri, 24 May 2019 13:22:15 +0200
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Quentin Monnet <quentin.monnet@netronome.com>
-Cc:     brouer@redhat.com, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, oss-drivers@netronome.com,
-        Yonghong Song <yhs@fb.com>, Andrii Nakryiko <andriin@fb.com>
-Subject: Re: [PATCH bpf-next v3 2/3] libbpf: add bpf_object__load_xattr()
- API function to pass log_level
-Message-ID: <20190524132215.4113ff08@carbon>
-In-Reply-To: <20190524103648.15669-3-quentin.monnet@netronome.com>
-References: <20190524103648.15669-1-quentin.monnet@netronome.com>
-        <20190524103648.15669-3-quentin.monnet@netronome.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.28]); Fri, 24 May 2019 11:22:22 +0000 (UTC)
+        id S2390772AbfEXLfu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 24 May 2019 07:35:50 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:45104 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390803AbfEXLft (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 24 May 2019 07:35:49 -0400
+Received: by mail-wr1-f65.google.com with SMTP id b18so9631317wrq.12
+        for <bpf@vger.kernel.org>; Fri, 24 May 2019 04:35:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=I1hfffn436msqgFGWpQyLY1Lerd3i6WTxQeF86oeiLU=;
+        b=VwEgRji++bwkwsgoKKVWySK/r8Ga8cwWLFoy/y1YGFlOt+v+sZeZGEvlBwldVAi7PO
+         HSzHu3PyP+mrQbWBqkp22zMxW4nvH+Ojk9wUfIz3ZZ62U8yCLN/Hq42Usgc+vlWa7TQj
+         w3WjzCMxUMqYYer+15tSXV1oCj5SOHEVyaUTSF6jowVBgg5UBSl1PLTSnfb9p30wWjgI
+         /usXVCKztc9lDdr0oJsw+u00kLkHakdirUgm3Ghoh410KUtuigRgKWH+KRkJcOGptqBp
+         l/Bf3vxbxKKhhRbWuFImDEP5lXeY4/tsM2C0mCH9D99oH75JQczhh1oNIo6xIl4TwWBH
+         8+oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=I1hfffn436msqgFGWpQyLY1Lerd3i6WTxQeF86oeiLU=;
+        b=tcRiKA69LSZObBRit1nTpKWTCMf6VBL4DW3g3/n0nG7GsOwfIt6k3lnWkFD1rGkcFM
+         r42haha6EWLmFwbmvXIABF+5sWYxiHLlo7XXGd2KaWKhMQjC7T7GzzNOv5pMJWCaCi2r
+         qw/Q++RcIE4QbpejhA9LZjfzmVJBBVp0NRPxMrK+lBSjFD0/ZjT9vJHOeRTXs6AnZLSY
+         c6UCrf/S7EBHoI9s3ZkgFoDzQ/cQ9aJN5K36htE6bwH2/EoqCRe5b1YYwipOyK8y/lAK
+         IEcHJn+vbGOxuzX1cdsXFt15zfN10C9qHUnWms4rIGbe+JujHESRiQjBrWh0+l2UsXYZ
+         zlRQ==
+X-Gm-Message-State: APjAAAXtU/QUcwDnSDBdTPyhwYGGJmiWpQoo12y9nhe3FnnCJFfUzx1j
+        xydTko+/E8EoKHa3tSD6EXHc6Q==
+X-Google-Smtp-Source: APXvYqy2o1UiEiwaDSneG2lZT33mzwmP+LiIlr8X37j1az0foA6dp23Zl8gdGb0ADsfpWfaTHiLJnQ==
+X-Received: by 2002:a5d:6406:: with SMTP id z6mr19983088wru.87.1558697748136;
+        Fri, 24 May 2019 04:35:48 -0700 (PDT)
+Received: from cbtest28.netronome.com ([217.38.71.146])
+        by smtp.gmail.com with ESMTPSA id x22sm2462902wmi.4.2019.05.24.04.35.46
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Fri, 24 May 2019 04:35:47 -0700 (PDT)
+From:   Jiong Wang <jiong.wang@netronome.com>
+To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        oss-drivers@netronome.com, davem@davemloft.net,
+        paul.burton@mips.com, udknight@gmail.com, zlim.lnx@gmail.com,
+        illusionist.neo@gmail.com, naveen.n.rao@linux.ibm.com,
+        sandipan@linux.ibm.com, schwidefsky@de.ibm.com,
+        heiko.carstens@de.ibm.com, jakub.kicinski@netronome.com,
+        Jiong Wang <jiong.wang@netronome.com>
+Subject: [PATCH v8 bpf-next 02/16] bpf: verifier: mark patched-insn with sub-register zext flag
+Date:   Fri, 24 May 2019 12:35:12 +0100
+Message-Id: <1558697726-4058-3-git-send-email-jiong.wang@netronome.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1558697726-4058-1-git-send-email-jiong.wang@netronome.com>
+References: <1558697726-4058-1-git-send-email-jiong.wang@netronome.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 24 May 2019 11:36:47 +0100
-Quentin Monnet <quentin.monnet@netronome.com> wrote:
+Patched insns do not go through generic verification, therefore doesn't has
+zero extension information collected during insn walking.
 
-> libbpf was recently made aware of the log_level attribute for programs,
-> used to specify the level of information expected to be dumped by the
-> verifier. Function bpf_prog_load_xattr() got support for this log_level
-> parameter.
-> 
-> But some applications using libbpf rely on another function to load
-> programs, bpf_object__load(), which does accept any parameter for log
-> level. Create an API function based on bpf_object__load(), but accepting
-> an "attr" object as a parameter. Then add a log_level field to that
-> object, so that applications calling the new bpf_object__load_xattr()
-> can pick the desired log level.
+We don't bother analyze them at the moment, for any sub-register def comes
+from them, just conservatively mark it as needing zero extension.
 
-Does this allow us to extend struct bpf_object_load_attr later?
+Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
+---
+ kernel/bpf/verifier.c | 37 +++++++++++++++++++++++++++++++++----
+ 1 file changed, 33 insertions(+), 4 deletions(-)
 
-> v3:
-> - Rewrite commit log.
-> 
-> v2:
-> - We are in a new cycle, bump libbpf extraversion number.
-> 
-> Signed-off-by: Quentin Monnet <quentin.monnet@netronome.com>
-> Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
-> ---
->  tools/lib/bpf/Makefile   |  2 +-
->  tools/lib/bpf/libbpf.c   | 20 +++++++++++++++++---
->  tools/lib/bpf/libbpf.h   |  6 ++++++
->  tools/lib/bpf/libbpf.map |  5 +++++
->  4 files changed, 29 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-> index a2aceadf68db..9312066a1ae3 100644
-> --- a/tools/lib/bpf/Makefile
-> +++ b/tools/lib/bpf/Makefile
-> @@ -3,7 +3,7 @@
->  
->  BPF_VERSION = 0
->  BPF_PATCHLEVEL = 0
-> -BPF_EXTRAVERSION = 3
-> +BPF_EXTRAVERSION = 4
->  
->  MAKEFLAGS += --no-print-directory
->  
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 197b574406b3..1c6fb7a3201e 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -2222,7 +2222,7 @@ static bool bpf_program__is_function_storage(struct bpf_program *prog,
->  }
->  
->  static int
-> -bpf_object__load_progs(struct bpf_object *obj)
-> +bpf_object__load_progs(struct bpf_object *obj, int log_level)
->  {
->  	size_t i;
->  	int err;
-> @@ -2230,6 +2230,7 @@ bpf_object__load_progs(struct bpf_object *obj)
->  	for (i = 0; i < obj->nr_programs; i++) {
->  		if (bpf_program__is_function_storage(&obj->programs[i], obj))
->  			continue;
-> +		obj->programs[i].log_level = log_level;
->  		err = bpf_program__load(&obj->programs[i],
->  					obj->license,
->  					obj->kern_version);
-> @@ -2381,10 +2382,14 @@ int bpf_object__unload(struct bpf_object *obj)
->  	return 0;
->  }
->  
-> -int bpf_object__load(struct bpf_object *obj)
-> +int bpf_object__load_xattr(struct bpf_object_load_attr *attr)
->  {
-> +	struct bpf_object *obj;
->  	int err;
->  
-> +	if (!attr)
-> +		return -EINVAL;
-> +	obj = attr->obj;
->  	if (!obj)
->  		return -EINVAL;
->  
-> @@ -2397,7 +2402,7 @@ int bpf_object__load(struct bpf_object *obj)
->  
->  	CHECK_ERR(bpf_object__create_maps(obj), err, out);
->  	CHECK_ERR(bpf_object__relocate(obj), err, out);
-> -	CHECK_ERR(bpf_object__load_progs(obj), err, out);
-> +	CHECK_ERR(bpf_object__load_progs(obj, attr->log_level), err, out);
->  
->  	return 0;
->  out:
-> @@ -2406,6 +2411,15 @@ int bpf_object__load(struct bpf_object *obj)
->  	return err;
->  }
->  
-> +int bpf_object__load(struct bpf_object *obj)
-> +{
-> +	struct bpf_object_load_attr attr = {
-> +		.obj = obj,
-> +	};
-> +
-> +	return bpf_object__load_xattr(&attr);
-> +}
-> +
->  static int check_path(const char *path)
->  {
->  	char *cp, errmsg[STRERR_BUFSIZE];
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index c5ff00515ce7..e1c748db44f6 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
-> @@ -89,8 +89,14 @@ LIBBPF_API int bpf_object__unpin_programs(struct bpf_object *obj,
->  LIBBPF_API int bpf_object__pin(struct bpf_object *object, const char *path);
->  LIBBPF_API void bpf_object__close(struct bpf_object *object);
->  
-> +struct bpf_object_load_attr {
-> +	struct bpf_object *obj;
-> +	int log_level;
-> +};
-
-Can this be extended later?
-
->  /* Load/unload object into/from kernel */
->  LIBBPF_API int bpf_object__load(struct bpf_object *obj);
-> +LIBBPF_API int bpf_object__load_xattr(struct bpf_object_load_attr *attr);
->  LIBBPF_API int bpf_object__unload(struct bpf_object *obj);
->  LIBBPF_API const char *bpf_object__name(struct bpf_object *obj);
->  LIBBPF_API unsigned int bpf_object__kversion(struct bpf_object *obj);
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index 673001787cba..6ce61fa0baf3 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -164,3 +164,8 @@ LIBBPF_0.0.3 {
->  		bpf_map_freeze;
->  		btf__finalize_data;
->  } LIBBPF_0.0.2;
-> +
-> +LIBBPF_0.0.4 {
-> +	global:
-> +		bpf_object__load_xattr;
-> +} LIBBPF_0.0.3;
-
-
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index f6b4c71..a6af316 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1269,6 +1269,24 @@ static bool is_reg64(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	return true;
+ }
+ 
++/* Return TRUE if INSN doesn't have explicit value define. */
++static bool insn_no_def(struct bpf_insn *insn)
++{
++	u8 class = BPF_CLASS(insn->code);
++
++	return (class == BPF_JMP || class == BPF_JMP32 ||
++		class == BPF_STX || class == BPF_ST);
++}
++
++/* Return TRUE if INSN has defined any 32-bit value explicitly. */
++static bool insn_has_def32(struct bpf_verifier_env *env, struct bpf_insn *insn)
++{
++	if (insn_no_def(insn))
++		return false;
++
++	return !is_reg64(env, insn, insn->dst_reg, NULL, DST_OP);
++}
++
+ static void mark_insn_zext(struct bpf_verifier_env *env,
+ 			   struct bpf_reg_state *reg)
+ {
+@@ -7298,14 +7316,23 @@ static void convert_pseudo_ld_imm64(struct bpf_verifier_env *env)
+  * insni[off, off + cnt).  Adjust corresponding insn_aux_data by copying
+  * [0, off) and [off, end) to new locations, so the patched range stays zero
+  */
+-static int adjust_insn_aux_data(struct bpf_verifier_env *env, u32 prog_len,
+-				u32 off, u32 cnt)
++static int adjust_insn_aux_data(struct bpf_verifier_env *env,
++				struct bpf_prog *new_prog, u32 off, u32 cnt)
+ {
+ 	struct bpf_insn_aux_data *new_data, *old_data = env->insn_aux_data;
++	struct bpf_insn *insn = new_prog->insnsi;
++	u32 prog_len;
+ 	int i;
+ 
++	/* aux info at OFF always needs adjustment, no matter fast path
++	 * (cnt == 1) is taken or not. There is no guarantee INSN at OFF is the
++	 * original insn at old prog.
++	 */
++	old_data[off].zext_dst = insn_has_def32(env, insn + off + cnt - 1);
++
+ 	if (cnt == 1)
+ 		return 0;
++	prog_len = new_prog->len;
+ 	new_data = vzalloc(array_size(prog_len,
+ 				      sizeof(struct bpf_insn_aux_data)));
+ 	if (!new_data)
+@@ -7313,8 +7340,10 @@ static int adjust_insn_aux_data(struct bpf_verifier_env *env, u32 prog_len,
+ 	memcpy(new_data, old_data, sizeof(struct bpf_insn_aux_data) * off);
+ 	memcpy(new_data + off + cnt - 1, old_data + off,
+ 	       sizeof(struct bpf_insn_aux_data) * (prog_len - off - cnt + 1));
+-	for (i = off; i < off + cnt - 1; i++)
++	for (i = off; i < off + cnt - 1; i++) {
+ 		new_data[i].seen = true;
++		new_data[i].zext_dst = insn_has_def32(env, insn + i);
++	}
+ 	env->insn_aux_data = new_data;
+ 	vfree(old_data);
+ 	return 0;
+@@ -7347,7 +7376,7 @@ static struct bpf_prog *bpf_patch_insn_data(struct bpf_verifier_env *env, u32 of
+ 				env->insn_aux_data[off].orig_idx);
+ 		return NULL;
+ 	}
+-	if (adjust_insn_aux_data(env, new_prog->len, off, len))
++	if (adjust_insn_aux_data(env, new_prog, off, len))
+ 		return NULL;
+ 	adjust_subprog_starts(env, off, len);
+ 	return new_prog;
 -- 
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
+2.7.4
+
