@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60618C072B5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BB67C46460
 	for <bpf@archiver.kernel.org>; Fri, 24 May 2019 11:36:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 38A3D217F9
+	by mail.kernel.org (Postfix) with ESMTP id 646632184B
 	for <bpf@archiver.kernel.org>; Fri, 24 May 2019 11:36:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="xUK4MnJj"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="UZ1Ng0cB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391157AbfEXLgQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 24 May 2019 07:36:16 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:40231 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391106AbfEXLf5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 24 May 2019 07:35:57 -0400
-Received: by mail-wr1-f66.google.com with SMTP id t4so1387236wrx.7
-        for <bpf@vger.kernel.org>; Fri, 24 May 2019 04:35:56 -0700 (PDT)
+        id S2391118AbfEXLfy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 24 May 2019 07:35:54 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:54451 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391112AbfEXLfy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 24 May 2019 07:35:54 -0400
+Received: by mail-wm1-f68.google.com with SMTP id i3so9009740wml.4
+        for <bpf@vger.kernel.org>; Fri, 24 May 2019 04:35:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=xTwwuxPV3uUT4NunKLFggl50SO6uXgijXKYOVj0eUcM=;
-        b=xUK4MnJjpnHyswF/dFXcC+ZzCjc6obPTzxM+zzz6IzwWHA8cW5IU65CczY11hzMMIS
-         CXCEM/5sj5ICdP6knwcSANe0IZE5gkgklHB3XvxGKj4MC+w8d2tyDCD8pbWC476oYENQ
-         gR/NNrrNXjUsrgVwVvciaAdBz7P0W8jTX/vMtd9NU1S7a0OzJXFSI8m6oWiWaKisIdfj
-         AWRZUX7Aez8fLeCLgoZ44/P9qYfbZOsCjQzQfyVNtpZmSXlG6si88f4CbMahE/s1KzA+
-         4v33pHpq82cGzaWRlr7SEx7nkLxgrplpEIyy7fxzruqxFDQO2M4pYarexHSkPu94AFW7
-         mKTg==
+        bh=DX8u14woMWB0/T1N/svKd1Gm9eJRtJGFELY8NQbCyRY=;
+        b=UZ1Ng0cB6tRBgt0MkN1f2QmfqIWsvAtoU5hE52bip+XYpMUPLgjEJp2mgh2a3uIUbY
+         rrl6PXLC2MoYi66XS/sk1bRnkte8c5/o6lMLVeyEy3PXuf7VB0IVdle98c5vezLLVuYm
+         gFOlbJzC98vEVR6q0+1p7MkrW3dktIoQ9MXNDVTwxc6RX4w2klw8pHjRzV852O2Ex4L6
+         Q5pVFYQG3+TapaFrQNBhZ2TFazrjdB+lAVobiUAqQs5spppG+ZPrO8tLjQR7Dr+jhHzS
+         wSH3EaK+AdWwG47001ES4NaKFTAm2aZ6yWHVqSxP6Kz/KB5JpbnHTC05C1G6pYndQwdE
+         Qwag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=xTwwuxPV3uUT4NunKLFggl50SO6uXgijXKYOVj0eUcM=;
-        b=ZG8vFj69r1taeO0yXzDuxcaGh5uXFSZtBPirde3C+lKe84zNVrCSUFTc2Xa1vnhnQE
-         iut9GDeno5KgvYU4NFw2lpqKeDR0iu0J2a9TKHAAHlK9ZX006Q67haUaRaqovGWHVov/
-         q4EPT9a9oqjlq8UjKcr+pyLeERePs0zToIL7Dmv6tXs8UaU7FWTVEv95R+kVR9SWjVUR
-         rkYGUf0XT1FykRTUNmibIJnA4GPfpZ2zftNzqmD6teBKPnmNQgVEf6Ft5x+ke2tbh648
-         HGJdqHbbTmP2a6eIMjtIWhujwrRMaCnZDK7lQWF13VUYzLV1L2I2IHvdbx8FdwvMrkzK
-         425g==
-X-Gm-Message-State: APjAAAXpIFbQXf5sRXG6OI4iVsVewsc6V7J1FQCn938OQKzlnRxeDdl9
-        QeUVMCXmTIPZvDoz6wJIJlC0hQ==
-X-Google-Smtp-Source: APXvYqxKm9dGztRAm6hTAXc0xEl/WauBBSajRtDnIqEX+if6/XaFGJxtMxIjYbTxON8gZZj+EEkSYg==
-X-Received: by 2002:a5d:54cc:: with SMTP id x12mr17107082wrv.303.1558697755479;
-        Fri, 24 May 2019 04:35:55 -0700 (PDT)
+        bh=DX8u14woMWB0/T1N/svKd1Gm9eJRtJGFELY8NQbCyRY=;
+        b=haErk6NMYq2RMcqWGl9H8D8TthuwpZleBcolEexSegdFyXq8fqfNF0NB0FX1q1Avkd
+         rHmlmX+fPFqevwKqRGQGSpMsvt/kl7MqDh3DvFmJvgxoSwHxSp4Ne+A38v6Mgi6dwfk4
+         2uMbZZtXqPaMf87ZmFtBKpMhCTDMuuRb/phr0aBGUadaRhxbqIdL2G1D9uHOkp4NiGQL
+         uhEZN2V1+GmYcUeJIUzJ3Hbt6wMxLAwQMhOj1ZHSjtfj+rGuf1B7va71bvkriZu7i3hI
+         WVxBA/tBKFP8BJc1b2zMn8pMzswQRjPnXVXupKaQ45WR9aDrSU1fQbODt2BA18f0+0CK
+         xGpg==
+X-Gm-Message-State: APjAAAU7zW0ng4cemSnK85AehC+DwCnSJIVPzJFFCKuBFliD2vCHhYYc
+        aovyOhd5dybDWjI68DWUVHv70Q==
+X-Google-Smtp-Source: APXvYqx9WP5jwojRzuN71GCyy37AdeKNMFFLQmvHP0V1FQj1rrtvgopL0rffK6o4XmLQi+JfIgAZMQ==
+X-Received: by 2002:a1c:e714:: with SMTP id e20mr15426964wmh.143.1558697752051;
+        Fri, 24 May 2019 04:35:52 -0700 (PDT)
 Received: from cbtest28.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id x22sm2462902wmi.4.2019.05.24.04.35.54
+        by smtp.gmail.com with ESMTPSA id x22sm2462902wmi.4.2019.05.24.04.35.50
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 24 May 2019 04:35:54 -0700 (PDT)
+        Fri, 24 May 2019 04:35:51 -0700 (PDT)
 From:   Jiong Wang <jiong.wang@netronome.com>
 To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
@@ -62,9 +62,9 @@ Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         sandipan@linux.ibm.com, schwidefsky@de.ibm.com,
         heiko.carstens@de.ibm.com, jakub.kicinski@netronome.com,
         Jiong Wang <jiong.wang@netronome.com>
-Subject: [PATCH v8 bpf-next 08/16] selftests: bpf: adjust several test_verifier helpers for insn insertion
-Date:   Fri, 24 May 2019 12:35:18 +0100
-Message-Id: <1558697726-4058-9-git-send-email-jiong.wang@netronome.com>
+Subject: [PATCH v8 bpf-next 05/16] bpf: introduce new bpf prog load flags "BPF_F_TEST_RND_HI32"
+Date:   Fri, 24 May 2019 12:35:15 +0100
+Message-Id: <1558697726-4058-6-git-send-email-jiong.wang@netronome.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1558697726-4058-1-git-send-email-jiong.wang@netronome.com>
 References: <1558697726-4058-1-git-send-email-jiong.wang@netronome.com>
@@ -73,112 +73,101 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-  - bpf_fill_ld_abs_vlan_push_pop:
-    Prevent zext happens inside PUSH_CNT loop. This could happen because
-    of BPF_LD_ABS (32-bit def) + BPF_JMP (64-bit use), or BPF_LD_ABS +
-    EXIT (64-bit use of R0). So, change BPF_JMP to BPF_JMP32 and redefine
-    R0 at exit path to cut off the data-flow from inside the loop.
+x86_64 and AArch64 perhaps are two arches that running bpf testsuite
+frequently, however the zero extension insertion pass is not enabled for
+them because of their hardware support.
 
-  - bpf_fill_jump_around_ld_abs:
-    Jump range is limited to 16 bit. every ld_abs is replaced by 6 insns,
-    but on arches like arm, ppc etc, there will be one BPF_ZEXT inserted
-    to extend the error value of the inlined ld_abs sequence which then
-    contains 7 insns. so, set the dividend to 7 so the testcase could
-    work on all arches.
+It is critical to guarantee the pass correction as it is supposed to be
+enabled at default for a couple of other arches, for example PowerPC,
+SPARC, arm, NFP etc. Therefore, it would be very useful if there is a way
+to test this pass on for example x86_64.
 
-  - bpf_fill_scale1/bpf_fill_scale2:
-    Both contains ~1M BPF_ALU32_IMM which will trigger ~1M insn patcher
-    call because of hi32 randomization later when BPF_F_TEST_RND_HI32 is
-    set for bpf selftests. Insn patcher is not efficient that 1M call to
-    it will hang computer. So , change to BPF_ALU64_IMM to avoid hi32
-    randomization.
+The test methodology employed by this set is "poisoning" useless bits. High
+32-bit of a definition is randomized if it is identified as not used by any
+later insn. Such randomization is only enabled under testing mode which is
+gated by the new bpf prog load flags "BPF_F_TEST_RND_HI32".
 
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
 ---
- tools/testing/selftests/bpf/test_verifier.c | 29 +++++++++++++++++++----------
- 1 file changed, 19 insertions(+), 10 deletions(-)
+ include/uapi/linux/bpf.h       | 18 ++++++++++++++++++
+ kernel/bpf/syscall.c           |  4 +++-
+ tools/include/uapi/linux/bpf.h | 18 ++++++++++++++++++
+ 3 files changed, 39 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index 6e2fec8..fa9b5bf 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -138,32 +138,36 @@ static void bpf_fill_ld_abs_vlan_push_pop(struct bpf_test *self)
- loop:
- 	for (j = 0; j < PUSH_CNT; j++) {
- 		insn[i++] = BPF_LD_ABS(BPF_B, 0);
--		insn[i] = BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0x34, len - i - 2);
-+		/* jump to error label */
-+		insn[i] = BPF_JMP32_IMM(BPF_JNE, BPF_REG_0, 0x34, len - i - 3);
- 		i++;
- 		insn[i++] = BPF_MOV64_REG(BPF_REG_1, BPF_REG_6);
- 		insn[i++] = BPF_MOV64_IMM(BPF_REG_2, 1);
- 		insn[i++] = BPF_MOV64_IMM(BPF_REG_3, 2);
- 		insn[i++] = BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0,
- 					 BPF_FUNC_skb_vlan_push),
--		insn[i] = BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, len - i - 2);
-+		insn[i] = BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, len - i - 3);
- 		i++;
- 	}
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 63e0cf6..daac8df 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -260,6 +260,24 @@ enum bpf_attach_type {
+  */
+ #define BPF_F_ANY_ALIGNMENT	(1U << 1)
  
- 	for (j = 0; j < PUSH_CNT; j++) {
- 		insn[i++] = BPF_LD_ABS(BPF_B, 0);
--		insn[i] = BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0x34, len - i - 2);
-+		insn[i] = BPF_JMP32_IMM(BPF_JNE, BPF_REG_0, 0x34, len - i - 3);
- 		i++;
- 		insn[i++] = BPF_MOV64_REG(BPF_REG_1, BPF_REG_6);
- 		insn[i++] = BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0,
- 					 BPF_FUNC_skb_vlan_pop),
--		insn[i] = BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, len - i - 2);
-+		insn[i] = BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, len - i - 3);
- 		i++;
- 	}
- 	if (++k < 5)
- 		goto loop;
++/* BPF_F_TEST_RND_HI32 is used in BPF_PROG_LOAD command for testing purpose.
++ * Verifier does sub-register def/use analysis and identifies instructions whose
++ * def only matters for low 32-bit, high 32-bit is never referenced later
++ * through implicit zero extension. Therefore verifier notifies JIT back-ends
++ * that it is safe to ignore clearing high 32-bit for these instructions. This
++ * saves some back-ends a lot of code-gen. However such optimization is not
++ * necessary on some arches, for example x86_64, arm64 etc, whose JIT back-ends
++ * hence hasn't used verifier's analysis result. But, we really want to have a
++ * way to be able to verify the correctness of the described optimization on
++ * x86_64 on which testsuites are frequently exercised.
++ *
++ * So, this flag is introduced. Once it is set, verifier will randomize high
++ * 32-bit for those instructions who has been identified as safe to ignore them.
++ * Then, if verifier is not doing correct analysis, such randomization will
++ * regress tests to expose bugs.
++ */
++#define BPF_F_TEST_RND_HI32	(1U << 2)
++
+ /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
+  * two extensions:
+  *
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index cb5440b..3d546b6 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1604,7 +1604,9 @@ static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
+ 	if (CHECK_ATTR(BPF_PROG_LOAD))
+ 		return -EINVAL;
  
--	for (; i < len - 1; i++)
--		insn[i] = BPF_ALU32_IMM(BPF_MOV, BPF_REG_0, 0xbef);
-+	for (; i < len - 3; i++)
-+		insn[i] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 0xbef);
-+	insn[len - 3] = BPF_JMP_A(1);
-+	/* error label */
-+	insn[len - 2] = BPF_MOV32_IMM(BPF_REG_0, 0);
- 	insn[len - 1] = BPF_EXIT_INSN();
- 	self->prog_len = len;
- }
-@@ -171,8 +175,13 @@ static void bpf_fill_ld_abs_vlan_push_pop(struct bpf_test *self)
- static void bpf_fill_jump_around_ld_abs(struct bpf_test *self)
- {
- 	struct bpf_insn *insn = self->fill_insns;
--	/* jump range is limited to 16 bit. every ld_abs is replaced by 6 insns */
--	unsigned int len = (1 << 15) / 6;
-+	/* jump range is limited to 16 bit. every ld_abs is replaced by 6 insns,
-+	 * but on arches like arm, ppc etc, there will be one BPF_ZEXT inserted
-+	 * to extend the error value of the inlined ld_abs sequence which then
-+	 * contains 7 insns. so, set the dividend to 7 so the testcase could
-+	 * work on all arches.
-+	 */
-+	unsigned int len = (1 << 15) / 7;
- 	int i = 0;
+-	if (attr->prog_flags & ~(BPF_F_STRICT_ALIGNMENT | BPF_F_ANY_ALIGNMENT))
++	if (attr->prog_flags & ~(BPF_F_STRICT_ALIGNMENT |
++				 BPF_F_ANY_ALIGNMENT |
++				 BPF_F_TEST_RND_HI32))
+ 		return -EINVAL;
  
- 	insn[i++] = BPF_MOV64_REG(BPF_REG_6, BPF_REG_1);
-@@ -232,7 +241,7 @@ static void bpf_fill_scale1(struct bpf_test *self)
- 	 * within 1m limit add MAX_TEST_INSNS - MAX_JMP_SEQ - 1 MOVs and 1 EXIT
- 	 */
- 	while (i < MAX_TEST_INSNS - MAX_JMP_SEQ - 1)
--		insn[i++] = BPF_ALU32_IMM(BPF_MOV, BPF_REG_0, 42);
-+		insn[i++] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 42);
- 	insn[i] = BPF_EXIT_INSN();
- 	self->prog_len = i + 1;
- 	self->retval = 42;
-@@ -264,7 +273,7 @@ static void bpf_fill_scale2(struct bpf_test *self)
- 	 * within 1m limit add MAX_TEST_INSNS - MAX_JMP_SEQ - 1 MOVs and 1 EXIT
- 	 */
- 	while (i < MAX_TEST_INSNS - MAX_JMP_SEQ - 1)
--		insn[i++] = BPF_ALU32_IMM(BPF_MOV, BPF_REG_0, 42);
-+		insn[i++] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 42);
- 	insn[i] = BPF_EXIT_INSN();
- 	self->prog_len = i + 1;
- 	self->retval = 42;
+ 	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) &&
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 63e0cf6..daac8df 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -260,6 +260,24 @@ enum bpf_attach_type {
+  */
+ #define BPF_F_ANY_ALIGNMENT	(1U << 1)
+ 
++/* BPF_F_TEST_RND_HI32 is used in BPF_PROG_LOAD command for testing purpose.
++ * Verifier does sub-register def/use analysis and identifies instructions whose
++ * def only matters for low 32-bit, high 32-bit is never referenced later
++ * through implicit zero extension. Therefore verifier notifies JIT back-ends
++ * that it is safe to ignore clearing high 32-bit for these instructions. This
++ * saves some back-ends a lot of code-gen. However such optimization is not
++ * necessary on some arches, for example x86_64, arm64 etc, whose JIT back-ends
++ * hence hasn't used verifier's analysis result. But, we really want to have a
++ * way to be able to verify the correctness of the described optimization on
++ * x86_64 on which testsuites are frequently exercised.
++ *
++ * So, this flag is introduced. Once it is set, verifier will randomize high
++ * 32-bit for those instructions who has been identified as safe to ignore them.
++ * Then, if verifier is not doing correct analysis, such randomization will
++ * regress tests to expose bugs.
++ */
++#define BPF_F_TEST_RND_HI32	(1U << 2)
++
+ /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
+  * two extensions:
+  *
 -- 
 2.7.4
 
