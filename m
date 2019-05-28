@@ -2,148 +2,63 @@ Return-Path: <SRS0=4Daw=T4=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C55FC04AB6
-	for <bpf@archiver.kernel.org>; Tue, 28 May 2019 08:57:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30DDCC04AB6
+	for <bpf@archiver.kernel.org>; Tue, 28 May 2019 09:24:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4D62A2075C
-	for <bpf@archiver.kernel.org>; Tue, 28 May 2019 08:57:32 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=codeaurora.org header.i=@codeaurora.org header.b="jWQLv7/y";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=codeaurora.org header.i=@codeaurora.org header.b="oe/dIn+8"
+	by mail.kernel.org (Postfix) with ESMTP id 1156B2075B
+	for <bpf@archiver.kernel.org>; Tue, 28 May 2019 09:24:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726506AbfE1I5b (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 May 2019 04:57:31 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:59818 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726279AbfE1I5b (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 May 2019 04:57:31 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 91DE460769; Tue, 28 May 2019 08:57:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1559033850;
-        bh=TgsQrhlAr8+HGUCtRPh+X0roiBK76Jmwa9FHWZ3CYwk=;
-        h=From:To:Subject:Date:From;
-        b=jWQLv7/yIfMOCqIB7OYFqqD7NWH9ddNquMMJM7BfEVn51RUPPd8B6HT2Ia3+tBZz3
-         Dd6guQPiEPcCWLRiOpohiSms4UzdpfQ7F4Kqv6l3hdDyPprGSwzX5dQ5G0WaE6CPYA
-         Z45N6/HRBg/5DrrU7x0Qifq4qapZCJgHRBI0spYs=
-Received: from [10.204.79.132] (blr-c-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sramana@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E163960388;
-        Tue, 28 May 2019 08:57:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1559033849;
-        bh=TgsQrhlAr8+HGUCtRPh+X0roiBK76Jmwa9FHWZ3CYwk=;
-        h=From:To:Subject:Date:From;
-        b=oe/dIn+8/UU6B1YK8E2iohtQVRl0V6O3zajEK2Cpp70PgWnUCVMtSiNEs7fvXtl9v
-         +WwgNbZDMMgXVxBt6+iu6yGQ1zxLJJbWrGAz2uM5asnK1PUmRwyxfnCc6vNiVWHj+E
-         xxLd+gkcvMg6tZpbmfWTiENruooo/R368IT9mM0o=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E163960388
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=sramana@codeaurora.org
-From:   Srinivas Ramana <sramana@codeaurora.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: samples/bpf compilation failures - 5.2.0
-Message-ID: <faaf8b1c-9552-a0ae-3088-2f4255dff857@codeaurora.org>
-Date:   Tue, 28 May 2019 14:27:25 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1726819AbfE1JYO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 May 2019 05:24:14 -0400
+Received: from www62.your-server.de ([213.133.104.62]:37742 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726279AbfE1JYO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 May 2019 05:24:14 -0400
+Received: from [78.46.172.3] (helo=sslproxy06.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hVYL6-0007k6-5H; Tue, 28 May 2019 11:24:12 +0200
+Received: from [178.197.249.12] (helo=linux.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hVYL5-0000tA-PE; Tue, 28 May 2019 11:24:11 +0200
+Subject: Re: [PATCH bpf-next] bpftool: auto-complete BTF IDs for btf dump
+To:     Andrii Nakryiko <andriin@fb.com>, andrii.nakryiko@gmail.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org, ast@fb.com,
+        quentin.monnet@netronome.com, kernel-team@fb.com
+References: <20190526000101.112077-1-andriin@fb.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <f84a51a0-09d0-378f-024e-1600674182f7@iogearbox.net>
+Date:   Tue, 28 May 2019 11:24:11 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20190526000101.112077-1-andriin@fb.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.3/25463/Tue May 28 09:57:22 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello,
+On 05/26/2019 02:01 AM, Andrii Nakryiko wrote:
+> Auto-complete BTF IDs for `btf dump id` sub-command. List of possible BTF
+> IDs is scavenged from loaded BPF programs that have associated BTFs, as
+> there is currently no API in libbpf to fetch list of all BTFs in the
+> system.
+> 
+> Suggested-by: Quentin Monnet <quentin.monnet@netronome.com>
+> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 
-I am trying to build samples/bpf in kernel(5.2.0-rc1) but unsuccessful 
-with below errors. Can you help to point what i am missing or if there 
-is some known issue?
+Applied, thanks!
 
-==============================8<===================================
-$ make samples/bpf/ 
-LLC=/local/mnt/workspace/tools/clang_ubuntu/clang/clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-14.04/bin/llc 
-CLANG=/local/mnt/workspace/tools/clang_ubuntu/clang/clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-14.04/bin/clang 
-V=1
-make -C /local/mnt/workspace/sramana/kdev_torvalds/kdev/kernel -f 
-/local/mnt/workspace/sramana/kdev_torvalds/kdev/kernel/Makefile samples/bpf/
-................
-................
-................
-make KBUILD_MODULES=1 -f ./scripts/Makefile.build obj=samples/bpf
-(cat /dev/null; ) > samples/bpf/modules.order
-make -C 
-/local/mnt/workspace/sramana/kdev_torvalds/kdev/kernel/samples/bpf/../../tools/lib/bpf/ 
-RM='rm -rf' LDFLAGS= 
-srctree=/local/mnt/workspace/sramana/kdev_torvalds/kdev/kernel/samples/bpf/../../ 
-O=
-
-Auto-detecting system features:
-...                        libelf: [ on  ]
-...                           bpf: [ on  ]
-
-make -C 
-/local/mnt/workspace/sramana/kdev_torvalds/kdev/kernel/samples/bpf/../..//tools/build 
-CFLAGS= LDFLAGS= fixdep
-make -f 
-/local/mnt/workspace/sramana/kdev_torvalds/kdev/kernel/samples/bpf/../..//tools/build/Makefile.build 
-dir=. obj=fixdep
-    ld -r -o fixdep-in.o  fixdep.o
-ld: fixdep.o: Relocations in generic ELF (EM: 183)
-ld: fixdep.o: Relocations in generic ELF (EM: 183)
-fixdep.o: error adding symbols: File in wrong format
-make[5]: *** [fixdep-in.o] Error 1
-make[4]: *** [fixdep-in.o] Error 2
-make[3]: *** [fixdep] Error 2
-make[2]: *** 
-[/local/mnt/workspace/sramana/kdev_torvalds/kdev/kernel/samples/bpf/../../tools/lib/bpf/libbpf.a] 
-Error 2
-make[1]: *** [samples/bpf/] Error 2
-make: *** [sub-make] Error 2
-==============================>8=======================================
-
-
-I am using the below commands to build:
-========================================================
-export ARCH=arm64
-export CROSS_COMPILE=<path>linaro-toolchain/5.1/bin/aarch64-linux-gnu-
-export CLANG_TRIPLE=arm64-linux-gnu-
-
-make 
-CC=<path>/clang_ubuntu/clang/clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-14.04/bin/clang 
-defconfig
-
-make 
-CC=<path>/clang_ubuntu/clang/clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-14.04/bin/clang 
--j8
-
-make 
-CC=<path>/clang_ubuntu/clang/clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-14.04/bin/clang 
-headers_install INSTALL_HDR_PATH=./usr
-
-make samples/bpf/ 
-LLC=<path>/clang_ubuntu/clang/clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-14.04/bin/llc 
-CLANG=<path>/clang_ubuntu/clang/clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-14.04/bin/clang 
-V=1 
-CC=<path>/clang_ubuntu/clang/clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-14.04/bin/clang
-========================================================
-
-Thanks,
--- Srinivas R
-
--- 
-Qualcomm India Private Limited, on behalf of Qualcomm Innovation
-Center, Inc., is a member of Code Aurora Forum, a Linux Foundation
-Collaborative Project
+(Please add versioning in the subject in future, e.g. [PATCH v2 bpf-next])
