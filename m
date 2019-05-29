@@ -2,103 +2,112 @@ Return-Path: <SRS0=eg6P=T5=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6301DC04AB6
-	for <bpf@archiver.kernel.org>; Wed, 29 May 2019 00:36:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9272C04AB6
+	for <bpf@archiver.kernel.org>; Wed, 29 May 2019 01:14:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 36FBA20B1F
-	for <bpf@archiver.kernel.org>; Wed, 29 May 2019 00:36:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B67B8208C3
+	for <bpf@archiver.kernel.org>; Wed, 29 May 2019 01:14:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qui6Ks6a"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="rOSNG4bK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726653AbfE2AgL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 May 2019 20:36:11 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:42575 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726515AbfE2AgL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 May 2019 20:36:11 -0400
-Received: by mail-lf1-f68.google.com with SMTP id y13so481068lfh.9;
-        Tue, 28 May 2019 17:36:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zHVQHvdN95XyuKz1DO4twHpntO9M0ikbWPHhVAV0QGQ=;
-        b=Qui6Ks6aW+6ZekicI4zDpqszWFZDHA6u6TqPM9RB+vTwqaKtOBXuY64Y4YKNqVLtrp
-         luE1POQACVl97jtWqj8JzIZ2UK+/Rx4Wzkw73AUb/ZDhdNfyILvnAePHIiQ2cx7UDTGJ
-         JfKT70GOdYREzMPEaXadj1HDAFPB4HgGwPj47Fl2VIPVqhiy+tAZqOeY+eh1evdp+D0o
-         HxPX+6HULbDMUpMMZfAmtJigq4tecdLnH1gnzVp7SAl8k/1aqjt9IOi8HWlSzC5RrWaA
-         duGuEy9hKsMfkgLgsIurIowMl7gV/WT0YCO7gZP1/73a8nfqRuDKOMYnqPylhTvtwlD4
-         S2Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zHVQHvdN95XyuKz1DO4twHpntO9M0ikbWPHhVAV0QGQ=;
-        b=Mr9qOo+h/suIsmVEWLB21dAocSLibvWYkB7Nn+p9jiTK5CXSh6U2tNRz8tQR9U7XCM
-         leo7I6ZmLW8pCPbQMebC9ACRv8me5n5aVGKGrUQGv1SXzPXqJ4++D8XuBnhO4Ze0c+Ff
-         yBLQLzjEjuWUhiOHsUtfByVfw2ifDOn7uX5P6In8X3kTMAt9ZoO05+6b0/Com5WwsDnI
-         6INLW6Wblo8/z3qi2y/4EusHdbOIGsF2dAuxy80x47e71CSUl0L1wzblJfK5IfpNx1Qg
-         NLPPHVWZZn7UdJhHK0GEnXpNmL7baX7UIFvYHwd2uaK7SosCHcFrwpjFymdguNmSmJQG
-         z+Cg==
-X-Gm-Message-State: APjAAAVqlv2CwzQHXd7Wz1tAp4lTI/RmGCXOjGACTU6OS6IIla0niUVb
-        1hVvJ4+airpVhsRWbVqUUpzfhVvrvvqRhu1Xpuo=
-X-Google-Smtp-Source: APXvYqwBTOb9HI+K62nLJfrXYu/UDrj5nnKreJd06NaV8a9ZaK1Uk3xeMI5oOTTE9adnTGSjZeFKWP5DnE4Bhg6MFoM=
-X-Received: by 2002:a19:ca0e:: with SMTP id a14mr9926757lfg.19.1559090169462;
- Tue, 28 May 2019 17:36:09 -0700 (PDT)
+        id S1725805AbfE2BOe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 May 2019 21:14:34 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:60322 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725828AbfE2BOe (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 28 May 2019 21:14:34 -0400
+Received: from pps.filterd (m0001255.ppops.net [127.0.0.1])
+        by mx0b-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4T1BlI3018968
+        for <bpf@vger.kernel.org>; Tue, 28 May 2019 18:14:32 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=q0gZeQn06XfmdaZyNCuqGSfc6wOnjFCu+fmwFIviwBw=;
+ b=rOSNG4bKKoBkxlFVmmdwHpWukwpZdKrkhvXKLOgasl3JAOceLRXfKGrIqIfda6rIUE3B
+ xB5FhS06dlxPKrIHf34hklYHRUX3J+L3g1X8O3VydZjiWy1ADGYYWtwGgw1lUmzLILPg
+ E9ct/epeFNhNYzk7xMMw0kAdZMhHxG14N+4= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0b-00082601.pphosted.com with ESMTP id 2ssckegpb4-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 28 May 2019 18:14:32 -0700
+Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 28 May 2019 18:14:32 -0700
+Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
+        id E0BE38617AA; Tue, 28 May 2019 18:14:30 -0700 (PDT)
+Smtp-Origin-Hostprefix: dev
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: dev101.prn2.facebook.com
+To:     <andrii.nakryiko@gmail.com>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <ast@fb.com>, <daniel@iogearbox.net>,
+        <kernel-team@fb.com>
+CC:     Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: prn2c23
+Subject: [PATCH bpf-next 1/9] libbpf: fix detection of corrupted BPF instructions section
+Date:   Tue, 28 May 2019 18:14:18 -0700
+Message-ID: <20190529011426.1328736-2-andriin@fb.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190529011426.1328736-1-andriin@fb.com>
+References: <20190529011426.1328736-1-andriin@fb.com>
+X-FB-Internal: Safe
 MIME-Version: 1.0
-References: <20190524103648.15669-1-quentin.monnet@netronome.com> <20190524103648.15669-3-quentin.monnet@netronome.com>
-In-Reply-To: <20190524103648.15669-3-quentin.monnet@netronome.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 28 May 2019 17:35:57 -0700
-Message-ID: <CAADnVQJ_V1obLb1ZhkKWzuPhrxGBjJOuSbof6VrA6vxT+W463A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/3] libbpf: add bpf_object__load_xattr() API
- function to pass log_level
-To:     Quentin Monnet <quentin.monnet@netronome.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        oss-drivers@netronome.com, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-28_11:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=887 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905290006
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, May 24, 2019 at 3:36 AM Quentin Monnet
-<quentin.monnet@netronome.com> wrote:
->
-> libbpf was recently made aware of the log_level attribute for programs,
-> used to specify the level of information expected to be dumped by the
-> verifier. Function bpf_prog_load_xattr() got support for this log_level
-> parameter.
->
-> But some applications using libbpf rely on another function to load
-> programs, bpf_object__load(), which does accept any parameter for log
-> level. Create an API function based on bpf_object__load(), but accepting
-> an "attr" object as a parameter. Then add a log_level field to that
-> object, so that applications calling the new bpf_object__load_xattr()
-> can pick the desired log level.
->
-> v3:
-> - Rewrite commit log.
->
-> v2:
-> - We are in a new cycle, bump libbpf extraversion number.
->
-> Signed-off-by: Quentin Monnet <quentin.monnet@netronome.com>
-> Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
-> ---
->  tools/lib/bpf/Makefile   |  2 +-
->  tools/lib/bpf/libbpf.c   | 20 +++++++++++++++++---
->  tools/lib/bpf/libbpf.h   |  6 ++++++
->  tools/lib/bpf/libbpf.map |  5 +++++
->  4 files changed, 29 insertions(+), 4 deletions(-)
+Ensure that size of a section w/ BPF instruction is exactly a multiple
+of BPF instruction size.
 
-This commit broke ./test_progs -s
-prog_tests/bpf_verif_scale.c no longer passes log_level.
-Could you please take a look?
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/lib/bpf/libbpf.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index ca4432f5b067..05a73223e524 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -349,8 +349,11 @@ static int
+ bpf_program__init(void *data, size_t size, char *section_name, int idx,
+ 		  struct bpf_program *prog)
+ {
+-	if (size < sizeof(struct bpf_insn)) {
+-		pr_warning("corrupted section '%s'\n", section_name);
++	const size_t bpf_insn_sz = sizeof(struct bpf_insn);
++
++	if (size < bpf_insn_sz || size % bpf_insn_sz) {
++		pr_warning("corrupted section '%s', size: %zu\n",
++			   section_name, size);
+ 		return -EINVAL;
+ 	}
+ 
+@@ -376,9 +379,8 @@ bpf_program__init(void *data, size_t size, char *section_name, int idx,
+ 			   section_name);
+ 		goto errout;
+ 	}
+-	prog->insns_cnt = size / sizeof(struct bpf_insn);
+-	memcpy(prog->insns, data,
+-	       prog->insns_cnt * sizeof(struct bpf_insn));
++	prog->insns_cnt = size / bpf_insn_sz;
++	memcpy(prog->insns, data, prog->insns_cnt * bpf_insn_sz);
+ 	prog->idx = idx;
+ 	prog->instances.fds = NULL;
+ 	prog->instances.nr = -1;
+-- 
+2.17.1
+
