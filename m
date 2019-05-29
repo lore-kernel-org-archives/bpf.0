@@ -2,99 +2,85 @@ Return-Path: <SRS0=eg6P=T5=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,T_DKIMWL_WL_HIGH,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6248C28CC0
-	for <bpf@archiver.kernel.org>; Wed, 29 May 2019 23:25:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 636FEC28CC0
+	for <bpf@archiver.kernel.org>; Wed, 29 May 2019 23:26:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BF7EF2432E
-	for <bpf@archiver.kernel.org>; Wed, 29 May 2019 23:25:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1559172322;
-	bh=2vOB4KufK7WuAfSJn65d6bTS5lcQL8yurklRvOPvviQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=qO4Ng8AX0EgMHSSXY5FUPn8vrDzy9G7CESWsuVmXvnO5q8NNXrdhD6ERhA9bwCxig
-	 gfSm+Ngy5YOxKJ651ZLPUXhaiQD+SXRc3zfcrWpJcNEDJ17gMnZRmYxs9LkYq7ks/1
-	 mi/lNtB6jcSVdKp2l3fkuoEXOZp3yB23rLdjLB0c=
+	by mail.kernel.org (Postfix) with ESMTP id 3B1AE24359
+	for <bpf@archiver.kernel.org>; Wed, 29 May 2019 23:26:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726540AbfE2XZV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 29 May 2019 19:25:21 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:49136 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726512AbfE2XYB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 29 May 2019 19:24:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=GuRApsTHKHRm35pYDPJVOOpxLQPAfK9zSYMx81HUKXE=; b=MbDfc3XdcpZjOoZSr+ZRM1zxYz
-        lZGU489ttKjY+QRV4zlBaMZrDhQwHYdNiMRNezRDKxh8aXYsaSXtIEJx79iUMbc7oPPk9IWG0Rfm4
-        3/YaBAEkXDQozUp9eyCxfR+iqfNapR/9MBCE1GV0ti1E3aBzeZwr7bKlLxm6IDyj+dEM0SltjW6f1
-        bfqhJmJqn17Vf2ehOFhaCfL/G638neZQpNK0go4gR0nGuOzB8uYDW9RZS3kzOpW8AvZB5dAR/GvR5
-        YmJxKgcWOHUov4djDnKrMEAEkpKc3ZffrNE3Vils2X9JSVu8FmkkGTzWZm3cPSkAf4GAsiZdJa+AK
-        8SXiXF6Q==;
-Received: from 177.132.232.81.dynamic.adsl.gvt.net.br ([177.132.232.81] helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hW7vL-0005Rg-3g; Wed, 29 May 2019 23:23:59 +0000
-Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
-        (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1hW7vI-0007xE-Mh; Wed, 29 May 2019 20:23:56 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH 08/22] docs: bpf: get rid of two warnings
-Date:   Wed, 29 May 2019 20:23:39 -0300
-Message-Id: <f2f40f306acbd3d834746fe9acb607052e82a1ee.1559171394.git.mchehab+samsung@kernel.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <cover.1559171394.git.mchehab+samsung@kernel.org>
-References: <cover.1559171394.git.mchehab+samsung@kernel.org>
+        id S1726636AbfE2X0j (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 29 May 2019 19:26:39 -0400
+Received: from www62.your-server.de ([213.133.104.62]:39754 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726189AbfE2X0j (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 29 May 2019 19:26:39 -0400
+Received: from [78.46.172.3] (helo=sslproxy06.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hW7xs-0000BG-7J; Thu, 30 May 2019 01:26:36 +0200
+Received: from [178.197.249.12] (helo=linux.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hW7xs-000Bbt-02; Thu, 30 May 2019 01:26:36 +0200
+Subject: Re: [PATCH v2 bpf-next 0/9] libbpf random fixes
+To:     Andrii Nakryiko <andriin@fb.com>, andrii.nakryiko@gmail.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org, ast@fb.com,
+        kernel-team@fb.com
+References: <20190529173611.4012579-1-andriin@fb.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <8718da15-efdc-cc14-d70d-4ffa3d200cc1@iogearbox.net>
+Date:   Thu, 30 May 2019 01:26:35 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.3.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190529173611.4012579-1-andriin@fb.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.3/25464/Wed May 29 09:59:09 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Documentation/bpf/btf.rst:154: WARNING: Unexpected indentation.
-Documentation/bpf/btf.rst:163: WARNING: Unexpected indentation.
+On 05/29/2019 07:36 PM, Andrii Nakryiko wrote:
+> This patch set is a collection of unrelated fixes for libbpf.
+> 
+> Patch #1 fixes detection of corrupted BPF section w/ instructions.
+> Patch #2 fixes possible errno clobbering.
+> Patch #3 simplifies endianness check and brings it in line with few other
+> similar checks in libbpf.
+> Patch #4 adds check for failed map name retrieval from ELF symbol name.
+> Patch #5 fixes return error code to be negative.
+> Patch #6 fixes using valid fd (0) as a marker of missing associated BTF.
+> Patch #7 removes redundant logic in two places.
+> Patch #8 fixes typos in comments and debug output, and fixes formatting.
+> Patch #9 unwraps a bunch of multi-line statements and comments.
+> 
+> v1->v2:
+>   - patch #1 simplifications (Song);
+> 
+> 
+> Andrii Nakryiko (9):
+>   libbpf: fix detection of corrupted BPF instructions section
+>   libbpf: preserve errno before calling into user callback
+>   libbpf: simplify endianness check
+>   libbpf: check map name retrieved from ELF
+>   libbpf: fix error code returned on corrupted ELF
+>   libbpf: use negative fd to specify missing BTF
+>   libbpf: simplify two pieces of logic
+>   libbpf: typo and formatting fixes
+>   libbpf: reduce unnecessary line wrapping
+> 
+>  tools/lib/bpf/libbpf.c | 148 +++++++++++++++++------------------------
+>  1 file changed, 60 insertions(+), 88 deletions(-)
+> 
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
----
- Documentation/bpf/btf.rst | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
-index 8820360d00da..4ae022d274ab 100644
---- a/Documentation/bpf/btf.rst
-+++ b/Documentation/bpf/btf.rst
-@@ -151,6 +151,7 @@ for the type. The maximum value of ``BTF_INT_BITS()`` is 128.
- 
- The ``BTF_INT_OFFSET()`` specifies the starting bit offset to calculate values
- for this int. For example, a bitfield struct member has:
-+
-  * btf member bit offset 100 from the start of the structure,
-  * btf member pointing to an int type,
-  * the int type has ``BTF_INT_OFFSET() = 2`` and ``BTF_INT_BITS() = 4``
-@@ -160,6 +161,7 @@ from bits ``100 + 2 = 102``.
- 
- Alternatively, the bitfield struct member can be the following to access the
- same bits as the above:
-+
-  * btf member bit offset 102,
-  * btf member pointing to an int type,
-  * the int type has ``BTF_INT_OFFSET() = 0`` and ``BTF_INT_BITS() = 4``
--- 
-2.21.0
-
+Applied, thanks!
