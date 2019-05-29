@@ -2,44 +2,44 @@ Return-Path: <SRS0=eg6P=T5=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,T_DKIMWL_WL_HIGH,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 607D4C04AB6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CC82C46470
 	for <bpf@archiver.kernel.org>; Wed, 29 May 2019 01:14:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 35E94208C3
+	by mail.kernel.org (Postfix) with ESMTP id 63691208C3
 	for <bpf@archiver.kernel.org>; Wed, 29 May 2019 01:14:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Ou8RHTw+"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ejxQbbIz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725828AbfE2BOg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1726097AbfE2BOg (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 28 May 2019 21:14:36 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:32778 "EHLO
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:42308 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725936AbfE2BOg (ORCPT
+        by vger.kernel.org with ESMTP id S1725917AbfE2BOg (ORCPT
         <rfc822;bpf@vger.kernel.org>); Tue, 28 May 2019 21:14:36 -0400
-Received: from pps.filterd (m0044008.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4T19E3Q014422
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4T1AbNw014498
         for <bpf@vger.kernel.org>; Tue, 28 May 2019 18:14:35 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=vQo30FB4087B60G3Mv8+/295sxgMwrBVL2FIrouroUQ=;
- b=Ou8RHTw+BWcUmeIP4ctUi1bJb/GEem5iriBdBfONSldsy+sg0pV8huetSTAmlmGNLZGJ
- 3OG0fjbdxlhNbTiO8HZ+iYYfGiJRp2aCVg2WVhRnu64eitvClUmFJLx1fHy8Do+TJnnM
- p4VznwIxxPRfScCFdBvC/nYq8621F2TzDtY= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=zOtmJGpxHqYR543cv2Vlxa+nZTQNKi9ZSoPUZCCPJM8=;
+ b=ejxQbbIzXBBXDzKh0LvmFdqtg+HPMCTtfDoPEPljntjgWeTsL6p+qsbx3JLxH11+ziEG
+ CHKMocK4K5oG0PHJ7uj/z5PukmFIPn3x0p9t6Ag2eU3I1JfqOO1Mw77kRYfuxSC6faQN
+ DFIZ3g19kUmv12cZtjdG4eI2cBTZAUtPTvU= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2ss90chjxw-2
+        by mx0a-00082601.pphosted.com with ESMTP id 2ss9209hww-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Tue, 28 May 2019 18:14:35 -0700
 Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 28 May 2019 18:14:31 -0700
+ 15.1.1713.5; Tue, 28 May 2019 18:14:33 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id DBDBC8617AA; Tue, 28 May 2019 18:14:28 -0700 (PDT)
+        id E61AE8617AA; Tue, 28 May 2019 18:14:32 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,10 +48,12 @@ To:     <andrii.nakryiko@gmail.com>, <netdev@vger.kernel.org>,
         <kernel-team@fb.com>
 CC:     Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH bpf-next 0/9] libbpf random fixes
-Date:   Tue, 28 May 2019 18:14:17 -0700
-Message-ID: <20190529011426.1328736-1-andriin@fb.com>
+Subject: [PATCH bpf-next 2/9] libbpf: preserve errno before calling into user callback
+Date:   Tue, 28 May 2019 18:14:19 -0700
+Message-ID: <20190529011426.1328736-3-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190529011426.1328736-1-andriin@fb.com>
+References: <20190529011426.1328736-1-andriin@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -60,7 +62,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
  malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ mlxlogscore=894 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1810050000 definitions=main-1905290006
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -68,36 +70,35 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set is a collection of unrelated fixes for libbpf.
+pr_warning ultimately may call into user-provided callback function,
+which can clobber errno value, so we need to save it before that.
 
-Patch #1 fixes detection of corrupted BPF section w/ instructions.
-Patch #2 fixes possible errno clobbering.
-Patch #3 simplifies endianness check and brings it in line with few other
-similar checks in libbpf.
-Patch #4 adds check for failed map name retrieval from ELF symbol name.
-Patch #5 fixes return error code to be negative.
-Patch #6 fixes using valid fd (0) as a marker of missing associated BTF.
-Patch #7 removes redundant logic in two places.
-Patch #8 fixes typos in comments and debug output, and fixes formatting.
-Patch #9 unwraps a bunch of multi-line statements and comments.
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/lib/bpf/libbpf.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-If patches #8 and #9 create too much history noise, I can drop them, they
-don't have functional changes.
-
-Andrii Nakryiko (9):
-  libbpf: fix detection of corrupted BPF instructions section
-  libbpf: preserve errno before calling into user callback
-  libbpf: simplify endianness check
-  libbpf: check map name retrieved from ELF
-  libbpf: fix error code returned on corrupted ELF
-  libbpf: use negative fd to specify missing BTF
-  libbpf: simplify two pieces of logic
-  libbpf: typo and formatting fixes
-  libbpf: reduce unnecessary line wrapping
-
- tools/lib/bpf/libbpf.c | 148 +++++++++++++++++------------------------
- 1 file changed, 60 insertions(+), 88 deletions(-)
-
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 05a73223e524..7b80b9ae8a1f 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -565,12 +565,12 @@ static int bpf_object__elf_init(struct bpf_object *obj)
+ 	} else {
+ 		obj->efile.fd = open(obj->path, O_RDONLY);
+ 		if (obj->efile.fd < 0) {
+-			char errmsg[STRERR_BUFSIZE];
+-			char *cp = libbpf_strerror_r(errno, errmsg,
+-						     sizeof(errmsg));
++			char errmsg[STRERR_BUFSIZE], *cp;
+ 
++			err = -errno;
++			cp = libbpf_strerror_r(err, errmsg, sizeof(errmsg));
+ 			pr_warning("failed to open %s: %s\n", obj->path, cp);
+-			return -errno;
++			return err;
+ 		}
+ 
+ 		obj->efile.elf = elf_begin(obj->efile.fd,
 -- 
 2.17.1
 
