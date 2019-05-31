@@ -2,56 +2,59 @@ Return-Path: <SRS0=1DKN=T7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,T_DKIMWL_WL_HIGH,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EBD6C04AB6
-	for <bpf@archiver.kernel.org>; Fri, 31 May 2019 22:29:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71CE6C28CC2
+	for <bpf@archiver.kernel.org>; Fri, 31 May 2019 22:29:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0202C26F26
-	for <bpf@archiver.kernel.org>; Fri, 31 May 2019 22:29:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4947226FBC
+	for <bpf@archiver.kernel.org>; Fri, 31 May 2019 22:29:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Krr+iT7N"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="bN9i/OSL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726711AbfEaW3O (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 31 May 2019 18:29:14 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:35584 "EHLO
+        id S1726820AbfEaW3S (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 31 May 2019 18:29:18 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:36174 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726450AbfEaW3O (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 31 May 2019 18:29:14 -0400
-Received: from pps.filterd (m0044008.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4VMOHMS019438
-        for <bpf@vger.kernel.org>; Fri, 31 May 2019 15:29:13 -0700
+        by vger.kernel.org with ESMTP id S1726806AbfEaW3S (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 31 May 2019 18:29:18 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4VMMtau018858
+        for <bpf@vger.kernel.org>; Fri, 31 May 2019 15:29:17 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=hf0iBmL+ZPzVVFEoCzjI/6lyyAyBGnjBbdBFpVUfY54=;
- b=Krr+iT7NPj8l45hO/CK6kHncf4mbnfBQXRIH1Q1Bv0yzLuhwByjC7dFh8JS8TAqg2F1I
- KmfnTC/5XTWpAlQ2eb+ZWHAW6nCVOM9m8h6jCTuJXU3cOy9ktkrqgoqrtwzd9M88bnRl
- ClDOggpkLbQppA7enuw/4fMmelox10Tbt3Q= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2su8tu8w81-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 31 May 2019 15:29:13 -0700
-Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::125) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Fri, 31 May 2019 15:29:12 -0700
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=UeYP0V9VYfVdhnHUlBAh6ZYekB7STWuJ6qgH5+rL3+0=;
+ b=bN9i/OSLxCkdrgEYnPXOmurWS5tznlqrChpyHRRZcPKBzyQgYH1jfzE/VkX5AvCrzKSk
+ 9/MNqXWacGOQ2zB3pY10FGfIYW9IWU9cxL9h4Fy5OZPSB81q5zAeWGQuUpclUe5Y2DtP
+ BqgW7gV1XPvBnPs0pSgZBtD3j7Qlsqebghs= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2su8vrrwfq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 31 May 2019 15:29:17 -0700
+Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Fri, 31 May 2019 15:29:16 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 409E62941A0E; Fri, 31 May 2019 15:29:10 -0700 (PDT)
+        id 9E1E72941A0E; Fri, 31 May 2019 15:29:13 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        David Miller <davem@davemloft.net>, <kernel-team@fb.com>
+        David Miller <davem@davemloft.net>, <kernel-team@fb.com>,
+        Tom Herbert <tom@herbertland.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf 0/2] bpf: udp: A few reuseport's bpf_prog for udp lookup
-Date:   Fri, 31 May 2019 15:29:10 -0700
-Message-ID: <20190531222910.2499861-1-kafai@fb.com>
+Subject: [PATCH bpf 2/2] bpf: udp: Avoid calling reuseport's bpf_prog from udp_gro
+Date:   Fri, 31 May 2019 15:29:13 -0700
+Message-ID: <20190531222913.2500781-1-kafai@fb.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190531222910.2499861-1-kafai@fb.com>
+References: <20190531222910.2499861-1-kafai@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -60,7 +63,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
  malwarescore=0 suspectscore=8 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=486 adultscore=0 classifier=spam adjust=0 reason=mlx
+ mlxlogscore=778 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1810050000 definitions=main-1905310138
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -68,22 +71,52 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series has fixes when running reuseport's bpf_prog for udp lookup.
-If there is reuseport's bpf_prog, the common issue is the reuseport code
-path expects skb->data pointing to the transport header (udphdr here).
-A couple of commits broke this expectation.  The issue is specific
-to running bpf_prog, so bpf tag is used for this series.
+When the commit a6024562ffd7 ("udp: Add GRO functions to UDP socket")
+added udp[46]_lib_lookup_skb to the udp_gro code path, it broke
+the reuseport_select_sock() assumption that skb->data is pointing
+to the transport header.
 
-Please refer to the individual commit message for details.
+This patch follows an earlier __udp6_lib_err() fix by
+passing a NULL skb to avoid calling the reuseport's bpf_prog.
 
-Martin KaFai Lau (2):
-  bpf: udp: ipv6: Avoid running reuseport's bpf_prog from __udp6_lib_err
-  bpf: udp: Avoid calling reuseport's bpf_prog from udp_gro
-
+Fixes: a6024562ffd7 ("udp: Add GRO functions to UDP socket")
+Cc: Tom Herbert <tom@herbertland.com>
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+---
  net/ipv4/udp.c | 6 +++++-
- net/ipv6/udp.c | 4 ++--
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ net/ipv6/udp.c | 2 +-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index 8fb250ed53d4..85db0e3d7f3f 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -503,7 +503,11 @@ static inline struct sock *__udp4_lib_lookup_skb(struct sk_buff *skb,
+ struct sock *udp4_lib_lookup_skb(struct sk_buff *skb,
+ 				 __be16 sport, __be16 dport)
+ {
+-	return __udp4_lib_lookup_skb(skb, sport, dport, &udp_table);
++	const struct iphdr *iph = ip_hdr(skb);
++
++	return __udp4_lib_lookup(dev_net(skb->dev), iph->saddr, sport,
++				 iph->daddr, dport, inet_iif(skb),
++				 inet_sdif(skb), &udp_table, NULL);
+ }
+ EXPORT_SYMBOL_GPL(udp4_lib_lookup_skb);
+ 
+diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+index 133e6370f89c..4e52c37bb836 100644
+--- a/net/ipv6/udp.c
++++ b/net/ipv6/udp.c
+@@ -243,7 +243,7 @@ struct sock *udp6_lib_lookup_skb(struct sk_buff *skb,
+ 
+ 	return __udp6_lib_lookup(dev_net(skb->dev), &iph->saddr, sport,
+ 				 &iph->daddr, dport, inet6_iif(skb),
+-				 inet6_sdif(skb), &udp_table, skb);
++				 inet6_sdif(skb), &udp_table, NULL);
+ }
+ EXPORT_SYMBOL_GPL(udp6_lib_lookup_skb);
+ 
 -- 
 2.17.1
 
