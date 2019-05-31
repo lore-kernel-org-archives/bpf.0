@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1194C04AB6
-	for <bpf@archiver.kernel.org>; Fri, 31 May 2019 20:21:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95B68C04AB6
+	for <bpf@archiver.kernel.org>; Fri, 31 May 2019 20:21:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6F7DC26ED6
-	for <bpf@archiver.kernel.org>; Fri, 31 May 2019 20:21:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6025526ED6
+	for <bpf@archiver.kernel.org>; Fri, 31 May 2019 20:21:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="YVSkYzNi"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="qdTqioI1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727532AbfEaUVw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 31 May 2019 16:21:52 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:57494 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727459AbfEaUVw (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 31 May 2019 16:21:52 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4VKIb6B022368
-        for <bpf@vger.kernel.org>; Fri, 31 May 2019 13:21:51 -0700
+        id S1727556AbfEaUVy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 31 May 2019 16:21:54 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:51082 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727459AbfEaUVy (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 31 May 2019 16:21:54 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4VKJufp013611
+        for <bpf@vger.kernel.org>; Fri, 31 May 2019 13:21:53 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=Ms/M1HRzBVmxZJcXEF3o5NdlcpINuLYvEImAKuzlplo=;
- b=YVSkYzNi/GejwzUC6TXZmdmGVcPNk0wG+veysI16yJs1t4PabFvgAJBAnMK26mnZazfN
- 00x6XO/Y9f8J5jBzYggMeJMZSC+RK7RAOdSWIE5XZjs3Rcq1Gyg7vBu9oIzuxH1e+Wql
- n3a+QIbSltdlPgjx+RaAjEmFlwu7mQiQKHc= 
+ content-type; s=facebook; bh=Hz/uYrVBA3zsJJJt5cGiSxPJ320YZfZ02wprCUKquW8=;
+ b=qdTqioI1rEW8LEdi1Td0NYLnYxyH7e2y/QahOC3rK0ivz4s6Yv7dN0tqr1qLVzDq8zUQ
+ JyHEizZQsrfzxcpwF/rDQwwUrPyl09elWu8J3PMisERAgl5DpIgc4Wa/44aDLjKCFWDi
+ jOjij1JCLi3k4xYuP747jv6+SVqZPqSkq2Q= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2suad2g5hp-3
+        by mx0a-00082601.pphosted.com with ESMTP id 2su6aa9436-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 31 May 2019 13:21:50 -0700
+        for <bpf@vger.kernel.org>; Fri, 31 May 2019 13:21:52 -0700
 Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 31 May 2019 13:21:50 -0700
+ 15.1.1713.5; Fri, 31 May 2019 13:21:51 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 87747861799; Fri, 31 May 2019 13:21:45 -0700 (PDT)
+        id 9EFF8861799; Fri, 31 May 2019 13:21:49 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,9 +48,9 @@ To:     <andrii.nakryiko@gmail.com>, <netdev@vger.kernel.org>,
         <kernel-team@fb.com>
 CC:     Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [RFC PATCH bpf-next 2/8] libbpf: extract BTF loading and simplify ELF parsing logic
-Date:   Fri, 31 May 2019 13:21:26 -0700
-Message-ID: <20190531202132.379386-3-andriin@fb.com>
+Subject: [RFC PATCH bpf-next 4/8] libbpf: identify maps by section index in addition to offset
+Date:   Fri, 31 May 2019 13:21:28 -0700
+Message-ID: <20190531202132.379386-5-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190531202132.379386-1-andriin@fb.com>
 References: <20190531202132.379386-1-andriin@fb.com>
@@ -60,7 +60,7 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-31_14:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
  mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1810050000 definitions=main-1905310123
@@ -70,246 +70,140 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-As a preparation for adding BTF-based BPF map loading, extract .BTF and
-.BTF.ext loading logic. Also simplify error handling in
-bpf_object__elf_collect() by returning early, as there is no common
-clean up to be done.
+To support maps to be defined in multiple sections, it's important to
+identify map not just by offset within its section, but section index as
+well. This patch adds tracking of section index.
+
+For global data, we record section index of corresponding
+.data/.bss/.rodata ELF section for uniformity, and thus don't need
+a special value of offset for those maps.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/libbpf.c | 137 ++++++++++++++++++++++-------------------
- 1 file changed, 75 insertions(+), 62 deletions(-)
+ tools/lib/bpf/libbpf.c | 42 ++++++++++++++++++++++++++----------------
+ 1 file changed, 26 insertions(+), 16 deletions(-)
 
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index ba89d9727137..9e39a0a33aeb 100644
+index c931ee7e1fd2..5e7ea7dac958 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -1078,6 +1078,58 @@ static void bpf_object__sanitize_btf_ext(struct bpf_object *obj)
- 	}
+@@ -207,7 +207,8 @@ static const char * const libbpf_type_to_btf_name[] = {
+ struct bpf_map {
+ 	int fd;
+ 	char *name;
+-	size_t offset;
++	int sec_idx;
++	size_t sec_offset;
+ 	int map_ifindex;
+ 	int inner_map_fd;
+ 	struct bpf_map_def def;
+@@ -647,7 +648,9 @@ static int compare_bpf_map(const void *_a, const void *_b)
+ 	const struct bpf_map *a = _a;
+ 	const struct bpf_map *b = _b;
+ 
+-	return a->offset - b->offset;
++	if (a->sec_idx != b->sec_idx)
++		return a->sec_idx - b->sec_idx;
++	return a->sec_offset - b->sec_offset;
  }
  
-+static int bpf_object__load_btf(struct bpf_object *obj,
-+				Elf_Data *btf_data,
-+				Elf_Data *btf_ext_data)
-+{
-+	int err = 0;
-+
-+	if (btf_data) {
-+		obj->btf = btf__new(btf_data->d_buf, btf_data->d_size);
-+		if (IS_ERR(obj->btf)) {
-+			pr_warning("Error loading ELF section %s: %d.\n",
-+				   BTF_ELF_SEC, err);
-+			goto out;
-+		}
-+		err = btf__finalize_data(obj, obj->btf);
-+		if (err) {
-+			pr_warning("Error finalizing %s: %d.\n",
-+				   BTF_ELF_SEC, err);
-+			goto out;
-+		}
-+		bpf_object__sanitize_btf(obj);
-+		err = btf__load(obj->btf);
-+		if (err) {
-+			pr_warning("Error loading %s into kernel: %d.\n",
-+				   BTF_ELF_SEC, err);
-+			goto out;
-+		}
-+	}
-+	if (btf_ext_data) {
-+		if (!obj->btf) {
-+			pr_debug("Ignore ELF section %s because its depending ELF section %s is not found.\n",
-+				 BTF_EXT_ELF_SEC, BTF_ELF_SEC);
-+			goto out;
-+		}
-+		obj->btf_ext = btf_ext__new(btf_ext_data->d_buf,
-+					    btf_ext_data->d_size);
-+		if (IS_ERR(obj->btf_ext)) {
-+			pr_warning("Error loading ELF section %s: %ld. Ignored and continue.\n",
-+				   BTF_EXT_ELF_SEC, PTR_ERR(obj->btf_ext));
-+			obj->btf_ext = NULL;
-+			goto out;
-+		}
-+		bpf_object__sanitize_btf_ext(obj);
-+	}
-+out:
-+	if (err || IS_ERR(obj->btf)) {
-+		if (!IS_ERR_OR_NULL(obj->btf))
-+			btf__free(obj->btf);
-+		obj->btf = NULL;
-+	}
-+	return 0;
-+}
-+
- static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
+ static bool bpf_map_type__is_map_in_map(enum bpf_map_type type)
+@@ -800,14 +803,15 @@ static struct bpf_map *bpf_object__add_map(struct bpf_object *obj)
+ 
+ static int
+ bpf_object__init_internal_map(struct bpf_object *obj, struct bpf_map *map,
+-			      enum libbpf_map_type type, Elf_Data *data,
+-			      void **data_buff)
++			      enum libbpf_map_type type, int sec_idx,
++			      Elf_Data *data, void **data_buff)
  {
- 	Elf *elf = obj->efile.elf;
-@@ -1102,24 +1154,21 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
- 		if (gelf_getshdr(scn, &sh) != &sh) {
- 			pr_warning("failed to get section(%d) header from %s\n",
- 				   idx, obj->path);
--			err = -LIBBPF_ERRNO__FORMAT;
--			goto out;
-+			return -LIBBPF_ERRNO__FORMAT;
- 		}
+ 	struct bpf_map_def *def = &map->def;
+ 	char map_name[BPF_OBJ_NAME_LEN];
  
- 		name = elf_strptr(elf, ep->e_shstrndx, sh.sh_name);
- 		if (!name) {
- 			pr_warning("failed to get section(%d) name from %s\n",
- 				   idx, obj->path);
--			err = -LIBBPF_ERRNO__FORMAT;
--			goto out;
-+			return -LIBBPF_ERRNO__FORMAT;
- 		}
- 
- 		data = elf_getdata(scn, 0);
- 		if (!data) {
- 			pr_warning("failed to get section(%d) data from %s(%s)\n",
- 				   idx, name, obj->path);
--			err = -LIBBPF_ERRNO__FORMAT;
--			goto out;
-+			return -LIBBPF_ERRNO__FORMAT;
- 		}
- 		pr_debug("section(%d) %s, size %ld, link %d, flags %lx, type=%d\n",
- 			 idx, name, (unsigned long)data->d_size,
-@@ -1130,10 +1179,14 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
- 			err = bpf_object__init_license(obj,
- 						       data->d_buf,
- 						       data->d_size);
-+			if (err)
-+				return err;
- 		} else if (strcmp(name, "version") == 0) {
- 			err = bpf_object__init_kversion(obj,
- 							data->d_buf,
- 							data->d_size);
-+			if (err)
-+				return err;
- 		} else if (strcmp(name, "maps") == 0) {
- 			obj->efile.maps_shndx = idx;
- 		} else if (strcmp(name, BTF_ELF_SEC) == 0) {
-@@ -1144,11 +1197,10 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
- 			if (obj->efile.symbols) {
- 				pr_warning("bpf: multiple SYMTAB in %s\n",
- 					   obj->path);
--				err = -LIBBPF_ERRNO__FORMAT;
--			} else {
--				obj->efile.symbols = data;
--				obj->efile.strtabidx = sh.sh_link;
-+				return -LIBBPF_ERRNO__FORMAT;
- 			}
-+			obj->efile.symbols = data;
-+			obj->efile.strtabidx = sh.sh_link;
- 		} else if (sh.sh_type == SHT_PROGBITS && data->d_size > 0) {
- 			if (sh.sh_flags & SHF_EXECINSTR) {
- 				if (strcmp(name, ".text") == 0)
-@@ -1162,6 +1214,7 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
- 
- 					pr_warning("failed to alloc program %s (%s): %s",
- 						   name, obj->path, cp);
-+					return err;
- 				}
- 			} else if (strcmp(name, ".data") == 0) {
- 				obj->efile.data = data;
-@@ -1173,8 +1226,8 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
- 				pr_debug("skip section(%d) %s\n", idx, name);
- 			}
- 		} else if (sh.sh_type == SHT_REL) {
-+			int nr_reloc = obj->efile.nr_reloc;
- 			void *reloc = obj->efile.reloc;
--			int nr_reloc = obj->efile.nr_reloc + 1;
- 			int sec = sh.sh_info; /* points to other section */
- 
- 			/* Only do relo for section with exec instructions */
-@@ -1184,79 +1237,39 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
- 				continue;
- 			}
- 
--			reloc = reallocarray(reloc, nr_reloc,
-+			reloc = reallocarray(reloc, nr_reloc + 1,
- 					     sizeof(*obj->efile.reloc));
- 			if (!reloc) {
- 				pr_warning("realloc failed\n");
--				err = -ENOMEM;
--			} else {
--				int n = nr_reloc - 1;
-+				return -ENOMEM;
-+			}
- 
--				obj->efile.reloc = reloc;
--				obj->efile.nr_reloc = nr_reloc;
-+			obj->efile.reloc = reloc;
-+			obj->efile.nr_reloc++;
- 
--				obj->efile.reloc[n].shdr = sh;
--				obj->efile.reloc[n].data = data;
--			}
-+			obj->efile.reloc[nr_reloc].shdr = sh;
-+			obj->efile.reloc[nr_reloc].data = data;
- 		} else if (sh.sh_type == SHT_NOBITS && strcmp(name, ".bss") == 0) {
- 			obj->efile.bss = data;
- 			obj->efile.bss_shndx = idx;
- 		} else {
- 			pr_debug("skip section(%d) %s\n", idx, name);
- 		}
--		if (err)
--			goto out;
+ 	map->libbpf_type = type;
+-	map->offset = ~(typeof(map->offset))0;
++	map->sec_idx = sec_idx;
++	map->sec_offset = 0;
+ 	snprintf(map_name, sizeof(map_name), "%.8s%.7s", obj->name,
+ 		 libbpf_type_to_btf_name[type]);
+ 	map->name = strdup(map_name);
+@@ -815,6 +819,8 @@ bpf_object__init_internal_map(struct bpf_object *obj, struct bpf_map *map,
+ 		pr_warning("failed to alloc map name\n");
+ 		return -ENOMEM;
  	}
++	pr_debug("map '%s' (global data): at sec_idx %d, offset %zu.\n",
++		 map_name, map->sec_idx, map->sec_offset);
  
- 	if (!obj->efile.strtabidx || obj->efile.strtabidx >= idx) {
- 		pr_warning("Corrupted ELF file: index of strtab invalid\n");
- 		return -LIBBPF_ERRNO__FORMAT;
- 	}
--	if (btf_data) {
--		obj->btf = btf__new(btf_data->d_buf, btf_data->d_size);
--		if (IS_ERR(obj->btf)) {
--			pr_warning("Error loading ELF section %s: %ld. Ignored and continue.\n",
--				   BTF_ELF_SEC, PTR_ERR(obj->btf));
--			obj->btf = NULL;
--		} else {
--			err = btf__finalize_data(obj, obj->btf);
--			if (!err) {
--				bpf_object__sanitize_btf(obj);
--				err = btf__load(obj->btf);
--			}
--			if (err) {
--				pr_warning("Error finalizing and loading %s into kernel: %d. Ignored and continue.\n",
--					   BTF_ELF_SEC, err);
--				btf__free(obj->btf);
--				obj->btf = NULL;
--				err = 0;
--			}
--		}
--	}
--	if (btf_ext_data) {
--		if (!obj->btf) {
--			pr_debug("Ignore ELF section %s because its depending ELF section %s is not found.\n",
--				 BTF_EXT_ELF_SEC, BTF_ELF_SEC);
--		} else {
--			obj->btf_ext = btf_ext__new(btf_ext_data->d_buf,
--						    btf_ext_data->d_size);
--			if (IS_ERR(obj->btf_ext)) {
--				pr_warning("Error loading ELF section %s: %ld. Ignored and continue.\n",
--					   BTF_EXT_ELF_SEC,
--					   PTR_ERR(obj->btf_ext));
--				obj->btf_ext = NULL;
--			} else {
--				bpf_object__sanitize_btf_ext(obj);
--			}
--		}
--	}
-+	err = bpf_object__load_btf(obj, btf_data, btf_ext_data);
-+	if (err)
-+		return err;
- 	if (bpf_object__has_maps(obj)) {
- 		err = bpf_object__init_maps(obj, flags);
+ 	def->type = BPF_MAP_TYPE_ARRAY;
+ 	def->key_size = sizeof(int);
+@@ -850,6 +856,7 @@ static int bpf_object__init_global_data_maps(struct bpf_object *obj)
+ 		if (IS_ERR(map))
+ 			return PTR_ERR(map);
+ 		err = bpf_object__init_internal_map(obj, map, LIBBPF_MAP_DATA,
++						    obj->efile.data_shndx,
+ 						    obj->efile.data,
+ 						    &obj->sections.data);
  		if (err)
--			goto out;
-+			return err;
- 	}
- 	err = bpf_object__init_prog_names(obj);
--out:
- 	return err;
+@@ -860,6 +867,7 @@ static int bpf_object__init_global_data_maps(struct bpf_object *obj)
+ 		if (IS_ERR(map))
+ 			return PTR_ERR(map);
+ 		err = bpf_object__init_internal_map(obj, map, LIBBPF_MAP_RODATA,
++						    obj->efile.rodata_shndx,
+ 						    obj->efile.rodata,
+ 						    &obj->sections.rodata);
+ 		if (err)
+@@ -870,6 +878,7 @@ static int bpf_object__init_global_data_maps(struct bpf_object *obj)
+ 		if (IS_ERR(map))
+ 			return PTR_ERR(map);
+ 		err = bpf_object__init_internal_map(obj, map, LIBBPF_MAP_BSS,
++						    obj->efile.bss_shndx,
+ 						    obj->efile.bss, NULL);
+ 		if (err)
+ 			return err;
+@@ -953,7 +962,10 @@ static int bpf_object__init_user_maps(struct bpf_object *obj, bool strict)
+ 		}
+ 
+ 		map->libbpf_type = LIBBPF_MAP_UNSPEC;
+-		map->offset = sym.st_value;
++		map->sec_idx = sym.st_shndx;
++		map->sec_offset = sym.st_value;
++		pr_debug("map '%s' (legacy): at sec_idx %d, offset %zu.\n",
++			 map_name, map->sec_idx, map->sec_offset);
+ 		if (sym.st_value + map_def_sz > data->d_size) {
+ 			pr_warning("corrupted maps section in %s: last map \"%s\" too small\n",
+ 				   obj->path, map_name);
+@@ -1453,9 +1465,13 @@ bpf_program__collect_reloc(struct bpf_program *prog, GElf_Shdr *shdr,
+ 				if (maps[map_idx].libbpf_type != type)
+ 					continue;
+ 				if (type != LIBBPF_MAP_UNSPEC ||
+-				    maps[map_idx].offset == sym.st_value) {
+-					pr_debug("relocation: find map %zd (%s) for insn %u\n",
+-						 map_idx, maps[map_idx].name, insn_idx);
++				    (maps[map_idx].sec_idx == sym.st_shndx &&
++				     maps[map_idx].sec_offset == sym.st_value)) {
++					pr_debug("relocation: found map %zd (%s, sec_idx %d, offset %zu) for insn %u\n",
++						 map_idx, maps[map_idx].name,
++						 maps[map_idx].sec_idx,
++						 maps[map_idx].sec_offset,
++						 insn_idx);
+ 					break;
+ 				}
+ 			}
+@@ -3472,13 +3488,7 @@ bpf_object__find_map_fd_by_name(struct bpf_object *obj, const char *name)
+ struct bpf_map *
+ bpf_object__find_map_by_offset(struct bpf_object *obj, size_t offset)
+ {
+-	int i;
+-
+-	for (i = 0; i < obj->nr_maps; i++) {
+-		if (obj->maps[i].offset == offset)
+-			return &obj->maps[i];
+-	}
+-	return ERR_PTR(-ENOENT);
++	return ERR_PTR(-ENOTSUP);
  }
  
+ long libbpf_get_error(const void *ptr)
 -- 
 2.17.1
 
