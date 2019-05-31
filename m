@@ -2,45 +2,44 @@ Return-Path: <SRS0=1DKN=T7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,UNWANTED_LANGUAGE_BODY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 317D5C04AB6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98CEEC28CC2
 	for <bpf@archiver.kernel.org>; Fri, 31 May 2019 20:22:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 097D626EE3
+	by mail.kernel.org (Postfix) with ESMTP id 71AB626EE3
 	for <bpf@archiver.kernel.org>; Fri, 31 May 2019 20:22:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="GdqEIYun"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="g8OMfir4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727569AbfEaUWA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1727455AbfEaUWA (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 31 May 2019 16:22:00 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:53996 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727578AbfEaUWA (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 31 May 2019 16:22:00 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4VKKHq2026119
-        for <bpf@vger.kernel.org>; Fri, 31 May 2019 13:21:59 -0700
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:39846 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727574AbfEaUV7 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 31 May 2019 16:21:59 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x4VKHcWv011653
+        for <bpf@vger.kernel.org>; Fri, 31 May 2019 13:21:58 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=Wt6sD2qSGKYkBS0QszOymKVaxgnbMMGtUJuBoNuqkAY=;
- b=GdqEIYun/5tf2LgsqsoSJxE7pOMSmbPOx5JJR5DDBZauz+YsvUzkTxXWGNaTh3j7njvV
- Tp5p9b3UGiucM0N+cF5/UP4YUth6k5uDM4DudJ1e5SZ+jjdCK8gr/dk9me8D0r/UBTr3
- P9arPmv+yPS3YVI/alieLL1xhTgcniLNbE8= 
+ content-type; s=facebook; bh=AYJBxbod3aKifNwgTVgPBUcBvNE6JScxe741jkomWoE=;
+ b=g8OMfir4UmNmuR9qKwF5Nxvu17yHnpJuc3mHvO95UKcNyuSa+RIDwwfBzg2ePa3Jx3EM
+ BVvl65pu9XJUCTtGVrZrJe5lbDX+yVx+gh+Utk5c/LhGAkrM+Pf45DJ+j9YYAG8plxZN
+ LpZTPjQigwcRHyg3kvID3SrNelWY6YZJzSk= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2su10ka3xq-2
+        by m0001303.ppops.net with ESMTP id 2stnvh3u2m-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 31 May 2019 13:21:59 -0700
+        for <bpf@vger.kernel.org>; Fri, 31 May 2019 13:21:58 -0700
 Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 31 May 2019 13:21:58 -0700
+ 15.1.1713.5; Fri, 31 May 2019 13:21:53 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id B7D7C861799; Fri, 31 May 2019 13:21:55 -0700 (PDT)
+        id AB481861799; Fri, 31 May 2019 13:21:51 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -49,9 +48,9 @@ To:     <andrii.nakryiko@gmail.com>, <netdev@vger.kernel.org>,
         <kernel-team@fb.com>
 CC:     Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [RFC PATCH bpf-next 7/8] selftests/bpf: add test for BTF-defined maps
-Date:   Fri, 31 May 2019 13:21:31 -0700
-Message-ID: <20190531202132.379386-8-andriin@fb.com>
+Subject: [RFC PATCH bpf-next 5/8] libbpf: split initialization and loading of BTF
+Date:   Fri, 31 May 2019 13:21:29 -0700
+Message-ID: <20190531202132.379386-6-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190531202132.379386-1-andriin@fb.com>
 References: <20190531202132.379386-1-andriin@fb.com>
@@ -61,9 +60,9 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-31_14:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=972 adultscore=0 classifier=spam adjust=0 reason=mlx
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1810050000 definitions=main-1905310123
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -71,115 +70,96 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add file test for BTF-defined map definition.
+Libbpf does sanitization of BTF before loading it into kernel, if kernel
+doesn't support some of newer BTF features. This removes some of the
+important information from BTF (e.g., DATASEC and VAR description),
+which will be used for map construction. This patch splits BTF
+processing into initialization step, in which BTF is initialized from
+ELF and all the original data is still preserved; and
+sanitization/loading step, which ensures that BTF is safe to load into
+kernel. This allows to use full BTF information to construct maps, while
+still loading valid BTF into older kernels.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- .../selftests/bpf/progs/test_btf_newkv.c      | 73 +++++++++++++++++++
- tools/testing/selftests/bpf/test_btf.c        | 10 +--
- 2 files changed, 76 insertions(+), 7 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/test_btf_newkv.c
+ tools/lib/bpf/libbpf.c | 34 ++++++++++++++++++++++++----------
+ 1 file changed, 24 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_btf_newkv.c b/tools/testing/selftests/bpf/progs/test_btf_newkv.c
-new file mode 100644
-index 000000000000..28c16bb583b6
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_btf_newkv.c
-@@ -0,0 +1,73 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2018 Facebook */
-+#include <linux/bpf.h>
-+#include "bpf_helpers.h"
-+
-+int _version SEC("version") = 1;
-+
-+struct ipv_counts {
-+	unsigned int v4;
-+	unsigned int v6;
-+};
-+
-+/* just to validate we can handle maps in multiple sections */
-+struct bpf_map_def SEC("maps") btf_map_legacy = {
-+	.type = BPF_MAP_TYPE_ARRAY,
-+	.key_size = sizeof(int),
-+	.value_size = sizeof(long long),
-+	.max_entries = 4,
-+};
-+
-+BPF_ANNOTATE_KV_PAIR(btf_map_legacy, int, struct ipv_counts);
-+
-+struct {
-+	int *key;
-+	struct ipv_counts *value;
-+	unsigned int type;
-+	unsigned int max_entries;
-+} btf_map SEC(".maps") = {
-+	.type = BPF_MAP_TYPE_ARRAY,
-+	.max_entries = 4,
-+};
-+
-+struct dummy_tracepoint_args {
-+	unsigned long long pad;
-+	struct sock *sock;
-+};
-+
-+__attribute__((noinline))
-+static int test_long_fname_2(struct dummy_tracepoint_args *arg)
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 5e7ea7dac958..79a8143240d7 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -1118,7 +1118,7 @@ static void bpf_object__sanitize_btf_ext(struct bpf_object *obj)
+ 	}
+ }
+ 
+-static int bpf_object__load_btf(struct bpf_object *obj,
++static int bpf_object__init_btf(struct bpf_object *obj,
+ 				Elf_Data *btf_data,
+ 				Elf_Data *btf_ext_data)
+ {
+@@ -1137,13 +1137,6 @@ static int bpf_object__load_btf(struct bpf_object *obj,
+ 				   BTF_ELF_SEC, err);
+ 			goto out;
+ 		}
+-		bpf_object__sanitize_btf(obj);
+-		err = btf__load(obj->btf);
+-		if (err) {
+-			pr_warning("Error loading %s into kernel: %d.\n",
+-				   BTF_ELF_SEC, err);
+-			goto out;
+-		}
+ 	}
+ 	if (btf_ext_data) {
+ 		if (!obj->btf) {
+@@ -1159,7 +1152,6 @@ static int bpf_object__load_btf(struct bpf_object *obj,
+ 			obj->btf_ext = NULL;
+ 			goto out;
+ 		}
+-		bpf_object__sanitize_btf_ext(obj);
+ 	}
+ out:
+ 	if (err || IS_ERR(obj->btf)) {
+@@ -1170,6 +1162,26 @@ static int bpf_object__load_btf(struct bpf_object *obj,
+ 	return 0;
+ }
+ 
++static int bpf_object__sanitize_and_load_btf(struct bpf_object *obj)
 +{
-+	struct ipv_counts *counts;
-+	int key = 0;
++	int err = 0;
 +
-+	if (!arg->sock)
++	if (!obj->btf)
 +		return 0;
 +
-+	counts = bpf_map_lookup_elem(&btf_map, &key);
-+	if (!counts)
-+		return 0;
++	bpf_object__sanitize_btf(obj);
++	bpf_object__sanitize_btf_ext(obj);
 +
-+	counts->v6++;
-+
-+	/* just verify we can reference both maps */
-+	counts = bpf_map_lookup_elem(&btf_map_legacy, &key);
-+	if (!counts)
-+		return 0;
-+
++	err = btf__load(obj->btf);
++	if (err) {
++		pr_warning("Error loading %s into kernel: %d.\n",
++			   BTF_ELF_SEC, err);
++		btf__free(obj->btf);
++		obj->btf = NULL;
++	}
 +	return 0;
 +}
 +
-+__attribute__((noinline))
-+static int test_long_fname_1(struct dummy_tracepoint_args *arg)
-+{
-+	return test_long_fname_2(arg);
-+}
-+
-+SEC("dummy_tracepoint")
-+int _dummy_tracepoint(struct dummy_tracepoint_args *arg)
-+{
-+	return test_long_fname_1(arg);
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_btf.c b/tools/testing/selftests/bpf/test_btf.c
-index 289daf54dec4..8351cb5f4a20 100644
---- a/tools/testing/selftests/bpf/test_btf.c
-+++ b/tools/testing/selftests/bpf/test_btf.c
-@@ -4016,13 +4016,9 @@ struct btf_file_test {
- };
- 
- static struct btf_file_test file_tests[] = {
--{
--	.file = "test_btf_haskv.o",
--},
--{
--	.file = "test_btf_nokv.o",
--	.btf_kv_notfound = true,
--},
-+	{ .file = "test_btf_haskv.o", },
-+	{ .file = "test_btf_newkv.o", },
-+	{ .file = "test_btf_nokv.o", .btf_kv_notfound = true, },
- };
- 
- static int do_test_file(unsigned int test_num)
+ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
+ {
+ 	Elf *elf = obj->efile.elf;
+@@ -1301,9 +1313,11 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
+ 		pr_warning("Corrupted ELF file: index of strtab invalid\n");
+ 		return -LIBBPF_ERRNO__FORMAT;
+ 	}
+-	err = bpf_object__load_btf(obj, btf_data, btf_ext_data);
++	err = bpf_object__init_btf(obj, btf_data, btf_ext_data);
+ 	if (!err)
+ 		err = bpf_object__init_maps(obj, flags);
++	if (!err)
++		err = bpf_object__sanitize_and_load_btf(obj);
+ 	if (!err)
+ 		err = bpf_object__init_prog_names(obj);
+ 	return err;
 -- 
 2.17.1
 
