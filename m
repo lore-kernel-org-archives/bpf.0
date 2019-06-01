@@ -7,49 +7,49 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_PASS,T_DKIMWL_WL_HIGH,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18153C28CC1
-	for <bpf@archiver.kernel.org>; Sat,  1 Jun 2019 13:32:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94D99C28CC4
+	for <bpf@archiver.kernel.org>; Sat,  1 Jun 2019 13:35:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E604924A71
-	for <bpf@archiver.kernel.org>; Sat,  1 Jun 2019 13:32:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E4A327570
+	for <bpf@archiver.kernel.org>; Sat,  1 Jun 2019 13:35:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1559395971;
-	bh=nuYqMwCwaG4PsWLR2mx2Ey/kaHUQDv6D9pf68XwKee0=;
+	s=default; t=1559396129;
+	bh=PqzdtlKkEOw/1J2z8QPwCU+mX7xgINWSDIfzuEFKlbA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=FB+Uy47EKmAezSTcn7k496SJwGTw9SK/H6HS36r7pXAJs8cEDikJ43NzG9l0CNLYI
-	 GQ5eE77U6ttDgpPCQN7ucbSWQV0oX2ks0tBVKyzC2SGx3tbwIux4DgEqKyiPM7O49K
-	 Um91qIVJimPjBCSSMtM5uq7Ox20IVTiebv4nNplM=
+	b=IExl1aphqB0SXSf755vmK3fehew/J/IJqHjYai64XySCDisSQ/GpsmO3n4PeL3pmA
+	 LtVqxEJY69Fj52QPns+PMcccOCzzh1VSe4mvumZT8UaQfK4NzGSqcfLopnCS56XABZ
+	 JOfNMeTYGE0CW5McWKDrpTZT3OgAvNjX/3oOkeQQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729309AbfFANYs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 1 Jun 2019 09:24:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54914 "EHLO mail.kernel.org"
+        id S1727295AbfFANfX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 1 Jun 2019 09:35:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53246 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728445AbfFANYs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 1 Jun 2019 09:24:48 -0400
+        id S1728664AbfFANXZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 1 Jun 2019 09:23:25 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1A6862738C;
-        Sat,  1 Jun 2019 13:24:46 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C48FB27333;
+        Sat,  1 Jun 2019 13:23:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559395486;
-        bh=nuYqMwCwaG4PsWLR2mx2Ey/kaHUQDv6D9pf68XwKee0=;
+        s=default; t=1559395403;
+        bh=PqzdtlKkEOw/1J2z8QPwCU+mX7xgINWSDIfzuEFKlbA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h76C05+9JN+jchdMhc/kD5giIHKOfZF1i61nPydN2+VVg5Wt3YU9JvG/yTlXKcq07
-         If05kiEjy+V6q8m6gWQyJdQQle5sSuMKSHNZHSh6YViunKYURPXbfy9brpK8Ngjxv2
-         RRusKEhFhIuD203AzpU7l4183swHEUq2kjA6J3Fc=
+        b=O2vdCgmtPvcTsZKr26QY1C6dgO1qykxwMH6lSfNjgLrvbl71AxG2YRJ05A/sYggls
+         +xfq3zi/dzjPiKOPVqpApz/lMqup5zIln9ZQWl7pt5OAqLYfS5KVz8W8W9N8wO7MyG
+         16u9Oi2qvSXrPXqYKpblgohv1Ewu4iy18+bmW0MM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     John Sperbeck <jsperbeck@google.com>,
         Dennis Zhou <dennis@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-mm@kvack.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 31/99] percpu: remove spurious lock dependency between percpu and sched
-Date:   Sat,  1 Jun 2019 09:22:38 -0400
-Message-Id: <20190601132346.26558-31-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 043/141] percpu: remove spurious lock dependency between percpu and sched
+Date:   Sat,  1 Jun 2019 09:20:19 -0400
+Message-Id: <20190601132158.25821-43-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190601132346.26558-1-sashal@kernel.org>
-References: <20190601132346.26558-1-sashal@kernel.org>
+In-Reply-To: <20190601132158.25821-1-sashal@kernel.org>
+References: <20190601132158.25821-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -201,10 +201,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/mm/percpu.c b/mm/percpu.c
-index 0c06e2f549a7b..bc58bcbe4b609 100644
+index 41e58f3d8fbf2..c66149ce1fe6a 100644
 --- a/mm/percpu.c
 +++ b/mm/percpu.c
-@@ -1702,6 +1702,7 @@ void free_percpu(void __percpu *ptr)
+@@ -1721,6 +1721,7 @@ void free_percpu(void __percpu *ptr)
  	struct pcpu_chunk *chunk;
  	unsigned long flags;
  	int off;
@@ -212,7 +212,7 @@ index 0c06e2f549a7b..bc58bcbe4b609 100644
  
  	if (!ptr)
  		return;
-@@ -1723,7 +1724,7 @@ void free_percpu(void __percpu *ptr)
+@@ -1742,7 +1743,7 @@ void free_percpu(void __percpu *ptr)
  
  		list_for_each_entry(pos, &pcpu_slot[pcpu_nr_slots - 1], list)
  			if (pos != chunk) {
@@ -221,7 +221,7 @@ index 0c06e2f549a7b..bc58bcbe4b609 100644
  				break;
  			}
  	}
-@@ -1731,6 +1732,9 @@ void free_percpu(void __percpu *ptr)
+@@ -1750,6 +1751,9 @@ void free_percpu(void __percpu *ptr)
  	trace_percpu_free_percpu(chunk->base_addr, off, ptr);
  
  	spin_unlock_irqrestore(&pcpu_lock, flags);
