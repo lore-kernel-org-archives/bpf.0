@@ -2,114 +2,124 @@ Return-Path: <SRS0=PVg6=UA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2DBAC28CC1
-	for <bpf@archiver.kernel.org>; Sat,  1 Jun 2019 13:43:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AF67C28CC1
+	for <bpf@archiver.kernel.org>; Sat,  1 Jun 2019 15:42:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AD2FC276E7
-	for <bpf@archiver.kernel.org>; Sat,  1 Jun 2019 13:43:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1559396600;
-	bh=EO/dkPdDUW+fy2N8DW/eKTgmTrgnAEjtpEC/X2yFuUQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=zCFBLhSdDUPtcpfRwrFFu/hFyI0sizC//JOVWhQULM6MT+yxIqdUeyXxHf6Lhj5lq
-	 LMQBV5Xz4rtlpnzHL5xR8xXnlvjb4YSbnbFzJK3uhfsOXpC23cHMw+KIfyjEiN4TYo
-	 QwVuODLR9YSycfZWXIZTCWVT9mnbJOw+U+WF5bnI=
+	by mail.kernel.org (Postfix) with ESMTP id E5E6E27349
+	for <bpf@archiver.kernel.org>; Sat,  1 Jun 2019 15:42:35 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BWe3vZYk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727818AbfFANSc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 1 Jun 2019 09:18:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45522 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727804AbfFANSc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 1 Jun 2019 09:18:32 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 32EFB255FF;
-        Sat,  1 Jun 2019 13:18:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559395111;
-        bh=EO/dkPdDUW+fy2N8DW/eKTgmTrgnAEjtpEC/X2yFuUQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zxpHU9IGWcZS6hYw/r5ArGK7pkRYSUvdPqYv2Mb63+rUZnzSDajE++yFv7vo6je50
-         ycPYnkAJOYn5dFNU46P0JuPJnD2s5HYe/rBJhvWA+3iW9mmIu4UtSkHkk2AluXvswb
-         Kg9UA85uCfhsDedZLtLD+dH0atsI678YKY6er1TE=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Krzesimir Nowak <krzesimir@kinvolk.io>,
-        Alban Crequy <alban@kinvolk.io>,
-        =?UTF-8?q?Iago=20L=C3=B3pez=20Galeiras?= <iago@kinvolk.io>,
-        Yonghong Song <yhs@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 036/186] bpf: fix undefined behavior in narrow load handling
-Date:   Sat,  1 Jun 2019 09:14:12 -0400
-Message-Id: <20190601131653.24205-36-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190601131653.24205-1-sashal@kernel.org>
-References: <20190601131653.24205-1-sashal@kernel.org>
+        id S1725980AbfFAPmf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 1 Jun 2019 11:42:35 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:37138 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725946AbfFAPmf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 1 Jun 2019 11:42:35 -0400
+Received: by mail-lf1-f65.google.com with SMTP id m15so10307255lfh.4;
+        Sat, 01 Jun 2019 08:42:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ANAnojDFgO/UEOlubtSuomjYlfi+/05syRfAQew4Lkc=;
+        b=BWe3vZYk2212WygQaRKlhOpRBvB4lylIckxRox790gWm26U5NjY3x6nsinUGmJR/Ot
+         vu4u0v2+q1Utb2Ud96218SSO/CgAae857yAyxW7poZSMvXFKCzM8b2cEW9v1cCB1943Q
+         9jA5EZ96jgiydsflEcKjIRORIgYkSXJak4RuQNc1olKMoHdsjLRCBbIwopCFcz6gyenB
+         WQoEH9M9xoEtdtQNzeZXj/Ea+uOsA0w5Fl6dCoN057C+dhy7uAR3R4ORpoSaJ5ExD4+A
+         BgjCGvoTlDsUwGb2jF/Kd8MtRGl+jYLUQWRK7EdwmoCreKB+V/WaZxYCtB9sjh2J5XlI
+         rSUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ANAnojDFgO/UEOlubtSuomjYlfi+/05syRfAQew4Lkc=;
+        b=Bif2dm23coOiTkvWzLafMhwctIsfRDUnGf7vfQTyUMFqPfSv1fc1M+u8gfEAkKW/8C
+         qcxjdSaWyUPWVt/Yiu21pQ7gxduaauX9TJM3mevsSlu3meMrVVEYouO8TVLhRyyA6Z5F
+         HZM/Tt7k5KugK2HyoxDTHNbaVrpqu67WjxJweshbBZtNydm2YNatQQXTzI1o92b70a7K
+         NZzNV41keJ4eNfIauPkGUqBKx+vXk4m0SFd9m0zIZBN6Ndx09up2ObamSqlfAz4T04Ji
+         RU8fNVn+G3t8bTX2QcNZImrYzUegk99ChfHnNXQjhmMs+mohZ8t+yCtlLoWLjS6Ub7av
+         joDA==
+X-Gm-Message-State: APjAAAVmirC+F5mk/cjTXtvvU0xCJaAZpLWZHZgMOyZcQaZ4ZsNxkEOb
+        o5Ml/j3InG7AOyVHwr6YFBcVniMXySu/wrchGvQ=
+X-Google-Smtp-Source: APXvYqytR1+jWyGN6bSKk5YHqC9B/y7Dba5mi2AgjkjhDwtD1lpQ7TlbddjDrIvEUcp0YLJt1cM/vJ8MjIjGQhARSvw=
+X-Received: by 2002:a19:ab1a:: with SMTP id u26mr1575334lfe.6.1559403753167;
+ Sat, 01 Jun 2019 08:42:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <201906011337.lBp5SlWB%lkp@intel.com>
+In-Reply-To: <201906011337.lBp5SlWB%lkp@intel.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sat, 1 Jun 2019 08:42:21 -0700
+Message-ID: <CAADnVQJC5Gx5Z=2=mngHMU65fGoesMBWy5pifeDquPOhefMF-A@mail.gmail.com>
+Subject: Re: [bpf:master 3/3] kernel/bpf/arraymap.c:657:36: error: invalid
+ application of 'sizeof' to incomplete type 'struct perf_sample_data'
+To:     Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>
+Cc:     Matt Mullins <mmullins@fb.com>, kbuild-all@01.org,
+        Andrew Hall <hall@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Krzesimir Nowak <krzesimir@kinvolk.io>
+Hi Matt,
 
-[ Upstream commit e2f7fc0ac6957cabff4cecf6c721979b571af208 ]
+due to this build issue I removed your commit from bpf tree.
+Please fix and resubmit.
 
-Commit 31fd85816dbe ("bpf: permits narrower load from bpf program
-context fields") made the verifier add AND instructions to clear the
-unwanted bits with a mask when doing a narrow load. The mask is
-computed with
+Thanks!
 
-  (1 << size * 8) - 1
-
-where "size" is the size of the narrow load. When doing a 4 byte load
-of a an 8 byte field the verifier shifts the literal 1 by 32 places to
-the left. This results in an overflow of a signed integer, which is an
-undefined behavior. Typically, the computed mask was zero, so the
-result of the narrow load ended up being zero too.
-
-Cast the literal to long long to avoid overflows. Note that narrow
-load of the 4 byte fields does not have the undefined behavior,
-because the load size can only be either 1 or 2 bytes, so shifting 1
-by 8 or 16 places will not overflow it. And reading 4 bytes would not
-be a narrow load of a 4 bytes field.
-
-Fixes: 31fd85816dbe ("bpf: permits narrower load from bpf program context fields")
-Reviewed-by: Alban Crequy <alban@kinvolk.io>
-Reviewed-by: Iago López Galeiras <iago@kinvolk.io>
-Signed-off-by: Krzesimir Nowak <krzesimir@kinvolk.io>
-Cc: Yonghong Song <yhs@fb.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- kernel/bpf/verifier.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 09d5d972c9ff2..950fac024fbb1 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -7296,7 +7296,7 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
- 									insn->dst_reg,
- 									shift);
- 				insn_buf[cnt++] = BPF_ALU64_IMM(BPF_AND, insn->dst_reg,
--								(1 << size * 8) - 1);
-+								(1ULL << size * 8) - 1);
- 			}
- 		}
- 
--- 
-2.20.1
-
+On Fri, May 31, 2019 at 10:48 PM kbuild test robot <lkp@intel.com> wrote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
+> head:   0b21b5502f561940e0d29f7ec5f840309e4a0243
+> commit: 0b21b5502f561940e0d29f7ec5f840309e4a0243 [3/3] bpf: preallocate a perf_sample_data per event fd
+> config: m68k-allyesconfig (attached as .config)
+> compiler: m68k-linux-gcc (GCC) 7.4.0
+> reproduce:
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         git checkout 0b21b5502f561940e0d29f7ec5f840309e4a0243
+>         # save the attached .config to linux build tree
+>         GCC_VERSION=7.4.0 make.cross ARCH=m68k
+>
+> If you fix the issue, kindly add following tag
+> Reported-by: kbuild test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>    kernel/bpf/arraymap.c: In function 'bpf_event_entry_gen':
+> >> kernel/bpf/arraymap.c:657:36: error: invalid application of 'sizeof' to incomplete type 'struct perf_sample_data'
+>      ee = kzalloc(sizeof(*ee) + sizeof(struct perf_sample_data), GFP_ATOMIC);
+>                                        ^~~~~~
+>
+> vim +657 kernel/bpf/arraymap.c
+>
+>    651
+>    652  static struct bpf_event_entry *bpf_event_entry_gen(struct file *perf_file,
+>    653                                                     struct file *map_file)
+>    654  {
+>    655          struct bpf_event_entry *ee;
+>    656
+>  > 657          ee = kzalloc(sizeof(*ee) + sizeof(struct perf_sample_data), GFP_ATOMIC);
+>    658          if (ee) {
+>    659                  ee->event = perf_file->private_data;
+>    660                  ee->perf_file = perf_file;
+>    661                  ee->map_file = map_file;
+>    662                  ee->sd = (void *)ee + sizeof(*ee);
+>    663          }
+>    664
+>    665          return ee;
+>    666  }
+>    667
+>
+> ---
+> 0-DAY kernel test infrastructure                Open Source Technology Center
+> https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
