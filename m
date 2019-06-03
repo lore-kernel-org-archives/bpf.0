@@ -2,148 +2,276 @@ Return-Path: <SRS0=PT69=UC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11A04C04AB5
-	for <bpf@archiver.kernel.org>; Mon,  3 Jun 2019 21:55:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18A91C04AB5
+	for <bpf@archiver.kernel.org>; Mon,  3 Jun 2019 22:03:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D8FDC26C3B
-	for <bpf@archiver.kernel.org>; Mon,  3 Jun 2019 21:55:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C295D247FC
+	for <bpf@archiver.kernel.org>; Mon,  3 Jun 2019 22:03:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore-com.20150623.gappssmtp.com header.i=@paul-moore-com.20150623.gappssmtp.com header.b="iHxItZmO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g+w/JPF2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726141AbfFCVz2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 3 Jun 2019 17:55:28 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:34351 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726049AbfFCVz2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 3 Jun 2019 17:55:28 -0400
-Received: by mail-lf1-f68.google.com with SMTP id y198so4306188lfa.1
-        for <bpf@vger.kernel.org>; Mon, 03 Jun 2019 14:55:27 -0700 (PDT)
+        id S1726241AbfFCWDa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 3 Jun 2019 18:03:30 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:32947 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726205AbfFCWDa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 3 Jun 2019 18:03:30 -0400
+Received: by mail-qk1-f195.google.com with SMTP id r6so1543990qkc.0;
+        Mon, 03 Jun 2019 15:03:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=39SsS75pnQ5vHdEqbne0WJ2yXM1xbTpEuZ3/IBKSvQw=;
-        b=iHxItZmO7EMI3oQoeYJNo81cTXL+a2p2lGyUDGhwEFPlL7xmIzWMz2BXM9RXXpR8HJ
-         bArXNfvV6zQe9IVr2+s/xKS8FaFXc/zYRj4s8VwQUrsFbtonyI6viek4fO8KY8ypzEhP
-         8yPBFAHB2MiATF/1ZdJoqWHdv0wyyNK5PXublbT5pKOGjVLjmQp27zoYA6KWmMIBVk4n
-         KLoHEK3LWJD5b+6lDu+yQ0byVhXODfaT4qcOgyoqCn1LN2X/NKX81uXtFnrvjiX+XoR4
-         7XMccsJarvfaKxnubqoBtMZFM2Wbo6yl1WFEvAqILRdXP5cwozFrPoWhqw6KmJJ8+9ks
-         Ph/Q==
+        bh=gWv5V0/ta59nQpjTBeFRFaXwoOhTRqRKQPqzVwoEPFY=;
+        b=g+w/JPF2X4+ZLrxseSdMcT7a0I7fvfSaEkSoYG5NuqBBLhUfeQoBcaUPKGAeOw5XZZ
+         Vwd+XzIDH8hhz4NQw9ALUwtBfH0MXAJtJQsLlNWzTsLf47iKu8jN/olmz3tXeTg21Zdb
+         3lIJZ58ldJXB3RjE18x+IgMYxUUUrS928TIHOXSND5uX6t6KcoM0Zpe9sOMNgVm6xrki
+         Yix0W7yscNBEPVpSQF9Am6kO2KFKCAmmCi6D2kB+V2sz746rDDaWTJ4U30JFAccweckN
+         IzRd9KPgwSVxELYYKtyt/rHbmBarZe2/QNRUHz6DGVZSRNNsdCxZjD7Y040LZ/oY9Gm/
+         GwpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=39SsS75pnQ5vHdEqbne0WJ2yXM1xbTpEuZ3/IBKSvQw=;
-        b=ba6sAlTVnhfx6SLaG+ePjsSrypBpb1S1cZy5+VpKk+goM0W4fW9VXkyl/X7qGfKWLu
-         jLzLhtBU03T5qcT+c7jsemlj1JgXhmfxcJFr5kqINgUUSLnbI+D7WlX1+Qf92yXezr3d
-         RDxXimK9c6xnV1Q4s1Tu/lNhmnWp0TvVhWn4a4hk+5dYr17DDpioR2TvtGQiZBAmKfKI
-         4YQGvdbVQNkDMyQrEEoVUj6H2pUGuYeSUdHDrjFQX3ZZ6/sO1c4rUxESkrVKsV3U8dYi
-         atpoRedK4LCKeEnpbPp0zLdggjmb/IE/6XGdVY2D8FUwveOcFEcxHJzy7Sut+StPtDnC
-         rGTg==
-X-Gm-Message-State: APjAAAVNjN9Pj1mNOeY5r+JGcWgYFvAUwk+a0wunJlAwJYj+qRP8Y8Ho
-        rsSnCMu9FJbMJUUIz4SQXl1HUM+QX8IJzMWxrfw3Y+c=
-X-Google-Smtp-Source: APXvYqxKd5fwr8QHl9rJyGVa9hftw7WKVY4g2KKTll9Io6rs88ViptI9pRCooetIr8mIjw9lSzXtBYo7RsBEknadaiw=
-X-Received: by 2002:a19:c301:: with SMTP id t1mr15151815lff.137.1559595462723;
- Mon, 03 Jun 2019 13:57:42 -0700 (PDT)
+        bh=gWv5V0/ta59nQpjTBeFRFaXwoOhTRqRKQPqzVwoEPFY=;
+        b=MTddgC6BCPwavdz41+N+fQey1TPiHpeilikqENSQAyNCsXzrID0BWs9mnh5lhwxY7i
+         BtsrwBABVE+CMMXZs60wcknMF9GWxPfolwXmlykE1yQvWF5xlh3qSI6w/P1XD3Cz46t2
+         1+nVi7orfhpLZQwjAseWD7RIdSwF/ocAAcE1P48e0po+6yoWbtu6rca3+S/vCT5RKsrn
+         86yj5R+jxlMvroyl4Rp99/2635oKpuQSh0v+7CqFItNdk8q0UD5tRmq2S4Vr+4wOXX3s
+         SvkLnTHk52qrHAENC6XhLDRFD2PNN9xViBzzv3OAEezjPgrAgsp6JV4WmqLq0hp6UoMU
+         tyYA==
+X-Gm-Message-State: APjAAAWUXNwDEU/Ja6/GPLDx0FqFmMSOmM362PSq2N5J5xwkt9roQwZx
+        IvXkxNUUKuQoJPJ8oPjtYgSWdIcKqQDLbP41x2uBA2oraLA=
+X-Google-Smtp-Source: APXvYqz9/g0gashzobTt6rTz5+EO4tt9rB5q3r5aGBYkkMTw12kqcRkTT1x9ndV45FD+v/aAekjfmM+D1bunRDhxVeo=
+X-Received: by 2002:a37:b3c2:: with SMTP id c185mr24150891qkf.44.1559599407865;
+ Mon, 03 Jun 2019 15:03:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190601021526.GA8264@zhanggen-UX430UQ> <CAFqZXNuPMxOQeq-5evh4dSuGC-Q5sQPjbhRgCBh4Q=u6OrEi9Q@mail.gmail.com>
-In-Reply-To: <CAFqZXNuPMxOQeq-5evh4dSuGC-Q5sQPjbhRgCBh4Q=u6OrEi9Q@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 3 Jun 2019 16:57:31 -0400
-Message-ID: <CAHC9VhSt9Qsj1Lgr+H0unbbxOR18KZqoSbfXPR=XpJ8uD8Q2AQ@mail.gmail.com>
-Subject: Re: [PATCH v3] selinux: lsm: fix a missing-check bug in selinux_sb_eat_lsm_opts()
-To:     Ondrej Mosnacek <omosnace@redhat.com>,
-        Gen Zhang <blackgod016574@gmail.com>
-Cc:     Stephen Smalley <sds@tycho.nsa.gov>,
-        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
+References: <20190531202132.379386-1-andriin@fb.com> <20190531202132.379386-7-andriin@fb.com>
+ <20190531212835.GA31612@mini-arch> <CAEf4Bza38VEh9NWTLEReAR_J0eqjsvH1a2T-0AeWqDZpE8YPfA@mail.gmail.com>
+ <20190603163222.GA14556@mini-arch>
+In-Reply-To: <20190603163222.GA14556@mini-arch>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 3 Jun 2019 15:03:16 -0700
+Message-ID: <CAEf4BzbRXAZMXY3kG9HuRC93j5XhyA3EbWxkLrrZsG7K4abdBg@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 6/8] libbpf: allow specifying map definitions
+ using BTF
+To:     Stanislav Fomichev <sdf@fomichev.me>
+Cc:     Andrii Nakryiko <andriin@fb.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jun 3, 2019 at 3:27 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
-> On Sat, Jun 1, 2019 at 4:15 AM Gen Zhang <blackgod016574@gmail.com> wrote:
-> > In selinux_sb_eat_lsm_opts(), 'arg' is allocated by kmemdup_nul(). It
-> > returns NULL when fails. So 'arg' should be checked. And 'mnt_opts'
-> > should be freed when error.
-> >
-> > Signed-off-by: Gen Zhang <blackgod016574@gmail.com>
-> > Reviewed-by: Ondrej Mosnacek <omosnace@redhat.com>
-> > Fixes: 99dbbb593fe6 ("selinux: rewrite selinux_sb_eat_lsm_opts()")
-> > ---
-> > diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> > index 3ec702c..f329fc0 100644
-> > --- a/security/selinux/hooks.c
-> > +++ b/security/selinux/hooks.c
-> > @@ -2616,6 +2616,7 @@ static int selinux_sb_eat_lsm_opts(char *options, void **mnt_opts)
-> >         char *from = options;
-> >         char *to = options;
-> >         bool first = true;
-> > +       int ret;
+On Mon, Jun 3, 2019 at 9:32 AM Stanislav Fomichev <sdf@fomichev.me> wrote:
 >
-> I'd suggest just moving the declaration of 'rc' here and simply reuse
-> that variable. Otherwise the patch looks good to me.
-
-Agreed.  Creating "ret" only makes the patch larger and doesn't add any value.
-
-I try to avoid making broad statements, but if you are unsure about
-which approach to take when fixing a problem, start with the smallest
-patch you can write.  Even if it turns out not to be the "best"
-solution upstream, it will be easier to review, discuss, and
-potentially port to other/older kernels.
-
+> On 05/31, Andrii Nakryiko wrote:
+> > On Fri, May 31, 2019 at 2:28 PM Stanislav Fomichev <sdf@fomichev.me> wrote:
+> > >
+> > > On 05/31, Andrii Nakryiko wrote:
+> > > > This patch adds support for a new way to define BPF maps. It relies on
+> > > > BTF to describe mandatory and optional attributes of a map, as well as
+> > > > captures type information of key and value naturally. This eliminates
+> > > > the need for BPF_ANNOTATE_KV_PAIR hack and ensures key/value sizes are
+> > > > always in sync with the key/value type.
+> > > My 2c: this is too magical and relies on me knowing the expected fields.
+> > > (also, the compiler won't be able to help with the misspellings).
 > >
-> >         while (1) {
-> >                 int len = opt_len(from);
-> > @@ -2635,15 +2636,16 @@ static int selinux_sb_eat_lsm_opts(char *options, void **mnt_opts)
-> >                                                 *q++ = c;
-> >                                 }
-> >                                 arg = kmemdup_nul(arg, q - arg, GFP_KERNEL);
-> > +                               if (!arg) {
-> > +                                       ret = -ENOMEM;
-> > +                                       goto free_opt;
-> > +                               }
-> >                         }
-> >                         rc = selinux_add_opt(token, arg, mnt_opts);
-> >                         if (unlikely(rc)) {
-> > +                               ret = rc;
-> >                                 kfree(arg);
-> > -                               if (*mnt_opts) {
-> > -                                       selinux_free_mnt_opts(*mnt_opts);
-> > -                                       *mnt_opts = NULL;
-> > -                               }
-> > -                               return rc;
-> > +                               goto free_opt;
-> >                         }
-> >                 } else {
-> >                         if (!first) {   // copy with preceding comma
-> > @@ -2661,6 +2663,12 @@ static int selinux_sb_eat_lsm_opts(char *options, void **mnt_opts)
-> >         }
-> >         *to = '\0';
-> >         return 0;
-> > +free_opt:
-> > +       if (*mnt_opts) {
-> > +               selinux_free_mnt_opts(*mnt_opts);
-> > +               *mnt_opts = NULL;
-> > +       }
-> > +       return ret;
-> >  }
+> > I don't think it's really worse than current bpf_map_def approach. In
+> > typical scenario, there are only two fields you need to remember: type
+> > and max_entries (notice, they are called exactly the same as in
+> > bpf_map_def, so this knowledge is transferrable). Then you'll have
+> > key/value, using which you are describing both type (using field's
+> > type) and size (calculated from the type).
 > >
-> >  static int selinux_sb_remount(struct super_block *sb, void *mnt_opts)
+> > I can relate a bit to that with bpf_map_def you can find definition
+> > and see all possible fields, but one can also find a lot of examples
+> > for new map definitions as well.
+> >
+> > One big advantage of this scheme, though, is that you get that type
+> > association automagically without using BPF_ANNOTATE_KV_PAIR hack,
+> > with no chance of having a mismatch, etc. This is less duplication (no
+> > need to do sizeof(struct my_struct) and struct my_struct as an arg to
+> > that macro) and there is no need to go and ping people to add those
+> > annotations to improve introspection of BPF maps.
+> Don't get me wrong, it looks good and there are advantages compared to
+> the existing way. But, again, feels to me a bit too magic. We should somehow
+> make it less magic (see below).
 >
-> --
-> Ondrej Mosnacek <omosnace at redhat dot com>
-> Software Engineer, Security Technologies
-> Red Hat, Inc.
+> > > I don't know how others feel about it, but I'd be much more comfortable
+> > > with a simpler TLV-like approach. Have a new section where the format
+> > > is |4-byte size|struct bpf_map_def_extendable|. That would essentially
+> > > allow us to extend it the way we do with a syscall args.
+> >
+> > It would help with extensibility, sure, though even current
+> > bpf_map_def approach sort of can be extended already. But it won't
+> > solve the problem of having BTF types captured for key/value (see
+> > above). Also, you'd need another macro to lay everything out properly.
+> I didn't know that we look into the list of exported symbols to estimate
+> the number of maps and then use it to derive struct bpf_map_def size.
+>
+> In that case, maybe we can keep extending struct bpf_map_def
+> and support BTF mode as a better alternative? bpf_map_def could be
+> used as a reference for which fields there are, people can still use it
+> (with BPF_ANNOTATE_KV_PAIR if needed), but they can also use
+> new BTF mode if they find that works better for them?
+>
+> Because the biggest issue for me with the BTF mode is the question
+> of where to look for the supported fields (and misspellings). People
+> on this mailing list can probably figure it out, but people who don't
+> work full time on bpf might find it hard. Having 'struct bpf_map_def'
+> as a reference (or a good supported piece of documentation) might help
 
--- 
-paul moore
-www.paul-moore.com
+So yeah, it's more about documentation and examples, it seems, rather
+than having a C struct in code, right? Today, if I need to add new
+map, I copy/paste either from example, existing code or look up
+documentation. You'll be able to do the same with new way (just grep
+for \.maps).
+
+> with that.
+>
+> What do you think? The only issue is that we now have two formats
+> to support :-/
+
+We'll have to support existing bpf_map_def for backwards compatibility
+(and see my reply to Jakub, you can just plain re-use struct
+bpf_map_def today with BTF approach, just put it into .maps section),
+but I'd love to avoid having to support new features using two
+different way, so if we go with BTF, I'd restrict new features to BTF
+only, moving forward.
+
+>
+> > > Also, (un)related: we don't currently use BTF internally, so if
+> > > you convert all tests, we'd be unable to run them :-(
+> >
+> > Not exactly sure what you mean "you'd be unable to run them". Do you
+> > mean that you use old Clang that doesn't emit BTF? If that's what you
+> > are saying, a lot of tests already rely on latest Clang, so those
+> > tests already don't work for you, probably. I'll leave it up to Daniel
+> > and Alexei to decide if we want to convert selftests right now or not.
+> > I did it mostly to prove that we can handle all existing cases (and
+> > found few gotchas and bugs along the way, both in my implementation
+> > and in kernel - fixes coming soon).
+> Yes, I mean that we don't always use the latest features of clang,
+> so having the existing tests in the old form (at least for a while)
+> would be appreciated. Good candidates to showcase new format can
+> be features that explicitly require BTF, stuff like spinlocks.
+
+I totally understand a concern, but I'll still defer to maintainers to
+make a call as to when to do conversion.
+
+>
+> > > > Relying on BTF, this approach allows for both forward and backward
+> > > > compatibility w.r.t. extending supported map definition features. Old
+> > > > libbpf implementation will ignore fields it doesn't recognize, while new
+> > > > implementations will parse and recognize new optional attributes.
+> > > I also don't know how to feel about old libbpf ignoring some attributes.
+> > > In the kernel we require that the unknown fields are zeroed.
+> > > We probably need to do something like that here? What do you think
+> > > would be a good example of an optional attribute?
+> >
+> > Ignoring is required for forward-compatibility, where old libbpf will
+> > be used to load newer user BPF programs. We can decided not to do it,
+> > in that case it's just a question of erroring out on first unknown
+> > field. This RFC was posted exactly to discuss all these issues with
+> > more general community, as there is no single true way to do this.
+> >
+> > As for examples of when it can be used. It's any feature that can be
+> > considered optional or a hint, so if old libbpf doesn't do that, it's
+> > still not the end of the world (and we can live with that, or can
+> > correct using direct libbpf API calls).
+> In general, doing what we do right now with bpf_map_def (returning an error
+> for non-zero unknown options) seems like the safest option. We should
+> probably do the same with the unknown BTF fields (return an error
+> for non-zero value).
+
+Yeah, as I replied to Jakub, libbpf already has strict/non-strict
+mode, we should probably do the same. The only potential difference is
+that there is no need to check for zeros and stuff: just don't define
+a field. And using an extra flag, we can allow more relaxed semantics
+(just debug/info/warn message on unknown fields). This is what
+__bpf_object__open_xattr does today with MAPS_RELAX_COMPAT flag.
+
+>
+> For a general BTF case, we can have some predefined policy: if, for example,
+> the field name starts with an underscore, it's optional and doesn't require
+> non-zero check. (or the name ends with '_opt' or some other clear policy).
+>
+> > > > The outline of the new map definition (short, BTF-defined maps) is as follows:
+> > > > 1. All the maps should be defined in .maps ELF section. It's possible to
+> > > >    have both "legacy" map definitions in `maps` sections and BTF-defined
+> > > >    maps in .maps sections. Everything will still work transparently.
+> > > > 2. The map declaration and initialization is done through
+> > > >    a global/static variable of a struct type with few mandatory and
+> > > >    extra optional fields:
+> > > >    - type field is mandatory and specified type of BPF map;
+> > > >    - key/value fields are mandatory and capture key/value type/size information;
+> > > >    - max_entries attribute is optional; if max_entries is not specified or
+> > > >      initialized, it has to be provided in runtime through libbpf API
+> > > >      before loading bpf_object;
+> > > >    - map_flags is optional and if not defined, will be assumed to be 0.
+> > > > 3. Key/value fields should be **a pointer** to a type describing
+> > > >    key/value. The pointee type is assumed (and will be recorded as such
+> > > >    and used for size determination) to be a type describing key/value of
+> > > >    the map. This is done to save excessive amounts of space allocated in
+> > > >    corresponding ELF sections for key/value of big size.
+> > > > 4. As some maps disallow having BTF type ID associated with key/value,
+> > > >    it's possible to specify key/value size explicitly without
+> > > >    associating BTF type ID with it. Use key_size and value_size fields
+> > > >    to do that (see example below).
+> > > >
+> > > > Here's an example of simple ARRAY map defintion:
+> > > >
+> > > > struct my_value { int x, y, z; };
+> > > >
+> > > > struct {
+> > > >       int type;
+> > > >       int max_entries;
+> > > >       int *key;
+> > > >       struct my_value *value;
+> > > > } btf_map SEC(".maps") = {
+> > > >       .type = BPF_MAP_TYPE_ARRAY,
+> > > >       .max_entries = 16,
+> > > > };
+> > > >
+> > > > This will define BPF ARRAY map 'btf_map' with 16 elements. The key will
+> > > > be of type int and thus key size will be 4 bytes. The value is struct
+> > > > my_value of size 12 bytes. This map can be used from C code exactly the
+> > > > same as with existing maps defined through struct bpf_map_def.
+> > > >
+> > > > Here's an example of STACKMAP definition (which currently disallows BTF type
+> > > > IDs for key/value):
+> > > >
+> > > > struct {
+> > > >       __u32 type;
+> > > >       __u32 max_entries;
+> > > >       __u32 map_flags;
+> > > >       __u32 key_size;
+> > > >       __u32 value_size;
+> > > > } stackmap SEC(".maps") = {
+> > > >       .type = BPF_MAP_TYPE_STACK_TRACE,
+> > > >       .max_entries = 128,
+> > > >       .map_flags = BPF_F_STACK_BUILD_ID,
+> > > >       .key_size = sizeof(__u32),
+> > > >       .value_size = PERF_MAX_STACK_DEPTH * sizeof(struct bpf_stack_build_id),
+> > > > };
+> > > >
+> > > > This approach is naturally extended to support map-in-map, by making a value
+> > > > field to be another struct that describes inner map. This feature is not
+> > > > implemented yet. It's also possible to incrementally add features like pinning
+> > > > with full backwards and forward compatibility.
+> > > >
+> > > > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> > > > ---
+> > > >  tools/lib/bpf/btf.h    |   1 +
+> > > >  tools/lib/bpf/libbpf.c | 333 +++++++++++++++++++++++++++++++++++++++--
+> > > >  2 files changed, 325 insertions(+), 9 deletions(-)
