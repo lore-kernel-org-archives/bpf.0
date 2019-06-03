@@ -2,154 +2,135 @@ Return-Path: <SRS0=PT69=UC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 302DDC04AB5
-	for <bpf@archiver.kernel.org>; Mon,  3 Jun 2019 18:07:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 478CAC04AB5
+	for <bpf@archiver.kernel.org>; Mon,  3 Jun 2019 21:43:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1092024001
-	for <bpf@archiver.kernel.org>; Mon,  3 Jun 2019 18:07:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0ED1425E3D
+	for <bpf@archiver.kernel.org>; Mon,  3 Jun 2019 21:43:07 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=paul-moore-com.20150623.gappssmtp.com header.i=@paul-moore-com.20150623.gappssmtp.com header.b="VKJfnpAi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726305AbfFCSHX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 3 Jun 2019 14:07:23 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:59072 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726055AbfFCSHX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 3 Jun 2019 14:07:23 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212])
-        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_128_CBC_SHA1:16)
-        (Exim 4.76)
-        (envelope-from <colin.king@canonical.com>)
-        id 1hXrMe-0000O6-Ld; Mon, 03 Jun 2019 18:07:20 +0000
-Subject: Re: [PATCH][next] bpf: remove redundant assignment to err
-To:     Jakub Kicinski <jakub.kicinski@netronome.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        netdev@vger.kernel.org, xdp-newbies@vger.kernel.org,
-        bpf@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20190603170247.9951-1-colin.king@canonical.com>
- <20190603102140.70fee157@cakuba.netronome.com>
- <276525bd-dd79-052e-7663-9acc92621853@canonical.com>
- <20190603104930.466a306b@cakuba.netronome.com>
-From:   Colin Ian King <colin.king@canonical.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=colin.king@canonical.com; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <e351d18c-21cd-6617-2a59-31a48be54b7e@canonical.com>
-Date:   Mon, 3 Jun 2019 19:07:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1726681AbfFCVnG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 3 Jun 2019 17:43:06 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:45855 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726281AbfFCVnG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 3 Jun 2019 17:43:06 -0400
+Received: by mail-lf1-f66.google.com with SMTP id u10so7741216lfm.12
+        for <bpf@vger.kernel.org>; Mon, 03 Jun 2019 14:43:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KcMRXd21hP8UmZkIG2RNnfnlH3SL7cuLE0q0RRkiu6s=;
+        b=VKJfnpAi1elHGrQJDGOtM/gN/DHi+Ci3IGMyX3NflK3rCh5QLlasviFfYvd5Z1n0Ll
+         sfT8j+rkJXOwV+YDS4o331naQ3mO3WKL+3uzZCCq+E1Ng8/lfuiakuEj6quDz1FceLdp
+         VfWqSDxDiyG7NS9ZHVwM7jMRPxBMvAPlMmUAa+1zKBWuFKfkWh+WvFe7roZu+S9re1MR
+         3mC8jy0LYvW2rqnw21AMOZdU5BlpaR9WphB1XPicbMYHATdnNswhzKRw/tq3nf2r/7OW
+         3pfIOyj1vzv7RlvQMgzQll2YOArCb8xfux5xgJZAvw7K6GU8R2M0+JaSP0/ZEshAzMpu
+         KasQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KcMRXd21hP8UmZkIG2RNnfnlH3SL7cuLE0q0RRkiu6s=;
+        b=H3a3ZZZVEB2RZbc4Io9uarcqh4d+9hITWbeWWNWqlBSkMea2zcJJBuZ/fDpStAAACW
+         VncYT64187tSSUkr3KlJP38b1HNPPU0tiuT3jATL6XDqrlSrGUWmpISak600FQebpvFi
+         aDfYM9FkMG7rnRfYEpPWeFXnqO+sGIxDIVEnJQDxgGGuxP15j2siZde3Se8/QpTXrRnC
+         f8EexWmkcwmDmtk/jHqu3Gv/7e4vhubWNmd1sDoiTkB/g5bhmgimYe3srDv6Dj0w9g67
+         SyFFvgaq1nb7FGvU7yZ/BwdleBrYFBgGgFVrzvraJHwAgbWdL6z9xOt8kDe25y2EToxs
+         k9yQ==
+X-Gm-Message-State: APjAAAUDHVYL9E/z6AqXfVBz8f0Yef0DD6yMTIZeyqk+4ybyotKUWMO7
+        16RIWG5z4OUXgXpW50Hl1wZCUh9cQKTDwzjyzFdV
+X-Google-Smtp-Source: APXvYqzBxyQVJ38l2yQR8Z55mFmcEnbrYjFwFo/PW/t0ZGSpit+8SCjtd4FFxwH9Ik99pI6puP1BvcBqmSMmUGqMVew=
+X-Received: by 2002:ac2:4358:: with SMTP id o24mr14377637lfl.13.1559596567285;
+ Mon, 03 Jun 2019 14:16:07 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190603104930.466a306b@cakuba.netronome.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190601021526.GA8264@zhanggen-UX430UQ> <CAFqZXNvBpmxNYjZx6YcH5Q-u4Tkwhfyzu_8VmEe8O7r9CCsvNg@mail.gmail.com>
+In-Reply-To: <CAFqZXNvBpmxNYjZx6YcH5Q-u4Tkwhfyzu_8VmEe8O7r9CCsvNg@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 3 Jun 2019 17:15:56 -0400
+Message-ID: <CAHC9VhQdr0uOe0X0vLN9fOe7zDJ8bnX4fDLSTmjAGJymCyQ+zg@mail.gmail.com>
+Subject: Re: [PATCH v3] selinux: lsm: fix a missing-check bug in selinux_sb_eat_lsm_opts()
+To:     Ondrej Mosnacek <omosnace@redhat.com>
+Cc:     Gen Zhang <blackgod016574@gmail.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 03/06/2019 18:49, Jakub Kicinski wrote:
-> On Mon, 3 Jun 2019 18:39:16 +0100, Colin Ian King wrote:
->> On 03/06/2019 18:21, Jakub Kicinski wrote:
->>> On Mon,  3 Jun 2019 18:02:47 +0100, Colin King wrote:  
->>>> From: Colin Ian King <colin.king@canonical.com>
->>>>
->>>> The variable err is assigned with the value -EINVAL that is never
->>>> read and it is re-assigned a new value later on.  The assignment is
->>>> redundant and can be removed.
->>>>
->>>> Addresses-Coverity: ("Unused value")
->>>> Signed-off-by: Colin Ian King <colin.king@canonical.com>
->>>> ---
->>>>  kernel/bpf/devmap.c | 2 +-
->>>>  kernel/bpf/xskmap.c | 2 +-
->>>>  2 files changed, 2 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
->>>> index 5ae7cce5ef16..a76cc6412fc4 100644
->>>> --- a/kernel/bpf/devmap.c
->>>> +++ b/kernel/bpf/devmap.c
->>>> @@ -88,7 +88,7 @@ static u64 dev_map_bitmap_size(const union bpf_attr *attr)
->>>>  static struct bpf_map *dev_map_alloc(union bpf_attr *attr)
->>>>  {
->>>>  	struct bpf_dtab *dtab;
->>>> -	int err = -EINVAL;
->>>> +	int err;
->>>>  	u64 cost;  
->>>
->>> Perhaps keep the variables ordered longest to shortest?  
->>
->> Is that a required coding standard?
-> 
-> For networking code, yes.  Just look around the files you're changing
-> and see for yourself.
+On Mon, Jun 3, 2019 at 3:23 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+> On Sat, Jun 1, 2019 at 4:15 AM Gen Zhang <blackgod016574@gmail.com> wrote:
+> > In selinux_sb_eat_lsm_opts(), 'arg' is allocated by kmemdup_nul(). It
+> > returns NULL when fails. So 'arg' should be checked. And 'mnt_opts'
+> > should be freed when error.
+> >
+> > Signed-off-by: Gen Zhang <blackgod016574@gmail.com>
+> > Reviewed-by: Ondrej Mosnacek <omosnace@redhat.com>
+>
+> It looks like you're new to the kernel development community, so let
+> me give you a bit of friendly advice for the future :)
+>
+> You don't need to repost the patch when people give you
+> Acked-by/Reviewed-by/Tested-by (unless there is a different reason to
+> respin/repost the patches). The maintainer goes over the replies when
+> applying the final patch and adds Acked-by/Reviewed-by/... on his/her
+> own.
+>
+> If you *do* need to respin a path for which you have received A/R/T,
+> then you need to distinguish between two cases:
+> 1. Only trivial changes to the patch (only fixed typos, edited commit
+> message, removed empty line, etc. - for example, v1 -> v2 of this
+> patch falls into this category) - in this case you can collect the
+> A/R/T yourself and add them to the new version. This saves the
+> maintainer and the reviewers from redundant work, since the patch is
+> still semantically the same and the A/R/T from the last version still
+> apply.
+> 2. Non-trivial changes to the patch (as is the case for this patch) -
+> in this case your patch needs to be reviewed again and you should
+> disregard all A/R/T from the previous version. You can easily piss
+> someone off if you add their Reviewed-by to a patch they haven't
+> actually reviewed, so be careful ;-)
 
-Ah, informal coding standards. Great. Won't this end up with more diff
-churn?
+I want to stress Ondrej's last point.  Carrying over an
+Acked-by/Reviewed-by/Tested-by tag if you make anything more than the
+most trivial change in a patch is *very* bad, and will likely result
+in a loss of trust between you and the maintainer.  If you are unsure,
+drop the A/R/T tag, there is *much* less harm in asking someone to
+re-review a patch than falsely tagging a patch as reviewed by someone
+when you have made substantial changes.
 
-> 
->>>>  	if (!capable(CAP_NET_ADMIN))
->>>> diff --git a/kernel/bpf/xskmap.c b/kernel/bpf/xskmap.c
->>>> index 22066c28ba61..26859c6c9491 100644
->>>> --- a/kernel/bpf/xskmap.c
->>>> +++ b/kernel/bpf/xskmap.c
->>>> @@ -17,7 +17,7 @@ struct xsk_map {
->>>>  
->>>>  static struct bpf_map *xsk_map_alloc(union bpf_attr *attr)
->>>>  {
->>>> -	int cpu, err = -EINVAL;
->>>> +	int cpu, err;
->>>>  	struct xsk_map *m;
->>>>  	u64 cost;  
->>>
->>> And here.
+I suspect you may have already read the
+Documentation/process/submitting-patches.rst file, but if you haven't
+it is worth reading.  It covers many of the things that are discussed
+elsewhere.
 
+If you aren't already, you should get in the habit of doing the
+following for each patch you post to the mailing list:
+1. Make sure it compiles cleanly, or at least doesn't introduce any
+new compiler warnings/errors.
+2. Run ./scripts/checkpatch.pl and fix as many problems as you can; a
+patch can still be accepted with checkpatch warnings/errors (and some
+maintainers might dislike some of checkpatch's decisions), but it
+helps a lot if you can fix all those.
+3. At the very least make sure your kernel changes boot, if you can,
+run the associated subsystem's test (if they have one) to verify that
+there are no regressions (the SELinux kernel test suite is here:
+https://github.com/SELinuxProject/selinux-testsuite)
+
+Lastly, when in doubt, you can always ask the mailing list; the
+SELinux list is a pretty friendly place :)
+
+-- 
+paul moore
+www.paul-moore.com
