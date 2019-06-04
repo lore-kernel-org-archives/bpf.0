@@ -2,175 +2,100 @@ Return-Path: <SRS0=9p/N=UD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C51EC282CE
-	for <bpf@archiver.kernel.org>; Tue,  4 Jun 2019 13:56:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82E14C282CE
+	for <bpf@archiver.kernel.org>; Tue,  4 Jun 2019 14:18:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0DD4024BC2
-	for <bpf@archiver.kernel.org>; Tue,  4 Jun 2019 13:56:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 580B12488E
+	for <bpf@archiver.kernel.org>; Tue,  4 Jun 2019 14:18:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1559657884;
+	bh=pEsbNQVUXZbSZW2TB6NppvxcRCj8hOFqmsyZKz/KNh4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=KpcYg746wgJx2uj7zYPqBZw47FD4D7ZXGgAAvz3RhS8uLkkk5fCLiwwwo4/MaTM4K
+	 OG5J/z4s5GFyNiTXfaIRw69A28Sa9dfdF0DVHrNTMVN8zjm6YwtXBLOU37cu4pCNr8
+	 EtS/igTYlnnHql4Dbx7zdEa7rc4sXOttRPm/7Ny8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727533AbfFDN4H (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 4 Jun 2019 09:56:07 -0400
-Received: from mail-it1-f199.google.com ([209.85.166.199]:42876 "EHLO
-        mail-it1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727504AbfFDN4H (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 4 Jun 2019 09:56:07 -0400
-Received: by mail-it1-f199.google.com with SMTP id s18so69873itl.7
-        for <bpf@vger.kernel.org>; Tue, 04 Jun 2019 06:56:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=e0x3CjfxT+Tc9OfQE9UyUP0v/CUgs1KGy0Ok9Cy7y8Q=;
-        b=Ncolpllqp7xPDCQ7voftSW2tGlCzGnnMNCp7h7PHu/HMhQ8iTTkKqL/aJmSZm5c/nn
-         8TVcqACMOvYYQSiqgOifzGU37mWK8vNMJnquX2E8A8PuipbPYd/jb2222Alcv4j5a/aV
-         2ESPWp3CrdYhN2k7/bma8h8B47MBKDgZj8nq+95lf4LIqbxB+jvGZK+A/49qHvHAjxb+
-         URqBH4MPCgkMePQY7DnuSchvIreEJz+cgBtVb4iGZgyeKNrE24xQDKsNfSjKlLzA15tc
-         l7uYwkq4iQUS+oTdOG3gXJ8hxFhLSmg5GB0f3u3BxUkBnImicHEPM5MseXML+pDbFspF
-         FWmg==
-X-Gm-Message-State: APjAAAXkgpnyTtdmrTDSvccE6r1xBuDLWkcbBNjXpP6gaQmYAcrrw7yn
-        Jltbm/OVabKW2MaGaJsInV6Gp9uPXHkGhCtF3ed9v0EQpNFb
-X-Google-Smtp-Source: APXvYqxswE3V/GpTEDke+LgJdIgEgE7AHZepq4QIp7VgGjhnjLYEetNn3M4bxurDFjITYWRV/6FI9+281KrpB9Zvomf/8KvUcPy8
+        id S1727770AbfFDOSE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 4 Jun 2019 10:18:04 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:52570 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727727AbfFDOSD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 4 Jun 2019 10:18:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=dhO3igvxIrcqM2bITRvLnPGN4GI5urZRLFU+88zCRl4=; b=CbxVc21JdLEkl0FXEV2FwrXHbE
+        aK8sdLMTmQioUaiN5FMija5UFkoQqIuFVWCG/MDjmQkbP13PTElegFIY5obDo5hFHZKHutXYUNSiK
+        M8sByLx38c/LyOcgNcMQn+eHslUqV8/PXmBmSqhkpiQum1Z7k9Vb9FEbiV5ND8VK5HLEJKAi6wTm+
+        5j9Tp9BehAdbSBtHw5Kh6YzQoUTACOG4NjbDsy/QvtEZ3f6/6pu5BniJxuhS/MneESKh828Voiaik
+        L4SgFCqwLOkt6FVRmNSC+cLLz/HQKhAvxIXvI+4iOJB2+nMtmKbx4K8ztiaPJCdOWTPLJM8+u3/gF
+        CbuE0bRA==;
+Received: from [179.182.172.34] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hYAGH-0001Rp-Ud; Tue, 04 Jun 2019 14:18:01 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1hYAGE-0002kv-KM; Tue, 04 Jun 2019 11:17:58 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH v2 05/22] docs: bpf: get rid of two warnings
+Date:   Tue,  4 Jun 2019 11:17:39 -0300
+Message-Id: <72cc48d5e25c9fb2b8729111db82abce8b25ee1b.1559656538.git.mchehab+samsung@kernel.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <cover.1559656538.git.mchehab+samsung@kernel.org>
+References: <cover.1559656538.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9f12:: with SMTP id q18mr16396879iot.250.1559656566027;
- Tue, 04 Jun 2019 06:56:06 -0700 (PDT)
-Date:   Tue, 04 Jun 2019 06:56:06 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000097025d058a7fd785@google.com>
-Subject: KASAN: slab-out-of-bounds Read in css_task_iter_advance
-From:   syzbot <syzbot+9343b7623bc03dc680c1@syzkaller.appspotmail.com>
-To:     ast@kernel.org, bpf@vger.kernel.org, cgroups@vger.kernel.org,
-        daniel@iogearbox.net, hannes@cmpxchg.org, kafai@fb.com,
-        linux-kernel@vger.kernel.org, lizefan@huawei.com,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, tj@kernel.org, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello,
+Documentation/bpf/btf.rst:154: WARNING: Unexpected indentation.
+Documentation/bpf/btf.rst:163: WARNING: Unexpected indentation.
 
-syzbot found the following crash on:
-
-HEAD commit:    56b697c6 Add linux-next specific files for 20190604
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=170d747ca00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4248d6bc70076f7d
-dashboard link: https://syzkaller.appspot.com/bug?extid=9343b7623bc03dc680c1
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-
-Unfortunately, I don't have any reproducer for this crash yet.
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+9343b7623bc03dc680c1@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: slab-out-of-bounds in css_task_iter_advance+0x49b/0x540  
-kernel/cgroup/cgroup.c:4507
-Read of size 4 at addr ffff88809ae59d64 by task syz-executor.2/28895
-
-CPU: 1 PID: 28895 Comm: syz-executor.2 Not tainted 5.2.0-rc3-next-20190604  
-#8
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0x172/0x1f0 lib/dump_stack.c:113
-  print_address_description.cold+0xd4/0x306 mm/kasan/report.c:351
-  __kasan_report.cold+0x1b/0x36 mm/kasan/report.c:482
-  kasan_report+0x12/0x20 mm/kasan/common.c:614
-  __asan_report_load4_noabort+0x14/0x20 mm/kasan/generic_report.c:131
-  css_task_iter_advance+0x49b/0x540 kernel/cgroup/cgroup.c:4507
-  css_task_iter_start+0x18b/0x230 kernel/cgroup/cgroup.c:4543
-  update_tasks_flags+0x85/0x100 kernel/cgroup/cpuset.c:1836
-  update_flag+0x232/0x470 kernel/cgroup/cpuset.c:1886
-  cpuset_write_u64+0x222/0x270 kernel/cgroup/cpuset.c:2268
-  cgroup_file_write+0x4db/0x790 kernel/cgroup/cgroup.c:3727
-  kernfs_fop_write+0x2b8/0x480 fs/kernfs/file.c:316
-  __vfs_write+0x8a/0x110 fs/read_write.c:494
-  vfs_write+0x268/0x5d0 fs/read_write.c:558
-  ksys_write+0x14f/0x290 fs/read_write.c:611
-  __do_sys_write fs/read_write.c:623 [inline]
-  __se_sys_write fs/read_write.c:620 [inline]
-  __x64_sys_write+0x73/0xb0 fs/read_write.c:620
-  do_syscall_64+0xfd/0x680 arch/x86/entry/common.c:301
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x459279
-Code: fd b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7  
-48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
-ff 0f 83 cb b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007f8d15ef2c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000459279
-RDX: 0000000000000011 RSI: 00000000200000c0 RDI: 0000000000000004
-RBP: 000000000075bf20 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f8d15ef36d4
-R13: 00000000004c8eb1 R14: 00000000004dfb68 R15: 00000000ffffffff
-
-Allocated by task 9803:
-  save_stack+0x23/0x90 mm/kasan/common.c:71
-  set_track mm/kasan/common.c:79 [inline]
-  __kasan_kmalloc mm/kasan/common.c:489 [inline]
-  __kasan_kmalloc.constprop.0+0xcf/0xe0 mm/kasan/common.c:462
-  kasan_slab_alloc+0xf/0x20 mm/kasan/common.c:497
-  slab_post_alloc_hook mm/slab.h:444 [inline]
-  slab_alloc mm/slab.c:3320 [inline]
-  kmem_cache_alloc+0x11a/0x6f0 mm/slab.c:3482
-  getname_flags fs/namei.c:138 [inline]
-  getname_flags+0xd6/0x5b0 fs/namei.c:128
-  getname fs/namei.c:209 [inline]
-  do_renameat2+0x199/0xc40 fs/namei.c:4543
-  __do_sys_rename fs/namei.c:4671 [inline]
-  __se_sys_rename fs/namei.c:4669 [inline]
-  __x64_sys_rename+0x61/0x80 fs/namei.c:4669
-  do_syscall_64+0xfd/0x680 arch/x86/entry/common.c:301
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-
-Freed by task 9803:
-  save_stack+0x23/0x90 mm/kasan/common.c:71
-  set_track mm/kasan/common.c:79 [inline]
-  __kasan_slab_free+0x102/0x150 mm/kasan/common.c:451
-  kasan_slab_free+0xe/0x10 mm/kasan/common.c:459
-  __cache_free mm/slab.c:3426 [inline]
-  kmem_cache_free+0x86/0x320 mm/slab.c:3692
-  putname+0xef/0x130 fs/namei.c:259
-  do_renameat2+0x2b4/0xc40 fs/namei.c:4647
-  __do_sys_rename fs/namei.c:4671 [inline]
-  __se_sys_rename fs/namei.c:4669 [inline]
-  __x64_sys_rename+0x61/0x80 fs/namei.c:4669
-  do_syscall_64+0xfd/0x680 arch/x86/entry/common.c:301
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-
-The buggy address belongs to the object at ffff88809ae58440
-  which belongs to the cache names_cache of size 4096
-The buggy address is located 2340 bytes to the right of
-  4096-byte region [ffff88809ae58440, ffff88809ae59440)
-The buggy address belongs to the page:
-page:ffffea00026b9600 refcount:1 mapcount:0 mapping:ffff8880aa593ac0  
-index:0x0 compound_mapcount: 0
-flags: 0x1fffc0000010200(slab|head)
-raw: 01fffc0000010200 ffffea00018b4308 ffffea0001afb488 ffff8880aa593ac0
-raw: 0000000000000000 ffff88809ae58440 0000000100000001 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
-  ffff88809ae59c00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-  ffff88809ae59c80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> ffff88809ae59d00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-                                                        ^
-  ffff88809ae59d80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-  ffff88809ae59e00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
-
-
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Acked-by: Song Liu <songliubraving@fb.com>
 ---
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ Documentation/bpf/btf.rst | 2 ++
+ 1 file changed, 2 insertions(+)
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
+index 35d83e24dbdb..4d565d202ce3 100644
+--- a/Documentation/bpf/btf.rst
++++ b/Documentation/bpf/btf.rst
+@@ -151,6 +151,7 @@ for the type. The maximum value of ``BTF_INT_BITS()`` is 128.
+ 
+ The ``BTF_INT_OFFSET()`` specifies the starting bit offset to calculate values
+ for this int. For example, a bitfield struct member has:
++
+  * btf member bit offset 100 from the start of the structure,
+  * btf member pointing to an int type,
+  * the int type has ``BTF_INT_OFFSET() = 2`` and ``BTF_INT_BITS() = 4``
+@@ -160,6 +161,7 @@ from bits ``100 + 2 = 102``.
+ 
+ Alternatively, the bitfield struct member can be the following to access the
+ same bits as the above:
++
+  * btf member bit offset 102,
+  * btf member pointing to an int type,
+  * the int type has ``BTF_INT_OFFSET() = 0`` and ``BTF_INT_BITS() = 4``
+-- 
+2.21.0
+
