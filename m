@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59E23C28CC3
-	for <bpf@archiver.kernel.org>; Tue,  4 Jun 2019 23:27:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A117BC282CE
+	for <bpf@archiver.kernel.org>; Tue,  4 Jun 2019 23:29:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 29E0F206B8
-	for <bpf@archiver.kernel.org>; Tue,  4 Jun 2019 23:27:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 701D4206B8
+	for <bpf@archiver.kernel.org>; Tue,  4 Jun 2019 23:29:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1559690843;
-	bh=nxRh5gsWX0lw2JTcIKF3LVbsKygYCIFFl5DHEA4xlWs=;
+	s=default; t=1559690942;
+	bh=9DVrfb+RbfAXUwVGsZ1Q/yAi2qX0Y8GWACm+qa2AtnU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=uVXiwjXOvYAeW8WU62n7VUKNLhd2OiAHsdGQTj8N0BNb6TKZrJ5ordkctzmM5z1si
-	 jqmJ/EdxymF0wcrX/uz5Zt5yfj2092Byc9Tau4HviVyp1lBNgZcXCNrS9tSBbPJntc
-	 4JfxFyIjVSUfrzwY/HvlTAcF/s39phmYAu+6OeFk=
+	b=Gvy9GWUK3a/M4EOLg7s/hF8ZJ4cQYWHikVM8eQ0TkkwHK09tDMxx8sCGqo44Cj7kY
+	 Mot1yJzWLiNVTqfW/uqbfOIgEMtVN1vEK3UJYJ9n0heaLIfTTQF/6v2APv4aoRfWE9
+	 g/oBV8R0QPqbwFl/OEFo9473wxMscz7jzmIlauWw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727955AbfFDXZU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 4 Jun 2019 19:25:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36930 "EHLO mail.kernel.org"
+        id S1727681AbfFDXYl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 4 Jun 2019 19:24:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35772 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727201AbfFDXZU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 4 Jun 2019 19:25:20 -0400
+        id S1727616AbfFDXYk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 4 Jun 2019 19:24:40 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9E1E32085A;
-        Tue,  4 Jun 2019 23:25:17 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BF3F320863;
+        Tue,  4 Jun 2019 23:24:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559690718;
-        bh=nxRh5gsWX0lw2JTcIKF3LVbsKygYCIFFl5DHEA4xlWs=;
+        s=default; t=1559690679;
+        bh=9DVrfb+RbfAXUwVGsZ1Q/yAi2qX0Y8GWACm+qa2AtnU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LjveTIoyG1AXUW7Jz4HyVsMuwbAcAFE+/CMD2k6kWZwh/KJxM2H5p2GoIadlXOvak
-         THBC1FElbsnz0jhYjXb6bqZPzbjiUYWnemk62xiupGg4vQqax0TqobIfItQpY5nfbB
-         bNbHD87ya14aFFvr36QcflFZMuZUF4OSqC2bBt7s=
+        b=k/78EMeiQ9/8NMZ3HsIXWsISPKW6BKvzvB7jYjXp2yGF6uAnANIPsm72tuJa1r38R
+         jDgkXK69HONp02YWkPd8ptP4q2MetEauJl2L2wAT/JlxRi0Z9KWjoCZ+Svl/ptVSwA
+         UNWHLA6FkZzP5cNDJItsHInTQJADrZYjZCSAtosE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Li Rongqing <lirongqing@baidu.com>, Zhang Yu <zhangyu31@baidu.com>,
@@ -48,12 +48,12 @@ Cc:     Li Rongqing <lirongqing@baidu.com>, Zhang Yu <zhangyu31@baidu.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 09/17] ipc: prevent lockup on alloc_msg and free_msg
-Date:   Tue,  4 Jun 2019 19:24:50 -0400
-Message-Id: <20190604232459.7745-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 10/24] ipc: prevent lockup on alloc_msg and free_msg
+Date:   Tue,  4 Jun 2019 19:24:01 -0400
+Message-Id: <20190604232416.7479-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190604232459.7745-1-sashal@kernel.org>
-References: <20190604232459.7745-1-sashal@kernel.org>
+In-Reply-To: <20190604232416.7479-1-sashal@kernel.org>
+References: <20190604232416.7479-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -155,10 +155,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 14 insertions(+), 2 deletions(-)
 
 diff --git a/ipc/mqueue.c b/ipc/mqueue.c
-index 28a142f1be36..d5491a880751 100644
+index d24025626310..5c0ae912f2f2 100644
 --- a/ipc/mqueue.c
 +++ b/ipc/mqueue.c
-@@ -371,7 +371,8 @@ static void mqueue_evict_inode(struct inode *inode)
+@@ -374,7 +374,8 @@ static void mqueue_evict_inode(struct inode *inode)
  	struct user_struct *user;
  	unsigned long mq_bytes, mq_treesize;
  	struct ipc_namespace *ipc_ns;
@@ -168,7 +168,7 @@ index 28a142f1be36..d5491a880751 100644
  
  	clear_inode(inode);
  
-@@ -382,10 +383,15 @@ static void mqueue_evict_inode(struct inode *inode)
+@@ -385,10 +386,15 @@ static void mqueue_evict_inode(struct inode *inode)
  	info = MQUEUE_I(inode);
  	spin_lock(&info->lock);
  	while ((msg = msg_get(info)) != NULL)
@@ -186,7 +186,7 @@ index 28a142f1be36..d5491a880751 100644
  	mq_treesize = info->attr.mq_maxmsg * sizeof(struct msg_msg) +
  		min_t(unsigned int, info->attr.mq_maxmsg, MQ_PRIO_MAX) *
 diff --git a/ipc/msgutil.c b/ipc/msgutil.c
-index bf74eaa5c39f..6d90b191c638 100644
+index 84598025a6ad..e65593742e2b 100644
 --- a/ipc/msgutil.c
 +++ b/ipc/msgutil.c
 @@ -18,6 +18,7 @@
