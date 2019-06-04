@@ -2,149 +2,191 @@ Return-Path: <SRS0=9p/N=UD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61B36C282CE
-	for <bpf@archiver.kernel.org>; Tue,  4 Jun 2019 10:17:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B089C282CE
+	for <bpf@archiver.kernel.org>; Tue,  4 Jun 2019 10:18:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3B065216F4
-	for <bpf@archiver.kernel.org>; Tue,  4 Jun 2019 10:17:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6009323D5B
+	for <bpf@archiver.kernel.org>; Tue,  4 Jun 2019 10:18:46 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=nifty.com header.i=@nifty.com header.b="T4jvQ0G6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727195AbfFDKRR convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 4 Jun 2019 06:17:17 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:41948 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727246AbfFDKRQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 4 Jun 2019 06:17:16 -0400
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id A877E3082DCE;
-        Tue,  4 Jun 2019 10:17:15 +0000 (UTC)
-Received: from carbon (ovpn-200-32.brq.redhat.com [10.40.200.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F399E5C89D;
-        Tue,  4 Jun 2019 10:17:04 +0000 (UTC)
-Date:   Tue, 4 Jun 2019 12:17:03 +0200
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Saeed Mahameed <saeedm@mellanox.com>
-Cc:     "jakub.kicinski@netronome.com" <jakub.kicinski@netronome.com>,
-        "bjorn.topel@gmail.com" <bjorn.topel@gmail.com>,
-        "toke@redhat.com" <toke@redhat.com>,
-        "magnus.karlsson@intel.com" <magnus.karlsson@intel.com>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "bjorn.topel@intel.com" <bjorn.topel@intel.com>, brouer@redhat.com,
-        John Fastabend <john.fastabend@gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] net: xdp: refactor XDP_QUERY_PROG{,_HW}
- to netdev
-Message-ID: <20190604121703.2baa0c0c@carbon>
-In-Reply-To: <f7e9b1c8f358a4bb83f01ab76dcc95195083e2bf.camel@mellanox.com>
-References: <20190531094215.3729-1-bjorn.topel@gmail.com>
-        <20190531094215.3729-2-bjorn.topel@gmail.com>
-        <b0a9c3b198bdefd145c34e52aa89d33aa502aaf5.camel@mellanox.com>
-        <20190601124233.5a130838@cakuba.netronome.com>
-        <CAJ+HfNjbALzf4SaopKe3pA4dV6n9m30doai_CLEDB9XG2RzjOg@mail.gmail.com>
-        <f7e9b1c8f358a4bb83f01ab76dcc95195083e2bf.camel@mellanox.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.46]); Tue, 04 Jun 2019 10:17:16 +0000 (UTC)
+        id S1727226AbfFDKSj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 4 Jun 2019 06:18:39 -0400
+Received: from conuserg-08.nifty.com ([210.131.2.75]:44024 "EHLO
+        conuserg-08.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727139AbfFDKSj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 4 Jun 2019 06:18:39 -0400
+Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
+        by conuserg-08.nifty.com with ESMTP id x54AEC76032511;
+        Tue, 4 Jun 2019 19:14:12 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com x54AEC76032511
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1559643254;
+        bh=2Cnt75TjD0TucqN65Zm4F4aK2FsJEMupPn4+qQfaomQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=T4jvQ0G6x7AI4kdGX5qwlpK7HOvTaBPAv/cRO5t4X32Dcs0uPZAvSErXh4DSjGB31
+         HcpKj3d7GK+dEJgeRDnlb3IgG5M1SUitGYK8fWYBHTStYwEem3M/mbalLmPcf7FXff
+         2NyynthHyJ0CxXthF++gCaIlODh+BwsYOnM6Vm7DKEJGoJYT3haZXkmHOejQU4htdI
+         qbLlQa5xUwjLEMB8M7yoUoLHvQw77TZmiZ2m1IsbGjpX7v+Ox9dBMBaEmddSnnMqUe
+         FudqJKtGFxDLUHkFG12GbiN4Ma4TLji3PyPSof/DKDCjFWY8qenZH14JVAqU6EKQqf
+         rZdDvtK1Yi38A==
+X-Nifty-SrcIP: [153.142.97.92]
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-riscv@lists.infradead.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-s390@vger.kernel.org, Greentime Hu <green.hu@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Palmer Dabbelt <palmer@sifive.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-snps-arc@lists.infradead.org,
+        Song Liu <songliubraving@fb.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Yonghong Song <yhs@fb.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Paul Mackerras <paulus@samba.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        linux-parisc@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        linux-kernel@vger.kernel.org, Vincent Chen <deanbo422@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH 00/15] kbuild: refactor headers_install and support compile-test of UAPI headers
+Date:   Tue,  4 Jun 2019 19:13:54 +0900
+Message-Id: <20190604101409.2078-1-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.17.1
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 3 Jun 2019 21:20:30 +0000
-Saeed Mahameed <saeedm@mellanox.com> wrote:
 
-> On Mon, 2019-06-03 at 11:04 +0200, Björn Töpel wrote:
-> > On Sat, 1 Jun 2019 at 21:42, Jakub Kicinski
-> > <jakub.kicinski@netronome.com> wrote:  
-> > > On Fri, 31 May 2019 19:18:17 +0000, Saeed Mahameed wrote:  
-> > > > On Fri, 2019-05-31 at 11:42 +0200, Björn Töpel wrote:  
-> > > > > From: Björn Töpel <bjorn.topel@intel.com>
-> > > > > 
-> > > > > All XDP capable drivers need to implement the
-> > > > > XDP_QUERY_PROG{,_HW} command of ndo_bpf. The query code is
-> > > > > fairly generic. This commit refactors the query code up from
-> > > > > the drivers to the netdev level.
-> > > > > 
-> > > > > The struct net_device has gained two new members: xdp_prog_hw
-> > > > > and xdp_flags. The former is the offloaded XDP program, if
-> > > > > any, and the latter tracks the flags that the supplied when
-> > > > > attaching the XDP  program. The flags only apply to SKB_MODE
-> > > > > or DRV_MODE, not HW_MODE.
-> > > > > 
-> > > > > The xdp_prog member, previously only used for SKB_MODE, is
-> > > > > shared with DRV_MODE. This is OK, due to the fact that
-> > > > > SKB_MODE and DRV_MODE are mutually exclusive. To
-> > > > > differentiate between the two modes, a new internal flag is
-> > > > > introduced as well.  
-> > > > 
-> > > > Just thinking out loud, why can't we allow any combination of
-> > > > HW/DRV/SKB modes? they are totally different attach points in a
-> > > > totally different checkpoints in a frame life cycle.  
+Multiple people have suggested to compile-test UAPI headers.
 
-The DRV_MODE and SKB_MODE is tricky to run concurrently. The XDP-redirect
-scheme (designed by John) use a BPF helper (bpf_xdp_redirect_map) that
-set global per-CPU state (this_cpu_ptr(&bpf_redirect_info)).
+Currently, Kbuild provides simple sanity checks by headers_check
+but they are not enough to catch bugs.
 
-The tricky part (which I warned about, and we already have some fixes
-for) is that the XDP/BPF-prog can call bpf_redirect_map, which update
-the per-CPU state, but it can still choose not to return XDP_REDIRECT,
-which then miss an invocation of xdp_do_redirect().  
- Later, your SKB_MODE XDP/BPF-prog can return XDP_REDIRECT without
-calling the helper, and then use/reach to the per-CPU info set by the
-DRV_MODE program, which is NOT something I want us to "support".
+The most recent patch I know is David Howells' work:
+https://patchwork.kernel.org/patch/10590203/
 
+I agree that we need better tests for UAPI headers,
+but I want to integrate it in a clean way.
 
-> > > FWIW see Message-ID: <20190201080236.446d84d4@redhat.com>
-> > 
-> > I've always seen the SKB-mode as something that will eventually be
-> > removed.
-> 
-> I don't think so, we are too deep into SKB-mode.
+The idea that has been in my mind is to compile each header
+to make sure the selfcontainedness.
 
-I wish we could remove it.  After we got native XDP support in veth,
-then its original purpose is gone, which were making it easier for
-developers to get something working on their laptop, without having to
-deploy it to the server with physical hardware all the time.
+Recently, Jani Nikula proposed a new syntax 'header-test-y'.
+https://patchwork.kernel.org/patch/10947005/
+
+So, I implemented UAPI compile-testing on top of that.
+
+When adding a new feature, cleaning the code first is a
+good practice.
+
+[1] Remove headers_install_all
+
+This target installs UAPI headers of all architectures
+in a single tree.
+It does not make sense to compile test of headers from
+multiple arches at the same time. Hence, removed.
+
+[2] Split header installation into 'make headers' and 'make headers_install'
+
+To compile-test UAPI headers, we need a work-directory somewhere
+to save objects and .*.cmd files.
+
+usr/include/ will be the work-directory.
+
+Since we cannot pollute the final destination of headers_install,
+
+I split the header installation into two stages.
+
+'make headers' will build up
+the ready-to-install headers in usr/include,
+which will be also used as a work-directory for the compile-test.
+
+'make headers_install' will copy headers
+from usr/include to $(INSTALL_HDR_PATH)/include.
+
+[3] Support compile-test of UAPI headers
+
+This is implemented in usr/include/Makefile
 
 
-> > Clickable link:
-> >  https://lore.kernel.org/netdev/20190201080236.446d84d4@redhat.com/
-> > 
-> 
-> So we are all hanging on Jesper's refactoring ideas that are not
-> getting any priority for now :).
+Jani Nikula (1):
+  kbuild: add support for ensuring headers are self-contained
 
-Well, that is not true.  This patchset _is_ the refactor idea that
-Bjørn is taking over and working on.  Specifically [2] from above link.
+Masahiro Yamada (14):
+  kbuild: remove headers_{install,check}_all
+  kbuild: remove stale dependency between Documentation/ and
+    headers_install
+  kbuild: make gdb_script depend on prepare0 instead of prepare
+  kbuild: fix Kconfig prompt of CONFIG_HEADERS_CHECK
+  kbuild: add CONFIG_HEADERS_INSTALL and loosen the dependency of
+    samples
+  kbuild: remove build_unifdef target in scripts/Makefile
+  kbuild: build all prerequisite of headers_install simultaneously
+  kbuild: add 'headers' target to build up ready-to-install uapi headers
+  kbuild: re-implement Makefile.headersinst without directory descending
+  kbuild: move hdr-inst shorthand to top Makefile
+  kbuild: simplify scripts/headers_install.sh
+  kbuild: deb-pkg: do not run headers_check
+  fixup: kbuild: add support for ensuring headers are self-contained
+  kbuild: compile test UAPI headers to ensure they are self-contained
 
-[2] https://github.com/xdp-project/xdp-project/blob/master/areas/core/xdp_per_rxq01.org#refactor-idea-xdpbpf_prog-into-netdev_rx_queuenet_device
- 
-> > > > Down the road i think we will utilize this fact and start
-> > > > introducing SKB helpers for SKB mode and driver helpers for DRV
-> > > > mode..  
-> > > 
-> > > Any reason why we would want the extra complexity?  There is
-> > > cls_bpf if someone wants skb features after all..  
-> 
-> Donno, SKB mode is earlier in the stack maybe .. 
-
-From a BPF perspective you cannot introduce SKB helpers for SKB mode.
-An XDP-prog have bpf prog type XDP (BPF_PROG_TYPE_XDP), and the program
-itself is identical regardless of attaching for DRV_MODE or SKB_MODE.
-You cannot detect this at attach time, due to tail-calls (which have
-painted us into a corner).
+ Documentation/kbuild/headers_install.txt |   7 --
+ Documentation/kbuild/makefiles.txt       |  13 ++-
+ Makefile                                 |  56 +++++-----
+ arch/arc/configs/tb10x_defconfig         |   1 +
+ arch/nds32/configs/defconfig             |   1 +
+ arch/parisc/configs/a500_defconfig       |   1 +
+ arch/parisc/configs/b180_defconfig       |   1 +
+ arch/parisc/configs/c3000_defconfig      |   1 +
+ arch/parisc/configs/default_defconfig    |   1 +
+ arch/powerpc/configs/ppc6xx_defconfig    |   1 +
+ arch/s390/configs/debug_defconfig        |   1 +
+ include/uapi/{linux => }/Kbuild          |   6 +-
+ init/Kconfig                             |  20 ++++
+ lib/Kconfig.debug                        |  25 +++--
+ samples/Kconfig                          |  14 ++-
+ samples/Makefile                         |   4 +-
+ scripts/Kbuild.include                   |   6 --
+ scripts/Makefile                         |   5 -
+ scripts/Makefile.build                   |   9 ++
+ scripts/Makefile.headersinst             | 132 ++++++++++-------------
+ scripts/Makefile.lib                     |   3 +
+ scripts/cc-system-headers.sh             |   8 ++
+ scripts/headers.sh                       |  29 -----
+ scripts/headers_install.sh               |  48 ++++-----
+ scripts/package/builddeb                 |   2 +-
+ usr/.gitignore                           |   1 -
+ usr/Makefile                             |   2 +
+ usr/include/.gitignore                   |   3 +
+ usr/include/Makefile                     | 132 +++++++++++++++++++++++
+ 29 files changed, 329 insertions(+), 204 deletions(-)
+ rename include/uapi/{linux => }/Kbuild (77%)
+ create mode 100755 scripts/cc-system-headers.sh
+ delete mode 100755 scripts/headers.sh
+ create mode 100644 usr/include/.gitignore
+ create mode 100644 usr/include/Makefile
 
 -- 
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
+2.17.1
+
