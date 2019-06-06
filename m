@@ -2,67 +2,84 @@ Return-Path: <SRS0=vsg3=UF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D729C28EBB
-	for <bpf@archiver.kernel.org>; Thu,  6 Jun 2019 23:49:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C021C04AB5
+	for <bpf@archiver.kernel.org>; Thu,  6 Jun 2019 23:57:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E13AE206DF
-	for <bpf@archiver.kernel.org>; Thu,  6 Jun 2019 23:49:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0196820840
+	for <bpf@archiver.kernel.org>; Thu,  6 Jun 2019 23:57:13 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="InVIO6J0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727993AbfFFXtb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 6 Jun 2019 19:49:31 -0400
-Received: from www62.your-server.de ([213.133.104.62]:47042 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726609AbfFFXtR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 6 Jun 2019 19:49:17 -0400
-Received: from [178.197.249.21] (helo=localhost)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1hZ28C-0005Qw-6c; Fri, 07 Jun 2019 01:49:16 +0200
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     alexei.starovoitov@gmail.com
-Cc:     kafai@fb.com, rdna@fb.com, m@lambda.lt, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf v3 3/6] bpf, libbpf: enable recvmsg attach types
-Date:   Fri,  7 Jun 2019 01:48:59 +0200
-Message-Id: <20190606234902.4300-4-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.9.5
-In-Reply-To: <20190606234902.4300-1-daniel@iogearbox.net>
+        id S1727877AbfFFX5N (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 6 Jun 2019 19:57:13 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:35150 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726609AbfFFX5N (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 6 Jun 2019 19:57:13 -0400
+Received: by mail-lf1-f66.google.com with SMTP id a25so236814lfg.2;
+        Thu, 06 Jun 2019 16:57:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OhBCLi5ITdlksNplm+/e76uqZauEz9CP+Gabd0yRIEQ=;
+        b=InVIO6J0AKSWnOVli9xoBugj4FU3ag8ysLp+cAPyPucU2mKfdlK5c4yqA9G8SWkE55
+         Mw426S4YqvUMKAV/ePXiLJa666R6CksfOVavbKJp2sXBNqm8oMnByoN5xtLUm7gUvn9x
+         1ABAFzGE0pz+UMmMwsus2PGxPvWUJlutMOmZV4X01Dk6PXmcAuqXXzQFxyMeFs0BQ9DJ
+         eX1NJ4QCS/CpmFW5RmvBJ2um9ma/OkaOKlsey2wY2HSDf4PJ5noxU7qeFTkWMVUjCVkY
+         9zjF+3MhJoeX5O3DAIqNZyhcF1RJDC+t7TI8BoNnzaTO+0m4BtNCJ0HFWK1f0TVU8c0m
+         eCsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OhBCLi5ITdlksNplm+/e76uqZauEz9CP+Gabd0yRIEQ=;
+        b=sXuXoe/nb/T4J3A3lnHN5RLZDH9aO55V6ppsZkPG0kqO4Gv0o74RM2oIlG86eCh6o8
+         SihrNZA5OLehKC6bIq3LaCIYweMkOLWfXQLi1656ToZP9BxkASqDWgs4toT1+7r7YuXk
+         RRQU+n8wz41blWxK1KrSJ+htCHCA1BhUi0/ZdJdmxlcsTZe8MbOh2MhWsGzwT+U+pZwY
+         Z4naAPETgAFOupQt/8EnzdxvHXX+yMGeulA5zRFlubGPkaPnXYs2DU8M5/agHwDks7Z2
+         EyC4BA/lXnxOeprVuiF3vhth55drsEwNA7zWUkX2MZ05s4PWg9PhrIaXGo0wQWPTCH98
+         RK+g==
+X-Gm-Message-State: APjAAAWi4jfmczX4uc5iki7dU0+HZp1qrjaPDop2B/8XwGjl7jwDn45b
+        hNKvyBIXeTgKr8WGCLAf8zxb2WC9mLLOaANRvzk=
+X-Google-Smtp-Source: APXvYqwSIFvJMXLyeDFJzvQY8BBn4Ae8bg2g1Kzy/3o6GpPGIIhtDKReRVDIldMTPKEXcWubRXwMYAQWL9+18G6Bwvg=
+X-Received: by 2002:ac2:5337:: with SMTP id f23mr26023839lfh.15.1559865431431;
+ Thu, 06 Jun 2019 16:57:11 -0700 (PDT)
+MIME-Version: 1.0
 References: <20190606234902.4300-1-daniel@iogearbox.net>
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.100.3/25472/Thu Jun  6 10:09:59 2019)
+In-Reply-To: <20190606234902.4300-1-daniel@iogearbox.net>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 6 Jun 2019 16:56:59 -0700
+Message-ID: <CAADnVQLcvq0r8JTBmk1Q903fwoW=FgcjqMhEL9xmXfTOQnD6OA@mail.gmail.com>
+Subject: Re: [PATCH bpf v3 0/6] Fix unconnected bpf cgroup hooks
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Andrey Ignatov <rdna@fb.com>,
+        Martynas Pumputis <m@lambda.lt>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Another trivial patch to libbpf in order to enable identifying and
-attaching programs to BPF_CGROUP_UDP{4,6}_RECVMSG by section name.
+On Thu, Jun 6, 2019 at 4:49 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> Please refer to the patch 1/6 as the main patch with the details
+> on the current sendmsg hook API limitations and proposal to fix
+> it in order to work with basic applications like DNS. Remaining
+> patches are the usual uapi and tooling updates as well as test
+> cases. Thanks a lot!
+>
+> v2 -> v3:
+>   - Add attach types to test_section_names.c and libbpf (Andrey)
+>   - Added given Acks, rest as-is
+> v1 -> v2:
+>   - Split off uapi header sync and bpftool bits (Martin, Alexei)
+>   - Added missing bpftool doc and bash completion as well
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- tools/lib/bpf/libbpf.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 5d046cc7b207..151f7ac1882e 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -3210,6 +3210,10 @@ static const struct {
- 						BPF_CGROUP_UDP4_SENDMSG),
- 	BPF_EAPROG_SEC("cgroup/sendmsg6",	BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
- 						BPF_CGROUP_UDP6_SENDMSG),
-+	BPF_EAPROG_SEC("cgroup/recvmsg4",	BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
-+						BPF_CGROUP_UDP4_RECVMSG),
-+	BPF_EAPROG_SEC("cgroup/recvmsg6",	BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
-+						BPF_CGROUP_UDP6_RECVMSG),
- 	BPF_EAPROG_SEC("cgroup/sysctl",		BPF_PROG_TYPE_CGROUP_SYSCTL,
- 						BPF_CGROUP_SYSCTL),
- };
--- 
-2.17.1
-
+Applied. Thanks
