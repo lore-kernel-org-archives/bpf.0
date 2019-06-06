@@ -6,54 +6,54 @@ X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
 	SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EBCEC04AB5
-	for <bpf@archiver.kernel.org>; Thu,  6 Jun 2019 14:12:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 890E5C04AB5
+	for <bpf@archiver.kernel.org>; Thu,  6 Jun 2019 14:35:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 64E0B20665
-	for <bpf@archiver.kernel.org>; Thu,  6 Jun 2019 14:12:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A0872070B
+	for <bpf@archiver.kernel.org>; Thu,  6 Jun 2019 14:35:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="owFu3Fk/"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ej65huN6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728011AbfFFOMr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 6 Jun 2019 10:12:47 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:41460 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726092AbfFFOMq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 6 Jun 2019 10:12:46 -0400
-Received: by mail-qk1-f194.google.com with SMTP id c11so1506154qkk.8
-        for <bpf@vger.kernel.org>; Thu, 06 Jun 2019 07:12:46 -0700 (PDT)
+        id S1728776AbfFFOfp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 6 Jun 2019 10:35:45 -0400
+Received: from mail-yb1-f196.google.com ([209.85.219.196]:46669 "EHLO
+        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728682AbfFFOfo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 6 Jun 2019 10:35:44 -0400
+Received: by mail-yb1-f196.google.com with SMTP id p8so991552ybo.13
+        for <bpf@vger.kernel.org>; Thu, 06 Jun 2019 07:35:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=KsiUn6UsyR6iRYKgGuT3vtVzQmJqP/05UQ9EDQmxkYE=;
-        b=owFu3Fk/e7jEjijt33GbOdLU7wrt+TBcjiaCyjlULB6hkiy37D5u8Aju1N4vIMmoR/
-         n5NNr4lh6bp84cVFjyMjN0Mw4Z8vmrSHB3RBSg3NJ7aT8zaNh3oUNg39ODvxBNtPEclE
-         LAxd0xxXerPHSrujz8tT82p5tHypH+0T2p4T3TIx2r0N5Jr3ZO0DVKXj6xaxtEHgtmSG
-         KA0PzqakNaf7Mdsc79p3uDLqNVpqsVa6S+UatKlpgwkNFC1Hixrq7VX7SYxiV9sIoxv0
-         ulDl1jgrzItWa/yKQGAxt1/UNIs87mZCf4d8Uaef13YMMnSyeBWI5bjyb622xwikzjvW
-         amnw==
+        bh=HgJ0GZY//Len7veYiP6CvMdfuN08GbgxjLHnvQVRuds=;
+        b=Ej65huN6br/BvsJL6NdryRgqMaigzdNrEh0yptxU6ktxfkOVfnGB8JhlcnDFegwM39
+         1+xf+2IbGCkZB2jitqE7MsxKe30xIxv6oUIFZb6dZojIaggD1y9e4wkzFf6KEnZXQAqs
+         Dka83U7UotuhVF2sxPWPJXwFEBL/RGPvmp+iW3hO/pbvvqr2hWVkwHI4hCcz1H+v8zVs
+         OwjZQY6FfB4+yJ4wASjdtBBchHyOGI2lsAZ1758+/CfmAKb7zdYttFR66+IXUdJkua8n
+         8l5PehvXi2ROk4xfrf1yIV+PuPc2tzcfIIjxZyYe149/ZfI5TuYzV25HnKl5aAl6A0yT
+         kF2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=KsiUn6UsyR6iRYKgGuT3vtVzQmJqP/05UQ9EDQmxkYE=;
-        b=Tl8cAoyFoD4bkvM/D4NPI+LgeVZOf9QRniv8XfhS6A9kbl6DaFYA0zYrDTJ14OwEFo
-         hU2SDai0LbHMUdg+gSVsQfbvfd6JchJstGocQ+VVECCFE4AlDe2Ia7RlDHun8ozkwhae
-         zeELfoPRqAJmx34uJtBUyGsJNqedBz8XjfZpJGmcYy7g10guKD+5ZnbwjxTZGLEN40R7
-         /d0Mj9uWE5oCfiwTVGSvuBsnP/dFoZJaf3cyTiCAPLM+Ga3DWg/PP7u/euhSCr2kkD34
-         CUp+WoLF8zzmk051pqaPZz6C5uGO2VE7lVqG+6hKVoBUWNeY8OuN8ExxR8AV4W0FvKCb
-         4KNA==
-X-Gm-Message-State: APjAAAUtN9T4Ur/1uxfQ9SzKROtHPijME4abGs2DNBEWv00xRaX9bMUL
-        wmxPI2I6r0sFvRjxT+7UCyLzOQ==
-X-Google-Smtp-Source: APXvYqzgywbaiNWm+kvMN3tdGnjUsKuDiMR1/OIQeKYq2OvUeH9rJad4z7QbVGO/S7K3ecfUNlGn4g==
-X-Received: by 2002:a37:68ca:: with SMTP id d193mr28018788qkc.240.1559830365868;
-        Thu, 06 Jun 2019 07:12:45 -0700 (PDT)
+        bh=HgJ0GZY//Len7veYiP6CvMdfuN08GbgxjLHnvQVRuds=;
+        b=jzbpOKZl7LKtLMZRA3BaIyRHyt8iO5IYKy2+XdcUWX/IgpguoY94unTfDNv+w2Sgnh
+         Tnay5zAXb5lRXUGJU1QtyyXsTyVve+0tiC2wrNWqrJK+jkHm/l2s0+D5b6iOCf4ZoUis
+         4hw8+CyiCOBtzq2eVdCJ0P+nPVxukREAUO8W7ANvac1hHMTOLIZ/Gb46d2Giv9SqPFcZ
+         qyhSjj8TdB6bG8/oThbYYOzaWDbRYU3oyX2pw2jVu0aRkqMC0XKHERsfuNZ1DfAooKGb
+         M5MoUlmIhF+BottpdnE2gBWM1u2x4mOmPHpsvcrYzujmXJ1/K8zYIh0O1k1d0pjY+IGc
+         PuOw==
+X-Gm-Message-State: APjAAAVP0/wyJXkRlC64yrowQqC1WES0eAOgL0UTWMRoWamZu/TCosGU
+        z/lxH386ud3nga/KOmfEt9rsrA==
+X-Google-Smtp-Source: APXvYqx4wLLqF1nY5nqIufaWI5Hdcp2smawrQmPU3ZCZZRABh9cWLQ/l6pM/bekVLBiX79E90XgiSg==
+X-Received: by 2002:a5b:a90:: with SMTP id h16mr21558068ybq.341.1559831744170;
+        Thu, 06 Jun 2019 07:35:44 -0700 (PDT)
 Received: from leoy-ThinkPad-X240s (li1322-146.members.linode.com. [45.79.223.146])
-        by smtp.gmail.com with ESMTPSA id e4sm765192qtc.3.2019.06.06.07.12.36
+        by smtp.gmail.com with ESMTPSA id v70sm515376ywc.78.2019.06.06.07.35.37
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 06 Jun 2019 07:12:45 -0700 (PDT)
-Date:   Thu, 6 Jun 2019 22:12:31 +0800
+        Thu, 06 Jun 2019 07:35:43 -0700 (PDT)
+Date:   Thu, 6 Jun 2019 22:35:32 +0800
 From:   Leo Yan <leo.yan@linaro.org>
 To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
 Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
@@ -69,51 +69,61 @@ Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] perf augmented_raw_syscalls: Support arm64 raw
- syscalls
-Message-ID: <20190606141231.GC5970@leoy-ThinkPad-X240s>
+Subject: Re: [PATCH v2 4/4] perf augmented_raw_syscalls: Document clang
+ configuration
+Message-ID: <20190606143532.GD5970@leoy-ThinkPad-X240s>
 References: <20190606094845.4800-1-leo.yan@linaro.org>
- <20190606094845.4800-4-leo.yan@linaro.org>
- <20190606133838.GC30166@kernel.org>
+ <20190606094845.4800-5-leo.yan@linaro.org>
+ <20190606140800.GF30166@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190606133838.GC30166@kernel.org>
+In-Reply-To: <20190606140800.GF30166@kernel.org>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Arnaldo,
-
-On Thu, Jun 06, 2019 at 10:38:38AM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Thu, Jun 06, 2019 at 05:48:44PM +0800, Leo Yan escreveu:
-> > This patch adds support for arm64 raw syscall numbers so that we can use
-> > it on arm64 platform.
+On Thu, Jun 06, 2019 at 11:08:00AM -0300, Arnaldo Carvalho de Melo wrote:
+> Em Thu, Jun 06, 2019 at 05:48:45PM +0800, Leo Yan escreveu:
+> > To build this program successfully with clang, there have three
+> > compiler options need to be specified:
 > > 
-> > After applied this patch, we need to specify macro -D__aarch64__ or
-> > -D__x86_64__ in compilation option so Clang can use the corresponding
-> > syscall numbers for arm64 or x86_64 respectively, other architectures
-> > will report failure when compilation.
+> >   - Header file path: tools/perf/include/bpf;
+> >   - Specify architecture;
+> >   - Define macro __NR_CPUS__.
 > 
-> So, please check what I have in my perf/core branch, I've completely
-> removed arch specific stuff from augmented_raw_syscalls.c.
-> 
-> What is done now is use a map to specify what to copy, that same map
-> that is used to state which syscalls should be traced.
-> 
-> It uses that tools/perf/arch/arm64/entry/syscalls/mksyscalltbl to figure
-> out the mapping of syscall names to ids, just like is done for x86_64
-> and other arches, falling back to audit-libs when that syscalltbl thing
-> is not present.
+> So, this shouldn't be needed, all of this is supposed to be done
+> automagically, have you done a 'make -C tools/perf install'?
 
-Actually I have noticed mksyscalltbl has been enabled for arm64, and
-had to say your approach is much better :)
+I missed the up operation.  But after git pulled the lastest code base
+from perf/core branch and used the command 'make -C tools/perf
+install', I still saw the eBPF build failure.
 
-Thanks for the info and I will try your patch at my side.
+Just now this issue is fixed after I removed the config
+'clang-bpf-cmd-template' from ~/.perfconfig;  the reason is I followed
+up the Documentation/perf-config.txt to set the config as below:
 
-[...]
+  clang-bpf-cmd-template = "$CLANG_EXEC -D__KERNEL__ $CLANG_OPTIONS \
+                          $KERNEL_INC_OPTIONS -Wno-unused-value \
+                          -Wno-pointer-sign -working-directory \
+                          $WORKING_DIR -c $CLANG_SOURCE -target bpf \
+                          -O2 -o -"
+
+In fact, util/llvm-utils.c has updated the default configuration as
+below:
+
+  #define CLANG_BPF_CMD_DEFAULT_TEMPLATE                          \
+                "$CLANG_EXEC -D__KERNEL__ -D__NR_CPUS__=$NR_CPUS "\
+                "-DLINUX_VERSION_CODE=$LINUX_VERSION_CODE "     \
+                "$CLANG_OPTIONS $PERF_BPF_INC_OPTIONS $KERNEL_INC_OPTIONS " \
+                "-Wno-unused-value -Wno-pointer-sign "          \
+                "-working-directory $WORKING_DIR "              \
+                "-c \"$CLANG_SOURCE\" -target bpf $CLANG_EMIT_LLVM -O2 -o - $LLVM_OPTIONS_PIPE"
+
+Maybe should update Documentation/perf-config.txt to tell users the
+real default value of clang-bpf-cmd-template?
 
 Thanks,
 Leo Yan
