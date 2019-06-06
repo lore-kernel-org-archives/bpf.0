@@ -2,355 +2,141 @@ Return-Path: <SRS0=vsg3=UF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_MED,URIBL_BLOCKED,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62AD7C04AB5
-	for <bpf@archiver.kernel.org>; Thu,  6 Jun 2019 14:36:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BAC82C28EB4
+	for <bpf@archiver.kernel.org>; Thu,  6 Jun 2019 14:41:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2F64F208C0
-	for <bpf@archiver.kernel.org>; Thu,  6 Jun 2019 14:36:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9494B20684
+	for <bpf@archiver.kernel.org>; Thu,  6 Jun 2019 14:41:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="N8oLfhfC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729102AbfFFOgS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 6 Jun 2019 10:36:18 -0400
-Received: from www62.your-server.de ([213.133.104.62]:33374 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728768AbfFFOgG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 6 Jun 2019 10:36:06 -0400
-Received: from [178.197.249.21] (helo=localhost)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1hYtUq-00049n-Li; Thu, 06 Jun 2019 16:36:04 +0200
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     alexei.starovoitov@gmail.com
-Cc:     kafai@fb.com, rdna@fb.com, m@lambda.lt, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf v2 1/4] bpf: fix unconnected udp hooks
-Date:   Thu,  6 Jun 2019 16:35:14 +0200
-Message-Id: <20190606143517.25710-2-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.9.5
-In-Reply-To: <20190606143517.25710-1-daniel@iogearbox.net>
-References: <20190606143517.25710-1-daniel@iogearbox.net>
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.100.3/25472/Thu Jun  6 10:09:59 2019)
+        id S1728859AbfFFOls (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 6 Jun 2019 10:41:48 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:33059 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728834AbfFFOls (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 6 Jun 2019 10:41:48 -0400
+Received: by mail-io1-f67.google.com with SMTP id u13so410226iop.0
+        for <bpf@vger.kernel.org>; Thu, 06 Jun 2019 07:41:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yUBzruiX0poMVnebHkNCtUzf308xan955Nhmvp3Y24o=;
+        b=N8oLfhfCoP/t5PYG52TcjF2tc8yM9MUIV91XTL1dQyRXANlO4TMjLOYVQCRmv8WS6G
+         dPw0BjG98OS26hm3NjvwDU7LkcKsojQNR+HtJHfn0Uu01UYlMw6RpKw5CnAKrKbgERRc
+         2B9n2VfK+C2+t1MKp0rZkCMTUbOPSMd4tw2wsCq3Lq6LQzBNAOEMbAzcOb/PxPAJyKLf
+         028o5J4GgWK6IRAQT6Ab31TogjeE80cmxwOJdjspx80QtGRG9ICcAFNCpapC7hbZ59bs
+         i24iWVXGStx0+mKUkyKF5GE86Vfs3BkmG5/DCWI3rUSsj1jkzj6Gx8qKJK1N71cii1jt
+         8NHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yUBzruiX0poMVnebHkNCtUzf308xan955Nhmvp3Y24o=;
+        b=TgpfwqLkr+RQX+BPIQhILBUgJhHqcRzGEi6ktH8ArYanhyPsbXtC47Ac2Ti3Ry+/FC
+         XJsKIOapkBEaUZFId5lIUJXAt/c+C+bl4NjkeRdgwkx927EB1Wabj4YlVGdFkR6oChSF
+         Csr2Dy9933Txi7UWShBWqK/7H8QGao2CHzT7uad1vmFQ+Ko9VIFd6o5FYKwMTVzbozsS
+         h8ihnfepYBta8FvL6mytbs+UPZ56wzI5JrIoe6O9lyxuamu7LiUx4sRmGshHkB+gK/G7
+         N9h+5N8Ilf7+4ZIKcW1ON8YK0GDcA5rWE1VoCG7Hgsn4OxJmMHkRkRjhWYfTiNR3GJFT
+         iiKQ==
+X-Gm-Message-State: APjAAAUUSYe+nTyW449JFfHim9pgnwRvsIVo24veuy+Jtus/hYI9QPvR
+        QkqHsk+MlFcR65rKY0YR0xZIoDc+/BXbAeYKuIGvDw==
+X-Google-Smtp-Source: APXvYqz8hOqO9k3wIdvVxhHX1nxpHAKAeuDw82/eM+fgXI+5jTsEKJYqN9UOwv8HWhW3FUMfi6A1SwZfoXGCqRs3Edg=
+X-Received: by 2002:a6b:8d92:: with SMTP id p140mr28286627iod.144.1559832107426;
+ Thu, 06 Jun 2019 07:41:47 -0700 (PDT)
+MIME-Version: 1.0
+References: <000000000000454279058aa80535@google.com>
+In-Reply-To: <000000000000454279058aa80535@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 6 Jun 2019 16:41:36 +0200
+Message-ID: <CACT4Y+bk4=avQpdiHM7BTRjZ+NahivshytP5-eVU7vDCxR2udA@mail.gmail.com>
+Subject: Re: KASAN: slab-out-of-bounds Read in usage_accumulate
+To:     syzbot <syzbot+b0d730107e2ca6cb952f@syzkaller.appspotmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Intention of cgroup bind/connect/sendmsg BPF hooks is to act transparently
-to applications as also stated in original motivation in 7828f20e3779 ("Merge
-branch 'bpf-cgroup-bind-connect'"). When recently integrating the latter
-two hooks into Cilium to enable host based load-balancing with Kubernetes,
-I ran into the issue that pods couldn't start up as DNS got broken. Kubernetes
-typically sets up DNS as a service and is thus subject to load-balancing.
+On Thu, Jun 6, 2019 at 3:52 PM syzbot
+<syzbot+b0d730107e2ca6cb952f@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following crash on:
+>
+> HEAD commit:    156c0591 Merge tag 'linux-kselftest-5.2-rc4' of git://git...
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=15f2095aa00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=60564cb52ab29d5b
+> dashboard link: https://syzkaller.appspot.com/bug?extid=b0d730107e2ca6cb952f
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11a8fb61a00000
 
-Upon further debugging, it turns out that the cgroupv2 sendmsg BPF hooks API
-is currently insufficient and thus not usable as-is for standard applications
-shipped with most distros. To break down the issue we ran into with a simple
-example:
+Looks +bpf related from the repro.
 
-  # cat /etc/resolv.conf
-  nameserver 147.75.207.207
-  nameserver 147.75.207.208
-
-For the purpose of a simple test, we set up above IPs as service IPs and
-transparently redirect traffic to a different DNS backend server for that
-node:
-
-  # cilium service list
-  ID   Frontend            Backend
-  1    147.75.207.207:53   1 => 8.8.8.8:53
-  2    147.75.207.208:53   1 => 8.8.8.8:53
-
-The attached BPF program is basically selecting one of the backends if the
-service IP/port matches on the cgroup hook. DNS breaks here, because the
-hooks are not transparent enough to applications which have built-in msg_name
-address checks:
-
-  # nslookup 1.1.1.1
-  ;; reply from unexpected source: 8.8.8.8#53, expected 147.75.207.207#53
-  ;; reply from unexpected source: 8.8.8.8#53, expected 147.75.207.208#53
-  ;; reply from unexpected source: 8.8.8.8#53, expected 147.75.207.207#53
-  [...]
-  ;; connection timed out; no servers could be reached
-
-  # dig 1.1.1.1
-  ;; reply from unexpected source: 8.8.8.8#53, expected 147.75.207.207#53
-  ;; reply from unexpected source: 8.8.8.8#53, expected 147.75.207.208#53
-  ;; reply from unexpected source: 8.8.8.8#53, expected 147.75.207.207#53
-  [...]
-
-  ; <<>> DiG 9.11.3-1ubuntu1.7-Ubuntu <<>> 1.1.1.1
-  ;; global options: +cmd
-  ;; connection timed out; no servers could be reached
-
-For comparison, if none of the service IPs is used, and we tell nslookup
-to use 8.8.8.8 directly it works just fine, of course:
-
-  # nslookup 1.1.1.1 8.8.8.8
-  1.1.1.1.in-addr.arpa	name = one.one.one.one.
-
-In order to fix this and thus act more transparent to the application,
-this needs reverse translation on recvmsg() side. A minimal fix for this
-API is to add similar recvmsg() hooks behind the BPF cgroups static key
-such that the program can track state and replace the current sockaddr_in{,6}
-with the original service IP. From BPF side, this basically tracks the
-service tuple plus socket cookie in an LRU map where the reverse NAT can
-then be retrieved via map value as one example. Side-note: the BPF cgroups
-static key should be converted to a per-hook static key in future.
-
-Same example after this fix:
-
-  # cilium service list
-  ID   Frontend            Backend
-  1    147.75.207.207:53   1 => 8.8.8.8:53
-  2    147.75.207.208:53   1 => 8.8.8.8:53
-
-Lookups work fine now:
-
-  # nslookup 1.1.1.1
-  1.1.1.1.in-addr.arpa    name = one.one.one.one.
-
-  Authoritative answers can be found from:
-
-  # dig 1.1.1.1
-
-  ; <<>> DiG 9.11.3-1ubuntu1.7-Ubuntu <<>> 1.1.1.1
-  ;; global options: +cmd
-  ;; Got answer:
-  ;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 51550
-  ;; flags: qr rd ra ad; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1
-
-  ;; OPT PSEUDOSECTION:
-  ; EDNS: version: 0, flags:; udp: 512
-  ;; QUESTION SECTION:
-  ;1.1.1.1.                       IN      A
-
-  ;; AUTHORITY SECTION:
-  .                       23426   IN      SOA     a.root-servers.net. nstld.verisign-grs.com. 2019052001 1800 900 604800 86400
-
-  ;; Query time: 17 msec
-  ;; SERVER: 147.75.207.207#53(147.75.207.207)
-  ;; WHEN: Tue May 21 12:59:38 UTC 2019
-  ;; MSG SIZE  rcvd: 111
-
-And from an actual packet level it shows that we're using the back end
-server when talking via 147.75.207.20{7,8} front end:
-
-  # tcpdump -i any udp
-  [...]
-  12:59:52.698732 IP foo.42011 > google-public-dns-a.google.com.domain: 18803+ PTR? 1.1.1.1.in-addr.arpa. (38)
-  12:59:52.698735 IP foo.42011 > google-public-dns-a.google.com.domain: 18803+ PTR? 1.1.1.1.in-addr.arpa. (38)
-  12:59:52.701208 IP google-public-dns-a.google.com.domain > foo.42011: 18803 1/0/0 PTR one.one.one.one. (67)
-  12:59:52.701208 IP google-public-dns-a.google.com.domain > foo.42011: 18803 1/0/0 PTR one.one.one.one. (67)
-  [...]
-
-In order to be flexible and to have same semantics as in sendmsg BPF
-programs, we only allow return codes in [1,1] range. In the sendmsg case
-the program is called if msg->msg_name is present which can in fact be
-the case in both, connected and unconnected UDP.
-
-The former only relies on the sockaddr_in{,6} passed via connect(2) iff
-passed msg->msg_name was NULL. Therefore, on recvmsg side, we act in similar
-way to call into the BPF program whenever a non-NULL msg->msg_name was
-passed independent of sk->sk_state being TCP_ESTABLISHED or not. Note
-that for TCP case, the msg->msg_name is ignored in the regular recvmsg
-path and therefore not relevant.
-
-For the case of ip{,v6}_recv_error() paths, picked up via MSG_ERRQUEUE,
-the hook is not called. This is intentional as it aligns with the same
-semantics as in case of TCP cgroup BPF hooks right now. This might be
-better addressed in future through a different bpf_attach_type such
-that this case can be distinguished from the regular recvmsg paths,
-for example.
-
-Fixes: 1cedee13d25a ("bpf: Hooks for sys_sendmsg")
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Andrey Ignatov <rdna@fb.com>
-Cc: Martin KaFai Lau <kafai@fb.com>
-Acked-by: Martynas Pumputis <m@lambda.lt>
----
- include/linux/bpf-cgroup.h |  8 ++++++++
- include/uapi/linux/bpf.h   |  2 ++
- kernel/bpf/syscall.c       |  8 ++++++++
- kernel/bpf/verifier.c      | 12 ++++++++----
- net/core/filter.c          |  2 ++
- net/ipv4/udp.c             |  4 ++++
- net/ipv6/udp.c             |  4 ++++
- 7 files changed, 36 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-index cb3c6b3b89c8..a7f7a98ec39d 100644
---- a/include/linux/bpf-cgroup.h
-+++ b/include/linux/bpf-cgroup.h
-@@ -238,6 +238,12 @@ int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
- #define BPF_CGROUP_RUN_PROG_UDP6_SENDMSG_LOCK(sk, uaddr, t_ctx)		       \
- 	BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, BPF_CGROUP_UDP6_SENDMSG, t_ctx)
- 
-+#define BPF_CGROUP_RUN_PROG_UDP4_RECVMSG_LOCK(sk, uaddr)			\
-+	BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, BPF_CGROUP_UDP4_RECVMSG, NULL)
-+
-+#define BPF_CGROUP_RUN_PROG_UDP6_RECVMSG_LOCK(sk, uaddr)			\
-+	BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, BPF_CGROUP_UDP6_RECVMSG, NULL)
-+
- #define BPF_CGROUP_RUN_PROG_SOCK_OPS(sock_ops)				       \
- ({									       \
- 	int __ret = 0;							       \
-@@ -339,6 +345,8 @@ static inline int bpf_percpu_cgroup_storage_update(struct bpf_map *map,
- #define BPF_CGROUP_RUN_PROG_INET6_CONNECT_LOCK(sk, uaddr) ({ 0; })
- #define BPF_CGROUP_RUN_PROG_UDP4_SENDMSG_LOCK(sk, uaddr, t_ctx) ({ 0; })
- #define BPF_CGROUP_RUN_PROG_UDP6_SENDMSG_LOCK(sk, uaddr, t_ctx) ({ 0; })
-+#define BPF_CGROUP_RUN_PROG_UDP4_RECVMSG_LOCK(sk, uaddr) ({ 0; })
-+#define BPF_CGROUP_RUN_PROG_UDP6_RECVMSG_LOCK(sk, uaddr) ({ 0; })
- #define BPF_CGROUP_RUN_PROG_SOCK_OPS(sock_ops) ({ 0; })
- #define BPF_CGROUP_RUN_PROG_DEVICE_CGROUP(type,major,minor,access) ({ 0; })
- #define BPF_CGROUP_RUN_PROG_SYSCTL(head,table,write,buf,count,pos,nbuf) ({ 0; })
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 63e0cf66f01a..e4114a7e4451 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -192,6 +192,8 @@ enum bpf_attach_type {
- 	BPF_LIRC_MODE2,
- 	BPF_FLOW_DISSECTOR,
- 	BPF_CGROUP_SYSCTL,
-+	BPF_CGROUP_UDP4_RECVMSG,
-+	BPF_CGROUP_UDP6_RECVMSG,
- 	__MAX_BPF_ATTACH_TYPE
- };
- 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index cb5440b02e82..e8ba3a153691 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1581,6 +1581,8 @@ bpf_prog_load_check_attach_type(enum bpf_prog_type prog_type,
- 		case BPF_CGROUP_INET6_CONNECT:
- 		case BPF_CGROUP_UDP4_SENDMSG:
- 		case BPF_CGROUP_UDP6_SENDMSG:
-+		case BPF_CGROUP_UDP4_RECVMSG:
-+		case BPF_CGROUP_UDP6_RECVMSG:
- 			return 0;
- 		default:
- 			return -EINVAL;
-@@ -1875,6 +1877,8 @@ static int bpf_prog_attach(const union bpf_attr *attr)
- 	case BPF_CGROUP_INET6_CONNECT:
- 	case BPF_CGROUP_UDP4_SENDMSG:
- 	case BPF_CGROUP_UDP6_SENDMSG:
-+	case BPF_CGROUP_UDP4_RECVMSG:
-+	case BPF_CGROUP_UDP6_RECVMSG:
- 		ptype = BPF_PROG_TYPE_CGROUP_SOCK_ADDR;
- 		break;
- 	case BPF_CGROUP_SOCK_OPS:
-@@ -1960,6 +1964,8 @@ static int bpf_prog_detach(const union bpf_attr *attr)
- 	case BPF_CGROUP_INET6_CONNECT:
- 	case BPF_CGROUP_UDP4_SENDMSG:
- 	case BPF_CGROUP_UDP6_SENDMSG:
-+	case BPF_CGROUP_UDP4_RECVMSG:
-+	case BPF_CGROUP_UDP6_RECVMSG:
- 		ptype = BPF_PROG_TYPE_CGROUP_SOCK_ADDR;
- 		break;
- 	case BPF_CGROUP_SOCK_OPS:
-@@ -2011,6 +2017,8 @@ static int bpf_prog_query(const union bpf_attr *attr,
- 	case BPF_CGROUP_INET6_CONNECT:
- 	case BPF_CGROUP_UDP4_SENDMSG:
- 	case BPF_CGROUP_UDP6_SENDMSG:
-+	case BPF_CGROUP_UDP4_RECVMSG:
-+	case BPF_CGROUP_UDP6_RECVMSG:
- 	case BPF_CGROUP_SOCK_OPS:
- 	case BPF_CGROUP_DEVICE:
- 	case BPF_CGROUP_SYSCTL:
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 95f9354495ad..d2c8a6677ac4 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5361,9 +5361,12 @@ static int check_return_code(struct bpf_verifier_env *env)
- 	struct tnum range = tnum_range(0, 1);
- 
- 	switch (env->prog->type) {
-+	case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
-+		if (env->prog->expected_attach_type == BPF_CGROUP_UDP4_RECVMSG ||
-+		    env->prog->expected_attach_type == BPF_CGROUP_UDP6_RECVMSG)
-+			range = tnum_range(1, 1);
- 	case BPF_PROG_TYPE_CGROUP_SKB:
- 	case BPF_PROG_TYPE_CGROUP_SOCK:
--	case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
- 	case BPF_PROG_TYPE_SOCK_OPS:
- 	case BPF_PROG_TYPE_CGROUP_DEVICE:
- 	case BPF_PROG_TYPE_CGROUP_SYSCTL:
-@@ -5380,16 +5383,17 @@ static int check_return_code(struct bpf_verifier_env *env)
- 	}
- 
- 	if (!tnum_in(range, reg->var_off)) {
-+		char tn_buf[48];
-+
- 		verbose(env, "At program exit the register R0 ");
- 		if (!tnum_is_unknown(reg->var_off)) {
--			char tn_buf[48];
--
- 			tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
- 			verbose(env, "has value %s", tn_buf);
- 		} else {
- 			verbose(env, "has unknown scalar value");
- 		}
--		verbose(env, " should have been 0 or 1\n");
-+		tnum_strn(tn_buf, sizeof(tn_buf), range);
-+		verbose(env, " should have been in %s\n", tn_buf);
- 		return -EINVAL;
- 	}
- 	return 0;
-diff --git a/net/core/filter.c b/net/core/filter.c
-index fdcc504d2dec..2814d785c110 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -6748,6 +6748,7 @@ static bool sock_addr_is_valid_access(int off, int size,
- 		case BPF_CGROUP_INET4_BIND:
- 		case BPF_CGROUP_INET4_CONNECT:
- 		case BPF_CGROUP_UDP4_SENDMSG:
-+		case BPF_CGROUP_UDP4_RECVMSG:
- 			break;
- 		default:
- 			return false;
-@@ -6758,6 +6759,7 @@ static bool sock_addr_is_valid_access(int off, int size,
- 		case BPF_CGROUP_INET6_BIND:
- 		case BPF_CGROUP_INET6_CONNECT:
- 		case BPF_CGROUP_UDP6_SENDMSG:
-+		case BPF_CGROUP_UDP6_RECVMSG:
- 			break;
- 		default:
- 			return false;
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index 85db0e3d7f3f..2d862823cbb7 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -1783,6 +1783,10 @@ int udp_recvmsg(struct sock *sk, struct msghdr *msg, size_t len, int noblock,
- 		sin->sin_addr.s_addr = ip_hdr(skb)->saddr;
- 		memset(sin->sin_zero, 0, sizeof(sin->sin_zero));
- 		*addr_len = sizeof(*sin);
-+
-+		if (cgroup_bpf_enabled)
-+			BPF_CGROUP_RUN_PROG_UDP4_RECVMSG_LOCK(sk,
-+							(struct sockaddr *)sin);
- 	}
- 
- 	if (udp_sk(sk)->gro_enabled)
-diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-index 4e52c37bb836..15570d7b9b61 100644
---- a/net/ipv6/udp.c
-+++ b/net/ipv6/udp.c
-@@ -369,6 +369,10 @@ int udpv6_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
- 						    inet6_iif(skb));
- 		}
- 		*addr_len = sizeof(*sin6);
-+
-+		if (cgroup_bpf_enabled)
-+			BPF_CGROUP_RUN_PROG_UDP6_RECVMSG_LOCK(sk,
-+						(struct sockaddr *)sin6);
- 	}
- 
- 	if (udp_sk(sk)->gro_enabled)
--- 
-2.17.1
-
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+b0d730107e2ca6cb952f@syzkaller.appspotmail.com
+>
+> ==================================================================
+> BUG: KASAN: slab-out-of-bounds in usage_accumulate+0x9e/0xb0
+> kernel/locking/lockdep.c:1676
+> Read of size 8 at addr ffff8880a59cfed0 by task syz-executor.1/9366
+>
+> CPU: 1 PID: 9366 Comm: syz-executor.1 Not tainted 5.2.0-rc3+ #20
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> Google 01/01/2011
+> Call Trace:
+>
+> Allocated by task 0:
+> (stack is not available)
+>
+> Freed by task 0:
+> (stack is not available)
+>
+> The buggy address belongs to the object at ffff8880a59ce6c0
+>   which belongs to the cache kmalloc-4k of size 4096
+> The buggy address is located 2064 bytes to the right of
+>   4096-byte region [ffff8880a59ce6c0, ffff8880a59cf6c0)
+> The buggy address belongs to the page:
+> page:ffffea0002967380 refcount:1 mapcount:0 mapping:ffff8880aa400dc0
+> index:0x0 compound_mapcount: 0
+> flags: 0x1fffc0000010200(slab|head)
+> raw: 01fffc0000010200 ffffea000296a008 ffffea000233fe08 ffff8880aa400dc0
+> raw: 0000000000000000 ffff8880a59ce6c0 0000000100000001 0000000000000000
+> page dumped because: kasan: bad access detected
+>
+> Memory state around the buggy address:
+>   ffff8880a59cfd80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>   ffff8880a59cfe00: fc fc fc fc f1 f1 f1 f1 00 f2 f2 f2 00 f2 f2 f2
+> > ffff8880a59cfe80: 00 f2 f2 f2 00 f2 f2 f2 fc fc fc fc 00 00 00 f2
+>                                                   ^
+>   ffff8880a59cff00: f2 f2 f2 f2 fc fc fc fc 00 00 00 f3 f3 f3 f3 f3
+>   ffff8880a59cff80: 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc
+> ==================================================================
+>
+>
+> ---
+> This bug is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this bug report. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this bug, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000454279058aa80535%40google.com.
+> For more options, visit https://groups.google.com/d/optout.
