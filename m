@@ -2,128 +2,74 @@ Return-Path: <SRS0=vsg3=UF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 890E5C04AB5
-	for <bpf@archiver.kernel.org>; Thu,  6 Jun 2019 14:35:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97017C04AB5
+	for <bpf@archiver.kernel.org>; Thu,  6 Jun 2019 14:36:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5A0872070B
-	for <bpf@archiver.kernel.org>; Thu,  6 Jun 2019 14:35:45 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ej65huN6"
+	by mail.kernel.org (Postfix) with ESMTP id 6C6B820673
+	for <bpf@archiver.kernel.org>; Thu,  6 Jun 2019 14:36:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728776AbfFFOfp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 6 Jun 2019 10:35:45 -0400
-Received: from mail-yb1-f196.google.com ([209.85.219.196]:46669 "EHLO
-        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728682AbfFFOfo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 6 Jun 2019 10:35:44 -0400
-Received: by mail-yb1-f196.google.com with SMTP id p8so991552ybo.13
-        for <bpf@vger.kernel.org>; Thu, 06 Jun 2019 07:35:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=HgJ0GZY//Len7veYiP6CvMdfuN08GbgxjLHnvQVRuds=;
-        b=Ej65huN6br/BvsJL6NdryRgqMaigzdNrEh0yptxU6ktxfkOVfnGB8JhlcnDFegwM39
-         1+xf+2IbGCkZB2jitqE7MsxKe30xIxv6oUIFZb6dZojIaggD1y9e4wkzFf6KEnZXQAqs
-         Dka83U7UotuhVF2sxPWPJXwFEBL/RGPvmp+iW3hO/pbvvqr2hWVkwHI4hCcz1H+v8zVs
-         OwjZQY6FfB4+yJ4wASjdtBBchHyOGI2lsAZ1758+/CfmAKb7zdYttFR66+IXUdJkua8n
-         8l5PehvXi2ROk4xfrf1yIV+PuPc2tzcfIIjxZyYe149/ZfI5TuYzV25HnKl5aAl6A0yT
-         kF2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=HgJ0GZY//Len7veYiP6CvMdfuN08GbgxjLHnvQVRuds=;
-        b=jzbpOKZl7LKtLMZRA3BaIyRHyt8iO5IYKy2+XdcUWX/IgpguoY94unTfDNv+w2Sgnh
-         Tnay5zAXb5lRXUGJU1QtyyXsTyVve+0tiC2wrNWqrJK+jkHm/l2s0+D5b6iOCf4ZoUis
-         4hw8+CyiCOBtzq2eVdCJ0P+nPVxukREAUO8W7ANvac1hHMTOLIZ/Gb46d2Giv9SqPFcZ
-         qyhSjj8TdB6bG8/oThbYYOzaWDbRYU3oyX2pw2jVu0aRkqMC0XKHERsfuNZ1DfAooKGb
-         M5MoUlmIhF+BottpdnE2gBWM1u2x4mOmPHpsvcrYzujmXJ1/K8zYIh0O1k1d0pjY+IGc
-         PuOw==
-X-Gm-Message-State: APjAAAVP0/wyJXkRlC64yrowQqC1WES0eAOgL0UTWMRoWamZu/TCosGU
-        z/lxH386ud3nga/KOmfEt9rsrA==
-X-Google-Smtp-Source: APXvYqx4wLLqF1nY5nqIufaWI5Hdcp2smawrQmPU3ZCZZRABh9cWLQ/l6pM/bekVLBiX79E90XgiSg==
-X-Received: by 2002:a5b:a90:: with SMTP id h16mr21558068ybq.341.1559831744170;
-        Thu, 06 Jun 2019 07:35:44 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s (li1322-146.members.linode.com. [45.79.223.146])
-        by smtp.gmail.com with ESMTPSA id v70sm515376ywc.78.2019.06.06.07.35.37
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 06 Jun 2019 07:35:43 -0700 (PDT)
-Date:   Thu, 6 Jun 2019 22:35:32 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] perf augmented_raw_syscalls: Document clang
- configuration
-Message-ID: <20190606143532.GD5970@leoy-ThinkPad-X240s>
-References: <20190606094845.4800-1-leo.yan@linaro.org>
- <20190606094845.4800-5-leo.yan@linaro.org>
- <20190606140800.GF30166@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190606140800.GF30166@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S1728859AbfFFOgG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 6 Jun 2019 10:36:06 -0400
+Received: from www62.your-server.de ([213.133.104.62]:33364 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728624AbfFFOgG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 6 Jun 2019 10:36:06 -0400
+Received: from [178.197.249.21] (helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hYtUq-00049f-1z; Thu, 06 Jun 2019 16:36:04 +0200
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     alexei.starovoitov@gmail.com
+Cc:     kafai@fb.com, rdna@fb.com, m@lambda.lt, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH bpf v2 0/4] Fix unconnected bpf cgroup hooks
+Date:   Thu,  6 Jun 2019 16:35:13 +0200
+Message-Id: <20190606143517.25710-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.9.5
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.3/25472/Thu Jun  6 10:09:59 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jun 06, 2019 at 11:08:00AM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Thu, Jun 06, 2019 at 05:48:45PM +0800, Leo Yan escreveu:
-> > To build this program successfully with clang, there have three
-> > compiler options need to be specified:
-> > 
-> >   - Header file path: tools/perf/include/bpf;
-> >   - Specify architecture;
-> >   - Define macro __NR_CPUS__.
-> 
-> So, this shouldn't be needed, all of this is supposed to be done
-> automagically, have you done a 'make -C tools/perf install'?
+Please refer to the patch 1/4 as the main patch with the details
+on the current sendmsg hook API limitations and proposal to fix
+it in order to work with basic applications like DNS. Remaining
+patches are the usual uapi and tooling updates as well as test
+cases. Thanks a lot!
 
-I missed the up operation.  But after git pulled the lastest code base
-from perf/core branch and used the command 'make -C tools/perf
-install', I still saw the eBPF build failure.
+v1 -> v2:
+  - Split off uapi header sync and bpftool bits (Martin, Alexei)
+  - Added missing bpftool doc and bash completion as well
 
-Just now this issue is fixed after I removed the config
-'clang-bpf-cmd-template' from ~/.perfconfig;  the reason is I followed
-up the Documentation/perf-config.txt to set the config as below:
+Daniel Borkmann (4):
+  bpf: fix unconnected udp hooks
+  bpf: sync tooling uapi header
+  bpf, bpftool: enable recvmsg attach types
+  bpf: add further msg_name rewrite tests to test_sock_addr
 
-  clang-bpf-cmd-template = "$CLANG_EXEC -D__KERNEL__ $CLANG_OPTIONS \
-                          $KERNEL_INC_OPTIONS -Wno-unused-value \
-                          -Wno-pointer-sign -working-directory \
-                          $WORKING_DIR -c $CLANG_SOURCE -target bpf \
-                          -O2 -o -"
+ include/linux/bpf-cgroup.h                    |   8 +
+ include/uapi/linux/bpf.h                      |   2 +
+ kernel/bpf/syscall.c                          |   8 +
+ kernel/bpf/verifier.c                         |  12 +-
+ net/core/filter.c                             |   2 +
+ net/ipv4/udp.c                                |   4 +
+ net/ipv6/udp.c                                |   4 +
+ .../bpftool/Documentation/bpftool-cgroup.rst  |   6 +-
+ .../bpftool/Documentation/bpftool-prog.rst    |   2 +-
+ tools/bpf/bpftool/bash-completion/bpftool     |   5 +-
+ tools/bpf/bpftool/cgroup.c                    |   5 +-
+ tools/bpf/bpftool/prog.c                      |   3 +-
+ tools/include/uapi/linux/bpf.h                |   2 +
+ tools/testing/selftests/bpf/test_sock_addr.c  | 213 ++++++++++++++++--
+ 14 files changed, 250 insertions(+), 26 deletions(-)
 
-In fact, util/llvm-utils.c has updated the default configuration as
-below:
+-- 
+2.17.1
 
-  #define CLANG_BPF_CMD_DEFAULT_TEMPLATE                          \
-                "$CLANG_EXEC -D__KERNEL__ -D__NR_CPUS__=$NR_CPUS "\
-                "-DLINUX_VERSION_CODE=$LINUX_VERSION_CODE "     \
-                "$CLANG_OPTIONS $PERF_BPF_INC_OPTIONS $KERNEL_INC_OPTIONS " \
-                "-Wno-unused-value -Wno-pointer-sign "          \
-                "-working-directory $WORKING_DIR "              \
-                "-c \"$CLANG_SOURCE\" -target bpf $CLANG_EMIT_LLVM -O2 -o - $LLVM_OPTIONS_PIPE"
-
-Maybe should update Documentation/perf-config.txt to tell users the
-real default value of clang-bpf-cmd-template?
-
-Thanks,
-Leo Yan
