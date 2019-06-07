@@ -2,108 +2,151 @@ Return-Path: <SRS0=PZ8U=UG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 222C5C468BE
-	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 14:11:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8366AC2BCA1
+	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 14:11:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F052721473
-	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 14:11:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5C6DC20B7C
+	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 14:11:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kinvolk.io header.i=@kinvolk.io header.b="j5fa4Xr7"
+	dkim=pass (1024-bit key) header.d=kinvolk.io header.i=@kinvolk.io header.b="EYGzdgf8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729482AbfFGOLR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 7 Jun 2019 10:11:17 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:41239 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729456AbfFGOLP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 7 Jun 2019 10:11:15 -0400
-Received: by mail-ed1-f67.google.com with SMTP id p15so3221549eds.8
-        for <bpf@vger.kernel.org>; Fri, 07 Jun 2019 07:11:14 -0700 (PDT)
+        id S1728656AbfFGOLN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 7 Jun 2019 10:11:13 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:41229 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729121AbfFGOLN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 7 Jun 2019 10:11:13 -0400
+Received: by mail-ed1-f65.google.com with SMTP id p15so3221379eds.8
+        for <bpf@vger.kernel.org>; Fri, 07 Jun 2019 07:11:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kinvolk.io; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Xp4rSZI5WhV+6Sat4AULJy3MtrPBifsfu9gUED/8PtM=;
-        b=j5fa4Xr7EV3n7eHh1YEh37F4gLNUjhYvDUz4lIuHeMDiEgRSAkv6SQOiAxlkqObRJs
-         jPFxqQI4VqeibG3Mb/hOzrk2jSsXV46nL/yVFNtre5PROvxr3dwiMwLpacpOipTz70EQ
-         IMFUGoSJBNeL82mmABWec4P0UZrCcMTylCJSI=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GW1chtOYexn3iEYy8Pq9DlSLLB5ej7vVGOlF8xEFfgU=;
+        b=EYGzdgf8GAFWo+SUyvKer6mt4TBmt6hBTlBmp7LWW7m2jE7nTiqLOxmCZV8tazHxrf
+         M1SSmcRjBT8RT7KRPwphdtUa0AII+xGWk8LYzp2KzYic2GPc7D++koW3LSe9BqZ+AVrc
+         PX8vgtxaB/YP8EWs1dzemyRdcps5F8/ftMbis=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Xp4rSZI5WhV+6Sat4AULJy3MtrPBifsfu9gUED/8PtM=;
-        b=rJgMkvM/TXw/Wkd8ynynO+B0U0WEtJFwr5Awy68kfFUct9P5OWjO7P5J45JzN+l5tG
-         1H5rJnOKf6jq6UQ4t4tQQfS+HcgPlHNKfxqCsx5Jw0b2ZUCzGjtt5CrimyLRcywyqmyI
-         1wXASqK2Mp0KtJWRncivzUJI+H3cJ+vxCjsPpFIqyiu0yybx+pgZ1sm929ixfuCzJGzi
-         SJfcW91B01A7VzLqcxi9HxSNCy3I0uuZ1dc+KJuI0LfUL7bN/2GlOd4bn+aH+r1ud/nG
-         fPrVeuuETN1WRbgRhI8ZdClyj1WddFpAuxRbl3N8nHPk9gxeoDuw0FghHLbtMRdelwle
-         gHwg==
-X-Gm-Message-State: APjAAAVJPmkg0FvU1VnllcOqHEl2mFY65QRFdQ7lz8oPnXI3exSgy1t6
-        /l7kJDeMdi6wlRROyZiYW8/ztg==
-X-Google-Smtp-Source: APXvYqy8+1YsywtSTa+c9W9VfssePeLtB7JQ8mgPOuXAxMPPEaW6jzftMhXPMHpXDCzCrK7FZDDhzw==
-X-Received: by 2002:a50:ec8e:: with SMTP id e14mr17918728edr.153.1559916673628;
-        Fri, 07 Jun 2019 07:11:13 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GW1chtOYexn3iEYy8Pq9DlSLLB5ej7vVGOlF8xEFfgU=;
+        b=f7hXhw0skRfDiQmitFiAkRaGx70kzTkCS2JrlCDZGI3ArZGavKZsuV/kpnJbM0+Oum
+         Jc3h8HvnKS1QltHq/XV/TyAb1QYluHraH0HaM+4jwAtC6yKCo5SdH8S10xcXKiJx/3sD
+         /JAKccR10DZVa0v3cl/6ofMiTMoqyHcdCzXCBzMZTKT6SIyNGlCywmJ3+eNlMHP3VtzU
+         3iOsB4tsDtEm9Fld8fvjzi8BiyNSjCyEwB7I2kOdqiBXMmU8MtCNzIHwVMPb9aNUq9uX
+         5B1Rkie3w4J7SaPGgRpBkP39+ERlJkGoWlfiXneAEwQGZXgGvqQMzMUgEg4S6FIho8W7
+         /BBw==
+X-Gm-Message-State: APjAAAXXw4o03RPFGrBFhv1XI3/FrjEc8mMwxT80T8+grCYLW/nPJcK6
+        LdHTsf4LBFJwj3VrznnCeFqlgw==
+X-Google-Smtp-Source: APXvYqyFO8OVO9Ek1HXeW7uJldc9Q3IHl5BmgqroEGn0wz7sBZvCdcPBXBgzAj+vO/RGzRoDloQRMg==
+X-Received: by 2002:aa7:cdc4:: with SMTP id h4mr47346453edw.221.1559916671307;
+        Fri, 07 Jun 2019 07:11:11 -0700 (PDT)
 Received: from locke-xps13.fritz.box (dslb-002-205-069-198.002.205.pools.vodafone-ip.de. [2.205.69.198])
-        by smtp.gmail.com with ESMTPSA id a40sm546116edd.1.2019.06.07.07.11.12
+        by smtp.gmail.com with ESMTPSA id a40sm546116edd.1.2019.06.07.07.11.09
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 07 Jun 2019 07:11:13 -0700 (PDT)
+        Fri, 07 Jun 2019 07:11:10 -0700 (PDT)
 From:   =?UTF-8?q?Iago=20L=C3=B3pez=20Galeiras?= <iago@kinvolk.io>
 To:     john.fastabend@gmail.com, ast@kernel.org, daniel@iogearbox.net
 Cc:     alban@kinvolk.io, krzesimir@kinvolk.io, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v5 2/4] bpf: sync bpf.h to tools/ for bpf_sock_ops->netns*
-Date:   Fri,  7 Jun 2019 16:11:04 +0200
-Message-Id: <20190607141106.32148-3-iago@kinvolk.io>
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Iago=20L=C3=B3pez=20Galeiras?= <iago@kinvolk.io>
+Subject: [PATCH bpf-next v5 0/4] sock ops: add netns ino and dev in bpf context
+Date:   Fri,  7 Jun 2019 16:11:02 +0200
+Message-Id: <20190607141106.32148-1-iago@kinvolk.io>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190607141106.32148-1-iago@kinvolk.io>
-References: <20190607141106.32148-1-iago@kinvolk.io>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Alban Crequy <alban@kinvolk.io>
+This series allows sockops programs to access the network namespace
+inode and device via (struct bpf_sock_ops)->netns_ino and ->netns_dev.
+This can be useful to apply different policies on different network
+namespaces.
 
-The change in struct bpf_sock_ops is synchronised
-from: include/uapi/linux/bpf.h
-to: tools/include/uapi/linux/bpf.h
+In the unlikely case where network namespaces are not compiled in
+(CONFIG_NET_NS=n), the verifier will generate code to return netns_dev
+as usual and will return 0 for netns_ino.
 
-Signed-off-by: Alban Crequy <alban@kinvolk.io>
+The generated BPF bytecode for netns_ino is loading the correct
+inode number at the time of execution.
 
----
+However, the generated BPF bytecode for netns_dev is loading an
+immediate value determined at BPF-load-time by looking at the
+initial network namespace. In practice, this works because all netns
+currently use the same virtual device. If this was to change, this
+code would need to be updated too.
+
+It also adds sockmap and verifier selftests to cover the new fields.
+
+Partial reads work thanks to commit e2f7fc0ac69 ("bpf: fix undefined
+behavior in narrow load handling").
+
+v1 patchset can be found at:
+https://lkml.org/lkml/2019/4/12/238
+
+Changes since v1:
+- add netns_dev (review from Alexei)
+- tools/include/uapi/linux/bpf.h: update with netns_dev
+- tools/testing/selftests/bpf/test_sockmap_kern.h: print debugs with
+- This is a new selftest (review from Song)
+
+v2 patchest can be found at:
+https://lkml.org/lkml/2019/4/18/685
 
 Changes since v2:
+- replace __u64 by u64 in kernel code (review from Y Song)
+- remove unneeded #else branch: program would be rejected in
+  is_valid_access (review from Y Song)
+- allow partial reads (<u64) (review from Y Song)
 - standalone patch for the sync (requested by Y Song)
+- update commitmsg to refer to netns_ino
+- test partial reads on netns_dev (review from Y Song)
+- split in two tests
+
+v3 patchset can be found at:
+https://lkml.org/lkml/2019/4/26/740
+
+Changes since v3:
+- return netns_dev unconditionally and set netns_ino to 0 if
+  CONFIG_NET_NS is not enabled (review from Jakub Kicinski)
+- use bpf_ctx_record_field_size and bpf_ctx_narrow_access_ok instead of
+  manually deal with partial reads (review from Y Song)
+- update commit message to reflect new code and remove note about
+  partial reads since it was discussed in the review
+- use bpf_ctx_range() and offsetofend()
+
+v4 patchset can be found at:
+https://lkml.org/lkml/2019/5/24/714
 
 Changes since v4:
-- add netns_dev comment on uapi header (review from Y Song)
----
- tools/include/uapi/linux/bpf.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+- add netns_dev comment on uapi headers (review from Y Song)
+- remove redundant bounds check (review from Y Song)
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 63e0cf66f01a..41f54ac3db95 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3261,6 +3261,12 @@ struct bpf_sock_ops {
- 	__u32 sk_txhash;
- 	__u64 bytes_received;
- 	__u64 bytes_acked;
-+	/*
-+	 * netns_dev might be zero if there's an error getting it
-+	 * when loading the BPF program. This is very unlikely.
-+	 */
-+	__u64 netns_dev;
-+	__u64 netns_ino;
- };
- 
- /* Definitions for bpf_sock_ops_cb_flags */
+Alban Crequy (4):
+  bpf: sock ops: add netns ino and dev in bpf context
+  bpf: sync bpf.h to tools/ for bpf_sock_ops->netns*
+  selftests: bpf: read netns_ino from struct bpf_sock_ops
+  selftests: bpf: verifier: read netns_dev and netns_ino from struct
+    bpf_sock_ops
+
+ include/uapi/linux/bpf.h                      |  6 ++
+ net/core/filter.c                             | 67 +++++++++++++++++++
+ tools/include/uapi/linux/bpf.h                |  6 ++
+ tools/testing/selftests/bpf/test_sockmap.c    | 38 ++++++++++-
+ .../testing/selftests/bpf/test_sockmap_kern.h | 22 ++++++
+ .../testing/selftests/bpf/verifier/var_off.c  | 53 +++++++++++++++
+ 6 files changed, 189 insertions(+), 3 deletions(-)
+
 -- 
 2.21.0
 
