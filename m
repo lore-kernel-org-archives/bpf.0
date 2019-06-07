@@ -2,153 +2,276 @@ Return-Path: <SRS0=PZ8U=UG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=unavailable
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47481C28CC3
-	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 09:58:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3FA4C2BCA1
+	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 14:11:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 16A8A20B7C
-	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 09:58:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C112C20B7C
+	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 14:11:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gNCRPlL5"
+	dkim=pass (1024-bit key) header.d=kinvolk.io header.i=@kinvolk.io header.b="hYmpl/RJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727233AbfFGJ6n (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 7 Jun 2019 05:58:43 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:37097 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726996AbfFGJ6m (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 7 Jun 2019 05:58:42 -0400
-Received: by mail-qk1-f196.google.com with SMTP id d15so846117qkl.4
-        for <bpf@vger.kernel.org>; Fri, 07 Jun 2019 02:58:42 -0700 (PDT)
+        id S1729487AbfFGOLR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 7 Jun 2019 10:11:17 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:45560 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728961AbfFGOLQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 7 Jun 2019 10:11:16 -0400
+Received: by mail-ed1-f68.google.com with SMTP id a14so1351897edv.12
+        for <bpf@vger.kernel.org>; Fri, 07 Jun 2019 07:11:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=DYaslGuRCa44w27gCTBvwFQNPiCOo89j5a92HT1O398=;
-        b=gNCRPlL5SC+waW1M964joyZ8kMUdAunRd0kG2R0C3sWB5B8AwM4yXoHZDbl/s+VEtP
-         WYXbP6xATcoLWTTvcuy9SFgWcIg7JbxHPYcew0ZPeQ/QY3/fxBBsWrcpj0qPc8EpyRcM
-         nvhTc2y5F3BrqmiUNxdGpNx5vpDhO8OCPI6D555S9mzfUR5vAiGGYgarsFHsBdGccDiA
-         80LZRj2aZdhvOfLehAI5nE1cZz+Jy7Xm/Qe0HdCFW1Pj9z+sH+YhYHITYZaV8IRjkSjh
-         92oT/4VuYF9Ow5L2FyT4NqFYMe1hijDDrM1bJwUZ86MHz8CZlXfzrCKDYf7NEwdtHN5F
-         rwMQ==
+        d=kinvolk.io; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=11EhXksDgdLmWhW501RogfILPsFHkHJiIn4iFOtsvjs=;
+        b=hYmpl/RJIdtBL+tsRx46QDZM7ntWEZeAb9P3BhBKmYfHgIuLyh9vvmb9zYXwPIVTat
+         dKl6Ldm0GyqhJeZkADC8h+04FfW+VTO+LTu9Ns56Dr11icJr10317+FdshImeHEJaDn3
+         jOxE9gYyRaoqV8HHHUAEaWJQqrScNxcW7TZMM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=DYaslGuRCa44w27gCTBvwFQNPiCOo89j5a92HT1O398=;
-        b=XoGRdn+7lqt7ut1oM25BZxkbW4Qv/lkuI0NHR/FJ0vzyBSMo1cj277eZ4aH0PUv0eG
-         elyojWfXlAx/ou6WRoxiMvKUc7t4rBfd1j3/ETo+jfRjy7x6FWNTgbr//O1WTRLq1B0Y
-         9Iiu86+zdTO40DyyRbe195gjC6dsr0u1CfiQIgGWYD8xtNloM3YLnyMZuHE6IQmaiFgJ
-         KC/dcTz/BCy/j1YVLNcFGgRqInzD6tWcqrOqlMPheuBL0vYWGMea9Yr6pq9vmpI9UflV
-         xQWWBM9MMjO7Vvvs9zlk4NLYpV9A4/NLy/+9+AUkoWwlf9tKytmHH+QFfqiEG50WUKYK
-         rhxQ==
-X-Gm-Message-State: APjAAAWppLdvguhrGPnTPCHPaq3uSZIIXVclOs1ii2lzQiSq65oCvylY
-        jmwuJQD/d9wW4ikCEErnjhSQ6A==
-X-Google-Smtp-Source: APXvYqzuPCkCoJMd93+bmUPkXRWcKmfAOtQiwBn348DGiv4tPkZy2smKLzEhRZ2ORX+iZMnBTJy22Q==
-X-Received: by 2002:a05:620a:533:: with SMTP id h19mr43063500qkh.325.1559901521594;
-        Fri, 07 Jun 2019 02:58:41 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s (li1322-146.members.linode.com. [45.79.223.146])
-        by smtp.gmail.com with ESMTPSA id w16sm970120qtc.41.2019.06.07.02.58.35
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 07 Jun 2019 02:58:41 -0700 (PDT)
-Date:   Fri, 7 Jun 2019 17:58:31 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] perf augmented_raw_syscalls: Support arm64 raw
- syscalls
-Message-ID: <20190607095831.GG5970@leoy-ThinkPad-X240s>
-References: <20190606094845.4800-1-leo.yan@linaro.org>
- <20190606094845.4800-4-leo.yan@linaro.org>
- <20190606133838.GC30166@kernel.org>
- <20190606141231.GC5970@leoy-ThinkPad-X240s>
- <20190606144412.GC21245@kernel.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=11EhXksDgdLmWhW501RogfILPsFHkHJiIn4iFOtsvjs=;
+        b=Wehb3VCwXevljcnTp+4an0C98etwsbGF9wz81Vqj/bFQc+phtixkxUm6quhNH6Lb2c
+         PmdoM0rEXND8sGpq/6DKbnSqZqtRfVoo9Biq0K8MLa28qS7o9CoMgwOd25nHz2oSl2Iv
+         73Z7JeC3FH67A3sdB4zuaGuRlxvt/qyczCvSVptTFu9Ul6nqP7jRxYxShTcVA7oCcdaj
+         /1PCY800+NSGAHM36ZE1fk2fqG/ljouQzBkd6j8SNDLMZkeyk0T7QohI2v2zkixHvIXz
+         HvPM1hE8s4wIFVArpj1PZuC4kfMFwLcmvw3UVbcBMhVTBKtW2W7GQmQot3qNnuhQHKmv
+         gX4A==
+X-Gm-Message-State: APjAAAWhWLU2GLi1dBn/RhRqKcJwWwdlJtCV8GCQVqOmzr5LWspzQgqA
+        isvMO60N/6W4NaxF70+sELvm/A==
+X-Google-Smtp-Source: APXvYqz2740/Zq7SORSpBbmq18iS12DgOvm5oFAPmO/N4K7hGYYvdn+cIQ/hX/Zj7omaxLUCzzTvrQ==
+X-Received: by 2002:a17:906:4cc3:: with SMTP id q3mr22467661ejt.27.1559916674717;
+        Fri, 07 Jun 2019 07:11:14 -0700 (PDT)
+Received: from locke-xps13.fritz.box (dslb-002-205-069-198.002.205.pools.vodafone-ip.de. [2.205.69.198])
+        by smtp.gmail.com with ESMTPSA id a40sm546116edd.1.2019.06.07.07.11.13
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 07 Jun 2019 07:11:14 -0700 (PDT)
+From:   =?UTF-8?q?Iago=20L=C3=B3pez=20Galeiras?= <iago@kinvolk.io>
+To:     john.fastabend@gmail.com, ast@kernel.org, daniel@iogearbox.net
+Cc:     alban@kinvolk.io, krzesimir@kinvolk.io, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v5 3/4] selftests: bpf: read netns_ino from struct bpf_sock_ops
+Date:   Fri,  7 Jun 2019 16:11:05 +0200
+Message-Id: <20190607141106.32148-4-iago@kinvolk.io>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190607141106.32148-1-iago@kinvolk.io>
+References: <20190607141106.32148-1-iago@kinvolk.io>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190606144412.GC21245@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Arnaldo,
+From: Alban Crequy <alban@kinvolk.io>
 
-On Thu, Jun 06, 2019 at 11:44:12AM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Thu, Jun 06, 2019 at 10:12:31PM +0800, Leo Yan escreveu:
-> > Hi Arnaldo,
-> > 
-> > On Thu, Jun 06, 2019 at 10:38:38AM -0300, Arnaldo Carvalho de Melo wrote:
-> > > Em Thu, Jun 06, 2019 at 05:48:44PM +0800, Leo Yan escreveu:
-> > > > This patch adds support for arm64 raw syscall numbers so that we can use
-> > > > it on arm64 platform.
-> > > > 
-> > > > After applied this patch, we need to specify macro -D__aarch64__ or
-> > > > -D__x86_64__ in compilation option so Clang can use the corresponding
-> > > > syscall numbers for arm64 or x86_64 respectively, other architectures
-> > > > will report failure when compilation.
-> > > 
-> > > So, please check what I have in my perf/core branch, I've completely
-> > > removed arch specific stuff from augmented_raw_syscalls.c.
-> > > 
-> > > What is done now is use a map to specify what to copy, that same map
-> > > that is used to state which syscalls should be traced.
-> > > 
-> > > It uses that tools/perf/arch/arm64/entry/syscalls/mksyscalltbl to figure
-> > > out the mapping of syscall names to ids, just like is done for x86_64
-> > > and other arches, falling back to audit-libs when that syscalltbl thing
-> > > is not present.
-> > 
-> > Actually I have noticed mksyscalltbl has been enabled for arm64, and
-> > had to say your approach is much better :)
-> > 
-> > Thanks for the info and I will try your patch at my side.
-> 
-> That is excellent news! I'm eager to hear from you if this perf+BPF
-> integration experiment works for arm64.
+This shows how a sockops program could be restricted to a specific
+network namespace. The sockops program looks at the current netns via
+(struct bpf_sock_ops)->netns_ino and checks if the value matches the
+configuration in the new BPF map "sock_netns".
 
-I tested with the lastest perf/core branch which contains the patch:
-'perf augmented_raw_syscalls: Tell which args are filenames and how
-many bytes to copy' and got the error as below:
+The test program ./test_sockmap accepts a new parameter "--netns"; the
+default value is the current netns found by stat() on /proc/self/ns/net,
+so the previous tests still pass:
 
-# perf trace -e string -e /mnt/linux-kernel/linux-cs-dev/tools/perf/examples/bpf/augmented_raw_syscalls.c
-Error:  Invalid syscall access, chmod, chown, creat, futimesat, lchown, link, lstat, mkdir, mknod, newfstatat, open, readlink, rename,
-rmdir, stat, statfs, symlink, truncate, unlink
-Hint:   try 'perf list syscalls:sys_enter_*'
-Hint:   and: 'man syscalls'
+sudo ./test_sockmap
+...
+Summary: 412 PASSED 0 FAILED
+...
+Summary: 824 PASSED 0 FAILED
 
-So seems mksyscalltbl has not included completely for syscalls, I
-use below command to generate syscalltbl_arm64[] array and it don't
-include related entries for access, chmod, chown, etc ...
+I run my additional test in the following way:
 
-You could refer the generated syscalltbl_arm64 in:
-http://paste.ubuntu.com/p/8Bj7Jkm2mP/
+NETNS=$(readlink /proc/self/ns/net | sed 's/^net:\[\(.*\)\]$/\1/')
+CGR=/sys/fs/cgroup/unified/user.slice/user-1000.slice/session-5.scope/
+sudo ./test_sockmap --cgroup $CGR --netns $NETNS &
 
-> I'm now trying to get past the verifier when checking if more than one
-> syscall arg is a filename, i.e. things like the rename* family, that
-> take two filenames.
-> 
-> An exercise in loop unrolling, providing the right hints to the
-> verifier, making sure clang don't trash those via explicit barriers, and
-> a lot of patience, limitless fun! ;-)
+cat /sys/kernel/debug/tracing/trace_pipe
 
-Cool!  Please feel free let me know if need me to do testing for this.
+echo foo | nc -l 127.0.0.1 8080 &
+echo bar | nc 127.0.0.1 8080
 
-Thanks,
-Leo Yan
+=> the connection goes through the sockmap
+
+When testing with a wrong $NETNS, I get the trace_pipe log:
+> not binding connection on netns 4026531992
+
+Signed-off-by: Alban Crequy <alban@kinvolk.io>
+
+---
+
+Changes since v1:
+- tools/include/uapi/linux/bpf.h: update with netns_dev
+- tools/testing/selftests/bpf/test_sockmap_kern.h: print debugs with
+  both netns_dev and netns_ino
+
+Changes since v2:
+- update commitmsg to refer to netns_ino
+---
+ tools/testing/selftests/bpf/test_sockmap.c    | 38 +++++++++++++++++--
+ .../testing/selftests/bpf/test_sockmap_kern.h | 22 +++++++++++
+ 2 files changed, 57 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
+index 3845144e2c91..5a1b9c96fca1 100644
+--- a/tools/testing/selftests/bpf/test_sockmap.c
++++ b/tools/testing/selftests/bpf/test_sockmap.c
+@@ -2,6 +2,7 @@
+ // Copyright (c) 2017-2018 Covalent IO, Inc. http://covalent.io
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <stdint.h>
+ #include <sys/socket.h>
+ #include <sys/ioctl.h>
+ #include <sys/select.h>
+@@ -21,6 +22,7 @@
+ #include <sys/resource.h>
+ #include <sys/types.h>
+ #include <sys/sendfile.h>
++#include <sys/stat.h>
+ 
+ #include <linux/netlink.h>
+ #include <linux/socket.h>
+@@ -63,8 +65,8 @@ int s1, s2, c1, c2, p1, p2;
+ int test_cnt;
+ int passed;
+ int failed;
+-int map_fd[8];
+-struct bpf_map *maps[8];
++int map_fd[9];
++struct bpf_map *maps[9];
+ int prog_fd[11];
+ 
+ int txmsg_pass;
+@@ -84,6 +86,7 @@ int txmsg_ingress;
+ int txmsg_skb;
+ int ktls;
+ int peek_flag;
++uint64_t netns_opt;
+ 
+ static const struct option long_options[] = {
+ 	{"help",	no_argument,		NULL, 'h' },
+@@ -111,6 +114,7 @@ static const struct option long_options[] = {
+ 	{"txmsg_skb", no_argument,		&txmsg_skb, 1 },
+ 	{"ktls", no_argument,			&ktls, 1 },
+ 	{"peek", no_argument,			&peek_flag, 1 },
++	{"netns",	required_argument,	NULL, 'n'},
+ 	{0, 0, NULL, 0 }
+ };
+ 
+@@ -1585,6 +1589,7 @@ char *map_names[] = {
+ 	"sock_bytes",
+ 	"sock_redir_flags",
+ 	"sock_skb_opts",
++	"sock_netns",
+ };
+ 
+ int prog_attach_type[] = {
+@@ -1619,6 +1624,8 @@ static int populate_progs(char *bpf_file)
+ 	struct bpf_object *obj;
+ 	int i = 0;
+ 	long err;
++	struct stat netns_sb;
++	uint64_t netns_ino;
+ 
+ 	obj = bpf_object__open(bpf_file);
+ 	err = libbpf_get_error(obj);
+@@ -1655,6 +1662,28 @@ static int populate_progs(char *bpf_file)
+ 		}
+ 	}
+ 
++	if (netns_opt == 0) {
++		err = stat("/proc/self/ns/net", &netns_sb);
++		if (err) {
++			fprintf(stderr,
++				"ERROR: cannot stat network namespace: %ld (%s)\n",
++				err, strerror(errno));
++			return -1;
++		}
++		netns_ino = netns_sb.st_ino;
++	} else {
++		netns_ino = netns_opt;
++	}
++	i = 1;
++	err = bpf_map_update_elem(map_fd[8], &netns_ino, &i, BPF_ANY);
++	if (err) {
++		fprintf(stderr,
++			"ERROR: bpf_map_update_elem (netns):  %ld (%s)\n",
++			err, strerror(errno));
++		return -1;
++	}
++
++
+ 	return 0;
+ }
+ 
+@@ -1738,7 +1767,7 @@ int main(int argc, char **argv)
+ 	if (argc < 2)
+ 		return test_suite(-1);
+ 
+-	while ((opt = getopt_long(argc, argv, ":dhvc:r:i:l:t:p:q:",
++	while ((opt = getopt_long(argc, argv, ":dhvc:r:i:l:t:p:q:n:",
+ 				  long_options, &longindex)) != -1) {
+ 		switch (opt) {
+ 		case 's':
+@@ -1805,6 +1834,9 @@ int main(int argc, char **argv)
+ 				return -1;
+ 			}
+ 			break;
++		case 'n':
++			netns_opt = strtoull(optarg, NULL, 10);
++			break;
+ 		case 0:
+ 			break;
+ 		case 'h':
+diff --git a/tools/testing/selftests/bpf/test_sockmap_kern.h b/tools/testing/selftests/bpf/test_sockmap_kern.h
+index e7639f66a941..317406dad6cf 100644
+--- a/tools/testing/selftests/bpf/test_sockmap_kern.h
++++ b/tools/testing/selftests/bpf/test_sockmap_kern.h
+@@ -91,6 +91,13 @@ struct bpf_map_def SEC("maps") sock_skb_opts = {
+ 	.max_entries = 1
+ };
+ 
++struct bpf_map_def SEC("maps") sock_netns = {
++	.type = BPF_MAP_TYPE_HASH,
++	.key_size = sizeof(__u64),
++	.value_size = sizeof(int),
++	.max_entries = 16
++};
++
+ SEC("sk_skb1")
+ int bpf_prog1(struct __sk_buff *skb)
+ {
+@@ -132,9 +139,24 @@ int bpf_sockmap(struct bpf_sock_ops *skops)
+ {
+ 	__u32 lport, rport;
+ 	int op, err = 0, index, key, ret;
++	int i = 0;
++	__u64 netns_dev, netns_ino;
++	int *allowed;
+ 
+ 
+ 	op = (int) skops->op;
++	netns_dev = skops->netns_dev;
++	netns_ino = skops->netns_ino;
++	bpf_printk("bpf_sockmap: netns_dev = %lu netns_ino = %lu\n",
++		   netns_dev, netns_ino);
++
++	// Only allow sockmap connection on the configured network namespace
++	allowed = bpf_map_lookup_elem(&sock_netns, &netns_ino);
++	if (allowed == NULL || *allowed == 0) {
++		bpf_printk("not binding connection on netns_ino %lu\n",
++			   netns_ino);
++		return 0;
++	}
+ 
+ 	switch (op) {
+ 	case BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB:
+-- 
+2.21.0
+
