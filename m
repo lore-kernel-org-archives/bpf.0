@@ -2,44 +2,44 @@ Return-Path: <SRS0=PZ8U=UG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,T_DKIMWL_WL_HIGH,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75CA8C2BCA1
-	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 16:38:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CAEBC2BCA1
+	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 16:38:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4CF1C2067C
-	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 16:38:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DFBEC2067C
+	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 16:38:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="jK6/7JAS"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="e6c3ToQw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730852AbfFGQiJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 7 Jun 2019 12:38:09 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:55038 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730304AbfFGQiI (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 7 Jun 2019 12:38:08 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x57GTRWc011446
-        for <bpf@vger.kernel.org>; Fri, 7 Jun 2019 09:38:07 -0700
+        id S1730304AbfFGQiV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 7 Jun 2019 12:38:21 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:39440 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729953AbfFGQiV (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 7 Jun 2019 12:38:21 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x57Gbwnu007454
+        for <bpf@vger.kernel.org>; Fri, 7 Jun 2019 09:38:20 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=kK787B2fSNLKBrSmlRNcG4ZJqW2AkkeJP293AgQqc94=;
- b=jK6/7JASXOWMM0E1UyrKjDhVoy7dqQ0rKqvbyQxamb/EI9rQKwpODb8yyoYa+M/qhPmQ
- h1hO5broVIZ3kl9YHPCYZQHmZz8UO0bLvfWMdZG614o2FOXx/lrvaYhsaq02QbC9if3c
- RjxiTzSsf8feVpJ+fpyvTgqgpjar2PZwrkU= 
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=P2Bhe+T7ArGtmnyGXtg3w06CcGyGgokWdtEP7eIkw0g=;
+ b=e6c3ToQwWbrCnfEfU+sKDxbCSDyRUpzSu5uEzIeGY1gXJJupV0SMEKq7psf1punRvF9f
+ MWmAwg+M25k4CpAb8vkSD5FBWUIykqohi0ktQi/2XwMPMeA0Z0uITz5Me+k2tUJdqx+Y
+ jfgA4CLUvsbkCt0YKC2sQMT+qupOJpGqJjI= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2syq410xan-18
+        by m0001303.ppops.net with ESMTP id 2sy0e8d9dy-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 07 Jun 2019 09:38:07 -0700
+        for <bpf@vger.kernel.org>; Fri, 07 Jun 2019 09:38:18 -0700
 Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 7 Jun 2019 09:38:04 -0700
+ 15.1.1713.5; Fri, 7 Jun 2019 09:38:03 -0700
 Received: by devvm3632.prn2.facebook.com (Postfix, from userid 172007)
-        id 912AACD9C6E4; Fri,  7 Jun 2019 09:38:03 -0700 (PDT)
+        id BBAC8CD9C6D4; Fri,  7 Jun 2019 09:38:01 -0700 (PDT)
 Smtp-Origin-Hostprefix: devvm
 From:   Hechao Li <hechaol@fb.com>
 Smtp-Origin-Hostname: devvm3632.prn2.facebook.com
@@ -47,12 +47,10 @@ To:     <bpf@vger.kernel.org>
 CC:     <netdev@vger.kernel.org>, <daniel@iogearbox.net>, <ast@kernel.org>,
         <kernel-team@fb.com>, Hechao Li <hechaol@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v4 bpf-next 2/2] bpf: use libbpf_num_possible_cpus in bpftool and selftests
-Date:   Fri, 7 Jun 2019 09:37:59 -0700
-Message-ID: <20190607163759.2211904-3-hechaol@fb.com>
+Subject: [PATCH v4 bpf-next 0/2] bpf: Add a new API libbpf_num_possible_cpus()
+Date:   Fri, 7 Jun 2019 09:37:57 -0700
+Message-ID: <20190607163759.2211904-1-hechaol@fb.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190607163759.2211904-1-hechaol@fb.com>
-References: <20190607163759.2211904-1-hechaol@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -61,152 +59,32 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
  malwarescore=0 suspectscore=13 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=727 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906070110
+ mlxlogscore=721 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906070111
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use the newly added bpf_num_possible_cpus() in bpftool and selftests
-and remove duplicate implementations.
+Getting number of possible CPUs is commonly used for per-CPU BPF maps
+and perf_event_maps. Add a new API libbpf_num_possible_cpus() that
+helps user with per-CPU related operations and remove duplicate
+implementations in bpftool and selftests.
 
-Signed-off-by: Hechao Li <hechaol@fb.com>
-Acked-by: Song Liu <songliubraving@fb.com>
----
- tools/bpf/bpftool/common.c             | 53 +++-----------------------
- tools/testing/selftests/bpf/bpf_util.h | 37 +++---------------
- 2 files changed, 10 insertions(+), 80 deletions(-)
+v4: Fixed error code when reading 0 bytes from possible CPU file
 
-diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index f7261fad45c1..5215e0870bcb 100644
---- a/tools/bpf/bpftool/common.c
-+++ b/tools/bpf/bpftool/common.c
-@@ -21,6 +21,7 @@
- #include <sys/vfs.h>
- 
- #include <bpf.h>
-+#include <libbpf.h> /* libbpf_num_possible_cpus */
- 
- #include "main.h"
- 
-@@ -439,57 +440,13 @@ unsigned int get_page_size(void)
- 
- unsigned int get_possible_cpus(void)
- {
--	static unsigned int result;
--	char buf[128];
--	long int n;
--	char *ptr;
--	int fd;
--
--	if (result)
--		return result;
--
--	fd = open("/sys/devices/system/cpu/possible", O_RDONLY);
--	if (fd < 0) {
--		p_err("can't open sysfs possible cpus");
--		exit(-1);
--	}
--
--	n = read(fd, buf, sizeof(buf));
--	if (n < 2) {
--		p_err("can't read sysfs possible cpus");
--		exit(-1);
--	}
--	close(fd);
-+	int cpus = libbpf_num_possible_cpus();
- 
--	if (n == sizeof(buf)) {
--		p_err("read sysfs possible cpus overflow");
-+	if (cpus < 0) {
-+		p_err("Can't get # of possible cpus: %s", strerror(-cpus));
- 		exit(-1);
- 	}
--
--	ptr = buf;
--	n = 0;
--	while (*ptr && *ptr != '\n') {
--		unsigned int a, b;
--
--		if (sscanf(ptr, "%u-%u", &a, &b) == 2) {
--			n += b - a + 1;
--
--			ptr = strchr(ptr, '-') + 1;
--		} else if (sscanf(ptr, "%u", &a) == 1) {
--			n++;
--		} else {
--			assert(0);
--		}
--
--		while (isdigit(*ptr))
--			ptr++;
--		if (*ptr == ',')
--			ptr++;
--	}
--
--	result = n;
--
--	return result;
-+	return cpus;
- }
- 
- static char *
-diff --git a/tools/testing/selftests/bpf/bpf_util.h b/tools/testing/selftests/bpf/bpf_util.h
-index a29206ebbd13..6231eafd4a5a 100644
---- a/tools/testing/selftests/bpf/bpf_util.h
-+++ b/tools/testing/selftests/bpf/bpf_util.h
-@@ -6,44 +6,17 @@
- #include <stdlib.h>
- #include <string.h>
- #include <errno.h>
-+#include <libbpf.h>
- 
- static inline unsigned int bpf_num_possible_cpus(void)
- {
--	static const char *fcpu = "/sys/devices/system/cpu/possible";
--	unsigned int start, end, possible_cpus = 0;
--	char buff[128];
--	FILE *fp;
--	int len, n, i, j = 0;
-+	int possible_cpus = libbpf_num_possible_cpus();
- 
--	fp = fopen(fcpu, "r");
--	if (!fp) {
--		printf("Failed to open %s: '%s'!\n", fcpu, strerror(errno));
-+	if (possible_cpus < 0) {
-+		printf("Failed to get # of possible cpus: '%s'!\n",
-+		       strerror(-possible_cpus));
- 		exit(1);
- 	}
--
--	if (!fgets(buff, sizeof(buff), fp)) {
--		printf("Failed to read %s!\n", fcpu);
--		exit(1);
--	}
--
--	len = strlen(buff);
--	for (i = 0; i <= len; i++) {
--		if (buff[i] == ',' || buff[i] == '\0') {
--			buff[i] = '\0';
--			n = sscanf(&buff[j], "%u-%u", &start, &end);
--			if (n <= 0) {
--				printf("Failed to retrieve # possible CPUs!\n");
--				exit(1);
--			} else if (n == 1) {
--				end = start;
--			}
--			possible_cpus += end - start + 1;
--			j = i + 1;
--		}
--	}
--
--	fclose(fp);
--
- 	return possible_cpus;
- }
- 
+Hechao Li (2):
+  bpf: add a new API libbpf_num_possible_cpus()
+  bpf: use libbpf_num_possible_cpus in bpftool and selftests
+
+ tools/bpf/bpftool/common.c             | 53 +++---------------------
+ tools/lib/bpf/libbpf.c                 | 57 ++++++++++++++++++++++++++
+ tools/lib/bpf/libbpf.h                 | 16 ++++++++
+ tools/lib/bpf/libbpf.map               |  1 +
+ tools/testing/selftests/bpf/bpf_util.h | 37 +++--------------
+ 5 files changed, 84 insertions(+), 80 deletions(-)
+
 -- 
 2.17.1
 
