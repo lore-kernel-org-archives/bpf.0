@@ -2,206 +2,211 @@ Return-Path: <SRS0=PZ8U=UG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_MED,URIBL_BLOCKED,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7526CC468BC
-	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 16:29:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75CA8C2BCA1
+	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 16:38:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4F74E2064A
-	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 16:29:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4CF1C2067C
+	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 16:38:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O/35Jua8"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="jK6/7JAS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730712AbfFGQ3o (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 7 Jun 2019 12:29:44 -0400
-Received: from mail-oi1-f201.google.com ([209.85.167.201]:50936 "EHLO
-        mail-oi1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730803AbfFGQ3m (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 7 Jun 2019 12:29:42 -0400
-Received: by mail-oi1-f201.google.com with SMTP id p83so746729oih.17
-        for <bpf@vger.kernel.org>; Fri, 07 Jun 2019 09:29:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=yErqIu3OgO24L5QyVBM0BiOznDJfoK1Hx1xADayQnhI=;
-        b=O/35Jua8/Ac3H0sW7c+oKLcvNYBk6CjtcTc0mJNeQD9Cbv8ZOZ/riGKdg6DE2uW+Iz
-         N50NKX/ZXViOpSE3SRnGCerHjuiNWGvsVAZlW4Z9jCBWIMiE5dHd0m5zGZFDlbhE4/a3
-         le2JXFWQp/uXBwfkBb4RWhb5lYt7P/v5gJsEtHCJ7nDfouJSiO++Cl1cnkPXbw/b2SjG
-         dBr/okNyMbWII4ZWSCtunFewVK+aI5rtjYyl1ln8bz/FoSMQB6GYLi+tOUe7nUxU33ys
-         Wl9nq2RPCjJFh9maFlx1sGqL4/OJLEzPJdsKJGDMXtFuVSv8R3+4U+agWUoEJlK5fJJA
-         w6yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=yErqIu3OgO24L5QyVBM0BiOznDJfoK1Hx1xADayQnhI=;
-        b=EG6/Ql5suVTt/nOa1STPy2s9ZbOSG0ZxCruunuiu386sKVXO1d9Wu4o29EYN/kBx7i
-         atTY0VRC5jZoCpQQ5lYfuGqjA3sZ70SZXzMZxWQa6WKEFlI0mnv74M9Gw8McHwlYlKTe
-         zmLeXsjr6so7IhRnffiOA4QC/7TONd1Wb9BpBVuT9d16JdPMLZulqYT4C2bbUcnts12k
-         9DCq1XC6e30TVlcUWSDUvXrRN0g+VF50zpeRbKRf950wN6ASEcjcZGpFP7lLiicnkF54
-         Ru1MOk5V2PVyK1PKayIMyQKXHf+2i6w4ixGk7Hp+AdfZIQbcVuuTCjUjPrj92kPoXkoq
-         qM0w==
-X-Gm-Message-State: APjAAAWKxIEhxc6GMkyahmfyALbTeqNkHTAFDv4+Nqrzg9hHJVy+UYDY
-        oRhSgho3+xfRh42B33i7OaYqfak=
-X-Google-Smtp-Source: APXvYqw1vU4eKf92itSrbYXGkH61+4ZWIxroQZYTw+zC5b7QOsucW/BG0sTCjq/hgnm5yEE2hnsybN0=
-X-Received: by 2002:aca:5241:: with SMTP id g62mr4106819oib.41.1559924981415;
- Fri, 07 Jun 2019 09:29:41 -0700 (PDT)
-Date:   Fri,  7 Jun 2019 09:29:20 -0700
-In-Reply-To: <20190607162920.24546-1-sdf@google.com>
-Message-Id: <20190607162920.24546-9-sdf@google.com>
-Mime-Version: 1.0
-References: <20190607162920.24546-1-sdf@google.com>
-X-Mailer: git-send-email 2.22.0.rc1.311.g5d7573a151-goog
-Subject: [PATCH bpf-next v3 8/8] bpftool: support cgroup sockopt
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        Stanislav Fomichev <sdf@google.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1730852AbfFGQiJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 7 Jun 2019 12:38:09 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:55038 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730304AbfFGQiI (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 7 Jun 2019 12:38:08 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x57GTRWc011446
+        for <bpf@vger.kernel.org>; Fri, 7 Jun 2019 09:38:07 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=kK787B2fSNLKBrSmlRNcG4ZJqW2AkkeJP293AgQqc94=;
+ b=jK6/7JASXOWMM0E1UyrKjDhVoy7dqQ0rKqvbyQxamb/EI9rQKwpODb8yyoYa+M/qhPmQ
+ h1hO5broVIZ3kl9YHPCYZQHmZz8UO0bLvfWMdZG614o2FOXx/lrvaYhsaq02QbC9if3c
+ RjxiTzSsf8feVpJ+fpyvTgqgpjar2PZwrkU= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2syq410xan-18
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 07 Jun 2019 09:38:07 -0700
+Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Fri, 7 Jun 2019 09:38:04 -0700
+Received: by devvm3632.prn2.facebook.com (Postfix, from userid 172007)
+        id 912AACD9C6E4; Fri,  7 Jun 2019 09:38:03 -0700 (PDT)
+Smtp-Origin-Hostprefix: devvm
+From:   Hechao Li <hechaol@fb.com>
+Smtp-Origin-Hostname: devvm3632.prn2.facebook.com
+To:     <bpf@vger.kernel.org>
+CC:     <netdev@vger.kernel.org>, <daniel@iogearbox.net>, <ast@kernel.org>,
+        <kernel-team@fb.com>, Hechao Li <hechaol@fb.com>
+Smtp-Origin-Cluster: prn2c23
+Subject: [PATCH v4 bpf-next 2/2] bpf: use libbpf_num_possible_cpus in bpftool and selftests
+Date:   Fri, 7 Jun 2019 09:37:59 -0700
+Message-ID: <20190607163759.2211904-3-hechaol@fb.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190607163759.2211904-1-hechaol@fb.com>
+References: <20190607163759.2211904-1-hechaol@fb.com>
+X-FB-Internal: Safe
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-07_08:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ malwarescore=0 suspectscore=13 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=727 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906070110
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Support sockopt prog type and cgroup hooks in the bpftool.
+Use the newly added bpf_num_possible_cpus() in bpftool and selftests
+and remove duplicate implementations.
 
-Acked-by: Jakub Kicinski <jakub.kicinski@netronome.com>
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
+Signed-off-by: Hechao Li <hechaol@fb.com>
+Acked-by: Song Liu <songliubraving@fb.com>
 ---
- tools/bpf/bpftool/Documentation/bpftool-cgroup.rst | 7 +++++--
- tools/bpf/bpftool/Documentation/bpftool-prog.rst   | 2 +-
- tools/bpf/bpftool/bash-completion/bpftool          | 8 +++++---
- tools/bpf/bpftool/cgroup.c                         | 5 ++++-
- tools/bpf/bpftool/main.h                           | 1 +
- tools/bpf/bpftool/prog.c                           | 3 ++-
- 6 files changed, 18 insertions(+), 8 deletions(-)
+ tools/bpf/bpftool/common.c             | 53 +++-----------------------
+ tools/testing/selftests/bpf/bpf_util.h | 37 +++---------------
+ 2 files changed, 10 insertions(+), 80 deletions(-)
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-index 36807735e2a5..cac088a320a6 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-@@ -29,7 +29,8 @@ CGROUP COMMANDS
- |	*PROG* := { **id** *PROG_ID* | **pinned** *FILE* | **tag** *PROG_TAG* }
- |	*ATTACH_TYPE* := { **ingress** | **egress** | **sock_create** | **sock_ops** | **device** |
- |		**bind4** | **bind6** | **post_bind4** | **post_bind6** | **connect4** | **connect6** |
--|		**sendmsg4** | **sendmsg6** | **sysctl** }
-+|		**sendmsg4** | **sendmsg6** | **sysctl** | **getsockopt** |
-+|		**setsockopt** }
- |	*ATTACH_FLAGS* := { **multi** | **override** }
+diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
+index f7261fad45c1..5215e0870bcb 100644
+--- a/tools/bpf/bpftool/common.c
++++ b/tools/bpf/bpftool/common.c
+@@ -21,6 +21,7 @@
+ #include <sys/vfs.h>
  
- DESCRIPTION
-@@ -86,7 +87,9 @@ DESCRIPTION
- 		  unconnected udp4 socket (since 4.18);
- 		  **sendmsg6** call to sendto(2), sendmsg(2), sendmmsg(2) for an
- 		  unconnected udp6 socket (since 4.18);
--		  **sysctl** sysctl access (since 5.2).
-+		  **sysctl** sysctl access (since 5.2);
-+		  **getsockopt** call to getsockopt (since 5.3);
-+		  **setsockopt** call to setsockopt (since 5.3).
+ #include <bpf.h>
++#include <libbpf.h> /* libbpf_num_possible_cpus */
  
- 	**bpftool cgroup detach** *CGROUP* *ATTACH_TYPE* *PROG*
- 		  Detach *PROG* from the cgroup *CGROUP* and attach type
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-index 228a5c863cc7..c6bade35032c 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-@@ -40,7 +40,7 @@ PROG COMMANDS
- |		**lwt_seg6local** | **sockops** | **sk_skb** | **sk_msg** | **lirc_mode2** |
- |		**cgroup/bind4** | **cgroup/bind6** | **cgroup/post_bind4** | **cgroup/post_bind6** |
- |		**cgroup/connect4** | **cgroup/connect6** | **cgroup/sendmsg4** | **cgroup/sendmsg6** |
--|		**cgroup/sysctl**
-+|		**cgroup/sysctl** | **cgroup/getsockopt** | **cgroup/setsockopt**
- |	}
- |       *ATTACH_TYPE* := {
- |		**msg_verdict** | **stream_verdict** | **stream_parser** | **flow_dissector**
-diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-index 2725e27dfa42..7afb8b6fbaaa 100644
---- a/tools/bpf/bpftool/bash-completion/bpftool
-+++ b/tools/bpf/bpftool/bash-completion/bpftool
-@@ -378,7 +378,8 @@ _bpftool()
-                                 cgroup/connect4 cgroup/connect6 \
-                                 cgroup/sendmsg4 cgroup/sendmsg6 \
-                                 cgroup/post_bind4 cgroup/post_bind6 \
--                                cgroup/sysctl" -- \
-+                                cgroup/sysctl cgroup/getsockopt \
-+                                cgroup/setsockopt" -- \
-                                                    "$cur" ) )
-                             return 0
-                             ;;
-@@ -688,7 +689,8 @@ _bpftool()
-                 attach|detach)
-                     local ATTACH_TYPES='ingress egress sock_create sock_ops \
-                         device bind4 bind6 post_bind4 post_bind6 connect4 \
--                        connect6 sendmsg4 sendmsg6 sysctl'
-+                        connect6 sendmsg4 sendmsg6 sysctl getsockopt \
-+                        setsockopt'
-                     local ATTACH_FLAGS='multi override'
-                     local PROG_TYPE='id pinned tag'
-                     case $prev in
-@@ -698,7 +700,7 @@ _bpftool()
-                             ;;
-                         ingress|egress|sock_create|sock_ops|device|bind4|bind6|\
-                         post_bind4|post_bind6|connect4|connect6|sendmsg4|\
--                        sendmsg6|sysctl)
-+                        sendmsg6|sysctl|getsockopt|setsockopt)
-                             COMPREPLY=( $( compgen -W "$PROG_TYPE" -- \
-                                 "$cur" ) )
-                             return 0
-diff --git a/tools/bpf/bpftool/cgroup.c b/tools/bpf/bpftool/cgroup.c
-index 7e22f115c8c1..3083f2e4886e 100644
---- a/tools/bpf/bpftool/cgroup.c
-+++ b/tools/bpf/bpftool/cgroup.c
-@@ -25,7 +25,8 @@
- 	"       ATTACH_TYPE := { ingress | egress | sock_create |\n"	       \
- 	"                        sock_ops | device | bind4 | bind6 |\n"	       \
- 	"                        post_bind4 | post_bind6 | connect4 |\n"       \
--	"                        connect6 | sendmsg4 | sendmsg6 | sysctl }"
-+	"                        connect6 | sendmsg4 | sendmsg6 | sysctl |\n"  \
-+	"                        getsockopt | setsockopt }"
+ #include "main.h"
  
- static const char * const attach_type_strings[] = {
- 	[BPF_CGROUP_INET_INGRESS] = "ingress",
-@@ -42,6 +43,8 @@ static const char * const attach_type_strings[] = {
- 	[BPF_CGROUP_UDP4_SENDMSG] = "sendmsg4",
- 	[BPF_CGROUP_UDP6_SENDMSG] = "sendmsg6",
- 	[BPF_CGROUP_SYSCTL] = "sysctl",
-+	[BPF_CGROUP_GETSOCKOPT] = "getsockopt",
-+	[BPF_CGROUP_SETSOCKOPT] = "setsockopt",
- 	[__MAX_BPF_ATTACH_TYPE] = NULL,
- };
+@@ -439,57 +440,13 @@ unsigned int get_page_size(void)
  
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 28a2a5857e14..9c5d9c80f71e 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -74,6 +74,7 @@ static const char * const prog_type_name[] = {
- 	[BPF_PROG_TYPE_SK_REUSEPORT]		= "sk_reuseport",
- 	[BPF_PROG_TYPE_FLOW_DISSECTOR]		= "flow_dissector",
- 	[BPF_PROG_TYPE_CGROUP_SYSCTL]		= "cgroup_sysctl",
-+	[BPF_PROG_TYPE_CGROUP_SOCKOPT]		= "cgroup_sockopt",
- };
+ unsigned int get_possible_cpus(void)
+ {
+-	static unsigned int result;
+-	char buf[128];
+-	long int n;
+-	char *ptr;
+-	int fd;
+-
+-	if (result)
+-		return result;
+-
+-	fd = open("/sys/devices/system/cpu/possible", O_RDONLY);
+-	if (fd < 0) {
+-		p_err("can't open sysfs possible cpus");
+-		exit(-1);
+-	}
+-
+-	n = read(fd, buf, sizeof(buf));
+-	if (n < 2) {
+-		p_err("can't read sysfs possible cpus");
+-		exit(-1);
+-	}
+-	close(fd);
++	int cpus = libbpf_num_possible_cpus();
  
- extern const char * const map_type_name[];
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 1f209c80d906..a201e1c83346 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -1070,7 +1070,8 @@ static int do_help(int argc, char **argv)
- 		"                 sk_reuseport | flow_dissector | cgroup/sysctl |\n"
- 		"                 cgroup/bind4 | cgroup/bind6 | cgroup/post_bind4 |\n"
- 		"                 cgroup/post_bind6 | cgroup/connect4 | cgroup/connect6 |\n"
--		"                 cgroup/sendmsg4 | cgroup/sendmsg6 }\n"
-+		"                 cgroup/sendmsg4 | cgroup/sendmsg6 | cgroup/getsockopt |\n"
-+		"                 cgroup/setsockopt }\n"
- 		"       ATTACH_TYPE := { msg_verdict | stream_verdict | stream_parser |\n"
- 		"                        flow_dissector }\n"
- 		"       " HELP_SPEC_OPTIONS "\n"
+-	if (n == sizeof(buf)) {
+-		p_err("read sysfs possible cpus overflow");
++	if (cpus < 0) {
++		p_err("Can't get # of possible cpus: %s", strerror(-cpus));
+ 		exit(-1);
+ 	}
+-
+-	ptr = buf;
+-	n = 0;
+-	while (*ptr && *ptr != '\n') {
+-		unsigned int a, b;
+-
+-		if (sscanf(ptr, "%u-%u", &a, &b) == 2) {
+-			n += b - a + 1;
+-
+-			ptr = strchr(ptr, '-') + 1;
+-		} else if (sscanf(ptr, "%u", &a) == 1) {
+-			n++;
+-		} else {
+-			assert(0);
+-		}
+-
+-		while (isdigit(*ptr))
+-			ptr++;
+-		if (*ptr == ',')
+-			ptr++;
+-	}
+-
+-	result = n;
+-
+-	return result;
++	return cpus;
+ }
+ 
+ static char *
+diff --git a/tools/testing/selftests/bpf/bpf_util.h b/tools/testing/selftests/bpf/bpf_util.h
+index a29206ebbd13..6231eafd4a5a 100644
+--- a/tools/testing/selftests/bpf/bpf_util.h
++++ b/tools/testing/selftests/bpf/bpf_util.h
+@@ -6,44 +6,17 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <errno.h>
++#include <libbpf.h>
+ 
+ static inline unsigned int bpf_num_possible_cpus(void)
+ {
+-	static const char *fcpu = "/sys/devices/system/cpu/possible";
+-	unsigned int start, end, possible_cpus = 0;
+-	char buff[128];
+-	FILE *fp;
+-	int len, n, i, j = 0;
++	int possible_cpus = libbpf_num_possible_cpus();
+ 
+-	fp = fopen(fcpu, "r");
+-	if (!fp) {
+-		printf("Failed to open %s: '%s'!\n", fcpu, strerror(errno));
++	if (possible_cpus < 0) {
++		printf("Failed to get # of possible cpus: '%s'!\n",
++		       strerror(-possible_cpus));
+ 		exit(1);
+ 	}
+-
+-	if (!fgets(buff, sizeof(buff), fp)) {
+-		printf("Failed to read %s!\n", fcpu);
+-		exit(1);
+-	}
+-
+-	len = strlen(buff);
+-	for (i = 0; i <= len; i++) {
+-		if (buff[i] == ',' || buff[i] == '\0') {
+-			buff[i] = '\0';
+-			n = sscanf(&buff[j], "%u-%u", &start, &end);
+-			if (n <= 0) {
+-				printf("Failed to retrieve # possible CPUs!\n");
+-				exit(1);
+-			} else if (n == 1) {
+-				end = start;
+-			}
+-			possible_cpus += end - start + 1;
+-			j = i + 1;
+-		}
+-	}
+-
+-	fclose(fp);
+-
+ 	return possible_cpus;
+ }
+ 
 -- 
-2.22.0.rc1.311.g5d7573a151-goog
+2.17.1
 
