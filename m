@@ -2,151 +2,112 @@ Return-Path: <SRS0=PZ8U=UG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8366AC2BCA1
-	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 14:11:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51AEDC468BC
+	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 14:36:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5C6DC20B7C
-	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 14:11:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2A98D2146E
+	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 14:36:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kinvolk.io header.i=@kinvolk.io header.b="EYGzdgf8"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QGUXZscH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728656AbfFGOLN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 7 Jun 2019 10:11:13 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:41229 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729121AbfFGOLN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 7 Jun 2019 10:11:13 -0400
-Received: by mail-ed1-f65.google.com with SMTP id p15so3221379eds.8
-        for <bpf@vger.kernel.org>; Fri, 07 Jun 2019 07:11:12 -0700 (PDT)
+        id S1729695AbfFGOgW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 7 Jun 2019 10:36:22 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:35732 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729441AbfFGOfd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 7 Jun 2019 10:35:33 -0400
+Received: by mail-qt1-f195.google.com with SMTP id d23so2511680qto.2
+        for <bpf@vger.kernel.org>; Fri, 07 Jun 2019 07:35:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kinvolk.io; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GW1chtOYexn3iEYy8Pq9DlSLLB5ej7vVGOlF8xEFfgU=;
-        b=EYGzdgf8GAFWo+SUyvKer6mt4TBmt6hBTlBmp7LWW7m2jE7nTiqLOxmCZV8tazHxrf
-         M1SSmcRjBT8RT7KRPwphdtUa0AII+xGWk8LYzp2KzYic2GPc7D++koW3LSe9BqZ+AVrc
-         PX8vgtxaB/YP8EWs1dzemyRdcps5F8/ftMbis=
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=GbgsWWJsYfuFE0Ayk1WcQ4Df2lBstgQ/CvJS7+ETd2s=;
+        b=QGUXZscHEoL0COiYgKJzGauvXiRnD/yzWrfJsYJcTclbPX9TCvCrdfjxhLSv6VqVOy
+         Ds63L+KT50jtxVnmqpdXm+k0hnKJi5RXnLS0g7q5/aYYikllYLDJlOL5jJq9fIyS2KXT
+         N4kSzGLH1BqH5+sIoQRhIEIplVz6xOOFXH3kUevzoxUvalU97d0JQV8t5yyidDelIDry
+         k8NouTI/Vwk3wkIkBwrPlJNHi55Eas42L1+bSUxShFHT/PfTIYvWn+XASslmcOf+opCq
+         Xe44NUEbE+9/+hU7i7HYNQl4s6GIv+QUbmYg2o2r2mDo0R1jnV48MtbC/0gPLmPAyG0T
+         qL2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GW1chtOYexn3iEYy8Pq9DlSLLB5ej7vVGOlF8xEFfgU=;
-        b=f7hXhw0skRfDiQmitFiAkRaGx70kzTkCS2JrlCDZGI3ArZGavKZsuV/kpnJbM0+Oum
-         Jc3h8HvnKS1QltHq/XV/TyAb1QYluHraH0HaM+4jwAtC6yKCo5SdH8S10xcXKiJx/3sD
-         /JAKccR10DZVa0v3cl/6ofMiTMoqyHcdCzXCBzMZTKT6SIyNGlCywmJ3+eNlMHP3VtzU
-         3iOsB4tsDtEm9Fld8fvjzi8BiyNSjCyEwB7I2kOdqiBXMmU8MtCNzIHwVMPb9aNUq9uX
-         5B1Rkie3w4J7SaPGgRpBkP39+ERlJkGoWlfiXneAEwQGZXgGvqQMzMUgEg4S6FIho8W7
-         /BBw==
-X-Gm-Message-State: APjAAAXXw4o03RPFGrBFhv1XI3/FrjEc8mMwxT80T8+grCYLW/nPJcK6
-        LdHTsf4LBFJwj3VrznnCeFqlgw==
-X-Google-Smtp-Source: APXvYqyFO8OVO9Ek1HXeW7uJldc9Q3IHl5BmgqroEGn0wz7sBZvCdcPBXBgzAj+vO/RGzRoDloQRMg==
-X-Received: by 2002:aa7:cdc4:: with SMTP id h4mr47346453edw.221.1559916671307;
-        Fri, 07 Jun 2019 07:11:11 -0700 (PDT)
-Received: from locke-xps13.fritz.box (dslb-002-205-069-198.002.205.pools.vodafone-ip.de. [2.205.69.198])
-        by smtp.gmail.com with ESMTPSA id a40sm546116edd.1.2019.06.07.07.11.09
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 07 Jun 2019 07:11:10 -0700 (PDT)
-From:   =?UTF-8?q?Iago=20L=C3=B3pez=20Galeiras?= <iago@kinvolk.io>
-To:     john.fastabend@gmail.com, ast@kernel.org, daniel@iogearbox.net
-Cc:     alban@kinvolk.io, krzesimir@kinvolk.io, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Iago=20L=C3=B3pez=20Galeiras?= <iago@kinvolk.io>
-Subject: [PATCH bpf-next v5 0/4] sock ops: add netns ino and dev in bpf context
-Date:   Fri,  7 Jun 2019 16:11:02 +0200
-Message-Id: <20190607141106.32148-1-iago@kinvolk.io>
-X-Mailer: git-send-email 2.21.0
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=GbgsWWJsYfuFE0Ayk1WcQ4Df2lBstgQ/CvJS7+ETd2s=;
+        b=G0UuswP9wuETUmAvOeBbNZZDMscfyEgKrZspQaTMJ5fLeML6UNwkuU5/q8+D6DmpEQ
+         xdJsmIfxsGwj9JPhlhDL2P5Jx8w76mUiEWmi7EAUEUCK3iNp5gyp8tHVXSj8pHett9II
+         TqGtfmVLKhkitqyXpbAuO1ry/hw/C0HC5jHkV/7dZDCCj1iwYsT7dOLHWnQcLzYlY6mg
+         AltzpYAqTrQEA77s+SAL/hOZxLceI0xRLO6Qai+wNTiCDcJZA7bYLgKgVmJWSMrqb2XP
+         9if0NjAAWE2MR1cof9bgqJ8tQv/ZFsHe4nlSOWZEz1v5a/iWUGiTrgujNOcw4SUJ/Zk7
+         szxw==
+X-Gm-Message-State: APjAAAXvqYMd4An98+BKbMd8Qy0yCpSbIGZk+fiskMCsEpAemoXTI2H3
+        4ps0uwDqGDE2ShGnXLekC73j6u+TI1xN6A==
+X-Google-Smtp-Source: APXvYqylHXL8PP8WU7yZy4f3dkfIgSoGD/enIs4QVNUfQMUWy/e2kCWQ7kzXKicoMTtJqeMAeDYHQA==
+X-Received: by 2002:ac8:2ca5:: with SMTP id 34mr47371137qtw.246.1559918132104;
+        Fri, 07 Jun 2019 07:35:32 -0700 (PDT)
+Received: from localhost.localdomain (li1322-146.members.linode.com. [45.79.223.146])
+        by smtp.gmail.com with ESMTPSA id c5sm1243963qkb.41.2019.06.07.07.35.24
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 07 Jun 2019 07:35:31 -0700 (PDT)
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andi Kleen <ak@linux.intel.com>, Mark Drayton <mbd@fb.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH] perf config: Update default value for llvm.clang-bpf-cmd-template
+Date:   Fri,  7 Jun 2019 22:35:08 +0800
+Message-Id: <20190607143508.18141-1-leo.yan@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series allows sockops programs to access the network namespace
-inode and device via (struct bpf_sock_ops)->netns_ino and ->netns_dev.
-This can be useful to apply different policies on different network
-namespaces.
+The clang bpf cmdline template has defined default value in the file
+tools/perf/util/llvm-utils.c, which has been changed for several times.
 
-In the unlikely case where network namespaces are not compiled in
-(CONFIG_NET_NS=n), the verifier will generate code to return netns_dev
-as usual and will return 0 for netns_ino.
+This patch updates the documentation to reflect the latest default value
+for the configuration llvm.clang-bpf-cmd-template.
 
-The generated BPF bytecode for netns_ino is loading the correct
-inode number at the time of execution.
+Fixes: d35b168c3dcd ("perf bpf: Give precedence to bpf header dir")
+Fixes: cb76371441d0 ("perf llvm: Allow passing options to llc in addition to clang")
+Fixes: 1b16fffa389d ("perf llvm-utils: Add bpf include path to clang command line")
+Signed-off-by: Leo Yan <leo.yan@linaro.org>
+---
+ tools/perf/Documentation/perf-config.txt | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-However, the generated BPF bytecode for netns_dev is loading an
-immediate value determined at BPF-load-time by looking at the
-initial network namespace. In practice, this works because all netns
-currently use the same virtual device. If this was to change, this
-code would need to be updated too.
-
-It also adds sockmap and verifier selftests to cover the new fields.
-
-Partial reads work thanks to commit e2f7fc0ac69 ("bpf: fix undefined
-behavior in narrow load handling").
-
-v1 patchset can be found at:
-https://lkml.org/lkml/2019/4/12/238
-
-Changes since v1:
-- add netns_dev (review from Alexei)
-- tools/include/uapi/linux/bpf.h: update with netns_dev
-- tools/testing/selftests/bpf/test_sockmap_kern.h: print debugs with
-- This is a new selftest (review from Song)
-
-v2 patchest can be found at:
-https://lkml.org/lkml/2019/4/18/685
-
-Changes since v2:
-- replace __u64 by u64 in kernel code (review from Y Song)
-- remove unneeded #else branch: program would be rejected in
-  is_valid_access (review from Y Song)
-- allow partial reads (<u64) (review from Y Song)
-- standalone patch for the sync (requested by Y Song)
-- update commitmsg to refer to netns_ino
-- test partial reads on netns_dev (review from Y Song)
-- split in two tests
-
-v3 patchset can be found at:
-https://lkml.org/lkml/2019/4/26/740
-
-Changes since v3:
-- return netns_dev unconditionally and set netns_ino to 0 if
-  CONFIG_NET_NS is not enabled (review from Jakub Kicinski)
-- use bpf_ctx_record_field_size and bpf_ctx_narrow_access_ok instead of
-  manually deal with partial reads (review from Y Song)
-- update commit message to reflect new code and remove note about
-  partial reads since it was discussed in the review
-- use bpf_ctx_range() and offsetofend()
-
-v4 patchset can be found at:
-https://lkml.org/lkml/2019/5/24/714
-
-Changes since v4:
-- add netns_dev comment on uapi headers (review from Y Song)
-- remove redundant bounds check (review from Y Song)
-
-Alban Crequy (4):
-  bpf: sock ops: add netns ino and dev in bpf context
-  bpf: sync bpf.h to tools/ for bpf_sock_ops->netns*
-  selftests: bpf: read netns_ino from struct bpf_sock_ops
-  selftests: bpf: verifier: read netns_dev and netns_ino from struct
-    bpf_sock_ops
-
- include/uapi/linux/bpf.h                      |  6 ++
- net/core/filter.c                             | 67 +++++++++++++++++++
- tools/include/uapi/linux/bpf.h                |  6 ++
- tools/testing/selftests/bpf/test_sockmap.c    | 38 ++++++++++-
- .../testing/selftests/bpf/test_sockmap_kern.h | 22 ++++++
- .../testing/selftests/bpf/verifier/var_off.c  | 53 +++++++++++++++
- 6 files changed, 189 insertions(+), 3 deletions(-)
-
+diff --git a/tools/perf/Documentation/perf-config.txt b/tools/perf/Documentation/perf-config.txt
+index 462b3cde0675..e4aa268d2e38 100644
+--- a/tools/perf/Documentation/perf-config.txt
++++ b/tools/perf/Documentation/perf-config.txt
+@@ -564,9 +564,12 @@ llvm.*::
+ 	llvm.clang-bpf-cmd-template::
+ 		Cmdline template. Below lines show its default value. Environment
+ 		variable is used to pass options.
+-		"$CLANG_EXEC -D__KERNEL__ $CLANG_OPTIONS $KERNEL_INC_OPTIONS \
+-		-Wno-unused-value -Wno-pointer-sign -working-directory \
+-		$WORKING_DIR  -c $CLANG_SOURCE -target bpf -O2 -o -"
++		"$CLANG_EXEC -D__KERNEL__ -D__NR_CPUS__=$NR_CPUS "\
++		"-DLINUX_VERSION_CODE=$LINUX_VERSION_CODE "	\
++		"$CLANG_OPTIONS $PERF_BPF_INC_OPTIONS $KERNEL_INC_OPTIONS " \
++		"-Wno-unused-value -Wno-pointer-sign "		\
++		"-working-directory $WORKING_DIR "		\
++		"-c \"$CLANG_SOURCE\" -target bpf $CLANG_EMIT_LLVM -O2 -o - $LLVM_OPTIONS_PIPE"
+ 
+ 	llvm.clang-opt::
+ 		Options passed to clang.
 -- 
-2.21.0
+2.17.1
 
