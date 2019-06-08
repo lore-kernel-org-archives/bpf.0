@@ -1,97 +1,288 @@
-Return-Path: <SRS0=PZ8U=UG=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=Td33=UH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61892C2BCA1
-	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 23:47:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E07DC468BC
+	for <bpf@archiver.kernel.org>; Sat,  8 Jun 2019 02:19:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 377F6208C0
-	for <bpf@archiver.kernel.org>; Fri,  7 Jun 2019 23:47:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E1D202146E
+	for <bpf@archiver.kernel.org>; Sat,  8 Jun 2019 02:19:30 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="qLZbpXc+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729973AbfFGXrb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 7 Jun 2019 19:47:31 -0400
-Received: from www62.your-server.de ([213.133.104.62]:60550 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727184AbfFGXrb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 7 Jun 2019 19:47:31 -0400
-Received: from [78.46.172.3] (helo=sslproxy06.your-server.de)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1hZOa0-00052O-Vv; Sat, 08 Jun 2019 01:47:29 +0200
-Received: from [178.197.248.32] (helo=linux.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1hZOa0-000QI0-QH; Sat, 08 Jun 2019 01:47:28 +0200
-Subject: Re: [PATCH v4 bpf-next 0/2] bpf: Add a new API
-To:     Roman Gushchin <guro@fb.com>, Hechao Li <hechaol@fb.com>
-Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>, Kernel Team <Kernel-team@fb.com>
-References: <20190607232550.GA5472@tower.DHCP.thefacebook.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <7b7c8e00-a0d5-7d45-017d-a8869cd8025c@iogearbox.net>
-Date:   Sat, 8 Jun 2019 01:47:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.3.0
+        id S1729995AbfFHCTa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 7 Jun 2019 22:19:30 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:56280 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728860AbfFHCTa (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 7 Jun 2019 22:19:30 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x582JSvE030663
+        for <bpf@vger.kernel.org>; Fri, 7 Jun 2019 19:19:29 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=JAPCKA0R8tL6UkusETQOmWNXdhzvUUva1T6aCN6wi/E=;
+ b=qLZbpXc+ASIpLpnXiYlPfW5/3t2iCOOFvryxqeMV0uE9g2YYatqrxzBzJcjTebc5HDuy
+ RF/fnMMgynMjEEuPEyIJxN5ZoekfmEddDfyqIuiF3dmuAoHiGgX46oHZVmMfD/h0LwXX
+ pmKiUZj0fhU+tGVa+cewWHXSc/GCq38Kwpo= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2t00xjresc-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 07 Jun 2019 19:19:29 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::128) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Fri, 7 Jun 2019 19:19:27 -0700
+Received: by devvm3632.prn2.facebook.com (Postfix, from userid 172007)
+        id 59AF5CE318F8; Fri,  7 Jun 2019 19:19:27 -0700 (PDT)
+Smtp-Origin-Hostprefix: devvm
+From:   Hechao Li <hechaol@fb.com>
+Smtp-Origin-Hostname: devvm3632.prn2.facebook.com
+To:     <bpf@vger.kernel.org>
+CC:     <netdev@vger.kernel.org>, <daniel@iogearbox.net>, <ast@kernel.org>,
+        <kernel-team@fb.com>, Hechao Li <hechaol@fb.com>
+Smtp-Origin-Cluster: prn2c23
+Subject: [PATCH v5 bpf-next 2/2] bpf: use libbpf_num_possible_cpus
+Date:   Fri, 7 Jun 2019 19:19:25 -0700
+Message-ID: <20190608021925.4060095-3-hechaol@fb.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190608021925.4060095-1-hechaol@fb.com>
+References: <20190608021925.4060095-1-hechaol@fb.com>
+X-FB-Internal: Safe
 MIME-Version: 1.0
-In-Reply-To: <20190607232550.GA5472@tower.DHCP.thefacebook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.100.3/25473/Fri Jun  7 10:00:31 2019)
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-08_01:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ malwarescore=0 suspectscore=13 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906080015
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 06/08/2019 01:25 AM, Roman Gushchin wrote:
-> On 06/07/2019 06:37 PM, Hechao Li wrote:
->> Getting number of possible CPUs is commonly used for per-CPU BPF maps
->> and perf_event_maps. Add a new API libbpf_num_possible_cpus() that
->> helps user with per-CPU related operations and remove duplicate
->> implementations in bpftool and selftests.
->>
->> v4: Fixed error code when reading 0 bytes from possible CPU file
->>
->> Hechao Li (2):
->>   bpf: add a new API libbpf_num_possible_cpus()
->>   bpf: use libbpf_num_possible_cpus in bpftool and selftests
->>
->>  tools/bpf/bpftool/common.c             | 53 +++---------------------
->>  tools/lib/bpf/libbpf.c                 | 57 ++++++++++++++++++++++++++
->>  tools/lib/bpf/libbpf.h                 | 16 ++++++++
->>  tools/lib/bpf/libbpf.map               |  1 +
->>  tools/testing/selftests/bpf/bpf_util.h | 37 +++--------------
->>  5 files changed, 84 insertions(+), 80 deletions(-)
-> 
->> Series applied, thanks!
-> 
->> P.s.: Please retain full history (v1->v2->v3->v4) in cover letter next time as
->> that is typical convention and helps readers of git log to follow what has been
->> changed over time.
-> 
-> 
-> Hello!
-> 
-> I'm getting the following errors on an attempt to build bpf tests.
-> Reverting the last patch fixes it.
-> 
-[...]
-> 
-> clang -I. -I./include/uapi -I../../../include/uapi -idirafter /usr/local/include -idirafter /opt/fb/devtoolset/bin/../lib/clang/4.0.0/include -idirafter /usr/include -Wno-compare-distinct-pointer-types \
-> 	 -O2 -target bpf -emit-llvm -c progs/sockmap_parse_prog.c -o - |      \
-> llc -march=bpf -mcpu=generic  -filetype=obj -o /data/users/guro/linux/tools/testing/selftests/bpf/sockmap_parse_prog.o
-> In file included from progs/sockmap_parse_prog.c:3:
-> ./bpf_util.h:9:10: fatal error: 'libbpf.h' file not found
-> #include <libbpf.h>
->          ^~~~~~~~~~
-> 1 error generated.
+Use the newly added bpf_num_possible_cpus() in bpftool and selftests
+and remove duplicate implementations.
 
-True, I've therefore tossed the series from bpf-next. Hechao, please fix and resubmit.
+This patch also removed bpf_util.h from some test BPF programs
+since it is a userspace utility.
+
+Signed-off-by: Hechao Li <hechaol@fb.com>
+---
+ tools/bpf/bpftool/common.c                    | 53 ++-----------------
+ tools/testing/selftests/bpf/bpf_endian.h      |  1 +
+ tools/testing/selftests/bpf/bpf_util.h        | 37 ++-----------
+ .../selftests/bpf/progs/sockmap_parse_prog.c  |  1 -
+ .../bpf/progs/sockmap_tcp_msg_prog.c          |  2 +-
+ .../bpf/progs/sockmap_verdict_prog.c          |  1 -
+ .../selftests/bpf/progs/test_sysctl_prog.c    |  5 +-
+ 7 files changed, 16 insertions(+), 84 deletions(-)
+
+diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
+index f7261fad45c1..5215e0870bcb 100644
+--- a/tools/bpf/bpftool/common.c
++++ b/tools/bpf/bpftool/common.c
+@@ -21,6 +21,7 @@
+ #include <sys/vfs.h>
+ 
+ #include <bpf.h>
++#include <libbpf.h> /* libbpf_num_possible_cpus */
+ 
+ #include "main.h"
+ 
+@@ -439,57 +440,13 @@ unsigned int get_page_size(void)
+ 
+ unsigned int get_possible_cpus(void)
+ {
+-	static unsigned int result;
+-	char buf[128];
+-	long int n;
+-	char *ptr;
+-	int fd;
+-
+-	if (result)
+-		return result;
+-
+-	fd = open("/sys/devices/system/cpu/possible", O_RDONLY);
+-	if (fd < 0) {
+-		p_err("can't open sysfs possible cpus");
+-		exit(-1);
+-	}
+-
+-	n = read(fd, buf, sizeof(buf));
+-	if (n < 2) {
+-		p_err("can't read sysfs possible cpus");
+-		exit(-1);
+-	}
+-	close(fd);
++	int cpus = libbpf_num_possible_cpus();
+ 
+-	if (n == sizeof(buf)) {
+-		p_err("read sysfs possible cpus overflow");
++	if (cpus < 0) {
++		p_err("Can't get # of possible cpus: %s", strerror(-cpus));
+ 		exit(-1);
+ 	}
+-
+-	ptr = buf;
+-	n = 0;
+-	while (*ptr && *ptr != '\n') {
+-		unsigned int a, b;
+-
+-		if (sscanf(ptr, "%u-%u", &a, &b) == 2) {
+-			n += b - a + 1;
+-
+-			ptr = strchr(ptr, '-') + 1;
+-		} else if (sscanf(ptr, "%u", &a) == 1) {
+-			n++;
+-		} else {
+-			assert(0);
+-		}
+-
+-		while (isdigit(*ptr))
+-			ptr++;
+-		if (*ptr == ',')
+-			ptr++;
+-	}
+-
+-	result = n;
+-
+-	return result;
++	return cpus;
+ }
+ 
+ static char *
+diff --git a/tools/testing/selftests/bpf/bpf_endian.h b/tools/testing/selftests/bpf/bpf_endian.h
+index b25595ea4a78..05f036df8a4c 100644
+--- a/tools/testing/selftests/bpf/bpf_endian.h
++++ b/tools/testing/selftests/bpf/bpf_endian.h
+@@ -2,6 +2,7 @@
+ #ifndef __BPF_ENDIAN__
+ #define __BPF_ENDIAN__
+ 
++#include <linux/stddef.h>
+ #include <linux/swab.h>
+ 
+ /* LLVM's BPF target selects the endianness of the CPU
+diff --git a/tools/testing/selftests/bpf/bpf_util.h b/tools/testing/selftests/bpf/bpf_util.h
+index a29206ebbd13..6231eafd4a5a 100644
+--- a/tools/testing/selftests/bpf/bpf_util.h
++++ b/tools/testing/selftests/bpf/bpf_util.h
+@@ -6,44 +6,17 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <errno.h>
++#include <libbpf.h>
+ 
+ static inline unsigned int bpf_num_possible_cpus(void)
+ {
+-	static const char *fcpu = "/sys/devices/system/cpu/possible";
+-	unsigned int start, end, possible_cpus = 0;
+-	char buff[128];
+-	FILE *fp;
+-	int len, n, i, j = 0;
++	int possible_cpus = libbpf_num_possible_cpus();
+ 
+-	fp = fopen(fcpu, "r");
+-	if (!fp) {
+-		printf("Failed to open %s: '%s'!\n", fcpu, strerror(errno));
++	if (possible_cpus < 0) {
++		printf("Failed to get # of possible cpus: '%s'!\n",
++		       strerror(-possible_cpus));
+ 		exit(1);
+ 	}
+-
+-	if (!fgets(buff, sizeof(buff), fp)) {
+-		printf("Failed to read %s!\n", fcpu);
+-		exit(1);
+-	}
+-
+-	len = strlen(buff);
+-	for (i = 0; i <= len; i++) {
+-		if (buff[i] == ',' || buff[i] == '\0') {
+-			buff[i] = '\0';
+-			n = sscanf(&buff[j], "%u-%u", &start, &end);
+-			if (n <= 0) {
+-				printf("Failed to retrieve # possible CPUs!\n");
+-				exit(1);
+-			} else if (n == 1) {
+-				end = start;
+-			}
+-			possible_cpus += end - start + 1;
+-			j = i + 1;
+-		}
+-	}
+-
+-	fclose(fp);
+-
+ 	return possible_cpus;
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/progs/sockmap_parse_prog.c b/tools/testing/selftests/bpf/progs/sockmap_parse_prog.c
+index ed3e4a551c57..9390e0244259 100644
+--- a/tools/testing/selftests/bpf/progs/sockmap_parse_prog.c
++++ b/tools/testing/selftests/bpf/progs/sockmap_parse_prog.c
+@@ -1,6 +1,5 @@
+ #include <linux/bpf.h>
+ #include "bpf_helpers.h"
+-#include "bpf_util.h"
+ #include "bpf_endian.h"
+ 
+ int _version SEC("version") = 1;
+diff --git a/tools/testing/selftests/bpf/progs/sockmap_tcp_msg_prog.c b/tools/testing/selftests/bpf/progs/sockmap_tcp_msg_prog.c
+index 65fbfdb6cd3a..e80484d98a1a 100644
+--- a/tools/testing/selftests/bpf/progs/sockmap_tcp_msg_prog.c
++++ b/tools/testing/selftests/bpf/progs/sockmap_tcp_msg_prog.c
+@@ -1,6 +1,6 @@
+ #include <linux/bpf.h>
++
+ #include "bpf_helpers.h"
+-#include "bpf_util.h"
+ #include "bpf_endian.h"
+ 
+ int _version SEC("version") = 1;
+diff --git a/tools/testing/selftests/bpf/progs/sockmap_verdict_prog.c b/tools/testing/selftests/bpf/progs/sockmap_verdict_prog.c
+index bdc22be46f2e..d85c874ef25e 100644
+--- a/tools/testing/selftests/bpf/progs/sockmap_verdict_prog.c
++++ b/tools/testing/selftests/bpf/progs/sockmap_verdict_prog.c
+@@ -1,6 +1,5 @@
+ #include <linux/bpf.h>
+ #include "bpf_helpers.h"
+-#include "bpf_util.h"
+ #include "bpf_endian.h"
+ 
+ int _version SEC("version") = 1;
+diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_prog.c b/tools/testing/selftests/bpf/progs/test_sysctl_prog.c
+index a295cad805d7..5cbbff416998 100644
+--- a/tools/testing/selftests/bpf/progs/test_sysctl_prog.c
++++ b/tools/testing/selftests/bpf/progs/test_sysctl_prog.c
+@@ -8,7 +8,6 @@
+ #include <linux/bpf.h>
+ 
+ #include "bpf_helpers.h"
+-#include "bpf_util.h"
+ 
+ /* Max supported length of a string with unsigned long in base 10 (pow2 - 1). */
+ #define MAX_ULONG_STR_LEN 0xF
+@@ -16,6 +15,10 @@
+ /* Max supported length of sysctl value string (pow2). */
+ #define MAX_VALUE_STR_LEN 0x40
+ 
++#ifndef ARRAY_SIZE
++#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
++#endif
++
+ static __always_inline int is_tcp_mem(struct bpf_sysctl *ctx)
+ {
+ 	char tcp_mem_name[] = "net/ipv4/tcp_mem";
+-- 
+2.17.1
+
