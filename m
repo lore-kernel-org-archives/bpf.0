@@ -2,38 +2,49 @@ Return-Path: <SRS0=MvGz=UI=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	T_DKIMWL_WL_HIGH autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2D44C28EBD
-	for <bpf@archiver.kernel.org>; Sun,  9 Jun 2019 09:29:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D8E9C2BCA1
+	for <bpf@archiver.kernel.org>; Sun,  9 Jun 2019 12:29:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8EAE7206DF
-	for <bpf@archiver.kernel.org>; Sun,  9 Jun 2019 09:29:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 773C0208E4
+	for <bpf@archiver.kernel.org>; Sun,  9 Jun 2019 12:29:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1560083396;
+	bh=V2I7JzBy6GpkLeFVFEd49U4hCJqclC8mWxGbOiPSGro=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=IIBYpJ8oJp/1MVWcqHZfFfKi+d+nMCm+7d2U1HogmNYIoR90EPX1K4lE32ukCJLK6
+	 2u4rgRb0ty5n/gbkDi2CBNI+/FmS35KRmYReGN2Y26NC9yYQ2aQokdt/Uf7upcGe06
+	 eCNF3rVa4aaHOcUo6YVZMNKSWOWWVp6+bdIyf0G4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727949AbfFIJ3x (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 9 Jun 2019 05:29:53 -0400
-Received: from smtp1.goneo.de ([85.220.129.30]:58026 "EHLO smtp1.goneo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727884AbfFIJ3x (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 9 Jun 2019 05:29:53 -0400
-X-Greylist: delayed 431 seconds by postgrey-1.27 at vger.kernel.org; Sun, 09 Jun 2019 05:29:52 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by smtp1.goneo.de (Postfix) with ESMTP id 8C61C23FF63;
-        Sun,  9 Jun 2019 11:22:39 +0200 (CEST)
-X-Virus-Scanned: by goneo
-Received: from smtp1.goneo.de ([127.0.0.1])
-        by localhost (smtp1.goneo.de [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id D6pB0LIdwmgn; Sun,  9 Jun 2019 11:22:38 +0200 (CEST)
-Received: from [192.168.1.127] (dyndsl-085-016-227-190.ewe-ip-backbone.de [85.16.227.190])
-        by smtp1.goneo.de (Postfix) with ESMTPSA id B273923F220;
-        Sun,  9 Jun 2019 11:22:36 +0200 (CEST)
-Subject: Re: [PATCH v3 00/33] Convert files to ReST - part 1
-To:     Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        id S1728189AbfFIM3w (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 9 Jun 2019 08:29:52 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:47188 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726874AbfFIM3v (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 9 Jun 2019 08:29:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
+        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=IuqsoxISFrOZKKS3BhELU3uFgb2g53uAyNxYwZgCHEU=; b=DyEjWJ7vQLo8VkwXgyJHdBfxK
+        GXjBapuN3ZK4cyYsNPgwtUt1PuGj2p1y4RKHqrLUVRgytFyHZPaeutkBpamadM5HQ2WZbx+0w0eBT
+        hP1ZPe18WIxTRmIr7mzU6BkDpUDmqKwWWHXDMGhJn29QS+iAa5SRaoVvxOIsEg2gYqhhtGmA12xcI
+        3zsWJF7ZJ5C8SGXK2oQOuJrUQMFxQEqomlUY/lV8HR3Hb/1GoZ2NRafLYwtlBlj4QMywNtmHRvBoG
+        SK4ufeZwOR6U8cJAB8e51GrzYN93/+3zpxzJIANm0n5cAqgkmLQLuv/KIsysCMJwlFNegGmuTOcn8
+        3H35bjE5A==;
+Received: from 179.176.115.133.dynamic.adsl.gvt.net.br ([179.176.115.133] helo=recife.lan)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hZwxI-0002Wx-RD; Sun, 09 Jun 2019 12:29:49 +0000
+Date:   Sun, 9 Jun 2019 09:29:40 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Heiko Carstens <heiko.carstens@de.ibm.com>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         Palmer Dabbelt <palmer@sifive.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
@@ -45,30 +56,90 @@ Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         Vincent Chen <deanbo422@gmail.com>,
         linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-References: <cover.1560045490.git.mchehab+samsung@kernel.org>
- <20190609091642.GA3705@osiris>
-From:   Markus Heiser <markus.heiser@darmarit.de>
-Message-ID: <56cd597a-9db8-b6ea-eed1-51d3bdf0e6e0@darmarit.de>
-Date:   Sun, 9 Jun 2019 11:22:36 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
+Subject: Re: [PATCH v3 00/33] Convert files to ReST - part 1
+Message-ID: <20190609092940.5e34e3b0@recife.lan>
 In-Reply-To: <20190609091642.GA3705@osiris>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: de-DE
+References: <cover.1560045490.git.mchehab+samsung@kernel.org>
+        <20190609091642.GA3705@osiris>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Em Sun, 9 Jun 2019 11:16:43 +0200
+Heiko Carstens <heiko.carstens@de.ibm.com> escreveu:
 
-Am 09.06.19 um 11:16 schrieb Heiko Carstens:
+> On Sat, Jun 08, 2019 at 11:26:50PM -0300, Mauro Carvalho Chehab wrote:
+> > This is the first part of a series I wrote sometime ago where I manually
+> > convert lots of files to be properly parsed by Sphinx as ReST files.
+> > 
+> > As it touches on lot of stuff, this series is based on today's docs-next
+> > + linux-next, at tag next-20190607.
+> > 
+> > I have right now about 85 patches with this undergoing work. That's
+> > because I opted to do ~1 patch per converted directory.
+> > 
+> > That sounds too much to be send on a single round. So, I'm opting to split
+> > it on 3 parts. Those patches should probably be good to be merged
+> > either by subsystem maintainers or via the docs tree.
+> > 
+> > I opted to mark new files not included yet to the main index.rst (directly or
+> > indirectly ) with the :orphan: tag, in order to avoid adding warnings to the
+> > build system. This should be removed after we find a "home" for all
+> > the converted files within the new document tree arrangement.
+> > 
+> > Both this series and  the next parts are on my devel git tree,
+> > at:
+> > 
+> > 	https://git.linuxtv.org/mchehab/experimental.git/log/?h=convert_rst_renames_v4
+> > 
+> > The final output in html (after all patches I currently have, including 
+> > the upcoming series) can be seen at:
+> > 
+> > 	https://www.infradead.org/~mchehab/rst_conversion/  
+> 
 > Will there be a web page (e.g. kernel.org), which contains always the
 > latest upstream version?
 
-You are looking for the HTML docs on kernel.org?
+Yes:
 
-   https://www.kernel.org/doc/html/latest/
+	https://www.kernel.org/doc/html/latest/
 
--- Markus --
+I guess this one is based on Linus tree.
+
+Jon also maintains a version at:
+
+	https://static.lwn.net/kerneldoc/
+
+I guess that one is based on docs-next branch from the Docs tree.
+
+Btw, if you want to build it for yourself, you could use:
+
+	make htmldocs
+
+If your system doesn't have all dependencies, it will give the
+hints about how to install them.
+
+> 
+> >   docs: Debugging390.txt: convert table to ascii artwork
+> >   docs: s390: convert docs to ReST and rename to *.rst
+> >   s390: include/asm/debug.h add kerneldoc markups  
+> 
+> I can pick these up for s390. Or do you want to send the whole series
+> in one go upstream?
+
+Yeah, feel free to pick them via the s390 tree.
+
+Regards,
+Mauro
+
+Thanks,
+Mauro
+
+
+Thanks,
+Mauro
