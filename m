@@ -2,164 +2,245 @@ Return-Path: <SRS0=fZcT=UK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,USER_AGENT_GIT
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6405DC4321D
-	for <bpf@archiver.kernel.org>; Tue, 11 Jun 2019 04:48:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75991C43218
+	for <bpf@archiver.kernel.org>; Tue, 11 Jun 2019 05:21:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3782420820
-	for <bpf@archiver.kernel.org>; Tue, 11 Jun 2019 04:48:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3A9A620665
+	for <bpf@archiver.kernel.org>; Tue, 11 Jun 2019 05:21:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Ecxdz7CY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kt7AEM4R"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391144AbfFKEsg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 11 Jun 2019 00:48:36 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:35550 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2403758AbfFKEsg (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 11 Jun 2019 00:48:36 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5B4jLNc013205
-        for <bpf@vger.kernel.org>; Mon, 10 Jun 2019 21:48:35 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=AYJBxbod3aKifNwgTVgPBUcBvNE6JScxe741jkomWoE=;
- b=Ecxdz7CYbmExWZUK/ieTlLzFQs04X1+Hu86UgwAE2C7ESOQgdkdJRZPA1M/s8W569okq
- XNxnSuzUh4ZFikLCDwmOARy9AfIMXq4fe4wl0WDGT+o5b02rAcdluQXsbXcP9jUcp8f5
- KL+GhuW9utoc89w1XzE9ph1901pFhbADjXI= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2t1s632vqm-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 10 Jun 2019 21:48:34 -0700
-Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Mon, 10 Jun 2019 21:48:20 -0700
-Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 2F9E686186A; Mon, 10 Jun 2019 21:48:20 -0700 (PDT)
-Smtp-Origin-Hostprefix: dev
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: dev101.prn2.facebook.com
-To:     <andrii.nakryiko@gmail.com>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <ast@fb.com>, <daniel@iogearbox.net>,
-        <kernel-team@fb.com>
-CC:     Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH bpf-next 5/8] libbpf: split initialization and loading of BTF
-Date:   Mon, 10 Jun 2019 21:47:44 -0700
-Message-ID: <20190611044747.44839-6-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190611044747.44839-1-andriin@fb.com>
-References: <20190611044747.44839-1-andriin@fb.com>
-X-FB-Internal: Safe
+        id S2391091AbfFKFVU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 11 Jun 2019 01:21:20 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:39244 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391044AbfFKFVT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 11 Jun 2019 01:21:19 -0400
+Received: by mail-qt1-f193.google.com with SMTP id i34so13075494qta.6;
+        Mon, 10 Jun 2019 22:21:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SK1nr6e/IQruUd6K4MJq+bdWbcaM5x45pX6JLMdcey0=;
+        b=kt7AEM4Rj+F8+dy8yiT0RW/xyrb9+enazFkCYXUwFnKsPjTU2N8P3ADr/QQ/dJJRAw
+         CiPd7R35Hdz1XGZ0Av9keD2oTdcXBQiR6tn150N7h4LZMEGHE6xHJdjZdOMBNd7+n1Oz
+         vzvhS2Et99murispr6VyyjQvn5Yr+HvloDe2cNv3SkhbI8qKLPc+B/NSz8gNJ/y/3rXn
+         qVHag8PMPPnBBb3LRZ66EiOZ+XhCKNN8tYeW53bnAppx6zbV9KnZhrwSFYOWcNIMsmQl
+         yixlVhLGm7TCPuyRc1abi5ctyngCULvGMp3IaSjSQ1h76oofjFxzTHr161XqbFJQ6Rmd
+         wtww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SK1nr6e/IQruUd6K4MJq+bdWbcaM5x45pX6JLMdcey0=;
+        b=k6FJogaeq51rP/thsIumJcvv8k0tV+sfuFSwaofzAixhTWjOF78vwgfLKuZeWcYBBA
+         WVMIqrf3AvoRlmn9+/zZHbopFWRdCJN03s9lCVmQGKHabzENFsbo+Eeg0M4JP6sieXRK
+         WW7UARyhQJBaJJ/Fyw5YPDqcoejeoFPNMmPQzl3u9ByLhVPQR0tbqzLP7/+/eEl5/sTG
+         8Y65Lu1wh02q+Jwwibpe/mP71qzlc+uGg5pbT3xXRCTe7MXMx1c83jlcuKgPxcREVKzF
+         YfCC9LQabW9o3wiH4Kjgt11iLtCefq4T1H1s9cW960crWNZStzRBTC5KT1iulswvrBDz
+         81vw==
+X-Gm-Message-State: APjAAAVwiDMY3LLvYZgqKWflSaelA0wBF4fksofkWvRtAoxe+dCAQb5Y
+        s/IUOQ/N/8k3mL35U826BBVEvusXX53o1ZQb4IE=
+X-Google-Smtp-Source: APXvYqxoLuPEOBoXwc2DChE3MeBxGPQdvXx5j6GOs+w3lI//eezctUadsxzoh6ME3U1SRyMaZg0lz4N2kN1d40c0z7Q=
+X-Received: by 2002:ac8:1087:: with SMTP id a7mr48866882qtj.141.1560230478347;
+ Mon, 10 Jun 2019 22:21:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-11_02:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906110033
-X-FB-Internal: deliver
+References: <20190611044747.44839-1-andriin@fb.com>
+In-Reply-To: <20190611044747.44839-1-andriin@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 10 Jun 2019 22:21:07 -0700
+Message-ID: <CAEf4Bzauq8GNk9F2z4vh1fqQuKg_7BusbhwmFU+gS16e8oKGmg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/8] BTF-defined BPF map definitions
+To:     Andrii Nakryiko <andriin@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Libbpf does sanitization of BTF before loading it into kernel, if kernel
-doesn't support some of newer BTF features. This removes some of the
-important information from BTF (e.g., DATASEC and VAR description),
-which will be used for map construction. This patch splits BTF
-processing into initialization step, in which BTF is initialized from
-ELF and all the original data is still preserved; and
-sanitization/loading step, which ensures that BTF is safe to load into
-kernel. This allows to use full BTF information to construct maps, while
-still loading valid BTF into older kernels.
+On Mon, Jun 10, 2019 at 9:48 PM Andrii Nakryiko <andriin@fb.com> wrote:
+>
+> This patch set implements initial version (as discussed at LSF/MM2019
+> conference) of a new way to specify BPF maps, relying on BTF type information,
+> which allows for easy extensibility, preserving forward and backward
+> compatibility. See details and examples in description for patch #6.
+>
+> [0] contains an outline of follow up extensions to be added after this basic
+> set of features lands. They are useful by itself, but also allows to bring
+> libbpf to feature-parity with iproute2 BPF loader. That should open a path
+> forward for BPF loaders unification.
+>
+> Patch #1 centralizes commonly used min/max macro in libbpf_internal.h.
+> Patch #2 extracts .BTF and .BTF.ext loading loging from elf_collect().
+> Patch #3 refactors map initialization logic into user-provided maps and global
+> data maps, in preparation to adding another way (BTF-defined maps).
+> Patch #4 adds support for map definitions in multiple ELF sections and
+> deprecates bpf_object__find_map_by_offset() API which doesn't appear to be
+> used anymore and makes assumption that all map definitions reside in single
+> ELF section.
+> Patch #5 splits BTF intialization from sanitization/loading into kernel to
+> preserve original BTF at the time of map initialization.
+> Patch #6 adds support for BTF-defined maps.
+> Patch #7 adds new test for BTF-defined map definition.
+> Patch #8 converts test BPF map definitions to use BTF way.
+>
+> [0] https://lore.kernel.org/bpf/CAEf4BzbfdG2ub7gCi0OYqBrUoChVHWsmOntWAkJt47=FE+km+A@mail.gmail.com/
+>
+> rfc->v1:
+> - error out on unknown field by default (Stanislav, Jakub, Lorenz);
+>
+> Andrii Nakryiko (8):
+>   libbpf: add common min/max macro to libbpf_internal.h
+>   libbpf: extract BTF loading and simplify ELF parsing logic
+>   libbpf: refactor map initialization
+>   libbpf: identify maps by section index in addition to offset
+>   libbpf: split initialization and loading of BTF
+>   libbpf: allow specifying map definitions using BTF
+>   selftests/bpf: add test for BTF-defined maps
+>   selftests/bpf: switch tests to BTF-defined map definitions
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/lib/bpf/libbpf.c | 34 ++++++++++++++++++++++++----------
- 1 file changed, 24 insertions(+), 10 deletions(-)
+I'm posting this as v1 to move discussion forward.
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 5e7ea7dac958..79a8143240d7 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -1118,7 +1118,7 @@ static void bpf_object__sanitize_btf_ext(struct bpf_object *obj)
- 	}
- }
- 
--static int bpf_object__load_btf(struct bpf_object *obj,
-+static int bpf_object__init_btf(struct bpf_object *obj,
- 				Elf_Data *btf_data,
- 				Elf_Data *btf_ext_data)
- {
-@@ -1137,13 +1137,6 @@ static int bpf_object__load_btf(struct bpf_object *obj,
- 				   BTF_ELF_SEC, err);
- 			goto out;
- 		}
--		bpf_object__sanitize_btf(obj);
--		err = btf__load(obj->btf);
--		if (err) {
--			pr_warning("Error loading %s into kernel: %d.\n",
--				   BTF_ELF_SEC, err);
--			goto out;
--		}
- 	}
- 	if (btf_ext_data) {
- 		if (!obj->btf) {
-@@ -1159,7 +1152,6 @@ static int bpf_object__load_btf(struct bpf_object *obj,
- 			obj->btf_ext = NULL;
- 			goto out;
- 		}
--		bpf_object__sanitize_btf_ext(obj);
- 	}
- out:
- 	if (err || IS_ERR(obj->btf)) {
-@@ -1170,6 +1162,26 @@ static int bpf_object__load_btf(struct bpf_object *obj,
- 	return 0;
- }
- 
-+static int bpf_object__sanitize_and_load_btf(struct bpf_object *obj)
-+{
-+	int err = 0;
-+
-+	if (!obj->btf)
-+		return 0;
-+
-+	bpf_object__sanitize_btf(obj);
-+	bpf_object__sanitize_btf_ext(obj);
-+
-+	err = btf__load(obj->btf);
-+	if (err) {
-+		pr_warning("Error loading %s into kernel: %d.\n",
-+			   BTF_ELF_SEC, err);
-+		btf__free(obj->btf);
-+		obj->btf = NULL;
-+	}
-+	return 0;
-+}
-+
- static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
- {
- 	Elf *elf = obj->efile.elf;
-@@ -1301,9 +1313,11 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
- 		pr_warning("Corrupted ELF file: index of strtab invalid\n");
- 		return -LIBBPF_ERRNO__FORMAT;
- 	}
--	err = bpf_object__load_btf(obj, btf_data, btf_ext_data);
-+	err = bpf_object__init_btf(obj, btf_data, btf_ext_data);
- 	if (!err)
- 		err = bpf_object__init_maps(obj, flags);
-+	if (!err)
-+		err = bpf_object__sanitize_and_load_btf(obj);
- 	if (!err)
- 		err = bpf_object__init_prog_names(obj);
- 	return err;
--- 
-2.17.1
+Important point that we haven't discussed extensively is whether we
+should allow applications to specify custom fields as part of map
+definition and if yes, what's the best way to expose that to
+application.
 
+I think we should avoid that and let applications handle app-specific
+per-map customizations using "associated" app-specific metadata
+struct, e.g.:
+
+/* map definition for libbpf */
+struct {
+    __u32 *key;
+    struct my_value *value;
+    __u32 type;
+} my_fancy_map SEC(".maps") = {
+    .type = BPF_MAP_TYPE_ARRAY,
+};
+
+/* app-specific associated metadata, based on map name convention */
+struct {
+    struct my_fancy_meta tag;
+    __u32 some_app_id;
+} my_fancy_map__metadata = {
+    .tag = {
+        /* ... */
+    },
+    .some_app_id = 123,
+};
+
+Then application itself can find corresponding BTF variable/type and
+parse data as it sees fit.
+
+In any case, it's not hard to add this later, but it would be good to
+see some realistic use cases where app-specific stuff needs to be part
+of BPF map definition.
+
+Some reasons to avoid this:
+1. Potential name conflicts when in the future libbpf adds a new
+supported field.
+2. Need to add APIs to expose this to application (callback, or expose
+map definition BTF type ID, or something along those lines). As app
+metadata can be of any type, we'll need to stick to very generic
+information, like: BTF type ID of struct + field info (name, #,
+offset, size), pointer to data section. At that point complexity of
+dealing with this extra metadata seems equivalent to just letting app
+find `my_fancy_map__metadata` struct and parse it, while also
+complicating libbpf APIs.
+3. In general, mixing together standardized map definition with ad-hoc
+application metadata seems like a bad idea and makes documenting all
+that more awkward.
+
+As for syntax of key/value type capturing. We are down to two
+realistic candidates:
+
+1. struct {
+    __u32 *key;
+    struct my_value *value;
+} ...
+
+2. struct {
+    struct {
+        __u32 key;
+        struct my_value value;
+    } types[]; /* has to be last field, or otherwise need explicit [0] size */
+} ...
+
+
+I prefer first for simplicity and less visual clutter. That pointer
+can be explained very succinctly in documentation, I don't think it's
+a big deal or is hard to grasp. In both cases we'll need to include
+justification of why it's not just inlined types (ELF size savings).
+
+There will be three distinctive cases for key/value syntax:
+
+- pointer to some type: this captures key/value type and size, without
+pre-initializing map;
+- inlined struct w/ another map definition - map-in-map case, pretty
+distinctive special case;
+- array of elements of some type - static pre-initialization w/
+values, initially supported for BPF_MAP_TYPE_PROG_ARRAY and
+map-in-maps, but potentially can be extended further, e.g., for normal
+arrays.
+
+Latter two are advanced rare cases, but indispensable for when you need it.
+
+Hope this helps a bit, thanks!
+
+
+>
+>  tools/lib/bpf/bpf.c                           |   7 +-
+>  tools/lib/bpf/bpf_prog_linfo.c                |   5 +-
+>  tools/lib/bpf/btf.c                           |   3 -
+>  tools/lib/bpf/btf.h                           |   1 +
+>  tools/lib/bpf/btf_dump.c                      |   3 -
+>  tools/lib/bpf/libbpf.c                        | 767 +++++++++++++-----
+>  tools/lib/bpf/libbpf_internal.h               |   7 +
+>  tools/testing/selftests/bpf/progs/bpf_flow.c  |  18 +-
+>  .../selftests/bpf/progs/get_cgroup_id_kern.c  |  18 +-
+>  .../testing/selftests/bpf/progs/netcnt_prog.c |  22 +-
+>  .../selftests/bpf/progs/sample_map_ret0.c     |  18 +-
+>  .../selftests/bpf/progs/socket_cookie_prog.c  |   9 +-
+>  .../bpf/progs/sockmap_verdict_prog.c          |  36 +-
+>  .../selftests/bpf/progs/test_btf_newkv.c      |  73 ++
+>  .../bpf/progs/test_get_stack_rawtp.c          |  27 +-
+>  .../selftests/bpf/progs/test_global_data.c    |  27 +-
+>  tools/testing/selftests/bpf/progs/test_l4lb.c |  45 +-
+>  .../selftests/bpf/progs/test_l4lb_noinline.c  |  45 +-
+>  .../selftests/bpf/progs/test_map_in_map.c     |  20 +-
+>  .../selftests/bpf/progs/test_map_lock.c       |  22 +-
+>  .../testing/selftests/bpf/progs/test_obj_id.c |   9 +-
+>  .../bpf/progs/test_select_reuseport_kern.c    |  45 +-
+>  .../bpf/progs/test_send_signal_kern.c         |  22 +-
+>  .../bpf/progs/test_skb_cgroup_id_kern.c       |   9 +-
+>  .../bpf/progs/test_sock_fields_kern.c         |  60 +-
+>  .../selftests/bpf/progs/test_spin_lock.c      |  33 +-
+>  .../bpf/progs/test_stacktrace_build_id.c      |  44 +-
+>  .../selftests/bpf/progs/test_stacktrace_map.c |  40 +-
+>  .../testing/selftests/bpf/progs/test_tc_edt.c |   9 +-
+>  .../bpf/progs/test_tcp_check_syncookie_kern.c |   9 +-
+>  .../selftests/bpf/progs/test_tcp_estats.c     |   9 +-
+>  .../selftests/bpf/progs/test_tcpbpf_kern.c    |  18 +-
+>  .../selftests/bpf/progs/test_tcpnotify_kern.c |  18 +-
+>  tools/testing/selftests/bpf/progs/test_xdp.c  |  18 +-
+>  .../selftests/bpf/progs/test_xdp_noinline.c   |  60 +-
+>  tools/testing/selftests/bpf/test_btf.c        |  10 +-
+>  .../selftests/bpf/test_queue_stack_map.h      |  20 +-
+>  .../testing/selftests/bpf/test_sockmap_kern.h |  72 +-
+>  38 files changed, 1187 insertions(+), 491 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_btf_newkv.c
+>
+> --
+> 2.17.1
+>
