@@ -2,185 +2,287 @@ Return-Path: <SRS0=fZcT=UK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-13.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,USER_AGENT_GIT
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2AEFC43218
-	for <bpf@archiver.kernel.org>; Tue, 11 Jun 2019 00:57:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EC54C43218
+	for <bpf@archiver.kernel.org>; Tue, 11 Jun 2019 04:18:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8A77420820
-	for <bpf@archiver.kernel.org>; Tue, 11 Jun 2019 00:57:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 03F4B20896
+	for <bpf@archiver.kernel.org>; Tue, 11 Jun 2019 04:18:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="noUG31kI"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DR6BhtQG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390060AbfFKA46 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 10 Jun 2019 20:56:58 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:54606 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2389362AbfFKA45 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 10 Jun 2019 20:56:57 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x5B0gFGS003840
-        for <bpf@vger.kernel.org>; Mon, 10 Jun 2019 17:56:56 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=YK0kr/ztpW3N21eoVX7SUrgX32oe6UrrVDCIEj7dQGc=;
- b=noUG31kIZvJ5Xc1+Q2A4DFaHVJlSMdHMrLxLb5ZwR1raDVtm+Vxc+n9PQTP80NJjMjt8
- mJoPvBZlqtukFMuQpLhSzeBuvabyL5AEIzslamLk4rVRBdP11l8l9lT74ja5ReYywq09
- S54G9Y2+CtouLcYfraAvox/Pvo7kP/K3FsQ= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by m0001303.ppops.net with ESMTP id 2t08pc7w45-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 10 Jun 2019 17:56:56 -0700
-Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Mon, 10 Jun 2019 17:56:54 -0700
-Received: by devvm3632.prn2.facebook.com (Postfix, from userid 172007)
-        id 99C03D0D72E2; Mon, 10 Jun 2019 17:56:53 -0700 (PDT)
-Smtp-Origin-Hostprefix: devvm
-From:   Hechao Li <hechaol@fb.com>
-Smtp-Origin-Hostname: devvm3632.prn2.facebook.com
-To:     <bpf@vger.kernel.org>
-CC:     <netdev@vger.kernel.org>, <daniel@iogearbox.net>, <ast@kernel.org>,
-        <kernel-team@fb.com>, Hechao Li <hechaol@fb.com>
-Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v6 bpf-next 1/3] bpf: add a new API libbpf_num_possible_cpus()
-Date:   Mon, 10 Jun 2019 17:56:50 -0700
-Message-ID: <20190611005652.3827331-2-hechaol@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190611005652.3827331-1-hechaol@fb.com>
-References: <20190611005652.3827331-1-hechaol@fb.com>
-X-FB-Internal: Safe
+        id S1725890AbfFKESo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 11 Jun 2019 00:18:44 -0400
+Received: from mail-yw1-f66.google.com ([209.85.161.66]:40927 "EHLO
+        mail-yw1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726199AbfFKESn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 11 Jun 2019 00:18:43 -0400
+Received: by mail-yw1-f66.google.com with SMTP id b143so4705277ywb.7
+        for <bpf@vger.kernel.org>; Mon, 10 Jun 2019 21:18:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=1x6+Y2pwnNkBGDLDQA27k+oCJGbUQsBRY2G4PLVMDls=;
+        b=DR6BhtQGonLnYvn7MNiu4oDO4frfF5lm0jDwdze6mJweZW2VPxmDkOqbWk7razp5gg
+         bdVvcrS0r8nubVk2zMqyBYVvwrxirqlTI9dqwRavbMDIBjq7eO3ad4f41WGSlivGQh42
+         eyB3OBY3gxo5JJ5cF0WT6BrH9Qqdv8c0KegfBux6R2jqEYvD1Nsgf5k7D45keJbUTQDp
+         FcVX1cWfyDGO0Yn+hNiDg9ZTtnZ7QH81HkIelZYJ5TD2GJOY46aX6QvU+X4b20scQAb0
+         LO4vYIs5ZVFeuB/4RdE8nwmK5PBo27o0/Umzezct2J7CzY2kxx+JCFZHeCnx3eSHiSA8
+         3KKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=1x6+Y2pwnNkBGDLDQA27k+oCJGbUQsBRY2G4PLVMDls=;
+        b=mcwb1KU9b48tqTVy5MGbZGmr3tnlB9IfqcbP/8Aws9jTK5ecJITlrBoIlbywPIB1HV
+         Pt/PMFVkQYo+QUs9XAnvFW29ho44BlzPAORR1OdJ+MYDu26GjtSx1z13oAjANNgLbv+D
+         yVu/SuXdcMdbek+2AW5AKKE1K9IaZEE6ukQdHnPfkJAAbofBciq50w/FXoy+0biIdGYA
+         nOgvjg2py+0evTnoAs9ur7ZTPzPndi/6p73zkuaSawWMjdAovA0emDKL9G4YkYG+flD6
+         FC9X1QqZqIUKKQAxOFkHlRlj1Uv4z9qwU93b2pcCXOktCCFtkSKgHh/P6LUfiLvDMAkO
+         kYLg==
+X-Gm-Message-State: APjAAAVzgKxvQrxS9kJAr8id/Hbq2VRHfVxYXLANIQF6ANS/O4y6EnyK
+        bxXwLmsIBXaFBfaXsmrzul5aiw==
+X-Google-Smtp-Source: APXvYqxOsQ69YPJhEntFbAK3zQJ0QzYFDoPf9fvyE2C7QqmQ7Ih7XSXq6zrapPl2POLHDJeDNof+HQ==
+X-Received: by 2002:a81:3715:: with SMTP id e21mr11019981ywa.33.1560226721916;
+        Mon, 10 Jun 2019 21:18:41 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s (li1322-146.members.linode.com. [45.79.223.146])
+        by smtp.gmail.com with ESMTPSA id q63sm3769235ywq.17.2019.06.10.21.18.35
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 10 Jun 2019 21:18:40 -0700 (PDT)
+Date:   Tue, 11 Jun 2019 12:18:31 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] perf augmented_raw_syscalls: Support arm64 raw
+ syscalls
+Message-ID: <20190611041831.GA3959@leoy-ThinkPad-X240s>
+References: <20190606094845.4800-1-leo.yan@linaro.org>
+ <20190606094845.4800-4-leo.yan@linaro.org>
+ <20190606133838.GC30166@kernel.org>
+ <20190606141231.GC5970@leoy-ThinkPad-X240s>
+ <20190606144412.GC21245@kernel.org>
+ <20190607095831.GG5970@leoy-ThinkPad-X240s>
+ <20190609131849.GB6357@leoy-ThinkPad-X240s>
+ <20190610184754.GU21245@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-10_10:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=13 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=681 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906110003
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190610184754.GU21245@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding a new API libbpf_num_possible_cpus() that helps user with
-per-CPU map operations.
+On Mon, Jun 10, 2019 at 03:47:54PM -0300, Arnaldo Carvalho de Melo wrote:
 
-Signed-off-by: Hechao Li <hechaol@fb.com>
----
- tools/lib/bpf/libbpf.c   | 57 ++++++++++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf.h   | 16 +++++++++++
- tools/lib/bpf/libbpf.map |  1 +
- 3 files changed, 74 insertions(+)
+[...]
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index ba89d9727137..dd8b2cd5d3a7 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -3827,3 +3827,60 @@ void bpf_program__bpil_offs_to_addr(struct bpf_prog_info_linear *info_linear)
- 					     desc->array_offset, addr);
- 	}
- }
-+
-+int libbpf_num_possible_cpus(void)
-+{
-+	static const char *fcpu = "/sys/devices/system/cpu/possible";
-+	int len = 0, n = 0, il = 0, ir = 0;
-+	unsigned int start = 0, end = 0;
-+	static int cpus;
-+	char buf[128];
-+	int error = 0;
-+	int fd = -1;
-+
-+	if (cpus > 0)
-+		return cpus;
-+
-+	fd = open(fcpu, O_RDONLY);
-+	if (fd < 0) {
-+		error = errno;
-+		pr_warning("Failed to open file %s: %s\n",
-+			   fcpu, strerror(error));
-+		return -error;
-+	}
-+	len = read(fd, buf, sizeof(buf));
-+	close(fd);
-+	if (len <= 0) {
-+		error = len ? errno : EINVAL;
-+		pr_warning("Failed to read # of possible cpus from %s: %s\n",
-+			   fcpu, strerror(error));
-+		return -error;
-+	}
-+	if (len == sizeof(buf)) {
-+		pr_warning("File %s size overflow\n", fcpu);
-+		return -EOVERFLOW;
-+	}
-+	buf[len] = '\0';
-+
-+	for (ir = 0, cpus = 0; ir <= len; ir++) {
-+		/* Each sub string separated by ',' has format \d+-\d+ or \d+ */
-+		if (buf[ir] == ',' || buf[ir] == '\0') {
-+			buf[ir] = '\0';
-+			n = sscanf(&buf[il], "%u-%u", &start, &end);
-+			if (n <= 0) {
-+				pr_warning("Failed to get # CPUs from %s\n",
-+					   &buf[il]);
-+				return -EINVAL;
-+			} else if (n == 1) {
-+				end = start;
-+			}
-+			cpus += end - start + 1;
-+			il = ir + 1;
-+		}
-+	}
-+	if (cpus <= 0) {
-+		pr_warning("Invalid #CPUs %d from %s\n", cpus, fcpu);
-+		return -EINVAL;
-+	}
-+	return cpus;
-+}
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 1af0d48178c8..2e594a0fa961 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -454,6 +454,22 @@ bpf_program__bpil_addr_to_offs(struct bpf_prog_info_linear *info_linear);
- LIBBPF_API void
- bpf_program__bpil_offs_to_addr(struct bpf_prog_info_linear *info_linear);
- 
-+/*
-+ * A helper function to get the number of possible CPUs before looking up
-+ * per-CPU maps. Negative errno is returned on failure.
-+ *
-+ * Example usage:
-+ *
-+ *     int ncpus = libbpf_num_possible_cpus();
-+ *     if (ncpus < 0) {
-+ *          // error handling
-+ *     }
-+ *     long values[ncpus];
-+ *     bpf_map_lookup_elem(per_cpu_map_fd, key, values);
-+ *
-+ */
-+LIBBPF_API int libbpf_num_possible_cpus(void);
-+
- #ifdef __cplusplus
- } /* extern "C" */
- #endif
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 46dcda89df21..2c6d835620d2 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -172,4 +172,5 @@ LIBBPF_0.0.4 {
- 		btf_dump__new;
- 		btf__parse_elf;
- 		bpf_object__load_xattr;
-+		libbpf_num_possible_cpus;
- } LIBBPF_0.0.3;
--- 
-2.17.1
+> > > I tested with the lastest perf/core branch which contains the patch:
+> > > 'perf augmented_raw_syscalls: Tell which args are filenames and how
+> > > many bytes to copy' and got the error as below:
+> > > 
+> > > # perf trace -e string -e /mnt/linux-kernel/linux-cs-dev/tools/perf/examples/bpf/augmented_raw_syscalls.c
+> > > Error:  Invalid syscall access, chmod, chown, creat, futimesat, lchown, link, lstat, mkdir, mknod, newfstatat, open, readlink, rename,
+> > > rmdir, stat, statfs, symlink, truncate, unlink
+> 
+> Humm, I think that we can just make the code that parses the
+> tools/perf/trace/strace/groups/string file to ignore syscalls it can't
+> find in the syscall_tbl, i.e. trace those if they exist in the arch.
 
+Agree.
+
+> > > Hint:   try 'perf list syscalls:sys_enter_*'
+> > > Hint:   and: 'man syscalls'
+> > > 
+> > > So seems mksyscalltbl has not included completely for syscalls, I
+> > > use below command to generate syscalltbl_arm64[] array and it don't
+> > > include related entries for access, chmod, chown, etc ...
+> 
+> So, we need to investigate why is that these are missing, good thing we
+> have this 'strings' group :-)
+> 
+> > > You could refer the generated syscalltbl_arm64 in:
+> > > http://paste.ubuntu.com/p/8Bj7Jkm2mP/
+> > 
+> > After digging into this issue on Arm64, below is summary info:
+> > 
+> > - arm64 uses the header include/uapi/linux/unistd.h to define system
+> >   call numbers, in this header some system calls are not defined (I
+> >   think the reason is these system calls are obsolete at the end) so the
+> >   corresponding strings are missed in the array syscalltbl_native,
+> >   for arm64 the array is defined in the file:
+> >   tools/perf/arch/arm64/include/generated/asm/syscalls.c.
+> 
+> Yeah, I looked at the 'access' case and indeed it is not present in
+> include/uapi/asm-generic/unistd.h, which is the place
+> include/uapi/linux/unistd.h ends up.
+> 
+> Ok please take a look at the patch at the end of this message, should be ok?
+> 
+> I tested it by changing the strace/gorups/string file to have a few
+> unknown syscalls, running it with -v we see:
+> 
+> [root@quaco perf]# perf trace -v -e string ls
+> Skipping unknown syscalls: access99, acct99, add_key99
+> <SNIP other verbose messages>
+> normal operation not considering those unknown syscalls.
+
+I did testing with the patch, but it failed after I added eBPF event
+with below command, I even saw segmentation fault; please see below
+inline comments.
+
+  perf --debug verbose=10 trace -e string -e \
+    /mnt/linux-kernel/linux-cs-dev/tools/perf/examples/bpf/augmented_raw_syscalls.c
+
+[...]
+
+> commit e0b34a78c4ed0a6422f5b2dafa0c8936e537ee41
+> Author: Arnaldo Carvalho de Melo <acme@redhat.com>
+> Date:   Mon Jun 10 15:37:45 2019 -0300
+> 
+>     perf trace: Skip unknown syscalls when expanding strace like syscall groups
+>     
+>     We have $INSTALL_DIR/share/perf-core/strace/groups/string files with
+>     syscalls that should be selected when 'string' is used, meaning, in this
+>     case, syscalls that receive as one of its arguments a string, like a
+>     pathname.
+>     
+>     But those were first selected and tested on x86_64, and end up failing
+>     in architectures where some of those syscalls are not available, like
+>     the 'access' syscall on arm64, which makes using 'perf trace -e string'
+>     in such archs to fail.
+>     
+>     Since this the routine doing the validation is used only when reading
+>     such files, do not fail when some syscall is not found in the
+>     syscalltbl, instead just use pr_debug() to register that in case people
+>     are suspicious of problems.
+>     
+>     Now using 'perf trace -e string' should work on arm64, selecting only
+>     the syscalls that have a string and are available on that architecture.
+>     
+>     Reported-by: Leo Yan <leo.yan@linaro.org>
+>     Cc: Adrian Hunter <adrian.hunter@intel.com>
+>     Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+>     Cc: Alexei Starovoitov <ast@kernel.org>
+>     Cc: Daniel Borkmann <daniel@iogearbox.net>
+>     Cc: Jiri Olsa <jolsa@redhat.com>
+>     Cc: Martin KaFai Lau <kafai@fb.com>
+>     Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+>     Cc: Mike Leach <mike.leach@linaro.org>
+>     Cc: Namhyung Kim <namhyung@kernel.org>
+>     Cc: Song Liu <songliubraving@fb.com>
+>     Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+>     Cc: Yonghong Song <yhs@fb.com>
+>     Link: https://lkml.kernel.org/n/tip-oa4c2x8p3587jme0g89fyg18@git.kernel.org
+>     Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> 
+> diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+> index 1a2a605cf068..eb70a4b71755 100644
+> --- a/tools/perf/builtin-trace.c
+> +++ b/tools/perf/builtin-trace.c
+> @@ -1529,6 +1529,7 @@ static int trace__read_syscall_info(struct trace *trace, int id)
+>  static int trace__validate_ev_qualifier(struct trace *trace)
+>  {
+>  	int err = 0, i;
+> +	bool printed_invalid_prefix = false;
+>  	size_t nr_allocated;
+>  	struct str_node *pos;
+>  
+> @@ -1555,14 +1556,15 @@ static int trace__validate_ev_qualifier(struct trace *trace)
+>  			if (id >= 0)
+>  				goto matches;
+>  
+> -			if (err == 0) {
+> -				fputs("Error:\tInvalid syscall ", trace->output);
+> -				err = -EINVAL;
+> +			if (!printed_invalid_prefix) {
+> +				pr_debug("Skipping unknown syscalls: ");
+> +				printed_invalid_prefix = true;
+>  			} else {
+> -				fputs(", ", trace->output);
+> +				pr_debug(", ");
+>  			}
+>  
+> -			fputs(sc, trace->output);
+> +			pr_debug("%s", sc);
+> +			continue;
+
+Here adds 'continue' so that we want to let ev_qualifier_ids.entries
+to only store valid system call ids.  But this is not sufficient,
+because we have initialized ev_qualifier_ids.nr at the beginning of
+the function:
+
+  trace->ev_qualifier_ids.nr = strlist__nr_entries(trace->ev_qualifier);
+
+This sentence will set ids number to the string table's length; but
+actually some strings are not really supported; this leads to some
+items in trace->ev_qualifier_ids.entries[] will be not initialized
+properly.
+
+If we want to get neat entries and entry number, I suggest at the
+beginning of the function we use variable 'nr_allocated' to store
+string table length and use it to allocate entries:
+
+  nr_allocated = strlist__nr_entries(trace->ev_qualifier);
+  trace->ev_qualifier_ids.entries = malloc(nr_allocated *
+                                           sizeof(trace->ev_qualifier_ids.entries[0]));
+
+If we find any matched string, then increment the nr field under
+'matches' tag:
+
+matches:
+                trace->ev_qualifier_ids.nr++;
+                trace->ev_qualifier_ids.entries[i++] = id;
+
+This can ensure the entries[0..nr-1] has valid id and we can use
+ev_qualifier_ids.nr to maintain the valid system call numbers.
+
+>  		}
+>  matches:
+>  		trace->ev_qualifier_ids.entries[i++] = id;
+> @@ -1591,15 +1593,14 @@ static int trace__validate_ev_qualifier(struct trace *trace)
+>  		}
+>  	}
+>  
+> -	if (err < 0) {
+> -		fputs("\nHint:\ttry 'perf list syscalls:sys_enter_*'"
+> -		      "\nHint:\tand: 'man syscalls'\n", trace->output);
+> -out_free:
+> -		zfree(&trace->ev_qualifier_ids.entries);
+> -		trace->ev_qualifier_ids.nr = 0;
+> -	}
+>  out:
+> +	if (printed_invalid_prefix)
+> +		pr_debug("\n");
+>  	return err;
+> +out_free:
+> +	zfree(&trace->ev_qualifier_ids.entries);
+> +	trace->ev_qualifier_ids.nr = 0;
+> +	goto out;
+
+Nitpick: directly return err and 'goto out' is not necessary.
+
+Thanks,
+Leo Yan
+
+>  }
+>  
+>  /*
