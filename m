@@ -2,248 +2,232 @@ Return-Path: <SRS0=LLXA=UM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05018C31E45
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 17:16:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 608D6C31E4C
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 17:16:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C4EB12053B
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 17:16:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2CEF721473
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 17:16:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DQ3kU5lR"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ZEyU6SvO";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="hT2UyHFn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729392AbfFMRPv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Jun 2019 13:15:51 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:39983 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729146AbfFMRPu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Jun 2019 13:15:50 -0400
-Received: by mail-qt1-f196.google.com with SMTP id a15so23429306qtn.7;
-        Thu, 13 Jun 2019 10:15:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1CQuHfghSCdZuNpHw09x3H5koLSD51doFuuveLUNnkM=;
-        b=DQ3kU5lR7F8W613x3qyMlaSBzoyloCT6L6OYuLxcBrULJmk5820N6qYpEsgJj/g2FZ
-         gM8Pre6XzbO8sI8ihw/wBUF4FhC8LGP0siS0xfvbsRrELhBg25uVqjMXIKuhKkYw6Zn4
-         WDmaBADhoPl2HNhpJK5cBr5yN7hnDajdQpg+usBUIo03fp5i+pa5QLG//31dvujsitRk
-         8Ii2IzI5G7CjhEmYS555yFzregjR65WaF6HgCAmSlrToLwxYaiQbgEqUJVB8kRDGR8Ic
-         qVX7x9Pwe45zawkl2tVjr/N/CGT04oWyk90povNQP+GH1Xv4wkym4pZHOK7wB//TjaHH
-         8fPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1CQuHfghSCdZuNpHw09x3H5koLSD51doFuuveLUNnkM=;
-        b=gRKCzWYuSzeH69pkzxvSr7hz2IQWsLV9GXrvmMdKW+0F3YcTjWAVG7t2nsUtGQ5a+y
-         1kpTOBRoTAvGq6I1dLKQyS2zjlhTVmYn8TZIcXSmjjJTHh21BIny4wgl/NLr+8Hua1uK
-         e7CW2lS9vRocOYH8/TywuIPQ2d13x8LSu2YvXEdWTn9dq5wCQQe0HUmtq1Kbts30dD9a
-         tApYkqDX/kShY03MCGLmkY2E+cWnO5kHaXC9aXGgbhI28ugliKckr/+ISHtcJh8pFMpu
-         J4aQsv/ALVQErqZWv8BO/uCfOyOL5RfaPAJI739gMqLwuQ0nFO/ouCeSeNVA80xnh6TY
-         iq3w==
-X-Gm-Message-State: APjAAAXxuNt2w+TXA/JoofPOs5D83db13LgBVWciAEBnZ9gGpn1UWoaf
-        fCPuoFsrjJY+tznoLwFZGlxoLaBlvIzOa/uTvdU=
-X-Google-Smtp-Source: APXvYqzWuIKSICuQgciL0RG/eDKoAgI37Sn1VKoyyv2dDtyO0u7hwVl3+n8MMWR10xYI4YyiYoEth8BaNpJbbS/M7bM=
-X-Received: by 2002:ac8:2d56:: with SMTP id o22mr26211735qta.171.1560446149184;
- Thu, 13 Jun 2019 10:15:49 -0700 (PDT)
+        id S1728921AbfFMRQE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Jun 2019 13:16:04 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:50018 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728729AbfFLVro (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 12 Jun 2019 17:47:44 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5CLleBd000812;
+        Wed, 12 Jun 2019 14:47:41 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=8LXXR8WGSmTXtXMu3e8cWsAgW/66TR3+i28iwl+pNhI=;
+ b=ZEyU6SvOHJIR22ezXmhmnRdGxxPYTSNx4xgO+l+WVUH589zU4U7jisw6Fu0IlAjVXPbg
+ nE0J9hacUfcmmwUeVk1JvSuFLDHXpNMVV5E0nD4mIxXtYahPlDmfr+qpE0LDYTKZO9Xf
+ oOL9d3q4+KfYo3Ut+A6kXbALwEsrRNP56uU= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2t37b0ggar-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jun 2019 14:47:40 -0700
+Received: from prn-mbx03.TheFacebook.com (2620:10d:c081:6::17) by
+ prn-hub01.TheFacebook.com (2620:10d:c081:35::125) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1713.5; Wed, 12 Jun 2019 14:47:35 -0700
+Received: from prn-hub04.TheFacebook.com (2620:10d:c081:35::128) by
+ prn-mbx03.TheFacebook.com (2620:10d:c081:6::17) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1713.5; Wed, 12 Jun 2019 14:47:34 -0700
+Received: from NAM01-BY2-obe.outbound.protection.outlook.com (192.168.54.28)
+ by o365-in.thefacebook.com (192.168.16.28) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
+ via Frontend Transport; Wed, 12 Jun 2019 14:47:34 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector1-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8LXXR8WGSmTXtXMu3e8cWsAgW/66TR3+i28iwl+pNhI=;
+ b=hT2UyHFnedbVqNXfkox7gglUS2nSFvLovmUbWZIpzdJ7T+opHgoSNsjlw/BT/SkW3iGS4n+gdV8JckUkZ9rORsLl+p5khwwb307pp7eNiQ+I1U3Etjtg7PxrSIoKuRuLrtu+7/2Ugo6yLSABeq+cb8UbuPn7jnxo+2lizMELTik=
+Received: from MWHPR15MB1790.namprd15.prod.outlook.com (10.174.97.138) by
+ MWHPR15MB1597.namprd15.prod.outlook.com (10.173.234.137) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1987.12; Wed, 12 Jun 2019 21:47:33 +0000
+Received: from MWHPR15MB1790.namprd15.prod.outlook.com
+ ([fe80::6590:7f75:5516:3871]) by MWHPR15MB1790.namprd15.prod.outlook.com
+ ([fe80::6590:7f75:5516:3871%3]) with mapi id 15.20.1987.010; Wed, 12 Jun 2019
+ 21:47:33 +0000
+From:   Martin Lau <kafai@fb.com>
+To:     Stanislav Fomichev <sdf@fomichev.me>
+CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Kernel Team <Kernel-team@fb.com>
+Subject: Re: [PATCH bpf-next 2/2] bpf: Add test for SO_REUSEPORT_DETACH_BPF
+Thread-Topic: [PATCH bpf-next 2/2] bpf: Add test for SO_REUSEPORT_DETACH_BPF
+Thread-Index: AQHVIVHaRrrhQKOS0kuUzzPvAtDO2KaYb/6AgAAeNwA=
+Date:   Wed, 12 Jun 2019 21:47:33 +0000
+Message-ID: <20190612214726.dx42e2yjbk3eng6y@kafai-mbp.dhcp.thefacebook.com>
+References: <20190612190536.2340077-1-kafai@fb.com>
+ <20190612190539.2340343-1-kafai@fb.com> <20190612195917.GB9056@mini-arch>
+In-Reply-To: <20190612195917.GB9056@mini-arch>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: MWHPR08CA0014.namprd08.prod.outlook.com
+ (2603:10b6:301:5f::27) To MWHPR15MB1790.namprd15.prod.outlook.com
+ (2603:10b6:301:53::10)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2620:10d:c090:180::1:564c]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 542dac74-a384-4d36-731e-08d6ef7f934e
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR15MB1597;
+x-ms-traffictypediagnostic: MWHPR15MB1597:
+x-microsoft-antispam-prvs: <MWHPR15MB1597DBA5DA2CFD96AA2E475AD5EC0@MWHPR15MB1597.namprd15.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4303;
+x-forefront-prvs: 0066D63CE6
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(376002)(136003)(39860400002)(346002)(366004)(199004)(189003)(5660300002)(52116002)(229853002)(14444005)(76176011)(386003)(256004)(6506007)(102836004)(6486002)(68736007)(6116002)(71200400001)(71190400001)(1076003)(6436002)(73956011)(64756008)(66946007)(66556008)(99286004)(66476007)(66446008)(6512007)(9686003)(53936002)(25786009)(476003)(186003)(305945005)(7736002)(316002)(6916009)(4326008)(2906002)(8936002)(446003)(81166006)(8676002)(14454004)(86362001)(81156014)(6246003)(11346002)(46003)(486006)(478600001)(54906003);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR15MB1597;H:MWHPR15MB1790.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: qcOtqM4HpWMd1G9reqQzUhOvVM7XQiBwgxWzDzWbx2EwlcqAvGoh2u2dckDknIHiyTDJlH7mcu501reB8Ah3Jo+mTD5rdNpKDtAtoZklE7L1eO6WWN5Cn0+/SbzSmxCdjHFvStSLkJ1X5FRa9fkURNHFHqTkhm5GaXCGUfLHxmhyxmT3fyAo8WjRv/rbbgvnYCL7Fnju5d1WQLcuxygLhLtfzbEouzfYiDBHBooYJqrDA7A9sXINTjp/JitRhpvtQk9Ew81+yQ41jL3Zh0vs87MlaB7dsVWNLvvJoIqS7e1UEkLuqSs8OYpkE2E2xkygmsBCsiNh2NTs7c7FN1B1zajn/0hw3F0CCqF+PKhd6EInmABJO4XsY/fN+Wgodlx/oTCAwexlExsmogUl+zRSdFH/G54letrKF0d9yJBSMpk=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <DDD13CA509EF3D44A6882209C6FE045C@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20190613132433.17213-1-afabre@cloudflare.com>
-In-Reply-To: <20190613132433.17213-1-afabre@cloudflare.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 13 Jun 2019 10:15:38 -0700
-Message-ID: <CAEf4BzYp0ZtbojxP++GYsc097RpoLBb08Aj7NM0s+GoM7RpvXg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: sk_storage: Fix out of bounds memory access
-To:     Arthur Fabre <afabre@cloudflare.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-CrossTenant-Network-Message-Id: 542dac74-a384-4d36-731e-08d6ef7f934e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jun 2019 21:47:33.5354
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: kafai@fb.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR15MB1597
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-12_13:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=926 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906120151
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jun 13, 2019 at 8:16 AM Arthur Fabre <afabre@cloudflare.com> wrote:
->
-> bpf_sk_storage maps use multiple spin locks to reduce contention.
-> The number of locks to use is determined by the number of possible CPUs.
-> With only 1 possible CPU, bucket_log == 0, and 2^0 = 1 locks are used.
->
-> When updating elements, the correct lock is determined with hash_ptr().
-> Calling hash_ptr() with 0 bits is undefined behavior, as it does:
->
-> x >> (64 - bits)
->
-> Using the value results in an out of bounds memory access.
-> In my case, this manifested itself as a page fault when raw_spin_lock_bh()
-> is called later, when running the self tests:
->
-> ./tools/testing/selftests/bpf/test_verifier 773 775
->
-> [   16.366342] BUG: unable to handle page fault for address: ffff8fe7a66f93f8
-> [   16.367139] #PF: supervisor write access in kernel mode
-> [   16.367751] #PF: error_code(0x0002) - not-present page
-> [   16.368323] PGD 35a01067 P4D 35a01067 PUD 0
-> [   16.368796] Oops: 0002 [#1] SMP PTI
-> [   16.369175] CPU: 0 PID: 189 Comm: test_verifier Not tainted 5.2.0-rc2+ #10
-> [   16.369960] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
-> [   16.371021] RIP: 0010:_raw_spin_lock_bh (/home/afabre/linux/./include/trace/events/initcall.h:48)
-> [ 16.371571] Code: 02 00 00 31 c0 ba ff 00 00 00 3e 0f b1 17 75 01 c3 e9 82 12 5f ff 66 90 65 81 05 ad 14 6f 41 00 02 00 00 31 c0 ba 01 00 00 00 <3e> 0f b1 17 75 01 c3 89 c6 e9 f0 02 5f ff b8 00 02 00 00 3e 0f c1
-> All code
-> ========
->    0:   02 00                   add    (%rax),%al
->    2:   00 31                   add    %dh,(%rcx)
->    4:   c0 ba ff 00 00 00 3e    sarb   $0x3e,0xff(%rdx)
->    b:   0f b1 17                cmpxchg %edx,(%rdi)
->    e:   75 01                   jne    0x11
->   10:   c3                      retq
->   11:   e9 82 12 5f ff          jmpq   0xffffffffff5f1298
->   16:   66 90                   xchg   %ax,%ax
->   18:   65 81 05 ad 14 6f 41    addl   $0x200,%gs:0x416f14ad(%rip)        # 0x416f14d0
->   1f:   00 02 00 00
->   23:   31 c0                   xor    %eax,%eax
->   25:   ba 01 00 00 00          mov    $0x1,%edx
->   2a:   3e 0f b1 17             cmpxchg %edx,%ds:*(%rdi)                <-- trapping instruction
->   2e:   75 01                   jne    0x31
->   30:   c3                      retq
->   31:   89 c6                   mov    %eax,%esi
->   33:   e9 f0 02 5f ff          jmpq   0xffffffffff5f0328
->   38:   b8 00 02 00 00          mov    $0x200,%eax
->   3d:   3e                      ds
->   3e:   0f                      .byte 0xf
->   3f:   c1                      .byte 0xc1
->
-> Code starting with the faulting instruction
-> ===========================================
->    0:   3e 0f b1 17             cmpxchg %edx,%ds:(%rdi)
->    4:   75 01                   jne    0x7
->    6:   c3                      retq
->    7:   89 c6                   mov    %eax,%esi
->    9:   e9 f0 02 5f ff          jmpq   0xffffffffff5f02fe
->    e:   b8 00 02 00 00          mov    $0x200,%eax
->   13:   3e                      ds
->   14:   0f                      .byte 0xf
->   15:   c1                      .byte 0xc1
-> [   16.373398] RSP: 0018:ffffa759809d3be0 EFLAGS: 00010246
-> [   16.373954] RAX: 0000000000000000 RBX: ffff8fe7a66f93f0 RCX: 0000000000000040
-> [   16.374645] RDX: 0000000000000001 RSI: ffff8fdaf9f0d180 RDI: ffff8fe7a66f93f8
-> [   16.375338] RBP: ffff8fdaf9f0d180 R08: ffff8fdafba2c320 R09: ffff8fdaf9f0d0c0
-> [   16.376028] R10: 0000000000000000 R11: 0000000000000000 R12: ffff8fdafa346700
-> [   16.376719] R13: ffff8fe7a66f93f8 R14: ffff8fdaf9f0d0c0 R15: 0000000000000001
-> [   16.377413] FS:  00007fda724c0740(0000) GS:ffff8fdafba00000(0000) knlGS:0000000000000000
-> [   16.378204] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   16.378763] CR2: ffff8fe7a66f93f8 CR3: 0000000139d1c006 CR4: 0000000000360ef0
-> [   16.379453] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> [   16.380144] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> [   16.380864] Call Trace:
-> [   16.381112] selem_link_map (/home/afabre/linux/./include/linux/compiler.h:221 /home/afabre/linux/net/core/bpf_sk_storage.c:243)
-> [   16.381476] sk_storage_update (/home/afabre/linux/net/core/bpf_sk_storage.c:355 /home/afabre/linux/net/core/bpf_sk_storage.c:414)
-> [   16.381888] bpf_sk_storage_get (/home/afabre/linux/net/core/bpf_sk_storage.c:760 /home/afabre/linux/net/core/bpf_sk_storage.c:741)
-> [   16.382285] ___bpf_prog_run (/home/afabre/linux/kernel/bpf/core.c:1447)
-> [   16.382679] ? __bpf_prog_run32 (/home/afabre/linux/kernel/bpf/core.c:1603)
-> [   16.383074] ? alloc_file_pseudo (/home/afabre/linux/fs/file_table.c:232)
-> [   16.383486] ? kvm_clock_get_cycles (/home/afabre/linux/arch/x86/kernel/kvmclock.c:98)
-> [   16.383906] ? ktime_get (/home/afabre/linux/kernel/time/timekeeping.c:265 /home/afabre/linux/kernel/time/timekeeping.c:369 /home/afabre/linux/kernel/time/timekeeping.c:754)
-> [   16.384243] ? bpf_test_run (/home/afabre/linux/net/bpf/test_run.c:47)
-> [   16.384613] ? bpf_prog_test_run_skb (/home/afabre/linux/net/bpf/test_run.c:313)
-> [   16.385065] ? security_capable (/home/afabre/linux/security/security.c:696 (discriminator 19))
-> [   16.385460] ? __do_sys_bpf (/home/afabre/linux/kernel/bpf/syscall.c:2072 /home/afabre/linux/kernel/bpf/syscall.c:2848)
-> [   16.385854] ? __handle_mm_fault (/home/afabre/linux/mm/memory.c:3507 /home/afabre/linux/mm/memory.c:3532 /home/afabre/linux/mm/memory.c:3666 /home/afabre/linux/mm/memory.c:3897 /home/afabre/linux/mm/memory.c:4021)
-> [   16.386273] ? __dentry_kill (/home/afabre/linux/fs/dcache.c:595)
-> [   16.386652] ? do_syscall_64 (/home/afabre/linux/arch/x86/entry/common.c:301)
-> [   16.387031] ? entry_SYSCALL_64_after_hwframe (/home/afabre/linux/./include/trace/events/initcall.h:10 /home/afabre/linux/./include/trace/events/initcall.h:10)
-> [   16.387541] Modules linked in:
-> [   16.387846] CR2: ffff8fe7a66f93f8
-> [   16.388175] ---[ end trace 891cf27b5b9c9cc6 ]---
-> [   16.388628] RIP: 0010:_raw_spin_lock_bh (/home/afabre/linux/./include/trace/events/initcall.h:48)
-> [ 16.389089] Code: 02 00 00 31 c0 ba ff 00 00 00 3e 0f b1 17 75 01 c3 e9 82 12 5f ff 66 90 65 81 05 ad 14 6f 41 00 02 00 00 31 c0 ba 01 00 00 00 <3e> 0f b1 17 75 01 c3 89 c6 e9 f0 02 5f ff b8 00 02 00 00 3e 0f c1
-> All code
-> ========
->    0:   02 00                   add    (%rax),%al
->    2:   00 31                   add    %dh,(%rcx)
->    4:   c0 ba ff 00 00 00 3e    sarb   $0x3e,0xff(%rdx)
->    b:   0f b1 17                cmpxchg %edx,(%rdi)
->    e:   75 01                   jne    0x11
->   10:   c3                      retq
->   11:   e9 82 12 5f ff          jmpq   0xffffffffff5f1298
->   16:   66 90                   xchg   %ax,%ax
->   18:   65 81 05 ad 14 6f 41    addl   $0x200,%gs:0x416f14ad(%rip)        # 0x416f14d0
->   1f:   00 02 00 00
->   23:   31 c0                   xor    %eax,%eax
->   25:   ba 01 00 00 00          mov    $0x1,%edx
->   2a:   3e 0f b1 17             cmpxchg %edx,%ds:*(%rdi)                <-- trapping instruction
->   2e:   75 01                   jne    0x31
->   30:   c3                      retq
->   31:   89 c6                   mov    %eax,%esi
->   33:   e9 f0 02 5f ff          jmpq   0xffffffffff5f0328
->   38:   b8 00 02 00 00          mov    $0x200,%eax
->   3d:   3e                      ds
->   3e:   0f                      .byte 0xf
->   3f:   c1                      .byte 0xc1
->
-> Code starting with the faulting instruction
-> ===========================================
->    0:   3e 0f b1 17             cmpxchg %edx,%ds:(%rdi)
->    4:   75 01                   jne    0x7
->    6:   c3                      retq
->    7:   89 c6                   mov    %eax,%esi
->    9:   e9 f0 02 5f ff          jmpq   0xffffffffff5f02fe
->    e:   b8 00 02 00 00          mov    $0x200,%eax
->   13:   3e                      ds
->   14:   0f                      .byte 0xf
->   15:   c1                      .byte 0xc1
-> [   16.390899] RSP: 0018:ffffa759809d3be0 EFLAGS: 00010246
-> [   16.391410] RAX: 0000000000000000 RBX: ffff8fe7a66f93f0 RCX: 0000000000000040
-> [   16.392102] RDX: 0000000000000001 RSI: ffff8fdaf9f0d180 RDI: ffff8fe7a66f93f8
-> [   16.392795] RBP: ffff8fdaf9f0d180 R08: ffff8fdafba2c320 R09: ffff8fdaf9f0d0c0
-> [   16.393481] R10: 0000000000000000 R11: 0000000000000000 R12: ffff8fdafa346700
-> [   16.394169] R13: ffff8fe7a66f93f8 R14: ffff8fdaf9f0d0c0 R15: 0000000000000001
-> [   16.394870] FS:  00007fda724c0740(0000) GS:ffff8fdafba00000(0000) knlGS:0000000000000000
-> [   16.395641] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   16.396193] CR2: ffff8fe7a66f93f8 CR3: 0000000139d1c006 CR4: 0000000000360ef0
-> [   16.396876] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> [   16.397557] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> [   16.398246] Kernel panic - not syncing: Fatal exception in interrupt
-> [   16.399067] Kernel Offset: 0x3ce00000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
-> [   16.400098] ---[ end Kernel panic - not syncing: Fatal exception in interrupt ]---
->
-> Signed-off-by: Arthur Fabre <afabre@cloudflare.com>
-> Fixes: 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage")
-> ---
->  net/core/bpf_sk_storage.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-> index f40e3d35fd9c..7ae0686c5418 100644
-> --- a/net/core/bpf_sk_storage.c
-> +++ b/net/core/bpf_sk_storage.c
-> @@ -90,7 +90,13 @@ struct bpf_sk_storage {
->  static struct bucket *select_bucket(struct bpf_sk_storage_map *smap,
->                                     struct bpf_sk_storage_elem *selem)
->  {
-> -       return &smap->buckets[hash_ptr(selem, smap->bucket_log)];
-> +       /* hash_ptr is undefined behavior with 0 bits */
-> +       int bucket = 0;
-> +       if (smap->bucket_log != 0) {
-> +               bucket = hash_ptr(selem, smap->bucket_log);
-> +       }
+On Wed, Jun 12, 2019 at 12:59:17PM -0700, Stanislav Fomichev wrote:
+> On 06/12, Martin KaFai Lau wrote:
+> > This patch adds a test for the new sockopt SO_REUSEPORT_DETACH_BPF.
+> >=20
+> > '-I../../../../usr/include/' is added to the Makefile to get
+> > the newly added SO_REUSEPORT_DETACH_BPF.
+> >=20
+> > Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+> > ---
+> >  tools/testing/selftests/bpf/Makefile          |  1 +
+> >  .../selftests/bpf/test_select_reuseport.c     | 50 +++++++++++++++++++
+> >  2 files changed, 51 insertions(+)
+> >=20
+> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selft=
+ests/bpf/Makefile
+> > index 44fb61f4d502..c7370361fa81 100644
+> > --- a/tools/testing/selftests/bpf/Makefile
+> > +++ b/tools/testing/selftests/bpf/Makefile
+> > @@ -16,6 +16,7 @@ LLVM_OBJCOPY	?=3D llvm-objcopy
+> >  LLVM_READELF	?=3D llvm-readelf
+> >  BTF_PAHOLE	?=3D pahole
+> >  CFLAGS +=3D -Wall -O2 -I$(APIDIR) -I$(LIBDIR) -I$(BPFDIR) -I$(GENDIR) =
+$(GENFLAGS) -I../../../include \
+> > +	  -I../../../../usr/include/ \
+> Why not copy inlude/uapi/asm-generic/socket.h into tools/include
+> instead? Will that work?
+Sure. I am ok with copy.  I don't think we need to sync very often.
+Do you know how to do that considering multiple arch's socket.h
+have been changed in Patch 1?
 
-Would it be better instead to make sure that bucket_log is always at
-least 1? Having bucket_log as zero can bite us in the future again.
+Is copy better?
 
-> +
-> +       return &smap->buckets[bucket];
->  }
->
->  static int omem_charge(struct sock *sk, unsigned int size)
-> --
-> 2.20.1
->
+>=20
+> >  	  -Dbpf_prog_load=3Dbpf_prog_test_load \
+> >  	  -Dbpf_load_program=3Dbpf_test_load_program
+> >  LDLIBS +=3D -lcap -lelf -lrt -lpthread
+> > diff --git a/tools/testing/selftests/bpf/test_select_reuseport.c b/tool=
+s/testing/selftests/bpf/test_select_reuseport.c
+> > index 75646d9b34aa..5aa00b4a4702 100644
+> > --- a/tools/testing/selftests/bpf/test_select_reuseport.c
+> > +++ b/tools/testing/selftests/bpf/test_select_reuseport.c
+> > @@ -523,6 +523,54 @@ static void test_pass_on_err(int type, sa_family_t=
+ family)
+> >  	printf("OK\n");
+> >  }
+> > =20
+> > +static void test_detach_bpf(int type, sa_family_t family)
+> > +{
+> > +	__u32 nr_run_before =3D 0, nr_run_after =3D 0, tmp, i;
+> > +	struct epoll_event ev;
+> > +	int cli_fd, err, nev;
+> > +	struct cmd cmd =3D {};
+> > +	int optvalue =3D 0;
+> > +
+> > +	printf("%s: ", __func__);
+> > +	err =3D setsockopt(sk_fds[0], SOL_SOCKET, SO_DETACH_REUSEPORT_BPF,
+> > +			 &optvalue, sizeof(optvalue));
+> > +	CHECK(err =3D=3D -1, "setsockopt(SO_DETACH_REUSEPORT_BPF)",
+> > +	      "err:%d errno:%d\n", err, errno);
+> > +
+> > +	err =3D setsockopt(sk_fds[1], SOL_SOCKET, SO_DETACH_REUSEPORT_BPF,
+> > +			 &optvalue, sizeof(optvalue));
+> > +	CHECK(err =3D=3D 0 || errno !=3D ENOENT, "setsockopt(SO_DETACH_REUSEP=
+ORT_BPF)",
+> > +	      "err:%d errno:%d\n", err, errno);
+> > +
+> > +	for (i =3D 0; i < NR_RESULTS; i++) {
+> > +		err =3D bpf_map_lookup_elem(result_map, &i, &tmp);
+> > +		CHECK(err =3D=3D -1, "lookup_elem(result_map)",
+> > +		      "i:%u err:%d errno:%d\n", i, err, errno);
+> > +		nr_run_before +=3D tmp;
+> > +	}
+> > +
+> > +	cli_fd =3D send_data(type, family, &cmd, sizeof(cmd), PASS);
+> > +	nev =3D epoll_wait(epfd, &ev, 1, 5);
+> > +	CHECK(nev <=3D 0, "nev <=3D 0",
+> > +	      "nev:%d expected:1 type:%d family:%d data:(0, 0)\n",
+> > +	      nev,  type, family);
+> > +
+> > +	for (i =3D 0; i < NR_RESULTS; i++) {
+> > +		err =3D bpf_map_lookup_elem(result_map, &i, &tmp);
+> > +		CHECK(err =3D=3D -1, "lookup_elem(result_map)",
+> > +		      "i:%u err:%d errno:%d\n", i, err, errno);
+> > +		nr_run_after +=3D tmp;
+> > +	}
+> > +
+> > +	CHECK(nr_run_before !=3D nr_run_after,
+> > +	      "nr_run_before !=3D nr_run_after",
+> > +	      "nr_run_before:%u nr_run_after:%u\n",
+> > +	      nr_run_before, nr_run_after);
+> > +
+> > +	printf("OK\n");
+> > +	close(cli_fd);
+> > +}
+> > +
+> >  static void prepare_sk_fds(int type, sa_family_t family, bool inany)
+> >  {
+> >  	const int first =3D REUSEPORT_ARRAY_SIZE - 1;
+> > @@ -664,6 +712,8 @@ static void test_all(void)
+> >  			test_pass(type, family);
+> >  			test_syncookie(type, family);
+> >  			test_pass_on_err(type, family);
+> > +			/* Must be the last test */
+> > +			test_detach_bpf(type, family);
+> > =20
+> >  			cleanup_per_test();
+> >  			printf("\n");
+> > --=20
+> > 2.17.1
+> >=20
