@@ -2,103 +2,113 @@ Return-Path: <SRS0=LLXA=UM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C416CC31E45
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:46:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86568C31E45
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:48:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9C731206BB
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:46:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B90220851
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:48:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TlShaR6e"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="HwzQ0rH3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731163AbfFMPqj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Jun 2019 11:46:39 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:43840 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731786AbfFMJkb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Jun 2019 05:40:31 -0400
-Received: by mail-pg1-f195.google.com with SMTP id f25so10626844pgv.10;
-        Thu, 13 Jun 2019 02:40:30 -0700 (PDT)
+        id S1731842AbfFMPsE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Jun 2019 11:48:04 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:32923 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732416AbfFMPsC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Jun 2019 11:48:02 -0400
+Received: by mail-lf1-f65.google.com with SMTP id y17so15491699lfe.0
+        for <bpf@vger.kernel.org>; Thu, 13 Jun 2019 08:48:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=S785yMePDE021tloy76IdFNKeU0Irn+hedVlKYK5ipY=;
-        b=TlShaR6epnwL9p3CfCwrB2g6iuxpQoNMpwhNhC3CLXs3o/HZOl58AoynO+xl+dhNVB
-         XoNuku3lQPC8g82X2kn8pKX0ecCsvxuo8JrSkHXCCDG16KJjhK1ioaQ0778T1z3dW87T
-         SjdOhV6PzC1NwCYDiWnF+BVkO/wvjhWt5dUnOm2W6uUtJIf/5//koj4eHJEYKaeqHVaB
-         Buku0/USyDgFp2sWu/qm8/94GNzTFCWWG3aAOH+rDJ2VqtuUNM9nm68aHJP8uvKT9awd
-         /i5cSaSgnJ3A4U1kLOsGaAVpkFUD+fe9sqYenPIp5wpxLrwrNKIWLLALGcQ3BwyTrWBM
-         fHSw==
+        d=cloudflare.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=MhxG2VWV0PUqNmkC6UYengHNix8YULmmoQX86iMuI1Q=;
+        b=HwzQ0rH3HntP0X1Ut+3aziFTUNyu7eZWshFffAcbuEQadz4P6sC2snoDJGp4KSyvu2
+         Kig7hRqtroYC7jNl67KKgqHxE423RPSnEeZfbHsd+gLto0eo7V3yt/GGwc+21qgO0c3A
+         GIH+62EGfN0eHFV/TMnqz5oJqV2MDDVZaYpN0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=S785yMePDE021tloy76IdFNKeU0Irn+hedVlKYK5ipY=;
-        b=Y6UkC7GqkYyU4GOqTN2eDDh4XgJF8/GR8IbJzGOd0zJGS5gyrjNwCqr2zbtmA9d2pR
-         6zt2OspPNIUZ6ORWYyhzDVemInB1qZt9PWwYJzmbYzl1JW0m24Hto8QFYJRllGH4tYEH
-         fqm6Q4rZOTCr60QgU9wfWfiwTAddUAetpPTvg3J6O3fD4yN3QRblfDXWzQMuDRL6VIu9
-         sRG1bSP+AnHp1gHp4j1cSCgBs+u3ikrG1pWA2I29OhmW1++Xe8gU0XEExJknGMcRQT5L
-         ZCYKS5CT/Wq5H1q4aUJ1DisX9F1DVBip/CPDIXFkiQoZfxvhz5fgipP65uMB9Dartufb
-         9qzA==
-X-Gm-Message-State: APjAAAUbqUHQDdiRNKswQPrZx4FNmQff+PJSCf3GoKEySRpQBcc5Z1hn
-        0blrYr0+Skdgha4RMloR7Bc=
-X-Google-Smtp-Source: APXvYqxBO4VpcMKL6uWlpGsa+GzR1EPPEvrVE3sbX1Y8jJSJ+Rdn+SnIhOakvtu6HF8uE4vOgLZWrQ==
-X-Received: by 2002:a17:90a:372a:: with SMTP id u39mr4402627pjb.2.1560418830360;
-        Thu, 13 Jun 2019 02:40:30 -0700 (PDT)
-Received: from z400-fedora29.kern.oss.ntt.co.jp ([222.151.198.97])
-        by smtp.gmail.com with ESMTPSA id y1sm2501015pfe.19.2019.06.13.02.40.26
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 13 Jun 2019 02:40:29 -0700 (PDT)
-From:   Toshiaki Makita <toshiaki.makita1@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     Toshiaki Makita <toshiaki.makita1@gmail.com>,
-        netdev@vger.kernel.org, xdp-newbies@vger.kernel.org,
-        bpf@vger.kernel.org,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-Subject: [PATCH v3 bpf-next 0/2] veth: Bulk XDP_TX
-Date:   Thu, 13 Jun 2019 18:39:57 +0900
-Message-Id: <20190613093959.2796-1-toshiaki.makita1@gmail.com>
-X-Mailer: git-send-email 2.20.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=MhxG2VWV0PUqNmkC6UYengHNix8YULmmoQX86iMuI1Q=;
+        b=phd7bchDsGCK5s8SfZQ8WQgRd6RWJjyzQ5pdI3dsSp91xtT3uI6zQwKoBptAZEu0jD
+         BISlHO6eQo/evEXBHMpriG20AHUMDRFbWwRq9lyrJSlGBI4wx6v5qwWg0uyTuDksn923
+         zRg7z+MTrkSv34tNIQrjy959JNvlbRDFdXYbPjWesJWoREenWsLHFmm1GN8xRH57lZEV
+         ZRP6hHvTJFJWub6KmEHKREMxUpnxcSHNQf/vF//k420y6j9E9gobFA7x5mAp1//7+mRA
+         ZhyQdRXy8bYTSDsM9c+paV9ejFqyLezwEISjMP9V1nRNpTc1jAuhpyXqvpFg438pWQmC
+         XXvw==
+X-Gm-Message-State: APjAAAVAO8u8Q+bb18J/71gV7/UZ64ebAQYfh6rbAS+1KnwZgPI0dXY7
+        6yka2UzBx+UYQMJuu2X1mCkuASHWLxsSIMsxeAK7/Q==
+X-Google-Smtp-Source: APXvYqzrRigc/QwtHv0h+SK0yPrIqLoP/sTRt4T7cb0mR/3kmBMhY1s0fNVfrmh2vHW4vI1uCiYqipwR2/fMUdkpn8I=
+X-Received: by 2002:a19:c383:: with SMTP id t125mr38852030lff.89.1560440880394;
+ Thu, 13 Jun 2019 08:48:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190613112709.7215-1-afabre@cloudflare.com> <20190613154152.GA9636@mini-arch>
+In-Reply-To: <20190613154152.GA9636@mini-arch>
+From:   Arthur Fabre <afabre@cloudflare.com>
+Date:   Thu, 13 Jun 2019 16:47:49 +0100
+Message-ID: <CAOn4ftu8dv4rOei=Janw8bRMGLM5bganNGjp3nLUof82Z9vSiQ@mail.gmail.com>
+Subject: Re: [PATCH] bpf: selftests: Fix warning in flow_dissector
+To:     Stanislav Fomichev <sdf@fomichev.me>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        linux-kselftest@vger.kernel.org, netdev <netdev@vger.kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This introduces bulk XDP_TX in veth.
-Improves XDP_TX performance by approximately 9%. The detailed
-explanation and performance numbers are shown in patch 2.
+Ah yes good catch. I guess it hasn't made it into bpf-next yet.
 
-v2:
-- Use stack for bulk queue instead of a global variable.
-
-v3:
-- Add act field to xdp_bulk_tx tracepoint to be in line with other XDP
-  tracepoints.
-
-Signed-off-by: Toshiaki Makita <toshiaki.makita1@gmail.com>
-
-Toshiaki Makita (2):
-  xdp: Add tracepoint for bulk XDP_TX
-  veth: Support bulk XDP_TX
-
- drivers/net/veth.c         | 60 ++++++++++++++++++++++++++++++++++++----------
- include/trace/events/xdp.h | 29 ++++++++++++++++++++++
- kernel/bpf/core.c          |  1 +
- 3 files changed, 78 insertions(+), 12 deletions(-)
-
--- 
-1.8.3.1
-
+On Thu, Jun 13, 2019 at 4:41 PM Stanislav Fomichev <sdf@fomichev.me> wrote:
+>
+> On 06/13, Arthur Fabre wrote:
+> > Building the userspace part of the flow_dissector resulted in:
+> >
+> > prog_tests/flow_dissector.c: In function =E2=80=98tx_tap=E2=80=99:
+> > prog_tests/flow_dissector.c:176:9: warning: implicit declaration
+> > of function =E2=80=98writev=E2=80=99; did you mean =E2=80=98write=E2=80=
+=99? [-Wimplicit-function-declaration]
+> >   return writev(fd, iov, ARRAY_SIZE(iov));
+> >          ^~~~~~
+> >          write
+> >
+> > Include <sys/uio.h> to fix this.
+> Wasn't it fixed already?
+>
+> See
+> https://lore.kernel.org/netdev/20190528190218.GA6950@ip-172-31-44-144.us-=
+west-2.compute.internal/
+>
+> > Signed-off-by: Arthur Fabre <afabre@cloudflare.com>
+> > ---
+> >  tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/=
+tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> > index fbd1d88a6095..c938283ac232 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> > @@ -3,6 +3,7 @@
+> >  #include <error.h>
+> >  #include <linux/if.h>
+> >  #include <linux/if_tun.h>
+> > +#include <sys/uio.h>
+> >
+> >  #define CHECK_FLOW_KEYS(desc, got, expected)                         \
+> >       CHECK_ATTR(memcmp(&got, &expected, sizeof(got)) !=3D 0,          =
+ \
+> > --
+> > 2.20.1
+> >
