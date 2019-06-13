@@ -2,142 +2,102 @@ Return-Path: <SRS0=LLXA=UM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-0.5 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FROM_EXCESS_BASE64,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A531EC31E45
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:17:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB08BC31E49
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:20:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 890E621743
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:17:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 81F6921473
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:20:22 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aiuyJuLR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733010AbfFMPRE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Jun 2019 11:17:04 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:35560 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732203AbfFMNXo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Jun 2019 09:23:44 -0400
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id CE355300145F;
-        Thu, 13 Jun 2019 13:23:39 +0000 (UTC)
-Received: from treble.redhat.com (ovpn-121-232.rdu2.redhat.com [10.10.121.232])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2C7A3541F0;
-        Thu, 13 Jun 2019 13:23:35 +0000 (UTC)
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Song Liu <songliubraving@fb.com>,
-        Kairui Song <kasong@redhat.com>
-Subject: [PATCH 2/9] objtool: Fix ORC unwinding in non-JIT BPF generated code
-Date:   Thu, 13 Jun 2019 08:20:59 -0500
-Message-Id: <99c22bbd79e72855f4bc9049981602d537a54e70.1560431531.git.jpoimboe@redhat.com>
-In-Reply-To: <cover.1560431531.git.jpoimboe@redhat.com>
-References: <cover.1560431531.git.jpoimboe@redhat.com>
+        id S1732120AbfFMPUB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Jun 2019 11:20:01 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:39165 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732119AbfFMM7F (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Jun 2019 08:59:05 -0400
+Received: by mail-qk1-f194.google.com with SMTP id i125so12637957qkd.6;
+        Thu, 13 Jun 2019 05:59:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x96K3+yL4WoUgnEbirvBaQSKr83c32+ERLs1LIKkwik=;
+        b=aiuyJuLRNLVdQzLYuGRJtnZRYInh5hhIMPa9LjwLM63yX5CvsZQOsbo+GnFEoD248a
+         xaRDOKNFcdUCWH12pQ78N2OCNqhp5fQ1vhYdmaL52Byr5RcQgY3zzmYRC+GqrwvNh1i2
+         U3iy8D3vwWbsgUyVLdUSEdxyPyFawJ4vLVeSzCBdiH4Afu1t44qeoeC8kHErEK5LjkeS
+         M1SjVwuK8jlGWYuLug+WQfY7pIoQVqan5O6Se+d9f8PUe+ptLDddhZnHBYBjrFAyo+O6
+         I6vhAj6qXFcui42Shut0MN0K2oJsJdLRJZ/DB3qJ7tEatNUDG7yUcyW2qjJd7ImsO6S5
+         Frow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x96K3+yL4WoUgnEbirvBaQSKr83c32+ERLs1LIKkwik=;
+        b=rNNa2CBuh9DSX7ZP9ZjQEsC/IJhd2JUkOZ2xsYZonL43mxgeUSNmVmHgTKDlL9uPlD
+         i9+Srdi4Wmok4JzdgP+qedXLL/hkv9rY2q8x24yPs8pLIavUkaBtTAyCOCogT/v/IKir
+         9g2R09JYchMfFI6dD5ryrJT29Inqu9f1Qvg8Yz5RgHGUk01OQ6JVSKrNGptgHDigk5wS
+         tCNrDRKz5/Mw0kLp7gp+X4WG164lWKnxDcvIskdNxCMtL8Q0b1iHPL0PDCyqY6pyiCzf
+         tIqamcrHa5iX0+5jKHuFK1mWGxamaDWW2GgWNeVVe1ejQ4tD7asMRJLD++ZD3ZRNzg57
+         zF6A==
+X-Gm-Message-State: APjAAAWef74yfLEdsfcLHgpBMIewxwgBU2PWch8zGLH2RdV9JvQbjSxL
+        V5LhE0H8rhlxdMUm7dDxrf2sQSO+wsRod+FZMyg=
+X-Google-Smtp-Source: APXvYqz95RLzseryKJga4Si/42Zv1IRKHwAbyL/zJWk/rxwWn71NzSoi+u8mr0d/R73URdZIhnQpog6X9ga57gdswoo=
+X-Received: by 2002:a37:7786:: with SMTP id s128mr70800782qkc.63.1560430743646;
+ Thu, 13 Jun 2019 05:59:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.43]); Thu, 13 Jun 2019 13:23:44 +0000 (UTC)
+References: <20190612155605.22450-1-maximmi@mellanox.com> <20190612134805.3bf4ea25@cakuba.netronome.com>
+In-Reply-To: <20190612134805.3bf4ea25@cakuba.netronome.com>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Date:   Thu, 13 Jun 2019 14:58:52 +0200
+Message-ID: <CAJ+HfNh3KcoZC5W6CLgnx2tzH41Kz11Zs__2QkOKF+CyEMzdMQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 00/17] AF_XDP infrastructure improvements and
+ mlx5e support
+To:     Jakub Kicinski <jakub.kicinski@netronome.com>
+Cc:     Maxim Mikityanskiy <maximmi@mellanox.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Saeed Mahameed <saeedm@mellanox.com>,
+        Jonathan Lemon <bsd@fb.com>,
+        Tariq Toukan <tariqt@mellanox.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Maciej Fijalkowski <maciejromanfijalkowski@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Objtool currently ignores ___bpf_prog_run() because it doesn't
-understand the jump table.  This results in the ORC unwinder not being
-able to unwind through non-JIT BPF code.
+On Wed, 12 Jun 2019 at 22:49, Jakub Kicinski
+<jakub.kicinski@netronome.com> wrote:
+>
+> On Wed, 12 Jun 2019 15:56:33 +0000, Maxim Mikityanskiy wrote:
+> > UAPI is not changed, XSK RX queues are exposed to the kernel. The lower
+> > half of the available amount of RX queues are regular queues, and the
+> > upper half are XSK RX queues.
+>
+> If I have 32 queues enabled on the NIC and I install AF_XDP socket on
+> queue 10, does the NIC now have 64 RQs, but only first 32 are in the
+> normal RSS map?
+>
 
-Luckily, the BPF jump table resembles a GCC switch jump table, which
-objtool already knows how to read.
+Additional, related, question to Jakub's: Say that I'd like to hijack
+all 32 Rx queues of the NIC. I create 32 AF_XDP socket and attach them
+in zero-copy mode to the device. What's the result?
 
-Add generic support for reading any static local jump table array named
-"jump_table", and rename the BPF variable accordingly, so objtool can
-generate ORC data for ___bpf_prog_run().
-
-Fixes: d15d356887e7 ("perf/x86: Make perf callchains work without CONFIG_FRAME_POINTER")
-Reported-by: Song Liu <songliubraving@fb.com>
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
----
- kernel/bpf/core.c     |  5 ++---
- tools/objtool/check.c | 16 ++++++++++++++--
- 2 files changed, 16 insertions(+), 5 deletions(-)
-
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 7c473f208a10..aa546ef7dbdc 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1299,7 +1299,7 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
- {
- #define BPF_INSN_2_LBL(x, y)    [BPF_##x | BPF_##y] = &&x##_##y
- #define BPF_INSN_3_LBL(x, y, z) [BPF_##x | BPF_##y | BPF_##z] = &&x##_##y##_##z
--	static const void *jumptable[256] = {
-+	static const void *jump_table[256] = {
- 		[0 ... 255] = &&default_label,
- 		/* Now overwrite non-defaults ... */
- 		BPF_INSN_MAP(BPF_INSN_2_LBL, BPF_INSN_3_LBL),
-@@ -1315,7 +1315,7 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
- #define CONT_JMP ({ insn++; goto select_insn; })
- 
- select_insn:
--	goto *jumptable[insn->code];
-+	goto *jump_table[insn->code];
- 
- 	/* ALU */
- #define ALU(OPCODE, OP)			\
-@@ -1558,7 +1558,6 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
- 		BUG_ON(1);
- 		return 0;
- }
--STACK_FRAME_NON_STANDARD(___bpf_prog_run); /* jump table */
- 
- #define PROG_NAME(stack_size) __bpf_prog_run##stack_size
- #define DEFINE_BPF_PROG_RUN(stack_size) \
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 172f99195726..8341c2fff14f 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -18,6 +18,8 @@
- 
- #define FAKE_JUMP_OFFSET -1
- 
-+#define JUMP_TABLE_SYM_PREFIX "jump_table."
-+
- struct alternative {
- 	struct list_head list;
- 	struct instruction *insn;
-@@ -997,6 +999,7 @@ static struct rela *find_switch_table(struct objtool_file *file,
- 	struct instruction *orig_insn = insn;
- 	struct section *rodata_sec;
- 	unsigned long table_offset;
-+	struct symbol *sym;
- 
- 	/*
- 	 * Backward search using the @first_jump_src links, these help avoid
-@@ -1035,9 +1038,18 @@ static struct rela *find_switch_table(struct objtool_file *file,
- 
- 		/*
- 		 * Make sure the .rodata address isn't associated with a
--		 * symbol.  gcc jump tables are anonymous data.
-+		 * symbol.  GCC jump tables are anonymous data.
-+		 *
-+		 * Also support C jump tables which are in the same format as
-+		 * switch jump tables.  Each jump table should be a static
-+		 * local const array named "jump_table" for objtool to
-+		 * recognize it.  Note: GCC will add a numbered suffix to the
-+		 * ELF symbol name, like "jump_table.12345", which it does for
-+		 * all static local variables.
- 		 */
--		if (find_symbol_containing(rodata_sec, table_offset))
-+		sym = find_symbol_containing(rodata_sec, table_offset);
-+		if (sym && strncmp(sym->name, JUMP_TABLE_SYM_PREFIX,
-+				   strlen(JUMP_TABLE_SYM_PREFIX)))
- 			continue;
- 
- 		rodata_rela = find_rela_by_dest(rodata_sec, table_offset);
--- 
-2.20.1
-
+> > The patch "xsk: Extend channels to support combined XSK/non-XSK
+> > traffic" was dropped. The final patch was reworked accordingly.
+>
+> The final patches has 2k LoC, kind of hard to digest.  You can also
+> post the clean up patches separately, no need for large series here.
