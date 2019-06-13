@@ -2,127 +2,242 @@ Return-Path: <SRS0=LLXA=UM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AB33C31E49
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:07:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A182C31E45
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:15:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7275520896
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:07:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 207CC20B7C
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:15:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=Mellanox.com header.i=@Mellanox.com header.b="F78G6zqx"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="keerC7ou"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732441AbfFMPHn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Jun 2019 11:07:43 -0400
-Received: from mail-eopbgr20046.outbound.protection.outlook.com ([40.107.2.46]:23618
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1732392AbfFMOCB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Jun 2019 10:02:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5CrquF4enKfagJjpgecW5N5Sj1CkibVoY4w9l5058eI=;
- b=F78G6zqxzj5/WWb4jfwVZr6qn9Sjab5zZV+C19Dg8z3G9BkXnZgDKZ4g9T09bE7QT4rhrVn2vfBS/0RCCLDn2v3sol+jUOnTSjnCl1USiRu4OsSctE/12NI2r6XQzn0q9V9NVB9SFcIC825YC4uo6d9qW3cSVExcLie6nth5vTA=
-Received: from AM6PR05MB5879.eurprd05.prod.outlook.com (20.179.0.76) by
- AM6PR05MB5688.eurprd05.prod.outlook.com (20.178.94.18) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1987.11; Thu, 13 Jun 2019 14:01:57 +0000
-Received: from AM6PR05MB5879.eurprd05.prod.outlook.com
- ([fe80::9527:fe9d:2a02:41d5]) by AM6PR05MB5879.eurprd05.prod.outlook.com
- ([fe80::9527:fe9d:2a02:41d5%5]) with mapi id 15.20.1987.010; Thu, 13 Jun 2019
- 14:01:57 +0000
-From:   Maxim Mikityanskiy <maximmi@mellanox.com>
-To:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>
-CC:     Alexei Starovoitov <ast@kernel.org>,
+        id S1732225AbfFMPPe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Jun 2019 11:15:34 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:38598 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732221AbfFMNZQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Jun 2019 09:25:16 -0400
+Received: by mail-wr1-f68.google.com with SMTP id d18so20780568wrs.5
+        for <bpf@vger.kernel.org>; Thu, 13 Jun 2019 06:25:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=H/XDzYueXffv1rUyJx1oEFA1jQkKQnEoAqI3KBmpQNQ=;
+        b=keerC7oubO4xWDPqVdCuDXHlcwDp1ZGxBs6OtO0Jg9F0rB7opUoNZfaXAywrlZu5nM
+         I+zPjctobOUMBWt7rFEArKp/IUuJNRdB1ulWSYXLeVdokX5WmkPYMWrbdMbkyTKUHevZ
+         7GdZskEhnLXcF6vcGs9LuGOSp+WrsAhmO4RsU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=H/XDzYueXffv1rUyJx1oEFA1jQkKQnEoAqI3KBmpQNQ=;
+        b=RWq7vz5eL2sKE/2RGUHLsN8k92nGu7U6i4ujOOn/LSMxHnQ1O8YlFJ0xXRLVkyEKkT
+         7ZY25DC0hXtsyY9MjxzNvBWPGLqUwNxto8KWyMJMLB4JeFYglecu86ZdDcK00K1+Mj5U
+         Y7qkn1p0fA7wqRqRVsxcffXphTLPgVHVr91l2cZxE4p6Wtna09udbfJvRAAk4qNN7xp4
+         vDrU/9sMoxI1dOaGqSNEc08DHsQxwJ1nWs7bXTm+Xlfbi2pgm183kG+fmumO1AJJDAOa
+         8i+VlVxf1YWTlyIvSRde8BY1R6w3NgVwwxHeauRZunA+f2CRAtBLPV0igtxvt/bqZ0rB
+         6M/Q==
+X-Gm-Message-State: APjAAAULOV1qyq9dmqmnjp7CfBg6NHo/kp39C6YxF5WXc9II0piegK/m
+        wY1nkWRM5qbZcq2NwWfMyC3AVw==
+X-Google-Smtp-Source: APXvYqwDEPlruy2eVqw9ZQATbv3Dsj0ZxtvE79jIaKuGvWhxiukBuyyX3IRiItW0qa3pl3HgnhuzQA==
+X-Received: by 2002:adf:c5c1:: with SMTP id v1mr41961383wrg.129.1560432313294;
+        Thu, 13 Jun 2019 06:25:13 -0700 (PDT)
+Received: from localhost.localdomain ([147.12.216.9])
+        by smtp.gmail.com with ESMTPSA id d10sm3324109wrp.74.2019.06.13.06.25.12
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 13 Jun 2019 06:25:12 -0700 (PDT)
+From:   Arthur Fabre <afabre@cloudflare.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Saeed Mahameed <saeedm@mellanox.com>,
-        Jonathan Lemon <bsd@fb.com>,
-        Tariq Toukan <tariqt@mellanox.com>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Maciej Fijalkowski <maciejromanfijalkowski@gmail.com>
-Subject: Re: [PATCH bpf-next v4 00/17] AF_XDP infrastructure improvements and
- mlx5e support
-Thread-Topic: [PATCH bpf-next v4 00/17] AF_XDP infrastructure improvements and
- mlx5e support
-Thread-Index: AQHVITdoe6rurVkq00yTWSmwKXBCXaaYfdWAgAEPPACAABGPgA==
-Date:   Thu, 13 Jun 2019 14:01:57 +0000
-Message-ID: <65cf2b7b-79a5-c660-358c-a265fc03b495@mellanox.com>
-References: <20190612155605.22450-1-maximmi@mellanox.com>
- <20190612134805.3bf4ea25@cakuba.netronome.com>
- <CAJ+HfNh3KcoZC5W6CLgnx2tzH41Kz11Zs__2QkOKF+CyEMzdMQ@mail.gmail.com>
-In-Reply-To: <CAJ+HfNh3KcoZC5W6CLgnx2tzH41Kz11Zs__2QkOKF+CyEMzdMQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR11CA0050.namprd11.prod.outlook.com
- (2603:10b6:a03:80::27) To AM6PR05MB5879.eurprd05.prod.outlook.com
- (2603:10a6:20b:a2::12)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=maximmi@mellanox.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [159.224.90.213]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 795bb6ef-69c6-440c-f6fa-08d6f007b2a5
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(7168020)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:AM6PR05MB5688;
-x-ms-traffictypediagnostic: AM6PR05MB5688:
-x-microsoft-antispam-prvs: <AM6PR05MB5688F58F09891B4D59DB1B4AD1EF0@AM6PR05MB5688.eurprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 0067A8BA2A
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(39860400002)(136003)(366004)(396003)(376002)(189003)(199004)(31696002)(86362001)(73956011)(66556008)(476003)(71190400001)(71200400001)(486006)(256004)(5024004)(26005)(2616005)(99286004)(66476007)(66946007)(52116002)(446003)(186003)(31686004)(53546011)(11346002)(316002)(386003)(6506007)(102836004)(55236004)(5660300002)(66066001)(76176011)(7416002)(36756003)(7736002)(6246003)(8936002)(3846002)(6116002)(6436002)(4326008)(25786009)(53936002)(110136005)(478600001)(66446008)(64756008)(68736007)(14454004)(229853002)(81166006)(81156014)(2906002)(6486002)(54906003)(6512007)(305945005)(8676002)(42413003)(32563001);DIR:OUT;SFP:1101;SCL:1;SRVR:AM6PR05MB5688;H:AM6PR05MB5879.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: mellanox.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: fP9i2afz0qbLBm96sJh2MMKkw7Byc8JNRK745OjrP6hmPLYPhEYupe7Il1eDRyyRNcIp0U+ctvRxq4XWT6/WJBIZypp/o7chNEVidD/0AjTQ5JpG3doClz4mupDCfbLS+UHtJp6NqYdV4OX8DDW597lR+LIUTAhRPkFmx+bHHx7LwIXd3OQxN2MUfT5reCfBkLYtk2Ru4xO/7zHxo0aivDHxJZP3YozU0pyUU2DH6c6XQJYJ0qtHhjJiSU/mW9We/g3kMrISMMim5FZhlxlj3gdVCHeyh1o5n6iCOt11GYmsNHw2ctDhqr/M7hVvSjNY0D3b2oLEJci0klb8QwsoojQOHGHIKwG0a9yUkBFuEaywPcdfzgKudN+etD8Qk7MMuBNMw6sptyXZXgxp/P00YLJOWUNl8ND+hcXOUW+6i2c=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4E80707A643A2646A0F1D942D32529E6@eurprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Arthur Fabre <afabre@cloudflare.com>
+Subject: [PATCH bpf-next] bpf: sk_storage: Fix out of bounds memory access
+Date:   Thu, 13 Jun 2019 14:24:34 +0100
+Message-Id: <20190613132433.17213-1-afabre@cloudflare.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-OriginatorOrg: Mellanox.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 795bb6ef-69c6-440c-f6fa-08d6f007b2a5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jun 2019 14:01:57.4700
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: maximmi@mellanox.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR05MB5688
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-T24gMjAxOS0wNi0xMyAxNTo1OCwgQmrDtnJuIFTDtnBlbCB3cm90ZToNCj4gT24gV2VkLCAxMiBK
-dW4gMjAxOSBhdCAyMjo0OSwgSmFrdWIgS2ljaW5za2kNCj4gPGpha3ViLmtpY2luc2tpQG5ldHJv
-bm9tZS5jb20+IHdyb3RlOg0KPj4NCj4+IE9uIFdlZCwgMTIgSnVuIDIwMTkgMTU6NTY6MzMgKzAw
-MDAsIE1heGltIE1pa2l0eWFuc2tpeSB3cm90ZToNCj4+PiBVQVBJIGlzIG5vdCBjaGFuZ2VkLCBY
-U0sgUlggcXVldWVzIGFyZSBleHBvc2VkIHRvIHRoZSBrZXJuZWwuIFRoZSBsb3dlcg0KPj4+IGhh
-bGYgb2YgdGhlIGF2YWlsYWJsZSBhbW91bnQgb2YgUlggcXVldWVzIGFyZSByZWd1bGFyIHF1ZXVl
-cywgYW5kIHRoZQ0KPj4+IHVwcGVyIGhhbGYgYXJlIFhTSyBSWCBxdWV1ZXMuDQo+Pg0KPj4gSWYg
-SSBoYXZlIDMyIHF1ZXVlcyBlbmFibGVkIG9uIHRoZSBOSUMgYW5kIEkgaW5zdGFsbCBBRl9YRFAg
-c29ja2V0IG9uDQo+PiBxdWV1ZSAxMCwgZG9lcyB0aGUgTklDIG5vdyBoYXZlIDY0IFJRcywgYnV0
-IG9ubHkgZmlyc3QgMzIgYXJlIGluIHRoZQ0KPj4gbm9ybWFsIFJTUyBtYXA/DQo+Pg0KPiANCj4g
-QWRkaXRpb25hbCwgcmVsYXRlZCwgcXVlc3Rpb24gdG8gSmFrdWInczogU2F5IHRoYXQgSSdkIGxp
-a2UgdG8gaGlqYWNrDQo+IGFsbCAzMiBSeCBxdWV1ZXMgb2YgdGhlIE5JQy4gSSBjcmVhdGUgMzIg
-QUZfWERQIHNvY2tldCBhbmQgYXR0YWNoIHRoZW0NCj4gaW4gemVyby1jb3B5IG1vZGUgdG8gdGhl
-IGRldmljZS4gV2hhdCdzIHRoZSByZXN1bHQ/DQoNClRoZXJlIGFyZSAzMiByZWd1bGFyIFJYIHF1
-ZXVlcyAoMC4uMzEpIGFuZCAzMiBYU0sgUlggcXVldWVzICgzMi4uNjMpLiBJZiANCnlvdSB3YW50
-IDMyIHplcm8tY29weSBBRl9YRFAgc29ja2V0cywgeW91IGNhbiBhdHRhY2ggdGhlbSB0byBxdWV1
-ZXMgDQozMi4uNjMsIGFuZCB0aGUgcmVndWxhciB0cmFmZmljIHdvbid0IGJlIGFmZmVjdGVkIGF0
-IGFsbC4NCg0KPj4+IFRoZSBwYXRjaCAieHNrOiBFeHRlbmQgY2hhbm5lbHMgdG8gc3VwcG9ydCBj
-b21iaW5lZCBYU0svbm9uLVhTSw0KPj4+IHRyYWZmaWMiIHdhcyBkcm9wcGVkLiBUaGUgZmluYWwg
-cGF0Y2ggd2FzIHJld29ya2VkIGFjY29yZGluZ2x5Lg0KPj4NCj4+IFRoZSBmaW5hbCBwYXRjaGVz
-IGhhcyAyayBMb0MsIGtpbmQgb2YgaGFyZCB0byBkaWdlc3QuICBZb3UgY2FuIGFsc28NCj4+IHBv
-c3QgdGhlIGNsZWFuIHVwIHBhdGNoZXMgc2VwYXJhdGVseSwgbm8gbmVlZCBmb3IgbGFyZ2Ugc2Vy
-aWVzIGhlcmUuDQoNCg==
+bpf_sk_storage maps use multiple spin locks to reduce contention.
+The number of locks to use is determined by the number of possible CPUs.
+With only 1 possible CPU, bucket_log == 0, and 2^0 = 1 locks are used.
+
+When updating elements, the correct lock is determined with hash_ptr().
+Calling hash_ptr() with 0 bits is undefined behavior, as it does:
+
+x >> (64 - bits)
+
+Using the value results in an out of bounds memory access.
+In my case, this manifested itself as a page fault when raw_spin_lock_bh()
+is called later, when running the self tests:
+
+./tools/testing/selftests/bpf/test_verifier 773 775
+
+[   16.366342] BUG: unable to handle page fault for address: ffff8fe7a66f93f8
+[   16.367139] #PF: supervisor write access in kernel mode
+[   16.367751] #PF: error_code(0x0002) - not-present page
+[   16.368323] PGD 35a01067 P4D 35a01067 PUD 0
+[   16.368796] Oops: 0002 [#1] SMP PTI
+[   16.369175] CPU: 0 PID: 189 Comm: test_verifier Not tainted 5.2.0-rc2+ #10
+[   16.369960] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
+[   16.371021] RIP: 0010:_raw_spin_lock_bh (/home/afabre/linux/./include/trace/events/initcall.h:48)
+[ 16.371571] Code: 02 00 00 31 c0 ba ff 00 00 00 3e 0f b1 17 75 01 c3 e9 82 12 5f ff 66 90 65 81 05 ad 14 6f 41 00 02 00 00 31 c0 ba 01 00 00 00 <3e> 0f b1 17 75 01 c3 89 c6 e9 f0 02 5f ff b8 00 02 00 00 3e 0f c1
+All code
+========
+   0:	02 00                	add    (%rax),%al
+   2:	00 31                	add    %dh,(%rcx)
+   4:	c0 ba ff 00 00 00 3e 	sarb   $0x3e,0xff(%rdx)
+   b:	0f b1 17             	cmpxchg %edx,(%rdi)
+   e:	75 01                	jne    0x11
+  10:	c3                   	retq
+  11:	e9 82 12 5f ff       	jmpq   0xffffffffff5f1298
+  16:	66 90                	xchg   %ax,%ax
+  18:	65 81 05 ad 14 6f 41 	addl   $0x200,%gs:0x416f14ad(%rip)        # 0x416f14d0
+  1f:	00 02 00 00
+  23:	31 c0                	xor    %eax,%eax
+  25:	ba 01 00 00 00       	mov    $0x1,%edx
+  2a:	3e 0f b1 17          	cmpxchg %edx,%ds:*(%rdi)		<-- trapping instruction
+  2e:	75 01                	jne    0x31
+  30:	c3                   	retq
+  31:	89 c6                	mov    %eax,%esi
+  33:	e9 f0 02 5f ff       	jmpq   0xffffffffff5f0328
+  38:	b8 00 02 00 00       	mov    $0x200,%eax
+  3d:	3e                   	ds
+  3e:	0f                   	.byte 0xf
+  3f:	c1                   	.byte 0xc1
+
+Code starting with the faulting instruction
+===========================================
+   0:	3e 0f b1 17          	cmpxchg %edx,%ds:(%rdi)
+   4:	75 01                	jne    0x7
+   6:	c3                   	retq
+   7:	89 c6                	mov    %eax,%esi
+   9:	e9 f0 02 5f ff       	jmpq   0xffffffffff5f02fe
+   e:	b8 00 02 00 00       	mov    $0x200,%eax
+  13:	3e                   	ds
+  14:	0f                   	.byte 0xf
+  15:	c1                   	.byte 0xc1
+[   16.373398] RSP: 0018:ffffa759809d3be0 EFLAGS: 00010246
+[   16.373954] RAX: 0000000000000000 RBX: ffff8fe7a66f93f0 RCX: 0000000000000040
+[   16.374645] RDX: 0000000000000001 RSI: ffff8fdaf9f0d180 RDI: ffff8fe7a66f93f8
+[   16.375338] RBP: ffff8fdaf9f0d180 R08: ffff8fdafba2c320 R09: ffff8fdaf9f0d0c0
+[   16.376028] R10: 0000000000000000 R11: 0000000000000000 R12: ffff8fdafa346700
+[   16.376719] R13: ffff8fe7a66f93f8 R14: ffff8fdaf9f0d0c0 R15: 0000000000000001
+[   16.377413] FS:  00007fda724c0740(0000) GS:ffff8fdafba00000(0000) knlGS:0000000000000000
+[   16.378204] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   16.378763] CR2: ffff8fe7a66f93f8 CR3: 0000000139d1c006 CR4: 0000000000360ef0
+[   16.379453] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[   16.380144] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[   16.380864] Call Trace:
+[   16.381112] selem_link_map (/home/afabre/linux/./include/linux/compiler.h:221 /home/afabre/linux/net/core/bpf_sk_storage.c:243)
+[   16.381476] sk_storage_update (/home/afabre/linux/net/core/bpf_sk_storage.c:355 /home/afabre/linux/net/core/bpf_sk_storage.c:414)
+[   16.381888] bpf_sk_storage_get (/home/afabre/linux/net/core/bpf_sk_storage.c:760 /home/afabre/linux/net/core/bpf_sk_storage.c:741)
+[   16.382285] ___bpf_prog_run (/home/afabre/linux/kernel/bpf/core.c:1447)
+[   16.382679] ? __bpf_prog_run32 (/home/afabre/linux/kernel/bpf/core.c:1603)
+[   16.383074] ? alloc_file_pseudo (/home/afabre/linux/fs/file_table.c:232)
+[   16.383486] ? kvm_clock_get_cycles (/home/afabre/linux/arch/x86/kernel/kvmclock.c:98)
+[   16.383906] ? ktime_get (/home/afabre/linux/kernel/time/timekeeping.c:265 /home/afabre/linux/kernel/time/timekeeping.c:369 /home/afabre/linux/kernel/time/timekeeping.c:754)
+[   16.384243] ? bpf_test_run (/home/afabre/linux/net/bpf/test_run.c:47)
+[   16.384613] ? bpf_prog_test_run_skb (/home/afabre/linux/net/bpf/test_run.c:313)
+[   16.385065] ? security_capable (/home/afabre/linux/security/security.c:696 (discriminator 19))
+[   16.385460] ? __do_sys_bpf (/home/afabre/linux/kernel/bpf/syscall.c:2072 /home/afabre/linux/kernel/bpf/syscall.c:2848)
+[   16.385854] ? __handle_mm_fault (/home/afabre/linux/mm/memory.c:3507 /home/afabre/linux/mm/memory.c:3532 /home/afabre/linux/mm/memory.c:3666 /home/afabre/linux/mm/memory.c:3897 /home/afabre/linux/mm/memory.c:4021)
+[   16.386273] ? __dentry_kill (/home/afabre/linux/fs/dcache.c:595)
+[   16.386652] ? do_syscall_64 (/home/afabre/linux/arch/x86/entry/common.c:301)
+[   16.387031] ? entry_SYSCALL_64_after_hwframe (/home/afabre/linux/./include/trace/events/initcall.h:10 /home/afabre/linux/./include/trace/events/initcall.h:10)
+[   16.387541] Modules linked in:
+[   16.387846] CR2: ffff8fe7a66f93f8
+[   16.388175] ---[ end trace 891cf27b5b9c9cc6 ]---
+[   16.388628] RIP: 0010:_raw_spin_lock_bh (/home/afabre/linux/./include/trace/events/initcall.h:48)
+[ 16.389089] Code: 02 00 00 31 c0 ba ff 00 00 00 3e 0f b1 17 75 01 c3 e9 82 12 5f ff 66 90 65 81 05 ad 14 6f 41 00 02 00 00 31 c0 ba 01 00 00 00 <3e> 0f b1 17 75 01 c3 89 c6 e9 f0 02 5f ff b8 00 02 00 00 3e 0f c1
+All code
+========
+   0:	02 00                	add    (%rax),%al
+   2:	00 31                	add    %dh,(%rcx)
+   4:	c0 ba ff 00 00 00 3e 	sarb   $0x3e,0xff(%rdx)
+   b:	0f b1 17             	cmpxchg %edx,(%rdi)
+   e:	75 01                	jne    0x11
+  10:	c3                   	retq
+  11:	e9 82 12 5f ff       	jmpq   0xffffffffff5f1298
+  16:	66 90                	xchg   %ax,%ax
+  18:	65 81 05 ad 14 6f 41 	addl   $0x200,%gs:0x416f14ad(%rip)        # 0x416f14d0
+  1f:	00 02 00 00
+  23:	31 c0                	xor    %eax,%eax
+  25:	ba 01 00 00 00       	mov    $0x1,%edx
+  2a:	3e 0f b1 17          	cmpxchg %edx,%ds:*(%rdi)		<-- trapping instruction
+  2e:	75 01                	jne    0x31
+  30:	c3                   	retq
+  31:	89 c6                	mov    %eax,%esi
+  33:	e9 f0 02 5f ff       	jmpq   0xffffffffff5f0328
+  38:	b8 00 02 00 00       	mov    $0x200,%eax
+  3d:	3e                   	ds
+  3e:	0f                   	.byte 0xf
+  3f:	c1                   	.byte 0xc1
+
+Code starting with the faulting instruction
+===========================================
+   0:	3e 0f b1 17          	cmpxchg %edx,%ds:(%rdi)
+   4:	75 01                	jne    0x7
+   6:	c3                   	retq
+   7:	89 c6                	mov    %eax,%esi
+   9:	e9 f0 02 5f ff       	jmpq   0xffffffffff5f02fe
+   e:	b8 00 02 00 00       	mov    $0x200,%eax
+  13:	3e                   	ds
+  14:	0f                   	.byte 0xf
+  15:	c1                   	.byte 0xc1
+[   16.390899] RSP: 0018:ffffa759809d3be0 EFLAGS: 00010246
+[   16.391410] RAX: 0000000000000000 RBX: ffff8fe7a66f93f0 RCX: 0000000000000040
+[   16.392102] RDX: 0000000000000001 RSI: ffff8fdaf9f0d180 RDI: ffff8fe7a66f93f8
+[   16.392795] RBP: ffff8fdaf9f0d180 R08: ffff8fdafba2c320 R09: ffff8fdaf9f0d0c0
+[   16.393481] R10: 0000000000000000 R11: 0000000000000000 R12: ffff8fdafa346700
+[   16.394169] R13: ffff8fe7a66f93f8 R14: ffff8fdaf9f0d0c0 R15: 0000000000000001
+[   16.394870] FS:  00007fda724c0740(0000) GS:ffff8fdafba00000(0000) knlGS:0000000000000000
+[   16.395641] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   16.396193] CR2: ffff8fe7a66f93f8 CR3: 0000000139d1c006 CR4: 0000000000360ef0
+[   16.396876] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[   16.397557] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[   16.398246] Kernel panic - not syncing: Fatal exception in interrupt
+[   16.399067] Kernel Offset: 0x3ce00000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+[   16.400098] ---[ end Kernel panic - not syncing: Fatal exception in interrupt ]---
+
+Signed-off-by: Arthur Fabre <afabre@cloudflare.com>
+Fixes: 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage")
+---
+ net/core/bpf_sk_storage.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+index f40e3d35fd9c..7ae0686c5418 100644
+--- a/net/core/bpf_sk_storage.c
++++ b/net/core/bpf_sk_storage.c
+@@ -90,7 +90,13 @@ struct bpf_sk_storage {
+ static struct bucket *select_bucket(struct bpf_sk_storage_map *smap,
+ 				    struct bpf_sk_storage_elem *selem)
+ {
+-	return &smap->buckets[hash_ptr(selem, smap->bucket_log)];
++	/* hash_ptr is undefined behavior with 0 bits */
++	int bucket = 0;
++	if (smap->bucket_log != 0) {
++		bucket = hash_ptr(selem, smap->bucket_log);
++	}
++
++	return &smap->buckets[bucket];
+ }
+ 
+ static int omem_charge(struct sock *sk, unsigned int size)
+-- 
+2.20.1
+
