@@ -2,173 +2,258 @@ Return-Path: <SRS0=LLXA=UM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74057C31E4A
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 18:10:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51FCFC31E45
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 18:26:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 48BCB21721
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 18:10:10 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="EmTuegif"
+	by mail.kernel.org (Postfix) with ESMTP id 2277220679
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 18:26:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729076AbfFMSKD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Jun 2019 14:10:03 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:44970 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728665AbfFMSKC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Jun 2019 14:10:02 -0400
-Received: by mail-qt1-f194.google.com with SMTP id x47so23599213qtk.11
-        for <bpf@vger.kernel.org>; Thu, 13 Jun 2019 11:10:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=+LKZyqgGQbCIPl9Dm71zQyE2nqAwRgmaCQ11R0neIWo=;
-        b=EmTuegif35siUUtwwIOMWur02oCKcpNgsi5u1MXNYXYDMY9z06Hq8WpZJOlRDRegNn
-         6yuZNtHtej4ar2gORDRqfp+i09CMWqs7VE17tHHSsQqodgXyFzjYh66k18EQnOhbDTf0
-         32PI/6bn/51pBk0+yaB4WLpQFdGbsjvb1XNyQDNN03R7RnReX3GM5OIYDA3DhuUvg1b1
-         cN7OTfIGs7LB02XBtzXwqMucew9uDZ56h0/dxhCkZORYsRrRovrM0AN1kB+PCxG5155g
-         mfiyHyQFNVZHvi4PJjig1maPM9IlEDYFbV1EAQet/oqkEkyKzx5H4dpObhvh93NwxCXr
-         A4Xw==
+        id S1728105AbfFMS0G (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Jun 2019 14:26:06 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:42559 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727442AbfFMS0C (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Jun 2019 14:26:02 -0400
+Received: by mail-io1-f70.google.com with SMTP id f22so16014371ioj.9
+        for <bpf@vger.kernel.org>; Thu, 13 Jun 2019 11:26:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=+LKZyqgGQbCIPl9Dm71zQyE2nqAwRgmaCQ11R0neIWo=;
-        b=DoS9yB5NtegWVZuHgatRaIeH0vFdzBvqCq8Q9yrULtBPEdE0T0TY4FQSZYmYewvEik
-         m6dvZRCiIPI6aS18tXW/vhmfX0isTN26oEgcxpTOVF6VTDUfJce2BUZ734Jjlj3JB+4x
-         f6yhg32K07lCd6qJd67Gvo9IMw2nbrFUVUUwkcaJrY/dOzMh+QHCeb6bJwKx/pOVWpwB
-         +lJkmyjE44/Y6U7YL0DKv1lJ5NnIIrb3751uPZXrdJvMJfyKMEhuzSUdKwYxZQ4vxqlI
-         NWM0Eej9ZLOaH6KtGtzbD6U6h9EW6dlkycq+U/5or5R+sW0LRZ5Sf4DqRE5+BqkqIj1d
-         1cwA==
-X-Gm-Message-State: APjAAAXoWdYv/FJHN+Zk+7jwMv+NoetOytYLLC/1HbT7N9vM5/BAHOEa
-        JueyY+V1QAJCGOTE8sxXxFzycg==
-X-Google-Smtp-Source: APXvYqxFKZWS2eCPpWb5I5tmIJOzuvY4s8b4e71351BqkWA9c9A4iwrqKm0UFbByhg0aGhU2TGsrIQ==
-X-Received: by 2002:ac8:16a2:: with SMTP id r31mr75450617qtj.302.1560449401337;
-        Thu, 13 Jun 2019 11:10:01 -0700 (PDT)
-Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id o66sm121381qkb.90.2019.06.13.11.09.59
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 13 Jun 2019 11:10:01 -0700 (PDT)
-Date:   Thu, 13 Jun 2019 11:09:56 -0700
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     Maxim Mikityanskiy <maximmi@mellanox.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Saeed Mahameed <saeedm@mellanox.com>,
-        Jonathan Lemon <bsd@fb.com>,
-        Tariq Toukan <tariqt@mellanox.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Maciej Fijalkowski <maciejromanfijalkowski@gmail.com>
-Subject: Re: [PATCH bpf-next v4 07/17] libbpf: Support drivers with
- non-combined channels
-Message-ID: <20190613110956.001ef81f@cakuba.netronome.com>
-In-Reply-To: <0afd3ef2-d0e3-192b-095e-0f8ae8e6fb5d@mellanox.com>
-References: <20190612155605.22450-1-maximmi@mellanox.com>
-        <20190612155605.22450-8-maximmi@mellanox.com>
-        <20190612132352.7ee27bf3@cakuba.netronome.com>
-        <0afd3ef2-d0e3-192b-095e-0f8ae8e6fb5d@mellanox.com>
-Organization: Netronome Systems, Ltd.
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=H8fkKRsajFNvveyMibT6Ym6gwJL9IWybrrDbLE6hjXM=;
+        b=cpE+Qo8fb+Ko6Bo8ouly9KUyJ2NFUEAGRtHQd0Jk2yJwKCDNjTCwGG/bDBp1/iKzdI
+         O+4qDg3505xrILotV/iUd+PlYJ9RBLg+j324/fkhAeDsNA4CL/lnzhrTZP0rcN//MzAA
+         qmUiTwNudkcBpGb7eqKAjGB1CuzcdSJiSlcYRp2QkMTB6jnB3WaTVaPFsV7+3vlGuOji
+         HY1OSWmDT4kk3UXb2reieNNsmLumBVgAyeND/p2yskRlJVZe8ddyFyZtyHLX1tturIzY
+         dGhuOUVvtjB0gg/23riyI2JaitPZA65PgBDIRXB/GrXXir/QyBO8pdOS+wFUjfzGAeB3
+         GBOA==
+X-Gm-Message-State: APjAAAXngjHWHpiQ39cySkf27gHNAgrRFQno2FhjwIkM7wpHjOG7oIFa
+        ZODuJO6LbLrqrIVtldICsUk7MfS5m9vKx3VSJr5x5RUzC/AE
+X-Google-Smtp-Source: APXvYqzBC1FZKm6BWRsem6orfogvQHSXv8MqMWzwoem5idhuC5D8v+7E99KxjGlqvsPxtqaqrIOr9RdqfLmefvin5NKd9sUHCap2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a02:b90e:: with SMTP id v14mr28704806jan.122.1560450360686;
+ Thu, 13 Jun 2019 11:26:00 -0700 (PDT)
+Date:   Thu, 13 Jun 2019 11:26:00 -0700
+In-Reply-To: <CACT4Y+bAuAiApr9CxSH5CoDnZ5hYmU+K4kJqrSo5yBZLyrzONA@mail.gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007042a8058b38a946@google.com>
+Subject: Re: memory leak in vhost_net_ioctl
+From:   syzbot <syzbot+0789f0c7e45efd7bb643@syzkaller.appspotmail.com>
+To:     asias@redhat.com, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, dvyukov@google.com,
+        hawk@kernel.org, hdanton@sina.com, jakub.kicinski@netronome.com,
+        jasowang@redhat.com, john.fastabend@gmail.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mst@redhat.com,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        virtualization@lists.linux-foundation.org,
+        xdp-newbies@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 13 Jun 2019 14:01:39 +0000, Maxim Mikityanskiy wrote:
-> On 2019-06-12 23:23, Jakub Kicinski wrote:
-> > On Wed, 12 Jun 2019 15:56:48 +0000, Maxim Mikityanskiy wrote:  
-> >> Currently, libbpf uses the number of combined channels as the maximum
-> >> queue number. However, the kernel has a different limitation:
-> >>
-> >> - xdp_reg_umem_at_qid() allows up to max(RX queues, TX queues).
-> >>
-> >> - ethtool_set_channels() checks for UMEMs in queues up to
-> >>    combined_count + max(rx_count, tx_count).
-> >>
-> >> libbpf shouldn't limit applications to a lower max queue number. Account
-> >> for non-combined RX and TX channels when calculating the max queue
-> >> number. Use the same formula that is used in ethtool.
-> >>
-> >> Signed-off-by: Maxim Mikityanskiy <maximmi@mellanox.com>
-> >> Reviewed-by: Tariq Toukan <tariqt@mellanox.com>
-> >> Acked-by: Saeed Mahameed <saeedm@mellanox.com>  
-> > 
-> > I don't think this is correct.  max_tx tells you how many TX channels
-> > there can be, you can't add that to combined.  Correct calculations is:
-> > 
-> > max_num_chans = max(max_combined, max(max_rx, max_tx))  
-> 
-> First of all, I'm aligning with the formula in the kernel, which is:
-> 
->      curr.combined_count + max(curr.rx_count, curr.tx_count);
-> 
-> (see net/core/ethtool.c, ethtool_set_channels()).
+Hello,
 
-curr != max.  ethtool code you're pointing me to (and which I wrote)
-uses the current allocation, not the max values.
+syzbot has tested the proposed patch but the reproducer still triggered  
+crash:
+memory leak in vhost_net_ioctl
 
-> The formula in libbpf should match it.
+ANGE): hsr_slave_1: link becomes ready
+2019/06/13 18:24:57 executed programs: 18
+BUG: memory leak
+unreferenced object 0xffff88811cbc6ac0 (size 64):
+   comm "syz-executor.0", pid 7196, jiffies 4294943804 (age 14.770s)
+   hex dump (first 32 bytes):
+     01 00 00 00 81 88 ff ff 00 00 00 00 82 88 ff ff  ................
+     d0 6a bc 1c 81 88 ff ff d0 6a bc 1c 81 88 ff ff  .j.......j......
+   backtrace:
+     [<000000006c752978>] kmemleak_alloc_recursive  
+include/linux/kmemleak.h:43 [inline]
+     [<000000006c752978>] slab_post_alloc_hook mm/slab.h:439 [inline]
+     [<000000006c752978>] slab_alloc mm/slab.c:3326 [inline]
+     [<000000006c752978>] kmem_cache_alloc_trace+0x13d/0x280 mm/slab.c:3553
+     [<00000000b3825d52>] kmalloc include/linux/slab.h:547 [inline]
+     [<00000000b3825d52>] vhost_net_ubuf_alloc drivers/vhost/net.c:241  
+[inline]
+     [<00000000b3825d52>] vhost_net_set_backend drivers/vhost/net.c:1535  
+[inline]
+     [<00000000b3825d52>] vhost_net_ioctl+0xb43/0xc10  
+drivers/vhost/net.c:1717
+     [<00000000700f02d7>] vfs_ioctl fs/ioctl.c:46 [inline]
+     [<00000000700f02d7>] file_ioctl fs/ioctl.c:509 [inline]
+     [<00000000700f02d7>] do_vfs_ioctl+0x62a/0x810 fs/ioctl.c:696
+     [<000000009a0ec0a7>] ksys_ioctl+0x86/0xb0 fs/ioctl.c:713
+     [<00000000d9416323>] __do_sys_ioctl fs/ioctl.c:720 [inline]
+     [<00000000d9416323>] __se_sys_ioctl fs/ioctl.c:718 [inline]
+     [<00000000d9416323>] __x64_sys_ioctl+0x1e/0x30 fs/ioctl.c:718
+     [<00000000e4407a23>] do_syscall_64+0x76/0x1a0  
+arch/x86/entry/common.c:301
+     [<000000008715c149>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-The formula should be based on understanding what we're doing, 
-not copying some not-really-equivalent code from somewhere :)
+BUG: memory leak
+unreferenced object 0xffff88810b1365c0 (size 64):
+   comm "syz-executor.2", pid 7193, jiffies 4294943823 (age 14.580s)
+   hex dump (first 32 bytes):
+     01 00 00 00 81 88 ff ff 00 00 00 00 81 88 ff ff  ................
+     d0 65 13 0b 81 88 ff ff d0 65 13 0b 81 88 ff ff  .e.......e......
+   backtrace:
+     [<000000006c752978>] kmemleak_alloc_recursive  
+include/linux/kmemleak.h:43 [inline]
+     [<000000006c752978>] slab_post_alloc_hook mm/slab.h:439 [inline]
+     [<000000006c752978>] slab_alloc mm/slab.c:3326 [inline]
+     [<000000006c752978>] kmem_cache_alloc_trace+0x13d/0x280 mm/slab.c:3553
+     [<00000000b3825d52>] kmalloc include/linux/slab.h:547 [inline]
+     [<00000000b3825d52>] vhost_net_ubuf_alloc drivers/vhost/net.c:241  
+[inline]
+     [<00000000b3825d52>] vhost_net_set_backend drivers/vhost/net.c:1535  
+[inline]
+     [<00000000b3825d52>] vhost_net_ioctl+0xb43/0xc10  
+drivers/vhost/net.c:1717
+     [<00000000700f02d7>] vfs_ioctl fs/ioctl.c:46 [inline]
+     [<00000000700f02d7>] file_ioctl fs/ioctl.c:509 [inline]
+     [<00000000700f02d7>] do_vfs_ioctl+0x62a/0x810 fs/ioctl.c:696
+     [<000000009a0ec0a7>] ksys_ioctl+0x86/0xb0 fs/ioctl.c:713
+     [<00000000d9416323>] __do_sys_ioctl fs/ioctl.c:720 [inline]
+     [<00000000d9416323>] __se_sys_ioctl fs/ioctl.c:718 [inline]
+     [<00000000d9416323>] __x64_sys_ioctl+0x1e/0x30 fs/ioctl.c:718
+     [<00000000e4407a23>] do_syscall_64+0x76/0x1a0  
+arch/x86/entry/common.c:301
+     [<000000008715c149>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-Combined is a basically a queue pair, RX is an RX ring with a dedicated
-IRQ, and TX is a TX ring with a dedicated IRQ.  If driver supports both
-combined and single purpose interrupt vectors it will most likely set
+BUG: memory leak
+unreferenced object 0xffff88810be23700 (size 64):
+   comm "syz-executor.3", pid 7194, jiffies 4294943823 (age 14.580s)
+   hex dump (first 32 bytes):
+     01 00 00 00 00 00 00 00 00 00 00 00 00 c9 ff ff  ................
+     10 37 e2 0b 81 88 ff ff 10 37 e2 0b 81 88 ff ff  .7.......7......
+   backtrace:
+     [<000000006c752978>] kmemleak_alloc_recursive  
+include/linux/kmemleak.h:43 [inline]
+     [<000000006c752978>] slab_post_alloc_hook mm/slab.h:439 [inline]
+     [<000000006c752978>] slab_alloc mm/slab.c:3326 [inline]
+     [<000000006c752978>] kmem_cache_alloc_trace+0x13d/0x280 mm/slab.c:3553
+     [<00000000b3825d52>] kmalloc include/linux/slab.h:547 [inline]
+     [<00000000b3825d52>] vhost_net_ubuf_alloc drivers/vhost/net.c:241  
+[inline]
+     [<00000000b3825d52>] vhost_net_set_backend drivers/vhost/net.c:1535  
+[inline]
+     [<00000000b3825d52>] vhost_net_ioctl+0xb43/0xc10  
+drivers/vhost/net.c:1717
+     [<00000000700f02d7>] vfs_ioctl fs/ioctl.c:46 [inline]
+     [<00000000700f02d7>] file_ioctl fs/ioctl.c:509 [inline]
+     [<00000000700f02d7>] do_vfs_ioctl+0x62a/0x810 fs/ioctl.c:696
+     [<000000009a0ec0a7>] ksys_ioctl+0x86/0xb0 fs/ioctl.c:713
+     [<00000000d9416323>] __do_sys_ioctl fs/ioctl.c:720 [inline]
+     [<00000000d9416323>] __se_sys_ioctl fs/ioctl.c:718 [inline]
+     [<00000000d9416323>] __x64_sys_ioctl+0x1e/0x30 fs/ioctl.c:718
+     [<00000000e4407a23>] do_syscall_64+0x76/0x1a0  
+arch/x86/entry/common.c:301
+     [<000000008715c149>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-	max_rx = num_hw_rx
-	max_tx = num_hw_tx
-	max_combined = min(rx, tx)
+BUG: memory leak
+unreferenced object 0xffff88810b136500 (size 64):
+   comm "syz-executor.6", pid 7228, jiffies 4294943827 (age 14.540s)
+   hex dump (first 32 bytes):
+     01 00 00 00 20 69 6f 63 00 00 00 00 64 65 76 2f  .... ioc....dev/
+     10 65 13 0b 81 88 ff ff 10 65 13 0b 81 88 ff ff  .e.......e......
+   backtrace:
+     [<000000006c752978>] kmemleak_alloc_recursive  
+include/linux/kmemleak.h:43 [inline]
+     [<000000006c752978>] slab_post_alloc_hook mm/slab.h:439 [inline]
+     [<000000006c752978>] slab_alloc mm/slab.c:3326 [inline]
+     [<000000006c752978>] kmem_cache_alloc_trace+0x13d/0x280 mm/slab.c:3553
+     [<00000000b3825d52>] kmalloc include/linux/slab.h:547 [inline]
+     [<00000000b3825d52>] vhost_net_ubuf_alloc drivers/vhost/net.c:241  
+[inline]
+     [<00000000b3825d52>] vhost_net_set_backend drivers/vhost/net.c:1535  
+[inline]
+     [<00000000b3825d52>] vhost_net_ioctl+0xb43/0xc10  
+drivers/vhost/net.c:1717
+     [<00000000700f02d7>] vfs_ioctl fs/ioctl.c:46 [inline]
+     [<00000000700f02d7>] file_ioctl fs/ioctl.c:509 [inline]
+     [<00000000700f02d7>] do_vfs_ioctl+0x62a/0x810 fs/ioctl.c:696
+     [<000000009a0ec0a7>] ksys_ioctl+0x86/0xb0 fs/ioctl.c:713
+     [<00000000d9416323>] __do_sys_ioctl fs/ioctl.c:720 [inline]
+     [<00000000d9416323>] __se_sys_ioctl fs/ioctl.c:718 [inline]
+     [<00000000d9416323>] __x64_sys_ioctl+0x1e/0x30 fs/ioctl.c:718
+     [<00000000e4407a23>] do_syscall_64+0x76/0x1a0  
+arch/x86/entry/common.c:301
+     [<000000008715c149>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-Like with most ethtool APIs there are some variations to this.
+BUG: memory leak
+unreferenced object 0xffff88810b9cfec0 (size 64):
+   comm "syz-executor.7", pid 7236, jiffies 4294943829 (age 14.520s)
+   hex dump (first 32 bytes):
+     01 00 00 00 20 69 6f 63 00 00 00 00 64 65 76 2f  .... ioc....dev/
+     d0 fe 9c 0b 81 88 ff ff d0 fe 9c 0b 81 88 ff ff  ................
+   backtrace:
+     [<000000006c752978>] kmemleak_alloc_recursive  
+include/linux/kmemleak.h:43 [inline]
+     [<000000006c752978>] slab_post_alloc_hook mm/slab.h:439 [inline]
+     [<000000006c752978>] slab_alloc mm/slab.c:3326 [inline]
+     [<000000006c752978>] kmem_cache_alloc_trace+0x13d/0x280 mm/slab.c:3553
+     [<00000000b3825d52>] kmalloc include/linux/slab.h:547 [inline]
+     [<00000000b3825d52>] vhost_net_ubuf_alloc drivers/vhost/net.c:241  
+[inline]
+     [<00000000b3825d52>] vhost_net_set_backend drivers/vhost/net.c:1535  
+[inline]
+     [<00000000b3825d52>] vhost_net_ioctl+0xb43/0xc10  
+drivers/vhost/net.c:1717
+     [<00000000700f02d7>] vfs_ioctl fs/ioctl.c:46 [inline]
+     [<00000000700f02d7>] file_ioctl fs/ioctl.c:509 [inline]
+     [<00000000700f02d7>] do_vfs_ioctl+0x62a/0x810 fs/ioctl.c:696
+     [<000000009a0ec0a7>] ksys_ioctl+0x86/0xb0 fs/ioctl.c:713
+     [<00000000d9416323>] __do_sys_ioctl fs/ioctl.c:720 [inline]
+     [<00000000d9416323>] __se_sys_ioctl fs/ioctl.c:718 [inline]
+     [<00000000d9416323>] __x64_sys_ioctl+0x1e/0x30 fs/ioctl.c:718
+     [<00000000e4407a23>] do_syscall_64+0x76/0x1a0  
+arch/x86/entry/common.c:301
+     [<000000008715c149>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-> Second, the existing drivers have either combined channels or separate 
-> rx and tx channels. So, for the first kind of drivers, max_tx doesn't 
-> tell how many TX channels there can be, it just says 0, and max_combined 
-> tells how many TX and RX channels are supported. As max_tx doesn't 
-> include max_combined (and vice versa), we should add them up.
+BUG: memory leak
+unreferenced object 0xffff88810b9cd380 (size 64):
+   comm "syz-executor.4", pid 7218, jiffies 4294943834 (age 14.470s)
+   hex dump (first 32 bytes):
+     01 00 00 00 81 88 ff ff 00 00 00 00 81 88 ff ff  ................
+     90 d3 9c 0b 81 88 ff ff 90 d3 9c 0b 81 88 ff ff  ................
+   backtrace:
+     [<000000006c752978>] kmemleak_alloc_recursive  
+include/linux/kmemleak.h:43 [inline]
+     [<000000006c752978>] slab_post_alloc_hook mm/slab.h:439 [inline]
+     [<000000006c752978>] slab_alloc mm/slab.c:3326 [inline]
+     [<000000006c752978>] kmem_cache_alloc_trace+0x13d/0x280 mm/slab.c:3553
+     [<00000000b3825d52>] kmalloc include/linux/slab.h:547 [inline]
+     [<00000000b3825d52>] vhost_net_ubuf_alloc drivers/vhost/net.c:241  
+[inline]
+     [<00000000b3825d52>] vhost_net_set_backend drivers/vhost/net.c:1535  
+[inline]
+     [<00000000b3825d52>] vhost_net_ioctl+0xb43/0xc10  
+drivers/vhost/net.c:1717
+     [<00000000700f02d7>] vfs_ioctl fs/ioctl.c:46 [inline]
+     [<00000000700f02d7>] file_ioctl fs/ioctl.c:509 [inline]
+     [<00000000700f02d7>] do_vfs_ioctl+0x62a/0x810 fs/ioctl.c:696
+     [<000000009a0ec0a7>] ksys_ioctl+0x86/0xb0 fs/ioctl.c:713
+     [<00000000d9416323>] __do_sys_ioctl fs/ioctl.c:720 [inline]
+     [<00000000d9416323>] __se_sys_ioctl fs/ioctl.c:718 [inline]
+     [<00000000d9416323>] __x64_sys_ioctl+0x1e/0x30 fs/ioctl.c:718
+     [<00000000e4407a23>] do_syscall_64+0x76/0x1a0  
+arch/x86/entry/common.c:301
+     [<000000008715c149>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-By existing drivers you mean Intel drivers which implement AF_XDP, 
-and your driver?  Both Intel and MLX drivers seem to only set
-max_combined.
 
-If you mean all drivers across the kernel, then I believe the best
-formula is what I gave you.
 
-> >>   tools/lib/bpf/xsk.c | 6 +++---
-> >>   1 file changed, 3 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
-> >> index bf15a80a37c2..86107857e1f0 100644
-> >> --- a/tools/lib/bpf/xsk.c
-> >> +++ b/tools/lib/bpf/xsk.c
-> >> @@ -334,13 +334,13 @@ static int xsk_get_max_queues(struct xsk_socket *xsk)
-> >>   		goto out;
-> >>   	}
-> >>   
-> >> -	if (channels.max_combined == 0 || errno == EOPNOTSUPP)
-> >> +	ret = channels.max_combined + max(channels.max_rx, channels.max_tx);
-> >> +
-> >> +	if (ret == 0 || errno == EOPNOTSUPP)
-> >>   		/* If the device says it has no channels, then all traffic
-> >>   		 * is sent to a single stream, so max queues = 1.
-> >>   		 */
-> >>   		ret = 1;
-> >> -	else
-> >> -		ret = channels.max_combined;
-> >>   
-> >>   out:
-> >>   	close(fd);  
+Tested on:
+
+commit:         c11fb13a Merge branch 'for-linus' of git://git.kernel.org/..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11c6b666a00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cb38d33cd06d8d48
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=11ff0de1a00000
+
