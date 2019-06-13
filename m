@@ -2,30 +2,30 @@ Return-Path: <SRS0=LLXA=UM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27952C31E45
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:16:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1CB2C31E45
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:16:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0B3FC21743
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:16:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C2F1E20449
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:16:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732520AbfFMPPe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Jun 2019 11:15:34 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:59468 "EHLO mx1.redhat.com"
+        id S1732210AbfFMPQM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Jun 2019 11:16:12 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:8369 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732216AbfFMNX5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Jun 2019 09:23:57 -0400
+        id S1732207AbfFMNXv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Jun 2019 09:23:51 -0400
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 132F83082126;
-        Thu, 13 Jun 2019 13:23:57 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id 433E3301BE65;
+        Thu, 13 Jun 2019 13:23:51 +0000 (UTC)
 Received: from treble.redhat.com (ovpn-121-232.rdu2.redhat.com [10.10.121.232])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C325351C66;
-        Thu, 13 Jun 2019 13:23:52 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1C4B954216;
+        Thu, 13 Jun 2019 13:23:50 +0000 (UTC)
 From:   Josh Poimboeuf <jpoimboe@redhat.com>
 To:     x86@kernel.org
 Cc:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
@@ -33,195 +33,87 @@ Cc:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         bpf@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
         Song Liu <songliubraving@fb.com>,
         Kairui Song <kasong@redhat.com>
-Subject: [PATCH 9/9] x86/bpf: Convert MOV function/macro argument ordering to AT&T syntax
-Date:   Thu, 13 Jun 2019 08:21:06 -0500
-Message-Id: <38ff1c9af6fc572aa962f171413dc7495453584c.1560431531.git.jpoimboe@redhat.com>
+Subject: [PATCH 7/9] x86/unwind/orc: Fall back to using frame pointers for generated code
+Date:   Thu, 13 Jun 2019 08:21:04 -0500
+Message-Id: <4f536ec4facda97406273a22a4c2677f7cb22148.1560431531.git.jpoimboe@redhat.com>
 In-Reply-To: <cover.1560431531.git.jpoimboe@redhat.com>
 References: <cover.1560431531.git.jpoimboe@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.42]); Thu, 13 Jun 2019 13:23:57 +0000 (UTC)
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.47]); Thu, 13 Jun 2019 13:23:51 +0000 (UTC)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Now that the comments have been converted to AT&T syntax, swap the order
-of the src/dst arguments in the MOV-related functions and macros to
-match the ordering of AT&T syntax.
+The ORC unwinder can't unwind through BPF JIT generated code because
+there are no ORC entries associated with the code.
 
+If an ORC entry isn't available, try to fall back to frame pointers.  If
+BPF and other generated code always do frame pointer setup (even with
+CONFIG_FRAME_POINTERS=n) then this will allow ORC to unwind through most
+generated code despite there being no corresponding ORC entries.
+
+Fixes: d15d356887e7 ("perf/x86: Make perf callchains work without CONFIG_FRAME_POINTER")
+Reported-by: Song Liu <songliubraving@fb.com>
 Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
 ---
- arch/x86/net/bpf_jit_comp.c | 44 ++++++++++++++++++-------------------
- 1 file changed, 22 insertions(+), 22 deletions(-)
+ arch/x86/kernel/unwind_orc.c | 26 ++++++++++++++++++++++----
+ 1 file changed, 22 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index a92c2445441d..0d0e96f84992 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -59,9 +59,9 @@ static bool is_uimm32(u64 value)
- }
+diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
+index 33b66b5c5aec..72b997eaa1fc 100644
+--- a/arch/x86/kernel/unwind_orc.c
++++ b/arch/x86/kernel/unwind_orc.c
+@@ -82,9 +82,9 @@ static struct orc_entry *orc_find(unsigned long ip);
+  * But they are copies of the ftrace entries that are static and
+  * defined in ftrace_*.S, which do have orc entries.
+  *
+- * If the undwinder comes across a ftrace trampoline, then find the
++ * If the unwinder comes across a ftrace trampoline, then find the
+  * ftrace function that was used to create it, and use that ftrace
+- * function's orc entrie, as the placement of the return code in
++ * function's orc entry, as the placement of the return code in
+  * the stack will be identical.
+  */
+ static struct orc_entry *orc_ftrace_find(unsigned long ip)
+@@ -128,6 +128,16 @@ static struct orc_entry null_orc_entry = {
+ 	.type = ORC_TYPE_CALL
+ };
  
- /* mov src, dst */
--#define EMIT_mov(DST, SRC)								 \
-+#define EMIT_mov(SRC, DST)								 \
- 	do {										 \
--		if (DST != SRC)								 \
-+		if (SRC != DST)								 \
- 			EMIT3(add_2mod(0x48, DST, SRC), 0x89, add_2reg(0xC0, DST, SRC)); \
- 	} while (0)
- 
-@@ -352,7 +352,7 @@ static void emit_bpf_tail_call(u8 **pprog)
- }
- 
- static void emit_mov_imm32(u8 **pprog, bool sign_propagate,
--			   u32 dst_reg, const u32 imm32)
-+			   const u32 imm32, u32 dst_reg)
++/* Fake frame pointer entry -- used as a fallback for generated code */
++static struct orc_entry orc_fp_entry = {
++	.type		= ORC_TYPE_CALL,
++	.sp_reg		= ORC_REG_BP,
++	.sp_offset	= 16,
++	.bp_reg		= ORC_REG_PREV_SP,
++	.bp_offset	= -16,
++	.end		= 0,
++};
++
+ static struct orc_entry *orc_find(unsigned long ip)
  {
- 	u8 *prog = *pprog;
- 	u8 b1, b2, b3;
-@@ -392,8 +392,8 @@ static void emit_mov_imm32(u8 **pprog, bool sign_propagate,
- 	*pprog = prog;
- }
+ 	static struct orc_entry *orc;
+@@ -392,8 +402,16 @@ bool unwind_next_frame(struct unwind_state *state)
+ 	 * calls and calls to noreturn functions.
+ 	 */
+ 	orc = orc_find(state->signal ? state->ip : state->ip - 1);
+-	if (!orc)
+-		goto err;
++	if (!orc) {
++		/*
++		 * As a fallback, try to assume this code uses a frame pointer.
++		 * This is useful for generated code, like BPF, which ORC
++		 * doesn't know about.  This is just a guess, so the rest of
++		 * the unwind is no longer considered reliable.
++		 */
++		orc = &orc_fp_entry;
++		state->error = true;
++	}
  
--static void emit_mov_imm64(u8 **pprog, u32 dst_reg,
--			   const u32 imm32_hi, const u32 imm32_lo)
-+static void emit_mov_imm64(u8 **pprog, const u32 imm32_hi, const u32 imm32_lo,
-+			   u32 dst_reg)
- {
- 	u8 *prog = *pprog;
- 	int cnt = 0;
-@@ -405,7 +405,7 @@ static void emit_mov_imm64(u8 **pprog, u32 dst_reg,
- 		 * directly, so save couple of bytes by just doing
- 		 * 'mov imm32, %eax' instead.
- 		 */
--		emit_mov_imm32(&prog, false, dst_reg, imm32_lo);
-+		emit_mov_imm32(&prog, false, imm32_lo, dst_reg);
- 	} else {
- 		/* movabs imm64, %rax */
- 		EMIT2(add_1mod(0x48, dst_reg), add_1reg(0xB8, dst_reg));
-@@ -416,17 +416,17 @@ static void emit_mov_imm64(u8 **pprog, u32 dst_reg,
- 	*pprog = prog;
- }
- 
--static void emit_mov_reg(u8 **pprog, bool is64, u32 dst_reg, u32 src_reg)
-+static void emit_mov_reg(u8 **pprog, bool is64, u32 src_reg, u32 dst_reg)
- {
- 	u8 *prog = *pprog;
- 	int cnt = 0;
- 
- 	if (is64) {
- 		/* mov src, dst */
--		EMIT_mov(dst_reg, src_reg);
-+		EMIT_mov(src_reg, dst_reg);
- 	} else {
- 		/* mov32 src, dst */
--		if (is_ereg(dst_reg) || is_ereg(src_reg))
-+		if (is_ereg(src_reg) || is_ereg(dst_reg))
- 			EMIT1(add_2mod(0x40, dst_reg, src_reg));
- 		EMIT2(0x89, add_2reg(0xC0, dst_reg, src_reg));
- 	}
-@@ -487,7 +487,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 		case BPF_ALU | BPF_MOV | BPF_X:
- 			emit_mov_reg(&prog,
- 				     BPF_CLASS(insn->code) == BPF_ALU64,
--				     dst_reg, src_reg);
-+				     src_reg, dst_reg);
- 			break;
- 
- 			/* neg dst */
-@@ -553,11 +553,11 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 		case BPF_ALU64 | BPF_MOV | BPF_K:
- 		case BPF_ALU | BPF_MOV | BPF_K:
- 			emit_mov_imm32(&prog, BPF_CLASS(insn->code) == BPF_ALU64,
--				       dst_reg, imm32);
-+				       imm32, dst_reg);
- 			break;
- 
- 		case BPF_LD | BPF_IMM | BPF_DW:
--			emit_mov_imm64(&prog, dst_reg, insn[1].imm, insn[0].imm);
-+			emit_mov_imm64(&prog, insn[1].imm, insn[0].imm, dst_reg);
- 			insn++;
- 			i++;
- 			break;
-@@ -576,13 +576,13 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 
- 			if (BPF_SRC(insn->code) == BPF_X)
- 				/* mov src_reg, %r11 */
--				EMIT_mov(AUX_REG, src_reg);
-+				EMIT_mov(src_reg, AUX_REG);
- 			else
- 				/* mov imm32, %r11 */
- 				EMIT3_off32(0x49, 0xC7, 0xC3, imm32);
- 
- 			/* mov dst_reg, %rax */
--			EMIT_mov(BPF_REG_0, dst_reg);
-+			EMIT_mov(dst_reg, BPF_REG_0);
- 
- 			/*
- 			 * xor %edx, %edx
-@@ -608,7 +608,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 			EMIT1(0x58); /* pop %rax */
- 
- 			/* mov %r11, dst_reg */
--			EMIT_mov(dst_reg, AUX_REG);
-+			EMIT_mov(AUX_REG, dst_reg);
- 			break;
- 
- 		case BPF_ALU | BPF_MUL | BPF_K:
-@@ -624,12 +624,12 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 				EMIT1(0x52); /* push %rdx */
- 
- 			/* mov dst_reg, %r11 */
--			EMIT_mov(AUX_REG, dst_reg);
-+			EMIT_mov(dst_reg, AUX_REG);
- 
- 			if (BPF_SRC(insn->code) == BPF_X)
--				emit_mov_reg(&prog, is64, BPF_REG_0, src_reg);
-+				emit_mov_reg(&prog, is64, src_reg, BPF_REG_0);
- 			else
--				emit_mov_imm32(&prog, is64, BPF_REG_0, imm32);
-+				emit_mov_imm32(&prog, is64, imm32, BPF_REG_0);
- 
- 			if (is64)
- 				EMIT1(add_1mod(0x48, AUX_REG));
-@@ -642,7 +642,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 				EMIT1(0x5A); /* pop %rdx */
- 			if (dst_reg != BPF_REG_0) {
- 				/* mov %rax, dst_reg */
--				EMIT_mov(dst_reg, BPF_REG_0);
-+				EMIT_mov(BPF_REG_0, dst_reg);
- 				EMIT1(0x58); /* pop %rax */
- 			}
- 			break;
-@@ -681,7 +681,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 			/* Check for bad case when dst_reg == %rcx */
- 			if (dst_reg == BPF_REG_4) {
- 				/* mov dst_reg, %r11 */
--				EMIT_mov(AUX_REG, dst_reg);
-+				EMIT_mov(dst_reg, AUX_REG);
- 				dst_reg = AUX_REG;
- 			}
- 
-@@ -689,7 +689,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 				EMIT1(0x51); /* push %rcx */
- 
- 				/* mov src_reg, %rcx */
--				EMIT_mov(BPF_REG_4, src_reg);
-+				EMIT_mov(src_reg, BPF_REG_4);
- 			}
- 
- 			/* shl %cl, %rax | shr %cl, %rax | sar %cl, %rax */
-@@ -710,7 +710,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 
- 			if (insn->dst_reg == BPF_REG_4)
- 				/* mov %r11, dst_reg */
--				EMIT_mov(insn->dst_reg, AUX_REG);
-+				EMIT_mov(AUX_REG, insn->dst_reg);
- 			break;
- 
- 		case BPF_ALU | BPF_END | BPF_FROM_BE:
+ 	/* End-of-stack check for kernel threads: */
+ 	if (orc->sp_reg == ORC_REG_UNDEFINED) {
 -- 
 2.20.1
 
