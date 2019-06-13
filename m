@@ -2,97 +2,107 @@ Return-Path: <SRS0=LLXA=UM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_MUTT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CC04C31E45
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 16:36:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08CAFC31E45
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 16:40:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1237620449
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 16:36:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D24CD20644
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 16:40:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="kADCSkyi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392309AbfFMQfy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Jun 2019 12:35:54 -0400
-Received: from mga01.intel.com ([192.55.52.88]:5947 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730702AbfFMHhz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Jun 2019 03:37:55 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Jun 2019 00:37:54 -0700
-X-ExtLoop1: 1
-Received: from mkarlsso-mobl.ger.corp.intel.com (HELO VM.ger.corp.intel.com) ([10.103.211.41])
-  by orsmga004.jf.intel.com with ESMTP; 13 Jun 2019 00:37:49 -0700
-From:   Magnus Karlsson <magnus.karlsson@intel.com>
-To:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
-        daniel@iogearbox.net, netdev@vger.kernel.org, brouer@redhat.com
-Cc:     bpf@vger.kernel.org, bruce.richardson@intel.com,
-        ciara.loftus@intel.com, jakub.kicinski@netronome.com,
-        xiaolong.ye@intel.com, qi.z.zhang@intel.com, maximmi@mellanox.com,
-        sridhar.samudrala@intel.com, kevin.laatz@intel.com,
-        ilias.apalodimas@linaro.org, kiran.patil@intel.com,
-        axboe@kernel.dk, maciej.fijalkowski@intel.com,
-        maciejromanfijalkowski@gmail.com, intel-wired-lan@lists.osuosl.org
-Subject: [PATCH bpf-next 3/6] i40e: add support for AF_XDP need_wakup feature
-Date:   Thu, 13 Jun 2019 09:37:27 +0200
-Message-Id: <1560411450-29121-4-git-send-email-magnus.karlsson@intel.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1560411450-29121-1-git-send-email-magnus.karlsson@intel.com>
-References: <1560411450-29121-1-git-send-email-magnus.karlsson@intel.com>
+        id S1730653AbfFMQkN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Jun 2019 12:40:13 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:50248 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730582AbfFMHAy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Jun 2019 03:00:54 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5D6xHRu024210;
+        Thu, 13 Jun 2019 07:00:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2018-07-02;
+ bh=HWozqqcp/Blla7YkQ0XS6n2TRrp0GniU7ZKMsnbPK8A=;
+ b=kADCSkyizcWvoL+XnNHHj7MkMAp0bHVJrX0tiAJI3Pv6/l3KEpYxWmiSJr32D5qWbhVQ
+ f5VIqjC2A4A60o63syLAqF8i42QYwvwrRC2KorK5MLfV21yTSipyAcqPHXRgPF58Eb7a
+ 0UNEByz5cpMC5/0gMurnHYBqxr/UJra/DuNGiZ4eFRDH/YQuu38kGztRwaycIwaJw45O
+ zImic6Ooyxj1pQYi1yIaBIdRcy1TD19bGOcIxL4ErkCniPuDMaaLJFhQ/tAUq2dSiSDf
+ ixkO/UVAnr1Y6Dvz4S20LOoKXx9KS4AJsTYKPjQ2uHeFd9N6g5w6mk8HxL1xliES4p9f NQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 2t05nqyj5v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 13 Jun 2019 07:00:32 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5D6xMcJ012723;
+        Thu, 13 Jun 2019 07:00:31 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 2t024vbrar-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 13 Jun 2019 07:00:31 +0000
+Received: from abhmp0022.oracle.com (abhmp0022.oracle.com [141.146.116.28])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x5D70UbZ012610;
+        Thu, 13 Jun 2019 07:00:30 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 13 Jun 2019 00:00:29 -0700
+Date:   Thu, 13 Jun 2019 10:00:21 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Shuah Khan <shuah@kernel.org>, Roman Gushchin <guro@fb.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] selftests/bpf: signedness bug in enable_all_controllers()
+Message-ID: <20190613070021.GG16334@mwanda>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9286 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1906130056
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9286 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906130056
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds support for the need_wakeup feature of AF_XDP. If the
-application has told the kernel that it might sleep using the new bind
-flag XDP_USE_NEED_WAKEUP, the driver will then set this flag if it has
-no more buffers on the NIC Rx ring and yield to the application. For
-Tx, it will set the flag if it has no outstanding Tx completion
-interrupts and return to the application.
+The "len" variable needs to be signed for the error handling to work
+properly.
 
-Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Fixes: 596092ef8bea ("selftests/bpf: enable all available cgroup v2 controllers")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 ---
- drivers/net/ethernet/intel/i40e/i40e_xsk.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ tools/testing/selftests/bpf/cgroup_helpers.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-index 32be3dd..1863974 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-@@ -625,6 +625,15 @@ int i40e_clean_rx_irq_zc(struct i40e_ring *rx_ring, int budget)
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
+index 0d89f0396be4..e95c33e333a4 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.c
++++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+@@ -47,7 +47,7 @@ int enable_all_controllers(char *cgroup_path)
+ 	char buf[PATH_MAX];
+ 	char *c, *c2;
+ 	int fd, cfd;
+-	size_t len;
++	ssize_t len;
  
- 	i40e_finalize_xdp_rx(rx_ring, xdp_xmit);
- 	i40e_update_rx_stats(rx_ring, total_rx_bytes, total_rx_packets);
-+
-+	if (xsk_umem_uses_might_sleep(rx_ring->xsk_umem)) {
-+		if (failure || rx_ring->next_to_clean == rx_ring->next_to_use)
-+			xsk_set_rx_need_wakeup(rx_ring->xsk_umem);
-+		else
-+			xsk_clear_rx_need_wakeup(rx_ring->xsk_umem);
-+
-+		return (int)total_rx_packets;
-+	}
- 	return failure ? budget : (int)total_rx_packets;
- }
- 
-@@ -758,6 +767,13 @@ bool i40e_clean_xdp_tx_irq(struct i40e_vsi *vsi,
- out_xmit:
- 	xmit_done = i40e_xmit_zc(tx_ring, budget);
- 
-+	if (xsk_umem_uses_might_sleep(tx_ring->xsk_umem)) {
-+		if (tx_ring->next_to_clean == tx_ring->next_to_use)
-+			xsk_set_tx_need_wakeup(tx_ring->xsk_umem);
-+		else
-+			xsk_clear_tx_need_wakeup(tx_ring->xsk_umem);
-+	}
-+
- 	return work_done && xmit_done;
- }
- 
+ 	snprintf(path, sizeof(path), "%s/cgroup.controllers", cgroup_path);
+ 	fd = open(path, O_RDONLY);
 -- 
-2.7.4
+2.20.1
 
