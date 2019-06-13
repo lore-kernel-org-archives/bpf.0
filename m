@@ -2,242 +2,198 @@ Return-Path: <SRS0=LLXA=UM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A182C31E45
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8392C31E4A
 	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:15:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 207CC20B7C
+	by mail.kernel.org (Postfix) with ESMTP id AB87C20449
 	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:15:35 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="keerC7ou"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732225AbfFMPPe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Jun 2019 11:15:34 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:38598 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732221AbfFMNZQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Jun 2019 09:25:16 -0400
-Received: by mail-wr1-f68.google.com with SMTP id d18so20780568wrs.5
-        for <bpf@vger.kernel.org>; Thu, 13 Jun 2019 06:25:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=H/XDzYueXffv1rUyJx1oEFA1jQkKQnEoAqI3KBmpQNQ=;
-        b=keerC7oubO4xWDPqVdCuDXHlcwDp1ZGxBs6OtO0Jg9F0rB7opUoNZfaXAywrlZu5nM
-         I+zPjctobOUMBWt7rFEArKp/IUuJNRdB1ulWSYXLeVdokX5WmkPYMWrbdMbkyTKUHevZ
-         7GdZskEhnLXcF6vcGs9LuGOSp+WrsAhmO4RsU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=H/XDzYueXffv1rUyJx1oEFA1jQkKQnEoAqI3KBmpQNQ=;
-        b=RWq7vz5eL2sKE/2RGUHLsN8k92nGu7U6i4ujOOn/LSMxHnQ1O8YlFJ0xXRLVkyEKkT
-         7ZY25DC0hXtsyY9MjxzNvBWPGLqUwNxto8KWyMJMLB4JeFYglecu86ZdDcK00K1+Mj5U
-         Y7qkn1p0fA7wqRqRVsxcffXphTLPgVHVr91l2cZxE4p6Wtna09udbfJvRAAk4qNN7xp4
-         vDrU/9sMoxI1dOaGqSNEc08DHsQxwJ1nWs7bXTm+Xlfbi2pgm183kG+fmumO1AJJDAOa
-         8i+VlVxf1YWTlyIvSRde8BY1R6w3NgVwwxHeauRZunA+f2CRAtBLPV0igtxvt/bqZ0rB
-         6M/Q==
-X-Gm-Message-State: APjAAAULOV1qyq9dmqmnjp7CfBg6NHo/kp39C6YxF5WXc9II0piegK/m
-        wY1nkWRM5qbZcq2NwWfMyC3AVw==
-X-Google-Smtp-Source: APXvYqwDEPlruy2eVqw9ZQATbv3Dsj0ZxtvE79jIaKuGvWhxiukBuyyX3IRiItW0qa3pl3HgnhuzQA==
-X-Received: by 2002:adf:c5c1:: with SMTP id v1mr41961383wrg.129.1560432313294;
-        Thu, 13 Jun 2019 06:25:13 -0700 (PDT)
-Received: from localhost.localdomain ([147.12.216.9])
-        by smtp.gmail.com with ESMTPSA id d10sm3324109wrp.74.2019.06.13.06.25.12
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 13 Jun 2019 06:25:12 -0700 (PDT)
-From:   Arthur Fabre <afabre@cloudflare.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Arthur Fabre <afabre@cloudflare.com>
-Subject: [PATCH bpf-next] bpf: sk_storage: Fix out of bounds memory access
-Date:   Thu, 13 Jun 2019 14:24:34 +0100
-Message-Id: <20190613132433.17213-1-afabre@cloudflare.com>
-X-Mailer: git-send-email 2.20.1
+        id S1733173AbfFMPPf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Jun 2019 11:15:35 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:46016 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732215AbfFMNXy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Jun 2019 09:23:54 -0400
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id E193BF9E9A;
+        Thu, 13 Jun 2019 13:23:49 +0000 (UTC)
+Received: from treble.redhat.com (ovpn-121-232.rdu2.redhat.com [10.10.121.232])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1611954201;
+        Thu, 13 Jun 2019 13:23:46 +0000 (UTC)
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Song Liu <songliubraving@fb.com>,
+        Kairui Song <kasong@redhat.com>
+Subject: [PATCH 6/9] x86/bpf: Fix JIT frame pointer usage
+Date:   Thu, 13 Jun 2019 08:21:03 -0500
+Message-Id: <03ddea21a533b7b0e471c1d73ebff19dacdcf7e3.1560431531.git.jpoimboe@redhat.com>
+In-Reply-To: <cover.1560431531.git.jpoimboe@redhat.com>
+References: <cover.1560431531.git.jpoimboe@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.38]); Thu, 13 Jun 2019 13:23:53 +0000 (UTC)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-bpf_sk_storage maps use multiple spin locks to reduce contention.
-The number of locks to use is determined by the number of possible CPUs.
-With only 1 possible CPU, bucket_log == 0, and 2^0 = 1 locks are used.
+The BPF JIT code clobbers RBP.  This breaks frame pointer convention and
+thus prevents the FP unwinder from unwinding through JIT generated code.
 
-When updating elements, the correct lock is determined with hash_ptr().
-Calling hash_ptr() with 0 bits is undefined behavior, as it does:
+RBP is currently used as the BPF stack frame pointer register.  The
+actual register used is opaque to the user, as long as it's a
+callee-saved register.  Change it to use R12 instead.
 
-x >> (64 - bits)
-
-Using the value results in an out of bounds memory access.
-In my case, this manifested itself as a page fault when raw_spin_lock_bh()
-is called later, when running the self tests:
-
-./tools/testing/selftests/bpf/test_verifier 773 775
-
-[   16.366342] BUG: unable to handle page fault for address: ffff8fe7a66f93f8
-[   16.367139] #PF: supervisor write access in kernel mode
-[   16.367751] #PF: error_code(0x0002) - not-present page
-[   16.368323] PGD 35a01067 P4D 35a01067 PUD 0
-[   16.368796] Oops: 0002 [#1] SMP PTI
-[   16.369175] CPU: 0 PID: 189 Comm: test_verifier Not tainted 5.2.0-rc2+ #10
-[   16.369960] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
-[   16.371021] RIP: 0010:_raw_spin_lock_bh (/home/afabre/linux/./include/trace/events/initcall.h:48)
-[ 16.371571] Code: 02 00 00 31 c0 ba ff 00 00 00 3e 0f b1 17 75 01 c3 e9 82 12 5f ff 66 90 65 81 05 ad 14 6f 41 00 02 00 00 31 c0 ba 01 00 00 00 <3e> 0f b1 17 75 01 c3 89 c6 e9 f0 02 5f ff b8 00 02 00 00 3e 0f c1
-All code
-========
-   0:	02 00                	add    (%rax),%al
-   2:	00 31                	add    %dh,(%rcx)
-   4:	c0 ba ff 00 00 00 3e 	sarb   $0x3e,0xff(%rdx)
-   b:	0f b1 17             	cmpxchg %edx,(%rdi)
-   e:	75 01                	jne    0x11
-  10:	c3                   	retq
-  11:	e9 82 12 5f ff       	jmpq   0xffffffffff5f1298
-  16:	66 90                	xchg   %ax,%ax
-  18:	65 81 05 ad 14 6f 41 	addl   $0x200,%gs:0x416f14ad(%rip)        # 0x416f14d0
-  1f:	00 02 00 00
-  23:	31 c0                	xor    %eax,%eax
-  25:	ba 01 00 00 00       	mov    $0x1,%edx
-  2a:	3e 0f b1 17          	cmpxchg %edx,%ds:*(%rdi)		<-- trapping instruction
-  2e:	75 01                	jne    0x31
-  30:	c3                   	retq
-  31:	89 c6                	mov    %eax,%esi
-  33:	e9 f0 02 5f ff       	jmpq   0xffffffffff5f0328
-  38:	b8 00 02 00 00       	mov    $0x200,%eax
-  3d:	3e                   	ds
-  3e:	0f                   	.byte 0xf
-  3f:	c1                   	.byte 0xc1
-
-Code starting with the faulting instruction
-===========================================
-   0:	3e 0f b1 17          	cmpxchg %edx,%ds:(%rdi)
-   4:	75 01                	jne    0x7
-   6:	c3                   	retq
-   7:	89 c6                	mov    %eax,%esi
-   9:	e9 f0 02 5f ff       	jmpq   0xffffffffff5f02fe
-   e:	b8 00 02 00 00       	mov    $0x200,%eax
-  13:	3e                   	ds
-  14:	0f                   	.byte 0xf
-  15:	c1                   	.byte 0xc1
-[   16.373398] RSP: 0018:ffffa759809d3be0 EFLAGS: 00010246
-[   16.373954] RAX: 0000000000000000 RBX: ffff8fe7a66f93f0 RCX: 0000000000000040
-[   16.374645] RDX: 0000000000000001 RSI: ffff8fdaf9f0d180 RDI: ffff8fe7a66f93f8
-[   16.375338] RBP: ffff8fdaf9f0d180 R08: ffff8fdafba2c320 R09: ffff8fdaf9f0d0c0
-[   16.376028] R10: 0000000000000000 R11: 0000000000000000 R12: ffff8fdafa346700
-[   16.376719] R13: ffff8fe7a66f93f8 R14: ffff8fdaf9f0d0c0 R15: 0000000000000001
-[   16.377413] FS:  00007fda724c0740(0000) GS:ffff8fdafba00000(0000) knlGS:0000000000000000
-[   16.378204] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   16.378763] CR2: ffff8fe7a66f93f8 CR3: 0000000139d1c006 CR4: 0000000000360ef0
-[   16.379453] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[   16.380144] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[   16.380864] Call Trace:
-[   16.381112] selem_link_map (/home/afabre/linux/./include/linux/compiler.h:221 /home/afabre/linux/net/core/bpf_sk_storage.c:243)
-[   16.381476] sk_storage_update (/home/afabre/linux/net/core/bpf_sk_storage.c:355 /home/afabre/linux/net/core/bpf_sk_storage.c:414)
-[   16.381888] bpf_sk_storage_get (/home/afabre/linux/net/core/bpf_sk_storage.c:760 /home/afabre/linux/net/core/bpf_sk_storage.c:741)
-[   16.382285] ___bpf_prog_run (/home/afabre/linux/kernel/bpf/core.c:1447)
-[   16.382679] ? __bpf_prog_run32 (/home/afabre/linux/kernel/bpf/core.c:1603)
-[   16.383074] ? alloc_file_pseudo (/home/afabre/linux/fs/file_table.c:232)
-[   16.383486] ? kvm_clock_get_cycles (/home/afabre/linux/arch/x86/kernel/kvmclock.c:98)
-[   16.383906] ? ktime_get (/home/afabre/linux/kernel/time/timekeeping.c:265 /home/afabre/linux/kernel/time/timekeeping.c:369 /home/afabre/linux/kernel/time/timekeeping.c:754)
-[   16.384243] ? bpf_test_run (/home/afabre/linux/net/bpf/test_run.c:47)
-[   16.384613] ? bpf_prog_test_run_skb (/home/afabre/linux/net/bpf/test_run.c:313)
-[   16.385065] ? security_capable (/home/afabre/linux/security/security.c:696 (discriminator 19))
-[   16.385460] ? __do_sys_bpf (/home/afabre/linux/kernel/bpf/syscall.c:2072 /home/afabre/linux/kernel/bpf/syscall.c:2848)
-[   16.385854] ? __handle_mm_fault (/home/afabre/linux/mm/memory.c:3507 /home/afabre/linux/mm/memory.c:3532 /home/afabre/linux/mm/memory.c:3666 /home/afabre/linux/mm/memory.c:3897 /home/afabre/linux/mm/memory.c:4021)
-[   16.386273] ? __dentry_kill (/home/afabre/linux/fs/dcache.c:595)
-[   16.386652] ? do_syscall_64 (/home/afabre/linux/arch/x86/entry/common.c:301)
-[   16.387031] ? entry_SYSCALL_64_after_hwframe (/home/afabre/linux/./include/trace/events/initcall.h:10 /home/afabre/linux/./include/trace/events/initcall.h:10)
-[   16.387541] Modules linked in:
-[   16.387846] CR2: ffff8fe7a66f93f8
-[   16.388175] ---[ end trace 891cf27b5b9c9cc6 ]---
-[   16.388628] RIP: 0010:_raw_spin_lock_bh (/home/afabre/linux/./include/trace/events/initcall.h:48)
-[ 16.389089] Code: 02 00 00 31 c0 ba ff 00 00 00 3e 0f b1 17 75 01 c3 e9 82 12 5f ff 66 90 65 81 05 ad 14 6f 41 00 02 00 00 31 c0 ba 01 00 00 00 <3e> 0f b1 17 75 01 c3 89 c6 e9 f0 02 5f ff b8 00 02 00 00 3e 0f c1
-All code
-========
-   0:	02 00                	add    (%rax),%al
-   2:	00 31                	add    %dh,(%rcx)
-   4:	c0 ba ff 00 00 00 3e 	sarb   $0x3e,0xff(%rdx)
-   b:	0f b1 17             	cmpxchg %edx,(%rdi)
-   e:	75 01                	jne    0x11
-  10:	c3                   	retq
-  11:	e9 82 12 5f ff       	jmpq   0xffffffffff5f1298
-  16:	66 90                	xchg   %ax,%ax
-  18:	65 81 05 ad 14 6f 41 	addl   $0x200,%gs:0x416f14ad(%rip)        # 0x416f14d0
-  1f:	00 02 00 00
-  23:	31 c0                	xor    %eax,%eax
-  25:	ba 01 00 00 00       	mov    $0x1,%edx
-  2a:	3e 0f b1 17          	cmpxchg %edx,%ds:*(%rdi)		<-- trapping instruction
-  2e:	75 01                	jne    0x31
-  30:	c3                   	retq
-  31:	89 c6                	mov    %eax,%esi
-  33:	e9 f0 02 5f ff       	jmpq   0xffffffffff5f0328
-  38:	b8 00 02 00 00       	mov    $0x200,%eax
-  3d:	3e                   	ds
-  3e:	0f                   	.byte 0xf
-  3f:	c1                   	.byte 0xc1
-
-Code starting with the faulting instruction
-===========================================
-   0:	3e 0f b1 17          	cmpxchg %edx,%ds:(%rdi)
-   4:	75 01                	jne    0x7
-   6:	c3                   	retq
-   7:	89 c6                	mov    %eax,%esi
-   9:	e9 f0 02 5f ff       	jmpq   0xffffffffff5f02fe
-   e:	b8 00 02 00 00       	mov    $0x200,%eax
-  13:	3e                   	ds
-  14:	0f                   	.byte 0xf
-  15:	c1                   	.byte 0xc1
-[   16.390899] RSP: 0018:ffffa759809d3be0 EFLAGS: 00010246
-[   16.391410] RAX: 0000000000000000 RBX: ffff8fe7a66f93f0 RCX: 0000000000000040
-[   16.392102] RDX: 0000000000000001 RSI: ffff8fdaf9f0d180 RDI: ffff8fe7a66f93f8
-[   16.392795] RBP: ffff8fdaf9f0d180 R08: ffff8fdafba2c320 R09: ffff8fdaf9f0d0c0
-[   16.393481] R10: 0000000000000000 R11: 0000000000000000 R12: ffff8fdafa346700
-[   16.394169] R13: ffff8fe7a66f93f8 R14: ffff8fdaf9f0d0c0 R15: 0000000000000001
-[   16.394870] FS:  00007fda724c0740(0000) GS:ffff8fdafba00000(0000) knlGS:0000000000000000
-[   16.395641] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   16.396193] CR2: ffff8fe7a66f93f8 CR3: 0000000139d1c006 CR4: 0000000000360ef0
-[   16.396876] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[   16.397557] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[   16.398246] Kernel panic - not syncing: Fatal exception in interrupt
-[   16.399067] Kernel Offset: 0x3ce00000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
-[   16.400098] ---[ end Kernel panic - not syncing: Fatal exception in interrupt ]---
-
-Signed-off-by: Arthur Fabre <afabre@cloudflare.com>
-Fixes: 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage")
+Fixes: d15d356887e7 ("perf/x86: Make perf callchains work without CONFIG_FRAME_POINTER")
+Reported-by: Song Liu <songliubraving@fb.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
 ---
- net/core/bpf_sk_storage.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ arch/x86/net/bpf_jit_comp.c | 43 +++++++++++++++++++++----------------
+ 1 file changed, 25 insertions(+), 18 deletions(-)
 
-diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-index f40e3d35fd9c..7ae0686c5418 100644
---- a/net/core/bpf_sk_storage.c
-+++ b/net/core/bpf_sk_storage.c
-@@ -90,7 +90,13 @@ struct bpf_sk_storage {
- static struct bucket *select_bucket(struct bpf_sk_storage_map *smap,
- 				    struct bpf_sk_storage_elem *selem)
- {
--	return &smap->buckets[hash_ptr(selem, smap->bucket_log)];
-+	/* hash_ptr is undefined behavior with 0 bits */
-+	int bucket = 0;
-+	if (smap->bucket_log != 0) {
-+		bucket = hash_ptr(selem, smap->bucket_log);
-+	}
-+
-+	return &smap->buckets[bucket];
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index e649f977f8e1..bb1968fea50a 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -100,9 +100,8 @@ static int bpf_size_to_x86_bytes(int bpf_size)
+ /*
+  * The following table maps BPF registers to x86-64 registers.
+  *
+- * x86-64 register R12 is unused, since if used as base address
+- * register in load/store instructions, it always needs an
+- * extra byte of encoding and is callee saved.
++ * RBP isn't used; it needs to be preserved to allow the unwinder to move
++ * through generated code stacks.
+  *
+  * Also x86-64 register R9 is unused. x86-64 register R10 is
+  * used for blinding (if enabled).
+@@ -118,7 +117,7 @@ static const int reg2hex[] = {
+ 	[BPF_REG_7] = 5,  /* R13 callee saved */
+ 	[BPF_REG_8] = 6,  /* R14 callee saved */
+ 	[BPF_REG_9] = 7,  /* R15 callee saved */
+-	[BPF_REG_FP] = 5, /* RBP readonly */
++	[BPF_REG_FP] = 4, /* R12 readonly */
+ 	[BPF_REG_AX] = 2, /* R10 temp register */
+ 	[AUX_REG] = 3,    /* R11 temp register */
+ };
+@@ -135,6 +134,7 @@ static bool is_ereg(u32 reg)
+ 			     BIT(BPF_REG_7) |
+ 			     BIT(BPF_REG_8) |
+ 			     BIT(BPF_REG_9) |
++			     BIT(BPF_REG_FP) |
+ 			     BIT(BPF_REG_AX));
  }
  
- static int omem_charge(struct sock *sk, unsigned int size)
+@@ -145,8 +145,7 @@ static bool is_axreg(u32 reg)
+ 
+ static bool is_sib_reg(u32 reg)
+ {
+-	/* R12 isn't used yet */
+-	false;
++	return reg == BPF_REG_FP;
+ }
+ 
+ /* Add modifiers if 'reg' maps to x86-64 registers R8..R15 */
+@@ -192,7 +191,7 @@ struct jit_context {
+ #define BPF_MAX_INSN_SIZE	128
+ #define BPF_INSN_SAFETY		64
+ 
+-#define PROLOGUE_SIZE		20
++#define PROLOGUE_SIZE		25
+ 
+ /*
+  * Emit x86-64 prologue code for BPF program and check its size.
+@@ -203,14 +202,20 @@ static void emit_prologue(u8 **pprog, u32 stack_depth)
+ 	u8 *prog = *pprog;
+ 	int cnt = 0;
+ 
++	/* push rbp */
++	EMIT1(0x55);
++
++	/* mov rbp, rsp */
++	EMIT3(0x48, 0x89, 0xE5);
++
+ 	/* push r15 */
+ 	EMIT2(0x41, 0x57);
+ 	/* push r14 */
+ 	EMIT2(0x41, 0x56);
+ 	/* push r13 */
+ 	EMIT2(0x41, 0x55);
+-	/* push rbp */
+-	EMIT1(0x55);
++	/* push r12 */
++	EMIT2(0x41, 0x54);
+ 	/* push rbx */
+ 	EMIT1(0x53);
+ 
+@@ -223,12 +228,12 @@ static void emit_prologue(u8 **pprog, u32 stack_depth)
+ 	EMIT2(0x6a, 0x00);
+ 
+ 	/*
+-	 * RBP is used for the BPF program's FP register.  It points to the end
++	 * R12 is used for the BPF program's FP register.  It points to the end
+ 	 * of the program's stack area.
+ 	 *
+-	 * mov rbp, rsp
++	 * mov r12, rsp
+ 	 */
+-	EMIT3(0x48, 0x89, 0xE5);
++	EMIT3(0x49, 0x89, 0xE4);
+ 
+ 	/* sub rsp, rounded_stack_depth */
+ 	EMIT3_off32(0x48, 0x81, 0xEC, round_up(stack_depth, 8));
+@@ -243,19 +248,21 @@ static void emit_epilogue(u8 **pprog)
+ 	u8 *prog = *pprog;
+ 	int cnt = 0;
+ 
+-	/* lea rsp, [rbp+0x8] */
+-	EMIT4(0x48, 0x8D, 0x65, 0x08);
++	/* lea rsp, [rbp-0x28] */
++	EMIT4(0x48, 0x8D, 0x65, 0xD8);
+ 
+ 	/* pop rbx */
+ 	EMIT1(0x5B);
+-	/* pop rbp */
+-	EMIT1(0x5D);
++	/* pop r12 */
++	EMIT2(0x41, 0x5C);
+ 	/* pop r13 */
+ 	EMIT2(0x41, 0x5D);
+ 	/* pop r14 */
+ 	EMIT2(0x41, 0x5E);
+ 	/* pop r15 */
+ 	EMIT2(0x41, 0x5F);
++	/* pop rbp */
++	EMIT1(0x5D);
+ 
+ 	/* ret */
+ 	EMIT1(0xC3);
+@@ -304,13 +311,13 @@ static void emit_bpf_tail_call(u8 **pprog)
+ 	 * if (tail_call_cnt > MAX_TAIL_CALL_CNT)
+ 	 *	goto out;
+ 	 */
+-	EMIT3(0x8B, 0x45, 0x04);                  /* mov eax, dword ptr [rbp + 4] */
++	EMIT3(0x8B, 0x45, 0xD4);                  /* mov eax, dword ptr [rbp - 44] */
+ 	EMIT3(0x83, 0xF8, MAX_TAIL_CALL_CNT);     /* cmp eax, MAX_TAIL_CALL_CNT */
+ #define OFFSET2 (27 + RETPOLINE_RAX_BPF_JIT_SIZE)
+ 	EMIT2(X86_JA, OFFSET2);                   /* ja out */
+ 	label2 = cnt;
+ 	EMIT3(0x83, 0xC0, 0x01);                  /* add eax, 1 */
+-	EMIT3(0x89, 0x45, 0x04);                  /* mov dword ptr [rbp + 4], eax */
++	EMIT3(0x89, 0x45, 0xD4);                  /* mov dword ptr [rbp - 44], eax */
+ 
+ 	/* prog = array->ptrs[index]; */
+ 	EMIT4_off32(0x48, 0x8B, 0x84, 0xD6,       /* mov rax, [rsi + rdx * 8 + offsetof(...)] */
 -- 
 2.20.1
 
