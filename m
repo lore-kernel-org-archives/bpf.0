@@ -2,103 +2,116 @@ Return-Path: <SRS0=LLXA=UM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B05D2C468B1
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:28:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A434BC31E49
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:41:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 88BBE206BB
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:28:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7888E207E0
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:41:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="TbGt75o/"
+	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="o6aVXpjq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729964AbfFMP2B (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Jun 2019 11:28:01 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:46835 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728977AbfFMLc7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Jun 2019 07:32:59 -0400
-Received: by mail-wr1-f66.google.com with SMTP id n4so20336352wrw.13
-        for <bpf@vger.kernel.org>; Thu, 13 Jun 2019 04:32:58 -0700 (PDT)
+        id S1728127AbfFMPl4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Jun 2019 11:41:56 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:40950 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387498AbfFMPlz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Jun 2019 11:41:55 -0400
+Received: by mail-pf1-f196.google.com with SMTP id p184so8791461pfp.7
+        for <bpf@vger.kernel.org>; Thu, 13 Jun 2019 08:41:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AF1205N89OZNViaP6acWXh6mHKPDql5m0Yi3tu1T8h8=;
-        b=TbGt75o/WSp1OSUJTHNYCciigYJKAYY6solbnb+OPu7egwRHpZFyTp57t0BC1acpgS
-         TAPKFVoWfjLIyWlG5lM6ccnEx04BY1qZTdskF0iD/gBFok1EC4Jb4k98qIWfHxkzKXFg
-         UCMZerFSt04ZfSvT63r76NMFvJdbfCUTVST3Y=
+        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=mWJyZbm7F3Ahz/ql/XF8euQ1ksW5Cu4zLDVBU8U4GDo=;
+        b=o6aVXpjqvNPmGOyOlXbaR8Zo2sjLjrACsvivGycW9GMFCBZxRG+Giv9O1YysXycFpR
+         36efE76JYm0/qUZIYkJ8E/5xHl/zIQDBAxcZFm7df4gRFn92NVCHGd7RMoUe4jCeKYdg
+         ah6tzVeUt1temIghkERv5YTXkb3gJlcKj9AquTF0HfKWqYh9/ZYXYCAC8ZNWZ8z7XZa0
+         xY8CvRkfk8wTNYTCECshfLGPOJccuAvmQ2fwGbYINT4izbMXhOJ646s5DgeMB20iLzzT
+         fKeVbj9TYL//xAu2cpuoxoQzHwqQTI9DB/FIt7Ensd9XV/FEnVK5ZJJF6EcP9EKnT8z0
+         JuDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AF1205N89OZNViaP6acWXh6mHKPDql5m0Yi3tu1T8h8=;
-        b=K822hNkl2QGuvLiaOht1bUCFlARz1SAmuqhTjE/RJzhUTFF8oFLWs3LF+6CrD9l9AJ
-         fyO0uq3nUjVpc2mrghnRR3oKqWJH6+Tt6KShXvdfQq98cvd4FDrbpDhePrc539Y9CbyT
-         +wrnoNpbWP3AoXHZ96+jar8VBDZ98dwOJbJGXskPL402Y16iwBp8fxekl5ofY9PFn3qm
-         xNeUP41kY5eBWDcG3lNLuj2+w3FyCTOya6XKE/bFJ1/9+g8H7uUYHUKv7GMkRxNN34kC
-         O4OPMhNUmT+CTK9dogmbbPBpMF2ZQlpfrv0RezTejM9kinvm0ChGoj4a63VfiNmWh6CL
-         rncQ==
-X-Gm-Message-State: APjAAAUm7qS+rSjXZtn+fk5uzWmVBgMIKg4XXsz38gbugD5XD0JYu5i7
-        Qbz4xB1FWleb7DqaCFsS1i+Iyw==
-X-Google-Smtp-Source: APXvYqyrdLnXSnjStU6hbkGo3KfeeAceiBKHAZw2YLa7AT/MAbzkQIg0WRzmMIvQXvl4kd3Mo2rHUA==
-X-Received: by 2002:a05:6000:128f:: with SMTP id f15mr5748511wrx.196.1560425577814;
-        Thu, 13 Jun 2019 04:32:57 -0700 (PDT)
-Received: from localhost.localdomain ([147.12.216.9])
-        by smtp.gmail.com with ESMTPSA id f2sm2646740wmc.34.2019.06.13.04.32.56
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=mWJyZbm7F3Ahz/ql/XF8euQ1ksW5Cu4zLDVBU8U4GDo=;
+        b=V1ZN07JMhHNnmR+Jy/S5AjJl/dR0el7DDXEL+PE+63Z0J4UzeR+PHvjH2KZ2Js0s5r
+         ecPTBvoySec7UZ8bph3RhK+EvwsZWzJCoUqv6ElLMxtFrj0jiP/61+SQT/9aVml8iorL
+         uMr1p9yBtjAN4KnjIRjj9rE5omJWt9zZCJ1r8mnmO0q7u1gqqGNGT4awoS+/4FHJp2BY
+         c55/K9hkvbCd7xgHwQ6HKT3kc7af3JOTgNowCzqA5c9GhTGfuuL3A2tup/yqVJyQMMPF
+         8OV490Xil6ntbTaNhHAqM1ZgNn3OnYk7jGM+VfauSxeYKwucRoqZf14zkuxNXd5kZm1r
+         gcVQ==
+X-Gm-Message-State: APjAAAWL0HUCvg2EqpPurlIgUWdcCitiyCIvJE3I/AsRJbRX4r06Nepb
+        o2RoMYSCCbS6RQoBoNBQj2K+6g==
+X-Google-Smtp-Source: APXvYqz665NIJnk8Z4SVgLXBrXMXtYkxyBLHoq/yncNrUZ0q/8CMlIVoc2MY1UgABSwK3TkEspaEgw==
+X-Received: by 2002:a17:90b:d8b:: with SMTP id bg11mr6287697pjb.30.1560440514297;
+        Thu, 13 Jun 2019 08:41:54 -0700 (PDT)
+Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
+        by smtp.gmail.com with ESMTPSA id x6sm111580pfx.17.2019.06.13.08.41.53
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 13 Jun 2019 04:32:57 -0700 (PDT)
-From:   Arthur Fabre <afabre@cloudflare.com>
-To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Thu, 13 Jun 2019 08:41:53 -0700 (PDT)
+Date:   Thu, 13 Jun 2019 08:41:52 -0700
+From:   Stanislav Fomichev <sdf@fomichev.me>
+To:     Arthur Fabre <afabre@cloudflare.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Arthur Fabre <afabre@cloudflare.com>
-Subject: [PATCH] bpf: selftests: Fix warning in flow_dissector
-Date:   Thu, 13 Jun 2019 12:27:09 +0100
-Message-Id: <20190613112709.7215-1-afabre@cloudflare.com>
-X-Mailer: git-send-email 2.20.1
+Subject: Re: [PATCH] bpf: selftests: Fix warning in flow_dissector
+Message-ID: <20190613154152.GA9636@mini-arch>
+References: <20190613112709.7215-1-afabre@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190613112709.7215-1-afabre@cloudflare.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Building the userspace part of the flow_dissector resulted in:
+On 06/13, Arthur Fabre wrote:
+> Building the userspace part of the flow_dissector resulted in:
+> 
+> prog_tests/flow_dissector.c: In function ‘tx_tap’:
+> prog_tests/flow_dissector.c:176:9: warning: implicit declaration
+> of function ‘writev’; did you mean ‘write’? [-Wimplicit-function-declaration]
+>   return writev(fd, iov, ARRAY_SIZE(iov));
+>          ^~~~~~
+>          write
+> 
+> Include <sys/uio.h> to fix this.
+Wasn't it fixed already?
 
-prog_tests/flow_dissector.c: In function ‘tx_tap’:
-prog_tests/flow_dissector.c:176:9: warning: implicit declaration
-of function ‘writev’; did you mean ‘write’? [-Wimplicit-function-declaration]
-  return writev(fd, iov, ARRAY_SIZE(iov));
-         ^~~~~~
-         write
+See
+https://lore.kernel.org/netdev/20190528190218.GA6950@ip-172-31-44-144.us-west-2.compute.internal/
 
-Include <sys/uio.h> to fix this.
-
-Signed-off-by: Arthur Fabre <afabre@cloudflare.com>
----
- tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-index fbd1d88a6095..c938283ac232 100644
---- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-+++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-@@ -3,6 +3,7 @@
- #include <error.h>
- #include <linux/if.h>
- #include <linux/if_tun.h>
-+#include <sys/uio.h>
- 
- #define CHECK_FLOW_KEYS(desc, got, expected)				\
- 	CHECK_ATTR(memcmp(&got, &expected, sizeof(got)) != 0,		\
--- 
-2.20.1
-
+> Signed-off-by: Arthur Fabre <afabre@cloudflare.com>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> index fbd1d88a6095..c938283ac232 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> @@ -3,6 +3,7 @@
+>  #include <error.h>
+>  #include <linux/if.h>
+>  #include <linux/if_tun.h>
+> +#include <sys/uio.h>
+>  
+>  #define CHECK_FLOW_KEYS(desc, got, expected)				\
+>  	CHECK_ATTR(memcmp(&got, &expected, sizeof(got)) != 0,		\
+> -- 
+> 2.20.1
+> 
