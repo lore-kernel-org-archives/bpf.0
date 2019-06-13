@@ -2,192 +2,248 @@ Return-Path: <SRS0=LLXA=UM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61AD8C31E4A
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 17:16:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05018C31E45
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 17:16:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 311182053B
+	by mail.kernel.org (Postfix) with ESMTP id C4EB12053B
 	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 17:16:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="2J309gy5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DQ3kU5lR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393685AbfFMRPv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1729392AbfFMRPv (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 13 Jun 2019 13:15:51 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:35950 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728734AbfFLVr7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 12 Jun 2019 17:47:59 -0400
-Received: by mail-pg1-f195.google.com with SMTP id f21so3628484pgi.3
-        for <bpf@vger.kernel.org>; Wed, 12 Jun 2019 14:47:58 -0700 (PDT)
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:39983 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729146AbfFMRPu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Jun 2019 13:15:50 -0400
+Received: by mail-qt1-f196.google.com with SMTP id a15so23429306qtn.7;
+        Thu, 13 Jun 2019 10:15:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=tHRkjY4Nu+1l3Rjs3Nvwl6SxOHkmP8KHiqBEv4eP/cY=;
-        b=2J309gy55Lz6ReiN1PiptjxIABPfKCeXn4VWfwGbj3jnIQZrXFJMqRQjvTw+ITIN1Z
-         +EF6k3EvwRrLzkvTKvwfh930rs+fbf9TyYAj1fXZwixcwy4SqGlO4SRV576qAoUU++sr
-         2WtIuqrdOqaamGoYpO8FunLmPtfXx18EnbxJTDo7qWZYbIaoh4gucsp1sbbvNA8ylXJY
-         mRWKZlITZ0LKpNacUSayxtZnznPLoE/DaMqeY5/CEBxgYj752e5m2L3FdkG2IIylrTyJ
-         4i0b134clRIqWEU2VS2Ge8NafbFsN2pRgXLmumSeaTtEZxN8BE31kJpQrEc7coKAsBPC
-         h8cQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1CQuHfghSCdZuNpHw09x3H5koLSD51doFuuveLUNnkM=;
+        b=DQ3kU5lR7F8W613x3qyMlaSBzoyloCT6L6OYuLxcBrULJmk5820N6qYpEsgJj/g2FZ
+         gM8Pre6XzbO8sI8ihw/wBUF4FhC8LGP0siS0xfvbsRrELhBg25uVqjMXIKuhKkYw6Zn4
+         WDmaBADhoPl2HNhpJK5cBr5yN7hnDajdQpg+usBUIo03fp5i+pa5QLG//31dvujsitRk
+         8Ii2IzI5G7CjhEmYS555yFzregjR65WaF6HgCAmSlrToLwxYaiQbgEqUJVB8kRDGR8Ic
+         qVX7x9Pwe45zawkl2tVjr/N/CGT04oWyk90povNQP+GH1Xv4wkym4pZHOK7wB//TjaHH
+         8fPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=tHRkjY4Nu+1l3Rjs3Nvwl6SxOHkmP8KHiqBEv4eP/cY=;
-        b=MJbU0zbr41G5YsfGu2VbnOYk8m11aGZ47QNe1pG3AvG3Muq2s8Ni7xwxBzpcmE1Y2y
-         CBFQrXPMnQl3oXqnbVboh0USqs2PJ6YzAeaHRKVnw9/FmNSHk1F0IYPj3Q3zqzMoXlqT
-         GQQ58x61Fheb4kxdlkqrox+5Jok2xHmwZDLwJRq5Ep12Jx2n+9TNa3veaR6swVTJ+1Mc
-         V1AiKT8ceai8ka02+QhwWCpX5kufMcAcyzGMlK9L8H7pIjM4LFOyfH7flxNTgqDtxSiu
-         s0icFgQgS6U3YhqGPvm3AXg5LC1ARTKS3WpZhDzk1u0ljskwOUCadmUXWchCFauL7Cbn
-         dPpA==
-X-Gm-Message-State: APjAAAUSp7upgWTAz5LwfTmvZytSDoNMrb7Mf7AV93XtfoQvm8JXzQeB
-        ObVy8OlcpduY7KtRaaUiSo0uNA==
-X-Google-Smtp-Source: APXvYqx8JhnLcG/AbC5KGm4JCW+hiB8dI9ieX/rv2as8530B7v313xvNTNqbzpOpnL9dbhZy3rEvNQ==
-X-Received: by 2002:a63:490d:: with SMTP id w13mr17920404pga.355.1560376078286;
-        Wed, 12 Jun 2019 14:47:58 -0700 (PDT)
-Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
-        by smtp.gmail.com with ESMTPSA id j11sm515208pfa.2.2019.06.12.14.47.57
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 12 Jun 2019 14:47:57 -0700 (PDT)
-Date:   Wed, 12 Jun 2019 14:47:57 -0700
-From:   Stanislav Fomichev <sdf@fomichev.me>
-To:     Martin Lau <kafai@fb.com>
-Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Miller <davem@davemloft.net>,
-        Kernel Team <Kernel-team@fb.com>
-Subject: Re: [PATCH bpf-next 2/2] bpf: Add test for SO_REUSEPORT_DETACH_BPF
-Message-ID: <20190612214757.GC9056@mini-arch>
-References: <20190612190536.2340077-1-kafai@fb.com>
- <20190612190539.2340343-1-kafai@fb.com>
- <20190612195917.GB9056@mini-arch>
- <20190612213046.e7tkduk5nfuv5s6a@kafai-mbp.dhcp.thefacebook.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1CQuHfghSCdZuNpHw09x3H5koLSD51doFuuveLUNnkM=;
+        b=gRKCzWYuSzeH69pkzxvSr7hz2IQWsLV9GXrvmMdKW+0F3YcTjWAVG7t2nsUtGQ5a+y
+         1kpTOBRoTAvGq6I1dLKQyS2zjlhTVmYn8TZIcXSmjjJTHh21BIny4wgl/NLr+8Hua1uK
+         e7CW2lS9vRocOYH8/TywuIPQ2d13x8LSu2YvXEdWTn9dq5wCQQe0HUmtq1Kbts30dD9a
+         tApYkqDX/kShY03MCGLmkY2E+cWnO5kHaXC9aXGgbhI28ugliKckr/+ISHtcJh8pFMpu
+         J4aQsv/ALVQErqZWv8BO/uCfOyOL5RfaPAJI739gMqLwuQ0nFO/ouCeSeNVA80xnh6TY
+         iq3w==
+X-Gm-Message-State: APjAAAXxuNt2w+TXA/JoofPOs5D83db13LgBVWciAEBnZ9gGpn1UWoaf
+        fCPuoFsrjJY+tznoLwFZGlxoLaBlvIzOa/uTvdU=
+X-Google-Smtp-Source: APXvYqzWuIKSICuQgciL0RG/eDKoAgI37Sn1VKoyyv2dDtyO0u7hwVl3+n8MMWR10xYI4YyiYoEth8BaNpJbbS/M7bM=
+X-Received: by 2002:ac8:2d56:: with SMTP id o22mr26211735qta.171.1560446149184;
+ Thu, 13 Jun 2019 10:15:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190612213046.e7tkduk5nfuv5s6a@kafai-mbp.dhcp.thefacebook.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+References: <20190613132433.17213-1-afabre@cloudflare.com>
+In-Reply-To: <20190613132433.17213-1-afabre@cloudflare.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 13 Jun 2019 10:15:38 -0700
+Message-ID: <CAEf4BzYp0ZtbojxP++GYsc097RpoLBb08Aj7NM0s+GoM7RpvXg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: sk_storage: Fix out of bounds memory access
+To:     Arthur Fabre <afabre@cloudflare.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 06/12, Martin Lau wrote:
-> On Wed, Jun 12, 2019 at 12:59:17PM -0700, Stanislav Fomichev wrote:
-> > On 06/12, Martin KaFai Lau wrote:
-> > > This patch adds a test for the new sockopt SO_REUSEPORT_DETACH_BPF.
-> > > 
-> > > '-I../../../../usr/include/' is added to the Makefile to get
-> > > the newly added SO_REUSEPORT_DETACH_BPF.
-> > > 
-> > > Signed-off-by: Martin KaFai Lau <kafai@fb.com>
-> > > ---
-> > >  tools/testing/selftests/bpf/Makefile          |  1 +
-> > >  .../selftests/bpf/test_select_reuseport.c     | 50 +++++++++++++++++++
-> > >  2 files changed, 51 insertions(+)
-> > > 
-> > > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> > > index 44fb61f4d502..c7370361fa81 100644
-> > > --- a/tools/testing/selftests/bpf/Makefile
-> > > +++ b/tools/testing/selftests/bpf/Makefile
-> > > @@ -16,6 +16,7 @@ LLVM_OBJCOPY	?= llvm-objcopy
-> > >  LLVM_READELF	?= llvm-readelf
-> > >  BTF_PAHOLE	?= pahole
-> > >  CFLAGS += -Wall -O2 -I$(APIDIR) -I$(LIBDIR) -I$(BPFDIR) -I$(GENDIR) $(GENFLAGS) -I../../../include \
-> > > +	  -I../../../../usr/include/ \
-> > Why not copy inlude/uapi/asm-generic/socket.h into tools/include
-> > instead? Will that work?
-> Sure. I am ok with copy.  I don't think we need to sync very often.
-> Do you know how to do that considering multiple arch's socket.h
-> have been changed in Patch 1?
-No, I don't know how to handle arch specific stuff. I suggest to copy
-asm-generic and have ifdefs in the tests if someone complains :-)
+On Thu, Jun 13, 2019 at 8:16 AM Arthur Fabre <afabre@cloudflare.com> wrote:
+>
+> bpf_sk_storage maps use multiple spin locks to reduce contention.
+> The number of locks to use is determined by the number of possible CPUs.
+> With only 1 possible CPU, bucket_log == 0, and 2^0 = 1 locks are used.
+>
+> When updating elements, the correct lock is determined with hash_ptr().
+> Calling hash_ptr() with 0 bits is undefined behavior, as it does:
+>
+> x >> (64 - bits)
+>
+> Using the value results in an out of bounds memory access.
+> In my case, this manifested itself as a page fault when raw_spin_lock_bh()
+> is called later, when running the self tests:
+>
+> ./tools/testing/selftests/bpf/test_verifier 773 775
+>
+> [   16.366342] BUG: unable to handle page fault for address: ffff8fe7a66f93f8
+> [   16.367139] #PF: supervisor write access in kernel mode
+> [   16.367751] #PF: error_code(0x0002) - not-present page
+> [   16.368323] PGD 35a01067 P4D 35a01067 PUD 0
+> [   16.368796] Oops: 0002 [#1] SMP PTI
+> [   16.369175] CPU: 0 PID: 189 Comm: test_verifier Not tainted 5.2.0-rc2+ #10
+> [   16.369960] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
+> [   16.371021] RIP: 0010:_raw_spin_lock_bh (/home/afabre/linux/./include/trace/events/initcall.h:48)
+> [ 16.371571] Code: 02 00 00 31 c0 ba ff 00 00 00 3e 0f b1 17 75 01 c3 e9 82 12 5f ff 66 90 65 81 05 ad 14 6f 41 00 02 00 00 31 c0 ba 01 00 00 00 <3e> 0f b1 17 75 01 c3 89 c6 e9 f0 02 5f ff b8 00 02 00 00 3e 0f c1
+> All code
+> ========
+>    0:   02 00                   add    (%rax),%al
+>    2:   00 31                   add    %dh,(%rcx)
+>    4:   c0 ba ff 00 00 00 3e    sarb   $0x3e,0xff(%rdx)
+>    b:   0f b1 17                cmpxchg %edx,(%rdi)
+>    e:   75 01                   jne    0x11
+>   10:   c3                      retq
+>   11:   e9 82 12 5f ff          jmpq   0xffffffffff5f1298
+>   16:   66 90                   xchg   %ax,%ax
+>   18:   65 81 05 ad 14 6f 41    addl   $0x200,%gs:0x416f14ad(%rip)        # 0x416f14d0
+>   1f:   00 02 00 00
+>   23:   31 c0                   xor    %eax,%eax
+>   25:   ba 01 00 00 00          mov    $0x1,%edx
+>   2a:   3e 0f b1 17             cmpxchg %edx,%ds:*(%rdi)                <-- trapping instruction
+>   2e:   75 01                   jne    0x31
+>   30:   c3                      retq
+>   31:   89 c6                   mov    %eax,%esi
+>   33:   e9 f0 02 5f ff          jmpq   0xffffffffff5f0328
+>   38:   b8 00 02 00 00          mov    $0x200,%eax
+>   3d:   3e                      ds
+>   3e:   0f                      .byte 0xf
+>   3f:   c1                      .byte 0xc1
+>
+> Code starting with the faulting instruction
+> ===========================================
+>    0:   3e 0f b1 17             cmpxchg %edx,%ds:(%rdi)
+>    4:   75 01                   jne    0x7
+>    6:   c3                      retq
+>    7:   89 c6                   mov    %eax,%esi
+>    9:   e9 f0 02 5f ff          jmpq   0xffffffffff5f02fe
+>    e:   b8 00 02 00 00          mov    $0x200,%eax
+>   13:   3e                      ds
+>   14:   0f                      .byte 0xf
+>   15:   c1                      .byte 0xc1
+> [   16.373398] RSP: 0018:ffffa759809d3be0 EFLAGS: 00010246
+> [   16.373954] RAX: 0000000000000000 RBX: ffff8fe7a66f93f0 RCX: 0000000000000040
+> [   16.374645] RDX: 0000000000000001 RSI: ffff8fdaf9f0d180 RDI: ffff8fe7a66f93f8
+> [   16.375338] RBP: ffff8fdaf9f0d180 R08: ffff8fdafba2c320 R09: ffff8fdaf9f0d0c0
+> [   16.376028] R10: 0000000000000000 R11: 0000000000000000 R12: ffff8fdafa346700
+> [   16.376719] R13: ffff8fe7a66f93f8 R14: ffff8fdaf9f0d0c0 R15: 0000000000000001
+> [   16.377413] FS:  00007fda724c0740(0000) GS:ffff8fdafba00000(0000) knlGS:0000000000000000
+> [   16.378204] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   16.378763] CR2: ffff8fe7a66f93f8 CR3: 0000000139d1c006 CR4: 0000000000360ef0
+> [   16.379453] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [   16.380144] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [   16.380864] Call Trace:
+> [   16.381112] selem_link_map (/home/afabre/linux/./include/linux/compiler.h:221 /home/afabre/linux/net/core/bpf_sk_storage.c:243)
+> [   16.381476] sk_storage_update (/home/afabre/linux/net/core/bpf_sk_storage.c:355 /home/afabre/linux/net/core/bpf_sk_storage.c:414)
+> [   16.381888] bpf_sk_storage_get (/home/afabre/linux/net/core/bpf_sk_storage.c:760 /home/afabre/linux/net/core/bpf_sk_storage.c:741)
+> [   16.382285] ___bpf_prog_run (/home/afabre/linux/kernel/bpf/core.c:1447)
+> [   16.382679] ? __bpf_prog_run32 (/home/afabre/linux/kernel/bpf/core.c:1603)
+> [   16.383074] ? alloc_file_pseudo (/home/afabre/linux/fs/file_table.c:232)
+> [   16.383486] ? kvm_clock_get_cycles (/home/afabre/linux/arch/x86/kernel/kvmclock.c:98)
+> [   16.383906] ? ktime_get (/home/afabre/linux/kernel/time/timekeeping.c:265 /home/afabre/linux/kernel/time/timekeeping.c:369 /home/afabre/linux/kernel/time/timekeeping.c:754)
+> [   16.384243] ? bpf_test_run (/home/afabre/linux/net/bpf/test_run.c:47)
+> [   16.384613] ? bpf_prog_test_run_skb (/home/afabre/linux/net/bpf/test_run.c:313)
+> [   16.385065] ? security_capable (/home/afabre/linux/security/security.c:696 (discriminator 19))
+> [   16.385460] ? __do_sys_bpf (/home/afabre/linux/kernel/bpf/syscall.c:2072 /home/afabre/linux/kernel/bpf/syscall.c:2848)
+> [   16.385854] ? __handle_mm_fault (/home/afabre/linux/mm/memory.c:3507 /home/afabre/linux/mm/memory.c:3532 /home/afabre/linux/mm/memory.c:3666 /home/afabre/linux/mm/memory.c:3897 /home/afabre/linux/mm/memory.c:4021)
+> [   16.386273] ? __dentry_kill (/home/afabre/linux/fs/dcache.c:595)
+> [   16.386652] ? do_syscall_64 (/home/afabre/linux/arch/x86/entry/common.c:301)
+> [   16.387031] ? entry_SYSCALL_64_after_hwframe (/home/afabre/linux/./include/trace/events/initcall.h:10 /home/afabre/linux/./include/trace/events/initcall.h:10)
+> [   16.387541] Modules linked in:
+> [   16.387846] CR2: ffff8fe7a66f93f8
+> [   16.388175] ---[ end trace 891cf27b5b9c9cc6 ]---
+> [   16.388628] RIP: 0010:_raw_spin_lock_bh (/home/afabre/linux/./include/trace/events/initcall.h:48)
+> [ 16.389089] Code: 02 00 00 31 c0 ba ff 00 00 00 3e 0f b1 17 75 01 c3 e9 82 12 5f ff 66 90 65 81 05 ad 14 6f 41 00 02 00 00 31 c0 ba 01 00 00 00 <3e> 0f b1 17 75 01 c3 89 c6 e9 f0 02 5f ff b8 00 02 00 00 3e 0f c1
+> All code
+> ========
+>    0:   02 00                   add    (%rax),%al
+>    2:   00 31                   add    %dh,(%rcx)
+>    4:   c0 ba ff 00 00 00 3e    sarb   $0x3e,0xff(%rdx)
+>    b:   0f b1 17                cmpxchg %edx,(%rdi)
+>    e:   75 01                   jne    0x11
+>   10:   c3                      retq
+>   11:   e9 82 12 5f ff          jmpq   0xffffffffff5f1298
+>   16:   66 90                   xchg   %ax,%ax
+>   18:   65 81 05 ad 14 6f 41    addl   $0x200,%gs:0x416f14ad(%rip)        # 0x416f14d0
+>   1f:   00 02 00 00
+>   23:   31 c0                   xor    %eax,%eax
+>   25:   ba 01 00 00 00          mov    $0x1,%edx
+>   2a:   3e 0f b1 17             cmpxchg %edx,%ds:*(%rdi)                <-- trapping instruction
+>   2e:   75 01                   jne    0x31
+>   30:   c3                      retq
+>   31:   89 c6                   mov    %eax,%esi
+>   33:   e9 f0 02 5f ff          jmpq   0xffffffffff5f0328
+>   38:   b8 00 02 00 00          mov    $0x200,%eax
+>   3d:   3e                      ds
+>   3e:   0f                      .byte 0xf
+>   3f:   c1                      .byte 0xc1
+>
+> Code starting with the faulting instruction
+> ===========================================
+>    0:   3e 0f b1 17             cmpxchg %edx,%ds:(%rdi)
+>    4:   75 01                   jne    0x7
+>    6:   c3                      retq
+>    7:   89 c6                   mov    %eax,%esi
+>    9:   e9 f0 02 5f ff          jmpq   0xffffffffff5f02fe
+>    e:   b8 00 02 00 00          mov    $0x200,%eax
+>   13:   3e                      ds
+>   14:   0f                      .byte 0xf
+>   15:   c1                      .byte 0xc1
+> [   16.390899] RSP: 0018:ffffa759809d3be0 EFLAGS: 00010246
+> [   16.391410] RAX: 0000000000000000 RBX: ffff8fe7a66f93f0 RCX: 0000000000000040
+> [   16.392102] RDX: 0000000000000001 RSI: ffff8fdaf9f0d180 RDI: ffff8fe7a66f93f8
+> [   16.392795] RBP: ffff8fdaf9f0d180 R08: ffff8fdafba2c320 R09: ffff8fdaf9f0d0c0
+> [   16.393481] R10: 0000000000000000 R11: 0000000000000000 R12: ffff8fdafa346700
+> [   16.394169] R13: ffff8fe7a66f93f8 R14: ffff8fdaf9f0d0c0 R15: 0000000000000001
+> [   16.394870] FS:  00007fda724c0740(0000) GS:ffff8fdafba00000(0000) knlGS:0000000000000000
+> [   16.395641] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   16.396193] CR2: ffff8fe7a66f93f8 CR3: 0000000139d1c006 CR4: 0000000000360ef0
+> [   16.396876] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [   16.397557] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [   16.398246] Kernel panic - not syncing: Fatal exception in interrupt
+> [   16.399067] Kernel Offset: 0x3ce00000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+> [   16.400098] ---[ end Kernel panic - not syncing: Fatal exception in interrupt ]---
+>
+> Signed-off-by: Arthur Fabre <afabre@cloudflare.com>
+> Fixes: 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage")
+> ---
+>  net/core/bpf_sk_storage.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+> index f40e3d35fd9c..7ae0686c5418 100644
+> --- a/net/core/bpf_sk_storage.c
+> +++ b/net/core/bpf_sk_storage.c
+> @@ -90,7 +90,13 @@ struct bpf_sk_storage {
+>  static struct bucket *select_bucket(struct bpf_sk_storage_map *smap,
+>                                     struct bpf_sk_storage_elem *selem)
+>  {
+> -       return &smap->buckets[hash_ptr(selem, smap->bucket_log)];
+> +       /* hash_ptr is undefined behavior with 0 bits */
+> +       int bucket = 0;
+> +       if (smap->bucket_log != 0) {
+> +               bucket = hash_ptr(selem, smap->bucket_log);
+> +       }
 
-> Is copy better?
-Doesn't ../../../../usr/include provide the same headers we have in
-tools/include/uapi? If you add -I../../../../usr/include, then is there
-a point of having copies under tools/include/uapi? I don't really
-know why we keep the copies under tools/include/uapi rather than including
-../../../usr/include directly.
+Would it be better instead to make sure that bucket_log is always at
+least 1? Having bucket_log as zero can bite us in the future again.
 
-> > >  	  -Dbpf_prog_load=bpf_prog_test_load \
-> > >  	  -Dbpf_load_program=bpf_test_load_program
-> > >  LDLIBS += -lcap -lelf -lrt -lpthread
-> > > diff --git a/tools/testing/selftests/bpf/test_select_reuseport.c b/tools/testing/selftests/bpf/test_select_reuseport.c
-> > > index 75646d9b34aa..5aa00b4a4702 100644
-> > > --- a/tools/testing/selftests/bpf/test_select_reuseport.c
-> > > +++ b/tools/testing/selftests/bpf/test_select_reuseport.c
-> > > @@ -523,6 +523,54 @@ static void test_pass_on_err(int type, sa_family_t family)
-> > >  	printf("OK\n");
-> > >  }
-> > >  
-> > > +static void test_detach_bpf(int type, sa_family_t family)
-> > > +{
-> > > +	__u32 nr_run_before = 0, nr_run_after = 0, tmp, i;
-> > > +	struct epoll_event ev;
-> > > +	int cli_fd, err, nev;
-> > > +	struct cmd cmd = {};
-> > > +	int optvalue = 0;
-> > > +
-> > > +	printf("%s: ", __func__);
-> > > +	err = setsockopt(sk_fds[0], SOL_SOCKET, SO_DETACH_REUSEPORT_BPF,
-> > > +			 &optvalue, sizeof(optvalue));
-> > > +	CHECK(err == -1, "setsockopt(SO_DETACH_REUSEPORT_BPF)",
-> > > +	      "err:%d errno:%d\n", err, errno);
-> > > +
-> > > +	err = setsockopt(sk_fds[1], SOL_SOCKET, SO_DETACH_REUSEPORT_BPF,
-> > > +			 &optvalue, sizeof(optvalue));
-> > > +	CHECK(err == 0 || errno != ENOENT, "setsockopt(SO_DETACH_REUSEPORT_BPF)",
-> > > +	      "err:%d errno:%d\n", err, errno);
-> > > +
-> > > +	for (i = 0; i < NR_RESULTS; i++) {
-> > > +		err = bpf_map_lookup_elem(result_map, &i, &tmp);
-> > > +		CHECK(err == -1, "lookup_elem(result_map)",
-> > > +		      "i:%u err:%d errno:%d\n", i, err, errno);
-> > > +		nr_run_before += tmp;
-> > > +	}
-> > > +
-> > > +	cli_fd = send_data(type, family, &cmd, sizeof(cmd), PASS);
-> > > +	nev = epoll_wait(epfd, &ev, 1, 5);
-> > > +	CHECK(nev <= 0, "nev <= 0",
-> > > +	      "nev:%d expected:1 type:%d family:%d data:(0, 0)\n",
-> > > +	      nev,  type, family);
-> > > +
-> > > +	for (i = 0; i < NR_RESULTS; i++) {
-> > > +		err = bpf_map_lookup_elem(result_map, &i, &tmp);
-> > > +		CHECK(err == -1, "lookup_elem(result_map)",
-> > > +		      "i:%u err:%d errno:%d\n", i, err, errno);
-> > > +		nr_run_after += tmp;
-> > > +	}
-> > > +
-> > > +	CHECK(nr_run_before != nr_run_after,
-> > > +	      "nr_run_before != nr_run_after",
-> > > +	      "nr_run_before:%u nr_run_after:%u\n",
-> > > +	      nr_run_before, nr_run_after);
-> > > +
-> > > +	printf("OK\n");
-> > > +	close(cli_fd);
-> > > +}
-> > > +
-> > >  static void prepare_sk_fds(int type, sa_family_t family, bool inany)
-> > >  {
-> > >  	const int first = REUSEPORT_ARRAY_SIZE - 1;
-> > > @@ -664,6 +712,8 @@ static void test_all(void)
-> > >  			test_pass(type, family);
-> > >  			test_syncookie(type, family);
-> > >  			test_pass_on_err(type, family);
-> > > +			/* Must be the last test */
-> > > +			test_detach_bpf(type, family);
-> > >  
-> > >  			cleanup_per_test();
-> > >  			printf("\n");
-> > > -- 
-> > > 2.17.1
-> > > 
+> +
+> +       return &smap->buckets[bucket];
+>  }
+>
+>  static int omem_charge(struct sock *sk, unsigned int size)
+> --
+> 2.20.1
+>
