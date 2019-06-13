@@ -2,99 +2,120 @@ Return-Path: <SRS0=LLXA=UM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E72AC31E45
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96E0AC46477
 	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 16:47:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EFFCF215EA
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 16:47:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6BA4C21721
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 16:47:08 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="HPVyuC10"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730273AbfFMQrD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Jun 2019 12:47:03 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:35310 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730272AbfFMFG2 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 13 Jun 2019 01:06:28 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5D51rog045499
-        for <bpf@vger.kernel.org>; Thu, 13 Jun 2019 01:06:28 -0400
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2t3ekajsw0-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 13 Jun 2019 01:06:27 -0400
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <bpf@vger.kernel.org> from <sandipan@linux.ibm.com>;
-        Thu, 13 Jun 2019 06:06:25 +0100
-Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 13 Jun 2019 06:06:22 +0100
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5D56EsZ28442890
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 13 Jun 2019 05:06:14 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AEED95204F;
-        Thu, 13 Jun 2019 05:06:21 +0000 (GMT)
-Received: from [9.85.72.231] (unknown [9.85.72.231])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 10F5B52051;
-        Thu, 13 Jun 2019 05:06:19 +0000 (GMT)
-Subject: Re: [PATCH 0/2] powerpc/bpf: DIV64 instruction fix
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-References: <cover.1560364574.git.naveen.n.rao@linux.vnet.ibm.com>
-From:   Sandipan Das <sandipan@linux.ibm.com>
-Date:   Thu, 13 Jun 2019 10:36:17 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.4.0
+        id S1730822AbfFMQrI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Jun 2019 12:47:08 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:38886 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730269AbfFMFFE (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 13 Jun 2019 01:05:04 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5D54o8s024722
+        for <bpf@vger.kernel.org>; Wed, 12 Jun 2019 22:05:03 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=SI24W5Z8EyLLOK4C9Z6ksLNPnCBwReaLrAALT/kmwL0=;
+ b=HPVyuC10xIfBTonIEfOTQy1g8y2wlBHvj3fiktyUStuBkiGb/9axaNkffAzPGv0nk9Jd
+ ITodZwkSJi71rvt+mreWGxuRx5xhJ6+zE76A0xAhRbTkIg6rS9Jkg34j9EL4ca7EUPia
+ yaeftHx0mwOJhTLTHA9rVes6b+1k+6C00+4= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2t38w718fc-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 12 Jun 2019 22:05:03 -0700
+Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 12 Jun 2019 22:05:01 -0700
+Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
+        id 70D1B861777; Wed, 12 Jun 2019 22:04:59 -0700 (PDT)
+Smtp-Origin-Hostprefix: dev
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: dev101.prn2.facebook.com
+To:     <andrii.nakryiko@gmail.com>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <ast@fb.com>, <daniel@iogearbox.net>,
+        <dan.carpenter@oracle.com>
+CC:     Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: prn2c23
+Subject: [PATCH bpf-next] libbpf: fix check for presence of associated BTF for map creation
+Date:   Wed, 12 Jun 2019 22:04:57 -0700
+Message-ID: <20190613050457.290884-1-andriin@fb.com>
+X-Mailer: git-send-email 2.17.1
+X-FB-Internal: Safe
 MIME-Version: 1.0
-In-Reply-To: <cover.1560364574.git.naveen.n.rao@linux.vnet.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19061305-0008-0000-0000-000002F3521F
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19061305-0009-0000-0000-000022605641
-Message-Id: <9420d355-94d3-4ab0-78d3-01596774676d@linux.ibm.com>
+Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-13_03:,,
  signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
  malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=669 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906130040
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906130041
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Kernel internally checks that either key or value type ID is specified,
+before using btf_fd. Do the same in libbpf's map creation code for
+determining when to retry map creation w/o BTF.
 
-On 13/06/19 12:21 AM, Naveen N. Rao wrote:
-> The first patch updates DIV64 overflow tests to properly detect error 
-> conditions. The second patch fixes powerpc64 JIT to generate the proper 
-> unsigned division instruction for BPF_ALU64.
-> 
-> - Naveen
-> 
-> Naveen N. Rao (2):
->   bpf: fix div64 overflow tests to properly detect errors
->   powerpc/bpf: use unsigned division instruction for 64-bit operations
-> 
->  arch/powerpc/include/asm/ppc-opcode.h              |  1 +
->  arch/powerpc/net/bpf_jit.h                         |  2 +-
->  arch/powerpc/net/bpf_jit_comp64.c                  |  8 ++++----
->  .../testing/selftests/bpf/verifier/div_overflow.c  | 14 ++++++++++----
->  4 files changed, 16 insertions(+), 9 deletions(-)
-> 
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Fixes: fba01a0689a9 ("libbpf: use negative fd to specify missing BTF")
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/lib/bpf/libbpf.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-For the series
-
-Acked-by: Sandipan Das <sandipan@linux.ibm.com>
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index dd8b2cd5d3a7..e725fa86b189 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -1736,7 +1736,7 @@ bpf_object__create_maps(struct bpf_object *obj)
+ 		create_attr.key_size = def->key_size;
+ 		create_attr.value_size = def->value_size;
+ 		create_attr.max_entries = def->max_entries;
+-		create_attr.btf_fd = -1;
++		create_attr.btf_fd = 0;
+ 		create_attr.btf_key_type_id = 0;
+ 		create_attr.btf_value_type_id = 0;
+ 		if (bpf_map_type__is_map_in_map(def->type) &&
+@@ -1750,11 +1750,12 @@ bpf_object__create_maps(struct bpf_object *obj)
+ 		}
+ 
+ 		*pfd = bpf_create_map_xattr(&create_attr);
+-		if (*pfd < 0 && create_attr.btf_fd >= 0) {
++		if (*pfd < 0 && (create_attr.btf_key_type_id ||
++				 create_attr.btf_value_type_id)) {
+ 			cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
+ 			pr_warning("Error in bpf_create_map_xattr(%s):%s(%d). Retrying without BTF.\n",
+ 				   map->name, cp, errno);
+-			create_attr.btf_fd = -1;
++			create_attr.btf_fd = 0;
+ 			create_attr.btf_key_type_id = 0;
+ 			create_attr.btf_value_type_id = 0;
+ 			map->btf_key_type_id = 0;
+@@ -2045,7 +2046,7 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+ 	load_attr.license = license;
+ 	load_attr.kern_version = kern_version;
+ 	load_attr.prog_ifindex = prog->prog_ifindex;
+-	load_attr.prog_btf_fd = prog->btf_fd;
++	load_attr.prog_btf_fd = prog->btf_fd >= 0 ? prog->btf_fd : 0;
+ 	load_attr.func_info = prog->func_info;
+ 	load_attr.func_info_rec_size = prog->func_info_rec_size;
+ 	load_attr.func_info_cnt = prog->func_info_cnt;
+-- 
+2.17.1
 
