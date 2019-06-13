@@ -2,36 +2,44 @@ Return-Path: <SRS0=LLXA=UM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=FROM_EXCESS_BASE64,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 514F4C31E49
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:06:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83D7FC31E45
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:07:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 34CEF207E0
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:06:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 51E8D21473
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:07:54 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=Mellanox.com header.i=@Mellanox.com header.b="RzTTuEu5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732434AbfFMPGC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Jun 2019 11:06:02 -0400
-Received: from mga07.intel.com ([134.134.136.100]:18387 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732427AbfFMOL3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Jun 2019 10:11:29 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Jun 2019 07:11:28 -0700
-X-ExtLoop1: 1
-Received: from btopel-mobl.isw.intel.com (HELO btopel-mobl.ger.intel.com) ([10.103.211.150])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Jun 2019 07:11:24 -0700
-Subject: Re: [PATCH bpf-next v4 00/17] AF_XDP infrastructure improvements and
- mlx5e support
-To:     Maxim Mikityanskiy <maximmi@mellanox.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        id S1732894AbfFMPHp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Jun 2019 11:07:45 -0400
+Received: from mail-eopbgr130084.outbound.protection.outlook.com ([40.107.13.84]:17571
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1732390AbfFMOBp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Jun 2019 10:01:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hxeuX7D1QAiTCC8RFAgTcVdwBN6G+b1c/lunrCn+vz0=;
+ b=RzTTuEu50IBPyAecUezKHUDTQpMMoFDaKq0A/t2U5tVqA/fqW4dHfxOqxOWywSf4y9CkdfgpUt3aLH5mHz7CVm/F6CJBrfYuU1NWx1fEqY0suQtweoj4omnrPhVFMWahxKgRdq0srf32/0LLswOa63q19VNwM5nkRxHf/Gmh8hU=
+Received: from AM6PR05MB5879.eurprd05.prod.outlook.com (20.179.0.76) by
+ AM6PR05MB5637.eurprd05.prod.outlook.com (20.178.86.86) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1987.10; Thu, 13 Jun 2019 14:01:39 +0000
+Received: from AM6PR05MB5879.eurprd05.prod.outlook.com
+ ([fe80::9527:fe9d:2a02:41d5]) by AM6PR05MB5879.eurprd05.prod.outlook.com
+ ([fe80::9527:fe9d:2a02:41d5%5]) with mapi id 15.20.1987.010; Thu, 13 Jun 2019
+ 14:01:39 +0000
+From:   Maxim Mikityanskiy <maximmi@mellanox.com>
+To:     Jakub Kicinski <jakub.kicinski@netronome.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
         Magnus Karlsson <magnus.karlsson@intel.com>,
         "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
@@ -42,63 +50,99 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Maciej Fijalkowski <maciejromanfijalkowski@gmail.com>
+Subject: Re: [PATCH bpf-next v4 07/17] libbpf: Support drivers with
+ non-combined channels
+Thread-Topic: [PATCH bpf-next v4 07/17] libbpf: Support drivers with
+ non-combined channels
+Thread-Index: AQHVITdxVC+hU8LhkUKnNDgy7zjLlaaYdxEAgAEneoA=
+Date:   Thu, 13 Jun 2019 14:01:39 +0000
+Message-ID: <0afd3ef2-d0e3-192b-095e-0f8ae8e6fb5d@mellanox.com>
 References: <20190612155605.22450-1-maximmi@mellanox.com>
- <20190612134805.3bf4ea25@cakuba.netronome.com>
- <CAJ+HfNh3KcoZC5W6CLgnx2tzH41Kz11Zs__2QkOKF+CyEMzdMQ@mail.gmail.com>
- <65cf2b7b-79a5-c660-358c-a265fc03b495@mellanox.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
-Message-ID: <54a8ed28-0690-565e-f470-2c81a990251e@intel.com>
-Date:   Thu, 13 Jun 2019 16:11:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <65cf2b7b-79a5-c660-358c-a265fc03b495@mellanox.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+ <20190612155605.22450-8-maximmi@mellanox.com>
+ <20190612132352.7ee27bf3@cakuba.netronome.com>
+In-Reply-To: <20190612132352.7ee27bf3@cakuba.netronome.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BYAPR11CA0044.namprd11.prod.outlook.com
+ (2603:10b6:a03:80::21) To AM6PR05MB5879.eurprd05.prod.outlook.com
+ (2603:10a6:20b:a2::12)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=maximmi@mellanox.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [159.224.90.213]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4567792d-b3dc-4388-e864-08d6f007a7ae
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(7168020)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:AM6PR05MB5637;
+x-ms-traffictypediagnostic: AM6PR05MB5637:
+x-microsoft-antispam-prvs: <AM6PR05MB5637F159FAB162855067B860D1EF0@AM6PR05MB5637.eurprd05.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0067A8BA2A
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(39860400002)(396003)(376002)(346002)(366004)(199004)(189003)(68736007)(11346002)(31686004)(446003)(8936002)(8676002)(81156014)(81166006)(486006)(305945005)(73956011)(66946007)(66446008)(66476007)(66556008)(64756008)(6246003)(229853002)(14454004)(7736002)(476003)(2616005)(6512007)(316002)(31696002)(99286004)(7416002)(6486002)(25786009)(54906003)(66066001)(53936002)(52116002)(6916009)(76176011)(5660300002)(4326008)(478600001)(6436002)(86362001)(53546011)(6506007)(386003)(26005)(55236004)(102836004)(71190400001)(71200400001)(256004)(14444005)(186003)(36756003)(2906002)(6116002)(3846002);DIR:OUT;SFP:1101;SCL:1;SRVR:AM6PR05MB5637;H:AM6PR05MB5879.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: mellanox.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: g7fqX9efSejPiGnE6QO4goNSQYL88N/kQaD9KiLJKakgE3J0EmXfZA4ClorCsuPuTAx+Egjrs7XaTtH2Sq5m1jWd/XZe/GjoG9cG5e3InrOCEZknTc30gjxir8IvF7cUGtNggroweyFG3h3g0Mdag5amHisxm+QL5eriIIjM8HYy9c361f5+RZYXGgJG+fHiFy46TThnszQ1AWlXYWnC4HeNGNDoA37q0O6UUEZGYO4ShDdHnV7XLtPbC0FUqCRFOuUHCf3+WLwuLWriFzzFKuachzXONSp9xD5gdbNwgIsWlTOb1bi1UnFXtbfnzF/Dz1w63vXntV+vNdABOx/dO8RcKFzNibOwN2CWIT/pRwrN/l9SIXTttUJaD6NVXJZaXRP4BarQsXoiiGKD4Mvv0wJzfGeuGCtjuhEPGsp2iX4=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A2847739FBBE6E4D8C648F8AA3D087F3@eurprd05.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: Mellanox.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4567792d-b3dc-4388-e864-08d6f007a7ae
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jun 2019 14:01:39.5454
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: maximmi@mellanox.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR05MB5637
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-
-On 2019-06-13 16:01, Maxim Mikityanskiy wrote:
-> On 2019-06-13 15:58, Björn Töpel wrote:
->> On Wed, 12 Jun 2019 at 22:49, Jakub Kicinski
->> <jakub.kicinski@netronome.com> wrote:
->>>
->>> On Wed, 12 Jun 2019 15:56:33 +0000, Maxim Mikityanskiy wrote:
->>>> UAPI is not changed, XSK RX queues are exposed to the kernel. The lower
->>>> half of the available amount of RX queues are regular queues, and the
->>>> upper half are XSK RX queues.
->>>
->>> If I have 32 queues enabled on the NIC and I install AF_XDP socket on
->>> queue 10, does the NIC now have 64 RQs, but only first 32 are in the
->>> normal RSS map?
->>>
->>
->> Additional, related, question to Jakub's: Say that I'd like to hijack
->> all 32 Rx queues of the NIC. I create 32 AF_XDP socket and attach them
->> in zero-copy mode to the device. What's the result?
-> 
-> There are 32 regular RX queues (0..31) and 32 XSK RX queues (32..63). If
-> you want 32 zero-copy AF_XDP sockets, you can attach them to queues
-> 32..63, and the regular traffic won't be affected at all.
-> 
-Thanks for getting back! More questions!
-
-Ok, so I cannot (with zero-copy) get the regular traffic into AF_XDP
-sockets?
-
-How does qids map? Can I only bind a zero-copy socket to qid 32..63 in
-the example above?
-
-Say that I have a a copy-mode AF_XDP socket bound to queue 2. In this
-case I will receive the regular traffic from queue 2. Enabling zero-copy
-for the same queue, will this give an error, or receive AF_XDP specific
-traffic from queue 2+32? Or return an error, and require an explicit
-bind to any of the queues 32..63?
-
-
-Thanks,
-Björn
+T24gMjAxOS0wNi0xMiAyMzoyMywgSmFrdWIgS2ljaW5za2kgd3JvdGU6DQo+IE9uIFdlZCwgMTIg
+SnVuIDIwMTkgMTU6NTY6NDggKzAwMDAsIE1heGltIE1pa2l0eWFuc2tpeSB3cm90ZToNCj4+IEN1
+cnJlbnRseSwgbGliYnBmIHVzZXMgdGhlIG51bWJlciBvZiBjb21iaW5lZCBjaGFubmVscyBhcyB0
+aGUgbWF4aW11bQ0KPj4gcXVldWUgbnVtYmVyLiBIb3dldmVyLCB0aGUga2VybmVsIGhhcyBhIGRp
+ZmZlcmVudCBsaW1pdGF0aW9uOg0KPj4NCj4+IC0geGRwX3JlZ191bWVtX2F0X3FpZCgpIGFsbG93
+cyB1cCB0byBtYXgoUlggcXVldWVzLCBUWCBxdWV1ZXMpLg0KPj4NCj4+IC0gZXRodG9vbF9zZXRf
+Y2hhbm5lbHMoKSBjaGVja3MgZm9yIFVNRU1zIGluIHF1ZXVlcyB1cCB0bw0KPj4gICAgY29tYmlu
+ZWRfY291bnQgKyBtYXgocnhfY291bnQsIHR4X2NvdW50KS4NCj4+DQo+PiBsaWJicGYgc2hvdWxk
+bid0IGxpbWl0IGFwcGxpY2F0aW9ucyB0byBhIGxvd2VyIG1heCBxdWV1ZSBudW1iZXIuIEFjY291
+bnQNCj4+IGZvciBub24tY29tYmluZWQgUlggYW5kIFRYIGNoYW5uZWxzIHdoZW4gY2FsY3VsYXRp
+bmcgdGhlIG1heCBxdWV1ZQ0KPj4gbnVtYmVyLiBVc2UgdGhlIHNhbWUgZm9ybXVsYSB0aGF0IGlz
+IHVzZWQgaW4gZXRodG9vbC4NCj4+DQo+PiBTaWduZWQtb2ZmLWJ5OiBNYXhpbSBNaWtpdHlhbnNr
+aXkgPG1heGltbWlAbWVsbGFub3guY29tPg0KPj4gUmV2aWV3ZWQtYnk6IFRhcmlxIFRvdWthbiA8
+dGFyaXF0QG1lbGxhbm94LmNvbT4NCj4+IEFja2VkLWJ5OiBTYWVlZCBNYWhhbWVlZCA8c2FlZWRt
+QG1lbGxhbm94LmNvbT4NCj4gDQo+IEkgZG9uJ3QgdGhpbmsgdGhpcyBpcyBjb3JyZWN0LiAgbWF4
+X3R4IHRlbGxzIHlvdSBob3cgbWFueSBUWCBjaGFubmVscw0KPiB0aGVyZSBjYW4gYmUsIHlvdSBj
+YW4ndCBhZGQgdGhhdCB0byBjb21iaW5lZC4gIENvcnJlY3QgY2FsY3VsYXRpb25zIGlzOg0KPiAN
+Cj4gbWF4X251bV9jaGFucyA9IG1heChtYXhfY29tYmluZWQsIG1heChtYXhfcngsIG1heF90eCkp
+DQoNCkZpcnN0IG9mIGFsbCwgSSdtIGFsaWduaW5nIHdpdGggdGhlIGZvcm11bGEgaW4gdGhlIGtl
+cm5lbCwgd2hpY2ggaXM6DQoNCiAgICAgY3Vyci5jb21iaW5lZF9jb3VudCArIG1heChjdXJyLnJ4
+X2NvdW50LCBjdXJyLnR4X2NvdW50KTsNCg0KKHNlZSBuZXQvY29yZS9ldGh0b29sLmMsIGV0aHRv
+b2xfc2V0X2NoYW5uZWxzKCkpLg0KDQpUaGUgZm9ybXVsYSBpbiBsaWJicGYgc2hvdWxkIG1hdGNo
+IGl0Lg0KDQpTZWNvbmQsIHRoZSBleGlzdGluZyBkcml2ZXJzIGhhdmUgZWl0aGVyIGNvbWJpbmVk
+IGNoYW5uZWxzIG9yIHNlcGFyYXRlIA0KcnggYW5kIHR4IGNoYW5uZWxzLiBTbywgZm9yIHRoZSBm
+aXJzdCBraW5kIG9mIGRyaXZlcnMsIG1heF90eCBkb2Vzbid0IA0KdGVsbCBob3cgbWFueSBUWCBj
+aGFubmVscyB0aGVyZSBjYW4gYmUsIGl0IGp1c3Qgc2F5cyAwLCBhbmQgbWF4X2NvbWJpbmVkIA0K
+dGVsbHMgaG93IG1hbnkgVFggYW5kIFJYIGNoYW5uZWxzIGFyZSBzdXBwb3J0ZWQuIEFzIG1heF90
+eCBkb2Vzbid0IA0KaW5jbHVkZSBtYXhfY29tYmluZWQgKGFuZCB2aWNlIHZlcnNhKSwgd2Ugc2hv
+dWxkIGFkZCB0aGVtIHVwLg0KDQo+PiAgIHRvb2xzL2xpYi9icGYveHNrLmMgfCA2ICsrKy0tLQ0K
+Pj4gICAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQ0KPj4N
+Cj4+IGRpZmYgLS1naXQgYS90b29scy9saWIvYnBmL3hzay5jIGIvdG9vbHMvbGliL2JwZi94c2su
+Yw0KPj4gaW5kZXggYmYxNWE4MGEzN2MyLi44NjEwNzg1N2UxZjAgMTAwNjQ0DQo+PiAtLS0gYS90
+b29scy9saWIvYnBmL3hzay5jDQo+PiArKysgYi90b29scy9saWIvYnBmL3hzay5jDQo+PiBAQCAt
+MzM0LDEzICszMzQsMTMgQEAgc3RhdGljIGludCB4c2tfZ2V0X21heF9xdWV1ZXMoc3RydWN0IHhz
+a19zb2NrZXQgKnhzaykNCj4+ICAgCQlnb3RvIG91dDsNCj4+ICAgCX0NCj4+ICAgDQo+PiAtCWlm
+IChjaGFubmVscy5tYXhfY29tYmluZWQgPT0gMCB8fCBlcnJubyA9PSBFT1BOT1RTVVBQKQ0KPj4g
+KwlyZXQgPSBjaGFubmVscy5tYXhfY29tYmluZWQgKyBtYXgoY2hhbm5lbHMubWF4X3J4LCBjaGFu
+bmVscy5tYXhfdHgpOw0KPj4gKw0KPj4gKwlpZiAocmV0ID09IDAgfHwgZXJybm8gPT0gRU9QTk9U
+U1VQUCkNCj4+ICAgCQkvKiBJZiB0aGUgZGV2aWNlIHNheXMgaXQgaGFzIG5vIGNoYW5uZWxzLCB0
+aGVuIGFsbCB0cmFmZmljDQo+PiAgIAkJICogaXMgc2VudCB0byBhIHNpbmdsZSBzdHJlYW0sIHNv
+IG1heCBxdWV1ZXMgPSAxLg0KPj4gICAJCSAqLw0KPj4gICAJCXJldCA9IDE7DQo+PiAtCWVsc2UN
+Cj4+IC0JCXJldCA9IGNoYW5uZWxzLm1heF9jb21iaW5lZDsNCj4+ICAgDQo+PiAgIG91dDoNCj4+
+ICAgCWNsb3NlKGZkKTsNCj4gDQoNCg==
