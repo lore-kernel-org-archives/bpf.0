@@ -4,28 +4,28 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53DEDC31E4A
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:16:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E200C31E49
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:16:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 343FF20449
+	by mail.kernel.org (Postfix) with ESMTP id D730620449
 	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 15:16:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732226AbfFMPQM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Jun 2019 11:16:12 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:35834 "EHLO mx1.redhat.com"
+        id S1732252AbfFMPQ3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Jun 2019 11:16:29 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:50488 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732208AbfFMNXw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Jun 2019 09:23:52 -0400
+        id S1732206AbfFMNXt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Jun 2019 09:23:49 -0400
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id E21E130F1BA3;
-        Thu, 13 Jun 2019 13:23:46 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id 3D877C1EB1ED;
+        Thu, 13 Jun 2019 13:23:44 +0000 (UTC)
 Received: from treble.redhat.com (ovpn-121-232.rdu2.redhat.com [10.10.121.232])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B95F6541F8;
-        Thu, 13 Jun 2019 13:23:45 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 03FD6541F2;
+        Thu, 13 Jun 2019 13:23:39 +0000 (UTC)
 From:   Josh Poimboeuf <jpoimboe@redhat.com>
 To:     x86@kernel.org
 Cc:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
@@ -33,145 +33,84 @@ Cc:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         bpf@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
         Song Liu <songliubraving@fb.com>,
         Kairui Song <kasong@redhat.com>
-Subject: [PATCH 5/9] x86/bpf: Support SIB byte generation
-Date:   Thu, 13 Jun 2019 08:21:02 -0500
-Message-Id: <30e798c2a5b5d89908e6beea03bf2938eaf2a1ca.1560431531.git.jpoimboe@redhat.com>
+Subject: [PATCH 3/9] x86/bpf: Move epilogue generation to a dedicated function
+Date:   Thu, 13 Jun 2019 08:21:00 -0500
+Message-Id: <b091755f6053b4a3f66de9c168d4f73a751a5661.1560431531.git.jpoimboe@redhat.com>
 In-Reply-To: <cover.1560431531.git.jpoimboe@redhat.com>
 References: <cover.1560431531.git.jpoimboe@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.43]); Thu, 13 Jun 2019 13:23:52 +0000 (UTC)
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.32]); Thu, 13 Jun 2019 13:23:49 +0000 (UTC)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In preparation for using R12 indexing instructions in BPF JIT code, add
-support for generating the x86 SIB byte.
+Improve code readability by moving the BPF JIT function epilogue
+generation code to a dedicated emit_epilogue() function, analagous to
+the existing emit_prologue() function.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
 ---
- arch/x86/net/bpf_jit_comp.c | 69 +++++++++++++++++++++++++++++--------
- 1 file changed, 54 insertions(+), 15 deletions(-)
+ arch/x86/net/bpf_jit_comp.c | 37 ++++++++++++++++++++++++-------------
+ 1 file changed, 24 insertions(+), 13 deletions(-)
 
 diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 485692d4b163..e649f977f8e1 100644
+index 32bfab4e21eb..da8c988b0f0f 100644
 --- a/arch/x86/net/bpf_jit_comp.c
 +++ b/arch/x86/net/bpf_jit_comp.c
-@@ -143,6 +143,12 @@ static bool is_axreg(u32 reg)
- 	return reg == BPF_REG_0;
+@@ -240,6 +240,28 @@ static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf)
+ 	*pprog = prog;
  }
  
-+static bool is_sib_reg(u32 reg)
++static void emit_epilogue(u8 **pprog)
 +{
-+	/* R12 isn't used yet */
-+	false;
++	u8 *prog = *pprog;
++	int cnt = 0;
++
++	/* mov rbx, qword ptr [rbp+0] */
++	EMIT4(0x48, 0x8B, 0x5D, 0);
++	/* mov r13, qword ptr [rbp+8] */
++	EMIT4(0x4C, 0x8B, 0x6D, 8);
++	/* mov r14, qword ptr [rbp+16] */
++	EMIT4(0x4C, 0x8B, 0x75, 16);
++	/* mov r15, qword ptr [rbp+24] */
++	EMIT4(0x4C, 0x8B, 0x7D, 24);
++
++	/* add rbp, AUX_STACK_SPACE */
++	EMIT4(0x48, 0x83, 0xC5, AUX_STACK_SPACE);
++	EMIT1(0xC9); /* leave */
++	EMIT1(0xC3); /* ret */
++
++	*pprog = prog;
 +}
 +
- /* Add modifiers if 'reg' maps to x86-64 registers R8..R15 */
- static u8 add_1mod(u8 byte, u32 reg)
- {
-@@ -779,10 +785,19 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 		case BPF_ST | BPF_MEM | BPF_DW:
- 			EMIT2(add_1mod(0x48, dst_reg), 0xC7);
- 
--st:			if (is_imm8(insn->off))
--				EMIT2(add_1reg(0x40, dst_reg), insn->off);
-+st:
-+			if (is_imm8(insn->off))
-+				EMIT1(add_1reg(0x40, dst_reg));
-+			else
-+				EMIT1(add_1reg(0x80, dst_reg));
+ /*
+  * Generate the following code:
+  *
+@@ -1036,19 +1058,8 @@ xadd:			if (is_imm8(insn->off))
+ 			seen_exit = true;
+ 			/* Update cleanup_addr */
+ 			ctx->cleanup_addr = proglen;
+-			/* mov rbx, qword ptr [rbp+0] */
+-			EMIT4(0x48, 0x8B, 0x5D, 0);
+-			/* mov r13, qword ptr [rbp+8] */
+-			EMIT4(0x4C, 0x8B, 0x6D, 8);
+-			/* mov r14, qword ptr [rbp+16] */
+-			EMIT4(0x4C, 0x8B, 0x75, 16);
+-			/* mov r15, qword ptr [rbp+24] */
+-			EMIT4(0x4C, 0x8B, 0x7D, 24);
+-
+-			/* add rbp, AUX_STACK_SPACE */
+-			EMIT4(0x48, 0x83, 0xC5, AUX_STACK_SPACE);
+-			EMIT1(0xC9); /* leave */
+-			EMIT1(0xC3); /* ret */
 +
-+			if (is_sib_reg(dst_reg))
-+				EMIT1(add_1reg(0x20, dst_reg));
-+
-+			if (is_imm8(insn->off))
-+				EMIT1(insn->off);
- 			else
--				EMIT1_off32(add_1reg(0x80, dst_reg), insn->off);
-+				EMIT(insn->off, 4);
- 
- 			EMIT(imm32, bpf_size_to_x86_bytes(BPF_SIZE(insn->code)));
- 			break;
-@@ -811,11 +826,19 @@ st:			if (is_imm8(insn->off))
- 			goto stx;
- 		case BPF_STX | BPF_MEM | BPF_DW:
- 			EMIT2(add_2mod(0x48, dst_reg, src_reg), 0x89);
--stx:			if (is_imm8(insn->off))
--				EMIT2(add_2reg(0x40, dst_reg, src_reg), insn->off);
-+stx:
-+			if (is_imm8(insn->off))
-+				EMIT1(add_2reg(0x40, dst_reg, src_reg));
- 			else
--				EMIT1_off32(add_2reg(0x80, dst_reg, src_reg),
--					    insn->off);
-+				EMIT1(add_2reg(0x80, dst_reg, src_reg));
-+
-+			if (is_sib_reg(dst_reg))
-+				EMIT1(add_1reg(0x20, dst_reg));
-+
-+			if (is_imm8(insn->off))
-+				EMIT1(insn->off);
-+			else
-+				EMIT(insn->off, 4);
++			emit_epilogue(&prog);
  			break;
  
- 			/* LDX: dst_reg = *(u8*)(src_reg + off) */
-@@ -837,16 +860,24 @@ stx:			if (is_imm8(insn->off))
- 		case BPF_LDX | BPF_MEM | BPF_DW:
- 			/* Emit 'mov rax, qword ptr [rax+0x14]' */
- 			EMIT2(add_2mod(0x48, src_reg, dst_reg), 0x8B);
--ldx:			/*
-+ldx:
-+			/*
- 			 * If insn->off == 0 we can save one extra byte, but
- 			 * special case of x86 R13 which always needs an offset
- 			 * is not worth the hassle
- 			 */
- 			if (is_imm8(insn->off))
--				EMIT2(add_2reg(0x40, src_reg, dst_reg), insn->off);
-+				EMIT1(add_2reg(0x40, src_reg, dst_reg));
-+			else
-+				EMIT1(add_2reg(0x80, src_reg, dst_reg));
-+
-+			if (is_sib_reg(src_reg))
-+				EMIT1(add_1reg(0x20, src_reg));
-+
-+			if (is_imm8(insn->off))
-+				EMIT1(insn->off);
- 			else
--				EMIT1_off32(add_2reg(0x80, src_reg, dst_reg),
--					    insn->off);
-+				EMIT(insn->off, 4);
- 			break;
- 
- 			/* STX XADD: lock *(u32*)(dst_reg + off) += src_reg */
-@@ -859,11 +890,19 @@ stx:			if (is_imm8(insn->off))
- 			goto xadd;
- 		case BPF_STX | BPF_XADD | BPF_DW:
- 			EMIT3(0xF0, add_2mod(0x48, dst_reg, src_reg), 0x01);
--xadd:			if (is_imm8(insn->off))
--				EMIT2(add_2reg(0x40, dst_reg, src_reg), insn->off);
-+xadd:
-+			if (is_imm8(insn->off))
-+				EMIT1(add_2reg(0x40, dst_reg, src_reg));
-+			else
-+				EMIT1(add_2reg(0x80, dst_reg, src_reg));
-+
-+			if (is_sib_reg(dst_reg))
-+				EMIT1(add_1reg(0x20, dst_reg));
-+
-+			if (is_imm8(insn->off))
-+				EMIT1(insn->off);
- 			else
--				EMIT1_off32(add_2reg(0x80, dst_reg, src_reg),
--					    insn->off);
-+				EMIT(insn->off, 4);
- 			break;
- 
- 			/* call */
+ 		default:
 -- 
 2.20.1
 
