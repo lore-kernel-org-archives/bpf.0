@@ -2,105 +2,249 @@ Return-Path: <SRS0=LLXA=UM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-8.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8491C31E45
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 16:59:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77A02C31E4A
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 17:00:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7FF1E20665
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 16:59:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4E870206BB
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 17:00:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SurKhAYJ"
+	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="KfHLt5cj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729868AbfFMQ7G (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Jun 2019 12:59:06 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:41899 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727639AbfFMQ7G (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Jun 2019 12:59:06 -0400
-Received: by mail-qk1-f193.google.com with SMTP id c11so13200920qkk.8;
-        Thu, 13 Jun 2019 09:59:05 -0700 (PDT)
+        id S2404422AbfFMRAR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Jun 2019 13:00:17 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:46662 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729772AbfFMACT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 12 Jun 2019 20:02:19 -0400
+Received: by mail-pf1-f193.google.com with SMTP id 81so10585684pfy.13
+        for <bpf@vger.kernel.org>; Wed, 12 Jun 2019 17:02:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=11OleX27xVveG0LvW8hhS+mOJv2guc7A/BC2mPPxyvA=;
-        b=SurKhAYJRBJsFlMemN2kRJ6bXLy/QXFfseNapj78YrX3aHam6qtgP1hZZjIISPV2bE
-         G7he95bIpytx3uucms6/j1bkIkz+j/rgUnQS+LFSuGoEO5i32gcranmFDcFRPLCpo6Ct
-         Mq+uwM/slJvEhZ6d7K5HTpL/HFTTiBhONMT/FE/LNswyNIFDWUzkEnp7GtZ1cEh8YiC1
-         ZT5vYlxczI/4ylayRQWESpJCAEcvJ9o3UTGzyj9oAd1kK2J78jtfB6Jn8HPmaaAM3uRN
-         NAqtU1gZaw1ObiwUgVDpSHRGBStlsHgh5fp8Y9wG6NChoLD3qlifr0uec+ja1EeNWx8p
-         6z9w==
+        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=YDUESB646rGE/IVwAhBdOdDFlzT1Fe3pYy+zXnheJTg=;
+        b=KfHLt5cjs9H7cVhUF7lUhuutBJqVxGfM2Z1KL6ty86XPylMaMb9MT+1bJ7D8agCirE
+         H3dyhwUf3Ma+dKTzEmxv9AX75R7AIjxMGbVnFjxUyQk3CmA+ckPORdC3rY2Qj3P2N1K8
+         bTN0oR/qB5zla6DTYYn6k6lCa8rfPRW5T8JfhTSeHIx2SxAkI5MWbgrDWMs39z6a8i2e
+         jJrR+ezPQK6piQYriYMTmgoTwtbkzxg6txWxfzSa7zcd9IXbXbIsMenGHlHLhbcXQAyW
+         HHrykwN5p2Nb5Okg8OuSYNIONkJYLe3XmmrE0w/Nj1hhhmNNZWNqxpkuFM6/QJJzeGAL
+         KMqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=11OleX27xVveG0LvW8hhS+mOJv2guc7A/BC2mPPxyvA=;
-        b=YSlzNoOyPDE39EPXHT5oF3MZzQAMNHcRP2XK4A+rLKrLVW+Na7KvK4JfQkZ6uFGJo5
-         A6eaejaaVs4/2Ns5NZBX88mDkBho/oUpinS14kWyOf0nRxHnai5ZjdmNuCeXN3oN0wSB
-         esdlZi2Y+qBLZCDAytOz91jXFtJAZEB7MA5WY7Ay560dR+EfqU1Q5QOoLJvrx5WBrUWp
-         ysB2NBNq8f0VHiTa7bc8IF3n7NIumow7jn/zyoisD0eYEyQDPhDt6S9/uFRWGT/7l7Oa
-         Gabkhc9HFS6q1kAL7WvHuFVKJUM5TTmXXzT5zLJfKhHTgcP7BZlRG+w+rytz872/gbS4
-         rwuA==
-X-Gm-Message-State: APjAAAXnvz4jxthV40j26ShUceu4LcZXL5r4exdGE8X4f4C+ZbjrsZft
-        Yb8HJ6dSbIl/13VLbgbeCOpsEQvN7pw0MLQV36g=
-X-Google-Smtp-Source: APXvYqydEhoSJBurY1SYbVgwzcyCtxVDPuMxRgTpW+wjNbPpqMDmeECXzdzYcRHH2jfwhtdgtHCfz6vfv62PbxmKdM0=
-X-Received: by 2002:ae9:eb53:: with SMTP id b80mr43330382qkg.172.1560445144990;
- Thu, 13 Jun 2019 09:59:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190613070021.GG16334@mwanda>
-In-Reply-To: <20190613070021.GG16334@mwanda>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 13 Jun 2019 09:58:53 -0700
-Message-ID: <CAEf4BzZn4hHobOBiQmSPQhKTrsi7MC=R-7OjWTMyFC03ehrjgg@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: signedness bug in enable_all_controllers()
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Roman Gushchin <guro@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=YDUESB646rGE/IVwAhBdOdDFlzT1Fe3pYy+zXnheJTg=;
+        b=O8whfLcTLqT1S7s6QFz/F0nUA37JBeC1gGN5pHZmrb3q0ByWjhEQ+9NblBeu6OUg+2
+         +o7fW+3lCk4EbrAr6AG2usUE9cBygG8OsvgOh/pan/6zQeh54yWsvIPfxr+s/xMcjF+y
+         efSM51dQJkmLemObdwwaW1L935YTS1lPQqKkWsjqgEQHpfrK1Jt8dmRD8wpzAYnHyuGQ
+         HM6yWYQgF5IkR9pLHSxPxRbw9PhV80x9UOoPUleN6XLam7UwW86chJGuoodPzKQVoHmx
+         5PzfUPYR+uHHKJMtudFUxGFhXjXRZpRYJmwgtHL8aBV9OHrQH/iY9Gd7DgyxZ2Qr6icR
+         UZWQ==
+X-Gm-Message-State: APjAAAWnOL5jqveL0n7W3kM6aiSl/bD4il1m2jfr8TTjj2MAPGna3c1j
+        YeVKP6Q7zPHxBlwokMqgb5VrDg==
+X-Google-Smtp-Source: APXvYqzFTunDH1pyfWd5wOU6xZ4tPlALyEsdyFMvJdVk2ijf0e8OBUTRZWe933xIqfLKzF6D6mROYQ==
+X-Received: by 2002:a65:620a:: with SMTP id d10mr27506727pgv.42.1560384138023;
+        Wed, 12 Jun 2019 17:02:18 -0700 (PDT)
+Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
+        by smtp.gmail.com with ESMTPSA id s1sm625604pfm.187.2019.06.12.17.02.16
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 12 Jun 2019 17:02:16 -0700 (PDT)
+Date:   Wed, 12 Jun 2019 17:02:15 -0700
+From:   Stanislav Fomichev <sdf@fomichev.me>
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        linux-kselftest@vger.kernel.org, bpf <bpf@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        David Miller <davem@davemloft.net>, kernel-team@fb.com,
+        Craig Gallek <kraig@google.com>
+Subject: Re: [PATCH v2 bpf-next 1/3] bpf: net: Add SO_DETACH_REUSEPORT_BPF
+Message-ID: <20190613000215.GD9056@mini-arch>
+References: <20190612232412.3196844-1-kafai@fb.com>
+ <20190612232414.3196957-1-kafai@fb.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190612232414.3196957-1-kafai@fb.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jun 13, 2019 at 9:40 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> The "len" variable needs to be signed for the error handling to work
-> properly.
->
-> Fixes: 596092ef8bea ("selftests/bpf: enable all available cgroup v2 controllers")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+On 06/12, Martin KaFai Lau wrote:
+> There is SO_ATTACH_REUSEPORT_[CE]BPF but there is no DETACH.
+> This patch adds SO_DETACH_REUSEPORT_BPF sockopt.  The same
+> sockopt can be used to undo both SO_ATTACH_REUSEPORT_[CE]BPF.
+> 
+> reseport_detach_prog() is added and it is mostly a mirror
+> of the existing reuseport_attach_prog().  The differences are,
+> it does not call reuseport_alloc() and returns -ENOENT when
+> there is no old prog.
+> 
+> Cc: Craig Gallek <kraig@google.com>
+> Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 > ---
+>  arch/alpha/include/uapi/asm/socket.h  |  2 ++
+>  arch/mips/include/uapi/asm/socket.h   |  2 ++
+>  arch/parisc/include/uapi/asm/socket.h |  2 ++
+>  arch/sparc/include/uapi/asm/socket.h  |  2 ++
+>  include/net/sock_reuseport.h          |  2 ++
+>  include/uapi/asm-generic/socket.h     |  2 ++
+>  net/core/sock.c                       |  4 ++++
+>  net/core/sock_reuseport.c             | 24 ++++++++++++++++++++++++
+>  8 files changed, 40 insertions(+)
+> 
+> diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
+> index 976e89b116e5..de6c4df61082 100644
+> --- a/arch/alpha/include/uapi/asm/socket.h
+> +++ b/arch/alpha/include/uapi/asm/socket.h
+> @@ -122,6 +122,8 @@
+>  #define SO_RCVTIMEO_NEW         66
+>  #define SO_SNDTIMEO_NEW         67
+>  
+> +#define SO_DETACH_REUSEPORT_BPF 68
+> +
+>  #if !defined(__KERNEL__)
+>  
+>  #if __BITS_PER_LONG == 64
+> diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
+> index d41765cfbc6e..d0a9ed2ca2d6 100644
+> --- a/arch/mips/include/uapi/asm/socket.h
+> +++ b/arch/mips/include/uapi/asm/socket.h
+> @@ -133,6 +133,8 @@
+>  #define SO_RCVTIMEO_NEW         66
+>  #define SO_SNDTIMEO_NEW         67
+>  
+> +#define SO_DETACH_REUSEPORT_BPF 68
+> +
+>  #if !defined(__KERNEL__)
+>  
+>  #if __BITS_PER_LONG == 64
+> diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
+> index 66c5dd245ac7..10173c32195e 100644
+> --- a/arch/parisc/include/uapi/asm/socket.h
+> +++ b/arch/parisc/include/uapi/asm/socket.h
+> @@ -114,6 +114,8 @@
+>  #define SO_RCVTIMEO_NEW         0x4040
+>  #define SO_SNDTIMEO_NEW         0x4041
+>  
+> +#define SO_DETACH_REUSEPORT_BPF 0x4042
+> +
+>  #if !defined(__KERNEL__)
+>  
+>  #if __BITS_PER_LONG == 64
+> diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
+> index 9265a9eece15..1895ac112a24 100644
+> --- a/arch/sparc/include/uapi/asm/socket.h
+> +++ b/arch/sparc/include/uapi/asm/socket.h
+> @@ -115,6 +115,8 @@
+>  #define SO_RCVTIMEO_NEW          0x0044
+>  #define SO_SNDTIMEO_NEW          0x0045
+>  
+> +#define SO_DETACH_REUSEPORT_BPF  0x0046
+> +
+>  #if !defined(__KERNEL__)
+>  
+>  
+> diff --git a/include/net/sock_reuseport.h b/include/net/sock_reuseport.h
+> index 8a5f70c7cdf2..d9112de85261 100644
+> --- a/include/net/sock_reuseport.h
+> +++ b/include/net/sock_reuseport.h
+> @@ -35,6 +35,8 @@ extern struct sock *reuseport_select_sock(struct sock *sk,
+>  					  struct sk_buff *skb,
+>  					  int hdr_len);
+>  extern int reuseport_attach_prog(struct sock *sk, struct bpf_prog *prog);
+> +extern int reuseport_detach_prog(struct sock *sk);
+> +
+>  int reuseport_get_id(struct sock_reuseport *reuse);
+>  
+>  #endif  /* _SOCK_REUSEPORT_H */
+> diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
+> index 8c1391c89171..77f7c1638eb1 100644
+> --- a/include/uapi/asm-generic/socket.h
+> +++ b/include/uapi/asm-generic/socket.h
+> @@ -117,6 +117,8 @@
+>  #define SO_RCVTIMEO_NEW         66
+>  #define SO_SNDTIMEO_NEW         67
+>  
+> +#define SO_DETACH_REUSEPORT_BPF 68
+> +
+>  #if !defined(__KERNEL__)
+>  
+>  #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index 75b1c950b49f..06be30737b69 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -1045,6 +1045,10 @@ int sock_setsockopt(struct socket *sock, int level, int optname,
+>  		}
+>  		break;
+>  
+> +	case SO_DETACH_REUSEPORT_BPF:
+> +		ret = reuseport_detach_prog(sk);
+> +		break;
+> +
+>  	case SO_DETACH_FILTER:
+>  		ret = sk_detach_filter(sk);
+>  		break;
+> diff --git a/net/core/sock_reuseport.c b/net/core/sock_reuseport.c
+> index dc4aefdf2a08..e0cb29469fa7 100644
+> --- a/net/core/sock_reuseport.c
+> +++ b/net/core/sock_reuseport.c
+> @@ -332,3 +332,27 @@ int reuseport_attach_prog(struct sock *sk, struct bpf_prog *prog)
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL(reuseport_attach_prog);
+> +
+> +int reuseport_detach_prog(struct sock *sk)
+> +{
+> +	struct sock_reuseport *reuse;
+> +	struct bpf_prog *old_prog;
+> +
+> +	if (!rcu_access_pointer(sk->sk_reuseport_cb))
+> +		return sk->sk_reuseport ? -ENOENT : -EINVAL;
+> +
+> +	spin_lock_bh(&reuseport_lock);
+> +	reuse = rcu_dereference_protected(sk->sk_reuseport_cb,
+> +					  lockdep_is_held(&reuseport_lock));
 
-Thanks for the fix!
+[..]
+> +	old_prog = rcu_dereference_protected(reuse->prog,
+> +					     lockdep_is_held(&reuseport_lock));
+> +	RCU_INIT_POINTER(reuse->prog, NULL);
+Nit, optionally can do the following instead:
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
+	struct bpf_prog *old_prog = NULL;
 
->  tools/testing/selftests/bpf/cgroup_helpers.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
-> index 0d89f0396be4..e95c33e333a4 100644
-> --- a/tools/testing/selftests/bpf/cgroup_helpers.c
-> +++ b/tools/testing/selftests/bpf/cgroup_helpers.c
-> @@ -47,7 +47,7 @@ int enable_all_controllers(char *cgroup_path)
->         char buf[PATH_MAX];
->         char *c, *c2;
->         int fd, cfd;
-> -       size_t len;
-> +       ssize_t len;
->
->         snprintf(path, sizeof(path), "%s/cgroup.controllers", cgroup_path);
->         fd = open(path, O_RDONLY);
-> --
-> 2.20.1
->
+	...
+
+	spin_lock_bh(&reuseport_lock);
+	reuse = rcu_dereference_protected(...);
+	rcu_swap_protected(reuse->prog, old_prog, lockdep_is_held(...));
+	spin_unlock_bh(&reuseport_lock);
+
+	if (!old_prog)
+		....
+
+	...
+
+rcu_swap_protected does rcu_dereference_protected+rcu_assign_pointer,
+can save you one line :-)
+
+> +	spin_unlock_bh(&reuseport_lock);
+> +
+> +	if (!old_prog)
+> +		return -ENOENT;
+> +
+> +	sk_reuseport_prog_free(old_prog);
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL(reuseport_detach_prog);
+> -- 
+> 2.17.1
+> 
