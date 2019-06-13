@@ -2,43 +2,43 @@ Return-Path: <SRS0=LLXA=UM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFCC4C31E49
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 16:49:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A06DC31E45
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 16:49:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 93CDA2082C
-	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 16:49:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 18EBB2082C
+	for <bpf@archiver.kernel.org>; Thu, 13 Jun 2019 16:49:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1560444592;
-	bh=jAOr2+M4nBWRsIB6zGOtEOu06zorQVILLkOxbz6vpfQ=;
+	s=default; t=1560444593;
+	bh=HSKdHZkeCVcuWu6/2UmkIq+B0Cr53r0/2NyoOVnUqFs=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=I4gYuoQZPHJydvil8g9i+RjPE0UQ4Avd9q4BKv/LbNj2VnbzH0BJfEhJXFDvBYZUA
-	 TR1dqG/hn2IbKxygicdooyS9h0vdJSlUxKVXF6smSKNTtXjnUAGlAizqijLmvHZouM
-	 lJQC3IorzmyJDUH8oxffq3pIFNw45SjWTUlcUvKc=
+	b=Hv9Ekx0nEkdDOy7rr9I0vRJpXaiI0oPgq4vjAfrRp4F2OM+FattV6zshNWWkoyWtQ
+	 oMiu62XEKg09+0VDqULqY42KpyD0gMFplNELVDdEjHz7I0GEB2ZuogWW9r06iBof1c
+	 pov7rslqd/w3IZG/2jQ7mHHWnhpGX1Hg8GgLBr5Q=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726953AbfFMQts convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 13 Jun 2019 12:49:48 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:33754 "EHLO
+        id S1730248AbfFMQtr convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 13 Jun 2019 12:49:47 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:59184 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726622AbfFMEUV (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 13 Jun 2019 00:20:21 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5D4IFA1027769
+        by vger.kernel.org with ESMTP id S1726763AbfFMEUW (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 13 Jun 2019 00:20:22 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5D4FBc9019783
         for <bpf@vger.kernel.org>; Wed, 12 Jun 2019 21:20:20 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2t3a6s0ut8-6
+        by mx0a-00082601.pphosted.com with ESMTP id 2t38w7151c-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Wed, 12 Jun 2019 21:20:20 -0700
 Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 12 Jun 2019 21:20:18 -0700
+ 15.1.1713.5; Wed, 12 Jun 2019 21:20:19 -0700
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 903FA760CD6; Wed, 12 Jun 2019 21:20:15 -0700 (PDT)
+        id 986F6760CD6; Wed, 12 Jun 2019 21:20:17 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -48,9 +48,9 @@ CC:     <daniel@iogearbox.net>, <jakub.kicinski@netronome.com>,
         <andriin@fb.com>, <jannh@google.com>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 6/9] selftests/bpf: fix tests
-Date:   Wed, 12 Jun 2019 21:20:00 -0700
-Message-ID: <20190613042003.3791852-7-ast@kernel.org>
+Subject: [PATCH bpf-next 7/9] selftests/bpf: add basic verifier tests for loops
+Date:   Wed, 12 Jun 2019 21:20:01 -0700
+Message-ID: <20190613042003.3791852-8-ast@kernel.org>
 X-Mailer: git-send-email 2.20.0
 In-Reply-To: <20190613042003.3791852-1-ast@kernel.org>
 References: <20190613042003.3791852-1-ast@kernel.org>
@@ -61,9 +61,9 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-13_02:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1034 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ mlxlogscore=753 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1810050000 definitions=main-1906130033
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -71,133 +71,182 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix tests that assumed no loops.
+This set of tests is a rewrite of Edward's earlier tests:
+https://patchwork.ozlabs.org/patch/877221/
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/testing/selftests/bpf/test_verifier.c  | 11 ++++------
- tools/testing/selftests/bpf/verifier/calls.c | 22 ++++++++++++--------
- tools/testing/selftests/bpf/verifier/cfg.c   | 11 ++++++----
- 3 files changed, 24 insertions(+), 20 deletions(-)
+ tools/testing/selftests/bpf/verifier/loops1.c | 161 ++++++++++++++++++
+ 1 file changed, 161 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/verifier/loops1.c
 
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index cd0248c54e25..93e1d87a343a 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -237,10 +237,10 @@ static void bpf_fill_scale1(struct bpf_test *self)
- 		insn[i++] = BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_6,
- 					-8 * (k % 64 + 1));
- 	}
--	/* every jump adds 1 step to insn_processed, so to stay exactly
--	 * within 1m limit add MAX_TEST_INSNS - MAX_JMP_SEQ - 1 MOVs and 1 EXIT
-+	/* is_state_visited() doesn't allocate state for pruning for every jump.
-+	 * Hence multiply jmps by 4 to accommodate that heuristic
- 	 */
--	while (i < MAX_TEST_INSNS - MAX_JMP_SEQ - 1)
-+	while (i < MAX_TEST_INSNS - MAX_JMP_SEQ * 4)
- 		insn[i++] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 42);
- 	insn[i] = BPF_EXIT_INSN();
- 	self->prog_len = i + 1;
-@@ -269,10 +269,7 @@ static void bpf_fill_scale2(struct bpf_test *self)
- 		insn[i++] = BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_6,
- 					-8 * (k % (64 - 4 * FUNC_NEST) + 1));
- 	}
--	/* every jump adds 1 step to insn_processed, so to stay exactly
--	 * within 1m limit add MAX_TEST_INSNS - MAX_JMP_SEQ - 1 MOVs and 1 EXIT
--	 */
--	while (i < MAX_TEST_INSNS - MAX_JMP_SEQ - 1)
-+	while (i < MAX_TEST_INSNS - MAX_JMP_SEQ * 4)
- 		insn[i++] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 42);
- 	insn[i] = BPF_EXIT_INSN();
- 	self->prog_len = i + 1;
-diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
-index 9093a8f64dc6..2d752c4f8d9d 100644
---- a/tools/testing/selftests/bpf/verifier/calls.c
-+++ b/tools/testing/selftests/bpf/verifier/calls.c
-@@ -215,9 +215,11 @@
- 	BPF_MOV64_IMM(BPF_REG_0, 3),
- 	BPF_JMP_IMM(BPF_JA, 0, 0, -6),
- 	},
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--	.errstr = "back-edge from insn",
--	.result = REJECT,
-+	.prog_type = BPF_PROG_TYPE_SOCKET_FILTER,
-+	.errstr_unpriv = "back-edge from insn",
-+	.result_unpriv = REJECT,
+diff --git a/tools/testing/selftests/bpf/verifier/loops1.c b/tools/testing/selftests/bpf/verifier/loops1.c
+new file mode 100644
+index 000000000000..5e980a5ab69d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/verifier/loops1.c
+@@ -0,0 +1,161 @@
++{
++	"bounded loop, count to 4",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
++	BPF_JMP_IMM(BPF_JLT, BPF_REG_0, 4, -2),
++	BPF_EXIT_INSN(),
++	},
 +	.result = ACCEPT,
-+	.retval = 1,
- },
- {
- 	"calls: conditional call 4",
-@@ -250,22 +252,24 @@
- 	BPF_MOV64_IMM(BPF_REG_0, 3),
- 	BPF_EXIT_INSN(),
- 	},
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--	.errstr = "back-edge from insn",
--	.result = REJECT,
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
++	.retval = 4,
++},
++{
++	"bounded loop, count to 20",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 3),
++	BPF_JMP_IMM(BPF_JLT, BPF_REG_0, 20, -2),
++	BPF_EXIT_INSN(),
++	},
 +	.result = ACCEPT,
-+	.retval = 1,
- },
- {
- 	"calls: conditional call 6",
- 	.insns = {
-+	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
- 	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 2),
--	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, -2),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, -3),
- 	BPF_EXIT_INSN(),
- 	BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
- 		    offsetof(struct __sk_buff, mark)),
- 	BPF_EXIT_INSN(),
- 	},
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--	.errstr = "back-edge from insn",
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.errstr = "infinite loop detected",
- 	.result = REJECT,
- },
- {
-diff --git a/tools/testing/selftests/bpf/verifier/cfg.c b/tools/testing/selftests/bpf/verifier/cfg.c
-index 349c0862fb4c..4eb76ed739ce 100644
---- a/tools/testing/selftests/bpf/verifier/cfg.c
-+++ b/tools/testing/selftests/bpf/verifier/cfg.c
-@@ -41,7 +41,8 @@
- 	BPF_JMP_IMM(BPF_JA, 0, 0, -1),
- 	BPF_EXIT_INSN(),
- 	},
--	.errstr = "back-edge",
-+	.errstr = "unreachable insn 1",
-+	.errstr_unpriv = "back-edge",
- 	.result = REJECT,
- },
- {
-@@ -53,18 +54,20 @@
- 	BPF_JMP_IMM(BPF_JA, 0, 0, -4),
- 	BPF_EXIT_INSN(),
- 	},
--	.errstr = "back-edge",
-+	.errstr = "unreachable insn 4",
-+	.errstr_unpriv = "back-edge",
- 	.result = REJECT,
- },
- {
- 	"conditional loop",
- 	.insns = {
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
++	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
++},
++{
++	"bounded loop, count from positive unknown to 4",
++	.insns = {
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_JMP_IMM(BPF_JSLT, BPF_REG_0, 0, 2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
++	BPF_JMP_IMM(BPF_JLT, BPF_REG_0, 4, -2),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
++	.retval = 4,
++},
++{
++	"bounded loop, count from totally unknown to 4",
++	.insns = {
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
++	BPF_JMP_IMM(BPF_JLT, BPF_REG_0, 4, -2),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
++},
++{
++	"bounded loop, count to 4 with equality",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
++		BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 4, -2),
++		BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
++},
++{
++	"bounded loop, start in the middle",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_JMP_A(1),
++		BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
++		BPF_JMP_IMM(BPF_JLT, BPF_REG_0, 4, -2),
++		BPF_EXIT_INSN(),
++	},
++	.result = REJECT,
++	.errstr = "back-edge",
++	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
++	.retval = 4,
++},
++{
++	"bounded loop containing a forward jump",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
++		BPF_JMP_REG(BPF_JEQ, BPF_REG_0, BPF_REG_0, 0),
++		BPF_JMP_IMM(BPF_JLT, BPF_REG_0, 4, -3),
++		BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
++	.retval = 4,
++},
++{
++	"bounded loop that jumps out rather than in",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_6, 0),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_6, 1),
++	BPF_JMP_IMM(BPF_JGT, BPF_REG_6, 10000, 2),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_JMP_A(-4),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
++},
++{
++	"infinite loop after a conditional jump",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 5),
++	BPF_JMP_IMM(BPF_JLT, BPF_REG_0, 4, 2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
++	BPF_JMP_A(-2),
++	BPF_EXIT_INSN(),
++	},
++	.result = REJECT,
++	.errstr = "program is too large",
++	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
++},
++{
++	"bounded recursion",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_1, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 1),
++	BPF_EXIT_INSN(),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
 +	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
- 	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
- 	BPF_MOV64_REG(BPF_REG_3, BPF_REG_0),
- 	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0, -3),
- 	BPF_EXIT_INSN(),
- 	},
--	.errstr = "back-edge",
-+	.errstr = "infinite loop detected",
-+	.errstr_unpriv = "back-edge",
- 	.result = REJECT,
- },
++	BPF_JMP_IMM(BPF_JLT, BPF_REG_1, 4, 1),
++	BPF_EXIT_INSN(),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, -5),
++	BPF_EXIT_INSN(),
++	},
++	.result = REJECT,
++	.errstr = "back-edge",
++	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
++},
++{
++	"infinite loop in two jumps",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_JMP_A(0),
++	BPF_JMP_IMM(BPF_JLT, BPF_REG_0, 4, -2),
++	BPF_EXIT_INSN(),
++	},
++	.result = REJECT,
++	.errstr = "loop detected",
++	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
++},
++{
++	"infinite loop: three-jump trick",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
++	BPF_ALU64_IMM(BPF_AND, BPF_REG_0, 1),
++	BPF_JMP_IMM(BPF_JLT, BPF_REG_0, 2, 1),
++	BPF_EXIT_INSN(),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
++	BPF_ALU64_IMM(BPF_AND, BPF_REG_0, 1),
++	BPF_JMP_IMM(BPF_JLT, BPF_REG_0, 2, 1),
++	BPF_EXIT_INSN(),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
++	BPF_ALU64_IMM(BPF_AND, BPF_REG_0, 1),
++	BPF_JMP_IMM(BPF_JLT, BPF_REG_0, 2, -11),
++	BPF_EXIT_INSN(),
++	},
++	.result = REJECT,
++	.errstr = "loop detected",
++	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
++},
 -- 
 2.20.0
 
