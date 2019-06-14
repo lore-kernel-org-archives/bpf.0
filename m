@@ -2,109 +2,189 @@ Return-Path: <SRS0=1nN+=UN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_MUTT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFE7AC31E4B
-	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 15:09:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 555F4C31E4B
+	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 15:13:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C7B8A20866
-	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 15:09:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1560524975;
-	bh=YlnbKY76MU++cPKthpCvz9e6XM7nVGVURhmpeatu9B4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=y9PrH0AEQAxRHDkC+vd1amNKdMuQrB2pTb7VvJ33XQ7HsE4gUVLv8iTEcqcIWokTI
-	 RwsYWptFCN0uJ9VO4MmeDmRfb3w4CfJuTmAZ5WlgnuHZjOuezwx+X+2JW2k5PDkjqd
-	 LoxHXHnt0OpopR9rOmXWfvLUMXNosA8v8eEcDJDk=
+	by mail.kernel.org (Postfix) with ESMTP id 19DDC21744
+	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 15:13:33 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="NHsBf+N0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725838AbfFNPJb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Jun 2019 11:09:31 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:46993 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725837AbfFNPJb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 14 Jun 2019 11:09:31 -0400
-Received: by mail-pl1-f195.google.com with SMTP id e5so1128901pls.13;
-        Fri, 14 Jun 2019 08:09:30 -0700 (PDT)
+        id S1725846AbfFNPNc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Jun 2019 11:13:32 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:53277 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725822AbfFNPNc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Jun 2019 11:13:32 -0400
+Received: by mail-wm1-f68.google.com with SMTP id x15so2748961wmj.3
+        for <bpf@vger.kernel.org>; Fri, 14 Jun 2019 08:13:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=+I9U1GODgSkyxPAIv5uSBlih1n/pRySECC43JZGkdsQ=;
-        b=iGhc4xzitJMk67sXbQMyBo8eYE8TxhKJEDf+KuuPxlnOLUZFysidCzwr54Kzzy0K2J
-         D+GJRX71MpXYgXx2M6apuBILbtB+nlVv2HxnXhyaQJh8VlGfzYaUAn2jZSunbRUcJP+x
-         iOB3D7jvu5eEN6YbwgH60SuKTejWz4B6PizS20cko5zfs7ZiBvyTkCfK/CSqY5Bns3l8
-         Ro6EsJZk30weiEJY/Uk5TEteCCGXB8XYvuQXqPh/3FoevGvIok7Er3BS5HLnUo9gdnw3
-         FP2pyydyRWD6S3lNwlB6S79WFXpwubyELDGZOmGBXGY7MLSjmvWneimvwEkDnHpcmFWV
-         0G/g==
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=8/UkoEae7i35+WwGcIqNoyF5fpe7RMTBxaaVX9AwVQ8=;
+        b=NHsBf+N0llByJ7gXzP+jLIyOpPvVs94SOS9TniPZBF6CahVQFef/IwB6cg0BItEqQF
+         acr9/bpEp14zxvrHKsXkR+/3t7njEHIxmU4GV1dx9VPqgYpZvFAxcOQ7zqwUltzUzCre
+         avlXc88Nc0/fmXW4WBrh2FEjVMKCH++F6nwKm5Yys4kL1EMFAkp6s0N+clhPWuDqIO9W
+         CV2HQ6Aw0Ln4GVMGjYGC0lpHGmh09xwhKKeCi0GfSW8xHGbkN+DDtBANDyc3QGeM7prb
+         gqBwbS6+JXihGKv1843xLHlLTvRtMei2P8SKnzWUv7zJyjAcm/rQ6tRyxCn1JlqIDw76
+         mG5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=+I9U1GODgSkyxPAIv5uSBlih1n/pRySECC43JZGkdsQ=;
-        b=HyJqtfDS72O5+9b4rUTlWezjRoRGjZcozrgUUZAu/pHK3Ra2m5TzIiRFzDuS26+PtL
-         BrTEV7VCmGA6vZkz0pXKdvVNAv25hJ+TR3tbOs4mLP/wmzmrVQEjBenljYN9TsRRumrC
-         e51XXRACUySdMtCGx+CMvJ3baFsoIv2nGjl3RrKEsxNYfWBrkDkNURBPUJ6YgqHRISny
-         lGSZGSV3l2vNFsKq5bYdRSeykmffCti5Cl1MT5soFduDfrcDLD3bdkXEBwi2GSdZjBha
-         oxF0bnd2MGzqz1jGCdKtf0fJ3r18iudr7oV9NdarQp9dM0Ld0IWQuSJWMS7CYOf3HwVC
-         EdNg==
-X-Gm-Message-State: APjAAAXJQhL/2ux5JThI5KGU1SoHqOQv9PkNNXpkEs48awzC58nuDUEH
-        8F2s0wQiWoe0Q73tZmHsO0Y=
-X-Google-Smtp-Source: APXvYqxzOCKBrFEtUYYWecwehqGBRjbcRqqz2d1PNNKgZEyBo102COqcOPB0Jz3DOPgdv6CXMm9Xlg==
-X-Received: by 2002:a17:902:b70f:: with SMTP id d15mr12366371pls.318.1560524969921;
-        Fri, 14 Jun 2019 08:09:29 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:180::1:b330])
-        by smtp.gmail.com with ESMTPSA id a22sm4039041pfn.173.2019.06.14.08.09.28
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 14 Jun 2019 08:09:28 -0700 (PDT)
-Date:   Fri, 14 Jun 2019 08:09:24 -0700
-From:   Tejun Heo <tj@kernel.org>
-To:     Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
-Cc:     axboe@kernel.dk, newella@fb.com, clm@fb.com, josef@toxicpanda.com,
-        dennisz@fb.com, lizefan@huawei.com, hannes@cmpxchg.org,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        kernel-team@fb.com, cgroups@vger.kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, kafai@fb.com, songliubraving@fb.com,
-        yhs@fb.com, bpf@vger.kernel.org, Josef Bacik <jbacik@fb.com>
-Subject: Re: [PATCH 08/10] blkcg: implement blk-ioweight
-Message-ID: <20190614150924.GB538958@devbig004.ftw2.facebook.com>
-References: <20190614015620.1587672-1-tj@kernel.org>
- <20190614015620.1587672-9-tj@kernel.org>
- <87pnngbbti.fsf@toke.dk>
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=8/UkoEae7i35+WwGcIqNoyF5fpe7RMTBxaaVX9AwVQ8=;
+        b=ngAQZADMG5FyqoHg9KV9lc4M0TvAIKrDewvhmFUL6NlE5bRb9Kpkx54GeW8J7KtPme
+         jaobMQqbYHnjHALpHS92wG0uThqWD3hsPJYHGNNdshtlKVugz5hFF83lGA3/POGMRDXz
+         00H0xEhMogIqObeU5h8I4MHkHBBNRZokAXiOqO/zIOrCQ0Yqb3YJva/qjHD6v5a/YHPb
+         xKtowP4SPBkWCCeiuDv6H0DNIK8Z34prmz0vPq3TVeuOn1cau2br7hadRb9wwFuhNI9D
+         pU6IhICwwcq9GSraJpJRRcTK7tQU3dgs9xjIgmTlbr67o1MecTiEyIaLeJdiZ4vk51oy
+         R5IQ==
+X-Gm-Message-State: APjAAAVRwaruOecXriQOmZmZRUtYLOsMmab7pVUFk19ccbdKx5Ws0VQz
+        clvIkBDsgDFIoZnuJK6ayLDwyw==
+X-Google-Smtp-Source: APXvYqzO0Y1Xc0cWXQQTj1NLGVpnm0jynKsbHiTBiCKXTUMaWxMSRMd5vD+H3ZsqxxKtIrIedkn6rA==
+X-Received: by 2002:a1c:3b45:: with SMTP id i66mr8746314wma.48.1560525209702;
+        Fri, 14 Jun 2019 08:13:29 -0700 (PDT)
+Received: from LAPTOP-V3S7NLPL ([217.38.71.146])
+        by smtp.gmail.com with ESMTPSA id j4sm2024717wrx.57.2019.06.14.08.13.28
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 14 Jun 2019 08:13:28 -0700 (PDT)
+References: <20190612113208.21865-1-naveen.n.rao@linux.vnet.ibm.com> <CAADnVQLp+N8pYTgmgEGfoubqKrWrnuTBJ9z2qc1rB6+04WfgHA@mail.gmail.com> <87sgse26av.fsf@netronome.com> <87r27y25c3.fsf@netronome.com> <CAADnVQJZkJu60jy8QoomVssC=z3NE4402bMnfobaWNE_ANC6sg@mail.gmail.com>
+User-agent: mu4e 0.9.18; emacs 25.2.2
+From:   Jiong Wang <jiong.wang@netronome.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jiong Wang <jiong.wang@netronome.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>
+Subject: Re: [PATCH] bpf: optimize constant blinding
+In-reply-to: <CAADnVQJZkJu60jy8QoomVssC=z3NE4402bMnfobaWNE_ANC6sg@mail.gmail.com>
+Date:   Fri, 14 Jun 2019 16:13:27 +0100
+Message-ID: <87ef3w5hew.fsf@netronome.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87pnngbbti.fsf@toke.dk>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Type: text/plain
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello, Toke.
 
-On Fri, Jun 14, 2019 at 02:17:45PM +0200, Toke Høiland-Jørgensen wrote:
-> One question: How are equal-weight cgroups scheduled relative to each
-> other? Or requests from different processes within a single cgroup for
-> that matter? FIFO? Round-robin? Something else?
+Alexei Starovoitov writes:
 
-Once each cgroup got their hierarchical weight and current vtime for
-the period, they don't talk to each other.  Each is expected to do the
-right thing on their own.  When the period ends, the timer looks at
-how the device is performing, how much each used and so on and then
-make necessary adjustments.  So, there's no direct cross-cgroup
-synchronization.  Each is throttled to their target level
-independently.
+> On Wed, Jun 12, 2019 at 8:25 AM Jiong Wang <jiong.wang@netronome.com> wrote:
+>>
+>>
+>> Jiong Wang writes:
+>>
+>> > Alexei Starovoitov writes:
+>> >
+>> >> On Wed, Jun 12, 2019 at 4:32 AM Naveen N. Rao
+>> >> <naveen.n.rao@linux.vnet.ibm.com> wrote:
+>> >>>
+>> >>> Currently, for constant blinding, we re-allocate the bpf program to
+>> >>> account for its new size and adjust all branches to accommodate the
+>> >>> same, for each BPF instruction that needs constant blinding. This is
+>> >>> inefficient and can lead to soft lockup with sufficiently large
+>> >>> programs, such as the new verifier scalability test (ld_dw: xor
+>> >>> semi-random 64 bit imms, test 5 -- with net.core.bpf_jit_harden=2)
+>> >>
+>> >> Slowdown you see is due to patch_insn right?
+>> >> In such case I prefer to fix the scaling issue of patch_insn instead.
+>> >> This specific fix for blinding only is not addressing the core of the problem.
+>> >> Jiong,
+>> >> how is the progress on fixing patch_insn?
+>>
+>> And what I have done is I have digested your conversion with Edward, and is
+>> slightly incline to the BB based approach as it also exposes the inserted
+>> insn to later pass in a natural way, then was trying to find a way that
+>> could create BB info in little extra code based on current verifier code,
+>> for example as a side effect of check_subprogs which is doing two insn
+>> traversal already. (I had some such code before in the historical
+>> wip/bpf-loop-detection branch, but feel it might be still too heavy for
+>> just improving insn patching)
+>
+> BB - basic block?
+> I'm not sure that was necessary.
+> The idea was that patching is adding stuff to linked list instead
+> and single pass at the end to linearize it.
 
-Within a single cgroup, the IOs are FIFO.  When an IO has enough vtime
-credit, it just passes through.  When it doesn't, it always waits
-behind any other IOs which are already waiting.
+Just an update and keep people posted.
 
-Thanks.
+Working on linked list based approach, the implementation looks like the
+following, mostly a combine of discussions happened and Naveen's patch,
+please feel free to comment.
 
--- 
-tejun
+  - Use the reserved opcode 0xf0 with BPF_ALU as new pseudo insn code
+    BPF_LIST_INSN. (0xf0 is also used with BPF_JMP class for tail call).
+
+  - Introduce patch pool into bpf_prog->aux to keep all patched insns.
+    Pool structure looks like:
+
+    struct {
+      int num;
+      int prev;
+      int next;
+    } head_0;
+    NUM patched insns for head_0
+    head_1;
+    patched insns for head_1
+    head_2;
+    ...
+
+  - Now when doing bpf_patch_insn_single, it doesn't change the original
+    prog etc, instead, it merely update the insn at patched offset into a
+    BPF_LIST_INSN, and pushed the patched insns plus a patch header into
+    the patch pool. Fields of BPF_LIST_INSN is updated to setup the links:
+    
+      BPF_LIST_INSN.off += patched_size
+      (accumulating the size attached to this list_insn, it is possible a
+      later patch pass patches insn in the patch pool, this means insn
+      traversal needs to be changed, when seeing BPF_LIST_INSN, should go
+      through the list)
+      
+      BPF_LIST_INSN.imm = offset of the patch header in patch pool
+      (off is 16-bit, imm is 32-bit, the patch pool is 32-bit length, so
+      use imm for keeping offset, meaning a BPF_LIST_INSN can contains no
+      more than 8192 insns, guess it is enough)
+
+  - When doing linearize:
+    1. a quick scan of prog->insnsi to know the final
+       image size, would be simple as:
+
+      fini_size = 0;
+      for_each_insn:
+        if (insn.code == (BPF_ALU | BPF_LIST_HEAD))
+          fini_size += insn->off;
+        else
+          fini_size++;
+
+    2. Resize prog into fini_size, and a second scan of prog->insnsi to
+       copy over all insns and patched insns, at the same time generate a
+       auxiliary index array which maps an old index to the new index in
+       final image, like the "clone_index" in Naveen's patch.
+
+    3. Finally, a single pass to update branch target, the same algo used
+       by this patch.
+       
+  - The APIs for doing insning patch looks like:
+      bpf_patch_insn_init:   init the generic patch pool.
+      bpf_patch_insn_single: push patched insns to the pool.
+                             link them to the associated BPF_LIST_INSN.
+      bpf_patch_insn_fini:   linearize a bpf_prog contains BPF_LIST_INSN.
+                             destroy patch pool in prog->aux.
+
+I am trying to making the implementation working with jit blind first to make
+sure basic things are ready. As JIT blinds happens after verification so no
+need to both aux update etc. Then will cleanup quite a few things for
+example patch a patched insn, adjust aux data, what to do with insn delete
+etc.
+
+Regards,
+Jiong
