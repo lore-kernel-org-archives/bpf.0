@@ -2,201 +2,101 @@ Return-Path: <SRS0=1nN+=UN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0367C31E44
-	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 07:26:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 338DBC31E44
+	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 07:35:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 895E621473
-	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 07:26:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1560497193;
-	bh=h/AJtk6vP+CDO2BxZaYImQZ//U0W8DKLdahXXBlTGbQ=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Ywh7te4rObzD4P+8g6dJjCd47t0YXxi6vAW0KhJnSNsqCOAL1WSxuM3pVWZCY4dMt
-	 nTk9Yhc1x/kBx7JVs/BHN5mRONnTNhAai1OVHnVSDYMmwPl8+myVMCZftzYscnWKSA
-	 kT3Ookg+acgbC+YVQitsy1RXoX/esqz+t+dngPAw=
+	by mail.kernel.org (Postfix) with ESMTP id F41EC21473
+	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 07:35:42 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W1ugtM53"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726133AbfFNH0d convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 14 Jun 2019 03:26:33 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:58538 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726490AbfFNH0d (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 14 Jun 2019 03:26:33 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5E7N9Ad018520
-        for <bpf@vger.kernel.org>; Fri, 14 Jun 2019 00:26:32 -0700
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2t3uh0a1xc-6
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 14 Jun 2019 00:26:31 -0700
-Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::126) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Fri, 14 Jun 2019 00:26:11 -0700
-Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 787FD760F47; Fri, 14 Jun 2019 00:26:09 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Alexei Starovoitov <ast@kernel.org>
-Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
-To:     <davem@davemloft.net>
-CC:     <daniel@iogearbox.net>, <andriin@fb.com>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 6/9] selftests/bpf: fix tests
-Date:   Fri, 14 Jun 2019 00:25:54 -0700
-Message-ID: <20190614072557.196239-7-ast@kernel.org>
-X-Mailer: git-send-email 2.20.0
-In-Reply-To: <20190614072557.196239-1-ast@kernel.org>
-References: <20190614072557.196239-1-ast@kernel.org>
+        id S1725801AbfFNHfm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Jun 2019 03:35:42 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:45557 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725789AbfFNHfm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Jun 2019 03:35:42 -0400
+Received: by mail-pf1-f196.google.com with SMTP id r1so882946pfq.12;
+        Fri, 14 Jun 2019 00:35:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=7t+luti4wV9vQmcaMbs7td85lQbR85hqcaLUIAiVWoI=;
+        b=W1ugtM53KzaD8xdpRd7Qz9A000X0MEMoMTKwO4rOT+ukHKvs72fjktZHI2WdbvxqL8
+         CUrxkE7YfIdQZ+jeOQtfL77kNuGwqeeV5RWJXxTqVCjcLYNj1TQICKiY9pJi2Oebz7n5
+         5ytj4Z1uOgPX4/ZaERd5O+rl2o9gFiDJvBUWyjM+T2TZvAv9sEDxjVWYqwO7LHQB7NWK
+         v1MCYnrUD8UJo4+OqL2Ai6N4tXtroBf2kjDNzUmuTiXHZcFDBOKR09LVRj3dFsHBvBua
+         NBn5kJG4x+NmoX7BmHuMOZFuDU7NKE9VLfW+WDCwiaVFvmcQ9lLALJu5xXmTFZumQtkN
+         k5Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=7t+luti4wV9vQmcaMbs7td85lQbR85hqcaLUIAiVWoI=;
+        b=PVLc5HDUzb/u1gONreU/hZdE1H4/kkQQF9zl7iXZYwNW53fL9LOEqlot4d9bXqDNvI
+         Z55pcEdaUaodJye0aHfB8vMrEcAmPQFeCQnQ3CG5nH3RPePfQVCigKp0iXucUCGyDl80
+         0OlpGL97/Wx5z4lUsIr1cdOLBdn48cSSl9F2jvpu9UN7zC7uAOpmcdXRPJ77jL08r5m6
+         lvokJxZbuiTsbkC8D93TWJGSt6GN6oW2J+kk96YZOaLgthOc2ETUz47GMG+m4J7rlZwG
+         C99ArRIz3/cz5DM5RzPda9LUV8zjmgNXGEfot1eQ5x37+gJXlzW1Vo/UdSFqWahF1UAe
+         +RkA==
+X-Gm-Message-State: APjAAAX7JUt93n2Sd4r/Ycxh37/OVuf/Eq4ikOw9Cf/fTHD5QQIgcAwj
+        S746HC0i7Bcgq6/jElP1yhJ+vGhH
+X-Google-Smtp-Source: APXvYqyv2Iou2lzuE0aE6mHU+9eW90kOnahjxUSoVewloziiQJO8iDhyEuFQn7BTkrc+npfuenI7Tg==
+X-Received: by 2002:a65:4907:: with SMTP id p7mr33957517pgs.288.1560497741637;
+        Fri, 14 Jun 2019 00:35:41 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:180::1:f6f1])
+        by smtp.gmail.com with ESMTPSA id w197sm3563876pfd.41.2019.06.14.00.35.40
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 14 Jun 2019 00:35:40 -0700 (PDT)
+Date:   Fri, 14 Jun 2019 00:35:38 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Song Liu <songliubraving@fb.com>,
+        Kairui Song <kasong@redhat.com>
+Subject: Re: [PATCH 2/9] objtool: Fix ORC unwinding in non-JIT BPF generated
+ code
+Message-ID: <20190614073536.d3xkhwhq3fuivwt5@ast-mbp.dhcp.thefacebook.com>
+References: <cover.1560431531.git.jpoimboe@redhat.com>
+ <99c22bbd79e72855f4bc9049981602d537a54e70.1560431531.git.jpoimboe@redhat.com>
+ <20190613205710.et5fywop4gfalsa6@ast-mbp.dhcp.thefacebook.com>
+ <20190614012030.b6eujm7b4psu62kj@treble>
+ <20190614070852.GQ3436@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-14_04:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1034 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906140058
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190614070852.GQ3436@hirez.programming.kicks-ass.net>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix tests that assumed no loops.
+On Fri, Jun 14, 2019 at 09:08:52AM +0200, Peter Zijlstra wrote:
+> On Thu, Jun 13, 2019 at 08:20:30PM -0500, Josh Poimboeuf wrote:
+> > On Thu, Jun 13, 2019 at 01:57:11PM -0700, Alexei Starovoitov wrote:
+> 
+> > > and to patches 8 and 9.
+> > 
+> > Well, it's your code, but ... can I ask why?  AT&T syntax is the
+> > standard for Linux, which is in fact the OS we are developing for.
+> 
+> I agree, all assembly in Linux is AT&T, adding Intel notation only
+> serves to cause confusion.
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/testing/selftests/bpf/test_verifier.c  | 11 ++++------
- tools/testing/selftests/bpf/verifier/calls.c | 22 ++++++++++++--------
- tools/testing/selftests/bpf/verifier/cfg.c   | 11 ++++++----
- 3 files changed, 24 insertions(+), 20 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index cd0248c54e25..93e1d87a343a 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -237,10 +237,10 @@ static void bpf_fill_scale1(struct bpf_test *self)
- 		insn[i++] = BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_6,
- 					-8 * (k % 64 + 1));
- 	}
--	/* every jump adds 1 step to insn_processed, so to stay exactly
--	 * within 1m limit add MAX_TEST_INSNS - MAX_JMP_SEQ - 1 MOVs and 1 EXIT
-+	/* is_state_visited() doesn't allocate state for pruning for every jump.
-+	 * Hence multiply jmps by 4 to accommodate that heuristic
- 	 */
--	while (i < MAX_TEST_INSNS - MAX_JMP_SEQ - 1)
-+	while (i < MAX_TEST_INSNS - MAX_JMP_SEQ * 4)
- 		insn[i++] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 42);
- 	insn[i] = BPF_EXIT_INSN();
- 	self->prog_len = i + 1;
-@@ -269,10 +269,7 @@ static void bpf_fill_scale2(struct bpf_test *self)
- 		insn[i++] = BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_6,
- 					-8 * (k % (64 - 4 * FUNC_NEST) + 1));
- 	}
--	/* every jump adds 1 step to insn_processed, so to stay exactly
--	 * within 1m limit add MAX_TEST_INSNS - MAX_JMP_SEQ - 1 MOVs and 1 EXIT
--	 */
--	while (i < MAX_TEST_INSNS - MAX_JMP_SEQ - 1)
-+	while (i < MAX_TEST_INSNS - MAX_JMP_SEQ * 4)
- 		insn[i++] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 42);
- 	insn[i] = BPF_EXIT_INSN();
- 	self->prog_len = i + 1;
-diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
-index 9093a8f64dc6..2d752c4f8d9d 100644
---- a/tools/testing/selftests/bpf/verifier/calls.c
-+++ b/tools/testing/selftests/bpf/verifier/calls.c
-@@ -215,9 +215,11 @@
- 	BPF_MOV64_IMM(BPF_REG_0, 3),
- 	BPF_JMP_IMM(BPF_JA, 0, 0, -6),
- 	},
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--	.errstr = "back-edge from insn",
--	.result = REJECT,
-+	.prog_type = BPF_PROG_TYPE_SOCKET_FILTER,
-+	.errstr_unpriv = "back-edge from insn",
-+	.result_unpriv = REJECT,
-+	.result = ACCEPT,
-+	.retval = 1,
- },
- {
- 	"calls: conditional call 4",
-@@ -250,22 +252,24 @@
- 	BPF_MOV64_IMM(BPF_REG_0, 3),
- 	BPF_EXIT_INSN(),
- 	},
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--	.errstr = "back-edge from insn",
--	.result = REJECT,
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.result = ACCEPT,
-+	.retval = 1,
- },
- {
- 	"calls: conditional call 6",
- 	.insns = {
-+	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
- 	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 2),
--	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, -2),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, -3),
- 	BPF_EXIT_INSN(),
- 	BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
- 		    offsetof(struct __sk_buff, mark)),
- 	BPF_EXIT_INSN(),
- 	},
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--	.errstr = "back-edge from insn",
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.errstr = "infinite loop detected",
- 	.result = REJECT,
- },
- {
-diff --git a/tools/testing/selftests/bpf/verifier/cfg.c b/tools/testing/selftests/bpf/verifier/cfg.c
-index 349c0862fb4c..4eb76ed739ce 100644
---- a/tools/testing/selftests/bpf/verifier/cfg.c
-+++ b/tools/testing/selftests/bpf/verifier/cfg.c
-@@ -41,7 +41,8 @@
- 	BPF_JMP_IMM(BPF_JA, 0, 0, -1),
- 	BPF_EXIT_INSN(),
- 	},
--	.errstr = "back-edge",
-+	.errstr = "unreachable insn 1",
-+	.errstr_unpriv = "back-edge",
- 	.result = REJECT,
- },
- {
-@@ -53,18 +54,20 @@
- 	BPF_JMP_IMM(BPF_JA, 0, 0, -4),
- 	BPF_EXIT_INSN(),
- 	},
--	.errstr = "back-edge",
-+	.errstr = "unreachable insn 4",
-+	.errstr_unpriv = "back-edge",
- 	.result = REJECT,
- },
- {
- 	"conditional loop",
- 	.insns = {
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
- 	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
- 	BPF_MOV64_REG(BPF_REG_3, BPF_REG_0),
- 	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0, -3),
- 	BPF_EXIT_INSN(),
- 	},
--	.errstr = "back-edge",
-+	.errstr = "infinite loop detected",
-+	.errstr_unpriv = "back-edge",
- 	.result = REJECT,
- },
--- 
-2.20.0
+It's not assembly. It's C code that generates binary and here
+we're talking about comments.
+I'm sure you're not proposing to do:
+/* mov src, dst */
+#define EMIT_mov(DST, SRC)                                                               \
+right?
+bpf_jit_comp.c stays as-is. Enough of it.
 
