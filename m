@@ -6,81 +6,92 @@ X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A95CFC31E44
-	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 07:43:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9E1EC31E44
+	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 08:11:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 746822084E
-	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 07:43:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9E8832080A
+	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 08:11:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="GUalq9Rt"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="F751dU49"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725825AbfFNHnB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Jun 2019 03:43:01 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:35424 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725775AbfFNHnB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 14 Jun 2019 03:43:01 -0400
+        id S1726370AbfFNILa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Jun 2019 04:11:30 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:60474 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726083AbfFNILa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Jun 2019 04:11:30 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=nXnEEiNY+lMHz0FD6eOUxvG6zddBANH1BMFzA31kGM0=; b=GUalq9RtnbNgX/TS40RS2QM4S
-        BlNBeH4Hqf5ia/FIjTbFYMUx6z7obuR4j50Pstq4SQgex1E7iy8dfzSn5TTclW0Z+f7wwLVFFX8md
-        zwV+oTiQy3WVoSMh/FxKU2rG2WNJOQmy0HbsuYuDp2n7QDzyr4hMNZQmnKLddTsIlqNSJeaevhy6z
-        22eynMpu6lVaYGHKhyCF+tbanCjRRnsn8B3XQ3lOp1KrHT/FgeWlQgWpnwm0FDpxskm6Hm8T0CByK
-        RFiq//qqaprlJdcGf6a++oDZSfYkII3YabMEd+UtR/UnAce1e11w181Ld+jV5Zy+kDZTYD5h6rp2/
-        YZSVwx6sw==;
+         bh=USG8NWPdVBgY5Ej2X/EDSC1YVY6FY+uYmg/tOOLTTFo=; b=F751dU49JkcOCni8fL2Qt0e2R
+        526jP56gRAGvqGQopmBVt6ByAtqWtTPuVRjmAQFCMc85IhMtr9ojAqwZyKTL7iA6waWtkxWITHOoM
+        f8/MVsucKiaQz/8neYKfB6i7z78g64oPDzJNOqZdb+gRvysCzZrs1dOBUgy7lsVSaw/8ncAORS4d+
+        QEZXCl6TlW53imd7FYTVEMyF7lHl9bQpZ+JYkIV3vFtbfPRLeStaAM7JLFjp/WHsQi6EAi0QhsBDO
+        ZUbBHyY2kvgnsxG+2DA5/RgYbH6JyY1UakyxxTxhjgFqtFxyjSQulKXZdt1OWF3B39o7xiu96x6kK
+        LosCUCu+Q==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hbgrG-0004oc-Qv; Fri, 14 Jun 2019 07:42:47 +0000
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hbhIs-0003ta-Ag; Fri, 14 Jun 2019 08:11:18 +0000
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4D76A209C9EB8; Fri, 14 Jun 2019 09:42:45 +0200 (CEST)
-Date:   Fri, 14 Jun 2019 09:42:45 +0200
+        id C40FB20A15636; Fri, 14 Jun 2019 10:11:16 +0200 (CEST)
+Date:   Fri, 14 Jun 2019 10:11:16 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>, X86 ML <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Song Liu <songliubraving@fb.com>,
         Kairui Song <kasong@redhat.com>
-Subject: Re: [PATCH 8/9] x86/bpf: Convert asm comments to AT&T syntax
-Message-ID: <20190614074245.GS3436@hirez.programming.kicks-ass.net>
+Subject: Re: [PATCH 2/9] objtool: Fix ORC unwinding in non-JIT BPF generated
+ code
+Message-ID: <20190614081116.GU3436@hirez.programming.kicks-ass.net>
 References: <cover.1560431531.git.jpoimboe@redhat.com>
- <77fe02f7d575091b06f68f8eed256da94aee653f.1560431531.git.jpoimboe@redhat.com>
- <E8372F56-269A-48A4-B80B-14FA664F8D41@fb.com>
+ <99c22bbd79e72855f4bc9049981602d537a54e70.1560431531.git.jpoimboe@redhat.com>
+ <20190613205710.et5fywop4gfalsa6@ast-mbp.dhcp.thefacebook.com>
+ <20190614012030.b6eujm7b4psu62kj@treble>
+ <20190614070852.GQ3436@hirez.programming.kicks-ass.net>
+ <20190614073536.d3xkhwhq3fuivwt5@ast-mbp.dhcp.thefacebook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <E8372F56-269A-48A4-B80B-14FA664F8D41@fb.com>
+In-Reply-To: <20190614073536.d3xkhwhq3fuivwt5@ast-mbp.dhcp.thefacebook.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jun 13, 2019 at 06:52:24PM +0000, Song Liu wrote:
-> > On Jun 13, 2019, at 6:21 AM, Josh Poimboeuf <jpoimboe@redhat.com> wrote:
-
-> > @@ -403,11 +403,11 @@ static void emit_mov_imm64(u8 **pprog, u32 dst_reg,
-> > 		 * For emitting plain u32, where sign bit must not be
-> > 		 * propagated LLVM tends to load imm64 over mov32
-> > 		 * directly, so save couple of bytes by just doing
-> > -		 * 'mov %eax, imm32' instead.
-> > +		 * 'mov imm32, %eax' instead.
-> > 		 */
-> > 		emit_mov_imm32(&prog, false, dst_reg, imm32_lo);
-> > 	} else {
-> > -		/* movabsq %rax, imm64 */
-> > +		/* movabs imm64, %rax */
+On Fri, Jun 14, 2019 at 12:35:38AM -0700, Alexei Starovoitov wrote:
+> On Fri, Jun 14, 2019 at 09:08:52AM +0200, Peter Zijlstra wrote:
+> > On Thu, Jun 13, 2019 at 08:20:30PM -0500, Josh Poimboeuf wrote:
+> > > On Thu, Jun 13, 2019 at 01:57:11PM -0700, Alexei Starovoitov wrote:
+> > 
+> > > > and to patches 8 and 9.
+> > > 
+> > > Well, it's your code, but ... can I ask why?  AT&T syntax is the
+> > > standard for Linux, which is in fact the OS we are developing for.
+> > 
+> > I agree, all assembly in Linux is AT&T, adding Intel notation only
+> > serves to cause confusion.
 > 
-> 		^^^^^ Should this be moveabsq? 
-> 
-> > 		EMIT2(add_1mod(0x48, dst_reg), add_1reg(0xB8, dst_reg));
-> > 		EMIT(imm32_lo, 4);
-> > 		EMIT(imm32_hi, 4);
+> It's not assembly. It's C code that generates binary and here
+> we're talking about comments.
 
-Song, can you please trim replies; I only found what you said because of
-Josh's reply.
+And comments are useless if they don't clarify. Intel syntax confuses.
+
+> I'm sure you're not proposing to do:
+> /* mov src, dst */
+> #define EMIT_mov(DST, SRC)                                                               \
+> right?
+
+Which is why Josh reversed both of them. The current Intel order is just
+terribly confusing. And I don't see any of the other JITs having
+confusing comments like this.
+
+> bpf_jit_comp.c stays as-is. Enough of it.
+
+I think you're forgetting this is also arch/x86 code, and no, it needs
+changes because its broken wrt unwinding.
