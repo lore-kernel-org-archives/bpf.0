@@ -2,97 +2,86 @@ Return-Path: <SRS0=1nN+=UN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E538C31E4B
-	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 17:56:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5131C31E4B
+	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 18:00:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 29E6421841
-	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 17:56:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1560535008;
-	bh=u7A2glWdDsI2x2SgfHUUq2LVtrXCaDuJkwVjBKKrUo8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=unoFYtHj65alMjtj4qNmJ/RwbGTwtPNHLGs3CJwEq0keUUyep7siNt11KoRwptDVL
-	 7sV0Z/K6k7qo2p2Hw8DUP+VFVl3j6xoondco8JgPvTUOKo7EGAL9jaSLqKKtXUOu1j
-	 uNMIEtcbVUABsNd8+T7QRu6bxZ5A1ZpmXFAreMxo=
+	by mail.kernel.org (Postfix) with ESMTP id B0BFC2183E
+	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 18:00:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726807AbfFNR4r (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Jun 2019 13:56:47 -0400
-Received: from mail-qk1-f172.google.com ([209.85.222.172]:34591 "EHLO
-        mail-qk1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726389AbfFNR4r (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 14 Jun 2019 13:56:47 -0400
-Received: by mail-qk1-f172.google.com with SMTP id t8so2251674qkt.1;
-        Fri, 14 Jun 2019 10:56:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=rr4DhL8mkbmYJTu+prptdDL5l4mcP175r2QLE+Qn8CA=;
-        b=cLJE6Rf50VcaPIRaV80FOsBwRwK4nUuYdTa5x8SSx7ww6xsZtzmNPaHRzNFTqODvt6
-         /hDunowkAFc2MbCFwhosFbE8+tPmvxmQRmpC52XUQF980dU32Z/0oL5rfh3XNrTNYbFv
-         KriO0fhfVsUT+A9lhgqJbmINYpztEe4MklT1Ldi/Vti1KUej1yYg4tDVt3hgO+0jTOpz
-         5Fj80H6LyQIWI99RhAp20XnOEHvpU96YrUa8/k5wkGWwVitKTO6pO/6rPbClA3iQm2IW
-         4fu7vDzS8uvA/oeFzyyU9Ar2Hi+EglXMSWAaTbVT0DVcRnsuLKZdJlnI/97tTg2cJhpu
-         KCAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=rr4DhL8mkbmYJTu+prptdDL5l4mcP175r2QLE+Qn8CA=;
-        b=KebvoWhKRM0aSt+WSLpMLhu2XJ8iQgggI0djTeL6CGayR+zWhhhyArkODirBXA3XT+
-         0JxXHsU2YcUj9WGIQdWyY7nYQblTZWOGFcBTIpimCbdY6t0qE9rPybXrtpZ0rH5vtL9a
-         u1U/sxt2TaaEiEtqgT0s3KfHYo88uWGL3w02Vf0xiZqxa0WcN5rN9fQarnM1LTAcZ5Aa
-         aFn9H4ZYS5lMsQtr8BKdfZ0fojQypcZ2JffWDn9UAXwjajhMqqQ54udpBsBRx75NC7sv
-         IbfOf7/dMEWIicDBwf20AB9nlKYlu6S0fqqRfgKvqNyiI7CEgmrt2ly6yki1HOFOBLy0
-         BgMQ==
-X-Gm-Message-State: APjAAAV0RcvJv174bkSSjwvOcofaEdzzM79TnPw6+k4SeFv04xveZcTf
-        VeaycOzZ0rD6KAEvJT0CZYU=
-X-Google-Smtp-Source: APXvYqyur5VtexgQTx8OWTjFE9G5cpfspjCCJpY9hNeZ4lleSYHrVILXqbnzUXo5x1BF6SWDHMdQ/Q==
-X-Received: by 2002:a37:7646:: with SMTP id r67mr57567827qkc.249.1560535005491;
-        Fri, 14 Jun 2019 10:56:45 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::6bab])
-        by smtp.gmail.com with ESMTPSA id t187sm1843362qkh.10.2019.06.14.10.56.44
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 14 Jun 2019 10:56:44 -0700 (PDT)
-Date:   Fri, 14 Jun 2019 10:56:42 -0700
-From:   Tejun Heo <tj@kernel.org>
-To:     axboe@kernel.dk, newella@fb.com, clm@fb.com, josef@toxicpanda.com,
-        dennisz@fb.com, lizefan@huawei.com, hannes@cmpxchg.org
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        kernel-team@fb.com, cgroups@vger.kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, kafai@fb.com, songliubraving@fb.com,
-        yhs@fb.com, bpf@vger.kernel.org
-Subject: Re: [PATCHSET block/for-next] IO cost model based work-conserving
- porportional controller
-Message-ID: <20190614175642.GA657710@devbig004.ftw2.facebook.com>
-References: <20190614015620.1587672-1-tj@kernel.org>
+        id S1727158AbfFNSAf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Jun 2019 14:00:35 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:41486 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726915AbfFNSAf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Jun 2019 14:00:35 -0400
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 652B481F13;
+        Fri, 14 Jun 2019 18:00:29 +0000 (UTC)
+Received: from treble.redhat.com (ovpn-121-232.rdu2.redhat.com [10.10.121.232])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DA8B95D982;
+        Fri, 14 Jun 2019 18:00:24 +0000 (UTC)
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     x86@kernel.org, Alexei Starovoitov <ast@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Song Liu <songliubraving@fb.com>,
+        Kairui Song <kasong@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@kernel.org>
+Subject: [PATCH v2 0/5] x86/bpf: unwinder fixes
+Date:   Fri, 14 Jun 2019 12:56:39 -0500
+Message-Id: <cover.1560534694.git.jpoimboe@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190614015620.1587672-1-tj@kernel.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.25]); Fri, 14 Jun 2019 18:00:35 +0000 (UTC)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jun 13, 2019 at 06:56:10PM -0700, Tejun Heo wrote:
-...
-> The patchset is also available in the following git branch.
-> 
->  git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git review-iow
+v2:
 
-Updated patchset available in the following branch.  Just build fixes
-and cosmetic changes for now.
+- Simplified the frame pointer fixes - instead of using R12, just
+  continue to use RBP for BPF_REG_FP, but use nested frames so the
+  unwinder can understand (suggested by David Laight).
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git review-iow-v2
+- Dropped the AT&T syntax patches for now.  I'm about to disappear for a
+  week and I don't have time to argue about whether code readability is
+  a good thing.
 
-Thanks.
+- I can do the 32-bit version of the fix when I get back.  It should be
+  easy enough.
+
+v1 is here:
+https://lkml.kernel.org/r/cover.1560431531.git.jpoimboe@redhat.com
+
+
+Josh Poimboeuf (4):
+  objtool: Fix ORC unwinding in non-JIT BPF generated code
+  x86/bpf: Move epilogue generation to a dedicated function
+  x86/bpf: Fix 64-bit JIT frame pointer usage
+  x86/unwind/orc: Fall back to using frame pointers for generated code
+
+Song Liu (1):
+  perf/x86: Always store regs->ip in perf_callchain_kernel()
+
+ arch/x86/events/core.c       |  10 +--
+ arch/x86/kernel/unwind_orc.c |  26 ++++++--
+ arch/x86/net/bpf_jit_comp.c  | 115 +++++++++++++++++++----------------
+ kernel/bpf/core.c            |   5 +-
+ tools/objtool/check.c        |  16 ++++-
+ 5 files changed, 107 insertions(+), 65 deletions(-)
 
 -- 
-tejun
+2.20.1
+
