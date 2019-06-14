@@ -2,43 +2,42 @@ Return-Path: <SRS0=1nN+=UN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B700C31E44
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60D2FC31E4C
 	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 07:26:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EE7DA2073F
-	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 07:26:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 300A62073F
+	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 07:26:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1560497165;
-	bh=QnnOHBWwcpMeztIQt76xj/9tB3Zttwjf2YDEMha1OJc=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=aUG9RBg3X19SBgIXCBIKjbIcmKhz8CEiV2JYrxs8bg6k6TOTqlQ8AlO9fs9p4v452
-	 O7cqH86427Ku1WzNkGFfcMlgBLN2P8eT04HAvRNdvd3ZaEALDrB1hR66IcWSnb8eoC
-	 EKaMrnNkEv0oJDXEnqbMt1lQn6O74rDcAP15c/tc=
+	bh=B1b6MCPTflEvLnNUqApR1xpEkK1DhtL4nvXQzRtUnVY=;
+	h=From:To:CC:Subject:Date:List-ID:From;
+	b=B2+p+qJSazPawkn103wtmZn1DoxWtd3z7qf2YdqNqdc0zYZz0o3/3GurxF/L9j5Y0
+	 krq3CqlXA4tDEgafuCYsNVgntO7/vi1DFGKyNm/NL9+2p9YFIdHz1BtTQZxOumclqA
+	 ZNzkdKTLXWCViPJuGo6cDF545B7WeKq19a95nUv4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726373AbfFNH0E convert rfc822-to-8bit (ORCPT
+        id S1726379AbfFNH0E convert rfc822-to-8bit (ORCPT
         <rfc822;bpf@archiver.kernel.org>); Fri, 14 Jun 2019 03:26:04 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:33010 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725846AbfFNH0D (ORCPT
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:45278 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725944AbfFNH0D (ORCPT
         <rfc822;bpf@vger.kernel.org>); Fri, 14 Jun 2019 03:26:03 -0400
-Received: from pps.filterd (m0044008.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5E7NfJV018409
-        for <bpf@vger.kernel.org>; Fri, 14 Jun 2019 00:26:03 -0700
+Received: from pps.filterd (m0001255.ppops.net [127.0.0.1])
+        by mx0b-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5E7M9rf030903
+        for <bpf@vger.kernel.org>; Fri, 14 Jun 2019 00:26:02 -0700
 Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2t3ru7jqr0-3
+        by mx0b-00082601.pphosted.com with ESMTP id 2t3qmj2wm2-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
         for <bpf@vger.kernel.org>; Fri, 14 Jun 2019 00:26:02 -0700
 Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c081:35::126) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Fri, 14 Jun 2019 00:26:01 -0700
+ Fri, 14 Jun 2019 00:25:59 -0700
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 60B2C760F47; Fri, 14 Jun 2019 00:26:01 -0700 (PDT)
+        id 4BA8B760F47; Fri, 14 Jun 2019 00:25:57 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -46,12 +45,10 @@ To:     <davem@davemloft.net>
 CC:     <daniel@iogearbox.net>, <andriin@fb.com>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 2/9] selftests/bpf: fix tests due to const spill/fill
-Date:   Fri, 14 Jun 2019 00:25:50 -0700
-Message-ID: <20190614072557.196239-3-ast@kernel.org>
+Subject: [PATCH v2 bpf-next 0/9] bpf: bounded loops and other features
+Date:   Fri, 14 Jun 2019 00:25:48 -0700
+Message-ID: <20190614072557.196239-1-ast@kernel.org>
 X-Mailer: git-send-email 2.20.0
-In-Reply-To: <20190614072557.196239-1-ast@kernel.org>
-References: <20190614072557.196239-1-ast@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
@@ -60,8 +57,8 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019
  signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
  malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1034 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=479 adultscore=0 classifier=spam adjust=0 reason=mlx
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=850 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1810050000 definitions=main-1906140058
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -69,189 +66,80 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-fix tests that incorrectly assumed that the verifier
-cannot track constants through stack.
+v1->v2: addressed Andrii's feedback.
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
----
- .../bpf/verifier/direct_packet_access.c       |  3 +-
- .../bpf/verifier/helper_access_var_len.c      | 28 ++++++++++---------
- 2 files changed, 17 insertions(+), 14 deletions(-)
+this patch set introduces verifier support for bounded loops and
+adds several other improvements.
+Ideally they would be introduced one at a time,
+but to support bounded loop the verifier needs to 'step back'
+in the patch 1. That patch introduces tracking of spill/fill
+of constants through the stack. Though it's a useful feature
+it hurts cilium tests.
+Patch 3 introduces another feature by extending is_branch_taken
+logic to 'if rX op rY' conditions. This feature is also
+necessary to support bounded loops.
+Then patch 4 adds support for the loops while adding
+key heuristics with jmp_processed.
+Introduction of parentage chain of verifier states in patch 4
+allows patch 9 to add backtracking of precise scalar registers
+which finally resolves degradation from patch 1.
 
-diff --git a/tools/testing/selftests/bpf/verifier/direct_packet_access.c b/tools/testing/selftests/bpf/verifier/direct_packet_access.c
-index d5c596fdc4b9..2c5fbe7bcd27 100644
---- a/tools/testing/selftests/bpf/verifier/direct_packet_access.c
-+++ b/tools/testing/selftests/bpf/verifier/direct_packet_access.c
-@@ -511,7 +511,8 @@
- 		    offsetof(struct __sk_buff, data)),
- 	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
- 		    offsetof(struct __sk_buff, data_end)),
--	BPF_MOV64_IMM(BPF_REG_0, 0xffffffff),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
-+		    offsetof(struct __sk_buff, mark)),
- 	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -8),
- 	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_10, -8),
- 	BPF_ALU64_IMM(BPF_AND, BPF_REG_0, 0xffff),
-diff --git a/tools/testing/selftests/bpf/verifier/helper_access_var_len.c b/tools/testing/selftests/bpf/verifier/helper_access_var_len.c
-index 1f39d845c64f..67ab12410050 100644
---- a/tools/testing/selftests/bpf/verifier/helper_access_var_len.c
-+++ b/tools/testing/selftests/bpf/verifier/helper_access_var_len.c
-@@ -29,9 +29,9 @@
- {
- 	"helper access to variable memory: stack, bitwise AND, zero included",
- 	.insns = {
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, 8),
- 	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
- 	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -64),
--	BPF_MOV64_IMM(BPF_REG_2, 16),
- 	BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, -128),
- 	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, -128),
- 	BPF_ALU64_IMM(BPF_AND, BPF_REG_2, 64),
-@@ -46,9 +46,9 @@
- {
- 	"helper access to variable memory: stack, bitwise AND + JMP, wrong max",
- 	.insns = {
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, 8),
- 	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
- 	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -64),
--	BPF_MOV64_IMM(BPF_REG_2, 16),
- 	BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, -128),
- 	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, -128),
- 	BPF_ALU64_IMM(BPF_AND, BPF_REG_2, 65),
-@@ -122,9 +122,9 @@
- {
- 	"helper access to variable memory: stack, JMP, bounds + offset",
- 	.insns = {
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, 8),
- 	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
- 	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -64),
--	BPF_MOV64_IMM(BPF_REG_2, 16),
- 	BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, -128),
- 	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, -128),
- 	BPF_JMP_IMM(BPF_JGT, BPF_REG_2, 64, 5),
-@@ -143,9 +143,9 @@
- {
- 	"helper access to variable memory: stack, JMP, wrong max",
- 	.insns = {
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, 8),
- 	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
- 	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -64),
--	BPF_MOV64_IMM(BPF_REG_2, 16),
- 	BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, -128),
- 	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, -128),
- 	BPF_JMP_IMM(BPF_JGT, BPF_REG_2, 65, 4),
-@@ -163,9 +163,9 @@
- {
- 	"helper access to variable memory: stack, JMP, no max check",
- 	.insns = {
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, 8),
- 	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
- 	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -64),
--	BPF_MOV64_IMM(BPF_REG_2, 16),
- 	BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, -128),
- 	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, -128),
- 	BPF_MOV64_IMM(BPF_REG_4, 0),
-@@ -183,9 +183,9 @@
- {
- 	"helper access to variable memory: stack, JMP, no min check",
- 	.insns = {
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, 8),
- 	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
- 	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -64),
--	BPF_MOV64_IMM(BPF_REG_2, 16),
- 	BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, -128),
- 	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, -128),
- 	BPF_JMP_IMM(BPF_JGT, BPF_REG_2, 64, 3),
-@@ -201,9 +201,9 @@
- {
- 	"helper access to variable memory: stack, JMP (signed), no min check",
- 	.insns = {
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, 8),
- 	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
- 	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -64),
--	BPF_MOV64_IMM(BPF_REG_2, 16),
- 	BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, -128),
- 	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, -128),
- 	BPF_JMP_IMM(BPF_JSGT, BPF_REG_2, 64, 3),
-@@ -244,6 +244,7 @@
- {
- 	"helper access to variable memory: map, JMP, wrong max",
- 	.insns = {
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 8),
- 	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
- 	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
- 	BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 0),
-@@ -251,7 +252,7 @@
- 	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
- 	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 10),
- 	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
--	BPF_MOV64_IMM(BPF_REG_2, sizeof(struct test_val)),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_6),
- 	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_2, -128),
- 	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_10, -128),
- 	BPF_JMP_IMM(BPF_JSGT, BPF_REG_2, sizeof(struct test_val) + 1, 4),
-@@ -262,7 +263,7 @@
- 	BPF_MOV64_IMM(BPF_REG_0, 0),
- 	BPF_EXIT_INSN(),
- 	},
--	.fixup_map_hash_48b = { 3 },
-+	.fixup_map_hash_48b = { 4 },
- 	.errstr = "invalid access to map value, value_size=48 off=0 size=49",
- 	.result = REJECT,
- 	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
-@@ -296,6 +297,7 @@
- {
- 	"helper access to variable memory: map adjusted, JMP, wrong max",
- 	.insns = {
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 8),
- 	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
- 	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
- 	BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 0),
-@@ -304,7 +306,7 @@
- 	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 11),
- 	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
- 	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 20),
--	BPF_MOV64_IMM(BPF_REG_2, sizeof(struct test_val)),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_6),
- 	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_2, -128),
- 	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_10, -128),
- 	BPF_JMP_IMM(BPF_JSGT, BPF_REG_2, sizeof(struct test_val) - 19, 4),
-@@ -315,7 +317,7 @@
- 	BPF_MOV64_IMM(BPF_REG_0, 0),
- 	BPF_EXIT_INSN(),
- 	},
--	.fixup_map_hash_48b = { 3 },
-+	.fixup_map_hash_48b = { 4 },
- 	.errstr = "R1 min value is outside of the array range",
- 	.result = REJECT,
- 	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
-@@ -337,8 +339,8 @@
- {
- 	"helper access to variable memory: size > 0 not allowed on NULL (ARG_PTR_TO_MEM_OR_NULL)",
- 	.insns = {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, 0),
- 	BPF_MOV64_IMM(BPF_REG_1, 0),
--	BPF_MOV64_IMM(BPF_REG_2, 1),
- 	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_2, -128),
- 	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_10, -128),
- 	BPF_ALU64_IMM(BPF_AND, BPF_REG_2, 64),
-@@ -562,6 +564,7 @@
- {
- 	"helper access to variable memory: 8 bytes leak",
- 	.insns = {
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, 8),
- 	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
- 	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -64),
- 	BPF_MOV64_IMM(BPF_REG_0, 0),
-@@ -572,7 +575,6 @@
- 	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -24),
- 	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -16),
- 	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -8),
--	BPF_MOV64_IMM(BPF_REG_2, 1),
- 	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_2, -128),
- 	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_10, -128),
- 	BPF_ALU64_IMM(BPF_AND, BPF_REG_2, 63),
+The end result is much faster verifier for existing programs
+and new support for loops.
+See patch 8 for many kinds of loops that are now validated.
+Patch 9 is the most tricky one and could be rewritten with
+a different algorithm in the future.
+
+Alexei Starovoitov (9):
+  bpf: track spill/fill of constants
+  selftests/bpf: fix tests due to const spill/fill
+  bpf: extend is_branch_taken to registers
+  bpf: introduce bounded loops
+  bpf: fix callees pruning callers
+  selftests/bpf: fix tests
+  selftests/bpf: add basic verifier tests for loops
+  selftests/bpf: add realistic loop tests
+  bpf: precise scalar_value tracking
+
+ include/linux/bpf_verifier.h                  |  69 +-
+ kernel/bpf/verifier.c                         | 739 ++++++++++++++++--
+ .../bpf/prog_tests/bpf_verif_scale.c          |  67 +-
+ tools/testing/selftests/bpf/progs/loop1.c     |  28 +
+ tools/testing/selftests/bpf/progs/loop2.c     |  28 +
+ tools/testing/selftests/bpf/progs/loop3.c     |  22 +
+ tools/testing/selftests/bpf/progs/pyperf.h    |   6 +-
+ tools/testing/selftests/bpf/progs/pyperf600.c |   9 +
+ .../selftests/bpf/progs/pyperf600_nounroll.c  |   8 +
+ .../testing/selftests/bpf/progs/strobemeta.c  |  10 +
+ .../testing/selftests/bpf/progs/strobemeta.h  | 528 +++++++++++++
+ .../bpf/progs/strobemeta_nounroll1.c          |   9 +
+ .../bpf/progs/strobemeta_nounroll2.c          |   9 +
+ .../selftests/bpf/progs/test_seg6_loop.c      | 261 +++++++
+ .../selftests/bpf/progs/test_sysctl_loop1.c   |  71 ++
+ .../selftests/bpf/progs/test_sysctl_loop2.c   |  72 ++
+ .../selftests/bpf/progs/test_xdp_loop.c       | 231 ++++++
+ tools/testing/selftests/bpf/test_verifier.c   |  11 +-
+ tools/testing/selftests/bpf/verifier/calls.c  |  22 +-
+ tools/testing/selftests/bpf/verifier/cfg.c    |  11 +-
+ .../bpf/verifier/direct_packet_access.c       |   3 +-
+ .../bpf/verifier/helper_access_var_len.c      |  28 +-
+ tools/testing/selftests/bpf/verifier/loops1.c | 161 ++++
+ 23 files changed, 2289 insertions(+), 114 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/loop1.c
+ create mode 100644 tools/testing/selftests/bpf/progs/loop2.c
+ create mode 100644 tools/testing/selftests/bpf/progs/loop3.c
+ create mode 100644 tools/testing/selftests/bpf/progs/pyperf600.c
+ create mode 100644 tools/testing/selftests/bpf/progs/pyperf600_nounroll.c
+ create mode 100644 tools/testing/selftests/bpf/progs/strobemeta.c
+ create mode 100644 tools/testing/selftests/bpf/progs/strobemeta.h
+ create mode 100644 tools/testing/selftests/bpf/progs/strobemeta_nounroll1.c
+ create mode 100644 tools/testing/selftests/bpf/progs/strobemeta_nounroll2.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_seg6_loop.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_loop.c
+ create mode 100644 tools/testing/selftests/bpf/verifier/loops1.c
+
 -- 
 2.20.0
 
