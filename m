@@ -2,261 +2,239 @@ Return-Path: <SRS0=1nN+=UN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21BD0C31E44
-	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 08:38:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0602C31E44
+	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 09:45:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E07E32133D
-	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 08:38:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8E6D02084E
+	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 09:45:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=azazel.net header.i=@azazel.net header.b="MvtV+EL3"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="VPTZ202+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726806AbfFNIi3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Jun 2019 04:38:29 -0400
-Received: from kadath.azazel.net ([81.187.231.250]:38796 "EHLO
-        kadath.azazel.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726707AbfFNIi3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 14 Jun 2019 04:38:29 -0400
-X-Greylist: delayed 2370 seconds by postgrey-1.27 at vger.kernel.org; Fri, 14 Jun 2019 04:38:28 EDT
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=azazel.net;
-         s=20190108; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=G0kG6tqXXsRGIiO+BHcEtfpdFD2+yHGBJ6x5btZuxkA=; b=MvtV+EL3y940ymGGuOgSbcqr9G
-        kWmqZgj+RVG52zJpxNLvpASYK91l/pZPjyaRJKZ8gmulUwbkc96+v/Y3f8pcACZtbmAcrEkyPfmzj
-        +AF3DdZwZZal7wuKknrxWgnuWgI9dr1S1DdHvkdTXC5ulV+8gZwKxTLKaKMGgpkmVPrnFNn2sNQR4
-        n6CgI7c6q5ylvS9WiiibsXaUCeBCE7SBBBvAQsz5MT79+syCQmzKZ0tTFhsIhiHXI6yC2kzS7naSP
-        t/EBFrBKI1XUa2pswCGBzSodZA/OFsVixCOxd62s53RqKr5Oldky3picc/JNFMdCSIUwQqByoqJ4m
-        boLAhlMg==;
-Received: from kadath.azazel.net ([2001:8b0:135f:bcd1:e2cb:4eff:fedf:e608] helo=azazel.net)
-        by kadath.azazel.net with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <jeremy@azazel.net>)
-        id 1hbh6A-0001e9-VN; Fri, 14 Jun 2019 08:58:11 +0100
-Date:   Fri, 14 Jun 2019 08:58:09 +0100
-From:   Jeremy Sowden <jeremy@azazel.net>
-To:     syzbot <syzbot+0789f0c7e45efd7bb643@syzkaller.appspotmail.com>
-Cc:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-        davem@davemloft.net, dvyukov@google.com, hawk@kernel.org,
-        hdanton@sina.com, jakub.kicinski@netronome.com,
-        jasowang@redhat.com, john.fastabend@gmail.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mst@redhat.com,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org,
-        xdp-newbies@vger.kernel.org
-Subject: Re: memory leak in vhost_net_ioctl
-Message-ID: <20190614075809.32gnqqpzgl25gxmz@azazel.net>
-References: <20190614024519.6224-1-hdanton@sina.com>
- <000000000000f9d056058b3fe507@google.com>
+        id S1727073AbfFNJph (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Jun 2019 05:45:37 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:39936 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727066AbfFNJph (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Jun 2019 05:45:37 -0400
+Received: by mail-wr1-f67.google.com with SMTP id p11so1809731wre.7
+        for <bpf@vger.kernel.org>; Fri, 14 Jun 2019 02:45:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FN3Mo/9O52tiExJ2EKMZbmgM+lLVWH4Q/0Rf5yk/E/c=;
+        b=VPTZ202+q1xiyfZ0QiJNZs9WiUU/ZfhgGNUczL8m7yiKP0OCWKJZsjpqWncm/L1dvG
+         to6pKBUYRedgE9vqkHs66CjU924ylAyqx6WMa//zewZeLM1jD+TKgvSw/WPWEiiWgGFp
+         soUEOlaPTGTki7HTEc++tfF+fzhuY17cQ2doE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FN3Mo/9O52tiExJ2EKMZbmgM+lLVWH4Q/0Rf5yk/E/c=;
+        b=AC3stmt93iSqzxbXbayex8ejOsAXmQFN+RXVyC5ERH9ntaX3RoO7sq2CeeQP1Jyj6l
+         BNy1/63wVaFfGEZs6ePSIdWzQiEAUeWY/nN/aVukVRI7JGjPEaNwTMzddhzsCL8GnVhB
+         J3KmBSJu3T73QPCP84gyZ1+KdVttBgiC86aPwsByb2Xnq6/t1Bf1CsMdKyxNHmtAG2UH
+         ZBY53CN/wqoyPDLjwGLwUbjmgDNpjfZnrqQDdFWSqgsV07W0kWd1LOAa5Ii3nepQ72HN
+         341/YbjRD/q3ZoQzfy2j4AFXeWCbHtx/odcQFNrfLxMIKGJ5929HQ344NN2Uda+dA8pH
+         unWg==
+X-Gm-Message-State: APjAAAXzKZqqkbB63N/TnQOeKgC4PfO3J7auIiZb2J971mxaBYCcDEEp
+        OR5QxOqBNYAPTxrwIufjE87gXQ==
+X-Google-Smtp-Source: APXvYqyXJU/dIoOdath7yxZLTAXBEVWrNh9SRTDYn79nqSG60RSVHLgx1TEaN+ZOjbeRT/N9z3RDiQ==
+X-Received: by 2002:a5d:4fce:: with SMTP id h14mr944547wrw.231.1560505533961;
+        Fri, 14 Jun 2019 02:45:33 -0700 (PDT)
+Received: from localhost.localdomain ([2a06:98c0:1000:8250:8265:66d4:1ae6:9025])
+        by smtp.gmail.com with ESMTPSA id o4sm1769631wmh.35.2019.06.14.02.45.32
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 14 Jun 2019 02:45:33 -0700 (PDT)
+From:   Arthur Fabre <afabre@cloudflare.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Arthur Fabre <afabre@cloudflare.com>
+Subject: [PATCH v2 bpf-next] bpf: sk_storage: Fix out of bounds memory access
+Date:   Fri, 14 Jun 2019 10:37:30 +0100
+Message-Id: <20190614093728.622-1-afabre@cloudflare.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="mv67wdquhvqcpoxi"
-Content-Disposition: inline
-In-Reply-To: <000000000000f9d056058b3fe507@google.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:8b0:135f:bcd1:e2cb:4eff:fedf:e608
-X-SA-Exim-Mail-From: jeremy@azazel.net
-X-SA-Exim-Scanned: No (on kadath.azazel.net); SAEximRunCond expanded to false
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+bpf_sk_storage maps use multiple spin locks to reduce contention.
+The number of locks to use is determined by the number of possible CPUs.
+With only 1 possible CPU, bucket_log == 0, and 2^0 = 1 locks are used.
 
---mv67wdquhvqcpoxi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+When updating elements, the correct lock is determined with hash_ptr().
+Calling hash_ptr() with 0 bits is undefined behavior, as it does:
 
-On 2019-06-13, at 20:04:01 -0700, syzbot wrote:
-> syzbot has tested the proposed patch but the reproducer still
-> triggered crash: memory leak in batadv_tvlv_handler_register
+x >> (64 - bits)
 
-There's already a fix for this batman leak:
+Using the value results in an out of bounds memory access.
+In my case, this manifested itself as a page fault when raw_spin_lock_bh()
+is called later, when running the self tests:
 
-  https://lore.kernel.org/netdev/00000000000017d64c058965f966@google.com/
-  https://www.open-mesh.org/issues/378
+./tools/testing/selftests/bpf/test_verifier 773 775
 
->   484.626788][  T156] bond0 (unregistering): Releasing backup
->   interface bond_slave_1
-> Warning: Permanently added '10.128.0.87' (ECDSA) to the list of known
-> hosts.
-> BUG: memory leak
-> unreferenced object 0xffff88811d25c4c0 (size 64):
->   comm "softirq", pid 0, jiffies 4294943668 (age 434.830s)
->   hex dump (first 32 bytes):
->     00 00 00 00 00 00 00 00 e0 fc 5b 20 81 88 ff ff  ..........[ ....
->     00 00 00 00 00 00 00 00 20 91 15 83 ff ff ff ff  ........ .......
->   backtrace:
->     [<000000000045bc9d>] kmemleak_alloc_recursive
-> include/linux/kmemleak.h:43 [inline]
->     [<000000000045bc9d>] slab_post_alloc_hook mm/slab.h:439 [inline]
->     [<000000000045bc9d>] slab_alloc mm/slab.c:3326 [inline]
->     [<000000000045bc9d>] kmem_cache_alloc_trace+0x13d/0x280
-> mm/slab.c:3553
->     [<00000000197d773e>] kmalloc include/linux/slab.h:547 [inline]
->     [<00000000197d773e>] kzalloc include/linux/slab.h:742 [inline]
->     [<00000000197d773e>] batadv_tvlv_handler_register+0xae/0x140
-> net/batman-adv/tvlv.c:529
->     [<00000000fa9f11af>] batadv_tt_init+0x78/0x180
-> net/batman-adv/translation-table.c:4411
->     [<000000008c50839d>] batadv_mesh_init+0x196/0x230
-> net/batman-adv/main.c:208
->     [<000000001c5a74a3>] batadv_softif_init_late+0x1ca/0x220
-> net/batman-adv/soft-interface.c:861
->     [<000000004e676cd1>] register_netdevice+0xbf/0x600
-> net/core/dev.c:8635
->     [<000000005601497b>] __rtnl_newlink+0xaca/0xb30
-> net/core/rtnetlink.c:3199
->     [<00000000ad02cf5e>] rtnl_newlink+0x4e/0x80
-> net/core/rtnetlink.c:3245
->     [<00000000eceb53af>] rtnetlink_rcv_msg+0x178/0x4b0
-> net/core/rtnetlink.c:5214
->     [<00000000140451f6>] netlink_rcv_skb+0x61/0x170
-> net/netlink/af_netlink.c:2482
->     [<00000000237e38f7>] rtnetlink_rcv+0x1d/0x30
-> net/core/rtnetlink.c:5232
->     [<000000000d47c000>] netlink_unicast_kernel
-> net/netlink/af_netlink.c:1307 [inline]
->     [<000000000d47c000>] netlink_unicast+0x1ec/0x2d0
-> net/netlink/af_netlink.c:1333
->     [<0000000098503d79>] netlink_sendmsg+0x26a/0x480
-> net/netlink/af_netlink.c:1922
->     [<000000009263e868>] sock_sendmsg_nosec net/socket.c:646 [inline]
->     [<000000009263e868>] sock_sendmsg+0x54/0x70 net/socket.c:665
->     [<000000007791ad47>] __sys_sendto+0x148/0x1f0 net/socket.c:1958
->     [<00000000d6f3807d>] __do_sys_sendto net/socket.c:1970 [inline]
->     [<00000000d6f3807d>] __se_sys_sendto net/socket.c:1966 [inline]
->     [<00000000d6f3807d>] __x64_sys_sendto+0x2a/0x30 net/socket.c:1966
->
-> BUG: memory leak
-> unreferenced object 0xffff8881024a3340 (size 64):
->   comm "softirq", pid 0, jiffies 4294943678 (age 434.730s)
->   hex dump (first 32 bytes):
->     00 00 00 00 00 00 00 00 e0 2c 66 04 81 88 ff ff  .........,f.....
->     00 00 00 00 00 00 00 00 20 91 15 83 ff ff ff ff  ........ .......
->   backtrace:
->     [<000000000045bc9d>] kmemleak_alloc_recursive
-> include/linux/kmemleak.h:43 [inline]
->     [<000000000045bc9d>] slab_post_alloc_hook mm/slab.h:439 [inline]
->     [<000000000045bc9d>] slab_alloc mm/slab.c:3326 [inline]
->     [<000000000045bc9d>] kmem_cache_alloc_trace+0x13d/0x280
-> mm/slab.c:3553
->     [<00000000197d773e>] kmalloc include/linux/slab.h:547 [inline]
->     [<00000000197d773e>] kzalloc include/linux/slab.h:742 [inline]
->     [<00000000197d773e>] batadv_tvlv_handler_register+0xae/0x140
-> net/batman-adv/tvlv.c:529
->     [<00000000fa9f11af>] batadv_tt_init+0x78/0x180
-> net/batman-adv/translation-table.c:4411
->     [<000000008c50839d>] batadv_mesh_init+0x196/0x230
-> net/batman-adv/main.c:208
->     [<000000001c5a74a3>] batadv_softif_init_late+0x1ca/0x220
-> net/batman-adv/soft-interface.c:861
->     [<000000004e676cd1>] register_netdevice+0xbf/0x600
-> net/core/dev.c:8635
->     [<000000005601497b>] __rtnl_newlink+0xaca/0xb30
-> net/core/rtnetlink.c:3199
->     [<00000000ad02cf5e>] rtnl_newlink+0x4e/0x80
-> net/core/rtnetlink.c:3245
->     [<00000000eceb53af>] rtnetlink_rcv_msg+0x178/0x4b0
-> net/core/rtnetlink.c:5214
->     [<00000000140451f6>] netlink_rcv_skb+0x61/0x170
-> net/netlink/af_netlink.c:2482
->     [<00000000237e38f7>] rtnetlink_rcv+0x1d/0x30
-> net/core/rtnetlink.c:5232
->     [<000000000d47c000>] netlink_unicast_kernel
-> net/netlink/af_netlink.c:1307 [inline]
->     [<000000000d47c000>] netlink_unicast+0x1ec/0x2d0
-> net/netlink/af_netlink.c:1333
->     [<0000000098503d79>] netlink_sendmsg+0x26a/0x480
-> net/netlink/af_netlink.c:1922
->     [<000000009263e868>] sock_sendmsg_nosec net/socket.c:646 [inline]
->     [<000000009263e868>] sock_sendmsg+0x54/0x70 net/socket.c:665
->     [<000000007791ad47>] __sys_sendto+0x148/0x1f0 net/socket.c:1958
->     [<00000000d6f3807d>] __do_sys_sendto net/socket.c:1970 [inline]
->     [<00000000d6f3807d>] __se_sys_sendto net/socket.c:1966 [inline]
->     [<00000000d6f3807d>] __x64_sys_sendto+0x2a/0x30 net/socket.c:1966
->
-> BUG: memory leak
-> unreferenced object 0xffff888108a71b80 (size 128):
->   comm "syz-executor.3", pid 7367, jiffies 4294943696 (age 434.550s)
->   hex dump (first 32 bytes):
->     f0 f8 bf 02 81 88 ff ff f0 f8 bf 02 81 88 ff ff  ................
->     1a dc 77 da 54 a0 be 41 64 20 e9 56 ff ff ff ff  ..w.T..Ad .V....
->   backtrace:
->     [<000000000045bc9d>] kmemleak_alloc_recursive
-> include/linux/kmemleak.h:43 [inline]
->     [<000000000045bc9d>] slab_post_alloc_hook mm/slab.h:439 [inline]
->     [<000000000045bc9d>] slab_alloc mm/slab.c:3326 [inline]
->     [<000000000045bc9d>] kmem_cache_alloc_trace+0x13d/0x280
-> mm/slab.c:3553
->     [<00000000cc6863ae>] kmalloc include/linux/slab.h:547 [inline]
->     [<00000000cc6863ae>] hsr_create_self_node+0x42/0x150
-> net/hsr/hsr_framereg.c:84
->     [<000000000e2bb6b0>] hsr_dev_finalize+0xa4/0x233
-> net/hsr/hsr_device.c:441
->     [<000000003b100a4a>] hsr_newlink+0xf3/0x140
-> net/hsr/hsr_netlink.c:69
->     [<00000000b5efb0eb>] __rtnl_newlink+0x892/0xb30
-> net/core/rtnetlink.c:3187
->     [<00000000ad02cf5e>] rtnl_newlink+0x4e/0x80
-> net/core/rtnetlink.c:3245
->     [<00000000eceb53af>] rtnetlink_rcv_msg+0x178/0x4b0
-> net/core/rtnetlink.c:5214
->     [<00000000140451f6>] netlink_rcv_skb+0x61/0x170
-> net/netlink/af_netlink.c:2482
->     [<00000000237e38f7>] rtnetlink_rcv+0x1d/0x30
-> net/core/rtnetlink.c:5232
->     [<000000000d47c000>] netlink_unicast_kernel
-> net/netlink/af_netlink.c:1307 [inline]
->     [<000000000d47c000>] netlink_unicast+0x1ec/0x2d0
-> net/netlink/af_netlink.c:1333
->     [<0000000098503d79>] netlink_sendmsg+0x26a/0x480
-> net/netlink/af_netlink.c:1922
->     [<000000009263e868>] sock_sendmsg_nosec net/socket.c:646 [inline]
->     [<000000009263e868>] sock_sendmsg+0x54/0x70 net/socket.c:665
->     [<000000007791ad47>] __sys_sendto+0x148/0x1f0 net/socket.c:1958
->     [<00000000d6f3807d>] __do_sys_sendto net/socket.c:1970 [inline]
->     [<00000000d6f3807d>] __se_sys_sendto net/socket.c:1966 [inline]
->     [<00000000d6f3807d>] __x64_sys_sendto+0x2a/0x30 net/socket.c:1966
->     [<000000003ba31db7>] do_syscall_64+0x76/0x1a0
-> arch/x86/entry/common.c:301
->     [<0000000075c8daad>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
->
-> Tested on:
->
-> commit:         c11fb13a Merge branch 'for-linus' of git://git.kernel.org/..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=15c8f3b6a00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=cb38d33cd06d8d48
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=12477101a00000
+[   16.366342] BUG: unable to handle page fault for address: ffff8fe7a66f93f8
+[   16.367139] #PF: supervisor write access in kernel mode
+[   16.367751] #PF: error_code(0x0002) - not-present page
+[   16.368323] PGD 35a01067 P4D 35a01067 PUD 0
+[   16.368796] Oops: 0002 [#1] SMP PTI
+[   16.369175] CPU: 0 PID: 189 Comm: test_verifier Not tainted 5.2.0-rc2+ #10
+[   16.369960] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
+[   16.371021] RIP: 0010:_raw_spin_lock_bh (/home/afabre/linux/./include/trace/events/initcall.h:48)
+[ 16.371571] Code: 02 00 00 31 c0 ba ff 00 00 00 3e 0f b1 17 75 01 c3 e9 82 12 5f ff 66 90 65 81 05 ad 14 6f 41 00 02 00 00 31 c0 ba 01 00 00 00 <3e> 0f b1 17 75 01 c3 89 c6 e9 f0 02 5f ff b8 00 02 00 00 3e 0f c1
+All code
+========
+   0:	02 00                	add    (%rax),%al
+   2:	00 31                	add    %dh,(%rcx)
+   4:	c0 ba ff 00 00 00 3e 	sarb   $0x3e,0xff(%rdx)
+   b:	0f b1 17             	cmpxchg %edx,(%rdi)
+   e:	75 01                	jne    0x11
+  10:	c3                   	retq
+  11:	e9 82 12 5f ff       	jmpq   0xffffffffff5f1298
+  16:	66 90                	xchg   %ax,%ax
+  18:	65 81 05 ad 14 6f 41 	addl   $0x200,%gs:0x416f14ad(%rip)        # 0x416f14d0
+  1f:	00 02 00 00
+  23:	31 c0                	xor    %eax,%eax
+  25:	ba 01 00 00 00       	mov    $0x1,%edx
+  2a:	3e 0f b1 17          	cmpxchg %edx,%ds:*(%rdi)		<-- trapping instruction
+  2e:	75 01                	jne    0x31
+  30:	c3                   	retq
+  31:	89 c6                	mov    %eax,%esi
+  33:	e9 f0 02 5f ff       	jmpq   0xffffffffff5f0328
+  38:	b8 00 02 00 00       	mov    $0x200,%eax
+  3d:	3e                   	ds
+  3e:	0f                   	.byte 0xf
+  3f:	c1                   	.byte 0xc1
 
-J.
+Code starting with the faulting instruction
+===========================================
+   0:	3e 0f b1 17          	cmpxchg %edx,%ds:(%rdi)
+   4:	75 01                	jne    0x7
+   6:	c3                   	retq
+   7:	89 c6                	mov    %eax,%esi
+   9:	e9 f0 02 5f ff       	jmpq   0xffffffffff5f02fe
+   e:	b8 00 02 00 00       	mov    $0x200,%eax
+  13:	3e                   	ds
+  14:	0f                   	.byte 0xf
+  15:	c1                   	.byte 0xc1
+[   16.373398] RSP: 0018:ffffa759809d3be0 EFLAGS: 00010246
+[   16.373954] RAX: 0000000000000000 RBX: ffff8fe7a66f93f0 RCX: 0000000000000040
+[   16.374645] RDX: 0000000000000001 RSI: ffff8fdaf9f0d180 RDI: ffff8fe7a66f93f8
+[   16.375338] RBP: ffff8fdaf9f0d180 R08: ffff8fdafba2c320 R09: ffff8fdaf9f0d0c0
+[   16.376028] R10: 0000000000000000 R11: 0000000000000000 R12: ffff8fdafa346700
+[   16.376719] R13: ffff8fe7a66f93f8 R14: ffff8fdaf9f0d0c0 R15: 0000000000000001
+[   16.377413] FS:  00007fda724c0740(0000) GS:ffff8fdafba00000(0000) knlGS:0000000000000000
+[   16.378204] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   16.378763] CR2: ffff8fe7a66f93f8 CR3: 0000000139d1c006 CR4: 0000000000360ef0
+[   16.379453] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[   16.380144] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[   16.380864] Call Trace:
+[   16.381112] selem_link_map (/home/afabre/linux/./include/linux/compiler.h:221 /home/afabre/linux/net/core/bpf_sk_storage.c:243)
+[   16.381476] sk_storage_update (/home/afabre/linux/net/core/bpf_sk_storage.c:355 /home/afabre/linux/net/core/bpf_sk_storage.c:414)
+[   16.381888] bpf_sk_storage_get (/home/afabre/linux/net/core/bpf_sk_storage.c:760 /home/afabre/linux/net/core/bpf_sk_storage.c:741)
+[   16.382285] ___bpf_prog_run (/home/afabre/linux/kernel/bpf/core.c:1447)
+[   16.382679] ? __bpf_prog_run32 (/home/afabre/linux/kernel/bpf/core.c:1603)
+[   16.383074] ? alloc_file_pseudo (/home/afabre/linux/fs/file_table.c:232)
+[   16.383486] ? kvm_clock_get_cycles (/home/afabre/linux/arch/x86/kernel/kvmclock.c:98)
+[   16.383906] ? ktime_get (/home/afabre/linux/kernel/time/timekeeping.c:265 /home/afabre/linux/kernel/time/timekeeping.c:369 /home/afabre/linux/kernel/time/timekeeping.c:754)
+[   16.384243] ? bpf_test_run (/home/afabre/linux/net/bpf/test_run.c:47)
+[   16.384613] ? bpf_prog_test_run_skb (/home/afabre/linux/net/bpf/test_run.c:313)
+[   16.385065] ? security_capable (/home/afabre/linux/security/security.c:696 (discriminator 19))
+[   16.385460] ? __do_sys_bpf (/home/afabre/linux/kernel/bpf/syscall.c:2072 /home/afabre/linux/kernel/bpf/syscall.c:2848)
+[   16.385854] ? __handle_mm_fault (/home/afabre/linux/mm/memory.c:3507 /home/afabre/linux/mm/memory.c:3532 /home/afabre/linux/mm/memory.c:3666 /home/afabre/linux/mm/memory.c:3897 /home/afabre/linux/mm/memory.c:4021)
+[   16.386273] ? __dentry_kill (/home/afabre/linux/fs/dcache.c:595)
+[   16.386652] ? do_syscall_64 (/home/afabre/linux/arch/x86/entry/common.c:301)
+[   16.387031] ? entry_SYSCALL_64_after_hwframe (/home/afabre/linux/./include/trace/events/initcall.h:10 /home/afabre/linux/./include/trace/events/initcall.h:10)
+[   16.387541] Modules linked in:
+[   16.387846] CR2: ffff8fe7a66f93f8
+[   16.388175] ---[ end trace 891cf27b5b9c9cc6 ]---
+[   16.388628] RIP: 0010:_raw_spin_lock_bh (/home/afabre/linux/./include/trace/events/initcall.h:48)
+[ 16.389089] Code: 02 00 00 31 c0 ba ff 00 00 00 3e 0f b1 17 75 01 c3 e9 82 12 5f ff 66 90 65 81 05 ad 14 6f 41 00 02 00 00 31 c0 ba 01 00 00 00 <3e> 0f b1 17 75 01 c3 89 c6 e9 f0 02 5f ff b8 00 02 00 00 3e 0f c1
+All code
+========
+   0:	02 00                	add    (%rax),%al
+   2:	00 31                	add    %dh,(%rcx)
+   4:	c0 ba ff 00 00 00 3e 	sarb   $0x3e,0xff(%rdx)
+   b:	0f b1 17             	cmpxchg %edx,(%rdi)
+   e:	75 01                	jne    0x11
+  10:	c3                   	retq
+  11:	e9 82 12 5f ff       	jmpq   0xffffffffff5f1298
+  16:	66 90                	xchg   %ax,%ax
+  18:	65 81 05 ad 14 6f 41 	addl   $0x200,%gs:0x416f14ad(%rip)        # 0x416f14d0
+  1f:	00 02 00 00
+  23:	31 c0                	xor    %eax,%eax
+  25:	ba 01 00 00 00       	mov    $0x1,%edx
+  2a:	3e 0f b1 17          	cmpxchg %edx,%ds:*(%rdi)		<-- trapping instruction
+  2e:	75 01                	jne    0x31
+  30:	c3                   	retq
+  31:	89 c6                	mov    %eax,%esi
+  33:	e9 f0 02 5f ff       	jmpq   0xffffffffff5f0328
+  38:	b8 00 02 00 00       	mov    $0x200,%eax
+  3d:	3e                   	ds
+  3e:	0f                   	.byte 0xf
+  3f:	c1                   	.byte 0xc1
 
---mv67wdquhvqcpoxi
-Content-Type: application/pgp-signature; name="signature.asc"
+Code starting with the faulting instruction
+===========================================
+   0:	3e 0f b1 17          	cmpxchg %edx,%ds:(%rdi)
+   4:	75 01                	jne    0x7
+   6:	c3                   	retq
+   7:	89 c6                	mov    %eax,%esi
+   9:	e9 f0 02 5f ff       	jmpq   0xffffffffff5f02fe
+   e:	b8 00 02 00 00       	mov    $0x200,%eax
+  13:	3e                   	ds
+  14:	0f                   	.byte 0xf
+  15:	c1                   	.byte 0xc1
+[   16.390899] RSP: 0018:ffffa759809d3be0 EFLAGS: 00010246
+[   16.391410] RAX: 0000000000000000 RBX: ffff8fe7a66f93f0 RCX: 0000000000000040
+[   16.392102] RDX: 0000000000000001 RSI: ffff8fdaf9f0d180 RDI: ffff8fe7a66f93f8
+[   16.392795] RBP: ffff8fdaf9f0d180 R08: ffff8fdafba2c320 R09: ffff8fdaf9f0d0c0
+[   16.393481] R10: 0000000000000000 R11: 0000000000000000 R12: ffff8fdafa346700
+[   16.394169] R13: ffff8fe7a66f93f8 R14: ffff8fdaf9f0d0c0 R15: 0000000000000001
+[   16.394870] FS:  00007fda724c0740(0000) GS:ffff8fdafba00000(0000) knlGS:0000000000000000
+[   16.395641] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   16.396193] CR2: ffff8fe7a66f93f8 CR3: 0000000139d1c006 CR4: 0000000000360ef0
+[   16.396876] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[   16.397557] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[   16.398246] Kernel panic - not syncing: Fatal exception in interrupt
+[   16.399067] Kernel Offset: 0x3ce00000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+[   16.400098] ---[ end Kernel panic - not syncing: Fatal exception in interrupt ]---
 
------BEGIN PGP SIGNATURE-----
+Force the minimum number of locks to two.
 
-iQIzBAABCAAdFiEEZ8d+2N/NBLDbUxIF0Z7UzfnX9sMFAl0DU4oACgkQ0Z7UzfnX
-9sMn7g/8DSm3sIrrshWDSyy7szl4gf7yrszSZ+Dusy9+UNL7QnfrgTAgzFEESeBH
-D+mzA5Jnv/xZH6nBWwdo+hvOzVpOxJrK2vF1iLOC+6q0frEWN+626UUxjVN3q2dU
-lEpXnIsEY1j/G8fDXcWtvDuX40rCKbSYbCs0YHf/RxJRiCG4qHcISfwViOlvUryu
-9O+13yT82OwYjf8zg3Czgll3f67/tLMhcIXAztccMGJmzoIiqi9wu7VCLHO9WjaH
-OgqRYXow09VwBdm1SeX6RaiU0NKikPx0Cay59EHBUu4eVUs7dk2hHh2e8n5CRC8e
-fMx8zEDmc9/fU0t+iwekfjX5y4U3VvOks1i+EdzheClV8mLy3x4F9k0+3el3TgJF
-qmCV8SSjlmQJ11FCacd4HCJ+4miUF+Fz/G7ii5QiU+j/vsUEzBEIKDKAT5qsYUwL
-j7n1HsgRxX8GXA/7MqDo4+EwCZxWRXqTNqwG5FOfAoLq/eJk5y1DCRqWGFVPvTN8
-lskd/oo+fQ2sDf1YtI3Hm1ZppzbQYjwSUIQmEmA9PuWVR1QM85d2Jqwf+plFyKn6
-zJ+mFFv80h/k9o35VQaBOsHema+/lTVvOSaWwoys6njDMU2saYvtY9pRWkn0mNE4
-EbnPJb3JIj+0B/Lq/XgMoNIWutlwyeH5YOgnGGO4dcBuPMoiuBA=
-=QX3O
------END PGP SIGNATURE-----
+Signed-off-by: Arthur Fabre <afabre@cloudflare.com>
+Fixes: 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage")
+---
+ net/core/bpf_sk_storage.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---mv67wdquhvqcpoxi--
+diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+index f40e3d35fd9c..94c7f77ecb6b 100644
+--- a/net/core/bpf_sk_storage.c
++++ b/net/core/bpf_sk_storage.c
+@@ -634,7 +634,8 @@ static struct bpf_map *bpf_sk_storage_map_alloc(union bpf_attr *attr)
+ 		return ERR_PTR(-ENOMEM);
+ 	bpf_map_init_from_attr(&smap->map, attr);
+ 
+-	smap->bucket_log = ilog2(roundup_pow_of_two(num_possible_cpus()));
++	/* Use at least 2 buckets, select_bucket() is undefined behavior with 1 bucket */
++	smap->bucket_log = max_t(u32, 1, ilog2(roundup_pow_of_two(num_possible_cpus())));
+ 	nbuckets = 1U << smap->bucket_log;
+ 	cost = sizeof(*smap->buckets) * nbuckets + sizeof(*smap);
+ 
+-- 
+2.20.1
+
