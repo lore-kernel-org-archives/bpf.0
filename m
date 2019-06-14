@@ -2,100 +2,76 @@ Return-Path: <SRS0=1nN+=UN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=FROM_EXCESS_BASE64,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97062C31E4E
-	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 18:01:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8223EC31E4B
+	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 19:51:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 718E721841
-	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 18:01:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5D651217F9
+	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 19:51:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727179AbfFNSAf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Jun 2019 14:00:35 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:50046 "EHLO mx1.redhat.com"
+        id S1725972AbfFNTvE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Jun 2019 15:51:04 -0400
+Received: from mga05.intel.com ([192.55.52.43]:30568 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726627AbfFNSAf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 14 Jun 2019 14:00:35 -0400
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 304F1307D84B;
-        Fri, 14 Jun 2019 18:00:33 +0000 (UTC)
-Received: from treble.redhat.com (ovpn-121-232.rdu2.redhat.com [10.10.121.232])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8302A5DE4E;
-        Fri, 14 Jun 2019 18:00:29 +0000 (UTC)
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     x86@kernel.org, Alexei Starovoitov <ast@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Song Liu <songliubraving@fb.com>,
-        Kairui Song <kasong@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@kernel.org>
-Subject: [PATCH v2 1/5] perf/x86: Always store regs->ip in perf_callchain_kernel()
-Date:   Fri, 14 Jun 2019 12:56:40 -0500
-Message-Id: <81b0cdc5aa276dac315a0536df384cc82da86243.1560534694.git.jpoimboe@redhat.com>
-In-Reply-To: <cover.1560534694.git.jpoimboe@redhat.com>
-References: <cover.1560534694.git.jpoimboe@redhat.com>
+        id S1725808AbfFNTvE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Jun 2019 15:51:04 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Jun 2019 12:51:04 -0700
+X-ExtLoop1: 1
+Received: from nisrael1-mobl1.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.255.41.147])
+  by orsmga006.jf.intel.com with ESMTP; 14 Jun 2019 12:50:54 -0700
+Subject: Re: [PATCH bpf-next v4 07/17] libbpf: Support drivers with
+ non-combined channels
+To:     Maciej Fijalkowski <maciejromanfijalkowski@gmail.com>,
+        Maxim Mikityanskiy <maximmi@mellanox.com>
+Cc:     Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Saeed Mahameed <saeedm@mellanox.com>,
+        Jonathan Lemon <bsd@fb.com>,
+        Tariq Toukan <tariqt@mellanox.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
+References: <20190612155605.22450-1-maximmi@mellanox.com>
+ <20190612155605.22450-8-maximmi@mellanox.com>
+ <20190612132352.7ee27bf3@cakuba.netronome.com>
+ <0afd3ef2-d0e3-192b-095e-0f8ae8e6fb5d@mellanox.com>
+ <20190613164514.00002f66@gmail.com>
+ <eb175575-1ab4-4d29-1dc9-28d85cddd842@mellanox.com>
+ <20190614191549.0000374d@gmail.com>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
+Message-ID: <9ee7363b-508a-4461-1c4f-252c2ba9cf76@intel.com>
+Date:   Fri, 14 Jun 2019 21:50:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
+In-Reply-To: <20190614191549.0000374d@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.48]); Fri, 14 Jun 2019 18:00:35 +0000 (UTC)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Song Liu <songliubraving@fb.com>
+On 2019-06-14 19:15, Maciej Fijalkowski wrote:
+> Why would I want to run AF_XDP without ZC? The main reason for having AF_XDP
+> support in drivers is the zero copy, right?
 
-The stacktrace_map_raw_tp BPF selftest is failing because the RIP saved
-by perf_arch_fetch_caller_regs() isn't getting saved by
-perf_callchain_kernel().
+In general I agree with you on this point. Short-term, I see copy-mode
+useful for API adoption reasons (as XDP_SKB), so from that perspecitve
+it's important. Longer term I'd like to explore AF_XDP as a faster
+AF_PACKET for pcap functionality.
 
-This was broken by the following commit:
 
-  d15d356887e7 ("perf/x86: Make perf callchains work without CONFIG_FRAME_POINTER")
-
-With that change, when starting with non-HW regs, the unwinder starts
-with the current stack frame and unwinds until it passes up the frame
-which called perf_arch_fetch_caller_regs().  So regs->ip needs to be
-saved deliberately.
-
-Fixes: d15d356887e7 ("perf/x86: Make perf callchains work without CONFIG_FRAME_POINTER")
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/events/core.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-index f0e4804515d8..6a7cfcadfc1e 100644
---- a/arch/x86/events/core.c
-+++ b/arch/x86/events/core.c
-@@ -2328,13 +2328,13 @@ perf_callchain_kernel(struct perf_callchain_entry_ctx *entry, struct pt_regs *re
- 		return;
- 	}
- 
--	if (perf_hw_regs(regs)) {
--		if (perf_callchain_store(entry, regs->ip))
--			return;
-+	if (perf_callchain_store(entry, regs->ip))
-+		return;
-+
-+	if (perf_hw_regs(regs))
- 		unwind_start(&state, current, regs, NULL);
--	} else {
-+	else
- 		unwind_start(&state, current, NULL, (void *)regs->sp);
--	}
- 
- 	for (; !unwind_done(&state); unwind_next_frame(&state)) {
- 		addr = unwind_get_return_address(&state);
--- 
-2.20.1
+Björn
 
