@@ -2,30 +2,30 @@ Return-Path: <SRS0=1nN+=UN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5131C31E4B
-	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 18:00:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3543C31E4E
+	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 18:00:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B0BFC2183E
-	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 18:00:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B67DB2184B
+	for <bpf@archiver.kernel.org>; Fri, 14 Jun 2019 18:00:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727158AbfFNSAf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Jun 2019 14:00:35 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:41486 "EHLO mx1.redhat.com"
+        id S1727437AbfFNSAo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Jun 2019 14:00:44 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:37034 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726915AbfFNSAf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 14 Jun 2019 14:00:35 -0400
+        id S1726762AbfFNSAn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Jun 2019 14:00:43 -0400
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 652B481F13;
-        Fri, 14 Jun 2019 18:00:29 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id EACA330832F4;
+        Fri, 14 Jun 2019 18:00:42 +0000 (UTC)
 Received: from treble.redhat.com (ovpn-121-232.rdu2.redhat.com [10.10.121.232])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DA8B95D982;
-        Fri, 14 Jun 2019 18:00:24 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1CE865D982;
+        Fri, 14 Jun 2019 18:00:40 +0000 (UTC)
 From:   Josh Poimboeuf <jpoimboe@redhat.com>
 To:     x86@kernel.org, Alexei Starovoitov <ast@kernel.org>
 Cc:     linux-kernel@vger.kernel.org,
@@ -37,51 +37,88 @@ Cc:     linux-kernel@vger.kernel.org,
         David Laight <David.Laight@ACULAB.COM>,
         Thomas Gleixner <tglx@linutronix.de>,
         Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@kernel.org>
-Subject: [PATCH v2 0/5] x86/bpf: unwinder fixes
-Date:   Fri, 14 Jun 2019 12:56:39 -0500
-Message-Id: <cover.1560534694.git.jpoimboe@redhat.com>
+Subject: [PATCH v2 5/5] x86/unwind/orc: Fall back to using frame pointers for generated code
+Date:   Fri, 14 Jun 2019 12:56:44 -0500
+Message-Id: <43cce8f734cf8ae1fcd10ea14d67c028c73b1540.1560534694.git.jpoimboe@redhat.com>
+In-Reply-To: <cover.1560534694.git.jpoimboe@redhat.com>
+References: <cover.1560534694.git.jpoimboe@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.25]); Fri, 14 Jun 2019 18:00:35 +0000 (UTC)
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.44]); Fri, 14 Jun 2019 18:00:43 +0000 (UTC)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-v2:
+The ORC unwinder can't unwind through BPF JIT generated code because
+there are no ORC entries associated with the code.
 
-- Simplified the frame pointer fixes - instead of using R12, just
-  continue to use RBP for BPF_REG_FP, but use nested frames so the
-  unwinder can understand (suggested by David Laight).
+If an ORC entry isn't available, try to fall back to frame pointers.  If
+BPF and other generated code always do frame pointer setup (even with
+CONFIG_FRAME_POINTERS=n) then this will allow ORC to unwind through most
+generated code despite there being no corresponding ORC entries.
 
-- Dropped the AT&T syntax patches for now.  I'm about to disappear for a
-  week and I don't have time to argue about whether code readability is
-  a good thing.
+Fixes: d15d356887e7 ("perf/x86: Make perf callchains work without CONFIG_FRAME_POINTER")
+Reported-by: Song Liu <songliubraving@fb.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ arch/x86/kernel/unwind_orc.c | 26 ++++++++++++++++++++++----
+ 1 file changed, 22 insertions(+), 4 deletions(-)
 
-- I can do the 32-bit version of the fix when I get back.  It should be
-  easy enough.
-
-v1 is here:
-https://lkml.kernel.org/r/cover.1560431531.git.jpoimboe@redhat.com
-
-
-Josh Poimboeuf (4):
-  objtool: Fix ORC unwinding in non-JIT BPF generated code
-  x86/bpf: Move epilogue generation to a dedicated function
-  x86/bpf: Fix 64-bit JIT frame pointer usage
-  x86/unwind/orc: Fall back to using frame pointers for generated code
-
-Song Liu (1):
-  perf/x86: Always store regs->ip in perf_callchain_kernel()
-
- arch/x86/events/core.c       |  10 +--
- arch/x86/kernel/unwind_orc.c |  26 ++++++--
- arch/x86/net/bpf_jit_comp.c  | 115 +++++++++++++++++++----------------
- kernel/bpf/core.c            |   5 +-
- tools/objtool/check.c        |  16 ++++-
- 5 files changed, 107 insertions(+), 65 deletions(-)
-
+diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
+index 33b66b5c5aec..72b997eaa1fc 100644
+--- a/arch/x86/kernel/unwind_orc.c
++++ b/arch/x86/kernel/unwind_orc.c
+@@ -82,9 +82,9 @@ static struct orc_entry *orc_find(unsigned long ip);
+  * But they are copies of the ftrace entries that are static and
+  * defined in ftrace_*.S, which do have orc entries.
+  *
+- * If the undwinder comes across a ftrace trampoline, then find the
++ * If the unwinder comes across a ftrace trampoline, then find the
+  * ftrace function that was used to create it, and use that ftrace
+- * function's orc entrie, as the placement of the return code in
++ * function's orc entry, as the placement of the return code in
+  * the stack will be identical.
+  */
+ static struct orc_entry *orc_ftrace_find(unsigned long ip)
+@@ -128,6 +128,16 @@ static struct orc_entry null_orc_entry = {
+ 	.type = ORC_TYPE_CALL
+ };
+ 
++/* Fake frame pointer entry -- used as a fallback for generated code */
++static struct orc_entry orc_fp_entry = {
++	.type		= ORC_TYPE_CALL,
++	.sp_reg		= ORC_REG_BP,
++	.sp_offset	= 16,
++	.bp_reg		= ORC_REG_PREV_SP,
++	.bp_offset	= -16,
++	.end		= 0,
++};
++
+ static struct orc_entry *orc_find(unsigned long ip)
+ {
+ 	static struct orc_entry *orc;
+@@ -392,8 +402,16 @@ bool unwind_next_frame(struct unwind_state *state)
+ 	 * calls and calls to noreturn functions.
+ 	 */
+ 	orc = orc_find(state->signal ? state->ip : state->ip - 1);
+-	if (!orc)
+-		goto err;
++	if (!orc) {
++		/*
++		 * As a fallback, try to assume this code uses a frame pointer.
++		 * This is useful for generated code, like BPF, which ORC
++		 * doesn't know about.  This is just a guess, so the rest of
++		 * the unwind is no longer considered reliable.
++		 */
++		orc = &orc_fp_entry;
++		state->error = true;
++	}
+ 
+ 	/* End-of-stack check for kernel threads: */
+ 	if (orc->sp_reg == ORC_REG_UNDEFINED) {
 -- 
 2.20.1
 
