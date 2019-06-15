@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AA2EC468B0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61E2CC31E50
 	for <bpf@archiver.kernel.org>; Sat, 15 Jun 2019 19:12:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 61D5820866
+	by mail.kernel.org (Postfix) with ESMTP id 2C1052080A
 	for <bpf@archiver.kernel.org>; Sat, 15 Jun 2019 19:12:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1560625963;
-	bh=h/AJtk6vP+CDO2BxZaYImQZ//U0W8DKLdahXXBlTGbQ=;
+	bh=f5qFDTv0CjPmJ53q5WTK1Cs2tuOOeeWm4WA8w5eKJN4=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=crBh34XRPLugs22UyxQhO0qKc/2DO/ixFFi7q0nVC9PgbjgBuGoAOWegrbp7qQfJU
-	 36wceEWhoCRhl607BrfX2u4p+PzUbG3cxUNxyID6n20/QwVi5jCntX+GPThBfV1ml7
-	 ZElOVC+4BPVcfLbn2uSZPc4ssAxH9XR9AILZaoP4=
+	b=ZvjzUXUZlE8DFfuLiekV6gomaBXgU9j0GVfDqc9oQZEN7m/PQDDZCNt0/tUe8gXn4
+	 XT+DtkbSEX26UAyhBy6ixmnAuof5tazH/OmyEQAvPhYISibOXqOdMpBk4lR+oHs9bw
+	 lsFHYt3T52EB8wcjKO6N9So0REgwcEduyC2lYnv0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727046AbfFOTMn convert rfc822-to-8bit (ORCPT
+        id S1727037AbfFOTMn convert rfc822-to-8bit (ORCPT
         <rfc822;bpf@archiver.kernel.org>); Sat, 15 Jun 2019 15:12:43 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:47812 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726973AbfFOTMk (ORCPT
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:59200 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726984AbfFOTMk (ORCPT
         <rfc822;bpf@vger.kernel.org>); Sat, 15 Jun 2019 15:12:40 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5FJA3u2019149
-        for <bpf@vger.kernel.org>; Sat, 15 Jun 2019 12:12:40 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2t4xbygybm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sat, 15 Jun 2019 12:12:40 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Sat, 15 Jun 2019 12:12:39 -0700
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x5FJCNRt015128
+        for <bpf@vger.kernel.org>; Sat, 15 Jun 2019 12:12:36 -0700
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by m0001303.ppops.net with ESMTP id 2t4vbds5gu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Sat, 15 Jun 2019 12:12:36 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Sat, 15 Jun 2019 12:12:34 -0700
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 61A3C760AA7; Sat, 15 Jun 2019 12:12:38 -0700 (PDT)
+        id 4CECF760AA7; Sat, 15 Jun 2019 12:12:34 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -46,9 +46,9 @@ To:     <davem@davemloft.net>
 CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v3 bpf-next 6/9] selftests/bpf: fix tests
-Date:   Sat, 15 Jun 2019 12:12:22 -0700
-Message-ID: <20190615191225.2409862-7-ast@kernel.org>
+Subject: [PATCH v3 bpf-next 4/9] bpf: introduce bounded loops
+Date:   Sat, 15 Jun 2019 12:12:20 -0700
+Message-ID: <20190615191225.2409862-5-ast@kernel.org>
 X-Mailer: git-send-email 2.20.0
 In-Reply-To: <20190615191225.2409862-1-ast@kernel.org>
 References: <20190615191225.2409862-1-ast@kernel.org>
@@ -59,144 +59,418 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-15_11:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1034 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
  mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906150181
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906150182
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix tests that assumed no loops.
+Allow the verifier to validate the loops by simulating their execution.
+Exisiting programs have used '#pragma unroll' to unroll the loops
+by the compiler. Instead let the verifier simulate all iterations
+of the loop.
+In order to do that introduce parentage chain of bpf_verifier_state and
+'branches' counter for the number of branches left to explore.
+See more detailed algorithm description in bpf_verifier.h
+
+This algorithm borrows the key idea from Edward Cree approach:
+https://patchwork.ozlabs.org/patch/877222/
+Additional state pruning heuristics make such brute force loop walk
+practical even for large loops.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Acked-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/testing/selftests/bpf/test_verifier.c  | 11 ++++------
- tools/testing/selftests/bpf/verifier/calls.c | 22 ++++++++++++--------
- tools/testing/selftests/bpf/verifier/cfg.c   | 11 ++++++----
- 3 files changed, 24 insertions(+), 20 deletions(-)
+ include/linux/bpf_verifier.h |  51 ++++++++++++-
+ kernel/bpf/verifier.c        | 143 ++++++++++++++++++++++++++++++++---
+ 2 files changed, 181 insertions(+), 13 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index cd0248c54e25..93e1d87a343a 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -237,10 +237,10 @@ static void bpf_fill_scale1(struct bpf_test *self)
- 		insn[i++] = BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_6,
- 					-8 * (k % 64 + 1));
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 704ed7971472..03037373b447 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -194,6 +194,53 @@ struct bpf_func_state {
+ struct bpf_verifier_state {
+ 	/* call stack tracking */
+ 	struct bpf_func_state *frame[MAX_CALL_FRAMES];
++	struct bpf_verifier_state *parent;
++	/*
++	 * 'branches' field is the number of branches left to explore:
++	 * 0 - all possible paths from this state reached bpf_exit or
++	 * were safely pruned
++	 * 1 - at least one path is being explored.
++	 * This state hasn't reached bpf_exit
++	 * 2 - at least two paths are being explored.
++	 * This state is an immediate parent of two children.
++	 * One is fallthrough branch with branches==1 and another
++	 * state is pushed into stack (to be explored later) also with
++	 * branches==1. The parent of this state has branches==1.
++	 * The verifier state tree connected via 'parent' pointer looks like:
++	 * 1
++	 * 1
++	 * 2 -> 1 (first 'if' pushed into stack)
++	 * 1
++	 * 2 -> 1 (second 'if' pushed into stack)
++	 * 1
++	 * 1
++	 * 1 bpf_exit.
++	 *
++	 * Once do_check() reaches bpf_exit, it calls update_branch_counts()
++	 * and the verifier state tree will look:
++	 * 1
++	 * 1
++	 * 2 -> 1 (first 'if' pushed into stack)
++	 * 1
++	 * 1 -> 1 (second 'if' pushed into stack)
++	 * 0
++	 * 0
++	 * 0 bpf_exit.
++	 * After pop_stack() the do_check() will resume at second 'if'.
++	 *
++	 * If is_state_visited() sees a state with branches > 0 it means
++	 * there is a loop. If such state is exactly equal to the current state
++	 * it's an infinite loop. Note states_equal() checks for states
++	 * equvalency, so two states being 'states_equal' does not mean
++	 * infinite loop. The exact comparison is provided by
++	 * states_maybe_looping() function. It's a stronger pre-check and
++	 * much faster than states_equal().
++	 *
++	 * This algorithm may not find all possible infinite loops or
++	 * loop iteration count may be too high.
++	 * In such cases BPF_COMPLEXITY_LIMIT_INSNS limit kicks in.
++	 */
++	u32 branches;
+ 	u32 insn_idx;
+ 	u32 curframe;
+ 	u32 active_spin_lock;
+@@ -312,7 +359,9 @@ struct bpf_verifier_env {
+ 	} cfg;
+ 	u32 subprog_cnt;
+ 	/* number of instructions analyzed by the verifier */
+-	u32 insn_processed;
++	u32 prev_insn_processed, insn_processed;
++	/* number of jmps, calls, exits analyzed so far */
++	u32 prev_jmps_processed, jmps_processed;
+ 	/* total verification time */
+ 	u64 verification_time;
+ 	/* maximum number of verifier states kept in 'branching' instructions */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 8d3a4ef1d969..25baa3c8cdd2 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -721,6 +721,8 @@ static int copy_verifier_state(struct bpf_verifier_state *dst_state,
+ 	dst_state->speculative = src->speculative;
+ 	dst_state->curframe = src->curframe;
+ 	dst_state->active_spin_lock = src->active_spin_lock;
++	dst_state->branches = src->branches;
++	dst_state->parent = src->parent;
+ 	for (i = 0; i <= src->curframe; i++) {
+ 		dst = dst_state->frame[i];
+ 		if (!dst) {
+@@ -736,6 +738,23 @@ static int copy_verifier_state(struct bpf_verifier_state *dst_state,
+ 	return 0;
+ }
+ 
++static void update_branch_counts(struct bpf_verifier_env *env, struct bpf_verifier_state *st)
++{
++	while (st) {
++		u32 br = --st->branches;
++
++		/* WARN_ON(br > 1) technically makes sense here,
++		 * but see comment in push_stack(), hence:
++		 */
++		WARN_ONCE((int)br < 0,
++			  "BUG update_branch_counts:branches_to_explore=%d\n",
++			  br);
++		if (br)
++			break;
++		st = st->parent;
++	}
++}
++
+ static int pop_stack(struct bpf_verifier_env *env, int *prev_insn_idx,
+ 		     int *insn_idx)
+ {
+@@ -789,6 +808,18 @@ static struct bpf_verifier_state *push_stack(struct bpf_verifier_env *env,
+ 			env->stack_size);
+ 		goto err;
  	}
--	/* every jump adds 1 step to insn_processed, so to stay exactly
--	 * within 1m limit add MAX_TEST_INSNS - MAX_JMP_SEQ - 1 MOVs and 1 EXIT
-+	/* is_state_visited() doesn't allocate state for pruning for every jump.
-+	 * Hence multiply jmps by 4 to accommodate that heuristic
++	if (elem->st.parent) {
++		++elem->st.parent->branches;
++		/* WARN_ON(branches > 2) technically makes sense here,
++		 * but
++		 * 1. speculative states will bump 'branches' for non-branch
++		 * instructions
++		 * 2. is_state_visited() heuristics may decide not to create
++		 * a new state for a sequence of branches and all such current
++		 * and cloned states will be pointing to a single parent state
++		 * which might have large 'branches' count.
++		 */
++	}
+ 	return &elem->st;
+ err:
+ 	free_verifier_state(env->cur_state, true);
+@@ -5682,7 +5713,8 @@ static void init_explored_state(struct bpf_verifier_env *env, int idx)
+  * w - next instruction
+  * e - edge
+  */
+-static int push_insn(int t, int w, int e, struct bpf_verifier_env *env)
++static int push_insn(int t, int w, int e, struct bpf_verifier_env *env,
++		     bool loop_ok)
+ {
+ 	int *insn_stack = env->cfg.insn_stack;
+ 	int *insn_state = env->cfg.insn_state;
+@@ -5712,6 +5744,8 @@ static int push_insn(int t, int w, int e, struct bpf_verifier_env *env)
+ 		insn_stack[env->cfg.cur_stack++] = w;
+ 		return 1;
+ 	} else if ((insn_state[w] & 0xF0) == DISCOVERED) {
++		if (loop_ok && env->allow_ptr_leaks)
++			return 0;
+ 		verbose_linfo(env, t, "%d: ", t);
+ 		verbose_linfo(env, w, "%d: ", w);
+ 		verbose(env, "back-edge from insn %d to %d\n", t, w);
+@@ -5763,7 +5797,7 @@ static int check_cfg(struct bpf_verifier_env *env)
+ 		if (opcode == BPF_EXIT) {
+ 			goto mark_explored;
+ 		} else if (opcode == BPF_CALL) {
+-			ret = push_insn(t, t + 1, FALLTHROUGH, env);
++			ret = push_insn(t, t + 1, FALLTHROUGH, env, false);
+ 			if (ret == 1)
+ 				goto peek_stack;
+ 			else if (ret < 0)
+@@ -5772,7 +5806,8 @@ static int check_cfg(struct bpf_verifier_env *env)
+ 				init_explored_state(env, t + 1);
+ 			if (insns[t].src_reg == BPF_PSEUDO_CALL) {
+ 				init_explored_state(env, t);
+-				ret = push_insn(t, t + insns[t].imm + 1, BRANCH, env);
++				ret = push_insn(t, t + insns[t].imm + 1, BRANCH,
++						env, false);
+ 				if (ret == 1)
+ 					goto peek_stack;
+ 				else if (ret < 0)
+@@ -5785,7 +5820,7 @@ static int check_cfg(struct bpf_verifier_env *env)
+ 			}
+ 			/* unconditional jump with single edge */
+ 			ret = push_insn(t, t + insns[t].off + 1,
+-					FALLTHROUGH, env);
++					FALLTHROUGH, env, true);
+ 			if (ret == 1)
+ 				goto peek_stack;
+ 			else if (ret < 0)
+@@ -5798,13 +5833,13 @@ static int check_cfg(struct bpf_verifier_env *env)
+ 		} else {
+ 			/* conditional jump with two edges */
+ 			init_explored_state(env, t);
+-			ret = push_insn(t, t + 1, FALLTHROUGH, env);
++			ret = push_insn(t, t + 1, FALLTHROUGH, env, true);
+ 			if (ret == 1)
+ 				goto peek_stack;
+ 			else if (ret < 0)
+ 				goto err_free;
+ 
+-			ret = push_insn(t, t + insns[t].off + 1, BRANCH, env);
++			ret = push_insn(t, t + insns[t].off + 1, BRANCH, env, true);
+ 			if (ret == 1)
+ 				goto peek_stack;
+ 			else if (ret < 0)
+@@ -5814,7 +5849,7 @@ static int check_cfg(struct bpf_verifier_env *env)
+ 		/* all other non-branch instructions with single
+ 		 * fall-through edge
+ 		 */
+-		ret = push_insn(t, t + 1, FALLTHROUGH, env);
++		ret = push_insn(t, t + 1, FALLTHROUGH, env, false);
+ 		if (ret == 1)
+ 			goto peek_stack;
+ 		else if (ret < 0)
+@@ -6247,6 +6282,8 @@ static void clean_live_states(struct bpf_verifier_env *env, int insn,
+ 
+ 	sl = *explored_state(env, insn);
+ 	while (sl) {
++		if (sl->state.branches)
++			goto next;
+ 		if (sl->state.insn_idx != insn ||
+ 		    sl->state.curframe != cur->curframe)
+ 			goto next;
+@@ -6611,12 +6648,32 @@ static int propagate_liveness(struct bpf_verifier_env *env,
+ 	return 0;
+ }
+ 
++static bool states_maybe_looping(struct bpf_verifier_state *old,
++				 struct bpf_verifier_state *cur)
++{
++	struct bpf_func_state *fold, *fcur;
++	int i, fr = cur->curframe;
++
++	if (old->curframe != fr)
++		return false;
++
++	fold = old->frame[fr];
++	fcur = cur->frame[fr];
++	for (i = 0; i < MAX_BPF_REG; i++)
++		if (memcmp(&fold->regs[i], &fcur->regs[i],
++			   offsetof(struct bpf_reg_state, parent)))
++			return false;
++	return true;
++}
++
++
+ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ {
+ 	struct bpf_verifier_state_list *new_sl;
+ 	struct bpf_verifier_state_list *sl, **pprev;
+ 	struct bpf_verifier_state *cur = env->cur_state, *new;
+ 	int i, j, err, states_cnt = 0;
++	bool add_new_state = false;
+ 
+ 	if (!env->insn_aux_data[insn_idx].prune_point)
+ 		/* this 'insn_idx' instruction wasn't marked, so we will not
+@@ -6624,6 +6681,18 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 		 */
+ 		return 0;
+ 
++	/* bpf progs typically have pruning point every 4 instructions
++	 * http://vger.kernel.org/bpfconf2019.html#session-1
++	 * Do not add new state for future pruning if the verifier hasn't seen
++	 * at least 2 jumps and at least 8 instructions.
++	 * This heuristics helps decrease 'total_states' and 'peak_states' metric.
++	 * In tests that amounts to up to 50% reduction into total verifier
++	 * memory consumption and 20% verifier time speedup.
++	 */
++	if (env->jmps_processed - env->prev_jmps_processed >= 2 &&
++	    env->insn_processed - env->prev_insn_processed >= 8)
++		add_new_state = true;
++
+ 	pprev = explored_state(env, insn_idx);
+ 	sl = *pprev;
+ 
+@@ -6633,6 +6702,30 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 		states_cnt++;
+ 		if (sl->state.insn_idx != insn_idx)
+ 			goto next;
++		if (sl->state.branches) {
++			if (states_maybe_looping(&sl->state, cur) &&
++			    states_equal(env, &sl->state, cur)) {
++				verbose_linfo(env, insn_idx, "; ");
++				verbose(env, "infinite loop detected at insn %d\n", insn_idx);
++				return -EINVAL;
++			}
++			/* if the verifier is processing a loop, avoid adding new state
++			 * too often, since different loop iterations have distinct
++			 * states and may not help future pruning.
++			 * This threshold shouldn't be too low to make sure that
++			 * a loop with large bound will be rejected quickly.
++			 * The most abusive loop will be:
++			 * r1 += 1
++			 * if r1 < 1000000 goto pc-2
++			 * 1M insn_procssed limit / 100 == 10k peak states.
++			 * This threshold shouldn't be too high either, since states
++			 * at the end of the loop are likely to be useful in pruning.
++			 */
++			if (env->jmps_processed - env->prev_jmps_processed < 20 &&
++			    env->insn_processed - env->prev_insn_processed < 100)
++				add_new_state = false;
++			goto miss;
++		}
+ 		if (states_equal(env, &sl->state, cur)) {
+ 			sl->hit_cnt++;
+ 			/* reached equivalent register/stack state,
+@@ -6650,7 +6743,15 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 				return err;
+ 			return 1;
+ 		}
+-		sl->miss_cnt++;
++miss:
++		/* when new state is not going to be added do not increase miss count.
++		 * Otherwise several loop iterations will remove the state
++		 * recorded earlier. The goal of these heuristics is to have
++		 * states from some iterations of the loop (some in the beginning
++		 * and some at the end) to help pruning.
++		 */
++		if (add_new_state)
++			sl->miss_cnt++;
+ 		/* heuristic to determine whether this state is beneficial
+ 		 * to keep checking from state equivalence point of view.
+ 		 * Higher numbers increase max_states_per_insn and verification time,
+@@ -6662,6 +6763,11 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 			 */
+ 			*pprev = sl->next;
+ 			if (sl->state.frame[0]->regs[0].live & REG_LIVE_DONE) {
++				u32 br = sl->state.branches;
++
++				WARN_ONCE(br,
++					  "BUG live_done but branches_to_explore %d\n",
++					  br);
+ 				free_verifier_state(&sl->state, false);
+ 				kfree(sl);
+ 				env->peak_states--;
+@@ -6687,18 +6793,25 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 	if (!env->allow_ptr_leaks && states_cnt > BPF_COMPLEXITY_LIMIT_STATES)
+ 		return 0;
+ 
+-	/* there were no equivalent states, remember current one.
+-	 * technically the current state is not proven to be safe yet,
++	if (!add_new_state)
++		return 0;
++
++	/* There were no equivalent states, remember the current one.
++	 * Technically the current state is not proven to be safe yet,
+ 	 * but it will either reach outer most bpf_exit (which means it's safe)
+-	 * or it will be rejected. Since there are no loops, we won't be
++	 * or it will be rejected. When there are no loops the verifier won't be
+ 	 * seeing this tuple (frame[0].callsite, frame[1].callsite, .. insn_idx)
+-	 * again on the way to bpf_exit
++	 * again on the way to bpf_exit.
++	 * When looping the sl->state.branches will be > 0 and this state
++	 * will not be considered for equivalence until branches == 0.
  	 */
--	while (i < MAX_TEST_INSNS - MAX_JMP_SEQ - 1)
-+	while (i < MAX_TEST_INSNS - MAX_JMP_SEQ * 4)
- 		insn[i++] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 42);
- 	insn[i] = BPF_EXIT_INSN();
- 	self->prog_len = i + 1;
-@@ -269,10 +269,7 @@ static void bpf_fill_scale2(struct bpf_test *self)
- 		insn[i++] = BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_6,
- 					-8 * (k % (64 - 4 * FUNC_NEST) + 1));
+ 	new_sl = kzalloc(sizeof(struct bpf_verifier_state_list), GFP_KERNEL);
+ 	if (!new_sl)
+ 		return -ENOMEM;
+ 	env->total_states++;
+ 	env->peak_states++;
++	env->prev_jmps_processed = env->jmps_processed;
++	env->prev_insn_processed = env->insn_processed;
+ 
+ 	/* add new state to the head of linked list */
+ 	new = &new_sl->state;
+@@ -6709,6 +6822,9 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 		return err;
  	}
--	/* every jump adds 1 step to insn_processed, so to stay exactly
--	 * within 1m limit add MAX_TEST_INSNS - MAX_JMP_SEQ - 1 MOVs and 1 EXIT
--	 */
--	while (i < MAX_TEST_INSNS - MAX_JMP_SEQ - 1)
-+	while (i < MAX_TEST_INSNS - MAX_JMP_SEQ * 4)
- 		insn[i++] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 42);
- 	insn[i] = BPF_EXIT_INSN();
- 	self->prog_len = i + 1;
-diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
-index 9093a8f64dc6..2d752c4f8d9d 100644
---- a/tools/testing/selftests/bpf/verifier/calls.c
-+++ b/tools/testing/selftests/bpf/verifier/calls.c
-@@ -215,9 +215,11 @@
- 	BPF_MOV64_IMM(BPF_REG_0, 3),
- 	BPF_JMP_IMM(BPF_JA, 0, 0, -6),
- 	},
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--	.errstr = "back-edge from insn",
--	.result = REJECT,
-+	.prog_type = BPF_PROG_TYPE_SOCKET_FILTER,
-+	.errstr_unpriv = "back-edge from insn",
-+	.result_unpriv = REJECT,
-+	.result = ACCEPT,
-+	.retval = 1,
- },
- {
- 	"calls: conditional call 4",
-@@ -250,22 +252,24 @@
- 	BPF_MOV64_IMM(BPF_REG_0, 3),
- 	BPF_EXIT_INSN(),
- 	},
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--	.errstr = "back-edge from insn",
--	.result = REJECT,
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.result = ACCEPT,
-+	.retval = 1,
- },
- {
- 	"calls: conditional call 6",
- 	.insns = {
-+	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
- 	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 2),
--	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, -2),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, -3),
- 	BPF_EXIT_INSN(),
- 	BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
- 		    offsetof(struct __sk_buff, mark)),
- 	BPF_EXIT_INSN(),
- 	},
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--	.errstr = "back-edge from insn",
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.errstr = "infinite loop detected",
- 	.result = REJECT,
- },
- {
-diff --git a/tools/testing/selftests/bpf/verifier/cfg.c b/tools/testing/selftests/bpf/verifier/cfg.c
-index 349c0862fb4c..4eb76ed739ce 100644
---- a/tools/testing/selftests/bpf/verifier/cfg.c
-+++ b/tools/testing/selftests/bpf/verifier/cfg.c
-@@ -41,7 +41,8 @@
- 	BPF_JMP_IMM(BPF_JA, 0, 0, -1),
- 	BPF_EXIT_INSN(),
- 	},
--	.errstr = "back-edge",
-+	.errstr = "unreachable insn 1",
-+	.errstr_unpriv = "back-edge",
- 	.result = REJECT,
- },
- {
-@@ -53,18 +54,20 @@
- 	BPF_JMP_IMM(BPF_JA, 0, 0, -4),
- 	BPF_EXIT_INSN(),
- 	},
--	.errstr = "back-edge",
-+	.errstr = "unreachable insn 4",
-+	.errstr_unpriv = "back-edge",
- 	.result = REJECT,
- },
- {
- 	"conditional loop",
- 	.insns = {
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
- 	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
- 	BPF_MOV64_REG(BPF_REG_3, BPF_REG_0),
- 	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0, -3),
- 	BPF_EXIT_INSN(),
- 	},
--	.errstr = "back-edge",
-+	.errstr = "infinite loop detected",
-+	.errstr_unpriv = "back-edge",
- 	.result = REJECT,
- },
+ 	new->insn_idx = insn_idx;
++	WARN_ONCE(new->branches != 1,
++		  "BUG is_state_visited:branches_to_explore=%d insn %d\n", new->branches, insn_idx);
++	cur->parent = new;
+ 	new_sl->next = *explored_state(env, insn_idx);
+ 	*explored_state(env, insn_idx) = new_sl;
+ 	/* connect new state to parentage chain. Current frame needs all
+@@ -6795,6 +6911,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 		return -ENOMEM;
+ 	state->curframe = 0;
+ 	state->speculative = false;
++	state->branches = 1;
+ 	state->frame[0] = kzalloc(sizeof(struct bpf_func_state), GFP_KERNEL);
+ 	if (!state->frame[0]) {
+ 		kfree(state);
+@@ -7001,6 +7118,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 		} else if (class == BPF_JMP || class == BPF_JMP32) {
+ 			u8 opcode = BPF_OP(insn->code);
+ 
++			env->jmps_processed++;
+ 			if (opcode == BPF_CALL) {
+ 				if (BPF_SRC(insn->code) != BPF_K ||
+ 				    insn->off != 0 ||
+@@ -7086,6 +7204,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 				if (err)
+ 					return err;
+ process_bpf_exit:
++				update_branch_counts(env, env->cur_state);
+ 				err = pop_stack(env, &env->prev_insn_idx,
+ 						&env->insn_idx);
+ 				if (err < 0) {
 -- 
 2.20.0
 
