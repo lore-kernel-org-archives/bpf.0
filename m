@@ -4,65 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A4B0C31E51
-	for <bpf@archiver.kernel.org>; Sat, 15 Jun 2019 00:02:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F87DC31E50
+	for <bpf@archiver.kernel.org>; Sat, 15 Jun 2019 00:06:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 128C021773
-	for <bpf@archiver.kernel.org>; Sat, 15 Jun 2019 00:02:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6103F21773
+	for <bpf@archiver.kernel.org>; Sat, 15 Jun 2019 00:06:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UR1QnVhG"
+	dkim=pass (2048-bit key) header.d=live.com header.i=@live.com header.b="P3Wgja4k"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726582AbfFOACv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Jun 2019 20:02:51 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:40469 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725981AbfFOACu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 14 Jun 2019 20:02:50 -0400
-Received: by mail-lf1-f68.google.com with SMTP id a9so2822614lff.7;
-        Fri, 14 Jun 2019 17:02:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PsY6YLZQisEzKpYTeNLm01WC17BqF5LKGI3d/XbnNP0=;
-        b=UR1QnVhGiR8PpSdixLr1ZY2LlolPMrTaeg0etSU230cB0RlUJSxRENatRyVNrlXoBU
-         xpTlp7mGCaTHqHtmyblx+SJ745lARNI96hCRc6jo/9CKU1GxujPlTAbPQ8Cp2nUinl/3
-         PHBI/6QBvGfXmbmdiaeb05+EJkgt3ob5m5nB1RE4JQXGTBVgFVWt9a3VN5GuuC5BK3sy
-         qwlCs2sGIDKYSlenqbEMICe3VQnI2DbK8Ik/swOLfG1ZskAdZtpTYGvrzkn3fvUv0WBo
-         71+3nZOSvogZWciMISYM9+ss4Yqfb96goglgIhNrRSdHzx4fGdYtdmo4rbAH9iSC9iI0
-         kuHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PsY6YLZQisEzKpYTeNLm01WC17BqF5LKGI3d/XbnNP0=;
-        b=OGg5s57bY3f7k2oaBqS7P4YJQqcF5pjEeiu9IqpQmwitGg2me99Cl0mmZL6QzSCfXa
-         Squynm6DrZbREI8BIbXqbHbWkVFXecY0ldcHa/CCxsHo+EhSVUa8o7xML4i/4NEPE5zL
-         vu+hYLDbbTkZU30mr8p0B0Ir1EERsRzCofmZ5pIf7+tjhvJu1Edt4YIcAMS1C57E9yBV
-         W/W8J68h/awJDsZzka9cX47tnfWL3ovmCZgZ6II+HY1txz3IghE1YpGWuG3MsZH5bcRH
-         4Zswh1e7g/prf7Vaq6gdJ6VcDNGvPyL7nkfSznhXjSe8koZ30/5VD6gIzt6As8wcSpdz
-         Qd0g==
-X-Gm-Message-State: APjAAAULenL12YHr0AJrEeKFujTujkg6hK3gXIs2GBAIYZ7wRojg3mtm
-        NcH+bDF9wQTTLPtjJCwU36pdddxScA2mLbXkCpQ=
-X-Google-Smtp-Source: APXvYqz5xMz7BB7ENjdB+9sn/VlhgT3dOKs3ovwxItexLSk5E5buLe4GKS4LW+5cbmDnWGlKS06tnqE/oKxS8EhYBxs=
-X-Received: by 2002:a19:ca0e:: with SMTP id a14mr23925879lfg.19.1560556967892;
- Fri, 14 Jun 2019 17:02:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1560534694.git.jpoimboe@redhat.com> <178097de8c1bd6a877342304f3469eac4067daa4.1560534694.git.jpoimboe@redhat.com>
- <20190614210555.q4ictql3tzzjio4r@ast-mbp.dhcp.thefacebook.com>
- <20190614211916.jnxakyfwilcv6r57@treble> <CAADnVQJ0dmxYTnaQC1UiSo7MhcTy2KRWJWJKw4jyxFWby-JgRg@mail.gmail.com>
- <20190614231311.gfeb47rpjoholuov@treble> <CAADnVQKOjvhpMQqjHvF-oX2U99WRCi+repgqmt6hiSObovxoaQ@mail.gmail.com>
- <20190614235417.7oagddee75xo7otp@treble>
-In-Reply-To: <20190614235417.7oagddee75xo7otp@treble>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 14 Jun 2019 17:02:36 -0700
-Message-ID: <CAADnVQ+mjtgZExhtKDu6bbaVSHUfOYb=XeJodPB5+WdjtLYvCA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/5] x86/bpf: Fix 64-bit JIT frame pointer usage
+        id S1726370AbfFOAGZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Jun 2019 20:06:25 -0400
+Received: from mail-oln040092002055.outbound.protection.outlook.com ([40.92.2.55]:29852
+        "EHLO NAM01-SN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726329AbfFOAGY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Jun 2019 20:06:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=30HXd+dPJtY9USRwewE+Bx8bYj0GxNalDluahMAvmAA=;
+ b=P3Wgja4ki15wIeHnix39n/Wm+5LJpLvalBRK6cZp8vSygMDI96MhjmlOC5blWCKTr1D2pCfaFkkLv3JCcqOHCz/WuUjseHnlQdw8VNv9k+B3wHX8ajpSE2elS4j2Ro2J694KfMay5bPAdzJ+gwLYk20ApIxg1y+knFJ5KjbAuUeLZm3TER4jkm/hEW8JYa/yz+UIXjjKZdEix1CjHUZLoyRSTu5I1e69cspGAUrwCag420F7gMrQeeJC5TuMLotiAcj7BbR/PXw/91gxMFWpHQ5U2anN/msPcDrimeNVqgnd+e/QPmazfO/DQ293ivqSlJm9O6OEFIxZSJ30AeaZqQ==
+Received: from SN1NAM01FT041.eop-nam01.prod.protection.outlook.com
+ (10.152.64.55) by SN1NAM01HT093.eop-nam01.prod.protection.outlook.com
+ (10.152.65.165) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.1987.11; Sat, 15 Jun
+ 2019 00:06:22 +0000
+Received: from BYAPR02MB5704.namprd02.prod.outlook.com (10.152.64.54) by
+ SN1NAM01FT041.mail.protection.outlook.com (10.152.65.86) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.1987.11 via Frontend Transport; Sat, 15 Jun 2019 00:06:22 +0000
+Received: from BYAPR02MB5704.namprd02.prod.outlook.com
+ ([fe80::18b:f08e:21ff:fa35]) by BYAPR02MB5704.namprd02.prod.outlook.com
+ ([fe80::18b:f08e:21ff:fa35%5]) with mapi id 15.20.1987.013; Sat, 15 Jun 2019
+ 00:06:22 +0000
+From:   abhja kaanlani <unidef_rogue@live.com>
 To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     X86 ML <x86@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+CC:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        X86 ML <x86@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Network Development <netdev@vger.kernel.org>,
@@ -70,67 +50,105 @@ Cc:     X86 ML <x86@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Song Liu <songliubraving@fb.com>,
         Kairui Song <kasong@redhat.com>,
         Steven Rostedt <rostedt@goodmis.org>,
-        David Laight <David.Laight@aculab.com>,
+        "David Laight" <David.Laight@aculab.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v2 2/5] objtool: Fix ORC unwinding in non-JIT BPF
+ generated code
+Thread-Topic: [PATCH v2 2/5] objtool: Fix ORC unwinding in non-JIT BPF
+ generated code
+Thread-Index: AQHVItsbjvHW1pAgSkaM92TtuhP88aaboi8AgAACh4CAAAB3gIAAAtCAgAAA+oCAAB/wgIAAA5+AgAAJEQCAAAEGTw==
+Date:   Sat, 15 Jun 2019 00:06:22 +0000
+Message-ID: <BYAPR02MB57042A4F3AAA334A6349643183E90@BYAPR02MB5704.namprd02.prod.outlook.com>
+References: <cover.1560534694.git.jpoimboe@redhat.com>
+ <c0add777a2e0207c1474ce99baa492a7ce3502d6.1560534694.git.jpoimboe@redhat.com>
+ <20190614205841.s4utbpurntpr6aiq@ast-mbp.dhcp.thefacebook.com>
+ <20190614210745.kwiqm5pkgabruzuj@treble>
+ <CAADnVQLK3ixK1JWF_mfScZoFzFF=6O8f1WcqkYqiejKeex1GSQ@mail.gmail.com>
+ <20190614211929.drnnawbi7guqj2ck@treble>
+ <CAADnVQ+BCxsKEK=ZzYOZkgTJAg_7jz1_f+FCX+Ms0vTOuW8Mxw@mail.gmail.com>
+ <20190614231717.xukbfpc2cy47s4xh@treble>
+ <CAADnVQJn+TnSj82MJ0ry1UTNGXD0qzESqfp7E1oi_HAYC-xTXg@mail.gmail.com>,<20190615000242.e5tcogffvyuuhnrs@treble>
+In-Reply-To: <20190615000242.e5tcogffvyuuhnrs@treble>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-incomingtopheadermarker: OriginalChecksum:DB603815C01532625D1A267674924C175B13E31D40761902888A42887286FE9A;UpperCasedChecksum:C267D0A64ECB0339B6B7B385EF85E68656BD261CBC212BB4B7C483FD36C764C4;SizeAsReceived:8042;Count:44
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [QbZJjtTO8EPklbpsz0US2cH1AnpybpFKVX62RKtDOFog3dsjKtba8xX50oTC43yi]
+x-ms-publictraffictype: Email
+x-incomingheadercount: 44
+x-eopattributedmessage: 0
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(5050001)(7020095)(20181119110)(201702061078)(5061506573)(5061507331)(1603103135)(2017031320274)(2017031322404)(2017031323274)(2017031324274)(1601125500)(1603101475)(1701031045);SRVR:SN1NAM01HT093;
+x-ms-traffictypediagnostic: SN1NAM01HT093:
+x-microsoft-antispam-message-info: Q8qNuqf6Uuy02b1i3OVPLYOgHS376cv94/B8O4eqoPlHJ+HE1jAR9A2/9C5WM7rciEBPGYjAt45Rgve4I9n+VpZymPTTD3pY/lDgcDJFHP+PxtUYjj7/2891wOEq5Lz9WTjC8gEzmzi1mQW0gyqHA9rEbAdhSwRuRoHgZF0vDJyYZzwHlQVgLXyDZm/BR5S/
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: live.com
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2d2cffa0-3052-41b6-d76d-08d6f1254cf9
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jun 2019 00:06:22.3561
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Internet
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1NAM01HT093
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jun 14, 2019 at 4:54 PM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
->
-> On Fri, Jun 14, 2019 at 04:23:41PM -0700, Alexei Starovoitov wrote:
-> > On Fri, Jun 14, 2019 at 4:13 PM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
-> > >
-> > > On Fri, Jun 14, 2019 at 02:27:30PM -0700, Alexei Starovoitov wrote:
-> > > > On Fri, Jun 14, 2019 at 2:19 PM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
-> > > > >
-> > > > > On Fri, Jun 14, 2019 at 02:05:56PM -0700, Alexei Starovoitov wrote:
-> > > > > > Have you tested it ?
-> > > > > > I really doubt, since in my test both CONFIG_UNWINDER_ORC and
-> > > > > > CONFIG_UNWINDER_FRAME_POINTER failed to unwind through such odd frame.
-> > > > >
-> > > > > Hm, are you seeing selftest failures?  They seem to work for me.
-> > > > >
-> > > > > > Here is much simple patch that I mentioned in the email yesterday,
-> > > > > > but you failed to listen instead of focusing on perceived 'code readability'.
-> > > > > >
-> > > > > > It makes one proper frame and both frame and orc unwinders are happy.
-> > > > >
-> > > > > I'm on my way out the door and I just skimmed it, but it looks fine.
-> > > > >
-> > > > > Some of the code and patch description look familiar, please be sure to
-> > > > > give me proper credit.
-> > > >
-> > > > credit means something positive.
-> > >
-> > > So you only give credit for *good* stolen code.  I must have missed that
-> > > section of the kernel patch guidelines.
-> >
-> > what are you talking about?
-> > you've posted one bad patch. I pointed out multiple issues in it.
-> > Then proposed another bad idea. I pointed out another set of issues.
-> > Than David proposed yet another idea that you've implemented
-> > and claimed that it's working when it was not.
-> > Then I got fed up with this thread and fix it for real by reverting
-> > that old commit that I mentioned way earlier.
-> > https://patchwork.ozlabs.org/patch/1116307/
-> > Where do you see your code or ideas being used?
-> > I see none.
->
-> Obviously I wasn't referring to this new whitewashed patch for which I
-> wasn't even on Cc, despite being one of the people (along with Peter Z)
-> who convinced you that there was a problem to begin with.
+Maybe add more multidimensional arrays?=20
 
-vger has a small limit on cc list. I always trim it to the minimum.
+Sent from my iPhone
 
-> The previous patch you posted has my patch description, push/pop and
-> comment changes, with no credit:
-
-I'm sorry for reusing one sentence from your commit log and
-not realizing you want credit for that.
-Will not happen again.
-I also suggest you never touch anything bpf related.
-Just to avoid this credit claims and threads like this one.
+>> On Jun 14, 2019, at 5:02 PM, Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+>>=20
+>>> On Fri, Jun 14, 2019 at 04:30:15PM -0700, Alexei Starovoitov wrote:
+>>>> On Fri, Jun 14, 2019 at 4:17 PM Josh Poimboeuf <jpoimboe@redhat.com> w=
+rote:
+>>>>=20
+>>>> On Fri, Jun 14, 2019 at 02:22:59PM -0700, Alexei Starovoitov wrote:
+>>>> On Fri, Jun 14, 2019 at 2:19 PM Josh Poimboeuf <jpoimboe@redhat.com> w=
+rote:
+>>>>>>>>>=20
+>>>>>>>>> +#define JUMP_TABLE_SYM_PREFIX "jump_table."
+>>>>>>>>=20
+>>>>>>>> since external tool will be looking at it should it be named
+>>>>>>>> "bpf_jump_table." to avoid potential name conflicts?
+>>>>>>>> Or even more unique name?
+>>>>>>>> Like "bpf_interpreter_jump_table." ?
+>>>>>>>=20
+>>>>>>> No, the point is that it's a generic feature which can also be used=
+ any
+>>>>>>> non-BPF code which might also have a jump table.
+>>>>>>=20
+>>>>>> and you're proposing to name all such jump tables in the kernel
+>>>>>> as static foo jump_table[] ?
+>>>>>=20
+>>>>> That's the idea.
+>>>>=20
+>>>> Then it needs much wider discussion.
+>>>=20
+>>> Why would it need wider discussion?  It only has one user.  If you
+>>> honestly believe that it will be controversial to require future users
+>>> to call a static jump table "jump_table" then we can have that
+>>> discussion when it comes up.
+>>=20
+>> It's clearly controversial.
+>> I nacked it already on pointless name change
+>> from "jumptable" to "jump_table" and now you're saying
+>> that no one will complain about "jump_table" name
+>> for all jump tables in the kernel that will ever appear?
+>=20
+> Let me get this straight.  You're saying that "jumptable" and
+> "bpf_interpreter_jump_table" are both acceptable.
+>=20
+> But NACK to "jump_table".
+>=20
+> Ok...
+>=20
+> --=20
+> Josh
