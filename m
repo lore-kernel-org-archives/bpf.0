@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1D19C31E5B
-	for <bpf@archiver.kernel.org>; Mon, 17 Jun 2019 19:27:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38291C31E5B
+	for <bpf@archiver.kernel.org>; Mon, 17 Jun 2019 19:27:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C08722085A
-	for <bpf@archiver.kernel.org>; Mon, 17 Jun 2019 19:27:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C58F2085A
+	for <bpf@archiver.kernel.org>; Mon, 17 Jun 2019 19:27:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="TSixw937"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="OcUnaD6V"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728878AbfFQT1J (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Jun 2019 15:27:09 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:62520 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725938AbfFQT1J (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 17 Jun 2019 15:27:09 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x5HJGnCL011530
-        for <bpf@vger.kernel.org>; Mon, 17 Jun 2019 12:27:08 -0700
+        id S1726964AbfFQT1L (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Jun 2019 15:27:11 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:36230 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727409AbfFQT1L (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 17 Jun 2019 15:27:11 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5HJFr9J008811
+        for <bpf@vger.kernel.org>; Mon, 17 Jun 2019 12:27:09 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=hhf4MxTEC5ppQ70xB5u6V5T1yjTkEsEJ4ftgtJuBA3Q=;
- b=TSixw937xfyGXU+gMCOwdhnFqI3cBHDF66RvQX3/kMpb8w5q1cU7obUlOHDw/FPZykTj
- NbIkhDPOgtYYaQw30PPJKnF+Y6i4Ou4kNv7gC3c1girzeAnI0D8G+2p3mbte9Ce8BPFF
- JvfQqVSgpZ/923KViRju5AR8CdPaeSkW5HQ= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 2t6cvx10cw-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 17 Jun 2019 12:27:08 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Mon, 17 Jun 2019 12:27:07 -0700
+ content-type; s=facebook; bh=5y3vxn2DFcdSf4r61of7ffwjsaM4VR7L3hH5wL9Pfv4=;
+ b=OcUnaD6VBC281RtwauT7fNWYhU/O/yv0EWBhcDe2t45dpDqV4pohKIMgASxd9Cps6w9a
+ mmKQZMSM7YIMdN/rTc+/L2z2eraNm2BUYPHytg95LoHHdfSq5UsxYUTwROmMqrcVBD1D
+ j7vJANXq5Wk2IsdUqNe9kSSDUjZu/hP2TNc= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2t6gv3014x-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 17 Jun 2019 12:27:09 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::125) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Mon, 17 Jun 2019 12:27:08 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 9F81986173A; Mon, 17 Jun 2019 12:27:03 -0700 (PDT)
+        id B297786173A; Mon, 17 Jun 2019 12:27:07 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,9 +48,9 @@ To:     <andrii.nakryiko@gmail.com>, <ast@fb.com>, <daniel@iogearbox.net>,
         <kernel-team@fb.com>
 CC:     Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v2 bpf-next 01/11] libbpf: add common min/max macro to libbpf_internal.h
-Date:   Mon, 17 Jun 2019 12:26:50 -0700
-Message-ID: <20190617192700.2313445-2-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 03/11] libbpf: streamline ELF parsing error-handling
+Date:   Mon, 17 Jun 2019 12:26:52 -0700
+Message-ID: <20190617192700.2313445-4-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190617192700.2313445-1-andriin@fb.com>
 References: <20190617192700.2313445-1-andriin@fb.com>
@@ -70,109 +70,143 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Multiple files in libbpf redefine their own definitions for min/max.
-Let's define them in libbpf_internal.h and use those everywhere.
+Simplify ELF parsing logic by exiting early, as there is no common clean
+up path to execute. That makes it unnecessary to track when err was set
+and when it was cleared. It also reduces nesting in some places.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Acked-by: Song Liu <songliubraving@fb.com>
 ---
- tools/lib/bpf/bpf.c             | 7 ++-----
- tools/lib/bpf/bpf_prog_linfo.c  | 5 +----
- tools/lib/bpf/btf.c             | 3 ---
- tools/lib/bpf/btf_dump.c        | 3 ---
- tools/lib/bpf/libbpf_internal.h | 7 +++++++
- 5 files changed, 10 insertions(+), 15 deletions(-)
+ tools/lib/bpf/libbpf.c | 44 +++++++++++++++++++-----------------------
+ 1 file changed, 20 insertions(+), 24 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 0d4b4fe10a84..c7d7993c44bb 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -26,10 +26,11 @@
- #include <memory.h>
- #include <unistd.h>
- #include <asm/unistd.h>
-+#include <errno.h>
- #include <linux/bpf.h>
- #include "bpf.h"
- #include "libbpf.h"
--#include <errno.h>
-+#include "libbpf_internal.h"
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 49d3a808e754..7ee44d8877c5 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -1154,24 +1154,21 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
+ 		if (gelf_getshdr(scn, &sh) != &sh) {
+ 			pr_warning("failed to get section(%d) header from %s\n",
+ 				   idx, obj->path);
+-			err = -LIBBPF_ERRNO__FORMAT;
+-			goto out;
++			return -LIBBPF_ERRNO__FORMAT;
+ 		}
  
- /*
-  * When building perf, unistd.h is overridden. __NR_bpf is
-@@ -53,10 +54,6 @@
- # endif
- #endif
+ 		name = elf_strptr(elf, ep->e_shstrndx, sh.sh_name);
+ 		if (!name) {
+ 			pr_warning("failed to get section(%d) name from %s\n",
+ 				   idx, obj->path);
+-			err = -LIBBPF_ERRNO__FORMAT;
+-			goto out;
++			return -LIBBPF_ERRNO__FORMAT;
+ 		}
  
--#ifndef min
--#define min(x, y) ((x) < (y) ? (x) : (y))
--#endif
--
- static inline __u64 ptr_to_u64(const void *ptr)
- {
- 	return (__u64) (unsigned long) ptr;
-diff --git a/tools/lib/bpf/bpf_prog_linfo.c b/tools/lib/bpf/bpf_prog_linfo.c
-index 6978314ea7f6..8c67561c93b0 100644
---- a/tools/lib/bpf/bpf_prog_linfo.c
-+++ b/tools/lib/bpf/bpf_prog_linfo.c
-@@ -6,10 +6,7 @@
- #include <linux/err.h>
- #include <linux/bpf.h>
- #include "libbpf.h"
--
--#ifndef min
--#define min(x, y) ((x) < (y) ? (x) : (y))
--#endif
-+#include "libbpf_internal.h"
+ 		data = elf_getdata(scn, 0);
+ 		if (!data) {
+ 			pr_warning("failed to get section(%d) data from %s(%s)\n",
+ 				   idx, name, obj->path);
+-			err = -LIBBPF_ERRNO__FORMAT;
+-			goto out;
++			return -LIBBPF_ERRNO__FORMAT;
+ 		}
+ 		pr_debug("section(%d) %s, size %ld, link %d, flags %lx, type=%d\n",
+ 			 idx, name, (unsigned long)data->d_size,
+@@ -1182,10 +1179,14 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
+ 			err = bpf_object__init_license(obj,
+ 						       data->d_buf,
+ 						       data->d_size);
++			if (err)
++				return err;
+ 		} else if (strcmp(name, "version") == 0) {
+ 			err = bpf_object__init_kversion(obj,
+ 							data->d_buf,
+ 							data->d_size);
++			if (err)
++				return err;
+ 		} else if (strcmp(name, "maps") == 0) {
+ 			obj->efile.maps_shndx = idx;
+ 		} else if (strcmp(name, BTF_ELF_SEC) == 0) {
+@@ -1196,11 +1197,10 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
+ 			if (obj->efile.symbols) {
+ 				pr_warning("bpf: multiple SYMTAB in %s\n",
+ 					   obj->path);
+-				err = -LIBBPF_ERRNO__FORMAT;
+-			} else {
+-				obj->efile.symbols = data;
+-				obj->efile.strtabidx = sh.sh_link;
++				return -LIBBPF_ERRNO__FORMAT;
+ 			}
++			obj->efile.symbols = data;
++			obj->efile.strtabidx = sh.sh_link;
+ 		} else if (sh.sh_type == SHT_PROGBITS && data->d_size > 0) {
+ 			if (sh.sh_flags & SHF_EXECINSTR) {
+ 				if (strcmp(name, ".text") == 0)
+@@ -1214,6 +1214,7 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
  
- struct bpf_prog_linfo {
- 	void *raw_linfo;
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index b2478e98c367..467224feb43b 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -16,9 +16,6 @@
- #include "libbpf_internal.h"
- #include "hashmap.h"
+ 					pr_warning("failed to alloc program %s (%s): %s",
+ 						   name, obj->path, cp);
++					return err;
+ 				}
+ 			} else if (strcmp(name, ".data") == 0) {
+ 				obj->efile.data = data;
+@@ -1225,8 +1226,8 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
+ 				pr_debug("skip section(%d) %s\n", idx, name);
+ 			}
+ 		} else if (sh.sh_type == SHT_REL) {
++			int nr_reloc = obj->efile.nr_reloc;
+ 			void *reloc = obj->efile.reloc;
+-			int nr_reloc = obj->efile.nr_reloc + 1;
+ 			int sec = sh.sh_info; /* points to other section */
  
--#define max(a, b) ((a) > (b) ? (a) : (b))
--#define min(a, b) ((a) < (b) ? (a) : (b))
--
- #define BTF_MAX_NR_TYPES 0x7fffffff
- #define BTF_MAX_STR_OFFSET 0x7fffffff
+ 			/* Only do relo for section with exec instructions */
+@@ -1236,28 +1237,24 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
+ 				continue;
+ 			}
  
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index 4b22db77e2cc..7065bb5b2752 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -18,9 +18,6 @@
- #include "libbpf.h"
- #include "libbpf_internal.h"
+-			reloc = reallocarray(reloc, nr_reloc,
++			reloc = reallocarray(reloc, nr_reloc + 1,
+ 					     sizeof(*obj->efile.reloc));
+ 			if (!reloc) {
+ 				pr_warning("realloc failed\n");
+-				err = -ENOMEM;
+-			} else {
+-				int n = nr_reloc - 1;
++				return -ENOMEM;
++			}
  
--#define min(x, y) ((x) < (y) ? (x) : (y))
--#define max(x, y) ((x) < (y) ? (y) : (x))
--
- static const char PREFIXES[] = "\t\t\t\t\t\t\t\t\t\t\t\t\t";
- static const size_t PREFIX_CNT = sizeof(PREFIXES) - 1;
+-				obj->efile.reloc = reloc;
+-				obj->efile.nr_reloc = nr_reloc;
++			obj->efile.reloc = reloc;
++			obj->efile.nr_reloc++;
  
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index 850f7bdec5cb..554a7856dc2d 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -23,6 +23,13 @@
- #define BTF_PARAM_ENC(name, type) (name), (type)
- #define BTF_VAR_SECINFO_ENC(type, offset, size) (type), (offset), (size)
+-				obj->efile.reloc[n].shdr = sh;
+-				obj->efile.reloc[n].data = data;
+-			}
++			obj->efile.reloc[nr_reloc].shdr = sh;
++			obj->efile.reloc[nr_reloc].data = data;
+ 		} else if (sh.sh_type == SHT_NOBITS && strcmp(name, ".bss") == 0) {
+ 			obj->efile.bss = data;
+ 			obj->efile.bss_shndx = idx;
+ 		} else {
+ 			pr_debug("skip section(%d) %s\n", idx, name);
+ 		}
+-		if (err)
+-			goto out;
+ 	}
  
-+#ifndef min
-+# define min(x, y) ((x) < (y) ? (x) : (y))
-+#endif
-+#ifndef max
-+# define max(x, y) ((x) < (y) ? (y) : (x))
-+#endif
-+
- extern void libbpf_print(enum libbpf_print_level level,
- 			 const char *format, ...)
- 	__attribute__((format(printf, 2, 3)));
+ 	if (!obj->efile.strtabidx || obj->efile.strtabidx >= idx) {
+@@ -1270,10 +1267,9 @@ static int bpf_object__elf_collect(struct bpf_object *obj, int flags)
+ 	if (bpf_object__has_maps(obj)) {
+ 		err = bpf_object__init_maps(obj, flags);
+ 		if (err)
+-			goto out;
++			return err;
+ 	}
+ 	err = bpf_object__init_prog_names(obj);
+-out:
+ 	return err;
+ }
+ 
 -- 
 2.17.1
 
