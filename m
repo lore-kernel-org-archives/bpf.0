@@ -2,145 +2,221 @@ Return-Path: <SRS0=IvYi=UR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BE2EC31E51
-	for <bpf@archiver.kernel.org>; Tue, 18 Jun 2019 14:05:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8CE1C31E5B
+	for <bpf@archiver.kernel.org>; Tue, 18 Jun 2019 15:47:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2107320B1F
-	for <bpf@archiver.kernel.org>; Tue, 18 Jun 2019 14:05:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 74B45214AF
+	for <bpf@archiver.kernel.org>; Tue, 18 Jun 2019 15:47:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AFgiShRe"
+	dkim=pass (2048-bit key) header.d=nifty.com header.i=@nifty.com header.b="zEO3Tjqb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729161AbfFROF3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Jun 2019 10:05:29 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:32798 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727584AbfFROF3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 18 Jun 2019 10:05:29 -0400
-Received: by mail-wr1-f65.google.com with SMTP id n9so14179875wru.0;
-        Tue, 18 Jun 2019 07:05:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=18SK1qRSJEvJYwBVfAw5XTYfSEQMIGF5hpJ1dG+VLr4=;
-        b=AFgiShRed81tyodvP4V1FR57IrPg4vwlECgHKtIt+Ps4vWSDwbDASQ9MuzLfmGUlpJ
-         IFkplBDUqH2MngSg/aBEW3Kf25Stz2ux6Yxtq1vzPDeXvf4BfWul3gJ8bJJaYVwVrgPh
-         GCfzgxO8rAcUiTtsLhKAvKlbhomeMpZYj8x9COtIF88vPuh6ArKeM11d1W8jqIeWu+ft
-         rpSZO5rJL0Vu7mWYEwyqKpvgSTYd/CNM1e5hOGq/OIPafV0lXuXwnFgM+7Y6GAHbfG1v
-         09aAbPTDAMbnUXqkOePVMvcxK9kd8yM6CmMdbeEWRqbQq1vWW/FHJlM5jlS1UqTXwP4o
-         BeoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=18SK1qRSJEvJYwBVfAw5XTYfSEQMIGF5hpJ1dG+VLr4=;
-        b=D0Gjk/1hNmH7sVKOjPFKdNrYmptTWuYvyygE0yXf/pqDgJWrqBptPt2VGekzIxLU4b
-         TH6LS0hhhZGL59sK+5hje2NSf78QidGtSm3JbldrLb8N663AfgjVKigbfeGSViGHGUlV
-         2dVlrD193jkMTY76hWU47wcyMJm1WNyB9akHlHZ2zmu/1JqyOLtXsXMVIMX60o8CYRbi
-         I2jbYzZ44vB6dOnA1URu0nuJJkX5fH/lr0IxLdaPDMtHZs//wrulRG3m2kEnKC3qzrFM
-         trvaHFlWLcW5rEykdHVQ/e7qygQQRCkYCW+YQuOEOFU8ntVoI1OTAcnQ2tDbp9IqmxHt
-         91Qw==
-X-Gm-Message-State: APjAAAWww4amzkyB0/XU11c0a+BvaugZZ1iwAul97i32owYpQgTUpMjJ
-        hxFe/7dzn7Jy247PliVZNrA=
-X-Google-Smtp-Source: APXvYqzSDWkdgcDBUIG7stUjfPH55mwjUGG4z2TrOQLogEXZ2wtBzixGK9UCgPvJuJZloOsA3LrUsA==
-X-Received: by 2002:adf:e2c7:: with SMTP id d7mr26097973wrj.272.1560866727378;
-        Tue, 18 Jun 2019 07:05:27 -0700 (PDT)
-Received: from Jitter (amontsouris-655-1-85-37.w90-44.abo.wanadoo.fr. [90.44.108.37])
-        by smtp.gmail.com with ESMTPSA id r4sm32352588wra.96.2019.06.18.07.05.26
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 18 Jun 2019 07:05:26 -0700 (PDT)
-Date:   Tue, 18 Jun 2019 16:05:26 +0200
-From:   Paul Chaignon <paul.chaignon@gmail.com>
-To:     Alexei Starovoitov <ast@fb.com>
-Cc:     Xiao Han <xiao.han@orange.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: Re: [PATCH v3 bpf-next 0/9] bpf: bounded loops and other features
-Message-ID: <CAO5pjwRKyyuTpddzssH4=rkchQK5zeo+cEqymYGckW9eWe_90A@mail.gmail.com>
-References: <20190615191225.2409862-1-ast@kernel.org>
- <CAEf4BzY_w-tTQFy_MfSvRwS4uDziNLRN+Jax4WXidP9R-s961w@mail.gmail.com>
- <70187096-9876-b004-0ccb-8293618f384f@fb.com>
+        id S1729647AbfFRPqz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Jun 2019 11:46:55 -0400
+Received: from conssluserg-02.nifty.com ([210.131.2.81]:25939 "EHLO
+        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729209AbfFRPqy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Jun 2019 11:46:54 -0400
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com [209.85.222.44]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id x5IFkfN4028453;
+        Wed, 19 Jun 2019 00:46:41 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com x5IFkfN4028453
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1560872802;
+        bh=386ZLEU3NwMBqho2YAfsvSOOObyOn03wy4ojBhvxK60=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=zEO3TjqbGOEvExBhKiAr+1HikWsmWFNgpCAfYBvqzvBYn3batDYk+Q30THkzzJVAi
+         AnDI2sDbURwJ6EawFc9+Ece35Tk04fStXcjIXDdGDhQWoL6w11dMbFama5grXT4j0R
+         V+OC4mb0Ws5539Va/vyrBmdYoQu8kXTFVWaH/UAZoxanZi0BUOfjT+zsRWLHNPFTye
+         piqVckY4JJ7yzRVgtKrHBVSo3c/c5FJA4qcI1V94YH5vl93xRVCn9rUzej4Ssem18q
+         v1tBySID2r88u+8+15EvkwHyxfo2CTpsQFe4gMd0Ab9Pv18fovHBho4ypB94zLM8Vd
+         /rVtx9E/pjG/g==
+X-Nifty-SrcIP: [209.85.222.44]
+Received: by mail-ua1-f44.google.com with SMTP id 8so6428262uaz.11;
+        Tue, 18 Jun 2019 08:46:41 -0700 (PDT)
+X-Gm-Message-State: APjAAAWR7k/6CtXPXCm6OxqQ6XZ9DQTZdUsAEw2DVDg9quBGyrNXTyF5
+        RXj9vCG7r/nNdVyIiCondC+vqOh1EPeGC5viJGU=
+X-Google-Smtp-Source: APXvYqxtLvDnMS0CFAbDTiZ+5ZRw6eQK7Tj+rcqL/cHf9e3ufopPnNNl1cknMI4hmuC4210dH4UbfTG8JkzKXgzkjhE=
+X-Received: by 2002:a67:7fcc:: with SMTP id a195mr44483545vsd.181.1560872800733;
+ Tue, 18 Jun 2019 08:46:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <70187096-9876-b004-0ccb-8293618f384f@fb.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20190604101409.2078-1-yamada.masahiro@socionext.com>
+In-Reply-To: <20190604101409.2078-1-yamada.masahiro@socionext.com>
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+Date:   Wed, 19 Jun 2019 00:46:04 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASv7WP+X2_oEEmp5tGqOxiv2VCj84CLuHhSsesF6AiD8A@mail.gmail.com>
+Message-ID: <CAK7LNASv7WP+X2_oEEmp5tGqOxiv2VCj84CLuHhSsesF6AiD8A@mail.gmail.com>
+Subject: Re: [PATCH 00/15] kbuild: refactor headers_install and support
+ compile-test of UAPI headers
+To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Palmer Dabbelt <palmer@sifive.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-riscv@lists.infradead.org,
+        Vincent Chen <deanbo422@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Helge Deller <deller@gmx.de>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Yonghong Song <yhs@fb.com>,
+        arcml <linux-snps-arc@lists.infradead.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-parisc@vger.kernel.org, Vineet Gupta <vgupta@synopsys.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Martin KaFai Lau <kafai@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jun 17, 2019 at 06:57PM, Alexei Starovoitov wrote:
-> On 6/17/19 9:39 AM, Andrii Nakryiko wrote:
-> > On Sat, Jun 15, 2019 at 12:12 PM Alexei Starovoitov <ast@kernel.org> wrote:
-> >>
-> >> v2->v3: fixed issues in backtracking pointed out by Andrii.
-> >> The next step is to add a lot more tests for backtracking.
-> >>
-> >
-> > Tests would be great, verifier complexity is at the level, where it's
-> > very easy to miss issues.
-> >
-> > Was fuzzying approach ever discussed for BPF verifier? I.e., have a
-> > fuzzer to generate both legal and illegal random small programs. Then
-> > re-implement verifier as user-level program with straightforward
-> > recursive exhaustive verification (so no state pruning logic, no
-> > precise/coarse, etc, just register/stack state tracking) of all
-> > possible branches. If kernel verifier's verdict differs from
-> > user-level verifier's verdict - flag that as a test case and figure
-> > out why they differ. Obviously that would work well only for small
-> > programs, but that should be a good first step already.
-> >
-> > In addition, if this is done, that user-land verifier can be a HUGE
-> > help to BPF application developers, as libbpf would (potentially) be
-> > able to generate better error messages using it as well.
+On Tue, Jun 4, 2019 at 7:15 PM Masahiro Yamada
+<yamada.masahiro@socionext.com> wrote:
 >
-> In theory that sounds good, but doesn't work in practice.
-> The kernel verifier keeps changing faster than user space can catch up.
-> It's also relying on loaded maps and all sorts of callbacks that
-> check context, allowed helpers, maps, combinations of them from all
-> over the kernel.
-> The last effort to build kernel verifier as-is into .o and link
-> with kmalloc/map wrappers in user space was here:
-> https://github.com/iovisor/bpf-fuzzer
-> It was fuzzing the verifier and was able to find few minor bugs.
-> But it quickly bit rotted.
-
-We've been working (with Xiao Han, cc'ed) on an update of bpf-fuzzer.  It
-helped us find a few issues in the verifier (mostly thanks to
-warn_on("verifier bug")s).  I'll probably send a patchset to the main
-repository in the next few weeks.
-
-Updating the glue code (userspace wrappers) is okay so far, as long as
-done regularly.
-
-[...]
-
 >
-> I think syzbot is still generating bpf programs. iirc it found
-> one bug in the past in the verifier core.
+> Multiple people have suggested to compile-test UAPI headers.
+>
+> Currently, Kbuild provides simple sanity checks by headers_check
+> but they are not enough to catch bugs.
+>
+> The most recent patch I know is David Howells' work:
+> https://patchwork.kernel.org/patch/10590203/
+>
+> I agree that we need better tests for UAPI headers,
+> but I want to integrate it in a clean way.
+>
+> The idea that has been in my mind is to compile each header
+> to make sure the selfcontainedness.
+>
+> Recently, Jani Nikula proposed a new syntax 'header-test-y'.
+> https://patchwork.kernel.org/patch/10947005/
+>
+> So, I implemented UAPI compile-testing on top of that.
+>
+> When adding a new feature, cleaning the code first is a
+> good practice.
+>
+> [1] Remove headers_install_all
+>
+> This target installs UAPI headers of all architectures
+> in a single tree.
+> It does not make sense to compile test of headers from
+> multiple arches at the same time. Hence, removed.
+>
+> [2] Split header installation into 'make headers' and 'make headers_install'
+>
+> To compile-test UAPI headers, we need a work-directory somewhere
+> to save objects and .*.cmd files.
+>
+> usr/include/ will be the work-directory.
+>
+> Since we cannot pollute the final destination of headers_install,
+>
+> I split the header installation into two stages.
+>
+> 'make headers' will build up
+> the ready-to-install headers in usr/include,
+> which will be also used as a work-directory for the compile-test.
+>
+> 'make headers_install' will copy headers
+> from usr/include to $(INSTALL_HDR_PATH)/include.
+>
+> [3] Support compile-test of UAPI headers
+>
+> This is implemented in usr/include/Makefile
+>
+>
+> Jani Nikula (1):
+>   kbuild: add support for ensuring headers are self-contained
+>
+> Masahiro Yamada (14):
+>   kbuild: remove headers_{install,check}_all
+>   kbuild: remove stale dependency between Documentation/ and
+>     headers_install
+>   kbuild: make gdb_script depend on prepare0 instead of prepare
+>   kbuild: fix Kconfig prompt of CONFIG_HEADERS_CHECK
+>   kbuild: add CONFIG_HEADERS_INSTALL and loosen the dependency of
+>     samples
+>   kbuild: remove build_unifdef target in scripts/Makefile
+>   kbuild: build all prerequisite of headers_install simultaneously
+>   kbuild: add 'headers' target to build up ready-to-install uapi headers
+>   kbuild: re-implement Makefile.headersinst without directory descending
+>   kbuild: move hdr-inst shorthand to top Makefile
+>   kbuild: simplify scripts/headers_install.sh
+>   kbuild: deb-pkg: do not run headers_check
+>   fixup: kbuild: add support for ensuring headers are self-contained
+>   kbuild: compile test UAPI headers to ensure they are self-contained
 
-syzkaller's template description of BPF programs is very limited.  It
-produces valid BPF instructions, but loaded programs make little sense,
-are trivial or invalid, and don't go very far in the verifier.  We
-probably can't rely on syzkaller to be effective for the verifier.
+Series, applied to linux-kbuild.
 
-> I think the only way to make verifier more robust is to keep
-> adding new test cases manually.
-> Most interesting bugs we found by humans.
 
-Tests and reviews are definitely the most effective ways to find bugs,
-despite the above two fuzzers.  The verifier is complex enough that the
-random approach of fuzzers has a hard time covering the code.
+>  Documentation/kbuild/headers_install.txt |   7 --
+>  Documentation/kbuild/makefiles.txt       |  13 ++-
+>  Makefile                                 |  56 +++++-----
+>  arch/arc/configs/tb10x_defconfig         |   1 +
+>  arch/nds32/configs/defconfig             |   1 +
+>  arch/parisc/configs/a500_defconfig       |   1 +
+>  arch/parisc/configs/b180_defconfig       |   1 +
+>  arch/parisc/configs/c3000_defconfig      |   1 +
+>  arch/parisc/configs/default_defconfig    |   1 +
+>  arch/powerpc/configs/ppc6xx_defconfig    |   1 +
+>  arch/s390/configs/debug_defconfig        |   1 +
+>  include/uapi/{linux => }/Kbuild          |   6 +-
+>  init/Kconfig                             |  20 ++++
+>  lib/Kconfig.debug                        |  25 +++--
+>  samples/Kconfig                          |  14 ++-
+>  samples/Makefile                         |   4 +-
+>  scripts/Kbuild.include                   |   6 --
+>  scripts/Makefile                         |   5 -
+>  scripts/Makefile.build                   |   9 ++
+>  scripts/Makefile.headersinst             | 132 ++++++++++-------------
+>  scripts/Makefile.lib                     |   3 +
+>  scripts/cc-system-headers.sh             |   8 ++
+>  scripts/headers.sh                       |  29 -----
+>  scripts/headers_install.sh               |  48 ++++-----
+>  scripts/package/builddeb                 |   2 +-
+>  usr/.gitignore                           |   1 -
+>  usr/Makefile                             |   2 +
+>  usr/include/.gitignore                   |   3 +
+>  usr/include/Makefile                     | 132 +++++++++++++++++++++++
+>  29 files changed, 329 insertions(+), 204 deletions(-)
+>  rename include/uapi/{linux => }/Kbuild (77%)
+>  create mode 100755 scripts/cc-system-headers.sh
+>  delete mode 100755 scripts/headers.sh
+>  create mode 100644 usr/include/.gitignore
+>  create mode 100644 usr/include/Makefile
+>
+> --
+> 2.17.1
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
-Paul
+
+
+-- 
+Best Regards
+Masahiro Yamada
