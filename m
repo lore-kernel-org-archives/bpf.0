@@ -2,62 +2,64 @@ Return-Path: <SRS0=IvYi=UR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70389C46477
-	for <bpf@archiver.kernel.org>; Tue, 18 Jun 2019 13:00:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81FDDC468B0
+	for <bpf@archiver.kernel.org>; Tue, 18 Jun 2019 13:00:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4A3EB20665
-	for <bpf@archiver.kernel.org>; Tue, 18 Jun 2019 13:00:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 594BB20665
+	for <bpf@archiver.kernel.org>; Tue, 18 Jun 2019 13:00:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="WlrdVYiP"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="JwDvo0IE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726543AbfFRNAz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Jun 2019 09:00:55 -0400
-Received: from mail-lj1-f176.google.com ([209.85.208.176]:40040 "EHLO
-        mail-lj1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725913AbfFRNAy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 18 Jun 2019 09:00:54 -0400
-Received: by mail-lj1-f176.google.com with SMTP id a21so13026817ljh.7
-        for <bpf@vger.kernel.org>; Tue, 18 Jun 2019 06:00:52 -0700 (PDT)
+        id S1728893AbfFRNA4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Jun 2019 09:00:56 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:35437 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725913AbfFRNA4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Jun 2019 09:00:56 -0400
+Received: by mail-lj1-f194.google.com with SMTP id x25so3440457ljh.2
+        for <bpf@vger.kernel.org>; Tue, 18 Jun 2019 06:00:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zUCt1Xr2sEbY7cfOrXi8lz4heLXYX7H0RXCZwsrzX+w=;
-        b=WlrdVYiPw/B2a+O95RjnvMnYcDrLm2DlWVIEE84iQKWH0Z+Jc2UbhUj2+9cv5cRz6q
-         onb65iR10RRF6QrdA1R8Cjv18vEC8efYZNxZ2OgnRshdZaEkkfvHHtQu3XuFXnvm12M2
-         lc3IZo6x9PatujDr7JK7j/HL/M+qBhsa9bUXA=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=5sOcMsDPhbVf9iBUCFYvG3YKCvRBKgejwbbZq0H8wxE=;
+        b=JwDvo0IEuH7FBGYJlmimPDGSu1MEzfBVtoqrnBV5DKNqWrDjyJgynxesSVpn7xV9yK
+         2uk19Qd8kyka8xL6j6jbY81L8zUnPmY+6+knqYHe9OtI5Wv5y9B6fObhetlrTACEBO8M
+         nY3XnsZYlLimOCnXRQGAWlzJw93sP7yzWbOtE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zUCt1Xr2sEbY7cfOrXi8lz4heLXYX7H0RXCZwsrzX+w=;
-        b=V5s3ZQ90acBwz6bU6ltH7piXu4b2v5f3ed8hzNsF9pKluK8/awT3sUQalPYqtQRiXu
-         y5hfkUZC8jggYzmElyrPihITDD7kndoPJj9nHoTjm8Y3ax2ecJLYhwlONR0fWBVH3z32
-         M/XhWR6QvFm1lVgWfIou5WrGXuoewc7rZV8jnOB5RpmmEGSwaQW1jzoL4kf/XCtMIuWZ
-         demyhYe1UMxv4PQQxbZbcWVisF1WGFVWX7vbBcVQiN4WDGKe1xmlRDqN7rQ2P1C2cLKE
-         yeSUZB2VlnlshygGcdUcPb7ZPQCAN1JSS8QJQFLB9bt5QuBIgegL+/dj5szypF6EY2up
-         WnBg==
-X-Gm-Message-State: APjAAAUqbm/mdf98SwHi92MivhhWValv1jQwCZTGVMo4aI6zJtZw47tx
-        MWrGFIv/obDtn2S4hgfbTHOKIqv4FeIwJg==
-X-Google-Smtp-Source: APXvYqx4fB1k/SIYL91oI3Q49ZteGat9gPL0g4OhKU5bZ7a/hjiGUCPW3yuFZyTIraGUp7MX+o8RGA==
-X-Received: by 2002:a2e:301a:: with SMTP id w26mr52809173ljw.76.1560862852079;
-        Tue, 18 Jun 2019 06:00:52 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=5sOcMsDPhbVf9iBUCFYvG3YKCvRBKgejwbbZq0H8wxE=;
+        b=MBoF9zNJST86lUPRNuStXTT7dFoyn1GmJ6kT4kOGJse94Egb5kD9kFvHBr590BrkY/
+         KsHH2tcX00r+qYEW76sXUGnrj6gdGREwd5tIIVlRIzOXG0146AkXHhn3oivUtxFukfXt
+         Awcd4k1+bOAmASifSEBlVx6Lrc0smrfGRyp2MCTkc/bGjaNxV/1LNQ8QVqbRMkMf0szn
+         4GjU6pYVrH2YYt8j55y8H+iee9f9MOSO9Lh0Cp7sUughbmFw9pM2kEX9XI1wEKPgd+O/
+         O7CNuRSw6NAtOubr7mlWQT31X6IMhliY0dnT2x8+O1grLmOMhWGF2DXqgFSbaHSs4r4S
+         rR4w==
+X-Gm-Message-State: APjAAAU1iGeQK0Cewv6PH6ASxxPoclecVLgSupDx2IssKLRZ0ltuZs4G
+        S0tDxUoaf6LytaSZnUF26msGkA==
+X-Google-Smtp-Source: APXvYqyPIksQL+9vAj1t8upGSC5DTbR7FOzt0JhxoPyxjBGu9zl84x7bdxEimO9SIyePZdb0zg2qjg==
+X-Received: by 2002:a2e:870f:: with SMTP id m15mr16495671lji.223.1560862854563;
+        Tue, 18 Jun 2019 06:00:54 -0700 (PDT)
 Received: from cloudflare.com ([176.221.114.230])
-        by smtp.gmail.com with ESMTPSA id d5sm2169695lfc.96.2019.06.18.06.00.51
+        by smtp.gmail.com with ESMTPSA id u9sm2180754lfb.38.2019.06.18.06.00.53
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 18 Jun 2019 06:00:51 -0700 (PDT)
+        Tue, 18 Jun 2019 06:00:54 -0700 (PDT)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     kernel-team@cloudflare.com
-Subject: [RFC bpf-next 0/7] Programming socket lookup with BPF
-Date:   Tue, 18 Jun 2019 15:00:43 +0200
-Message-Id: <20190618130050.8344-1-jakub@cloudflare.com>
+Cc:     kernel-team@cloudflare.com, Marek Majkowski <marek@cloudflare.com>
+Subject: [RFC bpf-next 2/7] ipv4: Run inet_lookup bpf program on socket lookup
+Date:   Tue, 18 Jun 2019 15:00:45 +0200
+Message-Id: <20190618130050.8344-3-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190618130050.8344-1-jakub@cloudflare.com>
+References: <20190618130050.8344-1-jakub@cloudflare.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -65,133 +67,119 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We have been exploring an idea of making listening socket
-lookup (inet_lookup) programmable with BPF.
+Run a BPF program before looking up the listening socket, or in case of udp
+before looking up any socket, connected or not. The program is allowed to
+change the destination address & port we use as keys for the lookup,
+providing its return code is BPF_REDIRECT.
 
-Why? At last Netdev Marek talked [1] about two limitations of bind() API
-we're hitting when running services on our edge servers:
+This allows us to redirect traffic destined to a set of addresses and ports
+without bindings sockets to all the addresses and ports we want to receive
+on.
 
-1) sharing a port between two services
+Suggested-by: Marek Majkowski <marek@cloudflare.com>
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+---
+ include/net/inet_hashtables.h | 39 +++++++++++++++++++++++++++++++++++
+ net/ipv4/inet_hashtables.c    | 11 ++++++----
+ net/ipv4/udp.c                |  1 +
+ 3 files changed, 47 insertions(+), 4 deletions(-)
 
-   Services are accepting connections on different (disjoint) IP ranges but
-   use the same port. Say, packets to 192.0.2.0/24 tcp/80 go to NGINX,
-   while 198.51.100.0/24 tcp/80 is handled by Apache. Servers are running
-   as different users, in a flat single-netns setup.
-
-2) receiving traffic on all ports
-
-   Proxy accepts connections a specific IP range but on any port [2].
-
-In both cases we've found that bind() and a combination of INADDR_ANY,
-SO_REUSEADDR, or SO_REUSEPORT doesn't allow for the setup we need, short of
-binding each service to every IP:port pair combination :-)
-
-We've resorted at first to custom patches [3], and more recently to traffic
-steering with TPROXY. Not without pain points:
-
- - XDP programs using bpf_sk_lookup helpers, like load balancers, can't
-   find the listening socket to check for SYN cookies with TPROXY redirect.
-
- - TPROXY takes a reference to the listening socket on dispatch, which
-   raises lock contention concerns.
-
- - Traffic steering configuration is split over several iptables rules, at
-   least one per service, which makes configuration changes error prone.
-
-Now back to the patch set, it introduces a new BPF program type, dubbed
-inet_lookup, that runs before listening socket lookup, and can override the
-destination IP:port pair used as lookup key. Program attaches to netns in
-scope of which the lookup happens.
-
-What an inet_lookup program might look like? For the mentioned scenario
-with two HTTP servers sharing port 80:
-
-#define NET1 (IP4(192,  0,   2, 0) >> 8)
-#define NET2 (IP4(198, 51, 100, 0) >> 8)
-
-SEC("inet_lookup/demo_two_http_servers")
-int demo_two_http_servers(struct bpf_inet_lookup *ctx)
-{
-        if (ctx->family != AF_INET)
-                return BPF_OK;
-        if (ctx->local_port != 80)
-                return BPF_OK;
-
-        switch (bpf_ntohl(ctx->local_ip4) >> 8) {
-        case NET1:
-                ctx->local_ip4 = bpf_htonl(IP4(127, 0, 0, 1));
-                ctx->local_port = 81;
-                return BPF_REDIRECT;
-        case NET2:
-                ctx->local_ip4 = bpf_htonl(IP4(127, 0, 0, 1));
-                ctx->local_port = 82;
-                return BPF_REDIRECT;
-        }
-
-        return BPF_OK;
-}
-
-What are the downsides?
-
- - BPF program, if attached, runs on the receive hot path,
- - introspection is worse than for TPROXY iptables rules.
-
-Also UDP packet steering has to be reworked. In current form we run the
-inet_lookup program before checking for any connected UDP sockets, which is
-unexpected.
-
-The patches, while still in their early stages, show what we're trying to
-solve. We're reaching out early for feedback to see what are the technical
-concerns and if we can address them.
-
-Just in time for the coming Netconf conference.
-
-Thanks,
-Jakub
-
-[1] https://netdevconf.org/0x13/session.html?panel-industry-perspectives
-[2] https://blog.cloudflare.com/how-we-built-spectrum/
-[3] https://www.spinics.net/lists/netdev/msg370789.html
-
-
-Jakub Sitnicki (7):
-  bpf: Introduce inet_lookup program type
-  ipv4: Run inet_lookup bpf program on socket lookup
-  ipv6: Run inet_lookup bpf program on socket lookup
-  bpf: Sync linux/bpf.h to tools/
-  libbpf: Add support for inet_lookup program type
-  bpf: Test destination address remapping with inet_lookup
-  bpf: Add verifier tests for inet_lookup context access
-
- include/linux/bpf_types.h                     |   1 +
- include/linux/filter.h                        |  17 +
- include/net/inet6_hashtables.h                |  39 ++
- include/net/inet_hashtables.h                 |  39 ++
- include/net/net_namespace.h                   |   3 +
- include/uapi/linux/bpf.h                      |  27 +
- kernel/bpf/syscall.c                          |  10 +
- net/core/filter.c                             | 216 ++++++++
- net/ipv4/inet_hashtables.c                    |  11 +-
- net/ipv4/udp.c                                |   1 +
- net/ipv6/inet6_hashtables.c                   |  11 +-
- net/ipv6/udp.c                                |   6 +-
- tools/include/uapi/linux/bpf.h                |  27 +
- tools/lib/bpf/libbpf.c                        |   4 +
- tools/lib/bpf/libbpf.h                        |   2 +
- tools/lib/bpf/libbpf.map                      |   2 +
- tools/lib/bpf/libbpf_probes.c                 |   1 +
- tools/testing/selftests/bpf/.gitignore        |   1 +
- tools/testing/selftests/bpf/Makefile          |   6 +-
- .../selftests/bpf/progs/inet_lookup_prog.c    |  68 +++
- .../testing/selftests/bpf/test_inet_lookup.c  | 392 ++++++++++++++
- .../testing/selftests/bpf/test_inet_lookup.sh |  35 ++
- .../selftests/bpf/verifier/ctx_inet_lookup.c  | 511 ++++++++++++++++++
- 23 files changed, 1418 insertions(+), 12 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/inet_lookup_prog.c
- create mode 100644 tools/testing/selftests/bpf/test_inet_lookup.c
- create mode 100755 tools/testing/selftests/bpf/test_inet_lookup.sh
- create mode 100644 tools/testing/selftests/bpf/verifier/ctx_inet_lookup.c
-
+diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
+index babb14136705..7d8b58b2ded0 100644
+--- a/include/net/inet_hashtables.h
++++ b/include/net/inet_hashtables.h
+@@ -418,4 +418,43 @@ int __inet_hash_connect(struct inet_timewait_death_row *death_row,
+ 
+ int inet_hash_connect(struct inet_timewait_death_row *death_row,
+ 		      struct sock *sk);
++
++#ifdef CONFIG_BPF_SYSCALL
++static inline void inet_lookup_run_bpf(struct net *net,
++				       const __be32 saddr,
++				       const __be16 sport,
++				       __be32 *daddr,
++				       unsigned short *hnum)
++{
++	struct bpf_inet_lookup_kern ctx = {
++		.family	= AF_INET,
++		.saddr	= saddr,
++		.sport	= sport,
++		.daddr	= *daddr,
++		.hnum	= *hnum,
++	};
++	struct bpf_prog *prog;
++	int ret = BPF_OK;
++
++	rcu_read_lock();
++	prog = rcu_dereference(net->inet_lookup_prog);
++	if (prog)
++		ret = BPF_PROG_RUN(prog, &ctx);
++	rcu_read_unlock();
++
++	if (ret == BPF_REDIRECT) {
++		*daddr = ctx.daddr;
++		*hnum = ctx.hnum;
++	}
++}
++#else
++static inline void inet_lookup_run_bpf(struct sk_buff *skb,
++				       const __be32 saddr,
++				       const __be16 sport,
++				       __be32 *daddr,
++				       unsigned short *hnum)
++{
++}
++#endif	/* CONFIG_BPF_SYSCALL */
++
+ #endif /* _INET_HASHTABLES_H */
+diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+index 942265d65eb3..ae3f1da1b4f6 100644
+--- a/net/ipv4/inet_hashtables.c
++++ b/net/ipv4/inet_hashtables.c
+@@ -300,24 +300,27 @@ struct sock *__inet_lookup_listener(struct net *net,
+ 				    const int dif, const int sdif)
+ {
+ 	struct inet_listen_hashbucket *ilb2;
++	unsigned short hnum2 = hnum;
+ 	struct sock *result = NULL;
++	__be32 daddr2 = daddr;
+ 	unsigned int hash2;
+ 
+-	hash2 = ipv4_portaddr_hash(net, daddr, hnum);
++	inet_lookup_run_bpf(net, saddr, sport, &daddr2, &hnum2);
++	hash2 = ipv4_portaddr_hash(net, daddr2, hnum2);
+ 	ilb2 = inet_lhash2_bucket(hashinfo, hash2);
+ 
+ 	result = inet_lhash2_lookup(net, ilb2, skb, doff,
+-				    saddr, sport, daddr, hnum,
++				    saddr, sport, daddr2, hnum2,
+ 				    dif, sdif);
+ 	if (result)
+ 		goto done;
+ 
+ 	/* Lookup lhash2 with INADDR_ANY */
+-	hash2 = ipv4_portaddr_hash(net, htonl(INADDR_ANY), hnum);
++	hash2 = ipv4_portaddr_hash(net, htonl(INADDR_ANY), hnum2);
+ 	ilb2 = inet_lhash2_bucket(hashinfo, hash2);
+ 
+ 	result = inet_lhash2_lookup(net, ilb2, skb, doff,
+-				    saddr, sport, htonl(INADDR_ANY), hnum,
++				    saddr, sport, htonl(INADDR_ANY), hnum2,
+ 				    dif, sdif);
+ done:
+ 	if (unlikely(IS_ERR(result)))
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index 8fb250ed53d4..c4f4c94525ec 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -467,6 +467,7 @@ struct sock *__udp4_lib_lookup(struct net *net, __be32 saddr,
+ 	struct udp_hslot *hslot2;
+ 	bool exact_dif = udp_lib_exact_dif_match(net, skb);
+ 
++	inet_lookup_run_bpf(net, saddr, sport, &daddr, &hnum);
+ 	hash2 = ipv4_portaddr_hash(net, daddr, hnum);
+ 	slot2 = hash2 & udptable->mask;
+ 	hslot2 = &udptable->hash2[slot2];
 -- 
 2.20.1
 
