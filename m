@@ -2,164 +2,110 @@ Return-Path: <SRS0=IvYi=UR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=0.0 required=3.0 tests=DATE_IN_PAST_06_12,
+	DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A677C31E5B
-	for <bpf@archiver.kernel.org>; Tue, 18 Jun 2019 18:53:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B6D7C31E5B
+	for <bpf@archiver.kernel.org>; Tue, 18 Jun 2019 20:28:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E0CB0206BA
-	for <bpf@archiver.kernel.org>; Tue, 18 Jun 2019 18:53:55 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="XKPiUQXC"
+	by mail.kernel.org (Postfix) with ESMTP id 5F618206E0
+	for <bpf@archiver.kernel.org>; Tue, 18 Jun 2019 20:28:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1560889689;
+	bh=8AsfAVyMpUySxxE6es1/fgTRGbzK+dTQ5xCz94DqBW0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=SdojKQcE9x2lpdNTErtQHpW0wPNpVT/NuxM0UPWYTjPdNzX4vRtKEScylRkAaDbel
+	 K/3O7Etk+FNG12x1aSA2efE1Ur3hJtZChLaAMRzXTANxteZ1xvmuomb7yHkSe3k6W8
+	 3Uz4AJsEFfAAUaErMmadm4WuhM3JSpkwx5zhXks4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730073AbfFRSxz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Jun 2019 14:53:55 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:33301 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730309AbfFRSxz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 18 Jun 2019 14:53:55 -0400
-Received: by mail-pl1-f195.google.com with SMTP id c14so6102630plo.0
-        for <bpf@vger.kernel.org>; Tue, 18 Jun 2019 11:53:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=jmVrM81H59ifNJSt4cq3fPpG2nhJ0Gp5lc98D4z5+wI=;
-        b=XKPiUQXCiT/toiTDoI6uNqg828RGKNlxgSAE7i2nOkfwaAda34IJ7f/EW9fbsx3ui5
-         9JkIILAJ1RFg3miyjqejz1aupLO9zs9QkEGBqzXwn1vJ0YxWlEqOfHmjc/3a3x8iuXyq
-         idMqsNkt0uP/4nz9daNc0aIAoxIy2gowupunZOtSe8Ibymm5mi0eUyQZrSupYkVB5/Cr
-         jmaDuFb1TJxIdEltt55i98o/bOg3uPH0l1pKP4I8bshA9dwQiiDD+xAx/SReNHXRMdYC
-         vv3pbUBCEAxJioJm8vTU9tNDT+nzh2+y9u1HHlbWsXDMETlobGtvw0QR1J2i0KDgWO1f
-         AIPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=jmVrM81H59ifNJSt4cq3fPpG2nhJ0Gp5lc98D4z5+wI=;
-        b=ZQlPQidlL7BucbQGUVNnTkD+X08lmie4DyyI9LH9TTcoGm0hYE6kVsbHU3UB8ik/E3
-         pCGVI3m++JBcKpU9VBKzKyMi8Zk9YUJjWWOBmpeI+LUqkwede8QGwcX6Od/4pbmEroBV
-         0Rn3KwiDTZiK4Lwt/45DWFZRscqdN19xb9jNhtvfTZ3ScyMk+OKfLRTyp7COQKSS/48F
-         wzYvy2n5u+79+EWEeXPkQKAdvtGtcFDlCh6Dv4SwWAZyrplgtjwGt9TC2yjj1wIt8ItK
-         +5yCqWh+JyXU+6inPsWsX3Sw83Zc2xgbeWOKRbjyN805m61CXgcuHsPVjZccAMaUAzwN
-         dV4Q==
-X-Gm-Message-State: APjAAAVHnHnlrGYYxXz5RYuDBqEVqQv4WHhXRvQ/h3A4MQU6vdjaJudV
-        AUyQvKZdZai4WZQiuihfHbraWw==
-X-Google-Smtp-Source: APXvYqx2SySAp9rUR8HbQ9AupN7FOYXWA+7/W/Jw1j5yv6xQBFxxIxvoTVTVoDI44JgjR/Hg1Ep5JQ==
-X-Received: by 2002:a17:902:aa8a:: with SMTP id d10mr78531487plr.159.1560884034108;
-        Tue, 18 Jun 2019 11:53:54 -0700 (PDT)
-Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
-        by smtp.gmail.com with ESMTPSA id e20sm15137247pfi.35.2019.06.18.11.53.53
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 18 Jun 2019 11:53:53 -0700 (PDT)
-Date:   Tue, 18 Jun 2019 11:53:52 -0700
-From:   Stanislav Fomichev <sdf@fomichev.me>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Stanislav Fomichev <sdf@google.com>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        id S1730604AbfFRU2J (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Jun 2019 16:28:09 -0400
+Received: from casper.infradead.org ([85.118.1.10]:52652 "EHLO
+        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730176AbfFRU2J (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Jun 2019 16:28:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=/yuq+528Ge2GyeWg6aQYCOiRFdbu/e3xfN3FdxpcEzY=; b=aB7KTV5ZzmCoj1Qxm3dVaqBytG
+        6+FKmt7R881qAHMbcleBouaKC3kmFz2LA9Gvif95NyyHzZYpT55h4RDehfIKQQY69CVa8wVC9pTSV
+        lM5saykAhFfav4/jsmfkmbjCMOcfAFWTC4XcOhZRfq2M8BexwvZFvq+n1RO+Q6bUZMKIXOAKqgS/z
+        Z0xhg86h0mjM6gWv9dljQS4maac4BmrXdCgsk5P5Rrbmx/H/nT9JqF0GEKhiNMUUO+RcYwIj4hQKr
+        S+oRAMGCViKI189iZwgPRWHso0mZugDsGCk+ehRnbRbif4s1O9+a3pZMmiNVfSY4BbgNtTHNIW9P3
+        VhKuGzng==;
+Received: from 177.133.86.196.dynamic.adsl.gvt.net.br ([177.133.86.196] helo=coco.lan)
+        by casper.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hdKi3-0001wm-Jm; Tue, 18 Jun 2019 20:28:04 +0000
+Date:   Tue, 18 Jun 2019 11:14:47 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin Lau <kafai@fb.com>
-Subject: Re: [PATCH bpf-next v6 1/9] bpf: implement getsockopt and setsockopt
- hooks
-Message-ID: <20190618185352.GK9636@mini-arch>
-References: <20190617180109.34950-1-sdf@google.com>
- <20190617180109.34950-2-sdf@google.com>
- <20190618163117.yuw44b24lo6prsrz@ast-mbp.dhcp.thefacebook.com>
- <20190618164913.GI9636@mini-arch>
- <20190618180944.GJ9636@mini-arch>
- <CAADnVQ+kymi+zJww+PfPd4WWhvNA67ynGVTd7oj6jiU+XFeguQ@mail.gmail.com>
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH v4 00/28] Convert files to ReST - part 1
+Message-ID: <20190618111122.64cdeb59@coco.lan>
+In-Reply-To: <20190614143640.40ee353a@lwn.net>
+References: <cover.1560361364.git.mchehab+samsung@kernel.org>
+        <20190614143640.40ee353a@lwn.net>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQ+kymi+zJww+PfPd4WWhvNA67ynGVTd7oj6jiU+XFeguQ@mail.gmail.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 06/18, Alexei Starovoitov wrote:
-> On Tue, Jun 18, 2019 at 11:09 AM Stanislav Fomichev <sdf@fomichev.me> wrote:
-> >
-> > On 06/18, Stanislav Fomichev wrote:
-> > > On 06/18, Alexei Starovoitov wrote:
-> > > > On Mon, Jun 17, 2019 at 11:01:01AM -0700, Stanislav Fomichev wrote:
-> > > > > Implement new BPF_PROG_TYPE_CGROUP_SOCKOPT program type and
-> > > > > BPF_CGROUP_{G,S}ETSOCKOPT cgroup hooks.
-> > > > >
-> > > > > BPF_CGROUP_SETSOCKOPT get a read-only view of the setsockopt arguments.
-> > > > > BPF_CGROUP_GETSOCKOPT can modify the supplied buffer.
-> > > > > Both of them reuse existing PTR_TO_PACKET{,_END} infrastructure.
-> > > > >
-> > > > > The buffer memory is pre-allocated (because I don't think there is
-> > > > > a precedent for working with __user memory from bpf). This might be
-> > > > > slow to do for each {s,g}etsockopt call, that's why I've added
-> > > > > __cgroup_bpf_prog_array_is_empty that exits early if there is nothing
-> > > > > attached to a cgroup. Note, however, that there is a race between
-> > > > > __cgroup_bpf_prog_array_is_empty and BPF_PROG_RUN_ARRAY where cgroup
-> > > > > program layout might have changed; this should not be a problem
-> > > > > because in general there is a race between multiple calls to
-> > > > > {s,g}etsocktop and user adding/removing bpf progs from a cgroup.
-> > > > >
-> > > > > The return code of the BPF program is handled as follows:
-> > > > > * 0: EPERM
-> > > > > * 1: success, execute kernel {s,g}etsockopt path after BPF prog exits
-> > > > > * 2: success, do _not_ execute kernel {s,g}etsockopt path after BPF
-> > > > >      prog exits
-> > > > >
-> > > > > Note that if 0 or 2 is returned from BPF program, no further BPF program
-> > > > > in the cgroup hierarchy is executed. This is in contrast with any existing
-> > > > > per-cgroup BPF attach_type.
-> > > >
-> > > > This is drastically different from all other cgroup-bpf progs.
-> > > > I think all programs should be executed regardless of return code.
-> > > > It seems to me that 1 vs 2 difference can be expressed via bpf program logic
-> > > > instead of return code.
-> > > >
-> > > > How about we do what all other cgroup-bpf progs do:
-> > > > "any no is no. all yes is yes"
-> > > > Meaning any ret=0 - EPERM back to user.
-> > > > If all are ret=1 - kernel handles get/set.
-> > > >
-> > > > I think the desire to differentiate 1 vs 2 came from ordering issue
-> > > > on getsockopt.
-> > > > How about for setsockopt all progs run first and then kernel.
-> > > > For getsockopt kernel runs first and then all progs.
-> > > > Then progs will have an ability to overwrite anything the kernel returns.
-> > > Good idea, makes sense. For getsockopt we'd also need to pass the return
-> > > value of the kernel getsockopt to let bpf programs override it, but seems
-> > > doable. Let me play with it a bit; I'll send another version if nothing
-> > > major comes up.
-> > >
-> > > Thanks for another round of review!
-> > One clarification: we'd still probably need to have 3 return codes for
-> > setsockopt:
-> > * any 0 - EPERM
-> > * all 1 - continue with the kernel path (i.e. apply this sockopt as is)
-> > * any 2 - return after all BPF hooks are executed (bypass kernel)
-> >           (any 0 trumps any 2 -> EPERM)
-> >
-> > The context is readonly for setsockopt, so it shouldn't be an issue.
-> > Let me know if you have better idea how to handle that.
-> 
-> I think we don't really need 2.
-> The progs can reduce optlen to zero (or optname to BPF_EMPTY_SOCKOPT)
-> and do ret=1.
-> Then the kernel can see that nothing to be be done and return 0 to user space.
-> Since parent prog in the chain will be able to see that child prog
-> set optlen to zero, it will be able to overwrite if necessary.
-Ack, optlen=0 sounds good. In that case parent prog can poke into optval
-because optval_end still points to the valid end of the data (and, as you
-said, can override optlen back if necessary). Thanks!
+Em Fri, 14 Jun 2019 14:36:40 -0600
+Jonathan Corbet <corbet@lwn.net> escreveu:
 
-> getsockopt wil be clean as well.
-> all 1s return whatever was produced by progs to user space.
-> and progs will be able to see what kernel wanted to return because
-> the kernel's getsockopt logic ran first.
-> ret=2 doesn't have any meaning for getsockopt, so nice to keep
-> setsockopt symmetrical and don't do it there either.
-Agreed.
+> On Wed, 12 Jun 2019 14:52:36 -0300
+> Mauro Carvalho Chehab <mchehab+samsung@kernel.org> wrote:
+> 
+> > This is mostly a rebase of the /33 series v3 I sent, on the top of the latest
+> > linux-next  (next-20190612).
+> > 
+> > Changes from v3:
+> > 
+> > - dropped cpufreq conversion - documents are too outdated;
+> > - infiniband patch is not here anymore - as it should be merged via RDMA;
+> > - s390 patches were already merged;
+> > - Dropped Geert as Maintainer from fb/framebuffer.rst, as per his request;
+> > - Did a minor editorial change at popwerpc/cxl.rst per Andrew Donellan
+> >   request;
+> > - Added acks/reviews;
+> > - trivial rebase fixups.  
+> 
+> So I had to pull docs-next forward to -rc4, but then I was able to apply
+> this set except for parts 5, 6, 14, 18, and 19.  
+
+Patch 5 went via Cgroups tree;
+Patch 18 went via power tree;
+Patch 6 is obsolete, as the cgroups-v1 CBQ chapter was removed;
+
+So, what's left from this series are patches 14 and 19.
+
+I have a rebased version of them on the top of linux-next
+on my working tree. Perhaps we should try to push those two late
+during the merge window.
+
+> Some progress made, but
+> this is somewhat painful work...
+
+Yeah, a change like that is not easy.
+
+Thanks,
+Mauro
