@@ -2,161 +2,151 @@ Return-Path: <SRS0=IvYi=UR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_MUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97035C31E51
-	for <bpf@archiver.kernel.org>; Tue, 18 Jun 2019 03:21:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E13DC31E51
+	for <bpf@archiver.kernel.org>; Tue, 18 Jun 2019 06:46:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6BE202084B
-	for <bpf@archiver.kernel.org>; Tue, 18 Jun 2019 03:21:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5053B20652
+	for <bpf@archiver.kernel.org>; Tue, 18 Jun 2019 06:46:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="FYOTl3p4"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="K3YrzhH9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726723AbfFRDVI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Jun 2019 23:21:08 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:34956 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725829AbfFRDVI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Jun 2019 23:21:08 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5I399uk137012;
-        Tue, 18 Jun 2019 03:20:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2018-07-02;
- bh=O/i7AMMkUKKosjfAFp+SY89OApm68MO3nGMJOcuM8UY=;
- b=FYOTl3p47yilQEAD2tOSXuRWh3gNFBayMh3bDKZ5lPjaRURvbbcEuz68TSWGsfFiXaUS
- SA84AqA7I21wkzycLfTRKuwFe//sh0OuzkV8khR9BIigtRJMtITTLUI4hbnFiLxRKl5h
- NPKtYuI/J2ovXQW97DEIYIqebwSfMg6SxLj7RUf1qRjsd3OWvpC7CiOs6G4kBqp4dbFS
- AzRvyVjId6RuLbufF3V9kR+PhvPRo4CcOgl2g2GgcJ+1W2AX7vuGdjjItKX4d6Xq9UJV
- lvHh4fVbZyL/omBrLiYv6/HOEN8toK/SlCH185oHS41f1Yn1fIW2ZSr5/uG9Mjc9hx04 0A== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2130.oracle.com with ESMTP id 2t4r3thqse-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Jun 2019 03:20:07 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5I3JKFx046047;
-        Tue, 18 Jun 2019 03:20:07 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3020.oracle.com with ESMTP id 2t5h5tg1qt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 18 Jun 2019 03:20:07 +0000
-Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x5I3K667047272;
-        Tue, 18 Jun 2019 03:20:06 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 2t5h5tg1qk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Jun 2019 03:20:06 +0000
-Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x5I3K5nB021569;
-        Tue, 18 Jun 2019 03:20:05 GMT
-Received: from localhost (/10.159.211.102)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 17 Jun 2019 20:20:05 -0700
-Date:   Mon, 17 Jun 2019 23:19:59 -0400
-From:   Kris Van Hees <kris.van.hees@oracle.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Kris Van Hees <kris.van.hees@oracle.com>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, dtrace-devel@oss.oracle.com,
-        LKML <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        id S1725913AbfFRGqP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Jun 2019 02:46:15 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:35524 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725829AbfFRGqP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Jun 2019 02:46:15 -0400
+Received: by mail-ot1-f68.google.com with SMTP id j19so12774269otq.2
+        for <bpf@vger.kernel.org>; Mon, 17 Jun 2019 23:46:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=PSGQkiA0RTI8/zzM/PYhJFV7uoveyRIL9DcSm94XU9M=;
+        b=K3YrzhH9knSVg0opN5pMXGhkU64WtQRcrTBMXdiJN7CLHG6jerHxWRWu4ostAajrwu
+         ikNE+RINxAVHNPRepCq10CAskzoDIrnQUTRxTN22rMOosA1Q1REL2vHwJppsWN1Fosts
+         cVFoYxw/JO3JoGeWFX5Rh9E1CHYKcOcebw4IS2xIJ0kNlZZcSuJxbTuW9lN5poIWnTeW
+         7UyXWNymgk6NIv1skfmyFT8P2TgsdCFhJ+j0uP1GyoAF4YIZ9jRF1Dv6CK2wI/gAWt3w
+         IkzY1eIbGHFbigJcytrKhQ96VsJoWp0xFfS7XX4dWC1Y8vwbx5UG0k9dyuajDJKSCyVF
+         +OXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=PSGQkiA0RTI8/zzM/PYhJFV7uoveyRIL9DcSm94XU9M=;
+        b=Z40/j/AjXO/akh+0P2xmEqyCCtUI0/UtUoRlsDsgSvjLpjzTPFKfVX/owjRnIPpQLQ
+         ENVfsGOwJ5RGmQXYBkIp4Jb6MuT5pNFTy6bop+JhnKGMmiYtS1jyNUX+VUVZckCHUHx1
+         HMGMTZ6V2bG7o+yesTvr+YGKjc0buFqSqqphuqih+4pk0Y3jmjYEkB0ogabfqzAtjaeZ
+         bNFd04rFwEhb2RkfPyfOVNiaD2wBpIcaUoZ09b7EZxXwqxlNCfKw/H48ezaTXw/rOhdY
+         4FoR3SsGyxLTe+edodWXvXe46uULyPCd6WbRyfYgpdUZKYK6ZOiFdH2O3vSGUTqe9IzI
+         bBtw==
+X-Gm-Message-State: APjAAAV8Gsv0LMr5CfCx2c7NtfPG/oUZEaY1/NQZHXve2NbIbhq+RvKI
+        TDSLtPhhQXSam5wB9IqFq5Jf6w==
+X-Google-Smtp-Source: APXvYqz1110ewdb9NUAeSTkRxzg85X1SuQAXuN8x7GHnMUBwOu5l7oTLYjyfwq1iIOpaqYNvbf+HJg==
+X-Received: by 2002:a9d:6f91:: with SMTP id h17mr13797401otq.67.1560839991255;
+        Mon, 17 Jun 2019 23:39:51 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s (li964-79.members.linode.com. [45.33.10.79])
+        by smtp.gmail.com with ESMTPSA id n7sm5347496oih.18.2019.06.17.23.39.45
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 17 Jun 2019 23:39:50 -0700 (PDT)
+Date:   Tue, 18 Jun 2019 14:39:37 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [RFC PATCH 00/11] bpf, trace, dtrace: DTrace BPF program type
- implementation and sample use
-Message-ID: <20190618031959.GI8794@oracle.com>
-References: <20190521213648.GK2422@oracle.com>
- <20190521232618.xyo6w3e6nkwu3h5v@ast-mbp.dhcp.thefacebook.com>
- <20190522041253.GM2422@oracle.com>
- <20190522201624.eza3pe2v55sn2t2w@ast-mbp.dhcp.thefacebook.com>
- <20190523051608.GP2422@oracle.com>
- <20190523202842.ij2quhpmem3nabii@ast-mbp.dhcp.thefacebook.com>
- <20190618012509.GF8794@oracle.com>
- <CAADnVQJoH4WOQ0t7ZhLgh4kh2obxkFs0UGDRas0y4QSqh1EMsg@mail.gmail.com>
- <20190618015442.GG8794@oracle.com>
- <CAADnVQ+zAwoH_mjJLhfEgXHHz+3WYkzhEm-mEObP0koLiSvknw@mail.gmail.com>
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH 2/2] perf trace: Handle NULL pointer dereference in
+ trace__syscall_info()
+Message-ID: <20190618063937.GB24549@leoy-ThinkPad-X240s>
+References: <20190617091140.24372-1-leo.yan@linaro.org>
+ <20190617091140.24372-2-leo.yan@linaro.org>
+ <20190617173203.GA23094@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAADnVQ+zAwoH_mjJLhfEgXHHz+3WYkzhEm-mEObP0koLiSvknw@mail.gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9291 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=875 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1906180024
+In-Reply-To: <20190617173203.GA23094@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jun 17, 2019 at 08:01:52PM -0700, Alexei Starovoitov wrote:
-> On Mon, Jun 17, 2019 at 6:54 PM Kris Van Hees <kris.van.hees@oracle.com> wrote:
-> >
-> > It is not hypothetical.  The folowing example works fine:
-> >
-> > static int noinline bpf_action(void *ctx, long fd, long buf, long count)
-> > {
-> >         int                     cpu = bpf_get_smp_processor_id();
-> >         struct data {
-> >                 u64     arg0;
-> >                 u64     arg1;
-> >                 u64     arg2;
-> >         }                       rec;
-> >
-> >         memset(&rec, 0, sizeof(rec));
-> >
-> >         rec.arg0 = fd;
-> >         rec.arg1 = buf;
-> >         rec.arg2 = count;
-> >
-> >         bpf_perf_event_output(ctx, &buffers, cpu, &rec, sizeof(rec));
-> >
-> >         return 0;
-> > }
-> >
-> > SEC("kprobe/ksys_write")
-> > int bpf_kprobe(struct pt_regs *ctx)
-> > {
-> >         return bpf_action(ctx, ctx->di, ctx->si, ctx->dx);
-> > }
-> >
-> > SEC("tracepoint/syscalls/sys_enter_write")
-> > int bpf_tp(struct syscalls_enter_write_args *ctx)
-> > {
-> >         return bpf_action(ctx, ctx->fd, ctx->buf, ctx->count);
-> > }
-> >
-> > char _license[] SEC("license") = "GPL";
-> > u32 _version SEC("version") = LINUX_VERSION_CODE;
+On Mon, Jun 17, 2019 at 02:32:03PM -0300, Arnaldo Carvalho de Melo wrote:
+> Em Mon, Jun 17, 2019 at 05:11:40PM +0800, Leo Yan escreveu:
+> > trace__init_bpf_map_syscall_args() invokes trace__syscall_info() to
+> > retrieve system calls information, it always passes NULL for 'evsel'
+> > argument; when id is an invalid value then the logging will try to
+> > output event name, this triggers NULL pointer dereference.
+> > 
+> > This patch directly uses string "unknown" for event name when 'evsel'
+> > is NULL pointer.
+> > 
+> > Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> > ---
+> >  tools/perf/builtin-trace.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+> > index 5cd74651db4c..49dfb2fd393b 100644
+> > --- a/tools/perf/builtin-trace.c
+> > +++ b/tools/perf/builtin-trace.c
+> > @@ -1764,7 +1764,7 @@ static struct syscall *trace__syscall_info(struct trace *trace,
+> >  		static u64 n;
+> >  
+> >  		pr_debug("Invalid syscall %d id, skipping (%s, %" PRIu64 ")\n",
+> > -			 id, perf_evsel__name(evsel), ++n);
+> > +			 id, evsel ? perf_evsel__name(evsel) : "unknown", ++n);
+> >  		return NULL;
 > 
-> Great. Then you're all set to proceed with user space dtrace tooling, right?
+> What do you think of this instead?
 
-I can indeed proceed with the initial basics, yes, and have started.  I hope
-to have a first bare bones patch for review sometime next week.
+Yes, I agree the below change is right thing to do.  FWIW:
 
-> What you'll discover thought that it works only for simplest things
-> like above. libbpf assumes that everything in single elf will be used
-> and passes the whole thing to the kernel.
-> The verifer removes dead code only from single program.
-> It disallows unused functions. Hence libbpf needs to start doing
-> more "linker work" than it does today.
-> When it loads .o it needs to pass to the kernel only the functions
-> that are used by the program.
-> This work should be straightforward to implement.
-> Unfortunately no one had time to do it.
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
 
-Ah yes, I see what you mean.  I'll work on that next since I will definitely
-be needing that.
+BTW, my patch followed the code in [1], after apply below your change,
+could consider to simplify code in [1] for without checking 'evsel' is
+NULL pointer anymore.
 
-> It's also going to be the first step to multi-elf support.
-> libbpf would need to do the same "linker work" across .o-s.
+Thanks,
+Leo
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/builtin-report.c?h=perf/core#n301
+
+> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+> index 68beef8f47ff..1d6af95b9207 100644
+> --- a/tools/perf/util/evsel.c
+> +++ b/tools/perf/util/evsel.c
+> @@ -590,6 +590,9 @@ const char *perf_evsel__name(struct perf_evsel *evsel)
+>  {
+>  	char bf[128];
+>  
+> +	if (!evsel)
+> +		goto out_unknown;
+> +
+>  	if (evsel->name)
+>  		return evsel->name;
+>  
+> @@ -629,7 +632,10 @@ const char *perf_evsel__name(struct perf_evsel *evsel)
+>  
+>  	evsel->name = strdup(bf);
+>  
+> -	return evsel->name ?: "unknown";
+> +	if (evsel->name)
+> +		return evsel->name;
+> +out_unknown:
+> +	return "unknown";
+>  }
+>  
+>  const char *perf_evsel__group_name(struct perf_evsel *evsel)
