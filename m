@@ -2,146 +2,130 @@ Return-Path: <SRS0=Gc+U=US=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEF9EC31E5B
-	for <bpf@archiver.kernel.org>; Wed, 19 Jun 2019 19:06:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBD54C31E5B
+	for <bpf@archiver.kernel.org>; Wed, 19 Jun 2019 19:08:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8C2F7214AF
-	for <bpf@archiver.kernel.org>; Wed, 19 Jun 2019 19:06:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9249F21721
+	for <bpf@archiver.kernel.org>; Wed, 19 Jun 2019 19:08:20 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dvBuK+hN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726496AbfFSTGl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Jun 2019 15:06:41 -0400
-Received: from gateway23.websitewelcome.com ([192.185.50.119]:12772 "EHLO
-        gateway23.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726380AbfFSTGl (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 19 Jun 2019 15:06:41 -0400
-X-Greylist: delayed 1227 seconds by postgrey-1.27 at vger.kernel.org; Wed, 19 Jun 2019 15:06:40 EDT
-Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
-        by gateway23.websitewelcome.com (Postfix) with ESMTP id 6FEA76A1E
-        for <bpf@vger.kernel.org>; Wed, 19 Jun 2019 13:46:12 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id dfb2hzb21YTGMdfb2hvAkx; Wed, 19 Jun 2019 13:46:12 -0500
-X-Authority-Reason: nr=8
-Received: from [187.160.61.213] (port=39053 helo=[192.168.0.9])
-        by gator4166.hostgator.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1hdfb2-000DhH-0B; Wed, 19 Jun 2019 13:46:12 -0500
-Subject: Re: [PATCH][bpf-next] bpf: verifier: add a break statement in switch
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Lawrence Brakmo <brakmo@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>
-References: <20190619160708.GA30356@embeddedor>
- <CAEf4BzbVWSd=xVHdbM1R_u_V_HA7DESdF=gL9aH76VC25oq1dg@mail.gmail.com>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=gustavo@embeddedor.com; keydata=
- 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
- VtSixD1uOgytAP7RWS474w==
-Message-ID: <ac7c8305-efc5-ffb6-f8a2-9595b2e06197@embeddedor.com>
-Date:   Wed, 19 Jun 2019 13:46:05 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1727458AbfFSTIU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Jun 2019 15:08:20 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:44674 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726380AbfFSTIU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Jun 2019 15:08:20 -0400
+Received: by mail-qt1-f196.google.com with SMTP id x47so291812qtk.11;
+        Wed, 19 Jun 2019 12:08:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/NuX+3WkUD8MPqANFCqpmo76cOhvITNkLzdl91UF+IU=;
+        b=dvBuK+hN7ZFK3WmZdGGBaTeYz0CTAFLkM7kx3R+awqIzgrsJQIng6FbpsRJfYdyqEp
+         av1ax6F5N14h0nIez3tsA6GD59qvszwBNMigOsh9bWeS6Gw1iZUPUuye/OandwecczK3
+         m85N8o2xD+OMO3011fWa0Bn/KkLCFIzSgbGjui0/Jk4vZlNm7PxLMdXNk9RvALaRS9Zi
+         24S8rjsXrrru+b/P8hi04y+UB8NkfdSLg79w+qknxzFBxxW3huHD151NF2/B+v7A7PrC
+         HLjWQVJ0bYMvtW8k67mq7GjK/DD2cPk/kNhg9I90eyqm6j+iWFL7ZABZ1ol0Nu+VkVHB
+         ALzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/NuX+3WkUD8MPqANFCqpmo76cOhvITNkLzdl91UF+IU=;
+        b=U41RwmzgOuq6DwHW8WgvrACiC2yyuFkqM1QC5lTgYc75uWh7LHw1TZsLpTj0m4TuQI
+         rotcJjS6bCFrWx4M21FvLC4cJM3nXAVgMPoqFaQUTQUiod51yduzVWUAU3K7icEr0VRx
+         l3ZtHpF2LDFJnQrw++UDHkB08T6jBD2qa3frHpgZLqNF7cSww28/iUdqWYMNigpTfwvg
+         bxgnsX/pdXsTzk89eClpUEV3mR2jzroejh1s8S14cA/K3QZDQqn0Jn3R8wRqLo8s049K
+         xFpBYTqYOZ2j7EDouHta57fETh0LxZT1nhU30FFFFSKM2B+EtWlRBQ5PV2AHGa5bZKTt
+         XrCw==
+X-Gm-Message-State: APjAAAXIZPViZ/rt+OkigbgXRd6T49ou1eK4gYQHoDycP4A2+M9qHFP6
+        saeex0mZKmnw+scGC9FKG34RU9XSO5NgyIu6W+g=
+X-Google-Smtp-Source: APXvYqwmh86CGNfbPYHjkFMIcguxAOBFlx1bU2wpGoJ38+Rs/i1L5bWESEOQBTQ9mILAtFEKG3whilsLSaMhrUoOtRE=
+X-Received: by 2002:a05:6214:1306:: with SMTP id a6mr22103594qvv.38.1560971299127;
+ Wed, 19 Jun 2019 12:08:19 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAEf4BzbVWSd=xVHdbM1R_u_V_HA7DESdF=gL9aH76VC25oq1dg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.160.61.213
-X-Source-L: No
-X-Exim-ID: 1hdfb2-000DhH-0B
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.0.9]) [187.160.61.213]:39053
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 9
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+References: <20190619190105.261533-1-sdf@google.com>
+In-Reply-To: <20190619190105.261533-1-sdf@google.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 19 Jun 2019 12:08:07 -0700
+Message-ID: <CAEf4BzZ73LvgvQDLaNm3YwUwCbfr-RQ14cACw+wcpkfExmEnJA@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: fix NULL deref in btf_type_is_resolve_source_only
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        syzbot <syzkaller@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Wed, Jun 19, 2019 at 12:01 PM Stanislav Fomichev <sdf@google.com> wrote:
+>
+> Commit 1dc92851849c ("bpf: kernel side support for BTF Var and DataSec")
+> added invocations of btf_type_is_resolve_source_only before
+> btf_type_nosize_or_null which checks for the NULL pointer.
+> Swap the order of btf_type_nosize_or_null and
+> btf_type_is_resolve_source_only to make sure the do the NULL pointer
+> check first.
+>
+> Fixes: 1dc92851849c ("bpf: kernel side support for BTF Var and DataSec")
+> Reported-by: syzbot <syzkaller@googlegroups.com>
+> Signed-off-by: Stanislav Fomichev <sdf@google.com>
+> ---
 
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 
-On 6/19/19 12:44 PM, Andrii Nakryiko wrote:
-> On Wed, Jun 19, 2019 at 9:07 AM Gustavo A. R. Silva
-> <gustavo@embeddedor.com> wrote:
->>
->> Notice that in this case, it's much clearer to explicitly add a break
->> rather than letting the code to fall through. It also avoid potential
->> future fall-through warnings[1].
->>
->> This patch is part of the ongoing efforts to enable
->> -Wimplicit-fallthrough.
->>
->> [1] https://lore.kernel.org/patchwork/patch/1087056/
->>
->> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
->> ---
-> 
-> Acked-by: Andrii Nakryiko <andriin@fb.com>
-> 
-
-Thanks, Andrii.
-
---
-Gustavo
-
+>  kernel/bpf/btf.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index cad09858a5f2..546ebee39e2a 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -1928,8 +1928,8 @@ static int btf_array_resolve(struct btf_verifier_env *env,
+>         /* Check array->index_type */
+>         index_type_id = array->index_type;
+>         index_type = btf_type_by_id(btf, index_type_id);
+> -       if (btf_type_is_resolve_source_only(index_type) ||
+> -           btf_type_nosize_or_null(index_type)) {
+> +       if (btf_type_nosize_or_null(index_type) ||
+> +           btf_type_is_resolve_source_only(index_type)) {
+>                 btf_verifier_log_type(env, v->t, "Invalid index");
+>                 return -EINVAL;
+>         }
+> @@ -1948,8 +1948,8 @@ static int btf_array_resolve(struct btf_verifier_env *env,
+>         /* Check array->type */
+>         elem_type_id = array->type;
+>         elem_type = btf_type_by_id(btf, elem_type_id);
+> -       if (btf_type_is_resolve_source_only(elem_type) ||
+> -           btf_type_nosize_or_null(elem_type)) {
+> +       if (btf_type_nosize_or_null(elem_type) ||
+> +           btf_type_is_resolve_source_only(elem_type)) {
+>                 btf_verifier_log_type(env, v->t,
+>                                       "Invalid elem");
+>                 return -EINVAL;
+> @@ -2170,8 +2170,8 @@ static int btf_struct_resolve(struct btf_verifier_env *env,
+>                 const struct btf_type *member_type = btf_type_by_id(env->btf,
+>                                                                 member_type_id);
+>
+> -               if (btf_type_is_resolve_source_only(member_type) ||
+> -                   btf_type_nosize_or_null(member_type)) {
+> +               if (btf_type_nosize_or_null(member_type) ||
+> +                   btf_type_is_resolve_source_only(member_type)) {
+>                         btf_verifier_log_member(env, v->t, member,
+>                                                 "Invalid member");
+>                         return -EINVAL;
+> --
+> 2.22.0.410.gd8fdbe21b5-goog
+>
