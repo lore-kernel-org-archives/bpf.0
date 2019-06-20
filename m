@@ -2,101 +2,161 @@ Return-Path: <SRS0=j58T=UT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FROM_EXCESS_BASE64,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39CC7C43613
-	for <bpf@archiver.kernel.org>; Thu, 20 Jun 2019 08:08:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FDC4C43613
+	for <bpf@archiver.kernel.org>; Thu, 20 Jun 2019 09:13:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 134AC2084A
-	for <bpf@archiver.kernel.org>; Thu, 20 Jun 2019 08:08:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72CA02080C
+	for <bpf@archiver.kernel.org>; Thu, 20 Jun 2019 09:13:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OmXGcAXD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LjHiGkCQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730196AbfFTIIF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Jun 2019 04:08:05 -0400
-Received: from mail-lf1-f49.google.com ([209.85.167.49]:41810 "EHLO
-        mail-lf1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726168AbfFTIIF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Jun 2019 04:08:05 -0400
-Received: by mail-lf1-f49.google.com with SMTP id 136so1727502lfa.8
-        for <bpf@vger.kernel.org>; Thu, 20 Jun 2019 01:08:04 -0700 (PDT)
+        id S1726468AbfFTJNg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Jun 2019 05:13:36 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:41327 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725889AbfFTJNg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Jun 2019 05:13:36 -0400
+Received: by mail-qk1-f194.google.com with SMTP id c11so1401664qkk.8;
+        Thu, 20 Jun 2019 02:13:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=5nLDF4KvNjOO0UGhzTbw+kgDFdu3GO4N4s2vFIPF9iU=;
-        b=OmXGcAXDCg5tpnkC3zM065z42PKi+z/FVjoDHqkRFwQQ351XflSo05WQbSV3o17OA1
-         ZCsdnjvvy8dS/tX2Yrk0+vtSVbKzdotrcrp1d3vJpozy0Jdb5LybpVHsiW48i/dDVI4m
-         ck78rIIOF3bMUbZaiZAMkWKmJcJn6Z/ZVjyWEsqoSws8e7XxsYNIIMXEHmshvOdBKAcx
-         J/hpS3vishBxStBuT5Vd6dFmaBnP06wN4IJ6LTtHWz3vxRs0dzNXAKspTbq1O91EelUW
-         7USUCZOQGv2Sw7kPzWpfZs5oEBsiyWFpcnyvM6d2Eb0IbXkpG8FtvbT1xWFcC5FeFvd/
-         egbg==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=X6bKwZxURv5deJWTCBXduGArgXHOHNe9PzEhrDNybaw=;
+        b=LjHiGkCQgGrOCV9VPwsq0TFHizch7kzd1nmyInQGvD7MdWCl7jTWNrw3fMPtK+VoN2
+         GtTee4zKmCUKG+F1C46YrOMrqxVmA6vb5pzt+MmF/V1zlM0QatZm5flLvPat15yrJKsC
+         CmDAJ5CnxJTsTEzolLefmc6GkFz3lcR3hWRy7IN6EA+0GnlryYOoI1E7kB5w9baYHkU0
+         tzmerJ1QyJtRugAfGvik0NLu5OiBpZZgG4PcAt0LZp4fM4Fpbaywb339Q9ZAJ6c6SiYX
+         /D3/YBQzbQWCBq/hofyunFugRPms8k8Vl/tmOq71TRt51Hy8u4NXAPSzlvfPggOeyWCZ
+         +uRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=5nLDF4KvNjOO0UGhzTbw+kgDFdu3GO4N4s2vFIPF9iU=;
-        b=iKNIDFDlEkiVdfVPwjG6NKnD3StLFja7paFJcJ7U7FCr/yalhyUxijK9w1t6tnN+t3
-         ngUbVpFgVKiVUdLMW6JyHTHB01ohgtvLvDmo56P+ZSZfcEuY61mt+dAhxS+/aRUlwnTY
-         l4Pg8BuUvGYYraxowEQoJhqbRUXtryGxZicgjoM2YaPyPLpUZXq4BQtf9UNTaXiYlTIG
-         1CuFev2VRNs1s7nkA983o6g1G4K6TuAtHeoOP2covvgYEPV/UorQ1n4BJRDIw7YAtqBH
-         ddYJjyBZskCyJVBijRbtZV9bo2QAE5dtZ2G5qA4fQ+vMTDK6awMccy+dyB+ENLfheyZG
-         WgYQ==
-X-Gm-Message-State: APjAAAVYEDrSsVhjwsIVlKl5LIocvRMqIOqsuKtwDtq3CPWDU39uaP5V
-        wbGCldh9MA/2zLlEB74X2AX1hjlj8hQ086rzTxijKQ==
-X-Google-Smtp-Source: APXvYqyU7SYZ3r1zFZE21AN1DFeMgGQwh6SguX3BRtEUzUX/aM0TrfFkxtA08Wzok29Qq+v25QAmavsjX/AI8Qz4iuA=
-X-Received: by 2002:a19:671c:: with SMTP id b28mr12475324lfc.164.1561018083426;
- Thu, 20 Jun 2019 01:08:03 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=X6bKwZxURv5deJWTCBXduGArgXHOHNe9PzEhrDNybaw=;
+        b=TaE+OypZS5kfpxGNVEMWdbCAWVNPBazPI680mparUMVn+weoaTrfraLyr4G+DgnRcf
+         3hNi4DkEMEBiiN/mbBBwU2H19ZbE9CJScmzUxOLbKzx0KghY5ISg+78KJrCLvNvOUYQh
+         nSNWmQRWCJ6OSgOI2f7PGqOurtGGZeIOcVrJtyF+BFE3PTFN4oLuqz3RCVFP6r7L+1w1
+         VP6oNi5b64AogQp7Nj5rPb1GVrkJI5C/RzO/dMMUJQyG5sbOk7ZW8GE2gtQfj4clZJYD
+         tsioxn3X844q+D9MWqdrrhBmQX1WdjzxKhgh2G2q9qrrcb8dwDnBZgLgrsYxPGwUfrIP
+         jYqQ==
+X-Gm-Message-State: APjAAAXDfErkVevs4kgkhJCC1GEPyhx59JKgSNK+k/PVQxaWVgK8A2lf
+        PmnCd3Nys6p2M6VfBZ/BZ3Q1nfsssg5PReTSCko=
+X-Google-Smtp-Source: APXvYqyRSSmVWRdQ+mFdOeY83EeFv/xT4VmqNVjx51xDnWaiiLYQ21KYkAyRUuO8XiejeNfl6ZgMKynq8mEbWvyLUuY=
+X-Received: by 2002:a05:620a:16a6:: with SMTP id s6mr106160992qkj.39.1561022014963;
+ Thu, 20 Jun 2019 02:13:34 -0700 (PDT)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 20 Jun 2019 13:37:52 +0530
-Message-ID: <CA+G9fYsMcdHmKY66CNhsrizO-gErkOQCkTcBSyOHLpOs+8g5=g@mail.gmail.com>
-Subject: selftests: bpf: test_libbpf.sh failed at file test_l4lb.o
-To:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, bpf@vger.kernel.org,
-        Netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        xdp-newbies@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
+References: <20190618120024.16788-1-maximmi@mellanox.com>
+In-Reply-To: <20190618120024.16788-1-maximmi@mellanox.com>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Date:   Thu, 20 Jun 2019 11:13:23 +0200
+Message-ID: <CAJ+HfNia-vUv7Eumfs8aMYGGkxPbbUQ++F+BQ=9C1NtP0Jt3hA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 00/16] AF_XDP infrastructure improvements and
+ mlx5e support
+To:     Maxim Mikityanskiy <maximmi@mellanox.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>, kafai@fb.com,
-        Yonghong Song <yhs@fb.com>, john.fastabend@gmail.com,
-        hawk@kernel.org, jakub.kicinski@netronome.com,
-        Shuah Khan <shuah@kernel.org>
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Saeed Mahameed <saeedm@mellanox.com>,
+        Jonathan Lemon <bsd@fb.com>,
+        Tariq Toukan <tariqt@mellanox.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Maciej Fijalkowski <maciejromanfijalkowski@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-selftests: bpf test_libbpf.sh failed running Linux -next kernel
-20190618 and 20190619.
+On Tue, 18 Jun 2019 at 14:00, Maxim Mikityanskiy <maximmi@mellanox.com> wro=
+te:
+>
+> This series contains improvements to the AF_XDP kernel infrastructure
+> and AF_XDP support in mlx5e. The infrastructure improvements are
+> required for mlx5e, but also some of them benefit to all drivers, and
+> some can be useful for other drivers that want to implement AF_XDP.
+>
+> The performance testing was performed on a machine with the following
+> configuration:
+>
+> - 24 cores of Intel Xeon E5-2620 v3 @ 2.40 GHz
+> - Mellanox ConnectX-5 Ex with 100 Gbit/s link
+>
+> The results with retpoline disabled, single stream:
+>
+> txonly: 33.3 Mpps (21.5 Mpps with queue and app pinned to the same CPU)
+> rxdrop: 12.2 Mpps
+> l2fwd: 9.4 Mpps
+>
+> The results with retpoline enabled, single stream:
+>
+> txonly: 21.3 Mpps (14.1 Mpps with queue and app pinned to the same CPU)
+> rxdrop: 9.9 Mpps
+> l2fwd: 6.8 Mpps
+>
+> v2 changes:
+>
+> Added patches for mlx5e and addressed the comments for v1. Rebased for
+> bpf-next.
+>
+> v3 changes:
+>
+> Rebased for the newer bpf-next, resolved conflicts in libbpf. Addressed
+> Bj=C3=B6rn's comments for coding style. Fixed a bug in error handling flo=
+w in
+> mlx5e_open_xsk.
+>
+> v4 changes:
+>
+> UAPI is not changed, XSK RX queues are exposed to the kernel. The lower
+> half of the available amount of RX queues are regular queues, and the
+> upper half are XSK RX queues. The patch "xsk: Extend channels to support
+> combined XSK/non-XSK traffic" was dropped. The final patch was reworked
+> accordingly.
+>
+> Added "net/mlx5e: Attach/detach XDP program safely", as the changes
+> introduced in the XSK patch base on the stuff from this one.
+>
+> Added "libbpf: Support drivers with non-combined channels", which aligns
+> the condition in libbpf with the condition in the kernel.
+>
+> Rebased over the newer bpf-next.
+>
+> v5 changes:
+>
+> In v4, ethtool reports the number of channels as 'combined' and the
+> number of XSK RX queues as 'rx' for mlx5e. It was changed, so that 'rx'
+> is 0, and 'combined' reports the double amount of channels if there is
+> an active UMEM - to make libbpf happy.
+>
+> The patch for libbpf was dropped. Although it's still useful and fixes
+> things, it raises some disagreement, so I'm dropping it - it's no longer
+> useful for mlx5e anymore after the change above.
+>
 
-Here is the log from x86_64,
-# selftests bpf test_libbpf.sh
-bpf: test_libbpf.sh_ #
-# [0] libbpf BTF is required, but is missing or corrupted.
-libbpf: BTF_is #
-# test_libbpf failed at file test_l4lb.o
-failed: at_file #
-# selftests test_libbpf [FAILED]
-test_libbpf: [FAILED]_ #
-[FAIL] 29 selftests bpf test_libbpf.sh
-selftests: bpf_test_libbpf.sh [FAIL]
+Just a heads-up: There are some checkpatch warnings (>80 chars/line)
+for the mlnx5 driver parts, and the series didn't apply cleanly on
+bpf-next for me.
 
-Full test log,
-https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190619/testrun/781777/log
+I haven't been able to test the mlnx5 parts.
 
-Test results comparison,
-https://qa-reports.linaro.org/lkft/linux-next-oe/tests/kselftest/bpf_test_libbpf.sh
+Parts of the series are unrelated/orthogonal, and could be submitted
+as separate series, e.g. patches {1,7} and patches {3,4}. No blockers
+for me, though.
 
-Good linux -next tag: next-20190617
-Bad linux -next tag: next-20190618
-git branch     master
-git commit    1c6b40509daf5190b1fd2c758649f7df1da4827b
-git repo
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Thanks for the hard work!
 
-Best regards
-Naresh Kamboju
+For the series:
+Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
