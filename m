@@ -2,44 +2,44 @@ Return-Path: <SRS0=j58T=UT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF971C48BE3
-	for <bpf@archiver.kernel.org>; Thu, 20 Jun 2019 23:10:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77C5AC48BE1
+	for <bpf@archiver.kernel.org>; Thu, 20 Jun 2019 23:10:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 977852082C
-	for <bpf@archiver.kernel.org>; Thu, 20 Jun 2019 23:10:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4F5B22082C
+	for <bpf@archiver.kernel.org>; Thu, 20 Jun 2019 23:10:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="fiZwf+Yx"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="flooIDXO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726098AbfFTXKU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1726074AbfFTXKU (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 20 Jun 2019 19:10:20 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:42906 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725815AbfFTXKT (ORCPT
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:23246 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726002AbfFTXKT (ORCPT
         <rfc822;bpf@vger.kernel.org>); Thu, 20 Jun 2019 19:10:19 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5KN7kZx008068
+Received: from pps.filterd (m0044008.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5KN9O3o012993
         for <bpf@vger.kernel.org>; Thu, 20 Jun 2019 16:10:18 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=RnLy4sqnK36QnV4nRge6edPCKvHBGHk32kZOjq8y8/I=;
- b=fiZwf+YxwIHi+ZUMHqLE6Dkv3fiFiAzyxse0PFHpEnUs8n08rEtoNu+djf0xWYWvLmC0
- KwEOCU1de+PAGFYYiHV3lWATu56qlYNQFEuCcUmoH0KEqxhgIaUZlIF01hv7saLb7I8q
- mWLkUhkpFFeuViAxjpqndSXljZtg95/qiXU= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2t8ewt11vp-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=Y1FWKdBI5j0avkYfXEmpyA8NTajFIFgoZI9ySoULmg8=;
+ b=flooIDXOYP65Ma2lpxW2EQrFXkbPnZ9Jm03O2DFRInPoqoE6UorAW7EX1yxkXxIHjIiK
+ D3nrKUk8SR4uoOBVWSAkdtccXXwoRevtKu2CDI4O1beIMdDSHEYwK1h8Z5C7O8D2l9Kh
+ mM1VhJTOLYBwwUnYDOnxSzDJdsF2lcXqVX4= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2t8f1n11jp-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
         for <bpf@vger.kernel.org>; Thu, 20 Jun 2019 16:10:17 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 20 Jun 2019 16:10:10 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::128) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Thu, 20 Jun 2019 16:10:17 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 4807B86173D; Thu, 20 Jun 2019 16:10:07 -0700 (PDT)
+        id 34DE486173D; Thu, 20 Jun 2019 16:10:16 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,10 +48,12 @@ To:     <andrii.nakryiko@gmail.com>, <ast@fb.com>, <daniel@iogearbox.net>,
         <kernel-team@fb.com>
 CC:     Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH bpf-next 0/7] libbpf: add tracing attach APIs 
-Date:   Thu, 20 Jun 2019 16:09:44 -0700
-Message-ID: <20190620230951.3155955-1-andriin@fb.com>
+Subject: [PATCH bpf-next 2/7] libbpf: add ability to attach/detach BPF to perf event
+Date:   Thu, 20 Jun 2019 16:09:46 -0700
+Message-ID: <20190620230951.3155955-3-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190620230951.3155955-1-andriin@fb.com>
+References: <20190620230951.3155955-1-andriin@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -60,62 +62,114 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
  malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=625 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906200163
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906200164
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patchset adds the following APIs to allow attaching BPF programs to
-tracing entities:
-- bpf_program__attach_perf_event for attaching to any opened perf event FD,
-  allowing users full control;
-- bpf_program__attach_kprobe for attaching to kernel probes (both entry and
-  return probes);
-- bpf_program__attach_uprobe for attaching to user probes (both entry/return);
-- bpf_program__attach_tracepoint for attaching to kernel tracepoints;
-- bpf_program__attach_raw_tracepoint for attaching to raw kernel tracepoint
-  (wrapper around bpf_raw_tracepoint_open);
+bpf_program__attach_perf_event allows to attach BPF program to existing
+perf event, providing most generic and most low-level way to attach BPF
+programs.
 
-This set of APIs makes libbpf more useful for tracing applications.
+libbpf_perf_event_disable_and_close API is added to disable and close
+existing perf event by its FD.
 
-Pre-patch #1 makes internal libbpf_strerror_r helper function work w/ negative
-error codes, lifting the burder off callers to keep track of error sign.
-Patch #2 adds attach_perf_event, which is the base for all other APIs.
-Patch #3 adds kprobe/uprobe APIs.
-Patch #4 adds tracepoint/raw_tracepoint APIs.
-Patch #5 converts one existing test to use attach_perf_event.
-Patch #6 adds new kprobe/uprobe tests.
-Patch #7 converts all the selftests currently using tracepoint to new APIs.
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/lib/bpf/libbpf.c   | 41 ++++++++++++++++++++++++++++++++++++++++
+ tools/lib/bpf/libbpf.h   |  4 ++++
+ tools/lib/bpf/libbpf.map |  2 ++
+ 3 files changed, 47 insertions(+)
 
-Andrii Nakryiko (7):
-  libbpf: make libbpf_strerror_r agnostic to sign of error
-  libbpf: add ability to attach/detach BPF to perf event
-  libbpf: add kprobe/uprobe attach API
-  libbpf: add tracepoint/raw tracepoint attach API
-  selftests/bpf: switch test to new attach_perf_event API
-  selftests/bpf: add kprobe/uprobe selftests
-  selftests/bpf: convert existing tracepoint tests to new APIs
-
- tools/lib/bpf/libbpf.c                        | 347 ++++++++++++++++++
- tools/lib/bpf/libbpf.h                        |  17 +
- tools/lib/bpf/libbpf.map                      |   6 +
- tools/lib/bpf/str_error.c                     |   2 +-
- .../selftests/bpf/prog_tests/attach_probe.c   | 151 ++++++++
- .../bpf/prog_tests/stacktrace_build_id.c      |  49 +--
- .../bpf/prog_tests/stacktrace_build_id_nmi.c  |  16 +-
- .../selftests/bpf/prog_tests/stacktrace_map.c |  42 +--
- .../bpf/prog_tests/stacktrace_map_raw_tp.c    |  14 +-
- .../bpf/prog_tests/task_fd_query_rawtp.c      |  10 +-
- .../bpf/prog_tests/task_fd_query_tp.c         |  51 +--
- .../bpf/prog_tests/tp_attach_query.c          |  56 +--
- .../selftests/bpf/progs/test_attach_probe.c   |  55 +++
- 13 files changed, 650 insertions(+), 166 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/attach_probe.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_attach_probe.c
-
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 8ce3beba8551..2bb1fa008be3 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -32,6 +32,7 @@
+ #include <linux/limits.h>
+ #include <linux/perf_event.h>
+ #include <linux/ring_buffer.h>
++#include <sys/ioctl.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ #include <sys/vfs.h>
+@@ -3928,6 +3929,46 @@ int bpf_prog_load_xattr(const struct bpf_prog_load_attr *attr,
+ 	return 0;
+ }
+ 
++int libbpf_perf_event_disable_and_close(int pfd)
++{
++	int err;
++
++	if (pfd < 0)
++		return 0;
++
++	err = ioctl(pfd, PERF_EVENT_IOC_DISABLE, 0);
++	close(pfd);
++	return err;
++}
++
++int bpf_program__attach_perf_event(struct bpf_program *prog, int pfd)
++{
++	char errmsg[STRERR_BUFSIZE];
++	int bpf_fd, err;
++
++	bpf_fd = bpf_program__fd(prog);
++	if (bpf_fd < 0) {
++		pr_warning("program '%s': can't attach before loaded\n",
++			   bpf_program__title(prog, false));
++		return -EINVAL;
++	}
++	if (ioctl(pfd, PERF_EVENT_IOC_SET_BPF, bpf_fd) < 0) {
++		err = -errno;
++		pr_warning("program '%s': failed to attach to pfd %d: %s\n",
++			   bpf_program__title(prog, false), pfd,
++			   libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
++		return err;
++	}
++	if (ioctl(pfd, PERF_EVENT_IOC_ENABLE, 0) < 0) {
++		err = -errno;
++		pr_warning("program '%s': failed to enable pfd %d: %s\n",
++			   bpf_program__title(prog, false), pfd,
++			   libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
++		return err;
++	}
++	return 0;
++}
++
+ enum bpf_perf_event_ret
+ bpf_perf_event_read_simple(void *mmap_mem, size_t mmap_size, size_t page_size,
+ 			   void **copy_mem, size_t *copy_size,
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index d639f47e3110..76db1bbc0dac 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -165,6 +165,10 @@ LIBBPF_API int bpf_program__pin(struct bpf_program *prog, const char *path);
+ LIBBPF_API int bpf_program__unpin(struct bpf_program *prog, const char *path);
+ LIBBPF_API void bpf_program__unload(struct bpf_program *prog);
+ 
++LIBBPF_API int libbpf_perf_event_disable_and_close(int pfd);
++LIBBPF_API int bpf_program__attach_perf_event(struct bpf_program *prog,
++					      int pfd);
++
+ struct bpf_insn;
+ 
+ /*
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 2c6d835620d2..d27406982b5a 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -172,5 +172,7 @@ LIBBPF_0.0.4 {
+ 		btf_dump__new;
+ 		btf__parse_elf;
+ 		bpf_object__load_xattr;
++		bpf_program__attach_perf_event;
+ 		libbpf_num_possible_cpus;
++		libbpf_perf_event_disable_and_close;
+ } LIBBPF_0.0.3;
 -- 
 2.17.1
 
