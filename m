@@ -2,83 +2,149 @@ Return-Path: <SRS0=j58T=UT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.6 required=3.0 tests=DATE_IN_PAST_06_12,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C4BFC43613
-	for <bpf@archiver.kernel.org>; Thu, 20 Jun 2019 15:37:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A540BC43613
+	for <bpf@archiver.kernel.org>; Thu, 20 Jun 2019 17:24:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 064DB20673
-	for <bpf@archiver.kernel.org>; Thu, 20 Jun 2019 15:37:16 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fn5YZ4i8"
+	by mail.kernel.org (Postfix) with ESMTP id 86C552084A
+	for <bpf@archiver.kernel.org>; Thu, 20 Jun 2019 17:24:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726686AbfFTPhP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Jun 2019 11:37:15 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:39554 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726649AbfFTPhP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Jun 2019 11:37:15 -0400
-Received: by mail-lj1-f195.google.com with SMTP id v18so3133080ljh.6;
-        Thu, 20 Jun 2019 08:37:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sdFhQUOmy0HUAK5VEgiFaGF1/IYr6NuyuE67mdG7njg=;
-        b=fn5YZ4i8JYfgEW/htWLS9IPeR0JzfnFjzhT1gsxJf9+dDPvqeh+hpVdv7lpNAaJcGM
-         MQBdidhg56n22SRHF2wt2Q1q9ICjoNWcHfCPw55QkB1jRqAXc0p0t0u1Ph1XdC+mZD+i
-         JwgCHU7IzLWn2+jM/83rxbapJnnOnuVUv8OkGFPHOyrBZClKr/EWcGMfKaFsFo0gsBnW
-         tO2O/hQn5Zt7/+X3EZ3l+5oD+aJ3Op2A/Zu+Nivt+swkFUAZTNo2KSpLjbeNXokh9GbH
-         HMYKov+FHouZ4rv5Qc2jv/hdeV2qSFOKfVmI47x3Tm+EcW4AnqaddEG9UmrcKI1F0YQl
-         Tkcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sdFhQUOmy0HUAK5VEgiFaGF1/IYr6NuyuE67mdG7njg=;
-        b=Vt2kopjSQBKg6NS71xIEeGPoOhY20eEeaCA2ay7XgTq5U8ETTIwuyC4EKI/7vRFv+M
-         8LKJUpYQSrrSUjd85EcgnUPpVSZEQzTHHKREajOZloDij9+pO/dz5VwI+FLIcvenh/1T
-         x+Op2ZXXalQjOemxhKNG+4oeqhXTioiFCx9Pd9Cmwy9YFeJykuzH0m6dEw2yGS+zRuoQ
-         PueqIN96lxPIz1rN4jk0yx1V4XuOc9bI2s5J3bhvBl2eUt6ttdA9LvfIiiKpaYr80pT1
-         CLSGi8iJ/im+o3NMGw6jma1stxthHVCHqPVUFpPGBemvB3kgizif96zA1XJkWtJshA2O
-         l4Og==
-X-Gm-Message-State: APjAAAUuxzZm1lJEXF95QERZu2xqoVS8BQjDjMhjKUFyH5a2S68544QY
-        qYzDa89RVIUFscEXf8036o5WxA1lMU0zSXOPxKM=
-X-Google-Smtp-Source: APXvYqzswEM46HvJ9q00SI3Pbqvu7kkgprJoqkGjWIGakUNmc4JZyLCnYieYrkq8hZ1yNVxSXNUVi/BM/Sqppa0EwmE=
-X-Received: by 2002:a2e:94c9:: with SMTP id r9mr23364870ljh.210.1561045033229;
- Thu, 20 Jun 2019 08:37:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190615191225.2409862-1-ast@kernel.org> <20190615191225.2409862-2-ast@kernel.org>
- <5d0ad24027106_8822adea29a05b47c@john-XPS-13-9370.notmuch>
- <20190620033538.4oou4mbck6xs64mj@ast-mbp.dhcp.thefacebook.com> <5d0b13c990eaa_21bb2acd7a54c5b4a0@john-XPS-13-9370.notmuch>
-In-Reply-To: <5d0b13c990eaa_21bb2acd7a54c5b4a0@john-XPS-13-9370.notmuch>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 20 Jun 2019 08:37:00 -0700
-Message-ID: <CAADnVQ+dA1+KH=vDzEW7idVH5Lsgrcwy+GjuzX-bNTYV4nDt7A@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 1/9] bpf: track spill/fill of constants
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1732473AbfFTRYf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Jun 2019 13:24:35 -0400
+Received: from mga12.intel.com ([192.55.52.136]:64663 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732425AbfFTRYf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Jun 2019 13:24:35 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Jun 2019 10:24:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,397,1557212400"; 
+   d="scan'208";a="359020306"
+Received: from silpixa00399838.ir.intel.com (HELO silpixa00399838.ger.corp.intel.com) ([10.237.223.110])
+  by fmsmga006.fm.intel.com with ESMTP; 20 Jun 2019 10:24:32 -0700
+From:   Kevin Laatz <kevin.laatz@intel.com>
+To:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        bjorn.topel@intel.com, magnus.karlsson@intel.com
+Cc:     bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        bruce.richardson@intel.com, ciara.loftus@intel.com,
+        Kevin Laatz <kevin.laatz@intel.com>
+Subject: [PATCH 00/11] XDP unaligned chunk placement support
+Date:   Thu, 20 Jun 2019 09:09:47 +0000
+Message-Id: <20190620090958.2135-1-kevin.laatz@intel.com>
+X-Mailer: git-send-email 2.17.1
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jun 19, 2019 at 10:04 PM John Fastabend
-<john.fastabend@gmail.com> wrote:
->
-> working my way through the series now, but for this patch
->
-> Acked-by: John Fastabend <john.fastabend@gmail.com>
+This patchset adds the ability to use unaligned chunks in the XDP umem.
 
-Thanks a lot for review!
-It's landed now, but if you find anything I'll send
-follow up patches.
-Which I plan to do anyway for few things in backtracking logic.
+Currently, all chunk addresses passed to the umem are masked to be chunk
+size aligned (default is 2k, max is PAGE_SIZE). This limits where we can
+place chunks within the umem as well as limiting the packet sizes that are
+supported.
+
+The changes in this patchset removes these restrictions, allowing XDP to be
+more flexible in where it can place a chunk within a umem. By relaxing where
+the chunks can be placed, it allows us to use an arbitrary buffer size and
+place that wherever we have a free address in the umem. These changes add the
+ability to support jumboframes and make it easy to integrate with other
+existing frameworks that have their own memory management systems, such as
+DPDK.
+
+Structure of the patchset:
+Patch 1:
+  - Remove unnecessary masking and headroom addition during zero-copy Rx
+    buffer recycling in i40e. This change is required in order for the
+    buffer recycling to work in the unaligned chunk mode.
+
+Patch 2:
+  - Remove unnecessary masking and headroom addition during
+    zero-copy Rx buffer recycling in ixgbe. This change is required in
+    order for the  buffer recycling to work in the unaligned chunk mode.
+
+Patch 3:
+  - Adds an offset parameter to zero_copy_allocator. This change will
+    enable us to calculate the original handle in zca_free. This will be
+    required for unaligned chunk mode since we can't easily mask back to
+    the original handle.
+
+Patch 4:
+  - Adds the offset parameter to i40e_zca_free. This change is needed for
+    calculating the handle since we can't easily mask back to the original
+    handle like we can in the aligned case.
+
+Patch 5:
+  - Adds the offset parameter to ixgbe_zca_free. This change is needed for
+    calculating the handle since we can't easily mask back to the original
+    handle like we can in the aligned case.
+
+
+Patch 6:
+  - Add infrastructure for unaligned chunks. Since we are dealing
+    with unaligned chunks that could potentially cross a physical page
+    boundary, we add checks to keep track of that information. We can
+    later use this information to correctly handle buffers that are
+    placed at an address where they cross a page boundary.
+
+Patch 7:
+  - Add flags for umem configuration to libbpf
+
+Patch 8:
+  - Modify xdpsock application to add a command line option for
+    unaligned chunks
+
+Patch 9:
+  - Addition of command line argument to pass in a desired buffer size
+    and buffer recycling for unaligned mode. Passing in a buffer size will
+    allow the application to use unaligned chunks with the unaligned chunk
+    mode. Since we are now using unaligned chunks, we need to recycle our
+    buffers in a slightly different way.
+
+Patch 10:
+  - Adds hugepage support to the xdpsock application
+
+Patch 11:
+  - Documentation update to include the unaligned chunk scenario. We need
+    to explicitly state that the incoming addresses are only masked in the
+    aligned chunk mode and not the unaligned chunk mode.
+
+Kevin Laatz (11):
+  i40e: simplify Rx buffer recycle
+  ixgbe: simplify Rx buffer recycle
+  xdp: add offset param to zero_copy_allocator
+  i40e: add offset to zca_free
+  ixgbe: add offset to zca_free
+  xsk: add support to allow unaligned chunk placement
+  libbpf: add flags to umem config
+  samples/bpf: add unaligned chunks mode support to xdpsock
+  samples/bpf: add buffer recycling for unaligned chunks to xdpsock
+  samples/bpf: use hugepages in xdpsock app
+  doc/af_xdp: include unaligned chunk case
+
+ Documentation/networking/af_xdp.rst           | 10 +-
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c    | 21 ++--
+ drivers/net/ethernet/intel/i40e/i40e_xsk.h    |  3 +-
+ .../ethernet/intel/ixgbe/ixgbe_txrx_common.h  |  3 +-
+ drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c  | 21 ++--
+ include/net/xdp.h                             |  3 +-
+ include/net/xdp_sock.h                        |  2 +
+ include/uapi/linux/if_xdp.h                   |  4 +
+ net/core/xdp.c                                | 11 ++-
+ net/xdp/xdp_umem.c                            | 17 ++--
+ net/xdp/xsk.c                                 | 60 +++++++++--
+ net/xdp/xsk_queue.h                           | 60 +++++++++--
+ samples/bpf/xdpsock_user.c                    | 99 ++++++++++++++-----
+ tools/include/uapi/linux/if_xdp.h             |  4 +
+ tools/lib/bpf/xsk.c                           |  7 ++
+ tools/lib/bpf/xsk.h                           |  2 +
+ 16 files changed, 241 insertions(+), 86 deletions(-)
+
+-- 
+2.17.1
+
