@@ -2,434 +2,85 @@ Return-Path: <SRS0=j58T=UT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.6 required=3.0 tests=DATE_IN_PAST_06_12,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-0.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6620EC43613
-	for <bpf@archiver.kernel.org>; Thu, 20 Jun 2019 17:25:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E682C43613
+	for <bpf@archiver.kernel.org>; Thu, 20 Jun 2019 22:20:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3EE2B2084A
-	for <bpf@archiver.kernel.org>; Thu, 20 Jun 2019 17:25:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5F4962070B
+	for <bpf@archiver.kernel.org>; Thu, 20 Jun 2019 22:20:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726866AbfFTRYt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Jun 2019 13:24:49 -0400
-Received: from mga12.intel.com ([192.55.52.136]:64663 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732501AbfFTRYs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Jun 2019 13:24:48 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Jun 2019 10:24:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,397,1557212400"; 
-   d="scan'208";a="359020365"
-Received: from silpixa00399838.ir.intel.com (HELO silpixa00399838.ger.corp.intel.com) ([10.237.223.110])
-  by fmsmga006.fm.intel.com with ESMTP; 20 Jun 2019 10:24:45 -0700
-From:   Kevin Laatz <kevin.laatz@intel.com>
-To:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        bjorn.topel@intel.com, magnus.karlsson@intel.com
-Cc:     bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        bruce.richardson@intel.com, ciara.loftus@intel.com,
-        Kevin Laatz <kevin.laatz@intel.com>
-Subject: [PATCH 06/11] xsk: add support to allow unaligned chunk placement
-Date:   Thu, 20 Jun 2019 09:09:53 +0000
-Message-Id: <20190620090958.2135-7-kevin.laatz@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190620090958.2135-1-kevin.laatz@intel.com>
-References: <20190620090958.2135-1-kevin.laatz@intel.com>
+        id S1726147AbfFTWUz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Jun 2019 18:20:55 -0400
+Received: from mail-wm1-f48.google.com ([209.85.128.48]:40489 "EHLO
+        mail-wm1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726115AbfFTWUz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Jun 2019 18:20:55 -0400
+Received: by mail-wm1-f48.google.com with SMTP id v19so4616546wmj.5;
+        Thu, 20 Jun 2019 15:20:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BOTfc6xkfy+nNPUxl8bRZyQtwbGj0bqWA6aMY4K9+Xw=;
+        b=Nf8TGbn6OVR9OJQqaA6T/0PXzq2RPCPkn1fva+MA7oxnSx+KTmRTXl8d5kzPdi8a+B
+         XZuzniMHYPndxcJcmk/gcXmboiD32wuLr3B3jmZUN2q8gRje38CZ/Gt1aiqYpRGymPc4
+         IEnWHEXo0srkWR04AinMct6y3q07fOEiEAku765lbvrAObIkBYZKjFNOo2jcvrXSYs5O
+         +BQTS9wUMPAmJxslf+QfaBorqEYgQ+0YRN2w4HYz6DdyHHsdHH/TQXItdJ6O3ElcCwDJ
+         xgj7Fa/WlqS9iJwv4fgF39gMvy9v44BWXKg4wzReoKhyI36xuJfghyb+LMASe6Dz6icc
+         ZqfA==
+X-Gm-Message-State: APjAAAVKw3EJoEVlSik8zdO5CMzyXqRzOFd07peL2z2dRJ7AVglfV51w
+        AQljRcAKWwr9m2CT0C0wply0H5meRHzqkJ1o2gqxkQ==
+X-Google-Smtp-Source: APXvYqytc7FGhIZ6v3mBOczs3HALl8ai/g2Gp77r/f6kV/1CIAj6C5Rr99Y6H0inh2JQhiHJSN0Ctef0UavM0E8p7h0=
+X-Received: by 2002:a1c:3b02:: with SMTP id i2mr998424wma.23.1561069252885;
+ Thu, 20 Jun 2019 15:20:52 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190618130050.8344-1-jakub@cloudflare.com> <20190618135258.spo6c457h6dfknt2@breakpoint.cc>
+ <87sgs6ey43.fsf@cloudflare.com>
+In-Reply-To: <87sgs6ey43.fsf@cloudflare.com>
+From:   Joe Stringer <joe@wand.net.nz>
+Date:   Thu, 20 Jun 2019 15:20:41 -0700
+Message-ID: <CAOftzPj6NWyWnz4JL-mXBaQUKAvQDtKJTrjZmrN4W5rqoy-W0A@mail.gmail.com>
+Subject: Re: [RFC bpf-next 0/7] Programming socket lookup with BPF
+To:     Jakub Sitnicki <jakub@cloudflare.com>
+Cc:     Florian Westphal <fw@strlen.de>, netdev <netdev@vger.kernel.org>,
+        bpf@vger.kernel.org, kernel-team@cloudflare.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, addresses are chunk size aligned. This means, we are very
-restricted in terms of where we can place chunk within the umem. For
-example, if we have a chunk size of 2k, then our chunks can only be placed
-at 0,2k,4k,6k,8k... and so on (ie. every 2k starting from 0).
+On Wed, Jun 19, 2019 at 2:14 AM Jakub Sitnicki <jakub@cloudflare.com> wrote:
+>
+> Hey Florian,
+>
+> Thanks for taking a look at it.
+>
+> On Tue, Jun 18, 2019 at 03:52 PM CEST, Florian Westphal wrote:
+> > Jakub Sitnicki <jakub@cloudflare.com> wrote:
+> >>  - XDP programs using bpf_sk_lookup helpers, like load balancers, can't
+> >>    find the listening socket to check for SYN cookies with TPROXY redirect.
+> >
+> > Sorry for the question, but where is the problem?
+> > (i.e., is it with TPROXY or bpf side)?
+>
+> The way I see it is that the problem is that we have mappings for
+> steering traffic into sockets split between two places: (1) the socket
+> lookup tables, and (2) the TPROXY rules.
+>
+> BPF programs that need to check if there is a socket the packet is
+> destined for have access to the socket lookup tables, via the mentioned
+> bpf_sk_lookup helper, but are unaware of TPROXY redirects.
+>
+> For TCP we're able to look up from BPF if there are any established,
+> request, and "normal" listening sockets. The listening sockets that
+> receive connections via TPROXY are invisible to BPF progs.
+>
+> Why are we interested in finding all listening sockets? To check if any
+> of them had SYN queue overflow recently and if we should honor SYN
+> cookies.
 
-This patch introduces the ability to use unaligned chunks. With these
-changes, we are no longer bound to having to place chunks at a 2k (or
-whatever your chunk size is) interval. Since we are no longer dealing with
-aligned chunks, they can now cross page boundaries. Checks for page
-contiguity have been added in order to keep track of which pages are
-followed by a physically contiguous page.
-
-Signed-off-by: Kevin Laatz <kevin.laatz@intel.com>
-Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
----
- include/net/xdp_sock.h      |  2 ++
- include/uapi/linux/if_xdp.h |  4 +++
- net/xdp/xdp_umem.c          | 17 +++++++----
- net/xdp/xsk.c               | 60 ++++++++++++++++++++++++++++++++-----
- net/xdp/xsk_queue.h         | 60 ++++++++++++++++++++++++++++++++-----
- 5 files changed, 121 insertions(+), 22 deletions(-)
-
-diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
-index ae0f368a62bb..c07977e271c4 100644
---- a/include/net/xdp_sock.h
-+++ b/include/net/xdp_sock.h
-@@ -19,6 +19,7 @@ struct xsk_queue;
- struct xdp_umem_page {
- 	void *addr;
- 	dma_addr_t dma;
-+	bool next_pg_contig;
- };
- 
- struct xdp_umem_fq_reuse {
-@@ -48,6 +49,7 @@ struct xdp_umem {
- 	bool zc;
- 	spinlock_t xsk_list_lock;
- 	struct list_head xsk_list;
-+	u32 flags;
- };
- 
- struct xdp_sock {
-diff --git a/include/uapi/linux/if_xdp.h b/include/uapi/linux/if_xdp.h
-index caed8b1614ff..8548f2110a77 100644
---- a/include/uapi/linux/if_xdp.h
-+++ b/include/uapi/linux/if_xdp.h
-@@ -17,6 +17,9 @@
- #define XDP_COPY	(1 << 1) /* Force copy-mode */
- #define XDP_ZEROCOPY	(1 << 2) /* Force zero-copy mode */
- 
-+/* Flags for xsk_umem_config flags */
-+#define XDP_UMEM_UNALIGNED_CHUNKS (1 << 0)
-+
- struct sockaddr_xdp {
- 	__u16 sxdp_family;
- 	__u16 sxdp_flags;
-@@ -52,6 +55,7 @@ struct xdp_umem_reg {
- 	__u64 len; /* Length of packet data area */
- 	__u32 chunk_size;
- 	__u32 headroom;
-+	__u32 flags;
- };
- 
- struct xdp_statistics {
-diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
-index 2b18223e7eb8..4d4782572855 100644
---- a/net/xdp/xdp_umem.c
-+++ b/net/xdp/xdp_umem.c
-@@ -301,12 +301,14 @@ static int xdp_umem_account_pages(struct xdp_umem *umem)
- 
- static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
- {
-+	bool unaligned_chunks = mr->flags & XDP_UMEM_UNALIGNED_CHUNKS;
- 	u32 chunk_size = mr->chunk_size, headroom = mr->headroom;
- 	unsigned int chunks, chunks_per_page;
- 	u64 addr = mr->addr, size = mr->len;
- 	int size_chk, err, i;
- 
--	if (chunk_size < XDP_UMEM_MIN_CHUNK_SIZE || chunk_size > PAGE_SIZE) {
-+	if ((!unaligned_chunks && chunk_size < XDP_UMEM_MIN_CHUNK_SIZE) ||
-+			chunk_size > PAGE_SIZE) {
- 		/* Strictly speaking we could support this, if:
- 		 * - huge pages, or*
- 		 * - using an IOMMU, or
-@@ -316,7 +318,7 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
- 		return -EINVAL;
- 	}
- 
--	if (!is_power_of_2(chunk_size))
-+	if (!unaligned_chunks && !is_power_of_2(chunk_size))
- 		return -EINVAL;
- 
- 	if (!PAGE_ALIGNED(addr)) {
-@@ -333,9 +335,11 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
- 	if (chunks == 0)
- 		return -EINVAL;
- 
--	chunks_per_page = PAGE_SIZE / chunk_size;
--	if (chunks < chunks_per_page || chunks % chunks_per_page)
--		return -EINVAL;
-+	if (!unaligned_chunks) {
-+		chunks_per_page = PAGE_SIZE / chunk_size;
-+		if (chunks < chunks_per_page || chunks % chunks_per_page)
-+			return -EINVAL;
-+	}
- 
- 	headroom = ALIGN(headroom, 64);
- 
-@@ -344,13 +348,14 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
- 		return -EINVAL;
- 
- 	umem->address = (unsigned long)addr;
--	umem->chunk_mask = ~((u64)chunk_size - 1);
-+	umem->chunk_mask = unaligned_chunks ? U64_MAX : ~((u64)chunk_size - 1);
- 	umem->size = size;
- 	umem->headroom = headroom;
- 	umem->chunk_size_nohr = chunk_size - headroom;
- 	umem->npgs = size / PAGE_SIZE;
- 	umem->pgs = NULL;
- 	umem->user = NULL;
-+	umem->flags = mr->flags;
- 	INIT_LIST_HEAD(&umem->xsk_list);
- 	spin_lock_init(&umem->xsk_list_lock);
- 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index a14e8864e4fa..dfae19942b70 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -39,7 +39,7 @@ bool xsk_is_setup_for_bpf_map(struct xdp_sock *xs)
- 
- u64 *xsk_umem_peek_addr(struct xdp_umem *umem, u64 *addr)
- {
--	return xskq_peek_addr(umem->fq, addr);
-+	return xskq_peek_addr(umem->fq, addr, umem);
- }
- EXPORT_SYMBOL(xsk_umem_peek_addr);
- 
-@@ -49,14 +49,36 @@ void xsk_umem_discard_addr(struct xdp_umem *umem)
- }
- EXPORT_SYMBOL(xsk_umem_discard_addr);
- 
-+/* If a buffer crosses a page boundary, we need to do 2 memcpy's, one for
-+ * each page. This is only required in copy mode.
-+ */
-+static void __xsk_rcv_memcpy(struct xdp_umem *umem, u64 addr, void *from_buf,
-+		u32 len, u32 metalen)
-+{
-+	void *to_buf = xdp_umem_get_data(umem, addr);
-+
-+	if (xskq_crosses_non_contig_pg(umem, addr)) {
-+		void *next_pg_addr = umem->pages[(addr >> PAGE_SHIFT)+1].addr;
-+		u64 page_start = addr & (PAGE_SIZE-1);
-+		u64 first_len = PAGE_SIZE - (addr - page_start);
-+
-+		memcpy(to_buf, from_buf, first_len + metalen);
-+		memcpy(next_pg_addr, from_buf + first_len, len - first_len);
-+
-+		return;
-+	}
-+
-+	memcpy(to_buf, from_buf, len + metalen);
-+}
-+
- static int __xsk_rcv(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
- {
--	void *to_buf, *from_buf;
-+	void *from_buf;
- 	u32 metalen;
- 	u64 addr;
- 	int err;
- 
--	if (!xskq_peek_addr(xs->umem->fq, &addr) ||
-+	if (!xskq_peek_addr(xs->umem->fq, &addr, xs->umem) ||
- 	    len > xs->umem->chunk_size_nohr - XDP_PACKET_HEADROOM) {
- 		xs->rx_dropped++;
- 		return -ENOSPC;
-@@ -72,8 +94,8 @@ static int __xsk_rcv(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
- 		metalen = xdp->data - xdp->data_meta;
- 	}
- 
--	to_buf = xdp_umem_get_data(xs->umem, addr);
--	memcpy(to_buf, from_buf, len + metalen);
-+	__xsk_rcv_memcpy(xs->umem, addr, from_buf, len, metalen);
-+
- 	addr += metalen;
- 	err = xskq_produce_batch_desc(xs->rx, addr, len);
- 	if (!err) {
-@@ -126,7 +148,7 @@ int xsk_generic_rcv(struct xdp_sock *xs, struct xdp_buff *xdp)
- 	if (xs->dev != xdp->rxq->dev || xs->queue_id != xdp->rxq->queue_index)
- 		return -EINVAL;
- 
--	if (!xskq_peek_addr(xs->umem->fq, &addr) ||
-+	if (!xskq_peek_addr(xs->umem->fq, &addr, xs->umem) ||
- 	    len > xs->umem->chunk_size_nohr - XDP_PACKET_HEADROOM) {
- 		xs->rx_dropped++;
- 		return -ENOSPC;
-@@ -173,7 +195,7 @@ bool xsk_umem_consume_tx(struct xdp_umem *umem, dma_addr_t *dma, u32 *len)
- 
- 	rcu_read_lock();
- 	list_for_each_entry_rcu(xs, &umem->xsk_list, list) {
--		if (!xskq_peek_desc(xs->tx, &desc))
-+		if (!xskq_peek_desc(xs->tx, &desc, umem))
- 			continue;
- 
- 		if (xskq_produce_addr_lazy(umem->cq, desc.addr))
-@@ -226,7 +248,7 @@ static int xsk_generic_xmit(struct sock *sk, struct msghdr *m,
- 
- 	mutex_lock(&xs->mutex);
- 
--	while (xskq_peek_desc(xs->tx, &desc)) {
-+	while (xskq_peek_desc(xs->tx, &desc, xs->umem)) {
- 		char *buffer;
- 		u64 addr;
- 		u32 len;
-@@ -393,6 +415,26 @@ static struct socket *xsk_lookup_xsk_from_fd(int fd)
- 	return sock;
- }
- 
-+/* Check if umem pages are contiguous.
-+ * If zero-copy mode, use the DMA address to do the page contiguity check
-+ * For all other modes we use addr (kernel virtual address)
-+ */
-+static void xsk_check_page_contiguity(struct xdp_umem *umem, u32 flags)
-+{
-+	int i;
-+
-+	if (flags & XDP_ZEROCOPY) {
-+		for (i = 0; i < umem->npgs-1; i++)
-+			umem->pages[i].next_pg_contig =
-+					(umem->pages[i].dma + PAGE_SIZE == umem->pages[i+1].dma);
-+		return;
-+	}
-+
-+	for (i = 0; i < umem->npgs-1; i++)
-+		umem->pages[i].next_pg_contig =
-+				(umem->pages[i].addr + PAGE_SIZE == umem->pages[i+1].addr);
-+}
-+
- static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
- {
- 	struct sockaddr_xdp *sxdp = (struct sockaddr_xdp *)addr;
-@@ -480,6 +522,8 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
- 		err = xdp_umem_assign_dev(xs->umem, dev, qid, flags);
- 		if (err)
- 			goto out_unlock;
-+
-+		xsk_check_page_contiguity(xs->umem, flags);
- 	}
- 
- 	xs->dev = dev;
-diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
-index 88b9ae24658d..c2676a1df938 100644
---- a/net/xdp/xsk_queue.h
-+++ b/net/xdp/xsk_queue.h
-@@ -119,6 +119,14 @@ static inline u32 xskq_nb_free(struct xsk_queue *q, u32 producer, u32 dcnt)
- 
- /* UMEM queue */
- 
-+static inline bool xskq_crosses_non_contig_pg(struct xdp_umem *umem, u64 addr)
-+{
-+	bool cross_pg = (addr & (PAGE_SIZE-1)) + umem->chunk_size_nohr > PAGE_SIZE;
-+	bool next_pg_contig = umem->pages[(addr >> PAGE_SHIFT)+1].next_pg_contig;
-+
-+	return cross_pg && !next_pg_contig;
-+}
-+
- static inline bool xskq_is_valid_addr(struct xsk_queue *q, u64 addr)
- {
- 	if (addr >= q->size) {
-@@ -129,23 +137,44 @@ static inline bool xskq_is_valid_addr(struct xsk_queue *q, u64 addr)
- 	return true;
- }
- 
--static inline u64 *xskq_validate_addr(struct xsk_queue *q, u64 *addr)
-+static inline bool xskq_is_valid_addr_unaligned(struct xsk_queue *q, u64 addr,
-+		struct xdp_umem *umem)
-+{
-+	if (addr >= q->size ||
-+			xskq_crosses_non_contig_pg(umem, addr)) {
-+		q->invalid_descs++;
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
-+static inline u64 *xskq_validate_addr(struct xsk_queue *q, u64 *addr,
-+		struct xdp_umem *umem)
- {
- 	while (q->cons_tail != q->cons_head) {
- 		struct xdp_umem_ring *ring = (struct xdp_umem_ring *)q->ring;
- 		unsigned int idx = q->cons_tail & q->ring_mask;
- 
- 		*addr = READ_ONCE(ring->desc[idx]) & q->chunk_mask;
-+		if (umem->flags & XDP_UMEM_UNALIGNED_CHUNKS) {
-+			if (xskq_is_valid_addr_unaligned(q, *addr, umem))
-+				return addr;
-+			goto out;
-+		}
-+
- 		if (xskq_is_valid_addr(q, *addr))
- 			return addr;
- 
-+out:
- 		q->cons_tail++;
- 	}
- 
- 	return NULL;
- }
- 
--static inline u64 *xskq_peek_addr(struct xsk_queue *q, u64 *addr)
-+static inline u64 *xskq_peek_addr(struct xsk_queue *q, u64 *addr,
-+		struct xdp_umem *umem)
- {
- 	if (q->cons_tail == q->cons_head) {
- 		smp_mb(); /* D, matches A */
-@@ -156,7 +185,7 @@ static inline u64 *xskq_peek_addr(struct xsk_queue *q, u64 *addr)
- 		smp_rmb();
- 	}
- 
--	return xskq_validate_addr(q, addr);
-+	return xskq_validate_addr(q, addr, umem);
- }
- 
- static inline void xskq_discard_addr(struct xsk_queue *q)
-@@ -215,8 +244,21 @@ static inline int xskq_reserve_addr(struct xsk_queue *q)
- 
- /* Rx/Tx queue */
- 
--static inline bool xskq_is_valid_desc(struct xsk_queue *q, struct xdp_desc *d)
-+static inline bool xskq_is_valid_desc(struct xsk_queue *q, struct xdp_desc *d,
-+						   struct xdp_umem *umem)
- {
-+	if (umem->flags & XDP_UMEM_UNALIGNED_CHUNKS) {
-+		if (!xskq_is_valid_addr_unaligned(q, d->addr, umem))
-+			return false;
-+
-+		if ((d->len > umem->chunk_size_nohr) || d->options) {
-+			q->invalid_descs++;
-+			return false;
-+		}
-+
-+		return true;
-+	}
-+
- 	if (!xskq_is_valid_addr(q, d->addr))
- 		return false;
- 
-@@ -230,14 +272,15 @@ static inline bool xskq_is_valid_desc(struct xsk_queue *q, struct xdp_desc *d)
- }
- 
- static inline struct xdp_desc *xskq_validate_desc(struct xsk_queue *q,
--						  struct xdp_desc *desc)
-+						  struct xdp_desc *desc,
-+						  struct xdp_umem *umem)
- {
- 	while (q->cons_tail != q->cons_head) {
- 		struct xdp_rxtx_ring *ring = (struct xdp_rxtx_ring *)q->ring;
- 		unsigned int idx = q->cons_tail & q->ring_mask;
- 
- 		*desc = READ_ONCE(ring->desc[idx]);
--		if (xskq_is_valid_desc(q, desc))
-+		if (xskq_is_valid_desc(q, desc, umem))
- 			return desc;
- 
- 		q->cons_tail++;
-@@ -247,7 +290,8 @@ static inline struct xdp_desc *xskq_validate_desc(struct xsk_queue *q,
- }
- 
- static inline struct xdp_desc *xskq_peek_desc(struct xsk_queue *q,
--					      struct xdp_desc *desc)
-+					      struct xdp_desc *desc,
-+					      struct xdp_umem *umem)
- {
- 	if (q->cons_tail == q->cons_head) {
- 		smp_mb(); /* D, matches A */
-@@ -258,7 +302,7 @@ static inline struct xdp_desc *xskq_peek_desc(struct xsk_queue *q,
- 		smp_rmb(); /* C, matches B */
- 	}
- 
--	return xskq_validate_desc(q, desc);
-+	return xskq_validate_desc(q, desc, umem);
- }
- 
- static inline void xskq_discard_desc(struct xsk_queue *q)
--- 
-2.17.1
-
+Why are they invisible? Can't you look them up with bpf_skc_lookup_tcp()?
