@@ -5,41 +5,41 @@ X-Spam-Level:
 X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C761C4646C
-	for <bpf@archiver.kernel.org>; Fri, 21 Jun 2019 04:56:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC7CAC48BE0
+	for <bpf@archiver.kernel.org>; Fri, 21 Jun 2019 04:56:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 558332089E
-	for <bpf@archiver.kernel.org>; Fri, 21 Jun 2019 04:56:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BBC632089E
+	for <bpf@archiver.kernel.org>; Fri, 21 Jun 2019 04:56:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="idQIeSi0"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="W5pBODCq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726174AbfFUE4N (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Jun 2019 00:56:13 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:17762 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725856AbfFUE4N (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 21 Jun 2019 00:56:13 -0400
-Received: from pps.filterd (m0044008.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5L4nMse016004
-        for <bpf@vger.kernel.org>; Thu, 20 Jun 2019 21:56:12 -0700
+        id S1725948AbfFUE4P (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Jun 2019 00:56:15 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:17796 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726188AbfFUE4P (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 21 Jun 2019 00:56:15 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5L4qb84016706
+        for <bpf@vger.kernel.org>; Thu, 20 Jun 2019 21:56:13 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=YZvFyESYAXst7BQTIiE2XnqvXDiVTuZeoI0DKsF38n8=;
- b=idQIeSi0fTYclT20c2FJjh4VbzcL7PSj+GdMyVX8hgpUzkfGulYkC5ayt1JnkAJXVOBI
- AzjeHEHdeM23msc/Y36M+sFC9HArackjjw5A2grWUuQLHoZ3kl9crxRi9RIDlkgXFHVh
- 9hdc1s8GbhJqVZ1h/De1ydeftpnB1ADukXQ= 
+ content-type; s=facebook; bh=VHdO0b1GZYlmk2/d2TyKVlnXGoi5GD3bSaLchuZmPtE=;
+ b=W5pBODCqwKmCeyQ/CKQSAB5KKUwQsDFDcFdu9N55AsYL20FhbxLTTW/HRDk86fHFVpBa
+ p57kpOMEbRXBnluQzig+9jWjD8H1+F78638yzgCrHMt98UB9tVhWH4IfLpomhKNz33sX
+ RhVHlZByGzTxqOGs06NaQ2yFIw+pMI5sfMg= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2t8f1n1ws6-2
+        by mx0a-00082601.pphosted.com with ESMTP id 2t8ewt1wp7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 20 Jun 2019 21:56:12 -0700
+        for <bpf@vger.kernel.org>; Thu, 20 Jun 2019 21:56:13 -0700
 Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 20 Jun 2019 21:56:10 -0700
+ 15.1.1713.5; Thu, 20 Jun 2019 21:56:12 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 28CFE861776; Thu, 20 Jun 2019 21:56:04 -0700 (PDT)
+        id 45F15861776; Thu, 20 Jun 2019 21:56:10 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,9 +48,9 @@ To:     <andrii.nakryiko@gmail.com>, <ast@fb.com>, <daniel@iogearbox.net>,
         <kernel-team@fb.com>
 CC:     Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v2 bpf-next 3/7] libbpf: add kprobe/uprobe attach API
-Date:   Thu, 20 Jun 2019 21:55:51 -0700
-Message-ID: <20190621045555.4152743-4-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 6/7] selftests/bpf: add kprobe/uprobe selftests
+Date:   Thu, 20 Jun 2019 21:55:54 -0700
+Message-ID: <20190621045555.4152743-7-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190621045555.4152743-1-andriin@fb.com>
 References: <20190621045555.4152743-1-andriin@fb.com>
@@ -70,267 +70,235 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add ability to attach to kernel and user probes and retprobes.
-Implementation depends on perf event support for kprobes/uprobes.
+Add tests verifying kprobe/kretprobe/uprobe/uretprobe APIs work as
+expected.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/libbpf.c   | 207 +++++++++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf.h   |   8 ++
- tools/lib/bpf/libbpf.map |   2 +
- 3 files changed, 217 insertions(+)
+ .../selftests/bpf/prog_tests/attach_probe.c   | 151 ++++++++++++++++++
+ .../selftests/bpf/progs/test_attach_probe.c   |  55 +++++++
+ 2 files changed, 206 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/attach_probe.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_attach_probe.c
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 2bb1fa008be3..d506772df350 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -3969,6 +3969,213 @@ int bpf_program__attach_perf_event(struct bpf_program *prog, int pfd)
- 	return 0;
- }
- 
-+static int parse_uint(const char *buf)
-+{
-+	int ret;
+diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+new file mode 100644
+index 000000000000..5cc7e674a513
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+@@ -0,0 +1,151 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
 +
-+	errno = 0;
-+	ret = (int)strtol(buf, NULL, 10);
-+	if (errno) {
-+		ret = -errno;
-+		pr_debug("failed to parse '%s' as unsigned int\n", buf);
-+		return ret;
-+	}
-+	if (ret < 0) {
-+		pr_debug("failed to parse '%s' as unsigned int\n", buf);
-+		return -EINVAL;
-+	}
-+	return ret;
-+}
++ssize_t get_base_addr() {
++	size_t start;
++	char buf[256];
++	FILE *f;
 +
-+static int parse_uint_from_file(const char* file)
-+{
-+	char buf[STRERR_BUFSIZE];
-+	int fd, ret;
++	f = fopen("/proc/self/maps", "r");
++	if (!f)
++		return -errno;
 +
-+	fd = open(file, O_RDONLY);
-+	if (fd < 0) {
-+		ret = -errno;
-+		pr_debug("failed to open '%s': %s\n", file,
-+			 libbpf_strerror_r(ret, buf, sizeof(buf)));
-+		return ret;
-+	}
-+	ret = read(fd, buf, sizeof(buf));
-+	ret = ret < 0 ? -errno : ret;
-+	close(fd);
-+	if (ret < 0) {
-+		pr_debug("failed to read '%s': %s\n", file,
-+			libbpf_strerror_r(ret, buf, sizeof(buf)));
-+		return ret;
-+	}
-+	if (ret == 0 || ret >= sizeof(buf)) {
-+		buf[sizeof(buf) - 1] = 0;
-+		pr_debug("unexpected input from '%s': '%s'\n", file, buf);
-+		return -EINVAL;
-+	}
-+	return parse_uint(buf);
-+}
-+
-+static int determine_kprobe_perf_type(void)
-+{
-+	const char *file = "/sys/bus/event_source/devices/kprobe/type";
-+	return parse_uint_from_file(file);
-+}
-+
-+static int determine_uprobe_perf_type(void)
-+{
-+	const char *file = "/sys/bus/event_source/devices/uprobe/type";
-+	return parse_uint_from_file(file);
-+}
-+
-+static int parse_config_from_file(const char *file)
-+{
-+	char buf[STRERR_BUFSIZE];
-+	int fd, ret;
-+
-+	fd = open(file, O_RDONLY);
-+	if (fd < 0) {
-+		ret = -errno;
-+		pr_debug("failed to open '%s': %s\n", file,
-+			 libbpf_strerror_r(ret, buf, sizeof(buf)));
-+		return ret;
-+	}
-+	ret = read(fd, buf, sizeof(buf));
-+	ret = ret < 0 ? -errno : ret;
-+	close(fd);
-+	if (ret < 0) {
-+		pr_debug("failed to read '%s': %s\n", file,
-+			libbpf_strerror_r(ret, buf, sizeof(buf)));
-+		return ret;
-+	}
-+	if (ret == 0 || ret >= sizeof(buf)) {
-+		buf[sizeof(buf) - 1] = 0;
-+		pr_debug("unexpected input from '%s': '%s'\n", file, buf);
-+		return -EINVAL;
-+	}
-+	if (strncmp(buf, "config:", 7)) {
-+		pr_debug("expected 'config:' prefix, found '%s'\n", buf);
-+		return -EINVAL;
-+	}
-+	return parse_uint(buf + 7);
-+}
-+
-+static int determine_kprobe_retprobe_bit(void)
-+{
-+	const char *file = "/sys/bus/event_source/devices/kprobe/format/retprobe";
-+	return parse_config_from_file(file);
-+}
-+
-+static int determine_uprobe_retprobe_bit(void)
-+{
-+	const char *file = "/sys/bus/event_source/devices/uprobe/format/retprobe";
-+	return parse_config_from_file(file);
-+}
-+
-+static int perf_event_open_probe(bool uprobe, bool retprobe, const char* name,
-+				 uint64_t offset, int pid)
-+{
-+	struct perf_event_attr attr = {};
-+	char errmsg[STRERR_BUFSIZE];
-+	int type, pfd, err;
-+
-+	type = uprobe ? determine_uprobe_perf_type()
-+		      : determine_kprobe_perf_type();
-+	if (type < 0) {
-+		pr_warning("failed to determine %s perf type: %s\n",
-+			   uprobe ? "uprobe" : "kprobe",
-+			   libbpf_strerror_r(type, errmsg, sizeof(errmsg)));
-+		return type;
-+	}
-+	if (retprobe) {
-+		int bit = uprobe ? determine_uprobe_retprobe_bit()
-+				 : determine_kprobe_retprobe_bit();
-+
-+		if (bit < 0) {
-+			pr_warning("failed to determine %s retprobe bit: %s\n",
-+				   uprobe ? "uprobe" : "kprobe",
-+				   libbpf_strerror_r(bit, errmsg,
-+						     sizeof(errmsg)));
-+			return bit;
++	while (fscanf(f, "%zx-%*x %s %*s\n", &start, buf) == 2) {
++		if (strcmp(buf, "r-xp") == 0) {
++			fclose(f);
++			return start;
 +		}
-+		attr.config |= 1 << bit;
 +	}
-+	attr.size = sizeof(attr);
-+	attr.type = type;
-+	attr.config1 = (uint64_t)(void *)name; /* kprobe_func or uprobe_path */
-+	attr.config2 = offset;		       /* kprobe_addr or probe_offset */
 +
-+	/* pid filter is meaningful only for uprobes */
-+	pfd = syscall(__NR_perf_event_open, &attr,
-+		      pid < 0 ? -1 : pid /* pid */,
-+		      pid == -1 ? 0 : -1 /* cpu */,
-+		      -1 /* group_fd */, PERF_FLAG_FD_CLOEXEC);
-+	if (pfd < 0) {
-+		err = -errno;
-+		pr_warning("%s perf_event_open() failed: %s\n",
-+			   uprobe ? "uprobe" : "kprobe",
-+			   libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
-+		return err;
-+	}
-+	return pfd;
++	fclose(f);
++	return -EINVAL;
 +}
 +
-+int bpf_program__attach_kprobe(struct bpf_program *prog, bool retprobe,
-+			       const char *func_name)
++void test_attach_probe(void)
 +{
-+	char errmsg[STRERR_BUFSIZE];
-+	int pfd, err;
++	const char *kprobe_name = "kprobe/sys_nanosleep";
++	const char *kretprobe_name = "kretprobe/sys_nanosleep";
++	const char *uprobe_name = "uprobe/trigger_func";
++	const char *uretprobe_name = "uretprobe/trigger_func";
++	const int kprobe_idx = 0, kretprobe_idx = 1;
++	const int uprobe_idx = 2, uretprobe_idx = 3;
++	const char *file = "./test_attach_probe.o";
++	struct bpf_program *kprobe_prog, *kretprobe_prog;
++	struct bpf_program *uprobe_prog, *uretprobe_prog;
++	struct bpf_object *obj;
++	int err, prog_fd, duration = 0, res;
++	int kprobe_pfd = -1, kretprobe_pfd = -1;
++	int uprobe_pfd = -1, uretprobe_pfd = -1;
++	int results_map_fd;
++	size_t uprobe_offset;
++	ssize_t base_addr;
 +
-+	pfd = perf_event_open_probe(false /* uprobe */, retprobe, func_name,
-+				    0 /* offset */, -1 /* pid */);
-+	if (pfd < 0) {
-+		pr_warning("program '%s': failed to create %s '%s' perf event: %s\n",
-+			   bpf_program__title(prog, false),
-+			   retprobe ? "kretprobe" : "kprobe", func_name,
-+			   libbpf_strerror_r(pfd, errmsg, sizeof(errmsg)));
-+		return pfd;
-+	}
-+	err = bpf_program__attach_perf_event(prog, pfd);
-+	if (err) {
-+		libbpf_perf_event_disable_and_close(pfd);
-+		pr_warning("program '%s': failed to attach to %s '%s': %s\n",
-+			   bpf_program__title(prog, false),
-+			   retprobe ? "kretprobe" : "kprobe", func_name,
-+			   libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
-+		return err;
-+	}
-+	return pfd;
++	base_addr = get_base_addr();
++	if (CHECK(base_addr < 0, "get_base_addr",
++		  "failed to find base addr: %zd", base_addr))
++		return;
++	uprobe_offset = (size_t)&get_base_addr - base_addr;
++
++	/* load programs */
++	err = bpf_prog_load(file, BPF_PROG_TYPE_KPROBE, &obj, &prog_fd);
++	if (CHECK(err, "obj_load", "err %d errno %d\n", err, errno))
++		return;
++
++	kprobe_prog = bpf_object__find_program_by_title(obj, kprobe_name);
++	if (CHECK(!kprobe_prog, "find_probe",
++		  "prog '%s' not found\n", kprobe_name))
++		goto cleanup;
++	kretprobe_prog = bpf_object__find_program_by_title(obj, kretprobe_name);
++	if (CHECK(!kretprobe_prog, "find_probe",
++		  "prog '%s' not found\n", kretprobe_name))
++		goto cleanup;
++	uprobe_prog = bpf_object__find_program_by_title(obj, uprobe_name);
++	if (CHECK(!uprobe_prog, "find_probe",
++		  "prog '%s' not found\n", uprobe_name))
++		goto cleanup;
++	uretprobe_prog = bpf_object__find_program_by_title(obj, uretprobe_name);
++	if (CHECK(!uretprobe_prog, "find_probe",
++		  "prog '%s' not found\n", uretprobe_name))
++		goto cleanup;
++
++	/* load maps */
++	results_map_fd = bpf_find_map(__func__, obj, "results_map");
++	if (CHECK(results_map_fd < 0, "find_results_map",
++		  "err %d\n", results_map_fd))
++		goto cleanup;
++
++	kprobe_pfd = bpf_program__attach_kprobe(kprobe_prog,
++						false /* retprobe */,
++						"sys_nanosleep");
++	if (CHECK(kprobe_pfd < 0, "attach_kprobe", "err %d\n", kprobe_pfd))
++		goto cleanup;
++
++	kretprobe_pfd = bpf_program__attach_kprobe(kretprobe_prog,
++						   true /* retprobe */,
++						   "sys_nanosleep");
++	if (CHECK(kretprobe_pfd < 0, "attach_kretprobe",
++		  "err %d\n", kretprobe_pfd))
++		goto cleanup;
++
++	uprobe_pfd = bpf_program__attach_uprobe(uprobe_prog,
++						false /* retprobe */,
++						0 /* self pid */,
++						"/proc/self/exe",
++						uprobe_offset);
++	if (CHECK(uprobe_pfd < 0, "attach_uprobe", "err %d\n", uprobe_pfd))
++		goto cleanup;
++
++	uretprobe_pfd = bpf_program__attach_uprobe(uretprobe_prog,
++						   true /* retprobe */,
++						   -1 /* any pid */,
++						   "/proc/self/exe",
++						   uprobe_offset);
++	if (CHECK(uretprobe_pfd < 0, "attach_uretprobe",
++		  "err %d\n", uretprobe_pfd))
++		goto cleanup;
++
++	/* trigger & validate kprobe && kretprobe */
++	usleep(1);
++
++	err = bpf_map_lookup_elem(results_map_fd, &kprobe_idx, &res);
++	if (CHECK(err, "get_kprobe_res",
++		  "failed to get kprobe res: %d\n", err))
++		goto cleanup;
++	if (CHECK(res != kprobe_idx + 1, "check_kprobe_res",
++		  "wrong kprobe res: %d\n", res))
++		goto cleanup;
++
++	err = bpf_map_lookup_elem(results_map_fd, &kretprobe_idx, &res);
++	if (CHECK(err, "get_kretprobe_res",
++		  "failed to get kretprobe res: %d\n", err))
++		goto cleanup;
++	if (CHECK(res != kretprobe_idx + 1, "check_kretprobe_res",
++		  "wrong kretprobe res: %d\n", res))
++		goto cleanup;
++
++	/* trigger & validate uprobe & uretprobe */
++	get_base_addr();
++
++	err = bpf_map_lookup_elem(results_map_fd, &uprobe_idx, &res);
++	if (CHECK(err, "get_uprobe_res",
++		  "failed to get uprobe res: %d\n", err))
++		goto cleanup;
++	if (CHECK(res != uprobe_idx + 1, "check_uprobe_res",
++		  "wrong uprobe res: %d\n", res))
++		goto cleanup;
++
++	err = bpf_map_lookup_elem(results_map_fd, &uretprobe_idx, &res);
++	if (CHECK(err, "get_uretprobe_res",
++		  "failed to get uretprobe res: %d\n", err))
++		goto cleanup;
++	if (CHECK(res != uretprobe_idx + 1, "check_uretprobe_res",
++		  "wrong uretprobe res: %d\n", res))
++		goto cleanup;
++
++cleanup:
++	libbpf_perf_event_disable_and_close(kprobe_pfd);
++	libbpf_perf_event_disable_and_close(kretprobe_pfd);
++	libbpf_perf_event_disable_and_close(uprobe_pfd);
++	libbpf_perf_event_disable_and_close(uretprobe_pfd);
++	bpf_object__close(obj);
 +}
+diff --git a/tools/testing/selftests/bpf/progs/test_attach_probe.c b/tools/testing/selftests/bpf/progs/test_attach_probe.c
+new file mode 100644
+index 000000000000..7a7c5cd728c8
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_attach_probe.c
+@@ -0,0 +1,55 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2017 Facebook
 +
-+int bpf_program__attach_uprobe(struct bpf_program *prog, bool retprobe,
-+			       pid_t pid, const char *binary_path,
-+			       size_t func_offset)
++#include <linux/ptrace.h>
++#include <linux/bpf.h>
++#include "bpf_helpers.h"
++
++struct {
++	int type;
++	int max_entries;
++	int *key;
++	int *value;
++} results_map SEC(".maps") = {
++	.type = BPF_MAP_TYPE_ARRAY,
++	.max_entries = 4,
++};
++
++SEC("kprobe/sys_nanosleep")
++int handle_sys_nanosleep_entry(struct pt_regs *ctx)
 +{
-+	char errmsg[STRERR_BUFSIZE];
-+	int pfd, err;
++	const int key = 0, value = 1;
 +
-+	pfd = perf_event_open_probe(true /* uprobe */, retprobe,
-+				    binary_path, func_offset, pid);
-+	if (pfd < 0) {
-+		pr_warning("program '%s': failed to create %s '%s:0x%zx' perf event: %s\n",
-+			   bpf_program__title(prog, false),
-+			   retprobe ? "uretprobe" : "uprobe",
-+			   binary_path, func_offset,
-+			   libbpf_strerror_r(pfd, errmsg, sizeof(errmsg)));
-+		return pfd;
-+	}
-+	err = bpf_program__attach_perf_event(prog, pfd);
-+	if (err) {
-+		libbpf_perf_event_disable_and_close(pfd);
-+		pr_warning("program '%s': failed to attach to %s '%s:0x%zx': %s\n",
-+			   bpf_program__title(prog, false),
-+			   retprobe ? "uretprobe" : "uprobe",
-+			   binary_path, func_offset,
-+			   libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
-+		return err;
-+	}
-+	return pfd;
++	bpf_map_update_elem(&results_map, &key, &value, 0);
++	return 0;
 +}
 +
- enum bpf_perf_event_ret
- bpf_perf_event_read_simple(void *mmap_mem, size_t mmap_size, size_t page_size,
- 			   void **copy_mem, size_t *copy_size,
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 76db1bbc0dac..a7264f06aa5f 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -168,6 +168,14 @@ LIBBPF_API void bpf_program__unload(struct bpf_program *prog);
- LIBBPF_API int libbpf_perf_event_disable_and_close(int pfd);
- LIBBPF_API int bpf_program__attach_perf_event(struct bpf_program *prog,
- 					      int pfd);
-+LIBBPF_API int bpf_program__attach_kprobe(struct bpf_program *prog,
-+					  bool retprobe,
-+					  const char *func_name);
-+LIBBPF_API int bpf_program__attach_uprobe(struct bpf_program *prog,
-+					  bool retprobe,
-+					  pid_t pid,
-+					  const char *binary_path,
-+					  size_t func_offset);
- 
- struct bpf_insn;
- 
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index d27406982b5a..1a982c2e1751 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -172,7 +172,9 @@ LIBBPF_0.0.4 {
- 		btf_dump__new;
- 		btf__parse_elf;
- 		bpf_object__load_xattr;
-+		bpf_program__attach_kprobe;
- 		bpf_program__attach_perf_event;
-+		bpf_program__attach_uprobe;
- 		libbpf_num_possible_cpus;
- 		libbpf_perf_event_disable_and_close;
- } LIBBPF_0.0.3;
++SEC("kretprobe/sys_nanosleep")
++int handle_sys_getpid_return(struct pt_regs *ctx)
++{
++	const int key = 1, value = 2;
++
++	bpf_map_update_elem(&results_map, &key, &value, 0);
++	return 0;
++}
++
++SEC("uprobe/trigger_func")
++int handle_uprobe_entry(struct pt_regs *ctx)
++{
++	const int key = 2, value = 3;
++
++	bpf_map_update_elem(&results_map, &key, &value, 0);
++	return 0;
++}
++
++SEC("uretprobe/trigger_func")
++int handle_uprobe_return(struct pt_regs *ctx)
++{
++	const int key = 3, value = 4;
++
++	bpf_map_update_elem(&results_map, &key, &value, 0);
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
++__u32 _version SEC("version") = 1;
 -- 
 2.17.1
 
