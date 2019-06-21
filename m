@@ -2,171 +2,89 @@ Return-Path: <SRS0=QPem=UU=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2204C43613
-	for <bpf@archiver.kernel.org>; Fri, 21 Jun 2019 19:52:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C593C43613
+	for <bpf@archiver.kernel.org>; Fri, 21 Jun 2019 20:55:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7A7E52075E
-	for <bpf@archiver.kernel.org>; Fri, 21 Jun 2019 19:52:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 156CB2089E
+	for <bpf@archiver.kernel.org>; Fri, 21 Jun 2019 20:55:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=dev-mellanox-co-il.20150623.gappssmtp.com header.i=@dev-mellanox-co-il.20150623.gappssmtp.com header.b="FxvgRGty"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=regit.org} header.i=@regit.org} header.b="Txk+ppO4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726114AbfFUTwR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Jun 2019 15:52:17 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:37389 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726137AbfFUTwR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 21 Jun 2019 15:52:17 -0400
-Received: by mail-lj1-f193.google.com with SMTP id 131so7000920ljf.4
-        for <bpf@vger.kernel.org>; Fri, 21 Jun 2019 12:52:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dev-mellanox-co-il.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=EPSJqa3r1kdyeW63tEDVfee+BtIlOEavn4pUB+slDmE=;
-        b=FxvgRGtyu1GHn+LoCk6L7b9S6nnVEJp3In9a+9NdlESKonBgQGNXxtTcLCDGNZqg6F
-         DCqMNHj428Wv/9sYXFn2CchLvY/+N1Y/9qz7UP9fBQY6qN8pi3407yWqxxE1sm/g0+us
-         45iFIHBMz3SCku+NxzceHGk5ejHCaad47CGj3etT+fwZVcGjtls2XTrWUcLrIHkuAVUb
-         XwYMzgieQNSogPEkhAh0nBnz+QANVzF2m2YEh0PkZlGsUHR3aFLDE4XuhBP9omb8Ace6
-         NhKHqOegkITJgEPr9lp6fczKnbzepU2dhWH16ai78TcJeVcOOWhs2bqzjp8VbhZOzEQK
-         QRHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=EPSJqa3r1kdyeW63tEDVfee+BtIlOEavn4pUB+slDmE=;
-        b=eGju3VQ0niYC9KXcQPZR88tywc0iQy1xNTdM44pp7zLKHFRDPrZeWLkDcEskSDLAUc
-         g7u6VifQ+gsZM00HRnumNjDEIdsFRRYtPXoWaRWr60MYxmyNiMbCEHod5zLrgTdCaNxV
-         Cd8LJ/w4iQEDhXdb4pFDNmW5yjwwThNXV8l7fzipA5x0z5CUx62f55h/haY72WJRjOhR
-         aC4yAzilloE0VLYIBnTSQJrlPy3IzrWaDQzU+SHeyxrfd+fjaYsw/El5HKkMi3845PXC
-         9/biOSD49u4YmsfXcBb9cyYS2cRTDZAUHrVxMFwncLzR9UltFILitQpKNrOjFXMlRoEx
-         psGg==
-X-Gm-Message-State: APjAAAXQv+s/i0+Pyew1LhljNuuGUXtmtbRsHXg4uaqx8CKuTTuLiuNx
-        w+GlcwZVqN8CupkOgG8qraxYjN2++RLpxXYbQ0FbCA==
-X-Google-Smtp-Source: APXvYqwmgr6JVDpHjL3J2y/q0YsZxYtmOKk21hZ72BiolF78wfaNNrNM5R1VurDkz55ydTUUelxfcrPrq9vhsyfWjCU=
-X-Received: by 2002:a2e:8007:: with SMTP id j7mr28448543ljg.191.1561146734869;
- Fri, 21 Jun 2019 12:52:14 -0700 (PDT)
+        id S1726018AbfFUUzM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Jun 2019 16:55:12 -0400
+Received: from home.regit.org ([37.187.126.138]:38348 "EHLO home.regit.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725985AbfFUUzM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 21 Jun 2019 16:55:12 -0400
+X-Greylist: delayed 2500 seconds by postgrey-1.27 at vger.kernel.org; Fri, 21 Jun 2019 16:55:12 EDT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=regit.org};
+         s=home; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:
+        To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=C9uzwKrfHDr8Db0GIiZYGqrcD2DgBTe3zpleN7Nb+Jk=; b=Txk+ppO4h76i60ylzHCOIoMgD3
+        qmZXxkufxllww+I47v/jHyffTfyvZAbZAQ0rOxTt4y56sMEFdBfINymv0tHgRjEAKZBYIPYrZqZYF
+        Mw2uSvlr0hjG6JX8hLRQy2zlF;
+Received: from [2a01:e34:ee97:b130:1a31:bfff:feb2:f9d5] (helo=localhost.localdomain)
+        by home.regit.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <eric@regit.org>)
+        id 1hePua-0001Q1-QM; Fri, 21 Jun 2019 22:13:31 +0200
+From:   Eric Leblond <eric@regit.org>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     Eric Leblond <eric@regit.org>
+Subject: [PATCH] xsk: sample kernel code is now in libbpf
+Date:   Fri, 21 Jun 2019 22:13:10 +0200
+Message-Id: <20190621201310.12791-1-eric@regit.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20190618120024.16788-1-maximmi@mellanox.com> <CAJ+HfNia-vUv7Eumfs8aMYGGkxPbbUQ++F+BQ=9C1NtP0Jt3hA@mail.gmail.com>
-In-Reply-To: <CAJ+HfNia-vUv7Eumfs8aMYGGkxPbbUQ++F+BQ=9C1NtP0Jt3hA@mail.gmail.com>
-From:   Saeed Mahameed <saeedm@dev.mellanox.co.il>
-Date:   Fri, 21 Jun 2019 12:52:03 -0700
-Message-ID: <CALzJLG-eCiYYshkm_op1PqkCmxTmdDdPSGbX7g2JMqTb8QXyJg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 00/16] AF_XDP infrastructure improvements and
- mlx5e support
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Cc:     Maxim Mikityanskiy <maximmi@mellanox.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Saeed Mahameed <saeedm@mellanox.com>,
-        Jonathan Lemon <bsd@fb.com>,
-        Tariq Toukan <tariqt@mellanox.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Maciej Fijalkowski <maciejromanfijalkowski@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jun 20, 2019 at 2:13 AM Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.co=
-m> wrote:
->
-> On Tue, 18 Jun 2019 at 14:00, Maxim Mikityanskiy <maximmi@mellanox.com> w=
-rote:
-> >
-> > This series contains improvements to the AF_XDP kernel infrastructure
-> > and AF_XDP support in mlx5e. The infrastructure improvements are
-> > required for mlx5e, but also some of them benefit to all drivers, and
-> > some can be useful for other drivers that want to implement AF_XDP.
-> >
-> > The performance testing was performed on a machine with the following
-> > configuration:
-> >
-> > - 24 cores of Intel Xeon E5-2620 v3 @ 2.40 GHz
-> > - Mellanox ConnectX-5 Ex with 100 Gbit/s link
-> >
-> > The results with retpoline disabled, single stream:
-> >
-> > txonly: 33.3 Mpps (21.5 Mpps with queue and app pinned to the same CPU)
-> > rxdrop: 12.2 Mpps
-> > l2fwd: 9.4 Mpps
-> >
-> > The results with retpoline enabled, single stream:
-> >
-> > txonly: 21.3 Mpps (14.1 Mpps with queue and app pinned to the same CPU)
-> > rxdrop: 9.9 Mpps
-> > l2fwd: 6.8 Mpps
-> >
-> > v2 changes:
-> >
-> > Added patches for mlx5e and addressed the comments for v1. Rebased for
-> > bpf-next.
-> >
-> > v3 changes:
-> >
-> > Rebased for the newer bpf-next, resolved conflicts in libbpf. Addressed
-> > Bj=C3=B6rn's comments for coding style. Fixed a bug in error handling f=
-low in
-> > mlx5e_open_xsk.
-> >
-> > v4 changes:
-> >
-> > UAPI is not changed, XSK RX queues are exposed to the kernel. The lower
-> > half of the available amount of RX queues are regular queues, and the
-> > upper half are XSK RX queues. The patch "xsk: Extend channels to suppor=
-t
-> > combined XSK/non-XSK traffic" was dropped. The final patch was reworked
-> > accordingly.
-> >
-> > Added "net/mlx5e: Attach/detach XDP program safely", as the changes
-> > introduced in the XSK patch base on the stuff from this one.
-> >
-> > Added "libbpf: Support drivers with non-combined channels", which align=
-s
-> > the condition in libbpf with the condition in the kernel.
-> >
-> > Rebased over the newer bpf-next.
-> >
-> > v5 changes:
-> >
-> > In v4, ethtool reports the number of channels as 'combined' and the
-> > number of XSK RX queues as 'rx' for mlx5e. It was changed, so that 'rx'
-> > is 0, and 'combined' reports the double amount of channels if there is
-> > an active UMEM - to make libbpf happy.
-> >
-> > The patch for libbpf was dropped. Although it's still useful and fixes
-> > things, it raises some disagreement, so I'm dropping it - it's no longe=
-r
-> > useful for mlx5e anymore after the change above.
-> >
->
-> Just a heads-up: There are some checkpatch warnings (>80 chars/line)
+Fix documentation that mention xdpsock_kern.c which has been
+replaced by code embedded in libbpf.
 
-Thanks Bjorn for your comment, in mlx5 we allow up to 95 chars per line,
-otherwise it is going to be an ugly zigzags.
+Signed-off-by: Eric Leblond <eric@regit.org>
+---
+ Documentation/networking/af_xdp.rst | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-> for the mlnx5 driver parts, and the series didn't apply cleanly on
-> bpf-next for me.
->
-> I haven't been able to test the mlnx5 parts.
->
-> Parts of the series are unrelated/orthogonal, and could be submitted
-> as separate series, e.g. patches {1,7} and patches {3,4}. No blockers
-> for me, though.
->
-> Thanks for the hard work!
->
-> For the series:
-> Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
+diff --git a/Documentation/networking/af_xdp.rst b/Documentation/networking/af_xdp.rst
+index e14d7d40fc75..83dddc20f5d6 100644
+--- a/Documentation/networking/af_xdp.rst
++++ b/Documentation/networking/af_xdp.rst
+@@ -220,7 +220,21 @@ Usage
+ In order to use AF_XDP sockets there are two parts needed. The
+ user-space application and the XDP program. For a complete setup and
+ usage example, please refer to the sample application. The user-space
+-side is xdpsock_user.c and the XDP side xdpsock_kern.c.
++side is xdpsock_user.c and the XDP side is part of libbpf.
++
++The XDP code sample included in tools/lib/bpf/xsk.c is the following::
++
++   SEC("xdp_sock") int xdp_sock_prog(struct xdp_md *ctx)
++   {
++       int index = ctx->rx_queue_index;
++
++       // A set entry here means that the correspnding queue_id
++       // has an active AF_XDP socket bound to it.
++       if (bpf_map_lookup_elem(&xsks_map, &index))
++           return bpf_redirect_map(&xsks_map, index, 0);
++
++       return XDP_PASS;
++   }
+ 
+ Naive ring dequeue and enqueue could look like this::
+ 
+-- 
+2.20.1
+
