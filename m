@@ -1,126 +1,86 @@
-Return-Path: <SRS0=FxbL=UV=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=7mvs=UW=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3DCDC48BE5
-	for <bpf@archiver.kernel.org>; Sat, 22 Jun 2019 05:40:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C886C43613
+	for <bpf@archiver.kernel.org>; Sun, 23 Jun 2019 09:47:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B9EEC2070B
-	for <bpf@archiver.kernel.org>; Sat, 22 Jun 2019 05:40:32 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nifty.com header.i=@nifty.com header.b="vfztd4Br"
+	by mail.kernel.org (Postfix) with ESMTP id EFB7820679
+	for <bpf@archiver.kernel.org>; Sun, 23 Jun 2019 09:47:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726054AbfFVFkc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 22 Jun 2019 01:40:32 -0400
-Received: from conssluserg-02.nifty.com ([210.131.2.81]:55098 "EHLO
-        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726049AbfFVFkc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 22 Jun 2019 01:40:32 -0400
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id x5M5eC9L014968;
-        Sat, 22 Jun 2019 14:40:13 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com x5M5eC9L014968
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1561182013;
-        bh=JxBG390b3AdnCwZiQOKsk1HAVj5lXZJFRQcpOMWwHbY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=vfztd4BrukAdjcSvvO2e/ZaIiyZ9mx12XbkLTV+W2nuoyC48frSlNAvAwwbP73Vyr
-         Tn+tVvlKIzCwwccAQjVD1cg72WyVKXSwN1+zOr7lOr0xep66UxomKkozXKaAAqJ+CV
-         SfVa4bLXejWLmgX1RRFqEBQRb5vCW/M+iBtN1UirSWuQ9L3Xh33Fs3k5t2oCFMw6Ld
-         Z7kiY+Xf7S5QA3YRLzTg1M2Ye9HAaaVOTunAB6PxPorlGZDFETkls1kQhr8wgHXtMf
-         YjfN2RgtEjH09lnD0+PgldC7gF8hrf52UOZ7yY1R/DkdUlmXGwi5iBOm4amb4+aKnQ
-         LTT74SXqb15DQ==
-X-Nifty-SrcIP: [209.85.222.54]
-Received: by mail-ua1-f54.google.com with SMTP id v18so3739081uad.12;
-        Fri, 21 Jun 2019 22:40:13 -0700 (PDT)
-X-Gm-Message-State: APjAAAUuZhCGgH9XL0FGqr+jjF6Fh1RUhfsTRGXzsgdXdgTZS4cMprPS
-        afVQByBwbpOU9AaM+w1rJfdhJIl9V7gAVvOKBM4=
-X-Google-Smtp-Source: APXvYqzlKgWISF72/2l3BCTzXtxOrbxlLww7I4OL4+Gvksq0C26omqpvWWFe0eb5vghy8UgM0iBbJXyRxsNhrZQR8a0=
-X-Received: by 2002:ab0:5ea6:: with SMTP id y38mr48367542uag.40.1561182012133;
- Fri, 21 Jun 2019 22:40:12 -0700 (PDT)
+        id S1726485AbfFWJrB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 23 Jun 2019 05:47:01 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:37518 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726414AbfFWJrB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 23 Jun 2019 05:47:01 -0400
+Received: by mail-io1-f70.google.com with SMTP id j18so17804989ioj.4
+        for <bpf@vger.kernel.org>; Sun, 23 Jun 2019 02:47:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=//qCEHHwsKmQKJGq2sElU6h7rWpgyd394JCVN/Ky63Y=;
+        b=PHAb3SgI6ScH+vll/hqZsnEfOWst5tVG05sJ/z4u2G6v8fOGKWXlpN0l7OZGJpNYHw
+         cCemLSkxWeOaxcGGfVAWftG56QVKDSM5Y5/J8//OHKulJpoFKOv/MKePCm8HGI3lQ/LS
+         sLomV811463xcYbLdNkH79yOwd9L+KHkCUhji35XgjsPBqyQtOxCXM0PleaaJ3LUf9bm
+         J8vdPbyx6WJI2Ugi7JfcwufSK/m09aqW7etz1PtQk8T6HxW4+3FSVohiCC2EctDaYfjZ
+         pXvlV4q85rYy8Ktxrj4dnbO/0TFHyIKPHLDqhJFSfnPJn3Ebrfdv+IzyscI7wu0t5HG5
+         8uqQ==
+X-Gm-Message-State: APjAAAUE5DGKOcTbmLRqqBz8HtzX0cfRi3qGek43WQ+qncbfc+G2/Kk/
+        uYRd2RhL5d9VrG6FAlA3lJykuSR8I3a3rH8j2tAS+vTVCfX0
+X-Google-Smtp-Source: APXvYqyGiLQ70dP6eFGnQ63Jed2MzJ0lmOsmDLwDerlbWSICxM7PikGk1Wtt/hUYnDo1CxkwarJk5FqD8R5xYTNQF8/oFlSwbHR+
 MIME-Version: 1.0
-References: <20190604101409.2078-1-yamada.masahiro@socionext.com>
- <20190604101409.2078-16-yamada.masahiro@socionext.com> <CAK8P3a08f25WYP5r57JHPcZWieS2+07=_qTphLosS4M2w8F0Zw@mail.gmail.com>
- <CAK7LNATt8BSrMfrOVjZ_SbA0awsh4CvRhu6TF3gYYynirpviWw@mail.gmail.com>
-In-Reply-To: <CAK7LNATt8BSrMfrOVjZ_SbA0awsh4CvRhu6TF3gYYynirpviWw@mail.gmail.com>
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Sat, 22 Jun 2019 14:39:35 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATi1kX_j9-7CoT24hohgTCQB1dSc9j8DNdmjnmEg1-kRg@mail.gmail.com>
-Message-ID: <CAK7LNATi1kX_j9-7CoT24hohgTCQB1dSc9j8DNdmjnmEg1-kRg@mail.gmail.com>
-Subject: Re: [PATCH 15/15] kbuild: compile test UAPI headers to ensure they
- are self-contained
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        David Howells <dhowells@redhat.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Song Liu <songliubraving@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Networking <netdev@vger.kernel.org>, Yonghong Song <yhs@fb.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv@lists.infradead.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Palmer Dabbelt <palmer@sifive.com>, bpf@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Received: by 2002:a6b:6a01:: with SMTP id x1mr26057928iog.77.1561283220587;
+ Sun, 23 Jun 2019 02:47:00 -0700 (PDT)
+Date:   Sun, 23 Jun 2019 02:47:00 -0700
+In-Reply-To: <00000000000090ae7a058bc12946@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c1cb06058bfa9371@google.com>
+Subject: Re: WARNING in debug_check_no_obj_freed
+From:   syzbot <syzbot+b972214bb803a343f4fe@syzkaller.appspotmail.com>
+To:     alexander.h.duyck@intel.com, amritha.nambiar@intel.com,
+        andriy.shevchenko@linux.intel.com, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        dmitry.torokhov@gmail.com, f.fainelli@gmail.com,
+        idosch@mellanox.com, jeffrey.t.kirsher@intel.com,
+        jiri@mellanox.com, kafai@fb.com, kgraul@linux.ibm.com,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, tyhicks@canonical.com,
+        ubraun@linux.ibm.com, wanghai26@huawei.com, yhs@fb.com,
+        yuehaibing@huawei.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Jun 22, 2019 at 2:12 PM Masahiro Yamada
-<yamada.masahiro@socionext.com> wrote:
->
-> On Sat, Jun 22, 2019 at 4:05 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Tue, Jun 4, 2019 at 12:16 PM Masahiro Yamada
-> > <yamada.masahiro@socionext.com> wrote:
-> >
-> > > --- a/Makefile
-> > > +++ b/Makefile
-> > > @@ -1363,7 +1363,7 @@ CLEAN_DIRS  +=3D $(MODVERDIR) include/ksym
-> > >  CLEAN_FILES +=3D modules.builtin.modinfo
-> > >
-> > >  # Directories & files removed with 'make mrproper'
-> > > -MRPROPER_DIRS  +=3D include/config usr/include include/generated    =
-      \
-> > > +MRPROPER_DIRS  +=3D include/config include/generated          \
-> > >                   arch/$(SRCARCH)/include/generated .tmp_objdiff
-> > >  MRPROPER_FILES +=3D .config .config.old .version \
-> > >                   Module.symvers tags TAGS cscope* GPATH GTAGS GRTAGS=
- GSYMS \
-> >
-> > This change seems to have caused a minor regression:
-> >
-> > $ make clean ; make clean
-> > find: =E2=80=98*=E2=80=99: No such file or directory
->
-> Hmm, I cannot reproduce this.
->
-> I checked the latest linux-next.
->
->
-> masahiro@grover:~/ref/linux-next$ git describe
-> next-20190621
-> masahiro@grover:~/ref/linux-next$ make clean; make clean
-> masahiro@grover:~/ref/linux-next$
->
->
+syzbot has bisected this bug to:
 
-Ah, now I was able to reproduce it.
+commit 99182beed858a1bde22f60046602b9b223225f73
+Author: Daniel Borkmann <daniel@iogearbox.net>
+Date:   Tue Apr 2 21:17:19 2019 +0000
 
-Will fix it soon. Thanks.
+     Merge branch 'bpf-selftest-clang-fixes'
 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12faf81aa00000
+start commit:   bed3c0d8 Merge tag 'for-5.2-rc5-tag' of git://git.kernel.o..
+git tree:       upstream
+final crash:    https://syzkaller.appspot.com/x/report.txt?x=11faf81aa00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=16faf81aa00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=28ec3437a5394ee0
+dashboard link: https://syzkaller.appspot.com/bug?extid=b972214bb803a343f4fe
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12fcf0b2a00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17a22ad6a00000
 
+Reported-by: syzbot+b972214bb803a343f4fe@syzkaller.appspotmail.com
+Fixes: 99182beed858 ("Merge branch 'bpf-selftest-clang-fixes'")
 
---=20
-Best Regards
-Masahiro Yamada
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
