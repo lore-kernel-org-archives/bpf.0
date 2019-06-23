@@ -2,47 +2,66 @@ Return-Path: <SRS0=7mvs=UW=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_MUTT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36764C43613
-	for <bpf@archiver.kernel.org>; Sun, 23 Jun 2019 15:24:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C61A2C4646B
+	for <bpf@archiver.kernel.org>; Sun, 23 Jun 2019 19:13:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0BCB0208C3
-	for <bpf@archiver.kernel.org>; Sun, 23 Jun 2019 15:24:27 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="qaLFmSnM"
+	by mail.kernel.org (Postfix) with ESMTP id 9E1D220656
+	for <bpf@archiver.kernel.org>; Sun, 23 Jun 2019 19:13:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1561317181;
+	bh=AsxupFvBvqb1mH3XUIHGLPhSXMlhWmiYztuijWSq/GQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=uAkVk5QQiMSWAJLx42qOU5awjKUwJIPrMnhdRZ0XfcCBVk5uUtOCB/iHmC7XbOpon
+	 vOVwS0Lp4sGYWF0XqgeySe0IZS3s8RE6DXDuZwxBOq22yEPn7ASviMSPuo3+igRUrQ
+	 F5M/SykY30qABCtPNDPbKqRk+fwvCNV0khvG2/eE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726697AbfFWPYV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 23 Jun 2019 11:24:21 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:50638 "EHLO vps0.lunn.ch"
+        id S1726289AbfFWTMw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 23 Jun 2019 15:12:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57584 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726399AbfFWPYV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 23 Jun 2019 11:24:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=tO9c/rs97W0ia9zMhQ+rkqpEZpffIjpr7pWLTraofSE=; b=qaLFmSnMQl4sPp1o2z/HXGCzah
-        gMwwcsQXCYPlG6KtqEJ2hGiujAEeoKTqb98ksLJhFsHhnSDfRILIc+zxWu0H7DSDIuWGK71T6hTOU
-        14HFECNi1bjjVp3jlL82mzgEJBIVQFKM1uMHnP/u93T3aVmFe6tYIfHVKB48U4sWi+G8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
-        (envelope-from <andrew@lunn.ch>)
-        id 1hf4Kt-00088y-5x; Sun, 23 Jun 2019 17:23:19 +0200
-Date:   Sun, 23 Jun 2019 17:23:19 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
+        id S1726119AbfFWTMw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 23 Jun 2019 15:12:52 -0400
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E215B215EA;
+        Sun, 23 Jun 2019 19:12:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1561317171;
+        bh=AsxupFvBvqb1mH3XUIHGLPhSXMlhWmiYztuijWSq/GQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=uJbKaQIyzSWaWU00fx8r+BgyZH9qH3M1R9/GjS5amJxhq2/wMRfKlESl/AGt7ycXB
+         ha0lnIyzb/RrBbLBKIida0P9PPS0bf0gRIpgT8FKt2U21oHebm129KzlVwMeLB3caD
+         MszeI+AS46K1WmuMqEvYmziFe5DO20u0Zy+g9YF0=
+Received: by mail-lj1-f181.google.com with SMTP id 205so1667253ljj.8;
+        Sun, 23 Jun 2019 12:12:50 -0700 (PDT)
+X-Gm-Message-State: APjAAAVyih0uk2fF1U3ZGyOS4oqfIBKd5qK5QkrdweGrbLxmIV0Tl+Uj
+        faEJqYQYpRG+Xa1RhqE1inUDwF+9U5igdawMqbA=
+X-Google-Smtp-Source: APXvYqzc0BAAUk0GcaZ6RKalll+UsB43Pr/w/hhGJmdfj5xhmoT71i8jk/2UViGqeh/ujennhK/FVzPhSD/yw16ZWlw=
+X-Received: by 2002:a2e:8155:: with SMTP id t21mr26819194ljg.80.1561317169025;
+ Sun, 23 Jun 2019 12:12:49 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190623151313.970-1-tranmanphong@gmail.com> <20190623151313.970-5-tranmanphong@gmail.com>
+In-Reply-To: <20190623151313.970-5-tranmanphong@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Sun, 23 Jun 2019 21:12:37 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPfCrgS_iJAK0cxm0-XyGt6P2vq1FH4v2_8LSbfUp8gwUw@mail.gmail.com>
+Message-ID: <CAJKOXPfCrgS_iJAK0cxm0-XyGt6P2vq1FH4v2_8LSbfUp8gwUw@mail.gmail.com>
+Subject: Re: [PATCH 04/15] ARM: exynos: cleanup cppcheck shifting error
 To:     Phong Tran <tranmanphong@gmail.com>
 Cc:     mark.rutland@arm.com, kstewart@linuxfoundation.org,
-        songliubraving@fb.com, peterz@infradead.org, nsekhar@ti.com,
-        ast@kernel.org, jolsa@redhat.com, netdev@vger.kernel.org,
-        gerg@uclinux.org, lorenzo.pieralisi@arm.com, will@kernel.org,
-        linux-samsung-soc@vger.kernel.org, daniel@iogearbox.net,
+        songliubraving@fb.com, andrew@lunn.ch, peterz@infradead.org,
+        nsekhar@ti.com, ast@kernel.org, jolsa@redhat.com,
+        netdev@vger.kernel.org, gerg@uclinux.org,
+        lorenzo.pieralisi@arm.com, will@kernel.org,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>, daniel@iogearbox.net,
         festevam@gmail.com, gregory.clement@bootlin.com,
-        allison@lohutok.net, linux@armlinux.org.uk, krzk@kernel.org,
+        allison@lohutok.net, linux@armlinux.org.uk,
         haojian.zhuang@gmail.com, bgolaszewski@baylibre.com,
         tony@atomide.com, mingo@redhat.com, linux-imx@nxp.com, yhs@fb.com,
         sebastian.hesselbarth@gmail.com, illusionist.neo@gmail.com,
@@ -56,30 +75,24 @@ Cc:     mark.rutland@arm.com, kstewart@linuxfoundation.org,
         hsweeten@visionengravers.com, kgene@kernel.org,
         kernel@pengutronix.de, sudeep.holla@arm.com, bpf@vger.kernel.org,
         shawnguo@kernel.org, kafai@fb.com, daniel@zonque.org
-Subject: Re: [PATCH 10/15] ARM: orion5x: cleanup cppcheck shifting errors
-Message-ID: <20190623152319.GD28942@lunn.ch>
-References: <20190623151313.970-1-tranmanphong@gmail.com>
- <20190623151313.970-11-tranmanphong@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190623151313.970-11-tranmanphong@gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, Jun 23, 2019 at 10:13:08PM +0700, Phong Tran wrote:
-> [arch/arm/mach-orion5x/pci.c:281]: (error) Shifting signed 32-bit value
-> by 31 bits is undefined behaviour
-> [arch/arm/mach-orion5x/pci.c:305]: (error) Shifting signed 32-bit value
-> by 31 bits is undefined behaviour
-> 
+On Sun, 23 Jun 2019 at 17:14, Phong Tran <tranmanphong@gmail.com> wrote:
+>
+> [arch/arm/mach-exynos/suspend.c:288]: (error) Shifting signed 32-bit
+> value by 31 bits is undefined behaviour
+>
 > Signed-off-by: Phong Tran <tranmanphong@gmail.com>
+> ---
+>  arch/arm/mach-exynos/suspend.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Maybe using the BIT() macro would be better, but this is O.K.
+Let's switch to BIT macro. It will solve the problem and is preferred
+way of coding.
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-
-    Andrew
+Best regards,
+Krzysztof
