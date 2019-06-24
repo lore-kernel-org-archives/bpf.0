@@ -2,129 +2,66 @@ Return-Path: <SRS0=kBJA=UX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C761C43613
-	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 13:54:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2F07C43613
+	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 13:54:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 40FBB20820
-	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 13:54:04 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UXviz1FY"
+	by mail.kernel.org (Postfix) with ESMTP id A31D320820
+	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 13:54:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728812AbfFXNyE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Jun 2019 09:54:04 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:39396 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727140AbfFXNyD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Jun 2019 09:54:03 -0400
-Received: by mail-pg1-f196.google.com with SMTP id 196so7165424pgc.6;
-        Mon, 24 Jun 2019 06:54:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=zQjmLUgEgoPYdrEskiQd4eI/hvTCG1dio5TGPGs8EvU=;
-        b=UXviz1FYWv8LN1KB9XAPp5ETo+uB/IhP6eA5IhifyHK/8l+NW03wtZF7RX4PrIXsHx
-         dp8ULP35iE7bckUFcqETJi1pxJxGwde4NNtkPv9J6pmTKcJq7Lq0/QzBWaMH1cXxjmK1
-         VVk1vfcf54VSZJz1ijVnEwQQnYomeeJ/gRPYU++4kuF8C0B6Nb+AptRraMhGsMGuCC5U
-         kk+PG4vkVCWPqKSKvkJklXXFevySyZbuyoWMaKpu8ZKML1tybp8WFKgDuOugpXza09O2
-         ax9D28gHNmZ/4fR2gzO9BDBcY1gTo9oJJpt57uo+9h4sUyRp87sAjnYObb8pGDxn37MI
-         sroA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=zQjmLUgEgoPYdrEskiQd4eI/hvTCG1dio5TGPGs8EvU=;
-        b=jV3wuEbYwB1DE2z+wkofAR+sE0v6SaTjUYNwiL+qz2dbXJy4X+xxYhdymSLj0IktXw
-         4JA3wZPbxet8l3TT0EkcIzYIslpBWX5FaD1iyHkGzrwH0ZvsqT6EkHT6VtOJOp2vCq08
-         PK0JrlFmYKVvVwQb48Hjlf65iwAeqpjCIhFtWDzMRC1sTr6/1AbWEq0yXJPzMzEj0SPs
-         I3et15C1Sxo47d+vbeBCSm6J7j/T+1gKsHM+Ur7gaAov5PQ4d4ZkyMRxLAmBekpZztUD
-         M2Wb+RGuJey5l+ncgNFMe/L+c+J1hGTn03+6La2YX+Qjmy8JS7xkscoOSaNLkDoqGplv
-         WOrQ==
-X-Gm-Message-State: APjAAAVlFUfIAHBVw1SQ/LFzbh930oHDWIxx+OpHLC0JpXYzhiPkAtDV
-        ytYBHaHQqt25fhUnAWul09s=
-X-Google-Smtp-Source: APXvYqwsnArH+danaJWoE22SfrR+t5xwX6bWxe/Zdpf+y6WnyhMXlbKolknDOiUoSOzrR5fKf1OJdw==
-X-Received: by 2002:a17:90a:cb12:: with SMTP id z18mr23838087pjt.82.1561384442876;
-        Mon, 24 Jun 2019 06:54:02 -0700 (PDT)
-Received: from debian.net.fpt ([58.187.168.105])
-        by smtp.gmail.com with ESMTPSA id 85sm11187901pgb.52.2019.06.24.06.53.52
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 24 Jun 2019 06:54:02 -0700 (PDT)
-From:   Phong Tran <tranmanphong@gmail.com>
-To:     tranmanphong@gmail.com
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        alexander.sverdlin@gmail.com, allison@lohutok.net, andrew@lunn.ch,
-        ast@kernel.org, bgolaszewski@baylibre.com, bpf@vger.kernel.org,
-        daniel@iogearbox.net, daniel@zonque.org, dmg@turingmachine.org,
-        festevam@gmail.com, gerg@uclinux.org, gregkh@linuxfoundation.org,
-        gregory.clement@bootlin.com, haojian.zhuang@gmail.com,
-        hsweeten@visionengravers.com, illusionist.neo@gmail.com,
-        info@metux.net, jason@lakedaemon.net, jolsa@redhat.com,
-        kafai@fb.com, kernel@pengutronix.de, kgene@kernel.org,
-        krzk@kernel.org, kstewart@linuxfoundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux@armlinux.org.uk,
-        liviu.dudau@arm.com, lkundrak@v3.sk, lorenzo.pieralisi@arm.com,
-        mark.rutland@arm.com, mingo@redhat.com, namhyung@kernel.org,
-        netdev@vger.kernel.org, nsekhar@ti.com, peterz@infradead.org,
-        robert.jarzmik@free.fr, s.hauer@pengutronix.de,
-        sebastian.hesselbarth@gmail.com, shawnguo@kernel.org,
-        songliubraving@fb.com, sudeep.holla@arm.com, swinslow@gmail.com,
-        tglx@linutronix.de, tony@atomide.com, will@kernel.org, yhs@fb.com
-Subject: [PATCH V2 15/15] ARM: vfp: cleanup cppcheck shifting errors
-Date:   Mon, 24 Jun 2019 20:51:05 +0700
-Message-Id: <20190624135105.15579-16-tranmanphong@gmail.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190624135105.15579-1-tranmanphong@gmail.com>
-References: <20190623151313.970-1-tranmanphong@gmail.com>
- <20190624135105.15579-1-tranmanphong@gmail.com>
+        id S1728879AbfFXNyl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Jun 2019 09:54:41 -0400
+Received: from www62.your-server.de ([213.133.104.62]:44296 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726716AbfFXNyl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Jun 2019 09:54:41 -0400
+Received: from [78.46.172.3] (helo=sslproxy06.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hfPQX-0008Hw-Ia; Mon, 24 Jun 2019 15:54:33 +0200
+Received: from [178.199.41.31] (helo=linux.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hfPQX-0009Lp-Am; Mon, 24 Jun 2019 15:54:33 +0200
+Subject: Re: [PATCH bpf] bpf: fix NULL deref in
+ btf_type_is_resolve_source_only
+To:     Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     davem@davemloft.net, ast@kernel.org,
+        syzbot <syzkaller@googlegroups.com>
+References: <20190619190105.261533-1-sdf@google.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <1a45e1c2-a9b9-e53c-d723-5aaacfe1cf80@iogearbox.net>
+Date:   Mon, 24 Jun 2019 15:54:32 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.3.0
+MIME-Version: 1.0
+In-Reply-To: <20190619190105.261533-1-sdf@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.3/25490/Mon Jun 24 10:02:14 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-[arch/arm/vfp/vfpdouble.c:397]: (error) Shifting signed 32-bit value by
-31 bits is undefined behaviour
-[arch/arm/vfp/vfpdouble.c:407]: (error) Shifting signed 32-bit value by
-31 bits is undefined behaviour
-[arch/arm/vfp/vfpmodule.c:263]: (error) Shifting signed 32-bit value by
-31 bits is undefined behaviour
-[arch/arm/vfp/vfpmodule.c:264]: (error) Shifting signed 32-bit value by
-31 bits is undefined behaviour
-[arch/arm/vfp/vfpsingle.c:441]: (error) Shifting signed 32-bit value by
-31 bits is undefined behaviour
-[arch/arm/vfp/vfpsingle.c:451]: (error) Shifting signed 32-bit value by
-31 bits is undefined behaviour
+On 06/19/2019 09:01 PM, Stanislav Fomichev wrote:
+> Commit 1dc92851849c ("bpf: kernel side support for BTF Var and DataSec")
+> added invocations of btf_type_is_resolve_source_only before
+> btf_type_nosize_or_null which checks for the NULL pointer.
+> Swap the order of btf_type_nosize_or_null and
+> btf_type_is_resolve_source_only to make sure the do the NULL pointer
+> check first.
+> 
+> Fixes: 1dc92851849c ("bpf: kernel side support for BTF Var and DataSec")
+> Reported-by: syzbot <syzkaller@googlegroups.com>
+> Signed-off-by: Stanislav Fomichev <sdf@google.com>
 
-Signed-off-by: Phong Tran <tranmanphong@gmail.com>
----
- arch/arm/vfp/vfpinstr.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/arch/arm/vfp/vfpinstr.h b/arch/arm/vfp/vfpinstr.h
-index 38dc154e39ff..8951637c58ff 100644
---- a/arch/arm/vfp/vfpinstr.h
-+++ b/arch/arm/vfp/vfpinstr.h
-@@ -57,10 +57,10 @@
- 
- #define vfp_single(inst)	(((inst) & 0x0000f00) == 0xa00)
- 
--#define FPSCR_N	(1 << 31)
--#define FPSCR_Z	(1 << 30)
--#define FPSCR_C (1 << 29)
--#define FPSCR_V	(1 << 28)
-+#define FPSCR_N	BIT(31)
-+#define FPSCR_Z	BIT(30)
-+#define FPSCR_C BIT(29)
-+#define FPSCR_V	BIT(28)
- 
- /*
-  * Since we aren't building with -mfpu=vfp, we need to code
--- 
-2.11.0
-
+Applied, thanks!
