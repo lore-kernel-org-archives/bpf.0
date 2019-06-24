@@ -2,136 +2,63 @@ Return-Path: <SRS0=kBJA=UX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FROM_EXCESS_BASE64,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 911B8C43613
-	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 15:36:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EAB13C43613
+	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 15:37:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 65ED620652
-	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 15:36:35 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DJzHvyiS"
+	by mail.kernel.org (Postfix) with ESMTP id C687A205C9
+	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 15:37:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731056AbfFXPgf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Jun 2019 11:36:35 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:37684 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726263AbfFXPge (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Jun 2019 11:36:34 -0400
-Received: by mail-qt1-f196.google.com with SMTP id y57so14959806qtk.4;
-        Mon, 24 Jun 2019 08:36:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=2fedAY1L1btlfl2SG7dqkjpbIsEJBo2iKLbpPw9GTe0=;
-        b=DJzHvyiSbcQ6CRpXmTjpzIx9uYAQpj5lVFPLxsegvuhGQyCRdl6TKjWM2zXtplk3WP
-         Fkj+9Jqz2ekthKHqTahkaSfuA8J04SORbLkZBNpuBRotxnutKyWMTMhUICa3mUmKW1Jw
-         cwmYSOgbzkSjZxTqL1WY92md5GwcEqcLNf3lSEIG5wWqPeh9wMzEqIiMIEwOxDAhWJk0
-         2ScNOn0aYlmPuj+XfxxCOYEosZeGxoSLAaVMIpohGFbUxeNm/LWrJRjKKw9k/wOVqEl3
-         qPqVkTeDttiJngm7lIM1wDU8UJtDmKWfFhZjhxy52hQVkiB4s1psKwdWd9bPx/6dzb0m
-         bKaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2fedAY1L1btlfl2SG7dqkjpbIsEJBo2iKLbpPw9GTe0=;
-        b=RW0db+DqFWuxnpQWKU6GOERjUdYx1Ytp67tS/vhPe/iqU9gXh7u8Mgate5hxa+1oPi
-         NJtmoEh38kUXlEUm1/uOL9SSaAeKxU8bD3sc+gUwqw+PGTwOI5pQXwJYIrNF9vjRHY1k
-         HIjkNdwW8kwDDz2mLqY3xrrYOXYpiwj/hHTPwadVzvBjtqfXVoDHmRisv4YZmEaQ8asD
-         PkKtyU49b1SZftGULm6rrt7s+2rFxSOalfTwjttyy/w1Hij7HNHUrFCXpy9TAlv4Qj61
-         XM3O9xVtHMSKm4IObuUEW9Qm/KFbiks3kmVAy+R/yLn2VSDxxUxHmPobjRpJLym2Xn0J
-         9fDQ==
-X-Gm-Message-State: APjAAAXUGMWdrSvXyomC2U3aUDoar7pnpdtuWuvM1AXhDpQ6okSIKhYi
-        CoouKLFD6azUckJkZXIkEbnQmN5e6RE93THvbWbB173cRN4=
-X-Google-Smtp-Source: APXvYqzud0u4l0tPcVLp9FP9+zn+iA4HMLTOKUiEi4BNJZaHRZKQcOi8G59OLZHPyhRjvq3u8N9Nr43JjGfISkrKlwM=
-X-Received: by 2002:ac8:2f07:: with SMTP id j7mr118912618qta.359.1561390593748;
- Mon, 24 Jun 2019 08:36:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190620090958.2135-1-kevin.laatz@intel.com> <20190620090958.2135-11-kevin.laatz@intel.com>
-In-Reply-To: <20190620090958.2135-11-kevin.laatz@intel.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Mon, 24 Jun 2019 17:36:22 +0200
-Message-ID: <CAJ+HfNhkXmDJO7nZx2A0Gg9vj7s83iUOtkRtWi=wpi5446_NcQ@mail.gmail.com>
-Subject: Re: [PATCH 10/11] samples/bpf: use hugepages in xdpsock app
-To:     Kevin Laatz <kevin.laatz@intel.com>
-Cc:     Netdev <netdev@vger.kernel.org>,
+        id S1730711AbfFXPhT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Jun 2019 11:37:19 -0400
+Received: from www62.your-server.de ([213.133.104.62]:47362 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729580AbfFXPhT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Jun 2019 11:37:19 -0400
+Received: from [78.46.172.2] (helo=sslproxy05.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hfQRc-00053w-U9; Mon, 24 Jun 2019 16:59:44 +0200
+Received: from [178.199.41.31] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hfQRc-000QfP-Ni; Mon, 24 Jun 2019 16:59:44 +0200
+Subject: Re: [PATCH][next] libbpf: fix spelling mistake "conflictling" ->
+ "conflicting"
+To:     Colin King <colin.king@canonical.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        bpf <bpf@vger.kernel.org>,
-        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-        Bruce Richardson <bruce.richardson@intel.com>,
-        ciara.loftus@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190619162742.985-1-colin.king@canonical.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <fb192b66-9fa9-b1ac-cc11-d621865e83b3@iogearbox.net>
+Date:   Mon, 24 Jun 2019 16:59:43 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.3.0
+MIME-Version: 1.0
+In-Reply-To: <20190619162742.985-1-colin.king@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.3/25490/Mon Jun 24 10:02:14 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 20 Jun 2019 at 19:25, Kevin Laatz <kevin.laatz@intel.com> wrote:
->
-> This patch modifies xdpsock to use mmap instead of posix_memalign. With
-> this change, we can use hugepages when running the application in unalign=
-ed
-> chunks mode. Using hugepages makes it more likely that we have physically
-> contiguous memory, which supports the unaligned chunk mode better.
->
-> Signed-off-by: Kevin Laatz <kevin.laatz@intel.com>
+On 06/19/2019 06:27 PM, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
+> 
+> There are several spelling mistakes in pr_warning messages. Fix these.
+> 
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 
-Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
-
-> ---
->  samples/bpf/xdpsock_user.c | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
->
-> diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
-> index 7b4ce047deb2..8ed63ad68428 100644
-> --- a/samples/bpf/xdpsock_user.c
-> +++ b/samples/bpf/xdpsock_user.c
-> @@ -74,6 +74,7 @@ static int opt_interval =3D 1;
->  static u64 opt_buffer_size =3D XSK_UMEM__DEFAULT_FRAME_SIZE;
->  static u32 opt_umem_flags;
->  static int opt_unaligned_chunks;
-> +static int opt_mmap_flags;
->  static u32 opt_xdp_bind_flags;
->  static __u32 prog_id;
->
-> @@ -438,6 +439,7 @@ static void parse_command_line(int argc, char **argv)
->                 case 'u':
->                         opt_umem_flags |=3D XDP_UMEM_UNALIGNED_CHUNKS;
->                         opt_unaligned_chunks =3D 1;
-> +                       opt_mmap_flags =3D MAP_HUGETLB;
->                         break;
->                 case 'b':
->                         opt_buffer_size =3D atoi(optarg);
-> @@ -707,11 +709,13 @@ int main(int argc, char **argv)
->                 exit(EXIT_FAILURE);
->         }
->
-> -       ret =3D posix_memalign(&bufs, getpagesize(), /* PAGE_SIZE aligned=
- */
-> -                            NUM_FRAMES * opt_buffer_size);
-> -       if (ret)
-> -               exit_with_error(ret);
-> -
-> +       /* Reserve memory for the umem. Use hugepages if unaligned chunk =
-mode */
-> +       bufs =3D mmap(NULL, NUM_FRAMES * opt_buffer_size, PROT_READ|PROT_=
-WRITE,
-> +                       MAP_PRIVATE|MAP_ANONYMOUS|opt_mmap_flags, -1, 0);
-> +       if (bufs =3D=3D MAP_FAILED) {
-> +               printf("ERROR: mmap failed\n");
-> +               exit(EXIT_FAILURE);
-> +       }
->         /* Create sockets... */
->         umem =3D xsk_configure_umem(bufs,
->                                   NUM_FRAMES * opt_buffer_size);
-> --
-> 2.17.1
->
+Applied, thanks!
