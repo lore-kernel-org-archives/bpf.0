@@ -2,87 +2,140 @@ Return-Path: <SRS0=kBJA=UX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B81E4C4646B
-	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 20:58:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18BEAC4646C
+	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 21:20:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9211320674
-	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 20:58:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4222120663
+	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 21:20:03 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lHtoNFJV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731563AbfFXU6R (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Jun 2019 16:58:17 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:46934 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726009AbfFXU6Q (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Jun 2019 16:58:16 -0400
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 729B030917AC;
-        Mon, 24 Jun 2019 20:58:16 +0000 (UTC)
-Received: from redhat.com (ovpn-118-11.phx2.redhat.com [10.3.118.11])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E61465D717;
-        Mon, 24 Jun 2019 20:58:15 +0000 (UTC)
-Received: from fche by redhat.com with local (Exim 4.92)
-        (envelope-from <fche@redhat.com>)
-        id 1hfW2U-0003ow-Ba; Mon, 24 Jun 2019 16:58:10 -0400
-Date:   Mon, 24 Jun 2019 16:58:10 -0400
-From:   "Frank Ch. Eigler" <fche@redhat.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Jessica Yu <jeyu@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, jikos@kernel.org,
-        mbenes@suse.cz, Petr Mladek <pmladek@suse.com>,
+        id S1728106AbfFXVUD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Jun 2019 17:20:03 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:34628 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726331AbfFXVUD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Jun 2019 17:20:03 -0400
+Received: by mail-qt1-f196.google.com with SMTP id m29so16182141qtu.1;
+        Mon, 24 Jun 2019 14:20:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=z1XEkKQQ4kQOXdYffh4+MsjiKPUgBbSin4ZmXxLUT3s=;
+        b=lHtoNFJVgt6ohOEc9mZ37e0yWZ6q+aG1oso8PxEP4JHGPNLt9OxXI5oSkuuw1NaAod
+         ZiraYdV9k7FN+/cDBRA3xUteWQF3m7osu6EYoeOIEb38sIHaGAvZZnHzGiOy2rczC9VR
+         hAkgIqQD3zEhQAJAIbbYKrCA9V0sZ257VYTfVbFzg361IyTXU8DriTfELg18DRexNrEh
+         Zi1M5q5pxqWR4thvfyeFFS3cObURgYyz9B6B7bSFujOB+JQyQFTAXpbPrxpmo/CDl5iY
+         IbvYzmAaYXRxF0w2FFxRXFAkhSyZM7Bi6U2bDAPvCnhZZv7XoasOK/UrQN/daTF+CJWZ
+         ZSew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=z1XEkKQQ4kQOXdYffh4+MsjiKPUgBbSin4ZmXxLUT3s=;
+        b=lgwn+z+VdLhIV/MVgL6G/IQHYCH0DZQvSASBahxOQFej8QX/YTNkP15Ybx6yOVgm7a
+         qM7zg3wrgim0+4RMpKQl/fRCzLj0fiplalnJ4nSRSUO9QsdVH+O+IwqAL7akTqTBXLaP
+         tRcwBGvrRO0eNq9docIYJQZeDLy+ADFUeDLMxzp27xLOQNAwHNcvw5MkND9lOVRhWzMs
+         uewwD2gfFFYsXKPB/iWSij29+6g+kJyxG/TO3n7paRENFRx4TLqxS4dQUhhbXHHEtCNp
+         jqT3Suibx0IV2u9EMDdR6TY8tENGi6ZwqUeUfX2u6hIp1m6Sqc00MPDXvWU6WXi5uLqQ
+         r6og==
+X-Gm-Message-State: APjAAAVsLvaTrTsHK0sE7fIz1MRES3GVIVhsD36gw9YY+NQSaWqbfwA6
+        fvgMK9O2l57yqE9RCbznHsndDxvxjxUFJCZlQVg=
+X-Google-Smtp-Source: APXvYqzh3izkXzhVwgv9YrlZAOs9DZCL9u0QPdeVhlfI2ASrToj3o5v0LVe3JXHLBkKqo0G9cE2w09NJZ9duhvBZ7ZY=
+X-Received: by 2002:a0c:9e02:: with SMTP id p2mr58572748qve.150.1561411201895;
+ Mon, 24 Jun 2019 14:20:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190624162429.16367-1-sdf@google.com> <20190624162429.16367-2-sdf@google.com>
+In-Reply-To: <20190624162429.16367-2-sdf@google.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 24 Jun 2019 14:19:50 -0700
+Message-ID: <CAEf4BzbRi9AGt5gcnFCgJPPp-64TsB37bncBXXg7B_bzGYSVAQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v8 1/9] bpf: implement getsockopt and setsockopt hooks
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Robert Richter <rric@kernel.org>,
-        rostedt <rostedt@goodmis.org>, Ingo Molnar <mingo@redhat.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        paulmck <paulmck@linux.ibm.com>,
-        "Joel Fernandes, Google" <joel@joelfernandes.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        oprofile-list@lists.sf.net, netdev <netdev@vger.kernel.org>,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH 2/3] module: Fix up module_notifier return values.
-Message-ID: <20190624205810.GD26422@redhat.com>
-References: <20190624091843.859714294@infradead.org>
- <20190624092109.805742823@infradead.org>
- <320564860.243.1561384864186.JavaMail.zimbra@efficios.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <320564860.243.1561384864186.JavaMail.zimbra@efficios.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.41]); Mon, 24 Jun 2019 20:58:16 +0000 (UTC)
+        Martin Lau <kafai@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi -
+On Mon, Jun 24, 2019 at 1:11 PM Stanislav Fomichev <sdf@google.com> wrote:
+>
+> Implement new BPF_PROG_TYPE_CGROUP_SOCKOPT program type and
+> BPF_CGROUP_{G,S}ETSOCKOPT cgroup hooks.
+>
+> BPF_CGROUP_SETSOCKOPT get a read-only view of the setsockopt arguments.
+> BPF_CGROUP_GETSOCKOPT can modify the supplied buffer.
+> Both of them reuse existing PTR_TO_PACKET{,_END} infrastructure.
+>
+> The buffer memory is pre-allocated (because I don't think there is
+> a precedent for working with __user memory from bpf). This might be
+> slow to do for each {s,g}etsockopt call, that's why I've added
+> __cgroup_bpf_prog_array_is_empty that exits early if there is nothing
+> attached to a cgroup. Note, however, that there is a race between
+> __cgroup_bpf_prog_array_is_empty and BPF_PROG_RUN_ARRAY where cgroup
+> program layout might have changed; this should not be a problem
+> because in general there is a race between multiple calls to
+> {s,g}etsocktop and user adding/removing bpf progs from a cgroup.
+>
+> The return code of the BPF program is handled as follows:
+> * 0: EPERM
+> * 1: success, continue with next BPF program in the cgroup chain
+>
+> v8:
+> * use s32 for optlen (Andrii Nakryiko)
+>
+> v7:
+> * return only 0 or 1 (Alexei Starovoitov)
+> * always run all progs (Alexei Starovoitov)
+> * use optval=0 as kernel bypass in setsockopt (Alexei Starovoitov)
+>   (decided to use optval=-1 instead, optval=0 might be a valid input)
+> * call getsockopt hook after kernel handlers (Alexei Starovoitov)
+>
+> v6:
+> * rework cgroup chaining; stop as soon as bpf program returns
+>   0 or 2; see patch with the documentation for the details
+> * drop Andrii's and Martin's Acked-by (not sure they are comfortable
+>   with the new state of things)
+>
+> v5:
+> * skip copy_to_user() and put_user() when ret == 0 (Martin Lau)
+>
+> v4:
+> * don't export bpf_sk_fullsock helper (Martin Lau)
+> * size != sizeof(__u64) for uapi pointers (Martin Lau)
+> * offsetof instead of bpf_ctx_range when checking ctx access (Martin Lau)
+>
+> v3:
+> * typos in BPF_PROG_CGROUP_SOCKOPT_RUN_ARRAY comments (Andrii Nakryiko)
+> * reverse christmas tree in BPF_PROG_CGROUP_SOCKOPT_RUN_ARRAY (Andrii
+>   Nakryiko)
+> * use __bpf_md_ptr instead of __u32 for optval{,_end} (Martin Lau)
+> * use BPF_FIELD_SIZEOF() for consistency (Martin Lau)
+> * new CG_SOCKOPT_ACCESS macro to wrap repeated parts
+>
+> v2:
+> * moved bpf_sockopt_kern fields around to remove a hole (Martin Lau)
+> * aligned bpf_sockopt_kern->buf to 8 bytes (Martin Lau)
+> * bpf_prog_array_is_empty instead of bpf_prog_array_length (Martin Lau)
+> * added [0,2] return code check to verifier (Martin Lau)
+> * dropped unused buf[64] from the stack (Martin Lau)
+> * use PTR_TO_SOCKET for bpf_sockopt->sk (Martin Lau)
+> * dropped bpf_target_off from ctx rewrites (Martin Lau)
+> * use return code for kernel bypass (Martin Lau & Andrii Nakryiko)
+>
+> Cc: Martin Lau <kafai@fb.com>
+> Signed-off-by: Stanislav Fomichev <sdf@google.com>
+> ---
 
-> > While auditing all module notifiers I noticed a whole bunch of fail
-> > wrt the return value. Notifiers have a 'special' return semantics.
-
-From peterz's comments, the patches, it's not obvious to me how one is
-to choose between 0 (NOTIFY_DONE) and 1 (NOTIFY_OK) in the case of a
-routine success.
-
-> [...]
-> I have a similar erroneous module notifier return value pattern
-> in lttng-modules as well. I'll go fix it right away. CCing
-> Frank Eigler from SystemTAP which AFAIK use a copy of
-> lttng-tracepoint.c in their project, which should be fixed
-> as well. I'm pasting the lttng-modules fix below.
-
-Sure, following suit.  Thanks.
-
-- FChE
+Acked-by: Andrii Nakryiko <andriin@fb.com>
