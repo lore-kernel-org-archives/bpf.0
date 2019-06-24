@@ -2,161 +2,193 @@ Return-Path: <SRS0=kBJA=UX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CAF2C43613
-	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 15:37:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FBABC48BE8
+	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 15:52:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5BD8D204EC
-	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 15:37:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1082620645
+	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 15:52:23 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="nMVpZ6t6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730614AbfFXPhZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Jun 2019 11:37:25 -0400
-Received: from www62.your-server.de ([213.133.104.62]:47396 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729580AbfFXPhX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Jun 2019 11:37:23 -0400
-Received: from [88.198.220.130] (helo=sslproxy01.your-server.de)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1hfQgn-0006VD-11; Mon, 24 Jun 2019 17:15:25 +0200
-Received: from [178.199.41.31] (helo=linux.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1hfQgm-0001i0-IJ; Mon, 24 Jun 2019 17:15:24 +0200
-Subject: Re: [PATCH V34 23/29] bpf: Restrict bpf when kernel lockdown is in
- confidentiality mode
-To:     Matthew Garrett <matthewgarrett@google.com>, jmorris@namei.org
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Matthew Garrett <mjg59@google.com>, netdev@vger.kernel.org,
-        Chun-Yi Lee <jlee@suse.com>, jannh@google.com,
+        id S1730557AbfFXPwR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Jun 2019 11:52:17 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:36501 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729274AbfFXPwR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Jun 2019 11:52:17 -0400
+Received: by mail-qk1-f193.google.com with SMTP id g18so10140774qkl.3
+        for <bpf@vger.kernel.org>; Mon, 24 Jun 2019 08:52:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Px55vsxlWUa+5ZAUavHWxhk2yXQs9ETqoP8b6WxOkms=;
+        b=nMVpZ6t6yvkRI8JTB2fGMerawDsRhL0/iqvwIvHdoVXopMnMqU5PI/pn1syMvLqGms
+         Rw2EcKCOL3MuPgQ97OgUvIP4Ut8lxtGkmBXc55ysvSxoamyi1P4HLcsx39d+QMyY81xQ
+         2PQDgpcf2DGfbHVXO4YLvpkFB0G8WZeBEyQNI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Px55vsxlWUa+5ZAUavHWxhk2yXQs9ETqoP8b6WxOkms=;
+        b=o/cfG6zR+A5h6dpp4fcmIlBTKZ4Tb8xAqR/EGqDWDpPY2hfiXxLYpJTsNJKthn7qIu
+         6DIPk2tTEPYgvCkv4j5kZ0r1lV/iwr6QpC4/QpBCNjGMQAke9Z+6HamfY98kQFzxQvRH
+         AO/FhNtM4OrhDD3kUK3G40nw89zseJClO6bJCQvNGcSkPeKyXNFKrLw9rCCen5p9RFlH
+         0R8S3W9HYHVHi2OjoE4XGKJkZotc7lCrTJkNiCvK9vCpxI9ggKMqzw9G/q9ROJlOlpjt
+         KmGqecPFdCUX3coh400pOjoSlcvANkDvRQPkDKdFJZPRjDAjbHez27ilYm0egFEj659c
+         eT/A==
+X-Gm-Message-State: APjAAAW+nAJ/DHWZWC1LpJVnBqAbLYlPbGjKcPvVnScDah4T9QyHYgv7
+        1emuzs1F0Vze90CYtwxnK6N79w==
+X-Google-Smtp-Source: APXvYqz62x1HJVduMVLToA+9rhh8i9WHHNxECpdrbrsdb/x4cV/E3lswnR5g/BIEwSHX7AR5Oxy1Rg==
+X-Received: by 2002:a37:ac14:: with SMTP id e20mr120205143qkm.243.1561391535368;
+        Mon, 24 Jun 2019 08:52:15 -0700 (PDT)
+Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
+        by smtp.gmail.com with ESMTPSA id k58sm7173879qtc.38.2019.06.24.08.52.14
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 24 Jun 2019 08:52:14 -0700 (PDT)
+Date:   Mon, 24 Jun 2019 11:52:13 -0400
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Frank Ch. Eigler" <fche@redhat.com>, Jessica Yu <jeyu@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, jikos@kernel.org,
+        mbenes@suse.cz, Petr Mladek <pmladek@suse.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Robert Richter <rric@kernel.org>,
+        rostedt <rostedt@goodmis.org>, Ingo Molnar <mingo@redhat.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        paulmck <paulmck@linux.ibm.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        oprofile-list@lists.sf.net, netdev <netdev@vger.kernel.org>,
         bpf@vger.kernel.org
-References: <20190622000358.19895-1-matthewgarrett@google.com>
- <20190622000358.19895-24-matthewgarrett@google.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <739e21b5-9559-d588-3542-bf0bc81de1b2@iogearbox.net>
-Date:   Mon, 24 Jun 2019 17:15:22 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.3.0
+Subject: Re: [PATCH 2/3] module: Fix up module_notifier return values.
+Message-ID: <20190624155213.GB261936@google.com>
+References: <20190624091843.859714294@infradead.org>
+ <20190624092109.805742823@infradead.org>
+ <320564860.243.1561384864186.JavaMail.zimbra@efficios.com>
 MIME-Version: 1.0
-In-Reply-To: <20190622000358.19895-24-matthewgarrett@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.100.3/25490/Mon Jun 24 10:02:14 2019)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <320564860.243.1561384864186.JavaMail.zimbra@efficios.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 06/22/2019 02:03 AM, Matthew Garrett wrote:
-> From: David Howells <dhowells@redhat.com>
+On Mon, Jun 24, 2019 at 10:01:04AM -0400, Mathieu Desnoyers wrote:
+> ----- On Jun 24, 2019, at 5:18 AM, Peter Zijlstra peterz@infradead.org wrote:
 > 
-> There are some bpf functions can be used to read kernel memory:
-
-Nit: that
-
-> bpf_probe_read, bpf_probe_write_user and bpf_trace_printk.  These allow
-
-Please explain how bpf_probe_write_user reads kernel memory ... ?!
-
-> private keys in kernel memory (e.g. the hibernation image signing key) to
-> be read by an eBPF program and kernel memory to be altered without
-
-... and while we're at it, also how they allow "kernel memory to be
-altered without restriction". I've been pointing this false statement
-out long ago.
-
-> restriction. Disable them if the kernel has been locked down in
-> confidentiality mode.
+> > While auditing all module notifiers I noticed a whole bunch of fail
+> > wrt the return value. Notifiers have a 'special' return semantics.
+> > 
+> > Cc: Robert Richter <rric@kernel.org>
+> > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > Cc: Ingo Molnar <mingo@redhat.com>
+> > Cc: Alexei Starovoitov <ast@kernel.org>
+> > Cc: Daniel Borkmann <daniel@iogearbox.net>
+> > Cc: Martin KaFai Lau <kafai@fb.com>
+> > Cc: Song Liu <songliubraving@fb.com>
+> > Cc: Yonghong Song <yhs@fb.com>
+> > Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> > Cc: "Paul E. McKenney" <paulmck@linux.ibm.com>
+> > Cc: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+> > Cc: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: oprofile-list@lists.sf.net
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: netdev@vger.kernel.org
+> > Cc: bpf@vger.kernel.org
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 > 
-> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Signed-off-by: Matthew Garrett <mjg59@google.com>
-> cc: netdev@vger.kernel.org
-> cc: Chun-Yi Lee <jlee@suse.com>
-> cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-
-Nacked-by: Daniel Borkmann <daniel@iogearbox.net>
-
-[...]
->  
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index d64c00afceb5..638f9b00a8df 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -137,6 +137,10 @@ BPF_CALL_3(bpf_probe_read, void *, dst, u32, size, const void *, unsafe_ptr)
->  {
->  	int ret;
->  
-> +	ret = security_locked_down(LOCKDOWN_BPF_READ);
-> +	if (ret)
-> +		return ret;
-
-This whole thing is still buggy as has been pointed out before by
-Jann. For helpers like above and few others below, error conditions
-must clear the buffer ...
-
->  	ret = probe_kernel_read(dst, unsafe_ptr, size);
->  	if (unlikely(ret < 0))
->  		memset(dst, 0, size);
-> @@ -156,6 +160,12 @@ static const struct bpf_func_proto bpf_probe_read_proto = {
->  BPF_CALL_3(bpf_probe_write_user, void *, unsafe_ptr, const void *, src,
->  	   u32, size)
->  {
-> +	int ret;
-> +
-> +	ret = security_locked_down(LOCKDOWN_BPF_READ);
-> +	if (ret)
-> +		return ret;
-> +
->  	/*
->  	 * Ensure we're in user context which is safe for the helper to
->  	 * run. This helper has no business in a kthread.
-> @@ -205,7 +215,11 @@ BPF_CALL_5(bpf_trace_printk, char *, fmt, u32, fmt_size, u64, arg1,
->  	int fmt_cnt = 0;
->  	u64 unsafe_addr;
->  	char buf[64];
-> -	int i;
-> +	int i, ret;
-> +
-> +	ret = security_locked_down(LOCKDOWN_BPF_READ);
-> +	if (ret)
-> +		return ret;
->  
->  	/*
->  	 * bpf_check()->check_func_arg()->check_stack_boundary()
-> @@ -534,6 +548,10 @@ BPF_CALL_3(bpf_probe_read_str, void *, dst, u32, size,
->  {
->  	int ret;
->  
-> +	ret = security_locked_down(LOCKDOWN_BPF_READ);
-> +	if (ret)
-> +		return ret;
-> +
->  	/*
->  	 * The strncpy_from_unsafe() call will likely not fill the entire
->  	 * buffer, but that's okay in this circumstance as we're probing
-> diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
-> index 5a08c17f224d..2eea2cc13117 100644
-> --- a/security/lockdown/lockdown.c
-> +++ b/security/lockdown/lockdown.c
-> @@ -33,6 +33,7 @@ static char *lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
->  	[LOCKDOWN_INTEGRITY_MAX] = "integrity",
->  	[LOCKDOWN_KCORE] = "/proc/kcore access",
->  	[LOCKDOWN_KPROBES] = "use of kprobes",
-> +	[LOCKDOWN_BPF_READ] = "use of bpf to read kernel RAM",
->  	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
->  };
->  
+> Thanks Peter for looking into this, especially considering your
+> endless love for kernel modules! ;)
 > 
+> It's not directly related to your changes, but I notice that
+> kernel/trace/trace_printk.c:hold_module_trace_bprintk_format()
+> appears to leak memory. Am I missing something ?
 
+Could you elaborate? Do you mean there is no MODULE_STATE_GOING notifier
+check? If that's what you mean then I agree, there should be some place
+where the format structures are freed when the module is unloaded no?
+
+> 
+> With respect to your changes:
+> Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+
+Looks good to me too.
+
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+
+Could we CC stable so that the fix is propagated to older kernels?
+
+thanks,
+
+ - Joel
+
+
+> I have a similar erroneous module notifier return value pattern
+> in lttng-modules as well. I'll go fix it right away. CCing
+> Frank Eigler from SystemTAP which AFAIK use a copy of
+> lttng-tracepoint.c in their project, which should be fixed
+> as well. I'm pasting the lttng-modules fix below.
+> 
+> Thanks!
+> 
+> Mathieu
+> 
+> --
+> 
+> commit 5eac9d146a7d947f0f314c4f7103c92cbccaeaf3
+> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Date:   Mon Jun 24 09:43:45 2019 -0400
+> 
+>     Fix: lttng-tracepoint module notifier should return NOTIFY_OK
+>     
+>     Module notifiers should return NOTIFY_OK on success rather than the
+>     value 0. The return value 0 does not seem to have any ill side-effects
+>     in the notifier chain caller, but it is preferable to respect the API
+>     requirements in case this changes in the future.
+>     
+>     Notifiers can encapsulate a negative errno value with
+>     notifier_from_errno(), but this is not needed by the LTTng tracepoint
+>     notifier.
+>     
+>     The approach taken in this notifier is to just print a console warning
+>     on error, because tracing failure should not prevent loading a module.
+>     So we definitely do not want to stop notifier iteration. Returning
+>     an error without stopping iteration is not really that useful, because
+>     only the return value of the last callback is returned to notifier chain
+>     caller.
+>     
+>     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> 
+> diff --git a/lttng-tracepoint.c b/lttng-tracepoint.c
+> index bbb2c7a4..8298b397 100644
+> --- a/lttng-tracepoint.c
+> +++ b/lttng-tracepoint.c
+> @@ -256,7 +256,7 @@ int lttng_tracepoint_coming(struct tp_module *tp_mod)
+>                 }
+>         }
+>         mutex_unlock(&lttng_tracepoint_mutex);
+> -       return 0;
+> +       return NOTIFY_OK;
+>  }
+>  
+>  static
+> 
+> 
+> -- 
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
