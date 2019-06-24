@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD523C4646C
-	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 23:54:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A31D2C4646B
+	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 23:57:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8B3D620679
-	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 23:54:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E7AB20449
+	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 23:57:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XvJQB8hW"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="txqvv/Nr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728773AbfFXXyh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Jun 2019 19:54:37 -0400
-Received: from mail-vk1-f201.google.com ([209.85.221.201]:41761 "EHLO
-        mail-vk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728547AbfFXXyT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Jun 2019 19:54:19 -0400
-Received: by mail-vk1-f201.google.com with SMTP id f125so7051707vkc.8
-        for <bpf@vger.kernel.org>; Mon, 24 Jun 2019 16:54:18 -0700 (PDT)
+        id S1728771AbfFXX50 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Jun 2019 19:57:26 -0400
+Received: from mail-pg1-f201.google.com ([209.85.215.201]:53981 "EHLO
+        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727629AbfFXX5Z (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Jun 2019 19:57:25 -0400
+Received: by mail-pg1-f201.google.com with SMTP id w22so1359579pgc.20
+        for <bpf@vger.kernel.org>; Mon, 24 Jun 2019 16:57:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:message-id:mime-version:subject:from:to:cc;
         bh=aQiVt1v1ZspQwRYs4b3nRqt7OstkFgTd68CV7/bkhBE=;
-        b=XvJQB8hWrOW/SRpeI4tK10iYplodRxP7G102eNBFBqwIMqTgenq6LtYA3UW7T7ITUh
-         thRvMJiDtniUB1muyhRW4m0OusgO2K0NXGpZmryrjGn7XtYQmOVnLnrgGwwgyOWfShV8
-         xfHcMGtR1GM/LLQqBhE/yjinnKHbkILzy1lRqSNTcUV6NAMQolBDUCJWyNRUMfNrmTQQ
-         FiQQQBS7vYwvSmP8HHvCTyDerVit/r1FsvvzcJF4TwX2RPJk35qgc4KBiUp+F8o0SFdp
-         XH5fcmKm4j9ciAseV8FHibjrvG6SYiePUrx1fypcNHazdghb88UFwh9fJBOco3mjJypH
-         VNsQ==
+        b=txqvv/NrWF2r2ZYnikxukD/ZTGTxdxrEpeeOGHmXwj72GqxK2ht2VzPh7WQDvUOEvx
+         fveeS03789E660Df7NgYySiBMq0CKfnt0FGrf+j0Ccn2Q8q1SUPKjPckd0zwOvi2S8Lm
+         fTMZHhPZ2Rt4so+75FNenrstI74oZ231YwcoLAzFNzkScr9l99sN5uLzDadIRInd/sy2
+         zSq3KdMgHT8SZI65hzgk0sGSFKdjTir5r+KZ4MDS5SoytMFRCAKJvHNZ7XT6h/cp2iDF
+         HHPsjszn23XpCFmfrSA9dnk+MoClS1XLMfyLf3IfmKNR0qOJoAYvyKcGSTMGcqqvcYiJ
+         pHvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
         bh=aQiVt1v1ZspQwRYs4b3nRqt7OstkFgTd68CV7/bkhBE=;
-        b=OtrJDZ7d2D8IZEMkJB/RE6ePl5KaLshLG8PROtXkNV9U5AHOzBa1bKBTmG6niAMrss
-         k7ponoa75BXfgjYS4GSVHpCi/nq9hz4if+LpMSKXtSpL5Rmtv+a5o7TV9mujL6gSn2JF
-         LpMNt9FB8hvqaS67gl+vWf/q/7m1tepJVRtuFmNsKjrvBNtZ2xHzo0a2Aw7d7FJJfKxg
-         G5hcL+EZyi/ss/Ln5r7SuqhsZMoBPdNJhNWHfMz88o7hyhsL5KEfYU9Ja0N0EvRxFhix
-         WI+7ptrFeOmDJyIlWnCy8gH+LO6+EMJqn3eRJib0Rflj9IK5cMJyJCZFpJ9WEerCNyG+
-         WLZA==
-X-Gm-Message-State: APjAAAXqEh8qWYsdljaazwsm4iFjDbgGkeN0B3U2Dr42+C3Jaixz4pxt
-        pQQI1RO16P9yy1vSi8miIAIKVuY5yvWvx7R0
-X-Google-Smtp-Source: APXvYqyfoVxlgRd5tAjiNz4zlZpLlPBxbOYJd+sVBprlJOt9sCpkadgDf+EMfW+nT+HAQz7dmb4j1cWMKVLw0Nti
-X-Received: by 2002:a67:ec8e:: with SMTP id h14mr49850337vsp.17.1561420458245;
- Mon, 24 Jun 2019 16:54:18 -0700 (PDT)
-Date:   Mon, 24 Jun 2019 16:53:32 -0700
-Message-Id: <20190624235334.163625-1-allanzhang@google.com>
+        b=ggJKwZI1u4Csq3EqE6DIpghU3faR+s3XLp0UmZWcPKkxHprhlVpk7dOvRGxLNwfZxq
+         fcN1RObj+yk81WXtEq74ehZviAWR02JdA5u6AWyq2U0O9l5ORAyLisGmEt+FT9K6MOaf
+         CeW9dI1350LQ5b7LZsBfiSxmn9+qDyI8kUtPAev1zgtDV8CEw+EjfRolNxdUwmvrk5ZH
+         DSWKDPXqZVm/CK8U7hUihYU3d4SqajCQox36VaUvNktDMtQqPlfRvMoAHpdyx4kkjWJH
+         lcr2pDP3tEOtFymJLWkE60DKKlvz78dddbUxzyL+T6xlbiJGxp64kxA5UXb6Zev02bwW
+         HIzw==
+X-Gm-Message-State: APjAAAWoffyfHyoQhuCCyihUXz9mP6cfDrgqW0XmGN/3UfGGe/eF0nfW
+        TvY9Ovavp8gstzt0T0Q8tY29MR6kUPOCmBsk
+X-Google-Smtp-Source: APXvYqyVAz/J7JuE9xSQrMGwuqiw5jvMqJF2PJiivFk2FjhFS9d/dVj1l146q2/pkut1R0tC6xATSgINoHjQjykI
+X-Received: by 2002:a65:560f:: with SMTP id l15mr12290186pgs.94.1561420645035;
+ Mon, 24 Jun 2019 16:57:25 -0700 (PDT)
+Date:   Mon, 24 Jun 2019 16:57:18 -0700
+Message-Id: <20190624235720.167067-1-allanzhang@google.com>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH v2 0/2] bpf: Allow bpf_skb_event_output for a few prog types
+Subject: [PATCH v3 0/2] bpf: Allow bpf_skb_event_output for more prog types
 From:   allanzhang <allanzhang@google.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
