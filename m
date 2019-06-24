@@ -8,57 +8,56 @@ X-Spam-Status: No, score=-16.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91DBFC48BE8
-	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 16:24:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5241C48BEA
+	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 16:24:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 69B1C20657
-	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 16:24:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7CDE9205C9
+	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 16:24:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oXWtiyNY"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wEfx71v1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725916AbfFXQYt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Jun 2019 12:24:49 -0400
-Received: from mail-pl1-f201.google.com ([209.85.214.201]:48331 "EHLO
-        mail-pl1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730103AbfFXQYt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Jun 2019 12:24:49 -0400
-Received: by mail-pl1-f201.google.com with SMTP id i33so7577752pld.15
-        for <bpf@vger.kernel.org>; Mon, 24 Jun 2019 09:24:48 -0700 (PDT)
+        id S1732074AbfFXQYy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Jun 2019 12:24:54 -0400
+Received: from mail-pl1-f202.google.com ([209.85.214.202]:50404 "EHLO
+        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732073AbfFXQYy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Jun 2019 12:24:54 -0400
+Received: by mail-pl1-f202.google.com with SMTP id 71so7575085pld.17
+        for <bpf@vger.kernel.org>; Mon, 24 Jun 2019 09:24:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=7rzKhN92sRL4pCiMOcgJ+oVcqEO/hspYwJXUq7M/U/s=;
-        b=oXWtiyNYExFz2bt+xZ3g2MT/csK/eR39Qy69PieQuJkedRJzeg5CpW7Gqb7tbzoeBZ
-         uKgXuL8cE8gI1s82M23qrcCRw2HraT1tCqpCpulB6OSREwA15YZJJP71PSWRRr6QROz5
-         fVsAiyUk8c8mFWAYQCWqv//pptb6HTX4xLhvs2Y9zILELnaMf7MrHZGPb5roP31z3UMH
-         gcRBZU9ROaEzMbUzjhIYeeI+ZRPbkbpr6djqo58m/HIR6mqHroaq8Q0Ho6yyd7HOKWWA
-         vdBE8r4Jjm/C0aLo2SaTBXB6gBVo8zhkvcEs4RYlljJS0Xoo+aCSKhVEWniFu2wdstPW
-         iVkA==
+        bh=PScmwSK+K9IB8yZqW06OWrhD6812WTEkgOnr9yWmmf4=;
+        b=wEfx71v1btEOlvKmKmG4dkf1KGyws8CgL75i2MN8jxzFYdlqumo5TK3W+0T/ktO7k/
+         HwHeQ1f0wq9/FGsZMXF4PsxNBKLN0DQflEMUoIPj5MdFDnnAkZZtOtTo4fGx2a/4hT3c
+         Gev0bUeqtsRN1DCThef+94kIX01/oQ5bUsrLuXrFART5/z7+gOkArdXJDtyyGSSCs8rK
+         qRGBp8PF02XPgqBvvgVaE1vy+yodX0/bLieUqDu2Yi/rQgL0qsRUZE4mFapSn19Zx/2/
+         ah1UJZVEKEr1jOSK4F+1HbA0HSsKsLYtgBU9rKobFieW96WkuQL+3OGK6uLZ4Exli0V2
+         OunQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=7rzKhN92sRL4pCiMOcgJ+oVcqEO/hspYwJXUq7M/U/s=;
-        b=oLcSXbw9myWgQ2/wAzrTIZHtfbNPyCD207/WumunYid5elAUvwC/XF7dVXgGD8bZn+
-         cRu5daMM8O8nZYwq0M3r5uMsjy7Bb495fY46Jqin2Y8fFH59SBx8QzFhBK4iaXtp76qw
-         FJnPDVQo2zUoOdU7JGuzPYRngxTTnjBcL92HqJsdLT1xjrC1AdqfrlVSrrQiJhjtlujP
-         uSdQTimxtcHGT7HTqX6Ato/iXuSem3QMGoAvWP9mzRup7o7AsJ0k9lVaoqGY20VOGPRv
-         a628GeqGfpS3JaAdPKi7YxXjBIt+PFaAKfp8GlyNY2OzX16K0SqmUKcCg4iCfdN3yRPQ
-         oOiw==
-X-Gm-Message-State: APjAAAVd9rlxE/1WyOR/mkHD3vqWCYd7NTOXX5OOn77oqRM9QsF8Vyd4
-        rZGUX32NQhJjfnRWUh9IvLQUKzE=
-X-Google-Smtp-Source: APXvYqyz7XtemhF9nJd7djzz0mpQZGc6rtJnMlyP4eK6Yu3B0z4lvpG0y48wHMoZrNBNGXjhzrxtpXE=
-X-Received: by 2002:a63:2985:: with SMTP id p127mr31802709pgp.400.1561393488148;
- Mon, 24 Jun 2019 09:24:48 -0700 (PDT)
-Date:   Mon, 24 Jun 2019 09:24:26 -0700
+        bh=PScmwSK+K9IB8yZqW06OWrhD6812WTEkgOnr9yWmmf4=;
+        b=SPHoG4O2OeQ0UIUz35q3EoC2OTi/bEmZUyIemtvH34nXdQIxy3S6mN21W1hOI8YvgX
+         y+RulnEEtQ9F1DLGR8ko8Y8s1h2/6dUVEfBkVxhbbIDscYz+x7iaPz0NSJDajhI/Dmxx
+         kpT62G133mD0JUB6FjJi7Xnv7ljFaI5S30e7eXlM3yfJLIB9+eaIG9sQN/oEQpAfKbs6
+         SPpSmmECG4snqjt/v378xkGDpQ7RsCEhPvqswRZG3V91sO9QddrBS/rAa1fy7BC3C5hZ
+         AL/aso8utoHJqt4IKPq5OqhcsAdCbuUqVoaIizNCEyWl1Z5HdkHiaLrPtD+Kd9mdtEwO
+         eqgg==
+X-Gm-Message-State: APjAAAUoFsRV0huScK6ntR1Gd8AY6+kgKCgRHMfYsyrOPXi/p+Iv/JTM
+        vHXDc8sD+zexNUWsXjWG7r96IKc=
+X-Google-Smtp-Source: APXvYqzMMHwmVqaFzQnYx7bu5yd1OmIKwA79DzoWPcErMHCvC7ljY+EnI7Uo/KFuXh+MSyIIpKQtQOU=
+X-Received: by 2002:a63:8043:: with SMTP id j64mr18485659pgd.216.1561393493248;
+ Mon, 24 Jun 2019 09:24:53 -0700 (PDT)
+Date:   Mon, 24 Jun 2019 09:24:28 -0700
 In-Reply-To: <20190624162429.16367-1-sdf@google.com>
-Message-Id: <20190624162429.16367-7-sdf@google.com>
+Message-Id: <20190624162429.16367-9-sdf@google.com>
 Mime-Version: 1.0
 References: <20190624162429.16367-1-sdf@google.com>
 X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH bpf-next v8 6/9] selftests/bpf: add sockopt test that
- exercises sk helpers
+Subject: [PATCH bpf-next v8 8/9] bpf: add sockopt documentation
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
@@ -69,354 +68,125 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-socktop test that introduces new SOL_CUSTOM sockopt level and
-stores whatever users sets in sk storage. Whenever getsockopt
-is called, the original value is retrieved.
+Provide user documentation about sockopt prog type and cgroup hooks.
 
 v7:
-* use retval=0 and optlen-1
+* add description for retval=0 and optlen=-1
 
 v6:
-* test 'ret=1' use-case as well (Alexei Starovoitov)
-
-v4:
-* don't call bpf_sk_fullsock helper
-
-v3:
-* drop (__u8 *)(long) casts for optval{,_end}
+* describe cgroup chaining, add example
 
 v2:
-* new test
+* use return code 2 for kernel bypass
 
 Cc: Martin Lau <kafai@fb.com>
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- tools/testing/selftests/bpf/.gitignore        |   1 +
- tools/testing/selftests/bpf/Makefile          |   3 +-
- .../testing/selftests/bpf/progs/sockopt_sk.c  |  91 +++++++++
- tools/testing/selftests/bpf/test_sockopt_sk.c | 185 ++++++++++++++++++
- 4 files changed, 279 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/progs/sockopt_sk.c
- create mode 100644 tools/testing/selftests/bpf/test_sockopt_sk.c
+ Documentation/bpf/index.rst               |  1 +
+ Documentation/bpf/prog_cgroup_sockopt.rst | 82 +++++++++++++++++++++++
+ 2 files changed, 83 insertions(+)
+ create mode 100644 Documentation/bpf/prog_cgroup_sockopt.rst
 
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index 3fe92601223d..8ac076c311d4 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -40,3 +40,4 @@ test_hashmap
- test_btf_dump
- xdping
- test_sockopt
-+test_sockopt_sk
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index afd7b3d298d8..1210b4e98d27 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -26,7 +26,7 @@ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test
- 	test_sock test_btf test_sockmap get_cgroup_id_user test_socket_cookie \
- 	test_cgroup_storage test_select_reuseport test_section_names \
- 	test_netcnt test_tcpnotify_user test_sock_fields test_sysctl test_hashmap \
--	test_btf_dump test_cgroup_attach xdping test_sockopt
-+	test_btf_dump test_cgroup_attach xdping test_sockopt test_sockopt_sk
+diff --git a/Documentation/bpf/index.rst b/Documentation/bpf/index.rst
+index d3fe4cac0c90..801a6ed3f2e5 100644
+--- a/Documentation/bpf/index.rst
++++ b/Documentation/bpf/index.rst
+@@ -42,6 +42,7 @@ Program types
+ .. toctree::
+    :maxdepth: 1
  
- BPF_OBJ_FILES = $(patsubst %.c,%.o, $(notdir $(wildcard progs/*.c)))
- TEST_GEN_FILES = $(BPF_OBJ_FILES)
-@@ -104,6 +104,7 @@ $(OUTPUT)/test_sock_fields: cgroup_helpers.c
- $(OUTPUT)/test_sysctl: cgroup_helpers.c
- $(OUTPUT)/test_cgroup_attach: cgroup_helpers.c
- $(OUTPUT)/test_sockopt: cgroup_helpers.c
-+$(OUTPUT)/test_sockopt_sk: cgroup_helpers.c
++   prog_cgroup_sockopt
+    prog_cgroup_sysctl
+    prog_flow_dissector
  
- .PHONY: force
- 
-diff --git a/tools/testing/selftests/bpf/progs/sockopt_sk.c b/tools/testing/selftests/bpf/progs/sockopt_sk.c
+diff --git a/Documentation/bpf/prog_cgroup_sockopt.rst b/Documentation/bpf/prog_cgroup_sockopt.rst
 new file mode 100644
-index 000000000000..ad4c5db2bc29
+index 000000000000..24985740711a
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/sockopt_sk.c
-@@ -0,0 +1,91 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <netinet/in.h>
-+#include <linux/bpf.h>
-+#include "bpf_helpers.h"
++++ b/Documentation/bpf/prog_cgroup_sockopt.rst
+@@ -0,0 +1,82 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+char _license[] SEC("license") = "GPL";
-+__u32 _version SEC("version") = 1;
++============================
++BPF_PROG_TYPE_CGROUP_SOCKOPT
++============================
 +
-+#define SOL_CUSTOM			0xdeadbeef
++``BPF_PROG_TYPE_CGROUP_SOCKOPT`` program type can be attached to two
++cgroup hooks:
 +
-+struct sockopt_sk {
-+	__u8 val;
-+};
++* ``BPF_CGROUP_GETSOCKOPT`` - called every time process executes ``getsockopt``
++  system call.
++* ``BPF_CGROUP_SETSOCKOPT`` - called every time process executes ``setsockopt``
++  system call.
 +
-+struct bpf_map_def SEC("maps") socket_storage_map = {
-+	.type = BPF_MAP_TYPE_SK_STORAGE,
-+	.key_size = sizeof(int),
-+	.value_size = sizeof(struct sockopt_sk),
-+	.map_flags = BPF_F_NO_PREALLOC,
-+};
-+BPF_ANNOTATE_KV_PAIR(socket_storage_map, int, struct sockopt_sk);
++The context (``struct bpf_sockopt``) has associated socket (``sk``) and
++all input arguments: ``level``, ``optname``, ``optval`` and ``optlen``.
 +
-+SEC("cgroup/getsockopt")
-+int _getsockopt(struct bpf_sockopt *ctx)
-+{
-+	__u8 *optval_end = ctx->optval_end;
-+	__u8 *optval = ctx->optval;
-+	struct sockopt_sk *storage;
++BPF_CGROUP_SETSOCKOPT
++=====================
 +
-+	if (ctx->level == SOL_IP && ctx->optname == IP_TOS)
-+		/* Not interested in SOL_IP:IP_TOS;
-+		 * let next BPF program in the cgroup chain or kernel
-+		 * handle it.
-+		 */
-+		return 1;
++``BPF_CGROUP_SETSOCKOPT`` is triggered *before* the kernel handling of
++sockopt and it has mostly read-only context (it can modify only ``optlen``).
++This hook has access to cgroup and socket local storage.
 +
-+	if (ctx->level != SOL_CUSTOM)
-+		return 0; /* EPERM, deny everything except custom level */
++If BPF program sets ``optlen`` to -1, the control will be returned
++back to the userspace after all other BPF programs in the cgroup
++chain finish (i.e. kernel ``setsockopt`` handling will *not* be executed).
 +
-+	if (optval + 1 > optval_end)
-+		return 0; /* EPERM, bounds check */
++Note, that the only acceptable value to set to ``optlen`` is -1. Any
++other value will trigger ``EFAULT``.
 +
-+	storage = bpf_sk_storage_get(&socket_storage_map, ctx->sk, 0,
-+				     BPF_SK_STORAGE_GET_F_CREATE);
-+	if (!storage)
-+		return 0; /* EPERM, couldn't get sk storage */
++Return Type
++-----------
 +
-+	if (!ctx->retval)
-+		return 0; /* EPERM, kernel should not have handled
-+			   * SOL_CUSTOM, something is wrong!
-+			   */
-+	ctx->retval = 0; /* Reset system call return value to zero */
++* ``0`` - reject the syscall, ``EPERM`` will be returned to the userspace.
++* ``1`` - success, continue with next BPF program in the cgroup chain.
 +
-+	optval[0] = storage->val;
-+	ctx->optlen = 1;
++BPF_CGROUP_GETSOCKOPT
++=====================
 +
-+	return 1;
-+}
++``BPF_CGROUP_GETSOCKOPT`` is triggered *after* the kernel handing of
++sockopt. The BPF hook can observe ``optval``, ``optlen`` and ``retval``
++if it's interested in whatever kernel has returned. BPF hook can override
++the values above, adjust ``optlen`` and reset ``retval`` to 0. If ``optlen``
++has been increased above initial ``setsockopt`` value (i.e. userspace
++buffer is too small), ``EFAULT`` is returned.
 +
-+SEC("cgroup/setsockopt")
-+int _setsockopt(struct bpf_sockopt *ctx)
-+{
-+	__u8 *optval_end = ctx->optval_end;
-+	__u8 *optval = ctx->optval;
-+	struct sockopt_sk *storage;
++Note, that the only acceptable value to set to ``retval`` is 0 and the
++original value that the kernel returned. Any other value will trigger
++``EFAULT``.
 +
-+	if (ctx->level == SOL_IP && ctx->optname == IP_TOS)
-+		/* Not interested in SOL_IP:IP_TOS;
-+		 * let next BPF program in the cgroup chain or kernel
-+		 * handle it.
-+		 */
-+		return 1;
++Return Type
++-----------
 +
-+	if (ctx->level != SOL_CUSTOM)
-+		return 0; /* EPERM, deny everything except custom level */
++* ``0`` - reject the syscall, ``EPERM`` will be returned to the userspace.
++* ``1`` - success: copy ``optval`` and ``optlen`` to userspace, return
++  ``retval`` from the syscall (note that this can be overwritten by
++  the BPF program from the parent cgroup).
 +
-+	if (optval + 1 > optval_end)
-+		return 0; /* EPERM, bounds check */
++Cgroup Inheritance
++==================
 +
-+	storage = bpf_sk_storage_get(&socket_storage_map, ctx->sk, 0,
-+				     BPF_SK_STORAGE_GET_F_CREATE);
-+	if (!storage)
-+		return 0; /* EPERM, couldn't get sk storage */
++Suppose, there is the following cgroup hierarchy where each cgroup
++has ``BPF_CGROUP_GETSOCKOPT`` attached at each level with
++``BPF_F_ALLOW_MULTI`` flag::
 +
-+	storage->val = optval[0];
-+	ctx->optlen = -1; /* BPF has consumed this option, don't call kernel
-+			   * setsockopt handler.
-+			   */
++  A (root, parent)
++   \
++    B (child)
 +
-+	return 1;
-+}
-diff --git a/tools/testing/selftests/bpf/test_sockopt_sk.c b/tools/testing/selftests/bpf/test_sockopt_sk.c
-new file mode 100644
-index 000000000000..67558e2c5427
---- /dev/null
-+++ b/tools/testing/selftests/bpf/test_sockopt_sk.c
-@@ -0,0 +1,185 @@
-+// SPDX-License-Identifier: GPL-2.0
++When the application calls ``getsockopt`` syscall from the cgroup B,
++the programs are executed from the bottom up: B, A. First program
++(B) sees the result of kernel's ``getsockopt``. It can optionally
++adjust ``optval``, ``optlen`` and reset ``retval`` to 0. After that
++control will be passed to the second (A) program which will see the
++same context as B including any potential modifications.
 +
-+#include <errno.h>
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <sys/types.h>
-+#include <sys/socket.h>
-+#include <netinet/in.h>
++Example
++=======
 +
-+#include <linux/filter.h>
-+#include <bpf/bpf.h>
-+#include <bpf/libbpf.h>
-+
-+#include "bpf_rlimit.h"
-+#include "bpf_util.h"
-+#include "cgroup_helpers.h"
-+
-+#define CG_PATH				"/sockopt"
-+
-+#define SOL_CUSTOM			0xdeadbeef
-+
-+static int getsetsockopt(void)
-+{
-+	int fd, err;
-+	char buf[4] = {};
-+	socklen_t optlen;
-+
-+	fd = socket(AF_INET, SOCK_STREAM, 0);
-+	if (fd < 0) {
-+		log_err("Failed to create socket");
-+		return -1;
-+	}
-+
-+	/* IP_TOS - BPF bypass */
-+
-+	buf[0] = 0x08;
-+	err = setsockopt(fd, SOL_IP, IP_TOS, buf, 1);
-+	if (err) {
-+		log_err("Failed to call setsockopt(IP_TOS)");
-+		goto err;
-+	}
-+
-+	buf[0] = 0x00;
-+	optlen = 1;
-+	err = getsockopt(fd, SOL_IP, IP_TOS, buf, &optlen);
-+	if (err) {
-+		log_err("Failed to call getsockopt(IP_TOS)");
-+		goto err;
-+	}
-+
-+	if (buf[0] != 0x08) {
-+		log_err("Unexpected getsockopt(IP_TOS) buf[0] 0x%02x != 0x08",
-+			buf[0]);
-+		goto err;
-+	}
-+
-+	/* IP_TTL - EPERM */
-+
-+	buf[0] = 1;
-+	err = setsockopt(fd, SOL_IP, IP_TTL, buf, 1);
-+	if (!err || errno != EPERM) {
-+		log_err("Unexpected success from setsockopt(IP_TTL)");
-+		goto err;
-+	}
-+
-+	/* SOL_CUSTOM - handled by BPF */
-+
-+	buf[0] = 0x01;
-+	err = setsockopt(fd, SOL_CUSTOM, 0, buf, 1);
-+	if (err) {
-+		log_err("Failed to call setsockopt");
-+		goto err;
-+	}
-+
-+	buf[0] = 0x00;
-+	optlen = 4;
-+	err = getsockopt(fd, SOL_CUSTOM, 0, buf, &optlen);
-+	if (err) {
-+		log_err("Failed to call getsockopt");
-+		goto err;
-+	}
-+
-+	if (optlen != 1) {
-+		log_err("Unexpected optlen %d != 1", optlen);
-+		goto err;
-+	}
-+	if (buf[0] != 0x01) {
-+		log_err("Unexpected buf[0] 0x%02x != 0x01", buf[0]);
-+		goto err;
-+	}
-+
-+	close(fd);
-+	return 0;
-+err:
-+	close(fd);
-+	return -1;
-+}
-+
-+static int prog_attach(struct bpf_object *obj, int cgroup_fd, const char *title)
-+{
-+	enum bpf_attach_type attach_type;
-+	enum bpf_prog_type prog_type;
-+	struct bpf_program *prog;
-+	int err;
-+
-+	err = libbpf_prog_type_by_name(title, &prog_type, &attach_type);
-+	if (err) {
-+		log_err("Failed to deduct types for %s BPF program", title);
-+		return -1;
-+	}
-+
-+	prog = bpf_object__find_program_by_title(obj, title);
-+	if (!prog) {
-+		log_err("Failed to find %s BPF program", title);
-+		return -1;
-+	}
-+
-+	err = bpf_prog_attach(bpf_program__fd(prog), cgroup_fd,
-+			      attach_type, 0);
-+	if (err) {
-+		log_err("Failed to attach %s BPF program", title);
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int run_test(int cgroup_fd)
-+{
-+	struct bpf_prog_load_attr attr = {
-+		.file = "./sockopt_sk.o",
-+	};
-+	struct bpf_object *obj;
-+	int ignored;
-+	int err;
-+
-+	err = bpf_prog_load_xattr(&attr, &obj, &ignored);
-+	if (err) {
-+		log_err("Failed to load BPF object");
-+		return -1;
-+	}
-+
-+	err = prog_attach(obj, cgroup_fd, "cgroup/getsockopt");
-+	if (err)
-+		goto close_bpf_object;
-+
-+	err = prog_attach(obj, cgroup_fd, "cgroup/setsockopt");
-+	if (err)
-+		goto close_bpf_object;
-+
-+	err = getsetsockopt();
-+
-+close_bpf_object:
-+	bpf_object__close(obj);
-+	return err;
-+}
-+
-+int main(int args, char **argv)
-+{
-+	int cgroup_fd;
-+	int err = EXIT_SUCCESS;
-+
-+	if (setup_cgroup_environment())
-+		goto cleanup_obj;
-+
-+	cgroup_fd = create_and_get_cgroup(CG_PATH);
-+	if (cgroup_fd < 0)
-+		goto cleanup_cgroup_env;
-+
-+	if (join_cgroup(CG_PATH))
-+		goto cleanup_cgroup;
-+
-+	if (run_test(cgroup_fd))
-+		err = EXIT_FAILURE;
-+
-+	printf("test_sockopt_sk: %s\n",
-+	       err == EXIT_SUCCESS ? "PASSED" : "FAILED");
-+
-+cleanup_cgroup:
-+	close(cgroup_fd);
-+cleanup_cgroup_env:
-+	cleanup_cgroup_environment();
-+cleanup_obj:
-+	return err;
-+}
++See ``tools/testing/selftests/bpf/progs/sockopt_sk.c`` for an example
++of BPF program that handles socket options.
 -- 
 2.22.0.410.gd8fdbe21b5-goog
 
