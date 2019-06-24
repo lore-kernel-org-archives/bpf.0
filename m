@@ -2,207 +2,115 @@ Return-Path: <SRS0=kBJA=UX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FROM_EXCESS_BASE64,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3338EC43613
-	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 09:24:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25EBBC43613
+	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 10:02:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 074F32089F
-	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 09:24:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F1E47212F5
+	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 10:02:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="pPZckTeX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iczv9kcH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727582AbfFXJYx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Jun 2019 05:24:53 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:42238 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727537AbfFXJYx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Jun 2019 05:24:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-Id:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=t52uwsZ5CS16wjZkH/9lP0ZEe/KSj6WTDcY9RTylZiU=; b=pPZckTeXk7GUNaGNfbBK8q0PET
-        Psm8el7YAywshXMcwevA7aur0wDPpnp4QcJ+KqJ1uwvD5z0H8AUlfcQVnD1GHLXxRvLJDT1LJpdF+
-        ArrXtpfxk76E2n8Y9P8oh/5r2UERyrrXl/s571fHUrdkz7DdsEVFgEQDYPshcUhoeRMWokvmtEIUi
-        rV1OSQHDdsa9DeouIVSVaYHFlZRr+BHJiwf37wWPkUxGop+I4Gl+MVMNIGjW1SN4ZBSP9mBD+Jziz
-        YZdsR77vZh1Wq7Q673JGai165+G3fDHIn4+Xk1z2UVtgN5RlURm45MF+2cWBzMWqVE6sTF8AKNA2u
-        fK5uCIxA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hfLCm-0006v0-M0; Mon, 24 Jun 2019 09:24:04 +0000
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 5518620A0EF24; Mon, 24 Jun 2019 11:24:02 +0200 (CEST)
-Message-Id: <20190624092109.805742823@infradead.org>
-User-Agent: quilt/0.65
-Date:   Mon, 24 Jun 2019 11:18:45 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
-        jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
-        pmladek@suse.com, ast@kernel.org, daniel@iogearbox.net,
-        akpm@linux-foundation.org, peterz@infradead.org
-Cc:     Robert Richter <rric@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        oprofile-list@lists.sf.net, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH 2/3] module: Fix up module_notifier return values.
-References: <20190624091843.859714294@infradead.org>
+        id S1728330AbfFXKCI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Jun 2019 06:02:08 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:37816 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726505AbfFXKCH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Jun 2019 06:02:07 -0400
+Received: by mail-qt1-f193.google.com with SMTP id y57so13826079qtk.4;
+        Mon, 24 Jun 2019 03:02:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=zl3SXiizM38obE/rpMeiB8IZyhI2MegvSmWGOea2jeo=;
+        b=iczv9kcHOGuOmLpziLkb/zIx8cYz3WhhR+m3XbUjHT3QEBf9eOSPvAn2SkI693zmeK
+         g9xv73tyGv/WVacOqZBqnUeAhjMNeUaJf/fhLDFHbvY1RiX5+wv/EsrmQuxL+6Ec42bC
+         Mvu4CN7Pk+M2eipbeULn+GZuxFIlxFflyDn7hyMUcKPwJVxJrjbneegwmmATHysnnoHl
+         GjGP9ruvB/r/87a7gb2l2BZkIAWAs6q+QR+Rl3gBDm9kB6vFRWcXXsUmy5XCmyPXp4pY
+         UeHqQgN63I62BrkLVvrGb+AhGEl7zFY7w+l0TqyfY9WjrrAxF+J0Auf2W/l/kxoFHJFU
+         ZCUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=zl3SXiizM38obE/rpMeiB8IZyhI2MegvSmWGOea2jeo=;
+        b=CR4SMBGXA01uINXdqJfyvLGPeaMDPdiL9vij+1T40W0zS0cu6UVz8DZhLhZhhNYhoC
+         QZlHE9/5ZbAHy3tT4jsWoFW5zGE9j25M/S6J8idDWFgajPzgM3Aci1cKKj8ZgsRudR2T
+         fpk5+xQCBMJTl/CW6NqbBhaKPSlce4VqcI1EFkH+TNZEKocE3AMmYybvO4P5a+r8kgqE
+         cXLsB5erSF7RZxB4y9+q8134BwyOBB6vKTblZjz40ltutr3u5M2cl4s3LsMckbbtD0bg
+         MNK/xzpvzU3OtsPDTO5H4OvAo0Vw/fSRQA7doVhB71tvUanuKspAK+eHyhKNCNZNHbcO
+         JZrA==
+X-Gm-Message-State: APjAAAUvw1ClVlxrqkOs4w6MK/rvym4UfDrHEwuN4X6phaooqZC9XD5t
+        GFLJ1Ce69ghw9Wb1+veZerAE5T+pqkv9AORUrs0=
+X-Google-Smtp-Source: APXvYqxTB0yRz/E0qFnmWGAZ/eaBm2zQCIB9H2MdjWC3taZsUHE0jSAlWlIQwY/HWkxbjKlGPG99bo4K1zACr2dVpEc=
+X-Received: by 2002:ac8:219d:: with SMTP id 29mr24603135qty.37.1561370526096;
+ Mon, 24 Jun 2019 03:02:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <20190621201310.12791-1-eric@regit.org>
+In-Reply-To: <20190621201310.12791-1-eric@regit.org>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Date:   Mon, 24 Jun 2019 12:01:54 +0200
+Message-ID: <CAJ+HfNhwq1xHFZJHf3iVPZHsb76ay5_XeVnyTeCjTABFQoSdAQ@mail.gmail.com>
+Subject: Re: [PATCH] xsk: sample kernel code is now in libbpf
+To:     Eric Leblond <eric@regit.org>
+Cc:     Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-While auditing all module notifiers I noticed a whole bunch of fail
-wrt the return value. Notifiers have a 'special' return semantics.
+On Fri, 21 Jun 2019 at 22:55, Eric Leblond <eric@regit.org> wrote:
+>
+> Fix documentation that mention xdpsock_kern.c which has been
+> replaced by code embedded in libbpf.
+>
+> Signed-off-by: Eric Leblond <eric@regit.org>
 
-Cc: Robert Richter <rric@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Martin KaFai Lau <kafai@fb.com>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "Paul E. McKenney" <paulmck@linux.ibm.com>
-Cc: "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: oprofile-list@lists.sf.net
-Cc: linux-kernel@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- drivers/oprofile/buffer_sync.c |    4 ++--
- kernel/module.c                |    9 +++++----
- kernel/trace/bpf_trace.c       |    8 ++++++--
- kernel/trace/trace.c           |    2 +-
- kernel/trace/trace_events.c    |    2 +-
- kernel/trace/trace_printk.c    |    4 ++--
- kernel/tracepoint.c            |    2 +-
- 7 files changed, 18 insertions(+), 13 deletions(-)
+Thanks Eric!
 
---- a/drivers/oprofile/buffer_sync.c
-+++ b/drivers/oprofile/buffer_sync.c
-@@ -116,7 +116,7 @@ module_load_notify(struct notifier_block
- {
- #ifdef CONFIG_MODULES
- 	if (val != MODULE_STATE_COMING)
--		return 0;
-+		return NOTIFY_DONE;
- 
- 	/* FIXME: should we process all CPU buffers ? */
- 	mutex_lock(&buffer_mutex);
-@@ -124,7 +124,7 @@ module_load_notify(struct notifier_block
- 	add_event_entry(MODULE_LOADED_CODE);
- 	mutex_unlock(&buffer_mutex);
- #endif
--	return 0;
-+	return NOTIFY_OK;
- }
- 
- 
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1302,10 +1302,11 @@ static int bpf_event_notify(struct notif
- {
- 	struct bpf_trace_module *btm, *tmp;
- 	struct module *mod = module;
-+	int ret = 0;
- 
- 	if (mod->num_bpf_raw_events == 0 ||
- 	    (op != MODULE_STATE_COMING && op != MODULE_STATE_GOING))
--		return 0;
-+		goto out;
- 
- 	mutex_lock(&bpf_module_mutex);
- 
-@@ -1315,6 +1316,8 @@ static int bpf_event_notify(struct notif
- 		if (btm) {
- 			btm->module = module;
- 			list_add(&btm->list, &bpf_trace_modules);
-+		} else {
-+			ret = -ENOMEM;
- 		}
- 		break;
- 	case MODULE_STATE_GOING:
-@@ -1330,7 +1333,8 @@ static int bpf_event_notify(struct notif
- 
- 	mutex_unlock(&bpf_module_mutex);
- 
--	return 0;
-+out:
-+	return notifier_from_errno(ret);
- }
- 
- static struct notifier_block bpf_module_nb = {
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -8685,7 +8685,7 @@ static int trace_module_notify(struct no
- 		break;
- 	}
- 
--	return 0;
-+	return NOTIFY_OK;
- }
- 
- static struct notifier_block trace_module_nb = {
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -2450,7 +2450,7 @@ static int trace_module_notify(struct no
- 	mutex_unlock(&trace_types_lock);
- 	mutex_unlock(&event_mutex);
- 
--	return 0;
-+	return NOTIFY_OK;
- }
- 
- static struct notifier_block trace_module_nb = {
---- a/kernel/trace/trace_printk.c
-+++ b/kernel/trace/trace_printk.c
-@@ -95,7 +95,7 @@ static int module_trace_bprintk_format_n
- 		if (val == MODULE_STATE_COMING)
- 			hold_module_trace_bprintk_format(start, end);
- 	}
--	return 0;
-+	return NOTIFY_OK;
- }
- 
- /*
-@@ -173,7 +173,7 @@ __init static int
- module_trace_bprintk_format_notify(struct notifier_block *self,
- 		unsigned long val, void *data)
- {
--	return 0;
-+	return NOTIFY_OK;
- }
- static inline const char **
- find_next_mod_format(int start_index, void *v, const char **fmt, loff_t *pos)
---- a/kernel/tracepoint.c
-+++ b/kernel/tracepoint.c
-@@ -538,7 +538,7 @@ static int tracepoint_module_notify(stru
- 	case MODULE_STATE_UNFORMED:
- 		break;
- 	}
--	return ret;
-+	return notifier_from_errno(ret);
- }
- 
- static struct notifier_block tracepoint_module_nb = {
+Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
 
-
+> ---
+>  Documentation/networking/af_xdp.rst | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
+>
+> diff --git a/Documentation/networking/af_xdp.rst b/Documentation/networki=
+ng/af_xdp.rst
+> index e14d7d40fc75..83dddc20f5d6 100644
+> --- a/Documentation/networking/af_xdp.rst
+> +++ b/Documentation/networking/af_xdp.rst
+> @@ -220,7 +220,21 @@ Usage
+>  In order to use AF_XDP sockets there are two parts needed. The
+>  user-space application and the XDP program. For a complete setup and
+>  usage example, please refer to the sample application. The user-space
+> -side is xdpsock_user.c and the XDP side xdpsock_kern.c.
+> +side is xdpsock_user.c and the XDP side is part of libbpf.
+> +
+> +The XDP code sample included in tools/lib/bpf/xsk.c is the following::
+> +
+> +   SEC("xdp_sock") int xdp_sock_prog(struct xdp_md *ctx)
+> +   {
+> +       int index =3D ctx->rx_queue_index;
+> +
+> +       // A set entry here means that the correspnding queue_id
+> +       // has an active AF_XDP socket bound to it.
+> +       if (bpf_map_lookup_elem(&xsks_map, &index))
+> +           return bpf_redirect_map(&xsks_map, index, 0);
+> +
+> +       return XDP_PASS;
+> +   }
+>
+>  Naive ring dequeue and enqueue could look like this::
+>
+> --
+> 2.20.1
+>
