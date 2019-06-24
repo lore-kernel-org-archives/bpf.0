@@ -8,203 +8,111 @@ X-Spam-Status: No, score=-16.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E17FC43613
-	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 16:24:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AFC6C43613
+	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 16:25:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4C59B205C9
-	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 16:24:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 68DD7205C9
+	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 16:25:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qOtywTYc"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lUQO0KmK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730421AbfFXQY6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Jun 2019 12:24:58 -0400
-Received: from mail-pl1-f201.google.com ([209.85.214.201]:50405 "EHLO
-        mail-pl1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732090AbfFXQY5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Jun 2019 12:24:57 -0400
-Received: by mail-pl1-f201.google.com with SMTP id 71so7575141pld.17
-        for <bpf@vger.kernel.org>; Mon, 24 Jun 2019 09:24:56 -0700 (PDT)
+        id S1727595AbfFXQZF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Jun 2019 12:25:05 -0400
+Received: from mail-pg1-f202.google.com ([209.85.215.202]:37228 "EHLO
+        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728530AbfFXQYl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Jun 2019 12:24:41 -0400
+Received: by mail-pg1-f202.google.com with SMTP id e16so9689456pga.4
+        for <bpf@vger.kernel.org>; Mon, 24 Jun 2019 09:24:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=EfgnC8pfVZNk/KTc0n9v3CAEQ82DZ1hKaslBIVETbYc=;
-        b=qOtywTYcLpN2E24m0OZUY6Fv3nKPavGEYoCPfC70pIdnEmZoGd5Q3EDvHZDFwgNjkh
-         9JXqw+yfS3anhYpEhrJqjseagWH551SX1JcL931lDMN1GATiYfY8V3H1wyjxpBFhOhGn
-         XtQ2CpPk80jkyrrcdfGZ/NIHWTbCISYGiLKG5gCOh4huwcLPot2fylnqGcgsqDiBP+Gp
-         q9efGYEs3o+4vOeYxI7zUFM2ky/JEfiXJEZFyc0iAS1Rv45bZQEf9p71PUsI+7J2NbTm
-         Su+gkBdBO21zQCm4zkeua6LYRNVKOYljN7tXLHSk76abTlXbtw9dGbIXDQ69y2kAQClV
-         j4zw==
+        bh=+NwZcf9Qug4AB3CHeUOviaC9ooYDCiQf1ZUN7j+uuFw=;
+        b=lUQO0KmK9Ovm7MnPN8zdQohipaxoM0Sr8fVIUHaXhEpU4q/a/Oq/wPxme3rJCvqLZt
+         8n7GRLmEjYbYVqzB+1InIosSM1XnEhEpRRGv3ZJ5swT7k5eZv38oPSzrpBErliRJNTJP
+         H4kdLrYV5ZfZQ4Z+cUnXDKrOqzRDZDkpeO1JJwb2IC+V2hKhZqo8idR94JuQfyhyaaHv
+         jP7QhDm2PspioAPf/KnOtKggG8ElQLBSApiujqgZfjJQKPh5LT9RU2x9N4mMctRcAdmS
+         P7i7d+RrLlMmTYo9tMVQNeKBFx//H2OH2Xo4TA1C8ptj86dOdHc9xS84A5+91FaKE/Ox
+         TpzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=EfgnC8pfVZNk/KTc0n9v3CAEQ82DZ1hKaslBIVETbYc=;
-        b=Qc1O4i0b3ak/S/OFm1NCRtQwXH7Js3aJ9Orilc7nP0j47Qzs6nTVurL2SRQL/QJE1E
-         4B0DsFYw+ZaLb0u97tzkz8Y1JM3HMhypxrjX+VbA4D1+8J5DrGvnGskHyRYPVjEUDyAB
-         aThCY52QY58R11GxCVTUupXvM77UCGBhfB131dJqH6bGRYCtcrG6ykDfmUQb2XOeK6IF
-         MAVnV6CWocRQ5bqRgvzT1RiDQ+iwLzudKag5K0Dps5NyoObU5tKP5lN09Y5M9oaCYU5B
-         k1azv/X0as3xHEFFgwTaH4GUPQvkRnGSpFDGr3NWfunIw1Hv6G1DnHtM4ULeBpmr2NqN
-         tbtg==
-X-Gm-Message-State: APjAAAVRqHP9Y7c2tRWB7sRUusSN1BIlTcrZqUORZXt2Awt7/57QkrhR
-        MStRuzzXuSQwBqcRv+HwW7qIlFs=
-X-Google-Smtp-Source: APXvYqzWyzaN31Nj0t4SY4KBuWHtwZgGnz5nQH7HeiV9VX8ELbLAbCHjGPEzT6e5spVj+TJPv73Wuc0=
-X-Received: by 2002:a63:1c59:: with SMTP id c25mr33275578pgm.395.1561393495760;
- Mon, 24 Jun 2019 09:24:55 -0700 (PDT)
-Date:   Mon, 24 Jun 2019 09:24:29 -0700
+        bh=+NwZcf9Qug4AB3CHeUOviaC9ooYDCiQf1ZUN7j+uuFw=;
+        b=VFvYPuA1yHC6xU3FRvJ7qaE8sKlsb4hY4BEgVv1uW7v1GMGkEKSYMjhr0yq7HhN78S
+         p8prYu1B3lrWBuC2WmjN1Xsty1cd9CHFFbfOJKIozgqVc1hfpjrt8WxcFMUIhcQ6nh5w
+         uD/Iu3Geo3gFB0ygEM2eMcUy4pesevUIipyVm7KZkzYT1xMJ4loCRf0ZUIPRoEYcZ1zJ
+         n7RsMW5eN/InDie0HHZzuGGjsLoyUcG7DsVCftSoZpmZUznHORnLNuYuD5G9bi0PjqTX
+         xdz2aTWfOzYk64O8L3l+b2WRVQWpqRff12ZfiqeFeDLLMhSRw0R3PspN9vj36YtwYcT0
+         lk7A==
+X-Gm-Message-State: APjAAAUDiLylzPQWhhskeRAO4BBbo9V8OUkGCWVSpNH419PjcGjchhu+
+        ZtT9s9z8oGlhVhM29RAmZg82LO0=
+X-Google-Smtp-Source: APXvYqwBaiy3L6Cfpe5S2uX9ddAgQ+wJk2LcXjvUPUb5lQ0hfkLFxR7h0HZcsKxrkiaNZbYdRbCJk4M=
+X-Received: by 2002:a63:360d:: with SMTP id d13mr33778747pga.80.1561393480302;
+ Mon, 24 Jun 2019 09:24:40 -0700 (PDT)
+Date:   Mon, 24 Jun 2019 09:24:23 -0700
 In-Reply-To: <20190624162429.16367-1-sdf@google.com>
-Message-Id: <20190624162429.16367-10-sdf@google.com>
+Message-Id: <20190624162429.16367-4-sdf@google.com>
 Mime-Version: 1.0
 References: <20190624162429.16367-1-sdf@google.com>
 X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH bpf-next v8 9/9] bpftool: support cgroup sockopt
+Subject: [PATCH bpf-next v8 3/9] libbpf: support sockopt hooks
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        Stanislav Fomichev <sdf@google.com>, Martin Lau <kafai@fb.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>
+        Stanislav Fomichev <sdf@google.com>, Martin Lau <kafai@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Support sockopt prog type and cgroup hooks in the bpftool.
+Make libbpf aware of new sockopt hooks so it can derive prog type
+and hook point from the section names.
 
 Cc: Martin Lau <kafai@fb.com>
-Acked-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- tools/bpf/bpftool/Documentation/bpftool-cgroup.rst | 7 +++++--
- tools/bpf/bpftool/Documentation/bpftool-prog.rst   | 3 ++-
- tools/bpf/bpftool/bash-completion/bpftool          | 9 ++++++---
- tools/bpf/bpftool/cgroup.c                         | 5 ++++-
- tools/bpf/bpftool/main.h                           | 1 +
- tools/bpf/bpftool/prog.c                           | 3 ++-
- 6 files changed, 20 insertions(+), 8 deletions(-)
+ tools/lib/bpf/libbpf.c        | 5 +++++
+ tools/lib/bpf/libbpf_probes.c | 1 +
+ 2 files changed, 6 insertions(+)
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-index 324df15bf4cc..6ac98f08e9d0 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-@@ -30,7 +30,8 @@ CGROUP COMMANDS
- |	*PROG* := { **id** *PROG_ID* | **pinned** *FILE* | **tag** *PROG_TAG* }
- |	*ATTACH_TYPE* := { **ingress** | **egress** | **sock_create** | **sock_ops** | **device** |
- |		**bind4** | **bind6** | **post_bind4** | **post_bind6** | **connect4** | **connect6** |
--|		**sendmsg4** | **sendmsg6** | **recvmsg4** | **recvmsg6** | **sysctl** }
-+|		**sendmsg4** | **sendmsg6** | **recvmsg4** | **recvmsg6** | **sysctl** |
-+|		**getsockopt** | **setsockopt** }
- |	*ATTACH_FLAGS* := { **multi** | **override** }
- 
- DESCRIPTION
-@@ -91,7 +92,9 @@ DESCRIPTION
-                   an unconnected udp4 socket (since 5.2);
- 		  **recvmsg6** call to recvfrom(2), recvmsg(2), recvmmsg(2) for
-                   an unconnected udp6 socket (since 5.2);
--		  **sysctl** sysctl access (since 5.2).
-+		  **sysctl** sysctl access (since 5.2);
-+		  **getsockopt** call to getsockopt (since 5.3);
-+		  **setsockopt** call to setsockopt (since 5.3).
- 
- 	**bpftool cgroup detach** *CGROUP* *ATTACH_TYPE* *PROG*
- 		  Detach *PROG* from the cgroup *CGROUP* and attach type
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-index 55dd06517a3b..1df637f85f94 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-@@ -40,7 +40,8 @@ PROG COMMANDS
- |		**lwt_seg6local** | **sockops** | **sk_skb** | **sk_msg** | **lirc_mode2** |
- |		**cgroup/bind4** | **cgroup/bind6** | **cgroup/post_bind4** | **cgroup/post_bind6** |
- |		**cgroup/connect4** | **cgroup/connect6** | **cgroup/sendmsg4** | **cgroup/sendmsg6** |
--|		**cgroup/recvmsg4** | **cgroup/recvmsg6** | **cgroup/sysctl**
-+|		**cgroup/recvmsg4** | **cgroup/recvmsg6** | **cgroup/sysctl** |
-+|		**cgroup/getsockopt** | **cgroup/setsockopt**
- |	}
- |       *ATTACH_TYPE* := {
- |		**msg_verdict** | **stream_verdict** | **stream_parser** | **flow_dissector**
-diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-index c98cb99867f6..08f35c787ab6 100644
---- a/tools/bpf/bpftool/bash-completion/bpftool
-+++ b/tools/bpf/bpftool/bash-completion/bpftool
-@@ -379,7 +379,8 @@ _bpftool()
-                                 cgroup/sendmsg4 cgroup/sendmsg6 \
-                                 cgroup/recvmsg4 cgroup/recvmsg6 \
-                                 cgroup/post_bind4 cgroup/post_bind6 \
--                                cgroup/sysctl" -- \
-+                                cgroup/sysctl cgroup/getsockopt \
-+                                cgroup/setsockopt" -- \
-                                                    "$cur" ) )
-                             return 0
-                             ;;
-@@ -689,7 +690,8 @@ _bpftool()
-                 attach|detach)
-                     local ATTACH_TYPES='ingress egress sock_create sock_ops \
-                         device bind4 bind6 post_bind4 post_bind6 connect4 \
--                        connect6 sendmsg4 sendmsg6 recvmsg4 recvmsg6 sysctl'
-+                        connect6 sendmsg4 sendmsg6 recvmsg4 recvmsg6 sysctl \
-+                        getsockopt setsockopt'
-                     local ATTACH_FLAGS='multi override'
-                     local PROG_TYPE='id pinned tag'
-                     case $prev in
-@@ -699,7 +701,8 @@ _bpftool()
-                             ;;
-                         ingress|egress|sock_create|sock_ops|device|bind4|bind6|\
-                         post_bind4|post_bind6|connect4|connect6|sendmsg4|\
--                        sendmsg6|recvmsg4|recvmsg6|sysctl)
-+                        sendmsg6|recvmsg4|recvmsg6|sysctl|getsockopt|\
-+                        setsockopt)
-                             COMPREPLY=( $( compgen -W "$PROG_TYPE" -- \
-                                 "$cur" ) )
-                             return 0
-diff --git a/tools/bpf/bpftool/cgroup.c b/tools/bpf/bpftool/cgroup.c
-index 1bb2a751107a..24937891bc48 100644
---- a/tools/bpf/bpftool/cgroup.c
-+++ b/tools/bpf/bpftool/cgroup.c
-@@ -26,7 +26,8 @@
- 	"                        sock_ops | device | bind4 | bind6 |\n"	       \
- 	"                        post_bind4 | post_bind6 | connect4 |\n"       \
- 	"                        connect6 | sendmsg4 | sendmsg6 |\n"           \
--	"                        recvmsg4 | recvmsg6 | sysctl }"
-+	"                        recvmsg4 | recvmsg6 | sysctl |\n"	       \
-+	"                        getsockopt | setsockopt }"
- 
- static const char * const attach_type_strings[] = {
- 	[BPF_CGROUP_INET_INGRESS] = "ingress",
-@@ -45,6 +46,8 @@ static const char * const attach_type_strings[] = {
- 	[BPF_CGROUP_SYSCTL] = "sysctl",
- 	[BPF_CGROUP_UDP4_RECVMSG] = "recvmsg4",
- 	[BPF_CGROUP_UDP6_RECVMSG] = "recvmsg6",
-+	[BPF_CGROUP_GETSOCKOPT] = "getsockopt",
-+	[BPF_CGROUP_SETSOCKOPT] = "setsockopt",
- 	[__MAX_BPF_ATTACH_TYPE] = NULL,
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 68f45a96769f..cacbd038ac79 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -2646,6 +2646,7 @@ static bool bpf_prog_type__needs_kver(enum bpf_prog_type type)
+ 	case BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE:
+ 	case BPF_PROG_TYPE_PERF_EVENT:
+ 	case BPF_PROG_TYPE_CGROUP_SYSCTL:
++	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
+ 		return false;
+ 	case BPF_PROG_TYPE_KPROBE:
+ 	default:
+@@ -3604,6 +3605,10 @@ static const struct {
+ 						BPF_CGROUP_UDP6_RECVMSG),
+ 	BPF_EAPROG_SEC("cgroup/sysctl",		BPF_PROG_TYPE_CGROUP_SYSCTL,
+ 						BPF_CGROUP_SYSCTL),
++	BPF_EAPROG_SEC("cgroup/getsockopt",	BPF_PROG_TYPE_CGROUP_SOCKOPT,
++						BPF_CGROUP_GETSOCKOPT),
++	BPF_EAPROG_SEC("cgroup/setsockopt",	BPF_PROG_TYPE_CGROUP_SOCKOPT,
++						BPF_CGROUP_SETSOCKOPT),
  };
  
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index fddec15c454a..fb0ba77e6722 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -74,6 +74,7 @@ static const char * const prog_type_name[] = {
- 	[BPF_PROG_TYPE_SK_REUSEPORT]		= "sk_reuseport",
- 	[BPF_PROG_TYPE_FLOW_DISSECTOR]		= "flow_dissector",
- 	[BPF_PROG_TYPE_CGROUP_SYSCTL]		= "cgroup_sysctl",
-+	[BPF_PROG_TYPE_CGROUP_SOCKOPT]		= "cgroup_sockopt",
- };
- 
- extern const char * const map_type_name[];
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index f1a831f05010..9b0db5d14e31 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -1071,7 +1071,8 @@ static int do_help(int argc, char **argv)
- 		"                 cgroup/bind4 | cgroup/bind6 | cgroup/post_bind4 |\n"
- 		"                 cgroup/post_bind6 | cgroup/connect4 | cgroup/connect6 |\n"
- 		"                 cgroup/sendmsg4 | cgroup/sendmsg6 | cgroup/recvmsg4 |\n"
--		"                 cgroup/recvmsg6 }\n"
-+		"                 cgroup/recvmsg6 | cgroup/getsockopt |\n"
-+		"                 cgroup/setsockopt }\n"
- 		"       ATTACH_TYPE := { msg_verdict | stream_verdict | stream_parser |\n"
- 		"                        flow_dissector }\n"
- 		"       " HELP_SPEC_OPTIONS "\n"
+ #undef BPF_PROG_SEC_IMPL
+diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
+index 6635a31a7a16..ace1a0708d99 100644
+--- a/tools/lib/bpf/libbpf_probes.c
++++ b/tools/lib/bpf/libbpf_probes.c
+@@ -101,6 +101,7 @@ probe_load(enum bpf_prog_type prog_type, const struct bpf_insn *insns,
+ 	case BPF_PROG_TYPE_SK_REUSEPORT:
+ 	case BPF_PROG_TYPE_FLOW_DISSECTOR:
+ 	case BPF_PROG_TYPE_CGROUP_SYSCTL:
++	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
+ 	default:
+ 		break;
+ 	}
 -- 
 2.22.0.410.gd8fdbe21b5-goog
 
