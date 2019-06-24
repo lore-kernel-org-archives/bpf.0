@@ -2,57 +2,85 @@ Return-Path: <SRS0=kBJA=UX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27856C43613
-	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 15:00:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EE1DC43613
+	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 15:29:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 06E6A205C9
-	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 15:00:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 536EF20652
+	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 15:29:01 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ChS7ei37"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726708AbfFXPAG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Jun 2019 11:00:06 -0400
-Received: from www62.your-server.de ([213.133.104.62]:33420 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728365AbfFXPAG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Jun 2019 11:00:06 -0400
-Received: from [78.46.172.2] (helo=sslproxy05.your-server.de)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1hfQRw-00055l-S1; Mon, 24 Jun 2019 17:00:04 +0200
-Received: from [178.199.41.31] (helo=linux.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1hfQRw-000UUS-Lv; Mon, 24 Jun 2019 17:00:04 +0200
-Subject: Re: [PATCH] xsk: sample kernel code is now in libbpf
-To:     Eric Leblond <eric@regit.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-References: <20190621201310.12791-1-eric@regit.org>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <32cddde0-47d6-a5c1-9a8c-aa2bc408dea2@iogearbox.net>
-Date:   Mon, 24 Jun 2019 17:00:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.3.0
+        id S1728876AbfFXP3B (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Jun 2019 11:29:01 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:46678 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726708AbfFXP3A (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Jun 2019 11:29:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=oAjztfS6a11nHbhHo7uC7mDxqHgIvw/jJlFzaOoft6c=; b=ChS7ei37kxum+rWJw+kFlBTPO
+        C/scV2A8FYJo+q7aUFx1PkEmzzt4b5EVV6M1jdpQvr0Gx1lO5RSYlbIId/xZJ25JZx0WNvctgqNzO
+        rAUAboJM7X/Gu3T9M4213MrJRQ7Q/mQ7kswh7gpnMJQh/fxuH2dMJbUPXd3UZUsdk8yWXjFSqLxks
+        20EGrtd6HZnSY8b2S3g+12cmGcfsy0QRYFRXsxS2cf+9CzDBGrqe7U3RJUNo92vPmuQ+UtysgfdZB
+        OIBKgc7xSf41vYlypspPOuf7je/fafDmAxpYAMEVwHpSvsnctIKIuJET9jDFXJoMNBfVMo73uzyy5
+        0pMuLoOBA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hfQsj-0000ti-6T; Mon, 24 Jun 2019 15:27:47 +0000
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C2D8720A585BA; Mon, 24 Jun 2019 17:27:43 +0200 (CEST)
+Date:   Mon, 24 Jun 2019 17:27:43 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Phong Tran <tranmanphong@gmail.com>
+Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
+        alexander.sverdlin@gmail.com, allison@lohutok.net, andrew@lunn.ch,
+        ast@kernel.org, bgolaszewski@baylibre.com, bpf@vger.kernel.org,
+        daniel@iogearbox.net, daniel@zonque.org, dmg@turingmachine.org,
+        festevam@gmail.com, gerg@uclinux.org, gregkh@linuxfoundation.org,
+        gregory.clement@bootlin.com, haojian.zhuang@gmail.com,
+        hsweeten@visionengravers.com, illusionist.neo@gmail.com,
+        info@metux.net, jason@lakedaemon.net, jolsa@redhat.com,
+        kafai@fb.com, kernel@pengutronix.de, kgene@kernel.org,
+        krzk@kernel.org, kstewart@linuxfoundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux@armlinux.org.uk,
+        liviu.dudau@arm.com, lkundrak@v3.sk, lorenzo.pieralisi@arm.com,
+        mark.rutland@arm.com, mingo@redhat.com, namhyung@kernel.org,
+        netdev@vger.kernel.org, nsekhar@ti.com, robert.jarzmik@free.fr,
+        s.hauer@pengutronix.de, sebastian.hesselbarth@gmail.com,
+        shawnguo@kernel.org, songliubraving@fb.com, sudeep.holla@arm.com,
+        swinslow@gmail.com, tglx@linutronix.de, tony@atomide.com,
+        will@kernel.org, yhs@fb.com
+Subject: Re: [PATCH V2 00/15] cleanup cppcheck signed shifting errors
+Message-ID: <20190624152743.GG3436@hirez.programming.kicks-ass.net>
+References: <20190623151313.970-1-tranmanphong@gmail.com>
+ <20190624135105.15579-1-tranmanphong@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20190621201310.12791-1-eric@regit.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.100.3/25490/Mon Jun 24 10:02:14 2019)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190624135105.15579-1-tranmanphong@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 06/21/2019 10:13 PM, Eric Leblond wrote:
-> Fix documentation that mention xdpsock_kern.c which has been
-> replaced by code embedded in libbpf.
+On Mon, Jun 24, 2019 at 08:50:50PM +0700, Phong Tran wrote:
+> There are errors with cppcheck 
 > 
-> Signed-off-by: Eric Leblond <eric@regit.org>
+> "Shifting signed 32-bit value by 31 bits is undefined behaviour errors"
 
-Applied, thanks!
+As I've already told you; your checker is bad. That is not in face
+undefined behaviour in the kernel.
+
+That's not to say you shouldn't clean up the code, but don't give broken
+checkout output as a reason.
