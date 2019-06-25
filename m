@@ -2,100 +2,109 @@ Return-Path: <SRS0=2zuU=UY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AD54C4646B
-	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 00:13:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74E58C4646B
+	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 00:14:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 344B1205ED
-	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 00:13:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D9EF205ED
+	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 00:14:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EssshDt/"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="oO6ZS5eq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729133AbfFYANx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Jun 2019 20:13:53 -0400
-Received: from mail-vs1-f74.google.com ([209.85.217.74]:35843 "EHLO
-        mail-vs1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726453AbfFYANb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Jun 2019 20:13:31 -0400
-Received: by mail-vs1-f74.google.com with SMTP id j77so4394545vsd.3
-        for <bpf@vger.kernel.org>; Mon, 24 Jun 2019 17:13:30 -0700 (PDT)
+        id S1730037AbfFYAOX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Jun 2019 20:14:23 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:41375 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730018AbfFYAOX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Jun 2019 20:14:23 -0400
+Received: by mail-qk1-f196.google.com with SMTP id c11so11214679qkk.8
+        for <bpf@vger.kernel.org>; Mon, 24 Jun 2019 17:14:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Q0hyqVzuncQMFkIZhAOHJkIfbxm5sDRWMvyBXtcavoo=;
-        b=EssshDt/dlH+w3otVcXsWVrkwsJGAEYnRZomAA2SB8qG/Igf+gZ+Yj3LwaIyfQ+jTJ
-         yZyJOFE5cqme7ibfp2WTeYILLR/Eq3LafVKKg36FAfr0rZ0zjaRRfvHudE5wa7UimQYV
-         HkJr+bRcOM4asjgjGlsGVfVmMhz2WroL/8+MSe/pjIy+MSyRaLtdC1vLU7xt2FLgAbd8
-         f9oP8cnro7VlgAtgCGyFmly/+lk9rLMPYRrltq92XkAexvCpDl/XhrAku4YXDNJB9kcf
-         VyY2P6cHBv0xzRRb/oyueFu/ELftH6aNCIaibDzCjQkh/Fe1azRI7GgxFS6mU08mapE+
-         GHPw==
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=idMODAcOv2Dt8ZWy2wPt4Z83ta1OwJTt0jsnz2NfzUI=;
+        b=oO6ZS5eqyA9LygqsicelqXcxs1lPMoD+hODhPKrOyskzS0p0gL80ydnDZrFAymyJQk
+         rzd7Tq31z91+DWytz5dz1NMQP7SexeLme2wMe62wSN8FxM2UxkVxnMx5u7cW2E8+o3fb
+         FEdGrmR8gQO/igyF70T5H0z9p29Fs5JZjqwAlqR3dmuNL2cQqMD9RWgknn/MYFMDMIcW
+         syZTrU8mWL3t0vlnX6LWJOIxY9ePxCFhVolT59fJfRSF+EcYaYfggmkqPT4ABF9IlQr4
+         WVdJeA+WNx3xGQdLAxckPCN24+7hdY5rHhpc3RL4Y5gsjzstgINbBtL3Mu0xYMm+LzbV
+         8JBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Q0hyqVzuncQMFkIZhAOHJkIfbxm5sDRWMvyBXtcavoo=;
-        b=glWlNitCBvcLjhD+gxIJjk8LXCRAGIc3N1B1HbzjLdT+mXa/+WWXAcHHZgasukW5aL
-         wxQZU9zr5zxVkae/II+OWYwI789F1Ub5TJJB13ztNiQawqTq7iHNr0b/LWk0O/IwK14Q
-         YYnKVdQW0MijjqHFYWhfe9IM8/PjnDqu/89QXnKJV26KxicUD7yq/N7AFHTSAnte8w1y
-         Q+R/GZKq/9mcfD+zigkbaoujB14lFGITS9yjpOPq9y/Cq6A5GG1SnfBJxOmH00bvGaWb
-         J9jExXCjDwjKdbY0iDXADTRbJagLiZMlYAq3L3rDEFNBSY3uaClxB0Z5XYByBgFerGXe
-         dDPg==
-X-Gm-Message-State: APjAAAUGKNt/dKznF4jxaX5bGikNLyqTXFtQfgH5X3y4vwFDyRfsbwEv
-        L98WQ3FmLVbCNhK5L4ShzswC+s9dXtLj/sub
-X-Google-Smtp-Source: APXvYqymD+lJYYlyP2I7bp7SGi9HdcHDJCT5J5n7xkvzEZeLw9Txu07SMJTO5XtuZBxB44z+jN54bvP/ZD3J4c30
-X-Received: by 2002:a1f:ec85:: with SMTP id k127mr12749816vkh.92.1561421610156;
- Mon, 24 Jun 2019 17:13:30 -0700 (PDT)
-Date:   Mon, 24 Jun 2019 17:13:24 -0700
-Message-Id: <20190625001326.172280-1-allanzhang@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH] bpf: Allow bpf_skb_event_output for a few prog types
-From:   allanzhang <allanzhang@google.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=idMODAcOv2Dt8ZWy2wPt4Z83ta1OwJTt0jsnz2NfzUI=;
+        b=kdn3S+DfjFzdFTyYLVhiRD5CG3BkF4kQVZFqW3B2nk4iD2sTs/jmSvjMJZpU8i6FKf
+         ta7rrAgLDwePzO4AHM08jj+7RpyoYIwDbZw0gjrD0bGk8LMj8sTWy4qwR/0FFVekV9/L
+         kz1FYcOx+wEDfygIF7tjGhj3UdlyCXs/VlvARGaHOAgzKxBbfm6pkKju3Om1PZdZtraV
+         757twgpSgdFcNGIEuh7AvRt96N8Z4bJRV64+8LKI7/HxoFu1EM4+fHV1xpJ68lKcbhdw
+         ZjxTO8bVdSG/+wkRjRUjU0ZUZbct1/HjfSfPxhp8BWuC845uBgkxsQYf9qzG1Zz5peh7
+         oD3Q==
+X-Gm-Message-State: APjAAAXmzAnIjdpZEgy399exvG1Lox0LG4Vyv1HIdNXyC46OLIH7RXEn
+        B8XHBMqZ/oz9pi69vCHSMJlz9w==
+X-Google-Smtp-Source: APXvYqz2RsO+/la3fEScy9M3DKQDzUV6J9+FET3PoqvNpTPp5INSNcc/ZnodbI3nQ0jwog296hUckA==
+X-Received: by 2002:a37:a2d8:: with SMTP id l207mr18964343qke.492.1561421661964;
+        Mon, 24 Jun 2019 17:14:21 -0700 (PDT)
+Received: from cakuba.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id s11sm7357466qte.49.2019.06.24.17.14.20
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 24 Jun 2019 17:14:21 -0700 (PDT)
+Date:   Mon, 24 Jun 2019 17:14:16 -0700
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Brian Vazquez <brianvv.kernel@gmail.com>
+Cc:     Brian Vazquez <brianvv@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     allanzhang <allanzhang@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        "David S . Miller" <davem@davemloft.net>,
+        Stanislav Fomichev <sdf@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Petar Penkov <ppenkov@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 2/6] bpf: add BPF_MAP_DUMP command to access more
+ than one entry per call
+Message-ID: <20190624171416.2a39f4c7@cakuba.netronome.com>
+In-Reply-To: <CABCgpaUhHmLaWUg-x_X+yYD6pnoAcMLw9jr1BPnv5vrM-NYmqQ@mail.gmail.com>
+References: <20190621231650.32073-1-brianvv@google.com>
+        <20190621231650.32073-3-brianvv@google.com>
+        <20190624154558.65c31561@cakuba.netronome.com>
+        <CABCgpaUhHmLaWUg-x_X+yYD6pnoAcMLw9jr1BPnv5vrM-NYmqQ@mail.gmail.com>
+Organization: Netronome Systems, Ltd.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Software event output is only enabled by a few prog types right now (TC,
-LWT out, XDP, sockops). Many other skb based prog types need
-bpf_skb_event_output to produce software event.
+On Mon, 24 Jun 2019 16:35:05 -0700, Brian Vazquez wrote:
+> On Mon, Jun 24, 2019 at 3:46 PM Jakub Kicinski wrote:
+> > On Fri, 21 Jun 2019 16:16:46 -0700, Brian Vazquez wrote:  
+> > > @@ -385,6 +386,14 @@ union bpf_attr {
+> > >               __u64           flags;
+> > >       };
+> > >
+> > > +     struct { /* struct used by BPF_MAP_DUMP command */
+> > > +             __u32           map_fd;  
+> >
+> > There is a hole here, perhaps flags don't have to be 64 bit?  
+> The command implementation is wrapping BPF_MAP_*_ELEM commands, I
+> would expect this one to handle the same flags which are 64 bit.
+> Note that there's a hole in the anonymous structure used by the other
+> commands too:
+>         struct { /* anonymous struct used by BPF_MAP_*_ELEM commands */
+>                 __u32           map_fd;
+>                 __aligned_u64   key;
+>                 union {
+>                         __aligned_u64 value;
+>                         __aligned_u64 next_key;
+>                 };
+>                 __u64           flags;
+>         };
 
-Added socket_filter, cg_skb, sk_skb prog types to generate sw event.
-
-Test bpf code is generated from code snippet:
-
-struct TMP {
-    uint64_t tmp;
-} tt;
-tt.tmp = 5;
-bpf_perf_event_output(skb, &connection_tracking_event_map, 0,
-                      &tt, sizeof(tt));
-return 1;
-
-the bpf assembly from llvm is:
-       0:       b7 02 00 00 05 00 00 00         r2 = 5
-       1:       7b 2a f8 ff 00 00 00 00         *(u64 *)(r10 - 8) = r2
-       2:       bf a4 00 00 00 00 00 00         r4 = r10
-       3:       07 04 00 00 f8 ff ff ff         r4 += -8
-       4:       18 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00    r2 = 0ll
-       6:       b7 03 00 00 00 00 00 00         r3 = 0
-       7:       b7 05 00 00 08 00 00 00         r5 = 8
-       8:       85 00 00 00 19 00 00 00         call 25
-       9:       b7 00 00 00 01 00 00 00         r0 = 1
-      10:       95 00 00 00 00 00 00 00         exit
-
-Patch 1 is enabling code.
-Patch 2 is fullly covered selftest code.
-
-Signed-off-by: allanzhang <allanzhang@google.com>
+Ah, okay.
