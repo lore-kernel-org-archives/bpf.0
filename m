@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06687C48BD7
-	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 19:43:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C67D3C48BD6
+	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 19:43:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CA70E2085A
-	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 19:43:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A093C208CB
+	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 19:43:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kinvolk.io header.i=@kinvolk.io header.b="B0qKM/U4"
+	dkim=pass (1024-bit key) header.d=kinvolk.io header.i=@kinvolk.io header.b="csn54bR/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729188AbfFYTnh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Jun 2019 15:43:37 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:42218 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729151AbfFYTmv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 25 Jun 2019 15:42:51 -0400
-Received: by mail-wr1-f66.google.com with SMTP id x17so19198511wrl.9
-        for <bpf@vger.kernel.org>; Tue, 25 Jun 2019 12:42:50 -0700 (PDT)
+        id S1728878AbfFYTns (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Jun 2019 15:43:48 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:36283 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728881AbfFYTmt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 25 Jun 2019 15:42:49 -0400
+Received: by mail-wr1-f68.google.com with SMTP id n4so18027253wrs.3
+        for <bpf@vger.kernel.org>; Tue, 25 Jun 2019 12:42:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kinvolk.io; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Vuh+TLhBB0eIRHe2g95nOHI1s4ciRO5HgoaZCB54tSE=;
-        b=B0qKM/U49PvsnjrR3PuiBZn8E2OIHXhNqRCZUOwb8Z2Dw+2MBibLdwsqij3E7iQWKn
-         mLrzp6xa4uKLImcuISPwM8X0ADKpvNRhy4D7rqRXNZ4+rpFZG0hp7CW48EljQEWjI/39
-         kKyv5DufztuCxwacO5OD8Pre1Y7vXeXuIFkLU=
+        bh=gF+TApHT5g/voE3vYeHrjhE0fjt+hIapyPZdSdt5oAQ=;
+        b=csn54bR/un7yHoLCBsM3gUToVx0AmYE5K7Oy2aGEZPtqU0mq7XujTVNDzqowgyHVSG
+         FdUGlOSmw9CAUCznG54Ck4vg54uHBUVPthrSIjqSlIT6GJyCz0B9DsnGMBxNd5Y6ZuZi
+         BLr+I6RmTPkWGUMyzCJsjx+r6WN1t7VsTCIJ8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Vuh+TLhBB0eIRHe2g95nOHI1s4ciRO5HgoaZCB54tSE=;
-        b=SzvqU8FCUr26hEoNtqdc4TjEaXmx4hNQs2CZhL9opWWbVduVIpiCEvuIibGZxIE22n
-         cABdvhGa1ZwP9WLGXZmltzx4k92qGzEGaoCE+y6Q7FjG+5mUofp6PkFPQsZmPpcFv+bz
-         hyRODwlrKqmy5TDwH7uoJtbsBokxEzVefme4cWRQXQsWdJZHyhpWbS3YVqEz9x7NUdsM
-         QkROIpSpzOozfaETIh39CDc/rInjhLiKOeEFEqUMxnCqZhToTkU09L23blY+5kdi6QMe
-         szOay5FWzo3Y7tGhh0olifIJH4oXEg+B38TaAcMDU0fXe4PvQELVsUaUk78mWuaxnGnX
-         1TEQ==
-X-Gm-Message-State: APjAAAWpiTXVKSHWpHyl8nQuXbw9sKTeOGu+Y6ABJ0wAmH1fZBpaN+Pp
-        GdaBsZwYQ1sDVVuerutFLOM0ow==
-X-Google-Smtp-Source: APXvYqxqGo9JlAmM8HyzzX1Md5s/iJmfNbMuxbfMOH18JHLunAkywkrJAM1P6MugGJF3HhOxB1xxYw==
-X-Received: by 2002:a05:6000:c9:: with SMTP id q9mr9743783wrx.208.1561491769960;
-        Tue, 25 Jun 2019 12:42:49 -0700 (PDT)
+        bh=gF+TApHT5g/voE3vYeHrjhE0fjt+hIapyPZdSdt5oAQ=;
+        b=EbflLsYD31d7n3bq4HHOm3UfBt5otLhpnCxMntvsaLhGtdvaZ7NLU7YxyK6hIqek7v
+         kAaGuZvmD+1WNzJgZ0MFR7ng8o9pdf6PIyyp8MFdPUbit/DZEr9FKaaG1stazyN+uuIJ
+         RR+xs/bCVPkw7GJrAAtmgTvokYFW/omJWynfOJFYbGV8j+ZwZPh/yQBW6RDIB5GumGGJ
+         aCfyRvbiVxk/gS+46PSKXLkBUpNaP1TfzMkYwLsk6Sqgo975qZBKf3bI2yd10VfYSXjA
+         VUrc4VV7f6w+LAFKdR6CJ5eMmCQxIa1YAI7HMnPao2eK6e2WbApufjd4gXFZRJH0keGe
+         IsEg==
+X-Gm-Message-State: APjAAAUh2ldt+yuIkNsATnxY+teoRcK7YH9arr+993WU6rd22YFLhQXC
+        aJ6VWRnwo3PXo86s7I3M4DhSoQ==
+X-Google-Smtp-Source: APXvYqyMKk5+9ncOIiVNAxk2PS3ILRPAWR8jAYomxKM4xSozvjpXH49pjU3/smRzRY7CmKGevTcuqw==
+X-Received: by 2002:a5d:5692:: with SMTP id f18mr58429326wrv.104.1561491767958;
+        Tue, 25 Jun 2019 12:42:47 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5aedb6.dynamic.kabel-deutschland.de. [95.90.237.182])
-        by smtp.gmail.com with ESMTPSA id q193sm84991wme.8.2019.06.25.12.42.49
+        by smtp.gmail.com with ESMTPSA id q193sm84991wme.8.2019.06.25.12.42.46
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 25 Jun 2019 12:42:49 -0700 (PDT)
+        Tue, 25 Jun 2019 12:42:47 -0700 (PDT)
 From:   Krzesimir Nowak <krzesimir@kinvolk.io>
 To:     netdev@vger.kernel.org
 Cc:     Alban Crequy <alban@kinvolk.io>,
@@ -60,10 +60,11 @@ Cc:     Alban Crequy <alban@kinvolk.io>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Krzesimir Nowak <krzesimir@kinvolk.io>
-Subject: [bpf-next v2 05/10] selftests/bpf: Allow passing more information to BPF prog test run
-Date:   Tue, 25 Jun 2019 21:42:10 +0200
-Message-Id: <20190625194215.14927-6-krzesimir@kinvolk.io>
+        Krzesimir Nowak <krzesimir@kinvolk.io>,
+        Stanislav Fomichev <sdf@google.com>
+Subject: [bpf-next v2 03/10] selftests/bpf: Avoid another case of errno clobbering
+Date:   Tue, 25 Jun 2019 21:42:08 +0200
+Message-Id: <20190625194215.14927-4-krzesimir@kinvolk.io>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190625194215.14927-1-krzesimir@kinvolk.io>
 References: <20190625194215.14927-1-krzesimir@kinvolk.io>
@@ -74,162 +75,48 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The test case can specify a custom length of the data member, context
-data and its length, which will be passed to
-bpf_prog_test_run_xattr. For backward compatilibity, if the data
-length is 0 (which is what will happen when the field is left
-unspecified in the designated initializer of a struct), then the
-length passed to the bpf_prog_test_run_xattr is TEST_DATA_LEN.
+Commit 8184d44c9a57 ("selftests/bpf: skip verifier tests for
+unsupported program types") added a check for an unsupported program
+type. The function doing it changes errno, so test_verifier should
+save it before calling it if test_verifier wants to print a reason why
+verifying a BPF program of a supported type failed.
 
-Also for backward compatilibity, if context data length is 0, NULL is
-passed as a context to bpf_prog_test_run_xattr. This is to avoid
-breaking other tests, where context data being NULL and context data
-length being 0 is handled differently from the case where context data
-is not NULL and context data length is 0.
-
-Custom lengths still can't be greater than hardcoded 64 bytes for data
-and 192 for context data.
-
-192 for context data was picked to allow passing struct
-bpf_perf_event_data as a context for perf event programs. The struct
-is quite large, because it contains struct pt_regs.
-
+Fixes: 8184d44c9a57 ("selftests/bpf: skip verifier tests for unsupported program types")
+Cc: Stanislav Fomichev <sdf@google.com>
 Signed-off-by: Krzesimir Nowak <krzesimir@kinvolk.io>
 ---
- tools/testing/selftests/bpf/test_verifier.c | 68 +++++++++++++++++++--
- 1 file changed, 62 insertions(+), 6 deletions(-)
+ tools/testing/selftests/bpf/test_verifier.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index db1f0f758f81..05bad54f481f 100644
+index 12589da13487..779e30b96ded 100644
 --- a/tools/testing/selftests/bpf/test_verifier.c
 +++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -54,6 +54,7 @@
- #define MAX_TEST_RUNS	8
- #define POINTER_VALUE	0xcafe4all
- #define TEST_DATA_LEN	64
-+#define TEST_CTX_LEN	192
+@@ -867,6 +867,7 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 	int fixup_skips;
+ 	__u32 pflags;
+ 	int i, err;
++	int saved_errno;
  
- #define F_NEEDS_EFFICIENT_UNALIGNED_ACCESS	(1 << 0)
- #define F_LOAD_WITH_STRICT_ALIGNMENT		(1 << 1)
-@@ -96,6 +97,9 @@ struct bpf_test {
- 	enum bpf_prog_type prog_type;
- 	uint8_t flags;
- 	__u8 data[TEST_DATA_LEN];
-+	__u32 data_len;
-+	__u8 ctx[TEST_CTX_LEN];
-+	__u32 ctx_len;
- 	void (*fill_helper)(struct bpf_test *self);
- 	uint8_t runs;
- 	struct {
-@@ -104,6 +108,9 @@ struct bpf_test {
- 			__u8 data[TEST_DATA_LEN];
- 			__u64 data64[TEST_DATA_LEN / 8];
- 		};
-+		__u32 data_len;
-+		__u8 ctx[TEST_CTX_LEN];
-+		__u32 ctx_len;
- 	} retvals[MAX_TEST_RUNS];
- };
- 
-@@ -818,7 +825,7 @@ static int set_admin(bool admin)
- }
- 
- static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
--			    void *data, size_t size_data)
-+			    void *data, size_t size_data, void *ctx, size_t size_ctx)
- {
- 	__u8 tmp[TEST_DATA_LEN << 2];
- 	__u32 size_tmp = sizeof(tmp);
-@@ -831,6 +838,8 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
- 		.data_size_in = size_data,
- 		.data_out = tmp,
- 		.data_size_out = size_tmp,
-+		.ctx_in = ctx,
-+		.ctx_size_in = size_ctx,
- 	};
- 
- 	if (unpriv)
-@@ -956,13 +965,39 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
- 	if (!alignment_prevented_execution && fd_prog >= 0) {
- 		uint32_t expected_val;
- 		int i;
-+		__u32 size_data;
-+		__u32 size_ctx;
-+		bool bad_size;
-+		void *ctx;
- 
- 		if (!test->runs) {
-+			if (test->data_len > 0)
-+				size_data = test->data_len;
-+			else
-+				size_data = sizeof(test->data);
-+			size_ctx = test->ctx_len;
-+			bad_size = false;
- 			expected_val = unpriv && test->retval_unpriv ?
- 				test->retval_unpriv : test->retval;
- 
--			err = do_prog_test_run(fd_prog, unpriv, expected_val,
--					       test->data, sizeof(test->data));
-+			if (size_data > sizeof(test->data)) {
-+				printf("FAIL: data size (%u) greater than TEST_DATA_LEN (%lu) ", size_data, sizeof(test->data));
-+				bad_size = true;
-+			}
-+			if (size_ctx > sizeof(test->ctx)) {
-+				printf("FAIL: ctx size (%u) greater than TEST_CTX_LEN (%lu) ", size_ctx, sizeof(test->ctx));
-+				bad_size = true;
-+			}
-+			if (size_ctx)
-+				ctx = test->ctx;
-+			else
-+				ctx = NULL;
-+			if (bad_size)
-+				err = 1;
-+			else
-+				err = do_prog_test_run(fd_prog, unpriv, expected_val,
-+						       test->data, size_data,
-+						       ctx, size_ctx);
- 			if (err)
- 				run_errs++;
- 			else
-@@ -970,14 +1005,35 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 	for (i = 0; i < MAX_NR_MAPS; i++)
+ 		map_fds[i] = -1;
+@@ -894,6 +895,7 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 		pflags |= BPF_F_ANY_ALIGNMENT;
+ 	fd_prog = bpf_verify_program(prog_type, prog, prog_len, pflags,
+ 				     "GPL", 0, bpf_vlog, sizeof(bpf_vlog), 4);
++	saved_errno = errno;
+ 	if (fd_prog < 0 && !bpf_probe_prog_type(prog_type, 0)) {
+ 		printf("SKIP (unsupported program type %d)\n", prog_type);
+ 		skips++;
+@@ -910,7 +912,7 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 	if (expected_ret == ACCEPT) {
+ 		if (fd_prog < 0) {
+ 			printf("FAIL\nFailed to load prog '%s'!\n",
+-			       strerror(errno));
++			       strerror(saved_errno));
+ 			goto fail_log;
  		}
- 
- 		for (i = 0; i < test->runs; i++) {
-+			if (test->retvals[i].data_len > 0)
-+				size_data = test->retvals[i].data_len;
-+			else
-+				size_data = sizeof(test->retvals[i].data);
-+			size_ctx = test->retvals[i].ctx_len;
-+			bad_size = false;
- 			if (unpriv && test->retvals[i].retval_unpriv)
- 				expected_val = test->retvals[i].retval_unpriv;
- 			else
- 				expected_val = test->retvals[i].retval;
- 
--			err = do_prog_test_run(fd_prog, unpriv, expected_val,
--					       test->retvals[i].data,
--					       sizeof(test->retvals[i].data));
-+			if (size_data > sizeof(test->retvals[i].data)) {
-+				printf("FAIL: data size (%u) at run %i greater than TEST_DATA_LEN (%lu) ", size_data, i + 1, sizeof(test->retvals[i].data));
-+				bad_size = true;
-+			}
-+			if (size_ctx > sizeof(test->retvals[i].ctx)) {
-+				printf("FAIL: ctx size (%u) at run %i greater than TEST_CTX_LEN (%lu) ", size_ctx, i + 1, sizeof(test->retvals[i].ctx));
-+				bad_size = true;
-+			}
-+			if (size_ctx)
-+				ctx = test->retvals[i].ctx;
-+			else
-+				ctx = NULL;
-+			if (bad_size)
-+				err = 1;
-+			else
-+				err = do_prog_test_run(fd_prog, unpriv, expected_val,
-+						       test->retvals[i].data, size_data,
-+						       ctx, size_ctx);
- 			if (err) {
- 				printf("(run %d/%d) ", i + 1, test->runs);
- 				run_errs++;
+ #ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
 -- 
 2.20.1
 
