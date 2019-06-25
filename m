@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C70DC48BD5
-	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 18:23:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB82DC48BD6
+	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 18:23:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5055420883
-	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 18:23:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A8B092086D
+	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 18:23:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="N4Zf63Q0"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Ox9xgiHe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732924AbfFYSXT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Jun 2019 14:23:19 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:2228 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732925AbfFYSXS (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 25 Jun 2019 14:23:18 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5PI53vB032267
-        for <bpf@vger.kernel.org>; Tue, 25 Jun 2019 11:23:17 -0700
+        id S1732945AbfFYSXY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Jun 2019 14:23:24 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:22298 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732937AbfFYSXV (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 25 Jun 2019 14:23:21 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5PI95Od019274
+        for <bpf@vger.kernel.org>; Tue, 25 Jun 2019 11:23:20 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=OA9bvUyhDNX+cwxXkDwPNKdyzV46rSJ7gwusns727DY=;
- b=N4Zf63Q0al/B0gMuVnOVwsbXNWh7kXo13kDukqAAHfwgd4dkG4XjvVNk+fvHDNEbKnfy
- RdoIh5Rhur//Hx+w+FluOjaduUx1Ig/qd1yGjM6GwxC1RkW376WOsFYX+fS3sRcuVxoO
- Mfnz8eayHOgF+QTZwRYaDysjTU54JLg8rUU= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2tbk3qsgap-7
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 25 Jun 2019 11:23:17 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 25 Jun 2019 11:23:13 -0700
+ content-type; s=facebook; bh=lKbl06bvlMWqo/+mnDQ62Ep/fWZPZ9o1+oEgsQFvJf0=;
+ b=Ox9xgiHeAwjdO8j508nM+2R767tXdZ/NfCeja1EuXhWsV/sXv1pUW53N98JPniNBeMFt
+ v4VwTbDwZ31EWS4bJwkkIb5R5kFBJAzAG97kHsFkX202y/QEzsJwOJmISh4VxgAlIzVI
+ OM5U4JKH1SXSsyQd8HpOE/h0nqqry+FgXk8= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2tbrmy01jw-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 25 Jun 2019 11:23:20 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Tue, 25 Jun 2019 11:23:17 -0700
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id BCFCA62E1DB8; Tue, 25 Jun 2019 11:23:11 -0700 (PDT)
+        id 5136F62E1DB8; Tue, 25 Jun 2019 11:23:15 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Song Liu <songliubraving@fb.com>
 Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
@@ -47,9 +47,9 @@ To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Song Liu <songliubraving@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 2/4] bpf: sync tools/include/uapi/linux/bpf.h
-Date:   Tue, 25 Jun 2019 11:23:01 -0700
-Message-ID: <20190625182303.874270-3-songliubraving@fb.com>
+Subject: [PATCH bpf-next 4/4] bpftool: use libbpf_[get|put]_bpf_permission()
+Date:   Tue, 25 Jun 2019 11:23:03 -0700
+Message-ID: <20190625182303.874270-5-songliubraving@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190625182303.874270-1-songliubraving@fb.com>
 References: <20190625182303.874270-1-songliubraving@fb.com>
@@ -61,7 +61,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
  malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=906 adultscore=0 classifier=spam adjust=0 reason=mlx
+ mlxlogscore=669 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1810050000 definitions=main-1906250137
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -69,27 +69,50 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Sync changes for bpf_dev_ioctl.
+This patch calls libbpf_[get|put]_bpf_permission() from bpftool. This
+allows users with access to /dev/bpf to perform operations like root.
 
 Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
- tools/include/uapi/linux/bpf.h | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/bpf/bpftool/feature.c | 2 +-
+ tools/bpf/bpftool/main.c    | 5 +++++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index b077507efa3f..ec3ae452cfd7 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3541,4 +3541,9 @@ struct bpf_sysctl {
- 				 */
- };
+diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
+index d672d9086fff..f7f43b91ce96 100644
+--- a/tools/bpf/bpftool/feature.c
++++ b/tools/bpf/bpftool/feature.c
+@@ -583,7 +583,7 @@ static int do_probe(int argc, char **argv)
+ 	/* Detection assumes user has sufficient privileges (CAP_SYS_ADMIN).
+ 	 * Let's approximate, and restrict usage to root user only.
+ 	 */
+-	if (geteuid()) {
++	if (!libbpf_get_bpf_permission()) {
+ 		p_err("please run this command as root user");
+ 		return -1;
+ 	}
+diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
+index 4879f6395c7e..f9146d7d8fc5 100644
+--- a/tools/bpf/bpftool/main.c
++++ b/tools/bpf/bpftool/main.c
+@@ -390,6 +390,10 @@ int main(int argc, char **argv)
+ 	if (argc < 0)
+ 		usage();
  
-+#define BPF_IOCTL	0xBF
-+
-+#define BPF_DEV_IOCTL_GET_PERM	_IO(BPF_IOCTL, 0x01)
-+#define BPF_DEV_IOCTL_PUT_PERM	_IO(BPF_IOCTL, 0x02)
-+
- #endif /* _UAPI__LINUX_BPF_H__ */
++	if (!libbpf_get_bpf_permission()) {
++		p_err("cannot get permission to access bpf() syscall");
++		usage();
++	}
+ 	ret = cmd_select(cmds, argc, argv, do_help);
+ 
+ 	if (json_output)
+@@ -400,5 +404,6 @@ int main(int argc, char **argv)
+ 		delete_pinned_obj_table(&map_table);
+ 	}
+ 
++	libbpf_put_bpf_permission();
+ 	return ret;
+ }
 -- 
 2.17.1
 
