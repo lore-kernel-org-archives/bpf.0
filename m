@@ -2,73 +2,140 @@ Return-Path: <SRS0=2zuU=UY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7DD8C4646B
-	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 02:32:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE5AFC48BD5
+	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 04:04:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A970D20644
-	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 02:32:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A11E820665
+	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 04:04:17 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pyn37ak+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728825AbfFYCcv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Jun 2019 22:32:51 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:19103 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726774AbfFYCcv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Jun 2019 22:32:51 -0400
-Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 2EBA02D62198397EADAF;
-        Tue, 25 Jun 2019 10:32:48 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS410-HUB.china.huawei.com
- (10.3.19.210) with Microsoft SMTP Server id 14.3.439.0; Tue, 25 Jun 2019
- 10:32:37 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <davem@davemloft.net>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <jakub.kicinski@netronome.com>, <hawk@kernel.org>,
-        <john.fastabend@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <xdp-newbies@vger.kernel.org>, <bpf@vger.kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH net-next] xdp: Make __mem_id_disconnect static
-Date:   Tue, 25 Jun 2019 10:31:37 +0800
-Message-ID: <20190625023137.29272-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.133.213.239]
-X-CFilter-Loop: Reflected
+        id S1727542AbfFYEER (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Jun 2019 00:04:17 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:39677 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727540AbfFYEER (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 25 Jun 2019 00:04:17 -0400
+Received: by mail-pf1-f193.google.com with SMTP id j2so8724656pfe.6;
+        Mon, 24 Jun 2019 21:04:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=lKJzQsTdWRiDE4LC6jT5wD3fUjkhZSxKv66YO52/0Io=;
+        b=Pyn37ak+v6Ct7FBS87A6cqV6Q+HmCXkxXjRSAU2haW+C01rhiL8/FPl5o5feklwBgA
+         G4M6AYWdtoAwRn2baMYR9UeN+jEJPdrnXY3rjJ8X0gLAfKhK8SCf7cYLzDtSyQeIxJTb
+         Ur+1coG8C0o3hwaew4r74zMHsfBDLzxSCeDnZ73sC6Ghm02eWvB8oziMQ2UUBkYhGMeI
+         zjyhoe2OxMXzrCUabWztTeSSyAg0lY7heQP+t6WcEBI49MoamdLPcp4JTNcxx4E35hLb
+         uMhFcFScixboCUs6oI5I7wVHBM00sUpr2vblLlQe0OnnBdmPjW6xpXkh+21VDlgXHsNL
+         bv0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=lKJzQsTdWRiDE4LC6jT5wD3fUjkhZSxKv66YO52/0Io=;
+        b=BFvf5LrvGWV5dVZAuBRemT00sTfq+13zfbOf+hs/WhzPfx9vMQ931PPaRFPCw39BsI
+         u7xoynoCWknTqM1/SXBDah+wVulS1O/ql3gGYeG6WvHPtxIHya6faASr653xYlQVAXea
+         pG0OT8fJZ+KXWbSKqSLy+OUWI9Frz1GXgp6Ngk1rDlOVaHiuZgWlct7RKh8Lf+3hnLZH
+         BYjS/iO1AxsXWcRlID+aW8WzufSaKo+VDOUQKBN1WI/mEfDpKY4C8SnX3xPq4xNnk2Q4
+         8FUcrEPnGGvDR/DjCFAAegnklGCaOkIS4LdS1+VnVQ3CD4iE0IEBM5P0uomG8iU5FB9/
+         b0Cg==
+X-Gm-Message-State: APjAAAVW0H/s5p54rt0u6+ldHx/k783PIdQRoqQB+81h9Y8qZEVlDFUi
+        IKzFnWPEFdOEY4iAUMWB1tY=
+X-Google-Smtp-Source: APXvYqxTiHp0SY/tY143tklMJob5/LblyUUsPs1ZUb+XI7s8nI5LiITkZ/gdXMBmlKhbq5C+PhtCVg==
+X-Received: by 2002:a17:90a:b883:: with SMTP id o3mr28893337pjr.50.1561435456007;
+        Mon, 24 Jun 2019 21:04:16 -0700 (PDT)
+Received: from debian.net.fpt ([58.187.168.105])
+        by smtp.gmail.com with ESMTPSA id b24sm12408944pfd.98.2019.06.24.21.04.05
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 24 Jun 2019 21:04:15 -0700 (PDT)
+From:   Phong Tran <tranmanphong@gmail.com>
+To:     tranmanphong@gmail.com
+Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
+        alexander.sverdlin@gmail.com, allison@lohutok.net, andrew@lunn.ch,
+        ast@kernel.org, bgolaszewski@baylibre.com, bpf@vger.kernel.org,
+        daniel@iogearbox.net, daniel@zonque.org, dmg@turingmachine.org,
+        festevam@gmail.com, gerg@uclinux.org, gregkh@linuxfoundation.org,
+        gregory.clement@bootlin.com, haojian.zhuang@gmail.com,
+        hsweeten@visionengravers.com, illusionist.neo@gmail.com,
+        info@metux.net, jason@lakedaemon.net, jolsa@redhat.com,
+        kafai@fb.com, kernel@pengutronix.de, kgene@kernel.org,
+        krzk@kernel.org, kstewart@linuxfoundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux@armlinux.org.uk,
+        liviu.dudau@arm.com, lkundrak@v3.sk, lorenzo.pieralisi@arm.com,
+        mark.rutland@arm.com, mingo@redhat.com, namhyung@kernel.org,
+        netdev@vger.kernel.org, nsekhar@ti.com, peterz@infradead.org,
+        robert.jarzmik@free.fr, s.hauer@pengutronix.de,
+        sebastian.hesselbarth@gmail.com, shawnguo@kernel.org,
+        songliubraving@fb.com, sudeep.holla@arm.com, swinslow@gmail.com,
+        tglx@linutronix.de, tony@atomide.com, will@kernel.org, yhs@fb.com
+Subject: [PATCH V3 00/15] cleanup cppcheck signed shifting errors
+Date:   Tue, 25 Jun 2019 11:03:41 +0700
+Message-Id: <20190625040356.27473-1-tranmanphong@gmail.com>
+X-Mailer: git-send-email 2.11.0
+In-Reply-To: <20190624135105.15579-1-tranmanphong@gmail.com>
+References: <20190624135105.15579-1-tranmanphong@gmail.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix sparse warning:
+This is also do as the suggestion of "Linux Kernel Mentorship Task List"
 
-net/core/xdp.c:88:6: warning:
- symbol '__mem_id_disconnect' was not declared. Should it be static?
+https://wiki.linuxfoundation.org/lkmp/lkmp_task_list#cleanup_cppcheck_errors
+"Shifting signed 32-bit value by 31 bits is undefined behaviour errors"
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- net/core/xdp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Change Log:
 
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index b29d7b5..829377c 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -85,7 +85,7 @@ static void __xdp_mem_allocator_rcu_free(struct rcu_head *rcu)
- 	kfree(xa);
- }
- 
--bool __mem_id_disconnect(int id, bool force)
-+static bool __mem_id_disconnect(int id, bool force)
- {
- 	struct xdp_mem_allocator *xa;
- 	bool safe_to_remove = true;
+V2: Using BIT() macro instead of (1UL << nr) 
+
+V3: 
+* Update the comments from Russell King.
+* Update commit message and cover letter for clearly the reason as request
+  Peter Zijlstra
+* For avoiding the broken only change (1<<nr) pattern to BIT(nr)
+
+Phong Tran (15):
+  arm: perf: cleanup cppcheck shifting error
+  ARM: davinci: cleanup cppcheck shifting errors
+  ARM: ep93xx: cleanup cppcheck shifting errors
+  ARM: exynos: cleanup cppcheck shifting error
+  ARM: footbridge: cleanup cppcheck shifting error
+  ARM: imx: cleanup cppcheck shifting errors
+  ARM: ks8695: cleanup cppcheck shifting error
+  ARM: mmp: cleanup cppcheck shifting errors
+  ARM: omap2: cleanup cppcheck shifting error
+  ARM: orion5x: cleanup cppcheck shifting errors
+  ARM: pxa: cleanup cppcheck shifting errors
+  ARM: vexpress: cleanup cppcheck shifting error
+  ARM: mm: cleanup cppcheck shifting errors
+  ARM: bpf: cleanup cppcheck shifting error
+  ARM: vfp: cleanup cppcheck shifting errors
+
+ arch/arm/kernel/perf_event_v7.c    |   6 +-
+ arch/arm/mach-davinci/ddr2.h       |   6 +-
+ arch/arm/mach-ep93xx/soc.h         | 134 ++++++++++++++++++-------------------
+ arch/arm/mach-exynos/suspend.c     |   2 +-
+ arch/arm/mach-footbridge/dc21285.c |   2 +-
+ arch/arm/mach-imx/iomux-mx3.h      |  64 +++++++++---------
+ arch/arm/mach-ks8695/regs-pci.h    |   4 +-
+ arch/arm/mach-mmp/pm-mmp2.h        |  40 +++++------
+ arch/arm/mach-mmp/pm-pxa910.h      |  74 ++++++++++----------
+ arch/arm/mach-omap2/powerdomain.c  |   2 +-
+ arch/arm/mach-orion5x/pci.c        |   8 +--
+ arch/arm/mach-pxa/irq.c            |   4 +-
+ arch/arm/mach-vexpress/spc.c       |   4 +-
+ arch/arm/mm/fault.h                |   6 +-
+ arch/arm/net/bpf_jit_32.c          |   2 +-
+ arch/arm/vfp/vfpinstr.h            |   8 +--
+ 16 files changed, 183 insertions(+), 183 deletions(-)
+
 -- 
-2.7.4
-
+2.11.0
 
