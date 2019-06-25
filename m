@@ -1,140 +1,160 @@
-Return-Path: <SRS0=kBJA=UX=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=2zuU=UY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5B8DC4646C
-	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 23:57:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F908C4646B
+	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 00:01:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BC74C20679
-	for <bpf@archiver.kernel.org>; Mon, 24 Jun 2019 23:57:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EE2072077C
+	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 00:01:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HgR87KJO"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="QeLvPWFo";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="NP0D9O5S"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728930AbfFXX53 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Jun 2019 19:57:29 -0400
-Received: from mail-yb1-f202.google.com ([209.85.219.202]:38426 "EHLO
-        mail-yb1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728927AbfFXX52 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Jun 2019 19:57:28 -0400
-Received: by mail-yb1-f202.google.com with SMTP id t14so5222968ybt.5
-        for <bpf@vger.kernel.org>; Mon, 24 Jun 2019 16:57:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=lTASmr8508yaqk28Yw8XQISa65o9AY9rEgUPJ2XrbLE=;
-        b=HgR87KJOS1v7A9kmRis9ASzQhNbmeTLU0roMW42HlmJb2Vw/ecwDkpvpaNtUztTUv7
-         h4vpxWjgXCKKKHUKF4+wZj8DQkaAGkhJqrcWplLbvU/fI5opDKRRbdtJx3eZfJdkebxt
-         5lLQlThX62drcBIZH7UH+REXFuJJvNW/vtzmYPg0Ve2TeI7LUs9qg/lwHGBGOxAuhQoK
-         YKLOIFepoVtUgSvnODVM4flMJG2zquyVTjn3+IQXbdQpZltRcrvJFjx+rDzMkYmsRIPT
-         0r9WqmY0/em+knUwzDG62lpnogrUEI69Q+Ivb+NXpaa2TXYGd96vpG7ghFpyM+quVfY9
-         vn7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=lTASmr8508yaqk28Yw8XQISa65o9AY9rEgUPJ2XrbLE=;
-        b=CW+Yl/GY6Wt4HYGMugapvGi2LmV5O3/abmCEDRVSIWrteBIQ006onpn+ZrtyfIJU5c
-         A6Jja+DurHVZ1L9lRHY2VywHhjyDJV50bvjNqtRIyzJKNfIYzhL2gJOQ1T0zGnRiGrxz
-         xCcHk+1roRxE7+477vnMaF5Jcu2NNbuz8d8PFH+NIdGGaTqkNKmjr0BnVRrhjM518re1
-         VajHllFgQ26gY9GtjlZUA0C4kWiR1iquFRh1YTcOm50GMcdk4jNVieeW1bwt280cFv7A
-         ZyqWwFcMAGe0KI1dbj8WRU59Xz84yZ+DOA2GG841eheXdfGdIkGxvbHrw0OI2uHGeuXL
-         /P2Q==
-X-Gm-Message-State: APjAAAUZmdphBobJoUovKUBn3aFcjgC1obCIinXNfiBuGgyXFqt2e2w6
-        0fbbC3iyZh7SIX1/CWbk4pDApsyfOJcvgQ+m
-X-Google-Smtp-Source: APXvYqzXalSqNauQM9XckgaKmyMAAqND1aX+nEX1lCLabHCSYvsOYf5VxY3Af5oXAhLyouFsqmetotCdMjNXR0vD
-X-Received: by 2002:a0d:cc91:: with SMTP id o139mr72026193ywd.162.1561420647461;
- Mon, 24 Jun 2019 16:57:27 -0700 (PDT)
-Date:   Mon, 24 Jun 2019 16:57:19 -0700
-In-Reply-To: <20190624235720.167067-1-allanzhang@google.com>
-Message-Id: <20190624235720.167067-2-allanzhang@google.com>
-Mime-Version: 1.0
-References: <20190624235720.167067-1-allanzhang@google.com>
-X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH v3 1/2] bpf: Allow bpf_skb_event_output for a few prog types
-From:   allanzhang <allanzhang@google.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
+        id S1728694AbfFYABD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Jun 2019 20:01:03 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:48140 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726631AbfFYABD (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 24 Jun 2019 20:01:03 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x5ONrZGf019635;
+        Mon, 24 Jun 2019 17:00:37 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=1KUYvvy7TYx7gYz9XSqgufG67pt/omR2tMk9xUNO+dQ=;
+ b=QeLvPWFoo2jhj1J45Hr+XHbzxHRpQkyBfioCzhyEvcA0pqutkDs60qn/3SmxPD8ztWMJ
+ Djo8O/z7wUE3U+O6eKqPGd1VeXFbMUJYQR0sTUPZmF4ni7a2oxInZ+PJq1fIf6XC5xoi
+ iqNiKM5DxglYnIrdVVc9pCDJsMSnCkGWzU0= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net with ESMTP id 2tb3gw97kv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 24 Jun 2019 17:00:37 -0700
+Received: from ash-exhub103.TheFacebook.com (2620:10d:c0a8:82::c) by
+ ash-exhub101.TheFacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Mon, 24 Jun 2019 17:00:36 -0700
+Received: from NAM04-CO1-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.35.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
+ via Frontend Transport; Mon, 24 Jun 2019 17:00:36 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector1-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1KUYvvy7TYx7gYz9XSqgufG67pt/omR2tMk9xUNO+dQ=;
+ b=NP0D9O5SaHgT0NkB4pZ2FXKw9GIw04qLr1pv+QRkJpydj/P4ZrML7QAtXdLnQcfDwzw607VLIdVrgiRMlz5/RHb4LDb5JRlAVuUJ+LzZdw44MhUsaQ3c0t8LHl41vfR6bzBTHDc5ZlmSdeYKO+P32+GXeuX9skEDzHP5qiYeZNY=
+Received: from MWHPR15MB1165.namprd15.prod.outlook.com (10.175.3.22) by
+ MWHPR15MB1773.namprd15.prod.outlook.com (10.174.97.145) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2008.13; Tue, 25 Jun 2019 00:00:35 +0000
+Received: from MWHPR15MB1165.namprd15.prod.outlook.com
+ ([fe80::400e:e329:ea98:aa0d]) by MWHPR15MB1165.namprd15.prod.outlook.com
+ ([fe80::400e:e329:ea98:aa0d%6]) with mapi id 15.20.2008.014; Tue, 25 Jun 2019
+ 00:00:35 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     allanzhang <allanzhang@google.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     allanzhang <allanzhang@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Martin Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 0/2] bpf: Allow bpf_skb_event_output for more prog
+ types
+Thread-Topic: [PATCH v3 0/2] bpf: Allow bpf_skb_event_output for more prog
+ types
+Thread-Index: AQHVKuikUE/omfxviUSX95ATQSfH9KarfDQA
+Date:   Tue, 25 Jun 2019 00:00:35 +0000
+Message-ID: <C74526B1-7426-4F84-A5D3-DA444A17CFCD@fb.com>
+References: <20190624235720.167067-1-allanzhang@google.com>
+In-Reply-To: <20190624235720.167067-1-allanzhang@google.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3445.104.11)
+x-originating-ip: [2620:10d:c090:200::2:78ae]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d7412e4b-6c41-4849-0858-08d6f9002636
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR15MB1773;
+x-ms-traffictypediagnostic: MWHPR15MB1773:
+x-microsoft-antispam-prvs: <MWHPR15MB17733ECDECA64BEC28DB4E8FB3E30@MWHPR15MB1773.namprd15.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0079056367
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(346002)(376002)(396003)(136003)(39860400002)(199004)(189003)(256004)(76176011)(14444005)(446003)(478600001)(50226002)(186003)(14454004)(8936002)(25786009)(2906002)(486006)(66946007)(66476007)(476003)(7736002)(73956011)(76116006)(66446008)(64756008)(66556008)(2616005)(305945005)(11346002)(102836004)(6506007)(81156014)(53546011)(81166006)(4326008)(54906003)(33656002)(8676002)(316002)(6512007)(68736007)(5660300002)(4744005)(6486002)(229853002)(6246003)(6916009)(6436002)(6116002)(99286004)(46003)(86362001)(36756003)(71190400001)(57306001)(71200400001)(53936002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR15MB1773;H:MWHPR15MB1165.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 9yJpQMC7NQ9qjEpdR1cGyZqAwL0DA+lnCbwdr+1PRkgO1CnQCulYR/tBvJi0wJlqjrMV5W6jPghs7rNPPGtVoQZTubGb465l//4RaDT5UfgBAqbuTNNKAmsE2wk1l/xVW+0uYh5lLSdl5SzvVHWolXgKchWN3TaGEGTbA7cq9wi0ZLNNqTXKFUOrm1JDW9Ri2uX7ZAKvF7oW0VvOdqP5dLt4Iw+CO7CM2aBN20P+EjsPLBoztIUyPd5NaGJ2DSZJPNZsfkFEd51P2kG/AlWst43S0MEG/DdVqOvmiGCfW/+T0FvOe2388sbuG94o9nHruADlVwRxCz+rXQ+qfzni3T986fYgxkM/LzIFOli+lwdf178/aNFuCDZl/yi0QKVXBLF03XlvFF7vTPGSiNKYaNWfUMiCmKj8den+cr+4TYg=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3A32A135E791AF4CB3FE11154083D599@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: d7412e4b-6c41-4849-0858-08d6f9002636
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jun 2019 00:00:35.3543
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: songliubraving@fb.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR15MB1773
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-24_16:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=994 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906240189
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Software event output is only enabled by a few prog types right now (TC,
-LWT out, XDP, sockops). Many other skb based prog types need
-bpf_skb_event_output to produce software event.
 
-Added socket_filter, cg_skb, sk_skb prog types to generate sw event.
 
-Test bpf code is generated from code snippet:
+> On Jun 24, 2019, at 4:57 PM, allanzhang <allanzhang@google.com> wrote:
+>=20
+> Software event output is only enabled by a few prog types right now (TC,
+> LWT out, XDP, sockops). Many other skb based prog types need
+> bpf_skb_event_output to produce software event.
+>=20
+> Added socket_filter, cg_skb, sk_skb prog types to generate sw event.
+>=20
+> *** BLURB HERE ***
+    ^^^^^^ this should be removed.=20
 
-struct TMP {
-    uint64_t tmp;
-} tt;
-tt.tmp = 5;
-bpf_perf_event_output(skb, &connection_tracking_event_map, 0,
-                      &tt, sizeof(tt));
-return 1;
+Please include bpf-next in the subject prefix.=20
+Please also include changes from v1 to v2 and v2 to v3 in the cover=20
+letter, like:
 
-the bpf assembly from llvm is:
-       0:       b7 02 00 00 05 00 00 00         r2 = 5
-       1:       7b 2a f8 ff 00 00 00 00         *(u64 *)(r10 - 8) = r2
-       2:       bf a4 00 00 00 00 00 00         r4 = r10
-       3:       07 04 00 00 f8 ff ff ff         r4 += -8
-       4:       18 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00    r2 = 0ll
-       6:       b7 03 00 00 00 00 00 00         r3 = 0
-       7:       b7 05 00 00 08 00 00 00         r5 = 8
-       8:       85 00 00 00 19 00 00 00         call 25
-       9:       b7 00 00 00 01 00 00 00         r0 = 1
-      10:       95 00 00 00 00 00 00 00         exit
+changes v1 =3D> v2:
+1. ...
+2. ...
 
-Signed-off-by: allanzhang <allanzhang@google.com>
----
- net/core/filter.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Thanks,
+Song
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 2014d76e0d2a..b75fcf412628 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5958,6 +5958,8 @@ sk_filter_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_get_socket_cookie_proto;
- 	case BPF_FUNC_get_socket_uid:
- 		return &bpf_get_socket_uid_proto;
-+	case BPF_FUNC_perf_event_output:
-+		return &bpf_skb_event_output_proto;
- 	default:
- 		return bpf_base_func_proto(func_id);
- 	}
-@@ -5978,6 +5980,8 @@ cg_skb_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_sk_storage_get_proto;
- 	case BPF_FUNC_sk_storage_delete:
- 		return &bpf_sk_storage_delete_proto;
-+	case BPF_FUNC_perf_event_output:
-+		return &bpf_skb_event_output_proto;
- #ifdef CONFIG_SOCK_CGROUP_DATA
- 	case BPF_FUNC_skb_cgroup_id:
- 		return &bpf_skb_cgroup_id_proto;
-@@ -6226,6 +6230,8 @@ sk_skb_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_sk_redirect_map_proto;
- 	case BPF_FUNC_sk_redirect_hash:
- 		return &bpf_sk_redirect_hash_proto;
-+	case BPF_FUNC_perf_event_output:
-+		return &bpf_skb_event_output_proto;
- #ifdef CONFIG_INET
- 	case BPF_FUNC_sk_lookup_tcp:
- 		return &bpf_sk_lookup_tcp_proto;
--- 
-2.22.0.410.gd8fdbe21b5-goog
+
+>=20
+> allanzhang (2):
+>  bpf: Allow bpf_skb_event_output for a few prog types
+>  bpf: Add selftests for bpf_perf_event_output
+>=20
+> net/core/filter.c                             |  6 ++
+> tools/testing/selftests/bpf/test_verifier.c   | 33 ++++++-
+> .../selftests/bpf/verifier/event_output.c     | 94 +++++++++++++++++++
+> 3 files changed, 132 insertions(+), 1 deletion(-)
+> create mode 100644 tools/testing/selftests/bpf/verifier/event_output.c
+>=20
+> --=20
+> 2.22.0.410.gd8fdbe21b5-goog
+>=20
 
