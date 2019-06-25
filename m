@@ -2,140 +2,79 @@ Return-Path: <SRS0=2zuU=UY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8D48C48BD6
-	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 22:23:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FB2FC48BD6
+	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 22:38:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BF0E72085A
-	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 22:23:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5662A20645
+	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 22:38:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iFuxSSu4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tuL05odj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726511AbfFYWXv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Jun 2019 18:23:51 -0400
-Received: from mail-pg1-f202.google.com ([209.85.215.202]:55942 "EHLO
-        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725914AbfFYWXh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 25 Jun 2019 18:23:37 -0400
-Received: by mail-pg1-f202.google.com with SMTP id b10so201236pgb.22
-        for <bpf@vger.kernel.org>; Tue, 25 Jun 2019 15:23:36 -0700 (PDT)
+        id S1726320AbfFYWiL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Jun 2019 18:38:11 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:33129 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725782AbfFYWiK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 25 Jun 2019 18:38:10 -0400
+Received: by mail-lf1-f66.google.com with SMTP id y17so173157lfe.0;
+        Tue, 25 Jun 2019 15:38:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=lTASmr8508yaqk28Yw8XQISa65o9AY9rEgUPJ2XrbLE=;
-        b=iFuxSSu4w+qeEDrnY8eCvHpyEmzF/JGzC5jealGOACnmQUOxHsvXUrxbx5B6NbMf9r
-         m0Ish2G+BzlT5I4xeMQ+olR/2b7upyAKmJvFDbKeXv9/C6crCP7GQX8iqRQieVK5hv/k
-         PF+Em80VwxveytMkLWejhiJATX/wxPCQgP6uhd8sTiThHx+VCJbL5PqkG1TTg5/Uohp0
-         EchVDYcu13G8obyU86sTZANEFEbTuqhOFg2Yt3HKAnFia4/dqzfG5m9HR35NUyK6iBFz
-         ZGp+p0l2JHbEetVVoSj2YO+upcrYy6CVYDt7Wg3xjK6WZ3DXIBEYE8sxTCYM9jgWTIU6
-         bMNw==
+        bh=57nh9LzggZk/LxOVK95V+eMaGeFdODYcYnlMlFniAXY=;
+        b=tuL05odjerGQqoZGt7FnNFMcjE2xbKf93l9RrOSBT8Eoxsla+ZgqT0RCcJg/WzjHzH
+         Ff1elEuvKQv+6Sq4mowsGOb5zJeLy4pkc8NX6fXphhIfsWGnOyD0X9d9gGi8xJAM2xnu
+         7+3X/Tgn1laYhJqjCSfHG2s36mo/IP5OGDLGwV5ff33tXK7YVdusVrlu2mmTs3GOsJal
+         bZNy3fLHTGQH0pe3TPO/Xb0VkZ6pXdn0d8wrq8KDp1dVDB4hvikiuO9QW4iz/HO2lOO6
+         Mhp0t87i7lyrMEoqab0sPDlV8JElnhP5VPCBGJRVoaRWCxG119nnzuDsRRIqReAMXXyN
+         c5bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=lTASmr8508yaqk28Yw8XQISa65o9AY9rEgUPJ2XrbLE=;
-        b=mJnN/riByiI39p6HahDmBqCUMU1N8HG27Xe39kKjbxN0w4Ipo1WzrQeIdp8WN7pplv
-         mo2hLORRTgQm/NGBuBTuidgOCx4UXIICyNVzNXykGBMYyf2PsGtt8N2GF2qwHldIi7lu
-         IJ0mCJgj+MK7D/eNbrgzMUms+r8K+TRgjz+kNXeoxPmZFtvQXD+A4DG+rK/BvO8QFwJ5
-         yE0Rndn101+OOVjRftRAtfaWNaDj0ShK0+baba2j8et2I77S9KGUZOrzRAHurRWaqqhJ
-         3yGASLhI1gYo5rJmT4hGw7gGAoSJlR1VhkqvdFLwIBNhYhDrU9tuulFlSJSHBaL7zSdZ
-         zBlA==
-X-Gm-Message-State: APjAAAWENRkL1lSFEMqYihd0vwVYUyyLbeukaN8QBfDabT7oFHfXAjaq
-        UQAesQOWvQhqNKHIXCfYzeYLlwr51nhi8b3+
-X-Google-Smtp-Source: APXvYqzWflQoTTCY4koVcOoYwwtcf1JO0bMRrK4mtCaxSI3WP6xeQVhy1ZTe3jrivMVF+vUDuw642TCLpR9CHoyY
-X-Received: by 2002:a63:490a:: with SMTP id w10mr40549380pga.6.1561501416111;
- Tue, 25 Jun 2019 15:23:36 -0700 (PDT)
-Date:   Tue, 25 Jun 2019 15:23:28 -0700
-In-Reply-To: <20190625222329.209732-1-allanzhang@google.com>
-Message-Id: <20190625222329.209732-2-allanzhang@google.com>
-Mime-Version: 1.0
-References: <20190625222329.209732-1-allanzhang@google.com>
-X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH bpf-next v5 1/2] bpf: Allow bpf_skb_event_output for a few
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=57nh9LzggZk/LxOVK95V+eMaGeFdODYcYnlMlFniAXY=;
+        b=ixCHIFnlGxcS+so0DIgtvC2MXjRInGV9GSU1GY3zYhDAr/1TrLGFIn2IKjkiJ6fmuQ
+         H/HXJu3t5BlIqkWPyoqkgKcOnpCNutAuqR8bhY1lhMXgHHzPtMnzI31YN/zGnmIVTcBu
+         a2qrUrBWFBFak7KxDvO6k+a2cYkrQDWsm06PYvcS+FSIjWbIRvW8VTA0SNXMecRAFckB
+         OsdBAHxp0Z690s7deYjXME+1EplJV1IsQf9pbUp7IloWAAKNzRW5Zivop0lk8x6agyng
+         GfjaAaA4358x+4pymGRjhs4FbKc+obguSZGRBq9Py911yvCRS9ctCOGNiOV+gzFGTg1S
+         wDpQ==
+X-Gm-Message-State: APjAAAUuelnHoGZPFHbI7BvLO4W7O/VxXHYOPuWbnb427eA+VK+kIDqr
+        DhFVxIBk7cXns0VOsg1CGZ6YB+HChLr4ZLC2Whw=
+X-Google-Smtp-Source: APXvYqw/tA51MMFChU5TVrgtP5MGJWwUTjySbf9Vh1pIqHfWFLZxrc8/r9o/QUu3//3Pult6ZC6UTy99vw51Oga5rvk=
+X-Received: by 2002:ac2:5337:: with SMTP id f23mr631616lfh.15.1561502288415;
+ Tue, 25 Jun 2019 15:38:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190625222329.209732-1-allanzhang@google.com> <20190625222329.209732-2-allanzhang@google.com>
+In-Reply-To: <20190625222329.209732-2-allanzhang@google.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 25 Jun 2019 15:37:56 -0700
+Message-ID: <CAADnVQJVFp0pfon=vurWkcC5yvzt7vWW=DVGPqAZqCMWLEXEVw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 1/2] bpf: Allow bpf_skb_event_output for a few
  prog types
-From:   allanzhang <allanzhang@google.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
+To:     allanzhang <allanzhang@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     allanzhang <allanzhang@google.com>
+        "David S. Miller" <davem@davemloft.net>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Software event output is only enabled by a few prog types right now (TC,
-LWT out, XDP, sockops). Many other skb based prog types need
-bpf_skb_event_output to produce software event.
+On Tue, Jun 25, 2019 at 3:23 PM allanzhang <allanzhang@google.com> wrote:
+>
+> Signed-off-by: allanzhang <allanzhang@google.com>
 
-Added socket_filter, cg_skb, sk_skb prog types to generate sw event.
-
-Test bpf code is generated from code snippet:
-
-struct TMP {
-    uint64_t tmp;
-} tt;
-tt.tmp = 5;
-bpf_perf_event_output(skb, &connection_tracking_event_map, 0,
-                      &tt, sizeof(tt));
-return 1;
-
-the bpf assembly from llvm is:
-       0:       b7 02 00 00 05 00 00 00         r2 = 5
-       1:       7b 2a f8 ff 00 00 00 00         *(u64 *)(r10 - 8) = r2
-       2:       bf a4 00 00 00 00 00 00         r4 = r10
-       3:       07 04 00 00 f8 ff ff ff         r4 += -8
-       4:       18 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00    r2 = 0ll
-       6:       b7 03 00 00 00 00 00 00         r3 = 0
-       7:       b7 05 00 00 08 00 00 00         r5 = 8
-       8:       85 00 00 00 19 00 00 00         call 25
-       9:       b7 00 00 00 01 00 00 00         r0 = 1
-      10:       95 00 00 00 00 00 00 00         exit
-
-Signed-off-by: allanzhang <allanzhang@google.com>
----
- net/core/filter.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 2014d76e0d2a..b75fcf412628 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5958,6 +5958,8 @@ sk_filter_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_get_socket_cookie_proto;
- 	case BPF_FUNC_get_socket_uid:
- 		return &bpf_get_socket_uid_proto;
-+	case BPF_FUNC_perf_event_output:
-+		return &bpf_skb_event_output_proto;
- 	default:
- 		return bpf_base_func_proto(func_id);
- 	}
-@@ -5978,6 +5980,8 @@ cg_skb_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_sk_storage_get_proto;
- 	case BPF_FUNC_sk_storage_delete:
- 		return &bpf_sk_storage_delete_proto;
-+	case BPF_FUNC_perf_event_output:
-+		return &bpf_skb_event_output_proto;
- #ifdef CONFIG_SOCK_CGROUP_DATA
- 	case BPF_FUNC_skb_cgroup_id:
- 		return &bpf_skb_cgroup_id_proto;
-@@ -6226,6 +6230,8 @@ sk_skb_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_sk_redirect_map_proto;
- 	case BPF_FUNC_sk_redirect_hash:
- 		return &bpf_sk_redirect_hash_proto;
-+	case BPF_FUNC_perf_event_output:
-+		return &bpf_skb_event_output_proto;
- #ifdef CONFIG_INET
- 	case BPF_FUNC_sk_lookup_tcp:
- 		return &bpf_sk_lookup_tcp_proto;
--- 
-2.22.0.410.gd8fdbe21b5-goog
-
+As Daniel mentioned SOB needs to have real name.
+If you keep ignoring feedback we'll keep rejecting patches without comments.
