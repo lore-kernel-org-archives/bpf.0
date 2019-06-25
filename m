@@ -2,119 +2,133 @@ Return-Path: <SRS0=2zuU=UY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B61FC48BD5
-	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 19:43:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 676CAC48BD5
+	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 19:46:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 51F402085A
-	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 19:43:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3E15C204FD
+	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 19:46:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kinvolk.io header.i=@kinvolk.io header.b="MNqpO7fl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o+aJk9f2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728766AbfFYTnz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Jun 2019 15:43:55 -0400
-Received: from mail-wr1-f46.google.com ([209.85.221.46]:42290 "EHLO
-        mail-wr1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728118AbfFYTmr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 25 Jun 2019 15:42:47 -0400
-Received: by mail-wr1-f46.google.com with SMTP id x17so19198251wrl.9
-        for <bpf@vger.kernel.org>; Tue, 25 Jun 2019 12:42:46 -0700 (PDT)
+        id S1727828AbfFYTqE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Jun 2019 15:46:04 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:32913 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727384AbfFYTqE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 25 Jun 2019 15:46:04 -0400
+Received: by mail-pf1-f193.google.com with SMTP id x15so10036006pfq.0;
+        Tue, 25 Jun 2019 12:46:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kinvolk.io; s=google;
+        d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+VsQ/hHNcVRgyGfowhBC9LviGWtE+VmAC6qAcPnOXLw=;
-        b=MNqpO7flohV2LHC/0o99V4Flq60k6Xqi5mVOq7pvi5o8/vUhZmA/FJZ08L3RSQMEAm
-         G7W8ulQn3fUI0QAd4qjYDL+bd3bm6kUM1Cn6TLsRE1CpPVJumaw1JYS0Oopvhiwr7CSV
-         Zjmxix/Yfqu0BysCNAzYd2cLYdcbSIm1mN/wo=
+         :mime-version;
+        bh=CvpGRQIfyA4kHAw6O6Qm/lsMzBb8T0R2UCjutO7iey0=;
+        b=o+aJk9f2CxqvUgKZvbf5ajY+7guRRvKlqLWkhdQ7mXYjuusbCSXWsMdm6Li1wiQL2B
+         rzsNK2NEDBvMcsqbycYMZ/lI0AAXMLnX+ZPMp3xMRtiEraYIv6sI18zlGzACRMtjTsOO
+         3UnnBDNA1twSyoWr3r9PwGm5IGtp2hYOG+VB8cAOIjIoGs001qOBb3TQAno0pGjDyEx9
+         f/28iSWq9i05wGwiqD025BC/fovzAVEeCiBzVu3UQ570iS1vnTx3nnAizQeTG2TKf2MS
+         tGHUHl7DyfYkokex0VoE4Ec4LCZK4AQy2hmM/xxcAemMIZ8eq6EXtLwPS90kPmvH4YIg
+         Qq6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+VsQ/hHNcVRgyGfowhBC9LviGWtE+VmAC6qAcPnOXLw=;
-        b=eNpT0NJ5trRS5Ulpyss1XhTPw9aYjcuDNIaAtnN1h0saCtc4d3BhAZCN97q+SPaB3a
-         Y75NVz140htt+LmzIrW5lY0Mt+ApOZwo8s3AC4cwYmwqBZ6V5q4s8653NLvfOcsn0RdV
-         J7j60Di2LqkUjOijHOp6oHXsANqVID5WXXGYrsBQfiEip7PUPExh2EKk1T6u93gD5et8
-         O/532oCosp0owHgSBLyNzmwbfpSFE0YAonzm1yfIkGrYvyXTj1LPAqDS34hX9+6Z2Aod
-         OfVQteJ2Kv47WPnomPDtKqRmMBVYIc8ehUKprIJbRhbt4BfBU90oHHVt4NENz898Ir2t
-         nMtQ==
-X-Gm-Message-State: APjAAAVgL7RxEo0OZ5RwDmV+T3HcN83wAkW2G0nWN9ODbitm3grqpqud
-        QCkCHck174dIgpvhH7LmoWeeiQ==
-X-Google-Smtp-Source: APXvYqxwIWnsmoPrhrrxor1cV0WAhSle5gHJb9T/lxWdy3jjx0rg6VuJjqVtNv9BYAB4tfqUMWNygg==
-X-Received: by 2002:a5d:4708:: with SMTP id y8mr3829076wrq.85.1561491765822;
-        Tue, 25 Jun 2019 12:42:45 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5aedb6.dynamic.kabel-deutschland.de. [95.90.237.182])
-        by smtp.gmail.com with ESMTPSA id q193sm84991wme.8.2019.06.25.12.42.44
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 25 Jun 2019 12:42:45 -0700 (PDT)
-From:   Krzesimir Nowak <krzesimir@kinvolk.io>
-To:     netdev@vger.kernel.org
-Cc:     Alban Crequy <alban@kinvolk.io>,
-        =?UTF-8?q?Iago=20L=C3=B3pez=20Galeiras?= <iago@kinvolk.io>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Krzesimir Nowak <krzesimir@kinvolk.io>
-Subject: [bpf-next v2 01/10] selftests/bpf: Print a message when tester could not run a program
-Date:   Tue, 25 Jun 2019 21:42:06 +0200
-Message-Id: <20190625194215.14927-2-krzesimir@kinvolk.io>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190625194215.14927-1-krzesimir@kinvolk.io>
-References: <20190625194215.14927-1-krzesimir@kinvolk.io>
+         :references:mime-version;
+        bh=CvpGRQIfyA4kHAw6O6Qm/lsMzBb8T0R2UCjutO7iey0=;
+        b=lnCL80EUrwetP9u12n9pWBzCo6Rk1BtKsG4qmRvwCOCbeBgXCGRvzp28m19Sluv6lW
+         tEH6bPR6IeRAq/DNCUdjBHHZ8dymJQHSJTnfz+KH8vWgzAVFxGPVgmQkvJ+XArkIoTGH
+         rUXOqt5rrL4WzVe2L4ORBlv00E5EL31ejlwHpHVA7JiXnfDlEkdWbwA9AljcbObr2qy8
+         cNOsxzAQRyein4C59G6LRw4qs69kzOE1CdYNwqIE2/GlGQjfWShsDa/E6DrJRYYQ6TDg
+         8CKbdeLWubdrfb27A3JtgEi7kJicgsQDtPvq/SpqIJESHsKQ/mIF/MxMpb6/to04b+zH
+         W5BA==
+X-Gm-Message-State: APjAAAWYA7j0m2rbnHINEPT4cg8vCPskOM3IIfBlGnNCtMYyiwlywTQy
+        I1fu2YrIt8lHPkHcqAHhvkM=
+X-Google-Smtp-Source: APXvYqx8sY3iFA0v3H9RPqWYjbhv8UDOaU+yy0WLBP2zSAq6krunuMWOTMLZpAKJ35iE6riRZqKQTg==
+X-Received: by 2002:a17:90a:2163:: with SMTP id a90mr575441pje.3.1561491964038;
+        Tue, 25 Jun 2019 12:46:04 -0700 (PDT)
+Received: from [172.20.52.61] ([2620:10d:c090:200::3:e848])
+        by smtp.gmail.com with ESMTPSA id 133sm17098349pfa.92.2019.06.25.12.46.02
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 25 Jun 2019 12:46:03 -0700 (PDT)
+From:   "Jonathan Lemon" <jonathan.lemon@gmail.com>
+To:     "Nathan Chancellor" <natechancellor@gmail.com>
+Cc:     "=?utf-8?b?QmrDtnJuIFTDtnBlbA==?=" <bjorn.topel@intel.com>,
+        "Magnus Karlsson" <magnus.karlsson@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Alexei Starovoitov" <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        "Jakub Kicinski" <jakub.kicinski@netronome.com>,
+        "Jesper Dangaard Brouer" <hawk@kernel.org>,
+        "John Fastabend" <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        xdp-newbies@vger.kernel.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        "Nathan Huckleberry" <nhuck@google.com>
+Subject: Re: [PATCH] xsk: Properly terminate assignment in
+ xskq_produce_flush_desc
+Date:   Tue, 25 Jun 2019 12:46:02 -0700
+X-Mailer: MailMate (1.12.5r5635)
+Message-ID: <34F07894-FDE7-44F8-B7F2-E2003D550AD2@gmail.com>
+In-Reply-To: <20190625182352.13918-1-natechancellor@gmail.com>
+References: <20190625182352.13918-1-natechancellor@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; format=flowed
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This prints a message when the error is about program type being not
-supported by the test runner or because of permissions problem. This
-is to see if the program we expected to run was actually executed.
 
-The messages are open-coded because strerror(ENOTSUPP) returns
-"Unknown error 524".
 
-Signed-off-by: Krzesimir Nowak <krzesimir@kinvolk.io>
----
- tools/testing/selftests/bpf/test_verifier.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+On 25 Jun 2019, at 11:23, Nathan Chancellor wrote:
 
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index c5514daf8865..9e17bda016ef 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -831,11 +831,20 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
- 				tmp, &size_tmp, &retval, NULL);
- 	if (unpriv)
- 		set_admin(false);
--	if (err && errno != 524/*ENOTSUPP*/ && errno != EPERM) {
--		printf("Unexpected bpf_prog_test_run error ");
--		return err;
-+	if (err) {
-+		switch (errno) {
-+		case 524/*ENOTSUPP*/:
-+			printf("Did not run the program (not supported) ");
-+			return 0;
-+		case EPERM:
-+			printf("Did not run the program (no permission) ");
-+			return 0;
-+		default:
-+			printf("Unexpected bpf_prog_test_run error (%s) ", strerror(saved_errno));
-+			return err;
-+		}
- 	}
--	if (!err && retval != expected_val &&
-+	if (retval != expected_val &&
- 	    expected_val != POINTER_VALUE) {
- 		printf("FAIL retval %d != %d ", retval, expected_val);
- 		return 1;
--- 
-2.20.1
+> Clang warns:
+>
+> In file included from net/xdp/xsk_queue.c:10:
+> net/xdp/xsk_queue.h:292:2: warning: expression result unused
+> [-Wunused-value]
+>         WRITE_ONCE(q->ring->producer, q->prod_tail);
+>         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> include/linux/compiler.h:284:6: note: expanded from macro 'WRITE_ONCE'
+>         __u.__val;                                      \
+>         ~~~ ^~~~~
+> 1 warning generated.
+>
+> The q->prod_tail assignment has a comma at the end, not a semi-colon.
+> Fix that so clang no longer warns and everything works as expected.
+>
+> Fixes: c497176cb2e4 ("xsk: add Rx receive functions and poll support")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/544
+> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 
+Nice find.
+
+Acked-by: Jonathan Lemon <jonathan.lemon@gmail.com>
+
+
+> ---
+>  net/xdp/xsk_queue.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
+> index 88b9ae24658d..cba4a640d5e8 100644
+> --- a/net/xdp/xsk_queue.h
+> +++ b/net/xdp/xsk_queue.h
+> @@ -288,7 +288,7 @@ static inline void xskq_produce_flush_desc(struct 
+> xsk_queue *q)
+>  	/* Order producer and data */
+>  	smp_wmb(); /* B, matches C */
+>
+> -	q->prod_tail = q->prod_head,
+> +	q->prod_tail = q->prod_head;
+>  	WRITE_ONCE(q->ring->producer, q->prod_tail);
+>  }
+>
+> -- 
+> 2.22.0
