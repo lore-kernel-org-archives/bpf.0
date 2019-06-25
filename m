@@ -2,120 +2,121 @@ Return-Path: <SRS0=2zuU=UY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C162C48BD6
-	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 18:23:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A35AC48BD6
+	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 18:24:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 16405208CA
-	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 18:23:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 502EC2086D
+	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 18:24:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Ffb3VSoE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AP7Npey8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732916AbfFYSX2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Jun 2019 14:23:28 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:12868 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727138AbfFYSX2 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 25 Jun 2019 14:23:28 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5PINL6v016795
-        for <bpf@vger.kernel.org>; Tue, 25 Jun 2019 11:23:27 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=d1ExIXP69uhF7f8Fjq0YWM/zSbL5re4X0urT4JJCyrc=;
- b=Ffb3VSoEg6SA5JwABhpZdMkC5/JFIpBWx7tpNce+uR+kGKl7f8l+2i8OHH8IaI4ALG0F
- e1Aa1SmogyjScUigBjsk7rhJs4TzZxcPB/QzlKCwqtA0RKSSSlsQt3A9rTA/FSMesn4f
- mJN6rztrJ7UwrwEBRR5YzriYGVNHbaP/OeE= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2tbjc1smkm-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 25 Jun 2019 11:23:25 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 25 Jun 2019 11:23:08 -0700
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id C983B62E1DB8; Tue, 25 Jun 2019 11:23:06 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Song Liu <songliubraving@fb.com>
-Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
-To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Song Liu <songliubraving@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 0/4] sys_bpf() access control via /dev/bpf
-Date:   Tue, 25 Jun 2019 11:22:59 -0700
-Message-ID: <20190625182303.874270-1-songliubraving@fb.com>
-X-Mailer: git-send-email 2.17.1
-X-FB-Internal: Safe
+        id S1727251AbfFYSYI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Jun 2019 14:24:08 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:35137 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727138AbfFYSYH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 25 Jun 2019 14:24:07 -0400
+Received: by mail-ed1-f67.google.com with SMTP id w20so20904438edd.2;
+        Tue, 25 Jun 2019 11:24:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2Y1fHVNSsj21p520XEod8X+4E/GAo7E8+cJufOo/k1w=;
+        b=AP7Npey8pgp8xTDS8RBgnpNc3lwjKMOEdzWsdMvDJg6RKV+vZEQkrIPtyw9Jbkf8Ny
+         sINTNiPJg+5BYPSghjcRCEgWQVaWJQdD5k33So5JpXJFv9akoCT3IYJyy2QCD/kHO7VU
+         uvJlShEma5aYlNWAgaN48K4HZfZ1m9WduuswxeKGq/EHVqcp5Bb7NPGHu4Oajb6zPIkd
+         YpeQK5qX5IJIoQIwgk5tZyI6ZhGWTGzNSmWR9Fpm97VIem3HcNh+z7biTTCUN4A65lMz
+         FT7VTukS2CDyHtshqdh4aKYOkT8HW31LYgEhP+/ml5IWmsEgboI5p7Gh8lbBkxNN88BT
+         HIeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2Y1fHVNSsj21p520XEod8X+4E/GAo7E8+cJufOo/k1w=;
+        b=c/PAC/ANemJVfRj5BTZeEHBCoTJRNcr+qo2r2xB0XEKgUTmYJXLfPA8ks0GjmjBnJa
+         9SlPgajwgd1dBbW53H91t/AisMP2cC/mIkvxA7KzKtJ+8syejjAgcBH6Udu+WrQ0GQg+
+         4THcfKGE8gda/2h/04rUifS7xPEz5ObeJrjq35NWZPbsIQ8yVX7udAd4ZGkvYPdNfu0z
+         HVyH+lwXh2rOg+mCZ5qNyR37UTKSIT1j/2Z7rga2Ain6+j3ZYWEpLirz09oqMT+193ln
+         JjtzPBbmt6AUFeY4xjZ7vLimkUlALfdhWBIJ73pve0JltN4kYZ5LG2PICSt+quejjZlK
+         jURg==
+X-Gm-Message-State: APjAAAXBnCZuA5MXnxKW0i6eaLLdQtMex8p8z4qScGCpb+BS9OcnpzEs
+        MqKXH9vEzbzyRDoqKMm8be8=
+X-Google-Smtp-Source: APXvYqyfiVnKBTDReM3U3HnitEqUtLIeUK93VVuj7LIWGKCfAfQB10fvnTBYlQALqQYcYOWHCBiv6w==
+X-Received: by 2002:a50:b566:: with SMTP id z35mr140706976edd.129.1561487045655;
+        Tue, 25 Jun 2019 11:24:05 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:4f9:2b:2b15::2])
+        by smtp.gmail.com with ESMTPSA id y3sm4811521edr.27.2019.06.25.11.24.04
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 25 Jun 2019 11:24:05 -0700 (PDT)
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        xdp-newbies@vger.kernel.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Huckleberry <nhuck@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>
+Subject: [PATCH] xsk: Properly terminate assignment in xskq_produce_flush_desc
+Date:   Tue, 25 Jun 2019 11:23:52 -0700
+Message-Id: <20190625182352.13918-1-natechancellor@gmail.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-25_12:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=795 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906250138
-X-FB-Internal: deliver
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, most access to sys_bpf() is limited to root. However, there are
-use cases that would benefit from non-privileged use of sys_bpf(), e.g.
-systemd.
+Clang warns:
 
-This set introduces a new model to control the access to sys_bpf(). A
-special device, /dev/bpf, is introduced to manage access to sys_bpf().
-Users with access to open /dev/bpf will be able to access most of
-sys_bpf() features. The use can get access to sys_bpf() by opening /dev/bpf
-and use ioctl to get/put permission.
+In file included from net/xdp/xsk_queue.c:10:
+net/xdp/xsk_queue.h:292:2: warning: expression result unused
+[-Wunused-value]
+        WRITE_ONCE(q->ring->producer, q->prod_tail);
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/linux/compiler.h:284:6: note: expanded from macro 'WRITE_ONCE'
+        __u.__val;                                      \
+        ~~~ ^~~~~
+1 warning generated.
 
-The permission to access sys_bpf() is marked by bit TASK_BPF_FLAG_PERMITTED
-in task_struct. During fork(), child will not inherit this bit.
+The q->prod_tail assignment has a comma at the end, not a semi-colon.
+Fix that so clang no longer warns and everything works as expected.
 
-libbpf APIs libbpf_[get|put]_bpf_permission() are added to help get and
-put the permission. bpftool is updated to use these APIs.
+Fixes: c497176cb2e4 ("xsk: add Rx receive functions and poll support")
+Link: https://github.com/ClangBuiltLinux/linux/issues/544
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+---
+ net/xdp/xsk_queue.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Song Liu (4):
-  bpf: unprivileged BPF access via /dev/bpf
-  bpf: sync tools/include/uapi/linux/bpf.h
-  libbpf: add libbpf_[get|put]_bpf_permission()
-  bpftool: use libbpf_[get|put]_bpf_permission()
+diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
+index 88b9ae24658d..cba4a640d5e8 100644
+--- a/net/xdp/xsk_queue.h
++++ b/net/xdp/xsk_queue.h
+@@ -288,7 +288,7 @@ static inline void xskq_produce_flush_desc(struct xsk_queue *q)
+ 	/* Order producer and data */
+ 	smp_wmb(); /* B, matches C */
+ 
+-	q->prod_tail = q->prod_head,
++	q->prod_tail = q->prod_head;
+ 	WRITE_ONCE(q->ring->producer, q->prod_tail);
+ }
+ 
+-- 
+2.22.0
 
- Documentation/ioctl/ioctl-number.txt |  1 +
- include/linux/bpf.h                  | 12 +++++
- include/linux/sched.h                |  8 ++++
- include/uapi/linux/bpf.h             |  5 ++
- kernel/bpf/arraymap.c                |  2 +-
- kernel/bpf/cgroup.c                  |  2 +-
- kernel/bpf/core.c                    |  4 +-
- kernel/bpf/cpumap.c                  |  2 +-
- kernel/bpf/devmap.c                  |  2 +-
- kernel/bpf/hashtab.c                 |  4 +-
- kernel/bpf/lpm_trie.c                |  2 +-
- kernel/bpf/offload.c                 |  2 +-
- kernel/bpf/queue_stack_maps.c        |  2 +-
- kernel/bpf/reuseport_array.c         |  2 +-
- kernel/bpf/stackmap.c                |  2 +-
- kernel/bpf/syscall.c                 | 72 +++++++++++++++++++++-------
- kernel/bpf/verifier.c                |  2 +-
- kernel/bpf/xskmap.c                  |  2 +-
- kernel/fork.c                        |  4 ++
- net/core/filter.c                    |  6 +--
- tools/bpf/bpftool/feature.c          |  2 +-
- tools/bpf/bpftool/main.c             |  5 ++
- tools/include/uapi/linux/bpf.h       |  5 ++
- tools/lib/bpf/libbpf.c               | 54 +++++++++++++++++++++
- tools/lib/bpf/libbpf.h               |  7 +++
- tools/lib/bpf/libbpf.map             |  2 +
- 26 files changed, 178 insertions(+), 35 deletions(-)
-
---
-2.17.1
