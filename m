@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92C68C48BD6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BAE8AC48BD3
 	for <bpf@archiver.kernel.org>; Wed, 26 Jun 2019 14:36:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6D724217D4
+	by mail.kernel.org (Postfix) with ESMTP id 95064217D6
 	for <bpf@archiver.kernel.org>; Wed, 26 Jun 2019 14:36:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727979AbfFZOgT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1728027AbfFZOgT (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Wed, 26 Jun 2019 10:36:19 -0400
-Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:59838 "EHLO
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:59853 "EHLO
         mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727323AbfFZOgS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1727489AbfFZOgS (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 26 Jun 2019 10:36:18 -0400
 Received: from Internal Mail-Server by MTLPINE2 (envelope-from tariqt@mellanox.com)
         with ESMTPS (AES256-SHA encrypted); 26 Jun 2019 17:36:16 +0300
 Received: from dev-l-vrt-206-006.mtl.labs.mlnx (dev-l-vrt-206-006.mtl.labs.mlnx [10.134.206.6])
-        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id x5QEaGXx027430;
+        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id x5QEaGY2027430;
         Wed, 26 Jun 2019 17:36:16 +0300
 From:   Tariq Toukan <tariqt@mellanox.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
@@ -33,14 +33,16 @@ Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
         Jonathan Lemon <bsd@fb.com>,
         "David S. Miller" <davem@davemloft.net>,
         Maxim Mikityanskiy <maximmi@mellanox.com>,
-        Tariq Toukan <tariqt@mellanox.com>,
-        Saeed Mahameed <saeedm@mellanox.com>
-Subject: [PATCH bpf-next V6 01/16] net/mlx5e: Attach/detach XDP program safely
-Date:   Wed, 26 Jun 2019 17:35:23 +0300
-Message-Id: <1561559738-4213-2-git-send-email-tariqt@mellanox.com>
+        Tariq Toukan <tariqt@mellanox.com>
+Subject: [PATCH bpf-next V6 04/16] libbpf: Support getsockopt XDP_OPTIONS
+Date:   Wed, 26 Jun 2019 17:35:26 +0300
+Message-Id: <1561559738-4213-5-git-send-email-tariqt@mellanox.com>
 X-Mailer: git-send-email 1.8.4.3
 In-Reply-To: <1561559738-4213-1-git-send-email-tariqt@mellanox.com>
 References: <1561559738-4213-1-git-send-email-tariqt@mellanox.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
@@ -48,80 +50,54 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Maxim Mikityanskiy <maximmi@mellanox.com>
 
-When an XDP program is set, a full reopen of all channels happens in two
-cases:
-
-1. When there was no program set, and a new one is being set.
-
-2. When there was a program set, but it's being unset.
-
-The full reopen is necessary, because the channel parameters may change
-if XDP is enabled or disabled. However, it's performed in an unsafe way:
-if the new channels fail to open, the old ones are already closed, and
-the interface goes down. Use the safe way to switch channels instead.
-The same way is already used for other configuration changes.
+Query XDP_OPTIONS in libbpf to determine if the zero-copy mode is active
+or not.
 
 Signed-off-by: Maxim Mikityanskiy <maximmi@mellanox.com>
 Signed-off-by: Tariq Toukan <tariqt@mellanox.com>
-Signed-off-by: Saeed Mahameed <saeedm@mellanox.com>
+Acked-by: Saeed Mahameed <saeedm@mellanox.com>
+Acked-by: Björn Töpel <bjorn.topel@intel.com>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en_main.c | 31 +++++++++++++++--------
- 1 file changed, 20 insertions(+), 11 deletions(-)
+ tools/lib/bpf/xsk.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-index 5e40db8f92e6..1b427d7fab42 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-@@ -4190,8 +4190,6 @@ static int mlx5e_xdp_set(struct net_device *netdev, struct bpf_prog *prog)
- 	/* no need for full reset when exchanging programs */
- 	reset = (!priv->channels.params.xdp_prog || !prog);
+diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+index 7ef6293b4fd7..bf15a80a37c2 100644
+--- a/tools/lib/bpf/xsk.c
++++ b/tools/lib/bpf/xsk.c
+@@ -65,6 +65,7 @@ struct xsk_socket {
+ 	int xsks_map_fd;
+ 	__u32 queue_id;
+ 	char ifname[IFNAMSIZ];
++	bool zc;
+ };
  
--	if (was_opened && reset)
--		mlx5e_close_locked(netdev);
- 	if (was_opened && !reset) {
- 		/* num_channels is invariant here, so we can take the
- 		 * batched reference right upfront.
-@@ -4203,20 +4201,31 @@ static int mlx5e_xdp_set(struct net_device *netdev, struct bpf_prog *prog)
- 		}
+ struct xsk_nl_info {
+@@ -480,6 +481,7 @@ int xsk_socket__create(struct xsk_socket **xsk_ptr, const char *ifname,
+ 	void *rx_map = NULL, *tx_map = NULL;
+ 	struct sockaddr_xdp sxdp = {};
+ 	struct xdp_mmap_offsets off;
++	struct xdp_options opts;
+ 	struct xsk_socket *xsk;
+ 	socklen_t optlen;
+ 	int err;
+@@ -597,6 +599,16 @@ int xsk_socket__create(struct xsk_socket **xsk_ptr, const char *ifname,
  	}
  
--	/* exchange programs, extra prog reference we got from caller
--	 * as long as we don't fail from this point onwards.
--	 */
--	old_prog = xchg(&priv->channels.params.xdp_prog, prog);
-+	if (was_opened && reset) {
-+		struct mlx5e_channels new_channels = {};
+ 	xsk->prog_fd = -1;
 +
-+		new_channels.params = priv->channels.params;
-+		new_channels.params.xdp_prog = prog;
-+		mlx5e_set_rq_type(priv->mdev, &new_channels.params);
-+		old_prog = priv->channels.params.xdp_prog;
-+
-+		err = mlx5e_safe_switch_channels(priv, &new_channels, NULL);
-+		if (err)
-+			goto unlock;
-+	} else {
-+		/* exchange programs, extra prog reference we got from caller
-+		 * as long as we don't fail from this point onwards.
-+		 */
-+		old_prog = xchg(&priv->channels.params.xdp_prog, prog);
++	optlen = sizeof(opts);
++	err = getsockopt(xsk->fd, SOL_XDP, XDP_OPTIONS, &opts, &optlen);
++	if (err) {
++		err = -errno;
++		goto out_mmap_tx;
 +	}
 +
- 	if (old_prog)
- 		bpf_prog_put(old_prog);
- 
--	if (reset) /* change RQ type according to priv->xdp_prog */
-+	if (!was_opened && reset) /* change RQ type according to priv->xdp_prog */
- 		mlx5e_set_rq_type(priv->mdev, &priv->channels.params);
- 
--	if (was_opened && reset)
--		err = mlx5e_open_locked(netdev);
--
--	if (!test_bit(MLX5E_STATE_OPENED, &priv->state) || reset)
-+	if (!was_opened || reset)
- 		goto unlock;
- 
- 	/* exchanging programs w/o reset, we update ref counts on behalf
++	xsk->zc = opts.flags & XDP_OPTIONS_ZEROCOPY;
++
+ 	if (!(xsk->config.libbpf_flags & XSK_LIBBPF_FLAGS__INHIBIT_PROG_LOAD)) {
+ 		err = xsk_setup_xdp_prog(xsk);
+ 		if (err)
 -- 
 1.8.3.1
 
