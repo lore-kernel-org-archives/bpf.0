@@ -2,27 +2,26 @@ Return-Path: <SRS0=yGwg=UZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CFC9C48BD9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F059DC48BDA
 	for <bpf@archiver.kernel.org>; Wed, 26 Jun 2019 14:36:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8027A2133F
+	by mail.kernel.org (Postfix) with ESMTP id D170F2133F
 	for <bpf@archiver.kernel.org>; Wed, 26 Jun 2019 14:36:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727589AbfFZOgq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1727859AbfFZOgq (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Wed, 26 Jun 2019 10:36:46 -0400
-Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:59885 "EHLO
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:59825 "EHLO
         mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727951AbfFZOgT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1727276AbfFZOgT (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 26 Jun 2019 10:36:19 -0400
 Received: from Internal Mail-Server by MTLPINE2 (envelope-from tariqt@mellanox.com)
         with ESMTPS (AES256-SHA encrypted); 26 Jun 2019 17:36:16 +0300
 Received: from dev-l-vrt-206-006.mtl.labs.mlnx (dev-l-vrt-206-006.mtl.labs.mlnx [10.134.206.6])
-        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id x5QEaGY7027430;
+        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id x5QEaGXw027430;
         Wed, 26 Jun 2019 17:36:16 +0300
 From:   Tariq Toukan <tariqt@mellanox.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
@@ -34,188 +33,152 @@ Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Maxim Mikityanskiy <maximmi@mellanox.com>,
         Tariq Toukan <tariqt@mellanox.com>
-Subject: [PATCH bpf-next V6 09/16] net/mlx5e: Allow ICO SQ to be used by multiple RQs
-Date:   Wed, 26 Jun 2019 17:35:31 +0300
-Message-Id: <1561559738-4213-10-git-send-email-tariqt@mellanox.com>
+Subject: [PATCH bpf-next V6 00/16] AF_XDP infrastructure improvements and mlx5e support
+Date:   Wed, 26 Jun 2019 17:35:22 +0300
+Message-Id: <1561559738-4213-1-git-send-email-tariqt@mellanox.com>
 X-Mailer: git-send-email 1.8.4.3
-In-Reply-To: <1561559738-4213-1-git-send-email-tariqt@mellanox.com>
-References: <1561559738-4213-1-git-send-email-tariqt@mellanox.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Maxim Mikityanskiy <maximmi@mellanox.com>
+This series contains improvements to the AF_XDP kernel infrastructure
+and AF_XDP support in mlx5e. The infrastructure improvements are
+required for mlx5e, but also some of them benefit to all drivers, and
+some can be useful for other drivers that want to implement AF_XDP.
 
-Prepare to creation of the XSK RQ, which will require posting UMRs, too.
-The same ICO SQ will be used for both RQs and also to trigger interrupts
-by posting NOPs. UMR WQEs can't be reused any more. Optimization
-introduced in commit ab966d7e4ff98 ("net/mlx5e: RX, Recycle buffer of
-UMR WQEs") is reverted.
+The performance testing was performed on a machine with the following
+configuration:
 
-Signed-off-by: Maxim Mikityanskiy <maximmi@mellanox.com>
-Signed-off-by: Tariq Toukan <tariqt@mellanox.com>
-Acked-by: Saeed Mahameed <saeedm@mellanox.com>
----
- drivers/net/ethernet/mellanox/mlx5/core/en.h      |  9 ++++++++
- drivers/net/ethernet/mellanox/mlx5/core/en_rx.c   | 27 +++++++++--------------
- drivers/net/ethernet/mellanox/mlx5/core/en_txrx.c |  4 +++-
- drivers/net/ethernet/mellanox/mlx5/core/wq.h      |  5 -----
- 4 files changed, 22 insertions(+), 23 deletions(-)
+- 24 cores of Intel Xeon E5-2620 v3 @ 2.40 GHz
+- Mellanox ConnectX-5 Ex with 100 Gbit/s link
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-index 992d5cb646b2..c7676635bc8e 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-@@ -348,6 +348,13 @@ enum {
- 
- struct mlx5e_sq_wqe_info {
- 	u8  opcode;
-+
-+	/* Auxiliary data for different opcodes. */
-+	union {
-+		struct {
-+			struct mlx5e_rq *rq;
-+		} umr;
-+	};
- };
- 
- struct mlx5e_txqsq {
-@@ -571,6 +578,7 @@ struct mlx5e_rq {
- 			u8                     log_stride_sz;
- 			u8                     umr_in_progress;
- 			u8                     umr_last_bulk;
-+			u8                     umr_completed;
- 		} mpwqe;
- 	};
- 	struct {
-@@ -798,6 +806,7 @@ void mlx5e_page_release(struct mlx5e_rq *rq, struct mlx5e_dma_info *dma_info,
- void mlx5e_handle_rx_cqe(struct mlx5e_rq *rq, struct mlx5_cqe64 *cqe);
- void mlx5e_handle_rx_cqe_mpwrq(struct mlx5e_rq *rq, struct mlx5_cqe64 *cqe);
- bool mlx5e_post_rx_wqes(struct mlx5e_rq *rq);
-+void mlx5e_poll_ico_cq(struct mlx5e_cq *cq);
- bool mlx5e_post_rx_mpwqes(struct mlx5e_rq *rq);
- void mlx5e_dealloc_rx_wqe(struct mlx5e_rq *rq, u16 ix);
- void mlx5e_dealloc_rx_mpwqe(struct mlx5e_rq *rq, u16 ix);
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-index 234a3fd39901..ec34df777c96 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-@@ -427,11 +427,6 @@ static void mlx5e_post_rx_mpwqe(struct mlx5e_rq *rq, u8 n)
- 	mlx5_wq_ll_update_db_record(wq);
- }
- 
--static inline u16 mlx5e_icosq_wrap_cnt(struct mlx5e_icosq *sq)
--{
--	return mlx5_wq_cyc_get_ctr_wrap_cnt(&sq->wq, sq->pc);
--}
--
- static inline void mlx5e_fill_icosq_frag_edge(struct mlx5e_icosq *sq,
- 					      struct mlx5_wq_cyc *wq,
- 					      u16 pi, u16 nnops)
-@@ -467,9 +462,7 @@ static int mlx5e_alloc_rx_mpwqe(struct mlx5e_rq *rq, u16 ix)
- 	}
- 
- 	umr_wqe = mlx5_wq_cyc_get_wqe(wq, pi);
--	if (unlikely(mlx5e_icosq_wrap_cnt(sq) < 2))
--		memcpy(umr_wqe, &rq->mpwqe.umr_wqe,
--		       offsetof(struct mlx5e_umr_wqe, inline_mtts));
-+	memcpy(umr_wqe, &rq->mpwqe.umr_wqe, offsetof(struct mlx5e_umr_wqe, inline_mtts));
- 
- 	for (i = 0; i < MLX5_MPWRQ_PAGES_PER_WQE; i++, dma_info++) {
- 		err = mlx5e_page_alloc_mapped(rq, dma_info);
-@@ -487,6 +480,7 @@ static int mlx5e_alloc_rx_mpwqe(struct mlx5e_rq *rq, u16 ix)
- 	umr_wqe->uctrl.xlt_offset = cpu_to_be16(xlt_offset);
- 
- 	sq->db.ico_wqe[pi].opcode = MLX5_OPCODE_UMR;
-+	sq->db.ico_wqe[pi].umr.rq = rq;
- 	sq->pc += MLX5E_UMR_WQEBBS;
- 
- 	sq->doorbell_cseg = &umr_wqe->ctrl;
-@@ -544,11 +538,10 @@ bool mlx5e_post_rx_wqes(struct mlx5e_rq *rq)
- 	return !!err;
- }
- 
--static void mlx5e_poll_ico_cq(struct mlx5e_cq *cq, struct mlx5e_rq *rq)
-+void mlx5e_poll_ico_cq(struct mlx5e_cq *cq)
- {
- 	struct mlx5e_icosq *sq = container_of(cq, struct mlx5e_icosq, cq);
- 	struct mlx5_cqe64 *cqe;
--	u8  completed_umr = 0;
- 	u16 sqcc;
- 	int i;
- 
-@@ -589,7 +582,7 @@ static void mlx5e_poll_ico_cq(struct mlx5e_cq *cq, struct mlx5e_rq *rq)
- 
- 			if (likely(wi->opcode == MLX5_OPCODE_UMR)) {
- 				sqcc += MLX5E_UMR_WQEBBS;
--				completed_umr++;
-+				wi->umr.rq->mpwqe.umr_completed++;
- 			} else if (likely(wi->opcode == MLX5_OPCODE_NOP)) {
- 				sqcc++;
- 			} else {
-@@ -605,24 +598,24 @@ static void mlx5e_poll_ico_cq(struct mlx5e_cq *cq, struct mlx5e_rq *rq)
- 	sq->cc = sqcc;
- 
- 	mlx5_cqwq_update_db_record(&cq->wq);
--
--	if (likely(completed_umr)) {
--		mlx5e_post_rx_mpwqe(rq, completed_umr);
--		rq->mpwqe.umr_in_progress -= completed_umr;
--	}
- }
- 
- bool mlx5e_post_rx_mpwqes(struct mlx5e_rq *rq)
- {
- 	struct mlx5e_icosq *sq = &rq->channel->icosq;
- 	struct mlx5_wq_ll *wq = &rq->mpwqe.wq;
-+	u8  umr_completed = rq->mpwqe.umr_completed;
- 	u8  missing, i;
- 	u16 head;
- 
- 	if (unlikely(!test_bit(MLX5E_RQ_STATE_ENABLED, &rq->state)))
- 		return false;
- 
--	mlx5e_poll_ico_cq(&sq->cq, rq);
-+	if (umr_completed) {
-+		mlx5e_post_rx_mpwqe(rq, umr_completed);
-+		rq->mpwqe.umr_in_progress -= umr_completed;
-+		rq->mpwqe.umr_completed = 0;
-+	}
- 
- 	missing = mlx5_wq_ll_missing(wq) - rq->mpwqe.umr_in_progress;
- 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_txrx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_txrx.c
-index f9862bf75491..de4d5ae431af 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_txrx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_txrx.c
-@@ -107,7 +107,9 @@ int mlx5e_napi_poll(struct napi_struct *napi, int budget)
- 		busy |= work_done == budget;
- 	}
- 
--	busy |= c->rq.post_wqes(rq);
-+	mlx5e_poll_ico_cq(&c->icosq.cq);
-+
-+	busy |= rq->post_wqes(rq);
- 
- 	if (busy) {
- 		if (likely(mlx5e_channel_no_affinity_change(c)))
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/wq.h b/drivers/net/ethernet/mellanox/mlx5/core/wq.h
-index 1f87cce421e0..f1ec58c9e9e3 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/wq.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/wq.h
-@@ -134,11 +134,6 @@ static inline void mlx5_wq_cyc_update_db_record(struct mlx5_wq_cyc *wq)
- 	*wq->db = cpu_to_be32(wq->wqe_ctr);
- }
- 
--static inline u16 mlx5_wq_cyc_get_ctr_wrap_cnt(struct mlx5_wq_cyc *wq, u16 ctr)
--{
--	return ctr >> wq->fbc.log_sz;
--}
--
- static inline u16 mlx5_wq_cyc_ctr2ix(struct mlx5_wq_cyc *wq, u16 ctr)
- {
- 	return ctr & wq->fbc.sz_m1;
+The results with retpoline disabled, single stream:
+
+txonly: 33.3 Mpps (21.5 Mpps with queue and app pinned to the same CPU)
+rxdrop: 12.2 Mpps
+l2fwd: 9.4 Mpps
+
+The results with retpoline enabled, single stream:
+
+txonly: 21.3 Mpps (14.1 Mpps with queue and app pinned to the same CPU)
+rxdrop: 9.9 Mpps
+l2fwd: 6.8 Mpps
+
+v2 changes:
+
+Added patches for mlx5e and addressed the comments for v1. Rebased for
+bpf-next.
+
+v3 changes:
+
+Rebased for the newer bpf-next, resolved conflicts in libbpf. Addressed
+Björn's comments for coding style. Fixed a bug in error handling flow in
+mlx5e_open_xsk.
+
+v4 changes:
+
+UAPI is not changed, XSK RX queues are exposed to the kernel. The lower
+half of the available amount of RX queues are regular queues, and the
+upper half are XSK RX queues. The patch "xsk: Extend channels to support
+combined XSK/non-XSK traffic" was dropped. The final patch was reworked
+accordingly.
+
+Added "net/mlx5e: Attach/detach XDP program safely", as the changes
+introduced in the XSK patch base on the stuff from this one.
+
+Added "libbpf: Support drivers with non-combined channels", which aligns
+the condition in libbpf with the condition in the kernel.
+
+Rebased over the newer bpf-next.
+
+v5 changes:
+
+In v4, ethtool reports the number of channels as 'combined' and the
+number of XSK RX queues as 'rx' for mlx5e. It was changed, so that 'rx'
+is 0, and 'combined' reports the double amount of channels if there is
+an active UMEM - to make libbpf happy.
+
+The patch for libbpf was dropped. Although it's still useful and fixes
+things, it raises some disagreement, so I'm dropping it - it's no longer
+useful for mlx5e anymore after the change above.
+
+v6 changes:
+
+As Maxim is out of office, I rebased the series on behalf of him,
+solved some conflicts, and re-spinned.
+
+Series generated against bpf-next commit:
+572a6928f9e3 xdp: Make __mem_id_disconnect static
+
+
+Maxim Mikityanskiy (16):
+  net/mlx5e: Attach/detach XDP program safely
+  xsk: Add API to check for available entries in FQ
+  xsk: Add getsockopt XDP_OPTIONS
+  libbpf: Support getsockopt XDP_OPTIONS
+  xsk: Change the default frame size to 4096 and allow controlling it
+  xsk: Return the whole xdp_desc from xsk_umem_consume_tx
+  net/mlx5e: Replace deprecated PCI_DMA_TODEVICE
+  net/mlx5e: Calculate linear RX frag size considering XSK
+  net/mlx5e: Allow ICO SQ to be used by multiple RQs
+  net/mlx5e: Refactor struct mlx5e_xdp_info
+  net/mlx5e: Share the XDP SQ for XDP_TX between RQs
+  net/mlx5e: XDP_TX from UMEM support
+  net/mlx5e: Consider XSK in XDP MTU limit calculation
+  net/mlx5e: Encapsulate open/close queues into a function
+  net/mlx5e: Move queue param structs to en/params.h
+  net/mlx5e: Add XSK zero-copy support
+
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c         |  12 +-
+ drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c       |  15 +-
+ drivers/net/ethernet/mellanox/mlx5/core/Makefile   |   2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en.h       | 155 ++++-
+ .../net/ethernet/mellanox/mlx5/core/en/params.c    | 108 +--
+ .../net/ethernet/mellanox/mlx5/core/en/params.h    | 118 +++-
+ drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c   | 231 +++++--
+ drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h   |  36 +-
+ .../ethernet/mellanox/mlx5/core/en/xsk/Makefile    |   1 +
+ .../net/ethernet/mellanox/mlx5/core/en/xsk/rx.c    | 192 ++++++
+ .../net/ethernet/mellanox/mlx5/core/en/xsk/rx.h    |  27 +
+ .../net/ethernet/mellanox/mlx5/core/en/xsk/setup.c | 223 +++++++
+ .../net/ethernet/mellanox/mlx5/core/en/xsk/setup.h |  25 +
+ .../net/ethernet/mellanox/mlx5/core/en/xsk/tx.c    | 111 ++++
+ .../net/ethernet/mellanox/mlx5/core/en/xsk/tx.h    |  15 +
+ .../net/ethernet/mellanox/mlx5/core/en/xsk/umem.c  | 267 ++++++++
+ .../net/ethernet/mellanox/mlx5/core/en/xsk/umem.h  |  31 +
+ .../net/ethernet/mellanox/mlx5/core/en_ethtool.c   |  25 +-
+ .../ethernet/mellanox/mlx5/core/en_fs_ethtool.c    |  18 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c  | 730 +++++++++++++--------
+ drivers/net/ethernet/mellanox/mlx5/core/en_rep.c   |  12 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en_rx.c    | 104 ++-
+ drivers/net/ethernet/mellanox/mlx5/core/en_stats.c | 115 +++-
+ drivers/net/ethernet/mellanox/mlx5/core/en_stats.h |  30 +
+ drivers/net/ethernet/mellanox/mlx5/core/en_txrx.c  |  42 +-
+ .../net/ethernet/mellanox/mlx5/core/ipoib/ipoib.c  |  14 +-
+ drivers/net/ethernet/mellanox/mlx5/core/wq.h       |   5 -
+ include/net/xdp_sock.h                             |  27 +-
+ include/uapi/linux/if_xdp.h                        |   8 +
+ net/xdp/xsk.c                                      |  36 +-
+ net/xdp/xsk_queue.h                                |  14 +
+ samples/bpf/xdpsock_user.c                         |  44 +-
+ tools/include/uapi/linux/if_xdp.h                  |   8 +
+ tools/lib/bpf/xsk.c                                |  12 +
+ tools/lib/bpf/xsk.h                                |   2 +-
+ 35 files changed, 2331 insertions(+), 484 deletions(-)
+ create mode 100644 drivers/net/ethernet/mellanox/mlx5/core/en/xsk/Makefile
+ create mode 100644 drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c
+ create mode 100644 drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.h
+ create mode 100644 drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
+ create mode 100644 drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.h
+ create mode 100644 drivers/net/ethernet/mellanox/mlx5/core/en/xsk/tx.c
+ create mode 100644 drivers/net/ethernet/mellanox/mlx5/core/en/xsk/tx.h
+ create mode 100644 drivers/net/ethernet/mellanox/mlx5/core/en/xsk/umem.c
+ create mode 100644 drivers/net/ethernet/mellanox/mlx5/core/en/xsk/umem.h
+
 -- 
 1.8.3.1
 
