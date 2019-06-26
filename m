@@ -2,140 +2,128 @@ Return-Path: <SRS0=yGwg=UZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12F6CC48BD6
-	for <bpf@archiver.kernel.org>; Wed, 26 Jun 2019 00:39:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9ECF4C48BD6
+	for <bpf@archiver.kernel.org>; Wed, 26 Jun 2019 01:14:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DFCA020883
-	for <bpf@archiver.kernel.org>; Wed, 26 Jun 2019 00:39:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 69C722086D
+	for <bpf@archiver.kernel.org>; Wed, 26 Jun 2019 01:14:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cv2ZwnGg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="deuJZWDX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726431AbfFZAjA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Jun 2019 20:39:00 -0400
-Received: from mail-pf1-f202.google.com ([209.85.210.202]:45065 "EHLO
-        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726416AbfFZAi7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 25 Jun 2019 20:38:59 -0400
-Received: by mail-pf1-f202.google.com with SMTP id i27so433662pfk.12
-        for <bpf@vger.kernel.org>; Tue, 25 Jun 2019 17:38:59 -0700 (PDT)
+        id S1726287AbfFZBOI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Jun 2019 21:14:08 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:33403 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726223AbfFZBOH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 25 Jun 2019 21:14:07 -0400
+Received: by mail-qk1-f195.google.com with SMTP id r6so335296qkc.0;
+        Tue, 25 Jun 2019 18:14:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=g15nGRFegqF9vTxmtNDH1TEJzKYjgH3Qiz5eOlA452w=;
-        b=cv2ZwnGgehkSvkmOim2n7lMeztNq8eFl7jrp3grr7iNB+QttoT4o2HdiEov5BPTQ4V
-         Q47ck3D7DXkTg/mV6MaxjU7Q8g4mvu4RixU+busJ3r07EpTh9INOg/fjX4H+nkXcsf+w
-         F5GHnm8MkbrRDWQg04ZKa1oxtd1o8+2Rxo2LgpUcgRTM1va5t04qmPJfJzKxMHxiuKtf
-         /sVHdObcfrZQ50lcQB8S1l2SwdJjZ2gFGU2xwC1VX/R8cnHK3AndX1hq1+UuitC9dE+M
-         VdhNw7i3CSqB6iJ4RA/WhC/uT9EphwNGunz4rDOPfRdMhUAIYaevoH4K9jk4MFFJkllT
-         bk1g==
+        bh=xa7kFnyQoa+lEZDO7e1IGoD9fmAsnkzHy+2marOiLwQ=;
+        b=deuJZWDXie6s6wJsPRLE5XatLhfZLBdzcg6KTeUX2rNTbwn/Sr0i2IQn8sAkXCPj/W
+         w3uuurc9pGXAcSTtC6m85Q93L0TM+Sm7V1ogHHAPgcEahjF9afHWYGokfqQcYY/O5k3h
+         K+ty7S/xbnHiZzXDscxmuu5SJBh2Brl0CygB7ZULmdjugnRMUDSApG6K2M7EK/WaArtQ
+         +5BRK/NZ/zLbuAv1BIib1n7z2B7OJ/A54VZRMDJbmXMl4VUOzwi5+Qoxttj8m1ukNhCI
+         uZPXdghZ6BfI2oNRCmwWowhUYTQrqJDoOSZB1+f9vY42oLRANTYIuxdDkdNKiN19nL/e
+         5TFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=g15nGRFegqF9vTxmtNDH1TEJzKYjgH3Qiz5eOlA452w=;
-        b=KjBHr7N8YCvpRtseh5YsxfRJ6SXVXd9Z9Zap/zxx8dBsPMkU0wB0LlgRPCyxGgJouc
-         JD/sgSlIyBt8mjGEE0JlzwKqEXVbwo1E9QQ3DoI9gXksB+I8zomBmIjghKn6P2cWZQe0
-         1gZDpAZqyhaMMzPLllw0cZD1J0GJwaP2MEI7fha1MPiBwl5dKrkG8zGCGl7faTE/4SpJ
-         mZsZ4ohc2UlhEwDOy0peDdWMO2oh8ZZS1u4H6G0e9T0aIg9wmLvxKUH5pZvB4TXt/ulK
-         Xslfpq9Z1IzpVvJDpZqn2omWFhaji0Qaq+6NiSPx2sTls3LvqbILfYHuyop2ZJVn5eze
-         PUXg==
-X-Gm-Message-State: APjAAAUutaTR8Znj2sGuVFxuaoz0FJI5beTHPLUH4U1lA9gVtJJeIKyZ
-        zS6l9O0+nh0BP9Z6V1kRNt4SDJTIcAcr6QC2
-X-Google-Smtp-Source: APXvYqz5ChaPKsKurIa8epxRev4U0HZ9vl32gSKlrAi+Lx1hoWOT+TV8SlDO0/U0lf6Lo6f1lxGCm4o0C5PjBBLG
-X-Received: by 2002:a63:e015:: with SMTP id e21mr2590431pgh.172.1561509538791;
- Tue, 25 Jun 2019 17:38:58 -0700 (PDT)
-Date:   Tue, 25 Jun 2019 17:38:51 -0700
-In-Reply-To: <20190626003852.163986-1-allanzhang@google.com>
-Message-Id: <20190626003852.163986-2-allanzhang@google.com>
-Mime-Version: 1.0
-References: <20190626003852.163986-1-allanzhang@google.com>
-X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH bpf-next v6 1/2] bpf: Allow bpf_skb_event_output for a few
- prog types
-From:   allanzhang <allanzhang@google.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xa7kFnyQoa+lEZDO7e1IGoD9fmAsnkzHy+2marOiLwQ=;
+        b=Y/E0LUJK/BWPK/9JWr/vCcEvdcybTh9EXyvSNlm51WSIiAUjamAFMSQufWIzVtHL99
+         N+toJrMa/JzxDBLeXYckEvKtfN8bspM6At4ZhoC3oTREqNzXoKnaZRkgR4v1XhuY1C+N
+         cIlUjFms1vjoEltoIJ/8DFHVqmq4Vm0q06Ph96preouXcNItlPpRz7xC+JpRW6wiEmQ7
+         3GlS8V2DOTr8KTsgeGY0iMGSnA1nLwGtLOUYxNuCB0wth2dnVjH8B8lO6XBJw0Apvxd+
+         9zccbhML8ZO7TMcGdIU/oBJk+U3ZuJAjPNKKALN5pITbyhx3jqYLlU+9+4BrH9RHIlwp
+         IuOw==
+X-Gm-Message-State: APjAAAXoDMSDXlyaDI7wr2D9e48oyBZQq45HnkJynbtjGywRPYIIKWlk
+        KepULaqrEXd6h4k+3D7j1nj6QELdPFxOQHZugcs=
+X-Google-Smtp-Source: APXvYqwEjNW3qilUtEwD2dd81tM9h8NAAnx3UXiozPS4tBXBBlz4c70wG/gGkbGLe8mrr+8HWDosRFreLhfZBZJdAR0=
+X-Received: by 2002:a37:4d82:: with SMTP id a124mr1492498qkb.72.1561511646642;
+ Tue, 25 Jun 2019 18:14:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190625182352.13918-1-natechancellor@gmail.com>
+In-Reply-To: <20190625182352.13918-1-natechancellor@gmail.com>
+From:   Song Liu <liu.song.a23@gmail.com>
+Date:   Tue, 25 Jun 2019 18:13:55 -0700
+Message-ID: <CAPhsuW5XRqNpcw7WEsg=E6----XG6-9Cs8=wQbPRfAOXnOYv8Q@mail.gmail.com>
+Subject: Re: [PATCH] xsk: Properly terminate assignment in xskq_produce_flush_desc
+To:     Nathan Chancellor <natechancellor@gmail.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     allanzhang <allanzhang@google.com>
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        xdp-newbies@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        clang-built-linux@googlegroups.com,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Huckleberry <nhuck@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Software event output is only enabled by a few prog types right now (TC,
-LWT out, XDP, sockops). Many other skb based prog types need
-bpf_skb_event_output to produce software event.
+On Tue, Jun 25, 2019 at 12:54 PM Nathan Chancellor
+<natechancellor@gmail.com> wrote:
+>
+> Clang warns:
+>
+> In file included from net/xdp/xsk_queue.c:10:
+> net/xdp/xsk_queue.h:292:2: warning: expression result unused
+> [-Wunused-value]
+>         WRITE_ONCE(q->ring->producer, q->prod_tail);
+>         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> include/linux/compiler.h:284:6: note: expanded from macro 'WRITE_ONCE'
+>         __u.__val;                                      \
+>         ~~~ ^~~~~
+> 1 warning generated.
+>
+> The q->prod_tail assignment has a comma at the end, not a semi-colon.
+> Fix that so clang no longer warns and everything works as expected.
+>
+> Fixes: c497176cb2e4 ("xsk: add Rx receive functions and poll support")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/544
+> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 
-Added socket_filter, cg_skb, sk_skb prog types to generate sw event.
+Cc: <stable@vger.kernel.org> # v4.18+
+Acked-by: Song Liu <songliubraving@fb.com>
 
-Test bpf code is generated from code snippet:
+Thanks for the fix!
 
-struct TMP {
-    uint64_t tmp;
-} tt;
-tt.tmp = 5;
-bpf_perf_event_output(skb, &connection_tracking_event_map, 0,
-                      &tt, sizeof(tt));
-return 1;
 
-the bpf assembly from llvm is:
-       0:       b7 02 00 00 05 00 00 00         r2 = 5
-       1:       7b 2a f8 ff 00 00 00 00         *(u64 *)(r10 - 8) = r2
-       2:       bf a4 00 00 00 00 00 00         r4 = r10
-       3:       07 04 00 00 f8 ff ff ff         r4 += -8
-       4:       18 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00    r2 = 0ll
-       6:       b7 03 00 00 00 00 00 00         r3 = 0
-       7:       b7 05 00 00 08 00 00 00         r5 = 8
-       8:       85 00 00 00 19 00 00 00         call 25
-       9:       b7 00 00 00 01 00 00 00         r0 = 1
-      10:       95 00 00 00 00 00 00 00         exit
-
-Signed-off-by: allan zhang <allanzhang@google.com>
----
- net/core/filter.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 2014d76e0d2a..b75fcf412628 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5958,6 +5958,8 @@ sk_filter_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_get_socket_cookie_proto;
- 	case BPF_FUNC_get_socket_uid:
- 		return &bpf_get_socket_uid_proto;
-+	case BPF_FUNC_perf_event_output:
-+		return &bpf_skb_event_output_proto;
- 	default:
- 		return bpf_base_func_proto(func_id);
- 	}
-@@ -5978,6 +5980,8 @@ cg_skb_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_sk_storage_get_proto;
- 	case BPF_FUNC_sk_storage_delete:
- 		return &bpf_sk_storage_delete_proto;
-+	case BPF_FUNC_perf_event_output:
-+		return &bpf_skb_event_output_proto;
- #ifdef CONFIG_SOCK_CGROUP_DATA
- 	case BPF_FUNC_skb_cgroup_id:
- 		return &bpf_skb_cgroup_id_proto;
-@@ -6226,6 +6230,8 @@ sk_skb_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_sk_redirect_map_proto;
- 	case BPF_FUNC_sk_redirect_hash:
- 		return &bpf_sk_redirect_hash_proto;
-+	case BPF_FUNC_perf_event_output:
-+		return &bpf_skb_event_output_proto;
- #ifdef CONFIG_INET
- 	case BPF_FUNC_sk_lookup_tcp:
- 		return &bpf_sk_lookup_tcp_proto;
--- 
-2.22.0.410.gd8fdbe21b5-goog
-
+> ---
+>  net/xdp/xsk_queue.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
+> index 88b9ae24658d..cba4a640d5e8 100644
+> --- a/net/xdp/xsk_queue.h
+> +++ b/net/xdp/xsk_queue.h
+> @@ -288,7 +288,7 @@ static inline void xskq_produce_flush_desc(struct xsk_queue *q)
+>         /* Order producer and data */
+>         smp_wmb(); /* B, matches C */
+>
+> -       q->prod_tail = q->prod_head,
+> +       q->prod_tail = q->prod_head;
+>         WRITE_ONCE(q->ring->producer, q->prod_tail);
+>  }
+>
+> --
+> 2.22.0
+>
