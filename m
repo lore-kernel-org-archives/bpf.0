@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0994C48BD9
-	for <bpf@archiver.kernel.org>; Wed, 26 Jun 2019 14:36:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B965FC48BD6
+	for <bpf@archiver.kernel.org>; Wed, 26 Jun 2019 14:36:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AB10D2133F
-	for <bpf@archiver.kernel.org>; Wed, 26 Jun 2019 14:36:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D3CC2133F
+	for <bpf@archiver.kernel.org>; Wed, 26 Jun 2019 14:36:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728179AbfFZOgX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Jun 2019 10:36:23 -0400
-Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:59966 "EHLO
+        id S1728171AbfFZOgV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Jun 2019 10:36:21 -0400
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:59954 "EHLO
         mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728170AbfFZOgW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 26 Jun 2019 10:36:22 -0400
+        with ESMTP id S1728133AbfFZOgV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 26 Jun 2019 10:36:21 -0400
 Received: from Internal Mail-Server by MTLPINE2 (envelope-from tariqt@mellanox.com)
         with ESMTPS (AES256-SHA encrypted); 26 Jun 2019 17:36:17 +0300
 Received: from dev-l-vrt-206-006.mtl.labs.mlnx (dev-l-vrt-206-006.mtl.labs.mlnx [10.134.206.6])
-        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id x5QEaGYB027430;
+        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id x5QEaGYA027430;
         Wed, 26 Jun 2019 17:36:16 +0300
 From:   Tariq Toukan <tariqt@mellanox.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
@@ -34,9 +34,9 @@ Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Maxim Mikityanskiy <maximmi@mellanox.com>,
         Tariq Toukan <tariqt@mellanox.com>
-Subject: [PATCH bpf-next V6 13/16] net/mlx5e: Consider XSK in XDP MTU limit calculation
-Date:   Wed, 26 Jun 2019 17:35:35 +0300
-Message-Id: <1561559738-4213-14-git-send-email-tariqt@mellanox.com>
+Subject: [PATCH bpf-next V6 12/16] net/mlx5e: XDP_TX from UMEM support
+Date:   Wed, 26 Jun 2019 17:35:34 +0300
+Message-Id: <1561559738-4213-13-git-send-email-tariqt@mellanox.com>
 X-Mailer: git-send-email 1.8.4.3
 In-Reply-To: <1561559738-4213-1-git-send-email-tariqt@mellanox.com>
 References: <1561559738-4213-1-git-send-email-tariqt@mellanox.com>
@@ -47,103 +47,95 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Maxim Mikityanskiy <maximmi@mellanox.com>
 
-Use the existing mlx5e_get_linear_rq_headroom function to calculate the
-headroom for mlx5e_xdp_max_mtu. This function takes the XSK headroom
-into consideration, which will be used in the following patches.
+When an XDP program returns XDP_TX, and the RQ is XSK-enabled, it
+requires careful handling, because convert_to_xdp_frame creates a new
+page and copies the data there, while our driver expects the xdp_frame
+to point to the same memory as the xdp_buff. Handle this case
+separately: map the page, and in the end unmap it and call
+xdp_return_frame.
 
 Signed-off-by: Maxim Mikityanskiy <maximmi@mellanox.com>
 Signed-off-by: Tariq Toukan <tariqt@mellanox.com>
 Acked-by: Saeed Mahameed <saeedm@mellanox.com>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en/params.c | 4 ++--
- drivers/net/ethernet/mellanox/mlx5/core/en/params.h | 2 ++
- drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c    | 5 +++--
- drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h    | 3 ++-
- drivers/net/ethernet/mellanox/mlx5/core/en_main.c   | 4 ++--
- 5 files changed, 11 insertions(+), 7 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c | 50 ++++++++++++++++++++----
+ 1 file changed, 42 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/params.c b/drivers/net/ethernet/mellanox/mlx5/core/en/params.c
-index 50a458dc3836..0de908b12fcc 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/params.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/params.c
-@@ -9,8 +9,8 @@ static inline bool mlx5e_rx_is_xdp(struct mlx5e_params *params,
- 	return params->xdp_prog || xsk;
- }
- 
--static inline u16 mlx5e_get_linear_rq_headroom(struct mlx5e_params *params,
--					       struct mlx5e_xsk_param *xsk)
-+u16 mlx5e_get_linear_rq_headroom(struct mlx5e_params *params,
-+				 struct mlx5e_xsk_param *xsk)
- {
- 	u16 headroom = NET_IP_ALIGN;
- 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/params.h b/drivers/net/ethernet/mellanox/mlx5/core/en/params.h
-index ed420f3efe52..7f29b82dd8c2 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/params.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/params.h
-@@ -11,6 +11,8 @@ struct mlx5e_xsk_param {
- 	u16 chunk_size;
- };
- 
-+u16 mlx5e_get_linear_rq_headroom(struct mlx5e_params *params,
-+				 struct mlx5e_xsk_param *xsk);
- u32 mlx5e_rx_get_linear_frag_sz(struct mlx5e_params *params,
- 				struct mlx5e_xsk_param *xsk);
- u8 mlx5e_mpwqe_log_pkts_per_wqe(struct mlx5e_params *params);
 diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-index 1364bdff702c..ee99efde9143 100644
+index b3e118fc4521..1364bdff702c 100644
 --- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
 +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-@@ -32,10 +32,11 @@
+@@ -69,14 +69,48 @@ int mlx5e_xdp_max_mtu(struct mlx5e_params *params)
+ 	xdptxd.data = xdpf->data;
+ 	xdptxd.len  = xdpf->len;
  
- #include <linux/bpf_trace.h>
- #include "en/xdp.h"
-+#include "en/params.h"
+-	xdpi.mode = MLX5E_XDP_XMIT_MODE_PAGE;
++	if (xdp->rxq->mem.type == MEM_TYPE_ZERO_COPY) {
++		/* The xdp_buff was in the UMEM and was copied into a newly
++		 * allocated page. The UMEM page was returned via the ZCA, and
++		 * this new page has to be mapped at this point and has to be
++		 * unmapped and returned via xdp_return_frame on completion.
++		 */
++
++		/* Prevent double recycling of the UMEM page. Even in case this
++		 * function returns false, the xdp_buff shouldn't be recycled,
++		 * as it was already done in xdp_convert_zc_to_xdp_frame.
++		 */
++		__set_bit(MLX5E_RQ_FLAG_XDP_XMIT, rq->flags); /* non-atomic */
++
++		xdpi.mode = MLX5E_XDP_XMIT_MODE_FRAME;
  
--int mlx5e_xdp_max_mtu(struct mlx5e_params *params)
-+int mlx5e_xdp_max_mtu(struct mlx5e_params *params, struct mlx5e_xsk_param *xsk)
- {
--	int hr = NET_IP_ALIGN + XDP_PACKET_HEADROOM;
-+	int hr = mlx5e_get_linear_rq_headroom(params, xsk);
+-	dma_addr = di->addr + (xdpf->data - (void *)xdpf);
+-	dma_sync_single_for_device(sq->pdev, dma_addr, xdptxd.len, DMA_TO_DEVICE);
++		dma_addr = dma_map_single(sq->pdev, xdptxd.data, xdptxd.len,
++					  DMA_TO_DEVICE);
++		if (dma_mapping_error(sq->pdev, dma_addr)) {
++			xdp_return_frame(xdpf);
++			return false;
++		}
  
- 	/* Let S := SKB_DATA_ALIGN(sizeof(struct skb_shared_info)).
- 	 * The condition checked in mlx5e_rx_is_linear_skb is:
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h
-index 86db5ad49a42..9200cb9f499b 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h
-@@ -39,7 +39,8 @@
- 	(sizeof(struct mlx5e_tx_wqe) / MLX5_SEND_WQE_DS)
- #define MLX5E_XDP_TX_DS_COUNT (MLX5E_XDP_TX_EMPTY_DS_COUNT + 1 /* SG DS */)
+-	xdptxd.dma_addr = dma_addr;
+-	xdpi.page.rq = rq;
+-	xdpi.page.di = *di;
++		xdptxd.dma_addr     = dma_addr;
++		xdpi.frame.xdpf     = xdpf;
++		xdpi.frame.dma_addr = dma_addr;
++	} else {
++		/* Driver assumes that convert_to_xdp_frame returns an xdp_frame
++		 * that points to the same memory region as the original
++		 * xdp_buff. It allows to map the memory only once and to use
++		 * the DMA_BIDIRECTIONAL mode.
++		 */
++
++		xdpi.mode = MLX5E_XDP_XMIT_MODE_PAGE;
++
++		dma_addr = di->addr + (xdpf->data - (void *)xdpf);
++		dma_sync_single_for_device(sq->pdev, dma_addr, xdptxd.len,
++					   DMA_TO_DEVICE);
++
++		xdptxd.dma_addr = dma_addr;
++		xdpi.page.rq    = rq;
++		xdpi.page.di    = *di;
++	}
  
--int mlx5e_xdp_max_mtu(struct mlx5e_params *params);
-+struct mlx5e_xsk_param;
-+int mlx5e_xdp_max_mtu(struct mlx5e_params *params, struct mlx5e_xsk_param *xsk);
- bool mlx5e_xdp_handle(struct mlx5e_rq *rq, struct mlx5e_dma_info *di,
- 		      void *va, u16 *rx_headroom, u32 *len);
- bool mlx5e_poll_xdpsq_cq(struct mlx5e_cq *cq);
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-index abc1d0f6cf53..96fb3fa32d63 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-@@ -3722,7 +3722,7 @@ int mlx5e_change_mtu(struct net_device *netdev, int new_mtu,
- 	if (params->xdp_prog &&
- 	    !mlx5e_rx_is_linear_skb(&new_channels.params)) {
- 		netdev_err(netdev, "MTU(%d) > %d is not allowed while XDP enabled\n",
--			   new_mtu, mlx5e_xdp_max_mtu(params));
-+			   new_mtu, mlx5e_xdp_max_mtu(params, NULL));
- 		err = -EINVAL;
- 		goto out;
- 	}
-@@ -4167,7 +4167,7 @@ static int mlx5e_xdp_allowed(struct mlx5e_priv *priv, struct bpf_prog *prog)
- 	if (!mlx5e_rx_is_linear_skb(&new_channels.params)) {
- 		netdev_warn(netdev, "XDP is not allowed with MTU(%d) > %d\n",
- 			    new_channels.params.sw_mtu,
--			    mlx5e_xdp_max_mtu(&new_channels.params));
-+			    mlx5e_xdp_max_mtu(&new_channels.params, NULL));
- 		return -EINVAL;
- 	}
+ 	return sq->xmit_xdp_frame(sq, &xdptxd, &xdpi);
+ }
+@@ -298,13 +332,13 @@ static void mlx5e_free_xdpsq_desc(struct mlx5e_xdpsq *sq,
  
+ 		switch (xdpi.mode) {
+ 		case MLX5E_XDP_XMIT_MODE_FRAME:
+-			/* XDP_REDIRECT */
++			/* XDP_TX from the XSK RQ and XDP_REDIRECT */
+ 			dma_unmap_single(sq->pdev, xdpi.frame.dma_addr,
+ 					 xdpi.frame.xdpf->len, DMA_TO_DEVICE);
+ 			xdp_return_frame(xdpi.frame.xdpf);
+ 			break;
+ 		case MLX5E_XDP_XMIT_MODE_PAGE:
+-			/* XDP_TX */
++			/* XDP_TX from the regular RQ */
+ 			mlx5e_page_release(xdpi.page.rq, &xdpi.page.di, recycle);
+ 			break;
+ 		default:
 -- 
 1.8.3.1
 
