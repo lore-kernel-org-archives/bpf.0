@@ -1,82 +1,143 @@
-Return-Path: <SRS0=2zuU=UY=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=yGwg=UZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=0.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FSL_HELO_FAKE,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_MUTT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6369C48BD6
-	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 23:48:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 223C8C48BD5
+	for <bpf@archiver.kernel.org>; Wed, 26 Jun 2019 00:35:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 80B8220883
-	for <bpf@archiver.kernel.org>; Tue, 25 Jun 2019 23:48:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1561506492;
-	bh=IIPnw17DMud2IaI5vgEyfR+P3UuBx+ITkJ6rG4E0/Zw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=s7WRHQ6+yoboe8ONxvAjOr0Kyw2yGNwnHYmo3FvrgxHk6He4+L2+0SL8P2+2KrLg3
-	 94fNUF1AKPvlOcL3N0VeRDn66Fj8E8eYOeEBh28gNcY29qG1c18KxMOhh2Uto3+pOk
-	 ORyqT+bRgUlcLsA+o7HDcwsFMwDK/s0lSYHK/yVI=
+	by mail.kernel.org (Postfix) with ESMTP id EB754208CA
+	for <bpf@archiver.kernel.org>; Wed, 26 Jun 2019 00:35:10 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="JH6j+9E5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726077AbfFYXsM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Jun 2019 19:48:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39846 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726037AbfFYXsM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 25 Jun 2019 19:48:12 -0400
-Received: from gmail.com (unknown [104.132.1.77])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 905A92086D;
-        Tue, 25 Jun 2019 23:48:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561506491;
-        bh=IIPnw17DMud2IaI5vgEyfR+P3UuBx+ITkJ6rG4E0/Zw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YdV2OgLAzb3QWIbIVBE+1Nl4jWGTlSEpUeKyjuhshQ5iyMDWHYzMnPwdXtw4XiTNM
-         Qlxvmu3vya3XBKrFZhs2Es4bATlzE9X90mNaVtgT3Pb2Mf6AIFRrheD9lOiitAgGAM
-         aOWIXSJfI4ZF3nZLsa28aqfknN+f2T7fsNojlPCM=
-Date:   Tue, 25 Jun 2019 16:48:09 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     syzbot <syzbot+8893700724999566d6a9@syzkaller.appspotmail.com>,
-        akpm@linux-foundation.org, ast@kernel.org, cai@lca.pw,
-        crecklin@redhat.com, daniel@iogearbox.net, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: KASAN: slab-out-of-bounds Write in validate_chain
-Message-ID: <20190625234808.GB116876@gmail.com>
-References: <000000000000e672c6058bd7ee45@google.com>
- <0000000000007724d6058c2dfc24@google.com>
+        id S1726223AbfFZAfK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Jun 2019 20:35:10 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:31646 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726287AbfFZAfK (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 25 Jun 2019 20:35:10 -0400
+Received: from pps.filterd (m0044008.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5Q0Yc7Q023124
+        for <bpf@vger.kernel.org>; Tue, 25 Jun 2019 17:35:09 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=facebook;
+ bh=ilCz0r4rFQeiGHJo/tWLnjPRjcP2MfFn/TIBT8YcCPM=;
+ b=JH6j+9E54U8HVOwRwhMykC26rwl2YEpW/iLXsgNh3rbsRrdepSQrUHFToHma1yG0pHaB
+ XV8E4lo9pHefb5AAHYgEX0ChUlqi+VwkKqo6toklPtG4L9bfh6drO/YTrv0eNxTHQl8U
+ o3kPU2o4au4ADXAOBEUgTW5ebQiV3OuH2G4= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2tbs17h94n-7
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 25 Jun 2019 17:35:08 -0700
+Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 25 Jun 2019 17:35:05 -0700
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id 740373702BCE; Tue, 25 Jun 2019 17:35:03 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Yonghong Song <yhs@fb.com>
+Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
+To:     <ast@fb.com>, <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+CC:     <kernel-team@fb.com>, <arnd@arndb.de>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next] bpf: fix compiler warning with CONFIG_MODULES=n
+Date:   Tue, 25 Jun 2019 17:35:03 -0700
+Message-ID: <20190626003503.1985698-1-yhs@fb.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000007724d6058c2dfc24@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-25_16:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906260004
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi John,
+With CONFIG_MODULES=3Dn, the following compiler warning occurs:
+  /data/users/yhs/work/net-next/kernel/trace/bpf_trace.c:605:13: warning:
+      =E2=80=98do_bpf_send_signal=E2=80=99 defined but not used [-Wunused=
+-function]
+  static void do_bpf_send_signal(struct irq_work *entry)
 
-On Tue, Jun 25, 2019 at 04:07:00PM -0700, syzbot wrote:
-> syzbot has bisected this bug to:
-> 
-> commit e9db4ef6bf4ca9894bb324c76e01b8f1a16b2650
-> Author: John Fastabend <john.fastabend@gmail.com>
-> Date:   Sat Jun 30 13:17:47 2018 +0000
-> 
->     bpf: sockhash fix omitted bucket lock in sock_close
-> 
+The __init function send_signal_irq_work_init(), which calls
+do_bpf_send_signal(), is defined under CONFIG_MODULES. Hence,
+when CONFIG_MODULES=3Dn, nobody calls static function do_bpf_send_signal(=
+),
+hence the warning.
 
-Are you working on this?  This is the 6th open syzbot report that has been
-bisected to this commit, and I suspect it's the cause of many of the other
-30 open syzbot reports I assigned to the bpf subsystem too
-(https://lore.kernel.org/bpf/20190624050114.GA30702@sol.localdomain/).
+The init function send_signal_irq_work_init() should work without
+CONFIG_MODULES. Moving it out of CONFIG_MODULES
+code section fixed the compiler warning, and also make bpf_send_signal()
+helper work without CONFIG_MODULES.
 
-Also, this is happening in mainline (v5.2-rc6).
+Fixes: 8b401f9ed244 ("bpf: implement bpf_send_signal() helper")
+Reported-By: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ kernel/trace/bpf_trace.c | 27 ++++++++++++++-------------
+ 1 file changed, 14 insertions(+), 13 deletions(-)
 
-- Eric
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index c102c240bb0b..ca1255d14576 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1431,6 +1431,20 @@ int bpf_get_perf_event_info(const struct perf_even=
+t *event, u32 *prog_id,
+ 	return err;
+ }
+=20
++static int __init send_signal_irq_work_init(void)
++{
++	int cpu;
++	struct send_signal_irq_work *work;
++
++	for_each_possible_cpu(cpu) {
++		work =3D per_cpu_ptr(&send_signal_work, cpu);
++		init_irq_work(&work->irq_work, do_bpf_send_signal);
++	}
++	return 0;
++}
++
++subsys_initcall(send_signal_irq_work_init);
++
+ #ifdef CONFIG_MODULES
+ static int bpf_event_notify(struct notifier_block *nb, unsigned long op,
+ 			    void *module)
+@@ -1478,18 +1492,5 @@ static int __init bpf_event_init(void)
+ 	return 0;
+ }
+=20
+-static int __init send_signal_irq_work_init(void)
+-{
+-	int cpu;
+-	struct send_signal_irq_work *work;
+-
+-	for_each_possible_cpu(cpu) {
+-		work =3D per_cpu_ptr(&send_signal_work, cpu);
+-		init_irq_work(&work->irq_work, do_bpf_send_signal);
+-	}
+-	return 0;
+-}
+-
+ fs_initcall(bpf_event_init);
+-subsys_initcall(send_signal_irq_work_init);
+ #endif /* CONFIG_MODULES */
+--=20
+2.17.1
+
