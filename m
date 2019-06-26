@@ -2,27 +2,27 @@ Return-Path: <SRS0=yGwg=UZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E908CC48BD3
-	for <bpf@archiver.kernel.org>; Wed, 26 Jun 2019 14:36:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BCEEC48BD6
+	for <bpf@archiver.kernel.org>; Wed, 26 Jun 2019 14:36:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CD1C72133F
-	for <bpf@archiver.kernel.org>; Wed, 26 Jun 2019 14:36:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4FC532133F
+	for <bpf@archiver.kernel.org>; Wed, 26 Jun 2019 14:36:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727962AbfFZOgT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Jun 2019 10:36:19 -0400
-Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:59860 "EHLO
+        id S1727481AbfFZOgp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Jun 2019 10:36:45 -0400
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:59871 "EHLO
         mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727543AbfFZOgS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 26 Jun 2019 10:36:18 -0400
+        with ESMTP id S1727859AbfFZOgT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 26 Jun 2019 10:36:19 -0400
 Received: from Internal Mail-Server by MTLPINE2 (envelope-from tariqt@mellanox.com)
         with ESMTPS (AES256-SHA encrypted); 26 Jun 2019 17:36:16 +0300
 Received: from dev-l-vrt-206-006.mtl.labs.mlnx (dev-l-vrt-206-006.mtl.labs.mlnx [10.134.206.6])
-        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id x5QEaGY3027430;
+        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id x5QEaGY6027430;
         Wed, 26 Jun 2019 17:36:16 +0300
 From:   Tariq Toukan <tariqt@mellanox.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
@@ -34,9 +34,9 @@ Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Maxim Mikityanskiy <maximmi@mellanox.com>,
         Tariq Toukan <tariqt@mellanox.com>
-Subject: [PATCH bpf-next V6 05/16] xsk: Change the default frame size to 4096 and allow controlling it
-Date:   Wed, 26 Jun 2019 17:35:27 +0300
-Message-Id: <1561559738-4213-6-git-send-email-tariqt@mellanox.com>
+Subject: [PATCH bpf-next V6 08/16] net/mlx5e: Calculate linear RX frag size considering XSK
+Date:   Wed, 26 Jun 2019 17:35:30 +0300
+Message-Id: <1561559738-4213-9-git-send-email-tariqt@mellanox.com>
 X-Mailer: git-send-email 1.8.4.3
 In-Reply-To: <1561559738-4213-1-git-send-email-tariqt@mellanox.com>
 References: <1561559738-4213-1-git-send-email-tariqt@mellanox.com>
@@ -47,169 +47,173 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Maxim Mikityanskiy <maximmi@mellanox.com>
 
-The typical XDP memory scheme is one packet per page. Change the AF_XDP
-frame size in libbpf to 4096, which is the page size on x86, to allow
-libbpf to be used with the drivers with the packet-per-page scheme.
+Additional conditions introduced:
 
-Add a command line option -f to xdpsock to allow to specify a custom
-frame size.
+- XSK implies XDP.
+- Headroom includes the XSK headroom if it exists.
+- No space is reserved for struct shared_skb_info in XSK mode.
+- Fragment size smaller than the XSK chunk size is not allowed.
+
+A new auxiliary function mlx5e_get_linear_rq_headroom with the support
+for XSK is introduced. Use this function in the implementation of
+mlx5e_get_rq_headroom. Change headroom to u32 to match the headroom
+field in struct xdp_umem.
 
 Signed-off-by: Maxim Mikityanskiy <maximmi@mellanox.com>
 Signed-off-by: Tariq Toukan <tariqt@mellanox.com>
 Acked-by: Saeed Mahameed <saeedm@mellanox.com>
 ---
- samples/bpf/xdpsock_user.c | 44 ++++++++++++++++++++++++++++----------------
- tools/lib/bpf/xsk.h        |  2 +-
- 2 files changed, 29 insertions(+), 17 deletions(-)
+ .../net/ethernet/mellanox/mlx5/core/en/params.c    | 65 +++++++++++++++-------
+ .../net/ethernet/mellanox/mlx5/core/en/params.h    |  8 ++-
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c  |  2 +-
+ 3 files changed, 52 insertions(+), 23 deletions(-)
 
-diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
-index 0f5eb0d7f2df..93eaaf7239b2 100644
---- a/samples/bpf/xdpsock_user.c
-+++ b/samples/bpf/xdpsock_user.c
-@@ -68,6 +68,7 @@ enum benchmark_type {
- static int opt_poll;
- static int opt_interval = 1;
- static u32 opt_xdp_bind_flags;
-+static int opt_xsk_frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE;
- static __u32 prog_id;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/params.c b/drivers/net/ethernet/mellanox/mlx5/core/en/params.c
+index d3744bffbae3..50a458dc3836 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/params.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/params.c
+@@ -3,33 +3,62 @@
  
- struct xsk_umem_info {
-@@ -276,6 +277,12 @@ static size_t gen_eth_frame(struct xsk_umem_info *umem, u64 addr)
- static struct xsk_umem_info *xsk_configure_umem(void *buffer, u64 size)
+ #include "en/params.h"
+ 
+-u32 mlx5e_rx_get_linear_frag_sz(struct mlx5e_params *params)
++static inline bool mlx5e_rx_is_xdp(struct mlx5e_params *params,
++				   struct mlx5e_xsk_param *xsk)
  {
- 	struct xsk_umem_info *umem;
-+	struct xsk_umem_config cfg = {
-+		.fill_size = XSK_RING_PROD__DEFAULT_NUM_DESCS,
-+		.comp_size = XSK_RING_CONS__DEFAULT_NUM_DESCS,
-+		.frame_size = opt_xsk_frame_size,
-+		.frame_headroom = XSK_UMEM__DEFAULT_FRAME_HEADROOM,
-+	};
- 	int ret;
- 
- 	umem = calloc(1, sizeof(*umem));
-@@ -283,7 +290,7 @@ static struct xsk_umem_info *xsk_configure_umem(void *buffer, u64 size)
- 		exit_with_error(errno);
- 
- 	ret = xsk_umem__create(&umem->umem, buffer, size, &umem->fq, &umem->cq,
--			       NULL);
-+			       &cfg);
- 	if (ret)
- 		exit_with_error(-ret);
- 
-@@ -323,11 +330,9 @@ static struct xsk_socket_info *xsk_configure_socket(struct xsk_umem_info *umem)
- 				     &idx);
- 	if (ret != XSK_RING_PROD__DEFAULT_NUM_DESCS)
- 		exit_with_error(-ret);
--	for (i = 0;
--	     i < XSK_RING_PROD__DEFAULT_NUM_DESCS *
--		     XSK_UMEM__DEFAULT_FRAME_SIZE;
--	     i += XSK_UMEM__DEFAULT_FRAME_SIZE)
--		*xsk_ring_prod__fill_addr(&xsk->umem->fq, idx++) = i;
-+	for (i = 0; i < XSK_RING_PROD__DEFAULT_NUM_DESCS; i++)
-+		*xsk_ring_prod__fill_addr(&xsk->umem->fq, idx++) =
-+			i * opt_xsk_frame_size;
- 	xsk_ring_prod__submit(&xsk->umem->fq,
- 			      XSK_RING_PROD__DEFAULT_NUM_DESCS);
- 
-@@ -346,6 +351,7 @@ static struct xsk_socket_info *xsk_configure_socket(struct xsk_umem_info *umem)
- 	{"interval", required_argument, 0, 'n'},
- 	{"zero-copy", no_argument, 0, 'z'},
- 	{"copy", no_argument, 0, 'c'},
-+	{"frame-size", required_argument, 0, 'f'},
- 	{0, 0, 0, 0}
- };
- 
-@@ -365,8 +371,9 @@ static void usage(const char *prog)
- 		"  -n, --interval=n	Specify statistics update interval (default 1 sec).\n"
- 		"  -z, --zero-copy      Force zero-copy mode.\n"
- 		"  -c, --copy           Force copy mode.\n"
-+		"  -f, --frame-size=n   Set the frame size (must be a power of two, default is %d).\n"
- 		"\n";
--	fprintf(stderr, str, prog);
-+	fprintf(stderr, str, prog, XSK_UMEM__DEFAULT_FRAME_SIZE);
- 	exit(EXIT_FAILURE);
- }
- 
-@@ -377,7 +384,7 @@ static void parse_command_line(int argc, char **argv)
- 	opterr = 0;
- 
- 	for (;;) {
--		c = getopt_long(argc, argv, "Frtli:q:psSNn:cz", long_options,
-+		c = getopt_long(argc, argv, "Frtli:q:psSNn:czf:", long_options,
- 				&option_index);
- 		if (c == -1)
- 			break;
-@@ -420,6 +427,9 @@ static void parse_command_line(int argc, char **argv)
- 		case 'F':
- 			opt_xdp_flags &= ~XDP_FLAGS_UPDATE_IF_NOEXIST;
- 			break;
-+		case 'f':
-+			opt_xsk_frame_size = atoi(optarg);
-+			break;
- 		default:
- 			usage(basename(argv[0]));
- 		}
-@@ -432,6 +442,11 @@ static void parse_command_line(int argc, char **argv)
- 		usage(basename(argv[0]));
- 	}
- 
-+	if (opt_xsk_frame_size & (opt_xsk_frame_size - 1)) {
-+		fprintf(stderr, "--frame-size=%d is not a power of two\n",
-+			opt_xsk_frame_size);
-+		usage(basename(argv[0]));
+-	u16 hw_mtu = MLX5E_SW2HW_MTU(params, params->sw_mtu);
+-	u16 linear_rq_headroom = params->xdp_prog ?
+-		XDP_PACKET_HEADROOM : MLX5_RX_HEADROOM;
+-	u32 frag_sz;
++	return params->xdp_prog || xsk;
++}
++
++static inline u16 mlx5e_get_linear_rq_headroom(struct mlx5e_params *params,
++					       struct mlx5e_xsk_param *xsk)
++{
++	u16 headroom = NET_IP_ALIGN;
++
++	if (mlx5e_rx_is_xdp(params, xsk)) {
++		headroom += XDP_PACKET_HEADROOM;
++		if (xsk)
++			headroom += xsk->headroom;
++	} else {
++		headroom += MLX5_RX_HEADROOM;
 +	}
++
++	return headroom;
++}
++
++u32 mlx5e_rx_get_linear_frag_sz(struct mlx5e_params *params,
++				struct mlx5e_xsk_param *xsk)
++{
++	u32 hw_mtu = MLX5E_SW2HW_MTU(params, params->sw_mtu);
++	u16 linear_rq_headroom = mlx5e_get_linear_rq_headroom(params, xsk);
++	u32 frag_sz = linear_rq_headroom + hw_mtu;
+ 
+-	linear_rq_headroom += NET_IP_ALIGN;
++	/* AF_XDP doesn't build SKBs in place. */
++	if (!xsk)
++		frag_sz = MLX5_SKB_FRAG_SZ(frag_sz);
+ 
+-	frag_sz = MLX5_SKB_FRAG_SZ(linear_rq_headroom + hw_mtu);
++	/* XDP in mlx5e doesn't support multiple packets per page. */
++	if (mlx5e_rx_is_xdp(params, xsk))
++		frag_sz = max_t(u32, frag_sz, PAGE_SIZE);
+ 
+-	if (params->xdp_prog && frag_sz < PAGE_SIZE)
+-		frag_sz = PAGE_SIZE;
++	/* Even if we can go with a smaller fragment size, we must not put
++	 * multiple packets into a single frame.
++	 */
++	if (xsk)
++		frag_sz = max_t(u32, frag_sz, xsk->chunk_size);
+ 
+ 	return frag_sz;
  }
  
- static void kick_tx(struct xsk_socket_info *xsk)
-@@ -583,8 +598,7 @@ static void tx_only(struct xsk_socket_info *xsk)
+ u8 mlx5e_mpwqe_log_pkts_per_wqe(struct mlx5e_params *params)
+ {
+-	u32 linear_frag_sz = mlx5e_rx_get_linear_frag_sz(params);
++	u32 linear_frag_sz = mlx5e_rx_get_linear_frag_sz(params, NULL);
  
- 			for (i = 0; i < BATCH_SIZE; i++) {
- 				xsk_ring_prod__tx_desc(&xsk->tx, idx + i)->addr
--					= (frame_nb + i) <<
--					XSK_UMEM__DEFAULT_FRAME_SHIFT;
-+					= (frame_nb + i) * opt_xsk_frame_size;
- 				xsk_ring_prod__tx_desc(&xsk->tx, idx + i)->len =
- 					sizeof(pkt_data) - 1;
- 			}
-@@ -661,21 +675,19 @@ int main(int argc, char **argv)
- 	}
+ 	return MLX5_MPWRQ_LOG_WQE_SZ - order_base_2(linear_frag_sz);
+ }
  
- 	ret = posix_memalign(&bufs, getpagesize(), /* PAGE_SIZE aligned */
--			     NUM_FRAMES * XSK_UMEM__DEFAULT_FRAME_SIZE);
-+			     NUM_FRAMES * opt_xsk_frame_size);
- 	if (ret)
- 		exit_with_error(ret);
+ bool mlx5e_rx_is_linear_skb(struct mlx5e_params *params)
+ {
+-	u32 frag_sz = mlx5e_rx_get_linear_frag_sz(params);
++	u32 frag_sz = mlx5e_rx_get_linear_frag_sz(params, NULL);
  
-        /* Create sockets... */
--	umem = xsk_configure_umem(bufs,
--				  NUM_FRAMES * XSK_UMEM__DEFAULT_FRAME_SIZE);
-+	umem = xsk_configure_umem(bufs, NUM_FRAMES * opt_xsk_frame_size);
- 	xsks[num_socks++] = xsk_configure_socket(umem);
+ 	return !params->lro_en && frag_sz <= PAGE_SIZE;
+ }
+@@ -39,7 +68,7 @@ bool mlx5e_rx_is_linear_skb(struct mlx5e_params *params)
+ bool mlx5e_rx_mpwqe_is_linear_skb(struct mlx5_core_dev *mdev,
+ 				  struct mlx5e_params *params)
+ {
+-	u32 frag_sz = mlx5e_rx_get_linear_frag_sz(params);
++	u32 frag_sz = mlx5e_rx_get_linear_frag_sz(params, NULL);
+ 	s8 signed_log_num_strides_param;
+ 	u8 log_num_strides;
  
- 	if (opt_bench == BENCH_TXONLY) {
- 		int i;
+@@ -75,7 +104,7 @@ u8 mlx5e_mpwqe_get_log_stride_size(struct mlx5_core_dev *mdev,
+ 				   struct mlx5e_params *params)
+ {
+ 	if (mlx5e_rx_mpwqe_is_linear_skb(mdev, params))
+-		return order_base_2(mlx5e_rx_get_linear_frag_sz(params));
++		return order_base_2(mlx5e_rx_get_linear_frag_sz(params, NULL));
  
--		for (i = 0; i < NUM_FRAMES * XSK_UMEM__DEFAULT_FRAME_SIZE;
--		     i += XSK_UMEM__DEFAULT_FRAME_SIZE)
--			(void)gen_eth_frame(umem, i);
-+		for (i = 0; i < NUM_FRAMES; i++)
-+			(void)gen_eth_frame(umem, i * opt_xsk_frame_size);
- 	}
+ 	return MLX5_MPWRQ_DEF_LOG_STRIDE_SZ(mdev);
+ }
+@@ -90,15 +119,9 @@ u8 mlx5e_mpwqe_get_log_num_strides(struct mlx5_core_dev *mdev,
+ u16 mlx5e_get_rq_headroom(struct mlx5_core_dev *mdev,
+ 			  struct mlx5e_params *params)
+ {
+-	u16 linear_rq_headroom = params->xdp_prog ?
+-		XDP_PACKET_HEADROOM : MLX5_RX_HEADROOM;
+-	bool is_linear_skb;
+-
+-	linear_rq_headroom += NET_IP_ALIGN;
+-
+-	is_linear_skb = (params->rq_wq_type == MLX5_WQ_TYPE_CYCLIC) ?
++	bool is_linear_skb = (params->rq_wq_type == MLX5_WQ_TYPE_CYCLIC) ?
+ 		mlx5e_rx_is_linear_skb(params) :
+ 		mlx5e_rx_mpwqe_is_linear_skb(mdev, params);
  
- 	signal(SIGINT, int_exit);
-diff --git a/tools/lib/bpf/xsk.h b/tools/lib/bpf/xsk.h
-index 82ea71a0f3ec..833a6e60d065 100644
---- a/tools/lib/bpf/xsk.h
-+++ b/tools/lib/bpf/xsk.h
-@@ -167,7 +167,7 @@ static inline void *xsk_umem__get_data(void *umem_area, __u64 addr)
+-	return is_linear_skb ? linear_rq_headroom : 0;
++	return is_linear_skb ? mlx5e_get_linear_rq_headroom(params, NULL) : 0;
+ }
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/params.h b/drivers/net/ethernet/mellanox/mlx5/core/en/params.h
+index b106a0236f36..ed420f3efe52 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/params.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/params.h
+@@ -6,7 +6,13 @@
  
- #define XSK_RING_CONS__DEFAULT_NUM_DESCS      2048
- #define XSK_RING_PROD__DEFAULT_NUM_DESCS      2048
--#define XSK_UMEM__DEFAULT_FRAME_SHIFT    11 /* 2048 bytes */
-+#define XSK_UMEM__DEFAULT_FRAME_SHIFT    12 /* 4096 bytes */
- #define XSK_UMEM__DEFAULT_FRAME_SIZE     (1 << XSK_UMEM__DEFAULT_FRAME_SHIFT)
- #define XSK_UMEM__DEFAULT_FRAME_HEADROOM 0
+ #include "en.h"
  
+-u32 mlx5e_rx_get_linear_frag_sz(struct mlx5e_params *params);
++struct mlx5e_xsk_param {
++	u16 headroom;
++	u16 chunk_size;
++};
++
++u32 mlx5e_rx_get_linear_frag_sz(struct mlx5e_params *params,
++				struct mlx5e_xsk_param *xsk);
+ u8 mlx5e_mpwqe_log_pkts_per_wqe(struct mlx5e_params *params);
+ bool mlx5e_rx_is_linear_skb(struct mlx5e_params *params);
+ bool mlx5e_rx_mpwqe_is_linear_skb(struct mlx5_core_dev *mdev,
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+index 1b427d7fab42..837a973b3507 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+@@ -1954,7 +1954,7 @@ static void mlx5e_build_rq_frags_info(struct mlx5_core_dev *mdev,
+ 	if (mlx5e_rx_is_linear_skb(params)) {
+ 		int frag_stride;
+ 
+-		frag_stride = mlx5e_rx_get_linear_frag_sz(params);
++		frag_stride = mlx5e_rx_get_linear_frag_sz(params, NULL);
+ 		frag_stride = roundup_pow_of_two(frag_stride);
+ 
+ 		info->arr[0].frag_size = byte_count;
 -- 
 1.8.3.1
 
