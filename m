@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D48AEC48BD3
-	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 00:48:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71DE7C48BD6
+	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 00:48:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9E26120665
-	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 00:48:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3BFFB20815
+	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 00:48:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1561596486;
-	bh=pf3TY0qhiBRSgL4uXDgcr/l4Y53BKYcGEPOf2PFRwlE=;
+	s=default; t=1561596489;
+	bh=L6SMbqHSeQw9mv1yAKSgSSkPQBoiKxO5Gh3UPOSOQSM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=LUeb8BGddgcGNMiXL0VQz+V7PWQU2YK/nzF695vZY04ArT0tfptlqToFoJhurE6ti
-	 TjXVNWWObsUUqjln2pdMTeIY1J7TMJ2l/V/F2EhJYC3CMk2mhiJr2PSCqGU5eLj/79
-	 4mjNTbRK9uGdIlbUlzDOuNrSdGanYiC3qsKmaLQA=
+	b=rEQfys43tkCe/APLWVcYQSZ/ZrXrwawrOJSCgHsAWoT14Hz+fOFKPIqTxdFBo3yZ6
+	 GJ/+M+/1asET2qiRnqNd+ui7484BesdLPqOAbHGowHUmE+W6inrnAeke/5hWQ6H0YJ
+	 Lih6kcfHAdYRo93vflopQMXZ7s2sLI1i2gsrGOaE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728235AbfF0Aii (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Jun 2019 20:38:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42910 "EHLO mail.kernel.org"
+        id S1728860AbfF0Aie (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Jun 2019 20:38:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42844 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727078AbfF0Aih (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 26 Jun 2019 20:38:37 -0400
+        id S1727078AbfF0Aid (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 26 Jun 2019 20:38:33 -0400
 Received: from sasha-vm.mshome.net (unknown [107.242.116.147])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 865CC217F9;
-        Thu, 27 Jun 2019 00:38:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CF64B214AF;
+        Thu, 27 Jun 2019 00:38:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561595916;
-        bh=pf3TY0qhiBRSgL4uXDgcr/l4Y53BKYcGEPOf2PFRwlE=;
+        s=default; t=1561595912;
+        bh=L6SMbqHSeQw9mv1yAKSgSSkPQBoiKxO5Gh3UPOSOQSM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GYCu65WGmmIADgoddOX2rVgEYgKbh5qZXL7lheJ4REsARGzghxodD6aCpkTNHP9/n
-         wEHSd7g/wCTsP/p7wH/CV0NY8mGG43GE9ATkpLygrgiK1+q5jcnxV3+UpBjSiCWASV
-         jY9yRRl8nRUVJtpeA7q6tih1KEKyE3QPCLpG3eEY=
+        b=ZP4CW66qHalhR3EAQ1ywVvV+SE0NZr7le8WDp8K1PBxQjSwtJCi42pXlg5Lsvqeef
+         46TOfd+nRiz0Bplc4IiXN1Niixtj2uDiNjOg2QJYPhVVytbsUpx0D4PtS3FQ4e9QNU
+         FeNhNuyJLBS7CGYZqlD4W253KfQz1fu7huHr5Vlc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Toshiaki Makita <toshiaki.makita1@gmail.com>,
-        David Ahern <dsahern@gmail.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         xdp-newbies@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 44/60] bpf, devmap: Add missing RCU read lock on flush
-Date:   Wed, 26 Jun 2019 20:35:59 -0400
-Message-Id: <20190627003616.20767-44-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 43/60] bpf, devmap: Add missing bulk queue free
+Date:   Wed, 26 Jun 2019 20:35:58 -0400
+Message-Id: <20190627003616.20767-43-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190627003616.20767-1-sashal@kernel.org>
 References: <20190627003616.20767-1-sashal@kernel.org>
@@ -62,57 +62,31 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Toshiaki Makita <toshiaki.makita1@gmail.com>
 
-[ Upstream commit 86723c8640633bee4b4588d3c7784ee7a0032f65 ]
+[ Upstream commit edabf4d9dd905acd60048ea1579943801e3a4876 ]
 
-.ndo_xdp_xmit() assumes it is called under RCU. For example virtio_net
-uses RCU to detect it has setup the resources for tx. The assumption
-accidentally broke when introducing bulk queue in devmap.
+dev_map_free() forgot to free bulk queue when freeing its entries.
 
 Fixes: 5d053f9da431 ("bpf: devmap prepare xdp frames for bulking")
-Reported-by: David Ahern <dsahern@gmail.com>
 Signed-off-by: Toshiaki Makita <toshiaki.makita1@gmail.com>
+Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/devmap.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ kernel/bpf/devmap.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-index 357d456d57b9..fc500ca464d0 100644
+index 99353ac28cd4..357d456d57b9 100644
 --- a/kernel/bpf/devmap.c
 +++ b/kernel/bpf/devmap.c
-@@ -282,6 +282,7 @@ void __dev_map_flush(struct bpf_map *map)
- 	unsigned long *bitmap = this_cpu_ptr(dtab->flush_needed);
- 	u32 bit;
+@@ -186,6 +186,7 @@ static void dev_map_free(struct bpf_map *map)
+ 		if (!dev)
+ 			continue;
  
-+	rcu_read_lock();
- 	for_each_set_bit(bit, bitmap, map->max_entries) {
- 		struct bpf_dtab_netdev *dev = READ_ONCE(dtab->netdev_map[bit]);
- 		struct xdp_bulk_queue *bq;
-@@ -297,6 +298,7 @@ void __dev_map_flush(struct bpf_map *map)
- 
- 		__clear_bit(bit, bitmap);
++		free_percpu(dev->bulkq);
+ 		dev_put(dev->dev);
+ 		kfree(dev);
  	}
-+	rcu_read_unlock();
- }
- 
- /* rcu_read_lock (from syscall and BPF contexts) ensures that if a delete and/or
-@@ -389,6 +391,7 @@ static void dev_map_flush_old(struct bpf_dtab_netdev *dev)
- 
- 		int cpu;
- 
-+		rcu_read_lock();
- 		for_each_online_cpu(cpu) {
- 			bitmap = per_cpu_ptr(dev->dtab->flush_needed, cpu);
- 			__clear_bit(dev->bit, bitmap);
-@@ -396,6 +399,7 @@ static void dev_map_flush_old(struct bpf_dtab_netdev *dev)
- 			bq = per_cpu_ptr(dev->bulkq, cpu);
- 			bq_xmit_all(dev, bq, XDP_XMIT_FLUSH, false);
- 		}
-+		rcu_read_unlock();
- 	}
- }
- 
 -- 
 2.20.1
 
