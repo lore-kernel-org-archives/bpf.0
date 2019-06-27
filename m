@@ -2,118 +2,137 @@ Return-Path: <SRS0=hqV4=U2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01F18C004E6
-	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 20:20:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DF9DC004E6
+	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 20:24:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CD96C20828
-	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 20:20:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 784BB2146E
+	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 20:24:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="c4k6/Tjg"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nxoAM6/0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726484AbfF0UUb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 27 Jun 2019 16:20:31 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:8048 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726443AbfF0UUb (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 27 Jun 2019 16:20:31 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5RKK8Pv006785
-        for <bpf@vger.kernel.org>; Thu, 27 Jun 2019 13:20:30 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=XKJ6Yj46urGmUPHQW0EEETjfYj0CehU24b6YzaBJaxE=;
- b=c4k6/Tjg8hir1cvNokmg2jy/rOrbxZ12b8MtXtBLW00qhUB0FEF+WSlPtWcMju9gdiTY
- 7aCtOd0sTJzZdLl4GH7saoeDIShblCPt2ngfwTfumpo5MeA7EHWjm2Sk09DW8wWNwIQR
- E5gKdDFECsG4F4aj3O11jGS1Ht5K6hljVVk= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2tcynf1axg-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 27 Jun 2019 13:20:30 -0700
-Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Thu, 27 Jun 2019 13:19:43 -0700
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 6CED162E2BE1; Thu, 27 Jun 2019 13:19:40 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Song Liu <songliubraving@fb.com>
-Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
-To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        <lmb@cloudflare.com>, <jannh@google.com>,
-        <gregkh@linuxfoundation.org>, Song Liu <songliubraving@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 4/4] bpftool: use libbpf_[enable|disable]_sys_bpf()
-Date:   Thu, 27 Jun 2019 13:19:23 -0700
-Message-ID: <20190627201923.2589391-5-songliubraving@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190627201923.2589391-1-songliubraving@fb.com>
-References: <20190627201923.2589391-1-songliubraving@fb.com>
-X-FB-Internal: Safe
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-27_13:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=472 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906270233
-X-FB-Internal: deliver
+        id S1726498AbfF0UY3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 27 Jun 2019 16:24:29 -0400
+Received: from mail-vk1-f202.google.com ([209.85.221.202]:42955 "EHLO
+        mail-vk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726497AbfF0UY2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 27 Jun 2019 16:24:28 -0400
+Received: by mail-vk1-f202.google.com with SMTP id y198so1012414vky.9
+        for <bpf@vger.kernel.org>; Thu, 27 Jun 2019 13:24:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=hnna79W33XQAUXPg9/1+75Om8IQv4yeuG+2GOpSRqBk=;
+        b=nxoAM6/0hGn9NpaSYkYsfcEUMyOmigbO9cRWQGsKt89RvIm2YqeNo//qXLvo8oP3PS
+         044tGgQaJF6TUV2OD1DOGYhpWiVRgmNgcIieqC4IxiN7jF46Q2vEdgWcMNciwawDG/AQ
+         qmU8RI9XseqCOqRMIO4iOtL0dAQYkRx+mkzpto6iDU6t/RtQ5oMsx7h4xDmKBIByaz2u
+         C3lTXK7g9C1k5hrluQjotj5WqqIcZqTDZakn/6bA8HJ+1ccSkOHQBeI2DFslXr/X214I
+         9+Qc6yCYXZjKdDeW5LcFVq/qi3wbLHBba78weED+B0NMjwDU95y86cTEVN9MMrDEllPL
+         oZeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=hnna79W33XQAUXPg9/1+75Om8IQv4yeuG+2GOpSRqBk=;
+        b=p9aHD0cf2lt2NvRVjxxtTKMA5Sj1cthQ9mE51lvGDAw1ZcIZkvJDh8f6rBCvt+WCVy
+         zhnvquvAYvietBpU6clbtd2g4NT/+qMnYTnZn4qTF+lR8Yq5XZvLyZvE+I479u10y9o2
+         fSEKnF+ofkmAN/ufgY4LZyG+v42svS/O2mBNo1H8rIx8a7XHqDsdK8Tkw9t7sUuZ0gqJ
+         ocpHyS7ug/MU3WeJY0SXG+4l1Ewy3V/iKw21BnOfNOJ8PnGrWxftIAc/O30q0/9uOOco
+         4sCnJPUS7Y7jt8BLuMEXPJ1ZbdrRaR2vqU+PFs7PJDcfOKivjFbuj569qkdh3jzNZOXY
+         WeNg==
+X-Gm-Message-State: APjAAAVaO5rwowt01qN4Jb7fiJwZmd0pNW5OyJ5fS6pXzRVeOSh6ulSn
+        uFprf2/2f1triyVQGj6+GIMZnYerTG1f
+X-Google-Smtp-Source: APXvYqyGMmarmCuZNKwB2NjDgUL40WdgGdUxR1eho0gTMhTpsyVa2Pg7TtSOJs9XeWofmor+SkOYMqXqeQFV
+X-Received: by 2002:a1f:50c1:: with SMTP id e184mr2322952vkb.86.1561667067716;
+ Thu, 27 Jun 2019 13:24:27 -0700 (PDT)
+Date:   Thu, 27 Jun 2019 13:24:11 -0700
+Message-Id: <20190627202417.33370-1-brianvv@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
+Subject: [RFC PATCH bpf-next v2 0/6]  bpf: add BPF_MAP_DUMP command to
+From:   Brian Vazquez <brianvv@google.com>
+To:     Brian Vazquez <brianvv.kernel@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S . Miller" <davem@davemloft.net>
+Cc:     Stanislav Fomichev <sdf@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Petar Penkov <ppenkov@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Brian Vazquez <brianvv@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch calls libbpf_[enable|disable]_sys_bpf() from bpftool. This
-allows users with access to /dev/bpf to perform operations like root.
+This introduces a new command to retrieve a variable number of entries
+from a bpf map.
 
-Signed-off-by: Song Liu <songliubraving@fb.com>
----
- tools/bpf/bpftool/feature.c | 2 +-
- tools/bpf/bpftool/main.c    | 5 +++++
- 2 files changed, 6 insertions(+), 1 deletion(-)
+This new command can be executed from the existing BPF syscall as
+follows:
 
-diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
-index d672d9086fff..772c9f445d34 100644
---- a/tools/bpf/bpftool/feature.c
-+++ b/tools/bpf/bpftool/feature.c
-@@ -583,7 +583,7 @@ static int do_probe(int argc, char **argv)
- 	/* Detection assumes user has sufficient privileges (CAP_SYS_ADMIN).
- 	 * Let's approximate, and restrict usage to root user only.
- 	 */
--	if (geteuid()) {
-+	if (!libbpf_enable_sys_bpf()) {
- 		p_err("please run this command as root user");
- 		return -1;
- 	}
-diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-index 4879f6395c7e..56959c5ac552 100644
---- a/tools/bpf/bpftool/main.c
-+++ b/tools/bpf/bpftool/main.c
-@@ -390,6 +390,10 @@ int main(int argc, char **argv)
- 	if (argc < 0)
- 		usage();
- 
-+	if (!libbpf_enable_sys_bpf()) {
-+		p_err("cannot enable access to sys_bpf()");
-+		usage();
-+	}
- 	ret = cmd_select(cmds, argc, argv, do_help);
- 
- 	if (json_output)
-@@ -400,5 +404,6 @@ int main(int argc, char **argv)
- 		delete_pinned_obj_table(&map_table);
- 	}
- 
-+	libbpf_disable_sys_bpf();
- 	return ret;
- }
+err =  bpf(BPF_MAP_DUMP, union bpf_attr *attr, u32 size)
+using attr->dump.map_fd, attr->dump.prev_key, attr->dump.buf,
+attr->dump.buf_len
+returns zero or negative error, and populates buf and buf_len on
+succees
+
+This implementation is wrapping the existing bpf methods:
+map_get_next_key and map_lookup_elem
+the results show that even with a 1-elem_size buffer, it runs ~40 faster
+than the current implementation, improvements of ~85% are reported when
+the buffer size is increased, although, after the buffer size is around
+5% of the total number of entries there's no huge difference in
+increasing
+it.
+
+Tested:
+Tried different size buffers to handle case where the bulk is bigger, or
+the elements to retrieve are less than the existing ones, all runs read
+a map of 100K entries. Below are the results(in ns) from the different
+runs:
+
+buf_len_1:       55528939 entry-by-entry: 97244981 improvement
+42.897887%
+buf_len_2:       34425779 entry-by-entry: 88863122 improvement
+61.259769%
+buf_len_230:     11700316 entry-by-entry: 88753301 improvement
+86.817036%
+buf_len_5000:    11615290 entry-by-entry: 88362637 improvement
+86.854976%
+buf_len_73000:   12083976 entry-by-entry: 89956483 improvement
+86.566865%
+buf_len_100000:  12638913 entry-by-entry: 89642303 improvement
+85.900727%
+buf_len_234567:  11873964 entry-by-entry: 89080077 improvement
+86.670461%
+
+Changelog:
+
+v2:
+- use proper bpf-next tag
+
+Brian Vazquez (6):
+  bpf: add bpf_map_value_size and bp_map_copy_value helper functions
+  bpf: add BPF_MAP_DUMP command to access more than one entry per call
+  bpf: keep bpf.h in sync with tools/
+  libbpf: support BPF_MAP_DUMP command
+  selftests/bpf: test BPF_MAP_DUMP command on a bpf hashmap
+  selftests/bpf: add test to measure performance of BPF_MAP_DUMP
+
+ include/uapi/linux/bpf.h                |   9 +
+ kernel/bpf/syscall.c                    | 242 ++++++++++++++++++------
+ tools/include/uapi/linux/bpf.h          |   9 +
+ tools/lib/bpf/bpf.c                     |  28 +++
+ tools/lib/bpf/bpf.h                     |   4 +
+ tools/lib/bpf/libbpf.map                |   2 +
+ tools/testing/selftests/bpf/test_maps.c | 141 +++++++++++++-
+ 7 files changed, 372 insertions(+), 63 deletions(-)
+
 -- 
-2.17.1
+2.22.0.410.gd8fdbe21b5-goog
 
