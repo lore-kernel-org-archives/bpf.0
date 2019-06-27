@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F13EC48BD6
-	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 00:48:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8E7DC48BD9
+	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 00:49:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 12CC22082F
-	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 00:48:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B60EC2147A
+	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 00:49:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1561596531;
-	bh=gyBTngWHtRDO9vpVZZ8b+0cr76f93Uf0igsoq7QNkXo=;
+	s=default; t=1561596582;
+	bh=Do+ZFldgUIPiXLB7n1y+uxP70mE2qkdNAeMpDck2sYg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ihAXbW1iosn23DcKNJP34sRB4Cdj4+1eHBP0mE5Zf1spxP8mmXHEhT6oQXB9oTtXW
-	 EUNzAuXnVV7HgytYOi7y6fX/SeOFarKdQId5wFKS6sA8Zb05qudY5dKrogigvukg8j
-	 1F0ws50bpj+3velWqQK2rklxB5Yz0b0Q7lP7FLNc=
+	b=BpVvqP8zwH0J+7fmPAWAm0hvaTEMOpvit/bEGT1JJQ2EkttT8KICb001wol1qtId0
+	 OPwbGp3GO+TVUhbUHShSzEMCyjo+T/aUEwbosxSc/pD1bNWTta0oJqtEHvBWNEXETX
+	 tQUPKT3/Zd30u96tZLGKdtah+BbfTeMe0jTtmRCY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727435AbfF0Ah4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Jun 2019 20:37:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42316 "EHLO mail.kernel.org"
+        id S1728519AbfF0AhJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Jun 2019 20:37:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41694 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728712AbfF0Ahx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 26 Jun 2019 20:37:53 -0400
+        id S1727168AbfF0AhI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 26 Jun 2019 20:37:08 -0400
 Received: from sasha-vm.mshome.net (unknown [107.242.116.147])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0C20F217F9;
-        Thu, 27 Jun 2019 00:37:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 56EE62184E;
+        Thu, 27 Jun 2019 00:37:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561595872;
-        bh=gyBTngWHtRDO9vpVZZ8b+0cr76f93Uf0igsoq7QNkXo=;
+        s=default; t=1561595827;
+        bh=Do+ZFldgUIPiXLB7n1y+uxP70mE2qkdNAeMpDck2sYg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dx13BFS9UpOkOdwpKMncIv+BvN79lCH20iR1m/TaFwZy6KW5dGqIcbgMbn+LqWOYK
-         U+aG1fyiMq5Go/6LwZCqwAEApBruVSUKqW57bOzGhImBN6xLV/WvY7p/EgEb373lTA
-         5D/N2Fm8mzv4xHdKd+6vZd192ocVzADL1mSUwoh4=
+        b=ugy0OgtlbpSSgrmrRWoXqKwaCv/ZumbETB30nw2wIGh+M0aionWTZIP5u1doisoA0
+         gG8PaGQTFwMsouM/QvzESxSjxza2SBgk92CdYct0Kb1t/s+4uB88531PLWGiyNp2W3
+         QNBb5x8pvPxIXvj6tsJ22JqxBGgaqP9qiuOY/g1g=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+Cc:     Martin KaFai Lau <kafai@fb.com>, Tom Herbert <tom@herbertland.com>,
+        Song Liu <songliubraving@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 31/60] bpf: lpm_trie: check left child of last leftmost node for NULL
-Date:   Wed, 26 Jun 2019 20:35:46 -0400
-Message-Id: <20190627003616.20767-31-sashal@kernel.org>
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 17/60] bpf: udp: Avoid calling reuseport's bpf_prog from udp_gro
+Date:   Wed, 26 Jun 2019 20:35:32 -0400
+Message-Id: <20190627003616.20767-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190627003616.20767-1-sashal@kernel.org>
 References: <20190627003616.20767-1-sashal@kernel.org>
@@ -60,131 +60,59 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jonathan Lemon <jonathan.lemon@gmail.com>
+From: Martin KaFai Lau <kafai@fb.com>
 
-[ Upstream commit da2577fdd0932ea4eefe73903f1130ee366767d2 ]
+[ Upstream commit 257a525fe2e49584842c504a92c27097407f778f ]
 
-If the leftmost parent node of the tree has does not have a child
-on the left side, then trie_get_next_key (and bpftool map dump) will
-not look at the child on the right.  This leads to the traversal
-missing elements.
+When the commit a6024562ffd7 ("udp: Add GRO functions to UDP socket")
+added udp[46]_lib_lookup_skb to the udp_gro code path, it broke
+the reuseport_select_sock() assumption that skb->data is pointing
+to the transport header.
 
-Lookup is not affected.
+This patch follows an earlier __udp6_lib_err() fix by
+passing a NULL skb to avoid calling the reuseport's bpf_prog.
 
-Update selftest to handle this case.
-
-Reproducer:
-
- bpftool map create /sys/fs/bpf/lpm type lpm_trie key 6 \
-     value 1 entries 256 name test_lpm flags 1
- bpftool map update pinned /sys/fs/bpf/lpm key  8 0 0 0  0   0 value 1
- bpftool map update pinned /sys/fs/bpf/lpm key 16 0 0 0  0 128 value 2
- bpftool map dump   pinned /sys/fs/bpf/lpm
-
-Returns only 1 element. (2 expected)
-
-Fixes: b471f2f1de8b ("bpf: implement MAP_GET_NEXT_KEY command for LPM_TRIE")
-Signed-off-by: Jonathan Lemon <jonathan.lemon@gmail.com>
-Acked-by: Martin KaFai Lau <kafai@fb.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Fixes: a6024562ffd7 ("udp: Add GRO functions to UDP socket")
+Cc: Tom Herbert <tom@herbertland.com>
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+Acked-by: Song Liu <songliubraving@fb.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/lpm_trie.c                      |  9 +++--
- tools/testing/selftests/bpf/test_lpm_map.c | 41 ++++++++++++++++++++--
- 2 files changed, 45 insertions(+), 5 deletions(-)
+ net/ipv4/udp.c | 6 +++++-
+ net/ipv6/udp.c | 2 +-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index 4f3138e6ecb2..1a8b208f6c55 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -676,9 +676,14 @@ static int trie_get_next_key(struct bpf_map *map, void *_key, void *_next_key)
- 	 * have exact two children, so this function will never return NULL.
- 	 */
- 	for (node = search_root; node;) {
--		if (!(node->flags & LPM_TREE_NODE_FLAG_IM))
-+		if (node->flags & LPM_TREE_NODE_FLAG_IM) {
-+			node = rcu_dereference(node->child[0]);
-+		} else {
- 			next_node = node;
--		node = rcu_dereference(node->child[0]);
-+			node = rcu_dereference(node->child[0]);
-+			if (!node)
-+				node = rcu_dereference(next_node->child[1]);
-+		}
- 	}
- do_copy:
- 	next_key->prefixlen = next_node->prefixlen;
-diff --git a/tools/testing/selftests/bpf/test_lpm_map.c b/tools/testing/selftests/bpf/test_lpm_map.c
-index 02d7c871862a..006be3963977 100644
---- a/tools/testing/selftests/bpf/test_lpm_map.c
-+++ b/tools/testing/selftests/bpf/test_lpm_map.c
-@@ -573,13 +573,13 @@ static void test_lpm_get_next_key(void)
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index e45a5e19e509..e6dbe3912b93 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -542,7 +542,11 @@ static inline struct sock *__udp4_lib_lookup_skb(struct sk_buff *skb,
+ struct sock *udp4_lib_lookup_skb(struct sk_buff *skb,
+ 				 __be16 sport, __be16 dport)
+ {
+-	return __udp4_lib_lookup_skb(skb, sport, dport, &udp_table);
++	const struct iphdr *iph = ip_hdr(skb);
++
++	return __udp4_lib_lookup(dev_net(skb->dev), iph->saddr, sport,
++				 iph->daddr, dport, inet_iif(skb),
++				 inet_sdif(skb), &udp_table, NULL);
+ }
+ EXPORT_SYMBOL_GPL(udp4_lib_lookup_skb);
  
- 	/* add one more element (total two) */
- 	key_p->prefixlen = 24;
--	inet_pton(AF_INET, "192.168.0.0", key_p->data);
-+	inet_pton(AF_INET, "192.168.128.0", key_p->data);
- 	assert(bpf_map_update_elem(map_fd, key_p, &value, 0) == 0);
+diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+index cab8b2b647f9..7c3ea06f86a9 100644
+--- a/net/ipv6/udp.c
++++ b/net/ipv6/udp.c
+@@ -282,7 +282,7 @@ struct sock *udp6_lib_lookup_skb(struct sk_buff *skb,
  
- 	memset(key_p, 0, key_size);
- 	assert(bpf_map_get_next_key(map_fd, NULL, key_p) == 0);
- 	assert(key_p->prefixlen == 24 && key_p->data[0] == 192 &&
--	       key_p->data[1] == 168 && key_p->data[2] == 0);
-+	       key_p->data[1] == 168 && key_p->data[2] == 128);
+ 	return __udp6_lib_lookup(dev_net(skb->dev), &iph->saddr, sport,
+ 				 &iph->daddr, dport, inet6_iif(skb),
+-				 inet6_sdif(skb), &udp_table, skb);
++				 inet6_sdif(skb), &udp_table, NULL);
+ }
+ EXPORT_SYMBOL_GPL(udp6_lib_lookup_skb);
  
- 	memset(next_key_p, 0, key_size);
- 	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == 0);
-@@ -592,7 +592,7 @@ static void test_lpm_get_next_key(void)
- 
- 	/* Add one more element (total three) */
- 	key_p->prefixlen = 24;
--	inet_pton(AF_INET, "192.168.128.0", key_p->data);
-+	inet_pton(AF_INET, "192.168.0.0", key_p->data);
- 	assert(bpf_map_update_elem(map_fd, key_p, &value, 0) == 0);
- 
- 	memset(key_p, 0, key_size);
-@@ -643,6 +643,41 @@ static void test_lpm_get_next_key(void)
- 	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == -1 &&
- 	       errno == ENOENT);
- 
-+	/* Add one more element (total five) */
-+	key_p->prefixlen = 28;
-+	inet_pton(AF_INET, "192.168.1.128", key_p->data);
-+	assert(bpf_map_update_elem(map_fd, key_p, &value, 0) == 0);
-+
-+	memset(key_p, 0, key_size);
-+	assert(bpf_map_get_next_key(map_fd, NULL, key_p) == 0);
-+	assert(key_p->prefixlen == 24 && key_p->data[0] == 192 &&
-+	       key_p->data[1] == 168 && key_p->data[2] == 0);
-+
-+	memset(next_key_p, 0, key_size);
-+	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == 0);
-+	assert(next_key_p->prefixlen == 28 && next_key_p->data[0] == 192 &&
-+	       next_key_p->data[1] == 168 && next_key_p->data[2] == 1 &&
-+	       next_key_p->data[3] == 128);
-+
-+	memcpy(key_p, next_key_p, key_size);
-+	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == 0);
-+	assert(next_key_p->prefixlen == 24 && next_key_p->data[0] == 192 &&
-+	       next_key_p->data[1] == 168 && next_key_p->data[2] == 1);
-+
-+	memcpy(key_p, next_key_p, key_size);
-+	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == 0);
-+	assert(next_key_p->prefixlen == 24 && next_key_p->data[0] == 192 &&
-+	       next_key_p->data[1] == 168 && next_key_p->data[2] == 128);
-+
-+	memcpy(key_p, next_key_p, key_size);
-+	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == 0);
-+	assert(next_key_p->prefixlen == 16 && next_key_p->data[0] == 192 &&
-+	       next_key_p->data[1] == 168);
-+
-+	memcpy(key_p, next_key_p, key_size);
-+	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == -1 &&
-+	       errno == ENOENT);
-+
- 	/* no exact matching key should return the first one in post order */
- 	key_p->prefixlen = 22;
- 	inet_pton(AF_INET, "192.168.1.0", key_p->data);
 -- 
 2.20.1
 
