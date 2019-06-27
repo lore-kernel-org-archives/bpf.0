@@ -2,144 +2,173 @@ Return-Path: <SRS0=hqV4=U2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-13.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFBA2C48BD7
-	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 10:15:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72969C48BDA
+	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 11:36:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C42A02085A
-	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 10:15:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4BFBD2080C
+	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 11:36:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="e9EAO+mr"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ncV8Nize"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726425AbfF0KPi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 27 Jun 2019 06:15:38 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:39289 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726416AbfF0KPi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 27 Jun 2019 06:15:38 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190627101536euoutp01206c9c2959f9a56e312aa1a3c517a3de~sBrMMCAO70626906269euoutp01O
-        for <bpf@vger.kernel.org>; Thu, 27 Jun 2019 10:15:36 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190627101536euoutp01206c9c2959f9a56e312aa1a3c517a3de~sBrMMCAO70626906269euoutp01O
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1561630536;
-        bh=bxFnqa+gaX8KmJ5gHPf/pUQVZxLmoOj5+HSflVCgAGs=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=e9EAO+mreRXgTRtmJmTUZFf6WvCCpBB9XBIQgtI+zSFMhir4Qe9UBmWIJPDvNMmWH
-         5nXKtYlBIO2LUxQQ8CRRyOzLq4/f9jAS3lAPKMQfgcxul0mzSABjsgL/KYZcQXZFIn
-         +E8dYZDqCEm6Mxx6V9K0p8HCTYPkdqC71dRM+qP4=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190627101535eucas1p1f06095434888e38115ff6854ffe74c70~sBrLRFIBf1062510625eucas1p1w;
-        Thu, 27 Jun 2019 10:15:35 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 14.5C.04325.747941D5; Thu, 27
-        Jun 2019 11:15:35 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20190627101535eucas1p27da11c25b0e15474e4c957053de139d9~sBrKmEPvo2154921549eucas1p2y;
-        Thu, 27 Jun 2019 10:15:35 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190627101534eusmtrp21aac3f20f0c9fc6301a40ab5de83a046~sBrKX_EFP2684426844eusmtrp2Z;
-        Thu, 27 Jun 2019 10:15:34 +0000 (GMT)
-X-AuditID: cbfec7f5-b8fff700000010e5-7e-5d1497474dd6
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 76.3E.04140.647941D5; Thu, 27
-        Jun 2019 11:15:34 +0100 (BST)
-Received: from imaximets.rnd.samsung.ru (unknown [106.109.129.180]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190627101534eusmtip11973e4335bb9d20dd7726864d937381a~sBrJp3Mb-0975409754eusmtip1D;
-        Thu, 27 Jun 2019 10:15:34 +0000 (GMT)
-From:   Ilya Maximets <i.maximets@samsung.com>
-To:     netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        xdp-newbies@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        id S1726429AbfF0Lgr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 27 Jun 2019 07:36:47 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:37458 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726370AbfF0Lgq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 27 Jun 2019 07:36:46 -0400
+Received: by mail-qt1-f196.google.com with SMTP id y57so2024989qtk.4
+        for <bpf@vger.kernel.org>; Thu, 27 Jun 2019 04:36:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lrbbw427y1OLicF2y8GQv6n0mSuHYHsZTkGTvsVsPRs=;
+        b=ncV8NizeVgSneI0njGBIgnjZ60NOgcjoKWqmSZgOb82tmrYcA/mkJ82Vkq53CDDpDm
+         etdv7xL7pqNnLAH9oSlm3bwun4e059lKHFXIgsT4F8OmN6tvsmNyhtcA/knNb3f3r/cf
+         oKMbZHLUmeMllV0RZbMBEBU4Sns3tTvPNspwZiWcKAmfxH7N1XgBcaPLbIxmBB+umPEL
+         qic/EnNTe8CCziDR5gAKCVzumoSE7l4CJSWElqx7nhvzs18ScvEQnpKOjN/MEEbJBFnK
+         K71Qkn+A0UP2Vo6IP6ZL4dR2i8klXTjs4iNpTvRugLlnoJSzdjvtFfLMTa5hY+4xuWW/
+         nN9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lrbbw427y1OLicF2y8GQv6n0mSuHYHsZTkGTvsVsPRs=;
+        b=nEm41l73LNll+ei2Skm757OH/Hf32RoWphHVL/FJ1qjX1PitdKjzoThpn2FQE/JQtR
+         vdRUVnsm1noAV46TT+KkwJT/gM2K9K+/n133uehYINwiC8JIVdQkwi1kESfvGtkFyuQT
+         JQQDrRS7umukdn3PryyOGCXUd0XDDV2P4JgrRJp+FkFBDGDTFfIQi+nUH8G/d7XCmtHd
+         QZesmuHsZmc+bNpvMtQTe8viC+TyEamj84XvaSGyRrN5J7jAWD4BKwTaMvCdQFY02CWf
+         wUVyXpe8sx7V1lpu7MX7A4oXIMZOh9biGsxXzWr4v4Gkl2k0tpp9EVijIuhjf1p+QrKg
+         BX/g==
+X-Gm-Message-State: APjAAAXD7MHOcogDulmZzKRYBHg3Q9q195/EHnNK1s4W8IdyK28mY5Uc
+        rG8AvqQ8q6ENCAryimMOocZNiD8p4YWordxtgGcfGA==
+X-Google-Smtp-Source: APXvYqxC+OzTvHF4zmnfGQg8wJLudDtNDpGXWQrZsaoLkAoO6mLER+L3idoJdGKuBDbhK3E1ffLTgOF0HgMO8H6+lxA=
+X-Received: by 2002:ac8:1ba9:: with SMTP id z38mr2684417qtj.176.1561635404388;
+ Thu, 27 Jun 2019 04:36:44 -0700 (PDT)
+MIME-Version: 1.0
+References: <faaf8b1c-9552-a0ae-3088-2f4255dff857@codeaurora.org>
+ <0bcdd38c-5cdb-0510-573a-9a6098ab2105@codeaurora.org> <CAJWu+oo5zmdY9ywhbQTWi+YXRDF=XSJrAUEE0uJ9dV_9vZUSBA@mail.gmail.com>
+In-Reply-To: <CAJWu+oo5zmdY9ywhbQTWi+YXRDF=XSJrAUEE0uJ9dV_9vZUSBA@mail.gmail.com>
+From:   Joel Fernandes <joelaf@google.com>
+Date:   Thu, 27 Jun 2019 07:36:32 -0400
+Message-ID: <CAJWu+opEj0=FAHvityWTVxE3BBLHMYiHqu+Bc1+T03DzEsnGbQ@mail.gmail.com>
+Subject: Re: samples/bpf compilation failures - 5.2.0
+To:     Srinivas Ramana <sramana@codeaurora.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Ilya Maximets <i.maximets@samsung.com>
-Subject: [PATCH bpf v5 0/2] xdp: fix hang while unregistering device bound
- to xdp socket
-Date:   Thu, 27 Jun 2019 13:15:27 +0300
-Message-Id: <20190627101529.11234-1-i.maximets@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplleLIzCtJLcpLzFFi42LZduznOV336SKxBu86VSz+tG1gtPh85Dib
-        xeKF35gt5pxvYbG40v6T3eLYixY2i13rZjJbXN41h81ixaETQLEFYhbb+/cxOnB7bFl5k8lj
-        56y77B6L97xk8ui6cYnZY3r3Q2aPvi2rGD0+b5ILYI/isklJzcksSy3St0vgymjYe5ex4A1b
-        xaX2jWwNjBNYuxg5OSQETCQm7Z/H0sXIxSEksIJR4sv+2ewQzhdGibbzz1ghnM+MEqsaX7LA
-        tPSdWM8GkVjOKPHr4B+oqh+MEn86FoANZhPQkTi1+ggjiC0iICXxccd2sLnMAjOZJbY8ngI2
-        SlggSuJ3xwIwm0VAVeL6yy1gNq+AtcSd5iNMEOvkJVZvOMAM0iwh8JtN4vKcrcwQCReJ2e2b
-        oWxhiVfHt7BD2DIS/3fOh2qul7jf8pIRormDUWL6oX9QCXuJLa/PATVwAJ2kKbF+lz5E2FHi
-        /uwfzCBhCQE+iRtvBUHCzEDmpG3TocK8Eh1tQhDVKhK/Dy6HukBK4ua7z1AXeEisa9wFZgsJ
-        xEpsbNrOPoFRbhbCrgWMjKsYxVNLi3PTU4uN81LL9YoTc4tL89L1kvNzNzECE8npf8e/7mDc
-        9yfpEKMAB6MSD++KncKxQqyJZcWVuYcYJTiYlUR488NEYoV4UxIrq1KL8uOLSnNSiw8xSnOw
-        KInzVjM8iBYSSE8sSc1OTS1ILYLJMnFwSjUwbpv0nonxv/CqOW5VR2oDrS8/FatIqd1x/DDX
-        93gBbpeZr7K5LOdP6Tx6sP3jws6ry4sfnJp+0VbjnOOSdamfim5LxZ6vMhQ/sNr3ubSFsNBS
-        eenLfbeDv328/+fltIlJV3Wj3lXt+9b7YNIaw509Yd+rO7q+1K/NnbG33JUjIFos6kH7vKXP
-        JiixFGckGmoxFxUnAgByL5ssIAMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrELMWRmVeSWpSXmKPExsVy+t/xu7pu00ViDZa9M7H407aB0eLzkeNs
-        FosXfmO2mHO+hcXiSvtPdotjL1rYLHatm8lscXnXHDaLFYdOAMUWiFls79/H6MDtsWXlTSaP
-        nbPusnss3vOSyaPrxiVmj+ndD5k9+rasYvT4vEkugD1Kz6Yov7QkVSEjv7jEVina0MJIz9DS
-        Qs/IxFLP0Ng81srIVEnfziYlNSezLLVI3y5BL6Nh713GgjdsFZfaN7I1ME5g7WLk5JAQMJHo
-        O7GerYuRi0NIYCmjxIOvNxkhElISP35dgCoSlvhzrQuq6BujxIXpW8CK2AR0JE6tPgJmiwA1
-        fNyxnR3EZhZYyCzxZZIJiC0sECFx98V3JhCbRUBV4vrLLSwgNq+AtcSd5iNMEAvkJVZvOMA8
-        gZFnASPDKkaR1NLi3PTcYiO94sTc4tK8dL3k/NxNjMDw3Xbs55YdjF3vgg8xCnAwKvHwrtgp
-        HCvEmlhWXJl7iFGCg1lJhDc/TCRWiDclsbIqtSg/vqg0J7X4EKMp0PKJzFKiyfnA2MoriTc0
-        NTS3sDQ0NzY3NrNQEuftEDgYIySQnliSmp2aWpBaBNPHxMEp1cAowR744OXCXz/3aHdumLvd
-        1fbnm4/ebyz/fNnAdnH3/PZEZi1GIbfXwrvrs5JMve8LZc+wDr5So1yuu/rszEk1Cxq7Dy/V
-        dSyRsV4Q+cDd/cKCmbsdpJ4fe7A67vGPjDhLzsobZyOmXJRKfbx498RjlwyXzUyQKT+Wae9S
-        ka4bFRnoy22lEeinxFKckWioxVxUnAgAFa49QXUCAAA=
-X-CMS-MailID: 20190627101535eucas1p27da11c25b0e15474e4c957053de139d9
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190627101535eucas1p27da11c25b0e15474e4c957053de139d9
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190627101535eucas1p27da11c25b0e15474e4c957053de139d9
-References: <CGME20190627101535eucas1p27da11c25b0e15474e4c957053de139d9@eucas1p2.samsung.com>
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>, bpf@vger.kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Version 5:
+> > On 5/28/2019 2:27 PM, Srinivas Ramana wrote:
+> > > Hello,
+> > >
+> > > I am trying to build samples/bpf in kernel(5.2.0-rc1) but unsuccessful
+> > > with below errors. Can you help to point what i am missing or if there
+> > > is some known issue?
 
-    * Fixed incorrect handling of rtnl_lock.
+By the way have you just tried building it on an ARM debian chroot? It
+is not worth IMO spending time on cross compiler issues if you can
+just native compile it within a chroot (as I do). Cross compilation
+does not get a lot of testing, so even if we fix it its likely to come
+up again as I've experienced. If you want a debian chroot that is
+Android friendly, you can find one here:
+https://github.com/joelagnel/adeb (comes with llvm, gcc etc).  I have
+done lots of native compilation on a Pixel phone.
 
-Version 4:
+J.
 
-    * 'xdp_umem_clear_dev' exposed to be used while unregistering.
-    * Added XDP socket state to track if resources already unbinded.
-    * Splitted in two fixes.
 
-Version 3:
 
-    * Declaration lines ordered from longest to shortest.
-    * Checking of event type moved to the top to avoid unnecessary
-      locking.
-
-Version 2:
-
-    * Completely re-implemented using netdev event handler.
-
-Ilya Maximets (2):
-  xdp: hold device for umem regardless of zero-copy mode
-  xdp: fix hang while unregistering device bound to xdp socket
-
- include/net/xdp_sock.h |  5 +++
- net/xdp/xdp_umem.c     | 21 +++++-----
- net/xdp/xdp_umem.h     |  1 +
- net/xdp/xsk.c          | 87 ++++++++++++++++++++++++++++++++++++------
- 4 files changed, 93 insertions(+), 21 deletions(-)
-
--- 
-2.17.1
-
+> > >
+> > > ==============================8<===================================
+> > > $ make samples/bpf/
+> > > LLC=/local/mnt/workspace/tools/clang_ubuntu/clang/clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-14.04/bin/llc
+> > > CLANG=/local/mnt/workspace/tools/clang_ubuntu/clang/clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-14.04/bin/clang
+> > > V=1
+> > > make -C /local/mnt/workspace/sramana/kdev_torvalds/kdev/kernel -f
+> > > /local/mnt/workspace/sramana/kdev_torvalds/kdev/kernel/Makefile
+> > > samples/bpf/
+> > > ................
+> > > ................
+> > > ................
+> > > make KBUILD_MODULES=1 -f ./scripts/Makefile.build obj=samples/bpf
+> > > (cat /dev/null; ) > samples/bpf/modules.order
+> > > make -C
+> > > /local/mnt/workspace/sramana/kdev_torvalds/kdev/kernel/samples/bpf/../../tools/lib/bpf/
+> > > RM='rm -rf' LDFLAGS=
+> > > srctree=/local/mnt/workspace/sramana/kdev_torvalds/kdev/kernel/samples/bpf/../../
+> > > O=
+> > >
+> > > Auto-detecting system features:
+> > > ...                        libelf: [ on  ]
+> > > ...                           bpf: [ on  ]
+> > >
+> > > make -C
+> > > /local/mnt/workspace/sramana/kdev_torvalds/kdev/kernel/samples/bpf/../..//tools/build
+> > > CFLAGS= LDFLAGS= fixdep
+> > > make -f
+> > > /local/mnt/workspace/sramana/kdev_torvalds/kdev/kernel/samples/bpf/../..//tools/build/Makefile.build
+> > > dir=. obj=fixdep
+> > >     ld -r -o fixdep-in.o  fixdep.o
+> > > ld: fixdep.o: Relocations in generic ELF (EM: 183)
+> > > ld: fixdep.o: Relocations in generic ELF (EM: 183)
+> > > fixdep.o: error adding symbols: File in wrong format
+> > > make[5]: *** [fixdep-in.o] Error 1
+> > > make[4]: *** [fixdep-in.o] Error 2
+> > > make[3]: *** [fixdep] Error 2
+> > > make[2]: ***
+> > > [/local/mnt/workspace/sramana/kdev_torvalds/kdev/kernel/samples/bpf/../../tools/lib/bpf/libbpf.a]
+> > > Error 2
+> > > make[1]: *** [samples/bpf/] Error 2
+> > > make: *** [sub-make] Error 2
+> > > ==============================>8=======================================
+> > >
+> > >
+> > > I am using the below commands to build:
+> > > ========================================================
+> > > export ARCH=arm64
+> > > export CROSS_COMPILE=<path>linaro-toolchain/5.1/bin/aarch64-linux-gnu-
+> > > export CLANG_TRIPLE=arm64-linux-gnu-
+> > >
+> > > make
+> > > CC=<path>/clang_ubuntu/clang/clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-14.04/bin/clang
+> > > defconfig
+> > >
+> > > make
+> > > CC=<path>/clang_ubuntu/clang/clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-14.04/bin/clang
+> > > -j8
+> > >
+> > > make
+> > > CC=<path>/clang_ubuntu/clang/clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-14.04/bin/clang
+> > > headers_install INSTALL_HDR_PATH=./usr
+> > >
+> > > make samples/bpf/
+> > > LLC=<path>/clang_ubuntu/clang/clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-14.04/bin/llc
+> > > CLANG=<path>/clang_ubuntu/clang/clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-14.04/bin/clang
+> > > V=1
+> > > CC=<path>/clang_ubuntu/clang/clang+llvm-8.0.0-x86_64-linux-gnu-ubuntu-14.04/bin/clang
+> > >
+> > > ========================================================
+> > >
+> > > Thanks,
+> > > -- Srinivas R
+> > >
+> >
+> >
+> > --
+> > Qualcomm India Private Limited, on behalf of Qualcomm Innovation
+> > Center, Inc., is a member of Code Aurora Forum, a Linux Foundation
+> > Collaborative Project
