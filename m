@@ -2,112 +2,134 @@ Return-Path: <SRS0=hqV4=U2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E370CC48BD7
-	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 20:25:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7186FC004E6
+	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 20:38:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BDD4720B7C
-	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 20:25:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 45C632075E
+	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 20:38:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lCTvipls"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="im9YE5Ax"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726617AbfF0UZH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 27 Jun 2019 16:25:07 -0400
-Received: from mail-pg1-f201.google.com ([209.85.215.201]:46788 "EHLO
-        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726614AbfF0UYl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 27 Jun 2019 16:24:41 -0400
-Received: by mail-pg1-f201.google.com with SMTP id s195so1886699pgs.13
-        for <bpf@vger.kernel.org>; Thu, 27 Jun 2019 13:24:41 -0700 (PDT)
+        id S1726498AbfF0Ui7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 27 Jun 2019 16:38:59 -0400
+Received: from mail-pf1-f201.google.com ([209.85.210.201]:55922 "EHLO
+        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726384AbfF0Ui6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 27 Jun 2019 16:38:58 -0400
+Received: by mail-pf1-f201.google.com with SMTP id i26so2268623pfo.22
+        for <bpf@vger.kernel.org>; Thu, 27 Jun 2019 13:38:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=ZJbz/C3e+sb5O/hI+5UE82UL50nEjTNC67t2N91YPtY=;
-        b=lCTviplsuxpS22jrClW1mL6aRTLXQXF+1uQJl4GrP6ELiwrIM8+E29QIF7dhjFLGfi
-         L6OYMLcLR2eAiHqKQuu83jwzMnjqC5d8Apw/sEF4B89WA6KsBhICw+c7ZFjW194I2AKo
-         vxPW6ly4lbZGqGoPxV6yi0G/Vr/JY/b2bQILBmVoE2LEgToG3BoC8Bms2fPRezw3FAs6
-         rs55e9Cxo/7e9nAqAkEepnKDI9q6NhBx6QmhfqaQ900R2wEifq7T8W4DPfu6MGZT+Khf
-         btHFXN3aHvhR6hYd745qdaYxuXS86cfNwyWHwJRzvRmhaRolW+lpmW328cecxh0/DACC
-         ucIQ==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=IyeyMj4roDD0kDM67GID8k8aBjlB7wnRUksBjx9pO6o=;
+        b=im9YE5Ax1IW3TiAXzjnhZUwpFA3CLsu0O+o+pmS2WAChzV0brY8wqf4rrA2X9VY3G9
+         2ASu1MOXrn2DbI1qIV0HCEe76a8sff5bcXJQQmGDltrVtHHLoOES72z0JlGrl7RLZiXO
+         GR8psTsBy6loGsTn5hbYfI0nrd53wTW2p2tEBHQ/b81EjTEi3Q2yPV4Iik2jrM+tfsym
+         8nKIcDFJ8nICfKirQjsB69UQBK31ZYCm7Bwzv99iPorlCXru8ozc2EvX8EUsMG4tyPtb
+         Iuq7ZxM9Y5lAX9y3kLVUNVEcpvIba2b03rhrDijhngsiGyMska08G/u6aKjkB/5k/MwO
+         CAxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=ZJbz/C3e+sb5O/hI+5UE82UL50nEjTNC67t2N91YPtY=;
-        b=dV9T+uO1wZohvFe7HfKM8ihqMYOJkWnlVyryOvVb8NvZ4K1FgLO9PcwyJXNoLtI2fF
-         uEHVUUB1fVjJFghLgBhCxo5JuYqf5qrfvwI2QbUc+KBOclQIZwU1hUn/KDk5DxODyr42
-         K9SyhTqpNrl9s9RvtbbdZB/tj6VuqHzXpGzI2VyQEeaPIDWGG2EY5shs+F4JDBrpudAG
-         KHh2V/3ybZBoGx/x9ywHf/ytfKn4psslPmz9bQNbHbVIKh7E0FuCipyZZpScFmzKR97p
-         +Uicv5pAkeiLQtnXP7fV9sMiENghGXvthLctd19JyAVyuoeKD5P8o2uok9AoOBIcCElw
-         6wgQ==
-X-Gm-Message-State: APjAAAWVkbeTLmUuCv002xoTUDijYdwbdnZMV/jVRts87OXplT8PVi4B
-        GiUWH8nTnyPelQ5IXywS50m2/81Zt7fa
-X-Google-Smtp-Source: APXvYqxPs9/hX31AxgdEdEA6GWdFRzA3e8KBAWPjSOpGxJSpn8o6xpvG+ON50dqck6rcViGHvFWvoMlbXgXp
-X-Received: by 2002:a63:5c1c:: with SMTP id q28mr5467792pgb.288.1561667080410;
- Thu, 27 Jun 2019 13:24:40 -0700 (PDT)
-Date:   Thu, 27 Jun 2019 13:24:14 -0700
-In-Reply-To: <20190627202417.33370-1-brianvv@google.com>
-Message-Id: <20190627202417.33370-4-brianvv@google.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=IyeyMj4roDD0kDM67GID8k8aBjlB7wnRUksBjx9pO6o=;
+        b=DwWZC4YxGnsZqJB/WM5X57lwYINFq0zaKH6LzAr8yZhd+VNALqFJCMza5ag0MkGTGB
+         SdXBs4qhEkhAjzb1ipAIUTXyp/O6B4xrS6AkZen4a/VtlpuxYHiOJgOKdOYlBt8boV8i
+         Jhyrln0avR6aLTUtk1IOw2EyRa0GbqUTOnRKjqUmxPVwZe3Wl0pUE+CyHGvWC7n8IKcs
+         Y+for/68u4Pk1f0rWSBRump9pFG4GJX0eWHmx2KiY6UC6wj++THaxIaYwXQQOR0GJiJp
+         hp4kJ/S+MkVLInYBM8wCFq+9oQKm5ZLtqDr7WcVBIADew25MiSucBq8lPuuHb5gCUwYL
+         J9JA==
+X-Gm-Message-State: APjAAAXFjCkWHxhzFnNS0LWMoi78J2mOuDDD4LxNgKQZk3rnas6Bsk/7
+        t4TLCwOuGLKNM61EXX/b5tS3rMs=
+X-Google-Smtp-Source: APXvYqycdK4YR0sCWfvO6YrXYvC0KrHBmL+yfD7s7GFgiCKWCMMrtTO9QS1AcKPy7G5GyvPd4GEgU9o=
+X-Received: by 2002:a63:18d:: with SMTP id 135mr5636361pgb.62.1561667937778;
+ Thu, 27 Jun 2019 13:38:57 -0700 (PDT)
+Date:   Thu, 27 Jun 2019 13:38:46 -0700
+Message-Id: <20190627203855.10515-1-sdf@google.com>
 Mime-Version: 1.0
-References: <20190627202417.33370-1-brianvv@google.com>
 X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [RFC PATCH bpf-next v2 3/6] bpf: keep bpf.h in sync with tools/
-From:   Brian Vazquez <brianvv@google.com>
-To:     Brian Vazquez <brianvv.kernel@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S . Miller" <davem@davemloft.net>
-Cc:     Stanislav Fomichev <sdf@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Petar Penkov <ppenkov@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Brian Vazquez <brianvv@google.com>
+Subject: [PATCH bpf-next v9 0/9] bpf: getsockopt and setsockopt hooks
+From:   Stanislav Fomichev <sdf@google.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
+        Stanislav Fomichev <sdf@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adds bpf_attr.dump structure to libbpf.
+This series implements two new per-cgroup hooks: getsockopt and
+setsockopt along with a new sockopt program type. The idea is pretty
+similar to recently introduced cgroup sysctl hooks, but
+implementation is simpler (no need to convert to/from strings).
 
-Suggested-by: Stanislav Fomichev <sdf@google.com>
-Signed-off-by: Brian Vazquez <brianvv@google.com>
----
- tools/include/uapi/linux/bpf.h | 9 +++++++++
- 1 file changed, 9 insertions(+)
+What this can be applied to:
+* move business logic of what tos/priority/etc can be set by
+  containers (either pass or reject)
+* handle existing options (or introduce new ones) differently by
+  propagating some information in cgroup/socket local storage
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index b077507efa3f3..1d753958874df 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -106,6 +106,7 @@ enum bpf_cmd {
- 	BPF_TASK_FD_QUERY,
- 	BPF_MAP_LOOKUP_AND_DELETE_ELEM,
- 	BPF_MAP_FREEZE,
-+	BPF_MAP_DUMP,
- };
- 
- enum bpf_map_type {
-@@ -385,6 +386,14 @@ union bpf_attr {
- 		__u64		flags;
- 	};
- 
-+	struct { /* struct used by BPF_MAP_DUMP command */
-+		__u32		map_fd;
-+		__aligned_u64	prev_key;
-+		__aligned_u64	buf;
-+		__aligned_u64	buf_len; /* input/output: len of buf */
-+		__u64		flags;
-+	} dump;
-+
- 	struct { /* anonymous struct used by BPF_PROG_LOAD command */
- 		__u32		prog_type;	/* one of enum bpf_prog_type */
- 		__u32		insn_cnt;
+Compared to a simple syscall/{g,s}etsockopt tracepoint, those
+hooks are context aware. Meaning, they can access underlying socket
+and use cgroup and socket local storage.
+
+v9:
+* allow overwriting setsocktop arguments (Alexei Starovoitov)
+  (see individual changes for more changelog details)
+
+Stanislav Fomichev (9):
+  bpf: implement getsockopt and setsockopt hooks
+  bpf: sync bpf.h to tools/
+  libbpf: support sockopt hooks
+  selftests/bpf: test sockopt section name
+  selftests/bpf: add sockopt test
+  selftests/bpf: add sockopt test that exercises sk helpers
+  selftests/bpf: add sockopt test that exercises BPF_F_ALLOW_MULTI
+  bpf: add sockopt documentation
+  bpftool: support cgroup sockopt
+
+ Documentation/bpf/index.rst                   |    1 +
+ Documentation/bpf/prog_cgroup_sockopt.rst     |   93 ++
+ include/linux/bpf-cgroup.h                    |   45 +
+ include/linux/bpf.h                           |    2 +
+ include/linux/bpf_types.h                     |    1 +
+ include/linux/filter.h                        |   10 +
+ include/uapi/linux/bpf.h                      |   14 +
+ kernel/bpf/cgroup.c                           |  333 ++++++
+ kernel/bpf/core.c                             |    9 +
+ kernel/bpf/syscall.c                          |   19 +
+ kernel/bpf/verifier.c                         |    8 +
+ net/core/filter.c                             |    2 +-
+ net/socket.c                                  |   30 +
+ .../bpftool/Documentation/bpftool-cgroup.rst  |    7 +-
+ .../bpftool/Documentation/bpftool-prog.rst    |    3 +-
+ tools/bpf/bpftool/bash-completion/bpftool     |    9 +-
+ tools/bpf/bpftool/cgroup.c                    |    5 +-
+ tools/bpf/bpftool/main.h                      |    1 +
+ tools/bpf/bpftool/prog.c                      |    3 +-
+ tools/include/uapi/linux/bpf.h                |   14 +
+ tools/lib/bpf/libbpf.c                        |    5 +
+ tools/lib/bpf/libbpf_probes.c                 |    1 +
+ tools/testing/selftests/bpf/.gitignore        |    3 +
+ tools/testing/selftests/bpf/Makefile          |    6 +-
+ .../selftests/bpf/progs/sockopt_multi.c       |   71 ++
+ .../testing/selftests/bpf/progs/sockopt_sk.c  |  111 ++
+ .../selftests/bpf/test_section_names.c        |   10 +
+ tools/testing/selftests/bpf/test_sockopt.c    | 1021 +++++++++++++++++
+ .../selftests/bpf/test_sockopt_multi.c        |  374 ++++++
+ tools/testing/selftests/bpf/test_sockopt_sk.c |  214 ++++
+ 30 files changed, 2415 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/bpf/prog_cgroup_sockopt.rst
+ create mode 100644 tools/testing/selftests/bpf/progs/sockopt_multi.c
+ create mode 100644 tools/testing/selftests/bpf/progs/sockopt_sk.c
+ create mode 100644 tools/testing/selftests/bpf/test_sockopt.c
+ create mode 100644 tools/testing/selftests/bpf/test_sockopt_multi.c
+ create mode 100644 tools/testing/selftests/bpf/test_sockopt_sk.c
+
 -- 
 2.22.0.410.gd8fdbe21b5-goog
-
