@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62859C48BD6
-	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 00:46:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21002C48BD6
+	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 00:47:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3809D20815
-	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 00:46:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DDB5F214DA
+	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 00:47:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1561596416;
-	bh=vX9yOVLKfgAcA242W7l+78lEAED88K2fXgoebEJZsTI=;
+	s=default; t=1561596461;
+	bh=SRGhtdCLzrjxHD0+NisFLJwJovdB0ptoiikw+tG7K5s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=sk4+AY+sCPTJDsro/Yplr7c2DwjUTbd0/2ez+LSlBoLojusNMqzZ3jDYcI6zca3sK
-	 Yw4gdcmk5DfP9yVEQiTlghxyiEeiQG3NB78lozUaoIZkhGgDDtIXv7a60feJsFcX6y
-	 LPuHMh6zTJiq5rXBSXragHonfCIrTU2BLQte1PE0=
+	b=UIQlnx1tBO9CTD4JOa9JKd5GhPlLTK5FnNPq6N8AdXjebGwo8W3St218PYRVukikS
+	 XNdUK6qq8CDMMEMe3WJu8dGtkwskbTRGHDQnxDdXbTvS99TGQPZcvhwF1YsM3Hsn7M
+	 Qa5/ctCXMnzr739TALk6ei90xR+QKfWbC5+MloS8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727655AbfF0Ajl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Jun 2019 20:39:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43798 "EHLO mail.kernel.org"
+        id S1728942AbfF0Aix (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Jun 2019 20:38:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43146 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727094AbfF0Aji (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 26 Jun 2019 20:39:38 -0400
+        id S1727271AbfF0Aiw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 26 Jun 2019 20:38:52 -0400
 Received: from sasha-vm.mshome.net (unknown [107.242.116.147])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5719421881;
-        Thu, 27 Jun 2019 00:39:35 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 02644205ED;
+        Thu, 27 Jun 2019 00:38:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561595977;
-        bh=vX9yOVLKfgAcA242W7l+78lEAED88K2fXgoebEJZsTI=;
+        s=default; t=1561595931;
+        bh=SRGhtdCLzrjxHD0+NisFLJwJovdB0ptoiikw+tG7K5s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pXTWfnI8IZvmKyU8UrSllimDFy8CjBprHOjTL6K8FMf3EvDQQMgJilZ7VjnL79v5t
-         TOqbZuE59ASyhqnsOIb0+/Gfh2CImGQe+AfRG9SPc0mDBVJ5F+24BtOH7lUQm3fb8j
-         QKpG0Ya0wPkQXtenqTyDntjvVcdekjxU6GDLCgt8=
+        b=vPFXTnlB5WxsemuwMuy3dwo1xcSRsdhpNjXK6mpR5kxD00VVEdfLo/cRNdIZKz3K3
+         EZBzzOb4V6LCBGCsn5p8vO9PZhlAhEdJqWd7+5KTWILuhUOTx8u6CiKOl0/die9JAg
+         DTpPlJR6GDM1p3yS3TWEbuph1g1JEgzZWA8DUPQg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     John Fastabend <john.fastabend@gmail.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
+Cc:     Matt Mullins <mmullins@fb.com>, Andrii Nakryiko <andriin@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 03/35] bpf: sockmap, fix use after free from sleep in psock backlog workqueue
-Date:   Wed, 26 Jun 2019 20:38:51 -0400
-Message-Id: <20190627003925.21330-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 49/60] bpf: fix nested bpf tracepoints with per-cpu data
+Date:   Wed, 26 Jun 2019 20:36:04 -0400
+Message-Id: <20190627003616.20767-49-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190627003925.21330-1-sashal@kernel.org>
-References: <20190627003925.21330-1-sashal@kernel.org>
+In-Reply-To: <20190627003616.20767-1-sashal@kernel.org>
+References: <20190627003616.20767-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,88 +60,193 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: John Fastabend <john.fastabend@gmail.com>
+From: Matt Mullins <mmullins@fb.com>
 
-[ Upstream commit bd95e678e0f6e18351ecdc147ca819145db9ed7b ]
+[ Upstream commit 9594dc3c7e71b9f52bee1d7852eb3d4e3aea9e99 ]
 
-Backlog work for psock (sk_psock_backlog) might sleep while waiting
-for memory to free up when sending packets. However, while sleeping
-the socket may be closed and removed from the map by the user space
-side.
+BPF_PROG_TYPE_RAW_TRACEPOINTs can be executed nested on the same CPU, as
+they do not increment bpf_prog_active while executing.
 
-This breaks an assumption in sk_stream_wait_memory, which expects the
-wait queue to be still there when it wakes up resulting in a
-use-after-free shown below. To fix his mark sendmsg as MSG_DONTWAIT
-to avoid the sleep altogether. We already set the flag for the
-sendpage case but we missed the case were sendmsg is used.
-Sockmap is currently the only user of skb_send_sock_locked() so only
-the sockmap paths should be impacted.
+This enables three levels of nesting, to support
+  - a kprobe or raw tp or perf event,
+  - another one of the above that irq context happens to call, and
+  - another one in nmi context
+(at most one of which may be a kprobe or perf event).
 
-==================================================================
-BUG: KASAN: use-after-free in remove_wait_queue+0x31/0x70
-Write of size 8 at addr ffff888069a0c4e8 by task kworker/0:2/110
-
-CPU: 0 PID: 110 Comm: kworker/0:2 Not tainted 5.0.0-rc2-00335-g28f9d1a3d4fe-dirty #14
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.10.2-2.fc27 04/01/2014
-Workqueue: events sk_psock_backlog
-Call Trace:
- print_address_description+0x6e/0x2b0
- ? remove_wait_queue+0x31/0x70
- kasan_report+0xfd/0x177
- ? remove_wait_queue+0x31/0x70
- ? remove_wait_queue+0x31/0x70
- remove_wait_queue+0x31/0x70
- sk_stream_wait_memory+0x4dd/0x5f0
- ? sk_stream_wait_close+0x1b0/0x1b0
- ? wait_woken+0xc0/0xc0
- ? tcp_current_mss+0xc5/0x110
- tcp_sendmsg_locked+0x634/0x15d0
- ? tcp_set_state+0x2e0/0x2e0
- ? __kasan_slab_free+0x1d1/0x230
- ? kmem_cache_free+0x70/0x140
- ? sk_psock_backlog+0x40c/0x4b0
- ? process_one_work+0x40b/0x660
- ? worker_thread+0x82/0x680
- ? kthread+0x1b9/0x1e0
- ? ret_from_fork+0x1f/0x30
- ? check_preempt_curr+0xaf/0x130
- ? iov_iter_kvec+0x5f/0x70
- ? kernel_sendmsg_locked+0xa0/0xe0
- skb_send_sock_locked+0x273/0x3c0
- ? skb_splice_bits+0x180/0x180
- ? start_thread+0xe0/0xe0
- ? update_min_vruntime.constprop.27+0x88/0xc0
- sk_psock_backlog+0xb3/0x4b0
- ? strscpy+0xbf/0x1e0
- process_one_work+0x40b/0x660
- worker_thread+0x82/0x680
- ? process_one_work+0x660/0x660
- kthread+0x1b9/0x1e0
- ? __kthread_create_on_node+0x250/0x250
- ret_from_fork+0x1f/0x30
-
-Fixes: 20bf50de3028c ("skbuff: Function to send an skbuf on a socket")
-Reported-by: Jakub Sitnicki <jakub@cloudflare.com>
-Tested-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: John Fastabend <john.fastabend@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Fixes: 20b9d7ac4852 ("bpf: avoid excessive stack usage for perf_sample_data")
+Signed-off-by: Matt Mullins <mmullins@fb.com>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/skbuff.c | 1 +
- 1 file changed, 1 insertion(+)
+ kernel/trace/bpf_trace.c | 100 ++++++++++++++++++++++++++++++++-------
+ 1 file changed, 84 insertions(+), 16 deletions(-)
 
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 2b3b0307dd89..6d9fd7d4bdfa 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -2299,6 +2299,7 @@ int skb_send_sock_locked(struct sock *sk, struct sk_buff *skb, int offset,
- 		kv.iov_base = skb->data + offset;
- 		kv.iov_len = slen;
- 		memset(&msg, 0, sizeof(msg));
-+		msg.msg_flags = MSG_DONTWAIT;
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 6c28d519447d..83c4e76f513a 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -365,8 +365,6 @@ static const struct bpf_func_proto bpf_perf_event_read_value_proto = {
+ 	.arg4_type	= ARG_CONST_SIZE,
+ };
  
- 		ret = kernel_sendmsg_locked(sk, &msg, &kv, 1, slen);
- 		if (ret <= 0)
+-static DEFINE_PER_CPU(struct perf_sample_data, bpf_trace_sd);
+-
+ static __always_inline u64
+ __bpf_perf_event_output(struct pt_regs *regs, struct bpf_map *map,
+ 			u64 flags, struct perf_sample_data *sd)
+@@ -398,24 +396,50 @@ __bpf_perf_event_output(struct pt_regs *regs, struct bpf_map *map,
+ 	return 0;
+ }
+ 
++/*
++ * Support executing tracepoints in normal, irq, and nmi context that each call
++ * bpf_perf_event_output
++ */
++struct bpf_trace_sample_data {
++	struct perf_sample_data sds[3];
++};
++
++static DEFINE_PER_CPU(struct bpf_trace_sample_data, bpf_trace_sds);
++static DEFINE_PER_CPU(int, bpf_trace_nest_level);
+ BPF_CALL_5(bpf_perf_event_output, struct pt_regs *, regs, struct bpf_map *, map,
+ 	   u64, flags, void *, data, u64, size)
+ {
+-	struct perf_sample_data *sd = this_cpu_ptr(&bpf_trace_sd);
++	struct bpf_trace_sample_data *sds = this_cpu_ptr(&bpf_trace_sds);
++	int nest_level = this_cpu_inc_return(bpf_trace_nest_level);
+ 	struct perf_raw_record raw = {
+ 		.frag = {
+ 			.size = size,
+ 			.data = data,
+ 		},
+ 	};
++	struct perf_sample_data *sd;
++	int err;
+ 
+-	if (unlikely(flags & ~(BPF_F_INDEX_MASK)))
+-		return -EINVAL;
++	if (WARN_ON_ONCE(nest_level > ARRAY_SIZE(sds->sds))) {
++		err = -EBUSY;
++		goto out;
++	}
++
++	sd = &sds->sds[nest_level - 1];
++
++	if (unlikely(flags & ~(BPF_F_INDEX_MASK))) {
++		err = -EINVAL;
++		goto out;
++	}
+ 
+ 	perf_sample_data_init(sd, 0, 0);
+ 	sd->raw = &raw;
+ 
+-	return __bpf_perf_event_output(regs, map, flags, sd);
++	err = __bpf_perf_event_output(regs, map, flags, sd);
++
++out:
++	this_cpu_dec(bpf_trace_nest_level);
++	return err;
+ }
+ 
+ static const struct bpf_func_proto bpf_perf_event_output_proto = {
+@@ -772,16 +796,48 @@ pe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ /*
+  * bpf_raw_tp_regs are separate from bpf_pt_regs used from skb/xdp
+  * to avoid potential recursive reuse issue when/if tracepoints are added
+- * inside bpf_*_event_output, bpf_get_stackid and/or bpf_get_stack
++ * inside bpf_*_event_output, bpf_get_stackid and/or bpf_get_stack.
++ *
++ * Since raw tracepoints run despite bpf_prog_active, support concurrent usage
++ * in normal, irq, and nmi context.
+  */
+-static DEFINE_PER_CPU(struct pt_regs, bpf_raw_tp_regs);
++struct bpf_raw_tp_regs {
++	struct pt_regs regs[3];
++};
++static DEFINE_PER_CPU(struct bpf_raw_tp_regs, bpf_raw_tp_regs);
++static DEFINE_PER_CPU(int, bpf_raw_tp_nest_level);
++static struct pt_regs *get_bpf_raw_tp_regs(void)
++{
++	struct bpf_raw_tp_regs *tp_regs = this_cpu_ptr(&bpf_raw_tp_regs);
++	int nest_level = this_cpu_inc_return(bpf_raw_tp_nest_level);
++
++	if (WARN_ON_ONCE(nest_level > ARRAY_SIZE(tp_regs->regs))) {
++		this_cpu_dec(bpf_raw_tp_nest_level);
++		return ERR_PTR(-EBUSY);
++	}
++
++	return &tp_regs->regs[nest_level - 1];
++}
++
++static void put_bpf_raw_tp_regs(void)
++{
++	this_cpu_dec(bpf_raw_tp_nest_level);
++}
++
+ BPF_CALL_5(bpf_perf_event_output_raw_tp, struct bpf_raw_tracepoint_args *, args,
+ 	   struct bpf_map *, map, u64, flags, void *, data, u64, size)
+ {
+-	struct pt_regs *regs = this_cpu_ptr(&bpf_raw_tp_regs);
++	struct pt_regs *regs = get_bpf_raw_tp_regs();
++	int ret;
++
++	if (IS_ERR(regs))
++		return PTR_ERR(regs);
+ 
+ 	perf_fetch_caller_regs(regs);
+-	return ____bpf_perf_event_output(regs, map, flags, data, size);
++	ret = ____bpf_perf_event_output(regs, map, flags, data, size);
++
++	put_bpf_raw_tp_regs();
++	return ret;
+ }
+ 
+ static const struct bpf_func_proto bpf_perf_event_output_proto_raw_tp = {
+@@ -798,12 +854,18 @@ static const struct bpf_func_proto bpf_perf_event_output_proto_raw_tp = {
+ BPF_CALL_3(bpf_get_stackid_raw_tp, struct bpf_raw_tracepoint_args *, args,
+ 	   struct bpf_map *, map, u64, flags)
+ {
+-	struct pt_regs *regs = this_cpu_ptr(&bpf_raw_tp_regs);
++	struct pt_regs *regs = get_bpf_raw_tp_regs();
++	int ret;
++
++	if (IS_ERR(regs))
++		return PTR_ERR(regs);
+ 
+ 	perf_fetch_caller_regs(regs);
+ 	/* similar to bpf_perf_event_output_tp, but pt_regs fetched differently */
+-	return bpf_get_stackid((unsigned long) regs, (unsigned long) map,
+-			       flags, 0, 0);
++	ret = bpf_get_stackid((unsigned long) regs, (unsigned long) map,
++			      flags, 0, 0);
++	put_bpf_raw_tp_regs();
++	return ret;
+ }
+ 
+ static const struct bpf_func_proto bpf_get_stackid_proto_raw_tp = {
+@@ -818,11 +880,17 @@ static const struct bpf_func_proto bpf_get_stackid_proto_raw_tp = {
+ BPF_CALL_4(bpf_get_stack_raw_tp, struct bpf_raw_tracepoint_args *, args,
+ 	   void *, buf, u32, size, u64, flags)
+ {
+-	struct pt_regs *regs = this_cpu_ptr(&bpf_raw_tp_regs);
++	struct pt_regs *regs = get_bpf_raw_tp_regs();
++	int ret;
++
++	if (IS_ERR(regs))
++		return PTR_ERR(regs);
+ 
+ 	perf_fetch_caller_regs(regs);
+-	return bpf_get_stack((unsigned long) regs, (unsigned long) buf,
+-			     (unsigned long) size, flags, 0);
++	ret = bpf_get_stack((unsigned long) regs, (unsigned long) buf,
++			    (unsigned long) size, flags, 0);
++	put_bpf_raw_tp_regs();
++	return ret;
+ }
+ 
+ static const struct bpf_func_proto bpf_get_stack_proto_raw_tp = {
 -- 
 2.20.1
 
