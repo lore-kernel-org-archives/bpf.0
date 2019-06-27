@@ -2,117 +2,333 @@ Return-Path: <SRS0=hqV4=U2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DBECC48BD6
-	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 16:37:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A796DC48BD9
+	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 16:41:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7067C2146E
-	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 16:37:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1561653453;
-	bh=KY/UJMcTJXGMQaBcjxINfMIIu2a6rYUw7n7Ve0Eub8w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=ziOzkvos/TbusU4zPl1h+OER2MdMsNexuotqvHCxqOZUi0BfYE9ESpEYqTTgNw8a/
-	 H7r+/uYaLcoQPrmxXnlEA82JxfqeZZfUUY5kzsOG25gJLHS6NS2geeRtAs6jvJNqhq
-	 F0lB5QgaSiHpLomCJqJncSJ1XKb7ZfpG/biulmXc=
+	by mail.kernel.org (Postfix) with ESMTP id 77201208E3
+	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 16:41:28 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=nifty.com header.i=@nifty.com header.b="prVhCqRe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726440AbfF0Qhd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 27 Jun 2019 12:37:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34152 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726315AbfF0Qhd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 27 Jun 2019 12:37:33 -0400
-Received: from localhost (unknown [89.205.136.226])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A0F58208E3;
-        Thu, 27 Jun 2019 16:37:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561653452;
-        bh=KY/UJMcTJXGMQaBcjxINfMIIu2a6rYUw7n7Ve0Eub8w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dqZ3xjiJ9Jyjx6YPJHod2QEUsNradGsE9ClL2z7Gx54xGTjhkkHm25lz6oTh2BcWN
-         OTSPQEaef22gwB+NwdcZpNTNL4d+Nsf+Eos0Pqr/a9499DYGVkMHjvE5G6it2y7lvS
-         XOAWBiYTamYzNjhy9ll+XkB8vmqK+W7gjA9NbSZU=
-Date:   Fri, 28 Jun 2019 00:37:23 +0800
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        "jannh@google.com" <jannh@google.com>
-Subject: Re: [PATCH bpf-next 1/4] bpf: unprivileged BPF access via /dev/bpf
-Message-ID: <20190627163723.GA9643@kroah.com>
-References: <20190625182303.874270-1-songliubraving@fb.com>
- <20190625182303.874270-2-songliubraving@fb.com>
- <9bc166ca-1ef0-ee1e-6306-6850d4008174@iogearbox.net>
- <5A472047-F329-43C3-9DBC-9BCFC0A19F1C@fb.com>
- <20190627000830.GB527@kroah.com>
- <94404006-0D7E-4226-9167-B1DFAF7FEB2A@fb.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <94404006-0D7E-4226-9167-B1DFAF7FEB2A@fb.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+        id S1726464AbfF0QlX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 27 Jun 2019 12:41:23 -0400
+Received: from conuserg-11.nifty.com ([210.131.2.78]:25518 "EHLO
+        conuserg-11.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726405AbfF0QlW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 27 Jun 2019 12:41:22 -0400
+Received: from grover.flets-west.jp (softbank126125154139.bbtec.net [126.125.154.139]) (authenticated)
+        by conuserg-11.nifty.com with ESMTP id x5RGdDPv001384;
+        Fri, 28 Jun 2019 01:39:15 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com x5RGdDPv001384
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1561653556;
+        bh=xleVobQ3gFt1kZA+PgYmMnWJHKMZco/iSd4Mbwa0kJI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=prVhCqReh/cRQtb64y6I07tftQEAHxTJM/x5kK8d8Rn65LoUO6GCzUy2uTNZVCPVn
+         KTin0hQMjz70IZxS3BWBRvJ2+48cEstHL+a3uRZJNadjA7W7WNbPsqjfgGc+VM97by
+         7cNqHSzp8VPFYOH4iZiZGFknipGXsNNB3GeuM+5OTRwswP5VTv/Pa5lIqnSTsE/4G3
+         mqX19lqcJEcPn/C689sVp0i5emb90icdAAbACrPX4jvnST38iLD28sOkXzW7nFmOaI
+         F7adKI8fa7UUS3yxAUTRvpEHM+//5aHS3ltIcSlwlrBA6vpqEbILb8xU6fyIuldAo4
+         k6YKc1RBqhWMw==
+X-Nifty-SrcIP: [126.125.154.139]
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Jani Nikula <jani.nikula@intel.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Song Liu <songliubraving@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>, netdev@vger.kernel.org,
+        Yonghong Song <yhs@fb.com>, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Palmer Dabbelt <palmer@sifive.com>, bpf@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Subject: [PATCH v3 1/4] kbuild: compile-test UAPI headers to ensure they are self-contained
+Date:   Fri, 28 Jun 2019 01:38:59 +0900
+Message-Id: <20190627163903.28398-2-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190627163903.28398-1-yamada.masahiro@socionext.com>
+References: <20190627163903.28398-1-yamada.masahiro@socionext.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jun 27, 2019 at 01:00:03AM +0000, Song Liu wrote:
-> 
-> 
-> > On Jun 26, 2019, at 5:08 PM, Greg KH <gregkh@linuxfoundation.org> wrote:
-> > 
-> > On Wed, Jun 26, 2019 at 03:17:47PM +0000, Song Liu wrote:
-> >>>> +static struct miscdevice bpf_dev = {
-> >>>> +	.minor		= MISC_DYNAMIC_MINOR,
-> >>>> +	.name		= "bpf",
-> >>>> +	.fops		= &bpf_chardev_ops,
-> >>>> +	.mode		= 0440,
-> >>>> +	.nodename	= "bpf",
-> >>> 
-> >>> Here's what kvm does:
-> >>> 
-> >>> static struct miscdevice kvm_dev = {
-> >>>       KVM_MINOR,
-> >>>       "kvm",
-> >>>       &kvm_chardev_ops,
-> >>> };
-> > 
-> > Ick, I thought we converted all of these to named initializers a long
-> > time ago :)
-> > 
-> >>> Is there an actual reason that mode is not 0 by default in bpf case? Why
-> >>> we need to define nodename?
-> >> 
-> >> Based on my understanding, mode of 0440 is what we want. If we leave it 
-> >> as 0, it will use default value of 0600. I guess we can just set it to 
-> >> 0440, as user space can change it later anyway. 
-> > 
-> > Don't rely on userspace changing it, set it to what you want the
-> > permissions to be in the kernel here, otherwise you have to create a new
-> > udev rule and get it merged into all of the distros.  Just do it right
-> > the first time and there is no need for it.
-> > 
-> > What is wrong with 0600 for this?  Why 0440?
-> 
-> We would like root to own the device, and let users in a certain group 
-> to be able to open it. So 0440 is what we need. 
+Multiple people have suggested compile-testing UAPI headers to ensure
+they can be really included from user-space. "make headers_check" is
+obviously not enough to catch bugs, and we often leak references to
+kernel-space definition to user-space.
 
-But you are doing a "write" ioctl here, right?  So don't you really need
-0660 at the least?  And if you "know" the group id, I think you can
-specify it too so udev doesn't have to do a ton of work, but that only
-works for groups that all distros number the same.
+Use the new header-test-y syntax to implement it. Please note exported
+headers are compile-tested with a completely different set of compiler
+flags. The header search path is set to $(objtree)/usr/include since
+exported headers should not include unexported ones.
 
-And why again is this an ioctl instead of a syscall?  What is so magic
-about the file descriptor here?
+We use -std=gnu89 for the kernel space since the kernel code highly
+depends on GNU extensions. On the other hand, UAPI headers should be
+written in more standardized C, so they are compiled with -std=c90.
+This will emit errors if C++ style comments, the keyword 'inline', etc.
+are used. Please use C style comments (/* ... */), '__inline__', etc.
+in UAPI headers.
 
-thanks
+There is additional compiler requirement to enable this test because
+many of UAPI headers include <stdlib.h>, <sys/ioctl.h>, <sys/time.h>,
+etc. directly or indirectly. You cannot use kernel.org pre-built
+toolchains [1] since they lack <stdlib.h>.
 
-greg k-h
+I added scripts/cc-system-headers.sh to check the system header
+availability, which CONFIG_UAPI_HEADER_TEST depends on.
+
+For now, a lot of headers need to be excluded because they cannot
+be compiled standalone, but this is a good start point.
+
+[1] https://mirrors.edge.kernel.org/pub/tools/crosstool/index.html
+
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+---
+
+Changes in v3: None
+Changes in v2:
+ - Add CONFIG_CPU_{BIG,LITTLE}_ENDIAN guard to avoid build error
+ - Use 'header-test-' instead of 'no-header-test'
+ - Avoid weird 'find' warning when cleaning
+
+ Makefile                     |   2 +-
+ init/Kconfig                 |  11 +++
+ scripts/cc-system-headers.sh |   8 +++
+ usr/.gitignore               |   1 -
+ usr/Makefile                 |   2 +
+ usr/include/.gitignore       |   3 +
+ usr/include/Makefile         | 134 +++++++++++++++++++++++++++++++++++
+ 7 files changed, 159 insertions(+), 2 deletions(-)
+ create mode 100755 scripts/cc-system-headers.sh
+ create mode 100644 usr/include/.gitignore
+ create mode 100644 usr/include/Makefile
+
+diff --git a/Makefile b/Makefile
+index 1f35aca4fe05..f23516980796 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1363,7 +1363,7 @@ CLEAN_DIRS  += $(MODVERDIR) include/ksym
+ CLEAN_FILES += modules.builtin.modinfo
+ 
+ # Directories & files removed with 'make mrproper'
+-MRPROPER_DIRS  += include/config usr/include include/generated          \
++MRPROPER_DIRS  += include/config include/generated          \
+ 		  arch/$(SRCARCH)/include/generated .tmp_objdiff
+ MRPROPER_FILES += .config .config.old .version \
+ 		  Module.symvers tags TAGS cscope* GPATH GTAGS GRTAGS GSYMS \
+diff --git a/init/Kconfig b/init/Kconfig
+index df5bba27e3fe..667d68e1cdf4 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -105,6 +105,17 @@ config HEADER_TEST
+ 	  If you are a developer or tester and want to ensure the requested
+ 	  headers are self-contained, say Y here. Otherwise, choose N.
+ 
++config UAPI_HEADER_TEST
++	bool "Compile test UAPI headers"
++	depends on HEADER_TEST && HEADERS_INSTALL
++	depends on $(success,$(srctree)/scripts/cc-system-headers.sh $(CC))
++	help
++	  Compile test headers exported to user-space to ensure they are
++	  self-contained, i.e. compilable as standalone units.
++
++	  If you are a developer or tester and want to ensure the exported
++	  headers are self-contained, say Y here. Otherwise, choose N.
++
+ config LOCALVERSION
+ 	string "Local version - append to kernel release"
+ 	help
+diff --git a/scripts/cc-system-headers.sh b/scripts/cc-system-headers.sh
+new file mode 100755
+index 000000000000..1b3db369828c
+--- /dev/null
++++ b/scripts/cc-system-headers.sh
+@@ -0,0 +1,8 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0-only
++
++cat << "END" | $@ -E -x c - -o /dev/null >/dev/null 2>&1
++#include <stdlib.h>
++#include <sys/ioctl.h>
++#include <sys/time.h>
++END
+diff --git a/usr/.gitignore b/usr/.gitignore
+index 8e48117a3f3d..be5eae1df7eb 100644
+--- a/usr/.gitignore
++++ b/usr/.gitignore
+@@ -7,4 +7,3 @@ initramfs_data.cpio.gz
+ initramfs_data.cpio.bz2
+ initramfs_data.cpio.lzma
+ initramfs_list
+-include
+diff --git a/usr/Makefile b/usr/Makefile
+index 4a70ae43c9cb..6a89eb019275 100644
+--- a/usr/Makefile
++++ b/usr/Makefile
+@@ -56,3 +56,5 @@ $(deps_initramfs): klibcdirs
+ $(obj)/$(datafile_y): $(obj)/gen_init_cpio $(deps_initramfs) klibcdirs
+ 	$(Q)$(initramfs) -l $(ramfs-input) > $(obj)/$(datafile_d_y)
+ 	$(call if_changed,initfs)
++
++subdir-$(CONFIG_UAPI_HEADER_TEST) += include
+diff --git a/usr/include/.gitignore b/usr/include/.gitignore
+new file mode 100644
+index 000000000000..a0991ff4402b
+--- /dev/null
++++ b/usr/include/.gitignore
+@@ -0,0 +1,3 @@
++*
++!.gitignore
++!Makefile
+diff --git a/usr/include/Makefile b/usr/include/Makefile
+new file mode 100644
+index 000000000000..58ce96fa1701
+--- /dev/null
++++ b/usr/include/Makefile
+@@ -0,0 +1,134 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++# Unlike the kernel space, uapi headers are written in standard C.
++#  - Forbid C++ style comments
++#  - Use '__inline__', '__asm__' instead of 'inline', 'asm'
++#
++# -std=c90 (equivalent to -ansi) catches the violation of those.
++# We cannot go as far as adding -Wpedantic since it emits too many warnings.
++#
++# REVISIT: re-consider the proper set of compiler flags for uapi compile-test.
++
++UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
++
++override c_flags = $(UAPI_CFLAGS) -Wp,-MD,$(depfile) -I$(objtree)/usr/include
++
++# The following are excluded for now because they fail to build.
++# The cause of errors are mostly missing include directives.
++# Check one by one, and send a patch to each subsystem.
++#
++# Do not add a new header to the blacklist without legitimate reason.
++# Please consider to fix the header first.
++header-test- += asm/ipcbuf.h
++header-test- += asm/msgbuf.h
++header-test- += asm/sembuf.h
++header-test- += asm/shmbuf.h
++header-test- += asm/signal.h
++header-test- += asm/ucontext.h
++header-test- += drm/vmwgfx_drm.h
++header-test- += linux/am437x-vpfe.h
++header-test- += linux/android/binderfs.h
++header-test- += linux/android/binder.h
++header-test-$(CONFIG_CPU_BIG_ENDIAN) += linux/byteorder/big_endian.h
++header-test-$(CONFIG_CPU_LITTLE_ENDIAN) += linux/byteorder/little_endian.h
++header-test- += linux/coda.h
++header-test- += linux/coda_psdev.h
++header-test- += linux/dvb/audio.h
++header-test- += linux/dvb/osd.h
++header-test- += linux/elfcore.h
++header-test- += linux/errqueue.h
++header-test- += linux/fsmap.h
++header-test- += linux/hdlc/ioctl.h
++header-test- += linux/jffs2.h
++header-test- += linux/kexec.h
++header-test- += linux/matroxfb.h
++header-test- += linux/netfilter_bridge/ebtables.h
++header-test- += linux/netfilter_ipv4/ipt_LOG.h
++header-test- += linux/netfilter_ipv6/ip6t_LOG.h
++header-test- += linux/nfc.h
++header-test- += linux/nilfs2_ondisk.h
++header-test- += linux/omap3isp.h
++header-test- += linux/omapfb.h
++header-test- += linux/patchkey.h
++header-test- += linux/phonet.h
++header-test- += linux/reiserfs_xattr.h
++header-test- += linux/scc.h
++header-test- += linux/sctp.h
++header-test- += linux/signal.h
++header-test- += linux/sysctl.h
++header-test- += linux/usb/audio.h
++header-test- += linux/ivtv.h
++header-test- += linux/v4l2-mediabus.h
++header-test- += linux/v4l2-subdev.h
++header-test- += linux/videodev2.h
++header-test- += linux/vm_sockets.h
++header-test- += misc/ocxl.h
++header-test- += mtd/mtd-abi.h
++header-test- += scsi/scsi_bsg_fc.h
++header-test- += scsi/scsi_netlink_fc.h
++header-test- += scsi/scsi_netlink.h
++header-test- += sound/asequencer.h
++header-test- += sound/asound.h
++header-test- += sound/asoc.h
++header-test- += sound/compress_offload.h
++header-test- += sound/emu10k1.h
++header-test- += sound/sfnt_info.h
++header-test- += sound/sof/eq.h
++header-test- += sound/sof/fw.h
++header-test- += sound/sof/header.h
++header-test- += sound/sof/manifest.h
++header-test- += sound/sof/trace.h
++header-test- += xen/evtchn.h
++header-test- += xen/gntdev.h
++header-test- += xen/privcmd.h
++
++# more headers are broken in some architectures
++
++ifeq ($(SRCARCH),arc)
++header-test- += linux/bpf_perf_event.h
++endif
++
++ifeq ($(SRCARCH),ia64)
++header-test- += asm/setup.h
++header-test- += asm/sigcontext.h
++header-test- += asm/perfmon.h
++header-test- += asm/perfmon_default_smpl.h
++header-test- += linux/if_bonding.h
++endif
++
++ifeq ($(SRCARCH),mips)
++header-test- += asm/stat.h
++endif
++
++ifeq ($(SRCARCH),powerpc)
++header-test- += asm/stat.h
++header-test- += linux/bpf_perf_event.h
++endif
++
++ifeq ($(SRCARCH),riscv)
++header-test- += linux/bpf_perf_event.h
++endif
++
++ifeq ($(SRCARCH),s390)
++header-test- += asm/runtime_instr.h
++header-test- += asm/zcrypt.h
++endif
++
++ifeq ($(SRCARCH),sparc)
++header-test- += asm/stat.h
++header-test- += asm/uctx.h
++header-test- += asm/fbio.h
++header-test- += asm/openpromio.h
++endif
++
++# asm-generic/*.h is used by asm/*.h, and should not be included directly
++header-test- += asm-generic/%
++
++# The rest are compile-tested
++header-test-y += $(filter-out $(header-test-), \
++			$(patsubst $(obj)/%,%, $(wildcard \
++			$(addprefix $(obj)/, *.h */*.h */*/*.h */*/*/*.h))))
++
++# For GNU Make <= 4.2.1, $(wildcard $(obj)/*/) matches to not only directories
++# but also regular files. Use $(filter %/, ...) just in case.
++clean-dirs += $(patsubst $(obj)/%/,%,$(filter %/, $(wildcard $(obj)/*/)))
+-- 
+2.17.1
+
