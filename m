@@ -2,167 +2,330 @@ Return-Path: <SRS0=hqV4=U2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD95FC48BD6
-	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 01:00:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A18CC48BD3
+	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 01:48:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7B91220663
-	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 01:00:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E1A47217D9
+	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 01:48:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="VRL7FIGk";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="TsbLJNX6"
+	dkim=pass (2048-bit key) header.d=nifty.com header.i=@nifty.com header.b="MYRMB9Mw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726839AbfF0BAe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Jun 2019 21:00:34 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:63358 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726728AbfF0BAd (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 26 Jun 2019 21:00:33 -0400
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5R0vhgn003002;
-        Wed, 26 Jun 2019 18:00:06 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=A4L9A/soYPtnkQlCSsqEqSWKMLw+JYl0uJNIg5QHzBs=;
- b=VRL7FIGkakILviH/n1H75lzvLDhtz6vyC2waqIBXj34JB7kAkXkYlrzGDpnjk9Dvgean
- CXBG4fqlL2ZukJjjbxa0C2IMlUdmab8BUKnJSaAu5qUbl9jMfiIxbRLxBvaH2qY9GdmT
- zkdY5+wuLF/o0z6zItqvE5auMPKjo0x1SOo= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2tcfqh0vf1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 26 Jun 2019 18:00:06 -0700
-Received: from prn-mbx03.TheFacebook.com (2620:10d:c081:6::17) by
- prn-hub04.TheFacebook.com (2620:10d:c081:35::128) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1713.5; Wed, 26 Jun 2019 18:00:05 -0700
-Received: from prn-hub02.TheFacebook.com (2620:10d:c081:35::126) by
- prn-mbx03.TheFacebook.com (2620:10d:c081:6::17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1713.5; Wed, 26 Jun 2019 18:00:05 -0700
-Received: from NAM01-BN3-obe.outbound.protection.outlook.com (192.168.54.28)
- by o365-in.thefacebook.com (192.168.16.26) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
- via Frontend Transport; Wed, 26 Jun 2019 18:00:04 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector1-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A4L9A/soYPtnkQlCSsqEqSWKMLw+JYl0uJNIg5QHzBs=;
- b=TsbLJNX6zTencOb0XaO+mumyJqR9negjBFHOfZ3d5zSGSeV/13y1x9mM6LE4zgmBp+Ar/Np6OoB65Fam6372WXJVDdmK98gqItOk7Mh7YTbwZi7hMCwEdTnzrKjCBFaOPur7eKFFXw2eSjgItnKMkMM4k7bO/1dphdWE8RUkdHc=
-Received: from MWHPR15MB1165.namprd15.prod.outlook.com (10.175.3.22) by
- MWHPR15MB1952.namprd15.prod.outlook.com (10.175.8.149) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2008.16; Thu, 27 Jun 2019 01:00:03 +0000
-Received: from MWHPR15MB1165.namprd15.prod.outlook.com
- ([fe80::400e:e329:ea98:aa0d]) by MWHPR15MB1165.namprd15.prod.outlook.com
- ([fe80::400e:e329:ea98:aa0d%6]) with mapi id 15.20.2008.018; Thu, 27 Jun 2019
- 01:00:03 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     Daniel Borkmann <daniel@iogearbox.net>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        "jannh@google.com" <jannh@google.com>
-Subject: Re: [PATCH bpf-next 1/4] bpf: unprivileged BPF access via /dev/bpf
-Thread-Topic: [PATCH bpf-next 1/4] bpf: unprivileged BPF access via /dev/bpf
-Thread-Index: AQHVK4MfT15tn2gAREGxInrd8zK0eaat8CiAgAAdbwCAAJRJAIAADmYA
-Date:   Thu, 27 Jun 2019 01:00:03 +0000
-Message-ID: <94404006-0D7E-4226-9167-B1DFAF7FEB2A@fb.com>
-References: <20190625182303.874270-1-songliubraving@fb.com>
- <20190625182303.874270-2-songliubraving@fb.com>
- <9bc166ca-1ef0-ee1e-6306-6850d4008174@iogearbox.net>
- <5A472047-F329-43C3-9DBC-9BCFC0A19F1C@fb.com>
- <20190627000830.GB527@kroah.com>
-In-Reply-To: <20190627000830.GB527@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3445.104.11)
-x-originating-ip: [2620:10d:c090:180::1:5a2e]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: dc7f8bec-f1fd-4df5-d5da-08d6fa9ac997
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(1401327)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:MWHPR15MB1952;
-x-ms-traffictypediagnostic: MWHPR15MB1952:
-x-microsoft-antispam-prvs: <MWHPR15MB195284B1BABD8D576C78654AB3FD0@MWHPR15MB1952.namprd15.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 008184426E
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(346002)(136003)(39860400002)(376002)(366004)(199004)(189003)(33656002)(99286004)(64756008)(4326008)(478600001)(50226002)(2616005)(476003)(486006)(6246003)(8936002)(54906003)(316002)(102836004)(186003)(66446008)(71200400001)(53546011)(71190400001)(6506007)(76176011)(53936002)(36756003)(229853002)(6916009)(6486002)(6116002)(57306001)(6512007)(446003)(2906002)(6436002)(86362001)(25786009)(305945005)(8676002)(5660300002)(81166006)(46003)(81156014)(73956011)(76116006)(66946007)(66556008)(66476007)(256004)(68736007)(11346002)(7736002)(14454004);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR15MB1952;H:MWHPR15MB1165.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: YJTMNC2DBb2IqUvog6SliffXrSwrpESPgEuxqcE0sfGk+DwYx2i8BUtSr6kUzEOwbfDoeL0sNt63PNXEhNgPe+30erryeJ5seQ0s81fv8RaW6Ed5otJeHBDzUB1GpF5hWnJO/nqqWJQpkp8D2xUjEKUysB33+fimTNUugY2y/lN6clvAcjrNrhdScNL1BD5BHS8pPnOSYXZ/tipuZ03/GA7WaXp/zSrBe+md66Gx4nb0Qx7ztusDyNGDlAL0L5w4qxDG2/FVGBbpWT72X7PNZK/CUA8KKGaFw9HsKfvf4/hNa5yvMHDnJKVb/ofKyHb+BLmjUYlJxI2UnFjjkVwHV+vYZsRxFd0xmaebS7WdgqkaStZi76NOmrKGJFvxZiQfKzzlUvnxlA3F0KXhUxfgu8JsvVUoWoYW3JCM4dbvwC8=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <8362171593A4E5448870DB542A4EA378@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: dc7f8bec-f1fd-4df5-d5da-08d6fa9ac997
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2019 01:00:03.2481
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: songliubraving@fb.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR15MB1952
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-26_14:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=897 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906270009
-X-FB-Internal: deliver
+        id S1726990AbfF0Bsu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Jun 2019 21:48:50 -0400
+Received: from conuserg-08.nifty.com ([210.131.2.75]:25506 "EHLO
+        conuserg-08.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726727AbfF0Bst (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 26 Jun 2019 21:48:49 -0400
+Received: from grover.flets-west.jp (softbank126125154139.bbtec.net [126.125.154.139]) (authenticated)
+        by conuserg-08.nifty.com with ESMTP id x5R1kN0w032702;
+        Thu, 27 Jun 2019 10:46:25 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com x5R1kN0w032702
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1561599986;
+        bh=WZ9ip/dsewBbMh/BR837qNRA9NcbAih/so1QKla8zwg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=MYRMB9MwdHhEEHy9mD2RMSt8uGIVjYJ0bZhbHnVL61upXQh2n39yJts9KW4nU2GGD
+         kkf2xOcwPBckNSLfKUL524JnPBfFiVFdT/yyebmJOTvxdS/IFUvYlQACCaMsOVcjbo
+         hcZVRs/1zYeitT5Giem8nt3BISxtbKHFPdlkAEbuRjwSOK6gcHGoqTg+1XAnFvzW+U
+         ig6BSADYoc4cPpGs0ADNkk1p7OkQJQkwKWtw8TrEVzYr9IWOyZ4misjD+58Hd0Jfks
+         cThGxc1P63ptsr7I0bSInfhj72TkQouj1OsVoASy/a6+P7IqUMvvQFCTIXA30GaVvL
+         1Hsl8Xger8Bew==
+X-Nifty-SrcIP: [126.125.154.139]
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Sam Ravnborg <sam@ravnborg.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Song Liu <songliubraving@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>, netdev@vger.kernel.org,
+        Yonghong Song <yhs@fb.com>, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Palmer Dabbelt <palmer@sifive.com>, bpf@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Subject: [PATCH v2 1/4] kbuild: compile-test UAPI headers to ensure they are self-contained
+Date:   Thu, 27 Jun 2019 10:46:14 +0900
+Message-Id: <20190627014617.600-2-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190627014617.600-1-yamada.masahiro@socionext.com>
+References: <20190627014617.600-1-yamada.masahiro@socionext.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Multiple people have suggested compile-testing UAPI headers to ensure
+they can be really included from user-space. "make headers_check" is
+obviously not enough to catch bugs, and we often leak references to
+kernel-space definition to user-space.
 
+Use the new header-test-y syntax to implement it. Please note exported
+headers are compile-tested with a completely different set of compiler
+flags. The header search path is set to $(objtree)/usr/include since
+exported headers should not include unexported ones.
 
-> On Jun 26, 2019, at 5:08 PM, Greg KH <gregkh@linuxfoundation.org> wrote:
->=20
-> On Wed, Jun 26, 2019 at 03:17:47PM +0000, Song Liu wrote:
->>>> +static struct miscdevice bpf_dev =3D {
->>>> +	.minor		=3D MISC_DYNAMIC_MINOR,
->>>> +	.name		=3D "bpf",
->>>> +	.fops		=3D &bpf_chardev_ops,
->>>> +	.mode		=3D 0440,
->>>> +	.nodename	=3D "bpf",
->>>=20
->>> Here's what kvm does:
->>>=20
->>> static struct miscdevice kvm_dev =3D {
->>>       KVM_MINOR,
->>>       "kvm",
->>>       &kvm_chardev_ops,
->>> };
->=20
-> Ick, I thought we converted all of these to named initializers a long
-> time ago :)
->=20
->>> Is there an actual reason that mode is not 0 by default in bpf case? Wh=
-y
->>> we need to define nodename?
->>=20
->> Based on my understanding, mode of 0440 is what we want. If we leave it=
-=20
->> as 0, it will use default value of 0600. I guess we can just set it to=20
->> 0440, as user space can change it later anyway.=20
->=20
-> Don't rely on userspace changing it, set it to what you want the
-> permissions to be in the kernel here, otherwise you have to create a new
-> udev rule and get it merged into all of the distros.  Just do it right
-> the first time and there is no need for it.
->=20
-> What is wrong with 0600 for this?  Why 0440?
+We use -std=gnu89 for the kernel space since the kernel code highly
+depends on GNU extensions. On the other hand, UAPI headers should be
+written in more standardized C, so they are compiled with -std=c90.
+This will emit errors if C++ style comments, the keyword 'inline', etc.
+are used. Please use C style comments (/* ... */), '__inline__', etc.
+in UAPI headers.
 
-We would like root to own the device, and let users in a certain group=20
-to be able to open it. So 0440 is what we need.=20
+There is additional compiler requirement to enable this test because
+many of UAPI headers include <stdlib.h>, <sys/ioctl.h>, <sys/time.h>,
+etc. directly or indirectly. You cannot use kernel.org pre-built
+toolchains [1] since they lack <stdlib.h>.
 
-Thanks,
-Song
+I added scripts/cc-system-headers.sh to check the system header
+availability, which CONFIG_UAPI_HEADER_TEST depends on.
+
+For now, a lot of headers need to be excluded because they cannot
+be compiled standalone, but this is a good start point.
+
+[1] https://mirrors.edge.kernel.org/pub/tools/crosstool/index.html
+
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+---
+
+Changes in v2:
+ - Add CONFIG_CPU_{BIG,LITTLE}_ENDIAN guard to avoid build error
+ - Use 'header-test-' instead of 'no-header-test'
+ - Avoid weird 'find' warning when cleaning
+
+ Makefile                     |   2 +-
+ init/Kconfig                 |  11 +++
+ scripts/cc-system-headers.sh |   8 +++
+ usr/.gitignore               |   1 -
+ usr/Makefile                 |   2 +
+ usr/include/.gitignore       |   3 +
+ usr/include/Makefile         | 133 +++++++++++++++++++++++++++++++++++
+ 7 files changed, 158 insertions(+), 2 deletions(-)
+ create mode 100755 scripts/cc-system-headers.sh
+ create mode 100644 usr/include/.gitignore
+ create mode 100644 usr/include/Makefile
+
+diff --git a/Makefile b/Makefile
+index 1f35aca4fe05..f23516980796 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1363,7 +1363,7 @@ CLEAN_DIRS  += $(MODVERDIR) include/ksym
+ CLEAN_FILES += modules.builtin.modinfo
+ 
+ # Directories & files removed with 'make mrproper'
+-MRPROPER_DIRS  += include/config usr/include include/generated          \
++MRPROPER_DIRS  += include/config include/generated          \
+ 		  arch/$(SRCARCH)/include/generated .tmp_objdiff
+ MRPROPER_FILES += .config .config.old .version \
+ 		  Module.symvers tags TAGS cscope* GPATH GTAGS GRTAGS GSYMS \
+diff --git a/init/Kconfig b/init/Kconfig
+index df5bba27e3fe..667d68e1cdf4 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -105,6 +105,17 @@ config HEADER_TEST
+ 	  If you are a developer or tester and want to ensure the requested
+ 	  headers are self-contained, say Y here. Otherwise, choose N.
+ 
++config UAPI_HEADER_TEST
++	bool "Compile test UAPI headers"
++	depends on HEADER_TEST && HEADERS_INSTALL
++	depends on $(success,$(srctree)/scripts/cc-system-headers.sh $(CC))
++	help
++	  Compile test headers exported to user-space to ensure they are
++	  self-contained, i.e. compilable as standalone units.
++
++	  If you are a developer or tester and want to ensure the exported
++	  headers are self-contained, say Y here. Otherwise, choose N.
++
+ config LOCALVERSION
+ 	string "Local version - append to kernel release"
+ 	help
+diff --git a/scripts/cc-system-headers.sh b/scripts/cc-system-headers.sh
+new file mode 100755
+index 000000000000..1b3db369828c
+--- /dev/null
++++ b/scripts/cc-system-headers.sh
+@@ -0,0 +1,8 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0-only
++
++cat << "END" | $@ -E -x c - -o /dev/null >/dev/null 2>&1
++#include <stdlib.h>
++#include <sys/ioctl.h>
++#include <sys/time.h>
++END
+diff --git a/usr/.gitignore b/usr/.gitignore
+index 8e48117a3f3d..be5eae1df7eb 100644
+--- a/usr/.gitignore
++++ b/usr/.gitignore
+@@ -7,4 +7,3 @@ initramfs_data.cpio.gz
+ initramfs_data.cpio.bz2
+ initramfs_data.cpio.lzma
+ initramfs_list
+-include
+diff --git a/usr/Makefile b/usr/Makefile
+index 4a70ae43c9cb..6a89eb019275 100644
+--- a/usr/Makefile
++++ b/usr/Makefile
+@@ -56,3 +56,5 @@ $(deps_initramfs): klibcdirs
+ $(obj)/$(datafile_y): $(obj)/gen_init_cpio $(deps_initramfs) klibcdirs
+ 	$(Q)$(initramfs) -l $(ramfs-input) > $(obj)/$(datafile_d_y)
+ 	$(call if_changed,initfs)
++
++subdir-$(CONFIG_UAPI_HEADER_TEST) += include
+diff --git a/usr/include/.gitignore b/usr/include/.gitignore
+new file mode 100644
+index 000000000000..a0991ff4402b
+--- /dev/null
++++ b/usr/include/.gitignore
+@@ -0,0 +1,3 @@
++*
++!.gitignore
++!Makefile
+diff --git a/usr/include/Makefile b/usr/include/Makefile
+new file mode 100644
+index 000000000000..c8c3eba28ccf
+--- /dev/null
++++ b/usr/include/Makefile
+@@ -0,0 +1,133 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++# Unlike the kernel space, uapi headers are written in standard C.
++#  - Forbid C++ style comments
++#  - Use '__inline__', '__asm__' instead of 'inline', 'asm'
++#
++# -std=c90 (equivalent to -ansi) catches the violation of those.
++# We cannot go as far as adding -Wpedantic since it emits too many warnings.
++#
++# REVISIT: re-consider the proper set of compiler flags for uapi compile-test.
++
++UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
++
++override c_flags = $(UAPI_CFLAGS) -Wp,-MD,$(depfile) -I$(objtree)/usr/include
++
++# The following are excluded for now just because they fail to build.
++# The cause of errors are mostly missing include directives.
++# Check one by one, and send a patch to each subsystem.
++#
++# Do not add a new header to the list without legitimate reason.
++# Please consider to fix the header first.
++header-test- += asm/ipcbuf.h
++header-test- += asm/msgbuf.h
++header-test- += asm/sembuf.h
++header-test- += asm/shmbuf.h
++header-test- += asm/signal.h
++header-test- += asm/ucontext.h
++header-test- += drm/vmwgfx_drm.h
++header-test- += linux/am437x-vpfe.h
++header-test- += linux/android/binderfs.h
++header-test- += linux/android/binder.h
++header-test-$(CONFIG_CPU_BIG_ENDIAN) += linux/byteorder/big_endian.h
++header-test-$(CONFIG_CPU_LITTLE_ENDIAN) += linux/byteorder/little_endian.h
++header-test- += linux/coda.h
++header-test- += linux/coda_psdev.h
++header-test- += linux/dvb/audio.h
++header-test- += linux/dvb/osd.h
++header-test- += linux/elfcore.h
++header-test- += linux/errqueue.h
++header-test- += linux/fsmap.h
++header-test- += linux/hdlc/ioctl.h
++header-test- += linux/jffs2.h
++header-test- += linux/kexec.h
++header-test- += linux/matroxfb.h
++header-test- += linux/netfilter_bridge/ebtables.h
++header-test- += linux/netfilter_ipv4/ipt_LOG.h
++header-test- += linux/netfilter_ipv6/ip6t_LOG.h
++header-test- += linux/nfc.h
++header-test- += linux/nilfs2_ondisk.h
++header-test- += linux/omap3isp.h
++header-test- += linux/omapfb.h
++header-test- += linux/patchkey.h
++header-test- += linux/phonet.h
++header-test- += linux/reiserfs_xattr.h
++header-test- += linux/scc.h
++header-test- += linux/sctp.h
++header-test- += linux/signal.h
++header-test- += linux/sysctl.h
++header-test- += linux/usb/audio.h
++header-test- += linux/ivtv.h
++header-test- += linux/v4l2-mediabus.h
++header-test- += linux/v4l2-subdev.h
++header-test- += linux/videodev2.h
++header-test- += linux/vm_sockets.h
++header-test- += misc/ocxl.h
++header-test- += mtd/mtd-abi.h
++header-test- += scsi/scsi_bsg_fc.h
++header-test- += scsi/scsi_netlink_fc.h
++header-test- += scsi/scsi_netlink.h
++header-test- += sound/asequencer.h
++header-test- += sound/asound.h
++header-test- += sound/asoc.h
++header-test- += sound/compress_offload.h
++header-test- += sound/emu10k1.h
++header-test- += sound/sfnt_info.h
++header-test- += sound/sof/eq.h
++header-test- += sound/sof/fw.h
++header-test- += sound/sof/header.h
++header-test- += sound/sof/manifest.h
++header-test- += sound/sof/trace.h
++header-test- += xen/evtchn.h
++header-test- += xen/gntdev.h
++header-test- += xen/privcmd.h
++
++# more headers are broken in some architectures
++
++ifeq ($(SRCARCH),arc)
++header-test- += linux/bpf_perf_event.h
++endif
++
++ifeq ($(SRCARCH),ia64)
++header-test- += asm/setup.h
++header-test- += asm/sigcontext.h
++header-test- += asm/perfmon.h
++header-test- += asm/perfmon_default_smpl.h
++header-test- += linux/if_bonding.h
++endif
++
++ifeq ($(SRCARCH),mips)
++header-test- += asm/stat.h
++endif
++
++ifeq ($(SRCARCH),powerpc)
++header-test- += asm/stat.h
++header-test- += linux/bpf_perf_event.h
++endif
++
++ifeq ($(SRCARCH),riscv)
++header-test- += linux/bpf_perf_event.h
++endif
++
++ifeq ($(SRCARCH),s390)
++header-test- += asm/runtime_instr.h
++header-test- += asm/zcrypt.h
++endif
++
++ifeq ($(SRCARCH),sparc)
++header-test- += asm/stat.h
++header-test- += asm/uctx.h
++header-test- += asm/fbio.h
++header-test- += asm/openpromio.h
++endif
++
++# asm-generic/*.h is used by asm/*.h, and should not be included directly
++header-test- += asm-generic/%
++
++header-test-y += $(filter-out $(header-test-), \
++			$(patsubst $(obj)/%,%, $(wildcard \
++			$(addprefix $(obj)/, *.h */*.h */*/*.h */*/*/*.h))))
++
++# For GNU Make <= 4.2.1, $(wildcard $(obj)/*/) matches to not only directories
++# but also regular files. Use $(filter %/, ...) just in case.
++clean-dirs += $(patsubst $(obj)/%/,%,$(filter %/, $(wildcard $(obj)/*/)))
+-- 
+2.17.1
+
