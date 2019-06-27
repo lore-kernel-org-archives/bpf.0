@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A724C48BD3
-	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 00:52:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDFEBC48BD9
+	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 00:52:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EC6442082F
-	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 00:52:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A5B99216FD
+	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 00:52:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1561596751;
-	bh=Z+shlkBQ8wdolk7PdrDWnw2HVrwoukW1lc4Rr9oYFNM=;
+	s=default; t=1561596772;
+	bh=ey4XY2fnHSK9yr28cRRuMCpnQpVzKjWWw7EuES0fdwM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=OXz4pOfi6QvYGl/EMLQIOxVdnX+T+Jqt53OXJ/hyyulxBkXdLsqS6i+TughX1D8c2
-	 Rp0bPkfP7H/FOub95ZylOkIHa5aigyS7u/5Np0RFpnpJN9+ZZ/wUGMGKdAQjoNmSHy
-	 4EKlr3q6nabfbYdxtKGMTBQUEUEJDzFPUnajJz6c=
+	b=K6lmS45gGuvFeMYJLUhDrXBwRgia0E0lbLHhWUJIPZ8j9RmJsCN5i7GODMeNuXExt
+	 TQWThTylxI1myHM1ffzqtq7GaPN4lrOvHvr7Fkby/4hRl34xLilwQF71C1nQ+DKSzW
+	 dq5uDFnKY9Y9N2DjVJVp5yFsTKW6oUtKhz/VauhQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727772AbfF0Ada (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Jun 2019 20:33:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37470 "EHLO mail.kernel.org"
+        id S1727677AbfF0AdH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Jun 2019 20:33:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36984 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727237AbfF0Ada (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 26 Jun 2019 20:33:30 -0400
+        id S1727136AbfF0AdH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 26 Jun 2019 20:33:07 -0400
 Received: from sasha-vm.mshome.net (unknown [107.242.116.147])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 94DE020815;
-        Thu, 27 Jun 2019 00:33:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5A5F620659;
+        Thu, 27 Jun 2019 00:33:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561595609;
-        bh=Z+shlkBQ8wdolk7PdrDWnw2HVrwoukW1lc4Rr9oYFNM=;
+        s=default; t=1561595586;
+        bh=ey4XY2fnHSK9yr28cRRuMCpnQpVzKjWWw7EuES0fdwM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yI3VQ3i/7+Fp7SyqLBPM53mXMPkR4vaX/pU3UZy6YrgiRLlQFjYzl6eK0RJoeqUgb
-         YaVjSk6AZfvrwqQCIhlSdmTHrHgZlTyPDS8Fzu2idjBvJRQZpbCB0v1cGG5CUIOTAT
-         yVvCSUyyLqiaNCzIVMFLpeMQ1uAPpeYXZMXx6+gc=
+        b=K8HKxGB1F4gC8VVua5gvEpOGtveAM0XrJawNFYjqTTQC+SiCt2idCg1zgiN5OIug9
+         yEMrXeWSfr23/EEoXPpOFxS6QQeN2YznKe9ir2PoMCPhbIkHcemc5ZyZGH6NbcboP9
+         +FntaPMvnRUp0INpCT87ysTn0dpYz7/bV8Rbuqdo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ilya Maximets <i.maximets@samsung.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
+Cc:     Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, xdp-newbies@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 54/95] xdp: check device pointer before clearing
-Date:   Wed, 26 Jun 2019 20:29:39 -0400
-Message-Id: <20190627003021.19867-54-sashal@kernel.org>
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.1 48/95] bpf: lpm_trie: check left child of last leftmost node for NULL
+Date:   Wed, 26 Jun 2019 20:29:33 -0400
+Message-Id: <20190627003021.19867-48-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190627003021.19867-1-sashal@kernel.org>
 References: <20190627003021.19867-1-sashal@kernel.org>
@@ -60,50 +60,131 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Ilya Maximets <i.maximets@samsung.com>
+From: Jonathan Lemon <jonathan.lemon@gmail.com>
 
-[ Upstream commit 01d76b5317003e019ace561a9b775f51aafdfdc4 ]
+[ Upstream commit da2577fdd0932ea4eefe73903f1130ee366767d2 ]
 
-We should not call 'ndo_bpf()' or 'dev_put()' with NULL argument.
+If the leftmost parent node of the tree has does not have a child
+on the left side, then trie_get_next_key (and bpftool map dump) will
+not look at the child on the right.  This leads to the traversal
+missing elements.
 
-Fixes: c9b47cc1fabc ("xsk: fix bug when trying to use both copy and zero-copy on one queue id")
-Signed-off-by: Ilya Maximets <i.maximets@samsung.com>
-Acked-by: Jonathan Lemon <jonathan.lemon@gmail.com>
+Lookup is not affected.
+
+Update selftest to handle this case.
+
+Reproducer:
+
+ bpftool map create /sys/fs/bpf/lpm type lpm_trie key 6 \
+     value 1 entries 256 name test_lpm flags 1
+ bpftool map update pinned /sys/fs/bpf/lpm key  8 0 0 0  0   0 value 1
+ bpftool map update pinned /sys/fs/bpf/lpm key 16 0 0 0  0 128 value 2
+ bpftool map dump   pinned /sys/fs/bpf/lpm
+
+Returns only 1 element. (2 expected)
+
+Fixes: b471f2f1de8b ("bpf: implement MAP_GET_NEXT_KEY command for LPM_TRIE")
+Signed-off-by: Jonathan Lemon <jonathan.lemon@gmail.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/xdp/xdp_umem.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ kernel/bpf/lpm_trie.c                      |  9 +++--
+ tools/testing/selftests/bpf/test_lpm_map.c | 41 ++++++++++++++++++++--
+ 2 files changed, 45 insertions(+), 5 deletions(-)
 
-diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
-index 989e52386c35..2f7e2c33a812 100644
---- a/net/xdp/xdp_umem.c
-+++ b/net/xdp/xdp_umem.c
-@@ -143,6 +143,9 @@ static void xdp_umem_clear_dev(struct xdp_umem *umem)
- 	struct netdev_bpf bpf;
- 	int err;
- 
-+	if (!umem->dev)
-+		return;
-+
- 	if (umem->zc) {
- 		bpf.command = XDP_SETUP_XSK_UMEM;
- 		bpf.xsk.umem = NULL;
-@@ -156,11 +159,9 @@ static void xdp_umem_clear_dev(struct xdp_umem *umem)
- 			WARN(1, "failed to disable umem!\n");
+diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+index 93a5cbbde421..3b03a7342f3c 100644
+--- a/kernel/bpf/lpm_trie.c
++++ b/kernel/bpf/lpm_trie.c
+@@ -715,9 +715,14 @@ static int trie_get_next_key(struct bpf_map *map, void *_key, void *_next_key)
+ 	 * have exact two children, so this function will never return NULL.
+ 	 */
+ 	for (node = search_root; node;) {
+-		if (!(node->flags & LPM_TREE_NODE_FLAG_IM))
++		if (node->flags & LPM_TREE_NODE_FLAG_IM) {
++			node = rcu_dereference(node->child[0]);
++		} else {
+ 			next_node = node;
+-		node = rcu_dereference(node->child[0]);
++			node = rcu_dereference(node->child[0]);
++			if (!node)
++				node = rcu_dereference(next_node->child[1]);
++		}
  	}
+ do_copy:
+ 	next_key->prefixlen = next_node->prefixlen;
+diff --git a/tools/testing/selftests/bpf/test_lpm_map.c b/tools/testing/selftests/bpf/test_lpm_map.c
+index 02d7c871862a..006be3963977 100644
+--- a/tools/testing/selftests/bpf/test_lpm_map.c
++++ b/tools/testing/selftests/bpf/test_lpm_map.c
+@@ -573,13 +573,13 @@ static void test_lpm_get_next_key(void)
  
--	if (umem->dev) {
--		rtnl_lock();
--		xdp_clear_umem_at_qid(umem->dev, umem->queue_id);
--		rtnl_unlock();
--	}
-+	rtnl_lock();
-+	xdp_clear_umem_at_qid(umem->dev, umem->queue_id);
-+	rtnl_unlock();
+ 	/* add one more element (total two) */
+ 	key_p->prefixlen = 24;
+-	inet_pton(AF_INET, "192.168.0.0", key_p->data);
++	inet_pton(AF_INET, "192.168.128.0", key_p->data);
+ 	assert(bpf_map_update_elem(map_fd, key_p, &value, 0) == 0);
  
- 	if (umem->zc) {
- 		dev_put(umem->dev);
+ 	memset(key_p, 0, key_size);
+ 	assert(bpf_map_get_next_key(map_fd, NULL, key_p) == 0);
+ 	assert(key_p->prefixlen == 24 && key_p->data[0] == 192 &&
+-	       key_p->data[1] == 168 && key_p->data[2] == 0);
++	       key_p->data[1] == 168 && key_p->data[2] == 128);
+ 
+ 	memset(next_key_p, 0, key_size);
+ 	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == 0);
+@@ -592,7 +592,7 @@ static void test_lpm_get_next_key(void)
+ 
+ 	/* Add one more element (total three) */
+ 	key_p->prefixlen = 24;
+-	inet_pton(AF_INET, "192.168.128.0", key_p->data);
++	inet_pton(AF_INET, "192.168.0.0", key_p->data);
+ 	assert(bpf_map_update_elem(map_fd, key_p, &value, 0) == 0);
+ 
+ 	memset(key_p, 0, key_size);
+@@ -643,6 +643,41 @@ static void test_lpm_get_next_key(void)
+ 	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == -1 &&
+ 	       errno == ENOENT);
+ 
++	/* Add one more element (total five) */
++	key_p->prefixlen = 28;
++	inet_pton(AF_INET, "192.168.1.128", key_p->data);
++	assert(bpf_map_update_elem(map_fd, key_p, &value, 0) == 0);
++
++	memset(key_p, 0, key_size);
++	assert(bpf_map_get_next_key(map_fd, NULL, key_p) == 0);
++	assert(key_p->prefixlen == 24 && key_p->data[0] == 192 &&
++	       key_p->data[1] == 168 && key_p->data[2] == 0);
++
++	memset(next_key_p, 0, key_size);
++	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == 0);
++	assert(next_key_p->prefixlen == 28 && next_key_p->data[0] == 192 &&
++	       next_key_p->data[1] == 168 && next_key_p->data[2] == 1 &&
++	       next_key_p->data[3] == 128);
++
++	memcpy(key_p, next_key_p, key_size);
++	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == 0);
++	assert(next_key_p->prefixlen == 24 && next_key_p->data[0] == 192 &&
++	       next_key_p->data[1] == 168 && next_key_p->data[2] == 1);
++
++	memcpy(key_p, next_key_p, key_size);
++	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == 0);
++	assert(next_key_p->prefixlen == 24 && next_key_p->data[0] == 192 &&
++	       next_key_p->data[1] == 168 && next_key_p->data[2] == 128);
++
++	memcpy(key_p, next_key_p, key_size);
++	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == 0);
++	assert(next_key_p->prefixlen == 16 && next_key_p->data[0] == 192 &&
++	       next_key_p->data[1] == 168);
++
++	memcpy(key_p, next_key_p, key_size);
++	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == -1 &&
++	       errno == ENOENT);
++
+ 	/* no exact matching key should return the first one in post order */
+ 	key_p->prefixlen = 22;
+ 	inet_pton(AF_INET, "192.168.1.0", key_p->data);
 -- 
 2.20.1
 
