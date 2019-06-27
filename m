@@ -7,49 +7,50 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64CA7C48BD9
-	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 00:45:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76F03C48BD6
+	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 00:46:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3258321726
-	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 00:45:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3FFF1208E3
+	for <bpf@archiver.kernel.org>; Thu, 27 Jun 2019 00:46:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1561596314;
-	bh=ot/6uJw/B4UWi3+CoLxc+GP6vTTK+Bxizzmegvr2GrI=;
+	s=default; t=1561596394;
+	bh=CXvPtPhMJMnEZMnJHiTFIt8lLMf9rloZWRT1DqeQ9Zo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=eqI4almJ0aAP6Kin+D6mlgAy4sRNrjIvjCBWCOM/QSzCXVTXPiFfl54m9qBfEuoHT
-	 bv+n2NW3lgi+sTgwNfAODcYwZjFN+6EAMgXxTcLGdocn9jtlGvPCUXQsGs+0LdfFQV
-	 YjfqEuj0nSwPPDzo0HLNpQUCe/ZJk8mAVfzeHpUo=
+	b=HjZcjivJIFwdCrGV6vVR2qIem9djsAQffxhwY5vG7X+Cx3Qb8t7VJk5XLajOD5Xjo
+	 vNPmL3HN2a7gd1NCds+3Y3d0PfsJbpJg61/Cj7I4VWp8bbC4RE3vEVLDmCeLNTunEH
+	 CQTcnr33maOM6ji3s7nO8lGJRWDt92RJ9W4/jGQw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729507AbfF0Ald (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Jun 2019 20:41:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45326 "EHLO mail.kernel.org"
+        id S1728754AbfF0AkE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Jun 2019 20:40:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44094 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729083AbfF0Ald (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 26 Jun 2019 20:41:33 -0400
+        id S1729216AbfF0AkA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 26 Jun 2019 20:40:00 -0400
 Received: from sasha-vm.mshome.net (unknown [107.242.116.147])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A3BAA21852;
-        Thu, 27 Jun 2019 00:41:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C5A4D21897;
+        Thu, 27 Jun 2019 00:39:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561596092;
-        bh=ot/6uJw/B4UWi3+CoLxc+GP6vTTK+Bxizzmegvr2GrI=;
+        s=default; t=1561596000;
+        bh=CXvPtPhMJMnEZMnJHiTFIt8lLMf9rloZWRT1DqeQ9Zo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SrQAEM47pN/EZ/DYSyGGL44pZMzgeSARN0PuiMNkVNZstGXRV3PNk7Zm56CUOJoLu
-         mxADS84vUNvLDFWQ+4gSRPrIP919tzKSFipZykr2lv32Bp0Kb2KFAzerOVsFa7BOpF
-         sT7ztyFA1kSkhXMNlfLeSrbpjbIef0f9mQmjRAvo=
+        b=aaioL5qgNKMFkvHxkAQ1A7X1CWAnOZI17SOsWfcB2DDXhYiglS7DyarEp+X5y/V/N
+         +5fVXMO8/NrivUfwMuetKdKdI3TRJQ7/JoIQ2sMGs8vAV6b7AtBASNqhZ2ggl/OOFM
+         ZG/2ByfVmLSSvaG55udqOZZV7/XBc0ttdawc4S2g=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chang-Hsien Tsai <luke.tw@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+Cc:     Martin KaFai Lau <kafai@fb.com>, Tom Herbert <tom@herbertland.com>,
+        Song Liu <songliubraving@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 02/21] samples, bpf: fix to change the buffer size for read()
-Date:   Wed, 26 Jun 2019 20:41:02 -0400
-Message-Id: <20190627004122.21671-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 10/35] bpf: udp: Avoid calling reuseport's bpf_prog from udp_gro
+Date:   Wed, 26 Jun 2019 20:38:58 -0400
+Message-Id: <20190627003925.21330-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190627004122.21671-1-sashal@kernel.org>
-References: <20190627004122.21671-1-sashal@kernel.org>
+In-Reply-To: <20190627003925.21330-1-sashal@kernel.org>
+References: <20190627003925.21330-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -59,43 +60,59 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Chang-Hsien Tsai <luke.tw@gmail.com>
+From: Martin KaFai Lau <kafai@fb.com>
 
-[ Upstream commit f7c2d64bac1be2ff32f8e4f500c6e5429c1003e0 ]
+[ Upstream commit 257a525fe2e49584842c504a92c27097407f778f ]
 
-If the trace for read is larger than 4096, the return
-value sz will be 4096. This results in off-by-one error
-on buf:
+When the commit a6024562ffd7 ("udp: Add GRO functions to UDP socket")
+added udp[46]_lib_lookup_skb to the udp_gro code path, it broke
+the reuseport_select_sock() assumption that skb->data is pointing
+to the transport header.
 
-    static char buf[4096];
-    ssize_t sz;
+This patch follows an earlier __udp6_lib_err() fix by
+passing a NULL skb to avoid calling the reuseport's bpf_prog.
 
-    sz = read(trace_fd, buf, sizeof(buf));
-    if (sz > 0) {
-        buf[sz] = 0;
-        puts(buf);
-    }
-
-Signed-off-by: Chang-Hsien Tsai <luke.tw@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Fixes: a6024562ffd7 ("udp: Add GRO functions to UDP socket")
+Cc: Tom Herbert <tom@herbertland.com>
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+Acked-by: Song Liu <songliubraving@fb.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- samples/bpf/bpf_load.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/ipv4/udp.c | 6 +++++-
+ net/ipv6/udp.c | 2 +-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/samples/bpf/bpf_load.c b/samples/bpf/bpf_load.c
-index 97913e109b14..99e5a2f63e76 100644
---- a/samples/bpf/bpf_load.c
-+++ b/samples/bpf/bpf_load.c
-@@ -369,7 +369,7 @@ void read_trace_pipe(void)
- 		static char buf[4096];
- 		ssize_t sz;
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index b89920c0f226..54343dc29cb4 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -563,7 +563,11 @@ static inline struct sock *__udp4_lib_lookup_skb(struct sk_buff *skb,
+ struct sock *udp4_lib_lookup_skb(struct sk_buff *skb,
+ 				 __be16 sport, __be16 dport)
+ {
+-	return __udp4_lib_lookup_skb(skb, sport, dport, &udp_table);
++	const struct iphdr *iph = ip_hdr(skb);
++
++	return __udp4_lib_lookup(dev_net(skb->dev), iph->saddr, sport,
++				 iph->daddr, dport, inet_iif(skb),
++				 inet_sdif(skb), &udp_table, NULL);
+ }
+ EXPORT_SYMBOL_GPL(udp4_lib_lookup_skb);
  
--		sz = read(trace_fd, buf, sizeof(buf));
-+		sz = read(trace_fd, buf, sizeof(buf) - 1);
- 		if (sz > 0) {
- 			buf[sz] = 0;
- 			puts(buf);
+diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+index 8d185a0fc5af..fa743776c459 100644
+--- a/net/ipv6/udp.c
++++ b/net/ipv6/udp.c
+@@ -308,7 +308,7 @@ struct sock *udp6_lib_lookup_skb(struct sk_buff *skb,
+ 
+ 	return __udp6_lib_lookup(dev_net(skb->dev), &iph->saddr, sport,
+ 				 &iph->daddr, dport, inet6_iif(skb),
+-				 inet6_sdif(skb), &udp_table, skb);
++				 inet6_sdif(skb), &udp_table, NULL);
+ }
+ EXPORT_SYMBOL_GPL(udp6_lib_lookup_skb);
+ 
 -- 
 2.20.1
 
