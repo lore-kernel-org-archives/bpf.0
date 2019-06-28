@@ -2,162 +2,101 @@ Return-Path: <SRS0=ch4g=U3=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF8DBC5B579
-	for <bpf@archiver.kernel.org>; Fri, 28 Jun 2019 08:04:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8A5EC4321A
+	for <bpf@archiver.kernel.org>; Fri, 28 Jun 2019 09:01:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C6DF9208C4
-	for <bpf@archiver.kernel.org>; Fri, 28 Jun 2019 08:04:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D5C6206E0
+	for <bpf@archiver.kernel.org>; Fri, 28 Jun 2019 09:01:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="ZmkvJjBi"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="ivpGvcNM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726572AbfF1IEd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 28 Jun 2019 04:04:33 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:46211 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726462AbfF1IEW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 28 Jun 2019 04:04:22 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190628080419euoutp027d0926ff3c79b89372fa6ed53e54a5b8~sTh2dulzn1415214152euoutp028
-        for <bpf@vger.kernel.org>; Fri, 28 Jun 2019 08:04:19 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190628080419euoutp027d0926ff3c79b89372fa6ed53e54a5b8~sTh2dulzn1415214152euoutp028
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1561709059;
-        bh=/DCcaQL4KIaru6eSY0qTOKmLgKNdZSlhfLXy28ktkDo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZmkvJjBijRsco2QTreUM7nLg3G3/ceygOxXHwClmarYqwrI2XLnliUE7rfFN8vOea
-         Bsn1cnRJ0a9rtw+WAmFnsdcQrdB5QtcNfDoVjUyRCHaJCHWKxpgI5vcq4y4fzPQwbY
-         3ibh4P2lfTH+3bu2VW7cENvolE5JLUm+tVwL0KeA=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20190628080418eucas1p2f39d2a67f27d91a536f94fc2d9d378fa~sTh1lBOi81539015390eucas1p2G;
-        Fri, 28 Jun 2019 08:04:18 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 5F.63.04377.20AC51D5; Fri, 28
-        Jun 2019 09:04:18 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190628080418eucas1p1fa312ee412b805346dce631e81f7c093~sTh0zQtFM1751917519eucas1p14;
-        Fri, 28 Jun 2019 08:04:18 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190628080417eusmtrp1e55a76b06e7fe4c6d934a2b791f410f4~sTh0lEaZL2335823358eusmtrp17;
-        Fri, 28 Jun 2019 08:04:17 +0000 (GMT)
-X-AuditID: cbfec7f4-113ff70000001119-92-5d15ca02bf44
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 9A.10.04140.10AC51D5; Fri, 28
-        Jun 2019 09:04:17 +0100 (BST)
-Received: from imaximets.rnd.samsung.ru (unknown [106.109.129.180]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190628080416eusmtip192d14bf957130d1f1b7f63f0f65783dd~sThzrPJBv2336323363eusmtip1S;
-        Fri, 28 Jun 2019 08:04:16 +0000 (GMT)
-From:   Ilya Maximets <i.maximets@samsung.com>
-To:     netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        xdp-newbies@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        id S1726524AbfF1JBi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 28 Jun 2019 05:01:38 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:34021 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726484AbfF1JBi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 28 Jun 2019 05:01:38 -0400
+Received: by mail-ot1-f65.google.com with SMTP id n5so5284117otk.1
+        for <bpf@vger.kernel.org>; Fri, 28 Jun 2019 02:01:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qUV4kfBHQVUIKfARtG5Yav4Y3FA4sBjhtv6NQ9Qeu8I=;
+        b=ivpGvcNMhyqcB3ec1oT53roHxf8bewZ3Phb32ULIMDyniG6NclUbjzZ+a+5XrNDs1b
+         SLblk5TVBOPR3Rjk/W0F5n+geCFzDrMLzbT1e9slOxgOjriNHnSCMTmE+dl4TjZUKuh0
+         XLHZASHT2NvQWoy5b66tH0j9TEahbD/9GO+J8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qUV4kfBHQVUIKfARtG5Yav4Y3FA4sBjhtv6NQ9Qeu8I=;
+        b=pv9w3jyjWrmNbhKfWrJeoFDJ4rvf4JuVhmJVmvL2G/jY09k0vbX97QeWnSNQBAEb3n
+         6S8j4hEMMVS1UqzZss1s0q+0QXCzdJliem/BnBlYdDA98U5ds+wDhf3oR9wkLeYen53Y
+         ZcuJUv3qb8NNItFTldWwpepjtHpb679Q4m57ZgwA0fMVh9LSimDEu6iPOT2cbHRm3adb
+         OX4BjoPskMBvXOiPwxv1GPnbV0qz2FKqwmbPsfpcEuWAYiEZnA/OQfxSeG6981H1pH2h
+         HSr4QZh3CJ6Y+7ws8J1Ut7hY0cnnTLyvfQjnxWP+rKRt4t1+Lmf/vA4GBiimqc4JDRpW
+         NzVg==
+X-Gm-Message-State: APjAAAWG1kUa5unmV+IJatPAcz0TQq17RaXZaDcDhAybTSivpO+yD8HO
+        y7zxTjsMLJ3JmQBb0WPMl2HfAjT2nvaHHqaO/mc+vw==
+X-Google-Smtp-Source: APXvYqyzaKbGnEbZX82tZjeqdRHpKJO2uNGCf/NKctMgnNoP971VgVKcSpcqhzdqJ6FJf2DUKEU5RNJ8x0u4O2p9aIU=
+X-Received: by 2002:a05:6830:1485:: with SMTP id s5mr214548otq.132.1561712497511;
+ Fri, 28 Jun 2019 02:01:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190627201923.2589391-1-songliubraving@fb.com> <20190627201923.2589391-2-songliubraving@fb.com>
+In-Reply-To: <20190627201923.2589391-2-songliubraving@fb.com>
+From:   Lorenz Bauer <lmb@cloudflare.com>
+Date:   Fri, 28 Jun 2019 10:01:26 +0100
+Message-ID: <CACAyw98RvDc+i3gpgnAtnM0ojAfQ-mHvzRXFRUcgkEPr3K4G-g@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 1/4] bpf: unprivileged BPF access via /dev/bpf
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Ilya Maximets <i.maximets@samsung.com>
-Subject: [PATCH bpf v6 1/2] xdp: hold device for umem regardless of
- zero-copy mode
-Date:   Fri, 28 Jun 2019 11:04:06 +0300
-Message-Id: <20190628080407.30354-2-i.maximets@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190628080407.30354-1-i.maximets@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFKsWRmVeSWpSXmKPExsWy7djP87pMp0RjDZbu0bL407aB0eLzkeNs
-        FosXfmO2mHO+hcXiSvtPdotjL1rYLHatm8lscXnXHDaLFYdOAMUWiFls79/H6MDtsWXlTSaP
-        nbPusnss3vOSyaPrxiVmj+ndD5k9+rasYvT4vEkugD2KyyYlNSezLLVI3y6BK6Nt2jX2gitc
-        Ff8m9LE3MF7h6GLk5JAQMJE40/6KqYuRi0NIYAWjxIeO7VDOF0aJVfv2MkM4nxkl1kw9xgzT
-        suPucUaIxHJGienH1rBAOD8YJb5en8EGUsUmoCNxavURRhBbREBK4uOO7ewgRcwCM5kltjye
-        wgKSEBYIkTj2cAlYEYuAqkTz/C52EJtXwFri2Lk17BDr5CVWbzgAtppTwEbi/fM2sNUSApPZ
-        JTq234YqcpHofLCeBcIWlnh1fAtUXEbi9OQeqHi9xP2Wl1DNHUB3H/rHBJGwl9jy+hxQAwfQ
-        eZoS63fpQ4QdJU5PBAUNB5DNJ3HjrSBImBnInLRtOjNEmFeio00IolpF4vfB5dAQkpK4+e4z
-        1AUeEttm/mWHBFA/o8TR/a9YJjDKz0JYtoCRcRWjeGppcW56arFRXmq5XnFibnFpXrpecn7u
-        JkZgijn97/iXHYy7/iQdYhTgYFTi4VXYKRIrxJpYVlyZe4hRgoNZSYRX8hxQiDclsbIqtSg/
-        vqg0J7X4EKM0B4uSOG81w4NoIYH0xJLU7NTUgtQimCwTB6dUA+O8+20MzhcrpP7vMc5vu+/N
-        /U1Cc/+xtL/qBX0ihr53J7vvX3ygRCzh1uQgjV9X3nSsMjTesy/ky5u/DzbMDmj6ENf2P9Ta
-        W/1F/6PEw72yz8J2vvxQO6k68HH4lcDnVSdl74Xse72ul/X3Xf+TJYGBEWLCd3PfX9zeJnXv
-        VLj3B55/3KkNUZ5KLMUZiYZazEXFiQBbqHWDLQMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrFLMWRmVeSWpSXmKPExsVy+t/xu7qMp0RjDZoPqVn8advAaPH5yHE2
-        i8ULvzFbzDnfwmJxpf0nu8WxFy1sFrvWzWS2uLxrDpvFikMngGILxCy29+9jdOD22LLyJpPH
-        zll32T0W73nJ5NF14xKzx/Tuh8wefVtWMXp83iQXwB6lZ1OUX1qSqpCRX1xiqxRtaGGkZ2hp
-        oWdkYqlnaGwea2VkqqRvZ5OSmpNZllqkb5egl9E27Rp7wRWuin8T+tgbGK9wdDFyckgImEjs
-        uHucsYuRi0NIYCmjxMvuySwQCSmJH78usELYwhJ/rnWxQRR9Y5R4/fEWWBGbgI7EqdVHGEFs
-        EaCGjzu2s4PYzAILmSW+TDIBsYUFgiTWXLzLBGKzCKhKNM/vAqvhFbCWOHZuDTvEAnmJ1RsO
-        MIPYnAI2Eu+ft4HNFAKqebj3F+sERr4FjAyrGEVSS4tz03OLjfSKE3OLS/PS9ZLzczcxAsN9
-        27GfW3Ywdr0LPsQowMGoxMOrsFMkVog1say4MvcQowQHs5IIr+Q5oBBvSmJlVWpRfnxRaU5q
-        8SFGU6CjJjJLiSbnA2MxryTe0NTQ3MLS0NzY3NjMQkmct0PgYIyQQHpiSWp2ampBahFMHxMH
-        p1QD43KZQMXPRdFv1jbKFd12/tduxyW3/f4Hy9bb1wwWbuqUfJO9g/1lpE/Im/DbNmVX7Iun
-        fy3ht/pXl+HhEaCUsvfPmd41J45IyJ/V6Pi3/g93RJO8ZEv8+aqPPV+ebjx0KvSDeN/qoE//
-        2ndqPxPwetOxdYHpkvifj37Nm9XJV3n6V6bkc7UfFUosxRmJhlrMRcWJAH7Q8QeNAgAA
-X-CMS-MailID: 20190628080418eucas1p1fa312ee412b805346dce631e81f7c093
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190628080418eucas1p1fa312ee412b805346dce631e81f7c093
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190628080418eucas1p1fa312ee412b805346dce631e81f7c093
-References: <20190628080407.30354-1-i.maximets@samsung.com>
-        <CGME20190628080418eucas1p1fa312ee412b805346dce631e81f7c093@eucas1p1.samsung.com>
+        Kernel Team <kernel-team@fb.com>, Jann Horn <jannh@google.com>,
+        gregkh@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Device pointer stored in umem regardless of zero-copy mode,
-so we heed to hold the device in all cases.
+On Thu, 27 Jun 2019 at 21:19, Song Liu <songliubraving@fb.com> wrote:
+>
+> This patch introduce unprivileged BPF access. The access control is
+> achieved via device /dev/bpf. Users with write access to /dev/bpf are able
+> to call sys_bpf().
+>
+> Two ioctl command are added to /dev/bpf:
+>
+> The two commands enable/disable permission to call sys_bpf() for current
+> task. This permission is noted by bpf_permitted in task_struct. This
+> permission is inherited during clone(CLONE_THREAD).
 
-Fixes: c9b47cc1fabc ("xsk: fix bug when trying to use both copy and zero-copy on one queue id")
-Signed-off-by: Ilya Maximets <i.maximets@samsung.com>
-Acked-by: Jonathan Lemon <jonathan.lemon@gmail.com>
----
- net/xdp/xdp_umem.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+If I understand it correctly, a process would have to open /dev/bpf before
+spawning other threads for this to work?
 
-diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
-index 9c6de4f114f8..267b82a4cbcf 100644
---- a/net/xdp/xdp_umem.c
-+++ b/net/xdp/xdp_umem.c
-@@ -105,6 +105,9 @@ int xdp_umem_assign_dev(struct xdp_umem *umem, struct net_device *dev,
- 
- 	umem->dev = dev;
- 	umem->queue_id = queue_id;
-+
-+	dev_hold(dev);
-+
- 	if (force_copy)
- 		/* For copy-mode, we are done. */
- 		goto out_rtnl_unlock;
-@@ -124,7 +127,6 @@ int xdp_umem_assign_dev(struct xdp_umem *umem, struct net_device *dev,
- 		goto err_unreg_umem;
- 	rtnl_unlock();
- 
--	dev_hold(dev);
- 	umem->zc = true;
- 	return 0;
- 
-@@ -163,10 +165,9 @@ static void xdp_umem_clear_dev(struct xdp_umem *umem)
- 	xdp_clear_umem_at_qid(umem->dev, umem->queue_id);
- 	rtnl_unlock();
- 
--	if (umem->zc) {
--		dev_put(umem->dev);
--		umem->zc = false;
--	}
-+	dev_put(umem->dev);
-+	umem->dev = NULL;
-+	umem->zc = false;
- }
- 
- static void xdp_umem_unpin_pages(struct xdp_umem *umem)
+That still wouldn't work for Go I'm afraid. The runtime creates and destroys
+threads on an ad-hoc basis, and there is no way to "initialize" in the
+first thread.
+With the API as is, any Go wrapper wishing to use this would have to do the
+following _for every BPF syscall_:
+
+1. Use runtime.LockOSThread() to prevent the scheduler from moving the
+    goroutine.
+2. Open /dev/bpf to set the bit in current_task
+3. Execute the syscall
+4. Call runtime.UnlockOSThread()
+
+Note that calling into C code via CGo doesn't change this. Is it not possible to
+set the bit on all processes in the current thread group?
+
 -- 
-2.17.1
+Lorenz Bauer  |  Systems Engineer
+6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
 
+www.cloudflare.com
