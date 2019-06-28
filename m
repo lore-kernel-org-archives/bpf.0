@@ -5,41 +5,41 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B25FCC5B578
-	for <bpf@archiver.kernel.org>; Fri, 28 Jun 2019 05:53:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDAE0C4321A
+	for <bpf@archiver.kernel.org>; Fri, 28 Jun 2019 05:53:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7DC9C2086D
-	for <bpf@archiver.kernel.org>; Fri, 28 Jun 2019 05:53:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B31EF2086D
+	for <bpf@archiver.kernel.org>; Fri, 28 Jun 2019 05:53:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="E6ekCykC"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="WhIg+hU5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726719AbfF1FxY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 28 Jun 2019 01:53:24 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:51594 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727035AbfF1FxW (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 28 Jun 2019 01:53:22 -0400
-Received: from pps.filterd (m0001255.ppops.net [127.0.0.1])
-        by mx0b-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5S5q6ID009139
+        id S1726622AbfF1FxZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 28 Jun 2019 01:53:25 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:58488 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727089AbfF1FxX (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 28 Jun 2019 01:53:23 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5S5iNFh003059
         for <bpf@vger.kernel.org>; Thu, 27 Jun 2019 22:53:21 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=mNtmyLcUuEqO4e+kQljW1QtWCrdL75VjHRtuB0aLBX4=;
- b=E6ekCykCyoEHwl6Sq1/9+y/P9BbHfTVin9dzjIT4nwZt0zvi2ITy2pZPzAJ77D1fQ6Ty
- uwvvE5GSPV002M2d28tD+zGvqd9rj3v6lbfS38X7xVK8zYorBPM8lbuyIDyw69SDnk69
- 5Dv1jOlPawe8Yo1XYQ/jxvZ3IhqQV2ScUu4= 
+ content-type; s=facebook; bh=3PjbKb/nEUy6KfRKR954lOrQSKqJL81G3OLgg5ZPWTM=;
+ b=WhIg+hU5/4NVaWtNzY4RnxotbX0TQD6i8RParE64RXjgRBq2uKfmDt+I23Ifv7eebvgK
+ syMONVP86vCjbVOlvs7ZjUqS0ppSwSeHjKYTyI4kOS1oWX2FKNjoNsMqC5iPo0M4Sjlm
+ 2nhQNDx/ho9C7RoOn+edaZ/xzaOQlTC2/Cs= 
 Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0b-00082601.pphosted.com with ESMTP id 2td1bvjda4-11
+        by mx0a-00082601.pphosted.com with ESMTP id 2td37dsvj4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 27 Jun 2019 22:53:20 -0700
+        for <bpf@vger.kernel.org>; Thu, 27 Jun 2019 22:53:21 -0700
 Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c081:35::125) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Thu, 27 Jun 2019 22:53:17 -0700
+ Thu, 27 Jun 2019 22:53:20 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 992EC861468; Thu, 27 Jun 2019 22:53:15 -0700 (PDT)
+        id AC826861468; Thu, 27 Jun 2019 22:53:19 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,9 +48,9 @@ To:     <andrii.nakryiko@gmail.com>, <ast@fb.com>, <daniel@iogearbox.net>,
         <kernel-team@fb.com>
 CC:     Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v3 bpf-next 3/9] libbpf: add ability to attach/detach BPF program to perf event
-Date:   Thu, 27 Jun 2019 22:52:57 -0700
-Message-ID: <20190628055303.1249758-4-andriin@fb.com>
+Subject: [PATCH v3 bpf-next 5/9] libbpf: add tracepoint attach API
+Date:   Thu, 27 Jun 2019 22:52:59 -0700
+Message-ID: <20190628055303.1249758-6-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190628055303.1249758-1-andriin@fb.com>
 References: <20190628055303.1249758-1-andriin@fb.com>
@@ -63,127 +63,139 @@ X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 pri
  malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
  mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906280066
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906280065
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-bpf_program__attach_perf_event allows to attach BPF program to existing
-perf event hook, providing most generic and most low-level way to attach BPF
-programs. It returns struct bpf_link, which should be passed to
-bpf_link__destroy to detach and free resources, associated with a link.
+Allow attaching BPF programs to kernel tracepoint BPF hooks specified by
+category and name.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/libbpf.c   | 58 ++++++++++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf.h   |  3 +++
+ tools/lib/bpf/libbpf.c   | 78 ++++++++++++++++++++++++++++++++++++++++
+ tools/lib/bpf/libbpf.h   |  4 +++
  tools/lib/bpf/libbpf.map |  1 +
- 3 files changed, 62 insertions(+)
+ 3 files changed, 83 insertions(+)
 
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 455795e6f8af..606705f878ba 100644
+index 65d2fef41003..76d1599a7d56 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -32,6 +32,7 @@
- #include <linux/limits.h>
- #include <linux/perf_event.h>
- #include <linux/ring_buffer.h>
-+#include <sys/ioctl.h>
- #include <sys/stat.h>
- #include <sys/types.h>
- #include <sys/vfs.h>
-@@ -3958,6 +3959,63 @@ int bpf_link__destroy(struct bpf_link *link)
- 	return err;
+@@ -4229,6 +4229,84 @@ struct bpf_link *bpf_program__attach_uprobe(struct bpf_program *prog,
+ 	return link;
  }
  
-+struct bpf_link_fd {
-+	struct bpf_link link; /* has to be at the top of struct */
-+	int fd; /* hook FD */
-+};
-+
-+static int bpf_link__destroy_perf_event(struct bpf_link *link)
++static int determine_tracepoint_id(const char* tp_category, const char* tp_name)
 +{
-+	struct bpf_link_fd *l = (void *)link;
-+	int err;
++	char file[PATH_MAX];
++	int ret;
 +
-+	if (l->fd < 0)
-+		return 0;
-+
-+	err = ioctl(l->fd, PERF_EVENT_IOC_DISABLE, 0);
-+	close(l->fd);
-+	return err;
++	ret = snprintf(file, sizeof(file),
++		       "/sys/kernel/debug/tracing/events/%s/%s/id",
++		       tp_category, tp_name);
++	if (ret < 0)
++		return -errno;
++	if (ret >= sizeof(file)) {
++		pr_debug("tracepoint %s/%s path is too long\n",
++			 tp_category, tp_name);
++		return -E2BIG;
++	}
++	return parse_uint_from_file(file);
 +}
 +
-+struct bpf_link *bpf_program__attach_perf_event(struct bpf_program *prog,
-+						int pfd)
++static int perf_event_open_tracepoint(const char* tp_category,
++				      const char* tp_name)
++{
++	struct perf_event_attr attr = {};
++	char errmsg[STRERR_BUFSIZE];
++	int tp_id, pfd, err;
++
++	tp_id = determine_tracepoint_id(tp_category, tp_name);
++	if (tp_id < 0){
++		pr_warning("failed to determine tracepoint '%s/%s' perf ID: %s\n",
++			   tp_category, tp_name,
++			   libbpf_strerror_r(tp_id, errmsg, sizeof(errmsg)));
++		return tp_id;
++	}
++
++	attr.type = PERF_TYPE_TRACEPOINT;
++	attr.size = sizeof(attr);
++	attr.config = tp_id;
++
++	pfd = syscall( __NR_perf_event_open, &attr, -1 /* pid */, 0 /* cpu */,
++			-1 /* group_fd */, PERF_FLAG_FD_CLOEXEC);
++	if (pfd < 0) {
++		err = -errno;
++		pr_warning("tracepoint '%s/%s' perf_event_open() failed: %s\n",
++			   tp_category, tp_name,
++			   libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
++		return err;
++	}
++	return pfd;
++}
++
++struct bpf_link *bpf_program__attach_tracepoint(struct bpf_program *prog,
++						const char *tp_category,
++						const char *tp_name)
 +{
 +	char errmsg[STRERR_BUFSIZE];
-+	struct bpf_link_fd *link;
-+	int bpf_fd, err;
++	struct bpf_link *link;
++	int pfd, err;
 +
-+	bpf_fd = bpf_program__fd(prog);
-+	if (bpf_fd < 0) {
-+		pr_warning("program '%s': can't attach before loaded\n",
-+			   bpf_program__title(prog, false));
-+		return ERR_PTR(-EINVAL);
++	pfd = perf_event_open_tracepoint(tp_category, tp_name);
++	if (pfd < 0) {
++		pr_warning("program '%s': failed to create tracepoint '%s/%s' perf event: %s\n",
++			   bpf_program__title(prog, false),
++			   tp_category, tp_name,
++			   libbpf_strerror_r(pfd, errmsg, sizeof(errmsg)));
++		return ERR_PTR(pfd);
 +	}
-+
-+	link = malloc(sizeof(*link));
-+	if (!link)
-+		return ERR_PTR(-ENOMEM);
-+	link->link.destroy = &bpf_link__destroy_perf_event;
-+	link->fd = pfd;
-+
-+	if (ioctl(pfd, PERF_EVENT_IOC_SET_BPF, bpf_fd) < 0) {
-+		err = -errno;
-+		free(link);
-+		pr_warning("program '%s': failed to attach to pfd %d: %s\n",
-+			   bpf_program__title(prog, false), pfd,
++	link = bpf_program__attach_perf_event(prog, pfd);
++	if (IS_ERR(link)) {
++		close(pfd);
++		err = PTR_ERR(link);
++		pr_warning("program '%s': failed to attach to tracepoint '%s/%s': %s\n",
++			   bpf_program__title(prog, false),
++			   tp_category, tp_name,
 +			   libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
-+		return ERR_PTR(err);
++		return link;
 +	}
-+	if (ioctl(pfd, PERF_EVENT_IOC_ENABLE, 0) < 0) {
-+		err = -errno;
-+		free(link);
-+		pr_warning("program '%s': failed to enable pfd %d: %s\n",
-+			   bpf_program__title(prog, false), pfd,
-+			   libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
-+		return ERR_PTR(err);
-+	}
-+	return (struct bpf_link *)link;
++	return link;
 +}
 +
  enum bpf_perf_event_ret
  bpf_perf_event_read_simple(void *mmap_mem, size_t mmap_size, size_t page_size,
  			   void **copy_mem, size_t *copy_size,
 diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 5082a5ebb0c2..1bf66c4a9330 100644
+index bd767cc11967..60611f4b4e1d 100644
 --- a/tools/lib/bpf/libbpf.h
 +++ b/tools/lib/bpf/libbpf.h
-@@ -169,6 +169,9 @@ struct bpf_link;
- 
- LIBBPF_API int bpf_link__destroy(struct bpf_link *link);
- 
+@@ -178,6 +178,10 @@ LIBBPF_API struct bpf_link *
+ bpf_program__attach_uprobe(struct bpf_program *prog, bool retprobe,
+ 			   pid_t pid, const char *binary_path,
+ 			   size_t func_offset);
 +LIBBPF_API struct bpf_link *
-+bpf_program__attach_perf_event(struct bpf_program *prog, int pfd);
-+
++bpf_program__attach_tracepoint(struct bpf_program *prog,
++			       const char *tp_category,
++			       const char *tp_name);
+ 
  struct bpf_insn;
  
- /*
 diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 3cde850fc8da..756f5aa802e9 100644
+index 57a40fb60718..3c618b75ef65 100644
 --- a/tools/lib/bpf/libbpf.map
 +++ b/tools/lib/bpf/libbpf.map
-@@ -169,6 +169,7 @@ LIBBPF_0.0.4 {
- 	global:
- 		bpf_link__destroy;
+@@ -171,6 +171,7 @@ LIBBPF_0.0.4 {
  		bpf_object__load_xattr;
-+		bpf_program__attach_perf_event;
+ 		bpf_program__attach_kprobe;
+ 		bpf_program__attach_perf_event;
++		bpf_program__attach_tracepoint;
+ 		bpf_program__attach_uprobe;
  		btf_dump__dump_type;
  		btf_dump__free;
- 		btf_dump__new;
 -- 
 2.17.1
 
