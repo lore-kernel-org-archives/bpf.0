@@ -2,44 +2,44 @@ Return-Path: <SRS0=toPo=U4=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2110DC4646D
-	for <bpf@archiver.kernel.org>; Sat, 29 Jun 2019 05:53:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8B44C5B579
+	for <bpf@archiver.kernel.org>; Sat, 29 Jun 2019 05:53:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E9865214DA
+	by mail.kernel.org (Postfix) with ESMTP id B4CF12086D
 	for <bpf@archiver.kernel.org>; Sat, 29 Jun 2019 05:53:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="k30i4tcU"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="CkmQLeLh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726817AbfF2FxX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 29 Jun 2019 01:53:23 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:25082 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726813AbfF2FxU (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 29 Jun 2019 01:53:20 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5T5maWT031526
-        for <bpf@vger.kernel.org>; Fri, 28 Jun 2019 22:53:20 -0700
+        id S1726819AbfF2FxW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 29 Jun 2019 01:53:22 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:28458 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726156AbfF2FxW (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 29 Jun 2019 01:53:22 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x5T5nKsZ028792
+        for <bpf@vger.kernel.org>; Fri, 28 Jun 2019 22:53:21 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=1ilmoBs7hcwSPLB7uN9c79wtqYPeISJvq6Wrwl45EgI=;
- b=k30i4tcUoxIkBVNp0FysuTEYEapL6o/+ocdMc/qSzS1nVH/t9o58cT2uRkkTNwoZEkQA
- 9f72+hdCjc3QipTRgLz8riM4O7PlW4vdO9RdpkreMRh5j74docnSEeaECdcoMiWkH//s
- BF2TqdssMnTRYREUrbM4lR6XH0eza3m/Lw0= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=rqdlFXMr6awE9RGRmjH0v4BMB0EM4bc3uG58NO5Ga3Y=;
+ b=CkmQLeLhLvSgDMKLpdBjSxYY2qJnSwCTYyB0/Mzp4+tMWwvLA0hWCc4TmMvWEM062kS8
+ GxZg7eF+UyWRz0ptS8nmh8PupDg2B/eZi0ooavPCxOlX/ZdZr/h7ZryCwVrlf7kueq+C
+ YPMQtRXEArXi1EiUeA2NskdmPXclppOcAMU= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2tdm8u2kk4-2
+        by m0089730.ppops.net with ESMTP id 2tdqm4ss1d-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 28 Jun 2019 22:53:19 -0700
+        for <bpf@vger.kernel.org>; Fri, 28 Jun 2019 22:53:20 -0700
 Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 28 Jun 2019 22:53:13 -0700
+ 15.1.1713.5; Fri, 28 Jun 2019 22:53:19 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id B6B7186145A; Fri, 28 Jun 2019 22:53:11 -0700 (PDT)
+        id CAF6B86145A; Fri, 28 Jun 2019 22:53:15 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,10 +48,12 @@ To:     <andrii.nakryiko@gmail.com>, <ast@fb.com>, <daniel@iogearbox.net>,
         <kernel-team@fb.com>, <songliubraving@fb.com>
 CC:     Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v3 bpf-next 0/4] libbpf: add perf buffer abstraction and API
-Date:   Fri, 28 Jun 2019 22:53:05 -0700
-Message-ID: <20190629055309.1594755-1-andriin@fb.com>
+Subject: [PATCH v3 bpf-next 2/4] libbpf: auto-set PERF_EVENT_ARRAY size to number of CPUs
+Date:   Fri, 28 Jun 2019 22:53:07 -0700
+Message-ID: <20190629055309.1594755-3-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190629055309.1594755-1-andriin@fb.com>
+References: <20190629055309.1594755-1-andriin@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -68,39 +70,83 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patchset adds a high-level API for setting up and polling perf buffers
-associated with BPF_MAP_TYPE_PERF_EVENT_ARRAY map. Details of APIs are
-described in corresponding commit.
+For BPF_MAP_TYPE_PERF_EVENT_ARRAY typically correct size is number of
+possible CPUs. This is impossible to specify at compilation time. This
+change adds automatic setting of PERF_EVENT_ARRAY size to number of
+system CPUs, unless non-zero size is specified explicitly. This allows
+to adjust size for advanced specific cases, while providing convenient
+and logical defaults.
 
-Patch #1 adds a set of APIs to set up and work with perf buffer.
-Patch #2 enhances libbpf to support auto-setting PERF_EVENT_ARRAY map size.
-Patch #3 adds test.
-Patch #4 converts bpftool map event_pipe to new API.
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/lib/bpf/libbpf.c | 31 ++++++++++++++++++++++++-------
+ 1 file changed, 24 insertions(+), 7 deletions(-)
 
-v2->v3:
-- added perf_buffer__new_raw for more low-level control;
-- converted bpftool map event_pipe to new API (Daniel);
-- fixed bug with error handling in create_maps (Song);
-
-v1->v2:
-- add auto-sizing of PERF_EVENT_ARRAY maps;
-
-Andrii Nakryiko (4):
-  libbpf: add perf buffer API
-  libbpf: auto-set PERF_EVENT_ARRAY size to number of CPUs
-  selftests/bpf: test perf buffer API
-  tools/bpftool: switch map event_pipe to libbpf's perf_buffer
-
- tools/bpf/bpftool/map_perf_ring.c             | 207 +++------
- tools/lib/bpf/libbpf.c                        | 397 +++++++++++++++++-
- tools/lib/bpf/libbpf.h                        |  49 +++
- tools/lib/bpf/libbpf.map                      |   4 +
- .../selftests/bpf/prog_tests/perf_buffer.c    |  94 +++++
- .../selftests/bpf/progs/test_perf_buffer.c    |  29 ++
- 6 files changed, 634 insertions(+), 146 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/perf_buffer.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_perf_buffer.c
-
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index e2bf3eedd0ae..a5ae7207d19a 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -2118,6 +2118,7 @@ static int
+ bpf_object__create_maps(struct bpf_object *obj)
+ {
+ 	struct bpf_create_map_attr create_attr = {};
++	int nr_cpus = 0;
+ 	unsigned int i;
+ 	int err;
+ 
+@@ -2140,7 +2141,22 @@ bpf_object__create_maps(struct bpf_object *obj)
+ 		create_attr.map_flags = def->map_flags;
+ 		create_attr.key_size = def->key_size;
+ 		create_attr.value_size = def->value_size;
+-		create_attr.max_entries = def->max_entries;
++		if (def->type == BPF_MAP_TYPE_PERF_EVENT_ARRAY &&
++		    !def->max_entries) {
++			if (!nr_cpus)
++				nr_cpus = libbpf_num_possible_cpus();
++			if (nr_cpus < 0) {
++				pr_warning("failed to determine number of system CPUs: %d\n",
++					   nr_cpus);
++				err = nr_cpus;
++				goto err_out;
++			}
++			pr_debug("map '%s': setting size to %d\n",
++				 map->name, nr_cpus);
++			create_attr.max_entries = nr_cpus;
++		} else {
++			create_attr.max_entries = def->max_entries;
++		}
+ 		create_attr.btf_fd = 0;
+ 		create_attr.btf_key_type_id = 0;
+ 		create_attr.btf_value_type_id = 0;
+@@ -2157,9 +2173,10 @@ bpf_object__create_maps(struct bpf_object *obj)
+ 		*pfd = bpf_create_map_xattr(&create_attr);
+ 		if (*pfd < 0 && (create_attr.btf_key_type_id ||
+ 				 create_attr.btf_value_type_id)) {
+-			cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
++			err = -errno;
++			cp = libbpf_strerror_r(err, errmsg, sizeof(errmsg));
+ 			pr_warning("Error in bpf_create_map_xattr(%s):%s(%d). Retrying without BTF.\n",
+-				   map->name, cp, errno);
++				   map->name, cp, err);
+ 			create_attr.btf_fd = 0;
+ 			create_attr.btf_key_type_id = 0;
+ 			create_attr.btf_value_type_id = 0;
+@@ -2171,11 +2188,11 @@ bpf_object__create_maps(struct bpf_object *obj)
+ 		if (*pfd < 0) {
+ 			size_t j;
+ 
+-			err = *pfd;
++			err = -errno;
+ err_out:
+-			cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
+-			pr_warning("failed to create map (name: '%s'): %s\n",
+-				   map->name, cp);
++			cp = libbpf_strerror_r(err, errmsg, sizeof(errmsg));
++			pr_warning("failed to create map (name: '%s'): %s(%d)\n",
++				   map->name, cp, err);
+ 			for (j = 0; j < i; j++)
+ 				zclose(obj->maps[j].fd);
+ 			return err;
 -- 
 2.17.1
 
