@@ -2,44 +2,44 @@ Return-Path: <SRS0=toPo=U4=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC59EC4321A
-	for <bpf@archiver.kernel.org>; Sat, 29 Jun 2019 03:49:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DEFDC4321A
+	for <bpf@archiver.kernel.org>; Sat, 29 Jun 2019 03:49:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B030D2075B
-	for <bpf@archiver.kernel.org>; Sat, 29 Jun 2019 03:49:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6CE752075B
+	for <bpf@archiver.kernel.org>; Sat, 29 Jun 2019 03:49:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="CQUgaLvc"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="lnTbV5JZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726903AbfF2Dtb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 28 Jun 2019 23:49:31 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:51410 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726889AbfF2Dt2 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 28 Jun 2019 23:49:28 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x5T3nR5E006440
-        for <bpf@vger.kernel.org>; Fri, 28 Jun 2019 20:49:27 -0700
+        id S1726907AbfF2Dte (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 28 Jun 2019 23:49:34 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:7520 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726873AbfF2Dtd (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 28 Jun 2019 23:49:33 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5T3nWpE008394
+        for <bpf@vger.kernel.org>; Fri, 28 Jun 2019 20:49:32 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=3E0UoYhAQc5XOiuHR0v7IwEu03D7lbStf9+0LvUq80A=;
- b=CQUgaLvcY+ncWevSImbDA/Em8I35r2ARiUTP9pvrPhvXe+NWIp0n/EbOa4ImVSgiHlcA
- UDDU6ezUTuDGscb4mGs/lEOLmXtILL2j3hRjquEMEx2qlCn5pzuxljmnONfpFMy8SBPe
- X0bJLKWYAKwdyJfPdZ5Go9R3eaaIjeZYU+Y= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 2tdqm4shym-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 28 Jun 2019 20:49:27 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 28 Jun 2019 20:49:26 -0700
+ content-type; s=facebook; bh=UzzF3CAfAgTqr21sMe+zfyU5im8XcSsiuTTjWrHWttM=;
+ b=lnTbV5JZVNtyArA+orQsImJR3Pgz3ihXrz2SkggB0FJBIYaO7tCecH+/tX9vsPQjUD8+
+ 1KvhtRXxonAa63IJaOltmbCwjG1tP4Tm7h+5VkT+GNwcCgwlKcrKOFl+d7CkwVuxmqa9
+ 1Xra1sQUkhX39cFODNdGCHEzMgFi5ITia9Q= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2tdsd0s5qf-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 28 Jun 2019 20:49:32 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Fri, 28 Jun 2019 20:49:26 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 0C2B7860E3E; Fri, 28 Jun 2019 20:49:22 -0700 (PDT)
+        id 21F33860E3E; Fri, 28 Jun 2019 20:49:26 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,9 +48,9 @@ To:     <andrii.nakryiko@gmail.com>, <bpf@vger.kernel.org>,
         <kernel-team@fb.com>, <sdf@fomichev.me>, <songliubraving@fb.com>
 CC:     Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v4 bpf-next 7/9] selftests/bpf: switch test to new attach_perf_event API
-Date:   Fri, 28 Jun 2019 20:49:04 -0700
-Message-ID: <20190629034906.1209916-8-andriin@fb.com>
+Subject: [PATCH v4 bpf-next 9/9] selftests/bpf: convert existing tracepoint tests to new APIs
+Date:   Fri, 28 Jun 2019 20:49:06 -0700
+Message-ID: <20190629034906.1209916-10-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190629034906.1209916-1-andriin@fb.com>
 References: <20190629034906.1209916-1-andriin@fb.com>
@@ -70,53 +70,72 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use new bpf_program__attach_perf_event() in test previously relying on
-direct ioctl manipulations.
+Convert some existing tests that attach to tracepoints to use
+bpf_program__attach_tracepoint API instead.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 Reviewed-by: Stanislav Fomichev <sdf@google.com>
 Acked-by: Song Liu <songliubraving@fb.com>
 ---
- .../bpf/prog_tests/stacktrace_build_id_nmi.c  | 31 +++++++++----------
- 1 file changed, 15 insertions(+), 16 deletions(-)
+ .../bpf/prog_tests/stacktrace_build_id.c      | 50 ++++---------------
+ .../selftests/bpf/prog_tests/stacktrace_map.c | 43 ++++------------
+ .../bpf/prog_tests/stacktrace_map_raw_tp.c    | 15 ++++--
+ 3 files changed, 31 insertions(+), 77 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
-index 1c1a2f75f3d8..9557b7dfb782 100644
---- a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
-+++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
-@@ -17,6 +17,7 @@ static __u64 read_perf_max_sample_freq(void)
- void test_stacktrace_build_id_nmi(void)
+diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
+index 3aab2b083c71..768883d838ea 100644
+--- a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
++++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
+@@ -4,11 +4,13 @@
+ void test_stacktrace_build_id(void)
  {
  	int control_map_fd, stackid_hmap_fd, stackmap_fd, stack_amap_fd;
 +	const char *prog_name = "tracepoint/random/urandom_read";
  	const char *file = "./test_stacktrace_build_id.o";
- 	int err, pmu_fd, prog_fd;
- 	struct perf_event_attr attr = {
-@@ -25,7 +26,9 @@ void test_stacktrace_build_id_nmi(void)
- 		.config = PERF_COUNT_HW_CPU_CYCLES,
- 	};
+-	int bytes, efd, err, pmu_fd, prog_fd, stack_trace_len;
+-	struct perf_event_attr attr = {};
++	int err, prog_fd, stack_trace_len;
  	__u32 key, previous_key, val, duration = 0;
 +	struct bpf_program *prog;
  	struct bpf_object *obj;
-+	struct bpf_link *link;
++	struct bpf_link *link = NULL;
  	char buf[256];
  	int i, j;
  	struct bpf_stack_build_id id_offs[PERF_MAX_STACK_DEPTH];
-@@ -39,6 +42,10 @@ void test_stacktrace_build_id_nmi(void)
+@@ -20,42 +22,14 @@ void test_stacktrace_build_id(void)
  	if (CHECK(err, "prog_load", "err %d errno %d\n", err, errno))
- 		return;
+ 		goto out;
  
+-	/* Get the ID for the sched/sched_switch tracepoint */
+-	snprintf(buf, sizeof(buf),
+-		 "/sys/kernel/debug/tracing/events/random/urandom_read/id");
+-	efd = open(buf, O_RDONLY, 0);
+-	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
 +	prog = bpf_object__find_program_by_title(obj, prog_name);
 +	if (CHECK(!prog, "find_prog", "prog '%s' not found\n", prog_name))
-+		goto close_prog;
-+
- 	pmu_fd = syscall(__NR_perf_event_open, &attr, -1 /* pid */,
- 			 0 /* cpu 0 */, -1 /* group id */,
- 			 0 /* flags */);
-@@ -47,15 +54,12 @@ void test_stacktrace_build_id_nmi(void)
- 		  pmu_fd, errno))
  		goto close_prog;
  
+-	bytes = read(efd, buf, sizeof(buf));
+-	close(efd);
+-	if (CHECK(bytes <= 0 || bytes >= sizeof(buf),
+-		  "read", "bytes %d errno %d\n", bytes, errno))
++	link = bpf_program__attach_tracepoint(prog, "random", "urandom_read");
++	if (CHECK(IS_ERR(link), "attach_tp", "err %ld\n", PTR_ERR(link)))
+ 		goto close_prog;
+ 
+-	/* Open the perf event and attach bpf progrram */
+-	attr.config = strtol(buf, NULL, 0);
+-	attr.type = PERF_TYPE_TRACEPOINT;
+-	attr.sample_type = PERF_SAMPLE_RAW | PERF_SAMPLE_CALLCHAIN;
+-	attr.sample_period = 1;
+-	attr.wakeup_events = 1;
+-	pmu_fd = syscall(__NR_perf_event_open, &attr, -1 /* pid */,
+-			 0 /* cpu 0 */, -1 /* group id */,
+-			 0 /* flags */);
+-	if (CHECK(pmu_fd < 0, "perf_event_open", "err %d errno %d\n",
+-		  pmu_fd, errno))
+-		goto close_prog;
+-
 -	err = ioctl(pmu_fd, PERF_EVENT_IOC_ENABLE, 0);
 -	if (CHECK(err, "perf_event_ioc_enable", "err %d errno %d\n",
 -		  err, errno))
@@ -126,16 +145,11 @@ index 1c1a2f75f3d8..9557b7dfb782 100644
 -	if (CHECK(err, "perf_event_ioc_set_bpf", "err %d errno %d\n",
 -		  err, errno))
 -		goto disable_pmu;
-+	link = bpf_program__attach_perf_event(prog, pmu_fd);
-+	if (CHECK(IS_ERR(link), "attach_perf_event",
-+		  "err %ld\n", PTR_ERR(link))) {
-+		close(pmu_fd);
-+		goto close_prog;
-+	}
- 
+-
  	/* find map fds */
  	control_map_fd = bpf_find_map(__func__, obj, "control_map");
-@@ -134,8 +138,7 @@ void test_stacktrace_build_id_nmi(void)
+ 	if (CHECK(control_map_fd < 0, "bpf_find_map control_map",
+@@ -133,8 +107,7 @@ void test_stacktrace_build_id(void)
  	 * try it one more time.
  	 */
  	if (build_id_matches < 1 && retry--) {
@@ -145,17 +159,130 @@ index 1c1a2f75f3d8..9557b7dfb782 100644
  		bpf_object__close(obj);
  		printf("%s:WARN:Didn't find expected build ID from the map, retrying\n",
  		       __func__);
-@@ -154,11 +157,7 @@ void test_stacktrace_build_id_nmi(void)
- 	 */
+@@ -152,10 +125,7 @@ void test_stacktrace_build_id(void)
+ 	      "err %d errno %d\n", err, errno);
  
  disable_pmu:
 -	ioctl(pmu_fd, PERF_EVENT_IOC_DISABLE);
 -
 -close_pmu:
 -	close(pmu_fd);
++	bpf_link__destroy(link);
+ 
+ close_prog:
+ 	bpf_object__close(obj);
+diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_map.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_map.c
+index 2bfd50a0d6d1..fc539335c5b3 100644
+--- a/tools/testing/selftests/bpf/prog_tests/stacktrace_map.c
++++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_map.c
+@@ -4,50 +4,26 @@
+ void test_stacktrace_map(void)
+ {
+ 	int control_map_fd, stackid_hmap_fd, stackmap_fd, stack_amap_fd;
++	const char *prog_name = "tracepoint/sched/sched_switch";
++	int err, prog_fd, stack_trace_len;
+ 	const char *file = "./test_stacktrace_map.o";
+-	int bytes, efd, err, pmu_fd, prog_fd, stack_trace_len;
+-	struct perf_event_attr attr = {};
+ 	__u32 key, val, duration = 0;
++	struct bpf_program *prog;
+ 	struct bpf_object *obj;
+-	char buf[256];
++	struct bpf_link *link;
+ 
+ 	err = bpf_prog_load(file, BPF_PROG_TYPE_TRACEPOINT, &obj, &prog_fd);
+ 	if (CHECK(err, "prog_load", "err %d errno %d\n", err, errno))
+ 		return;
+ 
+-	/* Get the ID for the sched/sched_switch tracepoint */
+-	snprintf(buf, sizeof(buf),
+-		 "/sys/kernel/debug/tracing/events/sched/sched_switch/id");
+-	efd = open(buf, O_RDONLY, 0);
+-	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
++	prog = bpf_object__find_program_by_title(obj, prog_name);
++	if (CHECK(!prog, "find_prog", "prog '%s' not found\n", prog_name))
+ 		goto close_prog;
+ 
+-	bytes = read(efd, buf, sizeof(buf));
+-	close(efd);
+-	if (bytes <= 0 || bytes >= sizeof(buf))
++	link = bpf_program__attach_tracepoint(prog, "sched", "sched_switch");
++	if (CHECK(IS_ERR(link), "attach_tp", "err %ld\n", PTR_ERR(link)))
+ 		goto close_prog;
+ 
+-	/* Open the perf event and attach bpf progrram */
+-	attr.config = strtol(buf, NULL, 0);
+-	attr.type = PERF_TYPE_TRACEPOINT;
+-	attr.sample_type = PERF_SAMPLE_RAW | PERF_SAMPLE_CALLCHAIN;
+-	attr.sample_period = 1;
+-	attr.wakeup_events = 1;
+-	pmu_fd = syscall(__NR_perf_event_open, &attr, -1 /* pid */,
+-			 0 /* cpu 0 */, -1 /* group id */,
+-			 0 /* flags */);
+-	if (CHECK(pmu_fd < 0, "perf_event_open", "err %d errno %d\n",
+-		  pmu_fd, errno))
+-		goto close_prog;
 -
+-	err = ioctl(pmu_fd, PERF_EVENT_IOC_ENABLE, 0);
+-	if (err)
+-		goto disable_pmu;
+-
+-	err = ioctl(pmu_fd, PERF_EVENT_IOC_SET_BPF, prog_fd);
+-	if (err)
+-		goto disable_pmu;
+-
+ 	/* find map fds */
+ 	control_map_fd = bpf_find_map(__func__, obj, "control_map");
+ 	if (control_map_fd < 0)
+@@ -96,8 +72,7 @@ void test_stacktrace_map(void)
+ disable_pmu:
+ 	error_cnt++;
+ disable_pmu_noerr:
+-	ioctl(pmu_fd, PERF_EVENT_IOC_DISABLE);
+-	close(pmu_fd);
 +	bpf_link__destroy(link);
  close_prog:
+ 	bpf_object__close(obj);
+ }
+diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_map_raw_tp.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_map_raw_tp.c
+index 1f8387d80fd7..fbfa8e76cf63 100644
+--- a/tools/testing/selftests/bpf/prog_tests/stacktrace_map_raw_tp.c
++++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_map_raw_tp.c
+@@ -3,18 +3,25 @@
+ 
+ void test_stacktrace_map_raw_tp(void)
+ {
++	const char *prog_name = "tracepoint/sched/sched_switch";
+ 	int control_map_fd, stackid_hmap_fd, stackmap_fd;
+ 	const char *file = "./test_stacktrace_map.o";
+-	int efd, err, prog_fd;
+ 	__u32 key, val, duration = 0;
++	int err, prog_fd;
++	struct bpf_program *prog;
+ 	struct bpf_object *obj;
++	struct bpf_link *link = NULL;
+ 
+ 	err = bpf_prog_load(file, BPF_PROG_TYPE_RAW_TRACEPOINT, &obj, &prog_fd);
+ 	if (CHECK(err, "prog_load raw tp", "err %d errno %d\n", err, errno))
+ 		return;
+ 
+-	efd = bpf_raw_tracepoint_open("sched_switch", prog_fd);
+-	if (CHECK(efd < 0, "raw_tp_open", "err %d errno %d\n", efd, errno))
++	prog = bpf_object__find_program_by_title(obj, prog_name);
++	if (CHECK(!prog, "find_prog", "prog '%s' not found\n", prog_name))
++		goto close_prog;
++
++	link = bpf_program__attach_raw_tracepoint(prog, "sched_switch");
++	if (CHECK(IS_ERR(link), "attach_raw_tp", "err %ld\n", PTR_ERR(link)))
+ 		goto close_prog;
+ 
+ 	/* find map fds */
+@@ -55,5 +62,7 @@ void test_stacktrace_map_raw_tp(void)
+ close_prog:
+ 	error_cnt++;
+ close_prog_noerr:
++	if (!IS_ERR_OR_NULL(link))
++		bpf_link__destroy(link);
  	bpf_object__close(obj);
  }
 -- 
