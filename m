@@ -2,289 +2,572 @@ Return-Path: <SRS0=toPo=U4=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DEFDC4321A
-	for <bpf@archiver.kernel.org>; Sat, 29 Jun 2019 03:49:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23B54C4321A
+	for <bpf@archiver.kernel.org>; Sat, 29 Jun 2019 05:53:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6CE752075B
-	for <bpf@archiver.kernel.org>; Sat, 29 Jun 2019 03:49:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D8B2B2086D
+	for <bpf@archiver.kernel.org>; Sat, 29 Jun 2019 05:53:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="lnTbV5JZ"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Hb0sGutr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726907AbfF2Dte (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 28 Jun 2019 23:49:34 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:7520 "EHLO
+        id S1726775AbfF2FxS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 29 Jun 2019 01:53:18 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:30146 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726873AbfF2Dtd (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 28 Jun 2019 23:49:33 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5T3nWpE008394
-        for <bpf@vger.kernel.org>; Fri, 28 Jun 2019 20:49:32 -0700
+        by vger.kernel.org with ESMTP id S1726766AbfF2FxS (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 29 Jun 2019 01:53:18 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5T5rH00022988
+        for <bpf@vger.kernel.org>; Fri, 28 Jun 2019 22:53:17 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=UzzF3CAfAgTqr21sMe+zfyU5im8XcSsiuTTjWrHWttM=;
- b=lnTbV5JZVNtyArA+orQsImJR3Pgz3ihXrz2SkggB0FJBIYaO7tCecH+/tX9vsPQjUD8+
- 1KvhtRXxonAa63IJaOltmbCwjG1tP4Tm7h+5VkT+GNwcCgwlKcrKOFl+d7CkwVuxmqa9
- 1Xra1sQUkhX39cFODNdGCHEzMgFi5ITia9Q= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2tdsd0s5qf-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 28 Jun 2019 20:49:32 -0700
-Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Fri, 28 Jun 2019 20:49:26 -0700
+ content-type; s=facebook; bh=Z2DxznVsRgimNmcc4o9wSwdYfoY0Oi2Cb+VEz0qBsII=;
+ b=Hb0sGutrRMuE8TX4S4RnfcQqLgA3RrJbiPCcA+gwLQDl+9/g1z3OLKhEI/pBrJIoz48R
+ uz8TW0NOaAe56L/u8iRzqE4ZHa6P880B5Oyur4+gUq0+6Co579JNikKifKcOUyVB1Yre
+ 3cgb63WqfyOMQU1FZhy+ZxiuBaSh6upvTEQ= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2tduqv0vs1-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 28 Jun 2019 22:53:17 -0700
+Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Fri, 28 Jun 2019 22:53:15 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 21F33860E3E; Fri, 28 Jun 2019 20:49:26 -0700 (PDT)
+        id C23E686145A; Fri, 28 Jun 2019 22:53:13 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
-To:     <andrii.nakryiko@gmail.com>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <ast@fb.com>, <daniel@iogearbox.net>,
-        <kernel-team@fb.com>, <sdf@fomichev.me>, <songliubraving@fb.com>
+To:     <andrii.nakryiko@gmail.com>, <ast@fb.com>, <daniel@iogearbox.net>,
+        <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <kernel-team@fb.com>, <songliubraving@fb.com>
 CC:     Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v4 bpf-next 9/9] selftests/bpf: convert existing tracepoint tests to new APIs
-Date:   Fri, 28 Jun 2019 20:49:06 -0700
-Message-ID: <20190629034906.1209916-10-andriin@fb.com>
+Subject: [PATCH v3 bpf-next 1/4] libbpf: add perf buffer API
+Date:   Fri, 28 Jun 2019 22:53:06 -0700
+Message-ID: <20190629055309.1594755-2-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190629034906.1209916-1-andriin@fb.com>
-References: <20190629034906.1209916-1-andriin@fb.com>
+In-Reply-To: <20190629055309.1594755-1-andriin@fb.com>
+References: <20190629055309.1594755-1-andriin@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-29_02:,,
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-29_04:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
  mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906290044
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906290074
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Convert some existing tests that attach to tracepoints to use
-bpf_program__attach_tracepoint API instead.
+BPF_MAP_TYPE_PERF_EVENT_ARRAY map is often used to send data from BPF program
+to user space for additional processing. libbpf already has very low-level API
+to read single CPU perf buffer, bpf_perf_event_read_simple(), but it's hard to
+use and requires a lot of code to set everything up. This patch adds
+perf_buffer abstraction on top of it, abstracting setting up and polling
+per-CPU logic into simple and convenient API, similar to what BCC provides.
+
+perf_buffer__new() sets up per-CPU ring buffers and updates corresponding BPF
+map entries. It accepts two user-provided callbacks: one for handling raw
+samples and one for get notifications of lost samples due to buffer overflow.
+
+perf_buffer__new_raw() is similar, but provides more control over how
+perf events are set up (by accepting user-provided perf_event_attr), how
+they are handled (perf_event_header pointer is passed directly to
+user-provided callback), and on which CPUs ring buffers are created
+(it's possible to provide a list of CPUs and corresponding map keys to
+update). This API allows advanced users fuller control.
+
+perf_buffer__poll() is used to fetch ring buffer data across all CPUs,
+utilizing epoll instance.
+
+perf_buffer__free() does corresponding clean up and unsets FDs from BPF map.
+
+All APIs are not thread-safe. User should ensure proper locking/coordination if
+used in multi-threaded set up.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Reviewed-by: Stanislav Fomichev <sdf@google.com>
-Acked-by: Song Liu <songliubraving@fb.com>
 ---
- .../bpf/prog_tests/stacktrace_build_id.c      | 50 ++++---------------
- .../selftests/bpf/prog_tests/stacktrace_map.c | 43 ++++------------
- .../bpf/prog_tests/stacktrace_map_raw_tp.c    | 15 ++++--
- 3 files changed, 31 insertions(+), 77 deletions(-)
+ tools/lib/bpf/libbpf.c   | 366 +++++++++++++++++++++++++++++++++++++++
+ tools/lib/bpf/libbpf.h   |  49 ++++++
+ tools/lib/bpf/libbpf.map |   4 +
+ 3 files changed, 419 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
-index 3aab2b083c71..768883d838ea 100644
---- a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
-+++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
-@@ -4,11 +4,13 @@
- void test_stacktrace_build_id(void)
- {
- 	int control_map_fd, stackid_hmap_fd, stackmap_fd, stack_amap_fd;
-+	const char *prog_name = "tracepoint/random/urandom_read";
- 	const char *file = "./test_stacktrace_build_id.o";
--	int bytes, efd, err, pmu_fd, prog_fd, stack_trace_len;
--	struct perf_event_attr attr = {};
-+	int err, prog_fd, stack_trace_len;
- 	__u32 key, previous_key, val, duration = 0;
-+	struct bpf_program *prog;
- 	struct bpf_object *obj;
-+	struct bpf_link *link = NULL;
- 	char buf[256];
- 	int i, j;
- 	struct bpf_stack_build_id id_offs[PERF_MAX_STACK_DEPTH];
-@@ -20,42 +22,14 @@ void test_stacktrace_build_id(void)
- 	if (CHECK(err, "prog_load", "err %d errno %d\n", err, errno))
- 		goto out;
- 
--	/* Get the ID for the sched/sched_switch tracepoint */
--	snprintf(buf, sizeof(buf),
--		 "/sys/kernel/debug/tracing/events/random/urandom_read/id");
--	efd = open(buf, O_RDONLY, 0);
--	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
-+	prog = bpf_object__find_program_by_title(obj, prog_name);
-+	if (CHECK(!prog, "find_prog", "prog '%s' not found\n", prog_name))
- 		goto close_prog;
- 
--	bytes = read(efd, buf, sizeof(buf));
--	close(efd);
--	if (CHECK(bytes <= 0 || bytes >= sizeof(buf),
--		  "read", "bytes %d errno %d\n", bytes, errno))
-+	link = bpf_program__attach_tracepoint(prog, "random", "urandom_read");
-+	if (CHECK(IS_ERR(link), "attach_tp", "err %ld\n", PTR_ERR(link)))
- 		goto close_prog;
- 
--	/* Open the perf event and attach bpf progrram */
--	attr.config = strtol(buf, NULL, 0);
--	attr.type = PERF_TYPE_TRACEPOINT;
--	attr.sample_type = PERF_SAMPLE_RAW | PERF_SAMPLE_CALLCHAIN;
--	attr.sample_period = 1;
--	attr.wakeup_events = 1;
--	pmu_fd = syscall(__NR_perf_event_open, &attr, -1 /* pid */,
--			 0 /* cpu 0 */, -1 /* group id */,
--			 0 /* flags */);
--	if (CHECK(pmu_fd < 0, "perf_event_open", "err %d errno %d\n",
--		  pmu_fd, errno))
--		goto close_prog;
--
--	err = ioctl(pmu_fd, PERF_EVENT_IOC_ENABLE, 0);
--	if (CHECK(err, "perf_event_ioc_enable", "err %d errno %d\n",
--		  err, errno))
--		goto close_pmu;
--
--	err = ioctl(pmu_fd, PERF_EVENT_IOC_SET_BPF, prog_fd);
--	if (CHECK(err, "perf_event_ioc_set_bpf", "err %d errno %d\n",
--		  err, errno))
--		goto disable_pmu;
--
- 	/* find map fds */
- 	control_map_fd = bpf_find_map(__func__, obj, "control_map");
- 	if (CHECK(control_map_fd < 0, "bpf_find_map control_map",
-@@ -133,8 +107,7 @@ void test_stacktrace_build_id(void)
- 	 * try it one more time.
- 	 */
- 	if (build_id_matches < 1 && retry--) {
--		ioctl(pmu_fd, PERF_EVENT_IOC_DISABLE);
--		close(pmu_fd);
-+		bpf_link__destroy(link);
- 		bpf_object__close(obj);
- 		printf("%s:WARN:Didn't find expected build ID from the map, retrying\n",
- 		       __func__);
-@@ -152,10 +125,7 @@ void test_stacktrace_build_id(void)
- 	      "err %d errno %d\n", err, errno);
- 
- disable_pmu:
--	ioctl(pmu_fd, PERF_EVENT_IOC_DISABLE);
--
--close_pmu:
--	close(pmu_fd);
-+	bpf_link__destroy(link);
- 
- close_prog:
- 	bpf_object__close(obj);
-diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_map.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_map.c
-index 2bfd50a0d6d1..fc539335c5b3 100644
---- a/tools/testing/selftests/bpf/prog_tests/stacktrace_map.c
-+++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_map.c
-@@ -4,50 +4,26 @@
- void test_stacktrace_map(void)
- {
- 	int control_map_fd, stackid_hmap_fd, stackmap_fd, stack_amap_fd;
-+	const char *prog_name = "tracepoint/sched/sched_switch";
-+	int err, prog_fd, stack_trace_len;
- 	const char *file = "./test_stacktrace_map.o";
--	int bytes, efd, err, pmu_fd, prog_fd, stack_trace_len;
--	struct perf_event_attr attr = {};
- 	__u32 key, val, duration = 0;
-+	struct bpf_program *prog;
- 	struct bpf_object *obj;
--	char buf[256];
-+	struct bpf_link *link;
- 
- 	err = bpf_prog_load(file, BPF_PROG_TYPE_TRACEPOINT, &obj, &prog_fd);
- 	if (CHECK(err, "prog_load", "err %d errno %d\n", err, errno))
- 		return;
- 
--	/* Get the ID for the sched/sched_switch tracepoint */
--	snprintf(buf, sizeof(buf),
--		 "/sys/kernel/debug/tracing/events/sched/sched_switch/id");
--	efd = open(buf, O_RDONLY, 0);
--	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
-+	prog = bpf_object__find_program_by_title(obj, prog_name);
-+	if (CHECK(!prog, "find_prog", "prog '%s' not found\n", prog_name))
- 		goto close_prog;
- 
--	bytes = read(efd, buf, sizeof(buf));
--	close(efd);
--	if (bytes <= 0 || bytes >= sizeof(buf))
-+	link = bpf_program__attach_tracepoint(prog, "sched", "sched_switch");
-+	if (CHECK(IS_ERR(link), "attach_tp", "err %ld\n", PTR_ERR(link)))
- 		goto close_prog;
- 
--	/* Open the perf event and attach bpf progrram */
--	attr.config = strtol(buf, NULL, 0);
--	attr.type = PERF_TYPE_TRACEPOINT;
--	attr.sample_type = PERF_SAMPLE_RAW | PERF_SAMPLE_CALLCHAIN;
--	attr.sample_period = 1;
--	attr.wakeup_events = 1;
--	pmu_fd = syscall(__NR_perf_event_open, &attr, -1 /* pid */,
--			 0 /* cpu 0 */, -1 /* group id */,
--			 0 /* flags */);
--	if (CHECK(pmu_fd < 0, "perf_event_open", "err %d errno %d\n",
--		  pmu_fd, errno))
--		goto close_prog;
--
--	err = ioctl(pmu_fd, PERF_EVENT_IOC_ENABLE, 0);
--	if (err)
--		goto disable_pmu;
--
--	err = ioctl(pmu_fd, PERF_EVENT_IOC_SET_BPF, prog_fd);
--	if (err)
--		goto disable_pmu;
--
- 	/* find map fds */
- 	control_map_fd = bpf_find_map(__func__, obj, "control_map");
- 	if (control_map_fd < 0)
-@@ -96,8 +72,7 @@ void test_stacktrace_map(void)
- disable_pmu:
- 	error_cnt++;
- disable_pmu_noerr:
--	ioctl(pmu_fd, PERF_EVENT_IOC_DISABLE);
--	close(pmu_fd);
-+	bpf_link__destroy(link);
- close_prog:
- 	bpf_object__close(obj);
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index f8c7a7ecb35e..e2bf3eedd0ae 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -32,7 +32,9 @@
+ #include <linux/limits.h>
+ #include <linux/perf_event.h>
+ #include <linux/ring_buffer.h>
++#include <sys/epoll.h>
+ #include <sys/ioctl.h>
++#include <sys/mman.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ #include <sys/vfs.h>
+@@ -4348,6 +4350,370 @@ bpf_perf_event_read_simple(void *mmap_mem, size_t mmap_size, size_t page_size,
+ 	return ret;
  }
-diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_map_raw_tp.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_map_raw_tp.c
-index 1f8387d80fd7..fbfa8e76cf63 100644
---- a/tools/testing/selftests/bpf/prog_tests/stacktrace_map_raw_tp.c
-+++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_map_raw_tp.c
-@@ -3,18 +3,25 @@
  
- void test_stacktrace_map_raw_tp(void)
- {
-+	const char *prog_name = "tracepoint/sched/sched_switch";
- 	int control_map_fd, stackid_hmap_fd, stackmap_fd;
- 	const char *file = "./test_stacktrace_map.o";
--	int efd, err, prog_fd;
- 	__u32 key, val, duration = 0;
-+	int err, prog_fd;
-+	struct bpf_program *prog;
- 	struct bpf_object *obj;
-+	struct bpf_link *link = NULL;
- 
- 	err = bpf_prog_load(file, BPF_PROG_TYPE_RAW_TRACEPOINT, &obj, &prog_fd);
- 	if (CHECK(err, "prog_load raw tp", "err %d errno %d\n", err, errno))
- 		return;
- 
--	efd = bpf_raw_tracepoint_open("sched_switch", prog_fd);
--	if (CHECK(efd < 0, "raw_tp_open", "err %d errno %d\n", efd, errno))
-+	prog = bpf_object__find_program_by_title(obj, prog_name);
-+	if (CHECK(!prog, "find_prog", "prog '%s' not found\n", prog_name))
-+		goto close_prog;
++struct perf_buffer;
 +
-+	link = bpf_program__attach_raw_tracepoint(prog, "sched_switch");
-+	if (CHECK(IS_ERR(link), "attach_raw_tp", "err %ld\n", PTR_ERR(link)))
- 		goto close_prog;
++struct perf_buffer_params {
++	struct perf_event_attr *attr;
++	/* if event_cb is specified, it takes precendence */
++	perf_buffer_event_fn event_cb;
++	/* sample_cb and lost_cb are higher-level common-case callbacks */
++	perf_buffer_sample_fn sample_cb;
++	perf_buffer_lost_fn lost_cb;
++	void *ctx;
++	int cpu_cnt;
++	int *cpus;
++	int *map_keys;
++};
++
++struct perf_cpu_buf {
++	struct perf_buffer *pb;
++	void *base; /* mmap()'ed memory */
++	void *buf; /* for reconstructing segmented data */
++	size_t buf_size;
++	int fd;
++	int cpu;
++	int map_key;
++};
++
++struct perf_buffer {
++	perf_buffer_event_fn event_cb;
++	perf_buffer_sample_fn sample_cb;
++	perf_buffer_lost_fn lost_cb;
++	void *ctx; /* passed into callbacks */
++
++	size_t page_size;
++	size_t mmap_size;
++	struct perf_cpu_buf **cpu_bufs;
++	struct epoll_event *events;
++	int cpu_cnt;
++	int epoll_fd; /* perf event FD */
++	int map_fd; /* BPF_MAP_TYPE_PERF_EVENT_ARRAY BPF map FD */
++};
++
++static void perf_buffer__free_cpu_buf(struct perf_buffer *pb,
++				      struct perf_cpu_buf *cpu_buf)
++{
++	if (!cpu_buf)
++		return;
++	if (cpu_buf->base &&
++	    munmap(cpu_buf->base, pb->mmap_size + pb->page_size))
++		pr_warning("failed to munmap cpu_buf #%d\n", cpu_buf->cpu);
++	if (cpu_buf->fd >= 0) {
++		ioctl(cpu_buf->fd, PERF_EVENT_IOC_DISABLE, 0);
++		close(cpu_buf->fd);
++	}
++	free(cpu_buf->buf);
++	free(cpu_buf);
++}
++
++void perf_buffer__free(struct perf_buffer *pb)
++{
++	int i;
++
++	if (!pb)
++		return;
++	if (pb->cpu_bufs) {
++		for (i = 0; i < pb->cpu_cnt && pb->cpu_bufs[i]; i++) {
++			struct perf_cpu_buf *cpu_buf = pb->cpu_bufs[i];
++
++			bpf_map_delete_elem(pb->map_fd, &cpu_buf->map_key);
++			perf_buffer__free_cpu_buf(pb, cpu_buf);
++		}
++		free(pb->cpu_bufs);
++	}
++	if (pb->epoll_fd >= 0)
++		close(pb->epoll_fd);
++	free(pb->events);
++	free(pb);
++}
++
++static struct perf_cpu_buf *
++perf_buffer__open_cpu_buf(struct perf_buffer *pb, struct perf_event_attr *attr,
++			  int cpu, int map_key)
++{
++	struct perf_cpu_buf *cpu_buf;
++	char msg[STRERR_BUFSIZE];
++	int err;
++
++	cpu_buf = calloc(1, sizeof(*cpu_buf));
++	if (!cpu_buf)
++		return ERR_PTR(-ENOMEM);
++
++	cpu_buf->pb = pb;
++	cpu_buf->cpu = cpu;
++	cpu_buf->map_key = map_key;
++
++	cpu_buf->fd = syscall(__NR_perf_event_open, attr, -1 /* pid */, cpu,
++			      -1, PERF_FLAG_FD_CLOEXEC);
++	if (cpu_buf->fd < 0) {
++		err = -errno;
++		pr_warning("failed to open perf buffer event on cpu #%d: %s\n",
++			   cpu, libbpf_strerror_r(err, msg, sizeof(msg)));
++		goto error;
++	}
++
++	cpu_buf->base = mmap(NULL, pb->mmap_size + pb->page_size,
++			     PROT_READ | PROT_WRITE, MAP_SHARED,
++			     cpu_buf->fd, 0);
++	if (cpu_buf->base == MAP_FAILED) {
++		cpu_buf->base = NULL;
++		err = -errno;
++		pr_warning("failed to mmap perf buffer on cpu #%d: %s\n",
++			   cpu, libbpf_strerror_r(err, msg, sizeof(msg)));
++		goto error;
++	}
++
++	if (ioctl(cpu_buf->fd, PERF_EVENT_IOC_ENABLE, 0) < 0) {
++		err = -errno;
++		pr_warning("failed to enable perf buffer event on cpu #%d: %s\n",
++			   cpu, libbpf_strerror_r(err, msg, sizeof(msg)));
++		goto error;
++	}
++
++	return cpu_buf;
++
++error:
++	perf_buffer__free_cpu_buf(pb, cpu_buf);
++	return (struct perf_cpu_buf *)ERR_PTR(err);
++}
++
++static struct perf_buffer *__perf_buffer__new(int map_fd, size_t page_cnt,
++					      struct perf_buffer_params *p);
++
++struct perf_buffer *perf_buffer__new(int map_fd, size_t page_cnt,
++				     const struct perf_buffer_opts *opts)
++{
++	struct perf_buffer_params p = {};
++	struct perf_event_attr attr = {
++		.config = PERF_COUNT_SW_BPF_OUTPUT,
++		.type = PERF_TYPE_SOFTWARE,
++		.sample_type = PERF_SAMPLE_RAW,
++		.sample_period = 1,
++		.wakeup_events = 1,
++	};
++
++	p.attr = &attr;
++	p.sample_cb = opts ? opts->sample_cb : NULL;
++	p.lost_cb = opts ? opts->lost_cb : NULL;
++	p.ctx = opts ? opts->ctx : NULL;
++
++	return __perf_buffer__new(map_fd, page_cnt, &p);
++}
++
++struct perf_buffer *
++perf_buffer__new_raw(int map_fd, size_t page_cnt,
++		     const struct perf_buffer_raw_opts *opts)
++{
++	struct perf_buffer_params p = {};
++
++	p.attr = opts->attr;
++	p.event_cb = opts->event_cb;
++	p.ctx = opts->ctx;
++	p.cpu_cnt = opts->cpu_cnt;
++	p.cpus = opts->cpus;
++	p.map_keys = opts->map_keys;
++
++	return __perf_buffer__new(map_fd, page_cnt, &p);
++}
++
++static struct perf_buffer *__perf_buffer__new(int map_fd, size_t page_cnt,
++					      struct perf_buffer_params *p)
++{
++	struct bpf_map_info map = {};
++	char msg[STRERR_BUFSIZE];
++	struct perf_buffer *pb;
++	__u32 map_info_len;
++	int err, i;
++
++	if (page_cnt & (page_cnt - 1)) {
++		pr_warning("page count should be power of two, but is %zu\n",
++			   page_cnt);
++		return ERR_PTR(-EINVAL);
++	}
++
++	map_info_len = sizeof(map);
++	err = bpf_obj_get_info_by_fd(map_fd, &map, &map_info_len);
++	if (err) {
++		err = -errno;
++		pr_warning("failed to get map info for map FD %d: %s\n",
++			   map_fd, libbpf_strerror_r(err, msg, sizeof(msg)));
++		return ERR_PTR(err);
++	}
++
++	if (map.type != BPF_MAP_TYPE_PERF_EVENT_ARRAY) {
++		pr_warning("map '%s' should be BPF_MAP_TYPE_PERF_EVENT_ARRAY\n",
++			   map.name);
++		return ERR_PTR(-EINVAL);
++	}
++
++	pb = calloc(1, sizeof(*pb));
++	if (!pb)
++		return ERR_PTR(-ENOMEM);
++
++	pb->event_cb = p->event_cb;
++	pb->sample_cb = p->sample_cb;
++	pb->lost_cb = p->lost_cb;
++	pb->ctx = p->ctx;
++
++	pb->page_size = getpagesize();
++	pb->mmap_size = pb->page_size * page_cnt;
++	pb->map_fd = map_fd;
++
++	pb->epoll_fd = epoll_create1(EPOLL_CLOEXEC);
++	if (pb->epoll_fd < 0) {
++		err = -errno;
++		pr_warning("failed to create epoll instance: %s\n",
++			   libbpf_strerror_r(err, msg, sizeof(msg)));
++		goto error;
++	}
++
++	if (p->cpu_cnt > 0) {
++		pb->cpu_cnt = p->cpu_cnt;
++	} else {
++		pb->cpu_cnt = libbpf_num_possible_cpus();
++		if (pb->cpu_cnt < 0) {
++			err = pb->cpu_cnt;
++			goto error;
++		}
++		if (map.max_entries < pb->cpu_cnt)
++			pb->cpu_cnt = map.max_entries;
++	}
++
++	pb->events = calloc(pb->cpu_cnt, sizeof(*pb->events));
++	if (!pb->events) {
++		err = -ENOMEM;
++		pr_warning("failed to allocate events: out of memory\n");
++		goto error;
++	}
++	pb->cpu_bufs = calloc(pb->cpu_cnt, sizeof(*pb->cpu_bufs));
++	if (!pb->cpu_bufs) {
++		err = -ENOMEM;
++		pr_warning("failed to allocate buffers: out of memory\n");
++		goto error;
++	}
++
++	for (i = 0; i < pb->cpu_cnt; i++) {
++		struct perf_cpu_buf *cpu_buf;
++		int cpu, map_key;
++
++		cpu = p->cpu_cnt > 0 ? p->cpus[i] : i;
++		map_key = p->cpu_cnt > 0 ? p->map_keys[i] : i;
++
++		cpu_buf = perf_buffer__open_cpu_buf(pb, p->attr, cpu, map_key);
++		if (IS_ERR(cpu_buf)) {
++			err = PTR_ERR(cpu_buf);
++			goto error;
++		}
++
++		pb->cpu_bufs[i] = cpu_buf;
++
++		err = bpf_map_update_elem(pb->map_fd, &map_key,
++					  &cpu_buf->fd, 0);
++		if (err) {
++			err = -errno;
++			pr_warning("failed to set cpu #%d, key %d -> perf FD %d: %s\n",
++				   cpu, map_key, cpu_buf->fd,
++				   libbpf_strerror_r(err, msg, sizeof(msg)));
++			goto error;
++		}
++
++		pb->events[i].events = EPOLLIN;
++		pb->events[i].data.ptr = cpu_buf;
++		if (epoll_ctl(pb->epoll_fd, EPOLL_CTL_ADD, cpu_buf->fd,
++			      &pb->events[i]) < 0) {
++			err = -errno;
++			pr_warning("failed to epoll_ctl cpu #%d perf FD %d: %s\n",
++				   cpu, cpu_buf->fd,
++				   libbpf_strerror_r(err, msg, sizeof(msg)));
++			goto error;
++		}
++	}
++
++	return pb;
++
++error:
++	if (pb)
++		perf_buffer__free(pb);
++	return ERR_PTR(err);
++}
++
++struct perf_sample_raw {
++	struct perf_event_header header;
++	uint32_t size;
++	char data[0];
++};
++
++struct perf_sample_lost {
++	struct perf_event_header header;
++	uint64_t id;
++	uint64_t lost;
++	uint64_t sample_id;
++};
++
++static enum bpf_perf_event_ret
++perf_buffer__process_record(struct perf_event_header *e, void *ctx)
++{
++	struct perf_cpu_buf *cpu_buf = ctx;
++	struct perf_buffer *pb = cpu_buf->pb;
++	void *data = e;
++
++	/* user wants full control over parsing perf event */
++	if (pb->event_cb)
++		return pb->event_cb(pb->ctx, cpu_buf->cpu, e);
++
++	switch (e->type) {
++	case PERF_RECORD_SAMPLE: {
++		struct perf_sample_raw *s = data;
++
++		if (pb->sample_cb)
++			pb->sample_cb(pb->ctx, cpu_buf->cpu, s->data, s->size);
++		break;
++	}
++	case PERF_RECORD_LOST: {
++		struct perf_sample_lost *s = data;
++
++		if (pb->lost_cb)
++			pb->lost_cb(pb->ctx, cpu_buf->cpu, s->lost);
++		break;
++	}
++	default:
++		pr_warning("unknown perf sample type %d\n", e->type);
++		return LIBBPF_PERF_EVENT_ERROR;
++	}
++	return LIBBPF_PERF_EVENT_CONT;
++}
++
++static int perf_buffer__process_records(struct perf_buffer *pb,
++					struct perf_cpu_buf *cpu_buf)
++{
++	enum bpf_perf_event_ret ret;
++
++	ret = bpf_perf_event_read_simple(cpu_buf->base, pb->mmap_size,
++					 pb->page_size, &cpu_buf->buf,
++					 &cpu_buf->buf_size,
++					 perf_buffer__process_record, cpu_buf);
++	if (ret != LIBBPF_PERF_EVENT_CONT)
++		return ret;
++	return 0;
++}
++
++int perf_buffer__poll(struct perf_buffer *pb, int timeout_ms)
++{
++	int cnt, err;
++
++	cnt = epoll_wait(pb->epoll_fd, pb->events, pb->cpu_cnt, timeout_ms);
++	for (int i = 0; i < cnt; i++) {
++		struct perf_cpu_buf *cpu_buf = pb->events[i].data.ptr;
++
++		err = perf_buffer__process_records(pb, cpu_buf);
++		if (err) {
++			pr_warning("error while processing records: %d\n", err);
++			return err;
++		}
++	}
++	return cnt < 0 ? -errno : cnt;
++}
++
+ struct bpf_prog_info_array_desc {
+ 	int	array_offset;	/* e.g. offset of jited_prog_insns */
+ 	int	count_offset;	/* e.g. offset of jited_prog_len */
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index f55933784f95..5cbf459ece0b 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -358,6 +358,26 @@ LIBBPF_API int bpf_prog_load(const char *file, enum bpf_prog_type type,
+ LIBBPF_API int bpf_set_link_xdp_fd(int ifindex, int fd, __u32 flags);
+ LIBBPF_API int bpf_get_link_xdp_id(int ifindex, __u32 *prog_id, __u32 flags);
  
- 	/* find map fds */
-@@ -55,5 +62,7 @@ void test_stacktrace_map_raw_tp(void)
- close_prog:
- 	error_cnt++;
- close_prog_noerr:
-+	if (!IS_ERR_OR_NULL(link))
-+		bpf_link__destroy(link);
- 	bpf_object__close(obj);
- }
++struct perf_buffer;
++
++typedef void (*perf_buffer_sample_fn)(void *ctx, int cpu,
++				      void *data, __u32 size);
++typedef void (*perf_buffer_lost_fn)(void *ctx, int cpu, __u64 cnt);
++
++/* common use perf buffer options */
++struct perf_buffer_opts {
++	/* if specified, sample_cb is called for each sample */
++	perf_buffer_sample_fn sample_cb;
++	/* if specified, lost_cb is called for each batch of lost samples */
++	perf_buffer_lost_fn lost_cb;
++	/* ctx is provided to sample_cb and lost_cb */
++	void *ctx;
++};
++
++LIBBPF_API struct perf_buffer *
++perf_buffer__new(int map_fd, size_t page_cnt,
++		 const struct perf_buffer_opts *opts);
++
+ enum bpf_perf_event_ret {
+ 	LIBBPF_PERF_EVENT_DONE	= 0,
+ 	LIBBPF_PERF_EVENT_ERROR	= -1,
+@@ -365,6 +385,35 @@ enum bpf_perf_event_ret {
+ };
+ 
+ struct perf_event_header;
++
++typedef enum bpf_perf_event_ret
++(*perf_buffer_event_fn)(void *ctx, int cpu, struct perf_event_header *event);
++
++/* raw perf buffer options, giving most power and control */
++struct perf_buffer_raw_opts {
++	/* perf event attrs passed directly into perf_event_open() */
++	struct perf_event_attr *attr;
++	/* raw event callback */
++	perf_buffer_event_fn event_cb;
++	/* ctx is provided to event_cb */
++	void *ctx;
++	/* if cpu_cnt == 0, open all on all possible CPUs (up to the number of
++	 * max_entries of given PERF_EVENT_ARRAY map)
++	 */
++	int cpu_cnt;
++	/* if cpu_cnt > 0, cpus is an array of CPUs to open ring buffers on */
++	int *cpus;
++	/* if cpu_cnt > 0, map_keys specify map keys to set per-CPU FDs for */
++	int *map_keys;
++};
++
++LIBBPF_API struct perf_buffer *
++perf_buffer__new_raw(int map_fd, size_t page_cnt,
++		     const struct perf_buffer_raw_opts *opts);
++
++LIBBPF_API void perf_buffer__free(struct perf_buffer *pb);
++LIBBPF_API int perf_buffer__poll(struct perf_buffer *pb, int timeout_ms);
++
+ typedef enum bpf_perf_event_ret
+ 	(*bpf_perf_event_print_t)(struct perf_event_header *hdr,
+ 				  void *private_data);
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index e6b7d4edbc93..f9d316e873d8 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -179,4 +179,8 @@ LIBBPF_0.0.4 {
+ 		btf_dump__new;
+ 		btf__parse_elf;
+ 		libbpf_num_possible_cpus;
++		perf_buffer__free;
++		perf_buffer__new;
++		perf_buffer__new_raw;
++		perf_buffer__poll;
+ } LIBBPF_0.0.3;
 -- 
 2.17.1
 
