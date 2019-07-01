@@ -1,166 +1,106 @@
-Return-Path: <SRS0=+nq3=U5=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=ay3l=U6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E0FFC5B57E
-	for <bpf@archiver.kernel.org>; Sun, 30 Jun 2019 07:58:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85688C06508
+	for <bpf@archiver.kernel.org>; Mon,  1 Jul 2019 01:01:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3ADC9208C4
-	for <bpf@archiver.kernel.org>; Sun, 30 Jun 2019 07:58:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 546CD212F5
+	for <bpf@archiver.kernel.org>; Mon,  1 Jul 2019 01:01:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nifty.com header.i=@nifty.com header.b="zUawODtU"
+	dkim=pass (2048-bit key) header.d=nifty.com header.i=@nifty.com header.b="ggO1KhAu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726531AbfF3H6Z (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 30 Jun 2019 03:58:25 -0400
-Received: from conssluserg-02.nifty.com ([210.131.2.81]:19799 "EHLO
-        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725959AbfF3H6Z (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 30 Jun 2019 03:58:25 -0400
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id x5U7vxPV023007;
-        Sun, 30 Jun 2019 16:58:00 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com x5U7vxPV023007
+        id S1726563AbfGABA6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 30 Jun 2019 21:00:58 -0400
+Received: from conuserg-12.nifty.com ([210.131.2.79]:61398 "EHLO
+        conuserg-12.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726040AbfGABA6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 30 Jun 2019 21:00:58 -0400
+Received: from grover.flets-west.jp (softbank126125154139.bbtec.net [126.125.154.139]) (authenticated)
+        by conuserg-12.nifty.com with ESMTP id x610x4fs000634;
+        Mon, 1 Jul 2019 09:59:06 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com x610x4fs000634
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1561881480;
-        bh=+9brw8RpKfPCHLaNnVG0ALKGMwnUyxhWFifAcm1Jy9A=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=zUawODtU0vhTiPl5qaNgEo9ByKy2yYb9HTAWd7jH5/KmRFRbCTqDf1r2buPkH6eY7
-         9KWkOkbCmnK9rkMatOmM0itxGnwHB/mMPuqRIjog1NzLgK//i1B3cXHhcTtE4pC6OU
-         VNXerozMf6mNDQ2YuNycgdEq1clJ5Ax3fRXt2Pykx7Eg5zzgtutbB8rwb3gug/dYXr
-         O98/bPfya6esIc3ETSzeD3199w5ae4W/Lwcu2gAXFoPoyufabN5ofgPBt7+mBFPuRl
-         yTH6VnFiqBpTquzJOkRU+fykLB1M8/iymSMC+5w1Mo4YIFRRu6hO3v+dQXWv3IKe2k
-         Skm8IrMNwnxoQ==
-X-Nifty-SrcIP: [209.85.222.49]
-Received: by mail-ua1-f49.google.com with SMTP id z13so3851870uaa.4;
-        Sun, 30 Jun 2019 00:58:00 -0700 (PDT)
-X-Gm-Message-State: APjAAAWysMbNscscgdcwsu+dZATRmuJuaguufvScETMbNbgnIXct6t2m
-        LqZIl0OYZjwAjoaIWjYoBL6cZFfUIYYY90xpG9I=
-X-Google-Smtp-Source: APXvYqzyVZpInW2H6+hLd4o8U+kv7ZbqLoJ5DBzo4XhAbsuYuwZv3Nes7LIrEN98cU8HrIW65l38Jgqlp5UdZQn0x3E=
-X-Received: by 2002:a9f:25e9:: with SMTP id 96mr10993006uaf.95.1561881479132;
- Sun, 30 Jun 2019 00:57:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190627163903.28398-1-yamada.masahiro@socionext.com>
- <20190627163903.28398-5-yamada.masahiro@socionext.com> <20190628180057.GA22758@ravnborg.org>
-In-Reply-To: <20190628180057.GA22758@ravnborg.org>
+        s=dec2015msa; t=1561942747;
+        bh=oooXViC9T86N1kehUCLZdnfYF06+I/OFxyRd+VRUuLY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ggO1KhAuF+Nehk+KyS4QRMj0B08P+J7jfF5cmz0EDGcz93utHNiduH2qvMY9Yto6q
+         8/8ceCQiq04MtWkng9ByWDTZzTQAdwv1azeeA9+fDDsAkPRmxhIdUzNDLOwLt0pgqw
+         OeIYQh9Hh1HBHgW2VrPzEQNXTAsN/qGX5sYXWUSVJuL66Xpe4D3w1tpS1HgzmTgLxV
+         7ZBfSW3v7jSdkeYemHkv/P2vDOdZhI1j8QXqbvz2Z4Uc1W/YQ4S7WHuYXLjZH1XLOn
+         mGU2UgfjiOCMsbAbahCqhQjLY55blB0RGnxiuotFQKfK68tOhGR+ftVWS+kQSLQ8Pw
+         jB+D0zrHWlh4g==
+X-Nifty-SrcIP: [126.125.154.139]
 From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Sun, 30 Jun 2019 16:57:23 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQDqtm5F_JoPAjPOuf6s3d0F1=Ctyq6s0u2DWNpbFr5vg@mail.gmail.com>
-Message-ID: <CAK7LNAQDqtm5F_JoPAjPOuf6s3d0F1=Ctyq6s0u2DWNpbFr5vg@mail.gmail.com>
-Subject: Re: [PATCH v3 4/4] kbuild: compile-test kernel headers to ensure they
- are self-contained
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        xdp-newbies@vger.kernel.org, Anton Vorontsov <anton@enomsg.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Colin Cross <ccross@android.com>,
+To:     linux-kbuild@vger.kernel.org
+Cc:     Sam Ravnborg <sam@ravnborg.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Song Liu <songliubraving@fb.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Alexei Starovoitov <ast@kernel.org>, netdev@vger.kernel.org,
+        Yonghong Song <yhs@fb.com>, linux-kernel@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>, bpf@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH 1/7] init/Kconfig: add CONFIG_CC_CAN_LINK
+Date:   Mon,  1 Jul 2019 09:58:39 +0900
+Message-Id: <20190701005845.12475-2-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190701005845.12475-1-yamada.masahiro@socionext.com>
+References: <20190701005845.12475-1-yamada.masahiro@socionext.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Sam,
+Currently, scripts/cc-can-link.sh is run just for BPFILTER_UMH, but
+defining CC_CAN_LINK will be useful in other places.
 
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+---
 
-On Sat, Jun 29, 2019 at 3:01 AM Sam Ravnborg <sam@ravnborg.org> wrote:
->
-> Hi Masahiro.
->
-> On Fri, Jun 28, 2019 at 01:39:02AM +0900, Masahiro Yamada wrote:
-> > The headers in include/ are globally used in the kernel source tree
-> > to provide common APIs. They are included from external modules, too.
-> >
-> > It will be useful to make as many headers self-contained as possible
-> > so that we do not have to rely on a specific include order.
-> >
-> > There are more than 4000 headers in include/. In my rough analysis,
-> > 70% of them are already self-contained. With efforts, most of them
-> > can be self-contained.
-> >
-> > For now, we must exclude more than 1000 headers just because they
-> > cannot be compiled as standalone units. I added them to header-test-.
-> > The black list was mostly generated by a script, so should be checked
-> > later.
-> The list is smaller than I had expected.
-> And I see why you insisted on avoiding a maze ok Kbuild files.
-> It looks good, except there is a few issues..
->
->
-> The file kernel/kheaders_data.tar.xz includes all the .s files.
-> Something needs to be done to exclude the .s files...
+Changes in v4:
+ - New patch
 
-Good catch. I will change scripts/gen_kheaders.sh
+Changes in v3: None
+Changes in v2: None
 
+ init/Kconfig         | 3 +++
+ net/bpfilter/Kconfig | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-> When building a full kernel the build fails like this:
->   LD      vmlinux.o
-> aarch64-linux-gnu-ld: cannot find include/lib.a: No such file or directory
-> make[1]: *** [/home/sam/kernel/linux-kbuild.git/Makefile:1054: vmlinux] Error 1
-> make[1]: Leaving directory '/home/sam/kernel/linux-kbuild.git/.build/arm64-allyesconfig'
-> make: *** [Makefile:179: sub-make] Error 2
-
-My bad - I built only include/,
-without testing full build.
-
-I will fix.
-
-
->
-> include/uapi/linux/mman.h fails when building sparc64 allmodconfig.
-> There is likely more header files that will fail when we start to
-> throw this after diverse randconfigs.
-> I have no good idea how to catch this.
-> Unless your scripts could automate this across several architectures.
-
-Thanks. I excluded a little more headers.
-
-
-> I did not continue my testing futher.
->
-> > +header-test-                 += uapi/drm/vmwgfx_drm.h
-> > +header-test-                 += uapi/linux/a.out.h
-> > +header-test-                 += uapi/linux/coda.h
-> ...
-> > +header-test-                 += uapi/xen/evtchn.h
-> > +header-test-                 += uapi/xen/gntdev.h
-> > +header-test-                 += uapi/xen/privcmd.h
->
-> I though uapi files were covered by another Makefile?
-> If they are added because we pull them in using a pattern, maybe they
-> should be removed using a specific filer-out?
-
-I have not looked at this closely yet.
-
-usr/include/Makefile tests UAPI headers
-crafted by scripts/headers_install.sh
-
-Testing UAPI headers in their raw form
-makes sense, I think.
-
-
-
+diff --git a/init/Kconfig b/init/Kconfig
+index df5bba27e3fe..2e9813daa2c1 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -24,6 +24,9 @@ config CLANG_VERSION
+ 	int
+ 	default $(shell,$(srctree)/scripts/clang-version.sh $(CC))
+ 
++config CC_CAN_LINK
++	def_bool $(success,$(srctree)/scripts/cc-can-link.sh $(CC))
++
+ config CC_HAS_ASM_GOTO
+ 	def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
+ 
+diff --git a/net/bpfilter/Kconfig b/net/bpfilter/Kconfig
+index 91f9d878165e..fed9290e3b41 100644
+--- a/net/bpfilter/Kconfig
++++ b/net/bpfilter/Kconfig
+@@ -9,7 +9,7 @@ menuconfig BPFILTER
+ if BPFILTER
+ config BPFILTER_UMH
+ 	tristate "bpfilter kernel module with user mode helper"
+-	depends on $(success,$(srctree)/scripts/cc-can-link.sh $(CC))
++	depends on CC_CAN_LINK
+ 	default m
+ 	help
+ 	  This builds bpfilter kernel module with embedded user mode helper
 -- 
-Best Regards
-Masahiro Yamada
+2.17.1
+
