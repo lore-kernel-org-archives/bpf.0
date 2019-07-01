@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93E44C06510
-	for <bpf@archiver.kernel.org>; Mon,  1 Jul 2019 23:59:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96A40C5B578
+	for <bpf@archiver.kernel.org>; Mon,  1 Jul 2019 23:59:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5F79320B7C
-	for <bpf@archiver.kernel.org>; Mon,  1 Jul 2019 23:59:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6184F20B7C
+	for <bpf@archiver.kernel.org>; Mon,  1 Jul 2019 23:59:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="nxvxYYv+"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="QFPNLOHk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727010AbfGAX7P (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 Jul 2019 19:59:15 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:22412 "EHLO
+        id S1726811AbfGAX7R (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 Jul 2019 19:59:17 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:11968 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726811AbfGAX7M (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 1 Jul 2019 19:59:12 -0400
+        by vger.kernel.org with ESMTP id S1727013AbfGAX7Q (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 1 Jul 2019 19:59:16 -0400
 Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x61NsKEU022239
-        for <bpf@vger.kernel.org>; Mon, 1 Jul 2019 16:59:11 -0700
+        by m0089730.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x61NsJAI022199
+        for <bpf@vger.kernel.org>; Mon, 1 Jul 2019 16:59:14 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=pMX+miHg/FXXzAODDCj/BGEfoCw+qyLP7+NouH9NI9g=;
- b=nxvxYYv+sP/8h9KWk0nNpEJVv9W0cBBM0tJJ+M0zhZyB4gvmfalJFx/rHCc4O2pQpaOs
- VZ6CARB8737skyBFcZqssUHXIUSCCP/0KK5hgC3PxsOdvhfzPFh0oRw3rj5tGoUVENQY
- 9eZ0qi6s++INbmUvOkc5J0euSJH9cj6iSCI= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 2tfg1s2qcr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 01 Jul 2019 16:59:11 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Mon, 1 Jul 2019 16:59:10 -0700
+ content-type; s=facebook; bh=z9xTrkl9u5eKjkX321IhwdRq05abOct5L4I//pM3ppM=;
+ b=QFPNLOHkoX6LyONoBwiI33lSKGwfYE8otP5PEAZ8RfynrnzbdaWmwyk9z+CELvBMzYLO
+ WXVfWtyHGw00MNVS+7aWNYq6bQ9Eowj/wrlvnqx2LeKssCDWSBQP0jeTCe2kcrguHJvW
+ zA7fMWZlrmkyKCCTe29VHUGLtzO1/TiPoQ8= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by m0089730.ppops.net with ESMTP id 2tfg1s2qcw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 01 Jul 2019 16:59:14 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Mon, 1 Jul 2019 16:59:13 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id C563086149D; Mon,  1 Jul 2019 16:59:08 -0700 (PDT)
+        id E1FFC86149D; Mon,  1 Jul 2019 16:59:12 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,9 +48,9 @@ To:     <andrii.nakryiko@gmail.com>, <bpf@vger.kernel.org>,
         <kernel-team@fb.com>, <yhs@fb.com>
 CC:     Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v5 bpf-next 2/9] libbpf: introduce concept of bpf_link
-Date:   Mon, 1 Jul 2019 16:58:56 -0700
-Message-ID: <20190701235903.660141-3-andriin@fb.com>
+Subject: [PATCH v5 bpf-next 4/9] libbpf: add kprobe/uprobe attach API
+Date:   Mon, 1 Jul 2019 16:58:58 -0700
+Message-ID: <20190701235903.660141-5-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190701235903.660141-1-andriin@fb.com>
 References: <20190701235903.660141-1-andriin@fb.com>
@@ -70,85 +70,229 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-bpf_link is an abstraction of an association of a BPF program and one of
-many possible BPF attachment points (hooks). This allows to have uniform
-interface for detaching BPF programs regardless of the nature of link
-and how it was created. Details of creation and setting up of a specific
-bpf_link is handled by corresponding attachment methods
-(bpf_program__attach_xxx) added in subsequent commits. Once successfully
-created, bpf_link has to be eventually destroyed with
-bpf_link__destroy(), at which point BPF program is disassociated from
-a hook and all the relevant resources are freed.
+Add ability to attach to kernel and user probes and retprobes.
+Implementation depends on perf event support for kprobes/uprobes.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Acked-by: Song Liu <songliubraving@fb.com>
 Reviewed-by: Stanislav Fomichev <sdf@google.com>
 ---
- tools/lib/bpf/libbpf.c   | 17 +++++++++++++++++
- tools/lib/bpf/libbpf.h   |  4 ++++
- tools/lib/bpf/libbpf.map |  3 ++-
- 3 files changed, 23 insertions(+), 1 deletion(-)
+ tools/lib/bpf/libbpf.c   | 169 +++++++++++++++++++++++++++++++++++++++
+ tools/lib/bpf/libbpf.h   |   7 ++
+ tools/lib/bpf/libbpf.map |   2 +
+ 3 files changed, 178 insertions(+)
 
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 6e6ebef11ba3..455795e6f8af 100644
+index bcaa294f819d..7b6142408b15 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -3941,6 +3941,23 @@ int bpf_prog_load_xattr(const struct bpf_prog_load_attr *attr,
- 	return 0;
+@@ -4021,6 +4021,175 @@ struct bpf_link *bpf_program__attach_perf_event(struct bpf_program *prog,
+ 	return (struct bpf_link *)link;
  }
  
-+struct bpf_link {
-+	int (*destroy)(struct bpf_link *link);
-+};
-+
-+int bpf_link__destroy(struct bpf_link *link)
++/*
++ * this function is expected to parse integer in the range of [0, 2^31-1] from
++ * given file using scanf format string fmt. If actual parsed value is
++ * negative, the result might be indistinguishable from error
++ */
++static int parse_uint_from_file(const char *file, const char *fmt)
 +{
-+	int err;
++	char buf[STRERR_BUFSIZE];
++	int err, ret;
++	FILE *f;
 +
-+	if (!link)
-+		return 0;
++	f = fopen(file, "r");
++	if (!f) {
++		err = -errno;
++		pr_debug("failed to open '%s': %s\n", file,
++			 libbpf_strerror_r(err, buf, sizeof(buf)));
++		return err;
++	}
++	err = fscanf(f, fmt, &ret);
++	if (err != 1) {
++		err = err == EOF ? -EIO : -errno;
++		pr_debug("failed to parse '%s': %s\n", file,
++			libbpf_strerror_r(err, buf, sizeof(buf)));
++		fclose(f);
++		return err;
++	}
++	fclose(f);
++	return ret;
++}
 +
-+	err = link->destroy(link);
-+	free(link);
++static int determine_kprobe_perf_type(void)
++{
++	const char *file = "/sys/bus/event_source/devices/kprobe/type";
 +
-+	return err;
++	return parse_uint_from_file(file, "%d\n");
++}
++
++static int determine_uprobe_perf_type(void)
++{
++	const char *file = "/sys/bus/event_source/devices/uprobe/type";
++
++	return parse_uint_from_file(file, "%d\n");
++}
++
++static int determine_kprobe_retprobe_bit(void)
++{
++	const char *file = "/sys/bus/event_source/devices/kprobe/format/retprobe";
++
++	return parse_uint_from_file(file, "config:%d\n");
++}
++
++static int determine_uprobe_retprobe_bit(void)
++{
++	const char *file = "/sys/bus/event_source/devices/uprobe/format/retprobe";
++
++	return parse_uint_from_file(file, "config:%d\n");
++}
++
++static int perf_event_open_probe(bool uprobe, bool retprobe, const char *name,
++				 uint64_t offset, int pid)
++{
++	struct perf_event_attr attr = {};
++	char errmsg[STRERR_BUFSIZE];
++	int type, pfd, err;
++
++	type = uprobe ? determine_uprobe_perf_type()
++		      : determine_kprobe_perf_type();
++	if (type < 0) {
++		pr_warning("failed to determine %s perf type: %s\n",
++			   uprobe ? "uprobe" : "kprobe",
++			   libbpf_strerror_r(type, errmsg, sizeof(errmsg)));
++		return type;
++	}
++	if (retprobe) {
++		int bit = uprobe ? determine_uprobe_retprobe_bit()
++				 : determine_kprobe_retprobe_bit();
++
++		if (bit < 0) {
++			pr_warning("failed to determine %s retprobe bit: %s\n",
++				   uprobe ? "uprobe" : "kprobe",
++				   libbpf_strerror_r(bit, errmsg,
++						     sizeof(errmsg)));
++			return bit;
++		}
++		attr.config |= 1 << bit;
++	}
++	attr.size = sizeof(attr);
++	attr.type = type;
++	attr.config1 = (uint64_t)(void *)name; /* kprobe_func or uprobe_path */
++	attr.config2 = offset;		       /* kprobe_addr or probe_offset */
++
++	/* pid filter is meaningful only for uprobes */
++	pfd = syscall(__NR_perf_event_open, &attr,
++		      pid < 0 ? -1 : pid /* pid */,
++		      pid == -1 ? 0 : -1 /* cpu */,
++		      -1 /* group_fd */, PERF_FLAG_FD_CLOEXEC);
++	if (pfd < 0) {
++		err = -errno;
++		pr_warning("%s perf_event_open() failed: %s\n",
++			   uprobe ? "uprobe" : "kprobe",
++			   libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
++		return err;
++	}
++	return pfd;
++}
++
++struct bpf_link *bpf_program__attach_kprobe(struct bpf_program *prog,
++					    bool retprobe,
++					    const char *func_name)
++{
++	char errmsg[STRERR_BUFSIZE];
++	struct bpf_link *link;
++	int pfd, err;
++
++	pfd = perf_event_open_probe(false /* uprobe */, retprobe, func_name,
++				    0 /* offset */, -1 /* pid */);
++	if (pfd < 0) {
++		pr_warning("program '%s': failed to create %s '%s' perf event: %s\n",
++			   bpf_program__title(prog, false),
++			   retprobe ? "kretprobe" : "kprobe", func_name,
++			   libbpf_strerror_r(pfd, errmsg, sizeof(errmsg)));
++		return ERR_PTR(pfd);
++	}
++	link = bpf_program__attach_perf_event(prog, pfd);
++	if (IS_ERR(link)) {
++		close(pfd);
++		err = PTR_ERR(link);
++		pr_warning("program '%s': failed to attach to %s '%s': %s\n",
++			   bpf_program__title(prog, false),
++			   retprobe ? "kretprobe" : "kprobe", func_name,
++			   libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
++		return link;
++	}
++	return link;
++}
++
++struct bpf_link *bpf_program__attach_uprobe(struct bpf_program *prog,
++					    bool retprobe, pid_t pid,
++					    const char *binary_path,
++					    size_t func_offset)
++{
++	char errmsg[STRERR_BUFSIZE];
++	struct bpf_link *link;
++	int pfd, err;
++
++	pfd = perf_event_open_probe(true /* uprobe */, retprobe,
++				    binary_path, func_offset, pid);
++	if (pfd < 0) {
++		pr_warning("program '%s': failed to create %s '%s:0x%zx' perf event: %s\n",
++			   bpf_program__title(prog, false),
++			   retprobe ? "uretprobe" : "uprobe",
++			   binary_path, func_offset,
++			   libbpf_strerror_r(pfd, errmsg, sizeof(errmsg)));
++		return ERR_PTR(pfd);
++	}
++	link = bpf_program__attach_perf_event(prog, pfd);
++	if (IS_ERR(link)) {
++		close(pfd);
++		err = PTR_ERR(link);
++		pr_warning("program '%s': failed to attach to %s '%s:0x%zx': %s\n",
++			   bpf_program__title(prog, false),
++			   retprobe ? "uretprobe" : "uprobe",
++			   binary_path, func_offset,
++			   libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
++		return link;
++	}
++	return link;
 +}
 +
  enum bpf_perf_event_ret
  bpf_perf_event_read_simple(void *mmap_mem, size_t mmap_size, size_t page_size,
  			   void **copy_mem, size_t *copy_size,
 diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index d639f47e3110..5082a5ebb0c2 100644
+index 1bf66c4a9330..bd767cc11967 100644
 --- a/tools/lib/bpf/libbpf.h
 +++ b/tools/lib/bpf/libbpf.h
-@@ -165,6 +165,10 @@ LIBBPF_API int bpf_program__pin(struct bpf_program *prog, const char *path);
- LIBBPF_API int bpf_program__unpin(struct bpf_program *prog, const char *path);
- LIBBPF_API void bpf_program__unload(struct bpf_program *prog);
+@@ -171,6 +171,13 @@ LIBBPF_API int bpf_link__destroy(struct bpf_link *link);
  
-+struct bpf_link;
-+
-+LIBBPF_API int bpf_link__destroy(struct bpf_link *link);
-+
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_perf_event(struct bpf_program *prog, int pfd);
++LIBBPF_API struct bpf_link *
++bpf_program__attach_kprobe(struct bpf_program *prog, bool retprobe,
++			   const char *func_name);
++LIBBPF_API struct bpf_link *
++bpf_program__attach_uprobe(struct bpf_program *prog, bool retprobe,
++			   pid_t pid, const char *binary_path,
++			   size_t func_offset);
+ 
  struct bpf_insn;
  
- /*
 diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 2c6d835620d2..3cde850fc8da 100644
+index 756f5aa802e9..57a40fb60718 100644
 --- a/tools/lib/bpf/libbpf.map
 +++ b/tools/lib/bpf/libbpf.map
-@@ -167,10 +167,11 @@ LIBBPF_0.0.3 {
- 
- LIBBPF_0.0.4 {
+@@ -169,7 +169,9 @@ LIBBPF_0.0.4 {
  	global:
-+		bpf_link__destroy;
-+		bpf_object__load_xattr;
+ 		bpf_link__destroy;
+ 		bpf_object__load_xattr;
++		bpf_program__attach_kprobe;
+ 		bpf_program__attach_perf_event;
++		bpf_program__attach_uprobe;
  		btf_dump__dump_type;
  		btf_dump__free;
  		btf_dump__new;
- 		btf__parse_elf;
--		bpf_object__load_xattr;
- 		libbpf_num_possible_cpus;
- } LIBBPF_0.0.3;
 -- 
 2.17.1
 
