@@ -2,409 +2,147 @@ Return-Path: <SRS0=CemK=U7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 389ADC06510
-	for <bpf@archiver.kernel.org>; Tue,  2 Jul 2019 10:05:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEA4BC06510
+	for <bpf@archiver.kernel.org>; Tue,  2 Jul 2019 10:09:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 057182054F
-	for <bpf@archiver.kernel.org>; Tue,  2 Jul 2019 10:05:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A213B20665
+	for <bpf@archiver.kernel.org>; Tue,  2 Jul 2019 10:09:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727107AbfGBKFa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Jul 2019 06:05:30 -0400
-Received: from mga18.intel.com ([134.134.136.126]:33827 "EHLO mga18.intel.com"
+        id S1726475AbfGBKJM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Jul 2019 06:09:12 -0400
+Received: from mga18.intel.com ([134.134.136.126]:34090 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725868AbfGBKFa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Jul 2019 06:05:30 -0400
+        id S1725835AbfGBKJM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Jul 2019 06:09:12 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Jul 2019 02:22:29 -0700
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Jul 2019 02:27:41 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.63,442,1557212400"; 
-   d="scan'208";a="315171694"
-Received: from mkarlsso-mobl.ger.corp.intel.com (HELO localhost.localdomain) ([10.252.32.218])
-  by orsmga004.jf.intel.com with ESMTP; 02 Jul 2019 02:22:18 -0700
-From:   Magnus Karlsson <magnus.karlsson@intel.com>
-To:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
-        daniel@iogearbox.net, netdev@vger.kernel.org, brouer@redhat.com
-Cc:     bpf@vger.kernel.org, bruce.richardson@intel.com,
-        ciara.loftus@intel.com, jakub.kicinski@netronome.com,
-        xiaolong.ye@intel.com, qi.z.zhang@intel.com, maximmi@mellanox.com,
-        sridhar.samudrala@intel.com, kevin.laatz@intel.com,
-        ilias.apalodimas@linaro.org, kiran.patil@intel.com,
-        axboe@kernel.dk, maciej.fijalkowski@intel.com,
-        maciejromanfijalkowski@gmail.com, intel-wired-lan@lists.osuosl.org
-Subject: [PATCH bpf-next v2 2/6] xsk: add support for need_wakeup flag in AF_XDP rings
-Date:   Tue,  2 Jul 2019 11:21:24 +0200
-Message-Id: <1562059288-26773-3-git-send-email-magnus.karlsson@intel.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1562059288-26773-1-git-send-email-magnus.karlsson@intel.com>
-References: <1562059288-26773-1-git-send-email-magnus.karlsson@intel.com>
+   d="scan'208";a="247208758"
+Received: from irsmsx152.ger.corp.intel.com ([163.33.192.66])
+  by orsmga001.jf.intel.com with ESMTP; 02 Jul 2019 02:27:39 -0700
+Received: from irsmsx103.ger.corp.intel.com ([169.254.3.140]) by
+ IRSMSX152.ger.corp.intel.com ([169.254.6.79]) with mapi id 14.03.0439.000;
+ Tue, 2 Jul 2019 10:27:38 +0100
+From:   "Richardson, Bruce" <bruce.richardson@intel.com>
+To:     Jakub Kicinski <jakub.kicinski@netronome.com>,
+        "Laatz, Kevin" <kevin.laatz@intel.com>
+CC:     Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "Topel, Bjorn" <bjorn.topel@intel.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "Loftus, Ciara" <ciara.loftus@intel.com>
+Subject: RE: [PATCH 00/11] XDP unaligned chunk placement support
+Thread-Topic: [PATCH 00/11] XDP unaligned chunk placement support
+Thread-Index: AQHVJ4i5lf51JKLIg0itC+9xR96zh6asrBSAgAKnKQCAAKqjAIABPLiAgABF0QCABFa7gIAAboQAgADCFaA=
+Date:   Tue, 2 Jul 2019 09:27:38 +0000
+Message-ID: <59AF69C657FD0841A61C55336867B5B07ED8B210@IRSMSX103.ger.corp.intel.com>
+References: <20190620083924.1996-1-kevin.laatz@intel.com>
+        <FA8389B9-F89C-4BFF-95EE-56F702BBCC6D@gmail.com>
+        <ef7e9469-e7be-647b-8bb1-da29bc01fa2e@intel.com>
+        <20190627142534.4f4b8995@cakuba.netronome.com>
+        <f0ca817a-02b4-df22-d01b-7bc07171a4dc@intel.com>
+        <BAE24CBF-416D-4665-B2C9-CE1F5EAE28FF@gmail.com>
+        <07e404eb-f712-b15a-4884-315aff3f7c7d@intel.com>
+ <20190701142002.1b17cc0b@cakuba.netronome.com>
+In-Reply-To: <20190701142002.1b17cc0b@cakuba.netronome.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiMWI5MmI0MTAtOWQxYS00NTljLTgyMTctODU4NDg3ODU3NWRlIiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiQzhtQ09KNStDWFRZMGtnc0VYN0dJVmdYRmljTUhPdHNRXC8wS2J1d2k4OFdDQmpVQzlkV3ptU3htVVdcLzhtNW9WIn0=
+x-ctpclassification: CTP_NT
+dlp-product: dlpe-windows
+dlp-version: 11.0.600.7
+dlp-reaction: no-action
+x-originating-ip: [163.33.239.182]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This commit adds support for a new flag called need_wakeup in the
-AF_XDP Tx and fill rings. When this flag is set, it means that the
-application has to explicitly wake up the kernel Rx (for the bit in
-the fill ring) or kernel Tx (for bit in the Tx ring) processing by
-issuing a syscall. Poll() can wake up both depending on the flags
-submitted and sendto() will wake up tx processing only.
-
-The main reason for introducing this new flag is to be able to
-efficiently support the case when application and driver is executing
-on the same core. Previously, the driver was just busy-spinning on the
-fill ring if it ran out of buffers in the HW and there were none on
-the fill ring. This approach works when the application is running on
-another core as it can replenish the fill ring while the driver is
-busy-spinning. Though, this is a lousy approach if both of them are
-running on the same core as the probability of the fill ring getting
-more entries when the driver is busy-spinning is zero. With this new
-feature the driver now sets the need_wakeup flag and returns to the
-application. The application can then replenish the fill queue and
-then explicitly wake up the Rx processing in the kernel using the
-syscall poll(). For Tx, the flag is only set to one if the driver has
-no outstanding Tx completion interrupts. If it has some, the flag is
-zero as it will be woken up by a completion interrupt anyway.
-
-As a nice side effect, this new flag also improves the performance of
-the case where application and driver are running on two different
-cores as it reduces the number of syscalls to the kernel. The kernel
-tells user space if it needs to be woken up by a syscall, and this
-eliminates many of the syscalls.
-
-This flag needs some simple driver support. If the driver does not
-support this, the Rx flag is always zero and the Tx flag is always
-one. This makes any application relying on this feature default to the
-old behaviour of not requiring any syscalls in the Rx path and always
-having to call sendto() in the Tx path.
-
-For backwards compatibility reasons, this feature has to be explicitly
-turned on using a new bind flag (XDP_USE_NEED_WAKEUP). I recommend
-that you always turn it on as it so far always have had a positive
-performance impact.
-
-The name and inspiration of the flag has been taken from io_uring by
-Jens Axboe. Details about this feature in io_uring can be found in
-http://kernel.dk/io_uring.pdf, section 8.3.
-
-Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
----
- include/linux/netdevice.h   |  4 ++
- include/net/xdp_sock.h      | 33 ++++++++++++++++-
- include/uapi/linux/if_xdp.h | 13 +++++++
- net/xdp/xdp_umem.c          |  9 +++++
- net/xdp/xsk.c               | 90 +++++++++++++++++++++++++++++++++++++++++++--
- net/xdp/xsk_queue.h         |  1 +
- 6 files changed, 146 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 60eef29..a206c1d 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -872,6 +872,9 @@ struct bpf_prog_offload_ops;
- struct netlink_ext_ack;
- struct xdp_umem;
- 
-+/* Flags for the flags field in XDP_SETUP_XSK_UMEM */
-+#define XSK_DRV_CAN_SLEEP (1 << 0) /* The driver is alowed to sleep. */
-+
- struct netdev_bpf {
- 	enum bpf_netdev_command command;
- 	union {
-@@ -894,6 +897,7 @@ struct netdev_bpf {
- 		/* XDP_SETUP_XSK_UMEM */
- 		struct {
- 			struct xdp_umem *umem;
-+			u32 flags;
- 			u16 queue_id;
- 		} xsk;
- 	};
-diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
-index 057b159..66c3755 100644
---- a/include/net/xdp_sock.h
-+++ b/include/net/xdp_sock.h
-@@ -27,6 +27,9 @@ struct xdp_umem_fq_reuse {
- 	u64 handles[];
- };
- 
-+/* Flags for the umem flags field. */
-+#define XDP_UMEM_MIGHT_SLEEP (1 << 0)
-+
- struct xdp_umem {
- 	struct xsk_queue *fq;
- 	struct xsk_queue *cq;
-@@ -41,10 +44,12 @@ struct xdp_umem {
- 	struct work_struct work;
- 	struct page **pgs;
- 	u32 npgs;
-+	u16 queue_id;
-+	u8 need_wakeup;
-+	u8 flags;
- 	int id;
- 	struct net_device *dev;
- 	struct xdp_umem_fq_reuse *fq_reuse;
--	u16 queue_id;
- 	bool zc;
- 	spinlock_t xsk_list_lock;
- 	struct list_head xsk_list;
-@@ -88,6 +93,11 @@ struct xdp_umem_fq_reuse *xsk_reuseq_swap(struct xdp_umem *umem,
- 					  struct xdp_umem_fq_reuse *newq);
- void xsk_reuseq_free(struct xdp_umem_fq_reuse *rq);
- struct xdp_umem *xdp_get_umem_from_qid(struct net_device *dev, u16 queue_id);
-+void xsk_set_rx_need_wakeup(struct xdp_umem *umem);
-+void xsk_set_tx_need_wakeup(struct xdp_umem *umem);
-+void xsk_clear_rx_need_wakeup(struct xdp_umem *umem);
-+void xsk_clear_tx_need_wakeup(struct xdp_umem *umem);
-+bool xsk_umem_uses_might_sleep(struct xdp_umem *umem);
- 
- static inline char *xdp_umem_get_data(struct xdp_umem *umem, u64 addr)
- {
-@@ -234,6 +244,27 @@ static inline void xsk_umem_fq_reuse(struct xdp_umem *umem, u64 addr)
- {
- }
- 
-+static inline void xsk_set_rx_need_wakeup(struct xdp_umem *umem)
-+{
-+}
-+
-+static inline void xsk_set_tx_need_wakeup(struct xdp_umem *umem)
-+{
-+}
-+
-+static inline void xsk_clear_rx_need_wakeup(struct xdp_umem *umem)
-+{
-+}
-+
-+static inline void xsk_clear_tx_need_wakeup(struct xdp_umem *umem)
-+{
-+}
-+
-+static inline bool xsk_umem_uses_might_sleep(struct xdp_umem *umem)
-+{
-+	return false;
-+}
-+
- #endif /* CONFIG_XDP_SOCKETS */
- 
- #endif /* _LINUX_XDP_SOCK_H */
-diff --git a/include/uapi/linux/if_xdp.h b/include/uapi/linux/if_xdp.h
-index faaa5ca..62b80d5 100644
---- a/include/uapi/linux/if_xdp.h
-+++ b/include/uapi/linux/if_xdp.h
-@@ -16,6 +16,15 @@
- #define XDP_SHARED_UMEM	(1 << 0)
- #define XDP_COPY	(1 << 1) /* Force copy-mode */
- #define XDP_ZEROCOPY	(1 << 2) /* Force zero-copy mode */
-+/* If this option is set, the driver might go sleep and in that case
-+ * the XDP_RING_NEED_WAKEUP flag in the fill and/or Tx rings will be
-+ * set. If it is set, the application need to explicitly wake up the
-+ * driver with a poll() (Rx and Tx) or sendto() (Tx only). If you are
-+ * running the driver and the application on the same core, you should
-+ * use this option so that the kernel will yield to the user space
-+ * application.
-+ */
-+#define XDP_USE_NEED_WAKEUP (1 << 3)
- 
- struct sockaddr_xdp {
- 	__u16 sxdp_family;
-@@ -25,10 +34,14 @@ struct sockaddr_xdp {
- 	__u32 sxdp_shared_umem_fd;
- };
- 
-+/* XDP_RING flags */
-+#define XDP_RING_NEED_WAKEUP (1 << 0)
-+
- struct xdp_ring_offset {
- 	__u64 producer;
- 	__u64 consumer;
- 	__u64 desc;
-+	__u64 flags;
- };
- 
- struct xdp_mmap_offsets {
-diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
-index 803554b..6b05cd0 100644
---- a/net/xdp/xdp_umem.c
-+++ b/net/xdp/xdp_umem.c
-@@ -105,6 +105,15 @@ int xdp_umem_assign_dev(struct xdp_umem *umem, struct net_device *dev,
- 
- 	umem->dev = dev;
- 	umem->queue_id = queue_id;
-+	if (flags & XDP_USE_NEED_WAKEUP) {
-+		umem->flags |= XDP_UMEM_MIGHT_SLEEP;
-+		/* Tx needs to be explicitly woken up the first time.
-+		 * Also for supporting drivers that do not implement this
-+		 * feature. They will always have to call sendto().
-+		 */
-+		xsk_set_tx_need_wakeup(umem);
-+	}
-+
- 	if (force_copy)
- 		/* For copy-mode, we are done. */
- 		goto out_rtnl_unlock;
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index cf8898f..fd7b99c 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -55,6 +55,66 @@ void xsk_umem_discard_addr(struct xdp_umem *umem)
- }
- EXPORT_SYMBOL(xsk_umem_discard_addr);
- 
-+void xsk_set_rx_need_wakeup(struct xdp_umem *umem)
-+{
-+	if (umem->need_wakeup & XDP_WAKEUP_RX)
-+		return;
-+
-+	umem->fq->ring->flags |= XDP_RING_NEED_WAKEUP;
-+	umem->need_wakeup |= XDP_WAKEUP_RX;
-+}
-+EXPORT_SYMBOL(xsk_set_rx_need_wakeup);
-+
-+void xsk_set_tx_need_wakeup(struct xdp_umem *umem)
-+{
-+	struct xdp_sock *xs;
-+
-+	if (umem->need_wakeup & XDP_WAKEUP_TX)
-+		return;
-+
-+	rcu_read_lock();
-+	list_for_each_entry_rcu(xs, &umem->xsk_list, list) {
-+		xs->tx->ring->flags |= XDP_RING_NEED_WAKEUP;
-+	}
-+	rcu_read_unlock();
-+
-+	umem->need_wakeup |= XDP_WAKEUP_TX;
-+}
-+EXPORT_SYMBOL(xsk_set_tx_need_wakeup);
-+
-+void xsk_clear_rx_need_wakeup(struct xdp_umem *umem)
-+{
-+	if (!(umem->need_wakeup & XDP_WAKEUP_RX))
-+		return;
-+
-+	umem->fq->ring->flags &= ~XDP_RING_NEED_WAKEUP;
-+	umem->need_wakeup &= ~XDP_WAKEUP_RX;
-+}
-+EXPORT_SYMBOL(xsk_clear_rx_need_wakeup);
-+
-+void xsk_clear_tx_need_wakeup(struct xdp_umem *umem)
-+{
-+	struct xdp_sock *xs;
-+
-+	if (!(umem->need_wakeup & XDP_WAKEUP_TX))
-+		return;
-+
-+	rcu_read_lock();
-+	list_for_each_entry_rcu(xs, &umem->xsk_list, list) {
-+		xs->tx->ring->flags &= ~XDP_RING_NEED_WAKEUP;
-+	}
-+	rcu_read_unlock();
-+
-+	umem->need_wakeup &= ~XDP_WAKEUP_TX;
-+}
-+EXPORT_SYMBOL(xsk_clear_tx_need_wakeup);
-+
-+bool xsk_umem_uses_might_sleep(struct xdp_umem *umem)
-+{
-+	return umem->flags & XDP_UMEM_MIGHT_SLEEP;
-+}
-+EXPORT_SYMBOL(xsk_umem_uses_might_sleep);
-+
- static int __xsk_rcv(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
- {
- 	void *to_buf, *from_buf;
-@@ -311,6 +371,12 @@ static unsigned int xsk_poll(struct file *file, struct socket *sock,
- 	unsigned int mask = datagram_poll(file, sock, wait);
- 	struct sock *sk = sock->sk;
- 	struct xdp_sock *xs = xdp_sk(sk);
-+	struct net_device *dev = xs->dev;
-+	struct xdp_umem *umem = xs->umem;
-+
-+	if (umem->need_wakeup)
-+		dev->netdev_ops->ndo_xsk_wakeup(dev, xs->queue_id,
-+						umem->need_wakeup);
- 
- 	if (xs->rx && !xskq_empty_desc(xs->rx))
- 		mask |= POLLIN | POLLRDNORM;
-@@ -411,7 +477,8 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
- 		return -EINVAL;
- 
- 	flags = sxdp->sxdp_flags;
--	if (flags & ~(XDP_SHARED_UMEM | XDP_COPY | XDP_ZEROCOPY))
-+	if (flags & ~(XDP_SHARED_UMEM | XDP_COPY | XDP_ZEROCOPY |
-+		      XDP_USE_NEED_WAKEUP))
- 		return -EINVAL;
- 
- 	mutex_lock(&xs->mutex);
-@@ -437,7 +504,8 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
- 		struct xdp_sock *umem_xs;
- 		struct socket *sock;
- 
--		if ((flags & XDP_COPY) || (flags & XDP_ZEROCOPY)) {
-+		if ((flags & XDP_COPY) || (flags & XDP_ZEROCOPY) ||
-+		    (flags & XDP_USE_NEED_WAKEUP)) {
- 			/* Cannot specify flags for shared sockets. */
- 			err = -EINVAL;
- 			goto out_unlock;
-@@ -525,6 +593,9 @@ static int xsk_setsockopt(struct socket *sock, int level, int optname,
- 		mutex_lock(&xs->mutex);
- 		q = (optname == XDP_TX_RING) ? &xs->tx : &xs->rx;
- 		err = xsk_init_queue(entries, q, false);
-+		if (!err && optname == XDP_TX_RING)
-+			/* Tx needs to be explicitly woken up the first time */
-+			xs->tx->ring->flags |= XDP_RING_NEED_WAKEUP;
- 		mutex_unlock(&xs->mutex);
- 		return err;
- 	}
-@@ -621,9 +692,12 @@ static int xsk_getsockopt(struct socket *sock, int level, int optname,
- 	case XDP_MMAP_OFFSETS:
- 	{
- 		struct xdp_mmap_offsets off;
-+		bool flags_supported = true;
- 
--		if (len < sizeof(off))
-+		if (len < sizeof(off) - sizeof(off.rx.flags))
- 			return -EINVAL;
-+		else if (len < sizeof(off))
-+			flags_supported = false;
- 
- 		off.rx.producer = offsetof(struct xdp_rxtx_ring, ptrs.producer);
- 		off.rx.consumer = offsetof(struct xdp_rxtx_ring, ptrs.consumer);
-@@ -638,6 +712,16 @@ static int xsk_getsockopt(struct socket *sock, int level, int optname,
- 		off.cr.producer = offsetof(struct xdp_umem_ring, ptrs.producer);
- 		off.cr.consumer = offsetof(struct xdp_umem_ring, ptrs.consumer);
- 		off.cr.desc	= offsetof(struct xdp_umem_ring, desc);
-+		if (flags_supported) {
-+			off.rx.flags = offsetof(struct xdp_rxtx_ring,
-+						ptrs.flags);
-+			off.tx.flags = offsetof(struct xdp_rxtx_ring,
-+						ptrs.flags);
-+			off.fr.flags = offsetof(struct xdp_umem_ring,
-+						ptrs.flags);
-+			off.cr.flags = offsetof(struct xdp_umem_ring,
-+						ptrs.flags);
-+		}
- 
- 		len = sizeof(off);
- 		if (copy_to_user(optval, &off, len))
-diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
-index 12b4978..25e41d4 100644
---- a/net/xdp/xsk_queue.h
-+++ b/net/xdp/xsk_queue.h
-@@ -16,6 +16,7 @@
- struct xdp_ring {
- 	u32 producer ____cacheline_aligned_in_smp;
- 	u32 consumer ____cacheline_aligned_in_smp;
-+	u32 flags;
- };
- 
- /* Used for the RX and TX queues for packets */
--- 
-2.7.4
-
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogSmFrdWIgS2ljaW5za2kg
+W21haWx0bzpqYWt1Yi5raWNpbnNraUBuZXRyb25vbWUuY29tXQ0KPiBTZW50OiBNb25kYXksIEp1
+bHkgMSwgMjAxOSAxMDoyMCBQTQ0KPiBUbzogTGFhdHosIEtldmluIDxrZXZpbi5sYWF0ekBpbnRl
+bC5jb20+DQo+IENjOiBKb25hdGhhbiBMZW1vbiA8am9uYXRoYW4ubGVtb25AZ21haWwuY29tPjsg
+bmV0ZGV2QHZnZXIua2VybmVsLm9yZzsNCj4gYXN0QGtlcm5lbC5vcmc7IGRhbmllbEBpb2dlYXJi
+b3gubmV0OyBUb3BlbCwgQmpvcm4NCj4gPGJqb3JuLnRvcGVsQGludGVsLmNvbT47IEthcmxzc29u
+LCBNYWdudXMgPG1hZ251cy5rYXJsc3NvbkBpbnRlbC5jb20+Ow0KPiBicGZAdmdlci5rZXJuZWwu
+b3JnOyBpbnRlbC13aXJlZC1sYW5AbGlzdHMub3N1b3NsLm9yZzsgUmljaGFyZHNvbiwgQnJ1Y2UN
+Cj4gPGJydWNlLnJpY2hhcmRzb25AaW50ZWwuY29tPjsgTG9mdHVzLCBDaWFyYSA8Y2lhcmEubG9m
+dHVzQGludGVsLmNvbT4NCj4gU3ViamVjdDogUmU6IFtQQVRDSCAwMC8xMV0gWERQIHVuYWxpZ25l
+ZCBjaHVuayBwbGFjZW1lbnQgc3VwcG9ydA0KPiANCj4gT24gTW9uLCAxIEp1bCAyMDE5IDE1OjQ0
+OjI5ICswMTAwLCBMYWF0eiwgS2V2aW4gd3JvdGU6DQo+ID4gT24gMjgvMDYvMjAxOSAyMToyOSwg
+Sm9uYXRoYW4gTGVtb24gd3JvdGU6DQo+ID4gPiBPbiAyOCBKdW4gMjAxOSwgYXQgOToxOSwgTGFh
+dHosIEtldmluIHdyb3RlOg0KPiA+ID4+IE9uIDI3LzA2LzIwMTkgMjI6MjUsIEpha3ViIEtpY2lu
+c2tpIHdyb3RlOg0KPiA+ID4+PiBJIHRoaW5rIHRoYXQncyB2ZXJ5IGxpbWl0aW5nLsKgIFdoYXQg
+aXMgdGhlIGNoYWxsZW5nZSBpbiBwcm92aWRpbmcNCj4gPiA+Pj4gYWxpZ25lZCBhZGRyZXNzZXMs
+IGV4YWN0bHk/DQo+ID4gPj4gVGhlIGNoYWxsZW5nZXMgYXJlIHR3by1mb2xkOg0KPiA+ID4+IDEp
+IGl0IHByZXZlbnRzIHVzaW5nIGFyYml0cmFyeSBidWZmZXIgc2l6ZXMsIHdoaWNoIHdpbGwgYmUg
+YW4gaXNzdWUNCj4gPiA+PiBzdXBwb3J0aW5nIGUuZy4ganVtYm8gZnJhbWVzIGluIGZ1dHVyZS4N
+Cj4gPiA+PiAyKSBoaWdoZXIgbGV2ZWwgdXNlci1zcGFjZSBmcmFtZXdvcmtzIHdoaWNoIG1heSB3
+YW50IHRvIHVzZSBBRl9YRFAsDQo+ID4gPj4gc3VjaCBhcyBEUERLLCBkbyBub3QgY3VycmVudGx5
+IHN1cHBvcnQgaGF2aW5nIGJ1ZmZlcnMgd2l0aCAnZml4ZWQnDQo+ID4gPj4gYWxpZ25tZW50Lg0K
+PiA+ID4+IMKgwqDCoCBUaGUgcmVhc29uIHRoYXQgRFBESyB1c2VzIGFyYml0cmFyeSBwbGFjZW1l
+bnQgaXMgdGhhdDoNCj4gPiA+PiDCoMKgwqAgwqDCoMKgIC0gaXQgd291bGQgc3RvcCB0aGluZ3Mg
+d29ya2luZyBvbiBjZXJ0YWluIE5JQ3Mgd2hpY2ggbmVlZA0KPiA+ID4+IHRoZSBhY3R1YWwgd3Jp
+dGFibGUgc3BhY2Ugc3BlY2lmaWVkIGluIHVuaXRzIG9mIDFrIC0gdGhlcmVmb3JlIHdlDQo+ID4g
+Pj4gbmVlZCAyaw0KPiA+ID4+ICsgbWV0YWRhdGEgc3BhY2UuDQo+ID4gPj4gwqDCoMKgIMKgwqDC
+oCAtIHdlIHBsYWNlIHBhZGRpbmcgYmV0d2VlbiBidWZmZXJzIHRvIGF2b2lkIGNvbnN0YW50bHkN
+Cj4gPiA+PiBoaXR0aW5nIHRoZSBzYW1lIG1lbW9yeSBjaGFubmVscyB3aGVuIGFjY2Vzc2luZyBt
+ZW1vcnkuDQo+ID4gPj4gwqDCoMKgIMKgwqDCoCAtIGl0IGFsbG93cyB0aGUgYXBwbGljYXRpb24g
+dG8gY2hvb3NlIHRoZSBhY3R1YWwgYnVmZmVyDQo+ID4gPj4gc2l6ZSBpdCB3YW50cyB0byB1c2Uu
+DQo+ID4gPj4gwqDCoMKgIFdlIG1ha2UgdXNlIG9mIHRoZSBhYm92ZSB0byBhbGxvdyB1cyB0byBz
+cGVlZCB1cCBwcm9jZXNzaW5nDQo+ID4gPj4gc2lnbmlmaWNhbnRseSBhbmQgYWxzbyByZWR1Y2Ug
+dGhlIHBhY2tldCBidWZmZXIgbWVtb3J5IHNpemUuDQo+ID4gPj4NCj4gPiA+PiDCoMKgwqAgTm90
+IGhhdmluZyBhcmJpdHJhcnkgYnVmZmVyIGFsaWdubWVudCBhbHNvIG1lYW5zIGFuIEFGX1hEUA0K
+PiA+ID4+IGRyaXZlciBmb3IgRFBESyBjYW5ub3QgYmUgYSBkcm9wLWluIHJlcGxhY2VtZW50IGZv
+ciBleGlzdGluZw0KPiA+ID4+IGRyaXZlcnMgaW4gdGhvc2UgZnJhbWV3b3Jrcy4gRXZlbiB3aXRo
+IGEgbmV3IGNhcGFiaWxpdHkgdG8gYWxsb3cgYW4NCj4gPiA+PiBhcmJpdHJhcnkgYnVmZmVyIGFs
+aWdubWVudCwgZXhpc3RpbmcgYXBwcyB3aWxsIG5lZWQgdG8gYmUgbW9kaWZpZWQNCj4gPiA+PiB0
+byB1c2UgdGhhdCBuZXcgY2FwYWJpbGl0eS4NCj4gPiA+DQo+ID4gPiBTaW5jZSBhbGwgYnVmZmVy
+cyBpbiB0aGUgdW1lbSBhcmUgdGhlIHNhbWUgY2h1bmsgc2l6ZSwgdGhlIG9yaWdpbmFsDQo+ID4g
+PiBidWZmZXIgYWRkcmVzcyBjYW4gYmUgcmVjYWxjdWxhdGVkIHdpdGggc29tZSBtdWx0aXBseS9z
+aGlmdCBtYXRoLg0KPiA+ID4gSG93ZXZlciwgdGhpcyBpcyBtb3JlIGV4cGVuc2l2ZSB0aGFuIGp1
+c3QgYSBtYXNrIG9wZXJhdGlvbi4NCj4gPg0KPiA+IFllcywgd2UgY2FuIGRvIHRoaXMuDQo+IA0K
+PiBUaGF0J2QgYmUgYmVzdCwgY2FuIERQREsgcmVhc29uYWJseSBndWFyYW50ZWUgdGhlIHNsaWNp
+bmcgaXMgdW5pZm9ybT8NCj4gRS5nLiBpdCdzIG5vdCBkZXNwZXJhdGUgYnVmZmVyIHBvb2xzIHdp
+dGggZGlmZmVyZW50IGJhc2VzPw0KDQpJdCdzIGdlbmVyYWxseSB1bmlmb3JtLCBidXQgaGFuZGxp
+bmcgdGhlIGNyb3NzaW5nIG9mIChodWdlKXBhZ2UgYm91bmRhcmllcw0KY29tcGxpY2F0ZXMgdGhp
+bmdzIGEgYml0LiBUaGVyZWZvcmUgSSB0aGluayB0aGUgZmluYWwgb3B0aW9uIGJlbG93DQppcyBi
+ZXN0IGFzIGl0IGF2b2lkcyBhbnkgc3VjaCBwcm9ibGVtcy4NCg0KPiANCj4gPiBBbm90aGVyIG9w
+dGlvbiB3ZSBoYXZlIGlzIHRvIGFkZCBhIHNvY2tldCBvcHRpb24gZm9yIHF1ZXJ5aW5nIHRoZQ0K
+PiA+IG1ldGFkYXRhIGxlbmd0aCBmcm9tIHRoZSBkcml2ZXIgKGFzc3VtaW5nIGl0IGRvZXNuJ3Qg
+dmFyeSBwZXIgcGFja2V0KS4NCj4gPiBXZSBjYW4gdXNlIHRoYXQgaW5mb3JtYXRpb24gdG8gZ2V0
+IGJhY2sgdG8gdGhlIG9yaWdpbmFsIGFkZHJlc3MgdXNpbmcNCj4gPiBzdWJ0cmFjdGlvbi4NCj4g
+DQo+IFVuZm9ydHVuYXRlbHkgdGhlIG1ldGFkYXRhIGRlcGVuZHMgb24gdGhlIHBhY2tldCBhbmQg
+aG93IG11Y2ggaW5mbyB0aGUNCj4gZGV2aWNlIHdhcyBhYmxlIHRvIGV4dHJhY3QuICBTbyBpdCdz
+IHZhcmlhYmxlIGxlbmd0aC4NCj4gDQo+ID4gQWx0ZXJuYXRpdmVseSwgd2UgY2FuIGNoYW5nZSB0
+aGUgUnggZGVzY3JpcHRvciBmb3JtYXQgdG8gaW5jbHVkZSB0aGUNCj4gPiBtZXRhZGF0YSBsZW5n
+dGguIFdlIGNvdWxkIGRvIHRoaXMgaW4gYSBjb3VwbGUgb2Ygd2F5cywgZm9yIGV4YW1wbGUsDQo+
+ID4gcmF0aGVyIHRoYW4gcmV0dXJuaW5nIHRoZSBhZGRyZXNzIGFzIHRoZSBzdGFydCBvZiB0aGUg
+cGFja2V0LCBpbnN0ZWFkDQo+ID4gcmV0dXJuIHRoZSBidWZmZXIgYWRkcmVzcyB0aGF0IHdhcyBw
+YXNzZWQgaW4sIGFuZCBhZGRpbmcgYW5vdGhlcg0KPiA+IDE2LWJpdCBmaWVsZCB0byBzcGVjaWZ5
+IHRoZSBzdGFydCBvZiBwYWNrZXQgb2Zmc2V0IHdpdGggdGhhdCBidWZmZXIuDQo+ID4gSWYgdXNp
+bmcgYW5vdGhlciAxNi1iaXRzIG9mIHRoZSBkZXNjcmlwdG9yIHNwYWNlIGlzIG5vdCBkZXNpcmFi
+bGUsIGFuDQo+ID4gYWx0ZXJuYXRpdmUgY291bGQgYmUgdG8gbGltaXQgdW1lbSBzaXplcyB0byBl
+LmcuIDJeNDggYml0cyAoMjU2DQo+ID4gdGVyYWJ5dGVzIHNob3VsZCBiZSBlbm91Z2gsIHJpZ2h0
+IDotKSApIGFuZCB1c2UgdGhlIHJlbWFpbmluZyAxNiBiaXRzDQo+ID4gb2YgdGhlIGFkZHJlc3Mg
+YXMgYSBwYWNrZXQgb2Zmc2V0LiBPdGhlciB2YXJpYXRpb25zIG9uIHRoZXNlIGFwcHJvYWNoDQo+
+ID4gYXJlIG9idmlvdXNseSBwb3NzaWJsZSB0b28uDQo+IA0KPiBTZWVtcyByZWFzb25hYmxlIHRv
+IG1lLi4NCg0KSSB0aGluayB0aGlzIGlzIHByb2JhYmx5IHRoZSBiZXN0IHNvbHV0aW9uLCBhbmQg
+YWxzbyBoYXMgdGhlIGFkdmFudGFnZSB0aGF0DQphIGJ1ZmZlciByZXRhaW5zIGl0cyBiYXNlIGFk
+ZHJlc3MgdGhlIGZ1bGwgd2F5IHRocm91Z2ggdGhlIGN5Y2xlIG9mIFJ4IGFuZCBUeC4NCg==
