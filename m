@@ -2,32 +2,31 @@ Return-Path: <SRS0=CemK=U7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF93EC06510
-	for <bpf@archiver.kernel.org>; Tue,  2 Jul 2019 10:13:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48029C06510
+	for <bpf@archiver.kernel.org>; Tue,  2 Jul 2019 10:19:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B847D20659
-	for <bpf@archiver.kernel.org>; Tue,  2 Jul 2019 10:13:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19BF820659
+	for <bpf@archiver.kernel.org>; Tue,  2 Jul 2019 10:19:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727084AbfGBKN6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Jul 2019 06:13:58 -0400
-Received: from mga07.intel.com ([134.134.136.100]:51646 "EHLO mga07.intel.com"
+        id S1726046AbfGBKTJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Jul 2019 06:19:09 -0400
+Received: from mga03.intel.com ([134.134.136.65]:56020 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725868AbfGBKN6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Jul 2019 06:13:58 -0400
+        id S1725868AbfGBKTJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Jul 2019 06:19:09 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Jul 2019 02:22:55 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Jul 2019 02:22:12 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.63,442,1557212400"; 
-   d="scan'208";a="315171788"
+   d="scan'208";a="315171591"
 Received: from mkarlsso-mobl.ger.corp.intel.com (HELO localhost.localdomain) ([10.252.32.218])
-  by orsmga004.jf.intel.com with ESMTP; 02 Jul 2019 02:22:49 -0700
+  by orsmga004.jf.intel.com with ESMTP; 02 Jul 2019 02:22:05 -0700
 From:   Magnus Karlsson <magnus.karlsson@intel.com>
 To:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
         daniel@iogearbox.net, netdev@vger.kernel.org, brouer@redhat.com
@@ -38,369 +37,158 @@ Cc:     bpf@vger.kernel.org, bruce.richardson@intel.com,
         ilias.apalodimas@linaro.org, kiran.patil@intel.com,
         axboe@kernel.dk, maciej.fijalkowski@intel.com,
         maciejromanfijalkowski@gmail.com, intel-wired-lan@lists.osuosl.org
-Subject: [PATCH bpf-next v2 6/6] samples/bpf: add use of need_sleep flag in xdpsock
-Date:   Tue,  2 Jul 2019 11:21:28 +0200
-Message-Id: <1562059288-26773-7-git-send-email-magnus.karlsson@intel.com>
+Subject: [PATCH bpf-next v2 0/6] add need_wakeup flag to the AF_XDP rings
+Date:   Tue,  2 Jul 2019 11:21:22 +0200
+Message-Id: <1562059288-26773-1-git-send-email-magnus.karlsson@intel.com>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1562059288-26773-1-git-send-email-magnus.karlsson@intel.com>
-References: <1562059288-26773-1-git-send-email-magnus.karlsson@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This commit adds using the need_sleep flag to the xdpsock sample
-application. It is turned on by default as we think it is a feature
-that seems to always produce a performance benefit, if the application
-has been written taking advantage of it. It can be turned off in the
-sample app by using the '-m' command line option.
+This patch set adds support for a new flag called need_wakeup in the
+AF_XDP Tx and fill rings. When this flag is set by the driver, it
+means that the application has to explicitly wake up the kernel Rx
+(for the bit in the fill ring) or kernel Tx (for bit in the Tx ring)
+processing by issuing a syscall. Poll() can wake up both and sendto()
+will wake up Tx processing only.
 
-The txpush and l2fwd sub applications have also been updated to
-support poll() with multiple sockets.
+The main reason for introducing this new flag is to be able to
+efficiently support the case when application and driver is executing
+on the same core. Previously, the driver was just busy-spinning on the
+fill ring if it ran out of buffers in the HW and there were none to
+get from the fill ring. This approach works when the application and
+driver is running on different cores as the application can replenish
+the fill ring while the driver is busy-spinning. Though, this is a
+lousy approach if both of them are running on the same core as the
+probability of the fill ring getting more entries when the driver is
+busy-spinning is zero. With this new feature the driver now sets the
+need_wakeup flag and returns to the application. The application can
+then replenish the fill queue and then explicitly wake up the Rx
+processing in the kernel using the syscall poll(). For Tx, the flag is
+only set to one if the driver has no outstanding Tx completion
+interrupts. If it has some, the flag is zero as it will be woken up by
+a completion interrupt anyway. This flag can also be used in other
+situations where the driver needs to be woken up explicitly.
 
-Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
----
- samples/bpf/xdpsock_user.c | 192 ++++++++++++++++++++++++++++-----------------
- 1 file changed, 120 insertions(+), 72 deletions(-)
+As a nice side effect, this new flag also improves the Tx performance
+of the case where application and driver are running on two different
+cores as it reduces the number of syscalls to the kernel. The kernel
+tells user space if it needs to be woken up by a syscall, and this
+eliminates many of the syscalls. The Rx performance of the 2-core case
+is on the other hand slightly worse, since there is a need to use a
+syscall now to wake up the driver, instead of the driver
+busy-spinning. It does waste less CPU cycles though, which might lead
+to better overall system performance.
 
-diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
-index 93eaaf7..7d771af 100644
---- a/samples/bpf/xdpsock_user.c
-+++ b/samples/bpf/xdpsock_user.c
-@@ -67,8 +67,10 @@ static int opt_ifindex;
- static int opt_queue;
- static int opt_poll;
- static int opt_interval = 1;
--static u32 opt_xdp_bind_flags;
-+static u32 opt_xdp_bind_flags = XDP_USE_NEED_WAKEUP;
- static int opt_xsk_frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE;
-+static int opt_timeout = 1000;
-+static bool opt_might_sleep = true;
- static __u32 prog_id;
- 
- struct xsk_umem_info {
-@@ -352,6 +354,7 @@ static struct option long_options[] = {
- 	{"zero-copy", no_argument, 0, 'z'},
- 	{"copy", no_argument, 0, 'c'},
- 	{"frame-size", required_argument, 0, 'f'},
-+	{"no-might-sleep", no_argument, 0, 'm'},
- 	{0, 0, 0, 0}
- };
- 
-@@ -372,6 +375,7 @@ static void usage(const char *prog)
- 		"  -z, --zero-copy      Force zero-copy mode.\n"
- 		"  -c, --copy           Force copy mode.\n"
- 		"  -f, --frame-size=n   Set the frame size (must be a power of two, default is %d).\n"
-+		"  -m, --no-might-sleep Turn off use of driver might sleep flag.\n"
- 		"\n";
- 	fprintf(stderr, str, prog, XSK_UMEM__DEFAULT_FRAME_SIZE);
- 	exit(EXIT_FAILURE);
-@@ -384,8 +388,9 @@ static void parse_command_line(int argc, char **argv)
- 	opterr = 0;
- 
- 	for (;;) {
--		c = getopt_long(argc, argv, "Frtli:q:psSNn:czf:", long_options,
--				&option_index);
-+
-+		c = getopt_long(argc, argv, "Frtli:q:psSNn:czf:m",
-+				long_options, &option_index);
- 		if (c == -1)
- 			break;
- 
-@@ -429,6 +434,9 @@ static void parse_command_line(int argc, char **argv)
- 			break;
- 		case 'f':
- 			opt_xsk_frame_size = atoi(optarg);
-+		case 'm':
-+			opt_might_sleep = false;
-+			opt_xdp_bind_flags &= ~XDP_USE_NEED_WAKEUP;
- 			break;
- 		default:
- 			usage(basename(argv[0]));
-@@ -459,7 +467,8 @@ static void kick_tx(struct xsk_socket_info *xsk)
- 	exit_with_error(errno);
- }
- 
--static inline void complete_tx_l2fwd(struct xsk_socket_info *xsk)
-+static inline void complete_tx_l2fwd(struct xsk_socket_info *xsk,
-+				     struct pollfd *fds)
- {
- 	u32 idx_cq = 0, idx_fq = 0;
- 	unsigned int rcvd;
-@@ -468,7 +477,9 @@ static inline void complete_tx_l2fwd(struct xsk_socket_info *xsk)
- 	if (!xsk->outstanding_tx)
- 		return;
- 
--	kick_tx(xsk);
-+	if (!opt_might_sleep || xsk_ring_prod__needs_wakeup(&xsk->tx))
-+		kick_tx(xsk);
-+
- 	ndescs = (xsk->outstanding_tx > BATCH_SIZE) ? BATCH_SIZE :
- 		xsk->outstanding_tx;
- 
-@@ -482,6 +493,8 @@ static inline void complete_tx_l2fwd(struct xsk_socket_info *xsk)
- 		while (ret != rcvd) {
- 			if (ret < 0)
- 				exit_with_error(-ret);
-+			if (xsk_ring_prod__needs_wakeup(&xsk->umem->fq))
-+				ret = poll(fds, num_socks, opt_timeout);
- 			ret = xsk_ring_prod__reserve(&xsk->umem->fq, rcvd,
- 						     &idx_fq);
- 		}
-@@ -505,7 +518,8 @@ static inline void complete_tx_only(struct xsk_socket_info *xsk)
- 	if (!xsk->outstanding_tx)
- 		return;
- 
--	kick_tx(xsk);
-+	if (!opt_might_sleep || xsk_ring_prod__needs_wakeup(&xsk->tx))
-+		kick_tx(xsk);
- 
- 	rcvd = xsk_ring_cons__peek(&xsk->umem->cq, BATCH_SIZE, &idx);
- 	if (rcvd > 0) {
-@@ -515,20 +529,25 @@ static inline void complete_tx_only(struct xsk_socket_info *xsk)
- 	}
- }
- 
--static void rx_drop(struct xsk_socket_info *xsk)
-+static void rx_drop(struct xsk_socket_info *xsk, struct pollfd *fds)
- {
- 	unsigned int rcvd, i;
- 	u32 idx_rx = 0, idx_fq = 0;
- 	int ret;
- 
- 	rcvd = xsk_ring_cons__peek(&xsk->rx, BATCH_SIZE, &idx_rx);
--	if (!rcvd)
-+	if (!rcvd) {
-+		if (xsk_ring_prod__needs_wakeup(&xsk->umem->fq))
-+			ret = poll(fds, num_socks, opt_timeout);
- 		return;
-+	}
- 
- 	ret = xsk_ring_prod__reserve(&xsk->umem->fq, rcvd, &idx_fq);
- 	while (ret != rcvd) {
- 		if (ret < 0)
- 			exit_with_error(-ret);
-+		if (xsk_ring_prod__needs_wakeup(&xsk->umem->fq))
-+			ret = poll(fds, num_socks, opt_timeout);
- 		ret = xsk_ring_prod__reserve(&xsk->umem->fq, rcvd, &idx_fq);
- 	}
- 
-@@ -549,42 +568,65 @@ static void rx_drop(struct xsk_socket_info *xsk)
- static void rx_drop_all(void)
- {
- 	struct pollfd fds[MAX_SOCKS + 1];
--	int i, ret, timeout, nfds = 1;
-+	int i, ret;
- 
- 	memset(fds, 0, sizeof(fds));
- 
- 	for (i = 0; i < num_socks; i++) {
- 		fds[i].fd = xsk_socket__fd(xsks[i]->xsk);
- 		fds[i].events = POLLIN;
--		timeout = 1000; /* 1sn */
- 	}
- 
- 	for (;;) {
- 		if (opt_poll) {
--			ret = poll(fds, nfds, timeout);
-+			ret = poll(fds, num_socks, opt_timeout);
- 			if (ret <= 0)
- 				continue;
- 		}
- 
- 		for (i = 0; i < num_socks; i++)
--			rx_drop(xsks[i]);
-+			rx_drop(xsks[i], fds);
-+	}
-+}
-+
-+static void tx_only(struct xsk_socket_info *xsk, u32 frame_nb)
-+{
-+	u32 idx;
-+
-+	if (xsk_ring_prod__reserve(&xsk->tx, BATCH_SIZE, &idx) == BATCH_SIZE) {
-+		unsigned int i;
-+
-+		for (i = 0; i < BATCH_SIZE; i++) {
-+			xsk_ring_prod__tx_desc(&xsk->tx, idx + i)->addr	=
-+				(frame_nb + i) << XSK_UMEM__DEFAULT_FRAME_SHIFT;
-+			xsk_ring_prod__tx_desc(&xsk->tx, idx + i)->len =
-+				sizeof(pkt_data) - 1;
-+		}
-+
-+		xsk_ring_prod__submit(&xsk->tx, BATCH_SIZE);
-+		xsk->outstanding_tx += BATCH_SIZE;
-+		frame_nb += BATCH_SIZE;
-+		frame_nb %= NUM_FRAMES;
- 	}
-+
-+	complete_tx_only(xsk);
- }
- 
--static void tx_only(struct xsk_socket_info *xsk)
-+static void tx_only_all(void)
- {
--	int timeout, ret, nfds = 1;
--	struct pollfd fds[nfds + 1];
--	u32 idx, frame_nb = 0;
-+	struct pollfd fds[MAX_SOCKS];
-+	u32 frame_nb[MAX_SOCKS] = {};
-+	int i, ret;
- 
- 	memset(fds, 0, sizeof(fds));
--	fds[0].fd = xsk_socket__fd(xsk->xsk);
--	fds[0].events = POLLOUT;
--	timeout = 1000; /* 1sn */
-+	for (i = 0; i < num_socks; i++) {
-+		fds[0].fd = xsk_socket__fd(xsks[i]->xsk);
-+		fds[0].events = POLLOUT;
-+	}
- 
- 	for (;;) {
- 		if (opt_poll) {
--			ret = poll(fds, nfds, timeout);
-+			ret = poll(fds, num_socks, opt_timeout);
- 			if (ret <= 0)
- 				continue;
- 
-@@ -592,69 +634,75 @@ static void tx_only(struct xsk_socket_info *xsk)
- 				continue;
- 		}
- 
--		if (xsk_ring_prod__reserve(&xsk->tx, BATCH_SIZE, &idx) ==
--		    BATCH_SIZE) {
--			unsigned int i;
--
--			for (i = 0; i < BATCH_SIZE; i++) {
--				xsk_ring_prod__tx_desc(&xsk->tx, idx + i)->addr
--					= (frame_nb + i) * opt_xsk_frame_size;
--				xsk_ring_prod__tx_desc(&xsk->tx, idx + i)->len =
--					sizeof(pkt_data) - 1;
--			}
--
--			xsk_ring_prod__submit(&xsk->tx, BATCH_SIZE);
--			xsk->outstanding_tx += BATCH_SIZE;
--			frame_nb += BATCH_SIZE;
--			frame_nb %= NUM_FRAMES;
--		}
--
--		complete_tx_only(xsk);
-+		for (i = 0; i < num_socks; i++)
-+			tx_only(xsks[i], frame_nb[i]);
- 	}
- }
- 
--static void l2fwd(struct xsk_socket_info *xsk)
-+static void l2fwd(struct xsk_socket_info *xsk, struct pollfd *fds)
- {
--	for (;;) {
--		unsigned int rcvd, i;
--		u32 idx_rx = 0, idx_tx = 0;
--		int ret;
-+	unsigned int rcvd, i;
-+	u32 idx_rx = 0, idx_tx = 0;
-+	int ret;
- 
--		for (;;) {
--			complete_tx_l2fwd(xsk);
-+	complete_tx_l2fwd(xsk, fds);
- 
--			rcvd = xsk_ring_cons__peek(&xsk->rx, BATCH_SIZE,
--						   &idx_rx);
--			if (rcvd > 0)
--				break;
--		}
-+	rcvd = xsk_ring_cons__peek(&xsk->rx, BATCH_SIZE, &idx_rx);
-+	if (!rcvd) {
-+		if (xsk_ring_prod__needs_wakeup(&xsk->umem->fq))
-+			ret = poll(fds, num_socks, opt_timeout);
-+		return;
-+	}
- 
-+	ret = xsk_ring_prod__reserve(&xsk->tx, rcvd, &idx_tx);
-+	while (ret != rcvd) {
-+		if (ret < 0)
-+			exit_with_error(-ret);
-+		if (xsk_ring_prod__needs_wakeup(&xsk->tx))
-+			kick_tx(xsk);
- 		ret = xsk_ring_prod__reserve(&xsk->tx, rcvd, &idx_tx);
--		while (ret != rcvd) {
--			if (ret < 0)
--				exit_with_error(-ret);
--			ret = xsk_ring_prod__reserve(&xsk->tx, rcvd, &idx_tx);
--		}
-+	}
-+
-+	for (i = 0; i < rcvd; i++) {
-+		u64 addr = xsk_ring_cons__rx_desc(&xsk->rx, idx_rx)->addr;
-+		u32 len = xsk_ring_cons__rx_desc(&xsk->rx, idx_rx++)->len;
-+		char *pkt = xsk_umem__get_data(xsk->umem->buffer, addr);
-+
-+		swap_mac_addresses(pkt);
- 
--		for (i = 0; i < rcvd; i++) {
--			u64 addr = xsk_ring_cons__rx_desc(&xsk->rx,
--							  idx_rx)->addr;
--			u32 len = xsk_ring_cons__rx_desc(&xsk->rx,
--							 idx_rx++)->len;
--			char *pkt = xsk_umem__get_data(xsk->umem->buffer, addr);
-+		hex_dump(pkt, len, addr);
-+		xsk_ring_prod__tx_desc(&xsk->tx, idx_tx)->addr = addr;
-+		xsk_ring_prod__tx_desc(&xsk->tx, idx_tx++)->len = len;
-+	}
- 
--			swap_mac_addresses(pkt);
-+	xsk_ring_prod__submit(&xsk->tx, rcvd);
-+	xsk_ring_cons__release(&xsk->rx, rcvd);
- 
--			hex_dump(pkt, len, addr);
--			xsk_ring_prod__tx_desc(&xsk->tx, idx_tx)->addr = addr;
--			xsk_ring_prod__tx_desc(&xsk->tx, idx_tx++)->len = len;
--		}
-+	xsk->rx_npkts += rcvd;
-+	xsk->outstanding_tx += rcvd;
-+}
-+
-+static void l2fwd_all(void)
-+{
-+	struct pollfd fds[MAX_SOCKS];
-+	int i, ret;
-+
-+	memset(fds, 0, sizeof(fds));
-+
-+	for (i = 0; i < num_socks; i++) {
-+		fds[i].fd = xsk_socket__fd(xsks[i]->xsk);
-+		fds[i].events = POLLOUT | POLLIN;
-+	}
- 
--		xsk_ring_prod__submit(&xsk->tx, rcvd);
--		xsk_ring_cons__release(&xsk->rx, rcvd);
-+	for (;;) {
-+		if (opt_poll) {
-+			ret = poll(fds, num_socks, opt_timeout);
-+			if (ret <= 0)
-+				continue;
-+		}
- 
--		xsk->rx_npkts += rcvd;
--		xsk->outstanding_tx += rcvd;
-+		for (i = 0; i < num_socks; i++)
-+			l2fwd(xsks[i], fds);
- 	}
- }
- 
-@@ -705,9 +753,9 @@ int main(int argc, char **argv)
- 	if (opt_bench == BENCH_RXDROP)
- 		rx_drop_all();
- 	else if (opt_bench == BENCH_TXONLY)
--		tx_only(xsks[0]);
-+		tx_only_all();
- 	else
--		l2fwd(xsks[0]);
-+		l2fwd_all();
- 
- 	return 0;
- }
--- 
+This new flag needs some simple driver support. If the driver does not
+support it, the Rx flag is always zero and the Tx flag is always
+one. This makes any application relying on this feature default to the
+old behavior of not requiring any syscalls in the Rx path and always
+having to call sendto() in the Tx path.
+
+For backwards compatibility reasons, this feature has to be explicitly
+turned on using a new bind flag (XDP_USE_NEED_WAKEUP). I recommend
+that you always turn it on as it has a large positive performance
+impact for the one core case and does not degrade 2 core performance
+and actually improves it for Tx heavy workloads.
+
+Here are some performance numbers measured on my local,
+non-performance optimized development system. That is why you are
+seeing numbers lower than the ones from Björn and Jesper. 64 byte
+packets at 40Gbit/s line rate. All results in Mpps. Cores == 1 means
+that both application and driver is executing on the same core. Cores
+== 2 that they are on different cores.
+
+                              Applications
+need_wakeup  cores    txpush    rxdrop      l2fwd
+---------------------------------------------------------------
+     n         1       0.07      0.06        0.03
+     y         1       21.6      8.2         6.5
+     n         2       32.3      11.7        8.7
+     y         2       33.1      11.7        8.7
+
+Overall, the need_wakeup flag provides the same or better performance
+in all the micro-benchmarks. The reduction of sendto() calls in txpush
+is large. Only a few per second is needed. For l2fwd, the drop is 50%
+for the 1 core case and more than 99.9% for the 2 core case. Do not
+know why I am not seeing the same drop for the 1 core case yet.
+
+The name and inspiration of the flag has been taken from io_uring by
+Jens Axboe. Details about this feature in io_uring can be found in
+http://kernel.dk/io_uring.pdf, section 8.3. It also addresses most of
+the denial of service and sendto() concerns raised by Maxim
+Mikityanskiy in https://www.spinics.net/lists/netdev/msg554657.html.
+
+The typical Tx part of an application will have to change from:
+
+ret = sendto(fd,....)
+
+to:
+
+if (xsk_ring_prod__needs_wakeup(&xsk->tx))
+       ret = sendto(fd,....)
+
+and th Rx part from:
+
+rcvd = xsk_ring_cons__peek(&xsk->rx, BATCH_SIZE, &idx_rx);
+if (!rcvd)
+       return;
+
+to:
+
+rcvd = xsk_ring_cons__peek(&xsk->rx, BATCH_SIZE, &idx_rx);
+if (!rcvd) {
+       if (xsk_ring_prod__needs_wakeup(&xsk->umem->fq))
+              ret = poll(fd,.....);
+       return;
+}
+
+v1 -> v2:
+* Fixed bisectability problem pointed out by Jakub
+* Added missing initiliztion of the Tx need_wakeup flag to 1
+
+This patch has been applied against commit 8daed7677a1d ("Merge branch 'bpf-lookup-devmap'")
+
+Structure of the patch set:
+
+Patch 1: Replaces the ndo_xsk_async_xmit with ndo_xsk_wakeup to
+         support waking up both Rx and Tx processing
+Patch 2: Implements the need_wakeup functionality in common code
+Patch 3-4: Add need_wakeup support to the i40e and ixgbe drivers
+Patch 5: Add need_wakeup support to libbpf
+Patch 6: Add need_wakeup support to the xdpsock sample application
+
+Thanks: Magnus
+
+Magnus Karlsson (6):
+  xsk: replace ndo_xsk_async_xmit with ndo_xsk_wakeup
+  xsk: add support for need_wakeup flag in AF_XDP rings
+  i40e: add support for AF_XDP need_wakup feature
+  ixgbe: add support for AF_XDP need_wakup feature
+  libbpf: add support for need_wakeup flag in AF_XDP part
+  samples/bpf: add use of need_sleep flag in xdpsock
+
+ drivers/net/ethernet/intel/i40e/i40e_main.c        |   5 +-
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c         |  23 ++-
+ drivers/net/ethernet/intel/i40e/i40e_xsk.h         |   2 +-
+ drivers/net/ethernet/intel/ixgbe/ixgbe_main.c      |   5 +-
+ .../net/ethernet/intel/ixgbe/ixgbe_txrx_common.h   |   2 +-
+ drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c       |  20 ++-
+ include/linux/netdevice.h                          |  18 +-
+ include/net/xdp_sock.h                             |  33 +++-
+ include/uapi/linux/if_xdp.h                        |  13 ++
+ net/xdp/xdp_umem.c                                 |  12 +-
+ net/xdp/xsk.c                                      |  93 +++++++++-
+ net/xdp/xsk_queue.h                                |   1 +
+ samples/bpf/xdpsock_user.c                         | 192 +++++++++++++--------
+ tools/include/uapi/linux/if_xdp.h                  |  13 ++
+ tools/lib/bpf/xsk.c                                |   4 +
+ tools/lib/bpf/xsk.h                                |   6 +
+ 16 files changed, 350 insertions(+), 92 deletions(-)
+
+--
 2.7.4
-
