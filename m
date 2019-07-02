@@ -2,126 +2,156 @@ Return-Path: <SRS0=UYZo=VA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F022C06511
-	for <bpf@archiver.kernel.org>; Wed,  3 Jul 2019 00:40:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D7C4C5B57D
+	for <bpf@archiver.kernel.org>; Wed,  3 Jul 2019 00:59:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 150F0218B0
-	for <bpf@archiver.kernel.org>; Wed,  3 Jul 2019 00:40:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6B2B62089C
+	for <bpf@archiver.kernel.org>; Wed,  3 Jul 2019 00:59:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="CQdsRFF1"
+	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="vBhqzuKw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726457AbfGCAkZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Jul 2019 20:40:25 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:37901 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726824AbfGCAkU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Jul 2019 20:40:20 -0400
-Received: by mail-qt1-f196.google.com with SMTP id n11so692978qtl.5
-        for <bpf@vger.kernel.org>; Tue, 02 Jul 2019 17:40:19 -0700 (PDT)
+        id S1727152AbfGCA7F (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Jul 2019 20:59:05 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:46792 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727082AbfGCA7E (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Jul 2019 20:59:04 -0400
+Received: by mail-oi1-f194.google.com with SMTP id 65so566185oid.13
+        for <bpf@vger.kernel.org>; Tue, 02 Jul 2019 17:59:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=4BtV39KjV7sDRMWmrXQvT/nf8DtHimxpqWMrsA8yZ8g=;
-        b=CQdsRFF171jO5+/s1qAUI1rgCzyTzJDs9gZOQMPyPjnK2ayU+zBw/Y1zuHJcS3Aqaa
-         DOee7yY43BfLZd8G3dM1yUpHgG+YIbD8ROTNtVfGY52fSj7ya5Ed3OQroTo8Cz47Xh/E
-         dsaGad6apPp+ZEq3MUye/V3Lzt0F7FRJxgyu40Nim3+roBef6y/zVuOZO/ydtLb1/7AV
-         V8+ae4mRJHOin7xdq2VTx5cmL15S+2G3Ry0hVPR8zpWJTpk/CBENGKyWw6bmiU1kCm0N
-         0AxXt/FTvuMJ1c1JkMO+FwHTrYgADhhuWJSrhkbmeqEKELzouSnt6TgRV1MAj0P94Sef
-         4LpA==
+        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=luvfa0E4zTa+mcJld8jPAXpzZzjY7UmGrCwGyWHIIKA=;
+        b=vBhqzuKwMnBliLxQX82mcgQzgBRPjVwVRNTf9So0F6Iw1ac8vFdbRnThh74e2VubIw
+         bcaaZmHI5Wu2wEwr6RdbXuwahmLk9uKdjyL2FPQuBJFGXONMdqMoI4TjoDtpfy2Bd4C0
+         2iqlI0jNPehwk+PCirQ9IKCqvWoMy/uGGQK/m+Hu7HTKZopkdvaO6WF+UkbjLVGbFz2u
+         satGm4GPy2IpecjiugIzfQhB52L8q9gl8sE7Pd7Y9lx8Z7HcixG9TmekS8bOE485ek7h
+         pJFilLEUWfz4cFociy2GI+EfciWV+KV3JM1cblSdc2Qh1tufSHw+8ZDqWqpRa3Gmv4j/
+         Ia+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=4BtV39KjV7sDRMWmrXQvT/nf8DtHimxpqWMrsA8yZ8g=;
-        b=IbG/X+Jna5HCL6lVVZWGgkasYbESym8wZsfg4SlVyQJslyF18JVqhFmMi3R/7nU0ze
-         j/nTyiwFfX/sX8OANMYovqYohwB0Q4X6ItNPBRo485hJT83pctWc4y39aWis9b5d6+lU
-         MwOb61oqfLxfpls6i9A95M1WLmrBM32PAf/cJie6jwlJKADcbsD4Jb535MlM7TYJC2nG
-         3GY6rlPk0kz3ku0IKLKUQRfsFkGCwgUBaP5bjCOMsQcG0ENUMLMOH1EMsV5g38CVZC5Q
-         qPDxAMzWUYvaObQFXE4XQI7xwJtc1imnB1em6JrVf9wJkywgb/gkdtd+SvQKWmJNlw2G
-         M37g==
-X-Gm-Message-State: APjAAAWz9g9ynAM5DjgxzPycnOAlamPQ29REwFWFbTcqn1+H6YKsiASb
-        +OT8gj2WehR5n9pxtobqpIqLJg==
-X-Google-Smtp-Source: APXvYqxS8kYtvbzapj/eH76oDHlldzxbfNicv6tPtHys9nj2jiUMbU6r2kzPJt0X+uutHWhL+5s2Hg==
-X-Received: by 2002:ac8:2b14:: with SMTP id 20mr28665349qtu.295.1562114419416;
-        Tue, 02 Jul 2019 17:40:19 -0700 (PDT)
-Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id c18sm220886qkm.78.2019.07.02.17.40.17
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=luvfa0E4zTa+mcJld8jPAXpzZzjY7UmGrCwGyWHIIKA=;
+        b=Aoe9f3uK2dQlYTTlyJsvReqvS0Vrs2LhKEWH6lOPVwycuHutsqO0K/t3eOkwPetP9s
+         vODsrUqX5AC9I1ZW+GiV1pRJjDMf5ycAOMAi6hxwKKXLCXRu7Y/7MhfrK0ANgFau+6xl
+         conyPHmS42v7vzYlmVpvVAhZDvIxggWu6ioVDnn4Uz+GIf+eG7YMJjAV1qJjivTDz1Ae
+         klCkQ7uJx7v0Oj6yliNAeoVWSpVFpBidXvbVomHzu2lyUDXCbjBvVhEmbTVGl4hEKdQR
+         l/yVO7+gXR/goqYE7LfPbcl3BqwZhFesHDOQ7JBZ2ALtmNA9lmoYkcwBa5FdeJ+KZF5y
+         L5vA==
+X-Gm-Message-State: APjAAAVvexpvUVndPGg3TwNBavHpXXqM4vFcATmv7rJ8uy1Kgfd7CePc
+        MXAL1MKk1MOuj+eMuVCSxM8M10XsmTk=
+X-Google-Smtp-Source: APXvYqzzZNG5r04NQAuUMRk/9I0Mi+YDsPPb2b4hnbUE5RRRO15d3vWd1bYFPeaRWxU5kPD0YcyDiw==
+X-Received: by 2002:a63:5a0a:: with SMTP id o10mr33887668pgb.282.1562109510489;
+        Tue, 02 Jul 2019 16:18:30 -0700 (PDT)
+Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
+        by smtp.gmail.com with ESMTPSA id 14sm173678pfj.36.2019.07.02.16.18.27
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 02 Jul 2019 17:40:19 -0700 (PDT)
-Date:   Tue, 2 Jul 2019 17:40:14 -0700
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     Ilya Maximets <i.maximets@samsung.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, xdp-newbies@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: Re: [PATCH bpf] xdp: fix race on generic receive path
-Message-ID: <20190702174014.005a3166@cakuba.netronome.com>
-In-Reply-To: <20190702143634.19688-1-i.maximets@samsung.com>
-References: <CGME20190702143639eucas1p2b168c68c35b70aac75cad6c72ccc81ad@eucas1p2.samsung.com>
-        <20190702143634.19688-1-i.maximets@samsung.com>
-Organization: Netronome Systems, Ltd.
+        Tue, 02 Jul 2019 16:18:28 -0700 (PDT)
+Date:   Tue, 2 Jul 2019 16:18:26 -0700
+From:   Stanislav Fomichev <sdf@fomichev.me>
+To:     Andrii Nakryiko <andriin@fb.com>
+Cc:     andrii.nakryiko@gmail.com, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, ast@fb.com, daniel@iogearbox.net,
+        kernel-team@fb.com
+Subject: Re: [PATCH v2 bpf-next 6/9] libbpf: use negative fd to specify
+ missing BTF
+Message-ID: <20190702231826.GL6757@mini-arch>
+References: <20190529173611.4012579-1-andriin@fb.com>
+ <20190529173611.4012579-7-andriin@fb.com>
+ <20190702225733.GK6757@mini-arch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190702225733.GK6757@mini-arch>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue,  2 Jul 2019 17:36:34 +0300, Ilya Maximets wrote:
-> Unlike driver mode, generic xdp receive could be triggered
-> by different threads on different CPU cores at the same time
-> leading to the fill and rx queue breakage. For example, this
-> could happen while sending packets from two processes to the
-> first interface of veth pair while the second part of it is
-> open with AF_XDP socket.
+On 07/02, Stanislav Fomichev wrote:
+> On 05/29, Andrii Nakryiko wrote:
+> > 0 is a valid FD, so it's better to initialize it to -1, as is done in
+> > other places. Also, technically, BTF type ID 0 is valid (it's a VOID
+> > type), so it's more reliable to check btf_fd, instead of
+> > btf_key_type_id, to determine if there is any BTF associated with a map.
+> > 
+> > Acked-by: Song Liu <songliubraving@fb.com>
+> > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> > ---
+> >  tools/lib/bpf/libbpf.c | 13 +++++++------
+> >  1 file changed, 7 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > index c972fa10271f..a27a0351e595 100644
+> > --- a/tools/lib/bpf/libbpf.c
+> > +++ b/tools/lib/bpf/libbpf.c
+> > @@ -1751,7 +1751,7 @@ bpf_object__create_maps(struct bpf_object *obj)
+> >  		create_attr.key_size = def->key_size;
+> >  		create_attr.value_size = def->value_size;
+> >  		create_attr.max_entries = def->max_entries;
+> > -		create_attr.btf_fd = 0;
+> > +		create_attr.btf_fd = -1;
+> >  		create_attr.btf_key_type_id = 0;
+> >  		create_attr.btf_value_type_id = 0;
+> >  		if (bpf_map_type__is_map_in_map(def->type) &&
+> > @@ -1765,11 +1765,11 @@ bpf_object__create_maps(struct bpf_object *obj)
+> >  		}
+> >  
+> >  		*pfd = bpf_create_map_xattr(&create_attr);
+> > -		if (*pfd < 0 && create_attr.btf_key_type_id) {
+> > +		if (*pfd < 0 && create_attr.btf_fd >= 0) {
+> >  			cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
+> >  			pr_warning("Error in bpf_create_map_xattr(%s):%s(%d). Retrying without BTF.\n",
+> >  				   map->name, cp, errno);
+> > -			create_attr.btf_fd = 0;
+> > +			create_attr.btf_fd = -1;
+> This breaks libbpf compatibility with the older kernels. If the kernel
+> doesn't know about btf_fd and we set it to -1, then CHECK_ATTR
+> fails :-(
 > 
-> Need to take a lock for each generic receive to avoid race.
-> 
-> Fixes: c497176cb2e4 ("xsk: add Rx receive functions and poll support")
-> Signed-off-by: Ilya Maximets <i.maximets@samsung.com>
+> Any objections to converting BTF retries to bpf_capabilities and then
+> knowingly passing bft_fd==0 or proper fd?
+Oh, nevermind, it looks like you fixed it already in e55d54f43d3f.
 
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index a14e8864e4fa..19f41d2b670c 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -119,17 +119,22 @@ int xsk_generic_rcv(struct xdp_sock *xs, struct xdp_buff *xdp)
->  {
->  	u32 metalen = xdp->data - xdp->data_meta;
->  	u32 len = xdp->data_end - xdp->data;
-> +	unsigned long flags;
->  	void *buffer;
->  	u64 addr;
->  	int err;
->  
-> -	if (xs->dev != xdp->rxq->dev || xs->queue_id != xdp->rxq->queue_index)
-> -		return -EINVAL;
-> +	spin_lock_irqsave(&xs->rx_lock, flags);
-
-Why _irqsave, rather than _bh?
-
-> +	if (xs->dev != xdp->rxq->dev || xs->queue_id != xdp->rxq->queue_index) {
-> +		err = -EINVAL;
-> +		goto out_unlock;
-> +	}
->  
->  	if (!xskq_peek_addr(xs->umem->fq, &addr) ||
->  	    len > xs->umem->chunk_size_nohr - XDP_PACKET_HEADROOM) {
-> -		xs->rx_dropped++;
-> -		return -ENOSPC;
-> +		err = -ENOSPC;
-> +		goto out_drop;
->  	}
->  
->  	addr += xs->umem->headroom;
-
+> >  			create_attr.btf_key_type_id = 0;
+> >  			create_attr.btf_value_type_id = 0;
+> >  			map->btf_key_type_id = 0;
+> > @@ -2053,6 +2053,9 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+> >  	char *log_buf;
+> >  	int ret;
+> >  
+> > +	if (!insns || !insns_cnt)
+> > +		return -EINVAL;
+> > +
+> >  	memset(&load_attr, 0, sizeof(struct bpf_load_program_attr));
+> >  	load_attr.prog_type = prog->type;
+> >  	load_attr.expected_attach_type = prog->expected_attach_type;
+> > @@ -2063,7 +2066,7 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+> >  	load_attr.license = license;
+> >  	load_attr.kern_version = kern_version;
+> >  	load_attr.prog_ifindex = prog->prog_ifindex;
+> > -	load_attr.prog_btf_fd = prog->btf_fd >= 0 ? prog->btf_fd : 0;
+> > +	load_attr.prog_btf_fd = prog->btf_fd;
+> >  	load_attr.func_info = prog->func_info;
+> >  	load_attr.func_info_rec_size = prog->func_info_rec_size;
+> >  	load_attr.func_info_cnt = prog->func_info_cnt;
+> > @@ -2072,8 +2075,6 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+> >  	load_attr.line_info_cnt = prog->line_info_cnt;
+> >  	load_attr.log_level = prog->log_level;
+> >  	load_attr.prog_flags = prog->prog_flags;
+> > -	if (!load_attr.insns || !load_attr.insns_cnt)
+> > -		return -EINVAL;
+> >  
+> >  retry_load:
+> >  	log_buf = malloc(log_buf_size);
+> > -- 
+> > 2.17.1
+> > 
