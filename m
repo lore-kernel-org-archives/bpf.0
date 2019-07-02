@@ -8,59 +8,61 @@ X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BD19C5B57D
-	for <bpf@archiver.kernel.org>; Tue,  2 Jul 2019 06:10:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 385A9C5B57D
+	for <bpf@archiver.kernel.org>; Tue,  2 Jul 2019 07:33:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E00E22146F
-	for <bpf@archiver.kernel.org>; Tue,  2 Jul 2019 06:10:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EC15D206A2
+	for <bpf@archiver.kernel.org>; Tue,  2 Jul 2019 07:33:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W865J4+m"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dYpGDVbA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725802AbfGBGKW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Jul 2019 02:10:22 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:40192 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725775AbfGBGKW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Jul 2019 02:10:22 -0400
-Received: by mail-io1-f65.google.com with SMTP id n5so34377350ioc.7;
-        Mon, 01 Jul 2019 23:10:22 -0700 (PDT)
+        id S1725845AbfGBHdK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Jul 2019 03:33:10 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:45593 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725802AbfGBHdK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Jul 2019 03:33:10 -0400
+Received: by mail-ot1-f65.google.com with SMTP id x21so16187601otq.12;
+        Tue, 02 Jul 2019 00:33:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=dpESTJoUvt6Vlyr2kYxBbiDvhF3//mz2Ax3svrqr2kE=;
-        b=W865J4+mrF5Yn7FnCiXw+p98Y95MH4uAyIgkm0DqjJL+9nNU9iqodi4ESm+R1PPEZ4
-         /KKeDkiMDgGukVHp19vlTdAekaez0CCS/SdEjr+02UYkt5RdrRTsDQr4W8AUDZEA3hLS
-         1ODcMsklNh67jggsDpAdfbDwtN1XD1A85qxcpE1hzgw4kOvLaBE099lSbLPuALAAO6zG
-         +gn4mL+CIm7sHpXGwT09+LNzl7B9YHLyrrlhHypKKw1bqmwwKFyPINUQgjoM3L0memAC
-         w2IVyLDV2jTBwGntYSSs2olA75P/EkhjwLK2AlnWwh+HvDeK56h/fZTpPr+J1CoCeCr+
-         pmCA==
+        bh=1c0hWyTMkj4M+bWpR7NkP+GHPURV06a0lFDJPeh6SBw=;
+        b=dYpGDVbArAc99DHzSwo7ccPqV8Y4tPzGnaOgB9C3wmDHAQTLRsbaaMKGkTJBV/KDZb
+         Rc5BmjQTVZFDcQAW3Axi3RcTtpXoA54Z4SYQv03df6Q+98kojc1RUtV0XsAuOQe4JDVg
+         G6mcjb3XMihaYiqNV30XIdEl/zAoyLhQ1+xzZ+D4w0dd+dYpX+ihpYthMF9SUtPrDswr
+         jz6VTb8OotAJEdX9TrFuDwzKmG9QVeRDCHLRCOuNlr8NLorCVX6WmrTjOT28ia/n58+6
+         cSZKjd7FmAK5ixcWXfq8iNExQEvVmXo3bD6ZV3O2G6ALOwVzqjuTa5RKwZRvrzFyTNEu
+         IlbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=dpESTJoUvt6Vlyr2kYxBbiDvhF3//mz2Ax3svrqr2kE=;
-        b=IwGI6kjVveMvV7PxMxu8yCPaR+rjFNJS3J/HzHKvweW54pRmqPBNE7E559sdt4eMnj
-         +QsZlYujwui6yHR7nYzV7e99uT8JKqqCEcQ93CE+GuyJb2zBdi64c2aBxkTGDC/DaSNu
-         ElFQ6crqkhFpsm6FTqWJxj6Si0az/lc8TkKwlNFPXDmlpryeTWstGdIO5nxW5q3iG7+c
-         kZR6CxvVHw1Ucfd9ofjf3c4zk8mGZQL9sF87To/1FddUWPPm/sLwwLdLATiWrQmEt6oO
-         2ovEA4Brl0oD7TYlRh5tybquBgx7/q3xM2NryylY0nEgdAr/cyOkYMKrSvX4CEyQX3WE
-         JOrg==
-X-Gm-Message-State: APjAAAV67LgbB7KqsdsOl65D2bPadolF2tB3yVmJotc5WfRolQriGP0T
-        +AlWHnfXAsiJ5SUbMZ93N7Qiwx+t2F1Kd5ORAwY=
-X-Google-Smtp-Source: APXvYqztAWJLT71TV/JWgo+PXC1kmCfC0etfReJR3ZZR93dVUlfCDuiYYwZrXSgqgXeJglZwGFtaFlCI7aFbD2+76q8=
-X-Received: by 2002:a5e:aa15:: with SMTP id s21mr29112371ioe.221.1562047821457;
- Mon, 01 Jul 2019 23:10:21 -0700 (PDT)
+        bh=1c0hWyTMkj4M+bWpR7NkP+GHPURV06a0lFDJPeh6SBw=;
+        b=XAbvY0hZc9jovr1bg5KnaCboti7Kl7cw4Aux7EVPjZAYlpPRegQsNgkk15gM5MQLlL
+         lD/E6+FCw/b2QpVcdBlr5cPmbg9mWBVHZbCzVfzrKDN2thsANXMQMgEBiVcEexVDDJJS
+         SRTt6qDbAy95jcB/ORQe3Tiw+ovtEmmvnq0x7KtvdbFrHXdiVGNHIoYWiyNs41/Yxb9+
+         VK13He1fknBMp1yZ+3IAWahdGDeUgzsCNWNc483UElRzDH5MjfoL92phNTcSGeVDeAqt
+         Uas6GdZ73NPqINElAesTroYgxn25OdVhksAz0rF4Hpm2w9tGjrOrgmiYfRVuP8jsCNdR
+         zfbg==
+X-Gm-Message-State: APjAAAWzGKALaRdJ9uqRWhpzvODBFoiAz45I8nRn3OXPL7zRKTcumvnW
+        e4JFolviFNrxCz9tPpTj6sKbGbG32wQ4b7h790A=
+X-Google-Smtp-Source: APXvYqxlKK9A0mURV2hWmdOgaTtmQLWnHF4lSa0SKZWdnTafzGv326O9eqka9xWFakaz/hlxNK54s7pdkvnQb8gpvdM=
+X-Received: by 2002:a9d:7259:: with SMTP id a25mr6155854otk.30.1562052789656;
+ Tue, 02 Jul 2019 00:33:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190702054647.1686489-1-andriin@fb.com>
-In-Reply-To: <20190702054647.1686489-1-andriin@fb.com>
-From:   Y Song <ys114321@gmail.com>
-Date:   Mon, 1 Jul 2019 23:09:45 -0700
-Message-ID: <CAH3MdRUv9eJuecKq7weG614+6oEtfLeUHnTxoU19qr39p9-mrQ@mail.gmail.com>
+References: <20190702054647.1686489-1-andriin@fb.com> <CAH3MdRUv9eJuecKq7weG614+6oEtfLeUHnTxoU19qr39p9-mrQ@mail.gmail.com>
+In-Reply-To: <CAH3MdRUv9eJuecKq7weG614+6oEtfLeUHnTxoU19qr39p9-mrQ@mail.gmail.com>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Tue, 2 Jul 2019 09:32:58 +0200
+Message-ID: <CAJ8uoz3BuPumnS_mY3eQf4oH3x2PFdPTScmxDCfgU6=1aDrnew@mail.gmail.com>
 Subject: Re: [PATCH bpf-next] libbpf: fix GCC8 warning for strncpy
-To:     Andrii Nakryiko <andriin@fb.com>
-Cc:     andrii.nakryiko@gmail.com, bpf <bpf@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, Alexei Starovoitov <ast@fb.com>,
+To:     Y Song <ys114321@gmail.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        bpf <bpf@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Magnus Karlsson <magnus.karlsson@intel.com>
 Content-Type: text/plain; charset="UTF-8"
@@ -69,37 +71,46 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jul 1, 2019 at 10:47 PM Andrii Nakryiko <andriin@fb.com> wrote:
+On Tue, Jul 2, 2019 at 8:10 AM Y Song <ys114321@gmail.com> wrote:
 >
-> GCC8 started emitting warning about using strncpy with number of bytes
-> exactly equal destination size, which is generally unsafe, as can lead
-> to non-zero terminated string being copied. Use IFNAMSIZ - 1 as number
-> of bytes to ensure name is always zero-terminated.
+> On Mon, Jul 1, 2019 at 10:47 PM Andrii Nakryiko <andriin@fb.com> wrote:
+> >
+> > GCC8 started emitting warning about using strncpy with number of bytes
+> > exactly equal destination size, which is generally unsafe, as can lead
+> > to non-zero terminated string being copied. Use IFNAMSIZ - 1 as number
+> > of bytes to ensure name is always zero-terminated.
+> >
+> > Cc: Magnus Karlsson <magnus.karlsson@intel.com>
+> > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> > ---
+> >  tools/lib/bpf/xsk.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+> > index bf15a80a37c2..9588e7f87d0b 100644
+> > --- a/tools/lib/bpf/xsk.c
+> > +++ b/tools/lib/bpf/xsk.c
+> > @@ -327,7 +327,7 @@ static int xsk_get_max_queues(struct xsk_socket *xsk)
+> >
+> >         channels.cmd = ETHTOOL_GCHANNELS;
+> >         ifr.ifr_data = (void *)&channels;
+> > -       strncpy(ifr.ifr_name, xsk->ifname, IFNAMSIZ);
+> > +       strncpy(ifr.ifr_name, xsk->ifname, IFNAMSIZ - 1);
 >
-> Cc: Magnus Karlsson <magnus.karlsson@intel.com>
-> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-> ---
->  tools/lib/bpf/xsk.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
-> index bf15a80a37c2..9588e7f87d0b 100644
-> --- a/tools/lib/bpf/xsk.c
-> +++ b/tools/lib/bpf/xsk.c
-> @@ -327,7 +327,7 @@ static int xsk_get_max_queues(struct xsk_socket *xsk)
->
->         channels.cmd = ETHTOOL_GCHANNELS;
->         ifr.ifr_data = (void *)&channels;
-> -       strncpy(ifr.ifr_name, xsk->ifname, IFNAMSIZ);
-> +       strncpy(ifr.ifr_name, xsk->ifname, IFNAMSIZ - 1);
+> To accommodate the xsk->ifname string length FNAMSIZ - 1, we need to have
+>     ifr.ifr_name[FNAMSIZ - 1] = '\0';
+> right?
 
-To accommodate the xsk->ifname string length FNAMSIZ - 1, we need to have
-    ifr.ifr_name[FNAMSIZ - 1] = '\0';
-right?
+Yes. Since the ifr struct is allocated from the stack and not zeroed,
+we should do this.
 
->         err = ioctl(fd, SIOCETHTOOL, &ifr);
->         if (err && errno != EOPNOTSUPP) {
->                 ret = -errno;
-> --
-> 2.17.1
->
+Thanks to both of you for catching this.
+
+/Magnus
+
+> >         err = ioctl(fd, SIOCETHTOOL, &ifr);
+> >         if (err && errno != EOPNOTSUPP) {
+> >                 ret = -errno;
+> > --
+> > 2.17.1
+> >
