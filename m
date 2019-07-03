@@ -2,252 +2,83 @@ Return-Path: <SRS0=UYZo=VA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BCFDC06513
-	for <bpf@archiver.kernel.org>; Wed,  3 Jul 2019 17:02:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E04B2C0650E
+	for <bpf@archiver.kernel.org>; Wed,  3 Jul 2019 18:30:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 751D3218A6
-	for <bpf@archiver.kernel.org>; Wed,  3 Jul 2019 17:02:47 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bukW9Fgr"
+	by mail.kernel.org (Postfix) with ESMTP id C45B321882
+	for <bpf@archiver.kernel.org>; Wed,  3 Jul 2019 18:30:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727255AbfGCRCI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Jul 2019 13:02:08 -0400
-Received: from mail-vs1-f74.google.com ([209.85.217.74]:41370 "EHLO
-        mail-vs1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727049AbfGCRCF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Jul 2019 13:02:05 -0400
-Received: by mail-vs1-f74.google.com with SMTP id a200so172176vsd.8
-        for <bpf@vger.kernel.org>; Wed, 03 Jul 2019 10:02:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=a4B2pi3afPrfivcwvxY/0YFG7emhlAa6z/TIz7oLh4I=;
-        b=bukW9FgrgpnaTfg+obcuWRTUvcBzM1ggSi0JTvkY2Ae5L6Evnn1MydKeWAdJr4jHpD
-         K155rMxmXXFSDoq4Gb6xRF5gobEtv7Uo8uSmSZ14Anr3zhMh2ChciBLGQZGq6OekZKEe
-         jRP1pbytIydxHfngZ0esiuBzO2S38JHCupNdqAzG3a1512b2/+dX0x06ht1OuIhnMZwO
-         /9nO/fzdGARi9rMTIVYLWPZIdBTRyaktPnhp99sgEoQSR4Wu8SAzlVe31dFU/gEiQPhV
-         7AEr53drxmxgT0iNyHiR5JGfHl5U/KRFgOeuXxobQH3RkOQwsTNpuYtWiXrOvJcJ3v6L
-         qx+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=a4B2pi3afPrfivcwvxY/0YFG7emhlAa6z/TIz7oLh4I=;
-        b=V0xJpEY15vwGbUMfJz+VNL3LrH44ouiXgzzmVY7Ww+GyMl5Yz+zZybzMv+pms/urzn
-         BR7pD2kdaDjpdvda0NVC44g37BupZd1mLrdFm83Ox+4waO4+2dXo2U3SW+ggkUMx1T9u
-         SMqriPzhMOLw/sWNPAAKNWnwK5fbFzy1vQ+gfNwsMNoNkJ7yE1EMYmqShfflPh11PU5E
-         OskkPyuWkvZshO1kf9fpp7A94F1tgaXRqj5GSSLBVibxGQEdt5Hu39Mwy8Wca/JfV57m
-         qg6cuwQfpux5rglXFh9q8t+cpfujDEWi09t4qsLUUXR7raHEdJI/0qTPUL58hH7/CqeE
-         PYOg==
-X-Gm-Message-State: APjAAAV3UQHB3AIXG2/kz3ewI7e22Hg4FbkiF1sB65U3nZb2G/E7rGWj
-        b5LYPqqB8CX4ahMgtwHP06rK/ambOTXG
-X-Google-Smtp-Source: APXvYqyRDVT/laYhNDbWB8Xb2kPsFbhawuoJWiOJduoc/afILyBFyisVqWPFHogEuIHJSxmJgFzVmkvnEmqF
-X-Received: by 2002:a1f:a887:: with SMTP id r129mr11227778vke.75.1562173324191;
- Wed, 03 Jul 2019 10:02:04 -0700 (PDT)
-Date:   Wed,  3 Jul 2019 10:01:13 -0700
-In-Reply-To: <20190703170118.196552-1-brianvv@google.com>
-Message-Id: <20190703170118.196552-2-brianvv@google.com>
+        id S1727016AbfGCSaG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Jul 2019 14:30:06 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:60558 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725933AbfGCSaG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Jul 2019 14:30:06 -0400
+Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::d71])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 6A17D140DA5B3;
+        Wed,  3 Jul 2019 11:30:05 -0700 (PDT)
+Date:   Wed, 03 Jul 2019 11:30:05 -0700 (PDT)
+Message-Id: <20190703.113005.69711790321030429.davem@davemloft.net>
+To:     yuehaibing@huawei.com
+Cc:     jaswinder.singh@linaro.org, ast@kernel.org,
+        ilias.apalodimas@linaro.org, daniel@iogearbox.net,
+        jakub.kicinski@netronome.com, hawk@kernel.org,
+        netdev@vger.kernel.org, xdp-newbies@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH net-next] net: socionext: remove set but not used
+ variable 'pkts'
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20190703024213.191191-1-yuehaibing@huawei.com>
+References: <20190703024213.191191-1-yuehaibing@huawei.com>
+X-Mailer: Mew version 6.8 on Emacs 26.1
 Mime-Version: 1.0
-References: <20190703170118.196552-1-brianvv@google.com>
-X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH bpf-next RFC v3 1/6] bpf: add bpf_map_value_size and
- bp_map_copy_value helper functions
-From:   Brian Vazquez <brianvv@google.com>
-To:     Brian Vazquez <brianvv.kernel@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S . Miller" <davem@davemloft.net>
-Cc:     Stanislav Fomichev <sdf@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Petar Penkov <ppenkov@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Brian Vazquez <brianvv@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Wed, 03 Jul 2019 11:30:05 -0700 (PDT)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Move reusable code from map_lookup_elem to helper functions to avoid code
-duplication in kernel/bpf/syscall.c
+From: YueHaibing <yuehaibing@huawei.com>
+Date: Wed, 3 Jul 2019 02:42:13 +0000
 
-Suggested-by: Stanislav Fomichev <sdf@google.com>
-Signed-off-by: Brian Vazquez <brianvv@google.com>
----
- kernel/bpf/syscall.c | 134 +++++++++++++++++++++++--------------------
- 1 file changed, 73 insertions(+), 61 deletions(-)
+> Fixes gcc '-Wunused-but-set-variable' warning:
+> 
+> drivers/net/ethernet/socionext/netsec.c: In function 'netsec_clean_tx_dring':
+> drivers/net/ethernet/socionext/netsec.c:637:15: warning:
+>  variable 'pkts' set but not used [-Wunused-but-set-variable]
+> 
+> It is not used since commit ba2b232108d3 ("net: netsec: add XDP support")
+> 
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+>  drivers/net/ethernet/socionext/netsec.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/socionext/netsec.c b/drivers/net/ethernet/socionext/netsec.c
+> index 5544a722543f..015d1ec5436a 100644
+> --- a/drivers/net/ethernet/socionext/netsec.c
+> +++ b/drivers/net/ethernet/socionext/netsec.c
+> @@ -634,7 +634,7 @@ static void netsec_set_rx_de(struct netsec_priv *priv,
+>  static bool netsec_clean_tx_dring(struct netsec_priv *priv)
+>  {
+>  	struct netsec_desc_ring *dring = &priv->desc_ring[NETSEC_RING_TX];
+> -	unsigned int pkts, bytes;
+> +	unsigned int bytes;
+>  	struct netsec_de *entry;
+>  	int tail = dring->tail;
+>  	int cnt = 0;
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index b0f545e07425..d200d2837ade 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -126,6 +126,76 @@ static struct bpf_map *find_and_alloc_map(union bpf_attr *attr)
- 	return map;
- }
- 
-+static u32 bpf_map_value_size(struct bpf_map *map)
-+{
-+	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
-+	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH ||
-+	    map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY ||
-+	    map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE)
-+		return round_up(map->value_size, 8) * num_possible_cpus();
-+	else if (IS_FD_MAP(map))
-+		return sizeof(u32);
-+	else
-+		return  map->value_size;
-+}
-+
-+static int bpf_map_copy_value(struct bpf_map *map, void *key, void *value,
-+			      __u64 flags)
-+{
-+	void *ptr;
-+	int err;
-+
-+	if (bpf_map_is_dev_bound(map))
-+		return  bpf_map_offload_lookup_elem(map, key, value);
-+
-+	preempt_disable();
-+	this_cpu_inc(bpf_prog_active);
-+	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
-+	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
-+		err = bpf_percpu_hash_copy(map, key, value);
-+	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY) {
-+		err = bpf_percpu_array_copy(map, key, value);
-+	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE) {
-+		err = bpf_percpu_cgroup_storage_copy(map, key, value);
-+	} else if (map->map_type == BPF_MAP_TYPE_STACK_TRACE) {
-+		err = bpf_stackmap_copy(map, key, value);
-+	} else if (IS_FD_ARRAY(map)) {
-+		err = bpf_fd_array_map_lookup_elem(map, key, value);
-+	} else if (IS_FD_HASH(map)) {
-+		err = bpf_fd_htab_map_lookup_elem(map, key, value);
-+	} else if (map->map_type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY) {
-+		err = bpf_fd_reuseport_array_lookup_elem(map, key, value);
-+	} else if (map->map_type == BPF_MAP_TYPE_QUEUE ||
-+		   map->map_type == BPF_MAP_TYPE_STACK) {
-+		err = map->ops->map_peek_elem(map, value);
-+	} else {
-+		rcu_read_lock();
-+		if (map->ops->map_lookup_elem_sys_only)
-+			ptr = map->ops->map_lookup_elem_sys_only(map, key);
-+		else
-+			ptr = map->ops->map_lookup_elem(map, key);
-+		if (IS_ERR(ptr)) {
-+			err = PTR_ERR(ptr);
-+		} else if (!ptr) {
-+			err = -ENOENT;
-+		} else {
-+			err = 0;
-+			if (flags & BPF_F_LOCK)
-+				/* lock 'ptr' and copy everything but lock */
-+				copy_map_value_locked(map, value, ptr, true);
-+			else
-+				copy_map_value(map, value, ptr);
-+			/* mask lock, since value wasn't zero inited */
-+			check_and_init_map_lock(map, value);
-+		}
-+		rcu_read_unlock();
-+	}
-+	this_cpu_dec(bpf_prog_active);
-+	preempt_enable();
-+
-+	return err;
-+}
-+
- void *bpf_map_area_alloc(size_t size, int numa_node)
- {
- 	/* We really just want to fail instead of triggering OOM killer
-@@ -729,7 +799,7 @@ static int map_lookup_elem(union bpf_attr *attr)
- 	void __user *uvalue = u64_to_user_ptr(attr->value);
- 	int ufd = attr->map_fd;
- 	struct bpf_map *map;
--	void *key, *value, *ptr;
-+	void *key, *value;
- 	u32 value_size;
- 	struct fd f;
- 	int err;
-@@ -761,72 +831,14 @@ static int map_lookup_elem(union bpf_attr *attr)
- 		goto err_put;
- 	}
- 
--	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
--	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH ||
--	    map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY ||
--	    map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE)
--		value_size = round_up(map->value_size, 8) * num_possible_cpus();
--	else if (IS_FD_MAP(map))
--		value_size = sizeof(u32);
--	else
--		value_size = map->value_size;
-+	value_size = bpf_map_value_size(map);
- 
- 	err = -ENOMEM;
- 	value = kmalloc(value_size, GFP_USER | __GFP_NOWARN);
- 	if (!value)
- 		goto free_key;
- 
--	if (bpf_map_is_dev_bound(map)) {
--		err = bpf_map_offload_lookup_elem(map, key, value);
--		goto done;
--	}
--
--	preempt_disable();
--	this_cpu_inc(bpf_prog_active);
--	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
--	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
--		err = bpf_percpu_hash_copy(map, key, value);
--	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY) {
--		err = bpf_percpu_array_copy(map, key, value);
--	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE) {
--		err = bpf_percpu_cgroup_storage_copy(map, key, value);
--	} else if (map->map_type == BPF_MAP_TYPE_STACK_TRACE) {
--		err = bpf_stackmap_copy(map, key, value);
--	} else if (IS_FD_ARRAY(map)) {
--		err = bpf_fd_array_map_lookup_elem(map, key, value);
--	} else if (IS_FD_HASH(map)) {
--		err = bpf_fd_htab_map_lookup_elem(map, key, value);
--	} else if (map->map_type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY) {
--		err = bpf_fd_reuseport_array_lookup_elem(map, key, value);
--	} else if (map->map_type == BPF_MAP_TYPE_QUEUE ||
--		   map->map_type == BPF_MAP_TYPE_STACK) {
--		err = map->ops->map_peek_elem(map, value);
--	} else {
--		rcu_read_lock();
--		if (map->ops->map_lookup_elem_sys_only)
--			ptr = map->ops->map_lookup_elem_sys_only(map, key);
--		else
--			ptr = map->ops->map_lookup_elem(map, key);
--		if (IS_ERR(ptr)) {
--			err = PTR_ERR(ptr);
--		} else if (!ptr) {
--			err = -ENOENT;
--		} else {
--			err = 0;
--			if (attr->flags & BPF_F_LOCK)
--				/* lock 'ptr' and copy everything but lock */
--				copy_map_value_locked(map, value, ptr, true);
--			else
--				copy_map_value(map, value, ptr);
--			/* mask lock, since value wasn't zero inited */
--			check_and_init_map_lock(map, value);
--		}
--		rcu_read_unlock();
--	}
--	this_cpu_dec(bpf_prog_active);
--	preempt_enable();
--
--done:
-+	err = bpf_map_copy_value(map, key, value, attr->flags);
- 	if (err)
- 		goto free_value;
- 
--- 
-2.22.0.410.gd8fdbe21b5-goog
+This breaks the reverse christmas-tree ordering of the local variables in this
+function.  Please move the 'bytes' declaration down by two lines when you make
+this change.
 
+Thanks.
