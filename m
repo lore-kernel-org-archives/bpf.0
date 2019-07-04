@@ -7,61 +7,61 @@ X-Spam-Status: No, score=-10.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8AFEC46495
-	for <bpf@archiver.kernel.org>; Thu,  4 Jul 2019 21:27:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 745EFC46498
+	for <bpf@archiver.kernel.org>; Thu,  4 Jul 2019 21:27:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9FD03218A0
-	for <bpf@archiver.kernel.org>; Thu,  4 Jul 2019 21:27:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 41F2421852
+	for <bpf@archiver.kernel.org>; Thu,  4 Jul 2019 21:27:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="BSqXb+OL"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="yYo8w836"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727589AbfGDV1K (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 4 Jul 2019 17:27:10 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:33782 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727212AbfGDV1K (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 4 Jul 2019 17:27:10 -0400
-Received: by mail-wr1-f67.google.com with SMTP id n9so7888535wru.0
-        for <bpf@vger.kernel.org>; Thu, 04 Jul 2019 14:27:08 -0700 (PDT)
+        id S1727586AbfGDV1Y (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 4 Jul 2019 17:27:24 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:42865 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727518AbfGDV1I (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 4 Jul 2019 17:27:08 -0400
+Received: by mail-wr1-f66.google.com with SMTP id a10so6761502wrp.9
+        for <bpf@vger.kernel.org>; Thu, 04 Jul 2019 14:27:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=c4uexnLqDLKe+JQKp5mzqnabcoGZYMu89NHs0NR4zsI=;
-        b=BSqXb+OL0r9jBPf3HD90kqmQ4HXtFSbw2BuCLQ4BzlPFfmMbpxonKHaOZxv4hp9pF2
-         khphw7Fs6O0dMKq5eDvNBtHHm2fwuYypC1dQTNmiTzkjWPqiXbGilUnH8dszlIbelvFw
-         TwXrdUo4utQt8z4yMafsf/YzGx9vFfOuLIZYn2A8ctqvBtxkTcrvsJI+kwHk0mWgn+yn
-         U9bRJ1CH5u/rqVcZRXiitZoQ0sjwWRluD2K8gxlZ0kSIZrZGngBuK9+hBtfr7S+XKuh3
-         OCEAZwM81G5YRzAoYYzetppOPiAhWMFeUuuS6fsjgwLA/NotihcUKUUoBnXb2cFVWr+B
-         wSaQ==
+        bh=xwMnaUxwwx/VpH4WlxvyV6kBbBg37qwOURMFSuhvxtQ=;
+        b=yYo8w836VjTG14z3azN+zUiSMCSYD2NhI2uECFaEIxzA+b/Khl929Q6AmWcw2eTxBr
+         gi6u8gNyUXs0293rJpsF9YUOi7H5YQuGTYyeiNY6bXFGwfYXhxmBoANgRSLBBkYjXybB
+         t1MqdhcodU8b9OlZkf2MrcPnEfUuUYb83nHMynD+2B8/dTOvXL473WVeLHDu/SoXgN0N
+         nInMCmVVWrTlxsFN9cEGUoyXEpmzJ69Nl1QXTHj8dn0o4rCqI46BgfknaswjwLT1Rg89
+         M+sampQ01xl52Lxdsln/kyjyYhXFx8kDEZIozD7Qot0E1FWygWsQeFRKKY+E0f9Ex8sP
+         3VEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=c4uexnLqDLKe+JQKp5mzqnabcoGZYMu89NHs0NR4zsI=;
-        b=LiziwFKT3IHpNI6EnO6M/1rDzCWBV6uZizeZIuUpqFLw8n41FhGsAXnBG9YBMEG9jM
-         i6EzpagnF9X1xYoa0lDrIa9QPlpJscFIKXF7rSVwPOcO91EBCwlmocBl4kL+FLP5cyMc
-         V/5J3bSTpCvCzUX5VuGTpuGYyR4qOTBadWIvHBNfncm/zYC3KD3mwgn2y3VXoUfjYN+Y
-         EG3MCYv/U//dPxeCdYClQuncHsr4qq7L9A1/PgxMQ0VH4hcUMX08K3/3SrhPl9zAQlM0
-         qQBq0it7Nz6RhTE3Ei58LXshlkBmhRqrhjZHxfgojW7N0qOedo7CZA4uBghwL7GsFrns
-         Y4fQ==
-X-Gm-Message-State: APjAAAUco4KPs6ggeqNmrG7I1Q6YqZV2QivcGmdidQ/cda7jj0xB9NrS
-        +ylNTa4rzTXZmaBsiX0daxPOow==
-X-Google-Smtp-Source: APXvYqwPHwjVm9DhsaBAACKETl9qv1+ndcFfoN4cTiMknKpJGLO6PMWpZTcjBTJsnJYUZHErOQfcoA==
-X-Received: by 2002:a05:6000:1285:: with SMTP id f5mr324773wrx.315.1562275627849;
-        Thu, 04 Jul 2019 14:27:07 -0700 (PDT)
+        bh=xwMnaUxwwx/VpH4WlxvyV6kBbBg37qwOURMFSuhvxtQ=;
+        b=XbJNtBariF9kMUII+VR2Na0dZPvNIqr5N6quFVmqDzdvYMWHslI5obHpyz2drA4Lip
+         IhhukNSmJUp50ToJzq2xdointleIiuV9rGcBJdlIUN6i7yBBmJfCs1Dh/UT0az9Dcm/r
+         mhRgJirENSaV21bFnoiSg29hlI3CXj8GJw0PPB+Hr7p+ye++kh36zdKSKdsZJQq7KMeh
+         zKmvQdWB6UgLdF+pJ4bAGnUUnTGfz+cAyT1YF9YJa4+TypFgImK25md4hWoC779uCIC8
+         A0ePMldNCOR+CNo8I8BC/I934m/KiHt8Gg9pLRjVcD/eHlanzpte9nxHRDG+Agbkn+p6
+         FVrw==
+X-Gm-Message-State: APjAAAWK7RWFMk8caUZDAFV3OxcjHlUwkibz95y90Eh6o/XBEr4izzRc
+        Igg9DJ3NTcjAMH3L5Xrntl8n+A==
+X-Google-Smtp-Source: APXvYqy/mDpC1fOZQHhba2byXK+sQ/X+siE4P2MxP1OwMJDOFmHji+q7NhHQtLkik4He8lrZ9ZwBSA==
+X-Received: by 2002:a5d:5752:: with SMTP id q18mr345467wrw.337.1562275626065;
+        Thu, 04 Jul 2019 14:27:06 -0700 (PDT)
 Received: from cbtest28.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id t17sm9716654wrs.45.2019.07.04.14.27.07
+        by smtp.gmail.com with ESMTPSA id t17sm9716654wrs.45.2019.07.04.14.27.05
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Thu, 04 Jul 2019 14:27:07 -0700 (PDT)
+        Thu, 04 Jul 2019 14:27:05 -0700 (PDT)
 From:   Jiong Wang <jiong.wang@netronome.com>
 To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
 Cc:     ecree@solarflare.com, naveen.n.rao@linux.vnet.ibm.com,
         andriin@fb.com, jakub.kicinski@netronome.com, bpf@vger.kernel.org,
         netdev@vger.kernel.org, oss-drivers@netronome.com,
         Jiong Wang <jiong.wang@netronome.com>
-Subject: [RFC bpf-next 4/8] bpf: migrate convert_ctx_accesses to list patching infra
-Date:   Thu,  4 Jul 2019 22:26:47 +0100
-Message-Id: <1562275611-31790-5-git-send-email-jiong.wang@netronome.com>
+Subject: [RFC bpf-next 2/8] bpf: extend list based insn patching infra to verification layer
+Date:   Thu,  4 Jul 2019 22:26:45 +0100
+Message-Id: <1562275611-31790-3-git-send-email-jiong.wang@netronome.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1562275611-31790-1-git-send-email-jiong.wang@netronome.com>
 References: <1562275611-31790-1-git-send-email-jiong.wang@netronome.com>
@@ -70,199 +70,184 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch migrate convert_ctx_accesses to new list patching
-infrastructure. pre-patch is used for generating prologue, because what we
-really want to do is insert the prog before prog start without touching
-the first insn.
+Verification layer also needs to handle auxiliar info as well as adjusting
+subprog start.
+
+At this layer, insns inside patch buffer could be jump, but they should
+have been resolved, meaning they shouldn't jump to insn outside of the
+patch buffer. Lineration function for this layer won't touch insns inside
+patch buffer.
+
+Adjusting subprog is finished along with adjusting jump target when the
+input will cover bpf to bpf call insn, re-register subprog start is cheap.
+But adjustment when there is insn deleteion is not considered yet.
 
 Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
 ---
- kernel/bpf/verifier.c | 98 ++++++++++++++++++++++++++++++---------------------
- 1 file changed, 58 insertions(+), 40 deletions(-)
+ kernel/bpf/verifier.c | 150 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 150 insertions(+)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2026d64..2d16e85 100644
+index a2e7637..2026d64 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -8631,41 +8631,59 @@ static int opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
- static int convert_ctx_accesses(struct bpf_verifier_env *env)
- {
- 	const struct bpf_verifier_ops *ops = env->ops;
--	int i, cnt, size, ctx_field_size, delta = 0;
--	const int insn_cnt = env->prog->len;
- 	struct bpf_insn insn_buf[16], *insn;
- 	u32 target_size, size_default, off;
--	struct bpf_prog *new_prog;
-+	struct bpf_list_insn *list, *elem;
-+	int cnt, size, ctx_field_size;
- 	enum bpf_access_type type;
- 	bool is_narrower_load;
-+	int ret = 0;
-+
-+	list = bpf_create_list_insn(env->prog);
-+	if (IS_ERR(list))
-+		return PTR_ERR(list);
-+	elem = list;
- 
- 	if (ops->gen_prologue || env->seen_direct_write) {
- 		if (!ops->gen_prologue) {
- 			verbose(env, "bpf verifier is misconfigured\n");
--			return -EINVAL;
-+			ret = -EINVAL;
-+			goto free_list_ret;
- 		}
- 		cnt = ops->gen_prologue(insn_buf, env->seen_direct_write,
- 					env->prog);
- 		if (cnt >= ARRAY_SIZE(insn_buf)) {
- 			verbose(env, "bpf verifier is misconfigured\n");
--			return -EINVAL;
-+			ret = -EINVAL;
-+			goto free_list_ret;
- 		} else if (cnt) {
--			new_prog = bpf_patch_insn_data(env, 0, insn_buf, cnt);
--			if (!new_prog)
--				return -ENOMEM;
-+			struct bpf_list_insn *new_hdr;
- 
--			env->prog = new_prog;
--			delta += cnt - 1;
-+			/* "gen_prologue" generates patch buffer, we want to use
-+			 * pre-patch buffer because we don't want to touch the
-+			 * insn/aux at start offset.
-+			 */
-+			new_hdr = bpf_prepatch_list_insn(list, insn_buf,
-+							 cnt - 1);
-+			if (IS_ERR(new_hdr)) {
-+				ret = -ENOMEM;
-+				goto free_list_ret;
-+			}
-+			/* Update list head, so new pre-patched nodes could be
-+			 * freed by destroyer.
-+			 */
-+			list = new_hdr;
- 		}
+@@ -8350,6 +8350,156 @@ static void opt_hard_wire_dead_code_branches(struct bpf_verifier_env *env)
  	}
- 
- 	if (bpf_prog_is_dev_bound(env->prog->aux))
--		return 0;
-+		goto linearize_list_ret;
- 
--	insn = env->prog->insnsi + delta;
--
--	for (i = 0; i < insn_cnt; i++, insn++) {
-+	for (; elem; elem = elem->next) {
- 		bpf_convert_ctx_access_t convert_ctx_access;
-+		struct bpf_insn_aux_data *aux;
-+
-+		insn = &elem->insn;
- 
- 		if (insn->code == (BPF_LDX | BPF_MEM | BPF_B) ||
- 		    insn->code == (BPF_LDX | BPF_MEM | BPF_H) ||
-@@ -8680,8 +8698,8 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
- 		else
- 			continue;
- 
--		if (type == BPF_WRITE &&
--		    env->insn_aux_data[i + delta].sanitize_stack_off) {
-+		aux = &env->insn_aux_data[elem->orig_idx - 1];
-+		if (type == BPF_WRITE && aux->sanitize_stack_off) {
- 			struct bpf_insn patch[] = {
- 				/* Sanitize suspicious stack slot with zero.
- 				 * There are no memory dependencies for this store,
-@@ -8689,8 +8707,7 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
- 				 * constant of zero
- 				 */
- 				BPF_ST_MEM(BPF_DW, BPF_REG_FP,
--					   env->insn_aux_data[i + delta].sanitize_stack_off,
--					   0),
-+					   aux->sanitize_stack_off, 0),
- 				/* the original STX instruction will immediately
- 				 * overwrite the same stack slot with appropriate value
- 				 */
-@@ -8698,17 +8715,15 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
- 			};
- 
- 			cnt = ARRAY_SIZE(patch);
--			new_prog = bpf_patch_insn_data(env, i + delta, patch, cnt);
--			if (!new_prog)
--				return -ENOMEM;
--
--			delta    += cnt - 1;
--			env->prog = new_prog;
--			insn      = new_prog->insnsi + i + delta;
-+			elem = bpf_patch_list_insn(elem, patch, cnt);
-+			if (IS_ERR(elem)) {
-+				ret = PTR_ERR(elem);
-+				goto free_list_ret;
-+			}
- 			continue;
- 		}
- 
--		switch (env->insn_aux_data[i + delta].ptr_type) {
-+		switch (aux->ptr_type) {
- 		case PTR_TO_CTX:
- 			if (!ops->convert_ctx_access)
- 				continue;
-@@ -8728,7 +8743,7 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
- 			continue;
- 		}
- 
--		ctx_field_size = env->insn_aux_data[i + delta].ctx_field_size;
-+		ctx_field_size = aux->ctx_field_size;
- 		size = BPF_LDST_BYTES(insn);
- 
- 		/* If the read access is a narrower load of the field,
-@@ -8744,7 +8759,8 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
- 
- 			if (type == BPF_WRITE) {
- 				verbose(env, "bpf verifier narrow ctx access misconfigured\n");
--				return -EINVAL;
-+				ret = -EINVAL;
-+				goto free_list_ret;
- 			}
- 
- 			size_code = BPF_H;
-@@ -8763,7 +8779,8 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
- 		if (cnt == 0 || cnt >= ARRAY_SIZE(insn_buf) ||
- 		    (ctx_field_size && !target_size)) {
- 			verbose(env, "bpf verifier is misconfigured\n");
--			return -EINVAL;
-+			ret = -EINVAL;
-+			goto free_list_ret;
- 		}
- 
- 		if (is_narrower_load && size < target_size) {
-@@ -8786,18 +8803,19 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
- 			}
- 		}
- 
--		new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
--		if (!new_prog)
--			return -ENOMEM;
--
--		delta += cnt - 1;
--
--		/* keep walking new program and skip insns we just inserted */
--		env->prog = new_prog;
--		insn      = new_prog->insnsi + i + delta;
-+		elem = bpf_patch_list_insn(elem, insn_buf, cnt);
-+		if (IS_ERR(elem)) {
-+			ret = PTR_ERR(elem);
-+			goto free_list_ret;
-+		}
- 	}
--
--	return 0;
-+linearize_list_ret:
-+	env = verifier_linearize_list_insn(env, list);
-+	if (IS_ERR(env))
-+		ret = PTR_ERR(env);
-+free_list_ret:
-+	bpf_destroy_list_insn(list);
-+	return ret;
  }
  
- static int jit_subprogs(struct bpf_verifier_env *env)
++/* Linearize bpf list insn to array (verifier layer). */
++static struct bpf_verifier_env *
++verifier_linearize_list_insn(struct bpf_verifier_env *env,
++			     struct bpf_list_insn *list)
++{
++	u32 *idx_map, idx, orig_cnt, fini_cnt = 0;
++	struct bpf_subprog_info *new_subinfo;
++	struct bpf_insn_aux_data *new_data;
++	struct bpf_prog *prog = env->prog;
++	struct bpf_verifier_env *ret_env;
++	struct bpf_insn *insns, *insn;
++	struct bpf_list_insn *elem;
++	int ret;
++
++	/* Calculate final size. */
++	for (elem = list; elem; elem = elem->next)
++		if (!(elem->flag & LIST_INSN_FLAG_REMOVED))
++			fini_cnt++;
++
++	orig_cnt = prog->len;
++	insns = prog->insnsi;
++	/* If prog length remains same, nothing else to do. */
++	if (fini_cnt == orig_cnt) {
++		for (insn = insns, elem = list; elem; elem = elem->next, insn++)
++			*insn = elem->insn;
++		return env;
++	}
++	/* Realloc insn buffer when necessary. */
++	if (fini_cnt > orig_cnt)
++		prog = bpf_prog_realloc(prog, bpf_prog_size(fini_cnt),
++					GFP_USER);
++	if (!prog)
++		return ERR_PTR(-ENOMEM);
++	insns = prog->insnsi;
++	prog->len = fini_cnt;
++	ret_env = env;
++
++	/* idx_map[OLD_IDX] = NEW_IDX */
++	idx_map = kvmalloc(orig_cnt * sizeof(u32), GFP_KERNEL);
++	if (!idx_map)
++		return ERR_PTR(-ENOMEM);
++	memset(idx_map, 0xff, orig_cnt * sizeof(u32));
++
++	/* Use the same alloc method used when allocating env->insn_aux_data. */
++	new_data = vzalloc(array_size(sizeof(*new_data), fini_cnt));
++	if (!new_data) {
++		kvfree(idx_map);
++		return ERR_PTR(-ENOMEM);
++	}
++
++	/* Copy over insn + calculate idx_map. */
++	for (idx = 0, elem = list; elem; elem = elem->next) {
++		int orig_idx = elem->orig_idx - 1;
++
++		if (orig_idx >= 0) {
++			idx_map[orig_idx] = idx;
++
++			if (elem->flag & LIST_INSN_FLAG_REMOVED)
++				continue;
++
++			new_data[idx] = env->insn_aux_data[orig_idx];
++
++			if (elem->flag & LIST_INSN_FLAG_PATCHED)
++				new_data[idx].zext_dst =
++					insn_has_def32(env, &elem->insn);
++		} else {
++			new_data[idx].seen = true;
++			new_data[idx].zext_dst = insn_has_def32(env,
++								&elem->insn);
++		}
++		insns[idx++] = elem->insn;
++	}
++
++	new_subinfo = kvzalloc(sizeof(env->subprog_info), GFP_KERNEL);
++	if (!new_subinfo) {
++		kvfree(idx_map);
++		vfree(new_data);
++		return ERR_PTR(-ENOMEM);
++	}
++	memcpy(new_subinfo, env->subprog_info, sizeof(env->subprog_info));
++	memset(env->subprog_info, 0, sizeof(env->subprog_info));
++	env->subprog_cnt = 0;
++	env->prog = prog;
++	ret = add_subprog(env, 0);
++	if (ret < 0) {
++		ret_env = ERR_PTR(ret);
++		goto free_all_ret;
++	}
++	/* Relocate jumps using idx_map.
++	 *   old_dst = jmp_insn.old_target + old_pc + 1;
++	 *   new_dst = idx_map[old_dst] = jmp_insn.new_target + new_pc + 1;
++	 *   jmp_insn.new_target = new_dst - new_pc - 1;
++	 */
++	for (idx = 0, elem = list; elem; elem = elem->next) {
++		int orig_idx = elem->orig_idx;
++
++		if (elem->flag & LIST_INSN_FLAG_REMOVED)
++			continue;
++		if ((elem->flag & LIST_INSN_FLAG_PATCHED) || !orig_idx) {
++			idx++;
++			continue;
++		}
++
++		ret = bpf_jit_adj_imm_off(&insns[idx], orig_idx - 1, idx,
++					  idx_map);
++		if (ret < 0) {
++			ret_env = ERR_PTR(ret);
++			goto free_all_ret;
++		}
++		/* Recalculate subprog start as we are at bpf2bpf call insn. */
++		if (ret > 0) {
++			ret = add_subprog(env, idx + insns[idx].imm + 1);
++			if (ret < 0) {
++				ret_env = ERR_PTR(ret);
++				goto free_all_ret;
++			}
++		}
++		idx++;
++	}
++	if (ret < 0) {
++		ret_env = ERR_PTR(ret);
++		goto free_all_ret;
++	}
++
++	env->subprog_info[env->subprog_cnt].start = fini_cnt;
++	for (idx = 0; idx <= env->subprog_cnt; idx++)
++		new_subinfo[idx].start = env->subprog_info[idx].start;
++	memcpy(env->subprog_info, new_subinfo, sizeof(env->subprog_info));
++
++	/* Adjust linfo.
++	 * FIXME: no support for insn removal at the moment.
++	 */
++	if (prog->aux->nr_linfo) {
++		struct bpf_line_info *linfo = prog->aux->linfo;
++		u32 nr_linfo = prog->aux->nr_linfo;
++
++		for (idx = 0; idx < nr_linfo; idx++)
++			linfo[idx].insn_off = idx_map[linfo[idx].insn_off];
++	}
++	vfree(env->insn_aux_data);
++	env->insn_aux_data = new_data;
++	goto free_mem_list_ret;
++free_all_ret:
++	vfree(new_data);
++free_mem_list_ret:
++	kvfree(new_subinfo);
++	kvfree(idx_map);
++	return ret_env;
++}
++
+ static int opt_remove_dead_code(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_insn_aux_data *aux_data = env->insn_aux_data;
 -- 
 2.7.4
 
