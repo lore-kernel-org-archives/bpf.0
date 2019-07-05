@@ -1,407 +1,169 @@
-Return-Path: <SRS0=LNRn=VB=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=d9P3=VC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF445C46497
-	for <bpf@archiver.kernel.org>; Thu,  4 Jul 2019 21:27:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 674DEC0650E
+	for <bpf@archiver.kernel.org>; Fri,  5 Jul 2019 00:18:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8634F21852
-	for <bpf@archiver.kernel.org>; Thu,  4 Jul 2019 21:27:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 24F3621852
+	for <bpf@archiver.kernel.org>; Fri,  5 Jul 2019 00:18:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="VNPJkSgh"
+	dkim=pass (1024-bit key) header.d=cs.washington.edu header.i=@cs.washington.edu header.b="des6ixjM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727518AbfGDV1Z (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 4 Jul 2019 17:27:25 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:43220 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727310AbfGDV1I (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 4 Jul 2019 17:27:08 -0400
-Received: by mail-wr1-f67.google.com with SMTP id p13so7837640wru.10
-        for <bpf@vger.kernel.org>; Thu, 04 Jul 2019 14:27:05 -0700 (PDT)
+        id S1727502AbfGEASS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 4 Jul 2019 20:18:18 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:44214 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726404AbfGEASS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 4 Jul 2019 20:18:18 -0400
+Received: by mail-pf1-f196.google.com with SMTP id t16so3487256pfe.11
+        for <bpf@vger.kernel.org>; Thu, 04 Jul 2019 17:18:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=iwT+3s2jEFcW3szOT63BZD0PBUkIwgHyY9EbKLgxRJc=;
-        b=VNPJkSghd7/vN6rRkF06NtuNdsrS+U8ojTW3HBWP3Jrvna4PEvVOPDQWQ/G2YswN2/
-         VbkfH/1ABUIzwd0QKry6KSJpMKmtn+NpORmAFwnSXG7cf0WvdKLEKMQ8w+rL1dJ4CNy3
-         YrH4ixXjMvr1lu6mTDDO2o5CeSvDIbPKE8SIlpRBXVJt3NWbIISiCHhNl817c18xwPlt
-         jwRpOeTqpBBP0rafDaDSoBKtVqKYobqQbYblRuMmwzFy1Nc7YpLDwXz1ouzK/c+WScLN
-         0jrlH0YdON8++4OJm8MutY8HAwWj/khFYag0dlhT8XjtKtAWF7wHV+6V/7Sw0pXfuxft
-         Itqw==
+        d=cs.washington.edu; s=goo201206;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ieoRpUxmUXtlmske89JbAl6yE+PFtkjAQtUvuulFg8E=;
+        b=des6ixjMKnQvR6ExT7KYukXvC/tI+2vPZSaFyTdpAPTJNVkpvPQ7HqA6Y28Z/irgkv
+         TjB+EIIQVi1T4+phwGES6MvjooIJjsMlulce7MAbKVl8G3itteydm9TqE4jeO6Qbznvj
+         BbKpB5UbOUNjobTmk9CUo8cmy1nCSHy8KYsaE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=iwT+3s2jEFcW3szOT63BZD0PBUkIwgHyY9EbKLgxRJc=;
-        b=qBmX5DK0vrrvMQvnNfrA5+avdQwmy+PZvP/tPRPLp4cruD0RdZz8h5c84bNFiaNLi9
-         FOV/GQBDz/1Ve7QoV4YNXrHVn8IhhOyrwuqCZDgOx5Ycjt3z55tpNdIXffOSWfP6YDpu
-         hMjx7SMDXS0Wk94jHUVIea7tzYLwQ7ZZ8SSPE0DDzRqNN7FsTFi/r153GFJQKdGLX0pM
-         9MpjHywgU8eM0vF7fDsnfvefNLr2x/vA7+2N3TVarGMawdaNxspZyf/oqmeGpv8BYuCt
-         5gcHrg8ZS3waXgavApaopPqkwuSt+VYIhAIydvIDO74uUfpXzaeBTA+6EcNkO9mqbykJ
-         X1mg==
-X-Gm-Message-State: APjAAAUkBXc4fBrE1+TznUTtJNEo++jW4D/Q+d50JY42EwJb1udyTmwn
-        MFIhO61JcOTkoDtvY36RTY/2cw==
-X-Google-Smtp-Source: APXvYqyCZmvMZhtzPcRkq1frWsIZkMisfmm+A8NfRUBbpo+N01vGkVXTtGKOgeCsbtsC3wuokMUe+g==
-X-Received: by 2002:a5d:4e50:: with SMTP id r16mr349654wrt.227.1562275625127;
-        Thu, 04 Jul 2019 14:27:05 -0700 (PDT)
-Received: from cbtest28.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id t17sm9716654wrs.45.2019.07.04.14.27.03
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Thu, 04 Jul 2019 14:27:04 -0700 (PDT)
-From:   Jiong Wang <jiong.wang@netronome.com>
-To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
-Cc:     ecree@solarflare.com, naveen.n.rao@linux.vnet.ibm.com,
-        andriin@fb.com, jakub.kicinski@netronome.com, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, oss-drivers@netronome.com,
-        Jiong Wang <jiong.wang@netronome.com>
-Subject: [RFC bpf-next 1/8] bpf: introducing list based insn patching infra to core layer
-Date:   Thu,  4 Jul 2019 22:26:44 +0100
-Message-Id: <1562275611-31790-2-git-send-email-jiong.wang@netronome.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1562275611-31790-1-git-send-email-jiong.wang@netronome.com>
-References: <1562275611-31790-1-git-send-email-jiong.wang@netronome.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ieoRpUxmUXtlmske89JbAl6yE+PFtkjAQtUvuulFg8E=;
+        b=Q7jPzgLODOGc3dyapBywcBVkzi6TEyjMdOTnxMWRIBIsF41YED3xdoowuDmzy1/YUA
+         K2aLIJ9vPkTQs0MQ8o8+R6xFinYq+hspo+Va6Wny8BU8FJCgQEjsdWd3YWpihbOLgBs+
+         PY1Wrrz9UwKt1CyASSRWomlxA5BqT0/76LcZSk4VVImMqqSdGwDetJyboOJMqx+fDe83
+         rD/x+FJErK3N5ly2n7X85+OlE6Tii5vvNw2Npr44yedpzRDkoJlyfZPUFss4YcNx6Yer
+         /NF2LDhJgr7gwiihiAyI28ndNKWLRcXUy5NK4QuKPLkXV2+iOBNeDlWMWod49pNu8HmU
+         2dng==
+X-Gm-Message-State: APjAAAVEAdqMqjhuGY8pX6xrOK6XzGqDBa05YrVci6mJ2W0cgf89HiYC
+        v9dynkQO9qoPFe+1++MaosBvzg==
+X-Google-Smtp-Source: APXvYqzYqQYsnij9RBKsP2qGU6x1hHVuqBZ4VlRgngJa3AsE0s35Rkjntbz44duoTSCYeQYhJwoFPQ==
+X-Received: by 2002:a17:90a:d3d4:: with SMTP id d20mr791957pjw.28.1562285897229;
+        Thu, 04 Jul 2019 17:18:17 -0700 (PDT)
+Received: from ryzen.cs.washington.edu ([2607:4000:200:11:882:19c3:2cb3:4b10])
+        by smtp.gmail.com with ESMTPSA id q1sm11494168pfn.178.2019.07.04.17.18.16
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 04 Jul 2019 17:18:16 -0700 (PDT)
+From:   Luke Nelson <lukenels@cs.washington.edu>
+X-Google-Original-From: Luke Nelson <luke.r.nels@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Luke Nelson <luke.r.nels@gmail.com>,
+        Song Liu <liu.song.a23@gmail.com>,
+        Jiong Wang <jiong.wang@netronome.com>,
+        Xi Wang <xi.wang@gmail.com>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>,
+        Palmer Dabbelt <palmer@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        netdev@vger.kernel.org, linux-riscv@lists.infradead.org,
+        bpf@vger.kernel.org
+Subject: [PATCH bpf-next] Enable zext optimization for more RV64G ALU ops
+Date:   Thu,  4 Jul 2019 17:18:02 -0700
+Message-Id: <20190705001803.30094-1-luke.r.nels@gmail.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch introduces list based bpf insn patching infra to bpf core layer
-which is lower than verification layer.
+commit 66d0d5a854a6 ("riscv: bpf: eliminate zero extension code-gen")
+added the new zero-extension optimization for some BPF ALU operations.
 
-This layer has bpf insn sequence as the solo input, therefore the tasks
-to be finished during list linerization is:
-  - copy insn
-  - relocate jumps
-  - relocation line info.
+Since then, bugs in the JIT that have been fixed in the bpf tree require
+this optimization to be added to other operations: commit 1e692f09e091
+("bpf, riscv: clear high 32 bits for ALU32 add/sub/neg/lsh/rsh/arsh"),
+and commit fe121ee531d1 ("bpf, riscv: clear target register high 32-bits
+for and/or/xor on ALU32")
 
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Suggested-by: Edward Cree <ecree@solarflare.com>
-Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
+Now that these have been merged to bpf-next, the zext optimization can
+be enabled for the fixed operations.
+
+Cc: Song Liu <liu.song.a23@gmail.com>
+Cc: Jiong Wang <jiong.wang@netronome.com>
+Cc: Xi Wang <xi.wang@gmail.com>
+Signed-off-by: Luke Nelson <luke.r.nels@gmail.com>
 ---
- include/linux/filter.h |  25 +++++
- kernel/bpf/core.c      | 268 +++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 293 insertions(+)
+ arch/riscv/net/bpf_jit_comp.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 1fe53e7..1fea68c 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -842,6 +842,31 @@ struct bpf_prog *bpf_patch_insn_single(struct bpf_prog *prog, u32 off,
- 				       const struct bpf_insn *patch, u32 len);
- int bpf_remove_insns(struct bpf_prog *prog, u32 off, u32 cnt);
+diff --git a/arch/riscv/net/bpf_jit_comp.c b/arch/riscv/net/bpf_jit_comp.c
+index 876cb9c705ce..5451ef3845f2 100644
+--- a/arch/riscv/net/bpf_jit_comp.c
++++ b/arch/riscv/net/bpf_jit_comp.c
+@@ -757,31 +757,31 @@ static int emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 	case BPF_ALU | BPF_ADD | BPF_X:
+ 	case BPF_ALU64 | BPF_ADD | BPF_X:
+ 		emit(is64 ? rv_add(rd, rd, rs) : rv_addw(rd, rd, rs), ctx);
+-		if (!is64)
++		if (!is64 && !aux->verifier_zext)
+ 			emit_zext_32(rd, ctx);
+ 		break;
+ 	case BPF_ALU | BPF_SUB | BPF_X:
+ 	case BPF_ALU64 | BPF_SUB | BPF_X:
+ 		emit(is64 ? rv_sub(rd, rd, rs) : rv_subw(rd, rd, rs), ctx);
+-		if (!is64)
++		if (!is64 && !aux->verifier_zext)
+ 			emit_zext_32(rd, ctx);
+ 		break;
+ 	case BPF_ALU | BPF_AND | BPF_X:
+ 	case BPF_ALU64 | BPF_AND | BPF_X:
+ 		emit(rv_and(rd, rd, rs), ctx);
+-		if (!is64)
++		if (!is64 && !aux->verifier_zext)
+ 			emit_zext_32(rd, ctx);
+ 		break;
+ 	case BPF_ALU | BPF_OR | BPF_X:
+ 	case BPF_ALU64 | BPF_OR | BPF_X:
+ 		emit(rv_or(rd, rd, rs), ctx);
+-		if (!is64)
++		if (!is64 && !aux->verifier_zext)
+ 			emit_zext_32(rd, ctx);
+ 		break;
+ 	case BPF_ALU | BPF_XOR | BPF_X:
+ 	case BPF_ALU64 | BPF_XOR | BPF_X:
+ 		emit(rv_xor(rd, rd, rs), ctx);
+-		if (!is64)
++		if (!is64 && !aux->verifier_zext)
+ 			emit_zext_32(rd, ctx);
+ 		break;
+ 	case BPF_ALU | BPF_MUL | BPF_X:
+@@ -811,13 +811,13 @@ static int emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 	case BPF_ALU | BPF_RSH | BPF_X:
+ 	case BPF_ALU64 | BPF_RSH | BPF_X:
+ 		emit(is64 ? rv_srl(rd, rd, rs) : rv_srlw(rd, rd, rs), ctx);
+-		if (!is64)
++		if (!is64 && !aux->verifier_zext)
+ 			emit_zext_32(rd, ctx);
+ 		break;
+ 	case BPF_ALU | BPF_ARSH | BPF_X:
+ 	case BPF_ALU64 | BPF_ARSH | BPF_X:
+ 		emit(is64 ? rv_sra(rd, rd, rs) : rv_sraw(rd, rd, rs), ctx);
+-		if (!is64)
++		if (!is64 && !aux->verifier_zext)
+ 			emit_zext_32(rd, ctx);
+ 		break;
  
-+int bpf_jit_adj_imm_off(struct bpf_insn *insn, int old_idx, int new_idx,
-+			int idx_map[]);
-+
-+#define LIST_INSN_FLAG_PATCHED	0x1
-+#define LIST_INSN_FLAG_REMOVED	0x2
-+struct bpf_list_insn {
-+	struct bpf_insn insn;
-+	struct bpf_list_insn *next;
-+	s32 orig_idx;
-+	u32 flag;
-+};
-+
-+struct bpf_list_insn *bpf_create_list_insn(struct bpf_prog *prog);
-+void bpf_destroy_list_insn(struct bpf_list_insn *list);
-+/* Replace LIST_INSN with new list insns generated from PATCH. */
-+struct bpf_list_insn *bpf_patch_list_insn(struct bpf_list_insn *list_insn,
-+					  const struct bpf_insn *patch,
-+					  u32 len);
-+/* Pre-patch list_insn with insns inside PATCH, meaning LIST_INSN is not
-+ * touched. New list insns are inserted before it.
-+ */
-+struct bpf_list_insn *bpf_prepatch_list_insn(struct bpf_list_insn *list_insn,
-+					     const struct bpf_insn *patch,
-+					     u32 len);
-+
- void bpf_clear_redirect_map(struct bpf_map *map);
+@@ -826,7 +826,7 @@ static int emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 	case BPF_ALU64 | BPF_NEG:
+ 		emit(is64 ? rv_sub(rd, RV_REG_ZERO, rd) :
+ 		     rv_subw(rd, RV_REG_ZERO, rd), ctx);
+-		if (!is64)
++		if (!is64 && !aux->verifier_zext)
+ 			emit_zext_32(rd, ctx);
+ 		break;
  
- static inline bool xdp_return_frame_no_direct(void)
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index e2c1b43..e60703e 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -502,6 +502,274 @@ int bpf_remove_insns(struct bpf_prog *prog, u32 off, u32 cnt)
- 	return WARN_ON_ONCE(bpf_adj_branches(prog, off, off + cnt, off, false));
- }
- 
-+int bpf_jit_adj_imm_off(struct bpf_insn *insn, int old_idx, int new_idx,
-+			s32 idx_map[])
-+{
-+	u8 code = insn->code;
-+	s64 imm;
-+	s32 off;
-+
-+	if (BPF_CLASS(code) != BPF_JMP && BPF_CLASS(code) != BPF_JMP32)
-+		return 0;
-+
-+	if (BPF_CLASS(code) == BPF_JMP &&
-+	    (BPF_OP(code) == BPF_EXIT ||
-+	     (BPF_OP(code) == BPF_CALL && insn->src_reg != BPF_PSEUDO_CALL)))
-+		return 0;
-+
-+	/* BPF to BPF call. */
-+	if (BPF_OP(code) == BPF_CALL) {
-+		imm = idx_map[old_idx + insn->imm + 1] - new_idx - 1;
-+		if (imm < S32_MIN || imm > S32_MAX)
-+			return -ERANGE;
-+		insn->imm = imm;
-+		return 1;
-+	}
-+
-+	/* Jump. */
-+	off = idx_map[old_idx + insn->off + 1] - new_idx - 1;
-+	if (off < S16_MIN || off > S16_MAX)
-+		return -ERANGE;
-+	insn->off = off;
-+	return 0;
-+}
-+
-+void bpf_destroy_list_insn(struct bpf_list_insn *list)
-+{
-+	struct bpf_list_insn *elem, *next;
-+
-+	for (elem = list; elem; elem = next) {
-+		next = elem->next;
-+		kvfree(elem);
-+	}
-+}
-+
-+struct bpf_list_insn *bpf_create_list_insn(struct bpf_prog *prog)
-+{
-+	unsigned int idx, len = prog->len;
-+	struct bpf_list_insn *hdr, *prev;
-+	struct bpf_insn *insns;
-+
-+	hdr = kvzalloc(sizeof(*hdr), GFP_KERNEL);
-+	if (!hdr)
-+		return ERR_PTR(-ENOMEM);
-+
-+	insns = prog->insnsi;
-+	hdr->insn = insns[0];
-+	hdr->orig_idx = 1;
-+	prev = hdr;
-+
-+	for (idx = 1; idx < len; idx++) {
-+		struct bpf_list_insn *node = kvzalloc(sizeof(*node),
-+						      GFP_KERNEL);
-+
-+		if (!node) {
-+			/* Destroy what has been allocated. */
-+			bpf_destroy_list_insn(hdr);
-+			return ERR_PTR(-ENOMEM);
-+		}
-+		node->insn = insns[idx];
-+		node->orig_idx = idx + 1;
-+		prev->next = node;
-+		prev = node;
-+	}
-+
-+	return hdr;
-+}
-+
-+/* Linearize bpf list insn to array. */
-+static struct bpf_prog *bpf_linearize_list_insn(struct bpf_prog *prog,
-+						struct bpf_list_insn *list)
-+{
-+	u32 *idx_map, idx, prev_idx, fini_cnt = 0, orig_cnt = prog->len;
-+	struct bpf_insn *insns, *insn;
-+	struct bpf_list_insn *elem;
-+
-+	/* Calculate final size. */
-+	for (elem = list; elem; elem = elem->next)
-+		if (!(elem->flag & LIST_INSN_FLAG_REMOVED))
-+			fini_cnt++;
-+
-+	insns = prog->insnsi;
-+	/* If prog length remains same, nothing else to do. */
-+	if (fini_cnt == orig_cnt) {
-+		for (insn = insns, elem = list; elem; elem = elem->next, insn++)
-+			*insn = elem->insn;
-+		return prog;
-+	}
-+	/* Realloc insn buffer when necessary. */
-+	if (fini_cnt > orig_cnt)
-+		prog = bpf_prog_realloc(prog, bpf_prog_size(fini_cnt),
-+					GFP_USER);
-+	if (!prog)
-+		return ERR_PTR(-ENOMEM);
-+	insns = prog->insnsi;
-+	prog->len = fini_cnt;
-+
-+	/* idx_map[OLD_IDX] = NEW_IDX */
-+	idx_map = kvmalloc(orig_cnt * sizeof(u32), GFP_KERNEL);
-+	if (!idx_map)
-+		return ERR_PTR(-ENOMEM);
-+	memset(idx_map, 0xff, orig_cnt * sizeof(u32));
-+
-+	/* Copy over insn + calculate idx_map. */
-+	for (idx = 0, elem = list; elem; elem = elem->next) {
-+		int orig_idx = elem->orig_idx - 1;
-+
-+		if (orig_idx >= 0) {
-+			idx_map[orig_idx] = idx;
-+
-+			if (elem->flag & LIST_INSN_FLAG_REMOVED)
-+				continue;
-+		}
-+		insns[idx++] = elem->insn;
-+	}
-+
-+	/* Relocate jumps using idx_map.
-+	 *   old_dst = jmp_insn.old_target + old_pc + 1;
-+	 *   new_dst = idx_map[old_dst] = jmp_insn.new_target + new_pc + 1;
-+	 *   jmp_insn.new_target = new_dst - new_pc - 1;
-+	 */
-+	for (idx = 0, prev_idx = 0, elem = list; elem; elem = elem->next) {
-+		int ret, orig_idx;
-+
-+		/* A removed insn doesn't increase new_pc */
-+		if (elem->flag & LIST_INSN_FLAG_REMOVED)
-+			continue;
-+
-+		orig_idx = elem->orig_idx - 1;
-+		ret = bpf_jit_adj_imm_off(&insns[idx],
-+					  orig_idx >= 0 ? orig_idx : prev_idx,
-+					  idx, idx_map);
-+		idx++;
-+		if (ret < 0) {
-+			kvfree(idx_map);
-+			return ERR_PTR(ret);
-+		}
-+		if (orig_idx >= 0)
-+			/* Record prev_idx. it is used for relocating jump insn
-+			 * inside patch buffer. For example, when doing jit
-+			 * blinding, a jump could be moved to some other
-+			 * positions inside the patch buffer, and its old_dst
-+			 * could be calculated using prev_idx.
-+			 */
-+			prev_idx = orig_idx;
-+	}
-+
-+	/* Adjust linfo.
-+	 *
-+	 * NOTE: the prog reached core layer has been adjusted to contain insns
-+	 *       for single function, however linfo contains information for
-+	 *       whole program, so we need to make sure linfo beyond current
-+	 *       function is handled properly.
-+	 */
-+	if (prog->aux->nr_linfo) {
-+		u32 linfo_idx, insn_start, insn_end, nr_linfo, idx, delta;
-+		struct bpf_line_info *linfo;
-+
-+		linfo_idx = prog->aux->linfo_idx;
-+		linfo = &prog->aux->linfo[linfo_idx];
-+		insn_start = linfo[0].insn_off;
-+		insn_end = insn_start + orig_cnt;
-+		nr_linfo = prog->aux->nr_linfo - linfo_idx;
-+		delta = fini_cnt - orig_cnt;
-+		for (idx = 0; idx < nr_linfo; idx++) {
-+			int adj_off;
-+
-+			if (linfo[idx].insn_off >= insn_end) {
-+				linfo[idx].insn_off += delta;
-+				continue;
-+			}
-+
-+			adj_off = linfo[idx].insn_off - insn_start;
-+			linfo[idx].insn_off = idx_map[adj_off] + insn_start;
-+		}
-+	}
-+	kvfree(idx_map);
-+
-+	return prog;
-+}
-+
-+struct bpf_list_insn *bpf_patch_list_insn(struct bpf_list_insn *list_insn,
-+					  const struct bpf_insn *patch,
-+					  u32 len)
-+{
-+	struct bpf_list_insn *prev, *next;
-+	u32 insn_delta = len - 1;
-+	u32 idx;
-+
-+	list_insn->insn = *patch;
-+	list_insn->flag |= LIST_INSN_FLAG_PATCHED;
-+
-+	/* Since our patchlet doesn't expand the image, we're done. */
-+	if (insn_delta == 0)
-+		return list_insn;
-+
-+	len--;
-+	patch++;
-+
-+	prev = list_insn;
-+	next = list_insn->next;
-+	for (idx = 0; idx < len; idx++) {
-+		struct bpf_list_insn *node = kvzalloc(sizeof(*node),
-+						      GFP_KERNEL);
-+
-+		if (!node) {
-+			/* Link what's allocated, so list destroyer could
-+			 * free them.
-+			 */
-+			prev->next = next;
-+			return ERR_PTR(-ENOMEM);
-+		}
-+
-+		node->insn = patch[idx];
-+		prev->next = node;
-+		prev = node;
-+	}
-+
-+	prev->next = next;
-+	return prev;
-+}
-+
-+struct bpf_list_insn *bpf_prepatch_list_insn(struct bpf_list_insn *list_insn,
-+					     const struct bpf_insn *patch,
-+					     u32 len)
-+{
-+	struct bpf_list_insn *prev, *node, *begin_node;
-+	u32 idx;
-+
-+	if (!len)
-+		return list_insn;
-+
-+	node = kvzalloc(sizeof(*node), GFP_KERNEL);
-+	if (!node)
-+		return ERR_PTR(-ENOMEM);
-+	node->insn = patch[0];
-+	begin_node = node;
-+	prev = node;
-+
-+	for (idx = 1; idx < len; idx++) {
-+		node = kvzalloc(sizeof(*node), GFP_KERNEL);
-+		if (!node) {
-+			node = begin_node;
-+			/* Release what's has been allocated. */
-+			while (node) {
-+				struct bpf_list_insn *next = node->next;
-+
-+				kvfree(node);
-+				node = next;
-+			}
-+			return ERR_PTR(-ENOMEM);
-+		}
-+		node->insn = patch[idx];
-+		prev->next = node;
-+		prev = node;
-+	}
-+
-+	prev->next = list_insn;
-+	return begin_node;
-+}
-+
- void bpf_prog_kallsyms_del_subprogs(struct bpf_prog *fp)
- {
- 	int i;
 -- 
-2.7.4
+2.20.1
 
