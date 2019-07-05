@@ -2,1238 +2,305 @@ Return-Path: <SRS0=d9P3=VC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A9FAC4649E
-	for <bpf@archiver.kernel.org>; Fri,  5 Jul 2019 15:50:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC168C468A0
+	for <bpf@archiver.kernel.org>; Fri,  5 Jul 2019 16:03:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C414A2184C
-	for <bpf@archiver.kernel.org>; Fri,  5 Jul 2019 15:50:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 81F6D20856
+	for <bpf@archiver.kernel.org>; Fri,  5 Jul 2019 16:03:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="lEbi9Wu1"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="rKeAsWzy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728156AbfGEPua (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 5 Jul 2019 11:50:30 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:5610 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728147AbfGEPua (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 5 Jul 2019 11:50:30 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x65FoDnm019338
-        for <bpf@vger.kernel.org>; Fri, 5 Jul 2019 08:50:27 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=+SsslLkz2OrNS6Qw2l8NF7Puxh71kHzKVGQ8bf7aiHg=;
- b=lEbi9Wu1sR84at0kK0PdaowAs3fnLW0clURz9ziNQyG5v3Re0HKgOS95/tVuD+6sToMJ
- 0+C0t5HiHEInE64SbqGJm7yaUTLFwbPlGDf0gXM+zDqvgKk4vwM/k0olTgRFdrTtHwN2
- CSo8qXw89dwko6tLvXwmSRmnf7nlxVAr3jQ= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2tj4ku13tb-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 05 Jul 2019 08:50:27 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 5 Jul 2019 08:50:25 -0700
-Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 549C9861628; Fri,  5 Jul 2019 08:50:22 -0700 (PDT)
-Smtp-Origin-Hostprefix: dev
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: dev101.prn2.facebook.com
-To:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>, <ast@fb.com>,
-        <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>
-CC:     Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v5 bpf-next 3/4] selftests/bpf: convert selftests using BTF-defined maps to new syntax
-Date:   Fri, 5 Jul 2019 08:50:11 -0700
-Message-ID: <20190705155012.3539722-4-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190705155012.3539722-1-andriin@fb.com>
-References: <20190705155012.3539722-1-andriin@fb.com>
-X-FB-Internal: Safe
+        id S1728223AbfGEQDa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 5 Jul 2019 12:03:30 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:46471 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727251AbfGEQDa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 5 Jul 2019 12:03:30 -0400
+Received: by mail-wr1-f66.google.com with SMTP id z1so5811558wru.13
+        for <bpf@vger.kernel.org>; Fri, 05 Jul 2019 09:03:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=to:cc:references:from:openpgp:autocrypt:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xfdS3GKUhM1w8zqXsHIdm7Qeg5J+OW96uoi4TIfpQoo=;
+        b=rKeAsWzyigtgVdlU22c9ESPchHftpVnYdZ/qi0i1ODTZYvtfMY6S+HSWumpCNhDRBT
+         5EOgvC4IAjbi/NvGsZ23VjXGsIYWlisv4JZBFA/T3d6ba/IEQTMGcpKjYiWdMZbCJSTK
+         PITylDgIfMW23eapYpnAuCRIvcF5Nl2IOp1qwOaWQU0a2mxUh1+Ye5KMfUBny6+Xtah1
+         W4jXMqoqJhD1rzKP7Rw31liQ/1/Lb31kw0DhVO7FJnoUwX3sLoVpCOk/wBCS1Mq630r7
+         f+qiI8rsQ5vNZSaWGGAX8a2qdZKasOIEDA2K/cYeEIzhncnh1d+OHR8KjIL+hiW5lKgx
+         4rmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:references:from:openpgp:autocrypt:subject
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=xfdS3GKUhM1w8zqXsHIdm7Qeg5J+OW96uoi4TIfpQoo=;
+        b=FsQp57PESGzZagGa3JJAhtru6Xz07xUMVXJTsr/KqZUjeUJIIFcwnZSzVyNu3iZ5ty
+         HF9SNarHZmAoWeGlO8SMruf0Xtfc0Kxr3ANDBbmPSY2IMwsuFCZNWoa4QE+BN2+JhU9o
+         5PPx9C7/QXr7+pTAN9AeG5P2jSPjU2oib7M/fD4MCkpOy5ntwFskXY3tuog692cogb5P
+         FHSRno6nEQx+x+imM3myVWZ5qMoZ66tdUJqx/tnoyhf41uIQbbFiAzOhxKvlc0UGT9kQ
+         5eX9Y5zfFhJ8dhLG4SY0X2+0cHRS/vaOX7NyqxyhZMPXu5w8kAMvLXs2qvdmWDobb8At
+         2QPw==
+X-Gm-Message-State: APjAAAXVQrk4vA4xd48LRtK0IOB+0cCLooOJinFGJ1oAfp9EyiYy3PQk
+        gONe07Tsj2UKE7mw5UjQ73xXzw==
+X-Google-Smtp-Source: APXvYqwDFI3Sbamhkt/WJ7ME6zsAXgs7kcZJV43wZWO7ptyP1rO2/AYuUeXynsXkGFpYDNY2WobWvw==
+X-Received: by 2002:a5d:428c:: with SMTP id k12mr4912024wrq.81.1562342606909;
+        Fri, 05 Jul 2019 09:03:26 -0700 (PDT)
+Received: from [172.20.1.254] ([217.38.71.146])
+        by smtp.gmail.com with ESMTPSA id f1sm6383750wml.28.2019.07.05.09.03.26
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 05 Jul 2019 09:03:26 -0700 (PDT)
+To:     Y Song <ys114321@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
+        oss-drivers@netronome.com
+References: <20190704085646.12406-1-quentin.monnet@netronome.com>
+ <CAH3MdRXuDmXobkXESZg0+VV=FrBLsiAYPC61xQsjx2smKQKUtQ@mail.gmail.com>
+ <b4bbb342-1f77-8669-ec51-8d5542f7e7b4@netronome.com>
+ <CAH3MdRWcU9=YCO6WuLY2e2-kixE7E8yLBS+fJH4ASh94oHcK-A@mail.gmail.com>
+From:   Quentin Monnet <quentin.monnet@netronome.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=quentin.monnet@netronome.com; prefer-encrypt=mutual; keydata=
+ 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
+ RHhSHGnKaQ6MfrTge5Q0h5A=
+Subject: Re: [PATCH bpf-next] tools: bpftool: add "prog run" subcommand to
+ test-run programs
+Message-ID: <4e7a66b8-8c4b-58cc-61a8-9ec6568d4df7@netronome.com>
+Date:   Fri, 5 Jul 2019 17:03:25 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-05_05:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907050194
-X-FB-Internal: deliver
+In-Reply-To: <CAH3MdRWcU9=YCO6WuLY2e2-kixE7E8yLBS+fJH4ASh94oHcK-A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Convert all the existing selftests that are already using BTF-defined
-maps to use new syntax (with no static data initialization).
+2019-07-05 08:42 UTC-0700 ~ Y Song <ys114321@gmail.com>
+> On Fri, Jul 5, 2019 at 1:21 AM Quentin Monnet
+> <quentin.monnet@netronome.com> wrote:
+>>
+>> 2019-07-04 22:49 UTC-0700 ~ Y Song <ys114321@gmail.com>
+>>> On Thu, Jul 4, 2019 at 1:58 AM Quentin Monnet
+>>> <quentin.monnet@netronome.com> wrote:
+>>>>
+>>>> Add a new "bpftool prog run" subcommand to run a loaded program on input
+>>>> data (and possibly with input context) passed by the user.
+>>>>
+>>>> Print output data (and output context if relevant) into a file or into
+>>>> the console. Print return value and duration for the test run into the
+>>>> console.
+>>>>
+>>>> A "repeat" argument can be passed to run the program several times in a
+>>>> row.
+>>>>
+>>>> The command does not perform any kind of verification based on program
+>>>> type (Is this program type allowed to use an input context?) or on data
+>>>> consistency (Can I work with empty input data?), this is left to the
+>>>> kernel.
+>>>>
+>>>> Example invocation:
+>>>>
+>>>>     # perl -e 'print "\x0" x 14' | ./bpftool prog run \
+>>>>             pinned /sys/fs/bpf/sample_ret0 \
+>>>>             data_in - data_out - repeat 5
+>>>>     0000000 0000 0000 0000 0000 0000 0000 0000      | ........ ......
+>>>>     Return value: 0, duration (average): 260ns
+>>>>
+>>>> When one of data_in or ctx_in is "-", bpftool reads from standard input,
+>>>> in binary format. Other formats (JSON, hexdump) might be supported (via
+>>>> an optional command line keyword like "data_fmt_in") in the future if
+>>>> relevant, but this would require doing more parsing in bpftool.
+>>>>
+>>>> Signed-off-by: Quentin Monnet <quentin.monnet@netronome.com>
+>>>> Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+>>>> ---
+>>
+>> [...]
+>>
+>>>> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+>>>> index 9b0db5d14e31..8dcbaa0a8ab1 100644
+>>>> --- a/tools/bpf/bpftool/prog.c
+>>>> +++ b/tools/bpf/bpftool/prog.c
+>>>> @@ -15,6 +15,7 @@
+>>>>  #include <sys/stat.h>
+>>>>
+>>>>  #include <linux/err.h>
+>>>> +#include <linux/sizes.h>
+>>>>
+>>>>  #include <bpf.h>
+>>>>  #include <btf.h>
+>>>> @@ -748,6 +749,344 @@ static int do_detach(int argc, char **argv)
+>>>>         return 0;
+>>>>  }
+>>>>
+>>>> +static int check_single_stdin(char *file_in, char *other_file_in)
+>>>> +{
+>>>> +       if (file_in && other_file_in &&
+>>>> +           !strcmp(file_in, "-") && !strcmp(other_file_in, "-")) {
+>>>> +               p_err("cannot use standard input for both data_in and ctx_in");
+>>>
+>>> The error message says data_in and ctx_in.
+>>> Maybe the input parameter should be file_data_in and file_ctx_in?
+>>
+>>
+>> Hi Yonghong,
+>>
+>> It's true those parameters should be file names. But having
+>> "file_data_in", "file_data_out", "file_ctx_in" and "file_ctx_out" on a
+>> command line seems a bit heavy to me? (And relying on keyword prefixing
+>> for typing the command won't help much.)
+>>
+>> My opinion is that it should be clear from the man page or the "help"
+>> command that the parameters are file names. What do you think? I can
+>> prefix all four arguments with "file_" if you believe this is better.
+> 
+> I think you misunderstood my question above.
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Acked-by: Song Liu <songliubraving@fb.com>
-Acked-by: Yonghong Song <yhs@fb.com>
----
- tools/testing/selftests/bpf/progs/bpf_flow.c  | 28 +++----
- .../testing/selftests/bpf/progs/netcnt_prog.c | 20 ++---
- .../selftests/bpf/progs/socket_cookie_prog.c  | 13 ++-
- .../selftests/bpf/progs/test_btf_newkv.c      | 13 ++-
- .../bpf/progs/test_get_stack_rawtp.c          | 39 ++++-----
- .../selftests/bpf/progs/test_global_data.c    | 37 ++++-----
- tools/testing/selftests/bpf/progs/test_l4lb.c | 65 ++++++---------
- .../selftests/bpf/progs/test_l4lb_noinline.c  | 65 ++++++---------
- .../selftests/bpf/progs/test_map_lock.c       | 26 +++---
- .../bpf/progs/test_select_reuseport_kern.c    | 67 ++++++---------
- .../bpf/progs/test_send_signal_kern.c         | 26 +++---
- .../bpf/progs/test_sock_fields_kern.c         | 78 +++++++-----------
- .../selftests/bpf/progs/test_spin_lock.c      | 36 ++++-----
- .../bpf/progs/test_stacktrace_build_id.c      | 55 +++++--------
- .../selftests/bpf/progs/test_stacktrace_map.c | 52 +++++-------
- .../selftests/bpf/progs/test_tcp_estats.c     | 13 ++-
- .../selftests/bpf/progs/test_tcpbpf_kern.c    | 26 +++---
- .../selftests/bpf/progs/test_tcpnotify_kern.c | 28 +++----
- tools/testing/selftests/bpf/progs/test_xdp.c  | 26 +++---
- .../selftests/bpf/progs/test_xdp_noinline.c   | 81 +++++++------------
- 20 files changed, 300 insertions(+), 494 deletions(-)
+Totally did, sorry :/.
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_flow.c b/tools/testing/selftests/bpf/progs/bpf_flow.c
-index 849f42e548b5..5ae485a6af3f 100644
---- a/tools/testing/selftests/bpf/progs/bpf_flow.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_flow.c
-@@ -58,26 +58,18 @@ struct frag_hdr {
- };
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 key_size;
--	__u32 value_size;
--} jmp_table SEC(".maps") = {
--	.type = BPF_MAP_TYPE_PROG_ARRAY,
--	.max_entries = 8,
--	.key_size = sizeof(__u32),
--	.value_size = sizeof(__u32),
--};
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 8);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} jmp_table SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	struct bpf_flow_keys *value;
--} last_dissection SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = 1,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct bpf_flow_keys);
-+} last_dissection SEC(".maps");
- 
- static __always_inline int export_flow_keys(struct bpf_flow_keys *keys,
- 					    int ret)
-diff --git a/tools/testing/selftests/bpf/progs/netcnt_prog.c b/tools/testing/selftests/bpf/progs/netcnt_prog.c
-index a25c82a5b7c8..38a997852cad 100644
---- a/tools/testing/selftests/bpf/progs/netcnt_prog.c
-+++ b/tools/testing/selftests/bpf/progs/netcnt_prog.c
-@@ -11,20 +11,16 @@
- #define NS_PER_SEC	1000000000
- 
- struct {
--	__u32 type;
--	struct bpf_cgroup_storage_key *key;
--	struct percpu_net_cnt *value;
--} percpu_netcnt SEC(".maps") = {
--	.type = BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE,
--};
-+	__uint(type, BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE);
-+	__type(key, struct bpf_cgroup_storage_key);
-+	__type(value, struct percpu_net_cnt);
-+} percpu_netcnt SEC(".maps");
- 
- struct {
--	__u32 type;
--	struct bpf_cgroup_storage_key *key;
--	struct net_cnt *value;
--} netcnt SEC(".maps") = {
--	.type = BPF_MAP_TYPE_CGROUP_STORAGE,
--};
-+	__uint(type, BPF_MAP_TYPE_CGROUP_STORAGE);
-+	__type(key, struct bpf_cgroup_storage_key);
-+	__type(value, struct net_cnt);
-+} netcnt SEC(".maps");
- 
- SEC("cgroup/skb")
- int bpf_nextcnt(struct __sk_buff *skb)
-diff --git a/tools/testing/selftests/bpf/progs/socket_cookie_prog.c b/tools/testing/selftests/bpf/progs/socket_cookie_prog.c
-index 6aabb681fb9a..e4440fdd94cb 100644
---- a/tools/testing/selftests/bpf/progs/socket_cookie_prog.c
-+++ b/tools/testing/selftests/bpf/progs/socket_cookie_prog.c
-@@ -13,14 +13,11 @@ struct socket_cookie {
- };
- 
- struct {
--	__u32 type;
--	__u32 map_flags;
--	int *key;
--	struct socket_cookie *value;
--} socket_cookies SEC(".maps") = {
--	.type = BPF_MAP_TYPE_SK_STORAGE,
--	.map_flags = BPF_F_NO_PREALLOC,
--};
-+	__uint(type, BPF_MAP_TYPE_SK_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, struct socket_cookie);
-+} socket_cookies SEC(".maps");
- 
- SEC("cgroup/connect6")
- int set_cookie(struct bpf_sock_addr *ctx)
-diff --git a/tools/testing/selftests/bpf/progs/test_btf_newkv.c b/tools/testing/selftests/bpf/progs/test_btf_newkv.c
-index 28c16bb583b6..5ee3622ddebb 100644
---- a/tools/testing/selftests/bpf/progs/test_btf_newkv.c
-+++ b/tools/testing/selftests/bpf/progs/test_btf_newkv.c
-@@ -21,14 +21,11 @@ struct bpf_map_def SEC("maps") btf_map_legacy = {
- BPF_ANNOTATE_KV_PAIR(btf_map_legacy, int, struct ipv_counts);
- 
- struct {
--	int *key;
--	struct ipv_counts *value;
--	unsigned int type;
--	unsigned int max_entries;
--} btf_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = 4,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 4);
-+	__type(key, int);
-+	__type(value, struct ipv_counts);
-+} btf_map SEC(".maps");
- 
- struct dummy_tracepoint_args {
- 	unsigned long long pad;
-diff --git a/tools/testing/selftests/bpf/progs/test_get_stack_rawtp.c b/tools/testing/selftests/bpf/progs/test_get_stack_rawtp.c
-index aaa6ec250e15..d06b47a09097 100644
---- a/tools/testing/selftests/bpf/progs/test_get_stack_rawtp.c
-+++ b/tools/testing/selftests/bpf/progs/test_get_stack_rawtp.c
-@@ -16,26 +16,18 @@ struct stack_trace_t {
- };
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 key_size;
--	__u32 value_size;
--} perfmap SEC(".maps") = {
--	.type = BPF_MAP_TYPE_PERF_EVENT_ARRAY,
--	.max_entries = 2,
--	.key_size = sizeof(int),
--	.value_size = sizeof(__u32),
--};
-+	__uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
-+	__uint(max_entries, 2);
-+	__uint(key_size, sizeof(int));
-+	__uint(value_size, sizeof(__u32));
-+} perfmap SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	struct stack_trace_t *value;
--} stackdata_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_PERCPU_ARRAY,
--	.max_entries = 1,
--};
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct stack_trace_t);
-+} stackdata_map SEC(".maps");
- 
- /* Allocate per-cpu space twice the needed. For the code below
-  *   usize = bpf_get_stack(ctx, raw_data, max_len, BPF_F_USER_STACK);
-@@ -56,14 +48,11 @@ struct {
-  * This is an acceptable workaround since there is one entry here.
-  */
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
- 	__u64 (*value)[2 * MAX_STACK_RAWTP];
--} rawdata_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_PERCPU_ARRAY,
--	.max_entries = 1,
--};
-+} rawdata_map SEC(".maps");
- 
- SEC("tracepoint/raw_syscalls/sys_enter")
- int bpf_prog1(void *ctx)
-diff --git a/tools/testing/selftests/bpf/progs/test_global_data.c b/tools/testing/selftests/bpf/progs/test_global_data.c
-index 866cc7ddbe43..32a6073acb99 100644
---- a/tools/testing/selftests/bpf/progs/test_global_data.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_data.c
-@@ -8,24 +8,18 @@
- #include "bpf_helpers.h"
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	__u64 *value;
--} result_number SEC(".maps") = {
--	.type		= BPF_MAP_TYPE_ARRAY,
--	.max_entries	= 11,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 11);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} result_number SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 5);
-+	__type(key, __u32);
- 	const char (*value)[32];
--} result_string SEC(".maps") = {
--	.type		= BPF_MAP_TYPE_ARRAY,
--	.max_entries	= 5,
--};
-+} result_string SEC(".maps");
- 
- struct foo {
- 	__u8  a;
-@@ -34,14 +28,11 @@ struct foo {
- };
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	struct foo *value;
--} result_struct SEC(".maps") = {
--	.type		= BPF_MAP_TYPE_ARRAY,
--	.max_entries	= 5,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 5);
-+	__type(key, __u32);
-+	__type(value, struct foo);
-+} result_struct SEC(".maps");
- 
- /* Relocation tests for __u64s. */
- static       __u64 num0;
-diff --git a/tools/testing/selftests/bpf/progs/test_l4lb.c b/tools/testing/selftests/bpf/progs/test_l4lb.c
-index 848cbb90f581..1d652ee8e73d 100644
---- a/tools/testing/selftests/bpf/progs/test_l4lb.c
-+++ b/tools/testing/selftests/bpf/progs/test_l4lb.c
-@@ -170,54 +170,39 @@ struct eth_hdr {
- };
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	struct vip *key;
--	struct vip_meta *value;
--} vip_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_HASH,
--	.max_entries = MAX_VIPS,
--};
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, MAX_VIPS);
-+	__type(key, struct vip);
-+	__type(value, struct vip_meta);
-+} vip_map SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	__u32 *value;
--} ch_rings SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = CH_RINGS_SIZE,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, CH_RINGS_SIZE);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} ch_rings SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	struct real_definition *value;
--} reals SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = MAX_REALS,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, MAX_REALS);
-+	__type(key, __u32);
-+	__type(value, struct real_definition);
-+} reals SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	struct vip_stats *value;
--} stats SEC(".maps") = {
--	.type = BPF_MAP_TYPE_PERCPU_ARRAY,
--	.max_entries = MAX_VIPS,
--};
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(max_entries, MAX_VIPS);
-+	__type(key, __u32);
-+	__type(value, struct vip_stats);
-+} stats SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	struct ctl_value *value;
--} ctl_array SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = CTL_MAP_SIZE,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, CTL_MAP_SIZE);
-+	__type(key, __u32);
-+	__type(value, struct ctl_value);
-+} ctl_array SEC(".maps");
- 
- static __always_inline __u32 get_packet_hash(struct packet_description *pckt,
- 					     bool ipv6)
-diff --git a/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c b/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c
-index c63ecf3ca573..2e4efe70b1e5 100644
---- a/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c
-+++ b/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c
-@@ -166,54 +166,39 @@ struct eth_hdr {
- };
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	struct vip *key;
--	struct vip_meta *value;
--} vip_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_HASH,
--	.max_entries = MAX_VIPS,
--};
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, MAX_VIPS);
-+	__type(key, struct vip);
-+	__type(value, struct vip_meta);
-+} vip_map SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	__u32 *value;
--} ch_rings SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = CH_RINGS_SIZE,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, CH_RINGS_SIZE);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} ch_rings SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	struct real_definition *value;
--} reals SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = MAX_REALS,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, MAX_REALS);
-+	__type(key, __u32);
-+	__type(value, struct real_definition);
-+} reals SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	struct vip_stats *value;
--} stats SEC(".maps") = {
--	.type = BPF_MAP_TYPE_PERCPU_ARRAY,
--	.max_entries = MAX_VIPS,
--};
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(max_entries, MAX_VIPS);
-+	__type(key, __u32);
-+	__type(value, struct vip_stats);
-+} stats SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	struct ctl_value *value;
--} ctl_array SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = CTL_MAP_SIZE,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, CTL_MAP_SIZE);
-+	__type(key, __u32);
-+	__type(value, struct ctl_value);
-+} ctl_array SEC(".maps");
- 
- static __u32 get_packet_hash(struct packet_description *pckt,
- 			     bool ipv6)
-diff --git a/tools/testing/selftests/bpf/progs/test_map_lock.c b/tools/testing/selftests/bpf/progs/test_map_lock.c
-index 40d9c2853393..bb7ce35f691b 100644
---- a/tools/testing/selftests/bpf/progs/test_map_lock.c
-+++ b/tools/testing/selftests/bpf/progs/test_map_lock.c
-@@ -12,14 +12,11 @@ struct hmap_elem {
- };
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	struct hmap_elem *value;
--} hash_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_HASH,
--	.max_entries = 1,
--};
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct hmap_elem);
-+} hash_map SEC(".maps");
- 
- struct array_elem {
- 	struct bpf_spin_lock lock;
-@@ -27,14 +24,11 @@ struct array_elem {
- };
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	int *key;
--	struct array_elem *value;
--} array_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = 1,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, struct array_elem);
-+} array_map SEC(".maps");
- 
- SEC("map_lock_demo")
- int bpf_map_lock_test(struct __sk_buff *skb)
-diff --git a/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c b/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c
-index 435a9527733e..ea7d84f01235 100644
---- a/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c
-@@ -22,56 +22,39 @@ int _version SEC("version") = 1;
- #endif
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 key_size;
--	__u32 value_size;
--} outer_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY_OF_MAPS,
--	.max_entries = 1,
--	.key_size = sizeof(__u32),
--	.value_size = sizeof(__u32),
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
-+	__uint(max_entries, 1);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} outer_map SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	__u32 *value;
--} result_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = NR_RESULTS,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, NR_RESULTS);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} result_map SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	int *value;
--} tmp_index_ovr_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = 1,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, int);
-+} tmp_index_ovr_map SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	__u32 *value;
--} linum_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = 1,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} linum_map SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	struct data_check *value;
--} data_check_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = 1,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct data_check);
-+} data_check_map SEC(".maps");
- 
- #define GOTO_DONE(_result) ({			\
- 	result = (_result);			\
-diff --git a/tools/testing/selftests/bpf/progs/test_send_signal_kern.c b/tools/testing/selftests/bpf/progs/test_send_signal_kern.c
-index 6ac68be5d68b..0e6be01157e6 100644
---- a/tools/testing/selftests/bpf/progs/test_send_signal_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_send_signal_kern.c
-@@ -5,24 +5,18 @@
- #include "bpf_helpers.h"
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	__u64 *value;
--} info_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = 1,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} info_map SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	__u64 *value;
--} status_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = 1,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} status_map SEC(".maps");
- 
- SEC("send_signal_demo")
- int bpf_send_signal_test(void *ctx)
-diff --git a/tools/testing/selftests/bpf/progs/test_sock_fields_kern.c b/tools/testing/selftests/bpf/progs/test_sock_fields_kern.c
-index c3d383d650cb..a47b003623ef 100644
---- a/tools/testing/selftests/bpf/progs/test_sock_fields_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_sock_fields_kern.c
-@@ -28,44 +28,32 @@ enum bpf_linum_array_idx {
- };
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	struct sockaddr_in6 *value;
--} addr_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = __NR_BPF_ADDR_ARRAY_IDX,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, __NR_BPF_ADDR_ARRAY_IDX);
-+	__type(key, __u32);
-+	__type(value, struct sockaddr_in6);
-+} addr_map SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	struct bpf_sock *value;
--} sock_result_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = __NR_BPF_RESULT_ARRAY_IDX,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, __NR_BPF_RESULT_ARRAY_IDX);
-+	__type(key, __u32);
-+	__type(value, struct bpf_sock);
-+} sock_result_map SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	struct bpf_tcp_sock *value;
--} tcp_sock_result_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = __NR_BPF_RESULT_ARRAY_IDX,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, __NR_BPF_RESULT_ARRAY_IDX);
-+	__type(key, __u32);
-+	__type(value, struct bpf_tcp_sock);
-+} tcp_sock_result_map SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	__u32 *value;
--} linum_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = __NR_BPF_LINUM_ARRAY_IDX,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, __NR_BPF_LINUM_ARRAY_IDX);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} linum_map SEC(".maps");
- 
- struct bpf_spinlock_cnt {
- 	struct bpf_spin_lock lock;
-@@ -73,24 +61,18 @@ struct bpf_spinlock_cnt {
- };
- 
- struct {
--	__u32 type;
--	__u32 map_flags;
--	int *key;
--	struct bpf_spinlock_cnt *value;
--} sk_pkt_out_cnt SEC(".maps") = {
--	.type = BPF_MAP_TYPE_SK_STORAGE,
--	.map_flags = BPF_F_NO_PREALLOC,
--};
-+	__uint(type, BPF_MAP_TYPE_SK_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, struct bpf_spinlock_cnt);
-+} sk_pkt_out_cnt SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 map_flags;
--	int *key;
--	struct bpf_spinlock_cnt *value;
--} sk_pkt_out_cnt10 SEC(".maps") = {
--	.type = BPF_MAP_TYPE_SK_STORAGE,
--	.map_flags = BPF_F_NO_PREALLOC,
--};
-+	__uint(type, BPF_MAP_TYPE_SK_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, struct bpf_spinlock_cnt);
-+} sk_pkt_out_cnt10 SEC(".maps");
- 
- static bool is_loopback6(__u32 *a6)
- {
-diff --git a/tools/testing/selftests/bpf/progs/test_spin_lock.c b/tools/testing/selftests/bpf/progs/test_spin_lock.c
-index 0a77ae36d981..a43b999c8da2 100644
---- a/tools/testing/selftests/bpf/progs/test_spin_lock.c
-+++ b/tools/testing/selftests/bpf/progs/test_spin_lock.c
-@@ -11,14 +11,11 @@ struct hmap_elem {
- };
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	int *key;
--	struct hmap_elem *value;
--} hmap SEC(".maps") = {
--	.type = BPF_MAP_TYPE_HASH,
--	.max_entries = 1,
--};
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, struct hmap_elem);
-+} hmap SEC(".maps");
- 
- struct cls_elem {
- 	struct bpf_spin_lock lock;
-@@ -26,12 +23,10 @@ struct cls_elem {
- };
- 
- struct {
--	__u32 type;
--	struct bpf_cgroup_storage_key *key;
--	struct cls_elem *value;
--} cls_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_CGROUP_STORAGE,
--};
-+	__uint(type, BPF_MAP_TYPE_CGROUP_STORAGE);
-+	__type(key, struct bpf_cgroup_storage_key);
-+	__type(value, struct cls_elem);
-+} cls_map SEC(".maps");
- 
- struct bpf_vqueue {
- 	struct bpf_spin_lock lock;
-@@ -42,14 +37,11 @@ struct bpf_vqueue {
- };
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	int *key;
--	struct bpf_vqueue *value;
--} vqueue SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = 1,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, struct bpf_vqueue);
-+} vqueue SEC(".maps");
- 
- #define CREDIT_PER_NS(delta, rate) (((delta) * rate) >> 20)
- 
-diff --git a/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c b/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c
-index fcf2280bb60c..bbfc8337b6f0 100644
---- a/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c
-+++ b/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c
-@@ -9,51 +9,36 @@
- #endif
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	__u32 *value;
--} control_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = 1,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} control_map SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	__u32 *value;
--} stackid_hmap SEC(".maps") = {
--	.type = BPF_MAP_TYPE_HASH,
--	.max_entries = 16384,
--};
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 16384);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} stackid_hmap SEC(".maps");
- 
- typedef struct bpf_stack_build_id stack_trace_t[PERF_MAX_STACK_DEPTH];
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 map_flags;
--	__u32 key_size;
--	__u32 value_size;
--} stackmap SEC(".maps") = {
--	.type = BPF_MAP_TYPE_STACK_TRACE,
--	.max_entries = 128,
--	.map_flags = BPF_F_STACK_BUILD_ID,
--	.key_size = sizeof(__u32),
--	.value_size = sizeof(stack_trace_t),
--};
-+	__uint(type, BPF_MAP_TYPE_STACK_TRACE);
-+	__uint(max_entries, 128);
-+	__uint(map_flags, BPF_F_STACK_BUILD_ID);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(stack_trace_t));
-+} stackmap SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 128);
-+	__type(key, __u32);
- 	/* there seems to be a bug in kernel not handling typedef properly */
- 	struct bpf_stack_build_id (*value)[PERF_MAX_STACK_DEPTH];
--} stack_amap SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = 128,
--};
-+} stack_amap SEC(".maps");
- 
- /* taken from /sys/kernel/debug/tracing/events/random/urandom_read/format */
- struct random_urandom_args {
-diff --git a/tools/testing/selftests/bpf/progs/test_stacktrace_map.c b/tools/testing/selftests/bpf/progs/test_stacktrace_map.c
-index 7ad09adbf648..803c15dc109d 100644
---- a/tools/testing/selftests/bpf/progs/test_stacktrace_map.c
-+++ b/tools/testing/selftests/bpf/progs/test_stacktrace_map.c
-@@ -9,48 +9,34 @@
- #endif
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	__u32 *value;
--} control_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = 1,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} control_map SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	__u32 *value;
--} stackid_hmap SEC(".maps") = {
--	.type = BPF_MAP_TYPE_HASH,
--	.max_entries = 16384,
--};
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 16384);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} stackid_hmap SEC(".maps");
- 
- typedef __u64 stack_trace_t[PERF_MAX_STACK_DEPTH];
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 key_size;
--	__u32 value_size;
--} stackmap SEC(".maps") = {
--	.type = BPF_MAP_TYPE_STACK_TRACE,
--	.max_entries = 16384,
--	.key_size = sizeof(__u32),
--	.value_size = sizeof(stack_trace_t),
--};
-+	__uint(type, BPF_MAP_TYPE_STACK_TRACE);
-+	__uint(max_entries, 16384);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(stack_trace_t));
-+} stackmap SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 16384);
-+	__type(key, __u32);
- 	__u64 (*value)[PERF_MAX_STACK_DEPTH];
--} stack_amap SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = 16384,
--};
-+} stack_amap SEC(".maps");
- 
- /* taken from /sys/kernel/debug/tracing/events/sched/sched_switch/format */
- struct sched_switch_args {
-diff --git a/tools/testing/selftests/bpf/progs/test_tcp_estats.c b/tools/testing/selftests/bpf/progs/test_tcp_estats.c
-index df98f7e32832..c8c595da38d4 100644
---- a/tools/testing/selftests/bpf/progs/test_tcp_estats.c
-+++ b/tools/testing/selftests/bpf/progs/test_tcp_estats.c
-@@ -149,14 +149,11 @@ struct tcp_estats_basic_event {
- };
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	struct tcp_estats_basic_event *value;
--} ev_record_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_HASH,
--	.max_entries = 1024,
--};
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 1024);
-+	__type(key, __u32);
-+	__type(value, struct tcp_estats_basic_event);
-+} ev_record_map SEC(".maps");
- 
- struct dummy_tracepoint_args {
- 	unsigned long long pad;
-diff --git a/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c b/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c
-index 38e10c9fd996..2e233613d1fc 100644
---- a/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c
-@@ -15,24 +15,18 @@
- #include "test_tcpbpf.h"
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	struct tcpbpf_globals *value;
--} global_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = 4,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 4);
-+	__type(key, __u32);
-+	__type(value, struct tcpbpf_globals);
-+} global_map SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	int *value;
--} sockopt_results SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = 2,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 2);
-+	__type(key, __u32);
-+	__type(value, int);
-+} sockopt_results SEC(".maps");
- 
- static inline void update_event_map(int event)
- {
-diff --git a/tools/testing/selftests/bpf/progs/test_tcpnotify_kern.c b/tools/testing/selftests/bpf/progs/test_tcpnotify_kern.c
-index d073d37d4e27..08346e7765d5 100644
---- a/tools/testing/selftests/bpf/progs/test_tcpnotify_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_tcpnotify_kern.c
-@@ -15,26 +15,18 @@
- #include "test_tcpnotify.h"
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	struct tcpnotify_globals *value;
--} global_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = 4,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 4);
-+	__type(key, __u32);
-+	__type(value, struct tcpnotify_globals);
-+} global_map SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 key_size;
--	__u32 value_size;
--} perf_event_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_PERF_EVENT_ARRAY,
--	.max_entries = 2,
--	.key_size = sizeof(int),
--	.value_size = sizeof(__u32),
--};
-+	__uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
-+	__uint(max_entries, 2);
-+	__uint(key_size, sizeof(int));
-+	__uint(value_size, sizeof(__u32));
-+} perf_event_map SEC(".maps");
- 
- int _version SEC("version") = 1;
- 
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp.c b/tools/testing/selftests/bpf/progs/test_xdp.c
-index ec3d2c1c8cf9..0941c655b07b 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp.c
-@@ -23,24 +23,18 @@
- int _version SEC("version") = 1;
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	__u64 *value;
--} rxcnt SEC(".maps") = {
--	.type = BPF_MAP_TYPE_PERCPU_ARRAY,
--	.max_entries = 256,
--};
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(max_entries, 256);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} rxcnt SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	struct vip *key;
--	struct iptnl_info *value;
--} vip2tnl SEC(".maps") = {
--	.type = BPF_MAP_TYPE_HASH,
--	.max_entries = MAX_IPTNL_ENTRIES,
--};
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, MAX_IPTNL_ENTRIES);
-+	__type(key, struct vip);
-+	__type(value, struct iptnl_info);
-+} vip2tnl SEC(".maps");
- 
- static __always_inline void count_tx(__u32 protocol)
- {
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-index d2eddb5553d1..dad8a7e33eaa 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-@@ -164,66 +164,47 @@ struct lb_stats {
- };
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	struct vip_definition *key;
--	struct vip_meta *value;
--} vip_map SEC(".maps") = {
--	.type = BPF_MAP_TYPE_HASH,
--	.max_entries = 512,
--};
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 512);
-+	__type(key, struct vip_definition);
-+	__type(value, struct vip_meta);
-+} vip_map SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 map_flags;
--	struct flow_key *key;
--	struct real_pos_lru *value;
--} lru_cache SEC(".maps") = {
--	.type = BPF_MAP_TYPE_LRU_HASH,
--	.max_entries = 300,
--	.map_flags = 1U << 1,
--};
-+	__uint(type, BPF_MAP_TYPE_LRU_HASH);
-+	__uint(max_entries, 300);
-+	__uint(map_flags, 1U << 1);
-+	__type(key, struct flow_key);
-+	__type(value, struct real_pos_lru);
-+} lru_cache SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	__u32 *value;
--} ch_rings SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = 12 * 655,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 12 * 655);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} ch_rings SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	struct real_definition *value;
--} reals SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = 40,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 40);
-+	__type(key, __u32);
-+	__type(value, struct real_definition);
-+} reals SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	struct lb_stats *value;
--} stats SEC(".maps") = {
--	.type = BPF_MAP_TYPE_PERCPU_ARRAY,
--	.max_entries = 515,
--};
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(max_entries, 515);
-+	__type(key, __u32);
-+	__type(value, struct lb_stats);
-+} stats SEC(".maps");
- 
- struct {
--	__u32 type;
--	__u32 max_entries;
--	__u32 *key;
--	struct ctl_value *value;
--} ctl_array SEC(".maps") = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.max_entries = 16,
--};
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 16);
-+	__type(key, __u32);
-+	__type(value, struct ctl_value);
-+} ctl_array SEC(".maps");
- 
- struct eth_hdr {
- 	unsigned char eth_dest[6];
--- 
-2.17.1
+> The command line parameters are fine.
+> I am talking about the function parameter names. Since in the error message,
+> the input parameters are referred for data_in and ctx_in
+>    p_err("cannot use standard input for both data_in and ctx_in")
+> maybe the function signature should be
+>   static int check_single_stdin(char *file_data_in, char *file_ctx_in)
+> 
+> If you are worried that later on the same function can be used in different
+> contexts, then alternatively, you can have signature like
+>   static int check_single_stdin(char *file_in, char *other_file_in,
+> const char *file_in_arg, const char *other_file_in_arg)
+> where file_in_arg will be passed in as "data_in" and other_file_in_arg
+> as "ctx_in".
+> I think we could delay this until it is really needed.
 
+As a matter of fact, the opposite thing happened. I first used the
+function for data_in/ctx_in, and also for data_out/ctx_out. But I
+changed my mind eventually because there is no real reason not to print
+both data_out and ctx_out to stdout if we want to do so. So I updated
+the name of the parameters in the error messages, but forgot to change
+the arguments for the function. Silly me.
+
+So I totally agree, I'll respin and change the argument names for the
+function. And yes, we could also pass the names to print in the error
+message, but I agree that this is not needed, and not helpful at the moment.
+
+Thanks for catching this!
+
+>>
+>> [...]
+>>
+>>>> +static int do_run(int argc, char **argv)
+>>>> +{
+>>>> +       char *data_fname_in = NULL, *data_fname_out = NULL;
+>>>> +       char *ctx_fname_in = NULL, *ctx_fname_out = NULL;
+>>>> +       struct bpf_prog_test_run_attr test_attr = {0};
+>>>> +       const unsigned int default_size = SZ_32K;
+>>>> +       void *data_in = NULL, *data_out = NULL;
+>>>> +       void *ctx_in = NULL, *ctx_out = NULL;
+>>>> +       unsigned int repeat = 1;
+>>>> +       int fd, err;
+>>>> +
+>>>> +       if (!REQ_ARGS(4))
+>>>> +               return -1;
+>>>> +
+>>>> +       fd = prog_parse_fd(&argc, &argv);
+>>>> +       if (fd < 0)
+>>>> +               return -1;
+>>>> +
+>>>> +       while (argc) {
+>>>> +               if (detect_common_prefix(*argv, "data_in", "data_out",
+>>>> +                                        "data_size_out", NULL))
+>>>> +                       return -1;
+>>>> +               if (detect_common_prefix(*argv, "ctx_in", "ctx_out",
+>>>> +                                        "ctx_size_out", NULL))
+>>>> +                       return -1;
+>>>> +
+>>>> +               if (is_prefix(*argv, "data_in")) {
+>>>> +                       NEXT_ARG();
+>>>> +                       if (!REQ_ARGS(1))
+>>>> +                               return -1;
+>>>> +
+>>>> +                       data_fname_in = GET_ARG();
+>>>> +                       if (check_single_stdin(data_fname_in, ctx_fname_in))
+>>>> +                               return -1;
+>>>> +               } else if (is_prefix(*argv, "data_out")) {
+>>>
+>>> Here, we all use is_prefix() to match "data_in", "data_out",
+>>> "data_size_out" etc.
+>>> That means users can use "data_i" instead of "data_in" as below
+>>>    ... | ./bpftool prog run id 283 data_i - data_out - repeat 5
+>>> is this expected?
+>> Yes, this is expected. We use prefix matching as we do pretty much
+>> everywhere else in bpftool. It's not as useful here because most of the
+>> strings for the names are similar. I agree that typing "data_i" instead
+>> of "data_in" brings little advantage, but I see no reason why we should
+>> reject prefixing for those keywords. And we accept "data_s" instead of
+>> "data_size_out", which is still shorter to type than the complete keyword.
+> 
+> This makes sense. Thanks for explanation.
+> 
+> Another question. Currently, you are proposing "./bpftool prog run ...",
+> but actually it is just a test_run. Do you think we should rename it
+> to "./bpftool prog test_run ..." to make it clear for its intention?
+
+Good question. Hmm. It would make it more explicit that we use the
+BPF_PROG_TEST_RUN command, but at the same time, from the point of view
+of the user, there is nothing in particular that makes it a test run, is
+it? I mean, you provide input data, you get output data and return
+value, that makes it a real BPF run somehow, except that it's not on a
+packet or anything. Do you think it is ambiguous and people may confuse
+it with something like "attach"?
+
+Thanks,
+Quentin
