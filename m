@@ -2,385 +2,200 @@ Return-Path: <SRS0=nwYh=VD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5364EC468AD
-	for <bpf@archiver.kernel.org>; Sat,  6 Jul 2019 06:02:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2189AC0650E
+	for <bpf@archiver.kernel.org>; Sat,  6 Jul 2019 15:57:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 21F8021873
-	for <bpf@archiver.kernel.org>; Sat,  6 Jul 2019 06:02:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A4F4020856
+	for <bpf@archiver.kernel.org>; Sat,  6 Jul 2019 15:57:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="l/Ew26PY"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="jCWZYfUP";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="POz0MrgT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726199AbfGFGCj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 6 Jul 2019 02:02:39 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:36952 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726065AbfGFGCj (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 6 Jul 2019 02:02:39 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x665xojT004391
-        for <bpf@vger.kernel.org>; Fri, 5 Jul 2019 23:02:37 -0700
+        id S1727014AbfGFP5A (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 6 Jul 2019 11:57:00 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:42652 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726446AbfGFP5A (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 6 Jul 2019 11:57:00 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x66Fpqtc015349;
+        Sat, 6 Jul 2019 08:56:38 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=RGkCnDzu8Hs6pZHF+GZE1sy/dRNYYUtBdhWC2IgSfaE=;
- b=l/Ew26PYjJjFVjwxJ2GOnBOgqCReSEJ9Zz/7DuiujLmcbnEtThdPNA6LRPtrPQgFAFLb
- BCBJOpHcnKtNrjO9kCjm9pniP4WmI8QfRDRtuXiUGajF9IYpqBObkIaXSBJU9wGMPTMS
- EgA8KmKz2r7GCKieEQ4W89E6qLlREjJ2Dwk= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2tj2kqbk15-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 05 Jul 2019 23:02:37 -0700
-Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::126) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Fri, 5 Jul 2019 23:02:35 -0700
-Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 8F5DE86161D; Fri,  5 Jul 2019 23:02:32 -0700 (PDT)
-Smtp-Origin-Hostprefix: dev
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: dev101.prn2.facebook.com
-To:     <andrii.nakryiko@gmail.com>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <ast@fb.com>, <daniel@iogearbox.net>,
-        <kernel-team@fb.com>
-CC:     Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v6 bpf-next 4/5] tools/bpftool: switch map event_pipe to libbpf's perf_buffer
-Date:   Fri, 5 Jul 2019 23:02:19 -0700
-Message-ID: <20190706060220.1801632-5-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190706060220.1801632-1-andriin@fb.com>
-References: <20190706060220.1801632-1-andriin@fb.com>
-X-FB-Internal: Safe
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=oXjPGrVezvW64S5e7OuBVNNo/ALkR4Jg0tCAGl9fFc0=;
+ b=jCWZYfUPvdAygZdt2VkpCWz45NKXJCDAvYynq0ZFSm+ec9XjYzng3eMo+Di5Nf6FhZUm
+ 2eiGKZ+LFP3Oaaj+zpK//6pR8k7UAGUvkVvPfoFGLiRxnMz+isrosCztLYYe+EwamS8j
+ HZvPMgBZ/W6M8o69T0t++V8ZMKaF0jlp5g0= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net with ESMTP id 2tjqacs3cc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Sat, 06 Jul 2019 08:56:38 -0700
+Received: from ash-exhub203.TheFacebook.com (2620:10d:c0a8:83::5) by
+ ash-exhub104.TheFacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Sat, 6 Jul 2019 08:56:37 -0700
+Received: from NAM01-SN1-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5
+ via Frontend Transport; Sat, 6 Jul 2019 08:56:37 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector1-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oXjPGrVezvW64S5e7OuBVNNo/ALkR4Jg0tCAGl9fFc0=;
+ b=POz0MrgTqqfOSlCSqgRCvhLRZ82Ukix6lWM6IaxtQkOpI3TinMWWHlUX3+GZB4xBYqAxGkoCMehi/uoWOyxmiUtz2roOpyso10Cb7SQjYXim+vxE5psQQFoeASkz5OdQHBU6W1RvVOuhJ3fHRRJNEh4Jzcn46UOMm5k8AdSs8ac=
+Received: from BYAPR15MB3384.namprd15.prod.outlook.com (20.179.59.17) by
+ BYAPR15MB3413.namprd15.prod.outlook.com (20.179.59.95) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2052.17; Sat, 6 Jul 2019 15:56:31 +0000
+Received: from BYAPR15MB3384.namprd15.prod.outlook.com
+ ([fe80::e499:ecba:ec04:abac]) by BYAPR15MB3384.namprd15.prod.outlook.com
+ ([fe80::e499:ecba:ec04:abac%5]) with mapi id 15.20.2052.019; Sat, 6 Jul 2019
+ 15:56:31 +0000
+From:   Yonghong Song <yhs@fb.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+CC:     Andrii Nakryiko <andriin@fb.com>, Kernel Team <Kernel-team@fb.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>
+Subject: Re: [PATCH v5 bpf-next 1/5] libbpf: add perf buffer API
+Thread-Topic: [PATCH v5 bpf-next 1/5] libbpf: add perf buffer API
+Thread-Index: AQHVM7RDY67jeJ/hpEu/lVUn/Au/Aqa9E8mAgAADagCAAKggAA==
+Date:   Sat, 6 Jul 2019 15:56:31 +0000
+Message-ID: <5019eba1-5da2-22b7-9bad-19e770dda2f0@fb.com>
+References: <20190706043522.1559005-1-andriin@fb.com>
+ <20190706043522.1559005-2-andriin@fb.com>
+ <e0e2f6d2-016c-70bd-a0c6-5c147d5b7aca@fb.com>
+ <CAEf4BzZYAN5t+6Kkt+W4ee13PL7dR4FG8P71dFnk_CHWqMmHPQ@mail.gmail.com>
+In-Reply-To: <CAEf4BzZYAN5t+6Kkt+W4ee13PL7dR4FG8P71dFnk_CHWqMmHPQ@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: MWHPR11CA0034.namprd11.prod.outlook.com
+ (2603:10b6:300:115::20) To BYAPR15MB3384.namprd15.prod.outlook.com
+ (2603:10b6:a03:10e::17)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2620:10d:c090:180::1:c7d4]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 56456e03-a87e-4abf-8419-08d7022a8349
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR15MB3413;
+x-ms-traffictypediagnostic: BYAPR15MB3413:
+x-microsoft-antispam-prvs: <BYAPR15MB3413D4AA4EA4352921AFD798D3F40@BYAPR15MB3413.namprd15.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 00909363D5
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(979002)(136003)(39860400002)(376002)(346002)(366004)(396003)(199004)(189003)(2616005)(14454004)(52116002)(476003)(54906003)(486006)(478600001)(36756003)(99286004)(53546011)(6506007)(4326008)(386003)(76176011)(31696002)(5660300002)(186003)(305945005)(7736002)(102836004)(6116002)(86362001)(6916009)(53936002)(71190400001)(71200400001)(6512007)(31686004)(66446008)(2906002)(64756008)(66556008)(8936002)(66476007)(66946007)(73956011)(25786009)(68736007)(14444005)(446003)(46003)(316002)(11346002)(256004)(6436002)(81166006)(6486002)(6246003)(81156014)(229853002)(8676002)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB3413;H:BYAPR15MB3384.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: WH95KxlDZ5TyFxGqBgg8xFhskaznIWeN1jcIjy9/BB+4wxURLlw7YpZ23a74rPmxIlkz3oTk2X9eufWtGJhX7jfV5fTtoiaGUeqYn4ljULBJWCPSq2UzA+VoP6XWxWv8HTVgNLr5NkzWX3+g+Ogc/LONfesoWkdVpllV5SVFXOAsWg+VU3WayBnFpVMG091DNNBJdabecqnPWDUk4h6I4+H5SOBLEPVhY2TIUBZiaPl3Ue5oBKh6YggDeiEgOSCq1MIthUZI5v8phs7Cbs5jjxg5qhWYr/nxKWBdSGMBFPoWUtVbQ9pizdihJLRN9jFtoKcVy48hpRpNAhrwN+GmdtQv4Hvtz1chq1WDpiByZE93IJqEwVfLHONSvs8a2BOMIsXedUMb8JKVOZgWamr3sCMwsL4zI8U2+9sVNSUqKZc=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4EC8B17F4721A54A94EC01C308764F9A@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-06_01:,,
+X-MS-Exchange-CrossTenant-Network-Message-Id: 56456e03-a87e-4abf-8419-08d7022a8349
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jul 2019 15:56:31.3728
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yhs@fb.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3413
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-06_04:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
  mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907060078
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1907060209
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Switch event_pipe implementation to rely on new libbpf perf buffer API
-(it's raw low-level variant).
-
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Acked-by: Jakub Kicinski <jakub.kicinski@netronome.com>
----
- tools/bpf/bpftool/map_perf_ring.c | 201 ++++++++++--------------------
- 1 file changed, 64 insertions(+), 137 deletions(-)
-
-diff --git a/tools/bpf/bpftool/map_perf_ring.c b/tools/bpf/bpftool/map_perf_ring.c
-index 0507dfaf7a8f..3f108ab17797 100644
---- a/tools/bpf/bpftool/map_perf_ring.c
-+++ b/tools/bpf/bpftool/map_perf_ring.c
-@@ -28,7 +28,7 @@
- 
- #define MMAP_PAGE_CNT	16
- 
--static bool stop;
-+static volatile bool stop;
- 
- struct event_ring_info {
- 	int fd;
-@@ -44,32 +44,44 @@ struct perf_event_sample {
- 	unsigned char data[];
- };
- 
-+struct perf_event_lost {
-+	struct perf_event_header header;
-+	__u64 id;
-+	__u64 lost;
-+};
-+
- static void int_exit(int signo)
- {
- 	fprintf(stderr, "Stopping...\n");
- 	stop = true;
- }
- 
-+struct event_pipe_ctx {
-+	bool all_cpus;
-+	int cpu;
-+	int idx;
-+};
-+
- static enum bpf_perf_event_ret
--print_bpf_output(struct perf_event_header *event, void *private_data)
-+print_bpf_output(void *private_data, int cpu, struct perf_event_header *event)
- {
--	struct perf_event_sample *e = container_of(event, struct perf_event_sample,
-+	struct perf_event_sample *e = container_of(event,
-+						   struct perf_event_sample,
- 						   header);
--	struct event_ring_info *ring = private_data;
--	struct {
--		struct perf_event_header header;
--		__u64 id;
--		__u64 lost;
--	} *lost = (typeof(lost))event;
-+	struct perf_event_lost *lost = container_of(event,
-+						    struct perf_event_lost,
-+						    header);
-+	struct event_pipe_ctx *ctx = private_data;
-+	int idx = ctx->all_cpus ? cpu : ctx->idx;
- 
- 	if (json_output) {
- 		jsonw_start_object(json_wtr);
- 		jsonw_name(json_wtr, "type");
- 		jsonw_uint(json_wtr, e->header.type);
- 		jsonw_name(json_wtr, "cpu");
--		jsonw_uint(json_wtr, ring->cpu);
-+		jsonw_uint(json_wtr, cpu);
- 		jsonw_name(json_wtr, "index");
--		jsonw_uint(json_wtr, ring->key);
-+		jsonw_uint(json_wtr, idx);
- 		if (e->header.type == PERF_RECORD_SAMPLE) {
- 			jsonw_name(json_wtr, "timestamp");
- 			jsonw_uint(json_wtr, e->time);
-@@ -89,7 +101,7 @@ print_bpf_output(struct perf_event_header *event, void *private_data)
- 		if (e->header.type == PERF_RECORD_SAMPLE) {
- 			printf("== @%lld.%09lld CPU: %d index: %d =====\n",
- 			       e->time / 1000000000ULL, e->time % 1000000000ULL,
--			       ring->cpu, ring->key);
-+			       cpu, idx);
- 			fprint_hex(stdout, e->data, e->size, " ");
- 			printf("\n");
- 		} else if (e->header.type == PERF_RECORD_LOST) {
-@@ -103,87 +115,25 @@ print_bpf_output(struct perf_event_header *event, void *private_data)
- 	return LIBBPF_PERF_EVENT_CONT;
- }
- 
--static void
--perf_event_read(struct event_ring_info *ring, void **buf, size_t *buf_len)
--{
--	enum bpf_perf_event_ret ret;
--
--	ret = bpf_perf_event_read_simple(ring->mem,
--					 MMAP_PAGE_CNT * get_page_size(),
--					 get_page_size(), buf, buf_len,
--					 print_bpf_output, ring);
--	if (ret != LIBBPF_PERF_EVENT_CONT) {
--		fprintf(stderr, "perf read loop failed with %d\n", ret);
--		stop = true;
--	}
--}
--
--static int perf_mmap_size(void)
--{
--	return get_page_size() * (MMAP_PAGE_CNT + 1);
--}
--
--static void *perf_event_mmap(int fd)
--{
--	int mmap_size = perf_mmap_size();
--	void *base;
--
--	base = mmap(NULL, mmap_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
--	if (base == MAP_FAILED) {
--		p_err("event mmap failed: %s\n", strerror(errno));
--		return NULL;
--	}
--
--	return base;
--}
--
--static void perf_event_unmap(void *mem)
--{
--	if (munmap(mem, perf_mmap_size()))
--		fprintf(stderr, "Can't unmap ring memory!\n");
--}
--
--static int bpf_perf_event_open(int map_fd, int key, int cpu)
-+int do_event_pipe(int argc, char **argv)
- {
--	struct perf_event_attr attr = {
-+	struct perf_event_attr perf_attr = {
- 		.sample_type = PERF_SAMPLE_RAW | PERF_SAMPLE_TIME,
- 		.type = PERF_TYPE_SOFTWARE,
- 		.config = PERF_COUNT_SW_BPF_OUTPUT,
-+		.sample_period = 1,
-+		.wakeup_events = 1,
- 	};
--	int pmu_fd;
--
--	pmu_fd = sys_perf_event_open(&attr, -1, cpu, -1, 0);
--	if (pmu_fd < 0) {
--		p_err("failed to open perf event %d for CPU %d", key, cpu);
--		return -1;
--	}
--
--	if (bpf_map_update_elem(map_fd, &key, &pmu_fd, BPF_ANY)) {
--		p_err("failed to update map for event %d for CPU %d", key, cpu);
--		goto err_close;
--	}
--	if (ioctl(pmu_fd, PERF_EVENT_IOC_ENABLE, 0)) {
--		p_err("failed to enable event %d for CPU %d", key, cpu);
--		goto err_close;
--	}
--
--	return pmu_fd;
--
--err_close:
--	close(pmu_fd);
--	return -1;
--}
--
--int do_event_pipe(int argc, char **argv)
--{
--	int i, nfds, map_fd, index = -1, cpu = -1;
- 	struct bpf_map_info map_info = {};
--	struct event_ring_info *rings;
--	size_t tmp_buf_sz = 0;
--	void *tmp_buf = NULL;
--	struct pollfd *pfds;
-+	struct perf_buffer_raw_opts opts = {};
-+	struct event_pipe_ctx ctx = {
-+		.all_cpus = true,
-+		.cpu = -1,
-+		.idx = -1,
-+	};
-+	struct perf_buffer *pb;
- 	__u32 map_info_len;
--	bool do_all = true;
-+	int err, map_fd;
- 
- 	map_info_len = sizeof(map_info);
- 	map_fd = map_parse_fd_and_info(&argc, &argv, &map_info, &map_info_len);
-@@ -205,7 +155,7 @@ int do_event_pipe(int argc, char **argv)
- 			char *endptr;
- 
- 			NEXT_ARG();
--			cpu = strtoul(*argv, &endptr, 0);
-+			ctx.cpu = strtoul(*argv, &endptr, 0);
- 			if (*endptr) {
- 				p_err("can't parse %s as CPU ID", **argv);
- 				goto err_close_map;
-@@ -216,7 +166,7 @@ int do_event_pipe(int argc, char **argv)
- 			char *endptr;
- 
- 			NEXT_ARG();
--			index = strtoul(*argv, &endptr, 0);
-+			ctx.idx = strtoul(*argv, &endptr, 0);
- 			if (*endptr) {
- 				p_err("can't parse %s as index", **argv);
- 				goto err_close_map;
-@@ -228,45 +178,32 @@ int do_event_pipe(int argc, char **argv)
- 			goto err_close_map;
- 		}
- 
--		do_all = false;
-+		ctx.all_cpus = false;
- 	}
- 
--	if (!do_all) {
--		if (index == -1 || cpu == -1) {
-+	if (!ctx.all_cpus) {
-+		if (ctx.idx == -1 || ctx.cpu == -1) {
- 			p_err("cpu and index must be specified together");
- 			goto err_close_map;
- 		}
--
--		nfds = 1;
- 	} else {
--		nfds = min(get_possible_cpus(), map_info.max_entries);
--		cpu = 0;
--		index = 0;
-+		ctx.cpu = 0;
-+		ctx.idx = 0;
- 	}
- 
--	rings = calloc(nfds, sizeof(rings[0]));
--	if (!rings)
-+	opts.attr = &perf_attr;
-+	opts.event_cb = print_bpf_output;
-+	opts.ctx = &ctx;
-+	opts.cpu_cnt = ctx.all_cpus ? 0 : 1;
-+	opts.cpus = &ctx.cpu;
-+	opts.map_keys = &ctx.idx;
-+
-+	pb = perf_buffer__new_raw(map_fd, MMAP_PAGE_CNT, &opts);
-+	err = libbpf_get_error(pb);
-+	if (err) {
-+		p_err("failed to create perf buffer: %s (%d)",
-+		      strerror(err), err);
- 		goto err_close_map;
--
--	pfds = calloc(nfds, sizeof(pfds[0]));
--	if (!pfds)
--		goto err_free_rings;
--
--	for (i = 0; i < nfds; i++) {
--		rings[i].cpu = cpu + i;
--		rings[i].key = index + i;
--
--		rings[i].fd = bpf_perf_event_open(map_fd, rings[i].key,
--						  rings[i].cpu);
--		if (rings[i].fd < 0)
--			goto err_close_fds_prev;
--
--		rings[i].mem = perf_event_mmap(rings[i].fd);
--		if (!rings[i].mem)
--			goto err_close_fds_current;
--
--		pfds[i].fd = rings[i].fd;
--		pfds[i].events = POLLIN;
- 	}
- 
- 	signal(SIGINT, int_exit);
-@@ -277,34 +214,24 @@ int do_event_pipe(int argc, char **argv)
- 		jsonw_start_array(json_wtr);
- 
- 	while (!stop) {
--		poll(pfds, nfds, 200);
--		for (i = 0; i < nfds; i++)
--			perf_event_read(&rings[i], &tmp_buf, &tmp_buf_sz);
-+		err = perf_buffer__poll(pb, 200);
-+		if (err < 0 && err != -EINTR) {
-+			p_err("perf buffer polling failed: %s (%d)",
-+			      strerror(err), err);
-+			goto err_close_pb;
-+		}
- 	}
--	free(tmp_buf);
- 
- 	if (json_output)
- 		jsonw_end_array(json_wtr);
- 
--	for (i = 0; i < nfds; i++) {
--		perf_event_unmap(rings[i].mem);
--		close(rings[i].fd);
--	}
--	free(pfds);
--	free(rings);
-+	perf_buffer__free(pb);
- 	close(map_fd);
- 
- 	return 0;
- 
--err_close_fds_prev:
--	while (i--) {
--		perf_event_unmap(rings[i].mem);
--err_close_fds_current:
--		close(rings[i].fd);
--	}
--	free(pfds);
--err_free_rings:
--	free(rings);
-+err_close_pb:
-+	perf_buffer__free(pb);
- err_close_map:
- 	close(map_fd);
- 	return -1;
--- 
-2.17.1
-
+DQoNCk9uIDcvNS8xOSAxMDo1NCBQTSwgQW5kcmlpIE5ha3J5aWtvIHdyb3RlOg0KPiBPbiBGcmks
+IEp1bCA1LCAyMDE5IGF0IDEwOjQyIFBNIFlvbmdob25nIFNvbmcgPHloc0BmYi5jb20+IHdyb3Rl
+Og0KPj4NCj4+DQo+Pg0KPj4gT24gNy81LzE5IDk6MzUgUE0sIEFuZHJpaSBOYWtyeWlrbyB3cm90
+ZToNCj4+PiBCUEZfTUFQX1RZUEVfUEVSRl9FVkVOVF9BUlJBWSBtYXAgaXMgb2Z0ZW4gdXNlZCB0
+byBzZW5kIGRhdGEgZnJvbSBCUEYgcHJvZ3JhbQ0KPj4+IHRvIHVzZXIgc3BhY2UgZm9yIGFkZGl0
+aW9uYWwgcHJvY2Vzc2luZy4gbGliYnBmIGFscmVhZHkgaGFzIHZlcnkgbG93LWxldmVsIEFQSQ0K
+Pj4+IHRvIHJlYWQgc2luZ2xlIENQVSBwZXJmIGJ1ZmZlciwgYnBmX3BlcmZfZXZlbnRfcmVhZF9z
+aW1wbGUoKSwgYnV0IGl0J3MgaGFyZCB0bw0KPj4+IHVzZSBhbmQgcmVxdWlyZXMgYSBsb3Qgb2Yg
+Y29kZSB0byBzZXQgZXZlcnl0aGluZyB1cC4gVGhpcyBwYXRjaCBhZGRzDQo+Pj4gcGVyZl9idWZm
+ZXIgYWJzdHJhY3Rpb24gb24gdG9wIG9mIGl0LCBhYnN0cmFjdGluZyBzZXR0aW5nIHVwIGFuZCBw
+b2xsaW5nDQo+Pj4gcGVyLUNQVSBsb2dpYyBpbnRvIHNpbXBsZSBhbmQgY29udmVuaWVudCBBUEks
+IHNpbWlsYXIgdG8gd2hhdCBCQ0MgcHJvdmlkZXMuDQo+Pj4NCj4+PiBwZXJmX2J1ZmZlcl9fbmV3
+KCkgc2V0cyB1cCBwZXItQ1BVIHJpbmcgYnVmZmVycyBhbmQgdXBkYXRlcyBjb3JyZXNwb25kaW5n
+IEJQRg0KPj4+IG1hcCBlbnRyaWVzLiBJdCBhY2NlcHRzIHR3byB1c2VyLXByb3ZpZGVkIGNhbGxi
+YWNrczogb25lIGZvciBoYW5kbGluZyByYXcNCj4+PiBzYW1wbGVzIGFuZCBvbmUgZm9yIGdldCBu
+b3RpZmljYXRpb25zIG9mIGxvc3Qgc2FtcGxlcyBkdWUgdG8gYnVmZmVyIG92ZXJmbG93Lg0KPj4+
+DQo+Pj4gcGVyZl9idWZmZXJfX25ld19yYXcoKSBpcyBzaW1pbGFyLCBidXQgcHJvdmlkZXMgbW9y
+ZSBjb250cm9sIG92ZXIgaG93DQo+Pj4gcGVyZiBldmVudHMgYXJlIHNldCB1cCAoYnkgYWNjZXB0
+aW5nIHVzZXItcHJvdmlkZWQgcGVyZl9ldmVudF9hdHRyKSwgaG93DQo+Pj4gdGhleSBhcmUgaGFu
+ZGxlZCAocGVyZl9ldmVudF9oZWFkZXIgcG9pbnRlciBpcyBwYXNzZWQgZGlyZWN0bHkgdG8NCj4+
+PiB1c2VyLXByb3ZpZGVkIGNhbGxiYWNrKSwgYW5kIG9uIHdoaWNoIENQVXMgcmluZyBidWZmZXJz
+IGFyZSBjcmVhdGVkDQo+Pj4gKGl0J3MgcG9zc2libGUgdG8gcHJvdmlkZSBhIGxpc3Qgb2YgQ1BV
+cyBhbmQgY29ycmVzcG9uZGluZyBtYXAga2V5cyB0bw0KPj4+IHVwZGF0ZSkuIFRoaXMgQVBJIGFs
+bG93cyBhZHZhbmNlZCB1c2VycyBmdWxsZXIgY29udHJvbC4NCj4+Pg0KPj4+IHBlcmZfYnVmZmVy
+X19wb2xsKCkgaXMgdXNlZCB0byBmZXRjaCByaW5nIGJ1ZmZlciBkYXRhIGFjcm9zcyBhbGwgQ1BV
+cywNCj4+PiB1dGlsaXppbmcgZXBvbGwgaW5zdGFuY2UuDQo+Pj4NCj4+PiBwZXJmX2J1ZmZlcl9f
+ZnJlZSgpIGRvZXMgY29ycmVzcG9uZGluZyBjbGVhbiB1cCBhbmQgdW5zZXRzIEZEcyBmcm9tIEJQ
+RiBtYXAuDQo+Pj4NCj4+PiBBbGwgQVBJcyBhcmUgbm90IHRocmVhZC1zYWZlLiBVc2VyIHNob3Vs
+ZCBlbnN1cmUgcHJvcGVyIGxvY2tpbmcvY29vcmRpbmF0aW9uIGlmDQo+Pj4gdXNlZCBpbiBtdWx0
+aS10aHJlYWRlZCBzZXQgdXAuDQo+Pj4NCj4+PiBTaWduZWQtb2ZmLWJ5OiBBbmRyaWkgTmFrcnlp
+a28gPGFuZHJpaW5AZmIuY29tPg0KPj4+IC0tLQ0KPj4+ICAgIHRvb2xzL2xpYi9icGYvbGliYnBm
+LmMgICB8IDM2NiArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4+PiAg
+ICB0b29scy9saWIvYnBmL2xpYmJwZi5oICAgfCAgNDkgKysrKysrDQo+Pj4gICAgdG9vbHMvbGli
+L2JwZi9saWJicGYubWFwIHwgICA0ICsNCj4+PiAgICAzIGZpbGVzIGNoYW5nZWQsIDQxOSBpbnNl
+cnRpb25zKCspDQo+Pj4NCj4+PiBkaWZmIC0tZ2l0IGEvdG9vbHMvbGliL2JwZi9saWJicGYuYyBi
+L3Rvb2xzL2xpYi9icGYvbGliYnBmLmMNCj4+PiBpbmRleCAyYTA4ZWIxMDYyMjEuLjcyMTQ5ZDY4
+YjhjMSAxMDA2NDQNCj4+PiAtLS0gYS90b29scy9saWIvYnBmL2xpYmJwZi5jDQo+Pj4gKysrIGIv
+dG9vbHMvbGliL2JwZi9saWJicGYuYw0KPj4+IEBAIC0zMiw3ICszMiw5IEBADQo+Pj4gICAgI2lu
+Y2x1ZGUgPGxpbnV4L2xpbWl0cy5oPg0KPj4+ICAgICNpbmNsdWRlIDxsaW51eC9wZXJmX2V2ZW50
+Lmg+DQo+Pj4gICAgI2luY2x1ZGUgPGxpbnV4L3JpbmdfYnVmZmVyLmg+DQo+Pj4gKyNpbmNsdWRl
+IDxzeXMvZXBvbGwuaD4NCj4+PiAgICAjaW5jbHVkZSA8c3lzL2lvY3RsLmg+DQo+Pj4gKyNpbmNs
+dWRlIDxzeXMvbW1hbi5oPg0KPj4+ICAgICNpbmNsdWRlIDxzeXMvc3RhdC5oPg0KPj4+ICAgICNp
+bmNsdWRlIDxzeXMvdHlwZXMuaD4NCj4+PiAgICAjaW5jbHVkZSA8c3lzL3Zmcy5oPg0KPj4+IEBA
+IC00MzU0LDYgKzQzNTYsMzcwIEBAIGJwZl9wZXJmX2V2ZW50X3JlYWRfc2ltcGxlKHZvaWQgKm1t
+YXBfbWVtLCBzaXplX3QgbW1hcF9zaXplLCBzaXplX3QgcGFnZV9zaXplLA0KPj4+ICAgICAgICBy
+ZXR1cm4gcmV0Ow0KPj4+ICAgIH0NCj4+Pg0KPj4+ICtzdHJ1Y3QgcGVyZl9idWZmZXI7DQo+Pj4g
+Kw0KPj4+ICtzdHJ1Y3QgcGVyZl9idWZmZXJfcGFyYW1zIHsNCj4+PiArICAgICBzdHJ1Y3QgcGVy
+Zl9ldmVudF9hdHRyICphdHRyOw0KPj4+ICsgICAgIC8qIGlmIGV2ZW50X2NiIGlzIHNwZWNpZmll
+ZCwgaXQgdGFrZXMgcHJlY2VuZGVuY2UgKi8NCj4+PiArICAgICBwZXJmX2J1ZmZlcl9ldmVudF9m
+biBldmVudF9jYjsNCj4+PiArICAgICAvKiBzYW1wbGVfY2IgYW5kIGxvc3RfY2IgYXJlIGhpZ2hl
+ci1sZXZlbCBjb21tb24tY2FzZSBjYWxsYmFja3MgKi8NCj4+PiArICAgICBwZXJmX2J1ZmZlcl9z
+YW1wbGVfZm4gc2FtcGxlX2NiOw0KPj4+ICsgICAgIHBlcmZfYnVmZmVyX2xvc3RfZm4gbG9zdF9j
+YjsNCj4+PiArICAgICB2b2lkICpjdHg7DQo+Pj4gKyAgICAgaW50IGNwdV9jbnQ7DQo+Pj4gKyAg
+ICAgaW50ICpjcHVzOw0KPj4gWy4uLl0NCj4+PiArDQo+Pj4gK2ludCBwZXJmX2J1ZmZlcl9fcG9s
+bChzdHJ1Y3QgcGVyZl9idWZmZXIgKnBiLCBpbnQgdGltZW91dF9tcykNCj4+PiArew0KPj4+ICsg
+ICAgIGludCBjbnQsIGVycjsNCj4+PiArDQo+Pj4gKyAgICAgY250ID0gZXBvbGxfd2FpdChwYi0+
+ZXBvbGxfZmQsIHBiLT5ldmVudHMsIHBiLT5jcHVfY250LCB0aW1lb3V0X21zKTsNCj4+PiArICAg
+ICBmb3IgKGludCBpID0gMDsgaSA8IGNudDsgaSsrKSB7DQo+Pg0KPj4gRmluZCBvbmUgY29tcGls
+YXRpb24gZXJyb3IgaGVyZS4NCj4+DQo+PiBsaWJicGYuYzogSW4gZnVuY3Rpb24g4oCYcGVyZl9i
+dWZmZXJfX3BvbGzigJk6DQo+PiBsaWJicGYuYzo0NzI4OjI6IGVycm9yOiDigJhmb3LigJkgbG9v
+cCBpbml0aWFsIGRlY2xhcmF0aW9ucyBhcmUgb25seSBhbGxvd2VkDQo+PiBpbiBDOTkgbW9kZQ0K
+Pj4gICAgIGZvciAoaW50IGkgPSAwOyBpIDwgY250OyBpKyspIHsNCj4+ICAgICBeDQo+Pg0KPiAN
+Cj4gQWguLi4gRml4aW5nLCB0aGFua3MhLiBIb3cgZGlkIHlvdSBjb21waWxlPyBtYWtlIC1DIHRv
+b2xzL2xpYi9icGYNCj4gZG9lc24ndCBzaG93IHRoaXMsIHNob3VsZCB3ZSB1cGRhdGUgbGliYnBm
+IE1ha2VmaWxlIHRvIGNhdGNoIHN0dWZmDQo+IGxpa2UgdGhpcz8NCg0KSSBkaWQgbm90IG1ha2Ug
+YW55IGNvZGUgY2hhbmdlcy4gTXkgY29tcGlsZXIgaXMgZ2NjIDQuOC41LiBpdCBpcyANCnBvc3Np
+YmxlIHRoYXQgb2xkIGNvbXBpbGVyIGxlc3MgdG9sZXJhbnQuDQoNCj4+PiArICAgICAgICAgICAg
+IHN0cnVjdCBwZXJmX2NwdV9idWYgKmNwdV9idWYgPSBwYi0+ZXZlbnRzW2ldLmRhdGEucHRyOw0K
+Pj4+ICsNCj4+PiArICAgICAgICAgICAgIGVyciA9IHBlcmZfYnVmZmVyX19wcm9jZXNzX3JlY29y
+ZHMocGIsIGNwdV9idWYpOw0KPj4+ICsgICAgICAgICAgICAgaWYgKGVycikgew0KPj4+ICsgICAg
+ICAgICAgICAgICAgICAgICBwcl93YXJuaW5nKCJlcnJvciB3aGlsZSBwcm9jZXNzaW5nIHJlY29y
+ZHM6ICVkXG4iLCBlcnIpOw0KPj4+ICsgICAgICAgICAgICAgICAgICAgICByZXR1cm4gZXJyOw0K
+Pj4+ICsgICAgICAgICAgICAgfQ0KPj4+ICsgICAgIH0NCj4+PiArICAgICByZXR1cm4gY250IDwg
+MCA/IC1lcnJubyA6IGNudDsNCj4+PiArfQ0KPj4+ICsNCj4+PiAgICBzdHJ1Y3QgYnBmX3Byb2df
+aW5mb19hcnJheV9kZXNjIHsNCj4+PiAgICAgICAgaW50ICAgICBhcnJheV9vZmZzZXQ7ICAgLyog
+ZS5nLiBvZmZzZXQgb2Ygaml0ZWRfcHJvZ19pbnNucyAqLw0KPj4+ICAgICAgICBpbnQgICAgIGNv
+dW50X29mZnNldDsgICAvKiBlLmcuIG9mZnNldCBvZiBqaXRlZF9wcm9nX2xlbiAqLw0KPj4gWy4u
+Ll0NCg==
