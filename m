@@ -2,127 +2,193 @@ Return-Path: <SRS0=cxIB=VF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87803C606BD
-	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 15:01:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63C27C606C1
+	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 15:11:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 673E221537
-	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 15:01:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 361A520844
+	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 15:11:37 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yg1gpVNh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727377AbfGHPBi convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 8 Jul 2019 11:01:38 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:20808 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730281AbfGHPBi (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 8 Jul 2019 11:01:38 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x68F09pj004960
-        for <bpf@vger.kernel.org>; Mon, 8 Jul 2019 11:01:36 -0400
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2tm6nrv515-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 08 Jul 2019 11:01:32 -0400
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <bpf@vger.kernel.org> from <iii@linux.ibm.com>;
-        Mon, 8 Jul 2019 16:01:30 +0100
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 8 Jul 2019 16:01:26 +0100
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x68F1Q5j39190670
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 8 Jul 2019 15:01:26 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EF0F611C04C;
-        Mon,  8 Jul 2019 15:01:25 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C3DD611C052;
-        Mon,  8 Jul 2019 15:01:25 +0000 (GMT)
-Received: from dyn-9-152-99-31.boeblingen.de.ibm.com (unknown [9.152.99.31])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  8 Jul 2019 15:01:25 +0000 (GMT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 11.5 \(3445.9.1\))
-Subject: Re: [PATCH v2 bpf-next] selftests/bpf: do not ignore clang failures
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-In-Reply-To: <cc418117-32a7-b7aa-3570-29b1b3421303@iogearbox.net>
-Date:   Mon, 8 Jul 2019 17:01:25 +0200
-Cc:     bpf <bpf@vger.kernel.org>, Song Liu <liu.song.a23@gmail.com>,
-        andrii.nakryiko@gmail.com,
-        Quentin Monnet <quentin.monnet@netronome.com>
-Content-Transfer-Encoding: 8BIT
-References: <CAEf4Bzb3BKoEcYiM3qQ6uqn+bZZ7kO2ogvZPba7679TWFT4fmw@mail.gmail.com>
- <20190701184025.25731-1-iii@linux.ibm.com>
- <cc418117-32a7-b7aa-3570-29b1b3421303@iogearbox.net>
+        id S1732119AbfGHPLh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jul 2019 11:11:37 -0400
+Received: from mail-vs1-f68.google.com ([209.85.217.68]:44342 "EHLO
+        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725872AbfGHPLg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jul 2019 11:11:36 -0400
+Received: by mail-vs1-f68.google.com with SMTP id v129so8427569vsb.11;
+        Mon, 08 Jul 2019 08:11:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=qSkBAdk5oddBWH4Q77bK0k0/VBqaR/5vSGHDXEvy3Mg=;
+        b=Yg1gpVNhkSvcLwybUOoLKF2S1WwFjaI6l060S2PdgedWdRlwmh9jgvrggY7u7mrqeo
+         Wx8+0gjT0IhrC2qM1HkVy7Ma7fdnAUbqNJeyizySg3SETmjiPK30ZiC9bMUkMD3URzE7
+         oiICrfiI1SL+ZbLKh7MVUV8asbLVPQKCHnDHmXTgV0da458kGp+26T843jIJ4vKCv6JO
+         F7ASYTSgPSUPVYBlk4w9f8lX2ooXvwcbcE9q8HWgflyS81NZDzjWGdhW8cyNGdl5XPJl
+         mjK4UDRbc2ZKzyBva7WSvAhDs3ZEvDQb3PUeJ0XwuBfUnWt4rj815FTI9lMIUC6162kh
+         rh7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=qSkBAdk5oddBWH4Q77bK0k0/VBqaR/5vSGHDXEvy3Mg=;
+        b=RDaCqm0J+R5V5G7br8Vl4ghq8y3OX115J039bHb8kkDPQKMLgYJ0lk3R0ELDjmLY0w
+         PuKNp5NSvQi4G4fbyMTNQdVFXZO3wQ+D4UUVIsxQERuzHWn6cN9uwWvbIb2Oi+gpcQdv
+         MC0+S82USK8wPk+pDlhxa+ppPpa4xijXVXMS+aj3S8ugtUzTgGT1Ky0WBrgRRWV5Nisn
+         8xUTCEMYujiV5H4NagjcmWoERjyG8Q29WnUq35ifd3SHN6wV3BeSv51T3UqKpLueX29X
+         VyEb2YqwOlORAeHk/OyqxmkGYwWcC8Frw5yRlt6Dea7Fp5vdR7iBXMSTqZhKgREGByYH
+         VeQA==
+X-Gm-Message-State: APjAAAWAygnbaOcazXQhgKHKqHcPknImc5gbSEhqCUNZI8bAJ3eg8U1L
+        DJnhNbAwN1VQNkBk8+kv729A22zKPlxCGgvejeKgpodxhU4=
+X-Google-Smtp-Source: APXvYqwPepGr97TYpU7TehuCAXGqVyYS9jfuD56GdqWIPRKMWtFRb+MQrh6kmqt0fCsCpeDiPaMSdk/Dr8YGUwvNJZI=
+X-Received: by 2002:a67:f7c6:: with SMTP id a6mr10651087vsp.120.1562598695231;
+ Mon, 08 Jul 2019 08:11:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1562359091.git.a.s.protopopov@gmail.com>
+ <e183c0af99056f8ea4de06acb358ace7f3a3d6ae.1562359091.git.a.s.protopopov@gmail.com>
+ <734dd45a-95b0-a7fd-9e1d-0535ef4d3e12@iogearbox.net>
+In-Reply-To: <734dd45a-95b0-a7fd-9e1d-0535ef4d3e12@iogearbox.net>
+From:   Anton Protopopov <a.s.protopopov@gmail.com>
+Date:   Mon, 8 Jul 2019 11:11:24 -0400
+Message-ID: <CAGn_itzJkW8uR-y92oU+jKKLRsAfsHcqJ+Cm0+KRZxJ-zaqMNA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf, libbpf: add a new API bpf_object__reuse_maps()
 To:     Daniel Borkmann <daniel@iogearbox.net>
-X-Mailer: Apple Mail (2.3445.9.1)
-X-TM-AS-GCONF: 00
-x-cbid: 19070815-0008-0000-0000-000002FAF873
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19070815-0009-0000-0000-00002268556A
-Message-Id: <59B1630A-537D-43A1-B75C-87BE80709F93@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-08_05:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907080187
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, andriin@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-> Am 05.07.2019 um 16:22 schrieb Daniel Borkmann <daniel@iogearbox.net>:
-> 
-> On 07/01/2019 08:40 PM, Ilya Leoshkevich wrote:
->> Am 01.07.2019 um 17:31 schrieb Andrii Nakryiko <andrii.nakryiko@gmail.com>:
->>> Do we still need clang | llc pipeline with new clang? Could the same
->>> be achieved with single clang invocation? That would solve the problem
->>> of not detecting pipeline failures.
->> 
->> I’ve experimented with this a little, and found that new clang:
->> 
->> - Does not understand -march, but -target is sufficient.
->> - Understands -mcpu.
->> - Understands -Xclang -target-feature -Xclang +foo as a replacement for
->>  -mattr=foo.
->> 
->> However, there are two issues with that:
->> 
->> - Don’t older clangs need to be supported? For example, right now alu32
->>  progs are built conditionally.
-> 
-> We usually require latest clang to be able to test most recent features like
-> BTF such that it helps to catch potential bugs in either of the projects
-> before release.
-> 
->> - It does not seem to be possible to build test_xdp.o without -target
->>  bpf.
-> 
-> For everything non-tracing, it does not make sense to invoke clang w/o
-> the -target bpf flag, see also Documentation/bpf/bpf_devel_QA.rst +573
-> for more explanation, so this needs to be present for building test_xdp.o.
+=D0=BF=D1=82, 5 =D0=B8=D1=8E=D0=BB. 2019 =D0=B3. =D0=B2 17:44, Daniel Borkm=
+ann <daniel@iogearbox.net>:
+>
+> On 07/05/2019 10:44 PM, Anton Protopopov wrote:
+> > Add a new API bpf_object__reuse_maps() which can be used to replace all=
+ maps in
+> > an object by maps pinned to a directory provided in the path argument. =
+ Namely,
+> > each map M in the object will be replaced by a map pinned to path/M.nam=
+e.
+> >
+> > Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
+> > ---
+> >  tools/lib/bpf/libbpf.c   | 34 ++++++++++++++++++++++++++++++++++
+> >  tools/lib/bpf/libbpf.h   |  2 ++
+> >  tools/lib/bpf/libbpf.map |  1 +
+> >  3 files changed, 37 insertions(+)
+> >
+> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > index 4907997289e9..84c9e8f7bfd3 100644
+> > --- a/tools/lib/bpf/libbpf.c
+> > +++ b/tools/lib/bpf/libbpf.c
+> > @@ -3144,6 +3144,40 @@ int bpf_object__unpin_maps(struct bpf_object *ob=
+j, const char *path)
+> >       return 0;
+> >  }
+> >
+> > +int bpf_object__reuse_maps(struct bpf_object *obj, const char *path)
+> > +{
+> > +     struct bpf_map *map;
+> > +
+> > +     if (!obj)
+> > +             return -ENOENT;
+> > +
+> > +     if (!path)
+> > +             return -EINVAL;
+> > +
+> > +     bpf_object__for_each_map(map, obj) {
+> > +             int len, err;
+> > +             int pinned_map_fd;
+> > +             char buf[PATH_MAX];
+>
+> We'd need to skip the case of bpf_map__is_internal(map) since they are al=
+ways
+> recreated for the given object.
+>
+> > +             len =3D snprintf(buf, PATH_MAX, "%s/%s", path, bpf_map__n=
+ame(map));
+> > +             if (len < 0) {
+> > +                     return -EINVAL;
+> > +             } else if (len >=3D PATH_MAX) {
+> > +                     return -ENAMETOOLONG;
+> > +             }
+> > +
+> > +             pinned_map_fd =3D bpf_obj_get(buf);
+> > +             if (pinned_map_fd < 0)
+> > +                     return pinned_map_fd;
+>
+> Should we rather have a new map definition attribute that tells to reuse
+> the map if it's pinned in bpf fs, and if not, we create it and later on
+> pin it? This is what iproute2 is doing and which we're making use of heav=
+ily.
 
-I'm referring to the test introduced in [1]. test_xdp.o might not be an
-ideal target, but even if it's replaced with a more suitable one, the
-llc invocation would still be required. So I could redo the patch as
-follows:
+What do you think about adding a new generic field, say load_flags,
+to the bpf_map_def structure and a particular flag, say LOAD_F_STICKY
+for this purpose? And it will be cleared for internal maps, so we will skip
+them as well.
 
-- Replace test_xdp.o with get_cgroup_id_kern.o, use an intermediate .bc
-  file.
-- Use clang without llc for all other eBPF programs.
-- Split out Kbuild include and order-only prerequisites.
+> In bpf_object__reuse_maps() bailing out if bpf_obj_get() fails is perhaps
+> too limiting for a generic API as new version of an object file may conta=
+in
+> new maps which are not yet present in bpf fs at that point.
 
-What do you think?
+How permissive should it be? Is it ok to just print a warning on any
+bpf_obj_get()
+failure? Or does it make sense to skip some specific error (ENOENT) and rej=
+ect
+on other errors?
 
-[1] https://lore.kernel.org/netdev/1541593725-27703-1-git-send-email-quentin.monnet@netronome.com/
-
-Best regards,
-Ilya
+>
+> > +             err =3D bpf_map__reuse_fd(map, pinned_map_fd);
+> > +             if (err)
+> > +                     return err;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
+> >  {
+> >       struct bpf_program *prog;
+> > diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> > index d639f47e3110..7fe465a1be76 100644
+> > --- a/tools/lib/bpf/libbpf.h
+> > +++ b/tools/lib/bpf/libbpf.h
+> > @@ -82,6 +82,8 @@ int bpf_object__variable_offset(const struct bpf_obje=
+ct *obj, const char *name,
+> >  LIBBPF_API int bpf_object__pin_maps(struct bpf_object *obj, const char=
+ *path);
+> >  LIBBPF_API int bpf_object__unpin_maps(struct bpf_object *obj,
+> >                                     const char *path);
+> > +LIBBPF_API int bpf_object__reuse_maps(struct bpf_object *obj,
+> > +                                   const char *path);
+> >  LIBBPF_API int bpf_object__pin_programs(struct bpf_object *obj,
+> >                                       const char *path);
+> >  LIBBPF_API int bpf_object__unpin_programs(struct bpf_object *obj,
+> > diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> > index 2c6d835620d2..66a30be6696c 100644
+> > --- a/tools/lib/bpf/libbpf.map
+> > +++ b/tools/lib/bpf/libbpf.map
+> > @@ -172,5 +172,6 @@ LIBBPF_0.0.4 {
+> >               btf_dump__new;
+> >               btf__parse_elf;
+> >               bpf_object__load_xattr;
+> > +             bpf_object__reuse_maps;
+> >               libbpf_num_possible_cpus;
+> >  } LIBBPF_0.0.3;
+> >
+>
