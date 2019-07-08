@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5698CC606C1
-	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 16:32:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7834C606C1
+	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 16:32:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 12C2B217F9
-	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 16:32:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B713F21479
+	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 16:32:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kinvolk.io header.i=@kinvolk.io header.b="mma1gBGP"
+	dkim=pass (1024-bit key) header.d=kinvolk.io header.i=@kinvolk.io header.b="SJBZLbfj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391344AbfGHQcB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jul 2019 12:32:01 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:35066 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390716AbfGHQcA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jul 2019 12:32:00 -0400
-Received: by mail-wm1-f66.google.com with SMTP id l2so186402wmg.0
-        for <bpf@vger.kernel.org>; Mon, 08 Jul 2019 09:31:58 -0700 (PDT)
+        id S2403940AbfGHQcE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jul 2019 12:32:04 -0400
+Received: from mail-wm1-f43.google.com ([209.85.128.43]:37392 "EHLO
+        mail-wm1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403826AbfGHQcD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jul 2019 12:32:03 -0400
+Received: by mail-wm1-f43.google.com with SMTP id f17so171572wme.2
+        for <bpf@vger.kernel.org>; Mon, 08 Jul 2019 09:32:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kinvolk.io; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=GJpWkWeszwICrKjVaAu7HhQ1O5OzLua03ZRK8ZR/OqM=;
-        b=mma1gBGPP6vlHaz6XpjTOio0GSLs+eNxf3GiLE7Y+gXUYW6MHTR1jFWi8NRJ7hU4KT
-         sAMcDZKOYxeXXuRD7abUtO4h/wUdMZP/22GN4R5By76JyPgltsfRshgb0ZsMFtMwQGhb
-         5rttbvEh88tpC9+7pwMjW1O+I8JYbgbDfxb/g=
+        bh=sQGKbunRlrvdVKbp02vEGwvG8+xrq5xUVQ5fY/+t4TE=;
+        b=SJBZLbfj73WvztsTVCyOaGzkao16f0cK4Qd3O7+93OdYSwxGMZrFSA+QNEXHIq4q52
+         QTqMGAMrkclA3q+GV20vV9rDe5T7Aq+vjBeSxnO4sxrsd425CRXW6cWA9wOzNeN23mBb
+         DH4d4tYhyv4Fh9Zq0DD9xa42KhSbQp1I9es+s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=GJpWkWeszwICrKjVaAu7HhQ1O5OzLua03ZRK8ZR/OqM=;
-        b=jJgj08RGtZrjOU2U4CREsUcKPgrwvGM9I7KHEy53jcw4oEozbET9AcK0OYhVEqafAH
-         ceW9+VENKDEBI6gY1gogmIv7LbvMVXRONFx7E221diLSR0QV3M+R/8nnsT2CunF51ga6
-         JCicha1TKKSWgPhQYRnqHvFZ/UylzFuGVInSNN8JtjlTOlwrdvgonqLS8Suf6qAXHtwO
-         wGkYkm+AJVyVsa2V4/TedM/GrlN3VohcU6owgDHY8iUccAacEv/OG9idjMGUB0CgfGEY
-         WnppJ1dGdqVqgrbBq7triREEEeoxd4jn0mzGdkpsVKblZuYfG45dqoyjVZk73a8WacuX
-         fyUQ==
-X-Gm-Message-State: APjAAAV/Xckb74uuYfBpE1RugtiWpZZYPytcpl80kRvwQGayp8JlGejd
-        RNXP8ohA7qpkfTrHAc3MNd6Uaw==
-X-Google-Smtp-Source: APXvYqzfUbq1Iw1is5h2WH4GBurEIOvz56BK8XDXmTaVMDdKlXNwy0Z4cAC1pdu2JMTs0Sc5Qa3siw==
-X-Received: by 2002:a05:600c:218d:: with SMTP id e13mr13561108wme.29.1562603517575;
-        Mon, 08 Jul 2019 09:31:57 -0700 (PDT)
+        bh=sQGKbunRlrvdVKbp02vEGwvG8+xrq5xUVQ5fY/+t4TE=;
+        b=iC9RIa3l/E3pLiSW3YjCoFFvBVa1+BM1QdCiRjOexwHvA0KLLUmr1JVUe13Z4OIFdF
+         02aErevHa2FTVWQ3wtYXEO6BXajqgnBRPFZk3fnTae2jNXsupa0JLskTxIxvskhBXKTp
+         MCYK+GTiG15WSs11Je+Q79zJsbKF0UxjN5QiOsHvT7lAdqi0Se3UwZok9EzYK6/f2q1s
+         DMdMqFacbUKpPYZvkTEZpkfB4kU0ZAJL5gX6/hbgt0ZzIN566kj+uTKWLLkTckCWjVls
+         sIVF7DyjwyXLd/OIsp0I5vNsLn9UjjG+c8hj8oVv1C5M5V6k78E5b46PUlWRsAPzxwK/
+         KT0g==
+X-Gm-Message-State: APjAAAU9l06tKnprvME5u6NKx7gi5RQlNs5PDzvzyVZs1+Rs6iKh1etQ
+        HaTGAbmlga0pMLkk70ddKdZ71w==
+X-Google-Smtp-Source: APXvYqzZGSWnfDDVHTzxD8mRM5nAtI2EXCovxJ1DXmzY0w4uYyNkN/nErPCAqTn8joiAXOQfOGRdWg==
+X-Received: by 2002:a1c:cc0d:: with SMTP id h13mr17034505wmb.119.1562603521360;
+        Mon, 08 Jul 2019 09:32:01 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5aedbe.dynamic.kabel-deutschland.de. [95.90.237.190])
-        by smtp.gmail.com with ESMTPSA id e6sm18255086wrw.23.2019.07.08.09.31.56
+        by smtp.gmail.com with ESMTPSA id e6sm18255086wrw.23.2019.07.08.09.32.00
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 08 Jul 2019 09:31:57 -0700 (PDT)
+        Mon, 08 Jul 2019 09:32:00 -0700 (PDT)
 From:   Krzesimir Nowak <krzesimir@kinvolk.io>
 To:     linux-kernel@vger.kernel.org
 Cc:     Alban Crequy <alban@kinvolk.io>,
@@ -66,9 +66,9 @@ Cc:     Alban Crequy <alban@kinvolk.io>,
         Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, xdp-newbies@vger.kernel.org,
         Krzesimir Nowak <krzesimir@kinvolk.io>
-Subject: [bpf-next v3 09/12] bpf: Split out some helper functions
-Date:   Mon,  8 Jul 2019 18:31:18 +0200
-Message-Id: <20190708163121.18477-10-krzesimir@kinvolk.io>
+Subject: [bpf-next v3 12/12] selftests/bpf: Test correctness of narrow 32bit read on 64bit field
+Date:   Mon,  8 Jul 2019 18:31:21 +0200
+Message-Id: <20190708163121.18477-13-krzesimir@kinvolk.io>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190708163121.18477-1-krzesimir@kinvolk.io>
 References: <20190708163121.18477-1-krzesimir@kinvolk.io>
@@ -79,634 +79,95 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The moved functions are generally useful for implementing
-bpf_prog_test_run for other types of BPF programs - they don't have
-any network-specific stuff in them, so I can use them in a test run
-implementation for perf event BPF program too.
+Test the correctness of the 32bit narrow reads by reading both halves
+of the 64 bit field and doing a binary or on them to see if we get the
+original value.
+
+It succeeds as it should, but with the commit e2f7fc0ac695 ("bpf: fix
+undefined behavior in narrow load handling") reverted, the test fails
+with a following message:
+
+> $ sudo ./test_verifier
+> ...
+> #967/p 32bit loads of a 64bit field (both least and most significant words) FAIL retval -1985229329 != 0
+> verification time 17 usec
+> stack depth 0
+> processed 8 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
+> ...
+> Summary: 1519 PASSED, 0 SKIPPED, 1 FAILED
 
 Signed-off-by: Krzesimir Nowak <krzesimir@kinvolk.io>
 ---
- include/linux/bpf.h   |  28 +++++
- kernel/bpf/Makefile   |   1 +
- kernel/bpf/test_run.c | 212 ++++++++++++++++++++++++++++++++++
- net/bpf/test_run.c    | 263 +++++++++++-------------------------------
- 4 files changed, 308 insertions(+), 196 deletions(-)
- create mode 100644 kernel/bpf/test_run.c
+ tools/testing/selftests/bpf/test_verifier.c   | 19 +++++++++++++++++
+ .../testing/selftests/bpf/verifier/var_off.c  | 21 +++++++++++++++++++
+ 2 files changed, 40 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 18f4cc2c6acd..28db8ba57bc3 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1143,4 +1143,32 @@ static inline u32 bpf_xdp_sock_convert_ctx_access(enum bpf_access_type type,
- }
- #endif /* CONFIG_INET */
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index 484ea8842b06..2a20280a4a44 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -24,6 +24,7 @@
  
-+/* Helper functions for bpf_prog_test_run implementations */
-+typedef u32 bpf_prog_run_helper_t(struct bpf_prog *prog, void *ctx,
-+				   void *private_data);
-+
-+enum bpf_test_run_flags {
-+	BPF_TEST_RUN_PLAIN = 0,
-+	BPF_TEST_RUN_SETUP_CGROUP_STORAGE = 1 << 0,
-+};
-+
-+int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat, u32 flags,
-+		 u32 *retval, u32 *duration);
-+
-+int bpf_test_run_cb(struct bpf_prog *prog, void *ctx, u32 repeat, u32 flags,
-+		    bpf_prog_run_helper_t run_prog, void *private_data,
-+		    u32 *retval, u32 *duration);
-+
-+int bpf_test_finish(union bpf_attr __user *uattr, u32 retval, u32 duration);
-+
-+void *bpf_receive_ctx(const union bpf_attr *kattr, u32 max_size);
-+
-+int bpf_send_ctx(const union bpf_attr *kattr, union bpf_attr __user *uattr,
-+		 const void *data, u32 size);
-+
-+void *bpf_receive_data(const union bpf_attr *kattr, u32 max_size);
-+
-+int bpf_send_data(const union bpf_attr *kattr, union bpf_attr __user *uattr,
-+		  const void *data, u32 size);
-+
- #endif /* _LINUX_BPF_H */
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index 29d781061cd5..570fd40288f4 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -22,3 +22,4 @@ obj-$(CONFIG_CGROUP_BPF) += cgroup.o
- ifeq ($(CONFIG_INET),y)
- obj-$(CONFIG_BPF_SYSCALL) += reuseport_array.o
- endif
-+obj-$(CONFIG_BPF_SYSCALL) += test_run.o
-diff --git a/kernel/bpf/test_run.c b/kernel/bpf/test_run.c
-new file mode 100644
-index 000000000000..0481373da8be
---- /dev/null
-+++ b/kernel/bpf/test_run.c
-@@ -0,0 +1,212 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2017 Facebook
-+ * Copyright (c) 2019 Tigera, Inc
-+ */
-+
-+#include <asm/div64.h>
-+
-+#include <linux/bpf-cgroup.h>
-+#include <linux/bpf.h>
-+#include <linux/err.h>
-+#include <linux/errno.h>
-+#include <linux/filter.h>
-+#include <linux/gfp.h>
-+#include <linux/kernel.h>
-+#include <linux/limits.h>
-+#include <linux/preempt.h>
-+#include <linux/rcupdate.h>
-+#include <linux/sched.h>
-+#include <linux/sched/signal.h>
-+#include <linux/slab.h>
-+#include <linux/timekeeping.h>
-+#include <linux/uaccess.h>
-+
-+static void teardown_cgroup_storage(struct bpf_cgroup_storage **storage)
-+{
-+	enum bpf_cgroup_storage_type stype;
-+
-+	if (!storage)
-+		return;
-+	for_each_cgroup_storage_type(stype)
-+		bpf_cgroup_storage_free(storage[stype]);
-+	kfree(storage);
-+}
-+
-+static struct bpf_cgroup_storage **setup_cgroup_storage(struct bpf_prog *prog)
-+{
-+	enum bpf_cgroup_storage_type stype;
-+	struct bpf_cgroup_storage **storage;
-+	size_t size = MAX_BPF_CGROUP_STORAGE_TYPE;
-+
-+	size *= sizeof(struct bpf_cgroup_storage *);
-+	storage = kzalloc(size, GFP_KERNEL);
-+	for_each_cgroup_storage_type(stype) {
-+		storage[stype] = bpf_cgroup_storage_alloc(prog, stype);
-+		if (IS_ERR(storage[stype])) {
-+			storage[stype] = NULL;
-+			teardown_cgroup_storage(storage);
-+			return ERR_PTR(-ENOMEM);
-+		}
-+	}
-+	return storage;
-+}
-+
-+static u32 run_bpf_prog(struct bpf_prog *prog, void *ctx, void *private_data)
-+{
-+	return BPF_PROG_RUN(prog, ctx);
-+}
-+
-+int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat, u32 flags,
-+		 u32 *retval, u32 *duration)
-+{
-+	return bpf_test_run_cb(prog, ctx, repeat, flags, run_bpf_prog, NULL,
-+			       retval, duration);
-+}
-+
-+int bpf_test_run_cb(struct bpf_prog *prog, void *ctx, u32 repeat, u32 flags,
-+		    bpf_prog_run_helper_t run_prog, void *private_data,
-+		    u32 *retval, u32 *duration)
-+{
-+	struct bpf_cgroup_storage **storage = NULL;
-+	u64 time_start, time_spent = 0;
-+	int ret = 0;
-+	u32 i;
-+
-+	if (flags & BPF_TEST_RUN_SETUP_CGROUP_STORAGE) {
-+		storage = setup_cgroup_storage(prog);
-+		if (IS_ERR(storage))
-+			return PTR_ERR(storage);
-+	}
-+
-+	if (!repeat)
-+		repeat = 1;
-+
-+	rcu_read_lock();
-+	preempt_disable();
-+	time_start = ktime_get_ns();
-+	for (i = 0; i < repeat; i++) {
-+		if (storage)
-+			bpf_cgroup_storage_set(storage);
-+		*retval = run_prog(prog, ctx, private_data);
-+
-+		if (signal_pending(current)) {
-+			preempt_enable();
-+			rcu_read_unlock();
-+			teardown_cgroup_storage(storage);
-+			return -EINTR;
-+		}
-+
-+		if (need_resched()) {
-+			time_spent += ktime_get_ns() - time_start;
-+			preempt_enable();
-+			rcu_read_unlock();
-+
-+			cond_resched();
-+
-+			rcu_read_lock();
-+			preempt_disable();
-+			time_start = ktime_get_ns();
-+		}
-+	}
-+	time_spent += ktime_get_ns() - time_start;
-+	preempt_enable();
-+	rcu_read_unlock();
-+
-+	do_div(time_spent, repeat);
-+	*duration = time_spent > U32_MAX ? U32_MAX : (u32)time_spent;
-+
-+	teardown_cgroup_storage(storage);
-+
-+	return ret;
-+}
-+
-+int bpf_test_finish(union bpf_attr __user *uattr, u32 retval, u32 duration)
-+{
-+	if (copy_to_user(&uattr->test.retval, &retval, sizeof(retval)))
-+		return -EFAULT;
-+	if (copy_to_user(&uattr->test.duration, &duration, sizeof(duration)))
-+		return -EFAULT;
-+	return 0;
-+}
-+
-+static void *bpf_receive_mem(u64 in, u32 in_size, u32 max_size)
-+{
-+	void __user *data_in = u64_to_user_ptr(in);
-+	void *data;
-+	int err;
-+
-+	if (!data_in && in_size)
-+		return ERR_PTR(-EINVAL);
-+	data = kzalloc(max_size, GFP_USER);
-+	if (!data)
-+		return ERR_PTR(-ENOMEM);
-+
-+	if (data_in) {
-+		err = bpf_check_uarg_tail_zero(data_in, max_size, in_size);
-+		if (err) {
-+			kfree(data);
-+			return ERR_PTR(err);
-+		}
-+
-+		in_size = min_t(u32, max_size, in_size);
-+		if (copy_from_user(data, data_in, in_size)) {
-+			kfree(data);
-+			return ERR_PTR(-EFAULT);
-+		}
-+	}
-+	return data;
-+}
-+
-+static int bpf_send_mem(u64 out, u32 out_size, u32 *out_size_write,
-+                        const void *data, u32 data_size)
-+{
-+	void __user *data_out = u64_to_user_ptr(out);
-+	int err = -EFAULT;
-+	u32 copy_size = data_size;
-+
-+	if (!data_out && out_size)
-+		return -EINVAL;
-+
-+	if (!data || !data_out)
-+		return 0;
-+
-+	if (copy_size > out_size) {
-+		copy_size = out_size;
-+		err = -ENOSPC;
-+	}
-+
-+	if (copy_to_user(data_out, data, copy_size))
-+		goto out;
-+	if (copy_to_user(out_size_write, &data_size, sizeof(data_size)))
-+		goto out;
-+	if (err != -ENOSPC)
-+		err = 0;
-+out:
-+	return err;
-+}
-+
-+void *bpf_receive_data(const union bpf_attr *kattr, u32 max_size)
-+{
-+	return bpf_receive_mem(kattr->test.data_in, kattr->test.data_size_in,
-+                               max_size);
-+}
-+
-+int bpf_send_data(const union bpf_attr *kattr, union bpf_attr __user *uattr,
-+                  const void *data, u32 size)
-+{
-+	return bpf_send_mem(kattr->test.data_out, kattr->test.data_size_out,
-+			    &uattr->test.data_size_out, data, size);
-+}
-+
-+void *bpf_receive_ctx(const union bpf_attr *kattr, u32 max_size)
-+{
-+	return bpf_receive_mem(kattr->test.ctx_in, kattr->test.ctx_size_in,
-+                               max_size);
-+}
-+
-+int bpf_send_ctx(const union bpf_attr *kattr, union bpf_attr __user *uattr,
-+                 const void *data, u32 size)
-+{
-+        return bpf_send_mem(kattr->test.ctx_out, kattr->test.ctx_size_out,
-+                            &uattr->test.ctx_size_out, data, size);
-+}
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 80e6f3a6864d..fe6b7b1af0cc 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -14,97 +14,6 @@
- #define CREATE_TRACE_POINTS
- #include <trace/events/bpf_test_run.h>
+ #include <sys/capability.h>
  
--static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
--			u32 *retval, u32 *time)
--{
--	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = { NULL };
--	enum bpf_cgroup_storage_type stype;
--	u64 time_start, time_spent = 0;
--	int ret = 0;
--	u32 i;
--
--	for_each_cgroup_storage_type(stype) {
--		storage[stype] = bpf_cgroup_storage_alloc(prog, stype);
--		if (IS_ERR(storage[stype])) {
--			storage[stype] = NULL;
--			for_each_cgroup_storage_type(stype)
--				bpf_cgroup_storage_free(storage[stype]);
--			return -ENOMEM;
--		}
--	}
--
--	if (!repeat)
--		repeat = 1;
--
--	rcu_read_lock();
--	preempt_disable();
--	time_start = ktime_get_ns();
--	for (i = 0; i < repeat; i++) {
--		bpf_cgroup_storage_set(storage);
--		*retval = BPF_PROG_RUN(prog, ctx);
--
--		if (signal_pending(current)) {
--			ret = -EINTR;
--			break;
--		}
--
--		if (need_resched()) {
--			time_spent += ktime_get_ns() - time_start;
--			preempt_enable();
--			rcu_read_unlock();
--
--			cond_resched();
--
--			rcu_read_lock();
--			preempt_disable();
--			time_start = ktime_get_ns();
--		}
--	}
--	time_spent += ktime_get_ns() - time_start;
--	preempt_enable();
--	rcu_read_unlock();
--
--	do_div(time_spent, repeat);
--	*time = time_spent > U32_MAX ? U32_MAX : (u32)time_spent;
--
--	for_each_cgroup_storage_type(stype)
--		bpf_cgroup_storage_free(storage[stype]);
--
--	return ret;
--}
--
--static int bpf_test_finish(const union bpf_attr *kattr,
--			   union bpf_attr __user *uattr, const void *data,
--			   u32 size, u32 retval, u32 duration)
--{
--	void __user *data_out = u64_to_user_ptr(kattr->test.data_out);
--	int err = -EFAULT;
--	u32 copy_size = size;
--
--	/* Clamp copy if the user has provided a size hint, but copy the full
--	 * buffer if not to retain old behaviour.
--	 */
--	if (kattr->test.data_size_out &&
--	    copy_size > kattr->test.data_size_out) {
--		copy_size = kattr->test.data_size_out;
--		err = -ENOSPC;
--	}
--
--	if (data_out && copy_to_user(data_out, data, copy_size))
--		goto out;
--	if (copy_to_user(&uattr->test.data_size_out, &size, sizeof(size)))
--		goto out;
--	if (copy_to_user(&uattr->test.retval, &retval, sizeof(retval)))
--		goto out;
--	if (copy_to_user(&uattr->test.duration, &duration, sizeof(duration)))
--		goto out;
--	if (err != -ENOSPC)
--		err = 0;
--out:
--	trace_bpf_test_finish(&err);
--	return err;
--}
--
- static void *bpf_test_init(const union bpf_attr *kattr, u32 size,
- 			   u32 headroom, u32 tailroom)
- {
-@@ -125,63 +34,6 @@ static void *bpf_test_init(const union bpf_attr *kattr, u32 size,
- 	return data;
++#include <linux/compiler.h>
+ #include <linux/unistd.h>
+ #include <linux/filter.h>
+ #include <linux/bpf_perf_event.h>
+@@ -343,6 +344,24 @@ static void bpf_fill_perf_event_test_run_check(struct bpf_test *self)
+ 	self->fill_insns = NULL;
  }
  
--static void *bpf_ctx_init(const union bpf_attr *kattr, u32 max_size)
--{
--	void __user *data_in = u64_to_user_ptr(kattr->test.ctx_in);
--	void __user *data_out = u64_to_user_ptr(kattr->test.ctx_out);
--	u32 size = kattr->test.ctx_size_in;
--	void *data;
--	int err;
--
--	if (!data_in && !data_out)
--		return NULL;
--
--	data = kzalloc(max_size, GFP_USER);
--	if (!data)
--		return ERR_PTR(-ENOMEM);
--
--	if (data_in) {
--		err = bpf_check_uarg_tail_zero(data_in, max_size, size);
--		if (err) {
--			kfree(data);
--			return ERR_PTR(err);
--		}
--
--		size = min_t(u32, max_size, size);
--		if (copy_from_user(data, data_in, size)) {
--			kfree(data);
--			return ERR_PTR(-EFAULT);
--		}
--	}
--	return data;
--}
--
--static int bpf_ctx_finish(const union bpf_attr *kattr,
--			  union bpf_attr __user *uattr, const void *data,
--			  u32 size)
--{
--	void __user *data_out = u64_to_user_ptr(kattr->test.ctx_out);
--	int err = -EFAULT;
--	u32 copy_size = size;
--
--	if (!data || !data_out)
--		return 0;
--
--	if (copy_size > kattr->test.ctx_size_out) {
--		copy_size = kattr->test.ctx_size_out;
--		err = -ENOSPC;
--	}
--
--	if (copy_to_user(data_out, data, copy_size))
--		goto out;
--	if (copy_to_user(&uattr->test.ctx_size_out, &size, sizeof(size)))
--		goto out;
--	if (err != -ENOSPC)
--		err = 0;
--out:
--	return err;
--}
--
- /**
-  * range_is_zero - test whether buffer is initialized
-  * @buf: buffer to check
-@@ -238,6 +90,36 @@ static void convert_skb_to___skb(struct sk_buff *skb, struct __sk_buff *__skb)
- 	memcpy(__skb->cb, &cb->data, QDISC_CB_PRIV_LEN);
- }
- 
-+static int bpf_net_prog_test_run_finish(const union bpf_attr *kattr,
-+                                        union bpf_attr __user *uattr,
-+                                        const void *data, u32 data_size,
-+                                        const void *ctx, u32 ctx_size,
-+                                        u32 retval, u32 duration)
++static void bpf_fill_32bit_loads(struct bpf_test *self)
 +{
-+	int ret;
-+	union bpf_attr fixed_kattr;
-+	const union bpf_attr *kattr_ptr = kattr;
++	compiletime_assert(
++		sizeof(struct bpf_perf_event_data) <= TEST_CTX_LEN,
++		"buffer for ctx is too short to fit struct bpf_perf_event_data");
++	compiletime_assert(
++		sizeof(struct bpf_perf_event_value) <= TEST_DATA_LEN,
++		"buffer for data is too short to fit struct bpf_perf_event_value");
 +
-+	/* Clamp copy (in bpf_send_mem) if the user has provided a
-+	 * size hint, but copy the full buffer if not to retain old
-+	 * behaviour.
-+	 */
-+	if (!kattr->test.data_size_out && kattr->test.data_out) {
-+		fixed_kattr = *kattr;
-+		fixed_kattr.test.data_size_out = U32_MAX;
-+		kattr_ptr = &fixed_kattr;
-+	}
++	struct bpf_perf_event_data ctx = {
++		.sample_period = 0x0123456789abcdef,
++	};
 +
-+	ret = bpf_send_data(kattr_ptr, uattr, data, data_size);
-+	if (!ret) {
-+		ret = bpf_test_finish(uattr, retval, duration);
-+		if (!ret && ctx)
-+			ret = bpf_send_ctx(kattr_ptr, uattr, ctx, ctx_size);
-+	}
-+	trace_bpf_test_finish(&ret);
-+	return ret;
++	memcpy(self->ctx, &ctx, sizeof(ctx));
++	free(self->fill_insns);
++	self->fill_insns = NULL;
 +}
 +
- int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 			  union bpf_attr __user *uattr)
- {
-@@ -257,7 +139,7 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 	if (IS_ERR(data))
- 		return PTR_ERR(data);
- 
--	ctx = bpf_ctx_init(kattr, sizeof(struct __sk_buff));
-+	ctx = bpf_receive_ctx(kattr, sizeof(struct __sk_buff));
- 	if (IS_ERR(ctx)) {
- 		kfree(data);
- 		return PTR_ERR(ctx);
-@@ -307,7 +189,8 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 	ret = convert___skb_to_skb(skb, ctx);
- 	if (ret)
- 		goto out;
--	ret = bpf_test_run(prog, skb, repeat, &retval, &duration);
-+	ret = bpf_test_run(prog, skb, repeat, BPF_TEST_RUN_SETUP_CGROUP_STORAGE,
-+			   &retval, &duration);
- 	if (ret)
- 		goto out;
- 	if (!is_l2) {
-@@ -327,10 +210,9 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 	/* bpf program can never convert linear skb to non-linear */
- 	if (WARN_ON_ONCE(skb_is_nonlinear(skb)))
- 		size = skb_headlen(skb);
--	ret = bpf_test_finish(kattr, uattr, skb->data, size, retval, duration);
--	if (!ret)
--		ret = bpf_ctx_finish(kattr, uattr, ctx,
--				     sizeof(struct __sk_buff));
-+	ret = bpf_net_prog_test_run_finish(kattr, uattr, skb->data, size,
-+					   ctx, sizeof(struct __sk_buff),
-+					   retval, duration);
- out:
- 	kfree_skb(skb);
- 	bpf_sk_storage_free(sk);
-@@ -365,32 +247,48 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
- 	rxqueue = __netif_get_rx_queue(current->nsproxy->net_ns->loopback_dev, 0);
- 	xdp.rxq = &rxqueue->xdp_rxq;
- 
--	ret = bpf_test_run(prog, &xdp, repeat, &retval, &duration);
-+	ret = bpf_test_run(prog, &xdp, repeat,
-+			   BPF_TEST_RUN_SETUP_CGROUP_STORAGE,
-+			   &retval, &duration);
- 	if (ret)
- 		goto out;
- 	if (xdp.data != data + XDP_PACKET_HEADROOM + NET_IP_ALIGN ||
- 	    xdp.data_end != xdp.data + size)
- 		size = xdp.data_end - xdp.data;
--	ret = bpf_test_finish(kattr, uattr, xdp.data, size, retval, duration);
-+	ret = bpf_net_prog_test_run_finish(kattr, uattr, xdp.data, size,
-+					   NULL, 0, retval, duration);
- out:
- 	kfree(data);
- 	return ret;
- }
- 
-+struct bpf_flow_dissect_run_data {
-+	__be16 proto;
-+	int nhoff;
-+	int hlen;
-+};
-+
-+static u32 bpf_flow_dissect_run(struct bpf_prog *prog, void *ctx,
-+				void *private_data)
+ /* BPF_SK_LOOKUP contains 13 instructions, if you need to fix up maps */
+ #define BPF_SK_LOOKUP(func)						\
+ 	/* struct bpf_sock_tuple tuple = {} */				\
+diff --git a/tools/testing/selftests/bpf/verifier/var_off.c b/tools/testing/selftests/bpf/verifier/var_off.c
+index 8504ac937809..3f8bee0a50ef 100644
+--- a/tools/testing/selftests/bpf/verifier/var_off.c
++++ b/tools/testing/selftests/bpf/verifier/var_off.c
+@@ -246,3 +246,24 @@
+ 	.result = ACCEPT,
+ 	.prog_type = BPF_PROG_TYPE_LWT_IN,
+ },
 +{
-+	struct bpf_flow_dissect_run_data *data = private_data;
-+
-+	return bpf_flow_dissect(prog, ctx, data->proto, data->nhoff, data->hlen);
-+}
-+
- int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- 				     const union bpf_attr *kattr,
- 				     union bpf_attr __user *uattr)
- {
-+	struct bpf_flow_dissect_run_data run_data = {};
- 	u32 size = kattr->test.data_size_in;
- 	struct bpf_flow_dissector ctx = {};
- 	u32 repeat = kattr->test.repeat;
- 	struct bpf_flow_keys flow_keys;
--	u64 time_start, time_spent = 0;
- 	const struct ethhdr *eth;
- 	u32 retval, duration;
- 	void *data;
- 	int ret;
--	u32 i;
- 
- 	if (prog->type != BPF_PROG_TYPE_FLOW_DISSECTOR)
- 		return -EINVAL;
-@@ -407,49 +305,22 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- 
- 	eth = (struct ethhdr *)data;
- 
--	if (!repeat)
--		repeat = 1;
--
- 	ctx.flow_keys = &flow_keys;
- 	ctx.data = data;
- 	ctx.data_end = (__u8 *)data + size;
- 
--	rcu_read_lock();
--	preempt_disable();
--	time_start = ktime_get_ns();
--	for (i = 0; i < repeat; i++) {
--		retval = bpf_flow_dissect(prog, &ctx, eth->h_proto, ETH_HLEN,
--					  size);
--
--		if (signal_pending(current)) {
--			preempt_enable();
--			rcu_read_unlock();
--
--			ret = -EINTR;
--			goto out;
--		}
--
--		if (need_resched()) {
--			time_spent += ktime_get_ns() - time_start;
--			preempt_enable();
--			rcu_read_unlock();
--
--			cond_resched();
--
--			rcu_read_lock();
--			preempt_disable();
--			time_start = ktime_get_ns();
--		}
--	}
--	time_spent += ktime_get_ns() - time_start;
--	preempt_enable();
--	rcu_read_unlock();
--
--	do_div(time_spent, repeat);
--	duration = time_spent > U32_MAX ? U32_MAX : (u32)time_spent;
-+	run_data.proto = eth->h_proto;
-+	run_data.nhoff = ETH_HLEN;
-+	run_data.hlen = size;
-+	ret = bpf_test_run_cb(prog, &ctx, repeat, BPF_TEST_RUN_PLAIN,
-+			      bpf_flow_dissect_run, &run_data,
-+			      &retval, &duration);
-+	if (!ret)
-+		goto out;
- 
--	ret = bpf_test_finish(kattr, uattr, &flow_keys, sizeof(flow_keys),
--			      retval, duration);
-+	ret = bpf_net_prog_test_run_finish(kattr, uattr, &flow_keys,
-+					   sizeof(flow_keys), NULL, 0,
-+					   retval, duration);
- 
- out:
- 	kfree(data);
++	"32bit loads of a 64bit field (both least and most significant words)",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_4, BPF_REG_1, offsetof(struct bpf_perf_event_data, sample_period)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_5, BPF_REG_1, offsetof(struct bpf_perf_event_data, sample_period) + 4),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, offsetof(struct bpf_perf_event_data, sample_period)),
++	BPF_ALU64_IMM(BPF_LSH, BPF_REG_5, 32),
++	BPF_ALU64_REG(BPF_OR, BPF_REG_4, BPF_REG_5),
++	BPF_ALU64_REG(BPF_XOR, BPF_REG_4, BPF_REG_6),
++	BPF_MOV64_REG(BPF_REG_0, BPF_REG_4),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_PERF_EVENT,
++	.ctx = { 0, },
++	.ctx_len = sizeof(struct bpf_perf_event_data),
++	.data = { 0, },
++	.data_len = sizeof(struct bpf_perf_event_value),
++	.fill_helper = bpf_fill_32bit_loads,
++	.override_data_out_len = true,
++},
 -- 
 2.20.1
 
