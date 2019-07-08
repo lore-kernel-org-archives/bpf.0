@@ -1,387 +1,303 @@
-Return-Path: <SRS0=nwYh=VD=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=cxIB=VF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.4 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D304C48BD5
-	for <bpf@archiver.kernel.org>; Sat,  6 Jul 2019 18:06:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6314C606A1
+	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 09:17:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3CC742082F
-	for <bpf@archiver.kernel.org>; Sat,  6 Jul 2019 18:06:48 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="YrBi6Mgh"
+	by mail.kernel.org (Postfix) with ESMTP id B1B3C20644
+	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 09:17:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727147AbfGFSGs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 6 Jul 2019 14:06:48 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:23868 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727117AbfGFSGp (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 6 Jul 2019 14:06:45 -0400
-Received: from pps.filterd (m0044008.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x66I3iU8006017
-        for <bpf@vger.kernel.org>; Sat, 6 Jul 2019 11:06:44 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=BglowR91btCBuV6NLbpdOR/iCVCEnsb74jPtxxgukRg=;
- b=YrBi6MghmUxDzlppac6iliqvMJ83s42lrrDKJiDpcqyCQI+s4fd19xxfZxO56UXNFD9A
- kp+uyNwKu9UquPd7JFWXdS+APtFFdO1ya/EdTUxXU5837nwSqexi16spg0YN+MpBCZce
- qRKdmem9g/OPWaO46pvPwEwmt8xpH4zHy4E= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2tjpxphd6c-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sat, 06 Jul 2019 11:06:44 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Sat, 6 Jul 2019 11:06:42 -0700
-Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 0CE0686170E; Sat,  6 Jul 2019 11:06:37 -0700 (PDT)
-Smtp-Origin-Hostprefix: dev
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: dev101.prn2.facebook.com
-To:     <andrii.nakryiko@gmail.com>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <ast@fb.com>, <daniel@iogearbox.net>,
-        <kernel-team@fb.com>
-CC:     Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v7 bpf-next 4/5] tools/bpftool: switch map event_pipe to libbpf's perf_buffer
-Date:   Sat, 6 Jul 2019 11:06:27 -0700
-Message-ID: <20190706180628.3919653-5-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190706180628.3919653-1-andriin@fb.com>
-References: <20190706180628.3919653-1-andriin@fb.com>
-X-FB-Internal: Safe
+        id S1729750AbfGHJRI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jul 2019 05:17:08 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:51568 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729746AbfGHJRH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jul 2019 05:17:07 -0400
+Received: by mail-io1-f69.google.com with SMTP id c5so18254848iom.18
+        for <bpf@vger.kernel.org>; Mon, 08 Jul 2019 02:17:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=6Zur9AJgLx1rFwFRhvX8hzY44srk5dm7/NYk1XyNsWo=;
+        b=tm6Mv7q1tOQ0UG5ZQJPmOGjCSxPOqOf+yuisl6l2R5K1MrFOovkZuWZpTF2XIMmipT
+         uiGix/y4EZls9gp20hsSxh3heCMEfMPi1vwfl3zl368aZrxvpvuNDkZmY6edLOyUQrAE
+         IrlXah/xptBhv2GUdbXbzn9kwY+K5yQNF0+iDV+e+U+vGBCIZ2ceqmAObZkd11qFJsIY
+         xi823EleFt1iBkg8XWap16fqCHKRNcnODPs86eSLBrEsebREsSz4pi8DMh9DiLXa9kAt
+         pso7vrCO2cwKoGKR2ckyqmHBJirwyJ+Dq9S6jxa3i5DvV2H/8R9lvnjpHlCqp4+V2mm9
+         ZafA==
+X-Gm-Message-State: APjAAAVk46YoaNPmYEsNQMgUqah+Pssqvvn6KKHODLglrAovS8+3ihkG
+        R3Z9mfh4TJyWh4mjcq0QEDJJDX7KYqBFGA0GkoWYJ+A7YGla
+X-Google-Smtp-Source: APXvYqygQ0iIE3rjam4X8l//nYtSCithi3A4I4aoGQDZxl4UscLx2Mgi2vls+kw6Ey99+2Czm+ResQzRml3BHLslwKS1XKjOQdX/
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-06_05:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907060240
-X-FB-Internal: deliver
+X-Received: by 2002:a02:b68f:: with SMTP id i15mr20028702jam.107.1562577426421;
+ Mon, 08 Jul 2019 02:17:06 -0700 (PDT)
+Date:   Mon, 08 Jul 2019 02:17:06 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006fa5eb058d27e8d1@google.com>
+Subject: possible deadlock in xsk_notifier
+From:   syzbot <syzbot+bf64ec93de836d7f4c2c@syzkaller.appspotmail.com>
+To:     ast@kernel.org, bjorn.topel@intel.com, bpf@vger.kernel.org,
+        christian@brauner.io, daniel@iogearbox.net, davem@davemloft.net,
+        dsahern@gmail.com, hawk@kernel.org, i.maximets@samsung.com,
+        idosch@mellanox.com, jakub.kicinski@netronome.com,
+        johannes.berg@intel.com, john.fastabend@gmail.com,
+        jonathan.lemon@gmail.com, kafai@fb.com,
+        linux-kernel@vger.kernel.org, magnus.karlsson@intel.com,
+        netdev@vger.kernel.org, nikolay@cumulusnetworks.com,
+        petrm@mellanox.com, roopa@cumulusnetworks.com,
+        songliubraving@fb.com, syzkaller-bugs@googlegroups.com,
+        xdp-newbies@vger.kernel.org, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Switch event_pipe implementation to rely on new libbpf perf buffer API
-(it's raw low-level variant).
+Hello,
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Acked-by: Jakub Kicinski <jakub.kicinski@netronome.com>
-Acked-by: Yonghong Song <yhs@fb.com>
+syzbot found the following crash on:
+
+HEAD commit:    9d1bc24b bonding: validate ip header before check IPPROTO_..
+git tree:       net
+console output: https://syzkaller.appspot.com/x/log.txt?x=1464c78ba00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e7c31a94f66cc0aa
+dashboard link: https://syzkaller.appspot.com/bug?extid=bf64ec93de836d7f4c2c
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1397378ba00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12f51315a00000
+
+The bug was bisected to:
+
+commit 455302d1c9ae9318660aaeb9748a01ff414c9741
+Author: Ilya Maximets <i.maximets@samsung.com>
+Date:   Fri Jun 28 08:04:07 2019 +0000
+
+     xdp: fix hang while unregistering device bound to xdp socket
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1092d9aba00000
+final crash:    https://syzkaller.appspot.com/x/report.txt?x=1292d9aba00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1492d9aba00000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+bf64ec93de836d7f4c2c@syzkaller.appspotmail.com
+Fixes: 455302d1c9ae ("xdp: fix hang while unregistering device bound to xdp  
+socket")
+
+======================================================
+WARNING: possible circular locking dependency detected
+5.2.0-rc6+ #75 Not tainted
+------------------------------------------------------
+syz-executor831/8960 is trying to acquire lock:
+00000000f6cc1fdf (&xs->mutex){+.+.}, at: xsk_notifier+0x149/0x290  
+net/xdp/xsk.c:730
+
+but task is already holding lock:
+00000000f06c3f54 (&net->xdp.lock){+.+.}, at: xsk_notifier+0xa7/0x290  
+net/xdp/xsk.c:726
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (&net->xdp.lock){+.+.}:
+        __mutex_lock_common kernel/locking/mutex.c:926 [inline]
+        __mutex_lock+0xf7/0x1310 kernel/locking/mutex.c:1073
+        mutex_lock_nested+0x16/0x20 kernel/locking/mutex.c:1088
+        xsk_notifier+0xa7/0x290 net/xdp/xsk.c:726
+        notifier_call_chain+0xc2/0x230 kernel/notifier.c:95
+        __raw_notifier_call_chain kernel/notifier.c:396 [inline]
+        raw_notifier_call_chain+0x2e/0x40 kernel/notifier.c:403
+        call_netdevice_notifiers_info+0x3f/0x90 net/core/dev.c:1749
+        call_netdevice_notifiers_extack net/core/dev.c:1761 [inline]
+        call_netdevice_notifiers net/core/dev.c:1775 [inline]
+        rollback_registered_many+0x9b9/0xfc0 net/core/dev.c:8206
+        rollback_registered+0x109/0x1d0 net/core/dev.c:8248
+        unregister_netdevice_queue net/core/dev.c:9295 [inline]
+        unregister_netdevice_queue+0x1ee/0x2c0 net/core/dev.c:9288
+        br_dev_delete+0x145/0x1a0 net/bridge/br_if.c:383
+        br_del_bridge+0xd7/0x120 net/bridge/br_if.c:483
+        br_ioctl_deviceless_stub+0x2a4/0x7b0 net/bridge/br_ioctl.c:376
+        sock_ioctl+0x44b/0x780 net/socket.c:1141
+        vfs_ioctl fs/ioctl.c:46 [inline]
+        file_ioctl fs/ioctl.c:509 [inline]
+        do_vfs_ioctl+0xd5f/0x1380 fs/ioctl.c:696
+        ksys_ioctl+0xab/0xd0 fs/ioctl.c:713
+        __do_sys_ioctl fs/ioctl.c:720 [inline]
+        __se_sys_ioctl fs/ioctl.c:718 [inline]
+        __x64_sys_ioctl+0x73/0xb0 fs/ioctl.c:718
+        do_syscall_64+0xfd/0x680 arch/x86/entry/common.c:301
+        entry_SYSCALL_64_after_hwframe+0x49/0xbe
+
+-> #1 (rtnl_mutex){+.+.}:
+        __mutex_lock_common kernel/locking/mutex.c:926 [inline]
+        __mutex_lock+0xf7/0x1310 kernel/locking/mutex.c:1073
+        mutex_lock_nested+0x16/0x20 kernel/locking/mutex.c:1088
+        rtnl_lock+0x17/0x20 net/core/rtnetlink.c:72
+        xdp_umem_assign_dev+0xbe/0x8b0 net/xdp/xdp_umem.c:96
+        xsk_bind+0x4d7/0xe70 net/xdp/xsk.c:488
+        __sys_bind+0x239/0x290 net/socket.c:1653
+        __do_sys_bind net/socket.c:1664 [inline]
+        __se_sys_bind net/socket.c:1662 [inline]
+        __x64_sys_bind+0x73/0xb0 net/socket.c:1662
+        do_syscall_64+0xfd/0x680 arch/x86/entry/common.c:301
+        entry_SYSCALL_64_after_hwframe+0x49/0xbe
+
+-> #0 (&xs->mutex){+.+.}:
+        lock_acquire+0x16f/0x3f0 kernel/locking/lockdep.c:4303
+        __mutex_lock_common kernel/locking/mutex.c:926 [inline]
+        __mutex_lock+0xf7/0x1310 kernel/locking/mutex.c:1073
+        mutex_lock_nested+0x16/0x20 kernel/locking/mutex.c:1088
+        xsk_notifier+0x149/0x290 net/xdp/xsk.c:730
+        notifier_call_chain+0xc2/0x230 kernel/notifier.c:95
+        __raw_notifier_call_chain kernel/notifier.c:396 [inline]
+        raw_notifier_call_chain+0x2e/0x40 kernel/notifier.c:403
+        call_netdevice_notifiers_info+0x3f/0x90 net/core/dev.c:1749
+        call_netdevice_notifiers_extack net/core/dev.c:1761 [inline]
+        call_netdevice_notifiers net/core/dev.c:1775 [inline]
+        rollback_registered_many+0x9b9/0xfc0 net/core/dev.c:8206
+        rollback_registered+0x109/0x1d0 net/core/dev.c:8248
+        unregister_netdevice_queue net/core/dev.c:9295 [inline]
+        unregister_netdevice_queue+0x1ee/0x2c0 net/core/dev.c:9288
+        br_dev_delete+0x145/0x1a0 net/bridge/br_if.c:383
+        br_del_bridge+0xd7/0x120 net/bridge/br_if.c:483
+        br_ioctl_deviceless_stub+0x2a4/0x7b0 net/bridge/br_ioctl.c:376
+        sock_ioctl+0x44b/0x780 net/socket.c:1141
+        vfs_ioctl fs/ioctl.c:46 [inline]
+        file_ioctl fs/ioctl.c:509 [inline]
+        do_vfs_ioctl+0xd5f/0x1380 fs/ioctl.c:696
+        ksys_ioctl+0xab/0xd0 fs/ioctl.c:713
+        __do_sys_ioctl fs/ioctl.c:720 [inline]
+        __se_sys_ioctl fs/ioctl.c:718 [inline]
+        __x64_sys_ioctl+0x73/0xb0 fs/ioctl.c:718
+        do_syscall_64+0xfd/0x680 arch/x86/entry/common.c:301
+        entry_SYSCALL_64_after_hwframe+0x49/0xbe
+
+other info that might help us debug this:
+
+Chain exists of:
+   &xs->mutex --> rtnl_mutex --> &net->xdp.lock
+
+  Possible unsafe locking scenario:
+
+        CPU0                    CPU1
+        ----                    ----
+   lock(&net->xdp.lock);
+                                lock(rtnl_mutex);
+                                lock(&net->xdp.lock);
+   lock(&xs->mutex);
+
+  *** DEADLOCK ***
+
+3 locks held by syz-executor831/8960:
+  #0: 00000000060d4522 (br_ioctl_mutex){+.+.}, at: sock_ioctl+0x427/0x780  
+net/socket.c:1139
+  #1: 000000006ae5b4ee (rtnl_mutex){+.+.}, at: rtnl_lock+0x17/0x20  
+net/core/rtnetlink.c:72
+  #2: 00000000f06c3f54 (&net->xdp.lock){+.+.}, at: xsk_notifier+0xa7/0x290  
+net/xdp/xsk.c:726
+
+stack backtrace:
+CPU: 1 PID: 8960 Comm: syz-executor831 Not tainted 5.2.0-rc6+ #75
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x172/0x1f0 lib/dump_stack.c:113
+  print_circular_bug.cold+0x1cc/0x28f kernel/locking/lockdep.c:1565
+  check_prev_add kernel/locking/lockdep.c:2310 [inline]
+  check_prevs_add kernel/locking/lockdep.c:2418 [inline]
+  validate_chain kernel/locking/lockdep.c:2800 [inline]
+  __lock_acquire+0x3755/0x5490 kernel/locking/lockdep.c:3793
+  lock_acquire+0x16f/0x3f0 kernel/locking/lockdep.c:4303
+  __mutex_lock_common kernel/locking/mutex.c:926 [inline]
+  __mutex_lock+0xf7/0x1310 kernel/locking/mutex.c:1073
+  mutex_lock_nested+0x16/0x20 kernel/locking/mutex.c:1088
+  xsk_notifier+0x149/0x290 net/xdp/xsk.c:730
+  notifier_call_chain+0xc2/0x230 kernel/notifier.c:95
+  __raw_notifier_call_chain kernel/notifier.c:396 [inline]
+  raw_notifier_call_chain+0x2e/0x40 kernel/notifier.c:403
+  call_netdevice_notifiers_info+0x3f/0x90 net/core/dev.c:1749
+  call_netdevice_notifiers_extack net/core/dev.c:1761 [inline]
+  call_netdevice_notifiers net/core/dev.c:1775 [inline]
+  rollback_registered_many+0x9b9/0xfc0 net/core/dev.c:8206
+  rollback_registered+0x109/0x1d0 net/core/dev.c:8248
+  unregister_netdevice_queue net/core/dev.c:9295 [inline]
+  unregister_netdevice_queue+0x1ee/0x2c0 net/core/dev.c:9288
+  br_dev_delete+0x145/0x1a0 net/bridge/br_if.c:383
+  br_del_bridge+0xd7/0x120 net/bridge/br_if.c:483
+  br_ioctl_deviceless_stub+0x2a4/0x7b0 net/bridge/br_ioctl.c:376
+  sock_ioctl+0x44b/0x780 net/socket.c:1141
+  vfs_ioctl fs/ioctl.c:46 [inline]
+  file_ioctl fs/ioctl.c:509 [inline]
+  do_vfs_ioctl+0xd5f/0x1380 fs/ioctl.c:696
+  ksys_ioctl+0xab/0xd0 fs/ioctl.c:713
+  __do_sys_ioctl fs/ioctl.c:720 [inline]
+  __se_sys_ioctl fs/ioctl.c:718 [inline]
+  __x64_sys_ioctl+0x73/0xb0 fs/ioctl.c:718
+  do_syscall_64+0xfd/0x680 arch/x86/entry/common.c:301
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x447929
+Code: e8 cc e7 ff ff 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7  
+48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 3b 08 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007f24c6077d98 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00000000006dcc58 RCX: 0000000000447929
+RDX: 0000000020000180 RSI: 00000000000089a1 RDI: 0000000000000003
+RBP: 00000000006dcc50 R08: 00007f24c6078700 R09: 0000000000000000
+R10: 00007f24c6078700 R11: 0000000000000246 R12: 00000000006dcc5c
+R13: 0000003066736362 R14: 0000000000000000 R15: 0000003066736362
+kobject: 'batman_adv' (00000000e09eb5f6): kobject_uevent_env
+kobject: 'batman_adv' (00000000e09eb5f6): kobject_uevent_env: filter  
+function caused the event to drop!
+kobject: 'batman_adv' (00000000e09eb5f6): kobject_cleanup, parent  
+00000000e11c2695
+kobject: 'batman_adv' (00000000e09eb5f6): calling ktype release
+kobject: (00000000e09eb5f6): dynamic_kobj_release
+kobject: 'batman_adv': free name
+kobject: 'rx-0' (00000000fc3ea8b5): kobject_cleanup, parent 000000000f96f49f
+kobject: 'rx-0' (00000000fc3ea8b5): auto cleanup 'remove' event
+kobject: 'rx-0' (00000000fc3ea8b5): kobject_uevent_env
+kobject: 'rx-0' (00000000fc3ea8b5): fill_kobj_path: path  
+= '/devices/virtual/net/bcsf0/queues/rx-0'
+kobject: 'rx-0' (00000000fc3ea8b5): auto cleanup kobject_del
+kobject: 'rx-0' (00000000fc3ea8b5): calling ktype release
+kobject: 'rx-0': free name
+kobject: 'tx-0' (0000000089e0fc81): kobject_cleanup, parent 000000000f96f49f
+kobject: 'tx-0' (0000000089e0fc81): auto cleanup 'remove' event
+kobject: 'tx-0' (0000000089e0fc81): kobject_uevent_env
+kobject: 'tx-0' (0000000089e0fc81): fill_kobj_path: path  
+= '/devices/virtual/net/bcsf0/queues/tx-0'
+kobject: 'tx-0' (0000000089e0fc81): auto cleanup kobject_del
+kobject: 'tx-0' (0000000089e0fc81): calling ktype release
+kobject: 'tx-0': free name
+kobject: 'queues' (000000000f96f49f): kobject_cleanup, parent  
+00000000e11c2695
+kobject: 'queues' (000000000f96f49f): calling ktype release
+kobject: 'queues' (000000000f96f49f): kset_release
+kobject: 'queues': free name
+kobject: 'bcsf0' (00000000e3247f71): kobject_uevent_env
+kobject: 'bcsf0' (00000000e3247f71): fill_kobj_path: path  
+= '/devices/virtual/net/bcsf0'
+kobject: 'bcsf0' (00000000e3247f71): kobject_cleanup, parent  
+00000000e11c2695
+kobject: 'bcsf0' (00000000e3247f71): calling ktype release
+kobject: 'bcsf0': free name
+
+
 ---
- tools/bpf/bpftool/map_perf_ring.c | 201 ++++++++++--------------------
- 1 file changed, 64 insertions(+), 137 deletions(-)
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/tools/bpf/bpftool/map_perf_ring.c b/tools/bpf/bpftool/map_perf_ring.c
-index 0507dfaf7a8f..3f108ab17797 100644
---- a/tools/bpf/bpftool/map_perf_ring.c
-+++ b/tools/bpf/bpftool/map_perf_ring.c
-@@ -28,7 +28,7 @@
- 
- #define MMAP_PAGE_CNT	16
- 
--static bool stop;
-+static volatile bool stop;
- 
- struct event_ring_info {
- 	int fd;
-@@ -44,32 +44,44 @@ struct perf_event_sample {
- 	unsigned char data[];
- };
- 
-+struct perf_event_lost {
-+	struct perf_event_header header;
-+	__u64 id;
-+	__u64 lost;
-+};
-+
- static void int_exit(int signo)
- {
- 	fprintf(stderr, "Stopping...\n");
- 	stop = true;
- }
- 
-+struct event_pipe_ctx {
-+	bool all_cpus;
-+	int cpu;
-+	int idx;
-+};
-+
- static enum bpf_perf_event_ret
--print_bpf_output(struct perf_event_header *event, void *private_data)
-+print_bpf_output(void *private_data, int cpu, struct perf_event_header *event)
- {
--	struct perf_event_sample *e = container_of(event, struct perf_event_sample,
-+	struct perf_event_sample *e = container_of(event,
-+						   struct perf_event_sample,
- 						   header);
--	struct event_ring_info *ring = private_data;
--	struct {
--		struct perf_event_header header;
--		__u64 id;
--		__u64 lost;
--	} *lost = (typeof(lost))event;
-+	struct perf_event_lost *lost = container_of(event,
-+						    struct perf_event_lost,
-+						    header);
-+	struct event_pipe_ctx *ctx = private_data;
-+	int idx = ctx->all_cpus ? cpu : ctx->idx;
- 
- 	if (json_output) {
- 		jsonw_start_object(json_wtr);
- 		jsonw_name(json_wtr, "type");
- 		jsonw_uint(json_wtr, e->header.type);
- 		jsonw_name(json_wtr, "cpu");
--		jsonw_uint(json_wtr, ring->cpu);
-+		jsonw_uint(json_wtr, cpu);
- 		jsonw_name(json_wtr, "index");
--		jsonw_uint(json_wtr, ring->key);
-+		jsonw_uint(json_wtr, idx);
- 		if (e->header.type == PERF_RECORD_SAMPLE) {
- 			jsonw_name(json_wtr, "timestamp");
- 			jsonw_uint(json_wtr, e->time);
-@@ -89,7 +101,7 @@ print_bpf_output(struct perf_event_header *event, void *private_data)
- 		if (e->header.type == PERF_RECORD_SAMPLE) {
- 			printf("== @%lld.%09lld CPU: %d index: %d =====\n",
- 			       e->time / 1000000000ULL, e->time % 1000000000ULL,
--			       ring->cpu, ring->key);
-+			       cpu, idx);
- 			fprint_hex(stdout, e->data, e->size, " ");
- 			printf("\n");
- 		} else if (e->header.type == PERF_RECORD_LOST) {
-@@ -103,87 +115,25 @@ print_bpf_output(struct perf_event_header *event, void *private_data)
- 	return LIBBPF_PERF_EVENT_CONT;
- }
- 
--static void
--perf_event_read(struct event_ring_info *ring, void **buf, size_t *buf_len)
--{
--	enum bpf_perf_event_ret ret;
--
--	ret = bpf_perf_event_read_simple(ring->mem,
--					 MMAP_PAGE_CNT * get_page_size(),
--					 get_page_size(), buf, buf_len,
--					 print_bpf_output, ring);
--	if (ret != LIBBPF_PERF_EVENT_CONT) {
--		fprintf(stderr, "perf read loop failed with %d\n", ret);
--		stop = true;
--	}
--}
--
--static int perf_mmap_size(void)
--{
--	return get_page_size() * (MMAP_PAGE_CNT + 1);
--}
--
--static void *perf_event_mmap(int fd)
--{
--	int mmap_size = perf_mmap_size();
--	void *base;
--
--	base = mmap(NULL, mmap_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
--	if (base == MAP_FAILED) {
--		p_err("event mmap failed: %s\n", strerror(errno));
--		return NULL;
--	}
--
--	return base;
--}
--
--static void perf_event_unmap(void *mem)
--{
--	if (munmap(mem, perf_mmap_size()))
--		fprintf(stderr, "Can't unmap ring memory!\n");
--}
--
--static int bpf_perf_event_open(int map_fd, int key, int cpu)
-+int do_event_pipe(int argc, char **argv)
- {
--	struct perf_event_attr attr = {
-+	struct perf_event_attr perf_attr = {
- 		.sample_type = PERF_SAMPLE_RAW | PERF_SAMPLE_TIME,
- 		.type = PERF_TYPE_SOFTWARE,
- 		.config = PERF_COUNT_SW_BPF_OUTPUT,
-+		.sample_period = 1,
-+		.wakeup_events = 1,
- 	};
--	int pmu_fd;
--
--	pmu_fd = sys_perf_event_open(&attr, -1, cpu, -1, 0);
--	if (pmu_fd < 0) {
--		p_err("failed to open perf event %d for CPU %d", key, cpu);
--		return -1;
--	}
--
--	if (bpf_map_update_elem(map_fd, &key, &pmu_fd, BPF_ANY)) {
--		p_err("failed to update map for event %d for CPU %d", key, cpu);
--		goto err_close;
--	}
--	if (ioctl(pmu_fd, PERF_EVENT_IOC_ENABLE, 0)) {
--		p_err("failed to enable event %d for CPU %d", key, cpu);
--		goto err_close;
--	}
--
--	return pmu_fd;
--
--err_close:
--	close(pmu_fd);
--	return -1;
--}
--
--int do_event_pipe(int argc, char **argv)
--{
--	int i, nfds, map_fd, index = -1, cpu = -1;
- 	struct bpf_map_info map_info = {};
--	struct event_ring_info *rings;
--	size_t tmp_buf_sz = 0;
--	void *tmp_buf = NULL;
--	struct pollfd *pfds;
-+	struct perf_buffer_raw_opts opts = {};
-+	struct event_pipe_ctx ctx = {
-+		.all_cpus = true,
-+		.cpu = -1,
-+		.idx = -1,
-+	};
-+	struct perf_buffer *pb;
- 	__u32 map_info_len;
--	bool do_all = true;
-+	int err, map_fd;
- 
- 	map_info_len = sizeof(map_info);
- 	map_fd = map_parse_fd_and_info(&argc, &argv, &map_info, &map_info_len);
-@@ -205,7 +155,7 @@ int do_event_pipe(int argc, char **argv)
- 			char *endptr;
- 
- 			NEXT_ARG();
--			cpu = strtoul(*argv, &endptr, 0);
-+			ctx.cpu = strtoul(*argv, &endptr, 0);
- 			if (*endptr) {
- 				p_err("can't parse %s as CPU ID", **argv);
- 				goto err_close_map;
-@@ -216,7 +166,7 @@ int do_event_pipe(int argc, char **argv)
- 			char *endptr;
- 
- 			NEXT_ARG();
--			index = strtoul(*argv, &endptr, 0);
-+			ctx.idx = strtoul(*argv, &endptr, 0);
- 			if (*endptr) {
- 				p_err("can't parse %s as index", **argv);
- 				goto err_close_map;
-@@ -228,45 +178,32 @@ int do_event_pipe(int argc, char **argv)
- 			goto err_close_map;
- 		}
- 
--		do_all = false;
-+		ctx.all_cpus = false;
- 	}
- 
--	if (!do_all) {
--		if (index == -1 || cpu == -1) {
-+	if (!ctx.all_cpus) {
-+		if (ctx.idx == -1 || ctx.cpu == -1) {
- 			p_err("cpu and index must be specified together");
- 			goto err_close_map;
- 		}
--
--		nfds = 1;
- 	} else {
--		nfds = min(get_possible_cpus(), map_info.max_entries);
--		cpu = 0;
--		index = 0;
-+		ctx.cpu = 0;
-+		ctx.idx = 0;
- 	}
- 
--	rings = calloc(nfds, sizeof(rings[0]));
--	if (!rings)
-+	opts.attr = &perf_attr;
-+	opts.event_cb = print_bpf_output;
-+	opts.ctx = &ctx;
-+	opts.cpu_cnt = ctx.all_cpus ? 0 : 1;
-+	opts.cpus = &ctx.cpu;
-+	opts.map_keys = &ctx.idx;
-+
-+	pb = perf_buffer__new_raw(map_fd, MMAP_PAGE_CNT, &opts);
-+	err = libbpf_get_error(pb);
-+	if (err) {
-+		p_err("failed to create perf buffer: %s (%d)",
-+		      strerror(err), err);
- 		goto err_close_map;
--
--	pfds = calloc(nfds, sizeof(pfds[0]));
--	if (!pfds)
--		goto err_free_rings;
--
--	for (i = 0; i < nfds; i++) {
--		rings[i].cpu = cpu + i;
--		rings[i].key = index + i;
--
--		rings[i].fd = bpf_perf_event_open(map_fd, rings[i].key,
--						  rings[i].cpu);
--		if (rings[i].fd < 0)
--			goto err_close_fds_prev;
--
--		rings[i].mem = perf_event_mmap(rings[i].fd);
--		if (!rings[i].mem)
--			goto err_close_fds_current;
--
--		pfds[i].fd = rings[i].fd;
--		pfds[i].events = POLLIN;
- 	}
- 
- 	signal(SIGINT, int_exit);
-@@ -277,34 +214,24 @@ int do_event_pipe(int argc, char **argv)
- 		jsonw_start_array(json_wtr);
- 
- 	while (!stop) {
--		poll(pfds, nfds, 200);
--		for (i = 0; i < nfds; i++)
--			perf_event_read(&rings[i], &tmp_buf, &tmp_buf_sz);
-+		err = perf_buffer__poll(pb, 200);
-+		if (err < 0 && err != -EINTR) {
-+			p_err("perf buffer polling failed: %s (%d)",
-+			      strerror(err), err);
-+			goto err_close_pb;
-+		}
- 	}
--	free(tmp_buf);
- 
- 	if (json_output)
- 		jsonw_end_array(json_wtr);
- 
--	for (i = 0; i < nfds; i++) {
--		perf_event_unmap(rings[i].mem);
--		close(rings[i].fd);
--	}
--	free(pfds);
--	free(rings);
-+	perf_buffer__free(pb);
- 	close(map_fd);
- 
- 	return 0;
- 
--err_close_fds_prev:
--	while (i--) {
--		perf_event_unmap(rings[i].mem);
--err_close_fds_current:
--		close(rings[i].fd);
--	}
--	free(pfds);
--err_free_rings:
--	free(rings);
-+err_close_pb:
-+	perf_buffer__free(pb);
- err_close_map:
- 	close(map_fd);
- 	return -1;
--- 
-2.17.1
-
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
