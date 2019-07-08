@@ -2,168 +2,134 @@ Return-Path: <SRS0=cxIB=VF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76642C606BD
-	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 16:33:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E8D2C606C1
+	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 16:39:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4FD4321479
-	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 16:33:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 70AE52166E
+	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 16:39:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kinvolk.io header.i=@kinvolk.io header.b="h+vDB2Gh"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Fp/JXrr1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730382AbfGHQc7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jul 2019 12:32:59 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:45655 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388242AbfGHQbs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jul 2019 12:31:48 -0400
-Received: by mail-wr1-f68.google.com with SMTP id f9so17831909wre.12
-        for <bpf@vger.kernel.org>; Mon, 08 Jul 2019 09:31:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kinvolk.io; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3v7kORJZf9psv+vA5sP8DDz4yEImqLDpanBLVAEtpNU=;
-        b=h+vDB2GhO2QOH0ZIG4dCQmb5vRQ9v6u24r5+jkrep/I+SiggmwNdaTIVIz3NzF9zl7
-         FsijVoW+As30PTmh3MEDhrWRipHg2nqc7cnPc+bilJDRsdyBubyYW9eS3A0zbnJmqp7s
-         tGv3zVBa7/+8fJYPnzcxoqEoZ9OJRRINNVzC8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3v7kORJZf9psv+vA5sP8DDz4yEImqLDpanBLVAEtpNU=;
-        b=ZpT+/xTSny0OZyzYi0ydMjEB/TtVfhByi13tMzJnM2yjaBaz7Z49BA4mgKb/IEjX3h
-         VRHhzXJmovDMW/MmSYsbhBd8KOi8a4bR/XDf2f4fQqUR3kuYcL2Xd0CGF4l8GAksBAMO
-         E3nbQ6hbbu8PtN4MJNZD2jymJgsb4PtRfuN+8/EurwbdX9lsr220bFTDRV3EoRBZuCPi
-         Te9Cyl+mcKBmK5DDLP8y/pwweWxJS+CtMKfdLcGpfn3gz0s+I8SEF8rkQecKp0E4xORt
-         L9f6GoBPxDoWqYJGAQUjBvSWFYLstGKDOJxqrtbM2zf37ZvrWj8ji5SGRT6hNfAVJJku
-         Caqg==
-X-Gm-Message-State: APjAAAUWzRE9CYAzqy2jDyYi2iqtq5lF2snaS+Bt8xmTmQI54uK/XcVf
-        Uixws4j/0unGHmtRXMleDNXmxQ==
-X-Google-Smtp-Source: APXvYqwP59KT50EM58K8Q4RqceI+LJyhV6rCtNfYHeHIqZFRu9Qe+ZURKr4E35fmQBJc7F8zSo4sQA==
-X-Received: by 2002:a5d:53c2:: with SMTP id a2mr18587648wrw.8.1562603506249;
-        Mon, 08 Jul 2019 09:31:46 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5aedbe.dynamic.kabel-deutschland.de. [95.90.237.190])
-        by smtp.gmail.com with ESMTPSA id e6sm18255086wrw.23.2019.07.08.09.31.44
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 08 Jul 2019 09:31:45 -0700 (PDT)
-From:   Krzesimir Nowak <krzesimir@kinvolk.io>
-To:     linux-kernel@vger.kernel.org
-Cc:     Alban Crequy <alban@kinvolk.io>,
-        =?UTF-8?q?Iago=20L=C3=B3pez=20Galeiras?= <iago@kinvolk.io>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, xdp-newbies@vger.kernel.org,
-        Krzesimir Nowak <krzesimir@kinvolk.io>
-Subject: [bpf-next v3 00/12] Test the 32bit narrow reads
-Date:   Mon,  8 Jul 2019 18:31:09 +0200
-Message-Id: <20190708163121.18477-1-krzesimir@kinvolk.io>
-X-Mailer: git-send-email 2.20.1
+        id S2387657AbfGHQjb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jul 2019 12:39:31 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:49986 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725836AbfGHQja (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jul 2019 12:39:30 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x68GXjUi132033;
+        Mon, 8 Jul 2019 16:38:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2018-07-02;
+ bh=IxnXRwFEVsBRcHWVY1AUPNtwkkxS39pGXrbWoyZ4Lsw=;
+ b=Fp/JXrr1F/US89eAFmDqwrjS5ytA2Bk6p9MCtg0f8xvvLnuii2vH0qVLYDh2iG1Pgsvp
+ Fhxa+zbXiqx4pVSX/XEfKdW/QnzSIGKWigQCN9GJzeZNb6UN47/xRrPf0Pv3E5uQH5QN
+ DGAd/lg2Fi1JkHfP6mH737oN8ApJAkF97iZae7Or4Ofc//AViLIGwoY6mm5g67XIqxk3
+ dupyan40rxoQuHvCz6S9fL1fTbIqEmA2uxnFGktXJbZIC9Z+Wof/QKAQyVcQdKcHxSL2
+ 9jT+IUMbvpNJ8yotyKnJN3Nty5H8nInzmilFW1bylL95WAwJjttP2LbHIk94sc9KUECN BA== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 2tjm9qffyr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 08 Jul 2019 16:38:23 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x68Gbb8P034884;
+        Mon, 8 Jul 2019 16:38:22 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by aserp3030.oracle.com with ESMTP id 2tjhpck953-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 08 Jul 2019 16:38:22 +0000
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x68GcMFp036252;
+        Mon, 8 Jul 2019 16:38:22 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 2tjhpck94t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 08 Jul 2019 16:38:22 +0000
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x68GcFBL000636;
+        Mon, 8 Jul 2019 16:38:15 GMT
+Received: from localhost (/10.159.211.102)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 08 Jul 2019 09:38:14 -0700
+Date:   Mon, 8 Jul 2019 12:38:11 -0400
+From:   Kris Van Hees <kris.van.hees@oracle.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Kris Van Hees <kris.van.hees@oracle.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, dtrace-devel@oss.oracle.com,
+        linux-kernel@vger.kernel.org, rostedt@goodmis.org,
+        mhiramat@kernel.org, acme@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, Chris Mason <clm@fb.com>
+Subject: Re: [PATCH 1/1] tools/dtrace: initial implementation of DTrace
+Message-ID: <20190708163811.GB20847@oracle.com>
+References: <201907040313.x643D8Pg025951@userv0121.oracle.com>
+ <201907040314.x643EUoA017906@aserv0122.oracle.com>
+ <20190704130509.GO3402@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190704130509.GO3402@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9312 signatures=668688
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1907080206
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-These patches try to test the fix made in commit e2f7fc0ac695 ("bpf:
-fix undefined behavior in narrow load handling"). The problem existed
-in the generated BPF bytecode that was doing a 32bit narrow read of a
-64bit field, so to test it the code would need to be executed.
-Currently the only such field exists in BPF_PROG_TYPE_PERF_EVENT,
-which was not supported by bpf_prog_test_run().
+On Thu, Jul 04, 2019 at 03:05:09PM +0200, Peter Zijlstra wrote:
+> On Wed, Jul 03, 2019 at 08:14:30PM -0700, Kris Van Hees wrote:
+> > +int dt_bpf_attach(int event_id, int bpf_fd)
+> > +{
+> > +	int			event_fd;
+> > +	int			rc;
+> > +	struct perf_event_attr	attr = {};
+> > +
+> > +	attr.type = PERF_TYPE_TRACEPOINT;
+> > +	attr.sample_type = PERF_SAMPLE_RAW;
+> > +	attr.sample_period = 1;
+> > +	attr.wakeup_events = 1;
+> > +	attr.config = event_id;
+> > +
+> > +	/* Register the event (based on its id), and obtain a fd. */
+> > +	event_fd = perf_event_open(&attr, -1, 0, -1, 0);
+> > +	if (event_fd < 0) {
+> > +		perror("sys_perf_event_open");
+> > +		return -1;
+> > +	}
+> > +
+> > +	/* Enable the probe. */
+> > +	rc = ioctl(event_fd, PERF_EVENT_IOC_ENABLE, 0);
+> 
+> AFAICT you didn't use attr.disabled = 1, so this IOC_ENABLE is
+> completely superfluous.
 
-I'm sending these patches to bpf-next now as they introduce a new
-feature. But maybe some of those patches could go to the bpf branch?
+Oh yes, good point (and the same applies to the dt_buffer.c code where I set
+up the events that own each buffer - no point in doing an explicit enable there
+eiteher).
 
+Thanks for catching this!
 
-There is a bit of yak shaving to do for the test to be run:
-
-1. Print why the program could not be run (patch 1).
-
-2. Some fixes for errno clobbering (patches 2 and 3).
-
-3. Using bpf_prog_test_run_xattr, so I can pass ctx_in stuff too
-   (patch 4).
-
-4. Adding ctx stuff and data out size override to struct bpf_test, and
-   use them for the perf event tests (patches 5 and 6).
-
-5. Some tools headers syncing (patches 7 and 8).
-
-6. Split out some useful functions for bpf_prog_test_run
-   implementation out of the net/bpf/test_run.c (patch 9)
-
-7. Implement bpf_prog_test_run for perf event programs and test it
-   (patches 10 and 11).
-
-
-The last point is where I'm least sure how things should be done
-properly:
-
-1. There is a bunch of stuff to prepare for the
-   bpf_perf_prog_read_value to work, and that stuff is very hacky. I
-   would welcome some hints about how to set up the perf_event and
-   perf_sample_data structs in a way that is a bit more future-proof
-   than just setting some fields in a specific way, so some other code
-   won't use some other fields (like setting event.oncpu to -1 to
-   avoid event.pmu to be used for reading the value of the event).
-
-2. The tests try to see if the test run for perf event sets up the
-   context properly, so they verify the struct pt_regs contents. They
-   way it is currently written Works For Me, but surely it won't work
-   on other arch. So what would be the way forward? Just put the test
-   case inside #ifdef __x86_64__?
-
-3. Another thing in tests - I'm trying to make sure that the
-   bpf_perf_prog_read_value helper works as it seems to be the only
-   bpf perf helper that takes the ctx as a parameter. Is that enough
-   or I should test other helpers too?
-
-
-About the test itself - I'm not sure if it will work on a big endian
-machine. I think it should, but I don't have anything handy here to
-verify it.
-
-Krzesimir Nowak (12):
-  selftests/bpf: Print a message when tester could not run a program
-  selftests/bpf: Avoid a clobbering of errno
-  selftests/bpf: Avoid another case of errno clobbering
-  selftests/bpf: Use bpf_prog_test_run_xattr
-  selftests/bpf: Allow passing more information to BPF prog test run
-  selftests/bpf: Make sure that preexisting tests for perf event work
-  tools headers: Adopt compiletime_assert from kernel sources
-  tools headers: Sync struct bpf_perf_event_data
-  bpf: Split out some helper functions
-  bpf: Implement bpf_prog_test_run for perf event programs
-  selftests/bpf: Add tests for bpf_prog_test_run for perf events progs
-  selftests/bpf: Test correctness of narrow 32bit read on 64bit field
-
- include/linux/bpf.h                           |  28 ++
- kernel/bpf/Makefile                           |   1 +
- kernel/bpf/test_run.c                         | 212 ++++++++++++++
- kernel/trace/bpf_trace.c                      |  60 ++++
- net/bpf/test_run.c                            | 263 +++++-------------
- tools/include/linux/compiler.h                |  28 ++
- tools/include/uapi/linux/bpf_perf_event.h     |   1 +
- tools/testing/selftests/bpf/test_verifier.c   | 197 ++++++++++++-
- .../selftests/bpf/verifier/perf_event_run.c   |  96 +++++++
- .../bpf/verifier/perf_event_sample_period.c   |   4 +
- .../testing/selftests/bpf/verifier/var_off.c  |  21 ++
- 11 files changed, 700 insertions(+), 211 deletions(-)
- create mode 100644 kernel/bpf/test_run.c
- create mode 100644 tools/testing/selftests/bpf/verifier/perf_event_run.c
-
--- 
-2.20.1
-
+> > +	if (rc < 0) {
+> > +		perror("PERF_EVENT_IOC_ENABLE");
+> > +		return -1;
+> > +	}
+> > +
+> > +	/* Associate the BPF program with the event. */
+> > +	rc = ioctl(event_fd, PERF_EVENT_IOC_SET_BPF, bpf_fd);
+> > +	if (rc < 0) {
+> > +		perror("PERF_EVENT_IOC_SET_BPF");
+> > +		return -1;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
