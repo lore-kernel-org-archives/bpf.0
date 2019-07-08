@@ -5,52 +5,52 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 261CCC606C1
-	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 16:32:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AD8FC606C1
+	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 16:32:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EEDAD21537
-	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 16:32:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2E011216F4
+	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 16:32:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kinvolk.io header.i=@kinvolk.io header.b="RhXNYx6s"
+	dkim=pass (1024-bit key) header.d=kinvolk.io header.i=@kinvolk.io header.b="W11kKcw1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730552AbfGHQcn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jul 2019 12:32:43 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:37279 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389078AbfGHQbx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jul 2019 12:31:53 -0400
-Received: by mail-wm1-f67.google.com with SMTP id f17so171018wme.2
-        for <bpf@vger.kernel.org>; Mon, 08 Jul 2019 09:31:52 -0700 (PDT)
+        id S2388838AbfGHQbv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jul 2019 12:31:51 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:44060 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388489AbfGHQbv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jul 2019 12:31:51 -0400
+Received: by mail-wr1-f67.google.com with SMTP id p17so6680644wrf.11
+        for <bpf@vger.kernel.org>; Mon, 08 Jul 2019 09:31:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kinvolk.io; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=z76b7cDfMIhdXC2S4ZNE4xkrLelxUNXMkQTCGU5+CcM=;
-        b=RhXNYx6sIoPRSm80OucW4DTy7frQhaZPWJmrYQbwM4HE/3hixCW6WTJJ4w43q9LLNd
-         dZJiNF+rmokzqQRRd+3NRPWItWj67xvVHDa1VDb1ML5a6iA5MqmuGGScfvd9ir26Nmr5
-         0IdygbIrnx4b+g9Gfgn/r431cV34dVhbf0v+Q=
+        bh=3geFFJ9tql4ZwrkQmT2Y6FVy9TSA0XcjotCe5RWiIWM=;
+        b=W11kKcw12664L0TISI/sieWZFZRo6VanqFvi/sZiO58JX6zHqbOe5vVsLBGA/+5B+Y
+         kKAtx9nfU9bBDJD3JcMKrs3s0vOlMoOeV4DK5ENYnVnXju2PxsleMeKcMdkefpydrt/X
+         /qu3fMa+w+lGdlcWFfAf4e1+K73wTK7C4pWbc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=z76b7cDfMIhdXC2S4ZNE4xkrLelxUNXMkQTCGU5+CcM=;
-        b=NBYG9W7foU3ROh8XCZxAb+fp4vK87S46Sl5pGiDVzLUgsHpo1eVtx0SVUFdVR+QeAk
-         Tm71qwIhDTPaDBiAv9uJlk4TCech9gy7Ny0wz0v0J+Oj4qyPwqpB2qKGcNc9bDcQaFD6
-         12Iz5HbbT3oP03HzXVMt1EjO4cyQfLFZi+HwNbdeDYaKCChz1Nb+GXxtH377Q6REHu3R
-         M+/2pGx3e0Q5bhPMoMQfS0a1l37HB+nEnc77aSSEXLb3zavllaTdl+SB3hP0iqLX/ecQ
-         cyR+saK8kJhWLujpJske1EpNEW9P2smH9QsM0UmhwWPVmm2tgU3WCu1tVE4nqrXfhRmQ
-         S82A==
-X-Gm-Message-State: APjAAAUno3IC3EUc9PM+UclVnhixYFwGfY6F1s+HRGSnVJfbpu3I6JtU
-        oHVrpyG/4GNYeMwSyKKXcLz/bA==
-X-Google-Smtp-Source: APXvYqzwiQkZAgs0VAH6SVpMDzW0Obn5DcSK9LXbi4kam1MbYa2py60vd/mSlpqJk3xgKq7QBW+AKw==
-X-Received: by 2002:a05:600c:22ce:: with SMTP id 14mr17954233wmg.27.1562603511384;
-        Mon, 08 Jul 2019 09:31:51 -0700 (PDT)
+        bh=3geFFJ9tql4ZwrkQmT2Y6FVy9TSA0XcjotCe5RWiIWM=;
+        b=G6cAQKOjKYJ6p4n9Rn3teshWwxSDjHfBJUVpvzJJ8bPwqEpqBKZQ5yumniCNO+I++w
+         1tZLIwlYCbuiH4X0/lxZBd4kkg0VNai5MdwxaBGsfbFC8SAIsi9/7MPkXehDp45gP/A8
+         x7iKIxkZoKYI8Ht6Y23+BT9prMlH8MJzjx79x7EdFRwo5eb5sV5u6+F46c6Jt9EgbETc
+         MdOS9exFU4qE7ij9aoSw9sMEGrm3Ux/Rp/Yia1Rtc4pOEofbH9IWewZFaKuHAJoYvlZ+
+         ay6XIGAa9QhoB32WS2ibAGRBzYgoVoWaxGxTTDO7uxCgJjRGIohSVg+v05FwxvNmg+jD
+         hYBQ==
+X-Gm-Message-State: APjAAAXZAfUENRQF1Dmx4yrpHB/JVu9ZaBYD2+knkauCRzQg6LmAdGwB
+        kkEqclD7+3WkW1GiM3qT1hSSDw==
+X-Google-Smtp-Source: APXvYqzjb6vUPKfQHIBsttODvNl7TdmxISCG+2hXPuXBG5uEruZ3Y9wg/g4GGXFNnZrOITpNYyyoWQ==
+X-Received: by 2002:adf:ec0f:: with SMTP id x15mr19952633wrn.165.1562603508638;
+        Mon, 08 Jul 2019 09:31:48 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5aedbe.dynamic.kabel-deutschland.de. [95.90.237.190])
-        by smtp.gmail.com with ESMTPSA id e6sm18255086wrw.23.2019.07.08.09.31.50
+        by smtp.gmail.com with ESMTPSA id e6sm18255086wrw.23.2019.07.08.09.31.47
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 08 Jul 2019 09:31:50 -0700 (PDT)
+        Mon, 08 Jul 2019 09:31:48 -0700 (PDT)
 From:   Krzesimir Nowak <krzesimir@kinvolk.io>
 To:     linux-kernel@vger.kernel.org
 Cc:     Alban Crequy <alban@kinvolk.io>,
@@ -66,9 +66,9 @@ Cc:     Alban Crequy <alban@kinvolk.io>,
         Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, xdp-newbies@vger.kernel.org,
         Krzesimir Nowak <krzesimir@kinvolk.io>
-Subject: [bpf-next v3 04/12] selftests/bpf: Use bpf_prog_test_run_xattr
-Date:   Mon,  8 Jul 2019 18:31:13 +0200
-Message-Id: <20190708163121.18477-5-krzesimir@kinvolk.io>
+Subject: [bpf-next v3 02/12] selftests/bpf: Avoid a clobbering of errno
+Date:   Mon,  8 Jul 2019 18:31:11 +0200
+Message-Id: <20190708163121.18477-3-krzesimir@kinvolk.io>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190708163121.18477-1-krzesimir@kinvolk.io>
 References: <20190708163121.18477-1-krzesimir@kinvolk.io>
@@ -79,56 +79,48 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The bpf_prog_test_run_xattr function gives more options to set up a
-test run of a BPF program than the bpf_prog_test_run function.
+Save errno right after bpf_prog_test_run returns, so we later check
+the error code actually set by bpf_prog_test_run, not by some libcap
+function.
 
-We will need this extra flexibility to pass ctx data later.
+Changes since v1:
+- Fix the "Fixes:" tag to mention actual commit that introduced the
+  bug
 
+Changes since v2:
+- Move the declaration so it fits the reverse christmas tree style.
+
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Fixes: 832c6f2c29ec ("bpf: test make sure to run unpriv test cases in test_verifier")
 Signed-off-by: Krzesimir Nowak <krzesimir@kinvolk.io>
 ---
- tools/testing/selftests/bpf/test_verifier.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+ tools/testing/selftests/bpf/test_verifier.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index c7541f572932..1640ba9f12c1 100644
+index b8d065623ead..3fe126e0083b 100644
 --- a/tools/testing/selftests/bpf/test_verifier.c
 +++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -822,14 +822,20 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
- {
+@@ -823,16 +823,18 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
  	__u8 tmp[TEST_DATA_LEN << 2];
  	__u32 size_tmp = sizeof(tmp);
--	uint32_t retval;
- 	int saved_errno;
+ 	uint32_t retval;
++	int saved_errno;
  	int err;
-+	struct bpf_prog_test_run_attr attr = {
-+		.prog_fd = fd_prog,
-+		.repeat = 1,
-+		.data_in = data,
-+		.data_size_in = size_data,
-+		.data_out = tmp,
-+		.data_size_out = size_tmp,
-+	};
  
  	if (unpriv)
  		set_admin(true);
--	err = bpf_prog_test_run(fd_prog, 1, data, size_data,
--				tmp, &size_tmp, &retval, NULL);
-+	err = bpf_prog_test_run_xattr(&attr);
- 	saved_errno = errno;
+ 	err = bpf_prog_test_run(fd_prog, 1, data, size_data,
+ 				tmp, &size_tmp, &retval, NULL);
++	saved_errno = errno;
  	if (unpriv)
  		set_admin(false);
-@@ -846,9 +852,9 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
- 			return err;
- 		}
- 	}
--	if (retval != expected_val &&
-+	if (attr.retval != expected_val &&
- 	    expected_val != POINTER_VALUE) {
--		printf("FAIL retval %d != %d ", retval, expected_val);
-+		printf("FAIL retval %d != %d ", attr.retval, expected_val);
- 		return 1;
- 	}
- 
+ 	if (err) {
+-		switch (errno) {
++		switch (saved_errno) {
+ 		case 524/*ENOTSUPP*/:
+ 			printf("Did not run the program (not supported) ");
+ 			return 0;
 -- 
 2.20.1
 
