@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3296C606BD
-	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 16:31:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC954C606BD
+	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 16:31:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9C60821743
-	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 16:31:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 957C421479
+	for <bpf@archiver.kernel.org>; Mon,  8 Jul 2019 16:31:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kinvolk.io header.i=@kinvolk.io header.b="AwysrBJC"
+	dkim=pass (1024-bit key) header.d=kinvolk.io header.i=@kinvolk.io header.b="f3sofSU/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389041AbfGHQbv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jul 2019 12:31:51 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:38771 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388297AbfGHQbv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jul 2019 12:31:51 -0400
-Received: by mail-wm1-f68.google.com with SMTP id s15so164133wmj.3
-        for <bpf@vger.kernel.org>; Mon, 08 Jul 2019 09:31:50 -0700 (PDT)
+        id S2389804AbfGHQb5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jul 2019 12:31:57 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:38779 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389407AbfGHQb4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jul 2019 12:31:56 -0400
+Received: by mail-wm1-f65.google.com with SMTP id s15so164411wmj.3
+        for <bpf@vger.kernel.org>; Mon, 08 Jul 2019 09:31:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kinvolk.io; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=yfapiFsE4OmxP9vMHIQmElH3PTxTJhdK3T96JsR6xmY=;
-        b=AwysrBJC39iPhW8fSEU+3huktCPgPvzlgzNdwOdQrw+V5E8uP/wIg/Q0wCJVSkrQUJ
-         Y12gYUKKE5NakL3+MVgJ2Fsu1guDhor2brgYw+CkRNveotznlgGG4HBX8Dk9thPw/Y5A
-         6Xk42e56KAaitNCqYeA68tZW2ACB2UxzsxWm8=
+        bh=Z2q/9DY/eMlLakYA2goJPIRtdbZUH+0KxlPnLmYNTOY=;
+        b=f3sofSU/bXru9qax++aOgBk+uAlSYw6diTvQz4Zb6xU+ePOE1k+PF6XybmrF8zA8Lm
+         cxUhOmVfIKOmnI0trsImIeXpuUUW+sKjTOhPWo3MCCGcHCf+iQIseb8AfeR7KKbyPnKH
+         4z9UWgWFHpp2PrqssJUgvo0yyedi5hHUcIboQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=yfapiFsE4OmxP9vMHIQmElH3PTxTJhdK3T96JsR6xmY=;
-        b=SS0Tv6W/bGL0HJ8bD08kSBNFCgZImJClGEEWrVERrSihNex3WtZw0AhX0Mb0UIiqHM
-         JucgvQksWHkFcOMzA3Gjqjbtj6CM2uV8pjzy/pNH71SU+kyBkqNsGeataPyJJRzcgW6q
-         38SjcgioK/Yofkzf0JzinpOpAzcPOPdexPOefnsHkskqkBBqstwec8qI13DE+b9V3cp8
-         EbmU/Szr9iNOLOE8sid8LxC66IHQ03sSsC9Z2evCIO5BfxAjdpzl3YIxCGwj5zYHE2ob
-         zrWG5x7ZXggzlgtG9cUUCPYS9EztpKCX2z1tw21K5/ZpboQyOMnhnzD983o+MaC+CAOE
-         4QSA==
-X-Gm-Message-State: APjAAAUdU2ZBRfpJ45UjJyBf9OQQiBLYSPwW7yZy2V1lE2rVdfJXsLyM
-        qeVN03QwThTp5k1f48PWRdu5nw==
-X-Google-Smtp-Source: APXvYqy4tMsGFA84bjXV72y0LxdF54qkE5Rr12cM5BrQCv2eDz3tBHn7eYNxh9WEPMBYW/RPdWOQtg==
-X-Received: by 2002:a1c:544d:: with SMTP id p13mr18325919wmi.78.1562603510047;
-        Mon, 08 Jul 2019 09:31:50 -0700 (PDT)
+        bh=Z2q/9DY/eMlLakYA2goJPIRtdbZUH+0KxlPnLmYNTOY=;
+        b=qHnruRPu9lhAs3VqTQyVXfUVuNlPDeJ9Vmn+CvJ22MguUM74yYupJM8nr2W2SxVlyv
+         bRPQdxxS1SnXLNQvXnb8FxI1XwL3xWAZG2p0aACdvxofYO+cunlon7sUzVKVewrOA/X+
+         1H4WPZih/3uQkw0ETt7yO8xmgU3A6erlq7awXXaF/K33rHKeroYZSfg/0eXi52C1JEpq
+         bes6qWy/YDpGRPHdDa7rEphcR+ZFOQVHvuxSdjb86wCjlcY5D/c40AgaZGN2dVTWYXcD
+         BemNxsKmZMLkHaqJGHHUAMIUh7VcJvhCRton1tLg2yh+XXVcexvv6Q+XCWvMmOHi2IJn
+         hOAw==
+X-Gm-Message-State: APjAAAVQ/ZFVYfBhSPXpLPPvCSrnPyPZr1NZfH7HlhsFlegUwr+eowXE
+        7PZy/PRIeDuwyVqsJfCtQ4NpGA==
+X-Google-Smtp-Source: APXvYqwgF4eK6PEywYbJMZghzfU39cx60C67Re6v5ey3Aa4/20vDkjnYdTfyPjo4Ljm9od9zONwd/g==
+X-Received: by 2002:a1c:2314:: with SMTP id j20mr17401953wmj.152.1562603514984;
+        Mon, 08 Jul 2019 09:31:54 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5aedbe.dynamic.kabel-deutschland.de. [95.90.237.190])
-        by smtp.gmail.com with ESMTPSA id e6sm18255086wrw.23.2019.07.08.09.31.48
+        by smtp.gmail.com with ESMTPSA id e6sm18255086wrw.23.2019.07.08.09.31.53
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 08 Jul 2019 09:31:49 -0700 (PDT)
+        Mon, 08 Jul 2019 09:31:54 -0700 (PDT)
 From:   Krzesimir Nowak <krzesimir@kinvolk.io>
 To:     linux-kernel@vger.kernel.org
 Cc:     Alban Crequy <alban@kinvolk.io>,
@@ -66,9 +66,9 @@ Cc:     Alban Crequy <alban@kinvolk.io>,
         Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, xdp-newbies@vger.kernel.org,
         Krzesimir Nowak <krzesimir@kinvolk.io>
-Subject: [bpf-next v3 03/12] selftests/bpf: Avoid another case of errno clobbering
-Date:   Mon,  8 Jul 2019 18:31:12 +0200
-Message-Id: <20190708163121.18477-4-krzesimir@kinvolk.io>
+Subject: [bpf-next v3 07/12] tools headers: Adopt compiletime_assert from kernel sources
+Date:   Mon,  8 Jul 2019 18:31:16 +0200
+Message-Id: <20190708163121.18477-8-krzesimir@kinvolk.io>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190708163121.18477-1-krzesimir@kinvolk.io>
 References: <20190708163121.18477-1-krzesimir@kinvolk.io>
@@ -79,51 +79,51 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Commit 8184d44c9a57 ("selftests/bpf: skip verifier tests for
-unsupported program types") added a check for an unsupported program
-type. The function doing it changes errno, so test_verifier should
-save it before calling it if test_verifier wants to print a reason why
-verifying a BPF program of a supported type failed.
+This will come in handy to verify that the hardcoded size of the
+context data in bpf_test struct is high enough to hold some struct.
 
-Changes since v2:
-- Move the declaration to fit the reverse christmas tree style.
-
-Fixes: 8184d44c9a57 ("selftests/bpf: skip verifier tests for unsupported program types")
-Cc: Stanislav Fomichev <sdf@google.com>
 Signed-off-by: Krzesimir Nowak <krzesimir@kinvolk.io>
 ---
- tools/testing/selftests/bpf/test_verifier.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/include/linux/compiler.h | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index 3fe126e0083b..c7541f572932 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -864,6 +864,7 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
- 	int run_errs, run_successes;
- 	int map_fds[MAX_NR_MAPS];
- 	const char *expected_err;
-+	int saved_errno;
- 	int fixup_skips;
- 	__u32 pflags;
- 	int i, err;
-@@ -894,6 +895,7 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
- 		pflags |= BPF_F_ANY_ALIGNMENT;
- 	fd_prog = bpf_verify_program(prog_type, prog, prog_len, pflags,
- 				     "GPL", 0, bpf_vlog, sizeof(bpf_vlog), 4);
-+	saved_errno = errno;
- 	if (fd_prog < 0 && !bpf_probe_prog_type(prog_type, 0)) {
- 		printf("SKIP (unsupported program type %d)\n", prog_type);
- 		skips++;
-@@ -910,7 +912,7 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
- 	if (expected_ret == ACCEPT) {
- 		if (fd_prog < 0) {
- 			printf("FAIL\nFailed to load prog '%s'!\n",
--			       strerror(errno));
-+			       strerror(saved_errno));
- 			goto fail_log;
- 		}
- #ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+diff --git a/tools/include/linux/compiler.h b/tools/include/linux/compiler.h
+index 1827c2f973f9..b4e97751000a 100644
+--- a/tools/include/linux/compiler.h
++++ b/tools/include/linux/compiler.h
+@@ -172,4 +172,32 @@ static __always_inline void __write_once_size(volatile void *p, void *res, int s
+ # define __fallthrough
+ #endif
+ 
++
++#ifdef __OPTIMIZE__
++# define __compiletime_assert(condition, msg, prefix, suffix)		\
++	do {								\
++		extern void prefix ## suffix(void) __compiletime_error(msg); \
++		if (!(condition))					\
++			prefix ## suffix();				\
++	} while (0)
++#else
++# define __compiletime_assert(condition, msg, prefix, suffix) do { } while (0)
++#endif
++
++#define _compiletime_assert(condition, msg, prefix, suffix) \
++	__compiletime_assert(condition, msg, prefix, suffix)
++
++/**
++ * compiletime_assert - break build and emit msg if condition is false
++ * @condition: a compile-time constant condition to check
++ * @msg:       a message to emit if condition is false
++ *
++ * In tradition of POSIX assert, this macro will break the build if the
++ * supplied condition is *false*, emitting the supplied error message if the
++ * compiler has support to do so.
++ */
++#define compiletime_assert(condition, msg) \
++	_compiletime_assert(condition, msg, __compiletime_assert_, __LINE__)
++
++
+ #endif /* _TOOLS_LINUX_COMPILER_H */
 -- 
 2.20.1
 
