@@ -2,320 +2,161 @@ Return-Path: <SRS0=z4n/=VH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96E74C74A26
-	for <bpf@archiver.kernel.org>; Wed, 10 Jul 2019 14:16:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1387C74A21
+	for <bpf@archiver.kernel.org>; Wed, 10 Jul 2019 15:38:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 663B92064B
-	for <bpf@archiver.kernel.org>; Wed, 10 Jul 2019 14:16:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C5CA72087F
+	for <bpf@archiver.kernel.org>; Wed, 10 Jul 2019 15:38:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="jT4rr1dR"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="lsDAwrPm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727709AbfGJOQC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Jul 2019 10:16:02 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:32833 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727628AbfGJOQB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 10 Jul 2019 10:16:01 -0400
-Received: by mail-pf1-f193.google.com with SMTP id g2so1189542pfq.0
-        for <bpf@vger.kernel.org>; Wed, 10 Jul 2019 07:16:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=98vQqac6N+4BDAWZ6eZd2FQ5tBz4a8s/ZIoQ2kqYqQU=;
-        b=jT4rr1dRIIdkKbYCMVTHZ2jKpCD13OQ/g/idVRGQ/vM8Hhd00Xsma2pTkwoIGRALKP
-         x68FvAFXmQBZ6S2Qi2SPDHxjnppLoAFpyb3FTLxg/USKswIOdGBQigG+QfVdUa434Ja6
-         GC2ykyqsyvETZsJEuquXZfNrr/rdVrerBxtaw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=98vQqac6N+4BDAWZ6eZd2FQ5tBz4a8s/ZIoQ2kqYqQU=;
-        b=Hh1R1HM3KTRQtxOTqD1nqhEuILx/itR8BuEKXC18R+PLztIrGPlhUQAzuO3zMosG0D
-         eIalkv5vWbeoYCJ1mDWBlQfv8WwOEtZ7+VzsclAQ+CJ4jpQXb62d9PNso3aF0au9E+SZ
-         FXTd6OmTM/RkZK4aRwqNyFYEPobmhucR4sLaS6OpJhY/fpv0unVFWa1MVWjfPKUZZPSN
-         ttJef1tdMDV9Qmljw63V8UBy015opBDjuL/tG10jvO8PO0KwWQJ6+E8HaWfvxuW95LL2
-         ZHbuO9HSR2dS0e9C0holHKnagEoFpH97+fhBWGWM7istThBGkDU+EnONrg4eKG8PItz5
-         YoKg==
-X-Gm-Message-State: APjAAAWn2VqImPyiTUYUjRjG7g9O+2dWeX2dEo458RUUAIqnn0+b0bMr
-        pDpnJPauebYbqdArFCzLnIJ3Cg==
-X-Google-Smtp-Source: APXvYqyVj2COh2XkJL7w391puzrxf+GO5LeBkj/huVRuoJfj6uXECXP7PK41v0m8skcXqm2b1c+vuw==
-X-Received: by 2002:a63:b904:: with SMTP id z4mr1266112pge.388.1562768160724;
-        Wed, 10 Jul 2019 07:16:00 -0700 (PDT)
-Received: from joelaf.cam.corp.google.com ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id l124sm2589249pgl.54.2019.07.10.07.15.57
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 10 Jul 2019 07:16:00 -0700 (PDT)
-From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Adrian Ratiu <adrian.ratiu@collabora.com>,
-        Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
-        Brendan Gregg <brendan.d.gregg@gmail.com>, connoro@google.com,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        duyuchao <yuchao.du@unisoc.com>, Ingo Molnar <mingo@redhat.com>,
-        jeffv@google.com, Karim Yaghmour <karim.yaghmour@opersys.com>,
-        kernel-team@android.com, linux-kselftest@vger.kernel.org,
-        Manali Shukla <manalishukla14@gmail.com>,
-        Manjo Raja Rao <linux@manojrajarao.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Matt Mullins <mmullins@fb.com>,
-        Michal Gregorczyk <michalgr@fb.com>,
-        Michal Gregorczyk <michalgr@live.com>,
-        Mohammad Husain <russoue@gmail.com>, namhyung@google.com,
-        namhyung@kernel.org, netdev@vger.kernel.org,
-        paul.chaignon@gmail.com, primiano@google.com,
-        Qais Yousef <qais.yousef@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Srinivas Ramana <sramana@codeaurora.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tamir Carmeli <carmeli.tamir@gmail.com>,
-        Yonghong Song <yhs@fb.com>
-Subject: [PATCH RFC 1/4] Move bpf_raw_tracepoint functionality into bpf_trace.c
-Date:   Wed, 10 Jul 2019 10:15:45 -0400
-Message-Id: <20190710141548.132193-2-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-In-Reply-To: <20190710141548.132193-1-joel@joelfernandes.org>
-References: <20190710141548.132193-1-joel@joelfernandes.org>
+        id S1727603AbfGJPi7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Jul 2019 11:38:59 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:36702 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726105AbfGJPi7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 10 Jul 2019 11:38:59 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6AFXpjV140644;
+        Wed, 10 Jul 2019 15:37:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id :
+ mime-version : date : from : to : cc : subject : content-type :
+ content-transfer-encoding; s=corp-2018-07-02;
+ bh=RoOPOjQgj2XYASbiBhpR/1oApLKROklq3dcoMH9Dp4M=;
+ b=lsDAwrPmHqsQB+Iaaw5ADhMtvebDrQoFVAS1sBi13MaorrlgkynlYaVcm2iwBodPz3s4
+ q2kMQ+Bg6wSRPVnmPEoQL6mbarYBOSptxvQ4ONVAAcHnlhEpCJwbGXWklNeRgByFHDyX
+ nN5zW2KhsyRjrWnuqITsJ/3Q9l7MQ173HVfZCli9T8wTj4hL8QNw+xl3h8a595OyYJ57
+ K8CEwpP8wjYlxD0Zs9PtZNSMBR23m10B8NQLMlvKvx5bRC8oimxJC2V+YRGIKS9tu2fC
+ G5CrVL6oYOWOzdB/OlsgtMC/pAhp+g4z3CMpfvILq4tWtMtMuLxnk+MKisQBAhifkPLc ag== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 2tjm9qtwwf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 10 Jul 2019 15:37:58 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6AFWjX3056498;
+        Wed, 10 Jul 2019 15:37:57 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by aserp3030.oracle.com with ESMTP id 2tmwgxjj8e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 10 Jul 2019 15:37:57 +0000
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x6AFbvkv069541;
+        Wed, 10 Jul 2019 15:37:57 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3030.oracle.com with ESMTP id 2tmwgxjj88-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 10 Jul 2019 15:37:57 +0000
+Received: from abhmp0022.oracle.com (abhmp0022.oracle.com [141.146.116.28])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x6AFboMR015946;
+        Wed, 10 Jul 2019 15:37:50 GMT
+Message-Id: <201907101537.x6AFboMR015946@aserv0122.oracle.com>
+Received: from localhost (/10.159.211.102) by default (Oracle Beehive Gateway
+ v4.0) with ESMTP ; Wed, 10 Jul 2019 08:37:49 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date:   Wed, 10 Jul 2019 08:37:50 -0700 (PDT)
+From:   Kris Van Hees <kris.van.hees@oracle.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        dtrace-devel@oss.oracle.com, linux-kernel@vger.kernel.org
+Cc:     rostedt@goodmis.org, mhiramat@kernel.org, acme@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net,
+        Peter Zijlstra <peterz@infradead.org>, Chris Mason <clm@fb.com>
+Subject: [PATCH V2 0/1] tools/dtrace: initial implementation of DTrace
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9314 signatures=668688
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1907100176
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In preparation to use raw tracepoints for BPF directly from ftrace, move
-the bpf_raw_tracepoint functionality into bpf_trace.c
+This is version 2 of the patch, incorporating feedback from Peter Zijlstra and
+Arnaldo Carvalho de Melo.
 
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
- include/linux/bpf_trace.h   | 10 ++++++
- kernel/bpf/syscall.c        | 69 ++++++-------------------------------
- kernel/trace/bpf_trace.c    | 56 ++++++++++++++++++++++++++++++
- kernel/trace/trace_events.c |  3 ++
- 4 files changed, 80 insertions(+), 58 deletions(-)
+Changes in Makefile:
+	- Remove -I$(srctree)/tools/perf from KBUILD_HOSTCFLAGS since it
+	  is not actually used.
 
-diff --git a/include/linux/bpf_trace.h b/include/linux/bpf_trace.h
-index ddf896abcfb6..4a593827fd87 100644
---- a/include/linux/bpf_trace.h
-+++ b/include/linux/bpf_trace.h
-@@ -4,4 +4,14 @@
- 
- #include <trace/events/xdp.h>
- 
-+#define BPF_RAW_TRACEPOINT_OPEN_LAST_FIELD raw_tracepoint.prog_fd
-+
-+struct bpf_raw_tracepoint {
-+	struct bpf_raw_event_map *btp;
-+	struct bpf_prog *prog;
-+};
-+
-+struct bpf_raw_tracepoint *bpf_raw_tracepoint_open(char *tp_name, int prog_fd);
-+void bpf_raw_tracepoint_close(struct bpf_raw_tracepoint *tp);
-+
- #endif /* __LINUX_BPF_TRACE_H__ */
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 42d17f730780..2001949b33f1 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1737,21 +1737,11 @@ static int bpf_obj_get(const union bpf_attr *attr)
- 				attr->file_flags);
- }
- 
--struct bpf_raw_tracepoint {
--	struct bpf_raw_event_map *btp;
--	struct bpf_prog *prog;
--};
--
- static int bpf_raw_tracepoint_release(struct inode *inode, struct file *filp)
- {
- 	struct bpf_raw_tracepoint *raw_tp = filp->private_data;
- 
--	if (raw_tp->prog) {
--		bpf_probe_unregister(raw_tp->btp, raw_tp->prog);
--		bpf_prog_put(raw_tp->prog);
--	}
--	bpf_put_raw_tracepoint(raw_tp->btp);
--	kfree(raw_tp);
-+	bpf_raw_tracepoint_close(raw_tp);
- 	return 0;
- }
- 
-@@ -1761,64 +1751,27 @@ static const struct file_operations bpf_raw_tp_fops = {
- 	.write		= bpf_dummy_write,
- };
- 
--#define BPF_RAW_TRACEPOINT_OPEN_LAST_FIELD raw_tracepoint.prog_fd
--
--static int bpf_raw_tracepoint_open(const union bpf_attr *attr)
-+static int bpf_raw_tracepoint_open_syscall(const union bpf_attr *attr)
- {
--	struct bpf_raw_tracepoint *raw_tp;
--	struct bpf_raw_event_map *btp;
--	struct bpf_prog *prog;
-+	int tp_fd;
- 	char tp_name[128];
--	int tp_fd, err;
-+	struct bpf_raw_tracepoint *raw_tp;
- 
- 	if (strncpy_from_user(tp_name, u64_to_user_ptr(attr->raw_tracepoint.name),
- 			      sizeof(tp_name) - 1) < 0)
- 		return -EFAULT;
- 	tp_name[sizeof(tp_name) - 1] = 0;
- 
--	btp = bpf_get_raw_tracepoint(tp_name);
--	if (!btp)
--		return -ENOENT;
--
--	raw_tp = kzalloc(sizeof(*raw_tp), GFP_USER);
--	if (!raw_tp) {
--		err = -ENOMEM;
--		goto out_put_btp;
--	}
--	raw_tp->btp = btp;
--
--	prog = bpf_prog_get(attr->raw_tracepoint.prog_fd);
--	if (IS_ERR(prog)) {
--		err = PTR_ERR(prog);
--		goto out_free_tp;
--	}
--	if (prog->type != BPF_PROG_TYPE_RAW_TRACEPOINT &&
--	    prog->type != BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE) {
--		err = -EINVAL;
--		goto out_put_prog;
--	}
--
--	err = bpf_probe_register(raw_tp->btp, prog);
--	if (err)
--		goto out_put_prog;
-+	raw_tp = bpf_raw_tracepoint_open(tp_name, attr->raw_tracepoint.prog_fd);
-+	if (IS_ERR(raw_tp))
-+		return PTR_ERR(raw_tp);
- 
--	raw_tp->prog = prog;
- 	tp_fd = anon_inode_getfd("bpf-raw-tracepoint", &bpf_raw_tp_fops, raw_tp,
- 				 O_CLOEXEC);
--	if (tp_fd < 0) {
--		bpf_probe_unregister(raw_tp->btp, prog);
--		err = tp_fd;
--		goto out_put_prog;
--	}
--	return tp_fd;
-+	if (tp_fd < 0)
-+		bpf_probe_unregister(raw_tp->btp, raw_tp->prog);
- 
--out_put_prog:
--	bpf_prog_put(prog);
--out_free_tp:
--	kfree(raw_tp);
--out_put_btp:
--	bpf_put_raw_tracepoint(btp);
--	return err;
-+	return tp_fd;
- }
- 
- static int bpf_prog_attach_check_attach_type(const struct bpf_prog *prog,
-@@ -2848,7 +2801,7 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, siz
- 		err = bpf_obj_get_info_by_fd(&attr, uattr);
- 		break;
- 	case BPF_RAW_TRACEPOINT_OPEN:
--		err = bpf_raw_tracepoint_open(&attr);
-+		err = bpf_raw_tracepoint_open_syscall(&attr);
- 		break;
- 	case BPF_BTF_LOAD:
- 		err = bpf_btf_load(&attr);
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 1c9a4745e596..c4b543bc617f 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -7,6 +7,7 @@
- #include <linux/slab.h>
- #include <linux/bpf.h>
- #include <linux/bpf_perf_event.h>
-+#include <linux/bpf_trace.h>
- #include <linux/filter.h>
- #include <linux/uaccess.h>
- #include <linux/ctype.h>
-@@ -1413,3 +1414,58 @@ static int __init bpf_event_init(void)
- 
- fs_initcall(bpf_event_init);
- #endif /* CONFIG_MODULES */
-+
-+void bpf_raw_tracepoint_close(struct bpf_raw_tracepoint *raw_tp)
-+{
-+	if (raw_tp->prog) {
-+		bpf_probe_unregister(raw_tp->btp, raw_tp->prog);
-+		bpf_prog_put(raw_tp->prog);
-+	}
-+	bpf_put_raw_tracepoint(raw_tp->btp);
-+	kfree(raw_tp);
-+}
-+
-+struct bpf_raw_tracepoint *bpf_raw_tracepoint_open(char *tp_name, int prog_fd)
-+{
-+	struct bpf_raw_tracepoint *raw_tp;
-+	struct bpf_raw_event_map *btp;
-+	struct bpf_prog *prog;
-+	int err;
-+
-+	btp = bpf_get_raw_tracepoint(tp_name);
-+	if (!btp)
-+		return ERR_PTR(-ENOENT);
-+
-+	raw_tp = kzalloc(sizeof(*raw_tp), GFP_USER);
-+	if (!raw_tp) {
-+		err = -ENOMEM;
-+		goto out_put_btp;
-+	}
-+	raw_tp->btp = btp;
-+
-+	prog = bpf_prog_get(prog_fd);
-+	if (IS_ERR(prog)) {
-+		err = PTR_ERR(prog);
-+		goto out_free_tp;
-+	}
-+	if (prog->type != BPF_PROG_TYPE_RAW_TRACEPOINT &&
-+	    prog->type != BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE) {
-+		err = -EINVAL;
-+		goto out_put_prog;
-+	}
-+
-+	err = bpf_probe_register(raw_tp->btp, prog);
-+	if (err)
-+		goto out_put_prog;
-+
-+	raw_tp->prog = prog;
-+	return raw_tp;
-+
-+out_put_prog:
-+	bpf_prog_put(prog);
-+out_free_tp:
-+	kfree(raw_tp);
-+out_put_btp:
-+	bpf_put_raw_tracepoint(btp);
-+	return ERR_PTR(err);
-+}
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index 0ce3db67f556..67851fb66b6b 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -2017,6 +2017,9 @@ event_create_dir(struct dentry *parent, struct trace_event_file *file)
- 
- 		trace_create_file("trigger", 0644, file->dir, file,
- 				  &event_trigger_fops);
-+
-+		trace_create_file("bpf_attach", 0644, file->dir, file,
-+				  &bpf_attach_trigger_fops);
- 	}
- 
- #ifdef CONFIG_HIST_TRIGGERS
--- 
-2.22.0.410.gd8fdbe21b5-goog
+Changes in dt_bpf.c:
+	- Remove unnecessary PERF_EVENT_IOC_ENABLE.
 
+Changes in dt_buffer.c:
+	- Use ring_buffer_read_head() and ring_buffer_write_tail() to
+	  avoid use of volatile.
+	- Handle perf events that wrap around the ring buffer boundary.
+	- Remove unnecessary PERF_EVENT_IOC_ENABLE.
+
+Changes in bpf_sample.c:
+	- Use PT_REGS_PARM1(x), etc instead of my own macros.  Adding
+	  PT_REGS_PARM6(x) in bpf_sample.c because we need to be able to
+	  support up to 6 arguments passed by registers.
+
+This patch is also available, applied to bpf-next, at the following URL:
+
+	https://github.com/oracle/dtrace-linux-kernel/tree/dtrace-bpf
+
+As suggested in feedback to my earlier patch submissions, this code takes an
+approach to avoid kernel code changes as much as possible.  The current patch
+does not involve any kernel code changes.  Further development of this code
+will continue with this approach, incrementally adding features to this first
+minimal implementation.  The goal is a fully featured and functional DTrace
+implementation involving kernel changes only when strictly necessary.
+
+The code presented here supports two very basic functions:
+
+1. Listing probes that are used in BPF programs
+
+   # dtrace -l -s bpf_sample.o
+      ID   PROVIDER            MODULE                          FUNCTION NAME
+   18876        fbt           vmlinux                        ksys_write entry
+   70423    syscall           vmlinux                             write entry
+
+2. Loading BPF tracing programs and collecting data that they generate
+
+   # dtrace -s bpf_sample.o
+   CPU     ID
+    15  70423 0xffff8c0968bf8ec0 0x00000000000001 0x0055e019eb3f60 0x0000000000002c
+    15  18876 0xffff8c0968bf8ec0 0x00000000000001 0x0055e019eb3f60 0x0000000000002c
+   ...
+
+Only kprobes and syscall tracepoints are supported since this is an initial
+patch.  It does show the use of a generic BPF function to implement the actual
+probe action, called from two distinct probe types.  Follow-up patches will
+add more probe types, add more tracing features from the D language, add
+support for D script compilation to BPF, etc.
+
+The implementation makes use of libbpf for handling BPF ELF objects, and uses
+the perf event output ring buffer (supported through BPF) to retrieve the
+tracing data.  The next step in development will be adding support to libbpf
+for programs using shared functions from a collection of functions included in
+the BPF ELF object (as suggested by Alexei).  
+
+The code is structured as follows:
+ tools/dtrace/dtrace.c      = command line utility
+ tools/dtrace/dt_bpf.c      = interface to libbpf
+ tools/dtrace/dt_buffer.c   = perf event output buffer handling
+ tools/dtrace/dt_fbt.c      = kprobes probe provider
+ tools/dtrace/dt_syscall.c  = syscall tracepoint probe provider
+ tools/dtrace/dt_probe.c    = generic probe and probe provider handling code
+                              This implements a generic interface to the actual
+                              probe providers (dt_fbt and dt_syscall).
+ tools/dtrace/dt_hash.c     = general probe hashing implementation
+ tools/dtrace/dt_utils.c    = support code (manage list of online CPUs)
+ tools/dtrace/dtrace.h      = API header file (used by BPF program source code)
+ tools/dtrace/dtrace_impl.h = implementation header file
+ tools/dtrace/bpf_sample.c  = sample BPF program using two probe types
+
+I included an entry for the MAINTAINERS file.  I offer to actively maintain
+this code, and to keep advancing its development.
+
+	Cheers,
+	Kris Van Hees
