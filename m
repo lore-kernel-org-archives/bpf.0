@@ -2,54 +2,55 @@ Return-Path: <SRS0=z4n/=VH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB18AC74A23
-	for <bpf@archiver.kernel.org>; Wed, 10 Jul 2019 14:15:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BD07C74A23
+	for <bpf@archiver.kernel.org>; Wed, 10 Jul 2019 14:16:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 74D6E2064B
-	for <bpf@archiver.kernel.org>; Wed, 10 Jul 2019 14:15:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EB19B2064B
+	for <bpf@archiver.kernel.org>; Wed, 10 Jul 2019 14:16:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="ik/txIOz"
+	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="puPKxWZQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727402AbfGJOP6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Jul 2019 10:15:58 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:34627 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727095AbfGJOP5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 10 Jul 2019 10:15:57 -0400
-Received: by mail-pf1-f193.google.com with SMTP id b13so1184653pfo.1
-        for <bpf@vger.kernel.org>; Wed, 10 Jul 2019 07:15:57 -0700 (PDT)
+        id S1727946AbfGJOQP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Jul 2019 10:16:15 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:41550 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727933AbfGJOQN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 10 Jul 2019 10:16:13 -0400
+Received: by mail-pf1-f195.google.com with SMTP id m30so1174793pff.8
+        for <bpf@vger.kernel.org>; Wed, 10 Jul 2019 07:16:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=joelfernandes.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8u/8oBvwls3TmHDIAgdRr1iO5w1leafBhE5nzfgIbNY=;
-        b=ik/txIOzI2+TUrsUL2ZoXzZa7twvPZdk3u9E2bYRIL99Lvfh0YdEPjD/zeLFzop8nI
-         dz+tENQ7uf96nUYOS7DKtU7tYereh/giq76H0nt6EdsZLxNVhJac+smvmQ0qoLhDSLkO
-         gydAI8tKn+4b+GYSIRTIbLPCYVtIOwL6NJwNY=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Yg+Fia+4TffgvjfVtZaMrwTvAUof2HACdCWfE9Adz90=;
+        b=puPKxWZQb+LZdgernOXSGHoCjjFfNqhgNCQgR3EAJVuYHTxPi0MWhE1gMoTZzoxDtL
+         JPgeBqpXoNCnj35nK/tB1FCJMvJg2YoHOxNlJ0Vchnf+Zhz2VlASaorgKKmUkgTvSIJf
+         8FW/bsoH46dLIF8XeGGCXT64TEZRMHpQZe0+E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8u/8oBvwls3TmHDIAgdRr1iO5w1leafBhE5nzfgIbNY=;
-        b=MmO4rVHubHCw9V8+AMmRHowRbTjJqlATxcZmpRR1rQ4h4tbn+bUXNNe+RSfj2hY7a2
-         2psdh6omn80oLRWlRfiVxQLtrHdTMwl9zB9SPBW4insSH31nj6DjojudGXu4kNC7ykkh
-         rcEWatFztyD9ryCy8f0Sd/i5mwA95vv/Pm0qAeZseAEQsr3j4s9Nm6XsKrilmIX2AwJL
-         fy9vQGLhmHQI/lXVUUOmrrnbGvpfSHtbtZX+l5C16hnRn2GBS+omF59aTrjj2ddBen+x
-         /onSHKlJ61h8DaVDdyAx9SK2/wVjPYZow+i+8P9Nbd4NxA8YuEZmufziMHZMg5dkgCaz
-         l2TQ==
-X-Gm-Message-State: APjAAAWODzMSVA32OxDVMYDD+oG+rLHb+XxhdApUninBbijGXF04jXjA
-        C34PTa3LbgJWoB25l2vz6GMfaA==
-X-Google-Smtp-Source: APXvYqwWrgLgXgQwACA2VuP7IqF8CPk7WQxKdd5MI3KP8MV596Wrwf2m53X+vAoh9by7zbDtkvjKkg==
-X-Received: by 2002:a63:4b02:: with SMTP id y2mr26565686pga.135.1562768156934;
-        Wed, 10 Jul 2019 07:15:56 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Yg+Fia+4TffgvjfVtZaMrwTvAUof2HACdCWfE9Adz90=;
+        b=P2TokYKCm6/mDvXQKCQ1NSTD0VT/83oul5VOa/cyQhCMmPZ2o+SQhhqxk2YufR0rQt
+         EcpPZTMQTjL1brbsgBTPJrrBQ4BqQDjXzKC8rylS6SXU9b+fZZFzUUzkBDOtcSK4mZJS
+         8yLi4q3QCaALyaxcB0Ef2Z+f1j/7jMYD2Y1xhYiSsO64YwXmNOXyYb0S6JU37D7Gy97A
+         IKYRjEWdkvJdza1n4hS8GTDKrCBbCfftS59jjGMMVrNYm9DyI17scJZRNAm2SavQXiUM
+         rSNGf+oP2uTI+Ltxh3bysk5boval5h7QaHcdJXAoIfi0+iqNQTYtIn13IUXLOPGkMyOl
+         TJ3w==
+X-Gm-Message-State: APjAAAUcJyM0yggMshoHufGQfqoRDGh/B4C4EMiVpov+pCOYbig+GmdR
+        o39JUvL7vRigJFbvcdAYGKA=
+X-Google-Smtp-Source: APXvYqxireE36SRG7vQaha91GKI62TdGTjOZ+qzVeiQZzoJfKbV6cQyUm55T8TcIjbBj3K5Tt9zuKQ==
+X-Received: by 2002:a17:90a:290b:: with SMTP id g11mr7342173pjd.122.1562768172230;
+        Wed, 10 Jul 2019 07:16:12 -0700 (PDT)
 Received: from joelaf.cam.corp.google.com ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id l124sm2589249pgl.54.2019.07.10.07.15.53
+        by smtp.gmail.com with ESMTPSA id l124sm2589249pgl.54.2019.07.10.07.16.08
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 10 Jul 2019 07:15:56 -0700 (PDT)
+        Wed, 10 Jul 2019 07:16:11 -0700 (PDT)
 From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
@@ -77,10 +78,12 @@ Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Tamir Carmeli <carmeli.tamir@gmail.com>,
         Yonghong Song <yhs@fb.com>
-Subject: [PATCH RFC 0/4] Add support to directly attach BPF program to ftrace
-Date:   Wed, 10 Jul 2019 10:15:44 -0400
-Message-Id: <20190710141548.132193-1-joel@joelfernandes.org>
+Subject: [PATCH RFC 4/4] selftests/bpf: Add test for ftrace-based BPF attach/detach
+Date:   Wed, 10 Jul 2019 10:15:48 -0400
+Message-Id: <20190710141548.132193-5-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
+In-Reply-To: <20190710141548.132193-1-joel@joelfernandes.org>
+References: <20190710141548.132193-1-joel@joelfernandes.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -88,56 +91,110 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
-These patches make it possible to attach BPF programs directly to tracepoints
-using ftrace (/sys/kernel/debug/tracing) without needing the process doing the
-attach to be alive. This has the following benefits:
+Here we add support for testing the attach and detach of a BPF program
+to a tracepoint through tracefs.
 
-1. Simplified Security: In Android, we have finer-grained security controls to
-specific ftrace trace events using SELinux labels. We control precisely who is
-allowed to enable an ftrace event already. By adding a node to ftrace for
-attaching BPF programs, we can use the same mechanism to further control who is
-allowed to attach to a trace event.
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+---
+ .../raw_tp_writable_test_ftrace_run.c         | 89 +++++++++++++++++++
+ 1 file changed, 89 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_ftrace_run.c
 
-2. Process lifetime: In Android we are adding usecases where a tracing program
-needs to be attached all the time to a tracepoint, for the full life time of
-the system. Such as to gather statistics where there no need for a detach for
-the full system lifetime. With perf or bpf(2)'s BPF_RAW_TRACEPOINT_OPEN, this
-means keeping a process alive all the time.  However, in Android our BPF loader
-currently (for hardeneded security) involves just starting a process at boot
-time, doing the BPF program loading, and then pinning them to /sys/fs/bpf.  We
-don't keep this process alive all the time. It is more suitable to do a
-one-shot attach of the program using ftrace and not need to have a process
-alive all the time anymore for this. Such process also needs elevated
-privileges since tracepoint program loading currently requires CAP_SYS_ADMIN
-anyway so by design Android's bpfloader runs once at init and exits.
-
-This series add a new bpf file to /sys/kernel/debug/tracing/events/X/Y/bpf
-The following commands can be written into it:
-attach:<fd>     Attaches BPF prog fd to tracepoint
-detach:<fd>     Detaches BPF prog fd to tracepoint
-
-Reading the bpf file will show all the attached programs to the tracepoint.
-
-Joel Fernandes (Google) (4):
-Move bpf_raw_tracepoint functionality into bpf_trace.c
-trace/bpf: Add support for attach/detach of ftrace events to BPF
-lib/bpf: Add support for ftrace event attach and detach
-selftests/bpf: Add test for ftrace-based BPF attach/detach
-
-include/linux/bpf_trace.h                     |  16 ++
-include/linux/trace_events.h                  |   1 +
-kernel/bpf/syscall.c                          |  69 +-----
-kernel/trace/bpf_trace.c                      | 225 ++++++++++++++++++
-kernel/trace/trace.h                          |   1 +
-kernel/trace/trace_events.c                   |   8 +
-tools/lib/bpf/bpf.c                           |  53 +++++
-tools/lib/bpf/bpf.h                           |   4 +
-tools/lib/bpf/libbpf.map                      |   2 +
-.../raw_tp_writable_test_ftrace_run.c         |  89 +++++++
-10 files changed, 410 insertions(+), 58 deletions(-)
-create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_ftrace_run.c
-
---
+diff --git a/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_ftrace_run.c b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_ftrace_run.c
+new file mode 100644
+index 000000000000..7b42e3a69b71
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_ftrace_run.c
+@@ -0,0 +1,89 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++#include <linux/nbd.h>
++
++void test_raw_tp_writable_test_ftrace_run(void)
++{
++	__u32 duration = 0;
++	char error[4096];
++	int ret;
++
++	const struct bpf_insn trace_program[] = {
++		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_6, 0),
++		BPF_MOV64_IMM(BPF_REG_0, 42),
++		BPF_STX_MEM(BPF_W, BPF_REG_6, BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++
++	struct bpf_load_program_attr load_attr = {
++		.prog_type = BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE,
++		.license = "GPL v2",
++		.insns = trace_program,
++		.insns_cnt = sizeof(trace_program) / sizeof(struct bpf_insn),
++		.log_level = 2,
++	};
++
++	int bpf_fd = bpf_load_program_xattr(&load_attr, error, sizeof(error));
++
++	if (CHECK(bpf_fd < 0, "bpf_raw_tracepoint_writable loaded",
++		  "failed: %d errno %d\n", bpf_fd, errno))
++		return;
++
++	const struct bpf_insn skb_program[] = {
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++
++	struct bpf_load_program_attr skb_load_attr = {
++		.prog_type = BPF_PROG_TYPE_SOCKET_FILTER,
++		.license = "GPL v2",
++		.insns = skb_program,
++		.insns_cnt = sizeof(skb_program) / sizeof(struct bpf_insn),
++	};
++
++	int filter_fd =
++		bpf_load_program_xattr(&skb_load_attr, error, sizeof(error));
++	if (CHECK(filter_fd < 0, "test_program_loaded", "failed: %d errno %d\n",
++		  filter_fd, errno))
++		goto out_bpffd;
++
++	ret = bpf_raw_tracepoint_ftrace_attach("bpf_test_run",
++					       "bpf_test_finish",
++					       bpf_fd);
++	if (CHECK(ret < 0, "bpf_raw_tracepoint_ftrace_attach",
++		  "failed: %d errno %d\n", ret, errno))
++		goto out_filterfd;
++
++	char test_skb[128] = {
++		0,
++	};
++
++	__u32 prog_ret;
++	int err = bpf_prog_test_run(filter_fd, 1, test_skb, sizeof(test_skb), 0,
++				    0, &prog_ret, 0);
++	CHECK(err != 42, "test_run",
++	      "tracepoint did not modify return value\n");
++	CHECK(prog_ret != 0, "test_run_ret",
++	      "socket_filter did not return 0\n");
++
++	ret = bpf_raw_tracepoint_ftrace_detach("bpf_test_run",
++					       "bpf_test_finish",
++					       bpf_fd);
++	if (CHECK(ret < 0, "bpf_raw_tracepoint_ftrace_detach",
++		  "failed: %d errno %d\n", ret, errno))
++		goto out_filterfd;
++
++	err = bpf_prog_test_run(filter_fd, 1, test_skb, sizeof(test_skb), 0, 0,
++				&prog_ret, 0);
++	CHECK(err != 0, "test_run_notrace",
++	      "test_run failed with %d errno %d\n", err, errno);
++	CHECK(prog_ret != 0, "test_run_ret_notrace",
++	      "socket_filter did not return 0\n");
++
++out_filterfd:
++	close(filter_fd);
++out_bpffd:
++	close(bpf_fd);
++}
+-- 
 2.22.0.410.gd8fdbe21b5-goog
 
