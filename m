@@ -5,52 +5,53 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73C8CC74A42
-	for <bpf@archiver.kernel.org>; Thu, 11 Jul 2019 06:53:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5746C74A48
+	for <bpf@archiver.kernel.org>; Thu, 11 Jul 2019 06:53:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4CCDA21019
-	for <bpf@archiver.kernel.org>; Thu, 11 Jul 2019 06:53:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9F82E21019
+	for <bpf@archiver.kernel.org>; Thu, 11 Jul 2019 06:53:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="gANpk55h"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="qr/jY+h2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728125AbfGKGx2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 11 Jul 2019 02:53:28 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:3874 "EHLO
+        id S1728124AbfGKGx3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Jul 2019 02:53:29 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:59170 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728070AbfGKGx1 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 11 Jul 2019 02:53:27 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6B6oLQh023541
-        for <bpf@vger.kernel.org>; Wed, 10 Jul 2019 23:53:26 -0700
+        by vger.kernel.org with ESMTP id S1728057AbfGKGxZ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 11 Jul 2019 02:53:25 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6B6m6fB014857
+        for <bpf@vger.kernel.org>; Wed, 10 Jul 2019 23:53:24 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=xW6SG4k1Rs+ZlCTlxu2pIGDqZC+9KjbDSxg/KmhEDu4=;
- b=gANpk55hdoPbwrt4OxO3JQOtH/rUubUFIQcGQkGVr3clJ8wCsA/R5t7Y/mNUIPmkaMtl
- KY153iDcFyrz8SA9DPVIzYXuiRgwej4EqQUwzNYom452DfTtdG5tdsHmeALYykzOb+Tu
- J3aj4LeKiG0A7hu9sxc7hlShnOb/KwtQEn8= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2tnrbjh9m0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 10 Jul 2019 23:53:26 -0700
-Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Wed, 10 Jul 2019 23:53:25 -0700
+ content-type; s=facebook; bh=8g/ZKbn1t6UvC9fMywEcxIMTy7d4PMsi3D5oeRhKtIQ=;
+ b=qr/jY+h2RBAhKxvdwMTBo/tPf6UmqtCHAnI7EZ622asPg+reswPdzEWUtqhJ5vWt+bt/
+ 3FMOHrPchsaBlr/rUow/h928YWpTOqCRIksdJxTzKNEBP4VUdqh/PhhfszhFUjqlLO35
+ CgypNUNsCPlbs16h58Gy3E0PFHq+HYDMQt8= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2tnvutggx0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 10 Jul 2019 23:53:24 -0700
+Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 10 Jul 2019 23:53:22 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 26F1C861661; Wed, 10 Jul 2019 23:53:25 -0700 (PDT)
+        id 113ED861661; Wed, 10 Jul 2019 23:53:21 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>, <yhs@fb.com>
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
+        Andrii Nakryiko <andriin@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v2 bpf-next 3/3] selftests/bpf: use typedef'ed arrays as map values
-Date:   Wed, 10 Jul 2019 23:53:07 -0700
-Message-ID: <20190711065307.2425636-4-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 1/3] bpf: fix BTF verifier size resolution logic
+Date:   Wed, 10 Jul 2019 23:53:05 -0700
+Message-ID: <20190711065307.2425636-2-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190711065307.2425636-1-andriin@fb.com>
 References: <20190711065307.2425636-1-andriin@fb.com>
@@ -70,60 +71,95 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Convert few tests that couldn't use typedef'ed arrays due to kernel bug.
+BTF verifier has a size resolution bug which in some circumstances leads to
+invalid size resolution for, e.g., TYPEDEF modifier.  This happens if we have
+[1] PTR -> [2] TYPEDEF -> [3] ARRAY, in which case due to being in pointer
+context ARRAY size won't be resolved (because for pointer it doesn't matter, so
+it's a sink in pointer context), but it will be permanently remembered as zero
+for TYPEDEF and TYPEDEF will be marked as RESOLVED. Eventually ARRAY size will
+be resolved correctly, but TYPEDEF resolved_size won't be updated anymore.
+This, subsequently, will lead to erroneous map creation failure, if that
+TYPEDEF is specified as either key or value, as key_size/value_size won't
+correspond to resolved size of TYPEDEF (kernel will believe it's zero).
 
+Note, that if BTF was ordered as [1] ARRAY <- [2] TYPEDEF <- [3] PTR, this
+won't be a problem, as by the time we get to TYPEDEF, ARRAY's size is already
+calculated and stored.
+
+This bug manifests itself in rejecting BTF-defined maps that use array
+typedef as a value type:
+
+typedef int array_t[16];
+
+struct {
+    __uint(type, BPF_MAP_TYPE_ARRAY);
+    __type(value, array_t); /* i.e., array_t *value; */
+} test_map SEC(".maps");
+
+The fix consists on not relying on modifier's resolved_size and instead using
+modifier's resolved_id (type ID for "concrete" type to which modifier
+eventually resolves) and doing size determination for that resolved type. This
+allow to preserve existing "early DFS termination" logic for PTR or
+STRUCT_OR_ARRAY contexts, but still do correct size determination for modifier
+types.
+
+Fixes: eb3f595dab40 ("bpf: btf: Validate type reference")
+Cc: Martin KaFai Lau <kafai@fb.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/testing/selftests/bpf/progs/test_get_stack_rawtp.c     | 3 ++-
- tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c | 3 +--
- tools/testing/selftests/bpf/progs/test_stacktrace_map.c      | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ kernel/bpf/btf.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_get_stack_rawtp.c b/tools/testing/selftests/bpf/progs/test_get_stack_rawtp.c
-index d06b47a09097..33254b771384 100644
---- a/tools/testing/selftests/bpf/progs/test_get_stack_rawtp.c
-+++ b/tools/testing/selftests/bpf/progs/test_get_stack_rawtp.c
-@@ -47,11 +47,12 @@ struct {
-  * issue and avoid complicated C programming massaging.
-  * This is an acceptable workaround since there is one entry here.
-  */
-+typedef __u64 raw_stack_trace_t[2 * MAX_STACK_RAWTP];
- struct {
- 	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
- 	__uint(max_entries, 1);
- 	__type(key, __u32);
--	__u64 (*value)[2 * MAX_STACK_RAWTP];
-+	__type(value, raw_stack_trace_t);
- } rawdata_map SEC(".maps");
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index cad09858a5f2..22fe8b155e51 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -1073,11 +1073,18 @@ const struct btf_type *btf_type_id_size(const struct btf *btf,
+ 				 !btf_type_is_var(size_type)))
+ 			return NULL;
  
- SEC("tracepoint/raw_syscalls/sys_enter")
-diff --git a/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c b/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c
-index bbfc8337b6f0..f5638e26865d 100644
---- a/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c
-+++ b/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c
-@@ -36,8 +36,7 @@ struct {
- 	__uint(type, BPF_MAP_TYPE_ARRAY);
- 	__uint(max_entries, 128);
- 	__type(key, __u32);
--	/* there seems to be a bug in kernel not handling typedef properly */
--	struct bpf_stack_build_id (*value)[PERF_MAX_STACK_DEPTH];
-+	__type(value, stack_trace_t);
- } stack_amap SEC(".maps");
+-		size = btf->resolved_sizes[size_type_id];
+ 		size_type_id = btf->resolved_ids[size_type_id];
+ 		size_type = btf_type_by_id(btf, size_type_id);
+ 		if (btf_type_nosize_or_null(size_type))
+ 			return NULL;
++		else if (btf_type_has_size(size_type))
++			size = size_type->size;
++		else if (btf_type_is_array(size_type))
++			size = btf->resolved_sizes[size_type_id];
++		else if (btf_type_is_ptr(size_type))
++			size = sizeof(void *);
++		else
++			return NULL;
+ 	}
  
- /* taken from /sys/kernel/debug/tracing/events/random/urandom_read/format */
-diff --git a/tools/testing/selftests/bpf/progs/test_stacktrace_map.c b/tools/testing/selftests/bpf/progs/test_stacktrace_map.c
-index 803c15dc109d..fa0be3e10a10 100644
---- a/tools/testing/selftests/bpf/progs/test_stacktrace_map.c
-+++ b/tools/testing/selftests/bpf/progs/test_stacktrace_map.c
-@@ -35,7 +35,7 @@ struct {
- 	__uint(type, BPF_MAP_TYPE_ARRAY);
- 	__uint(max_entries, 16384);
- 	__type(key, __u32);
--	__u64 (*value)[PERF_MAX_STACK_DEPTH];
-+	__type(value, stack_trace_t);
- } stack_amap SEC(".maps");
+ 	*type_id = size_type_id;
+@@ -1602,7 +1609,6 @@ static int btf_modifier_resolve(struct btf_verifier_env *env,
+ 	const struct btf_type *next_type;
+ 	u32 next_type_id = t->type;
+ 	struct btf *btf = env->btf;
+-	u32 next_type_size = 0;
  
- /* taken from /sys/kernel/debug/tracing/events/sched/sched_switch/format */
+ 	next_type = btf_type_by_id(btf, next_type_id);
+ 	if (!next_type || btf_type_is_resolve_source_only(next_type)) {
+@@ -1620,7 +1626,7 @@ static int btf_modifier_resolve(struct btf_verifier_env *env,
+ 	 * save us a few type-following when we use it later (e.g. in
+ 	 * pretty print).
+ 	 */
+-	if (!btf_type_id_size(btf, &next_type_id, &next_type_size)) {
++	if (!btf_type_id_size(btf, &next_type_id, NULL)) {
+ 		if (env_type_is_resolved(env, next_type_id))
+ 			next_type = btf_type_id_resolve(btf, &next_type_id);
+ 
+@@ -1633,7 +1639,7 @@ static int btf_modifier_resolve(struct btf_verifier_env *env,
+ 		}
+ 	}
+ 
+-	env_stack_pop_resolved(env, next_type_id, next_type_size);
++	env_stack_pop_resolved(env, next_type_id, 0);
+ 
+ 	return 0;
+ }
 -- 
 2.17.1
 
