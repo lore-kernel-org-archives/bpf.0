@@ -2,206 +2,200 @@ Return-Path: <SRS0=pj2O=VI=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA554C74A35
-	for <bpf@archiver.kernel.org>; Thu, 11 Jul 2019 14:31:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC040C74A35
+	for <bpf@archiver.kernel.org>; Thu, 11 Jul 2019 14:43:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B932821019
-	for <bpf@archiver.kernel.org>; Thu, 11 Jul 2019 14:31:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8FB3F20872
+	for <bpf@archiver.kernel.org>; Thu, 11 Jul 2019 14:43:41 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RvsrKGQe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728776AbfGKObM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 11 Jul 2019 10:31:12 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52268 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728505AbfGKObM (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 11 Jul 2019 10:31:12 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6BET2tl119481
-        for <bpf@vger.kernel.org>; Thu, 11 Jul 2019 10:31:10 -0400
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2tp54cddm4-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 11 Jul 2019 10:30:42 -0400
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <bpf@vger.kernel.org> from <iii@linux.ibm.com>;
-        Thu, 11 Jul 2019 15:30:38 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 11 Jul 2019 15:30:34 +0100
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6BEUXRJ43909374
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 11 Jul 2019 14:30:33 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EE9454203F;
-        Thu, 11 Jul 2019 14:30:32 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A41D242045;
-        Thu, 11 Jul 2019 14:30:32 +0000 (GMT)
-Received: from white.boeblingen.de.ibm.com (unknown [9.152.97.237])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 11 Jul 2019 14:30:32 +0000 (GMT)
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     bpf@vger.kernel.org, netdev@vger.kernel.org
-Cc:     ys114321@gmail.com, daniel@iogearbox.net, sdf@fomichev.me,
-        davem@davemloft.net, ast@kernel.org,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH v4 bpf-next 3/4] selftests/bpf: make PT_REGS_* work in userspace
-Date:   Thu, 11 Jul 2019 16:29:29 +0200
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190711142930.68809-1-iii@linux.ibm.com>
-References: <20190711142930.68809-1-iii@linux.ibm.com>
+        id S1728543AbfGKOnl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Jul 2019 10:43:41 -0400
+Received: from mail-yw1-f68.google.com ([209.85.161.68]:39403 "EHLO
+        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728471AbfGKOnl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 11 Jul 2019 10:43:41 -0400
+Received: by mail-yw1-f68.google.com with SMTP id x74so3898434ywx.6;
+        Thu, 11 Jul 2019 07:43:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=vmOGsoHiM6XG/FkzWHR9Ptf7rpGEwowGLGGHPi+MFsE=;
+        b=RvsrKGQe/7jfHw8K7xiEdsTUT8bBicNHtbkmlf24QpA/mMlhxLyhxQzmcXwOUdkaC5
+         6MaTcaVvSzZuVeiSxQKlfZp7haBTum0QA2r7Lmry4iQzs3e7D1qEeMSx5P4M03ATijW4
+         PkJhsxICIVvyxfqkj8FJOXJQ0RhRpPmHwAUrfOigfd0qcBu4eafWOmXeEj7dyGsmbaIJ
+         9x595aooLQoSF0KpWc4nfbABIJhCkzsvDld2BrIZcINq3PkmYA7hTd9FlYsho49BO+4k
+         so/vqc0BmjIwVWb6ZAJTNu1ZMHpXD3m2I2a09WvdQDgIQbP+szMKJ4xX062d8EEB+E2q
+         JmQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=vmOGsoHiM6XG/FkzWHR9Ptf7rpGEwowGLGGHPi+MFsE=;
+        b=mE8X9KwyLRDxL4YbzwA4UCUSuVx/UK+AZChmF3Y3tHh+NpYRJ0jK+XD5rpuwPkMXyd
+         r+o6/+kDwp4g/ycMrS/Heg1B51vPqwG6ncY/8wH35SkxcLZfgP5dUvPmZrsaWlCUkUMx
+         mkpLTX8uaZXzlRFApJfq2Uj9p2Arx6ay3hUnGHmY5SZviTa/YChtKQ+PJATM6gcSP8vN
+         /lKMr87yIlx9iISFtdXVFP/cXq5XL72o432kpMP/UFfp50g/m5V9vDdj5P3SxyQPGcgJ
+         DAggjBtnaZTpulqSAX/8fso9WR54b89DaO3QhxjNc4KVPSGNh/RCEBUIPc03+uhWyFh4
+         O4Lg==
+X-Gm-Message-State: APjAAAVbDVb243wGhYpHRXIxHOfe5EoMCARxLYEOnGF8puFkueSwnuJm
+        cMrFvImEyvA50Bb7wTxKgHJvRei26PbOoO++yGA=
+X-Google-Smtp-Source: APXvYqxYeX4hW5tYT/9KOKvI3xx9itOx+7MawBSLTgvaZ6T8c+c/LfMSHizMD8KUu6fS3zd1zVuVcLLamIkyb5uRe5Q=
+X-Received: by 2002:a05:620a:16a6:: with SMTP id s6mr2321074qkj.39.1562856219891;
+ Thu, 11 Jul 2019 07:43:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19071114-0008-0000-0000-000002FC7509
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19071114-0009-0000-0000-00002269DDA1
-Message-Id: <20190711142930.68809-4-iii@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-11_03:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=8 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907110163
+References: <20190711010844.1285018-1-andriin@fb.com> <CAGGp+cETuvWUwET=6Mq5sWTJhi5+Rs2bw8xNP2NYZXAAuc6-Og@mail.gmail.com>
+In-Reply-To: <CAGGp+cETuvWUwET=6Mq5sWTJhi5+Rs2bw8xNP2NYZXAAuc6-Og@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 11 Jul 2019 07:43:28 -0700
+Message-ID: <CAEf4Bzb1kE_jCbyye07-pVMT=914_Nrdh+R=QXA2qMssYP5brA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: remove logic duplication in test_verifier.c
+To:     Krzesimir Nowak <krzesimir@kinvolk.io>
+Cc:     Andrii Nakryiko <andriin@fb.com>, Kernel Team <kernel-team@fb.com>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Right now, on certain architectures, these macros are usable only with
-kernel headers. This patch makes it possible to use them with userspace
-headers and, as a consequence, not only in BPF samples, but also in BPF
-selftests.
+On Thu, Jul 11, 2019 at 5:13 AM Krzesimir Nowak <krzesimir@kinvolk.io> wrot=
+e:
+>
+> On Thu, Jul 11, 2019 at 3:08 AM Andrii Nakryiko <andriin@fb.com> wrote:
+> >
+> > test_verifier tests can specify single- and multi-runs tests. Internall=
+y
+> > logic of handling them is duplicated. Get rid of it by making single ru=
+n
+> > retval specification to be a first retvals spec.
+> >
+> > Cc: Krzesimir Nowak <krzesimir@kinvolk.io>
+> > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+>
+> Looks good, one nit below.
+>
+> Acked-by: Krzesimir Nowak <krzesimir@kinvolk.io>
+>
+> > ---
+> >  tools/testing/selftests/bpf/test_verifier.c | 37 ++++++++++-----------
+> >  1 file changed, 18 insertions(+), 19 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testin=
+g/selftests/bpf/test_verifier.c
+> > index b0773291012a..120ecdf4a7db 100644
+> > --- a/tools/testing/selftests/bpf/test_verifier.c
+> > +++ b/tools/testing/selftests/bpf/test_verifier.c
+> > @@ -86,7 +86,7 @@ struct bpf_test {
+> >         int fixup_sk_storage_map[MAX_FIXUPS];
+> >         const char *errstr;
+> >         const char *errstr_unpriv;
+> > -       uint32_t retval, retval_unpriv, insn_processed;
+> > +       uint32_t insn_processed;
+> >         int prog_len;
+> >         enum {
+> >                 UNDEF,
+> > @@ -95,16 +95,24 @@ struct bpf_test {
+> >         } result, result_unpriv;
+> >         enum bpf_prog_type prog_type;
+> >         uint8_t flags;
+> > -       __u8 data[TEST_DATA_LEN];
+> >         void (*fill_helper)(struct bpf_test *self);
+> >         uint8_t runs;
+> > -       struct {
+> > -               uint32_t retval, retval_unpriv;
+> > -               union {
+> > -                       __u8 data[TEST_DATA_LEN];
+> > -                       __u64 data64[TEST_DATA_LEN / 8];
+> > +       union {
+> > +               struct {
+>
+> Maybe consider moving the struct definition outside to further the
+> removal of the duplication?
 
-On s390, provide the forward declaration of struct pt_regs and cast it
-to user_pt_regs in PT_REGS_* macros. This is necessary, because instead
-of the full struct pt_regs, s390 exposes only its first member
-user_pt_regs to userspace, and bpf_helpers.h is used with both userspace
-(in selftests) and kernel (in samples) headers. It was added in commit
-466698e654e8 ("s390/bpf: correct broken uapi for
-BPF_PROG_TYPE_PERF_EVENT program type").
+Can't do that because then retval/retval_unpriv/data won't be
+accessible as a normal field of struct bpf_test. It has to be in
+anonymous structs/unions, unfortunately.
 
-Ditto on arm64.
+I tried the following, but that also didn't work:
 
-On x86, provide userspace versions of PT_REGS_* macros. Unlike s390 and
-arm64, x86 provides struct pt_regs to both userspace and kernel, however,
-with different member names.
+union {
+    struct bpf_test_retval {
+        uint32_t retval, retval_unpriv;
+        union {
+            __u8 data[TEST_DATA_LEN];
+            __u64 data64[TEST_DATA_LEN / 8];
+        };
+    };
+    struct bpf_test_retval retvals[MAX_TEST_RUNS];
+};
 
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
----
- tools/testing/selftests/bpf/bpf_helpers.h | 75 +++++++++++++++++------
- 1 file changed, 55 insertions(+), 20 deletions(-)
+This also made retval/retval_unpriv to not behave as normal fields of
+struct bpf_test.
 
-diff --git a/tools/testing/selftests/bpf/bpf_helpers.h b/tools/testing/selftests/bpf/bpf_helpers.h
-index 73071a94769a..27090d94afb6 100644
---- a/tools/testing/selftests/bpf/bpf_helpers.h
-+++ b/tools/testing/selftests/bpf/bpf_helpers.h
-@@ -358,6 +358,7 @@ static int (*bpf_skb_adjust_room)(void *ctx, __s32 len_diff, __u32 mode,
- 
- #if defined(bpf_target_x86)
- 
-+#ifdef __KERNEL__
- #define PT_REGS_PARM1(x) ((x)->di)
- #define PT_REGS_PARM2(x) ((x)->si)
- #define PT_REGS_PARM3(x) ((x)->dx)
-@@ -368,19 +369,49 @@ static int (*bpf_skb_adjust_room)(void *ctx, __s32 len_diff, __u32 mode,
- #define PT_REGS_RC(x) ((x)->ax)
- #define PT_REGS_SP(x) ((x)->sp)
- #define PT_REGS_IP(x) ((x)->ip)
-+#else
-+#ifdef __i386__
-+/* i386 kernel is built with -mregparm=3 */
-+#define PT_REGS_PARM1(x) ((x)->eax)
-+#define PT_REGS_PARM2(x) ((x)->edx)
-+#define PT_REGS_PARM3(x) ((x)->ecx)
-+#define PT_REGS_PARM4(x) 0
-+#define PT_REGS_PARM5(x) 0
-+#define PT_REGS_RET(x) ((x)->esp)
-+#define PT_REGS_FP(x) ((x)->ebp)
-+#define PT_REGS_RC(x) ((x)->eax)
-+#define PT_REGS_SP(x) ((x)->esp)
-+#define PT_REGS_IP(x) ((x)->eip)
-+#else
-+#define PT_REGS_PARM1(x) ((x)->rdi)
-+#define PT_REGS_PARM2(x) ((x)->rsi)
-+#define PT_REGS_PARM3(x) ((x)->rdx)
-+#define PT_REGS_PARM4(x) ((x)->rcx)
-+#define PT_REGS_PARM5(x) ((x)->r8)
-+#define PT_REGS_RET(x) ((x)->rsp)
-+#define PT_REGS_FP(x) ((x)->rbp)
-+#define PT_REGS_RC(x) ((x)->rax)
-+#define PT_REGS_SP(x) ((x)->rsp)
-+#define PT_REGS_IP(x) ((x)->rip)
-+#endif
-+#endif
- 
- #elif defined(bpf_target_s390)
- 
--#define PT_REGS_PARM1(x) ((x)->gprs[2])
--#define PT_REGS_PARM2(x) ((x)->gprs[3])
--#define PT_REGS_PARM3(x) ((x)->gprs[4])
--#define PT_REGS_PARM4(x) ((x)->gprs[5])
--#define PT_REGS_PARM5(x) ((x)->gprs[6])
--#define PT_REGS_RET(x) ((x)->gprs[14])
--#define PT_REGS_FP(x) ((x)->gprs[11]) /* Works only with CONFIG_FRAME_POINTER */
--#define PT_REGS_RC(x) ((x)->gprs[2])
--#define PT_REGS_SP(x) ((x)->gprs[15])
--#define PT_REGS_IP(x) ((x)->psw.addr)
-+/* s390 provides user_pt_regs instead of struct pt_regs to userspace */
-+struct pt_regs;
-+#define PT_REGS_S390 const volatile user_pt_regs
-+#define PT_REGS_PARM1(x) (((PT_REGS_S390 *)(x))->gprs[2])
-+#define PT_REGS_PARM2(x) (((PT_REGS_S390 *)(x))->gprs[3])
-+#define PT_REGS_PARM3(x) (((PT_REGS_S390 *)(x))->gprs[4])
-+#define PT_REGS_PARM4(x) (((PT_REGS_S390 *)(x))->gprs[5])
-+#define PT_REGS_PARM5(x) (((PT_REGS_S390 *)(x))->gprs[6])
-+#define PT_REGS_RET(x) (((PT_REGS_S390 *)(x))->gprs[14])
-+/* Works only with CONFIG_FRAME_POINTER */
-+#define PT_REGS_FP(x) (((PT_REGS_S390 *)(x))->gprs[11])
-+#define PT_REGS_RC(x) (((PT_REGS_S390 *)(x))->gprs[2])
-+#define PT_REGS_SP(x) (((PT_REGS_S390 *)(x))->gprs[15])
-+#define PT_REGS_IP(x) (((PT_REGS_S390 *)(x))->psw.addr)
- 
- #elif defined(bpf_target_arm)
- 
-@@ -397,16 +428,20 @@ static int (*bpf_skb_adjust_room)(void *ctx, __s32 len_diff, __u32 mode,
- 
- #elif defined(bpf_target_arm64)
- 
--#define PT_REGS_PARM1(x) ((x)->regs[0])
--#define PT_REGS_PARM2(x) ((x)->regs[1])
--#define PT_REGS_PARM3(x) ((x)->regs[2])
--#define PT_REGS_PARM4(x) ((x)->regs[3])
--#define PT_REGS_PARM5(x) ((x)->regs[4])
--#define PT_REGS_RET(x) ((x)->regs[30])
--#define PT_REGS_FP(x) ((x)->regs[29]) /* Works only with CONFIG_FRAME_POINTER */
--#define PT_REGS_RC(x) ((x)->regs[0])
--#define PT_REGS_SP(x) ((x)->sp)
--#define PT_REGS_IP(x) ((x)->pc)
-+/* arm64 provides struct user_pt_regs instead of struct pt_regs to userspace */
-+struct pt_regs;
-+#define PT_REGS_ARM64 const volatile struct user_pt_regs
-+#define PT_REGS_PARM1(x) (((PT_REGS_ARM64 *)(x))->regs[0])
-+#define PT_REGS_PARM2(x) (((PT_REGS_ARM64 *)(x))->regs[1])
-+#define PT_REGS_PARM3(x) (((PT_REGS_ARM64 *)(x))->regs[2])
-+#define PT_REGS_PARM4(x) (((PT_REGS_ARM64 *)(x))->regs[3])
-+#define PT_REGS_PARM5(x) (((PT_REGS_ARM64 *)(x))->regs[4])
-+#define PT_REGS_RET(x) (((PT_REGS_ARM64 *)(x))->regs[30])
-+/* Works only with CONFIG_FRAME_POINTER */
-+#define PT_REGS_FP(x) (((PT_REGS_ARM64 *)(x))->regs[29])
-+#define PT_REGS_RC(x) (((PT_REGS_ARM64 *)(x))->regs[0])
-+#define PT_REGS_SP(x) (((PT_REGS_ARM64 *)(x))->sp)
-+#define PT_REGS_IP(x) (((PT_REGS_ARM64 *)(x))->pc)
- 
- #elif defined(bpf_target_mips)
- 
--- 
-2.21.0
 
+>
+> > +                       uint32_t retval, retval_unpriv;
+> > +                       union {
+> > +                               __u8 data[TEST_DATA_LEN];
+> > +                               __u64 data64[TEST_DATA_LEN / 8];
+> > +                       };
+> >                 };
+> > -       } retvals[MAX_TEST_RUNS];
+> > +               struct {
+> > +                       uint32_t retval, retval_unpriv;
+> > +                       union {
+> > +                               __u8 data[TEST_DATA_LEN];
+> > +                               __u64 data64[TEST_DATA_LEN / 8];
+> > +                       };
+> > +               } retvals[MAX_TEST_RUNS];
+> > +       };
+> >         enum bpf_attach_type expected_attach_type;
+> >  };
+> >
+> > @@ -949,17 +957,8 @@ static void do_test_single(struct bpf_test *test, =
+bool unpriv,
+> >                 uint32_t expected_val;
+> >                 int i;
+> >
+> > -               if (!test->runs) {
+> > -                       expected_val =3D unpriv && test->retval_unpriv =
+?
+> > -                               test->retval_unpriv : test->retval;
+> > -
+> > -                       err =3D do_prog_test_run(fd_prog, unpriv, expec=
+ted_val,
+> > -                                              test->data, sizeof(test-=
+>data));
+> > -                       if (err)
+> > -                               run_errs++;
+> > -                       else
+> > -                               run_successes++;
+> > -               }
+> > +               if (!test->runs)
+> > +                       test->runs =3D 1;
+> >
+> >                 for (i =3D 0; i < test->runs; i++) {
+> >                         if (unpriv && test->retvals[i].retval_unpriv)
+> > --
+> > 2.17.1
+> >
+>
+>
+> --
+> Kinvolk GmbH | Adalbertstr.6a, 10999 Berlin | tel: +491755589364
+> Gesch=C3=A4ftsf=C3=BChrer/Directors: Alban Crequy, Chris K=C3=BChl, Iago =
+L=C3=B3pez Galeiras
+> Registergericht/Court of registration: Amtsgericht Charlottenburg
+> Registernummer/Registration number: HRB 171414 B
+> Ust-ID-Nummer/VAT ID number: DE302207000
