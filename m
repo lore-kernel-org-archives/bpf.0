@@ -2,94 +2,138 @@ Return-Path: <SRS0=pj2O=VI=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C332C74A35
-	for <bpf@archiver.kernel.org>; Thu, 11 Jul 2019 15:01:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1005C74A5B
+	for <bpf@archiver.kernel.org>; Thu, 11 Jul 2019 16:35:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0B7BE2166E
-	for <bpf@archiver.kernel.org>; Thu, 11 Jul 2019 15:01:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A273021019
+	for <bpf@archiver.kernel.org>; Thu, 11 Jul 2019 16:35:44 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KQVPhldP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728736AbfGKPBA convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 11 Jul 2019 11:01:00 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:65042 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728725AbfGKPBA (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 11 Jul 2019 11:01:00 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6BExOvP033996
-        for <bpf@vger.kernel.org>; Thu, 11 Jul 2019 11:00:59 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2tp6s41jt7-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 11 Jul 2019 11:00:54 -0400
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <bpf@vger.kernel.org> from <iii@linux.ibm.com>;
-        Thu, 11 Jul 2019 16:00:42 +0100
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 11 Jul 2019 16:00:38 +0100
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6BF0bkp12648538
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 11 Jul 2019 15:00:38 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D23A64204C;
-        Thu, 11 Jul 2019 15:00:37 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B08C44203F;
-        Thu, 11 Jul 2019 15:00:37 +0000 (GMT)
-Received: from dyn-9-152-97-237.boeblingen.de.ibm.com (unknown [9.152.97.237])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 11 Jul 2019 15:00:37 +0000 (GMT)
+        id S1728178AbfGKQfo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Jul 2019 12:35:44 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:38667 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726213AbfGKQfo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 11 Jul 2019 12:35:44 -0400
+Received: by mail-pl1-f194.google.com with SMTP id az7so3306483plb.5;
+        Thu, 11 Jul 2019 09:35:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=YBqG9gCkqUUFAchyuwWcht3NDQxJF/qNbfrZoS76VLA=;
+        b=KQVPhldPMgmsPjvMN632xtT4H77DmgalQUcQWVxqhEICVRhKWdsxt0GiOFy5FePKAd
+         E8GzJp6j/ek9yugGodI2iKgTlwhRKESwNuWzi0WibzaQuNXhH1c92+jk8hKewz54jFXP
+         Wr7sf6g5ZaEG4qTGtP1uwDoulNBYpfn5uxEQKFNxdkPyqCmYidl/cVjef2GLBE2bL1Ny
+         jetF6smCJm4tY7Cw85i4qvDv/sIvFp8cdQ2FeoAhR0pcqvb0ia57HFMPPq1E8VrlF9pP
+         fYNI8FoP0ZZ3Fqa11DDEjAgTKDxMUEXLbdIaDheiExI3ET3NmVDEZ3g89VOZK0yF66kI
+         pCmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=YBqG9gCkqUUFAchyuwWcht3NDQxJF/qNbfrZoS76VLA=;
+        b=HEBh/utmSMixrTuQHcETeR6cgKsdEzC6GGQK1urUw8gzr9VG26Udr3D+Ibjw69lS66
+         obK1LzCJa5SCldTjalw61XvmsFbX8SSe/Q4hia3wwb5P7FSVoN1GmAH5VzG2U3XzzkK2
+         or4f3veay43PP3qa70OuEA0sPbX06KT6jviMBfttK6Eza+HWRdUvN9K2ZShIFbpktGMb
+         00y9Svnwi53n2ppzipgf+Kbdc+zWYWSMvpb1hUc5Vmyoy4aangCUX88ncPJL92SpHcDG
+         +bMX08Z8mlmLq3SOObPt3vRBwQCwAJpvzk14gXGSvhw/NWkY+jjqfGvQB0561fvN7K43
+         8P/g==
+X-Gm-Message-State: APjAAAW0BERyEPwHDiw83cEVQydTARwScx+uZN+04TbWngBvckybCjTh
+        BhuMkgB4Fu2Thq8noM9ua3c=
+X-Google-Smtp-Source: APXvYqwBiVITXHOJNkNEbl6yFGGnU+hsw+io8o+ksnQqUmRtQQPb629IdKDD6GIF2HrT+D+AdT2FHA==
+X-Received: by 2002:a17:902:7088:: with SMTP id z8mr5732256plk.125.1562862943524;
+        Thu, 11 Jul 2019 09:35:43 -0700 (PDT)
+Received: from localhost ([184.63.162.180])
+        by smtp.gmail.com with ESMTPSA id r15sm6998971pfh.121.2019.07.11.09.35.41
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 11 Jul 2019 09:35:42 -0700 (PDT)
+Date:   Thu, 11 Jul 2019 09:35:36 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Jakub Kicinski <jakub.kicinski@netronome.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
+        edumazet@google.com, bpf@vger.kernel.org
+Message-ID: <5d2765584f043_698f2aaeaaf925bcb0@john-XPS-13-9370.notmuch>
+In-Reply-To: <20190710123417.2157a459@cakuba.netronome.com>
+References: <156261310104.31108.4569969631798277807.stgit@ubuntu3-kvm1>
+ <156261324561.31108.14410711674221391677.stgit@ubuntu3-kvm1>
+ <20190709194525.0d4c15a6@cakuba.netronome.com>
+ <5d255dececd33_1b7a2aec940d65b45@john-XPS-13-9370.notmuch>
+ <20190710123417.2157a459@cakuba.netronome.com>
+Subject: Re: [bpf PATCH v2 2/6] bpf: tls fix transition through disconnect
+ with close
+Mime-Version: 1.0
 Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 11.5 \(3445.9.1\))
-Subject: Re: [PATCH v3 bpf] selftests/bpf: do not ignore clang failures
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-In-Reply-To: <CAEf4Bzb6mY-F-wUNNimS+hMSRbJetTKXNcGDQbsJXhXDywA+tg@mail.gmail.com>
-Date:   Thu, 11 Jul 2019 17:00:37 +0200
-Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <liu.song.a23@gmail.com>
-Content-Transfer-Encoding: 8BIT
-References: <20190711091249.59865-1-iii@linux.ibm.com>
- <CAEf4Bzb6mY-F-wUNNimS+hMSRbJetTKXNcGDQbsJXhXDywA+tg@mail.gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-X-Mailer: Apple Mail (2.3445.9.1)
-X-TM-AS-GCONF: 00
-x-cbid: 19071115-0016-0000-0000-00000291CE55
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19071115-0017-0000-0000-000032EF8E88
-Message-Id: <51821F5F-A70F-485B-B6E7-CAE6D49B6D1D@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-11_03:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=3 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=889 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907110170
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-> Am 11.07.2019 um 16:55 schrieb Andrii Nakryiko <andrii.nakryiko@gmail.com>:
+Jakub Kicinski wrote:
+> On Tue, 09 Jul 2019 20:39:24 -0700, John Fastabend wrote:
+> > Jakub Kicinski wrote:
+> > > On Mon, 08 Jul 2019 19:14:05 +0000, John Fastabend wrote:  
+> > > > @@ -287,6 +313,27 @@ static void tls_sk_proto_cleanup(struct sock *sk,
+> > > >  #endif
+> > > >  }
+> > > >  
+> > > > +static void tls_sk_proto_unhash(struct sock *sk)
+> > > > +{
+> > > > +	struct inet_connection_sock *icsk = inet_csk(sk);
+> > > > +	long timeo = sock_sndtimeo(sk, 0);
+> > > > +	struct tls_context *ctx;
+> > > > +
+> > > > +	if (unlikely(!icsk->icsk_ulp_data)) {  
+> > > 
+> > > Is this for when sockmap is stacked on top of TLS and TLS got removed
+> > > without letting sockmap know?  
+> > 
+> > Right its a pattern I used on the sockmap side and put here. But
+> > I dropped the patch to let sockmap stack on top of TLS because
+> > it was more than a fix IMO. We could probably drop this check on
+> > the other hand its harmless.
 > 
-> On Thu, Jul 11, 2019 at 2:14 AM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
->> 
->> 
->> In addition, pull Kbuild.include in order to get .DELETE_ON_ERROR target,
+> I feel like this code is pretty complex I struggle to follow all the
+> paths, so perhaps it'd be better to drop stuff that's not necessary 
+> to have a clearer picture.
 > 
-> In your original patch you explicitly declared .DELETE_ON_ERROR, but
-> in this one you just include Kbuild.include.
-> Is it enough to just include that file to get desired behavior or your
-> forgot to add .DELETE_ON_ERROR?
 
-It’s enough to just include Kbuild.include. I grepped the source tree
-and found that no one else declares .DELETE_ON_ERROR explicitly, so I've
-decided to avoid doing this as well.
+Sure I can drop it and add it later when its necessary.
+
+> > > > +		if (sk->sk_prot->unhash)
+> > > > +			sk->sk_prot->unhash(sk);
+> > > > +	}
+> > > > +
+> > > > +	ctx = tls_get_ctx(sk);
+> > > > +	if (ctx->tx_conf == TLS_SW || ctx->rx_conf == TLS_SW)
+> > > > +		tls_sk_proto_cleanup(sk, ctx, timeo);
+> > > > +	icsk->icsk_ulp_data = NULL;  
+> > > 
+> > > I think close only starts checking if ctx is NULL in patch 6.
+> > > Looks like some chunks of ctx checking/clearing got spread to
+> > > patch 1 and some to patch 6.  
+> > 
+> > Yeah, I thought the patches were easier to read this way but
+> > maybe not. Could add something in the commit log.
+> 
+> Ack! Let me try to get a full grip of patches 2 and 6 and come back 
+> to this.
+> 
+> > > > +	tls_ctx_free_wq(ctx);
+> > > > +
+> > > > +	if (ctx->unhash)
+> > > > +		ctx->unhash(sk);
+> > > > +}
+> > > > +
+> > > >  static void tls_sk_proto_close(struct sock *sk, long timeout)
+> > > >  {
+> > > >  	struct tls_context *ctx = tls_get_ctx(sk);  
