@@ -2,114 +2,124 @@ Return-Path: <SRS0=pj2O=VI=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98BFCC74A5B
-	for <bpf@archiver.kernel.org>; Thu, 11 Jul 2019 16:40:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6A41C74A5B
+	for <bpf@archiver.kernel.org>; Thu, 11 Jul 2019 16:43:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6DADD20872
-	for <bpf@archiver.kernel.org>; Thu, 11 Jul 2019 16:40:02 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fa5gSGGs"
+	by mail.kernel.org (Postfix) with ESMTP id 90C7E20645
+	for <bpf@archiver.kernel.org>; Thu, 11 Jul 2019 16:43:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728434AbfGKQkB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 11 Jul 2019 12:40:01 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:43479 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728409AbfGKQkB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 11 Jul 2019 12:40:01 -0400
-Received: by mail-pl1-f194.google.com with SMTP id cl9so3294706plb.10;
-        Thu, 11 Jul 2019 09:40:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=KOT/1So1IFYA/aJw1dMOvXq1f7H5g9e04BW/pi2Jh8E=;
-        b=Fa5gSGGs1Osr80BVmBQ6ocvBjusK81e57cIaTdSEVg9FJo5WgSWo9uvCeWoMPT/ZHo
-         A9Q7l3+5NsabASmh/dDjkd4I/sFmnb29d+XtfFN6hbWUcdkIQ2nydraebuev0q5Svhpq
-         tzy3oSTS1F4510MERzDWrETYO7yUvfcFDWV/Y3NalUMbLAQHHFiLYvqfN3tfaJfEtXXS
-         1ztHTqRHfe1gVgUtPVg4RuB+V7+0v54YajGk46yic8yzieUG6+SyESWnyQc8ITaTHG90
-         Ea5YYbIYa+L6pOfpvvC3WmKyoBLkoAA4PE07bTmTvrIeijflXVA0Akdz/eJBGt+xL4af
-         b3cQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=KOT/1So1IFYA/aJw1dMOvXq1f7H5g9e04BW/pi2Jh8E=;
-        b=Qkkm2fV9uqkTPPsIUEnU1apzfXwsXG804VN6ZZS5gP+VtsAP/9Z0LAPtXz4OVzWzds
-         mQO8I3uCzzumHAqoXeyhVAuVd8uyIko0scxQaNn5A1xRSzx7Acd5Jd2Hse9y+qAlZpiC
-         PrZsTJEFCg9axGMVeEdUua98VFffUs93HjXKA7PQQBEvI5bzDHMl+XilxuAZs5pM81+l
-         TYVgRBW5GAHUteqI2V4SwF+nTt40zAVoMGyBZ+sQ/RufatGNY/2y5/tjkS1ItC1JjtaN
-         z4JbTmR7h5yJOvoRmm7zFVyUDgV75zh1Q1J2fA+mwYmZELYxKYaQ25ZFjIryGI6e9AhS
-         8Wmg==
-X-Gm-Message-State: APjAAAUFpT46Y4QDZc8utjO018rmHpC3s5pfD1jvOYjsoEGDaMK8vQNf
-        iit3h4XJJh+ltFFbRJ/4kAU=
-X-Google-Smtp-Source: APXvYqyetvxk6G2ETT3z/iLwMx1IwdmMdlkREjAcHgkBqVMfF5yBVm3p9C3gUMcpCwsHDYPkXuuTkQ==
-X-Received: by 2002:a17:902:f213:: with SMTP id gn19mr5867853plb.35.1562863201082;
-        Thu, 11 Jul 2019 09:40:01 -0700 (PDT)
-Received: from localhost ([184.63.162.180])
-        by smtp.gmail.com with ESMTPSA id 137sm7995206pfz.112.2019.07.11.09.39.58
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 11 Jul 2019 09:40:00 -0700 (PDT)
-Date:   Thu, 11 Jul 2019 09:39:53 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Jakub Kicinski <jakub.kicinski@netronome.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
-        edumazet@google.com, bpf@vger.kernel.org
-Message-ID: <5d276659122cc_698f2aaeaaf925bc3e@john-XPS-13-9370.notmuch>
-In-Reply-To: <20190710123543.04846e00@cakuba.netronome.com>
-References: <156261310104.31108.4569969631798277807.stgit@ubuntu3-kvm1>
- <156261331866.31108.6405316261950259075.stgit@ubuntu3-kvm1>
- <20190709193846.62f0a2c7@cakuba.netronome.com>
- <5d255ca6e5b0d_1b7a2aec940d65b4f6@john-XPS-13-9370.notmuch>
- <20190710123543.04846e00@cakuba.netronome.com>
-Subject: Re: [bpf PATCH v2 6/6] bpf: sockmap/tls, close can race with map free
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        id S1728405AbfGKQn1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Jul 2019 12:43:27 -0400
+Received: from gateway36.websitewelcome.com ([192.185.187.5]:40372 "EHLO
+        gateway36.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728294AbfGKQn1 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 11 Jul 2019 12:43:27 -0400
+X-Greylist: delayed 1252 seconds by postgrey-1.27 at vger.kernel.org; Thu, 11 Jul 2019 12:43:27 EDT
+Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
+        by gateway36.websitewelcome.com (Postfix) with ESMTP id 6CE17400C5A3D
+        for <bpf@vger.kernel.org>; Thu, 11 Jul 2019 10:45:36 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id lbq7h04huYTGMlbq7hrVux; Thu, 11 Jul 2019 11:22:35 -0500
+X-Authority-Reason: nr=8
+Received: from cablelink-187-160-61-213.pcs.intercable.net ([187.160.61.213]:24662 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1hlbq6-002Yit-1g; Thu, 11 Jul 2019 11:22:34 -0500
+Date:   Thu, 11 Jul 2019 11:22:33 -0500
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Lawrence Brakmo <brakmo@fb.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH][bpf-next] bpf: verifier: avoid fall-through warnings
+Message-ID: <20190711162233.GA6977@embeddedor>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.160.61.213
+X-Source-L: No
+X-Exim-ID: 1hlbq6-002Yit-1g
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: cablelink-187-160-61-213.pcs.intercable.net (embeddedor) [187.160.61.213]:24662
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 14
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Jakub Kicinski wrote:
-> On Tue, 09 Jul 2019 20:33:58 -0700, John Fastabend wrote:
-> > Jakub Kicinski wrote:
-> > > On Mon, 08 Jul 2019 19:15:18 +0000, John Fastabend wrote:  
-> > > > @@ -352,15 +354,18 @@ static void tls_sk_proto_close(struct sock *sk, long timeout)
-> > > >  	if (ctx->tx_conf == TLS_BASE && ctx->rx_conf == TLS_BASE)
-> > > >  		goto skip_tx_cleanup;
-> > > >  
-> > > > -	sk->sk_prot = ctx->sk_proto;
-> > > >  	tls_sk_proto_cleanup(sk, ctx, timeo);
-> > > >  
-> > > >  skip_tx_cleanup:
-> > > > +	write_lock_bh(&sk->sk_callback_lock);
-> > > > +	icsk->icsk_ulp_data = NULL;  
-> > > 
-> > > Is ulp_data pointer now supposed to be updated under the
-> > > sk_callback_lock?  
-> > 
-> > Yes otherwise it can race with tls_update(). I didn't remove the
-> > ulp pointer null set from tcp_ulp.c though. Could be done in this
-> > patch or as a follow up.
-> 
-> Do we need to hold the lock in unhash, too, or is unhash called with
-> sk_callback_lock held?
-> 
+In preparation to enabling -Wimplicit-fallthrough, this patch silences
+the following warning:
 
-We should hold the lock here. Also we should reset sk_prot similar to
-other paths in case we get here without a close() call. syzbot hasn't
-found that path yet but I'll add some tests for it.
+kernel/bpf/verifier.c: In function ‘check_return_code’:
+kernel/bpf/verifier.c:6106:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   if (env->prog->expected_attach_type == BPF_CGROUP_UDP4_RECVMSG ||
+      ^
+kernel/bpf/verifier.c:6109:2: note: here
+  case BPF_PROG_TYPE_CGROUP_SKB:
+  ^~~~
 
-	write_lock_bh(...)
-	icsk_ulp_data = NULL
-	sk->sk_prot = ctx->sk_proto;
-	write_unlock_bh(...)
+Warning level 3 was used: -Wimplicit-fallthrough=3
 
-Thanks
+Notice that is much clearer to explicitly add breaks in each case
+statement (that actually contains some code), rather than letting
+the code to fall through.
+
+This patch is part of the ongoing efforts to enable
+-Wimplicit-fallthrough.
+
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+
+NOTE: -Wimplicit-fallthrough will be enabled globally in v5.3. So, I
+      suggest you to take this patch for 5.3-rc1.
+
+ kernel/bpf/verifier.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index a2e763703c30..44c3b947400e 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6106,11 +6106,13 @@ static int check_return_code(struct bpf_verifier_env *env)
+ 		if (env->prog->expected_attach_type == BPF_CGROUP_UDP4_RECVMSG ||
+ 		    env->prog->expected_attach_type == BPF_CGROUP_UDP6_RECVMSG)
+ 			range = tnum_range(1, 1);
++		break;
+ 	case BPF_PROG_TYPE_CGROUP_SKB:
+ 		if (env->prog->expected_attach_type == BPF_CGROUP_INET_EGRESS) {
+ 			range = tnum_range(0, 3);
+ 			enforce_attach_type_range = tnum_range(2, 3);
+ 		}
++		break;
+ 	case BPF_PROG_TYPE_CGROUP_SOCK:
+ 	case BPF_PROG_TYPE_SOCK_OPS:
+ 	case BPF_PROG_TYPE_CGROUP_DEVICE:
+-- 
+2.21.0
+
