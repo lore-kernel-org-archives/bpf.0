@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5097C76191
-	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 14:38:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D757FC76191
+	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 14:50:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 898C120896
-	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 14:38:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ADAE5212F5
+	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 14:50:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563201535;
-	bh=gMYCMlIE9JhAmkeJS4THrWdhMpnJObwv71M4jlxwzgo=;
+	s=default; t=1563202200;
+	bh=S2eBUgf9xGvZ/9aLduwJ89yzz6C+jZsDnJr7fwmIXMY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=cA70q5tP+SPNezZt6azf+4iXBw5xCiiC7eHj3mbhWW+ktjXRWF70FPhhocM1nTdAZ
-	 T4GWpoTSBTnZDsD+Lb3ASHrAh/WRvJF/3IT9dsmHsvL3wO3uJtvtJrX+5ggEArWi7R
-	 hTxi6StUGdxFR7LbWtbTMz7cCjw3yUmyfd7GsQxM=
+	b=PmVtGwxyQFVSiOpT+YOKN07UrGgOBrKE4kmZfjNT++mfgGVXFe8KLh1+3oPqnohL4
+	 Vcymy0yU3+xJgRUQfpJ82/XQleO5Zr3n3D5OkocnHNmA3CCisJrfdEN1MQQ9vRn8Bd
+	 /z1l4aBBPyVpN7Occ1rHHwUCEM6fRojI+XMR0bGg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392123AbfGOOiy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Jul 2019 10:38:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37696 "EHLO mail.kernel.org"
+        id S2404778AbfGOOtp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Jul 2019 10:49:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41606 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392109AbfGOOiy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:38:54 -0400
+        id S2392128AbfGOOrT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:47:19 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 54A892086C;
-        Mon, 15 Jul 2019 14:38:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BD2DC21537;
+        Mon, 15 Jul 2019 14:47:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563201533;
-        bh=gMYCMlIE9JhAmkeJS4THrWdhMpnJObwv71M4jlxwzgo=;
+        s=default; t=1563202038;
+        bh=S2eBUgf9xGvZ/9aLduwJ89yzz6C+jZsDnJr7fwmIXMY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CnqwdXCsz3QjrP8XfVDrZcV90yUh4RGLO9ucpRh9FN0AQ3rpRjdhq/PhhHNFtSK4X
-         Z7yv2UYelcREXzaCe87cRzsKE9tyzsh6nupRFol1v6DRQvr7cLAvYHu/+YFxzJSMbi
-         A5fux5555aop6ituxdo3POfWxGIeG09WaEDAnljk=
+        b=vjUM1EAVz07mfiUuAtCYQEq7xj2mRMOoUPvmhxyyrpkMfBFkDPm7kf7NeA+cjXefO
+         FhzIJdgPWCD6y3eK4XRHrd6tKPUCDs7NdIFJYsioRjjukG+Xl5F9O4xN+KCgfDUjDc
+         w206pOK+Yh1/fKIHd6+7rY7JGA7hmtiaSUMntUy0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     =?UTF-8?q?Valdis=20Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>,
@@ -45,12 +45,12 @@ Cc:     =?UTF-8?q?Valdis=20Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 36/73] bpf: silence warning messages in core
-Date:   Mon, 15 Jul 2019 10:35:52 -0400
-Message-Id: <20190715143629.10893-36-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 29/53] bpf: silence warning messages in core
+Date:   Mon, 15 Jul 2019 10:45:11 -0400
+Message-Id: <20190715144535.11636-29-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190715143629.10893-1-sashal@kernel.org>
-References: <20190715143629.10893-1-sashal@kernel.org>
+In-Reply-To: <20190715144535.11636-1-sashal@kernel.org>
+References: <20190715144535.11636-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -101,7 +101,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index eed911d091da..5a590f22b4d4 100644
+index 13272582eee0..677991f29d66 100644
 --- a/kernel/bpf/Makefile
 +++ b/kernel/bpf/Makefile
 @@ -1,4 +1,5 @@
@@ -109,7 +109,7 @@ index eed911d091da..5a590f22b4d4 100644
 +CFLAGS_core.o += $(call cc-disable-warning, override-init)
  
  obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o
- obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o
+ obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o
 -- 
 2.20.1
 
