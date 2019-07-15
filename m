@@ -7,47 +7,48 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A67AC76196
-	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 14:02:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88F38C7618F
+	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 14:03:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5069D2083D
-	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 14:02:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6324A217D8
+	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 14:03:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563199325;
-	bh=cNuXwgW7cfsVapYE8pTdKebxsF8N8vLFuZqgQkmSg4g=;
+	s=default; t=1563199390;
+	bh=saYp66UYcTDDQpWG5VhqspncKjwKOnk1Hdx4A4GhGMU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=E3cHlTcqyYbMO86aTxE9PacVLtf3qlh/zAVALVG7ns7wuHr3d+DTWeMTV4Oftkaet
-	 Zrm7A8eaInkZuEH56lqPpfJjsHzn3QaVlcSzhqhUK24hVIhdwfDyXLkwKM94VuI6D+
-	 sHZGjSfp9avTQGTdJ5+KhV6MyHK7Tfq255PXu8+w=
+	b=0zUjDwIdftyFHfwWGEshwgzNeYQ0teCu5240XmYodtUYn7/291R02AlL0QHKQf66l
+	 2UCFNVQ/YIFOqsoDBsoaUfc4vkLwb4NGzFgGOrmy9KnAw+y5/yeHC4tVsyhtAiO5b7
+	 uFjQ1Zn4STyYInehkpGM42dY+bIzX6oatMWijvx0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732576AbfGOOB3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Jul 2019 10:01:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43868 "EHLO mail.kernel.org"
+        id S2387416AbfGOODE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Jul 2019 10:03:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47186 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732216AbfGOOB1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:01:27 -0400
+        id S2387455AbfGOODD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:03:03 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ED4F6217D8;
-        Mon, 15 Jul 2019 14:01:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DBE47217D9;
+        Mon, 15 Jul 2019 14:02:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563199286;
-        bh=cNuXwgW7cfsVapYE8pTdKebxsF8N8vLFuZqgQkmSg4g=;
+        s=default; t=1563199382;
+        bh=saYp66UYcTDDQpWG5VhqspncKjwKOnk1Hdx4A4GhGMU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VoPtOeOSvL39/Zd2zJJ8V2U5kDsC7RLv4WAgnw1gWKwThfB4qh5XbDgiM7yG9bMHW
-         dw905Fn08LfP0xaIZZzkqy7nn01zst9PQWBMYFSyu+3lcvHny/TdoI12lCoaPyGYRg
-         h8cU7nThcwUK+0AKy5HTA0H/1wgFEOg3UgUn0iDA=
+        b=Qmk9mkRJ6XAZ0jyCNl6dIyPDJPLSxnYLklgb+RKl5jD0B9J/xaJO/xv4huUr8/Ujv
+         atjpS1v8pBwOCKwA/2FXnlKe+Zuto4i6zCN4q0ZdMFPRxe9f0AhE7Kl8hGKFHX8EQ1
+         ozSsw5Yog6LDvqyUBk57L42uLa+PMknD+3EXukCw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jiri Benc <jbenc@redhat.com>, Yonghong Song <yhs@fb.com>,
+Cc:     Ilya Maximets <i.maximets@samsung.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        William Tu <u9012063@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 5.2 226/249] selftests: bpf: fix inlines in test_lwt_seg6local
-Date:   Mon, 15 Jul 2019 09:46:31 -0400
-Message-Id: <20190715134655.4076-226-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        xdp-newbies@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.2 248/249] xdp: fix race on generic receive path
+Date:   Mon, 15 Jul 2019 09:46:53 -0400
+Message-Id: <20190715134655.4076-248-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715134655.4076-1-sashal@kernel.org>
 References: <20190715134655.4076-1-sashal@kernel.org>
@@ -60,102 +61,104 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jiri Benc <jbenc@redhat.com>
+From: Ilya Maximets <i.maximets@samsung.com>
 
-[ Upstream commit 11aca65ec4db09527d3e9b6b41a0615b7da4386b ]
+[ Upstream commit bf0bdd1343efbbf65b4d53aef1fce14acbd79d50 ]
 
-Selftests are reporting this failure in test_lwt_seg6local.sh:
+Unlike driver mode, generic xdp receive could be triggered
+by different threads on different CPU cores at the same time
+leading to the fill and rx queue breakage. For example, this
+could happen while sending packets from two processes to the
+first interface of veth pair while the second part of it is
+open with AF_XDP socket.
 
-+ ip netns exec ns2 ip -6 route add fb00::6 encap bpf in obj test_lwt_seg6local.o sec encap_srh dev veth2
-Error fetching program/map!
-Failed to parse eBPF program: Operation not permitted
+Need to take a lock for each generic receive to avoid race.
 
-The problem is __attribute__((always_inline)) alone is not enough to prevent
-clang from inserting those functions in .text. In that case, .text is not
-marked as relocateable.
-
-See the output of objdump -h test_lwt_seg6local.o:
-
-Idx Name          Size      VMA               LMA               File off  Algn
-  0 .text         00003530  0000000000000000  0000000000000000  00000040  2**3
-                  CONTENTS, ALLOC, LOAD, READONLY, CODE
-
-This causes the iproute bpf loader to fail in bpf_fetch_prog_sec:
-bpf_has_call_data returns true but bpf_fetch_prog_relo fails as there's no
-relocateable .text section in the file.
-
-To fix this, convert to 'static __always_inline'.
-
-v2: Use 'static __always_inline' instead of 'static inline
-    __attribute__((always_inline))'
-
-Fixes: c99a84eac026 ("selftests/bpf: test for seg6local End.BPF action")
-Signed-off-by: Jiri Benc <jbenc@redhat.com>
-Acked-by: Yonghong Song <yhs@fb.com>
+Fixes: c497176cb2e4 ("xsk: add Rx receive functions and poll support")
+Signed-off-by: Ilya Maximets <i.maximets@samsung.com>
+Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Tested-by: William Tu <u9012063@gmail.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../testing/selftests/bpf/progs/test_lwt_seg6local.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ include/net/xdp_sock.h |  2 ++
+ net/xdp/xsk.c          | 31 ++++++++++++++++++++++---------
+ 2 files changed, 24 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_lwt_seg6local.c b/tools/testing/selftests/bpf/progs/test_lwt_seg6local.c
-index 0575751bc1bc..e2f6ed0a583d 100644
---- a/tools/testing/selftests/bpf/progs/test_lwt_seg6local.c
-+++ b/tools/testing/selftests/bpf/progs/test_lwt_seg6local.c
-@@ -61,7 +61,7 @@ struct sr6_tlv_t {
- 	unsigned char value[0];
- } BPF_PACKET_HEADER;
+diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
+index d074b6d60f8a..ac3c047d058c 100644
+--- a/include/net/xdp_sock.h
++++ b/include/net/xdp_sock.h
+@@ -67,6 +67,8 @@ struct xdp_sock {
+ 	 * in the SKB destructor callback.
+ 	 */
+ 	spinlock_t tx_completion_lock;
++	/* Protects generic receive. */
++	spinlock_t rx_lock;
+ 	u64 rx_dropped;
+ };
  
--__attribute__((always_inline)) struct ip6_srh_t *get_srh(struct __sk_buff *skb)
-+static __always_inline struct ip6_srh_t *get_srh(struct __sk_buff *skb)
- {
- 	void *cursor, *data_end;
- 	struct ip6_srh_t *srh;
-@@ -95,7 +95,7 @@ __attribute__((always_inline)) struct ip6_srh_t *get_srh(struct __sk_buff *skb)
- 	return srh;
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index a14e8864e4fa..5e0637db92ea 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -123,13 +123,17 @@ int xsk_generic_rcv(struct xdp_sock *xs, struct xdp_buff *xdp)
+ 	u64 addr;
+ 	int err;
+ 
+-	if (xs->dev != xdp->rxq->dev || xs->queue_id != xdp->rxq->queue_index)
+-		return -EINVAL;
++	spin_lock_bh(&xs->rx_lock);
++
++	if (xs->dev != xdp->rxq->dev || xs->queue_id != xdp->rxq->queue_index) {
++		err = -EINVAL;
++		goto out_unlock;
++	}
+ 
+ 	if (!xskq_peek_addr(xs->umem->fq, &addr) ||
+ 	    len > xs->umem->chunk_size_nohr - XDP_PACKET_HEADROOM) {
+-		xs->rx_dropped++;
+-		return -ENOSPC;
++		err = -ENOSPC;
++		goto out_drop;
+ 	}
+ 
+ 	addr += xs->umem->headroom;
+@@ -138,13 +142,21 @@ int xsk_generic_rcv(struct xdp_sock *xs, struct xdp_buff *xdp)
+ 	memcpy(buffer, xdp->data_meta, len + metalen);
+ 	addr += metalen;
+ 	err = xskq_produce_batch_desc(xs->rx, addr, len);
+-	if (!err) {
+-		xskq_discard_addr(xs->umem->fq);
+-		xsk_flush(xs);
+-		return 0;
+-	}
++	if (err)
++		goto out_drop;
++
++	xskq_discard_addr(xs->umem->fq);
++	xskq_produce_flush_desc(xs->rx);
+ 
++	spin_unlock_bh(&xs->rx_lock);
++
++	xs->sk.sk_data_ready(&xs->sk);
++	return 0;
++
++out_drop:
+ 	xs->rx_dropped++;
++out_unlock:
++	spin_unlock_bh(&xs->rx_lock);
+ 	return err;
  }
  
--__attribute__((always_inline))
-+static __always_inline
- int update_tlv_pad(struct __sk_buff *skb, uint32_t new_pad,
- 		   uint32_t old_pad, uint32_t pad_off)
- {
-@@ -125,7 +125,7 @@ int update_tlv_pad(struct __sk_buff *skb, uint32_t new_pad,
- 	return 0;
- }
+@@ -765,6 +777,7 @@ static int xsk_create(struct net *net, struct socket *sock, int protocol,
  
--__attribute__((always_inline))
-+static __always_inline
- int is_valid_tlv_boundary(struct __sk_buff *skb, struct ip6_srh_t *srh,
- 			  uint32_t *tlv_off, uint32_t *pad_size,
- 			  uint32_t *pad_off)
-@@ -184,7 +184,7 @@ int is_valid_tlv_boundary(struct __sk_buff *skb, struct ip6_srh_t *srh,
- 	return 0;
- }
+ 	xs = xdp_sk(sk);
+ 	mutex_init(&xs->mutex);
++	spin_lock_init(&xs->rx_lock);
+ 	spin_lock_init(&xs->tx_completion_lock);
  
--__attribute__((always_inline))
-+static __always_inline
- int add_tlv(struct __sk_buff *skb, struct ip6_srh_t *srh, uint32_t tlv_off,
- 	    struct sr6_tlv_t *itlv, uint8_t tlv_size)
- {
-@@ -228,7 +228,7 @@ int add_tlv(struct __sk_buff *skb, struct ip6_srh_t *srh, uint32_t tlv_off,
- 	return update_tlv_pad(skb, new_pad, pad_size, pad_off);
- }
- 
--__attribute__((always_inline))
-+static __always_inline
- int delete_tlv(struct __sk_buff *skb, struct ip6_srh_t *srh,
- 	       uint32_t tlv_off)
- {
-@@ -266,7 +266,7 @@ int delete_tlv(struct __sk_buff *skb, struct ip6_srh_t *srh,
- 	return update_tlv_pad(skb, new_pad, pad_size, pad_off);
- }
- 
--__attribute__((always_inline))
-+static __always_inline
- int has_egr_tlv(struct __sk_buff *skb, struct ip6_srh_t *srh)
- {
- 	int tlv_offset = sizeof(struct ip6_t) + sizeof(struct ip6_srh_t) +
+ 	mutex_lock(&net->xdp.lock);
 -- 
 2.20.1
 
