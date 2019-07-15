@@ -7,110 +7,155 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BB0FC76195
-	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 14:56:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3141C76191
+	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 15:00:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 75B182067C
-	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 14:56:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AB2312054F
+	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 15:00:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563202609;
-	bh=tOpREwC9ptswgJC0xfpd7gAJ0c2qFXk1QPaIcgZfPME=;
+	s=default; t=1563202839;
+	bh=cNuXwgW7cfsVapYE8pTdKebxsF8N8vLFuZqgQkmSg4g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=TBy2ucFffVCPu6rcawiM3LUoVxE3iPi1Y+emgbFGV7Aa1hEZUeNVzlV15/QWxQQHB
-	 GuJuOLkU7hQ3wOF0Xo5+YWDzx3YiaqTBDH1EwVe3OT1gd/lR3KVrZKCwwJRcCXfZtd
-	 qL9hpTVSUL/EeIerqudsd/nFda3dgCc3X4PXewHg=
+	b=ZSJlmTKesAB+fPmHYgkorKYI2uNa+GNU5OwFieHEm8Q9SIjex7qBf1WC1OVrZlBHr
+	 fRGilOdX9YvZNQYoZ+3RXVvNkHkorxp7TeiAzsToyLyQiYOUR2OWB4dAcz7hZAS9PV
+	 YxIfSOhy+Ie8nEMMhhN63hsGWWX/S+P95HzxVQW0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390349AbfGOOVi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Jul 2019 10:21:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47918 "EHLO mail.kernel.org"
+        id S2389656AbfGOOQD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Jul 2019 10:16:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32788 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390342AbfGOOVh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:21:37 -0400
+        id S2388728AbfGOOQD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:16:03 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 550E9217F4;
-        Mon, 15 Jul 2019 14:21:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5E033212F5;
+        Mon, 15 Jul 2019 14:15:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563200497;
-        bh=tOpREwC9ptswgJC0xfpd7gAJ0c2qFXk1QPaIcgZfPME=;
+        s=default; t=1563200162;
+        bh=cNuXwgW7cfsVapYE8pTdKebxsF8N8vLFuZqgQkmSg4g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=efPimlsdyQpU1K1xRjqytuRC8/acwVtNrhpSyBnJIjtF3Oymo3pveE37dXXT5HNHb
-         eS5LpbchMmqMvseU+bQgZNJOt9YUgQsQ2fK+2E2coxpQJXPA07pxmEAyKNY7u+cYvA
-         +FdFGvBaasuhTfK7xW8BdQSJt2+QMLZUZ/vTzJo4=
+        b=ByKSyNMJgmIIT0v+PICtoMOx8Nc8eChmSirQ9q5W1zuWhP1kjjHccuRn2rOrwP7fd
+         5z+FmPPSMvphcH+UXkHHS2JFvFhhfumsvEZmA1aH0GDihXVj/AhBV5CPBMHEdxRQo2
+         7i90bq9fzeUXZ7cfL/m1RhshDvZq92y/WJgFAqoM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Valdis=20Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>,
-        Andrii Nakryiko <andriin@fb.com>,
+Cc:     Jiri Benc <jbenc@redhat.com>, Yonghong Song <yhs@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 062/158] bpf: silence warning messages in core
-Date:   Mon, 15 Jul 2019 10:16:33 -0400
-Message-Id: <20190715141809.8445-62-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 5.1 198/219] selftests: bpf: fix inlines in test_lwt_seg6local
+Date:   Mon, 15 Jul 2019 10:03:19 -0400
+Message-Id: <20190715140341.6443-198-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190715141809.8445-1-sashal@kernel.org>
-References: <20190715141809.8445-1-sashal@kernel.org>
+In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
+References: <20190715140341.6443-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Valdis Klētnieks <valdis.kletnieks@vt.edu>
+From: Jiri Benc <jbenc@redhat.com>
 
-[ Upstream commit aee450cbe482a8c2f6fa5b05b178ef8b8ff107ca ]
+[ Upstream commit 11aca65ec4db09527d3e9b6b41a0615b7da4386b ]
 
-Compiling kernel/bpf/core.c with W=1 causes a flood of warnings:
+Selftests are reporting this failure in test_lwt_seg6local.sh:
 
-kernel/bpf/core.c:1198:65: warning: initialized field overwritten [-Woverride-init]
- 1198 | #define BPF_INSN_3_TBL(x, y, z) [BPF_##x | BPF_##y | BPF_##z] = true
-      |                                                                 ^~~~
-kernel/bpf/core.c:1087:2: note: in expansion of macro 'BPF_INSN_3_TBL'
- 1087 |  INSN_3(ALU, ADD,  X),   \
-      |  ^~~~~~
-kernel/bpf/core.c:1202:3: note: in expansion of macro 'BPF_INSN_MAP'
- 1202 |   BPF_INSN_MAP(BPF_INSN_2_TBL, BPF_INSN_3_TBL),
-      |   ^~~~~~~~~~~~
-kernel/bpf/core.c:1198:65: note: (near initialization for 'public_insntable[12]')
- 1198 | #define BPF_INSN_3_TBL(x, y, z) [BPF_##x | BPF_##y | BPF_##z] = true
-      |                                                                 ^~~~
-kernel/bpf/core.c:1087:2: note: in expansion of macro 'BPF_INSN_3_TBL'
- 1087 |  INSN_3(ALU, ADD,  X),   \
-      |  ^~~~~~
-kernel/bpf/core.c:1202:3: note: in expansion of macro 'BPF_INSN_MAP'
- 1202 |   BPF_INSN_MAP(BPF_INSN_2_TBL, BPF_INSN_3_TBL),
-      |   ^~~~~~~~~~~~
++ ip netns exec ns2 ip -6 route add fb00::6 encap bpf in obj test_lwt_seg6local.o sec encap_srh dev veth2
+Error fetching program/map!
+Failed to parse eBPF program: Operation not permitted
 
-98 copies of the above.
+The problem is __attribute__((always_inline)) alone is not enough to prevent
+clang from inserting those functions in .text. In that case, .text is not
+marked as relocateable.
 
-The attached patch silences the warnings, because we *know* we're overwriting
-the default initializer. That leaves bpf/core.c with only 6 other warnings,
-which become more visible in comparison.
+See the output of objdump -h test_lwt_seg6local.o:
 
-Signed-off-by: Valdis Kletnieks <valdis.kletnieks@vt.edu>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
+Idx Name          Size      VMA               LMA               File off  Algn
+  0 .text         00003530  0000000000000000  0000000000000000  00000040  2**3
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+
+This causes the iproute bpf loader to fail in bpf_fetch_prog_sec:
+bpf_has_call_data returns true but bpf_fetch_prog_relo fails as there's no
+relocateable .text section in the file.
+
+To fix this, convert to 'static __always_inline'.
+
+v2: Use 'static __always_inline' instead of 'static inline
+    __attribute__((always_inline))'
+
+Fixes: c99a84eac026 ("selftests/bpf: test for seg6local End.BPF action")
+Signed-off-by: Jiri Benc <jbenc@redhat.com>
+Acked-by: Yonghong Song <yhs@fb.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ .../testing/selftests/bpf/progs/test_lwt_seg6local.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index 0488b8258321..ffc39a7e028d 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-y := core.o
-+CFLAGS_core.o += $(call cc-disable-warning, override-init)
+diff --git a/tools/testing/selftests/bpf/progs/test_lwt_seg6local.c b/tools/testing/selftests/bpf/progs/test_lwt_seg6local.c
+index 0575751bc1bc..e2f6ed0a583d 100644
+--- a/tools/testing/selftests/bpf/progs/test_lwt_seg6local.c
++++ b/tools/testing/selftests/bpf/progs/test_lwt_seg6local.c
+@@ -61,7 +61,7 @@ struct sr6_tlv_t {
+ 	unsigned char value[0];
+ } BPF_PACKET_HEADER;
  
- obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o
- obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o
+-__attribute__((always_inline)) struct ip6_srh_t *get_srh(struct __sk_buff *skb)
++static __always_inline struct ip6_srh_t *get_srh(struct __sk_buff *skb)
+ {
+ 	void *cursor, *data_end;
+ 	struct ip6_srh_t *srh;
+@@ -95,7 +95,7 @@ __attribute__((always_inline)) struct ip6_srh_t *get_srh(struct __sk_buff *skb)
+ 	return srh;
+ }
+ 
+-__attribute__((always_inline))
++static __always_inline
+ int update_tlv_pad(struct __sk_buff *skb, uint32_t new_pad,
+ 		   uint32_t old_pad, uint32_t pad_off)
+ {
+@@ -125,7 +125,7 @@ int update_tlv_pad(struct __sk_buff *skb, uint32_t new_pad,
+ 	return 0;
+ }
+ 
+-__attribute__((always_inline))
++static __always_inline
+ int is_valid_tlv_boundary(struct __sk_buff *skb, struct ip6_srh_t *srh,
+ 			  uint32_t *tlv_off, uint32_t *pad_size,
+ 			  uint32_t *pad_off)
+@@ -184,7 +184,7 @@ int is_valid_tlv_boundary(struct __sk_buff *skb, struct ip6_srh_t *srh,
+ 	return 0;
+ }
+ 
+-__attribute__((always_inline))
++static __always_inline
+ int add_tlv(struct __sk_buff *skb, struct ip6_srh_t *srh, uint32_t tlv_off,
+ 	    struct sr6_tlv_t *itlv, uint8_t tlv_size)
+ {
+@@ -228,7 +228,7 @@ int add_tlv(struct __sk_buff *skb, struct ip6_srh_t *srh, uint32_t tlv_off,
+ 	return update_tlv_pad(skb, new_pad, pad_size, pad_off);
+ }
+ 
+-__attribute__((always_inline))
++static __always_inline
+ int delete_tlv(struct __sk_buff *skb, struct ip6_srh_t *srh,
+ 	       uint32_t tlv_off)
+ {
+@@ -266,7 +266,7 @@ int delete_tlv(struct __sk_buff *skb, struct ip6_srh_t *srh,
+ 	return update_tlv_pad(skb, new_pad, pad_size, pad_off);
+ }
+ 
+-__attribute__((always_inline))
++static __always_inline
+ int has_egr_tlv(struct __sk_buff *skb, struct ip6_srh_t *srh)
+ {
+ 	int tlv_offset = sizeof(struct ip6_t) + sizeof(struct ip6_srh_t) +
 -- 
 2.20.1
 
