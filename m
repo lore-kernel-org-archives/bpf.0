@@ -4,53 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AA89C7618F
-	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 15:02:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC731C76195
+	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 15:02:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 543D22054F
-	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 15:02:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C402E205ED
+	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 15:02:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563202935;
-	bh=XlGMvA78OvGLHAOA4r8DdAmpK8qtDo6lj0Fg1/lV9zs=;
+	s=default; t=1563202976;
+	bh=1Nu6axRrZiyeBMadUwVDUPnSA5lAz5ihLh+rhA/OQMw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=eAs5dsqjKbJtC5/bZBrVjiUoZplPJPSMvDWdT8fij8ZBsge+HSXDIavIEQib7fQ1F
-	 rhOozNgVhTc8uUUkSluRcQ5xaqEZrZNhrgHCCIGM4EQeY7FiB1gHzvDaoteO9sfsoD
-	 /jgjeLvUUhM/VlSio6SgppzI1uZ+jMeN5c0TRX/4=
+	b=yHMguB1DSSUPKUHaw1LpRSry+MXjRk47/5yi8l4RHX3l4sQXe2krH6SKSILTiNtPp
+	 hO+dYn4tmQISoKgXdHWA75me0q+LKgCx8QPiHrpv9ZJGnZIUgJ2+jJnSA/Y3Htg9DT
+	 4/oLRcetJbm66aBQZ1EvCB3JSb2qAOe1/42JpRT0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388729AbfGOONW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Jul 2019 10:13:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53716 "EHLO mail.kernel.org"
+        id S2388455AbfGOOK4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Jul 2019 10:10:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35486 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731050AbfGOONV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:13:21 -0400
+        id S2388831AbfGOOKA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:10:00 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C4F2721530;
-        Mon, 15 Jul 2019 14:13:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0412C2083D;
+        Mon, 15 Jul 2019 14:09:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563200000;
-        bh=XlGMvA78OvGLHAOA4r8DdAmpK8qtDo6lj0Fg1/lV9zs=;
+        s=default; t=1563199799;
+        bh=1Nu6axRrZiyeBMadUwVDUPnSA5lAz5ihLh+rhA/OQMw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cQ7Wx9tW5pJBGiqgUCPWrbgVQORlJhhUXoR8FMGHvCf/xh03MsGqwraXesNp9IDI2
-         2TcYrKjobmWgdIC3/SYxXA1BTdomN5vgb4p8nKPDQ2UxheSmyTMeXqQ9XkW40QXCn5
-         kF/l5ZJ/VqhpawmGD2b59LVZ+ikg13SqQ0YRZYPU=
+        b=XnX1lGSBWA6M+2ej7YwHggWTvbXf/q198cVmK9z+9zWMgK1O45YorHfVkTwCMSlN6
+         8YJhc88pRQ35NwolZtbKqLTS21gj8YxdCQpPkAeU7dWgvvkM1zV8VrqYoBmUaM9UiZ
+         m8W5pHp4nCd6VAFqD9UASDOOSNV+rvvviDfk/2gE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jiong Wang <jiong.wang@netronome.com>,
-        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Quentin Monnet <quentin.monnet@netronome.com>,
-        Song Liu <songliubraving@fb.com>,
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 156/219] bpf: fix BPF_ALU32 | BPF_ARSH on BE arches
-Date:   Mon, 15 Jul 2019 10:02:37 -0400
-Message-Id: <20190715140341.6443-156-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.1 109/219] bpf: fix callees pruning callers
+Date:   Mon, 15 Jul 2019 10:01:50 -0400
+Message-Id: <20190715140341.6443-109-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
 References: <20190715140341.6443-1-sashal@kernel.org>
@@ -63,56 +59,62 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jiong Wang <jiong.wang@netronome.com>
+From: Alexei Starovoitov <ast@kernel.org>
 
-[ Upstream commit 75672dda27bd00109a84cd975c17949ad9c45663 ]
+[ Upstream commit eea1c227b9e9bad295e8ef984004a9acf12bb68c ]
 
-Yauheni reported the following code do not work correctly on BE arches:
+The commit 7640ead93924 partially resolved the issue of callees
+incorrectly pruning the callers.
+With introduction of bounded loops and jmps_processed heuristic
+single verifier state may contain multiple branches and calls.
+It's possible that new verifier state (for future pruning) will be
+allocated inside callee. Then callee will exit (still within the same
+verifier state). It will go back to the caller and there R6-R9 registers
+will be read and will trigger mark_reg_read. But the reg->live for all frames
+but the top frame is not set to LIVE_NONE. Hence mark_reg_read will fail
+to propagate liveness into parent and future walking will incorrectly
+conclude that the states are equivalent because LIVE_READ is not set.
+In other words the rule for parent/live should be:
+whenever register parentage chain is set the reg->live should be set to LIVE_NONE.
+is_state_visited logic already follows this rule for spilled registers.
 
-       ALU_ARSH_X:
-               DST = (u64) (u32) ((*(s32 *) &DST) >> SRC);
-               CONT;
-       ALU_ARSH_K:
-               DST = (u64) (u32) ((*(s32 *) &DST) >> IMM);
-               CONT;
-
-and are causing failure of test_verifier test 'arsh32 on imm 2' on BE
-arches.
-
-The code is taking address and interpreting memory directly, so is not
-endianness neutral. We should instead perform standard C type casting on
-the variable. A u64 to s32 conversion will drop the high 32-bit and reserve
-the low 32-bit as signed integer, this is all we want.
-
-Fixes: 2dc6b100f928 ("bpf: interpreter support BPF_ALU | BPF_ARSH")
-Reported-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
-Reviewed-by: Quentin Monnet <quentin.monnet@netronome.com>
-Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
-Acked-by: Song Liu <songliubraving@fb.com>
+Fixes: 7640ead93924 ("bpf: verifier: make sure callees don't prune with caller differences")
+Fixes: f4d7e40a5b71 ("bpf: introduce function calls (verification)")
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/bpf/verifier.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 06ba9c5f156b..932fd3fa5a5a 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1367,10 +1367,10 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
- 		insn++;
- 		CONT;
- 	ALU_ARSH_X:
--		DST = (u64) (u32) ((*(s32 *) &DST) >> SRC);
-+		DST = (u64) (u32) (((s32) DST) >> SRC);
- 		CONT;
- 	ALU_ARSH_K:
--		DST = (u64) (u32) ((*(s32 *) &DST) >> IMM);
-+		DST = (u64) (u32) (((s32) DST) >> IMM);
- 		CONT;
- 	ALU64_ARSH_X:
- 		(*(s64 *) &DST) >>= SRC;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 4ff130ddfbf6..cbc03f051598 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6197,17 +6197,18 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 	 * the state of the call instruction (with WRITTEN set), and r0 comes
+ 	 * from callee with its full parentage chain, anyway.
+ 	 */
+-	for (j = 0; j <= cur->curframe; j++)
+-		for (i = j < cur->curframe ? BPF_REG_6 : 0; i < BPF_REG_FP; i++)
+-			cur->frame[j]->regs[i].parent = &new->frame[j]->regs[i];
+ 	/* clear write marks in current state: the writes we did are not writes
+ 	 * our child did, so they don't screen off its reads from us.
+ 	 * (There are no read marks in current state, because reads always mark
+ 	 * their parent and current state never has children yet.  Only
+ 	 * explored_states can get read marks.)
+ 	 */
+-	for (i = 0; i < BPF_REG_FP; i++)
+-		cur->frame[cur->curframe]->regs[i].live = REG_LIVE_NONE;
++	for (j = 0; j <= cur->curframe; j++) {
++		for (i = j < cur->curframe ? BPF_REG_6 : 0; i < BPF_REG_FP; i++)
++			cur->frame[j]->regs[i].parent = &new->frame[j]->regs[i];
++		for (i = 0; i < BPF_REG_FP; i++)
++			cur->frame[j]->regs[i].live = REG_LIVE_NONE;
++	}
+ 
+ 	/* all stack frames are accessible from callee, clear them all */
+ 	for (j = 0; j <= cur->curframe; j++) {
 -- 
 2.20.1
 
