@@ -2,61 +2,55 @@ Return-Path: <SRS0=XlhO=VM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1E9DC76195
-	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 15:09:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA8C0C7618F
+	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 15:11:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9BA592054F
-	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 15:09:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 82D4C2054F
+	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 15:11:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563203350;
-	bh=E3eGmKm5nu0OPb0GNpkfQOq2G2P0cK/daWQvt8RA8sI=;
+	s=default; t=1563203480;
+	bh=n73p8DBpdjQlzx+8hMTru8jM9tAEpZHBxzQSMiPsO38=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=uDQLx3dOUDUlD8HQSc5dkSEQOxuu7S5P2mtZuzoY8nzTF7sKN6mmO8nqMGeOMgemk
-	 uCnhMWDkhyhizWmsLC+b8a4WHW3Ui01+iElspG2GH/FH8pS5+UvXin5nqGeB6RPuVL
-	 QMGT6vWhea47s+gErmtqCY2mwDr1gtQ0jWoGb4yo=
+	b=xMx0B45Sf9xGWw7bKgOoN+nemmStwDj+n0z7WsnEj0wXs9CQ5vFmgg/NbhPy07c4x
+	 yKsxcLbOB0riPKeHmO8IO7qB8wzKWGtq3dsFG0yoxUPpSqMeMOTfWnK1rsDojt+CUJ
+	 laZHDvin9EVO5fiuk1xhAvIXBnavVUxQglyvIm1Y=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732703AbfGON5c (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Jul 2019 09:57:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35550 "EHLO mail.kernel.org"
+        id S1732516AbfGONyc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Jul 2019 09:54:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55392 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732702AbfGON5c (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Jul 2019 09:57:32 -0400
+        id S1732510AbfGONyc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Jul 2019 09:54:32 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0A6DE20C01;
-        Mon, 15 Jul 2019 13:57:28 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7A2E0212F5;
+        Mon, 15 Jul 2019 13:54:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563199051;
-        bh=E3eGmKm5nu0OPb0GNpkfQOq2G2P0cK/daWQvt8RA8sI=;
+        s=default; t=1563198871;
+        bh=n73p8DBpdjQlzx+8hMTru8jM9tAEpZHBxzQSMiPsO38=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jX02P9PZv/7bPJfl/R8+vNNBcgvXJo6zrg7QuZMsaXDejjqXs4bD7jxzqQA1JWaVn
-         aMGXv9ty402bLhV4CkT59c2/29ULvSsxl4kIPruh+o8PbUJciRxdw32VynvBqCI9yd
-         Yzn+cdtYXf1qxvMtZvNxCXskkQO0UNpq7TsEfsY8=
+        b=M1wrskseJNElrV18oIHpV0dWJqm2d0cCEx2jxa4xIFWN6bon5KVaUYBabX9eVexiC
+         68b2Yw3G/FS6YUScNynlgT1JyRE4coypVtCV8ZrABrsjLsHIzBcbQCd2OMIXAf/1pw
+         tQTmyjpF5ewH1dprWdbzkkmDL0Xj+phU9BPiYcOA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        Song Liu <songliubraving@fb.com>,
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, xdp-newbies@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 5.2 175/249] xsk: Properly terminate assignment in xskq_produce_flush_desc
-Date:   Mon, 15 Jul 2019 09:45:40 -0400
-Message-Id: <20190715134655.4076-175-sashal@kernel.org>
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.2 124/249] bpf: fix callees pruning callers
+Date:   Mon, 15 Jul 2019 09:44:49 -0400
+Message-Id: <20190715134655.4076-124-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715134655.4076-1-sashal@kernel.org>
 References: <20190715134655.4076-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -65,51 +59,62 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Nathan Chancellor <natechancellor@gmail.com>
+From: Alexei Starovoitov <ast@kernel.org>
 
-[ Upstream commit f7019b7b0ad14bde732b8953161994edfc384953 ]
+[ Upstream commit eea1c227b9e9bad295e8ef984004a9acf12bb68c ]
 
-Clang warns:
+The commit 7640ead93924 partially resolved the issue of callees
+incorrectly pruning the callers.
+With introduction of bounded loops and jmps_processed heuristic
+single verifier state may contain multiple branches and calls.
+It's possible that new verifier state (for future pruning) will be
+allocated inside callee. Then callee will exit (still within the same
+verifier state). It will go back to the caller and there R6-R9 registers
+will be read and will trigger mark_reg_read. But the reg->live for all frames
+but the top frame is not set to LIVE_NONE. Hence mark_reg_read will fail
+to propagate liveness into parent and future walking will incorrectly
+conclude that the states are equivalent because LIVE_READ is not set.
+In other words the rule for parent/live should be:
+whenever register parentage chain is set the reg->live should be set to LIVE_NONE.
+is_state_visited logic already follows this rule for spilled registers.
 
-In file included from net/xdp/xsk_queue.c:10:
-net/xdp/xsk_queue.h:292:2: warning: expression result unused
-[-Wunused-value]
-        WRITE_ONCE(q->ring->producer, q->prod_tail);
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-include/linux/compiler.h:284:6: note: expanded from macro 'WRITE_ONCE'
-        __u.__val;                                      \
-        ~~~ ^~~~~
-1 warning generated.
-
-The q->prod_tail assignment has a comma at the end, not a semi-colon.
-Fix that so clang no longer warns and everything works as expected.
-
-Fixes: c497176cb2e4 ("xsk: add Rx receive functions and poll support")
-Link: https://github.com/ClangBuiltLinux/linux/issues/544
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
-Acked-by: Jonathan Lemon <jonathan.lemon@gmail.com>
-Acked-by: Björn Töpel <bjorn.topel@intel.com>
-Acked-by: Song Liu <songliubraving@fb.com>
+Fixes: 7640ead93924 ("bpf: verifier: make sure callees don't prune with caller differences")
+Fixes: f4d7e40a5b71 ("bpf: introduce function calls (verification)")
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/xdp/xsk_queue.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/bpf/verifier.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
-index 88b9ae24658d..cba4a640d5e8 100644
---- a/net/xdp/xsk_queue.h
-+++ b/net/xdp/xsk_queue.h
-@@ -288,7 +288,7 @@ static inline void xskq_produce_flush_desc(struct xsk_queue *q)
- 	/* Order producer and data */
- 	smp_wmb(); /* B, matches C */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index a5c369e60343..11528bdaa9dc 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6456,17 +6456,18 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 	 * the state of the call instruction (with WRITTEN set), and r0 comes
+ 	 * from callee with its full parentage chain, anyway.
+ 	 */
+-	for (j = 0; j <= cur->curframe; j++)
+-		for (i = j < cur->curframe ? BPF_REG_6 : 0; i < BPF_REG_FP; i++)
+-			cur->frame[j]->regs[i].parent = &new->frame[j]->regs[i];
+ 	/* clear write marks in current state: the writes we did are not writes
+ 	 * our child did, so they don't screen off its reads from us.
+ 	 * (There are no read marks in current state, because reads always mark
+ 	 * their parent and current state never has children yet.  Only
+ 	 * explored_states can get read marks.)
+ 	 */
+-	for (i = 0; i < BPF_REG_FP; i++)
+-		cur->frame[cur->curframe]->regs[i].live = REG_LIVE_NONE;
++	for (j = 0; j <= cur->curframe; j++) {
++		for (i = j < cur->curframe ? BPF_REG_6 : 0; i < BPF_REG_FP; i++)
++			cur->frame[j]->regs[i].parent = &new->frame[j]->regs[i];
++		for (i = 0; i < BPF_REG_FP; i++)
++			cur->frame[j]->regs[i].live = REG_LIVE_NONE;
++	}
  
--	q->prod_tail = q->prod_head,
-+	q->prod_tail = q->prod_head;
- 	WRITE_ONCE(q->ring->producer, q->prod_tail);
- }
- 
+ 	/* all stack frames are accessible from callee, clear them all */
+ 	for (j = 0; j <= cur->curframe; j++) {
 -- 
 2.20.1
 
