@@ -7,46 +7,49 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 665E5C76191
-	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 14:01:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61696C76191
+	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 14:01:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3FF7D217D8
-	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 14:01:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3AA4420C01
+	for <bpf@archiver.kernel.org>; Mon, 15 Jul 2019 14:01:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563199284;
-	bh=6EGDGFXMhuPDKgjG9iOih392eCr4+z/n0ucJnaJcVI8=;
+	s=default; t=1563199309;
+	bh=tKvy5JbcZXx6YWzfQrPDW5p7WMo9r0DbLOyr2sIo3UE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=r9KHtErK/+WRYbgJ0FYCcXWwfJIOpUJuCASKWy7NW28gvysNwPEPfmLOxc/niQhfM
-	 yy3D428YuH9uPEw5dnkNMzFRG0G/wT+pAfwtgn+QnPAEuqM8weQTbW4XJX+SQbuAa3
-	 VIGZwyhVqp11AZaCHOIBEjvDgK8hGowSwBxK1n9o=
+	b=0tTlfWRc7qLbbAeDxFsG5YiAFohphOQXrd84+qBFEY9aWigRxCyVvQj6zwkWt61rx
+	 s3TjNw3H4KHgZZ/uodhkTnKYw7jffMU/QINNzvkcxoyeF3Vr4JXMmuRV5q5kJBcIkD
+	 UWKwQh0yeerKiSqKTfPQMZEg359Dr2AOkhV021mo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730914AbfGOOBX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Jul 2019 10:01:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43710 "EHLO mail.kernel.org"
+        id S1732632AbfGOOBs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Jul 2019 10:01:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44588 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732216AbfGOOBW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:01:22 -0400
+        id S1730529AbfGOOBs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:01:48 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D29DE20C01;
-        Mon, 15 Jul 2019 14:01:12 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9E92B21841;
+        Mon, 15 Jul 2019 14:01:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563199281;
-        bh=6EGDGFXMhuPDKgjG9iOih392eCr4+z/n0ucJnaJcVI8=;
+        s=default; t=1563199306;
+        bh=tKvy5JbcZXx6YWzfQrPDW5p7WMo9r0DbLOyr2sIo3UE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=chTuGd6Xun01ENEqA0mY7pRiV/hxvjQyU8+Lqw+ig0+03cocEdNjbBVYu5vSiLtyL
-         id5Nj6gsPSYSp4n2ZStqL+JF/zZk9myOmVbdgm75VyV2WUWppkbbAir84A6Vg0W6Of
-         Sj+k4/qSqmANVvCPfN2ah1yYmpLgA16OGGwYfaxY=
+        b=qS/UsNgbiUvw8DxlbOHoaSs44aAp4RnqQ+A4/Mu3ifpt012+3cs5VI6eFfG6iFbUC
+         mQGjke9mW7up1eqCCSGLCpWeuw3NYxP0LKoYKrzGBwH1pJVgOH5/1iv/ah018m+yOz
+         J9xMK4J9tBNn/bCn1VgRZWOXhpNi2oHYUvxHEN6g=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Leo Yan <leo.yan@linaro.org>, Yonghong Song <yhs@fb.com>,
+Cc:     Jiri Olsa <jolsa@redhat.com>, Michael Petlan <mpetlan@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Quentin Monnet <quentin.monnet@netronome.com>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 225/249] bpf, libbpf, smatch: Fix potential NULL pointer dereference
-Date:   Mon, 15 Jul 2019 09:46:30 -0400
-Message-Id: <20190715134655.4076-225-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 231/249] tools: bpftool: Fix json dump crash on powerpc
+Date:   Mon, 15 Jul 2019 09:46:36 -0400
+Message-Id: <20190715134655.4076-231-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715134655.4076-1-sashal@kernel.org>
 References: <20190715134655.4076-1-sashal@kernel.org>
@@ -59,64 +62,91 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Leo Yan <leo.yan@linaro.org>
+From: Jiri Olsa <jolsa@redhat.com>
 
-[ Upstream commit 33bae185f74d49a0d7b1bfaafb8e959efce0f243 ]
+[ Upstream commit aa52bcbe0e72fac36b1862db08b9c09c4caefae3 ]
 
-Based on the following report from Smatch, fix the potential NULL
-pointer dereference check:
+Michael reported crash with by bpf program in json mode on powerpc:
 
-  tools/lib/bpf/libbpf.c:3493
-  bpf_prog_load_xattr() warn: variable dereferenced before check 'attr'
-  (see line 3483)
+  # bpftool prog -p dump jited id 14
+  [{
+        "name": "0xd00000000a9aa760",
+        "insns": [{
+                "pc": "0x0",
+                "operation": "nop",
+                "operands": [null
+                ]
+            },{
+                "pc": "0x4",
+                "operation": "nop",
+                "operands": [null
+                ]
+            },{
+                "pc": "0x8",
+                "operation": "mflr",
+  Segmentation fault (core dumped)
 
-  3479 int bpf_prog_load_xattr(const struct bpf_prog_load_attr *attr,
-  3480                         struct bpf_object **pobj, int *prog_fd)
-  3481 {
-  3482         struct bpf_object_open_attr open_attr = {
-  3483                 .file           = attr->file,
-  3484                 .prog_type      = attr->prog_type,
-                                         ^^^^^^
-  3485         };
+The code is assuming char pointers in format, which is not always
+true at least for powerpc. Fixing this by dumping the whole string
+into buffer based on its format.
 
-At the head of function, it directly access 'attr' without checking
-if it's NULL pointer. This patch moves the values assignment after
-validating 'attr' and 'attr->file'.
+Please note that libopcodes code does not check return values from
+fprintf callback, but as per Jakub suggestion returning -1 on allocation
+failure so we do the best effort to propagate the error.
 
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
-Acked-by: Yonghong Song <yhs@fb.com>
+Fixes: 107f041212c1 ("tools: bpftool: add JSON output for `bpftool prog dump jited *` command")
+Reported-by: Michael Petlan <mpetlan@redhat.com>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+Reviewed-by: Quentin Monnet <quentin.monnet@netronome.com>
+Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ tools/bpf/bpftool/jit_disasm.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 151f7ac1882e..3865a5d27251 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -3487,10 +3487,7 @@ int bpf_prog_load(const char *file, enum bpf_prog_type type,
- int bpf_prog_load_xattr(const struct bpf_prog_load_attr *attr,
- 			struct bpf_object **pobj, int *prog_fd)
- {
--	struct bpf_object_open_attr open_attr = {
--		.file		= attr->file,
--		.prog_type	= attr->prog_type,
--	};
-+	struct bpf_object_open_attr open_attr = {};
- 	struct bpf_program *prog, *first_prog = NULL;
- 	enum bpf_attach_type expected_attach_type;
- 	enum bpf_prog_type prog_type;
-@@ -3503,6 +3500,9 @@ int bpf_prog_load_xattr(const struct bpf_prog_load_attr *attr,
- 	if (!attr->file)
- 		return -EINVAL;
+diff --git a/tools/bpf/bpftool/jit_disasm.c b/tools/bpf/bpftool/jit_disasm.c
+index 3ef3093560ba..bfed711258ce 100644
+--- a/tools/bpf/bpftool/jit_disasm.c
++++ b/tools/bpf/bpftool/jit_disasm.c
+@@ -11,6 +11,8 @@
+  * Licensed under the GNU General Public License, version 2.0 (GPLv2)
+  */
  
-+	open_attr.file = attr->file;
-+	open_attr.prog_type = attr->prog_type;
++#define _GNU_SOURCE
++#include <stdio.h>
+ #include <stdarg.h>
+ #include <stdint.h>
+ #include <stdio.h>
+@@ -44,11 +46,13 @@ static int fprintf_json(void *out, const char *fmt, ...)
+ 	char *s;
+ 
+ 	va_start(ap, fmt);
++	if (vasprintf(&s, fmt, ap) < 0)
++		return -1;
++	va_end(ap);
 +
- 	obj = bpf_object__open_xattr(&open_attr);
- 	if (IS_ERR_OR_NULL(obj))
- 		return -ENOENT;
+ 	if (!oper_count) {
+ 		int i;
+ 
+-		s = va_arg(ap, char *);
+-
+ 		/* Strip trailing spaces */
+ 		i = strlen(s) - 1;
+ 		while (s[i] == ' ')
+@@ -61,11 +65,10 @@ static int fprintf_json(void *out, const char *fmt, ...)
+ 	} else if (!strcmp(fmt, ",")) {
+ 		   /* Skip */
+ 	} else {
+-		s = va_arg(ap, char *);
+ 		jsonw_string(json_wtr, s);
+ 		oper_count++;
+ 	}
+-	va_end(ap);
++	free(s);
+ 	return 0;
+ }
+ 
 -- 
 2.20.1
 
