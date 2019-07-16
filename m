@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-8.6 required=3.0 tests=DATE_IN_PAST_06_12,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45A69C76188
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED246C76192
 	for <bpf@archiver.kernel.org>; Tue, 16 Jul 2019 11:22:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 202422173B
+	by mail.kernel.org (Postfix) with ESMTP id D03DD2053B
 	for <bpf@archiver.kernel.org>; Tue, 16 Jul 2019 11:22:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387734AbfGPLWL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Jul 2019 07:22:11 -0400
+        id S2387758AbfGPLWM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Jul 2019 07:22:12 -0400
 Received: from mga01.intel.com ([192.55.52.88]:34198 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733200AbfGPLWL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Jul 2019 07:22:11 -0400
+        id S1733200AbfGPLWM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Jul 2019 07:22:12 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Jul 2019 04:22:00 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Jul 2019 04:22:05 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.63,498,1557212400"; 
-   d="scan'208";a="366631454"
+   d="scan'208";a="366631570"
 Received: from silpixa00399838.ir.intel.com (HELO silpixa00399838.ger.corp.intel.com) ([10.237.223.10])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Jul 2019 04:21:57 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 16 Jul 2019 04:22:03 -0700
 From:   Kevin Laatz <kevin.laatz@intel.com>
 To:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
         bjorn.topel@intel.com, magnus.karlsson@intel.com,
@@ -35,9 +35,9 @@ To:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
 Cc:     bruce.richardson@intel.com, ciara.loftus@intel.com,
         bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
         Kevin Laatz <kevin.laatz@intel.com>
-Subject: [PATCH v2 05/10] ixgbe: modify driver for handling offsets
-Date:   Tue, 16 Jul 2019 03:06:32 +0000
-Message-Id: <20190716030637.5634-6-kevin.laatz@intel.com>
+Subject: [PATCH v2 07/10] samples/bpf: add unaligned chunks mode support to xdpsock
+Date:   Tue, 16 Jul 2019 03:06:34 +0000
+Message-Id: <20190716030637.5634-8-kevin.laatz@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190716030637.5634-1-kevin.laatz@intel.com>
 References: <20190620090958.2135-1-kevin.laatz@intel.com>
@@ -47,96 +47,103 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-With the addition of the unaligned chunks option, we need to make sure we
-handle the offsets accordingly based on the mode we are currently running
-in. This patch modifies the driver to appropriately mask the address for
-each case.
+This patch adds support for the unaligned chunks mode. The addition of the
+unaligned chunks option will allow users to run the application with more
+relaxed chunk placement in the XDP umem.
+
+Unaligned chunks mode can be used with the '-u' or '--unaligned' command
+line options.
 
 Signed-off-by: Kevin Laatz <kevin.laatz@intel.com>
+Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
 ---
- drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c | 26 ++++++++++++++++----
- 1 file changed, 21 insertions(+), 5 deletions(-)
+ samples/bpf/xdpsock_user.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-index bc86057628c8..ac1669b18d13 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-@@ -143,7 +143,9 @@ static int ixgbe_run_xdp_zc(struct ixgbe_adapter *adapter,
- 			    struct ixgbe_ring *rx_ring,
- 			    struct xdp_buff *xdp)
- {
-+	struct xdp_umem *umem = rx_ring->xsk_umem;
- 	int err, result = IXGBE_XDP_PASS;
-+	u64 offset = umem->headroom;
- 	struct bpf_prog *xdp_prog;
- 	struct xdp_frame *xdpf;
- 	u32 act;
-@@ -151,7 +153,13 @@ static int ixgbe_run_xdp_zc(struct ixgbe_adapter *adapter,
- 	rcu_read_lock();
- 	xdp_prog = READ_ONCE(rx_ring->xdp_prog);
- 	act = bpf_prog_run_xdp(xdp_prog, xdp);
--	xdp->handle += xdp->data - xdp->data_hard_start;
-+	offset += xdp->data - xdp->data_hard_start;
+diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
+index 93eaaf7239b2..26ba1a1fd582 100644
+--- a/samples/bpf/xdpsock_user.c
++++ b/samples/bpf/xdpsock_user.c
+@@ -67,6 +67,8 @@ static int opt_ifindex;
+ static int opt_queue;
+ static int opt_poll;
+ static int opt_interval = 1;
++static u32 opt_umem_flags;
++static int opt_unaligned_chunks;
+ static u32 opt_xdp_bind_flags;
+ static int opt_xsk_frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE;
+ static __u32 prog_id;
+@@ -282,7 +284,9 @@ static struct xsk_umem_info *xsk_configure_umem(void *buffer, u64 size)
+ 		.comp_size = XSK_RING_CONS__DEFAULT_NUM_DESCS,
+ 		.frame_size = opt_xsk_frame_size,
+ 		.frame_headroom = XSK_UMEM__DEFAULT_FRAME_HEADROOM,
++		.flags = opt_umem_flags
+ 	};
 +
-+	if (umem->flags & XDP_UMEM_UNALIGNED_CHUNKS)
-+		xdp->handle |= (offset << XSK_UNALIGNED_BUF_OFFSET_SHIFT);
-+	else
-+		xdp->handle += offset;
+ 	int ret;
+ 
+ 	umem = calloc(1, sizeof(*umem));
+@@ -291,6 +295,7 @@ static struct xsk_umem_info *xsk_configure_umem(void *buffer, u64 size)
+ 
+ 	ret = xsk_umem__create(&umem->umem, buffer, size, &umem->fq, &umem->cq,
+ 			       &cfg);
 +
- 	switch (act) {
- 	case XDP_PASS:
- 		break;
-@@ -235,7 +243,10 @@ void ixgbe_zca_free(struct zero_copy_allocator *alloc, unsigned long handle)
- 	nta++;
- 	rx_ring->next_to_alloc = (nta < rx_ring->count) ? nta : 0;
+ 	if (ret)
+ 		exit_with_error(-ret);
  
--	handle &= mask;
-+	if (rx_ring->xsk_umem->flags & XDP_UMEM_UNALIGNED_CHUNKS)
-+		handle &= XSK_UNALIGNED_BUF_ADDR_MASK;
-+	else
-+		handle &= mask;
+@@ -352,6 +357,7 @@ static struct option long_options[] = {
+ 	{"zero-copy", no_argument, 0, 'z'},
+ 	{"copy", no_argument, 0, 'c'},
+ 	{"frame-size", required_argument, 0, 'f'},
++	{"unaligned", no_argument, 0, 'u'},
+ 	{0, 0, 0, 0}
+ };
  
- 	bi->dma = xdp_umem_get_dma(rx_ring->xsk_umem, handle);
- 	bi->dma += hr;
-@@ -269,7 +280,7 @@ static bool ixgbe_alloc_buffer_zc(struct ixgbe_ring *rx_ring,
- 	bi->addr = xdp_umem_get_data(umem, handle);
- 	bi->addr += hr;
+@@ -372,6 +378,7 @@ static void usage(const char *prog)
+ 		"  -z, --zero-copy      Force zero-copy mode.\n"
+ 		"  -c, --copy           Force copy mode.\n"
+ 		"  -f, --frame-size=n   Set the frame size (must be a power of two, default is %d).\n"
++		"  -u, --unaligned	Enable unaligned chunk placement\n"
+ 		"\n";
+ 	fprintf(stderr, str, prog, XSK_UMEM__DEFAULT_FRAME_SIZE);
+ 	exit(EXIT_FAILURE);
+@@ -384,7 +391,7 @@ static void parse_command_line(int argc, char **argv)
+ 	opterr = 0;
  
--	bi->handle = handle + umem->headroom;
-+	bi->handle = handle;
- 
- 	xsk_umem_discard_addr(umem);
- 	return true;
-@@ -296,7 +307,7 @@ static bool ixgbe_alloc_buffer_slow_zc(struct ixgbe_ring *rx_ring,
- 	bi->addr = xdp_umem_get_data(umem, handle);
- 	bi->addr += hr;
- 
--	bi->handle = handle + umem->headroom;
-+	bi->handle = handle;
- 
- 	xsk_umem_discard_addr_rq(umem);
- 	return true;
-@@ -565,6 +576,7 @@ static bool ixgbe_xmit_zc(struct ixgbe_ring *xdp_ring, unsigned int budget)
- 	struct ixgbe_tx_buffer *tx_bi;
- 	bool work_done = true;
- 	struct xdp_desc desc;
-+	u64 addr, offset;
- 	dma_addr_t dma;
- 	u32 cmd_type;
- 
-@@ -578,7 +590,11 @@ static bool ixgbe_xmit_zc(struct ixgbe_ring *xdp_ring, unsigned int budget)
- 		if (!xsk_umem_consume_tx(xdp_ring->xsk_umem, &desc))
+ 	for (;;) {
+-		c = getopt_long(argc, argv, "Frtli:q:psSNn:czf:", long_options,
++		c = getopt_long(argc, argv, "Frtli:q:psSNn:czf:u", long_options,
+ 				&option_index);
+ 		if (c == -1)
  			break;
- 
--		dma = xdp_umem_get_dma(xdp_ring->xsk_umem, desc.addr);
-+		/* for unaligned chunks need to take offset from upper bits */
-+		offset = (desc.addr >> XSK_UNALIGNED_BUF_OFFSET_SHIFT);
-+		addr = (desc.addr & XSK_UNALIGNED_BUF_ADDR_MASK);
+@@ -424,12 +431,17 @@ static void parse_command_line(int argc, char **argv)
+ 		case 'c':
+ 			opt_xdp_bind_flags |= XDP_COPY;
+ 			break;
++		case 'u':
++			opt_umem_flags |= XDP_UMEM_UNALIGNED_CHUNKS;
++			opt_unaligned_chunks = 1;
++			break;
+ 		case 'F':
+ 			opt_xdp_flags &= ~XDP_FLAGS_UPDATE_IF_NOEXIST;
+ 			break;
+ 		case 'f':
+ 			opt_xsk_frame_size = atoi(optarg);
+ 			break;
 +
-+		dma = xdp_umem_get_dma(xdp_ring->xsk_umem, addr + offset);
+ 		default:
+ 			usage(basename(argv[0]));
+ 		}
+@@ -442,7 +454,8 @@ static void parse_command_line(int argc, char **argv)
+ 		usage(basename(argv[0]));
+ 	}
  
- 		dma_sync_single_for_device(xdp_ring->dev, dma, desc.len,
- 					   DMA_BIDIRECTIONAL);
+-	if (opt_xsk_frame_size & (opt_xsk_frame_size - 1)) {
++	if ((opt_xsk_frame_size & (opt_xsk_frame_size - 1)) &&
++			!opt_unaligned_chunks) {
+ 		fprintf(stderr, "--frame-size=%d is not a power of two\n",
+ 			opt_xsk_frame_size);
+ 		usage(basename(argv[0]));
 -- 
 2.17.1
 
