@@ -2,139 +2,252 @@ Return-Path: <SRS0=q5+7=VN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DATE_IN_PAST_06_12,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DC2AC76192
-	for <bpf@archiver.kernel.org>; Tue, 16 Jul 2019 11:22:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE8B5C76195
+	for <bpf@archiver.kernel.org>; Tue, 16 Jul 2019 11:35:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7DD622053B
-	for <bpf@archiver.kernel.org>; Tue, 16 Jul 2019 11:22:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B885221721
+	for <bpf@archiver.kernel.org>; Tue, 16 Jul 2019 11:35:06 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="VrDWXQ11"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387753AbfGPLWT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Jul 2019 07:22:19 -0400
-Received: from mga01.intel.com ([192.55.52.88]:34198 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387733AbfGPLWM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Jul 2019 07:22:12 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Jul 2019 04:22:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,498,1557212400"; 
-   d="scan'208";a="366631512"
-Received: from silpixa00399838.ir.intel.com (HELO silpixa00399838.ger.corp.intel.com) ([10.237.223.10])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Jul 2019 04:22:00 -0700
-From:   Kevin Laatz <kevin.laatz@intel.com>
-To:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        bjorn.topel@intel.com, magnus.karlsson@intel.com,
-        jakub.kicinski@netronome.com, jonathan.lemon@gmail.com
-Cc:     bruce.richardson@intel.com, ciara.loftus@intel.com,
-        bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        Kevin Laatz <kevin.laatz@intel.com>
-Subject: [PATCH v2 06/10] libbpf: add flags to umem config
-Date:   Tue, 16 Jul 2019 03:06:33 +0000
-Message-Id: <20190716030637.5634-7-kevin.laatz@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190716030637.5634-1-kevin.laatz@intel.com>
-References: <20190620090958.2135-1-kevin.laatz@intel.com>
- <20190716030637.5634-1-kevin.laatz@intel.com>
+        id S2387536AbfGPLfF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Jul 2019 07:35:05 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:46544 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733067AbfGPLfF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Jul 2019 07:35:05 -0400
+Received: by mail-ot1-f66.google.com with SMTP id z23so20638605ote.13
+        for <bpf@vger.kernel.org>; Tue, 16 Jul 2019 04:35:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1ZCpMbVDKwjQxtAJhuw96baeUJqx+eJCjRWxL6AT2Ek=;
+        b=VrDWXQ11OMSgyXajvroKGJ1TEO2e9EkYEswE1f9c+WM1VZbeJ0ZbaTdd96sptxfMV3
+         gEg0M3CdhibZx8lKrFpdhWG0BCqb/N6+URPsvrTDbC5JFi/QbYAME+IlybdeZsTKHFtm
+         ord/LwZv3sTEs9J2cEwYaup4jkbS6CgIORXNM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1ZCpMbVDKwjQxtAJhuw96baeUJqx+eJCjRWxL6AT2Ek=;
+        b=LnV4lckBUm5ywZ80yle+S27RPe7ok3Rqh2FyzL/V4JkYWxolT3LTPvNiYJk36lxeVQ
+         ay4TKKZ4VuJb1RjC9IpNHzaIQ+4ebWsZD+D4iYhIQaCaJSPMateNRY2N0aFgmtOXiG2Q
+         lrNS3fQzHgTxAa98R9KI2OSQh0pKo+bwm3RcJh6cZw5HnFR9NweiKPzK2+Iezv6slBnj
+         fdbScdGv4r0TQ6exqdc53Eys7TaonOww/803x8sByptA30Y52bOliVvVRsfBp//+XT1d
+         uX8vV7wwupUC0L7r9JtXDHej4RQ/+pGmkBzq+G50uqjjk6ByRfHJnP9dk/QFeegs7+Mn
+         /SDQ==
+X-Gm-Message-State: APjAAAUvfcqL4zSSSAYhWZVJNL123vABEl6rmRo+FjVmnVQIISfrq7xT
+        oDunlmgjo/d4nttZ5+NTNlxI++dRQgrnK7Js9TqwPw==
+X-Google-Smtp-Source: APXvYqwF8r7ktjEaOBhNWYU4Tt0iHudeQxO9ZD9aLMFkBHOXWG9xzpQ6fALxnMk2E0Jurozwi1HyenF+d/F0yWV5T/s=
+X-Received: by 2002:a9d:65ca:: with SMTP id z10mr24864459oth.334.1563276903776;
+ Tue, 16 Jul 2019 04:35:03 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190716002650.154729-1-ppenkov.kernel@gmail.com> <20190716002650.154729-3-ppenkov.kernel@gmail.com>
+In-Reply-To: <20190716002650.154729-3-ppenkov.kernel@gmail.com>
+From:   Lorenz Bauer <lmb@cloudflare.com>
+Date:   Tue, 16 Jul 2019 12:34:52 +0100
+Message-ID: <CACAyw99Umy6gaAu1DFTgemRXpZWmxeTSeCZDwdHWzLWeG8Ur3Q@mail.gmail.com>
+Subject: Re: [bpf-next RFC 2/6] tcp: add skb-less helpers to retrieve SYN cookie
+To:     Petar Penkov <ppenkov.kernel@gmail.com>
+Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        davem@davemloft.net, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Eric Dumazet <edumazet@google.com>, sdf@google.com,
+        Petar Penkov <ppenkov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds a 'flags' field to the umem_config and umem_reg structs.
-This will allow for more options to be added for configuring umems.
+On Tue, 16 Jul 2019 at 01:27, Petar Penkov <ppenkov.kernel@gmail.com> wrote:
+>
+> From: Petar Penkov <ppenkov@google.com>
+>
+> This patch allows generation of a SYN cookie before an SKB has been
+> allocated, as is the case at XDP.
+>
+> Signed-off-by: Petar Penkov <ppenkov@google.com>
+> ---
+>  include/net/tcp.h    | 11 ++++++
+>  net/ipv4/tcp_input.c | 79 ++++++++++++++++++++++++++++++++++++++++++++
+>  net/ipv4/tcp_ipv4.c  |  8 +++++
+>  net/ipv6/tcp_ipv6.c  |  8 +++++
+>  4 files changed, 106 insertions(+)
+>
+> diff --git a/include/net/tcp.h b/include/net/tcp.h
+> index cca3c59b98bf..a128e22c0d5d 100644
+> --- a/include/net/tcp.h
+> +++ b/include/net/tcp.h
+> @@ -414,6 +414,17 @@ void tcp_parse_options(const struct net *net, const struct sk_buff *skb,
+>                        int estab, struct tcp_fastopen_cookie *foc);
+>  const u8 *tcp_parse_md5sig_option(const struct tcphdr *th);
+>
+> +/*
+> + *     BPF SKB-less helpers
+> + */
+> +u16 tcp_v4_get_syncookie(struct sock *sk, struct iphdr *iph,
+> +                        struct tcphdr *tch, u32 *cookie);
+> +u16 tcp_v6_get_syncookie(struct sock *sk, struct ipv6hdr *iph,
+> +                        struct tcphdr *tch, u32 *cookie);
+> +u16 tcp_get_syncookie(struct request_sock_ops *rsk_ops,
+> +                     const struct tcp_request_sock_ops *af_ops,
+> +                     struct sock *sk, void *iph, struct tcphdr *tch,
+> +                     u32 *cookie);
+>  /*
+>   *     TCP v4 functions exported for the inet6 API
+>   */
+> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+> index 8892df6de1d4..1406d7e0953c 100644
+> --- a/net/ipv4/tcp_input.c
+> +++ b/net/ipv4/tcp_input.c
+> @@ -3782,6 +3782,52 @@ static void smc_parse_options(const struct tcphdr *th,
+>  #endif
+>  }
+>
+> +/* Try to parse the MSS option from the TCP header. Return 0 on failure, clamped
+> + * value on success.
+> + *
+> + * Invoked for BPF SYN cookie generation, so th should be a SYN.
+> + */
+> +static u16 tcp_parse_mss_option(const struct net *net, const struct tcphdr *th,
+> +                               u16 user_mss)
 
-The first use for the flags field is to add a flag for unaligned chunks
-mode. These flags can either be user-provided or filled with a default.
+net seems unused?
 
-Signed-off-by: Kevin Laatz <kevin.laatz@intel.com>
-Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
+> +{
+> +       const unsigned char *ptr = (const unsigned char *)(th + 1);
+> +       int length = (th->doff * 4) - sizeof(struct tcphdr);
+> +       u16 mss = 0;
+> +
+> +       while (length > 0) {
+> +               int opcode = *ptr++;
+> +               int opsize;
+> +
+> +               switch (opcode) {
+> +               case TCPOPT_EOL:
+> +                       return mss;
+> +               case TCPOPT_NOP:        /* Ref: RFC 793 section 3.1 */
+> +                       length--;
+> +                       continue;
+> +               default:
+> +                       if (length < 2)
+> +                               return mss;
+> +                       opsize = *ptr++;
+> +                       if (opsize < 2) /* "silly options" */
+> +                               return mss;
+> +                       if (opsize > length)
+> +                               return mss;     /* fail on partial options */
+> +                       if (opcode == TCPOPT_MSS && opsize == TCPOLEN_MSS) {
+> +                               u16 in_mss = get_unaligned_be16(ptr);
+> +
+> +                               if (in_mss) {
+> +                                       if (user_mss && user_mss < in_mss)
+> +                                               in_mss = user_mss;
+> +                                       mss = in_mss;
+> +                               }
+> +                       }
+> +                       ptr += opsize - 2;
+> +                       length -= opsize;
+> +               }
+> +       }
+> +       return mss;
+> +}
+> +
+>  /* Look for tcp options. Normally only called on SYN and SYNACK packets.
+>   * But, this can also be called on packets in the established flow when
+>   * the fast version below fails.
+> @@ -6464,6 +6510,39 @@ static void tcp_reqsk_record_syn(const struct sock *sk,
+>         }
+>  }
+>
+> +u16 tcp_get_syncookie(struct request_sock_ops *rsk_ops,
+> +                     const struct tcp_request_sock_ops *af_ops,
+> +                     struct sock *sk, void *iph, struct tcphdr *th,
+> +                     u32 *cookie)
+> +{
+> +       u16 mss = 0;
+> +#ifdef CONFIG_SYN_COOKIES
+> +       bool is_v4 = rsk_ops->family == AF_INET;
+> +       struct tcp_sock *tp = tcp_sk(sk);
+> +
+> +       if (sock_net(sk)->ipv4.sysctl_tcp_syncookies != 2 &&
+> +           !inet_csk_reqsk_queue_is_full(sk))
+> +               return 0;
+> +
+> +       if (!tcp_syn_flood_action(sk, rsk_ops->slab_name))
+> +               return 0;
+> +
+> +       if (sk_acceptq_is_full(sk)) {
+> +               NET_INC_STATS(sock_net(sk), LINUX_MIB_LISTENOVERFLOWS);
+> +               return 0;
+> +       }
+> +
+> +       mss = tcp_parse_mss_option(sock_net(sk), th, tp->rx_opt.user_mss);
+> +       if (!mss)
+> +               mss = af_ops->mss_clamp;
+> +
+> +       tcp_synq_overflow(sk);
+> +       *cookie = is_v4 ? __cookie_v4_init_sequence(iph, th, &mss)
+> +                       : __cookie_v6_init_sequence(iph, th, &mss);
+> +#endif
+> +       return mss;
+> +}
+> +
+>  int tcp_conn_request(struct request_sock_ops *rsk_ops,
+>                      const struct tcp_request_sock_ops *af_ops,
+>                      struct sock *sk, struct sk_buff *skb)
+> diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+> index d57641cb3477..0e06e59784bd 100644
+> --- a/net/ipv4/tcp_ipv4.c
+> +++ b/net/ipv4/tcp_ipv4.c
+> @@ -1515,6 +1515,14 @@ static struct sock *tcp_v4_cookie_check(struct sock *sk, struct sk_buff *skb)
+>         return sk;
+>  }
+>
+> +u16 tcp_v4_get_syncookie(struct sock *sk, struct iphdr *iph,
+> +                        struct tcphdr *tch, u32 *cookie)
+> +{
+> +       return tcp_get_syncookie(&tcp_request_sock_ops,
+> +                                &tcp_request_sock_ipv4_ops, sk, iph, tch,
+> +                                cookie);
+> +}
+> +
+>  /* The socket must have it's spinlock held when we get
+>   * here, unless it is a TCP_LISTEN socket.
+>   *
+> diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
+> index d56a9019a0fe..ce46cdba54bc 100644
+> --- a/net/ipv6/tcp_ipv6.c
+> +++ b/net/ipv6/tcp_ipv6.c
+> @@ -1058,6 +1058,14 @@ static struct sock *tcp_v6_cookie_check(struct sock *sk, struct sk_buff *skb)
+>         return sk;
+>  }
+>
+> +u16 tcp_v6_get_syncookie(struct sock *sk, struct ipv6hdr *iph,
+> +                        struct tcphdr *tch, u32 *cookie)
+> +{
+> +       return tcp_get_syncookie(&tcp6_request_sock_ops,
+> +                                &tcp_request_sock_ipv6_ops, sk, iph, tch,
+> +                                cookie);
+> +}
+> +
+>  static int tcp_v6_conn_request(struct sock *sk, struct sk_buff *skb)
+>  {
+>         if (skb->protocol == htons(ETH_P_IP))
+> --
+> 2.22.0.510.g264f2c817a-goog
+>
 
----
-v2:
-  - Removed the headroom check from this patch. It has moved to the
-    previous patch.
----
- tools/include/uapi/linux/if_xdp.h | 4 ++++
- tools/lib/bpf/xsk.c               | 3 +++
- tools/lib/bpf/xsk.h               | 2 ++
- 3 files changed, 9 insertions(+)
 
-diff --git a/tools/include/uapi/linux/if_xdp.h b/tools/include/uapi/linux/if_xdp.h
-index faaa5ca2a117..594bcebb189c 100644
---- a/tools/include/uapi/linux/if_xdp.h
-+++ b/tools/include/uapi/linux/if_xdp.h
-@@ -17,6 +17,9 @@
- #define XDP_COPY	(1 << 1) /* Force copy-mode */
- #define XDP_ZEROCOPY	(1 << 2) /* Force zero-copy mode */
- 
-+/* Flags for xsk_umem_config flags */
-+#define XDP_UMEM_UNALIGNED_CHUNKS (1 << 0)
-+
- struct sockaddr_xdp {
- 	__u16 sxdp_family;
- 	__u16 sxdp_flags;
-@@ -53,6 +56,7 @@ struct xdp_umem_reg {
- 	__u64 len; /* Length of packet data area */
- 	__u32 chunk_size;
- 	__u32 headroom;
-+	__u32 flags;
- };
- 
- struct xdp_statistics {
-diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
-index b33740221b7e..d5ff3fc39e32 100644
---- a/tools/lib/bpf/xsk.c
-+++ b/tools/lib/bpf/xsk.c
-@@ -116,6 +116,7 @@ static void xsk_set_umem_config(struct xsk_umem_config *cfg,
- 		cfg->comp_size = XSK_RING_CONS__DEFAULT_NUM_DESCS;
- 		cfg->frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE;
- 		cfg->frame_headroom = XSK_UMEM__DEFAULT_FRAME_HEADROOM;
-+		cfg->flags = XSK_UMEM__DEFAULT_FLAGS;
- 		return;
- 	}
- 
-@@ -123,6 +124,7 @@ static void xsk_set_umem_config(struct xsk_umem_config *cfg,
- 	cfg->comp_size = usr_cfg->comp_size;
- 	cfg->frame_size = usr_cfg->frame_size;
- 	cfg->frame_headroom = usr_cfg->frame_headroom;
-+	cfg->flags = usr_cfg->flags;
- }
- 
- static int xsk_set_xdp_socket_config(struct xsk_socket_config *cfg,
-@@ -182,6 +184,7 @@ int xsk_umem__create(struct xsk_umem **umem_ptr, void *umem_area, __u64 size,
- 	mr.len = size;
- 	mr.chunk_size = umem->config.frame_size;
- 	mr.headroom = umem->config.frame_headroom;
-+	mr.flags = umem->config.flags;
- 
- 	err = setsockopt(umem->fd, SOL_XDP, XDP_UMEM_REG, &mr, sizeof(mr));
- 	if (err) {
-diff --git a/tools/lib/bpf/xsk.h b/tools/lib/bpf/xsk.h
-index 833a6e60d065..44a03d8c34b9 100644
---- a/tools/lib/bpf/xsk.h
-+++ b/tools/lib/bpf/xsk.h
-@@ -170,12 +170,14 @@ LIBBPF_API int xsk_socket__fd(const struct xsk_socket *xsk);
- #define XSK_UMEM__DEFAULT_FRAME_SHIFT    12 /* 4096 bytes */
- #define XSK_UMEM__DEFAULT_FRAME_SIZE     (1 << XSK_UMEM__DEFAULT_FRAME_SHIFT)
- #define XSK_UMEM__DEFAULT_FRAME_HEADROOM 0
-+#define XSK_UMEM__DEFAULT_FLAGS 0
- 
- struct xsk_umem_config {
- 	__u32 fill_size;
- 	__u32 comp_size;
- 	__u32 frame_size;
- 	__u32 frame_headroom;
-+	__u32 flags;
- };
- 
- /* Flags for the libbpf_flags field. */
 -- 
-2.17.1
+Lorenz Bauer  |  Systems Engineer
+6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
 
+www.cloudflare.com
