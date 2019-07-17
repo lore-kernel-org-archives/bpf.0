@@ -2,124 +2,130 @@ Return-Path: <SRS0=vc2L=VO=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20C49C76186
-	for <bpf@archiver.kernel.org>; Wed, 17 Jul 2019 05:12:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2185EC76186
+	for <bpf@archiver.kernel.org>; Wed, 17 Jul 2019 07:52:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D9DDA208C0
-	for <bpf@archiver.kernel.org>; Wed, 17 Jul 2019 05:12:10 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tk6eJLjo"
+	by mail.kernel.org (Postfix) with ESMTP id EAD58217D9
+	for <bpf@archiver.kernel.org>; Wed, 17 Jul 2019 07:52:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1563349955;
+	bh=AduzEhpfg2VrAE19OEU5UAD569tPbdK9WGCbykgfs9U=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=qtrMRuU3A3tKl0gcxdL72daCxwZ3OnyfjdXfedSwa1puIvlEX70/YYIlwmKK2yVPL
+	 sISxwmRog1qZXeAgkGZF0d7V9PCTf8AM1tiWDuLBHRcf1+TW1WI26c2sSMJJtA2pmW
+	 XnLAX4rFIiq23NHsp8dCnKFj1Hap8uIDweBmi/Uw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725890AbfGQFMK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Jul 2019 01:12:10 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:42692 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725856AbfGQFMK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Jul 2019 01:12:10 -0400
-Received: by mail-io1-f65.google.com with SMTP id e20so13444437iob.9;
-        Tue, 16 Jul 2019 22:12:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=P18LXWJzk1p3M6n7gC2JDodduYn4DY2FTMI41+jZyT0=;
-        b=Tk6eJLjoxwEWfbJ1R9yNN/xvwvCFcn6jevVofyziU4rraBbexRzuLmbzgEIzt7BRm4
-         JiJloO5j9Lr46CXJCVqxX3TtKOlZcUJ/7kLtkTjkjkK87XVWnWFx8Xsbp8RakzQsuA47
-         v/2nM2TYg0W0RWQWQUein3ZDySHmYGAwmMvvwsLCP1S4TPSxiWrM8jxPzYI6SWfhHsSm
-         W0i8MB2pzGU74XmJqrrw9MMachL+/3mYp60IAndsHtd01lQgrtvBYor1bvptu0Uc6mVG
-         MqiitrvMXOhUMc/Td0e40tAQflcLLKPz6nkejsjb1whPX/3rwF7QB5uFkqPeSaHDtxUf
-         uMmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=P18LXWJzk1p3M6n7gC2JDodduYn4DY2FTMI41+jZyT0=;
-        b=IUQltA3l0BH6xJY0dVbjpsMXT3de6+okdyYs5c31s9wB/cgqWSXmMuyBqNi5zCmN4m
-         3Q2NopQGoZLbv3+VppgWtia/SonktSFI0Httdn/XmNj4Ci1XbHEhOcYXmvKiR397o+Ih
-         h69qDPYpobQw01QEGtF0hl1vVB0yoL95tb5uWcQrio5aN0sOl130WQ6cIi0f5J95fVL2
-         6I3euKpDjYebsFcx7zE6LRxd0Kbau2OW5ABtiLcIWZXCZaC/uaApPvqzwhpfhhnSo81S
-         SFT9HBCHv6yFv09m6J/pFMJQSRrgULdMSiZuWm31Bh/siOG0kSRL4hYrUDYhKBNAHmly
-         UV3Q==
-X-Gm-Message-State: APjAAAVZ+YC6veK9r0oMjwQWlyvGdNQx3S5BwKRbf5XRaHwFesKdX6Nb
-        Js3cCxlWcwDLXqx5LZOkJwmgvzMvwG0KtMnbl7Y=
-X-Google-Smtp-Source: APXvYqw5i2iP5ADet8mgqdNpv/krQffvuHM3py6o6iv6RWgaojGA9sAUZNW9gY/oj5YXgefloa63u1qWUFVv82HNjTk=
-X-Received: by 2002:a02:ce35:: with SMTP id v21mr37798136jar.108.1563340329468;
- Tue, 16 Jul 2019 22:12:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190716115910.23093-1-iii@linux.ibm.com> <CAH3MdRWGVDjW8cA9EbnFjK8ko1EqeyDyC_LoRTsxhLsYn1fZtw@mail.gmail.com>
-In-Reply-To: <CAH3MdRWGVDjW8cA9EbnFjK8ko1EqeyDyC_LoRTsxhLsYn1fZtw@mail.gmail.com>
-From:   Y Song <ys114321@gmail.com>
-Date:   Tue, 16 Jul 2019 22:11:33 -0700
-Message-ID: <CAH3MdRU-u1Gn6uj2D=mzXvdC2RDWas3Ec0QXObKsLac1GwuREQ@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf: fix narrower loads on s390
-To:     Ilya Leoshkevich <iii@linux.ibm.com>
-Cc:     bpf <bpf@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
-        gor@linux.ibm.com, heiko.carstens@de.ibm.com
-Content-Type: text/plain; charset="UTF-8"
+        id S1725932AbfGQHwe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Jul 2019 03:52:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56678 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725873AbfGQHwe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Jul 2019 03:52:34 -0400
+Received: from devnote2 (115.42.148.210.bf.2iij.net [210.148.42.115])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D1CDD2077C;
+        Wed, 17 Jul 2019 07:52:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563349953;
+        bh=AduzEhpfg2VrAE19OEU5UAD569tPbdK9WGCbykgfs9U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ADdIIP4LbRiUvB+uliUTmVchJU8aHDFFjvL+4mfKZw7q6/t82HChdesjTx2n7xkd/
+         OqVQchqbg+KmENao+1iR9M2GDc9vVYXws0IxdcL8wKtSkAqpukBA+c+gDbRzFS+nfN
+         kaXeGGe3GeHlkVgZ3pSVw+J5uQCh/oQ8gKL8HRvQ=
+Date:   Wed, 17 Jul 2019 16:52:22 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Justin He <Justin.He@arm.com>
+Subject: Re: [PATCH 0/2] arm/arm64: Add support for function error injection
+Message-Id: <20190717165222.62e02b99ebc16e23c3b81de2@kernel.org>
+In-Reply-To: <20190716111301.1855-1-leo.yan@linaro.org>
+References: <20190716111301.1855-1-leo.yan@linaro.org>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-[sorry, resend again as previous one has come text messed out due to
-networking issues]
+On Tue, 16 Jul 2019 19:12:59 +0800
+Leo Yan <leo.yan@linaro.org> wrote:
 
-On Tue, Jul 16, 2019 at 10:08 PM Y Song <ys114321@gmail.com> wrote:
->
-> On Tue, Jul 16, 2019 at 4:59 AM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
-> >
-> > test_pkt_md_access is failing on s390, since the associated eBPF prog
-> > returns TC_ACT_SHOT, which in turn happens because loading a part of a
-> > struct __sk_buff field produces an incorrect result.
-> >
-> > The problem is that when verifier emits the code to replace partial load
-> > of a field with a full load, a shift and a bitwise AND, it assumes that
-> > the machine is little endian.
-> >
-> > Adjust shift count calculation to account for endianness.
-> >
-> > Fixes: 31fd85816dbe ("bpf: permits narrower load from bpf program context fields")
-> > Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> > ---
-> >  kernel/bpf/verifier.c | 8 ++++++--
-> >  1 file changed, 6 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 5900cbb966b1..3f9353653558 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -8616,8 +8616,12 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
-> >                 }
-> >
-> >                 if (is_narrower_load && size < target_size) {
-> > -                       u8 shift = (off & (size_default - 1)) * 8;
-> > -
-> > +                       u8 load_off = off & (size_default - 1);
-> > +#ifdef __LITTLE_ENDIAN
-> > +                       u8 shift = load_off * 8;
-> > +#else
-> > +                       u8 shift = (size_default - (load_off + size)) * 8;
-> > +#endif
->
-All the values are in register. The shifting operations should be the
-same for big endian and little endian, e.g., value 64 >> 2 = 16 when
-value "64" is in register. So I did not see a problem here.
+> This small patch set is to add support for function error injection;
+> this can be used to eanble more advanced debugging feature, e.g.
+> CONFIG_BPF_KPROBE_OVERRIDE.
+> 
+> I only tested the first patch on arm64 platform Juno-r2 with below
+> steps; the second patch is for arm arch, but I absent the platform
+> for the testing so only pass compilation.
+> 
+> - Enable kernel configuration:
+>   CONFIG_BPF_KPROBE_OVERRIDE
+>   CONFIG_BTRFS_FS
+>   CONFIG_BPF_EVENTS=y
+>   CONFIG_KPROBES=y
+>   CONFIG_KPROBE_EVENTS=y
+>   CONFIG_BPF_KPROBE_OVERRIDE=y
+> - Build samples/bpf on Juno-r2 board with Debian rootFS:
+>   # cd $kernel
+>   # make headers_install
+>   # make samples/bpf/ LLC=llc-7 CLANG=clang-7
+> - Run the sample tracex7:
+>   # ./tracex7 /dev/sdb1
+>   [ 1975.211781] BTRFS error (device (efault)): open_ctree failed
+>   mount: /mnt/linux-kernel/linux-cs-dev/samples/bpf/tmpmnt: mount(2) system call failed: Cannot allocate memory.
 
-Could you elaborate which field access in test_pkt_md_access
-caused problem?
+This series looks good to me from the view point of override usage :)
 
-It would be good if you can give detailed memory layout and register values
-to illustrate the problem.
+Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
 
->
-> >                         if (ctx_field_size <= 4) {
-> >                                 if (shift)
-> >                                         insn_buf[cnt++] = BPF_ALU32_IMM(BPF_RSH,
-> > --
-> > 2.21.0
-> >
+For this series.
+
+Thank you,
+
+> 
+> 
+> Leo Yan (2):
+>   arm64: Add support for function error injection
+>   arm: Add support for function error injection
+> 
+>  arch/arm/Kconfig                         |  1 +
+>  arch/arm/include/asm/error-injection.h   | 13 +++++++++++++
+>  arch/arm/include/asm/ptrace.h            |  5 +++++
+>  arch/arm/lib/Makefile                    |  2 ++
+>  arch/arm/lib/error-inject.c              | 19 +++++++++++++++++++
+>  arch/arm64/Kconfig                       |  1 +
+>  arch/arm64/include/asm/error-injection.h | 13 +++++++++++++
+>  arch/arm64/include/asm/ptrace.h          |  5 +++++
+>  arch/arm64/lib/Makefile                  |  2 ++
+>  arch/arm64/lib/error-inject.c            | 19 +++++++++++++++++++
+>  10 files changed, 80 insertions(+)
+>  create mode 100644 arch/arm/include/asm/error-injection.h
+>  create mode 100644 arch/arm/lib/error-inject.c
+>  create mode 100644 arch/arm64/include/asm/error-injection.h
+>  create mode 100644 arch/arm64/lib/error-inject.c
+> 
+> -- 
+> 2.17.1
+> 
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
