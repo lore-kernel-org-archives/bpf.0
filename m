@@ -6,27 +6,27 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEFE1C7618F
-	for <bpf@archiver.kernel.org>; Thu, 18 Jul 2019 14:42:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6A32C76195
+	for <bpf@archiver.kernel.org>; Thu, 18 Jul 2019 14:44:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7E6BD21849
-	for <bpf@archiver.kernel.org>; Thu, 18 Jul 2019 14:42:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CC16D2184E
+	for <bpf@archiver.kernel.org>; Thu, 18 Jul 2019 14:44:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727730AbfGROm5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Jul 2019 10:42:57 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:37236 "EHLO mx1.redhat.com"
+        id S2390618AbfGROn4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Jul 2019 10:43:56 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:38860 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726040AbfGROm5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 18 Jul 2019 10:42:57 -0400
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        id S2390574AbfGROn4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 18 Jul 2019 10:43:56 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 35C6DC065134;
-        Thu, 18 Jul 2019 14:42:56 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id 83C208A004;
+        Thu, 18 Jul 2019 14:43:55 +0000 (UTC)
 Received: from redhat.com (ovpn-120-147.rdu2.redhat.com [10.10.120.147])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 972C45D739;
-        Thu, 18 Jul 2019 14:42:48 +0000 (UTC)
-Date:   Thu, 18 Jul 2019 10:42:47 -0400
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2BF4B6056F;
+        Thu, 18 Jul 2019 14:43:47 +0000 (UTC)
+Date:   Thu, 18 Jul 2019 10:43:46 -0400
 From:   "Michael S. Tsirkin" <mst@redhat.com>
 To:     Jason Wang <jasowang@redhat.com>
 Cc:     ? jiang <jiangkidd@hotmail.com>,
@@ -48,67 +48,72 @@ Cc:     ? jiang <jiangkidd@hotmail.com>,
         "jiangran.jr@alibaba-inc.com" <jiangran.jr@alibaba-inc.com>
 Subject: Re: [PATCH] virtio-net: parameterize min ring num_free for virtio
  receive
-Message-ID: <20190718103641-mutt-send-email-mst@kernel.org>
+Message-ID: <20190718104307-mutt-send-email-mst@kernel.org>
 References: <BYAPR14MB32056583C4963342F5D817C4A6C80@BYAPR14MB3205.namprd14.prod.outlook.com>
  <20190718085836-mutt-send-email-mst@kernel.org>
  <bdd30ef5-4f69-8218-eed0-38c6daac42db@redhat.com>
+ <20190718103641-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <bdd30ef5-4f69-8218-eed0-38c6daac42db@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.31]); Thu, 18 Jul 2019 14:42:56 +0000 (UTC)
+In-Reply-To: <20190718103641-mutt-send-email-mst@kernel.org>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.26]); Thu, 18 Jul 2019 14:43:55 +0000 (UTC)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jul 18, 2019 at 10:01:05PM +0800, Jason Wang wrote:
-> 
-> On 2019/7/18 下午9:04, Michael S. Tsirkin wrote:
-> > On Thu, Jul 18, 2019 at 12:55:50PM +0000, ? jiang wrote:
-> > > This change makes ring buffer reclaim threshold num_free configurable
-> > > for better performance, while it's hard coded as 1/2 * queue now.
-> > > According to our test with qemu + dpdk, packet dropping happens when
-> > > the guest is not able to provide free buffer in avail ring timely.
-> > > Smaller value of num_free does decrease the number of packet dropping
-> > > during our test as it makes virtio_net reclaim buffer earlier.
+On Thu, Jul 18, 2019 at 10:42:47AM -0400, Michael S. Tsirkin wrote:
+> On Thu, Jul 18, 2019 at 10:01:05PM +0800, Jason Wang wrote:
+> > 
+> > On 2019/7/18 下午9:04, Michael S. Tsirkin wrote:
+> > > On Thu, Jul 18, 2019 at 12:55:50PM +0000, ? jiang wrote:
+> > > > This change makes ring buffer reclaim threshold num_free configurable
+> > > > for better performance, while it's hard coded as 1/2 * queue now.
+> > > > According to our test with qemu + dpdk, packet dropping happens when
+> > > > the guest is not able to provide free buffer in avail ring timely.
+> > > > Smaller value of num_free does decrease the number of packet dropping
+> > > > during our test as it makes virtio_net reclaim buffer earlier.
+> > > > 
+> > > > At least, we should leave the value changeable to user while the
+> > > > default value as 1/2 * queue is kept.
+> > > > 
+> > > > Signed-off-by: jiangkidd<jiangkidd@hotmail.com>
+> > > That would be one reason, but I suspect it's not the
+> > > true one. If you need more buffer due to jitter
+> > > then just increase the queue size. Would be cleaner.
 > > > 
-> > > At least, we should leave the value changeable to user while the
-> > > default value as 1/2 * queue is kept.
 > > > 
-> > > Signed-off-by: jiangkidd<jiangkidd@hotmail.com>
-> > That would be one reason, but I suspect it's not the
-> > true one. If you need more buffer due to jitter
-> > then just increase the queue size. Would be cleaner.
+> > > However are you sure this is the reason for
+> > > packet drops? Do you see them dropped by dpdk
+> > > due to lack of space in the ring? As opposed to
+> > > by guest?
+> > > 
+> > > 
 > > 
+> > Besides those, this patch depends on the user to choose a suitable threshold
+> > which is not good. You need either a good value with demonstrated numbers or
+> > something smarter.
 > > 
-> > However are you sure this is the reason for
-> > packet drops? Do you see them dropped by dpdk
-> > due to lack of space in the ring? As opposed to
-> > by guest?
-> > 
-> > 
+> > Thanks
 > 
-> Besides those, this patch depends on the user to choose a suitable threshold
-> which is not good. You need either a good value with demonstrated numbers or
-> something smarter.
+> I do however think that we have a problem right now: try_fill_recv can
+> take up a long time during which net stack does not run at all. Imagine
+> a 1K queue - we are talking 512 packets. That's exceessive.  napi poll
+> weight solves a similar problem, so it might make sense to cap this at
+> napi_poll_weight.
 > 
-> Thanks
+> Which will allow tweaking it through a module parameter as a
+> side effect :) Maybe just do NAPI_POLL_WEIGHT.
 
-I do however think that we have a problem right now: try_fill_recv can
-take up a long time during which net stack does not run at all. Imagine
-a 1K queue - we are talking 512 packets. That's exceessive.  napi poll
-weight solves a similar problem, so it might make sense to cap this at
-napi_poll_weight.
+Or maybe NAPI_POLL_WEIGHT/2 like we do at half the queue ;). Please
+experiment, measure performance and let the list know
 
-Which will allow tweaking it through a module parameter as a
-side effect :) Maybe just do NAPI_POLL_WEIGHT.
-
-Need to be careful though: queues can also be small and I don't think we
-want to exceed queue size / 2, or maybe queue size - napi_poll_weight.
-Definitely must not exceed the full queue size.
-
--- 
-MST
+> Need to be careful though: queues can also be small and I don't think we
+> want to exceed queue size / 2, or maybe queue size - napi_poll_weight.
+> Definitely must not exceed the full queue size.
+> 
+> -- 
+> MST
