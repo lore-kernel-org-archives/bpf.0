@@ -2,65 +2,67 @@ Return-Path: <SRS0=h/Ra=VQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24F7BC76196
-	for <bpf@archiver.kernel.org>; Fri, 19 Jul 2019 17:31:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3B27C76196
+	for <bpf@archiver.kernel.org>; Fri, 19 Jul 2019 17:31:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 012FD21874
-	for <bpf@archiver.kernel.org>; Fri, 19 Jul 2019 17:31:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 909F72186A
+	for <bpf@archiver.kernel.org>; Fri, 19 Jul 2019 17:31:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="iRqO/zmZ"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="lueMyQB5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731424AbfGSRbL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Jul 2019 13:31:11 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:34873 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731411AbfGSRbK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Jul 2019 13:31:10 -0400
-Received: by mail-qt1-f194.google.com with SMTP id d23so31848670qto.2
-        for <bpf@vger.kernel.org>; Fri, 19 Jul 2019 10:31:09 -0700 (PDT)
+        id S1731520AbfGSRbS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Jul 2019 13:31:18 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:40716 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731518AbfGSRbR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Jul 2019 13:31:17 -0400
+Received: by mail-qt1-f195.google.com with SMTP id a15so31801741qtn.7
+        for <bpf@vger.kernel.org>; Fri, 19 Jul 2019 10:31:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=NPZ25U0KNpg61Ku6URhVeBa08Dg0ip/p/6qGinSsNF4=;
-        b=iRqO/zmZsiY742S7Al6C7CdTFTa6wwA8cDdH3FikXXc3+zn3klRynZTJWNHnuq4Rju
-         vKAso6Bdp59OhmIFt7EvUIrRJ5lm+3ih+DBQ/MpwJg8cuaIG+bfEWYeMKjE5taBbk0w7
-         iOlVFVERL2k9VqdifNlB57lsri6N5FcR7/FB2Ud+PLvjjWU5jKqWjdWpZY2AOxEv788c
-         NFeJuL/xZrF2YtU7PenuEng0g+4xRtrUM7l4MzTb6DpBZqxKDBjczk8mCivDaitx2EzD
-         hiHCUY7+7r+nwATFBp/jfaARJ6iaDUI4oqshJfBrG7MHVvknTyEpODrxVPzfBsl5hHj5
-         J/WA==
+        bh=fV4ph13BVFW/+1nr5Bj/fvQhIU+OIFSNkY2BpnkSbfA=;
+        b=lueMyQB5z0oY8OSQ7RFnZ9OnzjSD6kJS1yc62Y6ZUmlgZskJrtxfv3ldWrejhxDJcZ
+         Sx3VXfozsEOLhwQMzO57uBHc0awqfPbJxUJdEVfTPCKOkbtmxCL+6Xss8TlByHc4j7gt
+         rY6IGcfV39DthB+KB3juzMnNKZ04913opqrUCJMEZv1ehmq1lrcxVcDwgAH1TLzUY4Zr
+         UxG6+8E/DGCgsOG6dBP+qyni6uPIdgux45+4+IaJwSD2PGBn/0SU32cqwsltVnsMPm3g
+         Lb3BX3xwQM5y24NSqMc4I+x4AHQdGlMRf9Ti5+F+Ruv5fMECpxBfHKRbP1ttmEQSQecj
+         j9Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NPZ25U0KNpg61Ku6URhVeBa08Dg0ip/p/6qGinSsNF4=;
-        b=Tsyu/lZxNhInIMHUWfIaYOvaeIk7kBcFdqL9RK5tpyNm1qFKWoYGfLkI7/hwgEW+l9
-         rijYaO9sRiZlO7G8VrgdcgNADKfyu1LVFi5r36XUz8APMIOJ0bx0BRvHBAeY1iI7Z/0C
-         0fiFkpk/yFo/yAK0ROHAgf/IYzV4iCBFcALLcIfY6gWXdNixZzI5Bp0rDCB/xd2IFRXt
-         NaoqbyA4RSaSFU0qoES5OQBVASGbFi63t+CfUq7OCYXKbB/vrYwuhaOEDVCMBr2HWpwl
-         jB4nQNokC9zdNEqKwwuUXDZmcOIu0GmgyOdg1ZtVMXDJdo8/aSiH4kvQpwcxsPOUMgfh
-         5u0Q==
-X-Gm-Message-State: APjAAAUxl+oxKY2zoMUgcG3JGlpLlB9MrrsQAkOgOfgdV62z50BH9mWB
-        xs9O0QXYB/+XwLv8M1Q5dYps8A==
-X-Google-Smtp-Source: APXvYqxVGs3taP73E4A+4kWAiuZ1pib5I5zuO+JxNACtCa0arieTn2xxS/EIDRuqsmuuHbMYJpzeQA==
-X-Received: by 2002:ac8:1a3c:: with SMTP id v57mr37686895qtj.339.1563557469320;
-        Fri, 19 Jul 2019 10:31:09 -0700 (PDT)
+        bh=fV4ph13BVFW/+1nr5Bj/fvQhIU+OIFSNkY2BpnkSbfA=;
+        b=kffb9ej5CXsuqukdTxOHOQdvwEmG2eKC+bcKehlzYBSz/bnO6kJFCPTxEM0ftfdm8c
+         eaMQGpNbwNTrQBSUJS6h5EX8+lFMx/6bJi6cVuCzPcvnFi9Nw+0HKW78HlSzSGm6QOLx
+         BQy5mxi7hSbi4Aii1L0yTfGFLmcm8sv/moA23EAtGh8i6zWXb76DocBJMKGCKM4/cJdx
+         WjySeQDQ6TgKb6vb/SCz8rAm4GBnaPRWzT2AipR8EPLJmUmfBm/TXDfnb60leiyJ/iqv
+         UWWoLIjJamnMF17C4CHDlH99clzYtZpBEnrg7AyJJp9QmpSkpelfnjtxoIICO0isWifZ
+         Wqcw==
+X-Gm-Message-State: APjAAAVgrAnTcRPVtEvyODrnmUVCAzWP+txU+aAIb5IKwzAamCGk2/KT
+        TlFYR07KYxQaHmSYTjdlkW8WddVKSQQ=
+X-Google-Smtp-Source: APXvYqxaqJ/Lly6yEscJToMESM9ucwo+FS/i1kkn71ENSDhCL7vPQLgV1ApmLDHtp3ym3thqpLX3Ew==
+X-Received: by 2002:a0c:e001:: with SMTP id j1mr39415835qvk.110.1563557476569;
+        Fri, 19 Jul 2019 10:31:16 -0700 (PDT)
 Received: from jkicinski-Precision-T1700.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id y3sm15568509qtj.46.2019.07.19.10.31.08
+        by smtp.gmail.com with ESMTPSA id y3sm15568509qtj.46.2019.07.19.10.31.15
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 19 Jul 2019 10:31:08 -0700 (PDT)
+        Fri, 19 Jul 2019 10:31:16 -0700 (PDT)
 From:   Jakub Kicinski <jakub.kicinski@netronome.com>
 To:     john.fastabend@gmail.com, alexei.starovoitov@gmail.com,
         daniel@iogearbox.net
-Cc:     edumazet@google.com, netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf v4 06/14] bpf: sockmap, sock_map_delete needs to use xchg
-Date:   Fri, 19 Jul 2019 10:29:19 -0700
-Message-Id: <20190719172927.18181-7-jakub.kicinski@netronome.com>
+Cc:     edumazet@google.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Dirk van der Merwe <dirk.vandermerwe@netronome.com>
+Subject: [PATCH bpf v4 11/14] selftests/tls: test error codes around TLS ULP installation
+Date:   Fri, 19 Jul 2019 10:29:24 -0700
+Message-Id: <20190719172927.18181-12-jakub.kicinski@netronome.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190719172927.18181-1-jakub.kicinski@netronome.com>
 References: <20190719172927.18181-1-jakub.kicinski@netronome.com>
@@ -71,70 +73,78 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: John Fastabend <john.fastabend@gmail.com>
+Test the error codes returned when TCP connection is not
+in ESTABLISHED state.
 
-__sock_map_delete() may be called from a tcp event such as unhash or
-close from the following trace,
-
-  tcp_bpf_close()
-    tcp_bpf_remove()
-      sk_psock_unlink()
-        sock_map_delete_from_link()
-          __sock_map_delete()
-
-In this case the sock lock is held but this only protects against
-duplicate removals on the TCP side. If the map is free'd then we have
-this trace,
-
-  sock_map_free
-    xchg()                  <- replaces map entry
-    sock_map_unref()
-      sk_psock_put()
-        sock_map_del_link()
-
-The __sock_map_delete() call however uses a read, test, null over the
-map entry which can result in both paths trying to free the map
-entry.
-
-To fix use xchg in TCP paths as well so we avoid having two references
-to the same map entry.
-
-Fixes: 604326b41a6fb ("bpf, sockmap: convert to generic sk_msg interface")
-Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+Signed-off-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+Reviewed-by: Dirk van der Merwe <dirk.vandermerwe@netronome.com>
 ---
- net/core/sock_map.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ tools/testing/selftests/net/tls.c | 52 +++++++++++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 52d4faeee18b..28702f2e9a4a 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -276,16 +276,20 @@ static int __sock_map_delete(struct bpf_stab *stab, struct sock *sk_test,
- 			     struct sock **psk)
- {
- 	struct sock *sk;
-+	int err = 0;
- 
- 	raw_spin_lock_bh(&stab->lock);
- 	sk = *psk;
- 	if (!sk_test || sk_test == sk)
--		*psk = NULL;
-+		sk = xchg(psk, NULL);
-+
-+	if (likely(sk))
-+		sock_map_unref(sk, psk);
-+	else
-+		err = -EINVAL;
-+
- 	raw_spin_unlock_bh(&stab->lock);
--	if (unlikely(!sk))
--		return -EINVAL;
--	sock_map_unref(sk, psk);
--	return 0;
-+	return err;
+diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
+index 194826fee4f7..10df77326d34 100644
+--- a/tools/testing/selftests/net/tls.c
++++ b/tools/testing/selftests/net/tls.c
+@@ -911,6 +911,58 @@ TEST_F(tls, control_msg)
+ 	EXPECT_EQ(memcmp(buf, test_str, send_len), 0);
  }
  
- static void sock_map_delete_from_link(struct bpf_map *map, struct sock *sk,
++TEST(non_established) {
++	struct tls12_crypto_info_aes_gcm_256 tls12;
++	struct sockaddr_in addr;
++	int sfd, ret, fd;
++	socklen_t len;
++
++	len = sizeof(addr);
++
++	memset(&tls12, 0, sizeof(tls12));
++	tls12.info.version = TLS_1_2_VERSION;
++	tls12.info.cipher_type = TLS_CIPHER_AES_GCM_256;
++
++	addr.sin_family = AF_INET;
++	addr.sin_addr.s_addr = htonl(INADDR_ANY);
++	addr.sin_port = 0;
++
++	fd = socket(AF_INET, SOCK_STREAM, 0);
++	sfd = socket(AF_INET, SOCK_STREAM, 0);
++
++	ret = bind(sfd, &addr, sizeof(addr));
++	ASSERT_EQ(ret, 0);
++	ret = listen(sfd, 10);
++	ASSERT_EQ(ret, 0);
++
++	ret = setsockopt(fd, IPPROTO_TCP, TCP_ULP, "tls", sizeof("tls"));
++	EXPECT_EQ(ret, -1);
++	/* TLS ULP not supported */
++	if (errno == ENOENT)
++		return;
++	EXPECT_EQ(errno, ENOTSUPP);
++
++	ret = setsockopt(sfd, IPPROTO_TCP, TCP_ULP, "tls", sizeof("tls"));
++	EXPECT_EQ(ret, -1);
++	EXPECT_EQ(errno, ENOTSUPP);
++
++	ret = getsockname(sfd, &addr, &len);
++	ASSERT_EQ(ret, 0);
++
++	ret = connect(fd, &addr, sizeof(addr));
++	ASSERT_EQ(ret, 0);
++
++	ret = setsockopt(fd, IPPROTO_TCP, TCP_ULP, "tls", sizeof("tls"));
++	ASSERT_EQ(ret, 0);
++
++	ret = setsockopt(fd, IPPROTO_TCP, TCP_ULP, "tls", sizeof("tls"));
++	EXPECT_EQ(ret, -1);
++	EXPECT_EQ(errno, EEXIST);
++
++	close(fd);
++	close(sfd);
++}
++
+ TEST(keysizes) {
+ 	struct tls12_crypto_info_aes_gcm_256 tls12;
+ 	struct sockaddr_in addr;
 -- 
 2.21.0
 
