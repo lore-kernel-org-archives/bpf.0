@@ -2,197 +2,87 @@ Return-Path: <SRS0=h/Ra=VQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0823C7618F
-	for <bpf@archiver.kernel.org>; Fri, 19 Jul 2019 17:31:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40016C7618F
+	for <bpf@archiver.kernel.org>; Fri, 19 Jul 2019 17:37:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7D58921872
-	for <bpf@archiver.kernel.org>; Fri, 19 Jul 2019 17:31:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 048D32084D
+	for <bpf@archiver.kernel.org>; Fri, 19 Jul 2019 17:37:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="GjxMHG/j"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="o0Or+ROw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731310AbfGSRbG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Jul 2019 13:31:06 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:43740 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731084AbfGSRbG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Jul 2019 13:31:06 -0400
-Received: by mail-qt1-f196.google.com with SMTP id w17so31802042qto.10
-        for <bpf@vger.kernel.org>; Fri, 19 Jul 2019 10:31:05 -0700 (PDT)
+        id S1727850AbfGSRh0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Jul 2019 13:37:26 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:45099 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727602AbfGSRh0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Jul 2019 13:37:26 -0400
+Received: by mail-qt1-f194.google.com with SMTP id x22so26932565qtp.12
+        for <bpf@vger.kernel.org>; Fri, 19 Jul 2019 10:37:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=IzoJpvtjs5tq8ndn8zIpnqxVulmc9FUeDTH354o1sao=;
-        b=GjxMHG/jt9KFErTzw4lJ9vsqjbekWWQcl+Djh52PgpYckTkSou07V4YYl3x7Z7crvH
-         xmuKU7TxejZ4pSoRJs5k/dHoTH31a3i9a+xbq6hN5kOKXz3BPrpgZwHXWERULbedNsnI
-         MjBUmIIJdV54CQtcgRtznbBbnt57rVmhN7Ct5KJP3B15RivhXq5NUQWal1PZySsJs4cJ
-         zMc9Hy97dyVuWB+l/NCWW7fywupsiWMZG1/jOBNnZ5gnG4c5Rnw2zMlDGreeNJnlR5Dy
-         pZvYDMAzMs6lMc51U+78jdmvnhO9EJwM55DGNSerTkAyFqBKDwCnKQo2ogisO7cAXwfy
-         ADog==
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=md74l1tP+3MjgDMecOFujGhSYnRDKsU/DGj+r4fcaKA=;
+        b=o0Or+ROwXh+YLyB2aEGTFyHtfesjXiXIrpdbAQngHhqLThjapIYUAKcKkSwpSvvl0C
+         6Bb7CdHSj8RIZVo9EMGHiHAwtG17xnYj8cEcTIPN9dw1lVp8Zj98kld9AjS6rancgC95
+         h6iu/SBUsb6MNuXMSoJ35lfRyq06SMeSxnmKjahz/szhJUZbIg3Cz9QxhDwmcAfhwtsK
+         PeZrXA9EGYXyqOYkZPdiXFeSX+UTHZppUXB9BhbDxL6Wc29cBH56F5wtXszmV0r22vKE
+         EY04IV/7FDZDKevCpYxfbMtqtThoMmWe62dDtELeuw19XspEjp60gxcV8OYubnS4OKlS
+         jgOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IzoJpvtjs5tq8ndn8zIpnqxVulmc9FUeDTH354o1sao=;
-        b=Jcj8/Qk48sVwOETSjKjiwVZ6RhQuzvIZIGLjdYz9/1SZD9NxlPm1mcstro8UVB/LUR
-         qUPySQf1QKVS/Nxe0AcN2jv4yhi7rSYzB+AcZ7Hvej0LWVamUiY2OujANGwIwRjtNCUM
-         NsJ1QUn54zvzMEA3NEl0FPDxPBdC4z35iKWdptv6IjYrC+pNxvbT5xVAbBU1PmIfbmmn
-         jycy8z5DlQBpOS0kmodvBmq1EQWxu/0aXyiMIVgngB544N+HZ98q5E6v/P6r+JKI8p4l
-         WciE9Lf/PbJzi+QFse/EYGZTQOuW5jsaQfQJpHdfm/cZQREFIfwel5Hd4V+MD8nsfgvP
-         cLOQ==
-X-Gm-Message-State: APjAAAUEUx1jkicf4qUKqef9TYXL2F0YVv7JAkmEq8NkyZb8QvTBDc5x
-        tsG07NshloF3QT4BsizVSPHW1A==
-X-Google-Smtp-Source: APXvYqwvvMvtaye37QgX+NTdBGm096qsTdImSyoiQeN7EJgdKupOD248huKcovyq6j5XORuXWZxjig==
-X-Received: by 2002:a0c:9807:: with SMTP id c7mr38523434qvd.26.1563557465134;
-        Fri, 19 Jul 2019 10:31:05 -0700 (PDT)
-Received: from jkicinski-Precision-T1700.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id y3sm15568509qtj.46.2019.07.19.10.31.03
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 19 Jul 2019 10:31:04 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=md74l1tP+3MjgDMecOFujGhSYnRDKsU/DGj+r4fcaKA=;
+        b=bLzGdpXMDVxf2dv+o098JuAGY8jG668Y+kQ8FOt1ew/Q0LkpdkqmXpxXDzI+Bjnl6+
+         p3itC3XEIGOJXWi/1sEI/jlSHcpoZrygkOX1AQ0xAeavuj487E/hsHQwl2AxiY0DOIsC
+         gdycylGN6enrT6WQCz0Mn2jrM6BqEQnX1BQi2pVQFG9D8c7bh8zYaRnwhYANCNoWmFR7
+         c1jpMut9VJTRMd17qdrii+EO/tI3/JhTCsqXpsuvY0MnFU1OdEfGzAJcoLxskWG538Oi
+         bJQJvc/GQo/UeIou7msrilf6eCytTbypcEtEgLdz42PD+mCLwtrOUuyofgCNjwVlfBQw
+         V2Mg==
+X-Gm-Message-State: APjAAAXPCqrD47BzLp9t21BJ/Gmc2n5ikSZcAPCJM7lJRn109bx41A2Z
+        as4uSpApIr0LFrTPamXILEf0EQ==
+X-Google-Smtp-Source: APXvYqxdzwTKTjLFLIHtd2+PRC5rnYBA36IJhJcYj1ZBcnYvlY4HaoSFJLg5LS84k7nO7zA0WHFzbQ==
+X-Received: by 2002:aed:3e96:: with SMTP id n22mr32894870qtf.247.1563557845634;
+        Fri, 19 Jul 2019 10:37:25 -0700 (PDT)
+Received: from cakuba.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id z33sm14605101qtc.56.2019.07.19.10.37.24
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 19 Jul 2019 10:37:25 -0700 (PDT)
+Date:   Fri, 19 Jul 2019 10:37:21 -0700
 From:   Jakub Kicinski <jakub.kicinski@netronome.com>
 To:     john.fastabend@gmail.com, alexei.starovoitov@gmail.com,
         daniel@iogearbox.net
 Cc:     edumazet@google.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Dirk van der Merwe <dirk.vandermerwe@netronome.com>
-Subject: [PATCH bpf v4 03/14] net/tls: remove close callback sock unlock/lock around TX work flush
-Date:   Fri, 19 Jul 2019 10:29:16 -0700
-Message-Id: <20190719172927.18181-4-jakub.kicinski@netronome.com>
-X-Mailer: git-send-email 2.21.0
+        oss-drivers@netronome.com
+Subject: Re: [PATCH bpf v4 00/14] sockmap/tls fixes
+Message-ID: <20190719103721.558d9e7d@cakuba.netronome.com>
 In-Reply-To: <20190719172927.18181-1-jakub.kicinski@netronome.com>
 References: <20190719172927.18181-1-jakub.kicinski@netronome.com>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: John Fastabend <john.fastabend@gmail.com>
+On Fri, 19 Jul 2019 10:29:13 -0700, Jakub Kicinski wrote:
+> John says:
+> 
+> Resolve a series of splats discovered by syzbot and an unhash
+> TLS issue noted by Eric Dumazet.
 
-The tls close() callback currently drops the sock lock, makes a
-cancel_delayed_work_sync() call, and then relocks the sock.
+Sorry for the delay, this code is quite tricky. According to my testing
+TLS SW and HW should now work, I hope I didn't regress things on the
+sockmap side.
 
-By restructuring the code we can avoid droping lock and then
-reclaiming it. To simplify this we do the following,
-
- tls_sk_proto_close
- set_bit(CLOSING)
- set_bit(SCHEDULE)
- cancel_delay_work_sync() <- cancel workqueue
- lock_sock(sk)
- ...
- release_sock(sk)
- strp_done()
-
-Setting the CLOSING bit prevents the SCHEDULE bit from being
-cleared by any workqueue items e.g. if one happens to be
-scheduled and run between when we set SCHEDULE bit and cancel
-work. Then because SCHEDULE bit is set now no new work will
-be scheduled.
-
-Tested with net selftests and bpf selftests.
-
-Signed-off-by: John Fastabend <john.fastabend@gmail.com>
-Signed-off-by: Jakub Kicinski <jakub.kicinski@netronome.com>
-Reviewed-by: Dirk van der Merwe <dirk.vandermerwe@netronome.com>
----
- include/net/tls.h  |  2 ++
- net/tls/tls_main.c |  3 +++
- net/tls/tls_sw.c   | 24 +++++++++++++++++-------
- 3 files changed, 22 insertions(+), 7 deletions(-)
-
-diff --git a/include/net/tls.h b/include/net/tls.h
-index 43f551cd508b..d4276cb6de53 100644
---- a/include/net/tls.h
-+++ b/include/net/tls.h
-@@ -162,6 +162,7 @@ struct tls_sw_context_tx {
- 	int async_capable;
- 
- #define BIT_TX_SCHEDULED	0
-+#define BIT_TX_CLOSING		1
- 	unsigned long tx_bitmask;
- };
- 
-@@ -360,6 +361,7 @@ int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size);
- int tls_sw_sendpage(struct sock *sk, struct page *page,
- 		    int offset, size_t size, int flags);
- void tls_sw_close(struct sock *sk, long timeout);
-+void tls_sw_cancel_work_tx(struct tls_context *tls_ctx);
- void tls_sw_free_resources_tx(struct sock *sk);
- void tls_sw_free_resources_rx(struct sock *sk);
- void tls_sw_release_resources_rx(struct sock *sk);
-diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
-index 7ab682ed99fa..5c29b410cf7d 100644
---- a/net/tls/tls_main.c
-+++ b/net/tls/tls_main.c
-@@ -268,6 +268,9 @@ static void tls_sk_proto_close(struct sock *sk, long timeout)
- 	void (*sk_proto_close)(struct sock *sk, long timeout);
- 	bool free_ctx = false;
- 
-+	if (ctx->tx_conf == TLS_SW)
-+		tls_sw_cancel_work_tx(ctx);
-+
- 	lock_sock(sk);
- 	sk_proto_close = ctx->sk_proto_close;
- 
-diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index f58a8ffc2a9c..38c0e53c727d 100644
---- a/net/tls/tls_sw.c
-+++ b/net/tls/tls_sw.c
-@@ -2054,6 +2054,15 @@ static void tls_data_ready(struct sock *sk)
- 	}
- }
- 
-+void tls_sw_cancel_work_tx(struct tls_context *tls_ctx)
-+{
-+	struct tls_sw_context_tx *ctx = tls_sw_ctx_tx(tls_ctx);
-+
-+	set_bit(BIT_TX_CLOSING, &ctx->tx_bitmask);
-+	set_bit(BIT_TX_SCHEDULED, &ctx->tx_bitmask);
-+	cancel_delayed_work_sync(&ctx->tx_work.work);
-+}
-+
- void tls_sw_free_resources_tx(struct sock *sk)
- {
- 	struct tls_context *tls_ctx = tls_get_ctx(sk);
-@@ -2065,11 +2074,6 @@ void tls_sw_free_resources_tx(struct sock *sk)
- 	if (atomic_read(&ctx->encrypt_pending))
- 		crypto_wait_req(-EINPROGRESS, &ctx->async_wait);
- 
--	release_sock(sk);
--	cancel_delayed_work_sync(&ctx->tx_work.work);
--	lock_sock(sk);
--
--	/* Tx whatever records we can transmit and abandon the rest */
- 	tls_tx_records(sk, -1);
- 
- 	/* Free up un-sent records in tx_list. First, free
-@@ -2137,11 +2141,17 @@ static void tx_work_handler(struct work_struct *work)
- 					       struct tx_work, work);
- 	struct sock *sk = tx_work->sk;
- 	struct tls_context *tls_ctx = tls_get_ctx(sk);
--	struct tls_sw_context_tx *ctx = tls_sw_ctx_tx(tls_ctx);
-+	struct tls_sw_context_tx *ctx;
- 
--	if (!test_and_clear_bit(BIT_TX_SCHEDULED, &ctx->tx_bitmask))
-+	if (unlikely(!tls_ctx))
- 		return;
- 
-+	ctx = tls_sw_ctx_tx(tls_ctx);
-+	if (test_bit(BIT_TX_CLOSING, &ctx->tx_bitmask))
-+		return;
-+
-+	if (!test_and_clear_bit(BIT_TX_SCHEDULED, &ctx->tx_bitmask))
-+		return;
- 	lock_sock(sk);
- 	tls_tx_records(sk, -1);
- 	release_sock(sk);
--- 
-2.21.0
-
+This is not solving all the issues (ugh), apart from HW needing the
+unhash/shutdown treatment, as discussed we may have a sender stuck in
+wmem wait while we free context underneath. That's a "minor" UAF for
+another day..
