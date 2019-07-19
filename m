@@ -7,62 +7,61 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FB62C7618F
-	for <bpf@archiver.kernel.org>; Fri, 19 Jul 2019 17:31:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9829AC7618F
+	for <bpf@archiver.kernel.org>; Fri, 19 Jul 2019 17:31:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DE2342186A
-	for <bpf@archiver.kernel.org>; Fri, 19 Jul 2019 17:31:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6B3052186A
+	for <bpf@archiver.kernel.org>; Fri, 19 Jul 2019 17:31:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="hUrbqEVh"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="l2FlBjZG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731166AbfGSRbG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Jul 2019 13:31:06 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:34235 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729964AbfGSRbE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Jul 2019 13:31:04 -0400
-Received: by mail-qk1-f193.google.com with SMTP id t8so23819879qkt.1
-        for <bpf@vger.kernel.org>; Fri, 19 Jul 2019 10:31:04 -0700 (PDT)
+        id S1731405AbfGSRbJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Jul 2019 13:31:09 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:34871 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731379AbfGSRbJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Jul 2019 13:31:09 -0400
+Received: by mail-qt1-f195.google.com with SMTP id d23so31848618qto.2
+        for <bpf@vger.kernel.org>; Fri, 19 Jul 2019 10:31:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2ybR7/gj4/DkvEmMT6/QJs1sBMwkRv51hpYWIGESVpo=;
-        b=hUrbqEVh0YNQX97tZU8U6GR4ks6Bc0ZNekSwGPSfJa6jPK+k7LkfmEHc48k7kRjqJb
-         x7LLZI9cWpaKEa601OsXqkoZ+yWTjqxhTBGJlF8hRscIwQsF5a5FoXZwRBLE+EQrgoK3
-         H5Xh6zCbx8CNd6+DCw5dbrXsRoHnyGDqxLARNxl6uYG1Q7YWG6QTeOuJ0/mh73cc5olq
-         OX8rz8SonFQ9lV9mh/Ev7OxbPdQlm+7v+h0prAl2qpYBYUlQoSKz23bWPp5l+EoWAA8p
-         zBveoikAFf6F90vjkcdqSr0yIxyKojBr9HBpYg3qlaLnSzC3Zua7aiCw2iMLxKB1rL6g
-         UMgg==
+        bh=XtaTC8x/bvaAxD+ukazd4a/fS+Iy7H2AHJmoedmwCMw=;
+        b=l2FlBjZGRqPUHVIR9lV0+yQOn5T/HN6DyShHX9rmmZhEVRMEYaOM/H9pjR8sYpVg8X
+         eVap05NlCx6ySeMitrmxqmcww4DwiciR9hrWMKsCmbRaNnXFbeNU5di3zM1buw4cS2SO
+         wnxU3uKY4dXAIHE8ygbJquZlMJEpxGZOoxRyfKByw6W6hf8ajWKMsKbazDAUTXrCh3Yq
+         gH+O/n8TWtzN8LrLzoki/McrXWQTMV7vUaxZ6DYuWMgZcl179JzUBehaUsvQONJERL7O
+         lpQWKcKsv4m25Tki6YVq44PXXD91fu9wRsPItuCk+mxLv2oY4dTdqMwaLXTuMlhpItSa
+         wVmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2ybR7/gj4/DkvEmMT6/QJs1sBMwkRv51hpYWIGESVpo=;
-        b=n8/bCi8IBerXHGvsCZkxy6cXMLg3edaSKKClmo3JqqoAvkfLrNXbnDoXZqsAsbaLpT
-         UOfW4FUXDwJQtmiss8w5tX46MHoZG24iAilHEm+Ge1UjoWmlPSjwKGIYw8J/HbzqfcHp
-         TOehc1/80kqrGJ9fUypY1jKrU08QbViBocxSR87KBciuK071J8ca95MzfXXSYNeRNWAc
-         QvT60HUJCSFoYCCFSQMAiV2ab4CblgHh8zXyOmfr0qbpvUkEwqFz4G6+gVLAHLfWmhSK
-         nIbbMm3mLLD840OAAlBVUPwvVsG3Fz1eRxAOjlxaOEHcA9Gebivg5E1gdJrXIhBh0QVK
-         /AUg==
-X-Gm-Message-State: APjAAAVnL9iSF8R4vlD/PHCx1X6Sv2/5vDnc0vz86512Y5t/Z1iFxca/
-        CyMB2myvVvuxNU8gE5zMRHF1QQ==
-X-Google-Smtp-Source: APXvYqw8c7q2FerMN7vf6wc7OcvsoMGqb/K36a04jUYPGHS8Q2Fvq1oPspR6sH6d4IZl5u9Kvi5Xhw==
-X-Received: by 2002:a05:620a:10bc:: with SMTP id h28mr36035378qkk.289.1563557463707;
-        Fri, 19 Jul 2019 10:31:03 -0700 (PDT)
+        bh=XtaTC8x/bvaAxD+ukazd4a/fS+Iy7H2AHJmoedmwCMw=;
+        b=oYQurHmDsxrcGQgNHn4Yv8IjEouIMxPa90FhQhnJqLlWh73/kHBPN1bTMUb8u98TdZ
+         ODpIf1hTuLvxCjaUUXdHJ2OGQ4jO21JG6jzY6JnvBhZUooRghXTH4ByLlD9DniCfGibl
+         DhtdN2y9zGiBP+cpjoGxYMH+vmupnpGTwZZVLlU0IjIuxD5im13vwDTn2fjHiDJXHgYK
+         sTneLiObVvk5DB/9lppkTabG9y0VtWArpoyo2fHjXXx1G1MDcI55botuvYZxM2Abeitr
+         NL87/v2aUv/dIjS3PjBxhp1o9BKBmaGuq9BjlTUDj2Gyr4SymAEcw2B3KPN/3R2gLcbC
+         8uew==
+X-Gm-Message-State: APjAAAUCTN37FE06qh1YMTeFnpqkYnmu/JlfIvUToLsFuCvVyC5TVn5F
+        SQgcM0a9r2IBPEfDb/rO22kzgg==
+X-Google-Smtp-Source: APXvYqyjV+3YoKg1hO2yE45IqBUirtSv2McHM/X1239U2kfpgiwvLtyoNx6b+7Ztu6f//GCUkctiNg==
+X-Received: by 2002:ac8:2774:: with SMTP id h49mr36469409qth.97.1563557468036;
+        Fri, 19 Jul 2019 10:31:08 -0700 (PDT)
 Received: from jkicinski-Precision-T1700.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id y3sm15568509qtj.46.2019.07.19.10.31.02
+        by smtp.gmail.com with ESMTPSA id y3sm15568509qtj.46.2019.07.19.10.31.06
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 19 Jul 2019 10:31:03 -0700 (PDT)
+        Fri, 19 Jul 2019 10:31:07 -0700 (PDT)
 From:   Jakub Kicinski <jakub.kicinski@netronome.com>
 To:     john.fastabend@gmail.com, alexei.starovoitov@gmail.com,
         daniel@iogearbox.net
 Cc:     edumazet@google.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Dirk van der Merwe <dirk.vandermerwe@netronome.com>
-Subject: [PATCH bpf v4 02/14] net/tls: don't call tls_sk_proto_close for hw record offload
-Date:   Fri, 19 Jul 2019 10:29:15 -0700
-Message-Id: <20190719172927.18181-3-jakub.kicinski@netronome.com>
+        Jakub Kicinski <jakub.kicinski@netronome.com>
+Subject: [PATCH bpf v4 05/14] net/tls: fix transition through disconnect with close
+Date:   Fri, 19 Jul 2019 10:29:18 -0700
+Message-Id: <20190719172927.18181-6-jakub.kicinski@netronome.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190719172927.18181-1-jakub.kicinski@netronome.com>
 References: <20190719172927.18181-1-jakub.kicinski@netronome.com>
@@ -73,39 +72,211 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The deprecated TOE offload doesn't actually do anything in
-tls_sk_proto_close() - all TLS code is skipped and context
-not freed. Remove the callback to make it easier to refactor
-tls_sk_proto_close().
+From: John Fastabend <john.fastabend@gmail.com>
 
+It is possible (via shutdown()) for TCP socks to go through TCP_CLOSE
+state via tcp_disconnect() without actually calling tcp_close which
+would then call the tls close callback. Because of this a user could
+disconnect a socket then put it in a LISTEN state which would break
+our assumptions about sockets always being ESTABLISHED state.
+
+More directly because close() can call unhash() and unhash is
+implemented by sockmap if a sockmap socket has TLS enabled we can
+incorrectly destroy the psock from unhash() and then call its close
+handler again. But because the psock (sockmap socket representation)
+is already destroyed we call close handler in sk->prot. However,
+in some cases (TLS BASE/BASE case) this will still point at the
+sockmap close handler resulting in a circular call and crash reported
+by syzbot.
+
+To fix both above issues implement the unhash() routine for TLS.
+
+v4:
+ - add note about tls offload still needing the fix;
+ - move sk_proto to the cold cache line;
+ - split TX context free into "release" and "free",
+   otherwise the GC work itself is in already freed
+   memory;
+ - more TX before RX for consistency;
+ - reuse tls_ctx_free();
+ - schedule the GC work after we're done with context
+   to avoid UAF;
+ - don't set the unhash in all modes, all modes "inherit"
+   TLS_BASE's callbacks anyway;
+ - disable the unhash hook for TLS_HW.
+
+Fixes: 3c4d7559159bf ("tls: kernel TLS support")
+Reported-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: John Fastabend <john.fastabend@gmail.com>
 Signed-off-by: Jakub Kicinski <jakub.kicinski@netronome.com>
-Reviewed-by: Dirk van der Merwe <dirk.vandermerwe@netronome.com>
 ---
- net/tls/tls_main.c | 4 ----
- 1 file changed, 4 deletions(-)
+ Documentation/networking/tls-offload.rst |  6 +++
+ include/net/tls.h                        |  5 ++-
+ net/tls/tls_main.c                       | 55 ++++++++++++++++++++++++
+ 3 files changed, 65 insertions(+), 1 deletion(-)
 
+diff --git a/Documentation/networking/tls-offload.rst b/Documentation/networking/tls-offload.rst
+index 048e5ca44824..8a1eeb393316 100644
+--- a/Documentation/networking/tls-offload.rst
++++ b/Documentation/networking/tls-offload.rst
+@@ -513,3 +513,9 @@ Redirects leak clear text
+ 
+ In the RX direction, if segment has already been decrypted by the device
+ and it gets redirected or mirrored - clear text will be transmitted out.
++
++shutdown() doesn't clear TLS state
++----------------------------------
++
++shutdown() system call allows for a TLS socket to be reused as a different
++connection. Offload doesn't currently handle that.
+diff --git a/include/net/tls.h b/include/net/tls.h
+index 235508e35fd4..9e425ac2de45 100644
+--- a/include/net/tls.h
++++ b/include/net/tls.h
+@@ -271,6 +271,8 @@ struct tls_context {
+ 	unsigned long flags;
+ 
+ 	/* cache cold stuff */
++	struct proto *sk_proto;
++
+ 	void (*sk_destruct)(struct sock *sk);
+ 	void (*sk_proto_close)(struct sock *sk, long timeout);
+ 
+@@ -288,6 +290,8 @@ struct tls_context {
+ 
+ 	struct list_head list;
+ 	refcount_t refcount;
++
++	struct work_struct gc;
+ };
+ 
+ enum tls_offload_ctx_dir {
+@@ -359,7 +363,6 @@ void tls_sw_strparser_done(struct tls_context *tls_ctx);
+ int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size);
+ int tls_sw_sendpage(struct sock *sk, struct page *page,
+ 		    int offset, size_t size, int flags);
+-void tls_sw_close(struct sock *sk, long timeout);
+ void tls_sw_cancel_work_tx(struct tls_context *tls_ctx);
+ void tls_sw_release_resources_tx(struct sock *sk);
+ void tls_sw_free_ctx_tx(struct tls_context *tls_ctx);
 diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
-index 85a9d7d57b32..7ab682ed99fa 100644
+index d152a00a7a27..48f1c26459d0 100644
 --- a/net/tls/tls_main.c
 +++ b/net/tls/tls_main.c
-@@ -271,9 +271,6 @@ static void tls_sk_proto_close(struct sock *sk, long timeout)
- 	lock_sock(sk);
- 	sk_proto_close = ctx->sk_proto_close;
- 
--	if (ctx->tx_conf == TLS_HW_RECORD && ctx->rx_conf == TLS_HW_RECORD)
--		goto skip_tx_cleanup;
--
- 	if (ctx->tx_conf == TLS_BASE && ctx->rx_conf == TLS_BASE) {
- 		free_ctx = true;
- 		goto skip_tx_cleanup;
-@@ -766,7 +763,6 @@ static void build_protos(struct proto prot[TLS_NUM_CONFIG][TLS_NUM_CONFIG],
- 	prot[TLS_HW_RECORD][TLS_HW_RECORD] = *base;
- 	prot[TLS_HW_RECORD][TLS_HW_RECORD].hash		= tls_hw_hash;
- 	prot[TLS_HW_RECORD][TLS_HW_RECORD].unhash	= tls_hw_unhash;
--	prot[TLS_HW_RECORD][TLS_HW_RECORD].close	= tls_sk_proto_close;
+@@ -261,6 +261,33 @@ void tls_ctx_free(struct tls_context *ctx)
+ 	kfree(ctx);
  }
  
- static int tls_init(struct sock *sk)
++static void tls_ctx_free_deferred(struct work_struct *gc)
++{
++	struct tls_context *ctx = container_of(gc, struct tls_context, gc);
++
++	/* Ensure any remaining work items are completed. The sk will
++	 * already have lost its tls_ctx reference by the time we get
++	 * here so no xmit operation will actually be performed.
++	 */
++	if (ctx->tx_conf == TLS_SW) {
++		tls_sw_cancel_work_tx(ctx);
++		tls_sw_free_ctx_tx(ctx);
++	}
++
++	if (ctx->rx_conf == TLS_SW) {
++		tls_sw_strparser_done(ctx);
++		tls_sw_free_ctx_rx(ctx);
++	}
++
++	tls_ctx_free(ctx);
++}
++
++static void tls_ctx_free_wq(struct tls_context *ctx)
++{
++	INIT_WORK(&ctx->gc, tls_ctx_free_deferred);
++	schedule_work(&ctx->gc);
++}
++
+ static void tls_sk_proto_cleanup(struct sock *sk,
+ 				 struct tls_context *ctx, long timeo)
+ {
+@@ -288,6 +315,26 @@ static void tls_sk_proto_cleanup(struct sock *sk,
+ #endif
+ }
+ 
++static void tls_sk_proto_unhash(struct sock *sk)
++{
++	struct inet_connection_sock *icsk = inet_csk(sk);
++	long timeo = sock_sndtimeo(sk, 0);
++	struct tls_context *ctx;
++
++	if (unlikely(!icsk->icsk_ulp_data)) {
++		if (sk->sk_prot->unhash)
++			sk->sk_prot->unhash(sk);
++	}
++
++	ctx = tls_get_ctx(sk);
++	tls_sk_proto_cleanup(sk, ctx, timeo);
++	icsk->icsk_ulp_data = NULL;
++
++	if (ctx->sk_proto->unhash)
++		ctx->sk_proto->unhash(sk);
++	tls_ctx_free_wq(ctx);
++}
++
+ static void tls_sk_proto_close(struct sock *sk, long timeout)
+ {
+ 	void (*sk_proto_close)(struct sock *sk, long timeout);
+@@ -305,6 +352,7 @@ static void tls_sk_proto_close(struct sock *sk, long timeout)
+ 	if (ctx->tx_conf != TLS_BASE || ctx->rx_conf != TLS_BASE)
+ 		tls_sk_proto_cleanup(sk, ctx, timeo);
+ 
++	sk->sk_prot = ctx->sk_proto;
+ 	release_sock(sk);
+ 	if (ctx->tx_conf == TLS_SW)
+ 		tls_sw_free_ctx_tx(ctx);
+@@ -608,6 +656,7 @@ static struct tls_context *create_ctx(struct sock *sk)
+ 	ctx->setsockopt = sk->sk_prot->setsockopt;
+ 	ctx->getsockopt = sk->sk_prot->getsockopt;
+ 	ctx->sk_proto_close = sk->sk_prot->close;
++	ctx->unhash = sk->sk_prot->unhash;
+ 	return ctx;
+ }
+ 
+@@ -731,6 +780,7 @@ static void build_protos(struct proto prot[TLS_NUM_CONFIG][TLS_NUM_CONFIG],
+ 	prot[TLS_BASE][TLS_BASE].setsockopt	= tls_setsockopt;
+ 	prot[TLS_BASE][TLS_BASE].getsockopt	= tls_getsockopt;
+ 	prot[TLS_BASE][TLS_BASE].close		= tls_sk_proto_close;
++	prot[TLS_BASE][TLS_BASE].unhash		= tls_sk_proto_unhash;
+ 
+ 	prot[TLS_SW][TLS_BASE] = prot[TLS_BASE][TLS_BASE];
+ 	prot[TLS_SW][TLS_BASE].sendmsg		= tls_sw_sendmsg;
+@@ -748,16 +798,20 @@ static void build_protos(struct proto prot[TLS_NUM_CONFIG][TLS_NUM_CONFIG],
+ 
+ #ifdef CONFIG_TLS_DEVICE
+ 	prot[TLS_HW][TLS_BASE] = prot[TLS_BASE][TLS_BASE];
++	prot[TLS_HW][TLS_BASE].unhash		= base->unhash;
+ 	prot[TLS_HW][TLS_BASE].sendmsg		= tls_device_sendmsg;
+ 	prot[TLS_HW][TLS_BASE].sendpage		= tls_device_sendpage;
+ 
+ 	prot[TLS_HW][TLS_SW] = prot[TLS_BASE][TLS_SW];
++	prot[TLS_HW][TLS_SW].unhash		= base->unhash;
+ 	prot[TLS_HW][TLS_SW].sendmsg		= tls_device_sendmsg;
+ 	prot[TLS_HW][TLS_SW].sendpage		= tls_device_sendpage;
+ 
+ 	prot[TLS_BASE][TLS_HW] = prot[TLS_BASE][TLS_SW];
++	prot[TLS_BASE][TLS_HW].unhash		= base->unhash;
+ 
+ 	prot[TLS_SW][TLS_HW] = prot[TLS_SW][TLS_SW];
++	prot[TLS_SW][TLS_HW].unhash		= base->unhash;
+ 
+ 	prot[TLS_HW][TLS_HW] = prot[TLS_HW][TLS_SW];
+ #endif
+@@ -794,6 +848,7 @@ static int tls_init(struct sock *sk)
+ 	tls_build_proto(sk);
+ 	ctx->tx_conf = TLS_BASE;
+ 	ctx->rx_conf = TLS_BASE;
++	ctx->sk_proto = sk->sk_prot;
+ 	update_sk_prot(sk, ctx);
+ out:
+ 	return rc;
 -- 
 2.21.0
 
