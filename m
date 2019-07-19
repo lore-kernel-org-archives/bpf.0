@@ -7,60 +7,60 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECB27C76195
-	for <bpf@archiver.kernel.org>; Fri, 19 Jul 2019 17:31:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24F7BC76196
+	for <bpf@archiver.kernel.org>; Fri, 19 Jul 2019 17:31:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C93F92186A
-	for <bpf@archiver.kernel.org>; Fri, 19 Jul 2019 17:31:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 012FD21874
+	for <bpf@archiver.kernel.org>; Fri, 19 Jul 2019 17:31:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="AjeF2M5J"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="iRqO/zmZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731461AbfGSRbN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Jul 2019 13:31:13 -0400
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:35035 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731455AbfGSRbN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Jul 2019 13:31:13 -0400
-Received: by mail-qk1-f195.google.com with SMTP id r21so23847564qke.2
-        for <bpf@vger.kernel.org>; Fri, 19 Jul 2019 10:31:12 -0700 (PDT)
+        id S1731424AbfGSRbL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Jul 2019 13:31:11 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:34873 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731411AbfGSRbK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Jul 2019 13:31:10 -0400
+Received: by mail-qt1-f194.google.com with SMTP id d23so31848670qto.2
+        for <bpf@vger.kernel.org>; Fri, 19 Jul 2019 10:31:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2MMCFCBJboEB1CIyV6dVGBXQRDYkVd8+DYCGoW0iWWE=;
-        b=AjeF2M5J0BU1eQpiEOd0rKkfPUbNSRlth8FdcP8Rk+Hd8JlQ/sGAkCzuT20PJ+izCE
-         Z6HtIg6NUXZ+VpIXRWMH0FqjsXZSkMUL0dGYc6FBBeK/tCoAYgNXKAJc4BNjU9jdmINL
-         SsqezIaXnIAepoF0zqrLZ2BT0TshNhQ+nSXquZMovPNZg2rEWFVD21gLqcC4Sgzu6xaB
-         aFKwzJUKsTnZy+Df1UGXgMhCXAfQl4obUz680uOWe2beItkT9VTLD2cYvlhBvA4o2S3z
-         0kHK9QRVXApKaNmYYvcGE13MeJi54C2WRjv55PEEDnKxleBBnEZ234DJgyvvWE7QbH7j
-         66KQ==
+        bh=NPZ25U0KNpg61Ku6URhVeBa08Dg0ip/p/6qGinSsNF4=;
+        b=iRqO/zmZsiY742S7Al6C7CdTFTa6wwA8cDdH3FikXXc3+zn3klRynZTJWNHnuq4Rju
+         vKAso6Bdp59OhmIFt7EvUIrRJ5lm+3ih+DBQ/MpwJg8cuaIG+bfEWYeMKjE5taBbk0w7
+         iOlVFVERL2k9VqdifNlB57lsri6N5FcR7/FB2Ud+PLvjjWU5jKqWjdWpZY2AOxEv788c
+         NFeJuL/xZrF2YtU7PenuEng0g+4xRtrUM7l4MzTb6DpBZqxKDBjczk8mCivDaitx2EzD
+         hiHCUY7+7r+nwATFBp/jfaARJ6iaDUI4oqshJfBrG7MHVvknTyEpODrxVPzfBsl5hHj5
+         J/WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2MMCFCBJboEB1CIyV6dVGBXQRDYkVd8+DYCGoW0iWWE=;
-        b=G/i1uoeRU49DoFZGKPxJUIPTG+CNhIDgN2iSCm08X9NW/q2IwifASVoWrkCMn4chmc
-         SinpLGpqJPxG0F/weCxteR1p1YPAmi6REYQnTB8b8RnHk4ts3JA7j4C+uGfvWfp9f/U4
-         g2DPehJrrwe2GhBeG/DnITE7bw1jZHWbggGKZmLnMYnoprJ54rklwMeAMEWmSIgkAlbk
-         LoSsd2t+XnyzgPj3G4p18BfzMu71r4QXI0PhnZqoLtWjyTV6xKaOH2teRKR7mZHGBhC1
-         oTGfuMGRvaqHxFjYRGHhzpwbF1Jn9reIJ+bJfX8OeQCL3zy5EXqf1pITuDdM3KJ+Aq89
-         opEw==
-X-Gm-Message-State: APjAAAU3ASXQvSNcZJKfkirPY9ywZN87cI6uR6xbyZPhFiHJmHm+s8CE
-        qkspZ0avuwGdp8ikeJ3oHezcWA==
-X-Google-Smtp-Source: APXvYqwSnFM499KiZ0X7Qn+TSKes60QYSIBBhJr7Ycrd5UAt1Ywy2z9C+oyJfDqCUgGTIKzFCsCOiA==
-X-Received: by 2002:a05:620a:533:: with SMTP id h19mr35861754qkh.325.1563557472146;
-        Fri, 19 Jul 2019 10:31:12 -0700 (PDT)
+        bh=NPZ25U0KNpg61Ku6URhVeBa08Dg0ip/p/6qGinSsNF4=;
+        b=Tsyu/lZxNhInIMHUWfIaYOvaeIk7kBcFdqL9RK5tpyNm1qFKWoYGfLkI7/hwgEW+l9
+         rijYaO9sRiZlO7G8VrgdcgNADKfyu1LVFi5r36XUz8APMIOJ0bx0BRvHBAeY1iI7Z/0C
+         0fiFkpk/yFo/yAK0ROHAgf/IYzV4iCBFcALLcIfY6gWXdNixZzI5Bp0rDCB/xd2IFRXt
+         NaoqbyA4RSaSFU0qoES5OQBVASGbFi63t+CfUq7OCYXKbB/vrYwuhaOEDVCMBr2HWpwl
+         jB4nQNokC9zdNEqKwwuUXDZmcOIu0GmgyOdg1ZtVMXDJdo8/aSiH4kvQpwcxsPOUMgfh
+         5u0Q==
+X-Gm-Message-State: APjAAAUxl+oxKY2zoMUgcG3JGlpLlB9MrrsQAkOgOfgdV62z50BH9mWB
+        xs9O0QXYB/+XwLv8M1Q5dYps8A==
+X-Google-Smtp-Source: APXvYqxVGs3taP73E4A+4kWAiuZ1pib5I5zuO+JxNACtCa0arieTn2xxS/EIDRuqsmuuHbMYJpzeQA==
+X-Received: by 2002:ac8:1a3c:: with SMTP id v57mr37686895qtj.339.1563557469320;
+        Fri, 19 Jul 2019 10:31:09 -0700 (PDT)
 Received: from jkicinski-Precision-T1700.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id y3sm15568509qtj.46.2019.07.19.10.31.10
+        by smtp.gmail.com with ESMTPSA id y3sm15568509qtj.46.2019.07.19.10.31.08
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 19 Jul 2019 10:31:11 -0700 (PDT)
+        Fri, 19 Jul 2019 10:31:08 -0700 (PDT)
 From:   Jakub Kicinski <jakub.kicinski@netronome.com>
 To:     john.fastabend@gmail.com, alexei.starovoitov@gmail.com,
         daniel@iogearbox.net
 Cc:     edumazet@google.com, netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf v4 08/14] bpf: sockmap, only create entry if ulp is not already enabled
-Date:   Fri, 19 Jul 2019 10:29:21 -0700
-Message-Id: <20190719172927.18181-9-jakub.kicinski@netronome.com>
+Subject: [PATCH bpf v4 06/14] bpf: sockmap, sock_map_delete needs to use xchg
+Date:   Fri, 19 Jul 2019 10:29:19 -0700
+Message-Id: <20190719172927.18181-7-jakub.kicinski@netronome.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190719172927.18181-1-jakub.kicinski@netronome.com>
 References: <20190719172927.18181-1-jakub.kicinski@netronome.com>
@@ -73,39 +73,68 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: John Fastabend <john.fastabend@gmail.com>
 
-Sockmap does not currently support adding sockets after TLS has been
-enabled. There never was a real use case for this so it was never
-added. But, we lost the test for ULP at some point so add it here
-and fail the socket insert if TLS is enabled. Future work could
-make sockmap support this use case but fixup the bug here.
+__sock_map_delete() may be called from a tcp event such as unhash or
+close from the following trace,
+
+  tcp_bpf_close()
+    tcp_bpf_remove()
+      sk_psock_unlink()
+        sock_map_delete_from_link()
+          __sock_map_delete()
+
+In this case the sock lock is held but this only protects against
+duplicate removals on the TCP side. If the map is free'd then we have
+this trace,
+
+  sock_map_free
+    xchg()                  <- replaces map entry
+    sock_map_unref()
+      sk_psock_put()
+        sock_map_del_link()
+
+The __sock_map_delete() call however uses a read, test, null over the
+map entry which can result in both paths trying to free the map
+entry.
+
+To fix use xchg in TCP paths as well so we avoid having two references
+to the same map entry.
 
 Fixes: 604326b41a6fb ("bpf, sockmap: convert to generic sk_msg interface")
 Signed-off-by: John Fastabend <john.fastabend@gmail.com>
 ---
- net/core/sock_map.c | 3 +++
- 1 file changed, 3 insertions(+)
+ net/core/sock_map.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
 diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 56bcabe7c2f2..1330a7442e5b 100644
+index 52d4faeee18b..28702f2e9a4a 100644
 --- a/net/core/sock_map.c
 +++ b/net/core/sock_map.c
-@@ -334,6 +334,7 @@ static int sock_map_update_common(struct bpf_map *map, u32 idx,
- 				  struct sock *sk, u64 flags)
+@@ -276,16 +276,20 @@ static int __sock_map_delete(struct bpf_stab *stab, struct sock *sk_test,
+ 			     struct sock **psk)
  {
- 	struct bpf_stab *stab = container_of(map, struct bpf_stab, map);
-+	struct inet_connection_sock *icsk = inet_csk(sk);
- 	struct sk_psock_link *link;
- 	struct sk_psock *psock;
- 	struct sock *osk;
-@@ -344,6 +345,8 @@ static int sock_map_update_common(struct bpf_map *map, u32 idx,
- 		return -EINVAL;
- 	if (unlikely(idx >= map->max_entries))
- 		return -E2BIG;
-+	if (unlikely(icsk->icsk_ulp_data))
-+		return -EINVAL;
+ 	struct sock *sk;
++	int err = 0;
  
- 	link = sk_psock_init_link();
- 	if (!link)
+ 	raw_spin_lock_bh(&stab->lock);
+ 	sk = *psk;
+ 	if (!sk_test || sk_test == sk)
+-		*psk = NULL;
++		sk = xchg(psk, NULL);
++
++	if (likely(sk))
++		sock_map_unref(sk, psk);
++	else
++		err = -EINVAL;
++
+ 	raw_spin_unlock_bh(&stab->lock);
+-	if (unlikely(!sk))
+-		return -EINVAL;
+-	sock_map_unref(sk, psk);
+-	return 0;
++	return err;
+ }
+ 
+ static void sock_map_delete_from_link(struct bpf_map *map, struct sock *sk,
 -- 
 2.21.0
 
