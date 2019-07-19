@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFA88C7618F
-	for <bpf@archiver.kernel.org>; Fri, 19 Jul 2019 17:31:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D829C76195
+	for <bpf@archiver.kernel.org>; Fri, 19 Jul 2019 17:31:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ACCD52186A
+	by mail.kernel.org (Postfix) with ESMTP id DF54021872
 	for <bpf@archiver.kernel.org>; Fri, 19 Jul 2019 17:31:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="yZizlLNj"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="Gz8vfa1B"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731619AbfGSRbW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Jul 2019 13:31:22 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:44490 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731577AbfGSRbW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Jul 2019 13:31:22 -0400
-Received: by mail-qk1-f194.google.com with SMTP id d79so23771073qke.11
-        for <bpf@vger.kernel.org>; Fri, 19 Jul 2019 10:31:21 -0700 (PDT)
+        id S1731435AbfGSRbQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Jul 2019 13:31:16 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:34239 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731496AbfGSRbQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Jul 2019 13:31:16 -0400
+Received: by mail-qt1-f195.google.com with SMTP id k10so31886439qtq.1
+        for <bpf@vger.kernel.org>; Fri, 19 Jul 2019 10:31:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=v9pxN+7gjk03qL7CRFdYVls1HBWJfJg+h1DcC3IAeAU=;
-        b=yZizlLNjHZQx7cxD3ZD23WidJVkLZeFgm0V07gDv4kc92hRjqL+bmFlD6oGpmbanoi
-         X5RLb6sV2NxH0unvhOv+RuT6utcRH2ZpT5YUAOFOqxdGu6oOUR8H5+4v7WQG+hcg3+Tj
-         z3+aWhiDQr4ginPjBb2Q78T8juj/VdaatufRKrdJhu3OCxgbyG7+WpG8yV7cQVkfWwYP
-         zZiGDEoWRETBR7OCFhf3xba985jcR3RLbgo1EyDXC3/7wGkzo7/kEenPWQ8MF0lx8Tpn
-         DPOPrQW7ArWHWkLwMnoOYlrvna/o84Mrkr2+hoKbkzkKUvJPtric/5GNVev0WcOi3WGO
-         zeOw==
+        bh=+VvFeyw1azZq//RJ4RswMMne/9sZEWOtXmC4Y/HkVhg=;
+        b=Gz8vfa1BvZwIYVZF7NblfQU7jC31feP2eoeZkRbusEVGjLSJO+Kt+snMb1kssn7zpF
+         METbVky0Gi+bsZC8nV6Hf84xC5XdQO0Eb9nKHWgQ1vHTcvvioA9hDNHciNC8WXjJFo5Z
+         Fls0HvKEUFVCMQlCfqebMSyvJErdysS8N8z7ngg8oWW8X7ZFEP3/Q/VZXTE2pXYAtzK4
+         HbpRG0eoZButSvyjjZhfF0cUFchyfW2u9fTDfy+bZfQkI4KMnDPeOlMP77niNuP6yOVe
+         xmH77aB53OFFfrdYWHzwtTF/F8CaO9BxAlsQtl66EMYUYg+mBjN229A1+vZUV4DzWfGS
+         sDPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=v9pxN+7gjk03qL7CRFdYVls1HBWJfJg+h1DcC3IAeAU=;
-        b=bkbJ+5QYsBNz51QQNT7F2md/eGZ+4UsC59+rpg5DBRiQnfkPAxu31SfrVVl9Fpze82
-         qOd858KEa6UZxjCV4sOP3BRiuLgjPNSX8/ICMZc7WQDwZu2z61RwfIdsy2bIdh/GO5gl
-         KYGsjiH8w5prAXTs5sJpJ4thDKFF3a8kUVdZuIlDPFDEjNnMXVQtsPbXTF5y9aRYPJSx
-         G7O1zsJRaHhOT3cOWlqKsSERMSKJTNBR22LQKQomhmhYhC6XXPF2tN3nl0mds/fD2yGu
-         IekUZiRkJuQ4EekOwlfTEEn9J5BEvuhiyTT6aXNWAHXVZ4izjkXsoXycluymnu12sZXZ
-         W6iQ==
-X-Gm-Message-State: APjAAAV8Uvkiq3v7BZ3w6uBZM/JccsIDAZYKn8NkYC5KZYdliz0r9Vtd
-        ah5yxzNzF3+SYoBFdPd881++SQ==
-X-Google-Smtp-Source: APXvYqyBlhieHfpS6Q2xbEu766mRiGMUiwe57hv3Icv1K7dkvMBJVMZKN96DwD0SSyqb2inPBgBORg==
-X-Received: by 2002:a37:404b:: with SMTP id n72mr35536907qka.109.1563557481142;
-        Fri, 19 Jul 2019 10:31:21 -0700 (PDT)
+        bh=+VvFeyw1azZq//RJ4RswMMne/9sZEWOtXmC4Y/HkVhg=;
+        b=A7cqO83Kf6NoxMrZxooflHdzjCPTMRk4wYMkxrIaXUkb0wBGC/4WJUBrfDC4N2aowT
+         HQOUXvpBOE045WCRhjxpnrtbtpRraVTfNNGTlBMen+pIM4MsLP52LJq1Txr5xFbe/9Ls
+         iev752ZXquwd6jTxEF5K5v6jwhV9CGZoQRJ/T4OybvJ92zewCiH3rKOMqLQy+J7zwIR5
+         hnkz/CReJB+QukYFyE25qveit1zIIVbcubvRkjEIWJB4IYQelaDlto7uOzoxf5Tfsq6B
+         YetgwRKeBanJAwdFN/gDDdlqFrf/YbFEOomauLzdZ92C86X/WvMf9rNjjdG8AOZa+CVn
+         pGFA==
+X-Gm-Message-State: APjAAAXX7con//BdXd+jb8XJ2DoPFkFy1Nvv4hM3H1euHtyL9Nol/ick
+        QABTwSOconPaY1JINNyrHFezUw==
+X-Google-Smtp-Source: APXvYqxc38bhYZIZAj9hVQsSEWG4zo8HA1tRTDKp/YtbJ7hdBylj73GihOxuQtTHus0S4gdE/Vcqlg==
+X-Received: by 2002:a0c:9895:: with SMTP id f21mr38011254qvd.123.1563557475147;
+        Fri, 19 Jul 2019 10:31:15 -0700 (PDT)
 Received: from jkicinski-Precision-T1700.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id y3sm15568509qtj.46.2019.07.19.10.31.19
+        by smtp.gmail.com with ESMTPSA id y3sm15568509qtj.46.2019.07.19.10.31.13
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 19 Jul 2019 10:31:20 -0700 (PDT)
+        Fri, 19 Jul 2019 10:31:14 -0700 (PDT)
 From:   Jakub Kicinski <jakub.kicinski@netronome.com>
 To:     john.fastabend@gmail.com, alexei.starovoitov@gmail.com,
         daniel@iogearbox.net
 Cc:     edumazet@google.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
         Jakub Kicinski <jakub.kicinski@netronome.com>,
         Dirk van der Merwe <dirk.vandermerwe@netronome.com>
-Subject: [PATCH bpf v4 14/14] selftests/tls: add shutdown tests
-Date:   Fri, 19 Jul 2019 10:29:27 -0700
-Message-Id: <20190719172927.18181-15-jakub.kicinski@netronome.com>
+Subject: [PATCH bpf v4 10/14] selftests/tls: add a test for ULP but no keys
+Date:   Fri, 19 Jul 2019 10:29:23 -0700
+Message-Id: <20190719172927.18181-11-jakub.kicinski@netronome.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190719172927.18181-1-jakub.kicinski@netronome.com>
 References: <20190719172927.18181-1-jakub.kicinski@netronome.com>
@@ -73,23 +73,85 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add test for killing the connection via shutdown.
+Make sure we test the TLS_BASE/TLS_BASE case both with data
+and the tear down/clean up path.
 
 Signed-off-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 Reviewed-by: Dirk van der Merwe <dirk.vandermerwe@netronome.com>
 ---
- tools/testing/selftests/net/tls.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ tools/testing/selftests/net/tls.c | 74 +++++++++++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
 
 diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-index 94a86ca882de..630c5b884d43 100644
+index 090fff9dbc48..194826fee4f7 100644
 --- a/tools/testing/selftests/net/tls.c
 +++ b/tools/testing/selftests/net/tls.c
-@@ -952,6 +952,33 @@ TEST_F(tls, control_msg)
- 	EXPECT_EQ(memcmp(buf, test_str, send_len), 0);
- }
+@@ -25,6 +25,80 @@
+ #define TLS_PAYLOAD_MAX_LEN 16384
+ #define SOL_TLS 282
  
-+TEST_F(tls, shutdown)
++#ifndef ENOTSUPP
++#define ENOTSUPP 524
++#endif
++
++FIXTURE(tls_basic)
++{
++	int fd, cfd;
++	bool notls;
++};
++
++FIXTURE_SETUP(tls_basic)
++{
++	struct sockaddr_in addr;
++	socklen_t len;
++	int sfd, ret;
++
++	self->notls = false;
++	len = sizeof(addr);
++
++	addr.sin_family = AF_INET;
++	addr.sin_addr.s_addr = htonl(INADDR_ANY);
++	addr.sin_port = 0;
++
++	self->fd = socket(AF_INET, SOCK_STREAM, 0);
++	sfd = socket(AF_INET, SOCK_STREAM, 0);
++
++	ret = bind(sfd, &addr, sizeof(addr));
++	ASSERT_EQ(ret, 0);
++	ret = listen(sfd, 10);
++	ASSERT_EQ(ret, 0);
++
++	ret = getsockname(sfd, &addr, &len);
++	ASSERT_EQ(ret, 0);
++
++	ret = connect(self->fd, &addr, sizeof(addr));
++	ASSERT_EQ(ret, 0);
++
++	self->cfd = accept(sfd, &addr, &len);
++	ASSERT_GE(self->cfd, 0);
++
++	close(sfd);
++
++	ret = setsockopt(self->fd, IPPROTO_TCP, TCP_ULP, "tls", sizeof("tls"));
++	if (ret != 0) {
++		ASSERT_EQ(errno, ENOTSUPP);
++		self->notls = true;
++		printf("Failure setting TCP_ULP, testing without tls\n");
++		return;
++	}
++
++	ret = setsockopt(self->cfd, IPPROTO_TCP, TCP_ULP, "tls", sizeof("tls"));
++	ASSERT_EQ(ret, 0);
++}
++
++FIXTURE_TEARDOWN(tls_basic)
++{
++	close(self->fd);
++	close(self->cfd);
++}
++
++/* Send some data through with ULP but no keys */
++TEST_F(tls_basic, base_base)
 +{
 +	char const *test_str = "test_read";
 +	int send_len = 10;
@@ -100,25 +162,11 @@ index 94a86ca882de..630c5b884d43 100644
 +	EXPECT_EQ(send(self->fd, test_str, send_len, 0), send_len);
 +	EXPECT_NE(recv(self->cfd, buf, send_len, 0), -1);
 +	EXPECT_EQ(memcmp(buf, test_str, send_len), 0);
++};
 +
-+	shutdown(self->fd, SHUT_RDWR);
-+	shutdown(self->cfd, SHUT_RDWR);
-+}
-+
-+TEST_F(tls, shutdown_unsent)
-+{
-+	char const *test_str = "test_read";
-+	int send_len = 10;
-+
-+	EXPECT_EQ(send(self->fd, test_str, send_len, MSG_MORE), send_len);
-+
-+	shutdown(self->fd, SHUT_RDWR);
-+	shutdown(self->cfd, SHUT_RDWR);
-+}
-+
- TEST(non_established) {
- 	struct tls12_crypto_info_aes_gcm_256 tls12;
- 	struct sockaddr_in addr;
+ FIXTURE(tls)
+ {
+ 	int fd, cfd;
 -- 
 2.21.0
 
