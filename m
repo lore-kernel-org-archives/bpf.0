@@ -2,201 +2,346 @@ Return-Path: <SRS0=J0Jh=VT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDA32C7618F
-	for <bpf@archiver.kernel.org>; Mon, 22 Jul 2019 20:54:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBD11C76190
+	for <bpf@archiver.kernel.org>; Mon, 22 Jul 2019 22:34:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B1BBD218B8
-	for <bpf@archiver.kernel.org>; Mon, 22 Jul 2019 20:54:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AC7FE21985
+	for <bpf@archiver.kernel.org>; Mon, 22 Jul 2019 22:34:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="PYIAp+i7";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="BC7P3SGU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U6/9IuL/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728628AbfGVUyU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Jul 2019 16:54:20 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:14168 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727547AbfGVUyT (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 22 Jul 2019 16:54:19 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6MKriwm028703;
-        Mon, 22 Jul 2019 13:53:52 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=whAF+O3w6LYWAes4Vy/AuKxXLr4XzJzTvVwyAyP9nBw=;
- b=PYIAp+i7HA3W1HeDiZqq59+GeRXWeHj7ZP3vMoaUxqevY/4PsqPwpBLOGZ51Va2oAMFi
- M12s5flYOfYhiC2FpIvdqkMZarWeC1f5L88Ylvju+AZwB5KyXKn0n78ZLNaR6acd0gzY
- n+IGCB4SZU0WlCYE0rSJgzUVdY4knXu9rzU= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2twfxes6gp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 22 Jul 2019 13:53:52 -0700
-Received: from prn-mbx04.TheFacebook.com (2620:10d:c081:6::18) by
- prn-hub04.TheFacebook.com (2620:10d:c081:35::128) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1713.5; Mon, 22 Jul 2019 13:53:50 -0700
-Received: from prn-hub05.TheFacebook.com (2620:10d:c081:35::129) by
- prn-mbx04.TheFacebook.com (2620:10d:c081:6::18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1713.5; Mon, 22 Jul 2019 13:53:50 -0700
-Received: from NAM03-DM3-obe.outbound.protection.outlook.com (192.168.54.28)
- by o365-in.thefacebook.com (192.168.16.29) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
- via Frontend Transport; Mon, 22 Jul 2019 13:53:50 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lfjLlllJw7JcTDCfFbJDg29R9zY7f5l3bUAiXBe2a50TtnZoG25VA+S5+hSXb47iIkH1CiJjy8td0z9s4f5YmTTxSHkW/r9w8+1++sAv1YuEXJNEa8pkfoeQOzStoSVCZPieD6AprB1GYKFKZGaJpSMql20RpbpPWNCLZiQtXUaN3AJ/9GYSjCORhdZ5BKDwyK4hYRl1/C4BPLhINQ52FC8bC7DpIbgnHSCRAAg0/tb0C++aLLnaKMiZfondoeXd92I40bsUh6Yhqg/4AELzSri5Z3ZCB0gq1/TVVcXtpDxVKDNWGL4zfTv9Lvhn/FnLx1imHwyDmzbeT68aAMLj4w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=whAF+O3w6LYWAes4Vy/AuKxXLr4XzJzTvVwyAyP9nBw=;
- b=UN+N0823A1Hl0qizYSHci7paeGFuIEliZ6bx+tP2jI+IdXDQdfMy43zRb9PgFAVdUaE3sB3t3ANLWnMp1/rXYJfle3hDcV25aEFcG1L54sFFd2UIjpmziB0Z7ehyBMOf1EkidZo+/l8j/cuJSQwyKEPHhK0TuBfgW9598wtfspQIWdFhI1AERLeOhqbb+vsm5j/8xzeMiIUH6zabVsxZ9UXHhjY7i3sZ/al/sCLDsMQp1rRq3EN1Us+7m6sm9vSeKyq282rvDA8E4i1glUtaf96hQaLguwFHGkXSEghcFw1Te7w6oG+URdiiWNGtlngpJO75mi2TMt0+c11W82MyiA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=fb.com;dmarc=pass action=none header.from=fb.com;dkim=pass
- header.d=fb.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector1-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=whAF+O3w6LYWAes4Vy/AuKxXLr4XzJzTvVwyAyP9nBw=;
- b=BC7P3SGUDffuXtYjFT8JcEqsHrQ2KI0QjBtVkV8+HrugRpwfAbz59UPWQus+hUeFRaCW5iOPioTjpEnGngY6anBBmaXFYoSR/Mr3lZChIL9VUSoTgA6GdwybvxpOxHyXlCwY5S/S13cD5xJcEH+plcbxpkBr/QZAzhkelHaFv1I=
-Received: from MWHPR15MB1165.namprd15.prod.outlook.com (10.175.3.22) by
- MWHPR15MB1870.namprd15.prod.outlook.com (10.174.96.145) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2094.14; Mon, 22 Jul 2019 20:53:49 +0000
-Received: from MWHPR15MB1165.namprd15.prod.outlook.com
- ([fe80::4066:b41c:4397:27b7]) by MWHPR15MB1165.namprd15.prod.outlook.com
- ([fe80::4066:b41c:4397:27b7%7]) with mapi id 15.20.2094.013; Mon, 22 Jul 2019
- 20:53:49 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     Andy Lutomirski <luto@kernel.org>
-CC:     Kees Cook <keescook@chromium.org>,
-        "linux-security@vger.kernel.org" <linux-security@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Jann Horn <jannh@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux API <linux-api@vger.kernel.org>
-Subject: Re: [PATCH v2 bpf-next 1/4] bpf: unprivileged BPF access via /dev/bpf
-Thread-Topic: [PATCH v2 bpf-next 1/4] bpf: unprivileged BPF access via
- /dev/bpf
-Thread-Index: AQHVLSW5611trSWWQEuGSg4xXBva46awKSYAgAFFJoCAAehSgIACJsgAgAEbzICAARNPgIAANGYAgB9j6wA=
-Date:   Mon, 22 Jul 2019 20:53:48 +0000
-Message-ID: <4A7A225A-6C23-4C0F-9A95-7C6C56B281ED@fb.com>
-References: <20190627201923.2589391-1-songliubraving@fb.com>
- <20190627201923.2589391-2-songliubraving@fb.com>
- <21894f45-70d8-dfca-8c02-044f776c5e05@kernel.org>
- <3C595328-3ABE-4421-9772-8D41094A4F57@fb.com>
- <CALCETrWBnH4Q43POU8cQ7YMjb9LioK28FDEQf7aHZbdf1eBZWg@mail.gmail.com>
- <0DE7F23E-9CD2-4F03-82B5-835506B59056@fb.com>
- <CALCETrWBWbNFJvsTCeUchu3BZJ3SH3dvtXLUB2EhnPrzFfsLNA@mail.gmail.com>
- <201907021115.DCD56BBABB@keescook>
- <CALCETrXTta26CTtEDnzvtd03-WOGdXcnsAogP8JjLkcj4-mHvg@mail.gmail.com>
-In-Reply-To: <CALCETrXTta26CTtEDnzvtd03-WOGdXcnsAogP8JjLkcj4-mHvg@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3445.104.11)
-x-originating-ip: [2620:10d:c090:200::2:c799]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d50729da-4313-4458-41c8-08d70ee6b23f
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR15MB1870;
-x-ms-traffictypediagnostic: MWHPR15MB1870:
-x-microsoft-antispam-prvs: <MWHPR15MB1870741EC841E05EF49C1448B3C40@MWHPR15MB1870.namprd15.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3826;
-x-forefront-prvs: 01068D0A20
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(396003)(376002)(136003)(366004)(39860400002)(51444003)(199004)(189003)(7416002)(99286004)(6916009)(50226002)(57306001)(478600001)(68736007)(66946007)(76116006)(229853002)(8936002)(256004)(7736002)(14444005)(305945005)(71190400001)(71200400001)(25786009)(6116002)(14454004)(486006)(446003)(476003)(2616005)(81166006)(8676002)(81156014)(11346002)(33656002)(102836004)(186003)(86362001)(6512007)(316002)(6486002)(6506007)(46003)(36756003)(54906003)(76176011)(4326008)(5660300002)(6436002)(66556008)(66446008)(64756008)(6246003)(2906002)(53936002)(66476007)(53546011);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR15MB1870;H:MWHPR15MB1165.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: C+Yl1rKXCoxfcTCvlc62/L+pbPhpGvCHMOW1q9FpajfHsnoRb/Hwq7mG4qcgUyk0xrPo54QG6mK1B5pTeBy0YEIsoEIxOBQBTFA55yeQzhvcUqrWQGC2DGGOb+iUEhRfMfagcwRQhhtRJD+uHZfLeSYUyKMbYBLPw5vVQutGe3e+RHm25Kyi4BDS+HQYtUThP/1tRRW5Fftkvriuu7uqyiQFiVQW9YTqqC/FMlveKc+uWeQZLPwMW50jF3Uqf3eGv7p0sfxH2HgZM4T2l9/QlKZgYkKX8n6WEn87SFUDrwVVP2ZiQ/8ALmqSSpevIdKCOxUbsweBnjlkvICr47NAZq6ySgVScqQgamj5Rq1p/FeXiKm5/G99D0wxM+/8WXqe94kw1a/hs8+sKupitGgJaA+ps67N5SVHw30gTNqWd+c=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <4934353FD63ADE4698F42238323400FC@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1733225AbfGVWeX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Jul 2019 18:34:23 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:32863 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727381AbfGVWeV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 22 Jul 2019 18:34:21 -0400
+Received: by mail-pf1-f196.google.com with SMTP id g2so18061379pfq.0;
+        Mon, 22 Jul 2019 15:34:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Smy6CazaiFl/H6ExmdJz5h/Ca61boss3Hwy2iE3dK+Q=;
+        b=U6/9IuL/TDFPDdHP/xEXC6qMrm1JOrSFcurq01xiF+Ds4AZyxPEN0zUc6M5cA6Ac2S
+         lkz9/GilaTPQsdifymQ/iRSnBB3jF8OL7EtArtnl3P24bowo3fJlj3rjN86K6voNS6GH
+         Dqmbtb60GhmjYXSXo6GRkm723W8wBuMOSeua5HmsQ6B7GzeInFzsL3p7urhRUckE7nOz
+         cZAS/lxZQg2opPLxvraqp1cJo6cbVXc0mSOp571t2fjxJq+aMSbg5Xu5EFd+E1lReoM9
+         BS3AbtelcWJr2yfzvyHmXxv8QcBg7OH7i3yTert2ueqfUr/6ie3hJa/sawyB9+pwB1Ts
+         W4KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Smy6CazaiFl/H6ExmdJz5h/Ca61boss3Hwy2iE3dK+Q=;
+        b=Ng2UUl2LuM+IcF/2WVTTxLeArX4t6iz6uVkruAOHE4eKCa8atjSauyUIhkvT/2Oa0N
+         7ey0f2KHCLnWnNCtyTx0G1Y09pEx/2nFDKnEuNpoubDQZJeYG/FTFnYEEHo5WZSydMiY
+         Up5CYCbmiZrwHmoD3a4Gdl+0XBt3zotmVvRPrEweloHRk59s4LFpv/3b2aycfLfOUp1C
+         TrwUuxwj3nm8wYlmAys+sXhIN6FpQ70srvFDZnfK+ZrLRuoXVUpFXkyVk6jab+CT/Y0H
+         hZq6Hx34rPEhVgidzuUK4w5mYLJSoA/IJ9RyBS+Od3tJqvptCdmohnvu55U39yvNa4U7
+         5TQQ==
+X-Gm-Message-State: APjAAAUd4EPyvDo8Miyg28SUhS5FlVjZu7+U0qiPpodyw0TcKroeSaGK
+        BY2bATiwmTTAXej/uCQzaJA=
+X-Google-Smtp-Source: APXvYqz/H2LrvbsAG7WTQI6TytjdHd6yi9WvqhWVYARGR3hkdauf6CDVf8InQZb+IHek/f+tTcf/6A==
+X-Received: by 2002:a62:1444:: with SMTP id 65mr2422112pfu.145.1563834860576;
+        Mon, 22 Jul 2019 15:34:20 -0700 (PDT)
+Received: from blueforge.nvidia.com (searspoint.nvidia.com. [216.228.112.21])
+        by smtp.gmail.com with ESMTPSA id r18sm30597570pfg.77.2019.07.22.15.34.19
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 22 Jul 2019 15:34:20 -0700 (PDT)
+From:   john.hubbard@gmail.com
+X-Google-Original-From: jhubbard@nvidia.com
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Boaz Harrosh <boaz@plexistor.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ilya Dryomov <idryomov@gmail.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ming Lei <ming.lei@redhat.com>, Sage Weil <sage@redhat.com>,
+        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
+        Yan Zheng <zyan@redhat.com>, netdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH 1/3] mm/gup: introduce __put_user_pages()
+Date:   Mon, 22 Jul 2019 15:34:13 -0700
+Message-Id: <20190722223415.13269-2-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190722223415.13269-1-jhubbard@nvidia.com>
+References: <20190722223415.13269-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: d50729da-4313-4458-41c8-08d70ee6b23f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2019 20:53:49.0530
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: songliubraving@fb.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR15MB1870
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-22_15:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907220230
-X-FB-Internal: deliver
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Andy, Lorenz, and all,=20
+From: John Hubbard <jhubbard@nvidia.com>
 
-> On Jul 2, 2019, at 2:32 PM, Andy Lutomirski <luto@kernel.org> wrote:
->=20
-> On Tue, Jul 2, 2019 at 2:04 PM Kees Cook <keescook@chromium.org> wrote:
->>=20
->> On Mon, Jul 01, 2019 at 06:59:13PM -0700, Andy Lutomirski wrote:
->>> I think I'm understanding your motivation.  You're not trying to make
->>> bpf() generically usable without privilege -- you're trying to create
->>> a way to allow certain users to access dangerous bpf functionality
->>> within some limits.
->>>=20
->>> That's a perfectly fine goal, but I think you're reinventing the
->>> wheel, and the wheel you're reinventing is quite complicated and
->>> already exists.  I think you should teach bpftool to be secure when
->>> installed setuid root or with fscaps enabled and put your policy in
->>> bpftool.  If you want to harden this a little bit, it would seem
->>> entirely reasonable to add a new CAP_BPF_ADMIN and change some, but
->>> not all, of the capable() checks to check CAP_BPF_ADMIN instead of the
->>> capabilities that they currently check.
->>=20
->> If finer grained controls are wanted, it does seem like the /dev/bpf
->> path makes the most sense. open, request abilities, use fd. The open can
->> be mediated by DAC and LSM. The request can be mediated by LSM. This
->> provides a way to add policy at the LSM level and at the tool level.
->> (i.e. For tool-level controls: leave LSM wide open, make /dev/bpf owned
->> by "bpfadmin" and bpftool becomes setuid "bpfadmin". For fine-grained
->> controls, leave /dev/bpf wide open and add policy to SELinux, etc.)
->>=20
->> With only a new CAP, you don't get the fine-grained controls. (The
->> "request abilities" part is the key there.)
->=20
-> Sure you do: the effective set.  It has somewhat bizarre defaults, but
-> I don't think that's a real problem.  Also, this wouldn't be like
-> CAP_DAC_READ_SEARCH -- you can't accidentally use your BPF caps.
->=20
-> I think that a /dev capability-like object isn't totally nuts, but I
-> think we should do it well, and this patch doesn't really achieve
-> that.  But I don't think bpf wants fine-grained controls like this at
-> all -- as I pointed upthread, a fine-grained solution really wants
-> different treatment for the different capable() checks, and a bunch of
-> them won't resemble capabilities or /dev/bpf at all.
+Add a more capable variation of put_user_pages() to the
+API set, and call it from the simple ones.
 
-With 5.3-rc1 out, I am back on this. :)
+The new __put_user_pages() takes an enum that handles the various
+combinations of needing to call set_page_dirty() or
+set_page_dirty_lock(), before calling put_user_page().
 
-How about we modify the set as:
-  1. Introduce sys_bpf_with_cap() that takes fd of /dev/bpf.=20
-  2. Better handling of capable() calls through bpf code. I guess the
-     biggest problem here is is_priv in verifier.c:bpf_check().=20
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Jan Kara <jack@suse.cz>
+Cc: Christoph Hellwig <hch@lst.de>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ include/linux/mm.h |  58 ++++++++++++++++++-
+ mm/gup.c           | 137 ++++++++++++++++++++++-----------------------
+ 2 files changed, 124 insertions(+), 71 deletions(-)
 
-With this approach, we will be able to pass the fd around, so it should=20
-also solve problem for Go.=20
-
-Please let me know your comments/suggestions on this direction.=20
-
-Thanks,
-Song
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 0334ca97c584..7218585681b2 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1057,8 +1057,62 @@ static inline void put_user_page(struct page *page)
+ 	put_page(page);
+ }
+ 
+-void put_user_pages_dirty(struct page **pages, unsigned long npages);
+-void put_user_pages_dirty_lock(struct page **pages, unsigned long npages);
++enum pup_flags_t {
++	PUP_FLAGS_CLEAN		= 0,
++	PUP_FLAGS_DIRTY		= 1,
++	PUP_FLAGS_LOCK		= 2,
++	PUP_FLAGS_DIRTY_LOCK	= 3,
++};
++
++void __put_user_pages(struct page **pages, unsigned long npages,
++		      enum pup_flags_t flags);
++
++/**
++ * put_user_pages_dirty() - release and dirty an array of gup-pinned pages
++ * @pages:  array of pages to be marked dirty and released.
++ * @npages: number of pages in the @pages array.
++ *
++ * "gup-pinned page" refers to a page that has had one of the get_user_pages()
++ * variants called on that page.
++ *
++ * For each page in the @pages array, make that page (or its head page, if a
++ * compound page) dirty, if it was previously listed as clean. Then, release
++ * the page using put_user_page().
++ *
++ * Please see the put_user_page() documentation for details.
++ *
++ * set_page_dirty(), which does not lock the page, is used here.
++ * Therefore, it is the caller's responsibility to ensure that this is
++ * safe. If not, then put_user_pages_dirty_lock() should be called instead.
++ *
++ */
++static inline void put_user_pages_dirty(struct page **pages,
++					unsigned long npages)
++{
++	__put_user_pages(pages, npages, PUP_FLAGS_DIRTY);
++}
++
++/**
++ * put_user_pages_dirty_lock() - release and dirty an array of gup-pinned pages
++ * @pages:  array of pages to be marked dirty and released.
++ * @npages: number of pages in the @pages array.
++ *
++ * For each page in the @pages array, make that page (or its head page, if a
++ * compound page) dirty, if it was previously listed as clean. Then, release
++ * the page using put_user_page().
++ *
++ * Please see the put_user_page() documentation for details.
++ *
++ * This is just like put_user_pages_dirty(), except that it invokes
++ * set_page_dirty_lock(), instead of set_page_dirty().
++ *
++ */
++static inline void put_user_pages_dirty_lock(struct page **pages,
++					     unsigned long npages)
++{
++	__put_user_pages(pages, npages, PUP_FLAGS_DIRTY_LOCK);
++}
++
+ void put_user_pages(struct page **pages, unsigned long npages);
+ 
+ #if defined(CONFIG_SPARSEMEM) && !defined(CONFIG_SPARSEMEM_VMEMMAP)
+diff --git a/mm/gup.c b/mm/gup.c
+index 98f13ab37bac..6831ef064d76 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -29,87 +29,86 @@ struct follow_page_context {
+ 	unsigned int page_mask;
+ };
+ 
+-typedef int (*set_dirty_func_t)(struct page *page);
+-
+-static void __put_user_pages_dirty(struct page **pages,
+-				   unsigned long npages,
+-				   set_dirty_func_t sdf)
+-{
+-	unsigned long index;
+-
+-	for (index = 0; index < npages; index++) {
+-		struct page *page = compound_head(pages[index]);
+-
+-		/*
+-		 * Checking PageDirty at this point may race with
+-		 * clear_page_dirty_for_io(), but that's OK. Two key cases:
+-		 *
+-		 * 1) This code sees the page as already dirty, so it skips
+-		 * the call to sdf(). That could happen because
+-		 * clear_page_dirty_for_io() called page_mkclean(),
+-		 * followed by set_page_dirty(). However, now the page is
+-		 * going to get written back, which meets the original
+-		 * intention of setting it dirty, so all is well:
+-		 * clear_page_dirty_for_io() goes on to call
+-		 * TestClearPageDirty(), and write the page back.
+-		 *
+-		 * 2) This code sees the page as clean, so it calls sdf().
+-		 * The page stays dirty, despite being written back, so it
+-		 * gets written back again in the next writeback cycle.
+-		 * This is harmless.
+-		 */
+-		if (!PageDirty(page))
+-			sdf(page);
+-
+-		put_user_page(page);
+-	}
+-}
+-
+ /**
+- * put_user_pages_dirty() - release and dirty an array of gup-pinned pages
++ * __put_user_pages() - release an array of gup-pinned pages.
+  * @pages:  array of pages to be marked dirty and released.
+  * @npages: number of pages in the @pages array.
++ * @flags: additional hints, to be applied to each page:
+  *
+- * "gup-pinned page" refers to a page that has had one of the get_user_pages()
+- * variants called on that page.
++ *	PUP_FLAGS_CLEAN: no additional steps required. (Consider calling
++ *			 put_user_pages() directly, instead.)
+  *
+- * For each page in the @pages array, make that page (or its head page, if a
+- * compound page) dirty, if it was previously listed as clean. Then, release
+- * the page using put_user_page().
++ *	PUP_FLAGS_DIRTY: Call set_page_dirty() on the page (if not already
++ *			 dirty).
+  *
+- * Please see the put_user_page() documentation for details.
++ *      PUP_FLAGS_LOCK: meaningless by itself, but included in order to show
++ *			the numeric relationship between the flags.
+  *
+- * set_page_dirty(), which does not lock the page, is used here.
+- * Therefore, it is the caller's responsibility to ensure that this is
+- * safe. If not, then put_user_pages_dirty_lock() should be called instead.
++ *      PUP_FLAGS_DIRTY_LOCK: Call set_page_dirty_lock() on the page (if not
++ *			      already dirty).
+  *
++ * For each page in the @pages array, release the page using put_user_page().
+  */
+-void put_user_pages_dirty(struct page **pages, unsigned long npages)
++void __put_user_pages(struct page **pages, unsigned long npages,
++		      enum pup_flags_t flags)
+ {
+-	__put_user_pages_dirty(pages, npages, set_page_dirty);
+-}
+-EXPORT_SYMBOL(put_user_pages_dirty);
++	unsigned long index;
+ 
+-/**
+- * put_user_pages_dirty_lock() - release and dirty an array of gup-pinned pages
+- * @pages:  array of pages to be marked dirty and released.
+- * @npages: number of pages in the @pages array.
+- *
+- * For each page in the @pages array, make that page (or its head page, if a
+- * compound page) dirty, if it was previously listed as clean. Then, release
+- * the page using put_user_page().
+- *
+- * Please see the put_user_page() documentation for details.
+- *
+- * This is just like put_user_pages_dirty(), except that it invokes
+- * set_page_dirty_lock(), instead of set_page_dirty().
+- *
+- */
+-void put_user_pages_dirty_lock(struct page **pages, unsigned long npages)
+-{
+-	__put_user_pages_dirty(pages, npages, set_page_dirty_lock);
++	/*
++	 * TODO: this can be optimized for huge pages: if a series of pages is
++	 * physically contiguous and part of the same compound page, then a
++	 * single operation to the head page should suffice.
++	 */
++
++	for (index = 0; index < npages; index++) {
++		struct page *page = compound_head(pages[index]);
++
++		switch (flags) {
++		case PUP_FLAGS_CLEAN:
++			break;
++
++		case PUP_FLAGS_DIRTY:
++			/*
++			 * Checking PageDirty at this point may race with
++			 * clear_page_dirty_for_io(), but that's OK. Two key
++			 * cases:
++			 *
++			 * 1) This code sees the page as already dirty, so it
++			 * skips the call to set_page_dirty(). That could happen
++			 * because clear_page_dirty_for_io() called
++			 * page_mkclean(), followed by set_page_dirty().
++			 * However, now the page is going to get written back,
++			 * which meets the original intention of setting it
++			 * dirty, so all is well: clear_page_dirty_for_io() goes
++			 * on to call TestClearPageDirty(), and write the page
++			 * back.
++			 *
++			 * 2) This code sees the page as clean, so it calls
++			 * set_page_dirty(). The page stays dirty, despite being
++			 * written back, so it gets written back again in the
++			 * next writeback cycle. This is harmless.
++			 */
++			if (!PageDirty(page))
++				set_page_dirty(page);
++			break;
++
++		case PUP_FLAGS_LOCK:
++			VM_WARN_ON_ONCE(flags == PUP_FLAGS_LOCK);
++			/*
++			 * Shouldn't happen, but treat it as _DIRTY_LOCK if
++			 * it does: fall through.
++			 */
++
++		case PUP_FLAGS_DIRTY_LOCK:
++			/* Same comments as for PUP_FLAGS_DIRTY apply here. */
++			if (!PageDirty(page))
++				set_page_dirty_lock(page);
++			break;
++		};
++		put_user_page(page);
++	}
+ }
+-EXPORT_SYMBOL(put_user_pages_dirty_lock);
++EXPORT_SYMBOL(__put_user_pages);
+ 
+ /**
+  * put_user_pages() - release an array of gup-pinned pages.
+-- 
+2.22.0
 
