@@ -8,61 +8,61 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 274EEC7618F
-	for <bpf@archiver.kernel.org>; Tue, 23 Jul 2019 00:20:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9457C76194
+	for <bpf@archiver.kernel.org>; Tue, 23 Jul 2019 00:20:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EB05121BE6
-	for <bpf@archiver.kernel.org>; Tue, 23 Jul 2019 00:20:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9FB2C219BE
+	for <bpf@archiver.kernel.org>; Tue, 23 Jul 2019 00:20:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QmKz5oLb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lZ0j/Nuv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387642AbfGWAUw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Jul 2019 20:20:52 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:41414 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387633AbfGWAUv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 22 Jul 2019 20:20:51 -0400
-Received: by mail-pf1-f196.google.com with SMTP id m30so18171677pff.8;
-        Mon, 22 Jul 2019 17:20:51 -0700 (PDT)
+        id S2387652AbfGWAUx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Jul 2019 20:20:53 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:42821 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726283AbfGWAUx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 22 Jul 2019 20:20:53 -0400
+Received: by mail-pf1-f195.google.com with SMTP id q10so18154208pff.9;
+        Mon, 22 Jul 2019 17:20:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vgF24LyexnjpZpBmhmlOA7onPmOTJnnC05UHG8RL20Y=;
-        b=QmKz5oLb/eawxPj0k71yzqxhwrI1ta3Cmh1Ffhbio88xij6YwJCPtRGKANTFZvg0eI
-         PzmX4+JLel8i03B5xWdnBqTbygiXAtzQn4YeYoXdWwJr9h9haab8kk6yHwKkbwF+a4ma
-         Sr6hL1S+f0upSW8RVDQuot7Iy1iNvbtTCN2ZxXHJgnUnU9U6p6oWYMPvQfQvPrcP07ei
-         uliiipoINSNBUXwQwaYIxMlMxyeer0Kroye4pOB28pMBFetSF/9oH19IH5HPbGZtEGoc
-         tm3T28aT3D9c4txzpEW48zuFUSyTLVRlUOf0QxczcofwLXeVwwxPXVp0FFm5R2+BpVf1
-         3vEA==
+        bh=OAQCMm+LvmDbxVAKgZ82b3sMjfuFQxNO8tF7DCZWALE=;
+        b=lZ0j/NuvR5Wv0CgxRgTh4/VUiiVElb4YeiiXLzstbl0LYS9IRon1BQorVanQeJ0Ej1
+         gmFIM32eGdcphIg5JWurl+IbF7HlcFdj9Cl3lIwtfADIAWCUGFgH7+uybRUmlp/XmDcZ
+         futyampQdOPPFU3CSwCjHulGiQmXWjQ+KIbWi6ID8q2l8LnDjYt+0FC1Dt0sZZS+aFNJ
+         0aL7YW9Yki+YNbZ7Hcwg1YleujexvOc750CrmZoBKlKYonpBAC7LXyRu/lRvLQzYcGet
+         OSNlSFl0MLI9+kNMq2nOVIpA1iq3sudm89vziURjkMa1TUyAPn/Aqk4h+oWyJG5kU5UN
+         jC6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vgF24LyexnjpZpBmhmlOA7onPmOTJnnC05UHG8RL20Y=;
-        b=LF9p8rPbaUbh/BqBtN/T+OWyqCmTZ4JGWcFR/qsQR8pm6Asxj+VNbC1mSann55pNJh
-         jyd5gXEx8Ko0ULDheog/BuiW4YYYTNeUZVo1Ury6jQgsUI/quh4LgX0WNstahHZTn499
-         RJd6OI+cnDhQ7tak3+IUVumczak2jHFIjy+TZJ9IxInqXEbfvS+Mpi7Pg2RoRzGBJLGU
-         n/Aimi2xVmQzxHBPjEUzmHrCw0/B0UBjIZBu8jHbYC7nxXh3QEwDmU9aX2NR4Q4O3HZS
-         6ifc6WQpFPPdukehJUnZR/kozhUqsSRChRnzVSijZIbaKYtEB0236r9JsycAX0nuJ6A8
-         nDkQ==
-X-Gm-Message-State: APjAAAW4n7k+4uYkOg7BWzhBxrowgYke2uYj0bLWpKqNh0duoNC5J9DF
-        1By/caxzF6lVx5GH2BpghdK8ZXlA
-X-Google-Smtp-Source: APXvYqxmaLkeCINfGQW98uGFGVs4A/nGZLBzVxHW754kU93V3fn8P+2drFYONC4dn/hACeSzkvBqTg==
-X-Received: by 2002:a63:eb51:: with SMTP id b17mr71887692pgk.384.1563841250731;
-        Mon, 22 Jul 2019 17:20:50 -0700 (PDT)
+        bh=OAQCMm+LvmDbxVAKgZ82b3sMjfuFQxNO8tF7DCZWALE=;
+        b=Xez+6MLlJpWEeBrmCJEoJ/63TRppX0VK/I6wevGPKRNXAUE38mryFxsuzTO2FBFZ/i
+         hKKjQ51wUhN7hLotitZX+o/01/wm9Uy9QnVTslWXiR1p0/LRTcZpAVNPMDuy6e+z6Da7
+         Rnb4RAK7rPjLnWpHXlmE63An4G3tos6CBkfYtFL9//+Xe4aWjtMFsczCWLdhqH+nE1Eo
+         QjE3pombUDK56wZUhOVTq1RvTys0QWdCj3hCSO41zjcfvsipXvtv/P28tYEe9i8D+kME
+         xaakaPflbrqvfPn7k3E3+Wzaz5OmsTUCnFUD/lNIJxUW3nx78/LP6D8jd4VM7ppxS/q+
+         22vA==
+X-Gm-Message-State: APjAAAXILSk3ONEjweRgAgNdkjYYGXMQ2dUB47aEk21uWLWVy8M6tDV3
+        wOUkQj53h0RgKi0JtCOH/5cV8O6I
+X-Google-Smtp-Source: APXvYqwFsgiHMWSMJNrq0UcALH0FFDeMkPYjYcUvXBzqJNLRTM3b0fpUwdyEl5rpy19hDOezBBgjIA==
+X-Received: by 2002:a63:3009:: with SMTP id w9mr75920339pgw.260.1563841252476;
+        Mon, 22 Jul 2019 17:20:52 -0700 (PDT)
 Received: from ppenkov.svl.corp.google.com ([2620:15c:2c4:201:7bd4:4f27:abe4:d695])
-        by smtp.gmail.com with ESMTPSA id k64sm21718423pge.65.2019.07.22.17.20.49
+        by smtp.gmail.com with ESMTPSA id k64sm21718423pge.65.2019.07.22.17.20.51
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 22 Jul 2019 17:20:50 -0700 (PDT)
+        Mon, 22 Jul 2019 17:20:52 -0700 (PDT)
 From:   Petar Penkov <ppenkov.kernel@gmail.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
         edumazet@google.com, lmb@cloudflare.com, sdf@google.com,
         Petar Penkov <ppenkov@google.com>
-Subject: [bpf-next 3/6] bpf: add bpf_tcp_gen_syncookie helper
-Date:   Mon, 22 Jul 2019 17:20:39 -0700
-Message-Id: <20190723002042.105927-4-ppenkov.kernel@gmail.com>
+Subject: [bpf-next 5/6] selftests/bpf: bpf_tcp_gen_syncookie->bpf_helpers
+Date:   Mon, 22 Jul 2019 17:20:41 -0700
+Message-Id: <20190723002042.105927-6-ppenkov.kernel@gmail.com>
 X-Mailer: git-send-email 2.22.0.657.g960e92d24f-goog
 In-Reply-To: <20190723002042.105927-1-ppenkov.kernel@gmail.com>
 References: <20190723002042.105927-1-ppenkov.kernel@gmail.com>
@@ -75,164 +75,27 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Petar Penkov <ppenkov@google.com>
 
-This helper function allows BPF programs to try to generate SYN
-cookies, given a reference to a listener socket. The function works
-from XDP and with an skb context since bpf_skc_lookup_tcp can lookup a
-socket in both cases.
+Expose bpf_tcp_gen_syncookie to selftests.
 
 Signed-off-by: Petar Penkov <ppenkov@google.com>
-Suggested-by: Eric Dumazet <edumazet@google.com>
 ---
- include/uapi/linux/bpf.h | 30 ++++++++++++++++-
- net/core/filter.c        | 73 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 102 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/bpf_helpers.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 6f68438aa4ed..20baee7b2219 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -2713,6 +2713,33 @@ union bpf_attr {
-  *		**-EPERM** if no permission to send the *sig*.
-  *
-  *		**-EAGAIN** if bpf program can try again.
-+ *
-+ * s64 bpf_tcp_gen_syncookie(struct bpf_sock *sk, void *iph, u32 iph_len, struct tcphdr *th, u32 th_len)
-+ *	Description
-+ *		Try to issue a SYN cookie for the packet with corresponding
-+ *		IP/TCP headers, *iph* and *th*, on the listening socket in *sk*.
-+ *
-+ *		*iph* points to the start of the IPv4 or IPv6 header, while
-+ *		*iph_len* contains **sizeof**\ (**struct iphdr**) or
-+ *		**sizeof**\ (**struct ip6hdr**).
-+ *
-+ *		*th* points to the start of the TCP header, while *th_len*
-+ *		contains the length of the TCP header.
-+ *
-+ *	Return
-+ *		On success, lower 32 bits hold the generated SYN cookie in
-+ *		followed by 16 bits which hold the MSS value for that cookie,
-+ *		and the top 16 bits are unused.
-+ *
-+ *		On failure, the returned value is one of the following:
-+ *
-+ *		**-EINVAL** SYN cookie cannot be issued due to error
-+ *
-+ *		**-ENOENT** SYN cookie should not be issued (no SYN flood)
-+ *
-+ *		**-ENOTSUPP** kernel configuration does not enable SYN cookies
-+ *
-+ *		**-EPROTONOSUPPORT** IP packet version is not 4 or 6
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -2824,7 +2851,8 @@ union bpf_attr {
- 	FN(strtoul),			\
- 	FN(sk_storage_get),		\
- 	FN(sk_storage_delete),		\
--	FN(send_signal),
-+	FN(send_signal),		\
-+	FN(tcp_gen_syncookie),
+diff --git a/tools/testing/selftests/bpf/bpf_helpers.h b/tools/testing/selftests/bpf/bpf_helpers.h
+index 5a3d92c8bec8..19f01e967402 100644
+--- a/tools/testing/selftests/bpf/bpf_helpers.h
++++ b/tools/testing/selftests/bpf/bpf_helpers.h
+@@ -228,6 +228,9 @@ static void *(*bpf_sk_storage_get)(void *map, struct bpf_sock *sk,
+ static int (*bpf_sk_storage_delete)(void *map, struct bpf_sock *sk) =
+ 	(void *)BPF_FUNC_sk_storage_delete;
+ static int (*bpf_send_signal)(unsigned sig) = (void *)BPF_FUNC_send_signal;
++static long long (*bpf_tcp_gen_syncookie)(struct bpf_sock *sk, void *ip,
++					  int ip_len, void *tcp, int tcp_len) =
++	(void *) BPF_FUNC_tcp_gen_syncookie;
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-  * function eBPF program intends to call
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 47f6386fb17a..92114271eff6 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5850,6 +5850,75 @@ static const struct bpf_func_proto bpf_tcp_check_syncookie_proto = {
- 	.arg5_type	= ARG_CONST_SIZE,
- };
- 
-+BPF_CALL_5(bpf_tcp_gen_syncookie, struct sock *, sk, void *, iph, u32, iph_len,
-+	   struct tcphdr *, th, u32, th_len)
-+{
-+#ifdef CONFIG_SYN_COOKIES
-+	u32 cookie;
-+	u16 mss;
-+
-+	if (unlikely(th_len < sizeof(*th) || th_len != th->doff * 4))
-+		return -EINVAL;
-+
-+	if (sk->sk_protocol != IPPROTO_TCP || sk->sk_state != TCP_LISTEN)
-+		return -EINVAL;
-+
-+	if (!sock_net(sk)->ipv4.sysctl_tcp_syncookies)
-+		return -ENOENT;
-+
-+	if (!th->syn || th->ack || th->fin || th->rst)
-+		return -EINVAL;
-+
-+	if (unlikely(iph_len < sizeof(struct iphdr)))
-+		return -EINVAL;
-+
-+	/* Both struct iphdr and struct ipv6hdr have the version field at the
-+	 * same offset so we can cast to the shorter header (struct iphdr).
-+	 */
-+	switch (((struct iphdr *)iph)->version) {
-+	case 4:
-+		if (sk->sk_family == AF_INET6 && sk->sk_ipv6only)
-+			return -EINVAL;
-+
-+		mss = tcp_v4_get_syncookie(sk, iph, th, &cookie);
-+		break;
-+
-+#if IS_BUILTIN(CONFIG_IPV6)
-+	case 6:
-+		if (unlikely(iph_len < sizeof(struct ipv6hdr)))
-+			return -EINVAL;
-+
-+		if (sk->sk_family != AF_INET6)
-+			return -EINVAL;
-+
-+		mss = tcp_v6_get_syncookie(sk, iph, th, &cookie);
-+		break;
-+#endif /* CONFIG_IPV6 */
-+
-+	default:
-+		return -EPROTONOSUPPORT;
-+	}
-+	if (mss <= 0)
-+		return -ENOENT;
-+
-+	return cookie | ((u64)mss << 32);
-+#else
-+	return -ENOTSUPP;
-+#endif /* CONFIG_SYN_COOKIES */
-+}
-+
-+static const struct bpf_func_proto bpf_tcp_gen_syncookie_proto = {
-+	.func		= bpf_tcp_gen_syncookie,
-+	.gpl_only	= true, /* __cookie_v*_init_sequence() is GPL */
-+	.pkt_access	= true,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_PTR_TO_SOCK_COMMON,
-+	.arg2_type	= ARG_PTR_TO_MEM,
-+	.arg3_type	= ARG_CONST_SIZE,
-+	.arg4_type	= ARG_PTR_TO_MEM,
-+	.arg5_type	= ARG_CONST_SIZE,
-+};
-+
- #endif /* CONFIG_INET */
- 
- bool bpf_helper_changes_pkt_data(void *func)
-@@ -6135,6 +6204,8 @@ tc_cls_act_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_tcp_check_syncookie_proto;
- 	case BPF_FUNC_skb_ecn_set_ce:
- 		return &bpf_skb_ecn_set_ce_proto;
-+	case BPF_FUNC_tcp_gen_syncookie:
-+		return &bpf_tcp_gen_syncookie_proto;
- #endif
- 	default:
- 		return bpf_base_func_proto(func_id);
-@@ -6174,6 +6245,8 @@ xdp_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_xdp_skc_lookup_tcp_proto;
- 	case BPF_FUNC_tcp_check_syncookie:
- 		return &bpf_tcp_check_syncookie_proto;
-+	case BPF_FUNC_tcp_gen_syncookie:
-+		return &bpf_tcp_gen_syncookie_proto;
- #endif
- 	default:
- 		return bpf_base_func_proto(func_id);
+ /* llvm builtin functions that eBPF C program may use to
+  * emit BPF_LD_ABS and BPF_LD_IND instructions
 -- 
 2.22.0.657.g960e92d24f-goog
 
