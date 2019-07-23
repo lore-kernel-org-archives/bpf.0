@@ -2,59 +2,57 @@ Return-Path: <SRS0=nay9=VU=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7AF1C76186
-	for <bpf@archiver.kernel.org>; Tue, 23 Jul 2019 21:35:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05063C76190
+	for <bpf@archiver.kernel.org>; Tue, 23 Jul 2019 22:01:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AB4E6218D4
-	for <bpf@archiver.kernel.org>; Tue, 23 Jul 2019 21:35:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CFBDE218F0
+	for <bpf@archiver.kernel.org>; Tue, 23 Jul 2019 22:01:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="fPJU5Qae"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="k4zO6Xxb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403905AbfGWVfP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Jul 2019 17:35:15 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:34462 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2403946AbfGWVfN (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 23 Jul 2019 17:35:13 -0400
-Received: from pps.filterd (m0001255.ppops.net [127.0.0.1])
-        by mx0b-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6NLVhha024256
-        for <bpf@vger.kernel.org>; Tue, 23 Jul 2019 14:35:12 -0700
+        id S2389124AbfGWWBj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Jul 2019 18:01:39 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:54304 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2392204AbfGWWBj (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 23 Jul 2019 18:01:39 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6NLqwir020489
+        for <bpf@vger.kernel.org>; Tue, 23 Jul 2019 15:01:37 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=+IbkZA52+CSWhttM7Nop/CTIk408uavqulZJeySTpgc=;
- b=fPJU5QaeGOQ2Bm4MoJSzJ1QhGQILFN+4E3mqFxUExQT220kYiTZ4xkQT7lDhy3UVogby
- VeDKz7fb3RdLKmX2/NaMMNtoIb6r2BS+CGC4Ep/tg+mCURSpxLXn3Z7QzmEaN9HPrKKz
- bpSU6cq+MOmUwgu4fpSISs+ar26AMfswslg= 
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=snnMS8SSyfbrml0K8FCk8qY03YsI+7Yi9witzTC6DkA=;
+ b=k4zO6Xxb1L1z6xzqJ1wyu7IDqWW54vCaPenz+cE2Hx0ZNXTp1W9JRDFAAqnFwfPJMTHo
+ ZyVElFuupC7aSpJWb519ueLRj+GWBTJHjsxSgYRLShgxmZTeYca2S5+Aq7z3yMYnviMQ
+ qP+l0rrL4JioQuyiQXB8QkYGN2kUC0MwpdQ= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0b-00082601.pphosted.com with ESMTP id 2tx60s13xx-12
+        by mx0a-00082601.pphosted.com with ESMTP id 2tx61316j3-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 23 Jul 2019 14:35:12 -0700
+        for <bpf@vger.kernel.org>; Tue, 23 Jul 2019 15:01:37 -0700
 Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 23 Jul 2019 14:35:07 -0700
+ 15.1.1713.5; Tue, 23 Jul 2019 15:01:30 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 50DCF8615A2; Tue, 23 Jul 2019 14:35:04 -0700 (PDT)
+        id 423CE8615BA; Tue, 23 Jul 2019 15:01:29 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>, <songliubraving@fb.com>
+        <daniel@iogearbox.net>
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
+        Andrii Nakryiko <andriin@fb.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v2 bpf-next 4/5] samples/bpf: switch trace_output sample to perf_buffer API
-Date:   Tue, 23 Jul 2019 14:34:44 -0700
-Message-ID: <20190723213445.1732339-5-andriin@fb.com>
+Subject: [PATCH bpf-next] libbpf: silence GCC8 warning about string truncation
+Date:   Tue, 23 Jul 2019 15:01:27 -0700
+Message-ID: <20190723220127.1815913-1-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190723213445.1732339-1-andriin@fb.com>
-References: <20190723213445.1732339-1-andriin@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -63,119 +61,53 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
  malwarescore=0 suspectscore=8 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=975 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1907230217
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1907230221
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Convert trace_output sample to libbpf's perf_buffer API.
+Despite a proper NULL-termination after strncpy(..., ..., IFNAMSIZ - 1),
+GCC8 still complains about *expected* string truncation:
 
+  xsk.c:330:2: error: 'strncpy' output may be truncated copying 15 bytes
+  from a string of length 15 [-Werror=stringop-truncation]
+    strncpy(ifr.ifr_name, xsk->ifname, IFNAMSIZ - 1);
+
+This patch gets rid of the issue altogether by using memcpy instead.
+There is no performance regression, as strncpy will still copy and fill
+all of the bytes anyway.
+
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Acked-by: Song Liu <songliubraving@fb.com>
 ---
- samples/bpf/trace_output_user.c | 43 +++++++++++----------------------
- 1 file changed, 14 insertions(+), 29 deletions(-)
+ tools/lib/bpf/xsk.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/samples/bpf/trace_output_user.c b/samples/bpf/trace_output_user.c
-index 2dd1d39b152a..8ee47699a870 100644
---- a/samples/bpf/trace_output_user.c
-+++ b/samples/bpf/trace_output_user.c
-@@ -18,9 +18,6 @@
- #include <libbpf.h>
- #include "bpf_load.h"
- #include "perf-sys.h"
--#include "trace_helpers.h"
--
--static int pmu_fd;
+diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+index 5007b5d4fd2c..65f5dd556f99 100644
+--- a/tools/lib/bpf/xsk.c
++++ b/tools/lib/bpf/xsk.c
+@@ -327,7 +327,7 @@ static int xsk_get_max_queues(struct xsk_socket *xsk)
  
- static __u64 time_get_ns(void)
- {
-@@ -31,12 +28,12 @@ static __u64 time_get_ns(void)
- }
- 
- static __u64 start_time;
-+static __u64 cnt;
- 
- #define MAX_CNT 100000ll
- 
--static int print_bpf_output(void *data, int size)
-+static void print_bpf_output(void *ctx, int cpu, void *data, __u32 size)
- {
--	static __u64 cnt;
- 	struct {
- 		__u64 pid;
- 		__u64 cookie;
-@@ -45,7 +42,7 @@ static int print_bpf_output(void *data, int size)
- 	if (e->cookie != 0x12345678) {
- 		printf("BUG pid %llx cookie %llx sized %d\n",
- 		       e->pid, e->cookie, size);
--		return LIBBPF_PERF_EVENT_ERROR;
-+		return;
+ 	channels.cmd = ETHTOOL_GCHANNELS;
+ 	ifr.ifr_data = (void *)&channels;
+-	strncpy(ifr.ifr_name, xsk->ifname, IFNAMSIZ - 1);
++	memcpy(ifr.ifr_name, xsk->ifname, IFNAMSIZ - 1);
+ 	ifr.ifr_name[IFNAMSIZ - 1] = '\0';
+ 	err = ioctl(fd, SIOCETHTOOL, &ifr);
+ 	if (err && errno != EOPNOTSUPP) {
+@@ -517,7 +517,7 @@ int xsk_socket__create(struct xsk_socket **xsk_ptr, const char *ifname,
+ 		err = -errno;
+ 		goto out_socket;
  	}
+-	strncpy(xsk->ifname, ifname, IFNAMSIZ - 1);
++	memcpy(xsk->ifname, ifname, IFNAMSIZ - 1);
+ 	xsk->ifname[IFNAMSIZ - 1] = '\0';
  
- 	cnt++;
-@@ -53,30 +50,14 @@ static int print_bpf_output(void *data, int size)
- 	if (cnt == MAX_CNT) {
- 		printf("recv %lld events per sec\n",
- 		       MAX_CNT * 1000000000ll / (time_get_ns() - start_time));
--		return LIBBPF_PERF_EVENT_DONE;
-+		return;
- 	}
--
--	return LIBBPF_PERF_EVENT_CONT;
--}
--
--static void test_bpf_perf_event(void)
--{
--	struct perf_event_attr attr = {
--		.sample_type = PERF_SAMPLE_RAW,
--		.type = PERF_TYPE_SOFTWARE,
--		.config = PERF_COUNT_SW_BPF_OUTPUT,
--	};
--	int key = 0;
--
--	pmu_fd = sys_perf_event_open(&attr, -1/*pid*/, 0/*cpu*/, -1/*group_fd*/, 0);
--
--	assert(pmu_fd >= 0);
--	assert(bpf_map_update_elem(map_fd[0], &key, &pmu_fd, BPF_ANY) == 0);
--	ioctl(pmu_fd, PERF_EVENT_IOC_ENABLE, 0);
- }
- 
- int main(int argc, char **argv)
- {
-+	struct perf_buffer_opts pb_opts = {};
-+	struct perf_buffer *pb;
- 	char filename[256];
- 	FILE *f;
- 	int ret;
-@@ -88,16 +69,20 @@ int main(int argc, char **argv)
- 		return 1;
- 	}
- 
--	test_bpf_perf_event();
--
--	if (perf_event_mmap(pmu_fd) < 0)
-+	pb_opts.sample_cb = print_bpf_output;
-+	pb = perf_buffer__new(map_fd[0], 8, &pb_opts);
-+	ret = libbpf_get_error(pb);
-+	if (ret) {
-+		printf("failed to setup perf_buffer: %d\n", ret);
- 		return 1;
-+	}
- 
- 	f = popen("taskset 1 dd if=/dev/zero of=/dev/null", "r");
- 	(void) f;
- 
- 	start_time = time_get_ns();
--	ret = perf_event_poller(pmu_fd, print_bpf_output);
-+	while ((ret = perf_buffer__poll(pb, 1000)) >= 0 && cnt < MAX_CNT) {
-+	}
- 	kill(0, SIGINT);
- 	return ret;
- }
+ 	err = xsk_set_xdp_socket_config(&xsk->config, usr_config);
 -- 
 2.17.1
 
