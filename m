@@ -2,106 +2,92 @@ Return-Path: <SRS0=nay9=VU=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2936DC7618E
-	for <bpf@archiver.kernel.org>; Tue, 23 Jul 2019 10:15:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6E7AC7618B
+	for <bpf@archiver.kernel.org>; Tue, 23 Jul 2019 10:28:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EBB4D223D8
-	for <bpf@archiver.kernel.org>; Tue, 23 Jul 2019 10:15:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ADE8B2190F
+	for <bpf@archiver.kernel.org>; Tue, 23 Jul 2019 10:28:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="A6zgmMm9"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="IMAR6fvA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388940AbfGWKPv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Jul 2019 06:15:51 -0400
-Received: from mail-pf1-f201.google.com ([209.85.210.201]:34579 "EHLO
-        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388939AbfGWKPv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Jul 2019 06:15:51 -0400
-Received: by mail-pf1-f201.google.com with SMTP id i2so25886444pfe.1
-        for <bpf@vger.kernel.org>; Tue, 23 Jul 2019 03:15:51 -0700 (PDT)
+        id S2388736AbfGWK2E (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Jul 2019 06:28:04 -0400
+Received: from mail-ot1-f51.google.com ([209.85.210.51]:36998 "EHLO
+        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387790AbfGWK2E (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Jul 2019 06:28:04 -0400
+Received: by mail-ot1-f51.google.com with SMTP id s20so43482071otp.4
+        for <bpf@vger.kernel.org>; Tue, 23 Jul 2019 03:28:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        d=cloudflare.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=h7dsUuY4XgkJrRpU//tPdbDW3VQMrwX3cEPK49aoW3k=;
-        b=A6zgmMm9WbUycg22ml8plJHz5SO7tE5NzLs68G+UB7ZBg8EEC6XfiQ8P8xB9wnOYVm
-         RlpA7V9i8lJv+cLpVgCe4fC/h1Q/gr50/RTnLWyfs7a872TsHqE4JXFpSy/iem7u2O76
-         utYfJjJbXuFbYB45hgszstotN3ptHtRIhHd7vDy63kqb7FTk3bFUU5Vy9fpHGWdGq22l
-         /AeySlzvSSBd0AR9D+8zidJK4Lsr4lADoYNKZ5VRxq9Y6K1GYNB/n8sxkHQOJZQ3sMif
-         em6H1Ia98Uv/5RjfZcreyhdDwLv+bO1a8MVG593Di2QXNdV1n1PMoevvdLP9ExhiY3Vg
-         jDVg==
+        bh=DzjZ9xrgJ3e/N9oCtEjwrojn4zWHBMXyeNDwUYtXGpA=;
+        b=IMAR6fvAspFpE2VY2zN47kWU83tie4A+Smh5I1eVnhIRNNrh9o5KpPCjY2/S4IT1xX
+         MwoSHeg6j1eHNGeezJD7/3o8HH8XQa0EgZ6QAVMVdkrrGfyOpI8mKdF6jQsXtwje9h5d
+         eZwYSm3O7jWCVbxabKaIZYM58itmDAl3XtWrw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=h7dsUuY4XgkJrRpU//tPdbDW3VQMrwX3cEPK49aoW3k=;
-        b=AEeRIFHthIDwk3jf74KE4SrrdWphMIMvJkVhkNgiSRzyCdwMXvxd8uwJGKbNjx3ex2
-         GteExMJAo89eRD5I1ZSvHjXC5taOPaGqyXKl/BoLEMWQMWrKVhl9An5zg4evKPwial37
-         gZGg1j56ULkCQi1WsTFNmHiUCM/WSDbVZz+LFlMKs7jpN/8I8dGcIKtUtLUTav7W9FCj
-         +xKCIgFL8MET140WnDTSebZ/lKk+XEqeOs8L8QhzW8jdP+t7OxxS3syW1dl0TafQKVsv
-         eMSZTA2NKISJNczz9AL/Va832/ShXtxLgCNdDqCwsBWT2UZl7TpYvksgYMqlgofQfxM2
-         n8Vw==
-X-Gm-Message-State: APjAAAVfx6Xa8i3fxdghY21joOvmli+McmcxotfrtoKRDjItuAUuk3z7
-        DCv4nr5HkiAMQ1Imr+gTfZczLTxrZt4qXw==
-X-Google-Smtp-Source: APXvYqwvjeWio7ylwSxyvRjLzjXom8IC9uRyVyoj/Wm7PsJSHz4Kg6ZGjXpcFwuZrM+qkvTQWaIV8V4sbongvA==
-X-Received: by 2002:a63:b555:: with SMTP id u21mr77094873pgo.222.1563876950294;
- Tue, 23 Jul 2019 03:15:50 -0700 (PDT)
-Date:   Tue, 23 Jul 2019 03:15:38 -0700
-In-Reply-To: <20190723101538.136328-1-edumazet@google.com>
-Message-Id: <20190723101538.136328-3-edumazet@google.com>
-Mime-Version: 1.0
-References: <20190723101538.136328-1-edumazet@google.com>
-X-Mailer: git-send-email 2.22.0.657.g960e92d24f-goog
-Subject: [PATCH bpf 2/2] selftests/bpf: add another gso_segs access
-From:   Eric Dumazet <edumazet@google.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        netdev <netdev@vger.kernel.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DzjZ9xrgJ3e/N9oCtEjwrojn4zWHBMXyeNDwUYtXGpA=;
+        b=pay+ZN6r3DUnZ90i4ewewRGKUEN4HZamE0c0/wODJeC9awTeVa+xVVmaI0zSBBRi41
+         554EEXncwDQaS8yWF8dYWrNnS0qknlBXa7oGijPQixP+ER874cVikceLD/KpwJeC0F0Q
+         T0Fq5FZlVgxDZWxLUid1i5/DCLouJQkDPGxfyTPpy9Ev0WUc2HGx17FuQD7Tpo4hMTJK
+         Fzd2ZUwwwuEDm93Ht3euy5HkhxF0kxzbH076B7nNNX950HisiKllb5fjMSU7pUGyh21Y
+         aocmPRwtFTFXVQYgNq2vRNACMjodTn9WQ4P+ZhAK5ZqZ4WirhNPYDpNUWE/+4agA2Xhg
+         5yTA==
+X-Gm-Message-State: APjAAAWTaEcIKZsgkkZcJeX9Rb1KDCEQVZo3KcWUU18LlGB2Xdqknt/V
+        4m/harkbZsWu8q4yq1B011zpN59Mxx6iu1NmcWX01w==
+X-Google-Smtp-Source: APXvYqzEpVRw6OPxSjOoqAs6BN44GaYDcArZCOF2x1AMWSijh7TcvOBEmzzr2EMth26lY0YWk4E1HNUjbRO2AGoyfPQ=
+X-Received: by 2002:a9d:28:: with SMTP id 37mr53996317ota.289.1563877683237;
+ Tue, 23 Jul 2019 03:28:03 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190723002042.105927-1-ppenkov.kernel@gmail.com>
+In-Reply-To: <20190723002042.105927-1-ppenkov.kernel@gmail.com>
+From:   Lorenz Bauer <lmb@cloudflare.com>
+Date:   Tue, 23 Jul 2019 11:27:51 +0100
+Message-ID: <CACAyw9_6jp6PauEcCSVvc+JJA1VvZgNsYZtuvu5=vf4b0rxkvw@mail.gmail.com>
+Subject: Re: [bpf-next 0/6] Introduce a BPF helper to generate SYN cookies
+To:     Petar Penkov <ppenkov.kernel@gmail.com>
+Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        davem@davemloft.net, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Eric Dumazet <edumazet@google.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>
+        Stanislav Fomichev <sdf@google.com>,
+        Petar Penkov <ppenkov@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use BPF_REG_1 for source and destination of gso_segs read,
-to exercise "bpf: fix access to skb_shared_info->gso_segs" fix.
+On Tue, 23 Jul 2019 at 01:20, Petar Penkov <ppenkov.kernel@gmail.com> wrote:
+>
+> From: Petar Penkov <ppenkov@google.com>
+>
+> This patch series introduces a BPF helper function that allows generating SYN
+> cookies from BPF. Currently, this helper is enabled at both the TC hook and the
+> XDP hook.
+>
+> The first two patches in the series add/modify several TCP helper functions to
+> allow for SKB-less operation, as is the case at the XDP hook.
+>
+> The third patch introduces the bpf_tcp_gen_syncookie helper function which
+> generates a SYN cookie for either XDP or TC programs. The return value of
+> this function contains both the MSS value, encoded in the cookie, and the
+> cookie itself.
+>
+> The last three patches sync tools/ and add a test.
 
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Suggested-by: Stanislav Fomichev <sdf@google.com>
----
- tools/testing/selftests/bpf/verifier/ctx_skb.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Reviewed-by: Lorenz Bauer <lmb@cloudflare.com>
 
-diff --git a/tools/testing/selftests/bpf/verifier/ctx_skb.c b/tools/testing/selftests/bpf/verifier/ctx_skb.c
-index b0fda2877119c4af08277bd0f329f238c193313c..d438193804b212ffa80c94be47e8c1aca392181e 100644
---- a/tools/testing/selftests/bpf/verifier/ctx_skb.c
-+++ b/tools/testing/selftests/bpf/verifier/ctx_skb.c
-@@ -974,6 +974,17 @@
- 	.result = ACCEPT,
- 	.prog_type = BPF_PROG_TYPE_CGROUP_SKB,
- },
-+{
-+	"read gso_segs from CGROUP_SKB",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_1, BPF_REG_1,
-+		    offsetof(struct __sk_buff, gso_segs)),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_CGROUP_SKB,
-+},
- {
- 	"write gso_segs from CGROUP_SKB",
- 	.insns = {
 -- 
-2.22.0.657.g960e92d24f-goog
+Lorenz Bauer  |  Systems Engineer
+6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
 
+www.cloudflare.com
