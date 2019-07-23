@@ -2,44 +2,46 @@ Return-Path: <SRS0=nay9=VU=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 084E5C76186
-	for <bpf@archiver.kernel.org>; Tue, 23 Jul 2019 21:35:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74FF2C76186
+	for <bpf@archiver.kernel.org>; Tue, 23 Jul 2019 21:35:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CF911218D4
-	for <bpf@archiver.kernel.org>; Tue, 23 Jul 2019 21:35:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4BA1A218D4
+	for <bpf@archiver.kernel.org>; Tue, 23 Jul 2019 21:35:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="NI8y3rsD"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ID3bXyVo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389435AbfGWVfM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S2403938AbfGWVfM (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 23 Jul 2019 17:35:12 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:34996 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2403931AbfGWVfK (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 23 Jul 2019 17:35:10 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6NLWYBs014495
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:32628 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2403932AbfGWVfL (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 23 Jul 2019 17:35:11 -0400
+Received: from pps.filterd (m0001255.ppops.net [127.0.0.1])
+        by mx0b-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6NLVhhW024256
         for <bpf@vger.kernel.org>; Tue, 23 Jul 2019 14:35:10 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=aYTQ+zUgQJAdgomjovg3XpG481pbk+qgmf0N4tXpo40=;
- b=NI8y3rsD26SwEKlLfyHOFIuINK+/g47Q45EKncnO4uWdv6XrtXRZCGMIXcrMyhai9RkL
- pI/L11NBeCY55q2PfcYjqIXziQYlTyIXRNggHmhoKiqIBfA4xJo6Jwg1GTi1mgjEo1ef
- Zyt+KU1328gQ8vkbyEMN/wUUygK56imX0wc= 
+ content-type : content-transfer-encoding; s=facebook;
+ bh=T0bO4AAhjgz16uMHiPDzB9HF775s0mOgX1AT2lMVHS0=;
+ b=ID3bXyVoE3xc7hfrq9d3SkxgkOUTP6UaCFMT2V+4Y0q4oUJ+s1bIRNZF9Q0UvEOnYYBU
+ GiDrBhf8Ru1dUtuflDzTkjVeXDMMyEy0Z8eBLYl+vfrGBLJnhDZaSNaO4FtDSgT3FAhX
+ 1AVrge2dxxSZhU8lDSsZdQFxwzfYqJymT+o= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2tx61gs5t8-1
+        by mx0b-00082601.pphosted.com with ESMTP id 2tx60s13xx-8
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 23 Jul 2019 14:35:09 -0700
+        for <bpf@vger.kernel.org>; Tue, 23 Jul 2019 14:35:10 -0700
 Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 23 Jul 2019 14:35:08 -0700
+ 15.1.1713.5; Tue, 23 Jul 2019 14:35:05 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 5E0248615A2; Tue, 23 Jul 2019 14:35:06 -0700 (PDT)
+        id 487378615A2; Tue, 23 Jul 2019 14:35:02 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,21 +50,22 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v2 bpf-next 5/5] selftests/bpf: remove perf buffer helpers
-Date:   Tue, 23 Jul 2019 14:34:45 -0700
-Message-ID: <20190723213445.1732339-6-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 3/5] samples/bpf: convert xdp_sample_pkts_user to perf_buffer API
+Date:   Tue, 23 Jul 2019 14:34:43 -0700
+Message-ID: <20190723213445.1732339-4-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190723213445.1732339-1-andriin@fb.com>
 References: <20190723213445.1732339-1-andriin@fb.com>
-X-FB-Internal: Safe
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-23_09:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
  malwarescore=0 suspectscore=25 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=986 adultscore=0 classifier=spam adjust=0 reason=mlx
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1906280000 definitions=main-1907230217
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -70,175 +73,146 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-libbpf's perf_buffer API supersedes trace_helper.h's helpers.
-Remove those helpers after all existing users were already moved to
-perf_buffer API.
+Convert xdp_sample_pkts_user to libbpf's perf_buffer API.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 Acked-by: Song Liu <songliubraving@fb.com>
+Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 ---
- tools/testing/selftests/bpf/trace_helpers.c | 125 --------------------
- tools/testing/selftests/bpf/trace_helpers.h |   9 --
- 2 files changed, 134 deletions(-)
+ samples/bpf/xdp_sample_pkts_user.c | 61 +++++++++---------------------
+ 1 file changed, 17 insertions(+), 44 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
-index b47f205f0310..7f989b3e4e22 100644
---- a/tools/testing/selftests/bpf/trace_helpers.c
-+++ b/tools/testing/selftests/bpf/trace_helpers.c
-@@ -86,128 +86,3 @@ long ksym_get_addr(const char *name)
- 
- 	return 0;
- }
--
--static int page_size;
--static int page_cnt = 8;
--static struct perf_event_mmap_page *header;
--
--int perf_event_mmap_header(int fd, struct perf_event_mmap_page **header)
--{
--	void *base;
--	int mmap_size;
--
--	page_size = getpagesize();
--	mmap_size = page_size * (page_cnt + 1);
--
--	base = mmap(NULL, mmap_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
--	if (base == MAP_FAILED) {
--		printf("mmap err\n");
--		return -1;
--	}
--
--	*header = base;
--	return 0;
--}
--
--int perf_event_mmap(int fd)
--{
--	return perf_event_mmap_header(fd, &header);
--}
--
--static int perf_event_poll(int fd)
--{
--	struct pollfd pfd = { .fd = fd, .events = POLLIN };
--
--	return poll(&pfd, 1, 1000);
--}
--
--struct perf_event_sample {
--	struct perf_event_header header;
--	__u32 size;
--	char data[];
--};
--
--static enum bpf_perf_event_ret
--bpf_perf_event_print(struct perf_event_header *hdr, void *private_data)
--{
--	struct perf_event_sample *e = (struct perf_event_sample *)hdr;
--	perf_event_print_fn fn = private_data;
--	int ret;
--
--	if (e->header.type == PERF_RECORD_SAMPLE) {
--		ret = fn(e->data, e->size);
--		if (ret != LIBBPF_PERF_EVENT_CONT)
--			return ret;
--	} else if (e->header.type == PERF_RECORD_LOST) {
--		struct {
--			struct perf_event_header header;
--			__u64 id;
--			__u64 lost;
--		} *lost = (void *) e;
--		printf("lost %lld events\n", lost->lost);
--	} else {
--		printf("unknown event type=%d size=%d\n",
--		       e->header.type, e->header.size);
--	}
+diff --git a/samples/bpf/xdp_sample_pkts_user.c b/samples/bpf/xdp_sample_=
+pkts_user.c
+index dc66345a929a..3002714e3cd5 100644
+--- a/samples/bpf/xdp_sample_pkts_user.c
++++ b/samples/bpf/xdp_sample_pkts_user.c
+@@ -17,14 +17,13 @@
+ #include <linux/if_link.h>
+=20
+ #include "perf-sys.h"
+-#include "trace_helpers.h"
+=20
+ #define MAX_CPUS 128
+-static int pmu_fds[MAX_CPUS], if_idx;
+-static struct perf_event_mmap_page *headers[MAX_CPUS];
++static int if_idx;
+ static char *if_name;
+ static __u32 xdp_flags =3D XDP_FLAGS_UPDATE_IF_NOEXIST;
+ static __u32 prog_id;
++static struct perf_buffer *pb =3D NULL;
+=20
+ static int do_attach(int idx, int fd, const char *name)
+ {
+@@ -73,7 +72,7 @@ static int do_detach(int idx, const char *name)
+=20
+ #define SAMPLE_SIZE 64
+=20
+-static int print_bpf_output(void *data, int size)
++static void print_bpf_output(void *ctx, int cpu, void *data, __u32 size)
+ {
+ 	struct {
+ 		__u16 cookie;
+@@ -83,45 +82,20 @@ static int print_bpf_output(void *data, int size)
+ 	int i;
+=20
+ 	if (e->cookie !=3D 0xdead) {
+-		printf("BUG cookie %x sized %d\n",
+-		       e->cookie, size);
+-		return LIBBPF_PERF_EVENT_ERROR;
++		printf("BUG cookie %x sized %d\n", e->cookie, size);
++		return;
+ 	}
+=20
+ 	printf("Pkt len: %-5d bytes. Ethernet hdr: ", e->pkt_len);
+ 	for (i =3D 0; i < 14 && i < e->pkt_len; i++)
+ 		printf("%02x ", e->pkt_data[i]);
+ 	printf("\n");
 -
 -	return LIBBPF_PERF_EVENT_CONT;
 -}
 -
--int perf_event_poller(int fd, perf_event_print_fn output_fn)
+-static void test_bpf_perf_event(int map_fd, int num)
 -{
--	enum bpf_perf_event_ret ret;
--	void *buf = NULL;
--	size_t len = 0;
--
--	for (;;) {
--		perf_event_poll(fd);
--		ret = bpf_perf_event_read_simple(header, page_cnt * page_size,
--						 page_size, &buf, &len,
--						 bpf_perf_event_print,
--						 output_fn);
--		if (ret != LIBBPF_PERF_EVENT_CONT)
--			break;
--	}
--	free(buf);
--
--	return ret;
--}
--
--int perf_event_poller_multi(int *fds, struct perf_event_mmap_page **headers,
--			    int num_fds, perf_event_print_fn output_fn)
--{
--	enum bpf_perf_event_ret ret;
--	struct pollfd *pfds;
--	void *buf = NULL;
--	size_t len = 0;
+-	struct perf_event_attr attr =3D {
+-		.sample_type =3D PERF_SAMPLE_RAW,
+-		.type =3D PERF_TYPE_SOFTWARE,
+-		.config =3D PERF_COUNT_SW_BPF_OUTPUT,
+-		.wakeup_events =3D 1, /* get an fd notification for every event */
+-	};
 -	int i;
 -
--	pfds = calloc(num_fds, sizeof(*pfds));
--	if (!pfds)
--		return LIBBPF_PERF_EVENT_ERROR;
+-	for (i =3D 0; i < num; i++) {
+-		int key =3D i;
 -
--	for (i = 0; i < num_fds; i++) {
--		pfds[i].fd = fds[i];
--		pfds[i].events = POLLIN;
+-		pmu_fds[i] =3D sys_perf_event_open(&attr, -1/*pid*/, i/*cpu*/,
+-						 -1/*group_fd*/, 0);
+-
+-		assert(pmu_fds[i] >=3D 0);
+-		assert(bpf_map_update_elem(map_fd, &key,
+-					   &pmu_fds[i], BPF_ANY) =3D=3D 0);
+-		ioctl(pmu_fds[i], PERF_EVENT_IOC_ENABLE, 0);
 -	}
+ }
+=20
+ static void sig_handler(int signo)
+ {
+ 	do_detach(if_idx, if_name);
++	perf_buffer__free(pb);
+ 	exit(0);
+ }
+=20
+@@ -140,13 +114,13 @@ int main(int argc, char **argv)
+ 	struct bpf_prog_load_attr prog_load_attr =3D {
+ 		.prog_type	=3D BPF_PROG_TYPE_XDP,
+ 	};
++	struct perf_buffer_opts pb_opts =3D {};
+ 	const char *optstr =3D "F";
+ 	int prog_fd, map_fd, opt;
+ 	struct bpf_object *obj;
+ 	struct bpf_map *map;
+ 	char filename[256];
+-	int ret, err, i;
+-	int numcpus;
++	int ret, err;
+=20
+ 	while ((opt =3D getopt(argc, argv, optstr)) !=3D -1) {
+ 		switch (opt) {
+@@ -169,10 +143,6 @@ int main(int argc, char **argv)
+ 		return 1;
+ 	}
+=20
+-	numcpus =3D get_nprocs();
+-	if (numcpus > MAX_CPUS)
+-		numcpus =3D MAX_CPUS;
 -
--	for (;;) {
--		poll(pfds, num_fds, 1000);
--		for (i = 0; i < num_fds; i++) {
--			if (!pfds[i].revents)
--				continue;
--
--			ret = bpf_perf_event_read_simple(headers[i],
--							 page_cnt * page_size,
--							 page_size, &buf, &len,
--							 bpf_perf_event_print,
--							 output_fn);
--			if (ret != LIBBPF_PERF_EVENT_CONT)
--				break;
--		}
--	}
--	free(buf);
--	free(pfds);
--
--	return ret;
--}
-diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/selftests/bpf/trace_helpers.h
-index 18924f23db1b..aa4dcfe18050 100644
---- a/tools/testing/selftests/bpf/trace_helpers.h
-+++ b/tools/testing/selftests/bpf/trace_helpers.h
-@@ -3,7 +3,6 @@
- #define __TRACE_HELPER_H
- 
- #include <libbpf.h>
--#include <linux/perf_event.h>
- 
- struct ksym {
- 	long addr;
-@@ -14,12 +13,4 @@ int load_kallsyms(void);
- struct ksym *ksym_search(long key);
- long ksym_get_addr(const char *name);
- 
--typedef enum bpf_perf_event_ret (*perf_event_print_fn)(void *data, int size);
--
--int perf_event_mmap(int fd);
--int perf_event_mmap_header(int fd, struct perf_event_mmap_page **header);
--/* return LIBBPF_PERF_EVENT_DONE or LIBBPF_PERF_EVENT_ERROR */
--int perf_event_poller(int fd, perf_event_print_fn output_fn);
--int perf_event_poller_multi(int *fds, struct perf_event_mmap_page **headers,
--			    int num_fds, perf_event_print_fn output_fn);
- #endif
--- 
+ 	snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
+ 	prog_load_attr.file =3D filename;
+=20
+@@ -211,14 +181,17 @@ int main(int argc, char **argv)
+ 		return 1;
+ 	}
+=20
+-	test_bpf_perf_event(map_fd, numcpus);
++	pb_opts.sample_cb =3D print_bpf_output;
++	pb =3D perf_buffer__new(map_fd, 8, &pb_opts);
++	err =3D libbpf_get_error(pb);
++	if (err) {
++		perror("perf_buffer setup failed");
++		return 1;
++	}
+=20
+-	for (i =3D 0; i < numcpus; i++)
+-		if (perf_event_mmap_header(pmu_fds[i], &headers[i]) < 0)
+-			return 1;
++	while ((ret =3D perf_buffer__poll(pb, 1000)) >=3D 0) {
++	}
+=20
+-	ret =3D perf_event_poller_multi(pmu_fds, headers, numcpus,
+-				      print_bpf_output);
+ 	kill(0, SIGINT);
+ 	return ret;
+ }
+--=20
 2.17.1
 
