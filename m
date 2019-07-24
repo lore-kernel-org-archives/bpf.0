@@ -7,57 +7,56 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AB9FC76186
-	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 16:58:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A78CC76186
+	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 16:58:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 65B1E21926
-	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 16:58:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4E73621841
+	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 16:58:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kAKMDoDj"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rqq9g03P"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728376AbfGXQ6a (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Jul 2019 12:58:30 -0400
-Received: from mail-qt1-f202.google.com ([209.85.160.202]:42082 "EHLO
-        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728360AbfGXQ6a (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Jul 2019 12:58:30 -0400
-Received: by mail-qt1-f202.google.com with SMTP id x1so42109005qts.9
-        for <bpf@vger.kernel.org>; Wed, 24 Jul 2019 09:58:29 -0700 (PDT)
+        id S1728537AbfGXQ6k (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Jul 2019 12:58:40 -0400
+Received: from mail-qk1-f202.google.com ([209.85.222.202]:42312 "EHLO
+        mail-qk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728496AbfGXQ6h (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Jul 2019 12:58:37 -0400
+Received: by mail-qk1-f202.google.com with SMTP id 199so39968150qkj.9
+        for <bpf@vger.kernel.org>; Wed, 24 Jul 2019 09:58:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=aJbPYrkSLi1J83pO68ABpJTFWg54SVdLxJdC1FsJCN0=;
-        b=kAKMDoDjy/GQB+zG684OCW6wlWx3U7guijvEtLmQG1ZO+fg+9B4lwuuHZ1YCxFYbey
-         aIILqCEbkhNMH/1BsaX8Cxra7NcE87v+SsbjD5OpcBIbmmWlRz3uXMB8+C45RrrUOw9h
-         xvhQNp4wx4gnPQZooqPeuiaeCNaLX3GT0rnAX4NteS3vrzGcdqIfpUxooLnXV3Z9m9HE
-         jIjNzyssLbdVIfwJJ/JdhgFI7pcegQgx94lyB5+p3zkgH3rbyskSznAv/K0kwwmiAYgW
-         K4/jqLxEv81Y0oEZXKVf8AxZ+dEGvNEjviOpTqygmzBCY5wRY4ccqdr4SUdcY3UI0ork
-         IcWg==
+        bh=glKaPZF0kuawPUQxXbpKIp+157oyf0yYPp3UELzJQsg=;
+        b=rqq9g03PpRhF3ymvIyKsJZzyqpeGHYdT7zGj3bnG5I1MzwqawSR6jYQY47lcFaPh8u
+         AC4HC3jBJ8Q6HPjbVfvzmz4thwjP+kPTjr2j5uQJzkIhru+IeBl/CNrBF8HUEJPBemGj
+         YCZ8sgHUbNal4hCkX93eIDVTkVotYLPT72iFfHt7htZalJIeNAPgZOBv4v1Aggm/iBAF
+         E4vT2Eug6Gz2suAsgF+EumINRAuFJHHIgZphdq8fz7jesmzD+kw6OvLpLQVJ3v4oNRKf
+         6h7BMZEYGDGnq0Cb8crL9rOnzJd0xO2wfJjOb3bwSjthqNd8+O6dl4tNFBv5bU8iEhTG
+         811w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=aJbPYrkSLi1J83pO68ABpJTFWg54SVdLxJdC1FsJCN0=;
-        b=FseCBm5iuzILngL0CyH9vIAfJsI/LlXx+j0kEAaKQ9y+0M2K1PV9svrfeMroOA+igx
-         qtSWuE+A9Bw221zu1tJfH4Hng2GORvoGit1Q5kNRj1ff3Ml4OHPyDt4NmEdPGUGIjUVP
-         +RkJPOHjA/ElFFTYLNiwMMA03lM1bLVr4w5YUn08N9FNHO5pWZ7UkOYGfhb5FlJYmXLz
-         4SiWLCw5u+sAhRq9D5JSXwnnqTv8Rnnc3jzsrmbTBy5jg3T0EOwZcnicGgz/6gwwX5yO
-         asVVBk/4RbU2MFp08dKEcauNJjX4L/LptDQU8faTkLLAib2ldtHLgydLvhcvQeQWNBIS
-         IvCA==
-X-Gm-Message-State: APjAAAWxlpD5INGwfS0pPww/IseTHLdR+cdK4u1XTJCcYurv3je9PiF8
-        TdT6D3WhROuLQfyHcdcXbja0Atu5MzKp
-X-Google-Smtp-Source: APXvYqxgMXcuo8TFQqJKT944SW2wJ4aNvRsr895+1Vy1k+9oaPw7OAsiO1NiJ9psa1RBVkritBGPVRb87m7d
-X-Received: by 2002:a0c:afbd:: with SMTP id s58mr60379022qvc.217.1563987508719;
- Wed, 24 Jul 2019 09:58:28 -0700 (PDT)
-Date:   Wed, 24 Jul 2019 09:57:58 -0700
+        bh=glKaPZF0kuawPUQxXbpKIp+157oyf0yYPp3UELzJQsg=;
+        b=H3fA8hpU2p3AiPKrseoIyef/bKSAX1sC8xeEseg2XTJDqpLha8NzH1dloy02/ZIkgG
+         8Nyy4DCktZeHqtdcR+YryVwfRPJ5wKrq4htvhQXDUULj0Q02/Ugg68pAMjuTSAS0TxPo
+         IuBHCNe4Sy67lwVkG5MANcXViQKJ4B8qMmdKvuThBTp8VCedC4G9F2w/V+gywbOUf90U
+         StVbLF1u+RDYLghzTggdL6OG7z/XXNI171Sdm3YqrCfsMXKMbdqUxWZ2GyaRpNAOjTDS
+         RDS+jjC2vgThprYiT9HqprPeU7sIVeplWL0oYylHkP6NU74Rpa4aNVm0mx3AWpCaiB2g
+         kMLw==
+X-Gm-Message-State: APjAAAUHPvYxabHsPIwXY7ZbV+qK9TdGGSGWZ90FABUEK3TfhRpkxPi1
+        /1GfmeEP9WUBBwO3ZT5t6bsMYRMrvxjm
+X-Google-Smtp-Source: APXvYqwGhYKsmoggPNt4NsKlJiqWSzOCNjflzOiZPEzbK6MDkFFQIP6wyFXKUEoZQwNfArLV+zvI15TnxLV0
+X-Received: by 2002:a0c:8a76:: with SMTP id 51mr60440819qvu.210.1563987516337;
+ Wed, 24 Jul 2019 09:58:36 -0700 (PDT)
+Date:   Wed, 24 Jul 2019 09:58:01 -0700
 In-Reply-To: <20190724165803.87470-1-brianvv@google.com>
-Message-Id: <20190724165803.87470-2-brianvv@google.com>
+Message-Id: <20190724165803.87470-5-brianvv@google.com>
 Mime-Version: 1.0
 References: <20190724165803.87470-1-brianvv@google.com>
 X-Mailer: git-send-email 2.22.0.657.g960e92d24f-goog
-Subject: [PATCH bpf-next 1/6] bpf: add bpf_map_value_size and
- bp_map_copy_value helper functions
+Subject: [PATCH bpf-next 4/6] libbpf: support BPF_MAP_DUMP command
 From:   Brian Vazquez <brianvv@google.com>
 To:     Brian Vazquez <brianvv.kernel@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -74,180 +73,70 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Move reusable code from map_lookup_elem to helper functions to avoid code
-duplication in kernel/bpf/syscall.c
+Make libbpf aware of new BPF_MAP_DUMP command and add bpf_map_dump and
+bpf_map_dump_flags to use them from the library.
 
 Suggested-by: Stanislav Fomichev <sdf@google.com>
 Signed-off-by: Brian Vazquez <brianvv@google.com>
 ---
- kernel/bpf/syscall.c | 134 +++++++++++++++++++++++--------------------
- 1 file changed, 73 insertions(+), 61 deletions(-)
+ tools/lib/bpf/bpf.c | 28 ++++++++++++++++++++++++++++
+ tools/lib/bpf/bpf.h |  4 ++++
+ 2 files changed, 32 insertions(+)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 5d141f16f6fa9..86cdc2f7bb56e 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -126,6 +126,76 @@ static struct bpf_map *find_and_alloc_map(union bpf_attr *attr)
- 	return map;
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index c7d7993c44bb0..c1139b7db756a 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -368,6 +368,34 @@ int bpf_map_update_elem(int fd, const void *key, const void *value,
+ 	return sys_bpf(BPF_MAP_UPDATE_ELEM, &attr, sizeof(attr));
  }
  
-+static u32 bpf_map_value_size(struct bpf_map *map)
++int bpf_map_dump(int fd, const void *prev_key, void *buf, void *buf_len)
 +{
-+	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
-+	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH ||
-+	    map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY ||
-+	    map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE)
-+		return round_up(map->value_size, 8) * num_possible_cpus();
-+	else if (IS_FD_MAP(map))
-+		return sizeof(u32);
-+	else
-+		return  map->value_size;
++	union bpf_attr attr;
++
++	memset(&attr, 0, sizeof(attr));
++	attr.dump.map_fd = fd;
++	attr.dump.prev_key = ptr_to_u64(prev_key);
++	attr.dump.buf = ptr_to_u64(buf);
++	attr.dump.buf_len = ptr_to_u64(buf_len);
++
++	return sys_bpf(BPF_MAP_DUMP, &attr, sizeof(attr));
 +}
 +
-+static int bpf_map_copy_value(struct bpf_map *map, void *key, void *value,
-+			      __u64 flags)
++int bpf_map_dump_flags(int fd, const void *prev_key, void *buf, void *buf_len,
++		       __u64 flags)
 +{
-+	void *ptr;
-+	int err;
++	union bpf_attr attr;
 +
-+	if (bpf_map_is_dev_bound(map))
-+		return  bpf_map_offload_lookup_elem(map, key, value);
++	memset(&attr, 0, sizeof(attr));
++	attr.dump.map_fd = fd;
++	attr.dump.prev_key = ptr_to_u64(prev_key);
++	attr.dump.buf = ptr_to_u64(buf);
++	attr.dump.buf_len = ptr_to_u64(buf_len);
++	attr.dump.flags = flags;
 +
-+	preempt_disable();
-+	this_cpu_inc(bpf_prog_active);
-+	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
-+	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
-+		err = bpf_percpu_hash_copy(map, key, value);
-+	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY) {
-+		err = bpf_percpu_array_copy(map, key, value);
-+	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE) {
-+		err = bpf_percpu_cgroup_storage_copy(map, key, value);
-+	} else if (map->map_type == BPF_MAP_TYPE_STACK_TRACE) {
-+		err = bpf_stackmap_copy(map, key, value);
-+	} else if (IS_FD_ARRAY(map)) {
-+		err = bpf_fd_array_map_lookup_elem(map, key, value);
-+	} else if (IS_FD_HASH(map)) {
-+		err = bpf_fd_htab_map_lookup_elem(map, key, value);
-+	} else if (map->map_type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY) {
-+		err = bpf_fd_reuseport_array_lookup_elem(map, key, value);
-+	} else if (map->map_type == BPF_MAP_TYPE_QUEUE ||
-+		   map->map_type == BPF_MAP_TYPE_STACK) {
-+		err = map->ops->map_peek_elem(map, value);
-+	} else {
-+		rcu_read_lock();
-+		if (map->ops->map_lookup_elem_sys_only)
-+			ptr = map->ops->map_lookup_elem_sys_only(map, key);
-+		else
-+			ptr = map->ops->map_lookup_elem(map, key);
-+		if (IS_ERR(ptr)) {
-+			err = PTR_ERR(ptr);
-+		} else if (!ptr) {
-+			err = -ENOENT;
-+		} else {
-+			err = 0;
-+			if (flags & BPF_F_LOCK)
-+				/* lock 'ptr' and copy everything but lock */
-+				copy_map_value_locked(map, value, ptr, true);
-+			else
-+				copy_map_value(map, value, ptr);
-+			/* mask lock, since value wasn't zero inited */
-+			check_and_init_map_lock(map, value);
-+		}
-+		rcu_read_unlock();
-+	}
-+	this_cpu_dec(bpf_prog_active);
-+	preempt_enable();
-+
-+	return err;
++	return sys_bpf(BPF_MAP_DUMP, &attr, sizeof(attr));
 +}
 +
- void *bpf_map_area_alloc(size_t size, int numa_node)
+ int bpf_map_lookup_elem(int fd, const void *key, void *value)
  {
- 	/* We really just want to fail instead of triggering OOM killer
-@@ -729,7 +799,7 @@ static int map_lookup_elem(union bpf_attr *attr)
- 	void __user *uvalue = u64_to_user_ptr(attr->value);
- 	int ufd = attr->map_fd;
- 	struct bpf_map *map;
--	void *key, *value, *ptr;
-+	void *key, *value;
- 	u32 value_size;
- 	struct fd f;
- 	int err;
-@@ -761,72 +831,14 @@ static int map_lookup_elem(union bpf_attr *attr)
- 		goto err_put;
- 	}
+ 	union bpf_attr attr;
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index ff42ca043dc8f..86496443440e9 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -112,6 +112,10 @@ LIBBPF_API int bpf_verify_program(enum bpf_prog_type type,
+ LIBBPF_API int bpf_map_update_elem(int fd, const void *key, const void *value,
+ 				   __u64 flags);
  
--	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
--	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH ||
--	    map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY ||
--	    map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE)
--		value_size = round_up(map->value_size, 8) * num_possible_cpus();
--	else if (IS_FD_MAP(map))
--		value_size = sizeof(u32);
--	else
--		value_size = map->value_size;
-+	value_size = bpf_map_value_size(map);
- 
- 	err = -ENOMEM;
- 	value = kmalloc(value_size, GFP_USER | __GFP_NOWARN);
- 	if (!value)
- 		goto free_key;
- 
--	if (bpf_map_is_dev_bound(map)) {
--		err = bpf_map_offload_lookup_elem(map, key, value);
--		goto done;
--	}
--
--	preempt_disable();
--	this_cpu_inc(bpf_prog_active);
--	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
--	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
--		err = bpf_percpu_hash_copy(map, key, value);
--	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY) {
--		err = bpf_percpu_array_copy(map, key, value);
--	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE) {
--		err = bpf_percpu_cgroup_storage_copy(map, key, value);
--	} else if (map->map_type == BPF_MAP_TYPE_STACK_TRACE) {
--		err = bpf_stackmap_copy(map, key, value);
--	} else if (IS_FD_ARRAY(map)) {
--		err = bpf_fd_array_map_lookup_elem(map, key, value);
--	} else if (IS_FD_HASH(map)) {
--		err = bpf_fd_htab_map_lookup_elem(map, key, value);
--	} else if (map->map_type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY) {
--		err = bpf_fd_reuseport_array_lookup_elem(map, key, value);
--	} else if (map->map_type == BPF_MAP_TYPE_QUEUE ||
--		   map->map_type == BPF_MAP_TYPE_STACK) {
--		err = map->ops->map_peek_elem(map, value);
--	} else {
--		rcu_read_lock();
--		if (map->ops->map_lookup_elem_sys_only)
--			ptr = map->ops->map_lookup_elem_sys_only(map, key);
--		else
--			ptr = map->ops->map_lookup_elem(map, key);
--		if (IS_ERR(ptr)) {
--			err = PTR_ERR(ptr);
--		} else if (!ptr) {
--			err = -ENOENT;
--		} else {
--			err = 0;
--			if (attr->flags & BPF_F_LOCK)
--				/* lock 'ptr' and copy everything but lock */
--				copy_map_value_locked(map, value, ptr, true);
--			else
--				copy_map_value(map, value, ptr);
--			/* mask lock, since value wasn't zero inited */
--			check_and_init_map_lock(map, value);
--		}
--		rcu_read_unlock();
--	}
--	this_cpu_dec(bpf_prog_active);
--	preempt_enable();
--
--done:
-+	err = bpf_map_copy_value(map, key, value, attr->flags);
- 	if (err)
- 		goto free_value;
- 
++LIBBPF_API int bpf_map_dump(int fd, const void *prev_key, void *buf,
++				void *buf_len);
++LIBBPF_API int bpf_map_dump_flags(int fd, const void *prev_key, void *buf,
++				void *buf_len, __u64 flags);
+ LIBBPF_API int bpf_map_lookup_elem(int fd, const void *key, void *value);
+ LIBBPF_API int bpf_map_lookup_elem_flags(int fd, const void *key, void *value,
+ 					 __u64 flags);
 -- 
 2.22.0.657.g960e92d24f-goog
 
