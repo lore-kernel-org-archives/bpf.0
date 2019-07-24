@@ -2,300 +2,88 @@ Return-Path: <SRS0=hBvA=VV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C832C76186
-	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 20:33:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5898EC76186
+	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 20:44:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 34AC32054F
-	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 20:33:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 14110217F4
+	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 20:44:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ok9jRR+z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UXMT3P/X"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389727AbfGXUdc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Jul 2019 16:33:32 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:24370 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728257AbfGXT2G (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 24 Jul 2019 15:28:06 -0400
-Received: from pps.filterd (m0001255.ppops.net [127.0.0.1])
-        by mx0b-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6OJQl8A002976
-        for <bpf@vger.kernel.org>; Wed, 24 Jul 2019 12:28:05 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=W3MDWZXtfmHCQe2ch+wwiGqfOlC4s5RHrNHgzn0myxA=;
- b=ok9jRR+zIStKjSWkGMrngLNPJ2nmwCBr8aK9p4cuJix2Vh9WpwX/1tsVZRwFaQXYzL5l
- 9etcEK7KkWaeV87P2QwKoCSAPKCO1OU0NdvgS3AQIyE85DX/J6kzPn75LsNemktmNDga
- lDJidNei5Xpxsk0kukPpcijhGKMxOMq93Kc= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0b-00082601.pphosted.com with ESMTP id 2txu1ugp62-7
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 24 Jul 2019 12:28:05 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 24 Jul 2019 12:28:03 -0700
-Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 86DCA8615F8; Wed, 24 Jul 2019 12:28:01 -0700 (PDT)
-Smtp-Origin-Hostprefix: dev
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: dev101.prn2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>, <yhs@fb.com>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH bpf-next 01/10] libbpf: add .BTF.ext offset relocation section loading
-Date:   Wed, 24 Jul 2019 12:27:33 -0700
-Message-ID: <20190724192742.1419254-2-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190724192742.1419254-1-andriin@fb.com>
-References: <20190724192742.1419254-1-andriin@fb.com>
-X-FB-Internal: Safe
+        id S1728647AbfGXUoH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Jul 2019 16:44:07 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:44362 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728632AbfGXUoH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Jul 2019 16:44:07 -0400
+Received: by mail-qt1-f194.google.com with SMTP id 44so15875437qtg.11;
+        Wed, 24 Jul 2019 13:44:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8x/eSrRn/1psnj5/phwk+eQNpJCLfh+q8RaLejjTrHA=;
+        b=UXMT3P/XWUn1AjW3fzo0KHDuPHYpxVr5FB9Fl/0VpzJy/jcpwX1rJEzvvD8n6lO59b
+         hT+DBvZ06PSIoykBmd+m6nS0CG2tFwB2HR3PCkaJAM2BPybk4NmCfelmyivFWEBdToUJ
+         ZguoG//HkVu0J96YiOJINpm/IxLP+1asMVU1ruCIPl2pCFEyuHgJ0IVj61SMeqQYvB9e
+         nMrlUafLJSsu6AunNh9kSJsv2uHNgK5m5md0ZKJmsXbbHkpShJHzNJBdS6GkiMz+H0/8
+         GK059eztF5su5q2Tbo6ffFvcM49U2B3ViJpHzv4fxKWE7ZExPvJzuUnPfy+SyIB3MjOR
+         MLAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8x/eSrRn/1psnj5/phwk+eQNpJCLfh+q8RaLejjTrHA=;
+        b=LxfJcgV8fv2/SCrtGoNT7/7LKifC3jzEZOfvDbXQV/ja//nz6tUZ8FA2vHdZlXr3WW
+         gtcLvAC+CTwiqIFvZHWQlwqx2/tjObx2kSh9BXMiCmYbw15Bt0Zn/zx11P8XyHzXSygy
+         xnurieZH+uzB80iZqKC2tIuRs51WnkmfglCmZMraRGgwEje3t3yHAMAKZMFW+5AFhKnw
+         C7g/awxHpnNnSSVSpfP2iHdWo0qsR0Q1bmgDDi5XUFuEqM1KrHHMZzsyNorqq+NM93L0
+         hn9IueOaVztPrW57VnK+u5bZPb9Xq0vb++MZgUn3NIzLGGw8YiXwxaxEF/78mkWPaU5d
+         Ssvw==
+X-Gm-Message-State: APjAAAUXxdQ7ksjhbCgAhENcCzUjEdvt8VbiUXi+p/GhxGCjM8YrIj7m
+        oiD5y//JpLTspqcSGU35bmRj01nROK9zdKpFbd/KLzPb
+X-Google-Smtp-Source: APXvYqxdJRfVTMxPGlW88+fQZLQAZd3KGi9sIQLZtEIOXdIwaiHi/jWWk2XBGzB7s2unuFnNJhDk8gteTHZe/WcOmx4=
+X-Received: by 2002:ac8:25e7:: with SMTP id f36mr59392969qtf.139.1564001046706;
+ Wed, 24 Jul 2019 13:44:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-24_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1907240208
-X-FB-Internal: deliver
+References: <20190723220127.1815913-1-andriin@fb.com>
+In-Reply-To: <20190723220127.1815913-1-andriin@fb.com>
+From:   Song Liu <liu.song.a23@gmail.com>
+Date:   Wed, 24 Jul 2019 13:43:55 -0700
+Message-ID: <CAPhsuW7e9Cf69Pc7eR5iYvSo1qDzC_qYwpasfjeU6p9ygC=QwQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] libbpf: silence GCC8 warning about string truncation
+To:     Andrii Nakryiko <andriin@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Kernel Team <kernel-team@fb.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add support for BPF CO-RE offset relocations. Add section/record
-iteration macros for .BTF.ext. These macro are useful for iterating over
-each .BTF.ext record, either for dumping out contents or later for BPF
-CO-RE relocation handling.
+On Tue, Jul 23, 2019 at 7:33 PM Andrii Nakryiko <andriin@fb.com> wrote:
+>
+> Despite a proper NULL-termination after strncpy(..., ..., IFNAMSIZ - 1),
+> GCC8 still complains about *expected* string truncation:
+>
+>   xsk.c:330:2: error: 'strncpy' output may be truncated copying 15 bytes
+>   from a string of length 15 [-Werror=stringop-truncation]
+>     strncpy(ifr.ifr_name, xsk->ifname, IFNAMSIZ - 1);
+>
+> This patch gets rid of the issue altogether by using memcpy instead.
+> There is no performance regression, as strncpy will still copy and fill
+> all of the bytes anyway.
+>
+> Cc: Magnus Karlsson <magnus.karlsson@intel.com>
+> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 
-To enable other parts of libbpf to work with .BTF.ext contents, moved
-a bunch of type definitions into libbpf_internal.h.
-
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/lib/bpf/btf.c             | 64 +++++++++--------------
- tools/lib/bpf/btf.h             |  4 ++
- tools/lib/bpf/libbpf_internal.h | 91 +++++++++++++++++++++++++++++++++
- 3 files changed, 118 insertions(+), 41 deletions(-)
-
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 467224feb43b..4a36bc783848 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -42,47 +42,6 @@ struct btf {
- 	int fd;
- };
- 
--struct btf_ext_info {
--	/*
--	 * info points to the individual info section (e.g. func_info and
--	 * line_info) from the .BTF.ext. It does not include the __u32 rec_size.
--	 */
--	void *info;
--	__u32 rec_size;
--	__u32 len;
--};
--
--struct btf_ext {
--	union {
--		struct btf_ext_header *hdr;
--		void *data;
--	};
--	struct btf_ext_info func_info;
--	struct btf_ext_info line_info;
--	__u32 data_size;
--};
--
--struct btf_ext_info_sec {
--	__u32	sec_name_off;
--	__u32	num_info;
--	/* Followed by num_info * record_size number of bytes */
--	__u8	data[0];
--};
--
--/* The minimum bpf_func_info checked by the loader */
--struct bpf_func_info_min {
--	__u32   insn_off;
--	__u32   type_id;
--};
--
--/* The minimum bpf_line_info checked by the loader */
--struct bpf_line_info_min {
--	__u32	insn_off;
--	__u32	file_name_off;
--	__u32	line_off;
--	__u32	line_col;
--};
--
- static inline __u64 ptr_to_u64(const void *ptr)
- {
- 	return (__u64) (unsigned long) ptr;
-@@ -831,6 +790,9 @@ static int btf_ext_setup_info(struct btf_ext *btf_ext,
- 	/* The start of the info sec (including the __u32 record_size). */
- 	void *info;
- 
-+	if (ext_sec->len == 0)
-+		return 0;
-+
- 	if (ext_sec->off & 0x03) {
- 		pr_debug(".BTF.ext %s section is not aligned to 4 bytes\n",
- 		     ext_sec->desc);
-@@ -934,6 +896,19 @@ static int btf_ext_setup_line_info(struct btf_ext *btf_ext)
- 	return btf_ext_setup_info(btf_ext, &param);
- }
- 
-+static int btf_ext_setup_offset_reloc(struct btf_ext *btf_ext)
-+{
-+	struct btf_ext_sec_setup_param param = {
-+		.off = btf_ext->hdr->offset_reloc_off,
-+		.len = btf_ext->hdr->offset_reloc_len,
-+		.min_rec_size = sizeof(struct bpf_offset_reloc),
-+		.ext_info = &btf_ext->offset_reloc_info,
-+		.desc = "offset_reloc",
-+	};
-+
-+	return btf_ext_setup_info(btf_ext, &param);
-+}
-+
- static int btf_ext_parse_hdr(__u8 *data, __u32 data_size)
- {
- 	const struct btf_ext_header *hdr = (struct btf_ext_header *)data;
-@@ -1004,6 +979,13 @@ struct btf_ext *btf_ext__new(__u8 *data, __u32 size)
- 	if (err)
- 		goto done;
- 
-+	/* check if there is offset_reloc_off/offset_reloc_len fields */
-+	if (btf_ext->hdr->hdr_len < sizeof(struct btf_ext_header))
-+		goto done;
-+	err = btf_ext_setup_offset_reloc(btf_ext);
-+	if (err)
-+		goto done;
-+
- done:
- 	if (err) {
- 		btf_ext__free(btf_ext);
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index 88a52ae56fc6..287361ee1f6b 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -57,6 +57,10 @@ struct btf_ext_header {
- 	__u32	func_info_len;
- 	__u32	line_info_off;
- 	__u32	line_info_len;
-+
-+	/* optional part of .BTF.ext header */
-+	__u32	offset_reloc_off;
-+	__u32	offset_reloc_len;
- };
- 
- LIBBPF_API void btf__free(struct btf *btf);
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index 2ac29bd36226..087ff512282f 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -46,4 +46,95 @@ do {				\
- int libbpf__load_raw_btf(const char *raw_types, size_t types_len,
- 			 const char *str_sec, size_t str_len);
- 
-+struct btf_ext_info {
-+	/*
-+	 * info points to the individual info section (e.g. func_info and
-+	 * line_info) from the .BTF.ext. It does not include the __u32 rec_size.
-+	 */
-+	void *info;
-+	__u32 rec_size;
-+	__u32 len;
-+};
-+
-+#define for_each_btf_ext_sec(seg, sec)					\
-+	for (sec = (seg)->info;						\
-+	     (void *)sec < (seg)->info + (seg)->len;			\
-+	     sec = (void *)sec + sizeof(struct btf_ext_info_sec) +	\
-+		   (seg)->rec_size * sec->num_info)
-+
-+#define for_each_btf_ext_rec(seg, sec, i, rec)				\
-+	for (i = 0, rec = (void *)&(sec)->data;				\
-+	     i < (sec)->num_info;					\
-+	     i++, rec = (void *)rec + (seg)->rec_size)
-+
-+struct btf_ext {
-+	union {
-+		struct btf_ext_header *hdr;
-+		void *data;
-+	};
-+	struct btf_ext_info func_info;
-+	struct btf_ext_info line_info;
-+	struct btf_ext_info offset_reloc_info;
-+	__u32 data_size;
-+};
-+
-+struct btf_ext_info_sec {
-+	__u32	sec_name_off;
-+	__u32	num_info;
-+	/* Followed by num_info * record_size number of bytes */
-+	__u8	data[0];
-+};
-+
-+/* The minimum bpf_func_info checked by the loader */
-+struct bpf_func_info_min {
-+	__u32   insn_off;
-+	__u32   type_id;
-+};
-+
-+/* The minimum bpf_line_info checked by the loader */
-+struct bpf_line_info_min {
-+	__u32	insn_off;
-+	__u32	file_name_off;
-+	__u32	line_off;
-+	__u32	line_col;
-+};
-+
-+/* The minimum bpf_offset_reloc checked by the loader
-+ *
-+ * Offset relocation captures the following data:
-+ * - insn_off - instruction offset (in bytes) within a BPF program that needs
-+ *   its insn->imm field to be relocated with actual offset;
-+ * - type_id - BTF type ID of the "root" (containing) entity of a relocatable
-+ *   offset;
-+ * - access_str_off - offset into corresponding .BTF string section. String
-+ *   itself encodes an accessed field using a sequence of field and array
-+ *   indicies, separated by colon (:). It's conceptually very close to LLVM's
-+ *   getelementptr ([0]) instruction's arguments for identifying offset to 
-+ *   a field.
-+ *
-+ * Example to provide a better feel.
-+ *
-+ *   struct sample {
-+ *       int a;
-+ *       struct {
-+ *           int b[10];
-+ *       };
-+ *   };
-+ * 
-+ *   struct sample *s = ...;
-+ *   int x = &s->a;     // encoded as "0:0" (a is field #0)
-+ *   int y = &s->b[5];  // encoded as "0:1:5" (b is field #1, arr elem #5)
-+ *   int z = &s[10]->b; // encoded as "10:1" (ptr is used as an array)
-+ *
-+ * type_id for all relocs in this example  will capture BTF type id of
-+ * `struct sample`.
-+ *
-+ *   [0] https://llvm.org/docs/LangRef.html#getelementptr-instruction
-+ */
-+struct bpf_offset_reloc {
-+	__u32   insn_off;
-+	__u32   type_id;
-+	__u32   access_str_off;
-+};
-+
- #endif /* __LIBBPF_LIBBPF_INTERNAL_H */
--- 
-2.17.1
-
+Acked-by: Song Liu <songliubraving@fb.com>
