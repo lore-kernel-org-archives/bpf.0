@@ -2,44 +2,45 @@ Return-Path: <SRS0=hBvA=VV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45045C7618F
-	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 20:32:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B65F4C76186
+	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 20:32:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 06B482054F
-	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 20:32:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 76322206DD
+	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 20:32:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="kreRuFJt"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ielsGNog"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387726AbfGXT3U (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Jul 2019 15:29:20 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:15720 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388213AbfGXT2T (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 24 Jul 2019 15:28:19 -0400
-Received: from pps.filterd (m0044008.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6OJOvjL024481
-        for <bpf@vger.kernel.org>; Wed, 24 Jul 2019 12:28:18 -0700
+        id S2387397AbfGXT2Y (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Jul 2019 15:28:24 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:56340 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2388300AbfGXT2Y (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 24 Jul 2019 15:28:24 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x6OJNVcC027820
+        for <bpf@vger.kernel.org>; Wed, 24 Jul 2019 12:28:22 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=LwSQD8qxrLa4e/wyHYvaReAbGpaQ6TgAC89n4/JfuWU=;
- b=kreRuFJtECN06c40b8Lx/QWlOLrxAn/yN16CBG0SsaQ9aDznGZbRrvE3dCZdlBiVDjzr
- TvgSMgZmgRVQ3NtBqJ+0AZNXcMJdIxX009WSaC7FOWDivzJCe7R4SfXIxsDNGEkCBV+H
- apH+30vpcxwrDiznXXVHzeNMoOrYbaE8h1I= 
+ content-type; s=facebook; bh=y0dMsmqlib41qe6KpI3aNjDfU2z6Gp23Uf8MEcOzcXM=;
+ b=ielsGNogB8eTnnrJRUiNh/+cGDebNh9OnQ8EnuDC91kSBiqgb5DSEqdmZCcTdW+3DyBr
+ H3+Ens4tAJyijCGARzb7ku+uIB8GI4Ppl5aYgoJazrWYvslvUtKPvBuvFvHFbl5xjQDg
+ wM7w6C+avZwygVAsF3qIy4H1AZ62fbkCCMA= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2txr5nhc7w-6
+        by m0089730.ppops.net with ESMTP id 2txtq5rrkr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 24 Jul 2019 12:28:18 -0700
+        for <bpf@vger.kernel.org>; Wed, 24 Jul 2019 12:28:22 -0700
 Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 24 Jul 2019 12:28:14 -0700
+ 15.1.1713.5; Wed, 24 Jul 2019 12:28:21 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id B40BC8615F8; Wed, 24 Jul 2019 12:28:09 -0700 (PDT)
+        id E8C228615F8; Wed, 24 Jul 2019 12:28:19 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,9 +49,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH bpf-next 05/10] selftests/bpf: add CO-RE relocs nesting tests
-Date:   Wed, 24 Jul 2019 12:27:37 -0700
-Message-ID: <20190724192742.1419254-6-andriin@fb.com>
+Subject: [PATCH bpf-next 10/10] selftests/bpf: add CO-RE relocs ints tests
+Date:   Wed, 24 Jul 2019 12:27:42 -0700
+Message-ID: <20190724192742.1419254-11-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190724192742.1419254-1-andriin@fb.com>
 References: <20190724192742.1419254-1-andriin@fb.com>
@@ -70,527 +71,281 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a bunch of test validating correct handling of nested
-structs/unions.
+Add various tests validating handling compatible/incompatible integer
+types.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- .../selftests/bpf/prog_tests/core_reloc.c     |  39 +++
- .../bpf/progs/btf__core_reloc_nesting.c       |   3 +
- .../btf__core_reloc_nesting___anon_embed.c    |   3 +
- ...f__core_reloc_nesting___dup_compat_types.c |   5 +
- ...core_reloc_nesting___err_array_container.c |   3 +
- ...tf__core_reloc_nesting___err_array_field.c |   3 +
- ...e_reloc_nesting___err_dup_incompat_types.c |   4 +
- ...re_reloc_nesting___err_missing_container.c |   3 +
- ...__core_reloc_nesting___err_missing_field.c |   3 +
- ..._reloc_nesting___err_nonstruct_container.c |   3 +
- ...e_reloc_nesting___err_partial_match_dups.c |   4 +
- .../btf__core_reloc_nesting___err_too_deep.c  |   3 +
- .../btf__core_reloc_nesting___extra_nesting.c |   3 +
- ..._core_reloc_nesting___struct_union_mixup.c |   3 +
- .../selftests/bpf/progs/core_reloc_types.h    | 293 ++++++++++++++++++
- .../bpf/progs/test_core_reloc_nesting.c       |  48 +++
- 16 files changed, 423 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___anon_embed.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___dup_compat_types.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_array_container.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_array_field.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_dup_incompat_types.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_missing_container.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_missing_field.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_nonstruct_container.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_partial_match_dups.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_too_deep.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___extra_nesting.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___struct_union_mixup.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_core_reloc_nesting.c
+ .../selftests/bpf/prog_tests/core_reloc.c     |  40 +++++++
+ .../bpf/progs/btf__core_reloc_ints.c          |   3 +
+ .../bpf/progs/btf__core_reloc_ints___bool.c   |   3 +
+ .../btf__core_reloc_ints___err_bitfield.c     |   3 +
+ .../btf__core_reloc_ints___err_wrong_sz_16.c  |   3 +
+ .../btf__core_reloc_ints___err_wrong_sz_32.c  |   3 +
+ .../btf__core_reloc_ints___err_wrong_sz_64.c  |   3 +
+ .../btf__core_reloc_ints___err_wrong_sz_8.c   |   3 +
+ .../btf__core_reloc_ints___reverse_sign.c     |   3 +
+ .../selftests/bpf/progs/core_reloc_types.h    | 101 ++++++++++++++++++
+ .../bpf/progs/test_core_reloc_ints.c          |  48 +++++++++
+ 11 files changed, 213 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_ints.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_ints___bool.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_ints___err_bitfield.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_ints___err_wrong_sz_16.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_ints___err_wrong_sz_32.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_ints___err_wrong_sz_64.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_ints___err_wrong_sz_8.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_ints___reverse_sign.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_core_reloc_ints.c
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-index c553c5f07ec3..8e19a6c38446 100644
+index 9cb969de487b..da6254d54c08 100644
 --- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
 +++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-@@ -28,6 +28,29 @@
- 	.fails = true,							\
+@@ -145,6 +145,35 @@
+ 	.output_len = sizeof(struct core_reloc_ptr_as_arr),		\
  }
  
-+#define NESTING_DATA(struct_name) STRUCT_TO_CHAR_PTR(struct_name) {	\
-+	.a = { .a = { .a = 42 } },					\
-+	.b = { .b = { .b = 0xc001 } },					\
++#define INTS_DATA(struct_name) STRUCT_TO_CHAR_PTR(struct_name) {	\
++	.u8_field = 1,							\
++	.s8_field = 2,							\
++	.u16_field = 3,							\
++	.s16_field = 4,							\
++	.u32_field = 5,							\
++	.s32_field = 6,							\
++	.u64_field = 7,							\
++	.s64_field = 8,							\
 +}
 +
-+#define NESTING_CASE_COMMON(name)					\
++#define INTS_CASE_COMMON(name)						\
 +	.case_name = #name,						\
-+	.bpf_obj_file = "test_core_reloc_nesting.o",			\
++	.bpf_obj_file = "test_core_reloc_ints.o",			\
 +	.btf_src_file = "btf__core_reloc_" #name ".o"
 +
-+#define NESTING_CASE(name) {						\
-+	NESTING_CASE_COMMON(name),					\
-+	.input = NESTING_DATA(core_reloc_##name),			\
++#define INTS_CASE(name) {						\
++	INTS_CASE_COMMON(name),						\
++	.input = INTS_DATA(core_reloc_##name),				\
 +	.input_len = sizeof(struct core_reloc_##name),			\
-+	.output = NESTING_DATA(core_reloc_nesting),			\
-+	.output_len = sizeof(struct core_reloc_nesting)			\
++	.output = INTS_DATA(core_reloc_ints),				\
++	.output_len = sizeof(struct core_reloc_ints),			\
 +}
 +
-+#define NESTING_ERR_CASE(name) {					\
-+	NESTING_CASE_COMMON(name),					\
++#define INTS_ERR_CASE(name) {						\
++	INTS_CASE_COMMON(name),						\
 +	.fails = true,							\
 +}
 +
  struct core_reloc_test_case {
  	const char *case_name;
  	const char *bpf_obj_file;
-@@ -57,6 +80,22 @@ static struct core_reloc_test_case test_cases[] = {
- 	FLAVORS_CASE(flavors),
- 
- 	FLAVORS_ERR_CASE(flavors__err_wrong_name),
+@@ -220,6 +249,17 @@ static struct core_reloc_test_case test_cases[] = {
+ 	/* handling "ptr is an array" semantics */
+ 	PTR_AS_ARR_CASE(ptr_as_arr),
+ 	PTR_AS_ARR_CASE(ptr_as_arr___diff_sz),
 +
-+	/* various struct/enum nesting and resolution scenarios */
-+	NESTING_CASE(nesting),
-+	NESTING_CASE(nesting___anon_embed),
-+	NESTING_CASE(nesting___struct_union_mixup),
-+	NESTING_CASE(nesting___extra_nesting),
-+	NESTING_CASE(nesting___dup_compat_types),
++	/* int signedness/sizing/bitfield handling */
++	INTS_CASE(ints),
++	INTS_CASE(ints___bool),
++	INTS_CASE(ints___reverse_sign),
 +
-+	NESTING_ERR_CASE(nesting___err_missing_field),
-+	NESTING_ERR_CASE(nesting___err_array_field),
-+	NESTING_ERR_CASE(nesting___err_missing_container),
-+	NESTING_ERR_CASE(nesting___err_nonstruct_container),
-+	NESTING_ERR_CASE(nesting___err_array_container),
-+	NESTING_ERR_CASE(nesting___err_dup_incompat_types),
-+	NESTING_ERR_CASE(nesting___err_partial_match_dups),
-+	NESTING_ERR_CASE(nesting___err_too_deep),
++	INTS_ERR_CASE(ints___err_bitfield),
++	INTS_ERR_CASE(ints___err_wrong_sz_8),
++	INTS_ERR_CASE(ints___err_wrong_sz_16),
++	INTS_ERR_CASE(ints___err_wrong_sz_32),
++	INTS_ERR_CASE(ints___err_wrong_sz_64),
  };
  
  struct data {
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting.c
+diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_ints.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_ints.c
 new file mode 100644
-index 000000000000..4480fcc0f183
+index 000000000000..7d0f041042c5
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting.c
++++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_ints.c
 @@ -0,0 +1,3 @@
 +#include "core_reloc_types.h"
 +
-+void f(struct core_reloc_nesting x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___anon_embed.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___anon_embed.c
++void f(struct core_reloc_ints x) {}
+diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_ints___bool.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_ints___bool.c
 new file mode 100644
-index 000000000000..13e108f76ece
+index 000000000000..f9359450186e
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___anon_embed.c
++++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_ints___bool.c
 @@ -0,0 +1,3 @@
 +#include "core_reloc_types.h"
 +
-+void f(struct core_reloc_nesting___anon_embed x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___dup_compat_types.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___dup_compat_types.c
++void f(struct core_reloc_ints___bool x) {}
+diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_ints___err_bitfield.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_ints___err_bitfield.c
 new file mode 100644
-index 000000000000..76b54fda5fbb
+index 000000000000..50369e8320a0
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___dup_compat_types.c
-@@ -0,0 +1,5 @@
-+#include "core_reloc_types.h"
-+
-+void f1(struct core_reloc_nesting___dup_compat_types x) {}
-+void f2(struct core_reloc_nesting___dup_compat_types__2 x) {}
-+void f3(struct core_reloc_nesting___dup_compat_types__3 x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_array_container.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_array_container.c
-new file mode 100644
-index 000000000000..975fb95db810
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_array_container.c
++++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_ints___err_bitfield.c
 @@ -0,0 +1,3 @@
 +#include "core_reloc_types.h"
 +
-+void f(struct core_reloc_nesting___err_array_container x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_array_field.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_array_field.c
++void f(struct core_reloc_ints___err_bitfield x) {}
+diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_ints___err_wrong_sz_16.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_ints___err_wrong_sz_16.c
 new file mode 100644
-index 000000000000..ad66c67e7980
+index 000000000000..823bac13d641
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_array_field.c
++++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_ints___err_wrong_sz_16.c
 @@ -0,0 +1,3 @@
 +#include "core_reloc_types.h"
 +
-+void f(struct core_reloc_nesting___err_array_field x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_dup_incompat_types.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_dup_incompat_types.c
++void f(struct core_reloc_ints___err_wrong_sz_16 x) {}
+diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_ints___err_wrong_sz_32.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_ints___err_wrong_sz_32.c
 new file mode 100644
-index 000000000000..35c5f8da6812
+index 000000000000..b44f3be18535
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_dup_incompat_types.c
-@@ -0,0 +1,4 @@
-+#include "core_reloc_types.h"
-+
-+void f1(struct core_reloc_nesting___err_dup_incompat_types__1 x) {}
-+void f2(struct core_reloc_nesting___err_dup_incompat_types__2 x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_missing_container.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_missing_container.c
-new file mode 100644
-index 000000000000..142e332041db
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_missing_container.c
++++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_ints___err_wrong_sz_32.c
 @@ -0,0 +1,3 @@
 +#include "core_reloc_types.h"
 +
-+void f(struct core_reloc_nesting___err_missing_container x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_missing_field.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_missing_field.c
++void f(struct core_reloc_ints___err_wrong_sz_32 x) {}
+diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_ints___err_wrong_sz_64.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_ints___err_wrong_sz_64.c
 new file mode 100644
-index 000000000000..efcae167fab9
+index 000000000000..9a3dd2099c0f
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_missing_field.c
++++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_ints___err_wrong_sz_64.c
 @@ -0,0 +1,3 @@
 +#include "core_reloc_types.h"
 +
-+void f(struct core_reloc_nesting___err_missing_field x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_nonstruct_container.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_nonstruct_container.c
++void f(struct core_reloc_ints___err_wrong_sz_64 x) {}
+diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_ints___err_wrong_sz_8.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_ints___err_wrong_sz_8.c
 new file mode 100644
-index 000000000000..97aaaedd8ada
+index 000000000000..9f11ef5f6e88
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_nonstruct_container.c
++++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_ints___err_wrong_sz_8.c
 @@ -0,0 +1,3 @@
 +#include "core_reloc_types.h"
 +
-+void f(struct core_reloc_nesting___err_nonstruct_container x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_partial_match_dups.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_partial_match_dups.c
++void f(struct core_reloc_ints___err_wrong_sz_8 x) {}
+diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_ints___reverse_sign.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_ints___reverse_sign.c
 new file mode 100644
-index 000000000000..ffde35086e90
+index 000000000000..aafb1c5819d7
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_partial_match_dups.c
-@@ -0,0 +1,4 @@
-+#include "core_reloc_types.h"
-+
-+void f1(struct core_reloc_nesting___err_partial_match_dups__a x) {}
-+void f2(struct core_reloc_nesting___err_partial_match_dups__b x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_too_deep.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_too_deep.c
-new file mode 100644
-index 000000000000..39a2fadd8e95
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_too_deep.c
++++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_ints___reverse_sign.c
 @@ -0,0 +1,3 @@
 +#include "core_reloc_types.h"
 +
-+void f(struct core_reloc_nesting___err_too_deep x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___extra_nesting.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___extra_nesting.c
-new file mode 100644
-index 000000000000..a09d9dfb20df
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___extra_nesting.c
-@@ -0,0 +1,3 @@
-+#include "core_reloc_types.h"
-+
-+void f(struct core_reloc_nesting___extra_nesting x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___struct_union_mixup.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___struct_union_mixup.c
-new file mode 100644
-index 000000000000..3d8a1a74012f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___struct_union_mixup.c
-@@ -0,0 +1,3 @@
-+#include "core_reloc_types.h"
-+
-+void f(struct core_reloc_nesting___struct_union_mixup x) {}
++void f(struct core_reloc_ints___reverse_sign x) {}
 diff --git a/tools/testing/selftests/bpf/progs/core_reloc_types.h b/tools/testing/selftests/bpf/progs/core_reloc_types.h
-index 33b0c6a61912..340ee2bcd463 100644
+index c17c9279deae..5f3ebd4f6dc3 100644
 --- a/tools/testing/selftests/bpf/progs/core_reloc_types.h
 +++ b/tools/testing/selftests/bpf/progs/core_reloc_types.h
-@@ -13,3 +13,296 @@ struct core_reloc_flavors__err_wrong_name {
- 	int b;
- 	int c;
+@@ -1,3 +1,6 @@
++#include <stdint.h>
++#include <stdbool.h>
++
+ /*
+  * FLAVORS
+  */
+@@ -539,3 +542,101 @@ struct core_reloc_ptr_as_arr___diff_sz {
+ 	char __some_more_padding;
+ 	int a;
  };
 +
 +/*
-+ * NESTING
++ * INTS
 + */
-+/* original set up, used to record relocations in BPF program */
-+struct core_reloc_nesting_substruct {
-+	int a;
++struct core_reloc_ints {
++	uint8_t		u8_field;
++	int8_t		s8_field;
++	uint16_t	u16_field;
++	int16_t		s16_field;
++	uint32_t	u32_field;
++	int32_t		s32_field;
++	uint64_t	u64_field;
++	int64_t		s64_field;
 +};
 +
-+union core_reloc_nesting_subunion {
-+	int b;
++/* signed/unsigned types swap */
++struct core_reloc_ints___reverse_sign {
++	int8_t		u8_field;
++	uint8_t		s8_field;
++	int16_t		u16_field;
++	uint16_t	s16_field;
++	int32_t		u32_field;
++	uint32_t	s32_field;
++	int64_t		u64_field;
++	uint64_t	s64_field;
 +};
 +
-+struct core_reloc_nesting {
-+	union {
-+		struct core_reloc_nesting_substruct a;
-+	} a;
-+	struct {
-+		union core_reloc_nesting_subunion b;
-+	} b;
++struct core_reloc_ints___bool {
++	bool		u8_field; /* bool instead of uint8 */
++	int8_t		s8_field;
++	uint16_t	u16_field;
++	int16_t		s16_field;
++	uint32_t	u32_field;
++	int32_t		s32_field;
++	uint64_t	u64_field;
++	int64_t		s64_field;
 +};
 +
-+/* inlined anonymous struct/union instead of named structs in original */
-+struct core_reloc_nesting___anon_embed {
-+	int __just_for_padding;
-+	union {
-+		struct {
-+			int a;
-+		} a;
-+	} a;
-+	struct {
-+		union {
-+			int b;
-+		} b;
-+	} b;
++struct core_reloc_ints___err_bitfield {
++	uint8_t		u8_field;
++	int8_t		s8_field;
++	uint16_t	u16_field;
++	int16_t		s16_field;
++	uint32_t	u32_field: 32; /* bitfields are not supported */
++	int32_t		s32_field;
++	uint64_t	u64_field;
++	int64_t		s64_field;
 +};
 +
-+/* different mix of nested structs/unions than in original */
-+struct core_reloc_nesting___struct_union_mixup {
-+	int __a;
-+	struct {
-+		int __a;
-+		union {
-+			char __a;
-+			int a;
-+		} a;
-+	} a;
-+	int __b;
-+	union {
-+		int __b;
-+		union {
-+			char __b;
-+			int b;
-+		} b;
-+	} b;
++struct core_reloc_ints___err_wrong_sz_8 {
++	uint16_t	u8_field; /* not 8-bit anymore */
++	int16_t		s8_field; /* not 8-bit anymore */
++
++	uint16_t	u16_field;
++	int16_t		s16_field;
++	uint32_t	u32_field;
++	int32_t		s32_field;
++	uint64_t	u64_field;
++	int64_t		s64_field;
 +};
 +
-+/* extra anon structs/unions, but still valid a.a.a and b.b.b accessors */
-+struct core_reloc_nesting___extra_nesting {
-+	int __padding;
-+	struct {
-+		struct {
-+			struct {
-+				struct {
-+					union {
-+						int a;
-+					} a;
-+				};
-+			};
-+		} a;
-+		int __some_more;
-+		struct {
-+			union {
-+				union {
-+					union {
-+						struct {
-+							int b;
-+						};
-+					} b;
-+				};
-+			} b;
-+		};
-+	};
++struct core_reloc_ints___err_wrong_sz_16 {
++	uint8_t		u8_field;
++	int8_t		s8_field;
++
++	uint32_t	u16_field; /* not 16-bit anymore */
++	int32_t		s16_field; /* not 16-bit anymore */
++
++	uint32_t	u32_field;
++	int32_t		s32_field;
++	uint64_t	u64_field;
++	int64_t		s64_field;
 +};
 +
-+/* three flavors of same struct with different structure but same layout for
-+ * a.a.a and b.b.b, thus successfully resolved and relocatable */
-+struct core_reloc_nesting___dup_compat_types {
-+	char __just_for_padding;
-+	/* 3 more bytes of padding */
-+	struct {
-+		struct {
-+			int a; /* offset 4 */
-+		} a;
-+	} a;
-+	long long __more_padding;
-+	struct {
-+		struct {
-+			int b; /* offset 16 */
-+		} b;
-+	} b;
++struct core_reloc_ints___err_wrong_sz_32 {
++	uint8_t		u8_field;
++	int8_t		s8_field;
++	uint16_t	u16_field;
++	int16_t		s16_field;
++
++	uint64_t	u32_field; /* not 32-bit anymore */
++	int64_t		s32_field; /* not 32-bit anymore */
++
++	uint64_t	u64_field;
++	int64_t		s64_field;
 +};
 +
-+struct core_reloc_nesting___dup_compat_types__2 {
-+	int __aligned_padding;
-+	struct {
-+		int __trickier_noop[0];
-+		struct {
-+			char __some_more_noops[0];
-+			int a; /* offset 4 */
-+		} a;
-+	} a;
-+	int __more_padding;
-+	struct {
-+		struct {
-+			struct {
-+				int __critical_padding;
-+				int b; /* offset 16 */
-+			} b;
-+			int __does_not_matter;
-+		};
-+	} b;
-+	int __more_irrelevant_stuff;
-+};
++struct core_reloc_ints___err_wrong_sz_64 {
++	uint8_t		u8_field;
++	int8_t		s8_field;
++	uint16_t	u16_field;
++	int16_t		s16_field;
++	uint32_t	u32_field;
++	int32_t		s32_field;
 +
-+struct core_reloc_nesting___dup_compat_types__3 {
-+	char __correct_padding[4];
-+	struct {
-+		struct {
-+			int a; /* offset 4 */
-+		} a;
-+	} a;
-+	/* 8 byte padding due to next struct's alignment */
-+	struct {
-+		struct {
-+			int b;
-+		} b;
-+	} b __attribute__((aligned(16)));
++	uint32_t	u64_field; /* not 64-bit anymore */
++	int32_t		s64_field; /* not 64-bit anymore */
 +};
-+
-+/* b.b.b field is missing */
-+struct core_reloc_nesting___err_missing_field {
-+	struct {
-+		struct {
-+			int a;
-+		} a;
-+	} a;
-+	struct {
-+		struct {
-+			int x;
-+		} b;
-+	} b;
-+};
-+
-+/* b.b.b field is an array of integers instead of plain int */
-+struct core_reloc_nesting___err_array_field {
-+	struct {
-+		struct {
-+			int a;
-+		} a;
-+	} a;
-+	struct {
-+		struct {
-+			int b[1];
-+		} b;
-+	} b;
-+};
-+
-+/* middle b container is missing */
-+struct core_reloc_nesting___err_missing_container {
-+	struct {
-+		struct {
-+			int a;
-+		} a;
-+	} a;
-+	struct {
-+		int x;
-+	} b;
-+};
-+
-+/* middle b container is referenced through pointer instead of being embedded */
-+struct core_reloc_nesting___err_nonstruct_container {
-+	struct {
-+		struct {
-+			int a;
-+		} a;
-+	} a;
-+	struct {
-+		struct {
-+			int b;
-+		} *b;
-+	} b;
-+};
-+
-+/* middle b container is an array of structs instead of plain struct */
-+struct core_reloc_nesting___err_array_container {
-+	struct {
-+		struct {
-+			int a;
-+		} a;
-+	} a;
-+	struct {
-+		struct {
-+			int b;
-+		} b[1];
-+	} b;
-+};
-+
-+/* two flavors of same struct with incompatible layout for b.b.b */
-+struct core_reloc_nesting___err_dup_incompat_types__1 {
-+	struct {
-+		struct {
-+			int a; /* offset 0 */
-+		} a;
-+	} a;
-+	struct {
-+		struct {
-+			int b; /* offset 4 */
-+		} b;
-+	} b;
-+};
-+
-+struct core_reloc_nesting___err_dup_incompat_types__2 {
-+	struct {
-+		struct {
-+			int a; /* offset 0 */
-+		} a;
-+	} a;
-+	int __extra_padding;
-+	struct {
-+		struct {
-+			int b; /* offset 8 (!) */
-+		} b;
-+	} b;
-+};
-+
-+/* two flavors of same struct having one of a.a.a and b.b.b, but not both */
-+struct core_reloc_nesting___err_partial_match_dups__a {
-+	struct {
-+		struct {
-+			int a;
-+		} a;
-+	} a;
-+};
-+
-+struct core_reloc_nesting___err_partial_match_dups__b {
-+	struct {
-+		struct {
-+			int b;
-+		} b;
-+	} b;
-+};
-+
-+struct core_reloc_nesting___err_too_deep {
-+	struct {
-+		struct {
-+			int a;
-+		} a;
-+	} a;
-+	/* 65 levels of nestedness for b.b.b */
-+	struct {
-+		struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+				/* this one is one too much */
-+				struct {
-+					int b;
-+				};
-+			}; }; }; }; };
-+			}; }; }; }; };
-+			}; }; }; }; };
-+			}; }; }; }; };
-+			}; }; }; }; };
-+			}; }; }; }; };
-+			}; }; }; }; };
-+			}; }; }; }; };
-+			}; }; }; }; };
-+			}; }; }; }; };
-+			}; }; }; }; };
-+			}; }; }; }; };
-+		} b;
-+	} b;
-+};
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_nesting.c b/tools/testing/selftests/bpf/progs/test_core_reloc_nesting.c
+diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_ints.c b/tools/testing/selftests/bpf/progs/test_core_reloc_ints.c
 new file mode 100644
-index 000000000000..04a539030c5d
+index 000000000000..2eecbefdfd2f
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_nesting.c
++++ b/tools/testing/selftests/bpf/progs/test_core_reloc_ints.c
 @@ -0,0 +1,48 @@
 +// SPDX-License-Identifier: GPL-2.0
 +// Copyright (c) 2019 Facebook
@@ -606,35 +361,35 @@ index 000000000000..04a539030c5d
 +	char out[256];
 +} data;
 +
-+struct core_reloc_nesting_substruct {
-+	int a;
++struct core_reloc_ints {
++	uint8_t		u8_field;
++	int8_t		s8_field;
++	uint16_t	u16_field;
++	int16_t		s16_field;
++	uint32_t	u32_field;
++	int32_t		s32_field;
++	uint64_t	u64_field;
++	int64_t		s64_field;
 +};
 +
-+union core_reloc_nesting_subunion {
-+	int b;
-+};
-+
-+/* int a.a.a and b.b.b accesses */
-+struct core_reloc_nesting {
-+	union {
-+		struct core_reloc_nesting_substruct a;
-+	} a;
-+	struct {
-+		union core_reloc_nesting_subunion b;
-+	} b;
-+};
++#define CORE_READ(dst, src)					\
++	bpf_probe_read((void *)dst, sizeof(*dst),		\
++		       __builtin_preserve_access_index(src))
 +
 +SEC("raw_tracepoint/sys_enter")
-+int test_core_nesting(void *ctx)
++int test_core_mods(void *ctx)
 +{
-+	struct core_reloc_nesting *in = (void *)&data.in;
-+	struct core_reloc_nesting *out = (void *)&data.out;
++	struct core_reloc_ints *in = (void *)&data.in;
++	struct core_reloc_ints *out = (void *)&data.out;
 +
-+	if (bpf_probe_read(&out->a.a.a, sizeof(in->a.a.a),
-+			   __builtin_preserve_access_index(&in->a.a.a)))
-+		return 1;
-+	if (bpf_probe_read(&out->b.b.b, sizeof(in->b.b.b),
-+			   __builtin_preserve_access_index(&in->b.b.b)))
++	if (CORE_READ(&out->u8_field, &in->u8_field) ||
++	    CORE_READ(&out->s8_field, &in->s8_field) ||
++	    CORE_READ(&out->u16_field, &in->u16_field) ||
++	    CORE_READ(&out->s16_field, &in->s16_field) ||
++	    CORE_READ(&out->u32_field, &in->u32_field) ||
++	    CORE_READ(&out->s32_field, &in->s32_field) ||
++	    CORE_READ(&out->u64_field, &in->u64_field) ||
++	    CORE_READ(&out->s64_field, &in->s64_field))
 +		return 1;
 +
 +	return 0;
