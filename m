@@ -2,317 +2,138 @@ Return-Path: <SRS0=hBvA=VV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E891C76191
-	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 19:29:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D6C1C76186
+	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 20:14:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DC70D22ADA
-	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 19:29:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4CA1020665
+	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 20:14:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="pNaE9+4A"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="vQHeAiyX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728958AbfGXT3U (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Jul 2019 15:29:20 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:32624 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388232AbfGXT2V (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 24 Jul 2019 15:28:21 -0400
-Received: from pps.filterd (m0044008.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6OJOvjP024481
-        for <bpf@vger.kernel.org>; Wed, 24 Jul 2019 12:28:20 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=xbaCwKGAjqB6i+ptM9sDk9gnLFPD5fELZkO3qUMbfC0=;
- b=pNaE9+4Aui71xgk5JAAFPPfHF0LlgDN6MktRgMKbGr1ExwzcTjGJSnKF5+h7YshWyelb
- hDbmLFnr0mIwVJ+NbgrRKlNRnwECOWofxa9DGdJPhSxGupY4bwsEEVr33pbI6s7Opw9O
- 8na1fBCKzitlpmQL4BRVG8JJ4kRB2ynw0k4= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2txr5nhc7w-10
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 24 Jul 2019 12:28:20 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 24 Jul 2019 12:28:16 -0700
-Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id D1C8E8615F8; Wed, 24 Jul 2019 12:28:15 -0700 (PDT)
-Smtp-Origin-Hostprefix: dev
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: dev101.prn2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>, <yhs@fb.com>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH bpf-next 08/10] selftests/bpf: add CO-RE relocs modifiers/typedef tests
-Date:   Wed, 24 Jul 2019 12:27:40 -0700
-Message-ID: <20190724192742.1419254-9-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190724192742.1419254-1-andriin@fb.com>
-References: <20190724192742.1419254-1-andriin@fb.com>
-X-FB-Internal: Safe
+        id S2404554AbfGXUOL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Jul 2019 16:14:11 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:37030 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404068AbfGXTza (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Jul 2019 15:55:30 -0400
+Received: by mail-ed1-f68.google.com with SMTP id w13so48179881eds.4;
+        Wed, 24 Jul 2019 12:55:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dgiQF2cvC8jfXzt5HL3uJMfZaBJ8NW3XQoRQC8ii038=;
+        b=vQHeAiyXQ/fCWx93RMqspZg1DqWs3Ss8caJgC5JiNt1q2PzivWVm84dLQmP+XWPMBJ
+         wiM8lTSMXvxMkz5oJReFb1oqB5mBoC0dfhceBItUItDfaKYJuiQuwzJQIp9MHNmubDnM
+         Hds5/qNqyc8M+MnlPxI4ary5YddYAtlyLSbFFgcR5W/TTXYK6PlvEwlRN2OuFo9tO3E0
+         vGkFfsvGiINEUILt8rxNw2oCJPkB3cbjEeOIVoGHkQJPpucIBZWG53bDgkWZR8gLCwRb
+         IKvmqXEZEfLxA2ClNvYwQrE/YOQr7QqRX90PgnXj/7aHOC81GSClCaAVu7UTdbjzOZtg
+         Az/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dgiQF2cvC8jfXzt5HL3uJMfZaBJ8NW3XQoRQC8ii038=;
+        b=V59YyzLW4j4i4sPf+gLYnGFxtm9Q2iG+Ij1DwNU90qKoagLKVYGRZvyew2iicc17nK
+         dGWCRRIYvwDaP0LYVq8vA+igDBGF/oR0zfRSUyHvsgkzUw6a2lwxfW6QDTT+ZyYvoes1
+         Tyjfvg4HyxUCQUw8XZCWvwEKQL90Kffk4g+v7B8m7JCQEU0KSn9WuHlcM167ruGMHNhD
+         HoueKZVjIrRCWW+mErF+dIDcckv52VDC16kLv+9NtgLe4oh5qGLgezdFjr0a47WPgkCe
+         pIIVxtndjG/ag9LQCsbLArXJFWGbg6Fzia5CZR0fHdtHAe/MteLz76/OGltraUBX3a81
+         JKPQ==
+X-Gm-Message-State: APjAAAVL95xc01TZtrLi97XVX7ZW6bGzTmXlMYYbzbLTaVgNL4DIufEi
+        OmgFg6oVPsKb3aAH1NibahwVwGkp1J/VDPLXEJss+w==
+X-Google-Smtp-Source: APXvYqxlAArBe8lODQMcY4CpIrmB367EyP3gjRlWspBDi7tNnt9o7OTfGDWGL3ZxZG4lQwVNWoGp9sIGlniTSexzPB4=
+X-Received: by 2002:a50:eb92:: with SMTP id y18mr72682568edr.245.1563998128385;
+ Wed, 24 Jul 2019 12:55:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-24_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=67 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1907240207
-X-FB-Internal: deliver
+References: <20190724165803.87470-1-brianvv@google.com> <20190724165803.87470-3-brianvv@google.com>
+In-Reply-To: <20190724165803.87470-3-brianvv@google.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Wed, 24 Jul 2019 15:54:52 -0400
+Message-ID: <CAF=yD-+a=t_YizdJpb_Q+zxR7iP-V-EarNsp9tjnFTRBjOtFvA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/6] bpf: add BPF_MAP_DUMP command to dump more
+ than one entry per call
+To:     Brian Vazquez <brianvv@google.com>
+Cc:     Brian Vazquez <brianvv.kernel@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Stanislav Fomichev <sdf@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Petar Penkov <ppenkov@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add tests validating correct handling of various combinations of
-typedefs and const/volatile/restrict modifiers.
+On Wed, Jul 24, 2019 at 1:10 PM Brian Vazquez <brianvv@google.com> wrote:
+>
+> This introduces a new command to retrieve multiple number of entries
+> from a bpf map, wrapping the existing bpf methods:
+> map_get_next_key and map_lookup_elem
+>
+> To start dumping the map from the beginning you must specify NULL as
+> the prev_key.
+>
+> The new API returns 0 when it successfully copied all the elements
+> requested or it copied less because there weren't more elements to
+> retrieved (i.e err == -ENOENT). In last scenario err will be masked to 0.
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- .../selftests/bpf/prog_tests/core_reloc.c     | 27 +++++++
- .../bpf/progs/btf__core_reloc_mods.c          |  3 +
- .../progs/btf__core_reloc_mods___mod_swap.c   |  3 +
- .../progs/btf__core_reloc_mods___typedefs.c   |  3 +
- .../selftests/bpf/progs/core_reloc_types.h    | 72 +++++++++++++++++++
- .../bpf/progs/test_core_reloc_mods.c          | 68 ++++++++++++++++++
- 6 files changed, 176 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_mods.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_mods___mod_swap.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_mods___typedefs.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_core_reloc_mods.c
+I think I understand this, but perhaps it can be explained a bit more
+concisely without reference to ENOENT and error masking. The function
+returns the min of the number of requested elements and the number of
+remaining elements in the map from the given starting point
+(prev_key).
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-index 05746ead48d9..f2c7ed67a81c 100644
---- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-@@ -107,6 +107,28 @@
- 	.fails = true,							\
- }
- 
-+#define MODS_CASE(name) {						\
-+	.case_name = #name,						\
-+	.bpf_obj_file = "test_core_reloc_mods.o",			\
-+	.btf_src_file = "btf__core_reloc_" #name ".o",			\
-+	.input = STRUCT_TO_CHAR_PTR(core_reloc_##name) {		\
-+		.a = 1,							\
-+		.b = 2,							\
-+		.c = (void *)3,						\
-+		.d = (void *)4,						\
-+		.e = { [2] = 5 },					\
-+		.f = { [1] = 6 },					\
-+		.g = { .x = 7 },					\
-+		.h = { .y = 8 },					\
-+	},								\
-+	.input_len = sizeof(struct core_reloc_##name),			\
-+	.output = STRUCT_TO_CHAR_PTR(core_reloc_mods_output) {		\
-+		.a = 1, .b = 2, .c = 3, .d = 4,				\
-+		.e = 5, .f = 6, .g = 7, .h = 8,				\
-+	},								\
-+	.output_len = sizeof(struct core_reloc_mods_output),		\
-+}
-+
- struct core_reloc_test_case {
- 	const char *case_name;
- 	const char *bpf_obj_file;
-@@ -173,6 +195,11 @@ static struct core_reloc_test_case test_cases[] = {
- 	PRIMITIVES_ERR_CASE(primitives___err_non_enum),
- 	PRIMITIVES_ERR_CASE(primitives___err_non_int),
- 	PRIMITIVES_ERR_CASE(primitives___err_non_ptr),
-+
-+	/* const/volatile/restrict and typedefs scenarios */
-+	MODS_CASE(mods),
-+	MODS_CASE(mods___mod_swap),
-+	MODS_CASE(mods___typedefs),
- };
- 
- struct data {
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_mods.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_mods.c
-new file mode 100644
-index 000000000000..124197a2e813
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_mods.c
-@@ -0,0 +1,3 @@
-+#include "core_reloc_types.h"
-+
-+void f(struct core_reloc_mods x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_mods___mod_swap.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_mods___mod_swap.c
-new file mode 100644
-index 000000000000..f8a6592ca75f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_mods___mod_swap.c
-@@ -0,0 +1,3 @@
-+#include "core_reloc_types.h"
-+
-+void f(struct core_reloc_mods___mod_swap x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_mods___typedefs.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_mods___typedefs.c
-new file mode 100644
-index 000000000000..5c0d73687247
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_mods___typedefs.c
-@@ -0,0 +1,3 @@
-+#include "core_reloc_types.h"
-+
-+void f(struct core_reloc_mods___typedefs x) {}
-diff --git a/tools/testing/selftests/bpf/progs/core_reloc_types.h b/tools/testing/selftests/bpf/progs/core_reloc_types.h
-index 7526a5f5755b..3401e8342e57 100644
---- a/tools/testing/selftests/bpf/progs/core_reloc_types.h
-+++ b/tools/testing/selftests/bpf/progs/core_reloc_types.h
-@@ -454,3 +454,75 @@ struct core_reloc_primitives___err_non_ptr {
- 	int d; /* int instead of ptr */
- 	int (*f)(const char *);
- };
-+
-+/*
-+ * MODS
-+ */
-+struct core_reloc_mods_output {
-+	int a, b, c, d, e, f, g, h;
-+};
-+
-+typedef const int int_t;
-+typedef const char *char_ptr_t;
-+typedef const int arr_t[7];
-+
-+struct core_reloc_mods_substruct {
-+	int x;
-+	int y;
-+};
-+
-+typedef struct {
-+	int x;
-+	int y;
-+} core_reloc_mods_substruct_t;
-+
-+struct core_reloc_mods {
-+	int a;
-+	int_t b;
-+	char *c;
-+	char_ptr_t d;
-+	int e[3];
-+	arr_t f;
-+	struct core_reloc_mods_substruct g;
-+	core_reloc_mods_substruct_t h;
-+};
-+
-+/* a/b, c/d, e/f, and g/h pairs are swapped */
-+struct core_reloc_mods___mod_swap {
-+	int b;
-+	int_t a;
-+	char *d;
-+	char_ptr_t c;
-+	int f[3];
-+	arr_t e;
-+	struct {
-+		int y;
-+		int x;
-+	} h;
-+	core_reloc_mods_substruct_t g;
-+};
-+
-+typedef int int1_t;
-+typedef int1_t int2_t;
-+typedef int2_t int3_t;
-+
-+typedef int arr1_t[5];
-+typedef arr1_t arr2_t;
-+typedef arr2_t arr3_t;
-+typedef arr3_t arr4_t;
-+
-+typedef const char * const volatile restrict fancy_char_ptr_t;
-+
-+typedef core_reloc_mods_substruct_t core_reloc_mods_substruct_tt;
-+
-+/* we need more typedefs */
-+struct core_reloc_mods___typedefs {
-+	core_reloc_mods_substruct_tt g;
-+	core_reloc_mods_substruct_tt h;
-+	arr4_t f;
-+	arr4_t e;
-+	fancy_char_ptr_t d;
-+	fancy_char_ptr_t c;
-+	int3_t b;
-+	int3_t a;
-+};
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_mods.c b/tools/testing/selftests/bpf/progs/test_core_reloc_mods.c
-new file mode 100644
-index 000000000000..eaf436922cb3
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_mods.c
-@@ -0,0 +1,68 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2019 Facebook
-+
-+#include <linux/bpf.h>
-+#include <stdint.h>
-+#include "bpf_helpers.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+static volatile struct data {
-+	char in[256];
-+	char out[256];
-+} data;
-+
-+struct core_reloc_mods_output {
-+	int a, b, c, d, e, f, g, h;
-+};
-+
-+typedef const int int_t;
-+typedef const char *char_ptr_t;
-+typedef const int arr_t[7];
-+
-+struct core_reloc_mods_substruct {
-+	int x;
-+	int y;
-+};
-+
-+typedef struct {
-+	int x;
-+	int y;
-+} core_reloc_mods_substruct_t;
-+
-+struct core_reloc_mods {
-+	int a;
-+	int_t b;
-+	char *c;
-+	char_ptr_t d;
-+	int e[3];
-+	/* BUG: doesn't work if using `arr_t f;` */
-+	int f[7];
-+	struct core_reloc_mods_substruct g;
-+	/* BUG: doesn't work if using `core_reloc_mods_substruct_t h;` */
-+	struct core_reloc_mods_substruct h;
-+};
-+
-+#define CORE_READ(dst, src)					\
-+	bpf_probe_read((void *)dst, sizeof(*dst),		\
-+		       __builtin_preserve_access_index(src))
-+
-+SEC("raw_tracepoint/sys_enter")
-+int test_core_mods(void *ctx)
-+{
-+	struct core_reloc_mods *in = (void *)&data.in;
-+	struct core_reloc_mods_output *out = (void *)&data.out;
-+
-+	if (CORE_READ(&out->a, &in->a) ||
-+	    CORE_READ(&out->b, &in->b) ||
-+	    CORE_READ(&out->c, &in->c) ||
-+	    CORE_READ(&out->d, &in->d) ||
-+	    CORE_READ(&out->e, &in->e[2]) ||
-+	    CORE_READ(&out->f, &in->f[1]) ||
-+	    CORE_READ(&out->g, &in->g.x) ||
-+	    CORE_READ(&out->h, &in->h.y))
-+		return 1;
-+
-+	return 0;
-+}
-+
--- 
-2.17.1
+> On a successful call buf and buf_len will contain correct data and in
+> case prev_key was provided (not for the first walk, since prev_key is
+> NULL) it will contain the last_key copied into the prev_key which will
+> simplify next call.
+>
+> Only when it can't find a single element it will return -ENOENT meaning
+> that the map has been entirely walked. When an error is return buf,
+> buf_len and prev_key shouldn't be read nor used.
 
+That's common for error handling. No need to state explicitly.
+
+> Because maps can be called from userspace and kernel code, this function
+> can have a scenario where the next_key was found but by the time we
+> try to retrieve the value the element is not there, in this case the
+> function continues and tries to get a new next_key value, skipping the
+> deleted key. If at some point the function find itself trap in a loop,
+> it will return -EINTR.
+
+Good to point this out! I don't think that unbounded continue;
+statements until an interrupt happens is sufficient. Please bound the
+number of retries to a low number.
+
+> The function will try to fit as much as possible in the buf provided and
+> will return -EINVAL if buf_len is smaller than elem_size.
+>
+> QUEUE and STACK maps are not supported.
+>
+> Note that map_dump doesn't guarantee that reading the entire table is
+> consistent since this function is always racing with kernel and user code
+> but the same behaviour is found when the entire table is walked using
+> the current interfaces: map_get_next_key + map_lookup_elem.
+
+> It is also important to note that with  a locked map, the lock is grabbed
+> for 1 entry at the time, meaning that the returned buf might or might not
+> be consistent.
+
+Would it be informative to signal to the caller if the read was
+complete and consistent (because the entire table was read while the
+lock was held)?
+
+>
+> Suggested-by: Stanislav Fomichev <sdf@google.com>
+> Signed-off-by: Brian Vazquez <brianvv@google.com>
