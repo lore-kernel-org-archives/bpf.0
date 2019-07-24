@@ -2,61 +2,63 @@ Return-Path: <SRS0=hBvA=VV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+X-Spam-Status: No, score=-14.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A78CC76186
-	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 16:58:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85C4FC76186
+	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 16:58:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4E73621841
-	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 16:58:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B34521841
+	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 16:58:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rqq9g03P"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oUJf1bx4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728537AbfGXQ6k (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Jul 2019 12:58:40 -0400
-Received: from mail-qk1-f202.google.com ([209.85.222.202]:42312 "EHLO
-        mail-qk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728496AbfGXQ6h (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Jul 2019 12:58:37 -0400
-Received: by mail-qk1-f202.google.com with SMTP id 199so39968150qkj.9
-        for <bpf@vger.kernel.org>; Wed, 24 Jul 2019 09:58:36 -0700 (PDT)
+        id S2387645AbfGXQ6p (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Jul 2019 12:58:45 -0400
+Received: from mail-pg1-f201.google.com ([209.85.215.201]:33919 "EHLO
+        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387628AbfGXQ6l (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Jul 2019 12:58:41 -0400
+Received: by mail-pg1-f201.google.com with SMTP id x19so28694831pgx.1
+        for <bpf@vger.kernel.org>; Wed, 24 Jul 2019 09:58:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=glKaPZF0kuawPUQxXbpKIp+157oyf0yYPp3UELzJQsg=;
-        b=rqq9g03PpRhF3ymvIyKsJZzyqpeGHYdT7zGj3bnG5I1MzwqawSR6jYQY47lcFaPh8u
-         AC4HC3jBJ8Q6HPjbVfvzmz4thwjP+kPTjr2j5uQJzkIhru+IeBl/CNrBF8HUEJPBemGj
-         YCZ8sgHUbNal4hCkX93eIDVTkVotYLPT72iFfHt7htZalJIeNAPgZOBv4v1Aggm/iBAF
-         E4vT2Eug6Gz2suAsgF+EumINRAuFJHHIgZphdq8fz7jesmzD+kw6OvLpLQVJ3v4oNRKf
-         6h7BMZEYGDGnq0Cb8crL9rOnzJd0xO2wfJjOb3bwSjthqNd8+O6dl4tNFBv5bU8iEhTG
-         811w==
+        bh=IGj/M+6U995Y52IjNEaLV6LDl7AzZ6dG3QadQeE37S0=;
+        b=oUJf1bx45jmFQxsX5BUA7N5crPP1ky/I4ydMP3+NZjrKcZ4IYQv4NSrYFZBPh3ba0O
+         KUW1JA/XDot9TQDgD/EvsU9/6KMH52NYJD8iaa4EOdbMpnGsL6uni6HvqR4DMzOwNwio
+         N8yHR4BK5WrbGWJK9M4mePqRz7Wm3KIjGMGXT/W9N81Sxaa5dfxA8oNe7rhc79J2bIPh
+         wGFiZme9haD7UKM+LZj8frc9mP3ygbLlM4Fo9CjVF+6ZEbYfWG3sLl8oOqUnaYmLHL5D
+         xo5t97SRL2RDscENQ7xblfMyvHnihOW0px4qIhxJVR+kZby+J9MPvDefXh/0ONgDkIn6
+         3wKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=glKaPZF0kuawPUQxXbpKIp+157oyf0yYPp3UELzJQsg=;
-        b=H3fA8hpU2p3AiPKrseoIyef/bKSAX1sC8xeEseg2XTJDqpLha8NzH1dloy02/ZIkgG
-         8Nyy4DCktZeHqtdcR+YryVwfRPJ5wKrq4htvhQXDUULj0Q02/Ugg68pAMjuTSAS0TxPo
-         IuBHCNe4Sy67lwVkG5MANcXViQKJ4B8qMmdKvuThBTp8VCedC4G9F2w/V+gywbOUf90U
-         StVbLF1u+RDYLghzTggdL6OG7z/XXNI171Sdm3YqrCfsMXKMbdqUxWZ2GyaRpNAOjTDS
-         RDS+jjC2vgThprYiT9HqprPeU7sIVeplWL0oYylHkP6NU74Rpa4aNVm0mx3AWpCaiB2g
-         kMLw==
-X-Gm-Message-State: APjAAAUHPvYxabHsPIwXY7ZbV+qK9TdGGSGWZ90FABUEK3TfhRpkxPi1
-        /1GfmeEP9WUBBwO3ZT5t6bsMYRMrvxjm
-X-Google-Smtp-Source: APXvYqwGhYKsmoggPNt4NsKlJiqWSzOCNjflzOiZPEzbK6MDkFFQIP6wyFXKUEoZQwNfArLV+zvI15TnxLV0
-X-Received: by 2002:a0c:8a76:: with SMTP id 51mr60440819qvu.210.1563987516337;
- Wed, 24 Jul 2019 09:58:36 -0700 (PDT)
-Date:   Wed, 24 Jul 2019 09:58:01 -0700
+        bh=IGj/M+6U995Y52IjNEaLV6LDl7AzZ6dG3QadQeE37S0=;
+        b=IoHbjnwv7ixUKlPrSk0YYl+hmTYAKzPFF7Wo/YdsP4AuNsMcI+GEQbfqhCD4JKACIm
+         RTh5Z2SbXBV/LvLgugStDvpMrUTSjqsNYFR7OtPzZAHNrR4XINCTH6JeWt0CPLm4SrNG
+         7dR2aIlNtNZjhfnb0+bn2u1ylBAkQaa1KU+U5qnCwyXLXyE81fImpQqyXHHcup8mLizp
+         X0oyRKv1Pw0HgUMFIeDOer1S8XzbTy8HvO9WMsMVpfFbONQ52L/+tAOINIb4Co1zgajN
+         N3SbhSrJMciyrYTACObtMRsjdy37XDiqmKDnt9us4U78pKpj4g3AmnkNOgEPz6eieQb4
+         sdkw==
+X-Gm-Message-State: APjAAAVjbhiMI6+PiQu7KAh+mOc2oYm/WycRn9bPCBgRA4YrYAsePp3I
+        6XjEufu0gqIV0AxfKODb9RBBmasDXX5w
+X-Google-Smtp-Source: APXvYqxbKxLxrhzXjYCucyVFxZ24iwUfubUGnAiPkh3hmQBII0u/pLXrbRWzMfSy+YCD5R9UAeHnyTFZA0Z4
+X-Received: by 2002:a63:1455:: with SMTP id 21mr38502725pgu.116.1563987520966;
+ Wed, 24 Jul 2019 09:58:40 -0700 (PDT)
+Date:   Wed, 24 Jul 2019 09:58:03 -0700
 In-Reply-To: <20190724165803.87470-1-brianvv@google.com>
-Message-Id: <20190724165803.87470-5-brianvv@google.com>
+Message-Id: <20190724165803.87470-7-brianvv@google.com>
 Mime-Version: 1.0
 References: <20190724165803.87470-1-brianvv@google.com>
 X-Mailer: git-send-email 2.22.0.657.g960e92d24f-goog
-Subject: [PATCH bpf-next 4/6] libbpf: support BPF_MAP_DUMP command
+Subject: [PATCH bpf-next 6/6] selftests/bpf: add test to measure performance
+ of BPF_MAP_DUMP
 From:   Brian Vazquez <brianvv@google.com>
 To:     Brian Vazquez <brianvv.kernel@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -73,70 +75,105 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Make libbpf aware of new BPF_MAP_DUMP command and add bpf_map_dump and
-bpf_map_dump_flags to use them from the library.
+This tests compares the amount of time that takes to read an entire
+table of 100K elements on a bpf hashmap using both BPF_MAP_DUMP and
+BPF_MAP_GET_NEXT_KEY + BPF_MAP_LOOKUP_ELEM.
 
-Suggested-by: Stanislav Fomichev <sdf@google.com>
 Signed-off-by: Brian Vazquez <brianvv@google.com>
 ---
- tools/lib/bpf/bpf.c | 28 ++++++++++++++++++++++++++++
- tools/lib/bpf/bpf.h |  4 ++++
- 2 files changed, 32 insertions(+)
+ tools/testing/selftests/bpf/test_maps.c | 65 +++++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index c7d7993c44bb0..c1139b7db756a 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -368,6 +368,34 @@ int bpf_map_update_elem(int fd, const void *key, const void *value,
- 	return sys_bpf(BPF_MAP_UPDATE_ELEM, &attr, sizeof(attr));
+diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+index f7ab401399d40..c4593a8904ca6 100644
+--- a/tools/testing/selftests/bpf/test_maps.c
++++ b/tools/testing/selftests/bpf/test_maps.c
+@@ -18,6 +18,7 @@
+ #include <sys/socket.h>
+ #include <netinet/in.h>
+ #include <linux/bpf.h>
++#include <linux/time64.h>
+ 
+ #include <bpf/bpf.h>
+ #include <bpf/libbpf.h>
+@@ -389,6 +390,69 @@ static void test_hashmap_dump(void)
+ 	close(fd);
  }
  
-+int bpf_map_dump(int fd, const void *prev_key, void *buf, void *buf_len)
++static void test_hashmap_dump_perf(void)
 +{
-+	union bpf_attr attr;
++	int fd, i, max_entries = 100000;
++	uint64_t key, value, next_key;
++	bool next_key_valid = true;
++	void *buf;
++	u32 buf_len, entries;
++	int j = 0;
++	int clk_id = CLOCK_MONOTONIC;
++	struct timespec begin, end;
++	long long time_spent, dump_time_spent;
++	double res;
++	int tests[] = {1, 2, 230, 5000, 73000, 100000, 234567};
++	int test_len = ARRAY_SIZE(tests);
++	const int elem_size = sizeof(key) + sizeof(value);
 +
-+	memset(&attr, 0, sizeof(attr));
-+	attr.dump.map_fd = fd;
-+	attr.dump.prev_key = ptr_to_u64(prev_key);
-+	attr.dump.buf = ptr_to_u64(buf);
-+	attr.dump.buf_len = ptr_to_u64(buf_len);
++	fd = helper_fill_hashmap(max_entries);
++	// Alloc memory considering the largest buffer
++	buf = malloc(elem_size * tests[test_len-1]);
++	assert(buf != NULL);
 +
-+	return sys_bpf(BPF_MAP_DUMP, &attr, sizeof(attr));
++test:
++	entries = tests[j];
++	buf_len = elem_size*tests[j];
++	j++;
++	clock_gettime(clk_id, &begin);
++	errno = 0;
++	i = 0;
++	while (errno == 0) {
++		bpf_map_dump(fd, !i ? NULL : &key,
++				  buf, &buf_len);
++		if (errno)
++			break;
++		if (!i)
++			key = *((uint64_t *)(buf + buf_len - elem_size));
++		i += buf_len / elem_size;
++	}
++	clock_gettime(clk_id, &end);
++	assert(i  == max_entries);
++	dump_time_spent = NSEC_PER_SEC * (end.tv_sec - begin.tv_sec) +
++			  end.tv_nsec - begin.tv_nsec;
++	next_key_valid = true;
++	clock_gettime(clk_id, &begin);
++	assert(bpf_map_get_next_key(fd, NULL, &key) == 0);
++	for (i = 0; next_key_valid; i++) {
++		next_key_valid = bpf_map_get_next_key(fd, &key, &next_key) == 0;
++		assert(bpf_map_lookup_elem(fd, &key, &value) == 0);
++		key = next_key;
++	}
++	clock_gettime(clk_id, &end);
++	time_spent = NSEC_PER_SEC * (end.tv_sec - begin.tv_sec) +
++		     end.tv_nsec - begin.tv_nsec;
++	res = (1-((double)dump_time_spent/time_spent))*100;
++	printf("buf_len_%u:\t %llu entry-by-entry: %llu improvement %lf\n",
++	       entries, dump_time_spent, time_spent, res);
++	assert(i  == max_entries);
++
++	if (j < test_len)
++		goto test;
++	free(buf);
++	close(fd);
 +}
 +
-+int bpf_map_dump_flags(int fd, const void *prev_key, void *buf, void *buf_len,
-+		       __u64 flags)
-+{
-+	union bpf_attr attr;
-+
-+	memset(&attr, 0, sizeof(attr));
-+	attr.dump.map_fd = fd;
-+	attr.dump.prev_key = ptr_to_u64(prev_key);
-+	attr.dump.buf = ptr_to_u64(buf);
-+	attr.dump.buf_len = ptr_to_u64(buf_len);
-+	attr.dump.flags = flags;
-+
-+	return sys_bpf(BPF_MAP_DUMP, &attr, sizeof(attr));
-+}
-+
- int bpf_map_lookup_elem(int fd, const void *key, void *value)
+ static void test_hashmap_zero_seed(void)
  {
- 	union bpf_attr attr;
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index ff42ca043dc8f..86496443440e9 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -112,6 +112,10 @@ LIBBPF_API int bpf_verify_program(enum bpf_prog_type type,
- LIBBPF_API int bpf_map_update_elem(int fd, const void *key, const void *value,
- 				   __u64 flags);
+ 	int i, first, second, old_flags;
+@@ -1758,6 +1822,7 @@ static void run_all_tests(void)
+ 	test_hashmap_walk(0, NULL);
+ 	test_hashmap_zero_seed();
+ 	test_hashmap_dump();
++	test_hashmap_dump_perf();
  
-+LIBBPF_API int bpf_map_dump(int fd, const void *prev_key, void *buf,
-+				void *buf_len);
-+LIBBPF_API int bpf_map_dump_flags(int fd, const void *prev_key, void *buf,
-+				void *buf_len, __u64 flags);
- LIBBPF_API int bpf_map_lookup_elem(int fd, const void *key, void *value);
- LIBBPF_API int bpf_map_lookup_elem_flags(int fd, const void *key, void *value,
- 					 __u64 flags);
+ 	test_arraymap(0, NULL);
+ 	test_arraymap_percpu(0, NULL);
 -- 
 2.22.0.657.g960e92d24f-goog
 
