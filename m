@@ -2,287 +2,142 @@ Return-Path: <SRS0=hBvA=VV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8B94C76191
-	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 16:59:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F328C76186
+	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 17:00:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 73EDB21841
-	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 16:59:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F3C2921841
+	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 17:00:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="X9Uxl1pQ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FJi7WmtR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387685AbfGXQ7A (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Jul 2019 12:59:00 -0400
-Received: from mail-pg1-f201.google.com ([209.85.215.201]:47259 "EHLO
-        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728441AbfGXQ6c (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Jul 2019 12:58:32 -0400
-Received: by mail-pg1-f201.google.com with SMTP id l11so7303771pgc.14
-        for <bpf@vger.kernel.org>; Wed, 24 Jul 2019 09:58:32 -0700 (PDT)
+        id S1726220AbfGXRAV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Jul 2019 13:00:21 -0400
+Received: from mail-pf1-f201.google.com ([209.85.210.201]:41690 "EHLO
+        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725851AbfGXRAV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Jul 2019 13:00:21 -0400
+Received: by mail-pf1-f201.google.com with SMTP id q14so28965584pff.8
+        for <bpf@vger.kernel.org>; Wed, 24 Jul 2019 10:00:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=JhiTFKPdgUPiq/3CLngeqY1pwECv2NMtE4FVnY5brWc=;
-        b=X9Uxl1pQtqKu/ZuT+YDSx8UQSm3E8s/yC/XufSX18tbohg9rSekknJLAe9xHgjbbx7
-         D2FPWzlMHRyfhSABm7bsrH1CDV39nx5g/pZXfNSJDmv6KOKaV1ytCIuoTdonm84Xifu3
-         UmGhHpNPjWrLeSkfYgEksG+xolx7KSzitNaroJzNkljJjObyTRTnJh7FP9h1W6X4cLQD
-         6HNOMNCIQbMKTbsGenAS/UIDF2nr6dFP3BQumesprJGlCr7QRL4hHTOH/PLvi9b97IAE
-         N22di3vtH1Es+HlUbMQnVhUY+utIpvPyX8xURkbBfAUs6OMTRGWhjEvDR0a2oXqSw+wx
-         7hkQ==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=1xPEXMDkLELWIGaSMmOMYvDd/EFGlRxWlFEHpHsk6fU=;
+        b=FJi7WmtRWpa7GH2wOtF5ooh9n7vlVNN4fQuQW/pFfXdiBHnSemRqWPTKh34Anr/acL
+         /iq8uchMtVdEG/AYNTC6Eb9+Qc1cuSbAA1HA0WhPLe5KgqdWtwps6pg5BNMvmfmhFheh
+         bioYzPTRreDyfTXhA43yHdRY4hg5JggQYoH2O0cRyiNcqD5zY1iVxfoXeaV4FcKgVrAQ
+         RKJAI5uvfJaP9ZdbLAivvHPu1iEipzD4O6kiJx4XqUcuAWdLxUURzEcfg8CWSnnmyFgl
+         Pc3NZhv4/j03R564hNG99bs2d+Hd9MaQwfwCZ4h7/piuflNfRhfofV78+iAVMXDsERgC
+         slIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=JhiTFKPdgUPiq/3CLngeqY1pwECv2NMtE4FVnY5brWc=;
-        b=KW3n6/9N2k6LiqSHwxr2Z/9hpvmQyAodHPMK+HzbkUS3Mkw3IN61lYeAghJyrm0Z3j
-         ZcvRysI8JV9UJ9woa6c/RM6VH8b6dyTC/crlDK5JES46X3tzKw2j6IwjDLrQ0A5nHuXG
-         vFIReaSDWVm0cT1rSbyakiqR+5tEQy2DFMQ9K5GuTAMfZaVB4OIcRwQMSfRoQ9VzriGt
-         z/XqezdAkm5eiZcls4pUde2ASsmCGhzkgRRS9QdJzffk5eZ0cD1kiGKTCzAB65d1jq2e
-         kMjjuSDUsSqvm424w/H69f9VFgDGePyECKcAJoOjo5DIKgvph3Y63o6lQ1odinXBgCkD
-         cUWQ==
-X-Gm-Message-State: APjAAAVjoXH0Y/IgmTZs8XtJWpdHFZhGwufLkW/NJVrcqzigturBmgXU
-        NQwucfvOBsazmSWFP4BgSWCDG5tQ2wfp
-X-Google-Smtp-Source: APXvYqw2VsB8QRHHZVMQ1VhvHU/nDMf5a8qvedfp46p5hb+FxJEbYpXEIh3n7OA6WwWDSR2D++aTvC0B3Fhm
-X-Received: by 2002:a63:dd16:: with SMTP id t22mr50863450pgg.140.1563987511332;
- Wed, 24 Jul 2019 09:58:31 -0700 (PDT)
-Date:   Wed, 24 Jul 2019 09:57:59 -0700
-In-Reply-To: <20190724165803.87470-1-brianvv@google.com>
-Message-Id: <20190724165803.87470-3-brianvv@google.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=1xPEXMDkLELWIGaSMmOMYvDd/EFGlRxWlFEHpHsk6fU=;
+        b=j+GOznEWarFmF0susK1FAJoa+WM/8tmujcmcDFj6LLOakqAnprp4yejeFPxKoKf6VX
+         rfRi4fzmk9Jk0G6bHZOJle7RQ2r6PcSBE11r84tfVwzewc/+RZp4Qq2yjYBpl1C+lyV8
+         YuxX4K6h7HFI5wzZy9JYB8H/N19Im+WgnedXWYeYbtlfH5jnbwBrTr6fBQ2jBh0ndslr
+         Klvtj/zZtxJKvFO3lTpfQ3BOp1NtPA4f38+JZ3dgKbn9ZJr5iIOjwCcXT3LRY9V2glDy
+         9Py9kCtzKNGWXXQvoOhES9bBzHAEn0AsZISd6gngrRalgnkHrXdQw/lrHmXo/2zgsMs/
+         oFqA==
+X-Gm-Message-State: APjAAAWLq6ioW6N8jp69sjOTcMofu7ygcfwMVpK9jRrp2oXXl7HnFR/g
+        FWWUnr42ZgGTYXz307ABR+k8tU4=
+X-Google-Smtp-Source: APXvYqwpMLZ86VgJOfJVCkwACEnTjwzBt2hOKmktyaDaBVZ7+/iIvzFxcqrCupyT84JxvNgl+8TthxM=
+X-Received: by 2002:a65:55c7:: with SMTP id k7mr51084981pgs.305.1563987620511;
+ Wed, 24 Jul 2019 10:00:20 -0700 (PDT)
+Date:   Wed, 24 Jul 2019 10:00:11 -0700
+Message-Id: <20190724170018.96659-1-sdf@google.com>
 Mime-Version: 1.0
-References: <20190724165803.87470-1-brianvv@google.com>
 X-Mailer: git-send-email 2.22.0.657.g960e92d24f-goog
-Subject: [PATCH bpf-next 2/6] bpf: add BPF_MAP_DUMP command to dump more than
- one entry per call
-From:   Brian Vazquez <brianvv@google.com>
-To:     Brian Vazquez <brianvv.kernel@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S . Miller" <davem@davemloft.net>
-Cc:     Stanislav Fomichev <sdf@google.com>,
+Subject: [PATCH bpf-next 0/7] bpf/flow_dissector: support input flags
+From:   Stanislav Fomichev <sdf@google.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
+        Stanislav Fomichev <sdf@google.com>,
         Willem de Bruijn <willemb@google.com>,
-        Petar Penkov <ppenkov@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Brian Vazquez <brianvv@google.com>
+        Petar Penkov <ppenkov@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This introduces a new command to retrieve multiple number of entries
-from a bpf map, wrapping the existing bpf methods:
-map_get_next_key and map_lookup_elem
+C flow dissector supports input flags that tell it to customize parsing
+by either stopping early or trying to parse as deep as possible.
+BPF flow dissector always parses as deep as possible which is sub-optimal.
+Pass input flags to the BPF flow dissector as well so it can make the same
+decisions.
 
-To start dumping the map from the beginning you must specify NULL as
-the prev_key.
+Series outline:
+* remove unused FLOW_DISSECTOR_F_STOP_AT_L3 flag
+* export FLOW_DISSECTOR_F_XXX flags as uapi and pass them to BPF
+  flow dissector
+* add documentation for the export flags
+* support input flags in BPF_PROG_TEST_RUN via ctx_{in,out}
+* sync uapi to tools
+* support FLOW_DISSECTOR_F_PARSE_1ST_FRAG in selftest
+* support FLOW_DISSECTOR_F_STOP_AT_FLOW_LABEL in kernel and selftest
+* support FLOW_DISSECTOR_F_STOP_AT_ENCAP in selftest
 
-The new API returns 0 when it successfully copied all the elements
-requested or it copied less because there weren't more elements to
-retrieved (i.e err == -ENOENT). In last scenario err will be masked to 0.
+Pros:
+* makes BPF flow dissector faster by avoiding burning extra cycles
+* existing BPF progs continue to work by ignoring the flags and always
+  parsing as deep as possible
 
-On a successful call buf and buf_len will contain correct data and in
-case prev_key was provided (not for the first walk, since prev_key is
-NULL) it will contain the last_key copied into the prev_key which will
-simplify next call.
+Cons:
+* new UAPI which we need to support (OTOH, if we need to deprecate some
+  flags, we can just stop setting them upon calling BPF programs)
 
-Only when it can't find a single element it will return -ENOENT meaning
-that the map has been entirely walked. When an error is return buf,
-buf_len and prev_key shouldn't be read nor used.
+Some numbers (with .repeat = 4000000 in test_flow_dissector):
+        test_flow_dissector:PASS:ipv4-frag 35 nsec
+        test_flow_dissector:PASS:ipv4-frag 35 nsec
+        test_flow_dissector:PASS:ipv4-no-frag 32 nsec
+        test_flow_dissector:PASS:ipv4-no-frag 32 nsec
 
-Because maps can be called from userspace and kernel code, this function
-can have a scenario where the next_key was found but by the time we
-try to retrieve the value the element is not there, in this case the
-function continues and tries to get a new next_key value, skipping the
-deleted key. If at some point the function find itself trap in a loop,
-it will return -EINTR.
+        test_flow_dissector:PASS:ipv6-frag 39 nsec
+        test_flow_dissector:PASS:ipv6-frag 39 nsec
+        test_flow_dissector:PASS:ipv6-no-frag 36 nsec
+        test_flow_dissector:PASS:ipv6-no-frag 36 nsec
 
-The function will try to fit as much as possible in the buf provided and
-will return -EINVAL if buf_len is smaller than elem_size.
+        test_flow_dissector:PASS:ipv6-flow-label 36 nsec
+        test_flow_dissector:PASS:ipv6-flow-label 36 nsec
+        test_flow_dissector:PASS:ipv6-no-flow-label 33 nsec
+        test_flow_dissector:PASS:ipv6-no-flow-label 33 nsec
 
-QUEUE and STACK maps are not supported.
+        test_flow_dissector:PASS:ipip-encap 38 nsec
+        test_flow_dissector:PASS:ipip-encap 38 nsec
+        test_flow_dissector:PASS:ipip-no-encap 32 nsec
+        test_flow_dissector:PASS:ipip-no-encap 32 nsec
 
-Note that map_dump doesn't guarantee that reading the entire table is
-consistent since this function is always racing with kernel and user code
-but the same behaviour is found when the entire table is walked using
-the current interfaces: map_get_next_key + map_lookup_elem.
-It is also important to note that with  a locked map, the lock is grabbed
-for 1 entry at the time, meaning that the returned buf might or might not
-be consistent.
+The improvement is around 10%, but it's in a tight cache-hot
+BPF_PROG_TEST_RUN loop.
 
-Suggested-by: Stanislav Fomichev <sdf@google.com>
-Signed-off-by: Brian Vazquez <brianvv@google.com>
----
- include/uapi/linux/bpf.h |   9 +++
- kernel/bpf/syscall.c     | 117 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 126 insertions(+)
+Cc: Willem de Bruijn <willemb@google.com>
+Cc: Petar Penkov <ppenkov@google.com>
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index fa1c753dcdbc7..66dab5385170d 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -106,6 +106,7 @@ enum bpf_cmd {
- 	BPF_TASK_FD_QUERY,
- 	BPF_MAP_LOOKUP_AND_DELETE_ELEM,
- 	BPF_MAP_FREEZE,
-+	BPF_MAP_DUMP,
- };
- 
- enum bpf_map_type {
-@@ -388,6 +389,14 @@ union bpf_attr {
- 		__u64		flags;
- 	};
- 
-+	struct { /* struct used by BPF_MAP_DUMP command */
-+		__aligned_u64	prev_key;
-+		__aligned_u64	buf;
-+		__aligned_u64	buf_len; /* input/output: len of buf */
-+		__u64		flags;
-+		__u32		map_fd;
-+	} dump;
-+
- 	struct { /* anonymous struct used by BPF_PROG_LOAD command */
- 		__u32		prog_type;	/* one of enum bpf_prog_type */
- 		__u32		insn_cnt;
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 86cdc2f7bb56e..0c35505aa219f 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1097,6 +1097,120 @@ static int map_get_next_key(union bpf_attr *attr)
- 	return err;
- }
- 
-+/* last field in 'union bpf_attr' used by this command */
-+#define BPF_MAP_DUMP_LAST_FIELD dump.map_fd
-+
-+static int map_dump(union bpf_attr *attr)
-+{
-+	void __user *ukey = u64_to_user_ptr(attr->dump.prev_key);
-+	void __user *ubuf = u64_to_user_ptr(attr->dump.buf);
-+	u32 __user *ubuf_len = u64_to_user_ptr(attr->dump.buf_len);
-+	int ufd = attr->dump.map_fd;
-+	struct bpf_map *map;
-+	void *buf, *prev_key, *key, *value;
-+	u32 value_size, elem_size, buf_len, cp_len;
-+	struct fd f;
-+	int err;
-+	bool first_key = false;
-+
-+	if (CHECK_ATTR(BPF_MAP_DUMP))
-+		return -EINVAL;
-+
-+	if (attr->dump.flags & ~BPF_F_LOCK)
-+		return -EINVAL;
-+
-+	f = fdget(ufd);
-+	map = __bpf_map_get(f);
-+	if (IS_ERR(map))
-+		return PTR_ERR(map);
-+	if (!(map_get_sys_perms(map, f) & FMODE_CAN_READ)) {
-+		err = -EPERM;
-+		goto err_put;
-+	}
-+
-+	if ((attr->dump.flags & BPF_F_LOCK) &&
-+	    !map_value_has_spin_lock(map)) {
-+		err = -EINVAL;
-+		goto err_put;
-+	}
-+
-+	if (map->map_type == BPF_MAP_TYPE_QUEUE ||
-+	    map->map_type == BPF_MAP_TYPE_STACK) {
-+		err = -ENOTSUPP;
-+		goto err_put;
-+	}
-+
-+	value_size = bpf_map_value_size(map);
-+
-+	err = get_user(buf_len, ubuf_len);
-+	if (err)
-+		goto err_put;
-+
-+	elem_size = map->key_size + value_size;
-+	if (buf_len < elem_size) {
-+		err = -EINVAL;
-+		goto err_put;
-+	}
-+
-+	if (ukey) {
-+		prev_key = __bpf_copy_key(ukey, map->key_size);
-+		if (IS_ERR(prev_key)) {
-+			err = PTR_ERR(prev_key);
-+			goto err_put;
-+		}
-+	} else {
-+		prev_key = NULL;
-+		first_key = true;
-+	}
-+
-+	err = -ENOMEM;
-+	buf = kmalloc(elem_size, GFP_USER | __GFP_NOWARN);
-+	if (!buf)
-+		goto err_put;
-+
-+	key = buf;
-+	value = key + map->key_size;
-+	for (cp_len = 0; cp_len + elem_size <= buf_len;) {
-+		if (signal_pending(current)) {
-+			err = -EINTR;
-+			break;
-+		}
-+
-+		rcu_read_lock();
-+		err = map->ops->map_get_next_key(map, prev_key, key);
-+		rcu_read_unlock();
-+
-+		if (err)
-+			break;
-+
-+		err = bpf_map_copy_value(map, key, value, attr->dump.flags);
-+
-+		if (err == -ENOENT)
-+			continue;
-+		if (err)
-+			goto free_buf;
-+
-+		if (copy_to_user(ubuf + cp_len, buf, elem_size)) {
-+			err = -EFAULT;
-+			goto free_buf;
-+		}
-+
-+		prev_key = key;
-+		cp_len += elem_size;
-+	}
-+
-+	if (err == -ENOENT && cp_len)
-+		err = 0;
-+	if (!err && (copy_to_user(ubuf_len, &cp_len, sizeof(cp_len)) ||
-+		    (!first_key && copy_to_user(ukey, key, map->key_size))))
-+		err = -EFAULT;
-+free_buf:
-+	kfree(buf);
-+err_put:
-+	fdput(f);
-+	return err;
-+}
-+
- #define BPF_MAP_LOOKUP_AND_DELETE_ELEM_LAST_FIELD value
- 
- static int map_lookup_and_delete_elem(union bpf_attr *attr)
-@@ -2910,6 +3024,9 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, siz
- 	case BPF_MAP_LOOKUP_AND_DELETE_ELEM:
- 		err = map_lookup_and_delete_elem(&attr);
- 		break;
-+	case BPF_MAP_DUMP:
-+		err = map_dump(&attr);
-+		break;
- 	default:
- 		err = -EINVAL;
- 		break;
+Stanislav Fomichev (7):
+  bpf/flow_dissector: pass input flags to BPF flow dissector program
+  bpf/flow_dissector: document flags
+  bpf/flow_dissector: support flags in BPF_PROG_TEST_RUN
+  tools/bpf: sync bpf_flow_keys flags
+  sefltests/bpf: support FLOW_DISSECTOR_F_PARSE_1ST_FRAG
+  bpf/flow_dissector: support ipv6 flow_label and
+    FLOW_DISSECTOR_F_STOP_AT_FLOW_LABEL
+  selftests/bpf: support FLOW_DISSECTOR_F_STOP_AT_ENCAP
+
+ Documentation/bpf/prog_flow_dissector.rst     |  18 ++
+ include/linux/skbuff.h                        |   2 +-
+ include/net/flow_dissector.h                  |   4 -
+ include/uapi/linux/bpf.h                      |   6 +
+ net/bpf/test_run.c                            |  39 ++-
+ net/core/flow_dissector.c                     |  14 +-
+ tools/include/uapi/linux/bpf.h                |   6 +
+ .../selftests/bpf/prog_tests/flow_dissector.c | 235 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/bpf_flow.c  |  46 +++-
+ 9 files changed, 353 insertions(+), 17 deletions(-)
+
 -- 
 2.22.0.657.g960e92d24f-goog
-
