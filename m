@@ -2,85 +2,120 @@ Return-Path: <SRS0=hBvA=VV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DATE_IN_PAST_06_12,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E01BC7618B
-	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 13:26:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84AF3C7618B
+	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 13:27:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7DB11229FA
-	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 13:26:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 557FC229FA
+	for <bpf@archiver.kernel.org>; Wed, 24 Jul 2019 13:27:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ts5E6cak"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728010AbfGXN0s (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Jul 2019 09:26:48 -0400
-Received: from mga01.intel.com ([192.55.52.88]:14367 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726508AbfGXN0s (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Jul 2019 09:26:48 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Jul 2019 06:26:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,303,1559545200"; 
-   d="scan'208";a="369295236"
-Received: from silpixa00399838.ir.intel.com (HELO silpixa00399838.ger.corp.intel.com) ([10.237.223.140])
-  by fmsmga006.fm.intel.com with ESMTP; 24 Jul 2019 06:26:44 -0700
-From:   Kevin Laatz <kevin.laatz@intel.com>
-To:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        bjorn.topel@intel.com, magnus.karlsson@intel.com,
-        jakub.kicinski@netronome.com, jonathan.lemon@gmail.com,
-        saeedm@mellanox.com, maximmi@mellanox.com,
-        stephen@networkplumber.org
-Cc:     bruce.richardson@intel.com, ciara.loftus@intel.com,
-        bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        Kevin Laatz <kevin.laatz@intel.com>
-Subject: [PATCH bpf-next v3 11/11] doc/af_xdp: include unaligned chunk case
-Date:   Wed, 24 Jul 2019 05:10:43 +0000
-Message-Id: <20190724051043.14348-12-kevin.laatz@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190724051043.14348-1-kevin.laatz@intel.com>
-References: <20190716030637.5634-1-kevin.laatz@intel.com>
- <20190724051043.14348-1-kevin.laatz@intel.com>
+        id S1725870AbfGXN1u (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Jul 2019 09:27:50 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:33879 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725882AbfGXN1t (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Jul 2019 09:27:49 -0400
+Received: by mail-oi1-f195.google.com with SMTP id l12so35013167oil.1;
+        Wed, 24 Jul 2019 06:27:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=D3nfT2AYfvcWNX6C4tYDq8AelH7LpYUNw5f6JDGcCi4=;
+        b=Ts5E6cak4gKsQtDuVaUoYQjfi4Fars7QGaODnzf0sOIdoq+M22ArMpqO7gL0uMrp+x
+         HayWpfOmKyV/GOJJwStOFUxL1tU1Kj5egy1KPy0HToxYGVTyNhFQnuzBl+d/VWBpUhRi
+         eYI245UPkW2i4qB3zGlnCcnT1ZH2hZqGoMsmlHOkwmazcNw0YvhspKZGiN3sOZJXEO/5
+         nQRXruRU91Yv0UBiNZ4bMgDwN0/203grFc+T28EQZ3f362gJ7j2uy/LwA0G0GBDBinQP
+         umV9ebvHg64TIE8+TzfjqeNYwmsEFi88lUIgCrBP0JOveJNXXiQ2cE707TGOz+jckAvW
+         fqyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=D3nfT2AYfvcWNX6C4tYDq8AelH7LpYUNw5f6JDGcCi4=;
+        b=IR1/INbvTjdEePbQ+LxgmSWkEkPTqHkV39ngjD/MUU6sx4eKM4N7dedwXM987gHw5o
+         0TausBoIuCZlSO8YNAJqS7NOnuPFIM5JDp1x6gK6Y/py5bfZCzNb1oNHYkwlZrnNgMNq
+         ggsKKphLiStiEsVHEDB48eS+LYqSllZa1W5EDXQrkEuGmL4HnvbP1Dsd7dujRKG5zHUk
+         7Pti3vSnCnjgaoi10GpodA2LcXx+FSuNWZtOkaS39Db5ylxu4qArVytpBmYjZJXwBYZH
+         HzgNmoO0zCgSLTOrr/gcczO9oEXjtpD+IopYQaugdHmNc4fWeqLSk38OPSfTHzgIbKR5
+         Ry4g==
+X-Gm-Message-State: APjAAAVhPEoiSccbp8MsM16x+4OVXArcHyNG1skqfhtKiGg09DwaZhL/
+        4m7j5amg2FyqapcKBYblX/txP+aYfDQkWCwMPmLc5ltYlwqmHw==
+X-Google-Smtp-Source: APXvYqxAgeTd/a8HBW6CBSZcAe9204R7/yTv8UddJqu5NB1wOBZ3N1Co6fGgk4bDSNrfK73xA0M3ZeAncwYoCpDOBuY=
+X-Received: by 2002:aca:f441:: with SMTP id s62mr41989789oih.109.1563974868904;
+ Wed, 24 Jul 2019 06:27:48 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190723220127.1815913-1-andriin@fb.com>
+In-Reply-To: <20190723220127.1815913-1-andriin@fb.com>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Wed, 24 Jul 2019 15:27:38 +0200
+Message-ID: <CAJ8uoz17j9hzDFaYXRmLc0ziC5mwRCAYvvjmCkfUKHbMtcAwcQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] libbpf: silence GCC8 warning about string truncation
+To:     Andrii Nakryiko <andriin@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        kernel-team@fb.com, Magnus Karlsson <magnus.karlsson@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The addition of unaligned chunks mode, the documentation needs to be
-updated to indicate that the incoming addr to the fill ring will only be
-masked if the user application is run in the aligned chunk mode. This patch
-also adds a line to explicitly indicate that the incoming addr will not be
-masked if running the user application in the unaligned chunk mode.
+On Wed, Jul 24, 2019 at 4:33 AM Andrii Nakryiko <andriin@fb.com> wrote:
+>
+> Despite a proper NULL-termination after strncpy(..., ..., IFNAMSIZ - 1),
+> GCC8 still complains about *expected* string truncation:
+>
+>   xsk.c:330:2: error: 'strncpy' output may be truncated copying 15 bytes
+>   from a string of length 15 [-Werror=stringop-truncation]
+>     strncpy(ifr.ifr_name, xsk->ifname, IFNAMSIZ - 1);
+>
+> This patch gets rid of the issue altogether by using memcpy instead.
+> There is no performance regression, as strncpy will still copy and fill
+> all of the bytes anyway.
 
-Signed-off-by: Kevin Laatz <kevin.laatz@intel.com>
----
- Documentation/networking/af_xdp.rst | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+Let us make GCC8 happy then :-). Thanks Andrii.
 
-diff --git a/Documentation/networking/af_xdp.rst b/Documentation/networking/af_xdp.rst
-index eeedc2e826aa..83f7ae5fc045 100644
---- a/Documentation/networking/af_xdp.rst
-+++ b/Documentation/networking/af_xdp.rst
-@@ -153,10 +153,12 @@ an example, if the UMEM is 64k and each chunk is 4k, then the UMEM has
- 
- Frames passed to the kernel are used for the ingress path (RX rings).
- 
--The user application produces UMEM addrs to this ring. Note that the
--kernel will mask the incoming addr. E.g. for a chunk size of 2k, the
--log2(2048) LSB of the addr will be masked off, meaning that 2048, 2050
--and 3000 refers to the same chunk.
-+The user application produces UMEM addrs to this ring. Note that, if
-+running the application with aligned chunk mode, the kernel will mask
-+the incoming addr.  E.g. for a chunk size of 2k, the log2(2048) LSB of
-+the addr will be masked off, meaning that 2048, 2050 and 3000 refers
-+to the same chunk. If the user application is run in the unaligned
-+chunks mode, then the incoming addr will be left untouched.
- 
- 
- UMEM Completion Ring
--- 
-2.17.1
+Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
 
+> Cc: Magnus Karlsson <magnus.karlsson@intel.com>
+> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> ---
+>  tools/lib/bpf/xsk.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+> index 5007b5d4fd2c..65f5dd556f99 100644
+> --- a/tools/lib/bpf/xsk.c
+> +++ b/tools/lib/bpf/xsk.c
+> @@ -327,7 +327,7 @@ static int xsk_get_max_queues(struct xsk_socket *xsk)
+>
+>         channels.cmd = ETHTOOL_GCHANNELS;
+>         ifr.ifr_data = (void *)&channels;
+> -       strncpy(ifr.ifr_name, xsk->ifname, IFNAMSIZ - 1);
+> +       memcpy(ifr.ifr_name, xsk->ifname, IFNAMSIZ - 1);
+>         ifr.ifr_name[IFNAMSIZ - 1] = '\0';
+>         err = ioctl(fd, SIOCETHTOOL, &ifr);
+>         if (err && errno != EOPNOTSUPP) {
+> @@ -517,7 +517,7 @@ int xsk_socket__create(struct xsk_socket **xsk_ptr, const char *ifname,
+>                 err = -errno;
+>                 goto out_socket;
+>         }
+> -       strncpy(xsk->ifname, ifname, IFNAMSIZ - 1);
+> +       memcpy(xsk->ifname, ifname, IFNAMSIZ - 1);
+>         xsk->ifname[IFNAMSIZ - 1] = '\0';
+>
+>         err = xsk_set_xdp_socket_config(&xsk->config, usr_config);
+> --
+> 2.17.1
+>
