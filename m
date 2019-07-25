@@ -2,244 +2,656 @@ Return-Path: <SRS0=eHXP=VW=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D90E6C76191
-	for <bpf@archiver.kernel.org>; Thu, 25 Jul 2019 15:34:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34059C7618B
+	for <bpf@archiver.kernel.org>; Thu, 25 Jul 2019 15:39:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AFC7E229F3
-	for <bpf@archiver.kernel.org>; Thu, 25 Jul 2019 15:34:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E1FE622BF5
+	for <bpf@archiver.kernel.org>; Thu, 25 Jul 2019 15:39:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HKwbSIA0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="uSBYSB3+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389213AbfGYPeD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Jul 2019 11:34:03 -0400
-Received: from mail-pl1-f202.google.com ([209.85.214.202]:49226 "EHLO
-        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389195AbfGYPeC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 25 Jul 2019 11:34:02 -0400
-Received: by mail-pl1-f202.google.com with SMTP id 65so26494658plf.16
-        for <bpf@vger.kernel.org>; Thu, 25 Jul 2019 08:34:01 -0700 (PDT)
+        id S1728495AbfGYPjE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Jul 2019 11:39:04 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:35880 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728392AbfGYPjE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 25 Jul 2019 11:39:04 -0400
+Received: by mail-pg1-f196.google.com with SMTP id l21so23231475pgm.3;
+        Thu, 25 Jul 2019 08:39:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=GCDFpw0uwYKg8zzlh+Y1kxTvxF1Qwih2k/AvYXFT5Ik=;
-        b=HKwbSIA0mCQhrV2+nOxZIkn2DYopPVzf3R8bk+nGOZrtqV79bm3fyXKHLwLho6yj/0
-         q9A8pZ7VWHkonV0ONoE9p+5WB7zcsvd9PGWrS7pQrOLkD+F6+pYCsnHWIKrKwbJxbD3Q
-         JxUe/8zBfBZxhpETICtOR8MkHwmKajG2X7frEY5+kYBWZ4KFtbO5DdtLc8lEtqtzFjDV
-         QjZYAw/FinWw03/J3djHZLiz4jkPdW/QZco/AaRsDDCtP77mJGJ5lB0d79ZQhDCQLo0Z
-         qwf0jjn6RQYkyAUH8K3BHpk4sgtJxgPu4pJmPMynOpYmt6mkvrGucGaf+sC2Gu6QicbA
-         yBlA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version;
+        bh=v/kxyE2A6Hzq4IW82IR6/A1CQmOHHC14Hx0JRZ6U23A=;
+        b=uSBYSB3+aKRS0Fne1g4ggLCLwZjxdBSvRdJRr4xwrNpkhdHp8pTigtw573rYZXiKWM
+         IU2dlNjH6VaHh7yo2RvReEMS4/M6opYS0X4uf6yNSIM5S9foXlnyhBtYDs/fmUBX28DK
+         FTUGb1RiI6gLxN68o5g9MlEB/jQJ9k5EwJfNk4Jawiy5Z+5i0CdJejXUj48rslBts+RN
+         wuDBxqWWbulTdVOi/xeTsK1Q/O0Sk6Z0+fvuGBSPfsb2O9Zu4ZZUPUst4d/Zh9a5JdQ3
+         KZqmdRgF/PAF6ixPughktNJL0N6ZBfycV2+wEhakjn+fiaaq9v5Ev1uEGhk58HM/Yupz
+         MIpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=GCDFpw0uwYKg8zzlh+Y1kxTvxF1Qwih2k/AvYXFT5Ik=;
-        b=pqVICmqWljIHdryXC3biS1aFkgLdY3LKChWnDbHPAphegUtTOrz12K7SJZAqgnEj7g
-         lp3K0SZrfBjruYFv9eHe2z3WPci9TbKMkP+hwIXn0rftG9Rl2x0Hcr4RT4Tt+A6rwj5k
-         IakNs62wz3RytUjkysXQh/qV0f6/YB4UrTxkTbAtCWXv5TUgwrwPXfIEioSgo0+NahqF
-         0hIoVLn00cWvdYFGxX06DUukkl8UdWLx/5qjnLRorDrwp0qEqV8ah1HMOodpjoocn56p
-         mjxbbWqGYc3YjGUeEyQAdnp1QIsJ1TZhkwud3/bEUFT3HLTza5RpfFp0TUgGgqQSo7Oz
-         kqtA==
-X-Gm-Message-State: APjAAAWAs6aV8FxEcV81ileu72T6tB2Nfzy0Ffx8g0nsTQglDw2ddsjB
-        hS0qydtCjU0nHHixzXvgjVdE6eU=
-X-Google-Smtp-Source: APXvYqxSgH8dRwQdP+gWtFYoqtycYvcefSC3FwyFRg24iKhyPYiKSqsjQnBF7qbvAilYR/uObeTSPtM=
-X-Received: by 2002:a63:c70d:: with SMTP id n13mr85830085pgg.171.1564068841043;
- Thu, 25 Jul 2019 08:34:01 -0700 (PDT)
-Date:   Thu, 25 Jul 2019 08:33:41 -0700
-In-Reply-To: <20190725153342.3571-1-sdf@google.com>
-Message-Id: <20190725153342.3571-7-sdf@google.com>
-Mime-Version: 1.0
-References: <20190725153342.3571-1-sdf@google.com>
-X-Mailer: git-send-email 2.22.0.657.g960e92d24f-goog
-Subject: [PATCH bpf-next v2 6/7] bpf/flow_dissector: support ipv6 flow_label
- and FLOW_DISSECTOR_F_STOP_AT_FLOW_LABEL
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        Stanislav Fomichev <sdf@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Song Liu <songliubraving@fb.com>,
-        Petar Penkov <ppenkov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version;
+        bh=v/kxyE2A6Hzq4IW82IR6/A1CQmOHHC14Hx0JRZ6U23A=;
+        b=DmXaZM/zNWk2CW4K1JOylcPQPj0U9pCPE1gYJX3QJjAaRL7limxkJh55DwarE6cwxM
+         tZyC1SvNPYS6G3Kh6h/TLRcnmQiG3SlFx4FjxnB9Sf9s4+uGNWqD/1wN4xoV5IFYAKbO
+         iPCcLe1pfLbCVq4DAL/lm9BJoEYyycHyWs73Imd4yA4xJ9E6Rh/d/TUeIMAuTOCfWLHL
+         pc9A+vWn2hS6eCAJVfcqB6Ad0sTuYsUpFUHuKZLS0VvPBw6is6Z+S5aYNaCZv6vMtl11
+         zyGq/73Em5wcGC7HXJunoN3mmsBrUCz8pWaS7d9dnojbdhJdCAz6qGejrFp0xJHljl5z
+         Zfsw==
+X-Gm-Message-State: APjAAAWj0rXhUG3XHrmxgGxlLm0afRCUW/4MALLpd8LA43vPP9EIS4Zk
+        YJzcDjDgaLjD6gz9/PtuGEE=
+X-Google-Smtp-Source: APXvYqz1U4LT/cMm9qR3fxtSvlxosoPhEpgOHIfOICTo/YQbO7uw2KUJBMVGbkvc7e5xLL4Q12Oa+g==
+X-Received: by 2002:a62:b515:: with SMTP id y21mr17620211pfe.213.1564069143337;
+        Thu, 25 Jul 2019 08:39:03 -0700 (PDT)
+Received: from [172.20.174.128] ([2620:10d:c090:180::1:622f])
+        by smtp.gmail.com with ESMTPSA id f6sm52701201pga.50.2019.07.25.08.39.01
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 25 Jul 2019 08:39:02 -0700 (PDT)
+From:   "Jonathan Lemon" <jonathan.lemon@gmail.com>
+To:     "Kevin Laatz" <kevin.laatz@intel.com>
+Cc:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        bjorn.topel@intel.com, magnus.karlsson@intel.com,
+        jakub.kicinski@netronome.com, saeedm@mellanox.com,
+        maximmi@mellanox.com, stephen@networkplumber.org,
+        bruce.richardson@intel.com, ciara.loftus@intel.com,
+        bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org
+Subject: Re: [PATCH bpf-next v3 03/11] xsk: add support to allow unaligned
+ chunk placement
+Date:   Thu, 25 Jul 2019 08:39:00 -0700
+X-Mailer: MailMate (1.12.5r5635)
+Message-ID: <E0F8C5B9-A4CD-47CD-8C72-F840161D178E@gmail.com>
+In-Reply-To: <20190724051043.14348-4-kevin.laatz@intel.com>
+References: <20190716030637.5634-1-kevin.laatz@intel.com>
+ <20190724051043.14348-1-kevin.laatz@intel.com>
+ <20190724051043.14348-4-kevin.laatz@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; format=flowed
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add support for exporting ipv6 flow label via bpf_flow_keys.
-Export flow label from bpf_flow.c and also return early when
-FLOW_DISSECTOR_F_STOP_AT_FLOW_LABEL is passed.
 
-Acked-by: Willem de Bruijn <willemb@google.com>
-Acked-by: Song Liu <songliubraving@fb.com>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: Willem de Bruijn <willemb@google.com>
-Cc: Petar Penkov <ppenkov@google.com>
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- include/uapi/linux/bpf.h                      |  1 +
- net/core/flow_dissector.c                     |  9 ++++
- tools/include/uapi/linux/bpf.h                |  1 +
- .../selftests/bpf/prog_tests/flow_dissector.c | 46 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/bpf_flow.c  | 10 ++++
- 5 files changed, 67 insertions(+)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index b4ad19bd6aa8..83b4150466af 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -3533,6 +3533,7 @@ struct bpf_flow_keys {
- 		};
- 	};
- 	__u32	flags;
-+	__be32	flow_label;
- };
- 
- struct bpf_func_info {
-diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
-index a74c4ed1b30d..bcdb863cad28 100644
---- a/net/core/flow_dissector.c
-+++ b/net/core/flow_dissector.c
-@@ -737,6 +737,7 @@ static void __skb_flow_bpf_to_target(const struct bpf_flow_keys *flow_keys,
- 	struct flow_dissector_key_basic *key_basic;
- 	struct flow_dissector_key_addrs *key_addrs;
- 	struct flow_dissector_key_ports *key_ports;
-+	struct flow_dissector_key_tags *key_tags;
- 
- 	key_control = skb_flow_dissector_target(flow_dissector,
- 						FLOW_DISSECTOR_KEY_CONTROL,
-@@ -781,6 +782,14 @@ static void __skb_flow_bpf_to_target(const struct bpf_flow_keys *flow_keys,
- 		key_ports->src = flow_keys->sport;
- 		key_ports->dst = flow_keys->dport;
- 	}
-+
-+	if (dissector_uses_key(flow_dissector,
-+			       FLOW_DISSECTOR_KEY_FLOW_LABEL)) {
-+		key_tags = skb_flow_dissector_target(flow_dissector,
-+						     FLOW_DISSECTOR_KEY_FLOW_LABEL,
-+						     target_container);
-+		key_tags->flow_label = ntohl(flow_keys->flow_label);
-+	}
- }
- 
- bool bpf_flow_dissect(struct bpf_prog *prog, struct bpf_flow_dissector *ctx,
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index a0e1c891b56f..c26ca432b1b3 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3530,6 +3530,7 @@ struct bpf_flow_keys {
- 		};
- 	};
- 	__u32	flags;
-+	__be32	flow_label;
- };
- 
- struct bpf_func_info {
-diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-index f93a115db650..ada032be6199 100644
---- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-+++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-@@ -20,6 +20,7 @@
- 	      "is_encap=%u/%u "						\
- 	      "ip_proto=0x%x/0x%x "					\
- 	      "n_proto=0x%x/0x%x "					\
-+	      "flow_label=0x%x/0x%x "					\
- 	      "sport=%u/%u "						\
- 	      "dport=%u/%u\n",						\
- 	      got.nhoff, expected.nhoff,				\
-@@ -30,6 +31,7 @@
- 	      got.is_encap, expected.is_encap,				\
- 	      got.ip_proto, expected.ip_proto,				\
- 	      got.n_proto, expected.n_proto,				\
-+	      got.flow_label, expected.flow_label,			\
- 	      got.sport, expected.sport,				\
- 	      got.dport, expected.dport)
- 
-@@ -257,6 +259,50 @@ struct test tests[] = {
- 			.is_first_frag = true,
- 		},
- 	},
-+	{
-+		.name = "ipv6-flow-label",
-+		.pkt.ipv6 = {
-+			.eth.h_proto = __bpf_constant_htons(ETH_P_IPV6),
-+			.iph.nexthdr = IPPROTO_TCP,
-+			.iph.payload_len = __bpf_constant_htons(MAGIC_BYTES),
-+			.iph.flow_lbl = { 0xb, 0xee, 0xef },
-+			.tcp.doff = 5,
-+			.tcp.source = 80,
-+			.tcp.dest = 8080,
-+		},
-+		.keys = {
-+			.nhoff = ETH_HLEN,
-+			.thoff = ETH_HLEN + sizeof(struct ipv6hdr),
-+			.addr_proto = ETH_P_IPV6,
-+			.ip_proto = IPPROTO_TCP,
-+			.n_proto = __bpf_constant_htons(ETH_P_IPV6),
-+			.sport = 80,
-+			.dport = 8080,
-+			.flow_label = __bpf_constant_htonl(0xbeeef),
-+		},
-+	},
-+	{
-+		.name = "ipv6-no-flow-label",
-+		.pkt.ipv6 = {
-+			.eth.h_proto = __bpf_constant_htons(ETH_P_IPV6),
-+			.iph.nexthdr = IPPROTO_TCP,
-+			.iph.payload_len = __bpf_constant_htons(MAGIC_BYTES),
-+			.iph.flow_lbl = { 0xb, 0xee, 0xef },
-+			.tcp.doff = 5,
-+			.tcp.source = 80,
-+			.tcp.dest = 8080,
-+		},
-+		.keys = {
-+			.flags = FLOW_DISSECTOR_F_STOP_AT_FLOW_LABEL,
-+			.nhoff = ETH_HLEN,
-+			.thoff = ETH_HLEN + sizeof(struct ipv6hdr),
-+			.addr_proto = ETH_P_IPV6,
-+			.ip_proto = IPPROTO_TCP,
-+			.n_proto = __bpf_constant_htons(ETH_P_IPV6),
-+			.flow_label = __bpf_constant_htonl(0xbeeef),
-+		},
-+		.flags = FLOW_DISSECTOR_F_STOP_AT_FLOW_LABEL,
-+	},
- };
- 
- static int create_tap(const char *ifname)
-diff --git a/tools/testing/selftests/bpf/progs/bpf_flow.c b/tools/testing/selftests/bpf/progs/bpf_flow.c
-index 0eabe5e57944..7d73b7bfe609 100644
---- a/tools/testing/selftests/bpf/progs/bpf_flow.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_flow.c
-@@ -83,6 +83,12 @@ static __always_inline int export_flow_keys(struct bpf_flow_keys *keys,
- 	return ret;
- }
- 
-+#define IPV6_FLOWLABEL_MASK		__bpf_constant_htonl(0x000FFFFF)
-+static inline __be32 ip6_flowlabel(const struct ipv6hdr *hdr)
-+{
-+	return *(__be32 *)hdr & IPV6_FLOWLABEL_MASK;
-+}
-+
- static __always_inline void *bpf_flow_dissect_get_header(struct __sk_buff *skb,
- 							 __u16 hdr_size,
- 							 void *buffer)
-@@ -307,6 +313,10 @@ PROG(IPV6)(struct __sk_buff *skb)
- 
- 	keys->thoff += sizeof(struct ipv6hdr);
- 	keys->ip_proto = ip6h->nexthdr;
-+	keys->flow_label = ip6_flowlabel(ip6h);
-+
-+	if (keys->flags & FLOW_DISSECTOR_F_STOP_AT_FLOW_LABEL)
-+		return export_flow_keys(keys, BPF_OK);
- 
- 	return parse_ipv6_proto(skb, ip6h->nexthdr);
- }
--- 
-2.22.0.657.g960e92d24f-goog
+On 23 Jul 2019, at 22:10, Kevin Laatz wrote:
 
+> Currently, addresses are chunk size aligned. This means, we are very
+> restricted in terms of where we can place chunk within the umem. For
+> example, if we have a chunk size of 2k, then our chunks can only be 
+> placed
+> at 0,2k,4k,6k,8k... and so on (ie. every 2k starting from 0).
+>
+> This patch introduces the ability to use unaligned chunks. With these
+> changes, we are no longer bound to having to place chunks at a 2k (or
+> whatever your chunk size is) interval. Since we are no longer dealing 
+> with
+> aligned chunks, they can now cross page boundaries. Checks for page
+> contiguity have been added in order to keep track of which pages are
+> followed by a physically contiguous page.
+>
+> Signed-off-by: Kevin Laatz <kevin.laatz@intel.com>
+> Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
+> Signed-off-by: Bruce Richardson <bruce.richardson@intel.com>
+>
+> ---
+> v2:
+>   - Add checks for the flags coming from userspace
+>   - Fix how we get chunk_size in xsk_diag.c
+>   - Add defines for masking the new descriptor format
+>   - Modified the rx functions to use new descriptor format
+>   - Modified the tx functions to use new descriptor format
+>
+> v3:
+>   - Add helper function to do address/offset masking/addition
+> ---
+>  include/net/xdp_sock.h      | 17 ++++++++
+>  include/uapi/linux/if_xdp.h |  9 ++++
+>  net/xdp/xdp_umem.c          | 18 +++++---
+>  net/xdp/xsk.c               | 86 
+> ++++++++++++++++++++++++++++++-------
+>  net/xdp/xsk_diag.c          |  2 +-
+>  net/xdp/xsk_queue.h         | 68 +++++++++++++++++++++++++----
+>  6 files changed, 170 insertions(+), 30 deletions(-)
+>
+> diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
+> index 69796d264f06..738996c0f995 100644
+> --- a/include/net/xdp_sock.h
+> +++ b/include/net/xdp_sock.h
+> @@ -19,6 +19,7 @@ struct xsk_queue;
+>  struct xdp_umem_page {
+>  	void *addr;
+>  	dma_addr_t dma;
+> +	bool next_pg_contig;
+>  };
+>
+>  struct xdp_umem_fq_reuse {
+> @@ -48,6 +49,7 @@ struct xdp_umem {
+>  	bool zc;
+>  	spinlock_t xsk_list_lock;
+>  	struct list_head xsk_list;
+> +	u32 flags;
+>  };
+>
+>  struct xdp_sock {
+> @@ -144,6 +146,15 @@ static inline void xsk_umem_fq_reuse(struct 
+> xdp_umem *umem, u64 addr)
+>
+>  	rq->handles[rq->length++] = addr;
+>  }
+> +
+> +static inline u64 xsk_umem_handle_offset(struct xdp_umem *umem, u64 
+> handle,
+> +					 u64 offset)
+> +{
+> +	if (umem->flags & XDP_UMEM_UNALIGNED_CHUNKS)
+> +		return handle |= (offset << XSK_UNALIGNED_BUF_OFFSET_SHIFT);
+> +	else
+> +		return handle += offset;
+> +}
+
+This should be something like 'xsk_umem_adjust_offset()', and use "+=" 
+for both cases.
+
+
+>  #else
+>  static inline int xsk_generic_rcv(struct xdp_sock *xs, struct 
+> xdp_buff *xdp)
+>  {
+> @@ -241,6 +252,12 @@ static inline void xsk_umem_fq_reuse(struct 
+> xdp_umem *umem, u64 addr)
+>  {
+>  }
+>
+> +static inline u64 xsk_umem_handle_offset(struct xdp_umem *umem, u64 
+> handle,
+> +					 u64 offset)
+> +{
+> +	return NULL;
+> +}
+> +
+>  #endif /* CONFIG_XDP_SOCKETS */
+>
+>  #endif /* _LINUX_XDP_SOCK_H */
+> diff --git a/include/uapi/linux/if_xdp.h b/include/uapi/linux/if_xdp.h
+> index faaa5ca2a117..f8dc68fcdf78 100644
+> --- a/include/uapi/linux/if_xdp.h
+> +++ b/include/uapi/linux/if_xdp.h
+> @@ -17,6 +17,9 @@
+>  #define XDP_COPY	(1 << 1) /* Force copy-mode */
+>  #define XDP_ZEROCOPY	(1 << 2) /* Force zero-copy mode */
+>
+> +/* Flags for xsk_umem_config flags */
+> +#define XDP_UMEM_UNALIGNED_CHUNKS (1 << 0)
+> +
+>  struct sockaddr_xdp {
+>  	__u16 sxdp_family;
+>  	__u16 sxdp_flags;
+> @@ -53,6 +56,7 @@ struct xdp_umem_reg {
+>  	__u64 len; /* Length of packet data area */
+>  	__u32 chunk_size;
+>  	__u32 headroom;
+> +	__u32 flags;
+>  };
+>
+>  struct xdp_statistics {
+> @@ -74,6 +78,11 @@ struct xdp_options {
+>  #define XDP_UMEM_PGOFF_FILL_RING	0x100000000ULL
+>  #define XDP_UMEM_PGOFF_COMPLETION_RING	0x180000000ULL
+>
+> +/* Masks for unaligned chunks mode */
+> +#define XSK_UNALIGNED_BUF_OFFSET_SHIFT 48
+> +#define XSK_UNALIGNED_BUF_ADDR_MASK \
+> +	((1ULL << XSK_UNALIGNED_BUF_OFFSET_SHIFT) - 1)
+> +
+>  /* Rx/Tx descriptor */
+>  struct xdp_desc {
+>  	__u64 addr;
+> diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
+> index 83de74ca729a..952ca22103e9 100644
+> --- a/net/xdp/xdp_umem.c
+> +++ b/net/xdp/xdp_umem.c
+> @@ -299,6 +299,7 @@ static int xdp_umem_account_pages(struct xdp_umem 
+> *umem)
+>
+>  static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg 
+> *mr)
+>  {
+> +	bool unaligned_chunks = mr->flags & XDP_UMEM_UNALIGNED_CHUNKS;
+>  	u32 chunk_size = mr->chunk_size, headroom = mr->headroom;
+>  	unsigned int chunks, chunks_per_page;
+>  	u64 addr = mr->addr, size = mr->len;
+> @@ -314,7 +315,10 @@ static int xdp_umem_reg(struct xdp_umem *umem, 
+> struct xdp_umem_reg *mr)
+>  		return -EINVAL;
+>  	}
+>
+> -	if (!is_power_of_2(chunk_size))
+> +	if (mr->flags & ~(XDP_UMEM_UNALIGNED_CHUNKS))
+> +		return -EINVAL;
+> +
+> +	if (!unaligned_chunks && !is_power_of_2(chunk_size))
+>  		return -EINVAL;
+>
+>  	if (!PAGE_ALIGNED(addr)) {
+> @@ -331,9 +335,11 @@ static int xdp_umem_reg(struct xdp_umem *umem, 
+> struct xdp_umem_reg *mr)
+>  	if (chunks == 0)
+>  		return -EINVAL;
+>
+> -	chunks_per_page = PAGE_SIZE / chunk_size;
+> -	if (chunks < chunks_per_page || chunks % chunks_per_page)
+> -		return -EINVAL;
+> +	if (!unaligned_chunks) {
+> +		chunks_per_page = PAGE_SIZE / chunk_size;
+> +		if (chunks < chunks_per_page || chunks % chunks_per_page)
+> +			return -EINVAL;
+> +	}
+>
+>  	headroom = ALIGN(headroom, 64);
+>
+> @@ -342,13 +348,15 @@ static int xdp_umem_reg(struct xdp_umem *umem, 
+> struct xdp_umem_reg *mr)
+>  		return -EINVAL;
+>
+>  	umem->address = (unsigned long)addr;
+> -	umem->chunk_mask = ~((u64)chunk_size - 1);
+> +	umem->chunk_mask = unaligned_chunks ? XSK_UNALIGNED_BUF_ADDR_MASK
+> +					    : ~((u64)chunk_size - 1);
+
+The handle needs to be cleaned (reset to base address) when removed
+from the fill queue or recycle stack.  This will not provide the correct
+semantics for unaligned mode.
+
+
+>  	umem->size = size;
+>  	umem->headroom = headroom;
+>  	umem->chunk_size_nohr = chunk_size - headroom;
+>  	umem->npgs = size / PAGE_SIZE;
+>  	umem->pgs = NULL;
+>  	umem->user = NULL;
+> +	umem->flags = mr->flags;
+>  	INIT_LIST_HEAD(&umem->xsk_list);
+>  	spin_lock_init(&umem->xsk_list_lock);
+>
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 59b57d708697..b3ab653091c4 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -45,7 +45,7 @@ EXPORT_SYMBOL(xsk_umem_has_addrs);
+>
+>  u64 *xsk_umem_peek_addr(struct xdp_umem *umem, u64 *addr)
+>  {
+> -	return xskq_peek_addr(umem->fq, addr);
+> +	return xskq_peek_addr(umem->fq, addr, umem);
+>  }
+>  EXPORT_SYMBOL(xsk_umem_peek_addr);
+>
+> @@ -55,21 +55,42 @@ void xsk_umem_discard_addr(struct xdp_umem *umem)
+>  }
+>  EXPORT_SYMBOL(xsk_umem_discard_addr);
+>
+> +/* If a buffer crosses a page boundary, we need to do 2 memcpy's, one 
+> for
+> + * each page. This is only required in copy mode.
+> + */
+> +static void __xsk_rcv_memcpy(struct xdp_umem *umem, u64 addr, void 
+> *from_buf,
+> +			     u32 len, u32 metalen)
+> +{
+> +	void *to_buf = xdp_umem_get_data(umem, addr);
+> +
+> +	if (xskq_crosses_non_contig_pg(umem, addr, len + metalen)) {
+> +		void *next_pg_addr = umem->pages[(addr >> PAGE_SHIFT) + 1].addr;
+> +		u64 page_start = addr & (PAGE_SIZE - 1);
+> +		u64 first_len = PAGE_SIZE - (addr - page_start);
+> +
+> +		memcpy(to_buf, from_buf, first_len + metalen);
+> +		memcpy(next_pg_addr, from_buf + first_len, len - first_len);
+> +
+> +		return;
+> +	}
+> +
+> +	memcpy(to_buf, from_buf, len + metalen);
+> +}
+> +
+>  static int __xsk_rcv(struct xdp_sock *xs, struct xdp_buff *xdp, u32 
+> len)
+>  {
+> -	void *to_buf, *from_buf;
+> +	u64 offset = xs->umem->headroom;
+> +	void *from_buf;
+>  	u32 metalen;
+>  	u64 addr;
+>  	int err;
+>
+> -	if (!xskq_peek_addr(xs->umem->fq, &addr) ||
+> +	if (!xskq_peek_addr(xs->umem->fq, &addr, xs->umem) ||
+>  	    len > xs->umem->chunk_size_nohr - XDP_PACKET_HEADROOM) {
+>  		xs->rx_dropped++;
+>  		return -ENOSPC;
+>  	}
+>
+> -	addr += xs->umem->headroom;
+> -
+>  	if (unlikely(xdp_data_meta_unsupported(xdp))) {
+>  		from_buf = xdp->data;
+>  		metalen = 0;
+> @@ -78,9 +99,13 @@ static int __xsk_rcv(struct xdp_sock *xs, struct 
+> xdp_buff *xdp, u32 len)
+>  		metalen = xdp->data - xdp->data_meta;
+>  	}
+>
+> -	to_buf = xdp_umem_get_data(xs->umem, addr);
+> -	memcpy(to_buf, from_buf, len + metalen);
+> -	addr += metalen;
+> +	__xsk_rcv_memcpy(xs->umem, addr + offset, from_buf, len, metalen);
+> +
+> +	offset += metalen;
+> +	if (xs->umem->flags & XDP_UMEM_UNALIGNED_CHUNKS)
+> +		addr |= offset << XSK_UNALIGNED_BUF_OFFSET_SHIFT;
+> +	else
+> +		addr += offset;
+>  	err = xskq_produce_batch_desc(xs->rx, addr, len);
+>  	if (!err) {
+>  		xskq_discard_addr(xs->umem->fq);
+> @@ -127,6 +152,7 @@ int xsk_generic_rcv(struct xdp_sock *xs, struct 
+> xdp_buff *xdp)
+>  	u32 len = xdp->data_end - xdp->data;
+>  	void *buffer;
+>  	u64 addr;
+> +	u64 offset = xs->umem->headroom;
+>  	int err;
+>
+>  	spin_lock_bh(&xs->rx_lock);
+> @@ -136,17 +162,17 @@ int xsk_generic_rcv(struct xdp_sock *xs, struct 
+> xdp_buff *xdp)
+>  		goto out_unlock;
+>  	}
+>
+> -	if (!xskq_peek_addr(xs->umem->fq, &addr) ||
+> +	if (!xskq_peek_addr(xs->umem->fq, &addr, xs->umem) ||
+>  	    len > xs->umem->chunk_size_nohr - XDP_PACKET_HEADROOM) {
+>  		err = -ENOSPC;
+>  		goto out_drop;
+>  	}
+>
+> -	addr += xs->umem->headroom;
+> -
+> -	buffer = xdp_umem_get_data(xs->umem, addr);
+> +	buffer = xdp_umem_get_data(xs->umem, addr + offset);
+>  	memcpy(buffer, xdp->data_meta, len + metalen);
+> -	addr += metalen;
+> +	offset += metalen;
+> +
+> +	addr = xsk_umem_handle_offset(xs->umem, addr, offset);
+>  	err = xskq_produce_batch_desc(xs->rx, addr, len);
+>  	if (err)
+>  		goto out_drop;
+> @@ -190,7 +216,7 @@ bool xsk_umem_consume_tx(struct xdp_umem *umem, 
+> struct xdp_desc *desc)
+>
+>  	rcu_read_lock();
+>  	list_for_each_entry_rcu(xs, &umem->xsk_list, list) {
+> -		if (!xskq_peek_desc(xs->tx, desc))
+> +		if (!xskq_peek_desc(xs->tx, desc, umem))
+>  			continue;
+>
+>  		if (xskq_produce_addr_lazy(umem->cq, desc->addr))
+> @@ -243,7 +269,7 @@ static int xsk_generic_xmit(struct sock *sk, 
+> struct msghdr *m,
+>  	if (xs->queue_id >= xs->dev->real_num_tx_queues)
+>  		goto out;
+>
+> -	while (xskq_peek_desc(xs->tx, &desc)) {
+> +	while (xskq_peek_desc(xs->tx, &desc, xs->umem)) {
+>  		char *buffer;
+>  		u64 addr;
+>  		u32 len;
+> @@ -262,6 +288,10 @@ static int xsk_generic_xmit(struct sock *sk, 
+> struct msghdr *m,
+>
+>  		skb_put(skb, len);
+>  		addr = desc.addr;
+> +		if (xs->umem->flags & XDP_UMEM_UNALIGNED_CHUNKS)
+> +			addr = (addr & XSK_UNALIGNED_BUF_ADDR_MASK) |
+> +				(addr >> XSK_UNALIGNED_BUF_OFFSET_SHIFT);
+
+This doesn't look right to me.  Shouldn't it be "(addr & mask) + (addr 
+ >> shift)"?
+I'd also prefer to see this type of logic in an inline/macro
+
+> +
+>  		buffer = xdp_umem_get_data(xs->umem, addr);
+>  		err = skb_store_bits(skb, 0, buffer, len);
+>  		if (unlikely(err) || xskq_reserve_addr(xs->umem->cq)) {
+> @@ -272,7 +302,7 @@ static int xsk_generic_xmit(struct sock *sk, 
+> struct msghdr *m,
+>  		skb->dev = xs->dev;
+>  		skb->priority = sk->sk_priority;
+>  		skb->mark = sk->sk_mark;
+> -		skb_shinfo(skb)->destructor_arg = (void *)(long)addr;
+> +		skb_shinfo(skb)->destructor_arg = (void *)(long)desc.addr;
+>  		skb->destructor = xsk_destruct_skb;
+>
+>  		err = dev_direct_xmit(skb, xs->queue_id);
+> @@ -412,6 +442,28 @@ static struct socket *xsk_lookup_xsk_from_fd(int 
+> fd)
+>  	return sock;
+>  }
+>
+> +/* Check if umem pages are contiguous.
+> + * If zero-copy mode, use the DMA address to do the page contiguity 
+> check
+> + * For all other modes we use addr (kernel virtual address)
+> + */
+> +static void xsk_check_page_contiguity(struct xdp_umem *umem, u32 
+> flags)
+> +{
+> +	int i;
+> +
+> +	if (flags & XDP_ZEROCOPY) {
+> +		for (i = 0; i < umem->npgs - 1; i++)
+> +			umem->pages[i].next_pg_contig =
+> +					(umem->pages[i].dma + PAGE_SIZE ==
+> +						umem->pages[i + 1].dma);
+> +		return;
+> +	}
+> +
+> +	for (i = 0; i < umem->npgs - 1; i++)
+> +		umem->pages[i].next_pg_contig =
+> +				(umem->pages[i].addr + PAGE_SIZE ==
+> +					umem->pages[i + 1].addr);
+> +}
+> +
+>  static int xsk_bind(struct socket *sock, struct sockaddr *addr, int 
+> addr_len)
+>  {
+>  	struct sockaddr_xdp *sxdp = (struct sockaddr_xdp *)addr;
+> @@ -500,6 +552,8 @@ static int xsk_bind(struct socket *sock, struct 
+> sockaddr *addr, int addr_len)
+>  		err = xdp_umem_assign_dev(xs->umem, dev, qid, flags);
+>  		if (err)
+>  			goto out_unlock;
+> +
+> +		xsk_check_page_contiguity(xs->umem, flags);
+>  	}
+>
+>  	xs->dev = dev;
+> diff --git a/net/xdp/xsk_diag.c b/net/xdp/xsk_diag.c
+> index d5e06c8e0cbf..9986a759fe06 100644
+> --- a/net/xdp/xsk_diag.c
+> +++ b/net/xdp/xsk_diag.c
+> @@ -56,7 +56,7 @@ static int xsk_diag_put_umem(const struct xdp_sock 
+> *xs, struct sk_buff *nlskb)
+>  	du.id = umem->id;
+>  	du.size = umem->size;
+>  	du.num_pages = umem->npgs;
+> -	du.chunk_size = (__u32)(~umem->chunk_mask + 1);
+> +	du.chunk_size = umem->chunk_size_nohr + umem->headroom;
+>  	du.headroom = umem->headroom;
+>  	du.ifindex = umem->dev ? umem->dev->ifindex : 0;
+>  	du.queue_id = umem->queue_id;
+> diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
+> index 909c5168ed0f..0d77212367f0 100644
+> --- a/net/xdp/xsk_queue.h
+> +++ b/net/xdp/xsk_queue.h
+> @@ -133,6 +133,16 @@ static inline bool xskq_has_addrs(struct 
+> xsk_queue *q, u32 cnt)
+>
+>  /* UMEM queue */
+>
+> +static inline bool xskq_crosses_non_contig_pg(struct xdp_umem *umem, 
+> u64 addr,
+> +					      u64 length)
+> +{
+> +	bool cross_pg = (addr & (PAGE_SIZE - 1)) + length > PAGE_SIZE;
+> +	bool next_pg_contig =
+> +		umem->pages[(addr >> PAGE_SHIFT) + 1].next_pg_contig;
+> +
+> +	return cross_pg && !next_pg_contig;
+> +}
+> +
+>  static inline bool xskq_is_valid_addr(struct xsk_queue *q, u64 addr)
+>  {
+>  	if (addr >= q->size) {
+> @@ -143,23 +153,50 @@ static inline bool xskq_is_valid_addr(struct 
+> xsk_queue *q, u64 addr)
+>  	return true;
+>  }
+>
+> -static inline u64 *xskq_validate_addr(struct xsk_queue *q, u64 *addr)
+> +static inline bool xskq_is_valid_addr_unaligned(struct xsk_queue *q, 
+> u64 addr,
+> +						u64 length,
+> +						struct xdp_umem *umem)
+> +{
+> +	addr += addr >> XSK_UNALIGNED_BUF_OFFSET_SHIFT;
+> +	addr &= XSK_UNALIGNED_BUF_ADDR_MASK;
+> +	if (addr >= q->size ||
+> +	    xskq_crosses_non_contig_pg(umem, addr, length)) {
+> +		q->invalid_descs++;
+> +		return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +static inline u64 *xskq_validate_addr(struct xsk_queue *q, u64 *addr,
+> +				      struct xdp_umem *umem)
+>  {
+>  	while (q->cons_tail != q->cons_head) {
+>  		struct xdp_umem_ring *ring = (struct xdp_umem_ring *)q->ring;
+>  		unsigned int idx = q->cons_tail & q->ring_mask;
+>
+>  		*addr = READ_ONCE(ring->desc[idx]) & q->chunk_mask> +
+> +		if (umem->flags & XDP_UMEM_UNALIGNED_CHUNKS) {
+> +			if (xskq_is_valid_addr_unaligned(q, *addr,
+> +							 umem->chunk_size_nohr,
+> +							 umem))
+> +				return addr;
+> +			goto out;
+> +		}
+> +
+>  		if (xskq_is_valid_addr(q, *addr))
+>  			return addr;
+>
+> +out:
+>  		q->cons_tail++;
+>  	}
+>
+>  	return NULL;
+>  }
+>
+> -static inline u64 *xskq_peek_addr(struct xsk_queue *q, u64 *addr)
+> +static inline u64 *xskq_peek_addr(struct xsk_queue *q, u64 *addr,
+> +				  struct xdp_umem *umem)
+>  {
+>  	if (q->cons_tail == q->cons_head) {
+>  		smp_mb(); /* D, matches A */
+> @@ -170,7 +207,7 @@ static inline u64 *xskq_peek_addr(struct xsk_queue 
+> *q, u64 *addr)
+>  		smp_rmb();
+>  	}
+>
+> -	return xskq_validate_addr(q, addr);
+> +	return xskq_validate_addr(q, addr, umem);
+>  }
+>
+>  static inline void xskq_discard_addr(struct xsk_queue *q)
+> @@ -229,8 +266,21 @@ static inline int xskq_reserve_addr(struct 
+> xsk_queue *q)
+>
+>  /* Rx/Tx queue */
+>
+> -static inline bool xskq_is_valid_desc(struct xsk_queue *q, struct 
+> xdp_desc *d)
+> +static inline bool xskq_is_valid_desc(struct xsk_queue *q, struct 
+> xdp_desc *d,
+> +				      struct xdp_umem *umem)
+>  {
+> +	if (umem->flags & XDP_UMEM_UNALIGNED_CHUNKS) {
+> +		if (!xskq_is_valid_addr_unaligned(q, d->addr, d->len, umem))
+> +			return false;
+> +
+> +		if (d->len > umem->chunk_size_nohr || d->options) {
+> +			q->invalid_descs++;
+> +			return false;
+> +		}
+> +
+> +		return true;
+> +	}
+> +
+>  	if (!xskq_is_valid_addr(q, d->addr))
+>  		return false;
+>
+> @@ -244,14 +294,15 @@ static inline bool xskq_is_valid_desc(struct 
+> xsk_queue *q, struct xdp_desc *d)
+>  }
+>
+>  static inline struct xdp_desc *xskq_validate_desc(struct xsk_queue 
+> *q,
+> -						  struct xdp_desc *desc)
+> +						  struct xdp_desc *desc,
+> +						  struct xdp_umem *umem)
+>  {
+>  	while (q->cons_tail != q->cons_head) {
+>  		struct xdp_rxtx_ring *ring = (struct xdp_rxtx_ring *)q->ring;
+>  		unsigned int idx = q->cons_tail & q->ring_mask;
+>
+>  		*desc = READ_ONCE(ring->desc[idx]);
+> -		if (xskq_is_valid_desc(q, desc))
+> +		if (xskq_is_valid_desc(q, desc, umem))
+>  			return desc;
+>
+>  		q->cons_tail++;
+> @@ -261,7 +312,8 @@ static inline struct xdp_desc 
+> *xskq_validate_desc(struct xsk_queue *q,
+>  }
+>
+>  static inline struct xdp_desc *xskq_peek_desc(struct xsk_queue *q,
+> -					      struct xdp_desc *desc)
+> +					      struct xdp_desc *desc,
+> +					      struct xdp_umem *umem)
+>  {
+>  	if (q->cons_tail == q->cons_head) {
+>  		smp_mb(); /* D, matches A */
+> @@ -272,7 +324,7 @@ static inline struct xdp_desc 
+> *xskq_peek_desc(struct xsk_queue *q,
+>  		smp_rmb(); /* C, matches B */
+>  	}
+>
+> -	return xskq_validate_desc(q, desc);
+> +	return xskq_validate_desc(q, desc, umem);
+>  }
+>
+>  static inline void xskq_discard_desc(struct xsk_queue *q)
+> -- 
+> 2.17.1
