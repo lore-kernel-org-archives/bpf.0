@@ -8,56 +8,56 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87D5EC7618B
-	for <bpf@archiver.kernel.org>; Thu, 25 Jul 2019 15:34:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2982C76191
+	for <bpf@archiver.kernel.org>; Thu, 25 Jul 2019 15:34:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3E01E229F3
-	for <bpf@archiver.kernel.org>; Thu, 25 Jul 2019 15:34:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CA2A7229F3
+	for <bpf@archiver.kernel.org>; Thu, 25 Jul 2019 15:34:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="r5kb15Tx"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TETaKcXe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389201AbfGYPeC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Jul 2019 11:34:02 -0400
-Received: from mail-qk1-f201.google.com ([209.85.222.201]:40589 "EHLO
-        mail-qk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389193AbfGYPd7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 25 Jul 2019 11:33:59 -0400
-Received: by mail-qk1-f201.google.com with SMTP id c1so42610701qkl.7
-        for <bpf@vger.kernel.org>; Thu, 25 Jul 2019 08:33:59 -0700 (PDT)
+        id S2389231AbfGYPeF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Jul 2019 11:34:05 -0400
+Received: from mail-pf1-f202.google.com ([209.85.210.202]:47745 "EHLO
+        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389195AbfGYPeF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 25 Jul 2019 11:34:05 -0400
+Received: by mail-pf1-f202.google.com with SMTP id f25so31064601pfk.14
+        for <bpf@vger.kernel.org>; Thu, 25 Jul 2019 08:34:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=Fq6IZgW4iOignB5P3NDDYUqS650/L2ZWasm6xkd4wQI=;
-        b=r5kb15TxNspk5pTGy0JZeAumNmle01ejUcMAQjKiQxg1xN7QvTX2MJW5aHm49u7X2Z
-         Mh6OeTrsW4bSmuBRpyINHj9bE/7NutGmT76yNyDCz0IGCNKuOtLoRDuXFsPRbYfb7D+x
-         pBF+LS7GTTYkh+2LPLRtsEUdyePdYQPLH6dCfbFhvG8prnWhgE/KShizYPF5u1czQr5+
-         +pY1D+pPysQ2VFxMx+uyw9x7jmNTSpwIr6EewpjWcgWbBssNIF/704KCewibfrPwsoYa
-         lfZ92PYveB10vpFiknbspznULh+/euWSTCGdaj/AuLPX198Rqy6U9JvXGn34xiKGIVj4
-         E+Ow==
+        bh=cwc6MFuQeVYESzjjmb98s1+UYBUaqh95Zn6ch0zENRw=;
+        b=TETaKcXejX2FlpfjkqWWHA4Gf5x0ixuRBfgqI1bh+V3+PVgISKvJ2r+geazwh4H+sl
+         8NwfLm7XEy9gQtWItzVw/RRza0tpUiuhpXC3tByEdl8HMJGjHppV9ykVSy7nSDfMMtMi
+         xdkjM7w1Lk14V4Nk9OZiO6j+vZeCJ1DPFBJ5yTC7x+bZLRifgVlawu0BTYcHZnrb37Iu
+         MjGEP/HFGfMPsdMgKztzQr/m9u9oO+qVV3bKng17yjqCuKIKPLyyqv+exIMWCDcuM/rc
+         eK5/97NR5wgXWYuO0lf+zQE6N5DsnZ9vmE7fRJ3S05EIQnvN6hplurIJi4drGsJoeNBK
+         udLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=Fq6IZgW4iOignB5P3NDDYUqS650/L2ZWasm6xkd4wQI=;
-        b=tHrT5PNYPTgMEgMXluwLchf4PtmXDp4Ev6Dl1Npx1i0unsuK8TQxgDhruHGnrO7NMP
-         ftmIk9BXus/CePFpOM+nks8ih7Z7RHdvgbGWa6u2F0BaEylexC37dwcrh/cxWEY+XD+Q
-         Vho4bQTCJz7gTBJAnr1BLw4KMOGONi5rqfTAQVqT2FdV1azFmB14cXEpi9QHuGDY3w+v
-         pZtz4aD3R7cDlN28WZHnBlkOt/Sa8Cq1nRFBnRrdkkAUxwjHnzm/ZCU2cv2ERyUyAP9h
-         wugcPmKle1pPYMksd1Hsu3a1vqvjUZGeZ5++4+s7+ef/7J3BzV/IdOPv5P8yyUUyJEc9
-         d38g==
-X-Gm-Message-State: APjAAAVCveuayeD4yAONpnzUuAd8k4fyVa9xeHB3HQmmJh0oTa1in1VO
-        gmHwJLuxYeoJKUZjhwgroR4A60Q=
-X-Google-Smtp-Source: APXvYqwDKwqRzE9v9RUJzcj/K/w9EIFKEtuCpO0u5/zvR3exREZZ2yrLLLGj2SB/WXv6Zcw+Ncl5JJA=
-X-Received: by 2002:a05:620a:4:: with SMTP id j4mr58927359qki.269.1564068838815;
- Thu, 25 Jul 2019 08:33:58 -0700 (PDT)
-Date:   Thu, 25 Jul 2019 08:33:40 -0700
+        bh=cwc6MFuQeVYESzjjmb98s1+UYBUaqh95Zn6ch0zENRw=;
+        b=fgJCAaoVgIRus4DTltCqlX5YqlTEIwWRgGdyljpZ5xTM2PSLlQ6/dVxd32MXkzEG1n
+         2mXDpYUUzXX0NAjbsXG3I62Rk84KxFPNu20CvTgU4F16xyiryfCqHHGfb6w8qYoDBodP
+         nSJwLcCbjHWheQr6P6NMOUo/p7b/yVjpleOj54pbQw4sOqyo4w+XliNYwGiGzGWl31n4
+         js8EBlD8UJfgH9XCTRq13GJhXk/NgBjLlOMYPLgq9yAWGgNSepDveMKqQQJrldkKFyc9
+         jVDXtSoZuXAtx9AeaCINrqzoRuFuvS134O9Svql+A1sDSc4rnaeLL6wxhmC9BhMTe25r
+         4MrA==
+X-Gm-Message-State: APjAAAX1qeHcbXXUzWij8DoHnoOSDPdA2bPoAConTXj/IsaT/ycsW64Z
+        /kUwga0cCWvj/L8YzURE+QSSFj4=
+X-Google-Smtp-Source: APXvYqxsaIF0+3j3tO9QIyHUUbsUly3lsHn8bpSIYPZ8k8PLRjL0LFHG319mOWHjfLNH4T5YmHpzGhE=
+X-Received: by 2002:a63:dd17:: with SMTP id t23mr59456661pgg.295.1564068843582;
+ Thu, 25 Jul 2019 08:34:03 -0700 (PDT)
+Date:   Thu, 25 Jul 2019 08:33:42 -0700
 In-Reply-To: <20190725153342.3571-1-sdf@google.com>
-Message-Id: <20190725153342.3571-6-sdf@google.com>
+Message-Id: <20190725153342.3571-8-sdf@google.com>
 Mime-Version: 1.0
 References: <20190725153342.3571-1-sdf@google.com>
 X-Mailer: git-send-email 2.22.0.657.g960e92d24f-goog
-Subject: [PATCH bpf-next v2 5/7] selftests/bpf: support FLOW_DISSECTOR_F_PARSE_1ST_FRAG
+Subject: [PATCH bpf-next v2 7/7] selftests/bpf: support FLOW_DISSECTOR_F_STOP_AT_ENCAP
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
@@ -71,303 +71,142 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-bpf_flow.c: exit early unless FLOW_DISSECTOR_F_PARSE_1ST_FRAG is passed
-in flags. Also, set ip_proto earlier, this makes sure we have correct
-value with fragmented packets.
-
-Add selftest cases to test ipv4/ipv6 fragments and skip eth_get_headlen
-tests that don't have FLOW_DISSECTOR_F_PARSE_1ST_FRAG flag.
-
-eth_get_headlen calls flow dissector with
-FLOW_DISSECTOR_F_PARSE_1ST_FRAG flag so we can't run tests that
-have different set of input flags against it.
+Exit as soon as we found that packet is encapped when
+FLOW_DISSECTOR_F_STOP_AT_ENCAP is passed.
+Add appropriate selftest cases.
 
 v2:
- * sefltests -> selftests (Willem de Bruijn)
- * Reword a comment about eth_get_headlen flags (Song Liu)
+* Subtract sizeof(struct iphdr) from .iph_inner.tot_len (Willem de Bruijn)
 
 Acked-by: Willem de Bruijn <willemb@google.com>
+Acked-by: Song Liu <songliubraving@fb.com>
 Cc: Song Liu <songliubraving@fb.com>
 Cc: Willem de Bruijn <willemb@google.com>
 Cc: Petar Penkov <ppenkov@google.com>
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- .../selftests/bpf/prog_tests/flow_dissector.c | 132 +++++++++++++++++-
- tools/testing/selftests/bpf/progs/bpf_flow.c  |  28 +++-
- 2 files changed, 153 insertions(+), 7 deletions(-)
+ .../selftests/bpf/prog_tests/flow_dissector.c | 64 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/bpf_flow.c  |  8 +++
+ 2 files changed, 72 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-index c938283ac232..f93a115db650 100644
+index ada032be6199..15265c7a90a3 100644
 --- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
 +++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-@@ -5,6 +5,10 @@
- #include <linux/if_tun.h>
- #include <sys/uio.h>
- 
-+#ifndef IP_MF
-+#define IP_MF 0x2000
-+#endif
-+
- #define CHECK_FLOW_KEYS(desc, got, expected)				\
- 	CHECK_ATTR(memcmp(&got, &expected, sizeof(got)) != 0,		\
- 	      desc,							\
-@@ -49,6 +53,18 @@ struct ipv6_pkt {
+@@ -41,6 +41,13 @@ struct ipv4_pkt {
  	struct tcphdr tcp;
  } __packed;
  
-+struct ipv6_frag_pkt {
++struct ipip_pkt {
 +	struct ethhdr eth;
-+	struct ipv6hdr iph;
-+	struct frag_hdr {
-+		__u8 nexthdr;
-+		__u8 reserved;
-+		__be16 frag_off;
-+		__be32 identification;
-+	} ipf;
++	struct iphdr iph;
++	struct iphdr iph_inner;
 +	struct tcphdr tcp;
 +} __packed;
 +
- struct dvlan_ipv6_pkt {
+ struct svlan_ipv4_pkt {
  	struct ethhdr eth;
  	__u16 vlan_tci;
-@@ -65,9 +81,11 @@ struct test {
+@@ -82,6 +89,7 @@ struct test {
+ 	union {
  		struct ipv4_pkt ipv4;
  		struct svlan_ipv4_pkt svlan_ipv4;
++		struct ipip_pkt ipip;
  		struct ipv6_pkt ipv6;
-+		struct ipv6_frag_pkt ipv6_frag;
+ 		struct ipv6_frag_pkt ipv6_frag;
  		struct dvlan_ipv6_pkt dvlan_ipv6;
- 	} pkt;
- 	struct bpf_flow_keys keys;
-+	__u32 flags;
- };
- 
- #define VLAN_HLEN	4
-@@ -143,6 +161,102 @@ struct test tests[] = {
- 			.n_proto = __bpf_constant_htons(ETH_P_IPV6),
+@@ -303,6 +311,62 @@ struct test tests[] = {
  		},
+ 		.flags = FLOW_DISSECTOR_F_STOP_AT_FLOW_LABEL,
  	},
 +	{
-+		.name = "ipv4-frag",
-+		.pkt.ipv4 = {
++		.name = "ipip-encap",
++		.pkt.ipip = {
 +			.eth.h_proto = __bpf_constant_htons(ETH_P_IP),
 +			.iph.ihl = 5,
-+			.iph.protocol = IPPROTO_TCP,
++			.iph.protocol = IPPROTO_IPIP,
 +			.iph.tot_len = __bpf_constant_htons(MAGIC_BYTES),
-+			.iph.frag_off = __bpf_constant_htons(IP_MF),
++			.iph_inner.ihl = 5,
++			.iph_inner.protocol = IPPROTO_TCP,
++			.iph_inner.tot_len =
++				__bpf_constant_htons(MAGIC_BYTES) -
++				sizeof(struct iphdr),
 +			.tcp.doff = 5,
 +			.tcp.source = 80,
 +			.tcp.dest = 8080,
 +		},
 +		.keys = {
-+			.flags = FLOW_DISSECTOR_F_PARSE_1ST_FRAG,
++			.nhoff = 0,
 +			.nhoff = ETH_HLEN,
-+			.thoff = ETH_HLEN + sizeof(struct iphdr),
++			.thoff = ETH_HLEN + sizeof(struct iphdr) +
++				sizeof(struct iphdr),
 +			.addr_proto = ETH_P_IP,
 +			.ip_proto = IPPROTO_TCP,
 +			.n_proto = __bpf_constant_htons(ETH_P_IP),
-+			.is_frag = true,
-+			.is_first_frag = true,
++			.is_encap = true,
 +			.sport = 80,
 +			.dport = 8080,
 +		},
-+		.flags = FLOW_DISSECTOR_F_PARSE_1ST_FRAG,
 +	},
 +	{
-+		.name = "ipv4-no-frag",
-+		.pkt.ipv4 = {
++		.name = "ipip-no-encap",
++		.pkt.ipip = {
 +			.eth.h_proto = __bpf_constant_htons(ETH_P_IP),
 +			.iph.ihl = 5,
-+			.iph.protocol = IPPROTO_TCP,
++			.iph.protocol = IPPROTO_IPIP,
 +			.iph.tot_len = __bpf_constant_htons(MAGIC_BYTES),
-+			.iph.frag_off = __bpf_constant_htons(IP_MF),
++			.iph_inner.ihl = 5,
++			.iph_inner.protocol = IPPROTO_TCP,
++			.iph_inner.tot_len =
++				__bpf_constant_htons(MAGIC_BYTES) -
++				sizeof(struct iphdr),
 +			.tcp.doff = 5,
 +			.tcp.source = 80,
 +			.tcp.dest = 8080,
 +		},
 +		.keys = {
++			.flags = FLOW_DISSECTOR_F_STOP_AT_ENCAP,
 +			.nhoff = ETH_HLEN,
 +			.thoff = ETH_HLEN + sizeof(struct iphdr),
 +			.addr_proto = ETH_P_IP,
-+			.ip_proto = IPPROTO_TCP,
++			.ip_proto = IPPROTO_IPIP,
 +			.n_proto = __bpf_constant_htons(ETH_P_IP),
-+			.is_frag = true,
-+			.is_first_frag = true,
++			.is_encap = true,
 +		},
-+	},
-+	{
-+		.name = "ipv6-frag",
-+		.pkt.ipv6_frag = {
-+			.eth.h_proto = __bpf_constant_htons(ETH_P_IPV6),
-+			.iph.nexthdr = IPPROTO_FRAGMENT,
-+			.iph.payload_len = __bpf_constant_htons(MAGIC_BYTES),
-+			.ipf.nexthdr = IPPROTO_TCP,
-+			.tcp.doff = 5,
-+			.tcp.source = 80,
-+			.tcp.dest = 8080,
-+		},
-+		.keys = {
-+			.flags = FLOW_DISSECTOR_F_PARSE_1ST_FRAG,
-+			.nhoff = ETH_HLEN,
-+			.thoff = ETH_HLEN + sizeof(struct ipv6hdr) +
-+				sizeof(struct frag_hdr),
-+			.addr_proto = ETH_P_IPV6,
-+			.ip_proto = IPPROTO_TCP,
-+			.n_proto = __bpf_constant_htons(ETH_P_IPV6),
-+			.is_frag = true,
-+			.is_first_frag = true,
-+			.sport = 80,
-+			.dport = 8080,
-+		},
-+		.flags = FLOW_DISSECTOR_F_PARSE_1ST_FRAG,
-+	},
-+	{
-+		.name = "ipv6-no-frag",
-+		.pkt.ipv6_frag = {
-+			.eth.h_proto = __bpf_constant_htons(ETH_P_IPV6),
-+			.iph.nexthdr = IPPROTO_FRAGMENT,
-+			.iph.payload_len = __bpf_constant_htons(MAGIC_BYTES),
-+			.ipf.nexthdr = IPPROTO_TCP,
-+			.tcp.doff = 5,
-+			.tcp.source = 80,
-+			.tcp.dest = 8080,
-+		},
-+		.keys = {
-+			.nhoff = ETH_HLEN,
-+			.thoff = ETH_HLEN + sizeof(struct ipv6hdr) +
-+				sizeof(struct frag_hdr),
-+			.addr_proto = ETH_P_IPV6,
-+			.ip_proto = IPPROTO_TCP,
-+			.n_proto = __bpf_constant_htons(ETH_P_IPV6),
-+			.is_frag = true,
-+			.is_first_frag = true,
-+		},
++		.flags = FLOW_DISSECTOR_F_STOP_AT_ENCAP,
 +	},
  };
  
  static int create_tap(const char *ifname)
-@@ -225,6 +339,13 @@ void test_flow_dissector(void)
- 			.data_size_in = sizeof(tests[i].pkt),
- 			.data_out = &flow_keys,
- 		};
-+		static struct bpf_flow_keys ctx = {};
-+
-+		if (tests[i].flags) {
-+			tattr.ctx_in = &ctx;
-+			tattr.ctx_size_in = sizeof(ctx);
-+			ctx.flags = tests[i].flags;
-+		}
- 
- 		err = bpf_prog_test_run_xattr(&tattr);
- 		CHECK_ATTR(tattr.data_size_out != sizeof(flow_keys) ||
-@@ -251,10 +372,19 @@ void test_flow_dissector(void)
- 	CHECK(err, "ifup", "err %d errno %d\n", err, errno);
- 
- 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
--		struct bpf_flow_keys flow_keys = {};
-+		/* Keep in sync with 'flags' from eth_get_headlen. */
-+		__u32 eth_get_headlen_flags = FLOW_DISSECTOR_F_PARSE_1ST_FRAG;
- 		struct bpf_prog_test_run_attr tattr = {};
-+		struct bpf_flow_keys flow_keys = {};
- 		__u32 key = 0;
- 
-+		/* For skb-less case we can't pass input flags; run
-+		 * only the tests that have a matching set of flags.
-+		 */
-+
-+		if (tests[i].flags != eth_get_headlen_flags)
-+			continue;
-+
- 		err = tx_tap(tap_fd, &tests[i].pkt, sizeof(tests[i].pkt));
- 		CHECK(err < 0, "tx_tap", "err %d errno %d\n", err, errno);
- 
 diff --git a/tools/testing/selftests/bpf/progs/bpf_flow.c b/tools/testing/selftests/bpf/progs/bpf_flow.c
-index 5ae485a6af3f..0eabe5e57944 100644
+index 7d73b7bfe609..b6236cdf8564 100644
 --- a/tools/testing/selftests/bpf/progs/bpf_flow.c
 +++ b/tools/testing/selftests/bpf/progs/bpf_flow.c
-@@ -153,7 +153,6 @@ static __always_inline int parse_ip_proto(struct __sk_buff *skb, __u8 proto)
- 	struct tcphdr *tcp, _tcp;
- 	struct udphdr *udp, _udp;
- 
--	keys->ip_proto = proto;
- 	switch (proto) {
- 	case IPPROTO_ICMP:
- 		icmp = bpf_flow_dissect_get_header(skb, sizeof(*icmp), &_icmp);
-@@ -231,7 +230,6 @@ static __always_inline int parse_ipv6_proto(struct __sk_buff *skb, __u8 nexthdr)
- {
- 	struct bpf_flow_keys *keys = skb->flow_keys;
- 
--	keys->ip_proto = nexthdr;
- 	switch (nexthdr) {
- 	case IPPROTO_HOPOPTS:
- 	case IPPROTO_DSTOPTS:
-@@ -266,6 +264,7 @@ PROG(IP)(struct __sk_buff *skb)
- 	keys->addr_proto = ETH_P_IP;
- 	keys->ipv4_src = iph->saddr;
- 	keys->ipv4_dst = iph->daddr;
-+	keys->ip_proto = iph->protocol;
- 
- 	keys->thoff += iph->ihl << 2;
- 	if (data + keys->thoff > data_end)
-@@ -273,13 +272,19 @@ PROG(IP)(struct __sk_buff *skb)
- 
- 	if (iph->frag_off & bpf_htons(IP_MF | IP_OFFSET)) {
- 		keys->is_frag = true;
--		if (iph->frag_off & bpf_htons(IP_OFFSET))
-+		if (iph->frag_off & bpf_htons(IP_OFFSET)) {
- 			/* From second fragment on, packets do not have headers
- 			 * we can parse.
- 			 */
- 			done = true;
--		else
-+		} else {
- 			keys->is_first_frag = true;
-+			/* No need to parse fragmented packet unless
-+			 * explicitly asked for.
-+			 */
-+			if (!(keys->flags & FLOW_DISSECTOR_F_PARSE_1ST_FRAG))
-+				done = true;
-+		}
- 	}
- 
- 	if (done)
-@@ -301,6 +306,7 @@ PROG(IPV6)(struct __sk_buff *skb)
- 	memcpy(&keys->ipv6_src, &ip6h->saddr, 2*sizeof(ip6h->saddr));
- 
- 	keys->thoff += sizeof(struct ipv6hdr);
-+	keys->ip_proto = ip6h->nexthdr;
- 
- 	return parse_ipv6_proto(skb, ip6h->nexthdr);
- }
-@@ -317,7 +323,8 @@ PROG(IPV6OP)(struct __sk_buff *skb)
- 	/* hlen is in 8-octets and does not include the first 8 bytes
- 	 * of the header
- 	 */
--	skb->flow_keys->thoff += (1 + ip6h->hdrlen) << 3;
-+	keys->thoff += (1 + ip6h->hdrlen) << 3;
-+	keys->ip_proto = ip6h->nexthdr;
- 
- 	return parse_ipv6_proto(skb, ip6h->nexthdr);
- }
-@@ -333,9 +340,18 @@ PROG(IPV6FR)(struct __sk_buff *skb)
- 
- 	keys->thoff += sizeof(*fragh);
- 	keys->is_frag = true;
--	if (!(fragh->frag_off & bpf_htons(IP6_OFFSET)))
-+	keys->ip_proto = fragh->nexthdr;
-+
-+	if (!(fragh->frag_off & bpf_htons(IP6_OFFSET))) {
- 		keys->is_first_frag = true;
- 
-+		/* No need to parse fragmented packet unless
-+		 * explicitly asked for.
-+		 */
-+		if (!(keys->flags & FLOW_DISSECTOR_F_PARSE_1ST_FRAG))
+@@ -167,9 +167,15 @@ static __always_inline int parse_ip_proto(struct __sk_buff *skb, __u8 proto)
+ 		return export_flow_keys(keys, BPF_OK);
+ 	case IPPROTO_IPIP:
+ 		keys->is_encap = true;
++		if (keys->flags & FLOW_DISSECTOR_F_STOP_AT_ENCAP)
 +			return export_flow_keys(keys, BPF_OK);
-+	}
 +
- 	return parse_ipv6_proto(skb, fragh->nexthdr);
- }
+ 		return parse_eth_proto(skb, bpf_htons(ETH_P_IP));
+ 	case IPPROTO_IPV6:
+ 		keys->is_encap = true;
++		if (keys->flags & FLOW_DISSECTOR_F_STOP_AT_ENCAP)
++			return export_flow_keys(keys, BPF_OK);
++
+ 		return parse_eth_proto(skb, bpf_htons(ETH_P_IPV6));
+ 	case IPPROTO_GRE:
+ 		gre = bpf_flow_dissect_get_header(skb, sizeof(*gre), &_gre);
+@@ -189,6 +195,8 @@ static __always_inline int parse_ip_proto(struct __sk_buff *skb, __u8 proto)
+ 			keys->thoff += 4; /* Step over sequence number */
  
+ 		keys->is_encap = true;
++		if (keys->flags & FLOW_DISSECTOR_F_STOP_AT_ENCAP)
++			return export_flow_keys(keys, BPF_OK);
+ 
+ 		if (gre->proto == bpf_htons(ETH_P_TEB)) {
+ 			eth = bpf_flow_dissect_get_header(skb, sizeof(*eth),
 -- 
 2.22.0.657.g960e92d24f-goog
 
