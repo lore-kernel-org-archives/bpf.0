@@ -4,52 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 899C3C76191
-	for <bpf@archiver.kernel.org>; Fri, 26 Jul 2019 13:55:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A1A3C7618B
+	for <bpf@archiver.kernel.org>; Fri, 26 Jul 2019 13:58:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 635A622CE9
-	for <bpf@archiver.kernel.org>; Fri, 26 Jul 2019 13:55:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D825A20449
+	for <bpf@archiver.kernel.org>; Fri, 26 Jul 2019 13:57:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1564149356;
-	bh=jwyKKrIH0Sb3LUWowXcuRJ297ShxLiOtHjsxfr0bXBQ=;
+	s=default; t=1564149479;
+	bh=nb+zJZftTQM8nQ2ze5k/VmpjYrxra2RgQex0fH8qUcg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ymyp9oeAPgEGy7/Urwkpk4ABFa1j9NSoDDhcv5F4tZqcLf7FEFrCnvFoSt8Z/3guO
-	 uVXGG0bjvuqn/m2B9Ted6ImP0QUg+Uea6tKy8KAFMP9CUopY3gAUY3VAMTtOn2asNk
-	 vnPw2b1PVjSsF8Uc+EuZSxz11FZL9EQv+B/3rrb4=
+	b=M8w/lmNHwrHjAIT4NbkhSObFfHsq9TQbbKJ2YtXC2j4snpwD2we90UGWeI6oR1+4v
+	 9Fjtb5IhuI/jVKNls7nfrdW4evyUGZW/hS4JWTbDpTRPKdCYhyutbBfKYOs78Viris
+	 8ltpvS/XDZwF+OQq2fd5JZJTfgOrOx2P5MVqlzoE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387839AbfGZNmH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Jul 2019 09:42:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49258 "EHLO mail.kernel.org"
+        id S2387604AbfGZNkx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Jul 2019 09:40:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47102 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387418AbfGZNmG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Jul 2019 09:42:06 -0400
+        id S1727748AbfGZNkx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 26 Jul 2019 09:40:53 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7EF6F22BF5;
-        Fri, 26 Jul 2019 13:42:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C62562238C;
+        Fri, 26 Jul 2019 13:40:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564148525;
-        bh=jwyKKrIH0Sb3LUWowXcuRJ297ShxLiOtHjsxfr0bXBQ=;
+        s=default; t=1564148451;
+        bh=nb+zJZftTQM8nQ2ze5k/VmpjYrxra2RgQex0fH8qUcg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pO5aPHJxePB3A5na1SQEVi0ksbB8X4/W0lmianAPdtLFJ4Sapxqu0Upn/899C8v56
-         Bav46PtE7M6gNmUjihALnfKi7vW0dOLYuRYb4W3XW6koCN/BsNes+mGnzobjYKd/fr
-         qj69X3excgIFeu6Hx8XSpCCWm274qB/xugGW6LVs=
+        b=jZJZRnDLDnc/XfxxgfclezeCyH81gu7yM93vpuYxMemrXXn8sAut2FOyJTRiNAyd7
+         UYAO30k+vO09iNOKKwj3Ce9HNPr2gGxyokOwYBpiO1bLfPZSynLVw5rPI3ZRS9hv0q
+         suGvlzXeqxLTMjEoL0pCDMFtFHxBxhKqXNtRz5jM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
+Cc:     Andrii Nakryiko <andriin@fb.com>, Martin KaFai Lau <kafai@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 82/85] bpf: Disable GCC -fgcse optimization for ___bpf_prog_run()
-Date:   Fri, 26 Jul 2019 09:39:32 -0400
-Message-Id: <20190726133936.11177-82-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 47/85] bpf: fix BTF verifier size resolution logic
+Date:   Fri, 26 Jul 2019 09:38:57 -0400
+Message-Id: <20190726133936.11177-47-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190726133936.11177-1-sashal@kernel.org>
 References: <20190726133936.11177-1-sashal@kernel.org>
@@ -62,110 +59,125 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Josh Poimboeuf <jpoimboe@redhat.com>
+From: Andrii Nakryiko <andriin@fb.com>
 
-[ Upstream commit 3193c0836f203a91bef96d88c64cccf0be090d9c ]
+[ Upstream commit 1acc5d5c5832da9a98b22374a8fae08ffe31b3f8 ]
 
-On x86-64, with CONFIG_RETPOLINE=n, GCC's "global common subexpression
-elimination" optimization results in ___bpf_prog_run()'s jumptable code
-changing from this:
+BTF verifier has a size resolution bug which in some circumstances leads to
+invalid size resolution for, e.g., TYPEDEF modifier.  This happens if we have
+[1] PTR -> [2] TYPEDEF -> [3] ARRAY, in which case due to being in pointer
+context ARRAY size won't be resolved (because for pointer it doesn't matter, so
+it's a sink in pointer context), but it will be permanently remembered as zero
+for TYPEDEF and TYPEDEF will be marked as RESOLVED. Eventually ARRAY size will
+be resolved correctly, but TYPEDEF resolved_size won't be updated anymore.
+This, subsequently, will lead to erroneous map creation failure, if that
+TYPEDEF is specified as either key or value, as key_size/value_size won't
+correspond to resolved size of TYPEDEF (kernel will believe it's zero).
 
-	select_insn:
-		jmp *jumptable(, %rax, 8)
-		...
-	ALU64_ADD_X:
-		...
-		jmp *jumptable(, %rax, 8)
-	ALU_ADD_X:
-		...
-		jmp *jumptable(, %rax, 8)
+Note, that if BTF was ordered as [1] ARRAY <- [2] TYPEDEF <- [3] PTR, this
+won't be a problem, as by the time we get to TYPEDEF, ARRAY's size is already
+calculated and stored.
 
-to this:
+This bug manifests itself in rejecting BTF-defined maps that use array
+typedef as a value type:
 
-	select_insn:
-		mov jumptable, %r12
-		jmp *(%r12, %rax, 8)
-		...
-	ALU64_ADD_X:
-		...
-		jmp *(%r12, %rax, 8)
-	ALU_ADD_X:
-		...
-		jmp *(%r12, %rax, 8)
+typedef int array_t[16];
 
-The jumptable address is placed in a register once, at the beginning of
-the function.  The function execution can then go through multiple
-indirect jumps which rely on that same register value.  This has a few
-issues:
+struct {
+    __uint(type, BPF_MAP_TYPE_ARRAY);
+    __type(value, array_t); /* i.e., array_t *value; */
+} test_map SEC(".maps");
 
-1) Objtool isn't smart enough to be able to track such a register value
-   across multiple recursive indirect jumps through the jump table.
+The fix consists on not relying on modifier's resolved_size and instead using
+modifier's resolved_id (type ID for "concrete" type to which modifier
+eventually resolves) and doing size determination for that resolved type. This
+allow to preserve existing "early DFS termination" logic for PTR or
+STRUCT_OR_ARRAY contexts, but still do correct size determination for modifier
+types.
 
-2) With CONFIG_RETPOLINE enabled, this optimization actually results in
-   a small slowdown.  I measured a ~4.7% slowdown in the test_bpf
-   "tcpdump port 22" selftest.
-
-   This slowdown is actually predicted by the GCC manual:
-
-     Note: When compiling a program using computed gotos, a GCC
-     extension, you may get better run-time performance if you
-     disable the global common subexpression elimination pass by
-     adding -fno-gcse to the command line.
-
-So just disable the optimization for this function.
-
-Fixes: e55a73251da3 ("bpf: Fix ORC unwinding in non-JIT BPF code")
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Acked-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/30c3ca29ba037afcbd860a8672eef0021addf9fe.1563413318.git.jpoimboe@redhat.com
+Fixes: eb3f595dab40 ("bpf: btf: Validate type reference")
+Cc: Martin KaFai Lau <kafai@fb.com>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/compiler-gcc.h   | 2 ++
- include/linux/compiler_types.h | 4 ++++
- kernel/bpf/core.c              | 2 +-
- 3 files changed, 7 insertions(+), 1 deletion(-)
+ kernel/bpf/btf.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
-index e8579412ad21..d7ee4c6bad48 100644
---- a/include/linux/compiler-gcc.h
-+++ b/include/linux/compiler-gcc.h
-@@ -170,3 +170,5 @@
- #else
- #define __diag_GCC_8(s)
- #endif
-+
-+#define __no_fgcse __attribute__((optimize("-fno-gcse")))
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index 19e58b9138a0..0454d82f8bd8 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -187,6 +187,10 @@ struct ftrace_likely_data {
- #define asm_volatile_goto(x...) asm goto(x)
- #endif
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index cad09858a5f2..8614102971da 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -1073,11 +1073,18 @@ const struct btf_type *btf_type_id_size(const struct btf *btf,
+ 				 !btf_type_is_var(size_type)))
+ 			return NULL;
  
-+#ifndef __no_fgcse
-+# define __no_fgcse
-+#endif
-+
- /* Are two types/vars the same type (ignoring qualifiers)? */
- #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+-		size = btf->resolved_sizes[size_type_id];
+ 		size_type_id = btf->resolved_ids[size_type_id];
+ 		size_type = btf_type_by_id(btf, size_type_id);
+ 		if (btf_type_nosize_or_null(size_type))
+ 			return NULL;
++		else if (btf_type_has_size(size_type))
++			size = size_type->size;
++		else if (btf_type_is_array(size_type))
++			size = btf->resolved_sizes[size_type_id];
++		else if (btf_type_is_ptr(size_type))
++			size = sizeof(void *);
++		else
++			return NULL;
+ 	}
  
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 080e2bb644cc..ebfd189916dc 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1295,7 +1295,7 @@ bool bpf_opcode_in_insntable(u8 code)
-  *
-  * Decode and execute eBPF instructions.
-  */
--static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
-+static u64 __no_fgcse ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
- {
- #define BPF_INSN_2_LBL(x, y)    [BPF_##x | BPF_##y] = &&x##_##y
- #define BPF_INSN_3_LBL(x, y, z) [BPF_##x | BPF_##y | BPF_##z] = &&x##_##y##_##z
+ 	*type_id = size_type_id;
+@@ -1602,7 +1609,6 @@ static int btf_modifier_resolve(struct btf_verifier_env *env,
+ 	const struct btf_type *next_type;
+ 	u32 next_type_id = t->type;
+ 	struct btf *btf = env->btf;
+-	u32 next_type_size = 0;
+ 
+ 	next_type = btf_type_by_id(btf, next_type_id);
+ 	if (!next_type || btf_type_is_resolve_source_only(next_type)) {
+@@ -1620,7 +1626,7 @@ static int btf_modifier_resolve(struct btf_verifier_env *env,
+ 	 * save us a few type-following when we use it later (e.g. in
+ 	 * pretty print).
+ 	 */
+-	if (!btf_type_id_size(btf, &next_type_id, &next_type_size)) {
++	if (!btf_type_id_size(btf, &next_type_id, NULL)) {
+ 		if (env_type_is_resolved(env, next_type_id))
+ 			next_type = btf_type_id_resolve(btf, &next_type_id);
+ 
+@@ -1633,7 +1639,7 @@ static int btf_modifier_resolve(struct btf_verifier_env *env,
+ 		}
+ 	}
+ 
+-	env_stack_pop_resolved(env, next_type_id, next_type_size);
++	env_stack_pop_resolved(env, next_type_id, 0);
+ 
+ 	return 0;
+ }
+@@ -1645,7 +1651,6 @@ static int btf_var_resolve(struct btf_verifier_env *env,
+ 	const struct btf_type *t = v->t;
+ 	u32 next_type_id = t->type;
+ 	struct btf *btf = env->btf;
+-	u32 next_type_size;
+ 
+ 	next_type = btf_type_by_id(btf, next_type_id);
+ 	if (!next_type || btf_type_is_resolve_source_only(next_type)) {
+@@ -1675,12 +1680,12 @@ static int btf_var_resolve(struct btf_verifier_env *env,
+ 	 * forward types or similar that would resolve to size of
+ 	 * zero is allowed.
+ 	 */
+-	if (!btf_type_id_size(btf, &next_type_id, &next_type_size)) {
++	if (!btf_type_id_size(btf, &next_type_id, NULL)) {
+ 		btf_verifier_log_type(env, v->t, "Invalid type_id");
+ 		return -EINVAL;
+ 	}
+ 
+-	env_stack_pop_resolved(env, next_type_id, next_type_size);
++	env_stack_pop_resolved(env, next_type_id, 0);
+ 
+ 	return 0;
+ }
 -- 
 2.20.1
 
