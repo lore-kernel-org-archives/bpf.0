@@ -2,44 +2,45 @@ Return-Path: <SRS0=Twvj=VZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D2D4C76186
-	for <bpf@archiver.kernel.org>; Sun, 28 Jul 2019 03:25:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58FE5C76186
+	for <bpf@archiver.kernel.org>; Sun, 28 Jul 2019 03:25:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4933121655
-	for <bpf@archiver.kernel.org>; Sun, 28 Jul 2019 03:25:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2E7D621655
+	for <bpf@archiver.kernel.org>; Sun, 28 Jul 2019 03:25:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="mVtBBDM7"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="NSi+Vrxs"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726023AbfG1DZr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 27 Jul 2019 23:25:47 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:7454 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726004AbfG1DZr (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 27 Jul 2019 23:25:47 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x6S3Ni5N023369
-        for <bpf@vger.kernel.org>; Sat, 27 Jul 2019 20:25:46 -0700
+        id S1726120AbfG1DZu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 27 Jul 2019 23:25:50 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:44820 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726115AbfG1DZu (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 27 Jul 2019 23:25:50 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6S3P6mE003675
+        for <bpf@vger.kernel.org>; Sat, 27 Jul 2019 20:25:49 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=44ceatmvJcmJn22R9vBTITFdEuxhvHirtmB4yCAIeQk=;
- b=mVtBBDM7vU5Pajd2QiWTeD36mW99ltgoJgrU4/40KtLKwSI/E+LnBxZsRcpcqAKm8FO3
- vWOczrnpsH91IJyIJi+1j1heEC7Ya4ZOh6072K89G9fVVsDxXEGtZiJB2vL7EEF0WRw2
- dF9tn81ppRRxd+fFJRfHW4nrLQPfRdecn8Q= 
+ content-type; s=facebook; bh=2XaP3HC+2XdCme04g/oEiFAqUV2TlRPaOQ0KTJA7p8A=;
+ b=NSi+Vrxsm3kPSNa+Jy1V738+oeaeAGbvxuFiQp9H4eR4UIQj5CSn3L76Er6ljQOQ/VAX
+ ECkpUlISM5XSchzWzuY76EgcRQf7rydXxk54KoKqN5g1j9/g8U74OL6Cox1KDL6Ng8Zy
+ nWnZ7pjyRCUpui9T0AbYwMuRIdsm54sc1y8= 
 Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by m0089730.ppops.net with ESMTP id 2u0j3stamw-5
+        by mx0a-00082601.pphosted.com with ESMTP id 2u0hx2tbtm-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Sat, 27 Jul 2019 20:25:45 -0700
+        for <bpf@vger.kernel.org>; Sat, 27 Jul 2019 20:25:49 -0700
 Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c081:35::128) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Sat, 27 Jul 2019 20:25:43 -0700
+ Sat, 27 Jul 2019 20:25:48 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 9ABFC8615B1; Sat, 27 Jul 2019 20:25:40 -0700 (PDT)
+        id BA8828615B1; Sat, 27 Jul 2019 20:25:46 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,9 +49,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v3 bpf-next 2/9] selftests/bpf: revamp test_progs to allow more control
-Date:   Sat, 27 Jul 2019 20:25:24 -0700
-Message-ID: <20190728032531.2358749-3-andriin@fb.com>
+Subject: [PATCH v3 bpf-next 5/9] selftest/bpf: centralize libbpf logging management for test_progs
+Date:   Sat, 27 Jul 2019 20:25:27 -0700
+Message-ID: <20190728032531.2358749-6-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190728032531.2358749-1-andriin@fb.com>
 References: <20190728032531.2358749-1-andriin@fb.com>
@@ -70,146 +71,151 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Refactor test_progs to allow better control on what's being run.
-Also use argp to do argument parsing, so that it's easier to keep adding
-more options.
+Make test_progs test runner own libbpf logging. Also introduce two
+levels of verbosity: -v and -vv. First one will be used in subsequent
+patches to enable test log output always. Second one increases verbosity
+level of libbpf logging further to include debug output as well.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/testing/selftests/bpf/Makefile     |  8 +--
- tools/testing/selftests/bpf/test_progs.c | 84 +++++++++++++++++++++---
- 2 files changed, 77 insertions(+), 15 deletions(-)
+ .../bpf/prog_tests/bpf_verif_scale.c          |  6 +++-
+ .../bpf/prog_tests/reference_tracking.c       | 15 +++-------
+ tools/testing/selftests/bpf/test_progs.c      | 29 +++++++++++++++++++
+ 3 files changed, 38 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index bb66cc4a7f34..3bd0f4a0336a 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -239,14 +239,8 @@ $(OUTPUT)/test_progs: test_progs.c $(PROG_TESTS_FILES) | $(PROG_TESTS_H)
- $(PROG_TESTS_H): $(PROG_TESTS_FILES) | $(PROG_TESTS_DIR)
- 	$(shell ( cd prog_tests/; \
- 		  echo '/* Generated header, do not edit */'; \
--		  echo '#ifdef DECLARE'; \
- 		  ls *.c 2> /dev/null | \
--			sed -e 's@\([^\.]*\)\.c@extern void test_\1(void);@'; \
--		  echo '#endif'; \
--		  echo '#ifdef CALL'; \
--		  ls *.c 2> /dev/null | \
--			sed -e 's@\([^\.]*\)\.c@test_\1();@'; \
--		  echo '#endif' \
-+			sed -e 's@\([^\.]*\)\.c@DEFINE_TEST(\1)@'; \
- 		 ) > $(PROG_TESTS_H))
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
+index e1b55261526f..ceddb8cc86f4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
+@@ -70,10 +70,11 @@ void test_bpf_verif_scale(void)
+ 	const char *cg_sysctl[] = {
+ 		"./test_sysctl_loop1.o", "./test_sysctl_loop2.o",
+ 	};
++	libbpf_print_fn_t old_print_fn = NULL;
+ 	int err, i;
  
- MAP_TESTS_DIR = $(OUTPUT)/map_tests
+ 	if (verifier_stats)
+-		libbpf_set_print(libbpf_debug_print);
++		old_print_fn = libbpf_set_print(libbpf_debug_print);
+ 
+ 	err = check_load("./loop3.o", BPF_PROG_TYPE_RAW_TRACEPOINT);
+ 	printf("test_scale:loop3:%s\n", err ? (error_cnt--, "OK") : "FAIL");
+@@ -97,4 +98,7 @@ void test_bpf_verif_scale(void)
+ 
+ 	err = check_load("./test_seg6_loop.o", BPF_PROG_TYPE_LWT_SEG6LOCAL);
+ 	printf("test_scale:test_seg6_loop:%s\n", err ? "FAIL" : "OK");
++
++	if (verifier_stats)
++		libbpf_set_print(old_print_fn);
+ }
+diff --git a/tools/testing/selftests/bpf/prog_tests/reference_tracking.c b/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
+index 5633be43828f..4a4f428d1a78 100644
+--- a/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
++++ b/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
+@@ -1,15 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <test_progs.h>
+ 
+-static int libbpf_debug_print(enum libbpf_print_level level,
+-			      const char *format, va_list args)
+-{
+-	if (level == LIBBPF_DEBUG)
+-		return 0;
+-
+-	return vfprintf(stderr, format, args);
+-}
+-
+ void test_reference_tracking(void)
+ {
+ 	const char *file = "./test_sk_lookup_kern.o";
+@@ -36,9 +27,11 @@ void test_reference_tracking(void)
+ 
+ 		/* Expect verifier failure if test name has 'fail' */
+ 		if (strstr(title, "fail") != NULL) {
+-			libbpf_set_print(NULL);
++			libbpf_print_fn_t old_print_fn;
++
++			old_print_fn = libbpf_set_print(NULL);
+ 			err = !bpf_program__load(prog, "GPL", 0);
+-			libbpf_set_print(libbpf_debug_print);
++			libbpf_set_print(old_print_fn);
+ 		} else {
+ 			err = bpf_program__load(prog, "GPL", 0);
+ 		}
 diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index dae0819b1141..eea88ba59225 100644
+index 6e04b9f83777..94b6951b90b3 100644
 --- a/tools/testing/selftests/bpf/test_progs.c
 +++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -3,6 +3,7 @@
-  */
- #include "test_progs.h"
- #include "bpf_rlimit.h"
-+#include <argp.h>
+@@ -186,6 +186,8 @@ enum ARG_KEYS {
+ 	ARG_TEST_NUM = 'n',
+ 	ARG_TEST_NAME = 't',
+ 	ARG_VERIFIER_STATS = 's',
++
++	ARG_VERBOSE = 'v',
+ };
+ 	
+ static const struct argp_option opts[] = {
+@@ -195,6 +197,8 @@ static const struct argp_option opts[] = {
+ 	  "Run tests with names containing NAME" },
+ 	{ "verifier-stats", ARG_VERIFIER_STATS, NULL, 0,
+ 	  "Output verifier statistics", },
++	{ "verbose", ARG_VERBOSE, "LEVEL", OPTION_ARG_OPTIONAL,
++	  "Verbose output (use -vv for extra verbose output)" },
+ 	{},
+ };
  
- int error_cnt, pass_cnt;
- bool jit_enabled;
-@@ -156,22 +157,89 @@ void *spin_lock_thread(void *arg)
- 	pthread_exit(arg);
- }
+@@ -202,12 +206,22 @@ struct test_env {
+ 	int test_num_selector;
+ 	const char *test_name_selector;
+ 	bool verifier_stats;
++	bool verbose;
++	bool very_verbose;
+ };
  
--#define DECLARE
-+/* extern declarations for test funcs */
-+#define DEFINE_TEST(name) extern void test_##name();
- #include <prog_tests/tests.h>
--#undef DECLARE
-+#undef DEFINE_TEST
+ static struct test_env env = {
+ 	.test_num_selector = -1,
+ };
  
--int main(int ac, char **av)
-+struct prog_test_def {
-+	const char *test_name;
-+	void (*run_test)(void);
-+};
-+
-+static struct prog_test_def prog_test_defs[] = {
-+#define DEFINE_TEST(name) {	      \
-+	.test_name = #name,	      \
-+	.run_test = &test_##name,   \
-+},
-+#include <prog_tests/tests.h>
-+#undef DEFINE_TEST
-+};
-+
-+const char *argp_program_version = "test_progs 0.1";
-+const char *argp_program_bug_address = "<bpf@vger.kernel.org>";
-+const char argp_program_doc[] = "BPF selftests test runner";
-+
-+enum ARG_KEYS {
-+	ARG_VERIFIER_STATS = 's',
-+};
-+	
-+static const struct argp_option opts[] = {
-+	{ "verifier-stats", ARG_VERIFIER_STATS, NULL, 0,
-+	  "Output verifier statistics", },
-+	{},
-+};
-+
-+struct test_env {
-+	bool verifier_stats;
-+};
-+
-+static struct test_env env = {};
-+
-+static error_t parse_arg(int key, char *arg, struct argp_state *state)
- {
-+	struct test_env *env = state->input;
-+
-+	switch (key) {
-+	case ARG_VERIFIER_STATS:
-+		env->verifier_stats = true;
-+		break;
-+	case ARGP_KEY_ARG:
-+		argp_usage(state);
-+		break;
-+	case ARGP_KEY_END:
-+		break;
-+	default:
-+		return ARGP_ERR_UNKNOWN;
-+	}
-+	return 0;
++static int libbpf_print_fn(enum libbpf_print_level level,
++			   const char *format, va_list args)
++{
++	if (!env.very_verbose && level == LIBBPF_DEBUG)
++		return 0;
++	return vfprintf(stderr, format, args);
 +}
 +
-+
-+int main(int argc, char **argv)
-+{
-+	static const struct argp argp = {
-+		.options = opts,
-+		.parser = parse_arg,
-+		.doc = argp_program_doc,
-+	};
-+	const struct prog_test_def *def;
-+	int err, i;
-+
-+	err = argp_parse(&argp, argc, argv, 0, NULL, &env);
-+	if (err)
-+		return err;
+ static error_t parse_arg(int key, char *arg, struct argp_state *state)
+ {
+ 	struct test_env *env = state->input;
+@@ -229,6 +243,19 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
+ 	case ARG_VERIFIER_STATS:
+ 		env->verifier_stats = true;
+ 		break;
++	case ARG_VERBOSE:
++		if (arg) {
++			if (strcmp(arg, "v") == 0) {
++				env->very_verbose = true;
++			} else {
++				fprintf(stderr,
++					"Unrecognized verbosity setting ('%s'), only -v and -vv are supported\n",
++					arg);
++				return -EINVAL;
++			}
++		}
++		env->verbose = true;
++		break;
+ 	case ARGP_KEY_ARG:
+ 		argp_usage(state);
+ 		break;
+@@ -255,6 +282,8 @@ int main(int argc, char **argv)
+ 	if (err)
+ 		return err;
+ 
++	libbpf_set_print(libbpf_print_fn);
 +
  	srand(time(NULL));
  
  	jit_enabled = is_jit_enabled();
- 
--	if (ac == 2 && strcmp(av[1], "-s") == 0)
--		verifier_stats = true;
-+	verifier_stats = env.verifier_stats;
- 
--#define CALL
--#include <prog_tests/tests.h>
--#undef CALL
-+	for (i = 0; i < ARRAY_SIZE(prog_test_defs); i++) {
-+		def = &prog_test_defs[i];
-+		def->run_test();
-+	}
- 
- 	printf("Summary: %d PASSED, %d FAILED\n", pass_cnt, error_cnt);
- 	return error_cnt ? EXIT_FAILURE : EXIT_SUCCESS;
 -- 
 2.17.1
 
