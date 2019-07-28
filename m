@@ -5,41 +5,41 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84CF7C433FF
-	for <bpf@archiver.kernel.org>; Sun, 28 Jul 2019 03:26:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F735C76186
+	for <bpf@archiver.kernel.org>; Sun, 28 Jul 2019 03:26:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5DFB52067D
-	for <bpf@archiver.kernel.org>; Sun, 28 Jul 2019 03:26:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 285642067D
+	for <bpf@archiver.kernel.org>; Sun, 28 Jul 2019 03:26:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="W4AXxtxE"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="JhUfBxwq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726139AbfG1DZ6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 27 Jul 2019 23:25:58 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:40064 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726177AbfG1DZ5 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 27 Jul 2019 23:25:57 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6S3NJYX031294
-        for <bpf@vger.kernel.org>; Sat, 27 Jul 2019 20:25:56 -0700
+        id S1726208AbfG1D0E (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 27 Jul 2019 23:26:04 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:37900 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726004AbfG1DZs (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 27 Jul 2019 23:25:48 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6S3NoKU028481
+        for <bpf@vger.kernel.org>; Sat, 27 Jul 2019 20:25:47 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=nFRgnH9mQPN+sVp1HVKIA2YU5tTgpJRhti1w1Ct/vNg=;
- b=W4AXxtxEE4tsbtxuSeTn3xKIRxKJWWM3F8XL4gp7LzcKlC34UXCyOirkcAhdnEY4oAYf
- 1uIHPaPUW5oRI9hcMyfit7Rf0kjSubHw6iclwGfROibPuuUQRZe9eczCMixjwTBrMXsm
- 9DMgrpfhsGd4K94htV7eSqNE7sdtUKuH46o= 
+ content-type; s=facebook; bh=9x7A3T3WKDCwVuu2HKqmp+GWtlJ1b/JlojeE+ECPYMY=;
+ b=JhUfBxwq+NYymu+wrNBU+mHeCHorFIKngAJ4e2bVcxltNI4D29YO8O42FWiHxkQsgsiB
+ rPcMwOan7ACZR249OcE5k7daRaN6e+c7ee7scX9XfYESby17tVkJFMgBuBx3d0iKirUm
+ ZG9GuQYQN3Vr3y4aMMmbuUeSBv0J9+yf/Pw= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2u0me8t19k-1
+        by mx0a-00082601.pphosted.com with ESMTP id 2u0kqa250s-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sat, 27 Jul 2019 20:25:56 -0700
+        for <bpf@vger.kernel.org>; Sat, 27 Jul 2019 20:25:47 -0700
 Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Sat, 27 Jul 2019 20:25:55 -0700
+ 15.1.1713.5; Sat, 27 Jul 2019 20:25:45 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id E0DB18615B1; Sat, 27 Jul 2019 20:25:54 -0700 (PDT)
+        id B17A58615B1; Sat, 27 Jul 2019 20:25:44 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v3 bpf-next 9/9] selftests/bpf: convert send_signal.c to use subtests
-Date:   Sat, 27 Jul 2019 20:25:31 -0700
-Message-ID: <20190728032531.2358749-10-andriin@fb.com>
+Subject: [PATCH v3 bpf-next 4/9] libbpf: return previous print callback from libbpf_set_print
+Date:   Sat, 27 Jul 2019 20:25:26 -0700
+Message-ID: <20190728032531.2358749-5-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190728032531.2358749-1-andriin@fb.com>
 References: <20190728032531.2358749-1-andriin@fb.com>
@@ -62,7 +62,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
  malwarescore=0 suspectscore=8 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=675 adultscore=0 classifier=spam adjust=0 reason=mlx
+ mlxlogscore=757 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1906280000 definitions=main-1907280041
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -70,31 +70,48 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Convert send_signal set of tests to be exposed as three sub-tests.
+By returning previously set print callback from libbpf_set_print, it's
+possible to restore it, eventually. This is useful when running many
+independent test with one default print function, but overriding log
+verbosity for particular subset of tests.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/testing/selftests/bpf/prog_tests/send_signal.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ tools/lib/bpf/libbpf.c | 5 ++++-
+ tools/lib/bpf/libbpf.h | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/send_signal.c b/tools/testing/selftests/bpf/prog_tests/send_signal.c
-index d950f4558897..461b423d0584 100644
---- a/tools/testing/selftests/bpf/prog_tests/send_signal.c
-+++ b/tools/testing/selftests/bpf/prog_tests/send_signal.c
-@@ -219,7 +219,10 @@ void test_send_signal(void)
- {
- 	int ret = 0;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 8741c39adb1c..ead915aec349 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -74,9 +74,12 @@ static int __base_pr(enum libbpf_print_level level, const char *format,
  
--	ret |= test_send_signal_tracepoint();
--	ret |= test_send_signal_perf();
--	ret |= test_send_signal_nmi();
-+	if (test__start_subtest("send_signal_tracepoint"))
-+		ret |= test_send_signal_tracepoint();
-+	if (test__start_subtest("send_signal_perf"))
-+		ret |= test_send_signal_perf();
-+	if (test__start_subtest("send_signal_nmi"))
-+		ret |= test_send_signal_nmi();
+ static libbpf_print_fn_t __libbpf_pr = __base_pr;
+ 
+-void libbpf_set_print(libbpf_print_fn_t fn)
++libbpf_print_fn_t libbpf_set_print(libbpf_print_fn_t fn)
+ {
++	libbpf_print_fn_t old_print_fn = __libbpf_pr;
++
+ 	__libbpf_pr = fn;
++	return old_print_fn;
  }
+ 
+ __printf(2, 3)
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 5cbf459ece0b..8a9d462a6f6d 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -57,7 +57,7 @@ enum libbpf_print_level {
+ typedef int (*libbpf_print_fn_t)(enum libbpf_print_level level,
+ 				 const char *, va_list ap);
+ 
+-LIBBPF_API void libbpf_set_print(libbpf_print_fn_t fn);
++LIBBPF_API libbpf_print_fn_t libbpf_set_print(libbpf_print_fn_t fn);
+ 
+ /* Hide internal to user */
+ struct bpf_object;
 -- 
 2.17.1
 
