@@ -2,116 +2,81 @@ Return-Path: <SRS0=Twvj=VZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.4 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F735C76186
-	for <bpf@archiver.kernel.org>; Sun, 28 Jul 2019 03:26:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2CECC7618F
+	for <bpf@archiver.kernel.org>; Sun, 28 Jul 2019 03:46:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 285642067D
-	for <bpf@archiver.kernel.org>; Sun, 28 Jul 2019 03:26:05 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="JhUfBxwq"
+	by mail.kernel.org (Postfix) with ESMTP id C0E672085A
+	for <bpf@archiver.kernel.org>; Sun, 28 Jul 2019 03:46:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726208AbfG1D0E (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 27 Jul 2019 23:26:04 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:37900 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726004AbfG1DZs (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 27 Jul 2019 23:25:48 -0400
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6S3NoKU028481
-        for <bpf@vger.kernel.org>; Sat, 27 Jul 2019 20:25:47 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=9x7A3T3WKDCwVuu2HKqmp+GWtlJ1b/JlojeE+ECPYMY=;
- b=JhUfBxwq+NYymu+wrNBU+mHeCHorFIKngAJ4e2bVcxltNI4D29YO8O42FWiHxkQsgsiB
- rPcMwOan7ACZR249OcE5k7daRaN6e+c7ee7scX9XfYESby17tVkJFMgBuBx3d0iKirUm
- ZG9GuQYQN3Vr3y4aMMmbuUeSBv0J9+yf/Pw= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2u0kqa250s-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sat, 27 Jul 2019 20:25:47 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Sat, 27 Jul 2019 20:25:45 -0700
-Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id B17A58615B1; Sat, 27 Jul 2019 20:25:44 -0700 (PDT)
-Smtp-Origin-Hostprefix: dev
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: dev101.prn2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>, <sdf@fomichev.me>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v3 bpf-next 4/9] libbpf: return previous print callback from libbpf_set_print
-Date:   Sat, 27 Jul 2019 20:25:26 -0700
-Message-ID: <20190728032531.2358749-5-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190728032531.2358749-1-andriin@fb.com>
-References: <20190728032531.2358749-1-andriin@fb.com>
-X-FB-Internal: Safe
+        id S1725937AbfG1DqC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 27 Jul 2019 23:46:02 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:44901 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725878AbfG1DqB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 27 Jul 2019 23:46:01 -0400
+Received: by mail-io1-f70.google.com with SMTP id s9so63564575iob.11
+        for <bpf@vger.kernel.org>; Sat, 27 Jul 2019 20:46:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=o2kzyTbMhQL/kAorHcC+7ID+BqHWTQyphajjOBsUUz8=;
+        b=MGvUrXLSwPgxzEk0OFOtYti7XCdl0lznXdqxN2t1LHo2Xpp+vAS2Ol+qqgoq72JnnJ
+         pHsC9AE2VB/Jdq4CExSnxeRhOUaTik/RCS0kd/Jqw8KrPq83X/WGSxTUO0gIZEWoZ6ag
+         Hb0BieRBq+vVAI8bCV9ZhnjNxjvTHmdrjky+nwSXSPyBdkEmMUWoJfIxhLQzR5FtOB8s
+         rGubvV1eYlCTYK3RzmoBfyQ+eWVH2Yx0Vb3gL7RQBWjePEmvwX9lfF5lMYZ/QAdNBPuA
+         757gj+mM3bmI94RZL1tfr5Wpakw7dCeP8m3WPQRW8Ft9I6YomNiXvXzzAg5LgvQrKe3o
+         cUwA==
+X-Gm-Message-State: APjAAAVYy1GxGYlx6tfjqqmrE+a444o3w0wiBg3sHdXMe7iP9CEamqH2
+        P9T/cFU4cymaPbiMLjNp1ymFQneuwSWvI5B/zXf2hFoQmjjW
+X-Google-Smtp-Source: APXvYqxXM+e7HkG1ndOj4S4xy8tLRGbSOz7rHomFcVxe9opbIqsbCOX/jEqUOK4tXAcI7y8l03aMdveo9Zu26OKpCrjDuyQnBW0q
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-28_01:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=8 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=757 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1907280041
-X-FB-Internal: deliver
+X-Received: by 2002:a02:878a:: with SMTP id t10mr33742269jai.112.1564285560945;
+ Sat, 27 Jul 2019 20:46:00 -0700 (PDT)
+Date:   Sat, 27 Jul 2019 20:46:00 -0700
+In-Reply-To: <0000000000002b4896058e7abf78@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000300996058eb59dd7@google.com>
+Subject: Re: general protection fault in tls_trim_both_msgs
+From:   syzbot <syzbot+0e0fedcad708d12d3032@syzkaller.appspotmail.com>
+To:     ast@kernel.org, aviadye@mellanox.com, borisp@mellanox.com,
+        bpf@vger.kernel.org, corbet@lwn.net, daniel@iogearbox.net,
+        davejwatson@fb.com, davem@davemloft.net,
+        jakub.kicinski@netronome.com, john.fastabend@gmail.com,
+        kafai@fb.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-By returning previously set print callback from libbpf_set_print, it's
-possible to restore it, eventually. This is useful when running many
-independent test with one default print function, but overriding log
-verbosity for particular subset of tests.
+syzbot has bisected this bug to:
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/lib/bpf/libbpf.c | 5 ++++-
- tools/lib/bpf/libbpf.h | 2 +-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+commit 32857cf57f920cdc03b5095f08febec94cf9c36b
+Author: John Fastabend <john.fastabend@gmail.com>
+Date:   Fri Jul 19 17:29:18 2019 +0000
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 8741c39adb1c..ead915aec349 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -74,9 +74,12 @@ static int __base_pr(enum libbpf_print_level level, const char *format,
- 
- static libbpf_print_fn_t __libbpf_pr = __base_pr;
- 
--void libbpf_set_print(libbpf_print_fn_t fn)
-+libbpf_print_fn_t libbpf_set_print(libbpf_print_fn_t fn)
- {
-+	libbpf_print_fn_t old_print_fn = __libbpf_pr;
-+
- 	__libbpf_pr = fn;
-+	return old_print_fn;
- }
- 
- __printf(2, 3)
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 5cbf459ece0b..8a9d462a6f6d 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -57,7 +57,7 @@ enum libbpf_print_level {
- typedef int (*libbpf_print_fn_t)(enum libbpf_print_level level,
- 				 const char *, va_list ap);
- 
--LIBBPF_API void libbpf_set_print(libbpf_print_fn_t fn);
-+LIBBPF_API libbpf_print_fn_t libbpf_set_print(libbpf_print_fn_t fn);
- 
- /* Hide internal to user */
- struct bpf_object;
--- 
-2.17.1
+     net/tls: fix transition through disconnect with close
 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=155064d8600000
+start commit:   fde50b96 Add linux-next specific files for 20190726
+git tree:       linux-next
+final crash:    https://syzkaller.appspot.com/x/report.txt?x=175064d8600000
+console output: https://syzkaller.appspot.com/x/log.txt?x=135064d8600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4b58274564b354c1
+dashboard link: https://syzkaller.appspot.com/bug?extid=0e0fedcad708d12d3032
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14779d64600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1587c842600000
+
+Reported-by: syzbot+0e0fedcad708d12d3032@syzkaller.appspotmail.com
+Fixes: 32857cf57f92 ("net/tls: fix transition through disconnect with  
+close")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
