@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8262CC433FF
-	for <bpf@archiver.kernel.org>; Sun, 28 Jul 2019 03:25:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83433C41514
+	for <bpf@archiver.kernel.org>; Sun, 28 Jul 2019 03:25:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5B2912067D
-	for <bpf@archiver.kernel.org>; Sun, 28 Jul 2019 03:25:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5CCF621655
+	for <bpf@archiver.kernel.org>; Sun, 28 Jul 2019 03:25:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="LH1fhSec"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="kI9XbhlR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725978AbfG1DZn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 27 Jul 2019 23:25:43 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:27178 "EHLO
+        id S1726010AbfG1DZq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 27 Jul 2019 23:25:46 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:21712 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725965AbfG1DZm (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 27 Jul 2019 23:25:42 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6S3PHua003702
-        for <bpf@vger.kernel.org>; Sat, 27 Jul 2019 20:25:42 -0700
+        by vger.kernel.org with ESMTP id S1725875AbfG1DZq (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 27 Jul 2019 23:25:46 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6S3Pcti021452
+        for <bpf@vger.kernel.org>; Sat, 27 Jul 2019 20:25:45 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=Ro1atBOQn0FoflswE2CRQID1FbEPRYZgHIZRtk7tSxE=;
- b=LH1fhSecnYmaHHK2Dg+snv3pZIjsx0SjSOdELLyAR8tGFlc0TcGpGflxPOwst1t8qJAZ
- 2nCnRvFQfkYbDYWa13vkN8A9quwyxhcvGZmIWDaTWJe7K1FGw3nlHh0QyKoIK+dG6hMy
- moULaSzDirAybG6aVWYn9U/wShTTIQyU9II= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2u0hx2tbtb-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Sat, 27 Jul 2019 20:25:41 -0700
-Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::126) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Sat, 27 Jul 2019 20:25:39 -0700
+ content-type; s=facebook; bh=XL/3BQOO67wRVex3Vl3Z6QlWQL+soOan2NuJ2UsVDvo=;
+ b=kI9XbhlRJFrMtSEVqE22wJu8yrwvjoaPiGJbgw84wPYobhjhnzOSt9xLdqcEaV07dL4L
+ syXYCHQHi8wAXUxRuv4o9tQLDQf/Sin+cBRonSqvFIZ8H3k7Qf3Rphbfg4v2Pxh/0mCH
+ tBq/GSw2ATs7FKADfK1N7ieJ7iW+ZMtQOJI= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2u0jn3j8u0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Sat, 27 Jul 2019 20:25:45 -0700
+Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Sat, 27 Jul 2019 20:25:44 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 91F0F8615B1; Sat, 27 Jul 2019 20:25:38 -0700 (PDT)
+        id A6C2D8615B1; Sat, 27 Jul 2019 20:25:42 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v3 bpf-next 1/9] selftests/bpf: prevent headers to be compiled as C code
-Date:   Sat, 27 Jul 2019 20:25:23 -0700
-Message-ID: <20190728032531.2358749-2-andriin@fb.com>
+Subject: [PATCH v3 bpf-next 3/9] selftests/bpf: add test selectors by number and name to test_progs
+Date:   Sat, 27 Jul 2019 20:25:25 -0700
+Message-ID: <20190728032531.2358749-4-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190728032531.2358749-1-andriin@fb.com>
 References: <20190728032531.2358749-1-andriin@fb.com>
@@ -70,48 +70,119 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Apprently listing header as a normal dependency for a binary output
-makes it go through compilation as if it was C code. This currently
-works without a problem, but in subsequent commits causes problems for
-differently generated test.h for test_progs. Marking those headers as
-order-only dependency solves the issue.
+Add ability to specify either test number or test name substring to
+narrow down a set of test to run.
+
+Usage:
+sudo ./test_progs -n 1
+sudo ./test_progs -t attach_probe
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/testing/selftests/bpf/Makefile | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/test_progs.c | 43 +++++++++++++++++++++---
+ 1 file changed, 39 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 11c9c62c3362..bb66cc4a7f34 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -235,7 +235,7 @@ PROG_TESTS_H := $(PROG_TESTS_DIR)/tests.h
- PROG_TESTS_FILES := $(wildcard prog_tests/*.c)
- test_progs.c: $(PROG_TESTS_H)
- $(OUTPUT)/test_progs: CFLAGS += $(TEST_PROGS_CFLAGS)
--$(OUTPUT)/test_progs: test_progs.c $(PROG_TESTS_H) $(PROG_TESTS_FILES)
-+$(OUTPUT)/test_progs: test_progs.c $(PROG_TESTS_FILES) | $(PROG_TESTS_H)
- $(PROG_TESTS_H): $(PROG_TESTS_FILES) | $(PROG_TESTS_DIR)
- 	$(shell ( cd prog_tests/; \
- 		  echo '/* Generated header, do not edit */'; \
-@@ -256,7 +256,7 @@ MAP_TESTS_H := $(MAP_TESTS_DIR)/tests.h
- MAP_TESTS_FILES := $(wildcard map_tests/*.c)
- test_maps.c: $(MAP_TESTS_H)
- $(OUTPUT)/test_maps: CFLAGS += $(TEST_MAPS_CFLAGS)
--$(OUTPUT)/test_maps: test_maps.c $(MAP_TESTS_H) $(MAP_TESTS_FILES)
-+$(OUTPUT)/test_maps: test_maps.c $(MAP_TESTS_FILES) | $(MAP_TESTS_H)
- $(MAP_TESTS_H): $(MAP_TESTS_FILES) | $(MAP_TESTS_DIR)
- 	$(shell ( cd map_tests/; \
- 		  echo '/* Generated header, do not edit */'; \
-@@ -277,7 +277,7 @@ VERIFIER_TESTS_H := $(VERIFIER_TESTS_DIR)/tests.h
- VERIFIER_TEST_FILES := $(wildcard verifier/*.c)
- test_verifier.c: $(VERIFIER_TESTS_H)
- $(OUTPUT)/test_verifier: CFLAGS += $(TEST_VERIFIER_CFLAGS)
--$(OUTPUT)/test_verifier: test_verifier.c $(VERIFIER_TESTS_H)
-+$(OUTPUT)/test_verifier: test_verifier.c | $(VERIFIER_TEST_FILES) $(VERIFIER_TESTS_H)
- $(VERIFIER_TESTS_H): $(VERIFIER_TEST_FILES) | $(VERIFIER_TESTS_DIR)
- 	$(shell ( cd verifier/; \
- 		  echo '/* Generated header, do not edit */'; \
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index eea88ba59225..6e04b9f83777 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -4,6 +4,7 @@
+ #include "test_progs.h"
+ #include "bpf_rlimit.h"
+ #include <argp.h>
++#include <string.h>
+ 
+ int error_cnt, pass_cnt;
+ bool jit_enabled;
+@@ -164,6 +165,7 @@ void *spin_lock_thread(void *arg)
+ 
+ struct prog_test_def {
+ 	const char *test_name;
++	int test_num;
+ 	void (*run_test)(void);
+ };
+ 
+@@ -181,26 +183,49 @@ const char *argp_program_bug_address = "<bpf@vger.kernel.org>";
+ const char argp_program_doc[] = "BPF selftests test runner";
+ 
+ enum ARG_KEYS {
++	ARG_TEST_NUM = 'n',
++	ARG_TEST_NAME = 't',
+ 	ARG_VERIFIER_STATS = 's',
+ };
+ 	
+ static const struct argp_option opts[] = {
++	{ "num", ARG_TEST_NUM, "NUM", 0,
++	  "Run test number NUM only " },
++	{ "name", ARG_TEST_NAME, "NAME", 0,
++	  "Run tests with names containing NAME" },
+ 	{ "verifier-stats", ARG_VERIFIER_STATS, NULL, 0,
+ 	  "Output verifier statistics", },
+ 	{},
+ };
+ 
+ struct test_env {
++	int test_num_selector;
++	const char *test_name_selector;
+ 	bool verifier_stats;
+ };
+ 
+-static struct test_env env = {};
++static struct test_env env = {
++	.test_num_selector = -1,
++};
+ 
+ static error_t parse_arg(int key, char *arg, struct argp_state *state)
+ {
+ 	struct test_env *env = state->input;
+ 
+ 	switch (key) {
++	case ARG_TEST_NUM: {
++		int test_num;
++
++		errno = 0;
++		test_num = strtol(arg, NULL, 10);
++		if (errno)
++			return -errno;
++		env->test_num_selector = test_num;
++		break;
++	}
++	case ARG_TEST_NAME:
++		env->test_name_selector = arg;
++		break;
+ 	case ARG_VERIFIER_STATS:
+ 		env->verifier_stats = true;
+ 		break;
+@@ -223,7 +248,7 @@ int main(int argc, char **argv)
+ 		.parser = parse_arg,
+ 		.doc = argp_program_doc,
+ 	};
+-	const struct prog_test_def *def;
++	struct prog_test_def *test;
+ 	int err, i;
+ 
+ 	err = argp_parse(&argp, argc, argv, 0, NULL, &env);
+@@ -237,8 +262,18 @@ int main(int argc, char **argv)
+ 	verifier_stats = env.verifier_stats;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(prog_test_defs); i++) {
+-		def = &prog_test_defs[i];
+-		def->run_test();
++		test = &prog_test_defs[i];
++
++		test->test_num = i + 1;
++
++		if (env.test_num_selector >= 0 &&
++		    test->test_num != env.test_num_selector)
++			continue;
++		if (env.test_name_selector &&
++		    !strstr(test->test_name, env.test_name_selector))
++			continue;
++
++		test->run_test();
+ 	}
+ 
+ 	printf("Summary: %d PASSED, %d FAILED\n", pass_cnt, error_cnt);
 -- 
 2.17.1
 
