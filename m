@@ -5,64 +5,64 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FC1CC7618E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89350C433FF
 	for <bpf@archiver.kernel.org>; Mon, 29 Jul 2019 16:59:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 29DFB206E0
+	by mail.kernel.org (Postfix) with ESMTP id 603E32070B
 	for <bpf@archiver.kernel.org>; Mon, 29 Jul 2019 16:59:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KZcbmtfU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AkrdyvnM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728820AbfG2Q7g (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1728828AbfG2Q7j (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Jul 2019 12:59:39 -0400
+Received: from mail-pl1-f177.google.com ([209.85.214.177]:35347 "EHLO
+        mail-pl1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728808AbfG2Q7g (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 29 Jul 2019 12:59:36 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:36347 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727899AbfG2Q7f (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Jul 2019 12:59:35 -0400
-Received: by mail-pg1-f193.google.com with SMTP id l21so28556806pgm.3;
-        Mon, 29 Jul 2019 09:59:34 -0700 (PDT)
+Received: by mail-pl1-f177.google.com with SMTP id w24so27741150plp.2;
+        Mon, 29 Jul 2019 09:59:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ksAzpj+KHDgXM/KyHUhWdINlogi/v++p7bhxJ+uB+bY=;
-        b=KZcbmtfU13yKDgR+wr4hrSs3l1bzNUqaysOi4UcdhaPa+nOtHqJh+BlLkYZPfBOODV
-         4b4QtCCt20bE+3gR1SzIxrVZ8nqvBANg06ig9tbiG4YyP8qTtEBLJp8K2pSE8rQrES60
-         IB6/yqYIVHU6n6sggJZ735/Y8Rxr23I6Byd6Qbe0L527ZmWlHYjYNxe9Rta6Ft1hRHAM
-         E17kzQvP5J3op9BAIw7tIpZeamPHCZIEi2/SRaZkcc5cphDapp0+zICqTJdq8VdyaRq4
-         levzJMW+nU804yxGlSiON88C8TeBWWQTDQwpM5+LnFGOqdgpQ5D5qIQIpmCIYtQxeXyj
-         0Dwg==
+        bh=xphI6JZ/4VEeh2wSAzMPoVPbDD54bxmWPp69hdwyHKo=;
+        b=AkrdyvnMujBZVflAuy5SEgVOwP8ATpb5Kpzb14bm8r8JyaTdE1lD5YKjMx1EpTZuk4
+         +rkcE37eJHVogQHACogF6Du6y2BBzQLqR8zgM4Vw4QM6TcDpezf2jGh0jVo2PalmvING
+         DQ6GX9iyRcnO99kQbOrKMjuRIAZScJJFXbdTeGeanmyxY+SVHx6cBEfBXBEWYvDehUY0
+         q+tmKLrUxGDfMhaVX29lzNhEDVEPjB6Dr/kJ200hDlCObkeqT8Bu77XZIP471O5/H4BH
+         inZPlI7gSwr3rIjgvPFyWBAYERkK4+8fGQOZJDEiX9E6rICWRJKmXdIZF3omrn24G1nO
+         Lzhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ksAzpj+KHDgXM/KyHUhWdINlogi/v++p7bhxJ+uB+bY=;
-        b=f4DpqsAMV+BV+jVXAHSQdOIasoVJDqdpL+1HrNreskLiiata6KhGxoUZ3CqrcjIYOy
-         kOSHuyOE7Ji3I6At/f+AzQIQtrB/uUNEIo3OVPZbr9LpHfNuqsyNlmiycAjWhMjVMlKL
-         lFCgBWdsk/ckDi6DMlT5whnQYe/CYzDdE2rPjdssJ1fX6DH6yammPu/bNBhNEtDXJj5R
-         HB9vO8lVhG/NlfoU/NXvrAvqm0MiEY9hRuZEsdSmIhkMvW5BBvJRXBjQQP69DN3aQs3q
-         /jsQRdGITYaNUCRIodONBhci8bIli0AJZySUumI5q18lUuNz74nd1JaRFSGFrdaVGNM7
-         BUBg==
-X-Gm-Message-State: APjAAAWMSvwcZCVKNFpJQ+x9mEjpzyBhV81baSlsHHgFgB61DVrGzSOB
-        yR+GQyu2pKOoXjVpeE6CI2fKNb5R
-X-Google-Smtp-Source: APXvYqzSCNm51zetNwMUIh16uDoEJvr4tHpnbscqVUF01ity5U3L4R9PQyuX+CGHtBcOyaeCRqQZAw==
-X-Received: by 2002:a65:56c1:: with SMTP id w1mr103441040pgs.395.1564419573929;
-        Mon, 29 Jul 2019 09:59:33 -0700 (PDT)
+        bh=xphI6JZ/4VEeh2wSAzMPoVPbDD54bxmWPp69hdwyHKo=;
+        b=jITisYl+zteAaWyRgh1MoP5Y7SE1VlaFmSK1u66BFpOTAorMPqZlRqjlMOxYT/WNO+
+         OImBn6HhsnhiYD7QAjYFcVbacXtdk23OZUsltndxHkd3De5rveU9PNFyp64K0VYzzmmR
+         mO3iSLBSHpdSpKzU2hpNi6xiAARu6IWw9Sn9YSTw3t/rlOg0ZW2lYxM+dfAu7gAI06s1
+         X2MR8IoC6AL30L9u0kLWDciyVMBpGNy5HWO15bV5Xis558QaCW371c0z0tKfMJyF7V2k
+         cM5Eps51ebUKhaJQ84G09gtOpeIll0a3icIW85C/5cE1cKr0C3fvlod5FW5k/GnGYjBG
+         xfVw==
+X-Gm-Message-State: APjAAAXokjthcabtdhisxy3eXTIOEdZdV1D1TI9bPIY6DVy6m9JtLeIy
+        iFvcDrePax8RyQORuQ1NCmfPgO6Q
+X-Google-Smtp-Source: APXvYqzECqmLH95auX452SZdWcpl4NOQg7LJwyCVMUg1FUd32WHb52EazEqvYaa8/BmebI1CDk2pIA==
+X-Received: by 2002:a17:902:9346:: with SMTP id g6mr110854238plp.61.1564419575470;
+        Mon, 29 Jul 2019 09:59:35 -0700 (PDT)
 Received: from ppenkov.svl.corp.google.com ([2620:15c:2c4:201:7bd4:4f27:abe4:d695])
-        by smtp.gmail.com with ESMTPSA id i198sm60784651pgd.44.2019.07.29.09.59.33
+        by smtp.gmail.com with ESMTPSA id i198sm60784651pgd.44.2019.07.29.09.59.34
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 29 Jul 2019 09:59:33 -0700 (PDT)
+        Mon, 29 Jul 2019 09:59:35 -0700 (PDT)
 From:   Petar Penkov <ppenkov.kernel@gmail.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
         edumazet@google.com, lmb@cloudflare.com, sdf@google.com,
         toke@redhat.com, Petar Penkov <ppenkov@google.com>
-Subject: [bpf-next,v2 4/6] bpf: sync bpf.h to tools/
-Date:   Mon, 29 Jul 2019 09:59:16 -0700
-Message-Id: <20190729165918.92933-5-ppenkov.kernel@gmail.com>
+Subject: [bpf-next,v2 6/6] selftests/bpf: add test for bpf_tcp_gen_syncookie
+Date:   Mon, 29 Jul 2019 09:59:18 -0700
+Message-Id: <20190729165918.92933-7-ppenkov.kernel@gmail.com>
 X-Mailer: git-send-email 2.22.0.709.g102302147b-goog
 In-Reply-To: <20190729165918.92933-1-ppenkov.kernel@gmail.com>
 References: <20190729165918.92933-1-ppenkov.kernel@gmail.com>
@@ -75,79 +75,260 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Petar Penkov <ppenkov@google.com>
 
-Sync updated documentation for bpf_redirect_map.
+Modify the existing bpf_tcp_check_syncookie test to also generate a
+SYN cookie, pass the packet to the kernel, and verify that the two
+cookies are the same (and both valid). Since cloned SKBs are skipped
+during generic XDP, this test does not issue a SYN cookie when run in
+XDP mode. We therefore only check that a valid SYN cookie was issued at
+the TC hook.
 
-Sync the bpf_tcp_gen_syncookie helper function definition with the one
-in tools/uapi.
+Additionally, verify that the MSS for that SYN cookie is within
+expected range.
 
 Signed-off-by: Petar Penkov <ppenkov@google.com>
 Reviewed-by: Lorenz Bauer <lmb@cloudflare.com>
 ---
- tools/include/uapi/linux/bpf.h | 37 +++++++++++++++++++++++++++++++---
- 1 file changed, 34 insertions(+), 3 deletions(-)
+ .../bpf/progs/test_tcp_check_syncookie_kern.c | 48 +++++++++++++--
+ .../selftests/bpf/test_tcp_check_syncookie.sh |  3 +
+ .../bpf/test_tcp_check_syncookie_user.c       | 61 ++++++++++++++++---
+ 3 files changed, 99 insertions(+), 13 deletions(-)
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 3d7fc67ec1b8..5a54f1011db8 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1571,8 +1571,11 @@ union bpf_attr {
-  * 		but this is only implemented for native XDP (with driver
-  * 		support) as of this writing).
-  *
-- * 		All values for *flags* are reserved for future usage, and must
-- * 		be left at zero.
-+ * 		The lower two bits of *flags* are used as the return code if
-+ * 		the map lookup fails. This is so that the return value can be
-+ * 		one of the XDP program return codes up to XDP_TX, as chosen by
-+ * 		the caller. Any higher bits in the *flags* argument must be
-+ * 		unset.
-  *
-  * 		When used to redirect packets to net devices, this helper
-  * 		provides a high performance increase over **bpf_redirect**\ ().
-@@ -2710,6 +2713,33 @@ union bpf_attr {
-  *		**-EPERM** if no permission to send the *sig*.
-  *
-  *		**-EAGAIN** if bpf program can try again.
-+ *
-+ * s64 bpf_tcp_gen_syncookie(struct bpf_sock *sk, void *iph, u32 iph_len, struct tcphdr *th, u32 th_len)
-+ *	Description
-+ *		Try to issue a SYN cookie for the packet with corresponding
-+ *		IP/TCP headers, *iph* and *th*, on the listening socket in *sk*.
-+ *
-+ *		*iph* points to the start of the IPv4 or IPv6 header, while
-+ *		*iph_len* contains **sizeof**\ (**struct iphdr**) or
-+ *		**sizeof**\ (**struct ip6hdr**).
-+ *
-+ *		*th* points to the start of the TCP header, while *th_len*
-+ *		contains the length of the TCP header.
-+ *
-+ *	Return
-+ *		On success, lower 32 bits hold the generated SYN cookie in
-+ *		followed by 16 bits which hold the MSS value for that cookie,
-+ *		and the top 16 bits are unused.
-+ *
-+ *		On failure, the returned value is one of the following:
-+ *
-+ *		**-EINVAL** SYN cookie cannot be issued due to error
-+ *
-+ *		**-ENOENT** SYN cookie should not be issued (no SYN flood)
-+ *
-+ *		**-EOPNOTSUPP** kernel configuration does not enable SYN cookies
-+ *
-+ *		**-EPROTONOSUPPORT** IP packet version is not 4 or 6
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -2821,7 +2851,8 @@ union bpf_attr {
- 	FN(strtoul),			\
- 	FN(sk_storage_get),		\
- 	FN(sk_storage_delete),		\
--	FN(send_signal),
-+	FN(send_signal),		\
-+	FN(tcp_gen_syncookie),
+diff --git a/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c b/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c
+index 1ab095bcacd8..d8803dfa8d32 100644
+--- a/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c
++++ b/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c
+@@ -19,10 +19,29 @@
+ struct bpf_map_def SEC("maps") results = {
+ 	.type = BPF_MAP_TYPE_ARRAY,
+ 	.key_size = sizeof(__u32),
+-	.value_size = sizeof(__u64),
+-	.max_entries = 1,
++	.value_size = sizeof(__u32),
++	.max_entries = 3,
+ };
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-  * function eBPF program intends to call
++static __always_inline __s64 gen_syncookie(void *data_end, struct bpf_sock *sk,
++					   void *iph, __u32 ip_size,
++					   struct tcphdr *tcph)
++{
++	__u32 thlen = tcph->doff * 4;
++
++	if (tcph->syn && !tcph->ack) {
++		// packet should only have an MSS option
++		if (thlen != 24)
++			return 0;
++
++		if ((void *)tcph + thlen > data_end)
++			return 0;
++
++		return bpf_tcp_gen_syncookie(sk, iph, ip_size, tcph, thlen);
++	}
++	return 0;
++}
++
+ static __always_inline void check_syncookie(void *ctx, void *data,
+ 					    void *data_end)
+ {
+@@ -33,8 +52,10 @@ static __always_inline void check_syncookie(void *ctx, void *data,
+ 	struct ipv6hdr *ipv6h;
+ 	struct tcphdr *tcph;
+ 	int ret;
++	__u32 key_mss = 2;
++	__u32 key_gen = 1;
+ 	__u32 key = 0;
+-	__u64 value = 1;
++	__s64 seq_mss;
+ 
+ 	ethh = data;
+ 	if (ethh + 1 > data_end)
+@@ -66,6 +87,9 @@ static __always_inline void check_syncookie(void *ctx, void *data,
+ 		if (sk->state != BPF_TCP_LISTEN)
+ 			goto release;
+ 
++		seq_mss = gen_syncookie(data_end, sk, ipv4h, sizeof(*ipv4h),
++					tcph);
++
+ 		ret = bpf_tcp_check_syncookie(sk, ipv4h, sizeof(*ipv4h),
+ 					      tcph, sizeof(*tcph));
+ 		break;
+@@ -95,6 +119,9 @@ static __always_inline void check_syncookie(void *ctx, void *data,
+ 		if (sk->state != BPF_TCP_LISTEN)
+ 			goto release;
+ 
++		seq_mss = gen_syncookie(data_end, sk, ipv6h, sizeof(*ipv6h),
++					tcph);
++
+ 		ret = bpf_tcp_check_syncookie(sk, ipv6h, sizeof(*ipv6h),
+ 					      tcph, sizeof(*tcph));
+ 		break;
+@@ -103,8 +130,19 @@ static __always_inline void check_syncookie(void *ctx, void *data,
+ 		return;
+ 	}
+ 
+-	if (ret == 0)
+-		bpf_map_update_elem(&results, &key, &value, 0);
++	if (seq_mss > 0) {
++		__u32 cookie = (__u32)seq_mss;
++		__u32 mss = seq_mss >> 32;
++
++		bpf_map_update_elem(&results, &key_gen, &cookie, 0);
++		bpf_map_update_elem(&results, &key_mss, &mss, 0);
++	}
++
++	if (ret == 0) {
++		__u32 cookie = bpf_ntohl(tcph->ack_seq) - 1;
++
++		bpf_map_update_elem(&results, &key, &cookie, 0);
++	}
+ 
+ release:
+ 	bpf_sk_release(sk);
+diff --git a/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh b/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh
+index d48e51716d19..9b3617d770a5 100755
+--- a/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh
++++ b/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh
+@@ -37,6 +37,9 @@ setup()
+ 	ns1_exec ip link set lo up
+ 
+ 	ns1_exec sysctl -w net.ipv4.tcp_syncookies=2
++	ns1_exec sysctl -w net.ipv4.tcp_window_scaling=0
++	ns1_exec sysctl -w net.ipv4.tcp_timestamps=0
++	ns1_exec sysctl -w net.ipv4.tcp_sack=0
+ 
+ 	wait_for_ip 127.0.0.1
+ 	wait_for_ip ::1
+diff --git a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
+index 87829c86c746..b9e991d43155 100644
+--- a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
++++ b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
+@@ -2,6 +2,7 @@
+ // Copyright (c) 2018 Facebook
+ // Copyright (c) 2019 Cloudflare
+ 
++#include <limits.h>
+ #include <string.h>
+ #include <stdlib.h>
+ #include <unistd.h>
+@@ -77,7 +78,7 @@ static int connect_to_server(int server_fd)
+ 	return fd;
+ }
+ 
+-static int get_map_fd_by_prog_id(int prog_id)
++static int get_map_fd_by_prog_id(int prog_id, bool *xdp)
+ {
+ 	struct bpf_prog_info info = {};
+ 	__u32 info_len = sizeof(info);
+@@ -104,6 +105,8 @@ static int get_map_fd_by_prog_id(int prog_id)
+ 		goto err;
+ 	}
+ 
++	*xdp = info.type == BPF_PROG_TYPE_XDP;
++
+ 	map_fd = bpf_map_get_fd_by_id(map_ids[0]);
+ 	if (map_fd < 0)
+ 		log_err("Failed to get fd by map id %d", map_ids[0]);
+@@ -113,18 +116,32 @@ static int get_map_fd_by_prog_id(int prog_id)
+ 	return map_fd;
+ }
+ 
+-static int run_test(int server_fd, int results_fd)
++static int run_test(int server_fd, int results_fd, bool xdp)
+ {
+ 	int client = -1, srv_client = -1;
+ 	int ret = 0;
+ 	__u32 key = 0;
+-	__u64 value = 0;
++	__u32 key_gen = 1;
++	__u32 key_mss = 2;
++	__u32 value = 0;
++	__u32 value_gen = 0;
++	__u32 value_mss = 0;
+ 
+ 	if (bpf_map_update_elem(results_fd, &key, &value, 0) < 0) {
+ 		log_err("Can't clear results");
+ 		goto err;
+ 	}
+ 
++	if (bpf_map_update_elem(results_fd, &key_gen, &value_gen, 0) < 0) {
++		log_err("Can't clear results");
++		goto err;
++	}
++
++	if (bpf_map_update_elem(results_fd, &key_mss, &value_mss, 0) < 0) {
++		log_err("Can't clear results");
++		goto err;
++	}
++
+ 	client = connect_to_server(server_fd);
+ 	if (client == -1)
+ 		goto err;
+@@ -140,8 +157,35 @@ static int run_test(int server_fd, int results_fd)
+ 		goto err;
+ 	}
+ 
+-	if (value != 1) {
+-		log_err("Didn't match syncookie: %llu", value);
++	if (value == 0) {
++		log_err("Didn't match syncookie: %u", value);
++		goto err;
++	}
++
++	if (bpf_map_lookup_elem(results_fd, &key_gen, &value_gen) < 0) {
++		log_err("Can't lookup result");
++		goto err;
++	}
++
++	if (xdp && value_gen == 0) {
++		// SYN packets do not get passed through generic XDP, skip the
++		// rest of the test.
++		printf("Skipping XDP cookie check\n");
++		goto out;
++	}
++
++	if (bpf_map_lookup_elem(results_fd, &key_mss, &value_mss) < 0) {
++		log_err("Can't lookup result");
++		goto err;
++	}
++
++	if (value != value_gen) {
++		log_err("BPF generated cookie does not match kernel one");
++		goto err;
++	}
++
++	if (value_mss < 536 || value_mss > USHRT_MAX) {
++		log_err("Unexpected MSS retrieved");
+ 		goto err;
+ 	}
+ 
+@@ -163,13 +207,14 @@ int main(int argc, char **argv)
+ 	int server_v6 = -1;
+ 	int results = -1;
+ 	int err = 0;
++	bool xdp;
+ 
+ 	if (argc < 2) {
+ 		fprintf(stderr, "Usage: %s prog_id\n", argv[0]);
+ 		exit(1);
+ 	}
+ 
+-	results = get_map_fd_by_prog_id(atoi(argv[1]));
++	results = get_map_fd_by_prog_id(atoi(argv[1]), &xdp);
+ 	if (results < 0) {
+ 		log_err("Can't get map");
+ 		goto err;
+@@ -194,10 +239,10 @@ int main(int argc, char **argv)
+ 	if (server_v6 == -1)
+ 		goto err;
+ 
+-	if (run_test(server, results))
++	if (run_test(server, results, xdp))
+ 		goto err;
+ 
+-	if (run_test(server_v6, results))
++	if (run_test(server_v6, results, xdp))
+ 		goto err;
+ 
+ 	printf("ok\n");
 -- 
 2.22.0.709.g102302147b-goog
 
