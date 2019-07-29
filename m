@@ -1,136 +1,77 @@
-Return-Path: <SRS0=Twvj=VZ=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=qK0s=V2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67C70C7618F
-	for <bpf@archiver.kernel.org>; Sun, 28 Jul 2019 19:24:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6DD3C433FF
+	for <bpf@archiver.kernel.org>; Mon, 29 Jul 2019 12:16:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3A6BE20679
-	for <bpf@archiver.kernel.org>; Sun, 28 Jul 2019 19:24:28 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hx9jfQ9t"
+	by mail.kernel.org (Postfix) with ESMTP id BD552206B8
+	for <bpf@archiver.kernel.org>; Mon, 29 Jul 2019 12:16:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726105AbfG1TY1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 28 Jul 2019 15:24:27 -0400
-Received: from mail-lf1-f52.google.com ([209.85.167.52]:40533 "EHLO
-        mail-lf1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726099AbfG1TY1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 28 Jul 2019 15:24:27 -0400
-Received: by mail-lf1-f52.google.com with SMTP id b17so40528685lff.7;
-        Sun, 28 Jul 2019 12:24:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m1bkao4L2HOCuabkoSA/X13Y3hjpAfMVV+naV5LffF4=;
-        b=hx9jfQ9tM4cYnm1aIPDcrP2APz/emt/55jeszuJPdT/X0kPcaARRTWHB9ppUOlTpxs
-         hNLJCB9fk/nNXni/kM65Jm5dZv3zYIOexiw2u7X1eVIkQ75m8bPdlGKRLi5viMZZqIJ0
-         vtgLcYmUnv7/rLNevKast1AP29CqKzeK0vrb3kDNSv9xzgI7EcUKYnkuuqiC3m7srMdk
-         uNpUwqNfA8u11nMzp0OWIGywKBOuo/cqmgB5idPlv1plYXtpehntTGSWiiswCTTTpxuH
-         BIKn+T3OOFRLTZADaxRNZBR2hXsAe3iVoJUSPKzAZPRccES7iRWPexlg5Woy9Sh4gH+g
-         0dfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m1bkao4L2HOCuabkoSA/X13Y3hjpAfMVV+naV5LffF4=;
-        b=A1F6Yw2muSOXIIRoukMqu0/3P/fAlNQFjeF0qNqfC0ZKJbZhFcIbrKD4oDOepaIv/J
-         wHtswae8lXgRQpn1IFojA0vKnL7x1sm2oKCGidGS6U+6xZpjXMQvXNFPLX3gsUaoaHmZ
-         1nlcBbEcivCLZDDgxHSJ0dEyuGWEp/jrmGQZIDmkowgQ2jC/MzASrynpHaKujHGmMWIK
-         n186s4jD1tevKnb2LvJx61WYpitOt7YiA49Vqm0STsu5gbukag2lQYjWnit7mxn0INOa
-         tLp6OdNfedUoAnmsy26X2Y21XB67Zl3OJYuYABDlgzI0Hm4kGsD/im9wGdirLSxbK+Ic
-         uxcw==
-X-Gm-Message-State: APjAAAVsLA47Fbfj4MluNRy4C6T0TmDZmvHwyM6dRrwcpBWoDw2ng7RV
-        nrpJQLpbc9RX9akW8K03ozDeIJ1ypTtR0H5E1nU=
-X-Google-Smtp-Source: APXvYqwHSJGB6dXPgpl27UZrPHyZ7vIJtR4DxjPwhPr1lUpR3kClZ12N0XpBJpWTiosLdhMtjUn4AZxPu7op7veybBM=
-X-Received: by 2002:ac2:5337:: with SMTP id f23mr50595546lfh.15.1564341865219;
- Sun, 28 Jul 2019 12:24:25 -0700 (PDT)
+        id S1727631AbfG2MQp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Jul 2019 08:16:45 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:62911 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726818AbfG2MQo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Jul 2019 08:16:44 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id A4796C049E12;
+        Mon, 29 Jul 2019 12:16:44 +0000 (UTC)
+Received: from [192.168.42.247] (ovpn-200-29.brq.redhat.com [10.40.200.29])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5FE266012A;
+        Mon, 29 Jul 2019 12:16:39 +0000 (UTC)
+Subject: [PATCH net-next] MAINTAINERS: Remove mailing-list entry for XDP
+ (eXpress Data Path)
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
+        xdp-newbies@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, jakub.kicinski@netronome.com,
+        john.fastabend@gmail.com
+Date:   Mon, 29 Jul 2019 14:16:37 +0200
+Message-ID: <156440259790.6123.1563221733550893420.stgit@carbon>
+User-Agent: StGit/unknown-version
 MIME-Version: 1.0
-References: <2e9f33c9-b772-396e-1e70-2e2d5027cac5@iogearbox.net>
- <5f1e881b-7094-a6d9-5d7c-f391d128780d@iogearbox.net> <CAADnVQJ0ATngyqo8xjXdDsyFuuov3KRtbHMR1LcV8VnEDUK8Fg@mail.gmail.com>
-In-Reply-To: <CAADnVQJ0ATngyqo8xjXdDsyFuuov3KRtbHMR1LcV8VnEDUK8Fg@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Sun, 28 Jul 2019 12:24:13 -0700
-Message-ID: <CAADnVQKsvEaQhJBZ7mjds+8092=bhtK52LyYt7cE0WmQjp7qNw@mail.gmail.com>
-Subject: Linux Plumbers BPF micro-conference CFP (reminder)
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.31]); Mon, 29 Jul 2019 12:16:44 +0000 (UTC)
+To:     unlisted-recipients:; (no To-header on input)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hey Folks,
+This removes the mailing list xdp-newbies@vger.kernel.org from the XDP
+kernel maintainers entry.
 
-August 2nd deadline to submit a proposal for BPF uconf
-is quickly approaching.
-If you're attending LPC in Lisbon and interested
-in awesome BPF uconf you need to submit a proposal.
+Being in the kernel MAINTAINERS file successfully caused the list to
+receive kbuild bot warnings, syzbot reports and sometimes developer
+patches. The level of details in these messages, doesn't match the
+target audience of the XDP-newbies list. This is based on a survey on
+the mailing list, where 73% voted for removal from MAINTAINERS file.
 
-Some of you already submitted them to lpc-bpf@vger
-per instructions that were sent back on July 12.
-Some proposals were sent via website.
-We'd like all proposals to be seen in the website.
-Could you please re-enter your proposal there?
-Please go to:
-https://www.linuxplumbersconf.org/event/4/abstracts/
-click on 'submit new proposal'
-and copy-paste what you've already sent to lpc-bpf@vger.
-Much appreciate it and sorry for confusion.
+Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+---
+ MAINTAINERS |    1 -
+ 1 file changed, 1 deletion(-)
 
-There is still room for few new proposals,
-but space is getting very limited.
-Please don't delay.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9cc156c58f0c..45cb4237eddc 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17560,7 +17560,6 @@ M:	Jakub Kicinski <jakub.kicinski@netronome.com>
+ M:	Jesper Dangaard Brouer <hawk@kernel.org>
+ M:	John Fastabend <john.fastabend@gmail.com>
+ L:	netdev@vger.kernel.org
+-L:	xdp-newbies@vger.kernel.org
+ L:	bpf@vger.kernel.org
+ S:	Supported
+ F:	net/core/xdp.c
 
-Thanks!
-
-> ---------- Forwarded message ---------
-> From: Daniel Borkmann <daniel@iogearbox.net>
-> Date: Fri, Jul 12, 2019 at 7:26 AM
-> Subject: Linux Plumbers BPF micro-conference CFP (reminder)
-> To: <bpf@vger.kernel.org>
-> Cc: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-> <xdp-newbies@vger.kernel.org>, <iovisor-dev@lists.iovisor.org>,
-> <lpc-bpf@vger.kernel.org>, <alexei.starovoitov@gmail.com>
->
->
-> This is a call for proposals for the BPF micro-conference at this
-> years' Linux Plumbers Conference (LPC) 2019 which will be held in
-> Lisbon, Portugal for September 9-11.
->
-> The goal of the BPF micro-conference is to bring BPF developers
-> together to discuss topics around Linux kernel work related to
-> the BPF core infrastructure as well as its many subsystems under
-> tracing, networking, security, and BPF user space tooling (LLVM,
-> libbpf, bpftool and many others).
->
-> The format of the micro-conference has a main focus on discussion,
-> therefore each accepted topic will provide a short 1-2 slide
-> introduction with subsequent discussion for the rest of the given
-> time slot.
->
-> The BPF micro-conference is a community-driven event and open to
-> all LPC attendees, there is no additional registration required.
->
-> Please submit your discussion proposals to the LPC BPF micro-conference
-> organizers at:
->
->         lpc-bpf@vger.kernel.org
->
-> Proposals must be submitted until August 2nd, and submitters will
-> be notified of acceptance at latest by August 9. (Please note that
-> proposals must not be sent as html mail as they are otherwise dropped
-> by vger.)
->
-> The format of the submission and many other details can be found at:
->
->         http://vger.kernel.org/lpc-bpf.html
->
-> Looking forward to seeing you all in Lisbon in September!
