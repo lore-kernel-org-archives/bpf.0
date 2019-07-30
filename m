@@ -2,312 +2,75 @@ Return-Path: <SRS0=Yvha=V3=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A822C0650F
-	for <bpf@archiver.kernel.org>; Tue, 30 Jul 2019 19:54:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6296C0650F
+	for <bpf@archiver.kernel.org>; Tue, 30 Jul 2019 20:11:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1B52D20659
-	for <bpf@archiver.kernel.org>; Tue, 30 Jul 2019 19:54:59 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="gew3zUHn"
+	by mail.kernel.org (Postfix) with ESMTP id A2820205F4
+	for <bpf@archiver.kernel.org>; Tue, 30 Jul 2019 20:11:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1564517488;
+	bh=o3uLRMoj7ksCO+PSZelBEDrocrNeF1FSTchgLTFdhYk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=ypQP3CIDbyylAIkYj7WyfaM991TEFFNUHflEcKmYkrIC138RE9TFdaeNileyb2zU+
+	 nAtPR1th+7wegYAEzQPDX/9OM2ucX8ldUUvnTDpthqaPAXWPNBrAxfP9qb33AhRqv2
+	 GLJcWLwveWHv4XxcmIn1zkpkW0QJtVAYEIMfzwuQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726806AbfG3Ty6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 30 Jul 2019 15:54:58 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:17884 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726808AbfG3Ty5 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 30 Jul 2019 15:54:57 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x6UJmaDi027831
-        for <bpf@vger.kernel.org>; Tue, 30 Jul 2019 12:54:56 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=EWEK1bLjIsOrnzS2PbKvhPqR3c9JTDC3JMJWM8nDt80=;
- b=gew3zUHnBbeNWi1DsFWIPHAp+t+E9jGmihTdaXc8W8tykZtWT2GHXreIjQesIk9q5IjQ
- t+t63/gV7sA7tm3qJQfIPkpdBSaVo6X9/U1RcUuK3hDOSHc2ey4j5Vcz4tjv5Vy10BzD
- dgFczA9IuP2HMOYLEuBjOfxVOZjQvspswmk= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 2u2p4b1jh4-12
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 30 Jul 2019 12:54:56 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 30 Jul 2019 12:54:30 -0700
-Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id C2559861655; Tue, 30 Jul 2019 12:54:29 -0700 (PDT)
-Smtp-Origin-Hostprefix: dev
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: dev101.prn2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>, <yhs@fb.com>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v2 bpf-next 09/12] selftests/bpf: add CO-RE relocs modifiers/typedef tests
-Date:   Tue, 30 Jul 2019 12:54:05 -0700
-Message-ID: <20190730195408.670063-10-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190730195408.670063-1-andriin@fb.com>
-References: <20190730195408.670063-1-andriin@fb.com>
-X-FB-Internal: Safe
+        id S1727753AbfG3UL2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 30 Jul 2019 16:11:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60564 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726174AbfG3UL2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 30 Jul 2019 16:11:28 -0400
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DF0C8205F4
+        for <bpf@vger.kernel.org>; Tue, 30 Jul 2019 20:11:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564517487;
+        bh=o3uLRMoj7ksCO+PSZelBEDrocrNeF1FSTchgLTFdhYk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=QOGVRGx3yojDnXj1M55fGKT7kULYKRB5K6sdoXLtgAnmMB3Z3T93Qw/88wtrsHi6T
+         +LQIvOgVaMPhcG5M9YEPFs4L0I5U7YUczFpxzdudeY58c2vPDPqbNnzy9gpuxsSwlH
+         86Tn9vt6lcYEYqwIoeJdgsn9zyuLmisyUQnXlnKI=
+Received: by mail-wr1-f51.google.com with SMTP id r1so67090420wrl.7
+        for <bpf@vger.kernel.org>; Tue, 30 Jul 2019 13:11:26 -0700 (PDT)
+X-Gm-Message-State: APjAAAUlCstNRAY2XGfjv7fCPr9IZREIG76WOLM7DiOakOZcWyynhrMz
+        cTHWWxMAnYMcXwMfgfNDdA12AFnv0KEOq9DsPYoBuA==
+X-Google-Smtp-Source: APXvYqwyDtaFObbPjjDDbJdP+2pzuEcS5CPcMP/HTePjfEOLnBFjOXGFrvdwjdCxxXR8kZAToJO4b+06MbOQtduYfho=
+X-Received: by 2002:adf:cf02:: with SMTP id o2mr109682923wrj.352.1564517485465;
+ Tue, 30 Jul 2019 13:11:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-30_09:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=67 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1907300201
-X-FB-Internal: deliver
+References: <CAC+a-TbieGvrwqaLz+VPgMhafH-3O5yrqY12EKKa-wZ1YxzxSw@mail.gmail.com>
+In-Reply-To: <CAC+a-TbieGvrwqaLz+VPgMhafH-3O5yrqY12EKKa-wZ1YxzxSw@mail.gmail.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Tue, 30 Jul 2019 13:11:14 -0700
+X-Gmail-Original-Message-ID: <CALCETrU=HaRhxNiw3hbguN988Dk__5kOZ2SXmO944VAYuUw=Gg@mail.gmail.com>
+Message-ID: <CALCETrU=HaRhxNiw3hbguN988Dk__5kOZ2SXmO944VAYuUw=Gg@mail.gmail.com>
+Subject: Re: [RFC] seccomp: add CLOEXEC flag
+To:     Baojun Wang <wangbj@gmail.com>
+Cc:     Kees Cook <keescook@chromium.org>, Will Drewry <wad@chromium.org>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add tests validating correct handling of various combinations of
-typedefs and const/volatile/restrict modifiers.
+On Tue, Jul 30, 2019 at 10:49 AM Baojun Wang <wangbj@gmail.com> wrote:
+>
+> This patch add a new flag *SECCOMP_FILTER_FLAG_CLOEXEC*
+>
+> (CLOEXEC, 1 << 4ul) to seccomp syscall. When the flag is set, filter
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Acked-by: Song Liu <songliubraving@fb.com>
----
- .../selftests/bpf/prog_tests/core_reloc.c     | 27 +++++++
- .../bpf/progs/btf__core_reloc_mods.c          |  3 +
- .../progs/btf__core_reloc_mods___mod_swap.c   |  3 +
- .../progs/btf__core_reloc_mods___typedefs.c   |  3 +
- .../selftests/bpf/progs/core_reloc_types.h    | 72 +++++++++++++++++++
- .../bpf/progs/test_core_reloc_mods.c          | 62 ++++++++++++++++
- 6 files changed, 170 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_mods.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_mods___mod_swap.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_mods___typedefs.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_core_reloc_mods.c
+One problem here is that you're removing all filters installed after
+the CLOEXEC one, too.  That's no good.  I suppose you could prevent
+loading of non-CLOEXEC filters if any are CLOEXEC.  The naming of
+CLOEXEC is no good, too.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-index dd2bab1b2e7d..adb8480d14dc 100644
---- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-@@ -107,6 +107,28 @@
- 	.fails = true,							\
- }
- 
-+#define MODS_CASE(name) {						\
-+	.case_name = #name,						\
-+	.bpf_obj_file = "test_core_reloc_mods.o",			\
-+	.btf_src_file = "btf__core_reloc_" #name ".o",			\
-+	.input = STRUCT_TO_CHAR_PTR(core_reloc_##name) {		\
-+		.a = 1,							\
-+		.b = 2,							\
-+		.c = (void *)3,						\
-+		.d = (void *)4,						\
-+		.e = { [2] = 5 },					\
-+		.f = { [1] = 6 },					\
-+		.g = { .x = 7 },					\
-+		.h = { .y = 8 },					\
-+	},								\
-+	.input_len = sizeof(struct core_reloc_##name),			\
-+	.output = STRUCT_TO_CHAR_PTR(core_reloc_mods_output) {		\
-+		.a = 1, .b = 2, .c = 3, .d = 4,				\
-+		.e = 5, .f = 6, .g = 7, .h = 8,				\
-+	},								\
-+	.output_len = sizeof(struct core_reloc_mods_output),		\
-+}
-+
- struct core_reloc_test_case {
- 	const char *case_name;
- 	const char *bpf_obj_file;
-@@ -173,6 +195,11 @@ static struct core_reloc_test_case test_cases[] = {
- 	PRIMITIVES_ERR_CASE(primitives___err_non_enum),
- 	PRIMITIVES_ERR_CASE(primitives___err_non_int),
- 	PRIMITIVES_ERR_CASE(primitives___err_non_ptr),
-+
-+	/* const/volatile/restrict and typedefs scenarios */
-+	MODS_CASE(mods),
-+	MODS_CASE(mods___mod_swap),
-+	MODS_CASE(mods___typedefs),
- };
- 
- struct data {
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_mods.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_mods.c
-new file mode 100644
-index 000000000000..124197a2e813
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_mods.c
-@@ -0,0 +1,3 @@
-+#include "core_reloc_types.h"
-+
-+void f(struct core_reloc_mods x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_mods___mod_swap.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_mods___mod_swap.c
-new file mode 100644
-index 000000000000..f8a6592ca75f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_mods___mod_swap.c
-@@ -0,0 +1,3 @@
-+#include "core_reloc_types.h"
-+
-+void f(struct core_reloc_mods___mod_swap x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_mods___typedefs.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_mods___typedefs.c
-new file mode 100644
-index 000000000000..5c0d73687247
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_mods___typedefs.c
-@@ -0,0 +1,3 @@
-+#include "core_reloc_types.h"
-+
-+void f(struct core_reloc_mods___typedefs x) {}
-diff --git a/tools/testing/selftests/bpf/progs/core_reloc_types.h b/tools/testing/selftests/bpf/progs/core_reloc_types.h
-index 7526a5f5755b..3401e8342e57 100644
---- a/tools/testing/selftests/bpf/progs/core_reloc_types.h
-+++ b/tools/testing/selftests/bpf/progs/core_reloc_types.h
-@@ -454,3 +454,75 @@ struct core_reloc_primitives___err_non_ptr {
- 	int d; /* int instead of ptr */
- 	int (*f)(const char *);
- };
-+
-+/*
-+ * MODS
-+ */
-+struct core_reloc_mods_output {
-+	int a, b, c, d, e, f, g, h;
-+};
-+
-+typedef const int int_t;
-+typedef const char *char_ptr_t;
-+typedef const int arr_t[7];
-+
-+struct core_reloc_mods_substruct {
-+	int x;
-+	int y;
-+};
-+
-+typedef struct {
-+	int x;
-+	int y;
-+} core_reloc_mods_substruct_t;
-+
-+struct core_reloc_mods {
-+	int a;
-+	int_t b;
-+	char *c;
-+	char_ptr_t d;
-+	int e[3];
-+	arr_t f;
-+	struct core_reloc_mods_substruct g;
-+	core_reloc_mods_substruct_t h;
-+};
-+
-+/* a/b, c/d, e/f, and g/h pairs are swapped */
-+struct core_reloc_mods___mod_swap {
-+	int b;
-+	int_t a;
-+	char *d;
-+	char_ptr_t c;
-+	int f[3];
-+	arr_t e;
-+	struct {
-+		int y;
-+		int x;
-+	} h;
-+	core_reloc_mods_substruct_t g;
-+};
-+
-+typedef int int1_t;
-+typedef int1_t int2_t;
-+typedef int2_t int3_t;
-+
-+typedef int arr1_t[5];
-+typedef arr1_t arr2_t;
-+typedef arr2_t arr3_t;
-+typedef arr3_t arr4_t;
-+
-+typedef const char * const volatile restrict fancy_char_ptr_t;
-+
-+typedef core_reloc_mods_substruct_t core_reloc_mods_substruct_tt;
-+
-+/* we need more typedefs */
-+struct core_reloc_mods___typedefs {
-+	core_reloc_mods_substruct_tt g;
-+	core_reloc_mods_substruct_tt h;
-+	arr4_t f;
-+	arr4_t e;
-+	fancy_char_ptr_t d;
-+	fancy_char_ptr_t c;
-+	int3_t b;
-+	int3_t a;
-+};
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_mods.c b/tools/testing/selftests/bpf/progs/test_core_reloc_mods.c
-new file mode 100644
-index 000000000000..f98b942c062b
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_mods.c
-@@ -0,0 +1,62 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2019 Facebook
-+
-+#include <linux/bpf.h>
-+#include <stdint.h>
-+#include "bpf_helpers.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+static volatile struct data {
-+	char in[256];
-+	char out[256];
-+} data;
-+
-+struct core_reloc_mods_output {
-+	int a, b, c, d, e, f, g, h;
-+};
-+
-+typedef const int int_t;
-+typedef const char *char_ptr_t;
-+typedef const int arr_t[7];
-+
-+struct core_reloc_mods_substruct {
-+	int x;
-+	int y;
-+};
-+
-+typedef struct {
-+	int x;
-+	int y;
-+} core_reloc_mods_substruct_t;
-+
-+struct core_reloc_mods {
-+	int a;
-+	int_t b;
-+	char *c;
-+	char_ptr_t d;
-+	int e[3];
-+	arr_t f;
-+	struct core_reloc_mods_substruct g;
-+	core_reloc_mods_substruct_t h;
-+};
-+
-+SEC("raw_tracepoint/sys_enter")
-+int test_core_mods(void *ctx)
-+{
-+	struct core_reloc_mods *in = (void *)&data.in;
-+	struct core_reloc_mods_output *out = (void *)&data.out;
-+
-+	if (BPF_CORE_READ(&out->a, &in->a) ||
-+	    BPF_CORE_READ(&out->b, &in->b) ||
-+	    BPF_CORE_READ(&out->c, &in->c) ||
-+	    BPF_CORE_READ(&out->d, &in->d) ||
-+	    BPF_CORE_READ(&out->e, &in->e[2]) ||
-+	    BPF_CORE_READ(&out->f, &in->f[1]) ||
-+	    BPF_CORE_READ(&out->g, &in->g.x) ||
-+	    BPF_CORE_READ(&out->h, &in->h.y))
-+		return 1;
-+
-+	return 0;
-+}
-+
--- 
-2.17.1
-
+But you haven't really justified this very well.  What are you doing
+that involves filtering on PC, and how is it secure at all?
