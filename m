@@ -2,45 +2,44 @@ Return-Path: <SRS0=Yvha=V3=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47033C433FF
-	for <bpf@archiver.kernel.org>; Tue, 30 Jul 2019 19:54:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B655CC433FF
+	for <bpf@archiver.kernel.org>; Tue, 30 Jul 2019 19:54:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 144BD20659
-	for <bpf@archiver.kernel.org>; Tue, 30 Jul 2019 19:54:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 852B620659
+	for <bpf@archiver.kernel.org>; Tue, 30 Jul 2019 19:54:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="mrRPMMkf"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ZradLvYt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726795AbfG3Tyu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 30 Jul 2019 15:54:50 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:49566 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726764AbfG3Tys (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 30 Jul 2019 15:54:48 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6UJsfk6011506
-        for <bpf@vger.kernel.org>; Tue, 30 Jul 2019 12:54:47 -0700
+        id S1726791AbfG3Tyz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 30 Jul 2019 15:54:55 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:64788 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726806AbfG3Tyz (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 30 Jul 2019 15:54:55 -0400
+Received: from pps.filterd (m0044008.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6UJsoq7021017
+        for <bpf@vger.kernel.org>; Tue, 30 Jul 2019 12:54:54 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=6+lFn9Kuts7zWT5GF7aHDZEb/UVjDHwN0UoKHUeNPsI=;
- b=mrRPMMkf8i2MvJMZe2hPSde3FNBz/lqPZ+1fBQ3Wv2HQuJ2gfPMvV8W/vPIP/FotL7Vz
- z+vyi0P38QQ4ralZZmQRouD+m/WKIDLVwpxAcqp0VSiwyQASg9lNJ/vNEnsEZ8PO+bqb
- B9LkT7gq+eKDzSP5CjlJ3oK01Dm3VpH5LOY= 
+ content-type; s=facebook; bh=3nuy0P3yN1wrHI3HM9KJM2WsHb10Tk2CirV80lKrGt0=;
+ b=ZradLvYto/tWXVP+KSWsFpefgiSxlIsj6SIXPGZfHePDnGcl+5uJdpEGdX9wCpGMyZUB
+ dUhy58w1sSzW2T23dkxZrlyz69OMCVHYGZIVptAQRLuU0KP9MDJHpUe9xJKJi+ppaEYR
+ HCRkqCoumND475LGnsE5F/SE1TkWPtIh9Ik= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2u2pwm1dag-15
+        by mx0a-00082601.pphosted.com with ESMTP id 2u2uhtg6s4-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 30 Jul 2019 12:54:47 -0700
+        for <bpf@vger.kernel.org>; Tue, 30 Jul 2019 12:54:54 -0700
 Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 30 Jul 2019 12:54:20 -0700
+ 15.1.1713.5; Tue, 30 Jul 2019 12:54:33 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 8E8C8861655; Tue, 30 Jul 2019 12:54:19 -0700 (PDT)
+        id E233D861655; Tue, 30 Jul 2019 12:54:31 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -49,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v2 bpf-next 04/12] selftests/bpf: add CO-RE relocs testing setup
-Date:   Tue, 30 Jul 2019 12:54:00 -0700
-Message-ID: <20190730195408.670063-5-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 10/12] selftests/bpf: add CO-RE relocs ptr-as-array tests
+Date:   Tue, 30 Jul 2019 12:54:06 -0700
+Message-ID: <20190730195408.670063-11-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190730195408.670063-1-andriin@fb.com>
 References: <20190730195408.670063-1-andriin@fb.com>
@@ -63,7 +62,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
  malwarescore=0 suspectscore=67 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ mlxlogscore=908 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1906280000 definitions=main-1907300202
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -71,156 +70,108 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add CO-RE relocation test runner. Add one simple test validating that
-libbpf's logic for searching for kernel image and loading BTF out of it
-works.
+Add test validating correct relocation handling for cases where pointer
+to something is used as an array. E.g.:
+
+  int *ptr = ...;
+  int x = ptr[42];
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 Acked-by: Song Liu <songliubraving@fb.com>
 ---
- .../selftests/bpf/prog_tests/core_reloc.c     | 125 ++++++++++++++++++
- .../bpf/progs/test_core_reloc_kernel.c        |  36 +++++
- 2 files changed, 161 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/core_reloc.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
+ .../selftests/bpf/prog_tests/core_reloc.c     | 20 +++++++++++++
+ .../bpf/progs/btf__core_reloc_ptr_as_arr.c    |  3 ++
+ .../btf__core_reloc_ptr_as_arr___diff_sz.c    |  3 ++
+ .../selftests/bpf/progs/core_reloc_types.h    | 13 ++++++++
+ .../bpf/progs/test_core_reloc_ptr_as_arr.c    | 30 +++++++++++++++++++
+ 5 files changed, 69 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_ptr_as_arr.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_ptr_as_arr___diff_sz.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_core_reloc_ptr_as_arr.c
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-new file mode 100644
-index 000000000000..fab7492a8714
---- /dev/null
+index adb8480d14dc..ad663978be15 100644
+--- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
 +++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-@@ -0,0 +1,125 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+
-+struct core_reloc_test_case {
-+	const char *case_name;
-+	const char *bpf_obj_file;
-+	const char *btf_src_file;
-+	const char *input;
-+	int input_len;
-+	const char *output;
-+	int output_len;
-+	bool fails;
-+};
-+
-+static struct core_reloc_test_case test_cases[] = {
-+	/* validate we can find kernel image and use its BTF for relocs */
-+	{
-+		.case_name = "kernel",
-+		.bpf_obj_file = "test_core_reloc_kernel.o",
-+		.btf_src_file = NULL, /* load from /lib/modules/$(uname -r) */
-+		.input = "",
-+		.input_len = 0,
-+		.output = "\1", /* true */
-+		.output_len = 1,
-+	},
-+};
-+
-+struct data {
-+	char in[256];
-+	char out[256];
-+};
-+
-+void test_core_reloc(void)
-+{
-+	const char *probe_name = "raw_tracepoint/sys_enter";
-+	struct bpf_object_load_attr load_attr = {};
-+	struct core_reloc_test_case *test_case;
-+	int err, duration = 0, i, equal;
-+	struct bpf_link *link = NULL;
-+	struct bpf_map *data_map;
-+	struct bpf_program *prog;
-+	struct bpf_object *obj;
-+	const int zero = 0;
-+	struct data data;
-+
-+	for (i = 0; i < ARRAY_SIZE(test_cases); i++) {
-+		test_case = &test_cases[i];
-+
-+		if (!test__start_subtest(test_case->case_name))
-+			continue;
-+
-+		obj = bpf_object__open(test_case->bpf_obj_file);
-+		if (CHECK(IS_ERR_OR_NULL(obj), "obj_open",
-+			  "failed to open '%s': %ld\n",
-+			  test_case->bpf_obj_file, PTR_ERR(obj)))
-+			continue;
-+
-+		prog = bpf_object__find_program_by_title(obj, probe_name);
-+		if (CHECK(!prog, "find_probe",
-+			  "prog '%s' not found\n", probe_name))
-+			goto cleanup;
-+		bpf_program__set_type(prog, BPF_PROG_TYPE_RAW_TRACEPOINT);
-+
-+		load_attr.obj = obj;
-+		load_attr.log_level = 0;
-+		load_attr.target_btf_path = test_case->btf_src_file;
-+		err = bpf_object__load_xattr(&load_attr);
-+		if (test_case->fails) {
-+			CHECK(!err, "obj_load_fail",
-+			      "should fail to load prog '%s'\n", probe_name);
-+			goto cleanup;
-+		} else {
-+			if (CHECK(err, "obj_load",
-+				  "failed to load prog '%s': %d\n",
-+				  probe_name, err))
-+				goto cleanup;
-+		}
-+
-+		link = bpf_program__attach_raw_tracepoint(prog, "sys_enter");
-+		if (CHECK(IS_ERR(link), "attach_raw_tp", "err %ld\n",
-+			  PTR_ERR(link)))
-+			goto cleanup;
-+
-+		data_map = bpf_object__find_map_by_name(obj, "test_cor.bss");
-+		if (CHECK(!data_map, "find_data_map", "data map not found\n"))
-+			goto cleanup;
-+
-+		memset(&data, 0, sizeof(data));
-+		memcpy(data.in, test_case->input, test_case->input_len);
-+
-+		err = bpf_map_update_elem(bpf_map__fd(data_map),
-+					  &zero, &data, 0);
-+		if (CHECK(err, "update_data_map",
-+			  "failed to update .data map: %d\n", err))
-+			goto cleanup;
-+
-+		/* trigger test run */
-+		usleep(1);
-+
-+		err = bpf_map_lookup_elem(bpf_map__fd(data_map), &zero, &data);
-+		if (CHECK(err, "get_result",
-+			  "failed to get output data: %d\n", err))
-+			goto cleanup;
-+
-+		equal = memcmp(data.out, test_case->output,
-+			       test_case->output_len) == 0;
-+		if (CHECK(!equal, "check_result",
-+			  "input/output data don't match\n")) {
-+			int j;
-+
-+			for (j = 0; j < test_case->output_len; j++) {
-+				test__printf("byte #%d, EXP 0x%02hhx GOT 0x%02hhx\n",
-+					     j, test_case->output[j], data.out[j]);
-+			}
-+			goto cleanup;
-+		}
-+
-+cleanup:
-+		if (!IS_ERR_OR_NULL(link)) {
-+			bpf_link__destroy(link);
-+			link = NULL;
-+		}
-+		bpf_object__close(obj);
-+	}
+@@ -129,6 +129,22 @@
+ 	.output_len = sizeof(struct core_reloc_mods_output),		\
+ }
+ 
++#define PTR_AS_ARR_CASE(name) {						\
++	.case_name = #name,						\
++	.bpf_obj_file = "test_core_reloc_ptr_as_arr.o",			\
++	.btf_src_file = "btf__core_reloc_" #name ".o",			\
++	.input = (const char *)&(struct core_reloc_##name []){		\
++		{ .a = 1 },						\
++		{ .a = 2 },						\
++		{ .a = 3 },						\
++	},								\
++	.input_len = 3 * sizeof(struct core_reloc_##name),		\
++	.output = STRUCT_TO_CHAR_PTR(core_reloc_ptr_as_arr) {		\
++		.a = 3,							\
++	},								\
++	.output_len = sizeof(struct core_reloc_ptr_as_arr),		\
 +}
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c b/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
++
+ struct core_reloc_test_case {
+ 	const char *case_name;
+ 	const char *bpf_obj_file;
+@@ -200,6 +216,10 @@ static struct core_reloc_test_case test_cases[] = {
+ 	MODS_CASE(mods),
+ 	MODS_CASE(mods___mod_swap),
+ 	MODS_CASE(mods___typedefs),
++
++	/* handling "ptr is an array" semantics */
++	PTR_AS_ARR_CASE(ptr_as_arr),
++	PTR_AS_ARR_CASE(ptr_as_arr___diff_sz),
+ };
+ 
+ struct data {
+diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_ptr_as_arr.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_ptr_as_arr.c
 new file mode 100644
-index 000000000000..37e02aa3f0c8
+index 000000000000..8da52432ba17
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
-@@ -0,0 +1,36 @@
++++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_ptr_as_arr.c
+@@ -0,0 +1,3 @@
++#include "core_reloc_types.h"
++
++void f(struct core_reloc_ptr_as_arr x) {}
+diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_ptr_as_arr___diff_sz.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_ptr_as_arr___diff_sz.c
+new file mode 100644
+index 000000000000..003acfc9a3e7
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_ptr_as_arr___diff_sz.c
+@@ -0,0 +1,3 @@
++#include "core_reloc_types.h"
++
++void f(struct core_reloc_ptr_as_arr___diff_sz x) {}
+diff --git a/tools/testing/selftests/bpf/progs/core_reloc_types.h b/tools/testing/selftests/bpf/progs/core_reloc_types.h
+index 3401e8342e57..c17c9279deae 100644
+--- a/tools/testing/selftests/bpf/progs/core_reloc_types.h
++++ b/tools/testing/selftests/bpf/progs/core_reloc_types.h
+@@ -526,3 +526,16 @@ struct core_reloc_mods___typedefs {
+ 	int3_t b;
+ 	int3_t a;
+ };
++
++/*
++ * PTR_AS_ARR
++ */
++struct core_reloc_ptr_as_arr {
++	int a;
++};
++
++struct core_reloc_ptr_as_arr___diff_sz {
++	int :32; /* padding */
++	char __some_more_padding;
++	int a;
++};
+diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_ptr_as_arr.c b/tools/testing/selftests/bpf/progs/test_core_reloc_ptr_as_arr.c
+new file mode 100644
+index 000000000000..526b7ddc7ea1
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_core_reloc_ptr_as_arr.c
+@@ -0,0 +1,30 @@
 +// SPDX-License-Identifier: GPL-2.0
 +// Copyright (c) 2019 Facebook
 +
@@ -235,24 +186,18 @@ index 000000000000..37e02aa3f0c8
 +	char out[256];
 +} data;
 +
-+struct task_struct {
-+	int pid;
-+	int tgid;
++struct core_reloc_ptr_as_arr {
++	int a;
 +};
 +
 +SEC("raw_tracepoint/sys_enter")
-+int test_core_kernel(void *ctx)
++int test_core_ptr_as_arr(void *ctx)
 +{
-+	struct task_struct *task = (void *)bpf_get_current_task();
-+	uint64_t pid_tgid = bpf_get_current_pid_tgid();
-+	int pid, tgid;
++	struct core_reloc_ptr_as_arr *in = (void *)&data.in;
++	struct core_reloc_ptr_as_arr *out = (void *)&data.out;
 +
-+	if (BPF_CORE_READ(&pid, &task->pid) ||
-+	    BPF_CORE_READ(&tgid, &task->tgid))
++	if (BPF_CORE_READ(&out->a, &in[2].a))
 +		return 1;
-+
-+	/* validate pid + tgid matches */
-+	data.out[0] = (((uint64_t)pid << 32) | tgid) == pid_tgid;
 +
 +	return 0;
 +}
