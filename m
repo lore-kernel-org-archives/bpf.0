@@ -2,42 +2,43 @@ Return-Path: <SRS0=X7YH=V6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C796C0650F
-	for <bpf@archiver.kernel.org>; Fri,  2 Aug 2019 23:33:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72516C0650F
+	for <bpf@archiver.kernel.org>; Fri,  2 Aug 2019 23:33:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 180F721726
-	for <bpf@archiver.kernel.org>; Fri,  2 Aug 2019 23:33:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 48DFF20880
+	for <bpf@archiver.kernel.org>; Fri,  2 Aug 2019 23:33:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1564788831;
-	bh=iCOo7xI7jO3LGDM8wWIP9pDrqnSXH27d8ynJIFWxrB4=;
-	h=From:To:CC:Subject:Date:List-ID:From;
-	b=OyA6yXlRcFQwAnANxk1W8bZcIFlSl09v+p8Y1otTuK5HFg5soGPb/e5SDetEQjSDd
-	 LOOCXxy4YP6mZ6MB+ysCmqEfrY35ldQmjhBfiF/1UEzSyV9atOwLwTLZlimz4CgQ44
-	 I0rEIF3GX9097hBZOqLjEoC44P9sB8RKjg3VhMwE=
+	s=default; t=1564788835;
+	bh=itefUoYtcyxT6V/9p6fpr8KTCp7KEQCBq0N/LZwokdU=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=GitsvW3fLKcBJnW8NpXO127yZomj/PSHXnYFTTF+q9v/xugFU1r7aoQgj0aSodbj9
+	 zaTnk24LUV/Ywn1oTBaYU9zkCSQcDtJaIwp5Duy7yTdeHWgKyaG5HWT2ZtfrvMjf+o
+	 Q83vlG1R++CsxLnOD9LsQ5MxGiTeckkHZ7975c08=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389775AbfHBXdu convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 2 Aug 2019 19:33:50 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:29180 "EHLO
+        id S2390543AbfHBXdy convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 2 Aug 2019 19:33:54 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:12192 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2390185AbfHBXdu (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 2 Aug 2019 19:33:50 -0400
+        by vger.kernel.org with ESMTP id S2390293AbfHBXdx (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 2 Aug 2019 19:33:53 -0400
 Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x72NTLNq025542
-        for <bpf@vger.kernel.org>; Fri, 2 Aug 2019 16:33:49 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x72NTMgC025559
+        for <bpf@vger.kernel.org>; Fri, 2 Aug 2019 16:33:52 -0700
 Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2u4t1bs4eq-1
+        by mx0a-00082601.pphosted.com with ESMTP id 2u4t1bs4es-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 02 Aug 2019 16:33:49 -0700
+        for <bpf@vger.kernel.org>; Fri, 02 Aug 2019 16:33:52 -0700
 Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
  mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Fri, 2 Aug 2019 16:33:47 -0700
+ Fri, 2 Aug 2019 16:33:51 -0700
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 2F8A17601C2; Fri,  2 Aug 2019 16:33:44 -0700 (PDT)
+        id 444147601C2; Fri,  2 Aug 2019 16:33:49 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -45,10 +46,12 @@ To:     <davem@davemloft.net>
 CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 0/2] selftests/bpf: more loop tests
-Date:   Fri, 2 Aug 2019 16:33:42 -0700
-Message-ID: <20190802233344.863418-1-ast@kernel.org>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: add loop test 5
+Date:   Fri, 2 Aug 2019 16:33:44 -0700
+Message-ID: <20190802233344.863418-3-ast@kernel.org>
 X-Mailer: git-send-email 2.20.0
+In-Reply-To: <20190802233344.863418-1-ast@kernel.org>
+References: <20190802233344.863418-1-ast@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
@@ -58,7 +61,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
  malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1034 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=535 adultscore=0 classifier=spam adjust=0 reason=mlx
+ mlxlogscore=935 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1906280000 definitions=main-1908020243
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -66,19 +69,75 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add two bounded loop tests.
+Add a test with multiple exit conditions.
+It's not an infinite loop only when the verifier can properly track
+all math on variable 'i' through all possible ways of executing this loop.
 
-Alexei Starovoitov (2):
-  selftests/bpf: add loop test 4
-  selftests/bpf: add loop test 5
+barrier()s are needed to disable llvm optimization that combines multiple
+branches into fewer branches.
 
- .../bpf/prog_tests/bpf_verif_scale.c          |  2 +
- tools/testing/selftests/bpf/progs/loop4.c     | 23 ++++++++++++
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ .../bpf/prog_tests/bpf_verif_scale.c          |  1 +
  tools/testing/selftests/bpf/progs/loop5.c     | 37 +++++++++++++++++++
- 3 files changed, 62 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/loop4.c
+ 2 files changed, 38 insertions(+)
  create mode 100644 tools/testing/selftests/bpf/progs/loop5.c
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
+index 757e39540eda..29615a4a9362 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
+@@ -72,6 +72,7 @@ void test_bpf_verif_scale(void)
+ 		{ "loop1.o", BPF_PROG_TYPE_RAW_TRACEPOINT },
+ 		{ "loop2.o", BPF_PROG_TYPE_RAW_TRACEPOINT },
+ 		{ "loop4.o", BPF_PROG_TYPE_RAW_TRACEPOINT },
++		{ "loop5.o", BPF_PROG_TYPE_RAW_TRACEPOINT },
+ 
+ 		/* partial unroll. 19k insn in a loop.
+ 		 * Total program size 20.8k insn.
+diff --git a/tools/testing/selftests/bpf/progs/loop5.c b/tools/testing/selftests/bpf/progs/loop5.c
+new file mode 100644
+index 000000000000..9d9817efe208
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/loop5.c
+@@ -0,0 +1,37 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2019 Facebook
++#include <linux/sched.h>
++#include <linux/ptrace.h>
++#include <stdint.h>
++#include <stddef.h>
++#include <stdbool.h>
++#include <linux/bpf.h>
++#include "bpf_helpers.h"
++#define barrier() __asm__ __volatile__("": : :"memory")
++
++char _license[] SEC("license") = "GPL";
++
++SEC("socket")
++int while_true(volatile struct __sk_buff* skb)
++{
++	int i = 0;
++
++	while (true) {
++		if (skb->len)
++			i += 3;
++		else
++			i += 7;
++		if (i == 9)
++			break;
++		barrier();
++		if (i == 10)
++			break;
++		barrier();
++		if (i == 13)
++			break;
++		barrier();
++		if (i == 14)
++			break;
++	}
++	return i;
++}
 -- 
 2.20.0
 
