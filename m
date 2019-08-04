@@ -2,177 +2,173 @@ Return-Path: <SRS0=PIYb=WA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A302DC433FF
-	for <bpf@archiver.kernel.org>; Sun,  4 Aug 2019 21:41:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE67CC32750
+	for <bpf@archiver.kernel.org>; Sun,  4 Aug 2019 22:17:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7552720880
-	for <bpf@archiver.kernel.org>; Sun,  4 Aug 2019 21:41:10 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="u39I0RWz"
+	by mail.kernel.org (Postfix) with ESMTP id A948F20880
+	for <bpf@archiver.kernel.org>; Sun,  4 Aug 2019 22:17:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1564957022;
+	bh=NOsxGe27UUkBUODosCJyRGgFS2Jq9IOxrPzUq8LIvcM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=dBvsviVWSNKaSL4QTTDDvm11WGXf7y09/rzpiy3O/hmYaccYma3mZ//qA/MWbhWCm
+	 rUjhT+nzD2wKuBs3qDNbzCYF+ySvtnAQokc1wYq1eyoS8LWQVvoIM0ziOkkbuBRBeZ
+	 Cktpmaq7hjef2g+7T9cXM98eEVQqjkb+yP2OUTkg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726712AbfHDVkq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 4 Aug 2019 17:40:46 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:46011 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726536AbfHDVkq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 4 Aug 2019 17:40:46 -0400
-Received: by mail-pg1-f196.google.com with SMTP id o13so38595940pgp.12;
-        Sun, 04 Aug 2019 14:40:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=u7QfHgAZJphiJkiML+n7+9xiXsnu4L5blHeWg2XiOgc=;
-        b=u39I0RWzXaT9LZiMOuWXB1YMfdm9l0k5XildL+8oy8WG+Xp+HlNRUNYjNYcsIgMMTB
-         ZpD/HwYg5a0o6ahOx9ZYRbmJlZZ3NLwUfe/ls4mO6JoAFJIx/C4wKRP28ihiEUB5VjhT
-         D58n4BNw9c55IlGQPpiJrVPRnoEMM0g6/Xf+ahwHFl/B88xU2qGxK/pemUTTRjimFwRi
-         t/D8fcfMolCCDTGQO+urRxWr1DbAd4j3hCpOP6OcV/VT/muTPpaFTvV1+DiX2EdeA9OL
-         XsnejpGlwKFc3nz+z9brQ1fZaYH/JKmBK+jueenTXLYIBOez7qe7f8v+Db7b0LHhvgd6
-         B7fA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=u7QfHgAZJphiJkiML+n7+9xiXsnu4L5blHeWg2XiOgc=;
-        b=eD0MRIqa5Oj8GNBWMxatoMKxfLzjC7ouyELY647D/NYoMmEhvW2Aal2804l0PDCkVH
-         0MNCBTfMQMhjhviBwK699xvSKz+xaBOS+tq+dyCNMhZFHLBowBEfcG0EenMH3oq5YgV0
-         dRnKbqoZ0XokKnPp/3nhw2q4i7bLWy2YyLQ1f8ak8s/g4Y2BSQ1NszaEkKx+mh92DVoA
-         X9eFN99IS8J4DRZw3zCluC1f/gXZdMilYnZ0OxXqtCVOsvrXNSjTb7TmdWpOVBjM762G
-         CmqBY0NAsgfRwU/DCZCDFUYHF8+lRto9aa4CuVQUABTl7VaxPSHVNVn0+0bg9HbDfQ2I
-         XeTw==
-X-Gm-Message-State: APjAAAUkKgjXNKGXTJoltYtU1GCewByfllvZsFD9mNcNAo4QSw2shG3c
-        BxdBpTAuhQhfLR8V+fLkL0U=
-X-Google-Smtp-Source: APXvYqzFCjqlZU+HDCyGiBEvpK2/pADBDo3dD7v/H/FvucfCIeD6scQK7TlMDTLTVLBWsfhNeMf1fA==
-X-Received: by 2002:a17:90a:bc0c:: with SMTP id w12mr14275839pjr.111.1564954845639;
-        Sun, 04 Aug 2019 14:40:45 -0700 (PDT)
-Received: from blueforge.nvidia.com (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id 143sm123751024pgc.6.2019.08.04.14.40.43
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Sun, 04 Aug 2019 14:40:44 -0700 (PDT)
-From:   john.hubbard@gmail.com
-X-Google-Original-From: jhubbard@nvidia.com
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        Boaz Harrosh <boaz@plexistor.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ilya Dryomov <idryomov@gmail.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ming Lei <ming.lei@redhat.com>, Sage Weil <sage@redhat.com>,
-        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
-        Yan Zheng <zyan@redhat.com>, netdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
-        linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v6 0/3] mm/gup: add make_dirty arg to put_user_pages_dirty_lock()
-Date:   Sun,  4 Aug 2019 14:40:39 -0700
-Message-Id: <20190804214042.4564-1-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.22.0
+        id S1726825AbfHDWRC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 4 Aug 2019 18:17:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33698 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726713AbfHDWRA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 4 Aug 2019 18:17:00 -0400
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A464420882
+        for <bpf@vger.kernel.org>; Sun,  4 Aug 2019 22:16:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564957018;
+        bh=NOsxGe27UUkBUODosCJyRGgFS2Jq9IOxrPzUq8LIvcM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZHeVTZ/5jpIlZ9PqFAbQHX8U1FnpupXQuHee3Z41c3P3vBP585hgEZ/J7UZxElX0i
+         imYDUF/8rpIbW0Hv44wf6Mjoj/Eh3pbqLDbMYW+Us3nRTDZ8wYk2iGKtsvnztVK9SV
+         m6JcuMGhBkavxvHAZKCauWG1u1yECLcgOqynunQs=
+Received: by mail-wr1-f49.google.com with SMTP id x4so29284546wrt.6
+        for <bpf@vger.kernel.org>; Sun, 04 Aug 2019 15:16:58 -0700 (PDT)
+X-Gm-Message-State: APjAAAV/DBzu3B1zvGAhjvsvC1xzGJKE6SIhtrAP0O+KAudWeco6Be7M
+        aqkzNKCpE0RIK9oXnYaixNjG05zB6xJbFP53QsjGMw==
+X-Google-Smtp-Source: APXvYqxpYh/r8L67Yq8wytHQI4oN79Aw0hUduH+jnQG7PwmNVjSC50w0B3l5qWCsOFZlpSgQcSB+ucGe4OkPF/pYd34=
+X-Received: by 2002:adf:f28a:: with SMTP id k10mr81834684wro.343.1564957017128;
+ Sun, 04 Aug 2019 15:16:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
+References: <20190627201923.2589391-1-songliubraving@fb.com>
+ <20190627201923.2589391-2-songliubraving@fb.com> <21894f45-70d8-dfca-8c02-044f776c5e05@kernel.org>
+ <3C595328-3ABE-4421-9772-8D41094A4F57@fb.com> <CALCETrWBnH4Q43POU8cQ7YMjb9LioK28FDEQf7aHZbdf1eBZWg@mail.gmail.com>
+ <0DE7F23E-9CD2-4F03-82B5-835506B59056@fb.com> <CALCETrWBWbNFJvsTCeUchu3BZJ3SH3dvtXLUB2EhnPrzFfsLNA@mail.gmail.com>
+ <201907021115.DCD56BBABB@keescook> <CALCETrXTta26CTtEDnzvtd03-WOGdXcnsAogP8JjLkcj4-mHvg@mail.gmail.com>
+ <4A7A225A-6C23-4C0F-9A95-7C6C56B281ED@fb.com> <CALCETrX2bMnwC6_t4b_G-hzJSfMPrkK4YKs5ebcecv2LJ0rt3w@mail.gmail.com>
+ <514D5453-0AEE-420F-AEB6-3F4F58C62E7E@fb.com> <1DE886F3-3982-45DE-B545-67AD6A4871AB@amacapital.net>
+ <7F51F8B8-CF4C-4D82-AAE1-F0F28951DB7F@fb.com> <77354A95-4107-41A7-8936-D144F01C3CA4@fb.com>
+ <369476A8-4CE1-43DA-9239-06437C0384C7@fb.com> <CALCETrUpVMrk7aaf0trfg9AfZ4fy279uJgZH7V+gZzjFw=hUxA@mail.gmail.com>
+ <D4040C0C-47D6-4852-933C-59EB53C05242@fb.com> <CALCETrVoZL1YGUxx3kM-d21TWVRKdKw=f2B8aE5wc2zmX1cQ4g@mail.gmail.com>
+ <5A2FCD7E-7F54-41E5-BFAE-BB9494E74F2D@fb.com>
+In-Reply-To: <5A2FCD7E-7F54-41E5-BFAE-BB9494E74F2D@fb.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Sun, 4 Aug 2019 15:16:46 -0700
+X-Gmail-Original-Message-ID: <CALCETrU7NbBnXXsw1B+DvTkfTVRBFWXuJ8cZERCCNvdFG6KqRw@mail.gmail.com>
+Message-ID: <CALCETrU7NbBnXXsw1B+DvTkfTVRBFWXuJ8cZERCCNvdFG6KqRw@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 1/4] bpf: unprivileged BPF access via /dev/bpf
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Jann Horn <jannh@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: John Hubbard <jhubbard@nvidia.com>
+On Fri, Aug 2, 2019 at 12:22 AM Song Liu <songliubraving@fb.com> wrote:
+>
+> Hi Andy,
+>
+ >> I actually agree CAP_BPF_ADMIN makes sense. The hard part is to make
+> >> existing tools (setcap, getcap, etc.) and libraries aware of the new CAP.
+> >
+> > It's been done before -- it's not that hard.  IMO the main tricky bit
+> > would be try be somewhat careful about defining exactly what
+> > CAP_BPF_ADMIN does.
+>
+> Agreed. I think defining CAP_BPF_ADMIN could be a good topic for the
+> Plumbers conference.
+>
+> OTOH, I don't think we have to wait for CAP_BPF_ADMIN to allow daemons
+> like systemd to do sys_bpf() without root.
 
-Changes since v5:
+I don't understand the use case here.  Are you talking about systemd
+--user?  As far as I know, a user is expected to be able to fully
+control their systemd --user process, so giving it unrestricted bpf
+access is very close to giving it superuser access, and this doesn't
+sound like a good idea.  I think that, if systemd --user needs bpf(),
+it either needs real unprivileged bpf() or it needs a privileged
+helper (SUID or a daemon) to intermediate this access.
 
-* Patch #1: Fixed a bug that I introduced in v4:
-  drivers/infiniband/sw/siw/siw_mem.c needs to refer to
-  umem->page_chunk[i].plist, rather than umem->page_chunk[i].
+>
+> >
+> >>> I don't see why you need to invent a whole new mechanism for this.
+> >>> The entire cgroup ecosystem outside bpf() does just fine using the
+> >>> write permission on files in cgroupfs to control access.  Why can't
+> >>> bpf() do the same thing?
+> >>
+> >> It is easier to use write permission for BPF_PROG_ATTACH. But it is
+> >> not easy to do the same for other bpf commands: BPF_PROG_LOAD and
+> >> BPF_MAP_*. A lot of these commands don't have target concept. Maybe
+> >> we should have target concept for all these commands. But that is a
+> >> much bigger project. OTOH, "all or nothing" model allows all these
+> >> commands at once.
+> >
+> > For BPF_PROG_LOAD, I admit I've never understood why permission is
+> > required at all.  I think that CAP_SYS_ADMIN or similar should be
+> > needed to get is_priv in the verifier, but I think that should mainly
+> > be useful for tracing, and that requires lots of privilege anyway.
+> > BPF_MAP_* is probably the trickiest part.  One solution would be some
+> > kind of bpffs, but I'm sure other solutions are possible.
+>
+> Improving permission management of cgroup_bpf is another good topic to
+> discuss. However, it is also an overkill for current use case.
+>
 
-Changes since v4:
+I looked at the code some more, and I don't think this is so hard
+after all.  As I understand it, all of the map..by_id stuff is, to
+some extent, deprecated in favor of persistent maps.  As I see it, the
+map..by_id calls should require privilege forever, although I can
+imagine ways to scope that privilege to a namespace if the maps
+themselves were to be scoped to a namespace.
 
-* Christophe Hellwig's review applied: deleted siw_free_plist() and
-  __qib_release_user_pages(), now that put_user_pages_dirty_lock() does
-  what those routines were doing.
+Instead, unprivileged tools would use the persistent map interface
+roughly like this:
 
-* Applied Bjorn's ACK for net/xdp, and Christophe's Reviewed-by for patch
-  #1.
+$ bpftool map create /sys/fs/bpf/my_dir/filename type hash key 8 value
+8 entries 64 name mapname
 
-Changes since v3:
+This would require that the caller have either CAP_DAC_OVERRIDE or
+that the caller have permission to create files in /sys/fs/bpf/my_dir
+(using the same rules as for any filesystem), and the resulting map
+would end up owned by the creating user and have mode 0600 (or maybe
+0666, or maybe a new bpf_attr parameter) modified by umask.  Then all
+the various capable() checks that are currently involved in accessing
+a persistent map would instead check FMODE_READ or FMODE_WRITE on the
+map file as appropriate.
 
-* Fixed an unused variable warning in siw_mem.c
+Half of this stuff already works.  I just set my system up like this:
 
-Changes since v2:
+$ ls -l /sys/fs/bpf
+total 0
+drwxr-xr-x. 3 luto luto 0 Aug  4 15:10 luto
 
-* Critical bug fix: remove a stray "break;" from the new routine.
+$ mkdir /sys/fs/bpf/luto/test
 
-Changes since v1:
+$ ls -l /sys/fs/bpf/luto
+total 0
+drwxrwxr-x. 2 luto luto 0 Aug  4 15:10 test
 
-* Instead of providing __put_user_pages(), add an argument to
-  put_user_pages_dirty_lock(), and delete put_user_pages_dirty().
-  This is based on the following points:
+I bet that making the bpf() syscalls work appropriately in this
+context without privilege would only be a couple of hours of work.
+The hard work, creating bpffs and making it function, is already done
+:)
 
-    1. Lots of call sites become simpler if a bool is passed
-    into put_user_page*(), instead of making the call site
-    choose which put_user_page*() variant to call.
-
-    2. Christoph Hellwig's observation that set_page_dirty_lock()
-    is usually correct, and set_page_dirty() is usually a
-    bug, or at least questionable, within a put_user_page*()
-    calling chain.
-
-* Added the Infiniband driver back to the patch series, because it is
-  a caller of put_user_pages_dirty_lock().
-
-Unchanged parts from the v1 cover letter (except for the diffstat):
-
-Notes about the remaining patches to come:
-
-There are about 50+ patches in my tree [2], and I'll be sending out the
-remaining ones in a few more groups:
-
-    * The block/bio related changes (Jerome mostly wrote those, but I've
-      had to move stuff around extensively, and add a little code)
-
-    * mm/ changes
-
-    * other subsystem patches
-
-    * an RFC that shows the current state of the tracking patch set. That
-      can only be applied after all call sites are converted, but it's
-      good to get an early look at it.
-
-This is part a tree-wide conversion, as described in commit fc1d8e7cca2d
-("mm: introduce put_user_page*(), placeholder versions").
-
-John Hubbard (3):
-  mm/gup: add make_dirty arg to put_user_pages_dirty_lock()
-  drivers/gpu/drm/via: convert put_page() to put_user_page*()
-  net/xdp: convert put_page() to put_user_page*()
-
- drivers/gpu/drm/via/via_dmablit.c          |  10 +-
- drivers/infiniband/core/umem.c             |   5 +-
- drivers/infiniband/hw/hfi1/user_pages.c    |   5 +-
- drivers/infiniband/hw/qib/qib_user_pages.c |  13 +--
- drivers/infiniband/hw/usnic/usnic_uiom.c   |   5 +-
- drivers/infiniband/sw/siw/siw_mem.c        |  19 +---
- include/linux/mm.h                         |   5 +-
- mm/gup.c                                   | 115 +++++++++------------
- net/xdp/xdp_umem.c                         |   9 +-
- 9 files changed, 64 insertions(+), 122 deletions(-)
-
--- 
-2.22.0
-
+P.S. The docs for bpftool create are less than fantastic.  The
+complete lack of any error message at all when the syscall returns
+-EACCES is also not fantastic.
