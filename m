@@ -2,216 +2,138 @@ Return-Path: <SRS0=PIYb=WA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F5B4C19759
-	for <bpf@archiver.kernel.org>; Sun,  4 Aug 2019 20:43:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22472C19759
+	for <bpf@archiver.kernel.org>; Sun,  4 Aug 2019 21:41:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CF1FE2070D
-	for <bpf@archiver.kernel.org>; Sun,  4 Aug 2019 20:43:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E773B20880
+	for <bpf@archiver.kernel.org>; Sun,  4 Aug 2019 21:41:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ci8DEuem"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HKywskhQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726587AbfHDUnu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 4 Aug 2019 16:43:50 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:38216 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726561AbfHDUnu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 4 Aug 2019 16:43:50 -0400
-Received: by mail-pf1-f196.google.com with SMTP id y15so38521971pfn.5;
-        Sun, 04 Aug 2019 13:43:49 -0700 (PDT)
+        id S1726841AbfHDVky (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 4 Aug 2019 17:40:54 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:33591 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726869AbfHDVku (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 4 Aug 2019 17:40:50 -0400
+Received: by mail-pf1-f193.google.com with SMTP id g2so38554760pfq.0;
+        Sun, 04 Aug 2019 14:40:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QXemZGNKKSXaemQaQ7I2h0ppDpm757mVpb0u6Ipg/zY=;
-        b=Ci8DEuemiGJTvmtxDYZntIO4I3dCHvdICgkJ9JPV/JZNfhqjjxW0/RkOZ2IIgm2OzJ
-         hZfguJ7UcHTb+MWxe/on+Vaj4r5CVrO1Q76QDEUUQaCzPtyAkR9BKDjMPwg/TooahkPV
-         mRN2Vv8rUgyZeoj3Zx1DqzN1gR08fLQ3jwJqGhvyDOLF1GbJ/1Bunq8duzqhQfkNQJl7
-         /uatMz8xPqEqJdvCWu0ChHgyxJezs+wzKDrZBnGVfvrOptnzVaRp4zDX20vSrxV/Tqzv
-         JbswhyMM+LNYxYDDpA8XktF71PbhRslzvma2xHv1W54y6tLhcXWWLAYzMpu5RrMfioS0
-         TxLw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=GHzc1obwFKwJgG7nswfPGhmCYytguM8zaNUDmj5ciqU=;
+        b=HKywskhQFfCisurHq0YN1aLN2VuiPqiZvr/Y0yCqSOvBpKBB6dfn1Ks85FkIOYLagt
+         IEjEo2P7HBbsv7VlhjnKuygjXzMpnPaIGsP10h9HDIdzZHjUPIC3xbgsZDjtJvPBVGli
+         Q0JbJ4saQdgIeAacaN8voYvTrpABTrxgQ2M5TdIqar+aiYV4J+PYrFEofW0vtuiB1W8d
+         opC4ViUFAQNDeWpOVJhlcHdA/+i8Qx8dpZcNxVU8J71QwLdaBiQj1o1QAdYA4aqniQge
+         UufbAYoYs/svUAkwE0+PqikjTcfydpE8p7sULH9rSBFGj62Li+L68qWV/CJi6vPwTNy0
+         c48Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QXemZGNKKSXaemQaQ7I2h0ppDpm757mVpb0u6Ipg/zY=;
-        b=daI48xfqUlqavF51mWGJj7V1mbr9GF1hKk54qlSJ0pT0FmAQ4u5BJZNhYnjBjQsPYm
-         YgmT2QNedsoP8qseoCqL++tx7slT2UU5hvDocoUxxh2iW8MB/b7JuY5QMoLDJCA57NiE
-         8PsnqHgm+EPmr71bZg6zuVqRRJBgjfFbBg8iYZSRJVHAB7m3cVUNQz7I3D97Zq9F3jKm
-         BRQTa9vj97WQYIjr57fRXvw0rUIkcIu1XqZLfOkn4N0wWkIArbUXE6hHi7nQA01ShEBP
-         lKxFT0xf1nkzsg7hdzQJYFmVWu3N/Ld5q8Itj+58DP6/0vN7W3aMU8LnC7aZ0SmxhYqU
-         EPRA==
-X-Gm-Message-State: APjAAAUsDVgOhGHV2lIvOkhIN2qCxMLPD+nr0sUgIb2AalNpfWNQ0rWi
-        1e6SxiC40VJ+xlRJUF76Rrns9GAg9UWt6FO5IDk=
-X-Google-Smtp-Source: APXvYqweie4tsXgeXS4l7m40fPNiOzWI4ifFbqNi/NEF/3xuuypXNwYcjlPs7IYlTK9L8/DTw73l/0gHU2Opf+lx6uw=
-X-Received: by 2002:a62:1bca:: with SMTP id b193mr68260873pfb.57.1564951428540;
- Sun, 04 Aug 2019 13:43:48 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=GHzc1obwFKwJgG7nswfPGhmCYytguM8zaNUDmj5ciqU=;
+        b=S+2vXdcCSZ2oKqQg3wmkUMWHyUhrOaFQcPYlboSJA6hRiZxdnV9jlMyLPcpL3kAezp
+         9aqf4YrcO9IDGp+8mMgDAehH3P3r0QuOOTJzjrxuZo9bXclGBvPDDApS8E0iBk3Thq38
+         +at3fS+/fIOU4ieU9/becpJIjfBUygjELF3YNML3+1FtkqfDSYeZT/iQv4kYiuBBXJMW
+         8LF+fiT63rDNG2vHr78kfjG6+McRuD0La3+6h2GYweqWum+Lh5Nm5N51pCcvRiVOophq
+         hJj9STlyBlXK+CXi+YEQmqUyvvcGA7VdpnUBkzQ71rmsxkLbeMoxSTUIqOetAvmhy/pm
+         GbqA==
+X-Gm-Message-State: APjAAAUdAO2c/xSChLm17Ki+JeFuOcZ/ERlrYgL4wr5QXyou2NvvVMvL
+        NAiBNrIm5OmYIHSLDB83k+Y=
+X-Google-Smtp-Source: APXvYqy8FgpOqv4dwZxEbnr2U6myskz4yWgwHk7iGYAw3xfiu+D0Vw5P3EnbA0kXFBgzC5qKDZtyLg==
+X-Received: by 2002:a17:90a:bf08:: with SMTP id c8mr15109867pjs.75.1564954849997;
+        Sun, 04 Aug 2019 14:40:49 -0700 (PDT)
+Received: from blueforge.nvidia.com (searspoint.nvidia.com. [216.228.112.21])
+        by smtp.gmail.com with ESMTPSA id 143sm123751024pgc.6.2019.08.04.14.40.48
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Sun, 04 Aug 2019 14:40:49 -0700 (PDT)
+From:   john.hubbard@gmail.com
+X-Google-Original-From: jhubbard@nvidia.com
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Boaz Harrosh <boaz@plexistor.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ilya Dryomov <idryomov@gmail.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ming Lei <ming.lei@redhat.com>, Sage Weil <sage@redhat.com>,
+        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
+        Yan Zheng <zyan@redhat.com>, netdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v6 3/3] net/xdp: convert put_page() to put_user_page*()
+Date:   Sun,  4 Aug 2019 14:40:42 -0700
+Message-Id: <20190804214042.4564-4-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190804214042.4564-1-jhubbard@nvidia.com>
+References: <20190804214042.4564-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
-References: <20190803044320.5530-1-farid.m.zakaria@gmail.com>
- <20190803044320.5530-2-farid.m.zakaria@gmail.com> <CAH3MdRXTEN-Ra+61QA37hM2mkHx99K5NM7f+H6d8Em-bxvaenw@mail.gmail.com>
- <CACCo2jmcYAfY8zHJiT7NCb-Ct7Wguk9XHRc8QmZa7V3eJy0WTg@mail.gmail.com>
-In-Reply-To: <CACCo2jmcYAfY8zHJiT7NCb-Ct7Wguk9XHRc8QmZa7V3eJy0WTg@mail.gmail.com>
-From:   Farid Zakaria <farid.m.zakaria@gmail.com>
-Date:   Sun, 4 Aug 2019 13:43:37 -0700
-Message-ID: <CACCo2j=RAua1E0d6E+tVoOG=q1sSLuZpLqx32dY4mmhYNtDzvg@mail.gmail.com>
-Subject: Re: [PATCH 1/1] bpf: introduce new helper udp_flow_src_port
-To:     Y Song <ys114321@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-* re-sending as I've sent previously as HTML ... sorry *
+From: John Hubbard <jhubbard@nvidia.com>
 
-First off, thank you for taking the time to review this patch.
+For pages that were retained via get_user_pages*(), release those pages
+via the new put_user_page*() routines, instead of via put_page() or
+release_pages().
 
-It's not clear to me the backport you'd like for libbpf, I have been following
-the documentation outlined in
-https://www.kernel.org/doc/html/latest/bpf/index.html
-I will hold off on changes to this patch as you've asked for it going forward.
+This is part a tree-wide conversion, as described in commit fc1d8e7cca2d
+("mm: introduce put_user_page*(), placeholder versions").
 
-This patch is inspired by a MPLSoUDP (https://tools.ietf.org/html/rfc7510)]
-kernel module that was ported to eBPF -- our implementation is slightly
-modified for our custom use case.
+Acked-by: Björn Töpel <bjorn.topel@intel.com>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>
+Cc: David S. Miller <davem@davemloft.net>
+Cc: netdev@vger.kernel.org
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ net/xdp/xdp_umem.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-The Linux kernel provides a single abstraction for the src port for
-UDP tunneling
-via udp_flow_src_port. If it's improved eBPF filters would benefit if
-the call is the same.
+diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
+index 83de74ca729a..17c4b3d3dc34 100644
+--- a/net/xdp/xdp_umem.c
++++ b/net/xdp/xdp_umem.c
+@@ -166,14 +166,7 @@ void xdp_umem_clear_dev(struct xdp_umem *umem)
+ 
+ static void xdp_umem_unpin_pages(struct xdp_umem *umem)
+ {
+-	unsigned int i;
+-
+-	for (i = 0; i < umem->npgs; i++) {
+-		struct page *page = umem->pgs[i];
+-
+-		set_page_dirty_lock(page);
+-		put_page(page);
+-	}
++	put_user_pages_dirty_lock(umem->pgs, umem->npgs, true);
+ 
+ 	kfree(umem->pgs);
+ 	umem->pgs = NULL;
+-- 
+2.22.0
 
-Exposing this function to eBPF programs would maintain feature parity
-with other kernel
-tunneling implementations.
-
-Farid Zakaria
-
-Farid Zakaria
-
-
-
-On Sun, Aug 4, 2019 at 1:41 PM Farid Zakaria <farid.m.zakaria@gmail.com> wrote:
->
-> First off, thank you for taking the time to review this patch.
->
-> It's not clear to me the backport you'd like for libbpf, I have been following
-> the documentation outlined in https://www.kernel.org/doc/html/latest/bpf/index.html
-> I will hold off on changes to this patch as you've asked for it going forward.
->
-> This patch is inspired by a MPLSoUDP (https://tools.ietf.org/html/rfc7510)]
-> kernel module that was ported to eBPF -- our implementation is slightly
-> modified for our custom use case.
->
-> The Linux kernel provides a single abstraction for the src port for UDP tunneling
-> via udp_flow_src_port. If it's improved eBPF filters would benefit if the call is the same.
->
-> Exposing this function to eBPF programs would maintain feature parity with other kernel
-> tunneling implementations.
->
-> Cheers,
-> Farid Zakaria
->
->
->
-> On Sat, Aug 3, 2019 at 11:52 PM Y Song <ys114321@gmail.com> wrote:
->>
->> On Sat, Aug 3, 2019 at 8:29 PM Farid Zakaria <farid.m.zakaria@gmail.com> wrote:
->> >
->> > Foo over UDP uses UDP encapsulation to add additional entropy
->> > into the packets so that they get beter distribution across EMCP
->> > routes.
->> >
->> > Expose udp_flow_src_port as a bpf helper so that tunnel filters
->> > can benefit from the helper.
->> >
->> > Signed-off-by: Farid Zakaria <farid.m.zakaria@gmail.com>
->> > ---
->> >  include/uapi/linux/bpf.h                      | 21 +++++++--
->> >  net/core/filter.c                             | 20 ++++++++
->> >  tools/include/uapi/linux/bpf.h                | 21 +++++++--
->> >  tools/testing/selftests/bpf/bpf_helpers.h     |  2 +
->> >  .../bpf/prog_tests/udp_flow_src_port.c        | 28 +++++++++++
->> >  .../bpf/progs/test_udp_flow_src_port_kern.c   | 47 +++++++++++++++++++
->> >  6 files changed, 131 insertions(+), 8 deletions(-)
->> >  create mode 100644 tools/testing/selftests/bpf/prog_tests/udp_flow_src_port.c
->> >  create mode 100644 tools/testing/selftests/bpf/progs/test_udp_flow_src_port_kern.c
->>
->> First, for each review, backport and sync with libbpf repo, in the future,
->> could you break the patch to two patches?
->>    1. kernel changes (net/core/filter.c, include/uapi/linux/bpf.h)
->>    2. tools/include/uapi/linux/bpf.h
->>    3. tools/testing/ changes
->>
->> Second, could you explain why existing __sk_buff->hash not enough?
->> there are corner cases where if __sk_buff->hash is 0 and the kernel did some
->> additional hashing, but maybe you can approximate in bpf program?
->> For case, min >= max, I suppose you can get min/max port values
->> from the user space for a particular net device and then calculate
->> the hash in the bpf program?
->> What I want to know if how much accuracy you will lose if you just
->> use __sk_buff->hash and do approximation in bpf program.
->>
->> >
->> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
->> > index 4393bd4b2419..90e814153dec 100644
->> > --- a/include/uapi/linux/bpf.h
->> > +++ b/include/uapi/linux/bpf.h
->> > @@ -2545,9 +2545,21 @@ union bpf_attr {
->> >   *             *th* points to the start of the TCP header, while *th_len*
->> >   *             contains **sizeof**\ (**struct tcphdr**).
->> >   *
->> > - *     Return
->> > - *             0 if *iph* and *th* are a valid SYN cookie ACK, or a negative
->> > - *             error otherwise.
->> > + *  Return
->> > + *      0 if *iph* and *th* are a valid SYN cookie ACK, or a negative
->> > + *      error otherwise.
->> > + *
->> > + * int bpf_udp_flow_src_port(struct sk_buff *skb, int min, int max, int use_eth)
->> > + *  Description
->> > + *      It's common to implement tunnelling inside a UDP protocol to provide
->> > + *      additional randomness to the packet. The destination port of the UDP
->> > + *      header indicates the inner packet type whereas the source port is used
->> > + *      for additional entropy.
->> > + *
->> > + *  Return
->> > + *      An obfuscated hash of the packet that falls within the
->> > + *      min & max port range.
->> > + *      If min >= max, the default port range is used
->> >   *
->> >   * int bpf_sysctl_get_name(struct bpf_sysctl *ctx, char *buf, size_t buf_len, u64 flags)
->> >   *     Description
->> > @@ -2853,7 +2865,8 @@ union bpf_attr {
->> >         FN(sk_storage_get),             \
->> >         FN(sk_storage_delete),          \
->> >         FN(send_signal),                \
->> > -       FN(tcp_gen_syncookie),
->> > +       FN(tcp_gen_syncookie),  \
->> > +       FN(udp_flow_src_port),
->> >
->> >  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
->> >   * function eBPF program intends to call
->> > diff --git a/net/core/filter.c b/net/core/filter.c
->> > index 5a2707918629..fdf0ebb8c2c8 100644
->> > --- a/net/core/filter.c
->> > +++ b/net/core/filter.c
->> > @@ -2341,6 +2341,24 @@ static const struct bpf_func_proto bpf_msg_pull_data_proto = {
->> >         .arg4_type      = ARG_ANYTHING,
->> >  };
->> >
->> > +BPF_CALL_4(bpf_udp_flow_src_port, struct sk_buff *, skb, int, min,
->> > +          int, max, int, use_eth)
->> > +{
->> > +       struct net *net = dev_net(skb->dev);
->> > +
->> > +       return udp_flow_src_port(net, skb, min, max, use_eth);
->> > +}
->> > +
->> [...]
