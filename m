@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D62ABC32754
-	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 21:40:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD01EC32756
+	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 21:40:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AC8B221880
-	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 21:40:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A9F1121873
+	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 21:40:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="FUWh8kjW"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Qr0nv8Lw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388867AbfHGVkM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S2388825AbfHGVkM (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Wed, 7 Aug 2019 17:40:12 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:29692 "EHLO
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:5014 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387802AbfHGVkL (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 7 Aug 2019 17:40:11 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x77LZsBh023190
-        for <bpf@vger.kernel.org>; Wed, 7 Aug 2019 14:40:10 -0700
+        by vger.kernel.org with ESMTP id S2388133AbfHGVkM (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 7 Aug 2019 17:40:12 -0400
+Received: from pps.filterd (m0044008.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x77Ld44C026300
+        for <bpf@vger.kernel.org>; Wed, 7 Aug 2019 14:40:11 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=jvYJbiidPFG4lUEEHf3EQJ+yxhW6yOid7/9uqU27C10=;
- b=FUWh8kjWAyFYOOlioqBkbc4o7W70chGh8MhOlKWgkIC2SJeUF+xt4AIsRdWm2tvBcIws
- QGXhuyuSpHDNuQhnN8cu6RWDLACP2+ZKDRfJ7NBIC/FWSByUs4A+/nAnj9ILvdh9hF/8
- gz5GgxiECTaQxtOsQKdBqFAMmS+fb7Z84Hs= 
+ content-type; s=facebook; bh=kgFxWazS01eIWwOHycPHZdBhwK51SQUS1zT01I1wixc=;
+ b=Qr0nv8Lwz90FEnyatrjSpMyja9pNrwMfjk66g5fHGxtdE6BMptf3PDBJ/p7xvQiZeSTD
+ AYVhaS/M3MYbr0Jj4ROJCsvrG/Wz9fN0oZiymlTrSVlvabf0E8QJCBZpLrjO/YQGuXCA
+ SH/GyChDDd/cxTSCNiTkcubwRQc9jWdpciU= 
 Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2u8450gn1y-4
+        by mx0a-00082601.pphosted.com with ESMTP id 2u868s83ug-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
         for <bpf@vger.kernel.org>; Wed, 07 Aug 2019 14:40:10 -0700
 Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c081:35::126) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Wed, 7 Aug 2019 14:40:08 -0700
+ Wed, 7 Aug 2019 14:40:09 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 5A2AD861682; Wed,  7 Aug 2019 14:40:04 -0700 (PDT)
+        id 68CA3861682; Wed,  7 Aug 2019 14:40:08 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v6 bpf-next 01/14] libbpf: add helpers for working with BTF types
-Date:   Wed, 7 Aug 2019 14:39:48 -0700
-Message-ID: <20190807214001.872988-2-andriin@fb.com>
+Subject: [PATCH v6 bpf-next 03/14] libbpf: add .BTF.ext offset relocation section loading
+Date:   Wed, 7 Aug 2019 14:39:50 -0700
+Message-ID: <20190807214001.872988-4-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190807214001.872988-1-andriin@fb.com>
 References: <20190807214001.872988-1-andriin@fb.com>
@@ -60,220 +60,280 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-07_06:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=25 phishscore=0 bulkscore=0 spamscore=0
+ malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
  mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1908070186
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908070187
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add lots of frequently used helpers that simplify working with BTF
-types.
+Add support for BPF CO-RE offset relocations. Add section/record
+iteration macros for .BTF.ext. These macro are useful for iterating over
+each .BTF.ext record, either for dumping out contents or later for BPF
+CO-RE relocation handling.
+
+To enable other parts of libbpf to work with .BTF.ext contents, moved
+a bunch of type definitions into libbpf_internal.h.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+Acked-by: Song Liu <songliubraving@fb.com>
 ---
- tools/lib/bpf/btf.h | 178 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 178 insertions(+)
+ tools/lib/bpf/btf.c             |  69 ++++++++-------------
+ tools/lib/bpf/btf.h             |   4 ++
+ tools/lib/bpf/libbpf_internal.h | 105 ++++++++++++++++++++++++++++++++
+ 3 files changed, 136 insertions(+), 42 deletions(-)
 
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 1cd4e5d67158..aacb7608f02d 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -35,47 +35,6 @@ struct btf {
+ 	int fd;
+ };
+ 
+-struct btf_ext_info {
+-	/*
+-	 * info points to the individual info section (e.g. func_info and
+-	 * line_info) from the .BTF.ext. It does not include the __u32 rec_size.
+-	 */
+-	void *info;
+-	__u32 rec_size;
+-	__u32 len;
+-};
+-
+-struct btf_ext {
+-	union {
+-		struct btf_ext_header *hdr;
+-		void *data;
+-	};
+-	struct btf_ext_info func_info;
+-	struct btf_ext_info line_info;
+-	__u32 data_size;
+-};
+-
+-struct btf_ext_info_sec {
+-	__u32	sec_name_off;
+-	__u32	num_info;
+-	/* Followed by num_info * record_size number of bytes */
+-	__u8	data[0];
+-};
+-
+-/* The minimum bpf_func_info checked by the loader */
+-struct bpf_func_info_min {
+-	__u32   insn_off;
+-	__u32   type_id;
+-};
+-
+-/* The minimum bpf_line_info checked by the loader */
+-struct bpf_line_info_min {
+-	__u32	insn_off;
+-	__u32	file_name_off;
+-	__u32	line_off;
+-	__u32	line_col;
+-};
+-
+ static inline __u64 ptr_to_u64(const void *ptr)
+ {
+ 	return (__u64) (unsigned long) ptr;
+@@ -822,6 +781,9 @@ static int btf_ext_setup_info(struct btf_ext *btf_ext,
+ 	/* The start of the info sec (including the __u32 record_size). */
+ 	void *info;
+ 
++	if (ext_sec->len == 0)
++		return 0;
++
+ 	if (ext_sec->off & 0x03) {
+ 		pr_debug(".BTF.ext %s section is not aligned to 4 bytes\n",
+ 		     ext_sec->desc);
+@@ -925,11 +887,24 @@ static int btf_ext_setup_line_info(struct btf_ext *btf_ext)
+ 	return btf_ext_setup_info(btf_ext, &param);
+ }
+ 
++static int btf_ext_setup_offset_reloc(struct btf_ext *btf_ext)
++{
++	struct btf_ext_sec_setup_param param = {
++		.off = btf_ext->hdr->offset_reloc_off,
++		.len = btf_ext->hdr->offset_reloc_len,
++		.min_rec_size = sizeof(struct bpf_offset_reloc),
++		.ext_info = &btf_ext->offset_reloc_info,
++		.desc = "offset_reloc",
++	};
++
++	return btf_ext_setup_info(btf_ext, &param);
++}
++
+ static int btf_ext_parse_hdr(__u8 *data, __u32 data_size)
+ {
+ 	const struct btf_ext_header *hdr = (struct btf_ext_header *)data;
+ 
+-	if (data_size < offsetof(struct btf_ext_header, func_info_off) ||
++	if (data_size < offsetofend(struct btf_ext_header, hdr_len) ||
+ 	    data_size < hdr->hdr_len) {
+ 		pr_debug("BTF.ext header not found");
+ 		return -EINVAL;
+@@ -987,6 +962,9 @@ struct btf_ext *btf_ext__new(__u8 *data, __u32 size)
+ 	}
+ 	memcpy(btf_ext->data, data, size);
+ 
++	if (btf_ext->hdr->hdr_len <
++	    offsetofend(struct btf_ext_header, line_info_len))
++		goto done;
+ 	err = btf_ext_setup_func_info(btf_ext);
+ 	if (err)
+ 		goto done;
+@@ -995,6 +973,13 @@ struct btf_ext *btf_ext__new(__u8 *data, __u32 size)
+ 	if (err)
+ 		goto done;
+ 
++	if (btf_ext->hdr->hdr_len <
++	    offsetofend(struct btf_ext_header, offset_reloc_len))
++		goto done;
++	err = btf_ext_setup_offset_reloc(btf_ext);
++	if (err)
++		goto done;
++
+ done:
+ 	if (err) {
+ 		btf_ext__free(btf_ext);
 diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index 88a52ae56fc6..2604dc099855 100644
+index 2604dc099855..9cb44b4fbf60 100644
 --- a/tools/lib/bpf/btf.h
 +++ b/tools/lib/bpf/btf.h
-@@ -5,6 +5,7 @@
- #define __LIBBPF_BTF_H
+@@ -58,6 +58,10 @@ struct btf_ext_header {
+ 	__u32	func_info_len;
+ 	__u32	line_info_off;
+ 	__u32	line_info_len;
++
++	/* optional part of .BTF.ext header */
++	__u32	offset_reloc_off;
++	__u32	offset_reloc_len;
+ };
  
- #include <stdarg.h>
-+#include <linux/btf.h>
- #include <linux/types.h>
- 
- #ifdef __cplusplus
-@@ -120,6 +121,183 @@ LIBBPF_API void btf_dump__free(struct btf_dump *d);
- 
- LIBBPF_API int btf_dump__dump_type(struct btf_dump *d, __u32 id);
- 
-+/*
-+ * A set of helpers for easier BTF types handling
-+ */
-+static inline __u16 btf_kind(const struct btf_type *t)
-+{
-+	return BTF_INFO_KIND(t->info);
-+}
-+
-+static inline __u16 btf_vlen(const struct btf_type *t)
-+{
-+	return BTF_INFO_VLEN(t->info);
-+}
-+
-+static inline bool btf_kflag(const struct btf_type *t)
-+{
-+	return BTF_INFO_KFLAG(t->info);
-+}
-+
-+static inline bool btf_is_int(const struct btf_type *t)
-+{
-+	return btf_kind(t) == BTF_KIND_INT;
-+}
-+
-+static inline bool btf_is_ptr(const struct btf_type *t)
-+{
-+	return btf_kind(t) == BTF_KIND_PTR;
-+}
-+
-+static inline bool btf_is_array(const struct btf_type *t)
-+{
-+	return btf_kind(t) == BTF_KIND_ARRAY;
-+}
-+
-+static inline bool btf_is_struct(const struct btf_type *t)
-+{
-+	return btf_kind(t) == BTF_KIND_STRUCT;
-+}
-+
-+static inline bool btf_is_union(const struct btf_type *t)
-+{
-+	return btf_kind(t) == BTF_KIND_UNION;
-+}
-+
-+static inline bool btf_is_composite(const struct btf_type *t)
-+{
-+	__u16 kind = btf_kind(t);
-+
-+	return kind == BTF_KIND_STRUCT || kind == BTF_KIND_UNION;
-+}
-+
-+static inline bool btf_is_enum(const struct btf_type *t)
-+{
-+	return btf_kind(t) == BTF_KIND_ENUM;
-+}
-+
-+static inline bool btf_is_fwd(const struct btf_type *t)
-+{
-+	return btf_kind(t) == BTF_KIND_FWD;
-+}
-+
-+static inline bool btf_is_typedef(const struct btf_type *t)
-+{
-+	return btf_kind(t) == BTF_KIND_TYPEDEF;
-+}
-+
-+static inline bool btf_is_volatile(const struct btf_type *t)
-+{
-+	return btf_kind(t) == BTF_KIND_VOLATILE;
-+}
-+
-+static inline bool btf_is_const(const struct btf_type *t)
-+{
-+	return btf_kind(t) == BTF_KIND_CONST;
-+}
-+
-+static inline bool btf_is_restrict(const struct btf_type *t)
-+{
-+	return btf_kind(t) == BTF_KIND_RESTRICT;
-+}
-+
-+static inline bool btf_is_mod(const struct btf_type *t)
-+{
-+	__u16 kind = btf_kind(t);
-+
-+	return kind == BTF_KIND_VOLATILE ||
-+	       kind == BTF_KIND_CONST ||
-+	       kind == BTF_KIND_RESTRICT;
-+}
-+
-+static inline bool btf_is_func(const struct btf_type *t)
-+{
-+	return btf_kind(t) == BTF_KIND_FUNC;
-+}
-+
-+static inline bool btf_is_func_proto(const struct btf_type *t)
-+{
-+	return btf_kind(t) == BTF_KIND_FUNC_PROTO;
-+}
-+
-+static inline bool btf_is_var(const struct btf_type *t)
-+{
-+	return btf_kind(t) == BTF_KIND_VAR;
-+}
-+
-+static inline bool btf_is_datasec(const struct btf_type *t)
-+{
-+	return btf_kind(t) == BTF_KIND_DATASEC;
-+}
-+
-+static inline __u8 btf_int_encoding(const struct btf_type *t)
-+{
-+	return BTF_INT_ENCODING(*(__u32 *)(t + 1));
-+}
-+
-+static inline __u8 btf_int_offset(const struct btf_type *t)
-+{
-+	return BTF_INT_OFFSET(*(__u32 *)(t + 1));
-+}
-+
-+static inline __u8 btf_int_bits(const struct btf_type *t)
-+{
-+	return BTF_INT_BITS(*(__u32 *)(t + 1));
-+}
-+
-+static inline struct btf_array *btf_array(const struct btf_type *t)
-+{
-+	return (struct btf_array *)(t + 1);
-+}
-+
-+static inline struct btf_enum *btf_enum(const struct btf_type *t)
-+{
-+	return (struct btf_enum *)(t + 1);
-+}
-+
-+static inline struct btf_member *btf_members(const struct btf_type *t)
-+{
-+	return (struct btf_member *)(t + 1);
-+}
-+
-+/* Get bit offset of a member with specified index. */
-+static inline __u32 btf_member_bit_offset(const struct btf_type *t,
-+					  __u32 member_idx)
-+{
-+	const struct btf_member *m = btf_members(t) + member_idx;
-+	bool kflag = btf_kflag(t);
-+
-+	return kflag ? BTF_MEMBER_BIT_OFFSET(m->offset) : m->offset;
-+}
-+/*
-+ * Get bitfield size of a member, assuming t is BTF_KIND_STRUCT or
-+ * BTF_KIND_UNION. If member is not a bitfield, zero is returned.
-+ */
-+static inline __u32 btf_member_bitfield_size(const struct btf_type *t,
-+					     __u32 member_idx)
-+{
-+	const struct btf_member *m = btf_members(t) + member_idx;
-+	bool kflag = btf_kflag(t);
-+
-+	return kflag ? BTF_MEMBER_BITFIELD_SIZE(m->offset) : 0;
-+}
-+
-+static inline struct btf_param *btf_params(const struct btf_type *t)
-+{
-+	return (struct btf_param *)(t + 1);
-+}
-+
-+static inline struct btf_var *btf_var(const struct btf_type *t)
-+{
-+	return (struct btf_var *)(t + 1);
-+}
-+
-+static inline struct btf_var_secinfo *
-+btf_var_secinfos(const struct btf_type *t)
-+{
-+	return (struct btf_var_secinfo *)(t + 1);
-+}
-+
- #ifdef __cplusplus
- } /* extern "C" */
+ LIBBPF_API void btf__free(struct btf *btf);
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index 2ac29bd36226..2e83a34f8c79 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -29,6 +29,10 @@
+ #ifndef max
+ # define max(x, y) ((x) < (y) ? (y) : (x))
  #endif
++#ifndef offsetofend
++# define offsetofend(TYPE, FIELD) \
++	(offsetof(TYPE, FIELD) + sizeof(((TYPE *)0)->FIELD))
++#endif
+ 
+ extern void libbpf_print(enum libbpf_print_level level,
+ 			 const char *format, ...)
+@@ -46,4 +50,105 @@ do {				\
+ int libbpf__load_raw_btf(const char *raw_types, size_t types_len,
+ 			 const char *str_sec, size_t str_len);
+ 
++struct btf_ext_info {
++	/*
++	 * info points to the individual info section (e.g. func_info and
++	 * line_info) from the .BTF.ext. It does not include the __u32 rec_size.
++	 */
++	void *info;
++	__u32 rec_size;
++	__u32 len;
++};
++
++#define for_each_btf_ext_sec(seg, sec)					\
++	for (sec = (seg)->info;						\
++	     (void *)sec < (seg)->info + (seg)->len;			\
++	     sec = (void *)sec + sizeof(struct btf_ext_info_sec) +	\
++		   (seg)->rec_size * sec->num_info)
++
++#define for_each_btf_ext_rec(seg, sec, i, rec)				\
++	for (i = 0, rec = (void *)&(sec)->data;				\
++	     i < (sec)->num_info;					\
++	     i++, rec = (void *)rec + (seg)->rec_size)
++
++struct btf_ext {
++	union {
++		struct btf_ext_header *hdr;
++		void *data;
++	};
++	struct btf_ext_info func_info;
++	struct btf_ext_info line_info;
++	struct btf_ext_info offset_reloc_info;
++	__u32 data_size;
++};
++
++struct btf_ext_info_sec {
++	__u32	sec_name_off;
++	__u32	num_info;
++	/* Followed by num_info * record_size number of bytes */
++	__u8	data[0];
++};
++
++/* The minimum bpf_func_info checked by the loader */
++struct bpf_func_info_min {
++	__u32   insn_off;
++	__u32   type_id;
++};
++
++/* The minimum bpf_line_info checked by the loader */
++struct bpf_line_info_min {
++	__u32	insn_off;
++	__u32	file_name_off;
++	__u32	line_off;
++	__u32	line_col;
++};
++
++/* The minimum bpf_offset_reloc checked by the loader
++ *
++ * Offset relocation captures the following data:
++ * - insn_off - instruction offset (in bytes) within a BPF program that needs
++ *   its insn->imm field to be relocated with actual offset;
++ * - type_id - BTF type ID of the "root" (containing) entity of a relocatable
++ *   offset;
++ * - access_str_off - offset into corresponding .BTF string section. String
++ *   itself encodes an accessed field using a sequence of field and array
++ *   indicies, separated by colon (:). It's conceptually very close to LLVM's
++ *   getelementptr ([0]) instruction's arguments for identifying offset to 
++ *   a field.
++ *
++ * Example to provide a better feel.
++ *
++ *   struct sample {
++ *       int a;
++ *       struct {
++ *           int b[10];
++ *       };
++ *   };
++ *
++ *   struct sample *s = ...;
++ *   int x = &s->a;     // encoded as "0:0" (a is field #0)
++ *   int y = &s->b[5];  // encoded as "0:1:0:5" (anon struct is field #1, 
++ *                      // b is field #0 inside anon struct, accessing elem #5)
++ *   int z = &s[10]->b; // encoded as "10:1" (ptr is used as an array)
++ *
++ * type_id for all relocs in this example  will capture BTF type id of
++ * `struct sample`.
++ *
++ * Such relocation is emitted when using __builtin_preserve_access_index()
++ * Clang built-in, passing expression that captures field address, e.g.:
++ *
++ * bpf_probe_read(&dst, sizeof(dst),
++ *		  __builtin_preserve_access_index(&src->a.b.c));
++ *
++ * In this case Clang will emit offset relocation recording necessary data to
++ * be able to find offset of embedded `a.b.c` field within `src` struct.
++ *
++ *   [0] https://llvm.org/docs/LangRef.html#getelementptr-instruction
++ */
++struct bpf_offset_reloc {
++	__u32   insn_off;
++	__u32   type_id;
++	__u32   access_str_off;
++};
++
+ #endif /* __LIBBPF_LIBBPF_INTERNAL_H */
 -- 
 2.17.1
 
