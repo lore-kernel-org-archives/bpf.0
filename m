@@ -2,643 +2,237 @@ Return-Path: <SRS0=0fIo=WD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2FF5C433FF
-	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 05:39:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D872C433FF
+	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 05:52:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6458D21BE6
-	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 05:39:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D292D21BF6
+	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 05:52:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="NGw/sUyL"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="cX6VOPnT";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="VUo8xwh0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727068AbfHGFjH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 7 Aug 2019 01:39:07 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:25820 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726878AbfHGFjG (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 7 Aug 2019 01:39:06 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x775Xf8G007481
-        for <bpf@vger.kernel.org>; Tue, 6 Aug 2019 22:39:04 -0700
+        id S1725995AbfHGFwD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 7 Aug 2019 01:52:03 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:39178 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725794AbfHGFwD (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 7 Aug 2019 01:52:03 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x775nO0S031626;
+        Tue, 6 Aug 2019 22:51:58 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=X6+vkkENtYREVvxsuhE5M2Bi7nCjI70ywoTSMveXV38=;
- b=NGw/sUyLdNX0yQvthFMFeSz6Hzm27K2upHn6sZWLf708u8M+t3m5ECW7jsB1g+nW21fL
- dRecXI3tzlxjfeLdjL4NIT6dm2k8njDuP6cZOXW9NhLYp21XFobhnUhLCnMtkLBgybA5
- +5TDmv4bDpYFJmbPj2DDhBLQ6vwvY65Q1ko= 
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=5vFOtRdp1wOwUty7RF65lPBZSDdXU36rlIgh8B3fgmU=;
+ b=cX6VOPnTU0bRaRsoNY9RjQzYk/tdVCED9Xu8sFLzWTXVsl68dGjvylpx6KWOSSC66Dde
+ 9QBmvVpo9Nx4ILohZ6dblCPkErV3m8qfwd5Uj/EA7mbSgGAekZYyleI0OWmAo9RMY/Rk
+ zxqLbruNZuUMS5vHA697mwNeXMMTTOexGXg= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2u7k0hgvc0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 06 Aug 2019 22:39:03 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+        by mx0a-00082601.pphosted.com with ESMTP id 2u7degaaag-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 06 Aug 2019 22:51:58 -0700
+Received: from ash-exopmbx101.TheFacebook.com (2620:10d:c0a8:82::b) by
+ ash-exhub201.TheFacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 6 Aug 2019 22:38:28 -0700
-Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id B51C5861698; Tue,  6 Aug 2019 22:38:27 -0700 (PDT)
-Smtp-Origin-Hostprefix: dev
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: dev101.prn2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>, <yhs@fb.com>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v4 bpf-next 08/14] selftests/bpf: add CO-RE relocs nesting tests
-Date:   Tue, 6 Aug 2019 22:38:00 -0700
-Message-ID: <20190807053806.1534571-9-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190807053806.1534571-1-andriin@fb.com>
-References: <20190807053806.1534571-1-andriin@fb.com>
-X-FB-Internal: Safe
+ 15.1.1713.5; Tue, 6 Aug 2019 22:51:51 -0700
+Received: from ash-exhub202.TheFacebook.com (2620:10d:c0a8:83::6) by
+ ash-exopmbx101.TheFacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 6 Aug 2019 22:51:50 -0700
+Received: from NAM04-CO1-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
+ via Frontend Transport; Tue, 6 Aug 2019 22:51:50 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gVgcg3n6hd5xl5o8mCusTtWSelMFwhDFjFYG/UyjGBHdjIJeIyNNHU03jRLBuOyIp+Vid+QiAWZvQhgDNwKGYnjfJY0GzE68chuKFoWZlW+4q36nOmDiTJIYHHrmqXbTc3mb6v8kydYR+aOyMzOvbShNvQNwOwHPXc8u5yVmRGELQKLJR7+Bn2fW2Q5MBW6f8oEL6vkue+lYegE1Jg8/HFUQVCw2MFoLActl4ZWL+tgIkcBfYrNKPEH6TyFfgpy9ornOJwOwc/yFyr3cDmFHwO4pFAmM4IydJg8yY+2ob5GAuz28KNZmMg3aaMIRaTd/EPshYkQNB2FK7HdiQqP7DA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5vFOtRdp1wOwUty7RF65lPBZSDdXU36rlIgh8B3fgmU=;
+ b=HrDWF4HbxgRRh7wK88exsOF30W3fU4irfPFPFKZYwsmoDjMtzCN2CaSPKIuj4wdWcSEVzb1qp7xEasFMGaI2VKn9nU89zcLLdeWxSXVr35OP4LR16RNjqXHlFiZg9HTdfRaGahqGtW/DqX9/T6MOQGgrdMKErDQVFTizRcJ8wcdEva3q7qJ5XTs1EwpwbR2TezXpxjMKXQ8w5PoiIMXz5n+23iLiODTUIQ1wdx/4i9dW+vpqx7VA5je6kYqCp44lZOghadLoMsnaI5JKRpghELWwSqzLPe1shJ9dDN3+HGhGlJssuzoK8ftsCCdHNjYSAElShOgvjULnzfnjfgcmiA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
+ smtp.mailfrom=fb.com;dmarc=pass action=none header.from=fb.com;dkim=pass
+ header.d=fb.com;arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5vFOtRdp1wOwUty7RF65lPBZSDdXU36rlIgh8B3fgmU=;
+ b=VUo8xwh0Df/zTwEdtUCBe/0rl97QmybqrnERIvGezBpjVPnTdLphj+bkzw1PAYyBBcBV9aOaCIkwWVFTxCttSyhN3+pHM6phVNxFBigwrhiuLUFhWKIukpPw1iolB06OYQrL6TMazsCrSfCHbyNNVFtgNrU21zsyJw47AM/37WM=
+Received: from BYAPR15MB3384.namprd15.prod.outlook.com (20.179.59.17) by
+ BYAPR15MB2439.namprd15.prod.outlook.com (52.135.198.155) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2136.13; Wed, 7 Aug 2019 05:51:49 +0000
+Received: from BYAPR15MB3384.namprd15.prod.outlook.com
+ ([fe80::e499:ecba:ec04:abac]) by BYAPR15MB3384.namprd15.prod.outlook.com
+ ([fe80::e499:ecba:ec04:abac%5]) with mapi id 15.20.2136.018; Wed, 7 Aug 2019
+ 05:51:49 +0000
+From:   Yonghong Song <yhs@fb.com>
+To:     Daniel Xu <dxu@dxuuu.xyz>, Song Liu <songliubraving@fb.com>,
+        "Andrii Nakryiko" <andriin@fb.com>
+CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Kernel Team <Kernel-team@fb.com>
+Subject: Re: [PATCH 1/3] tracing/kprobe: Add PERF_EVENT_IOC_QUERY_KPROBE ioctl
+Thread-Topic: [PATCH 1/3] tracing/kprobe: Add PERF_EVENT_IOC_QUERY_KPROBE
+ ioctl
+Thread-Index: AQHVTLCaA23KAPLzH0qY+4wWGfc8J6bvLwEA
+Date:   Wed, 7 Aug 2019 05:51:49 +0000
+Message-ID: <f4a1ca0c-3fa1-5a20-2f41-133dc2ec1445@fb.com>
+References: <20190806234131.5655-1-dxu@dxuuu.xyz>
+In-Reply-To: <20190806234131.5655-1-dxu@dxuuu.xyz>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: MWHPR02CA0019.namprd02.prod.outlook.com
+ (2603:10b6:300:4b::29) To BYAPR15MB3384.namprd15.prod.outlook.com
+ (2603:10b6:a03:10e::17)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2620:10d:c090:180::1dec]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 91dc7bc2-33f0-4441-5a36-08d71afb56b9
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR15MB2439;
+x-ms-traffictypediagnostic: BYAPR15MB2439:
+x-microsoft-antispam-prvs: <BYAPR15MB243977C8D7BE4BCB47865FE5D3D40@BYAPR15MB2439.namprd15.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 01221E3973
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(366004)(396003)(39860400002)(346002)(136003)(199004)(189003)(81166006)(31686004)(6486002)(6436002)(11346002)(8676002)(478600001)(256004)(66946007)(7736002)(64756008)(8936002)(6512007)(71200400001)(53936002)(5024004)(305945005)(71190400001)(14444005)(14454004)(66476007)(81156014)(66556008)(476003)(66446008)(36756003)(186003)(25786009)(229853002)(110136005)(54906003)(5660300002)(316002)(486006)(2906002)(53546011)(6506007)(76176011)(99286004)(46003)(6246003)(2616005)(102836004)(6116002)(446003)(52116002)(86362001)(6636002)(386003)(4326008)(68736007)(31696002);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB2439;H:BYAPR15MB3384.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: Ge01okSbfSEsPSdA2rg+51qSSFej/rUZXEqfPLxkBZfqdaTdck8ZPJp7A+BuCWxX8Dtrat95/uy1OeD5lqbonXTAfoOlgKm23de46NaUJrRwxaqVrOw9+1m7h0ud7GXMG24j0FPecPTcK1lfCduhOlAVO0qJmzi0V/nWfusxgoKhWY1Ov24h2vj+vhBJxm11KW7mCwA0k2jTmde0mTRtYv6AgOlxSR80bd3w8fVAaeKbzJLt3909n24375KyHm7tlU5+GkWOd79NeS5+d3HrPcXcQJUgdgdzyGYhCN9bjFMIkEDRofPA59lV2tF9W/kPmTVJ8O7H5MNz2Ev3IV0V5zdL7nfBdAm46P4DCV9Gzx7aprZNp2SPpLE23VqBUyIZpxZADKuPg5JLZ7IJ8oybkDMzfffZYjVY8vkxQ21FSg4=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8C1B9FF8DED7294A94AE4F0E59469728@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-07_01:,,
+X-MS-Exchange-CrossTenant-Network-Message-Id: 91dc7bc2-33f0-4441-5a36-08d71afb56b9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Aug 2019 05:51:49.1924
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yhs@fb.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2439
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-07_02:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=67 phishscore=0 bulkscore=0 spamscore=0
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
  mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1908070059
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908070063
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a bunch of test validating correct handling of nested
-structs/unions.
-
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Acked-by: Song Liu <songliubraving@fb.com>
----
- .../selftests/bpf/prog_tests/core_reloc.c     |  39 +++
- .../bpf/progs/btf__core_reloc_nesting.c       |   3 +
- .../btf__core_reloc_nesting___anon_embed.c    |   3 +
- ...f__core_reloc_nesting___dup_compat_types.c |   5 +
- ...core_reloc_nesting___err_array_container.c |   3 +
- ...tf__core_reloc_nesting___err_array_field.c |   3 +
- ...e_reloc_nesting___err_dup_incompat_types.c |   4 +
- ...re_reloc_nesting___err_missing_container.c |   3 +
- ...__core_reloc_nesting___err_missing_field.c |   3 +
- ..._reloc_nesting___err_nonstruct_container.c |   3 +
- ...e_reloc_nesting___err_partial_match_dups.c |   4 +
- .../btf__core_reloc_nesting___err_too_deep.c  |   3 +
- .../btf__core_reloc_nesting___extra_nesting.c |   3 +
- ..._core_reloc_nesting___struct_union_mixup.c |   3 +
- .../selftests/bpf/progs/core_reloc_types.h    | 293 ++++++++++++++++++
- .../bpf/progs/test_core_reloc_nesting.c       |  46 +++
- 16 files changed, 421 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___anon_embed.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___dup_compat_types.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_array_container.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_array_field.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_dup_incompat_types.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_missing_container.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_missing_field.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_nonstruct_container.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_partial_match_dups.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_too_deep.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___extra_nesting.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___struct_union_mixup.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_core_reloc_nesting.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-index 995d5e9fd4c3..2c0e695f958f 100644
---- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-@@ -28,6 +28,29 @@
- 	.fails = true,							\
- }
- 
-+#define NESTING_DATA(struct_name) STRUCT_TO_CHAR_PTR(struct_name) {	\
-+	.a = { .a = { .a = 42 } },					\
-+	.b = { .b = { .b = 0xc001 } },					\
-+}
-+
-+#define NESTING_CASE_COMMON(name)					\
-+	.case_name = #name,						\
-+	.bpf_obj_file = "test_core_reloc_nesting.o",			\
-+	.btf_src_file = "btf__core_reloc_" #name ".o"
-+
-+#define NESTING_CASE(name) {						\
-+	NESTING_CASE_COMMON(name),					\
-+	.input = NESTING_DATA(core_reloc_##name),			\
-+	.input_len = sizeof(struct core_reloc_##name),			\
-+	.output = NESTING_DATA(core_reloc_nesting),			\
-+	.output_len = sizeof(struct core_reloc_nesting)			\
-+}
-+
-+#define NESTING_ERR_CASE(name) {					\
-+	NESTING_CASE_COMMON(name),					\
-+	.fails = true,							\
-+}
-+
- struct core_reloc_test_case {
- 	const char *case_name;
- 	const char *bpf_obj_file;
-@@ -57,6 +80,22 @@ static struct core_reloc_test_case test_cases[] = {
- 	FLAVORS_CASE(flavors),
- 
- 	FLAVORS_ERR_CASE(flavors__err_wrong_name),
-+
-+	/* various struct/enum nesting and resolution scenarios */
-+	NESTING_CASE(nesting),
-+	NESTING_CASE(nesting___anon_embed),
-+	NESTING_CASE(nesting___struct_union_mixup),
-+	NESTING_CASE(nesting___extra_nesting),
-+	NESTING_CASE(nesting___dup_compat_types),
-+
-+	NESTING_ERR_CASE(nesting___err_missing_field),
-+	NESTING_ERR_CASE(nesting___err_array_field),
-+	NESTING_ERR_CASE(nesting___err_missing_container),
-+	NESTING_ERR_CASE(nesting___err_nonstruct_container),
-+	NESTING_ERR_CASE(nesting___err_array_container),
-+	NESTING_ERR_CASE(nesting___err_dup_incompat_types),
-+	NESTING_ERR_CASE(nesting___err_partial_match_dups),
-+	NESTING_ERR_CASE(nesting___err_too_deep),
- };
- 
- struct data {
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting.c
-new file mode 100644
-index 000000000000..4480fcc0f183
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting.c
-@@ -0,0 +1,3 @@
-+#include "core_reloc_types.h"
-+
-+void f(struct core_reloc_nesting x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___anon_embed.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___anon_embed.c
-new file mode 100644
-index 000000000000..13e108f76ece
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___anon_embed.c
-@@ -0,0 +1,3 @@
-+#include "core_reloc_types.h"
-+
-+void f(struct core_reloc_nesting___anon_embed x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___dup_compat_types.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___dup_compat_types.c
-new file mode 100644
-index 000000000000..76b54fda5fbb
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___dup_compat_types.c
-@@ -0,0 +1,5 @@
-+#include "core_reloc_types.h"
-+
-+void f1(struct core_reloc_nesting___dup_compat_types x) {}
-+void f2(struct core_reloc_nesting___dup_compat_types__2 x) {}
-+void f3(struct core_reloc_nesting___dup_compat_types__3 x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_array_container.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_array_container.c
-new file mode 100644
-index 000000000000..975fb95db810
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_array_container.c
-@@ -0,0 +1,3 @@
-+#include "core_reloc_types.h"
-+
-+void f(struct core_reloc_nesting___err_array_container x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_array_field.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_array_field.c
-new file mode 100644
-index 000000000000..ad66c67e7980
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_array_field.c
-@@ -0,0 +1,3 @@
-+#include "core_reloc_types.h"
-+
-+void f(struct core_reloc_nesting___err_array_field x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_dup_incompat_types.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_dup_incompat_types.c
-new file mode 100644
-index 000000000000..35c5f8da6812
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_dup_incompat_types.c
-@@ -0,0 +1,4 @@
-+#include "core_reloc_types.h"
-+
-+void f1(struct core_reloc_nesting___err_dup_incompat_types__1 x) {}
-+void f2(struct core_reloc_nesting___err_dup_incompat_types__2 x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_missing_container.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_missing_container.c
-new file mode 100644
-index 000000000000..142e332041db
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_missing_container.c
-@@ -0,0 +1,3 @@
-+#include "core_reloc_types.h"
-+
-+void f(struct core_reloc_nesting___err_missing_container x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_missing_field.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_missing_field.c
-new file mode 100644
-index 000000000000..efcae167fab9
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_missing_field.c
-@@ -0,0 +1,3 @@
-+#include "core_reloc_types.h"
-+
-+void f(struct core_reloc_nesting___err_missing_field x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_nonstruct_container.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_nonstruct_container.c
-new file mode 100644
-index 000000000000..97aaaedd8ada
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_nonstruct_container.c
-@@ -0,0 +1,3 @@
-+#include "core_reloc_types.h"
-+
-+void f(struct core_reloc_nesting___err_nonstruct_container x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_partial_match_dups.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_partial_match_dups.c
-new file mode 100644
-index 000000000000..ffde35086e90
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_partial_match_dups.c
-@@ -0,0 +1,4 @@
-+#include "core_reloc_types.h"
-+
-+void f1(struct core_reloc_nesting___err_partial_match_dups__a x) {}
-+void f2(struct core_reloc_nesting___err_partial_match_dups__b x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_too_deep.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_too_deep.c
-new file mode 100644
-index 000000000000..39a2fadd8e95
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___err_too_deep.c
-@@ -0,0 +1,3 @@
-+#include "core_reloc_types.h"
-+
-+void f(struct core_reloc_nesting___err_too_deep x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___extra_nesting.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___extra_nesting.c
-new file mode 100644
-index 000000000000..a09d9dfb20df
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___extra_nesting.c
-@@ -0,0 +1,3 @@
-+#include "core_reloc_types.h"
-+
-+void f(struct core_reloc_nesting___extra_nesting x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___struct_union_mixup.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___struct_union_mixup.c
-new file mode 100644
-index 000000000000..3d8a1a74012f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_nesting___struct_union_mixup.c
-@@ -0,0 +1,3 @@
-+#include "core_reloc_types.h"
-+
-+void f(struct core_reloc_nesting___struct_union_mixup x) {}
-diff --git a/tools/testing/selftests/bpf/progs/core_reloc_types.h b/tools/testing/selftests/bpf/progs/core_reloc_types.h
-index 33b0c6a61912..340ee2bcd463 100644
---- a/tools/testing/selftests/bpf/progs/core_reloc_types.h
-+++ b/tools/testing/selftests/bpf/progs/core_reloc_types.h
-@@ -13,3 +13,296 @@ struct core_reloc_flavors__err_wrong_name {
- 	int b;
- 	int c;
- };
-+
-+/*
-+ * NESTING
-+ */
-+/* original set up, used to record relocations in BPF program */
-+struct core_reloc_nesting_substruct {
-+	int a;
-+};
-+
-+union core_reloc_nesting_subunion {
-+	int b;
-+};
-+
-+struct core_reloc_nesting {
-+	union {
-+		struct core_reloc_nesting_substruct a;
-+	} a;
-+	struct {
-+		union core_reloc_nesting_subunion b;
-+	} b;
-+};
-+
-+/* inlined anonymous struct/union instead of named structs in original */
-+struct core_reloc_nesting___anon_embed {
-+	int __just_for_padding;
-+	union {
-+		struct {
-+			int a;
-+		} a;
-+	} a;
-+	struct {
-+		union {
-+			int b;
-+		} b;
-+	} b;
-+};
-+
-+/* different mix of nested structs/unions than in original */
-+struct core_reloc_nesting___struct_union_mixup {
-+	int __a;
-+	struct {
-+		int __a;
-+		union {
-+			char __a;
-+			int a;
-+		} a;
-+	} a;
-+	int __b;
-+	union {
-+		int __b;
-+		union {
-+			char __b;
-+			int b;
-+		} b;
-+	} b;
-+};
-+
-+/* extra anon structs/unions, but still valid a.a.a and b.b.b accessors */
-+struct core_reloc_nesting___extra_nesting {
-+	int __padding;
-+	struct {
-+		struct {
-+			struct {
-+				struct {
-+					union {
-+						int a;
-+					} a;
-+				};
-+			};
-+		} a;
-+		int __some_more;
-+		struct {
-+			union {
-+				union {
-+					union {
-+						struct {
-+							int b;
-+						};
-+					} b;
-+				};
-+			} b;
-+		};
-+	};
-+};
-+
-+/* three flavors of same struct with different structure but same layout for
-+ * a.a.a and b.b.b, thus successfully resolved and relocatable */
-+struct core_reloc_nesting___dup_compat_types {
-+	char __just_for_padding;
-+	/* 3 more bytes of padding */
-+	struct {
-+		struct {
-+			int a; /* offset 4 */
-+		} a;
-+	} a;
-+	long long __more_padding;
-+	struct {
-+		struct {
-+			int b; /* offset 16 */
-+		} b;
-+	} b;
-+};
-+
-+struct core_reloc_nesting___dup_compat_types__2 {
-+	int __aligned_padding;
-+	struct {
-+		int __trickier_noop[0];
-+		struct {
-+			char __some_more_noops[0];
-+			int a; /* offset 4 */
-+		} a;
-+	} a;
-+	int __more_padding;
-+	struct {
-+		struct {
-+			struct {
-+				int __critical_padding;
-+				int b; /* offset 16 */
-+			} b;
-+			int __does_not_matter;
-+		};
-+	} b;
-+	int __more_irrelevant_stuff;
-+};
-+
-+struct core_reloc_nesting___dup_compat_types__3 {
-+	char __correct_padding[4];
-+	struct {
-+		struct {
-+			int a; /* offset 4 */
-+		} a;
-+	} a;
-+	/* 8 byte padding due to next struct's alignment */
-+	struct {
-+		struct {
-+			int b;
-+		} b;
-+	} b __attribute__((aligned(16)));
-+};
-+
-+/* b.b.b field is missing */
-+struct core_reloc_nesting___err_missing_field {
-+	struct {
-+		struct {
-+			int a;
-+		} a;
-+	} a;
-+	struct {
-+		struct {
-+			int x;
-+		} b;
-+	} b;
-+};
-+
-+/* b.b.b field is an array of integers instead of plain int */
-+struct core_reloc_nesting___err_array_field {
-+	struct {
-+		struct {
-+			int a;
-+		} a;
-+	} a;
-+	struct {
-+		struct {
-+			int b[1];
-+		} b;
-+	} b;
-+};
-+
-+/* middle b container is missing */
-+struct core_reloc_nesting___err_missing_container {
-+	struct {
-+		struct {
-+			int a;
-+		} a;
-+	} a;
-+	struct {
-+		int x;
-+	} b;
-+};
-+
-+/* middle b container is referenced through pointer instead of being embedded */
-+struct core_reloc_nesting___err_nonstruct_container {
-+	struct {
-+		struct {
-+			int a;
-+		} a;
-+	} a;
-+	struct {
-+		struct {
-+			int b;
-+		} *b;
-+	} b;
-+};
-+
-+/* middle b container is an array of structs instead of plain struct */
-+struct core_reloc_nesting___err_array_container {
-+	struct {
-+		struct {
-+			int a;
-+		} a;
-+	} a;
-+	struct {
-+		struct {
-+			int b;
-+		} b[1];
-+	} b;
-+};
-+
-+/* two flavors of same struct with incompatible layout for b.b.b */
-+struct core_reloc_nesting___err_dup_incompat_types__1 {
-+	struct {
-+		struct {
-+			int a; /* offset 0 */
-+		} a;
-+	} a;
-+	struct {
-+		struct {
-+			int b; /* offset 4 */
-+		} b;
-+	} b;
-+};
-+
-+struct core_reloc_nesting___err_dup_incompat_types__2 {
-+	struct {
-+		struct {
-+			int a; /* offset 0 */
-+		} a;
-+	} a;
-+	int __extra_padding;
-+	struct {
-+		struct {
-+			int b; /* offset 8 (!) */
-+		} b;
-+	} b;
-+};
-+
-+/* two flavors of same struct having one of a.a.a and b.b.b, but not both */
-+struct core_reloc_nesting___err_partial_match_dups__a {
-+	struct {
-+		struct {
-+			int a;
-+		} a;
-+	} a;
-+};
-+
-+struct core_reloc_nesting___err_partial_match_dups__b {
-+	struct {
-+		struct {
-+			int b;
-+		} b;
-+	} b;
-+};
-+
-+struct core_reloc_nesting___err_too_deep {
-+	struct {
-+		struct {
-+			int a;
-+		} a;
-+	} a;
-+	/* 65 levels of nestedness for b.b.b */
-+	struct {
-+		struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+			struct { struct { struct { struct { struct {
-+				/* this one is one too much */
-+				struct {
-+					int b;
-+				};
-+			}; }; }; }; };
-+			}; }; }; }; };
-+			}; }; }; }; };
-+			}; }; }; }; };
-+			}; }; }; }; };
-+			}; }; }; }; };
-+			}; }; }; }; };
-+			}; }; }; }; };
-+			}; }; }; }; };
-+			}; }; }; }; };
-+			}; }; }; }; };
-+			}; }; }; }; };
-+		} b;
-+	} b;
-+};
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_nesting.c b/tools/testing/selftests/bpf/progs/test_core_reloc_nesting.c
-new file mode 100644
-index 000000000000..3ca30cec2b39
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_nesting.c
-@@ -0,0 +1,46 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2019 Facebook
-+
-+#include <linux/bpf.h>
-+#include <stdint.h>
-+#include "bpf_helpers.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+static volatile struct data {
-+	char in[256];
-+	char out[256];
-+} data;
-+
-+struct core_reloc_nesting_substruct {
-+	int a;
-+};
-+
-+union core_reloc_nesting_subunion {
-+	int b;
-+};
-+
-+/* int a.a.a and b.b.b accesses */
-+struct core_reloc_nesting {
-+	union {
-+		struct core_reloc_nesting_substruct a;
-+	} a;
-+	struct {
-+		union core_reloc_nesting_subunion b;
-+	} b;
-+};
-+
-+SEC("raw_tracepoint/sys_enter")
-+int test_core_nesting(void *ctx)
-+{
-+	struct core_reloc_nesting *in = (void *)&data.in;
-+	struct core_reloc_nesting *out = (void *)&data.out;
-+
-+	if (BPF_CORE_READ(&out->a.a.a, &in->a.a.a))
-+		return 1;
-+	if (BPF_CORE_READ(&out->b.b.b, &in->b.b.b))
-+		return 1;
-+
-+	return 0;
-+}
-+
--- 
-2.17.1
-
+DQoNCk9uIDgvNi8xOSA0OjQxIFBNLCBEYW5pZWwgWHUgd3JvdGU6DQo+IEl0J3MgdXNlZnVsIHRv
+IGtub3cga3Byb2JlJ3Mgbm1pc3NlZCBhbmQgbmhpdCBzdGF0cy4gRm9yIGV4YW1wbGUgd2l0aA0K
+PiB0cmFjaW5nIHRvb2xzLCBpdCdzIGltcG9ydGFudCB0byBrbm93IHdoZW4gZXZlbnRzIG1heSBo
+YXZlIGJlZW4gbG9zdC4NCj4gVGhlcmUgaXMgY3VycmVudGx5IG5vIHdheSB0byBnZXQgdGhhdCBp
+bmZvcm1hdGlvbiBmcm9tIHRoZSBwZXJmIEFQSS4NCj4gVGhpcyBwYXRjaCBhZGRzIGEgbmV3IGlv
+Y3RsIHRoYXQgbGV0cyB1c2VycyBxdWVyeSB0aGlzIGluZm9ybWF0aW9uLg0KPiAtLS0NCj4gICBp
+bmNsdWRlL2xpbnV4L3RyYWNlX2V2ZW50cy5oICAgIHwgIDYgKysrKysrDQo+ICAgaW5jbHVkZS91
+YXBpL2xpbnV4L3BlcmZfZXZlbnQuaCB8IDIzICsrKysrKysrKysrKysrKysrKysrKysrDQo+ICAg
+a2VybmVsL2V2ZW50cy9jb3JlLmMgICAgICAgICAgICB8IDExICsrKysrKysrKysrDQo+ICAga2Vy
+bmVsL3RyYWNlL3RyYWNlX2twcm9iZS5jICAgICB8IDI1ICsrKysrKysrKysrKysrKysrKysrKysr
+KysNCj4gICA0IGZpbGVzIGNoYW5nZWQsIDY1IGluc2VydGlvbnMoKykNCj4gDQo+IGRpZmYgLS1n
+aXQgYS9pbmNsdWRlL2xpbnV4L3RyYWNlX2V2ZW50cy5oIGIvaW5jbHVkZS9saW51eC90cmFjZV9l
+dmVudHMuaA0KPiBpbmRleCA1MTUwNDM2NzgzZTguLjI4ZmFmMTE1ZTBiOCAxMDA2NDQNCj4gLS0t
+IGEvaW5jbHVkZS9saW51eC90cmFjZV9ldmVudHMuaA0KPiArKysgYi9pbmNsdWRlL2xpbnV4L3Ry
+YWNlX2V2ZW50cy5oDQo+IEBAIC01ODYsNiArNTg2LDEyIEBAIGV4dGVybiBpbnQgYnBmX2dldF9r
+cHJvYmVfaW5mbyhjb25zdCBzdHJ1Y3QgcGVyZl9ldmVudCAqZXZlbnQsDQo+ICAgCQkJICAgICAg
+IHUzMiAqZmRfdHlwZSwgY29uc3QgY2hhciAqKnN5bWJvbCwNCj4gICAJCQkgICAgICAgdTY0ICpw
+cm9iZV9vZmZzZXQsIHU2NCAqcHJvYmVfYWRkciwNCj4gICAJCQkgICAgICAgYm9vbCBwZXJmX3R5
+cGVfdHJhY2Vwb2ludCk7DQo+ICtleHRlcm4gaW50IHBlcmZfZXZlbnRfcXVlcnlfa3Byb2JlKHN0
+cnVjdCBwZXJmX2V2ZW50ICpldmVudCwgdm9pZCBfX3VzZXIgKmluZm8pOw0KPiArI2Vsc2UNCj4g
+K2ludCBwZXJmX2V2ZW50X3F1ZXJ5X2twcm9iZShzdHJ1Y3QgcGVyZl9ldmVudCAqZXZlbnQsIHZv
+aWQgX191c2VyICppbmZvKQ0KPiArew0KPiArCXJldHVybiAtRU9QTk9UU1VQUDsNCj4gK30NCj4g
+ICAjZW5kaWYNCj4gICAjaWZkZWYgQ09ORklHX1VQUk9CRV9FVkVOVFMNCj4gICBleHRlcm4gaW50
+ICBwZXJmX3Vwcm9iZV9pbml0KHN0cnVjdCBwZXJmX2V2ZW50ICpldmVudCwNCj4gZGlmZiAtLWdp
+dCBhL2luY2x1ZGUvdWFwaS9saW51eC9wZXJmX2V2ZW50LmggYi9pbmNsdWRlL3VhcGkvbGludXgv
+cGVyZl9ldmVudC5oDQo+IGluZGV4IDcxOThkZGQwYzZiMS4uNGE1ZTE4NjA2YmFmIDEwMDY0NA0K
+PiAtLS0gYS9pbmNsdWRlL3VhcGkvbGludXgvcGVyZl9ldmVudC5oDQo+ICsrKyBiL2luY2x1ZGUv
+dWFwaS9saW51eC9wZXJmX2V2ZW50LmgNCj4gQEAgLTQ0Nyw2ICs0NDcsMjggQEAgc3RydWN0IHBl
+cmZfZXZlbnRfcXVlcnlfYnBmIHsNCj4gICAJX191MzIJaWRzWzBdOw0KPiAgIH07DQo+ICAgDQo+
+ICsvKg0KPiArICogU3RydWN0dXJlIHVzZWQgYnkgYmVsb3cgUEVSRl9FVkVOVF9JT0NfUVVFUllf
+S1BST0UgY29tbWFuZA0KDQp0eXBvIFBFUkZfRVZFTlRfSU9DX1FVRVJZX0tQUk9FID0+IFBFUkZf
+RVZFTlRfSU9DX1FVRVJZX0tQUk9CRQ0KDQo+ICsgKiB0byBxdWVyeSBpbmZvcm1hdGlvbiBhYm91
+dCB0aGUga3Byb2JlIGF0dGFjaGVkIHRvIHRoZSBwZXJmDQo+ICsgKiBldmVudC4NCj4gKyAqLw0K
+PiArc3RydWN0IHBlcmZfZXZlbnRfcXVlcnlfa3Byb2JlIHsNCj4gKyAgICAgICAvKg0KPiArICAg
+ICAgICAqIFNpemUgb2Ygc3RydWN0dXJlIGZvciBmb3J3YXJkL2JhY2t3YXJkIGNvbXBhdGliaWxp
+dHkNCj4gKyAgICAgICAgKi8NCj4gKyAgICAgICBfX3UzMiAgIHNpemU7DQoNClNpbmNlIHRoaXMg
+aXMgcGVyZl9ldmVudCBVQVBJIGNoYW5nZSwgY291bGQgeW91IGNjIHRvDQpQZXRlciBaaWpsc3Ry
+YSA8cGV0ZXJ6QGluZnJhZGVhZC5vcmc+IGFzIHdlbGw/DQoNCldlIGhhdmUgMzIgYml0IGhvbGUg
+aGVyZS4gRm9yIFVBUEksIGl0IHdvdWxkIGJlIGJlc3QgdG8gcmVtb3ZlDQp0aGUgaG9sZSBvciBt
+YWtlIGl0IGV4cGxpY2l0LiBTbyBpbiB0aGlzIGNhc2UsIG1heWJlIHNvbWV0aGluZyBsaWtlDQog
+ICAgICAgICAgIF9fdTMyICAgOjMyOw0KDQpBbHNvLCB3aGF0IGlzIGluIHlvdXIgbWluZCBmb3Ig
+cG90ZW50aWFsIGZ1dHVyZSBleHRlbnNpb24/DQoNCj4gKyAgICAgICAvKg0KPiArICAgICAgICAq
+IFNldCBieSB0aGUga2VybmVsIHRvIGluZGljYXRlIG51bWJlciBvZiB0aW1lcyB0aGlzIGtwcm9i
+ZQ0KPiArICAgICAgICAqIHdhcyB0ZW1wb3JhcmlseSBkaXNhYmxlZA0KPiArICAgICAgICAqLw0K
+PiArICAgICAgIF9fdTY0ICAgbm1pc3NlZDsNCj4gKyAgICAgICAvKg0KPiArICAgICAgICAqIFNl
+dCBieSB0aGUga2VybmVsIHRvIGluZGljYXRlIG51bWJlciBvZiB0aW1lcyB0aGlzIGtwcm9iZQ0K
+PiArICAgICAgICAqIHdhcyBoaXQNCj4gKyAgICAgICAgKi8NCj4gKyAgICAgICBfX3U2NCAgIG5o
+aXQ7DQo+ICt9Ow0KPiArDQo+ICAgLyoNCj4gICAgKiBJb2N0bHMgdGhhdCBjYW4gYmUgZG9uZSBv
+biBhIHBlcmYgZXZlbnQgZmQ6DQo+ICAgICovDQo+IEBAIC00NjIsNiArNDg0LDcgQEAgc3RydWN0
+IHBlcmZfZXZlbnRfcXVlcnlfYnBmIHsNCj4gICAjZGVmaW5lIFBFUkZfRVZFTlRfSU9DX1BBVVNF
+X09VVFBVVAkJX0lPVygnJCcsIDksIF9fdTMyKQ0KPiAgICNkZWZpbmUgUEVSRl9FVkVOVF9JT0Nf
+UVVFUllfQlBGCQlfSU9XUignJCcsIDEwLCBzdHJ1Y3QgcGVyZl9ldmVudF9xdWVyeV9icGYgKikN
+Cj4gICAjZGVmaW5lIFBFUkZfRVZFTlRfSU9DX01PRElGWV9BVFRSSUJVVEVTCV9JT1coJyQnLCAx
+MSwgc3RydWN0IHBlcmZfZXZlbnRfYXR0ciAqKQ0KPiArI2RlZmluZSBQRVJGX0VWRU5UX0lPQ19R
+VUVSWV9LUFJPQkUJCV9JT1dSKCckJywgMTIsIHN0cnVjdCBwZXJmX2V2ZW50X3F1ZXJ5X2twcm9i
+ZSAqKQ0KPiAgIA0KPiAgIGVudW0gcGVyZl9ldmVudF9pb2NfZmxhZ3Mgew0KPiAgIAlQRVJGX0lP
+Q19GTEFHX0dST1VQCQk9IDFVIDw8IDAsDQo+IGRpZmYgLS1naXQgYS9rZXJuZWwvZXZlbnRzL2Nv
+cmUuYyBiL2tlcm5lbC9ldmVudHMvY29yZS5jDQo+IGluZGV4IDAyNmExNDU0MWEzOC4uZDYxYzNh
+YzVkYTRmIDEwMDY0NA0KPiAtLS0gYS9rZXJuZWwvZXZlbnRzL2NvcmUuYw0KPiArKysgYi9rZXJu
+ZWwvZXZlbnRzL2NvcmUuYw0KPiBAQCAtNTA2MSw2ICs1MDYxLDEwIEBAIHN0YXRpYyBpbnQgcGVy
+Zl9ldmVudF9zZXRfYnBmX3Byb2coc3RydWN0IHBlcmZfZXZlbnQgKmV2ZW50LCB1MzIgcHJvZ19m
+ZCk7DQo+ICAgc3RhdGljIGludCBwZXJmX2NvcHlfYXR0cihzdHJ1Y3QgcGVyZl9ldmVudF9hdHRy
+IF9fdXNlciAqdWF0dHIsDQo+ICAgCQkJICBzdHJ1Y3QgcGVyZl9ldmVudF9hdHRyICphdHRyKTsN
+Cj4gICANCj4gKyNpZmRlZiBDT05GSUdfS1BST0JFX0VWRU5UUw0KPiArc3RhdGljIHN0cnVjdCBw
+bXUgcGVyZl9rcHJvYmU7DQo+ICsjZW5kaWYgLyogQ09ORklHX0tQUk9CRV9FVkVOVFMgKi8NCj4g
+Kw0KPiAgIHN0YXRpYyBsb25nIF9wZXJmX2lvY3RsKHN0cnVjdCBwZXJmX2V2ZW50ICpldmVudCwg
+dW5zaWduZWQgaW50IGNtZCwgdW5zaWduZWQgbG9uZyBhcmcpDQo+ICAgew0KPiAgIAl2b2lkICgq
+ZnVuYykoc3RydWN0IHBlcmZfZXZlbnQgKik7DQo+IEBAIC01MTQzLDYgKzUxNDcsMTMgQEAgc3Rh
+dGljIGxvbmcgX3BlcmZfaW9jdGwoc3RydWN0IHBlcmZfZXZlbnQgKmV2ZW50LCB1bnNpZ25lZCBp
+bnQgY21kLCB1bnNpZ25lZCBsb24NCj4gICANCj4gICAJCXJldHVybiBwZXJmX2V2ZW50X21vZGlm
+eV9hdHRyKGV2ZW50LCAgJm5ld19hdHRyKTsNCj4gICAJfQ0KPiArI2lmZGVmIENPTkZJR19LUFJP
+QkVfRVZFTlRTDQo+ICsgICAgICAgIGNhc2UgUEVSRl9FVkVOVF9JT0NfUVVFUllfS1BST0JFOg0K
+PiArCQlpZiAoZXZlbnQtPmF0dHIudHlwZSAhPSBwZXJmX2twcm9iZS50eXBlKQ0KPiArCQkJcmV0
+dXJuIC1FSU5WQUw7DQoNClRoaXMgd2lsbCBvbmx5IGhhbmRsZSBGRCBiYXNlZCBrcHJvYmUuIElm
+IHRoaXMgaXMgdGhlIGludGVudGlvbiwgYmVzdCB0bw0KY2xlYXJseSBzdGF0ZSBpdCBpbiB0aGUg
+Y292ZXIgbGV0dGVyIGFzIHdlbGwuDQoNCkkgc3VzcGVjdCB0aGlzIHNob3VsZCBhbHNvIHdvcmsg
+Zm9yIGRlYnVnZnMgdHJhY2UgZXZlbnQgYmFzZWQga3Byb2JlLA0KYnV0IEkgZGlkIG5vdCB2ZXJp
+ZnkgaXQgdGhyb3VnaCBjb2Rlcy4NCg0KPiArDQo+ICsgICAgICAgICAgICAgICAgcmV0dXJuIHBl
+cmZfZXZlbnRfcXVlcnlfa3Byb2JlKGV2ZW50LCAodm9pZCBfX3VzZXIgKilhcmcpOw0KPiArI2Vu
+ZGlmIC8qIENPTkZJR19LUFJPQkVfRVZFTlRTICovDQo+ICAgCWRlZmF1bHQ6DQo+ICAgCQlyZXR1
+cm4gLUVOT1RUWTsNCj4gICAJfQ0KPiBkaWZmIC0tZ2l0IGEva2VybmVsL3RyYWNlL3RyYWNlX2tw
+cm9iZS5jIGIva2VybmVsL3RyYWNlL3RyYWNlX2twcm9iZS5jDQo+IGluZGV4IDlkNDgzYWQ5YmI2
+Yy4uNTQ0OTE4MmYzMDU2IDEwMDY0NA0KPiAtLS0gYS9rZXJuZWwvdHJhY2UvdHJhY2Vfa3Byb2Jl
+LmMNCj4gKysrIGIva2VybmVsL3RyYWNlL3RyYWNlX2twcm9iZS5jDQo+IEBAIC0xOTYsNiArMTk2
+LDMxIEBAIGJvb2wgdHJhY2Vfa3Byb2JlX2Vycm9yX2luamVjdGFibGUoc3RydWN0IHRyYWNlX2V2
+ZW50X2NhbGwgKmNhbGwpDQo+ICAgCXJldHVybiB3aXRoaW5fZXJyb3JfaW5qZWN0aW9uX2xpc3Qo
+dHJhY2Vfa3Byb2JlX2FkZHJlc3ModGspKTsNCj4gICB9DQo+ICAgDQo+ICtpbnQgcGVyZl9ldmVu
+dF9xdWVyeV9rcHJvYmUoc3RydWN0IHBlcmZfZXZlbnQgKmV2ZW50LCB2b2lkIF9fdXNlciAqaW5m
+bykNCj4gK3sNCj4gKwlzdHJ1Y3QgcGVyZl9ldmVudF9xdWVyeV9rcHJvYmUgX191c2VyICp1cXVl
+cnkgPSBpbmZvOw0KPiArCXN0cnVjdCBwZXJmX2V2ZW50X3F1ZXJ5X2twcm9iZSBxdWVyeSA9IHt9
+Ow0KPiArCXN0cnVjdCB0cmFjZV9ldmVudF9jYWxsICpjYWxsID0gZXZlbnQtPnRwX2V2ZW50Ow0K
+PiArCXN0cnVjdCB0cmFjZV9rcHJvYmUgKnRrID0gKHN0cnVjdCB0cmFjZV9rcHJvYmUgKiljYWxs
+LT5kYXRhOw0KPiArCXU2NCBubWlzc2VkLCBuaGl0Ow0KPiArDQo+ICsJaWYgKCFjYXBhYmxlKENB
+UF9TWVNfQURNSU4pKQ0KPiArCQlyZXR1cm4gLUVQRVJNOw0KPiArCWlmIChjb3B5X2Zyb21fdXNl
+cigmcXVlcnksIHVxdWVyeSwgc2l6ZW9mKHF1ZXJ5KSkpDQo+ICsJCXJldHVybiAtRUZBVUxUOw0K
+PiArCWlmIChxdWVyeS5zaXplICE9IHNpemVvZihxdWVyeSkpDQo+ICsJCXJldHVybiAtRUlOVkFM
+Ow0KPiArDQo+ICsJbmhpdCA9IHRyYWNlX2twcm9iZV9uaGl0KHRrKTsNCj4gKwlubWlzc2VkID0g
+dGstPnJwLmtwLm5taXNzZWQ7DQo+ICsNCj4gKwlpZiAoY29weV90b191c2VyKCZ1cXVlcnktPm5t
+aXNzZWQsICZubWlzc2VkLCBzaXplb2Yobm1pc3NlZCkpIHx8DQo+ICsJICAgIGNvcHlfdG9fdXNl
+cigmdXF1ZXJ5LT5uaGl0LCAmbmhpdCwgc2l6ZW9mKG5oaXQpKSkNCj4gKwkJcmV0dXJuIC1FRkFV
+TFQ7DQoNCllvdSBjYW4gdXNlIHB1dF91c2VyKCkgaW5zdGVhZCBvZiBjb3B5X3RvX3VzZXIoKSB0
+byBzaW1wbGlmeSB0aGUgY29kZS4NCg0KPiArDQo+ICsJcmV0dXJuIDA7DQo+ICt9DQo+ICsNCj4g
+ICBzdGF0aWMgaW50IHJlZ2lzdGVyX2twcm9iZV9ldmVudChzdHJ1Y3QgdHJhY2Vfa3Byb2JlICp0
+ayk7DQo+ICAgc3RhdGljIGludCB1bnJlZ2lzdGVyX2twcm9iZV9ldmVudChzdHJ1Y3QgdHJhY2Vf
+a3Byb2JlICp0ayk7DQo+ICAgDQo+IA0K
