@@ -2,100 +2,104 @@ Return-Path: <SRS0=0fIo=WD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA7D7C32751
-	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 19:03:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4692AC32751
+	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 19:30:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7298621EF2
-	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 19:03:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 18EEF2086D
+	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 19:30:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QM4puvkg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ckVPiHA3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730264AbfHGTDN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 7 Aug 2019 15:03:13 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:44681 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730262AbfHGTDN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 7 Aug 2019 15:03:13 -0400
-Received: by mail-qt1-f193.google.com with SMTP id 44so58426029qtg.11
-        for <bpf@vger.kernel.org>; Wed, 07 Aug 2019 12:03:13 -0700 (PDT)
+        id S1730407AbfHGTaP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 7 Aug 2019 15:30:15 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:36665 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730363AbfHGTaP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 7 Aug 2019 15:30:15 -0400
+Received: by mail-pl1-f193.google.com with SMTP id k8so42275105plt.3;
+        Wed, 07 Aug 2019 12:30:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GO2qWklrPTPdY6PSLC4MqlCYKOmVqOrH1O/3SwUXsio=;
-        b=QM4puvkgIWzFUKMLfxUB9rppW6axYcJyMWkEhxRaI7eoaMkLq7bZIC2C/3KBn5Hl2p
-         r0KhErbvnUnGubz9GhHq5agi21/3eoejbIo7nzJwJulkqkpyigtCTsBQndWEURXZiyo5
-         l28yN+fySAvhpcqyOeQgqOXKThS09dQvUh/y6ehsOAbbS3tLOLr/wo/1//TZWMf3oSux
-         4Lrg/oD5hPhwZKvv9fPNExJ0w8tXHbangpW5SBkiFlBHLIJSOSYBWPAOcGeznBO6JXNK
-         Loq8X1mUd1m817nF15Ivq2cqrQtEDKM9tHbnbosiVcWS6psIwECEpaLWzvlJrpXBhiMK
-         cShw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ObEX3XOlWeWT23v7d2oHVMbTltkGtaDbL7AOnbNpYho=;
+        b=ckVPiHA3Y2kGvCQB1JLlSs2X0FYl6tzEn3uyXO6poAg3s8LtmZAbrQ5YOgbwH0PYuY
+         n7QJq6AHZl1ocijZXJEQzaq/mRUaHuHlLKb+suAswLrLYfGiuiKDPKSNyEgEPBzpgikP
+         mKohYgINTsrSTkX2MWMC5szbJuDcvp/ZhAsxVIilDr0gdOUxY73LgJT1qIZ3UXEy1wH1
+         ONVrNINyXBWiQ9o9FpBofXjmvePGaeUbiYFIfzFV5LbXeX56BtwkP0hvF+hDrfg69wv2
+         XHkWw7liSZ6rHNH/jKB52m2X5ZXA0ORDSFMYck8yVcq8uUBfhhtzGs+NIHHXUubwyum+
+         D7gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GO2qWklrPTPdY6PSLC4MqlCYKOmVqOrH1O/3SwUXsio=;
-        b=lOLBSUvxjnyH/6/rqezVOv+f6Gseqf1lh3U5FvxLszvRAgAP8cQXc7QvfJWW7AF1eM
-         aHGfrx6MGZzJpPtI4egIj/PhNdxkZhfqiMT4Y/EGY537Ud0vcxJdMb9nH0Cjq6Ej4EpE
-         A5EL3+WZrPmOuS10qMbivo60i8esmrIan+54vq7XjipCclUdMyKIzuyNx2n6K2Wj70ru
-         nZHBqIoPk68DmgDvu25e7G4yCDft2tLuPmYSVnGHnaDDcCIv2logj+7duxuWUFHmDLzg
-         qb/ly8aUIMEL/8sOdGNxTZwq8e8n9T61ydfmDqVQGvcEufE02fFSCIHYYPMIn5mRyss0
-         G1aA==
-X-Gm-Message-State: APjAAAWdLr7+A9hcfqaZyHTpJVUt16TU6ZoUH4ywMyUa4lLJfFN9iOsM
-        w6Koo1xKuwmsl/Bvcz6Va1nxCoBvuIaqI+4Mi/U=
-X-Google-Smtp-Source: APXvYqyipi0D7aKctjRqD9FIqbAO3JKsSOP6eXsJFag9Hkol3C4+eqtib5ihlODgcsh/nqHUSwuWcEB4u3hwq7eSxJ4=
-X-Received: by 2002:a05:6214:1306:: with SMTP id a6mr7589884qvv.38.1565204592743;
- Wed, 07 Aug 2019 12:03:12 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ObEX3XOlWeWT23v7d2oHVMbTltkGtaDbL7AOnbNpYho=;
+        b=taJIypIww5f4Y1wv8JCVZ0vrl5V996owL4Ry3075BfTxZtbgs7UvutYcKBvZ87lxT6
+         0NUfT6SYyw0uEmHBFMTdEG/eWpNgGHp+4fKsrKG/fo2XauUoAil87MfWnNfAXlWIaMfI
+         sS4gJNHmdRi7hVDuy1t1fuGSeJ/6sObYZm06xj5WH5vfjm7WBKORhgDbixivwss5KkII
+         wpf+m7rTF4++RIK7xrgF8+vcvvgSpuM98wwrqy7lidKhtIsGKW3rVXFXvjBs7DzoSjwO
+         4ttvxtnGXeXUcyHhdB2zb/JxdNx5nqRnJelTvTR/T2XVaB0doBeoWubqFlILBerY0139
+         qvtg==
+X-Gm-Message-State: APjAAAXnY4P4GHO2/122GQH172Ds0zRd6B4F2gLK23JGyCzcPuyBJfJ9
+        aBnWP0Ey8CoEziL6MCtboWc=
+X-Google-Smtp-Source: APXvYqyvvg1ACVIpxDY7hfpLdLclBw4I4RfROp/RmaXlID5a+2MeRCbE4YmB1buH6l+AZ8ck5PD69w==
+X-Received: by 2002:a62:79c2:: with SMTP id u185mr11161713pfc.237.1565206214810;
+        Wed, 07 Aug 2019 12:30:14 -0700 (PDT)
+Received: from ast-mbp ([2620:10d:c090:200::7084])
+        by smtp.gmail.com with ESMTPSA id cx22sm610978pjb.25.2019.08.07.12.30.13
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 07 Aug 2019 12:30:13 -0700 (PDT)
+Date:   Wed, 7 Aug 2019 12:30:12 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Andrii Nakryiko <andriin@fb.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@fb.com,
+        daniel@iogearbox.net, yhs@fb.com, andrii.nakryiko@gmail.com,
+        kernel-team@fb.com
+Subject: Re: [PATCH v4 bpf-next 02/14] libbpf: convert libbpf code to use new
+ btf helpers
+Message-ID: <20190807193011.g2zuaapc2uvvr4h6@ast-mbp>
+References: <20190807053806.1534571-1-andriin@fb.com>
+ <20190807053806.1534571-3-andriin@fb.com>
 MIME-Version: 1.0
-References: <20190806233826.2478-1-dxu@dxuuu.xyz>
-In-Reply-To: <20190806233826.2478-1-dxu@dxuuu.xyz>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 7 Aug 2019 12:03:01 -0700
-Message-ID: <CAEf4BzbTeZLpMT0d0CchYZnMTUj3yYUxi4M0Ki6Urgo8_Lqz4w@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Add PERF_EVENT_IOC_QUERY_KPROBE ioctl
-To:     Daniel Xu <dxu@dxuuu.xyz>
-Cc:     Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190807053806.1534571-3-andriin@fb.com>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Aug 6, 2019 at 4:39 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
->
-> It's useful to know kprobe's nmissed and nhit stats. For example with
+On Tue, Aug 06, 2019 at 10:37:54PM -0700, Andrii Nakryiko wrote:
+> Simplify code by relying on newly added BTF helper functions.
+> 
+> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+..
+>  
+> -	for (i = 0, vsi = (struct btf_var_secinfo *)(t + 1);
+> -	     i < vars; i++, vsi++) {
+> +	for (i = 0, vsi = (void *)btf_var_secinfos(t); i < vars; i++, vsi++) {
 
-Is nmissed/nhit kprobe-specific? What about tracepoints and raw
-tracepoints, do they have something similar or they can never be
-missed? At least nhit still seems useful, so would be nice to have
-ability to get that with the same API, is it possible?
+> +			struct btf_member *m = (void *)btf_members(t);
+...
+>  		case BTF_KIND_ENUM: {
+> -			struct btf_enum *m = (struct btf_enum *)(t + 1);
+> -			__u16 vlen = BTF_INFO_VLEN(t->info);
+> +			struct btf_enum *m = (void *)btf_enum(t);
+> +			__u16 vlen = btf_vlen(t);
+...
+>  		case BTF_KIND_FUNC_PROTO: {
+> -			struct btf_param *m = (struct btf_param *)(t + 1);
+> -			__u16 vlen = BTF_INFO_VLEN(t->info);
+> +			struct btf_param *m = (void *)btf_params(t);
+> +			__u16 vlen = btf_vlen(t);
 
-> tracing tools, it's important to know when events may have been lost.
-> There is currently no way to get that information from the perf API.
-> This patch adds a new ioctl that lets users query this information.
->
-> Daniel Xu (3):
->   tracing/kprobe: Add PERF_EVENT_IOC_QUERY_KPROBE ioctl
->   libbpf: Add helper to extract perf fd from bpf_link
->   tracing/kprobe: Add self test for PERF_EVENT_IOC_QUERY_KPROBE
->
->  include/linux/trace_events.h                  |  6 +++
->  include/uapi/linux/perf_event.h               | 23 ++++++++++
->  kernel/events/core.c                          | 11 +++++
->  kernel/trace/trace_kprobe.c                   | 25 +++++++++++
->  tools/include/uapi/linux/perf_event.h         | 23 ++++++++++
->  tools/lib/bpf/libbpf.c                        | 13 ++++++
->  tools/lib/bpf/libbpf.h                        |  1 +
->  tools/lib/bpf/libbpf.map                      |  5 +++
->  .../selftests/bpf/prog_tests/attach_probe.c   | 43 +++++++++++++++++++
->  9 files changed, 150 insertions(+)
->
-> --
-> 2.20.1
->
+So all of these 'void *' type hacks are only to drop const-ness ?
+May be the helpers shouldn't be taking const then?
+
