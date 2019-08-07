@@ -2,128 +2,276 @@ Return-Path: <SRS0=0fIo=WD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E209CC433FF
-	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 20:10:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE1E7C433FF
+	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 20:48:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B64682199C
-	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 20:10:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8F0402173C
+	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 20:48:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o1nRzyfd"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="c1OlxUuc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387888AbfHGUKr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 7 Aug 2019 16:10:47 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:43564 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729934AbfHGUKr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 7 Aug 2019 16:10:47 -0400
-Received: by mail-qt1-f194.google.com with SMTP id w17so9088128qto.10;
-        Wed, 07 Aug 2019 13:10:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SErlbb0y5L/aKARO6Vw0SsAtfcwIDkq0Ah1o9nG9mJM=;
-        b=o1nRzyfd/FmlHR+0yCUVKXC4PPtdvjajP6nKsm4GxDUoMFpAaRCk0boZzHdzPWCss5
-         PkFDjRLEeHlA1ZJxmx/YNPTKDfibt6hC0qAmJzyIPAPiatrLpLpgiCoj3pzpQ1epOE8R
-         DvWPkXowkAKSImzdUTo/Fe23ESTa6sP1c5j1QEwq05JXWIHd0z9kVaOXZu8+ED6IYzR/
-         9a4HCPR8vwHQFc7wdSrFnRmj7uDnHfAOGyqiCpxVXZRNRw23jYbE/e9FVw6FeVC60DLI
-         mleusLA1OyZX5fVkDGNouMF13mbNxzJoYOismtBLP3ONPm9WVrY5M2SzdqrIpjEQSNwz
-         tqSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SErlbb0y5L/aKARO6Vw0SsAtfcwIDkq0Ah1o9nG9mJM=;
-        b=Q4tSgyEA+c+SXu37csRo/THjGX2U6oGoAQqPi6skfuuhLTAJRjjWCv4RID+dXjGt2f
-         6xY8e5ah0CMzCCYQYH76oZd1pzlH1oVvGyZCZRtJp+eIVZx1FzJUpgMFS+Eyj4vvn0X4
-         1hfpxnyz1tjZJXbJrcHABdHYfPHg+LUYJZk7cIgmDxXixcDT6fq08Q1nGm5yu9k6gjj8
-         wnWNdat9OdGk1WPzUqInEHDywhP7Na002ldgt8cIokgeDAWlRvKeBQXfTrQ02XiF3DL+
-         1pq1t2Tx5cToESXESJtLYgzkew9YXfglYo+LG4/MVUi/uiIgVpZV1NY8X6gbA6eWSHaa
-         tQVA==
-X-Gm-Message-State: APjAAAVtW+9f9rGLQ9/Uczd9UflDlpJMHAAtRjQm4M3EGfdc/Gl1KzFd
-        euUeonBKO8PvY4KziBP+iFNrMJKBRBxFDt75fIA=
-X-Google-Smtp-Source: APXvYqy5ThF1LnCDxBXUh7Bgr5iBPjgFpVX9g5synIgUmVsWEvRI2A5fTsZcXlAk0w1TzG6/xeFbPDSveYBzVMQqgis=
-X-Received: by 2002:a05:6214:1306:: with SMTP id a6mr7891989qvv.38.1565208646174;
- Wed, 07 Aug 2019 13:10:46 -0700 (PDT)
+        id S2388766AbfHGUs5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 7 Aug 2019 16:48:57 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:62986 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2388682AbfHGUs5 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 7 Aug 2019 16:48:57 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x77KhsAp030416
+        for <bpf@vger.kernel.org>; Wed, 7 Aug 2019 13:48:55 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=teJ7WUnde8h9gDIGnP7JYd+NwvnmM//HbVRYayYUzpU=;
+ b=c1OlxUucmqzoKfVfeU4Ji5EPpZFZdUtoucUbfMIE1fsVXXy5PUW3dNACoYz1AADzHmea
+ YZPGqgXdk0JYpRMJeYJTCVeZSN7OWA+pGxyT6aSqzIX0DUpP4LMWUXyZyLHH0n8Q51ZZ
+ uR7dJdUxATHQWkIDcLySJQ9o5mKG2lY9y2o= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by m0001303.ppops.net with ESMTP id 2u81cuh3f0-12
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 07 Aug 2019 13:48:55 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::126) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Wed, 7 Aug 2019 13:48:50 -0700
+Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
+        id 03C4986167B; Wed,  7 Aug 2019 13:48:47 -0700 (PDT)
+Smtp-Origin-Hostprefix: dev
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: dev101.prn2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>, <yhs@fb.com>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: prn2c23
+Subject: [PATCH v5 bpf-next 01/14] libbpf: add helpers for working with BTF types
+Date:   Wed, 7 Aug 2019 13:48:30 -0700
+Message-ID: <20190807204843.513594-2-andriin@fb.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190807204843.513594-1-andriin@fb.com>
+References: <20190807204843.513594-1-andriin@fb.com>
+X-FB-Internal: Safe
 MIME-Version: 1.0
-References: <20190807053806.1534571-1-andriin@fb.com> <20190807053806.1534571-3-andriin@fb.com>
- <20190807193011.g2zuaapc2uvvr4h6@ast-mbp> <CAEf4BzahxLWRVNcNWpba7_7CbbQgN8k0RU8Ya1XCK8j4rPQ0NQ@mail.gmail.com>
- <151d13d1-e894-56cc-4690-4661c8afc65e@fb.com>
-In-Reply-To: <151d13d1-e894-56cc-4690-4661c8afc65e@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 7 Aug 2019 13:10:34 -0700
-Message-ID: <CAEf4BzYPfMvNt57oP7YH1Subi6vE7ptcjkdBkdRCVcs=hw5LSQ@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf-next 02/14] libbpf: convert libbpf code to use new
- btf helpers
-To:     Alexei Starovoitov <ast@fb.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yonghong Song <yhs@fb.com>, Kernel Team <Kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-07_06:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ malwarescore=0 suspectscore=25 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908070179
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Aug 7, 2019 at 1:01 PM Alexei Starovoitov <ast@fb.com> wrote:
->
-> On 8/7/19 12:59 PM, Andrii Nakryiko wrote:
-> > On Wed, Aug 7, 2019 at 12:30 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> >>
-> >> On Tue, Aug 06, 2019 at 10:37:54PM -0700, Andrii Nakryiko wrote:
-> >>> Simplify code by relying on newly added BTF helper functions.
-> >>>
-> >>> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-> >> ..
-> >>>
-> >>> -     for (i = 0, vsi = (struct btf_var_secinfo *)(t + 1);
-> >>> -          i < vars; i++, vsi++) {
-> >>> +     for (i = 0, vsi = (void *)btf_var_secinfos(t); i < vars; i++, vsi++) {
-> >>
-> >>> +                     struct btf_member *m = (void *)btf_members(t);
-> >> ...
-> >>>                case BTF_KIND_ENUM: {
-> >>> -                     struct btf_enum *m = (struct btf_enum *)(t + 1);
-> >>> -                     __u16 vlen = BTF_INFO_VLEN(t->info);
-> >>> +                     struct btf_enum *m = (void *)btf_enum(t);
-> >>> +                     __u16 vlen = btf_vlen(t);
-> >> ...
-> >>>                case BTF_KIND_FUNC_PROTO: {
-> >>> -                     struct btf_param *m = (struct btf_param *)(t + 1);
-> >>> -                     __u16 vlen = BTF_INFO_VLEN(t->info);
-> >>> +                     struct btf_param *m = (void *)btf_params(t);
-> >>> +                     __u16 vlen = btf_vlen(t);
-> >>
-> >> So all of these 'void *' type hacks are only to drop const-ness ?
-> >
-> > Yes.
-> >
-> >> May be the helpers shouldn't be taking const then?
-> >>
-> >
-> > Probably not, because then we'll have much wider-spread problem of
-> > casting const pointers into non-const when passing btf_type into
-> > helpers.
-> > I think const as a default is the right choice, because normally BTF
-> > is immutable and btf__type_by_id is returning const pointer, etc.
-> > That's typical and expected use-case. btf_dedup and BTF sanitization +
-> > datasec size setting pieces are an exception that have to modify BTF
-> > types in place before passing it to user.
-> >
-> > So realistically I think we can just leave it as (void *), or I can do
-> > explicit non-const type casts, or we can just not use helpers for
-> > mutable cases. Do you have a preference?
->
-> Hmm. Take a const into the helper and drop it there?
-> I'd like to avoid all these 'void *'.
+Add lots of frequently used helpers that simplify working with BTF
+types.
 
-Well, I guess it's a way to do this as well. Given it's C, I guess
-it's acceptable to be so free about constness. I'll update patches.
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/lib/bpf/btf.h | 176 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 176 insertions(+)
+
+diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+index 88a52ae56fc6..037679f0dec8 100644
+--- a/tools/lib/bpf/btf.h
++++ b/tools/lib/bpf/btf.h
+@@ -5,6 +5,7 @@
+ #define __LIBBPF_BTF_H
+ 
+ #include <stdarg.h>
++#include <linux/btf.h>
+ #include <linux/types.h>
+ 
+ #ifdef __cplusplus
+@@ -120,6 +121,181 @@ LIBBPF_API void btf_dump__free(struct btf_dump *d);
+ 
+ LIBBPF_API int btf_dump__dump_type(struct btf_dump *d, __u32 id);
+ 
++/*
++ * A set of helpers for easier BTF types handling
++ */
++static inline __u16 btf_kind(const struct btf_type *t)
++{
++	return BTF_INFO_KIND(t->info);
++}
++
++static inline __u16 btf_vlen(const struct btf_type *t)
++{
++	return BTF_INFO_VLEN(t->info);
++}
++
++static inline bool btf_kflag(const struct btf_type *t)
++{
++	return BTF_INFO_KFLAG(t->info);
++}
++
++static inline bool btf_is_int(const struct btf_type *t)
++{
++	return btf_kind(t) == BTF_KIND_INT;
++}
++
++static inline bool btf_is_ptr(const struct btf_type *t)
++{
++	return btf_kind(t) == BTF_KIND_PTR;
++}
++
++static inline bool btf_is_array(const struct btf_type *t)
++{
++	return btf_kind(t) == BTF_KIND_ARRAY;
++}
++
++static inline bool btf_is_struct(const struct btf_type *t)
++{
++	return btf_kind(t) == BTF_KIND_STRUCT;
++}
++
++static inline bool btf_is_union(const struct btf_type *t)
++{
++	return btf_kind(t) == BTF_KIND_UNION;
++}
++
++static inline bool btf_is_composite(const struct btf_type *t)
++{
++	__u16 kind = btf_kind(t);
++
++	return kind == BTF_KIND_STRUCT || kind == BTF_KIND_UNION;
++}
++
++static inline bool btf_is_enum(const struct btf_type *t)
++{
++	return btf_kind(t) == BTF_KIND_ENUM;
++}
++
++static inline bool btf_is_fwd(const struct btf_type *t)
++{
++	return btf_kind(t) == BTF_KIND_FWD;
++}
++
++static inline bool btf_is_typedef(const struct btf_type *t)
++{
++	return btf_kind(t) == BTF_KIND_TYPEDEF;
++}
++
++static inline bool btf_is_volatile(const struct btf_type *t)
++{
++	return btf_kind(t) == BTF_KIND_VOLATILE;
++}
++
++static inline bool btf_is_const(const struct btf_type *t)
++{
++	return btf_kind(t) == BTF_KIND_CONST;
++}
++
++static inline bool btf_is_restrict(const struct btf_type *t)
++{
++	return btf_kind(t) == BTF_KIND_RESTRICT;
++}
++
++static inline bool btf_is_mod(const struct btf_type *t)
++{
++	__u16 kind = btf_kind(t);
++
++	return kind == BTF_KIND_VOLATILE ||
++	       kind == BTF_KIND_CONST ||
++	       kind == BTF_KIND_RESTRICT;
++}
++
++static inline bool btf_is_func(const struct btf_type *t)
++{
++	return btf_kind(t) == BTF_KIND_FUNC;
++}
++
++static inline bool btf_is_func_proto(const struct btf_type *t)
++{
++	return btf_kind(t) == BTF_KIND_FUNC_PROTO;
++}
++
++static inline bool btf_is_var(const struct btf_type *t)
++{
++	return btf_kind(t) == BTF_KIND_VAR;
++}
++
++static inline bool btf_is_datasec(const struct btf_type *t)
++{
++	return btf_kind(t) == BTF_KIND_DATASEC;
++}
++
++static inline __u8 btf_int_encoding(const struct btf_type *t)
++{
++	return BTF_INT_ENCODING(*(__u32 *)(t + 1));
++}
++
++static inline __u8 btf_int_offset(const struct btf_type *t)
++{
++	return BTF_INT_OFFSET(*(__u32 *)(t + 1));
++}
++
++static inline __u8 btf_int_bits(const struct btf_type *t)
++{
++	return BTF_INT_BITS(*(__u32 *)(t + 1));
++}
++
++static inline struct btf_array *btf_array(const struct btf_type *t)
++{
++	return (struct btf_array *)(t + 1);
++}
++
++static inline struct btf_enum *btf_enum(const struct btf_type *t)
++{
++	return (struct btf_enum *)(t + 1);
++}
++
++static inline struct btf_member *btf_members(const struct btf_type *t)
++{
++	return (struct btf_member *)(t + 1);
++}
++
++/* get bit offset of a member with specified index */
++static inline __u32 btf_member_bit_offset(const struct btf_type *t,
++					  __u32 member_idx)
++{
++	const struct btf_member *m = btf_members(t) + member_idx;
++	bool kflag = btf_kflag(t);
++
++	return kflag ? BTF_MEMBER_BIT_OFFSET(m->offset) : m->offset;
++}
++/* get bitfield size of a member, assuming t is BTF_KIND_STRUCT or
++ * BTF_KIND_UNION. If member is not a bitfield, zero is returned. */
++static inline __u32 btf_member_bitfield_size(const struct btf_type *t,
++					     __u32 member_idx)
++{
++	const struct btf_member *m = btf_members(t) + member_idx;
++	bool kflag = btf_kflag(t);
++
++	return kflag ? BTF_MEMBER_BITFIELD_SIZE(m->offset) : 0;
++}
++
++static inline struct btf_param *btf_params(const struct btf_type *t)
++{
++	return (struct btf_param *)(t + 1);
++}
++
++static inline struct btf_var *btf_var(const struct btf_type *t)
++{
++	return (struct btf_var *)(t + 1);
++}
++
++static inline struct btf_var_secinfo *
++btf_var_secinfos(const struct btf_type *t)
++{
++	return (struct btf_var_secinfo *)(t + 1);
++}
++
+ #ifdef __cplusplus
+ } /* extern "C" */
+ #endif
+-- 
+2.17.1
+
