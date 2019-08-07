@@ -2,144 +2,192 @@ Return-Path: <SRS0=0fIo=WD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E517DC31E40
-	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 01:31:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1997C19759
+	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 05:24:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BD46E217D7
-	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 01:31:54 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="F4m9knoh"
+	by mail.kernel.org (Postfix) with ESMTP id B078D21871
+	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 05:24:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1565155481;
+	bh=CjuQgL09pQH6XikSknVDOW+uxXrr2z62KM9ggjnnPag=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=O9q+Nqp7i43UZB40Hus/lY/QJuFHa4SsOITZWJAXNT2BfLw9bCax4CeyrPbYcWZGy
+	 5FCMmumqclcSYUb+mKzEem8NmckVSTTSa7Ug2FzLA28NvdOV7qSdXc8Q3F0cSUqWtF
+	 L5Cy/WX7oEHuguL0WS6T32gtCwFvsUFyWeznnL4Q=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727702AbfHGBbv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 6 Aug 2019 21:31:51 -0400
-Received: from mail-yb1-f193.google.com ([209.85.219.193]:36501 "EHLO
-        mail-yb1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727541AbfHGBbu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 6 Aug 2019 21:31:50 -0400
-Received: by mail-yb1-f193.google.com with SMTP id d9so25075782ybf.3
-        for <bpf@vger.kernel.org>; Tue, 06 Aug 2019 18:31:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=T+sIdUCYVl9gdRoUkUG8PgRAt1MU+/JJSzC8cSPoyKI=;
-        b=F4m9knohPlyqe6iRBIqFogCxSMnpxfTnrNWZCR9yxgbB7jxuwk5G49Fr3Yk/Xw8ml9
-         BZedneP/R5GsmdKW1zaP8a4d6U9JK6r3soeGP9+77jQo83aNdUFu0Pg6auBFzgfb745n
-         qZmIri2k5kirqo1rqRPqFtkeh+UaJ+gxE46qehbsLCBwyMGNAb4LzWNxxchylTugTGzF
-         wLgGzWBtDpvrUKQxeBDO2XcdIgDVq4u0XiNjVcNspdW/kjB7dA7kKn81qOuPuEq5vT9D
-         CCLS3aa+sHxb6m2tFFPS/rslez9LrTny5DfBMNa9fxii55Xz7IiwhaDAn2k/m6Tso2Db
-         5r3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=T+sIdUCYVl9gdRoUkUG8PgRAt1MU+/JJSzC8cSPoyKI=;
-        b=NRos56UvZi+WwHd+fRw+1CbwenR4KOb7p5nKkh6Xdg/SmH/zmuAjgFzCgH6K+GGIOF
-         GIBE87nBP93SwpJVlLisFgaLOdHNfy2sRKV6xBPIN3q/B6QnkRVGEy0yGubbcwJOS0gC
-         SIShzrxLLKfW+OYzHV+27iC5e76UaXyL6ghP0uylzNeOL+k4DFSV8NuNHJZtsrH+3g1L
-         rYe9RwaauI0Sw7ABOrWRjtQBDn9wofm+i2RWU+4pl4G2uM1H7gGqjkASrXASuu5Vcmxn
-         FjoEDUlcJ7JfPN73xSbnjqxf0dUyd0sjTZG2aOw0s+a+EgM2hA9XqkKqC2c5M8iYwSrI
-         USig==
-X-Gm-Message-State: APjAAAVn1b6CdTDfhFKujXDM7m9hxySBHjpgOTMiY/QgbR/pWaUeBB9F
-        Gc02XpbDQFcY+OG1W77rFK2maA==
-X-Google-Smtp-Source: APXvYqwBSZkykF5JBW3dZ2JAWQGnqKUHEgflynlYlJTG89ph5DdcJK1w1FbC6oyDXFDuWZCqly8qmQ==
-X-Received: by 2002:a25:5986:: with SMTP id n128mr4697126ybb.301.1565141510026;
-        Tue, 06 Aug 2019 18:31:50 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s (li1322-146.members.linode.com. [45.79.223.146])
-        by smtp.gmail.com with ESMTPSA id k20sm20014855ywm.106.2019.08.06.18.31.42
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 06 Aug 2019 18:31:49 -0700 (PDT)
-Date:   Wed, 7 Aug 2019 09:31:39 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
+        id S1726566AbfHGFYk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 7 Aug 2019 01:24:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51478 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725922AbfHGFYj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 7 Aug 2019 01:24:39 -0400
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 27E2E21881
+        for <bpf@vger.kernel.org>; Wed,  7 Aug 2019 05:24:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565155478;
+        bh=CjuQgL09pQH6XikSknVDOW+uxXrr2z62KM9ggjnnPag=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hM4kZYk74xC358c7QYNpNu7qK6yiYjEsC953rGv5mWne6TQZuJAH8AAkj/2zlvxD0
+         MwcNCHNEqs4PitehLGOYGZcNNxCb17UyKJfL5rnkW0wdpaMHOwhe4jBkmxs7NqXzAb
+         1PhAstqqCkZvlNYaDbuPkKwAdwjUamzlMgNFL2Ik=
+Received: by mail-wr1-f41.google.com with SMTP id n9so64908917wrr.4
+        for <bpf@vger.kernel.org>; Tue, 06 Aug 2019 22:24:38 -0700 (PDT)
+X-Gm-Message-State: APjAAAWngBKzgWL2LVj1dS6ZuLijHRte4sdconLePOrNFlaE805G7PGB
+        lRIFkzDqKhD5oKiSnLaP2LF0DsW4MJLgZywKh5uibw==
+X-Google-Smtp-Source: APXvYqw7hE1TmqQ9Y5v5Hspi4JaeP11sWfX0sgjg8zNAco0JPNqFazXPgW+OhkVJ4WOiIV/lXoUyQfSnQrqfM95Kzm8=
+X-Received: by 2002:adf:dd0f:: with SMTP id a15mr7721712wrm.265.1565155476577;
+ Tue, 06 Aug 2019 22:24:36 -0700 (PDT)
+MIME-Version: 1.0
+References: <D4040C0C-47D6-4852-933C-59EB53C05242@fb.com> <CALCETrVoZL1YGUxx3kM-d21TWVRKdKw=f2B8aE5wc2zmX1cQ4g@mail.gmail.com>
+ <5A2FCD7E-7F54-41E5-BFAE-BB9494E74F2D@fb.com> <CALCETrU7NbBnXXsw1B+DvTkfTVRBFWXuJ8cZERCCNvdFG6KqRw@mail.gmail.com>
+ <CALCETrUjh6DdgW1qSuSRd1_=0F9CqB8+sNj__e_6AHEvh_BaxQ@mail.gmail.com>
+ <CALCETrWtE2U4EvZVYeq8pSmQjBzF2PHH+KxYW8FSeF+W=1FYjw@mail.gmail.com>
+ <EE7B7AE1-3D44-4561-94B9-E97A626A251D@fb.com> <CALCETrXX-Jeb4wiQuL6FUai4wNMmMiUxuLLh_Lb9mT7h=0GgAw@mail.gmail.com>
+ <20190805192122.laxcaz75k4vxdspn@ast-mbp> <CALCETrVtPs8gY-H4gmzSqPboid3CB++n50SvYd6RU9YVde_-Ow@mail.gmail.com>
+ <20190806011134.p5baub5l3t5fkmou@ast-mbp>
+In-Reply-To: <20190806011134.p5baub5l3t5fkmou@ast-mbp>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Tue, 6 Aug 2019 22:24:25 -0700
+X-Gmail-Original-Message-ID: <CALCETrXEHL3+NAY6P6vUj7Pvd9ZpZsYC6VCLXOaNxb90a_POGw@mail.gmail.com>
+Message-ID: <CALCETrXEHL3+NAY6P6vUj7Pvd9ZpZsYC6VCLXOaNxb90a_POGw@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 1/4] bpf: unprivileged BPF access via /dev/bpf
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Kees Cook <keescook@chromium.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH v2 0/3] arm/arm64: Add support for function error
- injection
-Message-ID: <20190807013139.GB6724@leoy-ThinkPad-X240s>
-References: <20190806100015.11256-1-leo.yan@linaro.org>
- <20190807090811.1e50eb3e1d5a7b85743748e7@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190807090811.1e50eb3e1d5a7b85743748e7@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        Kernel Team <Kernel-team@fb.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Jann Horn <jannh@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Aug 07, 2019 at 09:08:11AM +0900, Masami Hiramatsu wrote:
-> On Tue,  6 Aug 2019 18:00:12 +0800
-> Leo Yan <leo.yan@linaro.org> wrote:
-> 
-> > This small patch set is to add support for function error injection;
-> > this can be used to eanble more advanced debugging feature, e.g.
-> > CONFIG_BPF_KPROBE_OVERRIDE.
-> > 
-> > The patch 01/03 is to consolidate the function definition which can be
-> > suared cross architectures, patches 02,03/03 are used for enabling
-> > function error injection on arm64 and arm architecture respectively.
-> > 
-> > I tested on arm64 platform Juno-r2 and one of my laptop with x86
-> > architecture with below steps; I don't test for Arm architecture so
-> > only pass compilation.
-> > 
-> > - Enable kernel configuration:
-> >   CONFIG_BPF_KPROBE_OVERRIDE
-> >   CONFIG_BTRFS_FS
-> >   CONFIG_BPF_EVENTS=y
-> >   CONFIG_KPROBES=y
-> >   CONFIG_KPROBE_EVENTS=y
-> >   CONFIG_BPF_KPROBE_OVERRIDE=y
-> > 
-> > - Build samples/bpf on with Debian rootFS:
-> >   # cd $kernel
-> >   # make headers_install
-> >   # make samples/bpf/ LLC=llc-7 CLANG=clang-7
-> > 
-> > - Run the sample tracex7:
-> >   # dd if=/dev/zero of=testfile.img bs=1M seek=1000 count=1
-> >   # DEVICE=$(losetup --show -f testfile.img)
-> >   # mkfs.btrfs -f $DEVICE
-> >   # ./tracex7 testfile.img
-> >   [ 1975.211781] BTRFS error (device (efault)): open_ctree failed
-> >   mount: /mnt/linux-kernel/linux-cs-dev/samples/bpf/tmpmnt: mount(2) system call failed: Cannot allocate memory.
-> > 
-> > Changes from v1:
-> > * Consolidated the function definition into asm-generic header (Will);
-> > * Used APIs to access pt_regs elements (Will);
-> > * Fixed typos in the comments (Will).
-> 
-> This looks good to me.
-> 
-> Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-> 
-> Thank you!
+On Mon, Aug 5, 2019 at 6:11 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Mon, Aug 05, 2019 at 02:25:35PM -0700, Andy Lutomirski wrote:
+> > It tries to make the kernel respect the access modes for fds.  Without
+> > this patch, there seem to be some holes: nothing looked at program fds
+> > and, unless I missed something, you could take a readonly fd for a
+> > program, pin the program, and reopen it RW.
+>
+> I think it's by design. iirc Daniel had a use case for something like this.
 
-Thanks a lot for reviewing, Masami.
+That seems odd.  Daniel, can you elaborate?
 
-Leo.
+> Hence unprivileged bpf is actually something that can be deprecated.
+
+I hope not.  There are a couple setsockopt uses right now, and and
+seccomp will surely want it someday.  And the bpf-inside-container use
+case really is unprivileged bpf -- containers are, in many (most?)
+cases, explicitly not trusted by the host.  But regardless, see below.
+
+> > The ability to obtain an fd to a cgroup does *not* imply any right to
+> > modify that cgroup.  The ability to write to a cgroup directory
+> > already means something else -- it's the ability to create cgroups
+> > under the group in question.  I'm suggesting that a new API be added
+> > that allows attaching a bpf program to a cgroup without capabilities
+> > and that instead requires write access to a new file in the cgroup
+> > directory.  (It could be a single file for all bpf types or one file
+> > per type.  I prefer the latter -- it gives the admin finer-grained
+> > control.)
+>
+> This is something to discuss. I don't mind something like this,
+> but in general bpf is not for untrusted users.
+> Hence I don't want to overdesign.
+
+I think the code would end up being extremely simple.  It would be an
+ABI change, but I think that it could easily be arranged so that new
+and old libbpf would be fully functional on new and old kernels except
+that only new libbpf with a new kernel would be able to attach cgroup
+programs without privilege.  I see no reason to remove the current
+cgroup attach API.
+
+> See https://github.com/systemd/systemd/blob/01234e1fe777602265ffd25ab6e73823c62b0efe/src/core/bpf-firewall.c#L671-L674
+> bpf based IP sandboxing doesn't work in 'systemd --user'.
+> That is just one of the problems that people complained about.
+
+This isn't privilege *dropping* -- this is not having privilege in the
+first place.  Giving systemd --user unrestricted use of bpf() is
+tantamount to making the user root.  But again, see below.
+
+>
+> Inside containers and inside nested containers we need to start processes
+> that will use bpf. All of the processes are trusted.
+
+Trusted by whom?  In a non-nested container, the container manager
+*might* be trusted by the outside world.  In a *nested* container,
+unless the inner container management is controlled from outside the
+outer container, it's not trusted.  I don't know much about how
+Facebook's containers work, but the LXC/LXD/Podman world is moving
+very strongly toward user namespaces and maximally-untrusted
+containers, and I think bpf() should work in that context.
+
+> To solve your concern of bypassing all capable checks...
+> How about we do /dev/bpf/full_verifier first?
+> It will replace capable() checks in the verifier only.
+
+I'm not convinced that "in the verifier" is the right distinction.
+Telling administrators that some setting lets certain users bypass
+bpf() verifier checks doesn't have a clear enough meaning.  I propose,
+instead, that the current capable() checks be divided into three
+categories:
+
+a) Those that, by design, control privileged operations.  This
+includes most attach calls, but it also includes allow_ptr_leaks,
+bpf_probe_read(), and quite a few other things.  It also includes all
+of the by_id calls, I think, unless some clever modification to the
+way they worked would isolate different users' objects.  I think that
+persistent objects can do pretty much everything that by_id users
+would need, so this isn't a big deal.
+
+b) Those that protect code that is considered to be at higher risk of
+exposing security bugs.  In other words, these are things that would
+have no need for privilege if we could prove that the implementation
+was perfect.  This includes bpf2bpf, LPM, etc.
+
+c) Those that serve to prevent excessive resource usage.  This
+includes the bounded loop code (I think -- this might also be category
+(b)) and several explicit checks for program size.
+
+I suppose that the speculative execution mitigation stuff could be
+split out from (b) into its own category.
+
+Based on this, how about a different division: /dev/bpf_dangerous for
+(b) and /dev/bpf_resources for (c)?  And (a) is dealt with by
+gradually reducing the privilege needed for the important operations.
+/dev/bpf_dangerous isn't ideal in the long run though, since a lot of
+the operations in that category will probably become less dangerous as
+the code is better vetted, and people granting "dangerous" permission
+might want to restrict it to only the specific parts that they need.
+/dev/bpf_lpm, /dev/bpf2bpf, etc could work better.
+
+This type of thing actually fits quite nicely into an idea I've been
+thinking about for a while called "implicit rights". In very brief
+summary, there would be objects called /dev/rights/xyz, where xyz is
+the same of a "right".  If there is a readable object of the right
+type at the literal path "/dev/rights/xyz", then you have right xyz.
+There's a bit more flexibility on top of this.  BPF could use
+/dev/rights/bpf/maptypes/lpm and
+/dev/rights/bpf/verifier/bounded_loops, for example.  Other non-BPF
+use cases include a biggie:
+/dev/rights/namespace/create_unprivileged_userns.
+/dev/rights/bind_port/80 would be nice, too.
+
+I may have a bit of time over the next few days to actually prototype
+this.  Would you be interested in using this for BPF?
