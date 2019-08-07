@@ -5,101 +5,85 @@ X-Spam-Level:
 X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4692AC32751
-	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 19:30:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D708C433FF
+	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 19:31:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 18EEF2086D
-	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 19:30:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D50AC2229C
+	for <bpf@archiver.kernel.org>; Wed,  7 Aug 2019 19:31:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ckVPiHA3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DL1BE6YM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730407AbfHGTaP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 7 Aug 2019 15:30:15 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:36665 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730363AbfHGTaP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 7 Aug 2019 15:30:15 -0400
-Received: by mail-pl1-f193.google.com with SMTP id k8so42275105plt.3;
-        Wed, 07 Aug 2019 12:30:15 -0700 (PDT)
+        id S2389137AbfHGTbO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 7 Aug 2019 15:31:14 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:40162 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389098AbfHGTbO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 7 Aug 2019 15:31:14 -0400
+Received: by mail-pl1-f194.google.com with SMTP id a93so42203841pla.7;
+        Wed, 07 Aug 2019 12:31:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=ObEX3XOlWeWT23v7d2oHVMbTltkGtaDbL7AOnbNpYho=;
-        b=ckVPiHA3Y2kGvCQB1JLlSs2X0FYl6tzEn3uyXO6poAg3s8LtmZAbrQ5YOgbwH0PYuY
-         n7QJq6AHZl1ocijZXJEQzaq/mRUaHuHlLKb+suAswLrLYfGiuiKDPKSNyEgEPBzpgikP
-         mKohYgINTsrSTkX2MWMC5szbJuDcvp/ZhAsxVIilDr0gdOUxY73LgJT1qIZ3UXEy1wH1
-         ONVrNINyXBWiQ9o9FpBofXjmvePGaeUbiYFIfzFV5LbXeX56BtwkP0hvF+hDrfg69wv2
-         XHkWw7liSZ6rHNH/jKB52m2X5ZXA0ORDSFMYck8yVcq8uUBfhhtzGs+NIHHXUubwyum+
-         D7gg==
+        bh=bvbPklOdUA/AqR4MNrUOI+g+38lLzjNfbXlN0TQ3HO4=;
+        b=DL1BE6YMswITJ4K3VYSGzaJ6voj7yeF9q7jYt9AUZQIL1fRIzPzaJIKL1G+k+CQ+oX
+         5+bA3g7HaMI5Gpus0G7A8XmxlVJabD/sJZiqLa16OwW2IWMNhQV13LKYJm5VC0FMCVvh
+         DE3AgGWwEDYBpgw631/I+mye949V+mshiNMaATQo+MT2AbpESRT4254WmerIgpuz+3uh
+         bwZ6zb45oJy4SAVAkAWdDzFAAwSpGi+b81noa8cCfnYXmoAL4J+UVxe+ZijW1Qnb0nsE
+         SlwO8KaguQeIJQpnt75dqfiHvWlEOTvszhIxMs3T3R9T1Dq+p2o3/oPS9eHEdo1p18+q
+         BDWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ObEX3XOlWeWT23v7d2oHVMbTltkGtaDbL7AOnbNpYho=;
-        b=taJIypIww5f4Y1wv8JCVZ0vrl5V996owL4Ry3075BfTxZtbgs7UvutYcKBvZ87lxT6
-         0NUfT6SYyw0uEmHBFMTdEG/eWpNgGHp+4fKsrKG/fo2XauUoAil87MfWnNfAXlWIaMfI
-         sS4gJNHmdRi7hVDuy1t1fuGSeJ/6sObYZm06xj5WH5vfjm7WBKORhgDbixivwss5KkII
-         wpf+m7rTF4++RIK7xrgF8+vcvvgSpuM98wwrqy7lidKhtIsGKW3rVXFXvjBs7DzoSjwO
-         4ttvxtnGXeXUcyHhdB2zb/JxdNx5nqRnJelTvTR/T2XVaB0doBeoWubqFlILBerY0139
-         qvtg==
-X-Gm-Message-State: APjAAAXnY4P4GHO2/122GQH172Ds0zRd6B4F2gLK23JGyCzcPuyBJfJ9
-        aBnWP0Ey8CoEziL6MCtboWc=
-X-Google-Smtp-Source: APXvYqyvvg1ACVIpxDY7hfpLdLclBw4I4RfROp/RmaXlID5a+2MeRCbE4YmB1buH6l+AZ8ck5PD69w==
-X-Received: by 2002:a62:79c2:: with SMTP id u185mr11161713pfc.237.1565206214810;
-        Wed, 07 Aug 2019 12:30:14 -0700 (PDT)
+        bh=bvbPklOdUA/AqR4MNrUOI+g+38lLzjNfbXlN0TQ3HO4=;
+        b=bS2hnZyyZ6VhL0gtyGcDxFol+dbgxpE03uqYh6VyQShtAUEZR16rw4dCwZlQQiCLe9
+         xnUMSHjwl2aLEJrVDWrFBZu//fN8FB/9gkSX9aEBUp5SZDXy7hyx1YA4Dcs7ORhSjQw1
+         UJ8iS7h10IKD+xK765K6spUJnALGlmSz0ayeJ6eMmU49W8nndhB68fwLdVm5lPnRHBCZ
+         92RQRLqIo++MHTUGWMwdvPT1+NSVmgoRFCHio74lSggR7zaTgni4MrwkfZPgJIP5shFQ
+         Q1E5lLACzBfNQqMlZvkLmvr3HZ1EGcJkN7mIDY9jbwSwyKOGSqu7OJTJRrfe0j1ng5sO
+         wIqA==
+X-Gm-Message-State: APjAAAWKoxKLmFW6O6r5L5tR2NzqfnEN9i9nKJZNk1OkqcztdzqGbBdM
+        B3WJJKWg1hmfEXTSudEBNTA=
+X-Google-Smtp-Source: APXvYqzVWWxBBKDC7eDe35wEfCOMKHMh+IsIoVtCmPPJCXntrXo0yOLy42SyIGQ5u0Y5Q2uxmiUMfA==
+X-Received: by 2002:a17:90a:270f:: with SMTP id o15mr46122pje.56.1565206273555;
+        Wed, 07 Aug 2019 12:31:13 -0700 (PDT)
 Received: from ast-mbp ([2620:10d:c090:200::7084])
-        by smtp.gmail.com with ESMTPSA id cx22sm610978pjb.25.2019.08.07.12.30.13
+        by smtp.gmail.com with ESMTPSA id v63sm95417494pfv.174.2019.08.07.12.31.12
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 07 Aug 2019 12:30:13 -0700 (PDT)
-Date:   Wed, 7 Aug 2019 12:30:12 -0700
+        Wed, 07 Aug 2019 12:31:12 -0700 (PDT)
+Date:   Wed, 7 Aug 2019 12:31:11 -0700
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     Andrii Nakryiko <andriin@fb.com>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@fb.com,
         daniel@iogearbox.net, yhs@fb.com, andrii.nakryiko@gmail.com,
         kernel-team@fb.com
-Subject: Re: [PATCH v4 bpf-next 02/14] libbpf: convert libbpf code to use new
- btf helpers
-Message-ID: <20190807193011.g2zuaapc2uvvr4h6@ast-mbp>
+Subject: Re: [PATCH v4 bpf-next 01/14] libbpf: add helpers for working with
+ BTF types
+Message-ID: <20190807193110.p5flmxojmdjdg4dj@ast-mbp>
 References: <20190807053806.1534571-1-andriin@fb.com>
- <20190807053806.1534571-3-andriin@fb.com>
+ <20190807053806.1534571-2-andriin@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190807053806.1534571-3-andriin@fb.com>
+In-Reply-To: <20190807053806.1534571-2-andriin@fb.com>
 User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Aug 06, 2019 at 10:37:54PM -0700, Andrii Nakryiko wrote:
-> Simplify code by relying on newly added BTF helper functions.
+On Tue, Aug 06, 2019 at 10:37:53PM -0700, Andrii Nakryiko wrote:
+> Add lots of frequently used helpers that simplify working with BTF
+> types.
 > 
 > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ..
->  
-> -	for (i = 0, vsi = (struct btf_var_secinfo *)(t + 1);
-> -	     i < vars; i++, vsi++) {
-> +	for (i = 0, vsi = (void *)btf_var_secinfos(t); i < vars; i++, vsi++) {
+> +/* get bitfield size of a member, assuming t is BTF_KIND_STRUCT or
+> + * BTF_KIND_UNION. If member is not a bitfield, zero is returned. */
 
-> +			struct btf_member *m = (void *)btf_members(t);
-...
->  		case BTF_KIND_ENUM: {
-> -			struct btf_enum *m = (struct btf_enum *)(t + 1);
-> -			__u16 vlen = BTF_INFO_VLEN(t->info);
-> +			struct btf_enum *m = (void *)btf_enum(t);
-> +			__u16 vlen = btf_vlen(t);
-...
->  		case BTF_KIND_FUNC_PROTO: {
-> -			struct btf_param *m = (struct btf_param *)(t + 1);
-> -			__u16 vlen = BTF_INFO_VLEN(t->info);
-> +			struct btf_param *m = (void *)btf_params(t);
-> +			__u16 vlen = btf_vlen(t);
-
-So all of these 'void *' type hacks are only to drop const-ness ?
-May be the helpers shouldn't be taking const then?
+Invalid comment style.
 
