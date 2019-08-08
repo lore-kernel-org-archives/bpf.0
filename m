@@ -6,48 +6,48 @@ X-Spam-Status: No, score=-0.4 required=3.0 tests=FROM_LOCAL_HEX,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48678C0650F
-	for <bpf@archiver.kernel.org>; Thu,  8 Aug 2019 16:44:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE15EC0650F
+	for <bpf@archiver.kernel.org>; Thu,  8 Aug 2019 16:45:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 253D521883
-	for <bpf@archiver.kernel.org>; Thu,  8 Aug 2019 16:44:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A28DF21881
+	for <bpf@archiver.kernel.org>; Thu,  8 Aug 2019 16:45:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390190AbfHHQoT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 8 Aug 2019 12:44:19 -0400
-Received: from mail-ot1-f69.google.com ([209.85.210.69]:33686 "EHLO
-        mail-ot1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732572AbfHHQoH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 8 Aug 2019 12:44:07 -0400
-Received: by mail-ot1-f69.google.com with SMTP id w5so62900987otg.0
-        for <bpf@vger.kernel.org>; Thu, 08 Aug 2019 09:44:07 -0700 (PDT)
+        id S2390244AbfHHQpG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 8 Aug 2019 12:45:06 -0400
+Received: from mail-ot1-f71.google.com ([209.85.210.71]:37068 "EHLO
+        mail-ot1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390238AbfHHQpG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 8 Aug 2019 12:45:06 -0400
+Received: by mail-ot1-f71.google.com with SMTP id x5so62812845otb.4
+        for <bpf@vger.kernel.org>; Thu, 08 Aug 2019 09:45:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=iMvZ/m27+Coh4q2kypY8c+/9YvSWV25rvuLfoAzVCWs=;
-        b=kOzqWqvmITZIa598VAEhxhlCYRHI4SPapMN+xKkftY1GM7cHgYyLoA9S9BHwgcXD9f
-         kMHACkKgX3G2qf7u22FTfLXyt0SytSKkJPU06mkkgJ7YoGpdpINtpgQ94U6zQIHYpR3g
-         OHvWsCUqbJySuIhPFI3QOtfVuktaMU/VeMvO7J0Uoz7OSennwh/KXVBT3xTCV1BL/x+a
-         +lzkq/dfd+iH02m6Ephn9AX2VV5vufTNw2eRAcRH3TlEoelsigbxFmwcT69SePwpcRjZ
-         RqxvWGO6swMXt8IGtQloifVHnbOJujpdd2pMlsKrHsycVmRhpVnUcLSiCfdDoVhVQGe5
-         qf8Q==
-X-Gm-Message-State: APjAAAUlu7kYxlDw+0yXgjHoe8xGwElIP/j+eIoNE8bb9ssGELok7FsE
-        GjDPWe1C0m9LM2lDfTbvvFMEpPP6moAPaErSRoo55aCmAO4N
-X-Google-Smtp-Source: APXvYqxHcP/FOawJxr9LBBv9fK/CPNC9T6++eJmBhZKGUxshGNO+LS58yl82k11uwsGUTDeHVj8QS2XhutJbJo0fT9vyrn6iS11V
+        bh=pCP8x+c3NdmQMNT+LHA6K3XzXnAObCZ6ntIBW771GIM=;
+        b=bNr9BVXeCkeSU6rkIIEiX0KF6GDwKCBOH6H+F8x3s1MTpCZX94IZU/GLbw9J/9ELX3
+         KynoDF6YyLOiGO2IyUUbr5ZtYTnjKCV1hKbiTLlf1L2RXcAlrstiHzAqTrDyf6gMiUra
+         snWTkbu1e12HdHWjlkW3F3S1hrFR6E+JgEnrckwlnqNZMqU39SnFpyns+4frVxcU5gNj
+         Vl1hKOBJqiS0w7PhnfdLZu9A/ys4U3bQhjWc0nrscD4kilxx8IiUPnmcD3k0GWAH5lr9
+         RWc3mqKF6PLVDKWi/2srfoGsjUflZUDjAM2SX99/ChRoqd0TU7dlqkF/5gDDqSljxOPM
+         33fA==
+X-Gm-Message-State: APjAAAXTLP3ZtMGDniChIwDkDQ5sI8BC+WyYdoJdx1g64z3hj4cUAbk5
+        6RlK8TH4oroUV6cdYHUh7AuXPwkXec2pROmq3VW+TUSZcBin
+X-Google-Smtp-Source: APXvYqyKZOG/tnmvcHVs/lnVgia1SmEKFAl2TJJr91WPNOtvwVYVhOvsr5tAKftpEUX5MjcOQuAl2XktGfyghSfgZBa3BS6XROE2
 MIME-Version: 1.0
-X-Received: by 2002:a5d:8d15:: with SMTP id p21mr15404757ioj.219.1565282646712;
- Thu, 08 Aug 2019 09:44:06 -0700 (PDT)
-Date:   Thu, 08 Aug 2019 09:44:06 -0700
+X-Received: by 2002:a5d:9613:: with SMTP id w19mr109048iol.140.1565282705187;
+ Thu, 08 Aug 2019 09:45:05 -0700 (PDT)
+Date:   Thu, 08 Aug 2019 09:45:05 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000216779058f9dc40e@google.com>
-Subject: general protection fault in tls_tx_records
-From:   syzbot <syzbot+97d0cf528b9c8e9be7f4@syzkaller.appspotmail.com>
-To:     ast@kernel.org, aviadye@mellanox.com, borisp@mellanox.com,
-        bpf@vger.kernel.org, daniel@iogearbox.net, davejwatson@fb.com,
-        davem@davemloft.net, jakub.kicinski@netronome.com,
-        john.fastabend@gmail.com, kafai@fb.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com
+Message-ID: <0000000000009dac7f058f9dc763@google.com>
+Subject: INFO: rcu detected stall in tcp_write_timer
+From:   syzbot <syzbot+1f80b70f1e8f1df46319@syzkaller.appspotmail.com>
+To:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, edumazet@google.com, kafai@fb.com,
+        kuznet@ms2.inr.ac.ru, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com,
+        yoshfuji@linux-ipv6.org
 Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
@@ -60,60 +60,118 @@ syzbot found the following crash on:
 
 HEAD commit:    ce96e791 Add linux-next specific files for 20190731
 git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=13ce4fd0600000
+console output: https://syzkaller.appspot.com/x/log.txt?x=12b2efd0600000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=fca5b9d53db6585c
-dashboard link: https://syzkaller.appspot.com/bug?extid=97d0cf528b9c8e9be7f4
+dashboard link: https://syzkaller.appspot.com/bug?extid=1f80b70f1e8f1df46319
 compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
 Unfortunately, I don't have any reproducer for this crash yet.
 
 IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+97d0cf528b9c8e9be7f4@syzkaller.appspotmail.com
+Reported-by: syzbot+1f80b70f1e8f1df46319@syzkaller.appspotmail.com
 
-kasan: GPF could be caused by NULL-ptr deref or user memory access
-general protection fault: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.3.0-rc2-next-20190731 #56
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: events tx_work_handler
-RIP: 0010:tls_tx_records+0x5e/0x740 net/tls/tls_sw.c:365
-Code: 80 3c 02 00 0f 85 31 06 00 00 49 8b 87 b0 06 00 00 48 8d 78 28 48 89  
-45 c0 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f  
-85 1b 06 00 00 48 8b 45 c0 48 8d 78 60 48 8b 58 28
-RSP: 0018:ffff8880a98d7cb0 EFLAGS: 00010206
-RAX: dffffc0000000000 RBX: 0000000000000001 RCX: 1ffffffff134c016
-RDX: 0000000000000005 RSI: ffffffff862e74fc RDI: 0000000000000028
-RBP: ffff8880a98d7d00 R08: ffff8880a98c8300 R09: 0000000000000000
-R10: fffffbfff134b9d8 R11: ffff8880a98c8300 R12: ffff88808eb47cc0
-R13: ffff8880a9ac4c40 R14: ffff88808eb47de8 R15: ffff8880a9ac4c40
-FS:  0000000000000000(0000) GS:ffff8880ae800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000001b30e80 CR3: 000000009c1a0000 CR4: 00000000001406f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+	(detected by 1, t=10502 jiffies, g=28777, q=38)
+rcu: All QSes seen, last rcu_preempt kthread activity 10503  
+(4294973637-4294963134), jiffies_till_next_fqs=1, root ->qsmask 0x0
+syz-executor.5  R  running task    27376 17588  10322 0x00004008
 Call Trace:
-  tx_work_handler+0x134/0x180 net/tls/tls_sw.c:2176
-  process_one_work+0x9af/0x1740 kernel/workqueue.c:2269
-  worker_thread+0x98/0xe40 kernel/workqueue.c:2415
+  <IRQ>
+  sched_show_task kernel/sched/core.c:5814 [inline]
+  sched_show_task.cold+0x2ed/0x34e kernel/sched/core.c:5789
+  print_other_cpu_stall kernel/rcu/tree_stall.h:410 [inline]
+  check_cpu_stall kernel/rcu/tree_stall.h:536 [inline]
+  rcu_pending kernel/rcu/tree.c:2736 [inline]
+  rcu_sched_clock_irq.cold+0xac8/0xc13 kernel/rcu/tree.c:2183
+  update_process_times+0x32/0x80 kernel/time/timer.c:1639
+  tick_sched_handle+0xa2/0x190 kernel/time/tick-sched.c:167
+  tick_sched_timer+0x53/0x140 kernel/time/tick-sched.c:1296
+  __run_hrtimer kernel/time/hrtimer.c:1389 [inline]
+  __hrtimer_run_queues+0x364/0xe40 kernel/time/hrtimer.c:1451
+  hrtimer_interrupt+0x314/0x770 kernel/time/hrtimer.c:1509
+  local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1068 [inline]
+  smp_apic_timer_interrupt+0x160/0x610 arch/x86/kernel/apic/apic.c:1093
+  apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:828
+RIP: 0010:__kasan_check_read+0x0/0x20 mm/kasan/common.c:91
+Code: e8 e9 c0 ae ff 0f 0b 4c 8b 4d d0 e9 27 ee ff ff 48 8b 73 58 89 c2 48  
+c7 c7 e0 c2 89 88 f7 da e8 ca c0 ae ff e9 da ee ff ff 90 <55> 89 f6 31 d2  
+48 89 e5 48 8b 4d 08 e8 cf 26 00 00 5d c3 0f 1f 00
+RSP: 0018:ffff8880ae909b40 EFLAGS: 00000202 ORIG_RAX: ffffffffffffff13
+RAX: 0000000000000000 RBX: ffff8880601cce08 RCX: ffffffff8158f467
+RDX: 0000000000000000 RSI: 0000000000000004 RDI: ffff8880601cce08
+RBP: ffff8880ae909c08 R08: 1ffff1100c0399c1 R09: ffffed100c0399c2
+R10: ffffed100c0399c1 R11: ffff8880601cce0b R12: 0000000000000001
+R13: 0000000000000003 R14: ffffed100c0399c1 R15: 0000000000000001
+  pv_queued_spin_lock_slowpath arch/x86/include/asm/paravirt.h:642 [inline]
+  queued_spin_lock_slowpath arch/x86/include/asm/qspinlock.h:50 [inline]
+  queued_spin_lock include/asm-generic/qspinlock.h:81 [inline]
+  do_raw_spin_lock+0x20e/0x2e0 kernel/locking/spinlock_debug.c:113
+  __raw_spin_lock include/linux/spinlock_api_smp.h:143 [inline]
+  _raw_spin_lock+0x37/0x40 kernel/locking/spinlock.c:151
+  spin_lock include/linux/spinlock.h:338 [inline]
+  tcp_write_timer+0x2b/0x1e0 net/ipv4/tcp_timer.c:610
+  call_timer_fn+0x1ac/0x780 kernel/time/timer.c:1322
+  expire_timers kernel/time/timer.c:1366 [inline]
+  __run_timers kernel/time/timer.c:1685 [inline]
+  __run_timers kernel/time/timer.c:1653 [inline]
+  run_timer_softirq+0x697/0x17a0 kernel/time/timer.c:1698
+  __do_softirq+0x262/0x98c kernel/softirq.c:292
+  invoke_softirq kernel/softirq.c:373 [inline]
+  irq_exit+0x19b/0x1e0 kernel/softirq.c:413
+  exiting_irq arch/x86/include/asm/apic.h:536 [inline]
+  smp_apic_timer_interrupt+0x1a3/0x610 arch/x86/kernel/apic/apic.c:1095
+  apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:828
+  </IRQ>
+RIP: 0010:arch_local_irq_restore arch/x86/include/asm/paravirt.h:756  
+[inline]
+RIP: 0010:slab_alloc mm/slab.c:3312 [inline]
+RIP: 0010:__do_kmalloc mm/slab.c:3653 [inline]
+RIP: 0010:__kmalloc+0x2b8/0x770 mm/slab.c:3664
+Code: 7e 0f 85 d6 fe ff ff e8 26 c5 53 ff e9 cc fe ff ff e8 1c ff ca ff 48  
+83 3d e4 52 26 07 00 0f 84 4f 03 00 00 48 8b 7d c0 57 9d <0f> 1f 44 00 00  
+e9 5e fe ff ff 31 d2 be 35 02 00 00 48 c7 c7 ce c0
+RSP: 0018:ffff888069e978c0 EFLAGS: 00000286 ORIG_RAX: ffffffffffffff13
+RAX: 0000000000000007 RBX: 0000000000000dc0 RCX: 1ffffffff134c016
+RDX: 0000000000000000 RSI: ffffffff8177a12e RDI: 0000000000000286
+RBP: ffff888069e97938 R08: ffff888064bee240 R09: ffffed10154802c1
+R10: ffffed10154802c0 R11: ffff8880aa401603 R12: 0000000000000100
+R13: 0000000000000dc0 R14: ffff8880aa4008c0 R15: ffff88805f8e7dc0
+  kmalloc_array include/linux/slab.h:614 [inline]
+  kcalloc include/linux/slab.h:625 [inline]
+  iter_file_splice_write+0x16e/0xbe0 fs/splice.c:690
+  do_splice_from fs/splice.c:848 [inline]
+  direct_splice_actor+0x123/0x190 fs/splice.c:1020
+  splice_direct_to_actor+0x366/0x970 fs/splice.c:975
+  do_splice_direct+0x1da/0x2a0 fs/splice.c:1063
+  do_sendfile+0x597/0xd00 fs/read_write.c:1464
+  __do_sys_sendfile64 fs/read_write.c:1519 [inline]
+  __se_sys_sendfile64 fs/read_write.c:1511 [inline]
+  __x64_sys_sendfile64+0x15a/0x220 fs/read_write.c:1511
+  do_syscall_64+0xfa/0x760 arch/x86/entry/common.c:290
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x459829
+Code: fd b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7  
+48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 cb b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007f9691478c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
+RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 0000000000459829
+RDX: 0000000020001000 RSI: 0000000000000003 RDI: 0000000000000003
+RBP: 000000000075bf20 R08: 0000000000000000 R09: 0000000000000000
+R10: 000000000000ffff R11: 0000000000000246 R12: 00007f96914796d4
+R13: 00000000004c6ff7 R14: 00000000004dc558 R15: 00000000ffffffff
+rcu: rcu_preempt kthread starved for 10569 jiffies! g28777 f0x2  
+RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=0
+rcu: RCU grace-period kthread stack dump:
+rcu_preempt     R  running task    29688    10      2 0x80004000
+Call Trace:
+  context_switch kernel/sched/core.c:3254 [inline]
+  __schedule+0x755/0x15b0 kernel/sched/core.c:3921
+  schedule+0xa8/0x270 kernel/sched/core.c:3985
+  schedule_timeout+0x486/0xc50 kernel/time/timer.c:1807
+  rcu_gp_fqs_loop kernel/rcu/tree.c:1611 [inline]
+  rcu_gp_kthread+0x9b2/0x18c0 kernel/rcu/tree.c:1768
   kthread+0x361/0x430 kernel/kthread.c:255
   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-Modules linked in:
----[ end trace c75bda97ceb541bf ]---
-RIP: 0010:tls_tx_records+0x5e/0x740 net/tls/tls_sw.c:365
-Code: 80 3c 02 00 0f 85 31 06 00 00 49 8b 87 b0 06 00 00 48 8d 78 28 48 89  
-45 c0 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f  
-85 1b 06 00 00 48 8b 45 c0 48 8d 78 60 48 8b 58 28
-RSP: 0018:ffff8880a98d7cb0 EFLAGS: 00010206
-RAX: dffffc0000000000 RBX: 0000000000000001 RCX: 1ffffffff134c016
-RDX: 0000000000000005 RSI: ffffffff862e74fc RDI: 0000000000000028
-RBP: ffff8880a98d7d00 R08: ffff8880a98c8300 R09: 0000000000000000
-R10: fffffbfff134b9d8 R11: ffff8880a98c8300 R12: ffff88808eb47cc0
-R13: ffff8880a9ac4c40 R14: ffff88808eb47de8 R15: ffff8880a9ac4c40
-FS:  0000000000000000(0000) GS:ffff8880ae800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffd4f4eadac CR3: 00000000987e6000 CR4: 00000000001406f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
 
 ---
