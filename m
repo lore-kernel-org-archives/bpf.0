@@ -2,326 +2,174 @@ Return-Path: <SRS0=og6p=WE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.4 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83FDCC0650F
-	for <bpf@archiver.kernel.org>; Thu,  8 Aug 2019 15:28:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A954FC0650F
+	for <bpf@archiver.kernel.org>; Thu,  8 Aug 2019 16:44:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 400C82173C
-	for <bpf@archiver.kernel.org>; Thu,  8 Aug 2019 15:28:34 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="gNhhbKGp"
+	by mail.kernel.org (Postfix) with ESMTP id 8B21921882
+	for <bpf@archiver.kernel.org>; Thu,  8 Aug 2019 16:44:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727096AbfHHP2d (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 8 Aug 2019 11:28:33 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:39097 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732662AbfHHP2d (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 8 Aug 2019 11:28:33 -0400
-Received: by mail-pf1-f194.google.com with SMTP id f17so40305179pfn.6
-        for <bpf@vger.kernel.org>; Thu, 08 Aug 2019 08:28:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=utJWuWxfDp9ua5XumByBys8UZrFgh1w22LZS9xGgft0=;
-        b=gNhhbKGptYxJiV8nv+PwZ3LmMXSAAAKCbVBAwGcEYy3Ljf7Iz91lwtJ3otISgSQKtq
-         69aVvxuO1Rxha7cbW7qjEL8nIOMxreugPIwYgH9JEWdVzna4kI5/WZZPX9DrxzmUYy5S
-         +Nzaf2O2D7Zv10i2A3LMoy56RWprtpy4Psww1ZHu/zUQqMj6WKOn2fV8TZuYFe38m9Pw
-         m8nbadKEqrMs/64A4oApXfS0sGTLAJE/yh9pl/MOeWKvA08kWe+qsN4WWhGUUPutfNfI
-         Z/7+drJcLdhROZiGOKSRW4HJ/fi7MxPIjihidEXRW0NCdRYWiDP1KpcazZrvkg/V0Rne
-         GNgQ==
+        id S1732775AbfHHQoI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 8 Aug 2019 12:44:08 -0400
+Received: from mail-ot1-f70.google.com ([209.85.210.70]:45952 "EHLO
+        mail-ot1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390191AbfHHQoI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 8 Aug 2019 12:44:08 -0400
+Received: by mail-ot1-f70.google.com with SMTP id b25so62782152otp.12
+        for <bpf@vger.kernel.org>; Thu, 08 Aug 2019 09:44:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=utJWuWxfDp9ua5XumByBys8UZrFgh1w22LZS9xGgft0=;
-        b=VW3Ru4BW8+qqolc0kJACsfnvn5mNKFuJOHGuSpHKZJTbCeKIfWAMZtbam/vN14j6aq
-         tgqSMPFUUlRLz5LvjrsZL9iocyViE09uf1Le8ILXV0o1xyvyLygelyCzuSJK3BtuvJNP
-         eWOrpW6YBvz8SSx1F84npwD2/E/bsr0+zIvKDj2ZVtIHCivjPDJq+ZEAkFqnph9BldT2
-         8fSF9pRLeFhciSfMC1qAtMvnejcXbXkgYpFaG4Jf6YIENVGspxL/fier41XZJMRidjsG
-         jM23Hsf7UCzlL/0A9EOJaCVn86bDwvdwLGfjJ61iJ12a4zdZ3qiIgeuI4wNWTkqY/Tc1
-         oOSw==
-X-Gm-Message-State: APjAAAUyIskS5eVQLgxdU2RbyR/qrm4+tyBrm3NkbJmfS4n3UYF/wQgh
-        WpI7vFk8fuuXXMhMxXdBqBG9kg==
-X-Google-Smtp-Source: APXvYqwj9ppAnE+z/2UQ/r0ivgWFgYub68BSRT/i731mai1cNLIMRCsWMGiXSONU1zgDYlEUt5HgdA==
-X-Received: by 2002:a63:6c7:: with SMTP id 190mr13150393pgg.7.1565278112226;
-        Thu, 08 Aug 2019 08:28:32 -0700 (PDT)
-Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
-        by smtp.gmail.com with ESMTPSA id l25sm114899839pff.143.2019.08.08.08.28.31
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 08 Aug 2019 08:28:31 -0700 (PDT)
-Date:   Thu, 8 Aug 2019 08:28:30 -0700
-From:   Stanislav Fomichev <sdf@fomichev.me>
-To:     Martin Lau <kafai@fb.com>
-Cc:     Stanislav Fomichev <sdf@google.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>
-Subject: Re: [PATCH bpf-next 1/3] bpf: support cloning sk storage on accept()
-Message-ID: <20190808152830.GC2820@mini-arch>
-References: <20190807154720.260577-1-sdf@google.com>
- <20190807154720.260577-2-sdf@google.com>
- <20190808063936.3p4ahtdkw35rrzqu@kafai-mbp>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=iHsPdrpnVUzzAO5Tf1V0+Uz36Wmve8VdL1a5sOx66mk=;
+        b=uXKoKqRZvn6/FkiGQlz6nnzumNfvsvFs2VzS9gVkT2rDsVqmXYUyJamFfLJDgHOyVj
+         J1VCNw/1/grlUCXoZgAl3lnsBn7+qEVqBvSLapmfn7jeTs+JxjCUMepEtxXyZ+vOdyVN
+         YShiicnbk38lXdaXP6qPUm9cgmLMhgawixXurjn8xEMfuNUi++0yX1KVPjIBoa3qLXiP
+         CW+S6SwIZHCU0alfk8kBkIiLKhG8qyIcWebd5/y5hIan6IISlONb0we/vpT2gZNcz47Q
+         zSD8iVqRrwtYTHV55QYkecLthOEsSsnXgSEtFk159wzKtuykMPTsSaQvQhJZiDPze1Nz
+         cPIw==
+X-Gm-Message-State: APjAAAU1w2Q+rz71EvWtONS1GVSPobWd+lF/n2wo74SaZPPBAkSy8FjM
+        oNEUIgje5t2bp4wna8mc9bRAXfjdMepBnkLkEK+xeJmmj3QR
+X-Google-Smtp-Source: APXvYqyo78jxXQQ0AW+OjxxN1emWNnXNmX+2l9sgSJE9/qUF4I8w6aVsT1ES1JQr8NOm156voc57iQ+bbleVs3sKqbBauCgIdNSO
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190808063936.3p4ahtdkw35rrzqu@kafai-mbp>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Received: by 2002:a5d:928a:: with SMTP id s10mr16244046iom.29.1565282647023;
+ Thu, 08 Aug 2019 09:44:07 -0700 (PDT)
+Date:   Thu, 08 Aug 2019 09:44:07 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000262820058f9dc474@google.com>
+Subject: KASAN: use-after-free Read in tls_wait_data
+From:   syzbot <syzbot+30c791a76814a3c6c9f9@syzkaller.appspotmail.com>
+To:     ast@kernel.org, aviadye@mellanox.com, borisp@mellanox.com,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davejwatson@fb.com,
+        davem@davemloft.net, jakub.kicinski@netronome.com,
+        john.fastabend@gmail.com, kafai@fb.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 08/08, Martin Lau wrote:
-> On Wed, Aug 07, 2019 at 08:47:18AM -0700, Stanislav Fomichev wrote:
-> > Add new helper bpf_sk_storage_clone which optionally clones sk storage
-> > and call it from bpf_sk_storage_clone. Reuse the gap in
-> > bpf_sk_storage_elem to store clone/non-clone flag.
-> > 
-> > Cc: Martin KaFai Lau <kafai@fb.com>
-> > Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> > ---
-> >  include/net/bpf_sk_storage.h |  10 ++++
-> >  include/uapi/linux/bpf.h     |   1 +
-> >  net/core/bpf_sk_storage.c    | 102 +++++++++++++++++++++++++++++++++--
-> >  net/core/sock.c              |   9 ++--
-> >  4 files changed, 115 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/include/net/bpf_sk_storage.h b/include/net/bpf_sk_storage.h
-> > index b9dcb02e756b..8e4f831d2e52 100644
-> > --- a/include/net/bpf_sk_storage.h
-> > +++ b/include/net/bpf_sk_storage.h
-> > @@ -10,4 +10,14 @@ void bpf_sk_storage_free(struct sock *sk);
-> >  extern const struct bpf_func_proto bpf_sk_storage_get_proto;
-> >  extern const struct bpf_func_proto bpf_sk_storage_delete_proto;
-> >  
-> > +#ifdef CONFIG_BPF_SYSCALL
-> > +int bpf_sk_storage_clone(const struct sock *sk, struct sock *newsk);
-> > +#else
-> > +static inline int bpf_sk_storage_clone(const struct sock *sk,
-> > +				       struct sock *newsk)
-> > +{
-> > +	return 0;
-> > +}
-> > +#endif
-> > +
-> >  #endif /* _BPF_SK_STORAGE_H */
-> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > index 4393bd4b2419..00459ca4c8cf 100644
-> > --- a/include/uapi/linux/bpf.h
-> > +++ b/include/uapi/linux/bpf.h
-> > @@ -2931,6 +2931,7 @@ enum bpf_func_id {
-> >  
-> >  /* BPF_FUNC_sk_storage_get flags */
-> >  #define BPF_SK_STORAGE_GET_F_CREATE	(1ULL << 0)
-> > +#define BPF_SK_STORAGE_GET_F_CLONE	(1ULL << 1)
-> It is only used in bpf_sk_storage_get().
-> What if the elem is created from bpf_fd_sk_storage_update_elem()
-> i.e. from the syscall API ?
-> 
-> What may be the use case for a map to have both CLONE and non-CLONE
-> elements?  If it is not the case, would it be better to add
-> BPF_F_CLONE to bpf_attr->map_flags?
-I didn't think about putting it on the map itself since the API
-is on a per-element, but it does make sense. I can't come up
-with a use-case for a per-element selective clone/non-clone.
-Thanks, will move to the map itself.
+Hello,
 
-> >  
-> >  /* Mode for BPF_FUNC_skb_adjust_room helper. */
-> >  enum bpf_adj_room_mode {
-> > diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-> > index 94c7f77ecb6b..b6dea67965bc 100644
-> > --- a/net/core/bpf_sk_storage.c
-> > +++ b/net/core/bpf_sk_storage.c
-> > @@ -12,6 +12,9 @@
-> >  
-> >  static atomic_t cache_idx;
-> >  
-> > +#define BPF_SK_STORAGE_GET_F_MASK	(BPF_SK_STORAGE_GET_F_CREATE | \
-> > +					 BPF_SK_STORAGE_GET_F_CLONE)
-> > +
-> >  struct bucket {
-> >  	struct hlist_head list;
-> >  	raw_spinlock_t lock;
-> > @@ -66,7 +69,8 @@ struct bpf_sk_storage_elem {
-> >  	struct hlist_node snode;	/* Linked to bpf_sk_storage */
-> >  	struct bpf_sk_storage __rcu *sk_storage;
-> >  	struct rcu_head rcu;
-> > -	/* 8 bytes hole */
-> > +	u8 clone:1;
-> > +	/* 7 bytes hole */
-> >  	/* The data is stored in aother cacheline to minimize
-> >  	 * the number of cachelines access during a cache hit.
-> >  	 */
-> > @@ -509,7 +513,7 @@ static int sk_storage_delete(struct sock *sk, struct bpf_map *map)
-> >  	return 0;
-> >  }
-> >  
-> > -/* Called by __sk_destruct() */
-> > +/* Called by __sk_destruct() & bpf_sk_storage_clone() */
-> >  void bpf_sk_storage_free(struct sock *sk)
-> >  {
-> >  	struct bpf_sk_storage_elem *selem;
-> > @@ -739,19 +743,106 @@ static int bpf_fd_sk_storage_delete_elem(struct bpf_map *map, void *key)
-> >  	return err;
-> >  }
-> >  
-> > +static struct bpf_sk_storage_elem *
-> > +bpf_sk_storage_clone_elem(struct sock *newsk,
-> > +			  struct bpf_sk_storage_map *smap,
-> > +			  struct bpf_sk_storage_elem *selem)
-> > +{
-> > +	struct bpf_sk_storage_elem *copy_selem;
-> > +
-> > +	copy_selem = selem_alloc(smap, newsk, NULL, true);
-> > +	if (!copy_selem)
-> > +		return ERR_PTR(-ENOMEM);
-> nit.
-> may be just return NULL as selem_alloc() does.
-Sounds good.
+syzbot found the following crash on:
 
-> > +
-> > +	if (map_value_has_spin_lock(&smap->map))
-> > +		copy_map_value_locked(&smap->map, SDATA(copy_selem)->data,
-> > +				      SDATA(selem)->data, true);
-> > +	else
-> > +		copy_map_value(&smap->map, SDATA(copy_selem)->data,
-> > +			       SDATA(selem)->data);
-> > +
-> > +	return copy_selem;
-> > +}
-> > +
-> > +int bpf_sk_storage_clone(const struct sock *sk, struct sock *newsk)
-> > +{
-> > +	struct bpf_sk_storage *new_sk_storage = NULL;
-> > +	struct bpf_sk_storage *sk_storage;
-> > +	struct bpf_sk_storage_elem *selem;
-> > +	int ret;
-> > +
-> > +	RCU_INIT_POINTER(newsk->sk_bpf_storage, NULL);
-> > +
-> > +	rcu_read_lock();
-> > +	sk_storage = rcu_dereference(sk->sk_bpf_storage);
-> > +
-> > +	if (!sk_storage || hlist_empty(&sk_storage->list))
-> > +		goto out;
-> > +
-> > +	hlist_for_each_entry_rcu(selem, &sk_storage->list, snode) {
-> > +		struct bpf_sk_storage_map *smap;
-> > +		struct bpf_sk_storage_elem *copy_selem;
-> > +
-> > +		if (!selem->clone)
-> > +			continue;
-> > +
-> > +		smap = rcu_dereference(SDATA(selem)->smap);
-> > +		if (!smap)
-> smap should not be NULL.
-I see; you never set it back to NULL and we are guaranteed that the
-map is still around due to rcu. Removed.
+HEAD commit:    7b4980e0 Add linux-next specific files for 20190802
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=14a749b4600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7e1348afd44b5e02
+dashboard link: https://syzkaller.appspot.com/bug?extid=30c791a76814a3c6c9f9
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
-> > +			continue;
-> > +
-> > +		copy_selem = bpf_sk_storage_clone_elem(newsk, smap, selem);
-> > +		if (IS_ERR(copy_selem)) {
-> > +			ret = PTR_ERR(copy_selem);
-> > +			goto err;
-> > +		}
-> > +
-> > +		if (!new_sk_storage) {
-> > +			ret = sk_storage_alloc(newsk, smap, copy_selem);
-> > +			if (ret) {
-> > +				kfree(copy_selem);
-> > +				atomic_sub(smap->elem_size,
-> > +					   &newsk->sk_omem_alloc);
-> > +				goto err;
-> > +			}
-> > +
-> > +			new_sk_storage = rcu_dereference(copy_selem->sk_storage);
-> > +			continue;
-> > +		}
-> > +
-> > +		raw_spin_lock_bh(&new_sk_storage->lock);
-> > +		selem_link_map(smap, copy_selem);
-> Unlike the existing selem-update use-cases in bpf_sk_storage.c,
-> the smap->map.refcnt has not been held here.  Reading the smap
-> is fine.  However, adding a new selem to a deleting smap is an issue.
-> Hence, I think bpf_map_inc_not_zero() should be done first.
-In this case, I should probably do it after smap = rcu_deref()?
+Unfortunately, I don't have any reproducer for this crash yet.
 
-> > +		__selem_link_sk(new_sk_storage, copy_selem);
-> > +		raw_spin_unlock_bh(&new_sk_storage->lock);
-> > +	}
-> > +
-> > +out:
-> > +	rcu_read_unlock();
-> > +	return 0;
-> > +
-> > +err:
-> > +	rcu_read_unlock();
-> > +
-> > +	bpf_sk_storage_free(newsk);
-> > +	return ret;
-> > +}
-> > +
-> >  BPF_CALL_4(bpf_sk_storage_get, struct bpf_map *, map, struct sock *, sk,
-> >  	   void *, value, u64, flags)
-> >  {
-> >  	struct bpf_sk_storage_data *sdata;
-> >  
-> > -	if (flags > BPF_SK_STORAGE_GET_F_CREATE)
-> > +	if (flags & ~BPF_SK_STORAGE_GET_F_MASK)
-> > +		return (unsigned long)NULL;
-> > +
-> > +	if ((flags & BPF_SK_STORAGE_GET_F_CLONE) &&
-> > +	    !(flags & BPF_SK_STORAGE_GET_F_CREATE))
-> >  		return (unsigned long)NULL;
-> >  
-> >  	sdata = sk_storage_lookup(sk, map, true);
-> >  	if (sdata)
-> >  		return (unsigned long)sdata->data;
-> >  
-> > -	if (flags == BPF_SK_STORAGE_GET_F_CREATE &&
-> > +	if ((flags & BPF_SK_STORAGE_GET_F_CREATE) &&
-> >  	    /* Cannot add new elem to a going away sk.
-> >  	     * Otherwise, the new elem may become a leak
-> >  	     * (and also other memory issues during map
-> > @@ -762,6 +853,9 @@ BPF_CALL_4(bpf_sk_storage_get, struct bpf_map *, map, struct sock *, sk,
-> >  		/* sk must be a fullsock (guaranteed by verifier),
-> >  		 * so sock_gen_put() is unnecessary.
-> >  		 */
-> > +		if (!IS_ERR(sdata))
-> > +			SELEM(sdata)->clone =
-> > +				!!(flags & BPF_SK_STORAGE_GET_F_CLONE);
-> >  		sock_put(sk);
-> >  		return IS_ERR(sdata) ?
-> >  			(unsigned long)NULL : (unsigned long)sdata->data;
-> > diff --git a/net/core/sock.c b/net/core/sock.c
-> > index d57b0cc995a0..f5e801a9cea4 100644
-> > --- a/net/core/sock.c
-> > +++ b/net/core/sock.c
-> > @@ -1851,9 +1851,12 @@ struct sock *sk_clone_lock(const struct sock *sk, const gfp_t priority)
-> >  			goto out;
-> >  		}
-> >  		RCU_INIT_POINTER(newsk->sk_reuseport_cb, NULL);
-> > -#ifdef CONFIG_BPF_SYSCALL
-> > -		RCU_INIT_POINTER(newsk->sk_bpf_storage, NULL);
-> > -#endif
-> > +
-> > +		if (bpf_sk_storage_clone(sk, newsk)) {
-> > +			sk_free_unlock_clone(newsk);
-> > +			newsk = NULL;
-> > +			goto out;
-> > +		}
-> >  
-> >  		newsk->sk_err	   = 0;
-> >  		newsk->sk_err_soft = 0;
-> > -- 
-> > 2.22.0.770.g0f2c4a37fd-goog
-> > 
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+30c791a76814a3c6c9f9@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: use-after-free in tls_wait_data+0x884/0x980  
+net/tls/tls_sw.c:1261
+Read of size 8 at addr ffff88808ea9f890 by task syz-executor.2/31898
+
+CPU: 1 PID: 31898 Comm: syz-executor.2 Not tainted 5.3.0-rc2-next-20190802  
+#58
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x172/0x1f0 lib/dump_stack.c:113
+  print_address_description.cold+0xd4/0x306 mm/kasan/report.c:351
+  __kasan_report.cold+0x1b/0x36 mm/kasan/report.c:482
+  kasan_report+0x12/0x17 mm/kasan/common.c:610
+  __asan_report_load8_noabort+0x14/0x20 mm/kasan/generic_report.c:132
+  tls_wait_data+0x884/0x980 net/tls/tls_sw.c:1261
+  tls_sw_recvmsg+0x57d/0x17c0 net/tls/tls_sw.c:1730
+  inet_recvmsg+0x136/0x620 net/ipv4/af_inet.c:838
+  sock_recvmsg_nosec+0x89/0xb0 net/socket.c:871
+  ___sys_recvmsg+0x271/0x5a0 net/socket.c:2480
+  do_recvmmsg+0x27e/0x7a0 net/socket.c:2601
+  __sys_recvmmsg+0x259/0x270 net/socket.c:2680
+  __do_sys_recvmmsg net/socket.c:2703 [inline]
+  __se_sys_recvmmsg net/socket.c:2696 [inline]
+  __x64_sys_recvmmsg+0xe6/0x140 net/socket.c:2696
+  do_syscall_64+0xfa/0x760 arch/x86/entry/common.c:290
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x459829
+Code: fd b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7  
+48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 cb b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007f6093e3ec78 EFLAGS: 00000246 ORIG_RAX: 000000000000012b
+RAX: ffffffffffffffda RBX: 0000000000000005 RCX: 0000000000459829
+RDX: 0000000000000004 RSI: 00000000200031c0 RDI: 0000000000000003
+RBP: 000000000075bf20 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f6093e3f6d4
+R13: 00000000004c6d67 R14: 00000000004dc0a8 R15: 00000000ffffffff
+
+Allocated by task 31898:
+  save_stack+0x23/0x90 mm/kasan/common.c:69
+  set_track mm/kasan/common.c:77 [inline]
+  __kasan_kmalloc mm/kasan/common.c:486 [inline]
+  __kasan_kmalloc.constprop.0+0xcf/0xe0 mm/kasan/common.c:459
+  kasan_kmalloc+0x9/0x10 mm/kasan/common.c:500
+  kmem_cache_alloc_trace+0x158/0x790 mm/slab.c:3550
+  kmalloc include/linux/slab.h:552 [inline]
+  kzalloc include/linux/slab.h:686 [inline]
+  tls_set_sw_offload+0x110a/0x1567 net/tls/tls_sw.c:2243
+  do_tls_setsockopt_conf net/tls/tls_main.c:594 [inline]
+  do_tls_setsockopt net/tls/tls_main.c:630 [inline]
+  tls_setsockopt+0x68d/0x8d0 net/tls/tls_main.c:649
+  sock_common_setsockopt+0x94/0xd0 net/core/sock.c:3130
+  __sys_setsockopt+0x261/0x4c0 net/socket.c:2084
+  __do_sys_setsockopt net/socket.c:2100 [inline]
+  __se_sys_setsockopt net/socket.c:2097 [inline]
+  __x64_sys_setsockopt+0xbe/0x150 net/socket.c:2097
+  do_syscall_64+0xfa/0x760 arch/x86/entry/common.c:290
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+
+Freed by task 17:
+  save_stack+0x23/0x90 mm/kasan/common.c:69
+  set_track mm/kasan/common.c:77 [inline]
+  __kasan_slab_free+0x102/0x150 mm/kasan/common.c:448
+  kasan_slab_free+0xe/0x10 mm/kasan/common.c:456
+  __cache_free mm/slab.c:3425 [inline]
+  kfree+0x10a/0x2c0 mm/slab.c:3756
+  tls_sw_free_ctx_rx+0x31/0x40 net/tls/tls_sw.c:2145
+  tls_ctx_free_deferred+0xc4/0x130 net/tls/tls_main.c:279
+  process_one_work+0x9af/0x1740 kernel/workqueue.c:2269
+  worker_thread+0x98/0xe40 kernel/workqueue.c:2415
+  kthread+0x361/0x430 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+The buggy address belongs to the object at ffff88808ea9f680
+  which belongs to the cache kmalloc-1k of size 1024
+The buggy address is located 528 bytes inside of
+  1024-byte region [ffff88808ea9f680, ffff88808ea9fa80)
+The buggy address belongs to the page:
+page:ffffea00023aa780 refcount:1 mapcount:0 mapping:ffff8880aa400c40  
+index:0x0 compound_mapcount: 0
+flags: 0x1fffc0000010200(slab|head)
+raw: 01fffc0000010200 ffffea000295f888 ffffea00021f7908 ffff8880aa400c40
+raw: 0000000000000000 ffff88808ea9e000 0000000100000007 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+  ffff88808ea9f780: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff88808ea9f800: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> ffff88808ea9f880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                          ^
+  ffff88808ea9f900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff88808ea9f980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
