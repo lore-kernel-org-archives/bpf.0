@@ -5,159 +5,128 @@ X-Spam-Level:
 X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC966C31E40
-	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 21:52:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5ED06C31E40
+	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 21:52:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 79A162067D
-	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 21:52:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0DFA62067D
+	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 21:52:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QD2Q9TVx"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qCcbdR00"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727893AbfHLVw1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 12 Aug 2019 17:52:27 -0400
-Received: from mail-vk1-f202.google.com ([209.85.221.202]:46498 "EHLO
-        mail-vk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727892AbfHLVw0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 12 Aug 2019 17:52:26 -0400
-Received: by mail-vk1-f202.google.com with SMTP id j63so44921475vkc.13
-        for <bpf@vger.kernel.org>; Mon, 12 Aug 2019 14:52:26 -0700 (PDT)
+        id S1727315AbfHLVwq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 12 Aug 2019 17:52:46 -0400
+Received: from mail-pf1-f202.google.com ([209.85.210.202]:55429 "EHLO
+        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727927AbfHLVwp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 12 Aug 2019 17:52:45 -0400
+Received: by mail-pf1-f202.google.com with SMTP id 22so3119580pfn.22
+        for <bpf@vger.kernel.org>; Mon, 12 Aug 2019 14:52:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=2AgXEJvicJBSy/SRKWnK2/gvt/mXyTWKNhSQOzYorzg=;
-        b=QD2Q9TVxotj25Bb1ouljTvMCvR83QJDYk2233b6aDf5UyAOc4+c3u0nYzqK2HiP9Jd
-         mWjfm3fF7X8BxISaaea7HPxbpoGJAkgRdVmpjYKrjmNuH3MarsX7MS4wsNBe6G8n6f36
-         n47LxqcnSGzw6RtyrzlLPb+EQoVzrvthsOmuGkhCqDIEAEO62T+Ih/9XGutE8xHgaxex
-         niw/b9YZcCQAxTuG+nGc6XTtMhuRJ36Q9JkIWVX4S93KEdLzIXq0UIzJZCfKPIBEyf5h
-         yv65GUdyh/ZiBeRFUstxqphaAC9yA1yaTYOoX+hpm1aZ4CwSO39oD+vxLn1QJTqzYfuB
-         H22A==
+        bh=G35OOE0sSfMuupCpgKQ0U4p9HFNylMt7P/lVbiGjqC0=;
+        b=qCcbdR00iqgqZ/gG+jyOtF9Vncm844UkTWidc/xDIrreYwf0T8fY8OG5dIQRuiIxUe
+         FzmJOT/4MTg94OWbw0D9mWByCs1880fYzbD8pk0R6AkDeFsG731eVhxBT+J45lFhFbwf
+         mlOlBZtSLGRqW7vKpUirVuKzaLN7Rjm4AfAx434gpgHK8OnXp1izWDswYuMTZaX7/v+k
+         E5rmfQINbPC0sfjRL04ILiNYMQYE/0nCRU4hiRjda6N7E6/6+GyHD0Ng7d2h3RK1UWj6
+         dgszycG/x5ZESFf+qAorMsQgsHnfLzNx5F9k2KWcorwNp2pin4MzhBg34i9DY6K23R8/
+         UIAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=2AgXEJvicJBSy/SRKWnK2/gvt/mXyTWKNhSQOzYorzg=;
-        b=tgyD14INAdKlQGXrQZUEZSbEeVPFJKrhr9/0AsGCfrqHxsS9IQaCWSyAXX9fuyr4Yh
-         ulaK3lcULEzhhyEo7eaDw4aqnWogz9bW6CM4LicNBUH62QB4Cs4ogRhhgMEDyPP4TGAc
-         lpddEWIIgieGmTDC4WxWkxGNXvaJvG5PBL7Qb/nsAaWVAFSXzvkX8y+ztoDPycb4NZQE
-         G1wKYz+0txHNz72eILIxufDvcRujZHhJU+7tEKIQ6KM82Znb4e8k2vu9CJZkablLaAfj
-         CJ0Uewjwq5I6yp1M13wsxmw7mYMhV9Ekx290IcjL2YAS5CCEct17LK0qIh6QNmQO6w6c
-         iayA==
-X-Gm-Message-State: APjAAAUoHOKKYU32gB+k+zoZ9qOQw5eUEUqSFa/G9BPeHFxFWQwgZz7W
-        HHG/4orX5tJM1JLjBgj0SQizBVhN1TqhVtaiIsw=
-X-Google-Smtp-Source: APXvYqyYgGBEoezTTpIvU8mq/ZQBKS1RsoV2oTSHueva+H2OsTqtCQ71O4GdWT1QoPUyVfobIUtoTQjr5ewI4rtj4B0=
-X-Received: by 2002:a67:e447:: with SMTP id n7mr10737492vsm.115.1565646745461;
- Mon, 12 Aug 2019 14:52:25 -0700 (PDT)
-Date:   Mon, 12 Aug 2019 14:50:43 -0700
+        bh=G35OOE0sSfMuupCpgKQ0U4p9HFNylMt7P/lVbiGjqC0=;
+        b=hRl3WFQfKmOA28E3t2ayttUM512W5WT34CJgF9+Yy8PjHtNcyFdAv9gdv1+t9umxL6
+         IPc6UvH4uHBHiRWlq4sGhQ3cXIvYForIIfg0/qeg9/akd4831J93NpUI7BC76iWxaSyj
+         2hwHJMlWuvME71UdM+nmRl1F+yLdugeVpCT2Pt0ZgDw6ajV00XP63rikY77o9KPy4tBy
+         MvaPTelcxtb1b9052k89wsDg6o8CmGcNbEILVsHvC1t7waKCMwg1ePn7/gzGG7GCGnT3
+         bQ58DcPa0LyweTeL64zGTUsyLFntTK5gjK55ywtJeYVzMOd7Go3YOVPc8QAlHyxKD9Xt
+         yF8Q==
+X-Gm-Message-State: APjAAAXtm/1JCkwBYC6avd1KN+upt1nDy3cCRZk06XyEDa/idjTx+SkC
+        /uTJYLFnOIDCF8AuEOvTc6GMIB+W3bvGHDAnuA4=
+X-Google-Smtp-Source: APXvYqxLWMFYSVfr9/WeBe4JYuK0mMWVB3QFQmdMAe16b4tQpW2+ajfgokDvaDbjaNDG0XIPT7kh9+HxxjG7h46tDzs=
+X-Received: by 2002:a65:6114:: with SMTP id z20mr32341554pgu.141.1565646764247;
+ Mon, 12 Aug 2019 14:52:44 -0700 (PDT)
+Date:   Mon, 12 Aug 2019 14:50:45 -0700
 In-Reply-To: <20190812215052.71840-1-ndesaulniers@google.com>
-Message-Id: <20190812215052.71840-10-ndesaulniers@google.com>
+Message-Id: <20190812215052.71840-12-ndesaulniers@google.com>
 Mime-Version: 1.0
 References: <20190812215052.71840-1-ndesaulniers@google.com>
 X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
-Subject: [PATCH 10/16] powerpc: prefer __section and __printf from compiler_attributes.h
+Subject: [PATCH 12/16] arm64: prefer __section from compiler_attributes.h
 From:   Nick Desaulniers <ndesaulniers@google.com>
 To:     akpm@linux-foundation.org
 Cc:     sedat.dilek@gmail.com, jpoimboe@redhat.com, yhs@fb.com,
         miguel.ojeda.sandonis@gmail.com,
         clang-built-linux@googlegroups.com,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Geoff Levand <geoff@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>,
-        Allison Randal <allison@lohutok.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Andrey Konovalov <andreyknvl@google.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Rob Herring <robh@kernel.org>, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
+        Enrico Weigelt <info@metux.net>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Masayoshi Mizuma <m.mizuma@jp.fujitsu.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Allison Randal <allison@lohutok.net>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+GCC unescapes escaped string section names while Clang does not. Because
+__section uses the `#` stringification operator for the section name, it
+doesn't need to be escaped.
+
+This antipattern was found with:
+$ grep -e __section\(\" -e __section__\(\" -r
+
 Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
 Suggested-by: Josh Poimboeuf <jpoimboe@redhat.com>
 Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
- arch/powerpc/boot/main.c         | 3 +--
- arch/powerpc/boot/ps3.c          | 6 ++----
- arch/powerpc/include/asm/cache.h | 2 +-
- arch/powerpc/kernel/btext.c      | 2 +-
- 4 files changed, 5 insertions(+), 8 deletions(-)
+ arch/arm64/include/asm/cache.h     | 2 +-
+ arch/arm64/kernel/smp_spin_table.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/powerpc/boot/main.c b/arch/powerpc/boot/main.c
-index 102cc546444d..3ccc84e06fc4 100644
---- a/arch/powerpc/boot/main.c
-+++ b/arch/powerpc/boot/main.c
-@@ -150,8 +150,7 @@ static struct addr_range prep_initrd(struct addr_range vmlinux, void *chosen,
-  * edit the command line passed to vmlinux (by setting /chosen/bootargs).
-  * The buffer is put in it's own section so that tools may locate it easier.
-  */
--static char cmdline[BOOT_COMMAND_LINE_SIZE]
--	__attribute__((__section__("__builtin_cmdline")));
-+static char cmdline[BOOT_COMMAND_LINE_SIZE] __section(__builtin_cmdline);
+diff --git a/arch/arm64/include/asm/cache.h b/arch/arm64/include/asm/cache.h
+index 64eeaa41e7ca..43da6dd29592 100644
+--- a/arch/arm64/include/asm/cache.h
++++ b/arch/arm64/include/asm/cache.h
+@@ -78,7 +78,7 @@ static inline u32 cache_type_cwg(void)
+ 	return (read_cpuid_cachetype() >> CTR_CWG_SHIFT) & CTR_CWG_MASK;
+ }
  
- static void prep_cmdline(void *chosen)
- {
-diff --git a/arch/powerpc/boot/ps3.c b/arch/powerpc/boot/ps3.c
-index c52552a681c5..70b2ed82d2de 100644
---- a/arch/powerpc/boot/ps3.c
-+++ b/arch/powerpc/boot/ps3.c
-@@ -24,8 +24,7 @@ extern int lv1_get_repository_node_value(u64 in_1, u64 in_2, u64 in_3,
- #ifdef DEBUG
- #define DBG(fmt...) printf(fmt)
- #else
--static inline int __attribute__ ((format (printf, 1, 2))) DBG(
--	const char *fmt, ...) {return 0;}
-+static inline int __printf(1, 2) DBG(const char *fmt, ...) { return 0; }
- #endif
- 
- BSS_STACK(4096);
-@@ -35,8 +34,7 @@ BSS_STACK(4096);
-  * The buffer is put in it's own section so that tools may locate it easier.
-  */
- 
--static char cmdline[BOOT_COMMAND_LINE_SIZE]
--	__attribute__((__section__("__builtin_cmdline")));
-+static char cmdline[BOOT_COMMAND_LINE_SIZE] __section(__builtin_cmdline);
- 
- static void prep_cmdline(void *chosen)
- {
-diff --git a/arch/powerpc/include/asm/cache.h b/arch/powerpc/include/asm/cache.h
-index 45e3137ccd71..9114495855eb 100644
---- a/arch/powerpc/include/asm/cache.h
-+++ b/arch/powerpc/include/asm/cache.h
-@@ -91,7 +91,7 @@ static inline u32 l1_cache_bytes(void)
- 	isync
- 
- #else
 -#define __read_mostly __attribute__((__section__(".data..read_mostly")))
 +#define __read_mostly __section(.data..read_mostly)
  
- #ifdef CONFIG_PPC_BOOK3S_32
- extern long _get_L2CR(void);
-diff --git a/arch/powerpc/kernel/btext.c b/arch/powerpc/kernel/btext.c
-index 6dfceaa820e4..f57712a55815 100644
---- a/arch/powerpc/kernel/btext.c
-+++ b/arch/powerpc/kernel/btext.c
-@@ -26,7 +26,7 @@
- static void scrollscreen(void);
- #endif
+ static inline int cache_line_size_of_cpu(void)
+ {
+diff --git a/arch/arm64/kernel/smp_spin_table.c b/arch/arm64/kernel/smp_spin_table.c
+index 76c2739ba8a4..c8a3fee00c11 100644
+--- a/arch/arm64/kernel/smp_spin_table.c
++++ b/arch/arm64/kernel/smp_spin_table.c
+@@ -19,7 +19,7 @@
+ #include <asm/smp_plat.h>
  
--#define __force_data __attribute__((__section__(".data")))
-+#define __force_data __section(.data)
+ extern void secondary_holding_pen(void);
+-volatile unsigned long __section(".mmuoff.data.read")
++volatile unsigned long __section(.mmuoff.data.read)
+ secondary_holding_pen_release = INVALID_HWID;
  
- static int g_loc_X __force_data;
- static int g_loc_Y __force_data;
+ static phys_addr_t cpu_release_addr[NR_CPUS];
 -- 
 2.23.0.rc1.153.gdeed80330f-goog
 
