@@ -2,74 +2,71 @@ Return-Path: <SRS0=ULdP=WI=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD6DFC31E40
-	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 21:53:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33A2CC433FF
+	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 21:53:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 853A42067D
-	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 21:53:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 018292067D
+	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 21:53:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F7+jqw49"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hNh20e8y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728037AbfHLVxO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 12 Aug 2019 17:53:14 -0400
-Received: from mail-pf1-f202.google.com ([209.85.210.202]:45130 "EHLO
-        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727676AbfHLVxH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 12 Aug 2019 17:53:07 -0400
-Received: by mail-pf1-f202.google.com with SMTP id w16so2885060pfn.12
-        for <bpf@vger.kernel.org>; Mon, 12 Aug 2019 14:53:07 -0700 (PDT)
+        id S1727653AbfHLVxQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 12 Aug 2019 17:53:16 -0400
+Received: from mail-pf1-f201.google.com ([209.85.210.201]:46330 "EHLO
+        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728019AbfHLVxP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 12 Aug 2019 17:53:15 -0400
+Received: by mail-pf1-f201.google.com with SMTP id g185so4832328pfb.13
+        for <bpf@vger.kernel.org>; Mon, 12 Aug 2019 14:53:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=mebfbjlkEdZmmfTa81qyikO5W5onC7JtmBJnlT+apBs=;
-        b=F7+jqw49SQZDkzeeWOAGmc6Lc1h+SEKaJh0xlc/LAxLKe2v+de+46qMQvwT+4BkWvs
-         f8AKwNOC2CnnRVjmawfvPbXbdhxoRH91LyrcooNmXAxHmZ/SSIiRp7NP7qehBJkD9Olp
-         Ggic8vteYilEaiqd7MDETwi5wJ0mukkru6pKC350sgRkfmYpmA1Uf6c4JGCBq+4KCoFj
-         Zcd1QsAZD6fs0YID/HD9qvUSEmxUnQVeQOHFtt9VRuQrg3TjVMVYz9ZZaP6BYPbc4TbJ
-         UrL5f27WPHBtcOEV1KHCFIthMyxdDU2shC6ubPAwjtByDHIVqz1vzmt1fTLro53yIjGq
-         fxXw==
+        bh=YgAdSQNQK5RRSuTOz4Q5BGZbFQj3edcVyfEz3s8S5aQ=;
+        b=hNh20e8yVAqhC501qgqcjuQ0i5LsaslXsipm2xAXWGnGb/fVTvbBs56+3cEF/4psbR
+         vd+aCLC8rkY0yc37yiOqygu9ZiNGRR6yarB4fkirGOAro8tg2cx8l93sIAGipAPn8rZo
+         HCBTocL9vCapv5MkLz3aRzLVqG6tLK/eqcKOcHnzb8MhSx9FfSetfZt/RkQ10zrbmys3
+         5fVjDE57BoEhumHZ486AxaQU/nRIAyC++wlcT+r7wHIRC7tZzttTgf64G4KSFgsl6OQi
+         5kx9DR6BodIyaY71IWmvZSGc+LNmiqGmQZz0j35b68tXi7pnbaeiUp/z0XYqTyP+Z0HA
+         pvBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=mebfbjlkEdZmmfTa81qyikO5W5onC7JtmBJnlT+apBs=;
-        b=SrZ9+alLCuMp+5EoHneOKqTSqAgbdQo2IShIqc2c2VRulgODlwOKyto0VTOAEz/ncp
-         9XLEvMsEaXorOUKNjosle2lb+E/q2/pO+uUVqp5wzsZqvx70MKonLSmVllafw186ufP9
-         B9QJ4qTXITmloquQl5JWuFqYQA1c1K137ocs6bkgDh+BFYV/V/g9vt6rHznGOzUxIaIF
-         qqLBQWUZ0eWpvzT38K13hNoXGG9vLUVp4ro6odqvCkYVnIrLYaMsiAi+gl3dayZFTHvQ
-         KzRY+x81Dn0IBlQg8q9RScD/Eu+Uo6xrfcJDv8qAxzHiuzSpMywjcrhU/IPB1DoYE9Pl
-         xbhQ==
-X-Gm-Message-State: APjAAAUpHrGf3vKNIjbVljBE2X7r1dWsMiLswspORzh5RNDcoPe+AnSi
-        2lIu/Nx+j1tYdeZWkOycp94Y1w/ZPTGyVKf6pgg=
-X-Google-Smtp-Source: APXvYqzq0U1hjY8eWG6GSRKegcIlvhtHVnc6vSGEgTKw2aQOoeh9n5S0ZRoCoSIobu8VYEPAe+LSTHysytF0nT5E2UM=
-X-Received: by 2002:a63:4461:: with SMTP id t33mr31217445pgk.124.1565646786608;
- Mon, 12 Aug 2019 14:53:06 -0700 (PDT)
-Date:   Mon, 12 Aug 2019 14:50:48 -0700
+        bh=YgAdSQNQK5RRSuTOz4Q5BGZbFQj3edcVyfEz3s8S5aQ=;
+        b=VtNAFui3l/CE/6XqDUF45wheZL5uOkrUCI31Wqdf4BKV2NOi8l5Es9HTQYVnF9P1je
+         C0FIGd0WZAcvk8PyVknFErGM5rPFkeDhi0wGY68/N4/jVsEF1X7O/W/53dir13v6Tfv9
+         6bnbU9KUWtfFrHLYu5RkJBuyiaT8NcsMMfAGBAhA8V2SEEsKooY+xN1LtHD4JHzQGG7X
+         bnZXueC+bN//1q1NuIOB5BRzhBqw88clzGJFCkF4kW/g/s/HkfzW75PROJ4meNsOuScO
+         Hr/43timvAMyvoQeuoPygFZCJMhUyU4hLWbJBmlJk3JNBOS0oO85hVJBfSKBvofyprsJ
+         mFAw==
+X-Gm-Message-State: APjAAAWz4pDZTwJFm7jtvASN/CfR/xAfDg33SLey0CxPezLOlPxyAERM
+        UPhX/aBa2oR1IY4RuqbOZd7UmELddTgV+m/ttdc=
+X-Google-Smtp-Source: APXvYqzuPe5shinEGeMAlq/vxb2lm76ce6O1V98lxpu8cB801lah02QJsTdeJ8g1XyzdySS5v59I+RjN9L3C7txvZ7M=
+X-Received: by 2002:a63:f94c:: with SMTP id q12mr31466728pgk.10.1565646794664;
+ Mon, 12 Aug 2019 14:53:14 -0700 (PDT)
+Date:   Mon, 12 Aug 2019 14:50:50 -0700
 In-Reply-To: <20190812215052.71840-1-ndesaulniers@google.com>
-Message-Id: <20190812215052.71840-15-ndesaulniers@google.com>
+Message-Id: <20190812215052.71840-17-ndesaulniers@google.com>
 Mime-Version: 1.0
 References: <20190812215052.71840-1-ndesaulniers@google.com>
 X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
-Subject: [PATCH 15/16] include/linux/compiler.h: remove unused KENTRY macro
+Subject: [PATCH 00/16] treewide: prefer __section from compiler_attributes.h
 From:   Nick Desaulniers <ndesaulniers@google.com>
 To:     akpm@linux-foundation.org
 Cc:     sedat.dilek@gmail.com, jpoimboe@redhat.com, yhs@fb.com,
         miguel.ojeda.sandonis@gmail.com,
         clang-built-linux@googlegroups.com,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, linux-sparse@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Song Liu <songliubraving@fb.com>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
@@ -77,50 +74,83 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This macro is not used throughout the kernel. Delete it rather than
-update the __section to be a fully spelled out
-__attribute__((__section__())) to avoid
-https://bugs.llvm.org/show_bug.cgi?id=42950.
+GCC unescapes escaped string section names while Clang does not. Because
+__section uses the `#` stringification operator for the section name, it
+doesn't need to be escaped.
 
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
- include/linux/compiler.h | 23 -----------------------
- 1 file changed, 23 deletions(-)
+This fixes an Oops observed in distro's that use systemd and not
+net.core.bpf_jit_enable=1, when their kernels are compiled with Clang.
 
-diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-index 5e88e7e33abe..f01c1e527f85 100644
---- a/include/linux/compiler.h
-+++ b/include/linux/compiler.h
-@@ -136,29 +136,6 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
- } while (0)
- #endif
- 
--/*
-- * KENTRY - kernel entry point
-- * This can be used to annotate symbols (functions or data) that are used
-- * without their linker symbol being referenced explicitly. For example,
-- * interrupt vector handlers, or functions in the kernel image that are found
-- * programatically.
-- *
-- * Not required for symbols exported with EXPORT_SYMBOL, or initcalls. Those
-- * are handled in their own way (with KEEP() in linker scripts).
-- *
-- * KENTRY can be avoided if the symbols in question are marked as KEEP() in the
-- * linker script. For example an architecture could KEEP() its entire
-- * boot/exception vector code rather than annotate each function and data.
-- */
--#ifndef KENTRY
--# define KENTRY(sym)						\
--	extern typeof(sym) sym;					\
--	static const unsigned long __kentry_##sym		\
--	__used							\
--	__section("___kentry" "+" #sym )			\
--	= (unsigned long)&sym;
--#endif
--
- #ifndef RELOC_HIDE
- # define RELOC_HIDE(ptr, off)					\
-   ({ unsigned long __ptr;					\
+Instead, we should:
+1. Prefer __section(.section_name_no_quotes).
+2. Only use __attribute__((__section(".section"))) when creating the
+section name via C preprocessor (see the definition of __define_initcall
+in arch/um/include/shared/init.h).
+
+This antipattern was found with:
+$ grep -e __section\(\" -e __section__\(\" -r
+
+See the discussions in:
+https://bugs.llvm.org/show_bug.cgi?id=42950
+https://marc.info/?l=linux-netdev&m=156412960619946&w=2
+
+Nick Desaulniers (16):
+  s390/boot: fix section name escaping
+  arc: prefer __section from compiler_attributes.h
+  parisc: prefer __section from compiler_attributes.h
+  um: prefer __section from compiler_attributes.h
+  sh: prefer __section from compiler_attributes.h
+  ia64: prefer __section from compiler_attributes.h
+  arm: prefer __section from compiler_attributes.h
+  mips: prefer __section from compiler_attributes.h
+  sparc: prefer __section from compiler_attributes.h
+  powerpc: prefer __section and __printf from compiler_attributes.h
+  x86: prefer __section from compiler_attributes.h
+  arm64: prefer __section from compiler_attributes.h
+  include/asm-generic: prefer __section from compiler_attributes.h
+  include/linux: prefer __section from compiler_attributes.h
+  include/linux/compiler.h: remove unused KENTRY macro
+  compiler_attributes.h: add note about __section
+
+ arch/arc/include/asm/linkage.h        |  8 +++----
+ arch/arc/include/asm/mach_desc.h      |  3 +--
+ arch/arm/include/asm/cache.h          |  2 +-
+ arch/arm/include/asm/mach/arch.h      |  4 ++--
+ arch/arm/include/asm/setup.h          |  2 +-
+ arch/arm64/include/asm/cache.h        |  2 +-
+ arch/arm64/kernel/smp_spin_table.c    |  2 +-
+ arch/ia64/include/asm/cache.h         |  2 +-
+ arch/mips/include/asm/cache.h         |  2 +-
+ arch/parisc/include/asm/cache.h       |  2 +-
+ arch/parisc/include/asm/ldcw.h        |  2 +-
+ arch/powerpc/boot/main.c              |  3 +--
+ arch/powerpc/boot/ps3.c               |  6 ++----
+ arch/powerpc/include/asm/cache.h      |  2 +-
+ arch/powerpc/kernel/btext.c           |  2 +-
+ arch/s390/boot/startup.c              |  2 +-
+ arch/sh/include/asm/cache.h           |  2 +-
+ arch/sparc/include/asm/cache.h        |  2 +-
+ arch/sparc/kernel/btext.c             |  2 +-
+ arch/um/kernel/um_arch.c              |  6 +++---
+ arch/x86/include/asm/cache.h          |  2 +-
+ arch/x86/include/asm/intel-mid.h      |  2 +-
+ arch/x86/include/asm/iommu_table.h    |  5 ++---
+ arch/x86/include/asm/irqflags.h       |  2 +-
+ arch/x86/include/asm/mem_encrypt.h    |  2 +-
+ arch/x86/kernel/cpu/cpu.h             |  3 +--
+ include/asm-generic/error-injection.h |  2 +-
+ include/asm-generic/kprobes.h         |  5 ++---
+ include/linux/cache.h                 |  6 +++---
+ include/linux/compiler.h              | 31 ++++-----------------------
+ include/linux/compiler_attributes.h   | 10 +++++++++
+ include/linux/cpu.h                   |  2 +-
+ include/linux/export.h                |  2 +-
+ include/linux/init_task.h             |  4 ++--
+ include/linux/interrupt.h             |  5 ++---
+ include/linux/sched/debug.h           |  2 +-
+ include/linux/srcutree.h              |  2 +-
+ 37 files changed, 62 insertions(+), 83 deletions(-)
+
 -- 
 2.23.0.rc1.153.gdeed80330f-goog
 
