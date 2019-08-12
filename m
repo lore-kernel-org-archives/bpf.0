@@ -2,109 +2,58 @@ Return-Path: <SRS0=ULdP=WI=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFABAC31E40
-	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 21:53:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23B8FC31E40
+	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 22:13:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 82038206C2
-	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 21:53:20 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oZgJljpX"
+	by mail.kernel.org (Postfix) with ESMTP id F393F2070C
+	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 22:13:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728030AbfHLVxO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 12 Aug 2019 17:53:14 -0400
-Received: from mail-pl1-f202.google.com ([209.85.214.202]:34557 "EHLO
-        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727705AbfHLVxL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 12 Aug 2019 17:53:11 -0400
-Received: by mail-pl1-f202.google.com with SMTP id 71so61871751pld.1
-        for <bpf@vger.kernel.org>; Mon, 12 Aug 2019 14:53:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=bLIn7GLHipF5J2aM8u4yisb20ADo6gvdLQjWA3nqqto=;
-        b=oZgJljpXQ94rk2zW18vXcsZCcgjkqaEK0PFChQqFNUt9eJvRqpG4FjIx2VGo1ax+1W
-         9LkZEFvnvQf02vEHwbNRr57CpoAZW18go0riE7ej7s/xKszlrapE+MB3qeBOdD41evqx
-         DU/YJ3BMfUdNEQOHFc1G7SKXOnpMfO94pUpF3H4pDLqDZ0XeWgLwLDyFySqSY/dQVASg
-         J0uwn4XLMvLP/6jEpQwjOMjhtDAFTa8TRYsI2q22JG9aSl4NCpQnF6uaDWBntIPKGNnk
-         s7TFZyujRoUAZr7YPCUNvKLYOIrCxj6HqiLrCocg+2h8u1GCXmYVb8HRMIDn3qr+bKHb
-         9SHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=bLIn7GLHipF5J2aM8u4yisb20ADo6gvdLQjWA3nqqto=;
-        b=bHFWEn0Jb+n/HWFP55Vo4wp+rLPFWH+YAc2ja5wVyiIpxxy57XRCStnIw34vdw+KgF
-         17j4+7agv0jlO0pkDbuAyVYv3575cmPStPzVth7+5FfEzEFx3rAXGqOoglLF46KRi7sD
-         wiD8IbV2or1asX9JkgWZuC56zb+zgG10BAi/nk1xGoPl5/CcMEQeJexe4w6v/lnLo2XV
-         /OnG6hej51IBY4J3zNzAaGjfWVZrC90b1lRUVmVBj5nJ0IxnOLyeZ5IulXf7xcq+TH2q
-         E9SZe3GglvkajytgdNAqhy5nWZtFTdg5vU/CMG3zfsLEtJVuq29abPdRHm3I7j/0tMB+
-         FehQ==
-X-Gm-Message-State: APjAAAXu9dxEfoYVQPVYq4zBj7jPzMMpoikg+lg+P6naDZaVLiq0A1MA
-        HMNichgIhG33k2lYDn6JXnGYXgChoN5VdqnhgGw=
-X-Google-Smtp-Source: APXvYqw4GsYyT7mhjnCkdsxNxaVETRuyF5MdPuiPgtTE/mHJhvlyJgo0ZkJMKWtagGQzpcMCTnaLpGCyUdZCqpaIfbg=
-X-Received: by 2002:a65:6093:: with SMTP id t19mr981443pgu.79.1565646790802;
- Mon, 12 Aug 2019 14:53:10 -0700 (PDT)
-Date:   Mon, 12 Aug 2019 14:50:49 -0700
-In-Reply-To: <20190812215052.71840-1-ndesaulniers@google.com>
-Message-Id: <20190812215052.71840-16-ndesaulniers@google.com>
-Mime-Version: 1.0
-References: <20190812215052.71840-1-ndesaulniers@google.com>
-X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
-Subject: [PATCH 16/16] compiler_attributes.h: add note about __section
-From:   Nick Desaulniers <ndesaulniers@google.com>
-To:     akpm@linux-foundation.org
-Cc:     sedat.dilek@gmail.com, jpoimboe@redhat.com, yhs@fb.com,
-        miguel.ojeda.sandonis@gmail.com,
-        clang-built-linux@googlegroups.com,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org,
+        id S1726632AbfHLWNt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 12 Aug 2019 18:13:49 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:52246 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726602AbfHLWNt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 12 Aug 2019 18:13:49 -0400
+Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::d71])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id D331A1264D004;
+        Mon, 12 Aug 2019 15:13:47 -0700 (PDT)
+Date:   Mon, 12 Aug 2019 15:13:44 -0700 (PDT)
+Message-Id: <20190812.151344.808737276838117231.davem@davemloft.net>
+To:     ndesaulniers@google.com
+Cc:     akpm@linux-foundation.org, sedat.dilek@gmail.com,
+        jpoimboe@redhat.com, yhs@fb.com, miguel.ojeda.sandonis@gmail.com,
+        clang-built-linux@googlegroups.com, ast@kernel.org,
+        daniel@iogearbox.net, kafai@fb.com, songliubraving@fb.com,
+        sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 09/16] sparc: prefer __section from
+ compiler_attributes.h
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20190812215052.71840-9-ndesaulniers@google.com>
+References: <20190812215052.71840-1-ndesaulniers@google.com>
+        <20190812215052.71840-9-ndesaulniers@google.com>
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 12 Aug 2019 15:13:48 -0700 (PDT)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The antipattern described can be found with:
-$ grep -e __section\(\" -r -e __section__\(\"
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 12 Aug 2019 14:50:42 -0700
 
-Link: https://bugs.llvm.org/show_bug.cgi?id=42950
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
- include/linux/compiler_attributes.h | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+> Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Suggested-by: Josh Poimboeuf <jpoimboe@redhat.com>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
-index 6b318efd8a74..f8c008d7f616 100644
---- a/include/linux/compiler_attributes.h
-+++ b/include/linux/compiler_attributes.h
-@@ -225,6 +225,16 @@
- #define __pure                          __attribute__((__pure__))
- 
- /*
-+ *  Note: Since this macro makes use of the "stringification operator" `#`, a
-+ *        quoted string literal should not be passed to it. eg.
-+ *        prefer:
-+ *        __section(.foo)
-+ *        to:
-+ *        __section(".foo")
-+ *        unless the section name is dynamically built up, in which case the
-+ *        verbose __attribute__((__section__(".foo" x))) should be preferred.
-+ *        See also: https://bugs.llvm.org/show_bug.cgi?id=42950
-+ *
-  *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-section-function-attribute
-  *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-section-variable-attribute
-  * clang: https://clang.llvm.org/docs/AttributeReference.html#section-declspec-allocate
--- 
-2.23.0.rc1.153.gdeed80330f-goog
-
+Acked-by: David S. Miller <davem@davemloft.net>
