@@ -2,35 +2,61 @@ Return-Path: <SRS0=ULdP=WI=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FC5DC31E40
-	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 07:24:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3E66C31E40
+	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 07:39:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E3E7E206C2
-	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 07:24:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6D2062085A
+	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 07:39:45 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UZbvpYbc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726877AbfHLHYf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 12 Aug 2019 03:24:35 -0400
-Received: from mga09.intel.com ([134.134.136.24]:18977 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725901AbfHLHYf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 12 Aug 2019 03:24:35 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Aug 2019 00:24:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,376,1559545200"; 
-   d="scan'208";a="193899225"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.122]) ([10.237.72.122])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Aug 2019 00:24:28 -0700
-Subject: Re: [PATCH v4 1/2] perf machine: Support arch's specific kernel start
- address
-To:     Leo Yan <leo.yan@linaro.org>
+        id S1726931AbfHLHjk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 12 Aug 2019 03:39:40 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:42629 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726785AbfHLHjk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 12 Aug 2019 03:39:40 -0400
+Received: by mail-pf1-f194.google.com with SMTP id i30so571489pfk.9
+        for <bpf@vger.kernel.org>; Mon, 12 Aug 2019 00:39:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=2quQnHJeT9Fa5IrcwEwRCo1YcerZTXomN5HFRZFMkZA=;
+        b=UZbvpYbcRKMB/b1QsY8X3xIXLrbQEdCpA4iv13KRfFJsy7ZRirVFICaxDYOri61lmI
+         /kPemgdrhQXdHaDh5SYmHoB06YaJICbPKKh5UjTUqeOZPR0/yAVReQ981EUoIPLWHoue
+         HdNp0+7bLSTsZQ3ZzvBkRI4aNF8cSRi6tEwa3xCZMoD3V//LdModJ5MZxOCsiEGWUmwf
+         5ftBQ9yml82PT+YSCWCIa/cGWj7xRg6+KIfxzDqQz95QAfsqF5syMu2pj7crCYOp5MwK
+         lZ3e2Qxq9uOgPMIZ4d7gc7E8ffRUBNVI8KTgbRriTGU/JNG6ndglyx8GhUTUP9KaHqCA
+         CUig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=2quQnHJeT9Fa5IrcwEwRCo1YcerZTXomN5HFRZFMkZA=;
+        b=k3I3ZTshPx8pJAdYFrwEUt2+lQOEurZSpNcmvbs0ThXhmVCsXx03t4FUS/Mxe8Wg+o
+         ifzWohCjMhAaDL/oDeKILiAiKrTn79fIa7pY2C4q+ecCG3iH6VfArSh/uaVKujvuohyo
+         FaNcHI4RVOnZ4o4q2ag+OB63wY7s1Q2DCbg3PAt+jDfQclfJqS4RrNt77MIflHesMEw6
+         4y8fAlKkZhQ2YBvuNG6QL+K/TBGAizw9vz1QcB707e/ISCqpT7SOtKuBGHH/Zk2pNWaf
+         YwLurPSYiPt7NlaJAYTZ5OTqVmmChEbxLWS5VNe45uQ7Qu+6AXXjzJ4etlQ+qbojHGrR
+         QLlg==
+X-Gm-Message-State: APjAAAXxRIUZmX17NK50D9THaawn1iQflpPTBUGgd4Kq70l8Mxb/+nFj
+        9gvLsgtFuNKvWuyAbRXKI5ax1Q==
+X-Google-Smtp-Source: APXvYqxsTbOEkvNmm97I6dKg6Jvq/xPehRt6IenrYIjfZP9tbVsVlR9H+zzFNqA/n8mNeFGwsh9AAw==
+X-Received: by 2002:a65:4505:: with SMTP id n5mr26188138pgq.301.1565595579238;
+        Mon, 12 Aug 2019 00:39:39 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s (li456-16.members.linode.com. [50.116.10.16])
+        by smtp.gmail.com with ESMTPSA id k6sm115551672pfi.12.2019.08.12.00.39.33
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 12 Aug 2019 00:39:38 -0700 (PDT)
+Date:   Mon, 12 Aug 2019 15:39:31 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>
 Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Jiri Olsa <jolsa@redhat.com>,
@@ -48,172 +74,123 @@ Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, clang-built-linux@googlegroups.com,
         Mathieu Poirier <mathieu.poirier@linaro.org>
+Subject: Re: [PATCH v4 1/2] perf machine: Support arch's specific kernel
+ start address
+Message-ID: <20190812073931.GB8062@leoy-ThinkPad-X240s>
 References: <20190810072135.27072-1-leo.yan@linaro.org>
  <20190810072135.27072-2-leo.yan@linaro.org>
  <c1818f6f-37df-6971-fddc-6663e5b6ff95@intel.com>
  <20190812070236.GA8062@leoy-ThinkPad-X240s>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <250165c6-908a-c57e-8d83-03da4272f568@intel.com>
-Date:   Mon, 12 Aug 2019 10:23:21 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+ <250165c6-908a-c57e-8d83-03da4272f568@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20190812070236.GA8062@leoy-ThinkPad-X240s>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <250165c6-908a-c57e-8d83-03da4272f568@intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 12/08/19 10:02 AM, Leo Yan wrote:
-> On Mon, Aug 12, 2019 at 09:37:33AM +0300, Adrian Hunter wrote:
->> On 10/08/19 10:21 AM, Leo Yan wrote:
->>> machine__get_kernel_start() gives out the kernel start address; some
->>> architectures need to tweak the start address so that can reflect the
->>> kernel start address correctly.  This is not only for x86_64 arch, but
->>> it is also required by other architectures, e.g. arm/arm64 needs to
->>> tweak the kernel start address so can include the kernel memory regions
->>> which are used before the '_stext' symbol.
->>>
->>> This patch refactors machine__get_kernel_start() by adding a weak
->>> arch__fix_kernel_text_start(), any architecture can implement it to
->>> tweak its specific start address; this also allows the arch specific
->>> code to be placed into 'arch' folder.
->>>
->>> Signed-off-by: Leo Yan <leo.yan@linaro.org>
->>> ---
->>>  tools/perf/arch/x86/util/machine.c | 10 ++++++++++
->>>  tools/perf/util/machine.c          | 13 +++++++------
->>>  tools/perf/util/machine.h          |  2 ++
->>>  3 files changed, 19 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/tools/perf/arch/x86/util/machine.c b/tools/perf/arch/x86/util/machine.c
->>> index 1e9ec783b9a1..9f012131534a 100644
->>> --- a/tools/perf/arch/x86/util/machine.c
->>> +++ b/tools/perf/arch/x86/util/machine.c
->>> @@ -101,4 +101,14 @@ int machine__create_extra_kernel_maps(struct machine *machine,
->>>  	return ret;
->>>  }
->>>  
->>> +void arch__fix_kernel_text_start(u64 *start)
->>> +{
->>> +	/*
->>> +	 * On x86_64, PTI entry trampolines are less than the
->>> +	 * start of kernel text, but still above 2^63. So leave
->>> +	 * kernel_start = 1ULL << 63 for x86_64.
->>> +	 */
->>> +	*start = 1ULL << 63;
->>> +}
->>
->> That is needed for reporting x86 data on any arch i.e. it is not specific to
->> the compile-time architecture, it is specific to the perf.data file
->> architecture, which is what machine__is() compares. So, this looks wrong.
+On Mon, Aug 12, 2019 at 10:23:21AM +0300, Adrian Hunter wrote:
+> On 12/08/19 10:02 AM, Leo Yan wrote:
+> > On Mon, Aug 12, 2019 at 09:37:33AM +0300, Adrian Hunter wrote:
+> >> On 10/08/19 10:21 AM, Leo Yan wrote:
+> >>> machine__get_kernel_start() gives out the kernel start address; some
+> >>> architectures need to tweak the start address so that can reflect the
+> >>> kernel start address correctly.  This is not only for x86_64 arch, but
+> >>> it is also required by other architectures, e.g. arm/arm64 needs to
+> >>> tweak the kernel start address so can include the kernel memory regions
+> >>> which are used before the '_stext' symbol.
+> >>>
+> >>> This patch refactors machine__get_kernel_start() by adding a weak
+> >>> arch__fix_kernel_text_start(), any architecture can implement it to
+> >>> tweak its specific start address; this also allows the arch specific
+> >>> code to be placed into 'arch' folder.
+> >>>
+> >>> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> >>> ---
+> >>>  tools/perf/arch/x86/util/machine.c | 10 ++++++++++
+> >>>  tools/perf/util/machine.c          | 13 +++++++------
+> >>>  tools/perf/util/machine.h          |  2 ++
+> >>>  3 files changed, 19 insertions(+), 6 deletions(-)
+> >>>
+> >>> diff --git a/tools/perf/arch/x86/util/machine.c b/tools/perf/arch/x86/util/machine.c
+> >>> index 1e9ec783b9a1..9f012131534a 100644
+> >>> --- a/tools/perf/arch/x86/util/machine.c
+> >>> +++ b/tools/perf/arch/x86/util/machine.c
+> >>> @@ -101,4 +101,14 @@ int machine__create_extra_kernel_maps(struct machine *machine,
+> >>>  	return ret;
+> >>>  }
+> >>>  
+> >>> +void arch__fix_kernel_text_start(u64 *start)
+> >>> +{
+> >>> +	/*
+> >>> +	 * On x86_64, PTI entry trampolines are less than the
+> >>> +	 * start of kernel text, but still above 2^63. So leave
+> >>> +	 * kernel_start = 1ULL << 63 for x86_64.
+> >>> +	 */
+> >>> +	*start = 1ULL << 63;
+> >>> +}
+> >>
+> >> That is needed for reporting x86 data on any arch i.e. it is not specific to
+> >> the compile-time architecture, it is specific to the perf.data file
+> >> architecture, which is what machine__is() compares. So, this looks wrong.
+> > 
+> > Thanks for reviewing, Adrian.
+> > 
+> > If so, I think we should extend the function machine__get_kernel_start()
+> > as below; for building successfully, will always define the macro
+> > ARM_PRE_START_SIZE in Makefile.config.
+> > 
+> > @Arnaldo, @Adrian, Please let me know if this works for you?
 > 
-> Thanks for reviewing, Adrian.
+> I don't know how you intend to calculate ARM_PRE_START_SIZE, but below is OK
+> for x86.
 > 
-> If so, I think we should extend the function machine__get_kernel_start()
-> as below; for building successfully, will always define the macro
-> ARM_PRE_START_SIZE in Makefile.config.
+> > 
+> > diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+> > index f6ee7fbad3e4..30a0ff627263 100644
+> > --- a/tools/perf/util/machine.c
+> > +++ b/tools/perf/util/machine.c
+> > @@ -2687,13 +2687,26 @@ int machine__get_kernel_start(struct machine *machine)
+> >         machine->kernel_start = 1ULL << 63;
+> >         if (map) {
+> >                 err = map__load(map);
+> > +               if (err)
+> > +                       return err;
+> > +
+> >                 /*
+> >                  * On x86_64, PTI entry trampolines are less than the
+> >                  * start of kernel text, but still above 2^63. So leave
+> >                  * kernel_start = 1ULL << 63 for x86_64.
+> >                  */
+> > -               if (!err && !machine__is(machine, "x86_64"))
+> > +               if (!machine__is(machine, "x86_64"))
+> >                         machine->kernel_start = map->start;
+> > +
+> > +               /*
+> > +                * On arm/arm64, some memory regions are prior to '_stext'
+> > +                * symbol; to reflect the complete kernel address space,
+> > +                * compensate these pre-defined regions for kernel start
+> > +                * address.
+> > +                */
+> > +               if (machine__is(machine, "arm64") ||
+> > +                   machine__is(machine, "arm"))
 > 
-> @Arnaldo, @Adrian, Please let me know if this works for you?
+> machine__is() does not normalize the architecture, so you may want to use
+> perf_env__arch() instead.
 
-I don't know how you intend to calculate ARM_PRE_START_SIZE, but below is OK
-for x86.
+You are right, thanks for suggestion.  Will use perf_env__arch() in
+next spin.
+
+Thanks,
+Leo Yan
 
 > 
-> diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-> index f6ee7fbad3e4..30a0ff627263 100644
-> --- a/tools/perf/util/machine.c
-> +++ b/tools/perf/util/machine.c
-> @@ -2687,13 +2687,26 @@ int machine__get_kernel_start(struct machine *machine)
->         machine->kernel_start = 1ULL << 63;
->         if (map) {
->                 err = map__load(map);
-> +               if (err)
-> +                       return err;
-> +
->                 /*
->                  * On x86_64, PTI entry trampolines are less than the
->                  * start of kernel text, but still above 2^63. So leave
->                  * kernel_start = 1ULL << 63 for x86_64.
->                  */
-> -               if (!err && !machine__is(machine, "x86_64"))
-> +               if (!machine__is(machine, "x86_64"))
->                         machine->kernel_start = map->start;
-> +
-> +               /*
-> +                * On arm/arm64, some memory regions are prior to '_stext'
-> +                * symbol; to reflect the complete kernel address space,
-> +                * compensate these pre-defined regions for kernel start
-> +                * address.
-> +                */
-> +               if (machine__is(machine, "arm64") ||
-> +                   machine__is(machine, "arm"))
+> > +                       machine->kernel_start -= ARM_PRE_START_SIZE;
+> >         }
+> >         return err;
+> >  }
 
-machine__is() does not normalize the architecture, so you may want to use
-perf_env__arch() instead.
-
-> +                       machine->kernel_start -= ARM_PRE_START_SIZE;
->         }
->         return err;
->  }
-> 
-> Thanks,
-> Leo Yan
-> 
->>> +
->>>  #endif
->>> diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
->>> index f6ee7fbad3e4..603518835692 100644
->>> --- a/tools/perf/util/machine.c
->>> +++ b/tools/perf/util/machine.c
->>> @@ -2671,6 +2671,10 @@ int machine__nr_cpus_avail(struct machine *machine)
->>>  	return machine ? perf_env__nr_cpus_avail(machine->env) : 0;
->>>  }
->>>  
->>> +void __weak arch__fix_kernel_text_start(u64 *start __maybe_unused)
->>> +{
->>> +}
->>> +
->>>  int machine__get_kernel_start(struct machine *machine)
->>>  {
->>>  	struct map *map = machine__kernel_map(machine);
->>> @@ -2687,14 +2691,11 @@ int machine__get_kernel_start(struct machine *machine)
->>>  	machine->kernel_start = 1ULL << 63;
->>>  	if (map) {
->>>  		err = map__load(map);
->>> -		/*
->>> -		 * On x86_64, PTI entry trampolines are less than the
->>> -		 * start of kernel text, but still above 2^63. So leave
->>> -		 * kernel_start = 1ULL << 63 for x86_64.
->>> -		 */
->>> -		if (!err && !machine__is(machine, "x86_64"))
->>> +		if (!err)
->>>  			machine->kernel_start = map->start;
->>>  	}
->>> +
->>> +	arch__fix_kernel_text_start(&machine->kernel_start);
->>>  	return err;
->>>  }
->>>  
->>> diff --git a/tools/perf/util/machine.h b/tools/perf/util/machine.h
->>> index ef803f08ae12..9cb459f4bfbc 100644
->>> --- a/tools/perf/util/machine.h
->>> +++ b/tools/perf/util/machine.h
->>> @@ -278,6 +278,8 @@ void machine__get_kallsyms_filename(struct machine *machine, char *buf,
->>>  int machine__create_extra_kernel_maps(struct machine *machine,
->>>  				      struct dso *kernel);
->>>  
->>> +void arch__fix_kernel_text_start(u64 *start);
->>> +
->>>  /* Kernel-space maps for symbols that are outside the main kernel map and module maps */
->>>  struct extra_kernel_map {
->>>  	u64 start;
->>>
->>
-> 
-
+[...]
