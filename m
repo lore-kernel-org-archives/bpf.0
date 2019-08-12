@@ -7,70 +7,75 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3636EC31E40
-	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 21:52:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2BEFC32750
+	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 21:52:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EF32F2075B
-	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 21:52:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B74DB206C2
+	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 21:52:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="J+mGdp7X"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GOYts8y6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727611AbfHLVvw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 12 Aug 2019 17:51:52 -0400
-Received: from mail-qk1-f202.google.com ([209.85.222.202]:32864 "EHLO
-        mail-qk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727763AbfHLVvu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 12 Aug 2019 17:51:50 -0400
-Received: by mail-qk1-f202.google.com with SMTP id f22so13379710qkg.0
-        for <bpf@vger.kernel.org>; Mon, 12 Aug 2019 14:51:50 -0700 (PDT)
+        id S1727812AbfHLVwG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 12 Aug 2019 17:52:06 -0400
+Received: from mail-qk1-f201.google.com ([209.85.222.201]:53974 "EHLO
+        mail-qk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727726AbfHLVwF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 12 Aug 2019 17:52:05 -0400
+Received: by mail-qk1-f201.google.com with SMTP id d11so94553811qkb.20
+        for <bpf@vger.kernel.org>; Mon, 12 Aug 2019 14:52:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=dkl7/UCGpL+NlP2/x1g4PAFoM8egHhu+Vinm7RBGZqk=;
-        b=J+mGdp7Xm+87VwfjayUFTm4z6KIjoLKr3G5/6jbsKjKiWWIavprKB+X7dmk0l9Bx8F
-         onSRT1QJl9t/AsSUb7lT5itZEaf1B4LthCvRbfAWbm/I4HV9vsfjoxoUO6mofTuRYqBk
-         QTMiE2dznF57pZEAp4uQD5dk+pVLIclEK1thrPGBYjJh5Sxq9A2Qq/K1ErbvAnsf/NbL
-         H0siglRdh1L/K6vWMFosRpOdO6OhF8/2McAILUeNkj8aeoy+x9pm/NMyc5ueAlhUBX7q
-         7F81YB86R3OsMbHXv+SUQCqqSSDQh7B55g3uz+4czgFjrQGi1eUJ/VLLgzCmLQxj34Bi
-         PjzA==
+        bh=4H9PWcGFWTnQRRpR6qzftNQ0lP7jmcpJc1z5bvKXC0c=;
+        b=GOYts8y62z5hDG5UBvKTyRA53eo64IPfTWzoj20oJPWRcHrTKxwsvLxh3a4n5gbZEv
+         PEmhfuyQJErUyzHsQgmc+BxiQ+0zaHqdQPYkHNoGmXn1M/p3nNSyCS4YS+QnjsSu15e/
+         4p9ECmVJbtW52/m719Gd9XDThtFlJaVi8EAw8eYS5rrF7pNdIpC8S3YQAtKU4R/HoM1y
+         BQi3xcPQqrL81dRaMBvh/8Aty6jeE0XDlyzQopxkixPirRMhNQ2BW7dcG4t34N56iTRJ
+         t5GaJvbA2lpJTkd80ffPOg6j49O1q9MIvTWyeV3HEdK0REH1ZKW2JM3VYuddT4rKkiLa
+         91eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=dkl7/UCGpL+NlP2/x1g4PAFoM8egHhu+Vinm7RBGZqk=;
-        b=NsMtxL0QyHcxf0AeUvha2aAWfwc5urSO7T+6oU8rGEHvV0tfX5EdYbvyiVLglzCAg1
-         u2kIVkALDsIBnGqUxyQAojwMbQXbrzmbxsFyX+gO6CwhW4kGfKw17wA5ioxc6zbaGmUb
-         jB99B/kyKbJuUdusgosrOOaxYsASA4nW8opMBWR4TEyrWkqVocjiLrc89aoe6j44Y8gG
-         imQKWeldEwVpkrTx/U+FSjvInghc4+Njzl4UEOTrZk6vE1J3Htl8a2Z7HPT5V0DWpr3o
-         eUdrMmFrkZ2eI+RHnzXI7Mr8ptx42MPL3XlvwLdjUsAalmsOAAR8mziylx1q54p9PZqs
-         gFVw==
-X-Gm-Message-State: APjAAAUZIFYTCt/LRsk267+Im2UcCHX36XxZ2oIb6RralDoyEZT/+zsI
-        yuI7UhVjwOMFX1Vzq9R9AnNr6e8WZxO17VJ+3xc=
-X-Google-Smtp-Source: APXvYqyIVNZp/lKbPY7G8paK5xKsgjgvn231PYi/oi7bEXYUfhmPaZX/hLJikIpebz1OJaGj/71NLcX6GrZgVy6zIas=
-X-Received: by 2002:a05:6214:1086:: with SMTP id o6mr17437802qvr.107.1565646709559;
- Mon, 12 Aug 2019 14:51:49 -0700 (PDT)
-Date:   Mon, 12 Aug 2019 14:50:38 -0700
+        bh=4H9PWcGFWTnQRRpR6qzftNQ0lP7jmcpJc1z5bvKXC0c=;
+        b=bqqRX/lhBmvyQmgsKbq7USGs7xMhc0Sc8tj9c1IZponK170zX9prbR85kSRj+oegop
+         HkzeUd3esIYOdyoxS6BO+TvIMdvb1tPaghb2hS20vK8uKCEWQNxA3z8NkZu3/MVjh9PZ
+         Bb0XYdIsfGcgv66i+Xkzt2mnoImqReaekJWba23qt6GhWAkyPcmKJnj+fRXqEe5+Riid
+         lcVxBo8ZRh63ZmZ343LUFgqQ2NzFhWYphxlFvxAv6gOfjpyue526pOuWSqUXSxybf1N8
+         XZAOHELFhbn0geDPtrnZRML7hWVi3RRYfN4ll3DaYNj4XAiL4BRlywWHbi9qO3Y6kat7
+         hb6Q==
+X-Gm-Message-State: APjAAAWZPMr9YkASj964zV5H/VhhHMIv22bgBefGJBIUNi7PJJJ0qUl/
+        qbgBINjP08PHmDxM9NqiWuaKkPMpM326Ps6Prb0=
+X-Google-Smtp-Source: APXvYqwes1gV2IDw+8Qi/1BZf+2RvRVqWZMirG+2WSzT6D2Sl6v9dobOMCg6A6UD4p/INQTsMrciAWtKuTDBsrcdsyU=
+X-Received: by 2002:ac8:45d2:: with SMTP id e18mr6288417qto.241.1565646724122;
+ Mon, 12 Aug 2019 14:52:04 -0700 (PDT)
+Date:   Mon, 12 Aug 2019 14:50:40 -0700
 In-Reply-To: <20190812215052.71840-1-ndesaulniers@google.com>
-Message-Id: <20190812215052.71840-5-ndesaulniers@google.com>
+Message-Id: <20190812215052.71840-7-ndesaulniers@google.com>
 Mime-Version: 1.0
 References: <20190812215052.71840-1-ndesaulniers@google.com>
 X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
-Subject: [PATCH 05/16] sh: prefer __section from compiler_attributes.h
+Subject: [PATCH 07/16] arm: prefer __section from compiler_attributes.h
 From:   Nick Desaulniers <ndesaulniers@google.com>
 To:     akpm@linux-foundation.org
 Cc:     sedat.dilek@gmail.com, jpoimboe@redhat.com, yhs@fb.com,
         miguel.ojeda.sandonis@gmail.com,
         clang-built-linux@googlegroups.com,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
+        Russell King <linux@armlinux.org.uk>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, linux-sh@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
+        Song Liu <songliubraving@fb.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Allison Randal <allison@lohutok.net>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Enrico Weigelt <info@metux.net>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
@@ -81,22 +86,58 @@ Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
 Suggested-by: Josh Poimboeuf <jpoimboe@redhat.com>
 Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
- arch/sh/include/asm/cache.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/include/asm/cache.h     | 2 +-
+ arch/arm/include/asm/mach/arch.h | 4 ++--
+ arch/arm/include/asm/setup.h     | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/sh/include/asm/cache.h b/arch/sh/include/asm/cache.h
-index 2408ac4873aa..07ddf31124a3 100644
---- a/arch/sh/include/asm/cache.h
-+++ b/arch/sh/include/asm/cache.h
-@@ -15,7 +15,7 @@
- 
- #define L1_CACHE_BYTES		(1 << L1_CACHE_SHIFT)
+diff --git a/arch/arm/include/asm/cache.h b/arch/arm/include/asm/cache.h
+index 1d65ed3a2755..cc06079600e0 100644
+--- a/arch/arm/include/asm/cache.h
++++ b/arch/arm/include/asm/cache.h
+@@ -24,6 +24,6 @@
+ #define ARCH_SLAB_MINALIGN 8
+ #endif
  
 -#define __read_mostly __attribute__((__section__(".data..read_mostly")))
 +#define __read_mostly __section(.data..read_mostly)
  
- #ifndef __ASSEMBLY__
- struct cache_info {
+ #endif
+diff --git a/arch/arm/include/asm/mach/arch.h b/arch/arm/include/asm/mach/arch.h
+index e7df5a822cab..2986f6b4862d 100644
+--- a/arch/arm/include/asm/mach/arch.h
++++ b/arch/arm/include/asm/mach/arch.h
+@@ -81,7 +81,7 @@ extern const struct machine_desc __arch_info_begin[], __arch_info_end[];
+ #define MACHINE_START(_type,_name)			\
+ static const struct machine_desc __mach_desc_##_type	\
+  __used							\
+- __attribute__((__section__(".arch.info.init"))) = {	\
++ __section(.arch.info.init) = {	\
+ 	.nr		= MACH_TYPE_##_type,		\
+ 	.name		= _name,
+ 
+@@ -91,7 +91,7 @@ static const struct machine_desc __mach_desc_##_type	\
+ #define DT_MACHINE_START(_name, _namestr)		\
+ static const struct machine_desc __mach_desc_##_name	\
+  __used							\
+- __attribute__((__section__(".arch.info.init"))) = {	\
++ __section(.arch.info.init) = {	\
+ 	.nr		= ~0,				\
+ 	.name		= _namestr,
+ 
+diff --git a/arch/arm/include/asm/setup.h b/arch/arm/include/asm/setup.h
+index 67d20712cb48..00190f1f0574 100644
+--- a/arch/arm/include/asm/setup.h
++++ b/arch/arm/include/asm/setup.h
+@@ -14,7 +14,7 @@
+ #include <uapi/asm/setup.h>
+ 
+ 
+-#define __tag __used __attribute__((__section__(".taglist.init")))
++#define __tag __used __section(.taglist.init)
+ #define __tagtable(tag, fn) \
+ static const struct tagtable __tagtable_##fn __tag = { tag, fn }
+ 
 -- 
 2.23.0.rc1.153.gdeed80330f-goog
 
