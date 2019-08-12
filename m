@@ -7,82 +7,71 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6952C31E40
-	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 21:52:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABF58C31E40
+	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 21:53:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9E24A2067D
-	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 21:52:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 780602067D
+	for <bpf@archiver.kernel.org>; Mon, 12 Aug 2019 21:53:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l0vrvwIH"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="B1M/tQcz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727702AbfHLVwj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 12 Aug 2019 17:52:39 -0400
-Received: from mail-pl1-f202.google.com ([209.85.214.202]:52646 "EHLO
-        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727929AbfHLVwi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 12 Aug 2019 17:52:38 -0400
-Received: by mail-pl1-f202.google.com with SMTP id g18so61861115plj.19
-        for <bpf@vger.kernel.org>; Mon, 12 Aug 2019 14:52:38 -0700 (PDT)
+        id S1726632AbfHLVw7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 12 Aug 2019 17:52:59 -0400
+Received: from mail-pf1-f201.google.com ([209.85.210.201]:54895 "EHLO
+        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727724AbfHLVvp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 12 Aug 2019 17:51:45 -0400
+Received: by mail-pf1-f201.google.com with SMTP id y66so67075241pfb.21
+        for <bpf@vger.kernel.org>; Mon, 12 Aug 2019 14:51:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=nhdP3qLGadfkBXXgzu2XRajPFFK4fSn/Au7TvOHqv+g=;
-        b=l0vrvwIHmSzOktb7Rq3EdrK6pdsP3Ma3RCqx5BQ6NP0yweIZWAU2Q/lHhoKvWSxp6n
-         hb/8hiCQkymuV+MMOHey9h69MdrERLD0hZ/gfrxdEVFUhiSHtWnAoQhOg6NXS1/OG/rA
-         9o28P2Qois3wr22QlsgANra7Ffshp6GNOzF/SQl3ww6PwmpI9RZSp1Zd+eSsUyOy8Xh9
-         8/gU6pTbRK5x5aBYeVeLkGgRxNa6mKkBFuZUTSejia6ABf36q3l92lLkASTPqArWoGUx
-         FVz/lju2Dg6bsdjVY2St8Tc9hDr5mfAQ/LOxOKiurkoCnULUdwHJkriMSFsS0OH/LIWd
-         78Vg==
+        bh=+V6H61t/WhJBtoDgPI8KA/pTwpjh8ARqkJflJLJFNkA=;
+        b=B1M/tQczf/XakLDt4Inap3j9ElF/nZDax8kM67P0+4rSAEH7C64FdFFYSLrRzqKkYX
+         0BjVEzzXsoy4prlbQ9UO0XjUaVioPsJepUdinCXmNmWblyLhMttRjyNxD395r0K07Uzq
+         +/vSotQ5Btm7RMFUZCamhb3TLsBzJCaWms2wf2rRuXQexO/KFVHurKufzwuszAO9xl8y
+         /c8iAdvW+4Z8pgK6ZZu2qf3nKfh7SLjj/Z2XrgIF3XmS8VDTsFKsRyWO7EKfHlCChLLB
+         Ynh+8+O0K3H3ODFi/7qj3ZBp5fP0ts2nLOsZEEbcDm3suCCsaDUMEh0gh9cDLV1vqruy
+         dkgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=nhdP3qLGadfkBXXgzu2XRajPFFK4fSn/Au7TvOHqv+g=;
-        b=fF5t7ehupnjiDLy/IRRJ4kPUKM0BgRuRaEwP6qftR1e3X9nOuHFDH1Nqhkfp8lZo5e
-         MgNK4JDMp4WJQbnVJZU8xqdgzeh6xj00h90cYK6BrEI+399mSqfX6jsNZ/9FS2Ourszn
-         +bSB3JlcRTxKoohqYFfddrFytBQ1h5aPMiNXLeCIZcbDvpG0P0ggNlSGKwqdrxKQMvRg
-         wP+/F2Vy8Ai79qf7vLK8syNrjDcndNPjlGkRZUhNXPEVFJFXkNZnFr1cgS5DZXwFUvv8
-         kH3SEvzZVTCnW0/Dmd2307BHT5wLxunpgN0BPtzblGLK4CewuRO3aNTqwCN5ZNb6i/SU
-         JPvg==
-X-Gm-Message-State: APjAAAUrdaaN7WLpCgMKPBEAP8nELfDpr8D2s7jcVjHPGj6Gy2w/HKIv
-        eUvQNL+B9xNcECMpRND0gEGzyXouP/vC1QBNK00=
-X-Google-Smtp-Source: APXvYqwjy4xajDSecFizcMZwjTAAh0pv2jT2DdR94TnRtiSiK/C8DMNalg6ERPgxV3Xo/RWyTVhpKrSzLDDIluqa8Bk=
-X-Received: by 2002:a65:6406:: with SMTP id a6mr26645041pgv.393.1565646757703;
- Mon, 12 Aug 2019 14:52:37 -0700 (PDT)
-Date:   Mon, 12 Aug 2019 14:50:44 -0700
+        bh=+V6H61t/WhJBtoDgPI8KA/pTwpjh8ARqkJflJLJFNkA=;
+        b=SydpvNnMCOaQiR0GZep3rPMMEvyKFe5/dx3itzFSxvzc532SoDYcE62YNmly7NXd7j
+         Gb4cWDFTq+sxO+jU3HVcI+wefhKDR9scfDH6xZIJYP/Ic3aNqkoQ6HnpShQQLzXzFHPL
+         5aqYIsLjncwyO7hoJKbOnfm6pWOuhWgONhf0T4GUxy+A3EdcjyctqaYUGg2jthAEP8MH
+         q6FppszVS7Zz4wGKRDWIoF3pG2jgaCZQHD7REjDIbzp5LfTwa7ZzCQ5fj9CBxYDNRkhf
+         TkQWsnJ5kDICxFKflDtw3La2YUDR7lKfz8TZ/hw02lAL6pJaMRdl9nJzGy5fU+WGNRPs
+         D+jA==
+X-Gm-Message-State: APjAAAUzxL4AUc7+8gXei9hTg5UdePXEn7eTdqobVFvWXC35HTZJdKRJ
+        /ZkKAytMrVH+ciXAgzAu4VTqD5zEiy0LpxGdnuk=
+X-Google-Smtp-Source: APXvYqy+gBnwTRFqFtcaUPFVCV+RN8fBOs7JrKztEUXGWzHzMhKgSUKueSt0oxa7kDLjRP4KiZmrddRZ5NjXndqtJSs=
+X-Received: by 2002:a65:68d9:: with SMTP id k25mr32098928pgt.337.1565646704006;
+ Mon, 12 Aug 2019 14:51:44 -0700 (PDT)
+Date:   Mon, 12 Aug 2019 14:50:37 -0700
 In-Reply-To: <20190812215052.71840-1-ndesaulniers@google.com>
-Message-Id: <20190812215052.71840-11-ndesaulniers@google.com>
+Message-Id: <20190812215052.71840-4-ndesaulniers@google.com>
 Mime-Version: 1.0
 References: <20190812215052.71840-1-ndesaulniers@google.com>
 X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
-Subject: [PATCH 11/16] x86: prefer __section from compiler_attributes.h
+Subject: [PATCH 04/16] um: prefer __section from compiler_attributes.h
 From:   Nick Desaulniers <ndesaulniers@google.com>
 To:     akpm@linux-foundation.org
 Cc:     sedat.dilek@gmail.com, jpoimboe@redhat.com, yhs@fb.com,
         miguel.ojeda.sandonis@gmail.com,
         clang-built-linux@googlegroups.com,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        Armijn Hemel <armijn@tjaldur.nl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Allison Randal <allison@lohutok.net>,
-        Juergen Gross <jgross@suse.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Enrico Weigelt <info@metux.net>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Pu Wen <puwen@hygon.cn>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
+        Song Liu <songliubraving@fb.com>, linux-um@lists.infradead.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
@@ -93,96 +82,26 @@ Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
 Suggested-by: Josh Poimboeuf <jpoimboe@redhat.com>
 Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
- arch/x86/include/asm/cache.h       | 2 +-
- arch/x86/include/asm/intel-mid.h   | 2 +-
- arch/x86/include/asm/iommu_table.h | 5 ++---
- arch/x86/include/asm/irqflags.h    | 2 +-
- arch/x86/include/asm/mem_encrypt.h | 2 +-
- arch/x86/kernel/cpu/cpu.h          | 3 +--
- 6 files changed, 7 insertions(+), 9 deletions(-)
+ arch/um/kernel/um_arch.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/include/asm/cache.h b/arch/x86/include/asm/cache.h
-index abe08690a887..bb9f4bf4ec02 100644
---- a/arch/x86/include/asm/cache.h
-+++ b/arch/x86/include/asm/cache.h
-@@ -8,7 +8,7 @@
- #define L1_CACHE_SHIFT	(CONFIG_X86_L1_CACHE_SHIFT)
- #define L1_CACHE_BYTES	(1 << L1_CACHE_SHIFT)
+diff --git a/arch/um/kernel/um_arch.c b/arch/um/kernel/um_arch.c
+index a818ccef30ca..18e0287dd97e 100644
+--- a/arch/um/kernel/um_arch.c
++++ b/arch/um/kernel/um_arch.c
+@@ -52,9 +52,9 @@ struct cpuinfo_um boot_cpu_data = {
+ 	.ipi_pipe		= { -1, -1 }
+ };
  
--#define __read_mostly __attribute__((__section__(".data..read_mostly")))
-+#define __read_mostly __section(.data..read_mostly)
+-union thread_union cpu0_irqstack
+-	__attribute__((__section__(".data..init_irqstack"))) =
+-		{ .thread_info = INIT_THREAD_INFO(init_task) };
++union thread_union cpu0_irqstack __section(.data..init_irqstack) = {
++	.thread_info = INIT_THREAD_INFO(init_task)
++};
  
- #define INTERNODE_CACHE_SHIFT CONFIG_X86_INTERNODE_CACHE_SHIFT
- #define INTERNODE_CACHE_BYTES (1 << INTERNODE_CACHE_SHIFT)
-diff --git a/arch/x86/include/asm/intel-mid.h b/arch/x86/include/asm/intel-mid.h
-index 8e5af119dc2d..f51f04aefe1b 100644
---- a/arch/x86/include/asm/intel-mid.h
-+++ b/arch/x86/include/asm/intel-mid.h
-@@ -43,7 +43,7 @@ struct devs_id {
- 
- #define sfi_device(i)								\
- 	static const struct devs_id *const __intel_mid_sfi_##i##_dev __used	\
--	__attribute__((__section__(".x86_intel_mid_dev.init"))) = &i
-+	__section(.x86_intel_mid_dev.init) = &i
- 
- /**
- * struct mid_sd_board_info - template for SD device creation
-diff --git a/arch/x86/include/asm/iommu_table.h b/arch/x86/include/asm/iommu_table.h
-index 1fb3fd1a83c2..7d190710eb92 100644
---- a/arch/x86/include/asm/iommu_table.h
-+++ b/arch/x86/include/asm/iommu_table.h
-@@ -50,9 +50,8 @@ struct iommu_table_entry {
- 
- #define __IOMMU_INIT(_detect, _depend, _early_init, _late_init, _finish)\
- 	static const struct iommu_table_entry				\
--		__iommu_entry_##_detect __used				\
--	__attribute__ ((unused, __section__(".iommu_table"),		\
--			aligned((sizeof(void *)))))	\
-+		__iommu_entry_##_detect __used __section(.iommu_table)	\
-+		__aligned((sizeof(void *)))				\
- 	= {_detect, _depend, _early_init, _late_init,			\
- 	   _finish ? IOMMU_FINISH_IF_DETECTED : 0}
- /*
-diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
-index 8a0e56e1dcc9..68db90bca813 100644
---- a/arch/x86/include/asm/irqflags.h
-+++ b/arch/x86/include/asm/irqflags.h
-@@ -9,7 +9,7 @@
- #include <asm/nospec-branch.h>
- 
- /* Provide __cpuidle; we can't safely include <linux/cpu.h> */
--#define __cpuidle __attribute__((__section__(".cpuidle.text")))
-+#define __cpuidle __section(.cpuidle.text)
- 
- /*
-  * Interrupt control:
-diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/asm/mem_encrypt.h
-index 0c196c47d621..db2cd3709148 100644
---- a/arch/x86/include/asm/mem_encrypt.h
-+++ b/arch/x86/include/asm/mem_encrypt.h
-@@ -50,7 +50,7 @@ void __init mem_encrypt_free_decrypted_mem(void);
- bool sme_active(void);
- bool sev_active(void);
- 
--#define __bss_decrypted __attribute__((__section__(".bss..decrypted")))
-+#define __bss_decrypted __section(.bss..decrypted)
- 
- #else	/* !CONFIG_AMD_MEM_ENCRYPT */
- 
-diff --git a/arch/x86/kernel/cpu/cpu.h b/arch/x86/kernel/cpu/cpu.h
-index c0e2407abdd6..7ff9dc41a603 100644
---- a/arch/x86/kernel/cpu/cpu.h
-+++ b/arch/x86/kernel/cpu/cpu.h
-@@ -38,8 +38,7 @@ struct _tlb_table {
- 
- #define cpu_dev_register(cpu_devX) \
- 	static const struct cpu_dev *const __cpu_dev_##cpu_devX __used \
--	__attribute__((__section__(".x86_cpu_dev.init"))) = \
--	&cpu_devX;
-+	__section(.x86_cpu_dev.init) = &cpu_devX;
- 
- extern const struct cpu_dev *const __x86_cpu_dev_start[],
- 			    *const __x86_cpu_dev_end[];
+ /* Changed in setup_arch, which is called in early boot */
+ static char host_info[(__NEW_UTS_LEN + 1) * 5];
 -- 
 2.23.0.rc1.153.gdeed80330f-goog
 
