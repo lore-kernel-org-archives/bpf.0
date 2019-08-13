@@ -2,118 +2,100 @@ Return-Path: <SRS0=vYPl=WJ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 455C6C433FF
-	for <bpf@archiver.kernel.org>; Tue, 13 Aug 2019 08:03:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11F37C433FF
+	for <bpf@archiver.kernel.org>; Tue, 13 Aug 2019 08:27:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 167B320679
-	for <bpf@archiver.kernel.org>; Tue, 13 Aug 2019 08:03:07 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AYFA0Q48"
+	by mail.kernel.org (Postfix) with ESMTP id D1A9B206C2
+	for <bpf@archiver.kernel.org>; Tue, 13 Aug 2019 08:27:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1565684877;
+	bh=ijpfiLD9sMLgqwaHAQaKtfQ0oW53gq9SgIUsFx/EV8w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=H0MlgV1B4Xyw2lvRcd1No8bSN1n1M3ZolLq7gBt9/8/O0rzZit8iRXySO/TGzyEv3
+	 oLaVPtvow08s3C2WbQaW3CdHhRJECXntf2q4BocwuZSj9FLno5y+yHkkBWnet1ol+/
+	 8NYn0OCyNq8JSnU5iS8g3Rlef6ojxOabDpVGAx2E=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727129AbfHMIDG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Aug 2019 04:03:06 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:39067 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725842AbfHMIDG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Aug 2019 04:03:06 -0400
-Received: by mail-ot1-f65.google.com with SMTP id b1so1071664otp.6;
-        Tue, 13 Aug 2019 01:03:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xpTjmXViSqIki2Cb2qHpkfQ62APVJj7AGYZMRIsoCJ8=;
-        b=AYFA0Q48dX8onM7zG1H8BuQOm2zh/w79ApEK6ezu93//mTeriuACrbmOrAUH4FTlRE
-         grdX+HbfBfjYQM3DPrOGRw5HZpIEFcrBB4mLP0Jn2ue/W+RdzBXlYtDl8eajDOiUjZzl
-         S2BStp2whwPW/DdQ4FqQUVOn+d5agQUeEAKJdzy9A53jzAmj72y2/7DlBvubA+K6cLUV
-         W30iWaGSFvtDIrjrU7ZmVTy19Evq518Xe1klm+es+rjpGJYW2VXkgFkqPCQOBJFJlWAY
-         +IgfLW8ged01WvOmEibmynVe5lN8t6yD1am79qSRamNXI0x6/2qQBD0WzzuN/iPgWlhf
-         QPSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xpTjmXViSqIki2Cb2qHpkfQ62APVJj7AGYZMRIsoCJ8=;
-        b=KjApIHuXb/AyCeiXN7/OxPhmZPuJfOXgl/QQS3ci5G9FkSsfCGaFH/N1KkzCr2suv8
-         1G7/jRWHeJ/zsKMizL57W22co+gXyZqcPWVz1ytk3uox1pr6amNUpK9VDmPjVafKYpFY
-         1/gWyBnRrpm6ctMLcPa0GJ/yOBfLptue0KJM6vVedtHoV38gIi/EIQjLtYAytEb+bRQd
-         ZjHS51IV0/u/t9zfBjff5ERM1fG5A9EZyWdHkio8FFWi1edfh6xrKs64c0x61dh2jBKz
-         I1aBPE33YzaqrBZjrExts6GBU3JU2N5ftqGGgWdhFaCMK3S3aU4UnNsUwcu6wmFFG7Zl
-         R+tA==
-X-Gm-Message-State: APjAAAXEPlNfB2L3JnG1z3l6QuxwWzdw+ft9/lCYbPufyPLlw+POepSz
-        44INt5VNEkhm9xTSQpl9Z+Pb/HDaM7jCS4q/wxc=
-X-Google-Smtp-Source: APXvYqzzSJbUR/V1lvk2p/n+pBFYlV3r4RaXqZ8riQxviItgG2T6vtN6lVbqJgCVjr/mfYonAVDHl6acFGgXOfajAzU=
-X-Received: by 2002:aca:fcc4:: with SMTP id a187mr619358oii.126.1565683385526;
- Tue, 13 Aug 2019 01:03:05 -0700 (PDT)
+        id S1728101AbfHMI1w (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Aug 2019 04:27:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47616 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727777AbfHMI1w (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Aug 2019 04:27:52 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4CE3820663;
+        Tue, 13 Aug 2019 08:27:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565684871;
+        bh=ijpfiLD9sMLgqwaHAQaKtfQ0oW53gq9SgIUsFx/EV8w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QkIvwE5tYT09KkCFtpJwm7HZLlHqi7YtD2t9dHzFHHbudHhT6m3fHElv7f/famL6V
+         6RX2sDey0FfjTlcVcY0xV4h11w9BZ4L3bLfmClSBlRNoJ3iznV5dNmefm1i0ut2eGV
+         BMQdBYfRU1YgwtqKokZT9Mj2zs7yUdAEeZEiu9ds=
+Date:   Tue, 13 Aug 2019 09:27:44 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     akpm@linux-foundation.org, sedat.dilek@gmail.com,
+        jpoimboe@redhat.com, yhs@fb.com, miguel.ojeda.sandonis@gmail.com,
+        clang-built-linux@googlegroups.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Enrico Weigelt <info@metux.net>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Masayoshi Mizuma <m.mizuma@jp.fujitsu.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Allison Randal <allison@lohutok.net>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH 12/16] arm64: prefer __section from compiler_attributes.h
+Message-ID: <20190813082744.xmzmm4j675rqiz47@willie-the-truck>
+References: <20190812215052.71840-1-ndesaulniers@google.com>
+ <20190812215052.71840-12-ndesaulniers@google.com>
 MIME-Version: 1.0
-References: <20190812113429.2488-1-ivan.khoronzhuk@linaro.org> <20190812124326.32146-1-ivan.khoronzhuk@linaro.org>
-In-Reply-To: <20190812124326.32146-1-ivan.khoronzhuk@linaro.org>
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-Date:   Tue, 13 Aug 2019 10:02:54 +0200
-Message-ID: <CAJ8uoz0bBhdQSocQz8Y9tvrGCsCE9TDf3m1u6=sL4Eo5tZ17YQ@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next] mm: mmap: increase sockets maximum memory
- size pgoff for 32bits
-To:     Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        linux-mm@kvack.org, Xdp <xdp-newbies@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, Alexei Starovoitov <ast@kernel.org>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190812215052.71840-12-ndesaulniers@google.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Aug 12, 2019 at 2:45 PM Ivan Khoronzhuk
-<ivan.khoronzhuk@linaro.org> wrote:
->
-> The AF_XDP sockets umem mapping interface uses XDP_UMEM_PGOFF_FILL_RING
-> and XDP_UMEM_PGOFF_COMPLETION_RING offsets. The offsets seems like are
-> established already and are part of configuration interface.
->
-> But for 32-bit systems, while AF_XDP socket configuration, the values
-> are to large to pass maximum allowed file size verification.
-> The offsets can be tuned ofc, but instead of changing existent
-> interface - extend max allowed file size for sockets.
+Hi Nick,
 
-Can you use mmap2() instead that takes a larger offset (2^44) even on
-32-bit systems?
-
-/Magnus
-
-> Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+On Mon, Aug 12, 2019 at 02:50:45PM -0700, Nick Desaulniers wrote:
+> GCC unescapes escaped string section names while Clang does not. Because
+> __section uses the `#` stringification operator for the section name, it
+> doesn't need to be escaped.
+> 
+> This antipattern was found with:
+> $ grep -e __section\(\" -e __section__\(\" -r
+> 
+> Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Suggested-by: Josh Poimboeuf <jpoimboe@redhat.com>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 > ---
->
-> Based on bpf-next/master
->
-> v2..v1:
->         removed not necessarily #ifdev as ULL and UL for 64 has same size
->
->  mm/mmap.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index 7e8c3e8ae75f..578f52812361 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -1358,6 +1358,9 @@ static inline u64 file_mmap_size_max(struct file *file, struct inode *inode)
->         if (S_ISBLK(inode->i_mode))
->                 return MAX_LFS_FILESIZE;
->
-> +       if (S_ISSOCK(inode->i_mode))
-> +               return MAX_LFS_FILESIZE;
-> +
->         /* Special "we do even unsigned file positions" case */
->         if (file->f_mode & FMODE_UNSIGNED_OFFSET)
->                 return 0;
-> --
-> 2.17.1
->
+>  arch/arm64/include/asm/cache.h     | 2 +-
+>  arch/arm64/kernel/smp_spin_table.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+
+Does this fix a build issue, or is it just cosmetic or do we end up with
+duplicate sections or something else?
+
+Happy to route it via arm64, just having trouble working out whether it's
+5.3 material!
+
+Will
