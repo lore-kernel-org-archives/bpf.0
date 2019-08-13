@@ -2,92 +2,126 @@ Return-Path: <SRS0=vYPl=WJ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA04CC433FF
-	for <bpf@archiver.kernel.org>; Tue, 13 Aug 2019 09:33:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB6F6C32750
+	for <bpf@archiver.kernel.org>; Tue, 13 Aug 2019 10:23:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AB4A1206C1
-	for <bpf@archiver.kernel.org>; Tue, 13 Aug 2019 09:33:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8C504206C2
+	for <bpf@archiver.kernel.org>; Tue, 13 Aug 2019 10:23:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="X4zF5sDg"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Y0RUcptj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727038AbfHMJdc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Aug 2019 05:33:32 -0400
-Received: from mail-wm1-f49.google.com ([209.85.128.49]:53789 "EHLO
-        mail-wm1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726811AbfHMJdc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Aug 2019 05:33:32 -0400
-Received: by mail-wm1-f49.google.com with SMTP id 10so846644wmp.3
-        for <bpf@vger.kernel.org>; Tue, 13 Aug 2019 02:33:30 -0700 (PDT)
+        id S1728934AbfHMKX4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Aug 2019 06:23:56 -0400
+Received: from mail-lf1-f47.google.com ([209.85.167.47]:40615 "EHLO
+        mail-lf1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728797AbfHMKXv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Aug 2019 06:23:51 -0400
+Received: by mail-lf1-f47.google.com with SMTP id b17so76382549lff.7
+        for <bpf@vger.kernel.org>; Tue, 13 Aug 2019 03:23:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=MlR2rn9zThqqmBqWlzW7EqR2TgaSWvTZCGypbjFEDiY=;
-        b=X4zF5sDgHXJn+8pNouCDO0v+RWNoI9+wEHnZS12zqg8b5GYhO+/nvXXbbm5kV4LEcj
-         pDNBvS/n54JrgwETuMMOEP9Z3mHftdRJLwzM7Z6I1Ljj+ps9zFEOQ2NIhErYNrDqtHqz
-         d/Z1pswbGT/99Hmo7qXZfSyvJILBIkIl8tY7DKqTF2Ii3vWbBllGKg/UX00e6zfgPC7r
-         Ef8rEamr29/RcID0eFKbeUzlQE9u1ZgO5pCn3M/uKr4MIw4F+HEi9RLRM0wy0ORxkMYN
-         ULgBKjAR07jKQIGQTYdHnCrZKht+lbrBR56skGnNinMbnOiXrqbFAz+4pbkRq0ycxjar
-         pHlQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=mFrYdNufqJMBiXr6Fl+Xru3C6SYEreBVGiSnrc3weyc=;
+        b=Y0RUcptj1nphOy9DUsYSiUGS5oC8t0JnfW7QiIiMtYxxcHAAIyv1N4Upb4ezqwLOrZ
+         wuZg6ub802synfGnhYu7FTj6Q+z0l0UrajtxxBKWSW8G7D+qPTE7qJu0MjppbAHzzLYm
+         0aOOHQIFsG4z6eviJ8yb8Cqdyw0y4/2IaU/kCNA0Qu0+tbdQv0fRSnCnCPEJJRJ6eat8
+         WZgcxw37voDsQAoCE3tGerY8pE+0S3QnAax+CxfMuNScM6koos5vYuslETUmiTFak7pq
+         p1gRy0yl2o4tUwFoqJ8fYbKrrGXdLOK5OILS8ajqrmb8qo+wJlZYxAc/vIIwa6vYzrYR
+         bYLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=MlR2rn9zThqqmBqWlzW7EqR2TgaSWvTZCGypbjFEDiY=;
-        b=fFqthZzzbRw37rtL6xDj8WIEH8rKQwJJs1GZd96J++Nh1fxmsTmQmR+REAQJNF87l6
-         +NeOKHYTS35KKWkDbwF7NH0lvJCn3X0fCT/qC0cIEgrCRRwheWdX5Gp4g1bI9UfZkC8f
-         XPQlU42Q2iXjWFWRsP+34IS5/7o09udSiJWZE7eBBdw1qex+dgdbYTeHPwliPV00ykMU
-         0smnqT43+6BOU60qsJG8uVAde3eUbrnEif12obPAaEQXl0tm34d1+m/yA2rdjXUfyyVy
-         3igRUMlrQmmutIHGJ7axvLokyccbXWSnTiABg2mRy3NHH6JskmXJ5m05cJV/QCCMvOiE
-         zVzA==
-X-Gm-Message-State: APjAAAVchU/LOU/L+M35Zlyb+s0wAMuTvGUpdaVq9BENjj2SgR/aVkwZ
-        2tSt/QJzm8/nUopnbroWkpo2i29PVbs=
-X-Google-Smtp-Source: APXvYqxmAMHNUTlNacw/cR8fY/SukXmqu+Q979YuGUmmgGaWBLmN1RZl+Xu+CzHgOsXsN755PKuYjA==
-X-Received: by 2002:a05:600c:24cf:: with SMTP id 15mr2074434wmu.76.1565688810013;
-        Tue, 13 Aug 2019 02:33:30 -0700 (PDT)
-Received: from [172.20.1.137] ([217.38.71.146])
-        by smtp.googlemail.com with ESMTPSA id k124sm2146043wmk.47.2019.08.13.02.33.28
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Tue, 13 Aug 2019 02:33:29 -0700 (PDT)
-Subject: Re: Taking a day off...
-To:     jakub.kicinski@netronome.com
-Cc:     bpf@vger.kernel.org
-References: <20190812.212659.1072592048193337024.davem@davemloft.net>
-From:   =?UTF-8?Q?Pablo_Casc=c3=b3n?= <pablo.cascon@netronome.com>
-Message-ID: <77f93fa7-c4a6-39a5-32c2-e82c61f9fcf9@netronome.com>
-Date:   Tue, 13 Aug 2019 10:33:27 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <20190812.212659.1072592048193337024.davem@davemloft.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-GB
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=mFrYdNufqJMBiXr6Fl+Xru3C6SYEreBVGiSnrc3weyc=;
+        b=Pibu9RFKyf24TxPU5HODyuumRAW7JrEGaExIavLD8tmr6uhSkx8fHsgO9GU8u/jmib
+         +xUYbiOUJEfxD3Fg2sCyoyCpS98riX+pNGi/HPur1vpFkDQSbrNCELWyzfNpIhduNZsY
+         xf8YoAKeJa6j1hPTtOsfarjcJAU96VN1wH3v4mYEcRjbxmICPz1e6zCHWU5Jji63aN8M
+         tq0upd7U95SZOg3XeWUZnmr3o0VieoiJC5mSpvj5Fusw0LM5fvjHHrwa+m+ewkc7JaXd
+         xodRjYpe4hFeCi3tjRmeqiaElW/Cnrw+JeD3nVIrNufSRI0F3GS4/Chdtt/zTBD4IOvt
+         vnhQ==
+X-Gm-Message-State: APjAAAVLK1p/PXs9vsWkIt7zRbOinIwwZ6pefGKDk6vORzClvffHgnnF
+        DJ/8AAe8EiegklyYSGPbeHyX1g==
+X-Google-Smtp-Source: APXvYqx5ubYdC+pwKtPbpWBtsKuHRSKAFyFuYvHkqHK34jLbYYqbtI1zkcH1ZbBt1JQOtwq91dYtuA==
+X-Received: by 2002:a19:6041:: with SMTP id p1mr22325227lfk.6.1565691829914;
+        Tue, 13 Aug 2019 03:23:49 -0700 (PDT)
+Received: from localhost.localdomain (168-200-94-178.pool.ukrtel.net. [178.94.200.168])
+        by smtp.gmail.com with ESMTPSA id e87sm24796942ljf.54.2019.08.13.03.23.48
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 13 Aug 2019 03:23:49 -0700 (PDT)
+From:   Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+To:     magnus.karlsson@intel.com, bjorn.topel@intel.com
+Cc:     davem@davemloft.net, hawk@kernel.org, john.fastabend@gmail.com,
+        jakub.kicinski@netronome.com, daniel@iogearbox.net,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        xdp-newbies@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+Subject: [PATCH bpf-next 3/3] samples: bpf: syscal_nrs: use mmap2 if defined
+Date:   Tue, 13 Aug 2019 13:23:18 +0300
+Message-Id: <20190813102318.5521-4-ivan.khoronzhuk@linaro.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190813102318.5521-1-ivan.khoronzhuk@linaro.org>
+References: <20190813102318.5521-1-ivan.khoronzhuk@linaro.org>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Wow this is big! Congratulations Kuba!
+For arm32 xdp sockets mmap2 is preferred, so use it if it's defined.
 
-On 13/08/2019 05:26, David Miller wrote:
-> Hello everyone,
->
-> Tomorrow I will be letting Jakub Kicinski manage the net and net-next
-> GIT trees.  So he will be integrating patches into GIT and doing git
-> pulls from people.  He will alway keep the patchwork states up to
-> date, just like I do.
->
-> I completely expect everyone to give Jakub the same respect and
-> consideration they usually give to me, because he deserves it.
->
-> In the future, when I need to take a few days off, I will hand things
-> over to Jakub in a similar way.
->
-> Thank you.
+Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+---
+ samples/bpf/syscall_nrs.c  |  5 +++++
+ samples/bpf/tracex5_kern.c | 11 +++++++++++
+ 2 files changed, 16 insertions(+)
+
+diff --git a/samples/bpf/syscall_nrs.c b/samples/bpf/syscall_nrs.c
+index 516e255cbe8f..2dec94238350 100644
+--- a/samples/bpf/syscall_nrs.c
++++ b/samples/bpf/syscall_nrs.c
+@@ -9,5 +9,10 @@ void syscall_defines(void)
+ 	COMMENT("Linux system call numbers.");
+ 	SYSNR(__NR_write);
+ 	SYSNR(__NR_read);
++#ifdef __NR_mmap2
++	SYSNR(__NR_mmap2);
++#else
+ 	SYSNR(__NR_mmap);
++#endif
++
+ }
+diff --git a/samples/bpf/tracex5_kern.c b/samples/bpf/tracex5_kern.c
+index f57f4e1ea1ec..300350ad299a 100644
+--- a/samples/bpf/tracex5_kern.c
++++ b/samples/bpf/tracex5_kern.c
+@@ -68,12 +68,23 @@ PROG(SYS__NR_read)(struct pt_regs *ctx)
+ 	return 0;
+ }
+ 
++#ifdef __NR_mmap2
++PROG(SYS__NR_mmap2)(struct pt_regs *ctx)
++{
++	char fmt[] = "mmap2\n";
++
++	bpf_trace_printk(fmt, sizeof(fmt));
++	return 0;
++}
++#else
+ PROG(SYS__NR_mmap)(struct pt_regs *ctx)
+ {
+ 	char fmt[] = "mmap\n";
++
+ 	bpf_trace_printk(fmt, sizeof(fmt));
+ 	return 0;
+ }
++#endif
+ 
+ char _license[] SEC("license") = "GPL";
+ u32 _version SEC("version") = LINUX_VERSION_CODE;
+-- 
+2.17.1
 
