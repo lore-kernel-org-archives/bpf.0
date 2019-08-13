@@ -2,53 +2,131 @@ Return-Path: <SRS0=vYPl=WJ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 666BDC32750
-	for <bpf@archiver.kernel.org>; Tue, 13 Aug 2019 17:43:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 337C7C433FF
+	for <bpf@archiver.kernel.org>; Tue, 13 Aug 2019 18:08:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4578F20842
-	for <bpf@archiver.kernel.org>; Tue, 13 Aug 2019 17:43:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 07F572067D
+	for <bpf@archiver.kernel.org>; Tue, 13 Aug 2019 18:08:27 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kXEYQNkg"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727352AbfHMRn2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Aug 2019 13:43:28 -0400
-Received: from smtp3.emailarray.com ([65.39.216.17]:54535 "EHLO
-        smtp3.emailarray.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727332AbfHMRn1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Aug 2019 13:43:27 -0400
-Received: (qmail 98191 invoked by uid 89); 13 Aug 2019 17:36:47 -0000
-Received: from unknown (HELO ?172.20.41.143?) (amxlbW9uQGZsdWdzdmFtcC5jb21AMTk5LjIwMS42NC4xMzc=) (POLARISLOCAL)  
-  by smtp3.emailarray.com with (AES256-GCM-SHA384 encrypted) SMTP; 13 Aug 2019 17:36:47 -0000
-From:   "Jonathan Lemon" <jlemon@flugsvamp.com>
-To:     "Ivan Khoronzhuk" <ivan.khoronzhuk@linaro.org>
-Cc:     magnus.karlsson@intel.com, bjorn.topel@intel.com,
-        davem@davemloft.net, hawk@kernel.org, john.fastabend@gmail.com,
-        jakub.kicinski@netronome.com, daniel@iogearbox.net,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        xdp-newbies@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next 1/3] libbpf: add asm/unistd.h to xsk to get
- __NR_mmap2
-Date:   Tue, 13 Aug 2019 10:36:42 -0700
-X-Mailer: MailMate (1.12.5r5635)
-Message-ID: <12D743F3-6BA0-4D9D-A80D-613EB0F86816@flugsvamp.com>
-In-Reply-To: <20190813102318.5521-2-ivan.khoronzhuk@linaro.org>
-References: <20190813102318.5521-1-ivan.khoronzhuk@linaro.org>
- <20190813102318.5521-2-ivan.khoronzhuk@linaro.org>
+        id S1728345AbfHMSI0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Aug 2019 14:08:26 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:39243 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726363AbfHMSI0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Aug 2019 14:08:26 -0400
+Received: by mail-qt1-f195.google.com with SMTP id l9so107208232qtu.6;
+        Tue, 13 Aug 2019 11:08:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SNZ+S1xTDsap5nSRhodL5I0JpQeKFOt/G+ST+kyDJlE=;
+        b=kXEYQNkgF9KWebqjvSmJl3h60JNSSa/IkU/BgziA4+7FAFpuU+8RtqJ/nU8IkD0E1B
+         GTBhBT4Kqc4vaewpvi4FWpN+L5Q21FNvVGzR5lCISYeRxMpAh0UdYtgPE98PXcXoGYhc
+         9zW5TzCRMXMYLWt9OmjVx6hTy/P8QcEJj7E8qv+0lpAV3ItmvprkiHwFY5boYXGMckKt
+         IQzB/Cww7uzhDnfGB6xt4iYfXdbMLkypqObcDstQBPEZp9paE5oxh0Kv8H2W4dpRHsKj
+         vkkSMFE9Bk2A/yAAw9aCIhSlmY2XeI635+MPXUmNHT3enuWeeCstMa+JuGNyIWlHh+ol
+         lFLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SNZ+S1xTDsap5nSRhodL5I0JpQeKFOt/G+ST+kyDJlE=;
+        b=V3/KeDPpYwoG5Zk5FqAshJV3vvM1/t2H5Xw0w6zT/kw2SgVelnyHvTk0sZQK3Kvh4Z
+         RqI/cOZNbJaqqRY3vvF5qnTurF7fh3bq0a6KXEUbX5V+24m2q8UM16a/PIdR7N04ozAU
+         DpofCFiyVpb4QIfne/VUVKr64mDCQ/OHTBNxEwPZ0r2Su9NSITdQ1FMETgiHDZzkjtXJ
+         sr5XKyR/3RLyUJt5Xpy4X43KU5A3+cBtKm5BwTrhRJpyXDE6OqNcZSGMQdcERRVfYdQ7
+         GefAiE+brI5pM6WyKLsGkHujuoq9/CvuXalaJ/qpJ7K3TruObB188+fWPMRlb/szuSjE
+         rC6g==
+X-Gm-Message-State: APjAAAWL9JPCjDUfIZKKCSEGuz60ELWeCquvmT2Sq9RI4hu3T1ChBfe+
+        38XJMKsJcQFkUsF+Kq9kThkVN6b7yc9U8LkGKjM=
+X-Google-Smtp-Source: APXvYqyEU6XpJs5xm2v1FGd6m+Cvuz5wuLZaHQnLCIBKJ1AuPYEoDBFQwkGyVwaRH66IocQRkHtrX47wBthCLmWO5kY=
+X-Received: by 2002:a0c:b243:: with SMTP id k3mr11381933qve.150.1565719705364;
+ Tue, 13 Aug 2019 11:08:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20190812183947.130889-1-andriin@fb.com> <c4103c58-941c-da3a-9abd-eecbcd256f1d@iogearbox.net>
+In-Reply-To: <c4103c58-941c-da3a-9abd-eecbcd256f1d@iogearbox.net>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 13 Aug 2019 11:08:14 -0700
+Message-ID: <CAEf4BzZr4FGfy+QpDQzVxMxCGWx5DYCcu9jsQJWK235+f3Oigg@mail.gmail.com>
+Subject: Re: [RESEND][PATCH v3 bpf-next] btf: expose BTF info through sysfs
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-
-
-On 13 Aug 2019, at 3:23, Ivan Khoronzhuk wrote:
-
-> That's needed to get __NR_mmap2 when mmap2 syscall is used.
+On Tue, Aug 13, 2019 at 7:20 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
 >
-> Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+> On 8/12/19 8:39 PM, Andrii Nakryiko wrote:
+> > Make .BTF section allocated and expose its contents through sysfs.
+> >
+> > /sys/kernel/btf directory is created to contain all the BTFs present
+> > inside kernel. Currently there is only kernel's main BTF, represented as
+> > /sys/kernel/btf/kernel file. Once kernel modules' BTFs are supported,
+> > each module will expose its BTF as /sys/kernel/btf/<module-name> file.
+> >
+> > Current approach relies on a few pieces coming together:
+> > 1. pahole is used to take almost final vmlinux image (modulo .BTF and
+> >     kallsyms) and generate .BTF section by converting DWARF info into
+> >     BTF. This section is not allocated and not mapped to any segment,
+> >     though, so is not yet accessible from inside kernel at runtime.
+> > 2. objcopy dumps .BTF contents into binary file and subsequently
+> >     convert binary file into linkable object file with automatically
+> >     generated symbols _binary__btf_kernel_bin_start and
+> >     _binary__btf_kernel_bin_end, pointing to start and end, respectively,
+> >     of BTF raw data.
+> > 3. final vmlinux image is generated by linking this object file (and
+> >     kallsyms, if necessary). sysfs_btf.c then creates
+> >     /sys/kernel/btf/kernel file and exposes embedded BTF contents through
+> >     it. This allows, e.g., libbpf and bpftool access BTF info at
+> >     well-known location, without resorting to searching for vmlinux image
+> >     on disk (location of which is not standardized and vmlinux image
+> >     might not be even available in some scenarios, e.g., inside qemu
+> >     during testing).
+>
+> Small question: given modules will be covered later, would it not be more
+> obvious to name it /sys/kernel/btf/vmlinux instead?
 
-Acked-by: Jonathan Lemon <jonathan.lemon@gmail.com>
+vmlinux totally makes sense, not sure why I didn't think about that initially...
+
+I'll follow up with a rename.
+
+>
+> > Alternative approach using .incbin assembler directive to embed BTF
+> > contents directly was attempted but didn't work, because sysfs_proc.o is
+> > not re-compiled during link-vmlinux.sh stage. This is required, though,
+> > to update embedded BTF data (initially empty data is embedded, then
+> > pahole generates BTF info and we need to regenerate sysfs_btf.o with
+> > updated contents, but it's too late at that point).
+> >
+> > If BTF couldn't be generated due to missing or too old pahole,
+> > sysfs_btf.c handles that gracefully by detecting that
+> > _binary__btf_kernel_bin_start (weak symbol) is 0 and not creating
+> > /sys/kernel/btf at all.
+> >
+> > v2->v3:
+> > - added Documentation/ABI/testing/sysfs-kernel-btf (Greg K-H);
+> > - created proper kobject (btf_kobj) for btf directory (Greg K-H);
+> > - undo v2 change of reusing vmlinux, as it causes extra kallsyms pass
+> >    due to initially missing  __binary__btf_kernel_bin_{start/end} symbols;
+> >
+> > v1->v2:
+> > - allow kallsyms stage to re-use vmlinux generated by gen_btf();
+> >
+> > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+>
+> In any case, this is great progress, applied thanks!
