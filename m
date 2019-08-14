@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41AE7C32753
-	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 02:39:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74C16C433FF
+	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 02:39:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0E58F20665
-	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 02:39:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4285420665
+	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 02:39:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1565750361;
-	bh=H7yId5Cjt3grtQ1JdVrFZniPce+PtmDRZEBY7dKBYSU=;
+	s=default; t=1565750377;
+	bh=Qxzn1GhQkt3VpBDtZ5IfDFsMDOoiGdj2MAiQd54afUo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=w9vxNg5dmf5qGDgUzI0qG9urmpP1CRYWW0uap+Dda8rbj3KYsHJfDe6qX7WJWa/aA
-	 igExsYVaBTp4fDc5wfJNHfXDH3yE9V6crDspacecWm8Tn5w+TsWNg7EX3tEM9bOtww
-	 oNjQ//bZqRyeyslcvfeuwPZkiUrKfaZ1RhTioAMg=
+	b=ajeXwkou4R7JnP2pa8gRoZ62ekDa/pm0++SoUMEMN3CK3ESJ40uolgMA3xIRdWbRo
+	 s1pt92gSWWKP4+15Id51ukJsk2oRbr+rv+oTGHwKkLOO2pSGgjdE1PfIJWgePTy2eu
+	 slKc/5H3tZJLivDpaINPMP4ar06lnZcoR1Jb1wSQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727540AbfHNCLg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Aug 2019 22:11:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43790 "EHLO mail.kernel.org"
+        id S1727422AbfHNCLZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Aug 2019 22:11:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43650 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727533AbfHNCLf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Aug 2019 22:11:35 -0400
+        id S1727410AbfHNCLZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Aug 2019 22:11:25 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DCD3220843;
-        Wed, 14 Aug 2019 02:11:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4B5F32084D;
+        Wed, 14 Aug 2019 02:11:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565748694;
-        bh=H7yId5Cjt3grtQ1JdVrFZniPce+PtmDRZEBY7dKBYSU=;
+        s=default; t=1565748684;
+        bh=Qxzn1GhQkt3VpBDtZ5IfDFsMDOoiGdj2MAiQd54afUo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=no1MXWG11J8C0V7C7mHdb3vpzIIFoV54k7oD1Xxvsygwso0sxMLtlBrh7qdtYqkMr
-         5vQl2D6IW6bZepJ2iDocnkg+dovLx0uwNFCXekemjLBUuakxQyRTZUD7hAyC6RfOWm
-         R6zgar5pNSq1uGg9vc/MjKtL+9C0hmQTlTj4lYxs=
+        b=jSXTl9IseVqvzEksIssa5/qzWzmHbWYxMJGINlCEPhhnwznfTzQFVM/zf2l2YJoQ7
+         qe+c5/G0XxLxMc+sClvo9znV0kmQXkMAkQlbWPd3Az1wKEdqWV0MjdLSZcHwxrdWIM
+         El1ilb0Xb1WDgtQTerLfyZVTYv2r8UvTIc1c+dtU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+Cc:     Andrii Nakryiko <andriin@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 025/123] bpf: sockmap, sock_map_delete needs to use xchg
-Date:   Tue, 13 Aug 2019 22:09:09 -0400
-Message-Id: <20190814021047.14828-25-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 020/123] libbpf: sanitize VAR to conservative 1-byte INT
+Date:   Tue, 13 Aug 2019 22:09:04 -0400
+Message-Id: <20190814021047.14828-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190814021047.14828-1-sashal@kernel.org>
 References: <20190814021047.14828-1-sashal@kernel.org>
@@ -59,74 +59,42 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: John Fastabend <john.fastabend@gmail.com>
+From: Andrii Nakryiko <andriin@fb.com>
 
-[ Upstream commit 45a4521dcbd92e71c9e53031b40e34211d3b4feb ]
+[ Upstream commit 1d4126c4e1190d2f7d3f388552f9bd17ae0c64fc ]
 
-__sock_map_delete() may be called from a tcp event such as unhash or
-close from the following trace,
+If VAR in non-sanitized BTF was size less than 4, converting such VAR
+into an INT with size=4 will cause BTF validation failure due to
+violationg of STRUCT (into which DATASEC was converted) member size.
+Fix by conservatively using size=1.
 
-  tcp_bpf_close()
-    tcp_bpf_remove()
-      sk_psock_unlink()
-        sock_map_delete_from_link()
-          __sock_map_delete()
-
-In this case the sock lock is held but this only protects against
-duplicate removals on the TCP side. If the map is free'd then we have
-this trace,
-
-  sock_map_free
-    xchg()                  <- replaces map entry
-    sock_map_unref()
-      sk_psock_put()
-        sock_map_del_link()
-
-The __sock_map_delete() call however uses a read, test, null over the
-map entry which can result in both paths trying to free the map
-entry.
-
-To fix use xchg in TCP paths as well so we avoid having two references
-to the same map entry.
-
-Fixes: 604326b41a6fb ("bpf, sockmap: convert to generic sk_msg interface")
-Signed-off-by: John Fastabend <john.fastabend@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/sock_map.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ tools/lib/bpf/libbpf.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index be6092ac69f8a..1d40e040320d2 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -281,16 +281,20 @@ static int __sock_map_delete(struct bpf_stab *stab, struct sock *sk_test,
- 			     struct sock **psk)
- {
- 	struct sock *sk;
-+	int err = 0;
- 
- 	raw_spin_lock_bh(&stab->lock);
- 	sk = *psk;
- 	if (!sk_test || sk_test == sk)
--		*psk = NULL;
-+		sk = xchg(psk, NULL);
-+
-+	if (likely(sk))
-+		sock_map_unref(sk, psk);
-+	else
-+		err = -EINVAL;
-+
- 	raw_spin_unlock_bh(&stab->lock);
--	if (unlikely(!sk))
--		return -EINVAL;
--	sock_map_unref(sk, psk);
--	return 0;
-+	return err;
- }
- 
- static void sock_map_delete_from_link(struct bpf_map *map, struct sock *sk,
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 3865a5d272514..77e14d9954796 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -1044,8 +1044,13 @@ static void bpf_object__sanitize_btf(struct bpf_object *obj)
+ 		if (!has_datasec && kind == BTF_KIND_VAR) {
+ 			/* replace VAR with INT */
+ 			t->info = BTF_INFO_ENC(BTF_KIND_INT, 0, 0);
+-			t->size = sizeof(int);
+-			*(int *)(t+1) = BTF_INT_ENC(0, 0, 32);
++			/*
++			 * using size = 1 is the safest choice, 4 will be too
++			 * big and cause kernel BTF validation failure if
++			 * original variable took less than 4 bytes
++			 */
++			t->size = 1;
++			*(int *)(t+1) = BTF_INT_ENC(0, 0, 8);
+ 		} else if (!has_datasec && kind == BTF_KIND_DATASEC) {
+ 			/* replace DATASEC with STRUCT */
+ 			struct btf_var_secinfo *v = (void *)(t + 1);
 -- 
 2.20.1
 
