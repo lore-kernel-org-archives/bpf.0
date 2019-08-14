@@ -2,97 +2,89 @@ Return-Path: <SRS0=gekI=WK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A683C433FF
-	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 17:07:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F152C32753
+	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 17:16:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D59152184B
-	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 17:07:18 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="P/zi5Bsa"
+	by mail.kernel.org (Postfix) with ESMTP id 4F6A92063F
+	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 17:16:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729843AbfHNRHS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Aug 2019 13:07:18 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:37264 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729841AbfHNRHR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 14 Aug 2019 13:07:17 -0400
-Received: by mail-pf1-f196.google.com with SMTP id 129so7027881pfa.4
-        for <bpf@vger.kernel.org>; Wed, 14 Aug 2019 10:07:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=F6sZvDt8GfsqSL6+yaOVxmYir21u5qs+0FrDZAMGm+U=;
-        b=P/zi5BsaaIlJFS27qbrRPHG19C5OHY9/C4zVdy7Cb6Jpf7LuJ+Up0Fht6/3cwDMPIj
-         28qwwRlC6h2CihsxxQsJljtiN1VMl20e9sW5lez1zg09H+GuRy+mnObc1RNGO3qpqLLU
-         8gTWRmY1XIwHOBi/KGKHPsJcAwLliaTgu2TCMO1DdSwoIVnJNMv66lyDzxPx+vuS5huV
-         +RyTFeTeR8ilnIYQ9ReQXgeO66HU7Mqh15dB2oB09ya5+j2f1jgC8FLJj+65ARVnSfDC
-         ej2Y2WDibJam82j5FL4I5swZRiBMJ6tNWEI9R9Nykh1ujrAAygao0vZYulwZXVlaOl0y
-         4ipw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=F6sZvDt8GfsqSL6+yaOVxmYir21u5qs+0FrDZAMGm+U=;
-        b=M0AlCREqbo1PBjJZC3s4CRc7RGlV9drGzhvNIyCSr3ETEk8Rn+gzWid+UiNHNHzpJD
-         nZ21hd0E8o5MnNO4Rdz/dHUa8Um6eUS7NavOfvOegI+yrWJ8Fwl924PFaJfwV6EQ15iV
-         2d+hgenSsS0pvnVJmi3V9G1SdzfFyIupz/dI5E5PFvVE5Pa9+Ho2CwHjXAfSCdoxADvT
-         oqeNcAsk0Rvfj9+L1csUXEBPZNO/534Nn5Jd6PwQk6iah0W2HHKWTUeeDZaIVZaYWZaA
-         slhjVWiTYLMSUH9yHLkX/wGU1uNA3/uHecWKrMRtmdAKPKWzSqGNV5NLULmlAGVQoOVj
-         kcnQ==
-X-Gm-Message-State: APjAAAX8rNY7lUqWUELpNzUgjWbX0yTCiwDWHH9/63E4+NMsWAz02gJQ
-        hsyIwfEABO4hV+0dRqewDbI07A==
-X-Google-Smtp-Source: APXvYqwg07VY8os024RQPur1zjETv2lW8luJPu4P30Aw7c7WkUQFbc1mwMUhePSJ8MX5oM07n3Q0Ng==
-X-Received: by 2002:a17:90a:c24e:: with SMTP id d14mr699458pjx.129.1565802437056;
-        Wed, 14 Aug 2019 10:07:17 -0700 (PDT)
-Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
-        by smtp.gmail.com with ESMTPSA id q24sm428759pjp.14.2019.08.14.10.07.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Aug 2019 10:07:16 -0700 (PDT)
-Date:   Wed, 14 Aug 2019 10:07:15 -0700
-From:   Stanislav Fomichev <sdf@fomichev.me>
-To:     Toshiaki Makita <toshiaki.makita1@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, William Tu <u9012063@gmail.com>
-Subject: Re: [RFC PATCH bpf-next 00/14] xdp_flow: Flow offload to XDP
-Message-ID: <20190814170715.GJ2820@mini-arch>
-References: <20190813120558.6151-1-toshiaki.makita1@gmail.com>
+        id S1731082AbfHNRO0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Aug 2019 13:14:26 -0400
+Received: from dispatch1-us1.ppe-hosted.com ([148.163.129.52]:33168 "EHLO
+        dispatch1-us1.ppe-hosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729107AbfHNRO0 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 14 Aug 2019 13:14:26 -0400
+X-Virus-Scanned: Proofpoint Essentials engine
+Received: from webmail.solarflare.com (webmail.solarflare.com [12.187.104.26])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1-us5.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTPS id 8D625180062;
+        Wed, 14 Aug 2019 17:14:24 +0000 (UTC)
+Received: from [10.17.20.203] (10.17.20.203) by ocex03.SolarFlarecom.com
+ (10.20.40.36) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 14 Aug
+ 2019 10:14:20 -0700
+Subject: Re: [RFC bpf-next 0/3] tools: bpftool: add subcommand to count map
+ entries
+To:     Quentin Monnet <quentin.monnet@netronome.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <oss-drivers@netronome.com>
+References: <20190813130921.10704-1-quentin.monnet@netronome.com>
+ <20190814015149.b4pmubo3s4ou5yek@ast-mbp>
+ <ab11a9f2-0fbd-d35f-fee1-784554a2705a@netronome.com>
+ <bdb4b47b-25fa-eb96-aa8d-dd4f4b012277@solarflare.com>
+ <18f887ec-99fd-20ae-f5d6-a1f4117b2d77@netronome.com>
+From:   Edward Cree <ecree@solarflare.com>
+Message-ID: <84aa97e3-5fde-e041-12c6-85863e27d2d9@solarflare.com>
+Date:   Wed, 14 Aug 2019 18:14:18 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190813120558.6151-1-toshiaki.makita1@gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <18f887ec-99fd-20ae-f5d6-a1f4117b2d77@netronome.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Content-Language: en-GB
+X-Originating-IP: [10.17.20.203]
+X-TM-AS-Product-Ver: SMEX-12.5.0.1300-8.5.1010-24846.005
+X-TM-AS-Result: No-4.660000-4.000000-10
+X-TMASE-MatchedRID: QW5G6BKkLTrmLzc6AOD8DfHkpkyUphL9frTt+hmA5bIrhioeAJKilVrh
+        neGACnO83JyZkMBokPLQvbuwy1I9/oQWSPO5cc238KGJCiV+3/JUE+MH85/4VAPBX2NhZtJTr/q
+        QdenuXcVZzzDA0sjQDYc8aIZtIudLKjPlgWuJZGwkFrn8AyeCvXpDIEzkG1Rb7TFPIrDjEdXffA
+        /WyrSuS98o/LR6nLGKb+8anoKmoxGmO6U9OrWUyDXKFtsDtZ7TWw/S0HB7eoMRGC0rW8q1XSMKo
+        2HmNqd69+lWSVgVU32JIG0pP8yLBr9ZdlL8eonaC24oEZ6SpSmb4wHqRpnaDkqZNSncfEh805m6
+        yr8nCFiomVaV1WLMqnHm8UEcdz6aaWzb5cWPQLRaU0yTy1qikJEXEPAPyNGcrlaO4F0BnSCS16g
+        HcUAYRIfMZMegLDIeGU0pKnas+RbnCJftFZkZizYJYNFU00e7N+XOQZygrvY=
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--4.660000-4.000000
+X-TMASE-Version: SMEX-12.5.0.1300-8.5.1010-24846.005
+X-MDID: 1565802865-Gp7HgkQUnKV7
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 08/13, Toshiaki Makita wrote:
-> * Implementation
-> 
-> xdp_flow makes use of UMH to load an eBPF program for XDP, similar to
-> bpfilter. The difference is that xdp_flow does not generate the eBPF
-> program dynamically but a prebuilt program is embedded in UMH. This is
-> mainly because flow insertion is considerably frequent. If we generate
-> and load an eBPF program on each insertion of a flow, the latency of the
-> first packet of ping in above test will incease, which I want to avoid.
-Can this be instead implemented with a new hook that will be called
-for TC events? This hook can write to perf event buffer and control
-plane will insert/remove/modify flow tables in the BPF maps (contol
-plane will also install xdp program).
-
-Why do we need UMH? What am I missing?
+On 14/08/2019 17:58, Quentin Monnet wrote:
+> 2019-08-14 17:45 UTC+0100 ~ Edward Cree <ecree@solarflare.com>
+>> This might be a really dumb suggestion, but: you're wanting to collect a
+>>  summary statistic over an in-kernel data structure in a single syscall,
+>>  because making a series of syscalls to examine every entry is slow and
+>>  racy.  Isn't that exactly a job for an in-kernel virtual machine, and
+>>  could you not supply an eBPF program which the kernel runs on each entry
+>>  in the map, thus supporting people who want to calculate something else
+>>  (mean, min and max, whatever) instead of count?
+>>
+> Hi Edward, I like the approach, thanks for the suggestion.
+>
+> But I did not mention that we were using offloaded maps: Tracing the
+> kernel would probably work for programs running on the host, but this is
+> not a solution we could extend to hardware offload.
+I don't see where "tracing" comes into it; this is a new program type and
+ a new map op under the bpf() syscall.
+Could the user-supplied BPF program not then be passed down to the device
+ for it to run against its offloaded maps?
