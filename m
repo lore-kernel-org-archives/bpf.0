@@ -2,186 +2,61 @@ Return-Path: <SRS0=gekI=WK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60A4FC433FF
-	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 07:34:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68A72C0650F
+	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 08:21:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3125D2084D
-	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 07:34:04 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U3aervMu"
+	by mail.kernel.org (Postfix) with ESMTP id 4A9E02084D
+	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 08:21:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727209AbfHNHeD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Aug 2019 03:34:03 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:40594 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726373AbfHNHeD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 14 Aug 2019 03:34:03 -0400
-Received: by mail-pg1-f194.google.com with SMTP id w10so52644234pgj.7;
-        Wed, 14 Aug 2019 00:34:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=qj5NILBPQh83BqkK6h+f4owNb7XWASz2eTmp6F/uJQ8=;
-        b=U3aervMuhZRPBiAbRA7MZaiEejdwE17EU1cNUFF89p1mndJcYy9Us5cIQnCPhqYBbr
-         /Tb7kNFHUen0Uay9owGgWm9TawgJXc45ZVnUyMnu8QO+0ulO+7zsptkmMIJ1OP0F1UOH
-         2+cUW7P6IIgkXnws3M1KZ/RmoNCSTDoN15+5aa845N7X0XtNFo1dbn/C+b+Drv4q7M7u
-         QV2WAzGk5y/TYXznKbw33OXDBiVgI3m95tldpddxptJWPF9haMzgYihjQLS+rUHeQsSE
-         VP4tVtAb2RtRLQCFYss8L/brLm7k4Vyh3QXQmcenwyyA7r8+T9ku1jU8dRH6s/OrAPzu
-         FGXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qj5NILBPQh83BqkK6h+f4owNb7XWASz2eTmp6F/uJQ8=;
-        b=qIz2z2vP8p2BFliIXmOLNsyKfjYf2Gw1tY+hvB0l7Gg7sUE8QHoY0oHsxLI3xxh+MN
-         D/EOeQtiUSTwDKDGf8o8i8FEjDHhLGBaq7mBFiwRN9TBYg/mk+0vVOvwSBIquFrG3xJG
-         R+GfsBHWnt284RSJsmpi6Ray8ejwWmKcRgY5qmQWlX/VjCc1rvdvI3NT7lk1M7VB1dWB
-         Ei+H/RJWuZf7EWZvq6Dyp/4YMg6SMm18IgW9/5VlzpwUsZQR+Q/OJMfZSK766sdolGam
-         jYXOk8GIuJ6OxE9o8wHFswgx3NTjW5FUTVJrdMXn315eVtz+RrDqDpgLv0jZUHgs5rYD
-         PLYw==
-X-Gm-Message-State: APjAAAVqeTPQBlYQsuDsfcmst4uFRiPGM8E/ElThdSNObxVQ8ydOkcY9
-        SaE5YHlUkIyLAoDWHk8Fd10=
-X-Google-Smtp-Source: APXvYqwUMQ5RskXWhEzNCQJucQGnSFaIJogIkSamtFEOdbfCbfls9UxnnvURXeEH2y+HKD6ZPwLRcg==
-X-Received: by 2002:aa7:914e:: with SMTP id 14mr44853503pfi.136.1565768042412;
-        Wed, 14 Aug 2019 00:34:02 -0700 (PDT)
-Received: from [172.20.20.103] ([222.151.198.97])
-        by smtp.gmail.com with ESMTPSA id l1sm158014289pfl.9.2019.08.14.00.33.58
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Wed, 14 Aug 2019 00:34:01 -0700 (PDT)
-Subject: Re: [RFC PATCH bpf-next 00/14] xdp_flow: Flow offload to XDP
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, William Tu <u9012063@gmail.com>
-References: <20190813120558.6151-1-toshiaki.makita1@gmail.com>
- <20190814014445.3dnduyrass5jycr5@ast-mbp>
-From:   Toshiaki Makita <toshiaki.makita1@gmail.com>
-Message-ID: <f6160572-8fa8-0199-8d81-6159dd4cd5ff@gmail.com>
-Date:   Wed, 14 Aug 2019 16:33:56 +0900
+        id S1727099AbfHNIVl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Aug 2019 04:21:41 -0400
+Received: from www62.your-server.de ([213.133.104.62]:41026 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725905AbfHNIVk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 14 Aug 2019 04:21:40 -0400
+Received: from sslproxy01.your-server.de ([88.198.220.130])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hxoXC-0002tp-6H; Wed, 14 Aug 2019 10:21:30 +0200
+Received: from [2a02:120b:2c12:c120:71a0:62dd:894c:fd0e] (helo=pc-66.home)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hxoXB-0000q9-U8; Wed, 14 Aug 2019 10:21:29 +0200
+Subject: Re: pull-request: bpf-next 2019-08-14
+To:     Jakub Kicinski <jakub.kicinski@netronome.com>
+Cc:     davem@davemloft.net, ast@kernel.org, andrii.nakryiko@gmail.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+References: <20190813231639.29891-1-daniel@iogearbox.net>
+ <20190813165902.41da0730@cakuba.netronome.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <6ddb1fea-4120-3767-05c1-5aebee057255@iogearbox.net>
+Date:   Wed, 14 Aug 2019 10:21:29 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20190814014445.3dnduyrass5jycr5@ast-mbp>
+In-Reply-To: <20190813165902.41da0730@cakuba.netronome.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.3/25540/Tue Aug 13 10:16:47 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Alexei, thank you for taking a look!
-
-On 2019/08/14 10:44, Alexei Starovoitov wrote:
-> On Tue, Aug 13, 2019 at 09:05:44PM +0900, Toshiaki Makita wrote:
->> This is a rough PoC for an idea to offload TC flower to XDP.
-> ...
->>   xdp_flow  TC        ovs kmod
->>   --------  --------  --------
->>   4.0 Mpps  1.1 Mpps  1.1 Mpps
-> 
-> Is xdp_flow limited to 4 Mpps due to veth or something else?
-
-Looking at perf, accumulation of each layer's overhead resulted in the number.
-With XDP prog which only redirects packets and does not touch the data,
-the drop rate is 10 Mpps. In this case the main overhead is XDP's redirect processing
-and handling of 2 XDP progs (in veth and i40e).
-In the xdp_flow test the overhead additionally includes flow key parse in XDP prog
-and hash table lookup (including jhash calculation) which resulted in 4 Mpps.
-
->> So xdp_flow drop rate is roughly 4x faster than software TC or ovs kmod.
+On 8/14/19 1:59 AM, Jakub Kicinski wrote:
+> On Wed, 14 Aug 2019 01:16:39 +0200, Daniel Borkmann wrote:
+>> Hi David, hi Jakub,
 >>
->> OTOH the time to add a flow increases with xdp_flow.
->>
->> ping latency of first packet when veth1 does XDP_PASS instead of DROP:
->>
->>   xdp_flow  TC        ovs kmod
->>   --------  --------  --------
->>   25ms      12ms      0.6ms
->>
->> xdp_flow does a lot of work to emulate TC behavior including UMH
->> transaction and multiple bpf map update from UMH which I think increases
->> the latency.
+>> The following pull-request contains BPF updates for your *net-next* tree.
 > 
-> make sense, but why vanilla TC is so slow ?
+> Pulled, let me know if I did it wrong 🤞
 
-No ideas. At least TC requires additional syscall to insert a flow compared to ovs kmod,
-but 12 ms looks too long for that.
-
->> * Implementation
->>
->> xdp_flow makes use of UMH to load an eBPF program for XDP, similar to
->> bpfilter. The difference is that xdp_flow does not generate the eBPF
->> program dynamically but a prebuilt program is embedded in UMH. This is
->> mainly because flow insertion is considerably frequent. If we generate
->> and load an eBPF program on each insertion of a flow, the latency of the
->> first packet of ping in above test will incease, which I want to avoid.
-> 
-> I think UMH approach is a good fit for this.
-> Clearly the same algorithm can be done as kernel code or kernel module, but
-> bpfilter-like UMH is a safer approach.
-> 
->> - patch 9
->>   Add tc-offload-xdp netdev feature and hooks to call xdp_flow kmod in
->>   TC flower offload code.
-> 
-> The hook into UMH from TC looks simple. Do you expect the same interface to be
-> reused from OVS ?
-
-Do you mean openvswitch kernel module by OVS?
-If so, no, at this point. TC hook is simple because I reused flow offload mechanism.
-OVS kmod does not have offload interface and ovs-vswitchd is using TC for offload.
-I wanted to reuse this mechanism for offloading to XDP, so using TC.
-
->> * About alternative userland (ovs-vswitchd etc.) implementation
->>
->> Maybe a similar logic can be implemented in ovs-vswitchd offload
->> mechanism, instead of adding code to kernel. I just thought offloading
->> TC is more generic and allows wider usage with direct TC command.
->>
->> For example, considering that OVS inserts a flow to kernel only when
->> flow miss happens in kernel, we can in advance add offloaded flows via
->> tc filter to avoid flow insertion latency for certain sensitive flows.
->> TC flower usage without using OVS is also possible.
->>
->> Also as written above nftables can be offloaded to XDP with this
->> mechanism as well.
-> 
-> Makes sense to me.
-> 
->>    bpf, hashtab: Compare keys in long
-> 
-> 3Mpps vs 4Mpps just from this patch ?
-> or combined with i40 prefech patch ?
-
-Combined.
-
->>   drivers/net/ethernet/intel/i40e/i40e_txrx.c  |    1 +
-> 
-> Could you share "perf report" for just hash tab optimization
-> and for i40 ?
-
-Sure, I'll get some more data and post them.
-
-> I haven't seen memcmp to be bottle neck in hash tab.
-> What is the the of the key?
-
-typo of "size of the key"? IIRC 64 bytes.
-
-Toshiaki Makita
+LGTM, thanks a lot! :-)
