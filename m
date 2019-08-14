@@ -7,47 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35C17C433FF
-	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 02:38:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67FC2C32750
+	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 02:39:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0E3C22084F
-	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 02:38:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 362CE2133F
+	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 02:39:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1565750321;
-	bh=YarHGKtBIijyaqXlWcY8Btnh31GnzALr+t2++I5/OJ4=;
+	s=default; t=1565750352;
+	bh=KJC1zLryXGyifwxyw7PIR5MBD6APX3t7YJiS0gvm7dc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=mjxuQf2bXpxaIOQR+ekYiPi6kUmak/QGpwJfVZ1GoigQ/Z+NBCNoPg+GrzLldabar
-	 N0WpezTlVW2R88WPVm0GRIzmaMsKhYfXiBko8pZHoTq5UyzF5ZdH30fK1ooGFrUQqF
-	 tPcBW86k1/pFnBHYp4jm0cM1FXulC5DGmkzyEQbk=
+	b=UQSLTX672hjowtK0FBfk8w7XbWUAwN0AS28VsT/V3B8mVm1BNUfdhNkS6B85tNfke
+	 9ivu1b8tvKbSRkQ53Wm6zswCzMZAxoRjSafx7JWOy+FdUyKu11zqriWWWid37ioLzC
+	 +SNzrRcCLNgbrkRo97pitoAo1wQ7/YujFFkre40M=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727715AbfHNCLw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Aug 2019 22:11:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44082 "EHLO mail.kernel.org"
+        id S1727580AbfHNCLi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Aug 2019 22:11:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43846 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727703AbfHNCLv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Aug 2019 22:11:51 -0400
+        id S1727566AbfHNCLh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Aug 2019 22:11:37 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1CC6A21744;
-        Wed, 14 Aug 2019 02:11:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 206D120874;
+        Wed, 14 Aug 2019 02:11:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565748710;
-        bh=YarHGKtBIijyaqXlWcY8Btnh31GnzALr+t2++I5/OJ4=;
+        s=default; t=1565748696;
+        bh=KJC1zLryXGyifwxyw7PIR5MBD6APX3t7YJiS0gvm7dc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LMftjXHlxL/Yp6N7ugK/rh/OvgyaD/6CDfc3ct1xnLr3fkwpS28k49c2Ab4EPyyFS
-         aE6+VYEFOUAdQdxwIUKMSjmDyeX2MrYuBD9jL8CcupftDyY2EyVt1KD7yMkWYeUko7
-         JeMM9uSQOIghEPYJsy31Rr4c9qHjLTauq6z4hkGI=
+        b=tC+BnhVAiyRPUTWvtOF0rCgv43sESEsPYNTEE0ZpmrsZyRpNR5/6fnh0Oy3Iq/pwn
+         PnYYYKaBvJ860brkQ88U/n+Zt7PVuplqY6Sg7/0Kb50DfWlju0jCoZvuqFqMgUHIdv
+         oNrd7LK5DJV5GaUs7O96L8e28QfTIvuoqBam5WGw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Eric Dumazet <edumazet@google.com>,
-        syzbot <syzkaller@googlegroups.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+Cc:     John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 034/123] bpf: fix access to skb_shared_info->gso_segs
-Date:   Tue, 13 Aug 2019 22:09:18 -0400
-Message-Id: <20190814021047.14828-34-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 027/123] bpf: sockmap, only create entry if ulp is not already enabled
+Date:   Tue, 13 Aug 2019 22:09:11 -0400
+Message-Id: <20190814021047.14828-27-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190814021047.14828-1-sashal@kernel.org>
 References: <20190814021047.14828-1-sashal@kernel.org>
@@ -60,67 +59,45 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: John Fastabend <john.fastabend@gmail.com>
 
-[ Upstream commit 06a22d897d82f12776d44dbf0850f5895469cb2a ]
+[ Upstream commit 0e858739c2d2eedeeac1d35bfa0ec3cc2a7190d8 ]
 
-It is possible we reach bpf_convert_ctx_access() with
-si->dst_reg == si->src_reg
+Sockmap does not currently support adding sockets after TLS has been
+enabled. There never was a real use case for this so it was never
+added. But, we lost the test for ULP at some point so add it here
+and fail the socket insert if TLS is enabled. Future work could
+make sockmap support this use case but fixup the bug here.
 
-Therefore, we need to load BPF_REG_AX before eventually
-mangling si->src_reg.
-
-syzbot generated this x86 code :
-   3:   55                      push   %rbp
-   4:   48 89 e5                mov    %rsp,%rbp
-   7:   48 81 ec 00 00 00 00    sub    $0x0,%rsp // Might be avoided ?
-   e:   53                      push   %rbx
-   f:   41 55                   push   %r13
-  11:   41 56                   push   %r14
-  13:   41 57                   push   %r15
-  15:   6a 00                   pushq  $0x0
-  17:   31 c0                   xor    %eax,%eax
-  19:   48 8b bf c0 00 00 00    mov    0xc0(%rdi),%rdi
-  20:   44 8b 97 bc 00 00 00    mov    0xbc(%rdi),%r10d
-  27:   4c 01 d7                add    %r10,%rdi
-  2a:   48 0f b7 7f 06          movzwq 0x6(%rdi),%rdi // Crash
-  2f:   5b                      pop    %rbx
-  30:   41 5f                   pop    %r15
-  32:   41 5e                   pop    %r14
-  34:   41 5d                   pop    %r13
-  36:   5b                      pop    %rbx
-  37:   c9                      leaveq
-  38:   c3                      retq
-
-Fixes: d9ff286a0f59 ("bpf: allow BPF programs access skb_shared_info->gso_segs field")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Fixes: 604326b41a6fb ("bpf, sockmap: convert to generic sk_msg interface")
+Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/filter.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ net/core/sock_map.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index f681fb772940c..534c310bb0893 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -7325,12 +7325,12 @@ static u32 bpf_convert_ctx_access(enum bpf_access_type type,
- 	case offsetof(struct __sk_buff, gso_segs):
- 		/* si->dst_reg = skb_shinfo(SKB); */
- #ifdef NET_SKBUFF_DATA_USES_OFFSET
--		*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct sk_buff, head),
--				      si->dst_reg, si->src_reg,
--				      offsetof(struct sk_buff, head));
- 		*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct sk_buff, end),
- 				      BPF_REG_AX, si->src_reg,
- 				      offsetof(struct sk_buff, end));
-+		*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct sk_buff, head),
-+				      si->dst_reg, si->src_reg,
-+				      offsetof(struct sk_buff, head));
- 		*insn++ = BPF_ALU64_REG(BPF_ADD, si->dst_reg, BPF_REG_AX);
- #else
- 		*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct sk_buff, end),
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index bbc91597d8364..8a4a45e7c29df 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -339,6 +339,7 @@ static int sock_map_update_common(struct bpf_map *map, u32 idx,
+ 				  struct sock *sk, u64 flags)
+ {
+ 	struct bpf_stab *stab = container_of(map, struct bpf_stab, map);
++	struct inet_connection_sock *icsk = inet_csk(sk);
+ 	struct sk_psock_link *link;
+ 	struct sk_psock *psock;
+ 	struct sock *osk;
+@@ -349,6 +350,8 @@ static int sock_map_update_common(struct bpf_map *map, u32 idx,
+ 		return -EINVAL;
+ 	if (unlikely(idx >= map->max_entries))
+ 		return -E2BIG;
++	if (unlikely(icsk->icsk_ulp_data))
++		return -EINVAL;
+ 
+ 	link = sk_psock_init_link();
+ 	if (!link)
 -- 
 2.20.1
 
