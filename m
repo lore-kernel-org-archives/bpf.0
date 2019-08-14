@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49556C433FF
-	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 02:39:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41AE7C32753
+	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 02:39:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 132922084F
-	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 02:39:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E58F20665
+	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 02:39:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1565750360;
-	bh=9zDbpXrPwc3N3ew0Hf5XdLobrVPXyTxAnXCNgfMII4k=;
+	s=default; t=1565750361;
+	bh=H7yId5Cjt3grtQ1JdVrFZniPce+PtmDRZEBY7dKBYSU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=KiVtoS22x3ZQ0Q6ZaGMEWrcmnY4DEh3i0vzJkwKbS4212uDHpkTE5yVt3+wkhq/V0
-	 /UGcebJExBzqV0XM+M3thrNCjDWrXpdd/7JdjgU+2gQJonU8fCQSpozmmN2D3w1ohs
-	 C+Jy6daKRXRSqYUDdeDFQcG6eSS1RPlcKvo0QEow=
+	b=w9vxNg5dmf5qGDgUzI0qG9urmpP1CRYWW0uap+Dda8rbj3KYsHJfDe6qX7WJWa/aA
+	 igExsYVaBTp4fDc5wfJNHfXDH3yE9V6crDspacecWm8Tn5w+TsWNg7EX3tEM9bOtww
+	 oNjQ//bZqRyeyslcvfeuwPZkiUrKfaZ1RhTioAMg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727550AbfHNCLg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1727540AbfHNCLg (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 13 Aug 2019 22:11:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43838 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:43790 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727535AbfHNCLg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Aug 2019 22:11:36 -0400
+        id S1727533AbfHNCLf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Aug 2019 22:11:35 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 04064216F4;
-        Wed, 14 Aug 2019 02:11:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DCD3220843;
+        Wed, 14 Aug 2019 02:11:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565748695;
-        bh=9zDbpXrPwc3N3ew0Hf5XdLobrVPXyTxAnXCNgfMII4k=;
+        s=default; t=1565748694;
+        bh=H7yId5Cjt3grtQ1JdVrFZniPce+PtmDRZEBY7dKBYSU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Gnlpni8M+xCyxdPovOFiGTFx4BZBfMWbgXwea3h+ztWqlryhS0wysdybhzitm2TB7
-         gy2dcBCU0fBnFi5v0LhV4gv/jl1/ylA1fLgoQzK96BFifkctv5Ni6ddsw03fNNOZ2L
-         BD2TyaJjwiZ7mqhOFZP7EVitU5Uc3sscujm3o4BM=
+        b=no1MXWG11J8C0V7C7mHdb3vpzIIFoV54k7oD1Xxvsygwso0sxMLtlBrh7qdtYqkMr
+         5vQl2D6IW6bZepJ2iDocnkg+dovLx0uwNFCXekemjLBUuakxQyRTZUD7hAyC6RfOWm
+         R6zgar5pNSq1uGg9vc/MjKtL+9C0hmQTlTj4lYxs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     John Fastabend <john.fastabend@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 026/123] bpf: sockmap, synchronize_rcu before free'ing map
-Date:   Tue, 13 Aug 2019 22:09:10 -0400
-Message-Id: <20190814021047.14828-26-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 025/123] bpf: sockmap, sock_map_delete needs to use xchg
+Date:   Tue, 13 Aug 2019 22:09:09 -0400
+Message-Id: <20190814021047.14828-25-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190814021047.14828-1-sashal@kernel.org>
 References: <20190814021047.14828-1-sashal@kernel.org>
@@ -61,33 +61,72 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: John Fastabend <john.fastabend@gmail.com>
 
-[ Upstream commit 2bb90e5cc90e1d09f631aeab041a9cf913a5bbe5 ]
+[ Upstream commit 45a4521dcbd92e71c9e53031b40e34211d3b4feb ]
 
-We need to have a synchronize_rcu before free'ing the sockmap because
-any outstanding psock references will have a pointer to the map and
-when they use this could trigger a use after free.
+__sock_map_delete() may be called from a tcp event such as unhash or
+close from the following trace,
+
+  tcp_bpf_close()
+    tcp_bpf_remove()
+      sk_psock_unlink()
+        sock_map_delete_from_link()
+          __sock_map_delete()
+
+In this case the sock lock is held but this only protects against
+duplicate removals on the TCP side. If the map is free'd then we have
+this trace,
+
+  sock_map_free
+    xchg()                  <- replaces map entry
+    sock_map_unref()
+      sk_psock_put()
+        sock_map_del_link()
+
+The __sock_map_delete() call however uses a read, test, null over the
+map entry which can result in both paths trying to free the map
+entry.
+
+To fix use xchg in TCP paths as well so we avoid having two references
+to the same map entry.
 
 Fixes: 604326b41a6fb ("bpf, sockmap: convert to generic sk_msg interface")
 Signed-off-by: John Fastabend <john.fastabend@gmail.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/sock_map.c | 2 ++
- 1 file changed, 2 insertions(+)
+ net/core/sock_map.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
 diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 1d40e040320d2..bbc91597d8364 100644
+index be6092ac69f8a..1d40e040320d2 100644
 --- a/net/core/sock_map.c
 +++ b/net/core/sock_map.c
-@@ -252,6 +252,8 @@ static void sock_map_free(struct bpf_map *map)
- 	raw_spin_unlock_bh(&stab->lock);
- 	rcu_read_unlock();
+@@ -281,16 +281,20 @@ static int __sock_map_delete(struct bpf_stab *stab, struct sock *sk_test,
+ 			     struct sock **psk)
+ {
+ 	struct sock *sk;
++	int err = 0;
  
-+	synchronize_rcu();
+ 	raw_spin_lock_bh(&stab->lock);
+ 	sk = *psk;
+ 	if (!sk_test || sk_test == sk)
+-		*psk = NULL;
++		sk = xchg(psk, NULL);
 +
- 	bpf_map_area_free(stab->sks);
- 	kfree(stab);
++	if (likely(sk))
++		sock_map_unref(sk, psk);
++	else
++		err = -EINVAL;
++
+ 	raw_spin_unlock_bh(&stab->lock);
+-	if (unlikely(!sk))
+-		return -EINVAL;
+-	sock_map_unref(sk, psk);
+-	return 0;
++	return err;
  }
+ 
+ static void sock_map_delete_from_link(struct bpf_map *map, struct sock *sk,
 -- 
 2.20.1
 
