@@ -2,153 +2,193 @@ Return-Path: <SRS0=gekI=WK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF435C433FF
-	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 19:56:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8DB5C32753
+	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 20:01:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 832B32064A
-	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 19:56:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 665F82064A
+	for <bpf@archiver.kernel.org>; Wed, 14 Aug 2019 20:01:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z5im4LRU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oEgtun6i"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727558AbfHNT4p (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Aug 2019 15:56:45 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:45274 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726865AbfHNT4p (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 14 Aug 2019 15:56:45 -0400
-Received: by mail-qt1-f195.google.com with SMTP id k13so14217221qtm.12;
-        Wed, 14 Aug 2019 12:56:44 -0700 (PDT)
+        id S1728169AbfHNUBo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Aug 2019 16:01:44 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:40951 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727273AbfHNUBo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 14 Aug 2019 16:01:44 -0400
+Received: by mail-qt1-f193.google.com with SMTP id e8so11001721qtp.7;
+        Wed, 14 Aug 2019 13:01:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=ww+ukQWhq8T3zW2D5eMGHhBPEXg0kxg6O6YWVSbyLu0=;
-        b=Z5im4LRUTbqe71draDujv36ynaR5I7qnWRFDXujjJOzy8/wD1b7rPasp8FZ0ASV+FK
-         2TOMISmoOdJ7DuiiaFYlzb9BQAokUydp8ZyR4t3xhk1tZM5T4q89XGdp4vgvIz3wTBGN
-         ffr//kJA2Xy3cDRAURvIvGO8qv4/ro/22riaw2Bg/9dDRcetRHknLSh58Jf+0KNGPA6v
-         lgx6bGTaXn0l4GBe5ERN9ErTjrki/EPLWVrJ2B3fH2L2nj5WJoF9oQPcTGGr3zqbYi0M
-         dkSVvFrCEYMsPitD6HZNUOztYWReG85PTV3FVlII6yFD012SQJAF12TPOqyl9lHBi811
-         DFeA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4KIMRxunohGVaj1oN9ljWqHEJ5I8LMKtQPOUCL1+qHg=;
+        b=oEgtun6ir7wdddSXlyiWXZzECbDTsDWNoce4YTt449zLgl4Hq/A+0T0oRiaUI1WVlO
+         PY6uZvOxlFOAQAHZzanlERxjl4Ylc3iZx5dyGb5c2dx1oMgsSEPRb/sRlcbgNDWdNPks
+         pp2xZix9zPfamlTc7a8UuhsYmI0bffO9oF48ehyYx9UpUrzWtDxkNsMwwnJyT+wZnue+
+         HlkbBnBv86kBr3wKOEo4LoPyGHfRBOX7s4zHft8Wbfe/lN4Ie4MM49Hq426BTCjmN8gD
+         q/F0OWPYc6CgjQuMC8jl4VNnXMlSKYZ/tMKlhsfLxEhwcm2TpcqL5BLVsbTeU0BEtmfy
+         0iGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=ww+ukQWhq8T3zW2D5eMGHhBPEXg0kxg6O6YWVSbyLu0=;
-        b=gOIXH6EXbEq99u27/TqlAWtgJW640zSSJoqOG3WixZrPqD4BNwu83PMHGzIEczf1Pz
-         Aj0W4PUBaIh8G8CZ7gRMFz1Hxj4YBaeXVVyZrSRImK+OgYqCCKuZAiTVnFtJlrAQpEcH
-         TI6KhURiF43fNfbxoVX5B04Kvj3BOSpOhfOlYrPoahFC4osbNV5zcbEb0vZ+yDyoPnY0
-         qrosby1lVpnfpzYMPGHe063un0TGD/UTNiwJcesEzZJDkLIdp97TaiVIJhSGWUszZe1f
-         2MoCZLtQUaR4b7Zqmq/sqakTSEAwEDPmeDaQ5TtSAR9YCBPSvAhUrg4cf8qsd5WIB7As
-         9rsQ==
-X-Gm-Message-State: APjAAAVaDSh7YV2zmipsJT3Uc4M6gA5bG0sFvd16OfOQPP8lVms1Opez
-        DVc9os4hhPe70aiVLwdyqCMKIOm2RIW/ei/TL8c=
-X-Google-Smtp-Source: APXvYqxXSTAWwijyc9NlManHFj6IVa/Msxv4XU2yOuIwifQOSvJEefJBpvrsS3zKqV4PuA0PJ50+m8sLy2gTt5qDjGs=
-X-Received: by 2002:ac8:488a:: with SMTP id i10mr891426qtq.93.1565812603868;
- Wed, 14 Aug 2019 12:56:43 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=4KIMRxunohGVaj1oN9ljWqHEJ5I8LMKtQPOUCL1+qHg=;
+        b=gDtpnklA+nKf6Ke43mkToBqP0TMdyaptQUFwaG6qzTSTQsiZU7ch/ZOxlrXAO7y6Wv
+         tvD9Pr76trP+sPNnwfa7OBVFIEGhIFZCmqDDeCwqGiFQPVNwGP8NNmaS2eQ1fI7ADyF6
+         abg+StPxik8Um7Q46kvxYYHSZix5WGjAIg8ld3OsOIBbKyS2R1hktHParVvp5w/UpCic
+         FZwuEj9FgBw+C3PnX4uOg6r3FBWlXfHW08jloFXba3eLGR13fB2H3ofsntDS1Rcp2Ooj
+         xDM/aGMXse5XxPmIFq3TyECRroLLUI7YEp7mtxI4CP2vY/568OtK2utj6mxMK4Z0yRlx
+         4nxA==
+X-Gm-Message-State: APjAAAUP0MzXHlZvhBcI+Fjas974oCf8FSuLaduQY8yMsB7k0ysp9ZKg
+        mpR1naKtxOb/ct+WtZBfZH29SA2ADbxIo70guq0=
+X-Google-Smtp-Source: APXvYqyv/cNihGFd2UWJXz9JUVv0ohy3x0srCgxalK3mkE9fsS+NVyC0yMAZzhZJKPFhGaf4o67Kb0Zy7Byj3s2KXr4=
+X-Received: by 2002:aed:26c2:: with SMTP id q60mr931189qtd.59.1565812902590;
+ Wed, 14 Aug 2019 13:01:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190813102318.5521-1-ivan.khoronzhuk@linaro.org>
- <20190813102318.5521-2-ivan.khoronzhuk@linaro.org> <CAEf4BzZ2y_DmTXkVqFh6Hdcquo6UvntvCygw5h5WwrWYXRRg_g@mail.gmail.com>
- <20190814092403.GA4142@khorivan>
-In-Reply-To: <20190814092403.GA4142@khorivan>
+References: <20190814164742.208909-1-sdf@google.com> <20190814164742.208909-3-sdf@google.com>
+ <CAEf4BzZR12JgbSvBqS7LMZjLcsneVDfFL9XyZdi3gtneyA9X9g@mail.gmail.com>
+ <CAEf4BzaE-KiW1Xt049A4s25YiaLeTH3yhgahwLUdpXNjF1sVpA@mail.gmail.com> <20190814195330.GL2820@mini-arch>
+In-Reply-To: <20190814195330.GL2820@mini-arch>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 14 Aug 2019 12:56:32 -0700
-Message-ID: <CAEf4BzbyAHkL5pFoBCKPY7ia3voj7t2OkFDNKYqdyE1Fiuy4nQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/3] libbpf: add asm/unistd.h to xsk to get __NR_mmap2
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        john fastabend <john.fastabend@gmail.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+Date:   Wed, 14 Aug 2019 13:01:31 -0700
+Message-ID: <CAEf4BzaEJcTKV6s8cVinpJcBStvs2LAJ+obNjevw54EOQq1QdQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/4] selftests/bpf: test_progs: test__skip
+To:     Stanislav Fomichev <sdf@fomichev.me>
+Cc:     Stanislav Fomichev <sdf@google.com>,
         Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        xdp-newbies@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
+        "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Aug 14, 2019 at 2:24 AM Ivan Khoronzhuk
-<ivan.khoronzhuk@linaro.org> wrote:
+On Wed, Aug 14, 2019 at 12:53 PM Stanislav Fomichev <sdf@fomichev.me> wrote:
 >
-> On Tue, Aug 13, 2019 at 04:38:13PM -0700, Andrii Nakryiko wrote:
->
-> Hi, Andrii
->
-> >On Tue, Aug 13, 2019 at 3:24 AM Ivan Khoronzhuk
-> ><ivan.khoronzhuk@linaro.org> wrote:
-> >>
-> >> That's needed to get __NR_mmap2 when mmap2 syscall is used.
-> >>
-> >> Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-> >> ---
-> >>  tools/lib/bpf/xsk.c | 1 +
-> >>  1 file changed, 1 insertion(+)
-> >>
-> >> diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
-> >> index 5007b5d4fd2c..f2fc40f9804c 100644
-> >> --- a/tools/lib/bpf/xsk.c
-> >> +++ b/tools/lib/bpf/xsk.c
-> >> @@ -12,6 +12,7 @@
-> >>  #include <stdlib.h>
-> >>  #include <string.h>
-> >>  #include <unistd.h>
-> >> +#include <asm/unistd.h>
+> On 08/14, Andrii Nakryiko wrote:
+> > On Wed, Aug 14, 2019 at 12:22 PM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
+> > >
+> > > On Wed, Aug 14, 2019 at 9:48 AM Stanislav Fomichev <sdf@google.com> wrote:
+> > > >
+> > > > Export test__skip() to indicate skipped tests and use it in
+> > > > test_send_signal_nmi().
+> > > >
+> > > > Cc: Andrii Nakryiko <andriin@fb.com>
+> > > > Signed-off-by: Stanislav Fomichev <sdf@google.com>
+> > > > ---
+> > >
+> > > For completeness, we should probably also support test__skip_subtest()
+> > > eventually, but it's fine until we don't have a use case.
 > >
-> >asm/unistd.h is not present in Github libbpf projection. Is there any
->
-> Look on includes from
-> tools/lib/bpf/libpf.c
-> tools/lib/bpf/bpf.c
->
+> > Hm.. so I think we don't need separate test__skip_subtest().
+> > test__skip() should skip either test or sub-test, depending on which
+> > context we are running in. So maybe just make sure this is handled
+> > correctly?
+> Do we care if it's a test or a subtest skip? My motivation was to
+> have a counter that can be examined to make sure we have a full test
+> coverage, so when people run the tests they can be sure that nothing
+> is skipped due to missing config or something else.
 
-Yeah, sorry for the noise. I missed that this is system header that's
-expected to be present, not internal kernel header, parts of which we
-need to re-implement for Github projection. Never mind my concerns.
+I think we do. We might convert, e.g., test_btf to be one big test
+with lots of sub-tests. Some of those might be legitimately skipped.
+Having just "1 test skipped" message is not helpful, when there are
+170 sub-tests that were not.
 
+>
+> Let me know if you see a value in highlighting test vs subtest skip.
+>
+> Other related question is: should we do verbose output in case
+> of a skip? Right now we don't do it.
 
-> That's how it's done... Copping headers to arch/arm will not
-> solve this, it includes both of them anyway, and anyway it needs
-> asm/unistd.h inclusion here, only because xsk.c needs __NR_*
+It might be useful, I guess, especially if it's not too common. But
+Alexei is way more picky about stuff like that, so I'd defer to him. I
+have no problem with a clean "SKIPPED: <test>/<subtest> (maybe some
+reason for skipping here)" message.
+
 >
->
-> >way to avoid including this header? Generally, libbpf can't easily use
-> >all of kernel headers, we need to re-implemented all the extra used
-> >stuff for Github version of libbpf, so we try to minimize usage of new
-> >headers that are not just plain uapi headers from include/uapi.
->
-> Yes I know, it's far away from real number of changes needed.
-> I faced enough about this already and kernel headers, especially
-> for arm32 it's a bit decency problem. But this patch it's part of
-> normal one. I have couple issues despite this normally fixed mmap2
-> that is the same even if uapi includes are coppied to tools/arch/arm.
->
-> In continuation of kernel headers inclusion and arm build:
->
-> For instance, what about this rough "kernel headers" hack:
-> https://github.com/ikhorn/af_xdp_stuff/commit/aa645ccca4d844f404ec3c2b27402d4d7848d1b5
->
-> or this one related for arm32 only:
-> https://github.com/ikhorn/af_xdp_stuff/commit/2c6c6d538605aac39600dcb3c9b66de11c70b963
->
-> I have more...
->
+> > >
+> > > Acked-by: Andrii Nakryiko <andriin@fb.com>
+> > >
+> > > >  tools/testing/selftests/bpf/prog_tests/send_signal.c | 1 +
+> > > >  tools/testing/selftests/bpf/test_progs.c             | 9 +++++++--
+> > > >  tools/testing/selftests/bpf/test_progs.h             | 2 ++
+> > > >  3 files changed, 10 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/tools/testing/selftests/bpf/prog_tests/send_signal.c b/tools/testing/selftests/bpf/prog_tests/send_signal.c
+> > > > index 1575f0a1f586..40c2c5efdd3e 100644
+> > > > --- a/tools/testing/selftests/bpf/prog_tests/send_signal.c
+> > > > +++ b/tools/testing/selftests/bpf/prog_tests/send_signal.c
+> > > > @@ -204,6 +204,7 @@ static int test_send_signal_nmi(void)
+> > > >                 if (errno == ENOENT) {
+> > > >                         printf("%s:SKIP:no PERF_COUNT_HW_CPU_CYCLES\n",
+> > > >                                __func__);
+> > > > +                       test__skip();
+> > > >                         return 0;
+> > > >                 }
+> > > >                 /* Let the test fail with a more informative message */
+> > > > diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+> > > > index 1a7a2a0c0a11..1993f2ce0d23 100644
+> > > > --- a/tools/testing/selftests/bpf/test_progs.c
+> > > > +++ b/tools/testing/selftests/bpf/test_progs.c
+> > > > @@ -121,6 +121,11 @@ void test__force_log() {
+> > > >         env.test->force_log = true;
+> > > >  }
+> > > >
+> > > > +void test__skip(void)
+> > > > +{
+> > > > +       env.skip_cnt++;
+> > > > +}
+> > > > +
+> > > >  struct ipv4_packet pkt_v4 = {
+> > > >         .eth.h_proto = __bpf_constant_htons(ETH_P_IP),
+> > > >         .iph.ihl = 5,
+> > > > @@ -535,8 +540,8 @@ int main(int argc, char **argv)
+> > > >                         test->test_name);
+> > > >         }
+> > > >         stdio_restore();
+> > > > -       printf("Summary: %d/%d PASSED, %d FAILED\n",
+> > > > -              env.succ_cnt, env.sub_succ_cnt, env.fail_cnt);
+> > > > +       printf("Summary: %d/%d PASSED, %d SKIPPED, %d FAILED\n",
 > >
-> >>  #include <arpa/inet.h>
-> >>  #include <asm/barrier.h>
-> >>  #include <linux/compiler.h>
-> >> --
-> >> 2.17.1
-> >>
->
-> --
-> Regards,
-> Ivan Khoronzhuk
+> > So because some sub-tests might be skipped, while others will be
+> > running, let's keep output consistent with SUCCESS and use
+> > <test>/<subtests> format for SKIPPED as well?
+> >
+> > > > +              env.succ_cnt, env.sub_succ_cnt, env.skip_cnt, env.fail_cnt);
+> > > >
+> > > >         free(env.test_selector.num_set);
+> > > >         free(env.subtest_selector.num_set);
+> > > > diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
+> > > > index 37d427f5a1e5..9defd35cb6c0 100644
+> > > > --- a/tools/testing/selftests/bpf/test_progs.h
+> > > > +++ b/tools/testing/selftests/bpf/test_progs.h
+> > > > @@ -64,6 +64,7 @@ struct test_env {
+> > > >         int succ_cnt; /* successful tests */
+> > > >         int sub_succ_cnt; /* successful sub-tests */
+> > > >         int fail_cnt; /* total failed tests + sub-tests */
+> > > > +       int skip_cnt; /* skipped tests */
+> > > >  };
+> > > >
+> > > >  extern int error_cnt;
+> > > > @@ -72,6 +73,7 @@ extern struct test_env env;
+> > > >
+> > > >  extern void test__force_log();
+> > > >  extern bool test__start_subtest(const char *name);
+> > > > +extern void test__skip(void);
+> > > >
+> > > >  #define MAGIC_BYTES 123
+> > > >
+> > > > --
+> > > > 2.23.0.rc1.153.gdeed80330f-goog
+> > > >
