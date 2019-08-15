@@ -2,145 +2,138 @@ Return-Path: <SRS0=AlFI=WL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B80C7C3A589
-	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 15:00:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30EDCC3A589
+	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 15:21:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8CBFF20656
-	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 15:00:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 031C2206C1
+	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 15:21:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="ukoAf53B"
+	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="YoynTap7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733290AbfHOPAd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 15 Aug 2019 11:00:33 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:35438 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733285AbfHOPAd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 15 Aug 2019 11:00:33 -0400
-Received: by mail-wr1-f65.google.com with SMTP id k2so2500486wrq.2
-        for <bpf@vger.kernel.org>; Thu, 15 Aug 2019 08:00:32 -0700 (PDT)
+        id S1728766AbfHOPVD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 15 Aug 2019 11:21:03 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:41334 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728700AbfHOPVD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 15 Aug 2019 11:21:03 -0400
+Received: by mail-pf1-f193.google.com with SMTP id 196so1477757pfz.8
+        for <bpf@vger.kernel.org>; Thu, 15 Aug 2019 08:21:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=SHpZ4QmRLvu5QStiFloxnaEe5T1qWZxwzosx1ZcjyYQ=;
-        b=ukoAf53Bsy/bOcsJFxcxJcpKiJcYp8IjD4tGnpHtoyKbikXDc1NDu7Xe0OOOL2jNwv
-         S8hNlQMCAq4e4PoCYUKpgkQ6XYS0sGGMqcrfnG43cAagfG704+30EVb/MDWfFU2ZWP6B
-         /3CpEyQxc279pqVZp1tFuF7M7ckS4OD1psI6aQAmsCCh5YUvdRY+GdX5C54FUi5yzMnu
-         3KzkfKVDC+LvgB+FNdO55gkzbSjuxXkkpWKKpI4/LvGDuRunQCxxPTW/LiRGUZSzcvNb
-         i9hRcmNoOd8wfVvKhMGmn0wHYojfPB++B7R6ZOmUXbxD6Nt7p8vwGZvO8Ps72w0IpQrb
-         gvkQ==
+        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=gWCpJv0MdsDcCjYfH3QHT9RFuWsfjx5IZK9e9mVsAXA=;
+        b=YoynTap7BbTEYNR98yeMXMzDCfOXQqvgHIvw9T4f5smrgxjtf6N2/WreLJ60l+vU8n
+         sQRM31Vvc9uMxiWvB7x0jIAhk3t5WryONIJ8hhIjS3dLDVABCIZzRE+TXCzCiZjfaGuG
+         f1jJN3z+bCNepyPs3HAWSeBLbaPAolhXY+2s/SjPXh3pZmoAX7dKANCwBtAQ3iQ2sDKb
+         ltS7eqL83EnQjGI7hoUZx+ELNE9WJZT48PAtQx+EQRhCdrwPvkO/1LYmAayjIzWxCk15
+         4gi+1qPX5o4KCrVHoRblzeR0s13OMlq9rqGOKoUHeTH6R88neSEhC2M8lFhg4fMh0CXI
+         x/Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=SHpZ4QmRLvu5QStiFloxnaEe5T1qWZxwzosx1ZcjyYQ=;
-        b=c2Jc3SiNQ8DQB/td/ZslRrYRFyF6i/qKFGRT5HfSaXN+9d8C74jmobheRUR0OEMcpr
-         Smileow72NhW887Rj8Y2iT3suBG922hXVGzLnB+ZBYDBW3poTToH354fwF9mgel803Ad
-         E64WRJpS/+jv/9iAV41DQQl1HY0ogkpxxhpVpg4EadEGLZaQ17gyc3tVS+QFZurEPFLf
-         pvH7Xytg/70OzoAiB6miFwp/wvvlZVE50rcl98pOVMA2ocl7UyiOdpMc+1QUHcaULR5/
-         EhsZB/QLkBJxD02/5ar8pq/mywpzL6JlPHkEGb6GopO6Z+CH1FVUJN1PVqLAOshyFbdV
-         c7Xw==
-X-Gm-Message-State: APjAAAWFxR5tcG4KkkW6OgPHD0HfBesgneDpGhH2dpUgUVbasm0ZkNkq
-        Xle+o5tO+ttS3pBFZz2EFpx5fA==
-X-Google-Smtp-Source: APXvYqxwWiUAz+0j8qKwd6syVgnRK/tsO398dvNffHeLQE33E6k5hiddUP3gLIUPM/g/BuOqPcM4tA==
-X-Received: by 2002:a5d:6a49:: with SMTP id t9mr5993705wrw.134.1565881231378;
-        Thu, 15 Aug 2019 08:00:31 -0700 (PDT)
-Received: from cbtest32.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id a23sm2794857wma.24.2019.08.15.08.00.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Aug 2019 08:00:30 -0700 (PDT)
-From:   Quentin Monnet <quentin.monnet@netronome.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        oss-drivers@netronome.com,
-        Quentin Monnet <quentin.monnet@netronome.com>
-Subject: [PATCH bpf-next 1/5] bpf: add new BPF_BTF_GET_NEXT_ID syscall command
-Date:   Thu, 15 Aug 2019 16:00:15 +0100
-Message-Id: <20190815150019.8523-2-quentin.monnet@netronome.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190815150019.8523-1-quentin.monnet@netronome.com>
-References: <20190815150019.8523-1-quentin.monnet@netronome.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=gWCpJv0MdsDcCjYfH3QHT9RFuWsfjx5IZK9e9mVsAXA=;
+        b=o6nfm2GFpT64WycyClR+ov10Sri3L6AnmDtktYRGyB8a52fDGIpuHourl6JOLxGK8t
+         NcL6gzGYSOTiO3kVUg7+2JfbDSZb/VB1n5ACmzjaNc3koT0MBh+BqGDwGui4usfR+jr1
+         0M+PMkTKAAlZ/pTFAWgxWs6yWygdcqMu8jQUueZ3lJcdajZUvTCKWBzpc3PqV9FC/Slv
+         MhPYrnBeSik6h/kngmcpwzUX0Rn5xswV0IWGepRGg5djrFmUxtOxQnqT9E5IVIp6r7go
+         hWnFN4mqerRR32c54twcTmu7F6+JUFbQBJH1JYDfMDiAhAbLnwxhpRnbVy5rjEVdteNd
+         +31A==
+X-Gm-Message-State: APjAAAVmVUthXS6uyUCbTx+kbW6dkk9xuO7Sj62GP3lW0pABe3UhylnQ
+        Hs4khE2XTqUZhYFul0KbMNaNrg==
+X-Google-Smtp-Source: APXvYqw55yeAxnoRONyct3JREtm0sRJmsrCOOytkTUf8aXAzcDNBNx85nZ3TKKmLqMaScwLjx2UGkg==
+X-Received: by 2002:aa7:8f2e:: with SMTP id y14mr5970297pfr.113.1565882462524;
+        Thu, 15 Aug 2019 08:21:02 -0700 (PDT)
+Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
+        by smtp.gmail.com with ESMTPSA id r75sm3268036pfc.18.2019.08.15.08.21.01
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 15 Aug 2019 08:21:01 -0700 (PDT)
+Date:   Thu, 15 Aug 2019 08:21:00 -0700
+From:   Stanislav Fomichev <sdf@fomichev.me>
+To:     Toshiaki Makita <toshiaki.makita1@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, William Tu <u9012063@gmail.com>
+Subject: Re: [RFC PATCH bpf-next 00/14] xdp_flow: Flow offload to XDP
+Message-ID: <20190815152100.GN2820@mini-arch>
+References: <20190813120558.6151-1-toshiaki.makita1@gmail.com>
+ <20190814170715.GJ2820@mini-arch>
+ <14c4a876-6f5d-4750-cbe4-19622f64975b@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <14c4a876-6f5d-4750-cbe4-19622f64975b@gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a new command for the bpf() system call: BPF_BTF_GET_NEXT_ID is used
-to cycle through all BTF objects loaded on the system.
+On 08/15, Toshiaki Makita wrote:
+> On 2019/08/15 2:07, Stanislav Fomichev wrote:
+> > On 08/13, Toshiaki Makita wrote:
+> > > * Implementation
+> > > 
+> > > xdp_flow makes use of UMH to load an eBPF program for XDP, similar to
+> > > bpfilter. The difference is that xdp_flow does not generate the eBPF
+> > > program dynamically but a prebuilt program is embedded in UMH. This is
+> > > mainly because flow insertion is considerably frequent. If we generate
+> > > and load an eBPF program on each insertion of a flow, the latency of the
+> > > first packet of ping in above test will incease, which I want to avoid.
+> > Can this be instead implemented with a new hook that will be called
+> > for TC events? This hook can write to perf event buffer and control
+> > plane will insert/remove/modify flow tables in the BPF maps (contol
+> > plane will also install xdp program).
+> > 
+> > Why do we need UMH? What am I missing?
+> 
+> So you suggest doing everything in xdp_flow kmod?
+You probably don't even need xdp_flow kmod. Add new tc "offload" mode
+(bypass) that dumps every command via netlink (or calls the BPF hook
+where you can dump it into perf event buffer) and then read that info
+from userspace and install xdp programs and modify flow tables.
+I don't think you need any kernel changes besides that stream
+of data from the kernel about qdisc/tc flow creation/removal/etc.
 
-The motivation is to be able to inspect (list) all BTF objects presents
-on the system.
+But, I haven't looked at the series deeply, so I might be missing
+something :-)
 
-Signed-off-by: Quentin Monnet <quentin.monnet@netronome.com>
-Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
----
- include/linux/bpf.h      | 3 +++
- include/uapi/linux/bpf.h | 1 +
- kernel/bpf/btf.c         | 4 ++--
- kernel/bpf/syscall.c     | 4 ++++
- 4 files changed, 10 insertions(+), 2 deletions(-)
+> I also thought about that. There are two phases so let's think about them separately.
+> 
+> 1) TC block (qdisc) creation / eBPF load
+> 
+> I saw eBPF maintainers repeatedly saying eBPF program loading needs to be
+> done from userland, not from kernel, to run the verifier for safety.
+> However xdp_flow eBPF program is prebuilt and embedded in kernel so we may
+> allow such programs to be loaded from kernel? I currently don't have the will
+> to make such an API as loading can be done with current UMH mechanism.
+> 
+> 2) flow insertion / eBPF map update
+> 
+> Not sure if this needs to be done from userland. One concern is that eBPF maps can
+> be modified by unrelated processes and we need to handle all unexpected state of maps.
+> Such handling tends to be difficult and may cause unexpected kernel behavior.
+> OTOH updating maps from kmod may reduces the latency of flow insertion drastically.
+Latency from the moment I type 'tc filter add ...' to the moment the rule
+is installed into the maps? Does it really matter?
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index f9a506147c8a..279ea762c34e 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -24,6 +24,9 @@ struct seq_file;
- struct btf;
- struct btf_type;
- 
-+extern struct idr btf_idr;
-+extern spinlock_t btf_idr_lock;
-+
- /* map is generic key/value storage optionally accesible by eBPF programs */
- struct bpf_map_ops {
- 	/* funcs callable from userspace (via syscall) */
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 4393bd4b2419..874bc5eefee1 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -106,6 +106,7 @@ enum bpf_cmd {
- 	BPF_TASK_FD_QUERY,
- 	BPF_MAP_LOOKUP_AND_DELETE_ELEM,
- 	BPF_MAP_FREEZE,
-+	BPF_BTF_GET_NEXT_ID,
- };
- 
- enum bpf_map_type {
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 5fcc7a17eb5a..e716a64b2f7f 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -195,8 +195,8 @@
- 	     i < btf_type_vlen(struct_type);					\
- 	     i++, member++)
- 
--static DEFINE_IDR(btf_idr);
--static DEFINE_SPINLOCK(btf_idr_lock);
-+DEFINE_IDR(btf_idr);
-+DEFINE_SPINLOCK(btf_idr_lock);
- 
- struct btf {
- 	void *data;
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 5d141f16f6fa..407b7f840874 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2874,6 +2874,10 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, siz
- 		err = bpf_obj_get_next_id(&attr, uattr,
- 					  &map_idr, &map_idr_lock);
- 		break;
-+	case BPF_BTF_GET_NEXT_ID:
-+		err = bpf_obj_get_next_id(&attr, uattr,
-+					  &btf_idr, &btf_idr_lock);
-+		break;
- 	case BPF_PROG_GET_FD_BY_ID:
- 		err = bpf_prog_get_fd_by_id(&attr);
- 		break;
--- 
-2.17.1
+Do I understand correctly that both of those events (qdisc creation and
+flow insertion) are triggered from tcf_block_offload_cmd (or similar)?
 
+> Alexei, Daniel, what do you think?
+> 
+> Toshiaki Makita
