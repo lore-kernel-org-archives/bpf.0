@@ -7,61 +7,61 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F120C3A59B
-	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 14:32:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7840BC3A59C
+	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 14:32:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 651AE2086C
-	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 14:32:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4DD582086C
+	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 14:32:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="w00eD6zu"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="gg/y4dqI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732955AbfHOOci (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 15 Aug 2019 10:32:38 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:35962 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732948AbfHOOcg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 15 Aug 2019 10:32:36 -0400
-Received: by mail-wm1-f67.google.com with SMTP id g67so1433742wme.1
-        for <bpf@vger.kernel.org>; Thu, 15 Aug 2019 07:32:36 -0700 (PDT)
+        id S1732960AbfHOOck (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 15 Aug 2019 10:32:40 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:38407 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729900AbfHOOce (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 15 Aug 2019 10:32:34 -0400
+Received: by mail-wm1-f65.google.com with SMTP id m125so1430110wmm.3
+        for <bpf@vger.kernel.org>; Thu, 15 Aug 2019 07:32:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=aDNxpHGNjzIhRdFUHhWdbz14YhYFMSlgXH+UzQL/n/8=;
-        b=w00eD6zuYRGH1jIiTVJEf9lLjIVZnhC0QawhAC32fxEEopDqbM7+pSk/U1hD8EBSZY
-         /yxX56laY8Y0nO3tLEghixZcIXpdS5dvO1Z3f/OD02kX0sMLzg7Hi5obV7/aO0OSASB2
-         74H0Jk8AAzzEU15yE5DzNS4DUzEcbQC4AWywvYV6r+mfcMBR3Sm1saJe4KsrF6Ax+i+A
-         Lj36frIWgqgDwygDUu59dq/jgYRHPN0QxpLO8ED+hYdQUkbJyhGsyY2Y4MrbuXdAujnY
-         9dExVa93uVTvqdbIzppTifEVJvdkm1zjhojjoyUlouF+EHQt8HQS9/ay5FIS9jzp2UEz
-         HSiA==
+        bh=GhCitZIE1rm8aD0lfIgbmHAyTkoG5GD5Cm1VynvrMAc=;
+        b=gg/y4dqIYmFdyInphTX8Wt+EQGNKRRYTuP/SmzQe9iy6izjuTILacgzG2kklO2tmOu
+         0Ffa2e0pTvph0ci0exTMriKMnlKiXSYpWR0+DtTO+5jJPGCqBIsVJAEvtzyx4gV7zp2x
+         V8Iad5LDayftlcivVS/AMT4WO+8YbacgUJ+xnhE2/M9nrYMmxrMWBJQga2CVWmklxmUF
+         FTDQEZljxwB0K5vdvWiN/E0hCiKqCTTu7+XLBNJbGb5Hv5bvhNfwyD81U8nIu/clMAd8
+         0loOQMjFaFwWRbipRjuYZzEFi5B1LdF76Yhriag/LPmQMXcK+GA/R8C4m4ntuRLoVjIj
+         +23Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=aDNxpHGNjzIhRdFUHhWdbz14YhYFMSlgXH+UzQL/n/8=;
-        b=TL6u8SigHdbPp0cN6ASMOcYIRYAWexVDGJdLUTvaCnoCgp/9DdFOYi2Nyusg/AhQsJ
-         raiDP/fOo+tx1nvZyggghfwnymBiyqnPJNBn1TQ09NCECQzrToQ5dkqm1Mxb1FzhPaUw
-         PLjM8VKqY6/I5/z3k+q8J2Trqexpmw6pNXKXPm8nMR1b8OQOF1LxcTTg/9BaiFdrx6R9
-         +olOVNx6JGhAS71oq9ptRRnI3t0tTYFunnSfIL/xhCl/h3PR/O2ZwCcz3PcDOOBR+1x6
-         Rm6mWnTaMN+5rVyjcZoSjUC3S7C12lGoxZsmTjTkBTATyHOmRnRq38KB6cQ2x8Xt7/LF
-         wx4g==
-X-Gm-Message-State: APjAAAVVrd/lCan7zHNsxjVxMxLlDWhyWGVgIGUyi5H5sii090N/d03v
-        hOLg2XDw8SHLBtzEpZjld0qoiilt1z0=
-X-Google-Smtp-Source: APXvYqxUUBg66ASuGRViLj9+Zj2B2ANuj8oLlQrkJxxEmO5ygbikhXVzd8iDj+qx4LVlLJbmdKlm2A==
-X-Received: by 2002:a1c:a686:: with SMTP id p128mr3228393wme.130.1565879555573;
-        Thu, 15 Aug 2019 07:32:35 -0700 (PDT)
+        bh=GhCitZIE1rm8aD0lfIgbmHAyTkoG5GD5Cm1VynvrMAc=;
+        b=et3QUEEn7rratq8ae7ztGZCn9ADbEeYaqiHOs3iyBUNKhZvypx71wTOsk1wtZ7b3Lz
+         myg+DKvdSKIwsqPp6Whz4qpzQaS/YTjYmes6SZUSUQyJrvk/tIryYdBGKDoYm7ZlydVP
+         IVgHos0mxmeahCkpO+HWaVGR66Hp66BEAAZE4vYnu1CjZKJxSfzDikM6XzvQXuL5GFFU
+         BjsMTLDCQ9nbNeEKdRfbbyjhYWl0yXoZTtSx7UrM/LyQpHxIf1WmutRFzms3Tdm4hAvt
+         qpfCT2f8S0rmhheKR+OYWnm41wHqozO0O2P3NsfEUg43IJGwG9HprhvuKYJT0stsA4Qz
+         yBRw==
+X-Gm-Message-State: APjAAAWlmixc/KyX0Km8c6OLL4/n9lzOVwA7gMWtK0T9owv0q3n+JPXC
+        J4pOfzInt12xyNy1Uncns7XZ+A==
+X-Google-Smtp-Source: APXvYqwu8EjSUkIT4UxX6coE1H5WsFoQ4nq4Qgbh6FF0MIKH4BTnCJT3IFRQeqwHwb+Rt0xVn3zKKQ==
+X-Received: by 2002:a1c:c747:: with SMTP id x68mr3222847wmf.14.1565879552510;
+        Thu, 15 Aug 2019 07:32:32 -0700 (PDT)
 Received: from cbtest32.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id a19sm8857463wra.2.2019.08.15.07.32.34
+        by smtp.gmail.com with ESMTPSA id a19sm8857463wra.2.2019.08.15.07.32.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Aug 2019 07:32:34 -0700 (PDT)
+        Thu, 15 Aug 2019 07:32:31 -0700 (PDT)
 From:   Quentin Monnet <quentin.monnet@netronome.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         oss-drivers@netronome.com,
         Quentin Monnet <quentin.monnet@netronome.com>
-Subject: [PATCH bpf 5/6] tools: bpftool: fix format string for p_err() in detect_common_prefix()
-Date:   Thu, 15 Aug 2019 15:32:19 +0100
-Message-Id: <20190815143220.4199-6-quentin.monnet@netronome.com>
+Subject: [PATCH bpf 2/6] tools: bpftool: fix format strings and arguments for jsonw_printf()
+Date:   Thu, 15 Aug 2019 15:32:16 +0100
+Message-Id: <20190815143220.4199-3-quentin.monnet@netronome.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190815143220.4199-1-quentin.monnet@netronome.com>
 References: <20190815143220.4199-1-quentin.monnet@netronome.com>
@@ -70,32 +70,52 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-There is one call to the p_err() function in detect_common_prefix()
-where the message to print is passed directly as the first argument,
-without using a format string. This is harmless, but may trigger
-warnings if the "__printf()" attribute is used correctly for the p_err()
-function. Let's fix it by using a "%s" format string.
+There are some mismatches between format strings and arguments passed to
+jsonw_printf() in the BTF dumper for bpftool, which seems harmless but
+may result in warnings if the "__printf()" attribute is used correctly
+for jsonw_printf(). Let's fix relevant format strings and type cast.
 
-Fixes: ba95c7452439 ("tools: bpftool: add "prog run" subcommand to test-run programs")
+Fixes: b12d6ec09730 ("bpf: btf: add btf print functionality")
 Signed-off-by: Quentin Monnet <quentin.monnet@netronome.com>
 Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 ---
- tools/bpf/bpftool/main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/bpf/bpftool/btf_dumper.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-index e916ff25697f..93d008687020 100644
---- a/tools/bpf/bpftool/main.c
-+++ b/tools/bpf/bpftool/main.c
-@@ -139,7 +139,7 @@ int detect_common_prefix(const char *arg, ...)
- 	strncat(msg, "'", sizeof(msg) - strlen(msg) - 1);
+diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumper.c
+index 8cafb9b31467..d66131f69689 100644
+--- a/tools/bpf/bpftool/btf_dumper.c
++++ b/tools/bpf/bpftool/btf_dumper.c
+@@ -26,9 +26,9 @@ static void btf_dumper_ptr(const void *data, json_writer_t *jw,
+ 			   bool is_plain_text)
+ {
+ 	if (is_plain_text)
+-		jsonw_printf(jw, "%p", *(unsigned long *)data);
++		jsonw_printf(jw, "%p", data);
+ 	else
+-		jsonw_printf(jw, "%u", *(unsigned long *)data);
++		jsonw_printf(jw, "%lu", *(unsigned long *)data);
+ }
  
- 	if (count >= 2) {
--		p_err(msg);
-+		p_err("%s", msg);
- 		return -1;
- 	}
- 
+ static int btf_dumper_modifier(const struct btf_dumper *d, __u32 type_id,
+@@ -216,7 +216,7 @@ static int btf_dumper_int(const struct btf_type *t, __u8 bit_offset,
+ 	switch (BTF_INT_ENCODING(*int_type)) {
+ 	case 0:
+ 		if (BTF_INT_BITS(*int_type) == 64)
+-			jsonw_printf(jw, "%lu", *(__u64 *)data);
++			jsonw_printf(jw, "%llu", *(__u64 *)data);
+ 		else if (BTF_INT_BITS(*int_type) == 32)
+ 			jsonw_printf(jw, "%u", *(__u32 *)data);
+ 		else if (BTF_INT_BITS(*int_type) == 16)
+@@ -229,7 +229,7 @@ static int btf_dumper_int(const struct btf_type *t, __u8 bit_offset,
+ 		break;
+ 	case BTF_INT_SIGNED:
+ 		if (BTF_INT_BITS(*int_type) == 64)
+-			jsonw_printf(jw, "%ld", *(long long *)data);
++			jsonw_printf(jw, "%lld", *(long long *)data);
+ 		else if (BTF_INT_BITS(*int_type) == 32)
+ 			jsonw_printf(jw, "%d", *(int *)data);
+ 		else if (BTF_INT_BITS(*int_type) == 16)
 -- 
 2.17.1
 
