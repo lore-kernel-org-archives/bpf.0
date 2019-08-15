@@ -7,61 +7,61 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5F65C3A59B
-	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 14:32:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19BD0C3A589
+	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 14:32:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B9288206C1
+	by mail.kernel.org (Postfix) with ESMTP id E46442086C
 	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 14:32:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="ZmpLee+M"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="onUTk2A4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732964AbfHOOcm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 15 Aug 2019 10:32:42 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:39314 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732940AbfHOOck (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 15 Aug 2019 10:32:40 -0400
-Received: by mail-wr1-f67.google.com with SMTP id t16so2407384wra.6
-        for <bpf@vger.kernel.org>; Thu, 15 Aug 2019 07:32:38 -0700 (PDT)
+        id S1732934AbfHOOcd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 15 Aug 2019 10:32:33 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:37906 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730466AbfHOOcd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 15 Aug 2019 10:32:33 -0400
+Received: by mail-wr1-f66.google.com with SMTP id g17so2414123wrr.5
+        for <bpf@vger.kernel.org>; Thu, 15 Aug 2019 07:32:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=klej20LM50rl+qegl25ThpIduG7ubdFrTIw/Elq2Oyk=;
-        b=ZmpLee+MpsIvwrI81gSC97WwtSwmglFRgAnR53OEOPTIM7/tGVwNzCUqW0EpCz7zCl
-         nSp7J9zX5N6QYUBVade+gQUtTr76yPVmJrkOP6fbrjC8jDz/wnckOKG7atAdCO2NhQZI
-         F/wup5rR8QZZ8U32G6dILI4JyV5P1ATplET25i3PZMZhaw5wnKBhFRDvvAYF6PH7ETja
-         1jUkLhXCs/iQRYqLmxUShrskQZU8h1N360msgzQt9DP9U/grRFS5MrMYVD4JXbT1DtmM
-         IpemRMWBOi61793/oigcAAWQgHnZQy/lz3BSm0Fa6oHt0Jymj5qU61aLQ+wMtcPLz8oC
-         jMDw==
+        bh=CMA3sRg7D/yxSYutIiGR9Ywo5TwiBUayBKOGHCZMAQQ=;
+        b=onUTk2A4W/SWt+WguIOVirYQ2odQDVjaZNL81KkBk8ukGK6ts8RDFnyOpEGCxZJLji
+         HCgBUJp3FQL2nSOMQTNkfs+rPZP7fHGdsy/MCpH8or4ZaqLgaKKTybCQn4jgF+blB1Gg
+         EmWCXyxx2rIbdqfVvmFfJyuxfN8dpzrl0q0NNcFYmrm7DmnO7d/kGg/CpxDb1HZZ2sPW
+         +ZCAboa9xzR6NqjszMd2GhD8k/qQ+M6PAotAwxGjEkoImkfThfE23XJj8m/cVJjWZ/Nm
+         z7og7WNyqdsLTMjSm2qOPx4fvOa9edM7GAw41fajeRaeoCvW2Wtgg01fbfsCywJmSx10
+         Y05Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=klej20LM50rl+qegl25ThpIduG7ubdFrTIw/Elq2Oyk=;
-        b=LpdaalAVg9LTb5ik1nv4WtinYYsmNvv28DwViIIdKq9lIZDYtlLFX6OtPHglUYK438
-         GYXg9GgJYK2NaYUTu8htUvlrmuWKq9GJ190SAc1A4cN0w6nvl7SnLr6jjazDgU0jbD+h
-         xIqJFAw8+/xW7TUQEqiYxNlovrYyg73V1O6tL+KAbP7eHHbbJwXbBkra5jUSi29i5xVA
-         YBt9ZOgScu1iuFmW4POGOcTY1/UFl7PXcD9tNScbIIUDph/2VPl2UABnGoc6djHdTYik
-         ISKcvSPi5NAOfi7SX4z0Wh9dHRtHFuvlyB6oaxZIJzQ8Od0J7vI9DwrxWHQIR6CbnQkp
-         KUlQ==
-X-Gm-Message-State: APjAAAUBi+iaBhzYzo+/ky60IxtpUdNZDXc4UMmz0Fkm/zU3rYcs+gLh
-        S3UZ+vYv3UhU7BkoGPJ89vu/sg==
-X-Google-Smtp-Source: APXvYqxIBOQL+nrXAbciTgQQN+SrA6sh71SeVePn3YZ9iwT/G69fL834Z5AjxMuTvBATZtBtSF+u0g==
-X-Received: by 2002:adf:fdcc:: with SMTP id i12mr6065639wrs.88.1565879558327;
-        Thu, 15 Aug 2019 07:32:38 -0700 (PDT)
+        bh=CMA3sRg7D/yxSYutIiGR9Ywo5TwiBUayBKOGHCZMAQQ=;
+        b=Nl1lQcXMtc0Knio9dvD1P3tYl2AC+KXLsHtoUUVEe+Bghgn0icyhBjo0xolkBBmWVy
+         E1kXEVFL/ZXsS07I+IqRHQ650NtakO0WF7D0ltjUgYu0fdJywARGRfvlqlxS8tww1Glf
+         P7SB9L8J/ByxyG2YxEMQuzT4RVn2xpp5+nOnXocv6KRiKGIJXAb+DjQA+F8rYT5yraWo
+         puMr2eGmrYwIU1ASj5KjNGPlyr8A8lPX9+K/Fm6VX48h5V2UjNYHpn1aGLHu78Hte7MF
+         2c1Ta/Bvct3I1uatGzeu32TvSsVS80A0nmbpAh+caRUSfJ8iKOrzOk4aMlgLBmSXe+BO
+         CzBw==
+X-Gm-Message-State: APjAAAX443dPvL+eoXMVnUd4DGhiQeL2IF0BHuaMJGahUa7q+u9dKmO6
+        TvoX4dz8shMfhO+afF6iHSx6hg==
+X-Google-Smtp-Source: APXvYqyxyRU7c5HWyYflegsbfoQS2Arr22U5UvgLTffx1xxpBYUJRRJxMR94yMAz9wKFAG5nDp7bcA==
+X-Received: by 2002:a05:6000:128d:: with SMTP id f13mr5935903wrx.241.1565879551546;
+        Thu, 15 Aug 2019 07:32:31 -0700 (PDT)
 Received: from cbtest32.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id a19sm8857463wra.2.2019.08.15.07.32.35
+        by smtp.gmail.com with ESMTPSA id a19sm8857463wra.2.2019.08.15.07.32.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Aug 2019 07:32:35 -0700 (PDT)
+        Thu, 15 Aug 2019 07:32:30 -0700 (PDT)
 From:   Quentin Monnet <quentin.monnet@netronome.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         oss-drivers@netronome.com,
         Quentin Monnet <quentin.monnet@netronome.com>
-Subject: [PATCH bpf 6/6] tools: bpftool: move "__printf()" attributes to header file
-Date:   Thu, 15 Aug 2019 15:32:20 +0100
-Message-Id: <20190815143220.4199-7-quentin.monnet@netronome.com>
+Subject: [PATCH bpf 1/6] tools: bpftool: fix arguments for p_err() in do_event_pipe()
+Date:   Thu, 15 Aug 2019 15:32:15 +0100
+Message-Id: <20190815143220.4199-2-quentin.monnet@netronome.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190815143220.4199-1-quentin.monnet@netronome.com>
 References: <20190815143220.4199-1-quentin.monnet@netronome.com>
@@ -70,139 +70,40 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Some functions in bpftool have a "__printf()" format attributes to tell
-the compiler they should expect printf()-like arguments. But because
-these attributes are not used for the function prototypes in the header
-files, the compiler does not run the checks everywhere the functions are
-used, and some mistakes on format string and corresponding arguments
-slipped in over time.
+The last argument passed to some calls to the p_err() functions is not
+correct, it should be "*argv" instead of "**argv". This may lead to a
+segmentation fault error if CPU IDs or indices from the command line
+cannot be parsed correctly. Let's fix this.
 
-Let's move the __printf() attributes to the correct places.
-
-Note: We add guards around the definition of GCC_VERSION in
-tools/include/linux/compiler-gcc.h to prevent a conflict in jit_disasm.c
-on GCC_VERSION from headers pulled via libbfd.
-
-Fixes: c101189bc968 ("tools: bpftool: fix -Wmissing declaration warnings")
-Reported-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+Fixes: f412eed9dfde ("tools: bpftool: add simple perf event output reader")
 Signed-off-by: Quentin Monnet <quentin.monnet@netronome.com>
 Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 ---
- tools/bpf/bpftool/common.c         | 4 ++--
- tools/bpf/bpftool/json_writer.c    | 6 ++----
- tools/bpf/bpftool/json_writer.h    | 6 ++++--
- tools/bpf/bpftool/main.h           | 4 ++--
- tools/include/linux/compiler-gcc.h | 2 ++
- 5 files changed, 12 insertions(+), 10 deletions(-)
+ tools/bpf/bpftool/map_perf_ring.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index 6a71324be628..88264abaa738 100644
---- a/tools/bpf/bpftool/common.c
-+++ b/tools/bpf/bpftool/common.c
-@@ -29,7 +29,7 @@
- #define BPF_FS_MAGIC		0xcafe4a11
- #endif
+diff --git a/tools/bpf/bpftool/map_perf_ring.c b/tools/bpf/bpftool/map_perf_ring.c
+index 3f108ab17797..4c5531d1a450 100644
+--- a/tools/bpf/bpftool/map_perf_ring.c
++++ b/tools/bpf/bpftool/map_perf_ring.c
+@@ -157,7 +157,7 @@ int do_event_pipe(int argc, char **argv)
+ 			NEXT_ARG();
+ 			ctx.cpu = strtoul(*argv, &endptr, 0);
+ 			if (*endptr) {
+-				p_err("can't parse %s as CPU ID", **argv);
++				p_err("can't parse %s as CPU ID", *argv);
+ 				goto err_close_map;
+ 			}
  
--void __printf(1, 2) p_err(const char *fmt, ...)
-+void p_err(const char *fmt, ...)
- {
- 	va_list ap;
+@@ -168,7 +168,7 @@ int do_event_pipe(int argc, char **argv)
+ 			NEXT_ARG();
+ 			ctx.idx = strtoul(*argv, &endptr, 0);
+ 			if (*endptr) {
+-				p_err("can't parse %s as index", **argv);
++				p_err("can't parse %s as index", *argv);
+ 				goto err_close_map;
+ 			}
  
-@@ -47,7 +47,7 @@ void __printf(1, 2) p_err(const char *fmt, ...)
- 	va_end(ap);
- }
- 
--void __printf(1, 2) p_info(const char *fmt, ...)
-+void p_info(const char *fmt, ...)
- {
- 	va_list ap;
- 
-diff --git a/tools/bpf/bpftool/json_writer.c b/tools/bpf/bpftool/json_writer.c
-index 6046dcab51cc..86501cd3c763 100644
---- a/tools/bpf/bpftool/json_writer.c
-+++ b/tools/bpf/bpftool/json_writer.c
-@@ -15,7 +15,6 @@
- #include <malloc.h>
- #include <inttypes.h>
- #include <stdint.h>
--#include <linux/compiler.h>
- 
- #include "json_writer.h"
- 
-@@ -153,8 +152,7 @@ void jsonw_name(json_writer_t *self, const char *name)
- 		putc(' ', self->out);
- }
- 
--void __printf(2, 0)
--jsonw_vprintf_enquote(json_writer_t *self, const char *fmt, va_list ap)
-+void jsonw_vprintf_enquote(json_writer_t *self, const char *fmt, va_list ap)
- {
- 	jsonw_eor(self);
- 	putc('"', self->out);
-@@ -162,7 +160,7 @@ jsonw_vprintf_enquote(json_writer_t *self, const char *fmt, va_list ap)
- 	putc('"', self->out);
- }
- 
--void __printf(2, 3) jsonw_printf(json_writer_t *self, const char *fmt, ...)
-+void jsonw_printf(json_writer_t *self, const char *fmt, ...)
- {
- 	va_list ap;
- 
-diff --git a/tools/bpf/bpftool/json_writer.h b/tools/bpf/bpftool/json_writer.h
-index cb9a1993681c..35cf1f00f96c 100644
---- a/tools/bpf/bpftool/json_writer.h
-+++ b/tools/bpf/bpftool/json_writer.h
-@@ -14,6 +14,7 @@
- #include <stdbool.h>
- #include <stdint.h>
- #include <stdarg.h>
-+#include <linux/compiler.h>
- 
- /* Opaque class structure */
- typedef struct json_writer json_writer_t;
-@@ -30,8 +31,9 @@ void jsonw_pretty(json_writer_t *self, bool on);
- void jsonw_name(json_writer_t *self, const char *name);
- 
- /* Add value  */
--void jsonw_vprintf_enquote(json_writer_t *self, const char *fmt, va_list ap);
--void jsonw_printf(json_writer_t *self, const char *fmt, ...);
-+void __printf(2, 0) jsonw_vprintf_enquote(json_writer_t *self, const char *fmt,
-+					  va_list ap);
-+void __printf(2, 3) jsonw_printf(json_writer_t *self, const char *fmt, ...);
- void jsonw_string(json_writer_t *self, const char *value);
- void jsonw_bool(json_writer_t *self, bool value);
- void jsonw_float(json_writer_t *self, double number);
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 7031a4bf87a0..af9ad56c303a 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -98,8 +98,8 @@ extern int bpf_flags;
- extern struct pinned_obj_table prog_table;
- extern struct pinned_obj_table map_table;
- 
--void p_err(const char *fmt, ...);
--void p_info(const char *fmt, ...);
-+void __printf(1, 2) p_err(const char *fmt, ...);
-+void __printf(1, 2) p_info(const char *fmt, ...);
- 
- bool is_prefix(const char *pfx, const char *str);
- int detect_common_prefix(const char *arg, ...);
-diff --git a/tools/include/linux/compiler-gcc.h b/tools/include/linux/compiler-gcc.h
-index 0d35f18006a1..95c072b70d0e 100644
---- a/tools/include/linux/compiler-gcc.h
-+++ b/tools/include/linux/compiler-gcc.h
-@@ -6,9 +6,11 @@
- /*
-  * Common definitions for all gcc versions go here.
-  */
-+#ifndef GCC_VERSION
- #define GCC_VERSION (__GNUC__ * 10000		\
- 		     + __GNUC_MINOR__ * 100	\
- 		     + __GNUC_PATCHLEVEL__)
-+#endif
- 
- #if GCC_VERSION >= 70000 && !defined(__CHECKER__)
- # define __fallthrough __attribute__ ((fallthrough))
 -- 
 2.17.1
 
