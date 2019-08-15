@@ -2,29 +2,30 @@ Return-Path: <SRS0=AlFI=WL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 673B0C433FF
-	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 03:46:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7878C31E40
+	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 03:46:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 37BFE20656
-	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 03:46:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B740C20656
+	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 03:46:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728283AbfHODqX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Aug 2019 23:46:23 -0400
+        id S1729639AbfHODqZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Aug 2019 23:46:25 -0400
 Received: from mga04.intel.com ([192.55.52.120]:56741 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727217AbfHODqX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 14 Aug 2019 23:46:23 -0400
+        id S1728786AbfHODqY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 14 Aug 2019 23:46:24 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
   by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Aug 2019 20:46:23 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,387,1559545200"; 
-   d="scan'208";a="352124050"
+   d="scan'208";a="352124058"
 Received: from arch-p28.jf.intel.com ([10.166.187.31])
   by orsmga005.jf.intel.com with ESMTP; 14 Aug 2019 20:46:23 -0700
 From:   Sridhar Samudrala <sridhar.samudrala@intel.com>
@@ -32,23 +33,21 @@ To:     magnus.karlsson@intel.com, bjorn.topel@intel.com,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         sridhar.samudrala@intel.com, intel-wired-lan@lists.osuosl.org,
         maciej.fijalkowski@intel.com, tom.herbert@intel.com
-Subject: [PATCH bpf-next 0/5] Add support for SKIP_BPF flag for AF_XDP sockets
-Date:   Wed, 14 Aug 2019 20:46:18 -0700
-Message-Id: <1565840783-8269-1-git-send-email-sridhar.samudrala@intel.com>
+Subject: [PATCH bpf-next 3/5] i40e: Enable XDP_SKIP_BPF option for AF_XDP sockets
+Date:   Wed, 14 Aug 2019 20:46:21 -0700
+Message-Id: <1565840783-8269-4-git-send-email-sridhar.samudrala@intel.com>
 X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1565840783-8269-1-git-send-email-sridhar.samudrala@intel.com>
+References: <1565840783-8269-1-git-send-email-sridhar.samudrala@intel.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch series introduces XDP_SKIP_BPF flag that can be specified
-during the bind() call of an AF_XDP socket to skip calling the BPF 
-program in the receive path and pass the buffer directly to the socket.
-
-When a single AF_XDP socket is associated with a queue and a HW
-filter is used to redirect the packets and the app is interested in
-receiving all the packets on that queue, we don't need an additional 
-BPF program to do further filtering or lookup/redirect to a socket.
+This patch skips calling BPF program in the receive path if
+the queue is associated with UMEM that is not shared and
+bound to an AF_XDP socket that has enabled skip bpf during
+bind() call.
 
 Here are some performance numbers collected on 
   - 2 socket 28 core Intel(R) Xeon(R) Platinum 8180 CPU @ 2.50GHz
@@ -75,26 +74,76 @@ rxdrop copy                8.2         10.5
 l2fwd  copy                1.7          1.7
 ---------------------------------------------	
 
-Sridhar Samudrala (5):
-  xsk: Convert bool 'zc' field in struct xdp_umem to a u32 bitmap
-  xsk: Introduce XDP_SKIP_BPF bind option
-  i40e: Enable XDP_SKIP_BPF option for AF_XDP sockets
-  ixgbe: Enable XDP_SKIP_BPF option for AF_XDP sockets
-  xdpsock_user: Add skip_bpf option
+Signed-off-by: Sridhar Samudrala <sridhar.samudrala@intel.com>
+---
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c | 22 +++++++++++++++++++--
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c  |  6 ++++++
+ 2 files changed, 26 insertions(+), 2 deletions(-)
 
- drivers/net/ethernet/intel/i40e/i40e_txrx.c   | 22 +++++++++-
- drivers/net/ethernet/intel/i40e/i40e_xsk.c    |  6 +++
- drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 20 ++++++++-
- drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c  | 16 ++++++-
- include/net/xdp_sock.h                        | 21 ++++++++-
- include/uapi/linux/if_xdp.h                   |  1 +
- include/uapi/linux/xdp_diag.h                 |  1 +
- net/xdp/xdp_umem.c                            |  9 ++--
- net/xdp/xsk.c                                 | 43 ++++++++++++++++---
- net/xdp/xsk_diag.c                            |  5 ++-
- samples/bpf/xdpsock_user.c                    |  8 ++++
- 11 files changed, 135 insertions(+), 17 deletions(-)
-
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+index e3f29dc8b290..5e63e3644e87 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+@@ -2199,6 +2199,7 @@ static struct sk_buff *i40e_run_xdp(struct i40e_ring *rx_ring,
+ 	int err, result = I40E_XDP_PASS;
+ 	struct i40e_ring *xdp_ring;
+ 	struct bpf_prog *xdp_prog;
++	struct xdp_umem *umem;
+ 	u32 act;
+ 
+ 	rcu_read_lock();
+@@ -2209,6 +2210,13 @@ static struct sk_buff *i40e_run_xdp(struct i40e_ring *rx_ring,
+ 
+ 	prefetchw(xdp->data_hard_start); /* xdp_frame write */
+ 
++	umem = xdp_get_umem_from_qid(rx_ring->netdev, rx_ring->queue_index);
++	if (xsk_umem_skip_bpf(umem)) {
++		err = xsk_umem_rcv(umem, xdp);
++		result = !err ? I40E_XDP_REDIR : I40E_XDP_CONSUMED;
++		goto xdp_out;
++	}
++
+ 	act = bpf_prog_run_xdp(xdp_prog, xdp);
+ 	switch (act) {
+ 	case XDP_PASS:
+@@ -2303,8 +2311,18 @@ void i40e_update_rx_stats(struct i40e_ring *rx_ring,
+  **/
+ void i40e_finalize_xdp_rx(struct i40e_ring *rx_ring, unsigned int xdp_res)
+ {
+-	if (xdp_res & I40E_XDP_REDIR)
+-		xdp_do_flush_map();
++	if (xdp_res & I40E_XDP_REDIR) {
++		struct xdp_umem *umem;
++
++		umem = rx_ring->xsk_umem;
++		if (!umem)
++			umem = xdp_get_umem_from_qid(rx_ring->netdev,
++						     rx_ring->queue_index);
++		if (xsk_umem_skip_bpf(umem))
++			xsk_umem_flush(umem);
++		else
++			xdp_do_flush_map();
++	}
+ 
+ 	if (xdp_res & I40E_XDP_TX) {
+ 		struct i40e_ring *xdp_ring =
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+index 32bad014d76c..cc538479c95d 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+@@ -195,6 +195,12 @@ static int i40e_run_xdp_zc(struct i40e_ring *rx_ring, struct xdp_buff *xdp)
+ 	struct bpf_prog *xdp_prog;
+ 	u32 act;
+ 
++	if (xsk_umem_skip_bpf(rx_ring->xsk_umem)) {
++		err = xsk_umem_rcv(rx_ring->xsk_umem, xdp);
++		result = !err ? I40E_XDP_REDIR : I40E_XDP_CONSUMED;
++		return result;
++	}
++
+ 	rcu_read_lock();
+ 	/* NB! xdp_prog will always be !NULL, due to the fact that
+ 	 * this path is enabled by setting an XDP program.
 -- 
 2.20.1
 
