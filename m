@@ -2,97 +2,101 @@ Return-Path: <SRS0=AlFI=WL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D280C3A589
-	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 14:22:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84385C3A589
+	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 14:32:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 259752086C
-	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 14:22:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 575012086C
+	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 14:32:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="zM8e7vTl"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="cQmKfWBZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732831AbfHOOWh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 15 Aug 2019 10:22:37 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:54345 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730497AbfHOOWh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 15 Aug 2019 10:22:37 -0400
-Received: by mail-wm1-f66.google.com with SMTP id p74so1429013wme.4
-        for <bpf@vger.kernel.org>; Thu, 15 Aug 2019 07:22:36 -0700 (PDT)
+        id S1731224AbfHOOcc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 15 Aug 2019 10:32:32 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:32823 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730261AbfHOOcc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 15 Aug 2019 10:32:32 -0400
+Received: by mail-wr1-f67.google.com with SMTP id u16so2436816wrr.0
+        for <bpf@vger.kernel.org>; Thu, 15 Aug 2019 07:32:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id;
-        bh=dzEHN37VGWbW9oZl14TcD0zcx2/h8u/uYbosL+lvXCs=;
-        b=zM8e7vTlI4W3svXevDk5e8ahEGLQWfag5Bbxs7zNoZ31wyE9PQGCpaFO7Y0MNEkmoC
-         /GxVUrDtp16CKuc9F9dZwR9GapbKnIxxQLWiYUyAoKMWTeUs12DTY4zlhsTTcNI0w71H
-         0cgifMlE8+LuSRrg50sr/n5OIx8P/YH20/3RD5q/Ium3lowM6Dy/9c+gJ+/dAW8uE5Yf
-         l3DmLiptIzyiK9jyFTUBQWQraQGgTl2R2TpQFHk7A+xHe+qKGfQHfCBVBzV2TWtIVi2k
-         DvlvN+HxWbzvCAL7eiJ+6IOeuSAGYjPqXHI5ap++62hDGx7CmE6HWziou0ghY2ANzFAE
-         dWVg==
+        bh=VzIV3wLK5szCxEi8cwnZRCUa5jZ2PF/EyCcsUyHAR5E=;
+        b=cQmKfWBZN7lmI2BBEhL0AuCpQssDt4nzWC2DZUPkmQSWE+VEop33UrjgzHtQ+ZlE7u
+         xVYgbSXr64uFDlc2laydxVbs1niuoorYTc8Db4mz18iPfzRTKytPQe4YleBpHDVDjYek
+         fLfbcdfH/zyjsKtXTjMH+5LG9uEucFHhax9Dq4EdKRKv1rP0mzk1urGYQZjpCrrIX67W
+         xw3MpNErjwzuqpCw2AGwcjeOfza8JXb4c5IT7Cg1VtiAkiuFyqwwnuZy17772wCqAkq7
+         JQmKr0co6qaF96vRSmzkTSPmyRI1VepHdkGgGdvx0sCKFIIvhis7Fo6PAEl/gzMfW69f
+         728A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=dzEHN37VGWbW9oZl14TcD0zcx2/h8u/uYbosL+lvXCs=;
-        b=X5WWnsGqOr8ApAYw6WDGdsl59I7ny27HAQgVDeunn7GbivO0Ou06REkL6dr2yRXr/n
-         LGs8aWDwFF6UsQdFAaUboDb7FDzro14UeHPbEfiiHTHJwC45W+mUVBbu8N7mSPweXX7v
-         rsFEUZRfJNOy6GU7McDVrlQ7t5EtHE/V1/xklaQdoA+2MhuNc49tzBhpuXGEpFl49Xoz
-         6M1+uIH2cU+0b2QTCZraqxmjaZF9A2YCdnnVNsbaPVLmanjrJakvPWSBZGocyA1U4YFJ
-         87lMTeDnj595uMt0sdroEucVKnXXT4WvcWkB67bOA9g65r4iFkwTQyEqF8iPksIGnVz+
-         oxdw==
-X-Gm-Message-State: APjAAAW2rbT4a/dLz6+EWisxRVsGEVzlLuG39ETeUWFL2WuF2k4WtWFd
-        jGPPCwNue3GyereMyDGDvgOxhQ==
-X-Google-Smtp-Source: APXvYqyB+L626GR0kHtVUSQzAVhqYH+zINNeFEGnziQG4awK6UZJQVOHdx7GObWtglIkhnOn7VKAOg==
-X-Received: by 2002:a1c:13:: with SMTP id 19mr2979003wma.162.1565878955575;
-        Thu, 15 Aug 2019 07:22:35 -0700 (PDT)
+        bh=VzIV3wLK5szCxEi8cwnZRCUa5jZ2PF/EyCcsUyHAR5E=;
+        b=KfbBPnIZukVinPPpghogzIi1UxInKk2Z4XpYtVxnb4T15rpop9jqeRMD//OMUAkRyk
+         fjAPoKhTJ1N+AdKGWpBwCOPWFm8Bo+nsh1/3p6X7Fwwil737mR4Zl6CNnLDx4N8OmN7f
+         kP5jFgNFRjpz04dr+Mv7YnxQyKVwhAhOpVXbrayLFONoqV+diNxTz/cQcFID/n0CFNtL
+         G+e62FPO8Jq9FSfKDnIiixwVwoeZAwfOWnPh//xDoHbR0pzEqX4DZhK6NdohGSf67dp+
+         VyqZ2rHi8uelC1Shl0ulYnewV+qjOE0mJ+0Fs6lLqYHsPgFsLYtrSzSS5CnEe0wDQPG2
+         wlyg==
+X-Gm-Message-State: APjAAAVlpksdmBg0X+YrtY+k9PmiFiRyASOBnaTC7J+izdXxnVLOsJjq
+        l+Augg09wfX6e27ZHSEjDrha4Q==
+X-Google-Smtp-Source: APXvYqxbg/i8zgboue0gyOYEzbsKK6Scl6nAmTso5Ls+s2B80n7c94kC8Co1D7hXtmC5im6RvTrr8A==
+X-Received: by 2002:a05:6000:1186:: with SMTP id g6mr6026852wrx.17.1565879550622;
+        Thu, 15 Aug 2019 07:32:30 -0700 (PDT)
 Received: from cbtest32.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id t198sm2860790wmt.39.2019.08.15.07.22.34
+        by smtp.gmail.com with ESMTPSA id a19sm8857463wra.2.2019.08.15.07.32.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Aug 2019 07:22:34 -0700 (PDT)
+        Thu, 15 Aug 2019 07:32:29 -0700 (PDT)
 From:   Quentin Monnet <quentin.monnet@netronome.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         oss-drivers@netronome.com,
         Quentin Monnet <quentin.monnet@netronome.com>
-Subject: [PATCH bpf] tools: bpftool: close prog FD before exit on showing a single program
-Date:   Thu, 15 Aug 2019 15:22:23 +0100
-Message-Id: <20190815142223.2203-1-quentin.monnet@netronome.com>
+Subject: [PATCH bpf 0/6] tools: bpftool: fix printf()-like functions
+Date:   Thu, 15 Aug 2019 15:32:14 +0100
+Message-Id: <20190815143220.4199-1-quentin.monnet@netronome.com>
 X-Mailer: git-send-email 2.17.1
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When showing metadata about a single program by invoking
-"bpftool prog show PROG", the file descriptor referring to the program
-is not closed before returning from the function. Let's close it.
+Hi,
+Because the "__printf()" attributes were used only where the functions are
+implemented, and not in header files, the checks have not been enforced on
+all the calls to printf()-like functions, and a number of errors slipped in
+bpftool over time.
 
-Fixes: 71bb428fe2c1 ("tools: bpf: add bpftool")
-Signed-off-by: Quentin Monnet <quentin.monnet@netronome.com>
-Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
----
- tools/bpf/bpftool/prog.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+This set cleans up such errors, and then moves the "__printf()" attributes
+to header files, so that the checks are performed at all locations.
 
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 66f04a4846a5..43fdbbfe41bb 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -363,7 +363,9 @@ static int do_show(int argc, char **argv)
- 		if (fd < 0)
- 			return -1;
- 
--		return show_prog(fd);
-+		err = show_prog(fd);
-+		close(fd);
-+		return err;
- 	}
- 
- 	if (argc)
+Quentin Monnet (6):
+  tools: bpftool: fix arguments for p_err() in do_event_pipe()
+  tools: bpftool: fix format strings and arguments for jsonw_printf()
+  tools: bpftool: fix argument for p_err() in BTF do_dump()
+  tools: bpftool: fix format string for p_err() in
+    query_flow_dissector()
+  tools: bpftool: fix format string for p_err() in
+    detect_common_prefix()
+  tools: bpftool: move "__printf()" attributes to header file
+
+ tools/bpf/bpftool/btf.c            | 2 +-
+ tools/bpf/bpftool/btf_dumper.c     | 8 ++++----
+ tools/bpf/bpftool/common.c         | 4 ++--
+ tools/bpf/bpftool/json_writer.c    | 6 ++----
+ tools/bpf/bpftool/json_writer.h    | 6 ++++--
+ tools/bpf/bpftool/main.c           | 2 +-
+ tools/bpf/bpftool/main.h           | 4 ++--
+ tools/bpf/bpftool/map_perf_ring.c  | 4 ++--
+ tools/bpf/bpftool/net.c            | 2 +-
+ tools/include/linux/compiler-gcc.h | 2 ++
+ 10 files changed, 21 insertions(+), 19 deletions(-)
+
 -- 
 2.17.1
 
