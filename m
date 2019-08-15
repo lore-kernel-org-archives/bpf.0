@@ -2,203 +2,157 @@ Return-Path: <SRS0=AlFI=WL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8A72C31E40
-	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 11:47:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3495DC3A589
+	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 12:14:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9C4FF2086C
-	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 11:47:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0AB972086C
+	for <bpf@archiver.kernel.org>; Thu, 15 Aug 2019 12:14:32 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pe3tFCbO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730363AbfHOLrL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 15 Aug 2019 07:47:11 -0400
-Received: from mga01.intel.com ([192.55.52.88]:55622 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726317AbfHOLrL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 15 Aug 2019 07:47:11 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Aug 2019 04:47:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,389,1559545200"; 
-   d="scan'208";a="184600470"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.122]) ([10.237.72.122])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 Aug 2019 04:47:06 -0700
-Subject: Re: [PATCH v5] perf machine: arm/arm64: Improve completeness for
- kernel address space
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, clang-built-linux@googlegroups.com,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org
-References: <20190815082521.16885-1-leo.yan@linaro.org>
- <d874e6b3-c115-6c8c-bb12-160cfd600505@intel.com>
- <20190815113242.GA28881@leoy-ThinkPad-X240s>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <e0919e39-7607-815b-3a12-96f098e45a5f@intel.com>
-Date:   Thu, 15 Aug 2019 14:45:57 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190815113242.GA28881@leoy-ThinkPad-X240s>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1731782AbfHOMOb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 15 Aug 2019 08:14:31 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:36177 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731773AbfHOMOb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 15 Aug 2019 08:14:31 -0400
+Received: by mail-lj1-f194.google.com with SMTP id u15so2055267ljl.3
+        for <bpf@vger.kernel.org>; Thu, 15 Aug 2019 05:14:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=33puqWwMZjyd4TYEQvWXwTMbXdpLyUiQZumxgi8mks8=;
+        b=pe3tFCbO2RnIoNE/LB44dZjDO8vQ7HB0YywwEaUvwc5hJvVjxuiE04bAv94cX33+Sb
+         NgfDL1T8IKqF3c1g4406lT/qYceHkQd/qshFBjOdaqP0ZHzyj22HHZu/JeWW/rtMix7c
+         m39QlnkRsMxEe5HcgnuAWA4njyQHElgbOlKYwH25btDHvOouEnZJsGaTKpnzVGBf8/yN
+         R0Ph7iMRYy/FpaLft34m9NQOPCOF8oqq82MwG1boLLjuhRBGiOLFaxNaUfXg5jdJyQe2
+         fmIudYQsUC1xRYY1XirqkuFbwtTbggb9/i+QGg04jjfUgpk5DfFV73t8cz/EwME7GcTN
+         iuXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=33puqWwMZjyd4TYEQvWXwTMbXdpLyUiQZumxgi8mks8=;
+        b=TZG72JSumodoTP/FqptyIG0bN60Z5yjatx73A1HVL1BNWSbw7nMTjCn/1/EuJLpYgY
+         bYpQmWFjNWK8lKptj+6f+00GzvnUgr9wy38JxtaDccz0zeFiwNwTjYBQtOlmU2JVL92l
+         zZWXvm63Vxe0HXjSRCxfVrYkunURYB186f3fIl2wOk9YCMK/hUmpWUGqCXFo0yHsxt97
+         CPN0qCPKiIG+K0m/th3BrHx/5JFbIuV28HQ/zGSUp5GCBKSggIOfRqBmaafEvnRPZJyP
+         g4lLh+H0/XHKddcyefCEpNBLaJOVj4XPaDonw9qPqhobpA53BK43qhtoJZDEGINRefaq
+         y5Lg==
+X-Gm-Message-State: APjAAAXlNFKa0ygm9fUAlHbvlrnCpPxBh25UBit3FL/6YHJSmAcqdWqg
+        qvQd1EfnXWzUpFOS/5y198KmCw==
+X-Google-Smtp-Source: APXvYqybKDvJZSU8YbbGOPb9gPZTpAAbsikrVdJiMkQ2qxDuOntFONRTiz7sQbnawMO/FjK90mokGA==
+X-Received: by 2002:a2e:81c3:: with SMTP id s3mr2567234ljg.70.1565871268718;
+        Thu, 15 Aug 2019 05:14:28 -0700 (PDT)
+Received: from localhost.localdomain (168-200-94-178.pool.ukrtel.net. [178.94.200.168])
+        by smtp.gmail.com with ESMTPSA id q25sm462060ljg.30.2019.08.15.05.14.27
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 15 Aug 2019 05:14:28 -0700 (PDT)
+From:   Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+To:     magnus.karlsson@intel.com, bjorn.topel@intel.com
+Cc:     davem@davemloft.net, hawk@kernel.org, john.fastabend@gmail.com,
+        jakub.kicinski@netronome.com, daniel@iogearbox.net,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        xdp-newbies@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jlemon@flugsvamp.com, yhs@fb.com, andrii.nakryiko@gmail.com,
+        Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+Subject: [PATCH bpf-next v2 2/3] xdp: xdp_umem: replace kmap on vmap for umem map
+Date:   Thu, 15 Aug 2019 15:13:55 +0300
+Message-Id: <20190815121356.8848-3-ivan.khoronzhuk@linaro.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190815121356.8848-1-ivan.khoronzhuk@linaro.org>
+References: <20190815121356.8848-1-ivan.khoronzhuk@linaro.org>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 15/08/19 2:32 PM, Leo Yan wrote:
-> Hi Adrian,
-> 
-> On Thu, Aug 15, 2019 at 11:54:54AM +0300, Adrian Hunter wrote:
-> 
-> [...]
-> 
->>> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
->>> index e4988f49ea79..d7ff839d8b20 100644
->>> --- a/tools/perf/Makefile.config
->>> +++ b/tools/perf/Makefile.config
->>> @@ -48,9 +48,20 @@ ifeq ($(SRCARCH),x86)
->>>    NO_PERF_REGS := 0
->>>  endif
->>>  
->>> +ARM_PRE_START_SIZE := 0
->>> +
->>>  ifeq ($(SRCARCH),arm)
->>>    NO_PERF_REGS := 0
->>>    LIBUNWIND_LIBS = -lunwind -lunwind-arm
->>> +  ifneq ($(wildcard $(srctree)/arch/$(SRCARCH)/kernel/vmlinux.lds),)
->>> +    # Extract info from lds:
->>> +    #   . = ((0xC0000000)) + 0x00208000;
->>> +    # ARM_PRE_START_SIZE := 0x00208000
->>> +    ARM_PRE_START_SIZE := $(shell egrep ' \. \= \({2}0x[0-9a-fA-F]+\){2}' \
->>> +      $(srctree)/arch/$(SRCARCH)/kernel/vmlinux.lds | \
->>> +      sed -e 's/[(|)|.|=|+|<|;|-]//g' -e 's/ \+/ /g' -e 's/^[ \t]*//' | \
->>> +      awk -F' ' '{printf "0x%x", $$2}' 2>/dev/null)
->>> +  endif
->>>  endif
->>>  
->>>  ifeq ($(SRCARCH),arm64)
->>> @@ -58,8 +69,19 @@ ifeq ($(SRCARCH),arm64)
->>>    NO_SYSCALL_TABLE := 0
->>>    CFLAGS += -I$(OUTPUT)arch/arm64/include/generated
->>>    LIBUNWIND_LIBS = -lunwind -lunwind-aarch64
->>> +  ifneq ($(wildcard $(srctree)/arch/$(SRCARCH)/kernel/vmlinux.lds),)
->>> +    # Extract info from lds:
->>> +    #  . = ((((((((0xffffffffffffffff)) - (((1)) << (48)) + 1) + (0)) + (0x08000000))) + (0x08000000))) + 0x00080000;
->>> +    # ARM_PRE_START_SIZE := (0x08000000 + 0x08000000 + 0x00080000) = 0x10080000
->>> +    ARM_PRE_START_SIZE := $(shell egrep ' \. \= \({8}0x[0-9a-fA-F]+\){2}' \
->>> +      $(srctree)/arch/$(SRCARCH)/kernel/vmlinux.lds | \
->>> +      sed -e 's/[(|)|.|=|+|<|;|-]//g' -e 's/ \+/ /g' -e 's/^[ \t]*//' | \
->>> +      awk -F' ' '{printf "0x%x", $$6+$$7+$$8}' 2>/dev/null)
->>> +  endif
->>
->> So, that is not going to work if you take a perf.data file to a non-arm machine?
-> 
-> Yeah, this patch will only allow perf to work correctly when perf
-> run natively on arm/arm64, so it can resolve partial of the issue.
-> 
->> How come you cannot use kallsyms to get the information?
-> 
-> Thanks for pointing out this.  Sorry I skipped your comment "I don't
-> know how you intend to calculate ARM_PRE_START_SIZE" when you reviewed
-> the patch v3, I should use that chance to elaborate the detailed idea
-> and so can get more feedback/guidance before procceed.
-> 
-> Actually, I have considered to use kallsyms when worked on the previous
-> patch set.
-> 
-> As mentioned in patch set v4's cover letter, I tried to implement
-> machine__create_extra_kernel_maps() for arm/arm64, the purpose is to
-> parse kallsyms so can find more kernel maps and thus also can fixup
-> the kernel start address.  But I found the 'perf script' tool directly
-> calls machine__get_kernel_start() instead of running into the flow for
-> machine__create_extra_kernel_maps();
+For 64-bit there is no reason to use vmap/vunmap, so use page_address
+as it was initially. For 32 bits, in some apps, like in samples
+xdpsock_user.c when number of pgs in use is quite big, the kmap
+memory can be not enough, despite on this, kmap looks like is
+deprecated in such cases as it can block and should be used rather
+for dynamic mm.
 
-Doesn't it just need to loop through each kernel map to find the lowest
-start address?
+Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+---
+ net/xdp/xdp_umem.c | 36 ++++++++++++++++++++++++++++++------
+ 1 file changed, 30 insertions(+), 6 deletions(-)
 
->                                      so I finally gave up to use
-> machine__create_extra_kernel_maps() for tweaking kernel start address
-> and went back to use this patch's approach by parsing lds files.
-> 
-> So for next step, I want to get some guidances:
-> 
-> - One method is to add a new weak function, e.g.
->   arch__fix_kernel_text_start(), then every arch can implement its own
->   function to fixup the kernel start address;
-> 
->   For arm/arm64, can use kallsyms to find the symbols with least
->   address and fixup for kernel start address.
-> 
-> - Another method is to directly parse kallsyms in the function
->   machine__get_kernel_start(), thus the change can be used for all
->   archs;
-> 
-> Seems to me the second method is to address this issue as a common
-> issue crossing all archs.  But not sure if this is the requirement for
-> all archs or just this is only required for arm/arm64.  Please let me
-> know what's your preference or other thoughts.  Thanks a lot!
-> 
-> Leo.
-> 
->>>  endif
->>>  
->>> +CFLAGS += -DARM_PRE_START_SIZE=$(ARM_PRE_START_SIZE)
->>> +
->>>  ifeq ($(SRCARCH),csky)
->>>    NO_PERF_REGS := 0
->>>  endif
->>> diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
->>> index f6ee7fbad3e4..e993f891bb82 100644
->>> --- a/tools/perf/util/machine.c
->>> +++ b/tools/perf/util/machine.c
->>> @@ -2687,13 +2687,26 @@ int machine__get_kernel_start(struct machine *machine)
->>>  	machine->kernel_start = 1ULL << 63;
->>>  	if (map) {
->>>  		err = map__load(map);
->>> +		if (err)
->>> +			return err;
->>> +
->>>  		/*
->>>  		 * On x86_64, PTI entry trampolines are less than the
->>>  		 * start of kernel text, but still above 2^63. So leave
->>>  		 * kernel_start = 1ULL << 63 for x86_64.
->>>  		 */
->>> -		if (!err && !machine__is(machine, "x86_64"))
->>> +		if (!machine__is(machine, "x86_64"))
->>>  			machine->kernel_start = map->start;
->>> +
->>> +		/*
->>> +		 * On arm/arm64, the kernel uses some memory regions which are
->>> +		 * prior to '_stext' symbol; to reflect the complete kernel
->>> +		 * address space, compensate these pre-defined regions for
->>> +		 * kernel start address.
->>> +		 */
->>> +		if (!strcmp(perf_env__arch(machine->env), "arm") ||
->>> +		    !strcmp(perf_env__arch(machine->env), "arm64"))
->>> +			machine->kernel_start -= ARM_PRE_START_SIZE;
->>>  	}
->>>  	return err;
->>>  }
->>>
->>
-> 
+diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
+index a0607969f8c0..d740c4f8810c 100644
+--- a/net/xdp/xdp_umem.c
++++ b/net/xdp/xdp_umem.c
+@@ -14,7 +14,7 @@
+ #include <linux/netdevice.h>
+ #include <linux/rtnetlink.h>
+ #include <linux/idr.h>
+-#include <linux/highmem.h>
++#include <linux/vmalloc.h>
+ 
+ #include "xdp_umem.h"
+ #include "xsk_queue.h"
+@@ -170,7 +170,30 @@ static void xdp_umem_unmap_pages(struct xdp_umem *umem)
+ 	unsigned int i;
+ 
+ 	for (i = 0; i < umem->npgs; i++)
+-		kunmap(umem->pgs[i]);
++		if (PageHighMem(umem->pgs[i]))
++			vunmap(umem->pages[i].addr);
++}
++
++static int xdp_umem_map_pages(struct xdp_umem *umem)
++{
++	unsigned int i;
++	void *addr;
++
++	for (i = 0; i < umem->npgs; i++) {
++		if (PageHighMem(umem->pgs[i]))
++			addr = vmap(&umem->pgs[i], 1, VM_MAP, PAGE_KERNEL);
++		else
++			addr = page_address(umem->pgs[i]);
++
++		if (!addr) {
++			xdp_umem_unmap_pages(umem);
++			return -ENOMEM;
++		}
++
++		umem->pages[i].addr = addr;
++	}
++
++	return 0;
+ }
+ 
+ static void xdp_umem_unpin_pages(struct xdp_umem *umem)
+@@ -312,7 +335,7 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+ 	u32 chunk_size = mr->chunk_size, headroom = mr->headroom;
+ 	unsigned int chunks, chunks_per_page;
+ 	u64 addr = mr->addr, size = mr->len;
+-	int size_chk, err, i;
++	int size_chk, err;
+ 
+ 	if (chunk_size < XDP_UMEM_MIN_CHUNK_SIZE || chunk_size > PAGE_SIZE) {
+ 		/* Strictly speaking we could support this, if:
+@@ -378,10 +401,11 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+ 		goto out_account;
+ 	}
+ 
+-	for (i = 0; i < umem->npgs; i++)
+-		umem->pages[i].addr = kmap(umem->pgs[i]);
++	err = xdp_umem_map_pages(umem);
++	if (!err)
++		return 0;
+ 
+-	return 0;
++	kfree(umem->pages);
+ 
+ out_account:
+ 	xdp_umem_unaccount_pages(umem);
+-- 
+2.17.1
 
