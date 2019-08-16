@@ -2,64 +2,66 @@ Return-Path: <SRS0=Gny/=WM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76D72C3A59D
-	for <bpf@archiver.kernel.org>; Fri, 16 Aug 2019 22:32:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2353C41514
+	for <bpf@archiver.kernel.org>; Fri, 16 Aug 2019 22:32:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 412CB206C2
-	for <bpf@archiver.kernel.org>; Fri, 16 Aug 2019 22:32:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8D5CA2184C
+	for <bpf@archiver.kernel.org>; Fri, 16 Aug 2019 22:32:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="r3r745fc";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="d2Y4LJVS"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="NMhyH+ji";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="c9etP3Rm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727726AbfHPWcR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 16 Aug 2019 18:32:17 -0400
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:47841 "EHLO
+        id S1727834AbfHPWcU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 16 Aug 2019 18:32:20 -0400
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:44639 "EHLO
         new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727669AbfHPWcR (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 16 Aug 2019 18:32:17 -0400
+        by vger.kernel.org with ESMTP id S1727878AbfHPWcU (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 16 Aug 2019 18:32:20 -0400
 Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 4EE24202D;
-        Fri, 16 Aug 2019 18:32:16 -0400 (EDT)
+        by mailnew.nyi.internal (Postfix) with ESMTP id 44E342007;
+        Fri, 16 Aug 2019 18:32:19 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Fri, 16 Aug 2019 18:32:16 -0400
+  by compute4.internal (MEProxy); Fri, 16 Aug 2019 18:32:19 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=fm1; bh=5Z3BJbMxGWyiINqbqOOYczIuMc
-        3tJww1wzh6U+BsAYU=; b=r3r745fckMQlPvH1EanYTC0QQmkgVk8Vz9uLZPdV4k
-        UfaaFYNKPbHXOEE/onwf4w/QJuVTbaLfFZ/Vmw/WsSGWGzh0wWP8MJmpOkJy5+Tm
-        igkg760eNnQd/OzTpr7D7zwCoyg5+OPzjCDlO5gsEJgCd1oHu6nKPmvSkPooZ2Y1
-        H2cyHkWtELnkv5y31XQZOw4A0OPGvy91VBSAE7uP21AQTQMoVZYgO0RQeCYWIEVM
-        g9BPQCUwHlTx+9FaPBxuHOLADT/hW8DBFr/5iV/OtcpO6BDtj4qN/7zzkYRP2ZKW
-        ll5wc7W7K9HkWKUB+BCgUIDEM38wKivUsnhQkY5+OPBQ==
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=fm1; bh=nULmcyQSNr8cA
+        ELFcrkB+0TUhwAeBpe1wH20rK6qw/k=; b=NMhyH+jiRhrSy2brSY3lU1nZBqFP1
+        W8GX++tTQhQA4yyPYYyUnFSbZgHUj+vMi5pi41nUZMgvkTOoZrNJOjIYfwGv8+Ei
+        IqjOEcQP1kYh+BVN15OgmdKLk01jSEwtHVbJbhGPbVimC34HjRB78VzeoYIfOno/
+        mWNQrKy9YHz9/6nPCTia9UWV6qDg2a19eazMLb/xOY0TwZtRK+Z1cRt13VaUYXH4
+        tViHao4oFagpIccy75kwLUTC1KqpAaV0ErTXP5KVVgnTYpXxUmP02ZB2MdUhNZ5k
+        bvPLJqDL3gZeMaS8GV98OS3hgDsFNXRieMCKZIW8xLczQ4pk2twkQW8RA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=5Z3BJbMxGWyiINqbq
-        OOYczIuMc3tJww1wzh6U+BsAYU=; b=d2Y4LJVSzAgIjm6rFgH4x/KkeEPMWu72k
-        PIMWfwG6IgZ/jgLDDPhI7rt6clqu3b9qSxSMD8BzXLBDntKZvWcRva5jVjHYPTVw
-        0JKSAKTGmwb9DqSw244dv6amRxTZldutMmdA3aaBgVgvHkvYwvrr5rnDQ96u/l95
-        IVCWo24uKyv9sJ/FDoZ5jB2zT+rooUADKmyTvPeFuQ2OGdIQEgeT5DM4/eS4/dYp
-        O6J9ctWZiu9Y1X4QZVGqMVNiZnvTPIO+W7RwcoW+CAqr7nIlolOr4guEgjOC67pS
-        ftF0mObcHVcfk9Mndr5Q6ErAE1p+hqfwWVhiGhdaJqhRyheycgeng==
-X-ME-Sender: <xms:7y5XXXpBw4i6EMbtZABFi-G7b5QajtZi3KiROWEOqqOxjiA-AzCPXg>
+        :in-reply-to:message-id:mime-version:references:subject:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; bh=nULmcyQSNr8cAELFcrkB+0TUhwAeBpe1wH20rK6qw/k=; b=c9etP3Rm
+        xbrP3YguVt+iLsILMZzSo3wa24oUzSg+zC6xrZPgE7QjP7UrbgX5xibfPkbt7VLY
+        Cd2FbkOtV+aH+s/sNeJXlvobJrEdqCPAyGm+nVZ5uwZKPiICiF3yRlFCKWVkTqs9
+        Pwbc4PwBGGJnBlrUZRuA6RZU5suMrRdVCctfvDilXMNF9Ew/5x413/P2f/IrDFuM
+        T/8m0HhEywbWKtvGbpFBCGj1WdnqgcUZhp9hCcuDV/DBtWIhgfTf80YYU2r2/v8k
+        ho3H4cPgA6OY7ZvVNdW/9aCkWhb3XrGBKy0BMgTLJ+XLak4C6S89CIwr5xzfJmMp
+        HFcCoODihIbl+A==
+X-ME-Sender: <xms:8i5XXZUn9S2vUtlP8DRIDrWvemhAxJOLPdWA5VWsekMMzCtaJKzxDg>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddrudefgedgtdelucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
-    fufffkofgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihu
-    segugihuuhhurdighiiiqeenucfkphepudelledrvddtuddrieegrddufeeknecurfgrrh
-    grmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiiinecuvehluhhsthgvrhfu
-    ihiivgeptd
-X-ME-Proxy: <xmx:7y5XXQIF2e_AIiLEFqIVpl18ZqhaWGSVhbXiMERy4XiuOxSJSCZ-4w>
-    <xmx:7y5XXfss3RHxROSmWARiiyd4_lpRMDpKmLr2iHBZcslX-4ydWHv6gw>
-    <xmx:7y5XXVA8dVXbNmGA0adhMnONjBZmA8-82CJfKY51u7ta2xgpKqiGhQ>
-    <xmx:8C5XXW0HAlie8cqJE2Vi3yMQC9U3nMqBazBrHv6tbbd4UWZpEZ1x7A>
+    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlfeehmdenucfjughrpefhvf
+    fufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
+    gihusegugihuuhhurdighiiiqeenucfkphepudelledrvddtuddrieegrddufeeknecurf
+    grrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiiinecuvehluhhsthgv
+    rhfuihiivgeptd
+X-ME-Proxy: <xmx:8y5XXd2tcickRucyFxBkyM7q-xCmhqHu5XsTYwkJ0tCoFc1VqW4W2Q>
+    <xmx:8y5XXQaCb4OuRyGwpaOPvVMapfjd40ZjmKnT_Rt5Mi0drpWBtXvJGw>
+    <xmx:8y5XXQrK0kUx6R2MWcsYltrCI8W66cdStlxhJv-rgOuXijuC13TJ5w>
+    <xmx:8y5XXbvI-mQC7ZrtVaTl5T5j-DDFEWn7F6q_h2V_GYK4A7McFDnO7g>
 Received: from dlxu-fedora-R90QNFJV.thefacebook.com (unknown [199.201.64.138])
-        by mail.messagingengine.com (Postfix) with ESMTPA id EA6DC8005B;
-        Fri, 16 Aug 2019 18:32:13 -0400 (EDT)
+        by mail.messagingengine.com (Postfix) with ESMTPA id 4CCD58005B;
+        Fri, 16 Aug 2019 18:32:17 -0400 (EDT)
 From:   Daniel Xu <dxu@dxuuu.xyz>
 To:     bpf@vger.kernel.org, songliubraving@fb.com, yhs@fb.com,
         andriin@fb.com, peterz@infradead.org, mingo@redhat.com,
@@ -68,10 +70,12 @@ Cc:     Daniel Xu <dxu@dxuuu.xyz>, ast@fb.com,
         alexander.shishkin@linux.intel.com, jolsa@redhat.com,
         namhyung@kernel.org, linux-kernel@vger.kernel.org,
         kernel-team@fb.com
-Subject: [PATCH v3 bpf-next 0/4] tracing/probe: Add PERF_EVENT_IOC_QUERY_PROBE
-Date:   Fri, 16 Aug 2019 15:31:45 -0700
-Message-Id: <20190816223149.5714-1-dxu@dxuuu.xyz>
+Subject: [PATCH v3 bpf-next 2/4] libbpf: Add helpers to extract perf fd from bpf_link
+Date:   Fri, 16 Aug 2019 15:31:47 -0700
+Message-Id: <20190816223149.5714-3-dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190816223149.5714-1-dxu@dxuuu.xyz>
+References: <20190816223149.5714-1-dxu@dxuuu.xyz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -79,52 +83,113 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-It's useful to know [uk]probe's nmissed and nhit stats. For example with
-tracing tools, it's important to know when events may have been lost.
-debugfs currently exposes a control file to get this information, but
-it is not compatible with probes registered with the perf API.
+It is sometimes necessary to perform ioctl's on the underlying perf fd.
+There is not currently a way to extract the fd given a bpf_link, so add a
+a pair of casting and getting helpers.
 
-While bpf programs may be able to manually count nhit, there is no way
-to gather nmissed. In other words, it is currently not possible to
-retrieve information about FD-based probes.
+The casting and getting helpers are nice because they let us define
+broad categories of links that makes it clear to users what they can
+expect to extract from what type of link.
 
-This patch adds a new ioctl that lets users query nmissed (as well as
-nhit for completeness). We currently only add support for [uk]probes
-but leave the possibility open for other probes like tracepoint.
+Acked-by: Song Liu <songliubraving@fb.com>
+Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+---
+ tools/lib/bpf/libbpf.c   | 21 +++++++++++++++++++++
+ tools/lib/bpf/libbpf.h   | 13 +++++++++++++
+ tools/lib/bpf/libbpf.map |  4 ++++
+ 3 files changed, 38 insertions(+)
 
-v2 -> v3:
-- Introduce bpf_link_type and associated getter to track underlying link
-  types
-- Add back size field in perf_event_query_probe for forward/backwards
-  compat
-- Remove NULL checks, fix typos
-
-v1 -> v2:
-- More descriptive cover letter
-- Make API more generic and support uprobes as well
-- Use casters/getters for libbpf instead of single getter
-- Fix typos
-- Remove size field from ioctl struct
-- Split out libbpf.h sync to tools dir to separate commit
-
-Daniel Xu (4):
-  tracing/probe: Add PERF_EVENT_IOC_QUERY_PROBE ioctl
-  libbpf: Add helpers to extract perf fd from bpf_link
-  tracing/probe: Sync perf_event.h to tools
-  tracing/probe: Add self test for PERF_EVENT_IOC_QUERY_PROBE
-
- include/linux/trace_events.h                  |  12 ++
- include/uapi/linux/perf_event.h               |  23 ++++
- kernel/events/core.c                          |  20 ++++
- kernel/trace/trace_kprobe.c                   |  24 ++++
- kernel/trace/trace_uprobe.c                   |  24 ++++
- tools/include/uapi/linux/perf_event.h         |  23 ++++
- tools/lib/bpf/libbpf.c                        |  21 ++++
- tools/lib/bpf/libbpf.h                        |  13 +++
- tools/lib/bpf/libbpf.map                      |   4 +
- .../selftests/bpf/prog_tests/attach_probe.c   | 106 ++++++++++++++++++
- 10 files changed, 270 insertions(+)
-
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 2233f919dd88..41588e13be2b 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -4876,6 +4876,7 @@ int bpf_prog_load_xattr(const struct bpf_prog_load_attr *attr,
+ 
+ struct bpf_link {
+ 	int (*destroy)(struct bpf_link *link);
++	enum bpf_link_type type;
+ };
+ 
+ int bpf_link__destroy(struct bpf_link *link)
+@@ -4909,6 +4910,24 @@ static int bpf_link__destroy_perf_event(struct bpf_link *link)
+ 	return err;
+ }
+ 
++const struct bpf_link_fd *bpf_link__as_fd(const struct bpf_link *link)
++{
++	if (link->type != LIBBPF_LINK_FD)
++		return NULL;
++
++	return (struct bpf_link_fd *)link;
++}
++
++enum bpf_link_type bpf_link__type(const struct bpf_link *link)
++{
++	return link->type;
++}
++
++int bpf_link_fd__fd(const struct bpf_link_fd *link)
++{
++	return link->fd;
++}
++
+ struct bpf_link *bpf_program__attach_perf_event(struct bpf_program *prog,
+ 						int pfd)
+ {
+@@ -4932,6 +4951,7 @@ struct bpf_link *bpf_program__attach_perf_event(struct bpf_program *prog,
+ 	if (!link)
+ 		return ERR_PTR(-ENOMEM);
+ 	link->link.destroy = &bpf_link__destroy_perf_event;
++	link->link.type = LIBBPF_LINK_FD;
+ 	link->fd = pfd;
+ 
+ 	if (ioctl(pfd, PERF_EVENT_IOC_SET_BPF, prog_fd) < 0) {
+@@ -5225,6 +5245,7 @@ struct bpf_link *bpf_program__attach_raw_tracepoint(struct bpf_program *prog,
+ 	link = malloc(sizeof(*link));
+ 	if (!link)
+ 		return ERR_PTR(-ENOMEM);
++	link->link.type = LIBBPF_LINK_FD;
+ 	link->link.destroy = &bpf_link__destroy_fd;
+ 
+ 	pfd = bpf_raw_tracepoint_open(tp_name, prog_fd);
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index e8f70977d137..2ddef5315ff9 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -166,7 +166,20 @@ LIBBPF_API int bpf_program__pin(struct bpf_program *prog, const char *path);
+ LIBBPF_API int bpf_program__unpin(struct bpf_program *prog, const char *path);
+ LIBBPF_API void bpf_program__unload(struct bpf_program *prog);
+ 
++enum bpf_link_type {
++	LIBBPF_LINK_FD,
++};
++
+ struct bpf_link;
++struct bpf_link_fd;
++
++/* casting APIs */
++LIBBPF_API const struct bpf_link_fd *
++bpf_link__as_fd(const struct bpf_link *link);
++
++/* getters APIs */
++LIBBPF_API enum bpf_link_type bpf_link__type(const struct bpf_link *link);
++LIBBPF_API int bpf_link_fd__fd(const struct bpf_link_fd *link);
+ 
+ LIBBPF_API int bpf_link__destroy(struct bpf_link *link);
+ 
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 4e72df8e98ba..ee9945177100 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -186,4 +186,8 @@ LIBBPF_0.0.4 {
+ } LIBBPF_0.0.3;
+ 
+ LIBBPF_0.0.5 {
++	global:
++		bpf_link__type;
++		bpf_link__as_fd;
++		bpf_link_fd__fd;
+ } LIBBPF_0.0.4;
 -- 
 2.20.1
 
