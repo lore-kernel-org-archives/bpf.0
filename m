@@ -2,62 +2,95 @@ Return-Path: <SRS0=Vw9o=WP=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5135DC3A5A0
-	for <bpf@archiver.kernel.org>; Mon, 19 Aug 2019 21:54:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B454AC3A5A2
+	for <bpf@archiver.kernel.org>; Mon, 19 Aug 2019 22:34:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 21248214DA
-	for <bpf@archiver.kernel.org>; Mon, 19 Aug 2019 21:54:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8834D22CF5
+	for <bpf@archiver.kernel.org>; Mon, 19 Aug 2019 22:34:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lekensteyn.nl header.i=@lekensteyn.nl header.b="Xh9d4nDM"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="PYrjGexu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728409AbfHSVy7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 19 Aug 2019 17:54:59 -0400
-Received: from lekensteyn.nl ([178.21.112.251]:44993 "EHLO lekensteyn.nl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728283AbfHSVy6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 19 Aug 2019 17:54:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lekensteyn.nl; s=s2048-2015-q1;
-        h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From; bh=SMCM1/Omy5aZ6jb+znsoIkaQU1iSr5QK5Mh7zfQA9ek=;
-        b=Xh9d4nDMWnin3Fu9BR+N5VFYahiJ6norxCVbwQp0rftp3fce4eZfmaZyp7EGwXEsQz3ZHTD/PU4xQ5l4dGiyDPtAH8BYlTqk8LDhL5CY3Kr1CCBAYXMZhepEUOcvmyA01UV/RC8q4havaXHnGZcoOC4bBzTpDjyZCQ5cgyoBRARanXXrfng0LWzEX5rSjYtdP6PzB8Z7CqmOSxCvo8ieS9yknv9sh98bOnLK6nJ/gpDYVC6jFtIuE47JSNQBIl6ogOSQRBlsRzdx+u3M5Pp46yFDLCIbHrhkRCFxvpNpZAxlZpbR1gLirblAMo3zKA7ES9xxG4HacfMwH5FAu3RaoA==;
-Received: by lekensteyn.nl with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.84_2)
-        (envelope-from <peter@lekensteyn.nl>)
-        id 1hzp5g-0005T6-6Z; Mon, 19 Aug 2019 23:21:24 +0200
-From:   Peter Wu <peter@lekensteyn.nl>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH 0/2] Small BPF documentation fixes
-Date:   Mon, 19 Aug 2019 22:21:20 +0100
-Message-Id: <20190819212122.10286-1-peter@lekensteyn.nl>
-X-Mailer: git-send-email 2.22.0
+        id S1728608AbfHSWen (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 19 Aug 2019 18:34:43 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:36655 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728568AbfHSWem (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 19 Aug 2019 18:34:42 -0400
+Received: by mail-qt1-f193.google.com with SMTP id z4so3799516qtc.3
+        for <bpf@vger.kernel.org>; Mon, 19 Aug 2019 15:34:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=/8syMKrISRpi1LM7hCsQr+3ogO/UJ/CBR8QK6jTRgOA=;
+        b=PYrjGexujQ7qjZ9HEQOtuMaFIDsAuSlIWNtS94bqJSfDt+JzMRd2oOrLYM3Dg4D7yH
+         6vSi0r+0NlolywFYZucE+X39yXuIvx719CBDU7QcxWcMBB1zKJJfc/QzccUR4P61AKw4
+         egl/9oz7J7Z6JbwxBmN4WMxPyQUx3/RD2XI5sdzFUuxCwxhC2/n2SWyB2G3fDCdK8joO
+         o6/e1kBlsjD/vZWMXd49zDsfzTAI/xajN7WNZjfiPxE21RI1LRS7P1Dt59SmOeYQML2F
+         z5DnzIRMgOLFqVZ7jawa6wN19Xex96uC5hhqhMYJ7uVeadvv02KT8ERQ4YewXfs70mqP
+         dRnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=/8syMKrISRpi1LM7hCsQr+3ogO/UJ/CBR8QK6jTRgOA=;
+        b=rJ3M9qCMFIOHi0UaGRcXZdvRI01DpfbM893J609Pcf6SPhcFEh0i9skuNvxiO2lx4k
+         dVTsRguk+4+bxwY5bv5j5pL9CKuerBEMshqU8C9eumSQYg9lHiH5bEEMJfwqpkIv/+H8
+         L3DwV1F5UgqrrjFuJO3qkUGHbgKDF3S4Blg9+yBudwvKZ3hvI296roC6ODmcNfXlcZvb
+         JmYztUdvYyArdRH/zxcl1J/+/tqjnLoZLA/hMrfjzDYEMlPy3RIiXJfPt5d+wAWz9uh5
+         AyQPHLfGGy3DZOo+mJcKl5KtxmkWQ7oeUqzw9flItT8hR0wwKKqUL4uJXRm31Za1lXZI
+         nr+A==
+X-Gm-Message-State: APjAAAUtUWsoOR5bzQgi6AU04P83XIcyGWycxRehR8IyJXngMFs1N8vg
+        5lVffVBNZ345ocevtwgRdphiAg==
+X-Google-Smtp-Source: APXvYqxt8DIc/EEwhFZZ6YFwgGynE/NFwfuo1VlLbW1HmXwJB5q8m9Ztm89w5K6iYJ61JWS9UZia5Q==
+X-Received: by 2002:a0c:8cc3:: with SMTP id q3mr12065348qvb.127.1566254080873;
+        Mon, 19 Aug 2019 15:34:40 -0700 (PDT)
+Received: from cakuba.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id p3sm8945645qta.12.2019.08.19.15.34.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Aug 2019 15:34:40 -0700 (PDT)
+Date:   Mon, 19 Aug 2019 15:34:32 -0700
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     syzbot <syzbot+4207c7f3a443366d8aa2@syzkaller.appspotmail.com>
+Cc:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, edumazet@google.com, john.fastabend@gmail.com,
+        kafai@fb.com, kuznet@ms2.inr.ac.ru, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com,
+        yoshfuji@linux-ipv6.org
+Subject: Re: BUG: unable to handle kernel paging request in tls_prots
+Message-ID: <20190819153432.06c23d19@cakuba.netronome.com>
+In-Reply-To: <000000000000d7bcbb058c3758a1@google.com>
+References: <000000000000d7bcbb058c3758a1@google.com>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+On Wed, 26 Jun 2019 03:17:05 -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    904d88d7 qmi_wwan: Fix out-of-bounds read
+> git tree:       net
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14a8b865a00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=137ec2016ea3870d
+> dashboard link: https://syzkaller.appspot.com/bug?extid=4207c7f3a443366d8aa2
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15576c71a00000
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+4207c7f3a443366d8aa2@syzkaller.appspotmail.com
 
-Some fixes for doc issues I ran into while playing with BPF and uprobes.
+That's one of the bugs John fixed:
 
-Kind regards,
-Peter
-
-Peter Wu (2):
-  bpf: fix 'struct pt_reg' typo in documentation
-  bpf: clarify description for CONFIG_BPF_EVENTS
-
- include/uapi/linux/bpf.h       | 6 +++---
- kernel/trace/Kconfig           | 3 ++-
- tools/include/uapi/linux/bpf.h | 6 +++---
- 3 files changed, 8 insertions(+), 7 deletions(-)
-
--- 
-2.22.0
-
+#syz fix: bpf: sockmap/tls, close can race with map free
