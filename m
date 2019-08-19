@@ -2,88 +2,74 @@ Return-Path: <SRS0=Vw9o=WP=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5893BC3A5A0
-	for <bpf@archiver.kernel.org>; Mon, 19 Aug 2019 21:36:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EF2BC3A5A0
+	for <bpf@archiver.kernel.org>; Mon, 19 Aug 2019 21:54:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2302222CEC
-	for <bpf@archiver.kernel.org>; Mon, 19 Aug 2019 21:36:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E140214DA
+	for <bpf@archiver.kernel.org>; Mon, 19 Aug 2019 21:54:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="bfNVMyCC"
+	dkim=pass (2048-bit key) header.d=lekensteyn.nl header.i=@lekensteyn.nl header.b="RpJXXkmz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728402AbfHSVf7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 19 Aug 2019 17:35:59 -0400
-Received: from mail-qk1-f176.google.com ([209.85.222.176]:43353 "EHLO
-        mail-qk1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728018AbfHSVf7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 19 Aug 2019 17:35:59 -0400
-Received: by mail-qk1-f176.google.com with SMTP id m2so2760789qkd.10
-        for <bpf@vger.kernel.org>; Mon, 19 Aug 2019 14:35:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=HRf/rgT/WG8UbnB9CjMWjQnc+PtTo38b22VnPUq0Gg8=;
-        b=bfNVMyCC+kpeWN4Ybm2ppMO2SSq9dd2BlbnaSbYunSW9kMr7c3/Mn7ghnxAYXX/H9w
-         5cnSpgo2YJd/pI0Wqb+d59pIFjFHJRUl59fR5WiO8eqo6wjq4l7mVfR/Dr2gNwO8ZQav
-         6L9PLkWJJs05//MgTBjYa8Y+6ITBMMRL+sTah5MhvAS7N1/asb8a+WQaUDzPlrKstd9L
-         HipbiFhOGFIavip/WSrlseDc+9rsiX1OLiBr9skoN9ZOkRjlgLZ0hh6eOiGSMaCMBWEN
-         gj71PmdpSRKKD4F7Lsrve9PMd/cNE+Dx8in71GFDGAmo0/BO8CpnzHVBUI6xiqFz76Gr
-         ej1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=HRf/rgT/WG8UbnB9CjMWjQnc+PtTo38b22VnPUq0Gg8=;
-        b=svZe3dTV+/x+tZLVap/5HecsA+M3az7jSJ7orDF6XIj0tRlMly/eJEp5urWJv7vq66
-         vBQT4/oqxOQ/52Um11oyj+D3mHc3vAX9N75mYc6OrIDZIY46k4+GLWH7PdZrZSMyu0Fo
-         3ShQVP2Dmva16rJODnLeIEisvcR67gKz72dpXZIdfei+1MFCigVrVQp4w6QiC5RfEo1z
-         suWe2gL6A4hPVzb91lLhn0nLErADlNhdNE8Xe0dWlJ7G4Lzz06tEz+2zLqDrJ/xI7vYU
-         vRHWJHHuJfmt9BE/QPA3IsPFx5jScEBtFqyPx5/cDQ+JW0wG1k13XDdL7FEAKKT7GtUn
-         Ye/Q==
-X-Gm-Message-State: APjAAAVlz7kwZl9hVn3nDlEMCo7VLz05j3AnP7lgFsLZvmUQqoKZMxTt
-        UjU+PPSKhm8ggIjwU+c7x5bwDQ==
-X-Google-Smtp-Source: APXvYqyP3YqD1FV6I4CPqc2ji59sr1BQNcZd6k5ZgqSkUowaBMDrU4lqioDJjyN9S5NapIiP5Q/Vrg==
-X-Received: by 2002:a37:9cc2:: with SMTP id f185mr22980034qke.172.1566250558671;
-        Mon, 19 Aug 2019 14:35:58 -0700 (PDT)
-Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id i5sm8912132qti.0.2019.08.19.14.35.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Aug 2019 14:35:58 -0700 (PDT)
-Date:   Mon, 19 Aug 2019 14:35:51 -0700
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
-        syzbot <syzbot+6a9ff159672dfbb41c95@syzkaller.appspotmail.com>,
-        ast@kernel.org, aviadye@mellanox.com, borisp@mellanox.com,
-        bpf@vger.kernel.org, daniel@iogearbox.net, davejwatson@fb.com,
-        davem@davemloft.net, hdanton@sina.com, john.fastabend@gmail.com,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org
-Subject: Re: INFO: task hung in tls_sw_release_resources_tx
-Message-ID: <20190819143551.5b8935f5@cakuba.netronome.com>
-In-Reply-To: <20190819141255.010a323a@cakuba.netronome.com>
-References: <000000000000523ea3059025b11d@google.com>
-        <000000000000e75f1805902bb919@google.com>
-        <20190816190234.2aaab5b6@cakuba.netronome.com>
-        <20190817054743.GE8209@sol.localdomain>
-        <20190819141255.010a323a@cakuba.netronome.com>
-Organization: Netronome Systems, Ltd.
+        id S1728360AbfHSVy4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 19 Aug 2019 17:54:56 -0400
+Received: from lekensteyn.nl ([178.21.112.251]:39727 "EHLO lekensteyn.nl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728283AbfHSVy4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 19 Aug 2019 17:54:56 -0400
+X-Greylist: delayed 2008 seconds by postgrey-1.27 at vger.kernel.org; Mon, 19 Aug 2019 17:54:56 EDT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lekensteyn.nl; s=s2048-2015-q1;
+        h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From; bh=CPhDF5jnURDhjAxSFhJHWKq3/SRRecFjjjdMVgviX/E=;
+        b=RpJXXkmzoFgbBUx1sJBeRcHJKuT3/TD6/lyleO5gyECCe5Im1ZGtsgioV7qOQNSOQ9H8LaNRFUpvCyaAI5XWirTUJRmHqgykZG0bncQM6g7OTi/uywPq9eskKMNeNw2mPUIAoTt4rCvsVXnFA93SsSHF+dxJ7WCwl+X1l4x9AsHZ6oG4Cz2Z/EOMcDuM/Qqhr1xj1NpDtweWRh72S1y/+xwr0rVYWjv2c0Xsvz6Cz9/r7lJLQJsV49/MBi6PgbuUG2CoPgZYUSlS6489CWe4iTLWndmoljJoVEuXwsYfOBgWx5iYEkg8EfRsJ6nKzsObRqRWVGPVBLWexQZMJd489g==;
+Received: by lekensteyn.nl with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.84_2)
+        (envelope-from <peter@lekensteyn.nl>)
+        id 1hzp5h-0005T6-0w; Mon, 19 Aug 2019 23:21:25 +0200
+From:   Peter Wu <peter@lekensteyn.nl>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH 2/2] bpf: clarify description for CONFIG_BPF_EVENTS
+Date:   Mon, 19 Aug 2019 22:21:22 +0100
+Message-Id: <20190819212122.10286-3-peter@lekensteyn.nl>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190819212122.10286-1-peter@lekensteyn.nl>
+References: <20190819212122.10286-1-peter@lekensteyn.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 19 Aug 2019 14:12:55 -0700, Jakub Kicinski wrote:
-> Looks like the dup didn't tickle syzbot the right way. Let me retry
-> sending this directly to the original report.
+PERF_EVENT_IOC_SET_BPF supports uprobes since v4.3, and tracepoints
+since v4.7 via commit 04a22fae4cbc ("tracing, perf: Implement BPF
+programs attached to uprobes"), and commit 98b5c2c65c29 ("perf, bpf:
+allow bpf programs attach to tracepoints") respectively.
 
-Oh, no, my bad, there was just a third bug of the same nature.
-tls_sw_release_resources_tx got renamed at some point, hence 
-the duplicate report.
+Signed-off-by: Peter Wu <peter@lekensteyn.nl>
+---
+ kernel/trace/Kconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+index 98da8998c25c..b09d7b1ffffd 100644
+--- a/kernel/trace/Kconfig
++++ b/kernel/trace/Kconfig
+@@ -520,7 +520,8 @@ config BPF_EVENTS
+ 	bool
+ 	default y
+ 	help
+-	  This allows the user to attach BPF programs to kprobe events.
++	  This allows the user to attach BPF programs to kprobe, uprobe, and
++	  tracepoint events.
+ 
+ config DYNAMIC_EVENTS
+ 	def_bool n
+-- 
+2.22.0
+
