@@ -5,77 +5,39 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A130AC3A59D
-	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 21:49:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5803CC3A589
+	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 23:09:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6B39122DA7
-	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 21:49:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2543322DD6
+	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 23:09:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="rz8uPXvV";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mO4CKoUe"
+	dkim=pass (2048-bit key) header.d=lekensteyn.nl header.i=@lekensteyn.nl header.b="BSaZJSOI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730882AbfHTVtD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Aug 2019 17:49:03 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:58177 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730430AbfHTVtC (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 20 Aug 2019 17:49:02 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 498D52CAE;
-        Tue, 20 Aug 2019 17:49:01 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 20 Aug 2019 17:49:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm1; bh=GpEKID6TfOFP4
-        CaEQSHu9G/hQ0IKQBVHpwa2lUjQrgs=; b=rz8uPXvVFavAYeBk8XDhzbsEX0KD4
-        QWRGbaGXIKB81NBnxV2EY0PggyvzQHXFzfQ2kOiGeEI8XCMKWGGru6JUzTsWKK8O
-        mQtpEtCsXasU2Z7Nu+dGMh1BdvSyWXJIUZCPSksYwEN+bVzY1kpCTSH0vaphrLeu
-        WzqoMAlThxP6RFCnYZ0o0xLQgUVdbRWOVQ71DaUbBLsm13hUOkzG7bep338g7XwO
-        SzCTHBtyp9x7G7VAGBqm8WsiGCcnsT7ooYrtVqYOhWHS1s5xB+ABT5b4jYkB4PBy
-        62I3/cX0elh+Wx6TWB5a9byEokGvDEVKJ2YyzhzIIbFP/Wi7SNwLn52+w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=GpEKID6TfOFP4CaEQSHu9G/hQ0IKQBVHpwa2lUjQrgs=; b=mO4CKoUe
-        f6wzbSwD2wmuvHsBqX4xWcSxKOy7X7ShGXA2MlrhYMLdT0Lgc1KNZSwBmG3mXRXB
-        ggLzy32bjyjZVZWHRn01bPyWi+AP2EMUvZ9VhV8NoTRDbwj8iYnEJiBniT0PBCR5
-        p3jgAHc/wCYp1aalB2lvEpUz4NJ5ikNUL5HM8UN/4b8aiy/jsqz0yaZcCSjfBu6b
-        5E4kw1JomE7k1lpilVcqUX135M6MhFs1WnYLiEpMJi8BYeMR8f+kA5n4xCdtMFl2
-        ut2qiRehKsdTzUuuG6ocp/HHZnB9QSYKCu4OyUauVznDyfWg9m1Xpc8cJBN9kkKM
-        VYyqR50YDTRVgQ==
-X-ME-Sender: <xms:zWpcXfOgJVOUEg2sLxnJpAxFnKLUqYAAxG8a8zO-VxPnTWe7YbwAhg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddrudegvddgtdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
-    fufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
-    gihusegugihuuhhurdighiiiqeenucfkphepudelledrvddtuddrieegrddvnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiiinecuvehluhhsthgvrhfu
-    ihiivgeptd
-X-ME-Proxy: <xmx:zWpcXR1QhuoVc5CY21uREffDNU2O4K1gg6LII7ycVSqiIiRqG-5Djg>
-    <xmx:zWpcXUNDVev9WSpcdaqoVpnsr9ANgJ2-cIdI-KD8Kna6IYBVQHYXbw>
-    <xmx:zWpcXXW0k7rUwMvBGYLHBAzHp2voTb5YM6-f5GO9B5JAN57J3CnjCQ>
-    <xmx:zWpcXRlPJoOYzcejWWpepfY8wLxnPeGSosDeoE8z5O9_8Lh_itGNxw>
-Received: from dlxu-fedora-R90QNFJV.thefacebook.com (unknown [199.201.64.2])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 3DA1880064;
-        Tue, 20 Aug 2019 17:48:59 -0400 (EDT)
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     bpf@vger.kernel.org, songliubraving@fb.com, yhs@fb.com,
-        andriin@fb.com, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org
-Cc:     Daniel Xu <dxu@dxuuu.xyz>, ast@fb.com,
-        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com
-Subject: [PATCH v4 bpf-next 1/4] tracing/probe: Add PERF_EVENT_IOC_QUERY_PROBE ioctl
-Date:   Tue, 20 Aug 2019 14:48:16 -0700
-Message-Id: <20190820214819.16154-2-dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190820214819.16154-1-dxu@dxuuu.xyz>
-References: <20190820214819.16154-1-dxu@dxuuu.xyz>
+        id S1726413AbfHTXJI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Aug 2019 19:09:08 -0400
+Received: from lekensteyn.nl ([178.21.112.251]:43647 "EHLO lekensteyn.nl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726362AbfHTXJI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Aug 2019 19:09:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lekensteyn.nl; s=s2048-2015-q1;
+        h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From; bh=aTs/19MyORw3OpmJFYMSjvA9Q0yVU+se+6r/BJ0qdiU=;
+        b=BSaZJSOI0BcGsmGwvW5jiiW/W0Ln5eJWYXS6BlI2IQLa8JVpexEwrGnu5q8jxhozsIAssg6GzZ4LSnzUJJvLgVP56qJY/cIgCiSLkM059gvXCb8YA59q9QTZwwJcUB6qP89BcQfSjkjFeFDKUeGtboTiAPQMoAxv+4p5SZMoB4b80NKUQwdl2o7CayGL9+pVsW87nB1DD+1fj7evgdFdX6AOWtzazCJ+zv/MkPKJ2+99Y2xnAjaoOKIv9pQCX0LN+6sPcryNCOEW+pvH1Xw8UqbxLHC58e5pL3WMl7nHqLV1MOlAGF6oMXpyHALW1A66TAKcfDwmH72NTiuMf7669w==;
+Received: by lekensteyn.nl with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.84_2)
+        (envelope-from <peter@lekensteyn.nl>)
+        id 1i0DFR-00055S-Np; Wed, 21 Aug 2019 01:09:05 +0200
+From:   Peter Wu <peter@lekensteyn.nl>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH v2 4/4] bpf: sync bpf.h to tools/
+Date:   Wed, 21 Aug 2019 00:09:00 +0100
+Message-Id: <20190820230900.23445-5-peter@lekensteyn.nl>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190820230900.23445-1-peter@lekensteyn.nl>
+References: <20190820230900.23445-1-peter@lekensteyn.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -83,206 +45,54 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-It's useful to know [uk]probe's nmissed and nhit stats. For example with
-tracing tools, it's important to know when events may have been lost.
-debugfs currently exposes a control file to get this information, but
-it is not compatible with probes registered with the perf API.
+Fix a 'struct pt_reg' typo and clarify when bpf_trace_printk discards
+lines. Affects documentation only.
 
-While bpf programs may be able to manually count nhit, there is no way
-to gather nmissed. In other words, it is currently not possible to
-retrieve information about FD-based probes.
-
-This patch adds a new ioctl that lets users query nmissed (as well as
-nhit for completeness). We currently only add support for [uk]probes
-but leave the possibility open for other probes like tracepoint.
-
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+Signed-off-by: Peter Wu <peter@lekensteyn.nl>
 ---
- include/linux/trace_events.h    |  2 ++
- include/uapi/linux/perf_event.h | 23 +++++++++++++++++++++++
- kernel/events/core.c            | 20 ++++++++++++++++++++
- kernel/trace/trace_kprobe.c     | 25 +++++++++++++++++++++++++
- kernel/trace/trace_uprobe.c     | 25 +++++++++++++++++++++++++
- 5 files changed, 95 insertions(+)
+ tools/include/uapi/linux/bpf.h | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
-index 5150436783e8..96f3cf2e39b4 100644
---- a/include/linux/trace_events.h
-+++ b/include/linux/trace_events.h
-@@ -586,6 +586,7 @@ extern int bpf_get_kprobe_info(const struct perf_event *event,
- 			       u32 *fd_type, const char **symbol,
- 			       u64 *probe_offset, u64 *probe_addr,
- 			       bool perf_type_tracepoint);
-+extern int perf_kprobe_event_query(struct perf_event *event, void __user *info);
- #endif
- #ifdef CONFIG_UPROBE_EVENTS
- extern int  perf_uprobe_init(struct perf_event *event,
-@@ -594,6 +595,7 @@ extern void perf_uprobe_destroy(struct perf_event *event);
- extern int bpf_get_uprobe_info(const struct perf_event *event,
- 			       u32 *fd_type, const char **filename,
- 			       u64 *probe_offset, bool perf_type_tracepoint);
-+extern int perf_uprobe_event_query(struct perf_event *event, void __user *info);
- #endif
- extern int  ftrace_profile_set_filter(struct perf_event *event, int event_id,
- 				     char *filter_str);
-diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-index 7198ddd0c6b1..8783d29a807a 100644
---- a/include/uapi/linux/perf_event.h
-+++ b/include/uapi/linux/perf_event.h
-@@ -447,6 +447,28 @@ struct perf_event_query_bpf {
- 	__u32	ids[0];
- };
- 
-+/*
-+ * Structure used by below PERF_EVENT_IOC_QUERY_PROBE command
-+ * to query information about the probe attached to the perf
-+ * event. Currently only supports [uk]probes.
-+ */
-+struct perf_event_query_probe {
-+	/*
-+	 * Size of structure for forward/backward compatibility
-+	 */
-+	__u64	size;
-+	/*
-+	 * Set by the kernel to indicate number of times this probe
-+	 * was temporarily disabled
-+	 */
-+	__u64	nmissed;
-+	/*
-+	 * Set by the kernel to indicate number of times this probe
-+	 * was hit
-+	 */
-+	__u64	nhit;
-+};
-+
- /*
-  * Ioctls that can be done on a perf event fd:
-  */
-@@ -462,6 +484,7 @@ struct perf_event_query_bpf {
- #define PERF_EVENT_IOC_PAUSE_OUTPUT		_IOW('$', 9, __u32)
- #define PERF_EVENT_IOC_QUERY_BPF		_IOWR('$', 10, struct perf_event_query_bpf *)
- #define PERF_EVENT_IOC_MODIFY_ATTRIBUTES	_IOW('$', 11, struct perf_event_attr *)
-+#define PERF_EVENT_IOC_QUERY_PROBE		_IOR('$', 12, struct perf_event_query_probe *)
- 
- enum perf_event_ioc_flags {
- 	PERF_IOC_FLAG_GROUP		= 1U << 0,
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 0463c1151bae..ed33d50511a3 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -5060,6 +5060,8 @@ static int perf_event_set_filter(struct perf_event *event, void __user *arg);
- static int perf_event_set_bpf_prog(struct perf_event *event, u32 prog_fd);
- static int perf_copy_attr(struct perf_event_attr __user *uattr,
- 			  struct perf_event_attr *attr);
-+static int perf_probe_event_query(struct perf_event *event,
-+				    void __user *info);
- 
- static long _perf_ioctl(struct perf_event *event, unsigned int cmd, unsigned long arg)
- {
-@@ -5143,6 +5145,10 @@ static long _perf_ioctl(struct perf_event *event, unsigned int cmd, unsigned lon
- 
- 		return perf_event_modify_attr(event,  &new_attr);
- 	}
-+#if defined(CONFIG_KPROBE_EVENTS) || defined(CONFIG_UPROBE_EVENTS)
-+	case PERF_EVENT_IOC_QUERY_PROBE:
-+		return perf_probe_event_query(event, (void __user *)arg);
-+#endif
- 	default:
- 		return -ENOTTY;
- 	}
-@@ -8833,6 +8839,20 @@ static inline void perf_tp_register(void)
- #endif
- }
- 
-+static int perf_probe_event_query(struct perf_event *event,
-+				    void __user *info)
-+{
-+#ifdef CONFIG_KPROBE_EVENTS
-+	if (event->attr.type == perf_kprobe.type)
-+		return perf_kprobe_event_query(event, (void __user *)info);
-+#endif
-+#ifdef CONFIG_UPROBE_EVENTS
-+	if (event->attr.type == perf_uprobe.type)
-+		return perf_uprobe_event_query(event, (void __user *)info);
-+#endif
-+	return -EINVAL;
-+}
-+
- static void perf_event_free_filter(struct perf_event *event)
- {
- 	ftrace_profile_free_filter(event);
-diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-index 9d483ad9bb6c..7da9b0102e34 100644
---- a/kernel/trace/trace_kprobe.c
-+++ b/kernel/trace/trace_kprobe.c
-@@ -196,6 +196,31 @@ bool trace_kprobe_error_injectable(struct trace_event_call *call)
- 	return within_error_injection_list(trace_kprobe_address(tk));
- }
- 
-+int perf_kprobe_event_query(struct perf_event *event, void __user *info)
-+{
-+	struct perf_event_query_probe __user *uquery = info;
-+	struct perf_event_query_probe query = {};
-+	struct trace_event_call *call = event->tp_event;
-+	struct trace_kprobe *tk = (struct trace_kprobe *)call->data;
-+	u64 ncopy;
-+
-+	if (!capable(CAP_SYS_ADMIN))
-+		return -EPERM;
-+	if (copy_from_user(&query, uquery,
-+			   offsetofend(struct perf_event_query_probe, size)))
-+		return -EFAULT;
-+
-+	ncopy = min_t(u64, query.size, sizeof(query));
-+	query.size = ncopy;
-+	query.nhit = trace_kprobe_nhit(tk);
-+	query.nmissed = tk->rp.kp.nmissed;
-+
-+	if (copy_to_user(uquery, &query, ncopy))
-+		return -EFAULT;
-+
-+	return 0;
-+}
-+
- static int register_kprobe_event(struct trace_kprobe *tk);
- static int unregister_kprobe_event(struct trace_kprobe *tk);
- 
-diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-index 1ceedb9146b1..88c03cc9042e 100644
---- a/kernel/trace/trace_uprobe.c
-+++ b/kernel/trace/trace_uprobe.c
-@@ -1333,6 +1333,31 @@ static inline void init_trace_event_call(struct trace_uprobe *tu)
- 	call->data = tu;
- }
- 
-+int perf_uprobe_event_query(struct perf_event *event, void __user *info)
-+{
-+	struct perf_event_query_probe __user *uquery = info;
-+	struct perf_event_query_probe query = {};
-+	struct trace_event_call *call = event->tp_event;
-+	struct trace_uprobe *tu = (struct trace_uprobe *)call->data;
-+	u64 ncopy;
-+
-+	if (!capable(CAP_SYS_ADMIN))
-+		return -EPERM;
-+	if (copy_from_user(&query, uquery,
-+			   offsetofend(struct perf_event_query_probe, size)))
-+		return -EFAULT;
-+
-+	ncopy = min_t(u64, query.size, sizeof(query));
-+	query.size = ncopy;
-+	query.nhit = tu->nhit;
-+	query.nmissed = 0;
-+
-+	if (copy_to_user(uquery, &query, ncopy))
-+		return -EFAULT;
-+
-+	return 0;
-+}
-+
- static int register_uprobe_event(struct trace_uprobe *tu)
- {
- 	init_trace_event_call(tu);
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 4e455018da65..58bdb89599c9 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -575,6 +575,8 @@ union bpf_attr {
+  * 		limited to five).
+  *
+  * 		Each time the helper is called, it appends a line to the trace.
++ * 		Lines are discarded while *\/sys/kernel/debug/tracing/trace* is
++ * 		open, use *\/sys/kernel/debug/tracing/trace_pipe* to avoid this.
+  * 		The format of the trace is customizable, and the exact output
+  * 		one will get depends on the options set in
+  * 		*\/sys/kernel/debug/tracing/trace_options* (see also the
+@@ -1013,7 +1015,7 @@ union bpf_attr {
+  * 		The realm of the route for the packet associated to *skb*, or 0
+  * 		if none was found.
+  *
+- * int bpf_perf_event_output(struct pt_reg *ctx, struct bpf_map *map, u64 flags, void *data, u64 size)
++ * int bpf_perf_event_output(struct pt_regs *ctx, struct bpf_map *map, u64 flags, void *data, u64 size)
+  * 	Description
+  * 		Write raw *data* blob into a special BPF perf event held by
+  * 		*map* of type **BPF_MAP_TYPE_PERF_EVENT_ARRAY**. This perf
+@@ -1075,7 +1077,7 @@ union bpf_attr {
+  * 	Return
+  * 		0 on success, or a negative error in case of failure.
+  *
+- * int bpf_get_stackid(struct pt_reg *ctx, struct bpf_map *map, u64 flags)
++ * int bpf_get_stackid(struct pt_regs *ctx, struct bpf_map *map, u64 flags)
+  * 	Description
+  * 		Walk a user or a kernel stack and return its id. To achieve
+  * 		this, the helper needs *ctx*, which is a pointer to the context
+@@ -1721,7 +1723,7 @@ union bpf_attr {
+  * 	Return
+  * 		0 on success, or a negative error in case of failure.
+  *
+- * int bpf_override_return(struct pt_reg *regs, u64 rc)
++ * int bpf_override_return(struct pt_regs *regs, u64 rc)
+  * 	Description
+  * 		Used for error injection, this helper uses kprobes to override
+  * 		the return value of the probed function, and to set it to *rc*.
 -- 
-2.21.0
+2.22.0
 
