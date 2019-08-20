@@ -2,87 +2,106 @@ Return-Path: <SRS0=Y+lb=WQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B608C3A59E
-	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 23:09:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3889FC3A589
+	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 23:22:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5DB5722DD6
-	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 23:09:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 07CD122D6D
+	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 23:22:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lekensteyn.nl header.i=@lekensteyn.nl header.b="X19LfTUd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C7fnNTjl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726141AbfHTXJO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Aug 2019 19:09:14 -0400
-Received: from lekensteyn.nl ([178.21.112.251]:51785 "EHLO lekensteyn.nl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726317AbfHTXJI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Aug 2019 19:09:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lekensteyn.nl; s=s2048-2015-q1;
-        h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From; bh=4pxomqX2YRpm2Ejb0bxAI4CKwQidMFt5OJE5J3FrhiE=;
-        b=X19LfTUdA3joSllsolRzkLSGkOMA7VihhSE3hrFbZhBJIdzjW18Dsl0mbfkoUEUK0a9wgnpkplKN9YNbPUsjJAlJz05gVShVIc4ZMk7l7XEilcOXKNrcmQ7xzoDmyyN72FBGGPP5sUa+Z1zg9r0n3M+ZmR2OTmHipEc3EcYho9cCaGmtoEVG/5Q2EiEqS+yHI/cJZvSfSEed2vYwZBPo90CHCtLH+nxmz0DtpcEMGG8Sh7LMrf4hoBPHTEbiE8dUAvXXr6eraSLmcU1iETpkcS2xjH8y6lEz4FXUvRP3Xg7RFiD6ytUwmb+hTuWNGa/8nOh+ZyX9qZzwz0j+lhiEiA==;
-Received: by lekensteyn.nl with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.84_2)
-        (envelope-from <peter@lekensteyn.nl>)
-        id 1i0DFQ-00055S-W4; Wed, 21 Aug 2019 01:09:05 +0200
-From:   Peter Wu <peter@lekensteyn.nl>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH v2 2/4] bpf: fix 'struct pt_reg' typo in documentation
-Date:   Wed, 21 Aug 2019 00:08:58 +0100
-Message-Id: <20190820230900.23445-3-peter@lekensteyn.nl>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190820230900.23445-1-peter@lekensteyn.nl>
+        id S1726735AbfHTXW0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Aug 2019 19:22:26 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:35059 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726523AbfHTXW0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Aug 2019 19:22:26 -0400
+Received: by mail-pg1-f196.google.com with SMTP id n4so184977pgv.2;
+        Tue, 20 Aug 2019 16:22:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=7q77S2d0XkJTsvieSIJBD7HqwVZVOkVs4YFNfBSPmG0=;
+        b=C7fnNTjlLwKJclqKABnQf3bM/Xwqa2xmx0q4o8iXOtAz6+TDAQqB1nzn+1B+LKRcHe
+         CPNlg8ofGhEmXvZRCY3Xh4t8AyNdgDHB7MZLG8y1/AoUMoGT4E5khjwY+xGKnqhsyoK9
+         tJdbcfa6+4nZu5BEAaHrR0a/+ZJys3dqFmtRarQJL0tEq9LyPmtTLfS2g8QCSKWgmb5r
+         2zAA9YiJ4C+MPxaV/0BSFjpJx8yAgkwLHNg5RcLrt8KqDAET5F6V0YBBsBmhM8bXeEGg
+         Psxn6Otmy3LXPL8OS/8IQqCWpl1lzUVfRXQm5OflOK8nunH28n7FF3VOgBAmbGJbAjum
+         gqvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=7q77S2d0XkJTsvieSIJBD7HqwVZVOkVs4YFNfBSPmG0=;
+        b=s2RXb2X8B2yPBtMPbdpmdB3gQQDiqNc+wTfgg3/DVzpX6nMpawhxDTk1XmSzBJpRx1
+         R83k3D/H+VecRV2znyHYwDp0ABp7+JgrSQev2d4JxAgt4Ur6W7SY1LTV/2rYP3i2mHr+
+         +DnRdzbYzbMWJGC/K7pt79gAqSW4vQV1S2CRsKyCtTuCexKuKjbKW88oLCwfISY8dSuS
+         WBvJ4JISMkYwJBWViqX8JsKqWfnwDKO46gw6if9MoaDzRJ+NMjw1KKJoF9OBQuVIZgWc
+         6ST1slNpp7Ko9e2NJPo1jvwZ125Ng0AEgL8u5g8JqM4E5+tV9A77i/WViloof+D8rS0N
+         lhGQ==
+X-Gm-Message-State: APjAAAUicK9UUc/7goacY7cu8VeOrF5gvgmEb56bUs4qevq3X9KGgMt3
+        iiWZbyUyIgZJoj4lBbKf9WCP+AWK
+X-Google-Smtp-Source: APXvYqxqKkAcWA6UVU5MSq/7uhV7kKsWVbCmpTYiCC+Wd258Zqt7anKn/r/WDLw22xA/lStvSiBuuA==
+X-Received: by 2002:a65:4489:: with SMTP id l9mr27523695pgq.207.1566343345156;
+        Tue, 20 Aug 2019 16:22:25 -0700 (PDT)
+Received: from ast-mbp ([2620:10d:c090:200::3efc])
+        by smtp.gmail.com with ESMTPSA id t4sm36281050pfq.153.2019.08.20.16.22.23
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 20 Aug 2019 16:22:24 -0700 (PDT)
+Date:   Tue, 20 Aug 2019 16:22:23 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Peter Wu <peter@lekensteyn.nl>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] bpf: clarify when bpf_trace_printk discards lines
+Message-ID: <20190820232221.vzxemergvzy3bg4j@ast-mbp>
 References: <20190820230900.23445-1-peter@lekensteyn.nl>
+ <20190820230900.23445-4-peter@lekensteyn.nl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190820230900.23445-4-peter@lekensteyn.nl>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-There is no 'struct pt_reg'.
+On Wed, Aug 21, 2019 at 12:08:59AM +0100, Peter Wu wrote:
+> I opened /sys/kernel/tracing/trace once and kept reading from it.
+> bpf_trace_printk somehow did not seem to work, no entries were appended
+> to that trace file. It turns out that tracing is disabled when that file
+> is open. Save the next person some time and document this.
+> 
+> The trace file is described in Documentation/trace/ftrace.rst, however
+> the implication "tracing is disabled" did not immediate translate to
+> "bpf_trace_printk silently discards entries".
+> 
+> Signed-off-by: Peter Wu <peter@lekensteyn.nl>
+> ---
+>  include/uapi/linux/bpf.h | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 9ca333c3ce91..e4236e357ed9 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -575,6 +575,8 @@ union bpf_attr {
+>   * 		limited to five).
+>   *
+>   * 		Each time the helper is called, it appends a line to the trace.
+> + * 		Lines are discarded while *\/sys/kernel/debug/tracing/trace* is
+> + * 		open, use *\/sys/kernel/debug/tracing/trace_pipe* to avoid this.
 
-Signed-off-by: Peter Wu <peter@lekensteyn.nl>
----
- include/uapi/linux/bpf.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index fa1c753dcdbc..9ca333c3ce91 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1013,7 +1013,7 @@ union bpf_attr {
-  * 		The realm of the route for the packet associated to *skb*, or 0
-  * 		if none was found.
-  *
-- * int bpf_perf_event_output(struct pt_reg *ctx, struct bpf_map *map, u64 flags, void *data, u64 size)
-+ * int bpf_perf_event_output(struct pt_regs *ctx, struct bpf_map *map, u64 flags, void *data, u64 size)
-  * 	Description
-  * 		Write raw *data* blob into a special BPF perf event held by
-  * 		*map* of type **BPF_MAP_TYPE_PERF_EVENT_ARRAY**. This perf
-@@ -1075,7 +1075,7 @@ union bpf_attr {
-  * 	Return
-  * 		0 on success, or a negative error in case of failure.
-  *
-- * int bpf_get_stackid(struct pt_reg *ctx, struct bpf_map *map, u64 flags)
-+ * int bpf_get_stackid(struct pt_regs *ctx, struct bpf_map *map, u64 flags)
-  * 	Description
-  * 		Walk a user or a kernel stack and return its id. To achieve
-  * 		this, the helper needs *ctx*, which is a pointer to the context
-@@ -1724,7 +1724,7 @@ union bpf_attr {
-  * 	Return
-  * 		0 on success, or a negative error in case of failure.
-  *
-- * int bpf_override_return(struct pt_reg *regs, u64 rc)
-+ * int bpf_override_return(struct pt_regs *regs, u64 rc)
-  * 	Description
-  * 		Used for error injection, this helper uses kprobes to override
-  * 		the return value of the probed function, and to set it to *rc*.
--- 
-2.22.0
+that's not quite correct.
+Having 'trace' file open doesn't discard lines.
+I think this type of comment in uapi header makes more confusion than helps.
 
