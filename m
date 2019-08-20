@@ -2,64 +2,66 @@ Return-Path: <SRS0=Y+lb=WQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CBC3C3A589
-	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 21:49:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 092E3C3A59D
+	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 21:49:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 33A6C22DA7
-	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 21:49:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C3C202339D
+	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 21:49:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="JVrgCXfL";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="i+zyOlFs"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="sJJ+Nd9K";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="KvnfySik"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730650AbfHTVtC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Aug 2019 17:49:02 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:34211 "EHLO
+        id S1730895AbfHTVtI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Aug 2019 17:49:08 -0400
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:44007 "EHLO
         new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730273AbfHTVtB (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 20 Aug 2019 17:49:01 -0400
+        by vger.kernel.org with ESMTP id S1730959AbfHTVtI (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 20 Aug 2019 17:49:08 -0400
 Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 625E621BB;
-        Tue, 20 Aug 2019 17:49:00 -0400 (EDT)
+        by mailnew.nyi.internal (Postfix) with ESMTP id E6B212D8D;
+        Tue, 20 Aug 2019 17:49:06 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 20 Aug 2019 17:49:00 -0400
+  by compute4.internal (MEProxy); Tue, 20 Aug 2019 17:49:06 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=fm1; bh=a/sXuKrYtYLnT+5uNbpd3uKPLS
-        r1XkxMB37mi6euXos=; b=JVrgCXfLj2pfz30stslGJwBLmnyUJAz+La78uysin4
-        D7+vTZIyVxnHO9Ci5tsBisaDBQ33XyXEvTbTDYGO+MoDZ8p0WGyeK5H0Y6bSluhm
-        Q9qQKDwDdMw12Zp67qLpDcZVoUelgjJzPvhMBOMivWJD4TB48EDtYAdvMN4Ln3Av
-        0MaHd531Ks8pj5ufBgbeUjbTV/a1Fr2SPEKJ+R8rdlsEH7Lsy8Yz953Edc84Z8yK
-        a6um41gCdffk1AvgsM5e57R0u0yAfGV8wdshgmTTSt0aFBmgDuxB5IwcS1IYyx9F
-        MFFs6xwry3s/w8+Iu3wCiL4C8nuyGT+WfefZx1HlQVCA==
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=fm1; bh=wwzGUs2eyk7oG
+        KkxpIpcL+YllWVCcAIC2rCVN5UFoSE=; b=sJJ+Nd9KAIanYgid7Uunyl0bcNSWD
+        79wzJl5yG56rIJhAeUwgetaTfwIhf3d9uUSWgFtoT+LhJOuAfyyqmc0z31QmeZRT
+        qKMeJ724G3fiq4dE5Q/kfq3eDeC+ml2KhblOsJJ5jGvqNQC0dY9UCliRWPsw48+B
+        qZ2BEyLWr1dM8srMsUt2lRioKlLsbCkXFCyYDnQ7tagHaxZ/IBRGrpYffJf+MMWb
+        p6Y4nnmXxaw4rp4K8Y8yXHawf+qVfN5kFWWnTx/z5euRqlon/2oR9kBAvI1E/EFb
+        fK37xLWJCQYTtqPNuYHManTi7XOGxPXJwI14Y5/MyFZhH3G4kF3kxrt1Q==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=a/sXuKrYtYLnT+5uN
-        bpd3uKPLSr1XkxMB37mi6euXos=; b=i+zyOlFsrJBVHmSMf9PEJcjKbN4B7fPKe
-        eKB9Dr891rzZQATIvVbuKgUWM0dmhWEECCQNOhPubQ780BgHTdGqlBguGDE1Gjcl
-        bKaq8GacDD8Cmiy1jO/CmAKYIYJbwJEbNMA3ha//ifKYBWuvGgZMo2TDcT2w4JB/
-        s4apWGoP50xmHThA8nu/mva4A2R/tLeZ8l6y6vy0oOHnp+ZrFPjtA31crYg1OpCN
-        w7ZY0s+q7zD+aUzn6KkBYqL3DKzYsj8mfJJwes9+RjE4ihCFV4ov2YUluMFH6+fZ
-        66MXm6goRweraDJB40OlLi1FfnBQYxJH+RT/2gi8n6GxQhFAz1iQA==
-X-ME-Sender: <xms:y2pcXRjamW5IWP4AexKJBQr5a9JRTWZpejWi7U7EdQUHCg4t_WiZVg>
+        :in-reply-to:message-id:mime-version:references:subject:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; bh=wwzGUs2eyk7oGKkxpIpcL+YllWVCcAIC2rCVN5UFoSE=; b=KvnfySik
+        zzfcW6uLPaAku9Ew9As/y9bTbTLJIYn4ROZsdIQtX8kTfpItLKlr8d4RMmj3K4EN
+        UGvCRkv8qM18oy5XYtXOgnHol61u10ysbqArNBim/BfmrlZycdj/S6K7i0ttJGoM
+        qhx+EK8orMk0KiTUNLKbbAlYttXIb6TSO1VCE1O3bsAArAf02e12QOzF0Uj2UR14
+        wxQBbC/cfiRi6HgfIrGDAI1hyRzjm9iXVgt0AyS7G0+7O+oFA7c/mwqQmfPXk5Am
+        Vnx6/BG4n92DGrsqOFjpOfoadIqR5/HqnH83TL3jNbyPCX76kU+liZNtogA3E1/1
+        H4BCqMzSbTiLVA==
+X-ME-Sender: <xms:0mpcXbXmwmNtV0GqIL9BKNutJDZroJsQp7fCyEwqZPVR9kfZGy4bSw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddrudegvddgtdegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
-    fufffkofgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihu
-    segugihuuhhurdighiiiqeenucfkphepudelledrvddtuddrieegrddvnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiiinecuvehluhhsthgvrhfuihii
-    vgeptd
-X-ME-Proxy: <xmx:y2pcXWx1BnGZG7lVsTaI1c0XyoRfLvvxNykeagfL1zv1eAAYbmAGlw>
-    <xmx:y2pcXZ82lAJh4QdeCDTrGy1-H01MsQl94DChJtRF_ouCofFn3jJvoQ>
-    <xmx:y2pcXeKxYMSjl6m3jvuTp2KihNnrk-x5rlogp8ZXMlvFc1SvCe7s4A>
-    <xmx:zGpcXQSqnUmxJpInDyaXRxgBNiApeJDo8zgPX1U_dFq_SUeBPF7j-g>
+    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlfeehmdenucfjughrpefhvf
+    fufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
+    gihusegugihuuhhurdighiiiqeenucfkphepudelledrvddtuddrieegrddvnecurfgrrh
+    grmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiiinecuvehluhhsthgvrhfu
+    ihiivgepud
+X-ME-Proxy: <xmx:0mpcXZ5ZADLYp2_MJQaVuVVmyLAOHmSvZx-gXaIeAvOFL15wofcBmg>
+    <xmx:0mpcXYIx9FdjFoZBUpm4Nr5XsUK_bWn54cWtDFGWGSyv0WSWL1KBgA>
+    <xmx:0mpcXfLhL9UQmPiORZSV2shBFLWJwxkD1MdFUwt6u8J2VT-XWbZfpw>
+    <xmx:0mpcXZ2cjoSXRtaxDko-zFjRZTu7UmEd5IhVDjNCt2bJZ4nZ09CYbQ>
 Received: from dlxu-fedora-R90QNFJV.thefacebook.com (unknown [199.201.64.2])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 6376780062;
-        Tue, 20 Aug 2019 17:48:57 -0400 (EDT)
+        by mail.messagingengine.com (Postfix) with ESMTPA id D1F7280060;
+        Tue, 20 Aug 2019 17:49:04 -0400 (EDT)
 From:   Daniel Xu <dxu@dxuuu.xyz>
 To:     bpf@vger.kernel.org, songliubraving@fb.com, yhs@fb.com,
         andriin@fb.com, peterz@infradead.org, mingo@redhat.com,
@@ -68,10 +70,12 @@ Cc:     Daniel Xu <dxu@dxuuu.xyz>, ast@fb.com,
         alexander.shishkin@linux.intel.com, jolsa@redhat.com,
         namhyung@kernel.org, linux-kernel@vger.kernel.org,
         kernel-team@fb.com
-Subject: [PATCH v4 bpf-next 0/4] tracing/probe: Add PERF_EVENT_IOC_QUERY_PROBE
-Date:   Tue, 20 Aug 2019 14:48:15 -0700
-Message-Id: <20190820214819.16154-1-dxu@dxuuu.xyz>
+Subject: [PATCH v4 bpf-next 4/4] tracing/probe: Add self test for PERF_EVENT_IOC_QUERY_PROBE
+Date:   Tue, 20 Aug 2019 14:48:19 -0700
+Message-Id: <20190820214819.16154-5-dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190820214819.16154-1-dxu@dxuuu.xyz>
+References: <20190820214819.16154-1-dxu@dxuuu.xyz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -79,57 +83,163 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-It's useful to know [uk]probe's nmissed and nhit stats. For example with
-tracing tools, it's important to know when events may have been lost.
-debugfs currently exposes a control file to get this information, but
-it is not compatible with probes registered with the perf API.
-
-While bpf programs may be able to manually count nhit, there is no way
-to gather nmissed. In other words, it is currently not possible to
-retrieve information about FD-based probes.
-
-This patch adds a new ioctl that lets users query nmissed (as well as
-nhit for completeness). We currently only add support for [uk]probes
-but leave the possibility open for other probes like tracepoint.
-
-v3 -> v4:
-- Make kernel code set size field on ioctl arg
-- Update selftests to check size field
-- Remove unnecessary function stubs
-
-v2 -> v3:
-- Introduce bpf_link_type and associated getter to track underlying link
-  types
-- Add back size field in perf_event_query_probe for forward/backwards
-  compat
-- Remove NULL checks, fix typos
-
-v1 -> v2:
-- More descriptive cover letter
-- Make API more generic and support uprobes as well
-- Use casters/getters for libbpf instead of single getter
-- Fix typos
-- Remove size field from ioctl struct
-- Split out libbpf.h sync to tools dir to separate commit
-
-Daniel Xu (4):
-  tracing/probe: Add PERF_EVENT_IOC_QUERY_PROBE ioctl
-  libbpf: Add helpers to extract perf fd from bpf_link
-  tracing/probe: Sync perf_event.h to tools
-  tracing/probe: Add self test for PERF_EVENT_IOC_QUERY_PROBE
-
- include/linux/trace_events.h                  |   2 +
- include/uapi/linux/perf_event.h               |  23 ++++
- kernel/events/core.c                          |  20 +++
- kernel/trace/trace_kprobe.c                   |  25 ++++
- kernel/trace/trace_uprobe.c                   |  25 ++++
- tools/include/uapi/linux/perf_event.h         |  23 ++++
- tools/lib/bpf/libbpf.c                        |  21 ++++
- tools/lib/bpf/libbpf.h                        |  13 ++
- tools/lib/bpf/libbpf.map                      |   3 +
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+---
  .../selftests/bpf/prog_tests/attach_probe.c   | 115 ++++++++++++++++++
- 10 files changed, 270 insertions(+)
+ 1 file changed, 115 insertions(+)
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+index 5ecc267d98b0..414d5f4f7ccd 100644
+--- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
++++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+@@ -27,17 +27,27 @@ void test_attach_probe(void)
+ 	const char *kretprobe_name = "kretprobe/sys_nanosleep";
+ 	const char *uprobe_name = "uprobe/trigger_func";
+ 	const char *uretprobe_name = "uretprobe/trigger_func";
++	struct perf_event_query_probe kprobe_query = {};
++	struct perf_event_query_probe kretprobe_query = {};
++	struct perf_event_query_probe uprobe_query = {};
++	struct perf_event_query_probe uretprobe_query = {};
+ 	const int kprobe_idx = 0, kretprobe_idx = 1;
+ 	const int uprobe_idx = 2, uretprobe_idx = 3;
+ 	const char *file = "./test_attach_probe.o";
+ 	struct bpf_program *kprobe_prog, *kretprobe_prog;
+ 	struct bpf_program *uprobe_prog, *uretprobe_prog;
+ 	struct bpf_object *obj;
++	const struct bpf_link_fd *kprobe_fd_link;
++	const struct bpf_link_fd *kretprobe_fd_link;
++	const struct bpf_link_fd *uprobe_fd_link;
++	const struct bpf_link_fd *uretprobe_fd_link;
+ 	int err, prog_fd, duration = 0, res;
+ 	struct bpf_link *kprobe_link = NULL;
+ 	struct bpf_link *kretprobe_link = NULL;
+ 	struct bpf_link *uprobe_link = NULL;
+ 	struct bpf_link *uretprobe_link = NULL;
++	int kprobe_fd, kretprobe_fd;
++	int uprobe_fd, uretprobe_fd;
+ 	int results_map_fd;
+ 	size_t uprobe_offset;
+ 	ssize_t base_addr;
+@@ -116,6 +126,63 @@ void test_attach_probe(void)
+ 	/* trigger & validate kprobe && kretprobe */
+ 	usleep(1);
+ 
++	kprobe_fd_link = bpf_link__as_fd(kprobe_link);
++	if (CHECK(!kprobe_fd_link, "kprobe_link_as_fd",
++		  "failed to cast link to fd link\n"))
++		goto cleanup;
++
++	kprobe_fd = bpf_link_fd__fd(kprobe_fd_link);
++	if (CHECK(kprobe_fd < 0, "kprobe_get_perf_fd",
++	    "failed to get perf fd from kprobe link\n"))
++		goto cleanup;
++
++	kretprobe_fd_link = bpf_link__as_fd(kretprobe_link);
++	if (CHECK(!kretprobe_fd_link, "kretprobe_link_as_fd",
++		  "failed to cast link to fd link\n"))
++		goto cleanup;
++
++	kretprobe_fd = bpf_link_fd__fd(kretprobe_fd_link);
++	if (CHECK(kretprobe_fd < 0, "kretprobe_get_perf_fd",
++	    "failed to get perf fd from kretprobe link\n"))
++		goto cleanup;
++
++	kprobe_query.size = sizeof(kprobe_query);
++	err = ioctl(kprobe_fd, PERF_EVENT_IOC_QUERY_PROBE, &kprobe_query);
++	if (CHECK(err, "get_kprobe_ioctl",
++		  "failed to issue kprobe query ioctl\n"))
++		goto cleanup;
++	if (CHECK(kprobe_query.size != sizeof(kprobe_query), "get_kprobe_ioctl",
++		  "read incorrect size from kprobe_ioctl: %llu\n",
++		  kprobe_query.size))
++		goto cleanup;
++	if (CHECK(kprobe_query.nmissed > 0, "get_kprobe_ioctl",
++		  "read incorrect nmissed from kprobe_ioctl: %llu\n",
++		  kprobe_query.nmissed))
++		goto cleanup;
++	if (CHECK(kprobe_query.nhit == 0, "get_kprobe_ioctl",
++		  "read incorrect nhit from kprobe_ioctl: %llu\n",
++		  kprobe_query.nhit))
++		goto cleanup;
++
++	kretprobe_query.size = sizeof(kretprobe_query);
++	err = ioctl(kretprobe_fd, PERF_EVENT_IOC_QUERY_PROBE, &kretprobe_query);
++	if (CHECK(err, "get_kretprobe_ioctl",
++		  "failed to issue kretprobe query ioctl\n"))
++		goto cleanup;
++	if (CHECK(kretprobe_query.size != sizeof(kretprobe_query),
++		  "get_kretprobe_ioctl",
++		  "read incorrect size from kretprobe_ioctl: %llu\n",
++		  kretprobe_query.size))
++		goto cleanup;
++	if (CHECK(kretprobe_query.nmissed > 0, "get_kretprobe_ioctl",
++		  "read incorrect nmissed from kretprobe_ioctl: %llu\n",
++		  kretprobe_query.nmissed))
++		goto cleanup;
++	if (CHECK(kretprobe_query.nhit <= 0, "get_kretprobe_ioctl",
++		  "read incorrect nhit from kretprobe_ioctl: %llu\n",
++		  kretprobe_query.nhit))
++		goto cleanup;
++
+ 	err = bpf_map_lookup_elem(results_map_fd, &kprobe_idx, &res);
+ 	if (CHECK(err, "get_kprobe_res",
+ 		  "failed to get kprobe res: %d\n", err))
+@@ -135,6 +202,54 @@ void test_attach_probe(void)
+ 	/* trigger & validate uprobe & uretprobe */
+ 	get_base_addr();
+ 
++	uprobe_fd_link = bpf_link__as_fd(uprobe_link);
++	if (CHECK(!uprobe_fd_link, "uprobe_link_as_fd",
++		  "failed to cast link to fd link\n"))
++		goto cleanup;
++
++	uprobe_fd = bpf_link_fd__fd(uprobe_fd_link);
++	if (CHECK(uprobe_fd < 0, "uprobe_get_perf_fd",
++	    "failed to get perf fd from uprobe link\n"))
++		goto cleanup;
++
++	uretprobe_fd_link = bpf_link__as_fd(uretprobe_link);
++	if (CHECK(!uretprobe_fd_link, "uretprobe_link_as_fd",
++		  "failed to cast link to fd link\n"))
++		goto cleanup;
++
++	uretprobe_fd = bpf_link_fd__fd(uretprobe_fd_link);
++	if (CHECK(uretprobe_fd < 0, "uretprobe_get_perf_fd",
++	    "failed to get perf fd from uretprobe link\n"))
++		goto cleanup;
++
++	uprobe_query.size = sizeof(uprobe_query);
++	err = ioctl(uprobe_fd, PERF_EVENT_IOC_QUERY_PROBE, &uprobe_query);
++	if (CHECK(err, "get_uprobe_ioctl",
++		  "failed to issue uprobe query ioctl\n"))
++		goto cleanup;
++	if (CHECK(uprobe_query.nmissed > 0, "get_uprobe_ioctl",
++		  "read incorrect nmissed from uprobe_ioctl: %llu\n",
++		  uprobe_query.nmissed))
++		goto cleanup;
++	if (CHECK(uprobe_query.nhit == 0, "get_uprobe_ioctl",
++		  "read incorrect nhit from uprobe_ioctl: %llu\n",
++		  uprobe_query.nhit))
++		goto cleanup;
++
++	uretprobe_query.size = sizeof(uretprobe_query);
++	err = ioctl(uretprobe_fd, PERF_EVENT_IOC_QUERY_PROBE, &uretprobe_query);
++	if (CHECK(err, "get_uretprobe_ioctl",
++		  "failed to issue uretprobe query ioctl\n"))
++		goto cleanup;
++	if (CHECK(uretprobe_query.nmissed > 0, "get_uretprobe_ioctl",
++		  "read incorrect nmissed from uretprobe_ioctl: %llu\n",
++		  uretprobe_query.nmissed))
++		goto cleanup;
++	if (CHECK(uretprobe_query.nhit <= 0, "get_uretprobe_ioctl",
++		  "read incorrect nhit from uretprobe_ioctl: %llu\n",
++		  uretprobe_query.nhit))
++		goto cleanup;
++
+ 	err = bpf_map_lookup_elem(results_map_fd, &uprobe_idx, &res);
+ 	if (CHECK(err, "get_uprobe_res",
+ 		  "failed to get uprobe res: %d\n", err))
 -- 
 2.21.0
 
