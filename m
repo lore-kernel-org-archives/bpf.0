@@ -2,42 +2,39 @@ Return-Path: <SRS0=Y+lb=WQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 167D9C3A59D
-	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 23:09:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F51DC3A59E
+	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 23:09:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D10F922DD6
-	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 23:09:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E6C192339E
+	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 23:09:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lekensteyn.nl header.i=@lekensteyn.nl header.b="FJyfkcTL"
+	dkim=pass (2048-bit key) header.d=lekensteyn.nl header.i=@lekensteyn.nl header.b="DqHIfd6f"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726354AbfHTXJJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1726534AbfHTXJJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 20 Aug 2019 19:09:09 -0400
-Received: from lekensteyn.nl ([178.21.112.251]:44209 "EHLO lekensteyn.nl"
+Received: from lekensteyn.nl ([178.21.112.251]:34323 "EHLO lekensteyn.nl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726203AbfHTXJJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S1726028AbfHTXJJ (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 20 Aug 2019 19:09:09 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lekensteyn.nl; s=s2048-2015-q1;
-        h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From; bh=CPhDF5jnURDhjAxSFhJHWKq3/SRRecFjjjdMVgviX/E=;
-        b=FJyfkcTLJKVSBbaflGqIw9KS4QzhZVM6wE+k1gOvJaoDwRS0+H2euts5GT1LGJNwwFCf7ZJfhbyXMxf6qZ0ZtZTLVGSPa8eeC2ayjO4DTepd0D6jDjzyZsRtty1+VhxSOq1R1hpPArQ7B3oI/5rCwEgkmDjw6SB34jy9Hl2sM08JbPgUAog7ymiODaIc1EODMWCzU+Ty/vox6T4EAcO4Qq+PX5Zi0bXNkODFcuRQRxarbwoSd7sV12aznyKaiL05xlrY/7oE1v/yfNAp99HUVDEtHo4Euzt6FQQyrMdcmOJVnQRGVN32hGNZdjoTjym2fMrRSLn5v2YynZeDSKToCg==;
+        h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From; bh=4HwCBJFfSBkXZe8xYmCQoO/bOakWt6wrHLfSFTA8ino=;
+        b=DqHIfd6f8UIzx3Bsa35j8eDbh7AAhwSm9FPc9wXLKvqtE5T2rGjgfAlHg5YzwuKI1ujcJ4a0nrnx1FTlSk/6iJZi5DsySs0MX4zWNk/3LhjQQ4pC17NL0UV+BKLk5VRIsUM3NyL+4HSF2TTBlhPIB1Bg2+53eJYJY0U4yQV6va6vD8dZevdxKDhzlMMrFqZ127aS02S/FvOnFiDXjPoC4yYRjy9Sw8R0ADjkIrMjjD4aSyTLUtqgBlEhV/Hst0o1ukeOZHUshks8p5/uOC9+CKBDc5MEKRs+TMINC+3AuT0hQh7zJRHVYpgWzznbRIhDQlgSuyA+luAmZq85ompJNQ==;
 Received: by lekensteyn.nl with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.84_2)
         (envelope-from <peter@lekensteyn.nl>)
-        id 1i0DFQ-00055S-8n; Wed, 21 Aug 2019 01:09:04 +0200
+        id 1i0DFO-00055S-9k; Wed, 21 Aug 2019 01:09:03 +0200
 From:   Peter Wu <peter@lekensteyn.nl>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH v2 1/4] bpf: clarify description for CONFIG_BPF_EVENTS
-Date:   Wed, 21 Aug 2019 00:08:57 +0100
-Message-Id: <20190820230900.23445-2-peter@lekensteyn.nl>
+Subject: [PATCH v2 0/4] BPF-related documentation fixes
+Date:   Wed, 21 Aug 2019 00:08:56 +0100
+Message-Id: <20190820230900.23445-1-peter@lekensteyn.nl>
 X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190820230900.23445-1-peter@lekensteyn.nl>
-References: <20190820230900.23445-1-peter@lekensteyn.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -45,30 +42,32 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-PERF_EVENT_IOC_SET_BPF supports uprobes since v4.3, and tracepoints
-since v4.7 via commit 04a22fae4cbc ("tracing, perf: Implement BPF
-programs attached to uprobes"), and commit 98b5c2c65c29 ("perf, bpf:
-allow bpf programs attach to tracepoints") respectively.
+Hi,
 
-Signed-off-by: Peter Wu <peter@lekensteyn.nl>
----
- kernel/trace/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Here are some small doc updates that should hopefully save the next
+eBPF/uprobe user some time. Based on v5.3-rc2, but net-next appears to
+have no conflicts.
 
-diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-index 98da8998c25c..b09d7b1ffffd 100644
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@ -520,7 +520,8 @@ config BPF_EVENTS
- 	bool
- 	default y
- 	help
--	  This allows the user to attach BPF programs to kprobe events.
-+	  This allows the user to attach BPF programs to kprobe, uprobe, and
-+	  tracepoint events.
- 
- config DYNAMIC_EVENTS
- 	def_bool n
+Changes since the v1[1]:
+- Split bpf.h patch for kernel and userspace tools (requested by Alexei)
+- Add new 'bpf: clarify when bpf_trace_printk discards lines' patch.
+
+Kind regards,
+Peter
+
+ [1]: https://lkml.kernel.org/r/20190819212122.10286-1-peter@lekensteyn.nl
+
+Peter Wu (4):
+  bpf: clarify description for CONFIG_BPF_EVENTS
+  bpf: fix 'struct pt_reg' typo in documentation
+  bpf: clarify when bpf_trace_printk discards lines
+  bpf: sync bpf.h to tools/
+
+ include/uapi/linux/bpf.h       | 8 +++++---
+ kernel/trace/Kconfig           | 3 ++-
+ tools/include/uapi/linux/bpf.h | 8 +++++---
+ 3 files changed, 12 insertions(+), 7 deletions(-)
+
 -- 
 2.22.0
 
