@@ -2,131 +2,120 @@ Return-Path: <SRS0=Y+lb=WQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB932C3A59E
-	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 09:32:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECF30C3A59D
+	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 09:46:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 91ED722DA7
-	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 09:32:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C28CB22CF7
+	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 09:46:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="rk+hTMGw"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="IoRCZn/H"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729472AbfHTJcS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Aug 2019 05:32:18 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:35701 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728842AbfHTJcM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Aug 2019 05:32:12 -0400
-Received: by mail-wm1-f66.google.com with SMTP id l2so2025316wmg.0
-        for <bpf@vger.kernel.org>; Tue, 20 Aug 2019 02:32:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=AMLCV3YzxdATq/4eGHOKLDLXG9C3cKBdYE1r3RyBJ+0=;
-        b=rk+hTMGw8a9uURSgyDxDkMWhr18PePPZvmBfqaxX1ITQyAaZ6o5a89pjHr56pR9Cxl
-         KA9C/fJeri19ouUChv39cqRaMowZ5+HxcbV4SH6RDqtRSYzUWevbEZwB2rpcinPtOn3k
-         ojzv+frJYkii33v7XggCDgmBfiifLMgNs4+6M4hyC2jCZ7UpfBFt6RwB2OGK28j2aHjP
-         QuMprko0g9jsnpvWi/5Nv7X8tE3cM5XyD0S9aOM5uTlHYKUslGkQFtTo8Fi8NLEbD1cO
-         F3tvqiU434VW/o9Aww8HZUD67Pin3SteVXSPY8iWn95+pNK2ErwTk6An3UyZofubqsQa
-         UHRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=AMLCV3YzxdATq/4eGHOKLDLXG9C3cKBdYE1r3RyBJ+0=;
-        b=kKvTl/W1oHAv67gF/C/j/lt59Lrzwa5CN8aaClwTLVQa6Z3efJHY5XkxH/vjzLv7Qt
-         /0TMjRrrtkaYFVCgnEsXEziuQKJWTcrH4A6MNTsl25czd/75yZ944sflQKkNxVZ6Vimj
-         WpimFrZBm2iuhH1F2q8PMEgRXl38X3YWemcpV7ZQsn9k89V9LqkEXXmzzT+Q8ptFNcBy
-         8KOqpkL7CpW2BcO83Mc5QEYpXBBQ0J51XlYAUiTpRozsgjcLnKeFvhUrCGUUMg1+dQ/5
-         /sfm7klQM8Xsd4E0UyMS2/iAgFNEKw6dO4TEb0hqNT6VNc1ugRxMAiwXL0K6/J7eqHa3
-         Lnkg==
-X-Gm-Message-State: APjAAAWr/Ehj5RFM0AiOtA+hxA5SbVUzsBMj7ClcHm4v24BKRmyn+9kI
-        FpwUPL0f1vL5bJovcBwVwfMewA==
-X-Google-Smtp-Source: APXvYqw0zXrkTjBalO13y9Z1hJ5xolNNsfEPwrKijfxX3qEHYi/DNuQ0BihPB2E5Zv/lMRB3gYDuTw==
-X-Received: by 2002:a7b:c019:: with SMTP id c25mr16184409wmb.116.1566293530086;
-        Tue, 20 Aug 2019 02:32:10 -0700 (PDT)
-Received: from cbtest32.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id p9sm16128190wru.61.2019.08.20.02.32.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Aug 2019 02:32:08 -0700 (PDT)
-From:   Quentin Monnet <quentin.monnet@netronome.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        oss-drivers@netronome.com,
-        Quentin Monnet <quentin.monnet@netronome.com>
-Subject: [PATCH bpf-next v2 3/5] libbpf: refactor bpf_*_get_next_id() functions
-Date:   Tue, 20 Aug 2019 10:31:52 +0100
-Message-Id: <20190820093154.14042-4-quentin.monnet@netronome.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190820093154.14042-1-quentin.monnet@netronome.com>
-References: <20190820093154.14042-1-quentin.monnet@netronome.com>
+        id S1729396AbfHTJqH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Aug 2019 05:46:07 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:49392 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728426AbfHTJqH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Aug 2019 05:46:07 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7K9iMuS132835;
+        Tue, 20 Aug 2019 09:45:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=corp-2019-08-05;
+ bh=rJGY4A3Rt+Hl36n8/Gp1bBe5o1K9b1rfgPgCTlnsZLU=;
+ b=IoRCZn/HHyA7FhxFvVj6hDLsTpXJkGk/NUTzOYs36RGnuC1qaGpe24SKjSOvSNnKC0sO
+ 2JnlmK1q5nnst+K2/9krBshx1SfR0eCVSLjOj+fWYF0bWO9wgUpulpYTKvJdsvpAqHX+
+ 6kSFK7W56flfSBiEpCiMSER5AAapl3w1C6SDi9SMBDERA+jOO1/1KlZcC1+gmN8eblnD
+ uc1MCGJZzgjVhmvcGR8lNh3pYLVhlsk2Pdl/h4yTnCWdMkaaZQUrk2F5YJ8uvOt2XRml
+ GyBAglJ3JTWXuh+6H+/qGRcEU6BuSRXThH+BpM2Fh8GuwSCZt6JXAhgHKWFky9GoAMPl xg== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 2ue90tdapw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Aug 2019 09:45:38 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7K9haIU022058;
+        Tue, 20 Aug 2019 09:45:37 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 2ufwgcywpj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Aug 2019 09:45:37 +0000
+Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x7K9jaH1013512;
+        Tue, 20 Aug 2019 09:45:36 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 20 Aug 2019 02:45:35 -0700
+Date:   Tue, 20 Aug 2019 12:44:44 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>
+Cc:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH -next] bpf: Use PTR_ERR_OR_ZERO in xsk_map_inc()
+Message-ID: <20190820094444.GA3964@kadam>
+References: <20190820013652.147041-1-yuehaibing@huawei.com>
+ <93fafdab-8fb3-0f2b-8f36-0cf297db3cd9@intel.com>
+ <20190820085547.GE4451@kadam>
+ <CAJ+HfNhRf+=yN6eOOZ1zp8=VicT-k6nHLO6r+f__O5X3M+N=ug@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJ+HfNhRf+=yN6eOOZ1zp8=VicT-k6nHLO6r+f__O5X3M+N=ug@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9354 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1906280000 definitions=main-1908200102
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9354 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1908200102
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In preparation for the introduction of a similar function for retrieving
-the id of the next BTF object, consolidate the code from
-bpf_prog_get_next_id() and bpf_map_get_next_id() in libbpf.
+On Tue, Aug 20, 2019 at 11:25:29AM +0200, Björn Töpel wrote:
+> On Tue, 20 Aug 2019 at 10:59, Dan Carpenter <dan.carpenter@oracle.com> wrote:
+> >
+> > On Tue, Aug 20, 2019 at 09:28:26AM +0200, Björn Töpel wrote:
+> > > For future patches: Prefix AF_XDP socket work with "xsk:" and use "PATCH
+> > > bpf-next" to let the developers know what tree you're aiming for.
+> >
+> > There are over 300 trees in linux-next.  It impossible to try remember
+> > everyone's trees.  No one else has this requirement.
+> >
+> 
+> Net/bpf are different, and I wanted to point that out to lessen the
+> burden for the maintainers. It's documented in:
+> 
+> Documentation/bpf/bpf_devel_QA.rst.
+> Documentation/networking/netdev-FAQ.rst
 
-Signed-off-by: Quentin Monnet <quentin.monnet@netronome.com>
-Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
----
- tools/lib/bpf/bpf.c | 21 ++++++++-------------
- 1 file changed, 8 insertions(+), 13 deletions(-)
+Ah...  I hadn't realized that BPF patches were confusing to Dave.
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index c7d7993c44bb..1439e99c9be5 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -568,7 +568,7 @@ int bpf_prog_test_run_xattr(struct bpf_prog_test_run_attr *test_attr)
- 	return ret;
- }
- 
--int bpf_prog_get_next_id(__u32 start_id, __u32 *next_id)
-+static int bpf_obj_get_next_id(__u32 start_id, __u32 *next_id, int cmd)
- {
- 	union bpf_attr attr;
- 	int err;
-@@ -576,26 +576,21 @@ int bpf_prog_get_next_id(__u32 start_id, __u32 *next_id)
- 	memset(&attr, 0, sizeof(attr));
- 	attr.start_id = start_id;
- 
--	err = sys_bpf(BPF_PROG_GET_NEXT_ID, &attr, sizeof(attr));
-+	err = sys_bpf(cmd, &attr, sizeof(attr));
- 	if (!err)
- 		*next_id = attr.next_id;
- 
- 	return err;
- }
- 
--int bpf_map_get_next_id(__u32 start_id, __u32 *next_id)
-+int bpf_prog_get_next_id(__u32 start_id, __u32 *next_id)
- {
--	union bpf_attr attr;
--	int err;
--
--	memset(&attr, 0, sizeof(attr));
--	attr.start_id = start_id;
--
--	err = sys_bpf(BPF_MAP_GET_NEXT_ID, &attr, sizeof(attr));
--	if (!err)
--		*next_id = attr.next_id;
-+	return bpf_obj_get_next_id(start_id, next_id, BPF_PROG_GET_NEXT_ID);
-+}
- 
--	return err;
-+int bpf_map_get_next_id(__u32 start_id, __u32 *next_id)
-+{
-+	return bpf_obj_get_next_id(start_id, next_id, BPF_MAP_GET_NEXT_ID);
- }
- 
- int bpf_prog_get_fd_by_id(__u32 id)
--- 
-2.17.1
+I actually do keep track of net and net-next.  I do quite a bit of extra
+stuff for netdev patches.  So what about if we used [PATCH] for bpf and
+[PATCH net] and [PATCH net-next] for networking?
 
+I will do that.
+
+regards,
+dan carpenter
