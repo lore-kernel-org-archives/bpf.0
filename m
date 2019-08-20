@@ -4,37 +4,37 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88730C3A59E
-	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 23:09:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 167D9C3A59D
+	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 23:09:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 50DF02339E
+	by mail.kernel.org (Postfix) with ESMTP id D10F922DD6
 	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 23:09:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lekensteyn.nl header.i=@lekensteyn.nl header.b="Ncim4CHF"
+	dkim=pass (2048-bit key) header.d=lekensteyn.nl header.i=@lekensteyn.nl header.b="FJyfkcTL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726362AbfHTXJJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1726354AbfHTXJJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 20 Aug 2019 19:09:09 -0400
-Received: from lekensteyn.nl ([178.21.112.251]:41075 "EHLO lekensteyn.nl"
+Received: from lekensteyn.nl ([178.21.112.251]:44209 "EHLO lekensteyn.nl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726354AbfHTXJI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Aug 2019 19:09:08 -0400
+        id S1726203AbfHTXJJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Aug 2019 19:09:09 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lekensteyn.nl; s=s2048-2015-q1;
-        h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From; bh=Q+UDWMYEYIrMXXf99yl5++TT8RhBbJ8ffMGbmG6M8fY=;
-        b=Ncim4CHFR1Q5+pd5BNiNHzCvws2Ijii1/CviLZYp5ZSWR4Knp+bFWtUXA4inj+VXxP/LbmslA8R0lI+PQszg7deLDswysKr8qIESiNHsUEg3fpY3T2WheqhouGW6ViDxZKJqPo0FYcuaHnT7A35lEKVss95cKOjpB23BLJ/RIPUimBmtZoZawJtSzRQmdzanEaEHM2WAxLzQof1XsglWFMlQZvZqrMkrWmTvWdHvAtDtrXyPU9HNWjnlIaN0e2oTtV8p4EcWyUUyvn8bMyRKk80RLyX8POgnhIX2G3hIJlaEKIdtmivX62gLQIip1fFKrkMGABkjKA+zKqSVO+AtfQ==;
+        h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From; bh=CPhDF5jnURDhjAxSFhJHWKq3/SRRecFjjjdMVgviX/E=;
+        b=FJyfkcTLJKVSBbaflGqIw9KS4QzhZVM6wE+k1gOvJaoDwRS0+H2euts5GT1LGJNwwFCf7ZJfhbyXMxf6qZ0ZtZTLVGSPa8eeC2ayjO4DTepd0D6jDjzyZsRtty1+VhxSOq1R1hpPArQ7B3oI/5rCwEgkmDjw6SB34jy9Hl2sM08JbPgUAog7ymiODaIc1EODMWCzU+Ty/vox6T4EAcO4Qq+PX5Zi0bXNkODFcuRQRxarbwoSd7sV12aznyKaiL05xlrY/7oE1v/yfNAp99HUVDEtHo4Euzt6FQQyrMdcmOJVnQRGVN32hGNZdjoTjym2fMrRSLn5v2YynZeDSKToCg==;
 Received: by lekensteyn.nl with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.84_2)
         (envelope-from <peter@lekensteyn.nl>)
-        id 1i0DFR-00055S-D6; Wed, 21 Aug 2019 01:09:05 +0200
+        id 1i0DFQ-00055S-8n; Wed, 21 Aug 2019 01:09:04 +0200
 From:   Peter Wu <peter@lekensteyn.nl>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH v2 3/4] bpf: clarify when bpf_trace_printk discards lines
-Date:   Wed, 21 Aug 2019 00:08:59 +0100
-Message-Id: <20190820230900.23445-4-peter@lekensteyn.nl>
+Subject: [PATCH v2 1/4] bpf: clarify description for CONFIG_BPF_EVENTS
+Date:   Wed, 21 Aug 2019 00:08:57 +0100
+Message-Id: <20190820230900.23445-2-peter@lekensteyn.nl>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190820230900.23445-1-peter@lekensteyn.nl>
 References: <20190820230900.23445-1-peter@lekensteyn.nl>
@@ -45,33 +45,30 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-I opened /sys/kernel/tracing/trace once and kept reading from it.
-bpf_trace_printk somehow did not seem to work, no entries were appended
-to that trace file. It turns out that tracing is disabled when that file
-is open. Save the next person some time and document this.
-
-The trace file is described in Documentation/trace/ftrace.rst, however
-the implication "tracing is disabled" did not immediate translate to
-"bpf_trace_printk silently discards entries".
+PERF_EVENT_IOC_SET_BPF supports uprobes since v4.3, and tracepoints
+since v4.7 via commit 04a22fae4cbc ("tracing, perf: Implement BPF
+programs attached to uprobes"), and commit 98b5c2c65c29 ("perf, bpf:
+allow bpf programs attach to tracepoints") respectively.
 
 Signed-off-by: Peter Wu <peter@lekensteyn.nl>
 ---
- include/uapi/linux/bpf.h | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/trace/Kconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 9ca333c3ce91..e4236e357ed9 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -575,6 +575,8 @@ union bpf_attr {
-  * 		limited to five).
-  *
-  * 		Each time the helper is called, it appends a line to the trace.
-+ * 		Lines are discarded while *\/sys/kernel/debug/tracing/trace* is
-+ * 		open, use *\/sys/kernel/debug/tracing/trace_pipe* to avoid this.
-  * 		The format of the trace is customizable, and the exact output
-  * 		one will get depends on the options set in
-  * 		*\/sys/kernel/debug/tracing/trace_options* (see also the
+diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+index 98da8998c25c..b09d7b1ffffd 100644
+--- a/kernel/trace/Kconfig
++++ b/kernel/trace/Kconfig
+@@ -520,7 +520,8 @@ config BPF_EVENTS
+ 	bool
+ 	default y
+ 	help
+-	  This allows the user to attach BPF programs to kprobe events.
++	  This allows the user to attach BPF programs to kprobe, uprobe, and
++	  tracepoint events.
+ 
+ config DYNAMIC_EVENTS
+ 	def_bool n
 -- 
 2.22.0
 
