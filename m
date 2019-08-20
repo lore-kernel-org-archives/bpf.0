@@ -7,61 +7,61 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92283C3A589
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB932C3A59E
 	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 09:32:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 64F2E22CF5
+	by mail.kernel.org (Postfix) with ESMTP id 91ED722DA7
 	for <bpf@archiver.kernel.org>; Tue, 20 Aug 2019 09:32:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="x5fgC20/"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="rk+hTMGw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729447AbfHTJcL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Aug 2019 05:32:11 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:36131 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728771AbfHTJcJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Aug 2019 05:32:09 -0400
-Received: by mail-wr1-f65.google.com with SMTP id r3so11654157wrt.3
-        for <bpf@vger.kernel.org>; Tue, 20 Aug 2019 02:32:07 -0700 (PDT)
+        id S1729472AbfHTJcS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Aug 2019 05:32:18 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:35701 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728842AbfHTJcM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Aug 2019 05:32:12 -0400
+Received: by mail-wm1-f66.google.com with SMTP id l2so2025316wmg.0
+        for <bpf@vger.kernel.org>; Tue, 20 Aug 2019 02:32:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=tVc7VN7gTtziOvHeOIXMyOs+0s8pDlRsBn9s0CrWFO8=;
-        b=x5fgC20/2BPZMlMDMx/IAGIVkVcHEud5rmvapbIons9qcdDgd04/bM/8u4iMFwYWmf
-         xn4A2dO3hSTQxvfnNp4z50NGcbxg+k0PJ367RnwlvGUFWODC7cKMa1T+3rngHAnowilG
-         KH9MF3wanwhNKwDh1nrks9dc6HlNpc50cF3NVI8D9u9kIh8yagDpBP7hEc+4aZyZH5Py
-         +wYRIaOvg7RRr/LPowgsNNnifI6E4ndTdRf061gJmM7zIv0/mW0tdFFC2kxJQJBQTe9W
-         FzbDlF3KloLDv/zRFyCCUzg5GNcKFuBLdGoyZ+91Goyd3IS/pIPSLpoLpJhGiyX4qyWv
-         hqvA==
+        bh=AMLCV3YzxdATq/4eGHOKLDLXG9C3cKBdYE1r3RyBJ+0=;
+        b=rk+hTMGw8a9uURSgyDxDkMWhr18PePPZvmBfqaxX1ITQyAaZ6o5a89pjHr56pR9Cxl
+         KA9C/fJeri19ouUChv39cqRaMowZ5+HxcbV4SH6RDqtRSYzUWevbEZwB2rpcinPtOn3k
+         ojzv+frJYkii33v7XggCDgmBfiifLMgNs4+6M4hyC2jCZ7UpfBFt6RwB2OGK28j2aHjP
+         QuMprko0g9jsnpvWi/5Nv7X8tE3cM5XyD0S9aOM5uTlHYKUslGkQFtTo8Fi8NLEbD1cO
+         F3tvqiU434VW/o9Aww8HZUD67Pin3SteVXSPY8iWn95+pNK2ErwTk6An3UyZofubqsQa
+         UHRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=tVc7VN7gTtziOvHeOIXMyOs+0s8pDlRsBn9s0CrWFO8=;
-        b=hJGn76apyK55KkbMj7tWC+b4WLx6wmNhjsRkLlIcqct1vihm73GSwgmzvxisASf7Jd
-         UnC2vU/rGskK28vAbjpNLwWWLrjdhrBJ/hxjmsW7E/yo8CaXkOKZxmDHoBeOJpfrNRzW
-         DoigsUZPswkZfDbd8Y7/09AuTP0cGiOhGdN5zMsnDJ9PXZAG8m4klOBFdX2MNG4xu+g6
-         8tFbZXlX5DQscFF4xYgnF9kIsAkaF4ILHobA1mrhGwtpzAJgyNzQ2WmQ1JKygEXhF84/
-         K42XWINNSUMO5cB+yXmJ5D/Ti9fyMT8oscI7Gvwp8uf5tEnc+kis+S++lnU9Uq3dNihM
-         eHMw==
-X-Gm-Message-State: APjAAAXH+7dFJ2NmDJ4v057qzWO5xWz7OmoChjtEvo18ftjWaknMF4YH
-        1l7IY1K62MkgamliZgn0CUIJS5O365U=
-X-Google-Smtp-Source: APXvYqyEgLmJgKDJTvMxC14PXf2yH46koODDnGABAg/9L0Lc2BBvPvs2wOQMct0hVXviOGlEH+kgLA==
-X-Received: by 2002:a5d:4ec6:: with SMTP id s6mr6476613wrv.327.1566293527206;
-        Tue, 20 Aug 2019 02:32:07 -0700 (PDT)
+        bh=AMLCV3YzxdATq/4eGHOKLDLXG9C3cKBdYE1r3RyBJ+0=;
+        b=kKvTl/W1oHAv67gF/C/j/lt59Lrzwa5CN8aaClwTLVQa6Z3efJHY5XkxH/vjzLv7Qt
+         /0TMjRrrtkaYFVCgnEsXEziuQKJWTcrH4A6MNTsl25czd/75yZ944sflQKkNxVZ6Vimj
+         WpimFrZBm2iuhH1F2q8PMEgRXl38X3YWemcpV7ZQsn9k89V9LqkEXXmzzT+Q8ptFNcBy
+         8KOqpkL7CpW2BcO83Mc5QEYpXBBQ0J51XlYAUiTpRozsgjcLnKeFvhUrCGUUMg1+dQ/5
+         /sfm7klQM8Xsd4E0UyMS2/iAgFNEKw6dO4TEb0hqNT6VNc1ugRxMAiwXL0K6/J7eqHa3
+         Lnkg==
+X-Gm-Message-State: APjAAAWr/Ehj5RFM0AiOtA+hxA5SbVUzsBMj7ClcHm4v24BKRmyn+9kI
+        FpwUPL0f1vL5bJovcBwVwfMewA==
+X-Google-Smtp-Source: APXvYqw0zXrkTjBalO13y9Z1hJ5xolNNsfEPwrKijfxX3qEHYi/DNuQ0BihPB2E5Zv/lMRB3gYDuTw==
+X-Received: by 2002:a7b:c019:: with SMTP id c25mr16184409wmb.116.1566293530086;
+        Tue, 20 Aug 2019 02:32:10 -0700 (PDT)
 Received: from cbtest32.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id p9sm16128190wru.61.2019.08.20.02.32.06
+        by smtp.gmail.com with ESMTPSA id p9sm16128190wru.61.2019.08.20.02.32.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Aug 2019 02:32:06 -0700 (PDT)
+        Tue, 20 Aug 2019 02:32:08 -0700 (PDT)
 From:   Quentin Monnet <quentin.monnet@netronome.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         oss-drivers@netronome.com,
         Quentin Monnet <quentin.monnet@netronome.com>
-Subject: [PATCH bpf-next v2 1/5] bpf: add new BPF_BTF_GET_NEXT_ID syscall command
-Date:   Tue, 20 Aug 2019 10:31:50 +0100
-Message-Id: <20190820093154.14042-2-quentin.monnet@netronome.com>
+Subject: [PATCH bpf-next v2 3/5] libbpf: refactor bpf_*_get_next_id() functions
+Date:   Tue, 20 Aug 2019 10:31:52 +0100
+Message-Id: <20190820093154.14042-4-quentin.monnet@netronome.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190820093154.14042-1-quentin.monnet@netronome.com>
 References: <20190820093154.14042-1-quentin.monnet@netronome.com>
@@ -70,77 +70,63 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a new command for the bpf() system call: BPF_BTF_GET_NEXT_ID is used
-to cycle through all BTF objects loaded on the system.
-
-The motivation is to be able to inspect (list) all BTF objects presents
-on the system.
+In preparation for the introduction of a similar function for retrieving
+the id of the next BTF object, consolidate the code from
+bpf_prog_get_next_id() and bpf_map_get_next_id() in libbpf.
 
 Signed-off-by: Quentin Monnet <quentin.monnet@netronome.com>
 Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 ---
- include/linux/bpf.h      | 3 +++
- include/uapi/linux/bpf.h | 1 +
- kernel/bpf/btf.c         | 4 ++--
- kernel/bpf/syscall.c     | 4 ++++
- 4 files changed, 10 insertions(+), 2 deletions(-)
+ tools/lib/bpf/bpf.c | 21 ++++++++-------------
+ 1 file changed, 8 insertions(+), 13 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 15ae49862b82..5b9d22338606 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -24,6 +24,9 @@ struct seq_file;
- struct btf;
- struct btf_type;
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index c7d7993c44bb..1439e99c9be5 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -568,7 +568,7 @@ int bpf_prog_test_run_xattr(struct bpf_prog_test_run_attr *test_attr)
+ 	return ret;
+ }
  
-+extern struct idr btf_idr;
-+extern spinlock_t btf_idr_lock;
-+
- /* map is generic key/value storage optionally accesible by eBPF programs */
- struct bpf_map_ops {
- 	/* funcs callable from userspace (via syscall) */
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 0ef594ac3899..8aa6126f0b6e 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -106,6 +106,7 @@ enum bpf_cmd {
- 	BPF_TASK_FD_QUERY,
- 	BPF_MAP_LOOKUP_AND_DELETE_ELEM,
- 	BPF_MAP_FREEZE,
-+	BPF_BTF_GET_NEXT_ID,
- };
+-int bpf_prog_get_next_id(__u32 start_id, __u32 *next_id)
++static int bpf_obj_get_next_id(__u32 start_id, __u32 *next_id, int cmd)
+ {
+ 	union bpf_attr attr;
+ 	int err;
+@@ -576,26 +576,21 @@ int bpf_prog_get_next_id(__u32 start_id, __u32 *next_id)
+ 	memset(&attr, 0, sizeof(attr));
+ 	attr.start_id = start_id;
  
- enum bpf_map_type {
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 5fcc7a17eb5a..e716a64b2f7f 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -195,8 +195,8 @@
- 	     i < btf_type_vlen(struct_type);					\
- 	     i++, member++)
+-	err = sys_bpf(BPF_PROG_GET_NEXT_ID, &attr, sizeof(attr));
++	err = sys_bpf(cmd, &attr, sizeof(attr));
+ 	if (!err)
+ 		*next_id = attr.next_id;
  
--static DEFINE_IDR(btf_idr);
--static DEFINE_SPINLOCK(btf_idr_lock);
-+DEFINE_IDR(btf_idr);
-+DEFINE_SPINLOCK(btf_idr_lock);
+ 	return err;
+ }
  
- struct btf {
- 	void *data;
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index cf8052b016e7..c0f62fd67c6b 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2884,6 +2884,10 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, siz
- 		err = bpf_obj_get_next_id(&attr, uattr,
- 					  &map_idr, &map_idr_lock);
- 		break;
-+	case BPF_BTF_GET_NEXT_ID:
-+		err = bpf_obj_get_next_id(&attr, uattr,
-+					  &btf_idr, &btf_idr_lock);
-+		break;
- 	case BPF_PROG_GET_FD_BY_ID:
- 		err = bpf_prog_get_fd_by_id(&attr);
- 		break;
+-int bpf_map_get_next_id(__u32 start_id, __u32 *next_id)
++int bpf_prog_get_next_id(__u32 start_id, __u32 *next_id)
+ {
+-	union bpf_attr attr;
+-	int err;
+-
+-	memset(&attr, 0, sizeof(attr));
+-	attr.start_id = start_id;
+-
+-	err = sys_bpf(BPF_MAP_GET_NEXT_ID, &attr, sizeof(attr));
+-	if (!err)
+-		*next_id = attr.next_id;
++	return bpf_obj_get_next_id(start_id, next_id, BPF_PROG_GET_NEXT_ID);
++}
+ 
+-	return err;
++int bpf_map_get_next_id(__u32 start_id, __u32 *next_id)
++{
++	return bpf_obj_get_next_id(start_id, next_id, BPF_MAP_GET_NEXT_ID);
+ }
+ 
+ int bpf_prog_get_fd_by_id(__u32 id)
 -- 
 2.17.1
 
