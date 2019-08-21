@@ -2,104 +2,103 @@ Return-Path: <SRS0=qicS=WR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 975FEC3A59E
-	for <bpf@archiver.kernel.org>; Wed, 21 Aug 2019 12:17:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A2D2C3A5A1
+	for <bpf@archiver.kernel.org>; Wed, 21 Aug 2019 12:17:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 738B3206DD
-	for <bpf@archiver.kernel.org>; Wed, 21 Aug 2019 12:17:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5EF5822D6D
+	for <bpf@archiver.kernel.org>; Wed, 21 Aug 2019 12:17:25 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="zLezPN9B"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727317AbfHUMRH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 21 Aug 2019 08:17:07 -0400
-Received: from www62.your-server.de ([213.133.104.62]:60648 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727060AbfHUMRG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 21 Aug 2019 08:17:06 -0400
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1i0PXz-0005EJ-22; Wed, 21 Aug 2019 14:17:03 +0200
-Received: from [2a02:120b:2c12:c120:71a0:62dd:894c:fd0e] (helo=pc-66.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1i0PXy-000ReL-SG; Wed, 21 Aug 2019 14:17:02 +0200
-Subject: Re: [PATCH bpf-next v2 2/4] selftests/bpf: test_progs: remove global
- fail/success counts
-To:     Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org,
-        Andrii Nakryiko <andriin@fb.com>
-References: <20190819191752.241637-1-sdf@google.com>
- <20190819191752.241637-3-sdf@google.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <5248b967-2887-2205-3e59-fc067e2ada33@iogearbox.net>
-Date:   Wed, 21 Aug 2019 14:17:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1728104AbfHUMRZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 21 Aug 2019 08:17:25 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:44601 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727953AbfHUMRY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 21 Aug 2019 08:17:24 -0400
+Received: by mail-lf1-f67.google.com with SMTP id v16so1596052lfg.11
+        for <bpf@vger.kernel.org>; Wed, 21 Aug 2019 05:17:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+KcSv9I/AsPeVximJhFUVD9sZ1/koeFyLmZnjNgXSj8=;
+        b=zLezPN9BDAmeEzUp7RC5RWtnZqxhiZV8LjE8EInGPMk+tkajmarjj8jTD7rEGZA/jf
+         IpuLS8eF8vSzsHmC/zjPoPgngruahBPsteHGaUl+azsEHJRipqTtsXFHsr1zLWZRqJ26
+         CRSJ5qB9vYUxzqmtz9JmgUw8FMpsz8baBUDbQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+KcSv9I/AsPeVximJhFUVD9sZ1/koeFyLmZnjNgXSj8=;
+        b=DVdQQwtWA8gVg+wNT5yBlHOjTQnypxaQf+eWgK3kWE+2IEJCEAypIk34K0eIJYPKhb
+         AXfgvE4iBl2iwY4O+T+BSLy/GPonL6/wJs4Gin+3DfijcHj1QUnKtSRk1MjVMocHR70n
+         0esuXc4A19lL3vAogB21523/Bz8rHNMMpmHqrQA8wcw+J7G/QF2af2l+JgJG9sSO3TN1
+         gJkMH8tbQckMTbOnvZFRAKUD13c0MLRGmQCQajR1RChIKGtBuh1815s01DPPgivRKyOE
+         TJ8H5dbIPoosAyggWBNAo7eIdzuZmWFlCdxP0RBlxa2eS/9QsvFZQyDJxEhFLDWJFDtL
+         /81w==
+X-Gm-Message-State: APjAAAXNc09HDVZICWSib0y4iJiV44LowgvnyeiNi+HTDPDr4CtKb43I
+        PVLtnl6GQv6lNQFU2wESvN/zHwrAbAPvNA==
+X-Google-Smtp-Source: APXvYqzS1ABrw1F1qVHRZ4NJjgUoTwUbuL8XDJ5Kzcjj485s/P1hXeo51xGbJXx1hbo+0WdwMvL1rA==
+X-Received: by 2002:a19:f11a:: with SMTP id p26mr18136589lfh.160.1566389841933;
+        Wed, 21 Aug 2019 05:17:21 -0700 (PDT)
+Received: from cloudflare.com ([176.221.114.230])
+        by smtp.gmail.com with ESMTPSA id w13sm3374947lfe.8.2019.08.21.05.17.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Aug 2019 05:17:21 -0700 (PDT)
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        Petar Penkov <ppenkov@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Lorenz Bauer <lmb@cloudflare.com>
+Subject: [PATCH bpf] flow_dissector: Fix potential use-after-free on BPF_PROG_DETACH
+Date:   Wed, 21 Aug 2019 14:17:20 +0200
+Message-Id: <20190821121720.22009-1-jakub@cloudflare.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <20190819191752.241637-3-sdf@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.100.3/25548/Wed Aug 21 10:27:18 2019)
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 8/19/19 9:17 PM, Stanislav Fomichev wrote:
-> Now that we have a global per-test/per-environment state, there
-> is no longer need to have global fail/success counters (and there
-> is no need to save/get the diff before/after the test).
+Call to bpf_prog_put(), with help of call_rcu(), queues an RCU-callback to
+free the program once a grace period has elapsed. The callback can run
+together with new RCU readers that started after the last grace period.
+New RCU readers can potentially see the "old" to-be-freed or already-freed
+pointer to the program object before the RCU update-side NULLs it.
 
-Thanks for the improvements, just a small comment below, otherwise LGTM.
+Reorder the operations so that the RCU update-side resets the protected
+pointer before the end of the grace period after which the program will be
+freed.
 
-> Introduce QCHECK macro (suggested by Andrii) and covert existing tests
-> to it. QCHECK uses new test__fail() to record the failure.
-> 
-> Cc: Andrii Nakryiko <andriin@fb.com>
-> Signed-off-by: Stanislav Fomichev <sdf@google.com>
-[...]
-> @@ -96,17 +93,25 @@ extern struct ipv6_packet pkt_v6;
->   #define _CHECK(condition, tag, duration, format...) ({			\
->   	int __ret = !!(condition);					\
->   	if (__ret) {							\
-> -		error_cnt++;						\
-> +		test__fail();						\
->   		printf("%s:FAIL:%s ", __func__, tag);			\
->   		printf(format);						\
->   	} else {							\
-> -		pass_cnt++;						\
->   		printf("%s:PASS:%s %d nsec\n",				\
->   		       __func__, tag, duration);			\
->   	}								\
->   	__ret;								\
->   })
->   
-> +#define QCHECK(condition) ({						\
-> +	int __ret = !!(condition);					\
-> +	if (__ret) {							\
-> +		test__fail();						\
-> +		printf("%s:FAIL:%d ", __func__, __LINE__);		\
-> +	}								\
-> +	__ret;								\
-> +})
+Fixes: d58e468b1112 ("flow_dissector: implements flow dissector BPF hook")
+Reported-by: Lorenz Bauer <lmb@cloudflare.com>
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+---
+ net/core/flow_dissector.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I know it's just a tiny nit but the name QCHECK() really doesn't tell me anything
-if I don't see its definition. Even just a CHECK_FAIL() might be 'better' and
-more aligned with the CHECK() and CHECK_ATTR() we have, at least I don't think
-many would automatically derive 'quiet' from the Q prefix [0].
-
-   [0] https://lore.kernel.org/bpf/CAEf4BzbUGiUZBWkTWe2=LfhkXYhQGndN9gR6VTZwfV3eytstUw@mail.gmail.com/
-
->   #define CHECK(condition, tag, format...) \
->   	_CHECK(condition, tag, duration, format)
->   #define CHECK_ATTR(condition, tag, format...) \
-> 
+diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
+index 3e6fedb57bc1..2470b4b404e6 100644
+--- a/net/core/flow_dissector.c
++++ b/net/core/flow_dissector.c
+@@ -142,8 +142,8 @@ int skb_flow_dissector_bpf_prog_detach(const union bpf_attr *attr)
+ 		mutex_unlock(&flow_dissector_mutex);
+ 		return -ENOENT;
+ 	}
+-	bpf_prog_put(attached);
+ 	RCU_INIT_POINTER(net->flow_dissector_prog, NULL);
++	bpf_prog_put(attached);
+ 	mutex_unlock(&flow_dissector_mutex);
+ 	return 0;
+ }
+-- 
+2.20.1
 
