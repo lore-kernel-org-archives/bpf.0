@@ -2,46 +2,46 @@ Return-Path: <SRS0=qicS=WR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FCCEC3A59E
-	for <bpf@archiver.kernel.org>; Wed, 21 Aug 2019 15:12:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C85BFC3A59E
+	for <bpf@archiver.kernel.org>; Wed, 21 Aug 2019 15:22:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 43AD0216F4
-	for <bpf@archiver.kernel.org>; Wed, 21 Aug 2019 15:12:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A3EB422CF7
+	for <bpf@archiver.kernel.org>; Wed, 21 Aug 2019 15:22:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727060AbfHUPL4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 21 Aug 2019 11:11:56 -0400
-Received: from www62.your-server.de ([213.133.104.62]:42510 "EHLO
+        id S1728433AbfHUPWW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 21 Aug 2019 11:22:22 -0400
+Received: from www62.your-server.de ([213.133.104.62]:45296 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726478AbfHUPLz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 21 Aug 2019 11:11:55 -0400
-Received: from sslproxy05.your-server.de ([78.46.172.2])
+        with ESMTP id S1726885AbfHUPWW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 21 Aug 2019 11:22:22 -0400
+Received: from sslproxy06.your-server.de ([78.46.172.3])
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1i0SH7-0003Vf-TQ; Wed, 21 Aug 2019 17:11:50 +0200
+        id 1i0SRG-0005Qb-Rr; Wed, 21 Aug 2019 17:22:18 +0200
 Received: from [2a02:120b:2c12:c120:71a0:62dd:894c:fd0e] (helo=pc-66.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89)
         (envelope-from <daniel@iogearbox.net>)
-        id 1i0SH7-000A6R-N0; Wed, 21 Aug 2019 17:11:49 +0200
-Subject: Re: [PATCH] selftests: bpf: install files test_xdp_vlan.sh
-To:     Anders Roxell <anders.roxell@linaro.org>, shuah@kernel.org,
-        ast@kernel.org, davem@davemloft.net, jakub.kicinski@netronome.com,
-        hawk@kernel.org, john.fastabend@gmail.com
-Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190820134121.25728-1-anders.roxell@linaro.org>
+        id 1i0SRG-00011k-MF; Wed, 21 Aug 2019 17:22:18 +0200
+Subject: Re: [PATCH bpf-next] btf: do not use CONFIG_OUTPUT_FORMAT
+To:     Ilya Leoshkevich <iii@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>
+Cc:     bpf@vger.kernel.org, Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+References: <20190820112939.84249-1-iii@linux.ibm.com>
 From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <d612fdef-6c79-01be-2b71-f1828b3051ce@iogearbox.net>
-Date:   Wed, 21 Aug 2019 17:11:48 +0200
+Message-ID: <0c16ca75-1a8c-d8a5-e485-4bd9fc51dcd4@iogearbox.net>
+Date:   Wed, 21 Aug 2019 17:22:18 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20190820134121.25728-1-anders.roxell@linaro.org>
+In-Reply-To: <20190820112939.84249-1-iii@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -52,18 +52,19 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 8/20/19 3:41 PM, Anders Roxell wrote:
-> When ./test_xdp_vlan_mode_generic.sh runs it complains that it can't
-> find file test_xdp_vlan.sh.
+On 8/20/19 1:29 PM, Ilya Leoshkevich wrote:
+> Building s390 kernel with CONFIG_DEBUG_INFO_BTF fails, because
+> CONFIG_OUTPUT_FORMAT is not defined. As a matter of fact, this variable
+> appears to be x86-only, so other arches might be affected as well.
 > 
->   # selftests: bpf: test_xdp_vlan_mode_generic.sh
->   # ./test_xdp_vlan_mode_generic.sh: line 9: ./test_xdp_vlan.sh: No such
->   file or directory
+> Fix by obtaining this value from objdump output, just like it's already
+> done for bin_arch. The exact objdump invocation is "inspired" by
+> arch/powerpc/boot/wrapper.
 > 
-> Rework so that test_xdp_vlan.sh gets installed, added to the variable
-> TEST_PROGS_EXTENDED.
+> Also, use LANG=C for the existing bin_arch objdump invocation to avoid
+> potential build issues on systems with non-English locale.
 > 
-> Fixes: d35661fcf95d ("selftests/bpf: add wrapper scripts for test_xdp_vlan.sh")
-> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> Fixes: 341dfcf8d78e ("btf: expose BTF info through sysfs")
+> Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 
-Applied, thanks!
+LGTM, applied, thanks!
