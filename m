@@ -2,129 +2,112 @@ Return-Path: <SRS0=7Sgb=WS=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43B87C3A5A3
-	for <bpf@archiver.kernel.org>; Thu, 22 Aug 2019 21:16:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C81CC41514
+	for <bpf@archiver.kernel.org>; Thu, 22 Aug 2019 21:58:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A68FC233FC
-	for <bpf@archiver.kernel.org>; Thu, 22 Aug 2019 21:16:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4AF5223401
+	for <bpf@archiver.kernel.org>; Thu, 22 Aug 2019 21:58:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="Utj4s/Z5";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="eMNX9UaI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MMyLRLW7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729113AbfHVVQb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 22 Aug 2019 17:16:31 -0400
-Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:48895 "EHLO
-        wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730897AbfHVVQR (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 22 Aug 2019 17:16:17 -0400
-X-Greylist: delayed 479 seconds by postgrey-1.27 at vger.kernel.org; Thu, 22 Aug 2019 17:16:16 EDT
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.west.internal (Postfix) with ESMTP id CFDEE49A;
-        Thu, 22 Aug 2019 17:08:14 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Thu, 22 Aug 2019 17:08:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
-        content-transfer-encoding:content-type:in-reply-to:date:cc
-        :subject:from:to:message-id; s=fm1; bh=WZ5Ec3wLQiEm5IlJwCBhY1oTo
-        MWeoHMfgT/wZdlQH5Q=; b=Utj4s/Z5saDMZIER6kYduuw5ZYnj1gZuBNQMjAk3I
-        GwAsPVKOr+/Azp/IbdYZPN6ePMEBYuIIZy6RNBaN4O63jvgcbJnxnmlGhrboJcmw
-        UthSMhr88TD8c0lIGbTubBfN3PlowT5cncIoEVsQh1jEloUj6Ags+rVsQUUoCbZP
-        Kksg6YvPmR2BlQIGxKyH28uW/d6KzRDss+bCEPBmhabFR6TPKiLFmssr92qJ8ou5
-        YUN4buxkRU/78bPvciLNknmT2SNhaJBzlsbo4Zk48ZBuua3MhxIjKsb6hsZHbpKR
-        2qGOCBtyRfjH3p7H/kHRFBcMDCNSXdkT1tB72cR2liWTg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=WZ5Ec3
-        wLQiEm5IlJwCBhY1oToMWeoHMfgT/wZdlQH5Q=; b=eMNX9UaIeB2Sm/5VpMH21P
-        YOpr4TD0uVEwVn+0GeuAYiMuDQoSFgPuIdBv0dibbEinqvnDeaFSyGrOVOu3pTM8
-        6/wO4nY7vx4eiPN6DoMGMn+u3C1H7qHoFiCqmScXsxktUIAbR6SCQ+IY0QaQw7Ai
-        k30z2Rff7dseY0OsOvTujqKVXnTmuo+DXVb0BHr8/QxZDMjEiPARGSfi7gCVqjem
-        pPn7az+SLLjYZRqjlhc/jbp3lJpDD8xmNp7PcBkapH3avJQN54HiIQTUjYGmOjZC
-        dppndIgwiGYamCRnffNBmRlBJPxkor/4nfZipdRyr3n0ZEYELeWfh5K4txBvwNnA
-        ==
-X-ME-Sender: <xms:PQRfXQKfIgkFSLdEPMcp9yeLkcwroP3kxcHz1x3emQCrROzvNo8VBA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddrudegiedguddufecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enfghrlhcuvffnffculdefhedmnecujfgurhepgfgtjgffuffhvffksehtqhertddttdej
-    necuhfhrohhmpedfffgrnhhivghlucgiuhdfuceougiguhesugiguhhuuhdrgiihiieqne
-    cukfhppeduleelrddvtddurdeigedrgeenucfrrghrrghmpehmrghilhhfrhhomhepugig
-    uhesugiguhhuuhdrgiihiienucevlhhushhtvghrufhiiigvpedt
-X-ME-Proxy: <xmx:PQRfXYU8ISslaBb0aPcoNOzsZOXje8elv4Qqu48meYoY24cDCfFefA>
-    <xmx:PQRfXWkxwm9Ej8uQLPPEfg68dTjcMsgImjZsPelUAk-3lVlZiv5Fyg>
-    <xmx:PQRfXWdesUsRaPhOWUSMB6ytOdMczGHdAgcOQQniUZ-wZsRJ5rwU9g>
-    <xmx:PgRfXeJcvuWPQjvXGiyQ2-HXUt_fQurItbiQYKI3NPwNce8E4xUFp8--DV0>
-Received: from localhost (prnvpn05.thefacebook.com [199.201.64.4])
-        by mail.messagingengine.com (Postfix) with ESMTPA id CD78380062;
-        Thu, 22 Aug 2019 17:08:10 -0400 (EDT)
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-In-Reply-To: <20190822090555.GJ2349@hirez.programming.kicks-ass.net>
-Date:   Thu, 22 Aug 2019 14:08:10 -0700
-Cc:     "Yonghong Song" <yhs@fb.com>, "Daniel Xu" <dxu@dxuuu.xyz>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "Andrii Nakryiko" <andriin@fb.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "acme@kernel.org" <acme@kernel.org>,
-        "Alexei Starovoitov" <ast@fb.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "jolsa@redhat.com" <jolsa@redhat.com>,
-        "namhyung@kernel.org" <namhyung@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Kernel Team" <Kernel-team@fb.com>,
-        "Arnaldo Carvalho de Melo" <acme@redhat.com>
-Subject: Re: [PATCH v3 bpf-next 1/4] tracing/probe: Add
- PERF_EVENT_IOC_QUERY_PROBE ioctl
-From:   "Daniel Xu" <dxu@dxuuu.xyz>
-To:     "Peter Zijlstra" <peterz@infradead.org>,
-        "Song Liu" <songliubraving@fb.com>
-Message-Id: <BWGGRTQXX7EP.15IPIDK3KLQ6O@dlxu-fedora-R90QNFJV>
+        id S1733069AbfHVV61 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 22 Aug 2019 17:58:27 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:44054 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732386AbfHVV61 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 22 Aug 2019 17:58:27 -0400
+Received: by mail-pl1-f196.google.com with SMTP id t14so4223135plr.11;
+        Thu, 22 Aug 2019 14:58:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :content-transfer-encoding:user-agent;
+        bh=sigJYFk+Q8pR1o6eZ0D86keNFXFBPNuofqZlri3Zfmk=;
+        b=MMyLRLW7rKWEn3A5ln1ByMZuj2c1D9cAVkujgr3g9HJK/+goKhOkHiBBAbFXHZyyCL
+         qypLXtTaT1HUEKAmyox5mrE+54FqTQL5F1nr4E/7bGZsmnAw1iVxbuDw44Euy6ftXuYg
+         ve3X0EkKXzJmeUTVIoQVSQpRT1MuEysJo9slO9brBZThml+dcqCq+5nPw75j8YlSboHV
+         jwhVSXxF+7n5G4/WnfxCbv9pBTXgBbJr5rNJ929dgdB1omA2AVpOjffXZZNpR8+I3Ah5
+         z6rKEDC86duu91bjUzI2+zwFIvGeXQSZ0hKnLaiLjTAhTGPa2SD42RSbNdqxSBwKVpOI
+         JKVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding:user-agent;
+        bh=sigJYFk+Q8pR1o6eZ0D86keNFXFBPNuofqZlri3Zfmk=;
+        b=o74IgHzptI7qdRi6HDUJ/WSHz+1bLXXouvmIlciVmdeuHH3DwVw6TE5buVOVF0uOG5
+         PCmrw5sqhJct5g1zOPqmO+h9v7ngvvoK5JbtGLIFup1N/hOKC4aLk5kxEDMR3P8gQARe
+         ZAOdV6u237PnM2aewzTQcUbZIQFykmgHK9yDh3XYSC7rqbPwbblwgmsXRbtvD6gduY4A
+         5pK6w2zhxlYHxY2Ak54LK2d/1kTzxuQMQ8XO/fyez2+EjWre/j0eiKlCA9DX1J0mHFqr
+         qSZIXjRQ8mJ0mU/9dAew6cwVwxT5r5l5wZPgfu4bjmkj/1oltIMFXsNy310jQvNgWpf2
+         51ZQ==
+X-Gm-Message-State: APjAAAV4BYf5YAbkxW4Kwu1KC8I7tUYhyGXFF1y5q8SSB0tJjroGsQLX
+        VCDeOHTTQJSObM6uQcFonp8=
+X-Google-Smtp-Source: APXvYqw93Ei4FhobENkoQh8QOfxTx3CADzCPuxWcsPQGrncMEjvS9dtshtbkr7lInAVoKuIUOM0QTw==
+X-Received: by 2002:a17:902:fe14:: with SMTP id g20mr1022404plj.54.1566511106363;
+        Thu, 22 Aug 2019 14:58:26 -0700 (PDT)
+Received: from ip-172-31-44-144.us-west-2.compute.internal (ec2-54-213-13-77.us-west-2.compute.amazonaws.com. [54.213.13.77])
+        by smtp.gmail.com with ESMTPSA id t23sm387068pfl.154.2019.08.22.14.58.25
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 22 Aug 2019 14:58:25 -0700 (PDT)
+Date:   Thu, 22 Aug 2019 21:58:23 +0000
+From:   Alakesh Haloi <alakesh.haloi@gmail.com>
+To:     Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
+Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] seccomp: fix compilation errors in seccomp-bpf kselftest
+Message-ID: <20190822215823.GA11292@ip-172-31-44-144.us-west-2.compute.internal>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu Aug 22, 2019 at 11:05 AM Peter Zijlstra wrote:
-> On Thu, Aug 22, 2019 at 07:54:16AM +0000, Song Liu wrote:
-> > Hi Peter,=20
-> >=20
-> > > On Aug 22, 2019, at 12:47 AM, Peter Zijlstra <peterz@infradead.org> w=
-rote:
-> > >=20
-> > > On Wed, Aug 21, 2019 at 06:43:49PM +0000, Yonghong Song wrote:
-> > >> On 8/21/19 11:31 AM, Peter Zijlstra wrote:
-> > >=20
-> > >>> So extending PERF_RECORD_LOST doesn't work. But PERF_FORMAT_LOST mi=
-ght
-> > >>> still work fine; but you get to implement it for all software event=
-s.
-> > >>=20
-> > >> Could you give more specifics about PERF_FORMAT_LOST? Googling=20
-> > >> "PERF_FORMAT_LOST" only yields two emails which we are discussing he=
-re :-(
-> > >=20
-> > > Look at what the other PERF_FORMAT_ flags do? Basically it is adding =
-a
-> > > field to the read(2) output.
-> >=20
-> > Do we need to implement PERF_FORMAT_LOST for all software events? If us=
-er
-> > space asks for PERF_FORMAT_LOST for events that do not support it, can =
-we
-> > just fail sys_perf_event_open()?
->=20
-> It really shouldn't be hard; and I'm failing to see why kprobes are
-> special.
+Without this patch we see following error while building and kselftest
+for secccomp_bpf fails.
 
-Thanks for the feedback, everyone. Really appreciate it.
+seccomp_bpf.c:1787:20: error: ‘PTRACE_EVENTMSG_SYSCALL_ENTRY’ undeclared (first use in this function);
+seccomp_bpf.c:1788:6: error: ‘PTRACE_EVENTMSG_SYSCALL_EXIT’ undeclared (first use in this function);
 
-I will look into extending read_format. I'll submit another patch series
-after I get the code to work.
+Signed-off-by: Alakesh Haloi <alakesh.haloi@gmail.com>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Daniel
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 6ef7f16c4cf5..2e619760fc3e 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -1353,6 +1353,14 @@ TEST_F(precedence, log_is_fifth_in_any_order)
+ #define PTRACE_EVENT_SECCOMP 7
+ #endif
+ 
++#ifndef PTRACE_EVENTMSG_SYSCALL_ENTRY
++#define PTRACE_EVENTMSG_SYSCALL_ENTRY 1
++#endif
++
++#ifndef PTRACE_EVENTMSG_SYSCALL_EXIT
++#define PTRACE_EVENTMSG_SYSCALL_EXIT 2
++#endif
++
+ #define IS_SECCOMP_EVENT(status) ((status >> 16) == PTRACE_EVENT_SECCOMP)
+ bool tracer_running;
+ void tracer_stop(int sig)
+-- 
+2.17.1
+
