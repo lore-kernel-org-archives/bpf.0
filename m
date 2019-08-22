@@ -2,110 +2,74 @@ Return-Path: <SRS0=7Sgb=WS=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FF0BC3A5A2
-	for <bpf@archiver.kernel.org>; Thu, 22 Aug 2019 06:00:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20C87C3A59D
+	for <bpf@archiver.kernel.org>; Thu, 22 Aug 2019 06:59:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EAABD233A1
-	for <bpf@archiver.kernel.org>; Thu, 22 Aug 2019 06:00:34 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JqYvOYju"
+	by mail.kernel.org (Postfix) with ESMTP id F0DA6233A1
+	for <bpf@archiver.kernel.org>; Thu, 22 Aug 2019 06:59:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731562AbfHVGAc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 22 Aug 2019 02:00:32 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:33978 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727781AbfHVGA3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 22 Aug 2019 02:00:29 -0400
-Received: by mail-oi1-f196.google.com with SMTP id g128so3522419oib.1;
-        Wed, 21 Aug 2019 23:00:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YluVw3FQcQqlMabmOIDq2KLrInzmsoUYZc4IQN5YmtM=;
-        b=JqYvOYjuef3saBKQs3+29283DrdRtXBMuhEu0BBU3p7Q0wbuQ542BpWtBaDKDmcsQ9
-         HFlAQAShm7r6ygrxZtyGQloPdz9J8Agu1Hn7WZIa+0YrgynLnC2YDEEsbEYRf9AuN74X
-         lNwaG2PfVJOaP4M50y+FduRMlEliwI4feQYDc2kZPyTSMZit6f9KecUC0r/YQ+QVjWHZ
-         eyk5q/ZgPczXnBG69B8S9HziYPYQWwZpYq8gvYkIM5TqeM+NXTBPFc2cZ6fojucOoY9+
-         +079MAlTMr9aoG4LJ5TZPNooKydTCoNjm46KZaawjEMW4jTYLGYg8yYA2IS95xvlB0Ch
-         K+Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YluVw3FQcQqlMabmOIDq2KLrInzmsoUYZc4IQN5YmtM=;
-        b=V5fihhJ5p8XBNtGe2/285GuNJyMPZTiezfpwyzzvQRe/olgqTfgAFhiS5HRGVoij0M
-         C/LSlHLmPpeUmPZ8DIdE68WhRKBsVJ4Zra+tOJCYq3dbEUa+65trB1bgX3aoXi9kF1Mt
-         Tbb0JL34mmdWrXBkMJyLBuwuAWpK0SBt2RUi2E06BHtzkUmjcTvw2qbvbfOalzSdNbFG
-         2hBQowwllBlca0+REcke19ykEODH23/yCw2d0Wwe2vAifp2stsMZno6LDybZqLYLz6ZX
-         F6pDwhx/L2n3yRlqvqTcsVMc6sQS1VqKgj/C0j+PCyio3Pd0SMErU1QWtAdJvSsdMtS5
-         66pA==
-X-Gm-Message-State: APjAAAXwNCW2v2XnIRBJPT6vKJEVLKDZhweoCkzpv+NCdnGHlb245Vzd
-        vRfOU6RF2Q203UWmxDT4qy7/mTX6yJzrnVhSMeA=
-X-Google-Smtp-Source: APXvYqzRnO+l/kwsBwkFGP9v7ygVphdCh3n/VmUbd2w1Q7i9ocTS89dO+t5wKzUEFIEDMJwJWSR6/iNgoK2cyQ1VKsY=
-X-Received: by 2002:aca:d08:: with SMTP id 8mr2494087oin.51.1566453629101;
- Wed, 21 Aug 2019 23:00:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190821121720.22009-1-jakub@cloudflare.com>
-In-Reply-To: <20190821121720.22009-1-jakub@cloudflare.com>
-From:   Petar Penkov <ppenkov.kernel@gmail.com>
-Date:   Wed, 21 Aug 2019 23:00:18 -0700
-Message-ID: <CAGdtWsSQT4wfXB8F=putR-Cm8xKcXFH1omfY3YGhJ8i9WBxjfQ@mail.gmail.com>
-Subject: Re: [PATCH bpf] flow_dissector: Fix potential use-after-free on BPF_PROG_DETACH
-To:     Jakub Sitnicki <jakub@cloudflare.com>
-Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        kernel-team@cloudflare.com, Petar Penkov <ppenkov@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Lorenz Bauer <lmb@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1731900AbfHVG7L (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 22 Aug 2019 02:59:11 -0400
+Received: from smtpbgau1.qq.com ([54.206.16.166]:49212 "EHLO smtpbgau1.qq.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731197AbfHVG7L (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 22 Aug 2019 02:59:11 -0400
+X-QQ-mid: bizesmtp19t1566457103t0y93v7p
+Received: from localhost.localdomain (unknown [218.76.23.26])
+        by esmtp10.qq.com (ESMTP) with 
+        id ; Thu, 22 Aug 2019 14:58:17 +0800 (CST)
+X-QQ-SSF: 01400000000000K0JH32000A0000000
+X-QQ-FEAT: YGus1B7tLZY6Td56PPA4So/HcXsjkjLQpHMm+zcGLM2RI8tGiaYm85NlJUKvs
+        z0KsXC831a4IBeRmVn5PNPCPdChD4tYlOQcMd2yLcGRrGxSUj6VpNq5tlRiZ1fnOsSBnF5z
+        UvRtrEUG4iK9G8nFYVAqqOwB2nWYfLRtd3kmoENSh74Or9lmx0104RqHeiuFgHwmNHNHVpT
+        S/sZmJOBrRiRGR4NZE+TpYo6Cvs2RJyE4crAKstu4zjlxLU8p2WtYPq6l/OwkrnA2Oi7drS
+        eKFKwV99ssNDHvyg15C5dYT1u3Ny4+OGKs8e5dN8K6o5puHL4kWuVO0+54iARWEb3kQf83F
+        5sYwAtd
+X-QQ-GoodBg: 2
+From:   xiaolinkui <xiaolinkui@kylinos.cn>
+To:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        xiaolinkui <xiaolinkui@kylinos.cn>
+Subject: [PATCH] net: use unlikely for dql_avail case
+Date:   Thu, 22 Aug 2019 14:58:16 +0800
+Message-Id: <20190822065816.23619-1-xiaolinkui@kylinos.cn>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:kylinos.cn:qybgforeign:qybgforeign1
+X-QQ-Bgrelay: 1
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This makes sense, thanks!
+This is an unlikely case, use unlikely() on it seems logical.
 
-Acked-by: Petar Penkov <ppenkov@google.com>
+Signed-off-by: xiaolinkui <xiaolinkui@kylinos.cn>
+---
+ include/linux/netdevice.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Wed, Aug 21, 2019 at 5:19 AM Jakub Sitnicki <jakub@cloudflare.com> wrote:
->
-> Call to bpf_prog_put(), with help of call_rcu(), queues an RCU-callback to
-> free the program once a grace period has elapsed. The callback can run
-> together with new RCU readers that started after the last grace period.
-> New RCU readers can potentially see the "old" to-be-freed or already-freed
-> pointer to the program object before the RCU update-side NULLs it.
->
-> Reorder the operations so that the RCU update-side resets the protected
-> pointer before the end of the grace period after which the program will be
-> freed.
->
-> Fixes: d58e468b1112 ("flow_dissector: implements flow dissector BPF hook")
-> Reported-by: Lorenz Bauer <lmb@cloudflare.com>
-> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
-> ---
->  net/core/flow_dissector.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
-> index 3e6fedb57bc1..2470b4b404e6 100644
-> --- a/net/core/flow_dissector.c
-> +++ b/net/core/flow_dissector.c
-> @@ -142,8 +142,8 @@ int skb_flow_dissector_bpf_prog_detach(const union bpf_attr *attr)
->                 mutex_unlock(&flow_dissector_mutex);
->                 return -ENOENT;
->         }
-> -       bpf_prog_put(attached);
->         RCU_INIT_POINTER(net->flow_dissector_prog, NULL);
-> +       bpf_prog_put(attached);
->         mutex_unlock(&flow_dissector_mutex);
->         return 0;
->  }
-> --
-> 2.20.1
->
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 88292953aa6f..005f3da1b13d 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -3270,7 +3270,7 @@ static inline void netdev_tx_completed_queue(struct netdev_queue *dev_queue,
+ 	 */
+ 	smp_mb();
+ 
+-	if (dql_avail(&dev_queue->dql) < 0)
++	if (unlikely(dql_avail(&dev_queue->dql) < 0))
+ 		return;
+ 
+ 	if (test_and_clear_bit(__QUEUE_STATE_STACK_XOFF, &dev_queue->state))
+-- 
+2.17.1
+
+
+
