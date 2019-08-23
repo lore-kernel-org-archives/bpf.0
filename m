@@ -6,40 +6,42 @@ X-Spam-Status: No, score=-5.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D6E3C3A5A2
-	for <bpf@archiver.kernel.org>; Fri, 23 Aug 2019 23:35:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B61BBC3A5A2
+	for <bpf@archiver.kernel.org>; Fri, 23 Aug 2019 23:36:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DF0B820850
-	for <bpf@archiver.kernel.org>; Fri, 23 Aug 2019 23:35:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8980020850
+	for <bpf@archiver.kernel.org>; Fri, 23 Aug 2019 23:36:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726603AbfHWXff (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 23 Aug 2019 19:35:35 -0400
-Received: from www62.your-server.de ([213.133.104.62]:52606 "EHLO
+        id S1726880AbfHWXgF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 23 Aug 2019 19:36:05 -0400
+Received: from www62.your-server.de ([213.133.104.62]:52712 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725892AbfHWXff (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 23 Aug 2019 19:35:35 -0400
+        with ESMTP id S1726839AbfHWXgF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 23 Aug 2019 19:36:05 -0400
 Received: from sslproxy05.your-server.de ([78.46.172.2])
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1i1J5b-0001oM-Bv; Sat, 24 Aug 2019 01:35:27 +0200
+        id 1i1J6A-0001pm-00; Sat, 24 Aug 2019 01:36:02 +0200
 Received: from [178.197.249.40] (helo=pc-63.home)
         by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89)
         (envelope-from <daniel@iogearbox.net>)
-        id 1i1J5b-000PRZ-59; Sat, 24 Aug 2019 01:35:27 +0200
-Subject: Re: [PATCH bpf] bpf: fix precision tracking in presence of bpf2bpf
- calls
-To:     Alexei Starovoitov <ast@kernel.org>, davem@davemloft.net
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, kernel-team@fb.com
-References: <20190821210710.1276117-1-ast@kernel.org>
+        id 1i1J69-000SE8-PL; Sat, 24 Aug 2019 01:36:01 +0200
+Subject: Re: [PATCH bpf] bpf: allow narrow loads of some sk_reuseport_md
+ fields with offset > 0
+To:     Ilya Leoshkevich <iii@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>
+Cc:     bpf@vger.kernel.org, Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+References: <20190820155025.91216-1-iii@linux.ibm.com>
 From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <0a921eb3-a3f7-8b23-cf61-87a4761cfc00@iogearbox.net>
-Date:   Sat, 24 Aug 2019 01:35:26 +0200
+Message-ID: <eff66291-6e76-eff2-8247-f1c67e9b8ac8@iogearbox.net>
+Date:   Sat, 24 Aug 2019 01:36:01 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20190821210710.1276117-1-ast@kernel.org>
+In-Reply-To: <20190820155025.91216-1-iii@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -50,32 +52,27 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 8/21/19 11:07 PM, Alexei Starovoitov wrote:
-> While adding extra tests for precision tracking and extra infra
-> to adjust verifier heuristics the existing test
-> "calls: cross frame pruning - liveness propagation" started to fail.
-> The root cause is the same as described in verifer.c comment:
+On 8/20/19 5:50 PM, Ilya Leoshkevich wrote:
+> test_select_reuseport fails on s390 due to verifier rejecting
+> test_select_reuseport_kern.o with the following message:
 > 
->   * Also if parent's curframe > frame where backtracking started,
->   * the verifier need to mark registers in both frames, otherwise callees
->   * may incorrectly prune callers. This is similar to
->   * commit 7640ead93924 ("bpf: verifier: make sure callees don't prune with caller differences")
->   * For now backtracking falls back into conservative marking.
+> 	; data_check.eth_protocol = reuse_md->eth_protocol;
+> 	18: (69) r1 = *(u16 *)(r6 +22)
+> 	invalid bpf_context access off=22 size=2
 > 
-> Turned out though that returning -ENOTSUPP from backtrack_insn() and
-> doing mark_all_scalars_precise() in the current parentage chain is not enough.
-> Depending on how is_state_visited() heuristic is creating parentage chain
-> it's possible that callee will incorrectly prune caller.
-> Fix the issue by setting precise=true earlier and more aggressively.
-> Before this fix the precision tracking _within_ functions that don't do
-> bpf2bpf calls would still work. Whereas now precision tracking is completely
-> disabled when bpf2bpf calls are present anywhere in the program.
+> This is because on big-endian machines casts from __u32 to __u16 are
+> generated by referencing the respective variable as __u16 with an offset
+> of 2 (as opposed to 0 on little-endian machines).
 > 
-> No difference in cilium tests (they don't have bpf2bpf calls).
-> No difference in test_progs though some of them have bpf2bpf calls,
-> but precision tracking wasn't effective there.
+> The verifier already has all the infrastructure in place to allow such
+> accesses, it's just that they are not explicitly enabled for
+> eth_protocol field. Enable them for eth_protocol field by using
+> bpf_ctx_range instead of offsetof.
 > 
-> Fixes: b5dc0163d8fd ("bpf: precise scalar_value tracking")
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> Ditto for ip_protocol, bind_inany and len, since they already allow
+> narrowing, and the same problem can arise when working with them.
+> 
+> Fixes: 2dbb9b9e6df6 ("bpf: Introduce BPF_PROG_TYPE_SK_REUSEPORT")
+> Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 
 Applied, thanks!
