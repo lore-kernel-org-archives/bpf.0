@@ -2,149 +2,94 @@ Return-Path: <SRS0=I0lg=WT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43A7BC3A5A1
-	for <bpf@archiver.kernel.org>; Fri, 23 Aug 2019 01:14:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71363C3A5A6
+	for <bpf@archiver.kernel.org>; Fri, 23 Aug 2019 05:52:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 23DDE233A0
-	for <bpf@archiver.kernel.org>; Fri, 23 Aug 2019 01:14:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3FB8A22CF7
+	for <bpf@archiver.kernel.org>; Fri, 23 Aug 2019 05:52:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1566539544;
+	bh=Og/xt8BQU5dbgRIZodD/rQ6MT4K5IHGgMTwPGSoeFQk=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=EtkDQdQGXdj74w0GG8CpdnrjMyqA9rGYLRxpXJ+WOfOxexi/YsnX6xmHAiFaDekTg
+	 Y2TfrU5a3po1yZMCAz0ZFGsae3kHxYeZ8U+cipyTRZ6ncOvcatv6ynX9QfoEtEjhvs
+	 8EtHg5vhdmeeFNjkEcBVkHK2x2N0sTsh+GBYLHzg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731592AbfHWBN7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 22 Aug 2019 21:13:59 -0400
-Received: from out1.zte.com.cn ([202.103.147.172]:55682 "EHLO mxct.zte.com.cn"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387676AbfHWBN7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 22 Aug 2019 21:13:59 -0400
-Received: from mse-fl2.zte.com.cn (unknown [10.30.14.239])
-        by Forcepoint Email with ESMTPS id 0F8CEBDD19C0BD7E4CD3;
-        Fri, 23 Aug 2019 09:13:57 +0800 (CST)
-Received: from notes_smtp.zte.com.cn (notessmtp.zte.com.cn [10.30.1.239])
-        by mse-fl2.zte.com.cn with ESMTP id x7N1Dgrq054529;
-        Fri, 23 Aug 2019 09:13:42 +0800 (GMT-8)
-        (envelope-from zhang.lin16@zte.com.cn)
-Received: from fox-host8.localdomain ([10.74.120.8])
-          by szsmtp06.zte.com.cn (Lotus Domino Release 8.5.3FP6)
-          with ESMTP id 2019082309141585-3127175 ;
-          Fri, 23 Aug 2019 09:14:15 +0800 
-From:   zhanglin <zhang.lin16@zte.com.cn>
-To:     davem@davemloft.net
-Cc:     ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, willemb@google.com,
-        edumazet@google.com, deepa.kernel@gmail.com, arnd@arndb.de,
-        dh.herrmann@gmail.com, gnault@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        xue.zhihong@zte.com.cn, wang.yi59@zte.com.cn,
-        jiang.xuexin@zte.com.cn, zhanglin <zhang.lin16@zte.com.cn>
-Subject: [PATCH] [PATCH v3] sock: fix potential memory leak in proto_register()
-Date:   Fri, 23 Aug 2019 09:14:11 +0800
-Message-Id: <1566522851-24018-1-git-send-email-zhang.lin16@zte.com.cn>
-X-Mailer: git-send-email 1.8.3.1
-X-MIMETrack: Itemize by SMTP Server on SZSMTP06/server/zte_ltd(Release 8.5.3FP6|November
- 21, 2013) at 2019-08-23 09:14:15,
-        Serialize by Router on notes_smtp/zte_ltd(Release 9.0.1FP7|August  17, 2016) at
- 2019-08-23 09:13:47,
-        Serialize complete at 2019-08-23 09:13:47
-X-MAIL: mse-fl2.zte.com.cn x7N1Dgrq054529
+        id S2391856AbfHWFwX convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 23 Aug 2019 01:52:23 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:61212 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2391970AbfHWFwW (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 23 Aug 2019 01:52:22 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7N5lW9O026454
+        for <bpf@vger.kernel.org>; Thu, 22 Aug 2019 22:52:21 -0700
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2uj42k97fe-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 22 Aug 2019 22:52:21 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::125) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Thu, 22 Aug 2019 22:52:20 -0700
+Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
+        id D0E7B760BEC; Thu, 22 Aug 2019 22:52:19 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Alexei Starovoitov <ast@kernel.org>
+Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
+To:     <davem@davemloft.net>
+CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <kernel-team@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next 2/4] tools/bpf: sync bpf.h
+Date:   Thu, 22 Aug 2019 22:52:13 -0700
+Message-ID: <20190823055215.2658669-3-ast@kernel.org>
+X-Mailer: git-send-email 2.20.0
+In-Reply-To: <20190823055215.2658669-1-ast@kernel.org>
+References: <20190823055215.2658669-1-ast@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-23_01:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1034 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=624 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908230063
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-If protocols registered exceeded PROTO_INUSE_NR, prot will be
-added to proto_list, but no available bit left for prot in
-proto_inuse_idx.
+sync bpf.h from kernel/ to tools/
 
-Changes since v2:
-* Propagate the error code properly
-
-Signed-off-by: zhanglin <zhang.lin16@zte.com.cn>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- net/core/sock.c | 31 +++++++++++++++++++++----------
- 1 file changed, 21 insertions(+), 10 deletions(-)
+ tools/include/uapi/linux/bpf.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/net/core/sock.c b/net/core/sock.c
-index bc3512f230a3..f39163071384 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -3139,16 +3139,17 @@ static __init int net_inuse_init(void)
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index b5889257cc33..5d2fb183ee2d 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -285,6 +285,9 @@ enum bpf_attach_type {
+  */
+ #define BPF_F_TEST_RND_HI32	(1U << 2)
  
- core_initcall(net_inuse_init);
- 
--static void assign_proto_idx(struct proto *prot)
-+static int assign_proto_idx(struct proto *prot)
- {
- 	prot->inuse_idx = find_first_zero_bit(proto_inuse_idx, PROTO_INUSE_NR);
- 
- 	if (unlikely(prot->inuse_idx == PROTO_INUSE_NR - 1)) {
- 		pr_err("PROTO_INUSE_NR exhausted\n");
--		return;
-+		return -ENOSPC;
- 	}
- 
- 	set_bit(prot->inuse_idx, proto_inuse_idx);
-+	return 0;
- }
- 
- static void release_proto_idx(struct proto *prot)
-@@ -3157,8 +3158,9 @@ static void release_proto_idx(struct proto *prot)
- 		clear_bit(prot->inuse_idx, proto_inuse_idx);
- }
- #else
--static inline void assign_proto_idx(struct proto *prot)
-+static inline int assign_proto_idx(struct proto *prot)
- {
-+	return 0;
- }
- 
- static inline void release_proto_idx(struct proto *prot)
-@@ -3207,6 +3209,8 @@ static int req_prot_init(const struct proto *prot)
- 
- int proto_register(struct proto *prot, int alloc_slab)
- {
-+	int ret = -ENOBUFS;
++/* The verifier internal test flag. Behavior is undefined */
++#define BPF_F_TEST_STATE_FREQ	(1U << 3)
 +
- 	if (alloc_slab) {
- 		prot->slab = kmem_cache_create_usercopy(prot->name,
- 					prot->obj_size, 0,
-@@ -3243,20 +3247,27 @@ int proto_register(struct proto *prot, int alloc_slab)
- 	}
- 
- 	mutex_lock(&proto_list_mutex);
-+	ret = assign_proto_idx(prot);
-+	if (ret) {
-+		mutex_unlock(&proto_list_mutex);
-+		goto out_free_timewait_sock_slab_name;
-+	}
- 	list_add(&prot->node, &proto_list);
--	assign_proto_idx(prot);
- 	mutex_unlock(&proto_list_mutex);
--	return 0;
-+	return ret;
- 
- out_free_timewait_sock_slab_name:
--	kfree(prot->twsk_prot->twsk_slab_name);
-+	if (alloc_slab && prot->twsk_prot)
-+		kfree(prot->twsk_prot->twsk_slab_name);
- out_free_request_sock_slab:
--	req_prot_cleanup(prot->rsk_prot);
-+	if (alloc_slab) {
-+		req_prot_cleanup(prot->rsk_prot);
- 
--	kmem_cache_destroy(prot->slab);
--	prot->slab = NULL;
-+		kmem_cache_destroy(prot->slab);
-+		prot->slab = NULL;
-+	}
- out:
--	return -ENOBUFS;
-+	return ret;
- }
- EXPORT_SYMBOL(proto_register);
- 
+ /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
+  * two extensions:
+  *
 -- 
-2.17.1
+2.20.0
 
