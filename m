@@ -2,42 +2,43 @@ Return-Path: <SRS0=I0lg=WT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 129CBC41514
-	for <bpf@archiver.kernel.org>; Fri, 23 Aug 2019 05:52:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28860C3A5A4
+	for <bpf@archiver.kernel.org>; Fri, 23 Aug 2019 05:52:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D45A523401
-	for <bpf@archiver.kernel.org>; Fri, 23 Aug 2019 05:52:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0089022CEC
+	for <bpf@archiver.kernel.org>; Fri, 23 Aug 2019 05:52:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1566539543;
-	bh=vIMF7o9j00Bb9fZZCwLIyaIyay1p2jgCxMN0ledNmmI=;
-	h=From:To:CC:Subject:Date:List-ID:From;
-	b=vY57VmG+tyw9RwTMSIr/9B7fJju7Q9kSJH+13VlHv6B1zomMwz+zR5u3fh5hgX1OZ
-	 my/gw3GiQUop1x51FRiDhIDhto8zcteWGOjWaKN7miR7L9DR0pqMZKIzHWmvh1BBGN
-	 yNAHMjR8u/xUqQ1lZOOzGVGu5VW3DdqpKJYbgIb0=
+	s=default; t=1566539549;
+	bh=Cs9U48j1hfxe69EaJCTM/3DWlKw3Oo0EmY8kOb30C60=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=ffG2utfrlsII5dzkMaFn3m+0zi5XECK0t4taJskZSVT409JssgO+p2y4ah8pmqBlp
+	 8vqohv5aaEobzEr82T8JdIr+Tqx7tvylhXQf0J/3huoLtpvXK+Sg4VDQqK2/Y5oGJF
+	 ZSw6qsVzWQJbkCOZRlKGVEte6o4ER1nF5qOPs5yM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392034AbfHWFwV convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 23 Aug 2019 01:52:21 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:38644 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2391970AbfHWFwU (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 23 Aug 2019 01:52:20 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.27/8.16.0.27) with SMTP id x7N5phHn025530
-        for <bpf@vger.kernel.org>; Thu, 22 Aug 2019 22:52:19 -0700
+        id S2392100AbfHWFw1 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 23 Aug 2019 01:52:27 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:14350 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387557AbfHWFw0 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 23 Aug 2019 01:52:26 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7N5noe9022296
+        for <bpf@vger.kernel.org>; Thu, 22 Aug 2019 22:52:25 -0700
 Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by m0001303.ppops.net with ESMTP id 2uj4jqh344-3
+        by mx0a-00082601.pphosted.com with ESMTP id 2uj3yes85k-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 22 Aug 2019 22:52:19 -0700
+        for <bpf@vger.kernel.org>; Thu, 22 Aug 2019 22:52:25 -0700
 Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::126) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c081:35::128) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Thu, 22 Aug 2019 22:52:17 -0700
+ Thu, 22 Aug 2019 22:52:24 -0700
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id C6F09760BEC; Thu, 22 Aug 2019 22:52:15 -0700 (PDT)
+        id EAC34760BEC; Thu, 22 Aug 2019 22:52:23 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -45,10 +46,12 @@ To:     <davem@davemloft.net>
 CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 0/4] bpf: precision tracking tests
-Date:   Thu, 22 Aug 2019 22:52:11 -0700
-Message-ID: <20190823055215.2658669-1-ast@kernel.org>
+Subject: [PATCH bpf-next 4/4] selftests/bpf: add precision tracking test
+Date:   Thu, 22 Aug 2019 22:52:15 -0700
+Message-ID: <20190823055215.2658669-5-ast@kernel.org>
 X-Mailer: git-send-email 2.20.0
+In-Reply-To: <20190823055215.2658669-1-ast@kernel.org>
+References: <20190823055215.2658669-1-ast@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
@@ -56,34 +59,62 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-23_01:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=549 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1908230064
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1034 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908230063
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add few additional tests for precision tracking in the verifier.
+Copy-paste of existing test
+"calls: cross frame pruning - liveness propagation"
+but ran with different parentage chain heuristic
+which stresses different path in precision tracking logic.
 
-Alexei Starovoitov (4):
-  bpf: introduce verifier internal test flag
-  tools/bpf: sync bpf.h
-  selftests/bpf: verifier precise tests
-  selftests/bpf: add precision tracking test
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+This test will be failing without this fix
+https://patchwork.ozlabs.org/patch/1151172/
+---
+ .../testing/selftests/bpf/verifier/precise.c  | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
- include/linux/bpf_verifier.h                  |   1 +
- include/uapi/linux/bpf.h                      |   3 +
- kernel/bpf/syscall.c                          |   1 +
- kernel/bpf/verifier.c                         |   5 +-
- tools/include/uapi/linux/bpf.h                |   3 +
- tools/testing/selftests/bpf/test_verifier.c   |  68 +++++++--
- .../testing/selftests/bpf/verifier/precise.c  | 142 ++++++++++++++++++
- 7 files changed, 211 insertions(+), 12 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/verifier/precise.c
-
+diff --git a/tools/testing/selftests/bpf/verifier/precise.c b/tools/testing/selftests/bpf/verifier/precise.c
+index a20953c23721..a455a4a71f11 100644
+--- a/tools/testing/selftests/bpf/verifier/precise.c
++++ b/tools/testing/selftests/bpf/verifier/precise.c
+@@ -115,3 +115,28 @@
+ 	regs=300 stack=0 before 17\
+ 	parent already had regs=0 stack=0 marks",
+ },
++{
++	"precise: cross frame pruning",
++	.insns = {
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_IMM(BPF_REG_8, 0),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1),
++	BPF_MOV64_IMM(BPF_REG_8, 1),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_IMM(BPF_REG_9, 0),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1),
++	BPF_MOV64_IMM(BPF_REG_9, 1),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 4),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_8, 1, 1),
++	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = BPF_F_TEST_STATE_FREQ,
++	.errstr = "!read_ok",
++	.result = REJECT,
++},
 -- 
 2.20.0
 
