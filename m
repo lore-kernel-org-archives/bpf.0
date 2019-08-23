@@ -2,351 +2,111 @@ Return-Path: <SRS0=I0lg=WT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=FROM_EXCESS_BASE64,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51A7EC3A5A2
-	for <bpf@archiver.kernel.org>; Fri, 23 Aug 2019 05:52:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78A03C3A5A2
+	for <bpf@archiver.kernel.org>; Fri, 23 Aug 2019 06:10:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1403E22CEC
-	for <bpf@archiver.kernel.org>; Fri, 23 Aug 2019 05:52:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1566539560;
-	bh=7M4pHHwJSkTX3auRzthDXwiMV3F5JptMtBG+W0n3jjw=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ka/fzeXwWxKYPWIemQZsAOyMqTnTQMm17MtIYSWXK+6WJu8oVGrPUE80F4ul0laPV
-	 QmG2G2Z91+foQd5/uMSiOfKUpWs+AL0wiInQ0h6yqpuwyjlSmLCLSKPLxaMTvOPz3z
-	 Hzme8qcFFUfWplvoqW1sB10+Usioato7P6i4qKgg=
+	by mail.kernel.org (Postfix) with ESMTP id 55BC022CF7
+	for <bpf@archiver.kernel.org>; Fri, 23 Aug 2019 06:10:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392082AbfHWFwj convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 23 Aug 2019 01:52:39 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:8286 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2392157AbfHWFwh (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 23 Aug 2019 01:52:37 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7N5mPKk023614
-        for <bpf@vger.kernel.org>; Thu, 22 Aug 2019 22:52:36 -0700
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2ujaafr0b7-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 22 Aug 2019 22:52:36 -0700
-Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Thu, 22 Aug 2019 22:52:23 -0700
-Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id E05DB760BEC; Thu, 22 Aug 2019 22:52:21 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Alexei Starovoitov <ast@kernel.org>
-Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
-To:     <davem@davemloft.net>
-CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 3/4] selftests/bpf: verifier precise tests
-Date:   Thu, 22 Aug 2019 22:52:14 -0700
-Message-ID: <20190823055215.2658669-4-ast@kernel.org>
-X-Mailer: git-send-email 2.20.0
-In-Reply-To: <20190823055215.2658669-1-ast@kernel.org>
-References: <20190823055215.2658669-1-ast@kernel.org>
+        id S2392301AbfHWGKc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 23 Aug 2019 02:10:32 -0400
+Received: from mga01.intel.com ([192.55.52.88]:60504 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2392300AbfHWGKc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 23 Aug 2019 02:10:32 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Aug 2019 23:10:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,420,1559545200"; 
+   d="scan'208";a="170030314"
+Received: from arappl-mobl2.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.252.53.140])
+  by orsmga007.jf.intel.com with ESMTP; 22 Aug 2019 23:10:27 -0700
+Subject: Re: [PATCH net v3] ixgbe: fix double clean of tx descriptors with xdp
+To:     William Tu <u9012063@gmail.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>
+Cc:     Ilya Maximets <i.maximets@samsung.com>,
+        Netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
+        Eelco Chaudron <echaudro@redhat.com>
+References: <CGME20190822171243eucas1p12213f2239d6c36be515dade41ed7470b@eucas1p1.samsung.com>
+ <20190822171237.20798-1-i.maximets@samsung.com>
+ <CAKgT0UepBGqx=FiqrdC-r3kvkMxVAHonkfc6rDt_HVQuzahZPQ@mail.gmail.com>
+ <CALDO+SYhU4krmBO8d4hsDGm+BuUAR4qMv=WzVa=jAx27+g9KnA@mail.gmail.com>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
+Message-ID: <217e90f5-206a-bb80-6699-f6dd750b57d9@intel.com>
+Date:   Fri, 23 Aug 2019 08:10:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-23_01:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=809 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1908230063
-X-FB-Internal: deliver
+In-Reply-To: <CALDO+SYhU4krmBO8d4hsDGm+BuUAR4qMv=WzVa=jAx27+g9KnA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use BPF_F_TEST_STATE_FREQ flag to check that precision
-tracking works as expected by comparing every step it takes.
+On 2019-08-22 19:32, William Tu wrote:
+> On Thu, Aug 22, 2019 at 10:21 AM Alexander Duyck
+> <alexander.duyck@gmail.com> wrote:
+>>
+>> On Thu, Aug 22, 2019 at 10:12 AM Ilya Maximets <i.maximets@samsung.com> wrote:
+>>>
+>>> Tx code doesn't clear the descriptors' status after cleaning.
+>>> So, if the budget is larger than number of used elems in a ring, some
+>>> descriptors will be accounted twice and xsk_umem_complete_tx will move
+>>> prod_tail far beyond the prod_head breaking the completion queue ring.
+>>>
+>>> Fix that by limiting the number of descriptors to clean by the number
+>>> of used descriptors in the tx ring.
+>>>
+>>> 'ixgbe_clean_xdp_tx_irq()' function refactored to look more like
+>>> 'ixgbe_xsk_clean_tx_ring()' since we're allowed to directly use
+>>> 'next_to_clean' and 'next_to_use' indexes.
+>>>
+>>> Fixes: 8221c5eba8c1 ("ixgbe: add AF_XDP zero-copy Tx support")
+>>> Signed-off-by: Ilya Maximets <i.maximets@samsung.com>
+>>> ---
+>>>
+>>> Version 3:
+>>>    * Reverted some refactoring made for v2.
+>>>    * Eliminated 'budget' for tx clean.
+>>>    * prefetch returned.
+>>>
+>>> Version 2:
+>>>    * 'ixgbe_clean_xdp_tx_irq()' refactored to look more like
+>>>      'ixgbe_xsk_clean_tx_ring()'.
+>>>
+>>>   drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c | 29 ++++++++------------
+>>>   1 file changed, 11 insertions(+), 18 deletions(-)
+>>
+>> Thanks for addressing my concerns.
+>>
+>> Acked-by: Alexander Duyck <alexander.h.duyck@linux.intel.com>
+> 
+> Thanks.
+> 
+> Tested-by: William Tu <u9012063@gmail.com>
+> 
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- tools/testing/selftests/bpf/test_verifier.c   |  68 ++++++++--
- .../testing/selftests/bpf/verifier/precise.c  | 117 ++++++++++++++++++
- 2 files changed, 174 insertions(+), 11 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/verifier/precise.c
+Will, thanks for testing! For this patch, did you notice any performance
+degradation?
 
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index 44e2d640b088..d27fd929abb9 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -61,6 +61,7 @@
- #define UNPRIV_SYSCTL "kernel/unprivileged_bpf_disabled"
- static bool unpriv_disabled = false;
- static int skips;
-+static bool verbose = false;
- 
- struct bpf_test {
- 	const char *descr;
-@@ -92,7 +93,8 @@ struct bpf_test {
- 	enum {
- 		UNDEF,
- 		ACCEPT,
--		REJECT
-+		REJECT,
-+		VERBOSE_ACCEPT,
- 	} result, result_unpriv;
- 	enum bpf_prog_type prog_type;
- 	uint8_t flags;
-@@ -859,6 +861,36 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
- 	return 0;
- }
- 
-+static bool cmp_str_seq(const char *log, const char *exp)
-+{
-+	char needle[80];
-+	const char *p, *q;
-+	int len;
-+
-+	do {
-+		p = strchr(exp, '\t');
-+		if (!p)
-+			p = exp + strlen(exp);
-+
-+		len = p - exp;
-+		if (len >= sizeof(needle) || !len) {
-+			printf("FAIL\nTestcase bug\n");
-+			return false;
-+		}
-+		strncpy(needle, exp, len);
-+		needle[len] = 0;
-+		q = strstr(log, needle);
-+		if (!q) {
-+			printf("FAIL\nUnexpected verifier log in successful load!\n"
-+			       "EXP: %s\nRES:\n", needle);
-+			return false;
-+		}
-+		log = q + len;
-+		exp = p + 1;
-+	} while (*p);
-+	return true;
-+}
-+
- static void do_test_single(struct bpf_test *test, bool unpriv,
- 			   int *passes, int *errors)
- {
-@@ -897,14 +929,20 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
- 		pflags |= BPF_F_STRICT_ALIGNMENT;
- 	if (test->flags & F_NEEDS_EFFICIENT_UNALIGNED_ACCESS)
- 		pflags |= BPF_F_ANY_ALIGNMENT;
-+	if (test->flags & ~3)
-+		pflags |= test->flags;
- 
-+	expected_ret = unpriv && test->result_unpriv != UNDEF ?
-+		       test->result_unpriv : test->result;
-+	expected_err = unpriv && test->errstr_unpriv ?
-+		       test->errstr_unpriv : test->errstr;
- 	memset(&attr, 0, sizeof(attr));
- 	attr.prog_type = prog_type;
- 	attr.expected_attach_type = test->expected_attach_type;
- 	attr.insns = prog;
- 	attr.insns_cnt = prog_len;
- 	attr.license = "GPL";
--	attr.log_level = 4;
-+	attr.log_level = verbose || expected_ret == VERBOSE_ACCEPT ? 1 : 4;
- 	attr.prog_flags = pflags;
- 
- 	fd_prog = bpf_load_program_xattr(&attr, bpf_vlog, sizeof(bpf_vlog));
-@@ -914,14 +952,9 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
- 		goto close_fds;
- 	}
- 
--	expected_ret = unpriv && test->result_unpriv != UNDEF ?
--		       test->result_unpriv : test->result;
--	expected_err = unpriv && test->errstr_unpriv ?
--		       test->errstr_unpriv : test->errstr;
--
- 	alignment_prevented_execution = 0;
- 
--	if (expected_ret == ACCEPT) {
-+	if (expected_ret == ACCEPT || expected_ret == VERBOSE_ACCEPT) {
- 		if (fd_prog < 0) {
- 			printf("FAIL\nFailed to load prog '%s'!\n",
- 			       strerror(errno));
-@@ -932,6 +965,9 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
- 		    (test->flags & F_NEEDS_EFFICIENT_UNALIGNED_ACCESS))
- 			alignment_prevented_execution = 1;
- #endif
-+		if (expected_ret == VERBOSE_ACCEPT && !cmp_str_seq(bpf_vlog, expected_err)) {
-+			goto fail_log;
-+		}
- 	} else {
- 		if (fd_prog >= 0) {
- 			printf("FAIL\nUnexpected success to load!\n");
-@@ -957,6 +993,9 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
- 		}
- 	}
- 
-+	if (verbose)
-+		printf(", verifier log:\n%s", bpf_vlog);
-+
- 	run_errs = 0;
- 	run_successes = 0;
- 	if (!alignment_prevented_execution && fd_prog >= 0) {
-@@ -1097,17 +1136,24 @@ int main(int argc, char **argv)
- {
- 	unsigned int from = 0, to = ARRAY_SIZE(tests);
- 	bool unpriv = !is_admin();
-+	int arg = 1;
-+
-+	if (argc > 1 && strcmp(argv[1], "-v") == 0) {
-+		arg++;
-+		verbose = true;
-+		argc--;
-+	}
- 
- 	if (argc == 3) {
--		unsigned int l = atoi(argv[argc - 2]);
--		unsigned int u = atoi(argv[argc - 1]);
-+		unsigned int l = atoi(argv[arg]);
-+		unsigned int u = atoi(argv[arg + 1]);
- 
- 		if (l < to && u < to) {
- 			from = l;
- 			to   = u + 1;
- 		}
- 	} else if (argc == 2) {
--		unsigned int t = atoi(argv[argc - 1]);
-+		unsigned int t = atoi(argv[arg]);
- 
- 		if (t < to) {
- 			from = t;
-diff --git a/tools/testing/selftests/bpf/verifier/precise.c b/tools/testing/selftests/bpf/verifier/precise.c
-new file mode 100644
-index 000000000000..a20953c23721
---- /dev/null
-+++ b/tools/testing/selftests/bpf/verifier/precise.c
-@@ -0,0 +1,117 @@
-+{
-+	"precise: test 1",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_FD(BPF_REG_6, 0),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_FP),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_FP, -8, 0),
-+	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1),
-+	BPF_EXIT_INSN(),
-+
-+	BPF_MOV64_REG(BPF_REG_9, BPF_REG_0),
-+
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_FP),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-+	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1),
-+	BPF_EXIT_INSN(),
-+
-+	BPF_MOV64_REG(BPF_REG_8, BPF_REG_0),
-+
-+	BPF_ALU64_REG(BPF_SUB, BPF_REG_9, BPF_REG_8), /* map_value_ptr -= map_value_ptr */
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_9),
-+	BPF_JMP_IMM(BPF_JLT, BPF_REG_2, 8, 1),
-+	BPF_EXIT_INSN(),
-+
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, 1), /* R2=inv(umin=1, umax=8) */
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_FP),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_MOV64_IMM(BPF_REG_3, 0),
-+	BPF_EMIT_CALL(BPF_FUNC_probe_read),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
-+	.fixup_map_array_48b = { 1 },
-+	.result = VERBOSE_ACCEPT,
-+	.errstr =
-+	"26: (85) call bpf_probe_read#4\
-+	last_idx 26 first_idx 20\
-+	regs=4 stack=0 before 25\
-+	regs=4 stack=0 before 24\
-+	regs=4 stack=0 before 23\
-+	regs=4 stack=0 before 22\
-+	regs=4 stack=0 before 20\
-+	parent didn't have regs=4 stack=0 marks\
-+	last_idx 19 first_idx 10\
-+	regs=4 stack=0 before 19\
-+	regs=200 stack=0 before 18\
-+	regs=300 stack=0 before 17\
-+	regs=201 stack=0 before 15\
-+	regs=201 stack=0 before 14\
-+	regs=200 stack=0 before 13\
-+	regs=200 stack=0 before 12\
-+	regs=200 stack=0 before 11\
-+	regs=200 stack=0 before 10\
-+	parent already had regs=0 stack=0 marks",
-+},
-+{
-+	"precise: test 2",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_LD_MAP_FD(BPF_REG_6, 0),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_FP),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_FP, -8, 0),
-+	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1),
-+	BPF_EXIT_INSN(),
-+
-+	BPF_MOV64_REG(BPF_REG_9, BPF_REG_0),
-+
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_FP),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-+	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1),
-+	BPF_EXIT_INSN(),
-+
-+	BPF_MOV64_REG(BPF_REG_8, BPF_REG_0),
-+
-+	BPF_ALU64_REG(BPF_SUB, BPF_REG_9, BPF_REG_8), /* map_value_ptr -= map_value_ptr */
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_9),
-+	BPF_JMP_IMM(BPF_JLT, BPF_REG_2, 8, 1),
-+	BPF_EXIT_INSN(),
-+
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, 1), /* R2=inv(umin=1, umax=8) */
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_FP),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_MOV64_IMM(BPF_REG_3, 0),
-+	BPF_EMIT_CALL(BPF_FUNC_probe_read),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
-+	.fixup_map_array_48b = { 1 },
-+	.result = VERBOSE_ACCEPT,
-+	.flags = BPF_F_TEST_STATE_FREQ,
-+	.errstr =
-+	"26: (85) call bpf_probe_read#4\
-+	last_idx 26 first_idx 22\
-+	regs=4 stack=0 before 25\
-+	regs=4 stack=0 before 24\
-+	regs=4 stack=0 before 23\
-+	regs=4 stack=0 before 22\
-+	parent didn't have regs=4 stack=0 marks\
-+	last_idx 20 first_idx 20\
-+	regs=4 stack=0 before 20\
-+	parent didn't have regs=4 stack=0 marks\
-+	last_idx 19 first_idx 17\
-+	regs=4 stack=0 before 19\
-+	regs=200 stack=0 before 18\
-+	regs=300 stack=0 before 17\
-+	parent already had regs=0 stack=0 marks",
-+},
--- 
-2.20.0
 
+Cheers,
+Björn
