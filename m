@@ -2,61 +2,52 @@ Return-Path: <SRS0=TB1Z=WW=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CCEEC3A59F
-	for <bpf@archiver.kernel.org>; Mon, 26 Aug 2019 15:11:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A265C3A59F
+	for <bpf@archiver.kernel.org>; Mon, 26 Aug 2019 15:18:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2DBFD20828
-	for <bpf@archiver.kernel.org>; Mon, 26 Aug 2019 15:11:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1566832294;
-	bh=+3wHUCLAJU9VcfWi1FrlZA64sXlEodgwHT/8Q/mtsjI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=hEMrunl6Lx1uR7wbdsKGTdQXLLviT7Um9FmH5aGp+2eqBe52iDzNXKsdH2Abl8sRe
-	 NQp6mPn9lmFtRiRVtk+zs6zpTTrpmUEToszmYCvUR+YzWfCXaJp3svXg45Tfjw6rAW
-	 LgOPcbbvm9gYES9cx3xjr3fg7MyasEgCctDAFiXs=
+	by mail.kernel.org (Postfix) with ESMTP id 7919520828
+	for <bpf@archiver.kernel.org>; Mon, 26 Aug 2019 15:18:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730463AbfHZPLd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 26 Aug 2019 11:11:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59624 "EHLO mail.kernel.org"
+        id S1728221AbfHZPSQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 26 Aug 2019 11:18:16 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:49572 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727658AbfHZPLd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 26 Aug 2019 11:11:33 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727850AbfHZPSP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 26 Aug 2019 11:18:15 -0400
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0CC7F2080C;
-        Mon, 26 Aug 2019 15:11:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566832292;
-        bh=+3wHUCLAJU9VcfWi1FrlZA64sXlEodgwHT/8Q/mtsjI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OR4jEIiCGSjOeQ7p3D0b1a599hT5n5AXwsjSsd+L5p70ViHopNwSqtaDPjLPFcnje
-         jPHj2tyExewzG7UQc6AoxoWeXV7E3TwIMQpaebUlf9XcakOvgkVAvgCz22YHxrm7DA
-         i/mEEJD2gr0fxIM0iS3/kCd8nFfpGuIZ0K+CIp4M=
-Date:   Mon, 26 Aug 2019 17:11:29 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
+        by mx1.redhat.com (Postfix) with ESMTPS id 757CE1801594;
+        Mon, 26 Aug 2019 15:18:15 +0000 (UTC)
+Received: from treble (ovpn-121-55.rdu2.redhat.com [10.10.121.55])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 525FD5D9C3;
+        Mon, 26 Aug 2019 15:18:10 +0000 (UTC)
+Date:   Mon, 26 Aug 2019 10:18:08 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
 To:     He Zhe <zhe.he@windriver.com>
 Cc:     ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
         songliubraving@fb.com, yhs@fb.com, ndesaulniers@google.com,
         miguel.ojeda.sandonis@gmail.com, luc.vanoostenryck@gmail.com,
-        schwidefsky@de.ibm.com, mst@redhat.com, gor@linux.ibm.com,
-        andreyknvl@google.com, jpoimboe@redhat.com,
+        schwidefsky@de.ibm.com, gregkh@linuxfoundation.org, mst@redhat.com,
+        gor@linux.ibm.com, andreyknvl@google.com,
         liuxiaozhou@bytedance.com, yamada.masahiro@socionext.com,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
 Subject: Re: kernel/bpf/core.o: warning: objtool: ___bpf_prog_run.cold()+0x7:
  call without frame pointer save/setup
-Message-ID: <20190826151129.GA21679@kroah.com>
+Message-ID: <20190826151808.upis57cckcpf2new@treble>
 References: <cf0273fb-c272-72be-50f9-b25bb7c7f183@windriver.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 In-Reply-To: <cf0273fb-c272-72be-50f9-b25bb7c7f183@windriver.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+User-Agent: NeoMutt/20180716
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.63]); Mon, 26 Aug 2019 15:18:15 +0000 (UTC)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
@@ -73,10 +64,15 @@ On Mon, Aug 26, 2019 at 10:42:53PM +0800, He Zhe wrote:
 > kernel/bpf/core.o: warning: objtool: ___bpf_prog_run()+0x8b9: sibling call from callable instruction with modified stack frame
 > if CONFIG_RETPOLINE=n, and no warning if CONFIG_RETPOLINE=y
 
-Do you see this same problem on 5.3-rc6?
+Can you please share the following:
 
-And what version of gcc are you using?
+- core.o file
 
-thanks,
+The following would also be helpful for me to try to recreate it:
 
-greg k-h
+- config file
+- compiler version
+- kernel version
+
+-- 
+Josh
