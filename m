@@ -2,233 +2,123 @@ Return-Path: <SRS0=TyRX=WY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A901C3A5A1
-	for <bpf@archiver.kernel.org>; Wed, 28 Aug 2019 21:03:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 972A6C3A5A1
+	for <bpf@archiver.kernel.org>; Wed, 28 Aug 2019 21:03:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E92C3217F5
-	for <bpf@archiver.kernel.org>; Wed, 28 Aug 2019 21:03:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E16722CF8
+	for <bpf@archiver.kernel.org>; Wed, 28 Aug 2019 21:03:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EjRBuz2N"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="QW6qqG6X"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726865AbfH1VDm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Aug 2019 17:03:42 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:33404 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726583AbfH1VDm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Aug 2019 17:03:42 -0400
-Received: by mail-qt1-f193.google.com with SMTP id v38so1253358qtb.0;
-        Wed, 28 Aug 2019 14:03:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=F+lDBcIF18NfqJCdUOLk/eWaW/BajVdL756ooh8T8qM=;
-        b=EjRBuz2NhKCYMhSeTP68unwPaTc7RzGySBwWEW/mK+o1ps42Frcf1RtsNl+fnS0bPb
-         dlD+lJJcWrSNeOtXKZ1DiikVXvze60PhMVy+F0Nwt8Jqnpj68UVTEGqWtUn019DvGyGV
-         4aBowlwjrv7mmqS8prPLuASFXnsJpPbqpQ5cGbUcGQTPsDHJP8VcELehcw4SJZCbP7+h
-         A/Wd/EcqM7BmTFejiQf/pN+Bxsov+SkmqpShTnoLEbkZ4J1//HpV7DFGPFsgp7zdtTl5
-         lyLyAFW50PPF+glfCUZi1gFQ7jyMIFHckhu0gR18YaaJucYe1lsoOXABF+5rxhxAjuhH
-         DPmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=F+lDBcIF18NfqJCdUOLk/eWaW/BajVdL756ooh8T8qM=;
-        b=s2ikLALUzWw+39vf5Dqi48KWJboC7K6EENUlUESvqHDlUyp08BFZvBHXNUVD7aZW1N
-         KaBU2qFhFuYciISzMvs6Xnkd+kmCB7dAfYmHil5EfkFeB1j6SE0SqJ/CUGKhsKjIDY4j
-         UhtuS2M+1TRFQVCORvLQtmqUQz31fN8LNEP6qAO7s2Y5yS2q/dB9D1tBDx2puINKsyFg
-         W9ezNAxaDnWNzStD0Q2JYSwNYFvKmnEm1HzIYFuiGK1o5RFaHqnSDVH0pizgIjQWQCpn
-         X+d5OOQSsxUJDy9+yWIlOjk0QUDDHxcU47iDlB89CdZc2IFi5L3TXNM3KOFGQn0eXPsF
-         QS6A==
-X-Gm-Message-State: APjAAAW+WxbPLyTCZ9dWnmZcFLeUfV4qh92Pv8Np7YtDdp74ELop+HgU
-        DZ0cj76m+Jh3eUx36hFsEq3RELux5Sg=
-X-Google-Smtp-Source: APXvYqx3fuf35YGtqMc5FeuEehXepZI/wgpMlnLOfP7ISrODi4cTIpjQq5A6z8mLQdhQutJCLyZaFQ==
-X-Received: by 2002:a05:6214:10e1:: with SMTP id q1mr4398531qvt.148.1567026220510;
-        Wed, 28 Aug 2019 14:03:40 -0700 (PDT)
-Received: from ebpf-metal ([190.162.109.190])
-        by smtp.gmail.com with ESMTPSA id o9sm178846qtr.71.2019.08.28.14.03.38
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 28 Aug 2019 14:03:39 -0700 (PDT)
-Date:   Wed, 28 Aug 2019 17:03:35 -0400
-From:   Carlos Antonio Neira Bustos <cneirabustos@gmail.com>
-To:     Yonghong Song <yhs@fb.com>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        "brouer@redhat.com" <brouer@redhat.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next V9 1/3] bpf: new helper to obtain namespace data
- from current task
-Message-ID: <20190828210333.itwtyqa5w5egnrwm@ebpf-metal>
-References: <20190813184747.12225-1-cneirabustos@gmail.com>
- <20190813184747.12225-2-cneirabustos@gmail.com>
- <13b7f81f-83b6-07c9-4864-b49749cbf7d9@fb.com>
- <20190814005604.yeqb45uv2fc3anab@dev00>
- <9a2cacad-b79f-5d39-6d62-bb48cbaaac07@fb.com>
- <CACiB22jyN9=0ATWWE+x=BoWD6u+8KO+MvBfsFQmcNfkmANb2_w@mail.gmail.com>
- <20190828203951.qo4kaloahcnvp7nw@ebpf-metal>
- <4faeb577-387a-7186-e060-f0ca76395823@fb.com>
+        id S1726882AbfH1VD4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Aug 2019 17:03:56 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:32270 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726583AbfH1VDz (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 28 Aug 2019 17:03:55 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x7SL3997000764
+        for <bpf@vger.kernel.org>; Wed, 28 Aug 2019 14:03:54 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=1jDmYSoVy2rDExjAsXWrEgtJ4ohgtMYJM4vqyRYBsZA=;
+ b=QW6qqG6Xstgm6RNIDS8R9W+by4b89PYa5upkJY5mEZLE72l9tlvL9kqUqT5A/LsbRDYd
+ nJLPT26xS+gTvJG+OKX/p7AvuEV/7vYHAUmn58/NP/epiXMsK3GTS4+1U2YdrTeaWu9G
+ YVbc9OsAHPjexU4LIYJQSeF7PtVbqN/LL0o= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2unka1uuhn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 28 Aug 2019 14:03:54 -0700
+Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 28 Aug 2019 14:03:53 -0700
+Received: by devvm2868.prn3.facebook.com (Postfix, from userid 125878)
+        id 72AC6A25D5C9; Wed, 28 Aug 2019 14:03:52 -0700 (PDT)
+Smtp-Origin-Hostprefix: devvm
+From:   Julia Kartseva <hex@fb.com>
+Smtp-Origin-Hostname: devvm2868.prn3.facebook.com
+To:     <rdna@fb.com>, <bpf@vger.kernel.org>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
+        <kernel-team@fb.com>
+CC:     Julia Kartseva <hex@fb.com>
+Smtp-Origin-Cluster: prn3c11
+Subject: [PATCH bpf-next 00/10] bpf: bpf_(prog|map|attach)_type_(from|to)_str helpers
+Date:   Wed, 28 Aug 2019 14:03:03 -0700
+Message-ID: <cover.1567024943.git.hex@fb.com>
+X-Mailer: git-send-email 2.17.1
+X-FB-Internal: Safe
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4faeb577-387a-7186-e060-f0ca76395823@fb.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.70,1.0.8
+ definitions=2019-08-28_11:2019-08-28,2019-08-28 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1011 spamscore=0
+ lowpriorityscore=0 adultscore=0 priorityscore=1501 bulkscore=0
+ malwarescore=0 phishscore=0 impostorscore=0 mlxlogscore=999 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1906280000 definitions=main-1908280205
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Thanks, I'll work on the net/netif_receive_skb selftest using this helper.
-I hope I could complete this work this week.
+Standardize commonly used bpf enum names by introducing helper methods to
+libbpf.
+When applications require enum to string mapping the related code is
+copy-pasted from bpftool. It hardens maintenance, e.g. when new enum
+values are added.
 
-Bests.
+Patches 0001-0003 introduce __MAX_BPF_PROG_TYPE and __MAX_BPF_MAP_TYPE enum
+type.
+Patches 0004-0006 introduce helpers methods
+libbpf_str_from_(prog|map|attach)_type and
+libbpf_(prog|map|attach)_type_from_str.
+Patches 0007-0008 extend and rename test_section_names test.
+Patches 0009-0010 introduce the helpers to bpftool.
 
-On Wed, Aug 28, 2019 at 08:53:25PM +0000, Yonghong Song wrote:
-> 
-> 
-> On 8/28/19 1:39 PM, Carlos Antonio Neira Bustos wrote:
-> > Yonghong,
-> > 
-> > Thanks for the pointer, I fixed this bug, but I found another one that's triggered
-> > now the test program I included in  tools/testing/selftests/bpf/test_pidns.
-> > It's seemed that fname was not correctly setup when passing it to filename_lookup.
-> > This is fixed now and I'm doing some more testing.
-> > I think I'll remove the tests on samples/bpf as they are mostly end on -EPERM as
-> > the fix intended.
-> > Is ok to remove them and just focus to finish the self tests code?.
-> 
-> Yes, the samples/bpf test case can be removed.
-> Could you create a selftest with tracpoint net/netif_receive_skb, which 
-> also uses the proposed helper? net/netif_receive_skb will happen in
-> interrupt context and it should catch the issue as well if 
-> filename_lookup still get called in interrupt context.
-> 
-> > 
-> > Bests
-> > 
-> > On Wed, Aug 14, 2019 at 01:25:06AM -0400, carlos antonio neira bustos wrote:
-> >> Thank you very much!
-> >>
-> >> Bests
-> >>
-> >> El mié., 14 de ago. de 2019 00:50, Yonghong Song <yhs@fb.com> escribió:
-> >>
-> >>>
-> >>>
-> >>> On 8/13/19 5:56 PM, Carlos Antonio Neira Bustos wrote:
-> >>>> On Tue, Aug 13, 2019 at 11:11:14PM +0000, Yonghong Song wrote:
-> >>>>>
-> >>>>>
-> >>>>> On 8/13/19 11:47 AM, Carlos Neira wrote:
-> >>>>>> From: Carlos <cneirabustos@gmail.com>
-> >>>>>>
-> >>>>>> New bpf helper bpf_get_current_pidns_info.
-> >>>>>> This helper obtains the active namespace from current and returns
-> >>>>>> pid, tgid, device and namespace id as seen from that namespace,
-> >>>>>> allowing to instrument a process inside a container.
-> >>>>>>
-> >>>>>> Signed-off-by: Carlos Neira <cneirabustos@gmail.com>
-> >>>>>> ---
-> >>>>>>     fs/internal.h            |  2 --
-> >>>>>>     fs/namei.c               |  1 -
-> >>>>>>     include/linux/bpf.h      |  1 +
-> >>>>>>     include/linux/namei.h    |  4 +++
-> >>>>>>     include/uapi/linux/bpf.h | 31 ++++++++++++++++++++++-
-> >>>>>>     kernel/bpf/core.c        |  1 +
-> >>>>>>     kernel/bpf/helpers.c     | 64
-> >>> ++++++++++++++++++++++++++++++++++++++++++++++++
-> >>>>>>     kernel/trace/bpf_trace.c |  2 ++
-> >>>>>>     8 files changed, 102 insertions(+), 4 deletions(-)
-> >>>>>>
-> >>> [...]
-> >>>>>>
-> >>>>>> +BPF_CALL_2(bpf_get_current_pidns_info, struct bpf_pidns_info *,
-> >>> pidns_info, u32,
-> >>>>>> +    size)
-> >>>>>> +{
-> >>>>>> +   const char *pidns_path = "/proc/self/ns/pid";
-> >>>>>> +   struct pid_namespace *pidns = NULL;
-> >>>>>> +   struct filename *tmp = NULL;
-> >>>>>> +   struct inode *inode;
-> >>>>>> +   struct path kp;
-> >>>>>> +   pid_t tgid = 0;
-> >>>>>> +   pid_t pid = 0;
-> >>>>>> +   int ret;
-> >>>>>> +   int len;
-> >>>>>
-> >>>>
-> >>>> Thank you very much for catching this!.
-> >>>> Could you share how to replicate this bug?.
-> >>>
-> >>> The config is attached. just run trace_ns_info and you
-> >>> can reproduce the issue.
-> >>>
-> >>>>
-> >>>>> I am running your sample program and get the following kernel bug:
-> >>>>>
-> >>>>> ...
-> >>>>> [   26.414825] BUG: sleeping function called from invalid context at
-> >>>>> /data/users/yhs/work/net-next/fs
-> >>>>> /dcache.c:843
-> >>>>> [   26.416314] in_atomic(): 1, irqs_disabled(): 0, pid: 1911, name: ping
-> >>>>> [   26.417189] CPU: 0 PID: 1911 Comm: ping Tainted: G        W
-> >>>>> 5.3.0-rc1+ #280
-> >>>>> [   26.418182] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
-> >>>>> BIOS 1.9.3-1.el7.centos 04/01/2
-> >>>>> 014
-> >>>>> [   26.419393] Call Trace:
-> >>>>> [   26.419697]  <IRQ>
-> >>>>> [   26.419960]  dump_stack+0x46/0x5b
-> >>>>> [   26.420434]  ___might_sleep+0xe4/0x110
-> >>>>> [   26.420894]  dput+0x2a/0x200
-> >>>>> [   26.421265]  walk_component+0x10c/0x280
-> >>>>> [   26.421773]  link_path_walk+0x327/0x560
-> >>>>> [   26.422280]  ? proc_ns_dir_readdir+0x1a0/0x1a0
-> >>>>> [   26.422848]  ? path_init+0x232/0x330
-> >>>>> [   26.423364]  path_lookupat+0x88/0x200
-> >>>>> [   26.423808]  ? selinux_parse_skb.constprop.69+0x124/0x430
-> >>>>> [   26.424521]  filename_lookup+0xaf/0x190
-> >>>>> [   26.425031]  ? simple_attr_release+0x20/0x20
-> >>>>> [   26.425560]  bpf_get_current_pidns_info+0xfa/0x190
-> >>>>> [   26.426168]  bpf_prog_83627154cefed596+0xe66/0x1000
-> >>>>> [   26.426779]  trace_call_bpf+0xb5/0x160
-> >>>>> [   26.427317]  ? __netif_receive_skb_core+0x1/0xbb0
-> >>>>> [   26.427929]  ? __netif_receive_skb_core+0x1/0xbb0
-> >>>>> [   26.428496]  kprobe_perf_func+0x4d/0x280
-> >>>>> [   26.428986]  ? tracing_record_taskinfo_skip+0x1a/0x30
-> >>>>> [   26.429584]  ? tracing_record_taskinfo+0xe/0x80
-> >>>>> [   26.430152]  ? ttwu_do_wakeup.isra.114+0xcf/0xf0
-> >>>>> [   26.430737]  ? __netif_receive_skb_core+0x1/0xbb0
-> >>>>> [   26.431334]  ? __netif_receive_skb_core+0x5/0xbb0
-> >>>>> [   26.431930]  kprobe_ftrace_handler+0x90/0xf0
-> >>>>> [   26.432495]  ftrace_ops_assist_func+0x63/0x100
-> >>>>> [   26.433060]  0xffffffffc03180bf
-> >>>>> [   26.433471]  ? __netif_receive_skb_core+0x1/0xbb0
-> >>>>> ...
-> >>>>>
-> >>>>> To prevent we are running in arbitrary task (e.g., idle task)
-> >>>>> context which may introduce sleeping issues, the following
-> >>>>> probably appropriate:
-> >>>>>
-> >>>>>           if (in_nmi() || in_softirq())
-> >>>>>                   return -EPERM;
-> >>>>>
-> >>>>> Anyway, if in nmi or softirq, the namespace and pid/tgid
-> >>>>> we get may be just accidentally associated with the bpf running
-> >>>>> context, but it could be in a different context. So such info
-> >>>>> is not reliable any way.
-> >>>>>
-> >>>>>> +
-> >>>>>> +   if (unlikely(size != sizeof(struct bpf_pidns_info)))
-> >>>>>> +           return -EINVAL;
-> >>>>>> +   pidns = task_active_pid_ns(current);
-> >>> [...]
-> >>>
+An alternative for adding __MAX_BPF_(PROG|MAP)_TYPE is using an erroneous
+result of bpf_(prog|map|attach)_type_(from|to)_str as an indicator of
+loop bound. The disadvantages are: tests won't fail when a string name
+is not provided for a new enum value; whoever wants to loop over enum
+values should be aware about this side feature of newly introduced helpers.
+
+Julia Kartseva (10):
+  bpf: introduce __MAX_BPF_PROG_TYPE and __MAX_BPF_MAP_TYPE enum values
+  tools/bpf: sync bpf.h to tools/
+  tools/bpf: handle __MAX_BPF_(PROG|MAP)_TYPE in switch statements
+  tools/bpf: add libbpf_prog_type_(from|to)_str helpers
+  tools/bpf: add libbpf_map_type_(from|to)_str helpers
+  tools/bpf: add libbpf_attach_type_(from|to)_str
+  selftests/bpf: extend test_section_names with type_(from|to)_str
+  selftests/bpf: rename test_section_names to
+    test_section_and_type_names
+  tools/bpftool: use libbpf_(prog|map)_type_to_str helpers
+  tools/bpftool: use libbpf_attach_type_to_str helper
+
+ include/uapi/linux/bpf.h                      |   6 +
+ tools/bpf/bpftool/cgroup.c                    |  60 +--
+ tools/bpf/bpftool/feature.c                   |  47 ++-
+ tools/bpf/bpftool/main.h                      |  33 --
+ tools/bpf/bpftool/map.c                       |  80 +---
+ tools/bpf/bpftool/prog.c                      |  31 +-
+ tools/include/uapi/linux/bpf.h                |   6 +
+ tools/lib/bpf/libbpf.c                        | 153 +++++++
+ tools/lib/bpf/libbpf.h                        |  17 +
+ tools/lib/bpf/libbpf.map                      |   6 +
+ tools/lib/bpf/libbpf_probes.c                 |   2 +
+ tools/testing/selftests/bpf/Makefile          |   2 +-
+ .../bpf/test_section_and_type_names.c         | 378 ++++++++++++++++++
+ .../selftests/bpf/test_section_names.c        | 233 -----------
+ 14 files changed, 673 insertions(+), 381 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/test_section_and_type_names.c
+ delete mode 100644 tools/testing/selftests/bpf/test_section_names.c
+
+-- 
+2.17.1
+
