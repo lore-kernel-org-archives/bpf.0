@@ -2,63 +2,70 @@ Return-Path: <SRS0=TyRX=WY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F641C3A5A6
-	for <bpf@archiver.kernel.org>; Wed, 28 Aug 2019 17:37:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25177C3A5A1
+	for <bpf@archiver.kernel.org>; Wed, 28 Aug 2019 17:52:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 77E242077B
-	for <bpf@archiver.kernel.org>; Wed, 28 Aug 2019 17:37:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EDDDA22CF8
+	for <bpf@archiver.kernel.org>; Wed, 28 Aug 2019 17:52:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="oFW8k5sh"
+	dkim=pass (2048-bit key) header.d=amacapital-net.20150623.gappssmtp.com header.i=@amacapital-net.20150623.gappssmtp.com header.b="XhlIuiCr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726623AbfH1RhV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Aug 2019 13:37:21 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:40081 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726980AbfH1Rg1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Aug 2019 13:36:27 -0400
-Received: by mail-pf1-f193.google.com with SMTP id w16so242247pfn.7
-        for <bpf@vger.kernel.org>; Wed, 28 Aug 2019 10:36:27 -0700 (PDT)
+        id S1726894AbfH1RwI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Aug 2019 13:52:08 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:46961 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726853AbfH1RwI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Aug 2019 13:52:08 -0400
+Received: by mail-pg1-f195.google.com with SMTP id m3so103491pgv.13
+        for <bpf@vger.kernel.org>; Wed, 28 Aug 2019 10:52:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=m0Ol9KiCJuTthVJpNdqXavAOI9ULv3o3m1zh5s9b1As=;
-        b=oFW8k5shx9dzTZCg4oYfKxxrESLsvpAIA5QCO3DOe5JfSNX5ICxHFKvHATbc9VgD3w
-         5+rVewSkK5+kiL+7lS0d7oAaUMKOuRqjYZaH4CxrLhIbqdMKdMJyL9TmnRR+lSFDhS+9
-         H/J3m1QfdE0eP7mou/vg7EAYza9c0CwIYY860=
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=jQX3yoLyPfk/0j+lt93BtL/GBDo4w3swgacBIDakXXQ=;
+        b=XhlIuiCrJiPd178mhAYLbMaCFhZdbbqbwaKU3q6uJ30qMagqqTw/bFQdZlNUymLTK8
+         dAlhmcyR3vP0ZtDqdiHYyudCImcd6mGVQj44mv4tr0vwZxX8d6TFobwdN4uxlZ1uDl/t
+         X/kt1Ft483Gh0bH+NGznab4xcFdJ/6TYS+9Yo3rpExBYeqGDHZD6RaHPArHNC3kr2rgJ
+         NxILOLue3/+PKN00bZKV+tNBQ8D4tNvwKWRAPKMbVtIL1UD4Gr4sqUnHjy2NZtrlK7hv
+         Jg6WoKH+rCjRnSUQMig8d9M/n0qExNh5AHuPyAICyXxTEnIuGS65lVHCT01gHzZmPOSt
+         MLHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=m0Ol9KiCJuTthVJpNdqXavAOI9ULv3o3m1zh5s9b1As=;
-        b=X8URLB95bolFiCahQYd5RMwVhjS7540PMqrsOsdq1F/HDrLs8uzrpJY5/MgCT8eex5
-         CCeJgBgTA9Pm33QosmVku0VIaHrVc82OiOHa6gObm6Q1MZG/papWW9Ty2Ep2MZ5cHkIN
-         caJDgzLcfbSf1lGLTQhxaLx0IXaSCVzvvwWCY/+yQFNdAVmtJvNYVdMrGNJR1rlXPLOO
-         a0UCTYYn76itJ8bLZDmu7ouAczdSpgbeC89T8M6Ray6V4WqsGwNde8owGvvfInbLu9gU
-         95cD+4wmwinOzpc0Guf8zm7bK05vG8MNlY2j4zlU+QdtmdmHAg2PtTTKQyfddrTqJ8dz
-         3U1w==
-X-Gm-Message-State: APjAAAV1KM0s+Rb5eoHDuMlLrMnrM4MdIgAx9NNt6vCk9c+p5Wqbh6qq
-        B/b4fEzzCE6YUTnpkAx47e2wkw==
-X-Google-Smtp-Source: APXvYqyH/WYT3nu0TOtBHExVMlqdFHVZ7R0fY91sEAf7okZikcnLyqTOEJjyRHLyXhLgGQXRNGz22Q==
-X-Received: by 2002:a63:f13:: with SMTP id e19mr4496092pgl.132.1567013786692;
-        Wed, 28 Aug 2019 10:36:26 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d11sm4397723pfh.59.2019.08.28.10.36.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2019 10:36:25 -0700 (PDT)
-Date:   Sun, 25 Aug 2019 14:59:37 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     David Abdurachmanov <david.abdurachmanov@gmail.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=jQX3yoLyPfk/0j+lt93BtL/GBDo4w3swgacBIDakXXQ=;
+        b=o7bV7df1Vd2Ld58x6F8dZlEyBC1vQwfjJCtc1hJ/TuUkVFK1ogk6AW6i8p9JD7Ic89
+         bWQE3gHGv59et3w9ScTYKfRKRbZJFxJ9A7dx9l+ediaYGo0gtk5n6RwMwkGjEQYO2YKq
+         CTlw0+vvWd8QNT4qIyT6f6cOdJ6jbCZR9AW7FHjyiQX/fLNxA69FpeAiK/C/Fxr+ISNr
+         xzvziU480Sgzlo+2+ryF5JYH3F3Anok5y8/FD7ZvlUyzZOkVyVkJ69IcgltLPAu275QI
+         BrB1YDZejb39iE7bL9udYD8QAWOE9Rddk9K1PqekjFy/KInU0kfcg3XciicdxY++X7KC
+         LfNA==
+X-Gm-Message-State: APjAAAXTpsPpyPWN8QH6XWnovmfYv9WuZXvhx3IsJYET2KhLPbNUsf2D
+        7OjfQ9HGK6Z5sQ/v2+EsJzQQOg==
+X-Google-Smtp-Source: APXvYqxOrLR3mQwFe9lP+xvQ8UaEwRlRzDb4ILg8zRF5qtKWo+EbZYY96fc4AyXGZBZM2GL8Qh83Qw==
+X-Received: by 2002:a17:90a:9905:: with SMTP id b5mr2493871pjp.117.1567014727512;
+        Wed, 28 Aug 2019 10:52:07 -0700 (PDT)
+Received: from ?IPv6:2600:1012:b023:28ef:14c8:9cc:b602:d8f? ([2600:1012:b023:28ef:14c8:9cc:b602:d8f])
+        by smtp.gmail.com with ESMTPSA id x10sm2728615pjo.4.2019.08.28.10.52.06
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 28 Aug 2019 10:52:06 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH v2] riscv: add support for SECCOMP and SECCOMP_FILTER
+From:   Andy Lutomirski <luto@amacapital.net>
+X-Mailer: iPhone Mail (16G77)
+In-Reply-To: <201908251451.73C6812E8@keescook>
+Date:   Wed, 28 Aug 2019 10:52:05 -0700
+Cc:     David Abdurachmanov <david.abdurachmanov@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@sifive.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Oleg Nesterov <oleg@redhat.com>,
-        Andy Lutomirski <luto@amacapital.net>,
         Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -74,32 +81,31 @@ Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, me@carlosedp.com
-Subject: Re: [PATCH v2] riscv: add support for SECCOMP and SECCOMP_FILTER
-Message-ID: <201908251451.73C6812E8@keescook>
-References: <20190822205533.4877-1-david.abdurachmanov@sifive.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190822205533.4877-1-david.abdurachmanov@sifive.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <419CB0D1-E51C-49D5-9745-7771C863462F@amacapital.net>
+References: <20190822205533.4877-1-david.abdurachmanov@sifive.com> <201908251451.73C6812E8@keescook>
+To:     Kees Cook <keescook@chromium.org>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Aug 22, 2019 at 01:55:22PM -0700, David Abdurachmanov wrote:
-> This patch was extensively tested on Fedora/RISCV (applied by default on
-> top of 5.2-rc7 kernel for <2 months). The patch was also tested with 5.3-rc
-> on QEMU and SiFive Unleashed board.
 
-Oops, I see the mention of QEMU here. Where's the best place to find
-instructions on creating a qemu riscv image/environment?
 
-> There is one failing kernel selftest: global.user_notification_signal
+> On Aug 25, 2019, at 2:59 PM, Kees Cook <keescook@chromium.org> wrote:
+>=20
+>> On Thu, Aug 22, 2019 at 01:55:22PM -0700, David Abdurachmanov wrote:
+>> This patch was extensively tested on Fedora/RISCV (applied by default on
+>> top of 5.2-rc7 kernel for <2 months). The patch was also tested with 5.3-=
+rc
+>> on QEMU and SiFive Unleashed board.
+>=20
+> Oops, I see the mention of QEMU here. Where's the best place to find
+> instructions on creating a qemu riscv image/environment?
 
-This test has been fragile (and is not arch-specific), so as long as
-everything else is passing, I would call this patch ready to go. :)
+I don=E2=80=99t suppose one of you riscv folks would like to contribute risc=
+v support to virtme?  virtme-run =E2=80=94arch=3Driscv would be quite nice, a=
+nd the total patch should be just a couple lines.  Unfortunately, it helps a=
+ lot to understand the subtleties of booting the architecture to write those=
+ couple lines :)
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
--- 
-Kees Cook
