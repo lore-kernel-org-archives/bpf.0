@@ -7,57 +7,57 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D133FC3A5A6
-	for <bpf@archiver.kernel.org>; Wed, 28 Aug 2019 07:23:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57118C3A5A1
+	for <bpf@archiver.kernel.org>; Wed, 28 Aug 2019 07:23:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A9CE92173E
-	for <bpf@archiver.kernel.org>; Wed, 28 Aug 2019 07:23:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2E1CA2173E
+	for <bpf@archiver.kernel.org>; Wed, 28 Aug 2019 07:23:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Pq2QeT0J"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="CY34KRJQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726561AbfH1HXL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Aug 2019 03:23:11 -0400
-Received: from mail-lf1-f50.google.com ([209.85.167.50]:39445 "EHLO
-        mail-lf1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726530AbfH1HXH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Aug 2019 03:23:07 -0400
-Received: by mail-lf1-f50.google.com with SMTP id l11so1238159lfk.6
-        for <bpf@vger.kernel.org>; Wed, 28 Aug 2019 00:23:06 -0700 (PDT)
+        id S1726395AbfH1HXO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Aug 2019 03:23:14 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:40067 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726583AbfH1HXN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Aug 2019 03:23:13 -0400
+Received: by mail-lf1-f68.google.com with SMTP id u29so1230193lfk.7
+        for <bpf@vger.kernel.org>; Wed, 28 Aug 2019 00:23:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ChrDtz59PnCX+6+r9UCdXvbVLOtObm7QD6/Fb8mBLd8=;
-        b=Pq2QeT0JSwflfDyfGw+IpbCkdMftwlMx9FkXMud1cXD7nUTTk/UhYnXygF7reAPVqz
-         RP6OBw+CaT2DDQkpnxoA4pySZjW4BGJAZpQVm1NGz1MMablRgnl1CJ1Z5N+xslqqBi0W
-         Yrqgk+snPp0iqhvVo05cYTtH4GYqtLal5Olfc=
+        bh=xgrCk7yvwW4trCdUCW/zs7DHG7RiYoZiMv11DkUjyPY=;
+        b=CY34KRJQleGuq9nuA1YAqUn8YS3HTbEn1q0twwhIGS9StLWMQAlJxzcVct2vWV3XI6
+         GoFCz4YLy9TD8HxLRQ9ponUSE746YtDLvfsQ4QzpSoa91rGgTtT3qGGX8RQdb2IQdDZi
+         7d3vtPqxCBEWoEg8hK8r4N2ooxEYs62JesMy8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ChrDtz59PnCX+6+r9UCdXvbVLOtObm7QD6/Fb8mBLd8=;
-        b=hXDJcKJBIUGGmWXtju4EwgHzsoQhhUdEiQPiwu2OlDVRAPjlhxvj2I7tgaoVwLcZMP
-         lg5+N0hpM2xId+BE3xE20bqk5TZnVMZZdYXWIRwP4HgZjVdPbJnvNVf9hgHH5oQ/736q
-         HBehKafuck98+XfGJJ28YY8av0INcUUl5zf8kPrqPJRsv+NgMIcBL03IAtrgjkMooane
-         nA//vPS3/Bq/1UMrZK8qsFmI5T/6pHTKSrJvnTqHjxsT5yDSXHnxRQPwgkAXbkPFwe44
-         fZit0+YWSro1KTwVkYjcl/NJna6z9uG3BJIv8ljYdWFISCMNNkmt34LUG9tO2ibi7DCP
-         iTqA==
-X-Gm-Message-State: APjAAAWYlqDmrJVMA0aafXRiDTrLUGlyqrqDx2Huqo71PD1XNALMqd4k
-        NAr/P8cLfdwMPL/fqkby3Lles4oYqHFWEg==
-X-Google-Smtp-Source: APXvYqzxJ3Mhwm/IPq1UDw4LsLtnUR8CKfKfH4WkwC8YVqnuos4IDuKZE0JITkZea8gPXZHVeep7/A==
-X-Received: by 2002:a19:6b09:: with SMTP id d9mr1653999lfa.8.1566976985078;
-        Wed, 28 Aug 2019 00:23:05 -0700 (PDT)
+        bh=xgrCk7yvwW4trCdUCW/zs7DHG7RiYoZiMv11DkUjyPY=;
+        b=CNRpjCG1eDhxj4VjPsBhgRGA3rG6v7GBbqDAzzptdSSeErqk1IPJ7DkwjpelcMRp8G
+         UkQepKdceFvzY+ArsQGLb3iioIO9+oj/2WPxl4xqUYy9xebBx5udfjWX+7wl2TyMfZ23
+         Z9u1cN88nCUF+XlSTNp8RWbg2oxvi6JccoGl8TgmYZpRdNtoeEjZ0aG231KlIAReODTs
+         IDYgqg60IKVTmmi1is7QjomMKlijETVgSh/zdFgiB/FiTmexrTGX2xd8QVIyJ2DxV18h
+         Cvh/UWdJGYDzx7fVdZb5ZkfhxQqoMtHu5Q7OCUOiwujUQHhyxsUZtzklo3dJEMtw0UyB
+         l4iw==
+X-Gm-Message-State: APjAAAW6tSuxcdSPbPuLH8EbxNTeTPx6EbdwQLW4ahEAWWgEgaE9CnZP
+        bi72b6kjY4qd6OBwcN5y3BuzIYCOtg8Cvg==
+X-Google-Smtp-Source: APXvYqyBX2F/tdBVnKxaVnZMkDjWIB0d0VTIsmFxa//brkhx8eda4TM8CK9LaEGkmf2RxMZ+K1RyJQ==
+X-Received: by 2002:ac2:5637:: with SMTP id b23mr1729315lff.186.1566976991158;
+        Wed, 28 Aug 2019 00:23:11 -0700 (PDT)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id w26sm590039lfk.57.2019.08.28.00.23.04
+        by smtp.gmail.com with ESMTPSA id j3sm593169lfp.34.2019.08.28.00.23.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2019 00:23:04 -0700 (PDT)
+        Wed, 28 Aug 2019 00:23:10 -0700 (PDT)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
         Marek Majkowski <marek@cloudflare.com>
-Subject: [RFCv2 bpf-next 07/12] inet6: Run inet_lookup bpf program on socket lookup
-Date:   Wed, 28 Aug 2019 09:22:45 +0200
-Message-Id: <20190828072250.29828-8-jakub@cloudflare.com>
+Subject: [RFCv2 bpf-next 10/12] bpf: Sync linux/bpf.h to tools/
+Date:   Wed, 28 Aug 2019 09:22:48 +0200
+Message-Id: <20190828072250.29828-11-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190828072250.29828-1-jakub@cloudflare.com>
 References: <20190828072250.29828-1-jakub@cloudflare.com>
@@ -68,64 +68,112 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Following the ipv4 changes, run a BPF program attached to netns in context
-of which we're doing the socket lookup so that it can redirect the skb to a
-socket of its choice. The program runs before the listening socket lookup.
+Newly added program, context type and helper is used by tests in a
+subsequent patch. Synchronize the header file.
 
-Suggested-by: Marek Majkowski <marek@cloudflare.com>
 Reviewed-by: Lorenz Bauer <lmb@cloudflare.com>
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- include/net/inet6_hashtables.h | 19 +++++++++++++++++++
- net/ipv6/inet6_hashtables.c    |  5 +++++
- 2 files changed, 24 insertions(+)
+ tools/include/uapi/linux/bpf.h | 58 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 57 insertions(+), 1 deletion(-)
 
-diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
-index fe96bf247aac..c2393d148d8d 100644
---- a/include/net/inet6_hashtables.h
-+++ b/include/net/inet6_hashtables.h
-@@ -104,6 +104,25 @@ struct sock *inet6_lookup(struct net *net, struct inet_hashinfo *hashinfo,
- 			  const int dif);
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index b5889257cc33..58ee3d24a430 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -173,6 +173,7 @@ enum bpf_prog_type {
+ 	BPF_PROG_TYPE_CGROUP_SYSCTL,
+ 	BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE,
+ 	BPF_PROG_TYPE_CGROUP_SOCKOPT,
++	BPF_PROG_TYPE_INET_LOOKUP,
+ };
  
- int inet6_hash(struct sock *sk);
-+
-+static inline struct sock *inet6_lookup_run_bpf(struct net *net, u8 proto,
-+						const struct in6_addr *saddr,
-+						__be16 sport,
-+						const struct in6_addr *daddr,
-+						unsigned short hnum)
-+{
-+	struct bpf_inet_lookup_kern ctx = {
-+		.family		= AF_INET6,
-+		.protocol	= proto,
-+		.saddr6		= *saddr,
-+		.sport		= sport,
-+		.daddr6		= *daddr,
-+		.hnum		= hnum,
-+	};
-+
-+	return __inet_lookup_run_bpf(net, &ctx);
-+}
-+
- #endif /* IS_ENABLED(CONFIG_IPV6) */
+ enum bpf_attach_type {
+@@ -199,6 +200,7 @@ enum bpf_attach_type {
+ 	BPF_CGROUP_UDP6_RECVMSG,
+ 	BPF_CGROUP_GETSOCKOPT,
+ 	BPF_CGROUP_SETSOCKOPT,
++	BPF_INET_LOOKUP,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
  
- #define INET6_MATCH(__sk, __net, __saddr, __daddr, __ports, __dif, __sdif) \
-diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
-index cf60fae9533b..40dd0a3d80ed 100644
---- a/net/ipv6/inet6_hashtables.c
-+++ b/net/ipv6/inet6_hashtables.c
-@@ -157,6 +157,11 @@ struct sock *inet6_lookup_listener(struct net *net,
- 	struct sock *result = NULL;
- 	unsigned int hash2;
+@@ -2747,6 +2749,33 @@ union bpf_attr {
+  *		**-EOPNOTSUPP** kernel configuration does not enable SYN cookies
+  *
+  *		**-EPROTONOSUPPORT** IP packet version is not 4 or 6
++ *
++ * int bpf_redirect_lookup(struct bpf_inet_lookup_kern *ctx, struct bpf_map *sockarray, void *key, u64 flags)
++ *	Description
++ *		Select a socket referenced by *map* (of type
++ *		**BPF_MAP_TYPE_REUSEPORT_SOCKARRAY**) at index *key* to use as a
++ *		result of listening (TCP) or bound (UDP) socket lookup.
++ *
++ *		The IP family and L4 protocol in *ctx* object, populated from
++ *		the packet that triggered the lookup, must match the selected
++ *		socket's family and protocol. IP6_V6ONLY socket option is
++ *		honored.
++ *
++ *		To be used by **BPF_INET_LOOKUP** programs attached to the
++ *		network namespace. Program needs to return **BPF_REDIRECT**, the
++ *		helper's success return value, for the selected socket to be
++ *		actually used.
++ *
++ *	Return
++ *		**BPF_REDIRECT** on success, if the socket at index *key* was selected.
++ *
++ *		**-EINVAL** if *flags* are invalid (not zero).
++ *
++ *		**-ENOENT** if there is no socket at index *key*.
++ *
++ *		**-EPROTOTYPE** if *ctx->protocol* does not match the socket protocol.
++ *
++ *		**-EAFNOSUPPORT** if socket does not accept IP version in *ctx->family*.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -2859,7 +2888,8 @@ union bpf_attr {
+ 	FN(sk_storage_get),		\
+ 	FN(sk_storage_delete),		\
+ 	FN(send_signal),		\
+-	FN(tcp_gen_syncookie),
++	FN(tcp_gen_syncookie),		\
++	FN(redirect_lookup),
  
-+	result = inet6_lookup_run_bpf(net, hashinfo->protocol,
-+				      saddr, sport, daddr, hnum);
-+	if (result)
-+		goto done;
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+  * function eBPF program intends to call
+@@ -3116,6 +3146,32 @@ struct bpf_tcp_sock {
+ 	__u32 icsk_retransmits;	/* Number of unrecovered [RTO] timeouts */
+ };
+ 
++/* User accessible data for inet_lookup programs.
++ * New fields must be added at the end.
++ */
++struct bpf_inet_lookup {
++	__u32 family;		/* AF_INET, AF_INET6 */
++	__u32 protocol;		/* IPROTO_TCP, IPPROTO_UDP */
++	__u32 remote_ip4;	/* Allows 1,2,4-byte read but no write.
++				 * Stored in network byte order.
++				 */
++	__u32 local_ip4;	/* Allows 1,2,4-byte read and 4-byte write.
++				 * Stored in network byte order.
++				 */
++	__u32 remote_ip6[4];	/* Allows 1,2,4-byte read but no write.
++				 * Stored in network byte order.
++				 */
++	__u32 local_ip6[4];	/* Allows 1,2,4-byte read and 4-byte write.
++				 * Stored in network byte order.
++				 */
++	__u32 remote_port;	/* Allows 4-byte read but no write.
++				 * Stored in network byte order.
++				 */
++	__u32 local_port;	/* Allows 4-byte read and write.
++				 * Stored in host byte order.
++				 */
++};
 +
- 	hash2 = ipv6_portaddr_hash(net, daddr, hnum);
- 	ilb2 = inet_lhash2_bucket(hashinfo, hash2);
- 
+ struct bpf_sock_tuple {
+ 	union {
+ 		struct {
 -- 
 2.20.1
 
