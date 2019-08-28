@@ -2,62 +2,63 @@ Return-Path: <SRS0=TyRX=WY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AF83C3A5A4
-	for <bpf@archiver.kernel.org>; Wed, 28 Aug 2019 07:23:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C261C3A5A6
+	for <bpf@archiver.kernel.org>; Wed, 28 Aug 2019 07:23:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 188402189D
+	by mail.kernel.org (Postfix) with ESMTP id E15CC2189D
 	for <bpf@archiver.kernel.org>; Wed, 28 Aug 2019 07:23:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="l+WnAGE1"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="avJG6Yi9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726512AbfH1HXE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Aug 2019 03:23:04 -0400
-Received: from mail-lj1-f173.google.com ([209.85.208.173]:41932 "EHLO
-        mail-lj1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726439AbfH1HXE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Aug 2019 03:23:04 -0400
-Received: by mail-lj1-f173.google.com with SMTP id m24so1584557ljg.8
-        for <bpf@vger.kernel.org>; Wed, 28 Aug 2019 00:23:02 -0700 (PDT)
+        id S1726430AbfH1HXB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Aug 2019 03:23:01 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:34806 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726322AbfH1HXB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Aug 2019 03:23:01 -0400
+Received: by mail-lj1-f194.google.com with SMTP id x18so1625098ljh.1
+        for <bpf@vger.kernel.org>; Wed, 28 Aug 2019 00:22:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=xsPtJmsxYP/q+K+pQ7bUfVJa1MUAKbGniE3ipGc6mgk=;
-        b=l+WnAGE1hfSY+7fRBLzVDFED63gfkGM5sfb0V9ZpawuqStb9bEMFdsvofGcQVBB2RH
-         IK6t4XIlAHBfU8A3mn3SSss4AU707yxIpCozPae3Z/en3n5YzUvT1QC9TyKtLCkkT2Wi
-         zNrggEksDfUXOksPmwxBPqolbV6w+nxXXleME=
+        bh=59F0XTFJ9u/clKrNXvOGNB2BB2yJWqdqNbYTvvq+2FQ=;
+        b=avJG6Yi9BMBUeH4I94+HFGHGpH1E14QZGdmQPyckMF+8oemMIAv1ITVhOFKiMp/Fms
+         eh9V3KylhtIPI96Zr/oYm6VUDHW1639eJwoIqx2C0grAtElT7/WbyDiqUbADFhEE/wa7
+         LHd4CifAnzCcApMR4femPILvY79Fvp4cWwsDY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xsPtJmsxYP/q+K+pQ7bUfVJa1MUAKbGniE3ipGc6mgk=;
-        b=umnhCBqIp5/DVWh0xEzM5oo1gZS6KZQ3T1gX7LDHIayd6mMDHQTdl2nYkbzM8lsnC2
-         B/q61GJlgeA8TUklZIc2XbHfaJUTLIqVIBhZlZsGCcq5NuLOstNBc444FQ7TPe9Ms8O+
-         0PQ11XvLwXWwAFyd1ZB5o8/UGrOkHSNBru5ydddCM/QYZjxe/or3K6Flmi0OfrUwKkVg
-         Lqa+tL3glXMP1GOxtEaZhYoxZWiM1vIue7D/wAAkWR/rpcuWqAWzgXvk2k//k5ZBCxFo
-         cPn4QqsX2IyweUFu+P0ZLdMQGv7OjqK1H/ZD7NGPCeKQmHttmkOWimdB5v4/i8s959Hz
-         sLXw==
-X-Gm-Message-State: APjAAAVuyYvju0HPlke/PFacCBMupLCcytyb0vKWG6Y6iptr/Rie79NT
-        ux7QdPxnM7gr8Xl+nDNK/jZoeounKw/GUA==
-X-Google-Smtp-Source: APXvYqxpN1OB5c5SGEUPvORJyLtQ4ib2MNukaCmr+HD+aTeoEcNF8KWfj7l2B0CrKw5AwetnUmygtw==
-X-Received: by 2002:a2e:9b47:: with SMTP id o7mr1240756ljj.35.1566976981476;
-        Wed, 28 Aug 2019 00:23:01 -0700 (PDT)
+        bh=59F0XTFJ9u/clKrNXvOGNB2BB2yJWqdqNbYTvvq+2FQ=;
+        b=XkX6BUD33nCIQ8aHm9usXVRf9kMch8s7QniTovqC1RKtriK6tWQBetADgzKSIcVCx5
+         5eSt/dlQlLyib1+fBn77VI4jG+HEBpjI65+qGtJ1ZVj2MM8lM8UQzKfJw4bh4RDUHYPN
+         kkDlxmxYKaY2s6BMG5u6whlY69rQKPSidSHsavHvix6sL1uo5WZrKjdLaofXjbzXi16A
+         m+g45edHd7XMCz39GLEpYRzpapjB81eiQipH2ViHFNVL5z1ncSTD6M5CxHIP1sPC7EW4
+         2+EbRh07MGz8Aa10DgQnxDgnQ6dZTCLQCq1QmUQqBZgtv63xyRUppnrLRlDHIZwyN0R4
+         f0uw==
+X-Gm-Message-State: APjAAAWQpHk85UV25pLCp7BFbR5rI9EH5cawP9kJ6V8/0iVa/W+q39g2
+        uo8S8tJBYagEzVYjTn/DvRE3eXfEOlm8ag==
+X-Google-Smtp-Source: APXvYqz/axBKab5GS3/fSKGhz1S7MvXSDR6jz6UneEL8PxXqv5rlH58IHNbqUR/wAdZEcu4IPEkmdQ==
+X-Received: by 2002:a2e:80c2:: with SMTP id r2mr1247933ljg.44.1566976977890;
+        Wed, 28 Aug 2019 00:22:57 -0700 (PDT)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id t3sm571937lfd.92.2019.08.28.00.23.00
+        by smtp.gmail.com with ESMTPSA id z19sm435710ljj.50.2019.08.28.00.22.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2019 00:23:01 -0700 (PDT)
+        Wed, 28 Aug 2019 00:22:57 -0700 (PDT)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
         Marek Majkowski <marek@cloudflare.com>
-Subject: [RFCv2 bpf-next 05/12] udp: Store layer 4 protocol in udp_table
-Date:   Wed, 28 Aug 2019 09:22:43 +0200
-Message-Id: <20190828072250.29828-6-jakub@cloudflare.com>
+Subject: [RFCv2 bpf-next 03/12] bpf: Add verifier tests for inet_lookup context access
+Date:   Wed, 28 Aug 2019 09:22:41 +0200
+Message-Id: <20190828072250.29828-4-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190828072250.29828-1-jakub@cloudflare.com>
 References: <20190828072250.29828-1-jakub@cloudflare.com>
@@ -68,236 +69,717 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Because UDP and UDP-Lite share code we have to pass the L4 protocol
-identifier alongside the socket table to down call sites where
-distinguishing between the two is needed.
-
-There is currently only one such call site, which by itself is not reason
-enough for the change.
-
-However, subsequent patches will also make use the new udp_table field
-inside the socket lookup routine to enforce that the BPF program selects
-only sockets with matching protocol.
+Exercise verifier access checks for bpf_inet_lookup context object fields.
 
 Reviewed-by: Lorenz Bauer <lmb@cloudflare.com>
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- include/net/udp.h   | 10 ++++++----
- net/ipv4/udp.c      | 15 +++++++--------
- net/ipv4/udp_impl.h |  2 +-
- net/ipv4/udplite.c  |  4 ++--
- net/ipv6/udp.c      | 12 ++++++------
- net/ipv6/udp_impl.h |  2 +-
- net/ipv6/udplite.c  |  2 +-
- 7 files changed, 24 insertions(+), 23 deletions(-)
+ .../selftests/bpf/verifier/ctx_inet_lookup.c  | 696 ++++++++++++++++++
+ 1 file changed, 696 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/verifier/ctx_inet_lookup.c
 
-diff --git a/include/net/udp.h b/include/net/udp.h
-index 79d141d2103b..97778976c5ec 100644
---- a/include/net/udp.h
-+++ b/include/net/udp.h
-@@ -63,16 +63,18 @@ struct udp_hslot {
- /**
-  *	struct udp_table - UDP table
-  *
-- *	@hash:	hash table, sockets are hashed on (local port)
-- *	@hash2:	hash table, sockets are hashed on (local port, local address)
-- *	@mask:	number of slots in hash tables, minus 1
-- *	@log:	log2(number of slots in hash table)
-+ *	@hash:		hash table, sockets are hashed on (local port)
-+ *	@hash2:		hash table, sockets are hashed on (local port, local address)
-+ *	@mask:		number of slots in hash tables, minus 1
-+ *	@log:		log2(number of slots in hash table)
-+ *	@protocol:	layer 4 protocol of the stored sockets
-  */
- struct udp_table {
- 	struct udp_hslot	*hash;
- 	struct udp_hslot	*hash2;
- 	unsigned int		mask;
- 	unsigned int		log;
-+	int			protocol;
- };
- extern struct udp_table udp_table;
- void udp_table_init(struct udp_table *, const char *);
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index d88821c794fb..9fffe9e9eec6 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -113,7 +113,7 @@
- #include <net/addrconf.h>
- #include <net/udp_tunnel.h>
- 
--struct udp_table udp_table __read_mostly;
-+struct udp_table udp_table __read_mostly = { .protocol = IPPROTO_UDP };
- EXPORT_SYMBOL(udp_table);
- 
- long sysctl_udp_mem[3] __read_mostly;
-@@ -2106,8 +2106,7 @@ EXPORT_SYMBOL(udp_sk_rx_dst_set);
- static int __udp4_lib_mcast_deliver(struct net *net, struct sk_buff *skb,
- 				    struct udphdr  *uh,
- 				    __be32 saddr, __be32 daddr,
--				    struct udp_table *udptable,
--				    int proto)
-+				    struct udp_table *udptable)
- {
- 	struct sock *sk, *first = NULL;
- 	unsigned short hnum = ntohs(uh->dest);
-@@ -2163,7 +2162,7 @@ static int __udp4_lib_mcast_deliver(struct net *net, struct sk_buff *skb,
- 	} else {
- 		kfree_skb(skb);
- 		__UDP_INC_STATS(net, UDP_MIB_IGNOREDMULTI,
--				proto == IPPROTO_UDPLITE);
-+				udptable->protocol == IPPROTO_UDPLITE);
- 	}
- 	return 0;
- }
-@@ -2240,8 +2239,7 @@ static int udp_unicast_rcv_skb(struct sock *sk, struct sk_buff *skb,
-  *	All we need to do is get the socket, and then do a checksum.
-  */
- 
--int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
--		   int proto)
-+int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable)
- {
- 	struct sock *sk;
- 	struct udphdr *uh;
-@@ -2249,6 +2247,7 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
- 	struct rtable *rt = skb_rtable(skb);
- 	__be32 saddr, daddr;
- 	struct net *net = dev_net(skb->dev);
-+	int proto = udptable->protocol;
- 
- 	/*
- 	 *  Validate the packet.
-@@ -2289,7 +2288,7 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
- 
- 	if (rt->rt_flags & (RTCF_BROADCAST|RTCF_MULTICAST))
- 		return __udp4_lib_mcast_deliver(net, skb, uh,
--						saddr, daddr, udptable, proto);
-+						saddr, daddr, udptable);
- 
- 	sk = __udp4_lib_lookup_skb(skb, uh->source, uh->dest, udptable);
- 	if (sk)
-@@ -2463,7 +2462,7 @@ int udp_v4_early_demux(struct sk_buff *skb)
- 
- int udp_rcv(struct sk_buff *skb)
- {
--	return __udp4_lib_rcv(skb, &udp_table, IPPROTO_UDP);
-+	return __udp4_lib_rcv(skb, &udp_table);
- }
- 
- void udp_destroy_sock(struct sock *sk)
-diff --git a/net/ipv4/udp_impl.h b/net/ipv4/udp_impl.h
-index 6b2fa77eeb1c..7013535f9084 100644
---- a/net/ipv4/udp_impl.h
-+++ b/net/ipv4/udp_impl.h
-@@ -6,7 +6,7 @@
- #include <net/protocol.h>
- #include <net/inet_common.h>
- 
--int __udp4_lib_rcv(struct sk_buff *, struct udp_table *, int);
-+int __udp4_lib_rcv(struct sk_buff *, struct udp_table *);
- int __udp4_lib_err(struct sk_buff *, u32, struct udp_table *);
- 
- int udp_v4_get_port(struct sock *sk, unsigned short snum);
-diff --git a/net/ipv4/udplite.c b/net/ipv4/udplite.c
-index 5936d66d1ce2..4e4e85de95b2 100644
---- a/net/ipv4/udplite.c
-+++ b/net/ipv4/udplite.c
-@@ -14,12 +14,12 @@
- #include <linux/proc_fs.h>
- #include "udp_impl.h"
- 
--struct udp_table 	udplite_table __read_mostly;
-+struct udp_table udplite_table __read_mostly = { .protocol = IPPROTO_UDPLITE };
- EXPORT_SYMBOL(udplite_table);
- 
- static int udplite_rcv(struct sk_buff *skb)
- {
--	return __udp4_lib_rcv(skb, &udplite_table, IPPROTO_UDPLITE);
-+	return __udp4_lib_rcv(skb, &udplite_table);
- }
- 
- static int udplite_err(struct sk_buff *skb, u32 info)
-diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-index 827fe7385078..16ef2303bd8d 100644
---- a/net/ipv6/udp.c
-+++ b/net/ipv6/udp.c
-@@ -741,7 +741,7 @@ static void udp6_csum_zero_error(struct sk_buff *skb)
-  */
- static int __udp6_lib_mcast_deliver(struct net *net, struct sk_buff *skb,
- 		const struct in6_addr *saddr, const struct in6_addr *daddr,
--		struct udp_table *udptable, int proto)
-+		struct udp_table *udptable)
- {
- 	struct sock *sk, *first = NULL;
- 	const struct udphdr *uh = udp_hdr(skb);
-@@ -803,7 +803,7 @@ static int __udp6_lib_mcast_deliver(struct net *net, struct sk_buff *skb,
- 	} else {
- 		kfree_skb(skb);
- 		__UDP6_INC_STATS(net, UDP_MIB_IGNOREDMULTI,
--				 proto == IPPROTO_UDPLITE);
-+				 udptable->protocol == IPPROTO_UDPLITE);
- 	}
- 	return 0;
- }
-@@ -836,11 +836,11 @@ static int udp6_unicast_rcv_skb(struct sock *sk, struct sk_buff *skb,
- 	return 0;
- }
- 
--int __udp6_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
--		   int proto)
-+int __udp6_lib_rcv(struct sk_buff *skb, struct udp_table *udptable)
- {
- 	const struct in6_addr *saddr, *daddr;
- 	struct net *net = dev_net(skb->dev);
-+	int proto = udptable->protocol;
- 	struct udphdr *uh;
- 	struct sock *sk;
- 	u32 ulen = 0;
-@@ -902,7 +902,7 @@ int __udp6_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
- 	 */
- 	if (ipv6_addr_is_multicast(daddr))
- 		return __udp6_lib_mcast_deliver(net, skb,
--				saddr, daddr, udptable, proto);
-+				saddr, daddr, udptable);
- 
- 	/* Unicast */
- 	sk = __udp6_lib_lookup_skb(skb, uh->source, uh->dest, udptable);
-@@ -1011,7 +1011,7 @@ INDIRECT_CALLABLE_SCOPE void udp_v6_early_demux(struct sk_buff *skb)
- 
- INDIRECT_CALLABLE_SCOPE int udpv6_rcv(struct sk_buff *skb)
- {
--	return __udp6_lib_rcv(skb, &udp_table, IPPROTO_UDP);
-+	return __udp6_lib_rcv(skb, &udp_table);
- }
- 
- /*
-diff --git a/net/ipv6/udp_impl.h b/net/ipv6/udp_impl.h
-index 20e324b6f358..acd5a942c633 100644
---- a/net/ipv6/udp_impl.h
-+++ b/net/ipv6/udp_impl.h
-@@ -8,7 +8,7 @@
- #include <net/inet_common.h>
- #include <net/transp_v6.h>
- 
--int __udp6_lib_rcv(struct sk_buff *, struct udp_table *, int);
-+int __udp6_lib_rcv(struct sk_buff *, struct udp_table *);
- int __udp6_lib_err(struct sk_buff *, struct inet6_skb_parm *, u8, u8, int,
- 		   __be32, struct udp_table *);
- 
-diff --git a/net/ipv6/udplite.c b/net/ipv6/udplite.c
-index bf7a7acd39b1..f442ed595e6f 100644
---- a/net/ipv6/udplite.c
-+++ b/net/ipv6/udplite.c
-@@ -14,7 +14,7 @@
- 
- static int udplitev6_rcv(struct sk_buff *skb)
- {
--	return __udp6_lib_rcv(skb, &udplite_table, IPPROTO_UDPLITE);
-+	return __udp6_lib_rcv(skb, &udplite_table);
- }
- 
- static int udplitev6_err(struct sk_buff *skb,
+diff --git a/tools/testing/selftests/bpf/verifier/ctx_inet_lookup.c b/tools/testing/selftests/bpf/verifier/ctx_inet_lookup.c
+new file mode 100644
+index 000000000000..665984d8179d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/verifier/ctx_inet_lookup.c
+@@ -0,0 +1,696 @@
++{
++	"valid 1,2,4-byte read bpf_inet_lookup remote_ip4",
++	.insns = {
++		/* 4-byte read */
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, remote_ip4)),
++		/* 2-byte read */
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, remote_ip4)),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, remote_ip4) + 2),
++		/* 1-byte read */
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, remote_ip4)),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, remote_ip4) + 3),
++		BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 8-byte read bpf_inet_lookup remote_ip4",
++	.insns = {
++		/* 8-byte read */
++		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, remote_ip4)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 8-byte write bpf_inet_lookup remote_ip4",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0x7f000001U),
++		/* 4-byte write */
++		BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, remote_ip4)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 4-byte write bpf_inet_lookup remote_ip4",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0x7f000001U),
++		/* 4-byte write */
++		BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, remote_ip4)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 2-byte write bpf_inet_lookup remote_ip4",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0x7f000001U),
++		/* 2-byte write */
++		BPF_STX_MEM(BPF_H, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, remote_ip4)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 1-byte write bpf_inet_lookup remote_ip4",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0x7f000001U),
++		/* 1-byte write */
++		BPF_STX_MEM(BPF_B, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, remote_ip4)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"valid 1,2,4-byte read bpf_inet_lookup local_ip4",
++	.insns = {
++		/* 4-byte read */
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, local_ip4)),
++		/* 2-byte read */
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, local_ip4)),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, local_ip4) + 2),
++		/* 1-byte read */
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, local_ip4)),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, local_ip4) + 3),
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 8-byte read bpf_inet_lookup local_ip4",
++	.insns = {
++		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, local_ip4)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 8-byte write bpf_inet_lookup local_ip4",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0x7f000001U),
++		BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, local_ip4)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 4-byte write bpf_inet_lookup local_ip4",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0x7f000001U),
++		BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, local_ip4)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 2-byte write bpf_inet_lookup local_ip4",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0x7f000001U),
++		BPF_STX_MEM(BPF_H, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, local_ip4)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 1-byte write bpf_inet_lookup local_ip4",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0x7f000001U),
++		BPF_STX_MEM(BPF_B, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, local_ip4)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"valid 1,2,4-byte read bpf_inet_lookup remote_ip6",
++	.insns = {
++		/* 4-byte read */
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, remote_ip6[0])),
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, remote_ip6[3])),
++		/* 2-byte read */
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, remote_ip6[0])),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup,
++				     remote_ip6[3]) + 2),
++		/* 1-byte read */
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, remote_ip6[0])),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup,
++				     remote_ip6[3]) + 3),
++		BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 8-byte read bpf_inet_lookup remote_ip6",
++	.insns = {
++		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, remote_ip6[0])),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 8-byte write bpf_inet_lookup remote_ip6",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0x00000001U),
++		BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, remote_ip6[0])),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 4-byte write bpf_inet_lookup remote_ip6",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0x00000001U),
++		BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, remote_ip6[0])),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 2-byte write bpf_inet_lookup remote_ip6",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0x00000001U),
++		BPF_STX_MEM(BPF_H, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, remote_ip6[0])),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 1-byte write bpf_inet_lookup remote_ip6",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0x00000001U),
++		BPF_STX_MEM(BPF_B, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, remote_ip6[0])),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"valid 1,2,4-byte read bpf_inet_lookup local_ip6",
++	.insns = {
++		/* 4-byte read */
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, local_ip6[0])),
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, local_ip6[3])),
++		/* 2-byte read */
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, local_ip6[0])),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, local_ip6[3]) + 2),
++		/* 1-byte read */
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, local_ip6[0])),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, local_ip6[3]) + 3),
++		BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 8-byte read bpf_inet_lookup local_ip6",
++	.insns = {
++		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, local_ip6[0])),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 8-byte write bpf_inet_lookup local_ip6",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0x00000001U),
++		BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, local_ip6[0])),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 4-byte write bpf_inet_lookup local_ip6",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0x00000001U),
++		BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, local_ip6[0])),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 2-byte write bpf_inet_lookup local_ip6",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0x00000001U),
++		BPF_STX_MEM(BPF_H, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, local_ip6[0])),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 1-byte write bpf_inet_lookup local_ip6",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0x00000001U),
++		BPF_STX_MEM(BPF_B, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, local_ip6[0])),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"valid 4-byte read bpf_inet_lookup remote_port",
++	.insns = {
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, remote_port)),
++		BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 8-byte read bpf_inet_lookup remote_port",
++	.insns = {
++		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, remote_port)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 2-byte read bpf_inet_lookup remote_port",
++	.insns = {
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, remote_port)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 1-byte read bpf_inet_lookup remote_port",
++	.insns = {
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, remote_port)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 8-byte write bpf_inet_lookup remote_port",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 1234),
++		BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, remote_port)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 4-byte write bpf_inet_lookup remote_port",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 1234),
++		BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, remote_port)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 2-byte write bpf_inet_lookup remote_port",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 1234),
++		BPF_STX_MEM(BPF_H, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, remote_port)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 1-byte write bpf_inet_lookup remote_port",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 1234),
++		BPF_STX_MEM(BPF_B, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, remote_port)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"valid 4-byte read bpf_inet_lookup local_port",
++	.insns = {
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, local_port)),
++		BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 8-byte read bpf_inet_lookup local_port",
++	.insns = {
++		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, local_port)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 2-byte read bpf_inet_lookup local_port",
++	.insns = {
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, local_port)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 1-byte read bpf_inet_lookup local_port",
++	.insns = {
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, local_port)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 8-byte write bpf_inet_lookup local_port",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 1234),
++		BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, local_port)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 4-byte write bpf_inet_lookup local_port",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 1234),
++		BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, local_port)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 2-byte write bpf_inet_lookup local_port",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 1234),
++		BPF_STX_MEM(BPF_H, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, local_port)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 1-byte write bpf_inet_lookup local_port",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 1234),
++		BPF_STX_MEM(BPF_B, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, local_port)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"valid 4-byte read bpf_inet_lookup family",
++	.insns = {
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, family)),
++		BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 8-byte read bpf_inet_lookup family",
++	.insns = {
++		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, family)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 2-byte read bpf_inet_lookup family",
++	.insns = {
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, family)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 1-byte read bpf_inet_lookup family",
++	.insns = {
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, family)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 8-byte write bpf_inet_lookup family",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 1234),
++		BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, family)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 4-byte write bpf_inet_lookup family",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 1234),
++		BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, family)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 2-byte write bpf_inet_lookup family",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 1234),
++		BPF_STX_MEM(BPF_H, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, family)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 1-byte write bpf_inet_lookup family",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 1234),
++		BPF_STX_MEM(BPF_B, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, family)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"valid 4-byte read bpf_inet_lookup protocol",
++	.insns = {
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, protocol)),
++		BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 8-byte read bpf_inet_lookup protocol",
++	.insns = {
++		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, protocol)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 2-byte read bpf_inet_lookup protocol",
++	.insns = {
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, protocol)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 1-byte read bpf_inet_lookup protocol",
++	.insns = {
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_inet_lookup, protocol)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 8-byte write bpf_inet_lookup protocol",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 1234),
++		BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, protocol)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 4-byte write bpf_inet_lookup protocol",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 1234),
++		BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, protocol)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 2-byte write bpf_inet_lookup protocol",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 1234),
++		BPF_STX_MEM(BPF_H, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, protocol)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
++{
++	"invalid 1-byte write bpf_inet_lookup protocol",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 1234),
++		BPF_STX_MEM(BPF_B, BPF_REG_1, BPF_REG_0,
++			    offsetof(struct bpf_inet_lookup, protocol)),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_INET_LOOKUP,
++},
 -- 
 2.20.1
 
