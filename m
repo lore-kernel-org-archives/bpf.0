@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56993C3A5A1
-	for <bpf@archiver.kernel.org>; Wed, 28 Aug 2019 21:04:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB703C3A5A1
+	for <bpf@archiver.kernel.org>; Wed, 28 Aug 2019 21:04:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2AEC12339E
-	for <bpf@archiver.kernel.org>; Wed, 28 Aug 2019 21:04:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AB57C22CF8
+	for <bpf@archiver.kernel.org>; Wed, 28 Aug 2019 21:04:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="jnKHszvc"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="NyDKAhPc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727096AbfH1VEU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Aug 2019 17:04:20 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:5932 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727024AbfH1VET (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 28 Aug 2019 17:04:19 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x7SKxveG025668
-        for <bpf@vger.kernel.org>; Wed, 28 Aug 2019 14:04:18 -0700
+        id S1727109AbfH1VEW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Aug 2019 17:04:22 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:14542 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727097AbfH1VEV (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 28 Aug 2019 17:04:21 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id x7SL2Rit023116
+        for <bpf@vger.kernel.org>; Wed, 28 Aug 2019 14:04:20 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=hGNB+Ir5jkBVB/3Ds+4h1CKVWEctBOogQTO+Yiul1gE=;
- b=jnKHszvcvDzVrXVsbXPLxF2R/HGEatpnvOSWRqrPXKExu327YNeFZrO07Ta9kxzPXTzB
- 84/N4Z83dDnm6iIMy4h88ieqhUmamLVedZ6oNkB+ZZfnUas36ONud6CzJKXBRj4EBiaR
- y7EOUC5uOBl7ABg+DCH4+29+5YDydin70To= 
+ content-type; s=facebook; bh=zevRuexbdAc20lx0nPT3/bJlFv43H54UMmH42cLDnGg=;
+ b=NyDKAhPcAdnbI2bxDkuZ6qYqfsYlbw6VmwepmLdCroX5iTdd1g9HiOp9o4LyoT2rTwFX
+ voqmAdW0zejDBezsCFbpIxs/tEfq1e4ZpCfCt8PLaqtI9NlLbV099k5ATGksNrV/em8n
+ RgMb4G7AOMnqkvWhpIG3rOBVsZCq/JyafWI= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2une6kmtmn-4
+        by m0001303.ppops.net with ESMTP id 2unuwq9r14-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 28 Aug 2019 14:04:18 -0700
+        for <bpf@vger.kernel.org>; Wed, 28 Aug 2019 14:04:19 -0700
 Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
  mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 28 Aug 2019 14:04:13 -0700
+ 15.1.1713.5; Wed, 28 Aug 2019 14:04:19 -0700
 Received: by devvm2868.prn3.facebook.com (Postfix, from userid 125878)
-        id 635D9A25D62C; Wed, 28 Aug 2019 14:04:13 -0700 (PDT)
+        id C24EBA25D697; Wed, 28 Aug 2019 14:04:18 -0700 (PDT)
 Smtp-Origin-Hostprefix: devvm
 From:   Julia Kartseva <hex@fb.com>
 Smtp-Origin-Hostname: devvm2868.prn3.facebook.com
@@ -48,9 +48,9 @@ To:     <rdna@fb.com>, <bpf@vger.kernel.org>, <ast@kernel.org>,
         <kernel-team@fb.com>
 CC:     Julia Kartseva <hex@fb.com>
 Smtp-Origin-Cluster: prn3c11
-Subject: [PATCH bpf-next 06/10] tools/bpf: add libbpf_attach_type_(from|to)_str
-Date:   Wed, 28 Aug 2019 14:03:09 -0700
-Message-ID: <5af82a599a3e886b48e89a47579ad331b7954ee0.1567024943.git.hex@fb.com>
+Subject: [PATCH bpf-next 08/10] selftests/bpf: rename test_section_names to test_section_and_type_names
+Date:   Wed, 28 Aug 2019 14:03:11 -0700
+Message-ID: <d7efef91661f75ab1241b6fd3679b075602187c1.1567024943.git.hex@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1567024943.git.hex@fb.com>
 References: <cover.1567024943.git.hex@fb.com>
@@ -59,10 +59,10 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.70,1.0.8
  definitions=2019-08-28_11:2019-08-28,2019-08-28 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
- impostorscore=0 mlxscore=0 bulkscore=0 malwarescore=0 clxscore=1015
- spamscore=0 phishscore=0 lowpriorityscore=0 mlxlogscore=999 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
+ priorityscore=1501 mlxscore=0 phishscore=0 mlxlogscore=999 impostorscore=0
+ adultscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1906280000 definitions=main-1908280205
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -70,114 +70,799 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Standardize string representation of attach types by putting commonly used
-names to libbpf.
-The attach_type to string mapping is taken from bpftool:
-tools/bpf/bpftool/cgroup.c
-tools/bpf/bpftool/prog.c
+Change the test name after extending it with enum stringification
+helpers.
 
 Signed-off-by: Julia Kartseva <hex@fb.com>
 ---
- tools/lib/bpf/libbpf.c   | 50 ++++++++++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf.h   |  5 ++++
- tools/lib/bpf/libbpf.map |  2 ++
- 3 files changed, 57 insertions(+)
+ tools/testing/selftests/bpf/Makefile          |   2 +-
+ .../bpf/test_section_and_type_names.c         | 378 ++++++++++++++++++
+ .../selftests/bpf/test_section_names.c        | 378 ------------------
+ 3 files changed, 379 insertions(+), 379 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/test_section_and_type_names.c
+ delete mode 100644 tools/testing/selftests/bpf/test_section_names.c
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 9c531256888b..b5b07493655f 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -354,6 +354,32 @@ static const char *const map_type_strs[] = {
- 	[BPF_MAP_TYPE_DEVMAP_HASH] = "devmap_hash"
- };
- 
-+static const char *const attach_type_strs[] = {
-+	[BPF_CGROUP_INET_INGRESS] = "ingress",
-+	[BPF_CGROUP_INET_EGRESS] = "egress",
-+	[BPF_CGROUP_INET_SOCK_CREATE] = "sock_create",
-+	[BPF_CGROUP_SOCK_OPS] = "sock_ops",
-+	[BPF_SK_SKB_STREAM_PARSER] = "stream_parser",
-+	[BPF_SK_SKB_STREAM_VERDICT] = "stream_verdict",
-+	[BPF_CGROUP_DEVICE] = "device",
-+	[BPF_SK_MSG_VERDICT] = "msg_verdict",
-+	[BPF_CGROUP_INET4_BIND] = "bind4",
-+	[BPF_CGROUP_INET6_BIND] = "bind6",
-+	[BPF_CGROUP_INET4_CONNECT] = "connect4",
-+	[BPF_CGROUP_INET6_CONNECT] = "connect6",
-+	[BPF_CGROUP_INET4_POST_BIND] = "post_bind4",
-+	[BPF_CGROUP_INET6_POST_BIND] = "post_bind6",
-+	[BPF_CGROUP_UDP4_SENDMSG] = "sendmsg4",
-+	[BPF_CGROUP_UDP6_SENDMSG] = "sendmsg6",
-+	[BPF_LIRC_MODE2] = "lirc_mode2",
-+	[BPF_FLOW_DISSECTOR] = "flow_dissector",
-+	[BPF_CGROUP_SYSCTL] = "sysctl",
-+	[BPF_CGROUP_UDP4_RECVMSG] = "recvmsg4",
-+	[BPF_CGROUP_UDP6_RECVMSG] = "recvmsg6",
-+	[BPF_CGROUP_GETSOCKOPT] = "getsockopt",
-+	[BPF_CGROUP_SETSOCKOPT] = "setsockopt"
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 1faad0c3c3c9..8212a6240297 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -26,7 +26,7 @@ LDLIBS += -lcap -lelf -lrt -lpthread
+ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test_progs \
+ 	test_align test_verifier_log test_dev_cgroup test_tcpbpf_user \
+ 	test_sock test_btf test_sockmap get_cgroup_id_user test_socket_cookie \
+-	test_cgroup_storage test_select_reuseport test_section_names \
++	test_cgroup_storage test_select_reuseport test_section_and_type_names \
+ 	test_netcnt test_tcpnotify_user test_sock_fields test_sysctl test_hashmap \
+ 	test_btf_dump test_cgroup_attach xdping test_sockopt test_sockopt_sk \
+ 	test_sockopt_multi test_sockopt_inherit test_tcp_rtt
+diff --git a/tools/testing/selftests/bpf/test_section_and_type_names.c b/tools/testing/selftests/bpf/test_section_and_type_names.c
+new file mode 100644
+index 000000000000..564585a07592
+--- /dev/null
++++ b/tools/testing/selftests/bpf/test_section_and_type_names.c
+@@ -0,0 +1,378 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2018 Facebook
++
++#include <err.h>
++#include <bpf/libbpf.h>
++
++#include "bpf_util.h"
++
++struct sec_name_test {
++	const char sec_name[32];
++	struct {
++		int rc;
++		enum bpf_prog_type prog_type;
++		enum bpf_attach_type expected_attach_type;
++	} expected_load;
++	struct {
++		int rc;
++		enum bpf_attach_type attach_type;
++	} expected_attach;
 +};
 +
- void bpf_program__unload(struct bpf_program *prog)
- {
- 	int i;
-@@ -4734,6 +4760,30 @@ int libbpf_map_type_to_str(enum bpf_map_type type, const char **str)
- 	return 0;
- }
- 
-+int libbpf_attach_type_from_str(const char *str, enum bpf_attach_type *type)
++static struct sec_name_test tests[] = {
++	{"InvAliD", {-EINVAL, 0, 0}, {-EINVAL, 0} },
++	{"cgroup", {-EINVAL, 0, 0}, {-EINVAL, 0} },
++	{"socket", {0, BPF_PROG_TYPE_SOCKET_FILTER, 0}, {-EINVAL, 0} },
++	{"kprobe/", {0, BPF_PROG_TYPE_KPROBE, 0}, {-EINVAL, 0} },
++	{"kretprobe/", {0, BPF_PROG_TYPE_KPROBE, 0}, {-EINVAL, 0} },
++	{"classifier", {0, BPF_PROG_TYPE_SCHED_CLS, 0}, {-EINVAL, 0} },
++	{"action", {0, BPF_PROG_TYPE_SCHED_ACT, 0}, {-EINVAL, 0} },
++	{"tracepoint/", {0, BPF_PROG_TYPE_TRACEPOINT, 0}, {-EINVAL, 0} },
++	{
++		"raw_tracepoint/",
++		{0, BPF_PROG_TYPE_RAW_TRACEPOINT, 0},
++		{-EINVAL, 0},
++	},
++	{"xdp", {0, BPF_PROG_TYPE_XDP, 0}, {-EINVAL, 0} },
++	{"perf_event", {0, BPF_PROG_TYPE_PERF_EVENT, 0}, {-EINVAL, 0} },
++	{"lwt_in", {0, BPF_PROG_TYPE_LWT_IN, 0}, {-EINVAL, 0} },
++	{"lwt_out", {0, BPF_PROG_TYPE_LWT_OUT, 0}, {-EINVAL, 0} },
++	{"lwt_xmit", {0, BPF_PROG_TYPE_LWT_XMIT, 0}, {-EINVAL, 0} },
++	{"lwt_seg6local", {0, BPF_PROG_TYPE_LWT_SEG6LOCAL, 0}, {-EINVAL, 0} },
++	{
++		"cgroup_skb/ingress",
++		{0, BPF_PROG_TYPE_CGROUP_SKB, 0},
++		{0, BPF_CGROUP_INET_INGRESS},
++	},
++	{
++		"cgroup_skb/egress",
++		{0, BPF_PROG_TYPE_CGROUP_SKB, 0},
++		{0, BPF_CGROUP_INET_EGRESS},
++	},
++	{"cgroup/skb", {0, BPF_PROG_TYPE_CGROUP_SKB, 0}, {-EINVAL, 0} },
++	{
++		"cgroup/sock",
++		{0, BPF_PROG_TYPE_CGROUP_SOCK, 0},
++		{0, BPF_CGROUP_INET_SOCK_CREATE},
++	},
++	{
++		"cgroup/post_bind4",
++		{0, BPF_PROG_TYPE_CGROUP_SOCK, BPF_CGROUP_INET4_POST_BIND},
++		{0, BPF_CGROUP_INET4_POST_BIND},
++	},
++	{
++		"cgroup/post_bind6",
++		{0, BPF_PROG_TYPE_CGROUP_SOCK, BPF_CGROUP_INET6_POST_BIND},
++		{0, BPF_CGROUP_INET6_POST_BIND},
++	},
++	{
++		"cgroup/dev",
++		{0, BPF_PROG_TYPE_CGROUP_DEVICE, 0},
++		{0, BPF_CGROUP_DEVICE},
++	},
++	{"sockops", {0, BPF_PROG_TYPE_SOCK_OPS, 0}, {0, BPF_CGROUP_SOCK_OPS} },
++	{
++		"sk_skb/stream_parser",
++		{0, BPF_PROG_TYPE_SK_SKB, 0},
++		{0, BPF_SK_SKB_STREAM_PARSER},
++	},
++	{
++		"sk_skb/stream_verdict",
++		{0, BPF_PROG_TYPE_SK_SKB, 0},
++		{0, BPF_SK_SKB_STREAM_VERDICT},
++	},
++	{"sk_skb", {0, BPF_PROG_TYPE_SK_SKB, 0}, {-EINVAL, 0} },
++	{"sk_msg", {0, BPF_PROG_TYPE_SK_MSG, 0}, {0, BPF_SK_MSG_VERDICT} },
++	{"lirc_mode2", {0, BPF_PROG_TYPE_LIRC_MODE2, 0}, {0, BPF_LIRC_MODE2} },
++	{
++		"flow_dissector",
++		{0, BPF_PROG_TYPE_FLOW_DISSECTOR, 0},
++		{0, BPF_FLOW_DISSECTOR},
++	},
++	{
++		"cgroup/bind4",
++		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_BIND},
++		{0, BPF_CGROUP_INET4_BIND},
++	},
++	{
++		"cgroup/bind6",
++		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_BIND},
++		{0, BPF_CGROUP_INET6_BIND},
++	},
++	{
++		"cgroup/connect4",
++		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_CONNECT},
++		{0, BPF_CGROUP_INET4_CONNECT},
++	},
++	{
++		"cgroup/connect6",
++		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_CONNECT},
++		{0, BPF_CGROUP_INET6_CONNECT},
++	},
++	{
++		"cgroup/sendmsg4",
++		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_UDP4_SENDMSG},
++		{0, BPF_CGROUP_UDP4_SENDMSG},
++	},
++	{
++		"cgroup/sendmsg6",
++		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_UDP6_SENDMSG},
++		{0, BPF_CGROUP_UDP6_SENDMSG},
++	},
++	{
++		"cgroup/recvmsg4",
++		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_UDP4_RECVMSG},
++		{0, BPF_CGROUP_UDP4_RECVMSG},
++	},
++	{
++		"cgroup/recvmsg6",
++		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_UDP6_RECVMSG},
++		{0, BPF_CGROUP_UDP6_RECVMSG},
++	},
++	{
++		"cgroup/sysctl",
++		{0, BPF_PROG_TYPE_CGROUP_SYSCTL, BPF_CGROUP_SYSCTL},
++		{0, BPF_CGROUP_SYSCTL},
++	},
++	{
++		"cgroup/getsockopt",
++		{0, BPF_PROG_TYPE_CGROUP_SOCKOPT, BPF_CGROUP_GETSOCKOPT},
++		{0, BPF_CGROUP_GETSOCKOPT},
++	},
++	{
++		"cgroup/setsockopt",
++		{0, BPF_PROG_TYPE_CGROUP_SOCKOPT, BPF_CGROUP_SETSOCKOPT},
++		{0, BPF_CGROUP_SETSOCKOPT},
++	},
++};
++
++static int test_prog_type_by_name(const struct sec_name_test *test)
 +{
-+	unsigned int i;
++	enum bpf_attach_type expected_attach_type;
++	enum bpf_prog_type prog_type;
++	int rc;
 +
-+	for (i = 0; i < ARRAY_SIZE(attach_type_strs); i++)
-+		if (attach_type_strs[i] &&
-+		    strcmp(attach_type_strs[i], str) == 0) {
-+			*type = i;
-+			return 0;
-+		}
++	rc = libbpf_prog_type_by_name(test->sec_name, &prog_type,
++				      &expected_attach_type);
 +
-+	return -EINVAL;
-+}
++	if (rc != test->expected_load.rc) {
++		warnx("prog: unexpected rc=%d for %s", rc, test->sec_name);
++		return -1;
++	}
 +
-+int libbpf_attach_type_to_str(enum bpf_attach_type type, const char **str)
-+{
-+	if (type < BPF_CGROUP_INET_INGRESS ||
-+	    type >= ARRAY_SIZE(attach_type_strs))
-+		return -EINVAL;
++	if (rc)
++		return 0;
 +
-+	*str = attach_type_strs[type];
++	if (prog_type != test->expected_load.prog_type) {
++		warnx("prog: unexpected prog_type=%d for %s", prog_type,
++		      test->sec_name);
++		return -1;
++	}
++
++	if (expected_attach_type != test->expected_load.expected_attach_type) {
++		warnx("prog: unexpected expected_attach_type=%d for %s",
++		      expected_attach_type, test->sec_name);
++		return -1;
++	}
++
 +	return 0;
 +}
 +
- static int
- bpf_program__identify_section(struct bpf_program *prog,
- 			      enum bpf_prog_type *prog_type,
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 90daeb2cdefb..0ad941951b0d 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -139,6 +139,11 @@ LIBBPF_API int libbpf_prog_type_to_str(enum bpf_prog_type type,
- LIBBPF_API int libbpf_map_type_from_str(const char *str,
- 					enum bpf_map_type *type);
- LIBBPF_API int libbpf_map_type_to_str(enum bpf_map_type type, const char **str);
-+/* String representation of attach type */
-+LIBBPF_API int libbpf_attach_type_from_str(const char *str,
-+					   enum bpf_attach_type *type);
-+LIBBPF_API int libbpf_attach_type_to_str(enum bpf_attach_type type,
-+					 const char **str);
- 
- /* Accessors of bpf_program */
- struct bpf_program;
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index e4ecf5414bb7..d87a6dc8a71f 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -192,4 +192,6 @@ LIBBPF_0.0.5 {
- 		libbpf_prog_type_to_str;
- 		libbpf_map_type_from_str;
- 		libbpf_map_type_to_str;
-+		libbpf_attach_type_from_str;
-+		libbpf_attach_type_to_str;
- } LIBBPF_0.0.4;
++static int test_attach_type_by_name(const struct sec_name_test *test)
++{
++	enum bpf_attach_type attach_type;
++	int rc;
++
++	rc = libbpf_attach_type_by_name(test->sec_name, &attach_type);
++
++	if (rc != test->expected_attach.rc) {
++		warnx("attach: unexpected rc=%d for %s", rc, test->sec_name);
++		return -1;
++	}
++
++	if (rc)
++		return 0;
++
++	if (attach_type != test->expected_attach.attach_type) {
++		warnx("attach: unexpected attach_type=%d for %s", attach_type,
++		      test->sec_name);
++		return -1;
++	}
++
++	return 0;
++}
++
++static int test_prog_type_from_to_str(void)
++{
++	enum bpf_prog_type type, actual_type;
++	const char *str;
++	int rc;
++
++	for (type = BPF_PROG_TYPE_UNSPEC; type < __MAX_BPF_PROG_TYPE; type++) {
++		rc = libbpf_prog_type_to_str(type, &str);
++		if (rc) {
++			warnx("prog_type_to_str: unexpected rc=%d for type %d",
++			      rc, type);
++			return rc;
++		}
++
++		rc = libbpf_prog_type_from_str(str, &actual_type);
++		if (rc) {
++			warnx("prog_type_from_str: unexpected rc=%d for str %s",
++			      rc, str);
++			return rc;
++		}
++
++		if (actual_type != type) {
++			warnx("prog: unexpected prog_type for str %s, %d != %d",
++			      str, actual_type, type);
++			return -EINVAL;
++		}
++	}
++
++	rc = libbpf_prog_type_to_str(__MAX_BPF_PROG_TYPE, &str);
++	if (!rc) {
++		warnx("prog: unexpected result for __MAX_BPF_PROG_TYPE");
++		return -EINVAL;
++	}
++
++	rc = libbpf_prog_type_from_str("NonExistent", &type);
++	if (!rc) {
++		warnx("prog: unexpected result for non existent key");
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int test_map_type_from_to_str(void)
++{
++	enum bpf_map_type type, actual_type;
++	const char *str;
++	int rc;
++
++	for (type = BPF_MAP_TYPE_UNSPEC; type < __MAX_BPF_MAP_TYPE; type++) {
++		rc = libbpf_map_type_to_str(type, &str);
++		if (rc) {
++			warnx("map_type_to_str: unexpected rc=%d for type %d",
++			      rc, type);
++			return rc;
++		}
++
++		rc = libbpf_map_type_from_str(str, &actual_type);
++		if (rc) {
++			warnx("map_type_from_str: unexpected rc=%d for str %s",
++			      rc, str);
++			return rc;
++		}
++
++		if (actual_type != type) {
++			warnx("map: unexpected map_type for str %s, %d != %d",
++			      str, actual_type, type);
++			return -EINVAL;
++		}
++	}
++
++	rc = libbpf_map_type_to_str(__MAX_BPF_MAP_TYPE, &str);
++	if (!rc) {
++		warnx("map: unexpected result for __MAX_BPF_MAP_TYPE");
++		return -EINVAL;
++	}
++
++	rc = libbpf_map_type_from_str("NonExistent", &type);
++	if (!rc) {
++		warnx("map: unexpected result for non existent key");
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int test_attach_type_from_to_str(void)
++{
++	enum bpf_attach_type type, actual_type;
++	const char *str;
++	int rc;
++
++	for (type = BPF_CGROUP_INET_INGRESS; type < __MAX_BPF_ATTACH_TYPE;
++	     type++) {
++		rc = libbpf_attach_type_to_str(type, &str);
++		if (rc) {
++			warnx("attach: unexpected rc=%d for type %d",
++			      rc, type);
++			return rc;
++		}
++
++		rc = libbpf_attach_type_from_str(str, &actual_type);
++		if (rc) {
++			warnx("attach: unexpected rc=%d for str %s",
++			      rc, str);
++			return rc;
++		}
++
++		if (actual_type != type) {
++			warnx("attach: unexpected type for str %s, %d != %d",
++			      str, actual_type, type);
++			return -EINVAL;
++		}
++	}
++
++	rc = libbpf_attach_type_to_str(__MAX_BPF_ATTACH_TYPE, &str);
++	if (!rc) {
++		warnx("attach: unexpected result for __MAX_BPF_ATTACH_TYPE");
++		return -EINVAL;
++	}
++
++	rc = libbpf_attach_type_from_str("NonExistent", &type);
++	if (!rc) {
++		warnx("attach: unexpected result for non existent key");
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int run_sec_name_test_case(const struct sec_name_test *test)
++{
++	if (test_prog_type_by_name(test))
++		return -1;
++	if (test_attach_type_by_name(test))
++		return -1;
++	return 0;
++}
++
++static int run_tests(void)
++{
++	int passes = 0;
++	int fails = 0;
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(tests); ++i) {
++		if (run_sec_name_test_case(&tests[i]))
++			++fails;
++		else
++			++passes;
++	}
++
++	if (test_prog_type_from_to_str())
++		++fails;
++	else
++		++passes;
++
++	if (test_map_type_from_to_str())
++		++fails;
++	else
++		++passes;
++
++	if (test_attach_type_from_to_str())
++		++fails;
++	else
++		++passes;
++	printf("Summary: %d PASSED, %d FAILED\n", passes, fails);
++	return fails ? -1 : 0;
++}
++
++int main(int argc, char **argv)
++{
++	return run_tests();
++}
+diff --git a/tools/testing/selftests/bpf/test_section_names.c b/tools/testing/selftests/bpf/test_section_names.c
+deleted file mode 100644
+index 564585a07592..000000000000
+--- a/tools/testing/selftests/bpf/test_section_names.c
++++ /dev/null
+@@ -1,378 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-// Copyright (c) 2018 Facebook
+-
+-#include <err.h>
+-#include <bpf/libbpf.h>
+-
+-#include "bpf_util.h"
+-
+-struct sec_name_test {
+-	const char sec_name[32];
+-	struct {
+-		int rc;
+-		enum bpf_prog_type prog_type;
+-		enum bpf_attach_type expected_attach_type;
+-	} expected_load;
+-	struct {
+-		int rc;
+-		enum bpf_attach_type attach_type;
+-	} expected_attach;
+-};
+-
+-static struct sec_name_test tests[] = {
+-	{"InvAliD", {-EINVAL, 0, 0}, {-EINVAL, 0} },
+-	{"cgroup", {-EINVAL, 0, 0}, {-EINVAL, 0} },
+-	{"socket", {0, BPF_PROG_TYPE_SOCKET_FILTER, 0}, {-EINVAL, 0} },
+-	{"kprobe/", {0, BPF_PROG_TYPE_KPROBE, 0}, {-EINVAL, 0} },
+-	{"kretprobe/", {0, BPF_PROG_TYPE_KPROBE, 0}, {-EINVAL, 0} },
+-	{"classifier", {0, BPF_PROG_TYPE_SCHED_CLS, 0}, {-EINVAL, 0} },
+-	{"action", {0, BPF_PROG_TYPE_SCHED_ACT, 0}, {-EINVAL, 0} },
+-	{"tracepoint/", {0, BPF_PROG_TYPE_TRACEPOINT, 0}, {-EINVAL, 0} },
+-	{
+-		"raw_tracepoint/",
+-		{0, BPF_PROG_TYPE_RAW_TRACEPOINT, 0},
+-		{-EINVAL, 0},
+-	},
+-	{"xdp", {0, BPF_PROG_TYPE_XDP, 0}, {-EINVAL, 0} },
+-	{"perf_event", {0, BPF_PROG_TYPE_PERF_EVENT, 0}, {-EINVAL, 0} },
+-	{"lwt_in", {0, BPF_PROG_TYPE_LWT_IN, 0}, {-EINVAL, 0} },
+-	{"lwt_out", {0, BPF_PROG_TYPE_LWT_OUT, 0}, {-EINVAL, 0} },
+-	{"lwt_xmit", {0, BPF_PROG_TYPE_LWT_XMIT, 0}, {-EINVAL, 0} },
+-	{"lwt_seg6local", {0, BPF_PROG_TYPE_LWT_SEG6LOCAL, 0}, {-EINVAL, 0} },
+-	{
+-		"cgroup_skb/ingress",
+-		{0, BPF_PROG_TYPE_CGROUP_SKB, 0},
+-		{0, BPF_CGROUP_INET_INGRESS},
+-	},
+-	{
+-		"cgroup_skb/egress",
+-		{0, BPF_PROG_TYPE_CGROUP_SKB, 0},
+-		{0, BPF_CGROUP_INET_EGRESS},
+-	},
+-	{"cgroup/skb", {0, BPF_PROG_TYPE_CGROUP_SKB, 0}, {-EINVAL, 0} },
+-	{
+-		"cgroup/sock",
+-		{0, BPF_PROG_TYPE_CGROUP_SOCK, 0},
+-		{0, BPF_CGROUP_INET_SOCK_CREATE},
+-	},
+-	{
+-		"cgroup/post_bind4",
+-		{0, BPF_PROG_TYPE_CGROUP_SOCK, BPF_CGROUP_INET4_POST_BIND},
+-		{0, BPF_CGROUP_INET4_POST_BIND},
+-	},
+-	{
+-		"cgroup/post_bind6",
+-		{0, BPF_PROG_TYPE_CGROUP_SOCK, BPF_CGROUP_INET6_POST_BIND},
+-		{0, BPF_CGROUP_INET6_POST_BIND},
+-	},
+-	{
+-		"cgroup/dev",
+-		{0, BPF_PROG_TYPE_CGROUP_DEVICE, 0},
+-		{0, BPF_CGROUP_DEVICE},
+-	},
+-	{"sockops", {0, BPF_PROG_TYPE_SOCK_OPS, 0}, {0, BPF_CGROUP_SOCK_OPS} },
+-	{
+-		"sk_skb/stream_parser",
+-		{0, BPF_PROG_TYPE_SK_SKB, 0},
+-		{0, BPF_SK_SKB_STREAM_PARSER},
+-	},
+-	{
+-		"sk_skb/stream_verdict",
+-		{0, BPF_PROG_TYPE_SK_SKB, 0},
+-		{0, BPF_SK_SKB_STREAM_VERDICT},
+-	},
+-	{"sk_skb", {0, BPF_PROG_TYPE_SK_SKB, 0}, {-EINVAL, 0} },
+-	{"sk_msg", {0, BPF_PROG_TYPE_SK_MSG, 0}, {0, BPF_SK_MSG_VERDICT} },
+-	{"lirc_mode2", {0, BPF_PROG_TYPE_LIRC_MODE2, 0}, {0, BPF_LIRC_MODE2} },
+-	{
+-		"flow_dissector",
+-		{0, BPF_PROG_TYPE_FLOW_DISSECTOR, 0},
+-		{0, BPF_FLOW_DISSECTOR},
+-	},
+-	{
+-		"cgroup/bind4",
+-		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_BIND},
+-		{0, BPF_CGROUP_INET4_BIND},
+-	},
+-	{
+-		"cgroup/bind6",
+-		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_BIND},
+-		{0, BPF_CGROUP_INET6_BIND},
+-	},
+-	{
+-		"cgroup/connect4",
+-		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_CONNECT},
+-		{0, BPF_CGROUP_INET4_CONNECT},
+-	},
+-	{
+-		"cgroup/connect6",
+-		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_CONNECT},
+-		{0, BPF_CGROUP_INET6_CONNECT},
+-	},
+-	{
+-		"cgroup/sendmsg4",
+-		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_UDP4_SENDMSG},
+-		{0, BPF_CGROUP_UDP4_SENDMSG},
+-	},
+-	{
+-		"cgroup/sendmsg6",
+-		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_UDP6_SENDMSG},
+-		{0, BPF_CGROUP_UDP6_SENDMSG},
+-	},
+-	{
+-		"cgroup/recvmsg4",
+-		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_UDP4_RECVMSG},
+-		{0, BPF_CGROUP_UDP4_RECVMSG},
+-	},
+-	{
+-		"cgroup/recvmsg6",
+-		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_UDP6_RECVMSG},
+-		{0, BPF_CGROUP_UDP6_RECVMSG},
+-	},
+-	{
+-		"cgroup/sysctl",
+-		{0, BPF_PROG_TYPE_CGROUP_SYSCTL, BPF_CGROUP_SYSCTL},
+-		{0, BPF_CGROUP_SYSCTL},
+-	},
+-	{
+-		"cgroup/getsockopt",
+-		{0, BPF_PROG_TYPE_CGROUP_SOCKOPT, BPF_CGROUP_GETSOCKOPT},
+-		{0, BPF_CGROUP_GETSOCKOPT},
+-	},
+-	{
+-		"cgroup/setsockopt",
+-		{0, BPF_PROG_TYPE_CGROUP_SOCKOPT, BPF_CGROUP_SETSOCKOPT},
+-		{0, BPF_CGROUP_SETSOCKOPT},
+-	},
+-};
+-
+-static int test_prog_type_by_name(const struct sec_name_test *test)
+-{
+-	enum bpf_attach_type expected_attach_type;
+-	enum bpf_prog_type prog_type;
+-	int rc;
+-
+-	rc = libbpf_prog_type_by_name(test->sec_name, &prog_type,
+-				      &expected_attach_type);
+-
+-	if (rc != test->expected_load.rc) {
+-		warnx("prog: unexpected rc=%d for %s", rc, test->sec_name);
+-		return -1;
+-	}
+-
+-	if (rc)
+-		return 0;
+-
+-	if (prog_type != test->expected_load.prog_type) {
+-		warnx("prog: unexpected prog_type=%d for %s", prog_type,
+-		      test->sec_name);
+-		return -1;
+-	}
+-
+-	if (expected_attach_type != test->expected_load.expected_attach_type) {
+-		warnx("prog: unexpected expected_attach_type=%d for %s",
+-		      expected_attach_type, test->sec_name);
+-		return -1;
+-	}
+-
+-	return 0;
+-}
+-
+-static int test_attach_type_by_name(const struct sec_name_test *test)
+-{
+-	enum bpf_attach_type attach_type;
+-	int rc;
+-
+-	rc = libbpf_attach_type_by_name(test->sec_name, &attach_type);
+-
+-	if (rc != test->expected_attach.rc) {
+-		warnx("attach: unexpected rc=%d for %s", rc, test->sec_name);
+-		return -1;
+-	}
+-
+-	if (rc)
+-		return 0;
+-
+-	if (attach_type != test->expected_attach.attach_type) {
+-		warnx("attach: unexpected attach_type=%d for %s", attach_type,
+-		      test->sec_name);
+-		return -1;
+-	}
+-
+-	return 0;
+-}
+-
+-static int test_prog_type_from_to_str(void)
+-{
+-	enum bpf_prog_type type, actual_type;
+-	const char *str;
+-	int rc;
+-
+-	for (type = BPF_PROG_TYPE_UNSPEC; type < __MAX_BPF_PROG_TYPE; type++) {
+-		rc = libbpf_prog_type_to_str(type, &str);
+-		if (rc) {
+-			warnx("prog_type_to_str: unexpected rc=%d for type %d",
+-			      rc, type);
+-			return rc;
+-		}
+-
+-		rc = libbpf_prog_type_from_str(str, &actual_type);
+-		if (rc) {
+-			warnx("prog_type_from_str: unexpected rc=%d for str %s",
+-			      rc, str);
+-			return rc;
+-		}
+-
+-		if (actual_type != type) {
+-			warnx("prog: unexpected prog_type for str %s, %d != %d",
+-			      str, actual_type, type);
+-			return -EINVAL;
+-		}
+-	}
+-
+-	rc = libbpf_prog_type_to_str(__MAX_BPF_PROG_TYPE, &str);
+-	if (!rc) {
+-		warnx("prog: unexpected result for __MAX_BPF_PROG_TYPE");
+-		return -EINVAL;
+-	}
+-
+-	rc = libbpf_prog_type_from_str("NonExistent", &type);
+-	if (!rc) {
+-		warnx("prog: unexpected result for non existent key");
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+-static int test_map_type_from_to_str(void)
+-{
+-	enum bpf_map_type type, actual_type;
+-	const char *str;
+-	int rc;
+-
+-	for (type = BPF_MAP_TYPE_UNSPEC; type < __MAX_BPF_MAP_TYPE; type++) {
+-		rc = libbpf_map_type_to_str(type, &str);
+-		if (rc) {
+-			warnx("map_type_to_str: unexpected rc=%d for type %d",
+-			      rc, type);
+-			return rc;
+-		}
+-
+-		rc = libbpf_map_type_from_str(str, &actual_type);
+-		if (rc) {
+-			warnx("map_type_from_str: unexpected rc=%d for str %s",
+-			      rc, str);
+-			return rc;
+-		}
+-
+-		if (actual_type != type) {
+-			warnx("map: unexpected map_type for str %s, %d != %d",
+-			      str, actual_type, type);
+-			return -EINVAL;
+-		}
+-	}
+-
+-	rc = libbpf_map_type_to_str(__MAX_BPF_MAP_TYPE, &str);
+-	if (!rc) {
+-		warnx("map: unexpected result for __MAX_BPF_MAP_TYPE");
+-		return -EINVAL;
+-	}
+-
+-	rc = libbpf_map_type_from_str("NonExistent", &type);
+-	if (!rc) {
+-		warnx("map: unexpected result for non existent key");
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+-static int test_attach_type_from_to_str(void)
+-{
+-	enum bpf_attach_type type, actual_type;
+-	const char *str;
+-	int rc;
+-
+-	for (type = BPF_CGROUP_INET_INGRESS; type < __MAX_BPF_ATTACH_TYPE;
+-	     type++) {
+-		rc = libbpf_attach_type_to_str(type, &str);
+-		if (rc) {
+-			warnx("attach: unexpected rc=%d for type %d",
+-			      rc, type);
+-			return rc;
+-		}
+-
+-		rc = libbpf_attach_type_from_str(str, &actual_type);
+-		if (rc) {
+-			warnx("attach: unexpected rc=%d for str %s",
+-			      rc, str);
+-			return rc;
+-		}
+-
+-		if (actual_type != type) {
+-			warnx("attach: unexpected type for str %s, %d != %d",
+-			      str, actual_type, type);
+-			return -EINVAL;
+-		}
+-	}
+-
+-	rc = libbpf_attach_type_to_str(__MAX_BPF_ATTACH_TYPE, &str);
+-	if (!rc) {
+-		warnx("attach: unexpected result for __MAX_BPF_ATTACH_TYPE");
+-		return -EINVAL;
+-	}
+-
+-	rc = libbpf_attach_type_from_str("NonExistent", &type);
+-	if (!rc) {
+-		warnx("attach: unexpected result for non existent key");
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+-static int run_sec_name_test_case(const struct sec_name_test *test)
+-{
+-	if (test_prog_type_by_name(test))
+-		return -1;
+-	if (test_attach_type_by_name(test))
+-		return -1;
+-	return 0;
+-}
+-
+-static int run_tests(void)
+-{
+-	int passes = 0;
+-	int fails = 0;
+-	int i;
+-
+-	for (i = 0; i < ARRAY_SIZE(tests); ++i) {
+-		if (run_sec_name_test_case(&tests[i]))
+-			++fails;
+-		else
+-			++passes;
+-	}
+-
+-	if (test_prog_type_from_to_str())
+-		++fails;
+-	else
+-		++passes;
+-
+-	if (test_map_type_from_to_str())
+-		++fails;
+-	else
+-		++passes;
+-
+-	if (test_attach_type_from_to_str())
+-		++fails;
+-	else
+-		++passes;
+-	printf("Summary: %d PASSED, %d FAILED\n", passes, fails);
+-	return fails ? -1 : 0;
+-}
+-
+-int main(int argc, char **argv)
+-{
+-	return run_tests();
+-}
 -- 
 2.17.1
 
