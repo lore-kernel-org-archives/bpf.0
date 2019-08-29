@@ -2,164 +2,110 @@ Return-Path: <SRS0=jPHo=WZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 195E0C3A5A3
-	for <bpf@archiver.kernel.org>; Thu, 29 Aug 2019 06:45:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8C19C3A59F
+	for <bpf@archiver.kernel.org>; Thu, 29 Aug 2019 06:51:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E3DE52070B
-	for <bpf@archiver.kernel.org>; Thu, 29 Aug 2019 06:45:33 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="WY+Abgpw"
+	by mail.kernel.org (Postfix) with ESMTP id 7BBDA233A1
+	for <bpf@archiver.kernel.org>; Thu, 29 Aug 2019 06:51:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1567061515;
+	bh=Tvk8O+MqkCt0qJtVET3j6ajgw/8+u6fpffg9CLrLLD8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=P3E+D7P9BpDAzclywjmymnngK/ZDZIMCJUai6ER76imy4axtQLPN2RuvESiLnLGd0
+	 lBEM7cXBY/A3zj2toeyE7G0DAJ48InIR01e3vvHQmE+VYR38frYQJ4+IVQDqT7ZHC5
+	 PzNx2cliFrl1Wg3srWEdBU95EgrplRIgZk3DMcmI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727464AbfH2Gpd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 29 Aug 2019 02:45:33 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:30950 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727161AbfH2GpM (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 29 Aug 2019 02:45:12 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id x7T6gYqa025076
-        for <bpf@vger.kernel.org>; Wed, 28 Aug 2019 23:45:11 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=NT7SZrw3Qy+6M0D0VAHxgNYPUvtSj8aHb73BTo4D7nk=;
- b=WY+AbgpwkAmNEChFcTVDjVhSlMmegaCwMCrljsSMs8Sie8oosQZLKQQqxYVGyxrO5BYA
- fwhT9iAnC9UV9eZzpCtjjWwEyZL5uyNzRExWeRcdd0ZLb8r+IszTH+KZkru3Pdc4bpt7
- PtowletVaAqYEdhc8tiOw1/U0Ap3M9E6SK4= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by m0001303.ppops.net with ESMTP id 2unuwqbhyk-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 28 Aug 2019 23:45:11 -0700
-Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Wed, 28 Aug 2019 23:45:09 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id C453C3702BA3; Wed, 28 Aug 2019 23:45:02 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@fb.com>,
-        Brian Vazquez <brianvv@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Yonghong Song <yhs@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 00/13] bpf: adding map batch processing support
-Date:   Wed, 28 Aug 2019 23:45:02 -0700
-Message-ID: <20190829064502.2750303-1-yhs@fb.com>
-X-Mailer: git-send-email 2.17.1
-X-FB-Internal: Safe
+        id S1727595AbfH2Gvz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 29 Aug 2019 02:51:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57148 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725881AbfH2Gvz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 29 Aug 2019 02:51:55 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BA1E82073F;
+        Thu, 29 Aug 2019 06:51:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567061514;
+        bh=Tvk8O+MqkCt0qJtVET3j6ajgw/8+u6fpffg9CLrLLD8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CxfE49YIHfWKhVTWbcrgeRVoBLw1cONxvlqhCny7z3gnlrOlmC1MlZdmRxZoKgR/y
+         dUtEnGXEGwj0GWHVH+93I9tsLwon+n4a8olljv+Aq0LR/yWrNTWUe0ohis5r2IL43E
+         xgVSPCQeRN8jRiimWKLfvNZhRKazhDeKwvoZMU4o=
+Date:   Thu, 29 Aug 2019 08:51:51 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Julia Kartseva <hex@fb.com>, ast@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>, rdna@fb.com,
+        bpf@vger.kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
+        kernel-team@fb.com
+Subject: Re: auto-split of commit. Was: [PATCH bpf-next 04/10] tools/bpf: add
+ libbpf_prog_type_(from|to)_str helpers
+Message-ID: <20190829065151.GB30423@kroah.com>
+References: <cover.1567024943.git.hex@fb.com>
+ <467620c966825173dbd65b37a3f9bd7dd4fb8184.1567024943.git.hex@fb.com>
+ <20190828163422.3d167c4b@cakuba.netronome.com>
+ <20190828234626.ltfy3qr2nne4uumy@ast-mbp.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.70,1.0.8
- definitions=2019-08-29_04:2019-08-28,2019-08-29 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- priorityscore=1501 mlxscore=0 phishscore=0 mlxlogscore=826 impostorscore=0
- adultscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0 bulkscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1906280000 definitions=main-1908290072
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190828234626.ltfy3qr2nne4uumy@ast-mbp.dhcp.thefacebook.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Brian Vazquez has proposed BPF_MAP_DUMP command to look up more than one
-map entries per syscall.
-  https://lore.kernel.org/bpf/CABCgpaU3xxX6CMMxD+1knApivtc2jLBHysDXw-0E9bQEL0qC3A@mail.gmail.com/T/#t
+On Wed, Aug 28, 2019 at 04:46:28PM -0700, Alexei Starovoitov wrote:
+> On Wed, Aug 28, 2019 at 04:34:22PM -0700, Jakub Kicinski wrote:
+> > 
+> > Greg, Thomas, libbpf is extracted from the kernel sources and
+> > maintained in a clone repo on GitHub for ease of packaging.
+> > 
+> > IIUC Alexei's concern is that since we are moving the commits from
+> > the kernel repo to the GitHub one we have to preserve the commits
+> > exactly as they are, otherwise SOB lines lose their power.
+> > 
+> > Can you provide some guidance on whether that's a valid concern, 
+> > or whether it's perfectly fine to apply a partial patch?
+> 
+> Right. That's exactly the concern.
+> 
+> Greg, Thomas,
+> could you please put your legal hat on and clarify the following.
+> Say some developer does a patch that modifies
+> include/uapi/linux/bpf.h
+> ..some other kernel code...and
+> tools/include/uapi/linux/bpf.h
+> 
+> That tools/include/uapi/linux/bpf.h is used by perf and by libbpf.
+> We have automatic mirror of tools/libbpf into github/libbpf/
+> so that external projects and can do git submodule of it,
+> can build packages out of it, etc.
+> 
+> The question is whether it's ok to split tools/* part out of
+> original commit, keep Author and SOB, create new commit out of it,
+> and automatically push that auto-generated commit into github mirror.
 
-During discussion, we found more use cases can be supported in a similar
-map operation batching framework. For example, batched map lookup and delete,
-which can be really helpful for bcc.
-  https://github.com/iovisor/bcc/blob/master/tools/tcptop.py#L233-L243
-  https://github.com/iovisor/bcc/blob/master/tools/slabratetop.py#L129-L138
-    
-Also, in bcc, we have API to delete all entries in a map.
-  https://github.com/iovisor/bcc/blob/master/src/cc/api/BPFTable.h#L257-L264
+Note, I am not a laywer, and am not _your_ lawyer either, only _your_
+lawyer can answer questions as to what is best for you.
 
-For map update, batched operations also useful as sometimes applications need
-to populate initial maps with more than one entry. For example, the below
-example is from kernel/samples/bpf/xdp_redirect_cpu_user.c:
-  https://github.com/torvalds/linux/blob/master/samples/bpf/xdp_redirect_cpu_user.c#L543-L550
+That being said, from a "are you keeping the correct authorship info",
+yes, it sounds like you are doing the correct thing here.
 
-This patch addresses all the above use cases. To make uapi stable, it also
-covers other potential use cases. Four bpf syscall subcommands are introduced:
-    BPF_MAP_LOOKUP_BATCH
-    BPF_MAP_LOOKUP_AND_DELETE_BATCH
-    BPF_MAP_UPDATE_BATCH
-    BPF_MAP_DELETE_BATCH
+Look at what I do for stable kernels, I take the original commit and add
+it to "another tree" keeping the original author and s-o-b chain intact,
+and adding a "this is the original git commit id" type message to the
+changelog text so that people can link it back to the original.
 
-In userspace, application can iterate through the whole map one batch
-as a time, e.g., bpf_map_lookup_batch() in the below:
-    p_key = NULL;
-    p_next_key = &key;
-    while (true) {
-       err = bpf_map_lookup_batch(fd, p_key, &p_next_key, keys, values,
-                                  &batch_size, elem_flags, flags);
-       if (err) ...
-       if (p_next_key) break; // done
-       if (!p_key) p_key = p_next_key;
-    }
-Please look at individual patches for details of new syscall subcommands
-and examples of user codes.
+If you are doing that here as well, I don't see how anyone can object.
 
-The testing is also done in a qemu VM environment:
-      measure_lookup: max_entries 1000000, batch 10, time 342ms
-      measure_lookup: max_entries 1000000, batch 1000, time 295ms
-      measure_lookup: max_entries 1000000, batch 1000000, time 270ms
-      measure_lookup: max_entries 1000000, no batching, time 1346ms
-      measure_lookup_delete: max_entries 1000000, batch 10, time 433ms
-      measure_lookup_delete: max_entries 1000000, batch 1000, time 363ms
-      measure_lookup_delete: max_entries 1000000, batch 1000000, time 357ms
-      measure_lookup_delete: max_entries 1000000, not batch, time 1894ms
-      measure_delete: max_entries 1000000, batch, time 220ms
-      measure_delete: max_entries 1000000, not batch, time 1289ms
-For a 1M entry hash table, batch size of 10 can reduce cpu time
-by 70%. Please see patch "tools/bpf: measure map batching perf"
-for details of test codes.
+thanks,
 
-Brian Vazquez (1):
-  bpf: add bpf_map_value_size and bp_map_copy_value helper functions
-
-Yonghong Song (12):
-  bpf: refactor map_update_elem()
-  bpf: refactor map_delete_elem()
-  bpf: refactor map_get_next_key()
-  bpf: adding map batch processing support
-  tools/bpf: sync uapi header bpf.h
-  tools/bpf: implement libbpf API functions for map batch operations
-  tools/bpf: add test for bpf_map_update_batch()
-  tools/bpf: add test for bpf_map_lookup_batch()
-  tools/bpf: add test for bpf_map_lookup_and_delete_batch()
-  tools/bpf: add test for bpf_map_delete_batch()
-  tools/bpf: add a multithreaded test for map batch operations
-  tools/bpf: measure map batching perf
-
- include/uapi/linux/bpf.h                      |  27 +
- kernel/bpf/syscall.c                          | 752 ++++++++++++++----
- tools/include/uapi/linux/bpf.h                |  27 +
- tools/lib/bpf/bpf.c                           |  67 ++
- tools/lib/bpf/bpf.h                           |  17 +
- tools/lib/bpf/libbpf.map                      |   4 +
- .../selftests/bpf/map_tests/map_batch_mt.c    | 126 +++
- .../selftests/bpf/map_tests/map_batch_perf.c  | 242 ++++++
- .../bpf/map_tests/map_delete_batch.c          | 139 ++++
- .../map_tests/map_lookup_and_delete_batch.c   | 164 ++++
- .../bpf/map_tests/map_lookup_batch.c          | 166 ++++
- .../bpf/map_tests/map_update_batch.c          | 115 +++
- 12 files changed, 1707 insertions(+), 139 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/map_tests/map_batch_mt.c
- create mode 100644 tools/testing/selftests/bpf/map_tests/map_batch_perf.c
- create mode 100644 tools/testing/selftests/bpf/map_tests/map_delete_batch.c
- create mode 100644 tools/testing/selftests/bpf/map_tests/map_lookup_and_delete_batch.c
- create mode 100644 tools/testing/selftests/bpf/map_tests/map_lookup_batch.c
- create mode 100644 tools/testing/selftests/bpf/map_tests/map_update_batch.c
-
--- 
-2.17.1
-
+greg k-h
