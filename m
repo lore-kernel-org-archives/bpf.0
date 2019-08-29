@@ -2,104 +2,209 @@ Return-Path: <SRS0=jPHo=WZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28B5CC3A5A6
-	for <bpf@archiver.kernel.org>; Thu, 29 Aug 2019 18:34:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13847C3A59F
+	for <bpf@archiver.kernel.org>; Thu, 29 Aug 2019 18:40:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EBA20205C9
-	for <bpf@archiver.kernel.org>; Thu, 29 Aug 2019 18:34:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1567103681;
-	bh=hkBnbXIj4Ow5ukHzAWFpSqN0IRB8d7dNXP7A+zZpRBQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=CIkTiof3oGMTCj5t+m7TT8CitK646Az/K8lh1AEzkywWSj17+uFYnjCgIMn/D0gTp
-	 YnOGH+F3KP0/h62Pt5NKCQGJLm+7YoMV4NLEFDi31bF0e0qGm6qPPR/R1A4qg7i36j
-	 mhZkEMsMerZ3rw01jpR14ZcpVyBHBp8pYU/DdMdc=
+	by mail.kernel.org (Postfix) with ESMTP id CD71121726
+	for <bpf@archiver.kernel.org>; Thu, 29 Aug 2019 18:40:01 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="v/NaBC5X"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728056AbfH2SNU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 29 Aug 2019 14:13:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55070 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727087AbfH2SNR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 29 Aug 2019 14:13:17 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 67AC12189D;
-        Thu, 29 Aug 2019 18:13:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567102396;
-        bh=hkBnbXIj4Ow5ukHzAWFpSqN0IRB8d7dNXP7A+zZpRBQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qtxi24umdUcuSRIwdfk7cQXF9cWXQuDwXySud/jP4Yb1VydCYv1vxcTVEmOFlYLix
-         DnOO0zrNtbjc7N5iw5smu2WgFVdqBeRRrn/pCf0RADLso02pyRUR40r5wgBvH7oqLr
-         NhoRCbGxY4kMc8AcjRPeclf+lUt1g1TI+QBbHrY8=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrii Nakryiko <andriin@fb.com>, Andrey Ignatov <rdna@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 03/76] libbpf: set BTF FD for prog only when there is supported .BTF.ext data
-Date:   Thu, 29 Aug 2019 14:11:58 -0400
-Message-Id: <20190829181311.7562-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190829181311.7562-1-sashal@kernel.org>
-References: <20190829181311.7562-1-sashal@kernel.org>
+        id S1727986AbfH2SkB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 29 Aug 2019 14:40:01 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:35690 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727813AbfH2SkB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 29 Aug 2019 14:40:01 -0400
+Received: by mail-ed1-f68.google.com with SMTP id t50so5153752edd.2
+        for <bpf@vger.kernel.org>; Thu, 29 Aug 2019 11:39:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=NwKudhIxtj7Zray+wZNixIal8r/E1MBsJakZSiC7ZTc=;
+        b=v/NaBC5Xt8P+CLQ4BZkAsyYKMQXFOmakGD4Bga2JMs7xxedO5kn79mbMsulgFgtSWw
+         ezKGOEUHSoREk7zGi9W0OmZ37O1PMWJhKZd7/p5dPV7taV70BZMNVzYOQYC7i5XulYqt
+         0qQbs0bvT5QLUkC+vqzYY7KWGBPSBRrYUsBdw7ZlSjTtqsTAQ9qnfHvhtm+MgRbUq9sB
+         m+GdO3IsCk33bQK/n3ziFY86/JWTz6AtKUse9d5LnxTJaSD5VE2ADtp8tafKtFb/4PD8
+         i3dh5uNCwoI+vGb7nY8TxYf8dwW0FfCyRT7ZcwMTFSm8zz7ZRPmb2WbcVf7ediEQkmpC
+         PNyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=NwKudhIxtj7Zray+wZNixIal8r/E1MBsJakZSiC7ZTc=;
+        b=Zu+e6VmSDToeCLvCBaAOcXK856JCDB9+0zUYpT187RRibox4KvcGenCacadXSmb2kD
+         EXJcuWRsAEj9+AIsh96PASYxjzUjhxHFbOTiIMW6eYy8j5cO3kGgO796L8KImnJLGAU2
+         pWgUWdkJ0O+I5EWIePQe8WmVps3N1mumfbAyKiv+mk8itHT1QtdfhtEMi51p9aXZ+eQD
+         OvcvGMb+eq801p7pf/MpUw6zlDOLf2IgSsy2bzkTHe9Jb7NHUe5cU79gBQrFVY5Dx9Yg
+         EPDz1r1X1H8j82To8lP71vSxZ65fe/Ik9oyvEY1w3WS93jlCsfJJiQP6oT+3rO+d3t1b
+         V3MQ==
+X-Gm-Message-State: APjAAAWCHtrUiLO8ZThsha2yBsLrsYP6/mwfABNz27/sHBbNZJsqYvV/
+        Y86YUzZjY9DEy26/GTkJSgrLVg==
+X-Google-Smtp-Source: APXvYqyL5xnRLCKRu6cFiByK3nr4mrPT573BNbnKOgFvQNv6xlZvF+QAOVykOPyprcT8089s/fwBiQ==
+X-Received: by 2002:a17:906:938a:: with SMTP id l10mr9716391ejx.232.1567103998665;
+        Thu, 29 Aug 2019 11:39:58 -0700 (PDT)
+Received: from cakuba.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id g20sm576484edp.92.2019.08.29.11.39.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Aug 2019 11:39:58 -0700 (PDT)
+Date:   Thu, 29 Aug 2019 11:39:32 -0700
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@fb.com>
+Cc:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Brian Vazquez <brianvv@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
+Subject: Re: [PATCH bpf-next 00/13] bpf: adding map batch processing support
+Message-ID: <20190829113932.5c058194@cakuba.netronome.com>
+In-Reply-To: <20190829064502.2750303-1-yhs@fb.com>
+References: <20190829064502.2750303-1-yhs@fb.com>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrii Nakryiko <andriin@fb.com>
+On Wed, 28 Aug 2019 23:45:02 -0700, Yonghong Song wrote:
+> Brian Vazquez has proposed BPF_MAP_DUMP command to look up more than one
+> map entries per syscall.
+>   https://lore.kernel.org/bpf/CABCgpaU3xxX6CMMxD+1knApivtc2jLBHysDXw-0E9bQEL0qC3A@mail.gmail.com/T/#t
+> 
+> During discussion, we found more use cases can be supported in a similar
+> map operation batching framework. For example, batched map lookup and delete,
+> which can be really helpful for bcc.
+>   https://github.com/iovisor/bcc/blob/master/tools/tcptop.py#L233-L243
+>   https://github.com/iovisor/bcc/blob/master/tools/slabratetop.py#L129-L138
+>     
+> Also, in bcc, we have API to delete all entries in a map.
+>   https://github.com/iovisor/bcc/blob/master/src/cc/api/BPFTable.h#L257-L264
+> 
+> For map update, batched operations also useful as sometimes applications need
+> to populate initial maps with more than one entry. For example, the below
+> example is from kernel/samples/bpf/xdp_redirect_cpu_user.c:
+>   https://github.com/torvalds/linux/blob/master/samples/bpf/xdp_redirect_cpu_user.c#L543-L550
+> 
+> This patch addresses all the above use cases. To make uapi stable, it also
+> covers other potential use cases. Four bpf syscall subcommands are introduced:
+>     BPF_MAP_LOOKUP_BATCH
+>     BPF_MAP_LOOKUP_AND_DELETE_BATCH
+>     BPF_MAP_UPDATE_BATCH
+>     BPF_MAP_DELETE_BATCH
+> 
+> In userspace, application can iterate through the whole map one batch
+> as a time, e.g., bpf_map_lookup_batch() in the below:
+>     p_key = NULL;
+>     p_next_key = &key;
+>     while (true) {
+>        err = bpf_map_lookup_batch(fd, p_key, &p_next_key, keys, values,
+>                                   &batch_size, elem_flags, flags);
+>        if (err) ...
+>        if (p_next_key) break; // done
+>        if (!p_key) p_key = p_next_key;
+>     }
+> Please look at individual patches for details of new syscall subcommands
+> and examples of user codes.
+> 
+> The testing is also done in a qemu VM environment:
+>       measure_lookup: max_entries 1000000, batch 10, time 342ms
+>       measure_lookup: max_entries 1000000, batch 1000, time 295ms
+>       measure_lookup: max_entries 1000000, batch 1000000, time 270ms
+>       measure_lookup: max_entries 1000000, no batching, time 1346ms
+>       measure_lookup_delete: max_entries 1000000, batch 10, time 433ms
+>       measure_lookup_delete: max_entries 1000000, batch 1000, time 363ms
+>       measure_lookup_delete: max_entries 1000000, batch 1000000, time 357ms
+>       measure_lookup_delete: max_entries 1000000, not batch, time 1894ms
+>       measure_delete: max_entries 1000000, batch, time 220ms
+>       measure_delete: max_entries 1000000, not batch, time 1289ms
+> For a 1M entry hash table, batch size of 10 can reduce cpu time
+> by 70%. Please see patch "tools/bpf: measure map batching perf"
+> for details of test codes.
 
-[ Upstream commit 3415ec643e7bd644b03026efbe2f2b36cbe9b34b ]
+Hi Yonghong!
 
-5d01ab7bac46 ("libbpf: fix erroneous multi-closing of BTF FD")
-introduced backwards-compatibility issue, manifesting itself as -E2BIG
-error returned on program load due to unknown non-zero btf_fd attribute
-value for BPF_PROG_LOAD sys_bpf() sub-command.
+great to see this, we have been looking at implementing some way to
+speed up map walks as well.
 
-This patch fixes bug by ensuring that we only ever associate BTF FD with
-program if there is a BTF.ext data that was successfully loaded into
-kernel, which automatically means kernel supports func_info/line_info
-and associated BTF FD for progs (checked and ensured also by BTF
-sanitization code).
+The direction we were looking in, after previous discussions [1],
+however, was to provide a BPF program which can run the logic entirely
+within the kernel.
 
-Fixes: 5d01ab7bac46 ("libbpf: fix erroneous multi-closing of BTF FD")
-Reported-by: Andrey Ignatov <rdna@fb.com>
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/lib/bpf/libbpf.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+We have a rough PoC on the FW side (we can offload the program which
+walks the map, which is pretty neat), but the kernel verifier side
+hasn't really progressed. It will soon.
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index e308fcf16cdd0..ce579e3654d60 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -2066,7 +2066,11 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
- 	load_attr.license = license;
- 	load_attr.kern_version = kern_version;
- 	load_attr.prog_ifindex = prog->prog_ifindex;
--	btf_fd = bpf_object__btf_fd(prog->obj);
-+	/* if .BTF.ext was loaded, kernel supports associated BTF for prog */
-+	if (prog->obj->btf_ext)
-+		btf_fd = bpf_object__btf_fd(prog->obj);
-+	else
-+		btf_fd = -1;
- 	load_attr.prog_btf_fd = btf_fd >= 0 ? btf_fd : 0;
- 	load_attr.func_info = prog->func_info;
- 	load_attr.func_info_rec_size = prog->func_info_rec_size;
--- 
-2.20.1
+The rough idea is that the user space provides two programs, "filter"
+and "dumper":
 
+	bpftool map exec id XYZ filter pinned /some/prog \
+				dumper pinned /some/other_prog
+
+Both programs get this context:
+
+struct map_op_ctx {
+	u64 key;
+	u64 value;
+}
+
+We need a per-map implementation of the exec side, but roughly maps
+would do:
+
+	LIST_HEAD(deleted);
+
+	for entry in map {
+		struct map_op_ctx {
+			.key	= entry->key,
+			.value	= entry->value,
+		};
+
+		act = BPF_PROG_RUN(filter, &map_op_ctx);
+		if (act & ~ACT_BITS)
+			return -EINVAL;
+
+		if (act & DELETE) {
+			map_unlink(entry);
+			list_add(entry, &deleted);
+		}
+		if (act & STOP)
+			break;
+	}
+
+	synchronize_rcu();
+
+	for entry in deleted {
+		struct map_op_ctx {
+			.key	= entry->key,
+			.value	= entry->value,
+		};
+		
+		BPF_PROG_RUN(dumper, &map_op_ctx);
+		map_free(entry);
+	}
+
+The filter program can't perform any map operations other than lookup,
+otherwise we won't be able to guarantee that we'll walk the entire map
+(if the filter program deletes some entries in a unfortunate order).
+
+If user space just wants a pure dump it can simply load a program which
+dumps the entries into a perf ring.
+
+I'm bringing this up because that mechanism should cover what is
+achieved with this patch set and much more. 
+
+In particular for networking workloads where old flows have to be
+pruned from the map periodically it's far more efficient to communicate
+to user space only the flows which timed out (the delete batching from
+this set won't help at all).
+
+With a 2M entry map and this patch set we still won't be able to prune
+once a second on one core.
+
+[1]
+https://lore.kernel.org/netdev/20190813130921.10704-4-quentin.monnet@netronome.com/
