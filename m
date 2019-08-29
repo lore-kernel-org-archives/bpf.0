@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE4C4C3A59F
-	for <bpf@archiver.kernel.org>; Thu, 29 Aug 2019 05:12:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2B4EC3A59F
+	for <bpf@archiver.kernel.org>; Thu, 29 Aug 2019 05:13:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A5711233FF
-	for <bpf@archiver.kernel.org>; Thu, 29 Aug 2019 05:12:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A21A233FF
+	for <bpf@archiver.kernel.org>; Thu, 29 Aug 2019 05:13:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1567055577;
-	bh=CY0SaJtoLmcX1hAtyalGwYso5hxI/qsd+guRP6RHRgA=;
-	h=From:To:CC:Subject:Date:List-ID:From;
-	b=DPdCbxs9vSoOUnWCsv4kY/5+xFU3HHD5aESQ/tuLMFs6RW1JEZUO+uZ5Wxfxffwy7
-	 SqEVAmE1+7Yjn+JU/HTrbLmqkFCayQohYtosK7xtKNNYeMsMnKAHmA98jsu5Sgdbai
-	 +M8/G8p5KEPb30ZVTPRsjmsegH0yYe4D1r2RsFtk=
+	s=default; t=1567055581;
+	bh=GG5yX5wfio9TZ3Ejdx0LwMP7f3XcHkK9LSQSTngWPGc=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=LS3X0Awl+Bk+vHghkPpyBn8e7o5Ca5WXb2kTvuf5x1+n37znzqvCPJIf2O/s96xTs
+	 cC1mK3KKOgvgKbQkgYrmiDWPC3ZUlX0FFRef7YtwYtGX66cbLm/PAq2mKMxVjnmw0/
+	 y0Vhd0lZVO23WTnWknzJOEJdSDrjqrCFV45M4AA4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725844AbfH2FM5 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 29 Aug 2019 01:12:57 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:59964 "EHLO
+        id S1725826AbfH2FNB convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 29 Aug 2019 01:13:01 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:16636 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725810AbfH2FM4 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 29 Aug 2019 01:12:56 -0400
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x7T58eWN018954
-        for <bpf@vger.kernel.org>; Wed, 28 Aug 2019 22:12:55 -0700
+        by vger.kernel.org with ESMTP id S1726164AbfH2FNA (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 29 Aug 2019 01:13:00 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x7T5A1K8002379
+        for <bpf@vger.kernel.org>; Wed, 28 Aug 2019 22:12:59 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2une016fn9-1
+        by mx0a-00082601.pphosted.com with ESMTP id 2up503rn51-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 28 Aug 2019 22:12:55 -0700
+        for <bpf@vger.kernel.org>; Wed, 28 Aug 2019 22:12:59 -0700
 Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 28 Aug 2019 22:12:54 -0700
+ 15.1.1713.5; Wed, 28 Aug 2019 22:12:57 -0700
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 9A0A3760F54; Wed, 28 Aug 2019 22:12:53 -0700 (PDT)
+        id ACE33760F54; Wed, 28 Aug 2019 22:12:57 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -48,20 +48,22 @@ CC:     <davem@davemloft.net>, <peterz@infradead.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>,
         <linux-api@vger.kernel.org>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 1/3] capability: introduce CAP_BPF and CAP_TRACING
-Date:   Wed, 28 Aug 2019 22:12:51 -0700
-Message-ID: <20190829051253.1927291-1-ast@kernel.org>
+Subject: [PATCH v2 bpf-next 3/3] perf: implement CAP_TRACING
+Date:   Wed, 28 Aug 2019 22:12:53 -0700
+Message-ID: <20190829051253.1927291-3-ast@kernel.org>
 X-Mailer: git-send-email 2.20.0
+In-Reply-To: <20190829051253.1927291-1-ast@kernel.org>
+References: <20190829051253.1927291-1-ast@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.70,1.0.8
  definitions=2019-08-29_03:2019-08-28,2019-08-29 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
- impostorscore=0 spamscore=0 mlxlogscore=960 phishscore=0 clxscore=1034
- lowpriorityscore=0 priorityscore=1501 malwarescore=0 adultscore=0
- mlxscore=0 suspectscore=1 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ impostorscore=0 suspectscore=1 phishscore=0 mlxlogscore=999 spamscore=0
+ priorityscore=1501 lowpriorityscore=0 malwarescore=0 clxscore=1034
+ mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1906280000 definitions=main-1908290056
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -69,135 +71,182 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-CAP_BPF allows the following BPF operations:
-- Loading all types of BPF programs
-- Creating all types of BPF maps except:
-   - stackmap that needs CAP_TRACING
-   - devmap that needs CAP_NET_ADMIN
-   - cpumap that needs CAP_SYS_ADMIN
-- Advanced verifier features
-  - Indirect variable access
-  - Bounded loops
-  - BPF to BPF function calls
-  - Scalar precision tracking
-  - Larger complexity limits
-  - Dead code elimination
-  - And potentially other features
-- Use of pointer-to-integer conversions in BPF programs
-- Bypassing of speculation attack hardening measures
-- Loading BPF Type Format (BTF) data
-- Iterate system wide loaded programs, maps, BTF objects
-- Retrieve xlated and JITed code of BPF programs
-- Access maps and programs via id
-- Use bpf_spin_lock() helper
+Implement permissions as stated in uapi/linux/capability.h
 
-CAP_BPF and CAP_TRACING together allow the following:
-- bpf_probe_read to read arbitrary kernel memory
-- bpf_trace_printk to print data to ftrace ring buffer
-- Attach to raw_tracepoint
-- Query association between kprobe/tracepoint and bpf program
-
-CAP_BPF and CAP_NET_ADMIN together allow the following:
-- Attach to cgroup-bpf hooks and query
-- skb, xdp, flow_dissector test_run command
-
-CAP_NET_ADMIN allows:
-- Attach networking bpf programs to xdp, tc, lwt, flow dissector
-
-CAP_TRACING allows:
-- Full use of perf_event_open(), similarly to the effect of
-  kernel.perf_event_paranoid == -1
-- Full use of tracefs
-- Creation of [ku][ret]probe
-- Accessing arbitrary kernel memory via kprobe + probe_kernel_read
-- Attach tracing bpf programs to perf events
-- Access to kallsyms
+Similar to CAP_BPF it's highly unlikely that s/CAP_SYS_ADMIN/CAP_TRACING/
+replacement will cause user breakage.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/uapi/linux/capability.h     | 51 ++++++++++++++++++++++++++++-
- security/selinux/include/classmap.h |  4 +--
- 2 files changed, 52 insertions(+), 3 deletions(-)
+ arch/powerpc/perf/core-book3s.c |  4 ++--
+ arch/x86/events/intel/bts.c     |  2 +-
+ arch/x86/events/intel/core.c    |  2 +-
+ arch/x86/events/intel/p4.c      |  2 +-
+ kernel/events/core.c            | 14 +++++++-------
+ kernel/events/hw_breakpoint.c   |  2 +-
+ kernel/trace/trace_event_perf.c |  4 ++--
+ 7 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/include/uapi/linux/capability.h b/include/uapi/linux/capability.h
-index 240fdb9a60f6..664e07d12888 100644
---- a/include/uapi/linux/capability.h
-+++ b/include/uapi/linux/capability.h
-@@ -366,8 +366,57 @@ struct vfs_ns_cap_data {
+diff --git a/arch/powerpc/perf/core-book3s.c b/arch/powerpc/perf/core-book3s.c
+index ca92e01d0bd1..ddb5f4b81023 100644
+--- a/arch/powerpc/perf/core-book3s.c
++++ b/arch/powerpc/perf/core-book3s.c
+@@ -204,7 +204,7 @@ static inline void perf_get_data_addr(struct pt_regs *regs, u64 *addrp)
+ 	if (!(mmcra & MMCRA_SAMPLE_ENABLE) || sdar_valid)
+ 		*addrp = mfspr(SPRN_SDAR);
  
- #define CAP_AUDIT_READ		37
+-	if (perf_paranoid_kernel() && !capable(CAP_SYS_ADMIN) &&
++	if (perf_paranoid_kernel() && !capable(CAP_TRACING) &&
+ 		is_kernel_addr(mfspr(SPRN_SDAR)))
+ 		*addrp = 0;
+ }
+@@ -472,7 +472,7 @@ static void power_pmu_bhrb_read(struct cpu_hw_events *cpuhw)
+ 			 * exporting it to userspace (avoid exposure of regions
+ 			 * where we could have speculative execution)
+ 			 */
+-			if (perf_paranoid_kernel() && !capable(CAP_SYS_ADMIN) &&
++			if (perf_paranoid_kernel() && !capable(CAP_TRACING) &&
+ 				is_kernel_addr(addr))
+ 				continue;
  
-+/*
-+ * CAP_BPF allows the following BPF operations:
-+ * - Loading all types of BPF programs
-+ * - Creating all types of BPF maps except:
-+ *    - stackmap that needs CAP_TRACING
-+ *    - devmap that needs CAP_NET_ADMIN
-+ *    - cpumap that needs CAP_SYS_ADMIN
-+ * - Advanced verifier features
-+ *   - Indirect variable access
-+ *   - Bounded loops
-+ *   - BPF to BPF function calls
-+ *   - Scalar precision tracking
-+ *   - Larger complexity limits
-+ *   - Dead code elimination
-+ *   - And potentially other features
-+ * - Use of pointer-to-integer conversions in BPF programs
-+ * - Bypassing of speculation attack hardening measures
-+ * - Loading BPF Type Format (BTF) data
-+ * - Iterate system wide loaded programs, maps, BTF objects
-+ * - Retrieve xlated and JITed code of BPF programs
-+ * - Access maps and programs via id
-+ * - Use bpf_spin_lock() helper
-+ *
-+ * CAP_BPF and CAP_TRACING together allow the following:
-+ * - bpf_probe_read to read arbitrary kernel memory
-+ * - bpf_trace_printk to print data to ftrace ring buffer
-+ * - Attach to raw_tracepoint
-+ * - Query association between kprobe/tracepoint and bpf program
-+ *
-+ * CAP_BPF and CAP_NET_ADMIN together allow the following:
-+ * - Attach to cgroup-bpf hooks and query
-+ * - skb, xdp, flow_dissector test_run command
-+ *
-+ * CAP_NET_ADMIN allows:
-+ * - Attach networking bpf programs to xdp, tc, lwt, flow dissector
-+ */
-+#define CAP_BPF			38
-+
-+/*
-+ * CAP_TRACING allows:
-+ * - Full use of perf_event_open(), similarly to the effect of
-+ *   kernel.perf_event_paranoid == -1
-+ * - Full use of tracefs
-+ * - Creation of [ku][ret]probe
-+ * - Accessing arbitrary kernel memory via kprobe + probe_kernel_read
-+ * - Attach tracing bpf programs to perf events
-+ * - Access to kallsyms
-+ */
-+#define CAP_TRACING		39
+diff --git a/arch/x86/events/intel/bts.c b/arch/x86/events/intel/bts.c
+index 5ee3fed881d3..848a104a0d33 100644
+--- a/arch/x86/events/intel/bts.c
++++ b/arch/x86/events/intel/bts.c
+@@ -550,7 +550,7 @@ static int bts_event_init(struct perf_event *event)
+ 	 * users to profile the kernel.
+ 	 */
+ 	if (event->attr.exclude_kernel && perf_paranoid_kernel() &&
+-	    !capable(CAP_SYS_ADMIN))
++	    !capable(CAP_TRACING))
+ 		return -EACCES;
  
--#define CAP_LAST_CAP         CAP_AUDIT_READ
-+#define CAP_LAST_CAP         CAP_TRACING
+ 	if (x86_add_exclusive(x86_lbr_exclusive_bts))
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index 648260b5f367..08714d33e566 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -3307,7 +3307,7 @@ static int intel_pmu_hw_config(struct perf_event *event)
+ 	if (x86_pmu.version < 3)
+ 		return -EINVAL;
  
- #define cap_valid(x) ((x) >= 0 && (x) <= CAP_LAST_CAP)
+-	if (perf_paranoid_cpu() && !capable(CAP_SYS_ADMIN))
++	if (perf_paranoid_cpu() && !capable(CAP_TRACING))
+ 		return -EACCES;
  
-diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
-index 201f7e588a29..0b364e245163 100644
---- a/security/selinux/include/classmap.h
-+++ b/security/selinux/include/classmap.h
-@@ -26,9 +26,9 @@
- 	    "audit_control", "setfcap"
+ 	event->hw.config |= ARCH_PERFMON_EVENTSEL_ANY;
+diff --git a/arch/x86/events/intel/p4.c b/arch/x86/events/intel/p4.c
+index dee579efb2b2..abf20e33b523 100644
+--- a/arch/x86/events/intel/p4.c
++++ b/arch/x86/events/intel/p4.c
+@@ -776,7 +776,7 @@ static int p4_validate_raw_event(struct perf_event *event)
+ 	 * the user needs special permissions to be able to use it
+ 	 */
+ 	if (p4_ht_active() && p4_event_bind_map[v].shared) {
+-		if (perf_paranoid_cpu() && !capable(CAP_SYS_ADMIN))
++		if (perf_paranoid_cpu() && !capable(CAP_TRACING))
+ 			return -EACCES;
+ 	}
  
- #define COMMON_CAP2_PERMS  "mac_override", "mac_admin", "syslog", \
--		"wake_alarm", "block_suspend", "audit_read"
-+		"wake_alarm", "block_suspend", "audit_read", "bpf", "tracing"
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 0463c1151bae..a0e5495cad53 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -4134,7 +4134,7 @@ find_get_context(struct pmu *pmu, struct task_struct *task,
  
--#if CAP_LAST_CAP > CAP_AUDIT_READ
-+#if CAP_LAST_CAP > CAP_TRACING
- #error New capability defined, please update COMMON_CAP2_PERMS.
- #endif
+ 	if (!task) {
+ 		/* Must be root to operate on a CPU event: */
+-		if (perf_paranoid_cpu() && !capable(CAP_SYS_ADMIN))
++		if (perf_paranoid_cpu() && !capable(CAP_TRACING))
+ 			return ERR_PTR(-EACCES);
  
+ 		cpuctx = per_cpu_ptr(pmu->pmu_cpu_context, cpu);
+@@ -8741,7 +8741,7 @@ static int perf_kprobe_event_init(struct perf_event *event)
+ 	if (event->attr.type != perf_kprobe.type)
+ 		return -ENOENT;
+ 
+-	if (!capable(CAP_SYS_ADMIN))
++	if (!capable(CAP_TRACING))
+ 		return -EACCES;
+ 
+ 	/*
+@@ -8801,7 +8801,7 @@ static int perf_uprobe_event_init(struct perf_event *event)
+ 	if (event->attr.type != perf_uprobe.type)
+ 		return -ENOENT;
+ 
+-	if (!capable(CAP_SYS_ADMIN))
++	if (!capable(CAP_TRACING))
+ 		return -EACCES;
+ 
+ 	/*
+@@ -10588,7 +10588,7 @@ static int perf_copy_attr(struct perf_event_attr __user *uattr,
+ 		}
+ 		/* privileged levels capture (kernel, hv): check permissions */
+ 		if ((mask & PERF_SAMPLE_BRANCH_PERM_PLM)
+-		    && perf_paranoid_kernel() && !capable(CAP_SYS_ADMIN))
++		    && perf_paranoid_kernel() && !capable(CAP_TRACING))
+ 			return -EACCES;
+ 	}
+ 
+@@ -10807,12 +10807,12 @@ SYSCALL_DEFINE5(perf_event_open,
+ 		return err;
+ 
+ 	if (!attr.exclude_kernel) {
+-		if (perf_paranoid_kernel() && !capable(CAP_SYS_ADMIN))
++		if (perf_paranoid_kernel() && !capable(CAP_TRACING))
+ 			return -EACCES;
+ 	}
+ 
+ 	if (attr.namespaces) {
+-		if (!capable(CAP_SYS_ADMIN))
++		if (!capable(CAP_TRACING))
+ 			return -EACCES;
+ 	}
+ 
+@@ -10826,7 +10826,7 @@ SYSCALL_DEFINE5(perf_event_open,
+ 
+ 	/* Only privileged users can get physical addresses */
+ 	if ((attr.sample_type & PERF_SAMPLE_PHYS_ADDR) &&
+-	    perf_paranoid_kernel() && !capable(CAP_SYS_ADMIN))
++	    perf_paranoid_kernel() && !capable(CAP_TRACING))
+ 		return -EACCES;
+ 
+ 	/*
+diff --git a/kernel/events/hw_breakpoint.c b/kernel/events/hw_breakpoint.c
+index c5cd852fe86b..6174d547699d 100644
+--- a/kernel/events/hw_breakpoint.c
++++ b/kernel/events/hw_breakpoint.c
+@@ -404,7 +404,7 @@ static int hw_breakpoint_parse(struct perf_event *bp,
+ 		 * Don't let unprivileged users set a breakpoint in the trap
+ 		 * path to avoid trap recursion attacks.
+ 		 */
+-		if (!capable(CAP_SYS_ADMIN))
++		if (!capable(CAP_TRACING))
+ 			return -EPERM;
+ 	}
+ 
+diff --git a/kernel/trace/trace_event_perf.c b/kernel/trace/trace_event_perf.c
+index 0892e38ed6fb..1ec3e08d4539 100644
+--- a/kernel/trace/trace_event_perf.c
++++ b/kernel/trace/trace_event_perf.c
+@@ -46,7 +46,7 @@ static int perf_trace_event_perm(struct trace_event_call *tp_event,
+ 
+ 	/* The ftrace function trace is allowed only for root. */
+ 	if (ftrace_event_is_function(tp_event)) {
+-		if (perf_paranoid_tracepoint_raw() && !capable(CAP_SYS_ADMIN))
++		if (perf_paranoid_tracepoint_raw() && !capable(CAP_TRACING))
+ 			return -EPERM;
+ 
+ 		if (!is_sampling_event(p_event))
+@@ -82,7 +82,7 @@ static int perf_trace_event_perm(struct trace_event_call *tp_event,
+ 	 * ...otherwise raw tracepoint data can be a severe data leak,
+ 	 * only allow root to have these.
+ 	 */
+-	if (perf_paranoid_tracepoint_raw() && !capable(CAP_SYS_ADMIN))
++	if (perf_paranoid_tracepoint_raw() && !capable(CAP_TRACING))
+ 		return -EPERM;
+ 
+ 	return 0;
 -- 
 2.20.0
 
