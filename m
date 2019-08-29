@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05DE1C3A59F
-	for <bpf@archiver.kernel.org>; Thu, 29 Aug 2019 18:26:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3321C3A5A3
+	for <bpf@archiver.kernel.org>; Thu, 29 Aug 2019 18:33:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C5A3B2166E
-	for <bpf@archiver.kernel.org>; Thu, 29 Aug 2019 18:26:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7C6FF2166E
+	for <bpf@archiver.kernel.org>; Thu, 29 Aug 2019 18:33:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1567103193;
-	bh=KgDQ6Jda5LEDY8kDUn5LFXutTM2b8PlpVRDCMS0ev7g=;
+	s=default; t=1567103627;
+	bh=j1DhezeBNuS/QPGHTZtbVwNwMe4iNqsCArHRdJU0aEM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=AWpaVjnlapjDy6OLSYMj+XewlBxzC/GfN8TK29Dx44RbH49mrbTqEIIBWMD1fcZsE
-	 LMlR97GwvMnoIC5SCSmj6qnOhcnu0phrVuA/KeQrY4HBDjN2oC7y4uvk2of8QLPvGx
-	 Mm5G3b+26RiIHYFY9z9ZpNiLcNS/VhCVlZTPhnUo=
+	b=TKrkSwjUlgFnLe4YDPzo2jfZRD6DzBKpS458Sx+JvZT+ver5Zn6I+yjPpAngXjVO2
+	 sRudxJ9/EHS1Ijm/7nOosbjklUcUUWgFykMjBjDNLIaSlSKKUINFFU89e78vWbKb0b
+	 LnkckuATwqnlkMbRK/44pTy/bXCcXUfNoSycO1LM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729501AbfH2SP4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 29 Aug 2019 14:15:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57772 "EHLO mail.kernel.org"
+        id S1729831AbfH2Sdl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 29 Aug 2019 14:33:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55412 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729484AbfH2SPy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 29 Aug 2019 14:15:54 -0400
+        id S1728461AbfH2SNm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 29 Aug 2019 14:13:42 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B891B2189D;
-        Thu, 29 Aug 2019 18:15:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F050C23407;
+        Thu, 29 Aug 2019 18:13:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567102553;
-        bh=KgDQ6Jda5LEDY8kDUn5LFXutTM2b8PlpVRDCMS0ev7g=;
+        s=default; t=1567102421;
+        bh=j1DhezeBNuS/QPGHTZtbVwNwMe4iNqsCArHRdJU0aEM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=09Hrn0I200NaAq29wcWmzAlcHzXWMll3psuRmC+teAZELS0965EFUgfcYtibw7Soz
-         GBi9CSHV+eWyT9io/vNPkDoRTFT7FNjaSICp64LJIdRHt7lwvta2DFwBjM8oFGFNFu
-         xhti3HaaT2cJHtrxYnWlplEJXDc5vDeUiWub28Aw=
+        b=Vmqo0Qzw9+3q5uJMHeiqQ/XgpBgfoZCgSrpFWb/x1hX+UNj4pY399PNml1xH3HOUE
+         8iwbu3fWEcpAwq2jWvIJO9pWdwe420WYtHmAbry+34iZizhBYOrGranAREoFGyCEj+
+         5S8I/3baJ8jppJLQkH1wfAZRhFCMR2plt2+IeKBU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Jakub Kicinski <jakub.kicinski@netronome.com>,
@@ -45,12 +45,12 @@ Cc:     Jakub Kicinski <jakub.kicinski@netronome.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 04/45] tools: bpftool: fix error message (prog -> object)
-Date:   Thu, 29 Aug 2019 14:15:04 -0400
-Message-Id: <20190829181547.8280-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 14/76] tools: bpftool: fix error message (prog -> object)
+Date:   Thu, 29 Aug 2019 14:12:09 -0400
+Message-Id: <20190829181311.7562-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190829181547.8280-1-sashal@kernel.org>
-References: <20190829181547.8280-1-sashal@kernel.org>
+In-Reply-To: <20190829181311.7562-1-sashal@kernel.org>
+References: <20190829181311.7562-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -77,10 +77,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index fcaf00621102f..be7aebff0c1e5 100644
+index f7261fad45c19..647d8a4044fbd 100644
 --- a/tools/bpf/bpftool/common.c
 +++ b/tools/bpf/bpftool/common.c
-@@ -238,7 +238,7 @@ int do_pin_any(int argc, char **argv, int (*get_fd_by_id)(__u32))
+@@ -236,7 +236,7 @@ int do_pin_any(int argc, char **argv, int (*get_fd_by_id)(__u32))
  
  	fd = get_fd_by_id(id);
  	if (fd < 0) {
