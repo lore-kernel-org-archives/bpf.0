@@ -2,551 +2,147 @@ Return-Path: <SRS0=jPHo=WZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C641C3A5A3
-	for <bpf@archiver.kernel.org>; Thu, 29 Aug 2019 05:13:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D7A8C3A59F
+	for <bpf@archiver.kernel.org>; Thu, 29 Aug 2019 06:00:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 49E41233FF
-	for <bpf@archiver.kernel.org>; Thu, 29 Aug 2019 05:13:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1567055583;
-	bh=4z7EzeYAPZbnuaHmWADScRUxaxJEUcfRa0wNuLd35O4=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=L/TKz560EdyMq8e/Eb7UrR+yncWufVPqSMgiO4Vj3gYYi6fTzETiOMu+ubukB/kk8
-	 z323eZOchO6GcmYVQYUuUvm6hgCmvL4Mw/SAQtwul+KM84sbcTdN3DUtv/haYvdloW
-	 tF0OL7nhdexIIGpw2vkmYN8KKVdB3tV1RWDI9QOc=
+	by mail.kernel.org (Postfix) with ESMTP id 1559C205ED
+	for <bpf@archiver.kernel.org>; Thu, 29 Aug 2019 06:00:48 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="oDmM+csB";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="OgSy6G4Z"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726825AbfH2FNC convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 29 Aug 2019 01:13:02 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:16672 "EHLO
+        id S1725847AbfH2GAs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 29 Aug 2019 02:00:48 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:11904 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726369AbfH2FNB (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 29 Aug 2019 01:13:01 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x7T5AfSP014471
-        for <bpf@vger.kernel.org>; Wed, 28 Aug 2019 22:13:00 -0700
+        by vger.kernel.org with ESMTP id S1725823AbfH2GAs (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 29 Aug 2019 02:00:48 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x7T603MW022697;
+        Wed, 28 Aug 2019 23:00:12 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=SpOVCw9KQEy/hmZWXM9nnmUt6o+d57cNpJwThkDymLw=;
+ b=oDmM+csBUIjFV4WE2IVo1oq5lE01wIZQwZSB2n0AfubalB48QtVOlQUInOokNFcW3DO8
+ J/9pSWnHlLmxsjjLYhZPnq7TvUG/extpapjdeMeP6wh+c0avqpv7jQsFzo53+zqvDPPF
+ +k/SdWleWuHRJG2lN1meyOcAVH1e9trmAPI= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2un3vjsktn-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 28 Aug 2019 22:13:00 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        by mx0a-00082601.pphosted.com with ESMTP id 2unvnk37fk-5
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 28 Aug 2019 23:00:12 -0700
+Received: from ash-exhub102.TheFacebook.com (2620:10d:c0a8:82::f) by
+ ash-exhub104.TheFacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 28 Aug 2019 22:12:56 -0700
-Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id A26A1760F54; Wed, 28 Aug 2019 22:12:55 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Alexei Starovoitov <ast@kernel.org>
-Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
-To:     <luto@amacapital.net>
-CC:     <davem@davemloft.net>, <peterz@infradead.org>,
-        <rostedt@goodmis.org>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <kernel-team@fb.com>,
-        <linux-api@vger.kernel.org>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 2/3] bpf: implement CAP_BPF
-Date:   Wed, 28 Aug 2019 22:12:52 -0700
-Message-ID: <20190829051253.1927291-2-ast@kernel.org>
-X-Mailer: git-send-email 2.20.0
-In-Reply-To: <20190829051253.1927291-1-ast@kernel.org>
+ 15.1.1713.5; Wed, 28 Aug 2019 23:00:03 -0700
+Received: from NAM03-BY2-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.35.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
+ via Frontend Transport; Wed, 28 Aug 2019 23:00:03 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b0+fwxt51i+sebDhbNrRdWIIy5rX8aEgCNMZaUyRB9Wf4gpMZ0k9r7jqecfF3fJ82Oz7Pk2xhqEjUBGJciF8KG6u8sOQ29CJE6w5a4Zw7SAktmGxZCT4Bd7gaN+CBOhjv2j9rVmM1RJv9u2JzLkwlov395cbjEaiB/piD9LtyUr4ymtmkr9GtKhoEXsYl1XT53oxCctYRNwqgYW+fehdOcMhkF64T2UdlbTGooH+0SCpd8TWWIzbNz0Gxa6A7v4v9Qql4NFhNGiCjdK+MsrHJj+1o28BluUxKeD7hJw6x6ZAxRrWNckpixieN092onpuhKyl+p8wpnxMZmuqmpgWVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SpOVCw9KQEy/hmZWXM9nnmUt6o+d57cNpJwThkDymLw=;
+ b=a9amvOMH3vix41vAudcXacqrLQIDuAYU0Ckb0Dg2LOBQSKk4kO21LKEO8NF5+mReJQqocqWORGZSxhG+op2ft+KXnQCFvPIj61G3DFnI1mINq5CPRf+lySQyGQgKX843SBm/nqxeljZ3GWm5GS6ENs7nwHO4OaFm5XN3sfklV/h+6WIQMK+4BCSrMz6kg8zahLGJZ08xT28y8iLIRoxQ8gotBOs9I6HEDL6de0VxMxEYpMph+x3v7IpfJ/7ovAM0fcPBDmuV9SwppuIHMp6Eo7Pu11ubO+VG+u/Dv8SksgDz2+Qsie4/3KeZDqvj/NufUWjqd1e8YObJKnssA5B9IQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SpOVCw9KQEy/hmZWXM9nnmUt6o+d57cNpJwThkDymLw=;
+ b=OgSy6G4ZNALJtcbJ7jBI5HqYpFsPGoFQLF5zLd79tiJYaKjAEnhZXR9+rV1uuK1cVx4Jdnsu9FCtAYH6naOxS099on1Bq9f0ci8goMzBT285dsklCob7fOeBNLohaXF1NF57OGzh2Lc6T7BrX2+yvYQZsNl/P/Yiwmf5LVLVpMc=
+Received: from MWHPR15MB1165.namprd15.prod.outlook.com (10.175.3.22) by
+ MWHPR15MB1248.namprd15.prod.outlook.com (10.175.3.10) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2199.21; Thu, 29 Aug 2019 06:00:02 +0000
+Received: from MWHPR15MB1165.namprd15.prod.outlook.com
+ ([fe80::45ee:bc50:acfa:60a5]) by MWHPR15MB1165.namprd15.prod.outlook.com
+ ([fe80::45ee:bc50:acfa:60a5%3]) with mapi id 15.20.2199.021; Thu, 29 Aug 2019
+ 06:00:01 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     Alexei Starovoitov <ast@kernel.org>
+CC:     Andy Lutomirski <luto@amacapital.net>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "Kernel Team" <Kernel-team@fb.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>
+Subject: Re: [PATCH v2 bpf-next 1/3] capability: introduce CAP_BPF and
+ CAP_TRACING
+Thread-Topic: [PATCH v2 bpf-next 1/3] capability: introduce CAP_BPF and
+ CAP_TRACING
+Thread-Index: AQHVXihsvq41notu3UCsny+JVxUfAqcRoayA
+Date:   Thu, 29 Aug 2019 06:00:01 +0000
+Message-ID: <5B8A0EFA-661B-4223-A59C-E16053BBAB81@fb.com>
 References: <20190829051253.1927291-1-ast@kernel.org>
+In-Reply-To: <20190829051253.1927291-1-ast@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3445.104.11)
+x-originating-ip: [2620:10d:c090:180::6d75]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5b2a2023-9f64-41df-abaf-08d72c4621a0
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR15MB1248;
+x-ms-traffictypediagnostic: MWHPR15MB1248:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MWHPR15MB124894BBD999BABA282B6E76B3A20@MWHPR15MB1248.namprd15.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:983;
+x-forefront-prvs: 0144B30E41
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(979002)(396003)(346002)(366004)(39860400002)(136003)(376002)(199004)(189003)(54906003)(53936002)(446003)(11346002)(478600001)(2906002)(2616005)(46003)(229853002)(476003)(5024004)(14454004)(86362001)(6246003)(6436002)(305945005)(6916009)(6512007)(486006)(256004)(316002)(7736002)(50226002)(4326008)(53546011)(25786009)(6486002)(5660300002)(558084003)(186003)(14444005)(33656002)(8936002)(8676002)(81156014)(99286004)(66946007)(66476007)(81166006)(66446008)(64756008)(66556008)(91956017)(102836004)(71190400001)(36756003)(71200400001)(6116002)(76116006)(6506007)(57306001)(76176011)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR15MB1248;H:MWHPR15MB1165.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 34qEUmkCseI3OEcPi3wCdG84x6THtz1zlgEgia2EU3+Ys2N1Zbe0mqGmRMSWhXnAYhJYBhWdMmXwwl0VtaqW7drM3Shy5NrUrYVAdUIRuVZeDziOtgaPlc6TFsVelz+/3cNK0wmeXazusmi/HaGItEfNksYG3aom6jwHMirgGaYSli0vn2dNPNnK+xNdyafUApXP9UkACw4omJMI/wsWedf60sXA7Ru9R/O1KWYM+o75nCVzEzkJXT9/Rp461gaagsh+mgZVEmkquGkXgPV4eTTTkTthT6RpdFc5ocCscfyXUaHD8cZ9MVMMaeJ3Xajzb+oCArxLuUcL+vr0Dis+L3yXrPqKmEKGQBjlyGS33O6paaFdx26N0/Z3vmFpzuP0kQEeyChK4TNnJ09CMEtSRDM1GCzs/6StPgbmtd0HDi4=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <AB2ABC2C42A04D4D818BE91564DF3278@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b2a2023-9f64-41df-abaf-08d72c4621a0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Aug 2019 06:00:01.8675
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jrOuZL92Zj44iI6bDZdQ3UUx25NV1befPexvNj3oOav89nzONkQBGy3TjycVVfFg4fVZNV/wJ2d2zGin1pbvQA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR15MB1248
+X-OriginatorOrg: fb.com
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.70,1.0.8
- definitions=2019-08-29_03:2019-08-28,2019-08-29 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- impostorscore=0 clxscore=1034 phishscore=0 mlxlogscore=999 adultscore=0
- spamscore=0 mlxscore=0 suspectscore=4 malwarescore=0 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1906280000 definitions=main-1908290056
+ definitions=2019-08-29_04:2019-08-28,2019-08-29 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ suspectscore=0 mlxscore=0 malwarescore=0 spamscore=0 lowpriorityscore=0
+ phishscore=0 clxscore=1015 priorityscore=1501 mlxlogscore=758
+ impostorscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1906280000 definitions=main-1908290066
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Implement permissions as stated in uapi/linux/capability.h
 
-Note that CAP_SYS_ADMIN is replaced with CAP_BPF.
-All existing applications that use BPF do not drop all caps
-and keep only CAP_SYS_ADMIN before doing bpf() syscall.
-Hence it's highly unlikely that existing code will break.
-If there will be reports of breakage then CAP_SYS_ADMIN
-would be allowed as well with "it's usage is deprecated" message
-similar to commit ee24aebffb75 ("cap_syslog: accept CAP_SYS_ADMIN for now")
+> On Aug 28, 2019, at 10:12 PM, Alexei Starovoitov <ast@kernel.org> wrote:
+>=20
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- include/linux/filter.h                      |  1 +
- kernel/bpf/arraymap.c                       |  2 +-
- kernel/bpf/cgroup.c                         |  2 +-
- kernel/bpf/core.c                           |  9 +++-
- kernel/bpf/hashtab.c                        |  4 +-
- kernel/bpf/lpm_trie.c                       |  2 +-
- kernel/bpf/queue_stack_maps.c               |  2 +-
- kernel/bpf/reuseport_array.c                |  2 +-
- kernel/bpf/stackmap.c                       |  2 +-
- kernel/bpf/syscall.c                        | 32 ++++++++------
- kernel/bpf/verifier.c                       |  4 +-
- kernel/trace/bpf_trace.c                    |  2 +-
- net/core/bpf_sk_storage.c                   |  2 +-
- net/core/filter.c                           | 10 +++--
- tools/testing/selftests/bpf/test_verifier.c | 46 +++++++++++++++++----
- 15 files changed, 83 insertions(+), 39 deletions(-)
+[...]
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 92c6e31fb008..16cea50af014 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -857,6 +857,7 @@ static inline bool bpf_dump_raw_ok(void)
- 	return kallsyms_show_value() == 1;
- }
- 
-+bool cap_bpf_tracing(void);
- struct bpf_prog *bpf_patch_insn_single(struct bpf_prog *prog, u32 off,
- 				       const struct bpf_insn *patch, u32 len);
- int bpf_remove_insns(struct bpf_prog *prog, u32 off, u32 cnt);
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 1c65ce0098a9..045e30b7160d 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -73,7 +73,7 @@ static struct bpf_map *array_map_alloc(union bpf_attr *attr)
- 	bool percpu = attr->map_type == BPF_MAP_TYPE_PERCPU_ARRAY;
- 	int ret, numa_node = bpf_map_attr_numa_node(attr);
- 	u32 elem_size, index_mask, max_entries;
--	bool unpriv = !capable(CAP_SYS_ADMIN);
-+	bool unpriv = !capable(CAP_BPF);
- 	u64 cost, array_size, mask64;
- 	struct bpf_map_memory mem;
- 	struct bpf_array *array;
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 6a6a154cfa7b..97f733354421 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -795,7 +795,7 @@ cgroup_base_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 	case BPF_FUNC_get_current_cgroup_id:
- 		return &bpf_get_current_cgroup_id_proto;
- 	case BPF_FUNC_trace_printk:
--		if (capable(CAP_SYS_ADMIN))
-+		if (cap_bpf_tracing())
- 			return bpf_get_trace_printk_proto();
- 		/* fall through */
- 	default:
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 8191a7db2777..16ed80835156 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -646,7 +646,7 @@ static bool bpf_prog_kallsyms_verify_off(const struct bpf_prog *fp)
- void bpf_prog_kallsyms_add(struct bpf_prog *fp)
- {
- 	if (!bpf_prog_kallsyms_candidate(fp) ||
--	    !capable(CAP_SYS_ADMIN))
-+	    !capable(CAP_BPF))
- 		return;
- 
- 	spin_lock_bh(&bpf_lock);
-@@ -768,7 +768,7 @@ static int bpf_jit_charge_modmem(u32 pages)
- {
- 	if (atomic_long_add_return(pages, &bpf_jit_current) >
- 	    (bpf_jit_limit >> PAGE_SHIFT)) {
--		if (!capable(CAP_SYS_ADMIN)) {
-+		if (!capable(CAP_BPF)) {
- 			atomic_long_sub(pages, &bpf_jit_current);
- 			return -EPERM;
- 		}
-@@ -2104,6 +2104,11 @@ int __weak skb_copy_bits(const struct sk_buff *skb, int offset, void *to,
- DEFINE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
- EXPORT_SYMBOL(bpf_stats_enabled_key);
- 
-+bool cap_bpf_tracing(void)
-+{
-+	return capable(CAP_BPF) && capable(CAP_TRACING);
-+}
-+
- /* All definitions of tracepoints related to BPF. */
- #define CREATE_TRACE_POINTS
- #include <linux/bpf_trace.h>
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 22066a62c8c9..f459315625ac 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -244,9 +244,9 @@ static int htab_map_alloc_check(union bpf_attr *attr)
- 	BUILD_BUG_ON(offsetof(struct htab_elem, fnode.next) !=
- 		     offsetof(struct htab_elem, hash_node.pprev));
- 
--	if (lru && !capable(CAP_SYS_ADMIN))
-+	if (lru && !capable(CAP_BPF))
- 		/* LRU implementation is much complicated than other
--		 * maps.  Hence, limit to CAP_SYS_ADMIN for now.
-+		 * maps.  Hence, limit to CAP_BPF.
- 		 */
- 		return -EPERM;
- 
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index 56e6c75d354d..a45fa5464d98 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -543,7 +543,7 @@ static struct bpf_map *trie_alloc(union bpf_attr *attr)
- 	u64 cost = sizeof(*trie), cost_per_node;
- 	int ret;
- 
--	if (!capable(CAP_SYS_ADMIN))
-+	if (!capable(CAP_BPF))
- 		return ERR_PTR(-EPERM);
- 
- 	/* check sanity of attributes */
-diff --git a/kernel/bpf/queue_stack_maps.c b/kernel/bpf/queue_stack_maps.c
-index f697647ceb54..ca0ba9edca86 100644
---- a/kernel/bpf/queue_stack_maps.c
-+++ b/kernel/bpf/queue_stack_maps.c
-@@ -45,7 +45,7 @@ static bool queue_stack_map_is_full(struct bpf_queue_stack *qs)
- /* Called from syscall */
- static int queue_stack_map_alloc_check(union bpf_attr *attr)
- {
--	if (!capable(CAP_SYS_ADMIN))
-+	if (!capable(CAP_BPF))
- 		return -EPERM;
- 
- 	/* check sanity of attributes */
-diff --git a/kernel/bpf/reuseport_array.c b/kernel/bpf/reuseport_array.c
-index 50c083ba978c..bfad7d41a061 100644
---- a/kernel/bpf/reuseport_array.c
-+++ b/kernel/bpf/reuseport_array.c
-@@ -154,7 +154,7 @@ static struct bpf_map *reuseport_array_alloc(union bpf_attr *attr)
- 	struct bpf_map_memory mem;
- 	u64 array_size;
- 
--	if (!capable(CAP_SYS_ADMIN))
-+	if (!capable(CAP_BPF))
- 		return ERR_PTR(-EPERM);
- 
- 	array_size = sizeof(*array);
-diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index 052580c33d26..beaff32fccc5 100644
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -90,7 +90,7 @@ static struct bpf_map *stack_map_alloc(union bpf_attr *attr)
- 	u64 cost, n_buckets;
- 	int err;
- 
--	if (!capable(CAP_SYS_ADMIN))
-+	if (!capable(CAP_TRACING))
- 		return ERR_PTR(-EPERM);
- 
- 	if (attr->map_flags & ~STACK_CREATE_FLAG_MASK)
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index c0f62fd67c6b..ef7b06ca30e5 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1176,7 +1176,7 @@ static int map_freeze(const union bpf_attr *attr)
- 		err = -EBUSY;
- 		goto err_put;
- 	}
--	if (!capable(CAP_SYS_ADMIN)) {
-+	if (!capable(CAP_BPF)) {
- 		err = -EPERM;
- 		goto err_put;
- 	}
-@@ -1634,7 +1634,7 @@ static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
- 
- 	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) &&
- 	    (attr->prog_flags & BPF_F_ANY_ALIGNMENT) &&
--	    !capable(CAP_SYS_ADMIN))
-+	    !capable(CAP_BPF))
- 		return -EPERM;
- 
- 	/* copy eBPF program license from user space */
-@@ -1647,11 +1647,11 @@ static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
- 	is_gpl = license_is_gpl_compatible(license);
- 
- 	if (attr->insn_cnt == 0 ||
--	    attr->insn_cnt > (capable(CAP_SYS_ADMIN) ? BPF_COMPLEXITY_LIMIT_INSNS : BPF_MAXINSNS))
-+	    attr->insn_cnt > (capable(CAP_BPF) ? BPF_COMPLEXITY_LIMIT_INSNS : BPF_MAXINSNS))
- 		return -E2BIG;
- 	if (type != BPF_PROG_TYPE_SOCKET_FILTER &&
- 	    type != BPF_PROG_TYPE_CGROUP_SKB &&
--	    !capable(CAP_SYS_ADMIN))
-+	    !capable(CAP_BPF))
- 		return -EPERM;
- 
- 	bpf_prog_load_fixup_attach_type(attr);
-@@ -1802,6 +1802,9 @@ static int bpf_raw_tracepoint_open(const union bpf_attr *attr)
- 	char tp_name[128];
- 	int tp_fd, err;
- 
-+	if (!cap_bpf_tracing())
-+		return -EPERM;
-+
- 	if (strncpy_from_user(tp_name, u64_to_user_ptr(attr->raw_tracepoint.name),
- 			      sizeof(tp_name) - 1) < 0)
- 		return -EFAULT;
-@@ -2080,7 +2083,10 @@ static int bpf_prog_test_run(const union bpf_attr *attr,
- 	struct bpf_prog *prog;
- 	int ret = -ENOTSUPP;
- 
--	if (!capable(CAP_SYS_ADMIN))
-+	if (!capable(CAP_NET_ADMIN) || !capable(CAP_BPF))
-+		/* test_run callback is available for networking progs only.
-+		 * Add cap_bpf_tracing() above when tracing progs become runable.
-+		 */
- 		return -EPERM;
- 	if (CHECK_ATTR(BPF_PROG_TEST_RUN))
- 		return -EINVAL;
-@@ -2117,7 +2123,7 @@ static int bpf_obj_get_next_id(const union bpf_attr *attr,
- 	if (CHECK_ATTR(BPF_OBJ_GET_NEXT_ID) || next_id >= INT_MAX)
- 		return -EINVAL;
- 
--	if (!capable(CAP_SYS_ADMIN))
-+	if (!capable(CAP_BPF))
- 		return -EPERM;
- 
- 	next_id++;
-@@ -2143,7 +2149,7 @@ static int bpf_prog_get_fd_by_id(const union bpf_attr *attr)
- 	if (CHECK_ATTR(BPF_PROG_GET_FD_BY_ID))
- 		return -EINVAL;
- 
--	if (!capable(CAP_SYS_ADMIN))
-+	if (!capable(CAP_BPF))
- 		return -EPERM;
- 
- 	spin_lock_bh(&prog_idr_lock);
-@@ -2177,7 +2183,7 @@ static int bpf_map_get_fd_by_id(const union bpf_attr *attr)
- 	    attr->open_flags & ~BPF_OBJ_FLAG_MASK)
- 		return -EINVAL;
- 
--	if (!capable(CAP_SYS_ADMIN))
-+	if (!capable(CAP_BPF))
- 		return -EPERM;
- 
- 	f_flags = bpf_get_file_flag(attr->open_flags);
-@@ -2352,7 +2358,7 @@ static int bpf_prog_get_info_by_fd(struct bpf_prog *prog,
- 	info.run_time_ns = stats.nsecs;
- 	info.run_cnt = stats.cnt;
- 
--	if (!capable(CAP_SYS_ADMIN)) {
-+	if (!capable(CAP_BPF)) {
- 		info.jited_prog_len = 0;
- 		info.xlated_prog_len = 0;
- 		info.nr_jited_ksyms = 0;
-@@ -2670,7 +2676,7 @@ static int bpf_btf_load(const union bpf_attr *attr)
- 	if (CHECK_ATTR(BPF_BTF_LOAD))
- 		return -EINVAL;
- 
--	if (!capable(CAP_SYS_ADMIN))
-+	if (!capable(CAP_BPF))
- 		return -EPERM;
- 
- 	return btf_new_fd(attr);
-@@ -2683,7 +2689,7 @@ static int bpf_btf_get_fd_by_id(const union bpf_attr *attr)
- 	if (CHECK_ATTR(BPF_BTF_GET_FD_BY_ID))
- 		return -EINVAL;
- 
--	if (!capable(CAP_SYS_ADMIN))
-+	if (!capable(CAP_BPF))
- 		return -EPERM;
- 
- 	return btf_get_fd_by_id(attr->btf_id);
-@@ -2752,7 +2758,7 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
- 	if (CHECK_ATTR(BPF_TASK_FD_QUERY))
- 		return -EINVAL;
- 
--	if (!capable(CAP_SYS_ADMIN))
-+	if (!cap_bpf_tracing())
- 		return -EPERM;
- 
- 	if (attr->task_fd_query.flags != 0)
-@@ -2820,7 +2826,7 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, siz
- 	union bpf_attr attr = {};
- 	int err;
- 
--	if (sysctl_unprivileged_bpf_disabled && !capable(CAP_SYS_ADMIN))
-+	if (sysctl_unprivileged_bpf_disabled && !capable(CAP_BPF))
- 		return -EPERM;
- 
- 	err = bpf_check_uarg_tail_zero(uattr, sizeof(attr), size);
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 10c0ff93f52b..5810e8cc9342 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -987,7 +987,7 @@ static void __mark_reg_unbounded(struct bpf_reg_state *reg)
- 	reg->umax_value = U64_MAX;
- 
- 	/* constant backtracking is enabled for root only for now */
--	reg->precise = capable(CAP_SYS_ADMIN) ? false : true;
-+	reg->precise = capable(CAP_BPF) ? false : true;
- }
- 
- /* Mark a register as having a completely unknown (scalar) value. */
-@@ -9233,7 +9233,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
- 		env->insn_aux_data[i].orig_idx = i;
- 	env->prog = *prog;
- 	env->ops = bpf_verifier_ops[env->prog->type];
--	is_priv = capable(CAP_SYS_ADMIN);
-+	is_priv = capable(CAP_BPF);
- 
- 	/* grab the mutex to protect few globals used by verifier */
- 	if (!is_priv)
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index ca1255d14576..2bf58ff5bf75 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1246,7 +1246,7 @@ int perf_event_query_prog_array(struct perf_event *event, void __user *info)
- 	u32 *ids, prog_cnt, ids_len;
- 	int ret;
- 
--	if (!capable(CAP_SYS_ADMIN))
-+	if (!cap_bpf_tracing())
- 		return -EPERM;
- 	if (event->attr.type != PERF_TYPE_TRACEPOINT)
- 		return -EINVAL;
-diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-index da5639a5bd3b..0b29f6abbeba 100644
---- a/net/core/bpf_sk_storage.c
-+++ b/net/core/bpf_sk_storage.c
-@@ -616,7 +616,7 @@ static int bpf_sk_storage_map_alloc_check(union bpf_attr *attr)
- 	    !attr->btf_key_type_id || !attr->btf_value_type_id)
- 		return -EINVAL;
- 
--	if (!capable(CAP_SYS_ADMIN))
-+	if (!capable(CAP_BPF))
- 		return -EPERM;
- 
- 	if (attr->value_size >= KMALLOC_MAX_SIZE -
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 0c1059cdad3d..986277abfde2 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5990,7 +5990,7 @@ bpf_base_func_proto(enum bpf_func_id func_id)
- 		break;
- 	}
- 
--	if (!capable(CAP_SYS_ADMIN))
-+	if (!capable(CAP_BPF))
- 		return NULL;
- 
- 	switch (func_id) {
-@@ -5999,7 +5999,9 @@ bpf_base_func_proto(enum bpf_func_id func_id)
- 	case BPF_FUNC_spin_unlock:
- 		return &bpf_spin_unlock_proto;
- 	case BPF_FUNC_trace_printk:
--		return bpf_get_trace_printk_proto();
-+		if (cap_bpf_tracing())
-+			return bpf_get_trace_printk_proto();
-+		/* fall through */
- 	default:
- 		return NULL;
- 	}
-@@ -6563,7 +6565,7 @@ static bool cg_skb_is_valid_access(int off, int size,
- 		return false;
- 	case bpf_ctx_range(struct __sk_buff, data):
- 	case bpf_ctx_range(struct __sk_buff, data_end):
--		if (!capable(CAP_SYS_ADMIN))
-+		if (!capable(CAP_BPF))
- 			return false;
- 		break;
- 	}
-@@ -6575,7 +6577,7 @@ static bool cg_skb_is_valid_access(int off, int size,
- 		case bpf_ctx_range_till(struct __sk_buff, cb[0], cb[4]):
- 			break;
- 		case bpf_ctx_range(struct __sk_buff, tstamp):
--			if (!capable(CAP_SYS_ADMIN))
-+			if (!capable(CAP_BPF))
- 				return false;
- 			break;
- 		default:
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index 44e2d640b088..91a7f25512ca 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -805,10 +805,20 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
- 	}
- }
- 
-+struct libcap {
-+	struct __user_cap_header_struct hdr;
-+	struct __user_cap_data_struct data[2];
-+};
-+
- static int set_admin(bool admin)
- {
- 	cap_t caps;
--	const cap_value_t cap_val = CAP_SYS_ADMIN;
-+	/* need CAP_BPF to load progs and CAP_NET_ADMIN to run networking progs,
-+	 * and CAP_TRACING to create stackmap
-+	 */
-+	const cap_value_t cap_net_admin = CAP_NET_ADMIN;
-+	const cap_value_t cap_sys_admin = CAP_SYS_ADMIN;
-+	struct libcap *cap;
- 	int ret = -1;
- 
- 	caps = cap_get_proc();
-@@ -816,11 +826,26 @@ static int set_admin(bool admin)
- 		perror("cap_get_proc");
- 		return -1;
- 	}
--	if (cap_set_flag(caps, CAP_EFFECTIVE, 1, &cap_val,
-+	cap = (struct libcap *)caps;
-+	if (cap_set_flag(caps, CAP_EFFECTIVE, 1, &cap_sys_admin, CAP_CLEAR)) {
-+		perror("cap_set_flag clear admin");
-+		goto out;
-+	}
-+	if (cap_set_flag(caps, CAP_EFFECTIVE, 1, &cap_net_admin,
- 				admin ? CAP_SET : CAP_CLEAR)) {
--		perror("cap_set_flag");
-+		perror("cap_set_flag set_or_clear net");
- 		goto out;
- 	}
-+	/* libcap is likely old and simply ignores CAP_BPF and CAP_TRACING,
-+	 * so update effective bits manually
-+	 */
-+	if (admin) {
-+		cap->data[1].effective |= 1 << (38 /* CAP_BPF */ - 32);
-+		cap->data[1].effective |= 1 << (39 /* CAP_TRACING */ - 32);
-+	} else {
-+		cap->data[1].effective &= ~(1 << (38 - 32));
-+		cap->data[1].effective &= ~(1 << (39 - 32));
-+	}
- 	if (cap_set_proc(caps)) {
- 		perror("cap_set_proc");
- 		goto out;
-@@ -1012,9 +1037,11 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
- 
- static bool is_admin(void)
- {
-+	cap_flag_value_t net_priv = CAP_CLEAR;
-+	bool tracing_priv = false;
-+	bool bpf_priv = false;
-+	struct libcap *cap;
- 	cap_t caps;
--	cap_flag_value_t sysadmin = CAP_CLEAR;
--	const cap_value_t cap_val = CAP_SYS_ADMIN;
- 
- #ifdef CAP_IS_SUPPORTED
- 	if (!CAP_IS_SUPPORTED(CAP_SETFCAP)) {
-@@ -1027,11 +1054,14 @@ static bool is_admin(void)
- 		perror("cap_get_proc");
- 		return false;
- 	}
--	if (cap_get_flag(caps, cap_val, CAP_EFFECTIVE, &sysadmin))
--		perror("cap_get_flag");
-+	cap = (struct libcap *)caps;
-+	bpf_priv = cap->data[1].effective & (1 << (38/* CAP_BPF */ - 32));
-+	tracing_priv = cap->data[1].effective & (1 << (39/* CAP_TRACING */ - 32));
-+	if (cap_get_flag(caps, CAP_NET_ADMIN, CAP_EFFECTIVE, &net_priv))
-+		perror("cap_get_flag NET");
- 	if (cap_free(caps))
- 		perror("cap_free");
--	return (sysadmin == CAP_SET);
-+	return bpf_priv && tracing_priv && net_priv == CAP_SET;
- }
- 
- static void get_unpriv_disabled()
--- 
-2.20.0
+> - Creation of [ku][ret]probe
+> - Accessing arbitrary kernel memory via kprobe + probe_kernel_read
+> - Attach tracing bpf programs to perf events
+> - Access to kallsyms
+>=20
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+
+Acked-by: Song Liu <songliubraving@fb.com>
 
