@@ -2,122 +2,155 @@ Return-Path: <SRS0=XeSK=W2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92A29C3A59F
-	for <bpf@archiver.kernel.org>; Fri, 30 Aug 2019 00:51:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C713C3A5A3
+	for <bpf@archiver.kernel.org>; Fri, 30 Aug 2019 04:16:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 657AF20673
-	for <bpf@archiver.kernel.org>; Fri, 30 Aug 2019 00:51:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2248822CE9
+	for <bpf@archiver.kernel.org>; Fri, 30 Aug 2019 04:16:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="biPM7KPd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NGcsYzMj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727562AbfH3Avp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 29 Aug 2019 20:51:45 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:42624 "EHLO
+        id S1725819AbfH3EQz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 30 Aug 2019 00:16:55 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:33773 "EHLO
         mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727578AbfH3Aur (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 29 Aug 2019 20:50:47 -0400
-Received: by mail-lj1-f195.google.com with SMTP id l14so4804362ljj.9
-        for <bpf@vger.kernel.org>; Thu, 29 Aug 2019 17:50:46 -0700 (PDT)
+        with ESMTP id S1725774AbfH3EQz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 30 Aug 2019 00:16:55 -0400
+Received: by mail-lj1-f195.google.com with SMTP id z17so5179342ljz.0;
+        Thu, 29 Aug 2019 21:16:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=baF6/BEW5KEVo2LOFkZZTRTkQs3Veu82MyQ6XaftpOU=;
-        b=biPM7KPdLtnr+xQRNp5xESVEeouLUJKehD24Gd9ioxx2OUh6OIbrndSWFIo+qFylSI
-         kWdpwF+J69U+3pO4IuT7c63y1CwY11q0cXDK5OXsQnG4N+5QSF0rdTNyreizSd4oQ8ux
-         Am84VUumVDcjZ1RoEaa413ZVsTrv4I2GuzRZa59p3t9MedXqHlG7BxfFeXGP1smCN1Rm
-         pj+FEwpD4ZadSIML4/3wTI9ldsdEy1/4SBL2pH8rHBRmKHSJVdGhBCPlnrs46hM1tr7p
-         VF5+0TZbcNTyjM8g81MSG9ZbEwNHniA392B0IqMVwrg9G2ma9dMcEqh7oNjuVlu+1z81
-         Z/3A==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iCLpdRArKeEL95JPVvIj5SaZBs9XGj7yces6tTfOStA=;
+        b=NGcsYzMjskd+7OhewWqjmPfjfb9vMfaXR2uRHfS9k8f4X5oAfxYur3wU1mGw6z9Adb
+         s2vSwPdI5MgQ4eo0KXdbdByfhixSLkllBJGWIlIgnMKt/IOTvkIeaEuR6O589lzfmryA
+         6DZK5zWsARS5a4cbhaMVO1vNF8zJA+nFUYwp2FocHW1HXNjbxt1aBqC73lDqN3iU2f2l
+         ODHuasUQ55rzy4x9fiz0RvJv5FS27UAqM3MvRHxTek4Mg8HyqGD6Owic2fzaFJ8SNuhf
+         eF5ngM9Cksnm6F0m+XrxQVECHdjmoyWi/boaFCBQQ7F09g+OKrJHWXcHf6DdE01r/QEj
+         VB5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=baF6/BEW5KEVo2LOFkZZTRTkQs3Veu82MyQ6XaftpOU=;
-        b=prM+zdLlxaH26TDcIg2zJtGZt9X79oKpKCbW6Ydk0Ir0VH3y1qU8PPRt7z6aPpccnX
-         zAclFmd61xiiNQ1dO5HvyLdjZtTJiQb2bbAqAy4jMNKVWuy0wuFY+dn1lrXU+4WAHJlP
-         c4y2H6ZSxb9Z9rIoy3ELYGS0EHN86kJ0HlXCIGQ3vMIksaIYa6F1vC7BB+lQrLrcab/e
-         NZP3oikB8PIws3h7pZMu5msnLtSYSPiGm0wo5Gr5wVJCMpFGwFur+OAbdfIEOXugz/Pi
-         tMiftogXUxhOPgi1Ql9sUFoFkgfPXtm+r94/qgTsKZc4ep1gFL8gEFdviBgG/Fqjuiu3
-         FLuw==
-X-Gm-Message-State: APjAAAV1T+1YIRyx28UvdMXWpiYWlCfSTVz9NAVwplMQSqkDKhZpxQYn
-        1eLLlG9wbJDoTHOywMYPzw6qkBt8KXk=
-X-Google-Smtp-Source: APXvYqwlf7D/N+8AETmyrADFpsR/4uDHEHGgehGXXJJxn9PraZ2fAYxITTtvWqzPcr0SP5k+C+brcg==
-X-Received: by 2002:a2e:900c:: with SMTP id h12mr6901426ljg.151.1567126245707;
-        Thu, 29 Aug 2019 17:50:45 -0700 (PDT)
-Received: from localhost.localdomain (168-200-94-178.pool.ukrtel.net. [178.94.200.168])
-        by smtp.gmail.com with ESMTPSA id f19sm628149lfk.43.2019.08.29.17.50.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Aug 2019 17:50:45 -0700 (PDT)
-From:   Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-To:     linux@armlinux.org.uk, ast@kernel.org, daniel@iogearbox.net,
-        yhs@fb.com, davem@davemloft.net, jakub.kicinski@netronome.com,
-        hawk@kernel.org, john.fastabend@gmail.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        clang-built-linux@googlegroups.com,
-        Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-Subject: [PATCH RFC bpf-next 03/10] libbpf: Makefile: add C/CXX/LDFLAGS to libbpf.so and test_libpf targets
-Date:   Fri, 30 Aug 2019 03:50:30 +0300
-Message-Id: <20190830005037.24004-4-ivan.khoronzhuk@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190830005037.24004-1-ivan.khoronzhuk@linaro.org>
-References: <20190830005037.24004-1-ivan.khoronzhuk@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iCLpdRArKeEL95JPVvIj5SaZBs9XGj7yces6tTfOStA=;
+        b=E7zwOCPAzSWUSb+IQDyQ7chPC/rhm/DNFR1h95z4qMNHlhfYrdMfjwBKlwt2fonFto
+         g5c5YDYsgLydq3C4pXX3tLfmUendbfdSVQ8mJCjGcKO5f/q6/lg+P0KPv247cA7zvDnV
+         dpyfTW6pLPiYLbL9E8O4s/nlJjT08GGtFEUXZgkama3kb45FvXJMarrI5hU/VWD85slT
+         aiR96an0e3ggYOzIAMRZ4SXrkCHinbbhRn+AJZgZqgF0D4F8kZDFKugSlCSphikmVi16
+         l/2HxSdFnbz765rx2SfC4Rg2Wj57/WJjcABziS0e8nEHi21uxm9EVxyj8GlMCYfr7al/
+         Ex+A==
+X-Gm-Message-State: APjAAAVnockiYd+271qgOPHwoy67wrcECitZJWx70mWBYUfcn3ljk2Ai
+        KpQyuxYfppQHq+Xkb0nhDhi9bqhbQ5Kf6zrHZPI=
+X-Google-Smtp-Source: APXvYqwckFt3LnsIIi6bT/vpq147Uo7WytBr14tQ2z3LKla/6nJ/Z4g9Ap40xGdfMuNke05PcWsONH/yRHIgQeADweg=
+X-Received: by 2002:a05:651c:1ba:: with SMTP id c26mr7511169ljn.11.1567138612764;
+ Thu, 29 Aug 2019 21:16:52 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190829051253.1927291-1-ast@kernel.org> <536636ad-0baf-31e9-85fe-2591b65068df@iogearbox.net>
+In-Reply-To: <536636ad-0baf-31e9-85fe-2591b65068df@iogearbox.net>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 29 Aug 2019 21:16:39 -0700
+Message-ID: <CAADnVQLiD_2dTWXgaC773Uo+4LPz=vFEysXUnUcsJ9FKBk5Q7g@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 1/3] capability: introduce CAP_BPF and CAP_TRACING
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
+        Linux API <linux-api@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In case of LDFLAGS and EXTRA_CC flags there is no way to pass them
-correctly to build command, for instance when --sysroot is used or
-external libraries are used, like -lelf. In follow patches this is
-used for samples/bpf cross-compiling.
+On Thu, Aug 29, 2019 at 8:47 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 8/29/19 7:12 AM, Alexei Starovoitov wrote:
+> [...]
+> >
+> > +/*
+> > + * CAP_BPF allows the following BPF operations:
+> > + * - Loading all types of BPF programs
+> > + * - Creating all types of BPF maps except:
+> > + *    - stackmap that needs CAP_TRACING
+> > + *    - devmap that needs CAP_NET_ADMIN
+> > + *    - cpumap that needs CAP_SYS_ADMIN
+> > + * - Advanced verifier features
+> > + *   - Indirect variable access
+> > + *   - Bounded loops
+> > + *   - BPF to BPF function calls
+> > + *   - Scalar precision tracking
+> > + *   - Larger complexity limits
+> > + *   - Dead code elimination
+> > + *   - And potentially other features
+> > + * - Use of pointer-to-integer conversions in BPF programs
+> > + * - Bypassing of speculation attack hardening measures
+> > + * - Loading BPF Type Format (BTF) data
+> > + * - Iterate system wide loaded programs, maps, BTF objects
+> > + * - Retrieve xlated and JITed code of BPF programs
+> > + * - Access maps and programs via id
+> > + * - Use bpf_spin_lock() helper
+>
+> This is still very wide.
 
-Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
----
- tools/lib/bpf/Makefile | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+'still very wide' ? you make it sound like it's a bad thing.
+Covering all of bpf with single CAP_BPF is #1 goal of this set.
 
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index 844f6cd79c03..d606d249e334 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -99,6 +99,10 @@ else
-   CFLAGS := -g -Wall
- endif
- 
-+ifdef EXTRA_CXXFLAGS
-+  CXXFLAGS := $(EXTRA_CXXFLAGS)
-+endif
-+
- ifeq ($(feature-libelf-mmap), 1)
-   override CFLAGS += -DHAVE_LIBELF_MMAP_SUPPORT
- endif
-@@ -179,8 +183,9 @@ $(BPF_IN): force elfdep bpfdep
- $(OUTPUT)libbpf.so: $(OUTPUT)libbpf.so.$(LIBBPF_VERSION)
- 
- $(OUTPUT)libbpf.so.$(LIBBPF_VERSION): $(BPF_IN)
--	$(QUIET_LINK)$(CC) --shared -Wl,-soname,libbpf.so.$(VERSION) \
--				    -Wl,--version-script=$(VERSION_SCRIPT) $^ -lelf -o $@
-+	$(QUIET_LINK)$(CC) $(LDFLAGS) \
-+		--shared -Wl,-soname,libbpf.so.$(VERSION) \
-+		-Wl,--version-script=$(VERSION_SCRIPT) $^ -lelf -o $@
- 	@ln -sf $(@F) $(OUTPUT)libbpf.so
- 	@ln -sf $(@F) $(OUTPUT)libbpf.so.$(VERSION)
- 
-@@ -188,7 +193,7 @@ $(OUTPUT)libbpf.a: $(BPF_IN)
- 	$(QUIET_LINK)$(RM) $@; $(AR) rcs $@ $^
- 
- $(OUTPUT)test_libbpf: test_libbpf.cpp $(OUTPUT)libbpf.a
--	$(QUIET_LINK)$(CXX) $(INCLUDES) $^ -lelf -o $@
-+	$(QUIET_LINK)$(CXX) $(CXXFLAGS) $(LDFLAGS) $(INCLUDES) $^ -lelf -o $@
- 
- $(OUTPUT)libbpf.pc:
- 	$(QUIET_GEN)sed -e "s|@PREFIX@|$(prefix)|" \
--- 
-2.17.1
+> Consider following example: app has CAP_BPF +> CAP_NET_ADMIN. Why can't we in this case *only* allow loading networking
+> related [plus generic] maps and programs? If it doesn't have CAP_TRACING,
+> what would be a reason to allow loading it? Same vice versa. There are
+> some misc program types like the infraread stuff, but they could continue
+> to live under [CAP_BPF +] CAP_SYS_ADMIN as fallback. I think categorizing
+> a specific list of prog and map types might be more clear than disallowing
+> some helpers like below (e.g. why choice of bpf_probe_read() but not
+> bpf_probe_write_user() etc).
 
+It kinda makes sense:
+cap_bpf+cap_net_admin allows networking progs.
+cap_bpf+cap_tracing allows tracing progs.
+But what to do with cg_sysctl, cg_device, lirc ?
+They are clearly neither.
+Invent yet another cap_foo for them?
+or let them under cap_bpf alone?
+If cap_bpf alone is enough then why bother with bpf+net_admin for networking?
+It's not making anything cleaner. Only confuses users.
+
+Also bpf_trace_printk() is using ftrace and can print arbitrary memory.
+In that sense it's no different than bpf_probe_read.
+Both should be under CAP_TRACING.
+But bpf_trace_printk() is available to all progs.
+Even to socket filters under cap_sys_admin today.
+With this patch set I'm allowing bpf_trace_printk() under CAP_TRACING.
+Same goes to bpf_probe_read.
+
+High level description:
+cap_bpf alone allows loading of all progs except when
+later cap_net_admin or cap_tracing will _not_ be able to
+filter out the helper at attach time that shouldn't be there.
+
+Example of how this patch set works:
+- to load and attach networking progs
+both cap_bpf and cap_net_admin are necessary.
+- to load and attach tracing progs
+both cap_bpf and cap_tracing are necessary.
+
+when networking prog is using bpf_trace_printk
+then cap_tracing is needed too.
+And it's checked at load time.
+If we do what you're proposing:
+"lets allow load of all networking with bpf+net_admin"
+then this won't work for bpf_trace_printk.
+Per helper function capability check is still needed.
+And since it's needed I see no reason to limit
+networking progs to bpf+net_admin at load time.
+Load time is still cap_bpf only.
+And helpers will be filtered out at attach by net_admin.
