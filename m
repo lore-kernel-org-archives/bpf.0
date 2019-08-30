@@ -2,56 +2,57 @@ Return-Path: <SRS0=XeSK=W2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E637C3A59F
-	for <bpf@archiver.kernel.org>; Fri, 30 Aug 2019 00:50:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA614C3A59F
+	for <bpf@archiver.kernel.org>; Fri, 30 Aug 2019 00:51:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 669F521726
-	for <bpf@archiver.kernel.org>; Fri, 30 Aug 2019 00:50:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7C59F20673
+	for <bpf@archiver.kernel.org>; Fri, 30 Aug 2019 00:51:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rnr4X0TQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Okdsp5Zx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727213AbfH3Auo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 29 Aug 2019 20:50:44 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:33076 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727118AbfH3Aun (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 29 Aug 2019 20:50:43 -0400
-Received: by mail-lj1-f194.google.com with SMTP id z17so4856615ljz.0
-        for <bpf@vger.kernel.org>; Thu, 29 Aug 2019 17:50:42 -0700 (PDT)
+        id S1727922AbfH3Au5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 29 Aug 2019 20:50:57 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:44880 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727896AbfH3Au4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 29 Aug 2019 20:50:56 -0400
+Received: by mail-lj1-f195.google.com with SMTP id e24so4787757ljg.11
+        for <bpf@vger.kernel.org>; Thu, 29 Aug 2019 17:50:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=xMuXLxwuJeSWopT/f8dXFbI5jVuji3StpvlKwxHupj4=;
-        b=rnr4X0TQdkwszhW4r53DgSGbfSyqjshLRLQ9ru9r0hiQjF6Pmzl6cFSGIXGZDyX8FM
-         kO4l69Gy3FILbmNq5bSUGsIpaZ9XaIHD/+YK6HPdgABmplST2YZNTLJo9RawuaCo+ute
-         7rBOt9fScpmIQdED0bS9ysnX6D/5oXmASshjL3akOMkCpUlDb0m3RuUipo7CfFf44g5O
-         NT/ccLrrYb5iZAFECZ3wB98QbOk+AWPIlhlBT8BwE0+tWyGIst3jCLaW5eI5KnWey2hK
-         qT8PWkNXjiYDmWcUscqudRpRLzArq1rvEq/ytQzRBj7ZXjV1OCAHSjD94QTSqLHQkDUW
-         ogiA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=mY025N9ZTLshq6bUASscJHYyFWN73WCKPGSueHP30TA=;
+        b=Okdsp5ZxNf0c0ZS1PgudZ1/Uzcx1vh+JyUHLIBaB4gA9eHqIu0am2+/xAGRamBrEmK
+         qCvznYgVkMcSDDWdiuCGk34vVj8/mP+ro1bCTjA8Ka3xrOrkCNjL5U6xgrBRNELJmuje
+         tp5PnYpAOK9+P7pd2AMtrpQ2VFUiwZgdf+VjTUiXBMwwiLm0B+wHxS9J4hkKQKTR1PMo
+         g5JzQdW9lrRdG4QItLYA3aqHsMKgs2n4aIc4BsxCiDVNYjJ1gBnQXG5diF7z2I2DKLba
+         2UWvt484BgUsrYmmG+TmQ/bM0gM9QCmze3gdMrsQwFGwno6fmli/VeP2qEfoN4+I/6o0
+         LHHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=xMuXLxwuJeSWopT/f8dXFbI5jVuji3StpvlKwxHupj4=;
-        b=dMCyPcM8eSw5WO5nNZIiYNaZb1Wq2A5SXyKLesTvTiDE6xzGKRO4vuRVUoJh7CsK33
-         FqO4DWg8eiD+bFThPYy1hBKu3uQOzq3rrrz/Emq7xAYzVUTN54gJ8dWMmvmXel7Wqa0g
-         jca3nRPOh9ZOVoOXVZikWRSyTdBzzfDUSq2+Bx1EhEIuGR6owertXlOUIs8/SSn4zjB6
-         oO0S5TI5C6r+RsHe2UQOisE8MjQG6dwv7gsCrNvp8HA274XhUPx+V5nJa0tRlX2yFr0U
-         vKwwvOjYWKRlIGQfTv3vGkAH2xB+S/UWBn2ayp56jOfW7P5/HQZOD2H+MMGDrr2SVkRC
-         wW3A==
-X-Gm-Message-State: APjAAAVDZdYl/DM+gZ9S+ZYaS92eReftZ4WxYzrO+k5ZcqNjobHsb++8
-        zri7eEKiHFVsdHM81no3rgvXGQ==
-X-Google-Smtp-Source: APXvYqxL710fHxqeBsIPyilVGaM4NIUyDBx68X3IEtdE/LKXFPKtMM8GtBcX4pfo/aWdd1ZNaV62/g==
-X-Received: by 2002:a2e:9d9a:: with SMTP id c26mr7203774ljj.56.1567126241817;
-        Thu, 29 Aug 2019 17:50:41 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=mY025N9ZTLshq6bUASscJHYyFWN73WCKPGSueHP30TA=;
+        b=PXMLmG5nBpePp5bRy3rnNWNw5UEmjUgFkEreBpElUE/yiT0XOGxas3s6tzsL8rtsKc
+         eaU/LokEnlIm/llsh52NWiGCrg9si/0WbLZDbSCCeKySPN8tEvOmQK1AA5LPeq9OE3el
+         OGacDSGQaU/h3nPgBZKZSbe4oO8oFmDcO2AbqHgJByebV2txghnSF6aWnu8JH2Uydm9W
+         OcJAVa+BpsCZdmX+IOmq1axfkYOlTNDfSMBQBwa3LS67UD03cZxTa1RZVSnHKwnBYLvK
+         A8/S4seHQTYRO99A2s4G7MKtA0YhC+/LdxewHy+hV0UEEuUdxcg6ASCbuNVB/O3Ka08K
+         7KpA==
+X-Gm-Message-State: APjAAAU0Ar2stG5TA4Rf16wgu8whAeiWRjtQZt5Mj5jd97BnSwHNtbYD
+        TM44Kw6cGCZF6nDC45zb1eDckg==
+X-Google-Smtp-Source: APXvYqwqImk+P6XTagmx3q1aVV2TwK0n5J/VZAS+IZlC8HW1HTeVnR0gZP11ETCdNHIKYsMWLXe3bA==
+X-Received: by 2002:a2e:2bda:: with SMTP id r87mr1097319ljr.3.1567126254430;
+        Thu, 29 Aug 2019 17:50:54 -0700 (PDT)
 Received: from localhost.localdomain (168-200-94-178.pool.ukrtel.net. [178.94.200.168])
-        by smtp.gmail.com with ESMTPSA id f19sm628149lfk.43.2019.08.29.17.50.40
+        by smtp.gmail.com with ESMTPSA id f19sm628149lfk.43.2019.08.29.17.50.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Aug 2019 17:50:41 -0700 (PDT)
+        Thu, 29 Aug 2019 17:50:53 -0700 (PDT)
 From:   Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
 To:     linux@armlinux.org.uk, ast@kernel.org, daniel@iogearbox.net,
         yhs@fb.com, davem@davemloft.net, jakub.kicinski@netronome.com,
@@ -60,55 +61,53 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         clang-built-linux@googlegroups.com,
         Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-Subject: [PATCH RFC bpf-next 00/10] improve/fix cross-compilation for bpf samples
-Date:   Fri, 30 Aug 2019 03:50:27 +0300
-Message-Id: <20190830005037.24004-1-ivan.khoronzhuk@linaro.org>
+Subject: [PATCH RFC bpf-next 10/10] arm: include: asm: unified: mask .syntax unified for clang
+Date:   Fri, 30 Aug 2019 03:50:37 +0300
+Message-Id: <20190830005037.24004-11-ivan.khoronzhuk@linaro.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190830005037.24004-1-ivan.khoronzhuk@linaro.org>
+References: <20190830005037.24004-1-ivan.khoronzhuk@linaro.org>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series contains mainly fixes/improvements for cross-compilation
-(also verified on native platform build), tested on arm, but intended
-for any arch.
+The samples/bpf reuses linux headers, with clang -emit-llvm,
+so this w/a is only for samples/bpf (samples/bpf/Makefile CLANG-bpf).
 
-The several patches are related to llvm clang and should be out of this
-series or even fixed in another way, and here just to get comments:
-  arm: include: asm: swab: mask rev16 instruction for clang
-  arm: include: asm: unified: mask .syntax unified for clang
+It allows to build samples/bpf for arm on target board.
+In another way clang -emit-llvm generates errors like:
 
-Also, only for armv7, there is one more problem related to long and
-void type sizes for 32 bits, while the BPF LLVM back end still
-operates in 64 bit, but that's another story.
+<inline asm>:1:1: error: unknown directive
+.syntax unified
 
-Smth related not only for cross-compilation and can have impact on other
-archs and build environments, so might be good idea to verify it in order
-to add appropriate changes, some warn options can be tuned, so comment.
+I have verified it on clang 5, 6 ,7, 8, 9, 10
+as on native platform as for cross-compiling. This decision is
+arguable, but it doesn't have impact on samples/bpf so it's easier
+just ignore it for clang, at least for now...
 
-Ivan Khoronzhuk (10):
-  samples: bpf: Makefile: use --target from cross-compile
-  samples: bpf: Makefile: remove target for native build
-  libbpf: Makefile: add C/CXX/LDFLAGS to libbpf.so and test_libpf
-    targets
-  samples: bpf: use own EXTRA_CFLAGS for clang commands
-  samples: bpf: Makefile: use vars from KBUILD_CFLAGS to handle linux
-    headers
-  samples: bpf: makefile: fix HDR_PROBE
-  samples: bpf: add makefile.prog for separate CC build
-  samples: bpf: Makefile: base progs build on Makefile.progs
-  arm: include: asm: swab: mask rev16 instruction for clang
-  arm: include: asm: unified: mask .syntax unified for clang
+Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+---
+ arch/arm/include/asm/unified.h | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
- arch/arm/include/asm/swab.h    |   3 +
- arch/arm/include/asm/unified.h |   6 +-
- samples/bpf/Makefile           | 177 +++++++++++++++++++--------------
- samples/bpf/Makefile.prog      |  77 ++++++++++++++
- samples/bpf/README.rst         |   7 ++
- tools/lib/bpf/Makefile         |  11 +-
- 6 files changed, 205 insertions(+), 76 deletions(-)
- create mode 100644 samples/bpf/Makefile.prog
-
+diff --git a/arch/arm/include/asm/unified.h b/arch/arm/include/asm/unified.h
+index 1e2c3eb04353..3cf8757b9a14 100644
+--- a/arch/arm/include/asm/unified.h
++++ b/arch/arm/include/asm/unified.h
+@@ -11,7 +11,11 @@
+ #if defined(__ASSEMBLY__)
+ 	.syntax unified
+ #else
+-__asm__(".syntax unified");
++
++#ifndef __clang__
++	__asm__(".syntax unified");
++#endif
++
+ #endif
+ 
+ #ifdef CONFIG_CPU_V7M
 -- 
 2.17.1
 
