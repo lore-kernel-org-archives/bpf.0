@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CBAEC3A5A4
-	for <bpf@archiver.kernel.org>; Fri, 30 Aug 2019 14:09:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 289E2C3A59B
+	for <bpf@archiver.kernel.org>; Fri, 30 Aug 2019 14:59:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D7F7C23427
-	for <bpf@archiver.kernel.org>; Fri, 30 Aug 2019 14:09:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EE41B23427
+	for <bpf@archiver.kernel.org>; Fri, 30 Aug 2019 14:59:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1567174177;
-	bh=p5AjW3xVDRxCRokQLJsTqv+1lmdRB2z4uTAo1OGwa4Q=;
+	s=default; t=1567177179;
+	bh=yuEg/AYA1c6NUhWecZUlheoiYTGMOlPXr3slJwLMjBE=;
 	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=P79/PMOTeJ4eNAJPxNcFvPulfxbbxHDzKawrro38RCSa4Pqyq1XZtrMGe3+HA//WF
-	 tmN/aGt8gV2GMEGxApd5bPT38n+74OlYcabcGeWDOQb2CwNRF5ERT0eiqqqVRvoJZg
-	 V7pfUHjRGuRloxt3DdI/KShGDg+JXkMmpRxiyxRM=
+	b=MD8W1ih4+GRiBkpg58pbZhnxcqztVUKpdUPV+vDw98Yijrb3QzBXuGWwO0pTO8w+E
+	 ussO3ngP3+f3Rtl/AjAE095SVkmkIyzigiEwm24qDUp4ta+lhmOy9t+IynmfywhKVt
+	 vVLWEQWHfivbZHM9EVadJyRy/lWFf1SMFOwtdShA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727958AbfH3OJb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 30 Aug 2019 10:09:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46668 "EHLO mail.kernel.org"
+        id S1727754AbfH3O7i (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 30 Aug 2019 10:59:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39098 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727791AbfH3OJb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 30 Aug 2019 10:09:31 -0400
+        id S1727751AbfH3O7i (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 30 Aug 2019 10:59:38 -0400
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 96DBD22CE9;
-        Fri, 30 Aug 2019 14:09:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 70C352341B;
+        Fri, 30 Aug 2019 14:59:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567174170;
-        bh=p5AjW3xVDRxCRokQLJsTqv+1lmdRB2z4uTAo1OGwa4Q=;
+        s=default; t=1567177177;
+        bh=yuEg/AYA1c6NUhWecZUlheoiYTGMOlPXr3slJwLMjBE=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=E/heTaWMHie+f9aeljhO/1yfl9cSU7vcNF/AqUhGNPWL/KPpd7dNvx0UyWaxDk1k2
-         VFXySM1rPovDrqpfURtsc0Qw49mjuDC3qFcbeYuFqQRddu0yUujxGnbUUQ6uBdz0AY
-         Fg6wPEqFXmdOf/n5IqZABnc7lopIyAgMoMkspmt4=
+        b=u1JFAqN/QGD4Fr1TrQB0MS943k5rWA952cBRxVbOh9N0fjLhRovc2G1XoK6mDEGXl
+         zQRqexm0Nzp2k5V9m7YyupViYZnXtEYln5bMhI0CMIUjUrnDUCChwEioFkGkCjYBXv
+         Br+Hx3PpKg8ee/48k5R/YO9a0jdkk06ep3gGNN0A=
 Subject: Re: [PATCH] seccomp: fix compilation errors in seccomp-bpf kselftest
 To:     Alakesh Haloi <alakesh.haloi@gmail.com>,
         Kees Cook <keescook@chromium.org>,
@@ -51,13 +51,14 @@ Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         shuah <shuah@kernel.org>
 References: <20190822215823.GA11292@ip-172-31-44-144.us-west-2.compute.internal>
+ <30e993fe-de76-9831-7ecc-61fcbcd51ae0@kernel.org>
 From:   shuah <shuah@kernel.org>
-Message-ID: <30e993fe-de76-9831-7ecc-61fcbcd51ae0@kernel.org>
-Date:   Fri, 30 Aug 2019 08:09:20 -0600
+Message-ID: <b19f12c1-9d22-f366-ebb8-2ac0759bfebf@kernel.org>
+Date:   Fri, 30 Aug 2019 08:59:35 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190822215823.GA11292@ip-172-31-44-144.us-west-2.compute.internal>
+In-Reply-To: <30e993fe-de76-9831-7ecc-61fcbcd51ae0@kernel.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -66,45 +67,56 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 8/22/19 3:58 PM, Alakesh Haloi wrote:
-> Without this patch we see following error while building and kselftest
-> for secccomp_bpf fails.
+On 8/30/19 8:09 AM, shuah wrote:
+> On 8/22/19 3:58 PM, Alakesh Haloi wrote:
+>> Without this patch we see following error while building and kselftest
+>> for secccomp_bpf fails.
+>>
+>> seccomp_bpf.c:1787:20: error: ‘PTRACE_EVENTMSG_SYSCALL_ENTRY’ 
+>> undeclared (first use in this function);
+>> seccomp_bpf.c:1788:6: error: ‘PTRACE_EVENTMSG_SYSCALL_EXIT’ undeclared 
+>> (first use in this function);
+>>
+>> Signed-off-by: Alakesh Haloi <alakesh.haloi@gmail.com>
+>> ---
+>>   tools/testing/selftests/seccomp/seccomp_bpf.c | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c 
+>> b/tools/testing/selftests/seccomp/seccomp_bpf.c
+>> index 6ef7f16c4cf5..2e619760fc3e 100644
+>> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+>> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+>> @@ -1353,6 +1353,14 @@ TEST_F(precedence, log_is_fifth_in_any_order)
+>>   #define PTRACE_EVENT_SECCOMP 7
+>>   #endif
+>> +#ifndef PTRACE_EVENTMSG_SYSCALL_ENTRY
+>> +#define PTRACE_EVENTMSG_SYSCALL_ENTRY 1
+>> +#endif
+>> +
+>> +#ifndef PTRACE_EVENTMSG_SYSCALL_EXIT
+>> +#define PTRACE_EVENTMSG_SYSCALL_EXIT 2
+>> +#endif
+>> +
+>>   #define IS_SECCOMP_EVENT(status) ((status >> 16) == 
+>> PTRACE_EVENT_SECCOMP)
+>>   bool tracer_running;
+>>   void tracer_stop(int sig)
+>>
 > 
-> seccomp_bpf.c:1787:20: error: ‘PTRACE_EVENTMSG_SYSCALL_ENTRY’ undeclared (first use in this function);
-> seccomp_bpf.c:1788:6: error: ‘PTRACE_EVENTMSG_SYSCALL_EXIT’ undeclared (first use in this function);
+> Hi Kees,
 > 
-> Signed-off-by: Alakesh Haloi <alakesh.haloi@gmail.com>
-> ---
->   tools/testing/selftests/seccomp/seccomp_bpf.c | 8 ++++++++
->   1 file changed, 8 insertions(+)
+> Okay to apply this one for 5.4-rc1. Or is this going through bpf tree?
+> If it is going through bpf tree:
 > 
-> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> index 6ef7f16c4cf5..2e619760fc3e 100644
-> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> @@ -1353,6 +1353,14 @@ TEST_F(precedence, log_is_fifth_in_any_order)
->   #define PTRACE_EVENT_SECCOMP 7
->   #endif
->   
-> +#ifndef PTRACE_EVENTMSG_SYSCALL_ENTRY
-> +#define PTRACE_EVENTMSG_SYSCALL_ENTRY 1
-> +#endif
-> +
-> +#ifndef PTRACE_EVENTMSG_SYSCALL_EXIT
-> +#define PTRACE_EVENTMSG_SYSCALL_EXIT 2
-> +#endif
-> +
->   #define IS_SECCOMP_EVENT(status) ((status >> 16) == PTRACE_EVENT_SECCOMP)
->   bool tracer_running;
->   void tracer_stop(int sig)
+> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+> 
+> thanks,
+> -- Shuah
 > 
 
-Hi Kees,
-
-Okay to apply this one for 5.4-rc1. Or is this going through bpf tree?
-If it is going through bpf tree:
-
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+I saw your mail about Tycho's solution to be your preferred. Ignore this
+message. I am applying Tycho's patch.
 
 thanks,
 -- Shuah
