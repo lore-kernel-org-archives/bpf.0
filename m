@@ -2,153 +2,109 @@ Return-Path: <SRS0=XeSK=W2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63BABC3A5A6
-	for <bpf@archiver.kernel.org>; Fri, 30 Aug 2019 11:01:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0009C3A5A4
+	for <bpf@archiver.kernel.org>; Fri, 30 Aug 2019 11:07:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 35BC121726
-	for <bpf@archiver.kernel.org>; Fri, 30 Aug 2019 11:01:02 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="xWDfxIOI"
+	by mail.kernel.org (Postfix) with ESMTP id 9B43421670
+	for <bpf@archiver.kernel.org>; Fri, 30 Aug 2019 11:07:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727789AbfH3LAz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 30 Aug 2019 07:00:55 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:46599 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727104AbfH3LAx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 30 Aug 2019 07:00:53 -0400
-Received: by mail-wr1-f65.google.com with SMTP id h7so5192286wrt.13
-        for <bpf@vger.kernel.org>; Fri, 30 Aug 2019 04:00:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=5KBK1cGSBEAbGEvyJtoTJ6fJ17kKSEVR9EUqVztgDKw=;
-        b=xWDfxIOIYjzAbGRzXVhrfSAcx5KGF/2WAhU5H2OqBZ48pYok+kyM+p1t5Gnaek9CzD
-         sXL5M2u80CQUo6GQqdbNNVgybgyl2KdMhvdwY+N4glLtQM2PsCvKZzGDdYvBUuR6Hfeq
-         7iSQcGIGm0iopgQyc0B1lyRdp41mPv0wliTg40bx8gR45HfejzIK/qxOmsp47KUsCLJz
-         uExjGUBtpeNHZ9Jl+MTMPx/4idDSCToZS8lHY0StfvpVeHdn34J7+GJIJl0eI05m0pVA
-         F7XrCLUH1P+budt/kfxmrGDR1fCpT6hUiEzFb1PShYlKaim0uGVgBMl//kEXOyy4JKTM
-         Ptxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=5KBK1cGSBEAbGEvyJtoTJ6fJ17kKSEVR9EUqVztgDKw=;
-        b=I0YBDDqjZYRXzi4iCRyle7klnQyXJa96+Lhwu06LmoKQu7pRhcne8A+keO5NGYyqlT
-         M8jRldLmAZc5bzvJ8cXJciX/KG7XQkxXMcOZtQETdhWIQOBBbpaYoMLlyNAjgeVfaY9L
-         fSnv0/ahNfMPhuq+FGm63ON5wUMBdZUqBuYsBZaiSgjOfB6rYEiT0NuWJqSJjH7vOY/a
-         6dqVdkjjsIVnAQC274LQCuCUki4bQYY9V1fbdJqRwFsKhYaIJ+UXWNiPLfNaaV253mAv
-         TDSPCuINXJaFvbrSnxYGX0fZRp7BFv3G7KZH7V35pdX8CQAFjNQKL55/kcLQARjp7qaP
-         jJOw==
-X-Gm-Message-State: APjAAAUcFl3GhRQGnBlDAnEOyHwM+5r86llZUcCna86D/hD40wlfrxbR
-        NX1KVQMnOBxMpW6nNudpMg1o5Q==
-X-Google-Smtp-Source: APXvYqyE5c88n/jExRazKL6s6y59bE1sgrEtKT0LVIyquRCbXmYNa+x6ZT6pa22w1q290hg4aQq0zw==
-X-Received: by 2002:adf:eac5:: with SMTP id o5mr18636189wrn.140.1567162851509;
-        Fri, 30 Aug 2019 04:00:51 -0700 (PDT)
-Received: from cbtest32.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id t198sm7848083wmt.39.2019.08.30.04.00.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Aug 2019 04:00:50 -0700 (PDT)
-From:   Quentin Monnet <quentin.monnet@netronome.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        oss-drivers@netronome.com,
-        Quentin Monnet <quentin.monnet@netronome.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>
-Subject: [PATCH bpf-next v2 1/4] tools: bpftool: ignore make built-in rules for getting kernel version
-Date:   Fri, 30 Aug 2019 12:00:37 +0100
-Message-Id: <20190830110040.31257-2-quentin.monnet@netronome.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190830110040.31257-1-quentin.monnet@netronome.com>
-References: <20190830110040.31257-1-quentin.monnet@netronome.com>
+        id S1727170AbfH3LHp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 30 Aug 2019 07:07:45 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:61632 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726902AbfH3LHp (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 30 Aug 2019 07:07:45 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7UB7fsS135647
+        for <bpf@vger.kernel.org>; Fri, 30 Aug 2019 07:07:43 -0400
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2uq0xcv494-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 30 Aug 2019 07:07:43 -0400
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <bpf@vger.kernel.org> from <iii@linux.ibm.com>;
+        Fri, 30 Aug 2019 12:07:38 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 30 Aug 2019 12:07:36 +0100
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7UB7YCE37683348
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 30 Aug 2019 11:07:34 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AC8C411C050;
+        Fri, 30 Aug 2019 11:07:34 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5817211C04A;
+        Fri, 30 Aug 2019 11:07:34 +0000 (GMT)
+Received: from white.boeblingen.de.ibm.com (unknown [9.152.96.21])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 30 Aug 2019 11:07:34 +0000 (GMT)
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>
+Cc:     bpf@vger.kernel.org, Song Liu <liu.song.a23@gmail.com>,
+        Yonghong Song <yhs@fb.com>, Andrey Ignatov <rdna@fb.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: [PATCH bpf v4 0/4] selftests/bpf: fix endianness issues in test_sysctl
+Date:   Fri, 30 Aug 2019 13:07:28 +0200
+X-Mailer: git-send-email 2.21.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19083011-0020-0000-0000-000003659CC7
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19083011-0021-0000-0000-000021BAF91C
+Message-Id: <20190830110732.8966-1-iii@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-30_05:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=878 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908300121
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Bpftool calls the toplevel Makefile to get the kernel version for the
-sources it is built from. But when the utility is built from the top of
-the kernel repository, it may dump the following error message for
-certain architectures (including x86):
+Patch 1 is a preparatory commit, which introduces 64-bit endianness
+conversion functions.
 
-    $ make tools/bpf
-    [...]
-    make[3]: *** [checkbin] Error 1
-    [...]
+Patch 2 fixes reading the wrong byte of an int.
 
-This does not prevent bpftool compilation, but may feel disconcerting.
-The "checkbin" arch-dependent target is not supposed to be called for
-target "kernelversion", which is a simple "echo" of the version number.
+Patch 3 improves error reporting.
 
-It turns out this is caused by the make invocation in tools/bpf/bpftool,
-which attempts to find implicit rules to apply. Extract from debug
-output:
+Patch 4 uses the new conversion functions to fix wrong endianness of
+immediates.
 
-    Reading makefiles...
-    Reading makefile 'Makefile'...
-    Reading makefile 'scripts/Kbuild.include' (search path) (no ~ expansion)...
-    Reading makefile 'scripts/subarch.include' (search path) (no ~ expansion)...
-    Reading makefile 'arch/x86/Makefile' (search path) (no ~ expansion)...
-    Reading makefile 'scripts/Makefile.kcov' (search path) (no ~ expansion)...
-    Reading makefile 'scripts/Makefile.gcc-plugins' (search path) (no ~ expansion)...
-    Reading makefile 'scripts/Makefile.kasan' (search path) (no ~ expansion)...
-    Reading makefile 'scripts/Makefile.extrawarn' (search path) (no ~ expansion)...
-    Reading makefile 'scripts/Makefile.ubsan' (search path) (no ~ expansion)...
-    Updating makefiles....
-     Considering target file 'scripts/Makefile.ubsan'.
-      Looking for an implicit rule for 'scripts/Makefile.ubsan'.
-      Trying pattern rule with stem 'Makefile.ubsan'.
-    [...]
-      Trying pattern rule with stem 'Makefile.ubsan'.
-      Trying implicit prerequisite 'scripts/Makefile.ubsan.o'.
-      Looking for a rule with intermediate file 'scripts/Makefile.ubsan.o'.
-       Avoiding implicit rule recursion.
-       Trying pattern rule with stem 'Makefile.ubsan'.
-       Trying rule prerequisite 'prepare'.
-       Trying rule prerequisite 'FORCE'.
-      Found an implicit rule for 'scripts/Makefile.ubsan'.
-        Considering target file 'prepare'.
-         File 'prepare' does not exist.
-          Considering target file 'prepare0'.
-           File 'prepare0' does not exist.
-            Considering target file 'archprepare'.
-             File 'archprepare' does not exist.
-              Considering target file 'archheaders'.
-               File 'archheaders' does not exist.
-               Finished prerequisites of target file 'archheaders'.
-              Must remake target 'archheaders'.
-    Putting child 0x55976f4f6980 (archheaders) PID 31743 on the chain.
+v1->v2: Use bpf_ntohl and bpf_be64_to_cpu, drop __bpf_le64_to_cpu.
+v2->v3: Split bpf_be64_to_cpu introduction into a separate patch.
+        Use the new functions in test_lwt_seg6local.c and
+	test_seg6_loop.c.
+v3->v4: Improved commit message, split fixes that are not related to
+        each other into separate patches.
 
-To avoid that, pass the -r and -R flags to eliminate the use of make
-built-in rules (and while at it, built-in variables) when running
-command "make kernelversion" from bpftool's Makefile.
+Ilya Leoshkevich (4):
+  selftests/bpf: introduce bpf_cpu_to_be64 and bpf_be64_to_cpu
+  selftests/bpf: fix "ctx:write sysctl:write read ok" on s390
+  selftests/bpf: improve unexpected success reporting in test_syctl
+  selftests/bpf: fix endianness issues in test_sysctl
 
-Signed-off-by: Quentin Monnet <quentin.monnet@netronome.com>
-Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
----
- tools/bpf/bpftool/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/bpf_endian.h      |  14 ++
+ .../selftests/bpf/progs/test_lwt_seg6local.c  |  16 +--
+ .../selftests/bpf/progs/test_seg6_loop.c      |   8 +-
+ tools/testing/selftests/bpf/test_sysctl.c     | 130 ++++++++++++------
+ 4 files changed, 107 insertions(+), 61 deletions(-)
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index f284c207765a..cd0fc05464e7 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -24,7 +24,7 @@ endif
- 
- LIBBPF = $(BPF_PATH)libbpf.a
- 
--BPFTOOL_VERSION := $(shell make --no-print-directory -sC ../../.. kernelversion)
-+BPFTOOL_VERSION := $(shell make -rR --no-print-directory -sC ../../.. kernelversion)
- 
- $(LIBBPF): FORCE
- 	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(OUTPUT) $(OUTPUT)libbpf.a
 -- 
-2.17.1
+2.21.0
 
