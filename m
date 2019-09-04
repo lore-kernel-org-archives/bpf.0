@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B920C3A5A8
-	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 15:58:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2855C3A5A8
+	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 16:00:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 288212339D
-	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 15:58:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C1A932070C
+	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 16:00:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1567612708;
-	bh=zPGuwjDYDiMDQS1Q5oFy7DwqvLOrtR8i3MQgAW0T9QA=;
+	s=default; t=1567612837;
+	bh=Ts8e8Hns3t4/ykTZIfN892InRBKDgKoLX54YAaNvoyM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=OvAeU6RfQxTb0Al7qWiO4qyP4IG7/jbPg8DAi1UpAsk9BFUbYkZxNgOSBFavXd642
-	 pxJq8VITE9bD5yc4fhzLUpBGZdv5JYcPaRKqA89Kbr8gp4og8AdZ8vLaTfJ/HWn0GO
-	 h65ugmdMNhwmkh2hG7S/pJOr8f8WUWm4kLwwTRXg=
+	b=VBF0UUzB0A+1wWQ8VqkoJ/WlPxp6ptY2yM4A7ucc4d0HvOtdY8SAHV6bw12sZKgoj
+	 gpHNI0Jw+9SAnDRUuInne3EOFThPse5rtJ6F9y3ClPF9ngDozleRJgtl9NZ/nvuuE6
+	 xy8n+0rDt91wqWIHNodMkG6z+xXwenR8bTpAOhDY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731986AbfIDP61 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Sep 2019 11:58:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60564 "EHLO mail.kernel.org"
+        id S1732768AbfIDQAh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Sep 2019 12:00:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35528 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731971AbfIDP60 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 4 Sep 2019 11:58:26 -0400
+        id S1732764AbfIDQAg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Sep 2019 12:00:36 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7677A23784;
-        Wed,  4 Sep 2019 15:58:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3A0872087E;
+        Wed,  4 Sep 2019 16:00:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567612705;
-        bh=zPGuwjDYDiMDQS1Q5oFy7DwqvLOrtR8i3MQgAW0T9QA=;
+        s=default; t=1567612836;
+        bh=Ts8e8Hns3t4/ykTZIfN892InRBKDgKoLX54YAaNvoyM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dKNNxd3ogGDSav2oWFgFyq0S6rfib36Ia4ByObVHaj/xRiUy22D5DLfzIgRoV3UBy
-         /PzfXiY+jgyEE4Iu8Vx803+QgZYRdPp8P41/k/c+ej84CPhw4QVmJLSJsbfgS0Wjj4
-         WUF6g36Etpa/nVgNHlCLV/GF5t10H2zJI90cDEHo=
+        b=zBaNiAom9twA/6aFb4r8Ub+FSAKUK412xQAMvwuUgv4xIggJST1EvtN7Fn8J+3A5Z
+         SzVa8jNrPgefYCnO78TkdzmYtsKwG9T3C1B47vYZNc6XcWj1FYbpyoEl1tNvnS1JsS
+         3yq3o6a1pwu6rt9iv6Yj2RW0FUQGzyJcdqNuwPFQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Anders Roxell <anders.roxell@linaro.org>,
+Cc:     Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 32/94] selftests/bpf: add config fragment BPF_JIT
-Date:   Wed,  4 Sep 2019 11:56:37 -0400
-Message-Id: <20190904155739.2816-32-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 23/52] xdp: unpin xdp umem pages in error path
+Date:   Wed,  4 Sep 2019 11:59:35 -0400
+Message-Id: <20190904160004.3671-23-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190904155739.2816-1-sashal@kernel.org>
-References: <20190904155739.2816-1-sashal@kernel.org>
+In-Reply-To: <20190904160004.3671-1-sashal@kernel.org>
+References: <20190904160004.3671-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,35 +60,43 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Anders Roxell <anders.roxell@linaro.org>
+From: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
 
-[ Upstream commit 0604409df9e04cdec7b08d471c8c1c0c10b5554d ]
+[ Upstream commit fb89c39455e4b49881c5a42761bd71f03d3ef888 ]
 
-When running test_kmod.sh the following shows up
+Fix mem leak caused by missed unpin routine for umem pages.
 
- # sysctl cannot stat /proc/sys/net/core/bpf_jit_enable No such file or directory
- cannot: stat_/proc/sys/net/core/bpf_jit_enable #
- # sysctl cannot stat /proc/sys/net/core/bpf_jit_harden No such file or directory
- cannot: stat_/proc/sys/net/core/bpf_jit_harden #
-
-Rework to enable CONFIG_BPF_JIT to solve "No such file or directory"
-
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+Fixes: 8aef7340ae9695 ("xsk: introduce xdp_umem_page")
+Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+Acked-by: Jonathan Lemon <jonathan.lemon@gmail.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/config | 1 +
- 1 file changed, 1 insertion(+)
+ net/xdp/xdp_umem.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index f7a0744db31e1..5dc109f4c0970 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -34,3 +34,4 @@ CONFIG_NET_MPLS_GSO=m
- CONFIG_MPLS_ROUTING=m
- CONFIG_MPLS_IPTUNNEL=m
- CONFIG_IPV6_SIT=m
-+CONFIG_BPF_JIT=y
+diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
+index a3b037fbfecde..8cab91c482ff5 100644
+--- a/net/xdp/xdp_umem.c
++++ b/net/xdp/xdp_umem.c
+@@ -322,7 +322,7 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+ 	umem->pages = kcalloc(umem->npgs, sizeof(*umem->pages), GFP_KERNEL);
+ 	if (!umem->pages) {
+ 		err = -ENOMEM;
+-		goto out_account;
++		goto out_pin;
+ 	}
+ 
+ 	for (i = 0; i < umem->npgs; i++)
+@@ -330,6 +330,8 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+ 
+ 	return 0;
+ 
++out_pin:
++	xdp_umem_unpin_pages(umem);
+ out_account:
+ 	xdp_umem_unaccount_pages(umem);
+ 	return err;
 -- 
 2.20.1
 
