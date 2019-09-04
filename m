@@ -2,97 +2,94 @@ Return-Path: <SRS0=JwFc=W7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6219CC3A5AB
-	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 21:23:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C909DC3A59E
+	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 23:03:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 37AC52339E
-	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 21:23:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 945A621670
+	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 23:03:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HEvKyf6h"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LIRvz3sM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728072AbfIDVXF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Sep 2019 17:23:05 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:38384 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729093AbfIDVXE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 4 Sep 2019 17:23:04 -0400
-Received: by mail-lj1-f193.google.com with SMTP id h3so194323ljb.5
-        for <bpf@vger.kernel.org>; Wed, 04 Sep 2019 14:23:03 -0700 (PDT)
+        id S1727544AbfIDXDg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Sep 2019 19:03:36 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:36371 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726495AbfIDXDg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Sep 2019 19:03:36 -0400
+Received: by mail-pl1-f196.google.com with SMTP id f19so320721plr.3;
+        Wed, 04 Sep 2019 16:03:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Uyna4IYOJol121SLmRwAZvx/NaOoPDVjYK6GTYbGUpc=;
-        b=HEvKyf6hs2+1i0SgpYXPM43WRe6XRXXEvFQ0JmJsaAzI+5Kzq7PFffuX1Jzl6+iI+6
-         ZOS2jHoERLTa7KDEHqUkRHkic/Ja7Ek8udlefSiSVCiZJiE73g8B+EpMrCGc2t5YWh2/
-         SGTuU7MjjoW3hBkpywZ1if3F4MaZDV3thVqrdaS7K7dnboqNTOKkoxEZTmAPH5EfMJuD
-         6ylzq81lX5Z/QbVObOZN8N60eGDSFjTidvDL4wbEm3aYKxAhfyU4EGV87B+QV1iOn1Mx
-         0YQawwISYg8nsmINmbUc4RpqXkqqAl9xBmACJepPDHfZFjxAPRxR7riT3rJe9uEQiNTd
-         Ad2A==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=5+YNQeHmIOGQ4YFqKr6GYXavT2t8Qpss7b++FdwDehE=;
+        b=LIRvz3sMipUno0nmuKl2kYng3IGBsvRMAblPMJHyIqd5Q+gKi32G2engUfsriPWhIL
+         e695Ckip55thTsHyapBmi6AgTjrkTF2Jp9cv5KaoeQS+xRKBEMWmSbGT0QvNAO8KMEZG
+         kPdU4dw299ZAGVpfLZY4+LfHB4m1UsfUYHrx/zxtBXsK6H8rz8O4NlO4cTJAg77h2EGs
+         xSA/09jKmfnf7wj6qRK+ldeQS9o2c+EFUVf6VCVaAOU1fnS+4er/zaQrAyh9u8PSEcf3
+         lQiByK8DAEp18W/niqygms/dJ1g0zOSHkr3se6sqfP4Ig0hZ4t1+UldVzGg4nAO8QEQj
+         G6oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=Uyna4IYOJol121SLmRwAZvx/NaOoPDVjYK6GTYbGUpc=;
-        b=J3oRKhhkcHGX1ZSmo/pO919qdauw3dTdCAtCoqvUg1XF0p63ol1ZoIvNS+5ngxAhxm
-         in0Td7jRI3CeisbqVt8ceDW//XzAjFY0SXILxZ6BOg1CYNkI0p7ipJ/0Ww/PKYwHi2K3
-         0PAuJDt27R8oLs2lFHU3k9xxzPoDnw88H9kUOywujHfQx7bXvlHClzDBmD8OB11Ggm5k
-         5YlhZ6ROeIbrwFYMBDRGDAF8rXnwnYO5p3qdxP6zZTehBrBo21Ly8k/ynyBrN0Wyqd9S
-         ggcmUeLNsdvrc441P0WqcMrbf5Gb0NjgUbJXnHuMg8BvGFxv9+aU9lX1Xfzw0BADTqIz
-         rKug==
-X-Gm-Message-State: APjAAAUYTIVEtnL2OWhmB9Lqcbfb9cBWdSC0/tAE6P9grXcZ34Q4CTDY
-        jw30dgz16pD1uo2cLx2tYy1TKA==
-X-Google-Smtp-Source: APXvYqzkLtLa+ISHzj9gXd6kgVF2aOZOhBrHlWU0/2syQniAi1eBTH35MnVXSNzvWO5yaoeS4EY65w==
-X-Received: by 2002:a2e:93d7:: with SMTP id p23mr3270338ljh.100.1567632182383;
-        Wed, 04 Sep 2019 14:23:02 -0700 (PDT)
-Received: from localhost.localdomain (168-200-94-178.pool.ukrtel.net. [178.94.200.168])
-        by smtp.gmail.com with ESMTPSA id s8sm3540836ljd.94.2019.09.04.14.23.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Sep 2019 14:23:01 -0700 (PDT)
-From:   Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-To:     ast@kernel.org, daniel@iogearbox.net, yhs@fb.com,
-        davem@davemloft.net, jakub.kicinski@netronome.com, hawk@kernel.org,
-        john.fastabend@gmail.com
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, clang-built-linux@googlegroups.com,
-        Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-Subject: [PATCH bpf-next 1/8] samples: bpf: Makefile: use --target from cross-compile
-Date:   Thu,  5 Sep 2019 00:22:05 +0300
-Message-Id: <20190904212212.13052-2-ivan.khoronzhuk@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190904212212.13052-1-ivan.khoronzhuk@linaro.org>
-References: <20190904212212.13052-1-ivan.khoronzhuk@linaro.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=5+YNQeHmIOGQ4YFqKr6GYXavT2t8Qpss7b++FdwDehE=;
+        b=e2u6s1RfVVCfGhuVul4j9qmd6sNBeqaNwgzYE61811apPdwYjY0dpsw5U0oHzTLE3y
+         lD39rklT2OppmIJIhr2xChXoGPe1hD9EZ1EbdY8NAAWypj8CDkuKTQCdwC2Qc25WI3RR
+         32zeFb+kht2B2Z/pADxIzHSnO+35KAD4hpOWHZu2Vd+1VGCpR8we4o0HU1e35P+gryyw
+         +NRfRjpRbYfo2KNYMPhjOK9lNOL/x4sQ/EfxblKKyPZKvNSKkFvqwBlP+RKW+bQBAzOT
+         8/r7go2/+IW7K+r5CVlHQh2obsb+V0a6jSFQ3ik3mey3Ia/3nTWyCiuiZV06l+sSfsQx
+         wEMA==
+X-Gm-Message-State: APjAAAVz/23QZbb8emyEYYXuaf/5m0LQ6QqOTgnZ0+74IKVX437ps4O5
+        343LdC2J/AE5P5qWnE23SHM=
+X-Google-Smtp-Source: APXvYqzkk04BhKur9AOltG4WTP61z+CCMCJ7IafF5r3QNrlBys/xUoW0zni9A7kwzpICtst9NYArGg==
+X-Received: by 2002:a17:902:5ac3:: with SMTP id g3mr212864plm.25.1567638215212;
+        Wed, 04 Sep 2019 16:03:35 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:180::a2cb])
+        by smtp.gmail.com with ESMTPSA id h66sm5290087pjb.0.2019.09.04.16.03.34
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 04 Sep 2019 16:03:34 -0700 (PDT)
+Date:   Wed, 4 Sep 2019 16:03:33 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
+        ast@kernel.org, daniel@iogearbox.net
+Subject: Re: [PATCH bpf-next 0/6] selftests/bpf: move sockopt tests under
+ test_progs
+Message-ID: <20190904230331.ld4zsn4jgldu7l6q@ast-mbp.dhcp.thefacebook.com>
+References: <20190904162509.199561-1-sdf@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190904162509.199561-1-sdf@google.com>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-For cross compiling the target triple can be inherited from
-cross-compile prefix as it's done in CLANG_FLAGS from kernel makefile.
-So copy-paste this decision from kernel Makefile.
+On Wed, Sep 04, 2019 at 09:25:03AM -0700, Stanislav Fomichev wrote:
+> Now that test_progs is shaping into more generic test framework,
+> let's convert sockopt tests to it. This requires adding
+> a helper to create and join a cgroup first (test__join_cgroup).
+> Since we already hijack stdout/stderr that shouldn't be
+> a problem (cgroup helpers log to stderr).
+> 
+> The rest of the patches just move sockopt tests files under prog_tests/
+> and do the required small adjustments.
 
-Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
----
- samples/bpf/Makefile | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 1d9be26b4edd..61b7394b811e 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -196,6 +196,8 @@ BTF_PAHOLE ?= pahole
- # Detect that we're cross compiling and use the cross compiler
- ifdef CROSS_COMPILE
- HOSTCC = $(CROSS_COMPILE)gcc
-+CLANG_ARCH_ARGS = --target=$(notdir $(CROSS_COMPILE:%-=%))
-+else
- CLANG_ARCH_ARGS = -target $(ARCH)
- endif
- 
--- 
-2.17.1
+Looks good. Thank you for working on it.
+Could you de-verbose setsockopt test a bit?
+#23/32 setsockopt: deny write ctx->retval:OK
+#23/33 setsockopt: deny read ctx->retval:OK
+#23/34 setsockopt: deny writing to ctx->optval:OK
+#23/35 setsockopt: deny writing to ctx->optval_end:OK
+#23/36 setsockopt: allow IP_TOS <= 128:OK
+#23/37 setsockopt: deny IP_TOS > 128:OK
+37 subtests is a bit too much spam.
 
