@@ -2,56 +2,57 @@ Return-Path: <SRS0=JwFc=W7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA560C3A5A9
-	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 21:23:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBA3BC3A5AA
+	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 21:23:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BC57620449
-	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 21:23:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C1F172077B
+	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 21:23:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="e4KCsujI"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Cyv0J+ys"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730078AbfIDVXD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Sep 2019 17:23:03 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:36900 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727789AbfIDVXD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 4 Sep 2019 17:23:03 -0400
-Received: by mail-lj1-f194.google.com with SMTP id t14so199327lji.4
-        for <bpf@vger.kernel.org>; Wed, 04 Sep 2019 14:23:01 -0700 (PDT)
+        id S1730410AbfIDVXH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Sep 2019 17:23:07 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:44684 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730269AbfIDVXG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Sep 2019 17:23:06 -0400
+Received: by mail-lj1-f195.google.com with SMTP id u14so158333ljj.11
+        for <bpf@vger.kernel.org>; Wed, 04 Sep 2019 14:23:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=y0/K/3NHW2BoW66hjF3E64lXnccuPIx+Txfbqzf3jL0=;
-        b=e4KCsujIe59XNJPsOgxhHEmYvS6Ir/WAdxo1GJhGHE/R3+AjBK2RgqtyTX3IZyINrf
-         SRreCzQZEnn0Yq8Wtj1O65F1SFMziACSlVSQCqda7Bh2FAcpMMUbrNGrjCaBJj9Zs4Ib
-         OuBXJPEFa3+9pMFMo7zbfu76utYP3aIKNBrbRWQ6M+zBO7HmbHg4RrESIbDQapxTQ+c1
-         hLH3lRY0zxCVAUmNOE73sfln/v46G/JKY5aY8q8Ida9BNUwgRAlBkTpd99zCRrZURLSt
-         00nL2H4XqV0cpyNBcr7DamsSvkZTS5zQmVLP7Iqc+4QDVhEp+crY/7PKZWNKycVzq0V2
-         fkow==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=yAjuHlaJV4iM+XkUvTeUDNJ1TAXGjdj3xJMvNO0S43o=;
+        b=Cyv0J+ysGE8GlcBy84R0TU6rZdMLzrvRQiwpquEiozDeaAQQQbYdykncSxj9SDvUie
+         8cgkYnKiR0ReAyi40NULGieV75yTwmLbqtUC8erbl75yzlcUtht7eSCMcD96oSjQ6M48
+         na1DMKbDpuTpTnG6pBKnr8wpjHOb3yRIBcWZofhCezWk3TBniFS5nn7vx0YuyOh6Lmdh
+         HWKQEzLvfpoT2NyKmWajaXus8qX7m3kiia7NxEwBexwDarrjZLHJ3aFVDEsLsVgZRvb9
+         Ba6Q8Da00IG4GVsd36zqBgKddkHbNRYPDGnrTw0kpAnEYfpgEDkKlGd7hMCJzVM7iMuK
+         Jj8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=y0/K/3NHW2BoW66hjF3E64lXnccuPIx+Txfbqzf3jL0=;
-        b=RhwJi9dqNwllcGaM+brq7XCrm5eK6k7GOaom+Tmvtfew4Ia2YRWpS4c54UY8Oo4Yfx
-         lL19LzcM85xUhkNut7w1G0Z9ZWcwlYWo8K7Iw2I4d6i47rtFXwR4HaAmJLKEEixxrlcX
-         XomPAxpnqd28d8JJqSePNmtB/PS9H9w0UmY/sfftVzmmq3MKC6mJ3SW8YvwIPXidf4oK
-         tHM789D9BMkjLaLCHgY7sZalPoTcjJq4leLtiDte0a95K4FVXehS7TF5UWRKWd9TL8Mp
-         kBMM8S8NEwZBYuqD4eydgpDKLWU7C/ZLQhG3AMQS0xsE3MvH2ws1ffZaju2aG5SKIy7Q
-         wrCQ==
-X-Gm-Message-State: APjAAAWz+4fgT0M/vV2eBqrXQ/L4vF2sVX5ATFv7S0qPCENKOkcCrEIB
-        l6xjv0kQZpXcExNJ8CpveYkNNA==
-X-Google-Smtp-Source: APXvYqxRpzRoAAkk3MuHOz0pYKzdu098OV1QWuP6crUl1RenkK0czy8yKZ2lfl5cQtYl5dgLJMMYOg==
-X-Received: by 2002:a2e:9882:: with SMTP id b2mr3706041ljj.225.1567632181203;
-        Wed, 04 Sep 2019 14:23:01 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=yAjuHlaJV4iM+XkUvTeUDNJ1TAXGjdj3xJMvNO0S43o=;
+        b=R4hXrXERNTtBlhlUvTgD3RkYn+Q/LmWqigtGD0MRcijp4LuA0bNnLd8KZoQeKoZzK8
+         Iub8RATzZWmEJhXhuBk/c2cAeFYxwZZywp6Q7O+Betl1DRIgiHugRKeFwaCuDFs4qHVc
+         eFC3MmJ38MBzLUuIaeyonctoBXWw7/s2y1szyNz1doYmmxUARCb/TKhsQ6r+nDUBXTzj
+         +9zjg2g1s7KDvEBRiSkCtm8ICDdCRTzK5POYdNdwu7jowbBSsAit/3zXpNU7bg/MGT8M
+         NaMaWdg2dOyvt4cbk9BFO9aFhlyc7k1mXtfLHgMb8k58t3kQb3M2YttISs9totehtBOo
+         DBdw==
+X-Gm-Message-State: APjAAAU7DO24hIP9vPAWHDxultlzvTzziF/8sffS+lYrPja5TKQG0lX9
+        u3tvg9ocUR6qksEs0XRckZJXQw==
+X-Google-Smtp-Source: APXvYqzs66qskiSXGEU5/HciBF3rdsatWJNxMWMs4uZDfI+qll5yZQLR0JCw95Quh2W/sgGTkyh7xg==
+X-Received: by 2002:a05:651c:1ba:: with SMTP id c26mr4261123ljn.154.1567632184814;
+        Wed, 04 Sep 2019 14:23:04 -0700 (PDT)
 Received: from localhost.localdomain (168-200-94-178.pool.ukrtel.net. [178.94.200.168])
-        by smtp.gmail.com with ESMTPSA id s8sm3540836ljd.94.2019.09.04.14.23.00
+        by smtp.gmail.com with ESMTPSA id s8sm3540836ljd.94.2019.09.04.14.23.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Sep 2019 14:23:00 -0700 (PDT)
+        Wed, 04 Sep 2019 14:23:04 -0700 (PDT)
 From:   Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
 To:     ast@kernel.org, daniel@iogearbox.net, yhs@fb.com,
         davem@davemloft.net, jakub.kicinski@netronome.com, hawk@kernel.org,
@@ -59,51 +60,63 @@ To:     ast@kernel.org, daniel@iogearbox.net, yhs@fb.com,
 Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, clang-built-linux@googlegroups.com,
         Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-Subject: [PATCH bpf-next 0/8] samples: bpf: improve/fix cross-compilation
-Date:   Thu,  5 Sep 2019 00:22:04 +0300
-Message-Id: <20190904212212.13052-1-ivan.khoronzhuk@linaro.org>
+Subject: [PATCH bpf-next 3/8] libbpf: Makefile: add C/CXX/LDFLAGS to libbpf.so and test_libpf targets
+Date:   Thu,  5 Sep 2019 00:22:07 +0300
+Message-Id: <20190904212212.13052-4-ivan.khoronzhuk@linaro.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190904212212.13052-1-ivan.khoronzhuk@linaro.org>
+References: <20190904212212.13052-1-ivan.khoronzhuk@linaro.org>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series contains mainly fixes/improvements for cross-compilation
-(also verified on native platform build), tested on arm, but intended
-for any arch.
+In case of LDFLAGS and EXTRA_CC flags there is no way to pass them
+correctly to build command, for instance when --sysroot is used or
+external libraries are used, like -lelf. In follow up patches this is
+used for samples/bpf cross-compiling getting elf lib from sysroot.
 
-Initial RFC link:
-https://lkml.org/lkml/2019/8/29/1665
+Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+---
+ tools/lib/bpf/Makefile | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-Besides the pathces given here, the RFC also contains couple patches
-related to llvm clang
-  arm: include: asm: swab: mask rev16 instruction for clang
-  arm: include: asm: unified: mask .syntax unified for clang
-
-The change touches not only cross-compilation and can have impact on
-other archs and build environments, so might be good idea to verify
-it in order to add appropriate changes, some warn options could be
-tuned also.
-
-Ivan Khoronzhuk (8):
-  samples: bpf: Makefile: use --target from cross-compile
-  samples: bpf: Makefile: remove target for native build
-  libbpf: Makefile: add C/CXX/LDFLAGS to libbpf.so and test_libpf
-    targets
-  samples: bpf: use own EXTRA_CFLAGS for clang commands
-  samples: bpf: Makefile: use vars from KBUILD_CFLAGS to handle linux
-    headers
-  samples: bpf: makefile: fix HDR_PROBE "echo"
-  samples: bpf: add makefile.prog for separate CC build
-  samples: bpf: Makefile: base progs build on Makefile.progs
-
- samples/bpf/Makefile      | 177 ++++++++++++++++++++++----------------
- samples/bpf/Makefile.prog |  77 +++++++++++++++++
- samples/bpf/README.rst    |   7 ++
- tools/lib/bpf/Makefile    |  11 ++-
- 4 files changed, 197 insertions(+), 75 deletions(-)
- create mode 100644 samples/bpf/Makefile.prog
-
+diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+index c6f94cffe06e..bccfa556ef4e 100644
+--- a/tools/lib/bpf/Makefile
++++ b/tools/lib/bpf/Makefile
+@@ -94,6 +94,10 @@ else
+   CFLAGS := -g -Wall
+ endif
+ 
++ifdef EXTRA_CXXFLAGS
++  CXXFLAGS := $(EXTRA_CXXFLAGS)
++endif
++
+ ifeq ($(feature-libelf-mmap), 1)
+   override CFLAGS += -DHAVE_LIBELF_MMAP_SUPPORT
+ endif
+@@ -176,8 +180,9 @@ $(BPF_IN): force elfdep bpfdep
+ $(OUTPUT)libbpf.so: $(OUTPUT)libbpf.so.$(LIBBPF_VERSION)
+ 
+ $(OUTPUT)libbpf.so.$(LIBBPF_VERSION): $(BPF_IN)
+-	$(QUIET_LINK)$(CC) --shared -Wl,-soname,libbpf.so.$(LIBBPF_MAJOR_VERSION) \
+-				    -Wl,--version-script=$(VERSION_SCRIPT) $^ -lelf -o $@
++	$(QUIET_LINK)$(CC) $(LDFLAGS) \
++		--shared -Wl,-soname,libbpf.so.$(LIBBPF_MAJOR_VERSION) \
++		-Wl,--version-script=$(VERSION_SCRIPT) $^ -lelf -o $@
+ 	@ln -sf $(@F) $(OUTPUT)libbpf.so
+ 	@ln -sf $(@F) $(OUTPUT)libbpf.so.$(LIBBPF_MAJOR_VERSION)
+ 
+@@ -185,7 +190,7 @@ $(OUTPUT)libbpf.a: $(BPF_IN)
+ 	$(QUIET_LINK)$(RM) $@; $(AR) rcs $@ $^
+ 
+ $(OUTPUT)test_libbpf: test_libbpf.cpp $(OUTPUT)libbpf.a
+-	$(QUIET_LINK)$(CXX) $(INCLUDES) $^ -lelf -o $@
++	$(QUIET_LINK)$(CXX) $(CXXFLAGS) $(LDFLAGS) $(INCLUDES) $^ -lelf -o $@
+ 
+ $(OUTPUT)libbpf.pc:
+ 	$(QUIET_GEN)sed -e "s|@PREFIX@|$(prefix)|" \
 -- 
 2.17.1
 
