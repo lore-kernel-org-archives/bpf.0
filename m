@@ -7,47 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2855C3A5A8
-	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 16:00:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E927CC3A5AA
+	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 16:00:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C1A932070C
-	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 16:00:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C2B6622CF5
+	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 16:00:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1567612837;
-	bh=Ts8e8Hns3t4/ykTZIfN892InRBKDgKoLX54YAaNvoyM=;
+	s=default; t=1567612845;
+	bh=DePtoH0g5oRyEKgg/e/21m31LEGE3uN55cqb/WCUfxQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=VBF0UUzB0A+1wWQ8VqkoJ/WlPxp6ptY2yM4A7ucc4d0HvOtdY8SAHV6bw12sZKgoj
-	 gpHNI0Jw+9SAnDRUuInne3EOFThPse5rtJ6F9y3ClPF9ngDozleRJgtl9NZ/nvuuE6
-	 xy8n+0rDt91wqWIHNodMkG6z+xXwenR8bTpAOhDY=
+	b=GXTPwSVJWPCEU0Oy7ZYn/e4TOVH8iQe/qurJwpOAp3glheM1ECffJ3pyU8gD0lVqC
+	 Z6Rs1LoSrREhmhIi5ViDDBruNOZU0RgJdVAnlbFNcHGfLqJATCaqn5LC2DXfclvHCA
+	 r5hr0HP2WpB6v5t6u3/bka6wmye0bUdJebTGHmno=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732768AbfIDQAh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Sep 2019 12:00:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35528 "EHLO mail.kernel.org"
+        id S1732807AbfIDQAo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Sep 2019 12:00:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35684 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732764AbfIDQAg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 4 Sep 2019 12:00:36 -0400
+        id S1732801AbfIDQAo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Sep 2019 12:00:44 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3A0872087E;
-        Wed,  4 Sep 2019 16:00:35 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 957132339E;
+        Wed,  4 Sep 2019 16:00:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567612836;
-        bh=Ts8e8Hns3t4/ykTZIfN892InRBKDgKoLX54YAaNvoyM=;
+        s=default; t=1567612843;
+        bh=DePtoH0g5oRyEKgg/e/21m31LEGE3uN55cqb/WCUfxQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zBaNiAom9twA/6aFb4r8Ub+FSAKUK412xQAMvwuUgv4xIggJST1EvtN7Fn8J+3A5Z
-         SzVa8jNrPgefYCnO78TkdzmYtsKwG9T3C1B47vYZNc6XcWj1FYbpyoEl1tNvnS1JsS
-         3yq3o6a1pwu6rt9iv6Yj2RW0FUQGzyJcdqNuwPFQ=
+        b=ONsQmELHhZWkQqgE8frpfr67MWrO7b5ulaOtx1uA5bCaDmToNb2ciAwZ9lm16gnOO
+         68morDPwmZuK0kYOjyMU1An5B9XmL4hpNfLszsVyoW4thO9dJj3RnRW+k/rUfsK5lJ
+         ESuytiwqdmeddZRrG07E3+0YJXQcEfSzObkdlARI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
+Cc:     Ilya Leoshkevich <iii@linux.ibm.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 23/52] xdp: unpin xdp umem pages in error path
-Date:   Wed,  4 Sep 2019 11:59:35 -0400
-Message-Id: <20190904160004.3671-23-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 28/52] bpf: allow narrow loads of some sk_reuseport_md fields with offset > 0
+Date:   Wed,  4 Sep 2019 11:59:40 -0400
+Message-Id: <20190904160004.3671-28-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190904160004.3671-1-sashal@kernel.org>
 References: <20190904160004.3671-1-sashal@kernel.org>
@@ -60,43 +59,59 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+From: Ilya Leoshkevich <iii@linux.ibm.com>
 
-[ Upstream commit fb89c39455e4b49881c5a42761bd71f03d3ef888 ]
+[ Upstream commit 2c238177bd7f4b14bdf7447cc1cd9bb791f147e6 ]
 
-Fix mem leak caused by missed unpin routine for umem pages.
+test_select_reuseport fails on s390 due to verifier rejecting
+test_select_reuseport_kern.o with the following message:
 
-Fixes: 8aef7340ae9695 ("xsk: introduce xdp_umem_page")
-Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-Acked-by: Jonathan Lemon <jonathan.lemon@gmail.com>
+	; data_check.eth_protocol = reuse_md->eth_protocol;
+	18: (69) r1 = *(u16 *)(r6 +22)
+	invalid bpf_context access off=22 size=2
+
+This is because on big-endian machines casts from __u32 to __u16 are
+generated by referencing the respective variable as __u16 with an offset
+of 2 (as opposed to 0 on little-endian machines).
+
+The verifier already has all the infrastructure in place to allow such
+accesses, it's just that they are not explicitly enabled for
+eth_protocol field. Enable them for eth_protocol field by using
+bpf_ctx_range instead of offsetof.
+
+Ditto for ip_protocol, bind_inany and len, since they already allow
+narrowing, and the same problem can arise when working with them.
+
+Fixes: 2dbb9b9e6df6 ("bpf: Introduce BPF_PROG_TYPE_SK_REUSEPORT")
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/xdp/xdp_umem.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ net/core/filter.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
-index a3b037fbfecde..8cab91c482ff5 100644
---- a/net/xdp/xdp_umem.c
-+++ b/net/xdp/xdp_umem.c
-@@ -322,7 +322,7 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
- 	umem->pages = kcalloc(umem->npgs, sizeof(*umem->pages), GFP_KERNEL);
- 	if (!umem->pages) {
- 		err = -ENOMEM;
--		goto out_account;
-+		goto out_pin;
- 	}
+diff --git a/net/core/filter.c b/net/core/filter.c
+index c996380f29597..e6fa88506c00d 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -7234,13 +7234,13 @@ sk_reuseport_is_valid_access(int off, int size,
+ 		return size == size_default;
  
- 	for (i = 0; i < umem->npgs; i++)
-@@ -330,6 +330,8 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+ 	/* Fields that allow narrowing */
+-	case offsetof(struct sk_reuseport_md, eth_protocol):
++	case bpf_ctx_range(struct sk_reuseport_md, eth_protocol):
+ 		if (size < FIELD_SIZEOF(struct sk_buff, protocol))
+ 			return false;
+ 		/* fall through */
+-	case offsetof(struct sk_reuseport_md, ip_protocol):
+-	case offsetof(struct sk_reuseport_md, bind_inany):
+-	case offsetof(struct sk_reuseport_md, len):
++	case bpf_ctx_range(struct sk_reuseport_md, ip_protocol):
++	case bpf_ctx_range(struct sk_reuseport_md, bind_inany):
++	case bpf_ctx_range(struct sk_reuseport_md, len):
+ 		bpf_ctx_record_field_size(info, size_default);
+ 		return bpf_ctx_narrow_access_ok(off, size, size_default);
  
- 	return 0;
- 
-+out_pin:
-+	xdp_umem_unpin_pages(umem);
- out_account:
- 	xdp_umem_unaccount_pages(umem);
- 	return err;
 -- 
 2.20.1
 
