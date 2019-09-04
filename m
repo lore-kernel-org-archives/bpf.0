@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 383E9C3A5AA
-	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 16:19:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4217C41514
+	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 16:20:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 04FC82053B
-	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 16:19:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AD4412053B
+	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 16:20:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1567613970;
-	bh=BJV4xn+dCqPEYrNnYRxOCtNh4EYW7nfGMGy0JjAm954=;
+	s=default; t=1567614015;
+	bh=ZUPeU7rXEE9Ft3yii0aStiNyiPcuIWemP1F9qsfU3JI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=KdLbR8SVkcvYfoi+kUCGE94wAhQ8MMby8YhG+Qb2tW+d1LJrqY0t7kGfPnzIIcg8/
-	 RNMnM9it4MR5++EG+i3a0QB7ZdbsXJTessE0HIFxl7CgjqRnuX3BUE2qoBJrrBM1fT
-	 YzNK/cxJSuXQcf1YHadw4tlHXKkGjgZ/yHgzKReU=
+	b=y9xjfStbhtGyAJODymXKcImdPKlPSczn3kzn0zX9xMLjF9RaluSzWU3zo+MEKI16i
+	 nHFrWA/eIPzFv5ICPgz5q5jHFA3sRKU6skvvdPPYqcobJavNrzdnPdnYp8lnnO4aFg
+	 fJYJIB1u2POPLqn4qDFv0J331BfxlluxoRpYjeoI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732098AbfIDQTX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Sep 2019 12:19:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60466 "EHLO mail.kernel.org"
+        id S1731796AbfIDP6M (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Sep 2019 11:58:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60076 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731936AbfIDP6X (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 4 Sep 2019 11:58:23 -0400
+        id S1731780AbfIDP6K (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Sep 2019 11:58:10 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1775A2341C;
-        Wed,  4 Sep 2019 15:58:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5AAE422CF5;
+        Wed,  4 Sep 2019 15:58:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567612702;
-        bh=BJV4xn+dCqPEYrNnYRxOCtNh4EYW7nfGMGy0JjAm954=;
+        s=default; t=1567612689;
+        bh=ZUPeU7rXEE9Ft3yii0aStiNyiPcuIWemP1F9qsfU3JI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QcyCd7g1r/YX/msrp9c+X9VI3BfdKXQLfcKq+t5GsH19OAuKz2WJewdbySMievCJi
-         6WEcfQK0gvdiDLrhEMr2MCBwIdt1MJ0nLubfy1RlIVY5wYcHGTsEYmu4TrS+rzHNmo
-         lxF7glNordrfDdAZQNTbZieZhquFZQM5InSnLHoo=
+        b=qGvMmWJ/t9Gxtw8X7al5rHm4TV4DwxnaiHyVWbF0aUiTqgUc7axzKDYXJQAzKjrNQ
+         S5sr0Aqq3CclxbRvVw8e+jrfPdF1DWIFFR3QYXyOYG6ZOQOzKP5L7JIrdryhHvo3Ml
+         eh5cQv4TVosfUBdzG2Mus+5nwJp/lzd9lKqUzXMc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
+Cc:     Ilya Leoshkevich <iii@linux.ibm.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 30/94] xdp: unpin xdp umem pages in error path
-Date:   Wed,  4 Sep 2019 11:56:35 -0400
-Message-Id: <20190904155739.2816-30-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 19/94] selftests/bpf: fix "bind{4, 6} deny specific IP & port" on s390
+Date:   Wed,  4 Sep 2019 11:56:24 -0400
+Message-Id: <20190904155739.2816-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190904155739.2816-1-sashal@kernel.org>
 References: <20190904155739.2816-1-sashal@kernel.org>
@@ -60,43 +60,59 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+From: Ilya Leoshkevich <iii@linux.ibm.com>
 
-[ Upstream commit fb89c39455e4b49881c5a42761bd71f03d3ef888 ]
+[ Upstream commit 27df5c7068bf23cab282dc64b1c9894429b3b8a0 ]
 
-Fix mem leak caused by missed unpin routine for umem pages.
+"bind4 allow specific IP & port" and "bind6 deny specific IP & port"
+fail on s390 because of endianness issue: the 4 IP address bytes are
+loaded as a word and compared with a constant, but the value of this
+constant should be different on big- and little- endian machines, which
+is not the case right now.
 
-Fixes: 8aef7340ae9695 ("xsk: introduce xdp_umem_page")
-Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-Acked-by: Jonathan Lemon <jonathan.lemon@gmail.com>
+Use __bpf_constant_ntohl to generate proper value based on machine
+endianness.
+
+Fixes: 1d436885b23b ("selftests/bpf: Selftest for sys_bind post-hooks.")
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/xdp/xdp_umem.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_sock.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
-index 9c6de4f114f84..9bd7b96027c12 100644
---- a/net/xdp/xdp_umem.c
-+++ b/net/xdp/xdp_umem.c
-@@ -368,7 +368,7 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
- 	umem->pages = kcalloc(umem->npgs, sizeof(*umem->pages), GFP_KERNEL);
- 	if (!umem->pages) {
- 		err = -ENOMEM;
--		goto out_account;
-+		goto out_pin;
- 	}
+diff --git a/tools/testing/selftests/bpf/test_sock.c b/tools/testing/selftests/bpf/test_sock.c
+index fb679ac3d4b07..0e66527334623 100644
+--- a/tools/testing/selftests/bpf/test_sock.c
++++ b/tools/testing/selftests/bpf/test_sock.c
+@@ -13,6 +13,7 @@
+ #include <bpf/bpf.h>
  
- 	for (i = 0; i < umem->npgs; i++)
-@@ -376,6 +376,8 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+ #include "cgroup_helpers.h"
++#include "bpf_endian.h"
+ #include "bpf_rlimit.h"
+ #include "bpf_util.h"
  
- 	return 0;
- 
-+out_pin:
-+	xdp_umem_unpin_pages(umem);
- out_account:
- 	xdp_umem_unaccount_pages(umem);
- 	return err;
+@@ -232,7 +233,8 @@ static struct sock_test tests[] = {
+ 			/* if (ip == expected && port == expected) */
+ 			BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
+ 				    offsetof(struct bpf_sock, src_ip6[3])),
+-			BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0x01000000, 4),
++			BPF_JMP_IMM(BPF_JNE, BPF_REG_7,
++				    __bpf_constant_ntohl(0x00000001), 4),
+ 			BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
+ 				    offsetof(struct bpf_sock, src_port)),
+ 			BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0x2001, 2),
+@@ -261,7 +263,8 @@ static struct sock_test tests[] = {
+ 			/* if (ip == expected && port == expected) */
+ 			BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
+ 				    offsetof(struct bpf_sock, src_ip4)),
+-			BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0x0100007F, 4),
++			BPF_JMP_IMM(BPF_JNE, BPF_REG_7,
++				    __bpf_constant_ntohl(0x7F000001), 4),
+ 			BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
+ 				    offsetof(struct bpf_sock, src_port)),
+ 			BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0x1002, 2),
 -- 
 2.20.1
 
