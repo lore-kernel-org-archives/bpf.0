@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DC41C3A5A9
-	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 21:23:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1746C3A5A9
+	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 21:23:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0627322CED
-	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 21:23:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 864B620449
+	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 21:23:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ABJbZSLC"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JxOWBX3K"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730497AbfIDVXJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Sep 2019 17:23:09 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:45650 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730391AbfIDVXI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 4 Sep 2019 17:23:08 -0400
-Received: by mail-lj1-f196.google.com with SMTP id l1so152976lji.12
-        for <bpf@vger.kernel.org>; Wed, 04 Sep 2019 14:23:06 -0700 (PDT)
+        id S1727562AbfIDVXh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Sep 2019 17:23:37 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:39556 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730222AbfIDVXF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Sep 2019 17:23:05 -0400
+Received: by mail-lj1-f193.google.com with SMTP id j16so188934ljg.6
+        for <bpf@vger.kernel.org>; Wed, 04 Sep 2019 14:23:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Jcr7utRE+skJcsLIDmCcqhAtcA7yd+FAfx8VSIjlEN0=;
-        b=ABJbZSLCV3FsQTMEMvdQFXH1D6yKF8jjS3/RsTHVZzVIkAvo/W1a9b9X01mzy8erDf
-         IvqzyVfDgOZy32aa2l5oCtncvHQ6pMbPDxg7JN2j46uWoAF42oXFeCw9S7iXZ3TCsDU7
-         bXlTQlfFkgg8VgBDXwIJy5jEQ0IpJoX1rT+fT8L3uKAjbYVAbZx8BJhUff53hbdBvUil
-         4ImdVopvHM5krnUPckUJAQOEh8YvcljPij/nQuBCc39DZ9KGfce2McYBf7MWkJe1ieJm
-         DCHDm8Q5yTXSRrFzvxF7e4WBVf0/ob1Bhcsx52IZEldzSy51EfyGwBs/8oSuQ/oTYIPU
-         9AlQ==
+        bh=1A0DTH8yoCPJNcxERaZ+ijIkUOQqqgHSIHaATGrPTFQ=;
+        b=JxOWBX3K7ATM3R5k6qLko7irOYaDDp/EgE8lqfrCSuMD68Wxvfb5wgkZ5UbBXSNViD
+         R37hhdMVyVTttgCsjHZkCQK2sZsQ/+mOjH2MmEnjoNubt0fsAOh+YGAb5XgJJ7CiMDVm
+         Oj0dm134XL61kE1LH53qBXVlpjUIpWHL04VEkk0t0hzqmk6ihGiJu1fwZYv8qOnE/agN
+         s0JL+ECqalNyE3mSNjOsv45sWpYK0MD9Xb5RhXGiwzcJlKmj7RfFCi0Mx8TMIsSEXmwf
+         3pc3CzpYyw4n2l94LKGE5Ws0K3mJNjjYb6vSUrZ64UMhnFZ6v1EEzgCkPrikOTSfU4Kj
+         g8Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=Jcr7utRE+skJcsLIDmCcqhAtcA7yd+FAfx8VSIjlEN0=;
-        b=D34xYiGYi6lDKCa9k8VIrfm5hQltI2M/w4pAa/81U7XZHZTaqYEd2UgrnWewYhESEj
-         84EPEm2ML3EDTPZU5IfEbXuEw3mHtSzzuWJPsUPU/AbaZd3JrQDXwKJQklHUzBIsFq1R
-         8IonuuB5DjX0g2gWXiQFjFKma9f04pBgqr0yEZGUH70aVwposb1YSWsYzXofSUI0z7F1
-         K9Z/A9gmyCXCBtEpcgTERbfo3OoAKCgsjEKEQWffFlj/+0ttGy8/KJr+E7nOZb5eQcRs
-         XSfFORqL4JQ1s+Lc9OaPzyBu7COm79tNV2oex2UIADRWUL0mZ4Q+zV73Jsw5vn/gXdPW
-         586g==
-X-Gm-Message-State: APjAAAWN/JKXhvj6FeS1RZLgYzUWydlibFjYWqLnJ9A3Bdr62XtgOQ8u
-        vS8H9TsfJI//eJSzFEIE2fzOVw==
-X-Google-Smtp-Source: APXvYqzWzjPF5Ux6tXpfnaSESyw9BAsVGLBMfoM57dZneHbSnLSQxMQ/ucdfrDeUAhN152yzYDB67A==
-X-Received: by 2002:a2e:8103:: with SMTP id d3mr3392965ljg.105.1567632185972;
-        Wed, 04 Sep 2019 14:23:05 -0700 (PDT)
+        bh=1A0DTH8yoCPJNcxERaZ+ijIkUOQqqgHSIHaATGrPTFQ=;
+        b=TJxoZm4LonkcsOZBmSRWoCcIBjuiwrMlwWV1A5tJNh6IQXqNgL8LnR0WXdLcNI4Hh5
+         JVfDIUVj9QInu45eIHYcGUj8m8vETfyTzeojSwju7/QEOkWxCEGfyywSL2bn702GYKB4
+         JZKl2OGidYxszTins4tiCs/8rDA2eqxfwAjhvgT0n0FCP6jUtmYQy50Dx9+8Cis0UA49
+         9YBBCZRwSPeNgNV27rNdedZR7/11FCNjFYVUPwtJz78vIFqTNnOJSOVJG4CQQ60eQyMl
+         ldWozw9BFS7ggwb5VBDLRsv9SSBZKHprCwjK9DvmP0TWEJImV2td6jAN9roc/cvGsdOk
+         z+KQ==
+X-Gm-Message-State: APjAAAWGW9q6hMvnMUZedQU2Imw7R23/ewPjLyibqRl2HG1syxXbz55b
+        8QhZJtv1YSvDZLrxA3bvnTFRtA==
+X-Google-Smtp-Source: APXvYqwz4ndJZfXhBcpi8UvRZpCbYG9ilF+aaCsG3QbQJpYkccg1tFAjfOYCP6qU35rHpewQ9EUEDA==
+X-Received: by 2002:a2e:7210:: with SMTP id n16mr14294364ljc.235.1567632183622;
+        Wed, 04 Sep 2019 14:23:03 -0700 (PDT)
 Received: from localhost.localdomain (168-200-94-178.pool.ukrtel.net. [178.94.200.168])
-        by smtp.gmail.com with ESMTPSA id s8sm3540836ljd.94.2019.09.04.14.23.04
+        by smtp.gmail.com with ESMTPSA id s8sm3540836ljd.94.2019.09.04.14.23.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Sep 2019 14:23:05 -0700 (PDT)
+        Wed, 04 Sep 2019 14:23:03 -0700 (PDT)
 From:   Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
 To:     ast@kernel.org, daniel@iogearbox.net, yhs@fb.com,
         davem@davemloft.net, jakub.kicinski@netronome.com, hawk@kernel.org,
@@ -60,9 +60,9 @@ To:     ast@kernel.org, daniel@iogearbox.net, yhs@fb.com,
 Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, clang-built-linux@googlegroups.com,
         Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-Subject: [PATCH bpf-next 4/8] samples: bpf: use own EXTRA_CFLAGS for clang commands
-Date:   Thu,  5 Sep 2019 00:22:08 +0300
-Message-Id: <20190904212212.13052-5-ivan.khoronzhuk@linaro.org>
+Subject: [PATCH bpf-next 2/8] samples: bpf: Makefile: remove target for native build
+Date:   Thu,  5 Sep 2019 00:22:06 +0300
+Message-Id: <20190904212212.13052-3-ivan.khoronzhuk@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190904212212.13052-1-ivan.khoronzhuk@linaro.org>
 References: <20190904212212.13052-1-ivan.khoronzhuk@linaro.org>
@@ -71,42 +71,38 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-It can overlap with CFLAGS used for libraries built with gcc if
-not now then in next patches. Correct it here for simplicity.
+No need to set --target for native build, at least for arm, the
+default target will be used anyway. In case of arm, for at least
+clang 5 - 10 it causes error like:
+
+clang: warning: unknown platform, assuming -mfloat-abi=soft
+LLVM ERROR: Unsupported calling convention
+make[2]: *** [/home/root/snapshot/samples/bpf/Makefile:299:
+/home/root/snapshot/samples/bpf/sockex1_kern.o] Error 1
+
+Only set to real triple helps: --target=arm-linux-gnueabihf
+or just drop the target key to use default one. Decision to just
+drop it and thus default target will be used (wich is native),
+looks better.
 
 Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
 ---
- samples/bpf/Makefile | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ samples/bpf/Makefile | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index a2953357927e..cdd742c05200 100644
+index 61b7394b811e..a2953357927e 100644
 --- a/samples/bpf/Makefile
 +++ b/samples/bpf/Makefile
-@@ -219,10 +219,10 @@ BTF_LLVM_PROBE := $(shell echo "int main() { return 0; }" | \
- 			  /bin/rm -f ./llvm_btf_verify.o)
- 
- ifneq ($(BTF_LLVM_PROBE),)
--	EXTRA_CFLAGS += -g
-+	CLANG_EXTRA_CFLAGS += -g
- else
- ifneq ($(and $(BTF_LLC_PROBE),$(BTF_PAHOLE_PROBE),$(BTF_OBJCOPY_PROBE)),)
--	EXTRA_CFLAGS += -g
-+	CLANG_EXTRA_CFLAGS += -g
- 	LLC_FLAGS += -mattr=dwarfris
- 	DWARF2BTF = y
+@@ -197,8 +197,6 @@ BTF_PAHOLE ?= pahole
+ ifdef CROSS_COMPILE
+ HOSTCC = $(CROSS_COMPILE)gcc
+ CLANG_ARCH_ARGS = --target=$(notdir $(CROSS_COMPILE:%-=%))
+-else
+-CLANG_ARCH_ARGS = -target $(ARCH)
  endif
-@@ -281,8 +281,8 @@ $(obj)/hbm_edt_kern.o: $(src)/hbm.h $(src)/hbm_kern.h
- # useless for BPF samples.
- $(obj)/%.o: $(src)/%.c
- 	@echo "  CLANG-bpf " $@
--	$(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(EXTRA_CFLAGS) -I$(obj) \
--		-I$(srctree)/tools/testing/selftests/bpf/ \
-+	$(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(CLANG_EXTRA_CFLAGS) \
-+		-I$(obj) -I$(srctree)/tools/testing/selftests/bpf/ \
- 		-D__KERNEL__ -D__BPF_TRACING__ -Wno-unused-value -Wno-pointer-sign \
- 		-D__TARGET_ARCH_$(SRCARCH) -Wno-compare-distinct-pointer-types \
- 		-Wno-gnu-variable-sized-type-not-at-end \
+ 
+ # Don't evaluate probes and warnings if we need to run make recursively
 -- 
 2.17.1
 
