@@ -4,52 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E927CC3A5AA
-	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 16:00:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 755BDC3A5A8
+	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 16:04:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C2B6622CF5
-	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 16:00:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4F97122CF5
+	for <bpf@archiver.kernel.org>; Wed,  4 Sep 2019 16:04:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1567612845;
-	bh=DePtoH0g5oRyEKgg/e/21m31LEGE3uN55cqb/WCUfxQ=;
+	s=default; t=1567613095;
+	bh=TELwY7OlCOCI4eSmoimyIpgGxWsKQxb8Ou88hpFh3io=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=GXTPwSVJWPCEU0Oy7ZYn/e4TOVH8iQe/qurJwpOAp3glheM1ECffJ3pyU8gD0lVqC
-	 Z6Rs1LoSrREhmhIi5ViDDBruNOZU0RgJdVAnlbFNcHGfLqJATCaqn5LC2DXfclvHCA
-	 r5hr0HP2WpB6v5t6u3/bka6wmye0bUdJebTGHmno=
+	b=fqxatoi3ftGP7OlJahpTAzXbSk8dZcA8jGGGpCuyjtUKZ8F+/0+Ml1XBhDQl9ICUf
+	 XOKY5fX+pHJcOnH3+xcYoz4/I2WAOyNWoIM8gLM00AvdL84a3Qe+MsYaKyh5omBwOK
+	 ybjHIBPuT0BLTC0EKt03wOQd7aXY0Kixcl8WGDxY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732807AbfIDQAo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Sep 2019 12:00:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35684 "EHLO mail.kernel.org"
+        id S2387601AbfIDQDJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Sep 2019 12:03:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39508 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732801AbfIDQAo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 4 Sep 2019 12:00:44 -0400
+        id S2387594AbfIDQDI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Sep 2019 12:03:08 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 957132339E;
-        Wed,  4 Sep 2019 16:00:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A7E092070C;
+        Wed,  4 Sep 2019 16:03:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567612843;
-        bh=DePtoH0g5oRyEKgg/e/21m31LEGE3uN55cqb/WCUfxQ=;
+        s=default; t=1567612987;
+        bh=TELwY7OlCOCI4eSmoimyIpgGxWsKQxb8Ou88hpFh3io=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ONsQmELHhZWkQqgE8frpfr67MWrO7b5ulaOtx1uA5bCaDmToNb2ciAwZ9lm16gnOO
-         68morDPwmZuK0kYOjyMU1An5B9XmL4hpNfLszsVyoW4thO9dJj3RnRW+k/rUfsK5lJ
-         ESuytiwqdmeddZRrG07E3+0YJXQcEfSzObkdlARI=
+        b=JxwQog6bSI2CNi7JKi0wzQ45eWQdA5wgO7heO9mIw8CkKdX2Ry7XVj1/StAdre98r
+         i4wYfG5gpI62LQctL6xeRVhhLBtRrD0N/0Xs97N9qqv4emoqkmKqQIbHGTfqpa0FYa
+         WVUGhr/BujtFKwZ1Z0eAj9tgxZBAI+nBuEdCzQIc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Ilya Leoshkevich <iii@linux.ibm.com>,
+        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 28/52] bpf: allow narrow loads of some sk_reuseport_md fields with offset > 0
-Date:   Wed,  4 Sep 2019 11:59:40 -0400
-Message-Id: <20190904160004.3671-28-sashal@kernel.org>
+        bpf@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.4 03/20] s390/bpf: use 32-bit index for tail calls
+Date:   Wed,  4 Sep 2019 12:02:46 -0400
+Message-Id: <20190904160303.5062-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190904160004.3671-1-sashal@kernel.org>
-References: <20190904160004.3671-1-sashal@kernel.org>
+In-Reply-To: <20190904160303.5062-1-sashal@kernel.org>
+References: <20190904160303.5062-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -61,57 +63,58 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Ilya Leoshkevich <iii@linux.ibm.com>
 
-[ Upstream commit 2c238177bd7f4b14bdf7447cc1cd9bb791f147e6 ]
+[ Upstream commit 91b4db5313a2c793aabc2143efb8ed0cf0fdd097 ]
 
-test_select_reuseport fails on s390 due to verifier rejecting
-test_select_reuseport_kern.o with the following message:
+"p runtime/jit: pass > 32bit index to tail_call" fails when
+bpf_jit_enable=1, because the tail call is not executed.
 
-	; data_check.eth_protocol = reuse_md->eth_protocol;
-	18: (69) r1 = *(u16 *)(r6 +22)
-	invalid bpf_context access off=22 size=2
+This in turn is because the generated code assumes index is 64-bit,
+while it must be 32-bit, and as a result prog array bounds check fails,
+while it should pass. Even if bounds check would have passed, the code
+that follows uses 64-bit index to compute prog array offset.
 
-This is because on big-endian machines casts from __u32 to __u16 are
-generated by referencing the respective variable as __u16 with an offset
-of 2 (as opposed to 0 on little-endian machines).
+Fix by using clrj instead of clgrj for comparing index with array size,
+and also by using llgfr for truncating index to 32 bits before using it
+to compute prog array offset.
 
-The verifier already has all the infrastructure in place to allow such
-accesses, it's just that they are not explicitly enabled for
-eth_protocol field. Enable them for eth_protocol field by using
-bpf_ctx_range instead of offsetof.
-
-Ditto for ip_protocol, bind_inany and len, since they already allow
-narrowing, and the same problem can arise when working with them.
-
-Fixes: 2dbb9b9e6df6 ("bpf: Introduce BPF_PROG_TYPE_SK_REUSEPORT")
+Fixes: 6651ee070b31 ("s390/bpf: implement bpf_tail_call() helper")
+Reported-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+Acked-by: Vasily Gorbik <gor@linux.ibm.com>
 Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/filter.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/s390/net/bpf_jit_comp.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index c996380f29597..e6fa88506c00d 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -7234,13 +7234,13 @@ sk_reuseport_is_valid_access(int off, int size,
- 		return size == size_default;
+diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
+index e53d410e88703..bcf409997d6dc 100644
+--- a/arch/s390/net/bpf_jit_comp.c
++++ b/arch/s390/net/bpf_jit_comp.c
+@@ -1067,8 +1067,8 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp, int i
+ 		/* llgf %w1,map.max_entries(%b2) */
+ 		EMIT6_DISP_LH(0xe3000000, 0x0016, REG_W1, REG_0, BPF_REG_2,
+ 			      offsetof(struct bpf_array, map.max_entries));
+-		/* clgrj %b3,%w1,0xa,label0: if %b3 >= %w1 goto out */
+-		EMIT6_PCREL_LABEL(0xec000000, 0x0065, BPF_REG_3,
++		/* clrj %b3,%w1,0xa,label0: if (u32)%b3 >= (u32)%w1 goto out */
++		EMIT6_PCREL_LABEL(0xec000000, 0x0077, BPF_REG_3,
+ 				  REG_W1, 0, 0xa);
  
- 	/* Fields that allow narrowing */
--	case offsetof(struct sk_reuseport_md, eth_protocol):
-+	case bpf_ctx_range(struct sk_reuseport_md, eth_protocol):
- 		if (size < FIELD_SIZEOF(struct sk_buff, protocol))
- 			return false;
- 		/* fall through */
--	case offsetof(struct sk_reuseport_md, ip_protocol):
--	case offsetof(struct sk_reuseport_md, bind_inany):
--	case offsetof(struct sk_reuseport_md, len):
-+	case bpf_ctx_range(struct sk_reuseport_md, ip_protocol):
-+	case bpf_ctx_range(struct sk_reuseport_md, bind_inany):
-+	case bpf_ctx_range(struct sk_reuseport_md, len):
- 		bpf_ctx_record_field_size(info, size_default);
- 		return bpf_ctx_narrow_access_ok(off, size, size_default);
+ 		/*
+@@ -1094,8 +1094,10 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp, int i
+ 		 *         goto out;
+ 		 */
  
+-		/* sllg %r1,%b3,3: %r1 = index * 8 */
+-		EMIT6_DISP_LH(0xeb000000, 0x000d, REG_1, BPF_REG_3, REG_0, 3);
++		/* llgfr %r1,%b3: %r1 = (u32) index */
++		EMIT4(0xb9160000, REG_1, BPF_REG_3);
++		/* sllg %r1,%r1,3: %r1 *= 8 */
++		EMIT6_DISP_LH(0xeb000000, 0x000d, REG_1, REG_1, REG_0, 3);
+ 		/* lg %r1,prog(%b2,%r1) */
+ 		EMIT6_DISP_LH(0xe3000000, 0x0004, REG_1, BPF_REG_2,
+ 			      REG_1, offsetof(struct bpf_array, ptrs));
 -- 
 2.20.1
 
