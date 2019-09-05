@@ -5,58 +5,58 @@ X-Spam-Level:
 X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEB48C00306
-	for <bpf@archiver.kernel.org>; Thu,  5 Sep 2019 15:27:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9496EC43331
+	for <bpf@archiver.kernel.org>; Thu,  5 Sep 2019 15:27:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 23C752082E
-	for <bpf@archiver.kernel.org>; Thu,  5 Sep 2019 15:27:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 08001206B8
+	for <bpf@archiver.kernel.org>; Thu,  5 Sep 2019 15:27:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dbRXurRG"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F2XORRjW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390457AbfIEP1a (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 5 Sep 2019 11:27:30 -0400
-Received: from mail-pf1-f202.google.com ([209.85.210.202]:36125 "EHLO
+        id S2390430AbfIEP1Y (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 5 Sep 2019 11:27:24 -0400
+Received: from mail-pf1-f202.google.com ([209.85.210.202]:36123 "EHLO
         mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390446AbfIEP11 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 5 Sep 2019 11:27:27 -0400
-Received: by mail-pf1-f202.google.com with SMTP id 194so1296396pfu.3
-        for <bpf@vger.kernel.org>; Thu, 05 Sep 2019 08:27:27 -0700 (PDT)
+        with ESMTP id S2390421AbfIEP1W (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 5 Sep 2019 11:27:22 -0400
+Received: by mail-pf1-f202.google.com with SMTP id 194so1296235pfu.3
+        for <bpf@vger.kernel.org>; Thu, 05 Sep 2019 08:27:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=lTHI3kK5VYAt2CUHcJhzYihkdJRkFD9/pz9e86BhyNk=;
-        b=dbRXurRGjsoIm7XS6NUTHIkKM1cvq603d5n3+CY+WiSo1vSDjJYST127Frp1uhdu0L
-         lM4dGvObc0J7TY53KOogvQGXgV5lMyiNEg6EZwxiH7ap449GfPzbg4m9GopUWASdTzOp
-         T2ktnzhPkTPBm5OsxFZm+AwNKkD6PJoHQLs4xa9UiTzQGg902UWcSks0GM6eRUQ1pAdX
-         QkvFE7Q1rB/RpAywXRBkPwR8M7VXU5WBZ3Tg/08SY5iM1G84P7MrHSTCfLIJ4E/+GhNL
-         /qFeKK2RRLymO87CXQYEekdGY8cO6SAJTzxVq9djiv26zVWT9DB5nAwGh9wUwlPQhnFO
-         0zNg==
+        bh=PKBNn7QHICb88J96DR4dcB71cwak21YXIgp4bI9raYQ=;
+        b=F2XORRjW42vLc+Dr4Fybkid7ICSDsRkq8sQZLq5LP2eBNCmhFFmY6TX+hJ19yQ4Qbn
+         RlUslw80Vf3NGFrrAKD6FJ0+UGQvE+lEySR2TomNesKBkXlUwQQOjmUG9FtfdV92HIIg
+         go/uVWbgOvFuL5u7mblwpDtRbnrrYbJdRo9e66oLvL7DRT4zO2rYzPvsFUdtZ6fDc8Hy
+         zV3wkMqgmS2RekUwgN1ckQOGh5OvDCgh9sP+tRioANEHlpQxxvu8a3V0kFJ++Infh4s5
+         byXyzslu2RagyIwiaYDwi3vPugkHef94VSikVC1yU1DV1QZ25F4z9PursChIF0D5ebHk
+         SsNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=lTHI3kK5VYAt2CUHcJhzYihkdJRkFD9/pz9e86BhyNk=;
-        b=MtDYeGoKsUI8TYbK6lR2I4bwZVz+LpyzeD1kBM5CGsuDHjVJ0N0Ej27eCBV60rCJKJ
-         DzOsUeWf0zABIGd12/3SCWDR0nosy/YGBAJKemwTGhzrB8Ju14SUALRpPVy1WJD00QTc
-         qQ/D5MZRK+mxv5N3p5sldE1O5ETMt4i6a8381Vq+D6CKV2mwyYvvA8B0r/64O8f+wZf6
-         KYNWzYV+152mj/YZsVAIIw4m2fuEwny+XiWCt6FmGFwXeXIHWTNrTfN9A1WG+QD9aTTG
-         TIA7frV315r7aQpVMAqcIjKTfuDAF69kikxtvriGSM6Ue3ctAFPJIcD1Ueu5OxFoqbbk
-         IcRg==
-X-Gm-Message-State: APjAAAUV8j3TFBXYJ1vRZ7YYeG/vYtEEwphaPwz+tI/GkQge9I3imM+N
-        xo7YtTFEW2VAAK6SNj/FvXZPClQ=
-X-Google-Smtp-Source: APXvYqzO8KFBDN3XXKCFYnMJLJFUojMRg9vpzHWGOumWWaLiCBuyWxzMLc+IFQ1ZmGVP32wVLBTmThY=
-X-Received: by 2002:a63:7e41:: with SMTP id o1mr3786395pgn.212.1567697246413;
- Thu, 05 Sep 2019 08:27:26 -0700 (PDT)
-Date:   Thu,  5 Sep 2019 08:27:09 -0700
+        bh=PKBNn7QHICb88J96DR4dcB71cwak21YXIgp4bI9raYQ=;
+        b=V4gH7z7yNMvsc2Btt8ns3oNxwKkyXzEJXTkAYOqgsv360FDoYyV7lJ+rTPDuw+4Fcn
+         6B6x9j6jb341bVvqb4i3lntTnAAMc3loj2JTgjWHRxC/zKyRM5YE5Vf+bvWgKJHYy6hj
+         TRwnf3Lmx74p8iJ+fkgvN3c2lHsnS1Dpcv5zh1cS0Smk93DtwYc0R1QckRGD6W3nQH2f
+         ZyDoNvcviV9r9eoOqqumJe0UMgnVpZzNFGVk9J4bs+Fof+/K5SLmIQ+3deClJNPHpYwm
+         kFom0SX5Y8athvY2Y34j/uJHC6/CO1FbEP3MkjsAzkC73Fi3NB7Ixoeprvo1jfNfTkXy
+         YOQg==
+X-Gm-Message-State: APjAAAUJRcfMlrIvqzIUr92jd+2ER3fGyjd0CtvNOY3cfyrNwQsD9SQU
+        sMnWYZ1DTMLWRGvtK1DPhJkLMgc=
+X-Google-Smtp-Source: APXvYqwvtRzM3yZx+LcV3hYVAFTJ9ZOr6zoo/ux0/mAhLsU8ZILtsNjs7jGd/jbag1PTNb2cEH4N3nw=
+X-Received: by 2002:a65:62d1:: with SMTP id m17mr3858400pgv.271.1567697241474;
+ Thu, 05 Sep 2019 08:27:21 -0700 (PDT)
+Date:   Thu,  5 Sep 2019 08:27:07 -0700
 In-Reply-To: <20190905152709.111193-1-sdf@google.com>
-Message-Id: <20190905152709.111193-7-sdf@google.com>
+Message-Id: <20190905152709.111193-5-sdf@google.com>
 Mime-Version: 1.0
 References: <20190905152709.111193-1-sdf@google.com>
 X-Mailer: git-send-email 2.23.0.187.g17f5b7556c-goog
-Subject: [PATCH bpf-next v2 6/6] selftests/bpf: test_progs: convert test_tcp_rtt
+Subject: [PATCH bpf-next v2 4/6] selftests/bpf: test_progs: convert test_sockopt_multi
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
@@ -73,49 +73,52 @@ Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
  tools/testing/selftests/bpf/.gitignore        |  1 -
  tools/testing/selftests/bpf/Makefile          |  3 +-
- .../{test_tcp_rtt.c => prog_tests/tcp_rtt.c}  | 83 ++++++-------------
- 3 files changed, 28 insertions(+), 59 deletions(-)
- rename tools/testing/selftests/bpf/{test_tcp_rtt.c => prog_tests/tcp_rtt.c} (76%)
+ .../sockopt_multi.c}                          | 62 +++----------------
+ 3 files changed, 11 insertions(+), 55 deletions(-)
+ rename tools/testing/selftests/bpf/{test_sockopt_multi.c => prog_tests/sockopt_multi.c} (83%)
 
 diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index 5b06bb45b500..7470327edcfe 100644
+index bc83c1a7ea1b..4143add5a11e 100644
 --- a/tools/testing/selftests/bpf/.gitignore
 +++ b/tools/testing/selftests/bpf/.gitignore
-@@ -39,4 +39,3 @@ libbpf.so.*
+@@ -39,6 +39,5 @@ libbpf.so.*
  test_hashmap
  test_btf_dump
  xdping
--test_tcp_rtt
+-test_sockopt_multi
+ test_sockopt_inherit
+ test_tcp_rtt
 diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index fe786df1174b..811f1b24d02b 100644
+index ea790901297c..271f8ce89c97 100644
 --- a/tools/testing/selftests/bpf/Makefile
 +++ b/tools/testing/selftests/bpf/Makefile
-@@ -28,7 +28,7 @@ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test
- 	test_sock test_btf test_sockmap get_cgroup_id_user test_socket_cookie \
+@@ -29,7 +29,7 @@ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test
  	test_cgroup_storage test_select_reuseport test_section_names \
  	test_netcnt test_tcpnotify_user test_sock_fields test_sysctl test_hashmap \
--	test_btf_dump test_cgroup_attach xdping test_tcp_rtt
-+	test_btf_dump test_cgroup_attach xdping
+ 	test_btf_dump test_cgroup_attach xdping \
+-	test_sockopt_multi test_sockopt_inherit test_tcp_rtt
++	test_sockopt_inherit test_tcp_rtt
  
  BPF_OBJ_FILES = $(patsubst %.c,%.o, $(notdir $(wildcard progs/*.c)))
  TEST_GEN_FILES = $(BPF_OBJ_FILES)
-@@ -108,7 +108,6 @@ $(OUTPUT)/test_netcnt: cgroup_helpers.c
+@@ -109,7 +109,6 @@ $(OUTPUT)/test_netcnt: cgroup_helpers.c
  $(OUTPUT)/test_sock_fields: cgroup_helpers.c
  $(OUTPUT)/test_sysctl: cgroup_helpers.c
  $(OUTPUT)/test_cgroup_attach: cgroup_helpers.c
--$(OUTPUT)/test_tcp_rtt: cgroup_helpers.c
+-$(OUTPUT)/test_sockopt_multi: cgroup_helpers.c
+ $(OUTPUT)/test_sockopt_inherit: cgroup_helpers.c
+ $(OUTPUT)/test_tcp_rtt: cgroup_helpers.c
  
- .PHONY: force
- 
-diff --git a/tools/testing/selftests/bpf/test_tcp_rtt.c b/tools/testing/selftests/bpf/prog_tests/tcp_rtt.c
-similarity index 76%
-rename from tools/testing/selftests/bpf/test_tcp_rtt.c
-rename to tools/testing/selftests/bpf/prog_tests/tcp_rtt.c
-index 93916a69823e..fdc0b3614a9e 100644
---- a/tools/testing/selftests/bpf/test_tcp_rtt.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tcp_rtt.c
-@@ -1,24 +1,7 @@
+diff --git a/tools/testing/selftests/bpf/test_sockopt_multi.c b/tools/testing/selftests/bpf/prog_tests/sockopt_multi.c
+similarity index 83%
+rename from tools/testing/selftests/bpf/test_sockopt_multi.c
+rename to tools/testing/selftests/bpf/prog_tests/sockopt_multi.c
+index 4be3441db867..29188d6f5c8d 100644
+--- a/tools/testing/selftests/bpf/test_sockopt_multi.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockopt_multi.c
+@@ -1,19 +1,5 @@
  // SPDX-License-Identifier: GPL-2.0
+-
 -#include <error.h>
 -#include <errno.h>
 -#include <stdio.h>
@@ -123,8 +126,6 @@ index 93916a69823e..fdc0b3614a9e 100644
 -#include <sys/types.h>
 -#include <sys/socket.h>
 -#include <netinet/in.h>
--#include <netinet/tcp.h>
--#include <pthread.h>
 -
 -#include <linux/filter.h>
 -#include <bpf/bpf.h>
@@ -135,116 +136,80 @@ index 93916a69823e..fdc0b3614a9e 100644
 +#include <test_progs.h>
  #include "cgroup_helpers.h"
  
--#define CG_PATH                                "/tcp_rtt"
--
- struct tcp_rtt_storage {
- 	__u32 invoked;
- 	__u32 dsack_dups;
-@@ -31,8 +14,8 @@ static void send_byte(int fd)
- {
- 	char b = 0x55;
- 
--	if (write(fd, &b, sizeof(b)) != 1)
--		error(1, errno, "Failed to send single byte");
-+	if (CHECK_FAIL(write(fd, &b, sizeof(b)) != 1))
-+		perror("Failed to send single byte");
+ static int prog_attach(struct bpf_object *obj, int cgroup_fd, const char *title)
+@@ -308,7 +294,7 @@ static int run_setsockopt_test(struct bpf_object *obj, int cg_parent,
+ 	return err;
  }
  
- static int wait_for_ack(int fd, int retries)
-@@ -66,8 +49,10 @@ static int verify_sk(int map_fd, int client_fd, const char *msg, __u32 invoked,
- 	int err = 0;
- 	struct tcp_rtt_storage val;
- 
--	if (bpf_map_lookup_elem(map_fd, &client_fd, &val) < 0)
--		error(1, errno, "Failed to read socket storage");
-+	if (CHECK_FAIL(bpf_map_lookup_elem(map_fd, &client_fd, &val) < 0)) {
-+		perror("Failed to read socket storage");
-+		return -1;
-+	}
- 
- 	if (val.invoked != invoked) {
- 		log_err("%s: unexpected bpf_tcp_sock.invoked %d != %d",
-@@ -225,61 +210,47 @@ static void *server_thread(void *arg)
- 	int fd = *(int *)arg;
- 	int client_fd;
- 
--	if (listen(fd, 1) < 0)
--		error(1, errno, "Failed to listed on socket");
-+	if (CHECK_FAIL(listen(fd, 1)) < 0) {
-+		perror("Failed to listed on socket");
-+		return NULL;
-+	}
- 
- 	client_fd = accept(fd, (struct sockaddr *)&addr, &len);
--	if (client_fd < 0)
--		error(1, errno, "Failed to accept client");
-+	if (CHECK_FAIL(client_fd < 0)) {
-+		perror("Failed to accept client");
-+		return NULL;
-+	}
- 
- 	/* Wait for the next connection (that never arrives)
- 	 * to keep this thread alive to prevent calling
- 	 * close() on client_fd.
- 	 */
--	if (accept(fd, (struct sockaddr *)&addr, &len) >= 0)
--		error(1, errno, "Unexpected success in second accept");
-+	if (CHECK_FAIL(accept(fd, (struct sockaddr *)&addr, &len) >= 0)) {
-+		perror("Unexpected success in second accept");
-+		return NULL;
-+	}
- 
- 	close(client_fd);
- 
- 	return NULL;
- }
- 
--int main(int args, char **argv)
-+void test_tcp_rtt(void)
+-int main(int argc, char **argv)
++void test_sockopt_multi(void)
  {
- 	int server_fd, cgroup_fd;
--	int err = EXIT_SUCCESS;
- 	pthread_t tid;
+ 	struct bpf_prog_load_attr attr = {
+ 		.file = "./sockopt_multi.o",
+@@ -319,56 +305,28 @@ int main(int argc, char **argv)
+ 	int err = -1;
+ 	int ignored;
  
--	if (setup_cgroup_environment())
--		goto cleanup_obj;
--
--	cgroup_fd = create_and_get_cgroup(CG_PATH);
--	if (cgroup_fd < 0)
--		goto cleanup_cgroup_env;
--
--	if (join_cgroup(CG_PATH))
--		goto cleanup_cgroup;
-+	cgroup_fd = test__join_cgroup("/tcp_rtt");
-+	if (CHECK_FAIL(cgroup_fd < 0))
-+		return;
- 
- 	server_fd = start_server();
--	if (server_fd < 0) {
--		err = EXIT_FAILURE;
--		goto cleanup_cgroup;
+-	if (setup_cgroup_environment()) {
+-		log_err("Failed to setup cgroup environment\n");
+-		goto out;
 -	}
-+	if (CHECK_FAIL(server_fd < 0))
-+		goto close_cgroup_fd;
+-
+-	cg_parent = create_and_get_cgroup("/parent");
+-	if (cg_parent < 0) {
+-		log_err("Failed to create cgroup /parent\n");
+-		goto out;
+-	}
+-
+-	cg_child = create_and_get_cgroup("/parent/child");
+-	if (cg_child < 0) {
+-		log_err("Failed to create cgroup /parent/child\n");
++	cg_parent = test__join_cgroup("/parent");
++	if (CHECK_FAIL(cg_parent < 0))
+ 		goto out;
+-	}
  
- 	pthread_create(&tid, NULL, server_thread, (void *)&server_fd);
+-	if (join_cgroup("/parent/child")) {
+-		log_err("Failed to join cgroup /parent/child\n");
++	cg_child = test__join_cgroup("/parent/child");
++	if (CHECK_FAIL(cg_child < 0))
+ 		goto out;
+-	}
+ 
+ 	err = bpf_prog_load_xattr(&attr, &obj, &ignored);
+-	if (err) {
+-		log_err("Failed to load BPF object");
++	if (CHECK_FAIL(err))
+ 		goto out;
+-	}
+ 
+ 	sock_fd = socket(AF_INET, SOCK_STREAM, 0);
+-	if (sock_fd < 0) {
+-		log_err("Failed to create socket");
++	if (CHECK_FAIL(sock_fd < 0))
+ 		goto out;
+-	}
+ 
+-	if (run_getsockopt_test(obj, cg_parent, cg_child, sock_fd))
+-		err = -1;
+-	printf("test_sockopt_multi: getsockopt %s\n",
+-	       err ? "FAILED" : "PASSED");
 -
--	if (run_test(cgroup_fd, server_fd))
--		err = EXIT_FAILURE;
+-	if (run_setsockopt_test(obj, cg_parent, cg_child, sock_fd))
+-		err = -1;
+-	printf("test_sockopt_multi: setsockopt %s\n",
+-	       err ? "FAILED" : "PASSED");
++	CHECK_FAIL(run_getsockopt_test(obj, cg_parent, cg_child, sock_fd));
++	CHECK_FAIL(run_setsockopt_test(obj, cg_parent, cg_child, sock_fd));
+ 
+ out:
+ 	close(sock_fd);
+ 	bpf_object__close(obj);
+ 	close(cg_child);
+ 	close(cg_parent);
 -
-+	CHECK_FAIL(run_test(cgroup_fd, server_fd));
- 	close(server_fd);
--
--	printf("test_sockopt_sk: %s\n",
--	       err == EXIT_SUCCESS ? "PASSED" : "FAILED");
--
--cleanup_cgroup:
-+close_cgroup_fd:
- 	close(cgroup_fd);
--cleanup_cgroup_env:
--	cleanup_cgroup_environment();
--cleanup_obj:
--	return err;
+-	printf("test_sockopt_multi: %s\n", err ? "FAILED" : "PASSED");
+-	return err ? EXIT_FAILURE : EXIT_SUCCESS;
  }
 -- 
 2.23.0.187.g17f5b7556c-goog
