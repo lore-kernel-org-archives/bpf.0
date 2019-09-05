@@ -2,215 +2,222 @@ Return-Path: <SRS0=JPvp=XA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9496EC43331
-	for <bpf@archiver.kernel.org>; Thu,  5 Sep 2019 15:27:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2949EC43331
+	for <bpf@archiver.kernel.org>; Thu,  5 Sep 2019 16:09:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 08001206B8
-	for <bpf@archiver.kernel.org>; Thu,  5 Sep 2019 15:27:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AD34220870
+	for <bpf@archiver.kernel.org>; Thu,  5 Sep 2019 16:09:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F2XORRjW"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Nvr1CwMd";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="IcLFG45s"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390430AbfIEP1Y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 5 Sep 2019 11:27:24 -0400
-Received: from mail-pf1-f202.google.com ([209.85.210.202]:36123 "EHLO
-        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390421AbfIEP1W (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 5 Sep 2019 11:27:22 -0400
-Received: by mail-pf1-f202.google.com with SMTP id 194so1296235pfu.3
-        for <bpf@vger.kernel.org>; Thu, 05 Sep 2019 08:27:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=PKBNn7QHICb88J96DR4dcB71cwak21YXIgp4bI9raYQ=;
-        b=F2XORRjW42vLc+Dr4Fybkid7ICSDsRkq8sQZLq5LP2eBNCmhFFmY6TX+hJ19yQ4Qbn
-         RlUslw80Vf3NGFrrAKD6FJ0+UGQvE+lEySR2TomNesKBkXlUwQQOjmUG9FtfdV92HIIg
-         go/uVWbgOvFuL5u7mblwpDtRbnrrYbJdRo9e66oLvL7DRT4zO2rYzPvsFUdtZ6fDc8Hy
-         zV3wkMqgmS2RekUwgN1ckQOGh5OvDCgh9sP+tRioANEHlpQxxvu8a3V0kFJ++Infh4s5
-         byXyzslu2RagyIwiaYDwi3vPugkHef94VSikVC1yU1DV1QZ25F4z9PursChIF0D5ebHk
-         SsNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=PKBNn7QHICb88J96DR4dcB71cwak21YXIgp4bI9raYQ=;
-        b=V4gH7z7yNMvsc2Btt8ns3oNxwKkyXzEJXTkAYOqgsv360FDoYyV7lJ+rTPDuw+4Fcn
-         6B6x9j6jb341bVvqb4i3lntTnAAMc3loj2JTgjWHRxC/zKyRM5YE5Vf+bvWgKJHYy6hj
-         TRwnf3Lmx74p8iJ+fkgvN3c2lHsnS1Dpcv5zh1cS0Smk93DtwYc0R1QckRGD6W3nQH2f
-         ZyDoNvcviV9r9eoOqqumJe0UMgnVpZzNFGVk9J4bs+Fof+/K5SLmIQ+3deClJNPHpYwm
-         kFom0SX5Y8athvY2Y34j/uJHC6/CO1FbEP3MkjsAzkC73Fi3NB7Ixoeprvo1jfNfTkXy
-         YOQg==
-X-Gm-Message-State: APjAAAUJRcfMlrIvqzIUr92jd+2ER3fGyjd0CtvNOY3cfyrNwQsD9SQU
-        sMnWYZ1DTMLWRGvtK1DPhJkLMgc=
-X-Google-Smtp-Source: APXvYqwvtRzM3yZx+LcV3hYVAFTJ9ZOr6zoo/ux0/mAhLsU8ZILtsNjs7jGd/jbag1PTNb2cEH4N3nw=
-X-Received: by 2002:a65:62d1:: with SMTP id m17mr3858400pgv.271.1567697241474;
- Thu, 05 Sep 2019 08:27:21 -0700 (PDT)
-Date:   Thu,  5 Sep 2019 08:27:07 -0700
-In-Reply-To: <20190905152709.111193-1-sdf@google.com>
-Message-Id: <20190905152709.111193-5-sdf@google.com>
-Mime-Version: 1.0
-References: <20190905152709.111193-1-sdf@google.com>
-X-Mailer: git-send-email 2.23.0.187.g17f5b7556c-goog
-Subject: [PATCH bpf-next v2 4/6] selftests/bpf: test_progs: convert test_sockopt_multi
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        Stanislav Fomichev <sdf@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S2388248AbfIEQJP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 5 Sep 2019 12:09:15 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:17000 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2388167AbfIEQJP (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 5 Sep 2019 12:09:15 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x85G4Jwa009425;
+        Thu, 5 Sep 2019 09:08:47 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=HmdCIrboWkM9rUDFDSHelcJxJIvcYEcwzcIwg5HXSv4=;
+ b=Nvr1CwMdhk5yTP752OlBaag9+s9vu7xtzAJh9L/y9KbfDZ6hBVXhBuooI2Rk5FQVq/mT
+ oSOe8zV6Y7/Qshq3LXqZf61pVDiWWTBtRMMWcToZj5tJVfBTCsLIhezMYSqhOwaEkBHa
+ 4sIS54SSPAGC2u5VcDUB6vERhCjjdztdfmc= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2utqxfk55h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 05 Sep 2019 09:08:46 -0700
+Received: from ash-exhub101.TheFacebook.com (2620:10d:c0a8:82::e) by
+ ash-exhub102.TheFacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Thu, 5 Sep 2019 09:08:45 -0700
+Received: from NAM03-DM3-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.35.173) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
+ via Frontend Transport; Thu, 5 Sep 2019 09:08:45 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TDNDT1P6NUNFaYpIJWwA2kKU98bjWpweFAphE37ukYQY7BXd53XRGBughtlG3B9smXGCjpsNKk7uFTKpoxQbBHjWs8/W2VS0/Xb+QyhZXL3Y6Z5HjksVWkPcx0PrKe7WUA5BcIBegc/FudgVvTULBWryodAy9QuxhNxJXqK3cP6J1Rt76fXooRkrdiXKLvsFId/JJcGPby96BXhb8i2bI6NE2wvu4v2Au+cPpipPJGqozRGyxldJnHbajLaCsZstEgotSEohoqNy2gWHtN4SHZpGxIYuOPZ+Y8y6gHeSAso0A2YfuovnJT8XXC8nyKdK1oyDaKbrz3z4keYJyv5WAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HmdCIrboWkM9rUDFDSHelcJxJIvcYEcwzcIwg5HXSv4=;
+ b=QI3h//HARrEhJeUTj96jjTzSU/ffuCOnja7/rAkDZdTeKFFL71tsF2kWZA31QxyqChOsuq4fUIcAkPDfe31jPUuerVpq5utc92usAmTJT/1VanggEfymKM3Hx53QViyGCE7v3VcB6MXQ5AV2+BulVy2VH4qzdMubD9MmkAZ3L4WgkUsHtXT8/DFtBCZ0pFu1IDDPMRsqZf+bgtF2h5iQ/yVqUy0/P5YBNyEwAK4SL4+4YpXU8+ngjy8KhD7bCwGOqURdH1iQrtdsC8Eq7rLnBd6QqJql/L6UeeFO3U+yJ1wkpRyJMArgPaHzGBL2+Sk1j+WFAjzgTvh9h9qCbRs86A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HmdCIrboWkM9rUDFDSHelcJxJIvcYEcwzcIwg5HXSv4=;
+ b=IcLFG45sga9sEnTnd1KwMjFeON3NbdIcyv69Xn/iGdKRfMPs+SnMbmRwOy9JOcJOgR3YFB0u0iMF+VL0wK2HEk7y81i3BMpikyR8rgbKW9DFNtVB4JcZDXBUS4ERJNq+3+eD0NfNwK8Yn82EpA45U0FR9uWBMBn08bcCCnPE/RE=
+Received: from MWHPR15MB1165.namprd15.prod.outlook.com (10.175.3.22) by
+ MWHPR15MB1616.namprd15.prod.outlook.com (10.175.142.17) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2241.15; Thu, 5 Sep 2019 16:08:44 +0000
+Received: from MWHPR15MB1165.namprd15.prod.outlook.com
+ ([fe80::a828:5750:379d:b9a1]) by MWHPR15MB1165.namprd15.prod.outlook.com
+ ([fe80::a828:5750:379d:b9a1%8]) with mapi id 15.20.2220.022; Thu, 5 Sep 2019
+ 16:08:44 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kernel Team <Kernel-team@fb.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>
+Subject: Re: [PATCH v3 bpf-next 2/3] bpf: implement CAP_BPF
+Thread-Topic: [PATCH v3 bpf-next 2/3] bpf: implement CAP_BPF
+Thread-Index: AQHVY1Cvn0QzeDIQmEifJi8CsD4pqaccPMEAgAAQQQCAABYXAIAABpEAgADYFYA=
+Date:   Thu, 5 Sep 2019 16:08:44 +0000
+Message-ID: <A0BD5C17-3118-4C90-825F-23CE187209EA@fb.com>
+References: <20190904184335.360074-1-ast@kernel.org>
+ <20190904184335.360074-2-ast@kernel.org>
+ <CE3B644F-D1A5-49F7-96B6-FD663C5F8961@fb.com>
+ <20190905013245.wguhhcxvxt5rnc6h@ast-mbp.dhcp.thefacebook.com>
+ <E342EC2A-24F6-4581-BFDC-119B5E02B560@fb.com>
+ <20190905031518.behyq7olkh6fjsoe@ast-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20190905031518.behyq7olkh6fjsoe@ast-mbp.dhcp.thefacebook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3445.104.11)
+x-originating-ip: [2620:10d:c090:200::2:b3a5]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b028d633-26dd-4ce8-53e6-08d7321b538e
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR15MB1616;
+x-ms-traffictypediagnostic: MWHPR15MB1616:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MWHPR15MB1616B4295D5ECE5ED6D17791B3BB0@MWHPR15MB1616.namprd15.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 015114592F
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(396003)(39860400002)(346002)(376002)(136003)(189003)(199004)(71190400001)(57306001)(14444005)(316002)(256004)(54906003)(71200400001)(6916009)(76176011)(8936002)(5660300002)(102836004)(8676002)(6506007)(86362001)(81156014)(81166006)(53546011)(4326008)(50226002)(36756003)(6116002)(25786009)(446003)(46003)(476003)(7736002)(11346002)(305945005)(2616005)(2906002)(486006)(186003)(99286004)(6486002)(6512007)(6436002)(33656002)(76116006)(66446008)(64756008)(66556008)(66476007)(66946007)(229853002)(53936002)(14454004)(6246003)(478600001);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR15MB1616;H:MWHPR15MB1165.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 0T38qyKJCGtdyNt7e6VdpHc4iBJ7YfkoeznQ1Q0QtcEtrCqh3bK98rKg5AIcR04Y1LwrvKrdaVcCiIcWlhRSXJGP9oHo8+kEaPqrscpqLtuRkTHp1cTaZoL4cZcqh7mbrabuP77GBKI2MZ3+lJEhT26VHnFAhUkQqlkCFFNaT8eyBGBxtBldYiBx1neCkwSOM6weo7OH3tsW8Ebo/41M/mnU3lXmGQEvTapbPzphdjqyGqLbiYEsF8RUEidKbJbzXHfB/YwVpwDXoJgFHy0Egacf3Lrpj9MxSzZ0uNNgGivn1cR+BFwcC9GyiQshNXV65rvgaJjyURGVGod0WU4Ud8BNGM4KrRTWNxFuICum0jSwOhAiUJjz0bgrS4LQhJRdeV4FT7/YBHSn2VpHuSQaAu4TSDL7CI989DoxZXiwI6s=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <4A33147E45FBAE45A2DA4C175F6E64EE@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: b028d633-26dd-4ce8-53e6-08d7321b538e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Sep 2019 16:08:44.1077
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /gIcgxvTiHOpkqKMzYgpmyxcGzEpm2hU7eD+0bHwXlyBjNBdl42sN2161iGf3h3YuznkNgXbKJo28nFpTYwj7Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR15MB1616
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.70,1.0.8
+ definitions=2019-09-05_05:2019-09-04,2019-09-05 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
+ spamscore=0 clxscore=1015 adultscore=0 impostorscore=0 malwarescore=0
+ phishscore=0 lowpriorityscore=0 bulkscore=0 mlxscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1906280000 definitions=main-1909050152
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Move the files, adjust includes, remove entry from Makefile & .gitignore
 
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- tools/testing/selftests/bpf/.gitignore        |  1 -
- tools/testing/selftests/bpf/Makefile          |  3 +-
- .../sockopt_multi.c}                          | 62 +++----------------
- 3 files changed, 11 insertions(+), 55 deletions(-)
- rename tools/testing/selftests/bpf/{test_sockopt_multi.c => prog_tests/sockopt_multi.c} (83%)
 
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index bc83c1a7ea1b..4143add5a11e 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -39,6 +39,5 @@ libbpf.so.*
- test_hashmap
- test_btf_dump
- xdping
--test_sockopt_multi
- test_sockopt_inherit
- test_tcp_rtt
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index ea790901297c..271f8ce89c97 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -29,7 +29,7 @@ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test
- 	test_cgroup_storage test_select_reuseport test_section_names \
- 	test_netcnt test_tcpnotify_user test_sock_fields test_sysctl test_hashmap \
- 	test_btf_dump test_cgroup_attach xdping \
--	test_sockopt_multi test_sockopt_inherit test_tcp_rtt
-+	test_sockopt_inherit test_tcp_rtt
- 
- BPF_OBJ_FILES = $(patsubst %.c,%.o, $(notdir $(wildcard progs/*.c)))
- TEST_GEN_FILES = $(BPF_OBJ_FILES)
-@@ -109,7 +109,6 @@ $(OUTPUT)/test_netcnt: cgroup_helpers.c
- $(OUTPUT)/test_sock_fields: cgroup_helpers.c
- $(OUTPUT)/test_sysctl: cgroup_helpers.c
- $(OUTPUT)/test_cgroup_attach: cgroup_helpers.c
--$(OUTPUT)/test_sockopt_multi: cgroup_helpers.c
- $(OUTPUT)/test_sockopt_inherit: cgroup_helpers.c
- $(OUTPUT)/test_tcp_rtt: cgroup_helpers.c
- 
-diff --git a/tools/testing/selftests/bpf/test_sockopt_multi.c b/tools/testing/selftests/bpf/prog_tests/sockopt_multi.c
-similarity index 83%
-rename from tools/testing/selftests/bpf/test_sockopt_multi.c
-rename to tools/testing/selftests/bpf/prog_tests/sockopt_multi.c
-index 4be3441db867..29188d6f5c8d 100644
---- a/tools/testing/selftests/bpf/test_sockopt_multi.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockopt_multi.c
-@@ -1,19 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
--
--#include <error.h>
--#include <errno.h>
--#include <stdio.h>
--#include <unistd.h>
--#include <sys/types.h>
--#include <sys/socket.h>
--#include <netinet/in.h>
--
--#include <linux/filter.h>
--#include <bpf/bpf.h>
--#include <bpf/libbpf.h>
--
--#include "bpf_rlimit.h"
--#include "bpf_util.h"
-+#include <test_progs.h>
- #include "cgroup_helpers.h"
- 
- static int prog_attach(struct bpf_object *obj, int cgroup_fd, const char *title)
-@@ -308,7 +294,7 @@ static int run_setsockopt_test(struct bpf_object *obj, int cg_parent,
- 	return err;
- }
- 
--int main(int argc, char **argv)
-+void test_sockopt_multi(void)
- {
- 	struct bpf_prog_load_attr attr = {
- 		.file = "./sockopt_multi.o",
-@@ -319,56 +305,28 @@ int main(int argc, char **argv)
- 	int err = -1;
- 	int ignored;
- 
--	if (setup_cgroup_environment()) {
--		log_err("Failed to setup cgroup environment\n");
--		goto out;
--	}
--
--	cg_parent = create_and_get_cgroup("/parent");
--	if (cg_parent < 0) {
--		log_err("Failed to create cgroup /parent\n");
--		goto out;
--	}
--
--	cg_child = create_and_get_cgroup("/parent/child");
--	if (cg_child < 0) {
--		log_err("Failed to create cgroup /parent/child\n");
-+	cg_parent = test__join_cgroup("/parent");
-+	if (CHECK_FAIL(cg_parent < 0))
- 		goto out;
--	}
- 
--	if (join_cgroup("/parent/child")) {
--		log_err("Failed to join cgroup /parent/child\n");
-+	cg_child = test__join_cgroup("/parent/child");
-+	if (CHECK_FAIL(cg_child < 0))
- 		goto out;
--	}
- 
- 	err = bpf_prog_load_xattr(&attr, &obj, &ignored);
--	if (err) {
--		log_err("Failed to load BPF object");
-+	if (CHECK_FAIL(err))
- 		goto out;
--	}
- 
- 	sock_fd = socket(AF_INET, SOCK_STREAM, 0);
--	if (sock_fd < 0) {
--		log_err("Failed to create socket");
-+	if (CHECK_FAIL(sock_fd < 0))
- 		goto out;
--	}
- 
--	if (run_getsockopt_test(obj, cg_parent, cg_child, sock_fd))
--		err = -1;
--	printf("test_sockopt_multi: getsockopt %s\n",
--	       err ? "FAILED" : "PASSED");
--
--	if (run_setsockopt_test(obj, cg_parent, cg_child, sock_fd))
--		err = -1;
--	printf("test_sockopt_multi: setsockopt %s\n",
--	       err ? "FAILED" : "PASSED");
-+	CHECK_FAIL(run_getsockopt_test(obj, cg_parent, cg_child, sock_fd));
-+	CHECK_FAIL(run_setsockopt_test(obj, cg_parent, cg_child, sock_fd));
- 
- out:
- 	close(sock_fd);
- 	bpf_object__close(obj);
- 	close(cg_child);
- 	close(cg_parent);
--
--	printf("test_sockopt_multi: %s\n", err ? "FAILED" : "PASSED");
--	return err ? EXIT_FAILURE : EXIT_SUCCESS;
- }
--- 
-2.23.0.187.g17f5b7556c-goog
+> On Sep 4, 2019, at 8:15 PM, Alexei Starovoitov <alexei.starovoitov@gmail.=
+com> wrote:
+>=20
+> On Thu, Sep 05, 2019 at 02:51:51AM +0000, Song Liu wrote:
+>>=20
+>>=20
+>>> On Sep 4, 2019, at 6:32 PM, Alexei Starovoitov <alexei.starovoitov@gmai=
+l.com> wrote:
+>>>=20
+>>> On Thu, Sep 05, 2019 at 12:34:36AM +0000, Song Liu wrote:
+>>>>=20
+>>>>=20
+>>>>> On Sep 4, 2019, at 11:43 AM, Alexei Starovoitov <ast@kernel.org> wrot=
+e:
+>>>>>=20
+>>>>> Implement permissions as stated in uapi/linux/capability.h
+>>>>>=20
+>>>>> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+>>>>>=20
+>>>>=20
+>>>> [...]
+>>>>=20
+>>>>> @@ -1648,11 +1648,11 @@ static int bpf_prog_load(union bpf_attr *attr=
+, union bpf_attr __user *uattr)
+>>>>> 	is_gpl =3D license_is_gpl_compatible(license);
+>>>>>=20
+>>>>> 	if (attr->insn_cnt =3D=3D 0 ||
+>>>>> -	    attr->insn_cnt > (capable(CAP_SYS_ADMIN) ? BPF_COMPLEXITY_LIMIT=
+_INSNS : BPF_MAXINSNS))
+>>>>> +	    attr->insn_cnt > (capable_bpf() ? BPF_COMPLEXITY_LIMIT_INSNS : =
+BPF_MAXINSNS))
+>>>>> 		return -E2BIG;
+>>>>> 	if (type !=3D BPF_PROG_TYPE_SOCKET_FILTER &&
+>>>>> 	    type !=3D BPF_PROG_TYPE_CGROUP_SKB &&
+>>>>> -	    !capable(CAP_SYS_ADMIN))
+>>>>> +	    !capable_bpf())
+>>>>> 		return -EPERM;
+>>>>=20
+>>>> Do we allow load BPF_PROG_TYPE_SOCKET_FILTER and BPF_PROG_TYPE_CGROUP_=
+SKB
+>>>> without CAP_BPF? If so, maybe highlight in the header?
+>>>=20
+>>> of course. there is no change in behavior.
+>>> 'highlight in the header'?
+>>> you mean in commit log?
+>>> I think it's a bit weird to describe things in commit that patch
+>>> is _not_ changing vs things that patch does actually change.
+>>> This type of comment would be great in a doc though.
+>>> The doc will be coming separately in the follow up assuming
+>>> the whole thing lands. I'll remember to note that bit.
+>>=20
+>> I meant capability.h:
+>>=20
+>> + * CAP_BPF allows the following BPF operations:
+>> + * - Loading all types of BPF programs
+>>=20
+>> But CAP_BPF is not required to load all types of programs.=20
+>=20
+> yes, but above statement is still correct, right?
+>=20
+> And right below it says:
+> * CAP_BPF allows the following BPF operations:
+> * - Loading all types of BPF programs
+> * - Creating all types of BPF maps except:
+> *    - stackmap that needs CAP_TRACING
+> *    - devmap that needs CAP_NET_ADMIN
+> *    - cpumap that needs CAP_SYS_ADMIN
+> which is also correct, but CAP_BPF is not required
+> for array, hash, prog_array, percpu, map-in-map ...
+> except their lru variants...
+> and except if they contain bpf_spin_lock...
+> and if they need BTF it currently can be loaded with cap_sys_admin only..=
+.
+>=20
+> If we say something about socket_filter, cg_skb progs in capability.h
+> we should clarify maps as well, but then it will become too big for .h
+> The comments in capability.h already look too long to me.
+> All that info and a lot more belongs in the doc.
+
+Agreed. We cannot put all these details in capability.h. Doc/wikipages=20
+would be better fit for these information.=20
+
+Thanks,
+Song
+
 
