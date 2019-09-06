@@ -2,101 +2,102 @@ Return-Path: <SRS0=IQzl=XB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-14.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37ED0C43331
-	for <bpf@archiver.kernel.org>; Fri,  6 Sep 2019 17:23:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0884BC43331
+	for <bpf@archiver.kernel.org>; Fri,  6 Sep 2019 22:20:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 076C820838
-	for <bpf@archiver.kernel.org>; Fri,  6 Sep 2019 17:23:06 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KV8oU3wT"
+	by mail.kernel.org (Postfix) with ESMTP id C6C0A207FC
+	for <bpf@archiver.kernel.org>; Fri,  6 Sep 2019 22:20:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1567808436;
+	bh=dHpdsc0HBwBY4SXvj3YGSE0d0yRHkSrcWKbu846Z1Tc=;
+	h=From:To:CC:Subject:Date:List-ID:From;
+	b=gqQ+oJrRGtO1x1N0v3vgb9X9U9+oHkVKT1lUUTl6Z2r8bJncyCVSwkqFZWh//10Xr
+	 AXVEd33GoudQ/0fxegLISqtKAKpaZQuuAyBbGymM5ezNzNWXeWSERu3nEmZAG+OPy/
+	 DmNdKxVpHC2/Y99NnHoK6J8A7zHCJbboJYShExV0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389174AbfIFRXF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 6 Sep 2019 13:23:05 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:45891 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729928AbfIFRXF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 6 Sep 2019 13:23:05 -0400
-Received: by mail-lj1-f196.google.com with SMTP id l1so6680479lji.12;
-        Fri, 06 Sep 2019 10:23:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nn6TPGTw/Cq8S+I4wR0SeuE0g0BvA7xFJW8E5r8GuMI=;
-        b=KV8oU3wTBVeUfjUO9qrWp30S0Cbuz71e5CDH4Mz+R19ArQ9CyYn4xrZhlo93H73waZ
-         p7rG9w74vhh/7F5gUK4PIZLxqdC8n4rtSa3dgTIyLuVHG3cWQcIU3uWtMn9Iv+hoVJEs
-         zMTPTti/x/+2IQIcUuijyicADVdHwUvkODI/gcYNRMnjoWLmBUw8kbxgFdBci/+Gqegn
-         sC5HjQy2FB0SuJ0msK66rk+e3HKzi4QvbPtbOcTt4AcLVeobky0zSyBocojL8AAYE/xg
-         Iswyc+jl3ndFJTHYDt4yzxlo5/DQt3xplVaXQt3j0b+egjCdwEIieEUDlxTAOAJWl+MO
-         zd0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nn6TPGTw/Cq8S+I4wR0SeuE0g0BvA7xFJW8E5r8GuMI=;
-        b=uaH5t7zXjY5iDAwbaAlNkDxBLEdJ8fvbCN7xTeYO+qdJWwcdyUT+NkyLP+LAmKR9C9
-         D02kuRrAlzJ0jd1I/ZILIvVvm0vDFYi7dfUYP/w2IgKn5mMN8k/rMSWxdO0Q/zlK8txC
-         13gG6j0ZX7xIXHC3KAJGRxMsSJbvg5l6eMfUoFtCTVv6vjWdf+o/y3ZC4z86gt+NIdMB
-         ltNVXgduOTcvvSNRQ8hny5b8aTKhJ7NBxruZ8/NXpV7sWlV/2wUXfX5YHKmzEgNRAQzM
-         JXu3A4K5PgnVkPUcMhXNorz+MSFSf2+Px/bcdf9lBNB16bFSMcPS67kxaw/pG4Tsfrkt
-         gHPg==
-X-Gm-Message-State: APjAAAXCi7FJ7J76PpZI4d0ic5hvJCeWII+KbASig6Axc4CHTxRrZTY/
-        D1+KGjMkSqbKZ0irPkaS0xI6Zp5AkcsfmZ2CBqU=
-X-Google-Smtp-Source: APXvYqxQheupr1KnzUmF5yhsKYroyEi/wLBbUUS031ou0X8DvBtA3ymvVS/xo3whND+ydZtvmZTSPzxLXK9wDiupNec=
-X-Received: by 2002:a2e:9955:: with SMTP id r21mr6421858ljj.58.1567790583048;
- Fri, 06 Sep 2019 10:23:03 -0700 (PDT)
+        id S2404740AbfIFWUg convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 6 Sep 2019 18:20:36 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:58920 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2404523AbfIFWUg (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 6 Sep 2019 18:20:36 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x86MJZTG026398
+        for <bpf@vger.kernel.org>; Fri, 6 Sep 2019 15:20:35 -0700
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2uup20u4dx-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 06 Sep 2019 15:20:35 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Fri, 6 Sep 2019 15:20:33 -0700
+Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
+        id 6F2FF760B7B; Fri,  6 Sep 2019 15:20:32 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Alexei Starovoitov <ast@kernel.org>
+Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
+To:     <davem@davemloft.net>
+CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <kernel-team@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: pull-request: bpf 2019-09-06
+Date:   Fri, 6 Sep 2019 15:20:32 -0700
+Message-ID: <20190906222032.1007163-1-ast@kernel.org>
+X-Mailer: git-send-email 2.20.0
 MIME-Version: 1.0
-References: <20190904184335.360074-2-ast@kernel.org> <201909070002.v6gbdPOK%lkp@intel.com>
-In-Reply-To: <201909070002.v6gbdPOK%lkp@intel.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 6 Sep 2019 10:22:51 -0700
-Message-ID: <CAADnVQ+D9JTgqMbx4mfX-9ShpLEdzKpxf1R4Sq9r5-bH+aADZg@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 2/3] bpf: implement CAP_BPF
-To:     kbuild test robot <lkp@intel.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>, kbuild-all@01.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
-        Linux API <linux-api@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.70,1.0.8
+ definitions=2019-09-06_10:2019-09-04,2019-09-06 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 suspectscore=1
+ bulkscore=0 impostorscore=0 mlxlogscore=778 adultscore=0 clxscore=1015
+ spamscore=0 malwarescore=0 priorityscore=1501 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1906280000 definitions=main-1909060220
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Sep 6, 2019 at 9:21 AM kbuild test robot <lkp@intel.com> wrote:
->
-> Hi Alexei,
->
-> I love your patch! Perhaps something to improve:
->
-> [auto build test WARNING on bpf-next/master]
->
-> url:    https://github.com/0day-ci/linux/commits/Alexei-Starovoitov/capability-introduce-CAP_BPF-and-CAP_TRACING/20190906-215814
-> base:   https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-> config: x86_64-allmodconfig (attached as .config)
-> compiler: gcc-7 (Debian 7.4.0-11) 7.4.0
-> reproduce:
->         # save the attached .config to linux build tree
->         make ARCH=x86_64
->
-> If you fix the issue, kindly add following tag
-> Reported-by: kbuild test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
->    kernel//bpf/syscall.c: In function 'bpf_prog_test_run':
-> >> kernel//bpf/syscall.c:2087:6: warning: the address of 'capable_bpf_net_admin' will always evaluate as 'true' [-Waddress]
->      if (!capable_bpf_net_admin)
->          ^
+Hi David,
 
-argh. fixing and rebasing.
+The following pull-request contains BPF updates for your *net* tree.
+
+The main changes are:
+
+1) verifier precision tracking fix, from Alexei.
+
+Please consider pulling these changes from:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+
+Thanks a lot!
+
+----------------------------------------------------------------
+
+The following changes since commit 44580a0118d3ede95fec4dce32df5f75f73cd663:
+
+  net: sock_map, fix missing ulp check in sock hash case (2019-09-05 11:56:19 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git 
+
+for you to fetch changes up to 2339cd6cd0b5401fa3fe886bf1c0cb8822041957:
+
+  bpf: fix precision tracking of stack slots (2019-09-05 14:06:58 +0200)
+
+----------------------------------------------------------------
+Alexei Starovoitov (1):
+      bpf: fix precision tracking of stack slots
+
+ kernel/bpf/verifier.c | 23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
