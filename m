@@ -2,123 +2,188 @@ Return-Path: <SRS0=IQzl=XB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F01A5C43140
-	for <bpf@archiver.kernel.org>; Fri,  6 Sep 2019 22:54:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EB6CC43331
+	for <bpf@archiver.kernel.org>; Fri,  6 Sep 2019 23:04:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C429A20842
-	for <bpf@archiver.kernel.org>; Fri,  6 Sep 2019 22:54:57 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="As5aC5kS"
+	by mail.kernel.org (Postfix) with ESMTP id E5B45207FC
+	for <bpf@archiver.kernel.org>; Fri,  6 Sep 2019 23:04:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389698AbfIFWy4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 6 Sep 2019 18:54:56 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:37744 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2392630AbfIFWyz (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 6 Sep 2019 18:54:55 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x86Mso14020433
-        for <bpf@vger.kernel.org>; Fri, 6 Sep 2019 15:54:54 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=nSFWwVxQsqHF3/M8YmhJm9tm7mNW8GuKI2jfSdkKnbI=;
- b=As5aC5kSGgXKWDhJ5apGVDyphqIYf+O7oMLgDm+daWTry0FRHrTSt5vUlaTrAqPF9e//
- RQNp8i4rByGf7c47HYU9rzod05MaFVeasAksevdO0DAAhAH98usczxPKFUZZidrdZbqO
- 9mNoxXd6ueH86Q2YssMasH1kOGER6/r6IDY= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2uu8mdxbg7-10
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 06 Sep 2019 15:54:54 -0700
-Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Fri, 6 Sep 2019 15:54:35 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id C532F3703134; Fri,  6 Sep 2019 15:54:34 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     <ast@fb.com>, <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>
-CC:     <kernel-team@fb.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Brian Vazquez <brianvv@google.com>,
-        Stanislav Fomichev <sdf@google.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [RFC PATCH bpf-next v2 0/2] bpf: adding map batch processing support
-Date:   Fri, 6 Sep 2019 15:54:32 -0700
-Message-ID: <20190906225434.3635421-1-yhs@fb.com>
-X-Mailer: git-send-email 2.17.1
-X-FB-Internal: Safe
+        id S2387545AbfIFXEe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 6 Sep 2019 19:04:34 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:33748 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388178AbfIFXEe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 6 Sep 2019 19:04:34 -0400
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com [209.85.167.69])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 814D93C93D
+        for <bpf@vger.kernel.org>; Fri,  6 Sep 2019 23:04:33 +0000 (UTC)
+Received: by mail-lf1-f69.google.com with SMTP id w22so1723707lfe.2
+        for <bpf@vger.kernel.org>; Fri, 06 Sep 2019 16:04:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=oxoH+WSworCrDFgeDCI681cyvPIJ/tnGjW05hqdt5DA=;
+        b=BCIetGHan3y+C43jfFR7oy60xaAAuQm2jvk0McxBcptswekvLj454G16BCWlbriZ+l
+         4CghiHxKmObfn4dJvPuc8pKwX5TtVQyWGve8vKW1l/AJXZ456vJ9y126T2iKVv7fNRSR
+         t25ZuvAu0AglN7qU1So9nC4mKcst7XdBPiU29YWLo/5tY6INKimJ2RQhzzCuJ2gXKReV
+         WbtVWPhG2fOqcIEoymYJxKcWxp884lmvq8YPdFxWeTKju3TNmoMqQlyFUv0aL7+k0c3A
+         v3ZTlEPSn1Bk94/7V0jXHd/Nn6rjOAHyJmGjzqXxt8yovaaF/KMsgb22aETOXjCp375q
+         A0YQ==
+X-Gm-Message-State: APjAAAXliMIvIe8BjOSmAOb3q+xHhFHaKp80Cv6PHNaj4lqQnns2mLZT
+        5E4bwJoBqpf/jhWvERLGZuWZddBc4P955pqmTP0zE1fwu+kKJJgokVnN84Q4V4GRCSLCWDPMcN/
+        YSkdARjplYh8N
+X-Received: by 2002:a2e:884d:: with SMTP id z13mr6924651ljj.62.1567811070482;
+        Fri, 06 Sep 2019 16:04:30 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqwsCIFvk5JgnR0MRQXhHrD2Joc0ZFQ3Mmb520dfURv4Nwe7K1X8zUHWhWYRqWew2CEQyRERqw==
+X-Received: by 2002:a2e:884d:: with SMTP id z13mr6924642ljj.62.1567811070259;
+        Fri, 06 Sep 2019 16:04:30 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
+        by smtp.gmail.com with ESMTPSA id k28sm1375984lfj.33.2019.09.06.16.04.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Sep 2019 16:04:29 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id E1D5D18061B; Sat,  7 Sep 2019 00:04:27 +0100 (WEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     syzbot <syzbot+4e7a85b1432052e8d6f8@syzkaller.appspotmail.com>,
+        bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Subject: Re: general protection fault in dev_map_hash_update_elem
+In-Reply-To: <20190906145408.05406b0f@carbon>
+References: <0000000000005091a70591d3e1d9@google.com> <CAADnVQK94boXD8Y=g1LsBtNG4wrYQ0Jnjxhq7hdxvyBKZuPwXw@mail.gmail.com> <20190906145408.05406b0f@carbon>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Sat, 07 Sep 2019 00:04:27 +0100
+Message-ID: <87woelxc04.fsf@toke.dk>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.70,1.0.8
- definitions=2019-09-06_10:2019-09-04,2019-09-06 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 spamscore=0
- suspectscore=0 priorityscore=1501 impostorscore=0 bulkscore=0
- mlxlogscore=754 clxscore=1015 mlxscore=0 lowpriorityscore=0 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1906280000 definitions=main-1909060223
-X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Previous discussion at:
-  https://lore.kernel.org/bpf/7ba9b492-8a08-a1d0-9c6e-03be4b8e5e07@fb.com/T/#t
+Jesper Dangaard Brouer <jbrouer@redhat.com> writes:
 
-Previous approach tries to use existing per-map looks like
-bpf_map_{get_next_key, lookup_elem, update_elem, delete_elem}
-to implement a batching process.
+> On Thu, 5 Sep 2019 14:44:37 -0700
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+>
+>> On Thu, Sep 5, 2019 at 1:08 PM syzbot
+>> <syzbot+4e7a85b1432052e8d6f8@syzkaller.appspotmail.com> wrote:
+>> >
+>> > Hello,
+>> >
+>> > syzbot found the following crash on:
+>> >
+>> > HEAD commit:    6d028043 Add linux-next specific files for 20190830
+>> > git tree:       linux-next
+>> > console output: https://syzkaller.appspot.com/x/log.txt?x=135c1a92600000
+>> > kernel config:  https://syzkaller.appspot.com/x/.config?x=82a6bec43ab0cb69
+>> > dashboard link: https://syzkaller.appspot.com/bug?extid=4e7a85b1432052e8d6f8
+>> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+>> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=109124e1600000
+>> >
+>> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+>> > Reported-by: syzbot+4e7a85b1432052e8d6f8@syzkaller.appspotmail.com
+>> >
+>> > kasan: CONFIG_KASAN_INLINE enabled
+>> > kasan: GPF could be caused by NULL-ptr deref or user memory access
+>> > general protection fault: 0000 [#1] PREEMPT SMP KASAN
+>> > CPU: 1 PID: 10235 Comm: syz-executor.0 Not tainted 5.3.0-rc6-next-20190830
+>> > #75
+>> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+>> > Google 01/01/2011
+>> > RIP: 0010:__write_once_size include/linux/compiler.h:203 [inline]
+>> > RIP: 0010:__hlist_del include/linux/list.h:795 [inline]
+>> > RIP: 0010:hlist_del_rcu include/linux/rculist.h:475 [inline]
+>> > RIP: 0010:__dev_map_hash_update_elem kernel/bpf/devmap.c:668 [inline]
+>> > RIP: 0010:dev_map_hash_update_elem+0x3c8/0x6e0 kernel/bpf/devmap.c:691
+>> > Code: 48 89 f1 48 89 75 c8 48 c1 e9 03 80 3c 11 00 0f 85 d3 02 00 00 48 b9
+>> > 00 00 00 00 00 fc ff df 48 8b 53 10 48 89 d6 48 c1 ee 03 <80> 3c 0e 00 0f
+>> > 85 97 02 00 00 48 85 c0 48 89 02 74 38 48 89 55 b8
+>> > RSP: 0018:ffff88808d607c30 EFLAGS: 00010046
+>> > RAX: 0000000000000000 RBX: ffff8880a7f14580 RCX: dffffc0000000000
+>> > RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff8880a7f14588
+>> > RBP: ffff88808d607c78 R08: 0000000000000004 R09: ffffed1011ac0f73
+>> > R10: ffffed1011ac0f72 R11: 0000000000000003 R12: ffff88809f4e9400
+>> > R13: ffff88809b06ba00 R14: 0000000000000000 R15: ffff88809f4e9528
+>> > FS:  00007f3a3d50c700(0000) GS:ffff8880ae900000(0000) knlGS:0000000000000000
+>> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> > CR2: 00007feb3fcd0000 CR3: 00000000986b9000 CR4: 00000000001406e0
+>> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> > Call Trace:
+>> >   map_update_elem+0xc82/0x10b0 kernel/bpf/syscall.c:966
+>> >   __do_sys_bpf+0x8b5/0x3350 kernel/bpf/syscall.c:2854
+>> >   __se_sys_bpf kernel/bpf/syscall.c:2825 [inline]
+>> >   __x64_sys_bpf+0x73/0xb0 kernel/bpf/syscall.c:2825
+>> >   do_syscall_64+0xfa/0x760 arch/x86/entry/common.c:290
+>> >   entry_SYSCALL_64_after_hwframe+0x49/0xbe
+>> > RIP: 0033:0x459879
+>> > Code: fd b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7
+>> > 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff
+>> > ff 0f 83 cb b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+>> > RSP: 002b:00007f3a3d50bc78 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+>> > RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000459879
+>> > RDX: 0000000000000020 RSI: 0000000020000040 RDI: 0000000000000002
+>> > RBP: 000000000075bf20 R08: 0000000000000000 R09: 0000000000000000
+>> > R10: 0000000000000000 R11: 0000000000000246 R12: 00007f3a3d50c6d4
+>> > R13: 00000000004bfc86 R14: 00000000004d1960 R15: 00000000ffffffff
+>> > Modules linked in:
+>> > ---[ end trace 083223e21dbd0ae5 ]---
+>> > RIP: 0010:__write_once_size include/linux/compiler.h:203 [inline]
+>> > RIP: 0010:__hlist_del include/linux/list.h:795 [inline]
+>> > RIP: 0010:hlist_del_rcu include/linux/rculist.h:475 [inline]
+>> > RIP: 0010:__dev_map_hash_update_elem kernel/bpf/devmap.c:668 [inline]
+>> > RIP: 0010:dev_map_hash_update_elem+0x3c8/0x6e0 kernel/bpf/devmap.c:691  
+>> 
+>> Toke,
+>> please take a look.
+>> Thanks!
+>
+> Hi Toke,
+>
+> I think the problem is that you read:
+>  old_dev = __dev_map_hash_lookup_elem(map, idx);
+>
+> Before holding the lock dtab->index_lock... 
+>
+> I'm not sure this is the correct fix, but I think below change should
+> solve the issue (not even compile tested):
+>
+> [bpf-next]$ git diff
+>
+> diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
+> index 9af048a932b5..c41854a68e9e 100644
+> --- a/kernel/bpf/devmap.c
+> +++ b/kernel/bpf/devmap.c
+> @@ -664,6 +664,9 @@ static int __dev_map_hash_update_elem(struct net *net, struct bpf_map *map,
+>  
+>         spin_lock_irqsave(&dtab->index_lock, flags);
+>  
+> +       /* Re-read old_dev while holding lock*/
+> +       old_dev = __dev_map_hash_lookup_elem(map, idx);
+> +
+>         if (old_dev) {
+>                 hlist_del_rcu(&old_dev->index_hlist);
+>         } else {
 
-It has a series drawback when the prev_key used by bpf_map_get_next_key()
-is not in hash table. In that case, as the hash table has no idea where
-the `prev_key` has been placed in the bucket before deletion, currently,
-it returns the first key. This makes batch processing may see
-duplicated elements, or in worst case if the hash table has heavy
-update/delete, the batch processing may never finish.
+I think you're right that it's a race between reading the old_dev ptr
+and the removal, leading to attempts to remove the same element twice.
 
-This RFC patch set implements bucket based batching for hashtab.
-That is, for lookup/delete, either the whole bucket is processed
-or none of elements in the bucket is processed. Forward progress
-is also guaranteed as long as user provides enough buffer.
+Your patch would be one way to fix it, another would be to check the
+pointer for list poison before removing it. Let me run both approaches
+by the bot to make sure it actually fixes the bug; I'll submit a proper
+fix that.
 
-This RFC also serves as a base for discussion at upcoming
-LPC2019 BPF Microconference.
-
-Changelogs:
-   v1 -> RFC v2:
-     . To address the bpf_map_get_next_key() issue where
-       if a key is not available the first key will be returned,
-       implement per-map batch operations for hashtab/lru_hashtab,
-       using bucket lock, as suggested by Alexei.
-
-Cc: Jakub Kicinski <jakub.kicinski@netronome.com>
-Cc: Brian Vazquez <brianvv@google.com>
-Cc: Stanislav Fomichev <sdf@google.com>
-
-Yonghong Song (2):
-  bpf: adding map batch processing support
-  tools/bpf: test bpf_map_lookup_and_delete_batch()
-
- include/linux/bpf.h                           |   9 +
- include/uapi/linux/bpf.h                      |  22 ++
- kernel/bpf/hashtab.c                          | 324 ++++++++++++++++++
- kernel/bpf/syscall.c                          |  68 ++++
- tools/include/uapi/linux/bpf.h                |  22 ++
- tools/lib/bpf/bpf.c                           |  59 ++++
- tools/lib/bpf/bpf.h                           |  13 +
- tools/lib/bpf/libbpf.map                      |   4 +
- .../map_tests/map_lookup_and_delete_batch.c   | 155 +++++++++
- 9 files changed, 676 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/map_tests/map_lookup_and_delete_batch.c
-
--- 
-2.17.1
-
+-Toke
