@@ -1,349 +1,228 @@
-Return-Path: <SRS0=v4uX=XC=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=Sw52=XD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5016C43331
-	for <bpf@archiver.kernel.org>; Sat,  7 Sep 2019 21:45:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 512E8C433EF
+	for <bpf@archiver.kernel.org>; Sun,  8 Sep 2019 01:59:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6987821835
-	for <bpf@archiver.kernel.org>; Sat,  7 Sep 2019 21:45:35 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Mgitbd95"
+	by mail.kernel.org (Postfix) with ESMTP id 33B3E21835
+	for <bpf@archiver.kernel.org>; Sun,  8 Sep 2019 01:59:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388655AbfIGVpf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 7 Sep 2019 17:45:35 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:45234 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728292AbfIGVpf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 7 Sep 2019 17:45:35 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x87Lck5N005522;
-        Sat, 7 Sep 2019 21:42:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2019-08-05;
- bh=RzwOxSydNXyFKI6PaoTuaIiUwrUkRUFmO7stOAVfgLs=;
- b=Mgitbd95uMb9APiFkswFW/Bj7melSd6hJ+qFR07jOzGl8wzx8lOEemgYYQAMr8WM9/QJ
- eKZ3CTx3znZk6pk3viLcH217RioSAhQ8BX8MFcOP3Lezd9KsD34rw09l4YNpbQTTKDuV
- e0e/B5wauX65dB2lkUibcXxfxg/o2N9ZecVX36Odr/4dNnvRtGuhhOgcnNUKufg/xbjO
- 9LJsSqKZA0xy4mnfUppGf0H95nWWS3GfxYguD9mpneOa5CBWnpXAn5316V9MrZxjmFAW
- MxfnD1I+RcxTtItW0Sw1Pph4Mw68EzJlRNGsikQRSnatTmuggP1lzx/pGVAJLwaT02je uA== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 2uvme3r19a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 07 Sep 2019 21:42:54 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x87Lc91p176278;
-        Sat, 7 Sep 2019 21:42:54 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 2uve9b9rdt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 07 Sep 2019 21:42:54 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x87LgrtO005280;
-        Sat, 7 Sep 2019 21:42:53 GMT
-Received: from dhcp-10-175-169-153.vpn.oracle.com (/10.175.169.153)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sat, 07 Sep 2019 14:42:51 -0700
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, davem@davemloft.net,
-        jakub.kicinski@netronome.com, hawk@kernel.org,
-        john.fastabend@gmail.com, rostedt@goodmis.org, mingo@redhat.com,
-        quentin.monnet@netronome.com, rdna@fb.com, joe@wand.net.nz,
-        acme@redhat.com, jolsa@kernel.org, alexey.budankov@linux.intel.com,
-        gregkh@linuxfoundation.org, namhyung@kernel.org, sdf@google.com,
-        f.fainelli@gmail.com, shuah@kernel.org, peter@lekensteyn.nl,
-        ivan@cloudflare.com, andriin@fb.com,
-        bhole_prashant_q7@lab.ntt.co.jp, david.calavera@gmail.com,
-        danieltimlee@gmail.com, ctakshak@fb.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Alan Maguire <alan.maguire@oracle.com>
-Subject: [RFC bpf-next 7/7] bpf: add tests for bpftool packet capture
-Date:   Sat,  7 Sep 2019 22:40:44 +0100
-Message-Id: <1567892444-16344-8-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1567892444-16344-1-git-send-email-alan.maguire@oracle.com>
-References: <1567892444-16344-1-git-send-email-alan.maguire@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9373 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=4 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1909070235
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9373 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=4 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1909070235
+        id S2389419AbfIHB7I (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 7 Sep 2019 21:59:08 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:54293 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388647AbfIHB7I (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 7 Sep 2019 21:59:08 -0400
+Received: by mail-io1-f70.google.com with SMTP id a20so13086133iok.21
+        for <bpf@vger.kernel.org>; Sat, 07 Sep 2019 18:59:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=rXKs9yhAL+cLtDNzcYNrqbpngd8N+DJ3APnXTX48uH8=;
+        b=FiPZPOPfg4bXZeYksAaaPwnFK0Vz9mR4A75OHpKkDfJdyGF/dfHSLGyAevPShC2z9J
+         08nCc8ci3Nw25U8cM05206VkuYSfvlM3bGfa+KXWSwKr7zDQhwwBwM4a4i22k/k/IHKQ
+         AySy1E2s7NK3Nw9Y/9qYgNH7lPJXsv3sTR4SUI6yCtqH02+KDpjK7yO6wHwrLlNyKP8k
+         gpxZTVgMCSzhJcGIaXznXR8Sq432zICrZZFW+i5GXxrlWWnMt/qxOadLJmeyfG+ywFCN
+         Ls6ODtaeFsIlgHAIGuz74a9fsFaaAiXLoasXkd4VwT/zAUpuxZlIBoxVMsMajJqXMB9X
+         ZwdA==
+X-Gm-Message-State: APjAAAXut4q1HCHzOIDVKPcveOITejSHHiYO0MCAomvxEKvIerUuuR5x
+        +0NV3KBE6hwevqrh8XE4PTa6WSXkQxdQSd0ovh/6wclFoEu7
+X-Google-Smtp-Source: APXvYqyN1zQ0hsIlmiKdinW/dtYs2rMpdVgFIoL09fkmJzKYJYJ3ntfObYT0u6rGFcEetLfFE/OpRJffdTMV+hFjyrkt9UuxQu0C
+MIME-Version: 1.0
+X-Received: by 2002:a05:6638:6b2:: with SMTP id d18mr18383931jad.61.1567907946584;
+ Sat, 07 Sep 2019 18:59:06 -0700 (PDT)
+Date:   Sat, 07 Sep 2019 18:59:06 -0700
+In-Reply-To: <0000000000005091a70591d3e1d9@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000032650c0592010449@google.com>
+Subject: Re: general protection fault in dev_map_hash_update_elem
+From:   syzbot <syzbot+4e7a85b1432052e8d6f8@syzkaller.appspotmail.com>
+To:     alexei.starovoitov@gmail.com, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
+        jakub.kicinski@netronome.com, jbrouer@redhat.com,
+        john.fastabend@gmail.com, kafai@fb.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        songliubraving@fb.com, syzkaller-bugs@googlegroups.com,
+        toke@redhat.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-add tests which verify packet capture works for tracing of
-kprobes and raw tracepoints, and for capturing packets from
-existing skb/xdp programs.
+syzbot has found a reproducer for the following crash on:
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- tools/testing/selftests/bpf/Makefile               |   3 +-
- .../testing/selftests/bpf/progs/bpftool_pcap_tc.c  |  41 +++++++
- .../testing/selftests/bpf/progs/bpftool_pcap_xdp.c |  39 ++++++
- tools/testing/selftests/bpf/test_bpftool_pcap.sh   | 132 +++++++++++++++++++++
- 4 files changed, 214 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/progs/bpftool_pcap_tc.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpftool_pcap_xdp.c
- create mode 100755 tools/testing/selftests/bpf/test_bpftool_pcap.sh
+HEAD commit:    a2c11b03 kcm: use BPF_PROG_RUN
+git tree:       bpf-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=13d46ec1600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cf0c85d15c20ade3
+dashboard link: https://syzkaller.appspot.com/bug?extid=4e7a85b1432052e8d6f8
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1220b2d1600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1360b26e600000
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 7f3196a..1e8b68d 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -66,7 +66,8 @@ TEST_PROGS := test_kmod.sh \
- 	test_tc_tunnel.sh \
- 	test_tc_edt.sh \
- 	test_xdping.sh \
--	test_bpftool_build.sh
-+	test_bpftool_build.sh \
-+	test_bpftool_pcap.sh
- 
- TEST_PROGS_EXTENDED := with_addr.sh \
- 	with_tunnels.sh \
-diff --git a/tools/testing/selftests/bpf/progs/bpftool_pcap_tc.c b/tools/testing/selftests/bpf/progs/bpftool_pcap_tc.c
-new file mode 100644
-index 0000000..b51f8fc
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpftool_pcap_tc.c
-@@ -0,0 +1,41 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2019, Oracle and/or its affiliates. All rights reserved. */
-+
-+#include <stddef.h>
-+#include <linux/ptrace.h>
-+#include <linux/bpf.h>
-+#include <linux/pkt_cls.h>
-+
-+#include <bpf_helpers.h>
-+
-+#define KBUILD_MODNAME "foo"
-+
-+struct bpf_map_def SEC("maps") pcap_data_map = {
-+	.type = BPF_MAP_TYPE_PERF_EVENT_ARRAY,
-+	.key_size = sizeof(int),
-+	.value_size = sizeof(int),
-+	.max_entries = 1024,
-+};
-+
-+struct bpf_map_def SEC("maps") pcap_conf_map = {
-+	.type = BPF_MAP_TYPE_ARRAY,
-+	.key_size = sizeof(int),
-+	.value_size = sizeof(struct bpf_pcap_hdr),
-+	.max_entries = 1,
-+};
-+
-+SEC("tc_pcap")
-+int tc_pcap(struct __sk_buff *skb)
-+{
-+	struct bpf_pcap_hdr *conf;
-+	int key = 0;
-+
-+	conf = bpf_map_lookup_elem(&pcap_conf_map, &key);
-+	if (!conf)
-+		return 0;
-+
-+	bpf_pcap(skb, conf->cap_len, &pcap_data_map, conf->protocol,
-+		 conf->flags);
-+
-+	return TC_ACT_OK;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/bpftool_pcap_xdp.c b/tools/testing/selftests/bpf/progs/bpftool_pcap_xdp.c
-new file mode 100644
-index 0000000..a7d6866
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpftool_pcap_xdp.c
-@@ -0,0 +1,39 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2019, Oracle and/or its affiliates. All rights reserved. */
-+
-+#include <stddef.h>
-+#include <linux/bpf.h>
-+
-+#include <bpf_helpers.h>
-+
-+#define KBUILD_MODNAME "foo"
-+
-+struct bpf_map_def SEC("maps") pcap_data_map = {
-+	.type = BPF_MAP_TYPE_PERF_EVENT_ARRAY,
-+	.key_size = sizeof(int),
-+	.value_size = sizeof(int),
-+	.max_entries = 1024,
-+};
-+
-+struct bpf_map_def SEC("maps") pcap_conf_map = {
-+	.type = BPF_MAP_TYPE_ARRAY,
-+	.key_size = sizeof(int),
-+	.value_size = sizeof(struct bpf_pcap_hdr),
-+	.max_entries = 1,
-+};
-+
-+SEC("xdp_pcap")
-+int xdp_pcap(struct xdp_md *ctx)
-+{
-+	struct bpf_pcap_hdr *conf;
-+	int key = 0;
-+
-+	conf = bpf_map_lookup_elem(&pcap_conf_map, &key);
-+	if (!conf)
-+		return 0;
-+
-+	bpf_pcap(ctx, conf->cap_len, &pcap_data_map, conf->protocol,
-+		 conf->flags);
-+
-+	return XDP_PASS;
-+}
-diff --git a/tools/testing/selftests/bpf/test_bpftool_pcap.sh b/tools/testing/selftests/bpf/test_bpftool_pcap.sh
-new file mode 100755
-index 0000000..92b5438
---- /dev/null
-+++ b/tools/testing/selftests/bpf/test_bpftool_pcap.sh
-@@ -0,0 +1,132 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (c) 2019, Oracle and/or its affiliates. All rights reserved.
-+
-+readonly src="../../../../"
-+readonly bpftool="${src}/tools/bpf/bpftool/bpftool"
-+readonly capfile="/tmp/cap.$$"
-+readonly ns="ns-$$"
-+readonly badport="5555"
-+readonly addr1="192.168.1.1"
-+readonly addr2="192.168.1.2"
-+readonly pinpath="/sys/fs/bpf/"
-+readonly veth1="${ns}-veth1"
-+readonly veth2="${ns}-veth2"
-+# 24 bytes for the pcap header
-+readonly cap_minsize=24
-+readonly caplens="0 8192"
-+readonly addrs="127.0.0.1 ::1"
-+readonly devs="none lo"
-+
-+cleanup() {
-+  iptables -D INPUT -p tcp --dport $badport -j DROP
-+  ip6tables -D INPUT -p tcp --dport $badport -j DROP
-+  ip netns del $ns 2>/dev/null
-+  rm -f $capfile
-+}
-+
-+verify_capture() {
-+  capsize=$(stat -c '%s' $capfile)
-+  if [[ $capsize -le $cap_minsize ]]; then
-+    exit 1
-+  fi
-+  if [[ $no_tcpdump == 0 ]]; then
-+    count=$(tcpdump -lnr $capfile $1 2>/dev/null)
-+    if [[ -z "$count" ]]; then
-+      exit 1
-+    fi
-+  fi
-+}
-+
-+which tcpdump 2>&1 > /dev/null
-+no_tcpdump=$?
-+
-+pcap_supported=$(bpftool pcap help >/dev/null 2>&1)
-+if [[ $? -ne 0 ]]; then
-+	echo "no pcap support in bpftool, cannot test feature."
-+	exit 0
-+fi
-+
-+set -e
-+
-+trap cleanup EXIT
-+
-+iptables -A INPUT -p tcp --dport $badport -j DROP
-+ip6tables -A INPUT -p tcp --dport $badport -j DROP
-+
-+# Test "bpftool pcap trace" - kprobe, tracepoint tracing
-+for probe in kprobe tracepoint; do
-+  for dev in $devs; do
-+    devarg=
-+    if [[ $dev != "none" ]]; then
-+      devarg="dev $dev"
-+    fi
-+    args="$probe:kfree_skb proto ip data_out $capfile $devarg"
-+    echo "Test trace $args"
-+    for caplen in $caplens ; do
-+      for progname in none $probe ; do
-+        progpath=
-+        if [[ $progname != "none" ]]; then
-+          progpath=${bpftool}_pcap_${probe}.o
-+        fi
-+        allargs="$progpath $args len $caplen"
-+        for addr in $addrs ; do
-+          $bpftool pcap trace $allargs &
-+          bpftool_pid=$!
-+          set +e
-+          timeout 2 nc $addr $badport 2>/dev/null
-+          kill -TERM $bpftool_pid
-+          set -e
-+          sleep 1
-+          verify_capture "host $addr and port $badport"
-+          rm -f $capfile
-+        done
-+      done
-+    done
-+    echo "Test trace $args: PASS"
-+  done
-+done
-+
-+# Test "bpftool pcap prog" - skb, xdp program tracing
-+ip netns add $ns
-+ip link add dev $veth2 netns $ns type veth peer name $veth1
-+ip link set $veth1 up
-+ip addr add ${addr1}/24 dev $veth1
-+ip -netns $ns link set $veth2 up
-+ip netns exec $ns ip addr add ${addr2}/24 dev $veth2
-+
-+for prog in tc xdp ; do
-+  if [[ $prog == tc ]]; then
-+    ip netns exec $ns tc qdisc add dev $veth2 clsact
-+    ip netns exec $ns tc filter add dev $veth2 ingress bpf da \
-+      obj bpftool_pcap_${prog}.o sec ${prog}_pcap
-+    id=$(ip netns exec $ns tc filter show dev $veth2 ingress | \
-+         awk '/direct-action/ { for(i=1;i<=NF;i++)if($i=="id")print $(i+1)}')
-+  else
-+    ip netns exec $ns ip link set dev $veth2 xdp obj bpftool_pcap_${prog}.o \
-+      sec ${prog}_pcap
-+    id=$(ip netns exec $ns ip link show $veth2 | awk '/prog\/xdp/ { print $3 }')
-+    sleep 5
-+  fi
-+  args="id $id data_out $capfile"
-+  echo "Test prog $args"
-+  for caplen in $caplens ; do
-+    allargs="$args len $caplen"
-+    $bpftool pcap prog $allargs &
-+    bpftool_pid=$!
-+    set +e
-+    ping -q -c 5 $addr2 1>/dev/null
-+    kill -TERM $bpftool_pid
-+    set -e
-+    sleep 1
-+    verify_capture "host $addr1"
-+    rm -f $capfile
-+  done
-+  if [[ $prog == tc ]]; then
-+    ip netns exec $ns tc qdisc del dev $veth2 clsact
-+    sleep 1
-+  else
-+    ip netns exec $ns ip link set dev $veth2 xdp off
-+  fi
-+  echo "Test trace $args: PASS"
-+done
--- 
-1.8.3.1
+Bisection is inconclusive: the first bad commit could be any of:
+
+116e7dbe Merge branch 'gen-syn-cookie'
+91bc3578 selftests/bpf: add test for bpf_tcp_gen_syncookie
+637f71c0 selftests/bpf: bpf_tcp_gen_syncookie->bpf_helpers
+bf8ff0f8 selftests/bpf: fix clearing buffered output between tests/subtests
+3745ee18 bpf: sync bpf.h to tools/
+a98bf573 tools: bpftool: add support for reporting the effective cgroup  
+progs
+70d66244 bpf: add bpf_tcp_gen_syncookie helper
+9babe825 bpf: always allocate at least 16 bytes for setsockopt hook
+9349d600 tcp: add skb-less helpers to retrieve SYN cookie
+fd5ef31f selftests/bpf: extend sockopt_sk selftest with TCP_CONGESTION use  
+case
+02bc2b64 Merge branch 'setsockopt-extra-mem'
+96511278 tcp: tcp_syn_flood_action read port from socket
+a78d0dbe selftests/bpf: add loop test 4
+d3406913 Merge branch 'devmap_hash'
+1375dc4a tools: Add definitions for devmap_hash map type
+8c303960 selftests/bpf: add loop test 5
+946152b3 selftests/bpf: test_progs: switch to open_memstream
+e4234619 tools/libbpf_probes: Add new devmap_hash type
+10fbe211 tools/include/uapi: Add devmap_hash BPF map type
+66bd2ec1 selftests/bpf: test_progs: test__printf -> printf
+16e910d4 selftests/bpf: test_progs: drop extra trailing tab
+6f9d451a xdp: Add devmap_hash map type for looking up devices by hashed  
+index
+682cdbdc Merge branch 'test_progs-stdio'
+fca16e51 xdp: Refactor devmap allocation code for reuse
+6dbff13c include/bpf.h: Remove map_insert_ctx() stubs
+ef20a9b2 libbpf: add helpers for working with BTF types
+475e31f8 Merge branch 'revamp-test_progs'
+b03bc685 libbpf: convert libbpf code to use new btf helpers
+4cedc0da libbpf: add .BTF.ext offset relocation section loading
+b207edfe selftests/bpf: convert send_signal.c to use subtests
+51436ed7 selftests/bpf: convert bpf_verif_scale.c to sub-tests API
+ddc7c304 libbpf: implement BPF CO-RE offset relocation algorithm
+2dc26d5a selftests/bpf: add BPF_CORE_READ relocatable read macro
+3a516a0a selftests/bpf: add sub-tests support for test_progs
+0ff97e56 selftests/bpf: abstract away test log output
+df36e621 selftests/bpf: add CO-RE relocs testing setup
+002d3afc selftests/bpf: add CO-RE relocs struct flavors tests
+329e38f7 selftest/bpf: centralize libbpf logging management for test_progs
+e87fd8ba libbpf: return previous print callback from libbpf_set_print
+ec6438a9 selftests/bpf: add CO-RE relocs nesting tests
+20a9ad2e selftests/bpf: add CO-RE relocs array tests
+8160bae2 selftests/bpf: add test selectors by number and name to test_progs
+766f2a59 selftests/bpf: revamp test_progs to allow more control
+d9db3550 selftests/bpf: add CO-RE relocs enum/ptr/func_proto tests
+61098e89 selftests/bpf: prevent headers to be compiled as C code
+9654e2ae selftests/bpf: add CO-RE relocs modifiers/typedef tests
+943e398d Merge branch 'flow_dissector-input-flags'
+d698f9db selftests/bpf: add CO-RE relocs ptr-as-array tests
+c1f5e7dd selftests/bpf: add CO-RE relocs ints tests
+e853ae77 selftests/bpf: support BPF_FLOW_DISSECTOR_F_STOP_AT_ENCAP
+29e1c668 selftests/bpf: add CO-RE relocs misc tests
+71c99e32 bpf/flow_dissector: support ipv6 flow_label and  
+BPF_FLOW_DISSECTOR_F_STOP_AT_FLOW_LABEL
+726e333f Merge branch 'compile-once-run-everywhere'
+ae173a91 selftests/bpf: support BPF_FLOW_DISSECTOR_F_PARSE_1ST_FRAG
+57debff2 tools/bpf: sync bpf_flow_keys flags
+b7076592 tools/bpf: fix core_reloc.c compilation error
+b2ca4e1c bpf/flow_dissector: support flags in BPF_PROG_TEST_RUN
+d9973cec xdp: xdp_umem: fix umem pages mapping for 32bits systems
+1ac6b126 bpf/flow_dissector: document flags
+3783d437 samples/bpf: xdp_fwd rename devmap name to be xdp_tx_ports
+086f9568 bpf/flow_dissector: pass input flags to BPF flow dissector program
+a32a32cb samples/bpf: make xdp_fwd more practically usable via devmap lookup
+03cd1d1a selftests/bpf: Add selftests for bpf_perf_event_output
+abcce733 samples/bpf: xdp_fwd explain bpf_fib_lookup return codes
+7c4b90d7 bpf: Allow bpf_skb_event_output for a few prog types
+9f30cd56 Merge branch 'bpf-xdp-fwd-sample-improvements'
+5e31d507 Merge branch 'convert-tests-to-libbpf'
+a664a834 tools: bpftool: fix reading from /proc/config.gz
+341dfcf8 btf: expose BTF info through sysfs
+47da6e4d selftests/bpf: remove perf buffer helpers
+c17bec54 samples/bpf: switch trace_output sample to perf_buffer API
+d66fa3c7 tools: bpftool: add feature check for zlib
+9840a4ff selftests/bpf: fix race in flow dissector tests
+f58a4d51 samples/bpf: convert xdp_sample_pkts_user to perf_buffer API
+7fd78568 btf: rename /sys/kernel/btf/kernel into /sys/kernel/btf/vmlinux
+898ca681 selftests/bpf: switch test_tcpnotify to perf_buffer API
+58b80815 selftests/bpf: convert test_get_stack_raw_tp to perf_buffer API
+a1916a15 libbpf: attempt to load kernel BTF from sysfs first
+72ef80b5 Merge branch 'bpf-libbpf-read-sysfs-btf'
+f2a3e4e9 libbpf: provide more helpful message on uninitialized global var
+708852dc Merge git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1130846e600000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+4e7a85b1432052e8d6f8@syzkaller.appspotmail.com
+
+kasan: CONFIG_KASAN_INLINE enabled
+kasan: GPF could be caused by NULL-ptr deref or user memory access
+general protection fault: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 10210 Comm: syz-executor910 Not tainted 5.3.0-rc7+ #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+RIP: 0010:__write_once_size include/linux/compiler.h:226 [inline]
+RIP: 0010:__hlist_del include/linux/list.h:762 [inline]
+RIP: 0010:hlist_del_rcu include/linux/rculist.h:455 [inline]
+RIP: 0010:__dev_map_hash_update_elem kernel/bpf/devmap.c:668 [inline]
+RIP: 0010:dev_map_hash_update_elem+0x3c8/0x6e0 kernel/bpf/devmap.c:691
+Code: 48 89 f1 48 89 75 c8 48 c1 e9 03 80 3c 11 00 0f 85 d3 02 00 00 48 b9  
+00 00 00 00 00 fc ff df 48 8b 53 10 48 89 d6 48 c1 ee 03 <80> 3c 0e 00 0f  
+85 97 02 00 00 48 85 c0 48 89 02 74 38 48 89 55 b8
+RSP: 0018:ffff88808c757c30 EFLAGS: 00010046
+RAX: 0000000000000000 RBX: ffff8880a216a980 RCX: dffffc0000000000
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff8880a216a988
+RBP: ffff88808c757c78 R08: 0000000000000004 R09: ffffed10118eaf73
+R10: ffffed10118eaf72 R11: 0000000000000003 R12: ffff88808c7fb2c0
+R13: ffff88808aa98800 R14: 0000000000000000 R15: ffff88808c7fb3e8
+FS:  00007fd4c5528700(0000) GS:ffff8880ae900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff47596210 CR3: 000000008b442000 CR4: 00000000001406e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+  map_update_elem+0xc82/0x10b0 kernel/bpf/syscall.c:966
+  __do_sys_bpf+0x8b5/0x3350 kernel/bpf/syscall.c:2854
+  __se_sys_bpf kernel/bpf/syscall.c:2825 [inline]
+  __x64_sys_bpf+0x73/0xb0 kernel/bpf/syscall.c:2825
+  do_syscall_64+0xfd/0x6a0 arch/x86/entry/common.c:296
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x446a29
+Code: e8 0c e8 ff ff 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7  
+48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 5b 07 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007fd4c5527db8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 00000000006dbc28 RCX: 0000000000446a29
+RDX: 0000000000000020 RSI: 0000000020000180 RDI: 0000000000000002
+RBP: 00000000006dbc20 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00000000006dbc2c
+R13: 00007fff4759618f R14: 00007fd4c55289c0 R15: 0000000000000000
+Modules linked in:
+---[ end trace 9a6d00abce3fe1c8 ]---
+RIP: 0010:__write_once_size include/linux/compiler.h:226 [inline]
+RIP: 0010:__hlist_del include/linux/list.h:762 [inline]
+RIP: 0010:hlist_del_rcu include/linux/rculist.h:455 [inline]
+RIP: 0010:__dev_map_hash_update_elem kernel/bpf/devmap.c:668 [inline]
+RIP: 0010:dev_map_hash_update_elem+0x3c8/0x6e0 kernel/bpf/devmap.c:691
+Code: 48 89 f1 48 89 75 c8 48 c1 e9 03 80 3c 11 00 0f 85 d3 02 00 00 48 b9  
+00 00 00 00 00 fc ff df 48 8b 53 10 48 89 d6 48 c1 ee 03 <80> 3c 0e 00 0f  
+85 97 02 00 00 48 85 c0 48 89 02 74 38 48 89 55 b8
+RSP: 0018:ffff88808c757c30 EFLAGS: 00010046
+RAX: 0000000000000000 RBX: ffff8880a216a980 RCX: dffffc0000000000
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff8880a216a988
+RBP: ffff88808c757c78 R08: 0000000000000004 R09: ffffed10118eaf73
+R10: ffffed10118eaf72 R11: 0000000000000003 R12: ffff88808c7fb2c0
+R13: ffff88808aa98800 R14: 0000000000000000 R15: ffff88808c7fb3e8
+FS:  00007fd4c5528700(0000) GS:ffff8880ae900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff47596210 CR3: 000000008b442000 CR4: 00000000001406e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
