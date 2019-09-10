@@ -2,193 +2,121 @@ Return-Path: <SRS0=5F2J=XF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26E88C3A5A2
-	for <bpf@archiver.kernel.org>; Tue, 10 Sep 2019 11:57:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB6DEC49ED7
+	for <bpf@archiver.kernel.org>; Tue, 10 Sep 2019 14:54:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E8AEA2084D
-	for <bpf@archiver.kernel.org>; Tue, 10 Sep 2019 11:57:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B0EA32168B
+	for <bpf@archiver.kernel.org>; Tue, 10 Sep 2019 14:54:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="aE3lyKZ7"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="G8tnCttE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726651AbfIJL5i (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Sep 2019 07:57:38 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:37977 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731954AbfIJL4a (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Sep 2019 07:56:30 -0400
-Received: by mail-wr1-f67.google.com with SMTP id l11so19604751wrx.5
-        for <bpf@vger.kernel.org>; Tue, 10 Sep 2019 04:56:29 -0700 (PDT)
+        id S1731464AbfIJOyK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Sep 2019 10:54:10 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:38314 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732106AbfIJOyG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Sep 2019 10:54:06 -0400
+Received: by mail-lj1-f196.google.com with SMTP id y23so16433967ljn.5
+        for <bpf@vger.kernel.org>; Tue, 10 Sep 2019 07:54:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=neu1+SNcx3+JCL0eDuwZqNrNaVee6BTW6AWaLZCdbp4=;
-        b=aE3lyKZ76kk0jH5fvUUBsWVhrptGL+yyoArZZ/LYIyxLKjUsI3xcSWR/3CoI7o4geo
-         /i/t/VFvVXi5My78PegN4xOs3dR1JpxwoZJK569R3IIjMrNvWO5a39fQ7dv+f/dY3Fpn
-         amkaj9Rl3iCRNkW23DZ49u7Fguh5Tf0RlWVOU=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=nuroSq5xVvvzh+v0qlo9GQuTkiKTTTkV0acBTH9xBxw=;
+        b=G8tnCttE8WYXmZymod5Wpj8QXNMnObna74TmAzDI0TZHGg2UXsdPql9W2EqG5PgPF9
+         Uj8nmQwOtHqqq+Hb/JwU6u9cBq+XPF1LdT3c9XeY5pJywF1a+6yAjImuknUtqsN3CKDi
+         QjyKjEb0eqmMgwbAiJ1zE0I0rGN8wZtMp10w3KHe4QYYVrBZzzPQZzK/oan0gujscL4Q
+         gGuiEmCbVllxpW3arvdko3OWVgmL+IHZl3bNByswiNmCSxShzFOZjBsyQHwvdvgAhzdq
+         p9EQGSZeykdG0xNtNvEKE0rsHPqIxc0rb6JcgjQk5k5mVq0Zxyp44J+d+BAaQRvMVYth
+         8PBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=neu1+SNcx3+JCL0eDuwZqNrNaVee6BTW6AWaLZCdbp4=;
-        b=NgOe5ovrkiew49+QgQoI/I7SN/B+JpjQ5YXMy8xLbfO5Kx3IAN8aJOpR1mNTQvXlZk
-         Bg//+Az0D/wTvAeflqp7X2S2U4wugGMN87x77cEiBPsaZ0oghBKadMVx77AXG5XXT2SZ
-         P5eUlnZLs5kPSRaUGF8wFC+SDBlr6WhWCMzob4i1oas+Wy7ycs+RhZquIu1sQiBuc2w6
-         XeCU3LTbMBjjTp6vUEC6ixtkHDj1MJ/rD6Dj3ZqLJ4i2zSKyhcziJUXd43ViHBsV0xyk
-         G5OQ2Ige10Tif648gcyhATbQdgHd7las2jopy5+4kCJq7mrR1XRMbdW1wXF9OR2/I8h5
-         hpVg==
-X-Gm-Message-State: APjAAAUTKvnJC2zjA5ABYYzEOkduYv6rLrOKQgkxMtvS7UQYCoI5yzv+
-        T1ERvHZGd2EFel7FvZZ+jp4mBQ==
-X-Google-Smtp-Source: APXvYqz0I8AKSm98TOHLRk9qzO54R/9/vbhmrvD8H96WG5P1Y90KCbbnzpJnNJ733VZXkbnkVhXZGA==
-X-Received: by 2002:adf:ce81:: with SMTP id r1mr25914250wrn.114.1568116588890;
-        Tue, 10 Sep 2019 04:56:28 -0700 (PDT)
-Received: from kpsingh-kernel.c.hoisthospitality.com (110.8.30.213.rev.vodafone.pt. [213.30.8.110])
-        by smtp.gmail.com with ESMTPSA id q19sm23732935wra.89.2019.09.10.04.56.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Sep 2019 04:56:28 -0700 (PDT)
-From:   KP Singh <kpsingh@chromium.org>
-To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        James Morris <jmorris@namei.org>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Garnier <thgarnie@chromium.org>,
-        Michael Halcrow <mhalcrow@google.com>,
-        Paul Turner <pjt@google.com>,
-        Brendan Gregg <brendan.d.gregg@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Christian Brauner <christian@brauner.io>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Florent Revest <revest@chromium.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Quentin Monnet <quentin.monnet@netronome.com>,
-        Andrey Ignatov <rdna@fb.com>, Joe Stringer <joe@wand.net.nz>
-Subject: [RFC v1 04/14] krsi: Add support in libbpf for BPF_PROG_TYPE_KRSI
-Date:   Tue, 10 Sep 2019 13:55:17 +0200
-Message-Id: <20190910115527.5235-5-kpsingh@chromium.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190910115527.5235-1-kpsingh@chromium.org>
-References: <20190910115527.5235-1-kpsingh@chromium.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to:user-agent;
+        bh=nuroSq5xVvvzh+v0qlo9GQuTkiKTTTkV0acBTH9xBxw=;
+        b=Xf8bp5kLYpU6xHqstgnVCx94bIC9Kd1oeKoMM37hWFJ/iTJJzsVPPELZokhRhozOM6
+         DTfrb+cTMqAoYvWanJkhkwT4Dh4rgH3vYn0VQfTTIx20dDmMcAOnG1vKeqb4IAwEy4q+
+         ZFXTY/e8B5Tp5+aThog6iTAmjvJCaG3Pj5qq2shsxjKj9YJ+QoG5Nkzah+72h6G10tiB
+         LYdI4lIgitLd5B2am44Ncm6cjtZzHjp4yywpSOg5vhdaNrUbZAnHyeOZ/C5ssND72azt
+         gHW5JvOuH5VBl6oXKK6PU+uprtFTNUb6q6uREkniMu0UW0FbIWBFkM9Kn1koegISWKfu
+         g6iQ==
+X-Gm-Message-State: APjAAAVJjbfpDEFTQWn6wuA7RYPLF8UsiW5s7tPlMZMNDw/KFkgbPI+3
+        lDzowU758arPjL3uoNt2ngo4vg==
+X-Google-Smtp-Source: APXvYqzoL8vXP4WzF0c3Qvv+WB5KvvkzQvf2Y20elnufkVTtlnsX7iT/hT9XprVDLXcWFsF+OztVLA==
+X-Received: by 2002:a2e:9081:: with SMTP id l1mr978301ljg.33.1568127244223;
+        Tue, 10 Sep 2019 07:54:04 -0700 (PDT)
+Received: from khorivan (168-200-94-178.pool.ukrtel.net. [178.94.200.168])
+        by smtp.gmail.com with ESMTPSA id l9sm3853105ljg.79.2019.09.10.07.54.03
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 10 Sep 2019 07:54:03 -0700 (PDT)
+Date:   Tue, 10 Sep 2019 17:54:01 +0300
+From:   Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, yhs@fb.com,
+        davem@davemloft.net, jakub.kicinski@netronome.com, hawk@kernel.org,
+        john.fastabend@gmail.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Subject: Re: [PATCH bpf-next 01/11] samples: bpf: makefile: fix HDR_PROBE
+ "echo"
+Message-ID: <20190910145359.GD3053@khorivan>
+Mail-Followup-To: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        ast@kernel.org, daniel@iogearbox.net, yhs@fb.com,
+        davem@davemloft.net, jakub.kicinski@netronome.com, hawk@kernel.org,
+        john.fastabend@gmail.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+References: <20190910103830.20794-1-ivan.khoronzhuk@linaro.org>
+ <20190910103830.20794-2-ivan.khoronzhuk@linaro.org>
+ <55803f7e-a971-d71a-fcc2-76ae1cf813bf@cogentembedded.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <55803f7e-a971-d71a-fcc2-76ae1cf813bf@cogentembedded.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: KP Singh <kpsingh@google.com>
+On Tue, Sep 10, 2019 at 01:46:48PM +0300, Sergei Shtylyov wrote:
+>Hello!
+>
+>On 10.09.2019 13:38, Ivan Khoronzhuk wrote:
+>
+>>echo should be replaced on echo -e to handle \n correctly, but instead,
+>
+>  s/on/with/?
+s/echo/printf/ instead of s/echo/echo -e/
 
-Update the libbpf library with functionality to load and
-attach a program type BPF_PROG_TYPE_KRSI.
+printf looks better.
 
-Since the bpf_prog_load does not allow the specification of an
-expected attach type, it's recommended to use bpf_prog_load_xattr and
-set the expected attach type as KRSI.
+>
+>>replace it on printf as some systems can't handle echo -e.
+>
+>   Likewise?
+Like some, better avoid ambiguity, for me it works fine - is not enough.
+https://pubs.opengroup.org/onlinepubs/9699919799/utilities/echo.html
+ "A string to be written to standard output. If the first operand is
+ -n, or if any of the operands contain a <backslash> character, the
+ results are implementation-defined"
 
-Signed-off-by: KP Singh <kpsingh@google.com>
----
- tools/lib/bpf/libbpf.c        | 4 ++++
- tools/lib/bpf/libbpf.h        | 2 ++
- tools/lib/bpf/libbpf.map      | 2 ++
- tools/lib/bpf/libbpf_probes.c | 1 +
- 4 files changed, 9 insertions(+)
+I can guess its Mac vs Linux, but it does mean nothing if it's defined as
+implementation dependent, can be any.
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 2b57d7ea7836..3cc86bbc68cd 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -2676,6 +2676,7 @@ static bool bpf_prog_type__needs_kver(enum bpf_prog_type type)
- 	case BPF_PROG_TYPE_PERF_EVENT:
- 	case BPF_PROG_TYPE_CGROUP_SYSCTL:
- 	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
-+	case BPF_PROG_TYPE_KRSI:
- 		return false;
- 	case BPF_PROG_TYPE_KPROBE:
- 	default:
-@@ -3536,6 +3537,7 @@ bool bpf_program__is_##NAME(const struct bpf_program *prog)	\
- }								\
- 
- BPF_PROG_TYPE_FNS(socket_filter, BPF_PROG_TYPE_SOCKET_FILTER);
-+BPF_PROG_TYPE_FNS(krsi, BPF_PROG_TYPE_KRSI);
- BPF_PROG_TYPE_FNS(kprobe, BPF_PROG_TYPE_KPROBE);
- BPF_PROG_TYPE_FNS(sched_cls, BPF_PROG_TYPE_SCHED_CLS);
- BPF_PROG_TYPE_FNS(sched_act, BPF_PROG_TYPE_SCHED_ACT);
-@@ -3590,6 +3592,8 @@ static const struct {
- 	BPF_PROG_SEC("lwt_out",			BPF_PROG_TYPE_LWT_OUT),
- 	BPF_PROG_SEC("lwt_xmit",		BPF_PROG_TYPE_LWT_XMIT),
- 	BPF_PROG_SEC("lwt_seg6local",		BPF_PROG_TYPE_LWT_SEG6LOCAL),
-+	BPF_APROG_SEC("krsi",			BPF_PROG_TYPE_KRSI,
-+						BPF_KRSI),
- 	BPF_APROG_SEC("cgroup_skb/ingress",	BPF_PROG_TYPE_CGROUP_SKB,
- 						BPF_CGROUP_INET_INGRESS),
- 	BPF_APROG_SEC("cgroup_skb/egress",	BPF_PROG_TYPE_CGROUP_SKB,
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 5cbf459ece0b..8781d29b4035 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -261,6 +261,7 @@ LIBBPF_API int bpf_program__set_sched_cls(struct bpf_program *prog);
- LIBBPF_API int bpf_program__set_sched_act(struct bpf_program *prog);
- LIBBPF_API int bpf_program__set_xdp(struct bpf_program *prog);
- LIBBPF_API int bpf_program__set_perf_event(struct bpf_program *prog);
-+LIBBPF_API int bpf_program__set_krsi(struct bpf_program *prog);
- LIBBPF_API void bpf_program__set_type(struct bpf_program *prog,
- 				      enum bpf_prog_type type);
- LIBBPF_API void
-@@ -275,6 +276,7 @@ LIBBPF_API bool bpf_program__is_sched_cls(const struct bpf_program *prog);
- LIBBPF_API bool bpf_program__is_sched_act(const struct bpf_program *prog);
- LIBBPF_API bool bpf_program__is_xdp(const struct bpf_program *prog);
- LIBBPF_API bool bpf_program__is_perf_event(const struct bpf_program *prog);
-+LIBBPF_API bool bpf_program__is_krsi(const struct bpf_program *prog);
- 
- /*
-  * No need for __attribute__((packed)), all members of 'bpf_map_def'
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index f9d316e873d8..75b8fe419c11 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -68,6 +68,7 @@ LIBBPF_0.0.1 {
- 		bpf_prog_test_run_xattr;
- 		bpf_program__fd;
- 		bpf_program__is_kprobe;
-+		bpf_program__is_krsi;
- 		bpf_program__is_perf_event;
- 		bpf_program__is_raw_tracepoint;
- 		bpf_program__is_sched_act;
-@@ -85,6 +86,7 @@ LIBBPF_0.0.1 {
- 		bpf_program__set_expected_attach_type;
- 		bpf_program__set_ifindex;
- 		bpf_program__set_kprobe;
-+		bpf_program__set_krsi;
- 		bpf_program__set_perf_event;
- 		bpf_program__set_prep;
- 		bpf_program__set_priv;
-diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
-index ace1a0708d99..cc515a36794d 100644
---- a/tools/lib/bpf/libbpf_probes.c
-+++ b/tools/lib/bpf/libbpf_probes.c
-@@ -102,6 +102,7 @@ probe_load(enum bpf_prog_type prog_type, const struct bpf_insn *insns,
- 	case BPF_PROG_TYPE_FLOW_DISSECTOR:
- 	case BPF_PROG_TYPE_CGROUP_SYSCTL:
- 	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
-+	case BPF_PROG_TYPE_KRSI:
- 	default:
- 		break;
- 	}
+>
+>>Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+>[...]
+>
+>MBR, Sergei
+>
+
 -- 
-2.20.1
-
+Regards,
+Ivan Khoronzhuk
