@@ -5,54 +5,54 @@ X-Spam-Level:
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D2CAC49ED9
-	for <bpf@archiver.kernel.org>; Tue, 10 Sep 2019 10:38:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F2F1C49ED6
+	for <bpf@archiver.kernel.org>; Tue, 10 Sep 2019 10:38:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E7168208E4
-	for <bpf@archiver.kernel.org>; Tue, 10 Sep 2019 10:38:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D742F20872
+	for <bpf@archiver.kernel.org>; Tue, 10 Sep 2019 10:38:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ABzAt76o"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TXCPyNiE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393842AbfIJKil (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Sep 2019 06:38:41 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:33298 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389533AbfIJKil (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Sep 2019 06:38:41 -0400
-Received: by mail-lj1-f194.google.com with SMTP id a22so15932071ljd.0
-        for <bpf@vger.kernel.org>; Tue, 10 Sep 2019 03:38:39 -0700 (PDT)
+        id S2406078AbfIJKip (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Sep 2019 06:38:45 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:39191 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403804AbfIJKio (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Sep 2019 06:38:44 -0400
+Received: by mail-lf1-f65.google.com with SMTP id l11so13021662lfk.6
+        for <bpf@vger.kernel.org>; Tue, 10 Sep 2019 03:38:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=NGKQzll/A9IaEu36OmTkFVayy8Bwv+m3n0iuRSm1M6Y=;
-        b=ABzAt76oNXU0+8r79M+Uq/vNmBPlKtTMxdiCXMEvHZE5RCKq3QqV2iBKiCEqCQMDfD
-         5MRDIcIUmhICZ3oxwsncRXUExmaAd9uO3zO0pf2FzyrZMXEgHWGUsMrthX1YCuT8uNr8
-         Fy0s+pdJsRFxY31Gq1uTHRY9vyjkZ4Lx/gplROpBnTB/nyNhoWEI9RhKa13TJTdcaqC9
-         qsDUhmIGRXpmc/qhpPCYEP73F4LEXLy/8Q1Cw3S1pNBR2BYa3qjcBMPKNVQUbuY7MZyb
-         DEINpV16u8PrEGM44UFFxvEoPR+mFi0diwU1Esg8Xd3hntXMUtO/QSHNxqgy9MXXYTPm
-         aZLw==
+        bh=4FRJ5Ph8qMbMU6/W3VLuGrqprbT0bDHz0d1WvLmMb4M=;
+        b=TXCPyNiEYJm+z3P9BrsgCARerEq9GOj2cQ11CYeYMNRuDkg/mY0M0tQui+vUdL1k87
+         8+ECvYjDRTCIoulo93XPu0RXJvzn/1Nz7YG2evAYLUkNhWIqO7VIZZ0QYmn63vEKS+8G
+         fn70QxPlntFDMw950+14w5b79yXsySEIlftqcIt9K+GAVfYjfmsfhQRDGCiQjDqcenl/
+         4Jq9v5fuFPTeUqaF4pzLPWOcipfkFql5KD6lqmjwOEZpE2e5y+2S8Fs5jznuqUTZGezp
+         RQQM60F5JHcdeChUHuytyct8VKXIhAVM7CZetbmTUFxRt208i+TlHTzDlk4C2rVJorC3
+         SQRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=NGKQzll/A9IaEu36OmTkFVayy8Bwv+m3n0iuRSm1M6Y=;
-        b=McmxSaVJdslOmFqKnwouiYR53cqJgzS0MSR05PvhVlKRmHknTUZLpsucIV79IT3VaO
-         Kc4qQb0Pp27PPSFarJKLneNoeJ0uOqEWdmkU0d5FuB6HZLl0vYa76zMpu/PCvQqBJurn
-         zipxtf9Ke1cBLBqkSA7Zl/48JPGm0By95c6fSA39Uzwx2Btl3ydW9AnYp48S3oeNPpze
-         tl+VRNA/7Jzkk4n8vuL20dEI2kRDbC0AR9/lRZnnPPFi6//w44F4hP5kxmOBP7jOwlUt
-         sA+dyNvGAJwtKkti6avzUf8MH+fa4VJ/N85yKi84vP5pBFwhQlB88AY+HRDfUDYwMD7r
-         mYsg==
-X-Gm-Message-State: APjAAAUPQwoeEByq0b3v/nCtSQxskTx/q4J5X0V7UfUIYVBbcG3btWKd
-        XFhO8QP5uBVLCZuwHjwybQu87Q==
-X-Google-Smtp-Source: APXvYqz0/JLIcR6H+rHFrDDr038ZGekYrfvl6BKTgPvWXfLvjHyS9lrOyEn6zwfVLEO1KhHL+BKEHQ==
-X-Received: by 2002:a2e:5456:: with SMTP id y22mr19750906ljd.60.1568111918957;
-        Tue, 10 Sep 2019 03:38:38 -0700 (PDT)
+        bh=4FRJ5Ph8qMbMU6/W3VLuGrqprbT0bDHz0d1WvLmMb4M=;
+        b=GYrohp9xJSULkLeLDro1nVBxw22OKpcixB5G5LBuj+iPqbpOnXXVp3nhikMsotR+Y6
+         oVBr3NYfSD8Hgmj464brF6X6tPqRmMUHRLFkhLz6hmDoOsernJPcF3QtokJDp6se6z/u
+         ILXWPlZ37e4e7LuIvVbVyr75j9fQQ16ooQk/gttoW62eawpNBzN2zgSfZbgyxPDENgcN
+         EMzEUSiq1E7GkQ6NIyUG8QAGUJjrNNnQdKhIdpGKt3FZvxx6E1j0BTYvRNmkig+w4gPg
+         AUwQTV2Nsplf5M7nk6UBrOadBwGzVvFFeNlE1ewL71ITcyrMN/8gbRrlhpH2f9IpeXsw
+         J0Kg==
+X-Gm-Message-State: APjAAAUJFM7s8yTX6kldbxD2nVTgKfC/4+w4y8unmO0A47TIGnl+RcvY
+        PS38iLBrWAZOMLYB+i4i7Cni4w==
+X-Google-Smtp-Source: APXvYqyi9xbnW2cDVsf94j9SbXL0HuQTM0QgoSbYxkUUySDf5SoWfA/fbnNV0o4lAKaHKbnMi4LeIQ==
+X-Received: by 2002:a19:14f:: with SMTP id 76mr19346797lfb.92.1568111922493;
+        Tue, 10 Sep 2019 03:38:42 -0700 (PDT)
 Received: from localhost.localdomain (168-200-94-178.pool.ukrtel.net. [178.94.200.168])
-        by smtp.gmail.com with ESMTPSA id g5sm4005563lfh.2.2019.09.10.03.38.37
+        by smtp.gmail.com with ESMTPSA id g5sm4005563lfh.2.2019.09.10.03.38.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Sep 2019 03:38:38 -0700 (PDT)
+        Tue, 10 Sep 2019 03:38:41 -0700 (PDT)
 From:   Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
 To:     ast@kernel.org, daniel@iogearbox.net, yhs@fb.com,
         davem@davemloft.net, jakub.kicinski@netronome.com, hawk@kernel.org,
@@ -60,9 +60,9 @@ To:     ast@kernel.org, daniel@iogearbox.net, yhs@fb.com,
 Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, clang-built-linux@googlegroups.com,
         Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-Subject: [PATCH bpf-next 01/11] samples: bpf: makefile: fix HDR_PROBE "echo"
-Date:   Tue, 10 Sep 2019 13:38:20 +0300
-Message-Id: <20190910103830.20794-2-ivan.khoronzhuk@linaro.org>
+Subject: [PATCH bpf-next 04/11] samples: bpf: use own EXTRA_CFLAGS for clang commands
+Date:   Tue, 10 Sep 2019 13:38:23 +0300
+Message-Id: <20190910103830.20794-5-ivan.khoronzhuk@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190910103830.20794-1-ivan.khoronzhuk@linaro.org>
 References: <20190910103830.20794-1-ivan.khoronzhuk@linaro.org>
@@ -71,27 +71,42 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-echo should be replaced on echo -e to handle \n correctly, but instead,
-replace it on printf as some systems can't handle echo -e.
+It can overlap with CFLAGS used for libraries built with gcc if
+not now then in next patches. Correct it here for simplicity.
 
 Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
 ---
- samples/bpf/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ samples/bpf/Makefile | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 1d9be26b4edd..f50ca852c2a8 100644
+index b59e77e2250e..8ecc5d0c2d5b 100644
 --- a/samples/bpf/Makefile
 +++ b/samples/bpf/Makefile
-@@ -201,7 +201,7 @@ endif
+@@ -218,10 +218,10 @@ BTF_LLVM_PROBE := $(shell echo "int main() { return 0; }" | \
+ 			  /bin/rm -f ./llvm_btf_verify.o)
  
- # Don't evaluate probes and warnings if we need to run make recursively
- ifneq ($(src),)
--HDR_PROBE := $(shell echo "\#include <linux/types.h>\n struct list_head { int a; }; int main() { return 0; }" | \
-+HDR_PROBE := $(shell printf "\#include <linux/types.h>\n struct list_head { int a; }; int main() { return 0; }" | \
- 	$(HOSTCC) $(KBUILD_HOSTCFLAGS) -x c - -o /dev/null 2>/dev/null && \
- 	echo okay)
- 
+ ifneq ($(BTF_LLVM_PROBE),)
+-	EXTRA_CFLAGS += -g
++	CLANG_EXTRA_CFLAGS += -g
+ else
+ ifneq ($(and $(BTF_LLC_PROBE),$(BTF_PAHOLE_PROBE),$(BTF_OBJCOPY_PROBE)),)
+-	EXTRA_CFLAGS += -g
++	CLANG_EXTRA_CFLAGS += -g
+ 	LLC_FLAGS += -mattr=dwarfris
+ 	DWARF2BTF = y
+ endif
+@@ -280,8 +280,8 @@ $(obj)/hbm_edt_kern.o: $(src)/hbm.h $(src)/hbm_kern.h
+ # useless for BPF samples.
+ $(obj)/%.o: $(src)/%.c
+ 	@echo "  CLANG-bpf " $@
+-	$(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(EXTRA_CFLAGS) -I$(obj) \
+-		-I$(srctree)/tools/testing/selftests/bpf/ \
++	$(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(CLANG_EXTRA_CFLAGS) \
++		-I$(obj) -I$(srctree)/tools/testing/selftests/bpf/ \
+ 		-D__KERNEL__ -D__BPF_TRACING__ -Wno-unused-value -Wno-pointer-sign \
+ 		-D__TARGET_ARCH_$(SRCARCH) -Wno-compare-distinct-pointer-types \
+ 		-Wno-gnu-variable-sized-type-not-at-end \
 -- 
 2.17.1
 
