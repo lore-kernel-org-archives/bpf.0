@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC546C3A5A2
-	for <bpf@archiver.kernel.org>; Tue, 10 Sep 2019 11:57:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 283A9C4740A
+	for <bpf@archiver.kernel.org>; Tue, 10 Sep 2019 11:57:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8A84321479
-	for <bpf@archiver.kernel.org>; Tue, 10 Sep 2019 11:57:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F1F90216F4
+	for <bpf@archiver.kernel.org>; Tue, 10 Sep 2019 11:57:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="HWPU3GzU"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="L/JcmoL9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729129AbfIJL5O (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Sep 2019 07:57:14 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:35656 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390926AbfIJL4q (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Sep 2019 07:56:46 -0400
-Received: by mail-wr1-f67.google.com with SMTP id g7so19677641wrx.2
-        for <bpf@vger.kernel.org>; Tue, 10 Sep 2019 04:56:44 -0700 (PDT)
+        id S1732932AbfIJL5R (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Sep 2019 07:57:17 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:39041 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388123AbfIJL4n (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Sep 2019 07:56:43 -0400
+Received: by mail-wr1-f66.google.com with SMTP id t16so19622375wra.6
+        for <bpf@vger.kernel.org>; Tue, 10 Sep 2019 04:56:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=YfOGR22A4l38lkUXccDczpuDVTPqgcNTsRkizO9Fy14=;
-        b=HWPU3GzU3QVDWGFcOkzkKogiWC5zNxa38kUeFlNO9Kv0qUPHCTbSerropijK0SpZSN
-         K/tSAc/9Oz+hLKCio0IEWK860DNV+gZDHBlDbqUjgdz4U7Db7F2HtGcT0V4b5XbfHCw6
-         a0n8yMrG4npPrn6SWvm2vaGruTF3DZBFh4q1w=
+        bh=Xx8OQzLGeYj3y8P8kHo1vFFB3UBFSHmtM6b5jQ7aUbc=;
+        b=L/JcmoL9YFbmK7b5Ew8OA1Fu7G6qYLk08zlfibWCYa5wLOBEtncRKjJHOAC/3GgUNH
+         tyH4p/RGx2W8u2s5Z5zmnBfGz80YsBhI+p+vULHEpkDHhJg+ymK5RN5K/0jBPlXyb2Yh
+         0Dwg1BkJ5ku6v9PobnKdYpGahlhHlgU675J58=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=YfOGR22A4l38lkUXccDczpuDVTPqgcNTsRkizO9Fy14=;
-        b=NvpsmnVE6dXUGWom0jyXtH6/dJmeHUig+QYJAnaB+HWvy9DA89NmV2wD1u7xW2Fwfe
-         7PI1rNFzInSVz1aMZdLWbg6Hj2t9zvTcqZutXDoyYle/ONjERnU45VnFxDIQMocV2CnN
-         rfZjFFQRoBm2mRClL6caFpmgwMd9xdsBJNSR1g5zjjKGduQc9jRSLuvAXh+PUZFWc49E
-         Z971HNn2wFp6UXW7GLeL1LjRPYkApTT+6b+v91hHCVUepYdazm0GCNH13K6pFmsNj6yW
-         hK2alxuQVJcWt2iSU5lLJZ4lBUgRVa7V5xF2KRfuGkgat9IKwtKgY4jfzgnNcxMgKj4a
-         9bSA==
-X-Gm-Message-State: APjAAAVOZi9mpcekgJ89zg+BDNwclzLjXn8cT/zFLvD/UTExO7Nv0ZTD
-        nv+xul4yBc3/xtF/+PUce5v2CQ==
-X-Google-Smtp-Source: APXvYqwBvCNY+UARdEFe9ujlmg+pek1+2O0NHRq9kph8SAZQWqBrnPDrZyO43r/LIcfKjWSRpLGvmw==
-X-Received: by 2002:adf:e48f:: with SMTP id i15mr2910963wrm.26.1568116604037;
-        Tue, 10 Sep 2019 04:56:44 -0700 (PDT)
+        bh=Xx8OQzLGeYj3y8P8kHo1vFFB3UBFSHmtM6b5jQ7aUbc=;
+        b=na5p5r1yxGQq4IsWR+cXXlbWWdurumCFWdtUwSVgfLMKkqKcWTsbnZtTqRJNY7tXb8
+         jDIb4pP9QLQvqaK19Ge6o7zYt711gAuYqPysUSYNXfaPHcznLCSxYG73eC5kJvSEY25x
+         UrKIJn4bwlaAfVAjhYgYQeDYMmpSkvjGUQl1XbAxp4MJlgyT/ZhhCiMMcxXHzJlPGZYW
+         DfGhNsiFnwcfJluksO7zLI2aNUS3AE3SAMFlflLd24vCUK3iT+Yy8jyKGA3vop+ZIraI
+         b68B5jRKudk9WkoFy+4ziTwfM1qmcXSJfbuUTK+MU1oSXN8mDjpFWrFeCoErwjLv6mkY
+         IQPA==
+X-Gm-Message-State: APjAAAU02WjwhelOpbs8kDKrQx7Gksz/6fEEC81tfdFbI3qAkkRrB3Wt
+        M15xJ50/M1biZ07CE0RPD8NzFw==
+X-Google-Smtp-Source: APXvYqwNk6DvXrD4yaS/Fc0Y482stWXQP2rzXiEmcLEygo6h6UhjTxAsjVjo58V1vhNDVNYvKl8pLw==
+X-Received: by 2002:adf:e852:: with SMTP id d18mr24404287wrn.225.1568116600270;
+        Tue, 10 Sep 2019 04:56:40 -0700 (PDT)
 Received: from kpsingh-kernel.c.hoisthospitality.com (110.8.30.213.rev.vodafone.pt. [213.30.8.110])
-        by smtp.gmail.com with ESMTPSA id q19sm23732935wra.89.2019.09.10.04.56.42
+        by smtp.gmail.com with ESMTPSA id q19sm23732935wra.89.2019.09.10.04.56.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Sep 2019 04:56:43 -0700 (PDT)
+        Tue, 10 Sep 2019 04:56:39 -0700 (PDT)
 From:   KP Singh <kpsingh@chromium.org>
 To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         linux-security-module@vger.kernel.org
@@ -77,9 +77,9 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Quentin Monnet <quentin.monnet@netronome.com>,
         Andrey Ignatov <rdna@fb.com>, Joe Stringer <joe@wand.net.nz>
-Subject: [RFC v1 12/14] krsi: Add an eBPF helper function to get the value of an env variable
-Date:   Tue, 10 Sep 2019 13:55:25 +0200
-Message-Id: <20190910115527.5235-13-kpsingh@chromium.org>
+Subject: [RFC v1 10/14] krsi: Handle attachment of the same program
+Date:   Tue, 10 Sep 2019 13:55:23 +0200
+Message-Id: <20190910115527.5235-11-kpsingh@chromium.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190910115527.5235-1-kpsingh@chromium.org>
 References: <20190910115527.5235-1-kpsingh@chromium.org>
@@ -92,351 +92,114 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: KP Singh <kpsingh@google.com>
 
-The helper returns the value of the environment variable in the buffer
-that is passed to it. If the var is set multiple times, the helper
-returns all the values as null separated strings.
+Allow the userspace to attach a newer version of a program without
+having duplicates of the same program.
 
-If the buffer is too short for these values, the helper tries to fill it
-the best it can and guarantees that the value returned in the buffer
-is always null terminated. After the buffer is filled, the helper keeps
-counting the number of times the environment variable is set in the
-envp.
+If BPF_F_ALLOW_OVERRIDE is passed, the attachment logic compares the
+name of the new program to the names of existing attached programs. The
+names are only compared till a "__" (or '\0', if there is no "__"). If
+a successful match is found, the existing program is replaced with the
+newer attachment.
 
-The return value of the helper is an u64 value which carries two pieces
-of information.
+./krsi Attaches "env_dumper__v1" followed by "env_dumper__v2"
+to the process_execution hook of the KRSI LSM.
 
-  * The upper 32 bits are a u32 value signifying the number of times
-    the environment variable is set in the envp.
-  * The lower 32 bits are a s32 value signifying the number of bytes
-    written to the buffer or an error code.
+./krsi
+./krsi
 
-Since the value of the environment variable can be very long and exceed
-what can be allocated on the BPF stack, a per-cpu array can be used
-instead:
+Before:
 
-struct bpf_map_def SEC("maps") env_map = {
-        .type = BPF_MAP_TYPE_PERCPU_ARRAY,
-        .key_size = sizeof(u32),
-        .value_size = 4096,
-        .max_entries = 1,
-};
+  cat /sys/kernel/security/krsi/process_execution
+  env_dumper__v1
+  env_dumper__v2
 
-SEC("prgrm")
-int bpf_prog1(void *ctx)
-{
-        u32 map_id = 0;
-        u64 times_ret;
-        s32 ret;
-        char name[48] = "LD_PRELOAD";
+After:
 
-        char *map_value = bpf_map_lookup_elem(&env_map, &map_id);
-        if (!map_value)
-                return 0;
-
-        // Read the lower 32 bits for the return value
-        times_ret = krsi_get_env_var(ctx, name, 48, map_value, 4096);
-        ret = times_ret & 0xffffffff;
-        if (ret < 0)
-                return ret;
-        return 0;
-}
+  cat /sys/kernel/security/krsi/process_execution
+  env_dumper__v2
 
 Signed-off-by: KP Singh <kpsingh@google.com>
 ---
- include/uapi/linux/bpf.h                  |  42 ++++++-
- security/krsi/ops.c                       | 129 ++++++++++++++++++++++
- tools/include/uapi/linux/bpf.h            |  42 ++++++-
- tools/testing/selftests/bpf/bpf_helpers.h |   3 +
- 4 files changed, 214 insertions(+), 2 deletions(-)
+ security/krsi/ops.c | 53 ++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 52 insertions(+), 1 deletion(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 32ab38f1a2fe..a4ef07956e07 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -2715,6 +2715,45 @@ union bpf_attr {
-  *		**-EPERM** if no permission to send the *sig*.
-  *
-  *		**-EAGAIN** if bpf program can try again.
-+ *
-+ * u64 krsi_get_env_var(void *ctx, char *name, char *buf,
-+ *			size_t name_len, size_t buf_len)
-+ *	Description
-+ *		This helper can be used as a part of the
-+ *		process_execution hook of the KRSI LSM in
-+ *		programs of type BPF_PROG_TYPE_KRSI.
-+ *
-+ *		The helper returns the value of the environment
-+ *		variable with the provided "name" for process that's
-+ *		going to be executed in the passed buffer, "buf". If the var
-+ *		is set multiple times, the helper returns all
-+ *		the values as null separated strings.
-+ *
-+ *		If the buffer is too short for these values, the helper
-+ *		tries to fill it the best it can and guarantees that the value
-+ *		returned in the buffer  is always null terminated.
-+ *		After the buffer is filled, the helper keeps counting the number
-+ *		of times the environment variable is set in the envp.
-+ *
-+ *	Return:
-+ *
-+ *		The return value of the helper is an u64 value
-+ *		which carries two pieces of information:
-+ *
-+ *		   The upper 32 bits are a u32 value signifying
-+ *		   the number of times the environment variable
-+ *		   is set in the envp.
-+ *		   The lower 32 bits are an s32 value signifying
-+ *		   the number of bytes written to the buffer or an error code:
-+ *
-+ *		**-ENOMEM** if the kernel is unable to allocate memory
-+ *			    for pinning the argv and envv.
-+ *
-+ *		**-E2BIG** if the value is larger than the size of the
-+ *			   destination buffer. The higher bits will still
-+ *			   the number of times the variable was set in the envp.
-+ *
-+ *		**-EINVAL** if name is not a NULL terminated string.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -2826,7 +2865,8 @@ union bpf_attr {
- 	FN(strtoul),			\
- 	FN(sk_storage_get),		\
- 	FN(sk_storage_delete),		\
--	FN(send_signal),
-+	FN(send_signal),		\
-+	FN(krsi_get_env_var),
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-  * function eBPF program intends to call
 diff --git a/security/krsi/ops.c b/security/krsi/ops.c
-index 1f4df920139c..1db94dfaac15 100644
+index 57bd304a03f4..1f4df920139c 100644
 --- a/security/krsi/ops.c
 +++ b/security/krsi/ops.c
-@@ -6,6 +6,8 @@
- #include <linux/bpf.h>
- #include <linux/security.h>
- #include <linux/krsi.h>
-+#include <linux/binfmts.h>
-+#include <linux/highmem.h>
- 
- #include "krsi_init.h"
- #include "krsi_fs.h"
-@@ -162,6 +164,131 @@ static bool krsi_prog_is_valid_access(int off, int size,
- 	return false;
+@@ -65,11 +65,52 @@ static struct krsi_hook *get_hook_from_fd(int fd)
+ 	return ERR_PTR(ret);
  }
  
-+static char *array_next_entry(char *array, unsigned long *offset,
-+			      unsigned long end)
++/*
++ * match_prog_name matches the name of the program till "__"
++ * or the end of the string is encountered. This allows
++ * a different version of the same program to be loaded.
++ *
++ * For example:
++ *
++ *	env_dumper__v1 is matched with env_dumper__v2
++ *
++ */
++static bool match_prog_name(char *a, char *b)
 +{
-+	char *entry;
-+	unsigned long current_offset = *offset;
++	int m, n;
++	char *end;
 +
-+	if (current_offset >= end)
-+		return NULL;
++	end = strstr(a, "__");
++	n = end ? end - a : strlen(a);
 +
-+	/*
-+	 * iterate on the array till the null byte is encountered
-+	 * and check for any overflows.
-+	 */
-+	entry = array + current_offset;
-+	while (array[current_offset]) {
-+		if (unlikely(++current_offset >= end))
-+			return NULL;
-+	}
++	end = strstr(b, "__");
++	m = end ? end - b : strlen(b);
 +
-+	/*
-+	 * Point the offset to the next element in the array.
-+	 */
-+	*offset = current_offset + 1;
++	if (m != n)
++		return false;
 +
-+	return entry;
++	return strncmp(a, b, n) == 0;
 +}
 +
-+static u64 get_env_var(struct krsi_ctx *ctx, char *name, char *dest,
-+		u32 n_size, u32 size)
++static struct bpf_prog *find_attached_prog(struct bpf_prog_array *array,
++					   struct bpf_prog *prog)
 +{
-+	s32 ret = 0;
-+	u32 num_vars = 0;
-+	int i, name_len;
-+	struct linux_binprm *bprm = ctx->bprm_ctx.bprm;
-+	int argc = bprm->argc;
-+	int envc = bprm->envc;
-+	unsigned long end = ctx->bprm_ctx.max_arg_offset;
-+	unsigned long offset = bprm->p % PAGE_SIZE;
-+	char *buf = ctx->bprm_ctx.arg_pages;
-+	char *curr_dest = dest;
-+	char *entry;
++	struct bpf_prog_array_item *item = array->items;
 +
-+	if (unlikely(!buf))
-+		return -ENOMEM;
-+
-+	for (i = 0; i < argc; i++) {
-+		entry = array_next_entry(buf, &offset, end);
-+		if (!entry)
-+			return 0;
++	for (; item->prog; item++) {
++		if (match_prog_name(item->prog->aux->name, prog->aux->name))
++			return item->prog;
 +	}
 +
-+	name_len = strlen(name);
-+	for (i = 0; i < envc; i++) {
-+		entry = array_next_entry(buf, &offset, end);
-+		if (!entry)
-+			return 0;
-+
-+		if (!strncmp(entry, name, name_len)) {
-+			num_vars++;
-+
-+			/*
-+			 * There is no need to do further copying
-+			 * if the buffer is already full. Just count how many
-+			 * times the environment variable is set.
-+			 */
-+			if (ret == -E2BIG)
-+				continue;
-+
-+			if (entry[name_len] != '=')
-+				continue;
-+
-+			/*
-+			 * Move the buf pointer by name_len + 1
-+			 * (for the "=" sign)
-+			 */
-+			entry += name_len + 1;
-+			ret = strlcpy(curr_dest, entry, size);
-+
-+			if (ret >= size) {
-+				ret = -E2BIG;
-+				continue;
-+			}
-+
-+			/*
-+			 * strlcpy just returns the length of the string copied.
-+			 * The remaining space needs to account for the added
-+			 * null character.
-+			 */
-+			curr_dest += ret + 1;
-+			size -= ret + 1;
-+			/*
-+			 * Update ret to be the current number of bytes written
-+			 * to the destination
-+			 */
-+			ret = curr_dest - dest;
-+		}
-+	}
-+
-+	return (u64) num_vars << 32 | (u32) ret;
++	return NULL;
 +}
 +
-+BPF_CALL_5(krsi_get_env_var, struct krsi_ctx *, ctx, char *, name, u32, n_size,
-+	  char *, dest, u32, size)
-+{
-+	char *name_end;
-+
-+	name_end = memchr(name, '\0', n_size);
-+	if (!name_end)
-+		return -EINVAL;
-+
-+	memset(dest, 0, size);
-+	return get_env_var(ctx, name, dest, n_size, size);
-+}
-+
-+static const struct bpf_func_proto krsi_get_env_var_proto = {
-+	.func = krsi_get_env_var,
-+	.gpl_only = true,
-+	.ret_type = RET_INTEGER,
-+	.arg1_type = ARG_PTR_TO_CTX,
-+	.arg2_type = ARG_PTR_TO_MEM,
-+	.arg3_type = ARG_CONST_SIZE_OR_ZERO,
-+	.arg4_type = ARG_PTR_TO_UNINIT_MEM,
-+	.arg5_type = ARG_CONST_SIZE_OR_ZERO,
-+};
-+
- BPF_CALL_5(krsi_event_output, void *, log,
- 	   struct bpf_map *, map, u64, flags, void *, data, u64, size)
+ int krsi_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
  {
-@@ -192,6 +319,8 @@ static const struct bpf_func_proto *krsi_prog_func_proto(enum bpf_func_id
- 		return &bpf_map_lookup_elem_proto;
- 	case BPF_FUNC_get_current_pid_tgid:
- 		return &bpf_get_current_pid_tgid_proto;
-+	case BPF_FUNC_krsi_get_env_var:
-+		return &krsi_get_env_var_proto;
- 	case BPF_FUNC_perf_event_output:
- 		return &krsi_event_output_proto;
- 	default:
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 32ab38f1a2fe..a4ef07956e07 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -2715,6 +2715,45 @@ union bpf_attr {
-  *		**-EPERM** if no permission to send the *sig*.
-  *
-  *		**-EAGAIN** if bpf program can try again.
-+ *
-+ * u64 krsi_get_env_var(void *ctx, char *name, char *buf,
-+ *			size_t name_len, size_t buf_len)
-+ *	Description
-+ *		This helper can be used as a part of the
-+ *		process_execution hook of the KRSI LSM in
-+ *		programs of type BPF_PROG_TYPE_KRSI.
-+ *
-+ *		The helper returns the value of the environment
-+ *		variable with the provided "name" for process that's
-+ *		going to be executed in the passed buffer, "buf". If the var
-+ *		is set multiple times, the helper returns all
-+ *		the values as null separated strings.
-+ *
-+ *		If the buffer is too short for these values, the helper
-+ *		tries to fill it the best it can and guarantees that the value
-+ *		returned in the buffer  is always null terminated.
-+ *		After the buffer is filled, the helper keeps counting the number
-+ *		of times the environment variable is set in the envp.
-+ *
-+ *	Return:
-+ *
-+ *		The return value of the helper is an u64 value
-+ *		which carries two pieces of information:
-+ *
-+ *		   The upper 32 bits are a u32 value signifying
-+ *		   the number of times the environment variable
-+ *		   is set in the envp.
-+ *		   The lower 32 bits are an s32 value signifying
-+ *		   the number of bytes written to the buffer or an error code:
-+ *
-+ *		**-ENOMEM** if the kernel is unable to allocate memory
-+ *			    for pinning the argv and envv.
-+ *
-+ *		**-E2BIG** if the value is larger than the size of the
-+ *			   destination buffer. The higher bits will still
-+ *			   the number of times the variable was set in the envp.
-+ *
-+ *		**-EINVAL** if name is not a NULL terminated string.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -2826,7 +2865,8 @@ union bpf_attr {
- 	FN(strtoul),			\
- 	FN(sk_storage_get),		\
- 	FN(sk_storage_delete),		\
--	FN(send_signal),
-+	FN(send_signal),		\
-+	FN(krsi_get_env_var),
+ 	struct bpf_prog_array *old_array;
+ 	struct bpf_prog_array *new_array;
+ 	struct krsi_hook *h;
++	struct bpf_prog *old_prog;
+ 	int ret = 0;
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-  * function eBPF program intends to call
-diff --git a/tools/testing/selftests/bpf/bpf_helpers.h b/tools/testing/selftests/bpf/bpf_helpers.h
-index f804f210244e..ecebdb772a9d 100644
---- a/tools/testing/selftests/bpf/bpf_helpers.h
-+++ b/tools/testing/selftests/bpf/bpf_helpers.h
-@@ -303,6 +303,9 @@ static int (*bpf_get_numa_node_id)(void) =
- static int (*bpf_probe_read_str)(void *ctx, __u32 size,
- 				 const void *unsafe_ptr) =
- 	(void *) BPF_FUNC_probe_read_str;
-+static unsigned long long (*krsi_get_env_var)(void *ctx,
-+	void *name, __u32 n_size, void *buf, __u32 size) =
-+	(void *) BPF_FUNC_krsi_get_env_var;
- static unsigned int (*bpf_get_socket_uid)(void *ctx) =
- 	(void *) BPF_FUNC_get_socket_uid;
- static unsigned int (*bpf_set_hash)(void *ctx, __u32 hash) =
+ 	h = get_hook_from_fd(attr->target_fd);
+@@ -79,8 +120,18 @@ int krsi_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+ 	mutex_lock(&h->mutex);
+ 	old_array = rcu_dereference_protected(h->progs,
+ 					      lockdep_is_held(&h->mutex));
++	/*
++	 * Check if a matching program with already exists and replace
++	 * the existing program will be overridden if BPF_F_ALLOW_OVERRIDE
++	 * is specified in the attach flags.
++	 */
++	old_prog = find_attached_prog(old_array, prog);
++	if (old_prog && !(attr->attach_flags & BPF_F_ALLOW_OVERRIDE)) {
++		ret = -EEXIST;
++		goto unlock;
++	}
+ 
+-	ret = bpf_prog_array_copy(old_array, NULL, prog, &new_array);
++	ret = bpf_prog_array_copy(old_array, old_prog, prog, &new_array);
+ 	if (ret < 0) {
+ 		ret = -ENOMEM;
+ 		goto unlock;
 -- 
 2.20.1
 
