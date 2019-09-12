@@ -2,108 +2,149 @@ Return-Path: <SRS0=C00Q=XH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A197EC43331
-	for <bpf@archiver.kernel.org>; Thu, 12 Sep 2019 10:52:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1B04C4CEC5
+	for <bpf@archiver.kernel.org>; Thu, 12 Sep 2019 13:34:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8418C20CC7
-	for <bpf@archiver.kernel.org>; Thu, 12 Sep 2019 10:52:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C8C5520830
+	for <bpf@archiver.kernel.org>; Thu, 12 Sep 2019 13:34:13 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jr/O3OdJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731139AbfILKwE convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 12 Sep 2019 06:52:04 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:37404 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730892AbfILKwE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 12 Sep 2019 06:52:04 -0400
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id DD47744BD1
-        for <bpf@vger.kernel.org>; Thu, 12 Sep 2019 10:52:03 +0000 (UTC)
-Received: by mail-ed1-f70.google.com with SMTP id bs22so13383431edb.23
-        for <bpf@vger.kernel.org>; Thu, 12 Sep 2019 03:52:03 -0700 (PDT)
+        id S1732179AbfILNeJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Sep 2019 09:34:09 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:41009 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731283AbfILNeJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 Sep 2019 09:34:09 -0400
+Received: by mail-pf1-f193.google.com with SMTP id b13so16011988pfo.8;
+        Thu, 12 Sep 2019 06:34:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=AOatXHCitiKL87ERXc3HpgwYrhBGRNlx7jOwScjCRWU=;
+        b=Jr/O3OdJj5XEnZw9E5KhFE2e/P79Jxv45DzbCTVOnksxsCZLrCsglgTpjMhP/CUqpQ
+         FxV/i9DjBWTuL0AgSOo3VZL/AswHSKtAfuKmG4suDcX+Bo9I+QEPA60qEFxwB3BmO52s
+         BA0mppgozs5ioUi9yc4VLIP/po1IZ22wKz7jLXvHsDXeM1TT6SAeDUGK5eUCaPCkcguW
+         z6HpeNcKUAb0mcD54P7MFHNhRj1FZ+eVpuKeWjhRJNXf1F1/7VxXdF/VtDt5Li9xk5gL
+         grIdetkJXTrCF7R8ZDbrTKoFtpBzoQtB0NDBB0beq5pgYNv+ziQznxWPIbs1omNQcZ08
+         EyIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=6flBUBjs8VPAbAefuygCBR5yf5XU4QbU0qOIz+By8ZI=;
-        b=bn+NyJX56hEl85LOMqdtqwDOm87GeDhjI4/wU92G609mEWS0QkJq5+iLacvbCdYTR0
-         kljBa9B+VexTDfe8dTkdXH1LppMaqhbyzNCkc2at3VM1Mg7ejNrCWpi/U7/bAUn2U8Q8
-         i7xelCksERCUpJ9QNXJf5LqaR+Gf1HTty6mV+Rk4g//YVW/a1xrwxo+0ibGnohGW1rqQ
-         kjqd8KXPNV89p7aq/tNLFlF/+mhjynE9idL+i7e7TK61roMKppXWgsKkrrC/qyo9PW7O
-         YAvltRoJDK9qsxEedr1j/H7UYKd70klG8FnSWTVE6v6fuRQ3OqaIsI31enxOxfdl1bnI
-         DA0A==
-X-Gm-Message-State: APjAAAXXTe3uDWbg8Ep1O8+XPyOOKWwnpGvjEXvg6ctBnSkqOBnIlaYs
-        93gt+dE/8eqCMERQ6gaGQ93/A1RG6hWe3AZr8a7UPXXZLyg9SXvW7vOymv3sJc8NLW/VE8t/RBA
-        VhczpqgIyDwCN
-X-Received: by 2002:a17:907:2065:: with SMTP id qp5mr33221224ejb.151.1568285522642;
-        Thu, 12 Sep 2019 03:52:02 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqx0B4fTUSLQ4Z3x7ogXVND6zxk194V/rQL1i/woELQNZgzJsKoUTobHl7LJ5qZW+w80pa/Csg==
-X-Received: by 2002:a17:907:2065:: with SMTP id qp5mr33221211ejb.151.1568285522444;
-        Thu, 12 Sep 2019 03:52:02 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
-        by smtp.gmail.com with ESMTPSA id u27sm4714326edb.48.2019.09.12.03.52.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Sep 2019 03:52:01 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 8960C180613; Thu, 12 Sep 2019 11:46:39 +0100 (WEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Yonghong Song <yhs@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kees Cook <keescook@chromium.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        "netdev\@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf\@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>
-Subject: Re: [PATCH] bpf: validate bpf_func when BPF_JIT is enabled
-In-Reply-To: <CABCJKufCwjXQ6a4oLjywDmxY2apUZ1yop-5+qty82bfwV-QTAA@mail.gmail.com>
-References: <20190909223236.157099-1-samitolvanen@google.com> <4f4136f5-db54-f541-2843-ccb35be25ab4@fb.com> <20190910172253.GA164966@google.com> <c7c7668e-6336-0367-42b3-2f6026c466dd@fb.com> <fd8b6f04-3902-12e9-eab1-fa85b7e44dd5@intel.com> <87impzt4pu.fsf@toke.dk> <CABCJKufCwjXQ6a4oLjywDmxY2apUZ1yop-5+qty82bfwV-QTAA@mail.gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Thu, 12 Sep 2019 11:46:39 +0100
-Message-ID: <87sgp1ssfk.fsf@toke.dk>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=AOatXHCitiKL87ERXc3HpgwYrhBGRNlx7jOwScjCRWU=;
+        b=J2v7+TuYy1c7WCnzWSDsMhk29wPYOchEgEkUk0qJKuBdNTeYRee662LXpWt1Z2nbLD
+         iCWlxRyICcFj+P4C/yDerreXWiqXP7AHKhsIT8m7ILGscqvjRqRKt1c9VV4OiUsihMeD
+         sJ//DYUJ+8i3PBMb0zQqSh9nrsIsH1h9K7ZhYqZnB892EywIgBM6VwZ39LWSOKIqCABI
+         vxSqiXPB97/BUaTyVrszkHP/FlcAzeb62OpcO0cvullufJYOO+4T1Cg/LjozwoxcfoOA
+         EygiOKOzHc5J/HJ5jAWtKcHWckFd19XBNKEzD27mMMPaLIqNtZyqzKKSFx0iTjD5RP2C
+         +A3w==
+X-Gm-Message-State: APjAAAX2hqhz7ZG/SB5iT6Ib9p9MAANx3Orb8fj9KNdNAahxCAue5LKa
+        z7Fye9XYDHgH8n4UyufmYw==
+X-Google-Smtp-Source: APXvYqx+o3gwfnUvsIkknmFCS2MYpF0zqj4FQzZXkli86+QlMwz3klWltYz4z1f6onv6AZ6GOeAMzg==
+X-Received: by 2002:a62:7c47:: with SMTP id x68mr49463684pfc.178.1568295248717;
+        Thu, 12 Sep 2019 06:34:08 -0700 (PDT)
+Received: from DESKTOP (softbank126011092035.bbtec.net. [126.11.92.35])
+        by smtp.gmail.com with ESMTPSA id u17sm15239pjn.7.2019.09.12.06.34.05
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 12 Sep 2019 06:34:07 -0700 (PDT)
+Date:   Thu, 12 Sep 2019 22:34:02 +0900
+From:   Takeshi Misawa <jeliantsurux@gmail.com>
+To:     syzbot <syzbot+d9c8bf24e56416d7ce2c@syzkaller.appspotmail.com>
+Cc:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, kafai@fb.com, linux-kernel@vger.kernel.org,
+        linux-ppp@vger.kernel.org, netdev@vger.kernel.org,
+        paulus@samba.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Subject: Re: memory leak in ppp_write
+Message-ID: <CAKK_rchVQCYmjPSxk9MszV9BtF8y04-j2dpjV0Jg3c+nrRNEWQ@mail.gmail.com>
+References: <000000000000edc1d5058f5dfa5f@google.com>
+ <000000000000594c700591433550@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: multipart/mixed; boundary="6WlEvdN9Dv0WHSBl"
+Content-Disposition: inline
+In-Reply-To: <000000000000594c700591433550@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Sami Tolvanen <samitolvanen@google.com> writes:
 
-> On Wed, Sep 11, 2019 at 5:09 AM Toke Høiland-Jørgensen <toke@redhat.com> wrote:
->>
->> Björn Töpel <bjorn.topel@intel.com> writes:
->> > I ran the "xdp_rxq_info" sample with and without Sami's patch:
->>
->> Thanks for doing this!
->
-> Yes, thanks for testing this Björn!
->
->> Or (1/22998700 - 1/23923874) * 10**9 == 1.7 nanoseconds of overhead.
->>
->> I guess that is not *too* bad; but it's still chipping away at
->> performance; anything we could do to lower the overhead?
->
-> The check is already rather minimal, but I could move this to a static
-> inline function to help ensure the compiler doesn't generate an
-> additional function call for this. I'm also fine with gating this
-> behind a separate config option, but I'm not sure if that's worth it.
-> Any thoughts?
+--6WlEvdN9Dv0WHSBl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I think it would be good if you do both. I'm a bit worried that XDP
-performance will end up in a "death by a thousand paper cuts" situation,
-so I'd rather push back on even relatively small overheads like this; so
-being able to turn it off in the config would be good.
+#syz test: https://github.com/google/kasan.git 6525771f
 
-Can you share more details about what the "future CFI checking" is
-likely to look like?
 
--Toke
+--6WlEvdN9Dv0WHSBl
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment; filename="0001-ppp-Fix-memory-leak-in-ppp_write.patch"
+
+From e4ff0d04a4b8dd6da3dfb9135235ae5360ce86e6 Mon Sep 17 00:00:00 2001
+From: Takeshi Misawa <jeliantsurux@gmail.com>
+Date: Wed, 11 Sep 2019 22:18:43 +0900
+Subject: [PATCH] ppp: Fix memory leak in ppp_write
+
+When ppp is closing, __ppp_xmit_process() failed to enqueue skb
+and skb allocated in ppp_write() is leaked.
+
+syzbot reported :
+BUG: memory leak
+unreferenced object 0xffff88812a17bc00 (size 224):
+  comm "syz-executor673", pid 6952, jiffies 4294942888 (age 13.040s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000d110fff9>] kmemleak_alloc_recursive include/linux/kmemleak.h:43 [inline]
+    [<00000000d110fff9>] slab_post_alloc_hook mm/slab.h:522 [inline]
+    [<00000000d110fff9>] slab_alloc_node mm/slab.c:3262 [inline]
+    [<00000000d110fff9>] kmem_cache_alloc_node+0x163/0x2f0 mm/slab.c:3574
+    [<000000002d616113>] __alloc_skb+0x6e/0x210 net/core/skbuff.c:197
+    [<000000000167fc45>] alloc_skb include/linux/skbuff.h:1055 [inline]
+    [<000000000167fc45>] ppp_write+0x48/0x120 drivers/net/ppp/ppp_generic.c:502
+    [<000000009ab42c0b>] __vfs_write+0x43/0xa0 fs/read_write.c:494
+    [<00000000086b2e22>] vfs_write fs/read_write.c:558 [inline]
+    [<00000000086b2e22>] vfs_write+0xee/0x210 fs/read_write.c:542
+    [<00000000a2b70ef9>] ksys_write+0x7c/0x130 fs/read_write.c:611
+    [<00000000ce5e0fdd>] __do_sys_write fs/read_write.c:623 [inline]
+    [<00000000ce5e0fdd>] __se_sys_write fs/read_write.c:620 [inline]
+    [<00000000ce5e0fdd>] __x64_sys_write+0x1e/0x30 fs/read_write.c:620
+    [<00000000d9d7b370>] do_syscall_64+0x76/0x1a0 arch/x86/entry/common.c:296
+    [<0000000006e6d506>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+
+Fix this by freeing skb, if ppp is closing.
+
+Reported-by: syzbot+d9c8bf24e56416d7ce2c@syzkaller.appspotmail.com
+Signed-off-by: Takeshi Misawa <jeliantsurux@gmail.com>
+---
+ drivers/net/ppp/ppp_generic.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/net/ppp/ppp_generic.c b/drivers/net/ppp/ppp_generic.c
+index a30e41a56085..9a1b006904a7 100644
+--- a/drivers/net/ppp/ppp_generic.c
++++ b/drivers/net/ppp/ppp_generic.c
+@@ -1415,6 +1415,8 @@ static void __ppp_xmit_process(struct ppp *ppp, struct sk_buff *skb)
+ 			netif_wake_queue(ppp->dev);
+ 		else
+ 			netif_stop_queue(ppp->dev);
++	} else {
++		kfree_skb(skb);
+ 	}
+ 	ppp_xmit_unlock(ppp);
+ }
+-- 
+2.17.1
+
+
+--6WlEvdN9Dv0WHSBl--
