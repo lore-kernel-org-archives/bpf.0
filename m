@@ -2,146 +2,69 @@ Return-Path: <SRS0=t4jm=XL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E02CEC49ED7
-	for <bpf@archiver.kernel.org>; Mon, 16 Sep 2019 10:57:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB772C49ED7
+	for <bpf@archiver.kernel.org>; Mon, 16 Sep 2019 12:43:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B9FCC2067D
-	for <bpf@archiver.kernel.org>; Mon, 16 Sep 2019 10:57:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8278E20665
+	for <bpf@archiver.kernel.org>; Mon, 16 Sep 2019 12:43:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726059AbfIPK5V (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 Sep 2019 06:57:21 -0400
-Received: from www62.your-server.de ([213.133.104.62]:57744 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725850AbfIPK5V (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 16 Sep 2019 06:57:21 -0400
-Received: from [2a02:120b:2c12:c120:71a0:62dd:894c:fd0e] (helo=localhost)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1i9oDG-0004Qb-Fv; Mon, 16 Sep 2019 12:26:30 +0200
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     davem@davemloft.net
-Cc:     daniel@iogearbox.net, ast@kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: pull-request: bpf-next 2019-09-16
-Date:   Mon, 16 Sep 2019 12:26:30 +0200
-Message-Id: <20190916102630.14491-1-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
+        id S1728022AbfIPMnB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 Sep 2019 08:43:01 -0400
+Received: from mga14.intel.com ([192.55.52.115]:20566 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727964AbfIPMnB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 16 Sep 2019 08:43:01 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Sep 2019 05:43:00 -0700
+X-IronPort-AV: E=Sophos;i="5.64,492,1559545200"; 
+   d="scan'208";a="191060337"
+Received: from jnikula-mobl3.fi.intel.com (HELO localhost) ([10.237.66.161])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Sep 2019 05:42:57 -0700
+From:   Jani Nikula <jani.nikula@intel.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Dave Jiang <dave.jiang@intel.com>,
+        ksummit-discuss@lists.linuxfoundation.org,
+        linux-nvdimm@lists.01.org, Vishal Verma <vishal.l.verma@intel.com>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [Ksummit-discuss] [PATCH v2 3/3] libnvdimm, MAINTAINERS: Maintainer Entry Profile
+In-Reply-To: <20190913114849.GP20699@kadam>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <156821692280.2951081.18036584954940423225.stgit@dwillia2-desk3.amr.corp.intel.com> <156821693963.2951081.11214256396118531359.stgit@dwillia2-desk3.amr.corp.intel.com> <20190911184332.GL20699@kadam> <9132e214-9b57-07dc-7ee2-f6bc52e960c5@kernel.dk> <20190913010937.7fc20d93@lwn.net> <20190913114849.GP20699@kadam>
+Date:   Mon, 16 Sep 2019 15:42:54 +0300
+Message-ID: <87pnk0xvht.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.101.4/25574/Mon Sep 16 10:25:07 2019)
+Content-Type: text/plain
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi David,
+On Fri, 13 Sep 2019, Dan Carpenter <dan.carpenter@oracle.com> wrote:
+> And the documentation doesn't help.  For example, I knew people's rules
+> about capitalizing the subject but I'd just forget.  I say that if you
+> can't be bothered to add it to checkpatch then it means you don't really
+> care that strongly.
 
-The following pull-request contains BPF updates for your *net-next* tree.
+It would be entirely possible to add the subsystem/driver specific
+checkpatch rules to MAINTAINERS entries or directory specific config
+files. As checkpatch options directly. For example
 
-The main changes are:
+--strict --max-line-length=100 --ignore=BIT_MACRO,SPLIT_STRING,LONG_LINE_STRING,BOOL_MEMBER
 
-1) Now that initial BPF backend for gcc has been merged upstream, enable
-   BPF kselftest suite for bpf-gcc. Also fix a BE issue with access to
-   bpf_sysctl.file_pos, from Ilya.
+or whatever.
 
-2) Follow-up fix for link-vmlinux.sh to remove bash-specific extensions
-   related to recent work on exposing BTF info through sysfs, from Andrii.
+SMOP. ;)
 
-3) AF_XDP zero copy fixes for i40e and ixgbe driver which caused umem
-   headroom to be added twice, from Ciara.
+BR,
+Jani.
 
-4) Refactoring work to convert sock opt tests into test_progs framework
-   in BPF kselftests, from Stanislav.
 
-5) Fix a general protection fault in dev_map_hash_update_elem(), from Toke.
-
-6) Cleanup to use BPF_PROG_RUN() macro in KCM, from Sami.
-
-Please consider pulling these changes from:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-
-Thanks a lot!
-
-----------------------------------------------------------------
-
-The following changes since commit 1e46c09ec10049a9e366153b32e41cc557383fdb:
-
-  Merge git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next (2019-09-06 16:49:17 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git 
-
-for you to fetch changes up to d895a0f16fadb26d22ab531c49768f7642ae5c3e:
-
-  bpf: fix accessing bpf_sysctl.file_pos on s390 (2019-09-16 11:44:05 +0200)
-
-----------------------------------------------------------------
-Alexei Starovoitov (1):
-      Merge branch 'move-sockopt-tests'
-
-Andrii Nakryiko (1):
-      kbuild: replace BASH-specific ${@:2} with shift and ${@}
-
-Ciara Loftus (3):
-      i40e: fix xdp handle calculations
-      ixgbe: fix xdp handle calculations
-      samples/bpf: fix xdpsock l2fwd tx for unaligned mode
-
-Daniel Borkmann (1):
-      Merge branch 'bpf-af-xdp-unaligned-fixes'
-
-Ilya Leoshkevich (2):
-      selftests/bpf: add bpf-gcc support
-      bpf: fix accessing bpf_sysctl.file_pos on s390
-
-Sami Tolvanen (1):
-      kcm: use BPF_PROG_RUN
-
-Stanislav Fomichev (6):
-      selftests/bpf: test_progs: add test__join_cgroup helper
-      selftests/bpf: test_progs: convert test_sockopt
-      selftests/bpf: test_progs: convert test_sockopt_sk
-      selftests/bpf: test_progs: convert test_sockopt_multi
-      selftests/bpf: test_progs: convert test_sockopt_inherit
-      selftests/bpf: test_progs: convert test_tcp_rtt
-
-Toke Høiland-Jørgensen (1):
-      xdp: Fix race in dev_map_hash_update_elem() when replacing element
-
- drivers/net/ethernet/intel/i40e/i40e_xsk.c         |   4 +-
- drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c       |   4 +-
- include/linux/filter.h                             |   8 +-
- kernel/bpf/cgroup.c                                |  10 +-
- kernel/bpf/devmap.c                                |  17 +++-
- kernel/bpf/verifier.c                              |   4 +-
- net/kcm/kcmsock.c                                  |   2 +-
- samples/bpf/xdpsock_user.c                         |   2 +-
- scripts/link-vmlinux.sh                            |  16 +++-
- tools/testing/selftests/bpf/.gitignore             |   5 -
- tools/testing/selftests/bpf/Makefile               |  77 +++++++++++-----
- tools/testing/selftests/bpf/bpf_helpers.h          |  24 +++--
- .../bpf/{test_sockopt.c => prog_tests/sockopt.c}   |  50 ++--------
- .../sockopt_inherit.c}                             | 102 +++++++++------------
- .../sockopt_multi.c}                               |  62 ++-----------
- .../{test_sockopt_sk.c => prog_tests/sockopt_sk.c} |  60 +++---------
- .../bpf/{test_tcp_rtt.c => prog_tests/tcp_rtt.c}   |  83 ++++++-----------
- tools/testing/selftests/bpf/progs/test_tc_edt.c    |   1 +
- tools/testing/selftests/bpf/test_progs.c           |  38 ++++++++
- tools/testing/selftests/bpf/test_progs.h           |   4 +-
- tools/testing/selftests/bpf/test_sysctl.c          |   9 +-
- 21 files changed, 260 insertions(+), 322 deletions(-)
- rename tools/testing/selftests/bpf/{test_sockopt.c => prog_tests/sockopt.c} (96%)
- rename tools/testing/selftests/bpf/{test_sockopt_inherit.c => prog_tests/sockopt_inherit.c} (72%)
- rename tools/testing/selftests/bpf/{test_sockopt_multi.c => prog_tests/sockopt_multi.c} (83%)
- rename tools/testing/selftests/bpf/{test_sockopt_sk.c => prog_tests/sockopt_sk.c} (79%)
- rename tools/testing/selftests/bpf/{test_tcp_rtt.c => prog_tests/tcp_rtt.c} (76%)
+-- 
+Jani Nikula, Intel Open Source Graphics Center
