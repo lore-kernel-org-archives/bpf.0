@@ -2,64 +2,62 @@ Return-Path: <SRS0=t4jm=XL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AA99C49ED7
-	for <bpf@archiver.kernel.org>; Mon, 16 Sep 2019 20:52:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5965EC49ED7
+	for <bpf@archiver.kernel.org>; Mon, 16 Sep 2019 21:22:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4E97F214AF
-	for <bpf@archiver.kernel.org>; Mon, 16 Sep 2019 20:52:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 23F0B2067B
+	for <bpf@archiver.kernel.org>; Mon, 16 Sep 2019 21:22:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="enkRrJ55"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ne1r7/Ag"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726968AbfIPUwT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 Sep 2019 16:52:19 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:34071 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726074AbfIPUwS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 16 Sep 2019 16:52:18 -0400
-Received: by mail-qt1-f193.google.com with SMTP id j1so1652976qth.1;
-        Mon, 16 Sep 2019 13:52:17 -0700 (PDT)
+        id S1730662AbfIPVWL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 Sep 2019 17:22:11 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:35962 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728810AbfIPVWL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 16 Sep 2019 17:22:11 -0400
+Received: by mail-lj1-f194.google.com with SMTP id v24so1367489ljj.3
+        for <bpf@vger.kernel.org>; Mon, 16 Sep 2019 14:22:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5E9DgtscC1GCtZrAXaWV/e6LeSvuqfRExaR2l222qbg=;
-        b=enkRrJ55r7CGq7yUK4OocWnjoUqN9/uub1ZCS+9yECQozqQ2jDtdumCB63K7CeXa+l
-         V0SxSGOa2bxm/UuZbey4+hVW3Iht0Nv47si42XYT9Til3uYobVfFgyM2oOxcedhJGTsa
-         SRfEmCG1mjtekX2nNy3N2WD8vbFBgpij7OBs4C6IZWXB2JNzS6I3POMHJ14q8B8euY0j
-         olun8rjtZ4LUOTrxIH+MGn4+lq21PMDeXOAzFdFtA7YZksoryS2UPeUl0VRQfYjBDFfw
-         0GOkbQduwoMvvmPtumFqWVDuHkSrHWAyaTuqiHTiiAFTsv08OgLSV6a1pXJIAO27yvlG
-         NaBA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=dkfcLQF/tIOTeeIdqJMbWZiDa2xY+OxFlDcGtEBgvPs=;
+        b=Ne1r7/AgO+KtwYd1q/2KIaKaaNVBrZ4rRc78P2bYM3GwpWcUHmWOyELgVlqVdh92CK
+         LkmLdMeRMT4ZBrJiyiyHc0ZpKt+umUpYPWtdUw+v0YDx+77GAJ5udCaJYqPpP0D0KGMn
+         h9AKeK7WVmqBr6hcJlKcTDIOFRRqQ//NPx4cq6zUq1iS5f/8A3lY1BMe85bRO1lXPvwF
+         dvjVKuY9m/Gve/Lzc1wBAS2wzlDr5v62PRKAORIO3mHrnIShq9/kA9eFhbkQYOMRsXXF
+         u/Fs2whKmrqLDSKO0mOrvZn45qhzXviEKYvLiYrd8v1z4B4E71TKPwDgCvquQkz8+OsC
+         I9Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5E9DgtscC1GCtZrAXaWV/e6LeSvuqfRExaR2l222qbg=;
-        b=pQ086qCrJAZxk90lCU07eUltPVNd9NHJySnh92eOeSWGo2ZTovFNAx9RQhRU8NQMmz
-         PM3kZsofdJm0fQ0Z1Zcyu18Nubh9XlmbD/atAGZvQe/3wdByF+7dkEltlnLyJTzBYOR9
-         MUw+xC/xH/KBzWsqRxllzkBLCd40HGKE2UAxTCc/P37q8vWd0J6ToEYi0UQZ9QkZa4JF
-         foBt3N+RmWKC9YfFoFu8EePB2BkLPssIi7cIybEh2Hwq2QDSnR09ntQdSkaxny9/4NGr
-         6MrihgoUYU6X8hLUL2Zdj4huD5GJwa1ahVJf4woxZUn2h2MqRChKox7r5tyIjtt3rT2p
-         ZRbA==
-X-Gm-Message-State: APjAAAWpY0HN0fM1up2xAhHimYSLU+WgZcbJx3Itfek54hoZ9aC6u7sm
-        FLBugqAerwftNF3aDKV2175yTn3GdBgPl9zFQqE=
-X-Google-Smtp-Source: APXvYqyfMJnpEjwqE4JJFdMyeOIHHaKx1q6Z6c4or3iQtVgnN7odi3uyKCacD3BuDE1jEzb/b2tO2nkGx6ORAW/uLZc=
-X-Received: by 2002:ac8:7401:: with SMTP id p1mr324627qtq.141.1568667137518;
- Mon, 16 Sep 2019 13:52:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190916105433.11404-1-ivan.khoronzhuk@linaro.org> <20190916105433.11404-7-ivan.khoronzhuk@linaro.org>
-In-Reply-To: <20190916105433.11404-7-ivan.khoronzhuk@linaro.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 16 Sep 2019 13:52:06 -0700
-Message-ID: <CAEf4BzYvt8=mnvo7jrSKhuHg-_kunb1F_F3g8hhwsZfWExEFPg@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 06/14] samples: bpf: makefile: drop
- unnecessarily inclusion for bpf_load
-To:     Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to:user-agent;
+        bh=dkfcLQF/tIOTeeIdqJMbWZiDa2xY+OxFlDcGtEBgvPs=;
+        b=CiY2BZYTIyU/Kl1llOHzK7l03cXaSiaW5QLAdHapb7cQZouhyq1KmHM8RBgKq1Qyoe
+         CIf3A9cVNs3Hw8236+aMav44BNkQLsGA/mn6oJpHS23YpjIQsW7G3YZS9pC9DafqLoQA
+         seFS/K9gnZ8EfACekTfd59Mf+t3+bUOitLS+PVaqScCaDEEM1D6vqyy6jFJ48iCLp/EI
+         dFN9/av4dY8w3oRZ6i9bwpoQP79ZwJMQwCBWXekTHTA/+e+m1qGKpj2w/fV8OgYAc11G
+         MmhcNHvSmfJMzO/GF9g949+4TjK//lQzarf668iA1o2JxHN2cCYk+Z5KSbwgEPP1nT3U
+         8BJQ==
+X-Gm-Message-State: APjAAAVnYpkxvFrk2sDfp/34dugNAO6ScPgbSgV39BhR6eyJJcURoIoa
+        20/rGcFlNDZSk+bjd4SXey+VAQ==
+X-Google-Smtp-Source: APXvYqzV76u2849Gz4AEo8493X917I7CZ3AYhQkdkfboPLmd4/iYmWUbuNaLbkPD5JsM0UV8Mt7CpA==
+X-Received: by 2002:a2e:98d2:: with SMTP id s18mr4661ljj.68.1568668929218;
+        Mon, 16 Sep 2019 14:22:09 -0700 (PDT)
+Received: from khorivan (168-200-94-178.pool.ukrtel.net. [178.94.200.168])
+        by smtp.gmail.com with ESMTPSA id r6sm14547ljr.77.2019.09.16.14.22.07
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 16 Sep 2019 14:22:08 -0700 (PDT)
+Date:   Tue, 17 Sep 2019 00:22:06 +0300
+From:   Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Yonghong Song <yhs@fb.com>,
@@ -71,40 +69,71 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         clang-built-linux@googlegroups.com,
         sergei.shtylyov@cogentembedded.com
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v3 bpf-next 01/14] samples: bpf: makefile: fix HDR_PROBE
+ "echo"
+Message-ID: <20190916212204.GA4420@khorivan>
+Mail-Followup-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, Yonghong Song <yhs@fb.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        john fastabend <john.fastabend@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        clang-built-linux@googlegroups.com,
+        sergei.shtylyov@cogentembedded.com
+References: <20190916105433.11404-1-ivan.khoronzhuk@linaro.org>
+ <20190916105433.11404-2-ivan.khoronzhuk@linaro.org>
+ <CAEf4BzZVTjCybmDgM0VBzv_L-LHtF8LcDyyKSWJm0ZA4jtJKcw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZVTjCybmDgM0VBzv_L-LHtF8LcDyyKSWJm0ZA4jtJKcw@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Sep 16, 2019 at 4:01 AM Ivan Khoronzhuk
-<ivan.khoronzhuk@linaro.org> wrote:
+On Mon, Sep 16, 2019 at 01:13:23PM -0700, Andrii Nakryiko wrote:
+>On Mon, Sep 16, 2019 at 3:59 AM Ivan Khoronzhuk
+><ivan.khoronzhuk@linaro.org> wrote:
+>>
+>> echo should be replaced with echo -e to handle '\n' correctly, but
+>> instead, replace it with printf as some systems can't handle echo -e.
+>>
+>> Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+>> ---
+>>  samples/bpf/Makefile | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+>> index 1d9be26b4edd..f50ca852c2a8 100644
+>> --- a/samples/bpf/Makefile
+>> +++ b/samples/bpf/Makefile
+>> @@ -201,7 +201,7 @@ endif
+>>
+>>  # Don't evaluate probes and warnings if we need to run make recursively
+>>  ifneq ($(src),)
+>> -HDR_PROBE := $(shell echo "\#include <linux/types.h>\n struct list_head { int a; }; int main() { return 0; }" | \
+>> +HDR_PROBE := $(shell printf "\#include <linux/types.h>\n struct list_head { int a; }; int main() { return 0; }" | \
 >
-> Drop inclusion for bpf_load -I$(objtree)/usr/include as it is
-> included for all objects anyway, with above line:
-> KBUILD_HOSTCFLAGS += -I$(objtree)/usr/include
->
-> Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-> ---
+>printf change is fine, but I'm confused about \# at the beginning of
+>the string. Not sure what was the intent, but it seems like it should
+>work with just #include at the beginning.
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
+At least no warns, but looks like should work.
+Will try it in next v.
 
->  samples/bpf/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-> index d3c8db3df560..9d923546e087 100644
-> --- a/samples/bpf/Makefile
-> +++ b/samples/bpf/Makefile
-> @@ -176,7 +176,7 @@ KBUILD_HOSTCFLAGS += -I$(srctree)/tools/testing/selftests/bpf/
->  KBUILD_HOSTCFLAGS += -I$(srctree)/tools/lib/ -I$(srctree)/tools/include
->  KBUILD_HOSTCFLAGS += -I$(srctree)/tools/perf
->
-> -HOSTCFLAGS_bpf_load.o += -I$(objtree)/usr/include -Wno-unused-variable
-> +HOSTCFLAGS_bpf_load.o += -Wno-unused-variable
->
->  KBUILD_HOSTLDLIBS              += $(LIBBPF) -lelf
->  HOSTLDLIBS_tracex4             += -lrt
-> --
-> 2.17.1
->
+>>         $(HOSTCC) $(KBUILD_HOSTCFLAGS) -x c - -o /dev/null 2>/dev/null && \
+>>         echo okay)
+>>
+>> --
+>> 2.17.1
+>>
+
+-- 
+Regards,
+Ivan Khoronzhuk
