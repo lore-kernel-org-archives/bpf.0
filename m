@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A55FC4CECD
-	for <bpf@archiver.kernel.org>; Tue, 17 Sep 2019 17:45:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AB40C4CEC9
+	for <bpf@archiver.kernel.org>; Tue, 17 Sep 2019 17:45:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 10CEB21848
-	for <bpf@archiver.kernel.org>; Tue, 17 Sep 2019 17:45:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 419C321848
+	for <bpf@archiver.kernel.org>; Tue, 17 Sep 2019 17:45:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1568742348;
-	bh=8ID7RcDmwZTwN17iIbOaX/70ydiUtE2iPXFUt17+Z58=;
+	s=default; t=1568742349;
+	bh=XKLPaYr+iky9Cs2CWKUCKwpYPTwRDM2cN4w9NgNkfew=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=mTPrYgAV9ytvyB8FhAHWxL8wSDin74Mwvi7CjuGFAB9gY1dfcwZB0OL66tuFg7bcn
-	 gr1/k1kU9Kf5SSKnJA6yicVrb8nS9x/bsJKTTt4+jfy/s3Vx08F/k9vsFC+Omc3TAv
-	 m1eJCIPqPNezMZaOCoM1eWLNaRMX+oQV6QXhkFlk=
+	b=oN4rB1yskEE0VcpI4pkPQd2jAu7xIDBDAMq32+EevLEV5UcJP6ZIFOtA0vYns0dy+
+	 7YoWEFzgRmTm75XXuwvncmDN6JgfGVkxSquNLkmSALlvSfLLbXqR1IsaH6beR1dYev
+	 JrmXqM3lkGRKZ9X4pxZ9G9pA2rI/kn+9kByCfP0I=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731364AbfIQRpr convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 17 Sep 2019 13:45:47 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:23992 "EHLO
+        id S1731365AbfIQRps convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 17 Sep 2019 13:45:48 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:9438 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725862AbfIQRpq (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 17 Sep 2019 13:45:46 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x8HHjBvC024471
-        for <bpf@vger.kernel.org>; Tue, 17 Sep 2019 10:45:45 -0700
+        by vger.kernel.org with ESMTP id S1725862AbfIQRps (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 17 Sep 2019 13:45:48 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x8HHjgBC019028
+        for <bpf@vger.kernel.org>; Tue, 17 Sep 2019 10:45:47 -0700
 Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2v2kbmuvj3-3
+        by mx0a-00082601.pphosted.com with ESMTP id 2v2bum679g-9
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 17 Sep 2019 10:45:45 -0700
+        for <bpf@vger.kernel.org>; Tue, 17 Sep 2019 10:45:47 -0700
 Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::128) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Tue, 17 Sep 2019 10:45:44 -0700
+ Tue, 17 Sep 2019 10:45:42 -0700
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id A25A476081D; Tue, 17 Sep 2019 10:45:42 -0700 (PDT)
+        id 9834876081D; Tue, 17 Sep 2019 10:45:40 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -46,9 +46,9 @@ To:     <davem@davemloft.net>
 CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf 2/2] bpf: fix BTF limits
-Date:   Tue, 17 Sep 2019 10:45:38 -0700
-Message-ID: <20190917174538.1295523-3-ast@kernel.org>
+Subject: [PATCH bpf 1/2] bpf: fix BTF verification of enums
+Date:   Tue, 17 Sep 2019 10:45:37 -0700
+Message-ID: <20190917174538.1295523-2-ast@kernel.org>
 X-Mailer: git-send-email 2.20.0
 In-Reply-To: <20190917174538.1295523-1-ast@kernel.org>
 References: <20190917174538.1295523-1-ast@kernel.org>
@@ -58,43 +58,43 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.70,1.0.8
  definitions=2019-09-17_09:2019-09-17,2019-09-17 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=524
- malwarescore=0 adultscore=0 spamscore=0 mlxscore=0 bulkscore=0
- clxscore=1034 suspectscore=1 lowpriorityscore=0 impostorscore=0
- priorityscore=1501 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1908290000 definitions=main-1909170171
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1034 spamscore=0
+ priorityscore=1501 mlxscore=0 adultscore=0 phishscore=0 bulkscore=0
+ suspectscore=1 impostorscore=0 malwarescore=0 mlxlogscore=782
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1909170171
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-vmlinux BTF has more than 64k types.
-Its string section is also at the offset larger than 64k.
-Adjust both limits to make in-kernel BTF verifier successfully parse in-kernel BTF.
+vmlinux BTF has enums that are 8 byte and 1 byte in size.
+2 byte enum is a valid construct as well.
+Fix BTF enum verification to accept those sizes.
 
 Fixes: 69b693f0aefa ("bpf: btf: Introduce BPF Type Format (BTF)")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Acked-by: Martin KaFai Lau <kafai@fb.com>
 ---
- include/uapi/linux/btf.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/bpf/btf.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
-index 63ae4a39e58b..c02dec97e1ce 100644
---- a/include/uapi/linux/btf.h
-+++ b/include/uapi/linux/btf.h
-@@ -22,9 +22,9 @@ struct btf_header {
- };
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index adb3adcebe3c..722d38e543e9 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -2377,9 +2377,8 @@ static s32 btf_enum_check_meta(struct btf_verifier_env *env,
+ 		return -EINVAL;
+ 	}
  
- /* Max # of type identifier */
--#define BTF_MAX_TYPE	0x0000ffff
-+#define BTF_MAX_TYPE	0x000fffff
- /* Max offset into the string section */
--#define BTF_MAX_NAME_OFFSET	0x0000ffff
-+#define BTF_MAX_NAME_OFFSET	0x00ffffff
- /* Max # of struct/union/enum members or func args */
- #define BTF_MAX_VLEN	0xffff
+-	if (t->size != sizeof(int)) {
+-		btf_verifier_log_type(env, t, "Expected size:%zu",
+-				      sizeof(int));
++	if (t->size > 8 || !is_power_of_2(t->size)) {
++		btf_verifier_log_type(env, t, "Unexpected size");
+ 		return -EINVAL;
+ 	}
  
 -- 
 2.20.0
