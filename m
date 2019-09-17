@@ -7,61 +7,61 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F17D4C4CECD
-	for <bpf@archiver.kernel.org>; Tue, 17 Sep 2019 13:31:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40CB4C4CECD
+	for <bpf@archiver.kernel.org>; Tue, 17 Sep 2019 13:31:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C5F3A2189D
-	for <bpf@archiver.kernel.org>; Tue, 17 Sep 2019 13:31:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C4FC2189D
+	for <bpf@archiver.kernel.org>; Tue, 17 Sep 2019 13:31:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="zKcskGT4";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gYIH4hII"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="M7/yT+Yk";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="INF5Hsph"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727534AbfIQNbt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Sep 2019 09:31:49 -0400
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:60105 "EHLO
+        id S1728186AbfIQNbe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Sep 2019 09:31:34 -0400
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:36271 "EHLO
         new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726230AbfIQNbh (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 17 Sep 2019 09:31:37 -0400
+        by vger.kernel.org with ESMTP id S1726230AbfIQNbd (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 17 Sep 2019 09:31:33 -0400
 Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 45CB32E12;
-        Tue, 17 Sep 2019 09:31:35 -0400 (EDT)
+        by mailnew.nyi.internal (Postfix) with ESMTP id 21CCF3955;
+        Tue, 17 Sep 2019 09:31:31 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Tue, 17 Sep 2019 09:31:35 -0400
+  by compute4.internal (MEProxy); Tue, 17 Sep 2019 09:31:31 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm1; bh=wVxLkASr4WgjE
-        Vi71vH9ixp5KrWmhI1orhWokzEt9X8=; b=zKcskGT4h6RF+C7xpW8WTiVytDeNa
-        HGE6RrXYCxRA7F5ZB9rbVrqJzDS/zKZ8pvE10YxmWFgPO0C8FCdGln2Vp0oH1+Hq
-        IQGkBz+WA2z20HxxcRBYokrANIwXhpi/9sIyV3BN0lXq95U5rJnX7eZEKqVBaj4X
-        5H0N6p7oiuKdDFV2Pmz12AnBfK6xvPGA8XE3f5hxT/m3TomaE5zJniPWElw17rxE
-        HsfpjOTzWgAszKmpIpDSiLTdRJCavv8YqHRtkAisZOQ7hBsSSGMF7NuQPkVxSvZf
-        U4g9bhJkeQZKYRzyemYsxDCI+BHHCYWrqSqfh+0YNApVgNmq6zDNIkkHQ==
+        :mime-version:content-transfer-encoding; s=fm1; bh=GJV3QxlCo4B38
+        CZxCwMYESB8BQr0ysoGirhVOVPTXPg=; b=M7/yT+YkNbwMvtjxSy9SCuuXcdnAi
+        WLhAFdfva1u5YNT9qstvdzKbH808QLuPCLeOtweRAEiW+nhF/JKw3lArAx3Yx4Cc
+        W7X0DqlveUpVCYo1TQzqvv2nhITqh9UggMpoicV7ZJTDCeX76YAYIoH+jR5+EPuW
+        R84WkOGRjgRg2HNbmXPMazLQce6f6I0teUXKFwOlLk2GeL1OBwGudHVHRKyptJ39
+        kJVNVhrCto1MCNTbOdsgJzTatsJAKXSSZztFFouiIW3170yW/IsbvM1CyJoQAVN7
+        nYmWTWNdJq+e5Qqo85hcGAuoenlViGHkOPhNif8gxJRqG33hQOI6BYALA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=wVxLkASr4WgjEVi71vH9ixp5KrWmhI1orhWokzEt9X8=; b=gYIH4hII
-        Fji6sdX4JYHLkBMS56gs0v1KPOgaoY42JrmbY7lOe1Rv5VRWh/21BVAeilocaLLL
-        GFWzO7xjux+blhkfxUbury5D0OWi6v2V/WdXBxruXfm3I/c0PnjN3VzwUnydqi98
-        LZ6LXim9JjlnP0AjzbQwoYxRSI6Eq3v0Wl+DdUFAqqCROp9JlY2Rd1KMqtv95ESD
-        zqYjMqF1p2FOYEAfjK0tlyl+oQ+mmsGQom8iUS59QrRKuwK7i2NYbXyuiz8PEeXw
-        Z7ILDRCazM9WBIF7FZ7/9JPwSK8/+drFkStSC+kVVd6FfJdLxGDVunmsst5fDBnP
-        b9sFP+mHySGcEg==
-X-ME-Sender: <xms:N-CAXZ9-DJkucie8eaNvqi0-vxksMd_ZZAb2VZyGWlNJ566gTuknmA>
+        fm3; bh=GJV3QxlCo4B38CZxCwMYESB8BQr0ysoGirhVOVPTXPg=; b=INF5Hsph
+        D5J3bypAjbNqXX2ilbdyVPSs1rWNPSqJMJ2BeR4VvvyDNnOK0CWCWQZyI9gAKZXK
+        OoprdOsY0p+GF6vODk/n095KUjG2p0EpiLHfVd+B8Vm0ttCthcB6kviuxjxpedzQ
+        OuiED22CKm9vvB6GatwdXyxWYqKR/6Npt2WT+NYDU1lrL/P0iyc2/7ijpnjmf66Z
+        ndodX0yg2o64NTAy5bqlHR2qEywElth3PIdWJ3xMLlL/LvnGf6WN7zHPl07HFD43
+        M87HA3PWvtr/T4re5pkeiujrjpTo7Dx63mFF5LZd0UpZL+Sx8DErUVwojWChRMq2
+        yMj76B8dpg+z0g==
+X-ME-Sender: <xms:MuCAXXKYok16YfOfXbtdIHyyY7_1ByvTcib3bjie7Ivzd8C3kqljIA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrudeigdefkecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdejtddmnecujfgurhephffvuf
     ffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceougig
     uhesugiguhhuuhdrgiihiieqnecukfhppeduleelrddvtddurdeiiedrtdenucfrrghrrg
     hmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihiienucevlhhushhtvghrufhi
-    iigvpedu
-X-ME-Proxy: <xmx:N-CAXXw2AwBjxrcJBTHnje3-5PPHyK21AUr71WMvfmeaPMz3qyZMsQ>
-    <xmx:N-CAXWG23QpagREGjBmZM9z50Fl9nplFMRs8bDyM7KGS5ZC_-GveNg>
-    <xmx:N-CAXVlAGceIfzeq4-DHzDYXQh3cHSm2tCUkCveEqVrayTM7v8oeaA>
-    <xmx:N-CAXcMf8y7_SHDLy9mDZZE-6dbJtLTzApEQMzII01Y-08FG9j2RwMBtWz8>
+    iigvpedt
+X-ME-Proxy: <xmx:M-CAXfOX_eDP7UbdrHPiXc5jN6oWcbOukrJFZqkmZutkrC9ZusYAJw>
+    <xmx:M-CAXQ3qyuYmwzJdyOTyy62-lntXqTyv71tl4Cx1klTMTVv02hXSPQ>
+    <xmx:M-CAXZyzkb0qQts71EpZ24WBO7qFMIZicKmCKpCDByrqxnoxQUvJTw>
+    <xmx:M-CAXcA3xKlFIy24N6ykBllis4FMrUnh0WvQC9uDv04uJappCtlUFjAv1Mg>
 Received: from dlxu-fedora-R90QNFJV.thefacebook.com (unknown [199.201.66.0])
-        by mail.messagingengine.com (Postfix) with ESMTPA id D4DBED6005D;
-        Tue, 17 Sep 2019 09:31:33 -0400 (EDT)
+        by mail.messagingengine.com (Postfix) with ESMTPA id 9888BD60063;
+        Tue, 17 Sep 2019 09:31:29 -0400 (EDT)
 From:   Daniel Xu <dxu@dxuuu.xyz>
 To:     bpf@vger.kernel.org, songliubraving@fb.com, yhs@fb.com,
         andriin@fb.com, peterz@infradead.org, mingo@redhat.com,
@@ -70,9 +70,9 @@ Cc:     Daniel Xu <dxu@dxuuu.xyz>, ast@fb.com,
         alexander.shishkin@linux.intel.com, jolsa@redhat.com,
         namhyung@kernel.org, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH bpf-next 4/5] libbpf: Set read_format PERF_FORMAT_LOST on kprobe perf fds
-Date:   Tue, 17 Sep 2019 06:30:55 -0700
-Message-Id: <20190917133056.5545-5-dxu@dxuuu.xyz>
+Subject: [PATCH bpf-next 1/5] perf/core: Add PERF_FORMAT_LOST read_format
+Date:   Tue, 17 Sep 2019 06:30:52 -0700
+Message-Id: <20190917133056.5545-2-dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190917133056.5545-1-dxu@dxuuu.xyz>
 References: <20190917133056.5545-1-dxu@dxuuu.xyz>
@@ -83,56 +83,207 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-There is no way to get the nmissed count from kprobes that are created
-using the perf API. The previous commits added read_format support for
-this count. Enable it in this commit.
+It's useful to know kprobe's nmissed count. For example with tracing
+tools, it's important to know when events may have been lost.  debugfs
+currently exposes a control file to get this information, but it is not
+compatible with probes registered with the perf API.
+
+While bpf programs may be able to manually count nhit, there is no way
+to gather nmissed. In other words, it is currently not possible to this
+retrieve information about FD-based probes.
+
+This patch adds a new field to perf's read_format that lets users query
+misses. Misses include both misses from the underlying kprobe
+infrastructure and misses from ringbuffer infrastructure.
 
 Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
 ---
- tools/lib/bpf/libbpf.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ include/linux/trace_events.h    |  1 +
+ include/uapi/linux/perf_event.h |  5 ++++-
+ kernel/events/core.c            | 39 ++++++++++++++++++++++++++++++---
+ kernel/trace/trace_kprobe.c     |  8 +++++++
+ 4 files changed, 49 insertions(+), 4 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 1ca0acd1d823..43f45f6d914d 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -5031,7 +5031,7 @@ static int determine_uprobe_retprobe_bit(void)
+diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
+index 30a8cdcfd4a4..952520c1240a 100644
+--- a/include/linux/trace_events.h
++++ b/include/linux/trace_events.h
+@@ -587,6 +587,7 @@ extern int bpf_get_kprobe_info(const struct perf_event *event,
+ 			       u32 *fd_type, const char **symbol,
+ 			       u64 *probe_offset, u64 *probe_addr,
+ 			       bool perf_type_tracepoint);
++extern u64 perf_kprobe_missed(const struct perf_event *event);
+ #endif
+ #ifdef CONFIG_UPROBE_EVENTS
+ extern int  perf_uprobe_init(struct perf_event *event,
+diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
+index 7198ddd0c6b1..bd874c7257f0 100644
+--- a/include/uapi/linux/perf_event.h
++++ b/include/uapi/linux/perf_event.h
+@@ -273,6 +273,7 @@ enum {
+  *	  { u64		time_enabled; } && PERF_FORMAT_TOTAL_TIME_ENABLED
+  *	  { u64		time_running; } && PERF_FORMAT_TOTAL_TIME_RUNNING
+  *	  { u64		id;           } && PERF_FORMAT_ID
++ *	  { u64		missed;       } && PERF_FORMAT_LOST
+  *	} && !PERF_FORMAT_GROUP
+  *
+  *	{ u64		nr;
+@@ -280,6 +281,7 @@ enum {
+  *	  { u64		time_running; } && PERF_FORMAT_TOTAL_TIME_RUNNING
+  *	  { u64		value;
+  *	    { u64	id;           } && PERF_FORMAT_ID
++ *	    { u64	missed;       } && PERF_FORMAT_LOST
+  *	  }		cntr[nr];
+  *	} && PERF_FORMAT_GROUP
+  * };
+@@ -289,8 +291,9 @@ enum perf_event_read_format {
+ 	PERF_FORMAT_TOTAL_TIME_RUNNING		= 1U << 1,
+ 	PERF_FORMAT_ID				= 1U << 2,
+ 	PERF_FORMAT_GROUP			= 1U << 3,
++	PERF_FORMAT_LOST			= 1U << 4,
+ 
+-	PERF_FORMAT_MAX = 1U << 4,		/* non-ABI */
++	PERF_FORMAT_MAX = 1U << 5,		/* non-ABI */
+ };
+ 
+ #define PERF_ATTR_SIZE_VER0	64	/* sizeof first published struct */
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 0463c1151bae..ee08d3ed6299 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -1715,6 +1715,9 @@ static void __perf_event_read_size(struct perf_event *event, int nr_siblings)
+ 	if (event->attr.read_format & PERF_FORMAT_ID)
+ 		entry += sizeof(u64);
+ 
++	if (event->attr.read_format & PERF_FORMAT_LOST)
++		entry += sizeof(u64);
++
+ 	if (event->attr.read_format & PERF_FORMAT_GROUP) {
+ 		nr += nr_siblings;
+ 		size += sizeof(u64);
+@@ -4734,6 +4737,24 @@ u64 perf_event_read_value(struct perf_event *event, u64 *enabled, u64 *running)
+ }
+ EXPORT_SYMBOL_GPL(perf_event_read_value);
+ 
++static struct pmu perf_kprobe;
++static u64 perf_event_lost(struct perf_event *event)
++{
++	struct ring_buffer *rb;
++	u64 lost = 0;
++
++	rcu_read_lock();
++	rb = rcu_dereference(event->rb);
++	if (likely(!!rb))
++		lost += local_read(&rb->lost);
++	rcu_read_unlock();
++
++	if (event->attr.type == perf_kprobe.type)
++		lost += perf_kprobe_missed(event);
++
++	return lost;
++}
++
+ static int __perf_read_group_add(struct perf_event *leader,
+ 					u64 read_format, u64 *values)
+ {
+@@ -4770,11 +4791,15 @@ static int __perf_read_group_add(struct perf_event *leader,
+ 	values[n++] += perf_event_count(leader);
+ 	if (read_format & PERF_FORMAT_ID)
+ 		values[n++] = primary_event_id(leader);
++	if (read_format & PERF_FORMAT_LOST)
++		values[n++] = perf_event_lost(leader);
+ 
+ 	for_each_sibling_event(sub, leader) {
+ 		values[n++] += perf_event_count(sub);
+ 		if (read_format & PERF_FORMAT_ID)
+ 			values[n++] = primary_event_id(sub);
++		if (read_format & PERF_FORMAT_LOST)
++			values[n++] = perf_event_lost(sub);
+ 	}
+ 
+ 	raw_spin_unlock_irqrestore(&ctx->lock, flags);
+@@ -4831,7 +4856,7 @@ static int perf_read_one(struct perf_event *event,
+ 				 u64 read_format, char __user *buf)
+ {
+ 	u64 enabled, running;
+-	u64 values[4];
++	u64 values[5];
+ 	int n = 0;
+ 
+ 	values[n++] = __perf_event_read_value(event, &enabled, &running);
+@@ -4841,6 +4866,8 @@ static int perf_read_one(struct perf_event *event,
+ 		values[n++] = running;
+ 	if (read_format & PERF_FORMAT_ID)
+ 		values[n++] = primary_event_id(event);
++	if (read_format & PERF_FORMAT_LOST)
++		values[n++] = perf_event_lost(event);
+ 
+ 	if (copy_to_user(buf, values, n * sizeof(u64)))
+ 		return -EFAULT;
+@@ -6141,7 +6168,7 @@ static void perf_output_read_one(struct perf_output_handle *handle,
+ 				 u64 enabled, u64 running)
+ {
+ 	u64 read_format = event->attr.read_format;
+-	u64 values[4];
++	u64 values[5];
+ 	int n = 0;
+ 
+ 	values[n++] = perf_event_count(event);
+@@ -6155,6 +6182,8 @@ static void perf_output_read_one(struct perf_output_handle *handle,
+ 	}
+ 	if (read_format & PERF_FORMAT_ID)
+ 		values[n++] = primary_event_id(event);
++	if (read_format & PERF_FORMAT_LOST)
++		values[n++] = perf_event_lost(event);
+ 
+ 	__output_copy(handle, values, n * sizeof(u64));
+ }
+@@ -6165,7 +6194,7 @@ static void perf_output_read_group(struct perf_output_handle *handle,
+ {
+ 	struct perf_event *leader = event->group_leader, *sub;
+ 	u64 read_format = event->attr.read_format;
+-	u64 values[5];
++	u64 values[6];
+ 	int n = 0;
+ 
+ 	values[n++] = 1 + leader->nr_siblings;
+@@ -6183,6 +6212,8 @@ static void perf_output_read_group(struct perf_output_handle *handle,
+ 	values[n++] = perf_event_count(leader);
+ 	if (read_format & PERF_FORMAT_ID)
+ 		values[n++] = primary_event_id(leader);
++	if (read_format & PERF_FORMAT_LOST)
++		values[n++] = perf_event_lost(leader);
+ 
+ 	__output_copy(handle, values, n * sizeof(u64));
+ 
+@@ -6196,6 +6227,8 @@ static void perf_output_read_group(struct perf_output_handle *handle,
+ 		values[n++] = perf_event_count(sub);
+ 		if (read_format & PERF_FORMAT_ID)
+ 			values[n++] = primary_event_id(sub);
++		if (read_format & PERF_FORMAT_LOST)
++			values[n++] = perf_event_lost(sub);
+ 
+ 		__output_copy(handle, values, n * sizeof(u64));
+ 	}
+diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+index 9d483ad9bb6c..cff471c8750b 100644
+--- a/kernel/trace/trace_kprobe.c
++++ b/kernel/trace/trace_kprobe.c
+@@ -196,6 +196,14 @@ bool trace_kprobe_error_injectable(struct trace_event_call *call)
+ 	return within_error_injection_list(trace_kprobe_address(tk));
  }
  
- static int perf_event_open_probe(bool uprobe, bool retprobe, const char *name,
--				 uint64_t offset, int pid)
-+				 uint64_t offset, int pid, uint64_t read_format)
- {
- 	struct perf_event_attr attr = {};
- 	char errmsg[STRERR_BUFSIZE];
-@@ -5060,6 +5060,7 @@ static int perf_event_open_probe(bool uprobe, bool retprobe, const char *name,
- 	}
- 	attr.size = sizeof(attr);
- 	attr.type = type;
-+	attr.read_format = read_format;
- 	attr.config1 = ptr_to_u64(name); /* kprobe_func or uprobe_path */
- 	attr.config2 = offset;		 /* kprobe_addr or probe_offset */
++u64 perf_kprobe_missed(const struct perf_event *event)
++{
++	struct trace_event_call *call = event->tp_event;
++	struct trace_kprobe *tk = (struct trace_kprobe *)call->data;
++
++	return tk->rp.kp.nmissed;
++}
++
+ static int register_kprobe_event(struct trace_kprobe *tk);
+ static int unregister_kprobe_event(struct trace_kprobe *tk);
  
-@@ -5087,7 +5088,8 @@ struct bpf_link *bpf_program__attach_kprobe(struct bpf_program *prog,
- 	int pfd, err;
- 
- 	pfd = perf_event_open_probe(false /* uprobe */, retprobe, func_name,
--				    0 /* offset */, -1 /* pid */);
-+				    0 /* offset */, -1 /* pid */,
-+				    PERF_FORMAT_LOST /* read_format */);
- 	if (pfd < 0) {
- 		pr_warning("program '%s': failed to create %s '%s' perf event: %s\n",
- 			   bpf_program__title(prog, false),
-@@ -5118,7 +5120,8 @@ struct bpf_link *bpf_program__attach_uprobe(struct bpf_program *prog,
- 	int pfd, err;
- 
- 	pfd = perf_event_open_probe(true /* uprobe */, retprobe,
--				    binary_path, func_offset, pid);
-+				    binary_path, func_offset, pid,
-+				    0 /* read_format */);
- 	if (pfd < 0) {
- 		pr_warning("program '%s': failed to create %s '%s:0x%zx' perf event: %s\n",
- 			   bpf_program__title(prog, false),
 -- 
 2.21.0
 
