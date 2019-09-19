@@ -2,83 +2,80 @@ Return-Path: <SRS0=+COa=XO=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC893C3A5A6
-	for <bpf@archiver.kernel.org>; Thu, 19 Sep 2019 14:39:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EE20C3A5A6
+	for <bpf@archiver.kernel.org>; Thu, 19 Sep 2019 15:20:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 93711217D6
-	for <bpf@archiver.kernel.org>; Thu, 19 Sep 2019 14:39:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5797D218AF
+	for <bpf@archiver.kernel.org>; Thu, 19 Sep 2019 15:20:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oYT2MlDg"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sm0KW63A"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732619AbfISOjd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Sep 2019 10:39:33 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:44782 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732579AbfISOjd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Sep 2019 10:39:33 -0400
-Received: by mail-lj1-f196.google.com with SMTP id m13so3812786ljj.11;
-        Thu, 19 Sep 2019 07:39:31 -0700 (PDT)
+        id S2388184AbfISPU4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Sep 2019 11:20:56 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:45026 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388060AbfISPUz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Sep 2019 11:20:55 -0400
+Received: by mail-qt1-f193.google.com with SMTP id u40so4655624qth.11
+        for <bpf@vger.kernel.org>; Thu, 19 Sep 2019 08:20:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qb8wSvIQ4nC55X54/RWJ18Vfsst4KOF/u6y+XHfA/dI=;
-        b=oYT2MlDgxVIBlh+OLSBJ4m3Lop7TBaO3jQ+SyVAeuhXATMFGGnLzt1qBS9IdSS+3ob
-         gNWOpdwD8ta3IWlNJb4ifMzbpQaujil4oegSphzZ2DolV4EnWfTrg7NzlEgtLbxg+m/M
-         g2OQnxKIYIBZKF5kxExB+XU40HQuHGKipV6jDf54mS2CxJR2AFiMzcU/q2EWtE+eVZeU
-         4bdX4B92kmC6N22zC2SLxG9Mq2PJyPaoQ7LyIBBH0Rq/wNT1CKGJJc9bPrwFOp6hEfzi
-         3u0MEKuiDixNq8pbYVNYb9/B4rstFm3mnC+WC0Z9D9Oj/Amv6GPRzlgbLEvwDxx+ff+N
-         GebA==
+        d=google.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=0T6xN3ksPpSL90JcA8rv4rx/3ITzItUpKS+z4irSomk=;
+        b=sm0KW63A/iP6ZjfvQAKNe8Q9DWLXLOwme13EEUD+xBZMilomAalTLcoa0Q3irGqLf3
+         9S9yTSIe52Pv2nKbG64B0YcGHnJmysOrIKy9SlJ3nERhvkBFWWupDHCugaYuAWybsTS2
+         U1AnIiCDY4EaodxQIvN6z5t8l4km9Eb5N6QDPUqUtGNwicumeDTfCPhXm74xCH5+Jgb/
+         mV6lcLPy16ICvX3z3Hd8f828erpGXQr0jkp3VJaamJBaA7oIfgWy+nr3KOGfapO3PwYL
+         aPpZjOkR7FMdVDztaFVN+OxEBBvWwFfyrGg3pb4fXwlY6x3VhtewHpOzRPrAtST0OM2m
+         8D6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qb8wSvIQ4nC55X54/RWJ18Vfsst4KOF/u6y+XHfA/dI=;
-        b=Fo+JPDh/kpkwiI0hnetC502NAN8y7E3cNi2MadGrETKoTmzXIB/EdBHpCiFKaUmDZH
-         iOKEWQcrcMbNwPh3R/HaeFwSxoAEwxKiAA0pa2DHrsmiuUCqWCHuXcXXdzap9O12kvBm
-         MBD00VSpaQQ8maTvxyW3TeyBo+x7EDflFmAaEFxvhxYBBh6Qa9+BgeMPRnllTKX5GBRz
-         UJb4wV5c3QjBcjcFJNBua3SsPMFv78CGa2YuwIlO4+q++M2hHMckSXOW03nBQNw3YPZu
-         yK5qebf7OSC0u3E8kXJJJfT2GH/TAbpjqQAEnaUwBlQtVXu1ky7+t/f0JqLis4oje6Lw
-         1B0w==
-X-Gm-Message-State: APjAAAUytwmg2LmzX1fGEA8IX5HTSU8RlXiPrZ8IAroBfrKH/h9o7nGX
-        zDzyosVXRtiLTvsixADu86FPKELYhWKlhPDhphU=
-X-Google-Smtp-Source: APXvYqwBIPpOQ0YhBy4YmO/A1wzqqtCBNaYvPSrmcyJfMpmmAi6MvcQQzq9pi2y/PMo4xLxzcvzRscJo0f01qTA+Tx0=
-X-Received: by 2002:a2e:9708:: with SMTP id r8mr5592899lji.58.1568903970830;
- Thu, 19 Sep 2019 07:39:30 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=0T6xN3ksPpSL90JcA8rv4rx/3ITzItUpKS+z4irSomk=;
+        b=qUmf456w1bFcq43iFrnPykJ97FeRrsCXq4TjGj/OYRPwjlqToggAp+InVpDlqZfCZq
+         aS8j0sV/HyA099u4fxIya14F+NZm9gJbqv8kStji7/AEfyK6QrFgUNUrQbxrvRHCzC9a
+         7XKA4dDhtcNe/FqygJsr62eyXfRif/DHlImStQXK2pR9sRdZeuNBuV7vfqK+YLO2X3nX
+         VF9KnA4OyRWBh4RW4FCybGnWH0IMNgI9NCpvXSLnVORjmIT03z/Y16hVX7vnf09sWTDL
+         Z9uR+YxePqgwRdvYP70DLXBSMODqlZgr0jjT1LISAqcYoXbQV4P9pyElWlL3zkNr+P1g
+         bClw==
+X-Gm-Message-State: APjAAAX/HHvGgNH8jNYGZlVQvETdD4PGhX/RdOhVtl/FTDy2LoD4os82
+        AY7ssTMQrXUtmFtt1bi6j+LMY2ZlJSpEbT6DlYRrSA==
+X-Google-Smtp-Source: APXvYqyu42vyJgiMpYNfoTPRPkEOZeKCr/uEjZy4hreKSUZYahEUEDA5Y2fIhi4vRVGXRn7JDesnMh8l22SntLiEzCY=
+X-Received: by 2002:ac8:4a8d:: with SMTP id l13mr3721351qtq.158.1568906454657;
+ Thu, 19 Sep 2019 08:20:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190919082902.GA15755@yogzotot>
-In-Reply-To: <20190919082902.GA15755@yogzotot>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 19 Sep 2019 07:39:19 -0700
-Message-ID: <CAADnVQK6FjwivxDsmoskH_Zwr+Q730+H9u_5hBBdyzzDP1vyRg@mail.gmail.com>
-Subject: Re: [PATCH] selftests: update .gitignore files for selftests/bpf and selftests/zram
-To:     Anatoly Pugachev <matorola@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 19 Sep 2019 17:20:43 +0200
+Message-ID: <CACT4Y+YNRgC2HJvH=xpRXMc2PBoXnWMZdoftEx8ZHAs4t1MhRQ@mail.gmail.com>
+Subject: bpf syzbot coverage
+To:     Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, syzkaller <syzkaller@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Sep 19, 2019 at 1:35 AM Anatoly Pugachev <matorola@gmail.com> wrote:
->
-> selftests: update .gitignore files for selftests/bpf and selftests/zram
->
-> Signed-off-by: Anatoly Pugachev <matorola@gmail.com>
-> ---
->  tools/testing/selftests/bpf/.gitignore  | 4 ++++
->  tools/testing/selftests/zram/.gitignore | 1 +
->  2 files changed, 5 insertions(+)
->  create mode 100644 tools/testing/selftests/zram/.gitignore
+Hi,
 
-could you please split this patch into selftests/bpf/ and the rest?
-we'll take bpf bits via bpf tree.
+I've showed syzbot coverage of the bpf subsystem to you recently, here
+are the links I promised to send. If you go to:
+https://syzkaller.appspot.com/upstream
+coverage reports are in the Instances table in the Coverage column.
+Choose a one with more coverage, e.g.:
+https://storage.googleapis.com/syzkaller/cover/ci-upstream-linux-next-kasan-gce-root.html
+(but be aware it's a 200MB html with whole kernel source code embed).
+Then navigate to kernel -> bpf to see coverage on bpf sources.
+
+The most useful things would be to identify parts that are not
+currently covered, but can be covered from user-space and extend
+syzkaller to cover them:
+https://github.com/google/syzkaller/blob/master/sys/linux/bpf.txt
+
+Thanks
