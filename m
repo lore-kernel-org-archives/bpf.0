@@ -2,64 +2,60 @@ Return-Path: <SRS0=+COa=XO=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5BDCC3A5A6
-	for <bpf@archiver.kernel.org>; Thu, 19 Sep 2019 17:04:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F28EC49ED7
+	for <bpf@archiver.kernel.org>; Thu, 19 Sep 2019 17:09:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8C8DA21907
-	for <bpf@archiver.kernel.org>; Thu, 19 Sep 2019 17:04:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4B7D821929
+	for <bpf@archiver.kernel.org>; Thu, 19 Sep 2019 17:09:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1568912672;
-	bh=9McqeeEKIgFZ2ZuG6M5IYR2WrH93EYD26mVgUCa8/Tc=;
+	s=default; t=1568912952;
+	bh=i47DafbV/d3Qe9fcajwsSj8c4rgxc5Rv2f5aucr6OF0=;
 	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=O+PxDtV6zi8snMFOwtlinL+c+Dol4/GCPVZKJ7nvYQq2CPgrq0PFf0OntwhEgPMw2
-	 M6aWCzerRN1cwTmjM18onixA0GFuAO1Za0aiVG8et7fDdO2e/jAiqHe+79yDn4Bvnn
-	 n3UVXlOMr+19lnyRJ4S4OQUDZqtEUjqNEjT2cqmE=
+	b=bN23EpplNuUqdoNO0/4zweV4IYzwNiiPT6dYrMLBe9RkoOCgCy7JFnC5cGvj1kxTE
+	 BXk/O0J90VOxhTL/RZ8PfF8Q3MY61yN92IefH6ZRCZQrB30TK1xCfMjLmK01TiCffu
+	 PrhhhcG3vV99nAPmTEYekXaAK3Ix9cjHB3VOgMoo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390687AbfISREc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Sep 2019 13:04:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35218 "EHLO mail.kernel.org"
+        id S2391873AbfISRJL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Sep 2019 13:09:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40068 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389542AbfISREc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Sep 2019 13:04:32 -0400
+        id S2391867AbfISRJL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Sep 2019 13:09:11 -0400
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D236220644;
-        Thu, 19 Sep 2019 17:04:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9BA3420644;
+        Thu, 19 Sep 2019 17:09:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568912671;
-        bh=9McqeeEKIgFZ2ZuG6M5IYR2WrH93EYD26mVgUCa8/Tc=;
+        s=default; t=1568912951;
+        bh=i47DafbV/d3Qe9fcajwsSj8c4rgxc5Rv2f5aucr6OF0=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=0ycU1wvP2mrqf8GK5O4ONtZQDBtEcD+OFQJsLURtPM9tTVQyyv7/19v5DoGYVJVbA
-         c+0GgB2uXtOOMAdHA00L3TGwZxO4kPRaeXctKSx3W+IScnfzLxbZe6T9n9dn0DB/yF
-         Jqm3sVqz5aDOcvritlx2YajoAgWXtBKSWpLLv75s=
-Subject: Re: [PATCH 2/4] seccomp: add two missing ptrace ifdefines
-To:     Kees Cook <keescook@chromium.org>,
-        "Dmitry V. Levin" <ldv@altlinux.org>
-Cc:     Tyler Hicks <tyhicks@canonical.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        luto@amacapital.net, jannh@google.com, wad@chromium.org,
-        ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Tycho Andersen <tycho@tycho.ws>,
-        stable@vger.kernel.org, shuah <shuah@kernel.org>
-References: <20190918084833.9369-1-christian.brauner@ubuntu.com>
- <20190918084833.9369-3-christian.brauner@ubuntu.com>
- <20190918091512.GA5088@elm> <201909181031.1EE73B4@keescook>
- <20190919104251.GA16834@altlinux.org> <201909190918.443D6BC7@keescook>
+        b=y0kS2eejiOAQDHwJwUiAzyZ1tREHU/RW3tJa98y85YB2Pbfv+WI/5fzPwpw0qWpuj
+         J6rg83zIPQuWKfdKirhR8OrwenAvCKVej5y1s703Ja+hPeDrSDRE+JO4oABTLlEvYh
+         GEpI+jlTrNJmtcpJrqyHpEeLLMs6j92wwmxqmFfs=
+Subject: Re: [PATCH] selftests: update .gitignore files for selftests/bpf and
+ selftests/zram
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Anatoly Pugachev <matorola@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, shuah <shuah@kernel.org>
+References: <20190919082902.GA15755@yogzotot>
+ <CAADnVQK6FjwivxDsmoskH_Zwr+Q730+H9u_5hBBdyzzDP1vyRg@mail.gmail.com>
 From:   shuah <shuah@kernel.org>
-Message-ID: <21046d2a-dd80-1d9a-9560-ea3f21d41234@kernel.org>
-Date:   Thu, 19 Sep 2019 11:04:19 -0600
+Message-ID: <56fb689c-428b-ad1a-6f25-48422420e4c5@kernel.org>
+Date:   Thu, 19 Sep 2019 11:09:10 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <201909190918.443D6BC7@keescook>
+In-Reply-To: <CAADnVQK6FjwivxDsmoskH_Zwr+Q730+H9u_5hBBdyzzDP1vyRg@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -68,34 +64,25 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 9/19/19 10:55 AM, Kees Cook wrote:
-> On Thu, Sep 19, 2019 at 01:42:51PM +0300, Dmitry V. Levin wrote:
->> On Wed, Sep 18, 2019 at 10:33:09AM -0700, Kees Cook wrote:
->>> This is actually fixed in -next already (and, yes, with the Fixes line
->>> Tyler has mentioned):
->>>
->>> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=next&id=69b2d3c5924273a0ae968d3818210fc57a1b9d07
+On 9/19/19 8:39 AM, Alexei Starovoitov wrote:
+> On Thu, Sep 19, 2019 at 1:35 AM Anatoly Pugachev <matorola@gmail.com> wrote:
 >>
->> Excuse me, does it mean that you expect each selftest to be self-hosted?
->> I was (and still is) under impression that selftests should be built
->> with headers installed from the tree. Is it the case, or is it not?
+>> selftests: update .gitignore files for selftests/bpf and selftests/zram
+>>
+>> Signed-off-by: Anatoly Pugachev <matorola@gmail.com>
+>> ---
+>>   tools/testing/selftests/bpf/.gitignore  | 4 ++++
+>>   tools/testing/selftests/zram/.gitignore | 1 +
+>>   2 files changed, 5 insertions(+)
+>>   create mode 100644 tools/testing/selftests/zram/.gitignore
 > 
-> As you know (but to give others some context) there is a long-standing
-> bug in the selftest build environment that causes these problems (it
-> isn't including the uAPI headers) which you'd proposed to be fixed
-> recently[1]. Did that ever get sent as a "real" patch? I don't see it
-> in Shuah's tree; can you send it to Shuah?
-> 
-> But even with that fixed, since the seccomp selftest has a history of
-> being built stand-alone, I've continued to take these kinds of fixes.
-> 
-> -Kees
-> 
-> [1] https://lore.kernel.org/lkml/20190805094719.GA1693@altlinux.org/
+> could you please split this patch into selftests/bpf/ and the rest?
+> we'll take bpf bits via bpf tree.
 > 
 
-It has been sent to kselftest list yesterday. I will pull this in for
-my next update.
+Yes. Please split them. .gitignore changes for each test need to be
+in separate patches.
 
 thanks,
 -- Shuah
+
