@@ -2,156 +2,219 @@ Return-Path: <SRS0=7D+q=XP=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9EFAC49ED7
-	for <bpf@archiver.kernel.org>; Fri, 20 Sep 2019 08:22:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50820C4CEC9
+	for <bpf@archiver.kernel.org>; Fri, 20 Sep 2019 08:30:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9D904207FC
-	for <bpf@archiver.kernel.org>; Fri, 20 Sep 2019 08:22:12 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gpxypbyV"
+	by mail.kernel.org (Postfix) with ESMTP id 22AF1222C3
+	for <bpf@archiver.kernel.org>; Fri, 20 Sep 2019 08:30:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395192AbfITIWM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Sep 2019 04:22:12 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:37056 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2395191AbfITIWL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Sep 2019 04:22:11 -0400
-Received: by mail-lj1-f195.google.com with SMTP id l21so6241163lje.4
-        for <bpf@vger.kernel.org>; Fri, 20 Sep 2019 01:22:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hOm0RSVxiN9cy/2zlDkuDpGL5XVU330++py7GJHjAx0=;
-        b=gpxypbyVCKkOGbVW+Afzq0G0SijqxBGhC3HHNQu38FBsCf3mjnrrXApKO4u8mD5Ge3
-         zA04+tnmTerkM4T1RJ7krUmnB+9hTEFLGJXEb12Rj7tOexqvl+NS34gitG6WfSllFUWh
-         4jKwiMG6K5ttmC0iW8Q0blWchaToknxTaq+xx5nUNjEIhDlZ7S96cWZ1yNPU3qPe62aT
-         INq3V5DtnKDJFTpcH19QS0y3kVdWHtz23xRU/H+KEZJ7m5AG/GrfFIJPrCDg5eZ8ICEB
-         RG4tAhxqXtZROOpeRHPk9By6C7D7GJeujMxAGxPFpnXTUGQimTyzigJgMQ//nJSFb65u
-         p+7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to:user-agent;
-        bh=hOm0RSVxiN9cy/2zlDkuDpGL5XVU330++py7GJHjAx0=;
-        b=lPdPUNK5tnqfUdkV/oylj/zy3mdjV8qJ0nLcRgtzar1Ms404M0JPI+i/d08bryV3n+
-         q4iK0vkS3pQiFP8rlVvt9tvJL456JNtA44FBDVH7dHk0gf/1ZYgYqs9lqDunAhSy2tJW
-         nihcW2Wlw9s4b4iMB6YPgV1oRcPlOfbGk8v2eSEW9Ntvm7ifkSZqOTtwo/fqBnQuaAvr
-         p6EvMBHWtXapn0CD1NUH2qPQ/loRba3bnojDZ+TG3fI2ZrrdXkukkIy2BsCL2cSySr83
-         6G/0Y2ZyMXvUnWXhsqLRx8UB42k/7m95V40PLAXjGY7hDjleJ34Mst2hw5FGQwpfrHZb
-         R0Og==
-X-Gm-Message-State: APjAAAUIl0LJRUEozMSBMgCenHniKVYAs2vCWZFmyKlYu7SYHe3DOVUd
-        YQ0xHsyBUFntggyTyVzbBY7qww==
-X-Google-Smtp-Source: APXvYqwL1jMaxNVYlobOS7lqzCZWK0IyjHtQ8tNd29VLU4eery6g9+RMfYffbt3kONUMacbsmztDtw==
-X-Received: by 2002:a05:651c:c4:: with SMTP id 4mr6073391ljr.111.1568967729239;
-        Fri, 20 Sep 2019 01:22:09 -0700 (PDT)
-Received: from khorivan (168-200-94-178.pool.ukrtel.net. [178.94.200.168])
-        by smtp.gmail.com with ESMTPSA id k15sm270207ljg.65.2019.09.20.01.22.07
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 20 Sep 2019 01:22:08 -0700 (PDT)
-Date:   Fri, 20 Sep 2019 11:22:06 +0300
-From:   Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin Lau <kafai@fb.com>, Andrii Nakryiko <andriin@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf] libbpf: fix version identification on busybox
-Message-ID: <20190920082204.GC8870@khorivan>
-Mail-Followup-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, Martin Lau <kafai@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20190919160518.25901-1-ivan.khoronzhuk@linaro.org>
- <CAEf4BzbCjCYr5NMPctDkUggwpehnqZPVBSqZOsd9MvSq6WmnZQ@mail.gmail.com>
+        id S2437435AbfITIai (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Sep 2019 04:30:38 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:39516 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405437AbfITIai (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Sep 2019 04:30:38 -0400
+Received: from static-dcd-cqq-121001.business.bouyguestelecom.com ([212.194.121.1] helo=localhost.localdomain)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1iBEJC-0007Va-HJ; Fri, 20 Sep 2019 08:30:30 +0000
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     keescook@chromium.org, luto@amacapital.net
+Cc:     jannh@google.com, wad@chromium.org, shuah@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Tycho Andersen <tycho@tycho.ws>,
+        Tyler Hicks <tyhicks@canonical.com>, stable@vger.kernel.org
+Subject: [PATCH v2 3/3] seccomp: test SECCOMP_USER_NOTIF_FLAG_CONTINUE
+Date:   Fri, 20 Sep 2019 10:30:07 +0200
+Message-Id: <20190920083007.11475-4-christian.brauner@ubuntu.com>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20190920083007.11475-1-christian.brauner@ubuntu.com>
+References: <20190920083007.11475-1-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzbCjCYr5NMPctDkUggwpehnqZPVBSqZOsd9MvSq6WmnZQ@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Sep 19, 2019 at 01:02:40PM -0700, Andrii Nakryiko wrote:
->On Thu, Sep 19, 2019 at 11:22 AM Ivan Khoronzhuk
-><ivan.khoronzhuk@linaro.org> wrote:
->>
->> It's very often for embedded to have stripped version of sort in
->> busybox, when no -V option present. It breaks build natively on target
->> board causing recursive loop.
->>
->> BusyBox v1.24.1 (2019-04-06 04:09:16 UTC) multi-call binary. \
->> Usage: sort [-nrugMcszbdfimSTokt] [-o FILE] [-k \
->> start[.offset][opts][,end[.offset][opts]] [-t CHAR] [FILE]...
->>
->> Lets modify command a little to avoid -V option.
->>
->> Fixes: dadb81d0afe732 ("libbpf: make libbpf.map source of truth for libbpf version")
->>
->> Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
->> ---
->>
->> Based on bpf/master
->>
->>  tools/lib/bpf/Makefile | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
->> index c6f94cffe06e..a12490ad6215 100644
->> --- a/tools/lib/bpf/Makefile
->> +++ b/tools/lib/bpf/Makefile
->> @@ -3,7 +3,7 @@
->>
->>  LIBBPF_VERSION := $(shell \
->>         grep -oE '^LIBBPF_([0-9.]+)' libbpf.map | \
->> -       sort -rV | head -n1 | cut -d'_' -f2)
->> +       cut -d'_' -f2 | sort -r | head -n1)
->
->You can't just sort alphabetically, because:
->
->1.2
->1.11
->
->should be in that order. See discussion on mailing thread for original commit.
+Test whether a syscall can be performed after having been intercepted by
+the seccomp notifier. The test uses dup() and kcmp() since it allows us to
+nicely test whether the dup() syscall actually succeeded by comparing whether
+the fds refer to the same underlying struct file.
 
-if X1.X2.X3, where X = {0,1,....99999}
-Then it can be:
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Andy Lutomirski <luto@amacapital.net>
+Cc: Will Drewry <wad@chromium.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: Tycho Andersen <tycho@tycho.ws>
+CC: Tyler Hicks <tyhicks@canonical.com>
+Cc: stable@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org
+---
+/* v2 */
+- Shuah Khan <shuah@kernel.org>:
+  - skip test on missing precondition
 
--LIBBPF_VERSION := $(shell \
--       grep -oE '^LIBBPF_([0-9.]+)' libbpf.map | \
--       sort -rV | head -n1 | cut -d'_' -f2)
-+_LBPFLIST := $(patsubst %;,%,$(patsubst LIBBPF_%,%,$(filter LIBBPF_%, \
-+           $(shell cat libbpf.map))))
-+_LBPFLIST2 := $(foreach v,$(_LBPFLIST), \
-+               $(subst $() $(),,$(foreach n,$(subst .,$() $(),$(v)), \
-+                       $(shell printf "%05d" $(n)))))
-+_LBPF_VER := $(word $(words $(sort $(_LBPFLIST2))), $(sort $(_LBPFLIST2)))
-+LIBBPF_VERSION := $(patsubst %_$(_LBPF_VER),%,$(filter %_$(_LBPF_VER), \
-+        $(join $(addsuffix _, $(_LBPFLIST)),$(_LBPFLIST2))))
+/* v1 */
+Link: https://lore.kernel.org/r/20190919095903.19370-4-christian.brauner@ubuntu.com
+- Christian Brauner <christian.brauner@ubuntu.com>:
+  - adapt to new flag name SECCOMP_USER_NOTIF_FLAG_CONTINUE
 
-It's bigger but avoids invocations of grep/sort/cut/head, only cat/printf
-, thus -V option also.
+/* v0 */
+Link: https://lore.kernel.org/r/20190918084833.9369-5-christian.brauner@ubuntu.com
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 107 ++++++++++++++++++
+ 1 file changed, 107 insertions(+)
 
->
->>  LIBBPF_MAJOR_VERSION := $(firstword $(subst ., ,$(LIBBPF_VERSION)))
->>
->>  MAKEFLAGS += --no-print-directory
->> --
->> 2.17.1
->>
-
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index e996d7b7fd6e..2519377ebda3 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -44,6 +44,7 @@
+ #include <sys/times.h>
+ #include <sys/socket.h>
+ #include <sys/ioctl.h>
++#include <linux/kcmp.h>
+ 
+ #include <unistd.h>
+ #include <sys/syscall.h>
+@@ -167,6 +168,10 @@ struct seccomp_metadata {
+ 
+ #define SECCOMP_RET_USER_NOTIF 0x7fc00000U
+ 
++#ifndef SECCOMP_USER_NOTIF_FLAG_CONTINUE
++#define SECCOMP_USER_NOTIF_FLAG_CONTINUE 0x00000001
++#endif
++
+ #define SECCOMP_IOC_MAGIC		'!'
+ #define SECCOMP_IO(nr)			_IO(SECCOMP_IOC_MAGIC, nr)
+ #define SECCOMP_IOR(nr, type)		_IOR(SECCOMP_IOC_MAGIC, nr, type)
+@@ -3481,6 +3486,108 @@ TEST(seccomp_get_notif_sizes)
+ 	EXPECT_EQ(sizes.seccomp_notif_resp, sizeof(struct seccomp_notif_resp));
+ }
+ 
++static int filecmp(pid_t pid1, pid_t pid2, int fd1, int fd2)
++{
++#ifdef __NR_kcmp
++	return syscall(__NR_kcmp, pid1, pid2, KCMP_FILE, fd1, fd2);
++#else
++	errno = ENOSYS;
++	return -1;
++#endif
++}
++
++TEST(user_notification_continue)
++{
++	pid_t pid;
++	long ret;
++	int status, listener;
++	struct seccomp_notif req = {};
++	struct seccomp_notif_resp resp = {};
++	struct pollfd pollfd;
++
++	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
++	}
++
++	listener = user_trap_syscall(__NR_dup, SECCOMP_FILTER_FLAG_NEW_LISTENER);
++	ASSERT_GE(listener, 0);
++
++	pid = fork();
++	ASSERT_GE(pid, 0);
++
++	if (pid == 0) {
++		int dup_fd, pipe_fds[2];
++		pid_t self;
++
++		ret = pipe(pipe_fds);
++		if (ret < 0)
++			exit(1);
++
++		dup_fd = dup(pipe_fds[0]);
++		if (dup_fd < 0)
++			exit(1);
++
++		self = getpid();
++
++		ret = filecmp(self, self, pipe_fds[0], dup_fd);
++		if (ret)
++			exit(2);
++
++		exit(0);
++	}
++
++	pollfd.fd = listener;
++	pollfd.events = POLLIN | POLLOUT;
++
++	EXPECT_GT(poll(&pollfd, 1, -1), 0);
++	EXPECT_EQ(pollfd.revents, POLLIN);
++
++	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req), 0);
++
++	pollfd.fd = listener;
++	pollfd.events = POLLIN | POLLOUT;
++
++	EXPECT_GT(poll(&pollfd, 1, -1), 0);
++	EXPECT_EQ(pollfd.revents, POLLOUT);
++
++	EXPECT_EQ(req.data.nr, __NR_dup);
++
++	resp.id = req.id;
++	resp.flags = SECCOMP_USER_NOTIF_FLAG_CONTINUE;
++
++	/*
++	 * Verify that setting SECCOMP_USER_NOTIF_FLAG_CONTINUE enforces other
++	 * args be set to 0.
++	 */
++	resp.error = 0;
++	resp.val = USER_NOTIF_MAGIC;
++	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_SEND, &resp), -1);
++	EXPECT_EQ(errno, EINVAL);
++
++	resp.error = USER_NOTIF_MAGIC;
++	resp.val = 0;
++	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_SEND, &resp), -1);
++	EXPECT_EQ(errno, EINVAL);
++
++	resp.error = 0;
++	resp.val = 0;
++	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_SEND, &resp), 0) {
++		if (errno == EINVAL)
++			XFAIL(goto skip, "Kernel does not support SECCOMP_USER_NOTIF_FLAG_CONTINUE");
++	}
++
++skip:
++	EXPECT_EQ(waitpid(pid, &status, 0), pid);
++	EXPECT_EQ(true, WIFEXITED(status));
++	EXPECT_EQ(0, WEXITSTATUS(status)) {
++		if (WEXITSTATUS(status) == 2) {
++			XFAIL(return, "Kernel does not support kcmp() syscall");
++			return;
++		}
++	}
++}
++
+ /*
+  * TODO:
+  * - add microbenchmarks
 -- 
-Regards,
-Ivan Khoronzhuk
+2.23.0
+
