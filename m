@@ -2,94 +2,116 @@ Return-Path: <SRS0=7D+q=XP=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AE1DC4CEC9
-	for <bpf@archiver.kernel.org>; Fri, 20 Sep 2019 08:31:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D03CC4CEC9
+	for <bpf@archiver.kernel.org>; Fri, 20 Sep 2019 08:48:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DCBAF207E0
-	for <bpf@archiver.kernel.org>; Fri, 20 Sep 2019 08:30:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4261E208C3
+	for <bpf@archiver.kernel.org>; Fri, 20 Sep 2019 08:48:09 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=tycho-ws.20150623.gappssmtp.com header.i=@tycho-ws.20150623.gappssmtp.com header.b="UdK7rtRd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408240AbfITIag (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Sep 2019 04:30:36 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:39513 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405437AbfITIag (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Sep 2019 04:30:36 -0400
-Received: from static-dcd-cqq-121001.business.bouyguestelecom.com ([212.194.121.1] helo=localhost.localdomain)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iBEJA-0007Va-Sa; Fri, 20 Sep 2019 08:30:28 +0000
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     keescook@chromium.org, luto@amacapital.net
-Cc:     jannh@google.com, wad@chromium.org, shuah@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, linux-kernel@vger.kernel.org,
+        id S2437848AbfITIsD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Sep 2019 04:48:03 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:46612 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437844AbfITIsD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Sep 2019 04:48:03 -0400
+Received: by mail-qt1-f195.google.com with SMTP id u22so7715264qtq.13
+        for <bpf@vger.kernel.org>; Fri, 20 Sep 2019 01:48:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tycho-ws.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=0ghb2ofoQaWYR79lBqsKSuBtiFPcVpCWcmnaiOOknyg=;
+        b=UdK7rtRdmjoms5ysOvQapgLVFBipggdRniC9S94pv9NhHQCFd2aVrGAdK2rzjD6akG
+         Yf8ycU1kg+M6bOXq0f15wgCxnNprnGI/gc2rCxE9KqAVVtlgfkVRbVFD6QWobsi8W263
+         efuNNhPLvEviZp+j+EWYx7ydei3p5mcg/VQI8ai1CGq2dhk2Of1jy0IjVWAnv4sT86t6
+         Xx3fZnHGhpYzgxN3rQwOYno/wCgehqisSaWqo6O/AmwyDQEcBVDPhMqHGxg4dRTNY3VF
+         3fQpH9Q+2KKsjirkPFVgsKrelftHn3GoWC1k+gT9vGTKk5NJGVmzWgg0mrO9kxhw4GFz
+         9j2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=0ghb2ofoQaWYR79lBqsKSuBtiFPcVpCWcmnaiOOknyg=;
+        b=I84rl4M17uEbR+kRPOZPMqfKFFXH2hjP6hCqGvrrp0UOIUdbPMEwloxfgdbfdz3UKD
+         Gjt506TyAIeMQkSs3Oa/IhgrD+Td96tv79B/nQEkKfJ2Vb2pYiAkF8cBEAwe1huTuTE9
+         jpJC7W7zhKVhYp++6BBD5UlNMObG3yNs8EYi9hhw12EGTJ2QqOHv4e0FiqEZYVPZUasc
+         7+MAxLcxCzGfvIIGHkMHO10p/NOBBaH6NotWRyZiqHQeiKexVD9ejFK/qNcUyMuPoqfo
+         t9jM3Q6Kw71GIwgMDHXA3qGn6rBbXrCGEWrM5r5pxeyEVpJXi5JUP0ebWjhtgDkKHzmZ
+         EdDw==
+X-Gm-Message-State: APjAAAU5AAacwocFlz/3FhuluJCU3hveZVIRuAZPpxpeImC2eX+gh9vV
+        p/Gi7dgifXI5za43tG9vqQrCJw==
+X-Google-Smtp-Source: APXvYqwOfEkZdd8pxj56VhHGXpmptTJLeojyZODLnOylGmjCMZvNA8CWEC3PiyQA78uxaUnCTZkJ1Q==
+X-Received: by 2002:a05:6214:1231:: with SMTP id p17mr12236189qvv.170.1568969280324;
+        Fri, 20 Sep 2019 01:48:00 -0700 (PDT)
+Received: from cisco ([192.241.255.151])
+        by smtp.gmail.com with ESMTPSA id z141sm693660qka.126.2019.09.20.01.47.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Sep 2019 01:47:59 -0700 (PDT)
+Date:   Fri, 20 Sep 2019 10:47:53 +0200
+From:   Tycho Andersen <tycho@tycho.ws>
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     keescook@chromium.org, luto@amacapital.net, jannh@google.com,
+        wad@chromium.org, shuah@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, kafai@fb.com, songliubraving@fb.com,
+        yhs@fb.com, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [PATCH v2 0/3] seccomp: continue syscall from notifier
-Date:   Fri, 20 Sep 2019 10:30:04 +0200
-Message-Id: <20190920083007.11475-1-christian.brauner@ubuntu.com>
-X-Mailer: git-send-email 2.23.0
+        bpf@vger.kernel.org, Tyler Hicks <tyhicks@canonical.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] seccomp: avoid overflow in implicit constant
+ conversion
+Message-ID: <20190920084753.GA16893@cisco>
+References: <20190920083007.11475-1-christian.brauner@ubuntu.com>
+ <20190920083007.11475-3-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190920083007.11475-3-christian.brauner@ubuntu.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hey everyone,
+On Fri, Sep 20, 2019 at 10:30:06AM +0200, Christian Brauner wrote:
+> USER_NOTIF_MAGIC is assigned to int variables in this test so set it to INT_MAX
+> to avoid warnings:
+> 
+> seccomp_bpf.c: In function ‘user_notification_continue’:
+> seccomp_bpf.c:3088:26: warning: overflow in implicit constant conversion [-Woverflow]
+>  #define USER_NOTIF_MAGIC 116983961184613L
+>                           ^
+> seccomp_bpf.c:3572:15: note: in expansion of macro ‘USER_NOTIF_MAGIC’
+>   resp.error = USER_NOTIF_MAGIC;
+>                ^~~~~~~~~~~~~~~~
+> 
+> Fixes: 6a21cc50f0c7 ("seccomp: add a return code to trap to userspace")
+> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+> Reviewed-by: Tyler Hicks <tyhicks@canonical.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Andy Lutomirski <luto@amacapital.net>
+> Cc: Will Drewry <wad@chromium.org>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Martin KaFai Lau <kafai@fb.com>
+> Cc: Song Liu <songliubraving@fb.com>
+> Cc: Yonghong Song <yhs@fb.com>
+> Cc: Tycho Andersen <tycho@tycho.ws>
 
-/* v2 */
-This is the patchset coming out of the KSummit session Kees and I gave
-in Lisbon last week (cf. [3] which also contains slides with more
-details on related things such as deep argument inspection).
-The simple idea is to extend the seccomp notifier to allow for the
-continuation of a syscall. The rationale for this can be found in the
-commit message to [1]. For the curious there is more detail in [2].
-This patchset would unblock supervising an extended set of syscalls such
-as mount() where a privileged process is supervising the syscalls of a
-lesser privileged process and emulates the syscall for the latter in
-userspace.
-For more comments on security see [1] and the comments in
-include/uapi/linux/seccomp.h added by this patchset.
+You can also add,
 
-Kees, if you prefer a pr the series can be pulled from:
-git@gitolite.kernel.org:pub/scm/linux/kernel/git/brauner/linux tags/seccomp-notify-syscall-continue-v5.5
+Reviewed-by: Tycho Andersen <tycho@tycho.ws>
 
-For anyone who wants to play with this it's sitting in:
-https://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git/log/?h=seccomp_syscall_continue
+for this one.
 
-/* v1 */
-Link: https://lore.kernel.org/r/20190919095903.19370-1-christian.brauner@ubuntu.com
-- Kees Cook <keescook@chromium.org>:
-  - dropped patch because it is already present in linux-next
-    [PATCH 2/4] seccomp: add two missing ptrace ifdefines
-    Link: https://lore.kernel.org/r/20190918084833.9369-3-christian.brauner@ubuntu.com
-
-/* v0 */
-Link: https://lore.kernel.org/r/20190918084833.9369-1-christian.brauner@ubuntu.com
-
-Thanks!
-Christian
-
-*** BLURB HERE ***
-
-Christian Brauner (3):
-  seccomp: add SECCOMP_USER_NOTIF_FLAG_CONTINUE
-  seccomp: avoid overflow in implicit constant conversion
-  seccomp: test SECCOMP_USER_NOTIF_FLAG_CONTINUE
-
- include/uapi/linux/seccomp.h                  |  28 +++++
- kernel/seccomp.c                              |  28 ++++-
- tools/testing/selftests/seccomp/seccomp_bpf.c | 110 +++++++++++++++++-
- 3 files changed, 159 insertions(+), 7 deletions(-)
-
--- 
-2.23.0
-
+Tycho
