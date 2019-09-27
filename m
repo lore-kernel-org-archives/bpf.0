@@ -2,125 +2,98 @@ Return-Path: <SRS0=uMm3=XW=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0401C47404
-	for <bpf@archiver.kernel.org>; Fri, 27 Sep 2019 17:20:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73D8BC4360C
+	for <bpf@archiver.kernel.org>; Fri, 27 Sep 2019 17:24:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C0F8321850
-	for <bpf@archiver.kernel.org>; Fri, 27 Sep 2019 17:20:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 45EAC207FF
+	for <bpf@archiver.kernel.org>; Fri, 27 Sep 2019 17:24:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="LkvK4hE6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CaBu1P+P"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728031AbfI0RUR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 27 Sep 2019 13:20:17 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:44994 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726251AbfI0RUQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 27 Sep 2019 13:20:16 -0400
-Received: by mail-lj1-f195.google.com with SMTP id m13so3218527ljj.11
-        for <bpf@vger.kernel.org>; Fri, 27 Sep 2019 10:20:14 -0700 (PDT)
+        id S1728000AbfI0RYw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 27 Sep 2019 13:24:52 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:34575 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726676AbfI0RYv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 27 Sep 2019 13:24:51 -0400
+Received: by mail-pf1-f196.google.com with SMTP id b128so1981900pfa.1;
+        Fri, 27 Sep 2019 10:24:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O/eekwhhc/lEaErl1cWQvuZyKqEyMda5rbusW6YMK7I=;
-        b=LkvK4hE626X9t4s92tPCDu4GVP+JW+rdiOHfvNh9N4jF4NJ9fWlvc7td1nIDU+CA3n
-         PEztECpiktmStFqQ0huvXxeFoYFnurGmt4lmEj4thS8is9bkVhtTwcYhaFJXZOE0CtAy
-         FW3A90ZFOAblRyxevEgwyKNwOoEO9RZOQsrxo=
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=AYzUoBpWOqTNHjVGTCJwOtqfLa5PIE8RsnPT73yDBlw=;
+        b=CaBu1P+Po6z15371YRSBimETL+pJ1eckaGXOYzqDZQYHiLZOWSSeHXMbwyrqp+lVBW
+         SCZLsP5TFyXwr6KwkK/H5CmRBho22sL2e2Rg5vllqLnOJyzIzmzGNdcC0oF/7J0MTQEm
+         jR0lY2Z/GPePvCdZFQuA7eiry+7CzMCshuANcopvSO028wCY/bibFruUE/tGmyGeEG6/
+         Dp7ZZN17OJfihKQ6NzIvyqaCF0/aid7e66OkiGhwFKnVXFIZ1BMPcmxCewNbSbyz36yq
+         G53qc2p4fnIvBJrlp6nXznThRTyA0g5FKjdqkpNbOw7x0/EQM1X4PQ3WOQcsjtPISxTp
+         KC0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O/eekwhhc/lEaErl1cWQvuZyKqEyMda5rbusW6YMK7I=;
-        b=fkedn+B8vuNhFUxH+pZ5kmKE/Q5PqN3aQ4Q7aDGJiAty17V3EL2WLpb07vNhLGyJJU
-         2C3krvYsABYuf6hQ3r9SvA5OTZ6AuCURaCdU4zJs/hueZN/NW+PLVmKSC0Su0VAo2dr2
-         rou91ghihkxJd3aFzrcpx2mUntxYdnRkScv1PREw7knzjVe7+wRGZaBY1a7cYB65+Umo
-         +lvLziKWbCThLNrNmI8Euobw4LvYBR2fq+taIpYCx4/ArpGypWBBFSRKRpAo2BVtV+ee
-         r0eYA882S06eNgpbbID4lfzCOOKK0qzYQKWYg8p6s5F3l7AO62+IHD4AT3BeJlV2eKjk
-         4p8w==
-X-Gm-Message-State: APjAAAWnNgRbeme4mNZA7Iyt52t9aIytEK1B6KBiXAw59M5ocI7S714b
-        cEbrCsttg47rsMn/+8QqQ+sfCEuwObFQDwcUrdvDAg==
-X-Google-Smtp-Source: APXvYqwQ0sJhbgkRNydnIi4RrSi/dFi7mwr/zU4s+w0Ydcubj32ElrELRy3PvgOlQ56qXz+SBC5iH82TlZ2DYY/65VY=
-X-Received: by 2002:a2e:5d17:: with SMTP id r23mr3716224ljb.229.1569604813845;
- Fri, 27 Sep 2019 10:20:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190822205533.4877-1-david.abdurachmanov@sifive.com>
- <alpine.DEB.2.21.9999.1908231717550.25649@viisi.sifive.com>
- <20190826145756.GB4664@cisco> <CAEn-LTrtn01=fp6taBBG_QkfBtgiJyt6oUjZJOi6VN8OeXp6=g@mail.gmail.com>
- <201908261043.08510F5E66@keescook> <alpine.DEB.2.21.9999.1908281825240.13811@viisi.sifive.com>
-In-Reply-To: <alpine.DEB.2.21.9999.1908281825240.13811@viisi.sifive.com>
-From:   Kees Cook <keescook@chromium.org>
-Date:   Fri, 27 Sep 2019 10:20:02 -0700
-Message-ID: <CAJr-aD=UnCN9E_mdVJ2H5nt=6juRSWikZnA5HxDLQxXLbsRz-w@mail.gmail.com>
-Subject: Re: [PATCH v2] riscv: add support for SECCOMP and SECCOMP_FILTER
-To:     Paul Walmsley <paul.walmsley@sifive.com>
-Cc:     Tycho Andersen <tycho@tycho.ws>,
-        David Abdurachmanov <david.abdurachmanov@gmail.com>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=AYzUoBpWOqTNHjVGTCJwOtqfLa5PIE8RsnPT73yDBlw=;
+        b=DxVRbmIr9/Q82ihgBdNoHTKXBXqIqrV8oKH1i2mPjSk7xMnNcbCAh2tHlgu5bIZQiR
+         Zny095YgWWIe/XbyTq4kTJM1hm4WDNy0ayCkAjjANJ4BFDoF8/nez5XcpSI0Uvxd7Gc3
+         3IzxnOyKhEhbe6KQpa/wGc7cnXoo1KBYaarJbyGlog8/JxfF1zhrCQM+3YT5S1nUI0ap
+         WrFVGtn8d7XnKMNSImiLyP0dgENcPDkfh7hrcs4Fhyegd31usUBbzb5UPR6t+E2DmXXd
+         cY2Xbp3UIQ3iADRP0poNl1g8o4OBCjJb0hCx73zN02EqtGZe17rIogL5Tcj/m6KDFE2j
+         uCFw==
+X-Gm-Message-State: APjAAAWPkKggAF5Zuklgf6XXvHSK2D7KGQiVx1NX1WxSCo9ZwWdHqV2X
+        4vU+4vwzkNLhILhBjKlTwzs=
+X-Google-Smtp-Source: APXvYqzjS/LgONkfor0jCAI55Z9ZcdGZp0hTMAs+WUttK8SqZ72R8Ga9P9GvK5z3Lsan4Ffw+MYpXg==
+X-Received: by 2002:a17:90a:e384:: with SMTP id b4mr11217071pjz.136.1569605091117;
+        Fri, 27 Sep 2019 10:24:51 -0700 (PDT)
+Received: from ?IPv6:2620:15c:2c1:200:55c7:81e6:c7d8:94b? ([2620:15c:2c1:200:55c7:81e6:c7d8:94b])
+        by smtp.gmail.com with ESMTPSA id e14sm5326009pjt.8.2019.09.27.10.24.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Sep 2019 10:24:50 -0700 (PDT)
+Subject: Re: [PATCH bpf] bpf: Fix a race in reuseport_array_free()
+To:     Martin KaFai Lau <kafai@fb.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        David Abdurachmanov <david.abdurachmanov@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Allison Randal <allison@lohutok.net>,
-        Alexios Zavras <alexios.zavras@intel.com>,
-        Anup Patel <Anup.Patel@wdc.com>,
-        Vincent Chen <vincentc@andestech.com>,
-        Alan Kao <alankao@andestech.com>,
-        linux-riscv@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, me@carlosedp.com
-Content-Type: text/plain; charset="UTF-8"
+        David Miller <davem@davemloft.net>, kernel-team@fb.com
+References: <20190927165221.2391541-1-kafai@fb.com>
+From:   Eric Dumazet <eric.dumazet@gmail.com>
+Message-ID: <04f683c6-ac49-05fb-6ec9-9f0d698657a2@gmail.com>
+Date:   Fri, 27 Sep 2019 10:24:49 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20190927165221.2391541-1-kafai@fb.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Aug 28, 2019 at 6:30 PM Paul Walmsley <paul.walmsley@sifive.com> wrote:
-> On Mon, 26 Aug 2019, Kees Cook wrote:
->
-> > On Mon, Aug 26, 2019 at 09:39:50AM -0700, David Abdurachmanov wrote:
-> > > I don't have the a build with SECCOMP for the board right now, so it
-> > > will have to wait. I just finished a new kernel (almost rc6) for Fedora,
-> >
-> > FWIW, I don't think this should block landing the code: all the tests
-> > fail without seccomp support. ;) So this patch is an improvement!
->
-> Am sympathetic to this -- we did it with the hugetlb patches for RISC-V --
-> but it would be good to understand a little bit more about why the test
-> fails before we merge it.
 
-The test is almost certainly failing due to the environmental
-requirements (i.e. namespaces, user ids, etc). There are some corner
-cases in there that we've had to fix in the past. If the other tests
-are passing, then I would expect all the seccomp internals are fine --
-it's just the case being weird. It's just a matter of figuring out
-what state the test environment is in so we can cover that corner case
-too.
 
-> Once we merge the patch, it will probably reduce the motivation for others
-> to either understand and fix the underlying problem with the RISC-V code
-> -- or, if it truly is a flaky test, to drop (or fix) the test in the
-> seccomp_bpf kselftests.
+On 9/27/19 9:52 AM, Martin KaFai Lau wrote:
+> In reuseport_array_free(), the rcu_read_lock() cannot ensure sk is still
+> valid.  It is because bpf_sk_reuseport_detach() can be called from
+> __sk_destruct() which is invoked through call_rcu(..., __sk_destruct).
 
-Sure, I get that point -- but I don't want to block seccomp landing
-for riscv for that. I suggested to David offlist that the test could
-just be marked with a FIXME XFAIL on riscv and once someone's in a
-better position to reproduce it we can fix it. (I think the test bug
-is almost certainly not riscv specific, but just some missing
-requirement that we aren't handling correctly.)
+We could question why reuseport_detach_sock(sk) is called from __sk_destruct()
+(after the rcu grace period) instead of sk_destruct() ?
 
-How does that sound?
+> 
+> This patch takes the reuseport_lock in reuseport_array_free() which
+> is not the fast path.  The lock is taken inside the loop in case
+> that the bpf map is big.
+> 
+> Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 
--Kees
+Fixes: 5dc4c4b7d4e8 ("bpf: Introduce BPF_MAP_TYPE_REUSEPORT_SOCKARRAY")
+
