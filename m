@@ -7,352 +7,290 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53B9DC32792
-	for <bpf@archiver.kernel.org>; Mon, 30 Sep 2019 20:48:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D43DAC32792
+	for <bpf@archiver.kernel.org>; Mon, 30 Sep 2019 20:51:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1233E224FE
-	for <bpf@archiver.kernel.org>; Mon, 30 Sep 2019 20:48:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 91E09224FE
+	for <bpf@archiver.kernel.org>; Mon, 30 Sep 2019 20:51:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="XR7sXK+k"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="MP3Cm56g"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726425AbfI3UsZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 30 Sep 2019 16:48:25 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:57316 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729964AbfI3UsZ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 30 Sep 2019 16:48:25 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x8UIqj4K010997
-        for <bpf@vger.kernel.org>; Mon, 30 Sep 2019 11:59:13 -0700
+        id S1729366AbfI3Uvk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 30 Sep 2019 16:51:40 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:30132 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729171AbfI3Uva (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 30 Sep 2019 16:51:30 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x8UIZCk9023252
+        for <bpf@vger.kernel.org>; Mon, 30 Sep 2019 11:35:14 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=V3uKBxX/9xjFlzIMPHfEWG3rVlQjygSEOVyjNKB3Eeg=;
- b=XR7sXK+kwlM3wKzeG4+vVdhgVctOObO37Sg/HYzzy2yqvidUPbQhGVcUVwTx8g5RaIJ5
- 8wYV2ZC7IKxgrj8o8rPCESoSKqjiEO8McdQZlaYAZ2VzamoDYx7gDWwUP+s7rjLLTxUj
- 6xpp0TY080Pjukf11YUnpED83D8GZoEN60E= 
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=rNiyO+7h9FlkmiKJo9+ZcI3VdSYSN299VszRbuuyIcY=;
+ b=MP3Cm56gQMWPg+tFBrnoIWU8IsgbJljVlueHQobF1CKPlWppwCR4CkSypz6c75rfrCOJ
+ NtWx/d1vb0N0CtlWyVlq36VpcH7zHIo4sAuhb2CZPbmH0KTX0r84Tr2nBvzHfF3EpmFI
+ eOKQmanMxeFGgBJpji9iMfCaKMa/eNp6K90= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2vaq9pey33-5
+        by mx0a-00082601.pphosted.com with ESMTP id 2vb66durf6-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 30 Sep 2019 11:59:13 -0700
+        for <bpf@vger.kernel.org>; Mon, 30 Sep 2019 11:35:14 -0700
 Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Mon, 30 Sep 2019 11:59:11 -0700
-Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 00D9986185A; Mon, 30 Sep 2019 11:59:10 -0700 (PDT)
-Smtp-Origin-Hostprefix: dev
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: dev101.prn2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+ 15.1.1713.5; Mon, 30 Sep 2019 11:34:31 -0700
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id 7489037014E8; Mon, 30 Sep 2019 11:34:29 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Yonghong Song <yhs@fb.com>
+Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        Kevin Laatz <kevin.laatz@intel.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
         Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH bpf-next 5/6] selftests/bpf: adjust CO-RE reloc tests for new BPF_CORE_READ macro
-Date:   Mon, 30 Sep 2019 11:58:54 -0700
-Message-ID: <20190930185855.4115372-6-andriin@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf v4] libbpf: handle symbol versioning properly for libbpf.a
+Date:   Mon, 30 Sep 2019 11:34:29 -0700
+Message-ID: <20190930183429.2544258-1-yhs@fb.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190930185855.4115372-1-andriin@fb.com>
-References: <20190930185855.4115372-1-andriin@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
  definitions=2019-09-30_11:2019-09-30,2019-09-30 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- lowpriorityscore=0 phishscore=0 suspectscore=67 spamscore=0
- priorityscore=1501 bulkscore=0 clxscore=1015 adultscore=0 mlxscore=0
- malwarescore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1908290000 definitions=main-1909300167
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ suspectscore=0 clxscore=1015 lowpriorityscore=0 bulkscore=0 adultscore=0
+ priorityscore=1501 phishscore=0 mlxlogscore=999 mlxscore=0 impostorscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1909300165
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Given introduction of variadic BPF_CORE_READ with slightly different
-syntax and semantics, define CORE_READ, which is a thin wrapper around
-low-level bpf_core_read() macro, which in turn is just a wrapper around
-bpf_probe_read(). BPF_CORE_READ is higher-level variadic macro
-supporting multi-pointer reads and are tested separately.
+bcc uses libbpf repo as a submodule. It brings in libbpf source
+code and builds everything together to produce shared libraries.
+With latest libbpf, I got the following errors:
+  /bin/ld: libbcc_bpf.so.0.10.0: version node not found for symbol xsk_umem__create@LIBBPF_0.0.2
+  /bin/ld: failed to set dynamic section sizes: Bad value
+  collect2: error: ld returned 1 exit status
+  make[2]: *** [src/cc/libbcc_bpf.so.0.10.0] Error 1
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+In xsk.c, we have
+  asm(".symver xsk_umem__create_v0_0_2, xsk_umem__create@LIBBPF_0.0.2");
+  asm(".symver xsk_umem__create_v0_0_4, xsk_umem__create@@LIBBPF_0.0.4");
+The linker thinks the built is for LIBBPF but cannot find proper version
+LIBBPF_0.0.2/4, so emit errors.
+
+I also confirmed that using libbpf.a to produce a shared library also
+has issues:
+  -bash-4.4$ cat t.c
+  extern void *xsk_umem__create;
+  void * test() { return xsk_umem__create; }
+  -bash-4.4$ gcc -c -fPIC t.c
+  -bash-4.4$ gcc -shared t.o libbpf.a -o t.so
+  /bin/ld: t.so: version node not found for symbol xsk_umem__create@LIBBPF_0.0.2
+  /bin/ld: failed to set dynamic section sizes: Bad value
+  collect2: error: ld returned 1 exit status
+  -bash-4.4$
+
+Symbol versioning does happens in commonly used libraries, e.g., elfutils
+and glibc. For static libraries, for a versioned symbol, the old definitions
+will be ignored, and the symbol will be an alias to the latest definition.
+For example, glibc sched_setaffinity is versioned.
+  -bash-4.4$ readelf -s /usr/lib64/libc.so.6 | grep sched_setaffinity
+     756: 000000000013d3d0    13 FUNC    GLOBAL DEFAULT   13 sched_setaffinity@GLIBC_2.3.3
+     757: 00000000000e2e70   455 FUNC    GLOBAL DEFAULT   13 sched_setaffinity@@GLIBC_2.3.4
+    1800: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS sched_setaffinity.c
+    4228: 00000000000e2e70   455 FUNC    LOCAL  DEFAULT   13 __sched_setaffinity_new
+    4648: 000000000013d3d0    13 FUNC    LOCAL  DEFAULT   13 __sched_setaffinity_old
+    7338: 000000000013d3d0    13 FUNC    GLOBAL DEFAULT   13 sched_setaffinity@GLIBC_2
+    7380: 00000000000e2e70   455 FUNC    GLOBAL DEFAULT   13 sched_setaffinity@@GLIBC_
+  -bash-4.4$
+For static library, the definition of sched_setaffinity aliases to the new definition.
+  -bash-4.4$ readelf -s /usr/lib64/libc.a | grep sched_setaffinity
+  File: /usr/lib64/libc.a(sched_setaffinity.o)
+     8: 0000000000000000   455 FUNC    GLOBAL DEFAULT    1 __sched_setaffinity_new
+    12: 0000000000000000   455 FUNC    WEAK   DEFAULT    1 sched_setaffinity
+
+For both elfutils and glibc, additional macros are used to control different handling
+of symbol versioning w.r.t static and shared libraries.
+For elfutils, the macro is SYMBOL_VERSIONING
+(https://sourceware.org/git/?p=elfutils.git;a=blob;f=lib/eu-config.h).
+For glibc, the macro is SHARED
+(https://sourceware.org/git/?p=glibc.git;a=blob;f=include/shlib-compat.h;hb=refs/heads/master)
+
+This patch used SHARED as the macro name. After this patch, the libbpf.a has
+  -bash-4.4$ readelf -s libbpf.a | grep xsk_umem__create
+     372: 0000000000017145  1190 FUNC    GLOBAL DEFAULT    1 xsk_umem__create_v0_0_4
+     405: 0000000000017145  1190 FUNC    WEAK   DEFAULT    1 xsk_umem__create
+     499: 00000000000175eb   103 FUNC    GLOBAL DEFAULT    1 xsk_umem__create_v0_0_2
+  -bash-4.4$
+No versioned symbols for xsk_umem__create.
+The libbpf.a can be used to build a shared library succesfully.
+  -bash-4.4$ cat t.c
+  extern void *xsk_umem__create;
+  void * test() { return xsk_umem__create; }
+  -bash-4.4$ gcc -c -fPIC t.c
+  -bash-4.4$ gcc -shared t.o libbpf.a -o t.so
+  -bash-4.4$
+
+Fixes: 10d30e301732 ("libbpf: add flags to umem config")
+Cc: Kevin Laatz <kevin.laatz@intel.com>
+Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+Cc: Andrii Nakryiko <andriin@fb.com>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- .../bpf/progs/test_core_reloc_arrays.c         | 10 ++++++----
- .../bpf/progs/test_core_reloc_flavors.c        |  8 +++++---
- .../selftests/bpf/progs/test_core_reloc_ints.c | 18 ++++++++++--------
- .../bpf/progs/test_core_reloc_kernel.c         |  6 ++++--
- .../selftests/bpf/progs/test_core_reloc_misc.c |  8 +++++---
- .../selftests/bpf/progs/test_core_reloc_mods.c | 18 ++++++++++--------
- .../bpf/progs/test_core_reloc_nesting.c        |  6 ++++--
- .../bpf/progs/test_core_reloc_primitives.c     | 12 +++++++-----
- .../bpf/progs/test_core_reloc_ptr_as_arr.c     |  4 +++-
- 9 files changed, 54 insertions(+), 36 deletions(-)
+ tools/lib/bpf/Makefile          | 27 ++++++++++++++++++---------
+ tools/lib/bpf/libbpf_internal.h | 16 ++++++++++++++++
+ tools/lib/bpf/xsk.c             |  4 ++--
+ 3 files changed, 36 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_arrays.c b/tools/testing/selftests/bpf/progs/test_core_reloc_arrays.c
-index bf67f0fdf743..58efe4944594 100644
---- a/tools/testing/selftests/bpf/progs/test_core_reloc_arrays.c
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_arrays.c
-@@ -31,6 +31,8 @@ struct core_reloc_arrays {
- 	struct core_reloc_arrays_substruct d[1][2];
- };
+ChangeLog:
+  v3 -> v4:
+     - Raname macros {OLD|NEW}_VERSION to {COMPAT|DEFAULT}_VERSION
+       (Alexei).
+  v2 -> v3:
+     - Rename macro name from SYMBOL_VERSIONING to SHARED,
+       plus some other minor changes (Andrii).
+  v1 -> v2:
+     - Simple hacking to remove versioning for static library, which
+       does not work if the versioned symbol is referenced,
+     to a proper implementation.
+
+diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+index 20772663d3e1..56ce6292071b 100644
+--- a/tools/lib/bpf/Makefile
++++ b/tools/lib/bpf/Makefile
+@@ -114,6 +114,9 @@ override CFLAGS += $(INCLUDES)
+ override CFLAGS += -fvisibility=hidden
+ override CFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
  
-+#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*dst), src)
++# flags specific for shared library
++SHLIB_FLAGS := -DSHARED
 +
- SEC("raw_tracepoint/sys_enter")
- int test_core_arrays(void *ctx)
- {
-@@ -38,16 +40,16 @@ int test_core_arrays(void *ctx)
- 	struct core_reloc_arrays_output *out = (void *)&data.out;
+ ifeq ($(VERBOSE),1)
+   Q =
+ else
+@@ -130,14 +133,17 @@ all:
+ export srctree OUTPUT CC LD CFLAGS V
+ include $(srctree)/tools/build/Makefile.include
  
- 	/* in->a[2] */
--	if (BPF_CORE_READ(&out->a2, &in->a[2]))
-+	if (CORE_READ(&out->a2, &in->a[2]))
- 		return 1;
- 	/* in->b[1][2][3] */
--	if (BPF_CORE_READ(&out->b123, &in->b[1][2][3]))
-+	if (CORE_READ(&out->b123, &in->b[1][2][3]))
- 		return 1;
- 	/* in->c[1].c */
--	if (BPF_CORE_READ(&out->c1c, &in->c[1].c))
-+	if (CORE_READ(&out->c1c, &in->c[1].c))
- 		return 1;
- 	/* in->d[0][0].d */
--	if (BPF_CORE_READ(&out->d00d, &in->d[0][0].d))
-+	if (CORE_READ(&out->d00d, &in->d[0][0].d))
- 		return 1;
+-BPF_IN		:= $(OUTPUT)libbpf-in.o
++SHARED_OBJDIR	:= $(OUTPUT)sharedobjs/
++STATIC_OBJDIR	:= $(OUTPUT)staticobjs/
++BPF_IN_SHARED	:= $(SHARED_OBJDIR)libbpf-in.o
++BPF_IN_STATIC	:= $(STATIC_OBJDIR)libbpf-in.o
+ VERSION_SCRIPT	:= libbpf.map
  
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_flavors.c b/tools/testing/selftests/bpf/progs/test_core_reloc_flavors.c
-index 9fda73e87972..3348acc7e50b 100644
---- a/tools/testing/selftests/bpf/progs/test_core_reloc_flavors.c
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_flavors.c
-@@ -39,6 +39,8 @@ struct core_reloc_flavors___weird {
- 	};
- };
+ LIB_TARGET	:= $(addprefix $(OUTPUT),$(LIB_TARGET))
+ LIB_FILE	:= $(addprefix $(OUTPUT),$(LIB_FILE))
+ PC_FILE		:= $(addprefix $(OUTPUT),$(PC_FILE))
  
-+#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*dst), src)
+-GLOBAL_SYM_COUNT = $(shell readelf -s --wide $(BPF_IN) | \
++GLOBAL_SYM_COUNT = $(shell readelf -s --wide $(BPF_IN_SHARED) | \
+ 			   cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' | \
+ 			   awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$8}' | \
+ 			   sort -u | wc -l)
+@@ -159,7 +165,7 @@ all: fixdep
+ 
+ all_cmd: $(CMD_TARGETS) check
+ 
+-$(BPF_IN): force elfdep bpfdep
++$(BPF_IN_SHARED): force elfdep bpfdep
+ 	@(test -f ../../include/uapi/linux/bpf.h -a -f ../../../include/uapi/linux/bpf.h && ( \
+ 	(diff -B ../../include/uapi/linux/bpf.h ../../../include/uapi/linux/bpf.h >/dev/null) || \
+ 	echo "Warning: Kernel ABI header at 'tools/include/uapi/linux/bpf.h' differs from latest version at 'include/uapi/linux/bpf.h'" >&2 )) || true
+@@ -175,17 +181,20 @@ $(BPF_IN): force elfdep bpfdep
+ 	@(test -f ../../include/uapi/linux/if_xdp.h -a -f ../../../include/uapi/linux/if_xdp.h && ( \
+ 	(diff -B ../../include/uapi/linux/if_xdp.h ../../../include/uapi/linux/if_xdp.h >/dev/null) || \
+ 	echo "Warning: Kernel ABI header at 'tools/include/uapi/linux/if_xdp.h' differs from latest version at 'include/uapi/linux/if_xdp.h'" >&2 )) || true
+-	$(Q)$(MAKE) $(build)=libbpf
++	$(Q)$(MAKE) $(build)=libbpf OUTPUT=$(SHARED_OBJDIR) CFLAGS="$(CFLAGS) $(SHLIB_FLAGS)"
 +
- SEC("raw_tracepoint/sys_enter")
- int test_core_flavors(void *ctx)
- {
-@@ -48,13 +50,13 @@ int test_core_flavors(void *ctx)
- 	struct core_reloc_flavors *out = (void *)&data.out;
++$(BPF_IN_STATIC): force elfdep bpfdep
++	$(Q)$(MAKE) $(build)=libbpf OUTPUT=$(STATIC_OBJDIR)
  
- 	/* read a using weird layout */
--	if (BPF_CORE_READ(&out->a, &in_weird->a))
-+	if (CORE_READ(&out->a, &in_weird->a))
- 		return 1;
- 	/* read b using reversed layout */
--	if (BPF_CORE_READ(&out->b, &in_rev->b))
-+	if (CORE_READ(&out->b, &in_rev->b))
- 		return 1;
- 	/* read c using original layout */
--	if (BPF_CORE_READ(&out->c, &in_orig->c))
-+	if (CORE_READ(&out->c, &in_orig->c))
- 		return 1;
+ $(OUTPUT)libbpf.so: $(OUTPUT)libbpf.so.$(LIBBPF_VERSION)
  
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_ints.c b/tools/testing/selftests/bpf/progs/test_core_reloc_ints.c
-index d99233c8008a..cfe16ede48dd 100644
---- a/tools/testing/selftests/bpf/progs/test_core_reloc_ints.c
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_ints.c
-@@ -23,20 +23,22 @@ struct core_reloc_ints {
- 	int64_t		s64_field;
- };
+-$(OUTPUT)libbpf.so.$(LIBBPF_VERSION): $(BPF_IN)
++$(OUTPUT)libbpf.so.$(LIBBPF_VERSION): $(BPF_IN_SHARED)
+ 	$(QUIET_LINK)$(CC) --shared -Wl,-soname,libbpf.so.$(LIBBPF_MAJOR_VERSION) \
+ 				    -Wl,--version-script=$(VERSION_SCRIPT) $^ -lelf -o $@
+ 	@ln -sf $(@F) $(OUTPUT)libbpf.so
+ 	@ln -sf $(@F) $(OUTPUT)libbpf.so.$(LIBBPF_MAJOR_VERSION)
  
-+#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*dst), src)
+-$(OUTPUT)libbpf.a: $(BPF_IN)
++$(OUTPUT)libbpf.a: $(BPF_IN_STATIC)
+ 	$(QUIET_LINK)$(RM) $@; $(AR) rcs $@ $^
+ 
+ $(OUTPUT)test_libbpf: test_libbpf.cpp $(OUTPUT)libbpf.a
+@@ -201,7 +210,7 @@ check: check_abi
+ 
+ check_abi: $(OUTPUT)libbpf.so
+ 	@if [ "$(GLOBAL_SYM_COUNT)" != "$(VERSIONED_SYM_COUNT)" ]; then	 \
+-		echo "Warning: Num of global symbols in $(BPF_IN)"	 \
++		echo "Warning: Num of global symbols in $(BPF_IN_SHARED)"	 \
+ 		     "($(GLOBAL_SYM_COUNT)) does NOT match with num of"	 \
+ 		     "versioned symbols in $^ ($(VERSIONED_SYM_COUNT))." \
+ 		     "Please make sure all LIBBPF_API symbols are"	 \
+@@ -259,9 +268,9 @@ config-clean:
+ 	$(Q)$(MAKE) -C $(srctree)/tools/build/feature/ clean >/dev/null
+ 
+ clean:
+-	$(call QUIET_CLEAN, libbpf) $(RM) $(TARGETS) $(CXX_TEST_TARGET) \
++	$(call QUIET_CLEAN, libbpf) $(RM) -rf $(TARGETS) $(CXX_TEST_TARGET) \
+ 		*.o *~ *.a *.so *.so.$(LIBBPF_MAJOR_VERSION) .*.d .*.cmd \
+-		*.pc LIBBPF-CFLAGS
++		*.pc LIBBPF-CFLAGS $(SHARED_OBJDIR) $(STATIC_OBJDIR)
+ 	$(call QUIET_CLEAN, core-gen) $(RM) $(OUTPUT)FEATURE-DUMP.libbpf
+ 
+ 
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index 2e83a34f8c79..f71a35875fb0 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -34,6 +34,22 @@
+ 	(offsetof(TYPE, FIELD) + sizeof(((TYPE *)0)->FIELD))
+ #endif
+ 
++/* Symbol versioning is different between static and shared library.
++ * Properly versioned symbols are needed for shared library, but
++ * only the symbol of the new version is needed for static library.
++ */
++#ifdef SHARED
++# define COMPAT_VERSION(internal_name, api_name, version) \
++	asm(".symver " #internal_name "," #api_name "@" #version);
++# define DEFAULT_VERSION(internal_name, api_name, version) \
++	asm(".symver " #internal_name "," #api_name "@@" #version);
++#else
++# define COMPAT_VERSION(internal_name, api_name, version)
++# define DEFAULT_VERSION(internal_name, api_name, version) \
++	extern typeof(internal_name) api_name \
++	__attribute__((weak, alias (#internal_name)));
++#endif
 +
- SEC("raw_tracepoint/sys_enter")
- int test_core_ints(void *ctx)
+ extern void libbpf_print(enum libbpf_print_level level,
+ 			 const char *format, ...)
+ 	__attribute__((format(printf, 2, 3)));
+diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+index 24fa313524fb..a902838f9fcc 100644
+--- a/tools/lib/bpf/xsk.c
++++ b/tools/lib/bpf/xsk.c
+@@ -261,8 +261,8 @@ int xsk_umem__create_v0_0_2(struct xsk_umem **umem_ptr, void *umem_area,
+ 	return xsk_umem__create_v0_0_4(umem_ptr, umem_area, size, fill, comp,
+ 					&config);
+ }
+-asm(".symver xsk_umem__create_v0_0_2, xsk_umem__create@LIBBPF_0.0.2");
+-asm(".symver xsk_umem__create_v0_0_4, xsk_umem__create@@LIBBPF_0.0.4");
++COMPAT_VERSION(xsk_umem__create_v0_0_2, xsk_umem__create, LIBBPF_0.0.2)
++DEFAULT_VERSION(xsk_umem__create_v0_0_4, xsk_umem__create, LIBBPF_0.0.4)
+ 
+ static int xsk_load_xdp_prog(struct xsk_socket *xsk)
  {
- 	struct core_reloc_ints *in = (void *)&data.in;
- 	struct core_reloc_ints *out = (void *)&data.out;
- 
--	if (BPF_CORE_READ(&out->u8_field, &in->u8_field) ||
--	    BPF_CORE_READ(&out->s8_field, &in->s8_field) ||
--	    BPF_CORE_READ(&out->u16_field, &in->u16_field) ||
--	    BPF_CORE_READ(&out->s16_field, &in->s16_field) ||
--	    BPF_CORE_READ(&out->u32_field, &in->u32_field) ||
--	    BPF_CORE_READ(&out->s32_field, &in->s32_field) ||
--	    BPF_CORE_READ(&out->u64_field, &in->u64_field) ||
--	    BPF_CORE_READ(&out->s64_field, &in->s64_field))
-+	if (CORE_READ(&out->u8_field, &in->u8_field) ||
-+	    CORE_READ(&out->s8_field, &in->s8_field) ||
-+	    CORE_READ(&out->u16_field, &in->u16_field) ||
-+	    CORE_READ(&out->s16_field, &in->s16_field) ||
-+	    CORE_READ(&out->u32_field, &in->u32_field) ||
-+	    CORE_READ(&out->s32_field, &in->s32_field) ||
-+	    CORE_READ(&out->u64_field, &in->u64_field) ||
-+	    CORE_READ(&out->s64_field, &in->s64_field))
- 		return 1;
- 
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c b/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
-index 37e02aa3f0c8..e5308026cfda 100644
---- a/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
-@@ -17,6 +17,8 @@ struct task_struct {
- 	int tgid;
- };
- 
-+#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*dst), src)
-+
- SEC("raw_tracepoint/sys_enter")
- int test_core_kernel(void *ctx)
- {
-@@ -24,8 +26,8 @@ int test_core_kernel(void *ctx)
- 	uint64_t pid_tgid = bpf_get_current_pid_tgid();
- 	int pid, tgid;
- 
--	if (BPF_CORE_READ(&pid, &task->pid) ||
--	    BPF_CORE_READ(&tgid, &task->tgid))
-+	if (CORE_READ(&pid, &task->pid) ||
-+	    CORE_READ(&tgid, &task->tgid))
- 		return 1;
- 
- 	/* validate pid + tgid matches */
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_misc.c b/tools/testing/selftests/bpf/progs/test_core_reloc_misc.c
-index c59984bd3e23..40c4638ab5cc 100644
---- a/tools/testing/selftests/bpf/progs/test_core_reloc_misc.c
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_misc.c
-@@ -32,6 +32,8 @@ struct core_reloc_misc_extensible {
- 	int b;
- };
- 
-+#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*dst), src)
-+
- SEC("raw_tracepoint/sys_enter")
- int test_core_misc(void *ctx)
- {
-@@ -41,15 +43,15 @@ int test_core_misc(void *ctx)
- 	struct core_reloc_misc_output *out = (void *)&data.out;
- 
- 	/* record two different relocations with the same accessor string */
--	if (BPF_CORE_READ(&out->a, &in_a->a1) ||	/* accessor: 0:0 */
--	    BPF_CORE_READ(&out->b, &in_b->b1))		/* accessor: 0:0 */
-+	if (CORE_READ(&out->a, &in_a->a1) ||		/* accessor: 0:0 */
-+	    CORE_READ(&out->b, &in_b->b1))		/* accessor: 0:0 */
- 		return 1;
- 
- 	/* Validate relocations capture array-only accesses for structs with
- 	 * fixed header, but with potentially extendable tail. This will read
- 	 * first 4 bytes of 2nd element of in_ext array of potentially
- 	 * variably sized struct core_reloc_misc_extensible. */ 
--	if (BPF_CORE_READ(&out->c, &in_ext[2]))		/* accessor: 2 */
-+	if (CORE_READ(&out->c, &in_ext[2]))		/* accessor: 2 */
- 		return 1;
- 
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_mods.c b/tools/testing/selftests/bpf/progs/test_core_reloc_mods.c
-index f98b942c062b..99fc9ee21895 100644
---- a/tools/testing/selftests/bpf/progs/test_core_reloc_mods.c
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_mods.c
-@@ -41,20 +41,22 @@ struct core_reloc_mods {
- 	core_reloc_mods_substruct_t h;
- };
- 
-+#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*dst), src)
-+
- SEC("raw_tracepoint/sys_enter")
- int test_core_mods(void *ctx)
- {
- 	struct core_reloc_mods *in = (void *)&data.in;
- 	struct core_reloc_mods_output *out = (void *)&data.out;
- 
--	if (BPF_CORE_READ(&out->a, &in->a) ||
--	    BPF_CORE_READ(&out->b, &in->b) ||
--	    BPF_CORE_READ(&out->c, &in->c) ||
--	    BPF_CORE_READ(&out->d, &in->d) ||
--	    BPF_CORE_READ(&out->e, &in->e[2]) ||
--	    BPF_CORE_READ(&out->f, &in->f[1]) ||
--	    BPF_CORE_READ(&out->g, &in->g.x) ||
--	    BPF_CORE_READ(&out->h, &in->h.y))
-+	if (CORE_READ(&out->a, &in->a) ||
-+	    CORE_READ(&out->b, &in->b) ||
-+	    CORE_READ(&out->c, &in->c) ||
-+	    CORE_READ(&out->d, &in->d) ||
-+	    CORE_READ(&out->e, &in->e[2]) ||
-+	    CORE_READ(&out->f, &in->f[1]) ||
-+	    CORE_READ(&out->g, &in->g.x) ||
-+	    CORE_READ(&out->h, &in->h.y))
- 		return 1;
- 
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_nesting.c b/tools/testing/selftests/bpf/progs/test_core_reloc_nesting.c
-index 3ca30cec2b39..c84fff3bdd72 100644
---- a/tools/testing/selftests/bpf/progs/test_core_reloc_nesting.c
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_nesting.c
-@@ -30,15 +30,17 @@ struct core_reloc_nesting {
- 	} b;
- };
- 
-+#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*dst), src)
-+
- SEC("raw_tracepoint/sys_enter")
- int test_core_nesting(void *ctx)
- {
- 	struct core_reloc_nesting *in = (void *)&data.in;
- 	struct core_reloc_nesting *out = (void *)&data.out;
- 
--	if (BPF_CORE_READ(&out->a.a.a, &in->a.a.a))
-+	if (CORE_READ(&out->a.a.a, &in->a.a.a))
- 		return 1;
--	if (BPF_CORE_READ(&out->b.b.b, &in->b.b.b))
-+	if (CORE_READ(&out->b.b.b, &in->b.b.b))
- 		return 1;
- 
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_primitives.c b/tools/testing/selftests/bpf/progs/test_core_reloc_primitives.c
-index add52f23ab35..4038e9907162 100644
---- a/tools/testing/selftests/bpf/progs/test_core_reloc_primitives.c
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_primitives.c
-@@ -25,17 +25,19 @@ struct core_reloc_primitives {
- 	int (*f)(const char *);
- };
- 
-+#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*dst), src)
-+
- SEC("raw_tracepoint/sys_enter")
- int test_core_primitives(void *ctx)
- {
- 	struct core_reloc_primitives *in = (void *)&data.in;
- 	struct core_reloc_primitives *out = (void *)&data.out;
- 
--	if (BPF_CORE_READ(&out->a, &in->a) ||
--	    BPF_CORE_READ(&out->b, &in->b) ||
--	    BPF_CORE_READ(&out->c, &in->c) ||
--	    BPF_CORE_READ(&out->d, &in->d) ||
--	    BPF_CORE_READ(&out->f, &in->f))
-+	if (CORE_READ(&out->a, &in->a) ||
-+	    CORE_READ(&out->b, &in->b) ||
-+	    CORE_READ(&out->c, &in->c) ||
-+	    CORE_READ(&out->d, &in->d) ||
-+	    CORE_READ(&out->f, &in->f))
- 		return 1;
- 
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_ptr_as_arr.c b/tools/testing/selftests/bpf/progs/test_core_reloc_ptr_as_arr.c
-index 526b7ddc7ea1..414d44620258 100644
---- a/tools/testing/selftests/bpf/progs/test_core_reloc_ptr_as_arr.c
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_ptr_as_arr.c
-@@ -16,13 +16,15 @@ struct core_reloc_ptr_as_arr {
- 	int a;
- };
- 
-+#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*dst), src)
-+
- SEC("raw_tracepoint/sys_enter")
- int test_core_ptr_as_arr(void *ctx)
- {
- 	struct core_reloc_ptr_as_arr *in = (void *)&data.in;
- 	struct core_reloc_ptr_as_arr *out = (void *)&data.out;
- 
--	if (BPF_CORE_READ(&out->a, &in[2].a))
-+	if (CORE_READ(&out->a, &in[2].a))
- 		return 1;
- 
- 	return 0;
 -- 
 2.17.1
 
