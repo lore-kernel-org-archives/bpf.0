@@ -2,220 +2,282 @@ Return-Path: <SRS0=vQPo=XZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.6 required=3.0 tests=DATE_IN_FUTURE_06_12,
-	DKIM_INVALID,DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_SBL,URIBL_SBL_A,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18A6BC32792
-	for <bpf@archiver.kernel.org>; Mon, 30 Sep 2019 16:41:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B86CC32792
+	for <bpf@archiver.kernel.org>; Mon, 30 Sep 2019 16:43:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D4F4C216F4
-	for <bpf@archiver.kernel.org>; Mon, 30 Sep 2019 16:41:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4390C215EA
+	for <bpf@archiver.kernel.org>; Mon, 30 Sep 2019 16:43:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="yJ56Zet3"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="nL/3T2yv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732166AbfI3Qlc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 30 Sep 2019 12:41:32 -0400
-Received: from gateway22.websitewelcome.com ([192.185.47.168]:40566 "EHLO
-        gateway22.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731976AbfI3Qlc (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 30 Sep 2019 12:41:32 -0400
-X-Greylist: delayed 1320 seconds by postgrey-1.27 at vger.kernel.org; Mon, 30 Sep 2019 12:41:31 EDT
-Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
-        by gateway22.websitewelcome.com (Postfix) with ESMTP id 4099B20F861
-        for <bpf@vger.kernel.org>; Mon, 30 Sep 2019 11:19:31 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id EyOZi0zKjVUVYEyOZioLTR; Mon, 30 Sep 2019 11:19:31 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=MfJZMISa5OTKdNXPHLsCROtCu6VTNYBXkGGuJIbv5t4=; b=yJ56Zet3XSJosWaXnnkVFp8of5
-        Emg89LTRpZY9FX1zwhbSRz7Y4hf7Y3KFMNi/Yi72U975/rN+VyKhsRnh5+55fvTGVJZH9Owg7yPSm
-        Sxn/yvHV653uc3q2RkprHX2xfLl+2wNY0PKe2K80bzPKtBTHQQQylvHaKEvTWo+d1hGijucxR09xF
-        MV6E5OVB6r031JXe8cnnUL8IshjqiRgEOUn81T1RvVeRxx7ERdzfGZw927rFSQN2F1jPRuaQTk4ge
-        US9KRZSQNAoV9160efk5Zkh3uWpUwvMK9kJ9LJyHRczv8hG6YXrlJNfvxatvmGHCCo5853kUrbXFK
-        9vEpo7rA==;
-Received: from [38.98.37.138] (port=62616 helo=[192.168.43.131])
-        by gator4166.hostgator.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1iEyOX-0027A7-Df; Mon, 30 Sep 2019 11:19:30 -0500
-Subject: Re: [PATCH v2] bpf: use flexible array members, not zero-length
-To:     Stephen Kitt <steve@sk2.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
-Cc:     linux-doc@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <F15E974F-4B7F-4819-B640-682A0A3A47C5@fb.com>
- <20190930073858.7639-1-steve@sk2.org>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=gustavo@embeddedor.com; keydata=
- mQINBFssHAwBEADIy3ZoPq3z5UpsUknd2v+IQud4TMJnJLTeXgTf4biSDSrXn73JQgsISBwG
- 2Pm4wnOyEgYUyJd5tRWcIbsURAgei918mck3tugT7AQiTUN3/5aAzqe/4ApDUC+uWNkpNnSV
- tjOx1hBpla0ifywy4bvFobwSh5/I3qohxDx+c1obd8Bp/B/iaOtnq0inli/8rlvKO9hp6Z4e
- DXL3PlD0QsLSc27AkwzLEc/D3ZaqBq7ItvT9Pyg0z3Q+2dtLF00f9+663HVC2EUgP25J3xDd
- 496SIeYDTkEgbJ7WYR0HYm9uirSET3lDqOVh1xPqoy+U9zTtuA9NQHVGk+hPcoazSqEtLGBk
- YE2mm2wzX5q2uoyptseSNceJ+HE9L+z1KlWW63HhddgtRGhbP8pj42bKaUSrrfDUsicfeJf6
- m1iJRu0SXYVlMruGUB1PvZQ3O7TsVfAGCv85pFipdgk8KQnlRFkYhUjLft0u7CL1rDGZWDDr
- NaNj54q2CX9zuSxBn9XDXvGKyzKEZ4NY1Jfw+TAMPCp4buawuOsjONi2X0DfivFY+ZsjAIcx
- qQMglPtKk/wBs7q2lvJ+pHpgvLhLZyGqzAvKM1sVtRJ5j+ARKA0w4pYs5a5ufqcfT7dN6TBk
- LXZeD9xlVic93Ju08JSUx2ozlcfxq+BVNyA+dtv7elXUZ2DrYwARAQABtCxHdXN0YXZvIEEu
- IFIuIFNpbHZhIDxndXN0YXZvQGVtYmVkZGVkb3IuY29tPokCPQQTAQgAJwUCWywcDAIbIwUJ
- CWYBgAULCQgHAgYVCAkKCwIEFgIDAQIeAQIXgAAKCRBHBbTLRwbbMZ6tEACk0hmmZ2FWL1Xi
- l/bPqDGFhzzexrdkXSfTTZjBV3a+4hIOe+jl6Rci/CvRicNW4H9yJHKBrqwwWm9fvKqOBAg9
- obq753jydVmLwlXO7xjcfyfcMWyx9QdYLERTeQfDAfRqxir3xMeOiZwgQ6dzX3JjOXs6jHBP
- cgry90aWbaMpQRRhaAKeAS14EEe9TSIly5JepaHoVdASuxklvOC0VB0OwNblVSR2S5i5hSsh
- ewbOJtwSlonsYEj4EW1noQNSxnN/vKuvUNegMe+LTtnbbocFQ7dGMsT3kbYNIyIsp42B5eCu
- JXnyKLih7rSGBtPgJ540CjoPBkw2mCfhj2p5fElRJn1tcX2McsjzLFY5jK9RYFDavez5w3lx
- JFgFkla6sQHcrxH62gTkb9sUtNfXKucAfjjCMJ0iuQIHRbMYCa9v2YEymc0k0RvYr43GkA3N
- PJYd/vf9vU7VtZXaY4a/dz1d9dwIpyQARFQpSyvt++R74S78eY/+lX8wEznQdmRQ27kq7BJS
- R20KI/8knhUNUJR3epJu2YFT/JwHbRYC4BoIqWl+uNvDf+lUlI/D1wP+lCBSGr2LTkQRoU8U
- 64iK28BmjJh2K3WHmInC1hbUucWT7Swz/+6+FCuHzap/cjuzRN04Z3Fdj084oeUNpP6+b9yW
- e5YnLxF8ctRAp7K4yVlvA7kCDQRbLBwMARAAsHCE31Ffrm6uig1BQplxMV8WnRBiZqbbsVJB
- H1AAh8tq2ULl7udfQo1bsPLGGQboJSVN9rckQQNahvHAIK8ZGfU4Qj8+CER+fYPp/MDZj+t0
- DbnWSOrG7z9HIZo6PR9z4JZza3Hn/35jFggaqBtuydHwwBANZ7A6DVY+W0COEU4of7CAahQo
- 5NwYiwS0lGisLTqks5R0Vh+QpvDVfuaF6I8LUgQR/cSgLkR//V1uCEQYzhsoiJ3zc1HSRyOP
- otJTApqGBq80X0aCVj1LOiOF4rrdvQnj6iIlXQssdb+WhSYHeuJj1wD0ZlC7ds5zovXh+FfF
- l5qH5RFY/qVn3mNIVxeO987WSF0jh+T5ZlvUNdhedGndRmwFTxq2Li6GNMaolgnpO/CPcFpD
- jKxY/HBUSmaE9rNdAa1fCd4RsKLlhXda+IWpJZMHlmIKY8dlUybP+2qDzP2lY7kdFgPZRU+e
- zS/pzC/YTzAvCWM3tDgwoSl17vnZCr8wn2/1rKkcLvTDgiJLPCevqpTb6KFtZosQ02EGMuHQ
- I6Zk91jbx96nrdsSdBLGH3hbvLvjZm3C+fNlVb9uvWbdznObqcJxSH3SGOZ7kCHuVmXUcqoz
- ol6ioMHMb+InrHPP16aVDTBTPEGwgxXI38f7SUEn+NpbizWdLNz2hc907DvoPm6HEGCanpcA
- EQEAAYkCJQQYAQgADwUCWywcDAIbDAUJCWYBgAAKCRBHBbTLRwbbMdsZEACUjmsJx2CAY+QS
- UMebQRFjKavwXB/xE7fTt2ahuhHT8qQ/lWuRQedg4baInw9nhoPE+VenOzhGeGlsJ0Ys52sd
- XvUjUocKgUQq6ekOHbcw919nO5L9J2ejMf/VC/quN3r3xijgRtmuuwZjmmi8ct24TpGeoBK4
- WrZGh/1hAYw4ieARvKvgjXRstcEqM5thUNkOOIheud/VpY+48QcccPKbngy//zNJWKbRbeVn
- imua0OpqRXhCrEVm/xomeOvl1WK1BVO7z8DjSdEBGzbV76sPDJb/fw+y+VWrkEiddD/9CSfg
- fBNOb1p1jVnT2mFgGneIWbU0zdDGhleI9UoQTr0e0b/7TU+Jo6TqwosP9nbk5hXw6uR5k5PF
- 8ieyHVq3qatJ9K1jPkBr8YWtI5uNwJJjTKIA1jHlj8McROroxMdI6qZ/wZ1ImuylpJuJwCDC
- ORYf5kW61fcrHEDlIvGc371OOvw6ejF8ksX5+L2zwh43l/pKkSVGFpxtMV6d6J3eqwTafL86
- YJWH93PN+ZUh6i6Rd2U/i8jH5WvzR57UeWxE4P8bQc0hNGrUsHQH6bpHV2lbuhDdqo+cM9eh
- GZEO3+gCDFmKrjspZjkJbB5Gadzvts5fcWGOXEvuT8uQSvl+vEL0g6vczsyPBtqoBLa9SNrS
- VtSixD1uOgytAP7RWS474w==
-Message-ID: <ae6bce75-d477-7727-316a-cb78e2cafc46@embeddedor.com>
-Date:   Mon, 30 Sep 2019 18:18:41 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1732333AbfI3QnB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 30 Sep 2019 12:43:01 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:59718 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732332AbfI3QnA (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 30 Sep 2019 12:43:00 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x8UGdtOE029875
+        for <bpf@vger.kernel.org>; Mon, 30 Sep 2019 09:42:58 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=Jam5MSBMV0iKo02Z+Pai+DC4qAEz8qkJ5uU7TaJzPg4=;
+ b=nL/3T2yvFBu9J/PktkIkItwF/34paKAJwge5pAg8HswP3yFyzZfhT3Dqjlt39vo1hC4v
+ bn5iz6XUy6gJ5nv/aeiJpEwcNb21srM1bxWIGhqyFjuKHVmSd7Z2I9ZN+rCvgPQQVq+O
+ KBqqBF4xLgkNxDiV0Ap3QGx4X7XlC/MUBcQ= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2vbnb281c7-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 30 Sep 2019 09:42:58 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Mon, 30 Sep 2019 09:42:56 -0700
+Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
+        id AAAF1861847; Mon, 30 Sep 2019 09:42:55 -0700 (PDT)
+Smtp-Origin-Hostprefix: dev
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: dev101.prn2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>, <toke@redhat.com>, <kpsingh@chromium.org>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: prn2c23
+Subject: [RFC][PATCH bpf-next] libbpf: add bpf_object__open_{file,mem} w/ sized opts
+Date:   Mon, 30 Sep 2019 09:42:39 -0700
+Message-ID: <20190930164239.3697916-1-andriin@fb.com>
+X-Mailer: git-send-email 2.17.1
+X-FB-Internal: Safe
 MIME-Version: 1.0
-In-Reply-To: <20190930073858.7639-1-steve@sk2.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 38.98.37.138
-X-Source-L: No
-X-Exim-ID: 1iEyOX-0027A7-Df
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.43.131]) [38.98.37.138]:62616
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 9
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
+ definitions=2019-09-30_10:2019-09-30,2019-09-30 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ adultscore=0 clxscore=1015 lowpriorityscore=0 suspectscore=8
+ priorityscore=1501 spamscore=0 malwarescore=0 phishscore=0 mlxscore=0
+ mlxlogscore=999 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1908290000 definitions=main-1909300160
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Add new set of bpf_object__open APIs using new approach to optional
+parameters extensibility allowing simpler ABI compatibility approach.
 
+This patch demonstrates an approach to implementing libbpf APIs that
+makes it easy to extend existing APIs with extra optional parameters in
+such a way, that ABI compatibility is preserved without having to do
+symbol versioning and generating lots of boilerplate code to handle it.
+To facilitate succinct code for working with options, add OPTS_VALID,
+OPTS_HAS, and OPTS_GET macros that hide all the NULL and size checks.
 
-On 9/30/19 02:38, Stephen Kitt wrote:
-> This switches zero-length arrays in variable-length structs to C99
-> flexible array members. GCC will then ensure that the arrays are
-> always the last element in the struct.
-> 
-> Coccinelle:
-> @@
-> identifier S, fld;
-> type T;
-> @@
-> 
-> struct S {
->   ...
->   T fld[
-> - 0
->   ];
->   ...
-> };
-> 
-> Signed-off-by: Stephen Kitt <steve@sk2.org>
-> ---
+Additionally, newly added libbpf APIs are encouraged to follow similar
+pattern of having all mandatory parameters as formal function parameters
+and always have optional (NULL-able) xxx_opts struct, which should
+always have real struct size as a first field and the rest would be
+optional parameters added over time, which tune the behavior of existing
+API, if specified by user.
 
-What changed in v2?
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/lib/bpf/libbpf.c          | 56 ++++++++++++++++++++++++++-------
+ tools/lib/bpf/libbpf.h          | 33 ++++++++++++++++---
+ tools/lib/bpf/libbpf.map        |  6 ++++
+ tools/lib/bpf/libbpf_internal.h |  6 ++++
+ 4 files changed, 85 insertions(+), 16 deletions(-)
 
-You should include a changelog here.
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index e0276520171b..bb8f4a6e4e6b 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -255,7 +255,7 @@ struct bpf_object {
+ 	 */
+ 	struct {
+ 		int fd;
+-		void *obj_buf;
++		const void *obj_buf;
+ 		size_t obj_buf_sz;
+ 		Elf *elf;
+ 		GElf_Ehdr ehdr;
+@@ -492,7 +492,7 @@ bpf_object__init_prog_names(struct bpf_object *obj)
+ }
+ 
+ static struct bpf_object *bpf_object__new(const char *path,
+-					  void *obj_buf,
++					  const void *obj_buf,
+ 					  size_t obj_buf_sz)
+ {
+ 	struct bpf_object *obj;
+@@ -569,7 +569,7 @@ static int bpf_object__elf_init(struct bpf_object *obj)
+ 		 * obj_buf should have been validated by
+ 		 * bpf_object__open_buffer().
+ 		 */
+-		obj->efile.elf = elf_memory(obj->efile.obj_buf,
++		obj->efile.elf = elf_memory((char *)obj->efile.obj_buf,
+ 					    obj->efile.obj_buf_sz);
+ 	} else {
+ 		obj->efile.fd = open(obj->path, O_RDONLY);
+@@ -3597,7 +3597,7 @@ static int bpf_object__validate(struct bpf_object *obj, bool needs_kver)
+ }
+ 
+ static struct bpf_object *
+-__bpf_object__open(const char *path, void *obj_buf, size_t obj_buf_sz,
++__bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
+ 		   bool needs_kver, int flags)
+ {
+ 	struct bpf_object *obj;
+@@ -3655,25 +3655,59 @@ struct bpf_object *bpf_object__open(const char *path)
+ 	return bpf_object__open_xattr(&attr);
+ }
+ 
+-struct bpf_object *bpf_object__open_buffer(void *obj_buf,
+-					   size_t obj_buf_sz,
+-					   const char *name)
++struct bpf_object *
++bpf_object__open_file(const char *path, struct bpf_object_open_opts *opts)
++{
++	if (!OPTS_VALID(opts) || !path)
++		return ERR_PTR(-EINVAL);
++
++	pr_debug("loading %s\n", path);
++
++	return __bpf_object__open(path, NULL, 0, false, 0);
++}
++
++static struct bpf_object *
++__bpf_object__open_mem(const void *obj_buf, size_t obj_buf_sz,
++		       struct bpf_object_open_opts *opts, bool enforce_kver)
+ {
+ 	char tmp_name[64];
++	const char *name;
+ 
+-	/* param validation */
+-	if (!obj_buf || obj_buf_sz <= 0)
+-		return NULL;
++	if (!OPTS_VALID(opts) || !obj_buf || obj_buf_sz == 0)
++		return ERR_PTR(-EINVAL);
+ 
++	name = OPTS_GET(opts, object_name, NULL);
+ 	if (!name) {
+ 		snprintf(tmp_name, sizeof(tmp_name), "%lx-%lx",
+ 			 (unsigned long)obj_buf,
+ 			 (unsigned long)obj_buf_sz);
+ 		name = tmp_name;
+ 	}
++
+ 	pr_debug("loading object '%s' from buffer\n", name);
+ 
+-	return __bpf_object__open(name, obj_buf, obj_buf_sz, true, true);
++	return __bpf_object__open(name, obj_buf, obj_buf_sz, enforce_kver, 0);
++}
++
++struct bpf_object *
++bpf_object__open_mem(const void *obj_buf, size_t obj_buf_sz,
++		     struct bpf_object_open_opts *opts)
++{
++	return __bpf_object__open_mem(obj_buf, obj_buf_sz, opts, false);
++}
++
++struct bpf_object *
++bpf_object__open_buffer(const void *obj_buf, size_t obj_buf_sz, const char *name)
++{
++	struct bpf_object_open_opts opts = {
++		.sz = sizeof(struct bpf_object_open_opts),
++		.object_name = name,
++	};
++
++	if (!obj_buf || obj_buf_sz == 0)
++		return NULL;
++
++	return __bpf_object__open_mem(obj_buf, obj_buf_sz, &opts, true);
+ }
+ 
+ int bpf_object__unload(struct bpf_object *obj)
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index e8f70977d137..987db195c5a0 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -67,14 +67,37 @@ struct bpf_object_open_attr {
+ 	enum bpf_prog_type prog_type;
+ };
+ 
++struct bpf_object_open_opts {
++	/* size of this struct, for forward and backward compatiblity */
++	size_t sz;
++	/* object name override, if provided:
++	 * - for object open from file, this will override setting object
++	 *   name from file path's base name;
++	 * - for object open from memory buffer, this will specify an object
++	 *   name and will override default "<addr>-<buf-size>" name;
++	 */
++	const char *object_name;
++	/* program type to use if determination based on program name doesn't
++	 * work */
++	enum bpf_prog_type fallback_prog_type;
++};
++
+ LIBBPF_API struct bpf_object *bpf_object__open(const char *path);
+ LIBBPF_API struct bpf_object *
++bpf_object__open_file(const char *path, struct bpf_object_open_opts *opts);
++LIBBPF_API struct bpf_object *
++bpf_object__open_mem(const void *obj_buf, size_t obj_buf_sz,
++		     struct bpf_object_open_opts *opts);
++
++/* deprecated bpf_object__open variants */
++LIBBPF_API struct bpf_object *
++bpf_object__open_buffer(const void *obj_buf, size_t obj_buf_sz,
++			const char *name);
++LIBBPF_API struct bpf_object *
+ bpf_object__open_xattr(struct bpf_object_open_attr *attr);
+-struct bpf_object *__bpf_object__open_xattr(struct bpf_object_open_attr *attr,
+-					    int flags);
+-LIBBPF_API struct bpf_object *bpf_object__open_buffer(void *obj_buf,
+-						      size_t obj_buf_sz,
+-						      const char *name);
++struct bpf_object *
++__bpf_object__open_xattr(struct bpf_object_open_attr *attr, int flags);
++
+ int bpf_object__section_size(const struct bpf_object *obj, const char *name,
+ 			     __u32 *size);
+ int bpf_object__variable_offset(const struct bpf_object *obj, const char *name,
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index d04c7cb623ed..4d241fd92dd4 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -190,3 +190,9 @@ LIBBPF_0.0.5 {
+ 	global:
+ 		bpf_btf_get_next_id;
+ } LIBBPF_0.0.4;
++
++LIBBPF_0.0.6 {
++	global:
++		bpf_object__open_file;
++		bpf_object__open_mem;
++} LIBBPF_0.0.5;
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index 2e83a34f8c79..1cf2cf8d80f3 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -47,6 +47,12 @@ do {				\
+ #define pr_info(fmt, ...)	__pr(LIBBPF_INFO, fmt, ##__VA_ARGS__)
+ #define pr_debug(fmt, ...)	__pr(LIBBPF_DEBUG, fmt, ##__VA_ARGS__)
+ 
++#define OPTS_VALID(opts) (!(opts) || (opts)->sz >= sizeof((opts)->sz))
++#define OPTS_HAS(opts, field) \
++	((opts) && opts->sz >= offsetofend(typeof(*(opts)), field))
++#define OPTS_GET(opts, field, fallback_value) \
++	(OPTS_HAS(opts, field) ? (opts)->field : fallback_value)
++
+ int libbpf__load_raw_btf(const char *raw_types, size_t types_len,
+ 			 const char *str_sec, size_t str_len);
+ 
+-- 
+2.17.1
 
-I encourage you to read the following document:
-
-https://kernelnewbies.org/Outreachyfirstpatch
-
-In particular this section "Versioning one patch revision"
-
-Also, always CC the lkml: linux-kernel@vger.kernel.org
-
-Thanks
---
-Gustavo
-
-
-
->  Documentation/bpf/btf.rst       | 2 +-
->  tools/lib/bpf/libbpf.c          | 2 +-
->  tools/lib/bpf/libbpf_internal.h | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
-> index 4d565d202ce3..24ce50fc1fc1 100644
-> --- a/Documentation/bpf/btf.rst
-> +++ b/Documentation/bpf/btf.rst
-> @@ -670,7 +670,7 @@ func_info for each specific ELF section.::
->          __u32   sec_name_off; /* offset to section name */
->          __u32   num_info;
->          /* Followed by num_info * record_size number of bytes */
-> -        __u8    data[0];
-> +        __u8    data[];
->       };
->  
->  Here, num_info must be greater than 0.
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index e0276520171b..c02ea0e1a588 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -5577,7 +5577,7 @@ static struct perf_buffer *__perf_buffer__new(int map_fd, size_t page_cnt,
->  struct perf_sample_raw {
->  	struct perf_event_header header;
->  	uint32_t size;
-> -	char data[0];
-> +	char data[];
->  };
->  
->  struct perf_sample_lost {
-> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-> index 2e83a34f8c79..930ada2276bf 100644
-> --- a/tools/lib/bpf/libbpf_internal.h
-> +++ b/tools/lib/bpf/libbpf_internal.h
-> @@ -86,7 +86,7 @@ struct btf_ext_info_sec {
->  	__u32	sec_name_off;
->  	__u32	num_info;
->  	/* Followed by num_info * record_size number of bytes */
-> -	__u8	data[0];
-> +	__u8	data[];
->  };
->  
->  /* The minimum bpf_func_info checked by the loader */
-> 
