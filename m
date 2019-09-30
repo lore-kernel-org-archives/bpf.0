@@ -2,110 +2,90 @@ Return-Path: <SRS0=vQPo=XZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 254B5C32792
-	for <bpf@archiver.kernel.org>; Mon, 30 Sep 2019 14:16:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2956C32792
+	for <bpf@archiver.kernel.org>; Mon, 30 Sep 2019 15:22:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E5EC920679
-	for <bpf@archiver.kernel.org>; Mon, 30 Sep 2019 14:16:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569853019;
-	bh=nGmiiEoUz5HKJWxHsVgQNmjDcNgJGAUYg6iCoS9sPTU=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=Hfd15Rn+eMwpNVkErRldtvBPLPAAf/7BqbOugy1Y0KhV9GQCEgG6pEgO3IJytpvoS
-	 0Xt6/4e15MYt743HqjoBu7J2wlHpsJuv3Qzkd2hqaTDrBXak/fV5DEOz+1Gh/p34cv
-	 HIomiooofTWctBlApKl2CyOoijh2MhXr/Irzfmy8=
+	by mail.kernel.org (Postfix) with ESMTP id AF2F5216F4
+	for <bpf@archiver.kernel.org>; Mon, 30 Sep 2019 15:22:46 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cAtYD8E/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731276AbfI3OQ6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 30 Sep 2019 10:16:58 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:39888 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730809AbfI3OQ6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 30 Sep 2019 10:16:58 -0400
-Received: by mail-io1-f67.google.com with SMTP id a1so38732067ioc.6
-        for <bpf@vger.kernel.org>; Mon, 30 Sep 2019 07:16:58 -0700 (PDT)
+        id S1731880AbfI3PWq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 30 Sep 2019 11:22:46 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:34373 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731127AbfI3PWq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 30 Sep 2019 11:22:46 -0400
+Received: by mail-pf1-f195.google.com with SMTP id b128so5823322pfa.1;
+        Mon, 30 Sep 2019 08:22:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=qSyzuXDiOCBGYUe5x3wq3t+cEuvzBt8YWh4PsSfAxng=;
-        b=UN3DqBAKeUwm8D0QEQjS3xJkE3+G7UwQhw6O0nfYZs1PZxchfelnwuw6XbPAxU+6iT
-         z7SVP3YgvJDIJkPDy8Bfe1iwyqHZfIHIy7DYtqo1N8vSDthWvJQNB9ATkSpZlZ3XCuki
-         qXAC8XV3pv/MJIMPSXlVWaEDCm27ZkGzg0pXY=
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version;
+        bh=noGn5Fh/vP763HppCbzo5uA2l/ciEILfvzg2KSvFK+k=;
+        b=cAtYD8E/qKFCcqdc3ztG6Ggy2HVIuyau9i28VHYQmmwDycAQ+RnFIZP5Cdvogc5FKB
+         19ASqk6/KWAiFoKwdBoc0DVlSzRRuFOA0VOEF4CQrEnfYRjr42hv6x6Wot+CgLjFjYvC
+         oxih32yZQVkg6qKhYEKWyFzbOh4TrYXdiPt5Ia2PNrHzD1thdECJBpaievj+zpFTf+gP
+         FTvESTxIV/txHVaCfvEglzuQdpEPL2ZN6gVfOYxBty4BXyXJ5Rjdh9mylMWjbvxJWetT
+         BGJ2/m81vvB4PKIAp507lwsbniZ3rCx10KonVBClDCRUN6rsut1lkGXRrLVgwC+gP6ps
+         +gkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qSyzuXDiOCBGYUe5x3wq3t+cEuvzBt8YWh4PsSfAxng=;
-        b=d1VZn0dg4C/jN0of172oVcCcnt73SyAT7d/RHL4S9YMbefV0ruWNDLBorEMYGvt8RV
-         Jcpuu88Mb7/eMS/Y2PjtobHj4PzlFq4iCpBS1jkaNLs9w0jQ5eV92Bqwx5xnoctxhFpw
-         WdsyUZHvwPoJhecGfTWHyE4OeOy76R3q2P/p8mcU1FNE2eiphf1j35MHgqlTcwZGT7wb
-         iVV+ZwG/crgpe44kD47p3MxzavAafOnQQsk5X9vdjiMvlC/9S2F3nmAnYpjj7ASAi2NS
-         O3SC1HWo+6d0s+urTjBPuAQUKN9323f6aIKfudkFRdSXTvlRfbCBNB4MQVr7+xuowV7T
-         0DYA==
-X-Gm-Message-State: APjAAAVqn033Bt/NqCTRRdLoI9Ezb9QfpPaP1r4jRQS3diEMswx8xUta
-        2rl5dZG6oTPnUDTt1lk6d3Ba7A==
-X-Google-Smtp-Source: APXvYqxn8RJVirvm2HAhcEVkXxh7lQAUGhEQpdT+JkKACOG3a8byP3d+14FHtvWo1veaYWwLKjPYgA==
-X-Received: by 2002:a92:6c10:: with SMTP id h16mr6350326ilc.299.1569853017550;
-        Mon, 30 Sep 2019 07:16:57 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id r2sm5475403ila.52.2019.09.30.07.16.56
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version;
+        bh=noGn5Fh/vP763HppCbzo5uA2l/ciEILfvzg2KSvFK+k=;
+        b=qLGFlnCLYm3hqNGixXOZvPZ8M9fEeDSVyv3fNWe5qMbqqPtuP5tshRn576JSU44qux
+         rEt51ipq9gNbw2VtE5DjXCBtO2PolmKwcDrDIJEAZwQExCr2NrUXl5r/k2LJ0NZEYFR+
+         JggSJSkqV9+tkBSXddfoYyM6Ag+NMnJWaQU7+X7c/e/CSa0KXtc3SxAO7k+MDcWuXfPA
+         l+WH8/rmAdZzRnec0uJj+PkU7qBGY1Btb4InV0SHT/L1zrverLV7tQI6UMLR/mFGybHL
+         rpicbfaV7VZG3rPjcDRP5Ubpfvg6sCmqg1816qQO8RUuliIrareIg2mnFKOn6hdTpgtQ
+         eCtA==
+X-Gm-Message-State: APjAAAUoPgxWQFSuJB6rx2CahIj/fU4loDkes5AHRAG3iMzgfEva+2CR
+        6b+kJtQxwPQEAxMD/stIFdU=
+X-Google-Smtp-Source: APXvYqzTxLcGdrsPPU3eOxGNGOQDIezsW+zj7fbitSQ99zChaY0XLbXSmEbAQNKB2NiqorjjmYKg/A==
+X-Received: by 2002:a17:90a:fe04:: with SMTP id ck4mr27861326pjb.74.1569856965442;
+        Mon, 30 Sep 2019 08:22:45 -0700 (PDT)
+Received: from [172.26.125.239] ([2620:10d:c090:180::aa94])
+        by smtp.gmail.com with ESMTPSA id w7sm12905416pjn.1.2019.09.30.08.22.44
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 30 Sep 2019 07:16:56 -0700 (PDT)
-Subject: Re: [PATCH] tools: bpf: Use !building_out_of_srctree to determine
- srctree
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     ast@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20190927011344.4695-1-skhan@linuxfoundation.org>
- <20190930085815.GA7249@pc-66.home>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <ea108769-1b3e-42f8-de9c-50b4a563be57@linuxfoundation.org>
-Date:   Mon, 30 Sep 2019 08:16:55 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 30 Sep 2019 08:22:44 -0700 (PDT)
+From:   "Jonathan Lemon" <jonathan.lemon@gmail.com>
+To:     "Magnus Karlsson" <magnus.karlsson@intel.com>
+Cc:     bjorn.topel@intel.com, ast@kernel.org, daniel@iogearbox.net,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH bpf] xsk: fix crash in poll when device does not support
+ ndo_xsk_wakeup
+Date:   Mon, 30 Sep 2019 08:22:43 -0700
+X-Mailer: MailMate (1.12.5r5635)
+Message-ID: <1CE08C6F-03BC-44C9-ACD3-F1C445C70B0C@gmail.com>
+In-Reply-To: <1569850212-4035-1-git-send-email-magnus.karlsson@intel.com>
+References: <1569850212-4035-1-git-send-email-magnus.karlsson@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20190930085815.GA7249@pc-66.home>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; format=flowed
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 9/30/19 2:58 AM, Daniel Borkmann wrote:
-> On Thu, Sep 26, 2019 at 07:13:44PM -0600, Shuah Khan wrote:
->> make TARGETS=bpf kselftest fails with:
->>
->> Makefile:127: tools/build/Makefile.include: No such file or directory
->>
->> When the bpf tool make is invoked from tools Makefile, srctree is
->> cleared and the current logic check for srctree equals to empty
->> string to determine srctree location from CURDIR.
->>
->> When the build in invoked from selftests/bpf Makefile, the srctree
->> is set to "." and the same logic used for srctree equals to empty is
->> needed to determine srctree.
->>
->> Check building_out_of_srctree undefined as the condition for both
->> cases to fix "make TARGETS=bpf kselftest" build failure.
->>
->> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> 
-> Applied, thanks!
-> 
+On 30 Sep 2019, at 6:30, Magnus Karlsson wrote:
 
-Hi Daniel!
+> Fixes a crash in poll() when an AF_XDP socket is opened in copy mode
+> with the XDP_USE_NEED_WAKEUP flag set and the bound device does not
+> have ndo_xsk_wakeup defined. Avoid trying to call the non-existing ndo
+> and instead call the internal xsk sendmsg functionality to send
+> packets in the same way (from the application's point of view) as
+> calling sendmsg() in any mode or poll() in zero-copy mode would have
+> done. The application should behave in the same way independent on if
+> zero-copy mode or copy-mode is used.
+>
+> Fixes: 77cd0d7b3f25 ("xsk: add support for need_wakeup flag in AF_XDP 
+> rings")
+> Reported-by: syzbot+a5765ed8cdb1cca4d249@syzkaller.appspotmail.com
+> Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
 
-Is the tree the patch went into included in the linux-next?
-
-thanks,
--- Shuah
+Acked-by: Jonathan Lemon <jonathan.lemon@gmail.com>
