@@ -2,134 +2,83 @@ Return-Path: <SRS0=bsNo=X2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42F47C352AA
-	for <bpf@archiver.kernel.org>; Tue,  1 Oct 2019 17:02:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA72CC352AA
+	for <bpf@archiver.kernel.org>; Tue,  1 Oct 2019 17:37:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 17F4B2086A
-	for <bpf@archiver.kernel.org>; Tue,  1 Oct 2019 17:02:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569949341;
-	bh=KeGk7ekKKZHY2R8nLwGcjBusx9sdG8nRc9xvnHtfSGM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=vHK/LSqlAQvSVwYlH+52z0FgvHzScoBG+Jk2m4MInzBrRBDCKoBIbbe8chCU+S4Zh
-	 WPwhal3Atv2AYGMBsoqYoYi80TPR0Dge0KZt0/IrT4B5f+OXRoI09JhUFC/gRblI95
-	 2pw8Y0LueFPk4XnKPkFmmaaCaqEnvX3jdLCWGrTk=
+	by mail.kernel.org (Postfix) with ESMTP id 92B9B2086A
+	for <bpf@archiver.kernel.org>; Tue,  1 Oct 2019 17:37:45 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EKLc4BdV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729622AbfJARCO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 1 Oct 2019 13:02:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51242 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729570AbfJAQkG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 1 Oct 2019 12:40:06 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C4A8F21906;
-        Tue,  1 Oct 2019 16:40:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569948005;
-        bh=KeGk7ekKKZHY2R8nLwGcjBusx9sdG8nRc9xvnHtfSGM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U5mo18adlS3mD7VBqclMZ84gx4heR8sBcuMoUb+3Lx7x8ZLT3mkdjaehkK71CbFh/
-         B9a2m1gh2cNrgFq7ra2dyFVrPTA37T+FTzTzwXLup93AXJojEiWMWw8OspFxXXbXs+
-         IiVUAWSkLvsWUNhBIA/moK2dByXWWDWI5C8Td7yo=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tycho Andersen <tycho@tycho.ws>, Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 30/71] selftests/seccomp: fix build on older kernels
-Date:   Tue,  1 Oct 2019 12:38:40 -0400
-Message-Id: <20191001163922.14735-30-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191001163922.14735-1-sashal@kernel.org>
-References: <20191001163922.14735-1-sashal@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S1731053AbfJARhp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Oct 2019 13:37:45 -0400
+Received: from mail-pg1-f202.google.com ([209.85.215.202]:50240 "EHLO
+        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731050AbfJARho (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 1 Oct 2019 13:37:44 -0400
+Received: by mail-pg1-f202.google.com with SMTP id r24so9157352pgj.17
+        for <bpf@vger.kernel.org>; Tue, 01 Oct 2019 10:37:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=3+w4QsZSJoLh853gBsFQX1yVGVE86OfZ0POYrmn9pHU=;
+        b=EKLc4BdVvrOA881KZYHEn6ikBQGKo5TVuNhmnxKpZVyWpOn45UQ6LoQyiOxOx7L3hC
+         mS3/3bAje8xM3gD1wCAsNpKY5mjWKNa/VF3Qz1Bo8Ds0b7JImYv9gPI1wlbKmTMvRO+D
+         ZOOOMgU9Oxd/GpCEXArPBkf0RpH8/sef+NwED+gM8hTMZjtfLkPqU+AJ5jK6GwGQlksn
+         2GoKJ8aD5hc1j3KTNEpy8xco2s657h+8msI8UttOH5kixwSEtJongK3rMLvzD7Bi2Hv1
+         UKNLkTc9jNHtufNJdVoQbvS/KncrjsHzpTe/cFiSCYGEtTsz7GXG1ktsrtxbWC6kIT/8
+         mAzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=3+w4QsZSJoLh853gBsFQX1yVGVE86OfZ0POYrmn9pHU=;
+        b=XJ5emef6cQgSGOMCAW3fQOmOosjqZ+8Rl31xO7h3d9lb/hENvJwIp71Y3siz4AET/+
+         u5zb63rGP3fmZJd91B6zRPEysJwSGQ2wQ0As7HA55bJDBIp2RqeJBCABxLVsYodBQv11
+         F3SmNWiUVF8zFGCOQYh3acZLvCKglgyKFDYSlaeMDc87C+YG8GhJN+9BTjfVyYMpa07T
+         OhXU8crjFNjxgi/Leb111aKKGwGDVnogrjVW0NK/ONOuHXlTVdCV0sJCLJUrA6y1zBEO
+         z/8Fc3/MF8GDLarSqKktZsjcPi0zd0ZJglp603b/lQjgSEEI+Z+lqDz87kpuLHn/UKGv
+         H7Fg==
+X-Gm-Message-State: APjAAAXcZG3BSj7BS8VTa2+/i08pH1RATNhJYYb3fBOuP0zERu+kXT9D
+        kn3xc7hLfvyyDjOcw2MTsEasm4vrK+wI
+X-Google-Smtp-Source: APXvYqzh7leVxFKHdDQPmZYu3Us5x9qMqvVeWemq0AVPn1urC7cQbYSuTPtSo0OyKCw3z1h198Q2hecUAQG9
+X-Received: by 2002:a63:4924:: with SMTP id w36mr15608050pga.113.1569951463622;
+ Tue, 01 Oct 2019 10:37:43 -0700 (PDT)
+Date:   Tue,  1 Oct 2019 10:37:26 -0700
+Message-Id: <20191001173728.149786-1-brianvv@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.23.0.444.g18eeb5a265-goog
+Subject: [PATCH bpf 0/2] selftests/bpf: test_progs: don't leak fd in bpf
+From:   Brian Vazquez <brianvv@google.com>
+To:     Brian Vazquez <brianvv.kernel@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S . Miller" <davem@davemloft.net>
+Cc:     Stanislav Fomichev <sdf@google.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Brian Vazquez <brianvv@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Tycho Andersen <tycho@tycho.ws>
+This patch series fixes some fd leaks in tcp_rtt and
+test_sockopt_inherit bpf prof_tests.
 
-[ Upstream commit 88282297fff00796e81f5e67734a6afdfb31fbc4 ]
+Brian Vazquez (2):
+  selftests/bpf: test_progs: don't leak server_fd in tcp_rtt
+  selftests/bpf: test_progs: don't leak server_fd in
+    test_sockopt_inherit
 
-The seccomp selftest goes to some length to build against older kernel
-headers, viz. all the #ifdefs at the beginning of the file.
+ tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c | 2 +-
+ tools/testing/selftests/bpf/prog_tests/tcp_rtt.c         | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-Commit 201766a20e30 ("ptrace: add PTRACE_GET_SYSCALL_INFO request")
-introduces some additional macros, but doesn't do the #ifdef dance.
-Let's add that dance here to avoid:
-
-gcc -Wl,-no-as-needed -Wall  seccomp_bpf.c -lpthread -o seccomp_bpf
-In file included from seccomp_bpf.c:51:
-seccomp_bpf.c: In function ‘tracer_ptrace’:
-seccomp_bpf.c:1787:20: error: ‘PTRACE_EVENTMSG_SYSCALL_ENTRY’ undeclared (first use in this function); did you mean ‘PTRACE_EVENT_CLONE’?
-  EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
-  __typeof__(_expected) __exp = (_expected); \
-             ^~~~~~~~~
-seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
-  EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-  ^~~~~~~~~
-seccomp_bpf.c:1787:20: note: each undeclared identifier is reported only once for each function it appears in
-  EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
-  __typeof__(_expected) __exp = (_expected); \
-             ^~~~~~~~~
-seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
-  EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-  ^~~~~~~~~
-seccomp_bpf.c:1788:6: error: ‘PTRACE_EVENTMSG_SYSCALL_EXIT’ undeclared (first use in this function); did you mean ‘PTRACE_EVENT_EXIT’?
-    : PTRACE_EVENTMSG_SYSCALL_EXIT, msg);
-      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
-  __typeof__(_expected) __exp = (_expected); \
-             ^~~~~~~~~
-seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
-  EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-  ^~~~~~~~~
-make: *** [Makefile:12: seccomp_bpf] Error 1
-
-[skhan@linuxfoundation.org: Fix checkpatch error in commit log]
-Signed-off-by: Tycho Andersen <tycho@tycho.ws>
-Fixes: 201766a20e30 ("ptrace: add PTRACE_GET_SYSCALL_INFO request")
-Acked-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/seccomp/seccomp_bpf.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 6ef7f16c4cf52..7f8b5c8982e3b 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -199,6 +199,11 @@ struct seccomp_notif_sizes {
- };
- #endif
- 
-+#ifndef PTRACE_EVENTMSG_SYSCALL_ENTRY
-+#define PTRACE_EVENTMSG_SYSCALL_ENTRY	1
-+#define PTRACE_EVENTMSG_SYSCALL_EXIT	2
-+#endif
-+
- #ifndef seccomp
- int seccomp(unsigned int op, unsigned int flags, void *args)
- {
 -- 
-2.20.1
+2.23.0.444.g18eeb5a265-goog
 
