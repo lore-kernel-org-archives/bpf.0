@@ -6,52 +6,52 @@ X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00815C352AA
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50D1CC35280
 	for <bpf@archiver.kernel.org>; Wed,  2 Oct 2019 13:30:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C61EA21A4A
-	for <bpf@archiver.kernel.org>; Wed,  2 Oct 2019 13:30:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2B31F21A4A
+	for <bpf@archiver.kernel.org>; Wed,  2 Oct 2019 13:30:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727982AbfJBNaj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Oct 2019 09:30:39 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:57674 "EHLO mx1.redhat.com"
+        id S1727976AbfJBNag (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Oct 2019 09:30:36 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:36750 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727981AbfJBNai (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Oct 2019 09:30:38 -0400
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com [209.85.167.69])
+        id S1727961AbfJBNaf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Oct 2019 09:30:35 -0400
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 8CBD5550BB
-        for <bpf@vger.kernel.org>; Wed,  2 Oct 2019 13:30:37 +0000 (UTC)
-Received: by mail-lf1-f69.google.com with SMTP id n5so3545084lfi.0
-        for <bpf@vger.kernel.org>; Wed, 02 Oct 2019 06:30:37 -0700 (PDT)
+        by mx1.redhat.com (Postfix) with ESMTPS id ACD12C049D59
+        for <bpf@vger.kernel.org>; Wed,  2 Oct 2019 13:30:34 +0000 (UTC)
+Received: by mail-lj1-f198.google.com with SMTP id 205so4852930ljf.13
+        for <bpf@vger.kernel.org>; Wed, 02 Oct 2019 06:30:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=9HOtLr1nND6QqUI8Q8VdibuQQQmxuKzuYOHS9mRlR1E=;
-        b=GWizkYkkRt3Di9oKJw98OALx9JkO78mZqqtSDAoyTHVWNjlUXKmxpOjn9i8Fyykwc0
-         1MmvgvAA3GNFZGDwPg+PPvUfhOQcmfLpiRLX4AXjbe+lYaGaznewbCDQUxWO43+OsOF9
-         9ZLG5A828RQkQ6bbVkpu6JpOoZg7Fjh2wj1lFIdh9pB+LygFgxSpLDyq4hF8lo/93VtB
-         3FJQR2RboOE/iO7kYl+PVb3DIG7525owakMgCl8TsZx8TOBouWwHqedykPbeplvVgV27
-         6Rg7Mww5TPt3qed9uFZf8T0L//J2J8CzQsAhDsd18AxmxWVUVzCWQgHhoKf6UrJftWa4
-         GrGA==
-X-Gm-Message-State: APjAAAWEuOyrrBn6MPRZseWyYgP9f6/YYKWYRlLbD4oxwDnW4AHcpy6I
-        wTvkSXv8mVf8+eS1W8MFqO5yyTwCp+jVeszLKIZPV8Uk6QVpvi9J3KxVmPLs6F+1Vupuq8ASoMn
-        TVIsMDLvACmOC
-X-Received: by 2002:a19:f111:: with SMTP id p17mr2355939lfh.187.1570023036089;
-        Wed, 02 Oct 2019 06:30:36 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqy9kGDVLmWBlBvzv2M3kxJrEQfwC6ZwPk5RsZde6tZUzWzlKrvuyJvNTEy7zCPgqiLgNzPocA==
-X-Received: by 2002:a19:f111:: with SMTP id p17mr2355926lfh.187.1570023035866;
-        Wed, 02 Oct 2019 06:30:35 -0700 (PDT)
+        bh=MbRvjz+ayvhsM9IuG/jm9f41EnIQ3Vg+fezDs5aB4Tc=;
+        b=kfg97c/hsajE+7fVjr5thCosgICS7IDP4TmAtis3e/IgmoDhC3D+2OyJBzwVSzWKpO
+         gMiXio0PMpAVR00+Wj8FE6JzA0Gh79isMU8rcrE3PA9T3gEUfdpYf68XbTM4NvMgArai
+         jbFkx40cHQ+50B9tAxSrIIa5bOqgg+fy9mGL0JtU9rDFfNuOFb7/9EjLmFql8DEGrz15
+         UCEuzE2ky8d4NCp5HU4RDMyeJhjJrk7uaWy9zlBl8zwpztN7mTAxaDaNwytk6qWyGSq/
+         KQVppwo9RXbHDSXguqdr6MoS6wkHUF3WmkyhC0Lu5rEhBmsTcMXVbVQ5uEFr8MRI3OyQ
+         lmzA==
+X-Gm-Message-State: APjAAAWc3WIwJ13mTyarUP64kY3LZSGavQ06e3nXB7W+HaayG7LuiviI
+        79Pm95uKquX1UKeemgEk7g5/zS6TtToI1yI4ZSjBWPRLdmLJhjhQYfhq04e4goAXjBQ1JNC4G6w
+        V9zdi5PcLdx2T
+X-Received: by 2002:a2e:9049:: with SMTP id n9mr2265455ljg.45.1570023033164;
+        Wed, 02 Oct 2019 06:30:33 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqzhItDCSb7i8ynjfpi0BvSstWb51xyb3Rm9KKA3hObciBcFvKthQDh/jZ9n5jJ2l1fAb+QWGQ==
+X-Received: by 2002:a2e:9049:: with SMTP id n9mr2265439ljg.45.1570023032936;
+        Wed, 02 Oct 2019 06:30:32 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([2a00:7660:6da:443::2])
-        by smtp.gmail.com with ESMTPSA id s6sm145355ljg.43.2019.10.02.06.30.33
+        by smtp.gmail.com with ESMTPSA id x2sm4887334ljj.94.2019.10.02.06.30.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2019 06:30:34 -0700 (PDT)
+        Wed, 02 Oct 2019 06:30:31 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 5B94F180640; Wed,  2 Oct 2019 15:30:33 +0200 (CEST)
-Subject: [PATCH bpf-next 8/9] libbpf: Add support for setting and getting XDP
- chain maps
+        id E513D180640; Wed,  2 Oct 2019 15:30:27 +0200 (CEST)
+Subject: [PATCH bpf-next 3/9] xdp: Support setting and getting device chain
+ map
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Daniel Borkmann <daniel@iogearbox.net>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -62,8 +62,8 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         David Miller <davem@davemloft.net>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Date:   Wed, 02 Oct 2019 15:30:33 +0200
-Message-ID: <157002303329.1302756.18388939731361871849.stgit@alrua-x1>
+Date:   Wed, 02 Oct 2019 15:30:27 +0200
+Message-ID: <157002302784.1302756.2073486805381846919.stgit@alrua-x1>
 In-Reply-To: <157002302448.1302756.5727756706334050763.stgit@alrua-x1>
 References: <157002302448.1302756.5727756706334050763.stgit@alrua-x1>
 User-Agent: StGit/0.19-dirty
@@ -77,153 +77,210 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-This adds two new API functions for setting and getting XDP programs with
-associated chain map IDs. Programs are expected to pair them, so that if a
-program uses the chain map-aware setter, it should also use the associated
-getter.
+This adds support to rtnetlink for setting and getting the per-device XDP
+chain map. The map is set by means of a new netlink attribute that contains
+a pointer to a BPF map of the XDP chain type. If such an attribute is
+included, it will be inserted into the struct net_device so that the XDP
+chain call code will pick it up on program execution.
 
-Programs using the old non-chain aware variants of the functions will not
-set the XDP chain map attribute on the netlink message, resulting in the
-kernel rejecting the command if a chain map has already been loaded.
+To prevent old userspace programs that do not understand the chain map
+attribute from messing up the chain call order, a netlink message with no
+chain map attribute set will be rejected if a chain map has already been
+installed.
+
+When installing a new chain call map, an XDP program fd must also be
+provided, otherwise the operation will be rejected.
 
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- tools/lib/bpf/libbpf.h   |    4 ++++
- tools/lib/bpf/libbpf.map |    2 ++
- tools/lib/bpf/netlink.c  |   49 ++++++++++++++++++++++++++++++++++++++++++----
- 3 files changed, 51 insertions(+), 4 deletions(-)
+ include/linux/netdevice.h    |    3 ++-
+ include/uapi/linux/if_link.h |    2 ++
+ net/core/dev.c               |   42 ++++++++++++++++++++++++++++++++++++------
+ net/core/rtnetlink.c         |   23 +++++++++++++++++++++++
+ 4 files changed, 63 insertions(+), 7 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index e8f70977d137..0a459840e32c 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -357,7 +357,11 @@ LIBBPF_API int bpf_prog_load(const char *file, enum bpf_prog_type type,
- 			     struct bpf_object **pobj, int *prog_fd);
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 48cc71aae466..60f3b510b175 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -1941,6 +1941,7 @@ struct net_device {
+ 	unsigned int		real_num_rx_queues;
  
- LIBBPF_API int bpf_set_link_xdp_fd(int ifindex, int fd, __u32 flags);
-+LIBBPF_API int bpf_set_link_xdp_chain(int ifindex, int prog_fd, int chain_map_fd,
-+				      __u32 flags);
- LIBBPF_API int bpf_get_link_xdp_id(int ifindex, __u32 *prog_id, __u32 flags);
-+LIBBPF_API int bpf_get_link_xdp_chain(int ifindex, __u32 *prog_id, __u32 *chain_map_id,
-+				      __u32 flags);
+ 	struct bpf_prog __rcu	*xdp_prog;
++	struct bpf_map __rcu	*xdp_chain_map;
+ 	unsigned long		gro_flush_timeout;
+ 	rx_handler_func_t __rcu	*rx_handler;
+ 	void __rcu		*rx_handler_data;
+@@ -3702,7 +3703,7 @@ struct sk_buff *dev_hard_start_xmit(struct sk_buff *skb, struct net_device *dev,
  
- struct perf_buffer;
- 
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 8d10ca03d78d..59f412680292 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -192,4 +192,6 @@ LIBBPF_0.0.5 {
- } LIBBPF_0.0.4;
- 
- LIBBPF_0.0.6 {
-+		bpf_set_link_xdp_chain;
-+		bpf_get_link_xdp_chain;
- } LIBBPF_0.0.5;
-diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
-index ce3ec81b71c0..c6f63bdab2e6 100644
---- a/tools/lib/bpf/netlink.c
-+++ b/tools/lib/bpf/netlink.c
-@@ -25,6 +25,7 @@ struct xdp_id_md {
- 	int ifindex;
- 	__u32 flags;
- 	__u32 id;
-+	__u32 chain_map_id;
+ typedef int (*bpf_op_t)(struct net_device *dev, struct netdev_bpf *bpf);
+ int dev_change_xdp_fd(struct net_device *dev, struct netlink_ext_ack *extack,
+-		      int fd, u32 flags);
++		      int prog_fd, int chain_map_fd, u32 flags);
+ u32 __dev_xdp_query(struct net_device *dev, bpf_op_t xdp_op,
+ 		    enum bpf_netdev_command cmd);
+ int xdp_umem_query(struct net_device *dev, u16 queue_id);
+diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
+index 8aec8769d944..e7a704387608 100644
+--- a/include/uapi/linux/if_link.h
++++ b/include/uapi/linux/if_link.h
+@@ -976,6 +976,8 @@ enum {
+ 	IFLA_XDP_DRV_PROG_ID,
+ 	IFLA_XDP_SKB_PROG_ID,
+ 	IFLA_XDP_HW_PROG_ID,
++	IFLA_XDP_CHAIN_MAP_FD,
++	IFLA_XDP_CHAIN_MAP_ID,
+ 	__IFLA_XDP_MAX,
  };
  
- int libbpf_netlink_open(__u32 *nl_pid)
-@@ -128,7 +129,8 @@ static int bpf_netlink_recv(int sock, __u32 nl_pid, int seq,
- 	return ret;
- }
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 7a456c6a7ad8..0aa5106339e7 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -8177,9 +8177,15 @@ static int dev_xdp_install(struct net_device *dev, bpf_op_t bpf_op,
  
--int bpf_set_link_xdp_fd(int ifindex, int fd, __u32 flags)
-+static int __bpf_set_link_xdp_fd(int ifindex, int *prog_fd, int *chain_map_fd,
-+				 __u32 flags)
+ static void dev_xdp_uninstall(struct net_device *dev)
  {
- 	int sock, seq = 0, ret;
- 	struct nlattr *nla, *nla_xdp;
-@@ -162,9 +164,19 @@ int bpf_set_link_xdp_fd(int ifindex, int fd, __u32 flags)
- 	nla_xdp = (struct nlattr *)((char *)nla + nla->nla_len);
- 	nla_xdp->nla_type = IFLA_XDP_FD;
- 	nla_xdp->nla_len = NLA_HDRLEN + sizeof(int);
--	memcpy((char *)nla_xdp + NLA_HDRLEN, &fd, sizeof(fd));
-+	memcpy((char *)nla_xdp + NLA_HDRLEN, prog_fd, sizeof(*prog_fd));
- 	nla->nla_len += nla_xdp->nla_len;
++	struct bpf_map *chain_map = NULL;
+ 	struct netdev_bpf xdp;
+ 	bpf_op_t ndo_bpf;
  
-+	if (chain_map_fd) {
-+		/* add XDP chain map */
-+		nla_xdp = (struct nlattr *)((char *)nla + nla->nla_len);
-+		nla_xdp->nla_type = IFLA_XDP_CHAIN_MAP_FD;
-+		nla_xdp->nla_len = NLA_HDRLEN + sizeof(int);
-+		memcpy((char *)nla_xdp + NLA_HDRLEN, chain_map_fd,
-+		       sizeof(*chain_map_fd));
-+		nla->nla_len += nla_xdp->nla_len;
++	/* Remove chain map */
++	rcu_swap_protected(dev->xdp_chain_map, chain_map, 1);
++	if(chain_map)
++		bpf_map_put_with_uref(chain_map);
++
+ 	/* Remove generic XDP */
+ 	WARN_ON(dev_xdp_install(dev, generic_xdp_install, NULL, 0, NULL));
+ 
+@@ -8207,15 +8213,17 @@ static void dev_xdp_uninstall(struct net_device *dev)
+  *	dev_change_xdp_fd - set or clear a bpf program for a device rx path
+  *	@dev: device
+  *	@extack: netlink extended ack
+- *	@fd: new program fd or negative value to clear
++ *	@prog_fd: new program fd or negative value to clear
++ *	@chain_map_fd: new chain map fd or negative value to clear
+  *	@flags: xdp-related flags
+  *
+  *	Set or clear a bpf program for a device
+  */
+ int dev_change_xdp_fd(struct net_device *dev, struct netlink_ext_ack *extack,
+-		      int fd, u32 flags)
++		      int prog_fd, int chain_map_fd, u32 flags)
+ {
+ 	const struct net_device_ops *ops = dev->netdev_ops;
++	struct bpf_map *chain_map = NULL;
+ 	enum bpf_netdev_command query;
+ 	struct bpf_prog *prog = NULL;
+ 	bpf_op_t bpf_op, bpf_chk;
+@@ -8237,7 +8245,7 @@ int dev_change_xdp_fd(struct net_device *dev, struct netlink_ext_ack *extack,
+ 	if (bpf_op == bpf_chk)
+ 		bpf_chk = generic_xdp_install;
+ 
+-	if (fd >= 0) {
++	if (prog_fd >= 0) {
+ 		u32 prog_id;
+ 
+ 		if (!offload && __dev_xdp_query(dev, bpf_chk, XDP_QUERY_PROG)) {
+@@ -8251,7 +8259,7 @@ int dev_change_xdp_fd(struct net_device *dev, struct netlink_ext_ack *extack,
+ 			return -EBUSY;
+ 		}
+ 
+-		prog = bpf_prog_get_type_dev(fd, BPF_PROG_TYPE_XDP,
++		prog = bpf_prog_get_type_dev(prog_fd, BPF_PROG_TYPE_XDP,
+ 					     bpf_op == ops->ndo_bpf);
+ 		if (IS_ERR(prog))
+ 			return PTR_ERR(prog);
+@@ -8267,13 +8275,35 @@ int dev_change_xdp_fd(struct net_device *dev, struct netlink_ext_ack *extack,
+ 			return 0;
+ 		}
+ 	} else {
++		if (chain_map_fd >= 0)
++			return -EINVAL;
++
+ 		if (!__dev_xdp_query(dev, bpf_op, query))
+ 			return 0;
+ 	}
+ 
++	if (chain_map_fd >= 0) {
++		chain_map = bpf_map_get_with_uref(chain_map_fd);
++		if (IS_ERR(chain_map))
++			return PTR_ERR(chain_map);
++
++		if (chain_map->map_type != BPF_MAP_TYPE_XDP_CHAIN) {
++			NL_SET_ERR_MSG(extack, "invalid chain map type");
++			bpf_map_put_with_uref(chain_map);
++			return -EINVAL;
++		}
 +	}
 +
- 	/* if user passed in any flags, add those too */
- 	if (flags) {
- 		nla_xdp = (struct nlattr *)((char *)nla + nla->nla_len);
-@@ -187,6 +199,17 @@ int bpf_set_link_xdp_fd(int ifindex, int fd, __u32 flags)
- 	return ret;
+ 	err = dev_xdp_install(dev, bpf_op, extack, flags, prog);
+-	if (err < 0 && prog)
+-		bpf_prog_put(prog);
++	if (err < 0) {
++		if (prog)
++			bpf_prog_put(prog);
++	} else {
++		rcu_swap_protected(dev->xdp_chain_map, chain_map, 1);
++	}
++
++	if(chain_map)
++		bpf_map_put_with_uref(chain_map);
+ 
+ 	return err;
  }
+diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
+index 49fa910b58af..d6123efdff80 100644
+--- a/net/core/rtnetlink.c
++++ b/net/core/rtnetlink.c
+@@ -1427,6 +1427,7 @@ static int rtnl_xdp_report_one(struct sk_buff *skb, struct net_device *dev,
  
-+int bpf_set_link_xdp_chain(int ifindex, int prog_fd, int chain_map_fd,
-+			   __u32 flags)
-+{
-+	return __bpf_set_link_xdp_fd(ifindex, &prog_fd, &chain_map_fd, flags);
-+}
-+
-+int bpf_set_link_xdp_fd(int ifindex, int fd, __u32 flags)
-+{
-+	return __bpf_set_link_xdp_fd(ifindex, &fd, NULL, flags);
-+}
-+
- static int __dump_link_nlmsg(struct nlmsghdr *nlh,
- 			     libbpf_dump_nlmsg_t dump_link_nlmsg, void *cookie)
+ static int rtnl_xdp_fill(struct sk_buff *skb, struct net_device *dev)
  {
-@@ -247,10 +270,13 @@ static int get_xdp_id(void *cookie, void *msg, struct nlattr **tb)
++	struct bpf_map *chain_map;
+ 	struct nlattr *xdp;
+ 	u32 prog_id;
+ 	int err;
+@@ -1461,6 +1462,13 @@ static int rtnl_xdp_fill(struct sk_buff *skb, struct net_device *dev)
+ 			goto err_cancel;
+ 	}
  
- 	xdp_id->id = libbpf_nla_getattr_u32(xdp_tb[xdp_attr]);
- 
-+	if (xdp_tb[IFLA_XDP_CHAIN_MAP_ID])
-+		xdp_id->chain_map_id = libbpf_nla_getattr_u32(xdp_tb[IFLA_XDP_CHAIN_MAP_ID]);
++	chain_map = rcu_dereference(dev->xdp_chain_map);
++	if (chain_map) {
++		err = nla_put_u32(skb, IFLA_XDP_CHAIN_MAP_ID, chain_map->id);
++		if (err)
++			goto err_cancel;
++	}
 +
+ 	nla_nest_end(skb, xdp);
  	return 0;
- }
  
--int bpf_get_link_xdp_id(int ifindex, __u32 *prog_id, __u32 flags)
-+static int __bpf_get_link_xdp_id(int ifindex, __u32 *prog_id, __u32 *chain_map_id, __u32 flags)
- {
- 	struct xdp_id_md xdp_id = {};
- 	int sock, ret;
-@@ -274,13 +300,28 @@ int bpf_get_link_xdp_id(int ifindex, __u32 *prog_id, __u32 flags)
- 	xdp_id.flags = flags;
+@@ -2756,12 +2764,27 @@ static int do_setlink(const struct sk_buff *skb,
+ 		}
  
- 	ret = libbpf_nl_get_link(sock, nl_pid, get_xdp_id, &xdp_id);
--	if (!ret)
-+	if (!ret) {
- 		*prog_id = xdp_id.id;
- 
-+		if (chain_map_id)
-+			*chain_map_id = xdp_id.chain_map_id;
-+	}
+ 		if (xdp[IFLA_XDP_FD]) {
++			int chain_map_fd = -1;
 +
- 	close(sock);
- 	return ret;
- }
++			if (xdp[IFLA_XDP_CHAIN_MAP_FD]) {
++				chain_map_fd = nla_get_s32(xdp[IFLA_XDP_CHAIN_MAP_FD]);
++			} else if (dev->xdp_chain_map) {
++				NL_SET_ERR_MSG(extack, "no chain map attribute, but chain map loaded");
++				err = -EINVAL;
++				goto errout;
++			}
++
+ 			err = dev_change_xdp_fd(dev, extack,
+ 						nla_get_s32(xdp[IFLA_XDP_FD]),
++						chain_map_fd,
+ 						xdp_flags);
+ 			if (err)
+ 				goto errout;
+ 			status |= DO_SETLINK_NOTIFY;
++		} else if (xdp[IFLA_XDP_CHAIN_MAP_FD]) {
++			err = -EINVAL;
++			NL_SET_ERR_MSG(extack, "chain map attribute invalid without prog fd");
++			goto errout;
+ 		}
+ 	}
  
-+int bpf_get_link_xdp_id(int ifindex, __u32 *prog_id, __u32 flags)
-+{
-+	return __bpf_get_link_xdp_id(ifindex, prog_id, NULL, flags);
-+}
-+
-+int bpf_get_link_xdp_chain(int ifindex, __u32 *prog_id, __u32 *chain_map_id,
-+			   __u32 flags)
-+{
-+	return __bpf_get_link_xdp_id(ifindex, prog_id, chain_map_id, flags);
-+}
-+
- int libbpf_nl_get_link(int sock, unsigned int nl_pid,
- 		       libbpf_dump_nlmsg_t dump_link_nlmsg, void *cookie)
- {
 
