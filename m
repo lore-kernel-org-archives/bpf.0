@@ -2,67 +2,70 @@ Return-Path: <SRS0=XbBo=X3=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C207BC352AA
-	for <bpf@archiver.kernel.org>; Wed,  2 Oct 2019 12:04:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58B44C35280
+	for <bpf@archiver.kernel.org>; Wed,  2 Oct 2019 12:04:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8DCC721D82
-	for <bpf@archiver.kernel.org>; Wed,  2 Oct 2019 12:04:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F38321783
+	for <bpf@archiver.kernel.org>; Wed,  2 Oct 2019 12:04:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="f23rjIBk"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DqsD2s9P"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728345AbfJBMEO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Oct 2019 08:04:14 -0400
-Received: from mail-lf1-f54.google.com ([209.85.167.54]:41007 "EHLO
-        mail-lf1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726681AbfJBMEO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Oct 2019 08:04:14 -0400
-Received: by mail-lf1-f54.google.com with SMTP id r2so12496833lfn.8
-        for <bpf@vger.kernel.org>; Wed, 02 Oct 2019 05:04:13 -0700 (PDT)
+        id S1728379AbfJBMER (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Oct 2019 08:04:17 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:37652 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728359AbfJBMER (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Oct 2019 08:04:17 -0400
+Received: by mail-lf1-f65.google.com with SMTP id w67so12523305lff.4
+        for <bpf@vger.kernel.org>; Wed, 02 Oct 2019 05:04:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QRH9ZC+8Ny/msHWcjGNR4E0iaqUnOOF/L6UnfzfPUco=;
-        b=f23rjIBkvLQp+jBBwDivqvjjR/UzmHdWYZ4YuKB85ScWs9VNgvA4l82vxQfSKKcZEP
-         itqjeh+PE4szh6m8AkdQaJJxl6kUhJ8wJOarb5IdXg9vbAtL1XMIVR5GAnhstXFNND9/
-         Tp4gkIs5PllRsdkpY0tfIKPIgCcuc2Jev1sSRm073Mp01icxsgnlr84wDdLUSQaXMP+k
-         gdZUX1vY5UU14Jlni8T57B/T5LsGEjD7zT/IkovAMyovfrbBrh+A7DWt3m3hHZSCotdE
-         2TdjRXRHjDwrrJHQpJb0i4AzX8eAXPkFYyS996qsFqApNUZqWLy6/4AJfn9J38+jDwIq
-         Z0Ng==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=TMB6TblY53+4VyVSJtgn0L5ohD/FsUtecY9KXTnnDX4=;
+        b=DqsD2s9P1SD/PtORTHEVfyScMUoIU61jGf1MvpZNqMizg2xPfFl/kReztOBlI4GO3e
+         z1Go2J83GjLF8pQSMiXB4U4w1NUvICHnzC5UOXJa6j9dnv/CmSOdsXIclmhJu5ouVmiw
+         cToPMiZ4rCxpRNxFnHuHNzLsiDwWc6LOOlN33hmZjj6W70SdmDvDd62PT+QmGNFua/B7
+         ooS7xH/oMHWaQ+xWj4FiiNRXj3PsjC+LqWib6sHftimrqCDAbyBFNlAuAVZcAXcj4Adn
+         h8uW+B5LXmgVaa0IuMpmJC5qHZGVXmUXkW+tsLgrdOjtHofRERJ3R5BekTtFZDNYZVUk
+         fx9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QRH9ZC+8Ny/msHWcjGNR4E0iaqUnOOF/L6UnfzfPUco=;
-        b=gAxdgzeDpBRaKVYyBNdFAOuDHFqiM+DIdMpmvdqLiu9octqTMSlc+bNh4/e2/Wz6ji
-         HrOin/cdpzzup1fKaQYdoIwU2Od/ali0E/3wbJlU+Tzet+fUVs7sp88E6QGz6Xi2Vdwy
-         s76/E/977M+dK73tvLD7XZB2Nzq8L3WYJjfiQHy5oQNRg6tOImIlAHHLgSK4NjpjdCYs
-         xJY/9tNRGzrvg5u00kfEZJEUjCQtvg/QnrPurv74suI1XN974AVUoQ9jfHXfUZskawdM
-         4QdnLfyA/m0qFCCbUnLpfyD9/LuSQcLPz/yy75O09dCRbwNH+gGYp2rftlRycBKy1Upd
-         IROQ==
-X-Gm-Message-State: APjAAAU0HaEDosdwYDxdDjqhP2DJ1mHUUXNcGsRejCE4DmBieaPpLD4+
-        92JDBFn78bzx1hgaPU9lzuEZcn4EGZY=
-X-Google-Smtp-Source: APXvYqyyyNzF3fRohqc2QWfIhha0eeknjrB2f4OKPHr3+Ot91a5QKrvaEtH0TD3WHGORsSn1/bsxrg==
-X-Received: by 2002:ac2:5925:: with SMTP id v5mr2150152lfi.8.1570017852633;
-        Wed, 02 Oct 2019 05:04:12 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=TMB6TblY53+4VyVSJtgn0L5ohD/FsUtecY9KXTnnDX4=;
+        b=Z8T4BBUZJ3nlbA5jo4p32dds8a/jWUomsB49unm+JKXamtfuKyVfb70Arfzehde8Jg
+         7bTf4pXE+Vfw4ft1qntuSz6EbGxRNnMuh5uJfOVf6Wvj6LrlcyAhYyZmYNFyPIm7KFGi
+         F5jNEt3sNVDmjlwBhFlPLuCcZZQLlXBwKqK8ntdlxFXQbIGDlrOz+qOtMAJxy604B1pS
+         jWlwto09hFGZeJQI2DJ2w+GfxEmpcmVbLO2j7FhsoLgH91HH31bJxJ/cpzHSgy7DSHSu
+         X7xswzNEkqZn3wCoSB5T7uqKrWps8R4cEBn+6Ff5HS7EWPh0IA3YTO8TUuKEGbU57Rce
+         KIVQ==
+X-Gm-Message-State: APjAAAVA5Xter+DTsiGpntj5CySNM3p4li7hH504feIjm2OZO28YZlf6
+        9RQdom4qBl0vTQEREU+/m5BBpw==
+X-Google-Smtp-Source: APXvYqzf1bxl3vPpwa5mq2B5jjzpp5yAncmvsE9rUg1AJrtdAyaV4drWRLAx9gwUoPb8uqukbTOHWA==
+X-Received: by 2002:ac2:4a69:: with SMTP id q9mr2037834lfp.86.1570017855074;
+        Wed, 02 Oct 2019 05:04:15 -0700 (PDT)
 Received: from localhost.localdomain (168-200-94-178.pool.ukrtel.net. [178.94.200.168])
-        by smtp.gmail.com with ESMTPSA id x2sm4833827ljj.94.2019.10.02.05.04.11
+        by smtp.gmail.com with ESMTPSA id x2sm4833827ljj.94.2019.10.02.05.04.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2019 05:04:11 -0700 (PDT)
+        Wed, 02 Oct 2019 05:04:14 -0700 (PDT)
 From:   Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
 To:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net
 Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-Subject: [PATCH bpf-next 0/2] selftest/bpf: remove warns for enable_all_controllers
-Date:   Wed,  2 Oct 2019 15:04:02 +0300
-Message-Id: <20191002120404.26962-1-ivan.khoronzhuk@linaro.org>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: correct path to include msg + path
+Date:   Wed,  2 Oct 2019 15:04:04 +0300
+Message-Id: <20191002120404.26962-3-ivan.khoronzhuk@linaro.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191002120404.26962-1-ivan.khoronzhuk@linaro.org>
+References: <20191002120404.26962-1-ivan.khoronzhuk@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -71,17 +74,59 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This micro series fixes annoying warn described in patches
-while samples/bpf build. Second patch fixes new warn that
-comes after fixing warn of first patch, that was masked.
+The "path" buf is supposed to contain path + printf msg up to 24 bytes.
+It will be cut anyway, but compiler generates truncation warns like:
 
-Ivan Khoronzhuk (2):
-  selftests/bpf: add static to enable_all_controllers()
-  selftests/bpf: correct path to include msg + path
+"
+samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c: In
+function ‘setup_cgroup_environment’:
+samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:52:34:
+warning: ‘/cgroup.controllers’ directive output may be truncated
+writing 19 bytes into a region of size between 1 and 4097
+[-Wformat-truncation=]
+snprintf(path, sizeof(path), "%s/cgroup.controllers", cgroup_path);
+				  ^~~~~~~~~~~~~~~~~~~
+samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:52:2:
+note: ‘snprintf’ output between 20 and 4116 bytes into a destination
+of size 4097
+snprintf(path, sizeof(path), "%s/cgroup.controllers", cgroup_path);
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:72:34:
+warning: ‘/cgroup.subtree_control’ directive output may be truncated
+writing 23 bytes into a region of size between 1 and 4097
+[-Wformat-truncation=]
+snprintf(path, sizeof(path), "%s/cgroup.subtree_control",
+				  ^~~~~~~~~~~~~~~~~~~~~~~
+cgroup_path);
+samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:72:2:
+note: ‘snprintf’ output between 24 and 4120 bytes into a destination
+of size 4097
+snprintf(path, sizeof(path), "%s/cgroup.subtree_control",
+cgroup_path);
+"
 
- tools/testing/selftests/bpf/cgroup_helpers.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+In order to avoid warns, lets decrease buf size for cgroup workdir on
+24 bytes with assumption to include also "/cgroup.subtree_control" to
+the address. The cut will never happen anyway.
 
+Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+---
+ tools/testing/selftests/bpf/cgroup_helpers.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
+index 4d74f3c4619b..0fb910df5387 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.c
++++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+@@ -98,7 +98,7 @@ static int enable_all_controllers(char *cgroup_path)
+  */
+ int setup_cgroup_environment(void)
+ {
+-	char cgroup_workdir[PATH_MAX + 1];
++	char cgroup_workdir[PATH_MAX - 24];
+ 
+ 	format_cgroup_path(cgroup_workdir, "");
+ 
 -- 
 2.17.1
 
