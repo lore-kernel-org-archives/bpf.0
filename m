@@ -2,145 +2,160 @@ Return-Path: <SRS0=XbBo=X3=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC41FC47404
-	for <bpf@archiver.kernel.org>; Wed,  2 Oct 2019 21:51:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49F22C4360C
+	for <bpf@archiver.kernel.org>; Wed,  2 Oct 2019 21:54:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 80B162086A
-	for <bpf@archiver.kernel.org>; Wed,  2 Oct 2019 21:51:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19EAD20842
+	for <bpf@archiver.kernel.org>; Wed,  2 Oct 2019 21:54:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="l/gmsE9q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bt3VWZmA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728294AbfJBVvT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Oct 2019 17:51:19 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:29566 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729599AbfJBVvL (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 2 Oct 2019 17:51:11 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x92Lp3hI027213
-        for <bpf@vger.kernel.org>; Wed, 2 Oct 2019 14:51:10 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=onMKCkZo+bmaZl5/HAPe75V4vR6XCRtoEEpJ5Vmi+B8=;
- b=l/gmsE9qavn+4OyCulF2Sdp6evzKmuh9G1MvfJ0HKOXbkkt1xitv077phekN8aiQRmZR
- WqBodQkKOoRBYqdbwDy3dAPLr4Kd1sk2xM55R40qTP2GGCSfTVemGHICCe4zUUvQEHLk
- f3DdL3nreMFt3dZHtlJkK4p9L5fuFBINPz8= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2vc8tayvc8-6
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 02 Oct 2019 14:51:10 -0700
-Received: from mx-out.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 2 Oct 2019 14:51:01 -0700
-Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 647BD861822; Wed,  2 Oct 2019 14:50:59 -0700 (PDT)
-Smtp-Origin-Hostprefix: dev
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: dev101.prn2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v2 bpf-next 5/7] libbpf: move bpf_{helpers,endian,tracing}.h into libbpf
-Date:   Wed, 2 Oct 2019 14:50:39 -0700
-Message-ID: <20191002215041.1083058-6-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191002215041.1083058-1-andriin@fb.com>
-References: <20191002215041.1083058-1-andriin@fb.com>
-X-FB-Internal: Safe
+        id S1726297AbfJBVyC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Oct 2019 17:54:02 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:33722 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725928AbfJBVyB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Oct 2019 17:54:01 -0400
+Received: by mail-qk1-f195.google.com with SMTP id x134so328939qkb.0;
+        Wed, 02 Oct 2019 14:53:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rzOcwXLPCPxOer2OQybfy1++8uKi5OM6q5fIBGrbztg=;
+        b=Bt3VWZmADHxaTGyi0q/esRUsSbOo55sfH7wTfotYnV+6N73XFIXvn3VSvg7sPPBXyV
+         LB8j5V7u3aKyMKTLhyW7LqfSUoAqrFuS4caTEqMFe7rvD6cM0T91cwqW7aDCu3LB/VBp
+         GiIiM7AmZk1sdo4jFj+5OXhW8e72L3QKg0uYhJN5gKH5w5QY/klGOKpAjEIEwZfJWS2D
+         wdiCqYZWUt45PQULbfvpI9uFVioZORPVi0sv/9b/jiFZK+vCgypwBOIK1Hql+WDLRatx
+         /8YRVZ4A3ExpLU1KzXwLNYFee0dRPQIIam09qzqcyC3Uep3hLnEULmhZA0wDlVStOEZW
+         b6SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rzOcwXLPCPxOer2OQybfy1++8uKi5OM6q5fIBGrbztg=;
+        b=PN815pF20f92v3h9rEIkshbFX1jHhx0Q52xHQSN5N4547nnMxHcY3jWsRNH8GsYGCL
+         nY/Mn0WExDVKBVTL1KYR/2icoKiafH/Lz3oO3oaVYr9uu3UdggA3KMIKzwxoQZWC+nnc
+         lVMoE++WjdTWNOxyvX55Ar2qciq8Aku6xW4qO2FSPBwEQhCgD0intF29dLCLEWDIK1xj
+         IKxb3bzpijTRlcl++DENH5cPHddJHAz6TxUx0t9qJWGayY02CrY9r9JkmtgSiOBBMwvg
+         f7t0vowQp9z/zPzc2P5gXPnnuqZKqkNA6xzZPonPlM1x/czLUCx7K77Wk2fou51OD14O
+         /8LQ==
+X-Gm-Message-State: APjAAAVop0aw8bvcSJwniCdAtu7p7r+l/a1OTVRKEBWFAomDzlWvy29s
+        GMSKXTEnIxNkvtFymTr0vo5/f+oVaNu6Z0UrmH8=
+X-Google-Smtp-Source: APXvYqyOF3z/DzRmunXZYetxTarAMDAqZvSiQ4zdVcvUxuWIyXYpouY4xADzvDjznsZXL/rHW1cH62TG+AVddAUteU4=
+X-Received: by 2002:a37:9fcd:: with SMTP id i196mr1165959qke.92.1570053238615;
+ Wed, 02 Oct 2019 14:53:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
- definitions=2019-10-02_09:2019-10-01,2019-10-02 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 adultscore=0
- spamscore=0 priorityscore=1501 lowpriorityscore=0 phishscore=0 bulkscore=0
- mlxlogscore=859 malwarescore=0 clxscore=1015 suspectscore=8
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1910020173
-X-FB-Internal: deliver
+References: <20191001173728.149786-1-brianvv@google.com> <20191001173728.149786-3-brianvv@google.com>
+ <CAEf4BzYxs6Ace8s64ML3pA9H4y0vgdWv_vDF57oy3i-O_G7c-g@mail.gmail.com>
+ <CABCgpaWbPN+2vSNdynHtmDxrgGbyzHa_D-y4-X8hLrQYbhTx=A@mail.gmail.com>
+ <20191002085553.GA6226@pc-66.home> <CAEf4BzZAywR2g4bRu8Bs-YJxzf64GTrR7NvgOaXG2fqaKiJpSQ@mail.gmail.com>
+ <20191002215051.GB9196@pc-66.home>
+In-Reply-To: <20191002215051.GB9196@pc-66.home>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 2 Oct 2019 14:53:47 -0700
+Message-ID: <CAEf4BzaftLAc1xv5yiRE2J6MLy_FF4g6_dqExTiPjs6ZDX6e=w@mail.gmail.com>
+Subject: Re: [PATCH bpf 2/2] selftests/bpf: test_progs: don't leak server_fd
+ in test_sockopt_inherit
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Brian Vazquez <brianvv.kernel@gmail.com>,
+        Brian Vazquez <brianvv@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Stanislav Fomichev <sdf@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Move bpf_helpers.h, bpf_tracing.h, and bpf_endian.h into libbpf. Ensure
-they are installed along the other libbpf headers. Also, adjust
-selftests and samples include path to include libbpf now.
+On Wed, Oct 2, 2019 at 2:51 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On Wed, Oct 02, 2019 at 01:30:14PM -0700, Andrii Nakryiko wrote:
+> > On Wed, Oct 2, 2019 at 1:56 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+> > > On Tue, Oct 01, 2019 at 08:42:30PM -0700, Brian Vazquez wrote:
+> > > > Thanks for reviewing the patches Andrii!
+> > > >
+> > > > Although Daniel fixed them and applied them correctly.
+> > >
+> > > After last kernel/maintainer summit at LPC, I reworked all my patchwork scripts [0]
+> > > which I use for bpf trees in order to further reduce manual work and add more sanity
+> > > checks at the same time. Therefore, the broken Fixes: tag was a good test-case. ;-)
+> >
+> > Do you scripts also capitalize first word after libbpf: prefix? Is
+> > that intentional? Is that a recommended subject casing:
+> >
+> > "libbpf: Do awesome stuff" vs "libbpf: do awesome stuff"?
+>
+> Right now we have a bit of a mix on that regard, and basically what the
+> pw-apply script from [0] is doing, is the following to provide some more
+> context:
+>
+> - Pulls the series mbox specified by series id from patchwork, dumps all
+>   necessary information about the series, e.g. whether it's complete and
+>   all patches are present, etc.
+> - Pushes the mbox through mb2q which is a script that x86 maintainers and
+>   few others use for their patch management and spills out a new mbox.
+>   This is effectively 'normalizing' the patches from the mbox to bring in
+>   some more consistency, meaning it adds Link: tags to every patch based
+>   on the message id and checks whether the necessary mailing list aka
+>   bpf was in Cc, so we always have lore BPF archive links, sorts tags so
+>   they all have a consistent order, it allows to propagate Acked-by,
+>   Reviewed-by, Tested-by tags from cover letter into the individual
+>   patches, it also capitalizes the first word after the subsystem prefix.
+> - It applies and merges the resulting mbox, and performs additional checks
+>   for the newly added commit range, that is, it checks whether Fixes tags
+>   are correctly formatted, whether the commit exists at all in the tree or
+>   whether subject / sha is wrong, and throws warnings to me so I can fix
+>   them up if needed or toss out the series again worst case, as well as
+>   checks whether SOB from the patch authors is present and matches their
+>   name.
+> - It allows to set the patches from the series into accepted state in
+>   patchwork.
+>
+> So overall less manual work / checks than what used to be before while
+> improving / ensuring more consistency in the commits at the same time.
+> If you have further suggestions / improvements / patches to pw.git,
+> happy to hear. :)
+>
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- samples/bpf/Makefile                               | 2 +-
- tools/lib/bpf/Makefile                             | 5 ++++-
- tools/{testing/selftests => lib}/bpf/bpf_endian.h  | 0
- tools/{testing/selftests => lib}/bpf/bpf_helpers.h | 0
- tools/{testing/selftests => lib}/bpf/bpf_tracing.h | 0
- tools/testing/selftests/bpf/Makefile               | 2 +-
- 6 files changed, 6 insertions(+), 3 deletions(-)
- rename tools/{testing/selftests => lib}/bpf/bpf_endian.h (100%)
- rename tools/{testing/selftests => lib}/bpf/bpf_helpers.h (100%)
- rename tools/{testing/selftests => lib}/bpf/bpf_tracing.h (100%)
+"libbpf: Captilized subj" looks weird, but I can live with that. I'll
+post subsequent patches with that casing. I'm glad a lot of that stuff
+is semi-automated, it's terrible to have to always check all that
+manually :)
 
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 42b571cde177..ecb3535d91e3 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -283,7 +283,7 @@ $(obj)/hbm_edt_kern.o: $(src)/hbm.h $(src)/hbm_kern.h
- $(obj)/%.o: $(src)/%.c
- 	@echo "  CLANG-bpf " $@
- 	$(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(EXTRA_CFLAGS) -I$(obj) \
--		-I$(srctree)/tools/testing/selftests/bpf/ \
-+		-I$(srctree)/tools/testing/selftests/bpf/ -I$(srctree)/tools/lib/bpf/ \
- 		-D__KERNEL__ -D__BPF_TRACING__ -Wno-unused-value -Wno-pointer-sign \
- 		-D__TARGET_ARCH_$(SRCARCH) -Wno-compare-distinct-pointer-types \
- 		-Wno-gnu-variable-sized-type-not-at-end \
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index c6f94cffe06e..20b5b0ff5c73 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -240,7 +240,10 @@ install_headers:
- 		$(call do_install,libbpf.h,$(prefix)/include/bpf,644); \
- 		$(call do_install,btf.h,$(prefix)/include/bpf,644); \
- 		$(call do_install,libbpf_util.h,$(prefix)/include/bpf,644); \
--		$(call do_install,xsk.h,$(prefix)/include/bpf,644);
-+		$(call do_install,xsk.h,$(prefix)/include/bpf,644); \
-+		$(call do_install,bpf_helpers.h,$(prefix)/include/bpf,644); \
-+		$(call do_install,bpf_tracing.h,$(prefix)/include/bpf,644); \
-+		$(call do_install,bpf_endian.h,$(prefix)/include/bpf,644);
- 
- install_pkgconfig: $(PC_FILE)
- 	$(call QUIET_INSTALL, $(PC_FILE)) \
-diff --git a/tools/testing/selftests/bpf/bpf_endian.h b/tools/lib/bpf/bpf_endian.h
-similarity index 100%
-rename from tools/testing/selftests/bpf/bpf_endian.h
-rename to tools/lib/bpf/bpf_endian.h
-diff --git a/tools/testing/selftests/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-similarity index 100%
-rename from tools/testing/selftests/bpf/bpf_helpers.h
-rename to tools/lib/bpf/bpf_helpers.h
-diff --git a/tools/testing/selftests/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
-similarity index 100%
-rename from tools/testing/selftests/bpf/bpf_tracing.h
-rename to tools/lib/bpf/bpf_tracing.h
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 6889c19a628c..b00a5d8046c7 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -148,7 +148,7 @@ $(shell $(1) -v -E - </dev/null 2>&1 \
- endef
- CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
- BPF_CFLAGS = -I. -I./include/uapi -I../../../include/uapi \
--	     -I$(OUTPUT)/../usr/include -D__TARGET_ARCH_$(SRCARCH)
-+	     -I$(BPFDIR) -I$(OUTPUT)/../usr/include -D__TARGET_ARCH_$(SRCARCH)
- 
- CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
- 	       -Wno-compare-distinct-pointer-types
--- 
-2.17.1
-
+> Thanks,
+> Daniel
+>
+> > >   [0] https://git.kernel.org/pub/scm/linux/kernel/git/dborkman/pw.git/
+> > >
+> > > > On Tue, Oct 1, 2019 at 8:20 PM Andrii Nakryiko
+> > > > <andrii.nakryiko@gmail.com> wrote:
+> > > > >
+> > > > > On Tue, Oct 1, 2019 at 10:40 AM Brian Vazquez <brianvv@google.com> wrote:
+> > > > > >
+> > > > >
+> > > > > I don't think there is a need to add "test_progs:" to subject, "
+> > > > > test_sockopt_inherit" is specific enough ;)
+> > > > >
+> > > > > > server_fd needs to be close if pthread can't be created.
+> > > > >
+> > > > > typo: closed
+> > > > >
+> > > > > > Fixes: e3e02e1d9c24 ("selftests/bpf: test_progs: convert test_sockopt_inherit")
+> > > > > > Cc: Stanislav Fomichev <sdf@google.com>
+> > > > > > Signed-off-by: Brian Vazquez <brianvv@google.com>
+> > > > > > ---
+> > > > >
+> > > > > Acked-by: Andrii Nakryiko <andriin@fb.com>
+> > > > >
+> > > > > >  tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c | 2 +-
+> > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
