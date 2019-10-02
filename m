@@ -2,105 +2,185 @@ Return-Path: <SRS0=XbBo=X3=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEA99C352AA
-	for <bpf@archiver.kernel.org>; Wed,  2 Oct 2019 12:04:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E79BCC352AA
+	for <bpf@archiver.kernel.org>; Wed,  2 Oct 2019 13:30:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 818B121929
-	for <bpf@archiver.kernel.org>; Wed,  2 Oct 2019 12:04:32 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OmP5kq+z"
+	by mail.kernel.org (Postfix) with ESMTP id C96B321783
+	for <bpf@archiver.kernel.org>; Wed,  2 Oct 2019 13:30:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728354AbfJBMEQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Oct 2019 08:04:16 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:36079 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728341AbfJBMEP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Oct 2019 08:04:15 -0400
-Received: by mail-lj1-f196.google.com with SMTP id v24so16841120ljj.3
-        for <bpf@vger.kernel.org>; Wed, 02 Oct 2019 05:04:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Y95OajR8Z4EhoKVV/d/GtPK38UmcXtK59LFx+wA+Kn4=;
-        b=OmP5kq+z+zbFpIxkBNzdy160yYdL/tMN7p+YDlhaPbcErQwKwPUXwv2VJg5sUXmyup
-         ygBxLJXG5geeSgJTdIEycdXlvcJ4VTiDNeCAcPjC9oX6zR5voiv5Ww3rBRcWuZD7otui
-         XmJuS4uPT/e5ZSoyF4+mdfA9VFyOem72gpoqPJVVo9aWJuI2LHax7Cs3gE8ErSWQazFK
-         JaESnbyXsinx1R/cgxTvkqrAHVdAH6gFw5ZUBlVLwH3Uwfnogt6FlnURjAsPrds0wVmq
-         reyXAR9+mGKS3WAcXU8dMUB8XLZ00ncKR8c6OPrSVvIyojBl/q0L730b+Ns7dEOXDGfS
-         0eeg==
+        id S1727870AbfJBNaa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Oct 2019 09:30:30 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:6250 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725917AbfJBNa3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Oct 2019 09:30:29 -0400
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 5E833C05AA52
+        for <bpf@vger.kernel.org>; Wed,  2 Oct 2019 13:30:28 +0000 (UTC)
+Received: by mail-lj1-f199.google.com with SMTP id m22so4894075ljj.6
+        for <bpf@vger.kernel.org>; Wed, 02 Oct 2019 06:30:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Y95OajR8Z4EhoKVV/d/GtPK38UmcXtK59LFx+wA+Kn4=;
-        b=A3U5PFnw4aP6bThrNX+FqhYBWE0PIUG8Z/yeZx0x8jETs+8EItQ6YftM7R9VYrZ1aQ
-         mJf8fVIgHl+ArN+P57JkJkcVwg02IxLj1ASKO8lULMgarkdnDveLc3f3XMNhk+ohbn0A
-         mVkH/O/D/xpfZcmJK3SOzQXFxElpzSlBcZJh8pZHdPYRw2SMEoFoZSBriRUwifVHMqTo
-         oUrbOs3LHpb0ejOPckeWeT6nEp8Q1cy6p23BVPsw10OmhdWa7TQargvTmVXc8PPgGz6C
-         vR2j+ls8GPkUC+Yqo55fGyyct4pRMYwaMIjoxLNMopnR4K+6Z54oxaWhy0jMDhPv+spy
-         qMAw==
-X-Gm-Message-State: APjAAAXw7FNaqS1EhkDiTZpO/zUEKjgCMJ//xvBGWQaIfYLuTAOlyB91
-        HxgbiC11DxYUdDhzztjXv4d60Q==
-X-Google-Smtp-Source: APXvYqwCgHv5cQQHT5flHSQGpsA/3qpFgY9BqKRSoHwTcS8bpTuL/U1VGR2qPBiljcvG8ANgpwX2YQ==
-X-Received: by 2002:a2e:5c09:: with SMTP id q9mr2285090ljb.4.1570017853751;
-        Wed, 02 Oct 2019 05:04:13 -0700 (PDT)
-Received: from localhost.localdomain (168-200-94-178.pool.ukrtel.net. [178.94.200.168])
-        by smtp.gmail.com with ESMTPSA id x2sm4833827ljj.94.2019.10.02.05.04.12
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:user-agent
+         :mime-version:content-transfer-encoding;
+        bh=XzdTNQVTcM9PqilE8DvtNGRuNhLxecb8IlMwsQq1hP8=;
+        b=gI13PUDo91ci+xxcCiMQCbWkDeSKJsQnURVkzqSEJx6oVBGQpEFtBRKD8Nr6t6toWQ
+         qJNzHdVjeG+Hj+QvgQz7iiVCwtIL5e+UebEjTHQX+kW3UCARhE5QepTOTXMlZd3XR0wo
+         3/Af2JbkZyHUc3VguuVzd8dSjr1BHeLvf5ZJs+rgkHMUphWwlzzGLh2F+W6hKNJcF3Pf
+         YinV1GUCWsyvKVegQbjl4cSE6boq8nQnCDc2N826a4gF217xMygOut2BFizdycmMQElS
+         Oi1jWfmRhguBs9sSVWlLdCt/IfA0zz/xDvlhv0JPN1snOlVvoELCjS05KWncZEs1Gy3X
+         HgDg==
+X-Gm-Message-State: APjAAAXplbU4QcPcGIe3YVSF8ae5BCm35DHWMmOcd74aHZ8AMjz3BLIS
+        ebOrRTj0uJo2/60GK1UtYfQrd1VXJyU5v7LsrtjaWwpw2Op8THS1pOSk19ZfSqny33Aj6I/FClF
+        DVfged17Q1NFZ
+X-Received: by 2002:a2e:5358:: with SMTP id t24mr2512522ljd.209.1570023026782;
+        Wed, 02 Oct 2019 06:30:26 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqzgLnOQiLlFTPh+I/dXdIGUpO3jQu6dvcibZo1wkHybJGVC/sKpcHdX9oVHJaBAgf4jHl7r2Q==
+X-Received: by 2002:a2e:5358:: with SMTP id t24mr2512496ljd.209.1570023026500;
+        Wed, 02 Oct 2019 06:30:26 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a00:7660:6da:443::2])
+        by smtp.gmail.com with ESMTPSA id m21sm4652958lfh.39.2019.10.02.06.30.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2019 05:04:13 -0700 (PDT)
-From:   Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-To:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-Subject: [PATCH bpf-next 1/2] selftests/bpf: add static to enable_all_controllers()
-Date:   Wed,  2 Oct 2019 15:04:03 +0300
-Message-Id: <20191002120404.26962-2-ivan.khoronzhuk@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191002120404.26962-1-ivan.khoronzhuk@linaro.org>
-References: <20191002120404.26962-1-ivan.khoronzhuk@linaro.org>
+        Wed, 02 Oct 2019 06:30:25 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id A060918063D; Wed,  2 Oct 2019 15:30:24 +0200 (CEST)
+Subject: [PATCH bpf-next 0/9] xdp: Support multiple programs on a single
+ interface through chain calls
+From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Marek Majkowski <marek@cloudflare.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        David Miller <davem@davemloft.net>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Date:   Wed, 02 Oct 2019 15:30:24 +0200
+Message-ID: <157002302448.1302756.5727756706334050763.stgit@alrua-x1>
+User-Agent: StGit/0.19-dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add static to enable_all_controllers() to get rid from annoying warn:
+This series adds support for executing multiple XDP programs on a single
+interface in sequence, through the use of chain calls, as discussed at the Linux
+Plumbers Conference last month:
 
-samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:44:5:
-warning: no previous prototype for ‘enable_all_controllers’
-[-Wmissing-prototypes]
- int enable_all_controllers(char *cgroup_path)
+https://linuxplumbersconf.org/event/4/contributions/460/
 
-while samples/bpf build.
+# HIGH-LEVEL IDEA
 
-Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+The basic idea is to express the chain call sequence through a special map type,
+which contains a mapping from a (program, return code) tuple to another program
+to run in next in the sequence. Userspace can populate this map to express
+arbitrary call sequences, and update the sequence by updating or replacing the
+map.
+
+The actual execution of the program sequence is done in bpf_prog_run_xdp(),
+which will lookup the chain sequence map, and if found, will loop through calls
+to BPF_PROG_RUN, looking up the next XDP program in the sequence based on the
+previous program ID and return code.
+
+An XDP chain call map can be installed on an interface by means of a new netlink
+attribute containing an fd pointing to a chain call map. This can be supplied
+along with the XDP prog fd, so that a chain map is always installed together
+with an XDP program.
+
+# PERFORMANCE
+
+I performed a simple performance test to get an initial feel for the overhead of
+the chain call mechanism. This test consists of running only two programs in
+sequence: One that returns XDP_PASS and another that returns XDP_DROP. I then
+measure the drop PPS performance and compare it to a baseline of just a single
+program that only returns XDP_DROP.
+
+For comparison, a test case that uses regular eBPF tail calls to sequence two
+programs together is also included. Finally, because 'perf' showed that the
+hashmap lookup was the largest single source of overhead, I also added a test
+case where I removed the jhash() call from the hashmap code, and just use the
+u32 key directly as an index into the hash bucket structure.
+
+The performance for these different cases is as follows (with retpolines disabled):
+
+| Test case                       | Perf      | Add. overhead | Total overhead |
+|---------------------------------+-----------+---------------+----------------|
+| Before patch (XDP DROP program) | 31.0 Mpps |               |                |
+| After patch (XDP DROP program)  | 28.9 Mpps |        2.3 ns |         2.3 ns |
+| XDP tail call                   | 26.6 Mpps |        3.0 ns |         5.3 ns |
+| XDP chain call (no jhash)       | 19.6 Mpps |       13.4 ns |        18.7 ns |
+| XDP chain call (this series)    | 17.0 Mpps |        7.9 ns |        26.6 ns |
+
+From this it is clear that while there is some overhead from this mechanism; but
+the jhash removal example indicates that it is probably possible to optimise the
+code to the point where the overhead becomes low enough that it is acceptable.
+
+# PATCH SET STRUCTURE
+This series is structured as follows:
+
+- Patch 1: Prerequisite
+- Patch 2: New map type
+- Patch 3: Netlink hooks to install the chain call map
+- Patch 4: Core chain call logic
+- Patch 5-7: Bookkeeping updates to tools
+- Patch 8: Libbpf support for installing chain call maps
+- Patch 9: Selftests with example user space code
+
+The whole series is also available in my git repo on kernel.org:
+https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git/log/?h=xdp-multiprog-01
+
 ---
- tools/testing/selftests/bpf/cgroup_helpers.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
-index e95c33e333a4..4d74f3c4619b 100644
---- a/tools/testing/selftests/bpf/cgroup_helpers.c
-+++ b/tools/testing/selftests/bpf/cgroup_helpers.c
-@@ -41,7 +41,7 @@
-  *
-  * If successful, 0 is returned.
-  */
--int enable_all_controllers(char *cgroup_path)
-+static int enable_all_controllers(char *cgroup_path)
- {
- 	char path[PATH_MAX + 1];
- 	char buf[PATH_MAX];
--- 
-2.17.1
+Toke Høiland-Jørgensen (9):
+      hashtab: Add new bpf_map_fd_put_value op
+      xdp: Add new xdp_chain_map type for specifying XDP call sequences
+      xdp: Support setting and getting device chain map
+      xdp: Implement chain call logic to support multiple programs on one interface
+      tools/include/uapi: Add XDP chain map definitions
+      tools/libbpf_probes: Add support for xdp_chain map type
+      bpftool: Add definitions for xdp_chain map type
+      libbpf: Add support for setting and getting XDP chain maps
+      selftests: Add tests for XDP chain calls
+
+
+ include/linux/bpf.h                             |   10 +
+ include/linux/bpf_types.h                       |    1 
+ include/linux/filter.h                          |   26 ++
+ include/linux/netdevice.h                       |    3 
+ include/uapi/linux/bpf.h                        |   12 +
+ include/uapi/linux/if_link.h                    |    2 
+ kernel/bpf/hashtab.c                            |  169 +++++++++++++-
+ kernel/bpf/map_in_map.c                         |    7 +
+ kernel/bpf/map_in_map.h                         |    1 
+ kernel/bpf/syscall.c                            |   11 +
+ net/core/dev.c                                  |   42 +++-
+ net/core/rtnetlink.c                            |   23 ++
+ tools/bpf/bpftool/Documentation/bpftool-map.rst |    4 
+ tools/bpf/bpftool/bash-completion/bpftool       |    2 
+ tools/bpf/bpftool/map.c                         |    3 
+ tools/include/uapi/linux/bpf.h                  |   12 +
+ tools/include/uapi/linux/if_link.h              |    2 
+ tools/lib/bpf/libbpf.h                          |    4 
+ tools/lib/bpf/libbpf.map                        |    2 
+ tools/lib/bpf/libbpf_probes.c                   |    4 
+ tools/lib/bpf/netlink.c                         |   49 ++++
+ tools/testing/selftests/bpf/.gitignore          |    1 
+ tools/testing/selftests/bpf/Makefile            |    3 
+ tools/testing/selftests/bpf/progs/xdp_dummy.c   |    6 +
+ tools/testing/selftests/bpf/test_maps.c         |   45 ++++
+ tools/testing/selftests/bpf/test_xdp_chain.sh   |   77 +++++++
+ tools/testing/selftests/bpf/xdp_chain.c         |  271 +++++++++++++++++++++++
+ 27 files changed, 765 insertions(+), 27 deletions(-)
+ create mode 100755 tools/testing/selftests/bpf/test_xdp_chain.sh
+ create mode 100644 tools/testing/selftests/bpf/xdp_chain.c
 
