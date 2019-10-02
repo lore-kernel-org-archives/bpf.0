@@ -6,51 +6,52 @@ X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50A73ECE58A
-	for <bpf@archiver.kernel.org>; Wed,  2 Oct 2019 13:30:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F1E2ECE58A
+	for <bpf@archiver.kernel.org>; Wed,  2 Oct 2019 13:30:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2A64E21783
-	for <bpf@archiver.kernel.org>; Wed,  2 Oct 2019 13:30:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B49321A4C
+	for <bpf@archiver.kernel.org>; Wed,  2 Oct 2019 13:30:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725917AbfJBNaa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Oct 2019 09:30:30 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:58366 "EHLO mx1.redhat.com"
+        id S1727954AbfJBNae (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Oct 2019 09:30:34 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:57636 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726657AbfJBNaa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Oct 2019 09:30:30 -0400
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
+        id S1727943AbfJBNae (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Oct 2019 09:30:34 -0400
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 87D8388307
-        for <bpf@vger.kernel.org>; Wed,  2 Oct 2019 13:30:29 +0000 (UTC)
-Received: by mail-lj1-f197.google.com with SMTP id j10so4848479lja.21
-        for <bpf@vger.kernel.org>; Wed, 02 Oct 2019 06:30:29 -0700 (PDT)
+        by mx1.redhat.com (Postfix) with ESMTPS id 97DF96B
+        for <bpf@vger.kernel.org>; Wed,  2 Oct 2019 13:30:33 +0000 (UTC)
+Received: by mail-lj1-f198.google.com with SMTP id 205so4852914ljf.13
+        for <bpf@vger.kernel.org>; Wed, 02 Oct 2019 06:30:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=zxVp0oQW9P1sFKHaI9R9o1AFUMKzBOp7SdYP5JimPZo=;
-        b=p1Yw93B4ewmrpmT/3Kx78XEU1CtIt3mO+yqyb8K7dwAP1qyj5TBgtDrnZK9B9OtCdk
-         mWXAfDVt6UjvABpMgdGOwAabfK1nKF6yciWt3PCu5ZStryoJ9eeBS1PagNzKFPh1POXM
-         i7mCaRQOAK46AH4rz6XjiF9RCHBB+53+mTkY2ltn36dnaIKPM1FBXtx+zoKx0iMZWI34
-         tuIqIalF3OgZzf6DUKe2QIC0abGMwhhgMEchvr5YS0DQ1524xAudGdl8dMS/juiQVXw/
-         U/wc2CD0cKJaWv8EOW6pyrhgTT0McktQAY4gzhPU8qUoFPm2I7hVZqr9GXz9Qc8ziiKP
-         UU0w==
-X-Gm-Message-State: APjAAAX1pUGQgHgudUxsyCGPQz4XL33kQFOVx+TPKh0WIKo78jZj/utm
-        531EqNrgn6e/6WB+evv+2vHr1A1nyMhuR7oIwlPNUsS9w9W75uBc6GH9e100CQYQJijFdcRW8/X
-        U3dFB0W6QrSXb
-X-Received: by 2002:a2e:7010:: with SMTP id l16mr2531611ljc.30.1570023027364;
-        Wed, 02 Oct 2019 06:30:27 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqxEYmgbkp2r9lxcYPcJPq1Rm82i91/W2uU9/3M8voFck9WzQxTtYO4FjuRGn4ap9COXrQn2xA==
-X-Received: by 2002:a2e:7010:: with SMTP id l16mr2531601ljc.30.1570023027166;
-        Wed, 02 Oct 2019 06:30:27 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a00:7660:6da:443::2])
-        by smtp.gmail.com with ESMTPSA id 202sm4772280ljf.75.2019.10.02.06.30.26
+        bh=m4Sgqjpq9WV+RhLcG+8KSrXV2gMjNXZLDdtwQU6v3z4=;
+        b=BWpLWfFayRtN6P4nzJPwkA06xPzesmGPc93Wa9dvQdGaqYrUdobS1Dvtx1+hkRScqN
+         orLlpaLJalYozb3Kyqq3Wqdbwjdg2h2nNufwFH33jC4TB8+zs6PGGgToyigAR45MO//U
+         r4NHoX9l+FI6V9XzekGhoPD3FjAoyRxc/tIj4Cguwe0tD+LXxrzKsQb8ihWODQt3zUh2
+         hsc9hiiSJ974uOLWdhNNQJSLiVkznCxQ0f1tub5rOmvkuw05crieUDi9Y3iCoNwPkUJR
+         D6WhY8mL0FkbBQoc2Ug2eFVKCT2AHwBRjFCZl4ihjM45sWfX+BYxmsIQmXOIbteY54X0
+         bK0w==
+X-Gm-Message-State: APjAAAUkbyTllwp06DFrlleFC9P/wc3XdlEZEUgJbLQBs//uLDphTyLA
+        YQKVZHgolO9uGS5axPN+S0qtgxGKWmRJLBdVlcV6L7+67MxQ3i1vYANb42MKjrxKX1rbUHxsjkU
+        IKNPc/W+vOdca
+X-Received: by 2002:a2e:5d98:: with SMTP id v24mr2651135lje.56.1570023032150;
+        Wed, 02 Oct 2019 06:30:32 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqw8cCkbNqL5TPDLmGDHggFEX6DkEsYyT6fJtdlXaqWq9FMXWMaNejYh7ICfgXbSYzvKA+MfaA==
+X-Received: by 2002:a2e:5d98:: with SMTP id v24mr2651117lje.56.1570023032001;
+        Wed, 02 Oct 2019 06:30:32 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
+        by smtp.gmail.com with ESMTPSA id y204sm4601049lfa.64.2019.10.02.06.30.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2019 06:30:26 -0700 (PDT)
+        Wed, 02 Oct 2019 06:30:31 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id B0BBD180640; Wed,  2 Oct 2019 15:30:25 +0200 (CEST)
-Subject: [PATCH bpf-next 1/9] hashtab: Add new bpf_map_fd_put_value op
+        id 1A9D6180642; Wed,  2 Oct 2019 15:30:30 +0200 (CEST)
+Subject: [PATCH bpf-next 5/9] tools/include/uapi: Add XDP chain map
+ definitions
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Daniel Borkmann <daniel@iogearbox.net>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -61,8 +62,8 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         David Miller <davem@davemloft.net>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Date:   Wed, 02 Oct 2019 15:30:25 +0200
-Message-ID: <157002302565.1302756.3212597038181844705.stgit@alrua-x1>
+Date:   Wed, 02 Oct 2019 15:30:30 +0200
+Message-ID: <157002303003.1302756.7196736864367141657.stgit@alrua-x1>
 In-Reply-To: <157002302448.1302756.5727756706334050763.stgit@alrua-x1>
 References: <157002302448.1302756.5727756706334050763.stgit@alrua-x1>
 User-Agent: StGit/0.19-dirty
@@ -76,115 +77,56 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-The fd type maps all resolve the fd into a pointer to the underlying object
-when it is inserted into the map, and stores that pointer as the real array
-value. The htab code assumes that the map value is this single pointer, and
-dereferences it before passing it to the map fd_put_ptr() op.
-
-For xdp chain maps we want to be able to store multiple pointers, so we
-need to get the pointer to the map value store, not the dereferenced
-pointer to the actual object. So add a new more general
-bpf_map_fd_put_value() op that takes the map value instead of the
-dereferenced pointer, and use this on map element free.
+This syncs the XDP chain-map related UAPI definitions into
+tools/include/uapi.
 
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- include/linux/bpf.h     |    1 +
- kernel/bpf/hashtab.c    |   16 ++++++----------
- kernel/bpf/map_in_map.c |    7 +++++++
- kernel/bpf/map_in_map.h |    1 +
- 4 files changed, 15 insertions(+), 10 deletions(-)
+ tools/include/uapi/linux/bpf.h     |   12 ++++++++++++
+ tools/include/uapi/linux/if_link.h |    2 ++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 5b9d22338606..be3e9e9109c7 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -50,6 +50,7 @@ struct bpf_map_ops {
- 	void *(*map_fd_get_ptr)(struct bpf_map *map, struct file *map_file,
- 				int fd);
- 	void (*map_fd_put_ptr)(void *ptr);
-+	void (*map_fd_put_value)(void *value);
- 	u32 (*map_gen_lookup)(struct bpf_map *map, struct bpf_insn *insn_buf);
- 	u32 (*map_fd_sys_lookup_elem)(void *ptr);
- 	void (*map_seq_show_elem)(struct bpf_map *map, void *key,
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 22066a62c8c9..113e1286e184 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -87,11 +87,6 @@ static inline void __percpu *htab_elem_get_ptr(struct htab_elem *l, u32 key_size
- 	return *(void __percpu **)(l->key + key_size);
- }
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 77c6be96d676..8b336fb68880 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -136,6 +136,7 @@ enum bpf_map_type {
+ 	BPF_MAP_TYPE_STACK,
+ 	BPF_MAP_TYPE_SK_STORAGE,
+ 	BPF_MAP_TYPE_DEVMAP_HASH,
++	BPF_MAP_TYPE_XDP_CHAIN,
+ };
  
--static void *fd_htab_map_get_ptr(const struct bpf_map *map, struct htab_elem *l)
--{
--	return *(void **)(l->key + roundup(map->key_size, 8));
--}
--
- static struct htab_elem *get_htab_elem(struct bpf_htab *htab, int i)
- {
- 	return (struct htab_elem *) (htab->elems + i * htab->elem_size);
-@@ -679,10 +674,10 @@ static void free_htab_elem(struct bpf_htab *htab, struct htab_elem *l)
- {
- 	struct bpf_map *map = &htab->map;
- 
--	if (map->ops->map_fd_put_ptr) {
--		void *ptr = fd_htab_map_get_ptr(map, l);
-+	if (map->ops->map_fd_put_value) {
-+		void *value = l->key + round_up(map->key_size, 8);
- 
--		map->ops->map_fd_put_ptr(ptr);
-+		map->ops->map_fd_put_value(value);
- 	}
- 
- 	if (htab_is_prealloc(htab)) {
-@@ -1400,9 +1395,9 @@ static void fd_htab_map_free(struct bpf_map *map)
- 		head = select_bucket(htab, i);
- 
- 		hlist_nulls_for_each_entry_safe(l, n, head, hash_node) {
--			void *ptr = fd_htab_map_get_ptr(map, l);
-+			void *value = l->key + round_up(map->key_size, 8);
- 
--			map->ops->map_fd_put_ptr(ptr);
-+			map->ops->map_fd_put_value(value);
- 		}
- 	}
- 
-@@ -1510,6 +1505,7 @@ const struct bpf_map_ops htab_of_maps_map_ops = {
- 	.map_delete_elem = htab_map_delete_elem,
- 	.map_fd_get_ptr = bpf_map_fd_get_ptr,
- 	.map_fd_put_ptr = bpf_map_fd_put_ptr,
-+	.map_fd_put_value = bpf_map_fd_put_value,
- 	.map_fd_sys_lookup_elem = bpf_map_fd_sys_lookup_elem,
- 	.map_gen_lookup = htab_of_map_gen_lookup,
- 	.map_check_btf = map_check_no_btf,
-diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
-index fab4fb134547..1b4e8b6da777 100644
---- a/kernel/bpf/map_in_map.c
-+++ b/kernel/bpf/map_in_map.c
-@@ -114,6 +114,13 @@ void bpf_map_fd_put_ptr(void *ptr)
- 	bpf_map_put(ptr);
- }
- 
-+void bpf_map_fd_put_value(void *value)
-+{
-+	void **ptr = value;
+ /* Note that tracing related programs such as
+@@ -3153,6 +3154,17 @@ enum xdp_action {
+ 	XDP_PASS,
+ 	XDP_TX,
+ 	XDP_REDIRECT,
 +
-+	bpf_map_fd_put_ptr(*ptr);
-+}
++	__XDP_ACT_MAX /* leave at end */
++};
++#define XDP_ACT_MAX	(__XDP_ACT_MAX - 1)
 +
- u32 bpf_map_fd_sys_lookup_elem(void *ptr)
- {
- 	return ((struct bpf_map *)ptr)->id;
-diff --git a/kernel/bpf/map_in_map.h b/kernel/bpf/map_in_map.h
-index a507bf6ef8b9..68d1a52e1757 100644
---- a/kernel/bpf/map_in_map.h
-+++ b/kernel/bpf/map_in_map.h
-@@ -16,6 +16,7 @@ bool bpf_map_meta_equal(const struct bpf_map *meta0,
- void *bpf_map_fd_get_ptr(struct bpf_map *map, struct file *map_file,
- 			 int ufd);
- void bpf_map_fd_put_ptr(void *ptr);
-+void bpf_map_fd_put_value(void *value);
- u32 bpf_map_fd_sys_lookup_elem(void *ptr);
++struct xdp_chain_acts {
++	__u32 wildcard_act;
++	__u32 drop_act;
++	__u32 pass_act;
++	__u32 tx_act;
++	__u32 redirect_act;
+ };
  
- #endif
+ /* user accessible metadata for XDP packet hook
+diff --git a/tools/include/uapi/linux/if_link.h b/tools/include/uapi/linux/if_link.h
+index 4a8c02cafa9a..7387d2371489 100644
+--- a/tools/include/uapi/linux/if_link.h
++++ b/tools/include/uapi/linux/if_link.h
+@@ -974,6 +974,8 @@ enum {
+ 	IFLA_XDP_DRV_PROG_ID,
+ 	IFLA_XDP_SKB_PROG_ID,
+ 	IFLA_XDP_HW_PROG_ID,
++	IFLA_XDP_CHAIN_MAP_FD,
++	IFLA_XDP_CHAIN_MAP_ID,
+ 	__IFLA_XDP_MAX,
+ };
+ 
 
