@@ -7,118 +7,241 @@ X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9C9FC10F14
-	for <bpf@archiver.kernel.org>; Thu,  3 Oct 2019 17:25:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53F77ECE58E
+	for <bpf@archiver.kernel.org>; Thu,  3 Oct 2019 17:31:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BDAF420865
-	for <bpf@archiver.kernel.org>; Thu,  3 Oct 2019 17:25:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2A0F920830
+	for <bpf@archiver.kernel.org>; Thu,  3 Oct 2019 17:31:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="face39Zi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kbfq1mSN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729468AbfJCRZe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Oct 2019 13:25:34 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:36635 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390881AbfJCRVu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Oct 2019 13:21:50 -0400
-Received: by mail-qt1-f195.google.com with SMTP id o12so4699988qtf.3;
-        Thu, 03 Oct 2019 10:21:49 -0700 (PDT)
+        id S1731031AbfJCRbM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Oct 2019 13:31:12 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:42935 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732760AbfJCRaT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Oct 2019 13:30:19 -0400
+Received: by mail-qt1-f196.google.com with SMTP id w14so4683192qto.9;
+        Thu, 03 Oct 2019 10:30:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=h5Rim9i4R2dtqePdDLpMCbY7rNwA6OH+nyEYI7LKahs=;
-        b=face39Zit5ry5Kv5MEk6wx4lT9nUPV/Qw7+B489XY4veUQ8Vg1354MpUcaarHInvO1
-         aEzb6pTQwv9J9IvU8iaZzbfOuYaNy9AWHG5qsRqVP2rR54qVMbGeueL2E/3PgqTc4MXR
-         ERYhWFZjcnZZ/O7s7ZxeaayQozjcO04gBOE/16ykGd3/zHrsTlW8iQme/sniIEngN3iJ
-         03xPKJsMjHyvHH9hSqX25xoaOz2boH7cgLVicayHXn2As2h41G5rhsna0OLOKET9aJLB
-         qSvFRZlxtr6FK0tcZQp0sH5NOthVXZtUhKxno5yWREXFDOzZpgs27BgDPFKAdTCJ1bIO
-         jpSg==
+        bh=OwHzOlv94fNEQPzUN9beE8wR2Nx0PGCIq76ElwD91IY=;
+        b=Kbfq1mSN6XsOJJ/hmRdAjfrwBr+ox+iLgaKkLdzPJeIQfnIY0MML3TLZCO/dvp94Q9
+         rqVMaifyKHSu1yvsQgEU7rbHiPpghd6NdVs7s2NGC0fHenPikkmn21UFqpIAWNkUSijs
+         CfsmewYSQH/tffSahrrtYwtqA4NXDUiV+CoMt8DvRrjkkqX+9smoyvlO7yYJpiiAuxsh
+         gAwGJ3D3kgR+XLPKIxelQ2RTNDXvLJ6/62HYY1IGyS0FrcwUaQUb2esICGUo3z9Wl4+j
+         1w+v5OpSY+CruNbhv2Q4EWNke7+ol1n66hqhvpigt1YNfqA/6R0gzFGYa+TuA2JglWT6
+         kTAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=h5Rim9i4R2dtqePdDLpMCbY7rNwA6OH+nyEYI7LKahs=;
-        b=I4EpVSL9YNC+Lu7aJw9cSEOw36qC7eK7ZkKES5NcoXXjnXeyNKqUUKml1dtLwsHEtK
-         IYYEBqMZGMSx4y9IR9jrhT8sxzj12ZtxaYxIzfldrJczoAKB4izga/LishtIiW2tlMp2
-         2w3RmI/LnFv/eV5bDd1Qh+lbc6tTQam6XIp5y4Ews41WAAQJ4lwaEYVVwL99hH3ayB21
-         ANrxuO6FNHy3NHY8lFM75YUz3HPLiANPtBGDMQX/7wMOCn6PyVIeEFwZMv7ooffcXPmp
-         8rOwY5kjEfIJRFVvzWeVsk4qMZhiLR+aQ3Wtle2s0h5ubX6jhbihycF87+chumURS/QJ
-         kZKA==
-X-Gm-Message-State: APjAAAXg17UfeBrmBIhZAm6pUQIM1AcQ85PC45jWAlbAKCSukqrZB0nt
-        ZSC0pmgDCd1UXZs8RBB/eTZfASEXc/nnj3jOjKFODxGSUbE=
-X-Google-Smtp-Source: APXvYqz4TrdMivyXDTK0GQ13yFmR3JItdHh5McZQkymTQsopcQ3vLgBQWOsNamCBOfIzbAPoIMHO57B910EUdBEE4mk=
-X-Received: by 2002:aed:2726:: with SMTP id n35mr10864628qtd.171.1570123309206;
- Thu, 03 Oct 2019 10:21:49 -0700 (PDT)
+        bh=OwHzOlv94fNEQPzUN9beE8wR2Nx0PGCIq76ElwD91IY=;
+        b=LM3Zu15rREJqJMJKY13YboqzNvOujoSpC2WAugiZtvHsr/YiMIP3EWoCd5p331a076
+         7DlLubkOCFF4I00YeF/IOZPN7QOyPaWoNRRrh8Mv0RlS9PR3DNgO8IMqCUs7wpdOx8N1
+         4s2FoGApJVQOTF9P8LHQgWb4qzjjoIIx//e2VNPL3+nnkrmE/hi8c7xBNCboztrf4zbm
+         3Nz6ZL34zjkEDMXX/U68wtTKEZexjMQBLg3Rkdm3tpdTDE4ggr2Zok3ltaVL1pxi3GZt
+         CRhv6y4Kc5n1qIx0/dUnXyGF3xFZcBRASFMazSzIOK3rnv2ZF6C9TJJO9tCs6khitA2Q
+         oRNg==
+X-Gm-Message-State: APjAAAV5vi/QlsQuU9khxV7MeQYfPvcbqf5OGlmzHrc3rI4qhNOi1Qtj
+        daa/pWB6qhrxW9gnp63lWtSP6ngfckc3U2sfyo0=
+X-Google-Smtp-Source: APXvYqytRvSGXPWUuop07pHcGjG3SqMoK6kaJugGE40KgcI3ho0s3kDM604BRnKN98+RZdamFAv6b3DBCaNpyly7YLc=
+X-Received: by 2002:ac8:7401:: with SMTP id p1mr10966238qtq.141.1570123817595;
+ Thu, 03 Oct 2019 10:30:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20191003014153.GA13156@paulmck-ThinkPad-P72> <20191003014310.13262-6-paulmck@kernel.org>
-In-Reply-To: <20191003014310.13262-6-paulmck@kernel.org>
+References: <20191001214141.6294-1-cneirabustos@gmail.com> <20191001214141.6294-3-cneirabustos@gmail.com>
+ <79645731-da32-6071-e05f-6345cf47bcd1@iogearbox.net> <20191003145211.GA3657@frodo.byteswizards.com>
+In-Reply-To: <20191003145211.GA3657@frodo.byteswizards.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 3 Oct 2019 10:21:38 -0700
-Message-ID: <CAEf4BzaBuktutCZr2ZUC6b-XK_JJ7prWZmO-5Yew2tVp5DxbBA@mail.gmail.com>
-Subject: Re: [PATCH tip/core/rcu 6/9] bpf/cgroup: Replace rcu_swap_protected()
- with rcu_replace()
-To:     paulmck@kernel.org
-Cc:     rcu@vger.kernel.org, open list <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>, jiangshanlai@gmail.com,
-        dipankar@in.ibm.com, Andrew Morton <akpm@linux-foundation.org>,
-        mathieu.desnoyers@efficios.com, josh@joshtriplett.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Ziljstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>, dhowells@redhat.com,
-        Eric Dumazet <edumazet@google.com>, fweisbec@gmail.com,
-        oleg@redhat.com, Joel Fernandes <joel@joelfernandes.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Date:   Thu, 3 Oct 2019 10:30:06 -0700
+Message-ID: <CAEf4BzZvTvGcyVfM=RB7GA+WHxsDkS+OGmUrNLpMhfa7bMBA1w@mail.gmail.com>
+Subject: Re: [PATCH V12 2/4] bpf: added new helper bpf_get_ns_current_pid_tgid
+To:     Carlos Antonio Neira Bustos <cneirabustos@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Networking <netdev@vger.kernel.org>, Yonghong Song <yhs@fb.com>,
+        ebiederm@xmission.com, Jesper Dangaard Brouer <brouer@redhat.com>,
+        bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Oct 2, 2019 at 6:45 PM <paulmck@kernel.org> wrote:
+On Thu, Oct 3, 2019 at 8:01 AM Carlos Antonio Neira Bustos
+<cneirabustos@gmail.com> wrote:
 >
-> From: "Paul E. McKenney" <paulmck@kernel.org>
+> On Wed, Oct 02, 2019 at 12:52:29PM +0200, Daniel Borkmann wrote:
+> > On 10/1/19 11:41 PM, Carlos Neira wrote:
+> > > New bpf helper bpf_get_ns_current_pid_tgid,
+> > > This helper will return pid and tgid from current task
+> > > which namespace matches dev_t and inode number provided,
+> > > this will allows us to instrument a process inside a container.
+> > >
+> > > Signed-off-by: Carlos Neira <cneirabustos@gmail.com>
+> > > ---
+> > >   include/linux/bpf.h      |  1 +
+> > >   include/uapi/linux/bpf.h | 18 +++++++++++++++++-
+> > >   kernel/bpf/core.c        |  1 +
+> > >   kernel/bpf/helpers.c     | 36 ++++++++++++++++++++++++++++++++++++
+> > >   kernel/trace/bpf_trace.c |  2 ++
+> > >   5 files changed, 57 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > > index 5b9d22338606..231001475504 100644
+> > > --- a/include/linux/bpf.h
+> > > +++ b/include/linux/bpf.h
+> > > @@ -1055,6 +1055,7 @@ extern const struct bpf_func_proto bpf_get_local_storage_proto;
+> > >   extern const struct bpf_func_proto bpf_strtol_proto;
+> > >   extern const struct bpf_func_proto bpf_strtoul_proto;
+> > >   extern const struct bpf_func_proto bpf_tcp_sock_proto;
+> > > +extern const struct bpf_func_proto bpf_get_ns_current_pid_tgid_proto;
+> > >   /* Shared helpers among cBPF and eBPF. */
+> > >   void bpf_user_rnd_init_once(void);
+> > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > > index 77c6be96d676..ea8145d7f897 100644
+> > > --- a/include/uapi/linux/bpf.h
+> > > +++ b/include/uapi/linux/bpf.h
+> > > @@ -2750,6 +2750,21 @@ union bpf_attr {
+> > >    *                **-EOPNOTSUPP** kernel configuration does not enable SYN cookies
+> > >    *
+> > >    *                **-EPROTONOSUPPORT** IP packet version is not 4 or 6
+> > > + *
+> > > + * u64 bpf_get_ns_current_pid_tgid(u64 dev, u64 inum)
+> > > + * Return
+> > > + *         A 64-bit integer containing the current tgid and pid from current task
+> > > + *              which namespace inode and dev_t matches , and is create as such:
+> > > + *         *current_task*\ **->tgid << 32 \|**
+> > > + *         *current_task*\ **->pid**.
+> > > + *
+> > > + *         On failure, the returned value is one of the following:
+> > > + *
+> > > + *         **-EINVAL** if dev and inum supplied don't match dev_t and inode number
+> > > + *              with nsfs of current task, or if dev conversion to dev_t lost high bits.
+> > > + *
+> > > + *         **-ENOENT** if /proc/self/ns does not exists.
+> > > + *
+> > >    */
+> > >   #define __BPF_FUNC_MAPPER(FN)             \
+> > >     FN(unspec),                     \
+> > > @@ -2862,7 +2877,8 @@ union bpf_attr {
+> > >     FN(sk_storage_get),             \
+> > >     FN(sk_storage_delete),          \
+> > >     FN(send_signal),                \
+> > > -   FN(tcp_gen_syncookie),
+> > > +   FN(tcp_gen_syncookie),          \
+> > > +   FN(get_ns_current_pid_tgid),
+> > >   /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> > >    * function eBPF program intends to call
+> > > diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> > > index 66088a9e9b9e..b2fd5358f472 100644
+> > > --- a/kernel/bpf/core.c
+> > > +++ b/kernel/bpf/core.c
+> > > @@ -2042,6 +2042,7 @@ const struct bpf_func_proto bpf_get_current_uid_gid_proto __weak;
+> > >   const struct bpf_func_proto bpf_get_current_comm_proto __weak;
+> > >   const struct bpf_func_proto bpf_get_current_cgroup_id_proto __weak;
+> > >   const struct bpf_func_proto bpf_get_local_storage_proto __weak;
+> > > +const struct bpf_func_proto bpf_get_ns_current_pid_tgid_proto __weak;
+> > >   const struct bpf_func_proto * __weak bpf_get_trace_printk_proto(void)
+> > >   {
+> > > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> > > index 5e28718928ca..8777181d1717 100644
+> > > --- a/kernel/bpf/helpers.c
+> > > +++ b/kernel/bpf/helpers.c
+> > > @@ -11,6 +11,8 @@
+> > >   #include <linux/uidgid.h>
+> > >   #include <linux/filter.h>
+> > >   #include <linux/ctype.h>
+> > > +#include <linux/pid_namespace.h>
+> > > +#include <linux/proc_ns.h>
+> > >   #include "../../lib/kstrtox.h"
+> > > @@ -487,3 +489,37 @@ const struct bpf_func_proto bpf_strtoul_proto = {
+> > >     .arg4_type      = ARG_PTR_TO_LONG,
+> > >   };
+> > >   #endif
+> > > +
+> > > +BPF_CALL_2(bpf_get_ns_current_pid_tgid, u64, dev, u64, inum)
+> > > +{
+> > > +   struct task_struct *task = current;
+> > > +   struct pid_namespace *pidns;
+> > > +   pid_t pid, tgid;
+> > > +
+> > > +   if ((u64)(dev_t)dev != dev)
+> > > +           return -EINVAL;
+> > > +
+> > > +   if (unlikely(!task))
+> > > +           return -EINVAL;
+> > > +
+> > > +   pidns = task_active_pid_ns(task);
+> > > +   if (unlikely(!pidns))
+> > > +           return -ENOENT;
+> > > +
+> > > +
+> > > +   if (!ns_match(&pidns->ns, (dev_t)dev, inum))
+> > > +           return -EINVAL;
+> > > +
+> > > +   pid = task_pid_nr_ns(task, pidns);
+> > > +   tgid = task_tgid_nr_ns(task, pidns);
+> > > +
+> > > +   return (u64) tgid << 32 | pid;
+> >
+> > Basically here you are overlapping the 64-bit return value for the valid
+> > outcome with the error codes above for the invalid case. If you look at
+> > bpf_perf_event_read() we already had such broken occasion that bit us in
+> > the past, and needed to introduce bpf_perf_event_read_value() instead.
+> > Lets not go there again and design it similarly to the latter.
+> >
+> > > +}
+> > > +
+> > > +const struct bpf_func_proto bpf_get_ns_current_pid_tgid_proto = {
+> > > +   .func           = bpf_get_ns_current_pid_tgid,
+> > > +   .gpl_only       = false,
+> > > +   .ret_type       = RET_INTEGER,
+> > > +   .arg1_type      = ARG_ANYTHING,
+> > > +   .arg2_type      = ARG_ANYTHING,
+> > > +};
+> > > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > > index 44bd08f2443b..32331a1dcb6d 100644
+> > > --- a/kernel/trace/bpf_trace.c
+> > > +++ b/kernel/trace/bpf_trace.c
+> > > @@ -735,6 +735,8 @@ tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+> > >   #endif
+> > >     case BPF_FUNC_send_signal:
+> > >             return &bpf_send_signal_proto;
+> > > +   case BPF_FUNC_get_ns_current_pid_tgid:
+> > > +           return &bpf_get_ns_current_pid_tgid_proto;
+> > >     default:
+> > >             return NULL;
+> > >     }
+> > >
+> >
+> Daniel,
+> If I understand correctly, to avoid problems I need to change the helper's function signature to something like the following:
 >
-> This commit replaces the use of rcu_swap_protected() with the more
-> intuitively appealing rcu_replace() as a step towards removing
-> rcu_swap_protected().
->
-> Link: https://lore.kernel.org/lkml/CAHk-=wiAsJLw1egFEE=Z7-GGtM6wcvtyytXZA1+BHqta4gg6Hw@mail.gmail.com/
-> Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Martin KaFai Lau <kafai@fb.com>
-> Cc: Song Liu <songliubraving@fb.com>
-> Cc: Yonghong Song <yhs@fb.com>
-> Cc: <netdev@vger.kernel.org>
-> Cc: <bpf@vger.kernel.org>
-> ---
+> struct bpf_ns_current_pid_tgid_storage {
+>         __u64 dev;
+>         __u64 inum;
+>         __u64 pidtgid;
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
+if you do it this way, please do
 
->  kernel/bpf/cgroup.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+__u32 pid;
+__u34 tgid;
+
+I have to look up where pid and tgid is in that 64-bit number every
+single time, let's not do it here for no good reason.
+
+> };
 >
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index ddd8add..06a0657 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -180,8 +180,8 @@ static void activate_effective_progs(struct cgroup *cgrp,
->                                      enum bpf_attach_type type,
->                                      struct bpf_prog_array *old_array)
->  {
-> -       rcu_swap_protected(cgrp->bpf.effective[type], old_array,
-> -                          lockdep_is_held(&cgroup_mutex));
-> +       old_array = rcu_replace(cgrp->bpf.effective[type], old_array,
-> +                               lockdep_is_held(&cgroup_mutex));
->         /* free prog array after grace period, since __cgroup_bpf_run_*()
->          * might be still walking the array
->          */
-> --
-> 2.9.5
+> BPF_CALL_2(bpf_get_ns_current_pid_tgid,
+>            struct bpf_ns_current_pid_tgid_storage *, buf, u32, size);
+>
+> then use dev and inum provided by the user and return the requested
+> value into pidtgid of the struct. Would that work?
+>
+> Thanks for your help.
+>
+>
+>
 >
