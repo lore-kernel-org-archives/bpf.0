@@ -2,139 +2,114 @@ Return-Path: <SRS0=XC6e=X4=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 730DAC10F14
-	for <bpf@archiver.kernel.org>; Thu,  3 Oct 2019 17:20:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06B84C32792
+	for <bpf@archiver.kernel.org>; Thu,  3 Oct 2019 17:21:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 407492086A
-	for <bpf@archiver.kernel.org>; Thu,  3 Oct 2019 17:20:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CC04920865
+	for <bpf@archiver.kernel.org>; Thu,  3 Oct 2019 17:21:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cX++/Qzu"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QN1UGe28"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389615AbfJCQSp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Oct 2019 12:18:45 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:42231 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388699AbfJCQSo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Oct 2019 12:18:44 -0400
-Received: by mail-pl1-f195.google.com with SMTP id e5so1741434pls.9;
-        Thu, 03 Oct 2019 09:18:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=HFMB6TYMRf3ctWgt0w7/+NhfpNo/ajEEmZE1ubfs/fM=;
-        b=cX++/QzuCtPvcWGvW9rR2w0pNHGVDqh7r8YgIJrbAWo/GFiDarECecuvR3y7kfIYM0
-         yWAJXqTQnW9b/R1uuVbzXXi7CcDQe6R2bDet/i64BDzJg3u/MVONMGGa+mD8wn8u74yD
-         q4hRK0oRWZAEiuV36rVGaYthj/ms9rsHxu0//Aqs9oCIgo9NGVFbzms09Fkg3BADDa+C
-         so2ThphCBFzj3dSGfoWGbmJsh10Py0mPZyC4YkmBaqG2GTcLeBW18R/Zqo6l9YxRgvfI
-         tnFYai5PGkBJW9XIB+1yEt/Y9U6SfH2KUv53svlm3BL338gi49okkRDy7/dVbgbhXWye
-         D9YA==
+        id S2389405AbfJCRVI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Oct 2019 13:21:08 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:22242 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2389421AbfJCRVH (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 3 Oct 2019 13:21:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1570123266;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z7rXGAQSbiGa4/7Bkctjr6dl8SSz5zO8pwOGZPcMe1w=;
+        b=QN1UGe28ocRTI/3XboKP84GZCpvWUqeja4IGFpzYB3gx9Y9Um4l62cyotb+N2NkN0Kgt1f
+        fJuC8MfaBN4jkJe/jeVj+BNwhQ9A0+YmZFVY5ULMXNutA2EemUwIRbNK7DKL+2IM20JIOh
+        nLp9ET9nI3Alv1VTW7MDWzlsZT4k998=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-227-YIQgiriSMA6VnjMSmVHHIg-1; Thu, 03 Oct 2019 13:21:04 -0400
+Received: by mail-lj1-f199.google.com with SMTP id r22so1068793ljg.15
+        for <bpf@vger.kernel.org>; Thu, 03 Oct 2019 10:21:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=HFMB6TYMRf3ctWgt0w7/+NhfpNo/ajEEmZE1ubfs/fM=;
-        b=MzfdVTposjGOPEs9y4fqmkibJA3uCMk/E/AodBjAwZqowucZJIcTQ3K9lYOS/a/Lkx
-         EH9CfWtkAixb1urk/vaxL0An3F749kO4zU/43JkhOPqoTOprtkjcNS5po8GvFMtJ3BHR
-         qR3z1KWQoZ308vldErb52KGkHc3Y5eHk5WqnvLyGqkDEtNO0QZkY5DG4OyM2h6LUUhmh
-         f92Vdc4QRP5vk9G13Gy9G4YiKOpo3L1mW1ugtwIzGWKbqZXF8C34EUXZ+9Mw4rsc4sbG
-         /xa5+pZO+0q1z9PD59wtUmzyxnvtNEp6qPsZU0nRA2iJun9xY28YVAb9fiuqfEox61ur
-         I1Fw==
-X-Gm-Message-State: APjAAAWWIEMS2Z0/DfLzQaJvrH3gt3OqRA3OBzgA/KjMvfdoSVnB6+lb
-        sBw61y0x83uhefGOZ8L4Q2E=
-X-Google-Smtp-Source: APXvYqxu9doqbZMkk6qFu7+Jxqg9K/cmOBSwXKQk7QZnPbCTgsdlNVWFYwkNQz4upJiHaMGxtgH+rg==
-X-Received: by 2002:a17:902:6b07:: with SMTP id o7mr10604286plk.44.1570119523163;
-        Thu, 03 Oct 2019 09:18:43 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:200::2:535c])
-        by smtp.gmail.com with ESMTPSA id d76sm3604486pfd.185.2019.10.03.09.18.41
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 03 Oct 2019 09:18:42 -0700 (PDT)
-Date:   Thu, 3 Oct 2019 09:18:40 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Alexei Starovoitov <ast@fb.com>, Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=Z7rXGAQSbiGa4/7Bkctjr6dl8SSz5zO8pwOGZPcMe1w=;
+        b=JHatrsNQd4CxqIOmTO7MbKC6n6p47f8pN3YW/jUeoQyZiMRFnw3rfDncRE5mEXHZ1H
+         kvUKrW0lOde8Dwjx71BhPojQyYFGdDFM2HPJHlnhpOu45WMuz0W6lA5WT+qol3qZgbQp
+         1V9olKn0lq4cPXMxDCwLhXyC/PWk4GV719RHa3OHAazpcmi/c3CxMeJVtquGbYMGPC8H
+         OFPs9kTo+4Q2eO8uWFDzygdlglBph/TXtogcYwpsRBiWagnucN6/ckA1A3ZjhXxFDJSY
+         vbNX5KOoaTWNYcY3PLvCBzf165HAWFutQLVsuwPX1sVANqcu/SDuJUVeC9Gr0X0nCd09
+         zPaQ==
+X-Gm-Message-State: APjAAAVVpLcEWGPHxb3GVN/QxX72BhW65wDDB52b/x9adh+uw9267X6i
+        by8voe72ZzALzax3uFhbtfm4byCZkMPHUrFaq/kSi12dfWttDn8kpQOb3R6GEm1+4Zp+86pma+b
+        n9FgUcSXde3Y6
+X-Received: by 2002:a2e:301a:: with SMTP id w26mr6813889ljw.168.1570123262610;
+        Thu, 03 Oct 2019 10:21:02 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqxdVca8Nh/s/XnjRxYBzzGYfahRNbeqRheVUMUAoTyrgPFZWpEK8rXkXg5jaqOA/m79I5yRKA==
+X-Received: by 2002:a2e:301a:: with SMTP id w26mr6813876ljw.168.1570123262441;
+        Thu, 03 Oct 2019 10:21:02 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a00:7660:6da:443::2])
+        by smtp.gmail.com with ESMTPSA id i142sm571559lfi.5.2019.10.03.10.21.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Oct 2019 10:21:01 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id C5D8E18063D; Thu,  3 Oct 2019 19:21:00 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <Kernel-team@fb.com>,
-        Linux API <linux-api@vger.kernel.org>
-Subject: trace_printk issue. Was: [PATCH bpf-next] bpf, capabilities:
- introduce CAP_BPF
-Message-ID: <20191003161838.7lz746aa2lzl7qi4@ast-mbp.dhcp.thefacebook.com>
-References: <DA52992F-4862-4945-8482-FE619A04C753@amacapital.net>
- <20190829040721.ef6rumbaunkavyrr@ast-mbp.dhcp.thefacebook.com>
- <20190928193727.1769e90c@oasis.local.home>
- <201909301129.5A1129C@keescook>
- <20191001012226.vwpe56won5r7gbrz@ast-mbp.dhcp.thefacebook.com>
- <20191001181052.43c9fabb@gandalf.local.home>
- <6e8b910c-a739-857d-4867-395bd369bc6a@fb.com>
- <20191001184731.0ec98c7a@gandalf.local.home>
- <a98725c6-a7db-1d9f-7033-5ecd96438c8d@fb.com>
- <20191002190027.4e204ea8@gandalf.local.home>
+        Kernel Team <kernel-team@fb.com>
+Subject: Re: [PATCH v2 bpf-next 4/7] selftests/bpf: split off tracing-only helpers into bpf_tracing.h
+In-Reply-To: <CAEf4BzZa9aSz_FXkexKWse_k-m0WvxZJZG6qOqacaKKxgHb1OA@mail.gmail.com>
+References: <20191002215041.1083058-1-andriin@fb.com> <20191002215041.1083058-5-andriin@fb.com> <87imp6qo1o.fsf@toke.dk> <CAEf4BzZa9aSz_FXkexKWse_k-m0WvxZJZG6qOqacaKKxgHb1OA@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Thu, 03 Oct 2019 19:21:00 +0200
+Message-ID: <87ftk9pwxv.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191002190027.4e204ea8@gandalf.local.home>
-User-Agent: NeoMutt/20180223
+X-MC-Unique: YIQgiriSMA6VnjMSmVHHIg-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Oct 02, 2019 at 07:00:27PM -0400, Steven Rostedt wrote:
-> > >>>>
-> > >>>> Both 'trace' and 'trace_pipe' have quirky side effects.
-> > >>>> Like opening 'trace' file will make all parallel trace_printk() to be ignored.
-> > >>>> While reading 'trace_pipe' file will clear it.
-> > >>>> The point that traditional 'read' and 'write' ACLs don't map as-is
-> > >>>> to tracefs, so I would be careful categorizing things into
-> > >>>> confidentiality vs integrity only based on access type.  
-> > >>>
-> > >>> What exactly is the bpf_trace_printk() used for? I may have other ideas
-> > >>> that can help.  
-> > >>
-> > >> It's debugging of bpf programs. Same is what printk() is used for
-> > >> by kernel developers.
-> > >>  
-> > > 
-> > > How is it extracted? Just read from the trace or trace_pipe file?  
-> > 
-> > yep. Just like kernel devs look at dmesg when they sprinkle printk.
-> > btw, if you can fix 'trace' file issue that stops all trace_printk
-> > while 'trace' file is open that would be great.
-> > Some users have been bitten by this behavior. We even documented it.
-> 
-> The behavior is documented as well in the ftrace documentation. That's
-> why we suggest the trace_pipe redirected into a file so that you don't
-> lose data (unless the writer goes too fast). If you prefer a producer
-> consumer where you lose newer events (like perf does), you can turn off
-> overwrite mode, and it will drop events when the buffer is full (see
-> options/overwrite).
+Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
 
-I think dropping last events is just as bad. Is there a mode to overwrite old
-and keep the last N (like perf does) ?
-That aside having 'trace' file open should NOT drop trace_printks.
-My point that bpf_trace_printk is just as important to bpf developers as
-printk to kernel developers.
-Imagine kernel developer losing their printk-s only because they typed
-"dmesg" in another terminal?
-It's completely unexpected and breaks developer trust in debugging mechanism.
-Peter Wu brought this issue to my attention in
-commit 55c33dfbeb83 ("bpf: clarify when bpf_trace_printk discards lines").
-And later sent similar doc fix to ftrace.rst.
-To be honest if I knew of this trace_printk quirk I would not have picked it
-as a debugging mechanism for bpf.
-I urge you to fix it.
+> On Thu, Oct 3, 2019 at 12:35 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
+dhat.com> wrote:
+>>
+>> Andrii Nakryiko <andriin@fb.com> writes:
+>>
+>> > +/* a helper structure used by eBPF C program
+>> > + * to describe BPF map attributes to libbpf loader
+>> > + */
+>> > +struct bpf_map_def {
+>> > +     unsigned int type;
+>> > +     unsigned int key_size;
+>> > +     unsigned int value_size;
+>> > +     unsigned int max_entries;
+>> > +     unsigned int map_flags;
+>> > +};
+>>
+>> Why is this still here? There's already an identical definition in libbp=
+f.h...
+>>
+>
+> It's a BPF (kernel) side vs userspace side difference. bpf_helpers.h
+> are included from BPF program, while libbpf.h won't work on kernel
+> side. So we have to have a duplicate of bpf_map_def.
+
+Ah, yes, of course. Silly me :)
+
+-Toke
 
