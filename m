@@ -2,157 +2,152 @@ Return-Path: <SRS0=XC6e=X4=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E6C4C4CED1
-	for <bpf@archiver.kernel.org>; Thu,  3 Oct 2019 17:14:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 921D8C32792
+	for <bpf@archiver.kernel.org>; Thu,  3 Oct 2019 17:15:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2108320865
-	for <bpf@archiver.kernel.org>; Thu,  3 Oct 2019 17:14:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 681BA20673
+	for <bpf@archiver.kernel.org>; Thu,  3 Oct 2019 17:15:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A/CBNCoJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lLixvvNE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390338AbfJCROb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Oct 2019 13:14:31 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:25055 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1731738AbfJCQ1I (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Oct 2019 12:27:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1570120027;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hl97RRcZcrIYJupRDULXM2IOdbeRQMpGH096RnGRTkc=;
-        b=A/CBNCoJQ0dx+jVF09zgvSjA0bicNyQU7e9qW5+u14TdxH0p9DRMiw6dTcyPU9lOewNqs3
-        eC0+jwmhbnBeKQL269SK/gWhhkdVPSN0Qd/iPohwF9LnGkoQa3WtDxg0uHpGaptAaErWE+
-        8IgfoKR/m4Wx39JgUD7VeTCRiVGMzPQ=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-146--36JOMzxP6aBI8OlHfX-Bg-1; Thu, 03 Oct 2019 12:27:03 -0400
-Received: by mail-lf1-f70.google.com with SMTP id r3so321789lfn.13
-        for <bpf@vger.kernel.org>; Thu, 03 Oct 2019 09:27:03 -0700 (PDT)
+        id S2404224AbfJCRPJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Oct 2019 13:15:09 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:40919 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391063AbfJCRPI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Oct 2019 13:15:08 -0400
+Received: by mail-qt1-f194.google.com with SMTP id f7so4642950qtq.7;
+        Thu, 03 Oct 2019 10:15:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=1kB+HNMetC19qZY2o5gFAydwEbfXL/aBhCptGyZn1AQ=;
+        b=lLixvvNE/Ob5XE12pVNrGVxwsqRBK7Ms+5GZ7Cw4jptNfPS06bagODYaVro1z7OYf1
+         Dxa84Cp6gXDVku2eq9+nRIkZWkNKKjLZt9a3pAagryEHezkDcPVrMM+78F5HHbTTzxrF
+         B3UcHwt1uujkZOvTfmqRGoUqdVTmIOpSK2yl61TWE8b8jbStfqlxW4OmzHyLxFiBNu5r
+         0+gzfi7tc2lJIeurCBad2qTMagdRTc8cDfsILp2AbWOmaQ2t7mHbJm1SLsdyaDpRhbxL
+         255XNTBnf6Xi7LeuMLJnjaT6hWTB4DEujbs9Q4SOetpobeNzeQx/aWMp4xLJoxOPlO3x
+         6N3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=hl97RRcZcrIYJupRDULXM2IOdbeRQMpGH096RnGRTkc=;
-        b=ApqGNO9faNaTCpmLFnY9MSYpEsGtnOSybcjWwCToXOtB+EjbNz9Tai7iMpUd+fQGAv
-         ImkwWlUOyax1vN0TOw9ih4ppfkn3Y17Y4hh1mitQzvqxg7oDxjw6Jv1kyefssIhxiy+i
-         deVCqTtorzNN3lyJ7yaZk+3YDOzFgrcG8jfbLEyeney6DHKBcqrVGrY2U+LNdj15Oy4O
-         5D4bom5wXBYN9uCkJ2ztQxle5VYYzs16u6MUhPbGSz1yuNtyfFHEkwoGUcnezQswGGEn
-         e4IB+ub1IGJrwIWsdv+V/IomzMGkc5TOFUoPTBnR1kjrxM3Oyt/vHuIVDoS1jwWq4nl6
-         wyJQ==
-X-Gm-Message-State: APjAAAU0eG5+azSgiKPwQ4/qXy5Gr0PMhih4ALKKCGsyy4YM5MrBkZxL
-        8V7vmKThgQIma6RInDwPffeMJ79oApXRXzz4YZiagCNXUo155i6TFUsB75SHvhgYZA1gY89tRTM
-        7dnx+vYqr1VKI
-X-Received: by 2002:a2e:9d50:: with SMTP id y16mr6545200ljj.70.1570120022258;
-        Thu, 03 Oct 2019 09:27:02 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqwWiuLcSKoRaVxkebUdfhoE89oH6oA58jgXqlx0RaM08Hae5JDAPB1m+IXJqWcW3kr12KzXiA==
-X-Received: by 2002:a2e:9d50:: with SMTP id y16mr6545181ljj.70.1570120022010;
-        Thu, 03 Oct 2019 09:27:02 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
-        by smtp.gmail.com with ESMTPSA id y3sm547356lfh.97.2019.10.03.09.27.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Oct 2019 09:27:01 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 5EB9C18063D; Thu,  3 Oct 2019 18:27:00 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
-Subject: Re: [PATCH v2 bpf-next 2/7] selftests/bpf: samples/bpf: split off legacy stuff from bpf_helpers.h
-In-Reply-To: <CAEf4Bzb7ikPkrxCVMtHK5rS2kdoF_mo5_Bn5U78zKBiYYHS8ig@mail.gmail.com>
-References: <20191002215041.1083058-1-andriin@fb.com> <20191002215041.1083058-3-andriin@fb.com> <87k19mqo1z.fsf@toke.dk> <CAEf4Bzb7ikPkrxCVMtHK5rS2kdoF_mo5_Bn5U78zKBiYYHS8ig@mail.gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Thu, 03 Oct 2019 18:27:00 +0200
-Message-ID: <87k19lpzfv.fsf@toke.dk>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=1kB+HNMetC19qZY2o5gFAydwEbfXL/aBhCptGyZn1AQ=;
+        b=ARWj+0eZ7H2Bum/sAUVuIuMrCAF9sUtPpPWomPH/9dglwfiq+ZKIb7qmmSesgJxtzj
+         wkqRAczZBaXNbvLYpdPkLxzbH3wUgByWGOB2nxKu2xhkR8V62gv1onsOQ6MoI/7m2jxZ
+         cLG6mfv4jIYld+h1wD0zb28Va5X7TRfBthYkGXQbnSlGvnPtiGLwQlDTJYG351zNF45r
+         TbkSmpzsHebN6EN+/LunhZf3NNvMdgxPMPP4utu4sJQAJhuz68FOMSwmYeQ/NtzvyOH4
+         tx25uK6p830uAlINPHwzDC2usc/MwdGDJa8TywMKM9UutVibN9i+rPHhot3Rtq50C1Pz
+         Ccxw==
+X-Gm-Message-State: APjAAAViAoToElzWG8es5c0Y0mTwNS2E9Ip9MJ7swzuxg2boPZyArHha
+        JXZ4SrKO/pC6gdgIMaHVnkdxP4whmSwidC5W5UQ=
+X-Google-Smtp-Source: APXvYqyD4sXOBPspLCS9RDJhkjw4yYOX82nJzQ7J8KVNRjGPNI+l27yfBwVTIwm0m+59blZ3YNOYC5DhWgvvZurIqKo=
+X-Received: by 2002:aed:2726:: with SMTP id n35mr10829218qtd.171.1570122907296;
+ Thu, 03 Oct 2019 10:15:07 -0700 (PDT)
 MIME-Version: 1.0
-X-MC-Unique: -36JOMzxP6aBI8OlHfX-Bg-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
+References: <20191003084321.1431906-1-toke@redhat.com>
+In-Reply-To: <20191003084321.1431906-1-toke@redhat.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 3 Oct 2019 10:14:56 -0700
+Message-ID: <CAEf4BzZpksMGZhggHd=wHVStrN9Wb8RRw-PyDm7fGL3A7YSXdQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] libbpf: Add cscope and TAGS targets to Makefile
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
-
-> On Thu, Oct 3, 2019 at 12:35 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
-dhat.com> wrote:
->>
->> Andrii Nakryiko <andriin@fb.com> writes:
->>
->> > diff --git a/samples/bpf/map_perf_test_kern.c b/samples/bpf/map_perf_t=
-est_kern.c
->> > index 2b2ffb97018b..f47ee513cb7c 100644
->> > --- a/samples/bpf/map_perf_test_kern.c
->> > +++ b/samples/bpf/map_perf_test_kern.c
->> > @@ -9,25 +9,26 @@
->> >  #include <linux/version.h>
->> >  #include <uapi/linux/bpf.h>
->> >  #include "bpf_helpers.h"
->> > +#include "bpf_legacy.h"
->> >
->> >  #define MAX_ENTRIES 1000
->> >  #define MAX_NR_CPUS 1024
->> >
->> > -struct bpf_map_def SEC("maps") hash_map =3D {
->> > +struct bpf_map_def_legacy SEC("maps") hash_map =3D {
->> >       .type =3D BPF_MAP_TYPE_HASH,
->> >       .key_size =3D sizeof(u32),
->> >       .value_size =3D sizeof(long),
->> >       .max_entries =3D MAX_ENTRIES,
->> >  };
->>
->> Why switch these when they're not actually using any of the extra fields
->> in map_def_legacy?
+On Thu, Oct 3, 2019 at 1:46 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redha=
+t.com> wrote:
 >
-> See below, they have to be uniform-sized.
+> Using cscope and/or TAGS files for navigating the source code is useful.
+> Add simple targets to the Makefile to generate the index files for both
+> tools.
 >
->> >
->> > -struct bpf_map_def SEC("maps") lru_hash_map =3D {
->> > +struct bpf_map_def_legacy SEC("maps") lru_hash_map =3D {
->> >       .type =3D BPF_MAP_TYPE_LRU_HASH,
->> >       .key_size =3D sizeof(u32),
->> >       .value_size =3D sizeof(long),
->> >       .max_entries =3D 10000,
->> >  };
->> >
->> > -struct bpf_map_def SEC("maps") nocommon_lru_hash_map =3D {
->> > +struct bpf_map_def_legacy SEC("maps") nocommon_lru_hash_map =3D {
->> >       .type =3D BPF_MAP_TYPE_LRU_HASH,
->> >       .key_size =3D sizeof(u32),
->> >       .value_size =3D sizeof(long),
->> > @@ -35,7 +36,7 @@ struct bpf_map_def SEC("maps") nocommon_lru_hash_map=
- =3D {
->> >       .map_flags =3D BPF_F_NO_COMMON_LRU,
->> >  };
->> >
->> > -struct bpf_map_def SEC("maps") inner_lru_hash_map =3D {
->> > +struct bpf_map_def_legacy SEC("maps") inner_lru_hash_map =3D {
->> >       .type =3D BPF_MAP_TYPE_LRU_HASH,
->> >       .key_size =3D sizeof(u32),
->> >       .value_size =3D sizeof(long),
->> > @@ -44,20 +45,20 @@ struct bpf_map_def SEC("maps") inner_lru_hash_map =
-=3D {
->> >       .numa_node =3D 0,
->> >  };
->>
->> Or are you just switching everything because of this one?
+> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> ---
+
+Thanks a lot for adding this!
+
+I tested cscope only and it works (especially without -k), so:
+
+Tested-by: Andrii Nakryiko <andriin@fb.com>
+
+
+>  tools/lib/bpf/.gitignore |  2 ++
+>  tools/lib/bpf/Makefile   | 10 +++++++++-
+>  2 files changed, 11 insertions(+), 1 deletion(-)
 >
-> Exactly. Another way would be to switch all but this to BTF-based one,
-> but I didn't want to make this patch set even bigger, we can always do
-> that later
+> diff --git a/tools/lib/bpf/.gitignore b/tools/lib/bpf/.gitignore
+> index d9e9dec04605..c1057c01223e 100644
+> --- a/tools/lib/bpf/.gitignore
+> +++ b/tools/lib/bpf/.gitignore
+> @@ -3,3 +3,5 @@ libbpf.pc
+>  FEATURE-DUMP.libbpf
+>  test_libbpf
+>  libbpf.so.*
+> +TAGS
+> +cscope.*
+> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+> index c6f94cffe06e..57df6b933196 100644
+> --- a/tools/lib/bpf/Makefile
+> +++ b/tools/lib/bpf/Makefile
+> @@ -262,7 +262,7 @@ clean:
+>
+>
+>
+> -PHONY +=3D force elfdep bpfdep
+> +PHONY +=3D force elfdep bpfdep cscope TAGS
+>  force:
+>
+>  elfdep:
+> @@ -271,6 +271,14 @@ elfdep:
+>  bpfdep:
+>         @if [ "$(feature-bpf)" !=3D "1" ]; then echo "BPF API too old"; e=
+xit 1 ; fi
+>
+> +cscope:
+> +       (echo \-k; echo \-q; for f in *.c *.h; do echo $$f; done) > cscop=
+e.files
+> +       cscope -b -f cscope.out
 
-Right, fair enough :)
+1. I'd drop -k, given libbpf is user-land library, so it's convenient
+to jump into system headers for some of BPF definitions.
+2. Wouldn't this be simpler and work exactly the same?
 
--Toke
+ls *.c *.h > cscope.files
+cscope -b -q -f cscope.out
 
+
+> +
+> +TAGS:
+
+let's make it lower-case, please? Linux makefile supports both `make
+tags` and `make TAGS`, but all-caps is terrible :)
+
+> +       rm -f TAGS
+> +       echo *.c *.h | xargs etags -a
+
+nit: might as well do ls *.c *.h for consistency with cscope
+suggestion above (though in both cases we just rely on shell expansion
+logic, so doesn't matter).
+
+> +
+>  # Declare the contents of the .PHONY variable as phony.  We keep that
+>  # information in a variable so we can use it in if_changed and friends.
+>  .PHONY: $(PHONY)
+> --
+> 2.23.0
+>
