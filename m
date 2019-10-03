@@ -6,117 +6,56 @@ X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61E2DC10F14
-	for <bpf@archiver.kernel.org>; Thu,  3 Oct 2019 15:02:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2F15C10F14
+	for <bpf@archiver.kernel.org>; Thu,  3 Oct 2019 15:39:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3B9252133F
-	for <bpf@archiver.kernel.org>; Thu,  3 Oct 2019 15:02:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8C0C22133F
+	for <bpf@archiver.kernel.org>; Thu,  3 Oct 2019 15:39:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727127AbfJCPCr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Oct 2019 11:02:47 -0400
-Received: from dispatchb-us1.ppe-hosted.com ([148.163.129.53]:49232 "EHLO
-        dispatchb-us1.ppe-hosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725874AbfJCPCq (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 3 Oct 2019 11:02:46 -0400
-X-Greylist: delayed 511 seconds by postgrey-1.27 at vger.kernel.org; Thu, 03 Oct 2019 11:02:46 EDT
-Received: from dispatchb-us1.ppe-hosted.com (localhost.localdomain [127.0.0.1])
-        by dispatchb-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id 36A5749353
-        for <bpf@vger.kernel.org>; Thu,  3 Oct 2019 14:54:16 +0000 (UTC)
-X-Virus-Scanned: Proofpoint Essentials engine
-Received: from webmail.solarflare.com (webmail.solarflare.com [12.187.104.26])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1-us2.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTPS id EF9DA68007A;
-        Thu,  3 Oct 2019 14:54:13 +0000 (UTC)
-Received: from [10.17.20.203] (10.17.20.203) by ocex03.SolarFlarecom.com
- (10.20.40.36) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 3 Oct
- 2019 07:53:52 -0700
-Subject: Re: [PATCH bpf-next 0/9] xdp: Support multiple programs on a single
- interface through chain calls
-To:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>
-CC:     Song Liu <songliubraving@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>, Martin Lau <kafai@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        Marek Majkowski <marek@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        David Miller <davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-References: <157002302448.1302756.5727756706334050763.stgit@alrua-x1>
- <E7319D69-6450-4BC3-97B1-134B420298FF@fb.com>
- <A754440E-07BF-4CF4-8F15-C41179DCECEF@fb.com> <87r23vq79z.fsf@toke.dk>
- <20191003105335.3cc65226@carbon>
- <CAADnVQKTbaxJhkukxXM7Ue7=kA9eWsGMpnkXc=Z8O3iWGSaO0A@mail.gmail.com>
- <87pnjdq4pi.fsf@toke.dk>
-From:   Edward Cree <ecree@solarflare.com>
-Message-ID: <1c9b72f9-1b61-d89a-49a4-e0b8eead853d@solarflare.com>
-Date:   Thu, 3 Oct 2019 15:53:50 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1728031AbfJCPjj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Oct 2019 11:39:39 -0400
+Received: from www62.your-server.de ([213.133.104.62]:50702 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727368AbfJCPjj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Oct 2019 11:39:39 -0400
+Received: from 57.248.197.178.dynamic.dsl-lte-bonding.zhbmb00p-msn.res.cust.swisscom.ch ([178.197.248.57] helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1iG3Ca-0005Qn-5h; Thu, 03 Oct 2019 17:39:36 +0200
+Date:   Thu, 3 Oct 2019 17:39:35 +0200
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+Cc:     shuah@kernel.org, ast@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 0/2] selftest/bpf: remove warns for
+ enable_all_controllers
+Message-ID: <20191003153935.GA18067@pc-63.home>
+References: <20191002120404.26962-1-ivan.khoronzhuk@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <87pnjdq4pi.fsf@toke.dk>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Content-Language: en-GB
-X-Originating-IP: [10.17.20.203]
-X-TM-AS-Product-Ver: SMEX-12.5.0.1300-8.5.1010-24950.005
-X-TM-AS-Result: No-3.444600-4.000000-10
-X-TMASE-MatchedRID: hls5oAVArl/mLzc6AOD8DfHkpkyUphL9NACXtweanwblhO+RZsN0Zor+
-        gPD/6bb5/nY12zbSW7Xh7WGk9eqElxMNizWX5cxi6OX7GFz9H1BGI9Mwxz8yaU8iLpubparm9Fb
-        T0eFjvVY8trUk/Qn8GTleqRRlTHCdG7B2FtuHETsW8Al79bnAD/bXnlulH5Mg4PdcWsl+C/OMvr
-        NL543EbgO3JVTdl8ePVIKZ9Pa/e17epncDgUbx3crLV1iI5YuZggDXESKHmTB+SLLtNOiBhkiO7
-        +wNDdeYCqRokEHAs+3Y6rPzrnouFKPFjJEFr+olSXhbxZVQ5H/3FLeZXNZS4IzHo47z5Aa+5XAN
-        8XFPmLn6ddQOm9Ik4J5glh4dZkrTAkfsSKHIw54MZCPlreuC10Wjf9EYkbqbj3rykoe+mOG9w8J
-        o/nuKXT/IVSD45lqQ1DXsKeBNv04EqZlWBkJWd7MZNZFdSWvHG2wlTHLNY1JWXGvUUmKP2w==
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--3.444600-4.000000
-X-TMASE-Version: SMEX-12.5.0.1300-8.5.1010-24950.005
-X-MDID: 1570114455-tqQeZUSOc4Xy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191002120404.26962-1-ivan.khoronzhuk@linaro.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.101.4/25591/Thu Oct  3 10:30:38 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 03/10/2019 15:33, Toke Høiland-Jørgensen wrote:
-> In all cases, the sysadmin can't (or doesn't want to) modify any of the
-> XDP programs. In fact, they may just be installed as pre-compiled .so
-> BPF files on his system. So he needs to be able to configure the call
-> chain of different programs without modifying the eBPF program source
-> code.
-Perhaps I'm being dumb, but can't we solve this if we make linking work?
-I.e. myIDS.so has ids_main() function, myFirewall.so has firewall()
- function, and sysadmin writes a little XDP prog to call these:
+On Wed, Oct 02, 2019 at 03:04:02PM +0300, Ivan Khoronzhuk wrote:
+> This micro series fixes annoying warn described in patches
+> while samples/bpf build. Second patch fixes new warn that
+> comes after fixing warn of first patch, that was masked.
+> 
+> Ivan Khoronzhuk (2):
+>   selftests/bpf: add static to enable_all_controllers()
+>   selftests/bpf: correct path to include msg + path
+> 
+>  tools/testing/selftests/bpf/cgroup_helpers.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-int main(struct xdp_md *ctx)
-{
-        int rc = firewall(ctx), rc2;
-
-        switch(rc) {
-        case XDP_DROP:
-        case XDP_ABORTED:
-        default:
-                return rc;
-        case XDP_PASS:
-                return ids_main(ctx);
-        case XDP_TX:
-        case XDP_REDIRECT:
-                rc2 = ids_main(ctx);
-                if (rc2 == XDP_PASS)
-                        return rc;
-                return rc2;
-        }
-}
-
-Now he compiles this and links it against those .so files, giving him
- a new object file which he can then install.
-
-(One problem which does spring to mind is that the .so files may very
- inconsiderately both name their entry points main(), which makes
- linking against both of them rather challenging.  But I think that
- can be worked around with a sufficiently clever linker).
-
--Ed
+Applied, thanks!
