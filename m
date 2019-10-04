@@ -5,41 +5,41 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAC79C47404
-	for <bpf@archiver.kernel.org>; Fri,  4 Oct 2019 22:40:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 928B1C47404
+	for <bpf@archiver.kernel.org>; Fri,  4 Oct 2019 22:41:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 969CA20873
-	for <bpf@archiver.kernel.org>; Fri,  4 Oct 2019 22:40:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 63B4020873
+	for <bpf@archiver.kernel.org>; Fri,  4 Oct 2019 22:41:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="cGvVidil"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Gw/AdKFq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729968AbfJDWkt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Oct 2019 18:40:49 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:34428 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728172AbfJDWks (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 4 Oct 2019 18:40:48 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x94MdEAi024851
-        for <bpf@vger.kernel.org>; Fri, 4 Oct 2019 15:40:47 -0700
+        id S1730298AbfJDWlL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Oct 2019 18:41:11 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:32600 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728767AbfJDWlL (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 4 Oct 2019 18:41:11 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x94Mej9Z028654
+        for <bpf@vger.kernel.org>; Fri, 4 Oct 2019 15:41:10 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=QrB+Lzm1lvx9PMFJFQniZYy0gxPbnSENfL6ouvOfL4k=;
- b=cGvVidilzDBYtwqn6eL6XAaNC4+GNnNL3wYFhGsebapnCbJRZhJt45DEpmPsNSoT+D1I
- YDxaQYoD1+TxMnT6u97qh8FsGYzQZmQnbrFcCIScC6QzIHsGyObuZV+LioXN5Pp1qitT
- eT38w70DdG/vx1SwM6ZXPUG34ts4yPW5ZQM= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2ve79tac2r-9
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 04 Oct 2019 15:40:47 -0700
-Received: from 2401:db00:30:6012:face:0:17:0 (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 4 Oct 2019 15:40:45 -0700
+ content-type; s=facebook; bh=6fu2NMQRFDvUUl/CUqhJrQTXyyrAVa46WH+4J/nqJy0=;
+ b=Gw/AdKFqyXs/wrUesJwvGG2p6Qq6494O6ioadt3WZ99ixin6eHp7LGFPyNJK+5q+aBAz
+ MgDc/Ffy8YuJSHRTi4GqhbiZFW00mLAk9JRoD30VTF3eBy9arKnz9+OP4OBrHPA66+vt
+ kyYNSHoiyqetiwEsy5nkyq6Z0ceHYlEcJkU= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2vdmh9ewn6-19
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 04 Oct 2019 15:41:10 -0700
+Received: from 2401:db00:12:909f:face:0:3:0 (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Fri, 4 Oct 2019 15:40:50 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 6FF228617D0; Fri,  4 Oct 2019 15:40:43 -0700 (PDT)
+        id 876758617D0; Fri,  4 Oct 2019 15:40:47 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v3 bpf-next 2/4] libbpf: add bpf_object__open_{file,mem} w/ extensible opts
-Date:   Fri, 4 Oct 2019 15:40:35 -0700
-Message-ID: <20191004224037.1625049-3-andriin@fb.com>
+Subject: [PATCH v3 bpf-next 4/4] selftests/bpf: switch tests to new bpf_object__open_{file,mem}() APIs
+Date:   Fri, 4 Oct 2019 15:40:37 -0700
+Message-ID: <20191004224037.1625049-5-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191004224037.1625049-1-andriin@fb.com>
 References: <20191004224037.1625049-1-andriin@fb.com>
@@ -59,300 +59,176 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
  definitions=2019-10-04_13:2019-10-03,2019-10-04 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 mlxscore=0
- impostorscore=0 phishscore=0 suspectscore=8 spamscore=0 malwarescore=0
- clxscore=1015 mlxlogscore=999 priorityscore=1501 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1910040191
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=8
+ adultscore=0 impostorscore=0 clxscore=1015 priorityscore=1501
+ mlxlogscore=999 bulkscore=0 phishscore=0 mlxscore=0 malwarescore=0
+ spamscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1908290000 definitions=main-1910040191
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add new set of bpf_object__open APIs using new approach to optional
-parameters extensibility allowing simpler ABI compatibility approach.
-
-This patch demonstrates an approach to implementing libbpf APIs that
-makes it easy to extend existing APIs with extra optional parameters in
-such a way, that ABI compatibility is preserved without having to do
-symbol versioning and generating lots of boilerplate code to handle it.
-To facilitate succinct code for working with options, add OPTS_VALID,
-OPTS_HAS, and OPTS_GET macros that hide all the NULL, size, and zero
-checks.
-
-Additionally, newly added libbpf APIs are encouraged to follow similar
-pattern of having all mandatory parameters as formal function parameters
-and always have optional (NULL-able) xxx_opts struct, which should
-always have real struct size as a first field and the rest would be
-optional parameters added over time, which tune the behavior of existing
-API, if specified by user.
+Verify new bpf_object__open_mem() and bpf_object__open_file() APIs work
+as expected by switching test_attach_probe test to use embedded BPF
+object and bpf_object__open_mem() and test_reference_tracking to
+bpf_object__open_file().
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/libbpf.c          | 87 ++++++++++++++++++++++++++-------
- tools/lib/bpf/libbpf.h          | 46 +++++++++++++++--
- tools/lib/bpf/libbpf.map        |  3 ++
- tools/lib/bpf/libbpf_internal.h | 32 ++++++++++++
- 4 files changed, 146 insertions(+), 22 deletions(-)
+ tools/testing/selftests/bpf/Makefile          |  2 +-
+ .../selftests/bpf/prog_tests/attach_probe.c   | 49 +++++++++++++++++--
+ .../bpf/prog_tests/reference_tracking.c       | 16 +++++-
+ 3 files changed, 59 insertions(+), 8 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 024334b29b54..d471d33400ae 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -505,7 +505,8 @@ static __u32 get_kernel_version(void)
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 6889c19a628c..294d7472dad7 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -160,7 +160,7 @@ $(OUTPUT)/test_queue_map.o: test_queue_stack_map.h
+ $(OUTPUT)/test_stack_map.o: test_queue_stack_map.h
  
- static struct bpf_object *bpf_object__new(const char *path,
- 					  const void *obj_buf,
--					  size_t obj_buf_sz)
-+					  size_t obj_buf_sz,
-+					  const char *obj_name)
- {
- 	struct bpf_object *obj;
- 	char *end;
-@@ -517,11 +518,17 @@ static struct bpf_object *bpf_object__new(const char *path,
- 	}
+ $(OUTPUT)/flow_dissector_load.o: flow_dissector_load.h
+-$(OUTPUT)/test_progs.o: flow_dissector_load.h
++$(OUTPUT)/test_progs.o: flow_dissector_load.h $(OUTPUT)/test_attach_probe.o
  
- 	strcpy(obj->path, path);
--	/* Using basename() GNU version which doesn't modify arg. */
--	strncpy(obj->name, basename((void *)path), sizeof(obj->name) - 1);
--	end = strchr(obj->name, '.');
--	if (end)
--		*end = 0;
-+	if (obj_name) {
-+		strncpy(obj->name, obj_name, sizeof(obj->name) - 1);
-+		obj->name[sizeof(obj->name) - 1] = 0;
-+	} else {
-+		/* Using basename() GNU version which doesn't modify arg. */
-+		strncpy(obj->name, basename((void *)path),
-+			sizeof(obj->name) - 1);
-+		end = strchr(obj->name, '.');
-+		if (end)
-+			*end = 0;
-+	}
+ BTF_LLC_PROBE := $(shell $(LLC) -march=bpf -mattr=help 2>&1 | grep dwarfris)
+ BTF_PAHOLE_PROBE := $(shell $(BTF_PAHOLE) --help 2>&1 | grep BTF)
+diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+index 5ecc267d98b0..4f50d32c4abb 100644
+--- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
++++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+@@ -1,6 +1,24 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <test_progs.h>
  
- 	obj->efile.fd = -1;
- 	/*
-@@ -3547,7 +3554,7 @@ bpf_object__load_progs(struct bpf_object *obj, int log_level)
- 
- static struct bpf_object *
- __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
--		   int flags)
-+		   const char *obj_name, int flags)
- {
- 	struct bpf_object *obj;
- 	int err;
-@@ -3557,7 +3564,7 @@ __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
- 		return ERR_PTR(-LIBBPF_ERRNO__LIBELF);
- 	}
- 
--	obj = bpf_object__new(path, obj_buf, obj_buf_sz);
-+	obj = bpf_object__new(path, obj_buf, obj_buf_sz, obj_name);
- 	if (IS_ERR(obj))
- 		return obj;
- 
-@@ -3583,7 +3590,7 @@ __bpf_object__open_xattr(struct bpf_object_open_attr *attr, int flags)
- 
- 	pr_debug("loading %s\n", attr->file);
- 
--	return __bpf_object__open(attr->file, NULL, 0, flags);
-+	return __bpf_object__open(attr->file, NULL, 0, NULL, flags);
++#define EMBED_FILE(NAME, PATH)						    \
++asm (									    \
++"      .pushsection \".rodata\", \"a\", @progbits              \n"	    \
++"      .global "#NAME"_data                                    \n"	    \
++#NAME"_data:                                                   \n"	    \
++"      .incbin \"" PATH "\"                                    \n"	    \
++#NAME"_data_end:                                               \n"	    \
++"      .global "#NAME"_size                                    \n"	    \
++"      .type "#NAME"_size, @object                             \n"	    \
++"      .size "#NAME"_size, 4                                   \n"	    \
++"      .align 4,                                               \n"	    \
++#NAME"_size:                                                   \n"	    \
++"      .int "#NAME"_data_end - "#NAME"_data                    \n"	    \
++"      .popsection                                             \n"	    \
++);									    \
++extern char NAME##_data[];						    \
++extern int NAME##_size;
++
+ ssize_t get_base_addr() {
+ 	size_t start;
+ 	char buf[256];
+@@ -21,6 +39,8 @@ ssize_t get_base_addr() {
+ 	return -EINVAL;
  }
  
- struct bpf_object *bpf_object__open_xattr(struct bpf_object_open_attr *attr)
-@@ -3601,25 +3608,67 @@ struct bpf_object *bpf_object__open(const char *path)
- 	return bpf_object__open_xattr(&attr);
- }
- 
--struct bpf_object *bpf_object__open_buffer(void *obj_buf,
--					   size_t obj_buf_sz,
--					   const char *name)
-+struct bpf_object *
-+bpf_object__open_file(const char *path, struct bpf_object_open_opts *opts)
-+{
-+	const char *obj_name;
-+	bool relaxed_maps;
++EMBED_FILE(probe, "test_attach_probe.o");
 +
-+	if (!OPTS_VALID(opts, bpf_object_open_opts))
-+		return ERR_PTR(-EINVAL);
-+	if (!path)
-+		return ERR_PTR(-EINVAL);
-+
-+	pr_debug("loading %s\n", path);
-+
-+	obj_name = OPTS_GET(opts, object_name, path);
-+	relaxed_maps = OPTS_GET(opts, relaxed_maps, false);
-+	return __bpf_object__open(path, NULL, 0, obj_name,
-+				  relaxed_maps ? MAPS_RELAX_COMPAT : 0);
-+}
-+
-+struct bpf_object *
-+bpf_object__open_mem(const void *obj_buf, size_t obj_buf_sz,
-+		     struct bpf_object_open_opts *opts)
+ void test_attach_probe(void)
  {
- 	char tmp_name[64];
-+	const char *obj_name;
-+	bool relaxed_maps;
- 
--	/* param validation */
--	if (!obj_buf || obj_buf_sz <= 0)
--		return NULL;
-+	if (!OPTS_VALID(opts, bpf_object_open_opts))
-+		return ERR_PTR(-EINVAL);
-+	if (!obj_buf || obj_buf_sz == 0)
-+		return ERR_PTR(-EINVAL);
- 
--	if (!name) {
-+	obj_name = OPTS_GET(opts, object_name, NULL);
-+	if (!obj_name) {
- 		snprintf(tmp_name, sizeof(tmp_name), "%lx-%lx",
- 			 (unsigned long)obj_buf,
- 			 (unsigned long)obj_buf_sz);
--		name = tmp_name;
-+		obj_name = tmp_name;
- 	}
--	pr_debug("loading object '%s' from buffer\n", name);
-+	pr_debug("loading object '%s' from buffer\n", obj_name);
-+
-+	relaxed_maps = OPTS_GET(opts, relaxed_maps, false);
-+	return __bpf_object__open(obj_name, obj_buf, obj_buf_sz, obj_name,
-+				  relaxed_maps ? MAPS_RELAX_COMPAT : 0);
-+}
-+
-+struct bpf_object *
-+bpf_object__open_buffer(const void *obj_buf, size_t obj_buf_sz,
-+			const char *name)
-+{
-+	LIBBPF_OPTS(bpf_object_open_opts, opts,
-+		.object_name = name,
-+		/* wrong default, but backwards-compatible */
+ 	const char *kprobe_name = "kprobe/sys_nanosleep";
+@@ -29,11 +49,15 @@ void test_attach_probe(void)
+ 	const char *uretprobe_name = "uretprobe/trigger_func";
+ 	const int kprobe_idx = 0, kretprobe_idx = 1;
+ 	const int uprobe_idx = 2, uretprobe_idx = 3;
+-	const char *file = "./test_attach_probe.o";
++	const char *obj_name = "attach_probe";
++	LIBBPF_OPTS(bpf_object_open_opts, open_opts,
++		.object_name = obj_name,
 +		.relaxed_maps = true,
 +	);
-+
-+	/* returning NULL is wrong, but backwards-compatible */
-+	if (!obj_buf || obj_buf_sz == 0)
-+		return NULL;
+ 	struct bpf_program *kprobe_prog, *kretprobe_prog;
+ 	struct bpf_program *uprobe_prog, *uretprobe_prog;
+ 	struct bpf_object *obj;
+-	int err, prog_fd, duration = 0, res;
++	int err, duration = 0, res;
+ 	struct bpf_link *kprobe_link = NULL;
+ 	struct bpf_link *kretprobe_link = NULL;
+ 	struct bpf_link *uprobe_link = NULL;
+@@ -48,11 +72,16 @@ void test_attach_probe(void)
+ 		return;
+ 	uprobe_offset = (size_t)&get_base_addr - base_addr;
  
--	return __bpf_object__open(name, obj_buf, obj_buf_sz, true);
-+	return bpf_object__open_mem(obj_buf, obj_buf_sz, &opts);
+-	/* load programs */
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_KPROBE, &obj, &prog_fd);
+-	if (CHECK(err, "obj_load", "err %d errno %d\n", err, errno))
++	/* open object */
++	obj = bpf_object__open_mem(probe_data, probe_size, &open_opts);
++	if (CHECK(IS_ERR(obj), "obj_open_mem", "err %ld\n", PTR_ERR(obj)))
+ 		return;
+ 
++	if (CHECK(strcmp(bpf_object__name(obj), obj_name), "obj_name",
++		  "wrong obj name '%s', expected '%s'\n",
++		  bpf_object__name(obj), obj_name))
++		goto cleanup;
++
+ 	kprobe_prog = bpf_object__find_program_by_title(obj, kprobe_name);
+ 	if (CHECK(!kprobe_prog, "find_probe",
+ 		  "prog '%s' not found\n", kprobe_name))
+@@ -70,6 +99,16 @@ void test_attach_probe(void)
+ 		  "prog '%s' not found\n", uretprobe_name))
+ 		goto cleanup;
+ 
++	bpf_program__set_kprobe(kprobe_prog);
++	bpf_program__set_kprobe(kretprobe_prog);
++	bpf_program__set_kprobe(uprobe_prog);
++	bpf_program__set_kprobe(uretprobe_prog);
++
++	/* create maps && load programs */
++	err = bpf_object__load(obj);
++	if (CHECK(err, "obj_load", "err %d\n", err))
++		goto cleanup;
++
+ 	/* load maps */
+ 	results_map_fd = bpf_find_map(__func__, obj, "results_map");
+ 	if (CHECK(results_map_fd < 0, "find_results_map",
+diff --git a/tools/testing/selftests/bpf/prog_tests/reference_tracking.c b/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
+index 5c78e2b5a917..86cee820d4d3 100644
+--- a/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
++++ b/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
+@@ -3,16 +3,26 @@
+ 
+ void test_reference_tracking(void)
+ {
+-	const char *file = "./test_sk_lookup_kern.o";
++	const char *file = "test_sk_lookup_kern.o";
++	const char *obj_name = "ref_track";
++	LIBBPF_OPTS(bpf_object_open_opts, open_opts,
++		.object_name = obj_name,
++		.relaxed_maps = true,
++	);
+ 	struct bpf_object *obj;
+ 	struct bpf_program *prog;
+ 	__u32 duration = 0;
+ 	int err = 0;
+ 
+-	obj = bpf_object__open(file);
++	obj = bpf_object__open_file(file, &open_opts);
+ 	if (CHECK_FAIL(IS_ERR(obj)))
+ 		return;
+ 
++	if (CHECK(strcmp(bpf_object__name(obj), obj_name), "obj_name",
++		  "wrong obj name '%s', expected '%s'\n",
++		  bpf_object__name(obj), obj_name))
++		goto cleanup;
++
+ 	bpf_object__for_each_program(prog, obj) {
+ 		const char *title;
+ 
+@@ -35,5 +45,7 @@ void test_reference_tracking(void)
+ 		}
+ 		CHECK(err, title, "\n");
+ 	}
++
++cleanup:
+ 	bpf_object__close(obj);
  }
- 
- int bpf_object__unload(struct bpf_object *obj)
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 2905dffd70b2..667e6853e51f 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -67,12 +67,52 @@ struct bpf_object_open_attr {
- 	enum bpf_prog_type prog_type;
- };
- 
-+/* Helper macro to declare and initialize libbpf options struct
-+ *
-+ * This dance with uninitialized declaration, followed by memset to zero,
-+ * followed by assignment using compound literal syntax is done to preserve
-+ * ability to use a nice struct field initialization syntax and **hopefully**
-+ * have all the padding bytes initialized to zero. It's not guaranteed though,
-+ * when copying literal, that compiler won't copy garbage in literal's padding
-+ * bytes, but that's the best way I've found and it seems to work in practice.
-+ */
-+#define LIBBPF_OPTS(TYPE, NAME, ...)					    \
-+	struct TYPE NAME;						    \
-+	memset(&NAME, 0, sizeof(struct TYPE));				    \
-+	NAME = (struct TYPE) {						    \
-+		.sz = sizeof(struct TYPE),				    \
-+		__VA_ARGS__						    \
-+	}
-+
-+struct bpf_object_open_opts {
-+	/* size of this struct, for forward/backward compatiblity */
-+	size_t sz;
-+	/* object name override, if provided:
-+	 * - for object open from file, this will override setting object
-+	 *   name from file path's base name;
-+	 * - for object open from memory buffer, this will specify an object
-+	 *   name and will override default "<addr>-<buf-size>" name;
-+	 */
-+	const char *object_name;
-+	/* parse map definitions non-strictly, allowing extra attributes/data */
-+	bool relaxed_maps;
-+};
-+#define bpf_object_open_opts__last_field relaxed_maps
-+
- LIBBPF_API struct bpf_object *bpf_object__open(const char *path);
- LIBBPF_API struct bpf_object *
-+bpf_object__open_file(const char *path, struct bpf_object_open_opts *opts);
-+LIBBPF_API struct bpf_object *
-+bpf_object__open_mem(const void *obj_buf, size_t obj_buf_sz,
-+		     struct bpf_object_open_opts *opts);
-+
-+/* deprecated bpf_object__open variants */
-+LIBBPF_API struct bpf_object *
-+bpf_object__open_buffer(const void *obj_buf, size_t obj_buf_sz,
-+			const char *name);
-+LIBBPF_API struct bpf_object *
- bpf_object__open_xattr(struct bpf_object_open_attr *attr);
--LIBBPF_API struct bpf_object *bpf_object__open_buffer(void *obj_buf,
--						      size_t obj_buf_sz,
--						      const char *name);
-+
- int bpf_object__section_size(const struct bpf_object *obj, const char *name,
- 			     __u32 *size);
- int bpf_object__variable_offset(const struct bpf_object *obj, const char *name,
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 8d10ca03d78d..4d241fd92dd4 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -192,4 +192,7 @@ LIBBPF_0.0.5 {
- } LIBBPF_0.0.4;
- 
- LIBBPF_0.0.6 {
-+	global:
-+		bpf_object__open_file;
-+		bpf_object__open_mem;
- } LIBBPF_0.0.5;
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index 2e83a34f8c79..f51444fc7eb7 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -47,6 +47,38 @@ do {				\
- #define pr_info(fmt, ...)	__pr(LIBBPF_INFO, fmt, ##__VA_ARGS__)
- #define pr_debug(fmt, ...)	__pr(LIBBPF_DEBUG, fmt, ##__VA_ARGS__)
- 
-+static inline bool libbpf_validate_opts(const char *opts,
-+					size_t opts_sz, size_t user_sz,
-+					const char *type_name)
-+{
-+	if (user_sz < sizeof(size_t)) {
-+		pr_warning("%s size (%zu) is too small\n", type_name, user_sz);
-+		return false;
-+	}
-+	if (user_sz > opts_sz) {
-+		size_t i;
-+
-+		for (i = opts_sz; i < user_sz; i++) {
-+			if (opts[i]) {
-+				pr_warning("%s has non-zero extra bytes",
-+					   type_name);
-+				return false;
-+			}
-+		}
-+	}
-+	return true;
-+}
-+
-+#define OPTS_VALID(opts, type)						      \
-+	(!(opts) || libbpf_validate_opts((const char *)opts,		      \
-+					 offsetofend(struct type,	      \
-+						     type##__last_field),     \
-+					 (opts)->sz, #type))
-+#define OPTS_HAS(opts, field) \
-+	((opts) && opts->sz >= offsetofend(typeof(*(opts)), field))
-+#define OPTS_GET(opts, field, fallback_value) \
-+	(OPTS_HAS(opts, field) ? (opts)->field : fallback_value)
-+
- int libbpf__load_raw_btf(const char *raw_types, size_t types_len,
- 			 const char *str_sec, size_t str_len);
- 
 -- 
 2.17.1
 
