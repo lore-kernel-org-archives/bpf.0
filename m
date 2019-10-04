@@ -2,147 +2,227 @@ Return-Path: <SRS0=CYzr=X5=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF45AC47404
-	for <bpf@archiver.kernel.org>; Fri,  4 Oct 2019 16:00:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A7FFC47404
+	for <bpf@archiver.kernel.org>; Fri,  4 Oct 2019 17:22:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 98AB4215EA
-	for <bpf@archiver.kernel.org>; Fri,  4 Oct 2019 16:00:57 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XmugAvUY"
+	by mail.kernel.org (Postfix) with ESMTP id E3D0C2084D
+	for <bpf@archiver.kernel.org>; Fri,  4 Oct 2019 17:22:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390031AbfJDQA5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Oct 2019 12:00:57 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:37941 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389968AbfJDQA4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Oct 2019 12:00:56 -0400
-Received: by mail-qt1-f194.google.com with SMTP id j31so9233271qta.5;
-        Fri, 04 Oct 2019 09:00:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=x43H1WdVB+aQVcMTCl4K6HWVYDlcjHA+H+vCbPPnykA=;
-        b=XmugAvUYqqNk1EWBTr1DPoDima0fEoFMd3XmyLWw9bSqlSBcVN/BYVbZwBZwVD2aHp
-         V6NNYWCZfkqeBOBD3RLa1uVVq84N92wa3fC/x4Yy0snz4m9mgLXXnraaz0BGK79d4l9n
-         nWcy8xDgQi5OMtg0t+dG83FwGg5f8Q8+ZOj2tDCCi1DH3Zqgbpt3ghfIQJwLkapYZ3/h
-         LAv0EbE/ERmkFoulbvlo2+PjgRd+Vu6qijKUy217YcqnFlszSItH4vLn9e8PosZqFVlw
-         Jb+spOQokoonmvdmQdxB9wivlJdiEihWDfaGtTotAdbsg4rQe7euiNwWp9/UMRPXzP27
-         SR6g==
+        id S2388388AbfJDRWr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Oct 2019 13:22:47 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:46734 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388332AbfJDRWq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Oct 2019 13:22:46 -0400
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id D69748830A
+        for <bpf@vger.kernel.org>; Fri,  4 Oct 2019 17:22:45 +0000 (UTC)
+Received: by mail-ed1-f70.google.com with SMTP id d7so4448616edp.23
+        for <bpf@vger.kernel.org>; Fri, 04 Oct 2019 10:22:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=x43H1WdVB+aQVcMTCl4K6HWVYDlcjHA+H+vCbPPnykA=;
-        b=YFl5U4rAyNjuv3z3Fxw1oIIHy0+25v76vqIdUvJiqLI6gGY89kVyYhTM7et2r7qiTt
-         SPEs231Lw15sh9HZM36oEQl/3JUPw73i89Bs8YrsH+wQi/Ics5dAjb45Da+K5jbr+Qfg
-         uSTa2hQQbbXKjEJLY5i3VwwJsEOGP4XoXG8ZmJjXSZbR0YhKS0Wuo8qrEubZKQp+LB3A
-         vhsqDBljHmH9qp7UoVJUsjVL4RS5autAZgSH8/NZ/rwQgzL9P2yX2ff8/PdYY/3dF/2E
-         zZS3OShzbNcv8y7jPzrypY1v4sQMbUFvFCp2X+SQ/ChZrhghkETXjd/TNefjQkEzj79Y
-         2/Vw==
-X-Gm-Message-State: APjAAAXf9r1/OoC1VqqF46+TzDcWjy2CMEA2deKJ+vN0QZg7AS27hYYP
-        kg73mLK3c0sPwH+83Oc2Qqb6iMqUAHZdp+IYDTw=
-X-Google-Smtp-Source: APXvYqzdvGDxzugMwOFPLGeHsIPnrsYId4GUWInlc1uUZONT16Ue3Bm79Xu8bTkJWVJqdE0JgvQcl2SO3Yn2lZZKdlI=
-X-Received: by 2002:ac8:5147:: with SMTP id h7mr16485127qtn.117.1570204853511;
- Fri, 04 Oct 2019 09:00:53 -0700 (PDT)
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=gP06x0QSFrrNnRRU47vmLqHVN/Zuj7zV86CGBnpn+Bw=;
+        b=BpOA1CXbUMrWaA4/+7ejzEPUByAzn11ovuJ/t2KhdjRE6s1o3lpiDfgzDHM6M/H7x/
+         T6Xj1p6wus6RhJGvMV8D5bQ1cu8wNIpNJw3rLxBCkVv3jFXQBtUaBb0YOS2YfiwKlzFz
+         vrNaiSXmxo9UP+RAuVjtYagxTtub2OG8pt+R4FAiZjVn4RnObafT5ouMQq5EjXwC/KpX
+         lX1AE14cRVZALVI2tD7GtKKcZ1Ay9c6oPMJzyvl+zaifyLGF7wvPdvb6CiC/u1U6ksCd
+         4R/+/Us6/887nvhtZYABgapAtT3jjZwzOutc3d411TAgoLbCxiUrBR+k9Hsy82TSLBBi
+         G9kA==
+X-Gm-Message-State: APjAAAUJOaTg8jKim5LUTej4mogWZwUNxan5/xmL/8Nmi+7xRQ/aGs3H
+        AMlbEEoUgN9KPj5yfiMJ1bE7KN80ssglqBbkUPYVws8vlBAoU5IiAti23u/+FRWvKOci/UhuYbi
+        qLXIxoPVRQhAJ
+X-Received: by 2002:a17:906:b283:: with SMTP id q3mr13548864ejz.7.1570209764465;
+        Fri, 04 Oct 2019 10:22:44 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqx6zMCuXEY0Mn9xovZAab7UKRgSaTHlFSXpMsNxLFE/dfda7X+VdG3WGlt8dA/52mZcrBPobg==
+X-Received: by 2002:a17:906:b283:: with SMTP id q3mr13548837ejz.7.1570209764184;
+        Fri, 04 Oct 2019 10:22:44 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
+        by smtp.gmail.com with ESMTPSA id y14sm665879ejb.20.2019.10.04.10.22.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Oct 2019 10:22:43 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id A429118063D; Fri,  4 Oct 2019 19:22:42 +0200 (CEST)
+Subject: [PATCH bpf-next v2 2/5] bpf: Add support for setting chain call
+ sequence for programs
+From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Marek Majkowski <marek@cloudflare.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Date:   Fri, 04 Oct 2019 19:22:42 +0200
+Message-ID: <157020976257.1824887.7683650534515359703.stgit@alrua-x1>
+In-Reply-To: <157020976030.1824887.7191033447861395957.stgit@alrua-x1>
+References: <157020976030.1824887.7191033447861395957.stgit@alrua-x1>
+User-Agent: StGit/0.19-dirty
 MIME-Version: 1.0
-References: <20191003212856.1222735-1-andriin@fb.com> <20191003212856.1222735-6-andriin@fb.com>
- <da73636f-7d81-1fe0-65af-aa32f7654c57@gmail.com> <CAEf4BzYRJ4i05prEJF_aCQK5jnmpSUqrwTXYsj4FDahCWcNQdQ@mail.gmail.com>
- <4fcbe7bf-201a-727a-a6f1-2088aea82a33@gmail.com>
-In-Reply-To: <4fcbe7bf-201a-727a-a6f1-2088aea82a33@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 4 Oct 2019 09:00:42 -0700
-Message-ID: <CAEf4BzZr9cxt=JrGYPUhDTRfbBocM18tFFaP+LiJSCF-g4hs2w@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 5/7] libbpf: move bpf_{helpers,endian,tracing}.h
- into libbpf
-To:     David Ahern <dsahern@gmail.com>
-Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Oct 4, 2019 at 8:44 AM David Ahern <dsahern@gmail.com> wrote:
->
-> On 10/4/19 9:27 AM, Andrii Nakryiko wrote:
-> > On Fri, Oct 4, 2019 at 7:47 AM David Ahern <dsahern@gmail.com> wrote:
-> >>
-> >> On 10/3/19 3:28 PM, Andrii Nakryiko wrote:
-> >>> Move bpf_helpers.h, bpf_tracing.h, and bpf_endian.h into libbpf. Ensure
-> >>> they are installed along the other libbpf headers. Also, adjust
-> >>> selftests and samples include path to include libbpf now.
-> >>
-> >> There are side effects to bringing bpf_helpers.h into libbpf if this
-> >> gets propagated to the github sync.
-> >>
-> >> bpf_helpers.h references BPF_FUNC_* which are defined in the
-> >> uapi/linux/bpf.h header. That is a kernel version dependent api file
-> >> which means attempts to use newer libbpf with older kernel headers is
-> >> going to throw errors when compiling bpf programs -- bpf_helpers.h will
-> >> contain undefined BPF_FUNC references.
-> >
-> > That's true, but I'm wondering if maintaining a copy of that enum in
-> > bpf_helpers.h itself is a good answer here?
-> >
-> > bpf_helpers.h will be most probably used with BPF CO-RE and
-> > auto-generated vmlinux.h with all the enums and types. In that case,
-> > you'll probably want to use vmlinux.h for one of the latest kernels
-> > anyways.
->
-> I'm not following you; my interpretation of your comment seems like you
-> are making huge assumptions.
->
-> I build bpf programs for specific kernel versions using the devel
-> packages for the specific kernel of interest.
+From: Alan Maguire <alan.maguire@oracle.com>
 
-Sure, and you can keep doing that, just don't include bpf_helpers.h?
+This adds support for setting and deleting bpf chain call programs through
+a couple of new commands in the bpf() syscall. The CHAIN_ADD and CHAIN_DEL
+commands take two eBPF program fds and a return code, and install the
+'next' program to be chain called after the 'prev' program if that program
+returns 'retcode'. A retcode of -1 means "wildcard", so that the program
+will be executed regardless of the previous program's return code.
 
-What I was saying, though, especially having in mind tracing BPF
-programs that need to inspect kernel structures, is that it's quite
-impractical to have to build many different versions of BPF programs
-for each supported kernel version and distribute them in binary form.
-So people usually use BCC and do compilation on-the-fly using BCC's
-embedded Clang.
 
-BPF CO-RE is providing an alternative, which will allow to pre-compile
-your program once for many different kernels you might be running your
-program on. There is tooling that eliminates the need for system
-headers. Instead we pre-generate a single vmlinux.h header with all
-the types/enums/etc, that are then used w/ BPF CO-RE to build portable
-BPF programs capable of working on multiple kernel versions.
+The syscall command names are based on Alexei's prog_chain example[0],
+which Alan helpfully rebased on current bpf-next. However, the logic and
+program storage is obviously adapted to the execution logic in the previous
+commit.
 
-So what I was pointing out there was that this vmlinux.h would be
-ideally generated from latest kernel and not having latest
-BPF_FUNC_xxx shouldn't be a problem. But see below about situation
-being worse.
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/ast/bpf.git/commit/?h=prog_chain&id=f54f45d00f91e083f6aec2abe35b6f0be52ae85b&context=15
 
->
-> >
-> > Nevertheless, it is a problem and thanks for bringing it up! I'd say
-> > for now we should still go ahead with this move and try to solve with
-> > issue once bpf_helpers.h is in libbpf. If bpf_helpers.h doesn't work
-> > for someone, it's no worse than it is today when users don't have
-> > bpf_helpers.h at all.
-> >
->
-> If this syncs to the github libbpf, it will be worse than today in the
-> sense of compile failures if someone's header file ordering picks
-> libbpf's bpf_helpers.h over whatever they are using today.
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+ include/uapi/linux/bpf.h |   10 ++++++
+ kernel/bpf/syscall.c     |   78 ++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 88 insertions(+)
 
-Today bpf_helpers.h don't exist for users or am I missing something?
-bpf_helpers.h right now are purely for selftests. But they are really
-useful outside that context, so I'm making it available for everyone
-by distributing with libbpf sources. If bpf_helpers.h doesn't work for
-some specific use case, just don't use it (yet?).
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index febe8934d19a..b5dbc49fa1a3 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -107,6 +107,9 @@ enum bpf_cmd {
+ 	BPF_MAP_LOOKUP_AND_DELETE_ELEM,
+ 	BPF_MAP_FREEZE,
+ 	BPF_BTF_GET_NEXT_ID,
++	BPF_PROG_CHAIN_ADD,
++	BPF_PROG_CHAIN_DEL,
++	BPF_PROG_CHAIN_GET,
+ };
+ 
+ enum bpf_map_type {
+@@ -516,6 +519,13 @@ union bpf_attr {
+ 		__u64		probe_offset;	/* output: probe_offset */
+ 		__u64		probe_addr;	/* output: probe_addr */
+ 	} task_fd_query;
++
++	struct { /* anonymous struct used by BPF_PROG_CHAIN_* commands */
++		__u32		prev_prog_fd;
++		__u32		next_prog_fd;
++		__u32		retcode;
++		__u32		next_prog_id;   /* output: prog_id */
++	};
+ } __attribute__((aligned(8)));
+ 
+ /* The description below is an attempt at providing documentation to eBPF
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index c2a49df5f921..054b1f7c83f8 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2112,6 +2112,79 @@ static int bpf_prog_test_run(const union bpf_attr *attr,
+ 	return ret;
+ }
+ 
++#define BPF_PROG_CHAIN_LAST_FIELD next_prog_id
++
++static int bpf_prog_chain(int cmd, const union bpf_attr *attr,
++			  union bpf_attr __user *uattr)
++{
++	struct bpf_prog *prog, *next_prog, *old_prog;
++	struct bpf_array *array;
++	int ret = -EOPNOTSUPP;
++	u32 index, prog_id;
++
++	if (CHECK_ATTR(BPF_PROG_CHAIN))
++		return -EINVAL;
++
++	/* Index 0 is wildcard, encoded as ~0 by userspace */
++	if (attr->retcode == ((u32) ~0))
++		index = 0;
++	else
++		index = attr->retcode + 1;
++
++	if (index >= BPF_NUM_CHAIN_SLOTS)
++		return -E2BIG;
++
++	prog = bpf_prog_get(attr->prev_prog_fd);
++	if (IS_ERR(prog))
++		return PTR_ERR(prog);
++
++	/* If no chain_progs array is set, that's because the chain call flag
++	 * was not set on program load, and so we can't support chain calls.
++	 */
++	if (!prog->aux->chain_progs)
++		goto out;
++
++	array = prog->aux->chain_progs;
++
++	switch (cmd) {
++	case BPF_PROG_CHAIN_ADD:
++		next_prog = bpf_prog_get(attr->next_prog_fd);
++		if (IS_ERR(next_prog)) {
++			ret = PTR_ERR(next_prog);
++			break;
++		}
++		old_prog = xchg(array->ptrs + index, next_prog);
++		if (old_prog)
++			bpf_prog_put(old_prog);
++		ret = 0;
++		break;
++	case BPF_PROG_CHAIN_DEL:
++		old_prog = xchg(array->ptrs + index, NULL);
++		if (old_prog) {
++			bpf_prog_put(old_prog);
++			ret = 0;
++		} else {
++			ret = -ENOENT;
++		}
++		break;
++	case BPF_PROG_CHAIN_GET:
++		old_prog = READ_ONCE(*(array->ptrs + index));
++		if (old_prog) {
++			prog_id = old_prog->aux->id;
++			if (put_user(prog_id, &uattr->next_prog_id))
++				ret = -EFAULT;
++			else
++				ret = 0;
++		} else
++			ret = -ENOENT;
++		break;
++	}
++
++out:
++	bpf_prog_put(prog);
++	return ret;
++}
++
+ #define BPF_OBJ_GET_NEXT_ID_LAST_FIELD next_id
+ 
+ static int bpf_obj_get_next_id(const union bpf_attr *attr,
+@@ -2884,6 +2957,11 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, siz
+ 	case BPF_PROG_TEST_RUN:
+ 		err = bpf_prog_test_run(&attr, uattr);
+ 		break;
++	case BPF_PROG_CHAIN_ADD:
++	case BPF_PROG_CHAIN_DEL:
++	case BPF_PROG_CHAIN_GET:
++		err = bpf_prog_chain(cmd, &attr, uattr);
++		break;
+ 	case BPF_PROG_GET_NEXT_ID:
+ 		err = bpf_obj_get_next_id(&attr, uattr,
+ 					  &prog_idr, &prog_idr_lock);
 
-I'm still failing to see how it's worse than situation today.
