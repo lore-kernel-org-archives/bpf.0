@@ -2,187 +2,83 @@ Return-Path: <SRS0=CYzr=X5=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B73C1C4CED1
-	for <bpf@archiver.kernel.org>; Fri,  4 Oct 2019 17:22:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6447BC4CED1
+	for <bpf@archiver.kernel.org>; Fri,  4 Oct 2019 17:53:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9A094215EA
-	for <bpf@archiver.kernel.org>; Fri,  4 Oct 2019 17:22:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3515D21D81
+	for <bpf@archiver.kernel.org>; Fri,  4 Oct 2019 17:53:35 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I0IC1K0P"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388282AbfJDRWo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Oct 2019 13:22:44 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:51458 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387990AbfJDRWo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Oct 2019 13:22:44 -0400
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 82C4D7FDEE
-        for <bpf@vger.kernel.org>; Fri,  4 Oct 2019 17:22:43 +0000 (UTC)
-Received: by mail-ed1-f72.google.com with SMTP id 34so4496148edf.0
-        for <bpf@vger.kernel.org>; Fri, 04 Oct 2019 10:22:43 -0700 (PDT)
+        id S2388428AbfJDRxf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Oct 2019 13:53:35 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:34357 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388195AbfJDRxe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Oct 2019 13:53:34 -0400
+Received: by mail-qt1-f194.google.com with SMTP id 3so9740238qta.1;
+        Fri, 04 Oct 2019 10:53:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XZtPrAuiyJow88xMJcgaW2oGIpQkaG6LyvDnnhFC908=;
+        b=I0IC1K0PJvUuKC9eZ+WY49NbkALLddx7G3URSB0o8HusFSIY2hVILSebarp0s5ZoeB
+         R0yezv6zjfLTg/5dFgIGXaM2/JHEFkUfIJOt0OCXizJSsUaG36D5Rr2yQ0krxvkTvrPT
+         WTwjPZNqgiPiXD0Dpci4VM1HtPoo0AEPhRuYrwuyAKEnO9QASCYH9xOfoVkTAA/o7IjB
+         rfkssMvYXtpUp/LpbcDqs2NMqvq/XXXdG8c9UR5MZZSFV4zoZ8smuqjMtR5chctDguGD
+         5vsROsyHWulhGMxNrPTrN7YkZCJgNewG5XHS5xDeVZJZMTF+xc5KP/f32J4k5kPhbTk0
+         14fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:user-agent
-         :mime-version:content-transfer-encoding;
-        bh=JaEjuFYN+ScCbMUL9SfWrwdbZf2ALm7M9GzE1SH29jk=;
-        b=I1EjmyqjfaTh6lHM3jQa/qx4uw7nR8ut5vSWqEBorVdVaRyuYiZOhDg8rPvz3bUfZe
-         WS2BEIal8nn7xUfSRw12OrO3w7WqCUZHKU7e1B+6a+dJTWCVC/hdnkkgo7i56MNrokrs
-         MuvkkoboOWHaK2cHrMlOVjO0l4YI/QHu4q5XFKmgT0/dLpAIUAYG8tmoFEPac4h7oLQQ
-         NirjwW+GE5wGXS9Ike3j9qoc/4zlTeoyAkEMQMaCoLnDfHbP6vD0vU8MweY1p7X0EJBV
-         mrGAl3Npl/sdZ72f7Je/t17wG4Gq7SIleNeje7DzvCAF2d3jDO064E8y/Oam4Rgyjbx5
-         NrqQ==
-X-Gm-Message-State: APjAAAXViySWUpCum3Ei2FNjO+1GodQyYrZC3ociASmZ5R9jFBeqORGH
-        2c0rAkWZxIVJ156NDzKBP62byk+cVn98JAEoHDvpbn3//XIg2dunslJX3JLq0qE6DnREKUh33LZ
-        f0HZB245CSe6O
-X-Received: by 2002:a17:906:7294:: with SMTP id b20mr13126119ejl.216.1570209762135;
-        Fri, 04 Oct 2019 10:22:42 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqxK2VdZHJbKFfD8txn26btn/slatnhpbU32KkPMXyU9fOjO9JZJ/bAcrLYekByUXdG1Dv++OA==
-X-Received: by 2002:a17:906:7294:: with SMTP id b20mr13126100ejl.216.1570209761806;
-        Fri, 04 Oct 2019 10:22:41 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
-        by smtp.gmail.com with ESMTPSA id v22sm1250014edm.89.2019.10.04.10.22.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Oct 2019 10:22:41 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 6D8CF18063D; Fri,  4 Oct 2019 19:22:40 +0200 (CEST)
-Subject: [PATCH bpf-next v2 0/5] xdp: Support multiple programs on a single
- interface through chain calls
-From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Marek Majkowski <marek@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Date:   Fri, 04 Oct 2019 19:22:40 +0200
-Message-ID: <157020976030.1824887.7191033447861395957.stgit@alrua-x1>
-User-Agent: StGit/0.19-dirty
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XZtPrAuiyJow88xMJcgaW2oGIpQkaG6LyvDnnhFC908=;
+        b=m+usZCdsLfa9UgRgGBg8iLeUmoM/o046YRXvSzYdHGsv6titwSjKBIGFDjYJ+Q7dLh
+         o15ezyb9B4EPW2H1ziPVexxXIts9gHQGCOXylCCdxePovuP9+KVQ6f0f1qIUOaV2BjxA
+         MpYUqjeMYgZkiuONaWJEVELDQN6QoPq2tye/tY4ez8mZy6N7YOi0ljNd0VMxYkEczWWw
+         TmKwTf2hlVGAZO6fv9zUIjYdSZmoRkSwlkALqyqWmSaSmZXlFfgqC7BRB2M5c7JsyX5Q
+         +1DUvmLLyyn4fEYvXF9R1k9WSZ2b7bKGOnM3CX+yF+n6ThgENS1Dif9ojDHK/ht1oRYj
+         qlaA==
+X-Gm-Message-State: APjAAAUMODXG7fCcrQWDnTTmePMC7f7EP7/r78q6rIIRVYVgj5TUil8A
+        /swxHEtIu6CK6Q3Ztx2bznViFjpFsVR4fbNiqS0=
+X-Google-Smtp-Source: APXvYqykZtTePGrXzDyF0uJ1d3l98isG+Z4F2EB5FFRtHnRgeS1A2/vR+i72fl3ua3Ephx4PVb314qmXWv/xshvk6Ow=
+X-Received: by 2002:ac8:37cb:: with SMTP id e11mr17615377qtc.22.1570211613271;
+ Fri, 04 Oct 2019 10:53:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20191004155615.95469-1-sdf@google.com> <20191004155615.95469-2-sdf@google.com>
+In-Reply-To: <20191004155615.95469-2-sdf@google.com>
+From:   Song Liu <liu.song.a23@gmail.com>
+Date:   Fri, 4 Oct 2019 10:53:22 -0700
+Message-ID: <CAPhsuW6-mdSLFDUdGL1eh2n2Wx32GDsvjCSSyv1dxom1g=uUow@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf/flow_dissector: add mode to enforce
+ global BPF flow dissector
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Petar Penkov <ppenkov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series adds support for executing multiple XDP programs on a single
-interface in sequence, through the use of chain calls, as discussed at the Linux
-Plumbers Conference last month:
+On Fri, Oct 4, 2019 at 8:58 AM Stanislav Fomichev <sdf@google.com> wrote:
+>
+> Always use init_net flow dissector BPF program if it's attached and fall
+> back to the per-net namespace one. Also, deny installing new programs if
+> there is already one attached to the root namespace.
+> Users can still detach their BPF programs, but can't attach any
+> new ones (-EEXIST).
+>
+> Cc: Petar Penkov <ppenkov@google.com>
+> Signed-off-by: Stanislav Fomichev <sdf@google.com>
 
-https://linuxplumbersconf.org/event/4/contributions/460/
-
-# HIGH-LEVEL IDEA
-
-Since the response to the previous iteration was pretty unanimous that this
-should not be XDP-specific, this version takes a different approach: We add the
-ability to inject chain call programs into the eBPF execution core itself. This
-also turns out to be simpler, so that's good :)
-
-The way this new approach works is the bpf() syscall gets a couple of new
-commands which takes a pair of BPF program fds and a return code. It will then
-attach the second program to the first one in a structured keyed by return code.
-When a program chain is thus established, the former program will tail call to
-the latter at the end of its execution.
-
-The actual tail calling is achieved by having the verifier inject instructions
-into the program that performs the chain call lookup and tail call before each
-BPF_EXIT instruction. Since this rewriting has to be performed at program load
-time, a new flag has to be set to trigger the rewriting. Only programs loaded
-with this flag set can have other programs attached to them for chain calls.
-
-Ideally, it shouldn't be necessary to set the flag on program load time,
-but rather inject the calls when a chain call program is first loaded.
-However, rewriting the program reallocates the bpf_prog struct, which is
-obviously not possible after the program has been attached to something.
-
-One way around this could be a sysctl to force the flag one (for enforcing
-system-wide support). Another could be to have the chain call support
-itself built into the interpreter and JIT, which could conceivably be
-re-run each time we attach a new chain call program. This would also allow
-the JIT to inject direct calls to the next program instead of using the
-tail call infrastructure, which presumably would be a performance win. The
-drawback is, of course, that it would require modifying all the JITs.
-
-
-# PERFORMANCE
-
-I performed a simple performance test to get an initial feel for the overhead of
-the chain call mechanism. This test consists of running only two programs in
-sequence: One that returns XDP_PASS and another that returns XDP_DROP. I then
-measure the drop PPS performance and compare it to a baseline of just a single
-program that only returns XDP_DROP.
-
-For comparison, a test case that uses regular eBPF tail calls to sequence two
-programs together is also included. I did not re-run the baseline tests from
-before, so the two top values are the same
-
-| Test case                        | Perf      | Overhead |
-|----------------------------------+-----------+----------|
-| Before patch (XDP DROP program)  | 31.0 Mpps |          |
-| XDP tail call                    | 26.6 Mpps | 5.3 ns   |
-|----------------------------------+-----------+----------|
-| After patch (XDP DROP program)   | 31.2 Mpps |          |
-| XDP chain call (wildcard return) | 26.8 Mpps | 5.3 ns   |
-| XDP chain call (XDP_PASS return) | 27.2 Mpps | 4.7 ns   |
-
-The difference between the wildcard and XDP_PASS cases for chain calls, is that
-using the wildcard mode needs two tail call attempts where the first one fails,
-(see the injected BPF code in patch 1) while XDP_PASS matches on the first tail
-call.
-
-# PATCH SET STRUCTURE
-This series is structured as follows:
-
-- Patch 1: Adds the code that injects the instructions into the programs
-- Patch 2: Adds the new commands added to the bpf() syscall
-- Patch 3-4: Tools/ update and libbpf syscall wrappers
-- Patch 5: Selftest  with example user space code (a bit hacky still)
-
-The whole series is also available in my git repo on kernel.org:
-https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git/log/?h=xdp-multiprog-02
-
-Changelog:
-
-v2:
-  - Completely new approach that integrates chain calls into the core eBPF
-    runtime instead of doing the map XDP-specific thing with a new map from v1.
-
----
-
-Alan Maguire (1):
-      bpf: Add support for setting chain call sequence for programs
-
-Toke Høiland-Jørgensen (4):
-      bpf: Support injecting chain calls into BPF programs on load
-      tools: Update bpf.h header for program chain calls
-      libbpf: Add syscall wrappers for BPF_PROG_CHAIN_* commands
-      selftests: Add tests for XDP chain calls
-
-
- include/linux/bpf.h                           |    2 
- include/uapi/linux/bpf.h                      |   16 +
- kernel/bpf/core.c                             |   10 +
- kernel/bpf/syscall.c                          |   81 ++++++
- kernel/bpf/verifier.c                         |   76 ++++++
- tools/include/uapi/linux/bpf.h                |   16 +
- tools/lib/bpf/bpf.c                           |   34 +++
- tools/lib/bpf/bpf.h                           |    4 
- tools/lib/bpf/libbpf.map                      |    3 
- tools/testing/selftests/bpf/.gitignore        |    1 
- tools/testing/selftests/bpf/Makefile          |    3 
- tools/testing/selftests/bpf/progs/xdp_dummy.c |    6 
- tools/testing/selftests/bpf/test_xdp_chain.sh |   77 ++++++
- tools/testing/selftests/bpf/xdp_chain.c       |  313 +++++++++++++++++++++++++
- 14 files changed, 640 insertions(+), 2 deletions(-)
- create mode 100755 tools/testing/selftests/bpf/test_xdp_chain.sh
- create mode 100644 tools/testing/selftests/bpf/xdp_chain.c
-
+Acked-by: Song Liu <songliubraving@fb.com>
