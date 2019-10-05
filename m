@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F26CAC47404
-	for <bpf@archiver.kernel.org>; Sat,  5 Oct 2019 05:03:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AAD4C32792
+	for <bpf@archiver.kernel.org>; Sat,  5 Oct 2019 05:03:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C9442222C0
-	for <bpf@archiver.kernel.org>; Sat,  5 Oct 2019 05:03:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D3BA720873
+	for <bpf@archiver.kernel.org>; Sat,  5 Oct 2019 05:03:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1570251823;
-	bh=BO+/jrpc2aaV0Us1ScAFzXHFCzNEr+gX1cE+sRcUzpA=;
+	s=default; t=1570251829;
+	bh=kkrH1CkN9fKd0wvnA+Vkr6TJPyrKfC8K5FoFqIESiG0=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=en26Wr7MXYCiQ6VfpKVDN/tiNogJ8z8Bufn5F7PGty2qadiEDpQ0CVuT1cWF/8jO3
-	 RaY4iFRyqu1KSTF3iKZBnXyU1CTMteYa0EjBeIjNPokCis0j7jqjcP1HG7K9L+DrAv
-	 wY1BAPhf6xOnNEWmseQ7bqd5mEaz8Uu7OVx2KEds=
+	b=0zBWAMtni6redeRUb7IIPkBUiVF2EFUrjd9UIvotSPY0Jz5YMwLP/BKW1BJNxUOS4
+	 MGQFg1cmSILIorWv2JQgBkdyYnMzSC1QARouTx3fiSndoljT6Sqx2PYEWelpnf5uHm
+	 qMvT48dq5E9n7PFaqGpyij4wcCcVQKqPHIVbptx0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727118AbfJEFDn convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sat, 5 Oct 2019 01:03:43 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:64978 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727059AbfJEFDm (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 5 Oct 2019 01:03:42 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9553ZAQ012985
-        for <bpf@vger.kernel.org>; Fri, 4 Oct 2019 22:03:41 -0700
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2ve8593eng-9
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 04 Oct 2019 22:03:41 -0700
-Received: from 2401:db00:30:600c:face:0:1f:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Fri, 4 Oct 2019 22:03:27 -0700
+        id S1727130AbfJEFDt convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sat, 5 Oct 2019 01:03:49 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:18306 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727117AbfJEFDt (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 5 Oct 2019 01:03:49 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x954xZI1015206
+        for <bpf@vger.kernel.org>; Fri, 4 Oct 2019 22:03:48 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2ve548c1nf-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 04 Oct 2019 22:03:48 -0700
+Received: from 2401:db00:2120:81dc:face:0:23:0 (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Fri, 4 Oct 2019 22:03:20 -0700
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 281E776091D; Fri,  4 Oct 2019 22:03:27 -0700 (PDT)
+        id E9FD576091D; Fri,  4 Oct 2019 22:03:18 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -46,9 +46,9 @@ To:     <davem@davemloft.net>
 CC:     <daniel@iogearbox.net>, <x86@kernel.org>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 06/10] bpf: add support for BTF pointers to interpreter
-Date:   Fri, 4 Oct 2019 22:03:10 -0700
-Message-ID: <20191005050314.1114330-7-ast@kernel.org>
+Subject: [PATCH bpf-next 02/10] bpf: add typecast to bpf helpers to help BTF generation
+Date:   Fri, 4 Oct 2019 22:03:06 -0700
+Message-ID: <20191005050314.1114330-3-ast@kernel.org>
 X-Mailer: git-send-email 2.20.0
 In-Reply-To: <20191005050314.1114330-1-ast@kernel.org>
 References: <20191005050314.1114330-1-ast@kernel.org>
@@ -58,112 +58,48 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
  definitions=2019-10-05_02:2019-10-03,2019-10-05 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
- malwarescore=0 clxscore=1034 bulkscore=0 phishscore=0 lowpriorityscore=0
- mlxlogscore=794 impostorscore=0 mlxscore=0 priorityscore=1501
- suspectscore=1 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1910050045
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 bulkscore=0 mlxlogscore=828 adultscore=0
+ lowpriorityscore=0 malwarescore=0 suspectscore=1 spamscore=0 clxscore=1015
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1910050044
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Pointer to BTF object is a pointer to kernel object or NULL.
-The memory access in the interpreter has to be done via probe_kernel_read
-to avoid page faults.
+When pahole converts dwarf to btf it emits only used types.
+Wrap existing bpf helper functions into typedef and use it in
+typecast to make gcc emits this type into dwarf.
+Then pahole will convert it to btf.
+The "btf_#name_of_helper" types will be used to figure out
+types of arguments of bpf helpers.
+The generate code before and after is the same.
+Only dwarf and btf are different.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/filter.h |  3 +++
- kernel/bpf/core.c      | 19 +++++++++++++++++++
- kernel/bpf/verifier.c  |  8 ++++++++
- 3 files changed, 30 insertions(+)
+ include/linux/filter.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/include/linux/filter.h b/include/linux/filter.h
-index d3d51d7aff2c..22ebea2e64ea 100644
+index 2ce57645f3cd..d3d51d7aff2c 100644
 --- a/include/linux/filter.h
 +++ b/include/linux/filter.h
-@@ -65,6 +65,9 @@ struct ctl_table_header;
- /* unused opcode to mark special call to bpf_tail_call() helper */
- #define BPF_TAIL_CALL	0xf0
- 
-+/* unused opcode to mark special load instruction. Same as BPF_ABS */
-+#define BPF_PROBE_MEM	0x20
-+
- /* unused opcode to mark call to interpreter with arguments */
- #define BPF_CALL_ARGS	0xe0
- 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 66088a9e9b9e..8a765bbd33f0 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1291,6 +1291,11 @@ bool bpf_opcode_in_insntable(u8 code)
- }
- 
- #ifndef CONFIG_BPF_JIT_ALWAYS_ON
-+u64 __weak bpf_probe_read(void * dst, u32 size, const void * unsafe_ptr)
-+{
-+	memset(dst, 0, size);
-+	return -EFAULT;
-+}
- /**
-  *	__bpf_prog_run - run eBPF program on a given context
-  *	@regs: is the array of MAX_BPF_EXT_REG eBPF pseudo-registers
-@@ -1310,6 +1315,10 @@ static u64 __no_fgcse ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u6
- 		/* Non-UAPI available opcodes. */
- 		[BPF_JMP | BPF_CALL_ARGS] = &&JMP_CALL_ARGS,
- 		[BPF_JMP | BPF_TAIL_CALL] = &&JMP_TAIL_CALL,
-+		[BPF_LDX | BPF_PROBE_MEM | BPF_B] = &&LDX_PROBE_MEM_B,
-+		[BPF_LDX | BPF_PROBE_MEM | BPF_H] = &&LDX_PROBE_MEM_H,
-+		[BPF_LDX | BPF_PROBE_MEM | BPF_W] = &&LDX_PROBE_MEM_W,
-+		[BPF_LDX | BPF_PROBE_MEM | BPF_DW] = &&LDX_PROBE_MEM_DW,
- 	};
- #undef BPF_INSN_3_LBL
- #undef BPF_INSN_2_LBL
-@@ -1542,6 +1551,16 @@ static u64 __no_fgcse ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u6
- 	LDST(W,  u32)
- 	LDST(DW, u64)
- #undef LDST
-+#define LDX_PROBE(SIZEOP, SIZE)						\
-+	LDX_PROBE_MEM_##SIZEOP:						\
-+		bpf_probe_read(&DST, SIZE, (const void *)(long) SRC);	\
-+		CONT;
-+	LDX_PROBE(B,  1)
-+	LDX_PROBE(H,  2)
-+	LDX_PROBE(W,  4)
-+	LDX_PROBE(DW, 8)
-+#undef LDX_PROBE
-+
- 	STX_XADD_W: /* lock xadd *(u32 *)(dst_reg + off16) += src_reg */
- 		atomic_add((u32) SRC, (atomic_t *)(unsigned long)
- 			   (DST + insn->off));
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 3c155873ffea..b81f46371bb9 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -7509,6 +7509,7 @@ static bool reg_type_mismatch_ok(enum bpf_reg_type type)
- 	case PTR_TO_TCP_SOCK:
- 	case PTR_TO_TCP_SOCK_OR_NULL:
- 	case PTR_TO_XDP_SOCK:
-+	case PTR_TO_BTF_ID:
- 		return false;
- 	default:
- 		return true;
-@@ -8650,6 +8651,13 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
- 		case PTR_TO_XDP_SOCK:
- 			convert_ctx_access = bpf_xdp_sock_convert_ctx_access;
- 			break;
-+		case PTR_TO_BTF_ID:
-+			if (type == BPF_WRITE) {
-+				verbose(env, "Writes through BTF pointers are not allowed\n");
-+				return -EINVAL;
-+			}
-+			insn->code = BPF_LDX | BPF_PROBE_MEM | BPF_SIZE((insn)->code);
-+			continue;
- 		default:
- 			continue;
- 		}
+@@ -464,10 +464,11 @@ static inline bool insn_is_zext(const struct bpf_insn *insn)
+ #define BPF_CALL_x(x, name, ...)					       \
+ 	static __always_inline						       \
+ 	u64 ____##name(__BPF_MAP(x, __BPF_DECL_ARGS, __BPF_V, __VA_ARGS__));   \
++	typedef u64 (*btf_##name)(__BPF_MAP(x, __BPF_DECL_ARGS, __BPF_V, __VA_ARGS__)); \
+ 	u64 name(__BPF_REG(x, __BPF_DECL_REGS, __BPF_N, __VA_ARGS__));	       \
+ 	u64 name(__BPF_REG(x, __BPF_DECL_REGS, __BPF_N, __VA_ARGS__))	       \
+ 	{								       \
+-		return ____##name(__BPF_MAP(x,__BPF_CAST,__BPF_N,__VA_ARGS__));\
++		return ((btf_##name)____##name)(__BPF_MAP(x,__BPF_CAST,__BPF_N,__VA_ARGS__));\
+ 	}								       \
+ 	static __always_inline						       \
+ 	u64 ____##name(__BPF_MAP(x, __BPF_DECL_ARGS, __BPF_V, __VA_ARGS__))
 -- 
 2.20.0
 
