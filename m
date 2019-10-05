@@ -2,43 +2,42 @@ Return-Path: <SRS0=qTbO=X6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90AB2C47404
-	for <bpf@archiver.kernel.org>; Sat,  5 Oct 2019 05:03:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09C52C32792
+	for <bpf@archiver.kernel.org>; Sat,  5 Oct 2019 05:03:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5F0A120873
-	for <bpf@archiver.kernel.org>; Sat,  5 Oct 2019 05:03:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C924320873
+	for <bpf@archiver.kernel.org>; Sat,  5 Oct 2019 05:03:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1570251832;
-	bh=3wzVNoH3iuATkBUjqFUXIpafwvLz664whSpult9zMsw=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=xsjkbJlQzbZBBbJqWE54ws3gb3Hspzabv7pxnHUBQ6zmQfqW8hB3jjQhks+z05ttw
-	 GGUYqeZ8udNsIgZEHk10ME4kepEr2AO+1JHzcUIjakSlAJDZbeN5YKUm57L4aHB1Ag
-	 XhGvVVllNtEZlDuMx3iKZ/TGFY7VY3H+KYrlUo24=
+	s=default; t=1570251835;
+	bh=/+g3BxhQpqNYKyuCms+42GKclcwMF/8/43rg7GPOfss=;
+	h=From:To:CC:Subject:Date:List-ID:From;
+	b=BAy6ieXoLzIBghYJtnxXiNXZBECLMkaRlMxL9iNSFVEvMeTQnBs8hOsKOSe6DFurx
+	 +xqncKcdY76mWq4KDN1v2mJE1s1VvymbfwlOlL4esmNySIC11IGc5m0xUZmolFti76
+	 M6BkSKp0DqtqTAepvm0wo0GOsyxEvS/gbFDYrQxM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727134AbfJEFDw convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sat, 5 Oct 2019 01:03:52 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:16636 "EHLO
+        id S1727117AbfJEFDz convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sat, 5 Oct 2019 01:03:55 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:15776 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727117AbfJEFDv (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 5 Oct 2019 01:03:51 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9553jnE007203
-        for <bpf@vger.kernel.org>; Fri, 4 Oct 2019 22:03:50 -0700
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2ve8xxk3am-9
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 04 Oct 2019 22:03:50 -0700
-Received: from 2401:db00:30:600c:face:0:1f:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::128) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Fri, 4 Oct 2019 22:03:35 -0700
+        by vger.kernel.org with ESMTP id S1727137AbfJEFDz (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 5 Oct 2019 01:03:55 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x954xZIE015206
+        for <bpf@vger.kernel.org>; Fri, 4 Oct 2019 22:03:53 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2ve548c1nf-18
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 04 Oct 2019 22:03:53 -0700
+Received: from 2401:db00:2120:80e1:face:0:29:0 (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Fri, 4 Oct 2019 22:03:20 -0700
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 4D6FA76091D; Fri,  4 Oct 2019 22:03:35 -0700 (PDT)
+        id 65DC176091D; Fri,  4 Oct 2019 22:03:14 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -46,224 +45,161 @@ To:     <davem@davemloft.net>
 CC:     <daniel@iogearbox.net>, <x86@kernel.org>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 10/10] selftests/bpf: add kfree_skb raw_tp test
-Date:   Fri, 4 Oct 2019 22:03:14 -0700
-Message-ID: <20191005050314.1114330-11-ast@kernel.org>
+Subject: [PATCH bpf-next 00/10] bpf: revolutionize bpf tracing
+Date:   Fri, 4 Oct 2019 22:03:04 -0700
+Message-ID: <20191005050314.1114330-1-ast@kernel.org>
 X-Mailer: git-send-email 2.20.0
-In-Reply-To: <20191005050314.1114330-1-ast@kernel.org>
-References: <20191005050314.1114330-1-ast@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
  definitions=2019-10-05_02:2019-10-03,2019-10-05 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- adultscore=0 impostorscore=0 phishscore=0 priorityscore=1501
- suspectscore=4 spamscore=0 malwarescore=0 bulkscore=0 mlxscore=0
- lowpriorityscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1908290000 definitions=main-1910050045
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 bulkscore=0 mlxlogscore=999 adultscore=0
+ lowpriorityscore=0 malwarescore=0 suspectscore=1 spamscore=0 clxscore=1015
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1910050044
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Load basic cls_bpf program.
-Load raw_tracepoint program and attach to kfree_skb raw tracepoint.
-Trigger cls_bpf via prog_test_run.
-At the end of test_run kernel will call kfree_skb
-which will trigger trace_kfree_skb tracepoint.
-Which will call our raw_tracepoint program.
-Which will take that skb and will dump it into perf ring buffer.
-Check that user space received correct packet.
+Revolutionize bpf tracing and bpf C programming.
+C language allows any pointer to be typecasted to any other pointer
+or convert integer to a pointer.
+Though bpf verifier is operating at assembly level it has strict type
+checking for fixed number of types.
+Known types are defined in 'enum bpf_reg_type'.
+For example:
+PTR_TO_FLOW_KEYS is a pointer to 'struct bpf_flow_keys'
+PTR_TO_SOCKET is a pointer to 'struct bpf_sock',
+and so on.
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- .../selftests/bpf/prog_tests/kfree_skb.c      | 90 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/kfree_skb.c | 76 ++++++++++++++++
- 2 files changed, 166 insertions(+)
+When it comes to bpf tracing there are no types to track.
+bpf+kprobe receives 'struct pt_regs' as input.
+bpf+raw_tracepoint receives raw kernel arguments as an array of u64 values.
+It was up to bpf program to interpret these integers.
+Typical tracing program looks like:
+int bpf_prog(struct pt_regs *ctx)
+{
+    struct net_device *dev;
+    struct sk_buff *skb;
+    int ifindex;
+
+    skb = (struct sk_buff *) ctx->di;
+    bpf_probe_read(&dev, sizeof(dev), &skb->dev);
+    bpf_probe_read(&ifindex, sizeof(ifindex), &dev->ifindex);
+}
+Addressing mistakes will not be caught by C compiler or by the verifier.
+The program above could have typecasted ctx->si to skb and page faulted
+on every bpf_probe_read().
+bpf_probe_read() allows reading any address and suppresses page faults.
+Typical program has hundreds of bpf_probe_read() calls to walk
+kernel data structures.
+Not only tracing program would be slow, but there was always a risk
+that bpf_probe_read() would read mmio region of memory and cause
+unpredictable hw behavior.
+
+With introduction of Compile Once Run Everywhere technology in libbpf
+and in LLVM and BPF Type Format (BTF) the verifier is finally ready
+for the next step in program verification.
+Now it can use in-kernel BTF to type check bpf assembly code.
+
+Equivalent program will look like:
+struct trace_kfree_skb {
+    struct sk_buff *skb;
+    void *location;
+};
+SEC("raw_tracepoint/kfree_skb")
+int trace_kfree_skb(struct trace_kfree_skb* ctx)
+{
+    struct sk_buff *skb = ctx->skb;
+    struct net_device *dev;
+    int ifindex;
+
+    __builtin_preserve_access_index(({
+        dev = skb->dev;
+        ifindex = dev->ifindex;
+    }));
+}
+
+These patches teach bpf verifier to recognize kfree_skb's first argument
+as 'struct sk_buff *' because this is what kernel C code is doing.
+The bpf program cannot 'cheat' and say that the first argument
+to kfree_skb raw_tracepoint is some other type.
+The verifier will catch such type mismatch between bpf program
+assumption of kernel code and the actual type in the kernel.
+
+Furthermore skb->dev access is type tracked as well.
+The verifier can see which field of skb is being read
+in bpf assembly. It will match offset to type.
+If bpf program has code:
+struct net_device *dev = (void *)skb->len;
+C compiler will not complain and generate bpf assembly code,
+but the verifier will recognize that integer 'len' field
+is being accessed at offsetof(struct sk_buff, len) and will reject
+further dereference of 'dev' variable because it contains
+integer value instead of a pointer.
+
+Such sophisticated type tracking allows calling networking
+bpf helpers from tracing programs.
+This patchset allows calling bpf_skb_event_output() that dumps
+skb data into perf ring buffer.
+It greatly improves observability.
+Now users can not only see packet lenth of the skb
+about to be freed in kfree_skb() kernel function, but can
+dump it to user space via perf ring buffer using bpf helper
+that was previously available only to TC and socket filters.
+See patch 10 for full example.
+
+The end result is safer and faster bpf tracing.
+Safer - because direct calls to bpf_probe_read() are disallowed and
+arbitrary addresses cannot be read.
+Faster - because normal loads are used to walk kernel data structures
+instead of bpf_probe_read() calls.
+Note that such loads can page fault and are supported by
+hidden bpf_probe_read() in interpreter and via exception table
+if program is JITed.
+
+See patches for details.
+
+Alexei Starovoitov (10):
+  bpf: add typecast to raw_tracepoints to help BTF generation
+  bpf: add typecast to bpf helpers to help BTF generation
+  bpf: process in-kernel BTF
+  libbpf: auto-detect btf_id of raw_tracepoint
+  bpf: implement accurate raw_tp context access via BTF
+  bpf: add support for BTF pointers to interpreter
+  bpf: add support for BTF pointers to x86 JIT
+  bpf: check types of arguments passed into helpers
+  bpf: disallow bpf_probe_read[_str] helpers
+  selftests/bpf: add kfree_skb raw_tp test
+
+ arch/x86/net/bpf_jit_comp.c                   |  96 +++++-
+ include/linux/bpf.h                           |  21 +-
+ include/linux/bpf_verifier.h                  |   6 +-
+ include/linux/btf.h                           |   1 +
+ include/linux/extable.h                       |  10 +
+ include/linux/filter.h                        |   6 +-
+ include/trace/bpf_probe.h                     |   3 +-
+ include/uapi/linux/bpf.h                      |   3 +-
+ kernel/bpf/btf.c                              | 318 ++++++++++++++++++
+ kernel/bpf/core.c                             |  39 ++-
+ kernel/bpf/verifier.c                         | 125 ++++++-
+ kernel/extable.c                              |   2 +
+ kernel/trace/bpf_trace.c                      |  10 +-
+ net/core/filter.c                             |  15 +-
+ tools/include/uapi/linux/bpf.h                |   3 +-
+ tools/lib/bpf/libbpf.c                        |  16 +
+ tools/testing/selftests/bpf/bpf_helpers.h     |   4 +
+ .../selftests/bpf/prog_tests/kfree_skb.c      |  90 +++++
+ tools/testing/selftests/bpf/progs/kfree_skb.c |  76 +++++
+ 19 files changed, 828 insertions(+), 16 deletions(-)
  create mode 100644 tools/testing/selftests/bpf/prog_tests/kfree_skb.c
  create mode 100644 tools/testing/selftests/bpf/progs/kfree_skb.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
-new file mode 100644
-index 000000000000..238bc7024b36
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
-@@ -0,0 +1,90 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+
-+static void on_sample(void *ctx, int cpu, void *data, __u32 size)
-+{
-+	int ifindex = *(int *)data, duration = 0;
-+	struct ipv6_packet * pkt_v6 = data + 4;
-+
-+	if (ifindex != 1)
-+		/* spurious kfree_skb not on loopback device */
-+		return;
-+	if (CHECK(size != 76, "check_size", "size %d != 76\n", size))
-+		return;
-+	if (CHECK(pkt_v6->eth.h_proto != 0xdd86, "check_eth",
-+		  "h_proto %x\n", pkt_v6->eth.h_proto))
-+		return;
-+	if (CHECK(pkt_v6->iph.nexthdr != 6, "check_ip",
-+		  "iph.nexthdr %x\n", pkt_v6->iph.nexthdr))
-+		return;
-+	if (CHECK(pkt_v6->tcp.doff != 5, "check_tcp",
-+		  "tcp.doff %x\n", pkt_v6->tcp.doff))
-+		return;
-+
-+	*(bool *)ctx = true;
-+}
-+
-+void test_kfree_skb(void)
-+{
-+	struct bpf_prog_load_attr attr = {
-+		.file = "./kfree_skb.o",
-+		.log_level = 2,
-+	};
-+
-+	struct bpf_object *obj, *obj2 = NULL;
-+	struct perf_buffer_opts pb_opts = {};
-+	struct perf_buffer *pb = NULL;
-+	struct bpf_link *link = NULL;
-+	struct bpf_map *perf_buf_map;
-+	struct bpf_program *prog;
-+	__u32 duration, retval;
-+	int err, pkt_fd, kfree_skb_fd;
-+	bool passed = false;
-+
-+	err = bpf_prog_load("./test_pkt_access.o", BPF_PROG_TYPE_SCHED_CLS, &obj, &pkt_fd);
-+	if (CHECK(err, "prog_load sched cls", "err %d errno %d\n", err, errno))
-+		return;
-+
-+	err = bpf_prog_load_xattr(&attr, &obj2, &kfree_skb_fd);
-+	if (CHECK(err, "prog_load raw tp", "err %d errno %d\n", err, errno))
-+		goto close_prog;
-+
-+	prog = bpf_object__find_program_by_title(obj2, "raw_tracepoint/kfree_skb");
-+	if (CHECK(!prog, "find_prog", "prog kfree_skb not found\n"))
-+		goto close_prog;
-+	link = bpf_program__attach_raw_tracepoint(prog, "kfree_skb");
-+	if (CHECK(IS_ERR(link), "attach_raw_tp", "err %ld\n", PTR_ERR(link)))
-+		goto close_prog;
-+
-+	perf_buf_map = bpf_object__find_map_by_name(obj2, "perf_buf_map");
-+	if (CHECK(!perf_buf_map, "find_perf_buf_map", "not found\n"))
-+		goto close_prog;
-+
-+	/* set up perf buffer */
-+	pb_opts.sample_cb = on_sample;
-+	pb_opts.ctx = &passed;
-+	pb = perf_buffer__new(bpf_map__fd(perf_buf_map), 1, &pb_opts);
-+	if (CHECK(IS_ERR(pb), "perf_buf__new", "err %ld\n", PTR_ERR(pb)))
-+		goto close_prog;
-+
-+	err = bpf_prog_test_run(pkt_fd, 1, &pkt_v6, sizeof(pkt_v6),
-+				NULL, NULL, &retval, &duration);
-+	CHECK(err || retval, "ipv6",
-+	      "err %d errno %d retval %d duration %d\n",
-+	      err, errno, retval, duration);
-+
-+	/* read perf buffer */
-+	err = perf_buffer__poll(pb, 100);
-+	if (CHECK(err < 0, "perf_buffer__poll", "err %d\n", err))
-+		goto close_prog;
-+	/* make sure kfree_skb program was triggered
-+	 * and it sent expected skb into ring buffer
-+	 */
-+	CHECK_FAIL(!passed);
-+close_prog:
-+	perf_buffer__free(pb);
-+	if (!IS_ERR_OR_NULL(link))
-+		bpf_link__destroy(link);
-+	bpf_object__close(obj);
-+	bpf_object__close(obj2);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/kfree_skb.c b/tools/testing/selftests/bpf/progs/kfree_skb.c
-new file mode 100644
-index 000000000000..61f1abfc4f48
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/kfree_skb.c
-@@ -0,0 +1,76 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2019 Facebook
-+#include <linux/bpf.h>
-+#include "bpf_helpers.h"
-+
-+char _license[] SEC("license") = "GPL";
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
-+	__uint(key_size, sizeof(int));
-+	__uint(value_size, sizeof(int));
-+} perf_buf_map SEC(".maps");
-+
-+#define _(P) (__builtin_preserve_access_index(P))
-+
-+/* define few struct-s that bpf program needs to access */
-+struct callback_head {
-+	struct callback_head *next;
-+	void (*func)(struct callback_head *head);
-+};
-+struct dev_ifalias {
-+	struct callback_head rcuhead;
-+};
-+
-+struct net_device /* same as kernel's struct net_device */ {
-+	int ifindex;
-+	volatile struct dev_ifalias *ifalias;
-+};
-+
-+struct sk_buff {
-+	/* field names and sizes should match to those in the kernel */
-+        unsigned int            len,
-+                                data_len;
-+        __u16                   mac_len,
-+                                hdr_len;
-+        __u16                   queue_mapping;
-+	struct net_device *dev;
-+	/* order of the fields doesn't matter */
-+};
-+
-+/* copy arguments from
-+ * include/trace/events/skb.h:
-+ * TRACE_EVENT(kfree_skb,
-+ *         TP_PROTO(struct sk_buff *skb, void *location),
-+ *
-+ * into struct below:
-+ */
-+struct trace_kfree_skb {
-+	struct sk_buff *skb;
-+	void *location;
-+};
-+
-+SEC("raw_tracepoint/kfree_skb")
-+int trace_kfree_skb(struct trace_kfree_skb* ctx)
-+{
-+	struct sk_buff *skb = ctx->skb;
-+	struct net_device *dev;
-+	int ifindex;
-+	struct callback_head *ptr;
-+	void *func;
-+	__builtin_preserve_access_index(({
-+		dev = skb->dev;
-+		ifindex = dev->ifindex;
-+		ptr = dev->ifalias->rcuhead.next;
-+		func = ptr->func;
-+	}));
-+
-+	bpf_printk("rcuhead.next %llx func %llx\n", ptr, func);
-+	bpf_printk("skb->len %d\n", _(skb->len));
-+	bpf_printk("skb->queue_mapping %d\n", _(skb->queue_mapping));
-+	bpf_printk("dev->ifindex %d\n", ifindex);
-+
-+	/* send first 72 byte of the packet to user space */
-+	bpf_skb_output(skb, &perf_buf_map, (72ull << 32) | BPF_F_CURRENT_CPU,
-+		       &ifindex, sizeof(ifindex));
-+	return 0;
-+}
 -- 
 2.20.0
 
