@@ -2,140 +2,102 @@ Return-Path: <SRS0=qTbO=X6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9F92C4360C
-	for <bpf@archiver.kernel.org>; Sat,  5 Oct 2019 01:24:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26482C47404
+	for <bpf@archiver.kernel.org>; Sat,  5 Oct 2019 05:03:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A8DCB20830
-	for <bpf@archiver.kernel.org>; Sat,  5 Oct 2019 01:24:10 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="aNlQ5uVh"
+	by mail.kernel.org (Postfix) with ESMTP id EEAAF222C0
+	for <bpf@archiver.kernel.org>; Sat,  5 Oct 2019 05:03:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1570251803;
+	bh=hw4XTtvQyIUW+vwlIsQ6YpRsbYJ0UXw97YJ1lhQ+KMg=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=KPtkZCIDkYOEeyD6R19JaxDpaVsp/e47/LvntGy2S00yi39WYmCVG4qFHck4AKHQx
+	 3Bh9VV4MBC40e5aCCUMQSzeSUMjwma8cHviJq62CtMs0N3A/GwkjiUmPkPclyXRIeu
+	 EceolM3j++UhkthGcFbooE1TVfQfS2qWulFkm34I=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726037AbfJEBYK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Oct 2019 21:24:10 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:33728 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725909AbfJEBYK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Oct 2019 21:24:10 -0400
-Received: by mail-oi1-f194.google.com with SMTP id a15so1286155oic.0
-        for <bpf@vger.kernel.org>; Fri, 04 Oct 2019 18:24:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=Gr3vPHhUUWGmUVhCZ83FOVrxuAp5M1FSUXsxEnqOUVw=;
-        b=aNlQ5uVh9JxZHsH9PosFCQkAXOZbUVmDp4sYNIiyQWF7usjj7tYRWSXGvGeb+TKmQx
-         /PKYmS1XWZi9z89cLQ8sCIOSbR9FlH6ncaopWkD+hcrjvRWSclilETaXt24XtrsjiYTW
-         FcDmxdTcT38ukq9MY0VdtfU84Hpxq5kPDmMmxPxIUYlpICCR1J71ZFp8FcxLdMTuQ4O+
-         0PciPfJdQ8/SgJA0QMK8CeGeuaSM+1WVBGkDGgs2dijunkUXtplNyQ7tYe0MLNEryPel
-         sN28J2s2rF3qk1Js6Fl2vJo3uz3N3ajPuVP0SYKhSHp2NGk0frPPaNviNK6+V2Af1CQg
-         AHIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=Gr3vPHhUUWGmUVhCZ83FOVrxuAp5M1FSUXsxEnqOUVw=;
-        b=ayQ++XwjYH/1lXK3X3nFymzoeORAZfl8RLJjSeNMa4yHqPbFrt+XIdXYaGDYH8bcqe
-         KuEhzp/FriQr553pZiBD88/x9Im9xEOUKh0jYyDU6CmkctzvCOyTqrspRu2mPgtKHxHz
-         d5nuhP0gZ5MFsOUGDGJT7EGzQyEAlJcYYwOqDfqHHF4fe3EgHDel0D/nu7U9YZw7fHyq
-         LHejSbzbEgvvt4IJusEWZ/wv9ivsBYhpDSwpCZXSTAYPfhRiMvBrDDHZKfeENzu0jE3c
-         EEx+Ub5ImebsN78HjR1UHkrxZEIkHdtiovqDCndFgh3jIxaj4LRWN1vtBJc4vYTpPOKJ
-         t4/A==
-X-Gm-Message-State: APjAAAXv7XYaZBxRRcSvtliYtZDVNVKrrVX9UHdEU304L9FGRB7VjHMN
-        u/LR9DRiXku24EXx33c3yYE6nA==
-X-Google-Smtp-Source: APXvYqzgkJxuaT0woltjn4JGZ5HsgdZmLxkxcI/oHlVqnvxI9eGlw+q4m2LXamIq0+QDajNCtfMU3A==
-X-Received: by 2002:aca:d07:: with SMTP id 7mr9442211oin.155.1570238649063;
-        Fri, 04 Oct 2019 18:24:09 -0700 (PDT)
-Received: from localhost ([2600:100e:b029:4ada:34fb:aeb7:d598:e51c])
-        by smtp.gmail.com with ESMTPSA id a9sm2260524otc.75.2019.10.04.18.24.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Oct 2019 18:24:08 -0700 (PDT)
-Date:   Fri, 4 Oct 2019 18:24:07 -0700 (PDT)
-From:   Paul Walmsley <paul.walmsley@sifive.com>
-X-X-Sender: paulw@viisi.sifive.com
-To:     Kees Cook <keescook@chromium.org>
-cc:     Tycho Andersen <tycho@tycho.ws>,
-        David Abdurachmanov <david.abdurachmanov@gmail.com>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        David Abdurachmanov <david.abdurachmanov@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Allison Randal <allison@lohutok.net>,
-        Alexios Zavras <alexios.zavras@intel.com>,
-        Anup Patel <Anup.Patel@wdc.com>,
-        Vincent Chen <vincentc@andestech.com>,
-        Alan Kao <alankao@andestech.com>,
-        linux-riscv@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, me@carlosedp.com
-Subject: Re: [PATCH v2] riscv: add support for SECCOMP and SECCOMP_FILTER
-In-Reply-To: <CAJr-aD=UnCN9E_mdVJ2H5nt=6juRSWikZnA5HxDLQxXLbsRz-w@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.9999.1910041820560.15827@viisi.sifive.com>
-References: <20190822205533.4877-1-david.abdurachmanov@sifive.com> <alpine.DEB.2.21.9999.1908231717550.25649@viisi.sifive.com> <20190826145756.GB4664@cisco> <CAEn-LTrtn01=fp6taBBG_QkfBtgiJyt6oUjZJOi6VN8OeXp6=g@mail.gmail.com> <201908261043.08510F5E66@keescook>
- <alpine.DEB.2.21.9999.1908281825240.13811@viisi.sifive.com> <CAJr-aD=UnCN9E_mdVJ2H5nt=6juRSWikZnA5HxDLQxXLbsRz-w@mail.gmail.com>
-User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
+        id S1726793AbfJEFDW convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sat, 5 Oct 2019 01:03:22 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:58136 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725773AbfJEFDW (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 5 Oct 2019 01:03:22 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9550mj3016304
+        for <bpf@vger.kernel.org>; Fri, 4 Oct 2019 22:03:21 -0700
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2vdmh9g4rj-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 04 Oct 2019 22:03:21 -0700
+Received: from 2401:db00:30:600c:face:0:1f:0 (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Fri, 4 Oct 2019 22:03:19 -0700
+Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
+        id DF7DD76091D; Fri,  4 Oct 2019 22:03:16 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Alexei Starovoitov <ast@kernel.org>
+Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
+To:     <davem@davemloft.net>
+CC:     <daniel@iogearbox.net>, <x86@kernel.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <kernel-team@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next 01/10] bpf: add typecast to raw_tracepoints to help BTF generation
+Date:   Fri, 4 Oct 2019 22:03:05 -0700
+Message-ID: <20191005050314.1114330-2-ast@kernel.org>
+X-Mailer: git-send-email 2.20.0
+In-Reply-To: <20191005050314.1114330-1-ast@kernel.org>
+References: <20191005050314.1114330-1-ast@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
+ definitions=2019-10-05_02:2019-10-03,2019-10-05 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=1
+ adultscore=0 impostorscore=0 clxscore=1034 priorityscore=1501
+ mlxlogscore=819 bulkscore=0 phishscore=0 mlxscore=0 malwarescore=0
+ spamscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1908290000 definitions=main-1910050044
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 27 Sep 2019, Kees Cook wrote:
+When pahole converts dwarf to btf it emits only used types.
+Wrap existing __bpf_trace_##template() function into
+btf_trace_##template typedef and use it in type cast to
+make gcc emits this type into dwarf. Then pahole will convert it to btf.
+The "btf_trace_" prefix will be used to identify BTF enabled raw tracepoints.
 
-> On Wed, Aug 28, 2019 at 6:30 PM Paul Walmsley <paul.walmsley@sifive.com> wrote:
-> > On Mon, 26 Aug 2019, Kees Cook wrote:
-> >
-> > > On Mon, Aug 26, 2019 at 09:39:50AM -0700, David Abdurachmanov wrote:
-> > > > I don't have the a build with SECCOMP for the board right now, so it
-> > > > will have to wait. I just finished a new kernel (almost rc6) for Fedora,
-> > >
-> > > FWIW, I don't think this should block landing the code: all the tests
-> > > fail without seccomp support. ;) So this patch is an improvement!
-> >
-> > Am sympathetic to this -- we did it with the hugetlb patches for RISC-V --
-> > but it would be good to understand a little bit more about why the test
-> > fails before we merge it.
-> 
-> The test is almost certainly failing due to the environmental
-> requirements (i.e. namespaces, user ids, etc). There are some corner
-> cases in there that we've had to fix in the past. If the other tests
-> are passing, then I would expect all the seccomp internals are fine --
-> it's just the case being weird. It's just a matter of figuring out
-> what state the test environment is in so we can cover that corner case
-> too.
-> 
-> > Once we merge the patch, it will probably reduce the motivation for others
-> > to either understand and fix the underlying problem with the RISC-V code
-> > -- or, if it truly is a flaky test, to drop (or fix) the test in the
-> > seccomp_bpf kselftests.
-> 
-> Sure, I get that point -- but I don't want to block seccomp landing
-> for riscv for that. I suggested to David offlist that the test could
-> just be marked with a FIXME XFAIL on riscv and once someone's in a
-> better position to reproduce it we can fix it. (I think the test bug
-> is almost certainly not riscv specific, but just some missing
-> requirement that we aren't handling correctly.)
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ include/trace/bpf_probe.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-OK.  It might be nice to mark the seccomp_bpf.c test as flaky in the 
-comments for the test.
+diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
+index d6e556c0a085..ff1a879773df 100644
+--- a/include/trace/bpf_probe.h
++++ b/include/trace/bpf_probe.h
+@@ -74,11 +74,12 @@ static inline void bpf_test_probe_##call(void)				\
+ {									\
+ 	check_trace_callback_type_##call(__bpf_trace_##template);	\
+ }									\
++typedef void (*btf_trace_##template)(void *__data, proto);		\
+ static struct bpf_raw_event_map	__used					\
+ 	__attribute__((section("__bpf_raw_tp_map")))			\
+ __bpf_trace_tp_map_##call = {						\
+ 	.tp		= &__tracepoint_##call,				\
+-	.bpf_func	= (void *)__bpf_trace_##template,		\
++	.bpf_func	= (void *)(btf_trace_##template)__bpf_trace_##template,	\
+ 	.num_args	= COUNT_ARGS(args),				\
+ 	.writable_size	= size,						\
+ };
+-- 
+2.20.0
 
-> How does that sound?
-
-Let's follow your plan.  Thanks for your review and feedback.
-
-
-- Paul
