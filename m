@@ -2,55 +2,57 @@ Return-Path: <SRS0=Z2SS=YA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 678F2ECE596
-	for <bpf@archiver.kernel.org>; Mon,  7 Oct 2019 17:20:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D59D6C47404
+	for <bpf@archiver.kernel.org>; Mon,  7 Oct 2019 17:20:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3E3922084D
-	for <bpf@archiver.kernel.org>; Mon,  7 Oct 2019 17:20:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B2375206BB
+	for <bpf@archiver.kernel.org>; Mon,  7 Oct 2019 17:20:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728939AbfJGRUr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Oct 2019 13:20:47 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:60626 "EHLO mx1.redhat.com"
+        id S1728918AbfJGRUn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Oct 2019 13:20:43 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:59640 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728891AbfJGRUp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Oct 2019 13:20:45 -0400
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com [209.85.167.69])
+        id S1728691AbfJGRUm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Oct 2019 13:20:42 -0400
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 8893C2A09B0
-        for <bpf@vger.kernel.org>; Mon,  7 Oct 2019 17:20:44 +0000 (UTC)
-Received: by mail-lf1-f69.google.com with SMTP id c13so1630493lfk.23
-        for <bpf@vger.kernel.org>; Mon, 07 Oct 2019 10:20:44 -0700 (PDT)
+        by mx1.redhat.com (Postfix) with ESMTPS id 43E6B970F1
+        for <bpf@vger.kernel.org>; Mon,  7 Oct 2019 17:20:41 +0000 (UTC)
+Received: by mail-lj1-f198.google.com with SMTP id b90so3723874ljf.11
+        for <bpf@vger.kernel.org>; Mon, 07 Oct 2019 10:20:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=txlyftqHDQYXziOZ8DqCu+4nJOlFLc3PaJao3l+9RW8=;
-        b=UphbzU2mHgtDYzSDtO9fNOzjLd1bAGTOiehehLG2URtMNKzv3gV5TdwwHnVVDOzTER
-         51MtfDmb9yT2+d35MCKzCQ5deKa9kA5vGpNFaaLeN8ehfIf4QTcH29iokR+ekW5DKKqW
-         7iVWBi5pD1X0w4uPnMNIEguI7sANssyEoZzPd6NYAnmwyAFOXrk6u1WqTZhscIojy5T9
-         x3ZPYp2Q0cj6SgsKEGwRIkosp1w5UFKE7QgMX6iUNt5KEoD1Y3ZQkm3IwCUlabH6frqn
-         XFcjsD1RhyMy5HpLh1/UYBmInfYOZU9NmWcRxUpvck1HCNn4B/BqsiWUWBjDxZ3lu2OG
-         H0pw==
-X-Gm-Message-State: APjAAAU+Cj/c6SZSWklf6zb4WYfT7niBrEwiTVF2hjjQbY7g3S6OnmuI
-        oMNo6yiUO0l6gk36KpxWyBBxc02Lca4NHDubq0PcOP9ooInspouMWSgvuLC+yihb9QOTlIoPZLL
-        TodYrM6bp7S/+
-X-Received: by 2002:a05:6512:6c:: with SMTP id i12mr17543088lfo.40.1570468842940;
-        Mon, 07 Oct 2019 10:20:42 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqw/GCPiOp1uAKIl8eu6rz49qzbLuYGC53kVzLTD1Lo6iGeQrU/IQbrBF4H1gs7RI9cp52HM4w==
-X-Received: by 2002:a05:6512:6c:: with SMTP id i12mr17543068lfo.40.1570468842544;
-        Mon, 07 Oct 2019 10:20:42 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a00:7660:6da:443::2])
-        by smtp.gmail.com with ESMTPSA id b10sm3234204lji.48.2019.10.07.10.20.41
+        bh=xRZBxB2lU16qLMfYcnzu6mRveyIlNiA+kH4ptEPYjRU=;
+        b=NvURMlRgMJ9H9OjTKLj9zjNoaUpvAUsblSNsj+vHA15F3emWut2DTQU6MaVNORJ2pu
+         5kFQBhwzAhRGI2kvBFrzd3f9Bg+uzu/WLVtsjsGq3cX7zasXjTOtOhWqH5A8Gj/zYk8+
+         NeqbNKqo3NU72BFb1a0v/opuZSuwQNpg8/Tg0JbG97VGt/8tB7eWsFHak7liAmNr5miR
+         VJuJkgUb24KtLEbXCo2Fwmtt3ogLiy2i/RejJHqGu+BRoOE+9bTWM6lSdkQ+02Qs+pUL
+         LA7LMqP//xTHeUxQNKhG9f563Nkc5a343DU+e8tVWApaQXZN9IkuToPJ1epCT/DWkj5R
+         WDAA==
+X-Gm-Message-State: APjAAAUcKvbhcOH1IepHCtPmR5Z1CMreoWiXnYWv/Pc/li4HXgSpaPbf
+        xH2soSuiUOlm57AytOgWPiEWMPxlqI/K5VS5kHah8ycwsyGRZykyIODzTXdDi70CIKn7IBlcWys
+        dTIHXMgRnTiq/
+X-Received: by 2002:a2e:1415:: with SMTP id u21mr18774255ljd.22.1570468839732;
+        Mon, 07 Oct 2019 10:20:39 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqwr6g7QS8I0pkHEY7lk/WHcHWs1pXGebMx67Xru1e9ilNXMxSFB2RqoX31M174XLHInZAG8Hw==
+X-Received: by 2002:a2e:1415:: with SMTP id u21mr18774245ljd.22.1570468839508;
+        Mon, 07 Oct 2019 10:20:39 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
+        by smtp.gmail.com with ESMTPSA id r75sm2827371lff.7.2019.10.07.10.20.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Oct 2019 10:20:41 -0700 (PDT)
+        Mon, 07 Oct 2019 10:20:38 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 8D95A18063D; Mon,  7 Oct 2019 19:20:40 +0200 (CEST)
-Subject: [PATCH bpf-next v3 5/5] selftests: Add tests for XDP chain calls
+        id 4E19B18063D; Mon,  7 Oct 2019 19:20:37 +0200 (CEST)
+Subject: [PATCH bpf-next v3 2/5] bpf: Add support for setting chain call
+ sequence for programs
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Daniel Borkmann <daniel@iogearbox.net>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -62,8 +64,8 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
         David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Mon, 07 Oct 2019 19:20:40 +0200
-Message-ID: <157046884049.2092443.15712793847213275225.stgit@alrua-x1>
+Date:   Mon, 07 Oct 2019 19:20:37 +0200
+Message-ID: <157046883723.2092443.3902769602513209987.stgit@alrua-x1>
 In-Reply-To: <157046883502.2092443.146052429591277809.stgit@alrua-x1>
 References: <157046883502.2092443.146052429591277809.stgit@alrua-x1>
 User-Agent: StGit/0.19-dirty
@@ -77,464 +79,150 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-This adds new self tests for the XDP chain call functionality.
+This adds support for setting and deleting bpf chain call programs through
+a couple of new commands in the bpf() syscall. The CHAIN_ADD and CHAIN_DEL
+commands take two eBPF program fds and a return code, and install the
+'next' program to be chain called after the 'prev' program if that program
+returns 'retcode'. A retcode of -1 means "wildcard", so that the program
+will be executed regardless of the previous program's return code.
 
+
+The syscall command names are based on Alexei's prog_chain example[0],
+which Alan helpfully rebased on current bpf-next. However, the logic and
+program storage is obviously adapted to the execution logic in the previous
+commit.
+
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/ast/bpf.git/commit/?h=prog_chain&id=f54f45d00f91e083f6aec2abe35b6f0be52ae85b&context=15
+
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- tools/testing/selftests/bpf/.gitignore        |    1 
- tools/testing/selftests/bpf/Makefile          |    3 
- tools/testing/selftests/bpf/progs/xdp_dummy.c |    6 
- tools/testing/selftests/bpf/test_xdp_chain.sh |   77 ++++++
- tools/testing/selftests/bpf/xdp_chain.c       |  313 +++++++++++++++++++++++++
- 5 files changed, 399 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/bpf/test_xdp_chain.sh
- create mode 100644 tools/testing/selftests/bpf/xdp_chain.c
+ include/uapi/linux/bpf.h |   10 ++++++
+ kernel/bpf/syscall.c     |   78 ++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 88 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index 7470327edcfe..e9d2d765cc8f 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -39,3 +39,4 @@ libbpf.so.*
- test_hashmap
- test_btf_dump
- xdping
-+xdp_chain
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 6889c19a628c..97e8f6ae4a15 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -29,7 +29,7 @@ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test
- 	test_sock test_btf test_sockmap get_cgroup_id_user test_socket_cookie \
- 	test_cgroup_storage test_select_reuseport test_section_names \
- 	test_netcnt test_tcpnotify_user test_sock_fields test_sysctl test_hashmap \
--	test_btf_dump test_cgroup_attach xdping
-+	test_btf_dump test_cgroup_attach xdping xdp_chain
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 1ce80a227be3..b03c23963af8 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -107,6 +107,9 @@ enum bpf_cmd {
+ 	BPF_MAP_LOOKUP_AND_DELETE_ELEM,
+ 	BPF_MAP_FREEZE,
+ 	BPF_BTF_GET_NEXT_ID,
++	BPF_PROG_CHAIN_ADD,
++	BPF_PROG_CHAIN_DEL,
++	BPF_PROG_CHAIN_GET,
+ };
  
- BPF_OBJ_FILES = $(patsubst %.c,%.o, $(notdir $(wildcard progs/*.c)))
- TEST_GEN_FILES = $(BPF_OBJ_FILES)
-@@ -71,6 +71,7 @@ TEST_PROGS := test_kmod.sh \
- 	test_tc_tunnel.sh \
- 	test_tc_edt.sh \
- 	test_xdping.sh \
-+	test_xdp_chain.sh \
- 	test_bpftool_build.sh
+ enum bpf_map_type {
+@@ -516,6 +519,13 @@ union bpf_attr {
+ 		__u64		probe_offset;	/* output: probe_offset */
+ 		__u64		probe_addr;	/* output: probe_addr */
+ 	} task_fd_query;
++
++	struct { /* anonymous struct used by BPF_PROG_CHAIN_* commands */
++		__u32		prev_prog_fd;
++		__u32		next_prog_fd;
++		__u32		retcode;
++		__u32		next_prog_id;   /* output: prog_id */
++	};
+ } __attribute__((aligned(8)));
  
- TEST_PROGS_EXTENDED := with_addr.sh \
-diff --git a/tools/testing/selftests/bpf/progs/xdp_dummy.c b/tools/testing/selftests/bpf/progs/xdp_dummy.c
-index 43b0ef1001ed..454a1f0763a1 100644
---- a/tools/testing/selftests/bpf/progs/xdp_dummy.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_dummy.c
-@@ -10,4 +10,10 @@ int xdp_dummy_prog(struct xdp_md *ctx)
- 	return XDP_PASS;
+ /* The description below is an attempt at providing documentation to eBPF
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index b8a203a05881..be8112e08a88 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2113,6 +2113,79 @@ static int bpf_prog_test_run(const union bpf_attr *attr,
+ 	return ret;
  }
  
-+SEC("xdp_drop")
-+int xdp_drop_prog(struct xdp_md *ctx)
++#define BPF_PROG_CHAIN_LAST_FIELD next_prog_id
++
++static int bpf_prog_chain(int cmd, const union bpf_attr *attr,
++			  union bpf_attr __user *uattr)
 +{
-+	return XDP_DROP;
-+}
++	struct bpf_prog *prog, *next_prog, *old_prog;
++	struct bpf_prog **array;
++	int ret = -EOPNOTSUPP;
++	u32 index, prog_id;
 +
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_xdp_chain.sh b/tools/testing/selftests/bpf/test_xdp_chain.sh
-new file mode 100755
-index 000000000000..3997655d4e45
---- /dev/null
-+++ b/tools/testing/selftests/bpf/test_xdp_chain.sh
-@@ -0,0 +1,77 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
++	if (CHECK_ATTR(BPF_PROG_CHAIN))
++		return -EINVAL;
 +
-+# xdp_chain tests
-+#   Here we setup and teardown configuration required to run
-+#   xdp_chain, exercising its options.
-+#
-+#   Setup is similar to xdping tests.
-+#
-+# Topology:
-+# ---------
-+#     root namespace   |     tc_ns0 namespace
-+#                      |
-+#      ----------      |     ----------
-+#      |  veth1  | --------- |  veth0  |
-+#      ----------    peer    ----------
-+#
-+# Device Configuration
-+# --------------------
-+# Root namespace with BPF
-+# Device names and addresses:
-+#	veth1 IP: 10.1.1.200
-+#
-+# Namespace tc_ns0 with BPF
-+# Device names and addresses:
-+#       veth0 IPv4: 10.1.1.100
-+#	xdp_chain binary run inside this
-+#
++	/* Index 0 is wildcard, encoded as ~0 by userspace */
++	if (attr->retcode == ((u32) ~0))
++		index = 0;
++	else
++		index = attr->retcode + 1;
 +
-+readonly TARGET_IP="10.1.1.100"
-+readonly TARGET_NS="xdp_ns0"
++	if (index >= BPF_NUM_CHAIN_SLOTS)
++		return -E2BIG;
 +
-+readonly LOCAL_IP="10.1.1.200"
++	prog = bpf_prog_get(attr->prev_prog_fd);
++	if (IS_ERR(prog))
++		return PTR_ERR(prog);
 +
-+setup()
-+{
-+	ip netns add $TARGET_NS
-+	ip link add veth0 type veth peer name veth1
-+	ip link set veth0 netns $TARGET_NS
-+	ip netns exec $TARGET_NS ip addr add ${TARGET_IP}/24 dev veth0
-+	ip addr add ${LOCAL_IP}/24 dev veth1
-+	ip netns exec $TARGET_NS ip link set veth0 up
-+	ip link set veth1 up
-+}
-+
-+cleanup()
-+{
-+	set +e
-+	ip netns delete $TARGET_NS 2>/dev/null
-+	ip link del veth1 2>/dev/null
-+}
-+
-+die()
-+{
-+        echo "$@" >&2
-+        exit 1
-+}
-+
-+test()
-+{
-+	args="$1"
-+
-+	ip netns exec $TARGET_NS ./xdp_chain $args || die "XDP chain test error"
-+}
-+
-+set -e
-+
-+server_pid=0
-+
-+trap cleanup EXIT
-+
-+setup
-+
-+test "-I veth0 -S $LOCAL_IP"
-+
-+echo "OK. All tests passed"
-+exit 0
-diff --git a/tools/testing/selftests/bpf/xdp_chain.c b/tools/testing/selftests/bpf/xdp_chain.c
-new file mode 100644
-index 000000000000..4b3fa26224fa
---- /dev/null
-+++ b/tools/testing/selftests/bpf/xdp_chain.c
-@@ -0,0 +1,313 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2019, Oracle and/or its affiliates. All rights reserved. */
-+
-+#include <linux/bpf.h>
-+#include <linux/if_link.h>
-+#include <arpa/inet.h>
-+#include <assert.h>
-+#include <errno.h>
-+#include <signal.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <libgen.h>
-+#include <sys/resource.h>
-+#include <net/if.h>
-+#include <sys/types.h>
-+#include <sys/socket.h>
-+#include <netdb.h>
-+
-+#include "bpf/bpf.h"
-+#include "bpf/libbpf.h"
-+
-+static int ifindex;
-+static __u32 xdp_flags = XDP_FLAGS_UPDATE_IF_NOEXIST;
-+static char *dest = NULL, *ifname = NULL;
-+
-+static void cleanup(int sig)
-+{
-+	int ret;
-+
-+	fprintf(stderr, "  Cleaning up\n");
-+	if ((ret = bpf_set_link_xdp_fd(ifindex, -1, xdp_flags)))
-+		fprintf(stderr, "Warning: Unable to clear XDP prog: %s\n",
-+			strerror(-ret));
-+	if (sig)
-+		exit(1);
-+}
-+
-+static void show_usage(const char *prog)
-+{
-+	fprintf(stderr,
-+		"usage: %s [OPTS] -I interface destination\n\n"
-+		"OPTS:\n"
-+		"    -I interface		interface name\n"
-+		"    -N			Run in driver mode\n"
-+		"    -S			Run in skb mode\n"
-+		"    -p pin_path		path to pin chain call map\n"
-+		"    -x			Exit after setup\n"
-+		"    -c			Cleanup and exit\n"
-+		"    -v			Verbose eBPF logging\n",
-+		prog);
-+}
-+
-+static int run_ping(bool should_fail, const char *msg)
-+{
-+	char cmd[256];
-+	bool success;
-+	int ret;
-+
-+	snprintf(cmd, sizeof(cmd), "ping -c 1 -W 1 -I %s %s >/dev/null", ifname, dest);
-+
-+	printf("  %s: ", msg);
-+
-+	ret = system(cmd);
-+
-+	success = (!!ret == should_fail);
-+	printf(success ? "PASS\n" : "FAIL\n");
-+
-+	return !success;
-+}
-+
-+struct bpf_program {
-+	/* Index in elf obj file, for relocation use. */
-+	int idx;
-+	char *name;
-+	int prog_ifindex;
-+	char *section_name;
-+	/* section_name with / replaced by _; makes recursive pinning
-+	 * in bpf_object__pin_programs easier
++	/* If the chain_calls bit is not set, that's because the chain call flag
++	 * was not set on program load, and so we can't support chain calls.
 +	 */
-+	char *pin_name;
-+	struct bpf_insn *insns;
-+	size_t insns_cnt, main_prog_cnt;
-+	enum bpf_prog_type type;
++	if (!prog->chain_calls)
++		goto out;
 +
-+	struct reloc_desc {
-+		enum {
-+			RELO_LD64,
-+			RELO_CALL,
-+			RELO_DATA,
-+		} type;
-+		int insn_idx;
-+		union {
-+			int map_idx;
-+			int text_off;
-+		};
-+	} *reloc_desc;
-+	int nr_reloc;
-+	int log_level;
++	array = prog->aux->chain_progs;
 +
-+	struct {
-+		int nr;
-+		int *fds;
-+	} instances;
-+	bpf_program_prep_t preprocessor;
-+
-+	struct bpf_object *obj;
-+	void *priv;
-+	bpf_program_clear_priv_t clear_priv;
-+
-+	enum bpf_attach_type expected_attach_type;
-+	void *func_info;
-+	__u32 func_info_rec_size;
-+	__u32 func_info_cnt;
-+
-+	struct bpf_capabilities *caps;
-+
-+	void *line_info;
-+	__u32 line_info_rec_size;
-+	__u32 line_info_cnt;
-+	__u32 prog_flags;
-+};
-+
-+static int printfunc(enum libbpf_print_level level, const char *format, va_list args)
-+{
-+	return vfprintf(stderr, format, args);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	__u32 mode_flags = XDP_FLAGS_DRV_MODE | XDP_FLAGS_SKB_MODE;
-+	struct rlimit r = {RLIM_INFINITY, RLIM_INFINITY};
-+	bool setup_only = false, cleanup_only = false;
-+	struct bpf_program *pass_prog, *drop_prog, *prog;
-+	int pass_prog_fd = -1, drop_prog_fd = -1;
-+	const char *filename = "xdp_dummy.o";
-+	int opt, ret = 1, log_level = 0;
-+	const char *optstr = "I:NSxcv";
-+	struct bpf_object *obj;
-+	u32 prog_id;
-+
-+	struct bpf_object_open_attr open_attr = {
-+						 .file = filename,
-+						 .prog_type = BPF_PROG_TYPE_XDP,
-+	};
-+
-+	while ((opt = getopt(argc, argv, optstr)) != -1) {
-+		switch (opt) {
-+		case 'I':
-+			ifname = optarg;
-+			ifindex = if_nametoindex(ifname);
-+			if (!ifindex) {
-+				fprintf(stderr, "Could not get interface %s\n",
-+					ifname);
-+				return 1;
-+			}
++	switch (cmd) {
++	case BPF_PROG_CHAIN_ADD:
++		next_prog = bpf_prog_get(attr->next_prog_fd);
++		if (IS_ERR(next_prog)) {
++			ret = PTR_ERR(next_prog);
 +			break;
-+		case 'N':
-+			xdp_flags |= XDP_FLAGS_DRV_MODE;
-+			break;
-+		case 'S':
-+			xdp_flags |= XDP_FLAGS_SKB_MODE;
-+			break;
-+		case 'x':
-+			setup_only = true;
-+			break;
-+		case 'v':
-+			log_level = 7;
-+			break;
-+		case 'c':
-+			cleanup_only = true;
-+			break;
-+		default:
-+			show_usage(basename(argv[0]));
-+			return 1;
 +		}
-+	}
-+
-+	if (!ifname) {
-+		show_usage(basename(argv[0]));
-+		return 1;
-+	}
-+
-+	if (cleanup_only) {
-+		cleanup(0);
-+		return 0;
-+	}
-+
-+	if (!setup_only && optind == argc) {
-+		show_usage(basename(argv[0]));
-+		return 1;
-+	}
-+	dest = argv[optind];
-+
-+	if ((xdp_flags & mode_flags) == mode_flags) {
-+		fprintf(stderr, "-N or -S can be specified, not both.\n");
-+		show_usage(basename(argv[0]));
-+		return 1;
-+	}
-+
-+	if (setrlimit(RLIMIT_MEMLOCK, &r)) {
-+		perror("setrlimit(RLIMIT_MEMLOCK)");
-+		return 1;
-+	}
-+
-+	if (log_level)
-+		libbpf_set_print(printfunc);
-+
-+	obj = bpf_object__open_xattr(&open_attr);
-+
-+	bpf_object__for_each_program(prog, obj) {
-+		bpf_program__set_type(prog, BPF_PROG_TYPE_XDP);
-+		prog->prog_flags = BPF_F_CHAIN_CALLS;
-+		prog->log_level = log_level;
-+		if ((ret = bpf_program__load(prog, "GPL", 0))) {
-+			fprintf(stderr, "unable to load program: %s\n", strerror(-ret));
-+			return 1;
-+		}
-+	}
-+	pass_prog = bpf_object__find_program_by_title(obj, "xdp_dummy");
-+	drop_prog = bpf_object__find_program_by_title(obj, "xdp_drop");
-+
-+	if (!pass_prog || !drop_prog) {
-+		fprintf(stderr, "could not find xdp programs\n");
-+		return 1;
-+	}
-+	pass_prog_fd = bpf_program__fd(pass_prog);
-+	drop_prog_fd = bpf_program__fd(drop_prog);
-+	if (pass_prog_fd < 0 || drop_prog_fd < 0) {
-+		fprintf(stderr, "could not find xdp programs\n");
-+		goto done;
-+	}
-+
-+
-+#define RUN_PING(should_fail, err) if ((ret = run_ping(should_fail, err))) goto done;
-+
-+	if (!setup_only) {
-+		RUN_PING(false, "Pre-setup ping test");
-+
-+		signal(SIGINT, cleanup);
-+		signal(SIGTERM, cleanup);
-+	}
-+
-+	if ((ret = bpf_set_link_xdp_fd(ifindex, pass_prog_fd, xdp_flags)) < 0) {
-+		fprintf(stderr, "Link set xdp fd failed for %s: %s\n", ifname,
-+			strerror(-ret));
-+		goto done;
-+	}
-+
-+	if (!setup_only) {
-+		sleep(1);
-+		RUN_PING(false, "Empty map test");
-+	}
-+
-+	if (bpf_prog_chain_add(pass_prog_fd, -1, drop_prog_fd)) {
-+		fprintf(stderr, "unable to add chain prog wildcard: %s (%d)\n", strerror(errno), errno);
-+		goto done;
-+	}
-+
-+	if (bpf_prog_chain_get(pass_prog_fd, -1, &prog_id)) {
-+		fprintf(stderr, "unable to get chain prog wildcard: %s (%d)\n", strerror(errno), errno);
-+		goto done;
-+	}
-+	printf("Next program attached with ID: %u\n", prog_id);
-+
-+	if (setup_only) {
-+		printf("Setup done; exiting.\n");
++		old_prog = xchg(array + index, next_prog);
++		if (old_prog)
++			bpf_prog_put(old_prog);
 +		ret = 0;
-+		goto done;
++		break;
++	case BPF_PROG_CHAIN_DEL:
++		old_prog = xchg(array + index, NULL);
++		if (old_prog) {
++			bpf_prog_put(old_prog);
++			ret = 0;
++		} else {
++			ret = -ENOENT;
++		}
++		break;
++	case BPF_PROG_CHAIN_GET:
++		old_prog = READ_ONCE(array[index]);
++		if (old_prog) {
++			prog_id = old_prog->aux->id;
++			if (put_user(prog_id, &uattr->next_prog_id))
++				ret = -EFAULT;
++			else
++				ret = 0;
++		} else
++			ret = -ENOENT;
++		break;
 +	}
 +
-+	sleep(1);
-+
-+	RUN_PING(true, "Wildcard act test");
-+
-+	if (bpf_prog_chain_del(pass_prog_fd, -1)) {
-+		fprintf(stderr, "unable to delete chain prog: %s\n", strerror(errno));
-+		goto done;
-+	}
-+	sleep(1);
-+
-+	RUN_PING(false, "Post-delete map test");
-+
-+	if (bpf_prog_chain_add(pass_prog_fd, XDP_PASS, drop_prog_fd)) {
-+		fprintf(stderr, "unable to add chain prog PASS: %s\n", strerror(errno));
-+		goto done;
-+	}
-+	sleep(1);
-+
-+	RUN_PING(true, "Pass act test");
-+
-+
-+	if ((ret = bpf_set_link_xdp_fd(ifindex, -1, xdp_flags)) < 0) {
-+		fprintf(stderr, "Link clear xdp fd failed for %s: '%s'\n", ifname, strerror(-ret));
-+		goto done;
-+	}
-+	sleep(1);
-+
-+	RUN_PING(false, "Post-delete prog test");
-+
-+
-+done:
-+	if (!setup_only)
-+		cleanup(ret);
-+
-+	if (pass_prog_fd > 0)
-+		close(pass_prog_fd);
-+	if (drop_prog_fd > 0)
-+		close(drop_prog_fd);
-+
++out:
++	bpf_prog_put(prog);
 +	return ret;
 +}
++
+ #define BPF_OBJ_GET_NEXT_ID_LAST_FIELD next_id
+ 
+ static int bpf_obj_get_next_id(const union bpf_attr *attr,
+@@ -2885,6 +2958,11 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, siz
+ 	case BPF_PROG_TEST_RUN:
+ 		err = bpf_prog_test_run(&attr, uattr);
+ 		break;
++	case BPF_PROG_CHAIN_ADD:
++	case BPF_PROG_CHAIN_DEL:
++	case BPF_PROG_CHAIN_GET:
++		err = bpf_prog_chain(cmd, &attr, uattr);
++		break;
+ 	case BPF_PROG_GET_NEXT_ID:
+ 		err = bpf_obj_get_next_id(&attr, uattr,
+ 					  &prog_idr, &prog_idr_lock);
 
