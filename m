@@ -2,250 +2,217 @@ Return-Path: <SRS0=Z2SS=YA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C50BC47404
-	for <bpf@archiver.kernel.org>; Mon,  7 Oct 2019 17:20:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 766DFECE58C
+	for <bpf@archiver.kernel.org>; Mon,  7 Oct 2019 17:21:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0E053206BB
-	for <bpf@archiver.kernel.org>; Mon,  7 Oct 2019 17:20:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4994C206BB
+	for <bpf@archiver.kernel.org>; Mon,  7 Oct 2019 17:21:31 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fibAwMiY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728636AbfJGRUv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Oct 2019 13:20:51 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:57804 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728735AbfJGRUk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Oct 2019 13:20:40 -0400
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id A2D7F69066
-        for <bpf@vger.kernel.org>; Mon,  7 Oct 2019 17:20:39 +0000 (UTC)
-Received: by mail-lj1-f197.google.com with SMTP id i18so3716947ljg.14
-        for <bpf@vger.kernel.org>; Mon, 07 Oct 2019 10:20:39 -0700 (PDT)
+        id S1727999AbfJGRVb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Oct 2019 13:21:31 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:34619 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727801AbfJGRVa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Oct 2019 13:21:30 -0400
+Received: by mail-pl1-f196.google.com with SMTP id k7so7193581pll.1;
+        Mon, 07 Oct 2019 10:21:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BAkDTsaT4pqzjP72lQaqIaOktikei1udLeGkVUvLMGI=;
+        b=fibAwMiY2x7P19N68woA02XOjS5jkFTQS/dctR3F1z0okOVMuRMfY3C5HlzaWfXUWl
+         efwKbCswSd/ufmcegOHwHB1eODcVdUMwMhgPLGHXyZoxMSjsG8PXGIJSzsmArstPHiXO
+         yeCnUvHlo01n3PXVa1XsB0AW783oad2eOprhxqHSByJW1ki36g27dZrVUxuaY6oYZ09d
+         9EiGFvP4Aa6LoXlNTPS7xO7fV09Hnlez7DcMcce04FaHzpiY7gX4FQwt39146xv7yK/O
+         PLjLNFNjN+6LsXsOleTokqILaq5MOMsgj+Op1eD8Bnh7Xi8KVz5wXQyKIknowbzW3bIb
+         TMvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=vgP8XOSqd3oOT02rp8h4K+6bCx3RQJbQb5Oc0LH/YPI=;
-        b=qxmcYMr3ErMDCS9bDgmcjEflkrjw4Q+jFc2yCcJsMXl5Nv5vHBubOgl0HqoNUPRqHB
-         gpYOuqC441Q+liteToq6XOdygY7dqhO4hUYuHOs2aroNO7CxnfcrgZsSICwukTPTEVeI
-         QYNi/CvCKFJXK2XtADuopqB7iJJmy9aBjutFTUCxEkhMOO27KIiDV0MItGco7RkZMyF8
-         UuaqJu9ZQ6g0w/7UWk9sc8l+UHoDG32e8E1rMK5vUYaMLN6NXeABFpf45zMRwasjBd2F
-         CQLODa01IWx0ADj0zQJL9y/I2g3oYxQBXTlNQ/6DTk3emDgTfjJNKZ20BbQUsSVkds/C
-         Xb6A==
-X-Gm-Message-State: APjAAAU/gwEgqhLwDJdY8zmOoJWBj0NZMYPh+Cm3Ulj0P9ToHl1ba/vi
-        TG8rm2/PlEcwAn+yj5YNUqs4/sCuVsVCBk73ZAOFnOcx4gY/NG+JxYRfj6OmchgTskBMjE6E2EV
-        O9FzF0GrjBMGE
-X-Received: by 2002:a05:651c:21b:: with SMTP id y27mr11099012ljn.219.1570468838158;
-        Mon, 07 Oct 2019 10:20:38 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqziWyBmEoYyTEGc2QYO/G+OgKCs4GZe4HzOOCsTMPb2Qgfo0zzgJlTrEEREqOsz1z1TPHo6HQ==
-X-Received: by 2002:a05:651c:21b:: with SMTP id y27mr11099002ljn.219.1570468837929;
-        Mon, 07 Oct 2019 10:20:37 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
-        by smtp.gmail.com with ESMTPSA id w27sm3259748ljd.55.2019.10.07.10.20.36
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BAkDTsaT4pqzjP72lQaqIaOktikei1udLeGkVUvLMGI=;
+        b=nJkxJY9nfPeNEYPleOO6zjCRhA0pS5Z4Qwc8n8IafG/+N2HeJ6+MPKqfMXbon6wDuH
+         y3K1y9hio0F/loNEDg33EQI12CSfedNn0VOyj2yA9K28nkCY5XBN6a96G1NnyzJYM/I0
+         jq+50DXeUfgn9QfiaZ7LwcDIpMpFV1O50xWj0m2B5Owguc0ZKLsQvqrvW8QJQIfJIrcf
+         2DGOp/VO2irDIq/bVUO2uyeyxWY5DuMk2OKB5dK315YrcnDxlRLoBCzkCXyQF0sKhFMI
+         ZuKgpA1mJSX1ElY7VGw22idyuocm+zSNMg60VoQA2RZdrF8t1u3DqQPxairrcySpGkiH
+         DTOA==
+X-Gm-Message-State: APjAAAVDzt96T2Lq6vbKunCipenMdttvwnhlMY6ODVp8CYYd/6809j5i
+        1vpefkb+8wiogIHUNBPDtw==
+X-Google-Smtp-Source: APXvYqyS/PCvG0JngaiPE/000+OvPwCZs+NGDFJIKH1SIFVxyWDm+2ymEQyr6RtIxLvJOYNsoiczCQ==
+X-Received: by 2002:a17:902:6b45:: with SMTP id g5mr16188222plt.336.1570468889565;
+        Mon, 07 Oct 2019 10:21:29 -0700 (PDT)
+Received: from localhost.localdomain ([110.35.161.54])
+        by smtp.gmail.com with ESMTPSA id 6sm19461374pfa.162.2019.10.07.10.21.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Oct 2019 10:20:37 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 39765180640; Mon,  7 Oct 2019 19:20:36 +0200 (CEST)
-Subject: [PATCH bpf-next v3 1/5] bpf: Support chain calling multiple BPF
- programs after each other
-From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Marek Majkowski <marek@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Date:   Mon, 07 Oct 2019 19:20:36 +0200
-Message-ID: <157046883614.2092443.9861796174814370924.stgit@alrua-x1>
-In-Reply-To: <157046883502.2092443.146052429591277809.stgit@alrua-x1>
-References: <157046883502.2092443.146052429591277809.stgit@alrua-x1>
-User-Agent: StGit/0.19-dirty
+        Mon, 07 Oct 2019 10:21:29 -0700 (PDT)
+From:   "Daniel T. Lee" <danieltimlee@gmail.com>
+To:     Yonghong Song <yhs@fb.com>, Song Liu <liu.song.a23@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, netdev@vger.kernel.org
+Subject: [PATCH bpf-next v7] samples: bpf: add max_pckt_size option at xdp_adjust_tail
+Date:   Tue,  8 Oct 2019 02:21:17 +0900
+Message-Id: <20191007172117.3916-1-danieltimlee@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Toke Høiland-Jørgensen <toke@redhat.com>
+Currently, at xdp_adjust_tail_kern.c, MAX_PCKT_SIZE is limited
+to 600. To make this size flexible, static global variable
+'max_pcktsz' is added.
 
-This adds support for wrapping eBPF program dispatch in chain calling
-logic. The code injection is controlled by a flag at program load time; if
-the flag is set, the BPF program will carry a flag bit that changes the
-program dispatch logic to wrap it in a chain call loop.
+By updating new packet size from the user space, xdp_adjust_tail_kern.o
+will use this value as a new max packet size.
 
-Ideally, it shouldn't be necessary to set the flag on program load time,
-but rather inject the calls when a chain call program is first loaded. The
-allocation logic sets the whole of struct bpf_prog to be read-only memory,
-so it can't immediately be modified, but conceivably we could just unlock
-the first page of the struct and flip the bit when a chain call program is
-first attached.
+This static global variable can be accesible from .data section with
+bpf_object__find_map* from user space, since it is considered as
+internal map (accessible with .bss/.data/.rodata suffix).
 
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+If no '-P <MAX_PCKT_SIZE>' option is used, the size of maximum packet
+will be 600 as a default.
+
+For clarity, change the helper to fetch map from 'bpf_map__next'
+to 'bpf_object__find_map_fd_by_name'. Also, changed the way to
+test prog_fd, map_fd from '!= 0' to '< 0', since fd could be 0
+when stdin is closed.
+
+Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
+
 ---
- include/linux/bpf.h      |    3 +++
- include/linux/filter.h   |   34 ++++++++++++++++++++++++++++++++--
- include/uapi/linux/bpf.h |    6 ++++++
- kernel/bpf/core.c        |    6 ++++++
- kernel/bpf/syscall.c     |    4 +++-
- 5 files changed, 50 insertions(+), 3 deletions(-)
+Changes in v6:
+    - Remove redundant error message
+Changes in v5:
+    - Change pcktsz map to static global variable
+Changes in v4:
+    - make pckt_size no less than ICMP_TOOBIG_SIZE
+    - Fix code style
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 5b9d22338606..13e5f38cf5c6 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -365,6 +365,8 @@ struct bpf_prog_stats {
- 	struct u64_stats_sync syncp;
- };
+ samples/bpf/xdp_adjust_tail_kern.c |  7 +++++--
+ samples/bpf/xdp_adjust_tail_user.c | 29 ++++++++++++++++++++---------
+ 2 files changed, 25 insertions(+), 11 deletions(-)
+
+diff --git a/samples/bpf/xdp_adjust_tail_kern.c b/samples/bpf/xdp_adjust_tail_kern.c
+index 411fdb21f8bc..c616508befb9 100644
+--- a/samples/bpf/xdp_adjust_tail_kern.c
++++ b/samples/bpf/xdp_adjust_tail_kern.c
+@@ -25,6 +25,9 @@
+ #define ICMP_TOOBIG_SIZE 98
+ #define ICMP_TOOBIG_PAYLOAD_SIZE 92
  
-+#define BPF_NUM_CHAIN_SLOTS 8
++/* volatile to prevent compiler optimizations */
++static volatile __u32 max_pcktsz = MAX_PCKT_SIZE;
 +
- struct bpf_prog_aux {
- 	atomic_t refcnt;
- 	u32 used_map_cnt;
-@@ -383,6 +385,7 @@ struct bpf_prog_aux {
- 	struct list_head ksym_lnode;
- 	const struct bpf_prog_ops *ops;
- 	struct bpf_map **used_maps;
-+	struct bpf_prog *chain_progs[BPF_NUM_CHAIN_SLOTS];
- 	struct bpf_prog *prog;
- 	struct user_struct *user;
- 	u64 load_time; /* ns since boottime */
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 2ce57645f3cd..3d1e4991e61d 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -21,6 +21,7 @@
- #include <linux/kallsyms.h>
- #include <linux/if_vlan.h>
- #include <linux/vmalloc.h>
-+#include <linux/nospec.h>
+ struct bpf_map_def SEC("maps") icmpcnt = {
+ 	.type = BPF_MAP_TYPE_ARRAY,
+ 	.key_size = sizeof(__u32),
+@@ -92,7 +95,7 @@ static __always_inline int send_icmp4_too_big(struct xdp_md *xdp)
+ 	orig_iph = data + off;
+ 	icmp_hdr->type = ICMP_DEST_UNREACH;
+ 	icmp_hdr->code = ICMP_FRAG_NEEDED;
+-	icmp_hdr->un.frag.mtu = htons(MAX_PCKT_SIZE-sizeof(struct ethhdr));
++	icmp_hdr->un.frag.mtu = htons(max_pcktsz - sizeof(struct ethhdr));
+ 	icmp_hdr->checksum = 0;
+ 	ipv4_csum(icmp_hdr, ICMP_TOOBIG_PAYLOAD_SIZE, &csum);
+ 	icmp_hdr->checksum = csum;
+@@ -121,7 +124,7 @@ static __always_inline int handle_ipv4(struct xdp_md *xdp)
+ 	int pckt_size = data_end - data;
+ 	int offset;
  
- #include <net/sch_generic.h>
+-	if (pckt_size > MAX_PCKT_SIZE) {
++	if (pckt_size > max(max_pcktsz, ICMP_TOOBIG_SIZE)) {
+ 		offset = pckt_size - ICMP_TOOBIG_SIZE;
+ 		if (bpf_xdp_adjust_tail(xdp, 0 - offset))
+ 			return XDP_PASS;
+diff --git a/samples/bpf/xdp_adjust_tail_user.c b/samples/bpf/xdp_adjust_tail_user.c
+index a3596b617c4c..d86e9ad0356b 100644
+--- a/samples/bpf/xdp_adjust_tail_user.c
++++ b/samples/bpf/xdp_adjust_tail_user.c
+@@ -23,6 +23,7 @@
+ #include "libbpf.h"
  
-@@ -528,6 +529,7 @@ struct bpf_prog {
- 				is_func:1,	/* program is a bpf function */
- 				kprobe_override:1, /* Do we override a kprobe? */
- 				has_callchain_buf:1, /* callchain buffer allocated? */
-+				chain_calls:1, /* should this use the chain_call wrapper */
- 				enforce_expected_attach_type:1; /* Enforce expected_attach_type checking at attach time */
- 	enum bpf_prog_type	type;		/* Type of BPF program */
- 	enum bpf_attach_type	expected_attach_type; /* For some prog types */
-@@ -551,6 +553,30 @@ struct sk_filter {
- 	struct bpf_prog	*prog;
- };
+ #define STATS_INTERVAL_S 2U
++#define MAX_PCKT_SIZE 600
  
-+#define BPF_MAX_CHAIN_CALLS 32
-+static __always_inline unsigned int do_chain_calls(const struct bpf_prog *prog,
-+						   const void *ctx)
-+{
-+	int i = BPF_MAX_CHAIN_CALLS;
-+	int idx;
-+	u32 ret;
-+
-+	do {
-+		ret = (*(prog)->bpf_func)(ctx, prog->insnsi);
-+
-+		if (ret + 1 >= BPF_NUM_CHAIN_SLOTS) {
-+			prog = prog->aux->chain_progs[0];
-+			continue;
+ static int ifindex = -1;
+ static __u32 xdp_flags = XDP_FLAGS_UPDATE_IF_NOEXIST;
+@@ -72,6 +73,7 @@ static void usage(const char *cmd)
+ 	printf("Usage: %s [...]\n", cmd);
+ 	printf("    -i <ifname|ifindex> Interface\n");
+ 	printf("    -T <stop-after-X-seconds> Default: 0 (forever)\n");
++	printf("    -P <MAX_PCKT_SIZE> Default: %u\n", MAX_PCKT_SIZE);
+ 	printf("    -S use skb-mode\n");
+ 	printf("    -N enforce native mode\n");
+ 	printf("    -F force loading prog\n");
+@@ -85,13 +87,14 @@ int main(int argc, char **argv)
+ 		.prog_type	= BPF_PROG_TYPE_XDP,
+ 	};
+ 	unsigned char opt_flags[256] = {};
+-	const char *optstr = "i:T:SNFh";
++	const char *optstr = "i:T:P:SNFh";
+ 	struct bpf_prog_info info = {};
+ 	__u32 info_len = sizeof(info);
+ 	unsigned int kill_after_s = 0;
+ 	int i, prog_fd, map_fd, opt;
+ 	struct bpf_object *obj;
+-	struct bpf_map *map;
++	__u32 max_pckt_size = 0;
++	__u32 key = 0;
+ 	char filename[256];
+ 	int err;
+ 
+@@ -110,6 +113,9 @@ int main(int argc, char **argv)
+ 		case 'T':
+ 			kill_after_s = atoi(optarg);
+ 			break;
++		case 'P':
++			max_pckt_size = atoi(optarg);
++			break;
+ 		case 'S':
+ 			xdp_flags |= XDP_FLAGS_SKB_MODE;
+ 			break;
+@@ -150,15 +156,20 @@ int main(int argc, char **argv)
+ 	if (bpf_prog_load_xattr(&prog_load_attr, &obj, &prog_fd))
+ 		return 1;
+ 
+-	map = bpf_map__next(NULL, obj);
+-	if (!map) {
+-		printf("finding a map in obj file failed\n");
+-		return 1;
++	/* static global var 'max_pcktsz' is accessible from .data section */
++	if (max_pckt_size) {
++		map_fd = bpf_object__find_map_fd_by_name(obj, "xdp_adju.data");
++		if (map_fd < 0) {
++			printf("finding a max_pcktsz map in obj file failed\n");
++			return 1;
 +		}
-+		idx = ret + 1;
-+		idx = array_index_nospec(idx, BPF_NUM_CHAIN_SLOTS);
-+
-+		prog = prog->aux->chain_progs[idx] ?: prog->aux->chain_progs[0];
-+	} while (prog && --i);
-+
-+	return ret;
-+}
-+
- DECLARE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
- 
- #define BPF_PROG_RUN(prog, ctx)	({				\
-@@ -559,14 +585,18 @@ DECLARE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
- 	if (static_branch_unlikely(&bpf_stats_enabled_key)) {	\
- 		struct bpf_prog_stats *stats;			\
- 		u64 start = sched_clock();			\
--		ret = (*(prog)->bpf_func)(ctx, (prog)->insnsi);	\
-+		ret = prog->chain_calls ?			\
-+			do_chain_calls(prog, ctx) :			\
-+			 (*(prog)->bpf_func)(ctx, (prog)->insnsi);	\
- 		stats = this_cpu_ptr(prog->aux->stats);		\
- 		u64_stats_update_begin(&stats->syncp);		\
- 		stats->cnt++;					\
- 		stats->nsecs += sched_clock() - start;		\
- 		u64_stats_update_end(&stats->syncp);		\
- 	} else {						\
--		ret = (*(prog)->bpf_func)(ctx, (prog)->insnsi);	\
-+		ret = prog->chain_calls ?				\
-+			do_chain_calls(prog, ctx) :			\
-+			 (*(prog)->bpf_func)(ctx, (prog)->insnsi);	\
- 	}							\
- 	ret; })
- 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 77c6be96d676..1ce80a227be3 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -288,6 +288,12 @@ enum bpf_attach_type {
- /* The verifier internal test flag. Behavior is undefined */
- #define BPF_F_TEST_STATE_FREQ	(1U << 3)
- 
-+/* Whether to enable chain call logic at program execution. If set, the program
-+ * execution logic will check for and jump to chain call programs configured
-+ * with the BPF_PROG_CHAIN_* commands to the bpf syscall.
-+ */
-+#define BPF_F_CHAIN_CALLS	(1U << 4)
-+
- /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
-  * two extensions:
-  *
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 66088a9e9b9e..5dfe3585bc5d 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -254,6 +254,12 @@ struct bpf_prog *bpf_prog_realloc(struct bpf_prog *fp_old, unsigned int size,
- void __bpf_prog_free(struct bpf_prog *fp)
- {
- 	if (fp->aux) {
-+		int i;
-+
-+		for (i = 0; i < BPF_NUM_CHAIN_SLOTS; i++)
-+			if (fp->aux->chain_progs[i])
-+				bpf_prog_put(fp->aux->chain_progs[i]);
-+
- 		free_percpu(fp->aux->stats);
- 		kfree(fp->aux);
++		bpf_map_update_elem(map_fd, &key, &max_pckt_size, BPF_ANY);
  	}
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 82eabd4e38ad..b8a203a05881 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1630,7 +1630,8 @@ static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
- 	if (attr->prog_flags & ~(BPF_F_STRICT_ALIGNMENT |
- 				 BPF_F_ANY_ALIGNMENT |
- 				 BPF_F_TEST_STATE_FREQ |
--				 BPF_F_TEST_RND_HI32))
-+				 BPF_F_TEST_RND_HI32 |
-+				 BPF_F_CHAIN_CALLS))
- 		return -EINVAL;
+-	map_fd = bpf_map__fd(map);
  
- 	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) &&
-@@ -1665,6 +1666,7 @@ static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
- 		return -ENOMEM;
+-	if (!prog_fd) {
+-		printf("load_bpf_file: %s\n", strerror(errno));
++	/* fetch icmpcnt map */
++	map_fd = bpf_object__find_map_fd_by_name(obj, "icmpcnt");
++	if (map_fd < 0) {
++		printf("finding a icmpcnt map in obj file failed\n");
+ 		return 1;
+ 	}
  
- 	prog->expected_attach_type = attr->expected_attach_type;
-+	prog->chain_calls = !!(attr->prog_flags & BPF_F_CHAIN_CALLS);
- 
- 	prog->aux->offload_requested = !!attr->prog_ifindex;
- 
+-- 
+2.20.1
 
