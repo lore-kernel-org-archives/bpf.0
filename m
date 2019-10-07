@@ -2,135 +2,181 @@ Return-Path: <SRS0=Z2SS=YA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A4DEECE58E
-	for <bpf@archiver.kernel.org>; Mon,  7 Oct 2019 17:15:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC893ECE58C
+	for <bpf@archiver.kernel.org>; Mon,  7 Oct 2019 17:20:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E4093206BB
-	for <bpf@archiver.kernel.org>; Mon,  7 Oct 2019 17:15:48 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fpotnSht"
+	by mail.kernel.org (Postfix) with ESMTP id AE4882084D
+	for <bpf@archiver.kernel.org>; Mon,  7 Oct 2019 17:20:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728048AbfJGRPr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Oct 2019 13:15:47 -0400
-Received: from mail-yb1-f194.google.com ([209.85.219.194]:41979 "EHLO
-        mail-yb1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728031AbfJGRPr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Oct 2019 13:15:47 -0400
-Received: by mail-yb1-f194.google.com with SMTP id 206so4921313ybc.8;
-        Mon, 07 Oct 2019 10:15:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0Nx7doSqP3vyMGuzBfy84px7RyjVFyVtPj4m80u5+fI=;
-        b=fpotnShtdpDup2DXvJaoGrtqQYYBSecr7fmSn4xZCy1x5vqeP+tYHPJGGNM3I1+QEs
-         Kz9yRsUrAItVCSp5XgFY8EiWRF5toWcO1WW1g78Zj+VHl9oud7+KREti4dwFMvT66ib9
-         0fvzTR9AveV/XNheaCMGxeaxdUUBNTovRCfLrkX8uuCXsSmJUFWDqu1UEvgWgb1wwRW1
-         sbbd2fby/5AA28HzuVW4uTUZUAEwohiwDxkRRZuFqfP6tUfx/rlOO2NaLwycc1tQssV0
-         gsKlMor9+KZi+4R0ClZ8Q24n2VyyD4gTOEBynNUootX/1Y3iqeK62vH1TZSCr+5XDayy
-         rliQ==
+        id S1728660AbfJGRUk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Oct 2019 13:20:40 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:50332 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727801AbfJGRUk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Oct 2019 13:20:40 -0400
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 10027C055673
+        for <bpf@vger.kernel.org>; Mon,  7 Oct 2019 17:20:39 +0000 (UTC)
+Received: by mail-lj1-f199.google.com with SMTP id p18so3739226ljn.1
+        for <bpf@vger.kernel.org>; Mon, 07 Oct 2019 10:20:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0Nx7doSqP3vyMGuzBfy84px7RyjVFyVtPj4m80u5+fI=;
-        b=sXeEugSYxmypgdvTjzVlaLFkGfgNiss56fptmLtBpULndgkeUaQbnwwv9JMMlZC0Gi
-         EUC8VwlLl/5W2sxN6Jhhe1Oh3bSBA72LFaQAkNxbBp006C/XigFzfXt/1DZMlQrFYeOF
-         6RkSsT5H0/+RmcERpz7X4uGq/SNTJgDg1h+gAaFkp2hP1MhZPJYQ4448Xq+s6PX3c9AR
-         b1zob9W5emK1CeesyaKlFdrSukznHHCY0GgWwRbFh/KolKVNrvzCMLzWsfgOB7Xy61ut
-         QZBpt7d+ZEOAW7WEyWVitWkTNOcy405f9pXCOIMLMnnkbN4bDv7MNhZfhdRYkQgD5gZF
-         KI1g==
-X-Gm-Message-State: APjAAAUq00wTVUA+wDRVmRfTewQAFgWm5f230GMh+pMeMwZn8r6SdvH7
-        vNPYwbLdmBTzpSR2B0xAbgpsR4lbjUeEfDLR0w==
-X-Google-Smtp-Source: APXvYqxAe6f6zBkaVphOXDXxxig/53h6NuLQA7tKjf0QoRvgjG8+bN0tffbGCZfpLCLBqAMTXYY8Sc01CmTKFXFb28k=
-X-Received: by 2002:a25:dcc6:: with SMTP id y189mr8963361ybe.9.1570468546254;
- Mon, 07 Oct 2019 10:15:46 -0700 (PDT)
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:user-agent
+         :mime-version:content-transfer-encoding;
+        bh=TV7l4rVSCPuFf6bf0/5mrz7z4gL0/i747x7OYxCnc2s=;
+        b=D9PcarBn4o7bb/86WFWJwq1enWqGVx3xCpvRauKROIlp3/uMRWzHEgvinHenDZne03
+         jqD0MMUprWruk2lA2CUUabC0w7eYWJc+RaUiaIymhXLl+oHZnGXX8BvKlqbEVaawGVkw
+         kwDykfudk/XBGxOUpNik9YySRroolY8kz4jYHB9s3oQ+GQvt/9dwmfnmrwtH4XBYvicl
+         3dNa2aTexU3IWK4+S9E0Z3MOwRjQ7ms8rqKfgQZ+I0IEWfTEJWONwJ19UMDalBu3NSUS
+         cvaj015+r9mUL+7HASHCOEtqewnTHW8lIdc/5zsBcllKGHRtx2IOqMVuRVG8dpdxpJsw
+         WtFg==
+X-Gm-Message-State: APjAAAXJGl5VUAm5U4CylFu9/7jDwP/swkZpLbX1qS7S6j8Y09SJgzT/
+        oUsl07H6KlHf6s3d5gjRk9s1Z37evDbSEAuwHmWFsbVUau2iRy/iXWIjlRrFVhrr2otRTvbSSA4
+        pBusqh0vKOCvz
+X-Received: by 2002:ac2:554e:: with SMTP id l14mr1792036lfk.32.1570468837493;
+        Mon, 07 Oct 2019 10:20:37 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqyesdDW+CfnpzSajvJVOjsSH6iBuq8qinIiQOnNFJVtXvS5GuuPidY4qjRXkOAYaxw+9N1I0Q==
+X-Received: by 2002:ac2:554e:: with SMTP id l14mr1792022lfk.32.1570468837240;
+        Mon, 07 Oct 2019 10:20:37 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
+        by smtp.gmail.com with ESMTPSA id v7sm2817572lfd.55.2019.10.07.10.20.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Oct 2019 10:20:36 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 2989A18063D; Mon,  7 Oct 2019 19:20:35 +0200 (CEST)
+Subject: [PATCH bpf-next v3 0/5] xdp: Support multiple programs on a single
+ interface through chain calls
+From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Marek Majkowski <marek@cloudflare.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Date:   Mon, 07 Oct 2019 19:20:35 +0200
+Message-ID: <157046883502.2092443.146052429591277809.stgit@alrua-x1>
+User-Agent: StGit/0.19-dirty
 MIME-Version: 1.0
-References: <20191007160635.1021-1-danieltimlee@gmail.com> <CAEf4BzYV68OubcBFZWpMvkKsHhzb3uuMQ7HcMUgYgqigog4q0g@mail.gmail.com>
-In-Reply-To: <CAEf4BzYV68OubcBFZWpMvkKsHhzb3uuMQ7HcMUgYgqigog4q0g@mail.gmail.com>
-From:   "Daniel T. Lee" <danieltimlee@gmail.com>
-Date:   Tue, 8 Oct 2019 01:13:57 +0900
-Message-ID: <CAEKGpzhhTn6OTQShmg31epf_Jgmo6jrqwCs4=bd3PQ8+548dZQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6] samples: bpf: add max_pckt_size option at xdp_adjust_tail
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Yonghong Song <yhs@fb.com>, Song Liu <liu.song.a23@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Oct 8, 2019 at 1:41 AM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Mon, Oct 7, 2019 at 9:06 AM Daniel T. Lee <danieltimlee@gmail.com> wrote:
-> >
-> > Currently, at xdp_adjust_tail_kern.c, MAX_PCKT_SIZE is limited
-> > to 600. To make this size flexible, static global variable
-> > 'max_pcktsz' is added.
-> >
-> > By updating new packet size from the user space, xdp_adjust_tail_kern.o
-> > will use this value as a new max packet size.
-> >
-> > This static global variable can be accesible from .data section with
-> > bpf_object__find_map* from user space, since it is considered as
-> > internal map (accessible with .bss/.data/.rodata suffix).
-> >
-> > If no '-P <MAX_PCKT_SIZE>' option is used, the size of maximum packet
-> > will be 600 as a default.
-> >
-> > Changed the way to test prog_fd, map_fd from '!= 0' to '< 0',
-> > since fd could be 0 when stdin is closed.
-> >
-> > Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
-> >
-> > ---
-> > Changes in v6:
-> >     - Remove redundant error message
-> > Changes in v5:
-> >     - Change pcktsz map to static global variable
-> > Changes in v4:
-> >     - make pckt_size no less than ICMP_TOOBIG_SIZE
-> >     - Fix code style
-> > Changes in v2:
-> >     - Change the helper to fetch map from 'bpf_map__next' to
-> >     'bpf_object__find_map_fd_by_name'.
->
->
-> This should go into commit message, that's netdev preference.
->
-> Otherwise looks good!
->
-> Acked-by: Andrii Nakryiko <andriin@fb.com>
->
+This series adds support for executing multiple XDP programs on a single
+interface in sequence, through the use of chain calls, as discussed at the Linux
+Plumbers Conference last month:
 
-Thanks for the feedback!
+https://linuxplumbersconf.org/event/4/contributions/460/
 
-Will send the next patch with the modified commit message right away!
+# HIGH-LEVEL IDEA
 
-Thanks,
-Daniel
+Since Alexei pointed out some issues with trying to rewrite the eBPF byte code,
+let's try a third approach: We add the ability to chain call programs into the
+eBPF execution core itself, but without rewriting the eBPF byte code.
 
-> >
-> >  samples/bpf/xdp_adjust_tail_kern.c |  7 +++++--
-> >  samples/bpf/xdp_adjust_tail_user.c | 29 ++++++++++++++++++++---------
-> >  2 files changed, 25 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/samples/bpf/xdp_adjust_tail_kern.c b/samples/bpf/xdp_adjust_tail_kern.c
-> > index 411fdb21f8bc..c616508befb9 100644
-> > --- a/samples/bpf/xdp_adjust_tail_kern.c
-> > +++ b/samples/bpf/xdp_adjust_tail_kern.c
-> > @@ -25,6 +25,9 @@
-> >  #define ICMP_TOOBIG_SIZE 98
-> >  #define ICMP_TOOBIG_PAYLOAD_SIZE 92
-> >
->
-> [...]
+As in the previous version, the bpf() syscall gets a couple of new commands
+which takes a pair of BPF program fds and a return code. It will then attach the
+second program to the first one in a structured keyed by return code. When a
+program chain is thus established, the former program will tail call to the
+latter at the end of its execution.
+
+The actual tail calling is achieved by adding a new flag to struct bpf_prog and
+having BPF_PROG_RUN run the chain call logic if that flag is set. This means
+that if the feature is *not* used, the overhead is a single conditional branch
+(which means I couldn't measure a performance difference, as can be seen in the
+results below).
+
+For this version I kept the load-time flag from the previous version, to avoid
+having to remove the read-only memory protection from the bpf prog. Only
+programs loaded with this flag set can have other programs attached to them for
+chain calls.
+
+As before, it shouldn't be necessary to set the flag on program load time, but
+rather we should enable the feature when a chain call program is first loaded.
+We could conceivably just remove the RO property from the first page of struct
+bpf_prog and set the flag as needed.
+
+# PERFORMANCE
+
+I performed a simple performance test to get an initial feel for the overhead of
+the chain call mechanism. This test consists of running only two programs in
+sequence: One that returns XDP_PASS and another that returns XDP_DROP. I then
+measure the drop PPS performance and compare it to a baseline of just a single
+program that only returns XDP_DROP.
+
+For comparison, a test case that uses regular eBPF tail calls to sequence two
+programs together is also included.
+
+| Test case                        | Perf      | Overhead |
+|----------------------------------+-----------+----------|
+| Before patch (XDP DROP program)  | 31.5 Mpps |          |
+| After patch (XDP DROP program)   | 32.0 Mpps |          |
+| XDP chain call (XDP_PASS return) | 28.5 Mpps | 3.8 ns   |
+| XDP chain call (wildcard return) | 28.1 Mpps | 4.3 ns   |
+
+I consider the "Before patch" and "After patch" to be identical; the .5 Mpps
+difference is within the regular test variance I see between runs. Likewise,
+there is probably no significant difference between hooking the XDP_PASS return
+code and using the wildcard slot.
+
+# PATCH SET STRUCTURE
+This series is structured as follows:
+
+- Patch 1: Adds the call chain looping logic
+- Patch 2: Adds the new commands added to the bpf() syscall
+- Patch 3-4: Tools/ update and libbpf syscall wrappers
+- Patch 5: Selftest  with example user space code (a bit hacky still)
+
+The whole series is also available in my git repo on kernel.org:
+https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git/log/?h=xdp-multiprog-03
+
+Changelog:
+
+v3:
+  - Keep the UAPI from v2, but change the implementation to hook into
+    BPF_PROG_RUN instead of trying to inject instructions into the eBPF program
+    itself (since that had problems as Alexei pointed out).
+v2:
+  - Completely new approach that integrates chain calls into the core eBPF
+    runtime instead of doing the map XDP-specific thing with a new map from v1.
+
+---
+
+Toke Høiland-Jørgensen (5):
+      bpf: Support chain calling multiple BPF programs after each other
+      bpf: Add support for setting chain call sequence for programs
+      tools: Update bpf.h header for program chain calls
+      libbpf: Add syscall wrappers for BPF_PROG_CHAIN_* commands
+      selftests: Add tests for XDP chain calls
+
+
+ include/linux/bpf.h                           |    3 
+ include/linux/filter.h                        |   34 +++
+ include/uapi/linux/bpf.h                      |   16 +
+ kernel/bpf/core.c                             |    6 
+ kernel/bpf/syscall.c                          |   82 ++++++-
+ tools/include/uapi/linux/bpf.h                |   16 +
+ tools/lib/bpf/bpf.c                           |   34 +++
+ tools/lib/bpf/bpf.h                           |    4 
+ tools/lib/bpf/libbpf.map                      |    3 
+ tools/testing/selftests/bpf/.gitignore        |    1 
+ tools/testing/selftests/bpf/Makefile          |    3 
+ tools/testing/selftests/bpf/progs/xdp_dummy.c |    6 
+ tools/testing/selftests/bpf/test_xdp_chain.sh |   77 ++++++
+ tools/testing/selftests/bpf/xdp_chain.c       |  313 +++++++++++++++++++++++++
+ 14 files changed, 594 insertions(+), 4 deletions(-)
+ create mode 100755 tools/testing/selftests/bpf/test_xdp_chain.sh
+ create mode 100644 tools/testing/selftests/bpf/xdp_chain.c
+
