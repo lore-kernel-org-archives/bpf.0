@@ -2,119 +2,128 @@ Return-Path: <SRS0=Z2SS=YA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C0F7C47404
-	for <bpf@archiver.kernel.org>; Mon,  7 Oct 2019 17:01:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7ECD7ECE58C
+	for <bpf@archiver.kernel.org>; Mon,  7 Oct 2019 17:12:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F35E6206C0
-	for <bpf@archiver.kernel.org>; Mon,  7 Oct 2019 17:01:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 52B2E206C0
+	for <bpf@archiver.kernel.org>; Mon,  7 Oct 2019 17:12:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="k1G+xzjJ"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="ylpNkZLT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727935AbfJGRBi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Oct 2019 13:01:38 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:53998 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727801AbfJGRBi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Oct 2019 13:01:38 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x97GnWaQ038139;
-        Mon, 7 Oct 2019 17:01:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : in-reply-to : message-id : references : mime-version :
- content-type; s=corp-2019-08-05;
- bh=J37BsPBVXyz3hzyC4XHgrvBJ2wSxJAc823dvyPMeA40=;
- b=k1G+xzjJdubboDDZm4lNB8Hx1x8JKbgN7LfSoRcdedsK8rree6KK4/ddtJyEGgq9xJxq
- vRJVL4SfZdPcUUt/SOIr8BlzBHTP2Z+75VYb8mzbMJ+nh0yugYeNVfQf14Qi3gsYki+q
- 0oWcXB6NgO/iss89bxfqV1QGn0JKGKoBqhX5Ey3PTzS+b/GqGagMHVUkTnIDYZ2/9BXl
- fD/kdf8AYkVx65ZoWwcrhrNjROPZo4Ni+avZPLvN9SGJfv65+M+Ta/m+Pk/F8UY4h08Z
- 3t0PsK8gaG+ng1Gsae0fVfePib8D6v4E0R7pP1Ecg1rWzQxXjZvpAxBx3YO7x3lpTbnb 4g== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 2vektr7xsn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 07 Oct 2019 17:01:22 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x97Gn5QW126833;
-        Mon, 7 Oct 2019 17:01:22 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 2vf4n9nuwj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 07 Oct 2019 17:01:22 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x97H1L5K021779;
-        Mon, 7 Oct 2019 17:01:21 GMT
-Received: from dhcp-10-175-213-187.vpn.oracle.com (/10.175.213.187)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 07 Oct 2019 10:01:20 -0700
-Date:   Mon, 7 Oct 2019 18:01:10 +0100 (BST)
-From:   Alan Maguire <alan.maguire@oracle.com>
-X-X-Sender: alan@dhcp-10-175-161-159.vpn.oracle.com
-To:     Andrii Nakryiko <andriin@fb.com>
-cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@fb.com,
-        daniel@iogearbox.net, andrii.nakryiko@gmail.com, kernel-team@fb.com
-Subject: Re: [PATCH bpf-next] selftests/bpf: fix dependency ordering for
- attach_probe test
-In-Reply-To: <20191007033037.2687437-1-andriin@fb.com>
-Message-ID: <alpine.LRH.2.20.1910071800480.21931@dhcp-10-175-161-159.vpn.oracle.com>
-References: <20191007033037.2687437-1-andriin@fb.com>
-User-Agent: Alpine 2.20 (LRH 67 2015-01-07)
+        id S1729069AbfJGRMu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Oct 2019 13:12:50 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:43553 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729067AbfJGRMt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Oct 2019 13:12:49 -0400
+Received: by mail-oi1-f196.google.com with SMTP id t84so12308902oih.10
+        for <bpf@vger.kernel.org>; Mon, 07 Oct 2019 10:12:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=voxQqlXcqJ7mOo4KVvha7FaxVVFvUMitFdHwmuWnFVE=;
+        b=ylpNkZLTfv7jeQ1uzPQDjIlQb6tJXjGs1GaCB6dQH2B7VIscYPzQRG0T6AWuvQcAwX
+         UaYkok+r0Uct6mz8WKCK+drL+zFhLmfLLp0NwzSz7cb5q2uwYEArsL0/TqYuP3fg6QIE
+         lnjKbp0c96AZT4oxE9Etvd2re8yMC7bWAIymA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=voxQqlXcqJ7mOo4KVvha7FaxVVFvUMitFdHwmuWnFVE=;
+        b=hduluiLByCqSs64SNrqbGXh+kMp9qyZModr45fSPJ0r5lWzHrCv3K5qKdl+jlXnCat
+         SwfJD0R6vJu2mtsvSJEe1IQyB69j58dFPK5X+GgorIOZAZTwqR64mtOAly+gO3f0vjoX
+         ez2PjDO8q1U13Utvy2tnNBlQMdSxO8o8/9hy9KKxaIARfNIpuFoEhwIMdheQbGFLgUui
+         3lT4gLzPd0G3r5ZGvghJGaHv4qMuZAeMwh/sh/kyhwP/KDPhGRcjYQaIlv0tGMXdX/Ia
+         lB81Tv9OmFT8y58P9ZDgVn60826WZF8hlDHfFbEdcQQln6xUsHNq83DEgEchMN0cu1sh
+         /IWA==
+X-Gm-Message-State: APjAAAWtbL3fA1oyWwo9jjlcSdfeFVWhms08KW3sPv7uMkDzcN+Z+M8i
+        KexHEkOzHKM3V1+dt+MQH9YAchd1wLpmYmPPulXEmndA
+X-Google-Smtp-Source: APXvYqxPJygoEvkl+rxpN2s9Nqb7Ree9yYY3K/Q5BCmPM8737XcrtX6MRYflZavuy2uNqaV0MkJ838fwSme1B8cSAug=
+X-Received: by 2002:aca:4f46:: with SMTP id d67mr286443oib.102.1570468368804;
+ Mon, 07 Oct 2019 10:12:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9403 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1910070157
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9403 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=3 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1910070157
+References: <157002302448.1302756.5727756706334050763.stgit@alrua-x1>
+ <E7319D69-6450-4BC3-97B1-134B420298FF@fb.com> <A754440E-07BF-4CF4-8F15-C41179DCECEF@fb.com>
+ <87r23vq79z.fsf@toke.dk> <20191003105335.3cc65226@carbon> <CAADnVQKTbaxJhkukxXM7Ue7=kA9eWsGMpnkXc=Z8O3iWGSaO0A@mail.gmail.com>
+ <87pnjdq4pi.fsf@toke.dk> <1c9b72f9-1b61-d89a-49a4-e0b8eead853d@solarflare.com>
+ <5d964d8ccfd90_55732aec43fe05c47b@john-XPS-13-9370.notmuch>
+ <87tv8pnd9c.fsf@toke.dk> <68466316-c796-7808-6932-01d9d8c0a40b@solarflare.com>
+ <CACAyw99oUfst5LDaPZmbKNfQtM2wF8fP0rz7qMk+Qn7SMaF_vw@mail.gmail.com> <1871cacb-4a43-f906-9a9b-ba6a2ca866dd@solarflare.com>
+In-Reply-To: <1871cacb-4a43-f906-9a9b-ba6a2ca866dd@solarflare.com>
+From:   Lorenz Bauer <lmb@cloudflare.com>
+Date:   Mon, 7 Oct 2019 18:12:37 +0100
+Message-ID: <CACAyw98mYK3Psv61+BDcyk56PbnJf2JhdfDLsB0eD4vLJJnGYQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/9] xdp: Support multiple programs on a single
+ interface through chain calls
+To:     Edward Cree <ecree@solarflare.com>
+Cc:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Song Liu <songliubraving@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>, Martin Lau <kafai@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        Marek Majkowski <marek@cloudflare.com>,
+        David Miller <davem@davemloft.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, 6 Oct 2019, Andrii Nakryiko wrote:
+On Mon, 7 Oct 2019 at 17:43, Edward Cree <ecree@solarflare.com> wrote:
+>
+> I might be being na=C3=AFve, but it doesn't sound more painful than is no=
+rmal
+>  for userland.  I mean, what operations have you got-
+> * create/destroy map (maybe, see above)
+> * load prog (pass it an fd from which it can read an ELF, and more fds
+>   for the maps it uses.  Everything else, e.g. BTFs, can just live in the
+>   ELF.)
+> * destroy prog
+> * bind prog to hook (admittedly there's a long list of hooks, but this is
+>   only to cover the XDP ones, so basically we just have to specify
+>   interface and generic/driver/hw)
+> -that doesn't seem like it presents great difficulties?
 
-> Current Makefile dependency chain is not strict enough and allows
-> test_attach_probe.o to be built before test_progs's
-> prog_test/attach_probe.o is built, which leads to assembler compainig
-> about missing included binary.
-> 
-> This patch is a minimal fix to fix this issue by enforcing that
-> test_attach_probe.o (BPF object file) is built before
-> prog_tests/attach_probe.c is attempted to be compiled.
-> 
-> Fixes: 928ca75e59d7 ("selftests/bpf: switch tests to new bpf_object__open_{file, mem}() APIs")
-> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+Sure, but this is the simplest, not necessarily realistic use case. There
+is a reason that libbpf has the API it has. For example, we patch our
+eBPF before loading it. I'm sure there are other complications, which is
+why I prefer to keep loading my own programs.
 
-Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+> No, I'm talking about doing a linker step (using the 'full-blown calls'
+>  _within_ an eBPF program that Alexei added a few months back) before the
+>  program is submitted to the kernel.  So the BPF_CALL|BPF_PSEUDO_CALL ins=
+n
+>  gets JITed to a direct call.
 
-> ---
->  tools/testing/selftests/bpf/Makefile | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 294d7472dad7..f899ed20ef4d 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -160,7 +160,8 @@ $(OUTPUT)/test_queue_map.o: test_queue_stack_map.h
->  $(OUTPUT)/test_stack_map.o: test_queue_stack_map.h
->  
->  $(OUTPUT)/flow_dissector_load.o: flow_dissector_load.h
-> -$(OUTPUT)/test_progs.o: flow_dissector_load.h $(OUTPUT)/test_attach_probe.o
-> +prog_tests/attach_probe.c: $(OUTPUT)/test_attach_probe.o
-> +$(OUTPUT)/test_progs.o: flow_dissector_load.h
->  
->  BTF_LLC_PROBE := $(shell $(LLC) -march=bpf -mattr=help 2>&1 | grep dwarfris)
->  BTF_PAHOLE_PROBE := $(shell $(BTF_PAHOLE) --help 2>&1 | grep BTF)
-> -- 
-> 2.17.1
-> 
-> 
+Ah, I see. I'm not sure whether this restriction has been lifted, but those
+calls are incompatible with tail calls. So we wouldn't be able to use this.
+
+> OK, but in that case xdpd isn't evidence that the "loader" approach doesn=
+'t
+>  work, so I still think it should be tried before we go to the lengths of
+>  pushing something into the kernel (that we then have to maintain forever=
+).
+
+Maybe this came across the wrong way, I never said it is. Merely that it's
+the status quo we'd like to move away from. If we can achieve that in
+userspace, great.
+
+Lorenz
+
+--=20
+Lorenz Bauer  |  Systems Engineer
+6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
+
+www.cloudflare.com
