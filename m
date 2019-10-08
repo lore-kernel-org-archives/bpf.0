@@ -2,97 +2,112 @@ Return-Path: <SRS0=X79y=YB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1AB6C35280
-	for <bpf@archiver.kernel.org>; Tue,  8 Oct 2019 16:54:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97CA5C10F14
+	for <bpf@archiver.kernel.org>; Tue,  8 Oct 2019 17:59:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B4FDD2070B
-	for <bpf@archiver.kernel.org>; Tue,  8 Oct 2019 16:54:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 769A3217D7
+	for <bpf@archiver.kernel.org>; Tue,  8 Oct 2019 17:59:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YL+DoRiE"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ndAcQLmF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729493AbfJHQyC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Oct 2019 12:54:02 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:38852 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727336AbfJHQyC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Oct 2019 12:54:02 -0400
-Received: by mail-qt1-f195.google.com with SMTP id j31so26276782qta.5;
-        Tue, 08 Oct 2019 09:54:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/OEB+Mhn1/RkASIEDZnYEyLWcZxXtELcOxL6+uOZNG8=;
-        b=YL+DoRiE2rrTwbbTBXBbBZP1lTje6Hnc5DFa4oCZiOdQbplEpcWjGhP6WZ1L4EoupP
-         rc8mOsOi8PBVbYXIcfCaJJ/TETpZYpnDZaEKStALIfvJnHcQWBSvDcW025QHR7F/MxQh
-         wRyino047/8uLFLjuv4Rd8JrJPdb7MWlFh/65ukY2ksoXnBeLR3Wxgc1IXdXaKCnHtb5
-         FqEQWW5+NSFqmL/+M9gfUY4KsNQhbYWRwl0XlzcNqzhI48WgTvZpUJNv/Ra4uaAXzsS6
-         TwlOSHI4X1IOguYLWs9OkzQZEyN07f06xd2w/sg6JNzWmDBCbKkDqGbyinamdxYWkBm0
-         y6jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/OEB+Mhn1/RkASIEDZnYEyLWcZxXtELcOxL6+uOZNG8=;
-        b=Nbg/VEd55KoQZoZBsUVqU6o4m2JyOB5JY7sS5q88qCL7iit/oguKUDEUUtzuPjVufh
-         B54QaYmYtkP4C4wPA8rq2CNLsoq4d+yMxN1o6m5dzsSesNidgEFB85NjiIXC6LDgBJuS
-         lrB9m81Ne0S5mr9DDz5lgTiCOyDdDa5IUYBS6ncNEyKXrMIjhIF8Ru3e9ZlXuxBwCCVq
-         5Lrgj/EywWZpgGu0pvwhA8xVWJI4+420pmY2jzY9KMNo5FdkXx8F1UplTjtL4WJcI3qT
-         nSrDX2rYUZbkvO9Cc5i0USAT/eoc6MlHPIXutRMMBYqFewJVvvBTHjy7xHW8fgUplA0t
-         qIQQ==
-X-Gm-Message-State: APjAAAW7zz3m2oltUuM0aYf9Lh9yCwvTI15U0jJARcMLHGeGju2KOJG+
-        6jX6sKT9nkXuf2SSNErhpCz3irIihzS7qn+pkUI=
-X-Google-Smtp-Source: APXvYqxb84QAlDM2cXZAYQloqBmHXClymF4iB7QazM3pPZH2fkB+gqNqPXwtMgm6nvCgKa9K6ngFVFVHno41QeRA1Uk=
-X-Received: by 2002:ad4:4649:: with SMTP id y9mr30202230qvv.247.1570553640920;
- Tue, 08 Oct 2019 09:54:00 -0700 (PDT)
+        id S1729506AbfJHR7z (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Oct 2019 13:59:55 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:10082 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726320AbfJHR7z (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 8 Oct 2019 13:59:55 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x98HxTop016707
+        for <bpf@vger.kernel.org>; Tue, 8 Oct 2019 10:59:54 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=76Gk0naCCpsyBqR1yVlnAM0v4hN68Eu2JwrVDrTYsZw=;
+ b=ndAcQLmF05EHfzSned+5TckUXNIi6OQ50YvYbyg+CyhRBj/UX8fp4xpAQRvM4RbA+Gfz
+ 2Er4V4vWihX4xAx0luX7IjuUCKcaXHlnf49RiEfAIe9+sQBy9JiaF6eNNoVsLRib5Jge
+ r4F3YTpf+6CVw96/zCr2IUGmtLiwhY1WWZ4= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2vg6ms6rvy-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 08 Oct 2019 10:59:54 -0700
+Received: from 2401:db00:30:600c:face:0:1f:0 (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 8 Oct 2019 10:59:53 -0700
+Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
+        id C32498618D3; Tue,  8 Oct 2019 10:59:51 -0700 (PDT)
+Smtp-Origin-Hostprefix: dev
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: dev101.prn2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: prn2c23
+Subject: [PATCH v5 bpf-next 1/7] selftests/bpf: undo GCC-specific bpf_helpers.h changes
+Date:   Tue, 8 Oct 2019 10:59:36 -0700
+Message-ID: <20191008175942.1769476-2-andriin@fb.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191008175942.1769476-1-andriin@fb.com>
+References: <20191008175942.1769476-1-andriin@fb.com>
+X-FB-Internal: Safe
 MIME-Version: 1.0
-References: <20191007224712.1984401-1-andriin@fb.com> <20191007224712.1984401-7-andriin@fb.com>
- <035617e9-2d0d-4082-8862-45bc4bb210fe@fb.com> <CAEf4Bzbe8mKFfd9yAN-i=f6jG50VL5SEqjVJTBcUe8=5eStYJA@mail.gmail.com>
- <5411bdae-a723-6dd3-d35a-8ec825924b4e@fb.com>
-In-Reply-To: <5411bdae-a723-6dd3-d35a-8ec825924b4e@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 8 Oct 2019 09:53:49 -0700
-Message-ID: <CAEf4Bza8d+O0dRZy5NkQbpA-Fnk32PhZK2wqJxJw=Ve9eYUwUA@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf-next 6/7] libbpf: add BPF_CORE_READ/BPF_CORE_READ_INTO
- helpers
-To:     Alexei Starovoitov <ast@fb.com>
-Cc:     Andrii Nakryiko <andriin@fb.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
+ definitions=2019-10-08_07:2019-10-08,2019-10-08 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ priorityscore=1501 mlxlogscore=999 clxscore=1015 spamscore=0 phishscore=0
+ bulkscore=0 impostorscore=0 suspectscore=8 mlxscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1910080143
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Oct 8, 2019 at 8:10 AM Alexei Starovoitov <ast@fb.com> wrote:
->
-> On 10/7/19 11:15 PM, Andrii Nakryiko wrote:
-> >>> +#define BPF_CORE_READ(src, a, ...)                                       \
-> >>> +     ({                                                                  \
-> >>> +             ___type(src, a, ##__VA_ARGS__) __r;                         \
-> >>> +             BPF_CORE_READ_INTO(&__r, src, a, ##__VA_ARGS__);            \
-> >>> +             __r;                                                        \
-> >>> +     })
-> >>> +
-> >> Since we're splitting things into
-> >> bpf_{helpers,helper_defs,endian,tracing}.h
-> >> how about adding all core macros into bpf_core_read.h ?
-> > ok, but maybe just bpf_core.h then?
->
-> bpf_core.h is too generic. It either needs to be capitalized,
-> which is unheard of for header files or some suffix added.
-> I think bpf_core_read.h is short enough and doesn't look like
-> bpf_core_write.h will be coming any time soon.
-> If you're worried about _read part then may be
-> bpf_core_access.h ?
->
+Having GCC provide its own bpf-helper.h is not the right approach and is
+going to be changed. Undo bpf_helpers.h change before moving
+bpf_helpers.h into libbpf.
 
-Alright, I'll split it off into bpf_core_read.h.
+Acked-by: Song Liu <songliubraving@fb.com>
+Acked-by: Ilya Leoshkevich <iii@linux.ibm.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/testing/selftests/bpf/bpf_helpers.h | 8 --------
+ 1 file changed, 8 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/bpf_helpers.h b/tools/testing/selftests/bpf/bpf_helpers.h
+index 15152280db6f..ffd4d8c9a087 100644
+--- a/tools/testing/selftests/bpf/bpf_helpers.h
++++ b/tools/testing/selftests/bpf/bpf_helpers.h
+@@ -15,8 +15,6 @@
+ 			 ##__VA_ARGS__);		\
+ })
+ 
+-#ifdef __clang__
+-
+ /* helper macro to place programs, maps, license in
+  * different sections in elf_bpf file. Section names
+  * are interpreted by elf_bpf loader
+@@ -47,12 +45,6 @@ struct bpf_map_def {
+ 	unsigned int numa_node;
+ };
+ 
+-#else
+-
+-#include <bpf-helpers.h>
+-
+-#endif
+-
+ #define BPF_ANNOTATE_KV_PAIR(name, type_key, type_val)		\
+ 	struct ____btf_map_##name {				\
+ 		type_key key;					\
+-- 
+2.17.1
+
