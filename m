@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5CB2C10F14
-	for <bpf@archiver.kernel.org>; Tue,  8 Oct 2019 18:00:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 295E9C4360C
+	for <bpf@archiver.kernel.org>; Tue,  8 Oct 2019 18:00:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6D674206C0
-	for <bpf@archiver.kernel.org>; Tue,  8 Oct 2019 18:00:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ED7FD218AC
+	for <bpf@archiver.kernel.org>; Tue,  8 Oct 2019 18:00:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="JScYiUHS"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="TYOKjv+n"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729535AbfJHSAB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Oct 2019 14:00:01 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:52214 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726336AbfJHSAA (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 8 Oct 2019 14:00:00 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x98Hxr6V027656
-        for <bpf@vger.kernel.org>; Tue, 8 Oct 2019 10:59:59 -0700
+        id S1729604AbfJHSAD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Oct 2019 14:00:03 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:56480 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729589AbfJHSAD (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 8 Oct 2019 14:00:03 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id x98HhGNf004526
+        for <bpf@vger.kernel.org>; Tue, 8 Oct 2019 11:00:02 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=E0rLXJzD5WGpFiEUAqRzqTjHrFHoUYQPvGt1eoR5myA=;
- b=JScYiUHSLs2R+qLLsViaqmbz/EZ5etsOWdc90HMPf3xv306E8+gmOJmlkoO8JYhPzTeI
- Wgh1rjAgWr6xR2p+pgJx+KXf7qN8r7fZUtH03XMSiCES4rzm03krb3PEA0L7Xl0c6eBq
- pL1PrSKp0JQPdum5WtnbvmqeEZaBBY3cYBg= 
+ content-type; s=facebook; bh=dewsSa+A6z5oJRaJrF7SxP9ZjmW14cL61gnz+X06G3o=;
+ b=TYOKjv+nWNrzQE2MigtPAkXugDgeiPRpGyOCqHCuFHmr0LR0clLroRyykfKvfSU7niCr
+ Va9xjAaG27cUP4B97mhiQE3Q15c+eKbh2rC5o7g+IbzFi/X6DFmATQbR3hErtY2hLWk7
+ WyUA/4QZDeSdUQgf50BlbEVrh7ZrAnYfbgQ= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2vgehqce10-7
+        by m0001303.ppops.net with ESMTP id 2vgr0gjdx8-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 08 Oct 2019 10:59:59 -0700
+        for <bpf@vger.kernel.org>; Tue, 08 Oct 2019 11:00:02 -0700
 Received: from 2401:db00:12:909f:face:0:3:0 (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 8 Oct 2019 10:59:56 -0700
+ 15.1.1713.5; Tue, 8 Oct 2019 11:00:00 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id CCB888618D3; Tue,  8 Oct 2019 10:59:53 -0700 (PDT)
+        id E52D08618D3; Tue,  8 Oct 2019 10:59:57 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v5 bpf-next 2/7] selftests/bpf: samples/bpf: split off legacy stuff from bpf_helpers.h
-Date:   Tue, 8 Oct 2019 10:59:37 -0700
-Message-ID: <20191008175942.1769476-3-andriin@fb.com>
+Subject: [PATCH v5 bpf-next 4/7] selftests/bpf: split off tracing-only helpers into bpf_tracing.h
+Date:   Tue, 8 Oct 2019 10:59:39 -0700
+Message-ID: <20191008175942.1769476-5-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191008175942.1769476-1-andriin@fb.com>
 References: <20191008175942.1769476-1-andriin@fb.com>
@@ -60,480 +60,637 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
  definitions=2019-10-08_07:2019-10-08,2019-10-08 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- mlxlogscore=999 suspectscore=8 clxscore=1015 lowpriorityscore=0
- priorityscore=1501 malwarescore=0 spamscore=0 mlxscore=0 adultscore=0
- bulkscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1908290000 definitions=main-1910080143
+ clxscore=1015 bulkscore=0 priorityscore=1501 impostorscore=0 mlxscore=0
+ spamscore=0 malwarescore=0 suspectscore=8 adultscore=0 lowpriorityscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1910080142
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Split off few legacy things from bpf_helpers.h into separate
-bpf_legacy.h file:
-- load_{byte|half|word};
-- remove extra inner_idx and numa_node fields from bpf_map_def and
-  introduce bpf_map_def_legacy for use in samples;
-- move BPF_ANNOTATE_KV_PAIR into bpf_legacy.h.
-
-Adjust samples and selftests accordingly by either including
-bpf_legacy.h and using bpf_map_def_legacy, or switching to BTF-defined
-maps altogether.
+Split-off PT_REGS-related helpers into bpf_tracing.h header. Adjust
+selftests and samples to include it where necessary.
 
 Acked-by: John Fastabend <john.fastabend@gmail.com>
 Acked-by: Song Liu <songliubraving@fb.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- samples/bpf/hbm_kern.h                        | 27 ++++++-------
- samples/bpf/map_perf_test_kern.c              | 23 +++++------
- samples/bpf/parse_ldabs.c                     |  1 +
- samples/bpf/sockex1_kern.c                    |  1 +
- samples/bpf/sockex2_kern.c                    |  1 +
- samples/bpf/sockex3_kern.c                    |  1 +
- samples/bpf/tcbpf1_kern.c                     |  1 +
- samples/bpf/test_map_in_map_kern.c            | 15 +++----
- tools/testing/selftests/bpf/bpf_helpers.h     | 24 +-----------
- tools/testing/selftests/bpf/bpf_legacy.h      | 39 +++++++++++++++++++
- .../testing/selftests/bpf/progs/sockopt_sk.c  | 13 +++----
- tools/testing/selftests/bpf/progs/tcp_rtt.c   | 13 +++----
- .../selftests/bpf/progs/test_btf_haskv.c      |  1 +
- .../selftests/bpf/progs/test_btf_newkv.c      |  1 +
- 14 files changed, 91 insertions(+), 70 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/bpf_legacy.h
+ samples/bpf/map_perf_test_kern.c          |   1 +
+ samples/bpf/offwaketime_kern.c            |   1 +
+ samples/bpf/sampleip_kern.c               |   1 +
+ samples/bpf/spintest_kern.c               |   1 +
+ samples/bpf/test_map_in_map_kern.c        |   1 +
+ samples/bpf/test_overhead_kprobe_kern.c   |   1 +
+ samples/bpf/test_probe_write_user_kern.c  |   1 +
+ samples/bpf/trace_event_kern.c            |   1 +
+ samples/bpf/tracex1_kern.c                |   1 +
+ samples/bpf/tracex2_kern.c                |   1 +
+ samples/bpf/tracex3_kern.c                |   1 +
+ samples/bpf/tracex4_kern.c                |   1 +
+ samples/bpf/tracex5_kern.c                |   1 +
+ tools/testing/selftests/bpf/bpf_helpers.h | 190 ---------------------
+ tools/testing/selftests/bpf/bpf_tracing.h | 195 ++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/loop1.c |   1 +
+ tools/testing/selftests/bpf/progs/loop2.c |   1 +
+ tools/testing/selftests/bpf/progs/loop3.c |   1 +
+ 18 files changed, 211 insertions(+), 190 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/bpf_tracing.h
 
-diff --git a/samples/bpf/hbm_kern.h b/samples/bpf/hbm_kern.h
-index aa207a2eebbd..4edaf47876ca 100644
---- a/samples/bpf/hbm_kern.h
-+++ b/samples/bpf/hbm_kern.h
-@@ -59,21 +59,18 @@
- #define BYTES_PER_NS(delta, rate) ((((u64)(delta)) * (rate)) >> 20)
- #define BYTES_TO_NS(bytes, rate) div64_u64(((u64)(bytes)) << 20, (u64)(rate))
- 
--struct bpf_map_def SEC("maps") queue_state = {
--	.type = BPF_MAP_TYPE_CGROUP_STORAGE,
--	.key_size = sizeof(struct bpf_cgroup_storage_key),
--	.value_size = sizeof(struct hbm_vqueue),
--};
--BPF_ANNOTATE_KV_PAIR(queue_state, struct bpf_cgroup_storage_key,
--		     struct hbm_vqueue);
--
--struct bpf_map_def SEC("maps") queue_stats = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.key_size = sizeof(u32),
--	.value_size = sizeof(struct hbm_queue_stats),
--	.max_entries = 1,
--};
--BPF_ANNOTATE_KV_PAIR(queue_stats, int, struct hbm_queue_stats);
-+struct {
-+	__uint(type, BPF_MAP_TYPE_CGROUP_STORAGE);
-+	__type(key, struct bpf_cgroup_storage_key);
-+	__type(value, struct hbm_vqueue);
-+} queue_state SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, u32);
-+	__type(value, struct hvm_queue_stats);
-+} queue_stats SEC(".maps");
- 
- struct hbm_pkt_info {
- 	int	cwnd;
 diff --git a/samples/bpf/map_perf_test_kern.c b/samples/bpf/map_perf_test_kern.c
-index 2b2ffb97018b..f47ee513cb7c 100644
+index f47ee513cb7c..5c11aefbc489 100644
 --- a/samples/bpf/map_perf_test_kern.c
 +++ b/samples/bpf/map_perf_test_kern.c
-@@ -9,25 +9,26 @@
- #include <linux/version.h>
+@@ -10,6 +10,7 @@
  #include <uapi/linux/bpf.h>
  #include "bpf_helpers.h"
-+#include "bpf_legacy.h"
+ #include "bpf_legacy.h"
++#include "bpf_tracing.h"
  
  #define MAX_ENTRIES 1000
  #define MAX_NR_CPUS 1024
- 
--struct bpf_map_def SEC("maps") hash_map = {
-+struct bpf_map_def_legacy SEC("maps") hash_map = {
- 	.type = BPF_MAP_TYPE_HASH,
- 	.key_size = sizeof(u32),
- 	.value_size = sizeof(long),
- 	.max_entries = MAX_ENTRIES,
- };
- 
--struct bpf_map_def SEC("maps") lru_hash_map = {
-+struct bpf_map_def_legacy SEC("maps") lru_hash_map = {
- 	.type = BPF_MAP_TYPE_LRU_HASH,
- 	.key_size = sizeof(u32),
- 	.value_size = sizeof(long),
- 	.max_entries = 10000,
- };
- 
--struct bpf_map_def SEC("maps") nocommon_lru_hash_map = {
-+struct bpf_map_def_legacy SEC("maps") nocommon_lru_hash_map = {
- 	.type = BPF_MAP_TYPE_LRU_HASH,
- 	.key_size = sizeof(u32),
- 	.value_size = sizeof(long),
-@@ -35,7 +36,7 @@ struct bpf_map_def SEC("maps") nocommon_lru_hash_map = {
- 	.map_flags = BPF_F_NO_COMMON_LRU,
- };
- 
--struct bpf_map_def SEC("maps") inner_lru_hash_map = {
-+struct bpf_map_def_legacy SEC("maps") inner_lru_hash_map = {
- 	.type = BPF_MAP_TYPE_LRU_HASH,
- 	.key_size = sizeof(u32),
- 	.value_size = sizeof(long),
-@@ -44,20 +45,20 @@ struct bpf_map_def SEC("maps") inner_lru_hash_map = {
- 	.numa_node = 0,
- };
- 
--struct bpf_map_def SEC("maps") array_of_lru_hashs = {
-+struct bpf_map_def_legacy SEC("maps") array_of_lru_hashs = {
- 	.type = BPF_MAP_TYPE_ARRAY_OF_MAPS,
- 	.key_size = sizeof(u32),
- 	.max_entries = MAX_NR_CPUS,
- };
- 
--struct bpf_map_def SEC("maps") percpu_hash_map = {
-+struct bpf_map_def_legacy SEC("maps") percpu_hash_map = {
- 	.type = BPF_MAP_TYPE_PERCPU_HASH,
- 	.key_size = sizeof(u32),
- 	.value_size = sizeof(long),
- 	.max_entries = MAX_ENTRIES,
- };
- 
--struct bpf_map_def SEC("maps") hash_map_alloc = {
-+struct bpf_map_def_legacy SEC("maps") hash_map_alloc = {
- 	.type = BPF_MAP_TYPE_HASH,
- 	.key_size = sizeof(u32),
- 	.value_size = sizeof(long),
-@@ -65,7 +66,7 @@ struct bpf_map_def SEC("maps") hash_map_alloc = {
- 	.map_flags = BPF_F_NO_PREALLOC,
- };
- 
--struct bpf_map_def SEC("maps") percpu_hash_map_alloc = {
-+struct bpf_map_def_legacy SEC("maps") percpu_hash_map_alloc = {
- 	.type = BPF_MAP_TYPE_PERCPU_HASH,
- 	.key_size = sizeof(u32),
- 	.value_size = sizeof(long),
-@@ -73,7 +74,7 @@ struct bpf_map_def SEC("maps") percpu_hash_map_alloc = {
- 	.map_flags = BPF_F_NO_PREALLOC,
- };
- 
--struct bpf_map_def SEC("maps") lpm_trie_map_alloc = {
-+struct bpf_map_def_legacy SEC("maps") lpm_trie_map_alloc = {
- 	.type = BPF_MAP_TYPE_LPM_TRIE,
- 	.key_size = 8,
- 	.value_size = sizeof(long),
-@@ -81,14 +82,14 @@ struct bpf_map_def SEC("maps") lpm_trie_map_alloc = {
- 	.map_flags = BPF_F_NO_PREALLOC,
- };
- 
--struct bpf_map_def SEC("maps") array_map = {
-+struct bpf_map_def_legacy SEC("maps") array_map = {
- 	.type = BPF_MAP_TYPE_ARRAY,
- 	.key_size = sizeof(u32),
- 	.value_size = sizeof(long),
- 	.max_entries = MAX_ENTRIES,
- };
- 
--struct bpf_map_def SEC("maps") lru_hash_lookup_map = {
-+struct bpf_map_def_legacy SEC("maps") lru_hash_lookup_map = {
- 	.type = BPF_MAP_TYPE_LRU_HASH,
- 	.key_size = sizeof(u32),
- 	.value_size = sizeof(long),
-diff --git a/samples/bpf/parse_ldabs.c b/samples/bpf/parse_ldabs.c
-index 6db6b21fdc6d..ef5892377beb 100644
---- a/samples/bpf/parse_ldabs.c
-+++ b/samples/bpf/parse_ldabs.c
-@@ -12,6 +12,7 @@
- #include <linux/udp.h>
- #include <uapi/linux/bpf.h>
- #include "bpf_helpers.h"
-+#include "bpf_legacy.h"
- 
- #define DEFAULT_PKTGEN_UDP_PORT	9
- #define IP_MF			0x2000
-diff --git a/samples/bpf/sockex1_kern.c b/samples/bpf/sockex1_kern.c
-index ed18e9a4909c..f96943f443ab 100644
---- a/samples/bpf/sockex1_kern.c
-+++ b/samples/bpf/sockex1_kern.c
-@@ -3,6 +3,7 @@
- #include <uapi/linux/if_packet.h>
- #include <uapi/linux/ip.h>
- #include "bpf_helpers.h"
-+#include "bpf_legacy.h"
- 
- struct bpf_map_def SEC("maps") my_map = {
- 	.type = BPF_MAP_TYPE_ARRAY,
-diff --git a/samples/bpf/sockex2_kern.c b/samples/bpf/sockex2_kern.c
-index f2f9dbc021b0..5566fa7d92fa 100644
---- a/samples/bpf/sockex2_kern.c
-+++ b/samples/bpf/sockex2_kern.c
-@@ -1,5 +1,6 @@
- #include <uapi/linux/bpf.h>
- #include "bpf_helpers.h"
-+#include "bpf_legacy.h"
- #include <uapi/linux/in.h>
- #include <uapi/linux/if.h>
- #include <uapi/linux/if_ether.h>
-diff --git a/samples/bpf/sockex3_kern.c b/samples/bpf/sockex3_kern.c
-index c527b57d3ec8..151dd842ecc0 100644
---- a/samples/bpf/sockex3_kern.c
-+++ b/samples/bpf/sockex3_kern.c
+diff --git a/samples/bpf/offwaketime_kern.c b/samples/bpf/offwaketime_kern.c
+index e7d9a0a3d45b..9cb5207a692f 100644
+--- a/samples/bpf/offwaketime_kern.c
++++ b/samples/bpf/offwaketime_kern.c
 @@ -6,6 +6,7 @@
   */
  #include <uapi/linux/bpf.h>
  #include "bpf_helpers.h"
-+#include "bpf_legacy.h"
- #include <uapi/linux/in.h>
- #include <uapi/linux/if.h>
- #include <uapi/linux/if_ether.h>
-diff --git a/samples/bpf/tcbpf1_kern.c b/samples/bpf/tcbpf1_kern.c
-index 274c884c87fe..ff43341bdfce 100644
---- a/samples/bpf/tcbpf1_kern.c
-+++ b/samples/bpf/tcbpf1_kern.c
-@@ -8,6 +8,7 @@
- #include <uapi/linux/filter.h>
- #include <uapi/linux/pkt_cls.h>
++#include "bpf_tracing.h"
+ #include <uapi/linux/ptrace.h>
+ #include <uapi/linux/perf_event.h>
+ #include <linux/version.h>
+diff --git a/samples/bpf/sampleip_kern.c b/samples/bpf/sampleip_kern.c
+index ceabf31079cf..4a190893894f 100644
+--- a/samples/bpf/sampleip_kern.c
++++ b/samples/bpf/sampleip_kern.c
+@@ -9,6 +9,7 @@
+ #include <uapi/linux/bpf.h>
+ #include <uapi/linux/bpf_perf_event.h>
  #include "bpf_helpers.h"
-+#include "bpf_legacy.h"
++#include "bpf_tracing.h"
  
- /* compiler workaround */
- #define _htonl __builtin_bswap32
+ #define MAX_IPS		8192
+ 
+diff --git a/samples/bpf/spintest_kern.c b/samples/bpf/spintest_kern.c
+index ce0167d09cdc..6e9478aa2938 100644
+--- a/samples/bpf/spintest_kern.c
++++ b/samples/bpf/spintest_kern.c
+@@ -10,6 +10,7 @@
+ #include <uapi/linux/bpf.h>
+ #include <uapi/linux/perf_event.h>
+ #include "bpf_helpers.h"
++#include "bpf_tracing.h"
+ 
+ struct bpf_map_def SEC("maps") my_map = {
+ 	.type = BPF_MAP_TYPE_HASH,
 diff --git a/samples/bpf/test_map_in_map_kern.c b/samples/bpf/test_map_in_map_kern.c
-index 42c44d091dd1..8101bf3dc7f7 100644
+index 8101bf3dc7f7..4f80cbe74c72 100644
 --- a/samples/bpf/test_map_in_map_kern.c
 +++ b/samples/bpf/test_map_in_map_kern.c
-@@ -11,11 +11,12 @@
- #include <uapi/linux/bpf.h>
+@@ -12,6 +12,7 @@
  #include <uapi/linux/in6.h>
  #include "bpf_helpers.h"
-+#include "bpf_legacy.h"
+ #include "bpf_legacy.h"
++#include "bpf_tracing.h"
  
  #define MAX_NR_PORTS 65536
  
- /* map #0 */
--struct bpf_map_def SEC("maps") port_a = {
-+struct bpf_map_def_legacy SEC("maps") port_a = {
- 	.type = BPF_MAP_TYPE_ARRAY,
- 	.key_size = sizeof(u32),
- 	.value_size = sizeof(int),
-@@ -23,7 +24,7 @@ struct bpf_map_def SEC("maps") port_a = {
- };
+diff --git a/samples/bpf/test_overhead_kprobe_kern.c b/samples/bpf/test_overhead_kprobe_kern.c
+index 468a66a92ef9..8d2518e68db9 100644
+--- a/samples/bpf/test_overhead_kprobe_kern.c
++++ b/samples/bpf/test_overhead_kprobe_kern.c
+@@ -8,6 +8,7 @@
+ #include <linux/ptrace.h>
+ #include <uapi/linux/bpf.h>
+ #include "bpf_helpers.h"
++#include "bpf_tracing.h"
  
- /* map #1 */
--struct bpf_map_def SEC("maps") port_h = {
-+struct bpf_map_def_legacy SEC("maps") port_h = {
+ #define _(P) ({typeof(P) val = 0; bpf_probe_read(&val, sizeof(val), &P); val;})
+ 
+diff --git a/samples/bpf/test_probe_write_user_kern.c b/samples/bpf/test_probe_write_user_kern.c
+index 3a677c807044..a543358218e6 100644
+--- a/samples/bpf/test_probe_write_user_kern.c
++++ b/samples/bpf/test_probe_write_user_kern.c
+@@ -9,6 +9,7 @@
+ #include <uapi/linux/bpf.h>
+ #include <linux/version.h>
+ #include "bpf_helpers.h"
++#include "bpf_tracing.h"
+ 
+ struct bpf_map_def SEC("maps") dnat_map = {
  	.type = BPF_MAP_TYPE_HASH,
- 	.key_size = sizeof(u32),
- 	.value_size = sizeof(int),
-@@ -31,7 +32,7 @@ struct bpf_map_def SEC("maps") port_h = {
- };
+diff --git a/samples/bpf/trace_event_kern.c b/samples/bpf/trace_event_kern.c
+index 7068fbdde951..8dc18d233a27 100644
+--- a/samples/bpf/trace_event_kern.c
++++ b/samples/bpf/trace_event_kern.c
+@@ -10,6 +10,7 @@
+ #include <uapi/linux/bpf_perf_event.h>
+ #include <uapi/linux/perf_event.h>
+ #include "bpf_helpers.h"
++#include "bpf_tracing.h"
  
- /* map #2 */
--struct bpf_map_def SEC("maps") reg_result_h = {
-+struct bpf_map_def_legacy SEC("maps") reg_result_h = {
+ struct key_t {
+ 	char comm[TASK_COMM_LEN];
+diff --git a/samples/bpf/tracex1_kern.c b/samples/bpf/tracex1_kern.c
+index 107da148820f..1a15f6605129 100644
+--- a/samples/bpf/tracex1_kern.c
++++ b/samples/bpf/tracex1_kern.c
+@@ -9,6 +9,7 @@
+ #include <uapi/linux/bpf.h>
+ #include <linux/version.h>
+ #include "bpf_helpers.h"
++#include "bpf_tracing.h"
+ 
+ #define _(P) ({typeof(P) val = 0; bpf_probe_read(&val, sizeof(val), &P); val;})
+ 
+diff --git a/samples/bpf/tracex2_kern.c b/samples/bpf/tracex2_kern.c
+index 5e11c20ce5ec..d70b3ea79ea7 100644
+--- a/samples/bpf/tracex2_kern.c
++++ b/samples/bpf/tracex2_kern.c
+@@ -9,6 +9,7 @@
+ #include <linux/version.h>
+ #include <uapi/linux/bpf.h>
+ #include "bpf_helpers.h"
++#include "bpf_tracing.h"
+ 
+ struct bpf_map_def SEC("maps") my_map = {
  	.type = BPF_MAP_TYPE_HASH,
- 	.key_size = sizeof(u32),
- 	.value_size = sizeof(int),
-@@ -39,7 +40,7 @@ struct bpf_map_def SEC("maps") reg_result_h = {
- };
+diff --git a/samples/bpf/tracex3_kern.c b/samples/bpf/tracex3_kern.c
+index ea1d4c19c132..9af546bebfa9 100644
+--- a/samples/bpf/tracex3_kern.c
++++ b/samples/bpf/tracex3_kern.c
+@@ -9,6 +9,7 @@
+ #include <linux/version.h>
+ #include <uapi/linux/bpf.h>
+ #include "bpf_helpers.h"
++#include "bpf_tracing.h"
  
- /* map #3 */
--struct bpf_map_def SEC("maps") inline_result_h = {
-+struct bpf_map_def_legacy SEC("maps") inline_result_h = {
+ struct bpf_map_def SEC("maps") my_map = {
  	.type = BPF_MAP_TYPE_HASH,
- 	.key_size = sizeof(u32),
- 	.value_size = sizeof(int),
-@@ -47,7 +48,7 @@ struct bpf_map_def SEC("maps") inline_result_h = {
- };
+diff --git a/samples/bpf/tracex4_kern.c b/samples/bpf/tracex4_kern.c
+index 6dd8e384de96..2a02cbe9d9a1 100644
+--- a/samples/bpf/tracex4_kern.c
++++ b/samples/bpf/tracex4_kern.c
+@@ -8,6 +8,7 @@
+ #include <linux/version.h>
+ #include <uapi/linux/bpf.h>
+ #include "bpf_helpers.h"
++#include "bpf_tracing.h"
  
- /* map #4 */ /* Test case #0 */
--struct bpf_map_def SEC("maps") a_of_port_a = {
-+struct bpf_map_def_legacy SEC("maps") a_of_port_a = {
- 	.type = BPF_MAP_TYPE_ARRAY_OF_MAPS,
- 	.key_size = sizeof(u32),
- 	.inner_map_idx = 0, /* map_fd[0] is port_a */
-@@ -55,7 +56,7 @@ struct bpf_map_def SEC("maps") a_of_port_a = {
- };
+ struct pair {
+ 	u64 val;
+diff --git a/samples/bpf/tracex5_kern.c b/samples/bpf/tracex5_kern.c
+index 35cb0eed3be5..b3557b21a8fe 100644
+--- a/samples/bpf/tracex5_kern.c
++++ b/samples/bpf/tracex5_kern.c
+@@ -11,6 +11,7 @@
+ #include <uapi/linux/unistd.h>
+ #include "syscall_nrs.h"
+ #include "bpf_helpers.h"
++#include "bpf_tracing.h"
  
- /* map #5 */ /* Test case #1 */
--struct bpf_map_def SEC("maps") h_of_port_a = {
-+struct bpf_map_def_legacy SEC("maps") h_of_port_a = {
- 	.type = BPF_MAP_TYPE_HASH_OF_MAPS,
- 	.key_size = sizeof(u32),
- 	.inner_map_idx = 0, /* map_fd[0] is port_a */
-@@ -63,7 +64,7 @@ struct bpf_map_def SEC("maps") h_of_port_a = {
- };
+ #define PROG(F) SEC("kprobe/"__stringify(F)) int bpf_func_##F
  
- /* map #6 */ /* Test case #2 */
--struct bpf_map_def SEC("maps") h_of_port_h = {
-+struct bpf_map_def_legacy SEC("maps") h_of_port_h = {
- 	.type = BPF_MAP_TYPE_HASH_OF_MAPS,
- 	.key_size = sizeof(u32),
- 	.inner_map_idx = 1, /* map_fd[1] is port_h */
 diff --git a/tools/testing/selftests/bpf/bpf_helpers.h b/tools/testing/selftests/bpf/bpf_helpers.h
-index ffd4d8c9a087..c7cfc27063d4 100644
+index 4e6f97142cd8..6d059c0a7845 100644
 --- a/tools/testing/selftests/bpf/bpf_helpers.h
 +++ b/tools/testing/selftests/bpf/bpf_helpers.h
-@@ -21,19 +21,8 @@
-  */
- #define SEC(NAME) __attribute__((section(NAME), used))
- 
--/* llvm builtin functions that eBPF C program may use to
-- * emit BPF_LD_ABS and BPF_LD_IND instructions
-- */
--struct sk_buff;
--unsigned long long load_byte(void *skb,
--			     unsigned long long off) asm("llvm.bpf.load.byte");
--unsigned long long load_half(void *skb,
--			     unsigned long long off) asm("llvm.bpf.load.half");
--unsigned long long load_word(void *skb,
--			     unsigned long long off) asm("llvm.bpf.load.word");
--
- /* a helper structure used by eBPF C program
-- * to describe map attributes to elf_bpf loader
-+ * to describe BPF map attributes to libbpf loader
-  */
- struct bpf_map_def {
- 	unsigned int type;
-@@ -41,19 +30,8 @@ struct bpf_map_def {
- 	unsigned int value_size;
- 	unsigned int max_entries;
+@@ -32,196 +32,6 @@ struct bpf_map_def {
  	unsigned int map_flags;
--	unsigned int inner_map_idx;
--	unsigned int numa_node;
  };
  
--#define BPF_ANNOTATE_KV_PAIR(name, type_key, type_val)		\
--	struct ____btf_map_##name {				\
--		type_key key;					\
--		type_val value;					\
--	};							\
--	struct ____btf_map_##name				\
--	__attribute__ ((section(".maps." #name), used))		\
--		____btf_map_##name = { }
+-/* Scan the ARCH passed in from ARCH env variable (see Makefile) */
+-#if defined(__TARGET_ARCH_x86)
+-	#define bpf_target_x86
+-	#define bpf_target_defined
+-#elif defined(__TARGET_ARCH_s390)
+-	#define bpf_target_s390
+-	#define bpf_target_defined
+-#elif defined(__TARGET_ARCH_arm)
+-	#define bpf_target_arm
+-	#define bpf_target_defined
+-#elif defined(__TARGET_ARCH_arm64)
+-	#define bpf_target_arm64
+-	#define bpf_target_defined
+-#elif defined(__TARGET_ARCH_mips)
+-	#define bpf_target_mips
+-	#define bpf_target_defined
+-#elif defined(__TARGET_ARCH_powerpc)
+-	#define bpf_target_powerpc
+-	#define bpf_target_defined
+-#elif defined(__TARGET_ARCH_sparc)
+-	#define bpf_target_sparc
+-	#define bpf_target_defined
+-#else
+-	#undef bpf_target_defined
+-#endif
 -
- /* Scan the ARCH passed in from ARCH env variable (see Makefile) */
- #if defined(__TARGET_ARCH_x86)
- 	#define bpf_target_x86
-diff --git a/tools/testing/selftests/bpf/bpf_legacy.h b/tools/testing/selftests/bpf/bpf_legacy.h
+-/* Fall back to what the compiler says */
+-#ifndef bpf_target_defined
+-#if defined(__x86_64__)
+-	#define bpf_target_x86
+-#elif defined(__s390__)
+-	#define bpf_target_s390
+-#elif defined(__arm__)
+-	#define bpf_target_arm
+-#elif defined(__aarch64__)
+-	#define bpf_target_arm64
+-#elif defined(__mips__)
+-	#define bpf_target_mips
+-#elif defined(__powerpc__)
+-	#define bpf_target_powerpc
+-#elif defined(__sparc__)
+-	#define bpf_target_sparc
+-#endif
+-#endif
+-
+-#if defined(bpf_target_x86)
+-
+-#ifdef __KERNEL__
+-#define PT_REGS_PARM1(x) ((x)->di)
+-#define PT_REGS_PARM2(x) ((x)->si)
+-#define PT_REGS_PARM3(x) ((x)->dx)
+-#define PT_REGS_PARM4(x) ((x)->cx)
+-#define PT_REGS_PARM5(x) ((x)->r8)
+-#define PT_REGS_RET(x) ((x)->sp)
+-#define PT_REGS_FP(x) ((x)->bp)
+-#define PT_REGS_RC(x) ((x)->ax)
+-#define PT_REGS_SP(x) ((x)->sp)
+-#define PT_REGS_IP(x) ((x)->ip)
+-#else
+-#ifdef __i386__
+-/* i386 kernel is built with -mregparm=3 */
+-#define PT_REGS_PARM1(x) ((x)->eax)
+-#define PT_REGS_PARM2(x) ((x)->edx)
+-#define PT_REGS_PARM3(x) ((x)->ecx)
+-#define PT_REGS_PARM4(x) 0
+-#define PT_REGS_PARM5(x) 0
+-#define PT_REGS_RET(x) ((x)->esp)
+-#define PT_REGS_FP(x) ((x)->ebp)
+-#define PT_REGS_RC(x) ((x)->eax)
+-#define PT_REGS_SP(x) ((x)->esp)
+-#define PT_REGS_IP(x) ((x)->eip)
+-#else
+-#define PT_REGS_PARM1(x) ((x)->rdi)
+-#define PT_REGS_PARM2(x) ((x)->rsi)
+-#define PT_REGS_PARM3(x) ((x)->rdx)
+-#define PT_REGS_PARM4(x) ((x)->rcx)
+-#define PT_REGS_PARM5(x) ((x)->r8)
+-#define PT_REGS_RET(x) ((x)->rsp)
+-#define PT_REGS_FP(x) ((x)->rbp)
+-#define PT_REGS_RC(x) ((x)->rax)
+-#define PT_REGS_SP(x) ((x)->rsp)
+-#define PT_REGS_IP(x) ((x)->rip)
+-#endif
+-#endif
+-
+-#elif defined(bpf_target_s390)
+-
+-/* s390 provides user_pt_regs instead of struct pt_regs to userspace */
+-struct pt_regs;
+-#define PT_REGS_S390 const volatile user_pt_regs
+-#define PT_REGS_PARM1(x) (((PT_REGS_S390 *)(x))->gprs[2])
+-#define PT_REGS_PARM2(x) (((PT_REGS_S390 *)(x))->gprs[3])
+-#define PT_REGS_PARM3(x) (((PT_REGS_S390 *)(x))->gprs[4])
+-#define PT_REGS_PARM4(x) (((PT_REGS_S390 *)(x))->gprs[5])
+-#define PT_REGS_PARM5(x) (((PT_REGS_S390 *)(x))->gprs[6])
+-#define PT_REGS_RET(x) (((PT_REGS_S390 *)(x))->gprs[14])
+-/* Works only with CONFIG_FRAME_POINTER */
+-#define PT_REGS_FP(x) (((PT_REGS_S390 *)(x))->gprs[11])
+-#define PT_REGS_RC(x) (((PT_REGS_S390 *)(x))->gprs[2])
+-#define PT_REGS_SP(x) (((PT_REGS_S390 *)(x))->gprs[15])
+-#define PT_REGS_IP(x) (((PT_REGS_S390 *)(x))->psw.addr)
+-
+-#elif defined(bpf_target_arm)
+-
+-#define PT_REGS_PARM1(x) ((x)->uregs[0])
+-#define PT_REGS_PARM2(x) ((x)->uregs[1])
+-#define PT_REGS_PARM3(x) ((x)->uregs[2])
+-#define PT_REGS_PARM4(x) ((x)->uregs[3])
+-#define PT_REGS_PARM5(x) ((x)->uregs[4])
+-#define PT_REGS_RET(x) ((x)->uregs[14])
+-#define PT_REGS_FP(x) ((x)->uregs[11]) /* Works only with CONFIG_FRAME_POINTER */
+-#define PT_REGS_RC(x) ((x)->uregs[0])
+-#define PT_REGS_SP(x) ((x)->uregs[13])
+-#define PT_REGS_IP(x) ((x)->uregs[12])
+-
+-#elif defined(bpf_target_arm64)
+-
+-/* arm64 provides struct user_pt_regs instead of struct pt_regs to userspace */
+-struct pt_regs;
+-#define PT_REGS_ARM64 const volatile struct user_pt_regs
+-#define PT_REGS_PARM1(x) (((PT_REGS_ARM64 *)(x))->regs[0])
+-#define PT_REGS_PARM2(x) (((PT_REGS_ARM64 *)(x))->regs[1])
+-#define PT_REGS_PARM3(x) (((PT_REGS_ARM64 *)(x))->regs[2])
+-#define PT_REGS_PARM4(x) (((PT_REGS_ARM64 *)(x))->regs[3])
+-#define PT_REGS_PARM5(x) (((PT_REGS_ARM64 *)(x))->regs[4])
+-#define PT_REGS_RET(x) (((PT_REGS_ARM64 *)(x))->regs[30])
+-/* Works only with CONFIG_FRAME_POINTER */
+-#define PT_REGS_FP(x) (((PT_REGS_ARM64 *)(x))->regs[29])
+-#define PT_REGS_RC(x) (((PT_REGS_ARM64 *)(x))->regs[0])
+-#define PT_REGS_SP(x) (((PT_REGS_ARM64 *)(x))->sp)
+-#define PT_REGS_IP(x) (((PT_REGS_ARM64 *)(x))->pc)
+-
+-#elif defined(bpf_target_mips)
+-
+-#define PT_REGS_PARM1(x) ((x)->regs[4])
+-#define PT_REGS_PARM2(x) ((x)->regs[5])
+-#define PT_REGS_PARM3(x) ((x)->regs[6])
+-#define PT_REGS_PARM4(x) ((x)->regs[7])
+-#define PT_REGS_PARM5(x) ((x)->regs[8])
+-#define PT_REGS_RET(x) ((x)->regs[31])
+-#define PT_REGS_FP(x) ((x)->regs[30]) /* Works only with CONFIG_FRAME_POINTER */
+-#define PT_REGS_RC(x) ((x)->regs[1])
+-#define PT_REGS_SP(x) ((x)->regs[29])
+-#define PT_REGS_IP(x) ((x)->cp0_epc)
+-
+-#elif defined(bpf_target_powerpc)
+-
+-#define PT_REGS_PARM1(x) ((x)->gpr[3])
+-#define PT_REGS_PARM2(x) ((x)->gpr[4])
+-#define PT_REGS_PARM3(x) ((x)->gpr[5])
+-#define PT_REGS_PARM4(x) ((x)->gpr[6])
+-#define PT_REGS_PARM5(x) ((x)->gpr[7])
+-#define PT_REGS_RC(x) ((x)->gpr[3])
+-#define PT_REGS_SP(x) ((x)->sp)
+-#define PT_REGS_IP(x) ((x)->nip)
+-
+-#elif defined(bpf_target_sparc)
+-
+-#define PT_REGS_PARM1(x) ((x)->u_regs[UREG_I0])
+-#define PT_REGS_PARM2(x) ((x)->u_regs[UREG_I1])
+-#define PT_REGS_PARM3(x) ((x)->u_regs[UREG_I2])
+-#define PT_REGS_PARM4(x) ((x)->u_regs[UREG_I3])
+-#define PT_REGS_PARM5(x) ((x)->u_regs[UREG_I4])
+-#define PT_REGS_RET(x) ((x)->u_regs[UREG_I7])
+-#define PT_REGS_RC(x) ((x)->u_regs[UREG_I0])
+-#define PT_REGS_SP(x) ((x)->u_regs[UREG_FP])
+-
+-/* Should this also be a bpf_target check for the sparc case? */
+-#if defined(__arch64__)
+-#define PT_REGS_IP(x) ((x)->tpc)
+-#else
+-#define PT_REGS_IP(x) ((x)->pc)
+-#endif
+-
+-#endif
+-
+-#if defined(bpf_target_powerpc)
+-#define BPF_KPROBE_READ_RET_IP(ip, ctx)		({ (ip) = (ctx)->link; })
+-#define BPF_KRETPROBE_READ_RET_IP		BPF_KPROBE_READ_RET_IP
+-#elif defined(bpf_target_sparc)
+-#define BPF_KPROBE_READ_RET_IP(ip, ctx)		({ (ip) = PT_REGS_RET(ctx); })
+-#define BPF_KRETPROBE_READ_RET_IP		BPF_KPROBE_READ_RET_IP
+-#else
+-#define BPF_KPROBE_READ_RET_IP(ip, ctx)		({				\
+-		bpf_probe_read(&(ip), sizeof(ip), (void *)PT_REGS_RET(ctx)); })
+-#define BPF_KRETPROBE_READ_RET_IP(ip, ctx)	({				\
+-		bpf_probe_read(&(ip), sizeof(ip),				\
+-				(void *)(PT_REGS_FP(ctx) + sizeof(ip))); })
+-#endif
+-
+ /*
+  * bpf_core_read() abstracts away bpf_probe_read() call and captures offset
+  * relocation for source address using __builtin_preserve_access_index()
+diff --git a/tools/testing/selftests/bpf/bpf_tracing.h b/tools/testing/selftests/bpf/bpf_tracing.h
 new file mode 100644
-index 000000000000..6f8988738bc1
+index 000000000000..b0dafe8b4ebc
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/bpf_legacy.h
-@@ -0,0 +1,39 @@
++++ b/tools/testing/selftests/bpf/bpf_tracing.h
+@@ -0,0 +1,195 @@
 +/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
-+#ifndef __BPF_LEGACY__
-+#define __BPF_LEGACY__
++#ifndef __BPF_TRACING_H__
++#define __BPF_TRACING_H__
 +
-+/*
-+ * legacy bpf_map_def with extra fields supported only by bpf_load(), do not
-+ * use outside of samples/bpf
-+ */
-+struct bpf_map_def_legacy {
-+	unsigned int type;
-+	unsigned int key_size;
-+	unsigned int value_size;
-+	unsigned int max_entries;
-+	unsigned int map_flags;
-+	unsigned int inner_map_idx;
-+	unsigned int numa_node;
-+};
++/* Scan the ARCH passed in from ARCH env variable (see Makefile) */
++#if defined(__TARGET_ARCH_x86)
++	#define bpf_target_x86
++	#define bpf_target_defined
++#elif defined(__TARGET_ARCH_s390)
++	#define bpf_target_s390
++	#define bpf_target_defined
++#elif defined(__TARGET_ARCH_arm)
++	#define bpf_target_arm
++	#define bpf_target_defined
++#elif defined(__TARGET_ARCH_arm64)
++	#define bpf_target_arm64
++	#define bpf_target_defined
++#elif defined(__TARGET_ARCH_mips)
++	#define bpf_target_mips
++	#define bpf_target_defined
++#elif defined(__TARGET_ARCH_powerpc)
++	#define bpf_target_powerpc
++	#define bpf_target_defined
++#elif defined(__TARGET_ARCH_sparc)
++	#define bpf_target_sparc
++	#define bpf_target_defined
++#else
++	#undef bpf_target_defined
++#endif
 +
-+#define BPF_ANNOTATE_KV_PAIR(name, type_key, type_val)		\
-+	struct ____btf_map_##name {				\
-+		type_key key;					\
-+		type_val value;					\
-+	};							\
-+	struct ____btf_map_##name				\
-+	__attribute__ ((section(".maps." #name), used))		\
-+		____btf_map_##name = { }
++/* Fall back to what the compiler says */
++#ifndef bpf_target_defined
++#if defined(__x86_64__)
++	#define bpf_target_x86
++#elif defined(__s390__)
++	#define bpf_target_s390
++#elif defined(__arm__)
++	#define bpf_target_arm
++#elif defined(__aarch64__)
++	#define bpf_target_arm64
++#elif defined(__mips__)
++	#define bpf_target_mips
++#elif defined(__powerpc__)
++	#define bpf_target_powerpc
++#elif defined(__sparc__)
++	#define bpf_target_sparc
++#endif
++#endif
 +
-+/* llvm builtin functions that eBPF C program may use to
-+ * emit BPF_LD_ABS and BPF_LD_IND instructions
-+ */
-+unsigned long long load_byte(void *skb,
-+			     unsigned long long off) asm("llvm.bpf.load.byte");
-+unsigned long long load_half(void *skb,
-+			     unsigned long long off) asm("llvm.bpf.load.half");
-+unsigned long long load_word(void *skb,
-+			     unsigned long long off) asm("llvm.bpf.load.word");
++#if defined(bpf_target_x86)
++
++#ifdef __KERNEL__
++#define PT_REGS_PARM1(x) ((x)->di)
++#define PT_REGS_PARM2(x) ((x)->si)
++#define PT_REGS_PARM3(x) ((x)->dx)
++#define PT_REGS_PARM4(x) ((x)->cx)
++#define PT_REGS_PARM5(x) ((x)->r8)
++#define PT_REGS_RET(x) ((x)->sp)
++#define PT_REGS_FP(x) ((x)->bp)
++#define PT_REGS_RC(x) ((x)->ax)
++#define PT_REGS_SP(x) ((x)->sp)
++#define PT_REGS_IP(x) ((x)->ip)
++#else
++#ifdef __i386__
++/* i386 kernel is built with -mregparm=3 */
++#define PT_REGS_PARM1(x) ((x)->eax)
++#define PT_REGS_PARM2(x) ((x)->edx)
++#define PT_REGS_PARM3(x) ((x)->ecx)
++#define PT_REGS_PARM4(x) 0
++#define PT_REGS_PARM5(x) 0
++#define PT_REGS_RET(x) ((x)->esp)
++#define PT_REGS_FP(x) ((x)->ebp)
++#define PT_REGS_RC(x) ((x)->eax)
++#define PT_REGS_SP(x) ((x)->esp)
++#define PT_REGS_IP(x) ((x)->eip)
++#else
++#define PT_REGS_PARM1(x) ((x)->rdi)
++#define PT_REGS_PARM2(x) ((x)->rsi)
++#define PT_REGS_PARM3(x) ((x)->rdx)
++#define PT_REGS_PARM4(x) ((x)->rcx)
++#define PT_REGS_PARM5(x) ((x)->r8)
++#define PT_REGS_RET(x) ((x)->rsp)
++#define PT_REGS_FP(x) ((x)->rbp)
++#define PT_REGS_RC(x) ((x)->rax)
++#define PT_REGS_SP(x) ((x)->rsp)
++#define PT_REGS_IP(x) ((x)->rip)
++#endif
++#endif
++
++#elif defined(bpf_target_s390)
++
++/* s390 provides user_pt_regs instead of struct pt_regs to userspace */
++struct pt_regs;
++#define PT_REGS_S390 const volatile user_pt_regs
++#define PT_REGS_PARM1(x) (((PT_REGS_S390 *)(x))->gprs[2])
++#define PT_REGS_PARM2(x) (((PT_REGS_S390 *)(x))->gprs[3])
++#define PT_REGS_PARM3(x) (((PT_REGS_S390 *)(x))->gprs[4])
++#define PT_REGS_PARM4(x) (((PT_REGS_S390 *)(x))->gprs[5])
++#define PT_REGS_PARM5(x) (((PT_REGS_S390 *)(x))->gprs[6])
++#define PT_REGS_RET(x) (((PT_REGS_S390 *)(x))->gprs[14])
++/* Works only with CONFIG_FRAME_POINTER */
++#define PT_REGS_FP(x) (((PT_REGS_S390 *)(x))->gprs[11])
++#define PT_REGS_RC(x) (((PT_REGS_S390 *)(x))->gprs[2])
++#define PT_REGS_SP(x) (((PT_REGS_S390 *)(x))->gprs[15])
++#define PT_REGS_IP(x) (((PT_REGS_S390 *)(x))->psw.addr)
++
++#elif defined(bpf_target_arm)
++
++#define PT_REGS_PARM1(x) ((x)->uregs[0])
++#define PT_REGS_PARM2(x) ((x)->uregs[1])
++#define PT_REGS_PARM3(x) ((x)->uregs[2])
++#define PT_REGS_PARM4(x) ((x)->uregs[3])
++#define PT_REGS_PARM5(x) ((x)->uregs[4])
++#define PT_REGS_RET(x) ((x)->uregs[14])
++#define PT_REGS_FP(x) ((x)->uregs[11]) /* Works only with CONFIG_FRAME_POINTER */
++#define PT_REGS_RC(x) ((x)->uregs[0])
++#define PT_REGS_SP(x) ((x)->uregs[13])
++#define PT_REGS_IP(x) ((x)->uregs[12])
++
++#elif defined(bpf_target_arm64)
++
++/* arm64 provides struct user_pt_regs instead of struct pt_regs to userspace */
++struct pt_regs;
++#define PT_REGS_ARM64 const volatile struct user_pt_regs
++#define PT_REGS_PARM1(x) (((PT_REGS_ARM64 *)(x))->regs[0])
++#define PT_REGS_PARM2(x) (((PT_REGS_ARM64 *)(x))->regs[1])
++#define PT_REGS_PARM3(x) (((PT_REGS_ARM64 *)(x))->regs[2])
++#define PT_REGS_PARM4(x) (((PT_REGS_ARM64 *)(x))->regs[3])
++#define PT_REGS_PARM5(x) (((PT_REGS_ARM64 *)(x))->regs[4])
++#define PT_REGS_RET(x) (((PT_REGS_ARM64 *)(x))->regs[30])
++/* Works only with CONFIG_FRAME_POINTER */
++#define PT_REGS_FP(x) (((PT_REGS_ARM64 *)(x))->regs[29])
++#define PT_REGS_RC(x) (((PT_REGS_ARM64 *)(x))->regs[0])
++#define PT_REGS_SP(x) (((PT_REGS_ARM64 *)(x))->sp)
++#define PT_REGS_IP(x) (((PT_REGS_ARM64 *)(x))->pc)
++
++#elif defined(bpf_target_mips)
++
++#define PT_REGS_PARM1(x) ((x)->regs[4])
++#define PT_REGS_PARM2(x) ((x)->regs[5])
++#define PT_REGS_PARM3(x) ((x)->regs[6])
++#define PT_REGS_PARM4(x) ((x)->regs[7])
++#define PT_REGS_PARM5(x) ((x)->regs[8])
++#define PT_REGS_RET(x) ((x)->regs[31])
++#define PT_REGS_FP(x) ((x)->regs[30]) /* Works only with CONFIG_FRAME_POINTER */
++#define PT_REGS_RC(x) ((x)->regs[1])
++#define PT_REGS_SP(x) ((x)->regs[29])
++#define PT_REGS_IP(x) ((x)->cp0_epc)
++
++#elif defined(bpf_target_powerpc)
++
++#define PT_REGS_PARM1(x) ((x)->gpr[3])
++#define PT_REGS_PARM2(x) ((x)->gpr[4])
++#define PT_REGS_PARM3(x) ((x)->gpr[5])
++#define PT_REGS_PARM4(x) ((x)->gpr[6])
++#define PT_REGS_PARM5(x) ((x)->gpr[7])
++#define PT_REGS_RC(x) ((x)->gpr[3])
++#define PT_REGS_SP(x) ((x)->sp)
++#define PT_REGS_IP(x) ((x)->nip)
++
++#elif defined(bpf_target_sparc)
++
++#define PT_REGS_PARM1(x) ((x)->u_regs[UREG_I0])
++#define PT_REGS_PARM2(x) ((x)->u_regs[UREG_I1])
++#define PT_REGS_PARM3(x) ((x)->u_regs[UREG_I2])
++#define PT_REGS_PARM4(x) ((x)->u_regs[UREG_I3])
++#define PT_REGS_PARM5(x) ((x)->u_regs[UREG_I4])
++#define PT_REGS_RET(x) ((x)->u_regs[UREG_I7])
++#define PT_REGS_RC(x) ((x)->u_regs[UREG_I0])
++#define PT_REGS_SP(x) ((x)->u_regs[UREG_FP])
++
++/* Should this also be a bpf_target check for the sparc case? */
++#if defined(__arch64__)
++#define PT_REGS_IP(x) ((x)->tpc)
++#else
++#define PT_REGS_IP(x) ((x)->pc)
++#endif
 +
 +#endif
 +
-diff --git a/tools/testing/selftests/bpf/progs/sockopt_sk.c b/tools/testing/selftests/bpf/progs/sockopt_sk.c
-index 9a3d1c79e6fe..1bafbb944e37 100644
---- a/tools/testing/selftests/bpf/progs/sockopt_sk.c
-+++ b/tools/testing/selftests/bpf/progs/sockopt_sk.c
-@@ -14,13 +14,12 @@ struct sockopt_sk {
- 	__u8 val;
- };
- 
--struct bpf_map_def SEC("maps") socket_storage_map = {
--	.type = BPF_MAP_TYPE_SK_STORAGE,
--	.key_size = sizeof(int),
--	.value_size = sizeof(struct sockopt_sk),
--	.map_flags = BPF_F_NO_PREALLOC,
--};
--BPF_ANNOTATE_KV_PAIR(socket_storage_map, int, struct sockopt_sk);
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SK_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, struct sockopt_sk);
-+} socket_storage_map SEC(".maps");
- 
- SEC("cgroup/getsockopt")
- int _getsockopt(struct bpf_sockopt *ctx)
-diff --git a/tools/testing/selftests/bpf/progs/tcp_rtt.c b/tools/testing/selftests/bpf/progs/tcp_rtt.c
-index 233bdcb1659e..2cf813a06b83 100644
---- a/tools/testing/selftests/bpf/progs/tcp_rtt.c
-+++ b/tools/testing/selftests/bpf/progs/tcp_rtt.c
-@@ -13,13 +13,12 @@ struct tcp_rtt_storage {
- 	__u32 icsk_retransmits;
- };
- 
--struct bpf_map_def SEC("maps") socket_storage_map = {
--	.type = BPF_MAP_TYPE_SK_STORAGE,
--	.key_size = sizeof(int),
--	.value_size = sizeof(struct tcp_rtt_storage),
--	.map_flags = BPF_F_NO_PREALLOC,
--};
--BPF_ANNOTATE_KV_PAIR(socket_storage_map, int, struct tcp_rtt_storage);
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SK_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, struct tcp_rtt_storage);
-+} socket_storage_map SEC(".maps");
- 
- SEC("sockops")
- int _sockops(struct bpf_sock_ops *ctx)
-diff --git a/tools/testing/selftests/bpf/progs/test_btf_haskv.c b/tools/testing/selftests/bpf/progs/test_btf_haskv.c
-index e5c79fe0ffdb..763c51447c19 100644
---- a/tools/testing/selftests/bpf/progs/test_btf_haskv.c
-+++ b/tools/testing/selftests/bpf/progs/test_btf_haskv.c
-@@ -2,6 +2,7 @@
- /* Copyright (c) 2018 Facebook */
++#if defined(bpf_target_powerpc)
++#define BPF_KPROBE_READ_RET_IP(ip, ctx)		({ (ip) = (ctx)->link; })
++#define BPF_KRETPROBE_READ_RET_IP		BPF_KPROBE_READ_RET_IP
++#elif defined(bpf_target_sparc)
++#define BPF_KPROBE_READ_RET_IP(ip, ctx)		({ (ip) = PT_REGS_RET(ctx); })
++#define BPF_KRETPROBE_READ_RET_IP		BPF_KPROBE_READ_RET_IP
++#else
++#define BPF_KPROBE_READ_RET_IP(ip, ctx)					    \
++	({ bpf_probe_read(&(ip), sizeof(ip), (void *)PT_REGS_RET(ctx)); })
++#define BPF_KRETPROBE_READ_RET_IP(ip, ctx)				    \
++	({ bpf_probe_read(&(ip), sizeof(ip),				    \
++			  (void *)(PT_REGS_FP(ctx) + sizeof(ip))); })
++#endif
++
++#endif
+diff --git a/tools/testing/selftests/bpf/progs/loop1.c b/tools/testing/selftests/bpf/progs/loop1.c
+index 7cdb7f878310..40ac722a9da5 100644
+--- a/tools/testing/selftests/bpf/progs/loop1.c
++++ b/tools/testing/selftests/bpf/progs/loop1.c
+@@ -7,6 +7,7 @@
+ #include <stdbool.h>
  #include <linux/bpf.h>
  #include "bpf_helpers.h"
-+#include "bpf_legacy.h"
++#include "bpf_tracing.h"
  
- int _version SEC("version") = 1;
+ char _license[] SEC("license") = "GPL";
  
-diff --git a/tools/testing/selftests/bpf/progs/test_btf_newkv.c b/tools/testing/selftests/bpf/progs/test_btf_newkv.c
-index 5ee3622ddebb..96f9e8451029 100644
---- a/tools/testing/selftests/bpf/progs/test_btf_newkv.c
-+++ b/tools/testing/selftests/bpf/progs/test_btf_newkv.c
-@@ -2,6 +2,7 @@
- /* Copyright (c) 2018 Facebook */
+diff --git a/tools/testing/selftests/bpf/progs/loop2.c b/tools/testing/selftests/bpf/progs/loop2.c
+index 9b2f808a2863..bb80f29aa7f7 100644
+--- a/tools/testing/selftests/bpf/progs/loop2.c
++++ b/tools/testing/selftests/bpf/progs/loop2.c
+@@ -7,6 +7,7 @@
+ #include <stdbool.h>
  #include <linux/bpf.h>
  #include "bpf_helpers.h"
-+#include "bpf_legacy.h"
++#include "bpf_tracing.h"
  
- int _version SEC("version") = 1;
+ char _license[] SEC("license") = "GPL";
+ 
+diff --git a/tools/testing/selftests/bpf/progs/loop3.c b/tools/testing/selftests/bpf/progs/loop3.c
+index d727657d51e2..2b9165a7afe1 100644
+--- a/tools/testing/selftests/bpf/progs/loop3.c
++++ b/tools/testing/selftests/bpf/progs/loop3.c
+@@ -7,6 +7,7 @@
+ #include <stdbool.h>
+ #include <linux/bpf.h>
+ #include "bpf_helpers.h"
++#include "bpf_tracing.h"
+ 
+ char _license[] SEC("license") = "GPL";
  
 -- 
 2.17.1
