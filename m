@@ -2,29 +2,29 @@ Return-Path: <SRS0=X79y=YB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04B9DC10F14
-	for <bpf@archiver.kernel.org>; Tue,  8 Oct 2019 06:16:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6988BECE596
+	for <bpf@archiver.kernel.org>; Tue,  8 Oct 2019 06:16:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D4F7E2067B
-	for <bpf@archiver.kernel.org>; Tue,  8 Oct 2019 06:16:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4354B2067B
+	for <bpf@archiver.kernel.org>; Tue,  8 Oct 2019 06:16:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729809AbfJHGQ5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Oct 2019 02:16:57 -0400
-Received: from mga04.intel.com ([192.55.52.120]:63831 "EHLO mga04.intel.com"
+        id S1730050AbfJHGQ6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Oct 2019 02:16:58 -0400
+Received: from mga04.intel.com ([192.55.52.120]:63837 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728297AbfJHGQ5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Oct 2019 02:16:57 -0400
+        id S1729802AbfJHGQ6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Oct 2019 02:16:58 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
   by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Oct 2019 23:16:56 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.67,269,1566889200"; 
-   d="scan'208";a="187206748"
+   d="scan'208";a="187206757"
 Received: from arch-p28.jf.intel.com ([10.166.187.31])
   by orsmga008.jf.intel.com with ESMTP; 07 Oct 2019 23:16:55 -0700
 From:   Sridhar Samudrala <sridhar.samudrala@intel.com>
@@ -32,115 +32,96 @@ To:     magnus.karlsson@intel.com, bjorn.topel@intel.com,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         sridhar.samudrala@intel.com, intel-wired-lan@lists.osuosl.org,
         maciej.fijalkowski@intel.com, tom.herbert@intel.com
-Subject: [PATCH bpf-next 0/4] Enable direct receive on AF_XDP sockets
-Date:   Mon,  7 Oct 2019 23:16:51 -0700
-Message-Id: <1570515415-45593-1-git-send-email-sridhar.samudrala@intel.com>
+Subject: [PATCH bpf-next 4/4] xdpsock: add an option to create AF_XDP sockets in XDP_DIRECT mode
+Date:   Mon,  7 Oct 2019 23:16:55 -0700
+Message-Id: <1570515415-45593-5-git-send-email-sridhar.samudrala@intel.com>
 X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1570515415-45593-1-git-send-email-sridhar.samudrala@intel.com>
+References: <1570515415-45593-1-git-send-email-sridhar.samudrala@intel.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This is a rework of the following patch series 
-https://lore.kernel.org/netdev/1565840783-8269-1-git-send-email-sridhar.samudrala@intel.com/#r
-that tried to enable direct receive by bypassing XDP program attached
-to the device.
+This option enables an AF_XDP socket to bind with a XDP_DIRECT flag
+that allows packets received on the associated queue to be received
+directly when an XDP program is not attached.
 
-Based on the community feedback and some suggestions from Bjorn, changed
-the semantics of the implementation to enable direct receive on AF_XDP
-sockets that are bound to a queue only when there is no normal XDP program
-attached to the device.
+Signed-off-by: Sridhar Samudrala <sridhar.samudrala@intel.com>
+---
+ samples/bpf/xdpsock_user.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
 
-This is accomplished by introducing a special BPF prog pointer (DIRECT_XSK)
-that is attached at the time of binding an AF_XDP socket to a queue of a
-device. This is done only if there is no other XDP program attached to
-the device. The normal XDP program has precedence and will replace the
-DIRECT_XSK prog if it is attached later. The main reason to introduce a
-special BPF prog pointer is to minimize the driver changes. The only change
-is to use the bpf_get_prog_id() helper when QUERYING the prog id.
-
-Any attach of a normal XDP program will take precedence and the direct xsk
-program will be removed. The direct XSK program will be attached
-automatically when the normal XDP program is removed when there are any
-AF_XDP direct sockets associated with that device.
-
-A static key is used to control this feature in order to avoid any overhead
-for normal XDP datapath when there are no AF_XDP sockets in direct-xsk mode.
-
-Here is some performance data i collected on my Intel Ivybridge based
-development system (Intel(R) Xeon(R) CPU E5-2697 v2 @ 2.70GHz)
-NIC: Intel 40Gb ethernet (i40e)
-
-xdpsock rxdrop 1 core (both app and queue's irq pinned to the same core)
-   default : taskset -c 1 ./xdpsock -i enp66s0f0 -r -q 1
-   direct-xsk :taskset -c 1 ./xdpsock -i enp66s0f0 -r -q 1
-6.1x improvement in drop rate
-
-xdpsock rxdrop 2 core (app and queue's irq pinned to different cores)
-   default : taskset -c 3 ./xdpsock -i enp66s0f0 -r -q 1
-   direct-xsk :taskset -c 3 ./xdpsock -i enp66s0f0 -r -d -q 1
-6x improvement in drop rate
-
-xdpsock l2fwd 1 core (both app and queue's irq pinned to the same core)
-   default : taskset -c 1 ./xdpsock -i enp66s0f0 -l -q 1
-   direct-xsk :taskset -c 1 ./xdpsock -i enp66s0f0 -l -d -q 1
-3.5x improvement in l2fwd rate
-
-xdpsock rxdrop 2 core (app and queue'sirq pinned to different cores)
-   default : taskset -c 3 ./xdpsock -i enp66s0f0 -l -q 1
-   direct-xsk :taskset -c 3 ./xdpsock -i enp66s0f0 -l -d -q 1
-4.5x improvement in l2fwd rate
-
-dpdk-pktgen is used to send 64byte UDP packets from a link partner and 
-ethtool ntuple flow rule is used to redirect packets to queue 1 on the 
-system under test.
-
-Sridhar Samudrala (4):
-  bpf: introduce bpf_get_prog_id and bpf_set_prog_id helper functions.
-  xsk: allow AF_XDP sockets to receive packets directly from a queue
-  libbpf: handle AF_XDP sockets created with XDP_DIRECT bind flag.
-  xdpsock: add an option to create AF_XDP sockets in XDP_DIRECT mode
-
- drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c     |  2 +-
- drivers/net/ethernet/cavium/thunder/nicvf_main.c  |  2 +-
- drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c  |  2 +-
- drivers/net/ethernet/intel/i40e/i40e_main.c       |  2 +-
- drivers/net/ethernet/intel/ixgbe/ixgbe_main.c     |  3 +-
- drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c |  3 +-
- drivers/net/ethernet/mellanox/mlx4/en_netdev.c    |  3 +-
- drivers/net/ethernet/mellanox/mlx5/core/en_main.c |  3 +-
- drivers/net/ethernet/qlogic/qede/qede_filter.c    |  2 +-
- drivers/net/ethernet/socionext/netsec.c           |  2 +-
- drivers/net/netdevsim/bpf.c                       |  6 ++-
- drivers/net/tun.c                                 |  4 +-
- drivers/net/veth.c                                |  4 +-
- drivers/net/virtio_net.c                          |  3 +-
- include/linux/bpf.h                               |  3 ++
- include/linux/filter.h                            | 18 +++++++
- include/linux/netdevice.h                         | 10 ++++
- include/net/xdp_sock.h                            |  5 ++
- include/trace/events/xdp.h                        |  4 +-
- include/uapi/linux/if_xdp.h                       |  5 ++
- kernel/bpf/arraymap.c                             |  2 +-
- kernel/bpf/cgroup.c                               |  2 +-
- kernel/bpf/core.c                                 |  2 +-
- kernel/bpf/syscall.c                              | 33 +++++++++----
- kernel/events/core.c                              |  2 +-
- kernel/trace/bpf_trace.c                          |  2 +-
- net/core/dev.c                                    | 54 ++++++++++++++++++++-
- net/core/filter.c                                 | 58 +++++++++++++++++++++++
- net/core/flow_dissector.c                         |  2 +-
- net/core/rtnetlink.c                              |  2 +-
- net/core/xdp.c                                    |  2 +-
- net/ipv6/seg6_local.c                             |  2 +-
- net/sched/act_bpf.c                               |  2 +-
- net/sched/cls_bpf.c                               |  2 +-
- net/xdp/xsk.c                                     | 51 +++++++++++++++++++-
- samples/bpf/xdpsock_user.c                        | 17 +++++--
- tools/include/uapi/linux/if_xdp.h                 |  5 ++
- tools/lib/bpf/xsk.c                               |  6 +++
- 38 files changed, 279 insertions(+), 53 deletions(-)
-
+diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
+index 405c4e091f8b..6f4633769968 100644
+--- a/samples/bpf/xdpsock_user.c
++++ b/samples/bpf/xdpsock_user.c
+@@ -129,6 +129,9 @@ static void print_benchmark(bool running)
+ 	if (opt_poll)
+ 		printf("poll() ");
+ 
++	if (opt_xdp_bind_flags & XDP_DIRECT)
++		printf("direct-xsk ");
++
+ 	if (running) {
+ 		printf("running...");
+ 		fflush(stdout);
+@@ -202,7 +205,8 @@ static void int_exit(int sig)
+ 	dump_stats();
+ 	xsk_socket__delete(xsks[0]->xsk);
+ 	(void)xsk_umem__delete(umem);
+-	remove_xdp_program();
++	if (!(opt_xdp_bind_flags & XDP_DIRECT))
++		remove_xdp_program();
+ 
+ 	exit(EXIT_SUCCESS);
+ }
+@@ -213,7 +217,8 @@ static void __exit_with_error(int error, const char *file, const char *func,
+ 	fprintf(stderr, "%s:%s:%i: errno: %d/\"%s\"\n", file, func,
+ 		line, error, strerror(error));
+ 	dump_stats();
+-	remove_xdp_program();
++	if (!(opt_xdp_bind_flags & XDP_DIRECT))
++		remove_xdp_program();
+ 	exit(EXIT_FAILURE);
+ }
+ 
+@@ -363,6 +368,7 @@ static struct option long_options[] = {
+ 	{"frame-size", required_argument, 0, 'f'},
+ 	{"no-need-wakeup", no_argument, 0, 'm'},
+ 	{"unaligned", no_argument, 0, 'u'},
++	{"direct-xsk", no_argument, 0, 'd'},
+ 	{0, 0, 0, 0}
+ };
+ 
+@@ -386,6 +392,7 @@ static void usage(const char *prog)
+ 		"  -m, --no-need-wakeup Turn off use of driver need wakeup flag.\n"
+ 		"  -f, --frame-size=n   Set the frame size (must be a power of two in aligned mode, default is %d).\n"
+ 		"  -u, --unaligned	Enable unaligned chunk placement\n"
++		"  -d, --direct-xsk	Direct packets to XDP socket.\n"
+ 		"\n";
+ 	fprintf(stderr, str, prog, XSK_UMEM__DEFAULT_FRAME_SIZE);
+ 	exit(EXIT_FAILURE);
+@@ -398,7 +405,7 @@ static void parse_command_line(int argc, char **argv)
+ 	opterr = 0;
+ 
+ 	for (;;) {
+-		c = getopt_long(argc, argv, "Frtli:q:psSNn:czf:mu",
++		c = getopt_long(argc, argv, "Frtli:q:psSNn:czf:mud",
+ 				long_options, &option_index);
+ 		if (c == -1)
+ 			break;
+@@ -452,7 +459,9 @@ static void parse_command_line(int argc, char **argv)
+ 			opt_need_wakeup = false;
+ 			opt_xdp_bind_flags &= ~XDP_USE_NEED_WAKEUP;
+ 			break;
+-
++		case 'd':
++			opt_xdp_bind_flags |= XDP_DIRECT;
++			break;
+ 		default:
+ 			usage(basename(argv[0]));
+ 		}
 -- 
 2.14.5
 
