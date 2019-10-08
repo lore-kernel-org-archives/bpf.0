@@ -5,41 +5,41 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAFECECE58C
-	for <bpf@archiver.kernel.org>; Tue,  8 Oct 2019 18:00:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E18EC4360C
+	for <bpf@archiver.kernel.org>; Tue,  8 Oct 2019 18:00:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AA730206C0
-	for <bpf@archiver.kernel.org>; Tue,  8 Oct 2019 18:00:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D822206C0
+	for <bpf@archiver.kernel.org>; Tue,  8 Oct 2019 18:00:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Ma5kB4CB"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="BhvtK0lH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729624AbfJHSAJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Oct 2019 14:00:09 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:41478 "EHLO
+        id S1729928AbfJHSAV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Oct 2019 14:00:21 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:3556 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726336AbfJHSAJ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 8 Oct 2019 14:00:09 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x98HxUYS016722
-        for <bpf@vger.kernel.org>; Tue, 8 Oct 2019 11:00:06 -0700
+        by vger.kernel.org with ESMTP id S1729682AbfJHSAM (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 8 Oct 2019 14:00:12 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x98Hxvxs017822
+        for <bpf@vger.kernel.org>; Tue, 8 Oct 2019 11:00:10 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=VdSIwPBXg7EuxMHKSDlR9tSYWXKqc4o2xdG8jq2Jn7M=;
- b=Ma5kB4CBezMos98tf5ctEPL8nulfJwo6tizMdq+dpedNPYO5zQnuKdFOytBap3fJdhem
- izIUQXd13au4lCTx5yDYtEiuDgDTvX7+xl42hrLRS5PVc7y4MPYesFTszWFfwVHRF8lA
- IFmKS1vB+ornvS2wuCxSzyaGsR8GzGYOFmM= 
+ content-type; s=facebook; bh=J/fFmr1w90IvPtXhqn1jx98tgNfDdFZCntC1Xi3/Kqc=;
+ b=BhvtK0lHwFW7le7YONKCWlNSZ1to8HGkg6mKFGMYihV6zl58LTk2XExzOQ2sGUQWgw/x
+ NzXmb4HxhvkD+28d/0sovNqrQTlkAVb7kdUp+u0dVyHCFa4jD5Ls0D+yBMKTGknB7YY8
+ IXyQA6sfJLtrM/rOzns9z8qCetLMPUxPVW8= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2vg6ms6rxm-2
+        by mx0a-00082601.pphosted.com with ESMTP id 2vgvbyscwe-12
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 08 Oct 2019 11:00:06 -0700
-Received: from 2401:db00:12:909f:face:0:3:0 (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 08 Oct 2019 11:00:10 -0700
+Received: from 2401:db00:30:600c:face:0:1f:0 (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 8 Oct 2019 11:00:05 -0700
+ 15.1.1713.5; Tue, 8 Oct 2019 10:59:57 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 0E2168618D3; Tue,  8 Oct 2019 11:00:02 -0700 (PDT)
+        id D8CDD8618D3; Tue,  8 Oct 2019 10:59:55 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v5 bpf-next 6/7] libbpf: add BPF_CORE_READ/BPF_CORE_READ_INTO helpers
-Date:   Tue, 8 Oct 2019 10:59:41 -0700
-Message-ID: <20191008175942.1769476-7-andriin@fb.com>
+Subject: [PATCH v5 bpf-next 3/7] selftests/bpf: adjust CO-RE reloc tests for new bpf_core_read() macro
+Date:   Tue, 8 Oct 2019 10:59:38 -0700
+Message-ID: <20191008175942.1769476-4-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191008175942.1769476-1-andriin@fb.com>
 References: <20191008175942.1769476-1-andriin@fb.com>
@@ -59,10 +59,10 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
  definitions=2019-10-08_07:2019-10-08,2019-10-08 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- priorityscore=1501 mlxlogscore=999 clxscore=1015 spamscore=0 phishscore=0
- bulkscore=0 impostorscore=0 suspectscore=8 mlxscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ spamscore=0 priorityscore=1501 adultscore=0 bulkscore=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1015 suspectscore=67 mlxlogscore=999 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1908290000 definitions=main-1910080143
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -70,383 +70,316 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add few macros simplifying BCC-like multi-level probe reads, while also
-emitting CO-RE relocations for each read.
+To allow adding a variadic BPF_CORE_READ macro with slightly different
+syntax and semantics, define CORE_READ in CO-RE reloc tests, which is
+a thin wrapper around low-level bpf_core_read() macro, which in turn is
+just a wrapper around bpf_probe_read().
 
 Acked-by: John Fastabend <john.fastabend@gmail.com>
 Acked-by: Song Liu <songliubraving@fb.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/Makefile                        |   3 +-
- tools/lib/bpf/bpf_core_read.h                 | 167 ++++++++++++++++++
- tools/lib/bpf/bpf_helpers.h                   |  32 +---
- .../bpf/progs/test_core_reloc_arrays.c        |   1 +
- .../bpf/progs/test_core_reloc_flavors.c       |   1 +
- .../bpf/progs/test_core_reloc_ints.c          |   1 +
- .../bpf/progs/test_core_reloc_kernel.c        |   1 +
- .../bpf/progs/test_core_reloc_misc.c          |   1 +
- .../bpf/progs/test_core_reloc_mods.c          |   1 +
- .../bpf/progs/test_core_reloc_nesting.c       |   1 +
- .../bpf/progs/test_core_reloc_primitives.c    |   1 +
- .../bpf/progs/test_core_reloc_ptr_as_arr.c    |   1 +
- 12 files changed, 187 insertions(+), 24 deletions(-)
- create mode 100644 tools/lib/bpf/bpf_core_read.h
+ tools/testing/selftests/bpf/bpf_helpers.h      |  8 ++++----
+ .../bpf/progs/test_core_reloc_arrays.c         | 10 ++++++----
+ .../bpf/progs/test_core_reloc_flavors.c        |  8 +++++---
+ .../selftests/bpf/progs/test_core_reloc_ints.c | 18 ++++++++++--------
+ .../bpf/progs/test_core_reloc_kernel.c         |  6 ++++--
+ .../selftests/bpf/progs/test_core_reloc_misc.c |  8 +++++---
+ .../selftests/bpf/progs/test_core_reloc_mods.c | 18 ++++++++++--------
+ .../bpf/progs/test_core_reloc_nesting.c        |  6 ++++--
+ .../bpf/progs/test_core_reloc_primitives.c     | 12 +++++++-----
+ .../bpf/progs/test_core_reloc_ptr_as_arr.c     |  4 +++-
+ 10 files changed, 58 insertions(+), 40 deletions(-)
 
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index 974453564f01..1270955e4845 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -250,7 +250,8 @@ install_headers: bpf_helper_defs.h
- 		$(call do_install,bpf_helpers.h,$(prefix)/include/bpf,644); \
- 		$(call do_install,bpf_helper_defs.h,$(prefix)/include/bpf,644); \
- 		$(call do_install,bpf_tracing.h,$(prefix)/include/bpf,644); \
--		$(call do_install,bpf_endian.h,$(prefix)/include/bpf,644);
-+		$(call do_install,bpf_endian.h,$(prefix)/include/bpf,644); \
-+		$(call do_install,bpf_core_read.h,$(prefix)/include/bpf,644);
+diff --git a/tools/testing/selftests/bpf/bpf_helpers.h b/tools/testing/selftests/bpf/bpf_helpers.h
+index c7cfc27063d4..4e6f97142cd8 100644
+--- a/tools/testing/selftests/bpf/bpf_helpers.h
++++ b/tools/testing/selftests/bpf/bpf_helpers.h
+@@ -223,7 +223,7 @@ struct pt_regs;
+ #endif
  
- install_pkgconfig: $(PC_FILE)
- 	$(call QUIET_INSTALL, $(PC_FILE)) \
-diff --git a/tools/lib/bpf/bpf_core_read.h b/tools/lib/bpf/bpf_core_read.h
-new file mode 100644
-index 000000000000..ae877e3ffb51
---- /dev/null
-+++ b/tools/lib/bpf/bpf_core_read.h
-@@ -0,0 +1,167 @@
-+/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
-+#ifndef __BPF_CORE_READ_H__
-+#define __BPF_CORE_READ_H__
-+
-+/*
+ /*
+- * BPF_CORE_READ abstracts away bpf_probe_read() call and captures offset
 + * bpf_core_read() abstracts away bpf_probe_read() call and captures offset
-+ * relocation for source address using __builtin_preserve_access_index()
-+ * built-in, provided by Clang.
-+ *
-+ * __builtin_preserve_access_index() takes as an argument an expression of
-+ * taking an address of a field within struct/union. It makes compiler emit
-+ * a relocation, which records BTF type ID describing root struct/union and an
-+ * accessor string which describes exact embedded field that was used to take
-+ * an address. See detailed description of this relocation format and
-+ * semantics in comments to struct bpf_offset_reloc in libbpf_internal.h.
-+ *
-+ * This relocation allows libbpf to adjust BPF instruction to use correct
-+ * actual field offset, based on target kernel BTF type that matches original
-+ * (local) BTF, used to record relocation.
-+ */
+  * relocation for source address using __builtin_preserve_access_index()
+  * built-in, provided by Clang.
+  *
+@@ -238,8 +238,8 @@ struct pt_regs;
+  * actual field offset, based on target kernel BTF type that matches original
+  * (local) BTF, used to record relocation.
+  */
+-#define BPF_CORE_READ(dst, src)						\
+-	bpf_probe_read((dst), sizeof(*(src)),				\
+-		       __builtin_preserve_access_index(src))
 +#define bpf_core_read(dst, sz, src)					    \
 +	bpf_probe_read(dst, sz,						    \
 +		       (const void *)__builtin_preserve_access_index(src))
-+
-+/*
-+ * bpf_core_read_str() is a thin wrapper around bpf_probe_read_str()
-+ * additionally emitting BPF CO-RE field relocation for specified source
-+ * argument.
-+ */
-+#define bpf_core_read_str(dst, sz, src)					    \
-+	bpf_probe_read_str(dst, sz,					    \
-+			   (const void *)__builtin_preserve_access_index(src))
-+
-+#define ___concat(a, b) a ## b
-+#define ___apply(fn, n) ___concat(fn, n)
-+#define ___nth(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, __11, N, ...) N
-+
-+/*
-+ * return number of provided arguments; used for switch-based variadic macro
-+ * definitions (see ___last, ___arrow, etc below)
-+ */
-+#define ___narg(...) ___nth(_, ##__VA_ARGS__, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
-+/*
-+ * return 0 if no arguments are passed, N - otherwise; used for
-+ * recursively-defined macros to specify termination (0) case, and generic
-+ * (N) case (e.g., ___read_ptrs, ___core_read)
-+ */
-+#define ___empty(...) ___nth(_, ##__VA_ARGS__, N, N, N, N, N, N, N, N, N, N, 0)
-+
-+#define ___last1(x) x
-+#define ___last2(a, x) x
-+#define ___last3(a, b, x) x
-+#define ___last4(a, b, c, x) x
-+#define ___last5(a, b, c, d, x) x
-+#define ___last6(a, b, c, d, e, x) x
-+#define ___last7(a, b, c, d, e, f, x) x
-+#define ___last8(a, b, c, d, e, f, g, x) x
-+#define ___last9(a, b, c, d, e, f, g, h, x) x
-+#define ___last10(a, b, c, d, e, f, g, h, i, x) x
-+#define ___last(...) ___apply(___last, ___narg(__VA_ARGS__))(__VA_ARGS__)
-+
-+#define ___nolast2(a, _) a
-+#define ___nolast3(a, b, _) a, b
-+#define ___nolast4(a, b, c, _) a, b, c
-+#define ___nolast5(a, b, c, d, _) a, b, c, d
-+#define ___nolast6(a, b, c, d, e, _) a, b, c, d, e
-+#define ___nolast7(a, b, c, d, e, f, _) a, b, c, d, e, f
-+#define ___nolast8(a, b, c, d, e, f, g, _) a, b, c, d, e, f, g
-+#define ___nolast9(a, b, c, d, e, f, g, h, _) a, b, c, d, e, f, g, h
-+#define ___nolast10(a, b, c, d, e, f, g, h, i, _) a, b, c, d, e, f, g, h, i
-+#define ___nolast(...) ___apply(___nolast, ___narg(__VA_ARGS__))(__VA_ARGS__)
-+
-+#define ___arrow1(a) a
-+#define ___arrow2(a, b) a->b
-+#define ___arrow3(a, b, c) a->b->c
-+#define ___arrow4(a, b, c, d) a->b->c->d
-+#define ___arrow5(a, b, c, d, e) a->b->c->d->e
-+#define ___arrow6(a, b, c, d, e, f) a->b->c->d->e->f
-+#define ___arrow7(a, b, c, d, e, f, g) a->b->c->d->e->f->g
-+#define ___arrow8(a, b, c, d, e, f, g, h) a->b->c->d->e->f->g->h
-+#define ___arrow9(a, b, c, d, e, f, g, h, i) a->b->c->d->e->f->g->h->i
-+#define ___arrow10(a, b, c, d, e, f, g, h, i, j) a->b->c->d->e->f->g->h->i->j
-+#define ___arrow(...) ___apply(___arrow, ___narg(__VA_ARGS__))(__VA_ARGS__)
-+
-+#define ___type(...) typeof(___arrow(__VA_ARGS__))
-+
-+#define ___read(read_fn, dst, src_type, src, accessor)			    \
-+	read_fn((void *)(dst), sizeof(*(dst)), &((src_type)(src))->accessor)
-+
-+/* "recursively" read a sequence of inner pointers using local __t var */
-+#define ___rd_last(...)							    \
-+	___read(bpf_core_read, &__t,					    \
-+		___type(___nolast(__VA_ARGS__)), __t, ___last(__VA_ARGS__));
-+#define ___rd_p0(src) const void *__t = src;
-+#define ___rd_p1(...) ___rd_p0(___nolast(__VA_ARGS__)) ___rd_last(__VA_ARGS__)
-+#define ___rd_p2(...) ___rd_p1(___nolast(__VA_ARGS__)) ___rd_last(__VA_ARGS__)
-+#define ___rd_p3(...) ___rd_p2(___nolast(__VA_ARGS__)) ___rd_last(__VA_ARGS__)
-+#define ___rd_p4(...) ___rd_p3(___nolast(__VA_ARGS__)) ___rd_last(__VA_ARGS__)
-+#define ___rd_p5(...) ___rd_p4(___nolast(__VA_ARGS__)) ___rd_last(__VA_ARGS__)
-+#define ___rd_p6(...) ___rd_p5(___nolast(__VA_ARGS__)) ___rd_last(__VA_ARGS__)
-+#define ___rd_p7(...) ___rd_p6(___nolast(__VA_ARGS__)) ___rd_last(__VA_ARGS__)
-+#define ___rd_p8(...) ___rd_p7(___nolast(__VA_ARGS__)) ___rd_last(__VA_ARGS__)
-+#define ___rd_p9(...) ___rd_p8(___nolast(__VA_ARGS__)) ___rd_last(__VA_ARGS__)
-+#define ___read_ptrs(src, ...)						    \
-+	___apply(___rd_p, ___narg(__VA_ARGS__))(src, __VA_ARGS__)
-+
-+#define ___core_read0(fn, dst, src, a)					    \
-+	___read(fn, dst, ___type(src), src, a);
-+#define ___core_readN(fn, dst, src, ...)				    \
-+	___read_ptrs(src, ___nolast(__VA_ARGS__))			    \
-+	___read(fn, dst, ___type(src, ___nolast(__VA_ARGS__)), __t,	    \
-+		___last(__VA_ARGS__));
-+#define ___core_read(fn, dst, src, a, ...)				    \
-+	___apply(___core_read, ___empty(__VA_ARGS__))(fn, dst,		    \
-+						      src, a, ##__VA_ARGS__)
-+
-+/*
-+ * BPF_CORE_READ_INTO() is a more performance-conscious variant of
-+ * BPF_CORE_READ(), in which final field is read into user-provided storage.
-+ * See BPF_CORE_READ() below for more details on general usage.
-+ */
-+#define BPF_CORE_READ_INTO(dst, src, a, ...)				    \
-+	({								    \
-+		___core_read(bpf_core_read, dst, src, a, ##__VA_ARGS__)	    \
-+	})
-+
-+/*
-+ * BPF_CORE_READ_STR_INTO() does same "pointer chasing" as
-+ * BPF_CORE_READ() for intermediate pointers, but then executes (and returns
-+ * corresponding error code) bpf_core_read_str() for final string read.
-+ */
-+#define BPF_CORE_READ_STR_INTO(dst, src, a, ...)			    \
-+	({								    \
-+		___core_read(bpf_core_read_str, dst, src, a, ##__VA_ARGS__) \
-+	})
-+
-+/*
-+ * BPF_CORE_READ() is used to simplify BPF CO-RE relocatable read, especially
-+ * when there are few pointer chasing steps.
-+ * E.g., what in non-BPF world (or in BPF w/ BCC) would be something like:
-+ *	int x = s->a.b.c->d.e->f->g;
-+ * can be succinctly achieved using BPF_CORE_READ as:
-+ *	int x = BPF_CORE_READ(s, a.b.c, d.e, f, g);
-+ *
-+ * BPF_CORE_READ will decompose above statement into 4 bpf_core_read (BPF
-+ * CO-RE relocatable bpf_probe_read() wrapper) calls, logically equivalent to:
-+ * 1. const void *__t = s->a.b.c;
-+ * 2. __t = __t->d.e;
-+ * 3. __t = __t->f;
-+ * 4. return __t->g;
-+ *
-+ * Equivalence is logical, because there is a heavy type casting/preservation
-+ * involved, as well as all the reads are happening through bpf_probe_read()
-+ * calls using __builtin_preserve_access_index() to emit CO-RE relocations.
-+ *
-+ * N.B. Only up to 9 "field accessors" are supported, which should be more
-+ * than enough for any practical purpose.
-+ */
-+#define BPF_CORE_READ(src, a, ...)					    \
-+	({								    \
-+		___type(src, a, ##__VA_ARGS__) __r;			    \
-+		BPF_CORE_READ_INTO(&__r, src, a, ##__VA_ARGS__);	    \
-+		__r;							    \
-+	})
-+
-+#endif
-+
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index 6d059c0a7845..2203595f38c3 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -7,7 +7,7 @@
- #define __uint(name, val) int (*name)[val]
- #define __type(name, val) typeof(val) *name
  
--/* helper macro to print out debug messages */
-+/* Helper macro to print out debug messages */
- #define bpf_printk(fmt, ...)				\
- ({							\
- 	char ____fmt[] = fmt;				\
-@@ -15,13 +15,19 @@
- 			 ##__VA_ARGS__);		\
- })
- 
--/* helper macro to place programs, maps, license in
-+/*
-+ * Helper macro to place programs, maps, license in
-  * different sections in elf_bpf file. Section names
-  * are interpreted by elf_bpf loader
-  */
- #define SEC(NAME) __attribute__((section(NAME), used))
- 
--/* a helper structure used by eBPF C program
-+#ifndef __always_inline
-+#define __always_inline __attribute__((always_inline))
-+#endif
-+
-+/*
-+ * Helper structure used by eBPF C program
-  * to describe BPF map attributes to libbpf loader
-  */
- struct bpf_map_def {
-@@ -32,24 +38,4 @@ struct bpf_map_def {
- 	unsigned int map_flags;
- };
- 
--/*
-- * bpf_core_read() abstracts away bpf_probe_read() call and captures offset
-- * relocation for source address using __builtin_preserve_access_index()
-- * built-in, provided by Clang.
-- *
-- * __builtin_preserve_access_index() takes as an argument an expression of
-- * taking an address of a field within struct/union. It makes compiler emit
-- * a relocation, which records BTF type ID describing root struct/union and an
-- * accessor string which describes exact embedded field that was used to take
-- * an address. See detailed description of this relocation format and
-- * semantics in comments to struct bpf_offset_reloc in libbpf_internal.h.
-- *
-- * This relocation allows libbpf to adjust BPF instruction to use correct
-- * actual field offset, based on target kernel BTF type that matches original
-- * (local) BTF, used to record relocation.
-- */
--#define bpf_core_read(dst, sz, src)					    \
--	bpf_probe_read(dst, sz,						    \
--		       (const void *)__builtin_preserve_access_index(src))
--
  #endif
 diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_arrays.c b/tools/testing/selftests/bpf/progs/test_core_reloc_arrays.c
-index 8e3f6e6a90e7..96b1f5f3b07a 100644
+index bf67f0fdf743..8e3f6e6a90e7 100644
 --- a/tools/testing/selftests/bpf/progs/test_core_reloc_arrays.c
 +++ b/tools/testing/selftests/bpf/progs/test_core_reloc_arrays.c
-@@ -4,6 +4,7 @@
- #include <linux/bpf.h>
- #include <stdint.h>
- #include "bpf_helpers.h"
-+#include "bpf_core_read.h"
+@@ -31,6 +31,8 @@ struct core_reloc_arrays {
+ 	struct core_reloc_arrays_substruct d[1][2];
+ };
  
- char _license[] SEC("license") = "GPL";
++#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*(dst)), src)
++
+ SEC("raw_tracepoint/sys_enter")
+ int test_core_arrays(void *ctx)
+ {
+@@ -38,16 +40,16 @@ int test_core_arrays(void *ctx)
+ 	struct core_reloc_arrays_output *out = (void *)&data.out;
  
+ 	/* in->a[2] */
+-	if (BPF_CORE_READ(&out->a2, &in->a[2]))
++	if (CORE_READ(&out->a2, &in->a[2]))
+ 		return 1;
+ 	/* in->b[1][2][3] */
+-	if (BPF_CORE_READ(&out->b123, &in->b[1][2][3]))
++	if (CORE_READ(&out->b123, &in->b[1][2][3]))
+ 		return 1;
+ 	/* in->c[1].c */
+-	if (BPF_CORE_READ(&out->c1c, &in->c[1].c))
++	if (CORE_READ(&out->c1c, &in->c[1].c))
+ 		return 1;
+ 	/* in->d[0][0].d */
+-	if (BPF_CORE_READ(&out->d00d, &in->d[0][0].d))
++	if (CORE_READ(&out->d00d, &in->d[0][0].d))
+ 		return 1;
+ 
+ 	return 0;
 diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_flavors.c b/tools/testing/selftests/bpf/progs/test_core_reloc_flavors.c
-index 613474a18b45..71fd7cebc9d7 100644
+index 9fda73e87972..613474a18b45 100644
 --- a/tools/testing/selftests/bpf/progs/test_core_reloc_flavors.c
 +++ b/tools/testing/selftests/bpf/progs/test_core_reloc_flavors.c
-@@ -4,6 +4,7 @@
- #include <linux/bpf.h>
- #include <stdint.h>
- #include "bpf_helpers.h"
-+#include "bpf_core_read.h"
+@@ -39,6 +39,8 @@ struct core_reloc_flavors___weird {
+ 	};
+ };
  
- char _license[] SEC("license") = "GPL";
++#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*(dst)), src)
++
+ SEC("raw_tracepoint/sys_enter")
+ int test_core_flavors(void *ctx)
+ {
+@@ -48,13 +50,13 @@ int test_core_flavors(void *ctx)
+ 	struct core_reloc_flavors *out = (void *)&data.out;
  
+ 	/* read a using weird layout */
+-	if (BPF_CORE_READ(&out->a, &in_weird->a))
++	if (CORE_READ(&out->a, &in_weird->a))
+ 		return 1;
+ 	/* read b using reversed layout */
+-	if (BPF_CORE_READ(&out->b, &in_rev->b))
++	if (CORE_READ(&out->b, &in_rev->b))
+ 		return 1;
+ 	/* read c using original layout */
+-	if (BPF_CORE_READ(&out->c, &in_orig->c))
++	if (CORE_READ(&out->c, &in_orig->c))
+ 		return 1;
+ 
+ 	return 0;
 diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_ints.c b/tools/testing/selftests/bpf/progs/test_core_reloc_ints.c
-index 7a88a3975455..ad5c3f59c9c6 100644
+index d99233c8008a..7a88a3975455 100644
 --- a/tools/testing/selftests/bpf/progs/test_core_reloc_ints.c
 +++ b/tools/testing/selftests/bpf/progs/test_core_reloc_ints.c
-@@ -4,6 +4,7 @@
- #include <linux/bpf.h>
- #include <stdint.h>
- #include "bpf_helpers.h"
-+#include "bpf_core_read.h"
+@@ -23,20 +23,22 @@ struct core_reloc_ints {
+ 	int64_t		s64_field;
+ };
  
- char _license[] SEC("license") = "GPL";
++#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*(dst)), src)
++
+ SEC("raw_tracepoint/sys_enter")
+ int test_core_ints(void *ctx)
+ {
+ 	struct core_reloc_ints *in = (void *)&data.in;
+ 	struct core_reloc_ints *out = (void *)&data.out;
  
+-	if (BPF_CORE_READ(&out->u8_field, &in->u8_field) ||
+-	    BPF_CORE_READ(&out->s8_field, &in->s8_field) ||
+-	    BPF_CORE_READ(&out->u16_field, &in->u16_field) ||
+-	    BPF_CORE_READ(&out->s16_field, &in->s16_field) ||
+-	    BPF_CORE_READ(&out->u32_field, &in->u32_field) ||
+-	    BPF_CORE_READ(&out->s32_field, &in->s32_field) ||
+-	    BPF_CORE_READ(&out->u64_field, &in->u64_field) ||
+-	    BPF_CORE_READ(&out->s64_field, &in->s64_field))
++	if (CORE_READ(&out->u8_field, &in->u8_field) ||
++	    CORE_READ(&out->s8_field, &in->s8_field) ||
++	    CORE_READ(&out->u16_field, &in->u16_field) ||
++	    CORE_READ(&out->s16_field, &in->s16_field) ||
++	    CORE_READ(&out->u32_field, &in->u32_field) ||
++	    CORE_READ(&out->s32_field, &in->s32_field) ||
++	    CORE_READ(&out->u64_field, &in->u64_field) ||
++	    CORE_READ(&out->s64_field, &in->s64_field))
+ 		return 1;
+ 
+ 	return 0;
 diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c b/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
-index 684a06cf41ea..14ce688463de 100644
+index 37e02aa3f0c8..684a06cf41ea 100644
 --- a/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
 +++ b/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
-@@ -4,6 +4,7 @@
- #include <linux/bpf.h>
- #include <stdint.h>
- #include "bpf_helpers.h"
-+#include "bpf_core_read.h"
+@@ -17,6 +17,8 @@ struct task_struct {
+ 	int tgid;
+ };
  
- char _license[] SEC("license") = "GPL";
++#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*(dst)), src)
++
+ SEC("raw_tracepoint/sys_enter")
+ int test_core_kernel(void *ctx)
+ {
+@@ -24,8 +26,8 @@ int test_core_kernel(void *ctx)
+ 	uint64_t pid_tgid = bpf_get_current_pid_tgid();
+ 	int pid, tgid;
  
+-	if (BPF_CORE_READ(&pid, &task->pid) ||
+-	    BPF_CORE_READ(&tgid, &task->tgid))
++	if (CORE_READ(&pid, &task->pid) ||
++	    CORE_READ(&tgid, &task->tgid))
+ 		return 1;
+ 
+ 	/* validate pid + tgid matches */
 diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_misc.c b/tools/testing/selftests/bpf/progs/test_core_reloc_misc.c
-index 10bdb2050552..1a36b0856653 100644
+index c59984bd3e23..10bdb2050552 100644
 --- a/tools/testing/selftests/bpf/progs/test_core_reloc_misc.c
 +++ b/tools/testing/selftests/bpf/progs/test_core_reloc_misc.c
-@@ -4,6 +4,7 @@
- #include <linux/bpf.h>
- #include <stdint.h>
- #include "bpf_helpers.h"
-+#include "bpf_core_read.h"
+@@ -32,6 +32,8 @@ struct core_reloc_misc_extensible {
+ 	int b;
+ };
  
- char _license[] SEC("license") = "GPL";
++#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*(dst)), src)
++
+ SEC("raw_tracepoint/sys_enter")
+ int test_core_misc(void *ctx)
+ {
+@@ -41,15 +43,15 @@ int test_core_misc(void *ctx)
+ 	struct core_reloc_misc_output *out = (void *)&data.out;
  
+ 	/* record two different relocations with the same accessor string */
+-	if (BPF_CORE_READ(&out->a, &in_a->a1) ||	/* accessor: 0:0 */
+-	    BPF_CORE_READ(&out->b, &in_b->b1))		/* accessor: 0:0 */
++	if (CORE_READ(&out->a, &in_a->a1) ||		/* accessor: 0:0 */
++	    CORE_READ(&out->b, &in_b->b1))		/* accessor: 0:0 */
+ 		return 1;
+ 
+ 	/* Validate relocations capture array-only accesses for structs with
+ 	 * fixed header, but with potentially extendable tail. This will read
+ 	 * first 4 bytes of 2nd element of in_ext array of potentially
+ 	 * variably sized struct core_reloc_misc_extensible. */ 
+-	if (BPF_CORE_READ(&out->c, &in_ext[2]))		/* accessor: 2 */
++	if (CORE_READ(&out->c, &in_ext[2]))		/* accessor: 2 */
+ 		return 1;
+ 
+ 	return 0;
 diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_mods.c b/tools/testing/selftests/bpf/progs/test_core_reloc_mods.c
-index e930e7e88c5c..3199fafede2c 100644
+index f98b942c062b..e930e7e88c5c 100644
 --- a/tools/testing/selftests/bpf/progs/test_core_reloc_mods.c
 +++ b/tools/testing/selftests/bpf/progs/test_core_reloc_mods.c
-@@ -4,6 +4,7 @@
- #include <linux/bpf.h>
- #include <stdint.h>
- #include "bpf_helpers.h"
-+#include "bpf_core_read.h"
+@@ -41,20 +41,22 @@ struct core_reloc_mods {
+ 	core_reloc_mods_substruct_t h;
+ };
  
- char _license[] SEC("license") = "GPL";
++#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*(dst)), src)
++
+ SEC("raw_tracepoint/sys_enter")
+ int test_core_mods(void *ctx)
+ {
+ 	struct core_reloc_mods *in = (void *)&data.in;
+ 	struct core_reloc_mods_output *out = (void *)&data.out;
  
+-	if (BPF_CORE_READ(&out->a, &in->a) ||
+-	    BPF_CORE_READ(&out->b, &in->b) ||
+-	    BPF_CORE_READ(&out->c, &in->c) ||
+-	    BPF_CORE_READ(&out->d, &in->d) ||
+-	    BPF_CORE_READ(&out->e, &in->e[2]) ||
+-	    BPF_CORE_READ(&out->f, &in->f[1]) ||
+-	    BPF_CORE_READ(&out->g, &in->g.x) ||
+-	    BPF_CORE_READ(&out->h, &in->h.y))
++	if (CORE_READ(&out->a, &in->a) ||
++	    CORE_READ(&out->b, &in->b) ||
++	    CORE_READ(&out->c, &in->c) ||
++	    CORE_READ(&out->d, &in->d) ||
++	    CORE_READ(&out->e, &in->e[2]) ||
++	    CORE_READ(&out->f, &in->f[1]) ||
++	    CORE_READ(&out->g, &in->g.x) ||
++	    CORE_READ(&out->h, &in->h.y))
+ 		return 1;
+ 
+ 	return 0;
 diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_nesting.c b/tools/testing/selftests/bpf/progs/test_core_reloc_nesting.c
-index b63007958290..98238cb64fbd 100644
+index 3ca30cec2b39..b63007958290 100644
 --- a/tools/testing/selftests/bpf/progs/test_core_reloc_nesting.c
 +++ b/tools/testing/selftests/bpf/progs/test_core_reloc_nesting.c
-@@ -4,6 +4,7 @@
- #include <linux/bpf.h>
- #include <stdint.h>
- #include "bpf_helpers.h"
-+#include "bpf_core_read.h"
+@@ -30,15 +30,17 @@ struct core_reloc_nesting {
+ 	} b;
+ };
  
- char _license[] SEC("license") = "GPL";
++#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*(dst)), src)
++
+ SEC("raw_tracepoint/sys_enter")
+ int test_core_nesting(void *ctx)
+ {
+ 	struct core_reloc_nesting *in = (void *)&data.in;
+ 	struct core_reloc_nesting *out = (void *)&data.out;
  
+-	if (BPF_CORE_READ(&out->a.a.a, &in->a.a.a))
++	if (CORE_READ(&out->a.a.a, &in->a.a.a))
+ 		return 1;
+-	if (BPF_CORE_READ(&out->b.b.b, &in->b.b.b))
++	if (CORE_READ(&out->b.b.b, &in->b.b.b))
+ 		return 1;
+ 
+ 	return 0;
 diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_primitives.c b/tools/testing/selftests/bpf/progs/test_core_reloc_primitives.c
-index 7654f59914bc..4f3ecb9127bb 100644
+index add52f23ab35..7654f59914bc 100644
 --- a/tools/testing/selftests/bpf/progs/test_core_reloc_primitives.c
 +++ b/tools/testing/selftests/bpf/progs/test_core_reloc_primitives.c
-@@ -4,6 +4,7 @@
- #include <linux/bpf.h>
- #include <stdint.h>
- #include "bpf_helpers.h"
-+#include "bpf_core_read.h"
+@@ -25,17 +25,19 @@ struct core_reloc_primitives {
+ 	int (*f)(const char *);
+ };
  
- char _license[] SEC("license") = "GPL";
++#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*(dst)), src)
++
+ SEC("raw_tracepoint/sys_enter")
+ int test_core_primitives(void *ctx)
+ {
+ 	struct core_reloc_primitives *in = (void *)&data.in;
+ 	struct core_reloc_primitives *out = (void *)&data.out;
  
+-	if (BPF_CORE_READ(&out->a, &in->a) ||
+-	    BPF_CORE_READ(&out->b, &in->b) ||
+-	    BPF_CORE_READ(&out->c, &in->c) ||
+-	    BPF_CORE_READ(&out->d, &in->d) ||
+-	    BPF_CORE_READ(&out->f, &in->f))
++	if (CORE_READ(&out->a, &in->a) ||
++	    CORE_READ(&out->b, &in->b) ||
++	    CORE_READ(&out->c, &in->c) ||
++	    CORE_READ(&out->d, &in->d) ||
++	    CORE_READ(&out->f, &in->f))
+ 		return 1;
+ 
+ 	return 0;
 diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_ptr_as_arr.c b/tools/testing/selftests/bpf/progs/test_core_reloc_ptr_as_arr.c
-index 709f7cba453f..27f602f00419 100644
+index 526b7ddc7ea1..709f7cba453f 100644
 --- a/tools/testing/selftests/bpf/progs/test_core_reloc_ptr_as_arr.c
 +++ b/tools/testing/selftests/bpf/progs/test_core_reloc_ptr_as_arr.c
-@@ -4,6 +4,7 @@
- #include <linux/bpf.h>
- #include <stdint.h>
- #include "bpf_helpers.h"
-+#include "bpf_core_read.h"
+@@ -16,13 +16,15 @@ struct core_reloc_ptr_as_arr {
+ 	int a;
+ };
  
- char _license[] SEC("license") = "GPL";
++#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*(dst)), src)
++
+ SEC("raw_tracepoint/sys_enter")
+ int test_core_ptr_as_arr(void *ctx)
+ {
+ 	struct core_reloc_ptr_as_arr *in = (void *)&data.in;
+ 	struct core_reloc_ptr_as_arr *out = (void *)&data.out;
  
+-	if (BPF_CORE_READ(&out->a, &in[2].a))
++	if (CORE_READ(&out->a, &in[2].a))
+ 		return 1;
+ 
+ 	return 0;
 -- 
 2.17.1
 
