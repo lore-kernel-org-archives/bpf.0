@@ -2,85 +2,125 @@ Return-Path: <SRS0=30R+=YC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2518EC47404
-	for <bpf@archiver.kernel.org>; Wed,  9 Oct 2019 08:31:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3EEEECE58D
+	for <bpf@archiver.kernel.org>; Wed,  9 Oct 2019 09:43:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EE974206C0
-	for <bpf@archiver.kernel.org>; Wed,  9 Oct 2019 08:31:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7987920673
+	for <bpf@archiver.kernel.org>; Wed,  9 Oct 2019 09:43:17 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="W9YHeVth"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726211AbfJIIbm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Oct 2019 04:31:42 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:41686 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725848AbfJIIbm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Oct 2019 04:31:42 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 8241CC057E32;
-        Wed,  9 Oct 2019 08:31:42 +0000 (UTC)
-Received: from griffin.upir.cz (ovpn-204-237.brq.redhat.com [10.40.204.237])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 94DDB60166;
-        Wed,  9 Oct 2019 08:31:41 +0000 (UTC)
-From:   Jiri Benc <jbenc@redhat.com>
-To:     bpf@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Peter Oskolkov <posk@google.com>
-Subject: [PATCH bpf] bpf: lwtunnel: fix reroute supplying invalid dst
-Date:   Wed,  9 Oct 2019 10:31:24 +0200
-Message-Id: <111664d58fe4e9dd9c8014bb3d0b2dab93086a9e.1570609794.git.jbenc@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.31]); Wed, 09 Oct 2019 08:31:42 +0000 (UTC)
+        id S1729906AbfJIJnR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Oct 2019 05:43:17 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:44011 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729320AbfJIJnQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Oct 2019 05:43:16 -0400
+Received: by mail-lf1-f67.google.com with SMTP id u3so1130807lfl.10
+        for <bpf@vger.kernel.org>; Wed, 09 Oct 2019 02:43:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0j2L3ajtr8f5T2LURsPPM1afMbZ2goV4TcNShICbZSQ=;
+        b=W9YHeVthJzhR4HyfoPcLhD9CSnipcswAriGhFBpykn/ovxMVHbFPFTRbmCIAUNQ66a
+         wKU4TQjFKSG3aszs/iGL8R72+0jQwD0l5+ut9flSTiOtRhodzwbqbXSGMxwQo3mTMcAL
+         d1XudqxVbl7JugGM5lMedzJYMSwlMzUiBA2OQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0j2L3ajtr8f5T2LURsPPM1afMbZ2goV4TcNShICbZSQ=;
+        b=IZuZn/qyMSPju9tIJHT3oOdAlYA2kIO2fQ1MZ7aD+KwF8BAO4cRG8/SRAawhI2f89a
+         ODFXGz2cpVdtddMz1jOMKmUMdYQeBqe02YlHpMnIjgvGFC/IOcJ4F4uOE03gTd0Dl/HD
+         U0EBTd4iAwm8RnExpSenpA+zhGqTd2JFd9tb82Q235+qs5EDOXDBqPedpzg4NaiyvM+L
+         P/BRpvkPm2CG1ag2d3gsUx/RiPbmtLIdALREgWEzODnvo1N7P4BDiwU5GUemmeHtTw6w
+         PGCP3WbMfF/fWzDt9W8MOrLOy40R+OSs67lqV12dYYXBM1BfkuHbMJSwIwLbzhjFhI0z
+         UVwQ==
+X-Gm-Message-State: APjAAAUp5E6wBI+NDMnW/wqEHR15dCvmlqJoBoRKABfmlb4q3EMwHEQb
+        eh30Ug304Z68TzraOtw1MOyzxrEbKvawrw==
+X-Google-Smtp-Source: APXvYqwCFfDRuxxuDQYQBTmvHTwUIEw2zA+6lQukKjPlA736WaGtj5Y8JFuSoOY7VZ7UaZv0yAyg9g==
+X-Received: by 2002:ac2:42c7:: with SMTP id n7mr1475211lfl.138.1570614194457;
+        Wed, 09 Oct 2019 02:43:14 -0700 (PDT)
+Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
+        by smtp.gmail.com with ESMTPSA id v1sm344353lfe.34.2019.10.09.02.43.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Oct 2019 02:43:13 -0700 (PDT)
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        Stanislav Fomichev <sdf@google.com>
+Subject: [PATH bpf-next 1/2] flow_dissector: Allow updating the flow dissector program atomically
+Date:   Wed,  9 Oct 2019 11:43:11 +0200
+Message-Id: <20191009094312.15284-1-jakub@cloudflare.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The dst in bpf_input() has lwtstate field set. As it is of the
-LWTUNNEL_ENCAP_BPF type, lwtstate->data is struct bpf_lwt. When the bpf
-program returns BPF_LWT_REROUTE, ip_route_input_noref is directly called on
-this skb. This causes invalid memory access, as ip_route_input_slow calls
-skb_tunnel_info(skb) that expects the dst->lwstate->data to be
-struct ip_tunnel_info. This results to struct bpf_lwt being accessed as
-struct ip_tunnel_info.
+It is currently not possible to detach the flow dissector program and
+attach a new one in an atomic fashion, that is with a single syscall.
+Attempts to do so will be met with EEXIST error.
 
-Drop the dst before calling the IP route input functions (both for IPv4 and
-IPv6).
+This makes updates to flow dissector program hard. Traffic steering that
+relies on BPF-powered flow dissection gets disrupted while old program has
+been already detached but the new one has not been attached yet.
 
-Reported by KASAN.
+There is also a window of opportunity to attach a flow dissector to a
+non-root namespace while updating the root flow dissector, thus blocking
+the update.
 
-Fixes: 3bd0b15281af ("bpf: add handling of BPF_LWT_REROUTE to lwt_bpf.c")
-Cc: Peter Oskolkov <posk@google.com>
-Signed-off-by: Jiri Benc <jbenc@redhat.com>
+Lastly, the behavior is inconsistent with cgroup BPF programs, which can be
+replaced with a single bpf(BPF_PROG_ATTACH, ...) syscall without any
+restrictions.
+
+Allow attaching a new flow dissector program when another one is already
+present with a restriction that it can't be the same program.
+
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- net/core/lwt_bpf.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ net/core/flow_dissector.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-index f93785e5833c..74cfb8b5ab33 100644
---- a/net/core/lwt_bpf.c
-+++ b/net/core/lwt_bpf.c
-@@ -88,11 +88,16 @@ static int bpf_lwt_input_reroute(struct sk_buff *skb)
- 	int err = -EINVAL;
+diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
+index 6b4b88d1599d..dbf502c18656 100644
+--- a/net/core/flow_dissector.c
++++ b/net/core/flow_dissector.c
+@@ -128,6 +128,8 @@ int skb_flow_dissector_bpf_prog_attach(const union bpf_attr *attr,
+ 		struct net *ns;
  
- 	if (skb->protocol == htons(ETH_P_IP)) {
-+		struct net_device *dev = skb_dst(skb)->dev;
- 		struct iphdr *iph = ip_hdr(skb);
+ 		for_each_net(ns) {
++			if (ns == &init_net)
++				continue;
+ 			if (rcu_access_pointer(ns->flow_dissector_prog)) {
+ 				ret = -EEXIST;
+ 				goto out;
+@@ -145,12 +147,14 @@ int skb_flow_dissector_bpf_prog_attach(const union bpf_attr *attr,
  
-+		dev_hold(dev);
-+		skb_dst_drop(skb);
- 		err = ip_route_input_noref(skb, iph->daddr, iph->saddr,
--					   iph->tos, skb_dst(skb)->dev);
-+					   iph->tos, dev);
-+		dev_put(dev);
- 	} else if (skb->protocol == htons(ETH_P_IPV6)) {
-+		skb_dst_drop(skb);
- 		err = ipv6_stub->ipv6_route_input(skb);
- 	} else {
- 		err = -EAFNOSUPPORT;
+ 	attached = rcu_dereference_protected(net->flow_dissector_prog,
+ 					     lockdep_is_held(&flow_dissector_mutex));
+-	if (attached) {
+-		/* Only one BPF program can be attached at a time */
+-		ret = -EEXIST;
++	if (attached == prog) {
++		/* The same program cannot be attached twice */
++		ret = -EINVAL;
+ 		goto out;
+ 	}
+ 	rcu_assign_pointer(net->flow_dissector_prog, prog);
++	if (attached)
++		bpf_prog_put(attached);
+ out:
+ 	mutex_unlock(&flow_dissector_mutex);
+ 	return ret;
 -- 
-2.18.1
+2.20.1
 
