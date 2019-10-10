@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 379E9ECE596
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE322ECE58D
 	for <bpf@archiver.kernel.org>; Thu, 10 Oct 2019 04:15:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0BAD020B7C
+	by mail.kernel.org (Postfix) with ESMTP id A9A3A20B7C
 	for <bpf@archiver.kernel.org>; Thu, 10 Oct 2019 04:15:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1570680940;
-	bh=o6ho/8RtlLxe8Y2Vs08OSApFvJq8hoICAs8Y24MlTvg=;
+	bh=4hHhcuY6CuDMPVFApA0X8/DI4pqmqR1I7kNgEWgpVFY=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=pEOO5FIRkKzvZ2j5SDLG1V206v8LBWbO9SeUBPXMQi6ljj9GTKXzWl208CCEgbHqx
-	 W+zEwDG0HuQLgn1FLKUiZwt0UulNuWRcpNJRYB2CFeLAZITd80p5LpmW/Wr49XQs+8
-	 YhpMUrvJkyztG8/PcbwJx2XmwHmjDmiUqxnO2WaA=
+	b=RW6vgh+qJ7Fuy0SW/0Sqsf0tuFQvdEGPyC86jy3MK1soI11vRVHwvkWUI/I9/NzVB
+	 utBspI4zP1JKmBd4+r1jG0O4JCuGLFQ92fbKytPMCHfiS0gCEdasnpGLHAv1InUfOm
+	 p9iOJGeBQgfQv9Po4j6R64qvIQ6iSya1ZzQewGV4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725822AbfJJEPj convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 10 Oct 2019 00:15:39 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:5736 "EHLO
+        id S1729349AbfJJEPX convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 10 Oct 2019 00:15:23 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:37220 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728771AbfJJEPY (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 10 Oct 2019 00:15:24 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9A4AO28019309
-        for <bpf@vger.kernel.org>; Wed, 9 Oct 2019 21:15:24 -0700
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2vhgvskgwq-9
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 09 Oct 2019 21:15:24 -0700
-Received: from 2401:db00:2120:81ca:face:0:31:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Wed, 9 Oct 2019 21:15:13 -0700
+        by vger.kernel.org with ESMTP id S1732252AbfJJEPW (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 10 Oct 2019 00:15:22 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9A4Ap2o018306
+        for <bpf@vger.kernel.org>; Wed, 9 Oct 2019 21:15:21 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2vhnsj9t2y-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 09 Oct 2019 21:15:21 -0700
+Received: from 2401:db00:2050:5076:face:0:9:0 (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 9 Oct 2019 21:15:20 -0700
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 5D624760CF9; Wed,  9 Oct 2019 21:15:11 -0700 (PDT)
+        id 870F5760CF9; Wed,  9 Oct 2019 21:15:19 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -46,9 +46,9 @@ To:     <davem@davemloft.net>
 CC:     <daniel@iogearbox.net>, <x86@kernel.org>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 04/12] bpf: add attach_btf_id attribute to program load
-Date:   Wed, 9 Oct 2019 21:14:55 -0700
-Message-ID: <20191010041503.2526303-5-ast@kernel.org>
+Subject: [PATCH v2 bpf-next 08/12] bpf: add support for BTF pointers to interpreter
+Date:   Wed, 9 Oct 2019 21:14:59 -0700
+Message-ID: <20191010041503.2526303-9-ast@kernel.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191010041503.2526303-1-ast@kernel.org>
 References: <20191010041503.2526303-1-ast@kernel.org>
@@ -58,10 +58,10 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
  definitions=2019-10-10_01:2019-10-08,2019-10-10 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1034
- suspectscore=1 lowpriorityscore=0 malwarescore=0 bulkscore=0 phishscore=0
- adultscore=0 impostorscore=0 mlxscore=0 spamscore=0 mlxlogscore=999
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 suspectscore=1
+ adultscore=0 mlxlogscore=813 impostorscore=0 priorityscore=1501
+ spamscore=0 lowpriorityscore=0 malwarescore=0 phishscore=0 bulkscore=0
+ clxscore=1034 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1908290000 definitions=main-1910100037
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -69,125 +69,102 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add attach_btf_id attribute to prog_load command.
-It's similar to existing expected_attach_type attribute which is
-used in several cgroup based program types.
-Unfortunately expected_attach_type is ignored for
-tracing programs and cannot be reused for new purpose.
-Hence introduce attach_btf_id to verify bpf programs against
-given in-kernel BTF type id at load time.
-It is strictly checked to be valid for raw_tp programs only.
-In a later patches it will become:
-btf_id == 0 semantics of existing raw_tp progs.
-btd_id > 0 raw_tp with BTF and additional type safety.
+Pointer to BTF object is a pointer to kernel object or NULL.
+The memory access in the interpreter has to be done via probe_kernel_read
+to avoid page faults.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 ---
- include/linux/bpf.h            |  1 +
- include/uapi/linux/bpf.h       |  1 +
- kernel/bpf/syscall.c           | 18 ++++++++++++++----
- tools/include/uapi/linux/bpf.h |  1 +
- 4 files changed, 17 insertions(+), 4 deletions(-)
+ include/linux/filter.h |  3 +++
+ kernel/bpf/core.c      | 19 +++++++++++++++++++
+ kernel/bpf/verifier.c  |  8 ++++++++
+ 3 files changed, 30 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 5b9d22338606..a254327c62e9 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -375,6 +375,7 @@ struct bpf_prog_aux {
- 	u32 id;
- 	u32 func_cnt; /* used by non-func prog as the number of func progs */
- 	u32 func_idx; /* 0 for non-func prog, the index in func array for func prog */
-+	u32 attach_btf_id; /* in-kernel BTF type id to attach to */
- 	bool verifier_zext; /* Zero extensions has been inserted by verifier. */
- 	bool offload_requested;
- 	struct bpf_prog **func;
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index a65c3b0c6935..3bb2cd1de341 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -420,6 +420,7 @@ union bpf_attr {
- 		__u32		line_info_rec_size;	/* userspace bpf_line_info size */
- 		__aligned_u64	line_info;	/* line info */
- 		__u32		line_info_cnt;	/* number of bpf_line_info records */
-+		__u32		attach_btf_id;	/* in-kernel BTF type id to attach to */
- 	};
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index d3d51d7aff2c..22ebea2e64ea 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -65,6 +65,9 @@ struct ctl_table_header;
+ /* unused opcode to mark special call to bpf_tail_call() helper */
+ #define BPF_TAIL_CALL	0xf0
  
- 	struct { /* anonymous struct used by BPF_OBJ_* commands */
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 82eabd4e38ad..b56c482c9760 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -23,6 +23,7 @@
- #include <linux/timekeeping.h>
- #include <linux/ctype.h>
- #include <linux/nospec.h>
-+#include <uapi/linux/btf.h>
++/* unused opcode to mark special load instruction. Same as BPF_ABS */
++#define BPF_PROBE_MEM	0x20
++
+ /* unused opcode to mark call to interpreter with arguments */
+ #define BPF_CALL_ARGS	0xe0
  
- #define IS_FD_ARRAY(map) ((map)->map_type == BPF_MAP_TYPE_PROG_ARRAY || \
- 			   (map)->map_type == BPF_MAP_TYPE_PERF_EVENT_ARRAY || \
-@@ -1565,8 +1566,9 @@ static void bpf_prog_load_fixup_attach_type(union bpf_attr *attr)
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 66088a9e9b9e..8a765bbd33f0 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1291,6 +1291,11 @@ bool bpf_opcode_in_insntable(u8 code)
  }
  
- static int
--bpf_prog_load_check_attach_type(enum bpf_prog_type prog_type,
--				enum bpf_attach_type expected_attach_type)
-+bpf_prog_load_check_attach(enum bpf_prog_type prog_type,
-+			   enum bpf_attach_type expected_attach_type,
-+			   u32 btf_id)
- {
- 	switch (prog_type) {
- 	case BPF_PROG_TYPE_CGROUP_SOCK:
-@@ -1608,13 +1610,19 @@ bpf_prog_load_check_attach_type(enum bpf_prog_type prog_type,
- 		default:
- 			return -EINVAL;
- 		}
-+	case BPF_PROG_TYPE_RAW_TRACEPOINT:
-+		if (btf_id > BTF_MAX_TYPE)
-+			return -EINVAL;
-+		return 0;
+ #ifndef CONFIG_BPF_JIT_ALWAYS_ON
++u64 __weak bpf_probe_read(void * dst, u32 size, const void * unsafe_ptr)
++{
++	memset(dst, 0, size);
++	return -EFAULT;
++}
+ /**
+  *	__bpf_prog_run - run eBPF program on a given context
+  *	@regs: is the array of MAX_BPF_EXT_REG eBPF pseudo-registers
+@@ -1310,6 +1315,10 @@ static u64 __no_fgcse ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u6
+ 		/* Non-UAPI available opcodes. */
+ 		[BPF_JMP | BPF_CALL_ARGS] = &&JMP_CALL_ARGS,
+ 		[BPF_JMP | BPF_TAIL_CALL] = &&JMP_TAIL_CALL,
++		[BPF_LDX | BPF_PROBE_MEM | BPF_B] = &&LDX_PROBE_MEM_B,
++		[BPF_LDX | BPF_PROBE_MEM | BPF_H] = &&LDX_PROBE_MEM_H,
++		[BPF_LDX | BPF_PROBE_MEM | BPF_W] = &&LDX_PROBE_MEM_W,
++		[BPF_LDX | BPF_PROBE_MEM | BPF_DW] = &&LDX_PROBE_MEM_DW,
+ 	};
+ #undef BPF_INSN_3_LBL
+ #undef BPF_INSN_2_LBL
+@@ -1542,6 +1551,16 @@ static u64 __no_fgcse ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u6
+ 	LDST(W,  u32)
+ 	LDST(DW, u64)
+ #undef LDST
++#define LDX_PROBE(SIZEOP, SIZE)						\
++	LDX_PROBE_MEM_##SIZEOP:						\
++		bpf_probe_read(&DST, SIZE, (const void *)(long) SRC);	\
++		CONT;
++	LDX_PROBE(B,  1)
++	LDX_PROBE(H,  2)
++	LDX_PROBE(W,  4)
++	LDX_PROBE(DW, 8)
++#undef LDX_PROBE
++
+ 	STX_XADD_W: /* lock xadd *(u32 *)(dst_reg + off16) += src_reg */
+ 		atomic_add((u32) SRC, (atomic_t *)(unsigned long)
+ 			   (DST + insn->off));
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 8246275704aa..2ade5193b76c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7526,6 +7526,7 @@ static bool reg_type_mismatch_ok(enum bpf_reg_type type)
+ 	case PTR_TO_TCP_SOCK:
+ 	case PTR_TO_TCP_SOCK_OR_NULL:
+ 	case PTR_TO_XDP_SOCK:
++	case PTR_TO_BTF_ID:
+ 		return false;
  	default:
-+		if (btf_id)
-+			return -EINVAL;
- 		return 0;
- 	}
- }
- 
- /* last field in 'union bpf_attr' used by this command */
--#define	BPF_PROG_LOAD_LAST_FIELD line_info_cnt
-+#define	BPF_PROG_LOAD_LAST_FIELD attach_btf_id
- 
- static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
- {
-@@ -1656,7 +1664,8 @@ static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
- 		return -EPERM;
- 
- 	bpf_prog_load_fixup_attach_type(attr);
--	if (bpf_prog_load_check_attach_type(type, attr->expected_attach_type))
-+	if (bpf_prog_load_check_attach(type, attr->expected_attach_type,
-+				       attr->attach_btf_id))
- 		return -EINVAL;
- 
- 	/* plain bpf_prog allocation */
-@@ -1665,6 +1674,7 @@ static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
- 		return -ENOMEM;
- 
- 	prog->expected_attach_type = attr->expected_attach_type;
-+	prog->aux->attach_btf_id = attr->attach_btf_id;
- 
- 	prog->aux->offload_requested = !!attr->prog_ifindex;
- 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index a65c3b0c6935..3bb2cd1de341 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -420,6 +420,7 @@ union bpf_attr {
- 		__u32		line_info_rec_size;	/* userspace bpf_line_info size */
- 		__aligned_u64	line_info;	/* line info */
- 		__u32		line_info_cnt;	/* number of bpf_line_info records */
-+		__u32		attach_btf_id;	/* in-kernel BTF type id to attach to */
- 	};
- 
- 	struct { /* anonymous struct used by BPF_OBJ_* commands */
+ 		return true;
+@@ -8667,6 +8668,13 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
+ 		case PTR_TO_XDP_SOCK:
+ 			convert_ctx_access = bpf_xdp_sock_convert_ctx_access;
+ 			break;
++		case PTR_TO_BTF_ID:
++			if (type == BPF_WRITE) {
++				verbose(env, "Writes through BTF pointers are not allowed\n");
++				return -EINVAL;
++			}
++			insn->code = BPF_LDX | BPF_PROBE_MEM | BPF_SIZE((insn)->code);
++			continue;
+ 		default:
+ 			continue;
+ 		}
 -- 
 2.23.0
 
