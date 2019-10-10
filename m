@@ -2,43 +2,42 @@ Return-Path: <SRS0=kVgz=YD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A25DECE597
-	for <bpf@archiver.kernel.org>; Thu, 10 Oct 2019 04:15:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27B6DECE596
+	for <bpf@archiver.kernel.org>; Thu, 10 Oct 2019 04:15:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5539421A4A
+	by mail.kernel.org (Postfix) with ESMTP id EDCFF218DE
 	for <bpf@archiver.kernel.org>; Thu, 10 Oct 2019 04:15:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1570680914;
-	bh=pO1/o7AnPvtTWvWfOlau2szF9QEHPJudnxYIDIppvJg=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ZeqIqyJpKrbMeKUqra3fC+Lu9pPH7b8Zk7gDzX4t+DXEhpGMATDKnCc2y0ZRJAZk+
-	 M3xshxNzwRDNb5IP4Vy7AaLaK1fpWJuX4xjeDfS1ODSPqX9KYGctln5FbUXK1agVhO
-	 1zwOXSlA9nMPXLmhBvzAH3AbLKKGjmDZwOk3fbCk=
+	s=default; t=1570680915;
+	bh=pksECMAiaCJfTYZXRdGzugqCbtJn/MNYTudalOobiec=;
+	h=From:To:CC:Subject:Date:List-ID:From;
+	b=wXXqi8vMeOy8h46EQT8xZ0PpbFasLz+54GV/8ywKLDg6IvhdYiKuXcuUA5OmsEg1Y
+	 obSh/TD9Ce8JKBio4DI0+pDQbBWI0FfiWnoYSFRqCFcF56LuApujCXTGdczQUW9ja0
+	 qcVHqYQJzI47eEdjoBJG/MCHLhz/09vL0EJZohhQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728366AbfJJEPN convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 10 Oct 2019 00:15:13 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:39142 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727309AbfJJEPN (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 10 Oct 2019 00:15:13 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id x9A4DWKv005430
-        for <bpf@vger.kernel.org>; Wed, 9 Oct 2019 21:15:12 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 2vgr0gtanu-7
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 09 Oct 2019 21:15:11 -0700
-Received: from 2401:db00:2050:5102:face:0:3b:0 (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 9 Oct 2019 21:15:09 -0700
+        id S1728388AbfJJEPO convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 10 Oct 2019 00:15:14 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:62800 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728549AbfJJEPO (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 10 Oct 2019 00:15:14 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9A4E4pn024743
+        for <bpf@vger.kernel.org>; Wed, 9 Oct 2019 21:15:13 -0700
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2vhm0ua7qc-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 09 Oct 2019 21:15:13 -0700
+Received: from 2401:db00:30:6012:face:0:17:0 (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Wed, 9 Oct 2019 21:15:06 -0700
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 4E461760CF9; Wed,  9 Oct 2019 21:15:09 -0700 (PDT)
+        id 25472760CF9; Wed,  9 Oct 2019 21:15:03 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -46,22 +45,20 @@ To:     <davem@davemloft.net>
 CC:     <daniel@iogearbox.net>, <x86@kernel.org>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 03/12] bpf: process in-kernel BTF
-Date:   Wed, 9 Oct 2019 21:14:54 -0700
-Message-ID: <20191010041503.2526303-4-ast@kernel.org>
+Subject: [PATCH v2 bpf-next 00/12] bpf: revolutionize bpf tracing
+Date:   Wed, 9 Oct 2019 21:14:51 -0700
+Message-ID: <20191010041503.2526303-1-ast@kernel.org>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191010041503.2526303-1-ast@kernel.org>
-References: <20191010041503.2526303-1-ast@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
  definitions=2019-10-10_02:2019-10-08,2019-10-10 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- clxscore=1015 bulkscore=0 priorityscore=1501 impostorscore=0 mlxscore=0
- spamscore=0 malwarescore=0 suspectscore=3 adultscore=0 lowpriorityscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ phishscore=0 clxscore=1015 bulkscore=0 impostorscore=0 mlxscore=0
+ suspectscore=1 mlxlogscore=999 lowpriorityscore=0 adultscore=0 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1908290000 definitions=main-1910100037
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -69,222 +66,151 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-If in-kernel BTF exists parse it and prepare 'struct btf *btf_vmlinux'
-for further use by the verifier.
-In-kernel BTF is trusted just like kallsyms and other build artifacts
-embedded into vmlinux.
-Yet run this BTF image through BTF verifier to make sure
-that it is valid and it wasn't mangled during the build.
-If in-kernel BTF is incorrect it means either gcc or pahole or kernel
-are buggy. In such case disallow loading BPF programs.
+v1->v2:
+- addressed feedback from Andrii and Eric. Thanks a lot for review!
+- added missing check at raw_tp attach time.
+- Andrii noticed that expected_attach_type cannot be reused.
+  Had to introduce new field to bpf_attr.
+- cleaned up logging nicely by introducing bpf_log() helper.
+- rebased.
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- include/linux/bpf_verifier.h |  4 +-
- include/linux/btf.h          |  1 +
- kernel/bpf/btf.c             | 71 +++++++++++++++++++++++++++++++++++-
- kernel/bpf/verifier.c        | 20 ++++++++++
- 4 files changed, 94 insertions(+), 2 deletions(-)
+Revolutionize bpf tracing and bpf C programming.
+C language allows any pointer to be typecasted to any other pointer
+or convert integer to a pointer.
+Though bpf verifier is operating at assembly level it has strict type
+checking for fixed number of types.
+Known types are defined in 'enum bpf_reg_type'.
+For example:
+PTR_TO_FLOW_KEYS is a pointer to 'struct bpf_flow_keys'
+PTR_TO_SOCKET is a pointer to 'struct bpf_sock',
+and so on.
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 26a6d58ca78c..713efae62e96 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -330,10 +330,12 @@ static inline bool bpf_verifier_log_full(const struct bpf_verifier_log *log)
- #define BPF_LOG_STATS	4
- #define BPF_LOG_LEVEL	(BPF_LOG_LEVEL1 | BPF_LOG_LEVEL2)
- #define BPF_LOG_MASK	(BPF_LOG_LEVEL | BPF_LOG_STATS)
-+#define BPF_LOG_KERNEL	(BPF_LOG_MASK + 1) /* kernel internal flag */
- 
- static inline bool bpf_verifier_log_needed(const struct bpf_verifier_log *log)
- {
--	return log->level && log->ubuf && !bpf_verifier_log_full(log);
-+	return (log->level && log->ubuf && !bpf_verifier_log_full(log)) ||
-+		log->level == BPF_LOG_KERNEL;
- }
- 
- #define BPF_MAX_SUBPROGS 256
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 64cdf2a23d42..55d43bc856be 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -56,6 +56,7 @@ bool btf_type_is_void(const struct btf_type *t);
- #ifdef CONFIG_BPF_SYSCALL
- const struct btf_type *btf_type_by_id(const struct btf *btf, u32 type_id);
- const char *btf_name_by_offset(const struct btf *btf, u32 offset);
-+struct btf *btf_parse_vmlinux(void);
- #else
- static inline const struct btf_type *btf_type_by_id(const struct btf *btf,
- 						    u32 type_id)
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 29c7c06c6bd6..ddeab1e8d21e 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -698,6 +698,13 @@ __printf(4, 5) static void __btf_verifier_log_type(struct btf_verifier_env *env,
- 	if (!bpf_verifier_log_needed(log))
- 		return;
- 
-+	/* btf verifier prints all types it is processing via
-+	 * btf_verifier_log_type(..., fmt = NULL).
-+	 * Skip those prints for in-kernel BTF verification.
-+	 */
-+	if (log->level == BPF_LOG_KERNEL && !fmt)
-+		return;
-+
- 	__btf_verifier_log(log, "[%u] %s %s%s",
- 			   env->log_type_id,
- 			   btf_kind_str[kind],
-@@ -735,6 +742,8 @@ static void btf_verifier_log_member(struct btf_verifier_env *env,
- 	if (!bpf_verifier_log_needed(log))
- 		return;
- 
-+	if (log->level == BPF_LOG_KERNEL && !fmt)
-+		return;
- 	/* The CHECK_META phase already did a btf dump.
- 	 *
- 	 * If member is logged again, it must hit an error in
-@@ -777,6 +786,8 @@ static void btf_verifier_log_vsi(struct btf_verifier_env *env,
- 
- 	if (!bpf_verifier_log_needed(log))
- 		return;
-+	if (log->level == BPF_LOG_KERNEL && !fmt)
-+		return;
- 	if (env->phase != CHECK_META)
- 		btf_verifier_log_type(env, datasec_type, NULL);
- 
-@@ -802,6 +813,8 @@ static void btf_verifier_log_hdr(struct btf_verifier_env *env,
- 	if (!bpf_verifier_log_needed(log))
- 		return;
- 
-+	if (log->level == BPF_LOG_KERNEL)
-+		return;
- 	hdr = &btf->hdr;
- 	__btf_verifier_log(log, "magic: 0x%x\n", hdr->magic);
- 	__btf_verifier_log(log, "version: %u\n", hdr->version);
-@@ -2405,7 +2418,8 @@ static s32 btf_enum_check_meta(struct btf_verifier_env *env,
- 			return -EINVAL;
- 		}
- 
--
-+		if (env->log.level == BPF_LOG_KERNEL)
-+			continue;
- 		btf_verifier_log(env, "\t%s val=%d\n",
- 				 __btf_name_by_offset(btf, enums[i].name_off),
- 				 enums[i].val);
-@@ -3367,6 +3381,61 @@ static struct btf *btf_parse(void __user *btf_data, u32 btf_data_size,
- 	return ERR_PTR(err);
- }
- 
-+extern char __weak _binary__btf_vmlinux_bin_start[];
-+extern char __weak _binary__btf_vmlinux_bin_end[];
-+
-+struct btf *btf_parse_vmlinux(void)
-+{
-+	struct btf_verifier_env *env = NULL;
-+	struct bpf_verifier_log *log;
-+	struct btf *btf = NULL;
-+	int err;
-+
-+	env = kzalloc(sizeof(*env), GFP_KERNEL | __GFP_NOWARN);
-+	if (!env)
-+		return ERR_PTR(-ENOMEM);
-+
-+	log = &env->log;
-+	log->level = BPF_LOG_KERNEL;
-+
-+	btf = kzalloc(sizeof(*btf), GFP_KERNEL | __GFP_NOWARN);
-+	if (!btf) {
-+		err = -ENOMEM;
-+		goto errout;
-+	}
-+	env->btf = btf;
-+
-+	btf->data = _binary__btf_vmlinux_bin_start;
-+	btf->data_size = _binary__btf_vmlinux_bin_end -
-+		_binary__btf_vmlinux_bin_start;
-+
-+	err = btf_parse_hdr(env);
-+	if (err)
-+		goto errout;
-+
-+	btf->nohdr_data = btf->data + btf->hdr.hdr_len;
-+
-+	err = btf_parse_str_sec(env);
-+	if (err)
-+		goto errout;
-+
-+	err = btf_check_all_metas(env);
-+	if (err)
-+		goto errout;
-+
-+	btf_verifier_env_free(env);
-+	refcount_set(&btf->refcnt, 1);
-+	return btf;
-+
-+errout:
-+	btf_verifier_env_free(env);
-+	if (btf) {
-+		kvfree(btf->types);
-+		kfree(btf);
-+	}
-+	return ERR_PTR(err);
-+}
-+
- void btf_type_seq_show(const struct btf *btf, u32 type_id, void *obj,
- 		       struct seq_file *m)
- {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ffc3e53f5300..051a355037bf 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -207,6 +207,8 @@ struct bpf_call_arg_meta {
- 	int func_id;
- };
- 
-+struct btf *btf_vmlinux;
-+
- static DEFINE_MUTEX(bpf_verifier_lock);
- 
- static const struct bpf_line_info *
-@@ -243,6 +245,10 @@ void bpf_verifier_vlog(struct bpf_verifier_log *log, const char *fmt,
- 	n = min(log->len_total - log->len_used - 1, n);
- 	log->kbuf[n] = '\0';
- 
-+	if (log->level == BPF_LOG_KERNEL) {
-+		pr_err("BPF:%s\n", log->kbuf);
-+		return;
-+	}
- 	if (!copy_to_user(log->ubuf + log->len_used, log->kbuf, n + 1))
- 		log->len_used += n;
- 	else
-@@ -9241,6 +9247,13 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
- 	env->ops = bpf_verifier_ops[env->prog->type];
- 	is_priv = capable(CAP_SYS_ADMIN);
- 
-+	if (!btf_vmlinux && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
-+		mutex_lock(&bpf_verifier_lock);
-+		if (!btf_vmlinux)
-+			btf_vmlinux = btf_parse_vmlinux();
-+		mutex_unlock(&bpf_verifier_lock);
-+	}
-+
- 	/* grab the mutex to protect few globals used by verifier */
- 	if (!is_priv)
- 		mutex_lock(&bpf_verifier_lock);
-@@ -9260,6 +9273,13 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
- 			goto err_unlock;
- 	}
- 
-+	if (IS_ERR(btf_vmlinux)) {
-+		/* Either gcc or pahole or kernel are broken. */
-+		verbose(env, "in-kernel BTF is malformed\n");
-+		ret = PTR_ERR(btf_vmlinux);
-+		goto err_unlock;
-+	}
-+
- 	env->strict_alignment = !!(attr->prog_flags & BPF_F_STRICT_ALIGNMENT);
- 	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS))
- 		env->strict_alignment = true;
+When it comes to bpf tracing there are no types to track.
+bpf+kprobe receives 'struct pt_regs' as input.
+bpf+raw_tracepoint receives raw kernel arguments as an array of u64 values.
+It was up to bpf program to interpret these integers.
+Typical tracing program looks like:
+int bpf_prog(struct pt_regs *ctx)
+{
+    struct net_device *dev;
+    struct sk_buff *skb;
+    int ifindex;
+
+    skb = (struct sk_buff *) ctx->di;
+    bpf_probe_read(&dev, sizeof(dev), &skb->dev);
+    bpf_probe_read(&ifindex, sizeof(ifindex), &dev->ifindex);
+}
+Addressing mistakes will not be caught by C compiler or by the verifier.
+The program above could have typecasted ctx->si to skb and page faulted
+on every bpf_probe_read().
+bpf_probe_read() allows reading any address and suppresses page faults.
+Typical program has hundreds of bpf_probe_read() calls to walk
+kernel data structures.
+Not only tracing program would be slow, but there was always a risk
+that bpf_probe_read() would read mmio region of memory and cause
+unpredictable hw behavior.
+
+With introduction of Compile Once Run Everywhere technology in libbpf
+and in LLVM and BPF Type Format (BTF) the verifier is finally ready
+for the next step in program verification.
+Now it can use in-kernel BTF to type check bpf assembly code.
+
+Equivalent program will look like:
+struct trace_kfree_skb {
+    struct sk_buff *skb;
+    void *location;
+};
+SEC("raw_tracepoint/kfree_skb")
+int trace_kfree_skb(struct trace_kfree_skb* ctx)
+{
+    struct sk_buff *skb = ctx->skb;
+    struct net_device *dev;
+    int ifindex;
+
+    __builtin_preserve_access_index(({
+        dev = skb->dev;
+        ifindex = dev->ifindex;
+    }));
+}
+
+These patches teach bpf verifier to recognize kfree_skb's first argument
+as 'struct sk_buff *' because this is what kernel C code is doing.
+The bpf program cannot 'cheat' and say that the first argument
+to kfree_skb raw_tracepoint is some other type.
+The verifier will catch such type mismatch between bpf program
+assumption of kernel code and the actual type in the kernel.
+
+Furthermore skb->dev access is type tracked as well.
+The verifier can see which field of skb is being read
+in bpf assembly. It will match offset to type.
+If bpf program has code:
+struct net_device *dev = (void *)skb->len;
+C compiler will not complain and generate bpf assembly code,
+but the verifier will recognize that integer 'len' field
+is being accessed at offsetof(struct sk_buff, len) and will reject
+further dereference of 'dev' variable because it contains
+integer value instead of a pointer.
+
+Such sophisticated type tracking allows calling networking
+bpf helpers from tracing programs.
+This patchset allows calling bpf_skb_event_output() that dumps
+skb data into perf ring buffer.
+It greatly improves observability.
+Now users can not only see packet lenth of the skb
+about to be freed in kfree_skb() kernel function, but can
+dump it to user space via perf ring buffer using bpf helper
+that was previously available only to TC and socket filters.
+See patch 10 for full example.
+
+The end result is safer and faster bpf tracing.
+Safer - because direct calls to bpf_probe_read() are disallowed and
+arbitrary addresses cannot be read.
+Faster - because normal loads are used to walk kernel data structures
+instead of bpf_probe_read() calls.
+Note that such loads can page fault and are supported by
+hidden bpf_probe_read() in interpreter and via exception table
+if program is JITed.
+
+See patches for details.
+
+Alexei Starovoitov (12):
+  bpf: add typecast to raw_tracepoints to help BTF generation
+  bpf: add typecast to bpf helpers to help BTF generation
+  bpf: process in-kernel BTF
+  bpf: add attach_btf_id attribute to program load
+  libbpf: auto-detect btf_id of raw_tracepoint
+  bpf: implement accurate raw_tp context access via BTF
+  bpf: attach raw_tp program with BTF via type name
+  bpf: add support for BTF pointers to interpreter
+  bpf: add support for BTF pointers to x86 JIT
+  bpf: check types of arguments passed into helpers
+  bpf: disallow bpf_probe_read[_str] helpers
+  selftests/bpf: add kfree_skb raw_tp test
+
+ arch/x86/net/bpf_jit_comp.c                   |  97 +++++-
+ include/linux/bpf.h                           |  39 ++-
+ include/linux/bpf_verifier.h                  |   8 +-
+ include/linux/btf.h                           |   1 +
+ include/linux/extable.h                       |  10 +
+ include/linux/filter.h                        |   6 +-
+ include/trace/bpf_probe.h                     |   3 +-
+ include/uapi/linux/bpf.h                      |  28 +-
+ kernel/bpf/btf.c                              | 325 +++++++++++++++++-
+ kernel/bpf/core.c                             |  39 ++-
+ kernel/bpf/syscall.c                          |  85 +++--
+ kernel/bpf/verifier.c                         | 159 ++++++++-
+ kernel/extable.c                              |   2 +
+ kernel/trace/bpf_trace.c                      |  10 +-
+ net/core/filter.c                             |  15 +-
+ tools/include/uapi/linux/bpf.h                |  28 +-
+ tools/lib/bpf/bpf.c                           |   3 +
+ tools/lib/bpf/libbpf.c                        |  17 +
+ .../selftests/bpf/prog_tests/kfree_skb.c      |  90 +++++
+ tools/testing/selftests/bpf/progs/kfree_skb.c |  74 ++++
+ 20 files changed, 975 insertions(+), 64 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/kfree_skb.c
+ create mode 100644 tools/testing/selftests/bpf/progs/kfree_skb.c
+
 -- 
 2.23.0
 
