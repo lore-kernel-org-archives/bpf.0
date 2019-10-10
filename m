@@ -2,148 +2,106 @@ Return-Path: <SRS0=kVgz=YD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D7F8C4360C
-	for <bpf@archiver.kernel.org>; Thu, 10 Oct 2019 03:55:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10866ECE58D
+	for <bpf@archiver.kernel.org>; Thu, 10 Oct 2019 04:15:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5856E206B6
-	for <bpf@archiver.kernel.org>; Thu, 10 Oct 2019 03:55:23 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="cbx6/ocp";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="G+uxzzH/"
+	by mail.kernel.org (Postfix) with ESMTP id D4F58218DE
+	for <bpf@archiver.kernel.org>; Thu, 10 Oct 2019 04:15:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1570680910;
+	bh=vPWob/SSxZMcmk2NlU3D5+LZ4h4rwF5/2STTNbwccs0=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=0z07mTCAgyN2lLYV4I81PcFUKQUJtr6Fi3TcJNc3geHz2yA49kD+Tfo3TYX3Nx5zW
+	 fZIuaijbtZAOVC5bTw/5eUTYf44XWM0sB+Qk0PurcNP1WXm3AlsdrWVEyfWqYnHSrr
+	 v/XwYPpoxhjuAYYIsa52hU2nxvFLf/SrO9kVMsOk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732638AbfJJDzX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Oct 2019 23:55:23 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:11642 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726524AbfJJDzW (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 9 Oct 2019 23:55:22 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9A3t7Ac020929;
-        Wed, 9 Oct 2019 20:55:07 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=Jny8/slMj12R7f5mj1ok99BuND+3QGZDIi0TyrG+TtQ=;
- b=cbx6/ocpfAsSTJut+XmKNevExbJcEg7toi1TARUAgpCetEYsYUHeHaoO99CP7RBjaonW
- oyKtTG+t7N8C9G6wTOsOt4Vob1Xu5qV3gYWPkd9NETFWwQGtnaYYRfTM2YD/8hBnVOTQ
- oalusJcIms1mDuLpi1/tfnYo2EV2ZTsFh0E= 
+        id S1727417AbfJJEPK convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 10 Oct 2019 00:15:10 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:37264 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726495AbfJJEPK (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 10 Oct 2019 00:15:10 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id x9A4DW2H005450
+        for <bpf@vger.kernel.org>; Wed, 9 Oct 2019 21:15:09 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2vhnsj9rbh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 09 Oct 2019 20:55:06 -0700
-Received: from ash-exopmbx201.TheFacebook.com (2620:10d:c0a8:83::8) by
- ash-exhub203.TheFacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+        by m0001303.ppops.net with ESMTP id 2vgr0gtanp-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 09 Oct 2019 21:15:09 -0700
+Received: from 2401:db00:2050:5076:face:0:9:0 (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 9 Oct 2019 20:54:47 -0700
-Received: from ash-exhub103.TheFacebook.com (2620:10d:c0a8:82::c) by
- ash-exopmbx201.TheFacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 9 Oct 2019 20:54:47 -0700
-Received: from NAM05-CO1-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.35.174) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
- via Frontend Transport; Wed, 9 Oct 2019 20:54:47 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RZbKF0lFCAfChu1S+yd+4X2gcI55g6bsT7d7TOY2hnncgf2pTwkUyFioj2u7uzO4XN879/gaOZhF0Guyc4PQKJ+RzV/xwNl0Oqz8EA4aLY7kF9B7XpBfLB4rA7Y059OjYh8TvkwPKW8I1+bFG6PlBQ/4OQg7JK5FkB9RRppuhszq8Ay1XvKFkud6jXD1zv8mV3BtnI0/94/ZnfSKaaBPWb9HclsEgnpR/kj5ToTdGalRjMRSofZydMrgZsfIFVW59n9TirEzRNr1nIzx6sArPqWuDv+K9paCTLpPoSgh9OEEGNCUhkGIzgVOyVAXkz/cgdfalRzO84yWI7fn6NEhHg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Jny8/slMj12R7f5mj1ok99BuND+3QGZDIi0TyrG+TtQ=;
- b=R7h+WAy2pmSPenm4x9q1QeYiq4oatCkI+4kN0bJ/YtGwPRDAiLgmkD+/NfsjkpdnMXvQvvPGVinfXgbxSnXiUBiSRmODoy/7TWYwne0050J3FcG74YgKg3HeT33VUm62hhncxmim/i5HgZp2Cun3G47k6avNo5atLr3iB1DtccFeyuVyVU3dkIHyJdOisYEip+3i/TeuvTCUI0VwMJYJ7dm8IT66/w2WSkjSzuzxTRUyah8obe0RkRE2/e9jWaDJA9Deg3+F0yBUP/DoOAFhm65UEHKjit5Z6eu1pkpQDLp6lYZNQ2p8KNB4BNqLNsqs7XdBvt0RmOeKnmraZ51zVg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Jny8/slMj12R7f5mj1ok99BuND+3QGZDIi0TyrG+TtQ=;
- b=G+uxzzH/zScC59MrWRw8eODR0YqcVGIvcxqZamIPF0ls+w629YGdK4623UE0FSVTOegwmG1BNTnCjxkqkMsw1kH3WTyDmgwUrEBR4eYnHuAVOO8XZHKYgIvAQrQKD3Cd82JyedkOzbqQ3xGOH3rbBJx4RE5sFSu5JW3uDIvo8gM=
-Received: from BYAPR15MB2501.namprd15.prod.outlook.com (52.135.196.11) by
- BYAPR15MB3029.namprd15.prod.outlook.com (20.178.238.90) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2347.18; Thu, 10 Oct 2019 03:54:46 +0000
-Received: from BYAPR15MB2501.namprd15.prod.outlook.com
- ([fe80::c13d:be57:b216:bfa0]) by BYAPR15MB2501.namprd15.prod.outlook.com
- ([fe80::c13d:be57:b216:bfa0%5]) with mapi id 15.20.2327.026; Thu, 10 Oct 2019
- 03:54:46 +0000
-From:   Alexei Starovoitov <ast@fb.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Kernel Team <Kernel-team@fb.com>
-Subject: Re: [PATCH bpf-next 05/10] bpf: implement accurate raw_tp context
- access via BTF
-Thread-Topic: [PATCH bpf-next 05/10] bpf: implement accurate raw_tp context
- access via BTF
-Thread-Index: AQHVezo5sKYubhk6UEK1EwMR6IEna6dP6i6AgAHDRACAAAiTgIAAE1WAgAF9F4A=
-Date:   Thu, 10 Oct 2019 03:54:45 +0000
-Message-ID: <9911e078-9408-4943-e069-fae0a56423e4@fb.com>
-References: <20191005050314.1114330-1-ast@kernel.org>
- <20191005050314.1114330-6-ast@kernel.org>
- <CAEf4BzZvZ_gseRgaJb-fXJ-M=0c71PebQLbDH50BL5fCK6yZ1g@mail.gmail.com>
- <b1d49ded-6d16-9476-ac70-89371ba7c709@fb.com>
- <CAEf4BzYUoGb2k9MwbyDpfm1p6+mbbSc_t4rcM6TKZ-Q2VaGxpw@mail.gmail.com>
- <CAEf4BzbtBU3pGVUOS-4_0gy50a41+_m4_ROYZNeGTJGpLTJotQ@mail.gmail.com>
-In-Reply-To: <CAEf4BzbtBU3pGVUOS-4_0gy50a41+_m4_ROYZNeGTJGpLTJotQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: MWHPR13CA0036.namprd13.prod.outlook.com
- (2603:10b6:300:95::22) To BYAPR15MB2501.namprd15.prod.outlook.com
- (2603:10b6:a02:88::11)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [2620:10d:c090:180::7c62]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 22d9e33b-f5e6-4bcc-4c02-08d74d3596df
-x-ms-traffictypediagnostic: BYAPR15MB3029:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BYAPR15MB3029E8CFC7B9F4084180EA94D7940@BYAPR15MB3029.namprd15.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3513;
-x-forefront-prvs: 018632C080
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(39860400002)(136003)(366004)(376002)(346002)(199004)(189003)(36756003)(7736002)(305945005)(53546011)(6506007)(66476007)(66556008)(64756008)(66446008)(256004)(6436002)(31686004)(6916009)(478600001)(102836004)(66946007)(25786009)(316002)(76176011)(386003)(5660300002)(6116002)(86362001)(2906002)(4326008)(31696002)(81156014)(8676002)(81166006)(6246003)(71190400001)(71200400001)(8936002)(4744005)(6512007)(446003)(14454004)(11346002)(486006)(99286004)(52116002)(229853002)(186003)(46003)(54906003)(2616005)(476003)(6486002);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB3029;H:BYAPR15MB2501.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: XhrBt0mjdARcbVwIO4oRjixD3RyiT0x0yqiSlLFtTg+T6tc833C61+fE5PxxcmSlIwSYJfjnnq2/5JlngVGvPCbDRfYeFF96K4fArWiSAPLgRPludr99rRPtTRRmAMYjqI8r4fQ01hy7C2+THVdQMi+WMrVTIzaJvOhHBs81Zu2zJMcFvsGzakm5W86r99RONRwfmflJkjIMDGHRg71TFby0ll0qxt+94/SQ+oYSr6kUS4/LA/8HkeWIQK/8ueLETH7c83NyWLYaUP53Uw+/w+FUDq+GMmj1N/lQB4vf8yR1kskBkuAwNyOGrvDhqt5eHGMMchDCboSdyzsQG7nhJTGuTulEyDc9Wj61wmkcNgHRJ73syqmG+WlYNTSMk74L1PP+aSUo4tf/zJuTQKFd3C9aeIC7BUOTlY2WVE1KKM4=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A66BC77C256C1A40A0687526DA6EDEA3@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ 15.1.1713.5; Wed, 9 Oct 2019 21:15:07 -0700
+Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
+        id 46171760CF9; Wed,  9 Oct 2019 21:15:07 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Alexei Starovoitov <ast@kernel.org>
+Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
+To:     <davem@davemloft.net>
+CC:     <daniel@iogearbox.net>, <x86@kernel.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <kernel-team@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH v2 bpf-next 02/12] bpf: add typecast to bpf helpers to help BTF generation
+Date:   Wed, 9 Oct 2019 21:14:53 -0700
+Message-ID: <20191010041503.2526303-3-ast@kernel.org>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191010041503.2526303-1-ast@kernel.org>
+References: <20191010041503.2526303-1-ast@kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 22d9e33b-f5e6-4bcc-4c02-08d74d3596df
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Oct 2019 03:54:45.8025
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 2OUXUxfwltxtg34ej6nL+xrWZjIjLzpfj7f3vMs8cWFK7tvRqFM0YdojxMozNox4
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3029
-X-OriginatorOrg: fb.com
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
- definitions=2019-10-10_01:2019-10-08,2019-10-10 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 suspectscore=0
- adultscore=0 mlxlogscore=768 impostorscore=0 priorityscore=1501
- spamscore=0 lowpriorityscore=0 malwarescore=0 phishscore=0 bulkscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1910100034
+ definitions=2019-10-10_02:2019-10-08,2019-10-10 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
+ clxscore=1015 bulkscore=0 priorityscore=1501 impostorscore=0 mlxscore=0
+ spamscore=0 malwarescore=0 suspectscore=1 adultscore=0 lowpriorityscore=0
+ mlxlogscore=891 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1910100037
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-T24gMTAvOC8xOSAxMDoxMCBQTSwgQW5kcmlpIE5ha3J5aWtvIHdyb3RlOg0KPiBmb3JfZWFjaF9t
-ZW1iZXIoaSwgdCwgbWVtYmVyKSB7DQo+ICAgICAgaWYgKG1vZmYgKyBtc2l6ZSA8PSBvZmYpDQo+
-ICAgICAgICAgIGNvbnRpbnVlOyAvKiBubyBvdmVybGFwIHdpdGggbWVtYmVyLCB5ZXQsIGtlZXAg
-aXRlcmF0aW5nICovDQo+ICAgICAgaWYgKG1vZmYgPj0gb2ZmICsgc2l6ZSkNCj4gICAgICAgICAg
-YnJlYWs7IC8qIHdvbid0IGZpbmQgYW55dGhpbmcsIGZpZWxkIGlzIGFscmVhZHkgdG9vIGZhciAq
-Lw0KPiANCj4gICAgICAvKiBvdmVybGFwcGluZywgcmVzdCBvZiB0aGUgY2hlY2tzICovDQoNCm1h
-a2VzIHNlbnNlLiBJJ2xsIHR3ZWFrIHRoZSBjb21tZW50cyBhbmQgY2hlY2tzLg0K
+When pahole converts dwarf to btf it emits only used types.
+Wrap existing bpf helper functions into typedef and use it in
+typecast to make gcc emits this type into dwarf.
+Then pahole will convert it to btf.
+The "btf_#name_of_helper" types will be used to figure out
+types of arguments of bpf helpers.
+The generated code before and after is the same.
+Only dwarf and btf sections are different.
+
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+---
+ include/linux/filter.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 2ce57645f3cd..d3d51d7aff2c 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -464,10 +464,11 @@ static inline bool insn_is_zext(const struct bpf_insn *insn)
+ #define BPF_CALL_x(x, name, ...)					       \
+ 	static __always_inline						       \
+ 	u64 ____##name(__BPF_MAP(x, __BPF_DECL_ARGS, __BPF_V, __VA_ARGS__));   \
++	typedef u64 (*btf_##name)(__BPF_MAP(x, __BPF_DECL_ARGS, __BPF_V, __VA_ARGS__)); \
+ 	u64 name(__BPF_REG(x, __BPF_DECL_REGS, __BPF_N, __VA_ARGS__));	       \
+ 	u64 name(__BPF_REG(x, __BPF_DECL_REGS, __BPF_N, __VA_ARGS__))	       \
+ 	{								       \
+-		return ____##name(__BPF_MAP(x,__BPF_CAST,__BPF_N,__VA_ARGS__));\
++		return ((btf_##name)____##name)(__BPF_MAP(x,__BPF_CAST,__BPF_N,__VA_ARGS__));\
+ 	}								       \
+ 	static __always_inline						       \
+ 	u64 ____##name(__BPF_MAP(x, __BPF_DECL_ARGS, __BPF_V, __VA_ARGS__))
+-- 
+2.23.0
+
