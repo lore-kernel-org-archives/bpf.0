@@ -2,170 +2,122 @@ Return-Path: <SRS0=XZ9j=YE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 057F3C4360C
-	for <bpf@archiver.kernel.org>; Fri, 11 Oct 2019 00:29:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CD11C4360C
+	for <bpf@archiver.kernel.org>; Fri, 11 Oct 2019 00:29:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D1ED9214E0
-	for <bpf@archiver.kernel.org>; Fri, 11 Oct 2019 00:29:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 44D7F2196E
+	for <bpf@archiver.kernel.org>; Fri, 11 Oct 2019 00:29:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oZoFP4EB"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ctOBcBUR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727893AbfJKA3E (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Oct 2019 20:29:04 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:38077 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727722AbfJKA2i (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Oct 2019 20:28:38 -0400
-Received: by mail-lj1-f196.google.com with SMTP id b20so8033585ljj.5
-        for <bpf@vger.kernel.org>; Thu, 10 Oct 2019 17:28:36 -0700 (PDT)
+        id S1726474AbfJKA3L (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Oct 2019 20:29:11 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:43244 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727895AbfJKA3F (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Oct 2019 20:29:05 -0400
+Received: by mail-lj1-f195.google.com with SMTP id n14so8002629ljj.10
+        for <bpf@vger.kernel.org>; Thu, 10 Oct 2019 17:29:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=oHm0qgs35bdRmF9F1S/p3tYJstCeeDVx8Vw6XCI5qDc=;
-        b=oZoFP4EBvirEOvHM9IfrnbIXJxjTZbSW136oc9UH1jI/wbPjjRATuu7MjU2Rqqkd/z
-         Q12GzulFKtOI+LJ0qj+5jNMmCVsXsm6Du5YO8D0p+tYMDdRNKcMbUISq9/l6pXtBklWP
-         janUJ6/iEWpc64Iuj0bEjCQprSWEhsxeyDw24v0xm1+sb7yVT1l1O4BSA94dZdZnN8fq
-         0Rdo69y1azsmEHPwIxAdFVnnYGhRyV/skW/4qKuKKE+kQCbdICf5xLj3qVQDQgwjUp4z
-         Em25qhXc2WFbbf826EgIg8xT5txDZCz845v5RT3V5P6kDssmNHcAoUYNkrA4/cxF2U5r
-         wUhA==
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=4WsWgFcQX+4hcpk8fzSs1Uvm+uJ+nhztEkt8zqmznqg=;
+        b=ctOBcBURvGgmJ1YcNG6NC//LFndWhI0zEGO2+cDY0qa66y8fxEW/CXFgEpco3GyBE/
+         zj9K8xfS4StDiRO26znkvTJ9CaoFGJYJvP+AExZhpeNS8wUd9Di6heimHjF41uJZIH8y
+         oH0g6tGELuQom9pG5eE/i6sChB8vJl216T0mhCc/wVKazkoXz8UCoJJ0R/tcgpbCbgbY
+         wDiO8urRb6Nv0b4/zAN9hrNFCHvuS2IukXWFidTX3Fr5mWdgmJJjXmST613+2O1cL5Kv
+         cbLg6AyRPnO358ie71Hox/9a9ha/MIWfQvL48wGoz2M8MO2jpWLL10vE5dYAcNgNdaae
+         JNsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=oHm0qgs35bdRmF9F1S/p3tYJstCeeDVx8Vw6XCI5qDc=;
-        b=s06k4MchGH6KrCRcljtxto1BklZmzD2p/GD0KV7PmrxYfzBX4earOBesluPnM0nB1T
-         Llq+/Lk9G3TquIggF/TGUNhMqpjvH5fHdWW/Ji9W0FNGc3OiHN+t82MTBRw2MuWjtg0S
-         rQsF4hdQSGKwgMTBOsqlzzdy8vOYNrcMxlLCBRqPHCfu0cTvXDJTMxAjoG50XcL9w4Yu
-         gq1hTgYKP7wWALJXkAUkNHoRJ0wmkK8FHZtE2gDeTetD8HcHA4/cR/1QsDGIKpDutHgm
-         QhdDIjxWC+/zKO4rBOr4zaepgOxveqyF7mINL/pmLbujdHHqosT4Sqjs3n+vRKyOh4Wl
-         IgEg==
-X-Gm-Message-State: APjAAAWWcr+PGuaWt7mzMViCUF0Vnx2oBsL7I23zw3Xzb3K54nl8MIRx
-        0vSqWj69bpw7WeIs6WuBLoBUhw==
-X-Google-Smtp-Source: APXvYqwTPy70ROgoZDQ55cPuYWUZQKFCSMSQwfrSkuApAs28Wn8XuDBpgk6VAGN8GXArn8LtVqlcmA==
-X-Received: by 2002:a2e:658f:: with SMTP id e15mr7832403ljf.254.1570753715857;
-        Thu, 10 Oct 2019 17:28:35 -0700 (PDT)
-Received: from localhost.localdomain (88-201-94-178.pool.ukrtel.net. [178.94.201.88])
-        by smtp.gmail.com with ESMTPSA id 126sm2367010lfh.45.2019.10.10.17.28.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2019 17:28:35 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to:user-agent;
+        bh=4WsWgFcQX+4hcpk8fzSs1Uvm+uJ+nhztEkt8zqmznqg=;
+        b=Qg2xYOg5jwljkf3RQf9YaJHn6B/e1feCRJkb5XwLZQefE1AwAna1gMb27zltPkOeeY
+         +2gzhRE/b+F/+GbeFt4goxODVpWHU1tpRBSkzqLIwm9NZu/7HBZCjMMGNUERbP9Kab5l
+         hZgU7zMu4F45H0/rzFGA4sEpyD21b7KYhPSib80RyQ3elTvVfrwo3FVypJURc4CS+/s0
+         zht0ASZ1eeePQCPmlPEE+dYh7GJ4ewfIFE679rt5zj+VrRL7FhCrZuoR5M9T5qW/gGiv
+         3FsKE7vKdd1R85I6WKZXtMrGTArsgtaPMuni0PTtDQlsLlitHOaVnGKmlHjCsIpmDUz3
+         m8xA==
+X-Gm-Message-State: APjAAAX6S0Mp3rJrqjfyuQPs5mcTz0DoK982WJH6Gg9ek9AVOBgOwjAm
+        WUFZKxTVbGJ+OWYazHBt0B9yGQ==
+X-Google-Smtp-Source: APXvYqySw5/2iZFOp9V0R18gVq02vew1YIQUx4qtGUkTfdB1VNPqrML/tZj5hh8JTwJShrTOzdeQEQ==
+X-Received: by 2002:a2e:9ad0:: with SMTP id p16mr7677917ljj.179.1570753743905;
+        Thu, 10 Oct 2019 17:29:03 -0700 (PDT)
+Received: from khorivan (88-201-94-178.pool.ukrtel.net. [178.94.201.88])
+        by smtp.gmail.com with ESMTPSA id c26sm1785025ljj.45.2019.10.10.17.29.02
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 10 Oct 2019 17:29:03 -0700 (PDT)
+Date:   Fri, 11 Oct 2019 03:29:01 +0300
 From:   Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-To:     ast@kernel.org, daniel@iogearbox.net, yhs@fb.com,
-        davem@davemloft.net, jakub.kicinski@netronome.com, hawk@kernel.org,
-        john.fastabend@gmail.com
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     ast@kernel.org, yhs@fb.com, davem@davemloft.net,
+        jakub.kicinski@netronome.com, hawk@kernel.org,
+        john.fastabend@gmail.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        clang-built-linux@googlegroups.com, ilias.apalodimas@linaro.org,
+        sergei.shtylyov@cogentembedded.com
+Subject: Re: [PATCH v4 bpf-next 00/15] samples: bpf: improve/fix
+ cross-compilation
+Message-ID: <20191011002900.GA4121@khorivan>
+Mail-Followup-To: Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org,
+        yhs@fb.com, davem@davemloft.net, jakub.kicinski@netronome.com,
+        hawk@kernel.org, john.fastabend@gmail.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, clang-built-linux@googlegroups.com,
-        ilias.apalodimas@linaro.org, sergei.shtylyov@cogentembedded.com,
-        Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-Subject: [PATCH v5 bpf-next 11/15] libbpf: don't use cxx to test_libpf target
-Date:   Fri, 11 Oct 2019 03:28:04 +0300
-Message-Id: <20191011002808.28206-12-ivan.khoronzhuk@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191011002808.28206-1-ivan.khoronzhuk@linaro.org>
-References: <20191011002808.28206-1-ivan.khoronzhuk@linaro.org>
+        ilias.apalodimas@linaro.org, sergei.shtylyov@cogentembedded.com
+References: <20191009204134.26960-1-ivan.khoronzhuk@linaro.org>
+ <20191011000056.GD20202@pc-63.home>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20191011000056.GD20202@pc-63.home>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-No need to use C++ for test_libbpf target when libbpf is on C and it
-can be tested with C, after this change the CXXFLAGS in makefiles can
-be avoided, at least in bpf samples, when sysroot is used, passing
-same C/LDFLAGS as for lib.
+On Fri, Oct 11, 2019 at 02:00:56AM +0200, Daniel Borkmann wrote:
+>On Wed, Oct 09, 2019 at 11:41:19PM +0300, Ivan Khoronzhuk wrote:
+>> This series contains mainly fixes/improvements for cross-compilation
+>> but not only, tested for arm, arm64, and intended for any arch.
+>> Also verified on native build (not cross compilation) for x86_64
+>> and arm, arm64.
+>[...]
+>
+>There are multiple SOBs missing, please fix. Thanks!
+>
+>[...]
+> 5 files changed, 218 insertions(+), 99 deletions(-)
+> create mode 100644 samples/bpf/Makefile.target
+> rename tools/lib/bpf/{test_libbpf.cpp => test_libbpf.c} (61%)
+>Deleted branch mbox (was 9f35d1d0c8f0).
+>Commit 9f35d1d0c8f0 ("samples/bpf: Add preparation steps and sysroot info to readme")
+>	author Signed-off-by missing
+>	committer Signed-off-by missing
+>	author email:    ivan.khoronzhuk@linaro.org
+>	committer email: daniel@iogearbox.net
+>
+>
+>Commit 1878c1de4607 ("samples/bpf: Use __LINUX_ARM_ARCH__ selector for arm")
+>	author Signed-off-by missing
+>	committer Signed-off-by missing
+>	author email:    ivan.khoronzhuk@linaro.org
+>	committer email: daniel@iogearbox.net
+>
+>
+>Errors in tree with Signed-off-by, please fix!
 
-Add "return 0" in test_libbpf to avoid warn, but also remove spaces at
-start of the lines to keep same style and avoid warns while apply.
+Done.
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
----
- tools/lib/bpf/Makefile                         | 18 +++++-------------
- .../lib/bpf/{test_libbpf.cpp => test_libbpf.c} | 14 ++++++++------
- 2 files changed, 13 insertions(+), 19 deletions(-)
- rename tools/lib/bpf/{test_libbpf.cpp => test_libbpf.c} (61%)
-
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index 1270955e4845..46280b5ad48d 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -52,7 +52,7 @@ ifndef VERBOSE
- endif
- 
- FEATURE_USER = .libbpf
--FEATURE_TESTS = libelf libelf-mmap bpf reallocarray cxx
-+FEATURE_TESTS = libelf libelf-mmap bpf reallocarray
- FEATURE_DISPLAY = libelf bpf
- 
- INCLUDES = -I. -I$(srctree)/tools/include -I$(srctree)/tools/arch/$(ARCH)/include/uapi -I$(srctree)/tools/include/uapi
-@@ -142,15 +142,7 @@ GLOBAL_SYM_COUNT = $(shell readelf -s --wide $(BPF_IN) | \
- VERSIONED_SYM_COUNT = $(shell readelf -s --wide $(OUTPUT)libbpf.so | \
- 			      grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 | sort -u | wc -l)
- 
--CMD_TARGETS = $(LIB_TARGET) $(PC_FILE)
--
--CXX_TEST_TARGET = $(OUTPUT)test_libbpf
--
--ifeq ($(feature-cxx), 1)
--	CMD_TARGETS += $(CXX_TEST_TARGET)
--endif
--
--TARGETS = $(CMD_TARGETS)
-+CMD_TARGETS = $(LIB_TARGET) $(PC_FILE) $(OUTPUT)test_libbpf
- 
- all: fixdep
- 	$(Q)$(MAKE) all_cmd
-@@ -190,8 +182,8 @@ $(OUTPUT)libbpf.so.$(LIBBPF_VERSION): $(BPF_IN)
- $(OUTPUT)libbpf.a: $(BPF_IN)
- 	$(QUIET_LINK)$(RM) $@; $(AR) rcs $@ $^
- 
--$(OUTPUT)test_libbpf: test_libbpf.cpp $(OUTPUT)libbpf.a
--	$(QUIET_LINK)$(CXX) $(INCLUDES) $^ -lelf -o $@
-+$(OUTPUT)test_libbpf: test_libbpf.c $(OUTPUT)libbpf.a
-+	$(QUIET_LINK)$(CC) $(INCLUDES) $^ -lelf -o $@
- 
- $(OUTPUT)libbpf.pc:
- 	$(QUIET_GEN)sed -e "s|@PREFIX@|$(prefix)|" \
-@@ -266,7 +258,7 @@ config-clean:
- 	$(Q)$(MAKE) -C $(srctree)/tools/build/feature/ clean >/dev/null
- 
- clean:
--	$(call QUIET_CLEAN, libbpf) $(RM) $(TARGETS) $(CXX_TEST_TARGET) \
-+	$(call QUIET_CLEAN, libbpf) $(RM) $(CMD_TARGETS) \
- 		*.o *~ *.a *.so *.so.$(LIBBPF_MAJOR_VERSION) .*.d .*.cmd \
- 		*.pc LIBBPF-CFLAGS bpf_helper_defs.h
- 	$(call QUIET_CLEAN, core-gen) $(RM) $(OUTPUT)FEATURE-DUMP.libbpf
-diff --git a/tools/lib/bpf/test_libbpf.cpp b/tools/lib/bpf/test_libbpf.c
-similarity index 61%
-rename from tools/lib/bpf/test_libbpf.cpp
-rename to tools/lib/bpf/test_libbpf.c
-index fc134873bb6d..f0eb2727b766 100644
---- a/tools/lib/bpf/test_libbpf.cpp
-+++ b/tools/lib/bpf/test_libbpf.c
-@@ -7,12 +7,14 @@
- 
- int main(int argc, char *argv[])
- {
--    /* libbpf.h */
--    libbpf_set_print(NULL);
-+	/* libbpf.h */
-+	libbpf_set_print(NULL);
- 
--    /* bpf.h */
--    bpf_prog_get_fd_by_id(0);
-+	/* bpf.h */
-+	bpf_prog_get_fd_by_id(0);
- 
--    /* btf.h */
--    btf__new(NULL, 0);
-+	/* btf.h */
-+	btf__new(NULL, 0);
-+
-+	return 0;
- }
 -- 
-2.17.1
-
+Regards,
+Ivan Khoronzhuk
