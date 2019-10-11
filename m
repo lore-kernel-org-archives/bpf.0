@@ -7,56 +7,57 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B652ECE58E
-	for <bpf@archiver.kernel.org>; Fri, 11 Oct 2019 16:21:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 382B3C47404
+	for <bpf@archiver.kernel.org>; Fri, 11 Oct 2019 16:21:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5BA3D206A1
-	for <bpf@archiver.kernel.org>; Fri, 11 Oct 2019 16:21:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D998206A1
+	for <bpf@archiver.kernel.org>; Fri, 11 Oct 2019 16:21:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DRaWA1Es"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wC6D6xz1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728220AbfJKQV3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Oct 2019 12:21:29 -0400
-Received: from mail-pf1-f201.google.com ([209.85.210.201]:53772 "EHLO
-        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726728AbfJKQV3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Oct 2019 12:21:29 -0400
-Received: by mail-pf1-f201.google.com with SMTP id x10so7836925pfr.20
-        for <bpf@vger.kernel.org>; Fri, 11 Oct 2019 09:21:29 -0700 (PDT)
+        id S1728314AbfJKQVc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Oct 2019 12:21:32 -0400
+Received: from mail-pl1-f202.google.com ([209.85.214.202]:56083 "EHLO
+        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728213AbfJKQVc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 11 Oct 2019 12:21:32 -0400
+Received: by mail-pl1-f202.google.com with SMTP id g11so6304289plm.22
+        for <bpf@vger.kernel.org>; Fri, 11 Oct 2019 09:21:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=KDZVxGGvtoUTk1RqaetpoYQq+Ui+ut5COCWag7pw9rs=;
-        b=DRaWA1Es/TQ8MVC3DtaBGIaen9YrP/2hLr9y9MZxWp8SXEdVYr5u4cdb6TJ3Hix2zS
-         bkfcW2q4LSTdI+uT+AAGvBNP0JndC/SqeVQ06d9DwH16mIJGMFUFwdm5RdrF50Glhdm+
-         a3wkCKWdFktlB7XTIpCAu87NNT0qivmeXhH46m69IXRNmfJCRjVg+/ReQ7t4JgZhZu9E
-         Fe9B68y/+3fKC54rEgj68JFPjR+Q1YALQTfmGuUBopPBBXGTvUnr4a8Zkyte8lZNJxpf
-         U7hY8rYRGi3MlTs2t/lKe+WWt9yQe4goE706HRX8NZgMZgZDsOpXiEKumLwhCWdQgABf
-         0qFw==
+        bh=KYr+rZ9xpD3o3WNhn/gciNYekX7hP9ynebQ52QiejRo=;
+        b=wC6D6xz1F3pXdU5fm+Fa7rKJFgfFJrU3cmp2OHi9kcDjxmTlc9RjjUFQ0n3ijsQZz7
+         5yXHnk7+4JdRs6wjO487kGoWS2ba6nnXn294PD93cGCp1WYEK3Y03zTDeL1F+iQS9fCU
+         S4hZX9ODKfQzvYX6RiSBzaU80PJunSnasVMzBzfp7jZkJma4ja+RpN1OMAXVrvpLUuhT
+         vzz9Q7PUN7RHfQBEodIExP3iNVIU8dTPNWxyc41He8itTrqEJLiW2PLoK/WRzCSgLwhJ
+         DAyziwVTHgwTMv5PDwaPx4P1iGt8s39Ya1moPaLE4nWCdobyDodE0tC+ZVABG5xEipHJ
+         pzSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=KDZVxGGvtoUTk1RqaetpoYQq+Ui+ut5COCWag7pw9rs=;
-        b=Ln2tBpWyOFF+pYiiEPHuq1hqpLHcUB9YbadFn5JjGRvL1x6SlhSli8yZis30TvrSRc
-         hcNrTWZisJsiRLe7oLc4nyFuwYxKdWmwa4/8bLdBRvYYSJab97CS8Euy/Lw1akxKIccV
-         I6LOF4Ebw3Bum1W4VVaetJoVB7tI8zdZvOa4ggEOBlRtqgzeqV7RbRpSR92usaa8zrjl
-         CWscKK5EAjxy8931skI80+PThdT+nJ71qYiSmvxK3p9MY1jVnFswF96CHvLLgOl+Uf2p
-         EXI7eI8+L9Xhzyp0Cuf8LoQwvdyYg2En3vzqGOD3t6JqmFZWUQ1KJJXI8ofm8zKUnIPW
-         +mVg==
-X-Gm-Message-State: APjAAAXGXAuId/X70zEnqCbSUJAN4xIV/Uywyq7Oh33J1JGMN3KkVWZV
-        O8+Hi7NDCUDIymUe2vmwc/pA6cE=
-X-Google-Smtp-Source: APXvYqxjQ1ZelYEyr7jRyX7StJ5karSIgWLxQNUdmm4yZKlp0cBxP1qTlJcBEuygrfv3aTUR+9WvFyo=
-X-Received: by 2002:a63:d450:: with SMTP id i16mr17496713pgj.126.1570810888835;
- Fri, 11 Oct 2019 09:21:28 -0700 (PDT)
-Date:   Fri, 11 Oct 2019 09:21:23 -0700
+        bh=KYr+rZ9xpD3o3WNhn/gciNYekX7hP9ynebQ52QiejRo=;
+        b=hbMFg/N1UY73WrEbawcFsdYOadjuTEnydS2t7lwrN7sQj5vBcONiMjZoEUOQ3HLYM/
+         130M8FzREvx5Nrl1HuvVDcNXBkZZ8cUmA1u1QjVUQSWlLtkJ019RuKeLuE0K18vr8+Ys
+         p7htsKOKxjn+CyQsx45n6QE+HA6IgXWNGegmRJetzVlhmYZMpf6HJ86l3W7aLS0cEp9l
+         EGKO3uYiVWyP1sbhdq+M8In4gPWnTLPuXPQ0MG8jyZCt6+Z3tuldK818BZsvgloG3nAR
+         Qn4bvc2pKfGmh17j6Bt/hmKOKo4pBlAuQrwWU/Lv9MsR0/du5WkvoJBuNdvAO1hz6al8
+         t5UA==
+X-Gm-Message-State: APjAAAVlsN6rOn+GOY4s6unIYZ83hnCIBJ6v/FB7UVtjge5dsSABAMW6
+        J4lpjyngCDbtAgqVaVVLQxmTGZA=
+X-Google-Smtp-Source: APXvYqxsYkX0433RFOTsuJprN7/ECWj7UzFP5CAUzdmAbfFG6m/ov91wU+dSgmV9fEWR2qQlEVRj9c8=
+X-Received: by 2002:a63:394:: with SMTP id 142mr17611833pgd.375.1570810891220;
+ Fri, 11 Oct 2019 09:21:31 -0700 (PDT)
+Date:   Fri, 11 Oct 2019 09:21:24 -0700
 In-Reply-To: <20191011162124.52982-1-sdf@google.com>
-Message-Id: <20191011162124.52982-2-sdf@google.com>
+Message-Id: <20191011162124.52982-3-sdf@google.com>
 Mime-Version: 1.0
 References: <20191011162124.52982-1-sdf@google.com>
 X-Mailer: git-send-email 2.23.0.700.g56cf767bdb-goog
-Subject: [PATCH bpf-next 2/3] tools/bpf: sync bpf.h
+Subject: [PATCH bpf-next 3/3] bpftool: print the comm of the process that
+ loaded the program
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
@@ -67,33 +68,34 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add created_by_comm.
+Print recently added created_by_comm along the existing created_by_uid.
+
+Example with loop1.o (loaded via bpftool):
+4: raw_tracepoint  name nested_loops  tag b9472b3ff5753ef2  gpl
+        loaded_at 2019-10-10T13:38:18-0700  uid 0  comm bpftool
+        xlated 264B  jited 152B  memlock 4096B
+        btf_id 3
 
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- tools/include/uapi/linux/bpf.h | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/bpf/bpftool/prog.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index a65c3b0c6935..4e883ecbba1e 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -326,6 +326,7 @@ enum bpf_attach_type {
- #define BPF_F_NUMA_NODE		(1U << 2)
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index 27da96a797ab..400771a942d7 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -296,7 +296,9 @@ static void print_prog_plain(struct bpf_prog_info *info, int fd)
+ 		print_boot_time(info->load_time, buf, sizeof(buf));
  
- #define BPF_OBJ_NAME_LEN 16U
-+#define BPF_CREATED_COMM_LEN	16U
+ 		/* Piggy back on load_time, since 0 uid is a valid one */
+-		printf("\tloaded_at %s  uid %u\n", buf, info->created_by_uid);
++		printf("\tloaded_at %s  uid %u  comm %s\n", buf,
++		       info->created_by_uid,
++		       info->created_by_comm);
+ 	}
  
- /* Flags for accessing BPF object from syscall side. */
- #define BPF_F_RDONLY		(1U << 3)
-@@ -3252,6 +3253,7 @@ struct bpf_prog_info {
- 	__aligned_u64 prog_tags;
- 	__u64 run_time_ns;
- 	__u64 run_cnt;
-+	char created_by_comm[BPF_CREATED_COMM_LEN];
- } __attribute__((aligned(8)));
- 
- struct bpf_map_info {
+ 	printf("\txlated %uB", info->xlated_prog_len);
 -- 
 2.23.0.700.g56cf767bdb-goog
 
