@@ -2,124 +2,81 @@ Return-Path: <SRS0=XZ9j=YE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.5 required=3.0 tests=DKIM_ADSP_CUSTOM_MED,
-	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62F56C47404
-	for <bpf@archiver.kernel.org>; Fri, 11 Oct 2019 21:13:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65106C47404
+	for <bpf@archiver.kernel.org>; Fri, 11 Oct 2019 21:18:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2F6872084C
-	for <bpf@archiver.kernel.org>; Fri, 11 Oct 2019 21:13:39 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cBzAlY5A"
+	by mail.kernel.org (Postfix) with ESMTP id 3DBFB2089F
+	for <bpf@archiver.kernel.org>; Fri, 11 Oct 2019 21:18:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726642AbfJKVNj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Oct 2019 17:13:39 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:42490 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726281AbfJKVNi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Oct 2019 17:13:38 -0400
-Received: by mail-qt1-f196.google.com with SMTP id w14so15841274qto.9;
-        Fri, 11 Oct 2019 14:13:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:date:user-agent:in-reply-to:references:mime-version
-         :content-transfer-encoding:subject:to:cc:message-id;
-        bh=CEKCUQt1GgF0uYM1zQl1vGee3IXpbteLdx2u6rvP9gQ=;
-        b=cBzAlY5Ad+xaDiOXjfJoKUpH5BmSIvedI/DL7/CkxXlzfqg756lkpn+fp3ktrL+A4m
-         7Kq6ovQOYO3sD7FsoxajB0e67G4j7ZSeKVOf18KbIBBK1GuelAhvpjHtYf9tj11328PX
-         qYQwwVAAO9J6pRAXfrcnzu2dqfjByvNfWLAmJKg4O9h5c8pXzVVaPa+8RsqeToZ6qp4c
-         TW/HweCEtD9YEdZrBzGVNGlpMrznsmXvhaO0Xq1TM218lUp6wdA7Nx+aU7D0vg959iT3
-         jcupm4kCAEM25HAY4D1g6RNcdHfgUHcbObnJTdicjJCgaVIn7KnrXnJJiGLocP4bkhpk
-         04/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:user-agent:in-reply-to:references
-         :mime-version:content-transfer-encoding:subject:to:cc:message-id;
-        bh=CEKCUQt1GgF0uYM1zQl1vGee3IXpbteLdx2u6rvP9gQ=;
-        b=nzJNh2VezwbRDzUiz54fdF7c/v5l1u5tey2OfbCNbJqCK9j9ucxeh7ojA9LYgDEr5Y
-         /y+L9iwx82blBnRvUzy7WlfB2ie4vwfURTupnULbFm19R83Px5w47NWJA32NhYTNjiyo
-         g3c8EU9G9SxsdVz7qCGejCEcuXTIMpBIkI7Z1cRh5trDf7WRTA3mDrl7LCgEPgNwhUvO
-         R5NFFYagjOIOMLIEQrNHbz1VeYku3bCtEbSCCaYC/UpTyNrfuT1homv6esKUeMcFXDP7
-         Kbw5eMujtyS9gwgI1ZW8U2z36n82ER+eS7j/pkqgT2wU6+JiGohuzmi6slihPqWyLVuG
-         85DQ==
-X-Gm-Message-State: APjAAAUj0SnWAfweJIgjdBohs9Y6QUmB+nCj3wlfT4S73TP2UbmWeYAX
-        Rvv9FjpMlTH72EMTFxpta/w=
-X-Google-Smtp-Source: APXvYqwO35xVQBtVF6IVZiQUg/mRHU7Z5cfYaLrK9xbKx1+gysQHUR8U1UhV7HE+9IhjEvnmR+OG7Q==
-X-Received: by 2002:aed:2796:: with SMTP id a22mr19043514qtd.324.1570828417432;
-        Fri, 11 Oct 2019 14:13:37 -0700 (PDT)
-Received: from [192.168.0.12] (179.187.15.68.dynamic.adsl.gvt.net.br. [179.187.15.68])
-        by smtp.gmail.com with ESMTPSA id 92sm4286809qte.30.2019.10.11.14.13.36
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 11 Oct 2019 14:13:36 -0700 (PDT)
-From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-Date:   Fri, 11 Oct 2019 18:11:36 -0300
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20191011203716.GI2096@mini-arch>
-References: <20191011162124.52982-1-sdf@google.com> <20191011162124.52982-3-sdf@google.com> <20191011201910.ynztujumh7dlluez@kafai-mbp.dhcp.thefacebook.com> <20191011203716.GI2096@mini-arch>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH bpf-next 3/3] bpftool: print the comm of the process that loaded the program
-To:     Stanislav Fomichev <sdf@fomichev.me>, Martin Lau <kafai@fb.com>
-CC:     Stanislav Fomichev <sdf@google.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        id S1728090AbfJKVSB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Oct 2019 17:18:01 -0400
+Received: from www62.your-server.de ([213.133.104.62]:46926 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726843AbfJKVSB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 11 Oct 2019 17:18:01 -0400
+Received: from 55.249.197.178.dynamic.dsl-lte-bonding.lssmb00p-msn.res.cust.swisscom.ch ([178.197.249.55] helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1iJ2IQ-0006X9-VU; Fri, 11 Oct 2019 23:17:59 +0200
+Date:   Fri, 11 Oct 2019 23:17:58 +0200
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Martin Lau <kafai@fb.com>, Andrii Nakryiko <andriin@fb.com>,
         "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>
-Message-ID: <37176EA5-3E3E-4405-9823-5D7153998DF2@kernel.org>
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Kernel Team <Kernel-team@fb.com>
+Subject: Re: [Potential Spoof] [PATCH bpf-next 2/2] selftests/bpf: remove
+ obsolete pahole/BTF support detection
+Message-ID: <20191011211758.GA12673@pc-63.home>
+References: <20191011031318.388493-1-andriin@fb.com>
+ <20191011031318.388493-3-andriin@fb.com>
+ <20191011162117.ckleov43b5piuzvb@kafai-mbp.dhcp.thefacebook.com>
+ <CAEf4BzZmWLQRxW_gnJEbxZPp6K_RPGXn-MYKetVD0P-yCHwTtw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZmWLQRxW_gnJEbxZPp6K_RPGXn-MYKetVD0P-yCHwTtw@mail.gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.101.4/25599/Fri Oct 11 10:48:23 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On October 11, 2019 5:37:16 PM GMT-03:00, Stanislav Fomichev <sdf@fomichev=
-=2Eme> wrote:
->On 10/11, Martin Lau wrote:
->> On Fri, Oct 11, 2019 at 09:21:24AM -0700, Stanislav Fomichev wrote:
->> > Example with loop1=2Eo (loaded via=20
->
->> What will be in "comm" for the python bcc script?
->I guess it will be "python"=2E But at least you get a signal that it's
->not some other system daemon :-)
+On Fri, Oct 11, 2019 at 10:28:39AM -0700, Andrii Nakryiko wrote:
+> On Fri, Oct 11, 2019 at 9:21 AM Martin Lau <kafai@fb.com> wrote:
+> > On Thu, Oct 10, 2019 at 08:13:18PM -0700, Andrii Nakryiko wrote:
+> > > Given lots of selftests won't work without recent enough Clang/LLVM that
+> > > fully supports BTF, there is no point in maintaining outdated BTF
+> > > support detection and fall-back to pahole logic. Just assume we have
+> > > everything we need.
+> > May be an error message to tell which llvm is needed?
+> 
+> Not sure where we'd want this to be checked/printed. We don't do this
+> today, so what I'm doing here is not really a regression.
+> There is no single llvm version I'd want to pin down. For most tests
+> LLVM w/ basic BTF support would be enough, for CO-RE stuff we need the
+> latest Clang 10 (not yet released officially), though. So essentially
+> the stance right now is that you need latest Clang built from sources
+> to have all the tests compiled and I don't think it's easy to check
+> for that.
 
-Perhaps bcc could use prctl to change its comm before calling sys_bpf and =
-set the script name?
+At some point once bpf-gcc gets more mature, we might need something
+more elaborate than just telling everyone to use latest clang/llvm
+from git, but so far that's our convention we have in place today.
 
-- Arnaldo
+> > $(CPU) and $(PROBE) are no longer needed also?
+> 
+> Good catch, removing them as well.
 
-Sent from smartphone
+Ok, expecting v2 then.
 
->
->> >=20
->> > Signed-off-by: Stanislav Fomichev <sdf@google=2Ecom>
->> > ---
->> >  tools/bpf/bpftool/prog=2Ec | 4 +++-
->> >  1 file changed, 3 insertions(+), 1 deletion(-)
->> >=20
->> > diff --git a/tools/bpf/bpftool/prog=2Ec b/tools/bpf/bpftool/prog=2Ec
->> > index 27da96a797ab=2E=2E400771a942d7 100644
->> > --- a/tools/bpf/bpftool/prog=2Ec
->> > +++ b/tools/bpf/bpftool/prog=2Ec
->> > @@ -296,7 +296,9 @@ static void print_prog_plain(struct
->bpf_prog_info *info, int fd)
->> >  		print_boot_time(info->load_time, buf, sizeof(buf));
->> > =20
->> >  		/* Piggy back on load_time, since 0 uid is a valid one */
->> > -		printf("\tloaded_at %s  uid %u\n", buf, info->created_by_uid);
->> > +		printf("\tloaded_at %s  uid %u  comm %s\n", buf,
->> > +		       info->created_by_uid,
->> > +		       info->created_by_comm);
->> >  	}
->> > =20
->> >  	printf("\txlated %uB", info->xlated_prog_len);
->> > --=20
->> > 2=2E23=2E0=2E700=2Eg56cf767bdb-goog
->> >=20
-
+Thanks,
+Daniel
