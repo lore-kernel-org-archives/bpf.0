@@ -2,126 +2,190 @@ Return-Path: <SRS0=XZ9j=YE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85C0CC47404
-	for <bpf@archiver.kernel.org>; Fri, 11 Oct 2019 21:30:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B29E0ECE58D
+	for <bpf@archiver.kernel.org>; Fri, 11 Oct 2019 22:02:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5407F2067B
-	for <bpf@archiver.kernel.org>; Fri, 11 Oct 2019 21:30:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 792AC2084C
+	for <bpf@archiver.kernel.org>; Fri, 11 Oct 2019 22:02:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="PTBZsVW4"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="JNH94K2Z"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728545AbfJKVa5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Oct 2019 17:30:57 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:34459 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727197AbfJKVa4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Oct 2019 17:30:56 -0400
-Received: by mail-pg1-f193.google.com with SMTP id y35so6515453pgl.1
-        for <bpf@vger.kernel.org>; Fri, 11 Oct 2019 14:30:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ck44Sagmm+Poik3/fC+1Kwb8pbbyBDj/Smy2bAJymqM=;
-        b=PTBZsVW4VPRHLXN4i+vJx/+sRJ5rmQThSxsjUsv31VYkpKILqkWsOYQXFAjTSS6lbI
-         9WzRyre9mqMBlHy4ImOr1MhPuD1G1bXBzObvJ2rS6Pj94MTF7d5m3663DeGNH346Tafg
-         5HLQzoiSN4H40ll8AGmzaXz9m47h2XMCYXv5FXMJeMxLhFNBA6ZHGYXVKyxA7ltNQ7b6
-         9XPK8dDqFXzdFq3vbZfD2FQKsYvDFqBwtaDk5ZPExhtIC/3rPsXjEx8tJAIzkvHlsa1Q
-         poAfNlEJD4t6mmTEPzHXtvnBVp2EwXqxvjxYpkXZT4llQCfcrmwzJEATC9mo7X/ICDny
-         5pcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ck44Sagmm+Poik3/fC+1Kwb8pbbyBDj/Smy2bAJymqM=;
-        b=NnaJGDFpzjcqpNUNiRTT6Sntk/hXvADFJU1fsWfjDHUW9HOhaDtmJfvmizKTzoM2hm
-         Eo+e+6iX1Yo5PtQHeUIFVKIV3iyIM5iVXbMcIl/4eYtXe07Sg3m8YIWTDWOT0Su+v7+5
-         5N4jYT8Hpbzvj292+E2j8AcBr0Av90xTLIkzhBlIbA3or1Af522x3dGR343X1jnaI94F
-         rKWQkHkeDNE+o1idydnT+hIaZ30PkllTZdFGCRu5WG9eWzrrUicZ+QDbsfe99nL6mFnX
-         mlZreOfsKX3EMLzhfHWk87fU4JEs9TxPNDqhYeWp7Pkqev4h6vQrr/xQfGJyLEiZk2bT
-         4PFA==
-X-Gm-Message-State: APjAAAWneOR/Gr5YXOkXWb3xTgtKEC5+guH9Qg1AkvZDXXxTsDEPjbvi
-        yp1a7YBxzv+1DuyEL1ZK5/PMzQ==
-X-Google-Smtp-Source: APXvYqyU92ryvT9MsM3L8Ajpyt7VBlmNIMVuNGSfjSRYuoRDeL+X5qSrYyuypStksCub2RuWutpJTg==
-X-Received: by 2002:a63:4181:: with SMTP id o123mr1335343pga.301.1570829455957;
-        Fri, 11 Oct 2019 14:30:55 -0700 (PDT)
-Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
-        by smtp.gmail.com with ESMTPSA id q15sm9683265pgl.12.2019.10.11.14.30.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Oct 2019 14:30:55 -0700 (PDT)
-Date:   Fri, 11 Oct 2019 14:30:54 -0700
-From:   Stanislav Fomichev <sdf@fomichev.me>
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Martin Lau <kafai@fb.com>, Stanislav Fomichev <sdf@google.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>
-Subject: Re: [PATCH bpf-next 3/3] bpftool: print the comm of the process that
- loaded the program
-Message-ID: <20191011213054.GJ2096@mini-arch>
-References: <20191011162124.52982-1-sdf@google.com>
- <20191011162124.52982-3-sdf@google.com>
- <20191011201910.ynztujumh7dlluez@kafai-mbp.dhcp.thefacebook.com>
- <20191011203716.GI2096@mini-arch>
- <37176EA5-3E3E-4405-9823-5D7153998DF2@kernel.org>
+        id S1729231AbfJKWCX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Oct 2019 18:02:23 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:56766 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729328AbfJKWCW (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 11 Oct 2019 18:02:22 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9BM03iH007739
+        for <bpf@vger.kernel.org>; Fri, 11 Oct 2019 15:02:22 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=w/7rYNnNANPTHWzl6P9abe3B5bXTGHBwVfxrhtNd3oc=;
+ b=JNH94K2ZAHlhJebwoe9wzt/obOSBquJkGXldTWyxnZHcLbGpe3xfSh+kjo2ctT67K9Pf
+ BdTCVjIrxN0Aef36NC93m6lcCIJARLfBVJmDdd/8AFkHojiy7RYZo5O9Y4ysXJ4EXxba
+ OHCIG3LhbR5HNSqQQA3W3qgrNm72nWeQl/k= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2vjqxgb1s1-6
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 11 Oct 2019 15:02:22 -0700
+Received: from 2401:db00:12:9028:face:0:29:0 (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Fri, 11 Oct 2019 15:02:00 -0700
+Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
+        id F305D861869; Fri, 11 Oct 2019 15:01:51 -0700 (PDT)
+Smtp-Origin-Hostprefix: dev
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: dev101.prn2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: prn2c23
+Subject: [PATCH v2 bpf-next 2/2] selftests/bpf: remove obsolete pahole/BTF support detection
+Date:   Fri, 11 Oct 2019 15:01:46 -0700
+Message-ID: <20191011220146.3798961-3-andriin@fb.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191011220146.3798961-1-andriin@fb.com>
+References: <20191011220146.3798961-1-andriin@fb.com>
+X-FB-Internal: Safe
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <37176EA5-3E3E-4405-9823-5D7153998DF2@kernel.org>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
+ definitions=2019-10-11_11:2019-10-10,2019-10-11 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
+ mlxlogscore=999 priorityscore=1501 impostorscore=0 lowpriorityscore=0
+ adultscore=0 spamscore=0 mlxscore=0 bulkscore=0 suspectscore=8
+ phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1908290000 definitions=main-1910110177
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 10/11, Arnaldo Carvalho de Melo wrote:
-> On October 11, 2019 5:37:16 PM GMT-03:00, Stanislav Fomichev <sdf@fomichev.me> wrote:
-> >On 10/11, Martin Lau wrote:
-> >> On Fri, Oct 11, 2019 at 09:21:24AM -0700, Stanislav Fomichev wrote:
-> >> > Example with loop1.o (loaded via 
-> >
-> >> What will be in "comm" for the python bcc script?
-> >I guess it will be "python". But at least you get a signal that it's
-> >not some other system daemon :-)
-> 
-> Perhaps bcc could use prctl to change its comm before calling sys_bpf and set the script name?
-Good idea! prctl does indeed call set_task_comm to change the task comm.
+Given lots of selftests won't work without recent enough Clang/LLVM that
+fully supports BTF, there is no point in maintaining outdated BTF
+support detection and fall-back to pahole logic. Just assume we have
+everything we need.
 
-> - Arnaldo
-> 
-> Sent from smartphone
-> 
-> >
-> >> > 
-> >> > Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> >> > ---
-> >> >  tools/bpf/bpftool/prog.c | 4 +++-
-> >> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >> > 
-> >> > diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-> >> > index 27da96a797ab..400771a942d7 100644
-> >> > --- a/tools/bpf/bpftool/prog.c
-> >> > +++ b/tools/bpf/bpftool/prog.c
-> >> > @@ -296,7 +296,9 @@ static void print_prog_plain(struct
-> >bpf_prog_info *info, int fd)
-> >> >  		print_boot_time(info->load_time, buf, sizeof(buf));
-> >> >  
-> >> >  		/* Piggy back on load_time, since 0 uid is a valid one */
-> >> > -		printf("\tloaded_at %s  uid %u\n", buf, info->created_by_uid);
-> >> > +		printf("\tloaded_at %s  uid %u  comm %s\n", buf,
-> >> > +		       info->created_by_uid,
-> >> > +		       info->created_by_comm);
-> >> >  	}
-> >> >  
-> >> >  	printf("\txlated %uB", info->xlated_prog_len);
-> >> > -- 
-> >> > 2.23.0.700.g56cf767bdb-goog
-> >> > 
-> 
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/testing/selftests/bpf/Makefile | 54 ++++------------------------
+ 1 file changed, 6 insertions(+), 48 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index f958643d36da..00d05c5e2d57 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -15,8 +15,6 @@ endif
+ CLANG		?= clang
+ LLC		?= llc
+ LLVM_OBJCOPY	?= llvm-objcopy
+-LLVM_READELF	?= llvm-readelf
+-BTF_PAHOLE	?= pahole
+ BPF_GCC		?= $(shell command -v bpf-gcc;)
+ CFLAGS += -g -Wall -O2 -I$(APIDIR) -I$(LIBDIR) -I$(BPFDIR) -I$(GENDIR) $(GENFLAGS) -I../../../include \
+ 	  -Dbpf_prog_load=bpf_prog_test_load \
+@@ -126,16 +124,6 @@ force:
+ $(BPFOBJ): force
+ 	$(MAKE) -C $(BPFDIR) OUTPUT=$(OUTPUT)/
+ 
+-PROBE := $(shell $(LLC) -march=bpf -mcpu=probe -filetype=null /dev/null 2>&1)
+-
+-# Let newer LLVM versions transparently probe the kernel for availability
+-# of full BPF instruction set.
+-ifeq ($(PROBE),)
+-  CPU ?= probe
+-else
+-  CPU ?= generic
+-endif
+-
+ # Get Clang's default includes on this system, as opposed to those seen by
+ # '-target bpf'. This fixes "missing" files on some architectures/distros,
+ # such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
+@@ -147,8 +135,9 @@ $(shell $(1) -v -E - </dev/null 2>&1 \
+ 	| sed -n '/<...> search starts here:/,/End of search list./{ s| \(/.*\)|-idirafter \1|p }')
+ endef
+ CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
+-BPF_CFLAGS = -I. -I./include/uapi -I../../../include/uapi \
+-	     -I$(BPFDIR) -I$(OUTPUT)/../usr/include -D__TARGET_ARCH_$(SRCARCH)
++BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) 				\
++	     -I. -I./include/uapi -I../../../include/uapi 		\
++	     -I$(BPFDIR) -I$(OUTPUT)/../usr/include
+ 
+ CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
+ 	       -Wno-compare-distinct-pointer-types
+@@ -162,28 +151,6 @@ $(OUTPUT)/test_stack_map.o: test_queue_stack_map.h
+ $(OUTPUT)/flow_dissector_load.o: flow_dissector_load.h
+ $(OUTPUT)/test_progs.o: flow_dissector_load.h
+ 
+-BTF_LLC_PROBE := $(shell $(LLC) -march=bpf -mattr=help 2>&1 | grep dwarfris)
+-BTF_PAHOLE_PROBE := $(shell $(BTF_PAHOLE) --help 2>&1 | grep BTF)
+-BTF_OBJCOPY_PROBE := $(shell $(LLVM_OBJCOPY) --help 2>&1 | grep -i 'usage.*llvm')
+-BTF_LLVM_PROBE := $(shell echo "int main() { return 0; }" | \
+-			  $(CLANG) -target bpf -O2 -g -c -x c - -o ./llvm_btf_verify.o; \
+-			  $(LLVM_READELF) -S ./llvm_btf_verify.o | grep BTF; \
+-			  /bin/rm -f ./llvm_btf_verify.o)
+-
+-ifneq ($(BTF_LLVM_PROBE),)
+-	BPF_CFLAGS += -g
+-else
+-ifneq ($(BTF_LLC_PROBE),)
+-ifneq ($(BTF_PAHOLE_PROBE),)
+-ifneq ($(BTF_OBJCOPY_PROBE),)
+-	BPF_CFLAGS += -g
+-	LLC_FLAGS += -mattr=dwarfris
+-	DWARF2BTF = y
+-endif
+-endif
+-endif
+-endif
+-
+ TEST_PROGS_CFLAGS := -I. -I$(OUTPUT)
+ TEST_MAPS_CFLAGS := -I. -I$(OUTPUT)
+ TEST_VERIFIER_CFLAGS := -I. -I$(OUTPUT) -Iverifier
+@@ -212,11 +179,8 @@ $(ALU32_BUILD_DIR)/%.o: progs/%.c $(ALU32_BUILD_DIR)/test_progs_32 \
+ 					| $(ALU32_BUILD_DIR)
+ 	($(CLANG) $(BPF_CFLAGS) $(CLANG_CFLAGS) -O2 -target bpf -emit-llvm \
+ 		-c $< -o - || echo "clang failed") | \
+-	$(LLC) -march=bpf -mattr=+alu32 -mcpu=$(CPU) $(LLC_FLAGS) \
++	$(LLC) -march=bpf -mcpu=probe -mattr=+alu32 $(LLC_FLAGS) \
+ 		-filetype=obj -o $@
+-ifeq ($(DWARF2BTF),y)
+-	$(BTF_PAHOLE) -J $@
+-endif
+ endif
+ 
+ ifneq ($(BPF_GCC),)
+@@ -251,19 +215,13 @@ endif
+ $(OUTPUT)/test_xdp.o: progs/test_xdp.c
+ 	($(CLANG) $(BPF_CFLAGS) $(CLANG_CFLAGS) -O2 -emit-llvm -c $< -o - || \
+ 		echo "clang failed") | \
+-	$(LLC) -march=bpf -mcpu=$(CPU) $(LLC_FLAGS) -filetype=obj -o $@
+-ifeq ($(DWARF2BTF),y)
+-	$(BTF_PAHOLE) -J $@
+-endif
++	$(LLC) -march=bpf -mcpu=probe $(LLC_FLAGS) -filetype=obj -o $@
+ 
+ # libbpf has to be built before BPF programs due to bpf_helper_defs.h
+ $(OUTPUT)/%.o: progs/%.c | $(BPFOBJ)
+ 	($(CLANG) $(BPF_CFLAGS) $(CLANG_CFLAGS) -O2 -target bpf -emit-llvm \
+ 		-c $< -o - || echo "clang failed") | \
+-	$(LLC) -march=bpf -mcpu=$(CPU) $(LLC_FLAGS) -filetype=obj -o $@
+-ifeq ($(DWARF2BTF),y)
+-	$(BTF_PAHOLE) -J $@
+-endif
++	$(LLC) -march=bpf -mcpu=probe $(LLC_FLAGS) -filetype=obj -o $@
+ 
+ PROG_TESTS_DIR = $(OUTPUT)/prog_tests
+ $(PROG_TESTS_DIR):
+-- 
+2.17.1
+
