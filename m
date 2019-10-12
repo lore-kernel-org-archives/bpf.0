@@ -2,721 +2,581 @@ Return-Path: <SRS0=4NqM=YF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 281FEC4360C
-	for <bpf@archiver.kernel.org>; Sat, 12 Oct 2019 07:19:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64D2BC4360C
+	for <bpf@archiver.kernel.org>; Sat, 12 Oct 2019 15:08:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CAD13206CD
-	for <bpf@archiver.kernel.org>; Sat, 12 Oct 2019 07:19:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 02B8A206CD
+	for <bpf@archiver.kernel.org>; Sat, 12 Oct 2019 15:08:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="OMJ0irXB"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="hR1NVlCm";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="J35QobgJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726728AbfJLHT0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 12 Oct 2019 03:19:26 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:34483 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728536AbfJLHT0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 12 Oct 2019 03:19:26 -0400
-Received: by mail-wm1-f65.google.com with SMTP id y135so10806094wmc.1
-        for <bpf@vger.kernel.org>; Sat, 12 Oct 2019 00:19:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id;
-        bh=+eCPexIO2u4tqVE9lLQfRRt4J1YhGtqfoXSHLQzoe4E=;
-        b=OMJ0irXBYNrqMF6vci+duzYryQd0obPEa69MOELfglSUgoa9yAexM5X42nKbbDgCYq
-         eDlXn0vrqx6nFRsVa0lkQwgT3is9KjRMgY5umeaGBVlUTZvg0jC5oiZoE/pgZ61WLvCY
-         fNG1Y86iob0Y5JCWLT6GXASIcztP8qyGKrAX5Rk1YGoTe1cg5Je6JqvIivIBTEzAf8aV
-         ASBrnrlbOIBoSnm8MRQJk9F1qNnlrpjMsmCiT/xFVzxrKyVghm23s3DDQ2w0iO93ii6c
-         R0PDisnKOHsBaHLIGeBigJRGifCnEpPe+Db7lZ+7IOGjA6MYy2+GG5b9gENjQEjZSibG
-         rrLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=+eCPexIO2u4tqVE9lLQfRRt4J1YhGtqfoXSHLQzoe4E=;
-        b=qwHA6BQIJMfPBbJTUs+4papoy05aZKTwMxBpvz17UYtHsgQUl6UVUhb+dfdxhCmrEO
-         K7trnNSfrYgtlaZCkTYx6Kl1/XRmOiMfo6Xgq1Ed8EI1feTBT0fjfhWZdwtzrmbWMfUa
-         H5IOFnEWIPQyJvzyUDEvk4KQ6lr87dnlBV+erQtzNbPMifQ6VUKOhVPDfZtxALn5Vsfr
-         Lir4JGo1ZlGUSPq0Y7vbZ+scbVwlewibnGOoryABK7ka901+x84+tlZaJJ7MtWVJPg3m
-         AgmgHaLdf/GaNSgr2EDasUfVMQgEg9TZ4GRAq9Jk1KIvonF3YSQVDRV+87I5rpZDhrew
-         ZEFg==
-X-Gm-Message-State: APjAAAVfKzRc0BtOiUlaiupJBNj81a11YbKt/iDHYSsrqFcG51BaxydD
-        2C29jlcVjSyu5NNcjMZ9KtaDLQ==
-X-Google-Smtp-Source: APXvYqxGGak0oqRfkOFWLhd3KDP7/Axe+f3talCnSGCxJxQlf/yTKU72pCEX//+Ism+EQd+o9gI62g==
-X-Received: by 2002:a1c:1f54:: with SMTP id f81mr6567516wmf.142.1570864760935;
-        Sat, 12 Oct 2019 00:19:20 -0700 (PDT)
-Received: from cbtest28.netronome.com ([217.38.71.146])
-        by smtp.gmail.com with ESMTPSA id v6sm21992949wma.24.2019.10.12.00.19.20
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Sat, 12 Oct 2019 00:19:20 -0700 (PDT)
-From:   Jiong Wang <jiong.wang@netronome.com>
-To:     alexei.starovoitov@gmail.com, yhs@fb.com
-Cc:     bpf@vger.kernel.org, oss-drivers@netronome.com,
-        Jiong Wang <jiong.wang@netronome.com>
-Subject: [LLVM PATCH] bpf: fix wrong truncation elimination when there is back-edge/loop
-Date:   Sat, 12 Oct 2019 08:18:59 +0100
-Message-Id: <1570864740-16857-1-git-send-email-jiong.wang@netronome.com>
-X-Mailer: git-send-email 2.7.4
+        id S1727642AbfJLPIQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 12 Oct 2019 11:08:16 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:33074 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727423AbfJLPIQ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 12 Oct 2019 11:08:16 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9CF00IT030895;
+        Sat, 12 Oct 2019 08:08:09 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=j6aWdFudhvLMwdLmymvQYhKJl2WxjYTOcbGdX9tZ3YI=;
+ b=hR1NVlCmQfTqhqdxj71ftwlsHNxD7wdjGZI6M+LqHvj9Lb7t33S7vS5CLVpfNoBEOUFx
+ Jz+H1ZZlkJdIHiYOIKfMVz8kx3Nr6jUiJ4Or8ugzuzsZFyQ62850dhX90UL7cycQn0cS
+ PZhFAPOKpW3DciYnAuYXBC3WnTo35KrVW94= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2vkav90xq6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Sat, 12 Oct 2019 08:08:09 -0700
+Received: from ash-exhub102.TheFacebook.com (2620:10d:c0a8:82::f) by
+ ash-exhub201.TheFacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Sat, 12 Oct 2019 08:08:02 -0700
+Received: from NAM03-BY2-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.35.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5
+ via Frontend Transport; Sat, 12 Oct 2019 08:08:02 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ScC6YXBv5hOnbbsirZ+jE9EzU4oLhdQ6hEMxN9lIhnfKrMZ98CYh8eSM7KnCdP34MvCAn5c0FqBoIui220X1txaMJOEEaHE6208LziUUjBdccCKPV3CiVbj6Zi9/GEoW4kYnyxqRBMPkNvwvntyqY0O8UFt6HuUgShXy9akWPVKTm/u8fNJb8vfcgcb/ia/PJ+SeRtApsvaeQeE+QVnl/enFj83buo96/AEzPft4+mPvws7+jtt3gjww+MkVDICqg7i8zREtp7sVnVNZsDIJPa0yw6Xgy8DqalxZ1Mw3bc8VF8ccWA2aKsqrAXsspX0aQbgQ4T5FRZbOHhZ7PGpVxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=j6aWdFudhvLMwdLmymvQYhKJl2WxjYTOcbGdX9tZ3YI=;
+ b=IxeoWKvyjXHaz2WwIcUgh70/ZZPIZsGaV92fMcojybsp3xAtrrCwE1zvIW1VUHFGgqnyFI5gFaFMc0s47NK0CS94W022hu1a4xJHWDM/APbjf6IN/HH2HmzbsyPEfC6Uw4/tLxhCeRZYToXzGIR6JMV8EZp2+1rIhQ3A3EO/c+0jHY3Rv541J5sSwl8CRc1KiLTmjY+++qKz6zfwckXWm+nYi8jZ91Feg93xWhiXTSZmk1/Hy7p3jikZBhDm717OjeJt/yK/dQepKEDdb1B5kXeNMREHlAkDJQ1X02Y1D7kyYStQmDG5ZApziTbQBBbzS+CG36mSjndWjH69Y0euzg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=j6aWdFudhvLMwdLmymvQYhKJl2WxjYTOcbGdX9tZ3YI=;
+ b=J35QobgJzE9XFvaRP8zBiCfsaTIXT7EAZiY1e8xYeCsrMsrSQV3sxnTwvWbrpZ1bKRNz43WBZzcVnrrWvO17K/HEZj5TZ1rEX+zwizvfrFd2RhA1cpNMwsq5ylv+J5yK0Br9gIpXlPM/oqnaxsI9T/3VE7ChH47hefRtd7tDFIM=
+Received: from BYAPR15MB3384.namprd15.prod.outlook.com (20.179.60.27) by
+ BYAPR15MB2838.namprd15.prod.outlook.com (20.178.206.23) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2347.17; Sat, 12 Oct 2019 15:08:00 +0000
+Received: from BYAPR15MB3384.namprd15.prod.outlook.com
+ ([fe80::b92c:ebd2:58dc:6b8d]) by BYAPR15MB3384.namprd15.prod.outlook.com
+ ([fe80::b92c:ebd2:58dc:6b8d%5]) with mapi id 15.20.2347.021; Sat, 12 Oct 2019
+ 15:08:00 +0000
+From:   Yonghong Song <yhs@fb.com>
+To:     Jiong Wang <jiong.wang@netronome.com>,
+        "alexei.starovoitov@gmail.com" <alexei.starovoitov@gmail.com>
+CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "oss-drivers@netronome.com" <oss-drivers@netronome.com>
+Subject: Re: [LLVM PATCH] bpf: fix wrong truncation elimination when there is
+ back-edge/loop
+Thread-Topic: [LLVM PATCH] bpf: fix wrong truncation elimination when there is
+ back-edge/loop
+Thread-Index: AQHVgM1h/vL3bQ0fZUKDV2iofaXBJadXG/wA
+Date:   Sat, 12 Oct 2019 15:07:59 +0000
+Message-ID: <9f010f55-4025-b27c-f05e-2ae0e00c1492@fb.com>
+References: <1570864740-16857-1-git-send-email-jiong.wang@netronome.com>
+In-Reply-To: <1570864740-16857-1-git-send-email-jiong.wang@netronome.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: CO2PR06CA0065.namprd06.prod.outlook.com
+ (2603:10b6:104:3::23) To BYAPR15MB3384.namprd15.prod.outlook.com
+ (2603:10b6:a03:112::27)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2620:10d:c090:180::bbaf]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b4946345-0269-4c11-056a-08d74f25f84a
+x-ms-traffictypediagnostic: BYAPR15MB2838:
+x-microsoft-antispam-prvs: <BYAPR15MB2838320A6C94FE3FB6DB75F6D3960@BYAPR15MB2838.namprd15.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4714;
+x-forefront-prvs: 0188D66E61
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(366004)(136003)(376002)(39860400002)(396003)(189003)(199004)(51914003)(14444005)(6116002)(4326008)(71190400001)(71200400001)(64756008)(66446008)(66476007)(66556008)(66946007)(6246003)(256004)(19627235002)(25786009)(99286004)(52116002)(14454004)(478600001)(110136005)(446003)(7736002)(305945005)(476003)(54906003)(31696002)(76176011)(2616005)(486006)(46003)(81166006)(8676002)(31686004)(53546011)(81156014)(102836004)(11346002)(316002)(2501003)(86362001)(8936002)(186003)(6436002)(36756003)(2906002)(229853002)(30864003)(6512007)(6506007)(5660300002)(6486002)(386003)(559001)(579004);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB2838;H:BYAPR15MB3384.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 75WpisDJiQjsDBLLyS0DNY3RDWzOTuISiNCWg0im3K+cQxA9ErkZ+1T40sX8gm/fzLzeJ5deIL9az0trV/p119KWynk5zdjUuAkt6AOMvQIJkR4yqMQRc5EuvoMzGiU54vVKaNVPW92OpFxLn1D2Ku+PtoeRX63iWV5pNPL5Gm5PRJvRvdoacMi8msqwuWyhi76MfpPFOYqL7glbA8wzsgOi+Bdq8xFN2udsvY7ySyBWQPIXhURERwA5vZD8Jsw6n5GYLKWgP/C1Tg1YIMB7blVdFM/4R2/yJixxT8ei9moPVJh7QdsZoVH63yjvECdRnLbXKnbnkZ1Rmq0KXnNaGSR4lVUEuYRjY4Ldc97iOeC2yUpLTeqlXE3NmRrflJGgMmv/BMoMZrf2zKEC08Nusk2qgShdL3K7h/BM1O6w1zE=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <309D8649C151594D8D5DE4CFD1E7D54B@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: b4946345-0269-4c11-056a-08d74f25f84a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Oct 2019 15:07:59.9826
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: P7frB7jR76srTc/Al6/EWBpFHhihZ3W9fNO3UB73xVxDi+DnbUk2QN7iPOqR3XaW
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2838
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
+ definitions=2019-10-12_07:2019-10-10,2019-10-12 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
+ impostorscore=0 suspectscore=0 clxscore=1011 priorityscore=1501
+ spamscore=0 lowpriorityscore=0 bulkscore=0 adultscore=0 malwarescore=0
+ mlxscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1910120137
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, BPF backend is doing truncation elimination. If one truncation
-is performed on a value defined by narrow loads, then it could be redundant
-given BPF loads zero extend the destination register implicitly.
-
-When the definition of the truncated value is a merging value (PHI node)
-that could come from different code paths, then checks need to be done on
-all possible code paths.
-
-Above described optimization was introduced as r306685, however it doesn't
-work when there is back-edge, for example when loop is used inside BPF
-code.
-
-For example for the following code, a zero-extended value should be stored
-into b[i], but the "and reg, 0xffff" is wrongly eliminated which then
-generates corrupted data.
-
-void cal1(unsigned short *a, unsigned long *b, unsigned int k)
-{
-  unsigned short e;
-
-  e = *a;
-  for (unsigned int i = 0; i < k; i++) {
-    b[i] = e;
-    e = ~e;
-  }
-}
-
-The reason is r306685 was trying to do the PHI node checks inside isel
-DAG2DAG phase, and the checks are done on MachineInstr. This is actually
-wrong, because MachineInstr is being built during isel phase and the
-associated information is not completed yet. A quick search shows none
-target other than BPF is access MachineInstr info during isel phase.
-
-For an PHI node, when you reached it during isel phase, it may have all
-predecessors linked, but not successors. It seems successors are linked to
-PHI node only when doing SelectionDAGISel::FinishBasicBlock and this
-happens later than PreprocessISelDAG hook.
-
-Previously, BPF program doesn't allow loop, there is probably the reason
-why this bug was not exposed.
-
-This patch therefore fixes the bug by the following approach:
- - The existing truncation elimination code and the associated
-   "load_to_vreg_" records are removed.
- - Instead, implement truncation elimination using MachineSSA pass, this
-   is where all information are built, and keep the pass together with other
-   similar peephole optimizations inside BPFMIPeephole.cpp. Redundant move
-   elimination logic is updated accordingly.
- - Unit testcase included + no compilation errors for kernel BPF selftest.
-
-Reported-by: David Beckett <david.beckett@netronome.com>
-Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
----
- lib/Target/BPF/BPF.h                  |   2 +
- lib/Target/BPF/BPFISelDAGToDAG.cpp    | 169 +++---------------------------
- lib/Target/BPF/BPFMIPeephole.cpp      | 187 +++++++++++++++++++++++++++++++++-
- lib/Target/BPF/BPFTargetMachine.cpp   |  12 ++-
- test/CodeGen/BPF/remove_truncate_6.ll |  80 +++++++++++++++
- 5 files changed, 283 insertions(+), 167 deletions(-)
- create mode 100644 test/CodeGen/BPF/remove_truncate_6.ll
-
-diff --git a/lib/Target/BPF/BPF.h b/lib/Target/BPF/BPF.h
-index ba21503..6e4f35f 100644
---- a/lib/Target/BPF/BPF.h
-+++ b/lib/Target/BPF/BPF.h
-@@ -20,12 +20,14 @@ ModulePass *createBPFAbstractMemberAccess(BPFTargetMachine *TM);
- FunctionPass *createBPFISelDag(BPFTargetMachine &TM);
- FunctionPass *createBPFMISimplifyPatchablePass();
- FunctionPass *createBPFMIPeepholePass();
-+FunctionPass *createBPFMIPeepholeTruncElimPass();
- FunctionPass *createBPFMIPreEmitPeepholePass();
- FunctionPass *createBPFMIPreEmitCheckingPass();
- 
- void initializeBPFAbstractMemberAccessPass(PassRegistry&);
- void initializeBPFMISimplifyPatchablePass(PassRegistry&);
- void initializeBPFMIPeepholePass(PassRegistry&);
-+void initializeBPFMIPeepholeTruncElimPass(PassRegistry&);
- void initializeBPFMIPreEmitPeepholePass(PassRegistry&);
- void initializeBPFMIPreEmitCheckingPass(PassRegistry&);
- }
-diff --git a/lib/Target/BPF/BPFISelDAGToDAG.cpp b/lib/Target/BPF/BPFISelDAGToDAG.cpp
-index 85fa1f2..f2be0ff 100644
---- a/lib/Target/BPF/BPFISelDAGToDAG.cpp
-+++ b/lib/Target/BPF/BPFISelDAGToDAG.cpp
-@@ -45,9 +45,7 @@ class BPFDAGToDAGISel : public SelectionDAGISel {
- 
- public:
-   explicit BPFDAGToDAGISel(BPFTargetMachine &TM)
--      : SelectionDAGISel(TM), Subtarget(nullptr) {
--    curr_func_ = nullptr;
--  }
-+      : SelectionDAGISel(TM), Subtarget(nullptr) {}
- 
-   StringRef getPassName() const override {
-     return "BPF DAG->DAG Pattern Instruction Selection";
-@@ -92,14 +90,8 @@ private:
-                           val_vec_type &Vals, int Offset);
-   bool getConstantFieldValue(const GlobalAddressSDNode *Node, uint64_t Offset,
-                              uint64_t Size, unsigned char *ByteSeq);
--  bool checkLoadDef(unsigned DefReg, unsigned match_load_op);
--
-   // Mapping from ConstantStruct global value to corresponding byte-list values
-   std::map<const void *, val_vec_type> cs_vals_;
--  // Mapping from vreg to load memory opcode
--  std::map<unsigned, unsigned> load_to_vreg_;
--  // Current function
--  const Function *curr_func_;
- };
- } // namespace
- 
-@@ -325,32 +317,13 @@ void BPFDAGToDAGISel::PreprocessLoad(SDNode *Node,
- }
- 
- void BPFDAGToDAGISel::PreprocessISelDAG() {
--  // Iterate through all nodes, interested in the following cases:
-+  // Iterate through all nodes, interested in the following case:
-   //
-   //  . loads from ConstantStruct or ConstantArray of constructs
-   //    which can be turns into constant itself, with this we can
-   //    avoid reading from read-only section at runtime.
-   //
--  //  . reg truncating is often the result of 8/16/32bit->64bit or
--  //    8/16bit->32bit conversion. If the reg value is loaded with
--  //    masked byte width, the AND operation can be removed since
--  //    BPF LOAD already has zero extension.
--  //
--  //    This also solved a correctness issue.
--  //    In BPF socket-related program, e.g., __sk_buff->{data, data_end}
--  //    are 32-bit registers, but later on, kernel verifier will rewrite
--  //    it with 64-bit value. Therefore, truncating the value after the
--  //    load will result in incorrect code.
--
--  // clear the load_to_vreg_ map so that we have a clean start
--  // for this function.
--  if (!curr_func_) {
--    curr_func_ = FuncInfo->Fn;
--  } else if (curr_func_ != FuncInfo->Fn) {
--    load_to_vreg_.clear();
--    curr_func_ = FuncInfo->Fn;
--  }
--
-+  //  . Removing redundant AND for intrinsic narrow loads.
-   for (SelectionDAG::allnodes_iterator I = CurDAG->allnodes_begin(),
-                                        E = CurDAG->allnodes_end();
-        I != E;) {
-@@ -358,8 +331,6 @@ void BPFDAGToDAGISel::PreprocessISelDAG() {
-     unsigned Opcode = Node->getOpcode();
-     if (Opcode == ISD::LOAD)
-       PreprocessLoad(Node, I);
--    else if (Opcode == ISD::CopyToReg)
--      PreprocessCopyToReg(Node);
-     else if (Opcode == ISD::AND)
-       PreprocessTrunc(Node, I);
-   }
-@@ -491,36 +462,6 @@ bool BPFDAGToDAGISel::fillConstantStruct(const DataLayout &DL,
-   return true;
- }
- 
--void BPFDAGToDAGISel::PreprocessCopyToReg(SDNode *Node) {
--  const RegisterSDNode *RegN = dyn_cast<RegisterSDNode>(Node->getOperand(1));
--  if (!RegN || !Register::isVirtualRegister(RegN->getReg()))
--    return;
--
--  const LoadSDNode *LD = dyn_cast<LoadSDNode>(Node->getOperand(2));
--  if (!LD)
--    return;
--
--  // Assign a load value to a virtual register. record its load width
--  unsigned mem_load_op = 0;
--  switch (LD->getMemOperand()->getSize()) {
--  default:
--    return;
--  case 4:
--    mem_load_op = BPF::LDW;
--    break;
--  case 2:
--    mem_load_op = BPF::LDH;
--    break;
--  case 1:
--    mem_load_op = BPF::LDB;
--    break;
--  }
--
--  LLVM_DEBUG(dbgs() << "Find Load Value to VReg "
--                    << Register::virtReg2Index(RegN->getReg()) << '\n');
--  load_to_vreg_[RegN->getReg()] = mem_load_op;
--}
--
- void BPFDAGToDAGISel::PreprocessTrunc(SDNode *Node,
-                                       SelectionDAG::allnodes_iterator &I) {
-   ConstantSDNode *MaskN = dyn_cast<ConstantSDNode>(Node->getOperand(1));
-@@ -534,112 +475,26 @@ void BPFDAGToDAGISel::PreprocessTrunc(SDNode *Node,
-   // which the generic optimizer doesn't understand their results are
-   // zero extended.
-   SDValue BaseV = Node->getOperand(0);
--  if (BaseV.getOpcode() == ISD::INTRINSIC_W_CHAIN) {
--    unsigned IntNo = cast<ConstantSDNode>(BaseV->getOperand(1))->getZExtValue();
--    uint64_t MaskV = MaskN->getZExtValue();
--
--    if (!((IntNo == Intrinsic::bpf_load_byte && MaskV == 0xFF) ||
--          (IntNo == Intrinsic::bpf_load_half && MaskV == 0xFFFF) ||
--          (IntNo == Intrinsic::bpf_load_word && MaskV == 0xFFFFFFFF)))
--      return;
--
--    LLVM_DEBUG(dbgs() << "Remove the redundant AND operation in: ";
--               Node->dump(); dbgs() << '\n');
--
--    I--;
--    CurDAG->ReplaceAllUsesWith(SDValue(Node, 0), BaseV);
--    I++;
--    CurDAG->DeleteNode(Node);
--
--    return;
--  }
--
--  // Multiple basic blocks case.
--  if (BaseV.getOpcode() != ISD::CopyFromReg)
-+  if (BaseV.getOpcode() != ISD::INTRINSIC_W_CHAIN)
-     return;
- 
--  unsigned match_load_op = 0;
--  switch (MaskN->getZExtValue()) {
--  default:
--    return;
--  case 0xFFFFFFFF:
--    match_load_op = BPF::LDW;
--    break;
--  case 0xFFFF:
--    match_load_op = BPF::LDH;
--    break;
--  case 0xFF:
--    match_load_op = BPF::LDB;
--    break;
--  }
-+  unsigned IntNo = cast<ConstantSDNode>(BaseV->getOperand(1))->getZExtValue();
-+  uint64_t MaskV = MaskN->getZExtValue();
- 
--  const RegisterSDNode *RegN =
--      dyn_cast<RegisterSDNode>(BaseV.getNode()->getOperand(1));
--  if (!RegN || !Register::isVirtualRegister(RegN->getReg()))
-+  if (!((IntNo == Intrinsic::bpf_load_byte && MaskV == 0xFF) ||
-+        (IntNo == Intrinsic::bpf_load_half && MaskV == 0xFFFF) ||
-+        (IntNo == Intrinsic::bpf_load_word && MaskV == 0xFFFFFFFF)))
-     return;
--  unsigned AndOpReg = RegN->getReg();
--  LLVM_DEBUG(dbgs() << "Examine " << printReg(AndOpReg) << '\n');
--
--  // Examine the PHI insns in the MachineBasicBlock to found out the
--  // definitions of this virtual register. At this stage (DAG2DAG
--  // transformation), only PHI machine insns are available in the machine basic
--  // block.
--  MachineBasicBlock *MBB = FuncInfo->MBB;
--  MachineInstr *MII = nullptr;
--  for (auto &MI : *MBB) {
--    for (unsigned i = 0; i < MI.getNumOperands(); ++i) {
--      const MachineOperand &MOP = MI.getOperand(i);
--      if (!MOP.isReg() || !MOP.isDef())
--        continue;
--      Register Reg = MOP.getReg();
--      if (Register::isVirtualRegister(Reg) && Reg == AndOpReg) {
--        MII = &MI;
--        break;
--      }
--    }
--  }
--
--  if (MII == nullptr) {
--    // No phi definition in this block.
--    if (!checkLoadDef(AndOpReg, match_load_op))
--      return;
--  } else {
--    // The PHI node looks like:
--    //   %2 = PHI %0, <%bb.1>, %1, <%bb.3>
--    // Trace each incoming definition, e.g., (%0, %bb.1) and (%1, %bb.3)
--    // The AND operation can be removed if both %0 in %bb.1 and %1 in
--    // %bb.3 are defined with a load matching the MaskN.
--    LLVM_DEBUG(dbgs() << "Check PHI Insn: "; MII->dump(); dbgs() << '\n');
--    unsigned PrevReg = -1;
--    for (unsigned i = 0; i < MII->getNumOperands(); ++i) {
--      const MachineOperand &MOP = MII->getOperand(i);
--      if (MOP.isReg()) {
--        if (MOP.isDef())
--          continue;
--        PrevReg = MOP.getReg();
--        if (!Register::isVirtualRegister(PrevReg))
--          return;
--        if (!checkLoadDef(PrevReg, match_load_op))
--          return;
--      }
--    }
--  }
- 
--  LLVM_DEBUG(dbgs() << "Remove the redundant AND operation in: "; Node->dump();
--             dbgs() << '\n');
-+  LLVM_DEBUG(dbgs() << "Remove the redundant AND operation in: ";
-+             Node->dump(); dbgs() << '\n');
- 
-   I--;
-   CurDAG->ReplaceAllUsesWith(SDValue(Node, 0), BaseV);
-   I++;
-   CurDAG->DeleteNode(Node);
--}
--
--bool BPFDAGToDAGISel::checkLoadDef(unsigned DefReg, unsigned match_load_op) {
--  auto it = load_to_vreg_.find(DefReg);
--  if (it == load_to_vreg_.end())
--    return false; // The definition of register is not exported yet.
- 
--  return it->second == match_load_op;
-+  return;
- }
- 
- FunctionPass *llvm::createBPFISelDag(BPFTargetMachine &TM) {
-diff --git a/lib/Target/BPF/BPFMIPeephole.cpp b/lib/Target/BPF/BPFMIPeephole.cpp
-index fafd2f7..2b52ce0 100644
---- a/lib/Target/BPF/BPFMIPeephole.cpp
-+++ b/lib/Target/BPF/BPFMIPeephole.cpp
-@@ -71,7 +71,7 @@ void BPFMIPeephole::initialize(MachineFunction &MFParm) {
-   MF = &MFParm;
-   MRI = &MF->getRegInfo();
-   TII = MF->getSubtarget<BPFSubtarget>().getInstrInfo();
--  LLVM_DEBUG(dbgs() << "*** BPF MachineSSA peephole pass ***\n\n");
-+  LLVM_DEBUG(dbgs() << "*** BPF MachineSSA ZEXT Elim peephole pass ***\n\n");
- }
- 
- bool BPFMIPeephole::isMovFrom32Def(MachineInstr *MovMI)
-@@ -186,7 +186,8 @@ bool BPFMIPeephole::eliminateZExtSeq(void) {
- } // end default namespace
- 
- INITIALIZE_PASS(BPFMIPeephole, DEBUG_TYPE,
--                "BPF MachineSSA Peephole Optimization", false, false)
-+                "BPF MachineSSA Peephole Optimization For ZEXT Eliminate",
-+                false, false)
- 
- char BPFMIPeephole::ID = 0;
- FunctionPass* llvm::createBPFMIPeepholePass() { return new BPFMIPeephole(); }
-@@ -253,12 +254,16 @@ bool BPFMIPreEmitPeephole::eliminateRedundantMov(void) {
-       // enabled. The special type cast insn MOV_32_64 involves different
-       // register class on src (i32) and dst (i64), RA could generate useless
-       // instruction due to this.
--      if (MI.getOpcode() == BPF::MOV_32_64) {
-+      unsigned Opcode = MI.getOpcode();
-+      if (Opcode == BPF::MOV_32_64 ||
-+          Opcode == BPF::MOV_rr || Opcode == BPF::MOV_rr_32) {
-         Register dst = MI.getOperand(0).getReg();
--        Register dst_sub = TRI->getSubReg(dst, BPF::sub_32);
-         Register src = MI.getOperand(1).getReg();
- 
--        if (dst_sub != src)
-+        if (Opcode == BPF::MOV_32_64)
-+          dst = TRI->getSubReg(dst, BPF::sub_32);
-+
-+        if (dst != src)
-           continue;
- 
-         ToErase = &MI;
-@@ -281,3 +286,175 @@ FunctionPass* llvm::createBPFMIPreEmitPeepholePass()
- {
-   return new BPFMIPreEmitPeephole();
- }
-+
-+STATISTIC(TruncElemNum, "Number of truncation eliminated");
-+
-+namespace {
-+
-+struct BPFMIPeepholeTruncElim : public MachineFunctionPass {
-+
-+  static char ID;
-+  const BPFInstrInfo *TII;
-+  MachineFunction *MF;
-+  MachineRegisterInfo *MRI;
-+
-+  BPFMIPeepholeTruncElim() : MachineFunctionPass(ID) {
-+    initializeBPFMIPeepholeTruncElimPass(*PassRegistry::getPassRegistry());
-+  }
-+
-+private:
-+  // Initialize class variables.
-+  void initialize(MachineFunction &MFParm);
-+
-+  bool eliminateTruncSeq(void);
-+
-+public:
-+
-+  // Main entry point for this pass.
-+  bool runOnMachineFunction(MachineFunction &MF) override {
-+    if (skipFunction(MF.getFunction()))
-+      return false;
-+
-+    initialize(MF);
-+
-+    return eliminateTruncSeq();
-+  }
-+};
-+
-+static bool TruncSizeCompatible(int TruncSize, unsigned opcode)
-+{
-+  if (TruncSize == 1)
-+    return opcode == BPF::LDB || opcode == BPF::LDB32;
-+
-+  if (TruncSize == 2)
-+    return opcode == BPF::LDH || opcode == BPF::LDH32;
-+
-+  if (TruncSize == 4)
-+    return opcode == BPF::LDW || opcode == BPF::LDW32;
-+
-+  return false;
-+}
-+
-+// Initialize class variables.
-+void BPFMIPeepholeTruncElim::initialize(MachineFunction &MFParm) {
-+  MF = &MFParm;
-+  MRI = &MF->getRegInfo();
-+  TII = MF->getSubtarget<BPFSubtarget>().getInstrInfo();
-+  LLVM_DEBUG(dbgs() << "*** BPF MachineSSA TRUNC Elim peephole pass ***\n\n");
-+}
-+
-+// Reg truncating is often the result of 8/16/32bit->64bit or
-+// 8/16bit->32bit conversion. If the reg value is loaded with
-+// masked byte width, the AND operation can be removed since
-+// BPF LOAD already has zero extension.
-+//
-+// This also solved a correctness issue.
-+// In BPF socket-related program, e.g., __sk_buff->{data, data_end}
-+// are 32-bit registers, but later on, kernel verifier will rewrite
-+// it with 64-bit value. Therefore, truncating the value after the
-+// load will result in incorrect code.
-+bool BPFMIPeepholeTruncElim::eliminateTruncSeq(void) {
-+  MachineInstr* ToErase = nullptr;
-+  bool Eliminated = false;
-+
-+  for (MachineBasicBlock &MBB : *MF) {
-+    for (MachineInstr &MI : MBB) {
-+      // The second insn to remove if the eliminate candidate is a pair.
-+      MachineInstr *MI2 = nullptr;;
-+      Register DstReg, SrcReg;
-+      MachineInstr *DefMI;
-+      int TruncSize = -1;
-+
-+      // If the previous instruction was marked for elimination, remove it now.
-+      if (ToErase) {
-+        ToErase->eraseFromParent();
-+        ToErase = nullptr;
-+      }
-+
-+      // AND A, 0xFFFFFFFF will be turned into SLL/SRL pair due to immediate
-+      // for BPF ANDI is i32, and this case only happens on ALU64.
-+      if (MI.getOpcode() == BPF::SRL_ri &&
-+          MI.getOperand(2).getImm() == 32) {
-+        SrcReg = MI.getOperand(1).getReg();
-+        MI2 = MRI->getVRegDef(SrcReg);
-+        DstReg = MI.getOperand(0).getReg();
-+
-+        if (!MI2 ||
-+            MI2->getOpcode() != BPF::SLL_ri ||
-+            MI2->getOperand(2).getImm() != 32)
-+          continue;
-+
-+        // Update SrcReg.
-+        SrcReg = MI2->getOperand(1).getReg();
-+        DefMI = MRI->getVRegDef(SrcReg);
-+        if (DefMI)
-+          TruncSize = 4;
-+      } else if (MI.getOpcode() == BPF::AND_ri ||
-+                 MI.getOpcode() == BPF::AND_ri_32) {
-+        SrcReg = MI.getOperand(1).getReg();
-+        DstReg = MI.getOperand(0).getReg();
-+        DefMI = MRI->getVRegDef(SrcReg);
-+
-+        if (!DefMI)
-+          continue;
-+
-+        int64_t imm = MI.getOperand(2).getImm();
-+        if (imm == 0xff)
-+          TruncSize = 1;
-+        else if (imm == 0xffff)
-+          TruncSize = 2;
-+      }
-+
-+      if (TruncSize == -1)
-+        continue;
-+
-+      // The definition is PHI node, check all inputs.
-+      if (DefMI->isPHI()) {
-+        bool CheckFail = false;
-+
-+        for (unsigned i = 1, e = DefMI->getNumOperands(); i < e; i += 2) {
-+          MachineOperand &opnd = DefMI->getOperand(i);
-+          if (!opnd.isReg())
-+            return false;
-+
-+          MachineInstr *PhiDef = MRI->getVRegDef(opnd.getReg());
-+          if (!PhiDef || PhiDef->isPHI() ||
-+              !TruncSizeCompatible(TruncSize, PhiDef->getOpcode())) {
-+            CheckFail = true;
-+            break;
-+          }
-+        }
-+
-+        if (CheckFail)
-+          continue;
-+      } else if (!TruncSizeCompatible(TruncSize, DefMI->getOpcode())) {
-+        continue;
-+      }
-+
-+      BuildMI(MBB, MI, MI.getDebugLoc(), TII->get(BPF::MOV_rr), DstReg)
-+              .addReg(SrcReg);
-+
-+      if (MI2)
-+        MI2->eraseFromParent();
-+
-+      // Mark it to ToErase, and erase in the next iteration.
-+      ToErase = &MI;
-+      TruncElemNum++;
-+      Eliminated = true;
-+    }
-+  }
-+
-+  return Eliminated;
-+}
-+
-+} // end default namespace
-+
-+INITIALIZE_PASS(BPFMIPeepholeTruncElim, "bpf-mi-trunc-elim",
-+                "BPF MachineSSA Peephole Optimization For TRUNC Eliminate",
-+                false, false)
-+
-+char BPFMIPeepholeTruncElim::ID = 0;
-+FunctionPass* llvm::createBPFMIPeepholeTruncElimPass()
-+{
-+  return new BPFMIPeepholeTruncElim();
-+}
-diff --git a/lib/Target/BPF/BPFTargetMachine.cpp b/lib/Target/BPF/BPFTargetMachine.cpp
-index d940ac9..0c4f2c7 100644
---- a/lib/Target/BPF/BPFTargetMachine.cpp
-+++ b/lib/Target/BPF/BPFTargetMachine.cpp
-@@ -36,6 +36,7 @@ extern "C" void LLVMInitializeBPFTarget() {
-   PassRegistry &PR = *PassRegistry::getPassRegistry();
-   initializeBPFAbstractMemberAccessPass(PR);
-   initializeBPFMIPeepholePass(PR);
-+  initializeBPFMIPeepholeTruncElimPass(PR);
- }
- 
- // DataLayout: little or big endian
-@@ -115,15 +116,16 @@ void BPFPassConfig::addMachineSSAOptimization() {
-   TargetPassConfig::addMachineSSAOptimization();
- 
-   const BPFSubtarget *Subtarget = getBPFTargetMachine().getSubtargetImpl();
--  if (Subtarget->getHasAlu32() && !DisableMIPeephole)
--    addPass(createBPFMIPeepholePass());
-+  if (!DisableMIPeephole) {
-+    if (Subtarget->getHasAlu32())
-+      addPass(createBPFMIPeepholePass());
-+    addPass(createBPFMIPeepholeTruncElimPass());
-+  }
- }
- 
- void BPFPassConfig::addPreEmitPass() {
--  const BPFSubtarget *Subtarget = getBPFTargetMachine().getSubtargetImpl();
--
-   addPass(createBPFMIPreEmitCheckingPass());
-   if (getOptLevel() != CodeGenOpt::None)
--    if (Subtarget->getHasAlu32() && !DisableMIPeephole)
-+    if (!DisableMIPeephole)
-       addPass(createBPFMIPreEmitPeepholePass());
- }
-diff --git a/test/CodeGen/BPF/remove_truncate_6.ll b/test/CodeGen/BPF/remove_truncate_6.ll
-new file mode 100644
-index 0000000..6577afb
---- /dev/null
-+++ b/test/CodeGen/BPF/remove_truncate_6.ll
-@@ -0,0 +1,80 @@
-+; RUN: llc < %s -march=bpf -verify-machineinstrs | FileCheck %s
-+; RUN: llc < %s -march=bpf -mattr=+alu32 -verify-machineinstrs | FileCheck --check-prefix=CHECK-32 %s
-+;
-+; void cal1(unsigned short *a, unsigned long *b, unsigned int k)
-+; {
-+;   unsigned short e;
-+;
-+;   e = *a;
-+;   for (unsigned int i = 0; i < k; i++) {
-+;     b[i] = e;
-+;     e = ~e;
-+;   }
-+; }
-+;
-+; void cal2(unsigned short *a, unsigned int *b, unsigned int k)
-+; {
-+;   unsigned short e;
-+;
-+;   e = *a;
-+;   for (unsigned int i = 0; i < k; i++) {
-+;     b[i] = e;
-+;     e = ~e;
-+;   }
-+; }
-+
-+; Function Attrs: nofree norecurse nounwind optsize
-+define dso_local void @cal1(i16* nocapture readonly %a, i64* nocapture %b, i32 %k) local_unnamed_addr #0 {
-+entry:
-+  %cmp8 = icmp eq i32 %k, 0
-+  br i1 %cmp8, label %for.cond.cleanup, label %for.body.preheader
-+
-+for.body.preheader:                               ; preds = %entry
-+  %0 = load i16, i16* %a, align 2
-+  %wide.trip.count = zext i32 %k to i64
-+  br label %for.body
-+
-+for.cond.cleanup:                                 ; preds = %for.body, %entry
-+  ret void
-+
-+for.body:                                         ; preds = %for.body, %for.body.preheader
-+  %indvars.iv = phi i64 [ 0, %for.body.preheader ], [ %indvars.iv.next, %for.body ]
-+  %e.09 = phi i16 [ %0, %for.body.preheader ], [ %neg, %for.body ]
-+  %conv = zext i16 %e.09 to i64
-+  %arrayidx = getelementptr inbounds i64, i64* %b, i64 %indvars.iv
-+; CHECK: r{{[0-9]+}} &= 65535
-+; CHECK-32: r{{[0-9]+}} &= 65535
-+  store i64 %conv, i64* %arrayidx, align 8
-+  %neg = xor i16 %e.09, -1
-+  %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
-+  %exitcond = icmp eq i64 %indvars.iv.next, %wide.trip.count
-+  br i1 %exitcond, label %for.cond.cleanup, label %for.body
-+}
-+
-+; Function Attrs: nofree norecurse nounwind optsize
-+define dso_local void @cal2(i16* nocapture readonly %a, i32* nocapture %b, i32 %k) local_unnamed_addr #0 {
-+entry:
-+  %cmp8 = icmp eq i32 %k, 0
-+  br i1 %cmp8, label %for.cond.cleanup, label %for.body.preheader
-+
-+for.body.preheader:                               ; preds = %entry
-+  %0 = load i16, i16* %a, align 2
-+  %wide.trip.count = zext i32 %k to i64
-+  br label %for.body
-+
-+for.cond.cleanup:                                 ; preds = %for.body, %entry
-+  ret void
-+
-+for.body:                                         ; preds = %for.body, %for.body.preheader
-+  %indvars.iv = phi i64 [ 0, %for.body.preheader ], [ %indvars.iv.next, %for.body ]
-+  %e.09 = phi i16 [ %0, %for.body.preheader ], [ %neg, %for.body ]
-+  %conv = zext i16 %e.09 to i32
-+  %arrayidx = getelementptr inbounds i32, i32* %b, i64 %indvars.iv
-+; CHECK: r{{[0-9]+}} &= 65535
-+; CHECK-32: w{{[0-9]+}} &= 65535
-+  store i32 %conv, i32* %arrayidx, align 4
-+  %neg = xor i16 %e.09, -1
-+  %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
-+  %exitcond = icmp eq i64 %indvars.iv.next, %wide.trip.count
-+  br i1 %exitcond, label %for.cond.cleanup, label %for.body
-+}
--- 
-2.7.4
-
+DQoNCk9uIDEwLzEyLzE5IDEyOjE4IEFNLCBKaW9uZyBXYW5nIHdyb3RlOg0KPiBDdXJyZW50bHks
+IEJQRiBiYWNrZW5kIGlzIGRvaW5nIHRydW5jYXRpb24gZWxpbWluYXRpb24uIElmIG9uZSB0cnVu
+Y2F0aW9uDQo+IGlzIHBlcmZvcm1lZCBvbiBhIHZhbHVlIGRlZmluZWQgYnkgbmFycm93IGxvYWRz
+LCB0aGVuIGl0IGNvdWxkIGJlIHJlZHVuZGFudA0KPiBnaXZlbiBCUEYgbG9hZHMgemVybyBleHRl
+bmQgdGhlIGRlc3RpbmF0aW9uIHJlZ2lzdGVyIGltcGxpY2l0bHkuDQo+IA0KPiBXaGVuIHRoZSBk
+ZWZpbml0aW9uIG9mIHRoZSB0cnVuY2F0ZWQgdmFsdWUgaXMgYSBtZXJnaW5nIHZhbHVlIChQSEkg
+bm9kZSkNCj4gdGhhdCBjb3VsZCBjb21lIGZyb20gZGlmZmVyZW50IGNvZGUgcGF0aHMsIHRoZW4g
+Y2hlY2tzIG5lZWQgdG8gYmUgZG9uZSBvbg0KPiBhbGwgcG9zc2libGUgY29kZSBwYXRocy4NCj4g
+DQo+IEFib3ZlIGRlc2NyaWJlZCBvcHRpbWl6YXRpb24gd2FzIGludHJvZHVjZWQgYXMgcjMwNjY4
+NSwgaG93ZXZlciBpdCBkb2Vzbid0DQo+IHdvcmsgd2hlbiB0aGVyZSBpcyBiYWNrLWVkZ2UsIGZv
+ciBleGFtcGxlIHdoZW4gbG9vcCBpcyB1c2VkIGluc2lkZSBCUEYNCj4gY29kZS4NCj4gDQo+IEZv
+ciBleGFtcGxlIGZvciB0aGUgZm9sbG93aW5nIGNvZGUsIGEgemVyby1leHRlbmRlZCB2YWx1ZSBz
+aG91bGQgYmUgc3RvcmVkDQo+IGludG8gYltpXSwgYnV0IHRoZSAiYW5kIHJlZywgMHhmZmZmIiBp
+cyB3cm9uZ2x5IGVsaW1pbmF0ZWQgd2hpY2ggdGhlbg0KPiBnZW5lcmF0ZXMgY29ycnVwdGVkIGRh
+dGEuDQo+IA0KPiB2b2lkIGNhbDEodW5zaWduZWQgc2hvcnQgKmEsIHVuc2lnbmVkIGxvbmcgKmIs
+IHVuc2lnbmVkIGludCBrKQ0KPiB7DQo+ICAgIHVuc2lnbmVkIHNob3J0IGU7DQo+IA0KPiAgICBl
+ID0gKmE7DQo+ICAgIGZvciAodW5zaWduZWQgaW50IGkgPSAwOyBpIDwgazsgaSsrKSB7DQo+ICAg
+ICAgYltpXSA9IGU7DQo+ICAgICAgZSA9IH5lOw0KPiAgICB9DQo+IH0NCj4gDQo+IFRoZSByZWFz
+b24gaXMgcjMwNjY4NSB3YXMgdHJ5aW5nIHRvIGRvIHRoZSBQSEkgbm9kZSBjaGVja3MgaW5zaWRl
+IGlzZWwNCj4gREFHMkRBRyBwaGFzZSwgYW5kIHRoZSBjaGVja3MgYXJlIGRvbmUgb24gTWFjaGlu
+ZUluc3RyLiBUaGlzIGlzIGFjdHVhbGx5DQo+IHdyb25nLCBiZWNhdXNlIE1hY2hpbmVJbnN0ciBp
+cyBiZWluZyBidWlsdCBkdXJpbmcgaXNlbCBwaGFzZSBhbmQgdGhlDQo+IGFzc29jaWF0ZWQgaW5m
+b3JtYXRpb24gaXMgbm90IGNvbXBsZXRlZCB5ZXQuIEEgcXVpY2sgc2VhcmNoIHNob3dzIG5vbmUN
+Cj4gdGFyZ2V0IG90aGVyIHRoYW4gQlBGIGlzIGFjY2VzcyBNYWNoaW5lSW5zdHIgaW5mbyBkdXJp
+bmcgaXNlbCBwaGFzZS4NCj4gDQo+IEZvciBhbiBQSEkgbm9kZSwgd2hlbiB5b3UgcmVhY2hlZCBp
+dCBkdXJpbmcgaXNlbCBwaGFzZSwgaXQgbWF5IGhhdmUgYWxsDQo+IHByZWRlY2Vzc29ycyBsaW5r
+ZWQsIGJ1dCBub3Qgc3VjY2Vzc29ycy4gSXQgc2VlbXMgc3VjY2Vzc29ycyBhcmUgbGlua2VkIHRv
+DQo+IFBISSBub2RlIG9ubHkgd2hlbiBkb2luZyBTZWxlY3Rpb25EQUdJU2VsOjpGaW5pc2hCYXNp
+Y0Jsb2NrIGFuZCB0aGlzDQo+IGhhcHBlbnMgbGF0ZXIgdGhhbiBQcmVwcm9jZXNzSVNlbERBRyBo
+b29rLg0KPiANCj4gUHJldmlvdXNseSwgQlBGIHByb2dyYW0gZG9lc24ndCBhbGxvdyBsb29wLCB0
+aGVyZSBpcyBwcm9iYWJseSB0aGUgcmVhc29uDQo+IHdoeSB0aGlzIGJ1ZyB3YXMgbm90IGV4cG9z
+ZWQuDQoNClRoYW5rcyBmb3IgdGhlIGZpeC4gWWVzLCBwcmV2aW91c2x5IEJQRiBwcm9ncmFtcyBk
+byBub3QgYWxsb3cgbG9vcHMNCnNvIEkgZGlkIGFuIGltcGxlbWVudGF0aW9uIGluIFNlbGVjdGlv
+bkRBR0lTZWwgcGhhc2UgdGFraW5nIGFkdmFudGFnZSBvZiANCnRoaXMgZmFjdC4gSSBkbyBhZ3Jl
+ZSBhIGxhdGVyIHBoYXNlIHdpdGggU1NBIGF2YWlsYWJsZSBpcyBiZXR0ZXINCnRvIGhhbmRsZSBh
+bGwgY2FzZXMgKHdpdGggb3Igd2l0aG91dCBsb29wcykuDQpXaWxsIGxvb2sgYXQgdGhlIHBhdGNo
+IGRldGFpbCBhIGxpdHRsZSBiaXQgbGF0ZXIuDQoNCj4gDQo+IFRoaXMgcGF0Y2ggdGhlcmVmb3Jl
+IGZpeGVzIHRoZSBidWcgYnkgdGhlIGZvbGxvd2luZyBhcHByb2FjaDoNCj4gICAtIFRoZSBleGlz
+dGluZyB0cnVuY2F0aW9uIGVsaW1pbmF0aW9uIGNvZGUgYW5kIHRoZSBhc3NvY2lhdGVkDQo+ICAg
+ICAibG9hZF90b192cmVnXyIgcmVjb3JkcyBhcmUgcmVtb3ZlZC4NCj4gICAtIEluc3RlYWQsIGlt
+cGxlbWVudCB0cnVuY2F0aW9uIGVsaW1pbmF0aW9uIHVzaW5nIE1hY2hpbmVTU0EgcGFzcywgdGhp
+cw0KPiAgICAgaXMgd2hlcmUgYWxsIGluZm9ybWF0aW9uIGFyZSBidWlsdCwgYW5kIGtlZXAgdGhl
+IHBhc3MgdG9nZXRoZXIgd2l0aCBvdGhlcg0KPiAgICAgc2ltaWxhciBwZWVwaG9sZSBvcHRpbWl6
+YXRpb25zIGluc2lkZSBCUEZNSVBlZXBob2xlLmNwcC4gUmVkdW5kYW50IG1vdmUNCj4gICAgIGVs
+aW1pbmF0aW9uIGxvZ2ljIGlzIHVwZGF0ZWQgYWNjb3JkaW5nbHkuDQo+ICAgLSBVbml0IHRlc3Rj
+YXNlIGluY2x1ZGVkICsgbm8gY29tcGlsYXRpb24gZXJyb3JzIGZvciBrZXJuZWwgQlBGIHNlbGZ0
+ZXN0Lg0KPiANCj4gUmVwb3J0ZWQtYnk6IERhdmlkIEJlY2tldHQgPGRhdmlkLmJlY2tldHRAbmV0
+cm9ub21lLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogSmlvbmcgV2FuZyA8amlvbmcud2FuZ0BuZXRy
+b25vbWUuY29tPg0KPiAtLS0NCj4gICBsaWIvVGFyZ2V0L0JQRi9CUEYuaCAgICAgICAgICAgICAg
+ICAgIHwgICAyICsNCj4gICBsaWIvVGFyZ2V0L0JQRi9CUEZJU2VsREFHVG9EQUcuY3BwICAgIHwg
+MTY5ICsrKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiAgIGxpYi9UYXJnZXQvQlBGL0JQ
+Rk1JUGVlcGhvbGUuY3BwICAgICAgfCAxODcgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrLQ0KPiAgIGxpYi9UYXJnZXQvQlBGL0JQRlRhcmdldE1hY2hpbmUuY3BwICAgfCAgMTIgKyst
+DQo+ICAgdGVzdC9Db2RlR2VuL0JQRi9yZW1vdmVfdHJ1bmNhdGVfNi5sbCB8ICA4MCArKysrKysr
+KysrKysrKysNCj4gICA1IGZpbGVzIGNoYW5nZWQsIDI4MyBpbnNlcnRpb25zKCspLCAxNjcgZGVs
+ZXRpb25zKC0pDQo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IHRlc3QvQ29kZUdlbi9CUEYvcmVtb3Zl
+X3RydW5jYXRlXzYubGwNCj4gDQo+IGRpZmYgLS1naXQgYS9saWIvVGFyZ2V0L0JQRi9CUEYuaCBi
+L2xpYi9UYXJnZXQvQlBGL0JQRi5oDQo+IGluZGV4IGJhMjE1MDMuLjZlNGYzNWYgMTAwNjQ0DQo+
+IC0tLSBhL2xpYi9UYXJnZXQvQlBGL0JQRi5oDQo+ICsrKyBiL2xpYi9UYXJnZXQvQlBGL0JQRi5o
+DQo+IEBAIC0yMCwxMiArMjAsMTQgQEAgTW9kdWxlUGFzcyAqY3JlYXRlQlBGQWJzdHJhY3RNZW1i
+ZXJBY2Nlc3MoQlBGVGFyZ2V0TWFjaGluZSAqVE0pOw0KPiAgIEZ1bmN0aW9uUGFzcyAqY3JlYXRl
+QlBGSVNlbERhZyhCUEZUYXJnZXRNYWNoaW5lICZUTSk7DQo+ICAgRnVuY3Rpb25QYXNzICpjcmVh
+dGVCUEZNSVNpbXBsaWZ5UGF0Y2hhYmxlUGFzcygpOw0KPiAgIEZ1bmN0aW9uUGFzcyAqY3JlYXRl
+QlBGTUlQZWVwaG9sZVBhc3MoKTsNCj4gK0Z1bmN0aW9uUGFzcyAqY3JlYXRlQlBGTUlQZWVwaG9s
+ZVRydW5jRWxpbVBhc3MoKTsNCj4gICBGdW5jdGlvblBhc3MgKmNyZWF0ZUJQRk1JUHJlRW1pdFBl
+ZXBob2xlUGFzcygpOw0KPiAgIEZ1bmN0aW9uUGFzcyAqY3JlYXRlQlBGTUlQcmVFbWl0Q2hlY2tp
+bmdQYXNzKCk7DQo+ICAgDQo+ICAgdm9pZCBpbml0aWFsaXplQlBGQWJzdHJhY3RNZW1iZXJBY2Nl
+c3NQYXNzKFBhc3NSZWdpc3RyeSYpOw0KPiAgIHZvaWQgaW5pdGlhbGl6ZUJQRk1JU2ltcGxpZnlQ
+YXRjaGFibGVQYXNzKFBhc3NSZWdpc3RyeSYpOw0KPiAgIHZvaWQgaW5pdGlhbGl6ZUJQRk1JUGVl
+cGhvbGVQYXNzKFBhc3NSZWdpc3RyeSYpOw0KPiArdm9pZCBpbml0aWFsaXplQlBGTUlQZWVwaG9s
+ZVRydW5jRWxpbVBhc3MoUGFzc1JlZ2lzdHJ5Jik7DQo+ICAgdm9pZCBpbml0aWFsaXplQlBGTUlQ
+cmVFbWl0UGVlcGhvbGVQYXNzKFBhc3NSZWdpc3RyeSYpOw0KPiAgIHZvaWQgaW5pdGlhbGl6ZUJQ
+Rk1JUHJlRW1pdENoZWNraW5nUGFzcyhQYXNzUmVnaXN0cnkmKTsNCj4gICB9DQo+IGRpZmYgLS1n
+aXQgYS9saWIvVGFyZ2V0L0JQRi9CUEZJU2VsREFHVG9EQUcuY3BwIGIvbGliL1RhcmdldC9CUEYv
+QlBGSVNlbERBR1RvREFHLmNwcA0KPiBpbmRleCA4NWZhMWYyLi5mMmJlMGZmIDEwMDY0NA0KPiAt
+LS0gYS9saWIvVGFyZ2V0L0JQRi9CUEZJU2VsREFHVG9EQUcuY3BwDQo+ICsrKyBiL2xpYi9UYXJn
+ZXQvQlBGL0JQRklTZWxEQUdUb0RBRy5jcHANCj4gQEAgLTQ1LDkgKzQ1LDcgQEAgY2xhc3MgQlBG
+REFHVG9EQUdJU2VsIDogcHVibGljIFNlbGVjdGlvbkRBR0lTZWwgew0KPiAgIA0KPiAgIHB1Ymxp
+YzoNCj4gICAgIGV4cGxpY2l0IEJQRkRBR1RvREFHSVNlbChCUEZUYXJnZXRNYWNoaW5lICZUTSkN
+Cj4gLSAgICAgIDogU2VsZWN0aW9uREFHSVNlbChUTSksIFN1YnRhcmdldChudWxscHRyKSB7DQo+
+IC0gICAgY3Vycl9mdW5jXyA9IG51bGxwdHI7DQo+IC0gIH0NCj4gKyAgICAgIDogU2VsZWN0aW9u
+REFHSVNlbChUTSksIFN1YnRhcmdldChudWxscHRyKSB7fQ0KPiAgIA0KPiAgICAgU3RyaW5nUmVm
+IGdldFBhc3NOYW1lKCkgY29uc3Qgb3ZlcnJpZGUgew0KPiAgICAgICByZXR1cm4gIkJQRiBEQUct
+PkRBRyBQYXR0ZXJuIEluc3RydWN0aW9uIFNlbGVjdGlvbiI7DQo+IEBAIC05MiwxNCArOTAsOCBA
+QCBwcml2YXRlOg0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdmFsX3ZlY190eXBlICZW
+YWxzLCBpbnQgT2Zmc2V0KTsNCj4gICAgIGJvb2wgZ2V0Q29uc3RhbnRGaWVsZFZhbHVlKGNvbnN0
+IEdsb2JhbEFkZHJlc3NTRE5vZGUgKk5vZGUsIHVpbnQ2NF90IE9mZnNldCwNCj4gICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIHVpbnQ2NF90IFNpemUsIHVuc2lnbmVkIGNoYXIgKkJ5dGVT
+ZXEpOw0KPiAtICBib29sIGNoZWNrTG9hZERlZih1bnNpZ25lZCBEZWZSZWcsIHVuc2lnbmVkIG1h
+dGNoX2xvYWRfb3ApOw0KPiAtDQo+ICAgICAvLyBNYXBwaW5nIGZyb20gQ29uc3RhbnRTdHJ1Y3Qg
+Z2xvYmFsIHZhbHVlIHRvIGNvcnJlc3BvbmRpbmcgYnl0ZS1saXN0IHZhbHVlcw0KPiAgICAgc3Rk
+OjptYXA8Y29uc3Qgdm9pZCAqLCB2YWxfdmVjX3R5cGU+IGNzX3ZhbHNfOw0KPiAtICAvLyBNYXBw
+aW5nIGZyb20gdnJlZyB0byBsb2FkIG1lbW9yeSBvcGNvZGUNCj4gLSAgc3RkOjptYXA8dW5zaWdu
+ZWQsIHVuc2lnbmVkPiBsb2FkX3RvX3ZyZWdfOw0KPiAtICAvLyBDdXJyZW50IGZ1bmN0aW9uDQo+
+IC0gIGNvbnN0IEZ1bmN0aW9uICpjdXJyX2Z1bmNfOw0KPiAgIH07DQo+ICAgfSAvLyBuYW1lc3Bh
+Y2UNCj4gICANCj4gQEAgLTMyNSwzMiArMzE3LDEzIEBAIHZvaWQgQlBGREFHVG9EQUdJU2VsOjpQ
+cmVwcm9jZXNzTG9hZChTRE5vZGUgKk5vZGUsDQo+ICAgfQ0KPiAgIA0KPiAgIHZvaWQgQlBGREFH
+VG9EQUdJU2VsOjpQcmVwcm9jZXNzSVNlbERBRygpIHsNCj4gLSAgLy8gSXRlcmF0ZSB0aHJvdWdo
+IGFsbCBub2RlcywgaW50ZXJlc3RlZCBpbiB0aGUgZm9sbG93aW5nIGNhc2VzOg0KPiArICAvLyBJ
+dGVyYXRlIHRocm91Z2ggYWxsIG5vZGVzLCBpbnRlcmVzdGVkIGluIHRoZSBmb2xsb3dpbmcgY2Fz
+ZToNCj4gICAgIC8vDQo+ICAgICAvLyAgLiBsb2FkcyBmcm9tIENvbnN0YW50U3RydWN0IG9yIENv
+bnN0YW50QXJyYXkgb2YgY29uc3RydWN0cw0KPiAgICAgLy8gICAgd2hpY2ggY2FuIGJlIHR1cm5z
+IGludG8gY29uc3RhbnQgaXRzZWxmLCB3aXRoIHRoaXMgd2UgY2FuDQo+ICAgICAvLyAgICBhdm9p
+ZCByZWFkaW5nIGZyb20gcmVhZC1vbmx5IHNlY3Rpb24gYXQgcnVudGltZS4NCj4gICAgIC8vDQo+
+IC0gIC8vICAuIHJlZyB0cnVuY2F0aW5nIGlzIG9mdGVuIHRoZSByZXN1bHQgb2YgOC8xNi8zMmJp
+dC0+NjRiaXQgb3INCj4gLSAgLy8gICAgOC8xNmJpdC0+MzJiaXQgY29udmVyc2lvbi4gSWYgdGhl
+IHJlZyB2YWx1ZSBpcyBsb2FkZWQgd2l0aA0KPiAtICAvLyAgICBtYXNrZWQgYnl0ZSB3aWR0aCwg
+dGhlIEFORCBvcGVyYXRpb24gY2FuIGJlIHJlbW92ZWQgc2luY2UNCj4gLSAgLy8gICAgQlBGIExP
+QUQgYWxyZWFkeSBoYXMgemVybyBleHRlbnNpb24uDQo+IC0gIC8vDQo+IC0gIC8vICAgIFRoaXMg
+YWxzbyBzb2x2ZWQgYSBjb3JyZWN0bmVzcyBpc3N1ZS4NCj4gLSAgLy8gICAgSW4gQlBGIHNvY2tl
+dC1yZWxhdGVkIHByb2dyYW0sIGUuZy4sIF9fc2tfYnVmZi0+e2RhdGEsIGRhdGFfZW5kfQ0KPiAt
+ICAvLyAgICBhcmUgMzItYml0IHJlZ2lzdGVycywgYnV0IGxhdGVyIG9uLCBrZXJuZWwgdmVyaWZp
+ZXIgd2lsbCByZXdyaXRlDQo+IC0gIC8vICAgIGl0IHdpdGggNjQtYml0IHZhbHVlLiBUaGVyZWZv
+cmUsIHRydW5jYXRpbmcgdGhlIHZhbHVlIGFmdGVyIHRoZQ0KPiAtICAvLyAgICBsb2FkIHdpbGwg
+cmVzdWx0IGluIGluY29ycmVjdCBjb2RlLg0KPiAtDQo+IC0gIC8vIGNsZWFyIHRoZSBsb2FkX3Rv
+X3ZyZWdfIG1hcCBzbyB0aGF0IHdlIGhhdmUgYSBjbGVhbiBzdGFydA0KPiAtICAvLyBmb3IgdGhp
+cyBmdW5jdGlvbi4NCj4gLSAgaWYgKCFjdXJyX2Z1bmNfKSB7DQo+IC0gICAgY3Vycl9mdW5jXyA9
+IEZ1bmNJbmZvLT5GbjsNCj4gLSAgfSBlbHNlIGlmIChjdXJyX2Z1bmNfICE9IEZ1bmNJbmZvLT5G
+bikgew0KPiAtICAgIGxvYWRfdG9fdnJlZ18uY2xlYXIoKTsNCj4gLSAgICBjdXJyX2Z1bmNfID0g
+RnVuY0luZm8tPkZuOw0KPiAtICB9DQo+IC0NCj4gKyAgLy8gIC4gUmVtb3ZpbmcgcmVkdW5kYW50
+IEFORCBmb3IgaW50cmluc2ljIG5hcnJvdyBsb2Fkcy4NCj4gICAgIGZvciAoU2VsZWN0aW9uREFH
+OjphbGxub2Rlc19pdGVyYXRvciBJID0gQ3VyREFHLT5hbGxub2Rlc19iZWdpbigpLA0KPiAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEUgPSBDdXJEQUctPmFsbG5vZGVz
+X2VuZCgpOw0KPiAgICAgICAgICBJICE9IEU7KSB7DQo+IEBAIC0zNTgsOCArMzMxLDYgQEAgdm9p
+ZCBCUEZEQUdUb0RBR0lTZWw6OlByZXByb2Nlc3NJU2VsREFHKCkgew0KPiAgICAgICB1bnNpZ25l
+ZCBPcGNvZGUgPSBOb2RlLT5nZXRPcGNvZGUoKTsNCj4gICAgICAgaWYgKE9wY29kZSA9PSBJU0Q6
+OkxPQUQpDQo+ICAgICAgICAgUHJlcHJvY2Vzc0xvYWQoTm9kZSwgSSk7DQo+IC0gICAgZWxzZSBp
+ZiAoT3Bjb2RlID09IElTRDo6Q29weVRvUmVnKQ0KPiAtICAgICAgUHJlcHJvY2Vzc0NvcHlUb1Jl
+ZyhOb2RlKTsNCj4gICAgICAgZWxzZSBpZiAoT3Bjb2RlID09IElTRDo6QU5EKQ0KPiAgICAgICAg
+IFByZXByb2Nlc3NUcnVuYyhOb2RlLCBJKTsNCj4gICAgIH0NCj4gQEAgLTQ5MSwzNiArNDYyLDYg
+QEAgYm9vbCBCUEZEQUdUb0RBR0lTZWw6OmZpbGxDb25zdGFudFN0cnVjdChjb25zdCBEYXRhTGF5
+b3V0ICZETCwNCj4gICAgIHJldHVybiB0cnVlOw0KPiAgIH0NCj4gICANCj4gLXZvaWQgQlBGREFH
+VG9EQUdJU2VsOjpQcmVwcm9jZXNzQ29weVRvUmVnKFNETm9kZSAqTm9kZSkgew0KPiAtICBjb25z
+dCBSZWdpc3RlclNETm9kZSAqUmVnTiA9IGR5bl9jYXN0PFJlZ2lzdGVyU0ROb2RlPihOb2RlLT5n
+ZXRPcGVyYW5kKDEpKTsNCj4gLSAgaWYgKCFSZWdOIHx8ICFSZWdpc3Rlcjo6aXNWaXJ0dWFsUmVn
+aXN0ZXIoUmVnTi0+Z2V0UmVnKCkpKQ0KPiAtICAgIHJldHVybjsNCj4gLQ0KPiAtICBjb25zdCBM
+b2FkU0ROb2RlICpMRCA9IGR5bl9jYXN0PExvYWRTRE5vZGU+KE5vZGUtPmdldE9wZXJhbmQoMikp
+Ow0KPiAtICBpZiAoIUxEKQ0KPiAtICAgIHJldHVybjsNCj4gLQ0KPiAtICAvLyBBc3NpZ24gYSBs
+b2FkIHZhbHVlIHRvIGEgdmlydHVhbCByZWdpc3Rlci4gcmVjb3JkIGl0cyBsb2FkIHdpZHRoDQo+
+IC0gIHVuc2lnbmVkIG1lbV9sb2FkX29wID0gMDsNCj4gLSAgc3dpdGNoIChMRC0+Z2V0TWVtT3Bl
+cmFuZCgpLT5nZXRTaXplKCkpIHsNCj4gLSAgZGVmYXVsdDoNCj4gLSAgICByZXR1cm47DQo+IC0g
+IGNhc2UgNDoNCj4gLSAgICBtZW1fbG9hZF9vcCA9IEJQRjo6TERXOw0KPiAtICAgIGJyZWFrOw0K
+PiAtICBjYXNlIDI6DQo+IC0gICAgbWVtX2xvYWRfb3AgPSBCUEY6OkxESDsNCj4gLSAgICBicmVh
+azsNCj4gLSAgY2FzZSAxOg0KPiAtICAgIG1lbV9sb2FkX29wID0gQlBGOjpMREI7DQo+IC0gICAg
+YnJlYWs7DQo+IC0gIH0NCj4gLQ0KPiAtICBMTFZNX0RFQlVHKGRiZ3MoKSA8PCAiRmluZCBMb2Fk
+IFZhbHVlIHRvIFZSZWcgIg0KPiAtICAgICAgICAgICAgICAgICAgICA8PCBSZWdpc3Rlcjo6dmly
+dFJlZzJJbmRleChSZWdOLT5nZXRSZWcoKSkgPDwgJ1xuJyk7DQo+IC0gIGxvYWRfdG9fdnJlZ19b
+UmVnTi0+Z2V0UmVnKCldID0gbWVtX2xvYWRfb3A7DQo+IC19DQo+IC0NCj4gICB2b2lkIEJQRkRB
+R1RvREFHSVNlbDo6UHJlcHJvY2Vzc1RydW5jKFNETm9kZSAqTm9kZSwNCj4gICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIFNlbGVjdGlvbkRBRzo6YWxsbm9kZXNfaXRlcmF0
+b3IgJkkpIHsNCj4gICAgIENvbnN0YW50U0ROb2RlICpNYXNrTiA9IGR5bl9jYXN0PENvbnN0YW50
+U0ROb2RlPihOb2RlLT5nZXRPcGVyYW5kKDEpKTsNCj4gQEAgLTUzNCwxMTIgKzQ3NSwyNiBAQCB2
+b2lkIEJQRkRBR1RvREFHSVNlbDo6UHJlcHJvY2Vzc1RydW5jKFNETm9kZSAqTm9kZSwNCj4gICAg
+IC8vIHdoaWNoIHRoZSBnZW5lcmljIG9wdGltaXplciBkb2Vzbid0IHVuZGVyc3RhbmQgdGhlaXIg
+cmVzdWx0cyBhcmUNCj4gICAgIC8vIHplcm8gZXh0ZW5kZWQuDQo+ICAgICBTRFZhbHVlIEJhc2VW
+ID0gTm9kZS0+Z2V0T3BlcmFuZCgwKTsNCj4gLSAgaWYgKEJhc2VWLmdldE9wY29kZSgpID09IElT
+RDo6SU5UUklOU0lDX1dfQ0hBSU4pIHsNCj4gLSAgICB1bnNpZ25lZCBJbnRObyA9IGNhc3Q8Q29u
+c3RhbnRTRE5vZGU+KEJhc2VWLT5nZXRPcGVyYW5kKDEpKS0+Z2V0WkV4dFZhbHVlKCk7DQo+IC0g
+ICAgdWludDY0X3QgTWFza1YgPSBNYXNrTi0+Z2V0WkV4dFZhbHVlKCk7DQo+IC0NCj4gLSAgICBp
+ZiAoISgoSW50Tm8gPT0gSW50cmluc2ljOjpicGZfbG9hZF9ieXRlICYmIE1hc2tWID09IDB4RkYp
+IHx8DQo+IC0gICAgICAgICAgKEludE5vID09IEludHJpbnNpYzo6YnBmX2xvYWRfaGFsZiAmJiBN
+YXNrViA9PSAweEZGRkYpIHx8DQo+IC0gICAgICAgICAgKEludE5vID09IEludHJpbnNpYzo6YnBm
+X2xvYWRfd29yZCAmJiBNYXNrViA9PSAweEZGRkZGRkZGKSkpDQo+IC0gICAgICByZXR1cm47DQo+
+IC0NCj4gLSAgICBMTFZNX0RFQlVHKGRiZ3MoKSA8PCAiUmVtb3ZlIHRoZSByZWR1bmRhbnQgQU5E
+IG9wZXJhdGlvbiBpbjogIjsNCj4gLSAgICAgICAgICAgICAgIE5vZGUtPmR1bXAoKTsgZGJncygp
+IDw8ICdcbicpOw0KPiAtDQo+IC0gICAgSS0tOw0KPiAtICAgIEN1ckRBRy0+UmVwbGFjZUFsbFVz
+ZXNXaXRoKFNEVmFsdWUoTm9kZSwgMCksIEJhc2VWKTsNCj4gLSAgICBJKys7DQo+IC0gICAgQ3Vy
+REFHLT5EZWxldGVOb2RlKE5vZGUpOw0KPiAtDQo+IC0gICAgcmV0dXJuOw0KPiAtICB9DQo+IC0N
+Cj4gLSAgLy8gTXVsdGlwbGUgYmFzaWMgYmxvY2tzIGNhc2UuDQo+IC0gIGlmIChCYXNlVi5nZXRP
+cGNvZGUoKSAhPSBJU0Q6OkNvcHlGcm9tUmVnKQ0KPiArICBpZiAoQmFzZVYuZ2V0T3Bjb2RlKCkg
+IT0gSVNEOjpJTlRSSU5TSUNfV19DSEFJTikNCj4gICAgICAgcmV0dXJuOw0KPiAgIA0KPiAtICB1
+bnNpZ25lZCBtYXRjaF9sb2FkX29wID0gMDsNCj4gLSAgc3dpdGNoIChNYXNrTi0+Z2V0WkV4dFZh
+bHVlKCkpIHsNCj4gLSAgZGVmYXVsdDoNCj4gLSAgICByZXR1cm47DQo+IC0gIGNhc2UgMHhGRkZG
+RkZGRjoNCj4gLSAgICBtYXRjaF9sb2FkX29wID0gQlBGOjpMRFc7DQo+IC0gICAgYnJlYWs7DQo+
+IC0gIGNhc2UgMHhGRkZGOg0KPiAtICAgIG1hdGNoX2xvYWRfb3AgPSBCUEY6OkxESDsNCj4gLSAg
+ICBicmVhazsNCj4gLSAgY2FzZSAweEZGOg0KPiAtICAgIG1hdGNoX2xvYWRfb3AgPSBCUEY6OkxE
+QjsNCj4gLSAgICBicmVhazsNCj4gLSAgfQ0KPiArICB1bnNpZ25lZCBJbnRObyA9IGNhc3Q8Q29u
+c3RhbnRTRE5vZGU+KEJhc2VWLT5nZXRPcGVyYW5kKDEpKS0+Z2V0WkV4dFZhbHVlKCk7DQo+ICsg
+IHVpbnQ2NF90IE1hc2tWID0gTWFza04tPmdldFpFeHRWYWx1ZSgpOw0KPiAgIA0KPiAtICBjb25z
+dCBSZWdpc3RlclNETm9kZSAqUmVnTiA9DQo+IC0gICAgICBkeW5fY2FzdDxSZWdpc3RlclNETm9k
+ZT4oQmFzZVYuZ2V0Tm9kZSgpLT5nZXRPcGVyYW5kKDEpKTsNCj4gLSAgaWYgKCFSZWdOIHx8ICFS
+ZWdpc3Rlcjo6aXNWaXJ0dWFsUmVnaXN0ZXIoUmVnTi0+Z2V0UmVnKCkpKQ0KPiArICBpZiAoISgo
+SW50Tm8gPT0gSW50cmluc2ljOjpicGZfbG9hZF9ieXRlICYmIE1hc2tWID09IDB4RkYpIHx8DQo+
+ICsgICAgICAgIChJbnRObyA9PSBJbnRyaW5zaWM6OmJwZl9sb2FkX2hhbGYgJiYgTWFza1YgPT0g
+MHhGRkZGKSB8fA0KPiArICAgICAgICAoSW50Tm8gPT0gSW50cmluc2ljOjpicGZfbG9hZF93b3Jk
+ICYmIE1hc2tWID09IDB4RkZGRkZGRkYpKSkNCj4gICAgICAgcmV0dXJuOw0KPiAtICB1bnNpZ25l
+ZCBBbmRPcFJlZyA9IFJlZ04tPmdldFJlZygpOw0KPiAtICBMTFZNX0RFQlVHKGRiZ3MoKSA8PCAi
+RXhhbWluZSAiIDw8IHByaW50UmVnKEFuZE9wUmVnKSA8PCAnXG4nKTsNCj4gLQ0KPiAtICAvLyBF
+eGFtaW5lIHRoZSBQSEkgaW5zbnMgaW4gdGhlIE1hY2hpbmVCYXNpY0Jsb2NrIHRvIGZvdW5kIG91
+dCB0aGUNCj4gLSAgLy8gZGVmaW5pdGlvbnMgb2YgdGhpcyB2aXJ0dWFsIHJlZ2lzdGVyLiBBdCB0
+aGlzIHN0YWdlIChEQUcyREFHDQo+IC0gIC8vIHRyYW5zZm9ybWF0aW9uKSwgb25seSBQSEkgbWFj
+aGluZSBpbnNucyBhcmUgYXZhaWxhYmxlIGluIHRoZSBtYWNoaW5lIGJhc2ljDQo+IC0gIC8vIGJs
+b2NrLg0KPiAtICBNYWNoaW5lQmFzaWNCbG9jayAqTUJCID0gRnVuY0luZm8tPk1CQjsNCj4gLSAg
+TWFjaGluZUluc3RyICpNSUkgPSBudWxscHRyOw0KPiAtICBmb3IgKGF1dG8gJk1JIDogKk1CQikg
+ew0KPiAtICAgIGZvciAodW5zaWduZWQgaSA9IDA7IGkgPCBNSS5nZXROdW1PcGVyYW5kcygpOyAr
+K2kpIHsNCj4gLSAgICAgIGNvbnN0IE1hY2hpbmVPcGVyYW5kICZNT1AgPSBNSS5nZXRPcGVyYW5k
+KGkpOw0KPiAtICAgICAgaWYgKCFNT1AuaXNSZWcoKSB8fCAhTU9QLmlzRGVmKCkpDQo+IC0gICAg
+ICAgIGNvbnRpbnVlOw0KPiAtICAgICAgUmVnaXN0ZXIgUmVnID0gTU9QLmdldFJlZygpOw0KPiAt
+ICAgICAgaWYgKFJlZ2lzdGVyOjppc1ZpcnR1YWxSZWdpc3RlcihSZWcpICYmIFJlZyA9PSBBbmRP
+cFJlZykgew0KPiAtICAgICAgICBNSUkgPSAmTUk7DQo+IC0gICAgICAgIGJyZWFrOw0KPiAtICAg
+ICAgfQ0KPiAtICAgIH0NCj4gLSAgfQ0KPiAtDQo+IC0gIGlmIChNSUkgPT0gbnVsbHB0cikgew0K
+PiAtICAgIC8vIE5vIHBoaSBkZWZpbml0aW9uIGluIHRoaXMgYmxvY2suDQo+IC0gICAgaWYgKCFj
+aGVja0xvYWREZWYoQW5kT3BSZWcsIG1hdGNoX2xvYWRfb3ApKQ0KPiAtICAgICAgcmV0dXJuOw0K
+PiAtICB9IGVsc2Ugew0KPiAtICAgIC8vIFRoZSBQSEkgbm9kZSBsb29rcyBsaWtlOg0KPiAtICAg
+IC8vICAgJTIgPSBQSEkgJTAsIDwlYmIuMT4sICUxLCA8JWJiLjM+DQo+IC0gICAgLy8gVHJhY2Ug
+ZWFjaCBpbmNvbWluZyBkZWZpbml0aW9uLCBlLmcuLCAoJTAsICViYi4xKSBhbmQgKCUxLCAlYmIu
+MykNCj4gLSAgICAvLyBUaGUgQU5EIG9wZXJhdGlvbiBjYW4gYmUgcmVtb3ZlZCBpZiBib3RoICUw
+IGluICViYi4xIGFuZCAlMSBpbg0KPiAtICAgIC8vICViYi4zIGFyZSBkZWZpbmVkIHdpdGggYSBs
+b2FkIG1hdGNoaW5nIHRoZSBNYXNrTi4NCj4gLSAgICBMTFZNX0RFQlVHKGRiZ3MoKSA8PCAiQ2hl
+Y2sgUEhJIEluc246ICI7IE1JSS0+ZHVtcCgpOyBkYmdzKCkgPDwgJ1xuJyk7DQo+IC0gICAgdW5z
+aWduZWQgUHJldlJlZyA9IC0xOw0KPiAtICAgIGZvciAodW5zaWduZWQgaSA9IDA7IGkgPCBNSUkt
+PmdldE51bU9wZXJhbmRzKCk7ICsraSkgew0KPiAtICAgICAgY29uc3QgTWFjaGluZU9wZXJhbmQg
+Jk1PUCA9IE1JSS0+Z2V0T3BlcmFuZChpKTsNCj4gLSAgICAgIGlmIChNT1AuaXNSZWcoKSkgew0K
+PiAtICAgICAgICBpZiAoTU9QLmlzRGVmKCkpDQo+IC0gICAgICAgICAgY29udGludWU7DQo+IC0g
+ICAgICAgIFByZXZSZWcgPSBNT1AuZ2V0UmVnKCk7DQo+IC0gICAgICAgIGlmICghUmVnaXN0ZXI6
+OmlzVmlydHVhbFJlZ2lzdGVyKFByZXZSZWcpKQ0KPiAtICAgICAgICAgIHJldHVybjsNCj4gLSAg
+ICAgICAgaWYgKCFjaGVja0xvYWREZWYoUHJldlJlZywgbWF0Y2hfbG9hZF9vcCkpDQo+IC0gICAg
+ICAgICAgcmV0dXJuOw0KPiAtICAgICAgfQ0KPiAtICAgIH0NCj4gLSAgfQ0KPiAgIA0KPiAtICBM
+TFZNX0RFQlVHKGRiZ3MoKSA8PCAiUmVtb3ZlIHRoZSByZWR1bmRhbnQgQU5EIG9wZXJhdGlvbiBp
+bjogIjsgTm9kZS0+ZHVtcCgpOw0KPiAtICAgICAgICAgICAgIGRiZ3MoKSA8PCAnXG4nKTsNCj4g
+KyAgTExWTV9ERUJVRyhkYmdzKCkgPDwgIlJlbW92ZSB0aGUgcmVkdW5kYW50IEFORCBvcGVyYXRp
+b24gaW46ICI7DQo+ICsgICAgICAgICAgICAgTm9kZS0+ZHVtcCgpOyBkYmdzKCkgPDwgJ1xuJyk7
+DQo+ICAgDQo+ICAgICBJLS07DQo+ICAgICBDdXJEQUctPlJlcGxhY2VBbGxVc2VzV2l0aChTRFZh
+bHVlKE5vZGUsIDApLCBCYXNlVik7DQo+ICAgICBJKys7DQo+ICAgICBDdXJEQUctPkRlbGV0ZU5v
+ZGUoTm9kZSk7DQo+IC19DQo+IC0NCj4gLWJvb2wgQlBGREFHVG9EQUdJU2VsOjpjaGVja0xvYWRE
+ZWYodW5zaWduZWQgRGVmUmVnLCB1bnNpZ25lZCBtYXRjaF9sb2FkX29wKSB7DQo+IC0gIGF1dG8g
+aXQgPSBsb2FkX3RvX3ZyZWdfLmZpbmQoRGVmUmVnKTsNCj4gLSAgaWYgKGl0ID09IGxvYWRfdG9f
+dnJlZ18uZW5kKCkpDQo+IC0gICAgcmV0dXJuIGZhbHNlOyAvLyBUaGUgZGVmaW5pdGlvbiBvZiBy
+ZWdpc3RlciBpcyBub3QgZXhwb3J0ZWQgeWV0Lg0KPiAgIA0KPiAtICByZXR1cm4gaXQtPnNlY29u
+ZCA9PSBtYXRjaF9sb2FkX29wOw0KPiArICByZXR1cm47DQo+ICAgfQ0KPiAgIA0KPiAgIEZ1bmN0
+aW9uUGFzcyAqbGx2bTo6Y3JlYXRlQlBGSVNlbERhZyhCUEZUYXJnZXRNYWNoaW5lICZUTSkgew0K
+PiBkaWZmIC0tZ2l0IGEvbGliL1RhcmdldC9CUEYvQlBGTUlQZWVwaG9sZS5jcHAgYi9saWIvVGFy
+Z2V0L0JQRi9CUEZNSVBlZXBob2xlLmNwcA0KPiBpbmRleCBmYWZkMmY3Li4yYjUyY2UwIDEwMDY0
+NA0KPiAtLS0gYS9saWIvVGFyZ2V0L0JQRi9CUEZNSVBlZXBob2xlLmNwcA0KPiArKysgYi9saWIv
+VGFyZ2V0L0JQRi9CUEZNSVBlZXBob2xlLmNwcA0KPiBAQCAtNzEsNyArNzEsNyBAQCB2b2lkIEJQ
+Rk1JUGVlcGhvbGU6OmluaXRpYWxpemUoTWFjaGluZUZ1bmN0aW9uICZNRlBhcm0pIHsNCj4gICAg
+IE1GID0gJk1GUGFybTsNCj4gICAgIE1SSSA9ICZNRi0+Z2V0UmVnSW5mbygpOw0KPiAgICAgVElJ
+ID0gTUYtPmdldFN1YnRhcmdldDxCUEZTdWJ0YXJnZXQ+KCkuZ2V0SW5zdHJJbmZvKCk7DQo+IC0g
+IExMVk1fREVCVUcoZGJncygpIDw8ICIqKiogQlBGIE1hY2hpbmVTU0EgcGVlcGhvbGUgcGFzcyAq
+KipcblxuIik7DQo+ICsgIExMVk1fREVCVUcoZGJncygpIDw8ICIqKiogQlBGIE1hY2hpbmVTU0Eg
+WkVYVCBFbGltIHBlZXBob2xlIHBhc3MgKioqXG5cbiIpOw0KPiAgIH0NCj4gICANCj4gICBib29s
+IEJQRk1JUGVlcGhvbGU6OmlzTW92RnJvbTMyRGVmKE1hY2hpbmVJbnN0ciAqTW92TUkpDQo+IEBA
+IC0xODYsNyArMTg2LDggQEAgYm9vbCBCUEZNSVBlZXBob2xlOjplbGltaW5hdGVaRXh0U2VxKHZv
+aWQpIHsNCj4gICB9IC8vIGVuZCBkZWZhdWx0IG5hbWVzcGFjZQ0KPiAgIA0KPiAgIElOSVRJQUxJ
+WkVfUEFTUyhCUEZNSVBlZXBob2xlLCBERUJVR19UWVBFLA0KPiAtICAgICAgICAgICAgICAgICJC
+UEYgTWFjaGluZVNTQSBQZWVwaG9sZSBPcHRpbWl6YXRpb24iLCBmYWxzZSwgZmFsc2UpDQo+ICsg
+ICAgICAgICAgICAgICAgIkJQRiBNYWNoaW5lU1NBIFBlZXBob2xlIE9wdGltaXphdGlvbiBGb3Ig
+WkVYVCBFbGltaW5hdGUiLA0KPiArICAgICAgICAgICAgICAgIGZhbHNlLCBmYWxzZSkNCj4gICAN
+Cj4gICBjaGFyIEJQRk1JUGVlcGhvbGU6OklEID0gMDsNCj4gICBGdW5jdGlvblBhc3MqIGxsdm06
+OmNyZWF0ZUJQRk1JUGVlcGhvbGVQYXNzKCkgeyByZXR1cm4gbmV3IEJQRk1JUGVlcGhvbGUoKTsg
+fQ0KPiBAQCAtMjUzLDEyICsyNTQsMTYgQEAgYm9vbCBCUEZNSVByZUVtaXRQZWVwaG9sZTo6ZWxp
+bWluYXRlUmVkdW5kYW50TW92KHZvaWQpIHsNCj4gICAgICAgICAvLyBlbmFibGVkLiBUaGUgc3Bl
+Y2lhbCB0eXBlIGNhc3QgaW5zbiBNT1ZfMzJfNjQgaW52b2x2ZXMgZGlmZmVyZW50DQo+ICAgICAg
+ICAgLy8gcmVnaXN0ZXIgY2xhc3Mgb24gc3JjIChpMzIpIGFuZCBkc3QgKGk2NCksIFJBIGNvdWxk
+IGdlbmVyYXRlIHVzZWxlc3MNCj4gICAgICAgICAvLyBpbnN0cnVjdGlvbiBkdWUgdG8gdGhpcy4N
+Cj4gLSAgICAgIGlmIChNSS5nZXRPcGNvZGUoKSA9PSBCUEY6Ok1PVl8zMl82NCkgew0KPiArICAg
+ICAgdW5zaWduZWQgT3Bjb2RlID0gTUkuZ2V0T3Bjb2RlKCk7DQo+ICsgICAgICBpZiAoT3Bjb2Rl
+ID09IEJQRjo6TU9WXzMyXzY0IHx8DQo+ICsgICAgICAgICAgT3Bjb2RlID09IEJQRjo6TU9WX3Jy
+IHx8IE9wY29kZSA9PSBCUEY6Ok1PVl9ycl8zMikgew0KPiAgICAgICAgICAgUmVnaXN0ZXIgZHN0
+ID0gTUkuZ2V0T3BlcmFuZCgwKS5nZXRSZWcoKTsNCj4gLSAgICAgICAgUmVnaXN0ZXIgZHN0X3N1
+YiA9IFRSSS0+Z2V0U3ViUmVnKGRzdCwgQlBGOjpzdWJfMzIpOw0KPiAgICAgICAgICAgUmVnaXN0
+ZXIgc3JjID0gTUkuZ2V0T3BlcmFuZCgxKS5nZXRSZWcoKTsNCj4gICANCj4gLSAgICAgICAgaWYg
+KGRzdF9zdWIgIT0gc3JjKQ0KPiArICAgICAgICBpZiAoT3Bjb2RlID09IEJQRjo6TU9WXzMyXzY0
+KQ0KPiArICAgICAgICAgIGRzdCA9IFRSSS0+Z2V0U3ViUmVnKGRzdCwgQlBGOjpzdWJfMzIpOw0K
+PiArDQo+ICsgICAgICAgIGlmIChkc3QgIT0gc3JjKQ0KPiAgICAgICAgICAgICBjb250aW51ZTsN
+Cj4gICANCj4gICAgICAgICAgIFRvRXJhc2UgPSAmTUk7DQo+IEBAIC0yODEsMyArMjg2LDE3NSBA
+QCBGdW5jdGlvblBhc3MqIGxsdm06OmNyZWF0ZUJQRk1JUHJlRW1pdFBlZXBob2xlUGFzcygpDQo+
+ICAgew0KPiAgICAgcmV0dXJuIG5ldyBCUEZNSVByZUVtaXRQZWVwaG9sZSgpOw0KPiAgIH0NCj4g
+Kw0KPiArU1RBVElTVElDKFRydW5jRWxlbU51bSwgIk51bWJlciBvZiB0cnVuY2F0aW9uIGVsaW1p
+bmF0ZWQiKTsNCj4gKw0KPiArbmFtZXNwYWNlIHsNCj4gKw0KPiArc3RydWN0IEJQRk1JUGVlcGhv
+bGVUcnVuY0VsaW0gOiBwdWJsaWMgTWFjaGluZUZ1bmN0aW9uUGFzcyB7DQo+ICsNCj4gKyAgc3Rh
+dGljIGNoYXIgSUQ7DQo+ICsgIGNvbnN0IEJQRkluc3RySW5mbyAqVElJOw0KPiArICBNYWNoaW5l
+RnVuY3Rpb24gKk1GOw0KPiArICBNYWNoaW5lUmVnaXN0ZXJJbmZvICpNUkk7DQo+ICsNCj4gKyAg
+QlBGTUlQZWVwaG9sZVRydW5jRWxpbSgpIDogTWFjaGluZUZ1bmN0aW9uUGFzcyhJRCkgew0KPiAr
+ICAgIGluaXRpYWxpemVCUEZNSVBlZXBob2xlVHJ1bmNFbGltUGFzcygqUGFzc1JlZ2lzdHJ5Ojpn
+ZXRQYXNzUmVnaXN0cnkoKSk7DQo+ICsgIH0NCj4gKw0KPiArcHJpdmF0ZToNCj4gKyAgLy8gSW5p
+dGlhbGl6ZSBjbGFzcyB2YXJpYWJsZXMuDQo+ICsgIHZvaWQgaW5pdGlhbGl6ZShNYWNoaW5lRnVu
+Y3Rpb24gJk1GUGFybSk7DQo+ICsNCj4gKyAgYm9vbCBlbGltaW5hdGVUcnVuY1NlcSh2b2lkKTsN
+Cj4gKw0KPiArcHVibGljOg0KPiArDQo+ICsgIC8vIE1haW4gZW50cnkgcG9pbnQgZm9yIHRoaXMg
+cGFzcy4NCj4gKyAgYm9vbCBydW5Pbk1hY2hpbmVGdW5jdGlvbihNYWNoaW5lRnVuY3Rpb24gJk1G
+KSBvdmVycmlkZSB7DQo+ICsgICAgaWYgKHNraXBGdW5jdGlvbihNRi5nZXRGdW5jdGlvbigpKSkN
+Cj4gKyAgICAgIHJldHVybiBmYWxzZTsNCj4gKw0KPiArICAgIGluaXRpYWxpemUoTUYpOw0KPiAr
+DQo+ICsgICAgcmV0dXJuIGVsaW1pbmF0ZVRydW5jU2VxKCk7DQo+ICsgIH0NCj4gK307DQo+ICsN
+Cj4gK3N0YXRpYyBib29sIFRydW5jU2l6ZUNvbXBhdGlibGUoaW50IFRydW5jU2l6ZSwgdW5zaWdu
+ZWQgb3Bjb2RlKQ0KPiArew0KPiArICBpZiAoVHJ1bmNTaXplID09IDEpDQo+ICsgICAgcmV0dXJu
+IG9wY29kZSA9PSBCUEY6OkxEQiB8fCBvcGNvZGUgPT0gQlBGOjpMREIzMjsNCj4gKw0KPiArICBp
+ZiAoVHJ1bmNTaXplID09IDIpDQo+ICsgICAgcmV0dXJuIG9wY29kZSA9PSBCUEY6OkxESCB8fCBv
+cGNvZGUgPT0gQlBGOjpMREgzMjsNCj4gKw0KPiArICBpZiAoVHJ1bmNTaXplID09IDQpDQo+ICsg
+ICAgcmV0dXJuIG9wY29kZSA9PSBCUEY6OkxEVyB8fCBvcGNvZGUgPT0gQlBGOjpMRFczMjsNCj4g
+Kw0KPiArICByZXR1cm4gZmFsc2U7DQo+ICt9DQo+ICsNCj4gKy8vIEluaXRpYWxpemUgY2xhc3Mg
+dmFyaWFibGVzLg0KPiArdm9pZCBCUEZNSVBlZXBob2xlVHJ1bmNFbGltOjppbml0aWFsaXplKE1h
+Y2hpbmVGdW5jdGlvbiAmTUZQYXJtKSB7DQo+ICsgIE1GID0gJk1GUGFybTsNCj4gKyAgTVJJID0g
+Jk1GLT5nZXRSZWdJbmZvKCk7DQo+ICsgIFRJSSA9IE1GLT5nZXRTdWJ0YXJnZXQ8QlBGU3VidGFy
+Z2V0PigpLmdldEluc3RySW5mbygpOw0KPiArICBMTFZNX0RFQlVHKGRiZ3MoKSA8PCAiKioqIEJQ
+RiBNYWNoaW5lU1NBIFRSVU5DIEVsaW0gcGVlcGhvbGUgcGFzcyAqKipcblxuIik7DQo+ICt9DQo+
+ICsNCj4gKy8vIFJlZyB0cnVuY2F0aW5nIGlzIG9mdGVuIHRoZSByZXN1bHQgb2YgOC8xNi8zMmJp
+dC0+NjRiaXQgb3INCj4gKy8vIDgvMTZiaXQtPjMyYml0IGNvbnZlcnNpb24uIElmIHRoZSByZWcg
+dmFsdWUgaXMgbG9hZGVkIHdpdGgNCj4gKy8vIG1hc2tlZCBieXRlIHdpZHRoLCB0aGUgQU5EIG9w
+ZXJhdGlvbiBjYW4gYmUgcmVtb3ZlZCBzaW5jZQ0KPiArLy8gQlBGIExPQUQgYWxyZWFkeSBoYXMg
+emVybyBleHRlbnNpb24uDQo+ICsvLw0KPiArLy8gVGhpcyBhbHNvIHNvbHZlZCBhIGNvcnJlY3Ru
+ZXNzIGlzc3VlLg0KPiArLy8gSW4gQlBGIHNvY2tldC1yZWxhdGVkIHByb2dyYW0sIGUuZy4sIF9f
+c2tfYnVmZi0+e2RhdGEsIGRhdGFfZW5kfQ0KPiArLy8gYXJlIDMyLWJpdCByZWdpc3RlcnMsIGJ1
+dCBsYXRlciBvbiwga2VybmVsIHZlcmlmaWVyIHdpbGwgcmV3cml0ZQ0KPiArLy8gaXQgd2l0aCA2
+NC1iaXQgdmFsdWUuIFRoZXJlZm9yZSwgdHJ1bmNhdGluZyB0aGUgdmFsdWUgYWZ0ZXIgdGhlDQo+
+ICsvLyBsb2FkIHdpbGwgcmVzdWx0IGluIGluY29ycmVjdCBjb2RlLg0KPiArYm9vbCBCUEZNSVBl
+ZXBob2xlVHJ1bmNFbGltOjplbGltaW5hdGVUcnVuY1NlcSh2b2lkKSB7DQo+ICsgIE1hY2hpbmVJ
+bnN0ciogVG9FcmFzZSA9IG51bGxwdHI7DQo+ICsgIGJvb2wgRWxpbWluYXRlZCA9IGZhbHNlOw0K
+PiArDQo+ICsgIGZvciAoTWFjaGluZUJhc2ljQmxvY2sgJk1CQiA6ICpNRikgew0KPiArICAgIGZv
+ciAoTWFjaGluZUluc3RyICZNSSA6IE1CQikgew0KPiArICAgICAgLy8gVGhlIHNlY29uZCBpbnNu
+IHRvIHJlbW92ZSBpZiB0aGUgZWxpbWluYXRlIGNhbmRpZGF0ZSBpcyBhIHBhaXIuDQo+ICsgICAg
+ICBNYWNoaW5lSW5zdHIgKk1JMiA9IG51bGxwdHI7Ow0KPiArICAgICAgUmVnaXN0ZXIgRHN0UmVn
+LCBTcmNSZWc7DQo+ICsgICAgICBNYWNoaW5lSW5zdHIgKkRlZk1JOw0KPiArICAgICAgaW50IFRy
+dW5jU2l6ZSA9IC0xOw0KPiArDQo+ICsgICAgICAvLyBJZiB0aGUgcHJldmlvdXMgaW5zdHJ1Y3Rp
+b24gd2FzIG1hcmtlZCBmb3IgZWxpbWluYXRpb24sIHJlbW92ZSBpdCBub3cuDQo+ICsgICAgICBp
+ZiAoVG9FcmFzZSkgew0KPiArICAgICAgICBUb0VyYXNlLT5lcmFzZUZyb21QYXJlbnQoKTsNCj4g
+KyAgICAgICAgVG9FcmFzZSA9IG51bGxwdHI7DQo+ICsgICAgICB9DQo+ICsNCj4gKyAgICAgIC8v
+IEFORCBBLCAweEZGRkZGRkZGIHdpbGwgYmUgdHVybmVkIGludG8gU0xML1NSTCBwYWlyIGR1ZSB0
+byBpbW1lZGlhdGUNCj4gKyAgICAgIC8vIGZvciBCUEYgQU5ESSBpcyBpMzIsIGFuZCB0aGlzIGNh
+c2Ugb25seSBoYXBwZW5zIG9uIEFMVTY0Lg0KPiArICAgICAgaWYgKE1JLmdldE9wY29kZSgpID09
+IEJQRjo6U1JMX3JpICYmDQo+ICsgICAgICAgICAgTUkuZ2V0T3BlcmFuZCgyKS5nZXRJbW0oKSA9
+PSAzMikgew0KPiArICAgICAgICBTcmNSZWcgPSBNSS5nZXRPcGVyYW5kKDEpLmdldFJlZygpOw0K
+PiArICAgICAgICBNSTIgPSBNUkktPmdldFZSZWdEZWYoU3JjUmVnKTsNCj4gKyAgICAgICAgRHN0
+UmVnID0gTUkuZ2V0T3BlcmFuZCgwKS5nZXRSZWcoKTsNCj4gKw0KPiArICAgICAgICBpZiAoIU1J
+MiB8fA0KPiArICAgICAgICAgICAgTUkyLT5nZXRPcGNvZGUoKSAhPSBCUEY6OlNMTF9yaSB8fA0K
+PiArICAgICAgICAgICAgTUkyLT5nZXRPcGVyYW5kKDIpLmdldEltbSgpICE9IDMyKQ0KPiArICAg
+ICAgICAgIGNvbnRpbnVlOw0KPiArDQo+ICsgICAgICAgIC8vIFVwZGF0ZSBTcmNSZWcuDQo+ICsg
+ICAgICAgIFNyY1JlZyA9IE1JMi0+Z2V0T3BlcmFuZCgxKS5nZXRSZWcoKTsNCj4gKyAgICAgICAg
+RGVmTUkgPSBNUkktPmdldFZSZWdEZWYoU3JjUmVnKTsNCj4gKyAgICAgICAgaWYgKERlZk1JKQ0K
+PiArICAgICAgICAgIFRydW5jU2l6ZSA9IDQ7DQo+ICsgICAgICB9IGVsc2UgaWYgKE1JLmdldE9w
+Y29kZSgpID09IEJQRjo6QU5EX3JpIHx8DQo+ICsgICAgICAgICAgICAgICAgIE1JLmdldE9wY29k
+ZSgpID09IEJQRjo6QU5EX3JpXzMyKSB7DQo+ICsgICAgICAgIFNyY1JlZyA9IE1JLmdldE9wZXJh
+bmQoMSkuZ2V0UmVnKCk7DQo+ICsgICAgICAgIERzdFJlZyA9IE1JLmdldE9wZXJhbmQoMCkuZ2V0
+UmVnKCk7DQo+ICsgICAgICAgIERlZk1JID0gTVJJLT5nZXRWUmVnRGVmKFNyY1JlZyk7DQo+ICsN
+Cj4gKyAgICAgICAgaWYgKCFEZWZNSSkNCj4gKyAgICAgICAgICBjb250aW51ZTsNCj4gKw0KPiAr
+ICAgICAgICBpbnQ2NF90IGltbSA9IE1JLmdldE9wZXJhbmQoMikuZ2V0SW1tKCk7DQo+ICsgICAg
+ICAgIGlmIChpbW0gPT0gMHhmZikNCj4gKyAgICAgICAgICBUcnVuY1NpemUgPSAxOw0KPiArICAg
+ICAgICBlbHNlIGlmIChpbW0gPT0gMHhmZmZmKQ0KPiArICAgICAgICAgIFRydW5jU2l6ZSA9IDI7
+DQo+ICsgICAgICB9DQo+ICsNCj4gKyAgICAgIGlmIChUcnVuY1NpemUgPT0gLTEpDQo+ICsgICAg
+ICAgIGNvbnRpbnVlOw0KPiArDQo+ICsgICAgICAvLyBUaGUgZGVmaW5pdGlvbiBpcyBQSEkgbm9k
+ZSwgY2hlY2sgYWxsIGlucHV0cy4NCj4gKyAgICAgIGlmIChEZWZNSS0+aXNQSEkoKSkgew0KPiAr
+ICAgICAgICBib29sIENoZWNrRmFpbCA9IGZhbHNlOw0KPiArDQo+ICsgICAgICAgIGZvciAodW5z
+aWduZWQgaSA9IDEsIGUgPSBEZWZNSS0+Z2V0TnVtT3BlcmFuZHMoKTsgaSA8IGU7IGkgKz0gMikg
+ew0KPiArICAgICAgICAgIE1hY2hpbmVPcGVyYW5kICZvcG5kID0gRGVmTUktPmdldE9wZXJhbmQo
+aSk7DQo+ICsgICAgICAgICAgaWYgKCFvcG5kLmlzUmVnKCkpDQo+ICsgICAgICAgICAgICByZXR1
+cm4gZmFsc2U7DQo+ICsNCj4gKyAgICAgICAgICBNYWNoaW5lSW5zdHIgKlBoaURlZiA9IE1SSS0+
+Z2V0VlJlZ0RlZihvcG5kLmdldFJlZygpKTsNCj4gKyAgICAgICAgICBpZiAoIVBoaURlZiB8fCBQ
+aGlEZWYtPmlzUEhJKCkgfHwNCj4gKyAgICAgICAgICAgICAgIVRydW5jU2l6ZUNvbXBhdGlibGUo
+VHJ1bmNTaXplLCBQaGlEZWYtPmdldE9wY29kZSgpKSkgew0KPiArICAgICAgICAgICAgQ2hlY2tG
+YWlsID0gdHJ1ZTsNCj4gKyAgICAgICAgICAgIGJyZWFrOw0KPiArICAgICAgICAgIH0NCj4gKyAg
+ICAgICAgfQ0KPiArDQo+ICsgICAgICAgIGlmIChDaGVja0ZhaWwpDQo+ICsgICAgICAgICAgY29u
+dGludWU7DQo+ICsgICAgICB9IGVsc2UgaWYgKCFUcnVuY1NpemVDb21wYXRpYmxlKFRydW5jU2l6
+ZSwgRGVmTUktPmdldE9wY29kZSgpKSkgew0KPiArICAgICAgICBjb250aW51ZTsNCj4gKyAgICAg
+IH0NCj4gKw0KPiArICAgICAgQnVpbGRNSShNQkIsIE1JLCBNSS5nZXREZWJ1Z0xvYygpLCBUSUkt
+PmdldChCUEY6Ok1PVl9yciksIERzdFJlZykNCj4gKyAgICAgICAgICAgICAgLmFkZFJlZyhTcmNS
+ZWcpOw0KPiArDQo+ICsgICAgICBpZiAoTUkyKQ0KPiArICAgICAgICBNSTItPmVyYXNlRnJvbVBh
+cmVudCgpOw0KPiArDQo+ICsgICAgICAvLyBNYXJrIGl0IHRvIFRvRXJhc2UsIGFuZCBlcmFzZSBp
+biB0aGUgbmV4dCBpdGVyYXRpb24uDQo+ICsgICAgICBUb0VyYXNlID0gJk1JOw0KPiArICAgICAg
+VHJ1bmNFbGVtTnVtKys7DQo+ICsgICAgICBFbGltaW5hdGVkID0gdHJ1ZTsNCj4gKyAgICB9DQo+
+ICsgIH0NCj4gKw0KPiArICByZXR1cm4gRWxpbWluYXRlZDsNCj4gK30NCj4gKw0KPiArfSAvLyBl
+bmQgZGVmYXVsdCBuYW1lc3BhY2UNCj4gKw0KPiArSU5JVElBTElaRV9QQVNTKEJQRk1JUGVlcGhv
+bGVUcnVuY0VsaW0sICJicGYtbWktdHJ1bmMtZWxpbSIsDQo+ICsgICAgICAgICAgICAgICAgIkJQ
+RiBNYWNoaW5lU1NBIFBlZXBob2xlIE9wdGltaXphdGlvbiBGb3IgVFJVTkMgRWxpbWluYXRlIiwN
+Cj4gKyAgICAgICAgICAgICAgICBmYWxzZSwgZmFsc2UpDQo+ICsNCj4gK2NoYXIgQlBGTUlQZWVw
+aG9sZVRydW5jRWxpbTo6SUQgPSAwOw0KPiArRnVuY3Rpb25QYXNzKiBsbHZtOjpjcmVhdGVCUEZN
+SVBlZXBob2xlVHJ1bmNFbGltUGFzcygpDQo+ICt7DQo+ICsgIHJldHVybiBuZXcgQlBGTUlQZWVw
+aG9sZVRydW5jRWxpbSgpOw0KPiArfQ0KPiBkaWZmIC0tZ2l0IGEvbGliL1RhcmdldC9CUEYvQlBG
+VGFyZ2V0TWFjaGluZS5jcHAgYi9saWIvVGFyZ2V0L0JQRi9CUEZUYXJnZXRNYWNoaW5lLmNwcA0K
+PiBpbmRleCBkOTQwYWM5Li4wYzRmMmM3IDEwMDY0NA0KPiAtLS0gYS9saWIvVGFyZ2V0L0JQRi9C
+UEZUYXJnZXRNYWNoaW5lLmNwcA0KPiArKysgYi9saWIvVGFyZ2V0L0JQRi9CUEZUYXJnZXRNYWNo
+aW5lLmNwcA0KPiBAQCAtMzYsNiArMzYsNyBAQCBleHRlcm4gIkMiIHZvaWQgTExWTUluaXRpYWxp
+emVCUEZUYXJnZXQoKSB7DQo+ICAgICBQYXNzUmVnaXN0cnkgJlBSID0gKlBhc3NSZWdpc3RyeTo6
+Z2V0UGFzc1JlZ2lzdHJ5KCk7DQo+ICAgICBpbml0aWFsaXplQlBGQWJzdHJhY3RNZW1iZXJBY2Nl
+c3NQYXNzKFBSKTsNCj4gICAgIGluaXRpYWxpemVCUEZNSVBlZXBob2xlUGFzcyhQUik7DQo+ICsg
+IGluaXRpYWxpemVCUEZNSVBlZXBob2xlVHJ1bmNFbGltUGFzcyhQUik7DQo+ICAgfQ0KPiAgIA0K
+PiAgIC8vIERhdGFMYXlvdXQ6IGxpdHRsZSBvciBiaWcgZW5kaWFuDQo+IEBAIC0xMTUsMTUgKzEx
+NiwxNiBAQCB2b2lkIEJQRlBhc3NDb25maWc6OmFkZE1hY2hpbmVTU0FPcHRpbWl6YXRpb24oKSB7
+DQo+ICAgICBUYXJnZXRQYXNzQ29uZmlnOjphZGRNYWNoaW5lU1NBT3B0aW1pemF0aW9uKCk7DQo+
+ICAgDQo+ICAgICBjb25zdCBCUEZTdWJ0YXJnZXQgKlN1YnRhcmdldCA9IGdldEJQRlRhcmdldE1h
+Y2hpbmUoKS5nZXRTdWJ0YXJnZXRJbXBsKCk7DQo+IC0gIGlmIChTdWJ0YXJnZXQtPmdldEhhc0Fs
+dTMyKCkgJiYgIURpc2FibGVNSVBlZXBob2xlKQ0KPiAtICAgIGFkZFBhc3MoY3JlYXRlQlBGTUlQ
+ZWVwaG9sZVBhc3MoKSk7DQo+ICsgIGlmICghRGlzYWJsZU1JUGVlcGhvbGUpIHsNCj4gKyAgICBp
+ZiAoU3VidGFyZ2V0LT5nZXRIYXNBbHUzMigpKQ0KPiArICAgICAgYWRkUGFzcyhjcmVhdGVCUEZN
+SVBlZXBob2xlUGFzcygpKTsNCj4gKyAgICBhZGRQYXNzKGNyZWF0ZUJQRk1JUGVlcGhvbGVUcnVu
+Y0VsaW1QYXNzKCkpOw0KPiArICB9DQo+ICAgfQ0KPiAgIA0KPiAgIHZvaWQgQlBGUGFzc0NvbmZp
+Zzo6YWRkUHJlRW1pdFBhc3MoKSB7DQo+IC0gIGNvbnN0IEJQRlN1YnRhcmdldCAqU3VidGFyZ2V0
+ID0gZ2V0QlBGVGFyZ2V0TWFjaGluZSgpLmdldFN1YnRhcmdldEltcGwoKTsNCj4gLQ0KPiAgICAg
+YWRkUGFzcyhjcmVhdGVCUEZNSVByZUVtaXRDaGVja2luZ1Bhc3MoKSk7DQo+ICAgICBpZiAoZ2V0
+T3B0TGV2ZWwoKSAhPSBDb2RlR2VuT3B0OjpOb25lKQ0KPiAtICAgIGlmIChTdWJ0YXJnZXQtPmdl
+dEhhc0FsdTMyKCkgJiYgIURpc2FibGVNSVBlZXBob2xlKQ0KPiArICAgIGlmICghRGlzYWJsZU1J
+UGVlcGhvbGUpDQo+ICAgICAgICAgYWRkUGFzcyhjcmVhdGVCUEZNSVByZUVtaXRQZWVwaG9sZVBh
+c3MoKSk7DQo+ICAgfQ0KPiBkaWZmIC0tZ2l0IGEvdGVzdC9Db2RlR2VuL0JQRi9yZW1vdmVfdHJ1
+bmNhdGVfNi5sbCBiL3Rlc3QvQ29kZUdlbi9CUEYvcmVtb3ZlX3RydW5jYXRlXzYubGwNCj4gbmV3
+IGZpbGUgbW9kZSAxMDA2NDQNCj4gaW5kZXggMDAwMDAwMC4uNjU3N2FmYg0KPiAtLS0gL2Rldi9u
+dWxsDQo+ICsrKyBiL3Rlc3QvQ29kZUdlbi9CUEYvcmVtb3ZlX3RydW5jYXRlXzYubGwNCj4gQEAg
+LTAsMCArMSw4MCBAQA0KPiArOyBSVU46IGxsYyA8ICVzIC1tYXJjaD1icGYgLXZlcmlmeS1tYWNo
+aW5laW5zdHJzIHwgRmlsZUNoZWNrICVzDQo+ICs7IFJVTjogbGxjIDwgJXMgLW1hcmNoPWJwZiAt
+bWF0dHI9K2FsdTMyIC12ZXJpZnktbWFjaGluZWluc3RycyB8IEZpbGVDaGVjayAtLWNoZWNrLXBy
+ZWZpeD1DSEVDSy0zMiAlcw0KPiArOw0KPiArOyB2b2lkIGNhbDEodW5zaWduZWQgc2hvcnQgKmEs
+IHVuc2lnbmVkIGxvbmcgKmIsIHVuc2lnbmVkIGludCBrKQ0KPiArOyB7DQo+ICs7ICAgdW5zaWdu
+ZWQgc2hvcnQgZTsNCj4gKzsNCj4gKzsgICBlID0gKmE7DQo+ICs7ICAgZm9yICh1bnNpZ25lZCBp
+bnQgaSA9IDA7IGkgPCBrOyBpKyspIHsNCj4gKzsgICAgIGJbaV0gPSBlOw0KPiArOyAgICAgZSA9
+IH5lOw0KPiArOyAgIH0NCj4gKzsgfQ0KPiArOw0KPiArOyB2b2lkIGNhbDIodW5zaWduZWQgc2hv
+cnQgKmEsIHVuc2lnbmVkIGludCAqYiwgdW5zaWduZWQgaW50IGspDQo+ICs7IHsNCj4gKzsgICB1
+bnNpZ25lZCBzaG9ydCBlOw0KPiArOw0KPiArOyAgIGUgPSAqYTsNCj4gKzsgICBmb3IgKHVuc2ln
+bmVkIGludCBpID0gMDsgaSA8IGs7IGkrKykgew0KPiArOyAgICAgYltpXSA9IGU7DQo+ICs7ICAg
+ICBlID0gfmU7DQo+ICs7ICAgfQ0KPiArOyB9DQo+ICsNCj4gKzsgRnVuY3Rpb24gQXR0cnM6IG5v
+ZnJlZSBub3JlY3Vyc2Ugbm91bndpbmQgb3B0c2l6ZQ0KPiArZGVmaW5lIGRzb19sb2NhbCB2b2lk
+IEBjYWwxKGkxNiogbm9jYXB0dXJlIHJlYWRvbmx5ICVhLCBpNjQqIG5vY2FwdHVyZSAlYiwgaTMy
+ICVrKSBsb2NhbF91bm5hbWVkX2FkZHIgIzAgew0KPiArZW50cnk6DQo+ICsgICVjbXA4ID0gaWNt
+cCBlcSBpMzIgJWssIDANCj4gKyAgYnIgaTEgJWNtcDgsIGxhYmVsICVmb3IuY29uZC5jbGVhbnVw
+LCBsYWJlbCAlZm9yLmJvZHkucHJlaGVhZGVyDQo+ICsNCj4gK2Zvci5ib2R5LnByZWhlYWRlcjog
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgOyBwcmVkcyA9ICVlbnRyeQ0KPiArICAlMCA9
+IGxvYWQgaTE2LCBpMTYqICVhLCBhbGlnbiAyDQo+ICsgICV3aWRlLnRyaXAuY291bnQgPSB6ZXh0
+IGkzMiAlayB0byBpNjQNCj4gKyAgYnIgbGFiZWwgJWZvci5ib2R5DQo+ICsNCj4gK2Zvci5jb25k
+LmNsZWFudXA6ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgOyBwcmVkcyA9ICVmb3Iu
+Ym9keSwgJWVudHJ5DQo+ICsgIHJldCB2b2lkDQo+ICsNCj4gK2Zvci5ib2R5OiAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgOyBwcmVkcyA9ICVmb3IuYm9keSwgJWZvci5i
+b2R5LnByZWhlYWRlcg0KPiArICAlaW5kdmFycy5pdiA9IHBoaSBpNjQgWyAwLCAlZm9yLmJvZHku
+cHJlaGVhZGVyIF0sIFsgJWluZHZhcnMuaXYubmV4dCwgJWZvci5ib2R5IF0NCj4gKyAgJWUuMDkg
+PSBwaGkgaTE2IFsgJTAsICVmb3IuYm9keS5wcmVoZWFkZXIgXSwgWyAlbmVnLCAlZm9yLmJvZHkg
+XQ0KPiArICAlY29udiA9IHpleHQgaTE2ICVlLjA5IHRvIGk2NA0KPiArICAlYXJyYXlpZHggPSBn
+ZXRlbGVtZW50cHRyIGluYm91bmRzIGk2NCwgaTY0KiAlYiwgaTY0ICVpbmR2YXJzLml2DQo+ICs7
+IENIRUNLOiBye3tbMC05XSt9fSAmPSA2NTUzNQ0KPiArOyBDSEVDSy0zMjogcnt7WzAtOV0rfX0g
+Jj0gNjU1MzUNCj4gKyAgc3RvcmUgaTY0ICVjb252LCBpNjQqICVhcnJheWlkeCwgYWxpZ24gOA0K
+PiArICAlbmVnID0geG9yIGkxNiAlZS4wOSwgLTENCj4gKyAgJWluZHZhcnMuaXYubmV4dCA9IGFk
+ZCBudXcgbnN3IGk2NCAlaW5kdmFycy5pdiwgMQ0KPiArICAlZXhpdGNvbmQgPSBpY21wIGVxIGk2
+NCAlaW5kdmFycy5pdi5uZXh0LCAld2lkZS50cmlwLmNvdW50DQo+ICsgIGJyIGkxICVleGl0Y29u
+ZCwgbGFiZWwgJWZvci5jb25kLmNsZWFudXAsIGxhYmVsICVmb3IuYm9keQ0KPiArfQ0KPiArDQo+
+ICs7IEZ1bmN0aW9uIEF0dHJzOiBub2ZyZWUgbm9yZWN1cnNlIG5vdW53aW5kIG9wdHNpemUNCj4g
+K2RlZmluZSBkc29fbG9jYWwgdm9pZCBAY2FsMihpMTYqIG5vY2FwdHVyZSByZWFkb25seSAlYSwg
+aTMyKiBub2NhcHR1cmUgJWIsIGkzMiAlaykgbG9jYWxfdW5uYW1lZF9hZGRyICMwIHsNCj4gK2Vu
+dHJ5Og0KPiArICAlY21wOCA9IGljbXAgZXEgaTMyICVrLCAwDQo+ICsgIGJyIGkxICVjbXA4LCBs
+YWJlbCAlZm9yLmNvbmQuY2xlYW51cCwgbGFiZWwgJWZvci5ib2R5LnByZWhlYWRlcg0KPiArDQo+
+ICtmb3IuYm9keS5wcmVoZWFkZXI6ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDsgcHJl
+ZHMgPSAlZW50cnkNCj4gKyAgJTAgPSBsb2FkIGkxNiwgaTE2KiAlYSwgYWxpZ24gMg0KPiArICAl
+d2lkZS50cmlwLmNvdW50ID0gemV4dCBpMzIgJWsgdG8gaTY0DQo+ICsgIGJyIGxhYmVsICVmb3Iu
+Ym9keQ0KPiArDQo+ICtmb3IuY29uZC5jbGVhbnVwOiAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIDsgcHJlZHMgPSAlZm9yLmJvZHksICVlbnRyeQ0KPiArICByZXQgdm9pZA0KPiArDQo+
+ICtmb3IuYm9keTogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDsgcHJl
+ZHMgPSAlZm9yLmJvZHksICVmb3IuYm9keS5wcmVoZWFkZXINCj4gKyAgJWluZHZhcnMuaXYgPSBw
+aGkgaTY0IFsgMCwgJWZvci5ib2R5LnByZWhlYWRlciBdLCBbICVpbmR2YXJzLml2Lm5leHQsICVm
+b3IuYm9keSBdDQo+ICsgICVlLjA5ID0gcGhpIGkxNiBbICUwLCAlZm9yLmJvZHkucHJlaGVhZGVy
+IF0sIFsgJW5lZywgJWZvci5ib2R5IF0NCj4gKyAgJWNvbnYgPSB6ZXh0IGkxNiAlZS4wOSB0byBp
+MzINCj4gKyAgJWFycmF5aWR4ID0gZ2V0ZWxlbWVudHB0ciBpbmJvdW5kcyBpMzIsIGkzMiogJWIs
+IGk2NCAlaW5kdmFycy5pdg0KPiArOyBDSEVDSzogcnt7WzAtOV0rfX0gJj0gNjU1MzUNCj4gKzsg
+Q0hFQ0stMzI6IHd7e1swLTldK319ICY9IDY1NTM1DQo+ICsgIHN0b3JlIGkzMiAlY29udiwgaTMy
+KiAlYXJyYXlpZHgsIGFsaWduIDQNCj4gKyAgJW5lZyA9IHhvciBpMTYgJWUuMDksIC0xDQo+ICsg
+ICVpbmR2YXJzLml2Lm5leHQgPSBhZGQgbnV3IG5zdyBpNjQgJWluZHZhcnMuaXYsIDENCj4gKyAg
+JWV4aXRjb25kID0gaWNtcCBlcSBpNjQgJWluZHZhcnMuaXYubmV4dCwgJXdpZGUudHJpcC5jb3Vu
+dA0KPiArICBiciBpMSAlZXhpdGNvbmQsIGxhYmVsICVmb3IuY29uZC5jbGVhbnVwLCBsYWJlbCAl
+Zm9yLmJvZHkNCj4gK30NCj4gDQo=
