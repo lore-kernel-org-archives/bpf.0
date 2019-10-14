@@ -2,442 +2,142 @@ Return-Path: <SRS0=k+HZ=YH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0317BECE596
-	for <bpf@archiver.kernel.org>; Mon, 14 Oct 2019 12:21:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2075ECE58E
+	for <bpf@archiver.kernel.org>; Mon, 14 Oct 2019 12:35:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DAB09217F9
-	for <bpf@archiver.kernel.org>; Mon, 14 Oct 2019 12:21:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 942442089C
+	for <bpf@archiver.kernel.org>; Mon, 14 Oct 2019 12:35:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731918AbfJNMVb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Oct 2019 08:21:31 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:43990 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730305AbfJNMVb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Oct 2019 08:21:31 -0400
-Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 4F49752E844D1AFB089A;
-        Mon, 14 Oct 2019 20:21:28 +0800 (CST)
-Received: from huawei.com (10.90.53.225) by DGGEMS401-HUB.china.huawei.com
- (10.3.19.201) with Microsoft SMTP Server id 14.3.439.0; Mon, 14 Oct 2019
- 20:21:23 +0800
-From:   Hou Tao <houtao1@huawei.com>
-To:     <linux-block@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <axboe@kernel.dk>, <ast@kernel.org>
-CC:     <hare@suse.com>, <osandov@fb.com>, <ming.lei@redhat.com>,
-        <damien.lemoal@wdc.com>, <bvanassche@acm.org>,
-        <daniel@iogearbox.net>, <kafai@fb.com>, <songliubraving@fb.com>,
-        <yhs@fb.com>
-Subject: [RFC PATCH 1/2] block: add support for redirecting IO completion through eBPF
-Date:   Mon, 14 Oct 2019 20:28:32 +0800
-Message-ID: <20191014122833.64908-2-houtao1@huawei.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20191014122833.64908-1-houtao1@huawei.com>
-References: <20191014122833.64908-1-houtao1@huawei.com>
+        id S1730717AbfJNMfw convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Mon, 14 Oct 2019 08:35:52 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:53614 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730719AbfJNMfv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Oct 2019 08:35:51 -0400
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id B92554E93D
+        for <bpf@vger.kernel.org>; Mon, 14 Oct 2019 12:35:50 +0000 (UTC)
+Received: by mail-lf1-f70.google.com with SMTP id m16so2884969lfb.1
+        for <bpf@vger.kernel.org>; Mon, 14 Oct 2019 05:35:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=PvVm8u9ObL3aYBOygBx9VWFhpRttK7ssE/n72+9xa/0=;
+        b=XRWTw0ocwqo+ohLdr6MmWcN9GLt1PM/YpLAjdpb7GacYieNJPk8J90eD7qoxi4hsXt
+         fMv3PvakdRk2Xde6SpHh4ep9pwbn1ljLXHXZqR0myRXeNcUhwa+ltJd6HVO2Z+ta7CMA
+         eWncrDVCoxbUVxCqUhoZ9XFEIiY8O5iuVxVZjuSEIzD7sAs5fzRxvwMxPIKYwpvpxdor
+         ZsZkMnlFJITJKI+c3l6SdD5S6y3MQnphE+I4UQ0HpIWzZJHBrKgWWycUpJjMmk9+qtNs
+         fipyWNpbdVKCIaW+41JFlFD2/yZOemnQ8yhWUNGuknYZuL1aXvG6qaokf+YKj8Gslml/
+         hwjA==
+X-Gm-Message-State: APjAAAVrQNAkrTeQqTFZc3BsZEMbBMHdKGdaePRzOJPHnOToaewCKolH
+        4NBsYP9qBDNcK26ZixZ7mvh54LVmCP2KmGY0SGuBT8Ey4vUscXoWzK4ux8dV7Ap06m7rwxmqmuB
+        2lgG+YXh3JaMA
+X-Received: by 2002:a2e:97ca:: with SMTP id m10mr16948674ljj.168.1571056548723;
+        Mon, 14 Oct 2019 05:35:48 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqxuPCWjO7iKsWtjLdhGHxGgh+y+o7yVh8iwinIdgS/da0MWM6yCi6ZPx6BIVIe5jtwmZvf8FA==
+X-Received: by 2002:a2e:97ca:: with SMTP id m10mr16948656ljj.168.1571056548487;
+        Mon, 14 Oct 2019 05:35:48 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
+        by smtp.gmail.com with ESMTPSA id n5sm4971168ljh.54.2019.10.14.05.35.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Oct 2019 05:35:47 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id ADBD818063D; Mon, 14 Oct 2019 14:35:45 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Marek Majkowski <marek@cloudflare.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 1/5] bpf: Support chain calling multiple BPF programs after each other
+In-Reply-To: <20191010044156.2hno4sszysu3c35g@ast-mbp.dhcp.thefacebook.com>
+References: <157046883502.2092443.146052429591277809.stgit@alrua-x1> <157046883614.2092443.9861796174814370924.stgit@alrua-x1> <20191007204234.p2bh6sul2uakpmnp@ast-mbp.dhcp.thefacebook.com> <87sgo3lkx9.fsf@toke.dk> <20191009015117.pldowv6n3k5p3ghr@ast-mbp.dhcp.thefacebook.com> <87o8yqjqg0.fsf@toke.dk> <20191010044156.2hno4sszysu3c35g@ast-mbp.dhcp.thefacebook.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Mon, 14 Oct 2019 14:35:45 +0200
+Message-ID: <87v9srijxa.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.225]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-For network stack, RPS, namely Receive Packet Steering, is used to
-distribute network protocol processing from hardware-interrupted CPU
-to specific CPUs and alleviating soft-irq load of the interrupted CPU.
+Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
 
-For block layer, soft-irq (for single queue device) or hard-irq
-(for multiple queue device) is used to handle IO completion, so
-RPS will be useful when the soft-irq load or the hard-irq load
-of a specific CPU is too high, or a specific CPU set is required
-to handle IO completion.
+> On Wed, Oct 09, 2019 at 10:03:43AM +0200, Toke Høiland-Jørgensen wrote:
+>> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+>> 
+>> > Please implement proper indirect calls and jumps.
+>> 
+>> I am still not convinced this will actually solve our problem; but OK, I
+>> can give it a shot.
+>
+> If you're not convinced let's talk about it first.
+>
+> Indirect calls is a building block for debugpoints.
+> Let's not call them tracepoints, because Linus banned any discusion
+> that includes that name.
+> The debugpoints is a way for BPF program to insert points in its
+> code to let external facility to do tracing and debugging.
+>
+> void (*debugpoint1)(struct xdp_buff *, int code);
+> void (*debugpoint2)(struct xdp_buff *);
+> void (*debugpoint3)(int len);
 
-Instead of setting the CPU set used for handling IO completion
-through sysfs or procfs, we can attach an eBPF program to the
-request-queue, provide some useful info (e.g., the CPU
-which submits the request) to the program, and let the program
-decides the proper CPU for IO completion handling.
+So how would these work? Similar to global variables (i.e., the loader
+creates a single-entry PROG_ARRAY map for each one)? Presumably with
+some BTF to validate the argument types?
 
-Signed-off-by: Hou Tao <houtao1@huawei.com>
----
- block/Makefile             |   2 +-
- block/blk-bpf.c            | 127 +++++++++++++++++++++++++++++++++++++
- block/blk-mq.c             |  22 +++++--
- block/blk-softirq.c        |  27 ++++++--
- include/linux/blkdev.h     |   3 +
- include/linux/bpf_blkdev.h |   9 +++
- include/linux/bpf_types.h  |   1 +
- include/uapi/linux/bpf.h   |   2 +
- kernel/bpf/syscall.c       |   9 +++
- 9 files changed, 190 insertions(+), 12 deletions(-)
- create mode 100644 block/blk-bpf.c
- create mode 100644 include/linux/bpf_blkdev.h
+So what would it take to actually support this? It doesn't quite sound
+trivial to add?
 
-diff --git a/block/Makefile b/block/Makefile
-index 9ef57ace90d4..0adb0f655e8c 100644
---- a/block/Makefile
-+++ b/block/Makefile
-@@ -9,7 +9,7 @@ obj-$(CONFIG_BLOCK) := bio.o elevator.o blk-core.o blk-sysfs.o \
- 			blk-lib.o blk-mq.o blk-mq-tag.o blk-stat.o \
- 			blk-mq-sysfs.o blk-mq-cpumap.o blk-mq-sched.o ioctl.o \
- 			genhd.o partition-generic.o ioprio.o \
--			badblocks.o partitions/ blk-rq-qos.o
-+			badblocks.o partitions/ blk-rq-qos.o blk-bpf.o
- 
- obj-$(CONFIG_BOUNCE)		+= bounce.o
- obj-$(CONFIG_BLK_SCSI_REQUEST)	+= scsi_ioctl.o
-diff --git a/block/blk-bpf.c b/block/blk-bpf.c
-new file mode 100644
-index 000000000000..d9e3b1caead4
---- /dev/null
-+++ b/block/blk-bpf.c
-@@ -0,0 +1,127 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2019 Hou Tao <houtao1@huawei.com>
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/slab.h>
-+#include <linux/bpf.h>
-+#include <linux/filter.h>
-+#include <linux/fs.h>
-+#include <linux/bpf_blkdev.h>
-+#include <linux/blkdev.h>
-+
-+extern const struct file_operations def_blk_fops;
-+
-+static DEFINE_SPINLOCK(blkdev_bpf_lock);
-+
-+const struct bpf_prog_ops blkdev_prog_ops = {
-+};
-+
-+static const struct bpf_func_proto *
-+blkdev_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
-+{
-+	switch (func_id) {
-+	case BPF_FUNC_map_lookup_elem:
-+		return &bpf_map_lookup_elem_proto;
-+	case BPF_FUNC_map_update_elem:
-+		return &bpf_map_update_elem_proto;
-+	case BPF_FUNC_map_delete_elem:
-+		return &bpf_map_delete_elem_proto;
-+	case BPF_FUNC_get_smp_processor_id:
-+		return &bpf_get_smp_processor_id_proto;
-+	case BPF_FUNC_get_numa_node_id:
-+		return &bpf_get_numa_node_id_proto;
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+const struct bpf_verifier_ops blkdev_verifier_ops = {
-+	.get_func_proto = blkdev_prog_func_proto,
-+};
-+
-+static struct request_queue *blkdev_rq_by_file(struct file *filp)
-+{
-+	struct block_device *bdev;
-+
-+	if (filp->f_op != &def_blk_fops)
-+		return ERR_PTR(-EINVAL);
-+
-+	bdev = I_BDEV(filp->f_mapping->host);
-+
-+	return bdev->bd_queue;
-+}
-+
-+int blkdev_bpf_prog_attach(const union bpf_attr *attr,
-+		enum bpf_prog_type ptype, struct bpf_prog *prog)
-+{
-+	int ret = 0;
-+	struct file *filp;
-+	struct request_queue *rq;
-+
-+	filp = fget(attr->target_fd);
-+	if (!filp) {
-+		ret = -EINVAL;
-+		goto fget_err;
-+	}
-+
-+	rq = blkdev_rq_by_file(filp);
-+	if (IS_ERR(rq)) {
-+		ret = PTR_ERR(rq);
-+		goto to_rq_err;
-+	}
-+
-+	spin_lock(&blkdev_bpf_lock);
-+	if (rq->prog) {
-+		ret = -EBUSY;
-+		goto set_prog_err;
-+	}
-+
-+	rcu_assign_pointer(rq->prog, prog);
-+
-+set_prog_err:
-+	spin_unlock(&blkdev_bpf_lock);
-+to_rq_err:
-+	fput(filp);
-+fget_err:
-+	return ret;
-+}
-+
-+int blkdev_bpf_prog_detach(const union bpf_attr *attr)
-+{
-+	int ret = 0;
-+	struct file *filp;
-+	struct request_queue *rq;
-+	struct bpf_prog *old_prog;
-+
-+	filp = fget(attr->target_fd);
-+	if (!filp) {
-+		ret = -EINVAL;
-+		goto fget_err;
-+	}
-+
-+	rq = blkdev_rq_by_file(filp);
-+	if (IS_ERR(rq)) {
-+		ret = PTR_ERR(rq);
-+		goto to_rq_err;
-+	}
-+
-+	old_prog = NULL;
-+	spin_lock(&blkdev_bpf_lock);
-+	if (!rq->prog) {
-+		ret = -ENODATA;
-+		goto clr_prog_err;
-+	}
-+	rcu_swap_protected(rq->prog, old_prog, 1);
-+
-+clr_prog_err:
-+	spin_unlock(&blkdev_bpf_lock);
-+	if (old_prog)
-+		bpf_prog_put(old_prog);
-+to_rq_err:
-+	fput(filp);
-+fget_err:
-+	return ret;
-+}
-+
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 20a49be536b5..5ac6fe6dbcd0 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -26,6 +26,7 @@
- #include <linux/delay.h>
- #include <linux/crash_dump.h>
- #include <linux/prefetch.h>
-+#include <linux/filter.h>
- 
- #include <trace/events/block.h>
- 
-@@ -584,6 +585,9 @@ static void __blk_mq_complete_request(struct request *rq)
- 	struct request_queue *q = rq->q;
- 	bool shared = false;
- 	int cpu;
-+	int ccpu;
-+	int bpf_ccpu = -1;
-+	struct bpf_prog *prog;
- 
- 	WRITE_ONCE(rq->state, MQ_RQ_COMPLETE);
- 	/*
-@@ -610,15 +614,25 @@ static void __blk_mq_complete_request(struct request *rq)
- 		return;
- 	}
- 
-+	rcu_read_lock();
-+	prog = rcu_dereference_protected(q->prog, 1);
-+	if (prog)
-+		bpf_ccpu = BPF_PROG_RUN(q->prog, NULL);
-+	rcu_read_unlock();
-+
- 	cpu = get_cpu();
--	if (!test_bit(QUEUE_FLAG_SAME_FORCE, &q->queue_flags))
--		shared = cpus_share_cache(cpu, ctx->cpu);
-+	if (bpf_ccpu < 0 || !cpu_online(bpf_ccpu)) {
-+		ccpu = ctx->cpu;
-+		if (!test_bit(QUEUE_FLAG_SAME_FORCE, &q->queue_flags))
-+			shared = cpus_share_cache(cpu, ctx->cpu);
-+	} else
-+		ccpu = bpf_ccpu;
- 
--	if (cpu != ctx->cpu && !shared && cpu_online(ctx->cpu)) {
-+	if (cpu != ccpu && !shared && cpu_online(ccpu)) {
- 		rq->csd.func = __blk_mq_complete_request_remote;
- 		rq->csd.info = rq;
- 		rq->csd.flags = 0;
--		smp_call_function_single_async(ctx->cpu, &rq->csd);
-+		smp_call_function_single_async(ccpu, &rq->csd);
- 	} else {
- 		q->mq_ops->complete(rq);
- 	}
-diff --git a/block/blk-softirq.c b/block/blk-softirq.c
-index 457d9ba3eb20..1139a5352a59 100644
---- a/block/blk-softirq.c
-+++ b/block/blk-softirq.c
-@@ -11,6 +11,7 @@
- #include <linux/cpu.h>
- #include <linux/sched.h>
- #include <linux/sched/topology.h>
-+#include <linux/filter.h>
- 
- #include "blk.h"
- 
-@@ -101,20 +102,32 @@ void __blk_complete_request(struct request *req)
- 	int cpu, ccpu = req->mq_ctx->cpu;
- 	unsigned long flags;
- 	bool shared = false;
-+	int bpf_ccpu = -1;
-+	struct bpf_prog *prog;
- 
- 	BUG_ON(!q->mq_ops->complete);
- 
--	local_irq_save(flags);
--	cpu = smp_processor_id();
-+	rcu_read_lock();
-+	prog = rcu_dereference_protected(q->prog, 1);
-+	if (prog)
-+		bpf_ccpu = BPF_PROG_RUN(q->prog, NULL);
-+	rcu_read_unlock();
- 
- 	/*
--	 * Select completion CPU
-+	 * Select completion CPU.
-+	 * If a valid CPU number is returned by eBPF program, use it directly.
- 	 */
--	if (test_bit(QUEUE_FLAG_SAME_COMP, &q->queue_flags) && ccpu != -1) {
--		if (!test_bit(QUEUE_FLAG_SAME_FORCE, &q->queue_flags))
--			shared = cpus_share_cache(cpu, ccpu);
-+	local_irq_save(flags);
-+	cpu = smp_processor_id();
-+	if (bpf_ccpu < 0 || !cpu_online(bpf_ccpu)) {
-+		if (test_bit(QUEUE_FLAG_SAME_COMP, &q->queue_flags) &&
-+			ccpu != -1) {
-+			if (!test_bit(QUEUE_FLAG_SAME_FORCE, &q->queue_flags))
-+				shared = cpus_share_cache(cpu, ccpu);
-+		} else
-+			ccpu = cpu;
- 	} else
--		ccpu = cpu;
-+		ccpu = bpf_ccpu;
- 
- 	/*
- 	 * If current CPU and requested CPU share a cache, run the softirq on
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index d9db32fb75ee..849589c3c51c 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -397,6 +397,8 @@ static inline int blkdev_reset_zones_ioctl(struct block_device *bdev,
- 
- #endif /* CONFIG_BLK_DEV_ZONED */
- 
-+struct bpf_prog;
-+
- struct request_queue {
- 	struct request		*last_merge;
- 	struct elevator_queue	*elevator;
-@@ -590,6 +592,7 @@ struct request_queue {
- 
- #define BLK_MAX_WRITE_HINTS	5
- 	u64			write_hints[BLK_MAX_WRITE_HINTS];
-+	struct bpf_prog __rcu *prog;
- };
- 
- #define QUEUE_FLAG_STOPPED	0	/* queue is stopped */
-diff --git a/include/linux/bpf_blkdev.h b/include/linux/bpf_blkdev.h
-new file mode 100644
-index 000000000000..0777428bc6e2
---- /dev/null
-+++ b/include/linux/bpf_blkdev.h
-@@ -0,0 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __BPF_BLKDEV_H__
-+#define __BPF_BLKDEV_H__
-+
-+extern int blkdev_bpf_prog_attach(const union bpf_attr *attr,
-+		enum bpf_prog_type ptype, struct bpf_prog *prog);
-+extern int blkdev_bpf_prog_detach(const union bpf_attr *attr);
-+
-+#endif /* !__BPF_BLKDEV_H__ */
-diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
-index 36a9c2325176..008facd336e5 100644
---- a/include/linux/bpf_types.h
-+++ b/include/linux/bpf_types.h
-@@ -38,6 +38,7 @@ BPF_PROG_TYPE(BPF_PROG_TYPE_LIRC_MODE2, lirc_mode2)
- #ifdef CONFIG_INET
- BPF_PROG_TYPE(BPF_PROG_TYPE_SK_REUSEPORT, sk_reuseport)
- #endif
-+BPF_PROG_TYPE(BPF_PROG_TYPE_BLKDEV, blkdev)
- 
- BPF_MAP_TYPE(BPF_MAP_TYPE_ARRAY, array_map_ops)
- BPF_MAP_TYPE(BPF_MAP_TYPE_PERCPU_ARRAY, percpu_array_map_ops)
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 77c6be96d676..36aa35e29be2 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -173,6 +173,7 @@ enum bpf_prog_type {
- 	BPF_PROG_TYPE_CGROUP_SYSCTL,
- 	BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE,
- 	BPF_PROG_TYPE_CGROUP_SOCKOPT,
-+	BPF_PROG_TYPE_BLKDEV,
- };
- 
- enum bpf_attach_type {
-@@ -199,6 +200,7 @@ enum bpf_attach_type {
- 	BPF_CGROUP_UDP6_RECVMSG,
- 	BPF_CGROUP_GETSOCKOPT,
- 	BPF_CGROUP_SETSOCKOPT,
-+	BPF_BLKDEV_IOC_CPU,
- 	__MAX_BPF_ATTACH_TYPE
- };
- 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 82eabd4e38ad..9724c0809f21 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -4,6 +4,7 @@
- #include <linux/bpf.h>
- #include <linux/bpf_trace.h>
- #include <linux/bpf_lirc.h>
-+#include <linux/bpf_blkdev.h>
- #include <linux/btf.h>
- #include <linux/syscalls.h>
- #include <linux/slab.h>
-@@ -1942,6 +1943,9 @@ static int bpf_prog_attach(const union bpf_attr *attr)
- 	case BPF_CGROUP_SETSOCKOPT:
- 		ptype = BPF_PROG_TYPE_CGROUP_SOCKOPT;
- 		break;
-+	case BPF_BLKDEV_IOC_CPU:
-+		ptype = BPF_PROG_TYPE_BLKDEV;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -1966,6 +1970,9 @@ static int bpf_prog_attach(const union bpf_attr *attr)
- 	case BPF_PROG_TYPE_FLOW_DISSECTOR:
- 		ret = skb_flow_dissector_bpf_prog_attach(attr, prog);
- 		break;
-+	case BPF_PROG_TYPE_BLKDEV:
-+		ret = blkdev_bpf_prog_attach(attr, ptype, prog);
-+		break;
- 	default:
- 		ret = cgroup_bpf_prog_attach(attr, ptype, prog);
- 	}
-@@ -2029,6 +2036,8 @@ static int bpf_prog_detach(const union bpf_attr *attr)
- 	case BPF_CGROUP_SETSOCKOPT:
- 		ptype = BPF_PROG_TYPE_CGROUP_SOCKOPT;
- 		break;
-+	case BPF_BLKDEV_IOC_CPU:
-+		return blkdev_bpf_prog_detach(attr);
- 	default:
- 		return -EINVAL;
- 	}
--- 
-2.22.0
+> Essentially it's live debugging (tracing) of cooperative bpf programs
+> that added debugpoints to their code.
 
+Yup, certainly not disputing that this would be useful for debugging;
+although it'll probably be a while before its use becomes widespread
+enough that it'll be a reliable tool for people deploying XDP programs...
+
+> Obviously indirect calls can be used for a ton of other things
+> including proper chaing of progs, but I'm convinced that
+> you don't need chaining to solve your problem.
+> You need debugging.
+
+Debugging is certainly also an area that I want to improve. However, I
+think that focusing on debugging as the driver for chaining programs was
+a mistake on my part; rudimentary debugging (using a tool such as
+xdpdump) is something that falls out of program chaining, but it's not
+the main driver for it.
+
+> If you disagree please explain _your_ problem again.
+> Saying that fb katran is a use case for chaining is, hrm, not correct.
+
+I never said Katran was the driver for this. I just used Katran as one
+of the "prior art" examples for my "how are people solving running
+multiple programs on the same interface" survey.
+
+What I want to achieve is simply the ability to run multiple independent
+XDP programs on the same interface, without having to put any
+constraints on the programs themselves. I'm not disputing that this is
+*possible* to do completely in userspace, I just don't believe the
+resulting solution will be very good. Proper kernel support for indirect
+calls (or just "tail calls that return") may change that; but in any
+case I think I need to go write some userspace code to have some more
+concrete examples to discuss from. So we can come back to the
+particulars once I've done that :)
+
+-Toke
