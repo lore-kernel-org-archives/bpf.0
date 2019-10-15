@@ -2,104 +2,103 @@ Return-Path: <SRS0=zD4z=YI=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0B20C10F14
-	for <bpf@archiver.kernel.org>; Tue, 15 Oct 2019 05:33:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84730ECE58E
+	for <bpf@archiver.kernel.org>; Tue, 15 Oct 2019 08:30:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A087D21835
-	for <bpf@archiver.kernel.org>; Tue, 15 Oct 2019 05:33:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A1BA2064B
+	for <bpf@archiver.kernel.org>; Tue, 15 Oct 2019 08:30:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728954AbfJOFdX convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 15 Oct 2019 01:33:23 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:42255 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728672AbfJOFcV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Oct 2019 01:32:21 -0400
-Received: from [5.158.153.53] (helo=tip-bot2.lab.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tip-bot2@linutronix.de>)
-        id 1iKFRH-0000QF-N9; Tue, 15 Oct 2019 07:32:07 +0200
-Received: from [127.0.1.1] (localhost [IPv6:::1])
-        by tip-bot2.lab.linutronix.de (Postfix) with ESMTP id 0F7361C04D4;
-        Tue, 15 Oct 2019 07:31:49 +0200 (CEST)
-Date:   Tue, 15 Oct 2019 05:31:48 -0000
-From:   tip-bot2 for =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= 
-        <tip-bot2@linutronix.de>
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] samples/bpf: fix build by setting HAVE_ATTR_TEST to zero
-Cc:     =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn.topel@intel.com>,
-        KP Singh <kpsingh@google.com>,
-        Song Liu <songliubraving@fb.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20191001113307.27796-3-bjorn.topel@gmail.com>
-References: <20191001113307.27796-3-bjorn.topel@gmail.com>
+        id S1728917AbfJOIac (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Oct 2019 04:30:32 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:3758 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726358AbfJOIab (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 15 Oct 2019 04:30:31 -0400
+Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 88D9A3F44917A8B0B694;
+        Tue, 15 Oct 2019 16:30:28 +0800 (CST)
+Received: from [127.0.0.1] (10.177.251.225) by DGGEMS409-HUB.china.huawei.com
+ (10.3.19.209) with Microsoft SMTP Server id 14.3.439.0; Tue, 15 Oct 2019
+ 16:30:18 +0800
+To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@redhat.com>, <namhyung@kernel.org>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <kafai@fb.com>, <songliubraving@fb.com>,
+        <yhs@fb.com>, <ilubashe@akamai.com>, <ak@linux.intel.com>,
+        <yeyunfeng@huawei.com>, <kan.liang@linux.intel.com>,
+        <alexey.budankov@linux.intel.com>
+From:   Yunfeng Ye <yeyunfeng@huawei.com>
+CC:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <hushiyuan@huawei.com>,
+        <linfeilong@huawei.com>
+Subject: [PATCH] perf tools: fix resource leak of closedir() on the error
+ paths
+Message-ID: <cd5f7cd2-b80d-6add-20a1-32f4f43e0744@huawei.com>
+Date:   Tue, 15 Oct 2019 16:30:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Message-ID: <157111750893.12254.16541060201823244763.tip-bot2@tip-bot2>
-X-Mailer: tip-git-log-daemon
-Robot-ID: <tip-bot2.linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.177.251.225]
+X-CFilter-Loop: Reflected
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The following commit has been merged into the perf/core branch of tip:
+Both build_mem_topology() and rm_rf_depth_pat() have resource leak of
+closedir() on the error paths.
 
-Commit-ID:     fce9501aec6bdda45ef3a5e365a5e0de7de7fe2d
-Gitweb:        https://git.kernel.org/tip/fce9501aec6bdda45ef3a5e365a5e0de7de7fe2d
-Author:        Björn Töpel <bjorn.topel@intel.com>
-AuthorDate:    Tue, 01 Oct 2019 13:33:07 +02:00
-Committer:     Arnaldo Carvalho de Melo <acme@redhat.com>
-CommitterDate: Mon, 07 Oct 2019 12:22:18 -03:00
+Fix this by calling closedir() before function returns.
 
-samples/bpf: fix build by setting HAVE_ATTR_TEST to zero
-
-To remove that test_attr__{enabled/open} are used by perf-sys.h, we
-set HAVE_ATTR_TEST to zero.
-
-Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
-Tested-by: KP Singh <kpsingh@google.com>
-Acked-by: Song Liu <songliubraving@fb.com>
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Link: http://lore.kernel.org/lkml/20191001113307.27796-3-bjorn.topel@gmail.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Fixes: e2091cedd51b ("perf tools: Add MEM_TOPOLOGY feature to perf data file")
+Fixes: cdb6b0235f17 ("perf tools: Add pattern name checking to rm_rf")
+Signed-off-by: Yunfeng Ye <yeyunfeng@huawei.com>
 ---
- samples/bpf/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ tools/perf/util/header.c | 4 +++-
+ tools/perf/util/util.c   | 6 ++++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 1d9be26..42b571c 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -176,6 +176,7 @@ KBUILD_HOSTCFLAGS += -I$(srctree)/tools/lib/bpf/
- KBUILD_HOSTCFLAGS += -I$(srctree)/tools/testing/selftests/bpf/
- KBUILD_HOSTCFLAGS += -I$(srctree)/tools/lib/ -I$(srctree)/tools/include
- KBUILD_HOSTCFLAGS += -I$(srctree)/tools/perf
-+KBUILD_HOSTCFLAGS += -DHAVE_ATTR_TEST=0
- 
- HOSTCFLAGS_bpf_load.o += -I$(objtree)/usr/include -Wno-unused-variable
- 
+diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
+index 86d9396..becc2d1 100644
+--- a/tools/perf/util/header.c
++++ b/tools/perf/util/header.c
+@@ -1296,8 +1296,10 @@ static int build_mem_topology(struct memory_node *nodes, u64 size, u64 *cntp)
+ 			continue;
+
+ 		if (WARN_ONCE(cnt >= size,
+-			      "failed to write MEM_TOPOLOGY, way too many nodes\n"))
++			"failed to write MEM_TOPOLOGY, way too many nodes\n")) {
++			closedir(dir);
+ 			return -1;
++		}
+
+ 		ret = memory_node__read(&nodes[cnt++], idx);
+ 	}
+diff --git a/tools/perf/util/util.c b/tools/perf/util/util.c
+index 5eda6e1..ae56c76 100644
+--- a/tools/perf/util/util.c
++++ b/tools/perf/util/util.c
+@@ -154,8 +154,10 @@ static int rm_rf_depth_pat(const char *path, int depth, const char **pat)
+ 		if (!strcmp(d->d_name, ".") || !strcmp(d->d_name, ".."))
+ 			continue;
+
+-		if (!match_pat(d->d_name, pat))
+-			return -2;
++		if (!match_pat(d->d_name, pat)) {
++			ret =  -2;
++			break;
++		}
+
+ 		scnprintf(namebuf, sizeof(namebuf), "%s/%s",
+ 			  path, d->d_name);
+-- 
+2.7.4.huawei.3
+
