@@ -1,245 +1,153 @@
-Return-Path: <SRS0=k+HZ=YH=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=zD4z=YI=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2EDCECE58E
-	for <bpf@archiver.kernel.org>; Mon, 14 Oct 2019 23:49:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17D59C4CECE
+	for <bpf@archiver.kernel.org>; Tue, 15 Oct 2019 01:21:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C50D02133F
-	for <bpf@archiver.kernel.org>; Mon, 14 Oct 2019 23:49:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D8ED320873
+	for <bpf@archiver.kernel.org>; Tue, 15 Oct 2019 01:21:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="dEXkjRDF"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="cyPZYuf+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726747AbfJNXtn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Oct 2019 19:49:43 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:29972 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726716AbfJNXtm (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 14 Oct 2019 19:49:42 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9ENjpwr010354
-        for <bpf@vger.kernel.org>; Mon, 14 Oct 2019 16:49:41 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=mefPmZ53jIVi83cfdpNxiI5k22In4K3vUgttua7TnOY=;
- b=dEXkjRDFGkMszq8+XDsTy1hQ2oDtuHE6p0f/O9fNnfqrcNSgp6/HmfxqM8lQnHseTQjF
- Xrd1NgeLLAUGRoWn/T7fbdEq95LDiQj0m+y+WQ1jlEO4CGeF4wyre+DMWyqhiYjaSxGS
- pQ6ePwDv/Up8JUIFB1gUYT07nv61IZW4qmE= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2vkxhc70x6-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 14 Oct 2019 16:49:41 -0700
-Received: from 2401:db00:30:6007:face:0:1:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Mon, 14 Oct 2019 16:49:39 -0700
-Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 963718618F6; Mon, 14 Oct 2019 16:49:36 -0700 (PDT)
-Smtp-Origin-Hostprefix: dev
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: dev101.prn2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH bpf-next 3/5] libbpf: add support for field existance CO-RE relocation
-Date:   Mon, 14 Oct 2019 16:49:26 -0700
-Message-ID: <20191014234928.561043-4-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191014234928.561043-1-andriin@fb.com>
-References: <20191014234928.561043-1-andriin@fb.com>
-X-FB-Internal: Safe
+        id S1727328AbfJOBUu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Oct 2019 21:20:50 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:55458 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727225AbfJOBUu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Oct 2019 21:20:50 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9F1FWPh010787;
+        Tue, 15 Oct 2019 01:20:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2019-08-05;
+ bh=nym7061D2humZLEh2kG3wf0wlc8iedL8d/xD0a8SLCw=;
+ b=cyPZYuf+Y3/agJ7stYDWA0yGfNrfCGgYx3LBqHWkkYoZFhF5jOB5aksdvxLFR066Xp9+
+ R90SentljpqICpgsGxhWV2ZKN+74QSyAxyKdFS9f+Ty2nTqQhjCH1qIdFICmw9VtnufW
+ olIhZ8YgYNDP+DcnMC9oxGGY5K9NK1n+/ubvd/0Z9ou7p43HYhYgX7UFRKsXoYTa5TDf
+ 2xPGMuR0GnFF2hl5JmA1uUfO6jNaLHBtfgKmyqg+2tQunuC0MAvpzdjA4NRChMCK2NSM
+ Pg2iR9oUasadnCUsf73sZXof93Q1mjKhAcISwk0ISiyE/F/GgvlvYw1aERHOAxXiS68X Nw== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 2vk6sqccup-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Oct 2019 01:20:13 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9F1J5WK152858;
+        Tue, 15 Oct 2019 01:20:13 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 2vkrbkx48v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Oct 2019 01:20:13 +0000
+Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x9F1K7er019180;
+        Tue, 15 Oct 2019 01:20:08 GMT
+Received: from [192.168.1.3] (/114.88.246.185)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 15 Oct 2019 01:20:07 +0000
+Subject: Re: [RFC PATCH 0/2] block: use eBPF to redirect IO completion
+To:     Hou Tao <houtao1@huawei.com>, linux-block@vger.kernel.org,
+        bpf@vger.kernel.org, netdev@vger.kernel.org, axboe@kernel.dk,
+        ast@kernel.org
+Cc:     hare@suse.com, osandov@fb.com, ming.lei@redhat.com,
+        damien.lemoal@wdc.com, bvanassche@acm.org, daniel@iogearbox.net,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com
+References: <20191014122833.64908-1-houtao1@huawei.com>
+From:   Bob Liu <bob.liu@oracle.com>
+Message-ID: <68fd4fe2-7008-4d7c-b8a6-dc7906dcd291@oracle.com>
+Date:   Tue, 15 Oct 2019 09:20:00 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
- definitions=2019-10-14_11:2019-10-11,2019-10-14 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- adultscore=0 priorityscore=1501 malwarescore=0 bulkscore=0 impostorscore=0
- phishscore=0 mlxscore=0 clxscore=1015 mlxlogscore=999 spamscore=0
- suspectscore=8 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1910140199
-X-FB-Internal: deliver
+In-Reply-To: <20191014122833.64908-1-houtao1@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9410 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1910150010
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9410 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1910150010
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add support for BPF_FRK_EXISTS relocation kind to detect existence of
-captured field in a destination BTF, allowing conditional logic to
-handle incompatible differences between kernels.
+On 10/14/19 8:28 PM, Hou Tao wrote:
+> For network stack, RPS, namely Receive Packet Steering, is used to
+> distribute network protocol processing from hardware-interrupted CPU
+> to specific CPUs and alleviating soft-irq load of the interrupted CPU.
+> 
+> For block layer, soft-irq (for single queue device) or hard-irq
+> (for multiple queue device) is used to handle IO completion, so
+> RPS will be useful when the soft-irq load or the hard-irq load
+> of a specific CPU is too high, or a specific CPU set is required
+> to handle IO completion.
+> 
+> Instead of setting the CPU set used for handling IO completion
+> through sysfs or procfs, we can attach an eBPF program to the
+> request-queue, provide some useful info (e.g., the CPU
+> which submits the request) to the program, and let the program
+> decides the proper CPU for IO completion handling.
+> 
 
-Also introduce opt-in relaxed CO-RE relocation handling option, which
-makes libbpf emit warning for failed relocations, but proceed with other
-relocations. Instruction, for which relocation failed, is patched with
-(u32)-1 value.
+But it looks like there isn't any benefit than through sysfs/procfs?
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/lib/bpf/libbpf.c | 74 +++++++++++++++++++++++++++++++++---------
- tools/lib/bpf/libbpf.h |  4 ++-
- 2 files changed, 61 insertions(+), 17 deletions(-)
+> In order to demonostrate the effect of IO completion redirection,
+> a test programm is built to redirect the IO completion handling
+> to all online CPUs or a specific CPU set:
+> 
+> 	./test_blkdev_ccpu -d /dev/vda
+> or
+> 	./test_blkdev_ccpu -d /dev/nvme0n1 -s 4,8,10-13
+> 
+> However I am still trying to find out a killer scenario for
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index db3308b91806..bebd9eb352ee 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -249,6 +249,7 @@ struct bpf_object {
- 
- 	bool loaded;
- 	bool has_pseudo_calls;
-+	bool relaxed_core_relocs;
- 
- 	/*
- 	 * Information when doing elf related work. Only valid if fd
-@@ -2771,26 +2772,54 @@ static int bpf_core_spec_match(struct bpf_core_spec *local_spec,
- 
- /*
-  * Patch relocatable BPF instruction.
-- * Expected insn->imm value is provided for validation, as well as the new
-- * relocated value.
-+ *
-+ * Patched value is determined by relocation kind and target specification.
-+ * For field existence relocation target spec will be NULL if field is not
-+ * found.
-+ * Expected insn->imm value is determined using relocation kind and local
-+ * spec, and is checked before patching instruction. If actual insn->imm value
-+ * is wrong, bail out with error.
-  *
-  * Currently three kinds of BPF instructions are supported:
-  * 1. rX = <imm> (assignment with immediate operand);
-  * 2. rX += <imm> (arithmetic operations with immediate operand);
-- * 3. *(rX) = <imm> (indirect memory assignment with immediate operand).
-- *
-- * If actual insn->imm value is wrong, bail out.
-  */
--static int bpf_core_reloc_insn(struct bpf_program *prog, int insn_off,
--			       __u32 orig_off, __u32 new_off)
-+static int bpf_core_reloc_insn(struct bpf_program *prog,
-+			       const struct bpf_field_reloc *relo,
-+			       const struct bpf_core_spec *local_spec,
-+			       const struct bpf_core_spec *targ_spec)
- {
-+	__u32 orig_val, new_val;
- 	struct bpf_insn *insn;
- 	int insn_idx;
- 	__u8 class;
- 
--	if (insn_off % sizeof(struct bpf_insn))
-+	if (relo->insn_off % sizeof(struct bpf_insn))
- 		return -EINVAL;
--	insn_idx = insn_off / sizeof(struct bpf_insn);
-+	insn_idx = relo->insn_off / sizeof(struct bpf_insn);
-+
-+	switch (relo->kind) {
-+	case BPF_FRK_BYTE_OFFSET:
-+		orig_val = local_spec->offset;
-+		if (targ_spec) {
-+			new_val = targ_spec->offset;
-+		} else {
-+			pr_warning("prog '%s': patching insn #%d w/ failed reloc, imm %d -> %d\n",
-+				   bpf_program__title(prog, false), insn_idx,
-+				   orig_val, -1);
-+			new_val = (__u32)-1;
-+		}
-+		break;
-+	case BPF_FRK_EXISTS:
-+		orig_val = 1; /* can't generate EXISTS relo w/o local field */
-+		new_val = targ_spec ? 1 : 0;
-+		break;
-+	default:
-+		pr_warning("prog '%s': unknown relo %d at insn #%d'\n",
-+			   bpf_program__title(prog, false),
-+			   relo->kind, insn_idx);
-+		return -EINVAL;
-+	}
- 
- 	insn = &prog->insns[insn_idx];
- 	class = BPF_CLASS(insn->code);
-@@ -2798,12 +2827,12 @@ static int bpf_core_reloc_insn(struct bpf_program *prog, int insn_off,
- 	if (class == BPF_ALU || class == BPF_ALU64) {
- 		if (BPF_SRC(insn->code) != BPF_K)
- 			return -EINVAL;
--		if (insn->imm != orig_off)
-+		if (insn->imm != orig_val)
- 			return -EINVAL;
--		insn->imm = new_off;
-+		insn->imm = new_val;
- 		pr_debug("prog '%s': patched insn #%d (ALU/ALU64) imm %d -> %d\n",
- 			 bpf_program__title(prog, false),
--			 insn_idx, orig_off, new_off);
-+			 insn_idx, orig_val, new_val);
- 	} else {
- 		pr_warning("prog '%s': trying to relocate unrecognized insn #%d, code:%x, src:%x, dst:%x, off:%x, imm:%x\n",
- 			   bpf_program__title(prog, false),
-@@ -2811,6 +2840,7 @@ static int bpf_core_reloc_insn(struct bpf_program *prog, int insn_off,
- 			   insn->off, insn->imm);
- 		return -EINVAL;
- 	}
-+
- 	return 0;
- }
- 
-@@ -3087,15 +3117,26 @@ static int bpf_core_reloc_field(struct bpf_program *prog,
- 		cand_ids->data[j++] = cand_spec.spec[0].type_id;
- 	}
- 
--	cand_ids->len = j;
--	if (cand_ids->len == 0) {
-+	/*
-+	 * For BPF_FRK_EXISTS relo or when relaxed CO-RE reloc mode is
-+	 * requested, it's expected that we might not find any candidates.
-+	 * In this case, if field wasn't found in any candidate, the list of
-+	 * candidates shouldn't change at all, we'll just handle relocating
-+	 * appropriately, depending on relo's kind.
-+	 */
-+	if (j > 0)
-+		cand_ids->len = j;
-+
-+	if (j == 0 && !prog->obj->relaxed_core_relocs &&
-+	    relo->kind != BPF_FRK_EXISTS) {
- 		pr_warning("prog '%s': relo #%d: no matching targets found for [%d] %s + %s\n",
- 			   prog_name, relo_idx, local_id, local_name, spec_str);
- 		return -ESRCH;
- 	}
- 
--	err = bpf_core_reloc_insn(prog, relo->insn_off,
--				  local_spec.offset, targ_spec.offset);
-+	/* bpf_core_reloc_insn should know how to handle missing targ_spec */
-+	err = bpf_core_reloc_insn(prog, relo, &local_spec,
-+				  j ? &targ_spec : NULL);
- 	if (err) {
- 		pr_warning("prog '%s': relo #%d: failed to patch insn at offset %d: %d\n",
- 			   prog_name, relo_idx, relo->insn_off, err);
-@@ -3587,6 +3628,7 @@ __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
- 	if (IS_ERR(obj))
- 		return obj;
- 
-+	obj->relaxed_core_relocs = OPTS_GET(opts, relaxed_core_relocs, false);
- 	relaxed_maps = OPTS_GET(opts, relaxed_maps, false);
- 
- 	CHECK_ERR(bpf_object__elf_init(obj), err, out);
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 667e6853e51f..53ce212764e0 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -96,8 +96,10 @@ struct bpf_object_open_opts {
- 	const char *object_name;
- 	/* parse map definitions non-strictly, allowing extra attributes/data */
- 	bool relaxed_maps;
-+	/* process CO-RE relocations non-strictly, allowing them to fail */
-+	bool relaxed_core_relocs;
- };
--#define bpf_object_open_opts__last_field relaxed_maps
-+#define bpf_object_open_opts__last_field relaxed_core_relocs
- 
- LIBBPF_API struct bpf_object *bpf_object__open(const char *path);
- LIBBPF_API struct bpf_object *
--- 
-2.17.1
+Speaking about scenario, perhaps attaching a filter could be useful? 
+So that the data can be processed the first place.
+
+-
+Bob
+
+> the eBPF redirection, so suggestions and comments are welcome.
+> 
+> Regards,
+> Tao
+> 
+> Hou Tao (2):
+>   block: add support for redirecting IO completion through eBPF
+>   selftests/bpf: add test program for redirecting IO completion CPU
+> 
+>  block/Makefile                                |   2 +-
+>  block/blk-bpf.c                               | 127 +++++++++
+>  block/blk-mq.c                                |  22 +-
+>  block/blk-softirq.c                           |  27 +-
+>  include/linux/blkdev.h                        |   3 +
+>  include/linux/bpf_blkdev.h                    |   9 +
+>  include/linux/bpf_types.h                     |   1 +
+>  include/uapi/linux/bpf.h                      |   2 +
+>  kernel/bpf/syscall.c                          |   9 +
+>  tools/include/uapi/linux/bpf.h                |   2 +
+>  tools/lib/bpf/libbpf.c                        |   1 +
+>  tools/lib/bpf/libbpf_probes.c                 |   1 +
+>  tools/testing/selftests/bpf/Makefile          |   1 +
+>  .../selftests/bpf/progs/blkdev_ccpu_rr.c      |  66 +++++
+>  .../testing/selftests/bpf/test_blkdev_ccpu.c  | 246 ++++++++++++++++++
+>  15 files changed, 507 insertions(+), 12 deletions(-)
+>  create mode 100644 block/blk-bpf.c
+>  create mode 100644 include/linux/bpf_blkdev.h
+>  create mode 100644 tools/testing/selftests/bpf/progs/blkdev_ccpu_rr.c
+>  create mode 100644 tools/testing/selftests/bpf/test_blkdev_ccpu.c
+> 
 
