@@ -2,87 +2,104 @@ Return-Path: <SRS0=ansy=YJ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA95EECE58F
-	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 00:42:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB5B8ECE59D
+	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 00:48:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9FD3E2067B
-	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 00:42:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C3EAD2067B
+	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 00:48:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390305AbfJPAls (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Oct 2019 20:41:48 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:53353 "EHLO
+        id S1726379AbfJPAsN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Oct 2019 20:48:13 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:53490 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388246AbfJPAls (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Oct 2019 20:41:48 -0400
-Received: from [213.220.153.21] (helo=localhost.localdomain)
+        with ESMTP id S1726362AbfJPAsN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 15 Oct 2019 20:48:13 -0400
+Received: from [213.220.153.21] (helo=wittgenstein)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iKXNq-00065g-If; Wed, 16 Oct 2019 00:41:46 +0000
+        id 1iKXU2-0006Y2-T7; Wed, 16 Oct 2019 00:48:10 +0000
+Date:   Wed, 16 Oct 2019 02:48:10 +0200
 From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     christian.brauner@ubuntu.com
-Cc:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-        kafai@fb.com, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+To:     ast@kernel.org
+Cc:     bpf@vger.kernel.org, daniel@iogearbox.net, kafai@fb.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         songliubraving@fb.com, yhs@fb.com
-Subject: [PATCH v2 0/3] bpf: switch to new usercopy helpers
-Date:   Wed, 16 Oct 2019 02:41:35 +0200
-Message-Id: <20191016004138.24845-1-christian.brauner@ubuntu.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191009160907.10981-1-christian.brauner@ubuntu.com>
+Subject: Re: [PATCH v2 0/3] bpf: switch to new usercopy helpers
+Message-ID: <20191016004809.tgw6zznr6ukppplp@wittgenstein>
 References: <20191009160907.10981-1-christian.brauner@ubuntu.com>
+ <20191016004138.24845-1-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20191016004138.24845-1-christian.brauner@ubuntu.com>
+User-Agent: NeoMutt/20180716
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hey everyone,
+On Wed, Oct 16, 2019 at 02:41:35AM +0200, Christian Brauner wrote:
+> Hey everyone,
+> 
+> In v5.4-rc2 we added two new helpers check_zeroed_user() and
+> copy_struct_from_user() including selftests (cf. [1]). It is a generic
+> interface designed to copy a struct from userspace. The helpers will be
+> especially useful for structs versioned by size of which we have quite a
+> few.
+> 
+> The most obvious benefit is that this helper lets us get rid of
+> duplicate code. We've already switched over sched_setattr(), perf_event_open(),
+> and clone3(). More importantly it will also help to ensure that users
+> implementing versioning-by-size end up with the same core semantics.
+> 
+> This point is especially crucial since we have at least one case where
+> versioning-by-size is used but with slighly different semantics:
+> sched_setattr(), perf_event_open(), and clone3() all do do similar
+> checks to copy_struct_from_user() while rt_sigprocmask(2) always rejects
+> differently-sized struct arguments.
+> 
+> This little series switches over bpf codepaths that have hand-rolled
+> implementations of these helpers.
+> 
+> Thanks!
+> Christian
+> 
+> /* v1 */
+> Link: https://lore.kernel.org/r/20191009160907.10981-1-christian.brauner@ubuntu.com
+> 
+> /* v2 */
+> - rebase onto bpf-next
+> 
+> /* Reference */
+> [1]: f5a1a536fa14 ("lib: introduce copy_struct_from_user() helper")
 
-In v5.4-rc2 we added two new helpers check_zeroed_user() and
-copy_struct_from_user() including selftests (cf. [1]). It is a generic
-interface designed to copy a struct from userspace. The helpers will be
-especially useful for structs versioned by size of which we have quite a
-few.
+Alexei, instead of applying the series you can also just pull from me:
 
-The most obvious benefit is that this helper lets us get rid of
-duplicate code. We've already switched over sched_setattr(), perf_event_open(),
-and clone3(). More importantly it will also help to ensure that users
-implementing versioning-by-size end up with the same core semantics.
+The following changes since commit 5bc60de50dfea235634fdf38cbc992fb968d113b:
 
-This point is especially crucial since we have at least one case where
-versioning-by-size is used but with slighly different semantics:
-sched_setattr(), perf_event_open(), and clone3() all do do similar
-checks to copy_struct_from_user() while rt_sigprocmask(2) always rejects
-differently-sized struct arguments.
+  selftests: bpf: Don't try to read files without read permission (2019-10-15 16:27:25 -0700)
 
-This little series switches over bpf codepaths that have hand-rolled
-implementations of these helpers.
+are available in the Git repository at:
 
-Thanks!
-Christian
+  git@gitolite.kernel.org:pub/scm/linux/kernel/git/brauner/linux tags/bpf-copy-struct-from-user
 
-/* v1 */
-Link: https://lore.kernel.org/r/20191009160907.10981-1-christian.brauner@ubuntu.com
+for you to fetch changes up to da1699b959d182bb161be3ffc17eab063b2aedd2:
 
-/* v2 */
-- rebase onto bpf-next
+  bpf: use copy_struct_from_user() in bpf() syscall (2019-10-16 02:35:11 +0200)
 
-/* Reference */
-[1]: f5a1a536fa14 ("lib: introduce copy_struct_from_user() helper")
+----------------------------------------------------------------
+bpf-copy-struct-from-user
 
+----------------------------------------------------------------
 Christian Brauner (3):
-  bpf: use check_zeroed_user() in bpf_check_uarg_tail_zero()
-  bpf: use copy_struct_from_user() in bpf_prog_get_info_by_fd()
-  bpf: use copy_struct_from_user() in bpf() syscall
+      bpf: use check_zeroed_user() in bpf_check_uarg_tail_zero()
+      bpf: use copy_struct_from_user() in bpf_prog_get_info_by_fd()
+      bpf: use copy_struct_from_user() in bpf() syscall
 
- kernel/bpf/syscall.c | 46 +++++++++++++++++---------------------------
+ kernel/bpf/syscall.c | 46 ++++++++++++++++++----------------------------
  1 file changed, 18 insertions(+), 28 deletions(-)
-
--- 
-2.23.0
-
