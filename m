@@ -4,34 +4,35 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37E32C4360C
-	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 07:30:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1501DECE588
+	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 07:43:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0E65220872
-	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 07:30:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EC9DB2168B
+	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 07:43:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388531AbfJPHac (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Oct 2019 03:30:32 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:35306 "EHLO
+        id S2390082AbfJPHnZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Oct 2019 03:43:25 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:35474 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387700AbfJPHac (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Oct 2019 03:30:32 -0400
+        with ESMTP id S1728201AbfJPHnZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 16 Oct 2019 03:43:25 -0400
 Received: from [213.220.153.21] (helo=wittgenstein)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iKdlN-0005JP-Gq; Wed, 16 Oct 2019 07:30:29 +0000
-Date:   Wed, 16 Oct 2019 09:30:28 +0200
+        id 1iKdxp-0005wu-W5; Wed, 16 Oct 2019 07:43:22 +0000
+Date:   Wed, 16 Oct 2019 09:43:21 +0200
 From:   Christian Brauner <christian.brauner@ubuntu.com>
 To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
         kafai@fb.com, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         songliubraving@fb.com, yhs@fb.com, Aleksa Sarai <cyphar@cyphar.com>
 Subject: Re: [PATCH v3 2/3] bpf: use copy_struct_from_user() in
- bpf_prog_get_info_by_fd()y
-Message-ID: <20191016073027.muvlebjy2zdg2yha@wittgenstein>
+ bpf_prog_get_info_by_fd()
+Message-ID: <20191016074320.smgazuy6cyrfa2ef@wittgenstein>
 References: <20191016004138.24845-1-christian.brauner@ubuntu.com>
  <20191016034432.4418-1-christian.brauner@ubuntu.com>
  <20191016034432.4418-3-christian.brauner@ubuntu.com>
@@ -100,7 +101,11 @@ On Tue, Oct 15, 2019 at 10:25:49PM -0700, Alexei Starovoitov wrote:
 > really?! min?!
 > Frankly I'm disappointed in quality of these patches.
 > Especially considering it's v3.
+> 
+> Just live the code alone.
 
-Ok, then I'm sorry.
+Oh, I didn't see that part. I didn't know that this would upset
+you that much. Sure, I can leave the code alone. Or I try to fix this
+up. If you're not happy with you can just ignore this.
 
 Christian
