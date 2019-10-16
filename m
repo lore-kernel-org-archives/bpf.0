@@ -2,102 +2,203 @@ Return-Path: <SRS0=ansy=YJ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3C03ECE599
-	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 20:09:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 650C5ECE599
+	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 20:13:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 99A7C2064B
-	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 20:09:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3491B20659
+	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 20:13:38 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RqLFqBrz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730600AbfJPUJo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Oct 2019 16:09:44 -0400
-Received: from www262.sakura.ne.jp ([202.181.97.72]:59718 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729175AbfJPUJo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Oct 2019 16:09:44 -0400
-Received: from fsav305.sakura.ne.jp (fsav305.sakura.ne.jp [153.120.85.136])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id x9GK9FuP069596;
-        Thu, 17 Oct 2019 05:09:15 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav305.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav305.sakura.ne.jp);
- Thu, 17 Oct 2019 05:09:15 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav305.sakura.ne.jp)
-Received: from [192.168.1.8] (softbank126227201116.bbtec.net [126.227.201.116])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id x9GK991E069577
-        (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NO);
-        Thu, 17 Oct 2019 05:09:15 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: Re: [PATCH bpf] xdp: Handle device unregister for devmap_hash map
- type
-To:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
-Cc:     daniel@iogearbox.net, ast@fb.com, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20191016132802.2760149-1-toke@redhat.com>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <2d516208-8c46-707c-4484-4547e66fc128@i-love.sakura.ne.jp>
-Date:   Thu, 17 Oct 2019 05:09:07 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1732033AbfJPUNh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Oct 2019 16:13:37 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:43972 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731781AbfJPUNh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 16 Oct 2019 16:13:37 -0400
+Received: by mail-qt1-f195.google.com with SMTP id t20so32708091qtr.10;
+        Wed, 16 Oct 2019 13:13:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LC0y7kLEaD0/+g/awxDip6/YjJkRa+fzM+ASYceAP1Y=;
+        b=RqLFqBrzQ12oXmM81YkFxmfKtmWGCkdtcYmefGIVT8RjpUCZWDbYFo7yem8vwUTcqo
+         ew/J382Rhg+wJCegUvsAoQokinHHbKfpNcTmzXYfaHtOfi6PZ3QdqGBgYc22NmaXWVZ7
+         Pd7S+ATUYUgNhon8MsfOkzKN/LUfvY8xjBXNkXglK5st/bR8gmN0XVf4olmC9Dyxn8NJ
+         VfyB9IMo2cuR+caTAKFRPUblGgltLxKEWp+YtynKmqQ/m2RCHkmw8baXiwG2avnXrZT/
+         qKjLiSdtXEps87KRudlVkwZl7hE3QUtvZzjlbIYWj/G2KJyfGb9IYE2CRe8W1VnZ2Lus
+         kLGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LC0y7kLEaD0/+g/awxDip6/YjJkRa+fzM+ASYceAP1Y=;
+        b=icm6IJa9kuPqE2VrDLDbHXrld+oqwyZrmtkkgiCboRJE+uM+/us9jWixJgRk8cEyp4
+         Vq0c+4jDo1ektlO/Hpfj144KqSOlR4miz/6mX7v/6YiU2vWX7doi919sDSNf+TgkCb2x
+         WZHCn4G0zADK7GmvKYMQM15fqXVD55bjhRsTHMTFL9wDdM118T5GvyDmLJnhXAYagrqT
+         McjBInj7BJsu4OhSP2/IksNOku0wgQjRazxOdMwEu2iaTnxww/DRr/dXK24GfVGYoGC2
+         WYGCVKxlhafle+EAixjk8f0annIqWXTg6W3+om4USmhFzgoGKPx6Ok+hlBThuUjRmQ01
+         AHoA==
+X-Gm-Message-State: APjAAAU7cZvg9ARX7/H9jt8V2fkXJAQLlK+fkOPStLtzLqkxNVpX7u9X
+        z0S8k5NlW9aeerberhnclFP1nHU6UVjiRaWNRVI=
+X-Google-Smtp-Source: APXvYqzSEDZP0klJ470HfWWZ1NPFKxXzpv3cGPwsGwpY6xF/zEcQcDE2MVN0jzq/9Giga/1c7MsEM1NiNur5Jrp7TDQ=
+X-Received: by 2002:ac8:108e:: with SMTP id a14mr45562406qtj.171.1571256816274;
+ Wed, 16 Oct 2019 13:13:36 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20191016132802.2760149-1-toke@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20191016032505.2089704-1-ast@kernel.org> <20191016032505.2089704-8-ast@kernel.org>
+In-Reply-To: <20191016032505.2089704-8-ast@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 16 Oct 2019 13:13:25 -0700
+Message-ID: <CAEf4BzYeMSavRrab4yG539S_DzRfMfMcmR93JuxA0wLhEEb2yg@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 07/11] bpf: attach raw_tp program with BTF via
+ type name
+To:     Alexei Starovoitov <ast@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>, x86@kernel.org,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2019/10/16 22:28, Toke Høiland-Jørgensen wrote:
-> It seems I forgot to add handling of devmap_hash type maps to the device
-> unregister hook for devmaps. This omission causes devices to not be
-> properly released, which causes hangs.
-> 
-> Fix this by adding the missing handler.
-> 
-> Fixes: 6f9d451ab1a3 ("xdp: Add devmap_hash map type for looking up devices by hashed index")
-> Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+On Wed, Oct 16, 2019 at 4:16 AM Alexei Starovoitov <ast@kernel.org> wrote:
+>
+> BTF type id specified at program load time has all
+> necessary information to attach that program to raw tracepoint.
+> Use kernel type name to find raw tracepoint.
+>
+> Add missing CHECK_ATTR() condition.
+>
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> ---
+> There is a tiny chance that CHECK_ATTR() may break some user space.
+> In such case the CHECK_ATTR change will be reverted.
 
-Well, regarding 6f9d451ab1a3, I think that we want explicit "(u64)" cast
+Sounds good.
 
-@@ -97,6 +123,14 @@ static int dev_map_init_map(struct bpf_dtab *dtab, union bpf_attr *attr)
-        cost = (u64) dtab->map.max_entries * sizeof(struct bpf_dtab_netdev *);
-        cost += sizeof(struct list_head) * num_possible_cpus();
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 
-+       if (attr->map_type == BPF_MAP_TYPE_DEVMAP_HASH) {
-+               dtab->n_buckets = roundup_pow_of_two(dtab->map.max_entries);
-+
-+               if (!dtab->n_buckets) /* Overflow check */
-+                       return -EINVAL;
-+               cost += sizeof(struct hlist_head) * dtab->n_buckets;
-
-                                                    ^here
-
-+       }
-+
-        /* if map size is larger than memlock limit, reject it */
-        err = bpf_map_charge_init(&dtab->map.memory, cost);
-        if (err)
-
-like "(u64) dtab->map.max_entries * sizeof(struct bpf_dtab_netdev *)" does.
-Otherwise, on 32bits build, "sizeof(struct hlist_head) * dtab->n_buckets" can become 0.
-
-----------
-#include <stdio.h>
-#include <linux/types.h>
-
-int main(int argc, char *argv[])
-{
-        volatile __u32 i = 4294967296ULL / sizeof(unsigned long *);
-        volatile __u64 cost = sizeof(unsigned long *) * i;
-
-        printf("cost=%llu\n", (unsigned long long) cost);
-        return 0;
-}
-----------
+> ---
+>  kernel/bpf/syscall.c | 70 +++++++++++++++++++++++++++++---------------
+>  1 file changed, 47 insertions(+), 23 deletions(-)
+>
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index b56c482c9760..523e3ac15a08 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -1816,17 +1816,52 @@ static int bpf_raw_tracepoint_open(const union bpf_attr *attr)
+>         struct bpf_raw_tracepoint *raw_tp;
+>         struct bpf_raw_event_map *btp;
+>         struct bpf_prog *prog;
+> -       char tp_name[128];
+> +       const char *tp_name;
+> +       char buf[128];
+>         int tp_fd, err;
+>
+> -       if (strncpy_from_user(tp_name, u64_to_user_ptr(attr->raw_tracepoint.name),
+> -                             sizeof(tp_name) - 1) < 0)
+> -               return -EFAULT;
+> -       tp_name[sizeof(tp_name) - 1] = 0;
+> +       if (CHECK_ATTR(BPF_RAW_TRACEPOINT_OPEN))
+> +               return -EINVAL;
+> +
+> +       prog = bpf_prog_get(attr->raw_tracepoint.prog_fd);
+> +       if (IS_ERR(prog))
+> +               return PTR_ERR(prog);
+> +
+> +       if (prog->type != BPF_PROG_TYPE_RAW_TRACEPOINT &&
+> +           prog->type != BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE) {
+> +               err = -EINVAL;
+> +               goto out_put_prog;
+> +       }
+> +
+> +       if (prog->type == BPF_PROG_TYPE_RAW_TRACEPOINT &&
+> +           prog->aux->attach_btf_id) {
+> +               if (attr->raw_tracepoint.name) {
+> +                       /* raw_tp name should not be specified in raw_tp
+> +                        * programs that were verified via in-kernel BTF info
+> +                        */
+> +                       err = -EINVAL;
+> +                       goto out_put_prog;
+> +               }
+> +               /* raw_tp name is taken from type name instead */
+> +               tp_name = kernel_type_name(prog->aux->attach_btf_id);
+> +               /* skip the prefix */
+> +               tp_name += sizeof("btf_trace_") - 1;
+> +       } else {
+> +               if (strncpy_from_user(buf,
+> +                                     u64_to_user_ptr(attr->raw_tracepoint.name),
+> +                                     sizeof(buf) - 1) < 0) {
+> +                       err = -EFAULT;
+> +                       goto out_put_prog;
+> +               }
+> +               buf[sizeof(buf) - 1] = 0;
+> +               tp_name = buf;
+> +       }
+>
+>         btp = bpf_get_raw_tracepoint(tp_name);
+> -       if (!btp)
+> -               return -ENOENT;
+> +       if (!btp) {
+> +               err = -ENOENT;
+> +               goto out_put_prog;
+> +       }
+>
+>         raw_tp = kzalloc(sizeof(*raw_tp), GFP_USER);
+>         if (!raw_tp) {
+> @@ -1834,38 +1869,27 @@ static int bpf_raw_tracepoint_open(const union bpf_attr *attr)
+>                 goto out_put_btp;
+>         }
+>         raw_tp->btp = btp;
+> -
+> -       prog = bpf_prog_get(attr->raw_tracepoint.prog_fd);
+> -       if (IS_ERR(prog)) {
+> -               err = PTR_ERR(prog);
+> -               goto out_free_tp;
+> -       }
+> -       if (prog->type != BPF_PROG_TYPE_RAW_TRACEPOINT &&
+> -           prog->type != BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE) {
+> -               err = -EINVAL;
+> -               goto out_put_prog;
+> -       }
+> +       raw_tp->prog = prog;
+>
+>         err = bpf_probe_register(raw_tp->btp, prog);
+>         if (err)
+> -               goto out_put_prog;
+> +               goto out_free_tp;
+>
+> -       raw_tp->prog = prog;
+>         tp_fd = anon_inode_getfd("bpf-raw-tracepoint", &bpf_raw_tp_fops, raw_tp,
+>                                  O_CLOEXEC);
+>         if (tp_fd < 0) {
+>                 bpf_probe_unregister(raw_tp->btp, prog);
+>                 err = tp_fd;
+> -               goto out_put_prog;
+> +               goto out_free_tp;
+>         }
+>         return tp_fd;
+>
+> -out_put_prog:
+> -       bpf_prog_put(prog);
+>  out_free_tp:
+>         kfree(raw_tp);
+>  out_put_btp:
+>         bpf_put_raw_tracepoint(btp);
+> +out_put_prog:
+> +       bpf_prog_put(prog);
+>         return err;
+>  }
+>
+> --
+> 2.17.1
+>
