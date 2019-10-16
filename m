@@ -2,168 +2,125 @@ Return-Path: <SRS0=ansy=YJ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADFA9C4360C
-	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 03:26:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1664FECE59D
+	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 03:29:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 83B8E20650
-	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 03:26:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1571196363;
-	bh=3Sid7lr8NjHE1TD6JHcIcJ2Lvad2GdFulwxTud2bPGc=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=VaQaUTzUr9bxlsqIy2FLO+4f6Sai/JMOmjF/mnpfFC5I5RQhpFlas8QQoHfOQaeXq
-	 R9kVyAcj+ndYI+xb8mX7unILdRFw3V0gdv7JzTvpyhrNZI1csZa60/O3px4cOiurGp
-	 /3lu5bAmc0O7vnNrhI45gzfHHZv9bRLQ7AI0lI2w=
+	by mail.kernel.org (Postfix) with ESMTP id E2C952082C
+	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 03:29:56 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="QhOFeYEs"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389063AbfJPD0D (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Oct 2019 23:26:03 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:36430 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730253AbfJPD0D (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 15 Oct 2019 23:26:03 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9G3OYPS008269
-        for <bpf@vger.kernel.org>; Tue, 15 Oct 2019 20:26:02 -0700
+        id S2389257AbfJPD34 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Oct 2019 23:29:56 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:31046 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2389282AbfJPD3z (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 15 Oct 2019 23:29:55 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id x9G3OlrI022673
+        for <bpf@vger.kernel.org>; Tue, 15 Oct 2019 20:29:54 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=Ihp6gM1Ne4D24tl6A+Pobs0oKjBtxXhU32mEmLbnM8g=;
+ b=QhOFeYEshLV2WoBjnQ07xxz/WPs9LlZ1qIs8s+OILpA42pp5risP2rMXRXGZFErDCIcr
+ ddweI5yZkTqyObLDK9Z1xcK19nsnqqd0Qj5YfCqWdQ7F8CnsvIAfzpu+kjS/7Z+xbmrS
+ g8AQ+Kb58/jVIeKZ+FTC2JJVFwul69hfdu4= 
 Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2vnfbbujw7-9
+        by m0001303.ppops.net with ESMTP id 2vn6m8debc-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 15 Oct 2019 20:26:02 -0700
-Received: from 2401:db00:2120:81dc:face:0:23:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::128) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 15 Oct 2019 20:29:54 -0700
+Received: from 2401:db00:30:6007:face:0:1:0 (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Tue, 15 Oct 2019 20:25:24 -0700
-Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 09112760F32; Tue, 15 Oct 2019 20:25:23 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Alexei Starovoitov <ast@kernel.org>
-Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
-To:     <davem@davemloft.net>
-CC:     <daniel@iogearbox.net>, <x86@kernel.org>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v3 bpf-next 08/11] bpf: add support for BTF pointers to interpreter
-Date:   Tue, 15 Oct 2019 20:25:02 -0700
-Message-ID: <20191016032505.2089704-9-ast@kernel.org>
+ Tue, 15 Oct 2019 20:29:52 -0700
+Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
+        id F41DB861998; Tue, 15 Oct 2019 20:29:51 -0700 (PDT)
+Smtp-Origin-Hostprefix: dev
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: dev101.prn2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: prn2c23
+Subject: [PATCH v2 bpf-next 0/6] Fix, clean up, and revamp selftests/bpf Makefile
+Date:   Tue, 15 Oct 2019 20:29:43 -0700
+Message-ID: <20191016032949.1445888-1-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191016032505.2089704-1-ast@kernel.org>
-References: <20191016032505.2089704-1-ast@kernel.org>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
  definitions=2019-10-16_01:2019-10-15,2019-10-16 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- suspectscore=1 priorityscore=1501 adultscore=0 mlxlogscore=801
- clxscore=1034 bulkscore=0 mlxscore=0 phishscore=0 spamscore=0
- impostorscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1908290000 definitions=main-1910160029
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
+ impostorscore=0 bulkscore=0 mlxlogscore=999 clxscore=1015 suspectscore=8
+ lowpriorityscore=0 spamscore=0 priorityscore=1501 malwarescore=0
+ mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1910160029
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Pointer to BTF object is a pointer to kernel object or NULL.
-The memory access in the interpreter has to be done via probe_kernel_read
-to avoid page faults.
+This patch set extensively revamps selftests/bpf's Makefile to generalize test
+runner concept and apply it uniformly to test_maps and test_progs test
+runners, along with test_progs' few build "flavors", exercising various ways
+to build BPF programs.
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
----
- include/linux/filter.h |  3 +++
- kernel/bpf/core.c      | 19 +++++++++++++++++++
- kernel/bpf/verifier.c  |  8 ++++++++
- 3 files changed, 30 insertions(+)
+As we do that, we fix dependencies between various phases of test runners, and
+simplify some one-off rules and dependencies currently present in Makefile.
+test_progs' flavors are now built into root $(OUTPUT) directory and can be run
+without any extra steps right from there. E.g., test_progs-alu32 is built and
+is supposed to be run from $(OUTPUT). It will cd into alu32/ subdirectory to
+load correct set of BPF object files (which are different from the ones built
+for test_progs).
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index d3d51d7aff2c..22ebea2e64ea 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -65,6 +65,9 @@ struct ctl_table_header;
- /* unused opcode to mark special call to bpf_tail_call() helper */
- #define BPF_TAIL_CALL	0xf0
- 
-+/* unused opcode to mark special load instruction. Same as BPF_ABS */
-+#define BPF_PROBE_MEM	0x20
-+
- /* unused opcode to mark call to interpreter with arguments */
- #define BPF_CALL_ARGS	0xe0
- 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 66088a9e9b9e..8a765bbd33f0 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1291,6 +1291,11 @@ bool bpf_opcode_in_insntable(u8 code)
- }
- 
- #ifndef CONFIG_BPF_JIT_ALWAYS_ON
-+u64 __weak bpf_probe_read(void * dst, u32 size, const void * unsafe_ptr)
-+{
-+	memset(dst, 0, size);
-+	return -EFAULT;
-+}
- /**
-  *	__bpf_prog_run - run eBPF program on a given context
-  *	@regs: is the array of MAX_BPF_EXT_REG eBPF pseudo-registers
-@@ -1310,6 +1315,10 @@ static u64 __no_fgcse ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u6
- 		/* Non-UAPI available opcodes. */
- 		[BPF_JMP | BPF_CALL_ARGS] = &&JMP_CALL_ARGS,
- 		[BPF_JMP | BPF_TAIL_CALL] = &&JMP_TAIL_CALL,
-+		[BPF_LDX | BPF_PROBE_MEM | BPF_B] = &&LDX_PROBE_MEM_B,
-+		[BPF_LDX | BPF_PROBE_MEM | BPF_H] = &&LDX_PROBE_MEM_H,
-+		[BPF_LDX | BPF_PROBE_MEM | BPF_W] = &&LDX_PROBE_MEM_W,
-+		[BPF_LDX | BPF_PROBE_MEM | BPF_DW] = &&LDX_PROBE_MEM_DW,
- 	};
- #undef BPF_INSN_3_LBL
- #undef BPF_INSN_2_LBL
-@@ -1542,6 +1551,16 @@ static u64 __no_fgcse ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u6
- 	LDST(W,  u32)
- 	LDST(DW, u64)
- #undef LDST
-+#define LDX_PROBE(SIZEOP, SIZE)						\
-+	LDX_PROBE_MEM_##SIZEOP:						\
-+		bpf_probe_read(&DST, SIZE, (const void *)(long) SRC);	\
-+		CONT;
-+	LDX_PROBE(B,  1)
-+	LDX_PROBE(H,  2)
-+	LDX_PROBE(W,  4)
-+	LDX_PROBE(DW, 8)
-+#undef LDX_PROBE
-+
- 	STX_XADD_W: /* lock xadd *(u32 *)(dst_reg + off16) += src_reg */
- 		atomic_add((u32) SRC, (atomic_t *)(unsigned long)
- 			   (DST + insn->off));
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 42a463e09761..c4b6a2cfcd47 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -7581,6 +7581,7 @@ static bool reg_type_mismatch_ok(enum bpf_reg_type type)
- 	case PTR_TO_TCP_SOCK:
- 	case PTR_TO_TCP_SOCK_OR_NULL:
- 	case PTR_TO_XDP_SOCK:
-+	case PTR_TO_BTF_ID:
- 		return false;
- 	default:
- 		return true;
-@@ -8722,6 +8723,13 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
- 		case PTR_TO_XDP_SOCK:
- 			convert_ctx_access = bpf_xdp_sock_convert_ctx_access;
- 			break;
-+		case PTR_TO_BTF_ID:
-+			if (type == BPF_WRITE) {
-+				verbose(env, "Writes through BTF pointers are not allowed\n");
-+				return -EINVAL;
-+			}
-+			insn->code = BPF_LDX | BPF_PROBE_MEM | BPF_SIZE((insn)->code);
-+			continue;
- 		default:
- 			continue;
- 		}
+Outline:
+- patch #1 teaches test_progs about flavor sub-directories;
+- patch #2 fixes one of CO-RE tests to not depend strictly on process name;
+- patch #3 changes test_maps's usage of map_tests/tests.h to be the same as
+  test_progs' one;
+- patch #4 adds convenient short `make test_progs`-like targets to build only
+  individual tests, if necessary;
+- patch #5 is a main patch in the series; it uses a bunch of make magic
+  (mainly $(call) and $(eval)) to define test runner "skeleton" and apply it
+  to 4 different test runners, lots more details in corresponding commit
+  description;
+- patch #6 does a bit of post-clean up for test_queue_map and test_stack_map
+  BPF programs.
+
+v1->v2:
+- drop test_progs-native causing compilation failures due to
+  __builtin_preserve_field_access, add back test_xdp.o override, which will
+  now emit rule re-definition warning.
+
+
+Andrii Nakryiko (6):
+  selftests/bpf: teach test_progs to cd into subdir
+  selftests/bpf: make CO-RE reloc test impartial to test_progs flavor
+  selftests/bpf: switch test_maps to test_progs' test.h format
+  selftests/bpf: add simple per-test targets to Makefile
+  selftests/bpf: replace test_progs and test_maps w/ general rule
+  selftests/bpf: move test_queue_stack_map.h into progs/ where it
+    belongs
+
+ tools/testing/selftests/bpf/.gitignore        |   5 +-
+ tools/testing/selftests/bpf/Makefile          | 336 ++++++++++--------
+ .../selftests/bpf/prog_tests/core_reloc.c     |   4 +-
+ .../selftests/bpf/progs/core_reloc_types.h    |   2 +-
+ .../bpf/progs/test_core_reloc_kernel.c        |   3 +-
+ .../bpf/{ => progs}/test_queue_stack_map.h    |   0
+ tools/testing/selftests/bpf/test_maps.c       |   8 +-
+ tools/testing/selftests/bpf/test_progs.c      |  33 +-
+ 8 files changed, 237 insertions(+), 154 deletions(-)
+ rename tools/testing/selftests/bpf/{ => progs}/test_queue_stack_map.h (100%)
+
 -- 
 2.17.1
 
