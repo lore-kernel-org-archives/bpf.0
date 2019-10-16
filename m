@@ -2,44 +2,44 @@ Return-Path: <SRS0=ansy=YJ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1664FECE59D
-	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 03:29:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E23BBC4360C
+	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 03:29:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E2C952082C
-	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 03:29:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B79022086A
+	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 03:29:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="QhOFeYEs"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="FBjZaadX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389257AbfJPD34 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Oct 2019 23:29:56 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:31046 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2389282AbfJPD3z (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 15 Oct 2019 23:29:55 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id x9G3OlrI022673
-        for <bpf@vger.kernel.org>; Tue, 15 Oct 2019 20:29:54 -0700
+        id S2389363AbfJPD36 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Oct 2019 23:29:58 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:32176 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389352AbfJPD35 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 15 Oct 2019 23:29:57 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9G3QSTC020060
+        for <bpf@vger.kernel.org>; Tue, 15 Oct 2019 20:29:57 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=Ihp6gM1Ne4D24tl6A+Pobs0oKjBtxXhU32mEmLbnM8g=;
- b=QhOFeYEshLV2WoBjnQ07xxz/WPs9LlZ1qIs8s+OILpA42pp5risP2rMXRXGZFErDCIcr
- ddweI5yZkTqyObLDK9Z1xcK19nsnqqd0Qj5YfCqWdQ7F8CnsvIAfzpu+kjS/7Z+xbmrS
- g8AQ+Kb58/jVIeKZ+FTC2JJVFwul69hfdu4= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=G9pkX0Le7EtlmNs7HIJJjBYvxhTS/DlmBVtgrQigqKQ=;
+ b=FBjZaadX2WGfdr/bnx3gxvt257nToOlT7GxV5jc7aF1s+ahhGwSgVaswMGD3r6HlWMkH
+ 02WuVadxwRbnJek6vOh9I6utb62HJuQsalrWwttFINo8pV/Zn1oDs+fVpLT2NMHesbtK
+ a1nl/kYIH/hDDSq1PWua1aAsg0JiQMs5ELE= 
 Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by m0001303.ppops.net with ESMTP id 2vn6m8debc-2
+        by mx0a-00082601.pphosted.com with ESMTP id 2vnkjd20w4-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 15 Oct 2019 20:29:54 -0700
-Received: from 2401:db00:30:6007:face:0:1:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 15 Oct 2019 20:29:57 -0700
+Received: from 2401:db00:30:600c:face:0:39:0 (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Tue, 15 Oct 2019 20:29:52 -0700
+ Tue, 15 Oct 2019 20:29:56 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id F41DB861998; Tue, 15 Oct 2019 20:29:51 -0700 (PDT)
+        id 12C37861998; Tue, 15 Oct 2019 20:29:56 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,79 +48,83 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v2 bpf-next 0/6] Fix, clean up, and revamp selftests/bpf Makefile
-Date:   Tue, 15 Oct 2019 20:29:43 -0700
-Message-ID: <20191016032949.1445888-1-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 2/6] selftests/bpf: make CO-RE reloc test impartial to test_progs flavor
+Date:   Tue, 15 Oct 2019 20:29:45 -0700
+Message-ID: <20191016032949.1445888-3-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191016032949.1445888-1-andriin@fb.com>
+References: <20191016032949.1445888-1-andriin@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
  definitions=2019-10-16_01:2019-10-15,2019-10-16 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- impostorscore=0 bulkscore=0 mlxlogscore=999 clxscore=1015 suspectscore=8
- lowpriorityscore=0 spamscore=0 priorityscore=1501 malwarescore=0
- mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1910160029
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ adultscore=0 spamscore=0 suspectscore=8 mlxlogscore=999 mlxscore=0
+ priorityscore=1501 malwarescore=0 bulkscore=0 clxscore=1015
+ impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1908290000 definitions=main-1910160029
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set extensively revamps selftests/bpf's Makefile to generalize test
-runner concept and apply it uniformly to test_maps and test_progs test
-runners, along with test_progs' few build "flavors", exercising various ways
-to build BPF programs.
+test_core_reloc_kernel test captures its own process name and validates
+it as part of the test. Given extra "flavors" of test_progs, this break
+for anything by default test_progs binary. Fix the test to cut out
+flavor part of the process name.
 
-As we do that, we fix dependencies between various phases of test runners, and
-simplify some one-off rules and dependencies currently present in Makefile.
-test_progs' flavors are now built into root $(OUTPUT) directory and can be run
-without any extra steps right from there. E.g., test_progs-alu32 is built and
-is supposed to be run from $(OUTPUT). It will cd into alu32/ subdirectory to
-load correct set of BPF object files (which are different from the ones built
-for test_progs).
+Fixes: ee2eb063d330 ("selftests/bpf: Add BPF_CORE_READ and BPF_CORE_READ_STR_INTO macro tests")
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/testing/selftests/bpf/prog_tests/core_reloc.c        | 4 ++--
+ tools/testing/selftests/bpf/progs/core_reloc_types.h       | 2 +-
+ tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c | 3 ++-
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-Outline:
-- patch #1 teaches test_progs about flavor sub-directories;
-- patch #2 fixes one of CO-RE tests to not depend strictly on process name;
-- patch #3 changes test_maps's usage of map_tests/tests.h to be the same as
-  test_progs' one;
-- patch #4 adds convenient short `make test_progs`-like targets to build only
-  individual tests, if necessary;
-- patch #5 is a main patch in the series; it uses a bunch of make magic
-  (mainly $(call) and $(eval)) to define test runner "skeleton" and apply it
-  to 4 different test runners, lots more details in corresponding commit
-  description;
-- patch #6 does a bit of post-clean up for test_queue_map and test_stack_map
-  BPF programs.
-
-v1->v2:
-- drop test_progs-native causing compilation failures due to
-  __builtin_preserve_field_access, add back test_xdp.o override, which will
-  now emit rule re-definition warning.
-
-
-Andrii Nakryiko (6):
-  selftests/bpf: teach test_progs to cd into subdir
-  selftests/bpf: make CO-RE reloc test impartial to test_progs flavor
-  selftests/bpf: switch test_maps to test_progs' test.h format
-  selftests/bpf: add simple per-test targets to Makefile
-  selftests/bpf: replace test_progs and test_maps w/ general rule
-  selftests/bpf: move test_queue_stack_map.h into progs/ where it
-    belongs
-
- tools/testing/selftests/bpf/.gitignore        |   5 +-
- tools/testing/selftests/bpf/Makefile          | 336 ++++++++++--------
- .../selftests/bpf/prog_tests/core_reloc.c     |   4 +-
- .../selftests/bpf/progs/core_reloc_types.h    |   2 +-
- .../bpf/progs/test_core_reloc_kernel.c        |   3 +-
- .../bpf/{ => progs}/test_queue_stack_map.h    |   0
- tools/testing/selftests/bpf/test_maps.c       |   8 +-
- tools/testing/selftests/bpf/test_progs.c      |  33 +-
- 8 files changed, 237 insertions(+), 154 deletions(-)
- rename tools/testing/selftests/bpf/{ => progs}/test_queue_stack_map.h (100%)
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
+index 7e2f5b4bf7f3..2b3586dc6c86 100644
+--- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
++++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
+@@ -211,8 +211,8 @@ static struct core_reloc_test_case test_cases[] = {
+ 		.input_len = 0,
+ 		.output = STRUCT_TO_CHAR_PTR(core_reloc_kernel_output) {
+ 			.valid = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+-			.comm = "test_progs\0\0\0\0\0",
+-			.comm_len = 11,
++			.comm = "test_progs",
++			.comm_len = sizeof("test_progs"),
+ 		},
+ 		.output_len = sizeof(struct core_reloc_kernel_output),
+ 	},
+diff --git a/tools/testing/selftests/bpf/progs/core_reloc_types.h b/tools/testing/selftests/bpf/progs/core_reloc_types.h
+index ad763ec0ba8f..f5939d9d5c61 100644
+--- a/tools/testing/selftests/bpf/progs/core_reloc_types.h
++++ b/tools/testing/selftests/bpf/progs/core_reloc_types.h
+@@ -6,7 +6,7 @@
+ 
+ struct core_reloc_kernel_output {
+ 	int valid[10];
+-	char comm[16];
++	char comm[sizeof("test_progs")];
+ 	int comm_len;
+ };
+ 
+diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c b/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
+index 50f609618b65..a4b5e0562ed5 100644
+--- a/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
++++ b/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
+@@ -15,7 +15,8 @@ static volatile struct data {
+ 
+ struct core_reloc_kernel_output {
+ 	int valid[10];
+-	char comm[16];
++	/* we have test_progs[-flavor], so cut flavor part */
++	char comm[sizeof("test_progs")];
+ 	int comm_len;
+ };
+ 
 -- 
 2.17.1
 
