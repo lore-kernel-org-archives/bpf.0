@@ -2,109 +2,99 @@ Return-Path: <SRS0=ansy=YJ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 112D1ECE59D
-	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 03:30:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3811BC4360C
+	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 03:31:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D99352082C
-	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 03:30:15 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="QZL1WQ7l"
+	by mail.kernel.org (Postfix) with ESMTP id 1666220663
+	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 03:31:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390993AbfJPDaO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Oct 2019 23:30:14 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:1288 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2390989AbfJPDaO (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 15 Oct 2019 23:30:14 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9G3UCUP017209
-        for <bpf@vger.kernel.org>; Tue, 15 Oct 2019 20:30:13 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=lASZsbS0MzgZ+kv94/3rudInFfHv8e6mbGeyrZdtm9c=;
- b=QZL1WQ7lBlysVolYDm2tfK8oFLgvUW5+TPjGIJVTq48VVr1wbA7CyiIzkdXpMmVzAFqj
- EJmxqj+NDd/cyy/akckQxRFqy0Vjc8MDoX+gq0PuqarXi6ooIFyrb3mrsxxuoza4VbNG
- b3whGGQKNIngRLbR5lgF8fpM1hVEyjwgyvo= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2vnf1wkn0w-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 15 Oct 2019 20:30:13 -0700
-Received: from 2401:db00:12:9028:face:0:29:0 (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 15 Oct 2019 20:30:01 -0700
-Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 382F0861998; Tue, 15 Oct 2019 20:30:00 -0700 (PDT)
-Smtp-Origin-Hostprefix: dev
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: dev101.prn2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v2 bpf-next 4/6] selftests/bpf: add simple per-test targets to Makefile
-Date:   Tue, 15 Oct 2019 20:29:47 -0700
-Message-ID: <20191016032949.1445888-5-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191016032949.1445888-1-andriin@fb.com>
-References: <20191016032949.1445888-1-andriin@fb.com>
-X-FB-Internal: Safe
+        id S2391000AbfJPDbU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Oct 2019 23:31:20 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:55449 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730211AbfJPDbU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 15 Oct 2019 23:31:20 -0400
+Received: from [213.220.153.21] (helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1iKa1t-0008BG-Fb; Wed, 16 Oct 2019 03:31:17 +0000
+Date:   Wed, 16 Oct 2019 05:31:16 +0200
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
+Subject: Re: [PATCH v2 0/3] bpf: switch to new usercopy helpers
+Message-ID: <20191016033115.ljwiae2cfltbdoyo@wittgenstein>
+References: <20191009160907.10981-1-christian.brauner@ubuntu.com>
+ <20191016004138.24845-1-christian.brauner@ubuntu.com>
+ <CAADnVQ+JmXK4EGtt-6pm+KENPooewfikaRE5dZqi1pMBc_jdxw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
- definitions=2019-10-16_01:2019-10-15,2019-10-16 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- adultscore=0 bulkscore=0 spamscore=0 clxscore=1015 malwarescore=0
- mlxlogscore=437 priorityscore=1501 suspectscore=9 phishscore=0 mlxscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1910160030
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAADnVQ+JmXK4EGtt-6pm+KENPooewfikaRE5dZqi1pMBc_jdxw@mail.gmail.com>
+User-Agent: NeoMutt/20180716
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently it's impossible to do `make test_progs` and have only
-test_progs be built, because all the binary targets are defined in terms
-of $(OUTPUT)/<binary>, and $(OUTPUT) is absolute path to current
-directory (or whatever gets overridden to by user).
+On Tue, Oct 15, 2019 at 07:14:42PM -0700, Alexei Starovoitov wrote:
+> On Tue, Oct 15, 2019 at 5:41 PM Christian Brauner
+> <christian.brauner@ubuntu.com> wrote:
+> >
+> > Hey everyone,
+> >
+> > In v5.4-rc2 we added two new helpers check_zeroed_user() and
+> > copy_struct_from_user() including selftests (cf. [1]). It is a generic
+> > interface designed to copy a struct from userspace. The helpers will be
+> > especially useful for structs versioned by size of which we have quite a
+> > few.
+> 
+> Was it tested?
+> Either your conversion is incorrect or that generic helper is broken.
+> ./test_progs -n 2
+> and
+> ./test_btf
+> are catching the bug:
+> BTF prog info raw test[8] (line_info (No subprog. zero tailing
+> line_info): do_test_info_raw:6205:FAIL prog_fd:-1
+> expected_prog_load_failure:0 errno:7
+> nonzero tailing record in line_infoprocessed 0 insns (limit 1000000)
+> max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
 
-This patch adds simple re-directing targets for all test targets making
-it possible to do simple and nice `make test_progs` (and any other
-target).
+Ugh, I misrememberd what the helper I helped design returns. The fix is:
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/testing/selftests/bpf/Makefile | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 5db9887a8f4c..0920593eacd0 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -78,11 +78,8 @@ int bpf_check_uarg_tail_zero(void __user *uaddr,
+                return 0;
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 5f97262e5fcb..fbced23935cc 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -84,6 +84,16 @@ TEST_GEN_PROGS_EXTENDED = test_libbpf_open test_sock_addr test_skb_cgroup_id_use
- 
- include ../lib.mk
- 
-+# Define simple and short `make test_progs`, `make test_sysctl`, etc targets
-+# to build individual tests.
-+# NOTE: Semicolon at the end is critical to override lib.mk's default static
-+# rule for binaries.
-+$(notdir $(TEST_GEN_PROGS)						\
-+	 $(TEST_PROGS)							\
-+	 $(TEST_PROGS_EXTENDED)						\
-+	 $(TEST_GEN_PROGS_EXTENDED)					\
-+	 $(TEST_CUSTOM_PROGS)): %: $(OUTPUT)/% ;
-+
- # NOTE: $(OUTPUT) won't get default value if used before lib.mk
- TEST_CUSTOM_PROGS = $(OUTPUT)/urandom_read
- all: $(TEST_CUSTOM_PROGS)
--- 
-2.17.1
+        err = check_zeroed_user(uaddr + expected_size, rest);
+-       if (err < 0)
+-               return err;
+-
+-       if (err)
+-               return -E2BIG;
++       if (err <= 0)
++               return err ?: -E2BIG;
 
+        return 0;
+ }
+
+aka check_zeroed_user() returns 0 if non-zero bytes are present, 1 if no
+non-zero bytes were present, and -errno on error.
+
+I'll send a fixed version. The tests pass for me with this.
+
+Christian
