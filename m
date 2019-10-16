@@ -6,37 +6,35 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E223FA372A
-	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 11:16:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6316FA372A
+	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 11:19:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5C26F2067B
-	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 11:16:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 88FFF2067B
+	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 11:19:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390947AbfJPLQu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Oct 2019 07:16:50 -0400
-Received: from imap1.codethink.co.uk ([176.9.8.82]:48634 "EHLO
-        imap1.codethink.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389063AbfJPLQt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Oct 2019 07:16:49 -0400
-Received: from [167.98.27.226] (helo=rainbowdash.codethink.co.uk)
-        by imap1.codethink.co.uk with esmtpsa (Exim 4.84_2 #1 (Debian))
-        id 1iKhIC-0005C7-Va; Wed, 16 Oct 2019 12:16:37 +0100
-Received: from ben by rainbowdash.codethink.co.uk with local (Exim 4.92.2)
-        (envelope-from <ben@rainbowdash.codethink.co.uk>)
-        id 1iKhIC-0005Eo-Fc; Wed, 16 Oct 2019 12:16:36 +0100
-From:   "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>
-To:     linux-kernel@lists.codethink.co.uk
-Cc:     "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: bpf: type fixes for __be16/__be32
-Date:   Wed, 16 Oct 2019 12:16:35 +0100
-Message-Id: <20191016111635.20089-1-ben.dooks@codethink.co.uk>
+        id S2392708AbfJPLTV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Oct 2019 07:19:21 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:40230 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389063AbfJPLTU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 16 Oct 2019 07:19:20 -0400
+Received: from [213.220.153.21] (helo=localhost.localdomain)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1iKhKo-0003tb-DZ; Wed, 16 Oct 2019 11:19:18 +0000
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     christian.brauner@ubuntu.com
+Cc:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        kafai@fb.com, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        songliubraving@fb.com, yhs@fb.com, Aleksa Sarai <cyphar@cyphar.com>
+Subject: [PATCH bpf-next v4 1/3] bpf: use check_zeroed_user() in bpf_check_uarg_tail_zero()
+Date:   Wed, 16 Oct 2019 13:18:08 +0200
+Message-Id: <20191016111810.1799-2-christian.brauner@ubuntu.com>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191016111810.1799-1-christian.brauner@ubuntu.com>
+References: <20191016034432.4418-1-christian.brauner@ubuntu.com>
+ <20191016111810.1799-1-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -44,72 +42,86 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In bpf_skb_load_helper_8_no_cache and
-bpf_skb_load_helper_16_no_cache they
-read a u16/u32 where actually these
-are __be16 and __be32.
+In v5.4-rc2 we added a new helper (cf. [1]) check_zeroed_user() which
+does what bpf_check_uarg_tail_zero() is doing generically. We're slowly
+switching such codepaths over to use check_zeroed_user() instead of
+using their own hand-rolled version.
 
-Fix the following by making the types
-match:
-
-net/core/filter.c:215:32: warning: cast to restricted __be16
-net/core/filter.c:215:32: warning: cast to restricted __be16
-net/core/filter.c:215:32: warning: cast to restricted __be16
-net/core/filter.c:215:32: warning: cast to restricted __be16
-net/core/filter.c:215:32: warning: cast to restricted __be16
-net/core/filter.c:215:32: warning: cast to restricted __be16
-net/core/filter.c:215:32: warning: cast to restricted __be16
-net/core/filter.c:215:32: warning: cast to restricted __be16
-net/core/filter.c:242:32: warning: cast to restricted __be32
-net/core/filter.c:242:32: warning: cast to restricted __be32
-net/core/filter.c:242:32: warning: cast to restricted __be32
-net/core/filter.c:242:32: warning: cast to restricted __be32
-net/core/filter.c:242:32: warning: cast to restricted __be32
-net/core/filter.c:242:32: warning: cast to restricted __be32
-net/core/filter.c:242:32: warning: cast to restricted __be32
-net/core/filter.c:242:32: warning: cast to restricted __be32
-net/core/filter.c:242:32: warning: cast to restricted __be32
-net/core/filter.c:242:32: warning: cast to restricted __be32
-net/core/filter.c:242:32: warning: cast to restricted __be32
-net/core/filter.c:242:32: warning: cast to restricted __be32
-
-Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
----
+[1]: f5a1a536fa14 ("lib: introduce copy_struct_from_user() helper")
 Cc: Alexei Starovoitov <ast@kernel.org>
 Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Martin KaFai Lau <kafai@fb.com>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: netdev@vger.kernel.org
+Cc: Aleksa Sarai <cyphar@cyphar.com>
 Cc: bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
 ---
- net/core/filter.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+/* v1 */
+Link: https://lore.kernel.org/r/20191009160907.10981-2-christian.brauner@ubuntu.com
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index f7338fee41f8..eefb1545b4c6 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -205,7 +205,7 @@ BPF_CALL_2(bpf_skb_load_helper_8_no_cache, const struct sk_buff *, skb,
- BPF_CALL_4(bpf_skb_load_helper_16, const struct sk_buff *, skb, const void *,
- 	   data, int, headlen, int, offset)
+/* v2 */
+Link: https://lore.kernel.org/r/20191016004138.24845-2-christian.brauner@ubuntu.com
+- Alexei Starovoitov <ast@kernel.org>:
+  - Add a comment in bpf_check_uarg_tail_zero() to clarify that
+    copy_struct_from_user() should be used whenever possible instead.
+
+/* v3 */
+Link: https://lore.kernel.org/r/20191016034432.4418-2-christian.brauner@ubuntu.com
+- Christian Brauner <christian.brauner@ubuntu.com>:
+  - use correct checks for check_zeroed_user()
+
+/* v4 */
+- Alexei Starovoitov <ast@kernel.org>:
+  - remove unnecessary min() and max() calls
+---
+ kernel/bpf/syscall.c | 23 +++++++----------------
+ 1 file changed, 7 insertions(+), 16 deletions(-)
+
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 82eabd4e38ad..8d112bc069c0 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -58,35 +58,26 @@ static const struct bpf_map_ops * const bpf_map_types[] = {
+  * There is a ToCToU between this function call and the following
+  * copy_from_user() call. However, this is not a concern since this function is
+  * meant to be a future-proofing of bits.
++ *
++ * Note, instead of using bpf_check_uarg_tail_zero() followed by
++ * copy_from_user() use the dedicated copy_struct_from_user() helper which
++ * performs both tasks whenever possible.
+  */
+ int bpf_check_uarg_tail_zero(void __user *uaddr,
+ 			     size_t expected_size,
+ 			     size_t actual_size)
  {
--	u16 tmp, *ptr;
-+	__be16 tmp, *ptr;
- 	const int len = sizeof(tmp);
+-	unsigned char __user *addr;
+-	unsigned char __user *end;
+-	unsigned char val;
+ 	int err;
  
- 	if (offset >= 0) {
-@@ -232,7 +232,7 @@ BPF_CALL_2(bpf_skb_load_helper_16_no_cache, const struct sk_buff *, skb,
- BPF_CALL_4(bpf_skb_load_helper_32, const struct sk_buff *, skb, const void *,
- 	   data, int, headlen, int, offset)
- {
--	u32 tmp, *ptr;
-+	__be32 tmp, *ptr;
- 	const int len = sizeof(tmp);
+ 	if (unlikely(actual_size > PAGE_SIZE))	/* silly large */
+ 		return -E2BIG;
  
- 	if (likely(offset >= 0)) {
+-	if (unlikely(!access_ok(uaddr, actual_size)))
+-		return -EFAULT;
+-
+ 	if (actual_size <= expected_size)
+ 		return 0;
+ 
+-	addr = uaddr + expected_size;
+-	end  = uaddr + actual_size;
+-
+-	for (; addr < end; addr++) {
+-		err = get_user(val, addr);
+-		if (err)
+-			return err;
+-		if (val)
+-			return -E2BIG;
+-	}
++	err = check_zeroed_user(uaddr + expected_size, actual_size - expected_size);
++	if (err <= 0)
++		return err ?: -E2BIG;
+ 
+ 	return 0;
+ }
 -- 
 2.23.0
 
