@@ -2,140 +2,129 @@ Return-Path: <SRS0=ansy=YJ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4DE9ECE59D
-	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 05:53:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E343C4360C
+	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 06:01:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9843A20872
-	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 05:53:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 77C8C2168B
+	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 06:01:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="uoHrhHfe"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Vp/B7EUo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387880AbfJPFxP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Oct 2019 01:53:15 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:44491 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387661AbfJPFxP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Oct 2019 01:53:15 -0400
-Received: by mail-qt1-f196.google.com with SMTP id u40so34335075qth.11;
-        Tue, 15 Oct 2019 22:53:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RiGbgLQGOqRcMfw6Pw7ihRQxY8j/bmQuL3YdxeJeF00=;
-        b=uoHrhHfekvYzxiFAAObCWtc6t6KNacE5Fh8CZ57faP9TfQ3qt/Q52ZvQvaDxrwlF0k
-         U2yKTkHzldve567/j7Gb036Sz64XAMRLjawWteWaq5WvW7lDY8DIyc2mz0I+0ww0/0m0
-         ZISjOhGwVvUAOpRRFs9zzwwUd+7nQ6ttufLfg+6wAsHKnleuvPQoX+jDXpVsb9mj1ldz
-         WZ39VTkyfYhxfRJ2XusqKTiu07Wq0LeOC3CpA6viRvvCgzJZgua0XzkfN6fVOP/3ZB0a
-         4WpYrkKeHzll64Kj22rjtwG7gUvkC91UkFlEuHgCZuYFqOjEI6m+R9j4TgZN7ICroKZI
-         ksJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RiGbgLQGOqRcMfw6Pw7ihRQxY8j/bmQuL3YdxeJeF00=;
-        b=PTof0G682I3wo0SevXzP+TnAOMZyEbh8FE50PdsrhIxmR4Q884M23cFvF+Xu2FE5QX
-         L5bX9npcMh3FZPlFW1Gh9KJ8MIvRgbq1wbnidAsIFtS937Bts2lui+Fj/JVhm0zaI5cg
-         d3wx6wXHCYLm2tlMEpm0jHRMHoRMmsgxVPG1VcQoedR9pbn/uKaMljMcmYeehu2ZtXVX
-         8s/8+11epAJZwbdcYU9RVJReBPlW5khQr0zzcQsE0+4UiFYKLvhex/i5FI98OFzHXNcM
-         xkmHLRRa7fygaTT+O721uY3TWtIOLWGvWBAzcd5fi1iYsdImlmODpywooIkQGwBg7GPn
-         951g==
-X-Gm-Message-State: APjAAAVHp2XYxYB7DlldFxTWFmqFgA2mTxWyH2LqWHF1SACR8lRAoDsH
-        VYpK3fvvRB6hv7yBD1HjC54E5iIXPZcF+82qysg=
-X-Google-Smtp-Source: APXvYqzpCRTJaR4sO8LDxV15wVTRL8gs4/GnUZ23hC586TTY2ZAaHkwS6XlQdjAtUpzHYmo0Rg74gzztf3GxoKxBMXU=
-X-Received: by 2002:ac8:5147:: with SMTP id h7mr8582962qtn.117.1571205193798;
- Tue, 15 Oct 2019 22:53:13 -0700 (PDT)
+        id S1729913AbfJPGBK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Oct 2019 02:01:10 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:20270 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726421AbfJPGBJ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 16 Oct 2019 02:01:09 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9G6045b030426
+        for <bpf@vger.kernel.org>; Tue, 15 Oct 2019 23:01:08 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=G9pkX0Le7EtlmNs7HIJJjBYvxhTS/DlmBVtgrQigqKQ=;
+ b=Vp/B7EUo0w0PvpKcUT0Xr8nzfYR4rNyxduEdPh2LPo8hBn7Tm4sK5FQ010emdnW3hS1i
+ p3tO0xhoBjIuy8ujVg+ghcEqB5YKW9Zx4DEggQpDN9SE142Xlv8HSoMcTfiQbKBQgw+O
+ QYwv9s6xoozAn/siQNYKiC/v+v3a+WeC4zw= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2vnkjd2ew6-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 15 Oct 2019 23:01:08 -0700
+Received: from 2401:db00:12:909f:face:0:3:0 (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Tue, 15 Oct 2019 23:01:07 -0700
+Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
+        id C04FF86195B; Tue, 15 Oct 2019 23:01:05 -0700 (PDT)
+Smtp-Origin-Hostprefix: dev
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: dev101.prn2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: prn2c23
+Subject: [PATCH v4 bpf-next 2/7] selftests/bpf: make CO-RE reloc test impartial to test_progs flavor
+Date:   Tue, 15 Oct 2019 23:00:46 -0700
+Message-ID: <20191016060051.2024182-3-andriin@fb.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191016060051.2024182-1-andriin@fb.com>
+References: <20191016060051.2024182-1-andriin@fb.com>
+X-FB-Internal: Safe
 MIME-Version: 1.0
-References: <20191016054945.1988387-1-andriin@fb.com> <20191016054945.1988387-8-andriin@fb.com>
-In-Reply-To: <20191016054945.1988387-8-andriin@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 15 Oct 2019 22:53:02 -0700
-Message-ID: <CAEf4BzZDm5ZWhrtp0R78rEhaNYHjBCKgXdK3QXFzKrEqHMxx8Q@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 7/7] selftest/bpf: remove test_libbpf.sh and test_libbpf_open
-To:     Andrii Nakryiko <andriin@fb.com>
-Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
+ definitions=2019-10-16_02:2019-10-15,2019-10-16 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ adultscore=0 spamscore=0 suspectscore=8 mlxlogscore=999 mlxscore=0
+ priorityscore=1501 malwarescore=0 bulkscore=0 clxscore=1015
+ impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1908290000 definitions=main-1910160056
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Oct 15, 2019 at 10:50 PM Andrii Nakryiko <andriin@fb.com> wrote:
->
-> test_progs is much more sophisticated superset of tests compared to
-> test_libbpf.sh and test_libbpf_open. Remove test_libbpf.sh and
-> test_libbpf_open.
->
-> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-> ---
->  tools/testing/selftests/bpf/.gitignore       |   2 -
->  tools/testing/selftests/bpf/Makefile         |   3 +-
->  tools/testing/selftests/bpf/test_libbpf      | Bin 0 -> 384568 bytes
->  tools/testing/selftests/bpf/test_libbpf.sh   |  43 -------------------
->  tools/testing/selftests/bpf/test_libbpf_open | Bin 0 -> 396096 bytes
+test_core_reloc_kernel test captures its own process name and validates
+it as part of the test. Given extra "flavors" of test_progs, this break
+for anything by default test_progs binary. Fix the test to cut out
+flavor part of the process name.
 
-well this was certainly not intended, sorry about that
+Fixes: ee2eb063d330 ("selftests/bpf: Add BPF_CORE_READ and BPF_CORE_READ_STR_INTO macro tests")
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/testing/selftests/bpf/prog_tests/core_reloc.c        | 4 ++--
+ tools/testing/selftests/bpf/progs/core_reloc_types.h       | 2 +-
+ tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c | 3 ++-
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
->  5 files changed, 1 insertion(+), 47 deletions(-)
->  create mode 100755 tools/testing/selftests/bpf/test_libbpf
->  delete mode 100755 tools/testing/selftests/bpf/test_libbpf.sh
->  create mode 100755 tools/testing/selftests/bpf/test_libbpf_open
->
-> diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-> index c51f356f84b5..55d2adf64832 100644
-> --- a/tools/testing/selftests/bpf/.gitignore
-> +++ b/tools/testing/selftests/bpf/.gitignore
-> @@ -11,7 +11,6 @@ test_dev_cgroup
->  test_tcpbpf_user
->  test_verifier_log
->  feature
-> -test_libbpf_open
->  test_sock
->  test_sock_addr
->  test_sock_fields
-> @@ -30,7 +29,6 @@ flow_dissector_load
->  test_netcnt
->  test_section_names
->  test_tcpnotify_user
-> -test_libbpf
->  test_tcp_check_syncookie_user
->  test_sysctl
->  libbpf.pc
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index db8c842ade73..9d7422a514c5 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -52,7 +52,6 @@ TEST_FILES =
->
->  # Order correspond to 'make run_tests' order
->  TEST_PROGS := test_kmod.sh \
-> -       test_libbpf.sh \
->         test_xdp_redirect.sh \
->         test_xdp_meta.sh \
->         test_xdp_veth.sh \
-> @@ -79,7 +78,7 @@ TEST_PROGS_EXTENDED := with_addr.sh \
->         test_xdp_vlan.sh
->
->  # Compile but not part of 'make run_tests'
-> -TEST_GEN_PROGS_EXTENDED = test_libbpf_open test_sock_addr test_skb_cgroup_id_user \
-> +TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
->         flow_dissector_load test_flow_dissector test_tcp_check_syncookie_user \
->         test_lirc_mode2_user
->
-> diff --git a/tools/testing/selftests/bpf/test_libbpf b/tools/testing/selftests/bpf/test_libbpf
-> new file mode 100755
-> index 0000000000000000000000000000000000000000..af5e18b8353486db7156dc81ac25b9eab3720370
-> GIT binary patch
-> literal 384568
-> zcmd44e|%KM)jz%gB0<rOiW*z35w(I<8h>CxQ5R)(LDBdlidH3nASgd#ND!>iU`U(m
+diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
+index 7e2f5b4bf7f3..2b3586dc6c86 100644
+--- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
++++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
+@@ -211,8 +211,8 @@ static struct core_reloc_test_case test_cases[] = {
+ 		.input_len = 0,
+ 		.output = STRUCT_TO_CHAR_PTR(core_reloc_kernel_output) {
+ 			.valid = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+-			.comm = "test_progs\0\0\0\0\0",
+-			.comm_len = 11,
++			.comm = "test_progs",
++			.comm_len = sizeof("test_progs"),
+ 		},
+ 		.output_len = sizeof(struct core_reloc_kernel_output),
+ 	},
+diff --git a/tools/testing/selftests/bpf/progs/core_reloc_types.h b/tools/testing/selftests/bpf/progs/core_reloc_types.h
+index ad763ec0ba8f..f5939d9d5c61 100644
+--- a/tools/testing/selftests/bpf/progs/core_reloc_types.h
++++ b/tools/testing/selftests/bpf/progs/core_reloc_types.h
+@@ -6,7 +6,7 @@
+ 
+ struct core_reloc_kernel_output {
+ 	int valid[10];
+-	char comm[16];
++	char comm[sizeof("test_progs")];
+ 	int comm_len;
+ };
+ 
+diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c b/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
+index 50f609618b65..a4b5e0562ed5 100644
+--- a/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
++++ b/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
+@@ -15,7 +15,8 @@ static volatile struct data {
+ 
+ struct core_reloc_kernel_output {
+ 	int valid[10];
+-	char comm[16];
++	/* we have test_progs[-flavor], so cut flavor part */
++	char comm[sizeof("test_progs")];
+ 	int comm_len;
+ };
+ 
+-- 
+2.17.1
 
-oops
