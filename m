@@ -2,114 +2,119 @@ Return-Path: <SRS0=ansy=YJ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7667AECE59E
-	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 03:45:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13A67C4360C
+	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 04:05:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 57E1820663
-	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 03:45:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D147020872
+	for <bpf@archiver.kernel.org>; Wed, 16 Oct 2019 04:05:31 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hbotq9+A"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732850AbfJPDpE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Oct 2019 23:45:04 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:55611 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726491AbfJPDot (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Oct 2019 23:44:49 -0400
-Received: from [213.220.153.21] (helo=localhost.localdomain)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iKaEw-0000Wg-GC; Wed, 16 Oct 2019 03:44:46 +0000
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     christian.brauner@ubuntu.com
-Cc:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-        kafai@fb.com, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        songliubraving@fb.com, yhs@fb.com
-Subject: [PATCH v3 0/3] bpf: switch to new usercopy helpers
-Date:   Wed, 16 Oct 2019 05:44:29 +0200
-Message-Id: <20191016034432.4418-1-christian.brauner@ubuntu.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191016004138.24845-1-christian.brauner@ubuntu.com>
-References: <20191016004138.24845-1-christian.brauner@ubuntu.com>
+        id S1728838AbfJPEFb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Oct 2019 00:05:31 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:38964 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727597AbfJPEFb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 16 Oct 2019 00:05:31 -0400
+Received: by mail-qt1-f195.google.com with SMTP id n7so34083936qtb.6;
+        Tue, 15 Oct 2019 21:05:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RCCD+pK2LNKXeGLEbaKSTm59HIBIHsYlW6ixxxiklIo=;
+        b=hbotq9+As/ijYHkMsVDTf6KDVypmqPC4hVwCwwvuWz4jkQV4Hq6UsuqPnN6M4KsH0J
+         +/2wQBdO5np18pWtrHw7JwWwPy9OreDZzowFpTNRvNvIfdtHvUMxymvTSdxDMh7488sN
+         19CucwBB6+FLjWroRmxrhqCYDmNRxvvDeE2fXrGKh5uCWl7c58cuYZqNOtPUzIY9YqZn
+         y6PQYGszxpc6hu764zr3fPFFpVa65Z8X6Yu8mz4dJxkyC3NuWkH05zT2SBSN342OVD5R
+         /A0q+wNqTPUDBHxNrHMSE5qRhbwbNnKceMwXhrub1ROs1KQVK7+xr2hWAdsJQ6fTf5Gp
+         tkZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RCCD+pK2LNKXeGLEbaKSTm59HIBIHsYlW6ixxxiklIo=;
+        b=YqiLPfjF8yIyWzip3NyQmtTpVLe4lSzyF8yAfJfjnfqTfXBfPDc1AjfHv3gilv/YB4
+         pqxOP4LA4YPbfw0oB057s+MGHMa7HG2BLrj5xp448hokisvAyHG5leh4eXyMjleMclza
+         PaYbB860a3PmFluA+mEyw2mCAREuRDqXehs2ZY5jhWczKoVJwKpaVofZ6lNCWMaY2A7w
+         OQhsTmcoQgX6OwS9D18quoSTw+VuYgF7opFNV6dX8FYRzxSAlTmvG089ie4KfKeeTiGf
+         KEMR7IMKk7RrlJsFFKM2LAehO4Qk4baYigZQ0xfbRD7zhxrJGufDrQXuSXtJOECt7seh
+         zIEA==
+X-Gm-Message-State: APjAAAXSzo3vqWXMUpJy2VK3nM3QHNc5aEz2eg6vKxRyIYVXdL6p6SnG
+        ZjOBzZIWbRB3wFn14b0UA223lZBHm7F70hqB0ik=
+X-Google-Smtp-Source: APXvYqzH4hj2oi9U9aJlau7y2M5M3SVeCMJnGxcQFXiYU0cal1SeWzaXXa+r4z/pwU3txHPp7W3133w3zTjc4YFdjBg=
+X-Received: by 2002:ac8:108e:: with SMTP id a14mr41448104qtj.171.1571198729776;
+ Tue, 15 Oct 2019 21:05:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20191007045726.21467-1-eric@sage.org> <20191007110020.6bf8dbc2@carbon>
+In-Reply-To: <20191007110020.6bf8dbc2@carbon>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 15 Oct 2019 21:05:18 -0700
+Message-ID: <CAEf4BzacEF0Ga921DCuYCVTxR4rFdOzmRt5o0T7HH-H38gEccg@mail.gmail.com>
+Subject: Re: [PATCH] samples/bpf: make xdp_monitor use raw_tracepoints
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     Eric Sage <eric@sage.org>, Networking <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        xdp-newbies@vger.kernel.org, brouer@redhat.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hey everyone,
+On Mon, Oct 7, 2019 at 2:00 AM Jesper Dangaard Brouer <brouer@redhat.com> wrote:
+>
+>
+> On Mon,  7 Oct 2019 04:57:26 +0000 Eric Sage <eric@sage.org> wrote:
+>
+> > raw_tracepoints are an eBPF alternative to standard tracepoints which
+> > attach to a tracepoint without the perf layer being executed, making
+> > them faster.
+> >
+> > Since xdp_monitor is supposed to have as little impact on the system as
+> > possible it is switched to using them by append raw_ to the SEC names.
+> >
+> > There was also a small issues with 'samples/bpf/bpf_load' - it was
+> > loading the raw_tracepoints with the tracing subsystem name still
+> > attached, which the bpf syscall rejects with a No such file or directory
+> > error. This is now fixed.
+> >
+> > Signed-off-by: Eric Sage <eric@sage.org>
+> > ---
+> >  samples/bpf/bpf_load.c         |  5 +++--
+> >  samples/bpf/xdp_monitor_kern.c | 26 +++++++++++++-------------
+> >  2 files changed, 16 insertions(+), 15 deletions(-)
+>
+> If there is an issue in the loader 'samples/bpf/bpf_load.c' then we
+> should of-cause fix it, but you should be aware that we are in general
+> trying to deprecate this loader, and we want to convert users over to
+> libbpf.
+>
+> This patch seems like a good first step forward.  Longer term, I would
+> like to see this converted into using libbpf.  The library are missing
+> attach helpers for regular tracepoints, but for raw_tracepoints it does
+> contain bpf_raw_tracepoint_open().
 
-In v5.4-rc2 we added two new helpers check_zeroed_user() and
-copy_struct_from_user() including selftests (cf. [1]). It is a generic
-interface designed to copy a struct from userspace. The helpers will be
-especially useful for structs versioned by size of which we have quite a
-few.
+libbpf has both bpf_program__attach_tracepoint() and
+bpf_program__attach_raw_tracepoint(), please use them, not lower-level
+bpf_raw_tracepoint_open(). See selftests/bpf/prog_tests/attach_probe.c
+for examples.
 
-The most obvious benefit is that this helper lets us get rid of
-duplicate code. We've already switched over sched_setattr(), perf_event_open(),
-and clone3(). More importantly it will also help to ensure that users
-implementing versioning-by-size end up with the same core semantics.
+>
+> You can see an example of how xdp_monitor have been converted into
+> using libbpf and raw_tracepoints here (by Jiri Olsa):
+>
+>  https://github.com/xdp-project/xdp-tutorial/blob/master/tracing02-xdp-monitor/trace_prog_kern.c
+>
+>
 
-This point is especially crucial since we have at least one case where
-versioning-by-size is used but with slighly different semantics:
-sched_setattr(), perf_event_open(), and clone3() all do do similar
-checks to copy_struct_from_user() while rt_sigprocmask(2) always rejects
-differently-sized struct arguments.
-
-This little series switches over bpf codepaths that have hand-rolled
-implementations of these helpers.
-
-This series can also be pulled:
-
-The following changes since commit 5bc60de50dfea235634fdf38cbc992fb968d113b:
-
-  selftests: bpf: Don't try to read files without read permission (2019-10-15 16:27:25 -0700)
-
-are available in the Git repository at:
-
-  git@gitolite.kernel.org:pub/scm/linux/kernel/git/brauner/linux tags/bpf-copy-struct-from-user
-
-for you to fetch changes up to 31a197d406cc01451e98312665d116c2dbb08202:
-
-  bpf: use copy_struct_from_user() in bpf() syscall (2019-10-16 05:32:38 +0200)
-
-----------------------------------------------------------------
-bpf-copy-struct-from-user
-
-----------------------------------------------------------------
-Christian Brauner (3):
-      bpf: use check_zeroed_user() in bpf_check_uarg_tail_zero()
-      bpf: use copy_struct_from_user() in bpf_prog_get_info_by_fd()
-      bpf: use copy_struct_from_user() in bpf() syscall
-
- kernel/bpf/syscall.c | 45 ++++++++++++++++-----------------------------
- 1 file changed, 16 insertions(+), 29 deletions(-)
-
-Thanks!
-Christian
-
-/* v1 */
-Link: https://lore.kernel.org/r/20191009160907.10981-1-christian.brauner@ubuntu.com
-
-/* v2 */
-Link: https://lore.kernel.org/r/20191016004138.24845-1-christian.brauner@ubuntu.com
-- rebase onto bpf-next
-
-/* Reference */
-[1]: f5a1a536fa14 ("lib: introduce copy_struct_from_user() helper")
-
-Christian Brauner (3):
-  bpf: use check_zeroed_user() in bpf_check_uarg_tail_zero()
-  bpf: use copy_struct_from_user() in bpf_prog_get_info_by_fd()
-  bpf: use copy_struct_from_user() in bpf() syscall
-
- kernel/bpf/syscall.c | 45 ++++++++++++++++----------------------------
- 1 file changed, 16 insertions(+), 29 deletions(-)
-
--- 
-2.23.0
-
+[...]
