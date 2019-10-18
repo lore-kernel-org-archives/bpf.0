@@ -2,152 +2,110 @@ Return-Path: <SRS0=UnAx=YL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F221CA9ECF
-	for <bpf@archiver.kernel.org>; Fri, 18 Oct 2019 05:14:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2A15CA9ECF
+	for <bpf@archiver.kernel.org>; Fri, 18 Oct 2019 05:15:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3FC4B222C5
-	for <bpf@archiver.kernel.org>; Fri, 18 Oct 2019 05:14:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 847A9222C5
+	for <bpf@archiver.kernel.org>; Fri, 18 Oct 2019 05:15:17 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VNYmFpR+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389797AbfJRFOl convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 18 Oct 2019 01:14:41 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:34526 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727606AbfJRFOk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 18 Oct 2019 01:14:40 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id E93303090FEE;
-        Fri, 18 Oct 2019 02:49:21 +0000 (UTC)
-Received: from tagon (ovpn-122-32.rdu2.redhat.com [10.10.122.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 00BB75F7C0;
-        Fri, 18 Oct 2019 02:49:19 +0000 (UTC)
-Date:   Thu, 17 Oct 2019 21:49:17 -0500
-From:   Clark Williams <williams@redhat.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     David Miller <davem@davemloft.net>,
-        Sebastian Sewior <bigeasy@linutronix.de>, daniel@iogearbox.net,
-        bpf@vger.kernel.org, ast@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: Re: [PATCH] BPF: Disable on PREEMPT_RT
-Message-ID: <20191017214917.18911f58@tagon>
-In-Reply-To: <alpine.DEB.2.21.1910172342090.1869@nanos.tec.linutronix.de>
-References: <20191017090500.ienqyium2phkxpdo@linutronix.de>
-        <20191017145358.GA26267@pc-63.home>
-        <20191017154021.ndza4la3hntk4d4o@linutronix.de>
-        <20191017.132548.2120028117307856274.davem@davemloft.net>
-        <alpine.DEB.2.21.1910172342090.1869@nanos.tec.linutronix.de>
-Organization: Red Hat, Inc
+        id S2388594AbfJRFPR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 18 Oct 2019 01:15:17 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:33026 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727606AbfJRFPR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 18 Oct 2019 01:15:17 -0400
+Received: by mail-pl1-f194.google.com with SMTP id d22so2281934pls.0;
+        Thu, 17 Oct 2019 22:15:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=eKCQEHJp+Bmk1+KxL2VW8ZVDs0l76/RRTSEB8GtoKzU=;
+        b=VNYmFpR+1svH3RklJ/ni4HOgMNYHl7MHEGV9c2RKjwcUsmhFCVwHCd8Lx6MtsoWVte
+         Git34f+i7ciXxxGu+izTqbWE5AxM6LMpwlAhUfDPh5Ki/fqj5/ZAurq5nX/8wqfZhuFx
+         GBzv2FpY+5gkaZoq5UJ8rNnF0b/TofDQ5Xp+lVHw+QBbI4lHwpdkGPzJRzkYMlkplsMf
+         Y5avb3hUqFh/XcCy5y/7Od4OeVLbiQf0WVuUB99THxpC4P/ofAiEkA2ITlSHT/5P5m5f
+         PI3HN+DbW9qrtCpPtPv5uvbqXLG3l3RaWsKUTdL6qDdCg2lddyuwlw/FuZ7C1SP5rVLF
+         TcLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=eKCQEHJp+Bmk1+KxL2VW8ZVDs0l76/RRTSEB8GtoKzU=;
+        b=EensbI4iBJApQ4yw/zv+51REzkZBDCIJK58ob+gndfNt9nNldO/g2RI45wefzbksa7
+         cAHdMxA/egvYhxe9knHfZOj3rPUdAvzv398GIk2jbS6vxILtGWBQPGNtirmXqq9IHdtk
+         aZnvA0I2C/8duBwXWtBd32GBOWKwzn8AaPCoIyrwCSn9evWsdFiiiyEMTe2LyOXz/kAE
+         w1ZZpDrfrFoCHMzW0F7P64KqqQ4KgIbDkJHiqyBBZSoWY0q50q6sRhRklLKmW2LfMV+1
+         r738Lgcf3sG8ADgJKWluBIbz1o5+8QGRXF+k13xAH67jy5oWgMgwPObQvapS1SF7FlMb
+         ZnVA==
+X-Gm-Message-State: APjAAAVJSQtleqkG2TqaZNQXvJW6xhIXh6KytDa6DUmjtD3CVs1aENNt
+        uEqL2Df2qsKcx0HG0W/wraMuKN9w
+X-Google-Smtp-Source: APXvYqzBaCznyjQSXNVi7TS0i1yrqWYhhCfDRmQilWmU7AcgFxRttRhzngCZrFJD7BNJlUiiRY2BpA==
+X-Received: by 2002:a17:902:a50a:: with SMTP id s10mr2720061plq.59.1571372661919;
+        Thu, 17 Oct 2019 21:24:21 -0700 (PDT)
+Received: from ast-mbp ([2620:10d:c090:180::cfd0])
+        by smtp.gmail.com with ESMTPSA id v35sm4253093pgn.89.2019.10.17.21.24.20
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 17 Oct 2019 21:24:21 -0700 (PDT)
+Date:   Thu, 17 Oct 2019 21:24:19 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        bpf@vger.kernel.org, Andrii Nakryiko <andriin@fb.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+Subject: Re: [PATCH v2 31/33] tools lib bpf: Renaming pr_warning to pr_warn
+Message-ID: <20191018042416.r4fffxzbxb3u4csg@ast-mbp>
+References: <20191018031710.41052-1-wangkefeng.wang@huawei.com>
+ <20191018031850.48498-1-wangkefeng.wang@huawei.com>
+ <20191018031850.48498-31-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.43]); Fri, 18 Oct 2019 02:49:22 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191018031850.48498-31-wangkefeng.wang@huawei.com>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-+acme
-
-On Thu, 17 Oct 2019 23:54:07 +0200 (CEST)
-Thomas Gleixner <tglx@linutronix.de> wrote:
-> On Thu, 17 Oct 2019, David Miller wrote:
+On Fri, Oct 18, 2019 at 11:18:48AM +0800, Kefeng Wang wrote:
+> For kernel logging macro, pr_warning is completely removed and
+> replaced by pr_warn, using pr_warn in tools lib bpf for symmetry
+> to kernel logging macro, then we could drop pr_warning in the
+> whole linux code.
 > 
-> > From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> > Date: Thu, 17 Oct 2019 17:40:21 +0200
-> >   
-> > > On 2019-10-17 16:53:58 [+0200], Daniel Borkmann wrote:  
-> > >> On Thu, Oct 17, 2019 at 11:05:01AM +0200, Sebastian Andrzej Siewior wrote:  
-> > >> > Disable BPF on PREEMPT_RT because
-> > >> > - it allocates and frees memory in atomic context
-> > >> > - it uses up_read_non_owner()
-> > >> > - BPF_PROG_RUN() expects to be invoked in non-preemptible context  
-> > >> 
-> > >> For the latter you'd also need to disable seccomp-BPF and everything
-> > >> cBPF related as they are /all/ invoked via BPF_PROG_RUN() ...  
-> > > 
-> > > I looked at tracing and it depended on BPF_SYSCALL so I assumed they all
-> > > do… Now looking for BPF_PROG_RUN() there is PPP_FILTER,
-> > > NET_TEAM_MODE_LOADBALANCE and probably more.  I didn't find a symbol for
-> > > seccomp-BPF. 
-> > > Would it make sense to override BPF_PROG_RUN() and make each caller fail
-> > > instead? Other recommendations?  
-> > 
-> > I hope you understand that basically you are disabling any packet sniffing
-> > on the system with this patch you are proposing.
-> > 
-> > This means no tcpdump, not wireshark, etc.  They will all become
-> > non-functional.
-> > 
-> > Turning off BPF just because PREEMPT_RT is enabled is a non-starter it is
-> > absolutely essential functionality for a Linux system at this point.  
-> 
-> I'm all ears for an alternative solution. Here are the pain points:
-> 
->   #1) BPF disables preemption unconditionally with no way to do a proper RT
->       substitution like most other infrastructure in the kernel provides
->       via spinlocks or other locking primitives.
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Martin KaFai Lau <kafai@fb.com>
+> Cc: Song Liu <songliubraving@fb.com>
+> Cc: Yonghong Song <yhs@fb.com>
+> Cc: bpf@vger.kernel.org
+> Acked-by: Andrii Nakryiko <andriin@fb.com>
+> Reviewed-by: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+>  tools/lib/bpf/btf.c             |  56 +--
+>  tools/lib/bpf/btf_dump.c        |  18 +-
+>  tools/lib/bpf/libbpf.c          | 679 ++++++++++++++++----------------
+>  tools/lib/bpf/libbpf_internal.h |   8 +-
+>  tools/lib/bpf/xsk.c             |   4 +-
+>  5 files changed, 379 insertions(+), 386 deletions(-)
 
-As I understand it, BPF programs cannot loop and are limited to 4096 instructions.
-Has anyone done any timing to see just how much having preemption off while a
-BPF program executes is going to affect us? Are we talking 1us or 50us? or longer?
-I wonder if there's some instrumentation we could use to determine the maximum time
-spent running a BPF program. Maybe some perf mojo...
+Nack.
+I prefer this type of renaming to go via bpf tree.
+It's not a kernel patch. It's touching user space library
+which is under heavy development.
+Doing any other way will cause a ton of conflicts.
 
-> 
->   #2) BPF does allocations in atomic contexts, which is a dubious decision
->       even for non RT. That's related to #1
-
-I guess my question here is, are the allocations done on behalf of an about-to-run
-BPF program, or as a result of executing BPF code?  Is it something we might be able
-to satisfy from a pre-allocated pool rather than kmalloc()? Ok, I need to go dive
-into BPF a bit deeper.
-
-> 
->   #3) BPF uses the up_read_non_owner() hackery which was only invented to
->       deal with already existing horrors and not meant to be proliferated.
-> 
->       Yes, I know it's a existing facility ....
-
-I'm sure I'll regret asking this, but why is up_read_non_owner() a horror? I mean,
-I get the fundamental wrongness of having someone that's not the owner of a semaphore
-performing an 'up' on it, but is there an RT-specific reason that it's bad? Is it
-totally a blocker for using BPF with RT or is it something we should fix over time?
-
-> 
-> TBH, I have no idea how to deal with those things. So the only way forward
-> for RT right now is to disable the whole thing.
-> 
-> Clark might have some insight from the product side for you how much that
-> impacts usability.
-> 
-> Thanks,
-> 
-> 	tglx
-
-
-Clark is only just starting his journey with BPF, so not an expert.
-
-I do think that we (RT) are going to have to co-exist with BPF, if only due to the
-increased use of XDP. I also think that other sub-systems will start to
-employ BPF for production purposes (as opposed to debug/analysis which is
-how we generally look at tracing, packet sniffing, etc.). I think we *have* to
-figure out how to co-exist. 
-
-Guess my "hey, that look interesting, think I'll leisurely read up on it" just got
-a little less leisurely. I'm out most of the day tomorrow but I'll catch up on email
-over the weekend.
-
-
-Clark
-
--- 
-The United States Coast Guard
-Ruining Natural Selection since 1790
