@@ -8,53 +8,53 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 088D5CA9ED0
-	for <bpf@archiver.kernel.org>; Fri, 18 Oct 2019 05:06:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D35ECA9ED0
+	for <bpf@archiver.kernel.org>; Fri, 18 Oct 2019 05:06:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D2CBD21835
-	for <bpf@archiver.kernel.org>; Fri, 18 Oct 2019 05:06:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 639F221835
+	for <bpf@archiver.kernel.org>; Fri, 18 Oct 2019 05:06:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XnvfBet4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="stVAgmUo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503885AbfJRFGH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 18 Oct 2019 01:06:07 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:35374 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725856AbfJRFGG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 18 Oct 2019 01:06:06 -0400
-Received: by mail-pg1-f196.google.com with SMTP id p30so2681052pgl.2;
-        Thu, 17 Oct 2019 22:06:05 -0700 (PDT)
+        id S2504259AbfJRFG2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 18 Oct 2019 01:06:28 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:33856 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2504254AbfJRFG2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 18 Oct 2019 01:06:28 -0400
+Received: by mail-pf1-f193.google.com with SMTP id b128so3105046pfa.1;
+        Thu, 17 Oct 2019 22:06:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3znI3jfyxhlrImFZP1YaxjrIboRVdgk6y/Uv9/1hgdY=;
-        b=XnvfBet4AbU0ExahHoD7IWNzMYRW3M2/FYWTAgA1MZybbezJNpGTEccvqnFVMAXY0g
-         Fm0bBX+M1hT/UDnZNpwGLB4vuqnJ/OaTwDXaCTJHKl4dxIN8im6vEpUpcevzthFxneMp
-         TNBS3RM2ahiDNdj1RY9GdN7Ll8WPPcD7Zxhri2GgvbPW3eiJCs8nbXuswgoeAnsadwaL
-         xF5+yCHVVr2wWk/+D+K2bmO1jCAuqN9xrS5+wtI35rO+NJ4WBaKyX+pjIgqkHE8we+yP
-         NPgoiYv2pwL1o+8s42S27f0NvxZLak+jSeq/MpskJ0CrReBjXWcAVGaJubKBRJsyY+vE
-         rzbA==
+        bh=2WYqjTN1RUCVkv/Je1j3VKlKtOkDStGRgvwygXm30VE=;
+        b=stVAgmUonojr7iuGmI4Ls1OhAgj/NAhYmLxFnkS+Ku/KXfGM2yrOPhODAJr04AJQUe
+         LD2I/9nMW0LIcT0cjr71RIX8cfrmEiQu0fBalMETBkRtXASge4Uvwpzuqg6Kh/3d8WFL
+         t95bYCAbedMYb9JAloXofu1OHjkJna83/NiMNfIXa8qLou3s/V5Pr4x+DYQoyAbQQ/Ie
+         zWM2JQj77twrlVjM92Fm85HQTAJbwgmNCHi2gwPXbkjyjjKhgNm1cULX6oF77lCTcKnx
+         unHqQx97wWXxa92boKNwLA/42Bw8RM2PLrqulVnppPk8e0NT7AB68IWIVDf4x69IByjj
+         uYAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3znI3jfyxhlrImFZP1YaxjrIboRVdgk6y/Uv9/1hgdY=;
-        b=KCgzlAraGzGUt17Lj8ksMiacufWFmi+ExSF4M2erl0twQVNxt4BUipLUUvCvhhStUk
-         3JmY5otxs5HVYjfsLiZMhYsrDUrgVexeFeSM3eb20D3mgsU8R7xKQidaFbdPzFd3XjP0
-         cFr5gQPbxl43Wrvlo50MNLE4oAmrucyr+iv1vQ4WQ4TXWQDYxfXdhA01S5F0Ny3q8GtC
-         x1/kZVur3ogY9pYBevvjp5kp+CMNCCuvgbPpOzdU+f9iRmRKAnL6zG6BntGnQ2uoQ90X
-         xMiI5iRxYF8yu14kWXXCVIyGyXBBou45qe0h80M4XAwPuCYeEc3uBPxJS4nQosDDiu0q
-         rbFA==
-X-Gm-Message-State: APjAAAVUNallv2HZoGEYSTKaREIILRbf/C0J4RZkXxKy/js+G8ajnyuX
-        NLt+qsm1E/pBlTFvgPUxR2A9PQsJ
-X-Google-Smtp-Source: APXvYqzDPlDkah3w9vs71p4pB03R5Apr7H6F4vO+4UvTHwe9ETXCUnl1vgZ0+kcqJFrRfIeWNlCnZw==
-X-Received: by 2002:a17:90a:5896:: with SMTP id j22mr8122854pji.55.1571371775397;
-        Thu, 17 Oct 2019 21:09:35 -0700 (PDT)
+        bh=2WYqjTN1RUCVkv/Je1j3VKlKtOkDStGRgvwygXm30VE=;
+        b=V8wMzoblKEO5GdFZwDjVPhyi9oduqybrhZZLFD13GXnQZIKWY53hJZqlpZswkVbvQk
+         G+6WhP9tny5xjOx6rw+kWrn7UBM8Nv5HS5+1zOhvjGwp8bQnOn5XKZbZMnejSvWEJRKa
+         cV+RC80DbICSLZCyksEG5Hzd7j5R5lBantAs/3eBl3Z0MBFL477Nmm9vvAhit/5CLgdZ
+         XYfq9DSlpL8RXb6dIHjtBfm89z/0q9E3v9c1S2kTG4eGMf9S2y56UiR66Idsdkqd29Vh
+         GIYsiD3XpoDc0vJqY87cc5opn46eIHpk3HcZ5YkR8UBDXPPYeTBMScV3YZ+83RCY87Rd
+         Kz5w==
+X-Gm-Message-State: APjAAAXaT1VsYsNsx13lumX/cm+9UYTLZqg70Knx6R2rU0M6fxNIjtyy
+        vejsz0MuJflYT/WlqBXfEcIn7M/b
+X-Google-Smtp-Source: APXvYqywM1MTmVDyX2VcXcBBiWD84D7G+0LcHfGimyOlkwTm6ToTV0VlTLXNOvWYP8rUIqSw+k42bQ==
+X-Received: by 2002:aa7:8a84:: with SMTP id a4mr3999603pfc.99.1571371717724;
+        Thu, 17 Oct 2019 21:08:37 -0700 (PDT)
 Received: from z400-fedora29.kern.oss.ntt.co.jp ([222.151.198.97])
-        by smtp.gmail.com with ESMTPSA id d11sm4341680pfo.104.2019.10.17.21.09.30
+        by smtp.gmail.com with ESMTPSA id d11sm4341680pfo.104.2019.10.17.21.08.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Oct 2019 21:09:34 -0700 (PDT)
+        Thu, 17 Oct 2019 21:08:37 -0700 (PDT)
 From:   Toshiaki Makita <toshiaki.makita1@gmail.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -75,9 +75,9 @@ Cc:     Toshiaki Makita <toshiaki.makita1@gmail.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         William Tu <u9012063@gmail.com>,
         Stanislav Fomichev <sdf@fomichev.me>
-Subject: [RFC PATCH v2 bpf-next 15/15] bpf, hashtab: Compare keys in long
-Date:   Fri, 18 Oct 2019 13:07:48 +0900
-Message-Id: <20191018040748.30593-16-toshiaki.makita1@gmail.com>
+Subject: [RFC PATCH v2 bpf-next 03/15] bpf: Add API to get program from id
+Date:   Fri, 18 Oct 2019 13:07:36 +0900
+Message-Id: <20191018040748.30593-4-toshiaki.makita1@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191018040748.30593-1-toshiaki.makita1@gmail.com>
 References: <20191018040748.30593-1-toshiaki.makita1@gmail.com>
@@ -88,66 +88,103 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-memcmp() is generally slow. Compare keys in long if possible.
-This improves xdp_flow performance.
+Factor out the logic in bpf_prog_get_fd_by_id() and add
+bpf_prog_get_by_id()/bpf_prog_get_type_dev_by_id().
+Also export bpf_prog_get_type_dev_by_id(), which will be used by the
+following commit to get bpf prog from its id.
 
 Signed-off-by: Toshiaki Makita <toshiaki.makita1@gmail.com>
 ---
- kernel/bpf/hashtab.c | 27 +++++++++++++++++++++++++--
- 1 file changed, 25 insertions(+), 2 deletions(-)
+ include/linux/bpf.h  |  8 ++++++++
+ kernel/bpf/syscall.c | 42 ++++++++++++++++++++++++++++++++++--------
+ 2 files changed, 42 insertions(+), 8 deletions(-)
 
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 22066a6..8b5ffd4 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -417,6 +417,29 @@ static inline struct hlist_nulls_head *select_bucket(struct bpf_htab *htab, u32
- 	return &__select_bucket(htab, hash)->head;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 282e28b..78fe7ef 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -636,6 +636,8 @@ int bpf_prog_array_copy(struct bpf_prog_array *old_array,
+ struct bpf_prog *bpf_prog_get(u32 ufd);
+ struct bpf_prog *bpf_prog_get_type_dev(u32 ufd, enum bpf_prog_type type,
+ 				       bool attach_drv);
++struct bpf_prog *bpf_prog_get_type_dev_by_id(u32 id, enum bpf_prog_type type,
++					     bool attach_drv);
+ struct bpf_prog * __must_check bpf_prog_add(struct bpf_prog *prog, int i);
+ void bpf_prog_sub(struct bpf_prog *prog, int i);
+ struct bpf_prog * __must_check bpf_prog_inc(struct bpf_prog *prog);
+@@ -760,6 +762,12 @@ static inline struct bpf_prog *bpf_prog_get_type_dev(u32 ufd,
+ 	return ERR_PTR(-EOPNOTSUPP);
  }
  
-+/* key1 must be aligned to sizeof long */
-+static bool key_equal(void *key1, void *key2, u32 size)
++static inline struct bpf_prog *
++bpf_prog_get_type_dev_by_id(u32 id, enum bpf_prog_type type, bool attach_drv)
 +{
-+	/* Check for key1 */
-+	BUILD_BUG_ON(!IS_ALIGNED(offsetof(struct htab_elem, key),
-+				 sizeof(long)));
-+
-+	if (IS_ALIGNED((unsigned long)key2 | (unsigned long)size,
-+		       sizeof(long))) {
-+		unsigned long *lkey1, *lkey2;
-+
-+		for (lkey1 = key1, lkey2 = key2; size > 0;
-+		     lkey1++, lkey2++, size -= sizeof(long)) {
-+			if (*lkey1 != *lkey2)
-+				return false;
-+		}
-+
-+		return true;
-+	}
-+
-+	return !memcmp(key1, key2, size);
++	return ERR_PTR(-EOPNOTSUPP);
 +}
 +
- /* this lookup function can only be called with bucket lock taken */
- static struct htab_elem *lookup_elem_raw(struct hlist_nulls_head *head, u32 hash,
- 					 void *key, u32 key_size)
-@@ -425,7 +448,7 @@ static struct htab_elem *lookup_elem_raw(struct hlist_nulls_head *head, u32 hash
- 	struct htab_elem *l;
+ static inline struct bpf_prog * __must_check bpf_prog_add(struct bpf_prog *prog,
+ 							  int i)
+ {
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 82eabd4..2dd6cfc 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2139,6 +2139,39 @@ static int bpf_obj_get_next_id(const union bpf_attr *attr,
+ 	return err;
+ }
  
- 	hlist_nulls_for_each_entry_rcu(l, n, head, hash_node)
--		if (l->hash == hash && !memcmp(&l->key, key, key_size))
-+		if (l->hash == hash && key_equal(&l->key, key, key_size))
- 			return l;
++static struct bpf_prog *bpf_prog_get_by_id(u32 id)
++{
++	struct bpf_prog *prog;
++
++	spin_lock_bh(&prog_idr_lock);
++	prog = idr_find(&prog_idr, id);
++	if (prog)
++		prog = bpf_prog_inc_not_zero(prog);
++	else
++		prog = ERR_PTR(-ENOENT);
++	spin_unlock_bh(&prog_idr_lock);
++
++	return prog;
++}
++
++struct bpf_prog *bpf_prog_get_type_dev_by_id(u32 id, enum bpf_prog_type type,
++					     bool attach_drv)
++{
++	struct bpf_prog *prog;
++
++	prog = bpf_prog_get_by_id(id);
++	if (IS_ERR(prog))
++		return prog;
++
++	if (!bpf_prog_get_ok(prog, &type, attach_drv)) {
++		bpf_prog_put(prog);
++		return ERR_PTR(-EINVAL);
++	}
++
++	return prog;
++}
++EXPORT_SYMBOL_GPL(bpf_prog_get_type_dev_by_id);
++
+ #define BPF_PROG_GET_FD_BY_ID_LAST_FIELD prog_id
  
- 	return NULL;
-@@ -444,7 +467,7 @@ static struct htab_elem *lookup_nulls_elem_raw(struct hlist_nulls_head *head,
+ static int bpf_prog_get_fd_by_id(const union bpf_attr *attr)
+@@ -2153,14 +2186,7 @@ static int bpf_prog_get_fd_by_id(const union bpf_attr *attr)
+ 	if (!capable(CAP_SYS_ADMIN))
+ 		return -EPERM;
  
- again:
- 	hlist_nulls_for_each_entry_rcu(l, n, head, hash_node)
--		if (l->hash == hash && !memcmp(&l->key, key, key_size))
-+		if (l->hash == hash && key_equal(&l->key, key, key_size))
- 			return l;
+-	spin_lock_bh(&prog_idr_lock);
+-	prog = idr_find(&prog_idr, id);
+-	if (prog)
+-		prog = bpf_prog_inc_not_zero(prog);
+-	else
+-		prog = ERR_PTR(-ENOENT);
+-	spin_unlock_bh(&prog_idr_lock);
+-
++	prog = bpf_prog_get_by_id(id);
+ 	if (IS_ERR(prog))
+ 		return PTR_ERR(prog);
  
- 	if (unlikely(get_nulls_value(n) != (hash & (n_buckets - 1))))
 -- 
 1.8.3.1
 
