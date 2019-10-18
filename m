@@ -2,156 +2,176 @@ Return-Path: <SRS0=UnAx=YL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB2A0CA9EA9
-	for <bpf@archiver.kernel.org>; Fri, 18 Oct 2019 19:28:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92B33CA9EA9
+	for <bpf@archiver.kernel.org>; Fri, 18 Oct 2019 19:44:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6384E222C2
-	for <bpf@archiver.kernel.org>; Fri, 18 Oct 2019 19:28:21 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="T2VLUeBF"
+	by mail.kernel.org (Postfix) with ESMTP id 74E77222C2
+	for <bpf@archiver.kernel.org>; Fri, 18 Oct 2019 19:44:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505855AbfJRT2V (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 18 Oct 2019 15:28:21 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:46638 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2388138AbfJRT2U (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 18 Oct 2019 15:28:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1571426899;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ReGmZfxNLrIuLgZJ1ThEBBVuP3LStbYtdPYwtz23/vM=;
-        b=T2VLUeBFxEfo9GhzmbSk211H297NOg9UAYY5rVu+lUZ3Eb347Vl0k3gFSv/Z7GurSRb0ES
-        VXyLfdbC3GJMpIM7BZ7I8eLvwQWDkxiF204t+v18dsIHaqAmJUqiRskodJUdcnoojFTS5T
-        /7ug7mpTLBmLroIIBUP2lGhErMRIlHs=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-266-Mp0QfZUHPZGfn4Fs3F_ySw-1; Fri, 18 Oct 2019 15:28:17 -0400
-Received: by mail-lf1-f71.google.com with SMTP id a14so1431168lfk.18
-        for <bpf@vger.kernel.org>; Fri, 18 Oct 2019 12:28:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=8lD3afoo9Y+y5S3nT5ktvWu7wmYcHUcDBojvsLe+bew=;
-        b=OStZfSawq7lKfQQITPpJ09hgfSg91eYw4+vHainD5IswVR9dpTPA73vbyh6ypsg8sZ
-         EWpQYJHcbJdAYDXyfVlaVl21TdyvsJtoe0qV9Fo9wbpJ7V2LKDtAAJLHca5Sf9nvv+UC
-         BPCImLdUCynLqUO8Tw/J47mkA+2kJLDbPOBXS8j0Gb5s19WoZSMC5joSTvkrt074yPyz
-         4WP2QpAjuzQfD4W/N7OgEN/zac/zd4AOftGTVI2bSSBZAVRQKrzDYo/vrMwvPWBD/QZe
-         g3TSpglmm7FL1mDuqoFFTnFpzo4fQNR0swZ9wLqKdwV1rrLV7Uwvft7ls1yM6kMp8BUI
-         CHYA==
-X-Gm-Message-State: APjAAAWsJQ0M/12ibIDk2EQ94OD/Pfu8smTGDG4aZO/n7P1vBQk3R9Zk
-        uBlu+0OWOsk+9pF8S1cjflfrW+Y+sZSnqkwwdEwONcbncTtqVVaUPiUWs1WZmUQMvPucdd/gJfa
-        lXXt+C1BzseK9
-X-Received: by 2002:a19:f107:: with SMTP id p7mr5544650lfh.91.1571426896260;
-        Fri, 18 Oct 2019 12:28:16 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqx4lubWUulL34gzxM41pSqL8vUg6UqCjnneyhVcYOLP6kmlk0Lt2/P31DSg0SBfU3TQloOZEw==
-X-Received: by 2002:a19:f107:: with SMTP id p7mr5544638lfh.91.1571426896046;
-        Fri, 18 Oct 2019 12:28:16 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
-        by smtp.gmail.com with ESMTPSA id x5sm3927436lfg.71.2019.10.18.12.28.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Oct 2019 12:28:15 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 9925D1804B6; Fri, 18 Oct 2019 21:28:14 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Martin Lau <kafai@fb.com>
-Cc:     "daniel\@iogearbox.net" <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@fb.com>,
-        "bpf\@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev\@vger.kernel.org" <netdev@vger.kernel.org>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: Re: [PATCH bpf v2] xdp: Handle device unregister for devmap_hash map type
-In-Reply-To: <20191018165049.rm6du3yq2e4vg45h@kafai-mbp>
-References: <20191017105232.2806390-1-toke@redhat.com> <20191017190219.hpphf7jnyn6xapb6@kafai-mbp.dhcp.thefacebook.com> <87pniue4cw.fsf@toke.dk> <20191018165049.rm6du3yq2e4vg45h@kafai-mbp>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Fri, 18 Oct 2019 21:28:14 +0200
-Message-ID: <87tv85dfap.fsf@toke.dk>
+        id S2394892AbfJRTo2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 18 Oct 2019 15:44:28 -0400
+Received: from www62.your-server.de ([213.133.104.62]:38332 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390538AbfJRTo2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 18 Oct 2019 15:44:28 -0400
+Received: from 55.249.197.178.dynamic.dsl-lte-bonding.lssmb00p-msn.res.cust.swisscom.ch ([178.197.249.55] helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1iLYAj-0000DU-Rv; Fri, 18 Oct 2019 21:44:26 +0200
+Date:   Fri, 18 Oct 2019 21:44:25 +0200
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     andriin@fb.com, ast@kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [bpf-next PATCH] bpf: libbpf, support older style kprobe load
+Message-ID: <20191018194425.GI26267@pc-63.home>
+References: <157141046629.11948.8937909716570078019.stgit@john-XPS-13-9370>
 MIME-Version: 1.0
-X-MC-Unique: Mp0QfZUHPZGfn4Fs3F_ySw-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <157141046629.11948.8937909716570078019.stgit@john-XPS-13-9370>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.101.4/25606/Fri Oct 18 10:58:40 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Martin Lau <kafai@fb.com> writes:
+On Fri, Oct 18, 2019 at 07:54:26AM -0700, John Fastabend wrote:
+> Following ./Documentation/trace/kprobetrace.rst add support for loading
+> kprobes programs on older kernels.
+> 
+> Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+> ---
+>  tools/lib/bpf/libbpf.c |   81 +++++++++++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 73 insertions(+), 8 deletions(-)
+> 
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index fcea6988f962..12b3105d112c 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -5005,20 +5005,89 @@ static int determine_uprobe_retprobe_bit(void)
+>  	return parse_uint_from_file(file, "config:%d\n");
+>  }
+>  
+> +static int use_kprobe_debugfs(const char *name,
+> +			      uint64_t offset, int pid, bool retprobe)
 
-> On Fri, Oct 18, 2019 at 12:26:55PM +0200, Toke H=C3=B8iland-J=C3=B8rgense=
-n wrote:
->> Martin Lau <kafai@fb.com> writes:
->>=20
->> > On Thu, Oct 17, 2019 at 12:52:32PM +0200, Toke H=C3=B8iland-J=C3=B8rge=
-nsen wrote:
->> >> It seems I forgot to add handling of devmap_hash type maps to the dev=
-ice
->> >> unregister hook for devmaps. This omission causes devices to not be
->> >> properly released, which causes hangs.
->> >>=20
->> >> Fix this by adding the missing handler.
->> >>=20
->> >> Fixes: 6f9d451ab1a3 ("xdp: Add devmap_hash map type for looking up de=
-vices by hashed index")
->> >> Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
->> >> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
->> >> ---
->> >> v2:
->> >>   - Grab the update lock while walking the map and removing entries.
->> >>=20
->> >>  kernel/bpf/devmap.c | 37 +++++++++++++++++++++++++++++++++++++
->> >>  1 file changed, 37 insertions(+)
->> >>=20
->> >> diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
->> >> index d27f3b60ff6d..a0a1153da5ae 100644
->> >> --- a/kernel/bpf/devmap.c
->> >> +++ b/kernel/bpf/devmap.c
->> >> @@ -719,6 +719,38 @@ const struct bpf_map_ops dev_map_hash_ops =3D {
->> >>  =09.map_check_btf =3D map_check_no_btf,
->> >>  };
->> >> =20
->> >> +static void dev_map_hash_remove_netdev(struct bpf_dtab *dtab,
->> >> +=09=09=09=09       struct net_device *netdev)
->> >> +{
->> >> +=09unsigned long flags;
->> >> +=09int i;
->> > dtab->n_buckets is u32.
->>=20
->> Oh, right, will fix.
->>=20
->> >> +
->> >> +=09spin_lock_irqsave(&dtab->index_lock, flags);
->> >> +=09for (i =3D 0; i < dtab->n_buckets; i++) {
->> >> +=09=09struct bpf_dtab_netdev *dev, *odev;
->> >> +=09=09struct hlist_head *head;
->> >> +
->> >> +=09=09head =3D dev_map_index_hash(dtab, i);
->> >> +=09=09dev =3D hlist_entry_safe(rcu_dereference_raw(hlist_first_rcu(h=
-ead)),
->> > The spinlock has already been held.  Is rcu_deref still needed?
->>=20
->> I guess it's not strictly needed, but since it's an rcu-protected list,
->> and hlist_first_rcu() returns an __rcu-annotated type, I think we will
->> get a 'sparse' warning if it's omitted, no?
->>=20
->> And since it's just a READ_ONCE, it doesn't actually hurt since this is
->> not the fast path, so I'd lean towards just keeping it? WDYT?
->>
-> Can hlist_for_each_safe() be used instead then?
-> A bonus is the following long line will go away.
-> I think the change will be simpler also.
+offset & pid unused?
 
-Ohhh, yes it can! I was looking for that variant of the for_each macro
-(the removal-safe one) and scratching my head as to why it wasn't there.
-Dunno how I missed that; thanks, will fix and resend! :)
+> +{
+> +	const char *file = "/sys/kernel/debug/tracing/kprobe_events";
+> +	int fd = open(file, O_WRONLY | O_APPEND, 0);
+> +	char buf[PATH_MAX];
+> +	int err;
+> +
+> +	if (fd < 0) {
+> +		pr_warning("failed open kprobe_events: %s\n",
+> +			   strerror(errno));
+> +		return -errno;
+> +	}
+> +
+> +	snprintf(buf, sizeof(buf), "%c:kprobes/%s %s",
+> +		 retprobe ? 'r' : 'p', name, name);
+> +
+> +	err = write(fd, buf, strlen(buf));
+> +	close(fd);
+> +	if (err < 0)
+> +		return -errno;
+> +	return 0;
+> +}
+> +
+>  static int perf_event_open_probe(bool uprobe, bool retprobe, const char *name,
+>  				 uint64_t offset, int pid)
+>  {
+>  	struct perf_event_attr attr = {};
+>  	char errmsg[STRERR_BUFSIZE];
+> +	uint64_t config1 = 0;
+>  	int type, pfd, err;
+>  
+>  	type = uprobe ? determine_uprobe_perf_type()
+>  		      : determine_kprobe_perf_type();
+>  	if (type < 0) {
+> -		pr_warning("failed to determine %s perf type: %s\n",
+> -			   uprobe ? "uprobe" : "kprobe",
+> -			   libbpf_strerror_r(type, errmsg, sizeof(errmsg)));
+> -		return type;
+> +		if (uprobe) {
+> +			pr_warning("failed to determine uprobe perf type %s: %s\n",
+> +				   name,
+> +				   libbpf_strerror_r(type,
+> +						     errmsg, sizeof(errmsg)));
+> +		} else {
+> +			/* If we do not have an event_source/../kprobes then we
+> +			 * can try to use kprobe-base event tracing, for details
+> +			 * see ./Documentation/trace/kprobetrace.rst
+> +			 */
+> +			const char *file = "/sys/kernel/debug/tracing/events/kprobes/";
+> +			char c[PATH_MAX];
+> +			int fd, n;
+> +
+> +			snprintf(c, sizeof(c), "%s/%s/id", file, name);
+> +
+> +			err = use_kprobe_debugfs(name, offset, pid, retprobe);
+> +			if (err)
+> +				return err;
 
--Toke
+Should we throw a pr_warning() here as well when bailing out?
 
+> +			type = PERF_TYPE_TRACEPOINT;
+> +			fd = open(c, O_RDONLY, 0);
+> +			if (fd < 0) {
+> +				pr_warning("failed to open tracepoint %s: %s\n",
+> +					   c, strerror(errno));
+> +				return -errno;
+> +			}
+> +			n = read(fd, c, sizeof(c));
+> +			close(fd);
+> +			if (n < 0) {
+> +				pr_warning("failed to read %s: %s\n",
+> +					   c, strerror(errno));
+> +				return -errno;
+> +			}
+> +			c[n] = '\0';
+> +			config1 = strtol(c, NULL, 0);
+> +			attr.size = sizeof(attr);
+> +			attr.type = type;
+> +			attr.config = config1;
+> +			attr.sample_period = 1;
+> +			attr.wakeup_events = 1;
+
+Is there a reason you set latter two whereas below they are not set,
+does it not default to these?
+
+> +		}
+> +	} else {
+> +		config1 = ptr_to_u64(name);
+> +		attr.size = sizeof(attr);
+> +		attr.type = type;
+> +		attr.config1 = config1; /* kprobe_func or uprobe_path */
+> +		attr.config2 = offset;  /* kprobe_addr or probe_offset */
+>  	}
+>  	if (retprobe) {
+>  		int bit = uprobe ? determine_uprobe_retprobe_bit()
+> @@ -5033,10 +5102,6 @@ static int perf_event_open_probe(bool uprobe, bool retprobe, const char *name,
+>  		}
+>  		attr.config |= 1 << bit;
+>  	}
+
+What happens in case of retprobe, don't you (unwantedly) bail out here
+again (even through you've set up the retprobe earlier)?
+
+> -	attr.size = sizeof(attr);
+> -	attr.type = type;
+> -	attr.config1 = ptr_to_u64(name); /* kprobe_func or uprobe_path */
+> -	attr.config2 = offset;		 /* kprobe_addr or probe_offset */
+>  
+>  	/* pid filter is meaningful only for uprobes */
+>  	pfd = syscall(__NR_perf_event_open, &attr,
+> 
