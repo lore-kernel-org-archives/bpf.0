@@ -8,53 +8,53 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 077C4CA9ECF
-	for <bpf@archiver.kernel.org>; Fri, 18 Oct 2019 05:12:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEFAACA9ED0
+	for <bpf@archiver.kernel.org>; Fri, 18 Oct 2019 05:13:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B87AE21835
-	for <bpf@archiver.kernel.org>; Fri, 18 Oct 2019 05:12:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9479C222C6
+	for <bpf@archiver.kernel.org>; Fri, 18 Oct 2019 05:13:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EbNwGHod"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iCpOTOH9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390085AbfJRFMF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 18 Oct 2019 01:12:05 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:44520 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388139AbfJRFMF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 18 Oct 2019 01:12:05 -0400
-Received: by mail-pf1-f196.google.com with SMTP id q21so3077662pfn.11;
-        Thu, 17 Oct 2019 22:12:03 -0700 (PDT)
+        id S1732046AbfJRFNz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 18 Oct 2019 01:13:55 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:45514 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727606AbfJRFNz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 18 Oct 2019 01:13:55 -0400
+Received: by mail-pl1-f193.google.com with SMTP id u12so2249789pls.12;
+        Thu, 17 Oct 2019 22:13:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JiBXzGwZlxWWcrVY21SxEa/4z5gwrUXX7O2QDRHGFAc=;
-        b=EbNwGHodM02PjvvL8TvFR6AV6aY6jFZ3Uxw450MPn7J7f7RPEjASDGWcSh4jfuhBgL
-         66xtM6daIWZi7IHdfKJ5qYDrUEGJjCvF8RD/54jH5NqOozUuhTd/kKldj20wPrWmjQeL
-         F8jtFV1WYOAf/UiwEn12I3Bi5GlLYp3R4aez/z927/P5bnXaRReCPzlg8vRq8rOnQkbM
-         M75mOuR6Uj/zZZaUVBVnvrjIkRNdtc2PMVoKuEM98BQxgWWBaqw1skJ3sYqNiqJQ7vGK
-         /zsC3o2LGUR/bcwRzAFZhPA0vQlXSclJSVjisyxbePK9B4WaEyyjXeZBaTMHCjooNgeu
-         P+1Q==
+        bh=ZAQePQ7/QLeSg6o7fSfTOlJs0MDCwCY0jzDB1HxnUcQ=;
+        b=iCpOTOH9CYfmcmecB5Wh8gDJXCHxZoJ+w3WlbTojmcVz/s7aKXUzKW+iQ+ohveaxe0
+         hMtHiiizZUjZwlXnlNQ70sdOe1t41XdEG70tbWk13YGqBnKu25HCcZLcIE7t+4TEL7SJ
+         nNGh5WuQL66Cx5MXSNObE9eU748wZ7WcTbakilfHNyqqg5tvq/byNgi90vWHMt7sT4p4
+         9ryqJmptlr0HXD98u/l4YYRNVWkbImS+fh7FbypBImSsUUVmgqZunZy4AgKmSFzEVyMm
+         Y5f5P99zOOCzGvP4dbV0+grEJWCzEaTE2p0wX/NcZ1y/PdhdapSr+y8W7bM1l2Nu8IQD
+         fk9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JiBXzGwZlxWWcrVY21SxEa/4z5gwrUXX7O2QDRHGFAc=;
-        b=ORnbZwLEBu7/eZS7Ln79v1QhIFW3mgMbdDNLUMX0P97bT2iOIUBaKTJ4b7ws42JQjH
-         dwre1VgQl0XYrL7Cz/leL3CHpgS4h0GkgxxrpKqBZsP8UF4Yjtrvbe20g2tYUs2+cKb4
-         eIAf6+frSIhylkyzXBwdcYdGRyWzWwsZLYIOnSOHcU5pvXfZxeUTJryvm6nB7zxIMArJ
-         NznVNbvujE1CX2b2MNZsPm+38OiynNgBedzycqnHlZZaRYzykibx++ZHmQav9xNtZKiw
-         pKY7ZA7b/6EJ2Zh4sLPQMN7yVskZdJXCmp67xA1lY2xw3Hpv1O63Moy6e8plQKflgRmb
-         8OQQ==
-X-Gm-Message-State: APjAAAWIpSDO4IdM+yohCiY8gFJRnrxqC7pOEfX3P/sMXDDOCrjhJ+be
-        45MesvPpmFw5e+iJ9dWFUIqo34P3
-X-Google-Smtp-Source: APXvYqxEa/22w7pIG5ZjMTpS3jSrIIybvdkOcCq83QFcC7eXoyoWUnxJgiwjlD9o17o7EQfXVCUOfw==
-X-Received: by 2002:a17:90a:d141:: with SMTP id t1mr8362143pjw.103.1571371737048;
-        Thu, 17 Oct 2019 21:08:57 -0700 (PDT)
+        bh=ZAQePQ7/QLeSg6o7fSfTOlJs0MDCwCY0jzDB1HxnUcQ=;
+        b=sadyiA9CyTzOHNtLiIBGgkuTeyaHsRSlYCavit9ttXmiLztWj6QzdLz/5fvFiIs1/Y
+         I/d2FjCt6apK9yBg26/glq+LCNRsjTFqtFsj/M2CofOMeEGJ6dGkMvuof1oZBMuQNnvV
+         phCuzt8SSmMilckv2g9O77azH5hBecJeqRDO4yy0F6VT/MfNj3gmwU1wC1/5LFem376Y
+         F6k9U6imvANnYrU2ZDbQun6ILC7wIWzLrMDsmFxemCAQIN48VBDc6w6ueP2VuCi+wFhW
+         Aw3gf7MpGHvwdZ6LIGvlWFd1QiugIv+0KPO1N5+vXS7dyV6X8uTHvCuh70FDPoLyUtc2
+         3pxQ==
+X-Gm-Message-State: APjAAAXM6uVDJNh/JAc3tzvQFFB//QXAVJ9Bv1po3w2DTphr85pe4m3l
+        Sg6W2kMs5Jq46tIRpVmklI9bIETd
+X-Google-Smtp-Source: APXvYqwoMBLtFgL83xyAx7Sa5V55f25Tj7JBU8z9TKjXc9uRls3ZYbUiyyE2NOZHbmPmfK/+syX/sQ==
+X-Received: by 2002:a17:902:d888:: with SMTP id b8mr7850950plz.259.1571371727060;
+        Thu, 17 Oct 2019 21:08:47 -0700 (PDT)
 Received: from z400-fedora29.kern.oss.ntt.co.jp ([222.151.198.97])
-        by smtp.gmail.com with ESMTPSA id d11sm4341680pfo.104.2019.10.17.21.08.51
+        by smtp.gmail.com with ESMTPSA id d11sm4341680pfo.104.2019.10.17.21.08.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Oct 2019 21:08:55 -0700 (PDT)
+        Thu, 17 Oct 2019 21:08:46 -0700 (PDT)
 From:   Toshiaki Makita <toshiaki.makita1@gmail.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -75,9 +75,9 @@ Cc:     Toshiaki Makita <toshiaki.makita1@gmail.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         William Tu <u9012063@gmail.com>,
         Stanislav Fomichev <sdf@fomichev.me>
-Subject: [RFC PATCH v2 bpf-next 07/15] xdp_flow: Add flow entry insertion/deletion logic in UMH
-Date:   Fri, 18 Oct 2019 13:07:40 +0900
-Message-Id: <20191018040748.30593-8-toshiaki.makita1@gmail.com>
+Subject: [RFC PATCH v2 bpf-next 05/15] xdp_flow: Attach bpf prog to XDP in kernel after UMH loaded program
+Date:   Fri, 18 Oct 2019 13:07:38 +0900
+Message-Id: <20191018040748.30593-6-toshiaki.makita1@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191018040748.30593-1-toshiaki.makita1@gmail.com>
 References: <20191018040748.30593-1-toshiaki.makita1@gmail.com>
@@ -88,558 +88,200 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This logic will be used when xdp_flow kmod requests flow
-insertion/deleteion.
-
-On insertion, find a free entry and populate it, then update next index
-pointer of its previous entry. On deletion, set the next index pointer
-of the prev entry to the next index of the entry to be deleted.
+As UMH runs under RTNL, it cannot attach XDP from userspace. Thus the
+kernel, xdp_flow module, installs the XDP program.
 
 Signed-off-by: Toshiaki Makita <toshiaki.makita1@gmail.com>
 ---
- net/xdp_flow/umh_bpf.h      |  15 ++
- net/xdp_flow/xdp_flow_umh.c | 470 +++++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 483 insertions(+), 2 deletions(-)
+ net/xdp_flow/xdp_flow_kern_mod.c | 109 ++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 103 insertions(+), 6 deletions(-)
 
-diff --git a/net/xdp_flow/umh_bpf.h b/net/xdp_flow/umh_bpf.h
-index b4fe0c6..4e4633f 100644
---- a/net/xdp_flow/umh_bpf.h
-+++ b/net/xdp_flow/umh_bpf.h
-@@ -15,4 +15,19 @@ struct xdp_flow_mask_entry {
- 	int next;
- };
+diff --git a/net/xdp_flow/xdp_flow_kern_mod.c b/net/xdp_flow/xdp_flow_kern_mod.c
+index 14e06ee..2c80590 100644
+--- a/net/xdp_flow/xdp_flow_kern_mod.c
++++ b/net/xdp_flow/xdp_flow_kern_mod.c
+@@ -3,10 +3,27 @@
+ #include <linux/module.h>
+ #include <linux/umh.h>
+ #include <linux/sched/signal.h>
++#include <linux/rhashtable.h>
+ #include <linux/rtnetlink.h>
++#include <linux/filter.h>
+ #include "xdp_flow.h"
+ #include "msgfmt.h"
  
-+static inline bool flow_equal(const struct xdp_flow_key *key1,
-+			      const struct xdp_flow_key *key2)
-+{
-+	long *lkey1 = (long *)key1;
-+	long *lkey2 = (long *)key2;
-+	int i;
++struct xdp_flow_prog {
++	struct rhash_head ht_node;
++	struct net_device *dev;
++	struct bpf_prog *prog;
++};
 +
-+	for (i = 0; i < sizeof(*key1); i += sizeof(long)) {
-+		if (*lkey1++ != *lkey2++)
-+			return false;
-+	}
++static const struct rhashtable_params progs_params = {
++	.key_len = sizeof(struct net_devce *),
++	.key_offset = offsetof(struct xdp_flow_prog, dev),
++	.head_offset = offsetof(struct xdp_flow_prog, ht_node),
++	.automatic_shrinking = true,
++};
 +
-+	return true;
-+}
++static struct rhashtable progs;
 +
- #endif
-diff --git a/net/xdp_flow/xdp_flow_umh.c b/net/xdp_flow/xdp_flow_umh.c
-index 515c2fd..0588a36 100644
---- a/net/xdp_flow/xdp_flow_umh.c
-+++ b/net/xdp_flow/xdp_flow_umh.c
-@@ -20,6 +20,8 @@
- int progfile_fd;
- FILE *kmsg;
+ extern char xdp_flow_umh_start;
+ extern char xdp_flow_umh_end;
  
-+#define zalloc(size) calloc(1, (size))
-+
- #define pr_log(fmt, prio, ...) fprintf(kmsg, "<%d>xdp_flow_umh: " fmt, \
- 				       LOG_DAEMON | (prio), ##__VA_ARGS__)
- #ifdef DEBUG
-@@ -42,6 +44,8 @@ struct netdev_info {
- 	struct netdev_info_key key;
- 	struct hlist_node node;
- 	struct bpf_object *obj;
-+	int free_slot_top;
-+	int free_slots[MAX_FLOW_MASKS];
- };
- 
- DEFINE_HASHTABLE(netdev_info_table, 16);
-@@ -272,6 +276,57 @@ static struct netdev_info *get_netdev_info(const struct mbox_request *req)
- 	return netdev_info;
- }
- 
-+static void init_flow_masks_free_slot(struct netdev_info *netdev_info)
-+{
-+	int i;
-+
-+	for (i = 0; i < MAX_FLOW_MASKS; i++)
-+		netdev_info->free_slots[MAX_FLOW_MASKS - 1 - i] = i;
-+	netdev_info->free_slot_top = MAX_FLOW_MASKS - 1;
-+}
-+
-+static int get_flow_masks_free_slot(const struct netdev_info *netdev_info)
-+{
-+	if (netdev_info->free_slot_top < 0)
-+		return -ENOBUFS;
-+
-+	return netdev_info->free_slots[netdev_info->free_slot_top];
-+}
-+
-+static int add_flow_masks_free_slot(struct netdev_info *netdev_info, int slot)
-+{
-+	if (unlikely(netdev_info->free_slot_top >= MAX_FLOW_MASKS - 1)) {
-+		pr_warn("BUG: free_slot overflow: top=%d, slot=%d\n",
-+			netdev_info->free_slot_top, slot);
-+		return -EOVERFLOW;
-+	}
-+
-+	netdev_info->free_slots[++netdev_info->free_slot_top] = slot;
-+
-+	return 0;
-+}
-+
-+static void delete_flow_masks_free_slot(struct netdev_info *netdev_info,
-+					int slot)
-+{
-+	int top_slot;
-+
-+	if (unlikely(netdev_info->free_slot_top < 0)) {
-+		pr_warn("BUG: free_slot underflow: top=%d, slot=%d\n",
-+			netdev_info->free_slot_top, slot);
-+		return;
-+	}
-+
-+	top_slot = netdev_info->free_slots[netdev_info->free_slot_top];
-+	if (unlikely(top_slot != slot)) {
-+		pr_warn("BUG: inconsistent free_slot top: top_slot=%d, slot=%d\n",
-+			top_slot, slot);
-+		return;
-+	}
-+
-+	netdev_info->free_slot_top--;
-+}
-+
- static int handle_load(const struct mbox_request *req, __u32 *prog_id)
+@@ -116,10 +133,17 @@ static int xdp_flow_setup_block_cb(enum tc_setup_type type, void *type_data,
+ static int xdp_flow_setup_bind(struct net_device *dev,
+ 			       struct netlink_ext_ack *extack)
  {
- 	struct netdev_info *netdev_info;
-@@ -295,6 +350,8 @@ static int handle_load(const struct mbox_request *req, __u32 *prog_id)
- 	}
- 	netdev_info->key.ifindex = key.ifindex;
++	u32 flags = XDP_FLAGS_DRV_MODE | XDP_FLAGS_UPDATE_IF_NOEXIST;
++	struct xdp_flow_prog *prog_node;
+ 	struct mbox_request *req;
++	struct bpf_prog *prog;
+ 	u32 id = 0;
+ 	int err;
  
-+	init_flow_masks_free_slot(netdev_info);
++	err = dev_check_xdp(dev, extack, true, NULL, flags);
++	if (err)
++		return err;
 +
- 	prog_fd = load_bpf(req->ifindex, &netdev_info->obj);
- 	if (prog_fd < 0) {
- 		err = prog_fd;
-@@ -335,14 +392,423 @@ static int handle_unload(const struct mbox_request *req)
- 	return 0;
+ 	req = kzalloc(sizeof(*req), GFP_KERNEL);
+ 	if (!req)
+ 		return -ENOMEM;
+@@ -129,21 +153,83 @@ static int xdp_flow_setup_bind(struct net_device *dev,
+ 
+ 	/* Load bpf in UMH and get prog id */
+ 	err = transact_umh(req, &id);
++	if (err)
++		goto out;
++
++	prog = bpf_prog_get_type_dev_by_id(id, BPF_PROG_TYPE_XDP, true);
++	if (IS_ERR(prog)) {
++		err = PTR_ERR(prog);
++		goto err_umh;
++	}
+ 
+-	/* TODO: id will be used to attach bpf prog to XDP
+-	 * As we have rtnl_lock, UMH cannot attach prog to XDP
+-	 */
++	err = dev_change_xdp(dev, extack, prog, flags);
++	if (err)
++		goto err_prog;
+ 
++	prog_node = kzalloc(sizeof(*prog_node), GFP_KERNEL);
++	if (!prog_node) {
++		err = -ENOMEM;
++		goto err_xdp;
++	}
++
++	prog_node->dev = dev;
++	prog_node->prog = prog;
++	err = rhashtable_insert_fast(&progs, &prog_node->ht_node, progs_params);
++	if (err)
++		goto err_pnode;
++
++	prog = bpf_prog_inc(prog);
++	if (IS_ERR(prog)) {
++		err = PTR_ERR(prog);
++		goto err_rht;
++	}
++out:
+ 	kfree(req);
+ 
+ 	return err;
++err_rht:
++	rhashtable_remove_fast(&progs, &prog_node->ht_node, progs_params);
++err_pnode:
++	kfree(prog_node);
++err_xdp:
++	dev_change_xdp(dev, extack, NULL, flags);
++err_prog:
++	bpf_prog_put(prog);
++err_umh:
++	req->cmd = XDP_FLOW_CMD_UNLOAD;
++	transact_umh(req, NULL);
++
++	goto out;
  }
  
-+static int get_table_fd(const struct netdev_info *netdev_info,
-+			const char *table_name)
-+{
-+	char errbuf[ERRBUF_SIZE];
-+	struct bpf_map *map;
-+	int map_fd;
-+	int err;
+ static int xdp_flow_setup_unbind(struct net_device *dev,
+ 				 struct netlink_ext_ack *extack)
+ {
++	struct xdp_flow_prog *prog_node;
++	u32 flags = XDP_FLAGS_DRV_MODE;
+ 	struct mbox_request *req;
+-	int err;
++	int err, ret = 0;
++	u32 prog_id = 0;
 +
-+	map = bpf_object__find_map_by_name(netdev_info->obj, table_name);
-+	if (!map) {
-+		pr_err("BUG: %s map not found.\n", table_name);
++	prog_node = rhashtable_lookup_fast(&progs, &dev, progs_params);
++	if (!prog_node) {
++		pr_warn_once("%s: xdp_flow unbind was requested before bind\n",
++			     dev->name);
 +		return -ENOENT;
 +	}
 +
-+	map_fd = bpf_map__fd(map);
-+	if (map_fd < 0) {
-+		err = libbpf_err(map_fd, errbuf);
-+		pr_err("Invalid map fd: %s\n", errbuf);
-+		return err;
++	err = dev_check_xdp(dev, extack, false, &prog_id, flags);
++	if (!err && prog_id == prog_node->prog->aux->id) {
++		err = dev_change_xdp(dev, extack, NULL, flags);
++		if (err) {
++			pr_warn("Failed to uninstall XDP prog: %d\n", err);
++			ret = err;
++		}
 +	}
 +
-+	return map_fd;
-+}
-+
-+static int get_flow_masks_head_fd(const struct netdev_info *netdev_info)
-+{
-+	return get_table_fd(netdev_info, "flow_masks_head");
-+}
-+
-+static int get_flow_masks_head(int head_fd, int *head)
-+{
-+	int err, zero = 0;
-+
-+	if (bpf_map_lookup_elem(head_fd, &zero, head)) {
-+		err = -errno;
-+		pr_err("Cannot get flow_masks_head: %s\n", strerror(errno));
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
-+static int update_flow_masks_head(int head_fd, int head)
-+{
-+	int err, zero = 0;
-+
-+	if (bpf_map_update_elem(head_fd, &zero, &head, 0)) {
-+		err = -errno;
-+		pr_err("Cannot update flow_masks_head: %s\n", strerror(errno));
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
-+static int get_flow_masks_fd(const struct netdev_info *netdev_info)
-+{
-+	return get_table_fd(netdev_info, "flow_masks");
-+}
-+
-+static int get_flow_tables_fd(const struct netdev_info *netdev_info)
-+{
-+	return get_table_fd(netdev_info, "flow_tables");
-+}
-+
-+static int __flow_table_insert_elem(int flow_table_fd,
-+				    const struct xdp_flow *flow)
-+{
-+	int err = 0;
-+
-+	if (bpf_map_update_elem(flow_table_fd, &flow->key, &flow->actions, 0)) {
-+		err = -errno;
-+		pr_err("Cannot insert flow entry: %s\n",
-+		       strerror(errno));
-+	}
-+
-+	return err;
-+}
-+
-+static void __flow_table_delete_elem(int flow_table_fd,
-+				     const struct xdp_flow *flow)
-+{
-+	bpf_map_delete_elem(flow_table_fd, &flow->key);
-+}
-+
-+static int flow_table_insert_elem(struct netdev_info *netdev_info,
-+				  const struct xdp_flow *flow)
-+{
-+	int masks_fd, head_fd, flow_tables_fd, flow_table_fd, free_slot, head;
-+	struct xdp_flow_mask_entry *entry, *pentry;
-+	int err, cnt, idx, pidx;
-+
-+	masks_fd = get_flow_masks_fd(netdev_info);
-+	if (masks_fd < 0)
-+		return masks_fd;
-+
-+	head_fd = get_flow_masks_head_fd(netdev_info);
-+	if (head_fd < 0)
-+		return head_fd;
-+
-+	err = get_flow_masks_head(head_fd, &head);
++	bpf_prog_put(prog_node->prog);
++	rhashtable_remove_fast(&progs, &prog_node->ht_node, progs_params);
++	kfree(prog_node);
+ 
+ 	req = kzalloc(sizeof(*req), GFP_KERNEL);
+ 	if (!req)
+@@ -153,10 +239,12 @@ static int xdp_flow_setup_unbind(struct net_device *dev,
+ 	req->ifindex = dev->ifindex;
+ 
+ 	err = transact_umh(req, NULL);
 +	if (err)
-+		return err;
-+
-+	flow_tables_fd = get_flow_tables_fd(netdev_info);
-+	if (flow_tables_fd < 0)
-+		return flow_tables_fd;
-+
-+	entry = zalloc(sizeof(*entry));
-+	if (!entry) {
-+		pr_err("Memory allocation for flow_masks entry failed\n");
-+		return -ENOMEM;
-+	}
-+
-+	pentry = zalloc(sizeof(*pentry));
-+	if (!pentry) {
-+		flow_table_fd = -ENOMEM;
-+		pr_err("Memory allocation for flow_masks prev entry failed\n");
-+		goto err_entry;
-+	}
-+
-+	idx = head;
-+	for (cnt = 0; cnt < MAX_FLOW_MASKS; cnt++) {
-+		if (idx == FLOW_MASKS_TAIL)
-+			break;
-+
-+		if (bpf_map_lookup_elem(masks_fd, &idx, entry)) {
-+			err = -errno;
-+			pr_err("Cannot lookup flow_masks: %s\n",
-+			       strerror(errno));
-+			goto err;
-+		}
-+
-+		if (entry->priority == flow->priority &&
-+		    flow_equal(&entry->mask, &flow->mask)) {
-+			__u32 id;
-+
-+			if (bpf_map_lookup_elem(flow_tables_fd, &idx, &id)) {
-+				err = -errno;
-+				pr_err("Cannot lookup flow_tables: %s\n",
-+				       strerror(errno));
-+				goto err;
-+			}
-+
-+			flow_table_fd = bpf_map_get_fd_by_id(id);
-+			if (flow_table_fd < 0) {
-+				err = -errno;
-+				pr_err("Cannot get flow_table fd by id: %s\n",
-+				       strerror(errno));
-+				goto err;
-+			}
-+
-+			err = __flow_table_insert_elem(flow_table_fd, flow);
-+			if (err)
-+				goto out;
-+
-+			entry->count++;
-+			if (bpf_map_update_elem(masks_fd, &idx, entry, 0)) {
-+				err = -errno;
-+				pr_err("Cannot update flow_masks count: %s\n",
-+				       strerror(errno));
-+				__flow_table_delete_elem(flow_table_fd, flow);
-+				goto out;
-+			}
-+
-+			goto out;
-+		}
-+
-+		if (entry->priority > flow->priority)
-+			break;
-+
-+		*pentry = *entry;
-+		pidx = idx;
-+		idx = entry->next;
-+	}
-+
-+	if (unlikely(cnt == MAX_FLOW_MASKS && idx != FLOW_MASKS_TAIL)) {
-+		err = -EINVAL;
-+		pr_err("Cannot lookup flow_masks: Broken flow_masks list\n");
-+		goto out;
-+	}
-+
-+	/* Flow mask was not found. Create a new one */
-+
-+	free_slot = get_flow_masks_free_slot(netdev_info);
-+	if (free_slot < 0) {
-+		err = free_slot;
-+		goto err;
-+	}
-+
-+	entry->mask = flow->mask;
-+	entry->priority = flow->priority;
-+	entry->count = 1;
-+	entry->next = idx;
-+	if (bpf_map_update_elem(masks_fd, &free_slot, entry, 0)) {
-+		err = -errno;
-+		pr_err("Cannot update flow_masks: %s\n", strerror(errno));
-+		goto err;
-+	}
-+
-+	flow_table_fd = bpf_create_map(BPF_MAP_TYPE_HASH,
-+				       sizeof(struct xdp_flow_key),
-+				       sizeof(struct xdp_flow_actions),
-+				       MAX_FLOWS, 0);
-+	if (flow_table_fd < 0) {
-+		err = -errno;
-+		pr_err("map creation for flow_table failed: %s\n",
-+		       strerror(errno));
-+		goto err;
-+	}
-+
-+	err = __flow_table_insert_elem(flow_table_fd, flow);
-+	if (err)
-+		goto out;
-+
-+	if (bpf_map_update_elem(flow_tables_fd, &free_slot, &flow_table_fd, 0)) {
-+		err = -errno;
-+		pr_err("Failed to insert flow_table into flow_tables: %s\n",
-+		       strerror(errno));
-+		goto out;
-+	}
-+
-+	if (cnt == 0) {
-+		err = update_flow_masks_head(head_fd, free_slot);
-+		if (err)
-+			goto err_flow_table;
-+	} else {
-+		pentry->next = free_slot;
-+		/* This effectively only updates one byte of entry->next */
-+		if (bpf_map_update_elem(masks_fd, &pidx, pentry, 0)) {
-+			err = -errno;
-+			pr_err("Cannot update flow_masks prev entry: %s\n",
-+			       strerror(errno));
-+			goto err_flow_table;
-+		}
-+	}
-+	delete_flow_masks_free_slot(netdev_info, free_slot);
-+out:
-+	close(flow_table_fd);
-+err:
-+	free(pentry);
-+err_entry:
-+	free(entry);
-+
-+	return err;
-+
-+err_flow_table:
-+	bpf_map_delete_elem(flow_tables_fd, &free_slot);
-+
-+	goto out;
-+}
-+
-+static int flow_table_delete_elem(struct netdev_info *netdev_info,
-+				  const struct xdp_flow *flow)
-+{
-+	int masks_fd, head_fd, flow_tables_fd, flow_table_fd, head;
-+	struct xdp_flow_mask_entry *entry, *pentry;
-+	int err, cnt, idx, pidx;
-+	__u32 id;
-+
-+	masks_fd = get_flow_masks_fd(netdev_info);
-+	if (masks_fd < 0)
-+		return masks_fd;
-+
-+	head_fd = get_flow_masks_head_fd(netdev_info);
-+	if (head_fd < 0)
-+		return head_fd;
-+
-+	err = get_flow_masks_head(head_fd, &head);
-+	if (err)
-+		return err;
-+
-+	flow_tables_fd = get_flow_tables_fd(netdev_info);
-+	if (flow_tables_fd < 0)
-+		return flow_tables_fd;
-+
-+	entry = zalloc(sizeof(*entry));
-+	if (!entry) {
-+		pr_err("Memory allocation for flow_masks entry failed\n");
-+		return -ENOMEM;
-+	}
-+
-+	pentry = zalloc(sizeof(*pentry));
-+	if (!pentry) {
-+		err = -ENOMEM;
-+		pr_err("Memory allocation for flow_masks prev entry failed\n");
-+		goto err_pentry;
-+	}
-+
-+	idx = head;
-+	for (cnt = 0; cnt < MAX_FLOW_MASKS; cnt++) {
-+		if (idx == FLOW_MASKS_TAIL) {
-+			err = -ENOENT;
-+			pr_err("Cannot lookup flow_masks: %s\n",
-+			       strerror(-err));
-+			goto out;
-+		}
-+
-+		if (bpf_map_lookup_elem(masks_fd, &idx, entry)) {
-+			err = -errno;
-+			pr_err("Cannot lookup flow_masks: %s\n",
-+			       strerror(errno));
-+			goto out;
-+		}
-+
-+		if (entry->priority > flow->priority) {
-+			err = -ENOENT;
-+			pr_err("Cannot lookup flow_masks: %s\n",
-+			       strerror(-err));
-+			goto out;
-+		}
-+
-+		if (entry->priority == flow->priority &&
-+		    flow_equal(&entry->mask, &flow->mask))
-+			break;
-+
-+		*pentry = *entry;
-+		pidx = idx;
-+		idx = entry->next;
-+	}
-+
-+	if (unlikely(cnt == MAX_FLOW_MASKS)) {
-+		err = -ENOENT;
-+		pr_err("Cannot lookup flow_masks: Broken flow_masks list\n");
-+		goto out;
-+	}
-+
-+	if (bpf_map_lookup_elem(flow_tables_fd, &idx, &id)) {
-+		err = -errno;
-+		pr_err("Cannot lookup flow_tables: %s\n",
-+		       strerror(errno));
-+		goto out;
-+	}
-+
-+	flow_table_fd = bpf_map_get_fd_by_id(id);
-+	if (flow_table_fd < 0) {
-+		err = -errno;
-+		pr_err("Cannot get flow_table fd by id: %s\n",
-+		       strerror(errno));
-+		goto out;
-+	}
-+
-+	__flow_table_delete_elem(flow_table_fd, flow);
-+	close(flow_table_fd);
-+
-+	if (--entry->count > 0) {
-+		if (bpf_map_update_elem(masks_fd, &idx, entry, 0)) {
-+			err = -errno;
-+			pr_err("Cannot update flow_masks count: %s\n",
-+			       strerror(errno));
-+		}
-+
-+		goto out;
-+	}
-+
-+	if (unlikely(entry->count < 0)) {
-+		pr_warn("flow_masks has negative count: %d\n",
-+			entry->count);
-+	}
-+
-+	if (cnt == 0) {
-+		err = update_flow_masks_head(head_fd, entry->next);
-+		if (err)
-+			goto out;
-+	} else {
-+		pentry->next = entry->next;
-+		/* This effectively only updates one byte of entry->next */
-+		if (bpf_map_update_elem(masks_fd, &pidx, pentry, 0)) {
-+			err = -errno;
-+			pr_err("Cannot update flow_masks prev entry: %s\n",
-+			       strerror(errno));
-+			goto out;
-+		}
-+	}
-+
-+	bpf_map_delete_elem(flow_tables_fd, &idx);
-+	err = add_flow_masks_free_slot(netdev_info, idx);
-+	if (err)
-+		pr_err("Cannot add flow_masks free slot: %s\n", strerror(-err));
-+out:
-+	free(pentry);
-+err_pentry:
-+	free(entry);
-+
-+	return err;
-+}
-+
- static int handle_replace(struct mbox_request *req)
- {
--	return -EOPNOTSUPP;
-+	struct netdev_info *netdev_info;
-+	int err;
-+
-+	netdev_info = get_netdev_info(req);
-+	if (IS_ERR(netdev_info))
-+		return PTR_ERR(netdev_info);
-+
-+	err = flow_table_insert_elem(netdev_info, &req->flow);
-+	if (err)
-+		return err;
-+
-+	return 0;
++		ret = err;
+ 
+ 	kfree(req);
+ 
+-	return err;
++	return ret;
  }
  
- static int handle_delete(const struct mbox_request *req)
+ static int xdp_flow_setup(struct net_device *dev, bool do_bind,
+@@ -214,7 +302,11 @@ static int start_umh(void)
+ 
+ static int __init load_umh(void)
  {
--	return -EOPNOTSUPP;
-+	struct netdev_info *netdev_info;
+-	int err = 0;
 +	int err;
 +
-+	netdev_info = get_netdev_info(req);
-+	if (IS_ERR(netdev_info))
-+		return PTR_ERR(netdev_info);
-+
-+	err = flow_table_delete_elem(netdev_info, &req->flow);
++	err = rhashtable_init(&progs, &progs_params);
 +	if (err)
 +		return err;
+ 
+ 	mutex_lock(&xdp_flow_ops.lock);
+ 	if (!xdp_flow_ops.stop) {
+@@ -230,8 +322,12 @@ static int __init load_umh(void)
+ 	xdp_flow_ops.setup = &xdp_flow_setup;
+ 	xdp_flow_ops.start = &start_umh;
+ 	xdp_flow_ops.module = THIS_MODULE;
 +
++	mutex_unlock(&xdp_flow_ops.lock);
 +	return 0;
+ err:
+ 	mutex_unlock(&xdp_flow_ops.lock);
++	rhashtable_destroy(&progs);
+ 	return err;
  }
  
- static void loop(void)
+@@ -244,6 +340,7 @@ static void __exit fini_umh(void)
+ 	xdp_flow_ops.setup = NULL;
+ 	xdp_flow_ops.setup_cb = NULL;
+ 	mutex_unlock(&xdp_flow_ops.lock);
++	rhashtable_destroy(&progs);
+ }
+ module_init(load_umh);
+ module_exit(fini_umh);
 -- 
 1.8.3.1
 
