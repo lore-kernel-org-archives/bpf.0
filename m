@@ -2,44 +2,45 @@ Return-Path: <SRS0=mFv6=YO=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 689DDCA9EAB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1A11CA9EAC
 	for <bpf@archiver.kernel.org>; Mon, 21 Oct 2019 03:39:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3E6A121897
+	by mail.kernel.org (Postfix) with ESMTP id B8B3E21897
 	for <bpf@archiver.kernel.org>; Mon, 21 Oct 2019 03:39:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="peWcX9d/"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="fgg1ZMuw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726799AbfJUDjO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 20 Oct 2019 23:39:14 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:2380 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726819AbfJUDjN (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 20 Oct 2019 23:39:13 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9L3Oxdc011093
+        id S1726977AbfJUDjQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 20 Oct 2019 23:39:16 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:60992 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726835AbfJUDjO (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 20 Oct 2019 23:39:14 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id x9L3SPxr011999
         for <bpf@vger.kernel.org>; Sun, 20 Oct 2019 20:39:12 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=VNvaTWXthWJrPwZd4kzqp4ngENTU2VIBfNNc7vvRgoI=;
- b=peWcX9d/p6E19+ObUjzYzVQjmGpX7Jdq87EbIDvBNXn8cHKwZ9b8AeF/rPOFhBnGS6uQ
- QZiTWOJ6atcJK7pq4TIGb0dNlOK33e1mEzkjVFRjHt8p4jwykRjOGCliPGu4C2uh0yJs
- PZZyV9WPR39Kpmy9+gLeStQlWq3o0JYYCPI= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2vr00mvwn2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 20 Oct 2019 20:39:11 -0700
-Received: from 2401:db00:12:909f:face:0:3:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::125) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Sun, 20 Oct 2019 20:39:10 -0700
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=3M+7s9lAERjR8PXfvnS9rd+0pqa1+n9UOLh9HznLXaQ=;
+ b=fgg1ZMuw2tOCkcFoOyqix5k3Y4ItC6zZ8s5rOSaFK1Y7S1/aSbNZkw/JX3Y8r4AOL1k5
+ ouHVYsKEhg7f/ACVHZqol37hdrERP+Pzhcz0qVqbNdL7wQmrYPZdRpUFlkXcIiKgCAmH
+ lIb9d2Wpyt3WOOdqaF0SoGgJLxiVqToE8uo= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net with ESMTP id 2vqx5nn62f-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Sun, 20 Oct 2019 20:39:12 -0700
+Received: from 2401:db00:12:9028:face:0:29:0 (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Sun, 20 Oct 2019 20:39:11 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 05FF3861976; Sun, 20 Oct 2019 20:39:03 -0700 (PDT)
+        id 011FE861976; Sun, 20 Oct 2019 20:39:09 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
@@ -48,59 +49,97 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH bpf-next 0/7] Auto-guess program type on bpf_object__open
-Date:   Sun, 20 Oct 2019 20:38:55 -0700
-Message-ID: <20191021033902.3856966-1-andriin@fb.com>
+Subject: [PATCH bpf-next 2/7] libbpf: add bpf_program__get_{type, expected_attach_type) APIs
+Date:   Sun, 20 Oct 2019 20:38:57 -0700
+Message-ID: <20191021033902.3856966-3-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191021033902.3856966-1-andriin@fb.com>
+References: <20191021033902.3856966-1-andriin@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
  definitions=2019-10-21_01:2019-10-18,2019-10-21 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 phishscore=0
- clxscore=1015 priorityscore=1501 bulkscore=0 suspectscore=8
- mlxlogscore=924 lowpriorityscore=0 adultscore=0 impostorscore=0
- malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1910210029
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
+ phishscore=0 mlxscore=0 impostorscore=0 malwarescore=0 spamscore=0
+ lowpriorityscore=0 adultscore=0 suspectscore=8 mlxlogscore=999
+ priorityscore=1501 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1908290000 definitions=main-1910210029
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set's main goal is to teach bpf_object__open() (and its variants)
-to automatically derive BPF program type/expected attach type from section
-names, similarly to how bpf_prog_load() was doing it. This significantly
-improves user experience by eliminating yet another
-obvious-only-in-the-hindsight surprise, when using libbpf APIs.
+There are bpf_program__set_type() and
+bpf_program__set_expected_attach_type(), but no corresponding getters,
+which seems rather incomplete. Fix this.
 
-There are a bunch of auxiliary clean-ups and improvements. E.g.,
-bpf_program__get_type() and bpf_program__get_expected_attach_type() are added
-for completeness and symmetry with corresponding setter APIs. Some clean up
-and fixes in selftests/bpf are done as well.
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/lib/bpf/libbpf.c   | 11 +++++++++++
+ tools/lib/bpf/libbpf.h   |  5 +++++
+ tools/lib/bpf/libbpf.map |  2 ++
+ 3 files changed, 18 insertions(+)
 
-Andrii Nakryiko (7):
-  tools: sync if_link.h
-  libbpf: add bpf_program__get_{type, expected_attach_type) APIs
-  libbpf: add uprobe/uretprobe and tp/raw_tp section suffixes
-  libbpf: teach bpf_object__open to guess program types
-  selftests/bpf: make a copy of subtest name
-  selftests/bpf: make reference_tracking test use subtests
-  selftest/bpf: get rid of a bunch of explicit BPF program type setting
-
- tools/include/uapi/linux/if_link.h            |  2 +
- tools/lib/bpf/libbpf.c                        | 80 ++++++++++++-------
- tools/lib/bpf/libbpf.h                        |  5 ++
- tools/lib/bpf/libbpf.map                      |  2 +
- .../selftests/bpf/prog_tests/attach_probe.c   |  5 --
- .../selftests/bpf/prog_tests/core_reloc.c     |  1 -
- .../selftests/bpf/prog_tests/rdonly_maps.c    |  4 -
- .../bpf/prog_tests/reference_tracking.c       |  3 +-
- .../selftests/bpf/progs/test_sk_lookup_kern.c | 18 ++---
- tools/testing/selftests/bpf/test_maps.c       |  4 -
- tools/testing/selftests/bpf/test_progs.c      | 17 ++--
- 11 files changed, 83 insertions(+), 58 deletions(-)
-
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index cccfd9355134..39163e68dc1e 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -4468,6 +4468,11 @@ int bpf_program__nth_fd(const struct bpf_program *prog, int n)
+ 	return fd;
+ }
+ 
++enum bpf_prog_type bpf_program__get_type(struct bpf_program *prog)
++{
++	return prog->type;
++}
++
+ void bpf_program__set_type(struct bpf_program *prog, enum bpf_prog_type type)
+ {
+ 	prog->type = type;
+@@ -4502,6 +4507,12 @@ BPF_PROG_TYPE_FNS(raw_tracepoint, BPF_PROG_TYPE_RAW_TRACEPOINT);
+ BPF_PROG_TYPE_FNS(xdp, BPF_PROG_TYPE_XDP);
+ BPF_PROG_TYPE_FNS(perf_event, BPF_PROG_TYPE_PERF_EVENT);
+ 
++enum bpf_attach_type
++bpf_program__get_expected_attach_type(struct bpf_program *prog)
++{
++	return prog->expected_attach_type;
++}
++
+ void bpf_program__set_expected_attach_type(struct bpf_program *prog,
+ 					   enum bpf_attach_type type)
+ {
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 53ce212764e0..0fdf086beba7 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -302,8 +302,13 @@ LIBBPF_API int bpf_program__set_sched_cls(struct bpf_program *prog);
+ LIBBPF_API int bpf_program__set_sched_act(struct bpf_program *prog);
+ LIBBPF_API int bpf_program__set_xdp(struct bpf_program *prog);
+ LIBBPF_API int bpf_program__set_perf_event(struct bpf_program *prog);
++
++LIBBPF_API enum bpf_prog_type bpf_program__get_type(struct bpf_program *prog);
+ LIBBPF_API void bpf_program__set_type(struct bpf_program *prog,
+ 				      enum bpf_prog_type type);
++
++LIBBPF_API enum bpf_attach_type
++bpf_program__get_expected_attach_type(struct bpf_program *prog);
+ LIBBPF_API void
+ bpf_program__set_expected_attach_type(struct bpf_program *prog,
+ 				      enum bpf_attach_type type);
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 4d241fd92dd4..d1473ea4d7a5 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -195,4 +195,6 @@ LIBBPF_0.0.6 {
+ 	global:
+ 		bpf_object__open_file;
+ 		bpf_object__open_mem;
++		bpf_program__get_expected_attach_type;
++		bpf_program__get_type;
+ } LIBBPF_0.0.5;
 -- 
 2.17.1
 
