@@ -7,50 +7,51 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12998CA9EAC
-	for <bpf@archiver.kernel.org>; Mon, 21 Oct 2019 03:39:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EFB4CA9EAF
+	for <bpf@archiver.kernel.org>; Mon, 21 Oct 2019 03:39:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D406921897
-	for <bpf@archiver.kernel.org>; Mon, 21 Oct 2019 03:39:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 136F421897
+	for <bpf@archiver.kernel.org>; Mon, 21 Oct 2019 03:39:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="MNqeKg+t"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="MTbnsoRl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727034AbfJUDjU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 20 Oct 2019 23:39:20 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:36548 "EHLO
+        id S1727020AbfJUDjX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 20 Oct 2019 23:39:23 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:49980 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727023AbfJUDjS (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 20 Oct 2019 23:39:18 -0400
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9L3T4fq030520
-        for <bpf@vger.kernel.org>; Sun, 20 Oct 2019 20:39:18 -0700
+        by vger.kernel.org with ESMTP id S1727047AbfJUDjW (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 20 Oct 2019 23:39:22 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9L3PNku022581
+        for <bpf@vger.kernel.org>; Sun, 20 Oct 2019 20:39:21 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=3AlcYDhKSlJzJACnynprN6D5nfhI9GTdS/lbQcdT/kY=;
- b=MNqeKg+t5eWebl/GaiStJweVlZqETX/sOOwp2JmACtwkkqevz30SqvA0zwUh74A1XHif
- K7AMp9ZUCNrfTs4ZAKXVSGaZBPbgCYt8VdeuWiC74m6nPIQ3suCiTQqPxqD3syoxhdjq
- 8nf5rHjy109D6tOiJvaedvnaxXh1+1vYv+A= 
+ content-type; s=facebook; bh=5y/va9/msMAijutnWbVeSAvy4IUt4s+rCi40uoYAEII=;
+ b=MTbnsoRlqRrFc0bRh2/SicUPnp81Cl18G9BFI2ULzacOTZeh+MNPRpaZaeCR5FWT4dFj
+ oofswPcuMCgmcQY1Umycb3BFeJRsUtCk6a09VfvcZUDwdyb4l1ntnaICYI2S7R4lD+XX
+ GSPqz9OX3s4FP2Unh+R2vviK/OM9zXXgzuw= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2vrjt2afmf-1
+        by mx0a-00082601.pphosted.com with ESMTP id 2vrj8n2h1b-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 20 Oct 2019 20:39:18 -0700
+        for <bpf@vger.kernel.org>; Sun, 20 Oct 2019 20:39:21 -0700
 Received: from 2401:db00:12:9028:face:0:29:0 (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Sun, 20 Oct 2019 20:39:16 -0700
+ 15.1.1713.5; Sun, 20 Oct 2019 20:39:20 -0700
 Received: by dev101.prn2.facebook.com (Postfix, from userid 137359)
-        id 12B1B861976; Sun, 20 Oct 2019 20:39:14 -0700 (PDT)
+        id 2703B861976; Sun, 20 Oct 2019 20:39:18 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: dev101.prn2.facebook.com
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
+        Andrii Nakryiko <andriin@fb.com>,
+        Stanislav Fomichev <sdf@google.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH bpf-next 4/7] libbpf: teach bpf_object__open to guess program types
-Date:   Sun, 20 Oct 2019 20:38:59 -0700
-Message-ID: <20191021033902.3856966-5-andriin@fb.com>
+Subject: [PATCH bpf-next 6/7] selftests/bpf: make reference_tracking test use subtests
+Date:   Sun, 20 Oct 2019 20:39:01 -0700
+Message-ID: <20191021033902.3856966-7-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191021033902.3856966-1-andriin@fb.com>
 References: <20191021033902.3856966-1-andriin@fb.com>
@@ -59,155 +60,129 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
  definitions=2019-10-21_01:2019-10-18,2019-10-21 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- phishscore=0 adultscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0
- bulkscore=0 clxscore=1015 impostorscore=0 spamscore=0 priorityscore=1501
- suspectscore=25 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1910210029
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=25
+ mlxlogscore=693 priorityscore=1501 impostorscore=0 mlxscore=0
+ lowpriorityscore=0 adultscore=0 clxscore=1015 bulkscore=0 spamscore=0
+ phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1908290000 definitions=main-1910210029
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Teach bpf_object__open how to guess program type and expected attach
-type from section names, similar to what bpf_prog_load() does. This
-seems like a really useful features and an oversight to not have this
-done during bpf_object_open(). To preserver backwards compatible
-behavior of bpf_prog_load(), its attr->prog_type is treated as an
-override of bpf_object__open() decisions, if attr->prog_type is not
-UNSPECIFIED.
+reference_tracking is actually a set of 9 sub-tests. Make it explicitly so.
 
-There is a slight difference in behavior for bpf_prog_load().
-Previously, if bpf_prog_load() was loading BPF object with more than one
-program, first program's guessed program type and expected attach type
-would determine corresponding attributes of all the subsequent program
-types, even if their sections names suggest otherwise. That seems like
-a rather dubious behavior and with this change it will behave more
-sanely: each program's type is determined individually, unless they are
-forced to uniformity through attr->prog_type.
+Also, add explicit "classifier/" prefix to BPF program section names to
+let libbpf correctly guess program type. Thus, also remove explicit
+bpf_prog__set_type() call.
 
+Cc: Stanislav Fomichev <sdf@google.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/libbpf.c | 65 +++++++++++++++++++++++-------------------
- 1 file changed, 36 insertions(+), 29 deletions(-)
+ .../bpf/prog_tests/reference_tracking.c        |  3 ++-
+ .../selftests/bpf/progs/test_sk_lookup_kern.c  | 18 +++++++++---------
+ 2 files changed, 11 insertions(+), 10 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index bf0c94fe74ca..51c867c85bf4 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -3616,6 +3616,7 @@ static struct bpf_object *
- __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
- 		   struct bpf_object_open_opts *opts)
- {
-+	struct bpf_program *prog;
- 	struct bpf_object *obj;
- 	const char *obj_name;
- 	char tmp_name[64];
-@@ -3655,8 +3656,24 @@ __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
- 	CHECK_ERR(bpf_object__probe_caps(obj), err, out);
- 	CHECK_ERR(bpf_object__elf_collect(obj, relaxed_maps), err, out);
- 	CHECK_ERR(bpf_object__collect_reloc(obj), err, out);
--
- 	bpf_object__elf_finish(obj);
-+
-+	bpf_object__for_each_program(prog, obj) {
-+		enum bpf_prog_type prog_type;
-+		enum bpf_attach_type attach_type;
-+
-+		err = libbpf_prog_type_by_name(prog->section_name, &prog_type,
-+					       &attach_type);
-+		if (err == -ESRCH)
-+			/* couldn't guess, but user might manually specify */
+diff --git a/tools/testing/selftests/bpf/prog_tests/reference_tracking.c b/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
+index 86cee820d4d3..4493ba277bd7 100644
+--- a/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
++++ b/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
+@@ -31,7 +31,8 @@ void test_reference_tracking(void)
+ 		if (strstr(title, ".text") != NULL)
+ 			continue;
+ 
+-		bpf_program__set_type(prog, BPF_PROG_TYPE_SCHED_CLS);
++		if (!test__start_subtest(title))
 +			continue;
-+		if (err)
-+			goto out;
-+
-+		bpf_program__set_type(prog, prog_type);
-+		bpf_program__set_expected_attach_type(prog, attach_type);
-+	}
-+
- 	return obj;
- out:
- 	bpf_object__close(obj);
-@@ -4696,7 +4713,7 @@ int libbpf_prog_type_by_name(const char *name, enum bpf_prog_type *prog_type,
- 		free(type_names);
- 	}
  
--	return -EINVAL;
-+	return -ESRCH;
+ 		/* Expect verifier failure if test name has 'fail' */
+ 		if (strstr(title, "fail") != NULL) {
+diff --git a/tools/testing/selftests/bpf/progs/test_sk_lookup_kern.c b/tools/testing/selftests/bpf/progs/test_sk_lookup_kern.c
+index e21cd736c196..cb49ccb707d1 100644
+--- a/tools/testing/selftests/bpf/progs/test_sk_lookup_kern.c
++++ b/tools/testing/selftests/bpf/progs/test_sk_lookup_kern.c
+@@ -53,7 +53,7 @@ static struct bpf_sock_tuple *get_tuple(void *data, __u64 nh_off,
+ 	return result;
  }
  
- int libbpf_attach_type_by_name(const char *name,
-@@ -4726,15 +4743,6 @@ int libbpf_attach_type_by_name(const char *name,
- 	return -EINVAL;
+-SEC("sk_lookup_success")
++SEC("classifier/sk_lookup_success")
+ int bpf_sk_lookup_test0(struct __sk_buff *skb)
+ {
+ 	void *data_end = (void *)(long)skb->data_end;
+@@ -78,7 +78,7 @@ int bpf_sk_lookup_test0(struct __sk_buff *skb)
+ 	return sk ? TC_ACT_OK : TC_ACT_UNSPEC;
  }
  
--static int
--bpf_program__identify_section(struct bpf_program *prog,
--			      enum bpf_prog_type *prog_type,
--			      enum bpf_attach_type *expected_attach_type)
--{
--	return libbpf_prog_type_by_name(prog->section_name, prog_type,
--					expected_attach_type);
--}
--
- int bpf_map__fd(const struct bpf_map *map)
+-SEC("sk_lookup_success_simple")
++SEC("classifier/sk_lookup_success_simple")
+ int bpf_sk_lookup_test1(struct __sk_buff *skb)
  {
- 	return map ? map->fd : -EINVAL;
-@@ -4902,8 +4910,6 @@ int bpf_prog_load_xattr(const struct bpf_prog_load_attr *attr,
+ 	struct bpf_sock_tuple tuple = {};
+@@ -90,7 +90,7 @@ int bpf_sk_lookup_test1(struct __sk_buff *skb)
+ 	return 0;
+ }
+ 
+-SEC("fail_use_after_free")
++SEC("classifier/fail_use_after_free")
+ int bpf_sk_lookup_uaf(struct __sk_buff *skb)
  {
- 	struct bpf_object_open_attr open_attr = {};
- 	struct bpf_program *prog, *first_prog = NULL;
--	enum bpf_attach_type expected_attach_type;
--	enum bpf_prog_type prog_type;
- 	struct bpf_object *obj;
- 	struct bpf_map *map;
- 	int err;
-@@ -4921,26 +4927,27 @@ int bpf_prog_load_xattr(const struct bpf_prog_load_attr *attr,
- 		return -ENOENT;
+ 	struct bpf_sock_tuple tuple = {};
+@@ -105,7 +105,7 @@ int bpf_sk_lookup_uaf(struct __sk_buff *skb)
+ 	return family;
+ }
  
- 	bpf_object__for_each_program(prog, obj) {
-+		enum bpf_attach_type attach_type = attr->expected_attach_type;
- 		/*
--		 * If type is not specified, try to guess it based on
--		 * section name.
-+		 * to preserve backwards compatibility, bpf_prog_load treats
-+		 * attr->prog_type, if specified, as an override to whatever
-+		 * bpf_object__open guessed
- 		 */
--		prog_type = attr->prog_type;
--		prog->prog_ifindex = attr->ifindex;
--		expected_attach_type = attr->expected_attach_type;
--		if (prog_type == BPF_PROG_TYPE_UNSPEC) {
--			err = bpf_program__identify_section(prog, &prog_type,
--							    &expected_attach_type);
--			if (err < 0) {
--				bpf_object__close(obj);
--				return -EINVAL;
--			}
-+		if (attr->prog_type != BPF_PROG_TYPE_UNSPEC) {
-+			bpf_program__set_type(prog, attr->prog_type);
-+			bpf_program__set_expected_attach_type(prog,
-+							      attach_type);
-+		}
-+		if (bpf_program__get_type(prog) == BPF_PROG_TYPE_UNSPEC) {
-+			/*
-+			 * we haven't guessed from section name and user
-+			 * didn't provide a fallback type, too bad...
-+			 */
-+			bpf_object__close(obj);
-+			return -EINVAL;
- 		}
+-SEC("fail_modify_sk_pointer")
++SEC("classifier/fail_modify_sk_pointer")
+ int bpf_sk_lookup_modptr(struct __sk_buff *skb)
+ {
+ 	struct bpf_sock_tuple tuple = {};
+@@ -120,7 +120,7 @@ int bpf_sk_lookup_modptr(struct __sk_buff *skb)
+ 	return 0;
+ }
  
--		bpf_program__set_type(prog, prog_type);
--		bpf_program__set_expected_attach_type(prog,
--						      expected_attach_type);
--
-+		prog->prog_ifindex = attr->ifindex;
- 		prog->log_level = attr->log_level;
- 		prog->prog_flags = attr->prog_flags;
- 		if (!first_prog)
+-SEC("fail_modify_sk_or_null_pointer")
++SEC("classifier/fail_modify_sk_or_null_pointer")
+ int bpf_sk_lookup_modptr_or_null(struct __sk_buff *skb)
+ {
+ 	struct bpf_sock_tuple tuple = {};
+@@ -134,7 +134,7 @@ int bpf_sk_lookup_modptr_or_null(struct __sk_buff *skb)
+ 	return 0;
+ }
+ 
+-SEC("fail_no_release")
++SEC("classifier/fail_no_release")
+ int bpf_sk_lookup_test2(struct __sk_buff *skb)
+ {
+ 	struct bpf_sock_tuple tuple = {};
+@@ -143,7 +143,7 @@ int bpf_sk_lookup_test2(struct __sk_buff *skb)
+ 	return 0;
+ }
+ 
+-SEC("fail_release_twice")
++SEC("classifier/fail_release_twice")
+ int bpf_sk_lookup_test3(struct __sk_buff *skb)
+ {
+ 	struct bpf_sock_tuple tuple = {};
+@@ -155,7 +155,7 @@ int bpf_sk_lookup_test3(struct __sk_buff *skb)
+ 	return 0;
+ }
+ 
+-SEC("fail_release_unchecked")
++SEC("classifier/fail_release_unchecked")
+ int bpf_sk_lookup_test4(struct __sk_buff *skb)
+ {
+ 	struct bpf_sock_tuple tuple = {};
+@@ -172,7 +172,7 @@ void lookup_no_release(struct __sk_buff *skb)
+ 	bpf_sk_lookup_tcp(skb, &tuple, sizeof(tuple), BPF_F_CURRENT_NETNS, 0);
+ }
+ 
+-SEC("fail_no_release_subcall")
++SEC("classifier/fail_no_release_subcall")
+ int bpf_sk_lookup_test5(struct __sk_buff *skb)
+ {
+ 	lookup_no_release(skb);
 -- 
 2.17.1
 
