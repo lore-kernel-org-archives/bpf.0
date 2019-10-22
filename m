@@ -2,66 +2,47 @@ Return-Path: <SRS0=cR4a=YP=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D9E4CA9EA0
-	for <bpf@archiver.kernel.org>; Tue, 22 Oct 2019 11:37:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15044CA9EB9
+	for <bpf@archiver.kernel.org>; Tue, 22 Oct 2019 12:59:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 11002207FC
-	for <bpf@archiver.kernel.org>; Tue, 22 Oct 2019 11:37:46 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="lPDEhgGn"
+	by mail.kernel.org (Postfix) with ESMTP id E90502075A
+	for <bpf@archiver.kernel.org>; Tue, 22 Oct 2019 12:59:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731936AbfJVLhj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 22 Oct 2019 07:37:39 -0400
-Received: from mail-lf1-f52.google.com ([209.85.167.52]:41563 "EHLO
-        mail-lf1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387474AbfJVLhh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 22 Oct 2019 07:37:37 -0400
-Received: by mail-lf1-f52.google.com with SMTP id x4so6510169lfn.8
-        for <bpf@vger.kernel.org>; Tue, 22 Oct 2019 04:37:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=xo1fyKX+7Sd9n19IL2v+0Ngzo9bK986LfFjLpFdWIA4=;
-        b=lPDEhgGnKjHK3JW9+lHXUDMa6GUyisSi0HMCl/m8GZdiVQWJDQqB4hFGtdlwF0kDwI
-         DhywtEV+1sRCbeIK7pfjc2d+lWqFLCb0U5WOtAIBGrsYuF2BQXOxaGIaYzPItZN03vJV
-         a+AtyMHSciua3aLgwwRec2zSrq/mTFve4GJT8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xo1fyKX+7Sd9n19IL2v+0Ngzo9bK986LfFjLpFdWIA4=;
-        b=W15V8rNJvQuFj4pXWPZIiBUHrkpxHRaSpIR29hl3MXMsQuJC5CjGpbrIALBxTbTouw
-         AkQwmw7zwiU0KCPR8EYNljSZzYhWZpOMaqwYBcJ3bwNQm+ZSCde+9wO4zDSyAZgV//7U
-         Zhv93X6KgQaa3ozicX0nBRotYLpi4awj+OjV9ZopPZT8b97oZt7taIGd6YC3ZQSBDf8h
-         zauSQiowhT35p8pzFlZBbKPfPOWjvnOYATtopr+wewjxTa02+cVX9jKDNV1MIfxGwbIy
-         TWdO+QnjNFFF/MANawmQxw0UZiWc6kQ/+B3A8iqHEXRGHTU6B5DfW+20FPB9SiBnfm/5
-         3a4A==
-X-Gm-Message-State: APjAAAVFoL+VlaoXWNZ3FhfLOhln8GnTI7gkCf1qhSCojZGa+iRto1Qo
-        BOWPboxgxixP/6TmMX8RHBXpBeNKlcJz1Q==
-X-Google-Smtp-Source: APXvYqxf5RtsP3+8l0+YbiaCq2NOPMWDoMe5AdFeLHwy2MXfNM8EU0LhQhGp2+Ugml2geRnRvpcsMQ==
-X-Received: by 2002:ac2:5108:: with SMTP id q8mr14029087lfb.150.1571744254892;
-        Tue, 22 Oct 2019 04:37:34 -0700 (PDT)
-Received: from cloudflare.com ([176.221.114.230])
-        by smtp.gmail.com with ESMTPSA id i190sm14857960lfi.45.2019.10.22.04.37.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Oct 2019 04:37:34 -0700 (PDT)
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     bpf@vger.kernel.org
-Cc:     John Fastabend <john.fastabend@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>, netdev@vger.kernel.org,
-        kernel-team@cloudflare.com
-Subject: [RFC bpf-next 2/5] bpf, sockmap: Allow inserting listening TCP sockets into SOCKMAP
-Date:   Tue, 22 Oct 2019 13:37:27 +0200
-Message-Id: <20191022113730.29303-3-jakub@cloudflare.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191022113730.29303-1-jakub@cloudflare.com>
-References: <20191022113730.29303-1-jakub@cloudflare.com>
+        id S1731281AbfJVM75 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 22 Oct 2019 08:59:57 -0400
+Received: from imap1.codethink.co.uk ([176.9.8.82]:55767 "EHLO
+        imap1.codethink.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389138AbfJVM7x (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 22 Oct 2019 08:59:53 -0400
+Received: from [167.98.27.226] (helo=rainbowdash.codethink.co.uk)
+        by imap1.codethink.co.uk with esmtpsa (Exim 4.84_2 #1 (Debian))
+        id 1iMtl1-0002WG-UN; Tue, 22 Oct 2019 13:59:28 +0100
+Received: from ben by rainbowdash.codethink.co.uk with local (Exim 4.92.3)
+        (envelope-from <ben@rainbowdash.codethink.co.uk>)
+        id 1iMtl1-0002kH-6c; Tue, 22 Oct 2019 13:59:27 +0100
+From:   "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>
+To:     linux-kernel@lists.codethink.co.uk
+Cc:     "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] xdp: fix type of string pointer in __XDP_ACT_SYM_TAB
+Date:   Tue, 22 Oct 2019 13:59:25 +0100
+Message-Id: <20191022125925.10508-1-ben.dooks@codethink.co.uk>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -69,44 +50,57 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In order for SOCKMAP type to become a generic collection for storing socket
-references we need to loosen the checks in update callback.
+The table entry in __XDP_ACT_SYM_TAB for the last item is set
+to { -1, 0 } where it should be { -1, NULL } as the second item
+is a pointer to a string.
 
-Currently SOCKMAP requires the TCP socket to be in established state, which
-prevents us from using it to keep references to listening sockets.
+Fixes the following sparse warnings:
 
-Change the update pre-checks so that it is sufficient for socket to be in a
-hash table, i.e. have a local address/port, to be inserted.
+./include/trace/events/xdp.h:28:1: warning: Using plain integer as NULL pointer
+./include/trace/events/xdp.h:53:1: warning: Using plain integer as NULL pointer
+./include/trace/events/xdp.h:82:1: warning: Using plain integer as NULL pointer
+./include/trace/events/xdp.h:140:1: warning: Using plain integer as NULL pointer
+./include/trace/events/xdp.h:155:1: warning: Using plain integer as NULL pointer
+./include/trace/events/xdp.h:190:1: warning: Using plain integer as NULL pointer
+./include/trace/events/xdp.h:225:1: warning: Using plain integer as NULL pointer
+./include/trace/events/xdp.h:260:1: warning: Using plain integer as NULL pointer
+./include/trace/events/xdp.h:318:1: warning: Using plain integer as NULL pointer
+./include/trace/events/xdp.h:356:1: warning: Using plain integer as NULL pointer
+./include/trace/events/xdp.h:390:1: warning: Using plain integer as NULL pointer
 
-Return -EINVAL if the condition is not met to be consistent with
-REUSEPORT_SOCKARRY map type.
-
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+Signed-off-by: Ben Dooks (Codethink) <ben.dooks@codethink.co.uk>
 ---
- net/core/sock_map.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <jakub.kicinski@netronome.com>
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ include/trace/events/xdp.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index facacc296e6c..222036393b90 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -415,11 +415,14 @@ static int sock_map_update_elem(struct bpf_map *map, void *key,
- 		ret = -EINVAL;
- 		goto out;
- 	}
--	if (!sock_map_sk_is_suitable(sk) ||
--	    sk->sk_state != TCP_ESTABLISHED) {
-+	if (!sock_map_sk_is_suitable(sk)) {
- 		ret = -EOPNOTSUPP;
- 		goto out;
- 	}
-+	if (!sk_hashed(sk)) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
+diff --git a/include/trace/events/xdp.h b/include/trace/events/xdp.h
+index 8c8420230a10..c7e3c9c5bad3 100644
+--- a/include/trace/events/xdp.h
++++ b/include/trace/events/xdp.h
+@@ -22,7 +22,7 @@
+ #define __XDP_ACT_SYM_FN(x)	\
+ 	{ XDP_##x, #x },
+ #define __XDP_ACT_SYM_TAB	\
+-	__XDP_ACT_MAP(__XDP_ACT_SYM_FN) { -1, 0 }
++	__XDP_ACT_MAP(__XDP_ACT_SYM_FN) { -1, NULL }
+ __XDP_ACT_MAP(__XDP_ACT_TP_FN)
  
- 	sock_map_sk_acquire(sk);
- 	ret = sock_map_update_common(map, idx, sk, flags);
+ TRACE_EVENT(xdp_exception,
 -- 
-2.20.1
+2.23.0
 
