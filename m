@@ -2,64 +2,66 @@ Return-Path: <SRS0=cR4a=YP=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02C87CA9EB9
-	for <bpf@archiver.kernel.org>; Tue, 22 Oct 2019 11:37:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D544ECA9EA0
+	for <bpf@archiver.kernel.org>; Tue, 22 Oct 2019 11:37:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CE6F4207FC
-	for <bpf@archiver.kernel.org>; Tue, 22 Oct 2019 11:37:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AC835207FC
+	for <bpf@archiver.kernel.org>; Tue, 22 Oct 2019 11:37:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="K7uRmE1s"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="BxyCCZY9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730828AbfJVLhg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 22 Oct 2019 07:37:36 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:34984 "EHLO
+        id S1730749AbfJVLhj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 22 Oct 2019 07:37:39 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:45375 "EHLO
         mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730893AbfJVLhg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 22 Oct 2019 07:37:36 -0400
-Received: by mail-lj1-f194.google.com with SMTP id m7so16822221lji.2
-        for <bpf@vger.kernel.org>; Tue, 22 Oct 2019 04:37:33 -0700 (PDT)
+        with ESMTP id S1731935AbfJVLhi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 22 Oct 2019 07:37:38 -0400
+Received: by mail-lj1-f194.google.com with SMTP id q64so16780653ljb.12
+        for <bpf@vger.kernel.org>; Tue, 22 Oct 2019 04:37:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tzLF7earaqQNOqHLaVTcUZJo2JIz/7DoNnPyWsmHOdg=;
-        b=K7uRmE1sbYHZkTqVFzhVff1AWMh+oPY1EQ1/nmtDIDv6F+dI3PIpICsZU2GuqOfZMD
-         fSTNQJDg65S20ZjYF11kxA5ANQi2kWMpZ4qbNDBDllUodu87WZHUIuS1TmXTmyybuYYw
-         smp3wUz0j14Def3asV2uuJ7k7Q/7q3w3MrAQ4=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Xqrpc0hIvk7cC/XR6fxs+NuIUEIOeQSw7Q47oAnYusw=;
+        b=BxyCCZY9d8ui0xczegbvwu8M0rvjNkHJJNWKBFcE3Wn0vdq7qeM7umSTxmwjPx+hF2
+         AAExR35Po1dhjm9aCm3RLXiFjqiffq7JCy8IN0+TZGOIXfYa6Bbodl8CCEWP8gSlWMNj
+         NjBQ/z0r0drJ1Jmlr844bX8/IoRSR2/+loNIU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tzLF7earaqQNOqHLaVTcUZJo2JIz/7DoNnPyWsmHOdg=;
-        b=DegaV/rQiwZxgaO8BtR1mUHD5+OmSGGrsuTR/43PQF8k2oorVqSIW1OgztWzavt0hd
-         xIHMGwuHrD0Wfl4Dsyat+M538UhMG1rz1smEBC34NZtsTY57QdzW5G4JjxhoWMCqXSUW
-         AmeSUDBiDOaKEneMtrS6/t4qnBn6gVWIusL3Cr3g5v+ltGdgT32gwqpoOtABjdSF9Ab9
-         +ICOGJqqce6BfAldT0jxDrt/tEdzTmk2zJSpbsIKQUDlrdf1pfwVCMqvSQDSv2jLF5pI
-         wTFfEWjIP/+U/sAbrV1bLizUC8aWmoSrI0fpLC/chwLsDps0SfP/B0G2pGN4FGmYdBJv
-         4Obw==
-X-Gm-Message-State: APjAAAWo9owt+ARf0hvYDVWSXm3wQQtSoRzhvb6KKAEXxohyIO8HZK3/
-        uMH1HcVJ0sN7F/r3sfEzmh49rmPWsoXCbg==
-X-Google-Smtp-Source: APXvYqyX+n39EJRCJOhNGsU7OTqlePHMIvmqiGkWKa6xzGybYVHfJDRd68mrlgp/zfl9fcW0Mn5OBQ==
-X-Received: by 2002:a2e:9b02:: with SMTP id u2mr18526999lji.18.1571744252288;
-        Tue, 22 Oct 2019 04:37:32 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Xqrpc0hIvk7cC/XR6fxs+NuIUEIOeQSw7Q47oAnYusw=;
+        b=h1GIClgxMhLDHNM65bVgMeUyhUeEtBnQ4AoSLkgDkuWKVFiNYrds1zynFeGtUhgdpz
+         B1ulkkT5e3TXp97i3KR0FWmR/fx72adwW6WboVr415NDahG0GnGCWymh8BvfY23/75Z1
+         5yrj/zagIZTEW7+ujmUkDvFyFlfN2SVFuGTjX0i/A7EoLD7NowUwvERCwuKqQJkMr8zg
+         +LogDcDtN9vwdqsgyWrSQoJu2B8O1Fzk+ILIaK+Npxp2kK1Cldx5hAqBfd4v3Eu75z6i
+         2SZzJAYw7imrgwpbDbRZKNcdHBwLRWfjhlWU/RX/LkmnlCuHsavACOCh4D2eUthQEevB
+         DhUg==
+X-Gm-Message-State: APjAAAWcVCJIHl80F/ELYKuzVfgZee2liSf/7Ks4jg77NhVl8FSQ9qsy
+        Nb3kwThfWmkjPcDaRbQ8ZilHpf1nB+h3VA==
+X-Google-Smtp-Source: APXvYqxf2UQaxeP8A49EhisZtxHdK55KwLl2SealOI3tDBkDqZEVySUJViRPSOZNmIdk6IBxD1mB4w==
+X-Received: by 2002:a2e:81da:: with SMTP id s26mr17749694ljg.192.1571744256224;
+        Tue, 22 Oct 2019 04:37:36 -0700 (PDT)
 Received: from cloudflare.com ([176.221.114.230])
-        by smtp.gmail.com with ESMTPSA id y3sm7173487lji.53.2019.10.22.04.37.31
+        by smtp.gmail.com with ESMTPSA id o196sm6362575lff.59.2019.10.22.04.37.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Oct 2019 04:37:31 -0700 (PDT)
+        Tue, 22 Oct 2019 04:37:35 -0700 (PDT)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org
 Cc:     John Fastabend <john.fastabend@gmail.com>,
         Martin KaFai Lau <kafai@fb.com>, netdev@vger.kernel.org,
         kernel-team@cloudflare.com
-Subject: [RFC bpf-next 0/5] Extend SOCKMAP to store listening sockets
-Date:   Tue, 22 Oct 2019 13:37:25 +0200
-Message-Id: <20191022113730.29303-1-jakub@cloudflare.com>
+Subject: [RFC bpf-next 3/5] bpf, sockmap: Don't let child socket inherit psock or its ops on copy
+Date:   Tue, 22 Oct 2019 13:37:28 +0200
+Message-Id: <20191022113730.29303-4-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191022113730.29303-1-jakub@cloudflare.com>
+References: <20191022113730.29303-1-jakub@cloudflare.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -67,53 +69,67 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set is a follow up on a suggestion from LPC '19 discussions to
-make SOCKMAP (or a new map type derived from it) a generic type for storing
-established as well as listening sockets.
+New sockets cloned from listening sockets that are in a sockmap must not
+inherit the psock that has the link to the sockmap. Otherwise child sockets
+unintentionally share the sockmap entry with the listening socket, which
+leads to double-free on socket close.
 
-We found ourselves in need of a map type that keeps references to listening
-sockets when working on making the socket lookup programmable, aka BPF
-inet_lookup [1].  Initially we repurposed REUSEPORT_SOCKARRAY but found it
-problematic to extend due to being tightly coupled with reuseport
-logic (see slides [2]). So we've turned our attention to SOCKMAP instead.
+Prevent it by overloading the accept callback. In it we restore the
+protocol and write buffer callbacks and clear the pointer to psock.
 
-As it turns out the changes needed to make SOCKMAP suitable for storing
-listening sockets are self-contained and have use outside of programming
-the socket lookup. Hence this patch set.
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+---
+ net/ipv4/tcp_bpf.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-With these patches SOCKMAP can be used in SK_REUSEPORT BPF programs as a
-drop-in replacement for REUSEPORT_SOCKARRAY for TCP. This can hopefully
-lead to code consolidation between the two map types in the future.
-
-Having said that, the main intention here is to lay groundwork for using
-SOCKMAP in the next iteration of programmable socket lookup patches.
-
-I'm looking for feedback if there's anything fundamentally wrong with
-extending SOCKMAP map type like this that I might have missed.
-
-Thanks,
-Jakub
-
-[1] https://lore.kernel.org/bpf/20190828072250.29828-1-jakub@cloudflare.com/
-[2] https://linuxplumbersconf.org/event/4/contributions/487/attachments/238/417/Programmable_socket_lookup_LPC_19.pdf
-
-
-Jakub Sitnicki (5):
-  bpf, sockmap: Let BPF helpers use lookup operation on SOCKMAP
-  bpf, sockmap: Allow inserting listening TCP sockets into SOCKMAP
-  bpf, sockmap: Don't let child socket inherit psock or its ops on copy
-  bpf: Allow selecting reuseport socket from a SOCKMAP
-  selftests/bpf: Extend SK_REUSEPORT tests to cover SOCKMAP
-
- kernel/bpf/verifier.c                         |   6 +-
- net/core/sock_map.c                           |  11 +-
- net/ipv4/tcp_bpf.c                            |  30 ++++
- tools/testing/selftests/bpf/Makefile          |   7 +-
- .../selftests/bpf/test_select_reuseport.c     | 141 ++++++++++++++----
- .../selftests/bpf/test_select_reuseport.sh    |  14 ++
- 6 files changed, 173 insertions(+), 36 deletions(-)
- create mode 100755 tools/testing/selftests/bpf/test_select_reuseport.sh
-
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index 8a56e09cfb0e..5838aaba4ce0 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -582,6 +582,35 @@ static void tcp_bpf_close(struct sock *sk, long timeout)
+ 	saved_close(sk, timeout);
+ }
+ 
++static struct sock *tcp_bpf_accept(struct sock *sk, int flags, int *err,
++				   bool kern)
++{
++	void (*saved_write_space)(struct sock *sk);
++	struct proto *saved_proto;
++	struct sk_psock *psock;
++	struct sock *child;
++
++	rcu_read_lock();
++	psock = sk_psock(sk);
++	if (unlikely(!psock)) {
++		rcu_read_unlock();
++		return sk->sk_prot->accept(sk, flags, err, kern);
++	}
++	saved_proto = psock->sk_proto;
++	saved_write_space = psock->saved_write_space;
++	rcu_read_unlock();
++
++	child = saved_proto->accept(sk, flags, err, kern);
++	if (!child)
++		return NULL;
++
++	/* Child must not inherit psock or its ops. */
++	rcu_assign_sk_user_data(child, NULL);
++	child->sk_prot = saved_proto;
++	child->sk_write_space = saved_write_space;
++	return child;
++}
++
+ enum {
+ 	TCP_BPF_IPV4,
+ 	TCP_BPF_IPV6,
+@@ -606,6 +635,7 @@ static void tcp_bpf_rebuild_protos(struct proto prot[TCP_BPF_NUM_CFGS],
+ 	prot[TCP_BPF_BASE].close		= tcp_bpf_close;
+ 	prot[TCP_BPF_BASE].recvmsg		= tcp_bpf_recvmsg;
+ 	prot[TCP_BPF_BASE].stream_memory_read	= tcp_bpf_stream_read;
++	prot[TCP_BPF_BASE].accept		= tcp_bpf_accept;
+ 
+ 	prot[TCP_BPF_TX]			= prot[TCP_BPF_BASE];
+ 	prot[TCP_BPF_TX].sendmsg		= tcp_bpf_sendmsg;
 -- 
 2.20.1
 
