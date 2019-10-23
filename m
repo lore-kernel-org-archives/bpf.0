@@ -1,93 +1,128 @@
-Return-Path: <SRS0=cR4a=YP=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=hlnV=YQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C33BDCA9EA0
-	for <bpf@archiver.kernel.org>; Tue, 22 Oct 2019 21:30:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FE99CA9EB9
+	for <bpf@archiver.kernel.org>; Wed, 23 Oct 2019 00:54:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9118A20679
-	for <bpf@archiver.kernel.org>; Tue, 22 Oct 2019 21:30:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D7E1C21783
+	for <bpf@archiver.kernel.org>; Wed, 23 Oct 2019 00:54:07 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dxp56W5Q"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731765AbfJVVar (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 22 Oct 2019 17:30:47 -0400
-Received: from www62.your-server.de ([213.133.104.62]:41034 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731437AbfJVVar (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 22 Oct 2019 17:30:47 -0400
-Received: from 13.249.197.178.dynamic.dsl-lte-bonding.lssmb00p-msn.res.cust.swisscom.ch ([178.197.249.13] helo=localhost)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1iN1jp-000617-8M; Tue, 22 Oct 2019 23:30:45 +0200
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     ast@kernel.org
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        id S1732328AbfJWAyG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 22 Oct 2019 20:54:06 -0400
+Received: from mail-pg1-f202.google.com ([209.85.215.202]:39584 "EHLO
+        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732449AbfJWAyG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 22 Oct 2019 20:54:06 -0400
+Received: by mail-pg1-f202.google.com with SMTP id m20so13819763pgv.6
+        for <bpf@vger.kernel.org>; Tue, 22 Oct 2019 17:54:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=orKMDyFq0pxDsmp0+soEOe34Z3iGwylS1aF6XcYLmDY=;
+        b=dxp56W5QwoEHYr+VvlnDojJFQ2s5Jr00cBo2UlZtUhbLztqDX+v6+mFLiFTmFce6QW
+         upwIV8Rb7h9vSzOV5rCKmO/VSgT7BjrhF61lxGDW61AFZDGWzaayL/+597j709GkCi0K
+         5rt3aQ2QeeayYfKJQ3lcb0LVh0i6yEutFUwWaWPtq+YPMOwqkW0jf9D83dbFi9F99gdS
+         KnF088Q2o6Af0a44MJQKk7o6My2hjCNyEk+VeoK2UfTTar3KkzLwaIUqUh/ZwrY3FsVW
+         gMFBtHZ/psrnbjZJJYDvno+NZqro2sxpRd6v2a0VIJ/42OdJaudV25DhgeWP532RlMy7
+         ycbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=orKMDyFq0pxDsmp0+soEOe34Z3iGwylS1aF6XcYLmDY=;
+        b=QNzJuACCW/yJbC2s1AjwJeGnMjdk/cNbYL7cFxQHOqMNTxv8TPBkqJHdniZi8k+U4B
+         VFT3XjI7inghfGLbvSp/XAfkg0bQeqaKgVH7B5rAPRr4tqurKNhwv3L72bK5IB/XX4yY
+         uE2/GuuA8tXIQuz7Ol+/LtC8GiFFR70ILiFLspjvFylwkpDFFgeoGe2Zsx9iwU8XnhHg
+         nRakgCDc/ybWLH0AETns2oB5FSMyixcIIqpxJDBhW+umLfTtGKcVM0AbCWgPBKg7vcFk
+         ugeGMIW9u0xMDhIbdltMrC4P5lFeH4I8jH+txDAxibTR0okBFiNGn42dhL5LcV5E4owH
+         GLWg==
+X-Gm-Message-State: APjAAAUfj112x/1ytKCsyM+4Ss+0VukVHSQAT4V2jpu76SQTlrc2gBOQ
+        IS7YZj3Nz9Ln0mP43K2uyQl6pN7RF7BK
+X-Google-Smtp-Source: APXvYqzyVIwLoq+9wyp9C7zURVMoBQyLpOCJQ6F7p/ccsS8pjZFa43S0nRwH0x7KWI+lYdhQ17E8tgEaTCrC
+X-Received: by 2002:a63:1904:: with SMTP id z4mr6951997pgl.413.1571792043458;
+ Tue, 22 Oct 2019 17:54:03 -0700 (PDT)
+Date:   Tue, 22 Oct 2019 17:53:30 -0700
+In-Reply-To: <20191023005337.196160-1-irogers@google.com>
+Message-Id: <20191023005337.196160-3-irogers@google.com>
+Mime-Version: 1.0
+References: <20191017170531.171244-1-irogers@google.com> <20191023005337.196160-1-irogers@google.com>
+X-Mailer: git-send-email 2.23.0.866.gb869b98d4c-goog
+Subject: [PATCH v2 2/9] perf tools: splice events onto evlist even on error
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>
-Subject: [PATCH bpf] bpf: Fix use after free in bpf_get_prog_name
-Date:   Tue, 22 Oct 2019 23:30:38 +0200
-Message-Id: <875f2906a7c1a0691f2d567b4d8e4ea2739b1e88.1571779205.git.daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.101.4/25610/Tue Oct 22 10:54:26 2019)
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        John Garry <john.garry@huawei.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, clang-built-linux@googlegroups.com
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-There is one more problematic case I noticed while recently fixing BPF kallsyms
-handling in cd7455f1013e ("bpf: Fix use after free in subprog's jited symbol
-removal") and that is bpf_get_prog_name().
+If event parsing fails the event list is leaked, instead splice the list
+onto the out result and let the caller cleanup.
 
-If BTF has been attached to the prog, then we may be able to fetch the function
-signature type id in kallsyms through prog->aux->func_info[prog->aux->func_idx].type_id.
-However, while the BTF object itself is torn down via RCU callback, the prog's
-aux->func_info is immediately freed via kvfree(prog->aux->func_info) once the
-prog's refcount either hit zero or when subprograms were already exposed via
-kallsyms and we hit the error path added in 5482e9a93c83 ("bpf: Fix memleak in
-aux->func_info and aux->btf").
-
-This violates RCU as well since kallsyms could be walked in parallel where we
-could access aux->func_info. Hence, defer kvfree() to after RCU grace period.
-Looking at ba64e7d85252 ("bpf: btf: support proper non-jit func info") there
-is no reason/dependency where we couldn't defer the kvfree(aux->func_info) into
-the RCU callback.
-
-Fixes: 5482e9a93c83 ("bpf: Fix memleak in aux->func_info and aux->btf")
-Fixes: ba64e7d85252 ("bpf: btf: support proper non-jit func info")
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: Martin KaFai Lau <kafai@fb.com>
+Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- kernel/bpf/syscall.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/perf/util/parse-events.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index bcfc362de4f2..0937719b87e2 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1326,6 +1326,7 @@ static void __bpf_prog_put_rcu(struct rcu_head *rcu)
- {
- 	struct bpf_prog_aux *aux = container_of(rcu, struct bpf_prog_aux, rcu);
+diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+index 4d42344698b8..a8f8801bd127 100644
+--- a/tools/perf/util/parse-events.c
++++ b/tools/perf/util/parse-events.c
+@@ -1962,15 +1962,20 @@ int parse_events(struct evlist *evlist, const char *str,
  
-+	kvfree(aux->func_info);
- 	free_used_maps(aux);
- 	bpf_prog_uncharge_memlock(aux->prog);
- 	security_bpf_prog_free(aux);
-@@ -1336,7 +1337,6 @@ static void __bpf_prog_put_noref(struct bpf_prog *prog, bool deferred)
- {
- 	bpf_prog_kallsyms_del_all(prog);
- 	btf_put(prog->aux->btf);
--	kvfree(prog->aux->func_info);
- 	bpf_prog_free_linfo(prog);
+ 	ret = parse_events__scanner(str, &parse_state, PE_START_EVENTS);
+ 	perf_pmu__parse_cleanup();
++
++	if (list_empty(&parse_state.list)) {
++		WARN_ONCE(true, "WARNING: event parser found nothing\n");
++		return -1;
++	}
++
++	/*
++	 * Add list to the evlist even with errors to allow callers to clean up.
++	 */
++	perf_evlist__splice_list_tail(evlist, &parse_state.list);
++
+ 	if (!ret) {
+ 		struct evsel *last;
  
- 	if (deferred)
+-		if (list_empty(&parse_state.list)) {
+-			WARN_ONCE(true, "WARNING: event parser found nothing\n");
+-			return -1;
+-		}
+-
+-		perf_evlist__splice_list_tail(evlist, &parse_state.list);
+ 		evlist->nr_groups += parse_state.nr_groups;
+ 		last = evlist__last(evlist);
+ 		last->cmdline_group_boundary = true;
 -- 
-2.21.0
+2.23.0.866.gb869b98d4c-goog
 
