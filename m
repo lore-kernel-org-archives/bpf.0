@@ -2,119 +2,176 @@ Return-Path: <SRS0=hlnV=YQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49233CA9EA0
-	for <bpf@archiver.kernel.org>; Wed, 23 Oct 2019 00:54:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 000F3CA9EA0
+	for <bpf@archiver.kernel.org>; Wed, 23 Oct 2019 02:27:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1F8282084B
-	for <bpf@archiver.kernel.org>; Wed, 23 Oct 2019 00:54:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B3F74207FC
+	for <bpf@archiver.kernel.org>; Wed, 23 Oct 2019 02:27:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="G3+2N9hR"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="opw26nla";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="FT63pESI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731234AbfJWAyA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 22 Oct 2019 20:54:00 -0400
-Received: from mail-pl1-f201.google.com ([209.85.214.201]:56180 "EHLO
-        mail-pl1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727140AbfJWAx7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 22 Oct 2019 20:53:59 -0400
-Received: by mail-pl1-f201.google.com with SMTP id g11so11567282plm.22
-        for <bpf@vger.kernel.org>; Tue, 22 Oct 2019 17:53:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=hTNszrLwiWQM9d4qPLewL0yEQ/cfDBLkldVagVLEUe8=;
-        b=G3+2N9hR6CXSywV/BCG9jOzcYqmnnIcMKGmlNKEdFehcbxSmPwGHWUEGPxsOqi0UPp
-         8M0SlH5BoyojTAmdI60I4dOtJ3aXm2zJJGSdETJyBFUEkUQv9JxUsiYcbWUeWnW6HR9M
-         moMWeOLseXW3m+Ak1+9LsOXvbUUOmsHD1W8OOdKwYcVxOlF4J7ok5HWpf4mmtd3i0SUx
-         jBxJiJYqlILVQ6WdIpWFFB/NYBoD3pg2UcQPJLrNqXMllSQomgO8rX4ZapAE76zjdLjW
-         REN4Hu+gnSTSl53QCKw5BI2Z+WrADhrHAvaBO2pETg5rxfgSXkYFcIhpaoubzbm9GkAj
-         uO8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=hTNszrLwiWQM9d4qPLewL0yEQ/cfDBLkldVagVLEUe8=;
-        b=OmWtZu5vtSLUmfhNhm4nIknPv65Y5yvruwdSKpGesncXs73CplryWGp2xtAa/plN8U
-         8H3zqpynKMzLa5gkKOFGdpImyeqyPbWBR37Z86LF4Vuqk0/QsIMh7iPhOK0ZqCrW04fE
-         xkk2IdlxyX4cPUADhKR4wGDqFwgQK1pbr5pYXIkXjIy6CVjV4JQvTD0Fe4CN3izPufuP
-         JELpmAG8Uj0dRVVJoGvbSQoRY7rXq/mLjBYgPklAXuLeji64kG3XRTfbPjsDHNKzbvcV
-         5d9/prvXQydP6MtrxCcRgnQIoc2y1pMS8F095tQTs1RxXINgn1d6EHvn8TJw4bMZiS/N
-         D3PQ==
-X-Gm-Message-State: APjAAAU7YMelHKsWeAg+rLJwP9jJnzdLIC8V9/i0hyQGWCbah2Pc+5Ho
-        NlKZW/5HXEOojvE/dqYxtwp+XWz/jqZE
-X-Google-Smtp-Source: APXvYqzYOzdcq5nCtM6xX1BGWadrzL6Bve96/TmAwvY8X0RhJGLPOQH1XzQWxptmeVhcoCUBfC4g1K9JIAd4
-X-Received: by 2002:a63:e255:: with SMTP id y21mr3404951pgj.353.1571792038384;
- Tue, 22 Oct 2019 17:53:58 -0700 (PDT)
-Date:   Tue, 22 Oct 2019 17:53:28 -0700
-In-Reply-To: <20191017170531.171244-1-irogers@google.com>
-Message-Id: <20191023005337.196160-1-irogers@google.com>
-Mime-Version: 1.0
-References: <20191017170531.171244-1-irogers@google.com>
-X-Mailer: git-send-email 2.23.0.866.gb869b98d4c-goog
-Subject: [PATCH v2 0/9] Improvements to memory usage by parse events
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        John Garry <john.garry@huawei.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, clang-built-linux@googlegroups.com
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1733196AbfJWC1t (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 22 Oct 2019 22:27:49 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:45494 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729994AbfJWC1s (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 22 Oct 2019 22:27:48 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9N2N0Qk018940;
+        Tue, 22 Oct 2019 19:27:34 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=mkWwJBF1OTvqn6Dc+3rPF0N5fXYiVr2zp7Wbo+pS3aU=;
+ b=opw26nlaxxnPVHk7V0QyoWmDtM8t4rutdQqn9NZOrin9l5cyMFGTIfrrI0a34XN4n2bP
+ 67SOalKMoZvmqFoFSrztbF/yicnMd49DezZw1r6AkwP4HSSof4zLAQiRswrOja7ljymT
+ MF5lIvIVnUwP+E3+p2sOVSZ9qQqaYTacr08= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2vt9t9gy77-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 22 Oct 2019 19:27:34 -0700
+Received: from ash-exhub203.TheFacebook.com (2620:10d:c0a8:83::5) by
+ ash-exhub101.TheFacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 22 Oct 2019 19:27:33 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
+ via Frontend Transport; Tue, 22 Oct 2019 19:27:33 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e0a9MehOkUELSC2CDlxEmhL9FRWShBJe6k+RrowkV3vZX6EvZHty1Uv8UDMDmo2KK6X+iRLK/STBiOXtabOtVHV8y8VHMZv0DwJFJe5HPkPkXnQ8BjtvsJW6saak6VBITYZR+z1DdcpaJXJvubaV8DII0lrAjhrUk7/Qup5EcsAo62B39HHpaWt1ZcdlRGsb02V2/JLDdz55PUTyIEPHmFFzULDo4CMNf6zJLy/6IkmV6IRQhy28iKbI8myJ77bQeAw034qUNvSJZEExH+9vEGmMehGyvaQdq/flKiDNccwjwno37+8GI+HlXQOGdLsgaoC+dQcLNSdv1WjTTMqzsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mkWwJBF1OTvqn6Dc+3rPF0N5fXYiVr2zp7Wbo+pS3aU=;
+ b=KdGHP5iJPlM7zH1qY4SzYXSXXk/slHB3ddMNax/1vHS4+p7RbsYQR/WF7VR4dGKuwqlYokagLkI024vs0BY8+boYjU6VXNkZNNOChPCDRNDDkML4jq6gpgHcIi3HP3+JsczvhkhcfNWXN5frCmu9bvftLNBreb699UbQJGBLDFAPr9aVdmia3HeJa7eLwAwWBEbUDiBwc6bn+PHiHcopdvtgXnS+Pb+5znWGC4ChM65NVgW+MESPZfLzYJ97YgreO+VY5APjXX4Kgzhz4VRwd6x2Q1opc+/XERjcPpDhsHZCk1nkTJo8p3yhgoyBq0jl6WNW9ueysubCE3fR7a1wdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mkWwJBF1OTvqn6Dc+3rPF0N5fXYiVr2zp7Wbo+pS3aU=;
+ b=FT63pESICd9lt92Aky65C/wxhswG+LC44l6OduVn9CU3QsiTEWfqbDSx1+IrMDCU4cweUVXj0NgzBc4YNXIslRC7SYZiueRG+HQMa6yLtc8IAYmniperAXZhgaoyo5gykW4LeA0/Q5vhx8391HSFtLd0VeZ3GggImx9dEgdjrHc=
+Received: from BYAPR15MB3384.namprd15.prod.outlook.com (20.179.60.27) by
+ BYAPR15MB2456.namprd15.prod.outlook.com (52.135.193.12) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2347.21; Wed, 23 Oct 2019 02:27:31 +0000
+Received: from BYAPR15MB3384.namprd15.prod.outlook.com
+ ([fe80::b92c:ebd2:58dc:6b8d]) by BYAPR15MB3384.namprd15.prod.outlook.com
+ ([fe80::b92c:ebd2:58dc:6b8d%5]) with mapi id 15.20.2387.019; Wed, 23 Oct 2019
+ 02:27:31 +0000
+From:   Yonghong Song <yhs@fb.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Kernel Team <Kernel-team@fb.com>,
+        Jiong Wang <jiong.wang@netronome.com>
+Subject: Re: [PATCH bpf-next v2] tools/bpf: turn on llvm alu32 attribute by
+ default
+Thread-Topic: [PATCH bpf-next v2] tools/bpf: turn on llvm alu32 attribute by
+ default
+Thread-Index: AQHViQ8bekJNizadfUWedWpSMU1ckadngLSA
+Date:   Wed, 23 Oct 2019 02:27:31 +0000
+Message-ID: <f666fdcd-9b02-ca47-509b-aaffb3cf7c09@fb.com>
+References: <20191022043119.2625263-1-yhs@fb.com>
+ <20191022192953.GB31343@pc-66.home>
+In-Reply-To: <20191022192953.GB31343@pc-66.home>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BYAPR07CA0066.namprd07.prod.outlook.com
+ (2603:10b6:a03:60::43) To BYAPR15MB3384.namprd15.prod.outlook.com
+ (2603:10b6:a03:112::27)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2620:10d:c090:180::b6b9]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e5d59235-3746-427b-c920-08d757608e5e
+x-ms-traffictypediagnostic: BYAPR15MB2456:
+x-ms-exchange-purlcount: 3
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BYAPR15MB24560E8EA42E6B6887B34D66D36B0@BYAPR15MB2456.namprd15.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5236;
+x-forefront-prvs: 019919A9E4
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(979002)(366004)(396003)(136003)(346002)(376002)(39860400002)(199004)(189003)(478600001)(966005)(14454004)(5660300002)(54906003)(31686004)(6246003)(316002)(6436002)(66946007)(6486002)(229853002)(31696002)(25786009)(64756008)(66556008)(4326008)(66476007)(6306002)(6512007)(76176011)(36756003)(99286004)(476003)(2906002)(8936002)(52116002)(6916009)(486006)(6506007)(186003)(7736002)(305945005)(2616005)(6116002)(386003)(71200400001)(46003)(86362001)(256004)(102836004)(66446008)(8676002)(11346002)(81166006)(81156014)(71190400001)(53546011)(446003)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB2456;H:BYAPR15MB3384.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /yOjGdgaL5/TskU9VVOeQglxath8yoZViIEEcR84jMDXaNLln5VA3oQLA29WOSJJ7n31SWWPWJpmqlqqCbxCLSoyEcgrdJvg82O7CZpXmm26HOO1T51SW4qMP/JYbyIDzEyJaceYDqDBB17d0QmBHYi5UyfbMRSJsmNJ1g0gZaYR4bYgkQP5psbBCFPkaQ3wLA/Pe/qwD4wqo9uQAdzL4aNAczZcrQ1+SuEHWmJ8+fqcLgvrxGb62xtQKraJA+Oz7ZvoxnX0m84EEAUhNQDT/V0xw4Up4rlHzl5yYtMXPXxQP/Z03XtBh0xl1NRPh5rmgB8UT+1B0W771qvmj+1ZD/cu1obb2IsJe8uvLF1ay3ljYyEY7QZ+G61aFrvSJH7aqXDvUBGbTkwDE3XOhJjkGotExEXhrAhrmKintNsjkCEAAAO0H3rZJx9/vNciiOyPIOu3v4X94wYc4i9FsciBU8QWRYexRPzVSrAjI8iTVX4=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C2EA3C51906CC6479E4E03486A9AE2AD@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5d59235-3746-427b-c920-08d757608e5e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Oct 2019 02:27:31.5796
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 3le1Y8rJWsT6GCNQ8+hfpkQ2yT9YEKIwmcaScy/V39d+qPSP4u4gZpidVKMK1yGs
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2456
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
+ definitions=2019-10-23_01:2019-10-22,2019-10-23 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 phishscore=0
+ adultscore=0 impostorscore=0 lowpriorityscore=0 clxscore=1015 bulkscore=0
+ malwarescore=0 suspectscore=0 spamscore=0 mlxlogscore=959
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1910230022
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The parse events parser leaks memory for certain expressions as well as
-allowing a char* to reference stack, heap or .rodata. This series of patches
-improves the hygeine and adds free-ing operations to reclaim memory in
-the parser in error and non-error situations.
-
-The series of patches was generated with LLVM's address sanitizer and
-libFuzzer:
-https://llvm.org/docs/LibFuzzer.html
-called on the parse_events function with randomly generated input. With
-the patches no leaks or memory corruption issues were present.
-
-These patches are preferable to an earlier proposed patch:
-   perf tools: avoid reading out of scope array
-
-Ian Rogers (9):
-  perf tools: add parse events append error
-  perf tools: splice events onto evlist even on error
-  perf tools: ensure config and str in terms are unique
-  perf tools: move ALLOC_LIST into a function
-  perf tools: avoid a malloc for array events
-  perf tools: add destructors for parse event terms
-  perf tools: before yyabort-ing free components
-  perf tools: if pmu configuration fails free terms
-  perf tools: add a deep delete for parse event terms
-
- tools/perf/util/parse-events.c | 177 ++++++++++-----
- tools/perf/util/parse-events.h |   3 +
- tools/perf/util/parse-events.y | 388 ++++++++++++++++++++++++---------
- tools/perf/util/pmu.c          |  38 ++--
- 4 files changed, 431 insertions(+), 175 deletions(-)
-
--- 
-2.23.0.866.gb869b98d4c-goog
-
+DQoNCk9uIDEwLzIyLzE5IDEyOjI5IFBNLCBEYW5pZWwgQm9ya21hbm4gd3JvdGU6DQo+IE9uIE1v
+biwgT2N0IDIxLCAyMDE5IGF0IDA5OjMxOjE5UE0gLTA3MDAsIFlvbmdob25nIFNvbmcgd3JvdGU6
+DQo+PiBsbHZtIGFsdTMyIHdhcyBpbnRyb2R1Y2VkIGluIGxsdm03Og0KPj4gICAgaHR0cHM6Ly91
+cmxkZWZlbnNlLnByb29mcG9pbnQuY29tL3YyL3VybD91PWh0dHBzLTNBX19yZXZpZXdzLmxsdm0u
+b3JnX3JMMzI1OTg3JmQ9RHdJQkFnJmM9NVZEMFJUdE5sVGgzeWNkNDFiM01VdyZyPURBOGUxQjVy
+MDczdklxUnJGejdNUkEmbT0wVkNWcy1hSXRrYVZMUko5SnA3WWVYMFdlMkpQS3pjWTdwXzgzSGxr
+c280JnM9TTBBTnZoODB0RE5aYjVKekU1dmo5SUVUa0tEODdMMWpGa2NSSFNoQzZSayZlPQ0KPj4g
+ICAgaHR0cHM6Ly91cmxkZWZlbnNlLnByb29mcG9pbnQuY29tL3YyL3VybD91PWh0dHBzLTNBX19y
+ZXZpZXdzLmxsdm0ub3JnX3JMMzI1OTg5JmQ9RHdJQkFnJmM9NVZEMFJUdE5sVGgzeWNkNDFiM01V
+dyZyPURBOGUxQjVyMDczdklxUnJGejdNUkEmbT0wVkNWcy1hSXRrYVZMUko5SnA3WWVYMFdlMkpQ
+S3pjWTdwXzgzSGxrc280JnM9TEFCbHJxOUU2dG1Dd3JiVTJiQ1FhX0x3Y2hDYUw4VGs1R2N6TUNP
+NUN2cyZlPQ0KPj4gRXhwZXJpbWVudHMgc2hvd2VkIHRoYXQgaW4gZ2VuZXJhbCBwZXJmb3JtYW5j
+ZQ0KPj4gaXMgYmV0dGVyIHdpdGggYWx1MzIgZW5hYmxlZDoNCj4+ICAgIGh0dHBzOi8vdXJsZGVm
+ZW5zZS5wcm9vZnBvaW50LmNvbS92Mi91cmw/dT1odHRwcy0zQV9fbHduLm5ldF9BcnRpY2xlc183
+NzUzMTZfJmQ9RHdJQkFnJmM9NVZEMFJUdE5sVGgzeWNkNDFiM01VdyZyPURBOGUxQjVyMDczdklx
+UnJGejdNUkEmbT0wVkNWcy1hSXRrYVZMUko5SnA3WWVYMFdlMkpQS3pjWTdwXzgzSGxrc280JnM9
+cVNESUlrYXV4dzlZXzhyWUgwQWx2QjRudnUwNnJlRHVoc2IwR3hTcG9CbyZlPQ0KPj4NCj4+IFRo
+aXMgcGF0Y2ggdHVybmVkIG9uIGFsdTMyIHdpdGggbm8tZmxhdm9yIHRlc3RfcHJvZ3MNCj4+IHdo
+aWNoIGlzIHRlc3RlZCBtb3N0IG9mdGVuLiBUaGUgZmxhdm9yIHRlc3QgYXQNCj4+IG5vX2FsdTMy
+L3Rlc3RfcHJvZ3MgY2FuIGJlIHVzZWQgdG8gdGVzdCB3aXRob3V0DQo+PiBhbHUzMiBlbmFibGVk
+LiBUaGUgTWFrZWZpbGUgY2hlY2sgZm9yIHdoZXRoZXINCj4+IGxsdm0gc3VwcG9ydHMgJy1tYXR0
+cj0rYWx1MzIgLW1jcHU9djMnIGlzDQo+PiByZW1vdmVkIGFzIGxsdm03IHNob3VsZCBiZSBhdmFp
+bGFibGUgZm9yIHJlY2VudA0KPj4gZGlzdHJpYnV0aW9ucyBhbmQgYWxzbyBsYXRlc3QgbGx2bSBp
+cyBwcmVmZXJyZWQNCj4+IHRvIHJ1biBicGYgc2VsZnRlc3RzLg0KPj4NCj4+IE5vdGUgdGhhdCBq
+bXAzMiBpcyBjaGVja2VkIGJ5IC1tY3B1PXByb2JlIGFuZA0KPj4gd2lsbCBiZSBlbmFibGVkIGlm
+IHRoZSBob3N0IGtlcm5lbCBzdXBwb3J0cyBpdC4NCj4+DQo+PiBDYzogSmlvbmcgV2FuZyA8amlv
+bmcud2FuZ0BuZXRyb25vbWUuY29tPg0KPj4gQWNrZWQtYnk6IEFuZHJpaSBOYWtyeWlrbyA8YW5k
+cmlpbkBmYi5jb20+DQo+PiBTaWduZWQtb2ZmLWJ5OiBZb25naG9uZyBTb25nIDx5aHNAZmIuY29t
+Pg0KPiANCj4gQXBwbGllZCwgdGhhbmtzIQ0KPiANCj4gV291bGQgaXQgbWFrZSBzZW5zZSB0byBp
+bmNsdWRlIC1tYXR0cj0rYWx1MzIgYWxzbyBpbnRvIC1tY3B1PXByb2JlDQo+IG9uIExMVk0gc2lk
+ZSBvciBpcyB0aGUgcmF0aW9uYWxlIHRvIG5vdCBkbyBpdCB0aGF0IHRoaXMgY2F1c2VzIGENCj4g
+cGVuYWx0eSBmb3IgdmFyaW91cyBvdGhlciwgbm9uLXg4NiBhcmNocyB3aGVuIGRvbmUgYnkgZGVm
+YXVsdA0KPiAoYWx0aG91Z2ggdGhleSBjb3VsZCBvcHQtb3V0IGF0IHRoZSBzYW1lIHRpbWUgdmlh
+IC1tYXR0cj0tYWx1MzIpPw0KDQpUaGUgY3VycmVudCAtbWNwdT1wcm9iZSBpcyBtb3N0bHkgdG8g
+cHJvdmlkZSB3aGV0aGVyIHBhcnRpY3VsYXINCmluc3RydWN0aW9uKHMpIGFyZSBzdXBwb3J0ZWQg
+YnkgdGhlIGtlcm5lbCBvciBub3QuIFRoaXMgZm9sbG93cw0KdHJhZGl0aW9uYWwgY3B1IGNvbmNl
+cHQuIEZvciAtbWF0dHI9K2FsdTMyIGNhc2UsIGluc3RydWN0aW9uIHNldA0KcmVtYWlucyB0aGUg
+c2FtZSwgYnV0IHdlIG5lZWQgdG8gcHJvYmUgdmVyaWZpZXIgY2FwYWJpbGl0eS4NCg0KQnV0IEkg
+YWdyZWUgdGhhdCBmb3IgYnBmIHByb2JpbmcgdmVyaWZpZXIgZm9yIGFsdTMyIHN1cHBvcnQNCmlz
+IHRvdGFsbHkgcmVhc29uYWJsZS4NCg0KSmlvbmcsIGNvdWxkIHlvdSBoZWxwIGRvIGFuIGltcGxl
+bWVudGF0aW9uIGluIGxsdm0gc2lkZSBzaW5jZQ0KeW91IGFyZSBtb3JlIGZhbWlsaWFyIHdpdGgg
+d2hhdCBhbHUzMiBjYXBhYmlsaXR5IG5lZWRzIHRvIGJlDQpjaGVja2VkIGZvciB2ZXJpZmllcj8g
+VGhhbmtzIQ0KDQoNCg==
