@@ -2,97 +2,192 @@ Return-Path: <SRS0=hlnV=YQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A809BCA9EB6
-	for <bpf@archiver.kernel.org>; Wed, 23 Oct 2019 13:05:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 476C6CA9EB6
+	for <bpf@archiver.kernel.org>; Wed, 23 Oct 2019 14:11:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 838D321872
-	for <bpf@archiver.kernel.org>; Wed, 23 Oct 2019 13:05:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C39C2086D
+	for <bpf@archiver.kernel.org>; Wed, 23 Oct 2019 14:11:32 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=mojatatu-com.20150623.gappssmtp.com header.i=@mojatatu-com.20150623.gappssmtp.com header.b="wz5fAXRB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405550AbfJWNFW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Oct 2019 09:05:22 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:49856 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405549AbfJWNFW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 23 Oct 2019 09:05:22 -0400
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 9C0754DB1F
-        for <bpf@vger.kernel.org>; Wed, 23 Oct 2019 13:05:21 +0000 (UTC)
-Received: by mail-lf1-f72.google.com with SMTP id f3so4108655lfa.16
-        for <bpf@vger.kernel.org>; Wed, 23 Oct 2019 06:05:21 -0700 (PDT)
+        id S2403954AbfJWOLb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Oct 2019 10:11:31 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:44023 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730622AbfJWOLb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 23 Oct 2019 10:11:31 -0400
+Received: by mail-io1-f66.google.com with SMTP id c11so15994217iom.10
+        for <bpf@vger.kernel.org>; Wed, 23 Oct 2019 07:11:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7mTLchMz27yHE3v+HYqAFC8C62BOeIbxUWkxLK3+HgE=;
+        b=wz5fAXRBiidu/z5ytS9ZYzs2p/f54ji1X/VUt1S6dvsdeizi+TGuiAKEwvYGaLPL+r
+         AGH588kL/XUwIsKjL2jv4s+B+mklp2HceTbU5gVv29XMQ7hLhxNVgM+WZwxCqnL/kB6W
+         9S2F+4FcrsZ+WFLU8B7FoJ4GHK2y4auXPe+2E+L4lHBbjyFCo0n7n5vs+oetDQSEmKJd
+         Sx02iGMm6a74v0mlzw7HpoZmpJ0jCQtdAGtStSCN2yPp3eqNCbqS5gDnffiiVraBHgZ5
+         qsdcvKnY5fmm7DMPKUIcd57u87UEU0AXNSxlTtfnmvSq2znf/ZUAU6mWI0NUofY4bUzw
+         TZmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=ayShX9eSwI2mf/Z2LSvzkLt/5bIb4viERXJyj+kghaQ=;
-        b=ZTJSFSCCUQ8d8fFbly+x3rFWWCBkrXwEb/yVKCkAgETNP9/LkB5AY9fzePdOEemPz9
-         ZrBb0ufMjAspCWHlSb4MbfiTBeiqTTL22DZut2iAvH6wHxJ85Z/aQIaBL13zihm1tugN
-         BypQH4tYtnSzUTjm7lUDzKjuZK9aa6EuWw5n+EIgWpdM800WT7mSF89bcCm6OPBpynZU
-         EORkOGYVugxDYpI9n8ZcfksvgxC5h807pI44m47AYKk/NRr1UtCKfAcMRvlkU4RSZXy7
-         +K8sKdcS6x8wi1bMKIDQxcec0CfXYIy99wWKcDvfB58mHrgEUCQqVuuppZx/eRQ0t6K3
-         pJJg==
-X-Gm-Message-State: APjAAAUCbgfNjhqtSPN1zBZ0/nINIQ0BV0quNu3K6IuHcEX7LaliIxda
-        TlnUUQkFmc5HToW8GvPkIY9Z4bbaXLzrd7moIqtBu5ozlauu2P+Bhw/oRSJ4bvxoe9Tkdhr5x4j
-        zmUm3zqP5IXq+
-X-Received: by 2002:ac2:46d8:: with SMTP id p24mr19215841lfo.28.1571835920144;
-        Wed, 23 Oct 2019 06:05:20 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqzwZtLPghpRsZMbUAONvnb70ijFg4cju+eSJepEBx9DBET3MVwXX1/NPhUB4xKvuIlos6F1jg==
-X-Received: by 2002:ac2:46d8:: with SMTP id p24mr19215817lfo.28.1571835919863;
-        Wed, 23 Oct 2019 06:05:19 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
-        by smtp.gmail.com with ESMTPSA id g21sm18349357lje.67.2019.10.23.06.05.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2019 06:05:19 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 5D77A1804B1; Wed, 23 Oct 2019 15:05:18 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7mTLchMz27yHE3v+HYqAFC8C62BOeIbxUWkxLK3+HgE=;
+        b=l0NvKkG6MhG31y4OHx4fOMk2rG+2bVzA5O09M/ZA0UsWwti+Q+jm2rE/c4GfKaKy1Z
+         vQW21YoqVk5qBided87JVKViTk6eN4LJa7tnY0Z5vfJ9TEGXfNA7J+xQzZWgMMBCJdFb
+         51LzVJ0qfrRW51xCZBfR0npgr7NzUkrPBjYJL9DYtdlSb7qmHxpOvlu1jaqhRG/N9ttj
+         Br8MGQAj61Fqu+cdJ16S2S5n6plpcdD/4sIfmMUA/d9V4pX8cMJHyxjlaI5xLFI9GciD
+         1VVc5uSFuGWqwBzqv0E2IwQvaonO69tNsX4yQFicpaZATRYbNF0mhhz3dMLeCbNmx9Rl
+         i+Yg==
+X-Gm-Message-State: APjAAAUivuuZL6EwPyvZOGQNhY3Y7uT6JOqysx15ycpkvTntF6mrqV9x
+        M8twCDHcR+X+F/MuUpsEDy1iHA==
+X-Google-Smtp-Source: APXvYqzXSqJpybvFZImqCY3p1LdZnsNbk/MXtCsS6dh/u0592dO/rmk/bmILZWsaXLAyTeTec0xS6Q==
+X-Received: by 2002:a02:19c1:: with SMTP id b184mr9607390jab.54.1571839889615;
+        Wed, 23 Oct 2019 07:11:29 -0700 (PDT)
+Received: from [10.0.0.194] ([64.26.149.125])
+        by smtp.googlemail.com with ESMTPSA id j74sm5898001ila.55.2019.10.23.07.11.26
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 23 Oct 2019 07:11:27 -0700 (PDT)
+Subject: Re: [RFC PATCH v2 bpf-next 00/15] xdp_flow: Flow offload to XDP
+To:     John Fastabend <john.fastabend@gmail.com>,
+        Toshiaki Makita <toshiaki.makita1@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 2/3] libbpf: Support configurable pinning of maps from BTF annotations
-In-Reply-To: <6c0e6ebf-aebc-5e80-0e32-aa81857f3a74@iogearbox.net>
-References: <157175668770.112621.17344362302386223623.stgit@toke.dk> <157175668991.112621.14204565208520782920.stgit@toke.dk> <CAEf4BzaM32j4iLhvcuwMS+dPDBd52KwviwJuoAwVVr8EwoRpHA@mail.gmail.com> <875zkgobf3.fsf@toke.dk> <CAEf4BzY-buKFadzzAKpCdjAZ+1_UwSpQobdRH7yQn_fFXQYX0w@mail.gmail.com> <87r233n8pl.fsf@toke.dk> <6c0e6ebf-aebc-5e80-0e32-aa81857f3a74@iogearbox.net>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Wed, 23 Oct 2019 15:05:18 +0200
-Message-ID: <87a79rmx2p.fsf@toke.dk>
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        Pravin B Shelar <pshelar@ovn.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        William Tu <u9012063@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>
+References: <20191018040748.30593-1-toshiaki.makita1@gmail.com>
+ <5da9d8c125fd4_31cf2adc704105c456@john-XPS-13-9370.notmuch>
+ <22e6652c-e635-4349-c863-255d6c1c548b@gmail.com>
+ <5daf34614a4af_30ac2b1cb5d205bce4@john-XPS-13-9370.notmuch>
+From:   Jamal Hadi Salim <jhs@mojatatu.com>
+Message-ID: <1c794797-db6f-83a7-30b4-aa864f798e5b@mojatatu.com>
+Date:   Wed, 23 Oct 2019 10:11:25 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <5daf34614a4af_30ac2b1cb5d205bce4@john-XPS-13-9370.notmuch>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-> You are worried about the case where an application should be able to
-> unpin the map before loading a new one so it doesn't get reused?
 
-No, I'm worried about the opposite: Someone running (the equivalent of)
-'ip link set dev eth0 xdp off', and then wondering why all resources
-aren't freed.
+Sorry - didnt read every detail of this thread so i may
+be missing something.
 
-I do believe that the common case could be solved by a logic similar to
-the one I proposed, though:
+On 2019-10-22 12:54 p.m., John Fastabend wrote:
+> Toshiaki Makita wrote:
+>> On 2019/10/19 0:22, John Fastabend wrote:
+>>> Toshiaki Makita wrote:
+>>>> This is a PoC for an idea to offload flow, i.e. TC flower and nftables,
+>>>> to XDP.
+>>>>
 
->> Hmm, but I guess it could do that anyway; so maybe what we need is just
->> a "try to find all pinned maps of this program" function? That could
->> then to something like:
->> 
->> - Get the maps IDs and names of all maps attached to that program from
->>    the kernel.
->> 
->> - Look for each map name in /sys/fs/bpf
->> 
->> - If a pinned map with the same name exists, compare the IDs, and unlink
->>    if they match
->> 
->> I don't suppose it'll be possible to do all that in a race-free manner,
->> but that would go for any use of unlink() unless I'm missing something?
+> 
+> I don't know who this "someone" is that wants to use XDP through TC
+> flower or nftables transparently. TC at least is not known for a
+> great uapi. 
+
+
+The uapi is netlink. You may be talking about lack of a friendly
+application library that abstracts out concepts?
+
+> It seems to me that it would be a relatively small project
+> to write a uapi that ran on top of a canned XDP program to add
+> flow rules. This could match tc cli if you wanted but why not take
+> the opportunity to write a UAPI that does flow management well.
+> 
+
+Disagreement:
+Unfortunately legacy utilities and apps cant just be magically wished
+away. There's a lot of value in transparently making them work with
+new infrastructure. My usual exaggerated pitch: 1000 books have been
+written on this stuff, 100K people have RH certificates which entitle
+them to be "experts"; dinasour kernels exist in data centres and
+(/giggle) "enteprise". You cant just ignore all that.
+
+Summary: there is value in what Toshiaki is doing.
+
+I am disappointed that given a flexible canvas like XDP, we are still
+going after something like flower... if someone was using u32 as the
+abstraction it will justify it a lot more in my mind.
+Tying it to OVS as well is not doing it justice.
+
+Agreement:
+Having said that I dont think that flower/OVS should be the interface
+that XDP should be aware of. Neither do i agree that kernel "real
+estate" should belong to Oneway(TM) of doing things (we are still stuck
+with netfilter planting the columbus flag on all networking hooks).
+Let 1000 flowers bloom.
+So: couldnt Toshiaki's requirement be met with writting a user space
+daemon that trampolines flower to "XDP format" flow transforms? That way
+in the future someone could add a u32->XDP format flow definition and we
+are not doomed to forever just use flower.
+
+>> To some extent yes, but not completely. Flow insertion from userspace
+>> triggered by datapath upcall is necessary regardless of whether we use
+>> TC or not.
+> 
+> Right but these are latency involved with OVS architecture not
+> kernel implementation artifacts. Actually what would be an interesting
+> metric would be to see latency of a native xdp implementation.
+> 
+> I don't think we should add another implementation to the kernel
+> that is worse than what we have.
+> 
+> 
+>   xdp_flow  TC        ovs kmod
+>   --------  --------  --------
+>   22ms      6ms       0.6ms
+> 
+> TC is already order of magnitude off it seems :(
+> 
+ >
+> If ovs_kmod is .6ms why am I going to use something that is 6ms or
+> 22ms. 
+
+I am speculating having not read Toshiaki's code.
+The obvious case for the layering is for policy management.
+As you go upwards hw->xdp->tc->userspace->remote control
+your policies get richer and the resolved policies pushed down
+are more resolved. I am guessing the numbers we see above are
+for that first packet which is used as a control packet.
+An automonous system like this is of course susceptible to
+attacks.
+
+The workaround would be to preload the rules, but even then
+you will need to deal with resource constraints. Comparison
+would be like hierarchies of cache to RAM: L1/2/3 before RAM.
+To illustrate: Very limited fastest L1 (aka NIC offload),
+Limited faster L2 (XDP algorithms), L3 being tc and RAM being
+the user space resolution.
+
+>I expect a native xdp implementation using a hash map to be
+> inline with ovs kmod if not better.
+
+Hashes are good for datapath use cases but not when you consider
+a holistic access where you have to worry about control aspect.
+
+cheers,
+jamal
