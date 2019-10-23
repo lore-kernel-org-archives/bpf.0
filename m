@@ -7,56 +7,56 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CECFCA9EA0
-	for <bpf@archiver.kernel.org>; Wed, 23 Oct 2019 00:54:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFDDDCA9EA0
+	for <bpf@archiver.kernel.org>; Wed, 23 Oct 2019 00:54:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4DD8820B7C
-	for <bpf@archiver.kernel.org>; Wed, 23 Oct 2019 00:54:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A73582084B
+	for <bpf@archiver.kernel.org>; Wed, 23 Oct 2019 00:54:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ACzNOSjh"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nz2uurdi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733192AbfJWAyc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 22 Oct 2019 20:54:32 -0400
-Received: from mail-pg1-f201.google.com ([209.85.215.201]:50524 "EHLO
-        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733141AbfJWAyV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 22 Oct 2019 20:54:21 -0400
-Received: by mail-pg1-f201.google.com with SMTP id r24so13799956pgj.17
-        for <bpf@vger.kernel.org>; Tue, 22 Oct 2019 17:54:20 -0700 (PDT)
+        id S1733145AbfJWAyj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 22 Oct 2019 20:54:39 -0400
+Received: from mail-pg1-f202.google.com ([209.85.215.202]:53548 "EHLO
+        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732951AbfJWAyP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 22 Oct 2019 20:54:15 -0400
+Received: by mail-pg1-f202.google.com with SMTP id r25so13800496pga.20
+        for <bpf@vger.kernel.org>; Tue, 22 Oct 2019 17:54:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=SBGZ2h3aJPS5SN0EQWSYu3r6PtBuafsgvwZrw927JEs=;
-        b=ACzNOSjhSAZYiamU7+gIegPI+Q1tGEcVzOclcAta24FXA9bzre55G4jhXY4B3F/EOS
-         QjXmegl3BtNi5CgWf0hg2RZOQ2b+hcfinMpmKHoXdCIjh5lbkoObioutFrR5TpzlGrOo
-         GP6655uAvHe+yP1LlBKwQqzL0KsohokW/xV73/Wd/RGAtEXTl+a9YHAfpNU/Ne1cH8jc
-         VwLRUe4ne6QB5+uskSqKMaTV7rNuhHDLUBhr+IIv4Ywo2id29V7e4aOQ4oR0Hky7wSD4
-         y0bFFjYGzE6UcfyibUpAfmWf4HWqy1hZoJL62SZ7mpwM5AHN6TflHqfk8y0ynM6upPMB
-         5HJg==
+        bh=5ErD/uUW7vtCV74qLmYJVVPg+bMOBGzP+X5HkC35T58=;
+        b=nz2uurdimjtldNTEoiMbb+rZ7G6+/McOYNx3KBrG80NV8yIYQCsVz+nZZ64wjXn/CD
+         194GMWoqLJKDaHgh348xPChUS2ZdNA8yfMtHFsaphbhOgU4pV1O8kRsA8vpsGMErkhoj
+         2xVkP5gGBwd1/Ze9WU/sHaXlFhfK655QyKXE5GeZv7YBQFoDJhksFk9YaNnvJH8vNTau
+         8PWgPHVPZaaaVCYDGnLqbQ975KiKdmnWlD/AxK8gcc/miyNAn/lwWmzNUR5qxxPIyAJN
+         L+P3vDMqaUUbRxx+deiXD+SVNpXMcKFY1sEkEUD5GNbDae87brG+/icY+y7PWfCtslZ4
+         d66A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=SBGZ2h3aJPS5SN0EQWSYu3r6PtBuafsgvwZrw927JEs=;
-        b=gbxd7gvh8cESGsNHdoaZD9RdQHcvIh+QQ4Zjqr4Uub/UHxs1uzyLLiq8hoLoTk6vHZ
-         pHkcHc5OZIwGT9h87+gYtYqPtIW3XgPVtnSkLDBVaRyKPrkThOdOaUzhNrGYmYZ67QUt
-         eUSBim3FXkIKVIIhsDnZ7/tfS9IduqdAhgwszXkHI9/rYqo6NDW+wAwMLTDrIg8YvNnw
-         0ZO+QmhZYsiWMy0v5WLG8CDYjA8AODNJ4feAMydZ97soysjDY6BfBz4kO7r90yMvP2Eu
-         TC9XeVQYamUkoK1G0uaitbRIGB1OXZSMHjTK9xPGr4wRypPpBERDoHPndX3xlTz/DfRh
-         AXQQ==
-X-Gm-Message-State: APjAAAX/MGsB9jLY/uITABEVRLYR0E/IC27LuYHjKJ5WO6R2YEcJRcSg
-        H2AzczUK7iZg/vL40aNVFO2T6LCPqnSN
-X-Google-Smtp-Source: APXvYqx2sTqLsUkmI521OZWxpQAAgcxz8e7uQh+AaUBQ+LvndCn6I2uaUNv4az8+K0JxYSw1RKpnpAIXu+7r
-X-Received: by 2002:a63:fa4a:: with SMTP id g10mr6658099pgk.432.1571792059764;
- Tue, 22 Oct 2019 17:54:19 -0700 (PDT)
-Date:   Tue, 22 Oct 2019 17:53:36 -0700
+        bh=5ErD/uUW7vtCV74qLmYJVVPg+bMOBGzP+X5HkC35T58=;
+        b=RVkz37CbhFMZ3cHonwc2yWnrn/Cbn4oijxtsGKtDW76YsDQxEum04KiIwH1CEAQn4I
+         QgIKo2blq3NV2H0foo2m8hF7UfC3WsQCSlOXtYZDrbykNbIKjxPOB5LGn27vyJmSj99t
+         KnN9y2hKFR5Tq9anvEQcUhN98hV7Vj7Sti6NS1uhp1DSNI7Yz1Xa9OMz9RVS3Si4eVC2
+         +8a6l4s4LIrGpBuW0NyPkc/rYk5TrvMQuRK5n2nxyxvcU2hmFqrQP4lvGkovu6u0ouq6
+         1nQxwqxyE8mYKCfCR9//HO7iH69Naf2DApEHE3I05KNLE04l+60CTOKWgj9FpdhauE7Q
+         IDzA==
+X-Gm-Message-State: APjAAAVbFSwK76uIY4f0j7LLAB+wIreEF6YeRLua2fH1FQwR/yxi8fG9
+        N1+kId87tuRLAAJKY/5vV+hM9rr2MFrA
+X-Google-Smtp-Source: APXvYqw68MRltqDbbSVJXBzvXcrD1zPG/SpAMuWzVbvPk288n4oOn7iZOhweSgAzWN/4RfD4Mm+Aurb8OQBb
+X-Received: by 2002:a63:7c14:: with SMTP id x20mr49380pgc.208.1571792054270;
+ Tue, 22 Oct 2019 17:54:14 -0700 (PDT)
+Date:   Tue, 22 Oct 2019 17:53:34 -0700
 In-Reply-To: <20191023005337.196160-1-irogers@google.com>
-Message-Id: <20191023005337.196160-9-irogers@google.com>
+Message-Id: <20191023005337.196160-7-irogers@google.com>
 Mime-Version: 1.0
 References: <20191017170531.171244-1-irogers@google.com> <20191023005337.196160-1-irogers@google.com>
 X-Mailer: git-send-email 2.23.0.866.gb869b98d4c-goog
-Subject: [PATCH v2 8/9] perf tools: if pmu configuration fails free terms
+Subject: [PATCH v2 6/9] perf tools: add destructors for parse event terms
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -84,34 +84,126 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Avoid a memory leak when the configuration fails.
+If parsing fails then destructors are ran to clean the up the stack.
+Rename the head union member to make the term and evlist use cases more
+distinct, this simplifies matching the correct destructor.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/parse-events.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ tools/perf/util/parse-events.y | 69 +++++++++++++++++++++++-----------
+ 1 file changed, 48 insertions(+), 21 deletions(-)
 
-diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index f7c8d0853d71..6bf64b3767cc 100644
---- a/tools/perf/util/parse-events.c
-+++ b/tools/perf/util/parse-events.c
-@@ -1400,8 +1400,15 @@ int parse_events_add_pmu(struct parse_events_state *parse_state,
- 	if (get_config_terms(head_config, &config_terms))
- 		return -ENOMEM;
+diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
+index 545ab7cefc20..4725b14b9db4 100644
+--- a/tools/perf/util/parse-events.y
++++ b/tools/perf/util/parse-events.y
+@@ -12,6 +12,7 @@
+ #include <stdio.h>
+ #include <linux/compiler.h>
+ #include <linux/types.h>
++#include <linux/zalloc.h>
+ #include "pmu.h"
+ #include "evsel.h"
+ #include "parse-events.h"
+@@ -37,6 +38,25 @@ static struct list_head* alloc_list()
+ 	return list;
+ }
  
--	if (perf_pmu__config(pmu, &attr, head_config, parse_state->error))
-+	if (perf_pmu__config(pmu, &attr, head_config, parse_state->error)) {
-+		struct perf_evsel_config_term *pos, *tmp;
++static void free_list_evsel(struct list_head* list_evsel)
++{
++	struct perf_evsel *pos, *tmp;
 +
-+		list_for_each_entry_safe(pos, tmp, &config_terms, list) {
-+			list_del_init(&pos->list);
-+			free(pos);
-+		}
- 		return -EINVAL;
++	list_for_each_entry_safe(pos, tmp, list_evsel, node) {
++		list_del_init(&pos->node);
++		perf_evsel__delete(pos);
 +	}
++	free(list_evsel);
++}
++
++static void free_term(struct parse_events_term *term)
++{
++	if (term->type_val == PARSE_EVENTS__TERM_TYPE_STR)
++		free(term->val.str);
++	zfree(&term->array.ranges);
++	free(term);
++}
++
+ static void inc_group_count(struct list_head *list,
+ 		       struct parse_events_state *parse_state)
+ {
+@@ -66,6 +86,7 @@ static void inc_group_count(struct list_head *list,
+ %type <num> PE_VALUE_SYM_TOOL
+ %type <num> PE_RAW
+ %type <num> PE_TERM
++%type <num> value_sym
+ %type <str> PE_NAME
+ %type <str> PE_BPF_OBJECT
+ %type <str> PE_BPF_SOURCE
+@@ -76,37 +97,43 @@ static void inc_group_count(struct list_head *list,
+ %type <str> PE_EVENT_NAME
+ %type <str> PE_PMU_EVENT_PRE PE_PMU_EVENT_SUF PE_KERNEL_PMU_EVENT
+ %type <str> PE_DRV_CFG_TERM
+-%type <num> value_sym
+-%type <head> event_config
+-%type <head> opt_event_config
+-%type <head> opt_pmu_config
++%destructor { free ($$); } <str>
+ %type <term> event_term
+-%type <head> event_pmu
+-%type <head> event_legacy_symbol
+-%type <head> event_legacy_cache
+-%type <head> event_legacy_mem
+-%type <head> event_legacy_tracepoint
++%destructor { free_term ($$); } <term>
++%type <list_terms> event_config
++%type <list_terms> opt_event_config
++%type <list_terms> opt_pmu_config
++%destructor { parse_events_terms__delete ($$); } <list_terms>
++%type <list_evsel> event_pmu
++%type <list_evsel> event_legacy_symbol
++%type <list_evsel> event_legacy_cache
++%type <list_evsel> event_legacy_mem
++%type <list_evsel> event_legacy_tracepoint
++%type <list_evsel> event_legacy_numeric
++%type <list_evsel> event_legacy_raw
++%type <list_evsel> event_bpf_file
++%type <list_evsel> event_def
++%type <list_evsel> event_mod
++%type <list_evsel> event_name
++%type <list_evsel> event
++%type <list_evsel> events
++%type <list_evsel> group_def
++%type <list_evsel> group
++%type <list_evsel> groups
++%destructor { free_list_evsel ($$); } <list_evsel>
+ %type <tracepoint_name> tracepoint_name
+-%type <head> event_legacy_numeric
+-%type <head> event_legacy_raw
+-%type <head> event_bpf_file
+-%type <head> event_def
+-%type <head> event_mod
+-%type <head> event_name
+-%type <head> event
+-%type <head> events
+-%type <head> group_def
+-%type <head> group
+-%type <head> groups
++%destructor { free ($$.sys); free ($$.event); } <tracepoint_name>
+ %type <array> array
+ %type <array> array_term
+ %type <array> array_terms
++%destructor { free ($$.ranges); } <array>
  
- 	evsel = __add_event(list, &parse_state->idx, &attr,
- 			    get_config_name(head_config), pmu,
+ %union
+ {
+ 	char *str;
+ 	u64 num;
+-	struct list_head *head;
++	struct list_head *list_evsel;
++	struct list_head *list_terms;
+ 	struct parse_events_term *term;
+ 	struct tracepoint_name {
+ 		char *sys;
 -- 
 2.23.0.866.gb869b98d4c-goog
 
