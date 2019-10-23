@@ -2,47 +2,46 @@ Return-Path: <SRS0=hlnV=YQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D71ECA9EB6
-	for <bpf@archiver.kernel.org>; Wed, 23 Oct 2019 08:40:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98A86C47E49
+	for <bpf@archiver.kernel.org>; Wed, 23 Oct 2019 08:50:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2177221906
-	for <bpf@archiver.kernel.org>; Wed, 23 Oct 2019 08:40:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 68AC7205C9
+	for <bpf@archiver.kernel.org>; Wed, 23 Oct 2019 08:50:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C8i4c9ow"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IcLeuCI6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390353AbfJWIkv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Oct 2019 04:40:51 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:45628 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2390314AbfJWIkv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 23 Oct 2019 04:40:51 -0400
+        id S2390606AbfJWIu5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Oct 2019 04:50:57 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:38677 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2390394AbfJWIu4 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 23 Oct 2019 04:50:56 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1571820050;
+        s=mimecast20190719; t=1571820656;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Leo1i+YgTzOAxyY1K0L+NX63hVj5HiYTBpizOFvje2U=;
-        b=C8i4c9owWLo9ELGFMx0EgsC5LvJTAmpyeUaS34sSBa41veIUd7TE1CiY+lujUsQazKtoMr
-        /5vCjW72xS8UELAKiJvXqzvq+qohN8bEf7rvy5MoJWW2pXttCSH6oy+5Lhb9cpBSL5vOXO
-        UjfheVFNaVEZDVgMG+iEv2byU4pE2Ys=
+        bh=YI79mYRt92nE/8ezIrvSVBz+DsF7BXp0cmzQIdyUOA4=;
+        b=IcLeuCI6HkORItItleREqlQTqo37tXhMw7tqD6eCrLwjvNJ6Y6X52xC+G3V9Awy+R9d6+t
+        0Hr6H7GjZpWZP8z3XHLdzOttfrKFIKge8YcLDU7B5W4qKV0sJo0ea3cBOVpG7dv4pKXy1D
+        UtCFKCCTuFWzuU/LnxkVafEmRlVvzMU=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-182-apkC9BGkO-e0K5zNBfDeLA-1; Wed, 23 Oct 2019 04:40:46 -0400
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+ us-mta-211-U6V1Un5eMgiryiQC6QiOAw-1; Wed, 23 Oct 2019 04:50:53 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 44F761800D6B;
-        Wed, 23 Oct 2019 08:40:44 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A5BD0476;
+        Wed, 23 Oct 2019 08:50:50 +0000 (UTC)
 Received: from krava (unknown [10.43.17.61])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 1FEE360BE1;
-        Wed, 23 Oct 2019 08:40:39 +0000 (UTC)
-Date:   Wed, 23 Oct 2019 10:40:39 +0200
+        by smtp.corp.redhat.com (Postfix) with SMTP id 9C56C1001DC2;
+        Wed, 23 Oct 2019 08:50:46 +0000 (UTC)
+Date:   Wed, 23 Oct 2019 10:50:45 +0200
 From:   Jiri Olsa <jolsa@redhat.com>
 To:     Ian Rogers <irogers@google.com>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
@@ -63,17 +62,17 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, clang-built-linux@googlegroups.com,
         Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v2 2/9] perf tools: splice events onto evlist even on
- error
-Message-ID: <20191023084039.GD22919@krava>
+Subject: Re: [PATCH v2 3/9] perf tools: ensure config and str in terms are
+ unique
+Message-ID: <20191023085045.GE22919@krava>
 References: <20191017170531.171244-1-irogers@google.com>
  <20191023005337.196160-1-irogers@google.com>
- <20191023005337.196160-3-irogers@google.com>
+ <20191023005337.196160-4-irogers@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20191023005337.196160-3-irogers@google.com>
+In-Reply-To: <20191023005337.196160-4-irogers@google.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-MC-Unique: apkC9BGkO-e0K5zNBfDeLA-1
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-MC-Unique: U6V1Un5eMgiryiQC6QiOAw-1
 X-Mimecast-Spam-Score: 0
 Content-Type: text/plain; charset=WINDOWS-1252
 Content-Transfer-Encoding: quoted-printable
@@ -83,65 +82,67 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Oct 22, 2019 at 05:53:30PM -0700, Ian Rogers wrote:
-> If event parsing fails the event list is leaked, instead splice the list
-> onto the out result and let the caller cleanup.
->=20
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/util/parse-events.c | 17 +++++++++++------
->  1 file changed, 11 insertions(+), 6 deletions(-)
->=20
-> diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-event=
-s.c
-> index 4d42344698b8..a8f8801bd127 100644
-> --- a/tools/perf/util/parse-events.c
-> +++ b/tools/perf/util/parse-events.c
-> @@ -1962,15 +1962,20 @@ int parse_events(struct evlist *evlist, const cha=
-r *str,
+On Tue, Oct 22, 2019 at 05:53:31PM -0700, Ian Rogers wrote:
+
+SNIP
+
+>  =09=09=09=09=09return -1;
+> +=09=09=09=09}
+>  =09=09=09=09list_add_tail(&term->list, head);
 > =20
->  =09ret =3D parse_events__scanner(str, &parse_state, PE_START_EVENTS);
->  =09perf_pmu__parse_cleanup();
-> +
-
-I dont understand.. is there something on the list in case we fail?
-
-> +=09if (list_empty(&parse_state.list)) {
-> +=09=09WARN_ONCE(true, "WARNING: event parser found nothing\n");
-> +=09=09return -1;
+>  =09=09=09=09if (!parse_events_add_pmu(parse_state, list,
+>  =09=09=09=09=09=09=09  pmu->name, head,
+>  =09=09=09=09=09=09=09  true, true)) {
+> -=09=09=09=09=09pr_debug("%s -> %s/%s/\n", str,
+> +=09=09=09=09=09pr_debug("%s -> %s/%s/\n", config,
+>  =09=09=09=09=09=09 pmu->name, alias->str);
+>  =09=09=09=09=09ok++;
+>  =09=09=09=09}
+> @@ -1462,8 +1472,10 @@ int parse_events_multi_pmu_add(struct parse_events=
+_state *parse_state,
+>  =09=09=09}
+>  =09=09}
+>  =09}
+> -=09if (!ok)
+> +=09if (!ok) {
+> +=09=09free(list);
+>  =09=09return -1;
 > +=09}
+>  =09*listp =3D list;
+>  =09return 0;
+>  }
+> @@ -2761,13 +2773,13 @@ int parse_events_term__sym_hw(struct parse_events=
+_term **term,
+>  =09struct parse_events_term temp =3D {
+>  =09=09.type_val  =3D PARSE_EVENTS__TERM_TYPE_STR,
+>  =09=09.type_term =3D PARSE_EVENTS__TERM_TYPE_USER,
+> -=09=09.config    =3D config ?: (char *) "event",
+> +=09=09.config    =3D config ?: strdup("event"),
 
-this will display extra warning message for fail case:
+there's no check if this succeeds
 
-[jolsa@krava perf]$ ./perf record -e krava ls
-WARNING: event parser found nothing
-event syntax error: 'krava'
-                     \___ parser error
-
-we don't want that
-
-jirka
-
-> +
-> +=09/*
-> +=09 * Add list to the evlist even with errors to allow callers to clean =
-up.
-> +=09 */
-> +=09perf_evlist__splice_list_tail(evlist, &parse_state.list);
-> +
->  =09if (!ret) {
->  =09=09struct evsel *last;
+>  =09};
 > =20
-> -=09=09if (list_empty(&parse_state.list)) {
-> -=09=09=09WARN_ONCE(true, "WARNING: event parser found nothing\n");
-> -=09=09=09return -1;
-> -=09=09}
-> -
-> -=09=09perf_evlist__splice_list_tail(evlist, &parse_state.list);
->  =09=09evlist->nr_groups +=3D parse_state.nr_groups;
->  =09=09last =3D evlist__last(evlist);
->  =09=09last->cmdline_group_boundary =3D true;
-> --=20
-> 2.23.0.866.gb869b98d4c-goog
->=20
+>  =09BUG_ON(idx >=3D PERF_COUNT_HW_MAX);
+>  =09sym =3D &event_symbols_hw[idx];
+> =20
+> -=09return new_term(term, &temp, (char *) sym->symbol, 0);
+> +=09return new_term(term, &temp, strdup(sym->symbol), 0);
+>  }
+> =20
+>  int parse_events_term__clone(struct parse_events_term **new,
+> @@ -2776,12 +2788,15 @@ int parse_events_term__clone(struct parse_events_=
+term **new,
+>  =09struct parse_events_term temp =3D {
+>  =09=09.type_val  =3D term->type_val,
+>  =09=09.type_term =3D term->type_term,
+> -=09=09.config    =3D term->config,
+> +=09=09.config    =3D term->config ? strdup(term->config) : NULL,
+
+ditto
+
+also how is this released when term is freed?
+
+thanks,
+jirka
 
