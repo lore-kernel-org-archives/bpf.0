@@ -2,68 +2,68 @@ Return-Path: <SRS0=HE6e=YR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04FDFCA9EAF
-	for <bpf@archiver.kernel.org>; Thu, 24 Oct 2019 19:03:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EE19CA9EBB
+	for <bpf@archiver.kernel.org>; Thu, 24 Oct 2019 19:03:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C4C832070B
-	for <bpf@archiver.kernel.org>; Thu, 24 Oct 2019 19:03:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0456F21A4A
+	for <bpf@archiver.kernel.org>; Thu, 24 Oct 2019 19:03:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="t7KJKTpn"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="T0qtov6j"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437219AbfJXTDE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 24 Oct 2019 15:03:04 -0400
-Received: from mail-pg1-f202.google.com ([209.85.215.202]:43688 "EHLO
-        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2504272AbfJXTCQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 24 Oct 2019 15:02:16 -0400
-Received: by mail-pg1-f202.google.com with SMTP id i4so12551493pgh.10
-        for <bpf@vger.kernel.org>; Thu, 24 Oct 2019 12:02:15 -0700 (PDT)
+        id S2410274AbfJXTDl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 24 Oct 2019 15:03:41 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:34729 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392785AbfJXTDk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 24 Oct 2019 15:03:40 -0400
+Received: by mail-wm1-f65.google.com with SMTP id v3so2621212wmh.1
+        for <bpf@vger.kernel.org>; Thu, 24 Oct 2019 12:03:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=+BLwqukjEjSzyRsrVOMoR9T3IlY0GDPVz6roAVxq3yY=;
-        b=t7KJKTpnHF3ZC04GAfov7AIuzmHbGyRQPlZ9mNgn4WFbdmAzVeA3ChR9XF+XttPnTf
-         75zhk2kZQS2H08vWZ0KAjkFIC8V9IkLKQpluChH+lg/MnJuKr5kCVY9jw5PIOMNuUG0v
-         anCFzMEgznP21uSnkF6N+V6o/0oK5xhEfGJh11ocATY8YuykY+p/p+swR8vkKlsRnfLB
-         tK7un0pAXk7/PR1+clMIhuk9I3sOOVftIxSWxeoxvfFn4oUhFZIpVGQTeMahrHAXmAJ9
-         tWCiLish5zUvhxogmHs2c/n+8gLy3wvOevOQOoU0z4JrHSf1zsOhHgFYlXTgrTerzBGJ
-         K+Tw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=sOlMPkHiIzj/1B8Xdw7OYCh86kzsC/Xbe8Wte/5yW6Q=;
+        b=T0qtov6jc1dWgVKPBKr+vQM05EqJtQlosqzBPsldHBN/WJeMn12v6oSWAzvVChG/Oo
+         adeXB39MdZpTCFvYC/HeOChfNtKImaaFdp8DJBp72XB2JW6AnmcRfIiKLe5QGUuDj8yf
+         WHHGTBqYrJlXmU+E/n5xRTvVG+QGDBYBCrWL4xzSx5GFZHoy3px+saTNPB6aO2rbXbXC
+         W+AiGoI9xIrsr8E+I6cUQaJPWE6g0wvsZpCdKH0UH7mVRdyqjkdiMipiKXJh2EYOoO61
+         l8LzLMJ+FMudrZPfYCvX/8WAV9D/F/gdzfKF3ahPkEONDiwrOYBeDaiedjOZKcEaD+gs
+         epxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=+BLwqukjEjSzyRsrVOMoR9T3IlY0GDPVz6roAVxq3yY=;
-        b=nenclxzmqRMIr/EzeDry0ulW/FsshMIn7uWzfCJtbu6+uvPUlLiK4YNPAiPm9hfXBU
-         pyn8tfa2dOThw3jusf9RImGW/yJKlcJwUOMVuWpWRJC0Icw/FK4AKGyxbwIYQ8IrBD63
-         eZX9U3n6F4oebr03yxvHZ4y8cry3ttlL/z/xHxtUIyJw8PiRF0sq9HiBcSro1IgflkeF
-         Jj8jjqDrcWdqyWR20Q8BOaEIEI1AkwUztLcEYw4eyyBEsxMqv3xxSTKdVjqIndYIzL0W
-         qSooX7/mLu5u0LioxmuCJF05ycXqy+zjBbCo1ENKKK4m71We+Rh/pPLD1bh5ZwBvdI2A
-         ZYRw==
-X-Gm-Message-State: APjAAAWxE58dnvZh928UP0whazzdDNGVRfTHWPo7t3XGrspVWN8xstTZ
-        oeAOrZHL/LMGfeyvWhGvJa80vAhY/U28
-X-Google-Smtp-Source: APXvYqzxIMOjHfrLCzoADHIQ+vCqU6Dp5CTsgb4D41Uy4S5lE49mdz54PDDtLJ3H/apOgnqz2EcWiMrex7l0
-X-Received: by 2002:a63:7218:: with SMTP id n24mr5945150pgc.100.1571943735169;
- Thu, 24 Oct 2019 12:02:15 -0700 (PDT)
-Date:   Thu, 24 Oct 2019 12:01:56 -0700
-In-Reply-To: <20191024190202.109403-1-irogers@google.com>
-Message-Id: <20191024190202.109403-4-irogers@google.com>
-Mime-Version: 1.0
-References: <20191023005337.196160-1-irogers@google.com> <20191024190202.109403-1-irogers@google.com>
-X-Mailer: git-send-email 2.23.0.866.gb869b98d4c-goog
-Subject: [PATCH v3 3/9] perf tools: ensure config and str in terms are unique
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=sOlMPkHiIzj/1B8Xdw7OYCh86kzsC/Xbe8Wte/5yW6Q=;
+        b=jhuP/8JZHCCRi5kN65pKoak3uKZCk6WiH0AvtSvFnEmiJ2TpaJOTzpsRkVPGFzLPbA
+         roOX0m+VXP8PkhrFnYdaozGGz9pREa+sN7v7VZC+QpWgrJNfkGiDqUTkCTyYqpgv5QBh
+         hzukYMDfhZ9x4JbPkVSz4fFDMnp3grfkte0xDbXjYbSOy5LGx+dRR+Y44YXrJu78M9zX
+         7PR9eBEhOvSfrlpaiIRvwcQizG+lMFLBZ4OyYBM91sp0v+0UeFPpOCeOCo1D49ymqdg+
+         zaR9bxqI+A6JJN5XS3tdmAu8F+Z89zae6AukADFC8elk63Toqxuke4BTigvl9BWQKohX
+         Idaw==
+X-Gm-Message-State: APjAAAUzEhT28GJJiqKjjyFGCZ/ISOempJ8qgJL9ZnxwDC0LZ4gLObtI
+        t9FMiF+sjMwWbTF8Hkg+uzIWpeF4+HtuohYqQCNvjg==
+X-Google-Smtp-Source: APXvYqy/lvarHvt9DQzDe9G2HXXmTGxdzgcZNoWA9U7wCC2qWxO7jfRxZT7bqAZWy7ZQ+Tb8pwH1UPf1ZIWJ3aTgkPw=
+X-Received: by 2002:a7b:c74a:: with SMTP id w10mr6252770wmk.30.1571943816673;
+ Thu, 24 Oct 2019 12:03:36 -0700 (PDT)
+MIME-Version: 1.0
+References: <20191017170531.171244-1-irogers@google.com> <20191023005337.196160-1-irogers@google.com>
+ <20191023005337.196160-7-irogers@google.com> <20191023090131.GH22919@krava>
+In-Reply-To: <20191023090131.GH22919@krava>
 From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
+Date:   Thu, 24 Oct 2019 12:03:25 -0700
+Message-ID: <CAP-5=fV4=0D=71Ea_ViHMo0opqME2JX2oGsTLPix3hbfdeV7MA@mail.gmail.com>
+Subject: Re: [PATCH v2 6/9] perf tools: add destructors for parse event terms
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -74,160 +74,43 @@ To:     Peter Zijlstra <peterz@infradead.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
         Kan Liang <kan.liang@linux.intel.com>,
         John Garry <john.garry@huawei.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, clang-built-linux@googlegroups.com
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
+        LKML <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Stephane Eranian <eranian@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Make it easier to release memory associated with parse event terms by
-duplicating the string for the config name and ensuring the val string
-is a duplicate.
+Sorry, the intent here is that patch v2 be used in preference to the
+1st patch, it looks like you've applied both. The first patch split
+apart tracepoint_name to avoid accessing out of scope stack memory,
+the second patch allocates heap memory that is correctly destructed
+(and consequently needs 1 fewer struct tracepoint_name member). Please
+disregard the 1st patch and just apply the second series.
 
-Currently the parser may memory leak terms and this is addressed in a
-later patch.
+Thanks,
+Ian
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/parse-events.c | 51 ++++++++++++++++++++++++++++------
- tools/perf/util/parse-events.y |  4 ++-
- 2 files changed, 45 insertions(+), 10 deletions(-)
 
-diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index f0d50f079d2f..dc5862a663b5 100644
---- a/tools/perf/util/parse-events.c
-+++ b/tools/perf/util/parse-events.c
-@@ -1430,7 +1430,6 @@ int parse_events_add_pmu(struct parse_events_state *parse_state,
- int parse_events_multi_pmu_add(struct parse_events_state *parse_state,
- 			       char *str, struct list_head **listp)
- {
--	struct list_head *head;
- 	struct parse_events_term *term;
- 	struct list_head *list;
- 	struct perf_pmu *pmu = NULL;
-@@ -1447,19 +1446,30 @@ int parse_events_multi_pmu_add(struct parse_events_state *parse_state,
- 
- 		list_for_each_entry(alias, &pmu->aliases, list) {
- 			if (!strcasecmp(alias->name, str)) {
-+				struct list_head *head;
-+				char *config;
-+
- 				head = malloc(sizeof(struct list_head));
- 				if (!head)
- 					return -1;
- 				INIT_LIST_HEAD(head);
--				if (parse_events_term__num(&term, PARSE_EVENTS__TERM_TYPE_USER,
--							   str, 1, false, &str, NULL) < 0)
-+				config = strdup(str);
-+				if (!config)
-+					return -1;
-+				if (parse_events_term__num(&term,
-+						   PARSE_EVENTS__TERM_TYPE_USER,
-+						   config, 1, false, &config,
-+						   NULL) < 0) {
-+					free(list);
-+					free(config);
- 					return -1;
-+				}
- 				list_add_tail(&term->list, head);
- 
- 				if (!parse_events_add_pmu(parse_state, list,
- 							  pmu->name, head,
- 							  true, true)) {
--					pr_debug("%s -> %s/%s/\n", str,
-+					pr_debug("%s -> %s/%s/\n", config,
- 						 pmu->name, alias->str);
- 					ok++;
- 				}
-@@ -1468,8 +1478,10 @@ int parse_events_multi_pmu_add(struct parse_events_state *parse_state,
- 			}
- 		}
- 	}
--	if (!ok)
-+	if (!ok) {
-+		free(list);
- 		return -1;
-+	}
- 	*listp = list;
- 	return 0;
- }
-@@ -2764,30 +2776,51 @@ int parse_events_term__sym_hw(struct parse_events_term **term,
- 			      char *config, unsigned idx)
- {
- 	struct event_symbol *sym;
-+	char *str;
- 	struct parse_events_term temp = {
- 		.type_val  = PARSE_EVENTS__TERM_TYPE_STR,
- 		.type_term = PARSE_EVENTS__TERM_TYPE_USER,
--		.config    = config ?: (char *) "event",
-+		.config    = config,
- 	};
- 
-+	if (!temp.config) {
-+		temp.config = strdup("event");
-+		if (!temp.config)
-+			return -ENOMEM;
-+	}
- 	BUG_ON(idx >= PERF_COUNT_HW_MAX);
- 	sym = &event_symbols_hw[idx];
- 
--	return new_term(term, &temp, (char *) sym->symbol, 0);
-+	str = strdup(sym->symbol);
-+	if (!str)
-+		return -ENOMEM;
-+	return new_term(term, &temp, str, 0);
- }
- 
- int parse_events_term__clone(struct parse_events_term **new,
- 			     struct parse_events_term *term)
- {
-+	char *str;
- 	struct parse_events_term temp = {
- 		.type_val  = term->type_val,
- 		.type_term = term->type_term,
--		.config    = term->config,
-+		.config    = NULL,
- 		.err_term  = term->err_term,
- 		.err_val   = term->err_val,
- 	};
- 
--	return new_term(new, &temp, term->val.str, term->val.num);
-+	if (term->config) {
-+		temp.config = strdup(term->config);
-+		if (!temp.config)
-+			return -ENOMEM;
-+	}
-+	if (term->type_val == PARSE_EVENTS__TERM_TYPE_NUM)
-+		return new_term(new, &temp, NULL, term->val.num);
-+
-+	str = strdup(term->val.str);
-+	if (!str)
-+		return -ENOMEM;
-+	return new_term(new, &temp, str, 0);
- }
- 
- int parse_events_copy_term_list(struct list_head *old,
-diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
-index 48126ae4cd13..27d6b187c9b1 100644
---- a/tools/perf/util/parse-events.y
-+++ b/tools/perf/util/parse-events.y
-@@ -644,9 +644,11 @@ PE_NAME array '=' PE_VALUE
- PE_DRV_CFG_TERM
- {
- 	struct parse_events_term *term;
-+	char *config = strdup($1);
- 
-+	ABORT_ON(!config);
- 	ABORT_ON(parse_events_term__str(&term, PARSE_EVENTS__TERM_TYPE_DRV_CFG,
--					$1, $1, &@1, NULL));
-+					config, $1, &@1, NULL));
- 	$$ = term;
- }
- 
--- 
-2.23.0.866.gb869b98d4c-goog
-
+On Wed, Oct 23, 2019 at 2:01 AM Jiri Olsa <jolsa@redhat.com> wrote:
+>
+> On Tue, Oct 22, 2019 at 05:53:34PM -0700, Ian Rogers wrote:
+> > If parsing fails then destructors are ran to clean the up the stack.
+> > Rename the head union member to make the term and evlist use cases more
+> > distinct, this simplifies matching the correct destructor.
+>
+> I'm getting compilation fail:
+>
+>   CC       util/parse-events-bison.o
+> util/parse-events.y: In function =E2=80=98yydestruct=E2=80=99:
+> util/parse-events.y:125:45: error: =E2=80=98struct tracepoint_name=E2=80=
+=99 has no member named =E2=80=98sys=E2=80=99; did you mean =E2=80=98sys1=
+=E2=80=99?
+>   125 | %destructor { free ($$.sys); free ($$.event); } <tracepoint_name>
+>
+> jirka
+>
