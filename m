@@ -2,138 +2,111 @@ Return-Path: <SRS0=HE6e=YR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D70C4CA9EAF
-	for <bpf@archiver.kernel.org>; Thu, 24 Oct 2019 16:56:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D89B6CA9EAF
+	for <bpf@archiver.kernel.org>; Thu, 24 Oct 2019 16:59:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9A0CB20659
-	for <bpf@archiver.kernel.org>; Thu, 24 Oct 2019 16:56:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A99B920659
+	for <bpf@archiver.kernel.org>; Thu, 24 Oct 2019 16:59:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="nv+8y1O0";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="kJPDPDql"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ptq8nTS5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726168AbfJXQ4T (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 24 Oct 2019 12:56:19 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:7904 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2409921AbfJXQ4S (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 24 Oct 2019 12:56:18 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9OGt1Od022070;
-        Thu, 24 Oct 2019 09:56:15 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : subject :
- date : message-id : references : in-reply-to : content-type : content-id :
- content-transfer-encoding : mime-version; s=facebook;
- bh=Y2G9q/ftsWSHCszUZPCqqMKnrAakV26w1Lo1uJpUB9c=;
- b=nv+8y1O03o/RIFfYsOGSFTubH8brzSTjY8Z2wu9Slvi0XaUTiJoIPKXqrmc/NGts/WFv
- uGtQM75+yl+gKTDG5qWIW38VGhmPP5zAW5S0+jDmAb7GZW0oHCJnkS6Fubty4qcMkNW/
- J8fAvdggLGtiviX769r4U+Qsj0cArtDlKBs= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2vtxhxcp89-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 24 Oct 2019 09:56:15 -0700
-Received: from ash-exopmbx201.TheFacebook.com (2620:10d:c0a8:83::8) by
- ash-exhub101.TheFacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 24 Oct 2019 09:56:08 -0700
-Received: from ash-exhub104.TheFacebook.com (2620:10d:c0a8:82::d) by
- ash-exopmbx201.TheFacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 24 Oct 2019 09:56:08 -0700
-Received: from NAM02-CY1-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.35.175) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5
- via Frontend Transport; Thu, 24 Oct 2019 09:56:08 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oLWiQfY630NGszecSuLPq/Hn/YbKqye5SvuO7iJUeyT1KuJTGHn2Vgjxcz2wr4uDQezT8ipwEWhzxvPjNvyaCtdoqSsFzzvk1u87FbncEEDNpdj4vBTtZEfafXssMQQZ9hKLoXxYfdNhOkJQZbEHLLXu9l26Kw5KPQkZ44yTmVmfzyFksxBt6gb8Mm/2bhI2a6b+CeyeytAly0bWhRC0fxcpjW5q8dAQDclq7ZXldvu0Of3yFRHxYdOZfeyN0RWES7vujkQA+E2GDlCtorg1OycsHP2/rXlclWBhS1nIZumFtJZpNOoeoGAihNCu82uBsIFx48s3BQiGihliC95mjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y2G9q/ftsWSHCszUZPCqqMKnrAakV26w1Lo1uJpUB9c=;
- b=hGCMRVY+V5rordQLa9x5QP8KnzqwWD2118peywDnRhMMf/0HpHVTDXUm8lUuVtcLczij75prk2F48Sl3ZipAa6HUK+03W7QSd6M4G3OrWMT4T4KuJrysqp0pMK2lxGXLx96C7z9siKC/iMNC9swcO+HwfvKdbtnBMrRSe9S3phkm/HX2ACCxY9Jo15Hu5ARWhZwhARYe8exmYC48k+xW+Uq44KHlx/BO9+c4A+4/kVOQARAzsf7HRrUyfAhti4gTePdarM+SRJs/SYQsBbngqpDg9f18UnyfUJpUDDZG6KEskrRLRctgXxvGe3Nse7jtcvJL+8o4kTBzBvVsV87WUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y2G9q/ftsWSHCszUZPCqqMKnrAakV26w1Lo1uJpUB9c=;
- b=kJPDPDqlu+dRSRLzZe6ijDHUx/3lr/vc1wrDGD5KxWaHepaNqfULDHS2rG5vCikXX1SnwVKcB4ksrwDIVZbQwvkzG92CCUMJs3tQsFKKvHfJFbISoksRMkxNCo/he/RjE7c6Uq+LKLgd2EXgTUHd6vZDuwjSECOA98KZJ0cwHBw=
-Received: from BYAPR15MB3384.namprd15.prod.outlook.com (20.179.60.27) by
- BYAPR15MB3429.namprd15.prod.outlook.com (20.179.58.155) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2387.23; Thu, 24 Oct 2019 16:56:07 +0000
-Received: from BYAPR15MB3384.namprd15.prod.outlook.com
- ([fe80::b92c:ebd2:58dc:6b8d]) by BYAPR15MB3384.namprd15.prod.outlook.com
- ([fe80::b92c:ebd2:58dc:6b8d%5]) with mapi id 15.20.2387.021; Thu, 24 Oct 2019
- 16:56:07 +0000
-From:   Yonghong Song <yhs@fb.com>
-To:     "Jose E. Marchesi" <jose.marchesi@oracle.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: initiated discussion to support attribute address_space in clang
-Thread-Topic: initiated discussion to support attribute address_space in clang
-Thread-Index: AQHViovtf36A5WULmUOUs3re8NDO8A==
-Date:   Thu, 24 Oct 2019 16:56:06 +0000
-Message-ID: <79a43f7f-b463-5f40-7830-f488d178b0a4@fb.com>
-References: <87lfutgvsu.fsf@oracle.com>
-In-Reply-To: <87lfutgvsu.fsf@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: MWHPR06CA0019.namprd06.prod.outlook.com
- (2603:10b6:301:39::32) To BYAPR15MB3384.namprd15.prod.outlook.com
- (2603:10b6:a03:112::27)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [2620:10d:c090:200::7254]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ff2da382-a660-4b8c-6882-08d758a30fe3
-x-ms-traffictypediagnostic: BYAPR15MB3429:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <BYAPR15MB34293C8C0DC4AC2B05AEEC24D36A0@BYAPR15MB3429.namprd15.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0200DDA8BE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(136003)(376002)(346002)(366004)(39860400002)(199004)(189003)(8936002)(2906002)(14454004)(6116002)(4744005)(36756003)(76176011)(52116002)(31686004)(64756008)(66556008)(46003)(66446008)(2616005)(99286004)(386003)(6506007)(66476007)(6436002)(11346002)(446003)(102836004)(486006)(71200400001)(71190400001)(186003)(5660300002)(2501003)(6306002)(6512007)(256004)(305945005)(966005)(31696002)(7736002)(476003)(66946007)(8676002)(81156014)(86362001)(316002)(81166006)(561944003)(25786009)(478600001)(6486002)(110136005);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB3429;H:BYAPR15MB3384.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MrzeYq+qEC8lx1JKMPBBRx9XTlzcOzNFHlk6tzjZInEM4oIPGOGkEf/Q/KAqvAOKhB95Ud2WVaUzaCao6bqYm5sFs1OoEpIMK16AVaHa/9z1LcgcXgyM0pbHtwWhfWxTCJeuVFXpcxdy9w3bNKPkT7BKqm3gVm8wJERXm69CQzZn4Zqj4xxXlWM63CaSD/xkf2yP7DvPZJQiMHMuvfsoW8V2BxB8jxv9uuLhOVAIGbnop+gi+7bcm5jV9o0WTTmw9HrukWDoecVHfHUwU/XWzGDxgRmuVBB0fIpeWW9XmjkblOnrjji6FUU/7XOwsqcbm85jfb91puh/utEbRz+jnhC5ynP19VEJ/MpMo2jp4yzrwqiKpW/gB9+WF1pjD01FDifNCqDILHbmlz1Ugn239frtTIs6RW4xuS/2GNbpEZAWhoOqwN7sHvMb7/qEXuFlNO+Tzjb9ih6qXfjBdEbdyv6W0WSg7SHxAUYjsZom0+A=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <52D738E6DCEDA645AAF58A75615DB06E@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff2da382-a660-4b8c-6882-08d758a30fe3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Oct 2019 16:56:06.8897
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 5z74Vbdl0+ZSf3bqMl96vnIZs8hm2xaFuKtLHRwsukJtIf4cRnx9xgXKhzCb9WnA
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3429
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
- definitions=2019-10-24_10:2019-10-23,2019-10-24 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- impostorscore=0 bulkscore=0 adultscore=0 malwarescore=0 mlxlogscore=944
- phishscore=0 clxscore=1011 suspectscore=0 spamscore=0 mlxscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1910240158
-X-FB-Internal: deliver
+        id S2407583AbfJXQ7d (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 24 Oct 2019 12:59:33 -0400
+Received: from mail-il1-f196.google.com ([209.85.166.196]:43341 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405976AbfJXQ7d (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 24 Oct 2019 12:59:33 -0400
+Received: by mail-il1-f196.google.com with SMTP id t5so23036603ilh.10;
+        Thu, 24 Oct 2019 09:59:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=J6cIyEOWdjlCo3WxpSxbJw4O5SIfcJm1CPBXanfu+xM=;
+        b=Ptq8nTS5o6TzUrMm9MB8ANO2yHy34z0C/j40+jeauPrMK1ui+Cj2l1U2REFdPofCO3
+         guMvB27Jbh8fe5GXqQn9wi4fKIsXcUxN6NoWnKS+xTeXyzHe2oxGZOLLHYrp6W/mly5L
+         NhTfWY1NJtjptXbxh9vTVVT8RDuDJ1Qsu9B/HR+xp3YOPuIVI2PCTwEm5R87MnTlRyYY
+         9v+d9sazNvxqJVnTrGgfHS7nXqN35yq++KIxc+jadIxA4Xb0LPPQcFDFsBP0pDbG9ya/
+         gGL7WakmpSkwzLJh2fphhZNLx+agJQXWL9oFUedrf5dy8mRAOu6Z3UsNMAuCZPBK1Fum
+         mHcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=J6cIyEOWdjlCo3WxpSxbJw4O5SIfcJm1CPBXanfu+xM=;
+        b=mTc6pIu6y3JP0Q8sxmlTUibHy6/2nLrWNFIN7ReOSRWda5+GFUm1JApoHTfcPQ3DBA
+         GmwW7YNsaIsVwz1vNLcLv3wyURQfN2VnwhbBWEEYiugm0E5d3r7XlL4pGEim0UgtJ37b
+         o9mcksf4S3k20ujyUlTthoaqfKpidDhpwkFs953RP83s7/Mr2kHJIgzK9e7Q4K1WIQWF
+         4qZ44mfGcb5aOZBU+iSJtvDDPSmhc7fwE2y4g6+AEo2t2NZgqss+gKtz/BvNbJurexhn
+         W4NgQ1rYbNnYwZfRMcPtmPdLE9Qqk4kV/u7LNB6/1yEAqhwA6B1u4J9aHlSp1GVtw+qJ
+         aCCg==
+X-Gm-Message-State: APjAAAXWgk3oLGL7dRhkzicvzo2C75AHhVvkEYUE8I2gMfASqwUWcuMd
+        L+GHWMuZyq7LHFZC1ilDLH0=
+X-Google-Smtp-Source: APXvYqyRHcHwApDP3qZCLoIWShsLsHHVj943atq34QEfH7qMjbYAvVAfDNDHQCguOw/3shGV+BrKgg==
+X-Received: by 2002:a92:ccd0:: with SMTP id u16mr47017799ilq.296.1571936372309;
+        Thu, 24 Oct 2019 09:59:32 -0700 (PDT)
+Received: from localhost ([184.63.162.180])
+        by smtp.gmail.com with ESMTPSA id d6sm7527320iop.34.2019.10.24.09.59.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Oct 2019 09:59:31 -0700 (PDT)
+Date:   Thu, 24 Oct 2019 09:59:22 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Jakub Sitnicki <jakub@cloudflare.com>, bpf@vger.kernel.org
+Cc:     John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com
+Message-ID: <5db1d86ad61ae_5c282ada047205c0a8@john-XPS-13-9370.notmuch>
+In-Reply-To: <20191022113730.29303-2-jakub@cloudflare.com>
+References: <20191022113730.29303-1-jakub@cloudflare.com>
+ <20191022113730.29303-2-jakub@cloudflare.com>
+Subject: RE: [RFC bpf-next 1/5] bpf, sockmap: Let BPF helpers use lookup
+ operation on SOCKMAP
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-SGksIEpvc2UsDQoNCkkganVzdCBpbml0aWF0ZWQgYSBkaXNjdXNzaW9uIChSRkMgcGF0Y2ggDQpo
-dHRwczovL3Jldmlld3MubGx2bS5vcmcvRDY5MzkzKSBmb3IgbGx2bS9jbGFuZyB0byBzdXBwb3J0
-IHVzZXIgDQphZGRyZXNzX3NwYWNlIGF0dHJpYnV0ZS4NCg0KSSBhbSBub3QgYWJsZSB0byBhZGQg
-eW91ciBuYW1lIGluIHN1YnNjcmliZXIgbGlzdCBhcyB5b3UgcHJvYmFibHkNCm5vdCByZWdpc3Rl
-cmVkIHdpdGggbGx2bSBtYWlsaW5nIGxpc3Qgb3IgcGhhYnJpY2F0b3IuDQoNCkp1c3QgbGV0IHlv
-dSBrbm93IHNvIHdlIGNhbiBoYXZlIGFuIGV2ZW50dWFsIHByb3Bvc2FsIHdoaWNoDQp3aWxsIGJl
-IGFsc28gZ29vZCBmb3IgZ2NjLiBQbGVhc2UgcGFydGljaXBhdGUgaW4gZGlzY3Vzc2lvbi4NCg0K
-VGhhbmtzLA0KDQpZb25naG9uZw0K
+Jakub Sitnicki wrote:
+> Don't require the BPF helpers that need to access SOCKMAP maps to live in
+> the sock_map module. Expose SOCKMAP lookup to all kernel-land.
+> 
+> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+> ---
+>  net/core/sock_map.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+> index eb114ee419b6..facacc296e6c 100644
+> --- a/net/core/sock_map.c
+> +++ b/net/core/sock_map.c
+> @@ -271,7 +271,9 @@ static struct sock *__sock_map_lookup_elem(struct bpf_map *map, u32 key)
+>  
+>  static void *sock_map_lookup(struct bpf_map *map, void *key)
+>  {
+> -	return ERR_PTR(-EOPNOTSUPP);
+> +	u32 index = *(u32 *)key;
+> +
+> +	return __sock_map_lookup_elem(map, index);
+>  }
+>  
+>  static int __sock_map_delete(struct bpf_stab *stab, struct sock *sk_test,
+> -- 
+> 2.20.1
+> 
+
+OK, I'm looking into the latest BTF bits to see if we can do something
+more useful here to keep the type information when the lookup is done so
+the sock can be feed from sk_lookup and actually read.
+
+As this series stands after the lookup its just an opaque ptr_to_map_value
+right?
