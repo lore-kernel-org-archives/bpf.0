@@ -2,78 +2,78 @@ Return-Path: <SRS0=HE6e=YR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60CAACA9EAF
-	for <bpf@archiver.kernel.org>; Thu, 24 Oct 2019 16:12:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AE13CA9EBC
+	for <bpf@archiver.kernel.org>; Thu, 24 Oct 2019 16:56:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 35CDE20659
-	for <bpf@archiver.kernel.org>; Thu, 24 Oct 2019 16:12:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2B07C205C9
+	for <bpf@archiver.kernel.org>; Thu, 24 Oct 2019 16:56:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VSYQSrqc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bnJWmYts"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439745AbfJXQMN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 24 Oct 2019 12:12:13 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:39865 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2439732AbfJXQMN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 24 Oct 2019 12:12:13 -0400
-Received: by mail-pf1-f196.google.com with SMTP id v4so15442380pff.6;
-        Thu, 24 Oct 2019 09:12:12 -0700 (PDT)
+        id S2409951AbfJXQ4R (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 24 Oct 2019 12:56:17 -0400
+Received: from mail-io1-f46.google.com ([209.85.166.46]:44826 "EHLO
+        mail-io1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726168AbfJXQ4R (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 24 Oct 2019 12:56:17 -0400
+Received: by mail-io1-f46.google.com with SMTP id w12so30339944iol.11;
+        Thu, 24 Oct 2019 09:56:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=I9gTKTY8dXIfST0vdAZ/EJgrRW810oQ1HZflmexaYVM=;
-        b=VSYQSrqcQvc6m/dj8ueivZPOBcvxYDvUdnAikL6BPeYqG7sPOvIpiJxfzoULJ2Albc
-         Y6Sgi1V2V57daNIzKQg0ayW0uQxUpGYx733lwcwSzS7vfATdLCVeXPLoTfaQgumLC3G1
-         7USgWJmG8k6g9UQ1mIlAQHmPiOPV7EqH4L3VH0HvD/CVDh6PMIOKrTZnlVD5ak49byMu
-         TPxT0HdZ4gwI2/jAV/BXQtAzIWg7lJXTLzWcoxH3Do35jqBREdPEwCugcLzNRFBNT2KF
-         TwNS73J2rUWYIWivH7w98rQQSKM6vWOBFSNzDf6nYWW4ubeHDnZyMM08ZsSh5ERTikMw
-         Jd3A==
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=wvcNv5xIFN846zQWLu3cY20MZbw7dwnexWPSClFQ4xU=;
+        b=bnJWmYtsMkDFfrksxxonX0WtNv9WdkaqUp332rLvu5PuPcgXrurJ+lh81Z3kt//baW
+         7uge+ziO9QPECrcQ8hSvralarVirtHvDp3jZUJuE7V8gFD8Kcs+1/NRHCjjN6UkBbEe+
+         4IHyUbauPwLc4s1b35XEbgbpgcOrbuGJCi9xmFP27o2+5ma6jljzixNWZaQ4GGyUcXHy
+         1leg5rf8ElbYTIgHJ+K1zTkqyoH4KJr0ppCfCAoxr0mu1QwWm8+wKKYWvzjb4byfGtBn
+         CXVSjD6wpCp0VCmelLXaDCFIJg1SNGZTw3yZzbTsOvbY6t7RLAJEpBqPxvnGNKCU2d32
+         kSxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=I9gTKTY8dXIfST0vdAZ/EJgrRW810oQ1HZflmexaYVM=;
-        b=AjXqbJCW6u7QNxWevOg0EYHv3GUMkHD7b1uqqgflFMHSeW9nC1mhcc2vCISfCa8xT/
-         80n8QnOlUsJR/NSJCurZbhJzlza8eQPLhx8W+Tykb0Z7/T8MaLqIASQ2histJ5yiz9zC
-         6Mx0GAm59PQiRg4lUlixHrCebsymy0WudCZaBVjmi/ds5mHmmSpEPPLDBJjSZorv17hZ
-         LDGoT8S9yFIW4+zjUWtwp4NdtUHPoXLquGFZlAOxwGbCX4i4o9m6tp4NzY5wwSCqQdzs
-         2NTYHEIfHbADawk0ly9nUTuC15lRFegqXj2PdKjS2LTYwHQMYR2rf+81zs2iu911LAwR
-         3DUQ==
-X-Gm-Message-State: APjAAAViWNlMg3B6Zym9ih/Lb1CFVQaiK9WmBIKyBmfTt093b/HIAfEP
-        x/cTrJA5k5TtOSSWmg3orsE=
-X-Google-Smtp-Source: APXvYqzheI1ZTSlQ/VFxOTT5AwlSfrUcqiDnTZPK+ycMytv4Qo4yjscx+a/ZZ5PcjEsrTvrCdXHv0g==
-X-Received: by 2002:a63:3203:: with SMTP id y3mr1102620pgy.437.1571933532198;
-        Thu, 24 Oct 2019 09:12:12 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:200::3:c1d6])
-        by smtp.gmail.com with ESMTPSA id 30sm28336041pgz.2.2019.10.24.09.12.10
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 24 Oct 2019 09:12:11 -0700 (PDT)
-Date:   Thu, 24 Oct 2019 09:12:09 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Jakub Sitnicki <jakub@cloudflare.com>
-Cc:     bpf@vger.kernel.org, John Fastabend <john.fastabend@gmail.com>,
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=wvcNv5xIFN846zQWLu3cY20MZbw7dwnexWPSClFQ4xU=;
+        b=XLA2fqcleZkZCE8zwTrTWX586eHCjOvAAiVsYXzK2ARSqhja81ph5qkZOmAmGsQnfC
+         m4Y+UnUFLulS6evCAWlKiR5abc+KdSs1lOfulDCAwiKLIGRyKmtHgxGbX+zwn3MPNhTV
+         nRpPo53JCmAMsBi9NQ6KQts4BnqwfNfsSjJYYE603S/nzUYjCfuXQ9jKjknmWjwnAAn+
+         kjBXIUsDXG3jUkFYo35Lh3v+v77uxTSuTlKD2pBYiXmikcBYg5eawteHKgzst67iQj+8
+         uHYzU/2cCTxSs04BujvsVMFMlVN7dEBZ8QNxJzvQRrheDEWB0jZLBpbFdCfVyg3360nx
+         shIA==
+X-Gm-Message-State: APjAAAVZKumuibR3wEIEEsgl4iHsayLhjyNcpBwjg+vHJX6dhgK6DJlU
+        36QhgJA929rZIayhuigH0GVZ0cAGU+g=
+X-Google-Smtp-Source: APXvYqwMMt1NAoU/JFqW8EXxDcrG3v05x+TvywkwWATpKnW98Iv6i5MtG5BrosbPpoHSok1YX56OGA==
+X-Received: by 2002:a5e:c642:: with SMTP id s2mr9665676ioo.218.1571936176596;
+        Thu, 24 Oct 2019 09:56:16 -0700 (PDT)
+Received: from localhost ([184.63.162.180])
+        by smtp.gmail.com with ESMTPSA id z19sm2409237ilj.49.2019.10.24.09.56.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Oct 2019 09:56:16 -0700 (PDT)
+Date:   Thu, 24 Oct 2019 09:56:08 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Jakub Sitnicki <jakub@cloudflare.com>, bpf@vger.kernel.org
+Cc:     John Fastabend <john.fastabend@gmail.com>,
         Martin KaFai Lau <kafai@fb.com>, netdev@vger.kernel.org,
         kernel-team@cloudflare.com
-Subject: Re: [RFC bpf-next 0/5] Extend SOCKMAP to store listening sockets
-Message-ID: <20191024161208.nh2hgsgtscmmfl7w@ast-mbp.dhcp.thefacebook.com>
-References: <20191022113730.29303-1-jakub@cloudflare.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Message-ID: <5db1d7a810bdb_5c282ada047205c08f@john-XPS-13-9370.notmuch>
 In-Reply-To: <20191022113730.29303-1-jakub@cloudflare.com>
-User-Agent: NeoMutt/20180223
+References: <20191022113730.29303-1-jakub@cloudflare.com>
+Subject: RE: [RFC bpf-next 0/5] Extend SOCKMAP to store listening sockets
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Oct 22, 2019 at 01:37:25PM +0200, Jakub Sitnicki wrote:
+Jakub Sitnicki wrote:
 > This patch set is a follow up on a suggestion from LPC '19 discussions to
 > make SOCKMAP (or a new map type derived from it) a generic type for storing
 > established as well as listening sockets.
@@ -98,6 +98,20 @@ On Tue, Oct 22, 2019 at 01:37:25PM +0200, Jakub Sitnicki wrote:
 > I'm looking for feedback if there's anything fundamentally wrong with
 > extending SOCKMAP map type like this that I might have missed.
 
-John, Martin,
-comments?
+I think this looks good. The main reason I blocked it off before is mostly
+because I had no use-case for it and the complication with what to do with
+child sockets. Clearing the psock state seems OK to me if user wants to
+add it back to a map they can simply grab it again from a sockops event.
 
+By the way I would eventually like to see the lookup hook return the
+correct type (PTR_TO_SOCKET_OR_NULL) so that the verifier "knows" the type
+and the socket can be used the same as if it was pulled from a sk_lookup
+helper.
+
+> 
+> Thanks,
+> Jakub
+> 
+> [1] https://lore.kernel.org/bpf/20190828072250.29828-1-jakub@cloudflare.com/
+> [2] https://linuxplumbersconf.org/event/4/contributions/487/attachments/238/417/Programmable_socket_lookup_LPC_19.pdf
+> 
