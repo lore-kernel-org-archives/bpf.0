@@ -6,52 +6,52 @@ X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 203DCCA9EBD
-	for <bpf@archiver.kernel.org>; Thu, 24 Oct 2019 13:11:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C361FCA9EBC
+	for <bpf@archiver.kernel.org>; Thu, 24 Oct 2019 13:11:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F15B620659
-	for <bpf@archiver.kernel.org>; Thu, 24 Oct 2019 13:11:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9AA6C20659
+	for <bpf@archiver.kernel.org>; Thu, 24 Oct 2019 13:11:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502396AbfJXNLp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 24 Oct 2019 09:11:45 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:51172 "EHLO mx1.redhat.com"
+        id S1729043AbfJXNLr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 24 Oct 2019 09:11:47 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:44258 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2502385AbfJXNLn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 24 Oct 2019 09:11:43 -0400
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
+        id S2502385AbfJXNLr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 24 Oct 2019 09:11:47 -0400
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id B15AF81DE1
-        for <bpf@vger.kernel.org>; Thu, 24 Oct 2019 13:11:42 +0000 (UTC)
-Received: by mail-wr1-f72.google.com with SMTP id s9so12838985wrw.23
-        for <bpf@vger.kernel.org>; Thu, 24 Oct 2019 06:11:42 -0700 (PDT)
+        by mx1.redhat.com (Postfix) with ESMTPS id 2F6B62CE95A
+        for <bpf@vger.kernel.org>; Thu, 24 Oct 2019 13:11:46 +0000 (UTC)
+Received: by mail-lf1-f72.google.com with SMTP id w22so5153031lfe.2
+        for <bpf@vger.kernel.org>; Thu, 24 Oct 2019 06:11:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=Aluqmbw9aS35UXdNs3uSSY9migl5EXzrc2Sy+ICnbM0=;
-        b=Cc/iN/4MSKAsJOE7jWrCj2jnwpuDU4bbtg5lsNE/7+dvaUikTuM4KeMBZ1e2sQgbvx
-         yLzt3tgbWAD2Hx+UgduAk30rH1sX9qDBWFUkQK6nHqRpAnEvhFI9Kt3X/yVIE9WJWPla
-         A0ilZmSUo8g1Nq99L2847lDPA5LepjgTmCx35WC0kR8T1BqGWlpuMkcad9+/oNZY9RS2
-         PmZpHjQiQP0Y9auc5lR2Ch8cpXdwhNw4BwHnZ2Gx6El8IpHfv5HZAKTcPKgqSPt8hbDI
-         +8EaYWI2PoNWmdn8an66oHWHuKMgE7bZvJj2j/YOFlZtHwMrSFASugdwl7HdjKILPcfP
-         K81w==
-X-Gm-Message-State: APjAAAXuXpZM+4v2HaOtO/u6h10B7TJxqOIi1KjfHJ+FCf0qXvSmEJwi
-        FSaSWv0rhy40RsY/CUjeeVUCOnT+vDe5Lf6VMsLb50c02fOPyeKayltr2JNDPDXiAeTuD9cLalJ
-        WT89ABbVECAUF
-X-Received: by 2002:adf:f010:: with SMTP id j16mr3900471wro.317.1571922701314;
-        Thu, 24 Oct 2019 06:11:41 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqxSsDNPkRvYY/hLpJaGJjEAsKaAlfFGQyedz+j2O429QN64u3Kd3S8VGqlv864QLEhAMSW7Tg==
-X-Received: by 2002:adf:f010:: with SMTP id j16mr3900455wro.317.1571922701039;
-        Thu, 24 Oct 2019 06:11:41 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a00:7660:6da:443::2])
-        by smtp.gmail.com with ESMTPSA id v81sm1431530wmg.4.2019.10.24.06.11.40
+        bh=AoKPNZux9mcVwhG+QjHj+0kfUyilNCwK3MSTTEPXVeA=;
+        b=Bai7v9CDhGPwGNDHWTjHMkQ8+MT2q/JXTIBvu/Cr06gI7SXp/tSm/ZJ47JIGSZ4uW8
+         /rptd+LqIx/cLb0eghNHWM3DQbdnDckg8vsasrBmAD1HiCzaoZl3q4EwNkcFD18onhnn
+         OPqFc/OsC6stwYlfFyW3RvP2iRRzjn4Gdfw/MCFeUnWTj6pZXr//0B6Ru7Qle2pWej8e
+         3kivduURNOz5QtNuOXS93p4Tg8y7MyUp6PhfvvnCjveGalvOCWxP6tGxD0SyqR4efiJs
+         N1F7FSCs9NgsxIQG6ZUzbiIGNKBTiy+Cukpf5XWuH1VzDBO0EexQsNrmhPlN7PIQxNOm
+         9Tfw==
+X-Gm-Message-State: APjAAAXif5IH1zqj6kVp+Ejku/sxfQ9Cx8Oep8k4f0eaHKkb/god+eaG
+        b1N8ttOGpJYzCogaCKueNJskbXfCDAWfOynspzhqGylfnce70XynvCkTR4e01Xgdt/wNieXtFhy
+        zV/UmsC2PFRth
+X-Received: by 2002:a19:ad4c:: with SMTP id s12mr27879634lfd.49.1571922704200;
+        Thu, 24 Oct 2019 06:11:44 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqwMtSa+DvlqjdaXfcoqOjeinX+L4dp2NS2PNE+1gTY3LuGEL0G6EKJ3RFsJVxWOG/4IxHAytw==
+X-Received: by 2002:a19:ad4c:: with SMTP id s12mr27879611lfd.49.1571922703884;
+        Thu, 24 Oct 2019 06:11:43 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
+        by smtp.gmail.com with ESMTPSA id s7sm10287617ljs.16.2019.10.24.06.11.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2019 06:11:40 -0700 (PDT)
+        Thu, 24 Oct 2019 06:11:43 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id BB42B1804B1; Thu, 24 Oct 2019 15:11:39 +0200 (CEST)
-Subject: [PATCH bpf-next v2 2/4] libbpf: Store map pin path and status in
- struct bpf_map
+        id F2CB51804B1; Thu, 24 Oct 2019 15:11:41 +0200 (CEST)
+Subject: [PATCH bpf-next v2 4/4] libbpf: Add option to auto-pin maps when
+ opening BPF object
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Daniel Borkmann <daniel@iogearbox.net>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -61,8 +61,8 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Thu, 24 Oct 2019 15:11:39 +0200
-Message-ID: <157192269965.234778.8724720580046668597.stgit@toke.dk>
+Date:   Thu, 24 Oct 2019 15:11:41 +0200
+Message-ID: <157192270189.234778.14607584397750494265.stgit@toke.dk>
 In-Reply-To: <157192269744.234778.11792009511322809519.stgit@toke.dk>
 References: <157192269744.234778.11792009511322809519.stgit@toke.dk>
 User-Agent: StGit/0.20
@@ -76,217 +76,232 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-Support storing and setting a pin path in struct bpf_map, which can be used
-for automatic pinning. Also store the pin status so we can avoid attempts
-to re-pin a map that has already been pinned (or reused from a previous
-pinning).
+With the functions added in previous commits that can automatically pin
+maps based on their 'pinning' setting, we can support auto-pinning of maps
+by the simple setting of an option to bpf_object__open.
+
+Since auto-pinning only does something if any maps actually have a
+'pinning' BTF attribute set, we default the new option to enabled, on the
+assumption that seamless pinning is what most callers want.
+
+When a map has a pin_path set at load time, libbpf will compare the map
+pinned at that location (if any), and if the attributes match, will re-use
+that map instead of creating a new one. If no existing map is found, the
+newly created map will instead be pinned at the location.
+
+Programs wanting to customise the pinning can override the pinning paths
+using bpf_map__set_pin_path() before calling bpf_object__load().
 
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- tools/lib/bpf/libbpf.c   |  115 ++++++++++++++++++++++++++++++++++++----------
- tools/lib/bpf/libbpf.h   |    3 +
- tools/lib/bpf/libbpf.map |    3 +
- 3 files changed, 97 insertions(+), 24 deletions(-)
+ tools/lib/bpf/libbpf.c |  120 ++++++++++++++++++++++++++++++++++++++++++++++--
+ tools/lib/bpf/libbpf.h |    4 +-
+ 2 files changed, 119 insertions(+), 5 deletions(-)
 
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index a2a7d074ac48..848e6710b8e6 100644
+index 179c9911458d..e911760cd7ff 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -226,6 +226,8 @@ struct bpf_map {
- 	void *priv;
- 	bpf_map_clear_priv_t clear_priv;
- 	enum libbpf_map_type libbpf_type;
-+	char *pin_path;
-+	bool pinned;
- };
- 
- struct bpf_secdata {
-@@ -4013,47 +4015,118 @@ int bpf_map__pin(struct bpf_map *map, const char *path)
- 	char *cp, errmsg[STRERR_BUFSIZE];
- 	int err;
- 
--	err = check_path(path);
--	if (err)
--		return err;
--
- 	if (map == NULL) {
- 		pr_warning("invalid map pointer\n");
- 		return -EINVAL;
- 	}
- 
--	if (bpf_obj_pin(map->fd, path)) {
--		cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
--		pr_warning("failed to pin map: %s\n", cp);
--		return -errno;
-+	if (map->pinned) {
-+		pr_warning("map already pinned\n");
-+		return -EEXIST;
-+	}
-+
-+	if (path && map->pin_path && strcmp(path, map->pin_path)) {
-+		pr_warning("map already has pin path '%s' different from '%s'\n",
-+			   map->pin_path, path);
-+		return -EINVAL;
-+	}
-+
-+	if (!map->pin_path && !path) {
-+		pr_warning("missing pin path\n");
-+		return -EINVAL;
- 	}
- 
--	pr_debug("pinned map '%s'\n", path);
-+	if (!map->pin_path) {
-+		map->pin_path = strdup(path);
-+		if (!map->pin_path) {
-+			err = -errno;
-+			goto out_err;
-+		}
-+	}
-+
-+	err = check_path(map->pin_path);
-+	if (err)
-+		return err;
-+
-+	if (bpf_obj_pin(map->fd, map->pin_path)) {
-+		err = -errno;
-+		goto out_err;
-+	}
-+
-+	map->pinned = true;
-+	pr_debug("pinned map '%s'\n", map->pin_path);
- 
- 	return 0;
-+
-+out_err:
-+	cp = libbpf_strerror_r(-err, errmsg, sizeof(errmsg));
-+	pr_warning("failed to pin map: %s\n", cp);
-+	return err;
+@@ -1378,7 +1378,29 @@ static int build_pin_path(char *buf, size_t buf_len,
+ 	return len;
  }
  
- int bpf_map__unpin(struct bpf_map *map, const char *path)
- {
- 	int err;
- 
--	err = check_path(path);
--	if (err)
--		return err;
--
- 	if (map == NULL) {
- 		pr_warning("invalid map pointer\n");
- 		return -EINVAL;
- 	}
- 
--	err = unlink(path);
-+	if (!map->pin_path) {
-+		pr_warning("map has no pin_path set\n");
-+		return -ENOENT;
-+	}
-+
-+	if (path && strcmp(path, map->pin_path)) {
-+		pr_warning("unpin path '%s' differs from map pin path '%s'\n",
-+			   path, map->pin_path);
-+		return -EINVAL;
-+	}
-+
-+	err = check_path(map->pin_path);
-+	if (err)
-+		return err;
-+
-+	err = unlink(map->pin_path);
- 	if (err != 0)
- 		return -errno;
--	pr_debug("unpinned map '%s'\n", path);
-+
-+	map->pinned = false;
-+	pr_debug("unpinned map '%s'\n", map->pin_path);
- 
- 	return 0;
- }
- 
-+int bpf_map__set_pin_path(struct bpf_map *map, const char *path)
+-static int bpf_object__init_maps(struct bpf_object *obj, bool relaxed_maps)
++static int bpf_object__build_map_pin_paths(struct bpf_object *obj)
 +{
-+	char *old = map->pin_path, *new;
++	struct bpf_map *map;
++	int err, len;
 +
-+	if (path) {
-+		new = strdup(path);
-+		if (!new)
-+			return -errno;
-+	} else {
-+		new = NULL;
++	bpf_object__for_each_map(map, obj) {
++		char buf[PATH_MAX];
++		len = build_pin_path(buf, sizeof(buf), map,
++				     "/sys/fs/bpf", false);
++		if (len == 0)
++			continue;
++		else if (len < 0)
++			return len;
++
++		err = bpf_map__set_pin_path(map, buf);
++		if (err)
++			return err;
++	}
++	return 0;
++}
++
++static int bpf_object__init_maps(struct bpf_object *obj, bool relaxed_maps,
++				 bool auto_pin_maps)
+ {
+ 	bool strict = !relaxed_maps;
+ 	int err;
+@@ -1395,6 +1417,12 @@ static int bpf_object__init_maps(struct bpf_object *obj, bool relaxed_maps)
+ 	if (err)
+ 		return err;
+ 
++	if (auto_pin_maps) {
++		err = bpf_object__build_map_pin_paths(obj);
++		if (err)
++			return err;
 +	}
 +
-+	map->pin_path = new;
-+	if (old)
-+		free(old);
+ 	if (obj->nr_maps) {
+ 		qsort(obj->maps, obj->nr_maps, sizeof(obj->maps[0]),
+ 		      compare_bpf_map);
+@@ -1577,7 +1605,8 @@ static int bpf_object__sanitize_and_load_btf(struct bpf_object *obj)
+ 	return 0;
+ }
+ 
+-static int bpf_object__elf_collect(struct bpf_object *obj, bool relaxed_maps)
++static int bpf_object__elf_collect(struct bpf_object *obj, bool relaxed_maps,
++				   bool auto_pin_maps)
+ {
+ 	Elf *elf = obj->efile.elf;
+ 	GElf_Ehdr *ep = &obj->efile.ehdr;
+@@ -1712,7 +1741,7 @@ static int bpf_object__elf_collect(struct bpf_object *obj, bool relaxed_maps)
+ 	}
+ 	err = bpf_object__init_btf(obj, btf_data, btf_ext_data);
+ 	if (!err)
+-		err = bpf_object__init_maps(obj, relaxed_maps);
++		err = bpf_object__init_maps(obj, relaxed_maps, auto_pin_maps);
+ 	if (!err)
+ 		err = bpf_object__sanitize_and_load_btf(obj);
+ 	if (!err)
+@@ -2288,12 +2317,91 @@ bpf_object__create_maps(struct bpf_object *obj)
+ 			}
+ 		}
+ 
++		if (map->pin_path) {
++			err = bpf_map__pin(map, NULL);
++			if (err)
++				pr_warning("failed to auto-pin map name '%s' at '%s'\n",
++					   map->name, map->pin_path);
++		}
++
+ 		pr_debug("created map %s: fd=%d\n", map->name, *pfd);
+ 	}
+ 
+ 	return 0;
+ }
+ 
++static int check_map_compat(const struct bpf_map *map,
++			    int map_fd)
++{
++	struct bpf_map_info map_info = {};
++	char msg[STRERR_BUFSIZE];
++	__u32 map_info_len;
++	int err;
++
++	map_info_len = sizeof(map_info);
++	err = bpf_obj_get_info_by_fd(map_fd, &map_info, &map_info_len);
++	if (err) {
++		err = -errno;
++		pr_warning("failed to get map info for map FD %d: %s\n",
++			   map_fd, libbpf_strerror_r(err, msg, sizeof(msg)));
++		return err;
++	}
++
++	if (map_info.type != map->def.type ||
++	    map_info.key_size != map->def.key_size ||
++	    map_info.value_size != map->def.value_size ||
++	    map_info.max_entries != map->def.max_entries ||
++	    map_info.map_flags != map->def.map_flags ||
++	    map_info.btf_key_type_id != map->btf_key_type_id ||
++	    map_info.btf_value_type_id != map->btf_value_type_id)
++		return 1;
 +
 +	return 0;
 +}
 +
-+const char *bpf_map__get_pin_path(struct bpf_map *map)
++static int
++bpf_object__check_map_reuse(struct bpf_object *obj)
 +{
-+	return map->pin_path;
-+}
++	char *cp, errmsg[STRERR_BUFSIZE];
++	struct bpf_map *map;
++	int err;
 +
-+bool bpf_map__is_pinned(struct bpf_map *map)
-+{
-+	return map->pinned;
-+}
++	bpf_object__for_each_map(map, obj) {
++		int pin_fd;
 +
- int bpf_object__pin_maps(struct bpf_object *obj, const char *path)
- {
- 	struct bpf_map *map;
-@@ -4094,17 +4167,10 @@ int bpf_object__pin_maps(struct bpf_object *obj, const char *path)
- 
- err_unpin_maps:
- 	while ((map = bpf_map__prev(map, obj))) {
--		char buf[PATH_MAX];
--		int len;
--
--		len = snprintf(buf, PATH_MAX, "%s/%s", path,
--			       bpf_map__name(map));
--		if (len < 0)
--			continue;
--		else if (len >= PATH_MAX)
 +		if (!map->pin_path)
- 			continue;
++			continue;
++
++		pin_fd = bpf_obj_get(map->pin_path);
++		if (pin_fd < 0) {
++			if (errno == ENOENT)
++				continue;
++
++			cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
++			pr_warning("Couldn't retrieve pinned map '%s': %s\n",
++				   map->pin_path, cp);
++			return pin_fd;
++		}
++
++		if (check_map_compat(map, pin_fd)) {
++			pr_warning("Couldn't reuse pinned map at '%s': "
++				   "parameter mismatch\n", map->pin_path);
++			close(pin_fd);
++			return -EINVAL;
++		}
++
++		err = bpf_map__reuse_fd(map, pin_fd);
++		if (err) {
++			close(pin_fd);
++			return err;
++		}
++		map->pinned = true;
++		pr_debug("Reused pinned map at '%s'\n", map->pin_path);
++	}
++
++	return 0;
++}
++
+ static int
+ check_btf_ext_reloc_err(struct bpf_program *prog, int err,
+ 			void *btf_prog_info, const char *info_name)
+@@ -3664,6 +3772,7 @@ __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
+ {
+ 	struct bpf_object *obj;
+ 	const char *obj_name;
++	bool auto_pin_maps;
+ 	char tmp_name[64];
+ 	bool relaxed_maps;
+ 	int err;
+@@ -3695,11 +3804,13 @@ __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
  
--		bpf_map__unpin(map, buf);
-+		bpf_map__unpin(map, NULL);
- 	}
+ 	obj->relaxed_core_relocs = OPTS_GET(opts, relaxed_core_relocs, false);
+ 	relaxed_maps = OPTS_GET(opts, relaxed_maps, false);
++	auto_pin_maps = OPTS_GET(opts, auto_pin_maps, true);
  
- 	return err;
-@@ -4254,6 +4320,7 @@ void bpf_object__close(struct bpf_object *obj)
+ 	CHECK_ERR(bpf_object__elf_init(obj), err, out);
+ 	CHECK_ERR(bpf_object__check_endianness(obj), err, out);
+ 	CHECK_ERR(bpf_object__probe_caps(obj), err, out);
+-	CHECK_ERR(bpf_object__elf_collect(obj, relaxed_maps), err, out);
++	CHECK_ERR(bpf_object__elf_collect(obj, relaxed_maps, auto_pin_maps),
++		  err, out);
+ 	CHECK_ERR(bpf_object__collect_reloc(obj), err, out);
  
- 	for (i = 0; i < obj->nr_maps; i++) {
- 		zfree(&obj->maps[i].name);
-+		zfree(&obj->maps[i].pin_path);
- 		if (obj->maps[i].clear_priv)
- 			obj->maps[i].clear_priv(&obj->maps[i],
- 						obj->maps[i].priv);
+ 	bpf_object__elf_finish(obj);
+@@ -3811,6 +3922,7 @@ int bpf_object__load_xattr(struct bpf_object_load_attr *attr)
+ 
+ 	obj->loaded = true;
+ 
++	CHECK_ERR(bpf_object__check_map_reuse(obj), err, out);
+ 	CHECK_ERR(bpf_object__create_maps(obj), err, out);
+ 	CHECK_ERR(bpf_object__relocate(obj, attr->target_btf_path), err, out);
+ 	CHECK_ERR(bpf_object__load_progs(obj, attr->log_level), err, out);
 diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 53ce212764e0..4e6733df5bb4 100644
+index 26a4ed3856e7..d492920fedb3 100644
 --- a/tools/lib/bpf/libbpf.h
 +++ b/tools/lib/bpf/libbpf.h
-@@ -375,6 +375,9 @@ LIBBPF_API int bpf_map__resize(struct bpf_map *map, __u32 max_entries);
- LIBBPF_API bool bpf_map__is_offload_neutral(const struct bpf_map *map);
- LIBBPF_API bool bpf_map__is_internal(const struct bpf_map *map);
- LIBBPF_API void bpf_map__set_ifindex(struct bpf_map *map, __u32 ifindex);
-+LIBBPF_API int bpf_map__set_pin_path(struct bpf_map *map, const char *path);
-+LIBBPF_API const char *bpf_map__get_pin_path(struct bpf_map *map);
-+LIBBPF_API bool bpf_map__is_pinned(struct bpf_map *map);
- LIBBPF_API int bpf_map__pin(struct bpf_map *map, const char *path);
- LIBBPF_API int bpf_map__unpin(struct bpf_map *map, const char *path);
+@@ -98,8 +98,10 @@ struct bpf_object_open_opts {
+ 	bool relaxed_maps;
+ 	/* process CO-RE relocations non-strictly, allowing them to fail */
+ 	bool relaxed_core_relocs;
++	/* auto-pin maps with 'pinning' attribute set? */
++	bool auto_pin_maps;
+ };
+-#define bpf_object_open_opts__last_field relaxed_core_relocs
++#define bpf_object_open_opts__last_field auto_pin_maps
  
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 4d241fd92dd4..ef9ae1943ec7 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -195,4 +195,7 @@ LIBBPF_0.0.6 {
- 	global:
- 		bpf_object__open_file;
- 		bpf_object__open_mem;
-+		bpf_map__get_pin_path;
-+		bpf_map__set_pin_path;
-+		bpf_map__is_pinned;
- } LIBBPF_0.0.5;
+ LIBBPF_API struct bpf_object *bpf_object__open(const char *path);
+ LIBBPF_API struct bpf_object *
 
