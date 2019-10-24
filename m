@@ -5,58 +5,58 @@ X-Spam-Level:
 X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B64CECA9EBC
-	for <bpf@archiver.kernel.org>; Thu, 24 Oct 2019 19:02:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19E29CA9EAF
+	for <bpf@archiver.kernel.org>; Thu, 24 Oct 2019 19:02:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8D9BC21929
-	for <bpf@archiver.kernel.org>; Thu, 24 Oct 2019 19:02:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E3E6A21D7B
+	for <bpf@archiver.kernel.org>; Thu, 24 Oct 2019 19:02:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Wkf8kLJ4"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZDhWZ5D7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504245AbfJXTCO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 24 Oct 2019 15:02:14 -0400
-Received: from mail-pl1-f202.google.com ([209.85.214.202]:35742 "EHLO
-        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2504252AbfJXTCN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 24 Oct 2019 15:02:13 -0400
-Received: by mail-pl1-f202.google.com with SMTP id p14so4278782plq.2
-        for <bpf@vger.kernel.org>; Thu, 24 Oct 2019 12:02:13 -0700 (PDT)
+        id S2504308AbfJXTCZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 24 Oct 2019 15:02:25 -0400
+Received: from mail-yw1-f73.google.com ([209.85.161.73]:35042 "EHLO
+        mail-yw1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2504298AbfJXTCX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 24 Oct 2019 15:02:23 -0400
+Received: by mail-yw1-f73.google.com with SMTP id t2so15228092ywd.2
+        for <bpf@vger.kernel.org>; Thu, 24 Oct 2019 12:02:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=Suz77OvPj2zse3ACt5ant97LgHIFhYaDbP1x2fdJ/qM=;
-        b=Wkf8kLJ4doKtpDHeS4YU4TeKPlVTfPSlzjZQVy1btaihCSxnPHRIiRgaYjanl9P/EF
-         /q2/E00TfLxsXDm/qzdA9a90yTBbb4/qddYpb3gRT+yWd3NYuySaiZEjPyPrlD+qwJnh
-         ANjOJIs44qf0VigeqJ0knHNu8zN4Bk7UjWqyTwfi0PIYQ1MakLNQBqVMXSki2O7vGllK
-         zoy4uAsMMdUrMmpy3X1PSF5M5hqlJ7h7Lwnxz2FkFR5Zqo5zq5Moch8/UhO+6JebGqiw
-         gLr47wVdPLeyBXMXulgt1YMfEazJvE3eTrKUZDf4ihGyJCdJUS4yRSlXZzyWAKrXJGSE
-         LNow==
+        bh=98x/ZBLRTnMz91JDf+r9eCkgM4R/aoJz7oABA29poQw=;
+        b=ZDhWZ5D7Wad+xuhdcDWVOwjHsUewHijXR4y/lysN14gT4QR+/zxGLfhiRxlGwAByFJ
+         wvV2FnISzVdGITQXf0PO2HsO/HkwjZV7v2BE0VRLy04+b4hbSO4FKoY7WN4sz/JBP1ZV
+         o3uEIPfSt625AEJBsANTLrgdPcGYLg6rMD08yGPhw2CvVkaj5YJyGZa4ERxFIT7hZQQx
+         HeODyGP/Z5W+sz6bzgLTdAN+HCfRn7izfeYB2gAdWXzraeS/rDA+lGdfOdKktC7MJl0b
+         YSufsmH3+5ztriU/uDRYbI53ZDXG2wUof1NI+EYLa+Zt3raRx1eQYkWBjgz3t8EjKwgQ
+         YxqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=Suz77OvPj2zse3ACt5ant97LgHIFhYaDbP1x2fdJ/qM=;
-        b=Sc4C6ise9/GcdhgpMvEpIh8CgfoZnNvgJkuvZbwuEjM0yUQTsQHZHaIObk0Re87dbV
-         YsPc3v3PKLJbr/wfSjd9X7WoRRTwBEluwGBSxtG5+ZtF4yohqbfYV8AJUHlFQ8cqLbiQ
-         VmCu2kx6BP79uy+N9VUvxcXoVHc6ODAPSK/8+Jw/Y7tR82aA65+nh4V2yYqLS9c1Y+Cq
-         cnzNzJe3dEF4Yrbw423U/JYLNKCLllIk0Z9Z+KTwDmiQspZ0A1frZjAr94IHU0fdSXFe
-         ATayTMhRIN2bf37+Ee8TdCHmVrS0QVQE2LRJ5XMeJWTyZ0nu34msYTV0nQP6PQz9ThYJ
-         iveg==
-X-Gm-Message-State: APjAAAU3v14PJt8DgAn8WdPNmgcWDRA/IgDVv+E1KfEtwcbNKgxsuaMN
-        TdhMvH0q2R+Zzz8WmWx0mxUrZHL7JwxK
-X-Google-Smtp-Source: APXvYqzE0YLcEtfJD5+y6FsT1a6u7MmXUky94H8cSOwI2hLGViFXlxCW8maOBgQEx701pR+olbLa+qMoDtVo
-X-Received: by 2002:a63:748:: with SMTP id 69mr18596734pgh.109.1571943732499;
- Thu, 24 Oct 2019 12:02:12 -0700 (PDT)
-Date:   Thu, 24 Oct 2019 12:01:55 -0700
+        bh=98x/ZBLRTnMz91JDf+r9eCkgM4R/aoJz7oABA29poQw=;
+        b=G2ueu7eofBOm1piZDNZDOtFqF9FpMaOlh0xX7xEGEqR6zjSxh6cBvIoP4Cv1VT73AV
+         cyBofloXtW5ZhNVFW1cW7iv5tAJPgSml7nD1mf2HMxugBOiybBohVxy3xdFDC+E1JAzs
+         F0DTkN8+H6brTGI4R+hX5UId35brW1qlV9u4V/gMbAUEbx0O7iQJqGy1tSH/uKrRcs3M
+         i+DIdVUAmf6bP+Bb+6wdUwyHrRfSETweCv/ED23CaJ0di7BtywBJ6F09DTtQT8pcIv1U
+         li+kMlpp062jCirDo514xCVbVhkVFotjFbuvJ1tfkyYXUS5r/Gd7Ja/irMSobjT9RGMZ
+         m+sA==
+X-Gm-Message-State: APjAAAXBpY8q2mDtlC9XCnVXVwxlnMIy1QkvGXbaIYn6ltmWG7pv7S68
+        B7GUiTPB/aChhOXxBm7U2BkOrp++wcV3
+X-Google-Smtp-Source: APXvYqy0z0w7HaNQVrFGbWenHVtVo7T0wRW7iIgngW02X25slgtdxq4MgrTgKqZ5Bo3fCcCgjigLNvemKmy6
+X-Received: by 2002:a81:58d6:: with SMTP id m205mr8304346ywb.293.1571943740635;
+ Thu, 24 Oct 2019 12:02:20 -0700 (PDT)
+Date:   Thu, 24 Oct 2019 12:01:58 -0700
 In-Reply-To: <20191024190202.109403-1-irogers@google.com>
-Message-Id: <20191024190202.109403-3-irogers@google.com>
+Message-Id: <20191024190202.109403-6-irogers@google.com>
 Mime-Version: 1.0
 References: <20191023005337.196160-1-irogers@google.com> <20191024190202.109403-1-irogers@google.com>
 X-Mailer: git-send-email 2.23.0.866.gb869b98d4c-goog
-Subject: [PATCH v3 2/9] perf tools: splice events onto evlist even on error
+Subject: [PATCH v3 5/9] perf tools: avoid a malloc for array events
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -84,48 +84,36 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-If event parsing fails the event list is leaked, instead splice the list
-onto the out result and let the caller cleanup.
-
-An example input for parse_events found by libFuzzer that reproduces
-this memory leak is 'm{'.
+Use realloc rather than malloc+memcpy to possibly avoid a memory
+allocation when appending array elements.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/parse-events.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ tools/perf/util/parse-events.y | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index edb3ae76777d..f0d50f079d2f 100644
---- a/tools/perf/util/parse-events.c
-+++ b/tools/perf/util/parse-events.c
-@@ -1968,15 +1968,20 @@ int parse_events(struct evlist *evlist, const char *str,
+diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
+index 26cb65798522..545ab7cefc20 100644
+--- a/tools/perf/util/parse-events.y
++++ b/tools/perf/util/parse-events.y
+@@ -691,14 +691,12 @@ array_terms ',' array_term
+ 	struct parse_events_array new_array;
  
- 	ret = parse_events__scanner(str, &parse_state, PE_START_EVENTS);
- 	perf_pmu__parse_cleanup();
-+
-+	if (!ret && list_empty(&parse_state.list)) {
-+		WARN_ONCE(true, "WARNING: event parser found nothing\n");
-+		return -1;
-+	}
-+
-+	/*
-+	 * Add list to the evlist even with errors to allow callers to clean up.
-+	 */
-+	perf_evlist__splice_list_tail(evlist, &parse_state.list);
-+
- 	if (!ret) {
- 		struct evsel *last;
- 
--		if (list_empty(&parse_state.list)) {
--			WARN_ONCE(true, "WARNING: event parser found nothing\n");
--			return -1;
--		}
--
--		perf_evlist__splice_list_tail(evlist, &parse_state.list);
- 		evlist->nr_groups += parse_state.nr_groups;
- 		last = evlist__last(evlist);
- 		last->cmdline_group_boundary = true;
+ 	new_array.nr_ranges = $1.nr_ranges + $3.nr_ranges;
+-	new_array.ranges = malloc(sizeof(new_array.ranges[0]) *
+-				  new_array.nr_ranges);
++	new_array.ranges = realloc($1.ranges,
++				sizeof(new_array.ranges[0]) *
++				new_array.nr_ranges);
+ 	ABORT_ON(!new_array.ranges);
+-	memcpy(&new_array.ranges[0], $1.ranges,
+-	       $1.nr_ranges * sizeof(new_array.ranges[0]));
+ 	memcpy(&new_array.ranges[$1.nr_ranges], $3.ranges,
+ 	       $3.nr_ranges * sizeof(new_array.ranges[0]));
+-	free($1.ranges);
+ 	free($3.ranges);
+ 	$$ = new_array;
+ }
 -- 
 2.23.0.866.gb869b98d4c-goog
 
