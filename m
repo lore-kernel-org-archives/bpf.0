@@ -7,56 +7,56 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33371CA9EBE
-	for <bpf@archiver.kernel.org>; Fri, 25 Oct 2019 18:08:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EEE1CA9EA0
+	for <bpf@archiver.kernel.org>; Fri, 25 Oct 2019 18:08:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 07814222C9
-	for <bpf@archiver.kernel.org>; Fri, 25 Oct 2019 18:08:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 63FCC21D81
+	for <bpf@archiver.kernel.org>; Fri, 25 Oct 2019 18:08:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lTwv/eB1"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TE1I8ODd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733247AbfJYSIt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 25 Oct 2019 14:08:49 -0400
-Received: from mail-pg1-f201.google.com ([209.85.215.201]:46153 "EHLO
-        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733221AbfJYSIs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 25 Oct 2019 14:08:48 -0400
-Received: by mail-pg1-f201.google.com with SMTP id 195so2351768pgc.13
-        for <bpf@vger.kernel.org>; Fri, 25 Oct 2019 11:08:47 -0700 (PDT)
+        id S2387598AbfJYSI6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 25 Oct 2019 14:08:58 -0400
+Received: from mail-pl1-f202.google.com ([209.85.214.202]:36985 "EHLO
+        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387528AbfJYSI6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 25 Oct 2019 14:08:58 -0400
+Received: by mail-pl1-f202.google.com with SMTP id r13so2011513pls.4
+        for <bpf@vger.kernel.org>; Fri, 25 Oct 2019 11:08:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=Ozw9D+vclIFM2icN5y6LJ8c4+4sMg5YbQ5WcIa5mPKI=;
-        b=lTwv/eB1vvUrtK55Es+3jXhBGjnnYgmNWQK59Qb/+YzRNjqlhFS3AYPxqPH4v1iXi5
-         eprA7oVUZ5OKMWCbnQ9m0qyj2I+eV8HltanVFKk3jKF8zieUgcjaJjFvZt1rOCzRZx58
-         qommgWmHtuXi1KvnF8HhzO6l+0SPG5Aiyrjpcaekl4bCNMhMJSNyOMlRr+5i0mayny0/
-         K4XLHkUMuoTOsLa8iYrtm30WMINkAmKuaUtTGvpBP9T+PtzjAZgciGR4zssanoipDQOt
-         kZ/LBQyEqgDQYtBsojKIXrIquVaKqm3Qjng2pB10Lz5obqWKr0tfQ8Wcs+ap/waXBSlv
-         2nPg==
+        bh=/dDefoMM36PIRowlZl2Nw9qTsavoFN0b32BVnZFbmdI=;
+        b=TE1I8ODdeGw+jnNWUNRzlklwmv17c6qrzXQrVdbHJnOnzIpNP0LmYLw3sMjAXxQAb9
+         CHWFQLhifF4aJbuSeqjIAHMuTV0SNZIzVTNtVMA2/nObkoSQcT58Aqhhb51ZeKfMaZZJ
+         iqipyyZjhwmdUteNYMnEZdiB1kBhdMerdQGJAhOs+tnM8seYIWZah0MT65eZBsQPrlz7
+         wjsWgKm+bdrGyKT6sSCuUgcxroefjWKXAhhNGLBFlCLovRUfZRxpPjckVmvgQtEKr763
+         VwjMWrK3ShE1+09qVTaNr2GMbY8/lQMjhruFBaU1xF0QJ/ywB6QauIkj48oAvU5y81jk
+         s51Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=Ozw9D+vclIFM2icN5y6LJ8c4+4sMg5YbQ5WcIa5mPKI=;
-        b=EsJeWi7Y6JdAIGqgor17K+0FFjnexmocVm8EpaoLlpLkVU4kjNoC50PRDbUeV1q6hr
-         6iNlRm8w7AlCKczWRy7HjlAoFTmE/KYv43o/qnn4b+47LiH/LrZkbcpGMUz7Mw9nmBLz
-         Pi7hOTpoNZ+TYtDTx3i8y6oKKQ5Fg/LlSikJhpzJXR1Pw1DixPV9wDgAcJfwn5dvqbky
-         NOpk3dLB+5fo639jXQA5mE0yIQLWobzTR0GiK1KsTZoahSxdF/dnDcsQhQ+d+WDCLgLQ
-         Qix6vIetDnUAiozwKMcnbk7k5R5q6/GjUKTNB2ffxiA6CNhfXT4Hv/DajRVLSDQ3ElMD
-         +/uw==
-X-Gm-Message-State: APjAAAWMuICwiqPTEpYrVJYoV0wsA3lJ9EiexDcpubIYeBmyQG4UPVWU
-        jbwSJTau7s10j+fWAxyr01Y8roitUIcV
-X-Google-Smtp-Source: APXvYqx33NkWbQAkNP63ERssM3E3pdl09Lr04Jhh9Vw9pwW28jHSa68V3TMfScFCvranyOLpFs5J5pnqED1o
-X-Received: by 2002:a65:53ce:: with SMTP id z14mr5963399pgr.445.1572026926291;
- Fri, 25 Oct 2019 11:08:46 -0700 (PDT)
-Date:   Fri, 25 Oct 2019 11:08:22 -0700
+        bh=/dDefoMM36PIRowlZl2Nw9qTsavoFN0b32BVnZFbmdI=;
+        b=A8bXLIrhnrIADJ7G3KJhZxvSLd0xSHDZJDJQlnSO1bnG/hwmyWakTta4Ug17mAe4P0
+         e0lupMdiLjNkxufquX6acNAu/CE6e0cUSILQRQJk9cR+a2NMX6iBroyUGWJu3zZ6WyMo
+         5FcXEXU3hNF4GLhjLkwH6TstqQn36kjTuiHWk1M0tVRV2sNsTJl8w9tSCX+HUDM4aTJk
+         XGwR1l0eUYM+x1OvTaULkp0gJMCN721fXFEHsegc4l8SApOIrPHnKEXDOHKhzmuONqMf
+         yRmMjtBTERTKM8QxiRtOR5O26nO5DTaYAi1WnCYcW2OpRDBD2HR8sF4T+PgaYm4fYL79
+         Tj/w==
+X-Gm-Message-State: APjAAAUgpfyvsPYKH4HBsjaqPQAWuhLiQEEn2asIu7vbglB1bdFCTR4U
+        UFZoX7W7OoV5Ul5RTbDkvSgiSV5BGB9O
+X-Google-Smtp-Source: APXvYqzIYA9d/vGzxB2esIdYemJ0Oq68o8ieY6t+zqP7n9k/G/llUi72E8BavQN495zkdxVZgQ7xf0PS/Bxl
+X-Received: by 2002:a63:5d18:: with SMTP id r24mr1468551pgb.53.1572026936817;
+ Fri, 25 Oct 2019 11:08:56 -0700 (PDT)
+Date:   Fri, 25 Oct 2019 11:08:26 -0700
 In-Reply-To: <20191025180827.191916-1-irogers@google.com>
-Message-Id: <20191025180827.191916-5-irogers@google.com>
+Message-Id: <20191025180827.191916-9-irogers@google.com>
 Mime-Version: 1.0
 References: <20191024190202.109403-1-irogers@google.com> <20191025180827.191916-1-irogers@google.com>
 X-Mailer: git-send-email 2.24.0.rc0.303.g954a862665-goog
-Subject: [PATCH v4 4/9] perf tools: splice events onto evlist even on error
+Subject: [PATCH v4 8/9] perf tools: if pmu configuration fails free terms
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -84,48 +84,34 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-If event parsing fails the event list is leaked, instead splice the list
-onto the out result and let the caller cleanup.
-
-An example input for parse_events found by libFuzzer that reproduces
-this memory leak is 'm{'.
+Avoid a memory leak when the configuration fails.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/parse-events.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ tools/perf/util/parse-events.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index c516d0cce946..4c4c6f3e866a 100644
+index fb6436a74869..3db1b647db38 100644
 --- a/tools/perf/util/parse-events.c
 +++ b/tools/perf/util/parse-events.c
-@@ -1952,15 +1952,20 @@ int parse_events(struct evlist *evlist, const char *str,
+@@ -1390,8 +1390,15 @@ int parse_events_add_pmu(struct parse_events_state *parse_state,
+ 	if (get_config_terms(head_config, &config_terms))
+ 		return -ENOMEM;
  
- 	ret = parse_events__scanner(str, &parse_state, PE_START_EVENTS);
- 	perf_pmu__parse_cleanup();
+-	if (perf_pmu__config(pmu, &attr, head_config, parse_state->error))
++	if (perf_pmu__config(pmu, &attr, head_config, parse_state->error)) {
++		struct perf_evsel_config_term *pos, *tmp;
 +
-+	if (!ret && list_empty(&parse_state.list)) {
-+		WARN_ONCE(true, "WARNING: event parser found nothing\n");
-+		return -1;
++		list_for_each_entry_safe(pos, tmp, &config_terms, list) {
++			list_del_init(&pos->list);
++			free(pos);
++		}
+ 		return -EINVAL;
 +	}
-+
-+	/*
-+	 * Add list to the evlist even with errors to allow callers to clean up.
-+	 */
-+	perf_evlist__splice_list_tail(evlist, &parse_state.list);
-+
- 	if (!ret) {
- 		struct evsel *last;
  
--		if (list_empty(&parse_state.list)) {
--			WARN_ONCE(true, "WARNING: event parser found nothing\n");
--			return -1;
--		}
--
--		perf_evlist__splice_list_tail(evlist, &parse_state.list);
- 		evlist->nr_groups += parse_state.nr_groups;
- 		last = evlist__last(evlist);
- 		last->cmdline_group_boundary = true;
+ 	evsel = __add_event(list, &parse_state->idx, &attr,
+ 			    get_config_name(head_config), pmu,
 -- 
 2.24.0.rc0.303.g954a862665-goog
 
