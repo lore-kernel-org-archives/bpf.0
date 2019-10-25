@@ -2,93 +2,86 @@ Return-Path: <SRS0=fH4Q=YS=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DE75CA9EBD
-	for <bpf@archiver.kernel.org>; Fri, 25 Oct 2019 18:20:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A61AECA9EA0
+	for <bpf@archiver.kernel.org>; Fri, 25 Oct 2019 18:27:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7345621D81
-	for <bpf@archiver.kernel.org>; Fri, 25 Oct 2019 18:20:19 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e1UeZJJ1"
+	by mail.kernel.org (Postfix) with ESMTP id 76F6321D7F
+	for <bpf@archiver.kernel.org>; Fri, 25 Oct 2019 18:27:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388506AbfJYSSv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 25 Oct 2019 14:18:51 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:33562 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388483AbfJYSSm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 25 Oct 2019 14:18:42 -0400
-Received: by mail-pf1-f195.google.com with SMTP id c184so2127252pfb.0;
-        Fri, 25 Oct 2019 11:18:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=lN55QHjqoYpt4NOraTywNTHCly3yYbf+A9v1xX8umRo=;
-        b=e1UeZJJ1SAVvAvOeFZCVhhebJpFenW2+buXOmHvP6L2CNSUrqHAglt9ui0CrjMtBki
-         c8YR3MVhn1hFKv+Zm18rTx32YJnd9hzECITfvh+Fe1+id9eG9lNfJMYBzeSS+Kl66mm5
-         9zLXPMfPn/aoMmQ4bBuMrNfolDh5FA/3h92IUa7bMQXACKsFTXH3ivYQnUrVTHIpeszh
-         cDlyA1QuZ2lHqyONg0H1ISaNBF02IvgmpdfGNFyFDq+8bOZZRo7paetT1wcCp6cmSDo9
-         4s+aaaOzfAnI1onGMEC1qx1CHPZXdg0VQl9yPacFIwABGAZ2XpA6mL+qxQRHrPzcllfX
-         jtbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=lN55QHjqoYpt4NOraTywNTHCly3yYbf+A9v1xX8umRo=;
-        b=cHQ6u3Ca3igqrW08Z7XRNkBDTzfCuGzm7RYb4ToePdfw1ZDJuCkYlpevQCuP5Q1iZh
-         35qQni7SoHLtXIrQ2ZCsQ9VvpM0vOfgUa30iEDF8/E8se4v/ywfCHzBLpeY1ji6KQmJ3
-         md9o5bJnRpjecT6cWO57IsL9c4Dzfph/ueHsNtowvp6o8ymfc1QaW2wAE2DltLB8RBRi
-         J30f2Ib4MTc0MBLspgXNrt2ImyPUgWnCTbo5DblwOCJ/oXWLN3X2RhvC2MBaPlwGoeEQ
-         IzbjM8E8WBQSHZ+ntqAIbDnmTDMbBSVdLPple+tewFq9ujyfhc0EfKMeRq+C6LTZ17OP
-         556w==
-X-Gm-Message-State: APjAAAVlXhYy122IF3jZc0y11EYDsVwhGYdb+wZG3CoG0tZceBiF0QMs
-        FLysckY3oD9G8NveoI79QR8=
-X-Google-Smtp-Source: APXvYqxzxBCadfN19+P8iYtHS2ATiKMVpxYB7hP//0VjBEaCVYnU6ZErCyfuuzm/Jekbt5Wz7f4FqA==
-X-Received: by 2002:a17:90a:aa97:: with SMTP id l23mr5844943pjq.7.1572027521353;
-        Fri, 25 Oct 2019 11:18:41 -0700 (PDT)
-Received: from [172.20.54.239] ([2620:10d:c090:200::1:4b93])
-        by smtp.gmail.com with ESMTPSA id y10sm3098910pfe.148.2019.10.25.11.18.40
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 25 Oct 2019 11:18:40 -0700 (PDT)
-From:   "Jonathan Lemon" <jonathan.lemon@gmail.com>
-To:     "=?utf-8?b?QmrDtnJuIFTDtnBlbA==?=" <bjorn.topel@gmail.com>
-Cc:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        jakub.kicinski@netronome.com,
-        "=?utf-8?b?QmrDtnJuIFTDtnBlbA==?=" <bjorn.topel@intel.com>,
-        bpf@vger.kernel.org, magnus.karlsson@gmail.com,
-        magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
-        toke@redhat.com
-Subject: Re: [PATCH bpf-next v3 1/2] xsk: store struct xdp_sock as a flexible
- array member of the XSKMAP
-Date:   Fri, 25 Oct 2019 11:18:39 -0700
-X-Mailer: MailMate (1.13r5655)
-Message-ID: <BE3EE2D6-2BAC-4540-94EE-1EC5928777E6@gmail.com>
-In-Reply-To: <20191025093219.10290-2-bjorn.topel@gmail.com>
-References: <20191025093219.10290-1-bjorn.topel@gmail.com>
- <20191025093219.10290-2-bjorn.topel@gmail.com>
+        id S1726069AbfJYS1N (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 25 Oct 2019 14:27:13 -0400
+Received: from dcvr.yhbt.net ([64.71.152.64]:33760 "EHLO dcvr.yhbt.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726030AbfJYS1M (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 25 Oct 2019 14:27:12 -0400
+Received: from localhost (dcvr.yhbt.net [127.0.0.1])
+        by dcvr.yhbt.net (Postfix) with ESMTP id 4E98A1F4C0;
+        Fri, 25 Oct 2019 18:27:12 +0000 (UTC)
+Date:   Fri, 25 Oct 2019 18:27:12 +0000
+From:   Eric Wong <e@80x24.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        workflows@vger.kernel.org
+Subject: Re: patch review delays
+Message-ID: <20191025182712.GA9391@dcvr>
+References: <CAADnVQK2a=scSwGF0TwJ_P0jW41iqnv6aV3FZVmoonRUEaj0kQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAADnVQK2a=scSwGF0TwJ_P0jW41iqnv6aV3FZVmoonRUEaj0kQ@mail.gmail.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> The last few days I've experienced long email delivery when I was not
+> directly cc-ed on patches.
+> Even right now I see some patches in patchworks, but not in my inbox.
+> Few folks reported similar issues.
+> In order for everyone to review the submissions appropriately
+> I'll be applying only the most obvious patches and
+> will let others sit in the patchworks a bit longer than usual.
+> Sorry about that.
+> Ironic that I'm using email to talk about email delays.
+> 
+> My understanding that these delays are not vger's fault.
+> Some remediations may be used sporadically, but
+> we need to accelerate our search of long term solutions.
+> I think Daniel's l2md:
+> https://git.kernel.org/pub/scm/linux/kernel/git/dborkman/l2md.git/
+> is a great solution.
+> It's on my todo list to give it a try,
+> but I'm not sure how practical for every patch reviewer on this list
+> to switch to that model.
+> Thoughts?
 
+If cloning git repos is too much work, You can subscribe to an
+Atom feed of search results to paths or files you're interested
+in using "dfn:" (diff-file-name) using your favorite feed
+reader:
 
-On 25 Oct 2019, at 2:32, Björn Töpel wrote:
+lore.kernel.org/lkml/?q=dfn:path/to/dir-or-file-youre-interested-in&x=A
 
-> From: Björn Töpel <bjorn.topel@intel.com>
->
-> Prior this commit, the array storing XDP socket instances were stored
-> in a separate allocated array of the XSKMAP. Now, we store the sockets
-> as a flexible array member in a similar fashion as the arraymap. Doing
-> so, we do less pointer chasing in the lookup.
->
-> Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
+Or drop the "&x=A" to get an HTML summary, or POST to that URL
+with "&x=m" to download an mbox.
 
-Acked-by: Jonathan Lemon <jonathan.lemon@gmail.com>
+You can also search for multiple files at once by having dfn:foo
+multiple times separated by "OR"
+
+lore.kernel.org/lkml/?q=dfn:foo+OR+dfn:bar&x=A
+
+https://lore.kernel.org/lkml/_/text/help/ has other prefixes
+like "dfn:" which might be helpful for search.
+
+For example, if you expected to be Cc-ed (or To-ed) and want to
+double-check that your mail account got it, you can use the "c:"
+or "tc:" prefixes with your name or address, too.
