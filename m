@@ -2,77 +2,165 @@ Return-Path: <SRS0=fH4Q=YS=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FAFDCA9EA0
-	for <bpf@archiver.kernel.org>; Fri, 25 Oct 2019 13:42:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 115DFCA9EA0
+	for <bpf@archiver.kernel.org>; Fri, 25 Oct 2019 13:42:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 41A9F2054F
-	for <bpf@archiver.kernel.org>; Fri, 25 Oct 2019 13:42:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DC12E21D71
+	for <bpf@archiver.kernel.org>; Fri, 25 Oct 2019 13:42:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=metanetworks.com header.i=@metanetworks.com header.b="ZhDSnzfh"
+	dkim=pass (1024-bit key) header.d=metanetworks.com header.i=@metanetworks.com header.b="Li6TPKlS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504855AbfJYNmi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 25 Oct 2019 09:42:38 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:46568 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2504854AbfJYNmi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 25 Oct 2019 09:42:38 -0400
-Received: by mail-wr1-f67.google.com with SMTP id n15so2367468wrw.13
-        for <bpf@vger.kernel.org>; Fri, 25 Oct 2019 06:42:37 -0700 (PDT)
+        id S2504881AbfJYNmw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 25 Oct 2019 09:42:52 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:33479 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2504824AbfJYNms (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 25 Oct 2019 09:42:48 -0400
+Received: by mail-wr1-f65.google.com with SMTP id s1so2439239wro.0
+        for <bpf@vger.kernel.org>; Fri, 25 Oct 2019 06:42:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=metanetworks.com; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=RZsFj5mSHLDPjjfjXJ3TNXEUO7OqHqp8fru+xxws/tM=;
-        b=ZhDSnzfh7B4uJ62zsXaqVGW4Au8iBBJ1wUiRaOIF6Kr16ReGw0YtsXjRWZ2u0IEQdm
-         oQNaboyIeHxbkZT8bHZFa8IuVS0m0xWrOzhYOZtybO4qiMtvIEv1EMufeRIy4YykT2zy
-         bV6uYl3YfCHfPzc1m23eY5Mce79GisIWGMjT0=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=0mnmJjgSlbBJ30kBXAxihFKleD83aqV+FTUAUtrG3yA=;
+        b=Li6TPKlS1dN7+hG4fVg7M1mBLXyZSf07oSkHnNQubaNALerMXZKLDxK7R9u+lzqxCy
+         ogprTCWDbICgJw0yomR4qlKWK64bTcZ7INGxfNig4hcYRHNrTzDv69+wbwZzcR6lhuf7
+         fyzfxPa1PjHRBK+jFpQ/Gv7TKnU4DXkigWg+0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=RZsFj5mSHLDPjjfjXJ3TNXEUO7OqHqp8fru+xxws/tM=;
-        b=OCKGKm1dT5ATL6RSGjqoDgd7XmmOPF5+vA1VkMWy9BD2FjpWa9sMbs0DiokZ1qMz2y
-         nwkYlhEZA4hGDclM6R4DZIvZaN6zKEWDFbyR1glWk+sfsxvuMYkZzkeCnYwfEuOiRLM8
-         sQj3UNb4McBGnuPey3JnGX9wy17U7/5bPC7ZQwRHjabhbW+RIfJ8WPCNUSBCmbFK+jDs
-         q6RhrDxPg0vlwpIUipFsdWqRnJ3wbKUgI5EA089mlQ3R0BbCjhjXGk1YMwcXU8rbWLPj
-         azbjtaztJSK+/N8NoCV7iFk7eTh0XpUiZZqQELHPMwc2UBlqfWFSo7LeMO4SgkcdGXnB
-         /g0A==
-X-Gm-Message-State: APjAAAXvoDLosSNSnvWmlP2HmGEJjJ/ksZgkkINdkSechl2TBjyM7K5s
-        HSMoqKVL7HzWksWQpY41bhuknA==
-X-Google-Smtp-Source: APXvYqxJeHJ5GOyx5hF2JJ8W4vj16avyKvi1nOvY1+NwCXXu789wK5brJvb+yEKmgatOE1vZnZ9Ijw==
-X-Received: by 2002:adf:9bdc:: with SMTP id e28mr2980294wrc.309.1572010956910;
-        Fri, 25 Oct 2019 06:42:36 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=0mnmJjgSlbBJ30kBXAxihFKleD83aqV+FTUAUtrG3yA=;
+        b=kQEvr8dncbXFnjxEjFUzmNB1kVok+XBFSUAdKssxR/xxmXLVjm3sqKFs3wUdZ3+fGj
+         ICER4wzdb9/WNic4emaMuZ0Wlm6reYrlAnU4qO/dfZaqV9PADS/sodU7g69LHjMTsBBp
+         izl7Gh9lxiQgDczuzAx8WRSqA6jlnVSOMn5hm91/2GhOFM73vgqKmhqKRY39XWCqAm6w
+         KsRHnWTEttLCQxlAcEOzzICsjqmOhEfsUTton4pTPCy06fdXHjdraEk1eYnDkPilZKHg
+         SfG/NA8FfL7bE59vRDoQoIFIDjdDyYdDyvHhTKzEtPRfd8xCN96uOshPBmyj1RgnXjWc
+         8opw==
+X-Gm-Message-State: APjAAAVnYMM/eXKYBBzp2BxsWFVJ3L6XP967rgqmiqCYDX90uD97FQj8
+        QvCLAixp9YB6OnSU6EXPtFvURg==
+X-Google-Smtp-Source: APXvYqwupdv7Fh2oROTvgM21NgJagri/TBE8LfHiqS9h+SXH5+3S+USNhdGzYSHXAQdz0PZWE1FJkQ==
+X-Received: by 2002:adf:e585:: with SMTP id l5mr3085728wrm.156.1572010966360;
+        Fri, 25 Oct 2019 06:42:46 -0700 (PDT)
 Received: from localhost.localdomain ([94.230.83.169])
-        by smtp.gmail.com with ESMTPSA id v11sm2194730wrw.97.2019.10.25.06.42.35
+        by smtp.gmail.com with ESMTPSA id v11sm2194730wrw.97.2019.10.25.06.42.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2019 06:42:36 -0700 (PDT)
+        Fri, 25 Oct 2019 06:42:45 -0700 (PDT)
 From:   Shmulik Ladkani <shmulik@metanetworks.com>
 X-Google-Original-From: Shmulik Ladkani <shmulik.ladkani@gmail.com>
 To:     Daniel Borkmann <daniel@iogearbox.net>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         Shmulik Ladkani <shmulik.ladkani@gmail.com>
-Subject: [PATCH bpf-next 0/2] test_bpf: Add an skb_segment test for a linear head_frag=0 skb whose gso_size was mangled
-Date:   Fri, 25 Oct 2019 16:42:21 +0300
-Message-Id: <20191025134223.2761-1-shmulik.ladkani@gmail.com>
+Subject: [PATCH bpf-next 2/2] test_bpf: Introduce 'gso_linear_no_head_frag' skb_segment test
+Date:   Fri, 25 Oct 2019 16:42:23 +0300
+Message-Id: <20191025134223.2761-3-shmulik.ladkani@gmail.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191025134223.2761-1-shmulik.ladkani@gmail.com>
+References: <20191025134223.2761-1-shmulik.ladkani@gmail.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a reproducer test that mimics the input skbs that lead to the BUG_ON
-in skb_segment() which was fixed by commit 3dcbdb134f32 ("net: gso: Fix skb_segment splat when splitting gso_size mangled skb having linear-headed frag_list").
+Following reports of skb_segment() hitting a BUG_ON when working on
+GROed skbs which have their gso_size mangled (e.g. after a
+bpf_skb_change_proto call), add a reproducer test that mimics the
+input skbs that lead to the mentioned BUG_ON as in [1] and validates the
+fix submitted in [2].
 
-Shmulik Ladkani (2):
-  test_bpf: Refactor test_skb_segment() to allow testing skb_segment()
-    on numerous different skbs
-  test_bpf: Introduce 'gso_linear_no_head_frag' skb_segment test
+[1] https://lists.openwall.net/netdev/2019/08/26/110
+[2] commit 3dcbdb134f32 ("net: gso: Fix skb_segment splat when splitting gso_size mangled skb having linear-headed frag_list")
 
- lib/test_bpf.c | 112 +++++++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 103 insertions(+), 9 deletions(-)
+Signed-off-by: Shmulik Ladkani <shmulik.ladkani@gmail.com>
+---
+ lib/test_bpf.c | 63 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
+diff --git a/lib/test_bpf.c b/lib/test_bpf.c
+index c952df82b515..cecb230833be 100644
+--- a/lib/test_bpf.c
++++ b/lib/test_bpf.c
+@@ -6859,6 +6859,60 @@ static __init struct sk_buff *build_test_skb(void)
+ 	return NULL;
+ }
+ 
++static __init struct sk_buff *build_test_skb_linear_no_head_frag(void)
++{
++	unsigned int alloc_size = 2000;
++	unsigned int headroom = 102, doffset = 72, data_size = 1308;
++	struct sk_buff *skb[2];
++	int i;
++
++	/* skbs linked in a frag_list, both with linear data, with head_frag=0
++	 * (data allocated by kmalloc), both have tcp data of 1308 bytes
++	 * (total payload is 2616 bytes).
++	 * Data offset is 72 bytes (40 ipv6 hdr, 32 tcp hdr). Some headroom.
++	 */
++	for (i = 0; i < 2; i++) {
++		skb[i] = alloc_skb(alloc_size, GFP_KERNEL);
++		if (!skb[i]) {
++			if (i == 0)
++				goto err_skb0;
++			else
++				goto err_skb1;
++		}
++
++		skb[i]->protocol = htons(ETH_P_IPV6);
++		skb_reserve(skb[i], headroom);
++		skb_put(skb[i], doffset + data_size);
++		skb_reset_network_header(skb[i]);
++		if (i == 0)
++			skb_reset_mac_header(skb[i]);
++		else
++			skb_set_mac_header(skb[i], -ETH_HLEN);
++		__skb_pull(skb[i], doffset);
++	}
++
++	/* setup shinfo.
++	 * mimic bpf_skb_proto_4_to_6, which resets gso_segs and assigns a
++	 * reduced gso_size.
++	 */
++	skb_shinfo(skb[0])->gso_size = 1288;
++	skb_shinfo(skb[0])->gso_type = SKB_GSO_TCPV6 | SKB_GSO_DODGY;
++	skb_shinfo(skb[0])->gso_segs = 0;
++	skb_shinfo(skb[0])->frag_list = skb[1];
++
++	/* adjust skb[0]'s len */
++	skb[0]->len += skb[1]->len;
++	skb[0]->data_len += skb[1]->len;
++	skb[0]->truesize += skb[1]->truesize;
++
++	return skb[0];
++
++err_skb1:
++	kfree_skb(skb[0]);
++err_skb0:
++	return NULL;
++}
++
+ struct skb_segment_test {
+ 	const char *descr;
+ 	struct sk_buff *(*build_skb)(void);
+@@ -6871,6 +6925,15 @@ static struct skb_segment_test skb_segment_tests[] __initconst = {
+ 		.build_skb = build_test_skb,
+ 		.features = NETIF_F_SG | NETIF_F_GSO_PARTIAL | NETIF_F_IP_CSUM |
+ 			    NETIF_F_IPV6_CSUM | NETIF_F_RXCSUM
++	},
++	{
++		.descr = "gso_linear_no_head_frag",
++		.build_skb = build_test_skb_linear_no_head_frag,
++		.features = NETIF_F_SG | NETIF_F_FRAGLIST |
++			    NETIF_F_HW_VLAN_CTAG_TX | NETIF_F_GSO |
++			    NETIF_F_LLTX_BIT | NETIF_F_GRO |
++			    NETIF_F_IPV6_CSUM | NETIF_F_RXCSUM |
++			    NETIF_F_HW_VLAN_STAG_TX_BIT
+ 	}
+ };
+ 
 -- 
 2.17.1
 
