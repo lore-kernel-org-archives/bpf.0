@@ -2,86 +2,106 @@ Return-Path: <SRS0=fH4Q=YS=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
 	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C85CCA9EA0
-	for <bpf@archiver.kernel.org>; Fri, 25 Oct 2019 18:39:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8EC7CA9EA0
+	for <bpf@archiver.kernel.org>; Fri, 25 Oct 2019 19:30:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6BE6A2070B
-	for <bpf@archiver.kernel.org>; Fri, 25 Oct 2019 18:39:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 992E420684
+	for <bpf@archiver.kernel.org>; Fri, 25 Oct 2019 19:30:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="cgIYENo7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jjAQriQ7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726599AbfJYSjG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 25 Oct 2019 14:39:06 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:38777 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726563AbfJYSjF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 25 Oct 2019 14:39:05 -0400
-Received: by mail-pl1-f193.google.com with SMTP id w8so1701405plq.5
-        for <bpf@vger.kernel.org>; Fri, 25 Oct 2019 11:39:05 -0700 (PDT)
+        id S1727135AbfJYTaU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 25 Oct 2019 15:30:20 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:43001 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725775AbfJYTaU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 25 Oct 2019 15:30:20 -0400
+Received: by mail-pf1-f194.google.com with SMTP id 21so2228272pfj.9;
+        Fri, 25 Oct 2019 12:30:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=0mBz0irOSbKoy/XDaINS4+iJlxSn8cKAvdTj8tcbPwg=;
-        b=cgIYENo7k5APpE4IBq2PiItOzWXffLlUY8LSgRGLUorI4ruDRnI2x+prBoQ920Rpvv
-         DOxJmENbvzdCfdXjW+f++tAh6PNP+6RWJ94dkoJaZ/8C2YKdX29zHHCD/PLLPTCJl26D
-         H7HlHwAcj6BzLj2IZ9F5r+fma9mfppYOuierYmydVDLX4COQJlLavRFApTuOF23+lxV/
-         jR3keN9q7Cl3ZHhIALMAuUIx0GjrhCuo5p6UlkCaDo2Nb+c+cTITcOtAZzg/8Yib+wqz
-         dlXLbGgWJTaTPgnKsHjIHeBpWQfUH1rbBbsUxFB7G1LFiay6RKdAzvCRJdfkV1u9VYwr
-         EbkA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version;
+        bh=0Ol0Q9d+nzw7reP27LbGXzVnDznqVRhprPqADBgH/xI=;
+        b=jjAQriQ7nUxcSr1XFJkzKM1qjyQMsg0rjgisDNSiP7tBFzuDmawJSLzKQxDaZ1TZqX
+         rRFCyhh6VL8xnaVoLNG+6mDcY4JOLz9HaSzB59a1aE8ZU2Zqe/goi0KB2XWie302QG3N
+         bRf+D6Q0CDarWB91xusGQD7iYFGBfvZHbBlcCFeYWZuAoTBDdttlah8yTnxCpji2F8tq
+         tTD2bYTqPGX2ful7uVyRb9VRubALyTsWUDb4pEJLfaNTS3Ji+V4HUlZoqdbnf3n1JXp6
+         923ISWPmEHrN6Ys8ghc8HfVL4HSaK8D6tv2+cj9RkmGS+pY5sYRMVa8d7dbr2RuAZO7l
+         0FIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=0mBz0irOSbKoy/XDaINS4+iJlxSn8cKAvdTj8tcbPwg=;
-        b=hPonwBua6fjhvMaNX94LH3NKRVxhvDWqv2uZ08wq1yNwWSbIlIFBg44WI0EHR94BMW
-         s82b2Fr7VqOAFub9XBWCX7R8bZk/CSlVtmedNyq5N5EKMWVDOiBwFEUPrS4VT29QaWUJ
-         /O71Q4AErrZ+uVaKKDHnAoJfBhytHx8s1sqpHz/7CPeJ603uo0CC5qiHG4fcd8CwZIbB
-         jRagRS02gRBIKJoeQHa0nAvFZyU5KaZDr9L7Sk8XBjklnv2c8A4EBJ+llnLT0ScaI0eE
-         EOx/MKqzrJKZy/3BD/6UpkIVMlg+i/S+vxU51yZN08D3ZFuqJqHSDF9tkhJh09nJsNU0
-         O2ag==
-X-Gm-Message-State: APjAAAVfQgwROrb1LDwsChq8C5p/XrIVGgmSTMIhk4sbmIPV0a63tSvs
-        f/yiE8GBAvn2o6fQwsoki7Rh1w==
-X-Google-Smtp-Source: APXvYqzUjPgweqD1AiuoDmGlwKdY7a5li63Uz8In6IeLq1VbqLgnBcEFoaS/yqyK6DuP5e0yapaHag==
-X-Received: by 2002:a17:902:d201:: with SMTP id t1mr5539900ply.212.1572028745119;
-        Fri, 25 Oct 2019 11:39:05 -0700 (PDT)
-Received: from cakuba.hsd1.ca.comcast.net (c-73-202-202-92.hsd1.ca.comcast.net. [73.202.202.92])
-        by smtp.gmail.com with ESMTPSA id a14sm2786692pgh.80.2019.10.25.11.39.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2019 11:39:04 -0700 (PDT)
-Date:   Fri, 25 Oct 2019 11:39:01 -0700
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Andrii Nakryiko <andriin@fb.com>,
-        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>
-Subject: Re: [PATCH] bpftool: Allow to read btf as raw data
-Message-ID: <20191025113901.5a7e121e@cakuba.hsd1.ca.comcast.net>
-In-Reply-To: <20191024133025.10691-1-jolsa@kernel.org>
-References: <20191024133025.10691-1-jolsa@kernel.org>
-Organization: Netronome Systems, Ltd.
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version;
+        bh=0Ol0Q9d+nzw7reP27LbGXzVnDznqVRhprPqADBgH/xI=;
+        b=mCUFU4/zBUQoyX3Rm3kcS2ugPOQ1JaMIfKSVFVj1bMBAmwy8T3QudNuL7fS+NNu3SM
+         Eab4Ijh++VzibJkcd8oye3J7Uondmj0Xmt4IVOgMhoB8YyFhy49h+W2EvDN5I6c/0hiB
+         v5XmO4v1R7/EtX4RxbwFFAOcoHcMb2hsg13FhPc8clYVhqaHbksk+bcSj9rALdDTdZLM
+         SblZ+crwz0fOVmIzjOlrrMF4JUu5coK+pAX0CHN25HT0orRGvEZCAQ5koAD7mB31LF7E
+         NJGJ7g6YV1xR+2HPGMWghyq/g0ngKxETKopYfahQtiA8JFZ2caCoQDv7QqvmTsFmnZHA
+         knQw==
+X-Gm-Message-State: APjAAAW02uTyz3zkhefs09RvZf0xRD0/YCQsGmJn1uHfW76BxDPmZpXd
+        aTAhxcdcBoWjD8Z1oB9Mx5tNr/pB
+X-Google-Smtp-Source: APXvYqwZimV4wJux6JvoxjKcLblnon0CqTabNqkGEQa5sFF7dlM4OLeZoXS9X2fTJb58AjZjF2LISA==
+X-Received: by 2002:aa7:838f:: with SMTP id u15mr6327200pfm.74.1572031819294;
+        Fri, 25 Oct 2019 12:30:19 -0700 (PDT)
+Received: from [172.20.54.239] ([2620:10d:c090:200::1:4b93])
+        by smtp.gmail.com with ESMTPSA id v4sm3068298pff.181.2019.10.25.12.30.18
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 25 Oct 2019 12:30:18 -0700 (PDT)
+From:   "Jonathan Lemon" <jonathan.lemon@gmail.com>
+To:     "Magnus Karlsson" <magnus.karlsson@intel.com>
+Cc:     bjorn.topel@intel.com, ast@kernel.org, daniel@iogearbox.net,
+        netdev@vger.kernel.org, bpf@vger.kernel.org, degeneloy@gmail.com,
+        john.fastabend@gmail.com
+Subject: Re: [PATCH bpf-next v3] libbpf: fix compatibility for kernels without
+ need_wakeup
+Date:   Fri, 25 Oct 2019 12:30:18 -0700
+X-Mailer: MailMate (1.13r5655)
+Message-ID: <9CF134CD-CB33-48D0-BFAF-BCFC2F9AE6AD@gmail.com>
+In-Reply-To: <1571995035-21889-1-git-send-email-magnus.karlsson@intel.com>
+References: <1571995035-21889-1-git-send-email-magnus.karlsson@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; format=flowed
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 24 Oct 2019 15:30:25 +0200, Jiri Olsa wrote:
-> The bpftool interface stays the same, but now it's possible
-> to run it over BTF raw data, like:
-> 
->   $ bpftool btf dump file /sys/kernel/btf/vmlinux
->   [1] INT '(anon)' size=4 bits_offset=0 nr_bits=32 encoding=(none)
->   [2] INT 'long unsigned int' size=8 bits_offset=0 nr_bits=64 encoding=(none)
->   [3] CONST '(anon)' type_id=2
-> 
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 
-Acked-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+
+On 25 Oct 2019, at 2:17, Magnus Karlsson wrote:
+
+> When the need_wakeup flag was added to AF_XDP, the format of the
+> XDP_MMAP_OFFSETS getsockopt was extended. Code was added to the
+> kernel to take care of compatibility issues arrising from running
+> applications using any of the two formats. However, libbpf was
+> not extended to take care of the case when the application/libbpf
+> uses the new format but the kernel only supports the old
+> format. This patch adds support in libbpf for parsing the old
+> format, before the need_wakeup flag was added, and emulating a
+> set of static need_wakeup flags that will always work for the
+> application.
+>
+> v2 -> v3:
+> * Incorporated code improvements suggested by Jonathan Lemon
+
+Thanks for doing this, Magnus!  It looks much simpler now.
+
+
+>
+> v1 -> v2:
+> * Rebased to bpf-next
+> * Rewrote the code as the previous version made you blind
+>
+> Fixes: a4500432c2587cb2a ("libbpf: add support for need_wakeup flag in 
+> AF_XDP part")
+> Reported-by: Eloy Degen <degeneloy@gmail.com>
+> Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+
+Acked-by: Jonathan Lemon <jonathan.lemon@gmail.com>
