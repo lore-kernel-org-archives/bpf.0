@@ -2,86 +2,125 @@ Return-Path: <SRS0=i04I=YT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32995CA9EB9
-	for <bpf@archiver.kernel.org>; Sat, 26 Oct 2019 07:52:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B60EECA9EBC
+	for <bpf@archiver.kernel.org>; Sat, 26 Oct 2019 13:31:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 01F732084C
-	for <bpf@archiver.kernel.org>; Sat, 26 Oct 2019 07:52:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8BFD421871
+	for <bpf@archiver.kernel.org>; Sat, 26 Oct 2019 13:31:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1572096703;
+	bh=OIZ6EXwHD5c8//jk+AXuRD+N7T25MxUNW2lB0iTm3+I=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=F78UgVTL+txJ4I+HQ9zSJtBN+5xqNRAcrXnQ1HBfJoQbyPjjH+xwfexLY1t9XRRm3
+	 dL+uf8Ny1Pvuc57EBaWZK9il2MdzaGxDNkNfe7/Cmu/+tEoERUTbYOn0NHkfgLBdkT
+	 6xSW9BJmifslmmmSrTRc/nfYlj2eS/hNe/olTHkQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726010AbfJZHwV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 26 Oct 2019 03:52:21 -0400
-Received: from mxhk.zte.com.cn ([63.217.80.70]:60902 "EHLO mxhk.zte.com.cn"
+        id S1728156AbfJZNTN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 26 Oct 2019 09:19:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41118 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725996AbfJZHwV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 26 Oct 2019 03:52:21 -0400
-Received: from mse-fl2.zte.com.cn (unknown [10.30.14.239])
-        by Forcepoint Email with ESMTPS id DAD3DE01D7A104C0546D;
-        Sat, 26 Oct 2019 15:52:16 +0800 (CST)
-Received: from notes_smtp.zte.com.cn (notes_smtp.zte.com.cn [10.30.1.239])
-        by mse-fl2.zte.com.cn with ESMTP id x9Q7q3oK076541;
-        Sat, 26 Oct 2019 15:52:03 +0800 (GMT-8)
-        (envelope-from zhang.lin16@zte.com.cn)
-Received: from fox-host8.localdomain ([10.74.120.8])
-          by szsmtp06.zte.com.cn (Lotus Domino Release 8.5.3FP6)
-          with ESMTP id 2019102615524640-139284 ;
-          Sat, 26 Oct 2019 15:52:46 +0800 
-From:   zhanglin <zhang.lin16@zte.com.cn>
-To:     davem@davemloft.net
-Cc:     ast@kernel.org, daniel@iogearbox.net, jakub.kicinski@netronome.com,
-        hawk@kernel.org, john.fastabend@gmail.com, mkubecek@suse.cz,
-        jiri@mellanox.com, pablo@netfilter.org, f.fainelli@gmail.com,
-        maxime.chevallier@bootlin.com, lirongqing@baidu.com,
-        vivien.didelot@gmail.com, linyunsheng@huawei.com,
-        natechancellor@gmail.com, arnd@arndb.de, dan.carpenter@oracle.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, xue.zhihong@zte.com.cn, wang.yi59@zte.com.cn,
-        jiang.xuexin@zte.com.cn, zhanglin <zhang.lin16@zte.com.cn>
-Subject: [PATCH] net: Zeroing the structure ethtool_wolinfo in ethtool_get_wol()
-Date:   Sat, 26 Oct 2019 15:54:16 +0800
-Message-Id: <1572076456-12463-1-git-send-email-zhang.lin16@zte.com.cn>
-X-Mailer: git-send-email 1.8.3.1
-X-MIMETrack: Itemize by SMTP Server on SZSMTP06/server/zte_ltd(Release 8.5.3FP6|November
- 21, 2013) at 2019-10-26 15:52:46,
-        Serialize by Router on notes_smtp/zte_ltd(Release 9.0.1FP7|August  17, 2016) at
- 2019-10-26 15:52:09,
-        Serialize complete at 2019-10-26 15:52:09
-X-MAIL: mse-fl2.zte.com.cn x9Q7q3oK076541
+        id S1726330AbfJZNTM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 26 Oct 2019 09:19:12 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 648F92070B;
+        Sat, 26 Oct 2019 13:19:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572095952;
+        bh=OIZ6EXwHD5c8//jk+AXuRD+N7T25MxUNW2lB0iTm3+I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=0ICES4KRgOu7rWK827qRoOmctrE7BQmBGlTeL2Na+VAjHkKnVs34uPZBy1QCVmk+x
+         Org01q//TpfDdbVjzdbgIMNuChrFrqJRsM5qhyPK5r0U9keEXhDULVBPiSOk0uU3ll
+         /4zoZyKegSFXgcTq9n+SDciwfMzlZ5diCZOeKYr0=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Song Liu <songliubraving@fb.com>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 01/59] tools: bpf: Use !building_out_of_srctree to determine srctree
+Date:   Sat, 26 Oct 2019 09:18:12 -0400
+Message-Id: <20191026131910.3435-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-memset() the structure ethtool_wolinfo that has padded bytes
-but the padded bytes have not been zeroed out.
+From: Shuah Khan <skhan@linuxfoundation.org>
 
-Signed-off-by: zhanglin <zhang.lin16@zte.com.cn>
+[ Upstream commit 55d554f5d14071f7c2c5dbd88d0a2eb695c97d16 ]
+
+make TARGETS=bpf kselftest fails with:
+
+Makefile:127: tools/build/Makefile.include: No such file or directory
+
+When the bpf tool make is invoked from tools Makefile, srctree is
+cleared and the current logic check for srctree equals to empty
+string to determine srctree location from CURDIR.
+
+When the build in invoked from selftests/bpf Makefile, the srctree
+is set to "." and the same logic used for srctree equals to empty is
+needed to determine srctree.
+
+Check building_out_of_srctree undefined as the condition for both
+cases to fix "make TARGETS=bpf kselftest" build failure.
+
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Song Liu <songliubraving@fb.com>
+Link: https://lore.kernel.org/bpf/20190927011344.4695-1-skhan@linuxfoundation.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/ethtool.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/bpf/Makefile     | 6 +++++-
+ tools/lib/bpf/Makefile | 6 +++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/net/core/ethtool.c b/net/core/ethtool.c
-index aeabc48..563a845 100644
---- a/net/core/ethtool.c
-+++ b/net/core/ethtool.c
-@@ -1471,11 +1471,13 @@ static int ethtool_reset(struct net_device *dev, char __user *useraddr)
+diff --git a/tools/bpf/Makefile b/tools/bpf/Makefile
+index 53b60ad452f5d..93a84965345dc 100644
+--- a/tools/bpf/Makefile
++++ b/tools/bpf/Makefile
+@@ -12,7 +12,11 @@ INSTALL ?= install
+ CFLAGS += -Wall -O2
+ CFLAGS += -D__EXPORTED_HEADERS__ -I$(srctree)/include/uapi -I$(srctree)/include
  
- static int ethtool_get_wol(struct net_device *dev, char __user *useraddr)
- {
--	struct ethtool_wolinfo wol = { .cmd = ETHTOOL_GWOL };
-+	struct ethtool_wolinfo wol;
+-ifeq ($(srctree),)
++# This will work when bpf is built in tools env. where srctree
++# isn't set and when invoked from selftests build, where srctree
++# is set to ".". building_out_of_srctree is undefined for in srctree
++# builds
++ifndef building_out_of_srctree
+ srctree := $(patsubst %/,%,$(dir $(CURDIR)))
+ srctree := $(patsubst %/,%,$(dir $(srctree)))
+ endif
+diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+index 3624557550a1f..5cd2786cc437c 100644
+--- a/tools/lib/bpf/Makefile
++++ b/tools/lib/bpf/Makefile
+@@ -7,7 +7,11 @@ BPF_EXTRAVERSION = 1
  
- 	if (!dev->ethtool_ops->get_wol)
- 		return -EOPNOTSUPP;
+ MAKEFLAGS += --no-print-directory
  
-+	memset(&wol, 0, sizeof(struct ethtool_wolinfo));
-+	wol.cmd = ETHTOOL_GWOL;
- 	dev->ethtool_ops->get_wol(dev, &wol);
- 
- 	if (copy_to_user(useraddr, &wol, sizeof(wol)))
+-ifeq ($(srctree),)
++# This will work when bpf is built in tools env. where srctree
++# isn't set and when invoked from selftests build, where srctree
++# is a ".". building_out_of_srctree is undefined for in srctree
++# builds
++ifndef building_out_of_srctree
+ srctree := $(patsubst %/,%,$(dir $(CURDIR)))
+ srctree := $(patsubst %/,%,$(dir $(srctree)))
+ srctree := $(patsubst %/,%,$(dir $(srctree)))
 -- 
-2.15.2
+2.20.1
 
