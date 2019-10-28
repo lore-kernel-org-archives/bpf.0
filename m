@@ -2,90 +2,152 @@ Return-Path: <SRS0=NgTr=YV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3450CCA9EC2
-	for <bpf@archiver.kernel.org>; Mon, 28 Oct 2019 18:01:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41FBCCA9EC2
+	for <bpf@archiver.kernel.org>; Mon, 28 Oct 2019 18:23:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1369620862
-	for <bpf@archiver.kernel.org>; Mon, 28 Oct 2019 18:01:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2279B217D6
+	for <bpf@archiver.kernel.org>; Mon, 28 Oct 2019 18:23:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="TxZ1dYYP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B/PjCMTx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404262AbfJ1SBG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 28 Oct 2019 14:01:06 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:38290 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729738AbfJ1SBC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 28 Oct 2019 14:01:02 -0400
-Received: by mail-pg1-f195.google.com with SMTP id w3so7396015pgt.5
-        for <bpf@vger.kernel.org>; Mon, 28 Oct 2019 11:01:00 -0700 (PDT)
+        id S2403790AbfJ1SXW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 28 Oct 2019 14:23:22 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:38325 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404359AbfJ1SXW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 28 Oct 2019 14:23:22 -0400
+Received: by mail-qk1-f193.google.com with SMTP id e2so850741qkn.5;
+        Mon, 28 Oct 2019 11:23:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=mFR9DJBz4aaSJA6Lp+Gxf14PeSYZwISp0W0+RRJlLaY=;
-        b=TxZ1dYYP5sCvuc/G/vsVQZeFEQV6aPYwbiShE+J0+/hTuDkChBkPUWKH31XeHoyFWP
-         mp469jb3ziur13QTCBOSpZypO5WPKrylEZfGFg9Hn16P4v8b8UvpGAQUc91pN2g98Lrj
-         vf4JYpxfR2GSy6o83cK2SCNr1rz2EslYifVV5pINWltfakM+8HrZReuL2N+RtebqO860
-         oz7CQuGhAXI9o28TJ3u273/VuogvrvQ75DLMVjsppvgzU1PS48PrqX9FPQCiN8A2LXKR
-         OuOvW+k1sIcQb63WjURoniXxXjf9YlAyBrNIV7S3Mq6w/1n9UzUxdkIK9wWjEFFlckXg
-         G+Lw==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=V/TfInN/7wY8IImWBzQpaHXY95U6VOk93yirrzOxwLU=;
+        b=B/PjCMTxJNTwZ8B9zkfxkl75Mweia5dDzHco9vbMkewQf2D8BIZPnLQdrKMI3jvZHc
+         EYH5l5ceDoTtgiOP2kRNneEQpxUhCGgHw1ORHEug7nkpj+rzSMxMSL3tW4svUbEq5lCH
+         XsOGgvbk8pczZMFneuWgnnLOWdGqrfNL58GkzpxTMdGEmRzRvpYh6ipwmdW1jipNHUFd
+         QyyLYhdbJ5yVhpBFF7NmnkVixZ1lMi40wgXUyZP24E6bAjxsSPLSf0OYA2ulNmMLyTJ+
+         nSHginjQMrAAnT3UVB4zL9yk0jK4XsQmX9XZ+d2Q7jkapWD5K8uGaqXKshE+spTdI+ZD
+         9Fmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=mFR9DJBz4aaSJA6Lp+Gxf14PeSYZwISp0W0+RRJlLaY=;
-        b=J9Tu8yw0OY2dSTaxMI/QVhqpzpudxqeYv5Veufajl4s9h9W9h10gO3i99Zbp4W64O/
-         OFDyj+WA/VeCsahpU9Kgykfsd+Hkqn8zdHen7Mzy7hF/Z48YRSKEzXdTtZVUxqSEj3Ix
-         d3xAeUR/VoS3O+zfGmdNpigJ1l6UDkjO5C9ZWPAeSOiua09D6O/tAYQ1QjJfuF/HQcAI
-         nTaGggqL4ubwYEqr1c1Pftfa9uyfCZhAwMbKAPLUagF9vDSfnI91Kq65FTupJ5Zhc3f6
-         DP2NkxaOqpmmdcMoiCqoNfMOdejaGnRxZoH+wq2GY5GgOc+/qrQOiCsxU5vMGbAotNnm
-         edCA==
-X-Gm-Message-State: APjAAAVFqS7Zk8AG9ltyqDNZ/b8E1oY6uyDruSqw8tNDi0MXz3+3ZDik
-        XYGOrFP4eQnL7f5aHthIb9nLqg==
-X-Google-Smtp-Source: APXvYqzPxwLVdq14TKHElmnIG+DCNhkQfxGivfW43j+TLX4y79TdDmbfnHUQXDTexo9uvgwpyylFvg==
-X-Received: by 2002:a17:90a:741:: with SMTP id s1mr639682pje.113.1572285660180;
-        Mon, 28 Oct 2019 11:01:00 -0700 (PDT)
-Received: from cakuba.hsd1.ca.comcast.net ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id r19sm11312566pgj.43.2019.10.28.11.00.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Oct 2019 11:01:00 -0700 (PDT)
-Date:   Mon, 28 Oct 2019 11:00:56 -0700
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Cc:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        bpf@vger.kernel.org, magnus.karlsson@gmail.com,
-        magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
-        jonathan.lemon@gmail.com, toke@redhat.com
-Subject: Re: [PATCH bpf-next v3 1/2] xsk: store struct xdp_sock as a
- flexible array member of the XSKMAP
-Message-ID: <20191028110056.17eea9fb@cakuba.hsd1.ca.comcast.net>
-In-Reply-To: <20191025093219.10290-2-bjorn.topel@gmail.com>
-References: <20191025093219.10290-1-bjorn.topel@gmail.com>
-        <20191025093219.10290-2-bjorn.topel@gmail.com>
-Organization: Netronome Systems, Ltd.
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=V/TfInN/7wY8IImWBzQpaHXY95U6VOk93yirrzOxwLU=;
+        b=LaAzxAK3LHvYnHzt/LSAOx8XKX5eAspF01uWBDWoGDv9qiJsS30wZJW2uV7Bd/kUp2
+         ABY07F99Injbd5grMzAKWsKjErkI/ePNNKqe2a/57fyuC4Ikb6mgoqqevR9oKLsURK/3
+         6HaGYnojXL65xs+XKZhhkoxDAWP9uqPoU6Al/vKxR1z4ILCRa3qiOtL+zoRXN1CqhqMf
+         h1n6i+e58beJ/+FDB25EYDtO2wQuvjhUhZsRNIEgndN0XV4chpE0ZI5wxfuGzaEHCbf6
+         V1mM3RkdneYRrGVuRXh4A3kuUer95XxIwlQI6jc7hM1sZNAUBpH5lYhKoJU8hAIoDL+W
+         S/NQ==
+X-Gm-Message-State: APjAAAWFKlXJN+7P1KAvBM9mJB6hP3ln6Zv1H7j9TmnfcQLjKKrwZ3bO
+        CJ1l3nwxuzqk9Dn86e1trljtirdB/MdPoYcC3po=
+X-Google-Smtp-Source: APXvYqxGjZumUkmmPMdXJDDA1+igKXAbOzkMalSA1cFjGrNHM3dGgS9IVfqmmcFsBd+0Sca6GJaVwiix5YQU4hCmTmM=
+X-Received: by 2002:a37:8046:: with SMTP id b67mr17706996qkd.437.1572287001355;
+ Mon, 28 Oct 2019 11:23:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <157220959547.48922.6623938299823744715.stgit@toke.dk>
+ <157220959980.48922.12100884213362040360.stgit@toke.dk> <20191028140624.584bcc1e@carbon>
+ <87imo9roxf.fsf@toke.dk> <483546c6-14b9-e1f1-b4c1-424d6b8d4ace@fb.com> <20191028171303.3e7e4601@carbon>
+In-Reply-To: <20191028171303.3e7e4601@carbon>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 28 Oct 2019 11:23:09 -0700
+Message-ID: <CAEf4BzbL_5VHyKkDuCcUjzaUDJAa=-0i0+mFGJtkkbm5pKyycQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 4/4] selftests: Add tests for automatic map pinning
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     Yonghong Song <yhs@fb.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        David Miller <davem@davemloft.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Anton Protopopov <aspsk2@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 25 Oct 2019 11:32:18 +0200, Bj=C3=B6rn T=C3=B6pel wrote:
-> From: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
->=20
-> Prior this commit, the array storing XDP socket instances were stored
-> in a separate allocated array of the XSKMAP. Now, we store the sockets
-> as a flexible array member in a similar fashion as the arraymap. Doing
-> so, we do less pointer chasing in the lookup.
->=20
-> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
+On Mon, Oct 28, 2019 at 9:13 AM Jesper Dangaard Brouer
+<brouer@redhat.com> wrote:
+>
+> On Mon, 28 Oct 2019 15:32:26 +0000
+> Yonghong Song <yhs@fb.com> wrote:
+>
+> > On 10/28/19 6:15 AM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+> > > Jesper Dangaard Brouer <brouer@redhat.com> writes:
+> > >
+> > >> On Sun, 27 Oct 2019 21:53:19 +0100
+> > >> Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com> wrote:
+> > >>
+> > >>> diff --git a/tools/testing/selftests/bpf/progs/test_pinning.c b/too=
+ls/testing/selftests/bpf/progs/test_pinning.c
+> > >>> new file mode 100644
+> > >>> index 000000000000..ff2d7447777e
+> > >>> --- /dev/null
+> > >>> +++ b/tools/testing/selftests/bpf/progs/test_pinning.c
+> > >>> @@ -0,0 +1,29 @@
+> > >>> +// SPDX-License-Identifier: GPL-2.0
+> > >>> +
+> > >>> +#include <linux/bpf.h>
+> > >>> +#include "bpf_helpers.h"
+> > >>> +
+> > >>> +int _version SEC("version") =3D 1;
+> > >>> +
+> > >>> +struct {
+> > >>> + __uint(type, BPF_MAP_TYPE_ARRAY);
+> > >>> + __uint(max_entries, 1);
+> > >>> + __type(key, __u32);
+> > >>> + __type(value, __u64);
+> > >>> + __uint(pinning, LIBBPF_PIN_BY_NAME);
+> > >>> +} pinmap SEC(".maps");
+> > >>
+> > >> So, this is the new BTF-defined maps syntax.
+> > >>
+> > >> Please remind me, what version of LLVM do we need to compile this?
+> > >
+> > > No idea what the minimum version is. I'm running LLVM 9.0 :)
+> >
+> > LLVM 9.0 starts to support .maps.
+> > There is no dependency on pahole.
+>
+> LLVM 9.0.0 is still very new:
+>  - 19 September 2019: LLVM 9.0.0 is now available
+>
+> For my XDP-tutorial[1], I cannot required people to have this new llvm
+> version.  But I would like to teach people about this new syntax (note,
+> I can upgrade libbpf version via git-submodule, and update bpf_helpers.h)=
+.
+>
+> To Andrii, any recommendations on how I can do the transition?
+>
+> I'm thinking, it should be possible to define both ELF-object sections
+> SEC "maps" and ".maps" at the same time. But how does libbpf handle that?
+> (Who takes precedence?)
 
-Damn, looks like I managed to reply to v2.=20
+Yes, libbpf will load both maps and .maps. There is no precedence,
+they are treated equally and are just added to the list of maps. But
+if there is .maps section without associated BTF, bpf_object__open
+will fail (because BTF is mandatory at that point).
 
-I think the size maths may overflow on 32bit machines on the addition.
+>
+>
+> (Alternatively, I can detect the LLVM version, in the Makefile, and have
+> a #ifdef define in the code)
+> --
+> Best regards,
+>   Jesper Dangaard Brouer
+>   MSc.CS, Principal Kernel Engineer at Red Hat
+>   LinkedIn: http://www.linkedin.com/in/brouer
+>
+> [1] https://github.com/xdp-project/xdp-tutorial
+>
