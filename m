@@ -2,332 +2,393 @@ Return-Path: <SRS0=j4GQ=YW=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.8 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97E12CA9EAE
-	for <bpf@archiver.kernel.org>; Tue, 29 Oct 2019 17:29:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2CA3CA9EAE
+	for <bpf@archiver.kernel.org>; Tue, 29 Oct 2019 17:35:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6E1D220830
-	for <bpf@archiver.kernel.org>; Tue, 29 Oct 2019 17:29:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8325C21479
+	for <bpf@archiver.kernel.org>; Tue, 29 Oct 2019 17:35:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727910AbfJ2R3a (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Oct 2019 13:29:30 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:46846 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727456AbfJ2R33 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 29 Oct 2019 13:29:29 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9TGsF8D087470
-        for <bpf@vger.kernel.org>; Tue, 29 Oct 2019 13:29:28 -0400
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2vxrru2nr4-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 29 Oct 2019 13:29:28 -0400
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <bpf@vger.kernel.org> from <iii@linux.ibm.com>;
-        Tue, 29 Oct 2019 17:29:26 -0000
-Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 29 Oct 2019 17:29:24 -0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9THSm3Z41943478
+        id S1728592AbfJ2Rf6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Oct 2019 13:35:58 -0400
+Received: from smtp-sh.infomaniak.ch ([128.65.195.4]:55501 "EHLO
+        smtp-sh.infomaniak.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728500AbfJ2Rf5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 29 Oct 2019 13:35:57 -0400
+X-Greylist: delayed 1166 seconds by postgrey-1.27 at vger.kernel.org; Tue, 29 Oct 2019 13:35:48 EDT
+Received: from smtp8.infomaniak.ch (smtp8.infomaniak.ch [83.166.132.38])
+        by smtp-sh.infomaniak.ch (8.14.5/8.14.5) with ESMTP id x9THFS6K006249
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 29 Oct 2019 17:28:48 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6AC2711C058;
-        Tue, 29 Oct 2019 17:29:22 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0D12F11C04C;
-        Tue, 29 Oct 2019 17:29:22 +0000 (GMT)
-Received: from white.boeblingen.de.ibm.com (unknown [9.152.96.221])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 29 Oct 2019 17:29:21 +0000 (GMT)
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>
-Cc:     bpf@vger.kernel.org, Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next] bpf: add s390 testing documentation
-Date:   Tue, 29 Oct 2019 18:29:16 +0100
-X-Mailer: git-send-email 2.23.0
+        Tue, 29 Oct 2019 18:15:28 +0100
+Received: from localhost (ns3096276.ip-94-23-54.eu [94.23.54.103])
+        (authenticated bits=0)
+        by smtp8.infomaniak.ch (8.14.5/8.14.5) with ESMTP id x9THFRT3168641;
+        Tue, 29 Oct 2019 18:15:27 +0100
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Drysdale <drysdale@google.com>,
+        Florent Revest <revest@chromium.org>,
+        James Morris <jmorris@namei.org>, Jann Horn <jann@thejh.net>,
+        John Johansen <john.johansen@canonical.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        KP Singh <kpsingh@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mickael.salaun@ssi.gouv.fr>,
+        Paul Moore <paul@paul-moore.com>,
+        Sargun Dhillon <sargun@sargun.me>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Stephen Smalley <sds@tycho.nsa.gov>, Tejun Heo <tj@kernel.org>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Tycho Andersen <tycho@tycho.ws>,
+        Will Drewry <wad@chromium.org>, bpf@vger.kernel.org,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH bpf-next v11 4/7] landlock: Add ptrace LSM hooks
+Date:   Tue, 29 Oct 2019 18:15:02 +0100
+Message-Id: <20191029171505.6650-5-mic@digikod.net>
+X-Mailer: git-send-email 2.24.0.rc1
+In-Reply-To: <20191029171505.6650-1-mic@digikod.net>
+References: <20191029171505.6650-1-mic@digikod.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19102917-0028-0000-0000-000003B0D6EF
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19102917-0029-0000-0000-0000247318D9
-Message-Id: <20191029172916.36528-1-iii@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-29_05:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1910290150
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This commits adds a document that explains how to test BPF in an s390
-QEMU guest.
+Add a first Landlock hook that can be used to enforce a security policy
+or to audit some process activities.  For a sandboxing use-case, it is
+needed to inform the kernel if a task can legitimately debug another.
+ptrace(2) can also be used by an attacker to impersonate another task
+and remain undetected while performing malicious activities.
 
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+Using ptrace(2) and related features on a target process can lead to a
+privilege escalation.  A sandboxed task must then be able to tell the
+kernel if another task is more privileged, via ptrace_may_access().
+
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andy Lutomirski <luto@amacapital.net>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: James Morris <jmorris@namei.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Serge E. Hallyn <serge@hallyn.com>
+Cc: Will Drewry <wad@chromium.org>
 ---
 
-I've been asked a few times how to test BPF on s390, so I took some time
-to compile from various sources and test the attached guide.
+Changes since v10:
+* revamp and replace the static policy with a Landlock hook which may be
+  used by the corresponding BPF_LANDLOCK_PTRACE program (attach) type
+  and a dedicated process_cmp_landlock_ptrace() BPF helper
+* check prog return value against LANDLOCK_RET_DENY (ret is a bitmask)
 
-Known limitations:
+Changes since v6:
+* factor out ptrace check
+* constify pointers
+* cleanup headers
+* use the new security_add_hooks()
+---
+ security/landlock/Makefile       |   4 +-
+ security/landlock/bpf_run.c      |  62 +++++++++++++++++
+ security/landlock/bpf_run.h      |  25 +++++++
+ security/landlock/hooks_ptrace.c | 114 +++++++++++++++++++++++++++++++
+ security/landlock/hooks_ptrace.h |  19 ++++++
+ security/landlock/init.c         |   2 +
+ 6 files changed, 224 insertions(+), 2 deletions(-)
+ create mode 100644 security/landlock/bpf_run.c
+ create mode 100644 security/landlock/bpf_run.h
+ create mode 100644 security/landlock/hooks_ptrace.c
+ create mode 100644 security/landlock/hooks_ptrace.h
 
-- Debian host or debootstrap-based chroot is required. Compiling for
-  s390 on other popular distros is much more tedious.
-- When using a little-endian host, BTF must be disabled. pahole doesn't
-  seem to support cross-compilation right now.
-
-Documentation/bpf/index.rst |   9 ++
- Documentation/bpf/s390.rst  | 205 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 214 insertions(+)
- create mode 100644 Documentation/bpf/s390.rst
-
-diff --git a/Documentation/bpf/index.rst b/Documentation/bpf/index.rst
-index 801a6ed3f2e5..4f5410b61441 100644
---- a/Documentation/bpf/index.rst
-+++ b/Documentation/bpf/index.rst
-@@ -47,6 +47,15 @@ Program types
-    prog_flow_dissector
+diff --git a/security/landlock/Makefile b/security/landlock/Makefile
+index 0b291f2c027c..93e4c2f31c8a 100644
+--- a/security/landlock/Makefile
++++ b/security/landlock/Makefile
+@@ -1,6 +1,6 @@
+ obj-$(CONFIG_SECURITY_LANDLOCK) := landlock.o
  
- 
-+Testing BPF
-+===========
-+
-+.. toctree::
-+   :maxdepth: 1
-+
-+   s390
-+
-+
- .. Links:
- .. _Documentation/networking/filter.txt: ../networking/filter.txt
- .. _man-pages: https://www.kernel.org/doc/man-pages/
-diff --git a/Documentation/bpf/s390.rst b/Documentation/bpf/s390.rst
+ landlock-y := init.o \
+-	bpf_verify.o bpf_ptrace.o \
++	bpf_verify.o bpf_run.o bpf_ptrace.o \
+ 	domain_manage.o domain_syscall.o \
+-	hooks_cred.o
++	hooks_cred.o hooks_ptrace.o
+diff --git a/security/landlock/bpf_run.c b/security/landlock/bpf_run.c
 new file mode 100644
-index 000000000000..21ecb309daea
+index 000000000000..8874958bdc30
 --- /dev/null
-+++ b/Documentation/bpf/s390.rst
-@@ -0,0 +1,205 @@
-+===================
-+Testing BPF on s390
-+===================
++++ b/security/landlock/bpf_run.c
+@@ -0,0 +1,62 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Landlock LSM - eBPF program evaluation
++ *
++ * Copyright © 2016-2019 Mickaël Salaün <mic@digikod.net>
++ * Copyright © 2018-2019 ANSSI
++ */
 +
-+1. Introduction
-+***************
++#include <asm/current.h>
++#include <linux/bpf.h>
++#include <linux/errno.h>
++#include <linux/filter.h>
++#include <linux/rculist.h>
++#include <uapi/linux/landlock.h>
 +
-+IBM Z are mainframe computers, which are descendants of IBM System/360 from
-+year 1964. They are supported by the Linux kernel under the name "s390". This
-+document describes how to test BPF in an s390 QEMU guest.
++#include "bpf_run.h"
++#include "common.h"
++#include "hooks_ptrace.h"
 +
-+2. One-time setup
-+*****************
++static const void *get_prog_ctx(struct landlock_hook_ctx *hook_ctx)
++{
++	switch (hook_ctx->type) {
++	case LANDLOCK_HOOK_PTRACE:
++		return landlock_get_ctx_ptrace(hook_ctx->ctx_ptrace);
++	}
++	WARN_ON(1);
++	return NULL;
++}
 +
-+The following is required to build and run the test suite:
++/**
++ * landlock_access_denied - run Landlock programs tied to a hook
++ *
++ * @domain: Landlock domain pointer
++ * @hook_ctx: non-NULL valid eBPF context pointer
++ *
++ * Return true if at least one program return deny, false otherwise.
++ */
++bool landlock_access_denied(struct landlock_domain *domain,
++		struct landlock_hook_ctx *hook_ctx)
++{
++	struct landlock_prog_list *prog_list;
++	const size_t hook = get_hook_index(hook_ctx->type);
 +
-+  * s390 GCC
-+  * s390 development headers and libraries
-+  * Clang with BPF support
-+  * QEMU with s390 support
-+  * Disk image with s390 rootfs
++	if (!domain)
++		return false;
 +
-+Debian supports installing compiler and libraries for s390 out of the box.
-+Users of other distros may use debootstrap in order to set up a Debian chroot::
++	for (prog_list = domain->programs[hook]; prog_list;
++			prog_list = prog_list->prev) {
++		u32 ret;
++		const void *prog_ctx;
 +
-+  sudo debootstrap \
-+    --variant=minbase \
-+    --include=sudo \
-+    testing \
-+    ./s390-toolchain
-+  sudo mount --rbind /dev ./s390-toolchain/dev
-+  sudo mount --rbind /proc ./s390-toolchain/proc
-+  sudo mount --rbind /sys ./s390-toolchain/sys
-+  sudo chroot ./s390-toolchain
++		prog_ctx = get_prog_ctx(hook_ctx);
++		if (!prog_ctx || WARN_ON(IS_ERR(prog_ctx)))
++			return true;
++		rcu_read_lock();
++		ret = BPF_PROG_RUN(prog_list->prog, prog_ctx);
++		rcu_read_unlock();
++		if (ret & LANDLOCK_RET_DENY)
++			return true;
++	}
++	return false;
++}
+diff --git a/security/landlock/bpf_run.h b/security/landlock/bpf_run.h
+new file mode 100644
+index 000000000000..3461cbb8ec12
+--- /dev/null
++++ b/security/landlock/bpf_run.h
+@@ -0,0 +1,25 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Landlock LSM - eBPF program evaluation headers
++ *
++ * Copyright © 2016-2019 Mickaël Salaün <mic@digikod.net>
++ * Copyright © 2018-2019 ANSSI
++ */
 +
-+Once on Debian, the build prerequisites can be installed as follows::
++#ifndef _SECURITY_LANDLOCK_BPF_RUN_H
++#define _SECURITY_LANDLOCK_BPF_RUN_H
 +
-+  sudo dpkg --add-architecture s390x
-+  sudo apt-get update
-+  sudo apt-get install \
-+    bc \
-+    bison \
-+    cmake \
-+    debootstrap \
-+    dwarves \
-+    flex \
-+    g++ \
-+    gcc \
-+    g++-s390x-linux-gnu \
-+    gcc-s390x-linux-gnu \
-+    gdb-multiarch \
-+    git \
-+    make \
-+    python3 \
-+    qemu-system-misc \
-+    qemu-utils \
-+    rsync \
-+    libcap-dev:s390x \
-+    libelf-dev:s390x \
-+    libncurses-dev
++#include "common.h"
++#include "hooks_ptrace.h"
 +
-+Latest Clang targeting BPF can be installed as follows::
++struct landlock_hook_ctx {
++	enum landlock_hook_type type;
++	union {
++		struct landlock_hook_ctx_ptrace *ctx_ptrace;
++	};
++};
 +
-+  git clone https://github.com/llvm/llvm-project.git
-+  ln -s ../../clang llvm-project/llvm/tools/
-+  mkdir llvm-project-build
-+  cd llvm-project-build
-+  cmake \
-+    -DLLVM_TARGETS_TO_BUILD=BPF \
-+    -DCMAKE_BUILD_TYPE=Release \
-+    -DCMAKE_INSTALL_PREFIX=/opt/clang-bpf \
-+    ../llvm-project/llvm
-+  make
-+  sudo make install
-+  export PATH=/opt/clang-bpf/bin:$PATH
++bool landlock_access_denied(struct landlock_domain *domain,
++		struct landlock_hook_ctx *hook_ctx);
 +
-+The disk image can be prepared using a loopback mount and debootstrap::
++#endif /* _SECURITY_LANDLOCK_BPF_RUN_H */
+diff --git a/security/landlock/hooks_ptrace.c b/security/landlock/hooks_ptrace.c
+new file mode 100644
+index 000000000000..8e518a472d04
+--- /dev/null
++++ b/security/landlock/hooks_ptrace.c
+@@ -0,0 +1,114 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Landlock LSM - ptrace hooks
++ *
++ * Copyright © 2017-2019 Mickaël Salaün <mic@digikod.net>
++ * Copyright © 2019 ANSSI
++ */
 +
-+  qemu-img create -f raw ./s390.img 1G
-+  sudo losetup -f ./s390.img
-+  sudo mkfs.ext4 /dev/loopX
-+  mkdir ./s390.rootfs
-+  sudo mount /dev/loopX ./s390.rootfs
-+  sudo debootstrap \
-+    --foreign \
-+    --arch=s390x \
-+    --variant=minbase \
-+    --include=" \
-+      iproute2, \
-+      iputils-ping, \
-+      isc-dhcp-client, \
-+      kmod, \
-+      libcap2, \
-+      libelf1, \
-+      netcat, \
-+      procps" \
-+    testing \
-+    ./s390.rootfs
-+  sudo umount ./s390.rootfs
-+  sudo losetup -d /dev/loopX
++#include <asm/current.h>
++#include <linux/cred.h>
++#include <linux/errno.h>
++#include <linux/kernel.h>
++#include <linux/lsm_hooks.h>
++#include <linux/sched.h>
++#include <uapi/linux/landlock.h>
 +
-+3. Compilation
-+**************
++#include "bpf_run.h"
++#include "common.h"
++#include "hooks_ptrace.h"
 +
-+In addition to the usual Kconfig options required to run the BPF test suite, it
-+is also helpful to select::
++struct landlock_hook_ctx_ptrace {
++	struct landlock_context_ptrace prog_ctx;
++};
 +
-+  CONFIG_NET_9P=y
-+  CONFIG_9P_FS=y
-+  CONFIG_NET_9P_VIRTIO=y
-+  CONFIG_VIRTIO_PCI=y
++const struct landlock_context_ptrace *landlock_get_ctx_ptrace(
++		const struct landlock_hook_ctx_ptrace *hook_ctx)
++{
++	if (WARN_ON(!hook_ctx))
++		return NULL;
 +
-+as that would enable a very easy way to share files with the s390 virtual
-+machine.
++	return &hook_ctx->prog_ctx;
++}
 +
-+Compiling kernel, modules and testsuite, as well as preparing gdb scripts to
-+simplify debugging, can be done using the following commands::
++static int check_ptrace(struct landlock_domain *domain,
++		struct task_struct *tracer, struct task_struct *tracee)
++{
++	struct landlock_hook_ctx_ptrace ctx_ptrace = {
++		.prog_ctx = {
++			.tracer = (uintptr_t)tracer,
++			.tracee = (uintptr_t)tracee,
++		},
++	};
++	struct landlock_hook_ctx hook_ctx = {
++		.type = LANDLOCK_HOOK_PTRACE,
++		.ctx_ptrace = &ctx_ptrace,
++	};
 +
-+  make ARCH=s390 CROSS_COMPILE=s390x-linux-gnu- menuconfig
-+  make ARCH=s390 CROSS_COMPILE=s390x-linux-gnu- bzImage modules scripts_gdb
-+  make ARCH=s390 CROSS_COMPILE=s390x-linux-gnu- \
-+    -C tools/testing/selftests \
-+    TARGETS=bpf \
-+    INSTALL_PATH=$PWD/tools/testing/selftests/kselftest_install \
-+    install
++	return landlock_access_denied(domain, &hook_ctx) ? -EPERM : 0;
++}
 +
-+4. Running the test suite
-+*************************
++/**
++ * hook_ptrace_access_check - determine whether the current process may access
++ *			      another
++ *
++ * @child: the process to be accessed
++ * @mode: the mode of attachment
++ *
++ * If the current task (i.e. tracer) has one or multiple BPF_LANDLOCK_PTRACE
++ * programs, then run them with the `struct landlock_context_ptrace` context.
++ * If one of these programs return LANDLOCK_RET_DENY, then deny access with
++ * -EPERM, else allow it by returning 0.
++ */
++static int hook_ptrace_access_check(struct task_struct *child,
++		unsigned int mode)
++{
++	struct landlock_domain *dom_current;
++	const size_t hook = get_hook_index(LANDLOCK_HOOK_PTRACE);
 +
-+The virtual machine can be started as follows::
++	dom_current = landlock_cred(current_cred())->domain;
++	if (!(dom_current && dom_current->programs[hook]))
++		return 0;
++	return check_ptrace(dom_current, current, child);
++}
 +
-+  qemu-system-s390x \
-+    -cpu max,zpci=on \
-+    -smp 2 \
-+    -m 4G \
-+    -kernel linux/arch/s390/boot/compressed/vmlinux \
-+    -drive file=./s390.img,if=virtio,format=raw \
-+    -nographic \
-+    -append 'root=/dev/vda rw console=ttyS1' \
-+    -virtfs local,path=./linux,security_model=none,mount_tag=linux \
-+    -object rng-random,filename=/dev/urandom,id=rng0 \
-+    -device virtio-rng-ccw,rng=rng0 \
-+    -netdev user,id=net0 \
-+    -device virtio-net-ccw,netdev=net0
++/**
++ * hook_ptrace_traceme - determine whether another process may trace the
++ *			 current one
++ *
++ * @parent: the task proposed to be the tracer
++ *
++ * If the parent task (i.e. tracer) has one or multiple BPF_LANDLOCK_PTRACE
++ * programs, then run them with the `struct landlock_context_ptrace` context.
++ * If one of these programs return LANDLOCK_RET_DENY, then deny access with
++ * -EPERM, else allow it by returning 0.
++ */
++static int hook_ptrace_traceme(struct task_struct *parent)
++{
++	struct landlock_domain *dom_parent;
++	const size_t hook = get_hook_index(LANDLOCK_HOOK_PTRACE);
++	int ret;
 +
-+When using this on a real IBM Z, ``-enable-kvm`` may be added for better
-+performance. When starting the virtual machine for the first time, disk image
-+setup must be finalized using the following command::
++	rcu_read_lock();
++	dom_parent = landlock_cred(__task_cred(parent))->domain;
++	if (!(dom_parent && dom_parent->programs[hook])) {
++		ret = 0;
++		goto put_rcu;
++	}
++	ret = check_ptrace(dom_parent, parent, current);
 +
-+  /debootstrap/debootstrap --second-stage
++put_rcu:
++	rcu_read_unlock();
++	return ret;
++}
 +
-+Directory with the code built on the host as well as ``/proc`` and ``/sys``
-+need to be mounted as follows::
++static struct security_hook_list landlock_hooks[] = {
++	LSM_HOOK_INIT(ptrace_access_check, hook_ptrace_access_check),
++	LSM_HOOK_INIT(ptrace_traceme, hook_ptrace_traceme),
++};
 +
-+  mkdir -p /linux
-+  mount -t 9p linux /linux
-+  mount -t proc proc /proc
-+  mount -t sysfs sys /sys
++__init void landlock_add_hooks_ptrace(void)
++{
++	security_add_hooks(landlock_hooks, ARRAY_SIZE(landlock_hooks),
++			LANDLOCK_NAME);
++}
+diff --git a/security/landlock/hooks_ptrace.h b/security/landlock/hooks_ptrace.h
+new file mode 100644
+index 000000000000..53fe651bdb3e
+--- /dev/null
++++ b/security/landlock/hooks_ptrace.h
+@@ -0,0 +1,19 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Landlock LSM - ptrace hooks headers
++ *
++ * Copyright © 2017-2019 Mickaël Salaün <mic@digikod.net>
++ * Copyright © 2019 ANSSI
++ */
 +
-+After that, the test suite can be run using the following commands::
++#ifndef _SECURITY_LANDLOCK_HOOKS_PTRACE_H
++#define _SECURITY_LANDLOCK_HOOKS_PTRACE_H
 +
-+  cd /linux/tools/testing/selftests/kselftest_install
-+  ./run_kselftest.sh
++struct landlock_hook_ctx_ptrace;
 +
-+As usual, tests can be also run individually::
++const struct landlock_context_ptrace *landlock_get_ctx_ptrace(
++		const struct landlock_hook_ctx_ptrace *hook_ctx);
 +
-+  cd /linux/tools/testing/selftests/bpf
-+  ./test_verifier
++__init void landlock_add_hooks_ptrace(void);
 +
-+5. Debugging
-+************
-+
-+It is possible to debug the s390 kernel using QEMU GDB stub, which is activated
-+by passing ``-s`` to QEMU.
-+
-+It is preferable to turn KASLR off, so that gdb would know where to find the
-+kernel image in memory, by building the kernel with::
-+
-+  RANDOMIZE_BASE=n
-+
-+GDB can then be attached using the following command::
-+
-+  gdb-multiarch -ex 'target remote localhost:1234' ./vmlinux
-+
-+6. Network
-+**********
-+
-+In case one needs to use the network in the virtual machine in order to e.g.
-+install additional packages, it can be configured using::
-+
-+  dhclient eth0
-+
-+7. Links
-+********
-+
-+This document is a compilation of techniques, whose more comprehensive
-+descriptions can be found by following these links:
-+
-+- `Debootstrap <https://wiki.debian.org/EmDebian/CrossDebootstrap>`_
-+- `Multiarch <https://wiki.debian.org/Multiarch/HOWTO>`_
-+- `Building LLVM <https://llvm.org/docs/CMake.html>`_
-+- `Cross-compiling the kernel <https://wiki.gentoo.org/wiki/Embedded_Handbook/General/Cross-compiling_the_kernel>`_
-+- `QEMU s390x Guest Support <https://wiki.qemu.org/Documentation/Platforms/S390X>`_
-+- `Plan 9 folder sharing over Virtio <https://wiki.qemu.org/Documentation/9psetup>`_
-+- `Using GDB with QEMU <https://wiki.osdev.org/Kernel_Debugging#Use_GDB_with_QEMU>`_
++#endif /* _SECURITY_LANDLOCK_HOOKS_PTRACE_H */
+diff --git a/security/landlock/init.c b/security/landlock/init.c
+index 8836ec4defd3..541aad17418e 100644
+--- a/security/landlock/init.c
++++ b/security/landlock/init.c
+@@ -10,11 +10,13 @@
+ 
+ #include "common.h"
+ #include "hooks_cred.h"
++#include "hooks_ptrace.h"
+ 
+ static int __init landlock_init(void)
+ {
+ 	pr_info(LANDLOCK_NAME ": Registering hooks\n");
+ 	landlock_add_hooks_cred();
++	landlock_add_hooks_ptrace();
+ 	return 0;
+ }
+ 
 -- 
 2.23.0
 
