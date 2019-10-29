@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF6C8CA9EC4
-	for <bpf@archiver.kernel.org>; Tue, 29 Oct 2019 19:39:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23134C47E49
+	for <bpf@archiver.kernel.org>; Tue, 29 Oct 2019 19:39:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A378D20862
-	for <bpf@archiver.kernel.org>; Tue, 29 Oct 2019 19:39:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 017202087F
+	for <bpf@archiver.kernel.org>; Tue, 29 Oct 2019 19:39:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732405AbfJ2Tjd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Oct 2019 15:39:33 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:54827 "EHLO mx1.redhat.com"
+        id S1732198AbfJ2Tj3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Oct 2019 15:39:29 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:3990 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732342AbfJ2Tjc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 29 Oct 2019 15:39:32 -0400
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
+        id S1732149AbfJ2Tj2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 29 Oct 2019 15:39:28 -0400
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 025392A09B7
-        for <bpf@vger.kernel.org>; Tue, 29 Oct 2019 19:39:31 +0000 (UTC)
-Received: by mail-lf1-f71.google.com with SMTP id t27so1555095lfk.21
-        for <bpf@vger.kernel.org>; Tue, 29 Oct 2019 12:39:30 -0700 (PDT)
+        by mx1.redhat.com (Postfix) with ESMTPS id 0E7EE58569
+        for <bpf@vger.kernel.org>; Tue, 29 Oct 2019 19:39:28 +0000 (UTC)
+Received: by mail-lf1-f70.google.com with SMTP id k30so2807386lfj.5
+        for <bpf@vger.kernel.org>; Tue, 29 Oct 2019 12:39:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=mQb1uT6i/aW9lEp+uYRlf8mFGYalqNcO7R4V6FqicfA=;
-        b=FQZwK4hN61FTLumyDF4OvZrOwrdjxXOjMQTZRPOpolH9Z4bAkjLV+34BI2jMn4Qh+r
-         hW5t4iEh/yoZ0Bgd5x66NOffWT6bxgk4dB0lOGiEyz0q2C5r7QdpT49AZgrZSBx79eFe
-         r5gLyD07nxq6CAKcWfJfJ7I9huacgV7BeCAe+TMrXRENNtdbk+9KdV3AS3Amx/kqRT86
-         cQrHDzCE5qOgBw+1jkOJ+8DyEMtBcsnL8AJ3p/zVwHPGl8NC6YSQ7PAzlRQx0gSUgeFa
-         b+W7dMnlO7+dzdOFMT/uNzpVnRBq6671pwibpNLMeyclVCUabBKvFd43Ve0L7BXLMlhU
-         /WNw==
-X-Gm-Message-State: APjAAAXjFeENAPwPvVzco5qT8E84BjSqDSE7khDVuLCIstyx4r98/xIX
-        /pOPimGYnee4GCocMCMROeThAMmgE/BlNX1Ew0KtY/w20CyPWx0UpkmSLACFEUbUyxxMeTkITu6
-        61xiEosFNQxdb
-X-Received: by 2002:a19:6813:: with SMTP id d19mr3664155lfc.144.1572377969469;
-        Tue, 29 Oct 2019 12:39:29 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqyUbv2TsARrYFYuxNfkOeKA34xM1A5bLMyn/nOaoJFaDG4GtHHRy7lf6rRt7FdQmKYVSoOWDQ==
-X-Received: by 2002:a19:6813:: with SMTP id d19mr3664141lfc.144.1572377969219;
-        Tue, 29 Oct 2019 12:39:29 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a00:7660:6da:443::2])
-        by smtp.gmail.com with ESMTPSA id p4sm5839942ljp.103.2019.10.29.12.39.28
+        bh=ZCfWMdw+9MblLP9dkNsTP45FIFnbRap3kdsWxOeMMFU=;
+        b=d7tjwc8hK+uSVkzvUw49Ow17IzU/pZ76LlW0NC2Z49mLOK6/ezKmTJGS7KU2t4wEEI
+         G/ybF+U2AQp7F3CWE6zIKumA2DL2TfUAPM7dfml0JzeWNhx+I8rjEGrcc5vIMGZqGWLe
+         QPjmksIgE0PmPAx2vcAJGaeX1DBWngqyZP2B3w4jf1OesiZlz49gX7g45sz2N3x/YSkQ
+         QTXnA/5bvmBCM4t4ORsAtsmgVNw/FdTKMo+yv/FlqwyvzX4ESd8Bam6d3vJytv0w7o+h
+         iEl0L5j/y/dCo3487hlQYKR/QGiwl6hjgc9xH0G0KLAu8QTcDSrtJFzUSAX0FcdEbH6X
+         UKag==
+X-Gm-Message-State: APjAAAXEfljFy5IJ/6Us+0EVMplDd/c93AGWpyvLUl7G6o6+oonlFAP5
+        bDyQk3LTRPtw5bHUgX9pp+fJzaW9zSCCWnv/FtHwv6OspmASFY08M/5uXJv4vEJkNEhPfKl+6Bq
+        6SYPiKySuy8HW
+X-Received: by 2002:a05:6512:146:: with SMTP id m6mr3453847lfo.98.1572377966476;
+        Tue, 29 Oct 2019 12:39:26 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqxwJ9tVlIrOn7DDSvwDwCNnrbZvJO/QsvYxP9PWJ2TjI42rBRVLXPhCc66SHNFTBvZWCy3sPA==
+X-Received: by 2002:a05:6512:146:: with SMTP id m6mr3453828lfo.98.1572377966176;
+        Tue, 29 Oct 2019 12:39:26 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
+        by smtp.gmail.com with ESMTPSA id o2sm2016188ljj.79.2019.10.29.12.39.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Oct 2019 12:39:28 -0700 (PDT)
+        Tue, 29 Oct 2019 12:39:25 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id E02F41818B7; Tue, 29 Oct 2019 20:39:27 +0100 (CET)
-Subject: [PATCH bpf-next v4 5/5] selftests: Add tests for automatic map
- pinning
+        id 9C79F1818B6; Tue, 29 Oct 2019 20:39:24 +0100 (CET)
+Subject: [PATCH bpf-next v4 2/5] libbpf: Store map pin path and status in
+ struct bpf_map
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Daniel Borkmann <daniel@iogearbox.net>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -61,8 +61,8 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Tue, 29 Oct 2019 20:39:27 +0100
-Message-ID: <157237796779.169521.16760790702202542513.stgit@toke.dk>
+Date:   Tue, 29 Oct 2019 20:39:24 +0100
+Message-ID: <157237796448.169521.1399805620810530569.stgit@toke.dk>
 In-Reply-To: <157237796219.169521.2129132883251452764.stgit@toke.dk>
 References: <157237796219.169521.2129132883251452764.stgit@toke.dk>
 User-Agent: StGit/0.20
@@ -76,213 +76,304 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-This adds a new BPF selftest to exercise the new automatic map pinning
-code.
+Support storing and setting a pin path in struct bpf_map, which can be used
+for automatic pinning. Also store the pin status so we can avoid attempts
+to re-pin a map that has already been pinned (or reused from a previous
+pinning).
+
+The behaviour of bpf_object__{un,}pin_maps() is changed so that if it is
+called with a NULL path argument (which was previously illegal), it will
+(un)pin only those maps that have a pin_path set.
 
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- tools/testing/selftests/bpf/prog_tests/pinning.c |  157 ++++++++++++++++++++++
- tools/testing/selftests/bpf/progs/test_pinning.c |   29 ++++
- 2 files changed, 186 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/pinning.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_pinning.c
+ tools/lib/bpf/libbpf.c   |  164 +++++++++++++++++++++++++++++++++++-----------
+ tools/lib/bpf/libbpf.h   |    8 ++
+ tools/lib/bpf/libbpf.map |    3 +
+ 3 files changed, 134 insertions(+), 41 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/pinning.c b/tools/testing/selftests/bpf/prog_tests/pinning.c
-new file mode 100644
-index 000000000000..71f7dc51edc7
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/pinning.c
-@@ -0,0 +1,157 @@
-+// SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index ce5ef3ddd263..fd11f6aeb32c 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -226,6 +226,8 @@ struct bpf_map {
+ 	void *priv;
+ 	bpf_map_clear_priv_t clear_priv;
+ 	enum libbpf_map_type libbpf_type;
++	char *pin_path;
++	bool pinned;
+ };
+ 
+ struct bpf_secdata {
+@@ -4025,47 +4027,119 @@ int bpf_map__pin(struct bpf_map *map, const char *path)
+ 	char *cp, errmsg[STRERR_BUFSIZE];
+ 	int err;
+ 
+-	err = check_path(path);
+-	if (err)
+-		return err;
+-
+ 	if (map == NULL) {
+ 		pr_warn("invalid map pointer\n");
+ 		return -EINVAL;
+ 	}
+ 
+-	if (bpf_obj_pin(map->fd, path)) {
+-		cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
+-		pr_warn("failed to pin map: %s\n", cp);
+-		return -errno;
++	if (map->pin_path) {
++		if (path && strcmp(path, map->pin_path)) {
++			pr_warn("map '%s' already has pin path '%s' different from '%s'\n",
++				bpf_map__name(map), map->pin_path, path);
++			return -EINVAL;
++		} else if (map->pinned) {
++			pr_debug("map '%s' already pinned at '%s'; not re-pinning\n",
++				 bpf_map__name(map), map->pin_path);
++			return 0;
++		}
++	} else {
++		if (!path) {
++			pr_warn("missing a path to pin map '%s' at\n",
++				bpf_map__name(map));
++			return -EINVAL;
++		} else if (map->pinned) {
++			pr_warn("map '%s' already pinned\n", bpf_map__name(map));
++			return -EEXIST;
++		}
 +
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <unistd.h>
-+#include <test_progs.h>
++		map->pin_path = strdup(path);
++		if (!map->pin_path) {
++			err = -errno;
++			goto out_err;
++		}
+ 	}
+ 
+-	pr_debug("pinned map '%s'\n", path);
++	err = check_path(map->pin_path);
++	if (err)
++		return err;
 +
-+__u32 get_map_id(struct bpf_object *obj, const char *name)
++	if (bpf_obj_pin(map->fd, map->pin_path)) {
++		err = -errno;
++		goto out_err;
++	}
++
++	map->pinned = true;
++	pr_debug("pinned map '%s'\n", map->pin_path);
+ 
+ 	return 0;
++
++out_err:
++	cp = libbpf_strerror_r(-err, errmsg, sizeof(errmsg));
++	pr_warn("failed to pin map: %s\n", cp);
++	return err;
+ }
+ 
+ int bpf_map__unpin(struct bpf_map *map, const char *path)
+ {
+ 	int err;
+ 
+-	err = check_path(path);
+-	if (err)
+-		return err;
+-
+ 	if (map == NULL) {
+ 		pr_warn("invalid map pointer\n");
+ 		return -EINVAL;
+ 	}
+ 
++	if (map->pin_path) {
++		if (path && strcmp(path, map->pin_path)) {
++			pr_warn("map '%s' already has pin path '%s' different from '%s'\n",
++				bpf_map__name(map), map->pin_path, path);
++			return -EINVAL;
++		}
++		path = map->pin_path;
++	} else if (!path) {
++		pr_warn("no path to unpin map '%s' from\n",
++			bpf_map__name(map));
++		return -EINVAL;
++	}
++
++	err = check_path(path);
++	if (err)
++		return err;
++
+ 	err = unlink(path);
+ 	if (err != 0)
+ 		return -errno;
+-	pr_debug("unpinned map '%s'\n", path);
++
++	map->pinned = false;
++	pr_debug("unpinned map from '%s' from '%s'\n", bpf_map__name(map), path);
+ 
+ 	return 0;
+ }
+ 
++int bpf_map__set_pin_path(struct bpf_map *map, const char *path)
 +{
-+	__u32 map_info_len, duration, retval;
-+	struct bpf_map_info map_info = {};
-+	struct bpf_map *map;
-+	int err;
++	char *new = NULL;
 +
-+	map_info_len = sizeof(map_info);
++	if (path) {
++		new = strdup(path);
++		if (!new)
++			return -errno;
++	}
 +
-+	map = bpf_object__find_map_by_name(obj, name);
-+	if (CHECK(!map, "find map", "NULL map"))
-+		return 0;
-+
-+	err = bpf_obj_get_info_by_fd(bpf_map__fd(map),
-+				     &map_info, &map_info_len);
-+	CHECK(err, "get map info", "err %d errno %d", err, errno);
-+	return map_info.id;
++	free(map->pin_path);
++	map->pin_path = new;
++	return 0;
 +}
 +
-+void test_pinning(void)
++const char *bpf_map__get_pin_path(struct bpf_map *map)
 +{
-+	__u32 duration, retval, size, map_id, map_id2;
-+	const char *custpinpath = "/sys/fs/bpf/custom/pinmap";
-+	const char *nopinpath = "/sys/fs/bpf/nopinmap";
-+	const char *custpath = "/sys/fs/bpf/custom";
-+	const char *pinpath = "/sys/fs/bpf/pinmap";
-+	const char *file = "./test_pinning.o";
-+	struct stat statbuf = {};
-+	struct bpf_object *obj;
-+	struct bpf_map *map;
-+	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts,
-+		.pin_root_path = custpath,
-+	);
-+
-+	int err;
-+	obj = bpf_object__open_file(file, NULL);
-+	if (CHECK_FAIL(libbpf_get_error(obj)))
-+		return;
-+
-+	err = bpf_object__load(obj);
-+	if (CHECK(err, "default load", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	/* check that pinmap was pinned */
-+	err = stat(pinpath, &statbuf);
-+	if (CHECK(err, "stat pinpath", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+        /* check that nopinmap was *not* pinned */
-+	err = stat(nopinpath, &statbuf);
-+	if (CHECK(!err || errno != ENOENT, "stat nopinpath",
-+		  "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+        map_id = get_map_id(obj, "pinmap");
-+	if (!map_id)
-+		goto out;
-+
-+	bpf_object__close(obj);
-+
-+	obj = bpf_object__open_file(file, NULL);
-+	if (CHECK_FAIL(libbpf_get_error(obj)))
-+		goto out;
-+
-+	err = bpf_object__load(obj);
-+	if (CHECK(err, "default load", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	/* check that same map ID was reused for second load */
-+	map_id2 = get_map_id(obj, "pinmap");
-+	if (CHECK(map_id != map_id2, "check reuse",
-+		  "err %d errno %d id %d id2 %d\n", err, errno, map_id, map_id2))
-+		goto out;
-+
-+	/* should be no-op to re-pin same map */
-+	map = bpf_object__find_map_by_name(obj, "pinmap");
-+	if (CHECK(!map, "find map", "NULL map"))
-+		goto out;
-+
-+	err = bpf_map__pin(map, NULL);
-+	if (CHECK(err, "re-pin map", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	/* but error to pin at different location */
-+	err = bpf_map__pin(map, "/sys/fs/bpf/other");
-+	if (CHECK(!err, "pin map different", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	/* unpin maps with a pin_path set */
-+	err = bpf_object__unpin_maps(obj, NULL);
-+	if (CHECK(err, "unpin maps", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	/* and re-pin them... */
-+	err = bpf_object__pin_maps(obj, NULL);
-+	if (CHECK(err, "pin maps", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	/* set pinning path of other map and re-pin all */
-+	map = bpf_object__find_map_by_name(obj, "nopinmap");
-+	if (CHECK(!map, "find map", "NULL map"))
-+		goto out;
-+
-+	err = bpf_map__set_pin_path(map, custpinpath);
-+	if (CHECK(err, "set pin path", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	/* should only pin the one unpinned map */
-+	err = bpf_object__pin_maps(obj, NULL);
-+	if (CHECK(err, "pin maps", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	/* check that nopinmap was pinned at the custom path */
-+	err = stat(custpinpath, &statbuf);
-+	if (CHECK(err, "stat custpinpath", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	/* remove the custom pin path to re-test it with auto-pinning below */
-+	err = unlink(custpinpath);
-+	if (CHECK(err, "unlink custpinpath", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = rmdir(custpath);
-+	if (CHECK(err, "rmdir custpindir", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	bpf_object__close(obj);
-+
-+	/* test auto-pinning at custom path with open opt */
-+	obj = bpf_object__open_file(file, &opts);
-+	if (CHECK_FAIL(libbpf_get_error(obj)))
-+		return;
-+
-+	err = bpf_object__load(obj);
-+	if (CHECK(err, "custom load", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	/* check that pinmap was pinned at the custom path */
-+	err = stat(custpinpath, &statbuf);
-+	if (CHECK(err, "stat custpinpath", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+out:
-+	unlink(pinpath);
-+	unlink(nopinpath);
-+	unlink(custpinpath);
-+	rmdir(custpath);
-+	if (obj)
-+		bpf_object__close(obj);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_pinning.c b/tools/testing/selftests/bpf/progs/test_pinning.c
-new file mode 100644
-index 000000000000..ff2d7447777e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_pinning.c
-@@ -0,0 +1,29 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include "bpf_helpers.h"
-+
-+int _version SEC("version") = 1;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+	__uint(pinning, LIBBPF_PIN_BY_NAME);
-+} pinmap SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} nopinmap SEC(".maps");
-+
-+SEC("xdp_prog")
-+int _xdp_prog(struct xdp_md *xdp)
-+{
-+	return XDP_PASS;
++	return map->pin_path;
 +}
 +
-+char _license[] SEC("license") = "GPL";
++bool bpf_map__is_pinned(struct bpf_map *map)
++{
++	return map->pinned;
++}
++
+ int bpf_object__pin_maps(struct bpf_object *obj, const char *path)
+ {
+ 	struct bpf_map *map;
+@@ -4084,20 +4158,27 @@ int bpf_object__pin_maps(struct bpf_object *obj, const char *path)
+ 		return err;
+ 
+ 	bpf_object__for_each_map(map, obj) {
++		char *pin_path = NULL;
+ 		char buf[PATH_MAX];
+-		int len;
+ 
+-		len = snprintf(buf, PATH_MAX, "%s/%s", path,
+-			       bpf_map__name(map));
+-		if (len < 0) {
+-			err = -EINVAL;
+-			goto err_unpin_maps;
+-		} else if (len >= PATH_MAX) {
+-			err = -ENAMETOOLONG;
+-			goto err_unpin_maps;
++		if (path) {
++			int len;
++
++			len = snprintf(buf, PATH_MAX, "%s/%s", path,
++				       bpf_map__name(map));
++			if (len < 0) {
++				err = -EINVAL;
++				goto err_unpin_maps;
++			} else if (len >= PATH_MAX) {
++				err = -ENAMETOOLONG;
++				goto err_unpin_maps;
++			}
++			pin_path = buf;
++		} else if (!map->pin_path) {
++			continue;
+ 		}
+ 
+-		err = bpf_map__pin(map, buf);
++		err = bpf_map__pin(map, pin_path);
+ 		if (err)
+ 			goto err_unpin_maps;
+ 	}
+@@ -4106,17 +4187,10 @@ int bpf_object__pin_maps(struct bpf_object *obj, const char *path)
+ 
+ err_unpin_maps:
+ 	while ((map = bpf_map__prev(map, obj))) {
+-		char buf[PATH_MAX];
+-		int len;
+-
+-		len = snprintf(buf, PATH_MAX, "%s/%s", path,
+-			       bpf_map__name(map));
+-		if (len < 0)
+-			continue;
+-		else if (len >= PATH_MAX)
++		if (!map->pin_path)
+ 			continue;
+ 
+-		bpf_map__unpin(map, buf);
++		bpf_map__unpin(map, NULL);
+ 	}
+ 
+ 	return err;
+@@ -4131,17 +4205,24 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
+ 		return -ENOENT;
+ 
+ 	bpf_object__for_each_map(map, obj) {
++		char *pin_path = NULL;
+ 		char buf[PATH_MAX];
+-		int len;
+ 
+-		len = snprintf(buf, PATH_MAX, "%s/%s", path,
+-			       bpf_map__name(map));
+-		if (len < 0)
+-			return -EINVAL;
+-		else if (len >= PATH_MAX)
+-			return -ENAMETOOLONG;
++		if (path) {
++			int len;
++
++			len = snprintf(buf, PATH_MAX, "%s/%s", path,
++				       bpf_map__name(map));
++			if (len < 0)
++				return -EINVAL;
++			else if (len >= PATH_MAX)
++				return -ENAMETOOLONG;
++			pin_path = buf;
++		} else if (!map->pin_path) {
++			continue;
++		}
+ 
+-		err = bpf_map__unpin(map, buf);
++		err = bpf_map__unpin(map, pin_path);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -4266,6 +4347,7 @@ void bpf_object__close(struct bpf_object *obj)
+ 
+ 	for (i = 0; i < obj->nr_maps; i++) {
+ 		zfree(&obj->maps[i].name);
++		zfree(&obj->maps[i].pin_path);
+ 		if (obj->maps[i].clear_priv)
+ 			obj->maps[i].clear_priv(&obj->maps[i],
+ 						obj->maps[i].priv);
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index c63e2ff84abc..e28ef2ebe062 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -124,6 +124,11 @@ int bpf_object__section_size(const struct bpf_object *obj, const char *name,
+ 			     __u32 *size);
+ int bpf_object__variable_offset(const struct bpf_object *obj, const char *name,
+ 				__u32 *off);
++
++/* pin_maps and unpin_maps can both be called with a NULL path, in which case
++ * they will use the pin_path attribute of each map (and ignore all maps that
++ * don't have a pin_path set).
++ */
+ LIBBPF_API int bpf_object__pin_maps(struct bpf_object *obj, const char *path);
+ LIBBPF_API int bpf_object__unpin_maps(struct bpf_object *obj,
+ 				      const char *path);
+@@ -385,6 +390,9 @@ LIBBPF_API int bpf_map__resize(struct bpf_map *map, __u32 max_entries);
+ LIBBPF_API bool bpf_map__is_offload_neutral(const struct bpf_map *map);
+ LIBBPF_API bool bpf_map__is_internal(const struct bpf_map *map);
+ LIBBPF_API void bpf_map__set_ifindex(struct bpf_map *map, __u32 ifindex);
++LIBBPF_API int bpf_map__set_pin_path(struct bpf_map *map, const char *path);
++LIBBPF_API const char *bpf_map__get_pin_path(struct bpf_map *map);
++LIBBPF_API bool bpf_map__is_pinned(struct bpf_map *map);
+ LIBBPF_API int bpf_map__pin(struct bpf_map *map, const char *path);
+ LIBBPF_API int bpf_map__unpin(struct bpf_map *map, const char *path);
+ 
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index d1473ea4d7a5..c24d4c01591d 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -197,4 +197,7 @@ LIBBPF_0.0.6 {
+ 		bpf_object__open_mem;
+ 		bpf_program__get_expected_attach_type;
+ 		bpf_program__get_type;
++		bpf_map__get_pin_path;
++		bpf_map__set_pin_path;
++		bpf_map__is_pinned;
+ } LIBBPF_0.0.5;
 
