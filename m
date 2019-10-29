@@ -2,397 +2,709 @@ Return-Path: <SRS0=j4GQ=YW=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01B15CA9EC3
-	for <bpf@archiver.kernel.org>; Tue, 29 Oct 2019 19:39:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBB80CA9EAE
+	for <bpf@archiver.kernel.org>; Tue, 29 Oct 2019 20:30:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CAD4320862
-	for <bpf@archiver.kernel.org>; Tue, 29 Oct 2019 19:39:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 898F3208E3
+	for <bpf@archiver.kernel.org>; Tue, 29 Oct 2019 20:30:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732363AbfJ2Tjb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Oct 2019 15:39:31 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:55353 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732175AbfJ2Tjb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 29 Oct 2019 15:39:31 -0400
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 57647BDF9
-        for <bpf@vger.kernel.org>; Tue, 29 Oct 2019 19:39:30 +0000 (UTC)
-Received: by mail-lj1-f198.google.com with SMTP id g28so3468064ljl.10
-        for <bpf@vger.kernel.org>; Tue, 29 Oct 2019 12:39:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=AuaZ7ExhPVniJLTjq8WFcBBx9NCoN51ynwkGN6b8gz8=;
-        b=dcO6SbicDtEn5MwgsfCcVVN2JHGwPdik8PkCSfHkpSyecsOIH9GCP/5BvVvSpEK9z/
-         Gz1mEkltejFKHaD7DRtoSsBa+kWX2wsVX3ryRmTfcgvrk5LQOZiWE9LRx93+eWjgLk2G
-         MDVf4owjuYg8YptRShFJu+TyvdHCRZoqrbsNjyG36NHo/tauyX4wCMjoIDZm+RfsHKFQ
-         k0yV34V6mpfawsfqHHdXu6XQ+APWENfg2SogbZdY6y8n19GBqblbBobasnZ/OyzgjXPq
-         +rKFSZJmewc4YKhjaqyEcaF5dW6ZuaaCDHAwtEph5fuqL88GgVtF9K7v22YcJofvIU2J
-         6GJw==
-X-Gm-Message-State: APjAAAU29CRcJPfLKOI6DqsoHjgO3Kw92T4ueV5lNuMfRh++16g8TEeF
-        jTIK4P9mTJWJIURuAcEpXjL4eSOuGfFhciS66dCxqIhU4ABQwKSAiUOgMYj4aDQNmsTsjF8LZ1V
-        Up0ygrvDl/NgN
-X-Received: by 2002:a05:651c:1124:: with SMTP id e4mr3923035ljo.52.1572377968807;
-        Tue, 29 Oct 2019 12:39:28 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqz0NZuhtJ6bXEy+yAjl256BM8XfjJ40uOk3XN2TVazIOKCcJUlpkIOl8HIcak80tLRrnsYCVw==
-X-Received: by 2002:a05:651c:1124:: with SMTP id e4mr3923009ljo.52.1572377968371;
-        Tue, 29 Oct 2019 12:39:28 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
-        by smtp.gmail.com with ESMTPSA id k9sm7119874ljk.91.2019.10.29.12.39.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Oct 2019 12:39:27 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id C03821818B6; Tue, 29 Oct 2019 20:39:26 +0100 (CET)
-Subject: [PATCH bpf-next v4 4/5] libbpf: Add auto-pinning of maps when loading
- BPF objects
-From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Date:   Tue, 29 Oct 2019 20:39:26 +0100
-Message-ID: <157237796671.169521.11697832576102917566.stgit@toke.dk>
-In-Reply-To: <157237796219.169521.2129132883251452764.stgit@toke.dk>
-References: <157237796219.169521.2129132883251452764.stgit@toke.dk>
-User-Agent: StGit/0.20
+        id S1726747AbfJ2UaG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Oct 2019 16:30:06 -0400
+Received: from smtp-sh2.infomaniak.ch ([128.65.195.6]:49289 "EHLO
+        smtp-sh2.infomaniak.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725840AbfJ2UaF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 29 Oct 2019 16:30:05 -0400
+Received: from smtp8.infomaniak.ch (smtp8.infomaniak.ch [83.166.132.38])
+        by smtp-sh2.infomaniak.ch (8.14.4/8.14.4/Debian-8+deb8u2) with ESMTP id x9THFUnj119194
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 29 Oct 2019 18:15:31 +0100
+Received: from localhost (ns3096276.ip-94-23-54.eu [94.23.54.103])
+        (authenticated bits=0)
+        by smtp8.infomaniak.ch (8.14.5/8.14.5) with ESMTP id x9THFU5P168850;
+        Tue, 29 Oct 2019 18:15:30 +0100
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Drysdale <drysdale@google.com>,
+        Florent Revest <revest@chromium.org>,
+        James Morris <jmorris@namei.org>, Jann Horn <jann@thejh.net>,
+        John Johansen <john.johansen@canonical.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        KP Singh <kpsingh@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mickael.salaun@ssi.gouv.fr>,
+        Paul Moore <paul@paul-moore.com>,
+        Sargun Dhillon <sargun@sargun.me>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Stephen Smalley <sds@tycho.nsa.gov>, Tejun Heo <tj@kernel.org>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Tycho Andersen <tycho@tycho.ws>,
+        Will Drewry <wad@chromium.org>, bpf@vger.kernel.org,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH bpf-next v11 6/7] bpf,landlock: Add tests for the Landlock ptrace program type
+Date:   Tue, 29 Oct 2019 18:15:04 +0100
+Message-Id: <20191029171505.6650-7-mic@digikod.net>
+X-Mailer: git-send-email 2.24.0.rc1
+In-Reply-To: <20191029171505.6650-1-mic@digikod.net>
+References: <20191029171505.6650-1-mic@digikod.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Toke Høiland-Jørgensen <toke@redhat.com>
+Test eBPF program context access and ptrace hooks semantic.
 
-This adds support to libbpf for setting map pinning information as part of
-the BTF map declaration, to get automatic map pinning (and reuse) on load.
-The pinning type currently only supports a single PIN_BY_NAME mode, where
-each map will be pinned by its name in a path that can be overridden, but
-defaults to /sys/fs/bpf.
-
-Since auto-pinning only does something if any maps actually have a
-'pinning' BTF attribute set, we default the new option to enabled, on the
-assumption that seamless pinning is what most callers want.
-
-When a map has a pin_path set at load time, libbpf will compare the map
-pinned at that location (if any), and if the attributes match, will re-use
-that map instead of creating a new one. If no existing map is found, the
-newly created map will instead be pinned at the location.
-
-Programs wanting to customise the pinning can override the pinning paths
-using bpf_map__set_pin_path() before calling bpf_object__load() (including
-setting it to NULL to disable pinning of a particular map).
-
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andy Lutomirski <luto@amacapital.net>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: James Morris <jmorris@namei.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Serge E. Hallyn <serge@hallyn.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Will Drewry <wad@chromium.org>
 ---
- tools/lib/bpf/bpf_helpers.h |    6 ++
- tools/lib/bpf/libbpf.c      |  144 +++++++++++++++++++++++++++++++++++++++++--
- tools/lib/bpf/libbpf.h      |   13 ++++
- 3 files changed, 154 insertions(+), 9 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index 2203595f38c3..0c7d28292898 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -38,4 +38,10 @@ struct bpf_map_def {
- 	unsigned int map_flags;
+Changes since v10:
+* rework tests with new Landlock ptrace programs which restrict ptrace
+  thanks to the task_landlock_ptrace_ancestor() helper
+* simplify ptrace tests (make expect_ptrace implicit)
+* add tests:
+  * check a child process tracing its parent
+  * check Landlock domain without ptrace enforcement (e.g. useful for
+    audit/signaling purpose)
+  * check inherited-only domains
+  * check task pointer arithmetic
+* fix flaky test for multi-core
+* increase log size
+* cosmetic renames
+* update and improve the Makefile
+
+Changes since v9:
+* replace subtype with expected_attach_type and expected_attach_triggers
+* rename inode_map_lookup() into inode_map_lookup_elem()
+* check for inode map entry without value (which is now possible thanks
+  to the pointer null check)
+* use read-only inode map for Landlock programs
+
+Changes since v8:
+* update eBPF include path for macros
+* use TEST_GEN_PROGS and use the generic "clean" target
+* add more verbose errors
+* update the bpf/verifier files
+* remove chain tests (from landlock and bpf/verifier)
+* replace the whitelist tests with blacklist tests (because of stateless
+  Landlock programs): remove "dotdot" tests and other depth tests
+* sync the landlock Makefile with its bpf sibling directory and use
+  bpf_load_program_xattr()
+
+Changes since v7:
+* update tests and add new ones for filesystem hierarchy and Landlock
+  chains.
+
+Changes since v6:
+* use the new kselftest_harness.h
+* use const variables
+* replace ASSERT_STEP with ASSERT_*
+* rename BPF_PROG_TYPE_LANDLOCK to BPF_PROG_TYPE_LANDLOCK_RULE
+* force sample library rebuild
+* fix install target
+
+Changes since v5:
+* add subtype test
+* add ptrace tests
+* split and rename files
+* cleanup and rebase
+---
+ scripts/bpf_helpers_doc.py                    |   1 +
+ tools/include/uapi/linux/bpf.h                |  23 +-
+ tools/include/uapi/linux/landlock.h           |  22 ++
+ tools/lib/bpf/libbpf_probes.c                 |   3 +
+ tools/testing/selftests/bpf/config            |   3 +
+ tools/testing/selftests/bpf/test_verifier.c   |   1 +
+ .../testing/selftests/bpf/verifier/landlock.c |  56 +++++
+ tools/testing/selftests/landlock/.gitignore   |   5 +
+ tools/testing/selftests/landlock/Makefile     |  27 +++
+ tools/testing/selftests/landlock/config       |   5 +
+ tools/testing/selftests/landlock/test.h       |  48 ++++
+ tools/testing/selftests/landlock/test_base.c  |  24 ++
+ .../testing/selftests/landlock/test_ptrace.c  | 210 ++++++++++++++++++
+ 13 files changed, 427 insertions(+), 1 deletion(-)
+ create mode 100644 tools/include/uapi/linux/landlock.h
+ create mode 100644 tools/testing/selftests/bpf/verifier/landlock.c
+ create mode 100644 tools/testing/selftests/landlock/.gitignore
+ create mode 100644 tools/testing/selftests/landlock/Makefile
+ create mode 100644 tools/testing/selftests/landlock/config
+ create mode 100644 tools/testing/selftests/landlock/test.h
+ create mode 100644 tools/testing/selftests/landlock/test_base.c
+ create mode 100644 tools/testing/selftests/landlock/test_ptrace.c
+
+diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_helpers_doc.py
+index 7548569e8076..8e4c0fe75663 100755
+--- a/scripts/bpf_helpers_doc.py
++++ b/scripts/bpf_helpers_doc.py
+@@ -466,6 +466,7 @@ class PrinterHelpers(Printer):
+             'const struct sk_buff': 'const struct __sk_buff',
+             'struct sk_msg_buff': 'struct sk_msg_md',
+             'struct xdp_buff': 'struct xdp_md',
++            'struct task_struct': 'void',
+     }
+ 
+     def print_header(self):
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 4af8b0819a32..c88436b97163 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -173,6 +173,7 @@ enum bpf_prog_type {
+ 	BPF_PROG_TYPE_CGROUP_SYSCTL,
+ 	BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE,
+ 	BPF_PROG_TYPE_CGROUP_SOCKOPT,
++	BPF_PROG_TYPE_LANDLOCK_HOOK,
  };
  
-+enum libbpf_pin_type {
-+	LIBBPF_PIN_NONE,
-+	/* PIN_BY_NAME: pin maps by name (in /sys/fs/bpf by default) */
-+	LIBBPF_PIN_BY_NAME,
-+};
-+
- #endif
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 895066393508..2b0a57edbaf9 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -1092,10 +1092,32 @@ static bool get_map_field_int(const char *map_name, const struct btf *btf,
- 	return true;
- }
- 
-+static int build_map_pin_path(struct bpf_map *map, const char *path)
-+{
-+	char buf[PATH_MAX];
-+	int err, len;
-+
-+	if (!path)
-+		path = "/sys/fs/bpf";
-+
-+	len = snprintf(buf, PATH_MAX, "%s/%s", path, bpf_map__name(map));
-+	if (len < 0)
-+		return -EINVAL;
-+	else if (len >= PATH_MAX)
-+		return -ENAMETOOLONG;
-+
-+	err = bpf_map__set_pin_path(map, buf);
-+	if (err)
-+		return err;
-+
-+	return 0;
-+}
-+
- static int bpf_object__init_user_btf_map(struct bpf_object *obj,
- 					 const struct btf_type *sec,
- 					 int var_idx, int sec_idx,
--					 const Elf_Data *data, bool strict)
-+					 const Elf_Data *data, bool strict,
-+					 const char *pin_root_path)
- {
- 	const struct btf_type *var, *def, *t;
- 	const struct btf_var_secinfo *vi;
-@@ -1270,6 +1292,28 @@ static int bpf_object__init_user_btf_map(struct bpf_object *obj,
- 			}
- 			map->def.value_size = sz;
- 			map->btf_value_type_id = t->type;
-+		} else if (strcmp(name, "pinning") == 0) {
-+			__u32 val;
-+			int err;
-+
-+			if (!get_map_field_int(map_name, obj->btf, def, m,
-+					       &val))
-+				return -EINVAL;
-+			pr_debug("map '%s': found pinning = %u.\n",
-+				 map_name, val);
-+
-+			if (val != LIBBPF_PIN_NONE &&
-+			    val != LIBBPF_PIN_BY_NAME) {
-+				pr_warn("map '%s': invalid pinning value %u.\n",
-+					map_name, val);
-+				return -EINVAL;
-+			}
-+			err = build_map_pin_path(map, pin_root_path);
-+			if (err) {
-+				pr_warn("map '%s': couldn't build pin path.\n",
-+					map_name);
-+				return err;
-+			}
- 		} else {
- 			if (strict) {
- 				pr_warn("map '%s': unknown field '%s'.\n",
-@@ -1289,7 +1333,8 @@ static int bpf_object__init_user_btf_map(struct bpf_object *obj,
- 	return 0;
- }
- 
--static int bpf_object__init_user_btf_maps(struct bpf_object *obj, bool strict)
-+static int bpf_object__init_user_btf_maps(struct bpf_object *obj, bool strict,
-+					  const char *pin_root_path)
- {
- 	const struct btf_type *sec = NULL;
- 	int nr_types, i, vlen, err;
-@@ -1331,7 +1376,7 @@ static int bpf_object__init_user_btf_maps(struct bpf_object *obj, bool strict)
- 	for (i = 0; i < vlen; i++) {
- 		err = bpf_object__init_user_btf_map(obj, sec, i,
- 						    obj->efile.btf_maps_shndx,
--						    data, strict);
-+						    data, strict, pin_root_path);
- 		if (err)
- 			return err;
- 	}
-@@ -1339,7 +1384,8 @@ static int bpf_object__init_user_btf_maps(struct bpf_object *obj, bool strict)
- 	return 0;
- }
- 
--static int bpf_object__init_maps(struct bpf_object *obj, bool relaxed_maps)
-+static int bpf_object__init_maps(struct bpf_object *obj, bool relaxed_maps,
-+				 const char *pin_root_path)
- {
- 	bool strict = !relaxed_maps;
- 	int err;
-@@ -1348,7 +1394,7 @@ static int bpf_object__init_maps(struct bpf_object *obj, bool relaxed_maps)
- 	if (err)
- 		return err;
- 
--	err = bpf_object__init_user_btf_maps(obj, strict);
-+	err = bpf_object__init_user_btf_maps(obj, strict, pin_root_path);
- 	if (err)
- 		return err;
- 
-@@ -1537,7 +1583,8 @@ static int bpf_object__sanitize_and_load_btf(struct bpf_object *obj)
- 	return 0;
- }
- 
--static int bpf_object__elf_collect(struct bpf_object *obj, bool relaxed_maps)
-+static int bpf_object__elf_collect(struct bpf_object *obj, bool relaxed_maps,
-+				   const char *pin_root_path)
- {
- 	Elf *elf = obj->efile.elf;
- 	GElf_Ehdr *ep = &obj->efile.ehdr;
-@@ -1672,7 +1719,7 @@ static int bpf_object__elf_collect(struct bpf_object *obj, bool relaxed_maps)
- 	}
- 	err = bpf_object__init_btf(obj, btf_data, btf_ext_data);
- 	if (!err)
--		err = bpf_object__init_maps(obj, relaxed_maps);
-+		err = bpf_object__init_maps(obj, relaxed_maps, pin_root_path);
- 	if (!err)
- 		err = bpf_object__sanitize_and_load_btf(obj);
- 	if (!err)
-@@ -2128,6 +2175,66 @@ bpf_object__probe_caps(struct bpf_object *obj)
- 	return 0;
- }
- 
-+static bool map_is_reuse_compat(const struct bpf_map *map, int map_fd)
-+{
-+	struct bpf_map_info map_info = {};
-+	char msg[STRERR_BUFSIZE];
-+	__u32 map_info_len;
-+
-+	map_info_len = sizeof(map_info);
-+
-+	if (bpf_obj_get_info_by_fd(map_fd, &map_info, &map_info_len)) {
-+		pr_warn("failed to get map info for map FD %d: %s\n",
-+			map_fd, libbpf_strerror_r(errno, msg, sizeof(msg)));
-+		return false;
-+	}
-+
-+	return (map_info.type == map->def.type &&
-+		map_info.key_size == map->def.key_size &&
-+		map_info.value_size == map->def.value_size &&
-+		map_info.max_entries == map->def.max_entries &&
-+		map_info.map_flags == map->def.map_flags);
-+}
-+
-+static int
-+bpf_object__reuse_map(struct bpf_map *map)
-+{
-+	char *cp, errmsg[STRERR_BUFSIZE];
-+	int err, pin_fd;
-+
-+	pin_fd = bpf_obj_get(map->pin_path);
-+	if (pin_fd < 0) {
-+		err = -errno;
-+		if (err == -ENOENT) {
-+			pr_debug("found no pinned map to reuse at '%s'\n",
-+				 map->pin_path);
-+			return 0;
-+		}
-+
-+		cp = libbpf_strerror_r(-err, errmsg, sizeof(errmsg));
-+		pr_warn("couldn't retrieve pinned map '%s': %s\n",
-+			map->pin_path, cp);
-+		return err;
-+	}
-+
-+	if (!map_is_reuse_compat(map, pin_fd)) {
-+		pr_warn("couldn't reuse pinned map at '%s': parameter mismatch\n",
-+			map->pin_path);
-+		close(pin_fd);
-+		return -EINVAL;
-+	}
-+
-+	err = bpf_map__reuse_fd(map, pin_fd);
-+	if (err) {
-+		close(pin_fd);
-+		return err;
-+	}
-+	map->pinned = true;
-+	pr_debug("reused pinned map at '%s'\n", map->pin_path);
-+
-+	return 0;
-+}
-+
- static int
- bpf_object__populate_internal_map(struct bpf_object *obj, struct bpf_map *map)
- {
-@@ -2170,6 +2277,15 @@ bpf_object__create_maps(struct bpf_object *obj)
- 		char *cp, errmsg[STRERR_BUFSIZE];
- 		int *pfd = &map->fd;
- 
-+		if (map->pin_path) {
-+			err = bpf_object__reuse_map(map);
-+			if (err) {
-+				pr_warn("error reusing pinned map %s\n",
-+					map->name);
-+				return err;
-+			}
-+		}
-+
- 		if (map->fd >= 0) {
- 			pr_debug("skip map create (preset) %s: fd=%d\n",
- 				 map->name, map->fd);
-@@ -2248,6 +2364,15 @@ bpf_object__create_maps(struct bpf_object *obj)
- 			}
- 		}
- 
-+		if (map->pin_path && !map->pinned) {
-+			err = bpf_map__pin(map, NULL);
-+			if (err) {
-+				pr_warn("failed to auto-pin map name '%s' at '%s'\n",
-+					map->name, map->pin_path);
-+				return err;
-+			}
-+		}
-+
- 		pr_debug("created map %s: fd=%d\n", map->name, *pfd);
- 	}
- 
-@@ -3619,6 +3744,7 @@ static struct bpf_object *
- __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
- 		   struct bpf_object_open_opts *opts)
- {
-+	const char *pin_root_path;
- 	struct bpf_program *prog;
- 	struct bpf_object *obj;
- 	const char *obj_name;
-@@ -3653,11 +3779,13 @@ __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
- 
- 	obj->relaxed_core_relocs = OPTS_GET(opts, relaxed_core_relocs, false);
- 	relaxed_maps = OPTS_GET(opts, relaxed_maps, false);
-+	pin_root_path = OPTS_GET(opts, pin_root_path, NULL);
- 
- 	CHECK_ERR(bpf_object__elf_init(obj), err, out);
- 	CHECK_ERR(bpf_object__check_endianness(obj), err, out);
- 	CHECK_ERR(bpf_object__probe_caps(obj), err, out);
--	CHECK_ERR(bpf_object__elf_collect(obj, relaxed_maps), err, out);
-+	CHECK_ERR(bpf_object__elf_collect(obj, relaxed_maps, pin_root_path),
-+		  err, out);
- 	CHECK_ERR(bpf_object__collect_reloc(obj), err, out);
- 	bpf_object__elf_finish(obj);
- 
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index e28ef2ebe062..d9a685d20f7a 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -103,8 +103,13 @@ struct bpf_object_open_opts {
- 	bool relaxed_maps;
- 	/* process CO-RE relocations non-strictly, allowing them to fail */
- 	bool relaxed_core_relocs;
-+	/* maps that set the 'pinning' attribute in their definition will have
-+	 * their pin_path attribute set to a file in this directory, and be
-+	 * auto-pinned to that path on load; defaults to "/sys/fs/bpf".
-+	 */
-+	const char *pin_root_path;
+ enum bpf_attach_type {
+@@ -199,6 +200,7 @@ enum bpf_attach_type {
+ 	BPF_CGROUP_UDP6_RECVMSG,
+ 	BPF_CGROUP_GETSOCKOPT,
+ 	BPF_CGROUP_SETSOCKOPT,
++	BPF_LANDLOCK_PTRACE,
+ 	__MAX_BPF_ATTACH_TYPE
  };
--#define bpf_object_open_opts__last_field relaxed_core_relocs
-+#define bpf_object_open_opts__last_field pin_root_path
  
- LIBBPF_API struct bpf_object *bpf_object__open(const char *path);
- LIBBPF_API struct bpf_object *
-@@ -125,6 +130,12 @@ int bpf_object__section_size(const struct bpf_object *obj, const char *name,
- int bpf_object__variable_offset(const struct bpf_object *obj, const char *name,
- 				__u32 *off);
+@@ -2775,6 +2777,24 @@ union bpf_attr {
+  * 		restricted to raw_tracepoint bpf programs.
+  * 	Return
+  * 		0 on success, or a negative error in case of failure.
++ *
++ * int bpf_task_landlock_ptrace_ancestor(struct task_struct *parent, struct task_struct *child)
++ *	Description
++ *		Check the relation of a potentially parent task with a child
++ *		one, according to their Landlock ptrace hook programs.
++ *	Return
++ *		**-EINVAL** if the child's ptrace programs are not comparable
++ *		to the parent ones, i.e. one of them is an empty set.
++ *
++ *		**-ENOENT** if the parent's ptrace programs are either in a
++ *		separate hierarchy of the child ones, or if the parent's ptrace
++ *		programs are a superset of the child ones.
++ *
++ *		0 if the parent's ptrace programs are the same as the child
++ *		ones.
++ *
++ *		1 if the parent's ptrace programs are indeed a subset of the
++ *		child ones.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -2888,7 +2908,8 @@ union bpf_attr {
+ 	FN(sk_storage_delete),		\
+ 	FN(send_signal),		\
+ 	FN(tcp_gen_syncookie),		\
+-	FN(skb_output),
++	FN(skb_output),			\
++	FN(task_landlock_ptrace_ancestor),
  
-+enum libbpf_pin_type {
-+	LIBBPF_PIN_NONE,
-+	/* PIN_BY_NAME: pin maps by name (in /sys/fs/bpf by default) */
-+	LIBBPF_PIN_BY_NAME,
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+  * function eBPF program intends to call
+diff --git a/tools/include/uapi/linux/landlock.h b/tools/include/uapi/linux/landlock.h
+new file mode 100644
+index 000000000000..3db2d190c4e7
+--- /dev/null
++++ b/tools/include/uapi/linux/landlock.h
+@@ -0,0 +1,22 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++/*
++ * Landlock - UAPI headers
++ *
++ * Copyright © 2017-2019 Mickaël Salaün <mic@digikod.net>
++ * Copyright © 2018-2019 ANSSI
++ */
++
++#ifndef _UAPI__LINUX_LANDLOCK_H__
++#define _UAPI__LINUX_LANDLOCK_H__
++
++#include <linux/types.h>
++
++#define LANDLOCK_RET_ALLOW	0
++#define LANDLOCK_RET_DENY	1
++
++struct landlock_context_ptrace {
++	__u64 tracer;
++	__u64 tracee;
 +};
 +
- /* pin_maps and unpin_maps can both be called with a NULL path, in which case
-  * they will use the pin_path attribute of each map (and ignore all maps that
-  * don't have a pin_path set).
++#endif /* _UAPI__LINUX_LANDLOCK_H__ */
+diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
+index 4b0b0364f5fc..1e0d6346a7c7 100644
+--- a/tools/lib/bpf/libbpf_probes.c
++++ b/tools/lib/bpf/libbpf_probes.c
+@@ -78,6 +78,9 @@ probe_load(enum bpf_prog_type prog_type, const struct bpf_insn *insns,
+ 	case BPF_PROG_TYPE_KPROBE:
+ 		xattr.kern_version = get_kernel_version();
+ 		break;
++	case BPF_PROG_TYPE_LANDLOCK_HOOK:
++		xattr.expected_attach_type = BPF_LANDLOCK_PTRACE;
++		break;
+ 	case BPF_PROG_TYPE_UNSPEC:
+ 	case BPF_PROG_TYPE_SOCKET_FILTER:
+ 	case BPF_PROG_TYPE_SCHED_CLS:
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 5dc109f4c097..3161a88a6059 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -35,3 +35,6 @@ CONFIG_MPLS_ROUTING=m
+ CONFIG_MPLS_IPTUNNEL=m
+ CONFIG_IPV6_SIT=m
+ CONFIG_BPF_JIT=y
++CONFIG_SECCOMP_FILTER=y
++CONFIG_SECURITY=y
++CONFIG_SECURITY_LANDLOCK=y
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index d27fd929abb9..74f249dafc0b 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -30,6 +30,7 @@
+ #include <linux/bpf.h>
+ #include <linux/if_ether.h>
+ #include <linux/btf.h>
++#include <linux/landlock.h>
+ 
+ #include <bpf/bpf.h>
+ #include <bpf/libbpf.h>
+diff --git a/tools/testing/selftests/bpf/verifier/landlock.c b/tools/testing/selftests/bpf/verifier/landlock.c
+new file mode 100644
+index 000000000000..59cd333745dc
+--- /dev/null
++++ b/tools/testing/selftests/bpf/verifier/landlock.c
+@@ -0,0 +1,56 @@
++{
++	"landlock/ptrace: always accept",
++	.prog_type = BPF_PROG_TYPE_LANDLOCK_HOOK,
++	.expected_attach_type = BPF_LANDLOCK_PTRACE,
++	.insns = {
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++},
++{
++	"landlock/ptrace: forbid arbitrary return value",
++	.prog_type = BPF_PROG_TYPE_LANDLOCK_HOOK,
++	.expected_attach_type = BPF_LANDLOCK_PTRACE,
++	.insns = {
++		BPF_MOV32_IMM(BPF_REG_0, 2),
++		BPF_EXIT_INSN(),
++	},
++	.result = REJECT,
++	.errstr = "At program exit the register R0 has value (0x2; 0x0) should have been in (0x0; 0x1)",
++},
++{
++	"landlock/ptrace: read context and call dedicated helper",
++	.prog_type = BPF_PROG_TYPE_LANDLOCK_HOOK,
++	.expected_attach_type = BPF_LANDLOCK_PTRACE,
++	.insns = {
++		BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
++		BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_6,
++			offsetof(struct landlock_context_ptrace, tracer)),
++		BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_6,
++			offsetof(struct landlock_context_ptrace, tracer)),
++		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0,
++				BPF_FUNC_task_landlock_ptrace_ancestor),
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++},
++{
++	"landlock/ptrace: forbid pointer arithmetic",
++	.prog_type = BPF_PROG_TYPE_LANDLOCK_HOOK,
++	.expected_attach_type = BPF_LANDLOCK_PTRACE,
++	.insns = {
++		BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
++		BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_6,
++			offsetof(struct landlock_context_ptrace, tracer)),
++		BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
++		BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_6,
++			offsetof(struct landlock_context_ptrace, tracee)),
++		BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, 1),
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.result = REJECT,
++	.errstr = "R1 pointer arithmetic on task prohibited",
++},
+diff --git a/tools/testing/selftests/landlock/.gitignore b/tools/testing/selftests/landlock/.gitignore
+new file mode 100644
+index 000000000000..4c5c01d23fe0
+--- /dev/null
++++ b/tools/testing/selftests/landlock/.gitignore
+@@ -0,0 +1,5 @@
++/feature
++/fixdep
++/*libbpf*
++/test_base
++/test_ptrace
+diff --git a/tools/testing/selftests/landlock/Makefile b/tools/testing/selftests/landlock/Makefile
+new file mode 100644
+index 000000000000..2da77c30e77f
+--- /dev/null
++++ b/tools/testing/selftests/landlock/Makefile
+@@ -0,0 +1,27 @@
++# SPDX-License-Identifier: GPL-2.0
++
++LIBDIR := $(abspath ../../../lib)
++BPFDIR := $(LIBDIR)/bpf
++TOOLSDIR := $(abspath ../../../include)
++APIDIR := $(TOOLSDIR)/uapi
++
++CFLAGS += -g -Wall -O2 -I$(APIDIR) -I$(LIBDIR) -I$(TOOLSDIR)
++LDLIBS += -lelf
++
++test_src = $(wildcard test_*.c)
++
++TEST_GEN_PROGS := $(test_src:.c=)
++
++include ../lib.mk
++
++BPFOBJ := $(OUTPUT)/libbpf.a
++
++$(TEST_GEN_PROGS): $(BPFOBJ) ../kselftest_harness.h
++
++.PHONY: force
++
++# force a rebuild of BPFOBJ when its dependencies are updated
++force:
++
++$(BPFOBJ): force
++	$(MAKE) -C $(BPFDIR) OUTPUT=$(OUTPUT)/
+diff --git a/tools/testing/selftests/landlock/config b/tools/testing/selftests/landlock/config
+new file mode 100644
+index 000000000000..fa5081b840ad
+--- /dev/null
++++ b/tools/testing/selftests/landlock/config
+@@ -0,0 +1,5 @@
++CONFIG_BPF=y
++CONFIG_BPF_SYSCALL=y
++CONFIG_SECCOMP_FILTER=y
++CONFIG_SECURITY=y
++CONFIG_SECURITY_LANDLOCK=y
+diff --git a/tools/testing/selftests/landlock/test.h b/tools/testing/selftests/landlock/test.h
+new file mode 100644
+index 000000000000..836df68b6bb8
+--- /dev/null
++++ b/tools/testing/selftests/landlock/test.h
+@@ -0,0 +1,48 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Landlock helpers
++ *
++ * Copyright © 2017-2019 Mickaël Salaün <mic@digikod.net>
++ * Copyright © 2019 ANSSI
++ */
++
++#include <bpf/bpf.h>
++#include <errno.h>
++#include <linux/filter.h>
++#include <linux/landlock.h>
++#include <linux/seccomp.h>
++#include <sys/prctl.h>
++#include <sys/syscall.h>
++
++#include "../kselftest_harness.h"
++#include "../../../../samples/bpf/bpf_load.h"
++
++#ifndef SECCOMP_PREPEND_LANDLOCK_PROG
++#define SECCOMP_PREPEND_LANDLOCK_PROG	4
++#endif
++
++#ifndef seccomp
++static int __attribute__((unused)) seccomp(unsigned int op, unsigned int flags,
++		void *args)
++{
++	errno = 0;
++	return syscall(__NR_seccomp, op, flags, args);
++}
++#endif
++
++static int __attribute__((unused)) ll_bpf_load_program(
++		const struct bpf_insn *bpf_insns, size_t insns_len,
++		char *log_buf, size_t log_buf_sz,
++		const enum bpf_attach_type attach_type)
++{
++	struct bpf_load_program_attr load_attr;
++
++	memset(&load_attr, 0, sizeof(struct bpf_load_program_attr));
++	load_attr.prog_type = BPF_PROG_TYPE_LANDLOCK_HOOK;
++	load_attr.expected_attach_type = attach_type;
++	load_attr.insns = bpf_insns;
++	load_attr.insns_cnt = insns_len / sizeof(struct bpf_insn);
++	load_attr.license = "GPL";
++
++	return bpf_load_program_xattr(&load_attr, log_buf, log_buf_sz);
++}
+diff --git a/tools/testing/selftests/landlock/test_base.c b/tools/testing/selftests/landlock/test_base.c
+new file mode 100644
+index 000000000000..db46f39048cb
+--- /dev/null
++++ b/tools/testing/selftests/landlock/test_base.c
+@@ -0,0 +1,24 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Landlock tests - base
++ *
++ * Copyright © 2017-2019 Mickaël Salaün <mic@digikod.net>
++ */
++
++#define _GNU_SOURCE
++#include <errno.h>
++
++#include "test.h"
++
++TEST(seccomp_landlock)
++{
++	int ret;
++
++	ret = seccomp(SECCOMP_PREPEND_LANDLOCK_PROG, 0, NULL);
++	EXPECT_EQ(-1, ret);
++	EXPECT_EQ(EFAULT, errno) {
++		TH_LOG("Kernel does not support CONFIG_SECURITY_LANDLOCK");
++	}
++}
++
++TEST_HARNESS_MAIN
+diff --git a/tools/testing/selftests/landlock/test_ptrace.c b/tools/testing/selftests/landlock/test_ptrace.c
+new file mode 100644
+index 000000000000..f4ee67126394
+--- /dev/null
++++ b/tools/testing/selftests/landlock/test_ptrace.c
+@@ -0,0 +1,210 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Landlock tests - ptrace
++ *
++ * Copyright © 2017-2019 Mickaël Salaün <mic@digikod.net>
++ * Copyright © 2019 ANSSI
++ */
++
++#define _GNU_SOURCE
++#include <signal.h> /* raise */
++#include <sys/ptrace.h>
++#include <sys/types.h> /* waitpid */
++#include <sys/wait.h> /* waitpid */
++#include <unistd.h> /* fork, pipe */
++
++#include "test.h"
++
++#define LOG_SIZE 512
++
++static void create_domain(struct __test_metadata *_metadata,
++		bool scoped_ptrace, bool inherited_only)
++{
++	const struct bpf_insn prog_void[] = {
++		BPF_MOV32_IMM(BPF_REG_0, LANDLOCK_RET_ALLOW),
++		BPF_EXIT_INSN(),
++	};
++	const struct bpf_insn prog_check[] = {
++		BPF_ALU64_REG(BPF_MOV, BPF_REG_6, BPF_REG_1),
++		BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_6,
++			offsetof(struct landlock_context_ptrace, tracer)),
++		BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_6,
++			offsetof(struct landlock_context_ptrace, tracee)),
++		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0,
++				BPF_FUNC_task_landlock_ptrace_ancestor),
++		/* if @tracee is an ancestor or at the same level of @tracer,
++		 * then allow ptrace (warning: do not use BPF_JGE 0) */
++		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, inherited_only ? 0 : 1, 2),
++		BPF_MOV32_IMM(BPF_REG_0, LANDLOCK_RET_DENY),
++		BPF_EXIT_INSN(),
++		BPF_MOV32_IMM(BPF_REG_0, LANDLOCK_RET_ALLOW),
++		BPF_EXIT_INSN(),
++	};
++	int prog;
++	char log[LOG_SIZE] = "";
++
++	if (scoped_ptrace)
++		prog = ll_bpf_load_program(prog_check, sizeof(prog_check),
++				log, sizeof(log), BPF_LANDLOCK_PTRACE);
++	else
++		prog = ll_bpf_load_program(prog_void, sizeof(prog_void),
++				log, sizeof(log), BPF_LANDLOCK_PTRACE);
++	ASSERT_NE(-1, prog) {
++		TH_LOG("Failed to load the %s program: %s\n%s",
++				scoped_ptrace ? "check" : "void",
++				strerror(errno), log);
++	}
++	ASSERT_EQ(0, seccomp(SECCOMP_PREPEND_LANDLOCK_PROG, 0, &prog)) {
++		TH_LOG("Failed to create a Landlock domain: %s", strerror(errno));
++	}
++	EXPECT_EQ(0, close(prog));
++}
++
++/* test PTRACE_TRACEME and PTRACE_ATTACH for parent and child */
++static void _check_ptrace(struct __test_metadata *_metadata,
++		bool scoped_ptrace, bool domain_both,
++		bool domain_parent, bool domain_child)
++{
++	pid_t child, parent;
++	int status;
++	int pipe_child[2], pipe_parent[2];
++	char buf_parent;
++	const bool inherited_only = domain_both && !domain_parent && !domain_child;
++
++	parent = getpid();
++
++	ASSERT_EQ(0, pipe(pipe_child));
++	ASSERT_EQ(0, pipe(pipe_parent));
++	if (domain_both)
++		create_domain(_metadata, scoped_ptrace, inherited_only);
++
++	child = fork();
++	ASSERT_LE(0, child);
++	if (child == 0) {
++		char buf_child;
++
++		EXPECT_EQ(0, close(pipe_parent[1]));
++		EXPECT_EQ(0, close(pipe_child[0]));
++		if (domain_child)
++			create_domain(_metadata, scoped_ptrace, inherited_only);
++
++		/* sync #1 */
++		ASSERT_EQ(1, read(pipe_parent[0], &buf_child, 1)) {
++			TH_LOG("Failed to read() sync #1 from parent");
++		}
++		ASSERT_EQ('.', buf_child);
++
++		/* test the parent protection */
++		ASSERT_EQ((domain_child && scoped_ptrace) ? -1 : 0,
++				ptrace(PTRACE_ATTACH, parent, NULL, 0));
++		if (domain_child && scoped_ptrace) {
++			ASSERT_EQ(EPERM, errno);
++		} else {
++			ASSERT_EQ(parent, waitpid(parent, &status, 0));
++			ASSERT_EQ(1, WIFSTOPPED(status));
++			ASSERT_EQ(0, ptrace(PTRACE_DETACH, parent, NULL, 0));
++		}
++
++		/* sync #2 */
++		ASSERT_EQ(1, write(pipe_child[1], ".", 1)) {
++			TH_LOG("Failed to write() sync #2 to parent");
++		}
++
++		/* test traceme */
++		ASSERT_EQ((domain_parent && scoped_ptrace) ? -1 : 0,
++				ptrace(PTRACE_TRACEME));
++		if (domain_parent && scoped_ptrace) {
++			ASSERT_EQ(EPERM, errno);
++		} else {
++			ASSERT_EQ(0, raise(SIGSTOP));
++		}
++
++		/* sync #3 */
++		ASSERT_EQ(1, read(pipe_parent[0], &buf_child, 1)) {
++			TH_LOG("Failed to read() sync #3 from parent");
++		}
++		ASSERT_EQ('.', buf_child);
++		_exit(_metadata->passed ? EXIT_SUCCESS : EXIT_FAILURE);
++	}
++
++	EXPECT_EQ(0, close(pipe_child[1]));
++	EXPECT_EQ(0, close(pipe_parent[0]));
++	if (domain_parent)
++		create_domain(_metadata, scoped_ptrace, inherited_only);
++
++	/* sync #1 */
++	ASSERT_EQ(1, write(pipe_parent[1], ".", 1)) {
++		TH_LOG("Failed to write() sync #1 to child");
++	}
++
++	/* test the parent protection */
++	/* sync #2 */
++	ASSERT_EQ(1, read(pipe_child[0], &buf_parent, 1)) {
++		TH_LOG("Failed to read() sync #2 from child");
++	}
++	ASSERT_EQ('.', buf_parent);
++
++	/* test traceme */
++	if (!(domain_parent && scoped_ptrace)) {
++		ASSERT_EQ(child, waitpid(child, &status, 0));
++		ASSERT_EQ(1, WIFSTOPPED(status));
++		ASSERT_EQ(0, ptrace(PTRACE_DETACH, child, NULL, 0));
++	}
++	/* test attach */
++	ASSERT_EQ((domain_parent && scoped_ptrace) ? -1 : 0,
++			ptrace(PTRACE_ATTACH, child, NULL, 0));
++	if (domain_parent && scoped_ptrace) {
++		ASSERT_EQ(EPERM, errno);
++	} else {
++		ASSERT_EQ(child, waitpid(child, &status, 0));
++		ASSERT_EQ(1, WIFSTOPPED(status));
++		ASSERT_EQ(0, ptrace(PTRACE_DETACH, child, NULL, 0));
++	}
++
++	/* sync #3 */
++	ASSERT_EQ(1, write(pipe_parent[1], ".", 1)) {
++		TH_LOG("Failed to write() sync #3 to child");
++	}
++	ASSERT_EQ(child, waitpid(child, &status, 0));
++	if (WIFSIGNALED(status) || WEXITSTATUS(status))
++		_metadata->passed = 0;
++}
++
++/* keep the *_scoped order to check program inheritance */
++#define CHECK_PTRACE(name, domain_both, domain_parent, domain_child) \
++	TEST(name ## _unscoped) { \
++		_check_ptrace(_metadata, false, domain_both, domain_parent, \
++				domain_child); \
++	} \
++	TEST(name ## _scoped) { \
++		_check_ptrace(_metadata, false, domain_both, domain_parent, \
++				domain_child); \
++		_check_ptrace(_metadata, true, domain_both, domain_parent, \
++				domain_child); \
++	}
++
++/* no domain */
++CHECK_PTRACE(allow_without_domain, false, false, false);
++
++/* child domain */
++CHECK_PTRACE(allow_with_one_domain, false, false, true);
++
++/* parent domain */
++CHECK_PTRACE(deny_with_parent_domain, false, true, false);
++
++/* parent and child domain */
++CHECK_PTRACE(deny_with_sibling_domain, false, true, true);
++
++/* inherited domain */
++CHECK_PTRACE(allow_sibling_domain, true, false, false);
++
++/* inherited and child domain */
++CHECK_PTRACE(allow_with_nested_domain, true, false, true);
++
++/* inherited and parent domain */
++CHECK_PTRACE(deny_with_nested_and_parent_domain, true, true, false);
++
++/* inherited, parent and child domain */
++CHECK_PTRACE(deny_with_forked_domain, true, true, true);
++
++TEST_HARNESS_MAIN
+-- 
+2.23.0
 
