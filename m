@@ -5,58 +5,58 @@ X-Spam-Level:
 X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9BD5CA9EC7
-	for <bpf@archiver.kernel.org>; Wed, 30 Oct 2019 22:34:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1EB8CA9EC7
+	for <bpf@archiver.kernel.org>; Wed, 30 Oct 2019 22:35:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9340620856
-	for <bpf@archiver.kernel.org>; Wed, 30 Oct 2019 22:34:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7968D20874
+	for <bpf@archiver.kernel.org>; Wed, 30 Oct 2019 22:35:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ru313old"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s97DVd+l"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726803AbfJ3We7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Oct 2019 18:34:59 -0400
-Received: from mail-pf1-f202.google.com ([209.85.210.202]:43505 "EHLO
-        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727216AbfJ3We5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 30 Oct 2019 18:34:57 -0400
-Received: by mail-pf1-f202.google.com with SMTP id i187so2886822pfc.10
-        for <bpf@vger.kernel.org>; Wed, 30 Oct 2019 15:34:56 -0700 (PDT)
+        id S1727462AbfJ3WfI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Oct 2019 18:35:08 -0400
+Received: from mail-pf1-f201.google.com ([209.85.210.201]:39112 "EHLO
+        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727452AbfJ3WfH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 30 Oct 2019 18:35:07 -0400
+Received: by mail-pf1-f201.google.com with SMTP id l20so2890711pff.6
+        for <bpf@vger.kernel.org>; Wed, 30 Oct 2019 15:35:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=JeMQyltmUCU8Ar0BgoXK1Jxj5wnahi83GTKOMO2N0jY=;
-        b=ru313oldJgqkIizzlEgnT3aaaYb9y7d/hgO91Umlt3UhjL/XxJQpbhZ5CkgL+xFOr7
-         cdSeiebfonuLj7OS+LYfPMVXq+djCNtqWc7XZo0z2g0wtZ7x5nCN86qoygK9NN1P90Ct
-         c/It+u54a2S9hlLm24suKuhkVqsMMsLejM2xgHWsTWdqZV35TyetbkVj6qhysaErPgux
-         3bTeuPTICcaW8uc6sp+Tunnhmra89a+hV5nHWLW4CJNPwVV1X1d1WUBjwp4zqZSq7xxo
-         XKJnPoUQvmEmiEg6HUghsCiEhQjcqxf6yIENWo5UlUEE25HgApE3kzQfyTP12BAoMhOE
-         Yw4w==
+        bh=32WJHD/sh+KDR1QXtWKrcNgurpa55lJDgOM8dIR2hMs=;
+        b=s97DVd+l4q9eCHtPWRoTjcTZxOalac+C+ekD4YByMpb18sCc9jkYRJyNPPv5XYfIBs
+         L5De6Rnih9Deqc9k6uljrfccJ8qiFWpiQp8qqUhuDdRc3Gaah3m48nn4v082qLROsB7E
+         881jZzNjnihLAoy7POw9DU9qsihxOq7GWkGaujbCh7YXadKWyPNbWzghbL+Fr0lWfbhe
+         gKR/MSjTVtem3S+gcAx0418KrcgxgFb8iyg941U1D4xKvbYeIf3Hq6W0+a1mUyJt1OuT
+         ZBUghnNKygR1rpItwqBrLbOkhUaJ7K/7ABMKRdZ2+BhGrZCZ2ArLlhRYGCHGPf+UFdCy
+         MaTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=JeMQyltmUCU8Ar0BgoXK1Jxj5wnahi83GTKOMO2N0jY=;
-        b=nUudFbs/CIEIiv9m+IhnJrgSttDK6MvBBvJ0m5uSmz+SMWncHgt8BOgdHX4va6HrOH
-         M4MGpRNjXst2xk1CJoWbF33UpbGcZX38XzNHE02A5IGdLBsjPgf4g+E/RT2XMtOeEeDI
-         pBGwYfsnMgAcKpKmGbHTWzo0EDQnJ0ZOdwVBihTlXqkc5p8QeVx/ziz8chs8GZLSZKLC
-         Fno8AsUDBGwjOKSm5o5mg6SJQbjBY+osEl7s8shBfTjvx/Wjjdjv7XeRO86aeK3BPlM+
-         t1Z/Das4kEajbWh0U0LhvUavQu7TFDgvR7QSr+FlMBaugjES7ElYYJzTyePO5X94VcmU
-         mMCQ==
-X-Gm-Message-State: APjAAAWxImhlAP5qYuxx1C9lEawiuUxaxlnY8IAU12Aj/NvITPi8VCcZ
-        FOP2VcmJkUDbae06YIcM9h2fvhoyQzOC
-X-Google-Smtp-Source: APXvYqywt2mKqJzXeMxuT76kZ0gRQhs+hU0ly42ZoUHWzoRfaGXsUcc4oKIKykf2/HS88X6eZVLlyE0j5Rw5
-X-Received: by 2002:a63:5a59:: with SMTP id k25mr1956115pgm.171.1572474895518;
- Wed, 30 Oct 2019 15:34:55 -0700 (PDT)
-Date:   Wed, 30 Oct 2019 15:34:39 -0700
+        bh=32WJHD/sh+KDR1QXtWKrcNgurpa55lJDgOM8dIR2hMs=;
+        b=Kq0M6+vUUh7FKw952I1rsb+us34Tpz2oOt34fv7Fucyck2H+zxA4FkV0HFDEwUt91N
+         G29OD5meCKCvYY6E/0Bozf98tzhy47Z97H5KjqXBYA12n8nvtniIkfjH+zNhGCOTEJGe
+         fHigBsBSNKyb5cFTRjLQLYhYIbujLgv9oqaL3mNDPgndAUgiDDdpKE9cJREejD9S/No8
+         kRnyUGEi3AAM6CS6ca1Kcvr/cavPDip6q+hPCSrH7CT+vLG+ilwLdxewbLEs9MswuDhL
+         AHOXNlZ0+ZjyD+Yo5qjZIZz65ZXrjO0pZ9Ytp7PsPl8bRHZR4MoyiQH9EZRbx5mG61AW
+         OUXw==
+X-Gm-Message-State: APjAAAU7eHEQEX6iWTtZjOb2kCxgoY+UdPyEoWPBwtT53RP2FlRwUn8p
+        o2eaDfFBR1QgTbFzGOvjuuD1XREzK/1d
+X-Google-Smtp-Source: APXvYqzjsKauaAqON3oPEFGh9TSt63PMuWrGOFptRGGUmXaJr8YeoqpKCpfPx7QC2mj9JHUzQZzIFMI4+CMr
+X-Received: by 2002:a63:e255:: with SMTP id y21mr1918782pgj.353.1572474906428;
+ Wed, 30 Oct 2019 15:35:06 -0700 (PDT)
+Date:   Wed, 30 Oct 2019 15:34:43 -0700
 In-Reply-To: <20191030223448.12930-1-irogers@google.com>
-Message-Id: <20191030223448.12930-2-irogers@google.com>
+Message-Id: <20191030223448.12930-6-irogers@google.com>
 Mime-Version: 1.0
 References: <20191025180827.191916-1-irogers@google.com> <20191030223448.12930-1-irogers@google.com>
 X-Mailer: git-send-email 2.24.0.rc1.363.gb1bccd3e3d-goog
-Subject: [PATCH v5 01/10] perf tools: add parse events handle error
+Subject: [PATCH v5 05/10] perf tools: ensure config and str in terms are unique
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -84,271 +84,150 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Parse event error handling may overwrite one error string with another
-creating memory leaks. Introduce a helper routine that warns about
-multiple error messages as well as avoiding the memory leak.
+Make it easier to release memory associated with parse event terms by
+duplicating the string for the config name and ensuring the val string
+is a duplicate.
 
-A reproduction of this problem can be seen with:
-  perf stat -e c/c/
-After this change this produces:
-WARNING: multiple event parsing errors
-event syntax error: 'c/c/'
-                       \___ unknown term
-
-valid terms: event,filter_rem,filter_opc0,edge,filter_isoc,filter_tid,filter_loc,filter_nc,inv,umask,filter_opc1,tid_en,thresh,filter_all_op,filter_not_nm,filter_state,filter_nm,config,config1,config2,name,period,percore
-Run 'perf list' for a list of valid events
-
- Usage: perf stat [<options>] [<command>]
-
-    -e, --event <event>   event selector. use 'perf list' to list available events
+Currently the parser may memory leak terms and this is addressed in a
+later patch.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/parse-events.c | 82 +++++++++++++++++++++-------------
- tools/perf/util/parse-events.h |  2 +
- tools/perf/util/pmu.c          | 30 ++++++++-----
- 3 files changed, 71 insertions(+), 43 deletions(-)
+ tools/perf/util/parse-events.c | 51 ++++++++++++++++++++++++++++------
+ tools/perf/util/parse-events.y |  4 ++-
+ 2 files changed, 45 insertions(+), 10 deletions(-)
 
 diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index db882f630f7e..e9b958d6c534 100644
+index 03e54a2d8685..578288c94d2a 100644
 --- a/tools/perf/util/parse-events.c
 +++ b/tools/perf/util/parse-events.c
-@@ -182,6 +182,20 @@ static int tp_event_has_id(const char *dir_path, struct dirent *evt_dir)
+@@ -1412,7 +1412,6 @@ int parse_events_add_pmu(struct parse_events_state *parse_state,
+ int parse_events_multi_pmu_add(struct parse_events_state *parse_state,
+ 			       char *str, struct list_head **listp)
+ {
+-	struct list_head *head;
+ 	struct parse_events_term *term;
+ 	struct list_head *list;
+ 	struct perf_pmu *pmu = NULL;
+@@ -1429,19 +1428,30 @@ int parse_events_multi_pmu_add(struct parse_events_state *parse_state,
  
- #define MAX_EVENT_LENGTH 512
+ 		list_for_each_entry(alias, &pmu->aliases, list) {
+ 			if (!strcasecmp(alias->name, str)) {
++				struct list_head *head;
++				char *config;
++
+ 				head = malloc(sizeof(struct list_head));
+ 				if (!head)
+ 					return -1;
+ 				INIT_LIST_HEAD(head);
+-				if (parse_events_term__num(&term, PARSE_EVENTS__TERM_TYPE_USER,
+-							   str, 1, false, &str, NULL) < 0)
++				config = strdup(str);
++				if (!config)
++					return -1;
++				if (parse_events_term__num(&term,
++						   PARSE_EVENTS__TERM_TYPE_USER,
++						   config, 1, false, &config,
++						   NULL) < 0) {
++					free(list);
++					free(config);
+ 					return -1;
++				}
+ 				list_add_tail(&term->list, head);
  
-+void parse_events__handle_error(struct parse_events_error *err, int idx,
-+				char *str, char *help)
-+{
-+	if (WARN(!str, "WARNING: failed to provide error string\n")) {
-+		free(help);
-+		return;
+ 				if (!parse_events_add_pmu(parse_state, list,
+ 							  pmu->name, head,
+ 							  true, true)) {
+-					pr_debug("%s -> %s/%s/\n", str,
++					pr_debug("%s -> %s/%s/\n", config,
+ 						 pmu->name, alias->str);
+ 					ok++;
+ 				}
+@@ -1450,8 +1460,10 @@ int parse_events_multi_pmu_add(struct parse_events_state *parse_state,
+ 			}
+ 		}
+ 	}
+-	if (!ok)
++	if (!ok) {
++		free(list);
+ 		return -1;
 +	}
-+	WARN_ONCE(err->str, "WARNING: multiple event parsing errors\n");
-+	err->idx = idx;
-+	free(err->str);
-+	err->str = str;
-+	free(err->help);
-+	err->help = help;
-+}
- 
- struct tracepoint_path *tracepoint_id_to_path(u64 config)
- {
-@@ -932,11 +946,11 @@ static int check_type_val(struct parse_events_term *term,
- 		return 0;
- 
- 	if (err) {
--		err->idx = term->err_val;
--		if (type == PARSE_EVENTS__TERM_TYPE_NUM)
--			err->str = strdup("expected numeric value");
--		else
--			err->str = strdup("expected string value");
-+		parse_events__handle_error(err, term->err_val,
-+					type == PARSE_EVENTS__TERM_TYPE_NUM
-+					? strdup("expected numeric value")
-+					: strdup("expected string value"),
-+					NULL);
- 	}
- 	return -EINVAL;
+ 	*listp = list;
+ 	return 0;
  }
-@@ -972,8 +986,11 @@ static bool config_term_shrinked;
- static bool
- config_term_avail(int term_type, struct parse_events_error *err)
+@@ -2746,30 +2758,51 @@ int parse_events_term__sym_hw(struct parse_events_term **term,
+ 			      char *config, unsigned idx)
  {
-+	char *err_str;
-+
- 	if (term_type < 0 || term_type >= __PARSE_EVENTS__TERM_TYPE_NR) {
--		err->str = strdup("Invalid term_type");
-+		parse_events__handle_error(err, -1,
-+					strdup("Invalid term_type"), NULL);
- 		return false;
- 	}
- 	if (!config_term_shrinked)
-@@ -992,9 +1009,9 @@ config_term_avail(int term_type, struct parse_events_error *err)
- 			return false;
+ 	struct event_symbol *sym;
++	char *str;
+ 	struct parse_events_term temp = {
+ 		.type_val  = PARSE_EVENTS__TERM_TYPE_STR,
+ 		.type_term = PARSE_EVENTS__TERM_TYPE_USER,
+-		.config    = config ?: (char *) "event",
++		.config    = config,
+ 	};
  
- 		/* term_type is validated so indexing is safe */
--		if (asprintf(&err->str, "'%s' is not usable in 'perf stat'",
--			     config_term_names[term_type]) < 0)
--			err->str = NULL;
-+		if (asprintf(&err_str, "'%s' is not usable in 'perf stat'",
-+				config_term_names[term_type]) >= 0)
-+			parse_events__handle_error(err, -1, err_str, NULL);
- 		return false;
- 	}
- }
-@@ -1036,17 +1053,20 @@ do {									   \
- 	case PARSE_EVENTS__TERM_TYPE_BRANCH_SAMPLE_TYPE:
- 		CHECK_TYPE_VAL(STR);
- 		if (strcmp(term->val.str, "no") &&
--		    parse_branch_str(term->val.str, &attr->branch_sample_type)) {
--			err->str = strdup("invalid branch sample type");
--			err->idx = term->err_val;
-+		    parse_branch_str(term->val.str,
-+				    &attr->branch_sample_type)) {
-+			parse_events__handle_error(err, term->err_val,
-+					strdup("invalid branch sample type"),
-+					NULL);
- 			return -EINVAL;
- 		}
- 		break;
- 	case PARSE_EVENTS__TERM_TYPE_TIME:
- 		CHECK_TYPE_VAL(NUM);
- 		if (term->val.num > 1) {
--			err->str = strdup("expected 0 or 1");
--			err->idx = term->err_val;
-+			parse_events__handle_error(err, term->err_val,
-+						strdup("expected 0 or 1"),
-+						NULL);
- 			return -EINVAL;
- 		}
- 		break;
-@@ -1080,8 +1100,9 @@ do {									   \
- 	case PARSE_EVENTS__TERM_TYPE_PERCORE:
- 		CHECK_TYPE_VAL(NUM);
- 		if ((unsigned int)term->val.num > 1) {
--			err->str = strdup("expected 0 or 1");
--			err->idx = term->err_val;
-+			parse_events__handle_error(err, term->err_val,
-+						strdup("expected 0 or 1"),
-+						NULL);
- 			return -EINVAL;
- 		}
- 		break;
-@@ -1089,9 +1110,9 @@ do {									   \
- 		CHECK_TYPE_VAL(NUM);
- 		break;
- 	default:
--		err->str = strdup("unknown term");
--		err->idx = term->err_term;
--		err->help = parse_events_formats_error_string(NULL);
-+		parse_events__handle_error(err, term->err_term,
-+				strdup("unknown term"),
-+				parse_events_formats_error_string(NULL));
- 		return -EINVAL;
- 	}
++	if (!temp.config) {
++		temp.config = strdup("event");
++		if (!temp.config)
++			return -ENOMEM;
++	}
+ 	BUG_ON(idx >= PERF_COUNT_HW_MAX);
+ 	sym = &event_symbols_hw[idx];
  
-@@ -1142,9 +1163,9 @@ static int config_term_tracepoint(struct perf_event_attr *attr,
- 		return config_term_common(attr, term, err);
- 	default:
- 		if (err) {
--			err->idx = term->err_term;
--			err->str = strdup("unknown term");
--			err->help = strdup("valid terms: call-graph,stack-size\n");
-+			parse_events__handle_error(err, term->err_term,
-+				strdup("unknown term"),
-+				strdup("valid terms: call-graph,stack-size\n"));
- 		}
- 		return -EINVAL;
- 	}
-@@ -1323,10 +1344,12 @@ int parse_events_add_pmu(struct parse_events_state *parse_state,
- 
- 	pmu = perf_pmu__find(name);
- 	if (!pmu) {
--		if (asprintf(&err->str,
-+		char *err_str;
-+
-+		if (asprintf(&err_str,
- 				"Cannot find PMU `%s'. Missing kernel support?",
--				name) < 0)
--			err->str = NULL;
-+				name) >= 0)
-+			parse_events__handle_error(err, -1, err_str, NULL);
- 		return -EINVAL;
- 	}
- 
-@@ -2797,13 +2820,10 @@ void parse_events__clear_array(struct parse_events_array *a)
- void parse_events_evlist_error(struct parse_events_state *parse_state,
- 			       int idx, const char *str)
- {
--	struct parse_events_error *err = parse_state->error;
--
--	if (!err)
-+	if (!parse_state->error)
- 		return;
--	err->idx = idx;
--	err->str = strdup(str);
--	WARN_ONCE(!err->str, "WARNING: failed to allocate error string");
-+
-+	parse_events__handle_error(parse_state->error, idx, strdup(str), NULL);
+-	return new_term(term, &temp, (char *) sym->symbol, 0);
++	str = strdup(sym->symbol);
++	if (!str)
++		return -ENOMEM;
++	return new_term(term, &temp, str, 0);
  }
  
- static void config_terms_list(char *buf, size_t buf_sz)
-diff --git a/tools/perf/util/parse-events.h b/tools/perf/util/parse-events.h
-index 769e07cddaa2..34f58d24a06a 100644
---- a/tools/perf/util/parse-events.h
-+++ b/tools/perf/util/parse-events.h
-@@ -124,6 +124,8 @@ struct parse_events_state {
- 	struct list_head	  *terms;
- };
+ int parse_events_term__clone(struct parse_events_term **new,
+ 			     struct parse_events_term *term)
+ {
++	char *str;
+ 	struct parse_events_term temp = {
+ 		.type_val  = term->type_val,
+ 		.type_term = term->type_term,
+-		.config    = term->config,
++		.config    = NULL,
+ 		.err_term  = term->err_term,
+ 		.err_val   = term->err_val,
+ 	};
  
-+void parse_events__handle_error(struct parse_events_error *err, int idx,
-+				char *str, char *help);
- void parse_events__shrink_config_terms(void);
- int parse_events__is_hardcoded_term(struct parse_events_term *term);
- int parse_events_term__num(struct parse_events_term **term,
-diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-index adbe97e941dd..f9f427d4c313 100644
---- a/tools/perf/util/pmu.c
-+++ b/tools/perf/util/pmu.c
-@@ -1050,9 +1050,9 @@ static int pmu_config_term(struct list_head *formats,
- 		if (err) {
- 			char *pmu_term = pmu_formats_string(formats);
- 
--			err->idx  = term->err_term;
--			err->str  = strdup("unknown term");
--			err->help = parse_events_formats_error_string(pmu_term);
-+			parse_events__handle_error(err, term->err_term,
-+				strdup("unknown term"),
-+				parse_events_formats_error_string(pmu_term));
- 			free(pmu_term);
- 		}
- 		return -EINVAL;
-@@ -1080,8 +1080,9 @@ static int pmu_config_term(struct list_head *formats,
- 		if (term->no_value &&
- 		    bitmap_weight(format->bits, PERF_PMU_FORMAT_BITS) > 1) {
- 			if (err) {
--				err->idx = term->err_val;
--				err->str = strdup("no value assigned for term");
-+				parse_events__handle_error(err, term->err_val,
-+					   strdup("no value assigned for term"),
-+					   NULL);
- 			}
- 			return -EINVAL;
- 		}
-@@ -1094,8 +1095,9 @@ static int pmu_config_term(struct list_head *formats,
- 						term->config, term->val.str);
- 			}
- 			if (err) {
--				err->idx = term->err_val;
--				err->str = strdup("expected numeric value");
-+				parse_events__handle_error(err, term->err_val,
-+					strdup("expected numeric value"),
-+					NULL);
- 			}
- 			return -EINVAL;
- 		}
-@@ -1108,11 +1110,15 @@ static int pmu_config_term(struct list_head *formats,
- 	max_val = pmu_format_max_value(format->bits);
- 	if (val > max_val) {
- 		if (err) {
--			err->idx = term->err_val;
--			if (asprintf(&err->str,
--				     "value too big for format, maximum is %llu",
--				     (unsigned long long)max_val) < 0)
--				err->str = strdup("value too big for format");
-+			char *err_str;
+-	return new_term(new, &temp, term->val.str, term->val.num);
++	if (term->config) {
++		temp.config = strdup(term->config);
++		if (!temp.config)
++			return -ENOMEM;
++	}
++	if (term->type_val == PARSE_EVENTS__TERM_TYPE_NUM)
++		return new_term(new, &temp, NULL, term->val.num);
 +
-+			parse_events__handle_error(err, term->err_val,
-+				asprintf(&err_str,
-+				    "value too big for format, maximum is %llu",
-+				    (unsigned long long)max_val) < 0
-+				    ? strdup("value too big for format")
-+				    : err_str,
-+				    NULL);
- 			return -EINVAL;
- 		}
- 		/*
++	str = strdup(term->val.str);
++	if (!str)
++		return -ENOMEM;
++	return new_term(new, &temp, str, 0);
+ }
+ 
+ int parse_events_copy_term_list(struct list_head *old,
+diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
+index ffa1a1b63796..545ab7cefc20 100644
+--- a/tools/perf/util/parse-events.y
++++ b/tools/perf/util/parse-events.y
+@@ -665,9 +665,11 @@ PE_NAME array '=' PE_VALUE
+ PE_DRV_CFG_TERM
+ {
+ 	struct parse_events_term *term;
++	char *config = strdup($1);
+ 
++	ABORT_ON(!config);
+ 	ABORT_ON(parse_events_term__str(&term, PARSE_EVENTS__TERM_TYPE_DRV_CFG,
+-					$1, $1, &@1, NULL));
++					config, $1, &@1, NULL));
+ 	$$ = term;
+ }
+ 
 -- 
 2.24.0.rc1.363.gb1bccd3e3d-goog
 
