@@ -2,139 +2,129 @@ Return-Path: <SRS0=c9tz=YX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14DADCA9EC9
-	for <bpf@archiver.kernel.org>; Wed, 30 Oct 2019 22:35:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5775C47E49
+	for <bpf@archiver.kernel.org>; Wed, 30 Oct 2019 22:49:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DB75320856
-	for <bpf@archiver.kernel.org>; Wed, 30 Oct 2019 22:35:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AACD52067D
+	for <bpf@archiver.kernel.org>; Wed, 30 Oct 2019 22:49:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gcodcIUv"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="TDqU50c8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726985AbfJ3Wey (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Oct 2019 18:34:54 -0400
-Received: from mail-pg1-f201.google.com ([209.85.215.201]:33967 "EHLO
-        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726377AbfJ3Wex (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 30 Oct 2019 18:34:53 -0400
-Received: by mail-pg1-f201.google.com with SMTP id w9so2742671pgl.1
-        for <bpf@vger.kernel.org>; Wed, 30 Oct 2019 15:34:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=SRqw2LSx0YB2BdwYQ6EePHj++2f3aHwtcvmz2x8WsbQ=;
-        b=gcodcIUvslFSwPfERYqecGIMte9yZP43PhQ2Qu2F0DwSy4nX1lyCG88L9b1XI1X+5I
-         90cZ4xb6DDfBB4c3rGWuqDz8/ZuDnttkFXaLS41zGenOuxdev/msOAnwI9zLKNXG5PMm
-         k/5nc5BKy0uwCDpRdGMXE5FtRp0c/Rr69FiBA+uuwwdAR5z1SVcESm+VaTtERF8dplMX
-         cwmci8lP8mY9/PqIxVDQdpIOBNrtTzEmBPGDupEYl1hl9bFDkJfk9b3uSfeoaCjQUe+F
-         0dBqIB9Acr8kyBTr6JmUqBsUoYjHFnH/pLGsgo09O/OmseQoNhxFZj4/xclg3WbcadkG
-         15tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=SRqw2LSx0YB2BdwYQ6EePHj++2f3aHwtcvmz2x8WsbQ=;
-        b=VSs0GYxj7thyKn2QGQYCEK27cciJY6HiHW4o7Ru3ghy1iFyaLr18by2ys/s6RhVs/x
-         GsgQN7LEsXC1shxH/VukQ20efvXM1z9ABYcqDZqGmQTzan2wv0wQ408wlnLDVBDQyEku
-         YD1DBIKraYYSvofH2b82YBaxmcljCIcBKs5p4nk4HADhJ8LP9d9UWnQ0S3AZQh/ZOjkr
-         i+ZqcmvmHPjPOee4Xm0zo8b8H58a+R0Ojab0LIrqP0MlEJcWZGXWHm/A+QjGFJoxSDwm
-         C4WRKXvxBeO/VLhS8nGdSA/27YJagxUf03KJo+26i3Uxb64VVkqTfEgVTpBNQZWs2DcS
-         pd3Q==
-X-Gm-Message-State: APjAAAX5tPWJJ1dfT1FPoIO8zh8+wwofnrGsbItsmCSbAVWgjggfD1H2
-        ld0DIZdZO1iAoE/b9rCWUh55LV7TDA+V
-X-Google-Smtp-Source: APXvYqy9Ma/nNUlrb2KjTqrKbpXVkwQKxeJS0X5WWuIRbJghR6jybob5m6FKIPhd8WkYpa5BE2yhCG7IFYJJ
-X-Received: by 2002:a65:588e:: with SMTP id d14mr2063152pgu.56.1572474892551;
- Wed, 30 Oct 2019 15:34:52 -0700 (PDT)
-Date:   Wed, 30 Oct 2019 15:34:38 -0700
-In-Reply-To: <20191025180827.191916-1-irogers@google.com>
-Message-Id: <20191030223448.12930-1-irogers@google.com>
-Mime-Version: 1.0
-References: <20191025180827.191916-1-irogers@google.com>
-X-Mailer: git-send-email 2.24.0.rc1.363.gb1bccd3e3d-goog
-Subject: [PATCH v5 00/10] Improvements to memory usage by parse events
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        John Garry <john.garry@huawei.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, clang-built-linux@googlegroups.com
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1727285AbfJ3Wtm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Oct 2019 18:49:42 -0400
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:10798 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727250AbfJ3Wtm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 30 Oct 2019 18:49:42 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dba13890000>; Wed, 30 Oct 2019 15:49:45 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 30 Oct 2019 15:49:39 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 30 Oct 2019 15:49:39 -0700
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 30 Oct
+ 2019 22:49:39 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Wed, 30 Oct 2019 22:49:38 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5dba13800002>; Wed, 30 Oct 2019 15:49:38 -0700
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH 04/19] media/v4l2-core: set pages dirty upon releasing DMA buffers
+Date:   Wed, 30 Oct 2019 15:49:15 -0700
+Message-ID: <20191030224930.3990755-5-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191030224930.3990755-1-jhubbard@nvidia.com>
+References: <20191030224930.3990755-1-jhubbard@nvidia.com>
+MIME-Version: 1.0
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1572475785; bh=XaBaipSsjoikJvkLH7RaOydN/WuSGfkJsZAiwvM/xPE=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Transfer-Encoding:Content-Type;
+        b=TDqU50c8TwyKmMgf/QDOTe3Vi1bVOitaLNonh0qiMoxrjojMp0wTfRux4Swk2FHl5
+         JJGYBcwT3ZevDeLVWf4S6QuZMQ0Lgc76irFx0ekQH8Fnv8kyfOshtxUwj3keS3tCY7
+         F5D1m4A2EQr/qED8mKHWtZbO0i+cEcxHpr70Q6RxWH8mk6sYhzR72caMlrH7U/2DJ9
+         cwN4vjQSS67t9JZPJ0DxjZGJhW0NmpX9Xjg5px4Z3HhCMFeEogkJ4W63rXbQ49reo0
+         Ta0Ru6XcEQojtc0AiLrAqhP/0gk5Gf5yaXkfGpmKAPqaQeMlSaBzLhwCOZG/jsUpVJ
+         ChKFrWebViYAg==
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The parse events parser leaks memory for certain expressions as well
-as allowing a char* to reference stack, heap or .rodata. This series
-of patches improves the hygeine and adds free-ing operations to
-reclaim memory in the parser in error and non-error situations.
+After DMA is complete, and the device and CPU caches are synchronized,
+it's still required to mark the CPU pages as dirty, if the data was
+coming from the device. However, this driver was just issuing a
+bare put_page() call, without any set_page_dirty*() call.
 
-The series of patches was generated with LLVM's address sanitizer and
-libFuzzer:
-https://llvm.org/docs/LibFuzzer.html
-called on the parse_events function with randomly generated input. With
-the patches no leaks or memory corruption issues were present.
+Fix the problem, by calling set_page_dirty_lock() if the CPU pages
+were potentially receiving data from the device.
 
-The v5 patches add initial error print to the set, as requested by
-Jiri Olsa. They also fix additional 2 missed frees in the patch
-'before yyabort-ing free components' and remove a redundant new_str
-variable from the patch 'add parse events handle error' as spotted by
-Stephane Eranian.
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ drivers/media/v4l2-core/videobuf-dma-sg.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-The v4 patches address review comments from Jiri Olsa, turning a long
-error message into a single warning, fixing the data type in a list
-iterator and reordering patches.
-
-The v3 patches address review comments from Jiri Olsa improving commit
-messages, handling ENOMEM errors from strdup better, and removing a
-printed warning if an invalid event is passed.
-
-The v2 patches are preferable to an earlier proposed patch:
-   perf tools: avoid reading out of scope array
-
-Ian Rogers (10):
-  perf tools: add parse events handle error
-  perf tools: move ALLOC_LIST into a function
-  perf tools: avoid a malloc for array events
-  perf tools: splice events onto evlist even on error
-  perf tools: ensure config and str in terms are unique
-  perf tools: add destructors for parse event terms
-  perf tools: before yyabort-ing free components
-  perf tools: if pmu configuration fails free terms
-  perf tools: add a deep delete for parse event terms
-  perf tools: report initial event parsing error
-
- tools/perf/arch/powerpc/util/kvm-stat.c |   9 +-
- tools/perf/builtin-stat.c               |   2 +
- tools/perf/builtin-trace.c              |  16 +-
- tools/perf/tests/parse-events.c         |   3 +-
- tools/perf/util/metricgroup.c           |   2 +-
- tools/perf/util/parse-events.c          | 236 ++++++++++----
- tools/perf/util/parse-events.h          |   7 +
- tools/perf/util/parse-events.y          | 390 +++++++++++++++++-------
- tools/perf/util/pmu.c                   |  32 +-
- 9 files changed, 509 insertions(+), 188 deletions(-)
-
--- 
-2.24.0.rc1.363.gb1bccd3e3d-goog
+diff --git a/drivers/media/v4l2-core/videobuf-dma-sg.c b/drivers/media/v4l2=
+-core/videobuf-dma-sg.c
+index 66a6c6c236a7..28262190c3ab 100644
+--- a/drivers/media/v4l2-core/videobuf-dma-sg.c
++++ b/drivers/media/v4l2-core/videobuf-dma-sg.c
+@@ -349,8 +349,11 @@ int videobuf_dma_free(struct videobuf_dmabuf *dma)
+ 	BUG_ON(dma->sglen);
+=20
+ 	if (dma->pages) {
+-		for (i =3D 0; i < dma->nr_pages; i++)
++		for (i =3D 0; i < dma->nr_pages; i++) {
++			if (dma->direction =3D=3D DMA_FROM_DEVICE)
++				set_page_dirty_lock(dma->pages[i]);
+ 			put_page(dma->pages[i]);
++		}
+ 		kfree(dma->pages);
+ 		dma->pages =3D NULL;
+ 	}
+--=20
+2.23.0
 
