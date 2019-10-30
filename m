@@ -2,345 +2,353 @@ Return-Path: <SRS0=c9tz=YX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94BB1CA9EC7
-	for <bpf@archiver.kernel.org>; Wed, 30 Oct 2019 22:32:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9BD5CA9EC7
+	for <bpf@archiver.kernel.org>; Wed, 30 Oct 2019 22:34:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 58C7E20874
-	for <bpf@archiver.kernel.org>; Wed, 30 Oct 2019 22:32:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1572474745;
-	bh=k+AZqLQHzZ/s9V+ja2mPGKo3Xkt1dkAXSX1Cdd/HEK8=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=eUpFOl0Ut/O5JIZ3Ze7ked8TMlQLNu1gp/eGlixOvYyi6q2jevrjD+hfhV1qiO4+q
-	 91aEISUhTOkOXjg7XVtSgDUkI195UwBmcfameE1SdWAXLkbqyHz6nqOwT6osQOlSOH
-	 tMsGF7bm+mWBBeR4k/qDcickiOXvZaOLm1Vg9M3s=
+	by mail.kernel.org (Postfix) with ESMTP id 9340620856
+	for <bpf@archiver.kernel.org>; Wed, 30 Oct 2019 22:34:59 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ru313old"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727106AbfJ3WcZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Oct 2019 18:32:25 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:36232 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726377AbfJ3WcY (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 30 Oct 2019 18:32:24 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id x9UMW8E7018769
-        for <bpf@vger.kernel.org>; Wed, 30 Oct 2019 15:32:23 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 2vxwf8xgq0-16
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 30 Oct 2019 15:32:23 -0700
-Received: from 2401:db00:2050:5076:face:0:1f:0 (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 30 Oct 2019 15:32:17 -0700
-Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 2ED72760903; Wed, 30 Oct 2019 15:32:17 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Alexei Starovoitov <ast@kernel.org>
-Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
-To:     <davem@davemloft.net>
-CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 2/2] libbpf: add support for prog_tracing
-Date:   Wed, 30 Oct 2019 15:32:12 -0700
-Message-ID: <20191030223212.953010-3-ast@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191030223212.953010-1-ast@kernel.org>
-References: <20191030223212.953010-1-ast@kernel.org>
-X-FB-Internal: Safe
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
- definitions=2019-10-30_09:2019-10-30,2019-10-30 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- malwarescore=0 mlxlogscore=999 spamscore=0 impostorscore=0 clxscore=1015
- adultscore=0 phishscore=0 priorityscore=1501 bulkscore=0 suspectscore=3
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1910300200
-X-FB-Internal: deliver
+        id S1726803AbfJ3We7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Oct 2019 18:34:59 -0400
+Received: from mail-pf1-f202.google.com ([209.85.210.202]:43505 "EHLO
+        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727216AbfJ3We5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 30 Oct 2019 18:34:57 -0400
+Received: by mail-pf1-f202.google.com with SMTP id i187so2886822pfc.10
+        for <bpf@vger.kernel.org>; Wed, 30 Oct 2019 15:34:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=JeMQyltmUCU8Ar0BgoXK1Jxj5wnahi83GTKOMO2N0jY=;
+        b=ru313oldJgqkIizzlEgnT3aaaYb9y7d/hgO91Umlt3UhjL/XxJQpbhZ5CkgL+xFOr7
+         cdSeiebfonuLj7OS+LYfPMVXq+djCNtqWc7XZo0z2g0wtZ7x5nCN86qoygK9NN1P90Ct
+         c/It+u54a2S9hlLm24suKuhkVqsMMsLejM2xgHWsTWdqZV35TyetbkVj6qhysaErPgux
+         3bTeuPTICcaW8uc6sp+Tunnhmra89a+hV5nHWLW4CJNPwVV1X1d1WUBjwp4zqZSq7xxo
+         XKJnPoUQvmEmiEg6HUghsCiEhQjcqxf6yIENWo5UlUEE25HgApE3kzQfyTP12BAoMhOE
+         Yw4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=JeMQyltmUCU8Ar0BgoXK1Jxj5wnahi83GTKOMO2N0jY=;
+        b=nUudFbs/CIEIiv9m+IhnJrgSttDK6MvBBvJ0m5uSmz+SMWncHgt8BOgdHX4va6HrOH
+         M4MGpRNjXst2xk1CJoWbF33UpbGcZX38XzNHE02A5IGdLBsjPgf4g+E/RT2XMtOeEeDI
+         pBGwYfsnMgAcKpKmGbHTWzo0EDQnJ0ZOdwVBihTlXqkc5p8QeVx/ziz8chs8GZLSZKLC
+         Fno8AsUDBGwjOKSm5o5mg6SJQbjBY+osEl7s8shBfTjvx/Wjjdjv7XeRO86aeK3BPlM+
+         t1Z/Das4kEajbWh0U0LhvUavQu7TFDgvR7QSr+FlMBaugjES7ElYYJzTyePO5X94VcmU
+         mMCQ==
+X-Gm-Message-State: APjAAAWxImhlAP5qYuxx1C9lEawiuUxaxlnY8IAU12Aj/NvITPi8VCcZ
+        FOP2VcmJkUDbae06YIcM9h2fvhoyQzOC
+X-Google-Smtp-Source: APXvYqywt2mKqJzXeMxuT76kZ0gRQhs+hU0ly42ZoUHWzoRfaGXsUcc4oKIKykf2/HS88X6eZVLlyE0j5Rw5
+X-Received: by 2002:a63:5a59:: with SMTP id k25mr1956115pgm.171.1572474895518;
+ Wed, 30 Oct 2019 15:34:55 -0700 (PDT)
+Date:   Wed, 30 Oct 2019 15:34:39 -0700
+In-Reply-To: <20191030223448.12930-1-irogers@google.com>
+Message-Id: <20191030223448.12930-2-irogers@google.com>
+Mime-Version: 1.0
+References: <20191025180827.191916-1-irogers@google.com> <20191030223448.12930-1-irogers@google.com>
+X-Mailer: git-send-email 2.24.0.rc1.363.gb1bccd3e3d-goog
+Subject: [PATCH v5 01/10] perf tools: add parse events handle error
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        John Garry <john.garry@huawei.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, clang-built-linux@googlegroups.com
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Cleanup libbpf from expected_attach_type == attach_btf_id hack
-and introduce BPF_PROG_TYPE_TRACING.
+Parse event error handling may overwrite one error string with another
+creating memory leaks. Introduce a helper routine that warns about
+multiple error messages as well as avoiding the memory leak.
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
+A reproduction of this problem can be seen with:
+  perf stat -e c/c/
+After this change this produces:
+WARNING: multiple event parsing errors
+event syntax error: 'c/c/'
+                       \___ unknown term
+
+valid terms: event,filter_rem,filter_opc0,edge,filter_isoc,filter_tid,filter_loc,filter_nc,inv,umask,filter_opc1,tid_en,thresh,filter_all_op,filter_not_nm,filter_state,filter_nm,config,config1,config2,name,period,percore
+Run 'perf list' for a list of valid events
+
+ Usage: perf stat [<options>] [<command>]
+
+    -e, --event <event>   event selector. use 'perf list' to list available events
+
+Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/include/uapi/linux/bpf.h |  2 +
- tools/lib/bpf/bpf.c            |  8 ++--
- tools/lib/bpf/bpf.h            |  5 ++-
- tools/lib/bpf/libbpf.c         | 79 ++++++++++++++++++++++++----------
- tools/lib/bpf/libbpf.h         |  2 +
- tools/lib/bpf/libbpf.map       |  2 +
- tools/lib/bpf/libbpf_probes.c  |  1 +
- 7 files changed, 71 insertions(+), 28 deletions(-)
+ tools/perf/util/parse-events.c | 82 +++++++++++++++++++++-------------
+ tools/perf/util/parse-events.h |  2 +
+ tools/perf/util/pmu.c          | 30 ++++++++-----
+ 3 files changed, 71 insertions(+), 43 deletions(-)
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 4af8b0819a32..a6bf19dabaab 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -173,6 +173,7 @@ enum bpf_prog_type {
- 	BPF_PROG_TYPE_CGROUP_SYSCTL,
- 	BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE,
- 	BPF_PROG_TYPE_CGROUP_SOCKOPT,
-+	BPF_PROG_TYPE_TRACING,
- };
+diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+index db882f630f7e..e9b958d6c534 100644
+--- a/tools/perf/util/parse-events.c
++++ b/tools/perf/util/parse-events.c
+@@ -182,6 +182,20 @@ static int tp_event_has_id(const char *dir_path, struct dirent *evt_dir)
  
- enum bpf_attach_type {
-@@ -199,6 +200,7 @@ enum bpf_attach_type {
- 	BPF_CGROUP_UDP6_RECVMSG,
- 	BPF_CGROUP_GETSOCKOPT,
- 	BPF_CGROUP_SETSOCKOPT,
-+	BPF_TRACE_RAW_TP,
- 	__MAX_BPF_ATTACH_TYPE
- };
+ #define MAX_EVENT_LENGTH 512
  
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 79046067720f..ca0d635b1d5e 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -228,9 +228,10 @@ int bpf_load_program_xattr(const struct bpf_load_program_attr *load_attr,
- 	memset(&attr, 0, sizeof(attr));
- 	attr.prog_type = load_attr->prog_type;
- 	attr.expected_attach_type = load_attr->expected_attach_type;
--	if (attr.prog_type == BPF_PROG_TYPE_RAW_TRACEPOINT)
--		/* expected_attach_type is ignored for tracing progs */
--		attr.attach_btf_id = attr.expected_attach_type;
-+	if (attr.prog_type == BPF_PROG_TYPE_TRACING)
-+		attr.attach_btf_id = load_attr->attach_btf_id;
-+	else
-+		attr.prog_ifindex = load_attr->prog_ifindex;
- 	attr.insn_cnt = (__u32)load_attr->insns_cnt;
- 	attr.insns = ptr_to_u64(load_attr->insns);
- 	attr.license = ptr_to_u64(load_attr->license);
-@@ -245,7 +246,6 @@ int bpf_load_program_xattr(const struct bpf_load_program_attr *load_attr,
- 	}
- 
- 	attr.kern_version = load_attr->kern_version;
--	attr.prog_ifindex = load_attr->prog_ifindex;
- 	attr.prog_btf_fd = load_attr->prog_btf_fd;
- 	attr.func_info_rec_size = load_attr->func_info_rec_size;
- 	attr.func_info_cnt = load_attr->func_info_cnt;
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 0db01334740f..1c53bc5b4b3c 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -78,7 +78,10 @@ struct bpf_load_program_attr {
- 	size_t insns_cnt;
- 	const char *license;
- 	__u32 kern_version;
--	__u32 prog_ifindex;
-+	union {
-+		__u32 prog_ifindex;
-+		__u32 attach_btf_id;
-+	};
- 	__u32 prog_btf_fd;
- 	__u32 func_info_rec_size;
- 	const void *func_info;
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 5d15cc4dfcd6..c80f316f1320 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -188,6 +188,7 @@ struct bpf_program {
- 	bpf_program_clear_priv_t clear_priv;
- 
- 	enum bpf_attach_type expected_attach_type;
-+	__u32 attach_btf_id;
- 	void *func_info;
- 	__u32 func_info_rec_size;
- 	__u32 func_info_cnt;
-@@ -3446,6 +3447,7 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
- 	load_attr.line_info_cnt = prog->line_info_cnt;
- 	load_attr.log_level = prog->log_level;
- 	load_attr.prog_flags = prog->prog_flags;
-+	load_attr.attach_btf_id = prog->attach_btf_id;
- 
- retry_load:
- 	log_buf = malloc(log_buf_size);
-@@ -3607,6 +3609,8 @@ bpf_object__load_progs(struct bpf_object *obj, int log_level)
- 	return 0;
- }
- 
-+static int libbpf_attach_btf_id_by_name(const char *name, __u32 *btf_id);
-+
- static struct bpf_object *
- __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
- 		   struct bpf_object_open_opts *opts)
-@@ -3656,6 +3660,7 @@ __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
- 	bpf_object__for_each_program(prog, obj) {
- 		enum bpf_prog_type prog_type;
- 		enum bpf_attach_type attach_type;
-+		__u32 btf_id;
- 
- 		err = libbpf_prog_type_by_name(prog->section_name, &prog_type,
- 					       &attach_type);
-@@ -3667,6 +3672,12 @@ __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
- 
- 		bpf_program__set_type(prog, prog_type);
- 		bpf_program__set_expected_attach_type(prog, attach_type);
-+		if (prog_type == BPF_PROG_TYPE_TRACING) {
-+			err = libbpf_attach_btf_id_by_name(prog->section_name, &btf_id);
-+			if (err)
-+				goto out;
-+			prog->attach_btf_id = btf_id;
-+		}
- 	}
- 
- 	return obj;
-@@ -4518,6 +4529,7 @@ BPF_PROG_TYPE_FNS(tracepoint, BPF_PROG_TYPE_TRACEPOINT);
- BPF_PROG_TYPE_FNS(raw_tracepoint, BPF_PROG_TYPE_RAW_TRACEPOINT);
- BPF_PROG_TYPE_FNS(xdp, BPF_PROG_TYPE_XDP);
- BPF_PROG_TYPE_FNS(perf_event, BPF_PROG_TYPE_PERF_EVENT);
-+BPF_PROG_TYPE_FNS(tracing, BPF_PROG_TYPE_TRACING);
- 
- enum bpf_attach_type
- bpf_program__get_expected_attach_type(struct bpf_program *prog)
-@@ -4546,7 +4558,8 @@ void bpf_program__set_expected_attach_type(struct bpf_program *prog,
- 	BPF_PROG_SEC_IMPL(string, ptype, eatype, 1, 0, eatype)
- 
- /* Programs that use BTF to identify attach point */
--#define BPF_PROG_BTF(string, ptype) BPF_PROG_SEC_IMPL(string, ptype, 0, 0, 1, 0)
-+#define BPF_PROG_BTF(string, ptype, eatype) \
-+	BPF_PROG_SEC_IMPL(string, ptype, eatype, 0, 1, 0)
- 
- /* Programs that can be attached but attach type can't be identified by section
-  * name. Kept for backward compatibility.
-@@ -4573,7 +4586,8 @@ static const struct {
- 	BPF_PROG_SEC("tp/",			BPF_PROG_TYPE_TRACEPOINT),
- 	BPF_PROG_SEC("raw_tracepoint/",		BPF_PROG_TYPE_RAW_TRACEPOINT),
- 	BPF_PROG_SEC("raw_tp/",			BPF_PROG_TYPE_RAW_TRACEPOINT),
--	BPF_PROG_BTF("tp_btf/",			BPF_PROG_TYPE_RAW_TRACEPOINT),
-+	BPF_PROG_BTF("tp_btf/",			BPF_PROG_TYPE_TRACING,
-+						BPF_TRACE_RAW_TP),
- 	BPF_PROG_SEC("xdp",			BPF_PROG_TYPE_XDP),
- 	BPF_PROG_SEC("perf_event",		BPF_PROG_TYPE_PERF_EVENT),
- 	BPF_PROG_SEC("lwt_in",			BPF_PROG_TYPE_LWT_IN),
-@@ -4678,27 +4692,6 @@ int libbpf_prog_type_by_name(const char *name, enum bpf_prog_type *prog_type,
- 			continue;
- 		*prog_type = section_names[i].prog_type;
- 		*expected_attach_type = section_names[i].expected_attach_type;
--		if (section_names[i].is_attach_btf) {
--			struct btf *btf = bpf_core_find_kernel_btf();
--			char raw_tp_btf_name[128] = "btf_trace_";
--			char *dst = raw_tp_btf_name + sizeof("btf_trace_") - 1;
--			int ret;
--
--			if (IS_ERR(btf)) {
--				pr_warn("vmlinux BTF is not found\n");
--				return -EINVAL;
--			}
--			/* prepend "btf_trace_" prefix per kernel convention */
--			strncat(dst, name + section_names[i].len,
--				sizeof(raw_tp_btf_name) - sizeof("btf_trace_"));
--			ret = btf__find_by_name(btf, raw_tp_btf_name);
--			btf__free(btf);
--			if (ret <= 0) {
--				pr_warn("%s is not found in vmlinux BTF\n", dst);
--				return -EINVAL;
--			}
--			*expected_attach_type = ret;
--		}
- 		return 0;
- 	}
- 	pr_warn("failed to guess program type based on ELF section name '%s'\n", name);
-@@ -4711,6 +4704,46 @@ int libbpf_prog_type_by_name(const char *name, enum bpf_prog_type *prog_type,
- 	return -ESRCH;
- }
- 
-+#define BTF_PREFIX "btf_trace_"
-+static int libbpf_attach_btf_id_by_name(const char *name, __u32 *btf_id)
++void parse_events__handle_error(struct parse_events_error *err, int idx,
++				char *str, char *help)
 +{
-+	struct btf *btf = bpf_core_find_kernel_btf();
-+	char raw_tp_btf_name[128] = BTF_PREFIX;
-+	char *dst = raw_tp_btf_name + sizeof(BTF_PREFIX) - 1;
-+	int ret, i, err = -EINVAL;
-+
-+	if (IS_ERR(btf)) {
-+		pr_warn("vmlinux BTF is not found\n");
-+		return -EINVAL;
++	if (WARN(!str, "WARNING: failed to provide error string\n")) {
++		free(help);
++		return;
 +	}
-+
-+	if (!name)
-+		goto out;
-+
-+	for (i = 0; i < ARRAY_SIZE(section_names); i++) {
-+		if (!section_names[i].is_attach_btf)
-+			continue;
-+		if (strncmp(name, section_names[i].sec, section_names[i].len))
-+			continue;
-+		/* prepend "btf_trace_" prefix per kernel convention */
-+		strncat(dst, name + section_names[i].len,
-+			sizeof(raw_tp_btf_name) - sizeof(BTF_PREFIX));
-+		ret = btf__find_by_name(btf, raw_tp_btf_name);
-+		if (ret <= 0) {
-+			pr_warn("%s is not found in vmlinux BTF\n", dst);
-+			goto out;
-+		}
-+		*btf_id = ret;
-+		err = 0;
-+		goto out;
-+	}
-+	pr_warn("failed to identify btf_id based on ELF section name '%s'\n", name);
-+	err = -ESRCH;
-+out:
-+	btf__free(btf);
-+	return err;
++	WARN_ONCE(err->str, "WARNING: multiple event parsing errors\n");
++	err->idx = idx;
++	free(err->str);
++	err->str = str;
++	free(err->help);
++	err->help = help;
 +}
-+
- int libbpf_attach_type_by_name(const char *name,
- 			       enum bpf_attach_type *attach_type)
+ 
+ struct tracepoint_path *tracepoint_id_to_path(u64 config)
  {
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index c63e2ff84abc..2b126ee5e173 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -307,6 +307,7 @@ LIBBPF_API int bpf_program__set_sched_cls(struct bpf_program *prog);
- LIBBPF_API int bpf_program__set_sched_act(struct bpf_program *prog);
- LIBBPF_API int bpf_program__set_xdp(struct bpf_program *prog);
- LIBBPF_API int bpf_program__set_perf_event(struct bpf_program *prog);
-+LIBBPF_API int bpf_program__set_tracing(struct bpf_program *prog);
+@@ -932,11 +946,11 @@ static int check_type_val(struct parse_events_term *term,
+ 		return 0;
  
- LIBBPF_API enum bpf_prog_type bpf_program__get_type(struct bpf_program *prog);
- LIBBPF_API void bpf_program__set_type(struct bpf_program *prog,
-@@ -326,6 +327,7 @@ LIBBPF_API bool bpf_program__is_sched_cls(const struct bpf_program *prog);
- LIBBPF_API bool bpf_program__is_sched_act(const struct bpf_program *prog);
- LIBBPF_API bool bpf_program__is_xdp(const struct bpf_program *prog);
- LIBBPF_API bool bpf_program__is_perf_event(const struct bpf_program *prog);
-+LIBBPF_API bool bpf_program__is_tracing(const struct bpf_program *prog);
- 
- /*
-  * No need for __attribute__((packed)), all members of 'bpf_map_def'
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index d1473ea4d7a5..69dded5af00b 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -197,4 +197,6 @@ LIBBPF_0.0.6 {
- 		bpf_object__open_mem;
- 		bpf_program__get_expected_attach_type;
- 		bpf_program__get_type;
-+		bpf_program__is_tracing;
-+		bpf_program__set_tracing;
- } LIBBPF_0.0.5;
-diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
-index 4b0b0364f5fc..a9eb8b322671 100644
---- a/tools/lib/bpf/libbpf_probes.c
-+++ b/tools/lib/bpf/libbpf_probes.c
-@@ -102,6 +102,7 @@ probe_load(enum bpf_prog_type prog_type, const struct bpf_insn *insns,
- 	case BPF_PROG_TYPE_FLOW_DISSECTOR:
- 	case BPF_PROG_TYPE_CGROUP_SYSCTL:
- 	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
-+	case BPF_PROG_TYPE_TRACING:
- 	default:
- 		break;
+ 	if (err) {
+-		err->idx = term->err_val;
+-		if (type == PARSE_EVENTS__TERM_TYPE_NUM)
+-			err->str = strdup("expected numeric value");
+-		else
+-			err->str = strdup("expected string value");
++		parse_events__handle_error(err, term->err_val,
++					type == PARSE_EVENTS__TERM_TYPE_NUM
++					? strdup("expected numeric value")
++					: strdup("expected string value"),
++					NULL);
  	}
+ 	return -EINVAL;
+ }
+@@ -972,8 +986,11 @@ static bool config_term_shrinked;
+ static bool
+ config_term_avail(int term_type, struct parse_events_error *err)
+ {
++	char *err_str;
++
+ 	if (term_type < 0 || term_type >= __PARSE_EVENTS__TERM_TYPE_NR) {
+-		err->str = strdup("Invalid term_type");
++		parse_events__handle_error(err, -1,
++					strdup("Invalid term_type"), NULL);
+ 		return false;
+ 	}
+ 	if (!config_term_shrinked)
+@@ -992,9 +1009,9 @@ config_term_avail(int term_type, struct parse_events_error *err)
+ 			return false;
+ 
+ 		/* term_type is validated so indexing is safe */
+-		if (asprintf(&err->str, "'%s' is not usable in 'perf stat'",
+-			     config_term_names[term_type]) < 0)
+-			err->str = NULL;
++		if (asprintf(&err_str, "'%s' is not usable in 'perf stat'",
++				config_term_names[term_type]) >= 0)
++			parse_events__handle_error(err, -1, err_str, NULL);
+ 		return false;
+ 	}
+ }
+@@ -1036,17 +1053,20 @@ do {									   \
+ 	case PARSE_EVENTS__TERM_TYPE_BRANCH_SAMPLE_TYPE:
+ 		CHECK_TYPE_VAL(STR);
+ 		if (strcmp(term->val.str, "no") &&
+-		    parse_branch_str(term->val.str, &attr->branch_sample_type)) {
+-			err->str = strdup("invalid branch sample type");
+-			err->idx = term->err_val;
++		    parse_branch_str(term->val.str,
++				    &attr->branch_sample_type)) {
++			parse_events__handle_error(err, term->err_val,
++					strdup("invalid branch sample type"),
++					NULL);
+ 			return -EINVAL;
+ 		}
+ 		break;
+ 	case PARSE_EVENTS__TERM_TYPE_TIME:
+ 		CHECK_TYPE_VAL(NUM);
+ 		if (term->val.num > 1) {
+-			err->str = strdup("expected 0 or 1");
+-			err->idx = term->err_val;
++			parse_events__handle_error(err, term->err_val,
++						strdup("expected 0 or 1"),
++						NULL);
+ 			return -EINVAL;
+ 		}
+ 		break;
+@@ -1080,8 +1100,9 @@ do {									   \
+ 	case PARSE_EVENTS__TERM_TYPE_PERCORE:
+ 		CHECK_TYPE_VAL(NUM);
+ 		if ((unsigned int)term->val.num > 1) {
+-			err->str = strdup("expected 0 or 1");
+-			err->idx = term->err_val;
++			parse_events__handle_error(err, term->err_val,
++						strdup("expected 0 or 1"),
++						NULL);
+ 			return -EINVAL;
+ 		}
+ 		break;
+@@ -1089,9 +1110,9 @@ do {									   \
+ 		CHECK_TYPE_VAL(NUM);
+ 		break;
+ 	default:
+-		err->str = strdup("unknown term");
+-		err->idx = term->err_term;
+-		err->help = parse_events_formats_error_string(NULL);
++		parse_events__handle_error(err, term->err_term,
++				strdup("unknown term"),
++				parse_events_formats_error_string(NULL));
+ 		return -EINVAL;
+ 	}
+ 
+@@ -1142,9 +1163,9 @@ static int config_term_tracepoint(struct perf_event_attr *attr,
+ 		return config_term_common(attr, term, err);
+ 	default:
+ 		if (err) {
+-			err->idx = term->err_term;
+-			err->str = strdup("unknown term");
+-			err->help = strdup("valid terms: call-graph,stack-size\n");
++			parse_events__handle_error(err, term->err_term,
++				strdup("unknown term"),
++				strdup("valid terms: call-graph,stack-size\n"));
+ 		}
+ 		return -EINVAL;
+ 	}
+@@ -1323,10 +1344,12 @@ int parse_events_add_pmu(struct parse_events_state *parse_state,
+ 
+ 	pmu = perf_pmu__find(name);
+ 	if (!pmu) {
+-		if (asprintf(&err->str,
++		char *err_str;
++
++		if (asprintf(&err_str,
+ 				"Cannot find PMU `%s'. Missing kernel support?",
+-				name) < 0)
+-			err->str = NULL;
++				name) >= 0)
++			parse_events__handle_error(err, -1, err_str, NULL);
+ 		return -EINVAL;
+ 	}
+ 
+@@ -2797,13 +2820,10 @@ void parse_events__clear_array(struct parse_events_array *a)
+ void parse_events_evlist_error(struct parse_events_state *parse_state,
+ 			       int idx, const char *str)
+ {
+-	struct parse_events_error *err = parse_state->error;
+-
+-	if (!err)
++	if (!parse_state->error)
+ 		return;
+-	err->idx = idx;
+-	err->str = strdup(str);
+-	WARN_ONCE(!err->str, "WARNING: failed to allocate error string");
++
++	parse_events__handle_error(parse_state->error, idx, strdup(str), NULL);
+ }
+ 
+ static void config_terms_list(char *buf, size_t buf_sz)
+diff --git a/tools/perf/util/parse-events.h b/tools/perf/util/parse-events.h
+index 769e07cddaa2..34f58d24a06a 100644
+--- a/tools/perf/util/parse-events.h
++++ b/tools/perf/util/parse-events.h
+@@ -124,6 +124,8 @@ struct parse_events_state {
+ 	struct list_head	  *terms;
+ };
+ 
++void parse_events__handle_error(struct parse_events_error *err, int idx,
++				char *str, char *help);
+ void parse_events__shrink_config_terms(void);
+ int parse_events__is_hardcoded_term(struct parse_events_term *term);
+ int parse_events_term__num(struct parse_events_term **term,
+diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+index adbe97e941dd..f9f427d4c313 100644
+--- a/tools/perf/util/pmu.c
++++ b/tools/perf/util/pmu.c
+@@ -1050,9 +1050,9 @@ static int pmu_config_term(struct list_head *formats,
+ 		if (err) {
+ 			char *pmu_term = pmu_formats_string(formats);
+ 
+-			err->idx  = term->err_term;
+-			err->str  = strdup("unknown term");
+-			err->help = parse_events_formats_error_string(pmu_term);
++			parse_events__handle_error(err, term->err_term,
++				strdup("unknown term"),
++				parse_events_formats_error_string(pmu_term));
+ 			free(pmu_term);
+ 		}
+ 		return -EINVAL;
+@@ -1080,8 +1080,9 @@ static int pmu_config_term(struct list_head *formats,
+ 		if (term->no_value &&
+ 		    bitmap_weight(format->bits, PERF_PMU_FORMAT_BITS) > 1) {
+ 			if (err) {
+-				err->idx = term->err_val;
+-				err->str = strdup("no value assigned for term");
++				parse_events__handle_error(err, term->err_val,
++					   strdup("no value assigned for term"),
++					   NULL);
+ 			}
+ 			return -EINVAL;
+ 		}
+@@ -1094,8 +1095,9 @@ static int pmu_config_term(struct list_head *formats,
+ 						term->config, term->val.str);
+ 			}
+ 			if (err) {
+-				err->idx = term->err_val;
+-				err->str = strdup("expected numeric value");
++				parse_events__handle_error(err, term->err_val,
++					strdup("expected numeric value"),
++					NULL);
+ 			}
+ 			return -EINVAL;
+ 		}
+@@ -1108,11 +1110,15 @@ static int pmu_config_term(struct list_head *formats,
+ 	max_val = pmu_format_max_value(format->bits);
+ 	if (val > max_val) {
+ 		if (err) {
+-			err->idx = term->err_val;
+-			if (asprintf(&err->str,
+-				     "value too big for format, maximum is %llu",
+-				     (unsigned long long)max_val) < 0)
+-				err->str = strdup("value too big for format");
++			char *err_str;
++
++			parse_events__handle_error(err, term->err_val,
++				asprintf(&err_str,
++				    "value too big for format, maximum is %llu",
++				    (unsigned long long)max_val) < 0
++				    ? strdup("value too big for format")
++				    : err_str,
++				    NULL);
+ 			return -EINVAL;
+ 		}
+ 		/*
 -- 
-2.17.1
+2.24.0.rc1.363.gb1bccd3e3d-goog
 
