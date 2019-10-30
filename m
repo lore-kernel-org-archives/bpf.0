@@ -2,320 +2,74 @@ Return-Path: <SRS0=c9tz=YX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 264B5CA9EC7
-	for <bpf@archiver.kernel.org>; Wed, 30 Oct 2019 19:36:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46785CA9EC5
+	for <bpf@archiver.kernel.org>; Wed, 30 Oct 2019 19:54:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F1D502080F
-	for <bpf@archiver.kernel.org>; Wed, 30 Oct 2019 19:36:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1572464172;
-	bh=xi27RkJByIOnY9BChKw9zn1qMdft6CmVN9crqJeaO00=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=DF+w5jcPACJL6deJgyF0MXzHgoxa61UMBQE2lB9knAH/HrZWq19qkafOgFh0eJnd7
-	 USpUscpZjfzUVWpuHGU/xqWcG9g7eQl/eJvgnX0u+IfnKoKWBH+OZqT7HqlaYJvMmn
-	 X4odbOLQ2G2esgxxOk/pR2WGr75xNJNRLMtbTbcU=
+	by mail.kernel.org (Postfix) with ESMTP id 0977F20717
+	for <bpf@archiver.kernel.org>; Wed, 30 Oct 2019 19:54:19 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ikCwF4wA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726184AbfJ3TgL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Oct 2019 15:36:11 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:27660 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726513AbfJ3TgL (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 30 Oct 2019 15:36:11 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9UJa90w000506
-        for <bpf@vger.kernel.org>; Wed, 30 Oct 2019 12:36:09 -0700
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2vxwn8wgyr-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 30 Oct 2019 12:36:09 -0700
-Received: from 2401:db00:2050:5076:face:0:9:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Wed, 30 Oct 2019 12:35:35 -0700
-Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 6B7B776071F; Wed, 30 Oct 2019 12:35:34 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Alexei Starovoitov <ast@kernel.org>
-Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
-To:     <davem@davemloft.net>
-CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 1/2] bpf: replace prog_raw_tp+btf_id with prog_tracing
-Date:   Wed, 30 Oct 2019 12:35:31 -0700
-Message-ID: <20191030193532.262014-2-ast@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191030193532.262014-1-ast@kernel.org>
-References: <20191030193532.262014-1-ast@kernel.org>
-X-FB-Internal: Safe
+        id S1726462AbfJ3TyS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Oct 2019 15:54:18 -0400
+Received: from mail-lf1-f42.google.com ([209.85.167.42]:46354 "EHLO
+        mail-lf1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726269AbfJ3TyS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 30 Oct 2019 15:54:18 -0400
+Received: by mail-lf1-f42.google.com with SMTP id t8so2529703lfc.13
+        for <bpf@vger.kernel.org>; Wed, 30 Oct 2019 12:54:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2xrFQT4wFXD3Gy0+We99RGmRvXgB/nwM6Gk7dX0iJaU=;
+        b=ikCwF4wAFRrcsGQNDJX1WIjPdWrSMYziMG5YlYWM9w81d3LRuP44bl3ZW/5wJqimNO
+         h9k4PENAu5kMRjYsTKoucrZXRYOeajIyAIzh+kiOEhyRJrjFgfZFCNGrAVOXN8+uOP37
+         pxtN8C5nvsfZ/nImnv2lMEj7MluNK466/KRrimxQNHtbsMrHzj8NjzmAARE84cU8a7PQ
+         keDDZ2pJ7fuHCjHHCAEioFuMvrhpaPT8kKWUnvqzhFon0GdRv0pE7GqKVmeyYeNB7hmA
+         xXrIBxb/+AjJioA7SGPP8I8F2nh83nFwK/5yAenUFJ0qBUOW8DjPRVEco9cIMXDSG06B
+         wGag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2xrFQT4wFXD3Gy0+We99RGmRvXgB/nwM6Gk7dX0iJaU=;
+        b=L+3NlP3A7KfA/UGL/7X4smY9MB58Rf9CMdz3ui5qykqrh775yW75kDd4NN6hXY5/LW
+         1qioi9/0W2AdCHOtf3hUnWMOnvWEtdkQ1bXLAEXs5/ym0N4pfUzvIn+nUn6NzAD5Gb8C
+         joU6E/fMqB6fevAzOE2WVGz+l1ZN5x0QQt32muZ7Nd6N/MfH3wnW0QSPBQhTHeqZbZJG
+         TsiuKznynNcNLhhrVxaeu/u0M2lBUZzCnRhoPYc6gBzjKMj0KEIjd82jBODqicYbADrJ
+         tbQdUJUCLZVCm00nk4hjpicBED64vgdBO5S519h3nudTfuWQVekp+JIZu8SM+6BO0Rrv
+         UKiQ==
+X-Gm-Message-State: APjAAAWqAlhyMrYAcP0xZqa8jR9/B0vawdxIjIBsm/zC/1hEpEmpx7Ca
+        MOSOBLA0jTZogT16jwS6rJ7al9Rk1moHilVAH38=
+X-Google-Smtp-Source: APXvYqzhDPZ0A89sJKUFRpO9O2MXhQCKNVkdsEQB4Nmk/VCvMSf9c5JolIuyahYdXFqG1XWOSPUzmLdZL7RCv2+hy/M=
+X-Received: by 2002:a19:3845:: with SMTP id d5mr574624lfj.162.1572465255012;
+ Wed, 30 Oct 2019 12:54:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
- definitions=2019-10-30_08:2019-10-30,2019-10-30 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
- bulkscore=0 spamscore=0 suspectscore=1 priorityscore=1501 mlxscore=0
- impostorscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0
- clxscore=1034 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1910300170
-X-FB-Internal: deliver
+References: <20191028122902.9763-1-iii@linux.ibm.com> <CAEf4BzajQL463pCogVAnX1H5Tg-+kj9p_-mAJs=n1r6OfZ2mXg@mail.gmail.com>
+ <9B04A778-42CE-4451-A276-5A41D6290055@linux.ibm.com> <20191029151615.GA83844@rdna-mbp>
+ <CAEf4BzahGwFmFP6wZkLda1p68JUDJRv36XM-8uKtHLovKLNLOQ@mail.gmail.com>
+In-Reply-To: <CAEf4BzahGwFmFP6wZkLda1p68JUDJRv36XM-8uKtHLovKLNLOQ@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 30 Oct 2019 12:54:03 -0700
+Message-ID: <CAADnVQ+UUQfzh-hN-vn9rXXXf+qVZeLaCJQ7y_YUH2hYsTOS4w@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: allow narrow loads of bpf_sysctl fields with
+ offset > 0
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Andrey Ignatov <rdna@fb.com>, Ilya Leoshkevich <iii@linux.ibm.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The bpf program type raw_tp together with 'expected_attach_type'
-was the most appropriate api to indicate BTF-enabled raw_tp programs.
-But during development it became apparent that 'expected_attach_type'
-cannot be used and new 'attach_btf_id' field had to be introduced.
-Which means that the information is duplicated in two fields where
-one of them is ignored.
-Clean it up by introducing new program type where both
-'expected_attach_type' and 'attach_btf_id' fields have
-specific meaning.
-In the future 'expected_attach_type' will be extended
-with other attach points that have similar semantics to raw_tp.
-This patch is replacing BTF-enabled BPF_PROG_TYPE_RAW_TRACEPOINT with
-prog_type = BPF_RPOG_TYPE_TRACING
-expected_attach_type = BPF_TRACE_RAW_TP
-attach_btf_id = btf_id of raw tracepoint inside the kernel
-Future patches will add
-expected_attach_type = BPF_TRACE_FENTRY or BPF_TRACE_FEXIT
-where programs have the same input context and the same helpers,
-but different attach points.
-
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- include/linux/bpf.h       |  5 +++++
- include/linux/bpf_types.h |  1 +
- include/uapi/linux/bpf.h  |  2 ++
- kernel/bpf/syscall.c      |  6 +++---
- kernel/bpf/verifier.c     | 34 +++++++++++++++++++++---------
- kernel/trace/bpf_trace.c  | 44 ++++++++++++++++++++++++++++++++-------
- 6 files changed, 71 insertions(+), 21 deletions(-)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 171be30fe0ae..80158cff44bd 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -373,6 +373,11 @@ enum bpf_cgroup_storage_type {
- 
- #define MAX_BPF_CGROUP_STORAGE_TYPE __BPF_CGROUP_STORAGE_MAX
- 
-+/* The longest tracepoint has 12 args.
-+ * See include/trace/bpf_probe.h
-+ */
-+#define MAX_BPF_FUNC_ARGS 12
-+
- struct bpf_prog_stats {
- 	u64 cnt;
- 	u64 nsecs;
-diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
-index 36a9c2325176..de14872b01ba 100644
---- a/include/linux/bpf_types.h
-+++ b/include/linux/bpf_types.h
-@@ -26,6 +26,7 @@ BPF_PROG_TYPE(BPF_PROG_TYPE_TRACEPOINT, tracepoint)
- BPF_PROG_TYPE(BPF_PROG_TYPE_PERF_EVENT, perf_event)
- BPF_PROG_TYPE(BPF_PROG_TYPE_RAW_TRACEPOINT, raw_tracepoint)
- BPF_PROG_TYPE(BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE, raw_tracepoint_writable)
-+BPF_PROG_TYPE(BPF_PROG_TYPE_TRACING, tracing)
- #endif
- #ifdef CONFIG_CGROUP_BPF
- BPF_PROG_TYPE(BPF_PROG_TYPE_CGROUP_DEVICE, cg_dev)
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 4af8b0819a32..a6bf19dabaab 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -173,6 +173,7 @@ enum bpf_prog_type {
- 	BPF_PROG_TYPE_CGROUP_SYSCTL,
- 	BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE,
- 	BPF_PROG_TYPE_CGROUP_SOCKOPT,
-+	BPF_PROG_TYPE_TRACING,
- };
- 
- enum bpf_attach_type {
-@@ -199,6 +200,7 @@ enum bpf_attach_type {
- 	BPF_CGROUP_UDP6_RECVMSG,
- 	BPF_CGROUP_GETSOCKOPT,
- 	BPF_CGROUP_SETSOCKOPT,
-+	BPF_TRACE_RAW_TP,
- 	__MAX_BPF_ATTACH_TYPE
- };
- 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index ff5225759553..985d01ced196 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1571,7 +1571,7 @@ bpf_prog_load_check_attach(enum bpf_prog_type prog_type,
- 			   u32 btf_id)
- {
- 	switch (prog_type) {
--	case BPF_PROG_TYPE_RAW_TRACEPOINT:
-+	case BPF_PROG_TYPE_TRACING:
- 		if (btf_id > BTF_MAX_TYPE)
- 			return -EINVAL;
- 		break;
-@@ -1833,13 +1833,13 @@ static int bpf_raw_tracepoint_open(const union bpf_attr *attr)
- 		return PTR_ERR(prog);
- 
- 	if (prog->type != BPF_PROG_TYPE_RAW_TRACEPOINT &&
-+	    prog->type != BPF_PROG_TYPE_TRACING &&
- 	    prog->type != BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE) {
- 		err = -EINVAL;
- 		goto out_put_prog;
- 	}
- 
--	if (prog->type == BPF_PROG_TYPE_RAW_TRACEPOINT &&
--	    prog->aux->attach_btf_id) {
-+	if (prog->type == BPF_PROG_TYPE_TRACING) {
- 		if (attr->raw_tracepoint.name) {
- 			/* raw_tp name should not be specified in raw_tp
- 			 * programs that were verified via in-kernel BTF info
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6b0de04f8b91..2f2374967b36 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -9381,24 +9381,36 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
- {
- 	struct bpf_prog *prog = env->prog;
- 	u32 btf_id = prog->aux->attach_btf_id;
-+	const char prefix[] = "btf_trace_";
- 	const struct btf_type *t;
- 	const char *tname;
- 
--	if (prog->type == BPF_PROG_TYPE_RAW_TRACEPOINT && btf_id) {
--		const char prefix[] = "btf_trace_";
-+	if (prog->type != BPF_PROG_TYPE_TRACING)
-+		return 0;
- 
--		t = btf_type_by_id(btf_vmlinux, btf_id);
--		if (!t) {
--			verbose(env, "attach_btf_id %u is invalid\n", btf_id);
--			return -EINVAL;
--		}
-+	if (!btf_id) {
-+		verbose(env, "Tracing programs must provide btf_id\n");
-+		return -EINVAL;
-+	}
-+	t = btf_type_by_id(btf_vmlinux, btf_id);
-+	if (!t) {
-+		verbose(env, "attach_btf_id %u is invalid\n", btf_id);
-+		return -EINVAL;
-+	}
-+	tname = btf_name_by_offset(btf_vmlinux, t->name_off);
-+	if (!tname) {
-+		verbose(env, "attach_btf_id %u doesn't have a name\n", btf_id);
-+		return -EINVAL;
-+	}
-+
-+	switch (prog->expected_attach_type) {
-+	case BPF_TRACE_RAW_TP:
- 		if (!btf_type_is_typedef(t)) {
- 			verbose(env, "attach_btf_id %u is not a typedef\n",
- 				btf_id);
- 			return -EINVAL;
- 		}
--		tname = btf_name_by_offset(btf_vmlinux, t->name_off);
--		if (!tname || strncmp(prefix, tname, sizeof(prefix) - 1)) {
-+		if (strncmp(prefix, tname, sizeof(prefix) - 1)) {
- 			verbose(env, "attach_btf_id %u points to wrong type name %s\n",
- 				btf_id, tname);
- 			return -EINVAL;
-@@ -9419,8 +9431,10 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
- 		prog->aux->attach_func_name = tname;
- 		prog->aux->attach_func_proto = t;
- 		prog->aux->attach_btf_trace = true;
-+		return 0;
-+	default:
-+		return -EINVAL;
- 	}
--	return 0;
- }
- 
- int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 571c25d60710..f50bf19f7a05 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1055,10 +1055,6 @@ raw_tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 	switch (func_id) {
- 	case BPF_FUNC_perf_event_output:
- 		return &bpf_perf_event_output_proto_raw_tp;
--#ifdef CONFIG_NET
--	case BPF_FUNC_skb_output:
--		return &bpf_skb_output_proto;
--#endif
- 	case BPF_FUNC_get_stackid:
- 		return &bpf_get_stackid_proto_raw_tp;
- 	case BPF_FUNC_get_stack:
-@@ -1068,20 +1064,44 @@ raw_tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 	}
- }
- 
-+static const struct bpf_func_proto *
-+tracing_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
-+{
-+	switch (func_id) {
-+#ifdef CONFIG_NET
-+	case BPF_FUNC_skb_output:
-+		return &bpf_skb_output_proto;
-+#endif
-+	default:
-+		return raw_tp_prog_func_proto(func_id, prog);
-+	}
-+}
-+
- static bool raw_tp_prog_is_valid_access(int off, int size,
- 					enum bpf_access_type type,
- 					const struct bpf_prog *prog,
- 					struct bpf_insn_access_aux *info)
- {
--	/* largest tracepoint in the kernel has 12 args */
--	if (off < 0 || off >= sizeof(__u64) * 12)
-+	if (off < 0 || off >= sizeof(__u64) * MAX_BPF_FUNC_ARGS)
-+		return false;
-+	if (type != BPF_READ)
-+		return false;
-+	if (off % size != 0)
-+		return false;
-+	return true;
-+}
-+
-+static bool tracing_prog_is_valid_access(int off, int size,
-+					 enum bpf_access_type type,
-+					 const struct bpf_prog *prog,
-+					 struct bpf_insn_access_aux *info)
-+{
-+	if (off < 0 || off >= sizeof(__u64) * MAX_BPF_FUNC_ARGS)
- 		return false;
- 	if (type != BPF_READ)
- 		return false;
- 	if (off % size != 0)
- 		return false;
--	if (!prog->aux->attach_btf_id)
--		return true;
- 	return btf_ctx_access(off, size, type, prog, info);
- }
- 
-@@ -1093,6 +1113,14 @@ const struct bpf_verifier_ops raw_tracepoint_verifier_ops = {
- const struct bpf_prog_ops raw_tracepoint_prog_ops = {
- };
- 
-+const struct bpf_verifier_ops tracing_verifier_ops = {
-+	.get_func_proto  = tracing_prog_func_proto,
-+	.is_valid_access = tracing_prog_is_valid_access,
-+};
-+
-+const struct bpf_prog_ops tracing_prog_ops = {
-+};
-+
- static bool raw_tp_writable_prog_is_valid_access(int off, int size,
- 						 enum bpf_access_type type,
- 						 const struct bpf_prog *prog,
--- 
-2.17.1
-
+Applied to bpf tree. Thanks
