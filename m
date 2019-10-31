@@ -2,35 +2,37 @@ Return-Path: <SRS0=z7FJ=YY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E111CA9EC7
-	for <bpf@archiver.kernel.org>; Thu, 31 Oct 2019 01:00:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF148CA9EC7
+	for <bpf@archiver.kernel.org>; Thu, 31 Oct 2019 01:00:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 130B52087E
-	for <bpf@archiver.kernel.org>; Thu, 31 Oct 2019 01:00:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CF6C52087E
+	for <bpf@archiver.kernel.org>; Thu, 31 Oct 2019 01:00:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726272AbfJaBAt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Oct 2019 21:00:49 -0400
-Received: from www62.your-server.de ([213.133.104.62]:42350 "EHLO
+        id S1727095AbfJaBAw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Oct 2019 21:00:52 -0400
+Received: from www62.your-server.de ([213.133.104.62]:42406 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726268AbfJaBAt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 30 Oct 2019 21:00:49 -0400
+        with ESMTP id S1727085AbfJaBAv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 30 Oct 2019 21:00:51 -0400
 Received: from 38.249.197.178.dynamic.dsl-lte-bonding.lssmb00p-msn.res.cust.swisscom.ch ([178.197.249.38] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1iPypS-0000Dw-Md; Thu, 31 Oct 2019 02:00:46 +0100
+        id 1iPypV-0000Eb-Tb; Thu, 31 Oct 2019 02:00:50 +0100
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, ast@kernel.org, andrii.nakryiko@gmail.com,
         Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v2 0/8] Fix BPF probe memory helpers
-Date:   Thu, 31 Oct 2019 02:00:18 +0100
-Message-Id: <cover.1572483054.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next v2 5/8] bpf: Switch BPF probe insns to bpf_probe_read_kernel
+Date:   Thu, 31 Oct 2019 02:00:23 +0100
+Message-Id: <a303d785af09e90779b3e587c4903f5ed415f376.1572483054.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <cover.1572483054.git.daniel@iogearbox.net>
+References: <cover.1572483054.git.daniel@iogearbox.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: daniel@iogearbox.net
@@ -40,51 +42,48 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This set adds probe_read_{user,kernel}(), probe_read_str_{user,kernel}()
-helpers, fixes probe_write_user() helper and selftests. For details please
-see individual patches.
+Commit 2a02759ef5f8 ("bpf: Add support for BTF pointers to interpreter")
+explicitly states that the pointer to BTF object is a pointer to a kernel
+object or NULL. Therefore we should also switch to using the strict kernel
+probe helper which is restricted to kernel addresses only when architectures
+have non-overlapping address spaces.
 
-Thanks!
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ kernel/bpf/core.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-v1 -> v2:
-  - standardize unsafe_ptr terminology in uapi header comment (Andrii)
-  - probe_read_{user,kernel}[_str] naming scheme (Andrii)
-  - use global data in last test case, remove relaxed_maps (Andrii)
-  - add strict non-pagefault kernel read funcs to avoid warning in
-    kernel probe read helpers (Alexei)
-
-Daniel Borkmann (8):
-  uaccess: Add non-pagefault user-space write function
-  uaccess: Add strict non-pagefault kernel-space read function
-  bpf: Make use of probe_user_write in probe write helper
-  bpf: Add probe_read_{user,kernel} and probe_read_{user,kernel}_str helpers
-  bpf: Switch BPF probe insns to bpf_probe_read_kernel
-  bpf, samples: Use bpf_probe_read_user where appropriate
-  bpf, testing: Convert prog tests to probe_read_{user,kernel}{,_str} helper
-  bpf, testing: Add selftest to read/write sockaddr from user space
-
- arch/x86/mm/Makefile                          |   2 +-
- arch/x86/mm/maccess.c                         |  38 ++++
- include/linux/uaccess.h                       |  16 ++
- include/uapi/linux/bpf.h                      | 120 +++++++----
- kernel/bpf/core.c                             |   9 +-
- kernel/trace/bpf_trace.c                      | 187 +++++++++++++-----
- mm/maccess.c                                  |  70 ++++++-
- samples/bpf/map_perf_test_kern.c              |   4 +-
- samples/bpf/test_map_in_map_kern.c            |   4 +-
- samples/bpf/test_probe_write_user_kern.c      |   2 +-
- tools/include/uapi/linux/bpf.h                | 120 +++++++----
- .../selftests/bpf/prog_tests/probe_user.c     |  78 ++++++++
- tools/testing/selftests/bpf/progs/kfree_skb.c |   4 +-
- tools/testing/selftests/bpf/progs/pyperf.h    |  67 ++++---
- .../testing/selftests/bpf/progs/strobemeta.h  |  36 ++--
- .../selftests/bpf/progs/test_probe_user.c     |  26 +++
- .../selftests/bpf/progs/test_tcp_estats.c     |   2 +-
- 17 files changed, 590 insertions(+), 195 deletions(-)
- create mode 100644 arch/x86/mm/maccess.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/probe_user.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_probe_user.c
-
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 673f5d40a93e..76452326fd8e 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1309,11 +1309,12 @@ bool bpf_opcode_in_insntable(u8 code)
+ }
+ 
+ #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+-u64 __weak bpf_probe_read(void * dst, u32 size, const void * unsafe_ptr)
++u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
+ {
+ 	memset(dst, 0, size);
+ 	return -EFAULT;
+ }
++
+ /**
+  *	__bpf_prog_run - run eBPF program on a given context
+  *	@regs: is the array of MAX_BPF_EXT_REG eBPF pseudo-registers
+@@ -1569,9 +1570,9 @@ static u64 __no_fgcse ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u6
+ 	LDST(W,  u32)
+ 	LDST(DW, u64)
+ #undef LDST
+-#define LDX_PROBE(SIZEOP, SIZE)						\
+-	LDX_PROBE_MEM_##SIZEOP:						\
+-		bpf_probe_read(&DST, SIZE, (const void *)(long) SRC);	\
++#define LDX_PROBE(SIZEOP, SIZE)							\
++	LDX_PROBE_MEM_##SIZEOP:							\
++		bpf_probe_read_kernel(&DST, SIZE, (const void *)(long) SRC);	\
+ 		CONT;
+ 	LDX_PROBE(B,  1)
+ 	LDX_PROBE(H,  2)
 -- 
 2.21.0
 
