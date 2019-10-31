@@ -2,286 +2,252 @@ Return-Path: <SRS0=z7FJ=YY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDBB4CA9ECF
-	for <bpf@archiver.kernel.org>; Thu, 31 Oct 2019 16:48:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1CC3CA9ECB
+	for <bpf@archiver.kernel.org>; Thu, 31 Oct 2019 17:22:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CEBB82173E
-	for <bpf@archiver.kernel.org>; Thu, 31 Oct 2019 16:48:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 69A1B2086D
+	for <bpf@archiver.kernel.org>; Thu, 31 Oct 2019 17:22:33 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YXDM0HyL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728814AbfJaQqn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 31 Oct 2019 12:46:43 -0400
-Received: from smtp-sh.infomaniak.ch ([128.65.195.4]:35234 "EHLO
-        smtp-sh.infomaniak.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728714AbfJaQql (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 31 Oct 2019 12:46:41 -0400
-Received: from smtp7.infomaniak.ch (smtp7.infomaniak.ch [83.166.132.30])
-        by smtp-sh.infomaniak.ch (8.14.5/8.14.5) with ESMTP id x9VGj5XS031706
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 31 Oct 2019 17:45:05 +0100
-Received: from localhost (ns3096276.ip-94-23-54.eu [94.23.54.103])
-        (authenticated bits=0)
-        by smtp7.infomaniak.ch (8.14.5/8.14.5) with ESMTP id x9VGj1Wx028284;
-        Thu, 31 Oct 2019 17:45:01 +0100
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Drysdale <drysdale@google.com>,
-        Florent Revest <revest@chromium.org>,
-        James Morris <jmorris@namei.org>, Jann Horn <jann@thejh.net>,
-        John Johansen <john.johansen@canonical.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        KP Singh <kpsingh@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mickael.salaun@ssi.gouv.fr>,
-        Paul Moore <paul@paul-moore.com>,
-        Sargun Dhillon <sargun@sargun.me>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Stephen Smalley <sds@tycho.nsa.gov>, Tejun Heo <tj@kernel.org>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Tycho Andersen <tycho@tycho.ws>,
-        Will Drewry <wad@chromium.org>, bpf@vger.kernel.org,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH bpf-next v12 0/7] Landlock LSM
-Date:   Thu, 31 Oct 2019 17:44:38 +0100
-Message-Id: <20191031164445.29426-1-mic@digikod.net>
-X-Mailer: git-send-email 2.24.0.rc1
+        id S1728837AbfJaRWd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 31 Oct 2019 13:22:33 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:35787 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728686AbfJaRWd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 31 Oct 2019 13:22:33 -0400
+Received: by mail-qk1-f195.google.com with SMTP id h6so7836198qkf.2;
+        Thu, 31 Oct 2019 10:22:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=oMfFzhVvoVWC2f8RdeEKTu5KlcXSKBqQpB/hPjE3vP8=;
+        b=YXDM0HyLbZpWaDOVEiyWMcqnSon454PSwOIL3nFeD5GPSo5p0OF0m6/DyabsADznEh
+         Ixp/ew78WxijD7Jqyp5eYENipq8QkGAXE0RWDfmR+pHqwwR/sMWJHr6MCQ8aTLiYqAp1
+         fMQ+8tWrh3OdNXR37XHNhLRsRPKNy1OZLoG+8WAeGcBIRNhvYJ0DfNyGVx+uAa4q83zu
+         jo3zpoJKnFupDMCSDiL6SZ9V9ksSNMYqJxLNSk4LOovrpiaQOMdDbb6LR1rwOYyq4F8K
+         Kw3SoHEX556DOj2WizJ/EiF+8cnwivphveUPYZqxpOsJj5d8plO99tSCnBDbabpZeoOy
+         Ptsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=oMfFzhVvoVWC2f8RdeEKTu5KlcXSKBqQpB/hPjE3vP8=;
+        b=K5H75aJ9SigG5yHzinKmhIL6Ub80b6GXj6sbJbltoFAxRVxIRCjXyRU7xH1/iT8fb1
+         zQrEbdJqulpTn/1TpRVroQbYIJsrOubRWYni9GQCsVuEPnQuI0SDXw7fmLNzrrspuvY1
+         IYNvTyK6wl0xQawitUlqCuzHNZgDgMTy5kDKV6iyaQdlJl4xKFB8wxVKLZ2WF5WSyq/5
+         8ohWacW1APXvvLKxO5Z2ZAHKxOjujfvOcojLI/Yg+DvbGkmI4C7a8eQhBXaPHlUUmePz
+         cQsQmJRBYNzBmoA3MH3Cp1lz1DjfGz5XNHekzvJXHAQClvg/Gkw4dCKIrg+GtC4Nf1/f
+         E68w==
+X-Gm-Message-State: APjAAAWEASYR8HUndZFYmVZR9yKCLPg720baWQ+AS9YWYIDs8RBmQCMo
+        YY/M3dW601pR8soLGUjYHo8s1W/pdEd4swLnh80=
+X-Google-Smtp-Source: APXvYqy+cO/4eyHBNJzJxQ0xbnCh5sxvIivJGzztAH7/0vkYxb07ULI1Mr6HYnMIBgQMw8XMh8L/RPCzGFacmkjP7ZQ=
+X-Received: by 2002:a05:620a:1011:: with SMTP id z17mr6323716qkj.39.1572542551388;
+ Thu, 31 Oct 2019 10:22:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
-X-Antivirus-Code: 0x100000
+References: <157237796219.169521.2129132883251452764.stgit@toke.dk> <157237796448.169521.1399805620810530569.stgit@toke.dk>
+In-Reply-To: <157237796448.169521.1399805620810530569.stgit@toke.dk>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 31 Oct 2019 10:22:20 -0700
+Message-ID: <CAEf4BzZ4pRLhwX+5Hh1jKsEhBAkrZbC14rBgAVgUt1gf3qJ+KQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 2/5] libbpf: Store map pin path and status in
+ struct bpf_map
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+On Tue, Oct 29, 2019 at 12:39 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@red=
+hat.com> wrote:
+>
+> From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+>
+> Support storing and setting a pin path in struct bpf_map, which can be us=
+ed
+> for automatic pinning. Also store the pin status so we can avoid attempts
+> to re-pin a map that has already been pinned (or reused from a previous
+> pinning).
+>
+> The behaviour of bpf_object__{un,}pin_maps() is changed so that if it is
+> called with a NULL path argument (which was previously illegal), it will
+> (un)pin only those maps that have a pin_path set.
+>
+> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> ---
 
-Following the previous series [1], this twelfth series mainly rework the
-domain management in response to Serge E. Hallyn's review.  Some minor
-fixes are also included.
+Looks good, thanks! Just some minor things to fix up below.
 
-This is the first step of the roadmap discussed at LPC [2].  While the
-intended final goal is to allow unprivileged (or non-root) users to use
-Landlock, this series allows only a process with global CAP_SYS_ADMIN to
-load and enforce a rule.  This may help to get feedback and avoid
-unexpected behaviors.
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 
-This series can be applied on top of bpf-next, commit e93d99180abd
-("selftests/bpf: Restore $(OUTPUT)/test_stub.o rule").  This can be
-tested with CONFIG_BPF_SYSCALL, CONFIG_SECCOMP_FILTER and
-CONFIG_SECURITY_LANDLOCK.  This patch series can be found in a Git
-repository here:
-https://github.com/landlock-lsm/linux/commits/landlock-v11
-I would really appreciate constructive comments on the design and the
-code.
+>  tools/lib/bpf/libbpf.c   |  164 +++++++++++++++++++++++++++++++++++-----=
+------
+>  tools/lib/bpf/libbpf.h   |    8 ++
+>  tools/lib/bpf/libbpf.map |    3 +
+>  3 files changed, 134 insertions(+), 41 deletions(-)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index ce5ef3ddd263..fd11f6aeb32c 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -226,6 +226,8 @@ struct bpf_map {
+>         void *priv;
+>         bpf_map_clear_priv_t clear_priv;
+>         enum libbpf_map_type libbpf_type;
+> +       char *pin_path;
+> +       bool pinned;
+>  };
+>
+>  struct bpf_secdata {
+> @@ -4025,47 +4027,119 @@ int bpf_map__pin(struct bpf_map *map, const char=
+ *path)
+>         char *cp, errmsg[STRERR_BUFSIZE];
+>         int err;
+>
+> -       err =3D check_path(path);
+> -       if (err)
+> -               return err;
+> -
+>         if (map =3D=3D NULL) {
+>                 pr_warn("invalid map pointer\n");
+>                 return -EINVAL;
+>         }
+>
+> -       if (bpf_obj_pin(map->fd, path)) {
+> -               cp =3D libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
+> -               pr_warn("failed to pin map: %s\n", cp);
+> -               return -errno;
+> +       if (map->pin_path) {
+> +               if (path && strcmp(path, map->pin_path)) {
+> +                       pr_warn("map '%s' already has pin path '%s' diffe=
+rent from '%s'\n",
+> +                               bpf_map__name(map), map->pin_path, path);
+> +                       return -EINVAL;
+> +               } else if (map->pinned) {
+> +                       pr_debug("map '%s' already pinned at '%s'; not re=
+-pinning\n",
+> +                                bpf_map__name(map), map->pin_path);
+> +                       return 0;
+> +               }
 
+`if (map->pinned)` check is the same in both branches, so I'd do it
+first, before this map->pin_path if/else.
 
-# Landlock LSM
+> +       } else {
+> +               if (!path) {
+> +                       pr_warn("missing a path to pin map '%s' at\n",
+> +                               bpf_map__name(map));
+> +                       return -EINVAL;
+> +               } else if (map->pinned) {
+> +                       pr_warn("map '%s' already pinned\n", bpf_map__nam=
+e(map));
+> +                       return -EEXIST;
+> +               }
+> +
+> +               map->pin_path =3D strdup(path);
+> +               if (!map->pin_path) {
+> +                       err =3D -errno;
+> +                       goto out_err;
+> +               }
+>         }
+>
 
-Landlock is a stackable LSM [3] intended to be used as a low-level
-framework to build custom access-control/audit systems or safe endpoint
-security agents.  There is currently one Landlock hook dedicated to
-check ptrace(2).  This hook accepts a dedicated eBPF program, called a
-Landlock program, which can currently compare its position in the
-hierarchy of similar programs tied to other processes.  This enables to
-enforce programmatic scoped ptrace restrictions.
+[...]
 
-The final goal of this new Linux Security Module (LSM) called Landlock
-is to allow any process, including unprivileged ones, to create powerful
-security sandboxes comparable to XNU Sandbox, FreeBSD Capsicum or
-OpenBSD Pledge (which could be implemented with Landlock).  This kind of
-sandbox is expected to help mitigate the security impact of bugs or
-unexpected/malicious behaviors in user-space applications.
+> +
+> +       err =3D check_path(path);
+> +       if (err)
+> +               return err;
+> +
+>         err =3D unlink(path);
+>         if (err !=3D 0)
+>                 return -errno;
+> -       pr_debug("unpinned map '%s'\n", path);
+> +
+> +       map->pinned =3D false;
+> +       pr_debug("unpinned map from '%s' from '%s'\n", bpf_map__name(map)=
+, path);
 
-The use of seccomp and Landlock is more suitable with the help of a
-user-space library (e.g.  libseccomp) that could help to specify a
-high-level language to express a security policy instead of raw eBPF
-programs.  Moreover, thanks to the LLVM front-end, it is quite easy to
-write an eBPF program with a subset of the C language.
+typo: extra from before map name?
 
-The documentation patch contains some kernel documentation, explanations
-on how to use Landlock and a FAQ.  The compiled documentation and some
-talks can be found here: https://landlock.io
+>
+>         return 0;
+>  }
+>
 
+[...]
 
-# Frequently asked questions
+>
+>         return err;
+> @@ -4131,17 +4205,24 @@ int bpf_object__unpin_maps(struct bpf_object *obj=
+, const char *path)
+>                 return -ENOENT;
+>
+>         bpf_object__for_each_map(map, obj) {
+> +               char *pin_path =3D NULL;
+>                 char buf[PATH_MAX];
 
-## Why is seccomp-bpf not enough?
+you can call buf as pin_path and get rid of extra pointer?
 
-A seccomp filter can access only raw syscall arguments (i.e. the
-register values) which means that it is not possible to filter according
-to the value pointed to by an argument, such as a file pathname. As an
-embryonic Landlock version demonstrated (i.e. seccomp-object), filtering
-at the syscall level is complicated (e.g. need to take care of race
-conditions). This is mainly because the access control checkpoints of
-the kernel are not at this high-level but more underneath, at the
-LSM-hook level. The LSM hooks are designed to handle this kind of
-checks.  Landlock abstracts this approach to leverage the ability of
-unprivileged users to limit themselves.
+> -               int len;
+>
+> -               len =3D snprintf(buf, PATH_MAX, "%s/%s", path,
+> -                              bpf_map__name(map));
+> -               if (len < 0)
+> -                       return -EINVAL;
+> -               else if (len >=3D PATH_MAX)
+> -                       return -ENAMETOOLONG;
+> +               if (path) {
+> +                       int len;
+> +
+> +                       len =3D snprintf(buf, PATH_MAX, "%s/%s", path,
+> +                                      bpf_map__name(map));
+> +                       if (len < 0)
+> +                               return -EINVAL;
+> +                       else if (len >=3D PATH_MAX)
+> +                               return -ENAMETOOLONG;
+> +                       pin_path =3D buf;
+> +               } else if (!map->pin_path) {
+> +                       continue;
+> +               }
+>
+> -               err =3D bpf_map__unpin(map, buf);
+> +               err =3D bpf_map__unpin(map, pin_path);
+>                 if (err)
+>                         return err;
+>         }
 
-Cf. section "What it isn't?" in
-Documentation/userspace-api/seccomp_filter.rst
+[...]
 
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index d1473ea4d7a5..c24d4c01591d 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -197,4 +197,7 @@ LIBBPF_0.0.6 {
+>                 bpf_object__open_mem;
+>                 bpf_program__get_expected_attach_type;
+>                 bpf_program__get_type;
+> +               bpf_map__get_pin_path;
+> +               bpf_map__set_pin_path;
+> +               bpf_map__is_pinned;
 
-## Why use the seccomp(2) syscall?
+we try to keep this list alphabetically sorted
 
-Landlock use the same semantic as seccomp to apply access rule
-restrictions. It add a new layer of security for the current process
-which is inherited by its children. It makes sense to use an unique
-access-restricting syscall (that should be allowed by seccomp filters)
-which can only drop privileges. Moreover, a Landlock rule could come
-from outside a process (e.g.  passed through a UNIX socket). It is then
-useful to differentiate the creation/load of Landlock eBPF programs via
-bpf(2), from rule enforcement via seccomp(2).
-
-
-## Why a new LSM? Are SELinux, AppArmor, Smack and Tomoyo not good
-   enough?
-
-The current access control LSMs are fine for their purpose which is to
-give the *root* the ability to enforce a security policy for the
-*system*. What is missing is a way to enforce a security policy for any
-application by its developer and *unprivileged user* as seccomp can do
-for raw syscall filtering.
-
-Differences from other (access control) LSMs:
-* not only dedicated to administrators (i.e. no_new_priv);
-* limited kernel attack surface (e.g. policy parsing);
-* constrained policy rules (no DoS: deterministic execution time);
-* do not leak more information than the loader process can legitimately
-  have access to (minimize metadata inference).
-
-
-# Changes since v11
-
-* rework domain management
-* minor fixes
-
-
-# Changes since v10
-
-* remove all the file system related features: program types, inode
-  map and expected_attach_triggers
-* replace the static ptrace security policy with a new and simpler
-  ptrace program (attached) type and a task_landlock_ptrace_ancestor()
-  eBPF helper
-* do not rely on seccomp internal structure but use stacked credentials
-  insdead
-* extend ptrace tests
-* add more documentation
-* split and rename files/patches
-* miscellaneous fixes
-
-
-Previous changes can be found in a previous cover-letter [4].
-
-
-[1] https://lore.kernel.org/lkml/20191029171505.6650-1-mic@digikod.net/
-[2] https://lore.kernel.org/lkml/5828776A.1010104@digikod.net/
-[3] https://lore.kernel.org/lkml/50db058a-7dde-441b-a7f9-f6837fe8b69f@schaufler-ca.com/
-[4] https://lore.kernel.org/lkml/20190721213116.23476-1-mic@digikod.net/
-
-Regards,
-
-Mickaël Salaün (7):
-  bpf,landlock: Define an eBPF program type for Landlock hooks
-  landlock: Add the management of domains
-  landlock,seccomp: Load Landlock programs per process hierarchy
-  landlock: Add ptrace LSM hooks
-  bpf,landlock: Add task_landlock_ptrace_ancestor() helper
-  bpf,landlock: Add tests for the Landlock ptrace program type
-  landlock: Add user and kernel documentation for Landlock
-
- Documentation/security/index.rst              |   1 +
- Documentation/security/landlock/index.rst     |  22 ++
- Documentation/security/landlock/kernel.rst    | 139 ++++++++++++
- Documentation/security/landlock/user.rst      | 142 ++++++++++++
- MAINTAINERS                                   |   9 +
- include/linux/bpf.h                           |   3 +
- include/linux/bpf_types.h                     |   3 +
- include/linux/landlock.h                      |  25 ++
- include/linux/lsm_hooks.h                     |   1 +
- include/uapi/linux/bpf.h                      |  23 +-
- include/uapi/linux/landlock.h                 |  39 ++++
- include/uapi/linux/seccomp.h                  |   1 +
- kernel/bpf/syscall.c                          |   9 +
- kernel/bpf/verifier.c                         |  11 +
- kernel/seccomp.c                              |   4 +
- scripts/bpf_helpers_doc.py                    |   1 +
- security/Kconfig                              |   1 +
- security/Makefile                             |   2 +
- security/landlock/Kconfig                     |  19 ++
- security/landlock/Makefile                    |   6 +
- security/landlock/bpf_ptrace.c                |  98 ++++++++
- security/landlock/bpf_ptrace.h                |  17 ++
- security/landlock/bpf_run.c                   |  62 +++++
- security/landlock/bpf_run.h                   |  25 ++
- security/landlock/bpf_verify.c                |  87 +++++++
- security/landlock/common.h                    |  84 +++++++
- security/landlock/domain_manage.c             | 173 ++++++++++++++
- security/landlock/domain_manage.h             |  23 ++
- security/landlock/domain_syscall.c            |  87 +++++++
- security/landlock/hooks_cred.c                |  47 ++++
- security/landlock/hooks_cred.h                |  14 ++
- security/landlock/hooks_ptrace.c              | 114 ++++++++++
- security/landlock/hooks_ptrace.h              |  19 ++
- security/landlock/init.c                      |  32 +++
- security/security.c                           |  15 ++
- tools/include/uapi/linux/bpf.h                |  23 +-
- tools/include/uapi/linux/landlock.h           |  22 ++
- tools/lib/bpf/libbpf_probes.c                 |   3 +
- tools/testing/selftests/bpf/config            |   3 +
- tools/testing/selftests/bpf/test_verifier.c   |   1 +
- .../testing/selftests/bpf/verifier/landlock.c |  56 +++++
- tools/testing/selftests/landlock/.gitignore   |   5 +
- tools/testing/selftests/landlock/Makefile     |  27 +++
- tools/testing/selftests/landlock/config       |   5 +
- tools/testing/selftests/landlock/test.h       |  48 ++++
- tools/testing/selftests/landlock/test_base.c  |  24 ++
- .../testing/selftests/landlock/test_ptrace.c  | 214 ++++++++++++++++++
- 47 files changed, 1787 insertions(+), 2 deletions(-)
- create mode 100644 Documentation/security/landlock/index.rst
- create mode 100644 Documentation/security/landlock/kernel.rst
- create mode 100644 Documentation/security/landlock/user.rst
- create mode 100644 include/linux/landlock.h
- create mode 100644 include/uapi/linux/landlock.h
- create mode 100644 security/landlock/Kconfig
- create mode 100644 security/landlock/Makefile
- create mode 100644 security/landlock/bpf_ptrace.c
- create mode 100644 security/landlock/bpf_ptrace.h
- create mode 100644 security/landlock/bpf_run.c
- create mode 100644 security/landlock/bpf_run.h
- create mode 100644 security/landlock/bpf_verify.c
- create mode 100644 security/landlock/common.h
- create mode 100644 security/landlock/domain_manage.c
- create mode 100644 security/landlock/domain_manage.h
- create mode 100644 security/landlock/domain_syscall.c
- create mode 100644 security/landlock/hooks_cred.c
- create mode 100644 security/landlock/hooks_cred.h
- create mode 100644 security/landlock/hooks_ptrace.c
- create mode 100644 security/landlock/hooks_ptrace.h
- create mode 100644 security/landlock/init.c
- create mode 100644 tools/include/uapi/linux/landlock.h
- create mode 100644 tools/testing/selftests/bpf/verifier/landlock.c
- create mode 100644 tools/testing/selftests/landlock/.gitignore
- create mode 100644 tools/testing/selftests/landlock/Makefile
- create mode 100644 tools/testing/selftests/landlock/config
- create mode 100644 tools/testing/selftests/landlock/test.h
- create mode 100644 tools/testing/selftests/landlock/test_base.c
- create mode 100644 tools/testing/selftests/landlock/test_ptrace.c
-
--- 
-2.23.0
-
+>  } LIBBPF_0.0.5;
+>
