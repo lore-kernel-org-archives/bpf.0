@@ -4,34 +4,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97E7FCA9ED0
-	for <bpf@archiver.kernel.org>; Fri,  1 Nov 2019 23:18:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4C28CA9ED1
+	for <bpf@archiver.kernel.org>; Fri,  1 Nov 2019 23:19:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6F72521897
-	for <bpf@archiver.kernel.org>; Fri,  1 Nov 2019 23:18:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BBDD021855
+	for <bpf@archiver.kernel.org>; Fri,  1 Nov 2019 23:19:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726947AbfKAXS7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Nov 2019 19:18:59 -0400
-Received: from www62.your-server.de ([213.133.104.62]:50428 "EHLO
+        id S1727549AbfKAXTB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Nov 2019 19:19:01 -0400
+Received: from www62.your-server.de ([213.133.104.62]:50472 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726701AbfKAXS6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 1 Nov 2019 19:18:58 -0400
+        with ESMTP id S1725989AbfKAXTB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 1 Nov 2019 19:19:01 -0400
 Received: from 38.249.197.178.dynamic.dsl-lte-bonding.lssmb00p-msn.res.cust.swisscom.ch ([178.197.249.38] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1iQgBz-0000Sc-Li; Sat, 02 Nov 2019 00:18:55 +0100
+        id 1iQgC1-0000T7-E6; Sat, 02 Nov 2019 00:18:57 +0100
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, ast@kernel.org, andrii.nakryiko@gmail.com,
         john.fastabend@gmail.com, Daniel Borkmann <daniel@iogearbox.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, x86@kernel.org
-Subject: [PATCH bpf-next v3 2/8] uaccess: Add strict non-pagefault kernel-space read function
-Date:   Sat,  2 Nov 2019 00:17:57 +0100
-Message-Id: <eefeefd769aa5a013531f491a71f0936779e916b.1572649915.git.daniel@iogearbox.net>
+        Andrii Nakryiko <andriin@fb.com>
+Subject: [PATCH bpf-next v3 5/8] bpf: Switch BPF probe insns to bpf_probe_read_kernel
+Date:   Sat,  2 Nov 2019 00:18:00 +0100
+Message-Id: <d2b90827837685424a4b8008dfe0460558abfada.1572649915.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1572649915.git.daniel@iogearbox.net>
 References: <cover.1572649915.git.daniel@iogearbox.net>
@@ -44,180 +44,49 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add two new probe_kernel_read_strict() and strncpy_from_unsafe_strict()
-helpers which by default alias to the __probe_kernel_read() and the
-__strncpy_from_unsafe(), respectively, but can be overridden by archs
-which have non-overlapping address ranges for kernel space and user
-space in order to bail out with -EFAULT when attempting to probe user
-memory including non-canonical user access addresses [0]:
-
-  4-level page tables:
-    user-space mem: 0x0000000000000000 - 0x00007fffffffffff
-    non-canonical:  0x0000800000000000 - 0xffff7fffffffffff
-
-  5-level page tables:
-    user-space mem: 0x0000000000000000 - 0x00ffffffffffffff
-    non-canonical:  0x0100000000000000 - 0xfeffffffffffffff
-
-The idea is that these helpers are complementary to the probe_user_read()
-and strncpy_from_unsafe_user() which probe user-only memory. Both added
-helpers here do the same, but for kernel-only addresses.
-
-Both set of helpers are going to be used for BPF tracing. They also
-explicitly avoid throwing the splat for non-canonical user addresses from
-00c42373d397 ("x86-64: add warning for non-canonical user access address
-dereferences").
-
-For compat, the current probe_kernel_read() and strncpy_from_unsafe() are
-left as-is.
-
-  [0] Documentation/x86/x86_64/mm.txt
+Commit 2a02759ef5f8 ("bpf: Add support for BTF pointers to interpreter")
+explicitly states that the pointer to BTF object is a pointer to a kernel
+object or NULL. Therefore we should also switch to using the strict kernel
+probe helper which is restricted to kernel addresses only when architectures
+have non-overlapping address spaces.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: x86@kernel.org
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 ---
- arch/x86/mm/Makefile    |  2 +-
- arch/x86/mm/maccess.c   | 43 +++++++++++++++++++++++++++++++++++++++++
- include/linux/uaccess.h |  4 ++++
- mm/maccess.c            | 25 +++++++++++++++++++++++-
- 4 files changed, 72 insertions(+), 2 deletions(-)
- create mode 100644 arch/x86/mm/maccess.c
+ kernel/bpf/core.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/mm/Makefile b/arch/x86/mm/Makefile
-index 84373dc9b341..bbc68a54795e 100644
---- a/arch/x86/mm/Makefile
-+++ b/arch/x86/mm/Makefile
-@@ -13,7 +13,7 @@ CFLAGS_REMOVE_mem_encrypt_identity.o	= -pg
- endif
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 673f5d40a93e..76452326fd8e 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1309,11 +1309,12 @@ bool bpf_opcode_in_insntable(u8 code)
+ }
  
- obj-y	:=  init.o init_$(BITS).o fault.o ioremap.o extable.o pageattr.o mmap.o \
--	    pat.o pgtable.o physaddr.o setup_nx.o tlb.o cpu_entry_area.o
-+	    pat.o pgtable.o physaddr.o setup_nx.o tlb.o cpu_entry_area.o maccess.o
- 
- # Make sure __phys_addr has no stackprotector
- nostackp := $(call cc-option, -fno-stack-protector)
-diff --git a/arch/x86/mm/maccess.c b/arch/x86/mm/maccess.c
-new file mode 100644
-index 000000000000..f5b85bdc0535
---- /dev/null
-+++ b/arch/x86/mm/maccess.c
-@@ -0,0 +1,43 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include <linux/uaccess.h>
-+#include <linux/kernel.h>
-+
-+#ifdef CONFIG_X86_64
-+static __always_inline u64 canonical_address(u64 vaddr, u8 vaddr_bits)
-+{
-+	return ((s64)vaddr << (64 - vaddr_bits)) >> (64 - vaddr_bits);
-+}
-+
-+static __always_inline bool invalid_probe_range(u64 vaddr)
-+{
-+	/*
-+	 * Range covering the highest possible canonical userspace address
-+	 * as well as non-canonical address range. For the canonical range
-+	 * we also need to include the userspace guard page.
-+	 */
-+	return vaddr < TASK_SIZE_MAX + PAGE_SIZE ||
-+	       canonical_address(vaddr, boot_cpu_data.x86_virt_bits) != vaddr;
-+}
-+#else
-+static __always_inline bool invalid_probe_range(u64 vaddr)
-+{
-+	return vaddr < TASK_SIZE_MAX;
-+}
-+#endif
-+
-+long probe_kernel_read_strict(void *dst, const void *src, size_t size)
-+{
-+	if (unlikely(invalid_probe_range((unsigned long)src)))
-+		return -EFAULT;
-+
-+	return __probe_kernel_read(dst, src, size);
-+}
-+
-+long strncpy_from_unsafe_strict(char *dst, const void *unsafe_addr, long count)
-+{
-+	if (unlikely(invalid_probe_range((unsigned long)unsafe_addr)))
-+		return -EFAULT;
-+
-+	return __strncpy_from_unsafe(dst, unsafe_addr, count);
-+}
-diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-index 38555435a64a..67f016010aad 100644
---- a/include/linux/uaccess.h
-+++ b/include/linux/uaccess.h
-@@ -311,6 +311,7 @@ copy_struct_from_user(void *dst, size_t ksize, const void __user *src,
-  * happens, handle that and return -EFAULT.
-  */
- extern long probe_kernel_read(void *dst, const void *src, size_t size);
-+extern long probe_kernel_read_strict(void *dst, const void *src, size_t size);
- extern long __probe_kernel_read(void *dst, const void *src, size_t size);
- 
- /*
-@@ -350,6 +351,9 @@ extern long notrace probe_user_write(void __user *dst, const void *src, size_t s
- extern long notrace __probe_user_write(void __user *dst, const void *src, size_t size);
- 
- extern long strncpy_from_unsafe(char *dst, const void *unsafe_addr, long count);
-+extern long strncpy_from_unsafe_strict(char *dst, const void *unsafe_addr,
-+				       long count);
-+extern long __strncpy_from_unsafe(char *dst, const void *unsafe_addr, long count);
- extern long strncpy_from_unsafe_user(char *dst, const void __user *unsafe_addr,
- 				     long count);
- extern long strnlen_unsafe_user(const void __user *unsafe_addr, long count);
-diff --git a/mm/maccess.c b/mm/maccess.c
-index 2d3c3d01064c..3ca8d97e5010 100644
---- a/mm/maccess.c
-+++ b/mm/maccess.c
-@@ -43,11 +43,20 @@ probe_write_common(void __user *dst, const void *src, size_t size)
-  * do_page_fault() doesn't attempt to take mmap_sem.  This makes
-  * probe_kernel_read() suitable for use within regions where the caller
-  * already holds mmap_sem, or other locks which nest inside mmap_sem.
-+ *
-+ * probe_kernel_read_strict() is the same as probe_kernel_read() except for
-+ * the case where architectures have non-overlapping user and kernel address
-+ * ranges: probe_kernel_read_strict() will additionally return -EFAULT for
-+ * probing memory on a user address range where probe_user_read() is supposed
-+ * to be used instead.
-  */
- 
- long __weak probe_kernel_read(void *dst, const void *src, size_t size)
-     __attribute__((alias("__probe_kernel_read")));
- 
-+long __weak probe_kernel_read_strict(void *dst, const void *src, size_t size)
-+    __attribute__((alias("__probe_kernel_read")));
-+
- long __probe_kernel_read(void *dst, const void *src, size_t size)
+ #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+-u64 __weak bpf_probe_read(void * dst, u32 size, const void * unsafe_ptr)
++u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
  {
- 	long ret;
-@@ -157,8 +166,22 @@ EXPORT_SYMBOL_GPL(probe_user_write);
-  *
-  * If @count is smaller than the length of the string, copies @count-1 bytes,
-  * sets the last byte of @dst buffer to NUL and returns @count.
-+ *
-+ * strncpy_from_unsafe_strict() is the same as strncpy_from_unsafe() except
-+ * for the case where architectures have non-overlapping user and kernel address
-+ * ranges: strncpy_from_unsafe_strict() will additionally return -EFAULT for
-+ * probing memory on a user address range where strncpy_from_unsafe_user() is
-+ * supposed to be used instead.
-  */
--long strncpy_from_unsafe(char *dst, const void *unsafe_addr, long count)
+ 	memset(dst, 0, size);
+ 	return -EFAULT;
+ }
 +
-+long __weak strncpy_from_unsafe(char *dst, const void *unsafe_addr, long count)
-+    __attribute__((alias("__strncpy_from_unsafe")));
-+
-+long __weak strncpy_from_unsafe_strict(char *dst, const void *unsafe_addr,
-+				       long count)
-+    __attribute__((alias("__strncpy_from_unsafe")));
-+
-+long __strncpy_from_unsafe(char *dst, const void *unsafe_addr, long count)
- {
- 	mm_segment_t old_fs = get_fs();
- 	const void *src = unsafe_addr;
+ /**
+  *	__bpf_prog_run - run eBPF program on a given context
+  *	@regs: is the array of MAX_BPF_EXT_REG eBPF pseudo-registers
+@@ -1569,9 +1570,9 @@ static u64 __no_fgcse ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u6
+ 	LDST(W,  u32)
+ 	LDST(DW, u64)
+ #undef LDST
+-#define LDX_PROBE(SIZEOP, SIZE)						\
+-	LDX_PROBE_MEM_##SIZEOP:						\
+-		bpf_probe_read(&DST, SIZE, (const void *)(long) SRC);	\
++#define LDX_PROBE(SIZEOP, SIZE)							\
++	LDX_PROBE_MEM_##SIZEOP:							\
++		bpf_probe_read_kernel(&DST, SIZE, (const void *)(long) SRC);	\
+ 		CONT;
+ 	LDX_PROBE(B,  1)
+ 	LDX_PROBE(H,  2)
 -- 
 2.21.0
 
