@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B984BCA9ECF
-	for <bpf@archiver.kernel.org>; Fri,  1 Nov 2019 23:19:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13DAECA9ED0
+	for <bpf@archiver.kernel.org>; Fri,  1 Nov 2019 23:19:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9A23320679
+	by mail.kernel.org (Postfix) with ESMTP id E733320679
 	for <bpf@archiver.kernel.org>; Fri,  1 Nov 2019 23:19:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727334AbfKAXTA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Nov 2019 19:19:00 -0400
-Received: from www62.your-server.de ([213.133.104.62]:50454 "EHLO
+        id S1727607AbfKAXTD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Nov 2019 19:19:03 -0400
+Received: from www62.your-server.de ([213.133.104.62]:50484 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726925AbfKAXS7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 1 Nov 2019 19:18:59 -0400
+        with ESMTP id S1726925AbfKAXTB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 1 Nov 2019 19:19:01 -0400
 Received: from 38.249.197.178.dynamic.dsl-lte-bonding.lssmb00p-msn.res.cust.swisscom.ch ([178.197.249.38] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1iQgC0-0000Sj-7X; Sat, 02 Nov 2019 00:18:56 +0100
+        id 1iQgC1-0000TI-VE; Sat, 02 Nov 2019 00:18:58 +0100
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, ast@kernel.org, andrii.nakryiko@gmail.com,
         john.fastabend@gmail.com, Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH bpf-next v3 3/8] bpf: Make use of probe_user_write in probe write helper
-Date:   Sat,  2 Nov 2019 00:17:58 +0100
-Message-Id: <841c461781874c07a0ee404a454c3bc0459eed30.1572649915.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next v3 6/8] bpf, samples: Use bpf_probe_read_user where appropriate
+Date:   Sat,  2 Nov 2019 00:18:01 +0100
+Message-Id: <5b0144b3f8e031ec5e2438bd7de8d7877e63bf2f.1572649915.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1572649915.git.daniel@iogearbox.net>
 References: <cover.1572649915.git.daniel@iogearbox.net>
@@ -44,44 +44,67 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Convert the bpf_probe_write_user() helper to probe_user_write() such that
-writes are not attempted under KERNEL_DS anymore which is buggy as kernel
-and user space pointers can have overlapping addresses. Also, given we have
-the access_ok() check inside probe_user_write(), the helper doesn't need
-to do it twice.
+Use bpf_probe_read_user() helper instead of bpf_probe_read() for samples that
+attach to kprobes probing on user addresses.
 
-Fixes: 96ae52279594 ("bpf: Add bpf_probe_write_user BPF helper to be called in tracers")
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Acked-by: Andrii Nakryiko <andriin@fb.com>
 ---
- kernel/trace/bpf_trace.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ samples/bpf/map_perf_test_kern.c         | 4 ++--
+ samples/bpf/test_map_in_map_kern.c       | 4 ++--
+ samples/bpf/test_probe_write_user_kern.c | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 571c25d60710..91eb17ac4bb6 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -163,7 +163,7 @@ static const struct bpf_func_proto bpf_probe_read_proto = {
- 	.arg3_type	= ARG_ANYTHING,
- };
+diff --git a/samples/bpf/map_perf_test_kern.c b/samples/bpf/map_perf_test_kern.c
+index 5c11aefbc489..281bcdaee58e 100644
+--- a/samples/bpf/map_perf_test_kern.c
++++ b/samples/bpf/map_perf_test_kern.c
+@@ -181,8 +181,8 @@ int stress_lru_hmap_alloc(struct pt_regs *ctx)
+ 	if (addrlen != sizeof(*in6))
+ 		return 0;
  
--BPF_CALL_3(bpf_probe_write_user, void *, unsafe_ptr, const void *, src,
-+BPF_CALL_3(bpf_probe_write_user, void __user *, unsafe_ptr, const void *, src,
- 	   u32, size)
- {
- 	/*
-@@ -186,10 +186,8 @@ BPF_CALL_3(bpf_probe_write_user, void *, unsafe_ptr, const void *, src,
- 		return -EPERM;
- 	if (unlikely(!nmi_uaccess_okay()))
- 		return -EPERM;
--	if (!access_ok(unsafe_ptr, size))
--		return -EPERM;
+-	ret = bpf_probe_read(test_params.dst6, sizeof(test_params.dst6),
+-			     &in6->sin6_addr);
++	ret = bpf_probe_read_user(test_params.dst6, sizeof(test_params.dst6),
++				  &in6->sin6_addr);
+ 	if (ret)
+ 		goto done;
  
--	return probe_kernel_write(unsafe_ptr, src, size);
-+	return probe_user_write(unsafe_ptr, src, size);
- }
+diff --git a/samples/bpf/test_map_in_map_kern.c b/samples/bpf/test_map_in_map_kern.c
+index 4f80cbe74c72..32ee752f19df 100644
+--- a/samples/bpf/test_map_in_map_kern.c
++++ b/samples/bpf/test_map_in_map_kern.c
+@@ -118,7 +118,7 @@ int trace_sys_connect(struct pt_regs *ctx)
+ 	if (addrlen != sizeof(*in6))
+ 		return 0;
  
- static const struct bpf_func_proto bpf_probe_write_user_proto = {
+-	ret = bpf_probe_read(dst6, sizeof(dst6), &in6->sin6_addr);
++	ret = bpf_probe_read_user(dst6, sizeof(dst6), &in6->sin6_addr);
+ 	if (ret) {
+ 		inline_ret = ret;
+ 		goto done;
+@@ -129,7 +129,7 @@ int trace_sys_connect(struct pt_regs *ctx)
+ 
+ 	test_case = dst6[7];
+ 
+-	ret = bpf_probe_read(&port, sizeof(port), &in6->sin6_port);
++	ret = bpf_probe_read_user(&port, sizeof(port), &in6->sin6_port);
+ 	if (ret) {
+ 		inline_ret = ret;
+ 		goto done;
+diff --git a/samples/bpf/test_probe_write_user_kern.c b/samples/bpf/test_probe_write_user_kern.c
+index a543358218e6..b7c48f37132c 100644
+--- a/samples/bpf/test_probe_write_user_kern.c
++++ b/samples/bpf/test_probe_write_user_kern.c
+@@ -37,7 +37,7 @@ int bpf_prog1(struct pt_regs *ctx)
+ 	if (sockaddr_len > sizeof(orig_addr))
+ 		return 0;
+ 
+-	if (bpf_probe_read(&orig_addr, sizeof(orig_addr), sockaddr_arg) != 0)
++	if (bpf_probe_read_user(&orig_addr, sizeof(orig_addr), sockaddr_arg) != 0)
+ 		return 0;
+ 
+ 	mapped_addr = bpf_map_lookup_elem(&dnat_map, &orig_addr);
 -- 
 2.21.0
 
