@@ -2,102 +2,89 @@ Return-Path: <SRS0=TYu4=YZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DE26CA9ECB
-	for <bpf@archiver.kernel.org>; Fri,  1 Nov 2019 00:51:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8EA5CA9ECB
+	for <bpf@archiver.kernel.org>; Fri,  1 Nov 2019 00:57:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4039E2086D
-	for <bpf@archiver.kernel.org>; Fri,  1 Nov 2019 00:51:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 826C62086D
+	for <bpf@archiver.kernel.org>; Fri,  1 Nov 2019 00:57:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="GP+bnz3d"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rrlOqMdc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727516AbfKAAvl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 31 Oct 2019 20:51:41 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:45521 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726803AbfKAAvl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 31 Oct 2019 20:51:41 -0400
-Received: by mail-lf1-f65.google.com with SMTP id v8so6037853lfa.12
-        for <bpf@vger.kernel.org>; Thu, 31 Oct 2019 17:51:40 -0700 (PDT)
+        id S1727580AbfKAA5B (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 31 Oct 2019 20:57:01 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:39119 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727455AbfKAA5A (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 31 Oct 2019 20:57:00 -0400
+Received: by mail-lj1-f195.google.com with SMTP id y3so8571817ljj.6;
+        Thu, 31 Oct 2019 17:56:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7MKIuXyw5t1sYq66/m6OQwaXeRIeCWIlU6RP0tUgVBA=;
-        b=GP+bnz3duEEFA84llAms/mV/2V9xmY+lczW1wxpnaQESMLp4BMJlHq1U5CWYBDYfyB
-         prptJa1SsLd+GBE5L2rv55N8gQTEZj/GG7dhA+nfzaW9WtnWPUwR7nlHPVJ9V7hy+oMn
-         ow7l4djMCfWF6t1lPToh43Iu5Hxjkpn/+j8ag+7AxTXfqu/yhfRsKVJW7xYtRoC5BxDo
-         celtasUX/Arurq5wgAFzdxQG73r1HiqOeYBAKJsmcf7nYFg64cSnQ/JxlhavM5BwqjKv
-         sHzlfDIjttBRCoXBJH5dy3k8rUm1p130n4OUx7rDnqobquOjUbT+6ud5WG1QjyTbKY3w
-         czMQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7KZalqPIBGBwrHXYv2oCo/flql1M8NVd61LL9jOZDSA=;
+        b=rrlOqMdcW5+Y3KEJbWFOKFOjFNQo+7g3fRhDp1RNPDT4GhP3UAjGTRC9GXIz7TeBye
+         agfKO8OOo7AzwAWLAQGt2NRN6mcoa264eoUqnrAw0YiQvUhmApcetCDDewRlVU3cDsbD
+         +6UXhFC908QW6FWUNsSI9fPkgrLULYvjMGuqi6oBLhJDbEqP69NXsbb8Kl/UX/eaM/+E
+         VgJCmJ/uCMVZWTuI/NTAR/oYkf3XpGNEiYiHgzIn4ZO9zW6RPfe46rAAgIzPFUIw7gYS
+         W/nU1Eh0IceXjJfF8gDuAZq4SThez0PuGfqr7DExepC06eo2o3XYQ3Qc1NIcDt57Ltae
+         UaaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7MKIuXyw5t1sYq66/m6OQwaXeRIeCWIlU6RP0tUgVBA=;
-        b=PEv/pG5nXy+W6h7Ajc9Fqp/8Un0zgNYDH6HxVXVoa6hFyAUUvJ0CMqoNWzyA+eZ6Kh
-         t+H9t7zsNnR8jNbZEvWNQ4NoJNmmX78pyLb/tSU8LomzXYMOG/4BPBZ+5FiAXlEQAzaD
-         PGzQrMb6x0uVPj9RL7tZWWm53zPPjr5CiaVjA5h/pc6czI6x1vmFlleMd3VaFz9tg+ZD
-         vIUA3FmfxPDije2gMqrk2jazoGz/d953/jKBP7do5cSBOM/3xh9ivwUC8hGLzTLUXq04
-         rMHxaRq1as3KhNSwBDQ08Vx3cdS/Dd3ESXiSAUt4YwfRpfGzpJM0+2zAKM/XuJJPXQER
-         3jmw==
-X-Gm-Message-State: APjAAAXY1Fdz/i897x1peYLu+Mz38fCPNCplMS9sCRmmHQ48k1uEpb7h
-        WP6dCxt00Uc2GisXK6/kQpLdog==
-X-Google-Smtp-Source: APXvYqyHfd/IaNRQBi5oidrpYHoXFA07acAGkJ3+eBEn50KgQcoHwxI071aUqui3L3Q5lGR/UkRZ1g==
-X-Received: by 2002:a19:895:: with SMTP id 143mr5346751lfi.158.1572569499890;
-        Thu, 31 Oct 2019 17:51:39 -0700 (PDT)
-Received: from jkicinski-Precision-T1700.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id y10sm2214009ljn.81.2019.10.31.17.51.37
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 31 Oct 2019 17:51:39 -0700 (PDT)
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net
-Cc:     netdev@vger.kernel.org, oss-drivers@netronome.com,
-        bpf@vger.kernel.org, jiri@resnulli.us,
-        Jakub Kicinski <jakub.kicinski@netronome.com>
-Subject: [PATCH bpf-next] Revert "selftests: bpf: Don't try to read files without read permission"
-Date:   Thu, 31 Oct 2019 17:51:27 -0700
-Message-Id: <20191101005127.1355-1-jakub.kicinski@netronome.com>
-X-Mailer: git-send-email 2.23.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7KZalqPIBGBwrHXYv2oCo/flql1M8NVd61LL9jOZDSA=;
+        b=ot58uhuOqbkz/Sb6bUdKxQi1benXjvSiNxLEL/XDfHFLvj3/ug9qRN+u31ARcUboxK
+         nW8LrtVQhRtwbeCF8PZvqbOv8t5ILRgHnx1lKNnuDD/mX+uY5gttnMoePGEcE6BzU5+e
+         BXkttQ7i0KkJ1BmNN+GpA+OtnqGoCoXalImtNs4NPShIQm+lAujme9V26V44tyn+2SW6
+         1DI+GhFO6tc08FJcAImNEsdyUtEHLRN4ST2N2eyIvgMeDXeqmpOGtcMt9h5aY2QHbeRW
+         8eih/64N2tOcETq0xixpuRK3CWbSFFbmonLw3TF6y+66ExRj2tqSLy8nSleYowEg9/31
+         /Tlw==
+X-Gm-Message-State: APjAAAVrAl9dFV0Yc8yBJ8j+orJ9AGIcaq+yxt8a2otpxqx3cxLJiWMR
+        I8MVuXavtkVF2p/cI35souBako1+Za4s111ytDnbSg==
+X-Google-Smtp-Source: APXvYqyXfsbugtAanZDp2088loLvVH2s5UB8yV4L1b1paSoVTrxPvzINkH6tA3sBFZH2mgmBf/dY/ST8Zbnh2SkPUyU=
+X-Received: by 2002:a2e:2e10:: with SMTP id u16mr2325638lju.51.1572569818601;
+ Thu, 31 Oct 2019 17:56:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20191101005127.1355-1-jakub.kicinski@netronome.com>
+In-Reply-To: <20191101005127.1355-1-jakub.kicinski@netronome.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 31 Oct 2019 17:56:46 -0700
+Message-ID: <CAADnVQKZbgqs3DJOsV4dtOY-ZXG8oQ7kWmJrJ_dS842qDrwABw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] Revert "selftests: bpf: Don't try to read files
+ without read permission"
+To:     Jakub Kicinski <jakub.kicinski@netronome.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Network Development <netdev@vger.kernel.org>,
+        OSS Drivers <oss-drivers@netronome.com>,
+        bpf <bpf@vger.kernel.org>, Jiri Pirko <jiri@resnulli.us>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This reverts commit 5bc60de50dfe ("selftests: bpf: Don't try to read
-files without read permission").
+On Thu, Oct 31, 2019 at 5:51 PM Jakub Kicinski
+<jakub.kicinski@netronome.com> wrote:
+>
+> This reverts commit 5bc60de50dfe ("selftests: bpf: Don't try to read
+> files without read permission").
+>
+> Quoted commit does not work at all, and was never tested.
+> Script requires root permissions (and tests for them)
+> and os.access() will always return true for root.
+>
+> The correct fix is needed in the bpf tree, so let's just
+> revert and save ourselves the merge conflict.
+>
+> Signed-off-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 
-Quoted commit does not work at all, and was never tested.
-Script requires root permissions (and tests for them)
-and os.access() will always return true for root.
-
-The correct fix is needed in the bpf tree, so let's just
-revert and save ourselves the merge conflict.
-
-Signed-off-by: Jakub Kicinski <jakub.kicinski@netronome.com>
----
- tools/testing/selftests/bpf/test_offload.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/test_offload.py b/tools/testing/selftests/bpf/test_offload.py
-index c44c650bde3a..15a666329a34 100755
---- a/tools/testing/selftests/bpf/test_offload.py
-+++ b/tools/testing/selftests/bpf/test_offload.py
-@@ -312,7 +312,7 @@ def bpftool_prog_load(sample, file_name, maps=[], prog_type="xdp", dev=None,
-             if f == "ports":
-                 continue
-             p = os.path.join(path, f)
--            if os.path.isfile(p) and os.access(p, os.R_OK):
-+            if os.path.isfile(p):
-                 _, out = cmd('cat %s/%s' % (path, f))
-                 dfs[f] = out.strip()
-             elif os.path.isdir(p):
--- 
-2.23.0
-
+Acked-by: Alexei Starovoitov <ast@kernel.org>
+Since original commit is broken may be apply directly to net-next ?
+I'm fine whichever way.
+I would wait for Jiri to reply first though.
