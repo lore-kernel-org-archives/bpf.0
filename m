@@ -4,34 +4,35 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 235C6CA9ED0
-	for <bpf@archiver.kernel.org>; Fri,  1 Nov 2019 23:19:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C0E5CA9ED1
+	for <bpf@archiver.kernel.org>; Fri,  1 Nov 2019 23:19:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0594921855
-	for <bpf@archiver.kernel.org>; Fri,  1 Nov 2019 23:19:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E1FEB20679
+	for <bpf@archiver.kernel.org>; Fri,  1 Nov 2019 23:19:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727806AbfKAXTI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Nov 2019 19:19:08 -0400
-Received: from www62.your-server.de ([213.133.104.62]:50510 "EHLO
+        id S1727180AbfKAXS7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Nov 2019 19:18:59 -0400
+Received: from www62.your-server.de ([213.133.104.62]:50448 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725989AbfKAXTC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 1 Nov 2019 19:19:02 -0400
+        with ESMTP id S1725989AbfKAXS7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 1 Nov 2019 19:18:59 -0400
 Received: from 38.249.197.178.dynamic.dsl-lte-bonding.lssmb00p-msn.res.cust.swisscom.ch ([178.197.249.38] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1iQgC3-0000Tg-1Q; Sat, 02 Nov 2019 00:18:59 +0100
+        id 1iQgBz-0000SS-1z; Sat, 02 Nov 2019 00:18:55 +0100
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, ast@kernel.org, andrii.nakryiko@gmail.com,
         john.fastabend@gmail.com, Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andriin@fb.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next v3 8/8] bpf, testing: Add selftest to read/write sockaddr from user space
-Date:   Sat,  2 Nov 2019 00:18:03 +0100
-Message-Id: <90f449d8af25354e05080e82fc6e2d3179da30ea.1572649915.git.daniel@iogearbox.net>
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [PATCH bpf-next v3 1/8] uaccess: Add non-pagefault user-space write function
+Date:   Sat,  2 Nov 2019 00:17:56 +0100
+Message-Id: <9df2542e68141bfa3addde631441ee45503856a8.1572649915.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1572649915.git.daniel@iogearbox.net>
 References: <cover.1572649915.git.daniel@iogearbox.net>
@@ -44,144 +45,121 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Tested on x86-64 and Ilya was also kind enough to give it a spin on
-s390x, both passing with probe_user:OK there. The test is using the
-newly added bpf_probe_read_user() to dump sockaddr from connect call
-into .bss BPF map and overrides the user buffer via bpf_probe_write_user():
+Commit 3d7081822f7f ("uaccess: Add non-pagefault user-space read functions")
+missed to add probe write function, therefore factor out a probe_write_common()
+helper with most logic of probe_kernel_write() except setting KERNEL_DS, and
+add a new probe_user_write() helper so it can be used from BPF side.
 
-  # ./test_progs
-  [...]
-  #17 pkt_md_access:OK
-  #18 probe_user:OK
-  #19 prog_run_xattr:OK
-  [...]
+Again, on some archs, the user address space and kernel address space can
+co-exist and be overlapping, so in such case, setting KERNEL_DS would mean
+that the given address is treated as being in kernel address space.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Acked-by: Andrii Nakryiko <andriin@fb.com>
-Tested-by: Ilya Leoshkevich <iii@linux.ibm.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
 ---
- .../selftests/bpf/prog_tests/probe_user.c     | 78 +++++++++++++++++++
- .../selftests/bpf/progs/test_probe_user.c     | 26 +++++++
- 2 files changed, 104 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/probe_user.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_probe_user.c
+ include/linux/uaccess.h | 12 +++++++++++
+ mm/maccess.c            | 45 +++++++++++++++++++++++++++++++++++++----
+ 2 files changed, 53 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/probe_user.c b/tools/testing/selftests/bpf/prog_tests/probe_user.c
-new file mode 100644
-index 000000000000..6cc36c87bdbc
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/probe_user.c
-@@ -0,0 +1,78 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
+diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+index d4ee6e942562..38555435a64a 100644
+--- a/include/linux/uaccess.h
++++ b/include/linux/uaccess.h
+@@ -337,6 +337,18 @@ extern long __probe_user_read(void *dst, const void __user *src, size_t size);
+ extern long notrace probe_kernel_write(void *dst, const void *src, size_t size);
+ extern long notrace __probe_kernel_write(void *dst, const void *src, size_t size);
+ 
++/*
++ * probe_user_write(): safely attempt to write to a location in user space
++ * @dst: address to write to
++ * @src: pointer to the data that shall be written
++ * @size: size of the data chunk
++ *
++ * Safely write to address @dst from the buffer at @src.  If a kernel fault
++ * happens, handle that and return -EFAULT.
++ */
++extern long notrace probe_user_write(void __user *dst, const void *src, size_t size);
++extern long notrace __probe_user_write(void __user *dst, const void *src, size_t size);
 +
-+void test_probe_user(void)
+ extern long strncpy_from_unsafe(char *dst, const void *unsafe_addr, long count);
+ extern long strncpy_from_unsafe_user(char *dst, const void __user *unsafe_addr,
+ 				     long count);
+diff --git a/mm/maccess.c b/mm/maccess.c
+index d065736f6b87..2d3c3d01064c 100644
+--- a/mm/maccess.c
++++ b/mm/maccess.c
+@@ -18,6 +18,18 @@ probe_read_common(void *dst, const void __user *src, size_t size)
+ 	return ret ? -EFAULT : 0;
+ }
+ 
++static __always_inline long
++probe_write_common(void __user *dst, const void *src, size_t size)
 +{
-+#define kprobe_name "__sys_connect"
-+	const char *prog_name = "kprobe/" kprobe_name;
-+	const char *obj_file = "./test_probe_user.o";
-+	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts, );
-+	int err, results_map_fd, sock_fd, duration;
-+	struct sockaddr curr, orig, tmp;
-+	struct sockaddr_in *in = (struct sockaddr_in *)&curr;
-+	struct bpf_link *kprobe_link = NULL;
-+	struct bpf_program *kprobe_prog;
-+	struct bpf_object *obj;
-+	static const int zero = 0;
++	long ret;
 +
-+	obj = bpf_object__open_file(obj_file, &opts);
-+	if (CHECK(IS_ERR(obj), "obj_open_file", "err %ld\n", PTR_ERR(obj)))
-+		return;
++	pagefault_disable();
++	ret = __copy_to_user_inatomic(dst, src, size);
++	pagefault_enable();
 +
-+	kprobe_prog = bpf_object__find_program_by_title(obj, prog_name);
-+	if (CHECK(!kprobe_prog, "find_probe",
-+		  "prog '%s' not found\n", prog_name))
-+		goto cleanup;
-+
-+	err = bpf_object__load(obj);
-+	if (CHECK(err, "obj_load", "err %d\n", err))
-+		goto cleanup;
-+
-+	results_map_fd = bpf_find_map(__func__, obj, "test_pro.bss");
-+	if (CHECK(results_map_fd < 0, "find_bss_map",
-+		  "err %d\n", results_map_fd))
-+		goto cleanup;
-+
-+	kprobe_link = bpf_program__attach_kprobe(kprobe_prog, false,
-+						 kprobe_name);
-+	if (CHECK(IS_ERR(kprobe_link), "attach_kprobe",
-+		  "err %ld\n", PTR_ERR(kprobe_link))) {
-+		kprobe_link = NULL;
-+		goto cleanup;
-+	}
-+
-+	memset(&curr, 0, sizeof(curr));
-+	in->sin_family = AF_INET;
-+	in->sin_port = htons(5555);
-+	in->sin_addr.s_addr = inet_addr("255.255.255.255");
-+	memcpy(&orig, &curr, sizeof(curr));
-+
-+	sock_fd = socket(AF_INET, SOCK_STREAM, 0);
-+	if (CHECK(sock_fd < 0, "create_sock_fd", "err %d\n", sock_fd))
-+		goto cleanup;
-+
-+	connect(sock_fd, &curr, sizeof(curr));
-+	close(sock_fd);
-+
-+	err = bpf_map_lookup_elem(results_map_fd, &zero, &tmp);
-+	if (CHECK(err, "get_kprobe_res",
-+		  "failed to get kprobe res: %d\n", err))
-+		goto cleanup;
-+
-+	in = (struct sockaddr_in *)&tmp;
-+	if (CHECK(memcmp(&tmp, &orig, sizeof(orig)), "check_kprobe_res",
-+		  "wrong kprobe res from probe read: %s:%u\n",
-+		  inet_ntoa(in->sin_addr), ntohs(in->sin_port)))
-+		goto cleanup;
-+
-+	memset(&tmp, 0xab, sizeof(tmp));
-+
-+	in = (struct sockaddr_in *)&curr;
-+	if (CHECK(memcmp(&curr, &tmp, sizeof(tmp)), "check_kprobe_res",
-+		  "wrong kprobe res from probe write: %s:%u\n",
-+		  inet_ntoa(in->sin_addr), ntohs(in->sin_port)))
-+		goto cleanup;
-+cleanup:
-+	bpf_link__destroy(kprobe_link);
-+	bpf_object__close(obj);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_probe_user.c b/tools/testing/selftests/bpf/progs/test_probe_user.c
-new file mode 100644
-index 000000000000..1871e2ece0c4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_probe_user.c
-@@ -0,0 +1,26 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/ptrace.h>
-+#include <linux/bpf.h>
-+
-+#include <netinet/in.h>
-+
-+#include "bpf_helpers.h"
-+#include "bpf_tracing.h"
-+
-+static struct sockaddr_in old;
-+
-+SEC("kprobe/__sys_connect")
-+int handle_sys_connect(struct pt_regs *ctx)
-+{
-+	void *ptr = (void *)PT_REGS_PARM2(ctx);
-+	struct sockaddr_in new;
-+
-+	bpf_probe_read_user(&old, sizeof(old), ptr);
-+	__builtin_memset(&new, 0xab, sizeof(new));
-+	bpf_probe_write_user(ptr, &new, sizeof(new));
-+
-+	return 0;
++	return ret ? -EFAULT : 0;
 +}
 +
-+char _license[] SEC("license") = "GPL";
+ /**
+  * probe_kernel_read(): safely attempt to read from a kernel-space location
+  * @dst: pointer to the buffer that shall take the data
+@@ -85,6 +97,7 @@ EXPORT_SYMBOL_GPL(probe_user_read);
+  * Safely write to address @dst from the buffer at @src.  If a kernel fault
+  * happens, handle that and return -EFAULT.
+  */
++
+ long __weak probe_kernel_write(void *dst, const void *src, size_t size)
+     __attribute__((alias("__probe_kernel_write")));
+ 
+@@ -94,15 +107,39 @@ long __probe_kernel_write(void *dst, const void *src, size_t size)
+ 	mm_segment_t old_fs = get_fs();
+ 
+ 	set_fs(KERNEL_DS);
+-	pagefault_disable();
+-	ret = __copy_to_user_inatomic((__force void __user *)dst, src, size);
+-	pagefault_enable();
++	ret = probe_write_common((__force void __user *)dst, src, size);
+ 	set_fs(old_fs);
+ 
+-	return ret ? -EFAULT : 0;
++	return ret;
+ }
+ EXPORT_SYMBOL_GPL(probe_kernel_write);
+ 
++/**
++ * probe_user_write(): safely attempt to write to a user-space location
++ * @dst: address to write to
++ * @src: pointer to the data that shall be written
++ * @size: size of the data chunk
++ *
++ * Safely write to address @dst from the buffer at @src.  If a kernel fault
++ * happens, handle that and return -EFAULT.
++ */
++
++long __weak probe_user_write(void __user *dst, const void *src, size_t size)
++    __attribute__((alias("__probe_user_write")));
++
++long __probe_user_write(void __user *dst, const void *src, size_t size)
++{
++	long ret = -EFAULT;
++	mm_segment_t old_fs = get_fs();
++
++	set_fs(USER_DS);
++	if (access_ok(dst, size))
++		ret = probe_write_common(dst, src, size);
++	set_fs(old_fs);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(probe_user_write);
+ 
+ /**
+  * strncpy_from_unsafe: - Copy a NUL terminated string from unsafe address.
 -- 
 2.21.0
 
