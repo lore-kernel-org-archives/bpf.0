@@ -1,42 +1,50 @@
-Return-Path: <SRS0=TYu4=YZ=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=aaSJ=Y2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C0E5CA9ED1
-	for <bpf@archiver.kernel.org>; Fri,  1 Nov 2019 23:19:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53169CA9ECF
+	for <bpf@archiver.kernel.org>; Sat,  2 Nov 2019 00:03:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E1FEB20679
-	for <bpf@archiver.kernel.org>; Fri,  1 Nov 2019 23:19:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 297422067D
+	for <bpf@archiver.kernel.org>; Sat,  2 Nov 2019 00:03:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727180AbfKAXS7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Nov 2019 19:18:59 -0400
-Received: from www62.your-server.de ([213.133.104.62]:50448 "EHLO
+        id S1726532AbfKBAD0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Nov 2019 20:03:26 -0400
+Received: from www62.your-server.de ([213.133.104.62]:58740 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725989AbfKAXS7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 1 Nov 2019 19:18:59 -0400
-Received: from 38.249.197.178.dynamic.dsl-lte-bonding.lssmb00p-msn.res.cust.swisscom.ch ([178.197.249.38] helo=localhost)
+        with ESMTP id S1726230AbfKBAD0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 1 Nov 2019 20:03:26 -0400
+Received: from sslproxy06.your-server.de ([78.46.172.3])
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1iQgBz-0000SS-1z; Sat, 02 Nov 2019 00:18:55 +0100
+        id 1iQgt0-0003l2-1v; Sat, 02 Nov 2019 01:03:22 +0100
+Received: from [178.197.249.38] (helo=pc-63.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1iQgsz-0003Cl-Pu; Sat, 02 Nov 2019 01:03:21 +0100
+Subject: Re: [PATCH bpf-next v5 0/3] xsk: XSKMAP performance improvements
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        netdev@vger.kernel.org, ast@kernel.org,
+        jakub.kicinski@netronome.com
+Cc:     bpf@vger.kernel.org, magnus.karlsson@gmail.com,
+        magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
+        jonathan.lemon@gmail.com, toke@redhat.com
+References: <20191101110346.15004-1-bjorn.topel@gmail.com>
 From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, ast@kernel.org, andrii.nakryiko@gmail.com,
-        john.fastabend@gmail.com, Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH bpf-next v3 1/8] uaccess: Add non-pagefault user-space write function
-Date:   Sat,  2 Nov 2019 00:17:56 +0100
-Message-Id: <9df2542e68141bfa3addde631441ee45503856a8.1572649915.git.daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <cover.1572649915.git.daniel@iogearbox.net>
-References: <cover.1572649915.git.daniel@iogearbox.net>
+Message-ID: <e01f2a9a-7a1b-c6f2-c504-265059fecfc5@iogearbox.net>
+Date:   Sat, 2 Nov 2019 01:03:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
+In-Reply-To: <20191101110346.15004-1-bjorn.topel@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 0.101.4/25620/Fri Nov  1 10:04:15 2019)
@@ -45,121 +53,50 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Commit 3d7081822f7f ("uaccess: Add non-pagefault user-space read functions")
-missed to add probe write function, therefore factor out a probe_write_common()
-helper with most logic of probe_kernel_write() except setting KERNEL_DS, and
-add a new probe_user_write() helper so it can be used from BPF side.
+On 11/1/19 12:03 PM, Björn Töpel wrote:
+> This set consists of three patches from Maciej and myself which are
+> optimizing the XSKMAP lookups.  In the first patch, the sockets are
+> moved to be stored at the tail of the struct xsk_map. The second
+> patch, Maciej implements map_gen_lookup() for XSKMAP. The third patch,
+> introduced in this revision, moves various XSKMAP functions, to permit
+> the compiler to do more aggressive inlining.
+> 
+> Based on the XDP program from tools/lib/bpf/xsk.c where
+> bpf_map_lookup_elem() is explicitly called, this work yields a 5%
+> improvement for xdpsock's rxdrop scenario. The last patch yields 2%
+> improvement.
+> 
+> Jonathan's Acked-by: for patch 1 and 2 was carried on. Note that the
+> overflow checks are done in the bpf_map_area_alloc() and
+> bpf_map_charge_init() functions, which was fixed in commit
+> ff1c08e1f74b ("bpf: Change size to u64 for bpf_map_{area_alloc,
+> charge_init}()").
+> 
+> Cheers,
+> Björn and Maciej
+> 
+> [1] https://patchwork.ozlabs.org/patch/1186170/
+> 
+> v1->v2: * Change size/cost to size_t and use {struct, array}_size
+>            where appropriate. (Jakub)
+> v2->v3: * Proper commit message for patch 2.
+> v3->v4: * Change size_t to u64 to handle 32-bit overflows. (Jakub)
+>          * Introduced patch 3.
+> v4->v5: * Use BPF_SIZEOF size, instead of BPF_DW, for correct
+>            pointer-sized loads. (Daniel)
+> 
+> Björn Töpel (2):
+>    xsk: store struct xdp_sock as a flexible array member of the XSKMAP
+>    xsk: restructure/inline XSKMAP lookup/redirect/flush
+> 
+> Maciej Fijalkowski (1):
+>    bpf: implement map_gen_lookup() callback for XSKMAP
+> 
+>   include/linux/bpf.h    |  25 ---------
+>   include/net/xdp_sock.h |  51 ++++++++++++++-----
+>   kernel/bpf/xskmap.c    | 112 +++++++++++++----------------------------
+>   net/xdp/xsk.c          |  33 +++++++++++-
+>   4 files changed, 106 insertions(+), 115 deletions(-)
+> 
 
-Again, on some archs, the user address space and kernel address space can
-co-exist and be overlapping, so in such case, setting KERNEL_DS would mean
-that the given address is treated as being in kernel address space.
-
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
----
- include/linux/uaccess.h | 12 +++++++++++
- mm/maccess.c            | 45 +++++++++++++++++++++++++++++++++++++----
- 2 files changed, 53 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-index d4ee6e942562..38555435a64a 100644
---- a/include/linux/uaccess.h
-+++ b/include/linux/uaccess.h
-@@ -337,6 +337,18 @@ extern long __probe_user_read(void *dst, const void __user *src, size_t size);
- extern long notrace probe_kernel_write(void *dst, const void *src, size_t size);
- extern long notrace __probe_kernel_write(void *dst, const void *src, size_t size);
- 
-+/*
-+ * probe_user_write(): safely attempt to write to a location in user space
-+ * @dst: address to write to
-+ * @src: pointer to the data that shall be written
-+ * @size: size of the data chunk
-+ *
-+ * Safely write to address @dst from the buffer at @src.  If a kernel fault
-+ * happens, handle that and return -EFAULT.
-+ */
-+extern long notrace probe_user_write(void __user *dst, const void *src, size_t size);
-+extern long notrace __probe_user_write(void __user *dst, const void *src, size_t size);
-+
- extern long strncpy_from_unsafe(char *dst, const void *unsafe_addr, long count);
- extern long strncpy_from_unsafe_user(char *dst, const void __user *unsafe_addr,
- 				     long count);
-diff --git a/mm/maccess.c b/mm/maccess.c
-index d065736f6b87..2d3c3d01064c 100644
---- a/mm/maccess.c
-+++ b/mm/maccess.c
-@@ -18,6 +18,18 @@ probe_read_common(void *dst, const void __user *src, size_t size)
- 	return ret ? -EFAULT : 0;
- }
- 
-+static __always_inline long
-+probe_write_common(void __user *dst, const void *src, size_t size)
-+{
-+	long ret;
-+
-+	pagefault_disable();
-+	ret = __copy_to_user_inatomic(dst, src, size);
-+	pagefault_enable();
-+
-+	return ret ? -EFAULT : 0;
-+}
-+
- /**
-  * probe_kernel_read(): safely attempt to read from a kernel-space location
-  * @dst: pointer to the buffer that shall take the data
-@@ -85,6 +97,7 @@ EXPORT_SYMBOL_GPL(probe_user_read);
-  * Safely write to address @dst from the buffer at @src.  If a kernel fault
-  * happens, handle that and return -EFAULT.
-  */
-+
- long __weak probe_kernel_write(void *dst, const void *src, size_t size)
-     __attribute__((alias("__probe_kernel_write")));
- 
-@@ -94,15 +107,39 @@ long __probe_kernel_write(void *dst, const void *src, size_t size)
- 	mm_segment_t old_fs = get_fs();
- 
- 	set_fs(KERNEL_DS);
--	pagefault_disable();
--	ret = __copy_to_user_inatomic((__force void __user *)dst, src, size);
--	pagefault_enable();
-+	ret = probe_write_common((__force void __user *)dst, src, size);
- 	set_fs(old_fs);
- 
--	return ret ? -EFAULT : 0;
-+	return ret;
- }
- EXPORT_SYMBOL_GPL(probe_kernel_write);
- 
-+/**
-+ * probe_user_write(): safely attempt to write to a user-space location
-+ * @dst: address to write to
-+ * @src: pointer to the data that shall be written
-+ * @size: size of the data chunk
-+ *
-+ * Safely write to address @dst from the buffer at @src.  If a kernel fault
-+ * happens, handle that and return -EFAULT.
-+ */
-+
-+long __weak probe_user_write(void __user *dst, const void *src, size_t size)
-+    __attribute__((alias("__probe_user_write")));
-+
-+long __probe_user_write(void __user *dst, const void *src, size_t size)
-+{
-+	long ret = -EFAULT;
-+	mm_segment_t old_fs = get_fs();
-+
-+	set_fs(USER_DS);
-+	if (access_ok(dst, size))
-+		ret = probe_write_common(dst, src, size);
-+	set_fs(old_fs);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(probe_user_write);
- 
- /**
-  * strncpy_from_unsafe: - Copy a NUL terminated string from unsafe address.
--- 
-2.21.0
-
+Looks good, applied, thanks!
