@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D069CCA9ED0
-	for <bpf@archiver.kernel.org>; Sat,  2 Nov 2019 22:00:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F4F1CA9EC7
+	for <bpf@archiver.kernel.org>; Sat,  2 Nov 2019 22:01:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9BEE620862
-	for <bpf@archiver.kernel.org>; Sat,  2 Nov 2019 22:00:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4BC8820862
+	for <bpf@archiver.kernel.org>; Sat,  2 Nov 2019 22:01:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1572732049;
-	bh=uRD2t8cws2ci7ML+QmYXuXFbzcXVu+/lGa+Iq7Jl9Ew=;
+	s=default; t=1572732073;
+	bh=0VXlZWWoMcSFmmXWeulx+et0eBm3m88aGiTOkKCt0vA=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=p2lj7JAaemp9Ky1xBs5OjwUGL5lw0nhT1eCKZmXjUmTgI9Ytr/CcdUM08z6S9dO9C
-	 CsELxqyKjpJJWwHfrgLM8irG/QP7UxBLseTW2mPKBlZJd5ZVtSZOIZXeqkXfgkn9VD
-	 3TFpWUYBKr5nuwaZzKvWKANUGQ/K1Mu7xUudquA0=
+	b=zerbffs3VND6TXVJqIZ/U8bmA422JFi4xEZQUuQCvhbdjFMZIf3UqWpACTAau7BA1
+	 gB1KTevtqtlKsSmIc8UuOARvL9txhneqIbr+iGkG0/yNQbdKVeoPeVQYDrQAgy823v
+	 GGCdr/CEdnWsr2VTot7Z/Z+cZjgCPA7LYgqXR00c=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727258AbfKBWAt convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sat, 2 Nov 2019 18:00:49 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:53076 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727267AbfKBWAr (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 2 Nov 2019 18:00:47 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA2M0jUl015484
-        for <bpf@vger.kernel.org>; Sat, 2 Nov 2019 15:00:47 -0700
+        id S1727303AbfKBWBM convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sat, 2 Nov 2019 18:01:12 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:32460 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727267AbfKBWBM (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 2 Nov 2019 18:01:12 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA2LxW5O018128
+        for <bpf@vger.kernel.org>; Sat, 2 Nov 2019 15:01:11 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2w15u9tchs-3
+        by mx0a-00082601.pphosted.com with ESMTP id 2w17hpt2tn-13
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sat, 02 Nov 2019 15:00:47 -0700
-Received: from 2401:db00:2050:5102:face:0:3b:0 (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Sat, 02 Nov 2019 15:01:11 -0700
+Received: from 2401:db00:12:909f:face:0:3:0 (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Sat, 2 Nov 2019 15:00:40 -0700
+ 15.1.1713.5; Sat, 2 Nov 2019 15:00:29 -0700
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 1CF79760F5C; Sat,  2 Nov 2019 15:00:40 -0700 (PDT)
+        id E2389760F5C; Sat,  2 Nov 2019 15:00:27 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -47,9 +47,9 @@ CC:     <daniel@iogearbox.net>, <peterz@infradead.org>,
         <rostedt@goodmis.org>, <x86@kernel.org>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 7/7] selftests/bpf: Add test for BPF trampoline
-Date:   Sat, 2 Nov 2019 15:00:25 -0700
-Message-ID: <20191102220025.2475981-8-ast@kernel.org>
+Subject: [PATCH bpf-next 1/7] bpf, ftrace: temporary workaround
+Date:   Sat, 2 Nov 2019 15:00:19 -0700
+Message-ID: <20191102220025.2475981-2-ast@kernel.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191102220025.2475981-1-ast@kernel.org>
 References: <20191102220025.2475981-1-ast@kernel.org>
@@ -59,10 +59,10 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
  definitions=2019-11-02_13:2019-11-01,2019-11-02 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0 clxscore=1034
- adultscore=0 bulkscore=0 mlxlogscore=999 suspectscore=1 impostorscore=0
- mlxscore=0 lowpriorityscore=0 malwarescore=0 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ impostorscore=0 mlxscore=0 phishscore=0 clxscore=1015 mlxlogscore=943
+ spamscore=0 suspectscore=1 bulkscore=0 lowpriorityscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1908290000 definitions=main-1911020218
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -70,207 +70,119 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add sanity test for BPF trampoline that checks kernel functions
-with up to 6 arguments of different sizes.
+Add temporary workaround until proper register_ftrace_direct() api lands. This
+commit must be reverted during upcoming merge window. The hack functions don't
+have safety checks that ftrace api performs.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/lib/bpf/bpf_helpers.h                   | 13 +++
- .../selftests/bpf/prog_tests/fentry_test.c    | 65 ++++++++++++++
- .../testing/selftests/bpf/progs/fentry_test.c | 90 +++++++++++++++++++
- 3 files changed, 168 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/fentry_test.c
- create mode 100644 tools/testing/selftests/bpf/progs/fentry_test.c
+ arch/x86/kernel/ftrace.c | 36 ++++++++++++++++++++++++++++++++++++
+ include/linux/bpf.h      |  5 +++++
+ kernel/bpf/core.c        | 30 ++++++++++++++++++++++++++++++
+ 3 files changed, 71 insertions(+)
 
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index 0c7d28292898..c63ab1add126 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -44,4 +44,17 @@ enum libbpf_pin_type {
- 	LIBBPF_PIN_BY_NAME,
- };
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index 024c3053dbba..0fd7643da92d 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -265,6 +265,42 @@ static int update_ftrace_func(unsigned long ip, void *new)
+ 	return ret;
+ }
  
-+/* The following types should be used by BPF_PROG_TYPE_TRACING program to
-+ * access kernel function arguments. BPF trampoline and raw tracepoints
-+ * typecast arguments to 'unsigned long long'.
++/*
++ * There are no safety checks here. It's a temporary hack until proper
++ * register_ftrace_direct() api lands. These functions blindly rewrite kernel
++ * text. Proper register_ftrace_direct() should check that IP is one of allowed
++ * fentry points. unregister_ftrace_direct() and modify_ftrace_direct() should
++ * do similar checks.
 + */
-+typedef int __attribute__((aligned(8))) ks32;
-+typedef char __attribute__((aligned(8))) ks8;
-+typedef short __attribute__((aligned(8))) ks16;
-+typedef long long __attribute__((aligned(8))) ks64;
-+typedef unsigned int __attribute__((aligned(8))) ku32;
-+typedef unsigned char __attribute__((aligned(8))) ku8;
-+typedef unsigned short __attribute__((aligned(8))) ku16;
-+typedef unsigned long long __attribute__((aligned(8))) ku64;
-+
- #endif
-diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_test.c b/tools/testing/selftests/bpf/prog_tests/fentry_test.c
-new file mode 100644
-index 000000000000..c24c5f739df6
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/fentry_test.c
-@@ -0,0 +1,65 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2019 Facebook */
-+#include <test_progs.h>
-+
-+void test_fentry_test(void)
++int arch_register_ftrace_hack(unsigned long ip, unsigned long addr)
 +{
-+	struct bpf_prog_load_attr attr = {
-+		.file = "./fentry_test.o",
-+	};
++	u8 *new;
++	int ret;
 +
-+	char prog_name[] = "fentry/bpf_fentry_testX";
-+	struct bpf_object *obj = NULL, *pkt_obj;
-+	int err, pkt_fd, kfree_skb_fd, i;
-+	struct bpf_link *link[6] = {};
-+	struct bpf_program *prog[6];
-+	__u32 duration, retval;
-+	struct bpf_map *data_map;
-+	bool passed = false;
-+	const int zero = 0;
-+	u64 result[6];
-+
-+	err = bpf_prog_load("./test_pkt_access.o", BPF_PROG_TYPE_SCHED_CLS,
-+			    &pkt_obj, &pkt_fd);
-+	if (CHECK(err, "prog_load sched cls", "err %d errno %d\n", err, errno))
-+		return;
-+	err = bpf_prog_load_xattr(&attr, &obj, &kfree_skb_fd);
-+	if (CHECK(err, "prog_load fail", "err %d errno %d\n", err, errno))
-+		goto close_prog;
-+
-+	for (i = 0; i < 6; i++) {
-+		prog_name[sizeof(prog_name) - 2] = '1' + i;
-+		prog[i] = bpf_object__find_program_by_title(obj, prog_name);
-+		if (CHECK(!prog[i], "find_prog", "prog %s not found\n", prog_name))
-+			goto close_prog;
-+		link[i] = bpf_program__attach_trace(prog[i]);
-+	}
-+	data_map = bpf_object__find_map_by_name(obj, "fentry_t.bss");
-+	if (CHECK(!data_map, "find_data_map", "data map not found\n"))
-+		goto close_prog;
-+
-+	err = bpf_prog_test_run(pkt_fd, 1, &pkt_v6, sizeof(pkt_v6),
-+				NULL, NULL, &retval, &duration);
-+	CHECK(err || retval, "ipv6",
-+	      "err %d errno %d retval %d duration %d\n",
-+	      err, errno, retval, duration);
-+
-+	err = bpf_map_lookup_elem(bpf_map__fd(data_map), &zero, &result);
-+	if (CHECK(err, "get_result",
-+		  "failed to get output data: %d\n", err))
-+		goto close_prog;
-+
-+	for (i = 0; i < 6; i++)
-+		if (CHECK(result[i] != 1, "result", "bpf_fentry_test%d failed err %ld\n",
-+			  i + 1, result[i]))
-+			goto close_prog;
-+
-+	passed = true;
-+	CHECK_FAIL(!passed);
-+close_prog:
-+	for (i = 0; i < 6; i++)
-+		if (!IS_ERR_OR_NULL(link[i]))
-+			bpf_link__destroy(link[i]);
-+	bpf_object__close(obj);
-+	bpf_object__close(pkt_obj);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/fentry_test.c b/tools/testing/selftests/bpf/progs/fentry_test.c
-new file mode 100644
-index 000000000000..545788bf8d50
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/fentry_test.c
-@@ -0,0 +1,90 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2019 Facebook */
-+#include <linux/bpf.h>
-+#include "bpf_helpers.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct test1 {
-+	ks32 a;
-+};
-+static volatile __u64 test1_result;
-+SEC("fentry/bpf_fentry_test1")
-+int test1(struct test1 *ctx)
-+{
-+	test1_result = ctx->a == 1;
-+	return 0;
++	ftrace_arch_code_modify_prepare();
++	new = ftrace_call_replace(ip, addr);
++	ret = update_ftrace_func(ip, new);
++	ftrace_arch_code_modify_post_process();
++	return ret;
 +}
 +
-+struct test2 {
-+	ks32 a;
-+	ku64 b;
-+};
-+static volatile __u64 test2_result;
-+SEC("fentry/bpf_fentry_test2")
-+int test2(struct test2 *ctx)
++int arch_unregister_ftrace_hack(unsigned long ip, unsigned long addr)
 +{
-+	test2_result = ctx->a == 2 && ctx->b == 3;
-+	return 0;
++	u8 *old;
++	int ret;
++
++	ftrace_arch_code_modify_prepare();
++	old = (void *)ftrace_nop_replace();
++	ret = update_ftrace_func(ip, old);
++	ftrace_arch_code_modify_post_process();
++	return ret;
 +}
 +
-+struct test3 {
-+	ks8 a;
-+	ks32 b;
-+	ku64 c;
-+};
-+static volatile __u64 test3_result;
-+SEC("fentry/bpf_fentry_test3")
-+int test3(struct test3 *ctx)
++int arch_modify_ftrace_hack(unsigned long ip, unsigned long addr)
 +{
-+	test3_result = ctx->a == 4 && ctx->b == 5 && ctx->c == 6;
-+	return 0;
++	return arch_register_ftrace_hack(ip, addr);
 +}
 +
-+struct test4 {
-+	void *a;
-+	ks8 b;
-+	ks32 c;
-+	ku64 d;
-+};
-+static volatile __u64 test4_result;
-+SEC("fentry/bpf_fentry_test4")
-+int test4(struct test4 *ctx)
+ int ftrace_update_ftrace_func(ftrace_func_t func)
+ {
+ 	unsigned long ip = (unsigned long)(&ftrace_call);
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 7c7f518811a6..a8941f113298 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1157,4 +1157,9 @@ static inline u32 bpf_xdp_sock_convert_ctx_access(enum bpf_access_type type,
+ }
+ #endif /* CONFIG_INET */
+ 
++/* workaround */
++int register_ftrace_direct(unsigned long ip, unsigned long addr);
++int unregister_ftrace_direct(unsigned long ip, unsigned long addr);
++int modify_ftrace_direct(unsigned long ip, unsigned long addr);
++
+ #endif /* _LINUX_BPF_H */
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index df82d5a42b23..1bacf70e6509 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2140,6 +2140,36 @@ int __weak skb_copy_bits(const struct sk_buff *skb, int offset, void *to,
+ 	return -EFAULT;
+ }
+ 
++int __weak arch_register_ftrace_hack(unsigned long ip, unsigned long addr)
 +{
-+	test4_result = ctx->a == (void *)7 && ctx->b == 8 && ctx->c == 9 &&
-+		ctx->d == 10;
-+	return 0;
++	return -ENOTSUPP;
 +}
 +
-+struct test5 {
-+	ku64 a;
-+	void *b;
-+	ks16 c;
-+	ks32 d;
-+	ku64 e;
-+};
-+static volatile __u64 test5_result;
-+SEC("fentry/bpf_fentry_test5")
-+int test5(struct test5 *ctx)
++int __weak register_ftrace_direct(unsigned long ip, unsigned long addr)
 +{
-+	test5_result = ctx->a == 11 && ctx->b == (void *)12 && ctx->c == 13 &&
-+		ctx->d == 14 && ctx->e == 15;
-+	return 0;
++	return arch_register_ftrace_hack(ip, addr);
 +}
 +
-+struct test6 {
-+	ku64 a;
-+	void *b;
-+	ks16 c;
-+	ks32 d;
-+	void *e;
-+	ks64 f;
-+};
-+static volatile __u64 test6_result;
-+SEC("fentry/bpf_fentry_test6")
-+int test6(struct test6 *ctx)
++int __weak arch_unregister_ftrace_hack(unsigned long ip, unsigned long addr)
 +{
-+	test6_result = ctx->a == 16 && ctx->b == (void *)17 && ctx->c == 18 &&
-+		ctx->d == 19 && ctx->e == (void *)20 && ctx->f == 21;
-+	return 0;
++	return -ENOTSUPP;
 +}
++
++int __weak unregister_ftrace_direct(unsigned long ip, unsigned long addr)
++{
++	return arch_unregister_ftrace_hack(ip, addr);
++}
++
++int __weak arch_modify_ftrace_hack(unsigned long ip, unsigned long addr)
++{
++	return -ENOTSUPP;
++}
++
++int __weak modify_ftrace_direct(unsigned long ip, unsigned long addr)
++{
++	return arch_modify_ftrace_hack(ip, addr);
++}
++
+ DEFINE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
+ EXPORT_SYMBOL(bpf_stats_enabled_key);
+ 
 -- 
 2.23.0
 
