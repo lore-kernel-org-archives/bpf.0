@@ -2,105 +2,128 @@ Return-Path: <SRS0=aaSJ=Y2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCE10CA9EC7
-	for <bpf@archiver.kernel.org>; Sat,  2 Nov 2019 11:02:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E32ECCA9ED1
+	for <bpf@archiver.kernel.org>; Sat,  2 Nov 2019 11:09:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A96CF20862
-	for <bpf@archiver.kernel.org>; Sat,  2 Nov 2019 11:02:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C50C120862
+	for <bpf@archiver.kernel.org>; Sat,  2 Nov 2019 11:09:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726329AbfKBLBz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 2 Nov 2019 07:01:55 -0400
-Received: from mga18.intel.com ([134.134.136.126]:24973 "EHLO mga18.intel.com"
+        id S1726634AbfKBLJm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 2 Nov 2019 07:09:42 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:42172 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726163AbfKBLBz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 2 Nov 2019 07:01:55 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Nov 2019 04:01:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,259,1569308400"; 
-   d="scan'208";a="206632673"
-Received: from mohseni-mobl2.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.252.42.93])
-  by FMSMGA003.fm.intel.com with ESMTP; 02 Nov 2019 04:01:44 -0700
-Subject: Re: [PATCH 11/19] net/xdp: set FOLL_PIN via pin_user_pages()
-To:     John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-References: <20191030224930.3990755-1-jhubbard@nvidia.com>
- <20191030224930.3990755-12-jhubbard@nvidia.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
-Message-ID: <67cd4960-bc17-9603-8d4d-b7b2f68bb373@intel.com>
-Date:   Sat, 2 Nov 2019 12:01:43 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S1726163AbfKBLJl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 2 Nov 2019 07:09:41 -0400
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 16DDEC04B940
+        for <bpf@vger.kernel.org>; Sat,  2 Nov 2019 11:09:41 +0000 (UTC)
+Received: by mail-lf1-f71.google.com with SMTP id b14so2379471lfi.8
+        for <bpf@vger.kernel.org>; Sat, 02 Nov 2019 04:09:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=LPiWhS+g/ovqClLwPSMJfIyTqzArOrHKO9TMIvpx0NE=;
+        b=JY3dmuwXEByFioRP+taEyNkhTXbCA1ru1N4KCsyZolXE/Gd9tax/I+F9O2FvXYDdtI
+         VHSt/JHrrWOCk6Y2OTtkMyQ5Ot7WJjDmMFcxwg4jBMq444eZ0pSEn61acCvvok1dSk+x
+         wmsNpFOQR9YKzgT2LebX3bZDvJ79m3aqXPgT5TXOt0J+nlQcQHQQ5hbt0xyPldv0Cm/n
+         dQrYLDg6MKe4JDZnbbgL43q3hFk0J7vA3IMvMqqhETOfjVHPFBeuNddguI2n84nIBF2n
+         DpODNZAEsn05UiNxYzWOblTsb/LmoCCdui172+DWF5Kd4+sX2WY5PrcnD56EVVDX2z0e
+         OyVw==
+X-Gm-Message-State: APjAAAVE9uNdwtDoSmtExfjnUv701vMVpgddY81UTB2TiRGoLVbTpmKn
+        r39tSj5s61+wqg5Shq3lLx3vl5/JdkRafXof9h4nO6a9JH8ndEI4ldIu+8mXCtYLKuQYm7BzzRk
+        dgkbZDHpUdhYY
+X-Received: by 2002:a19:f710:: with SMTP id z16mr5074341lfe.47.1572692979161;
+        Sat, 02 Nov 2019 04:09:39 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqwqkeJSegYVm4t/jyXZ3fXIJ9i3XLUQcIeWxU31drbml8IiJz0UdXIh7U8jwC+LsyjmiHS4sQ==
+X-Received: by 2002:a19:f710:: with SMTP id z16mr5074326lfe.47.1572692978993;
+        Sat, 02 Nov 2019 04:09:38 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a00:7660:6da:443::2])
+        by smtp.gmail.com with ESMTPSA id a2sm4013102lfh.73.2019.11.02.04.09.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Nov 2019 04:09:38 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id BB0E41818B6; Sat,  2 Nov 2019 12:09:37 +0100 (CET)
+Subject: [PATCH bpf-next v6 1/5] libbpf: Fix error handling in
+ bpf_map__reuse_fd()
+From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Date:   Sat, 02 Nov 2019 12:09:37 +0100
+Message-ID: <157269297769.394725.12634985106772698611.stgit@toke.dk>
+In-Reply-To: <157269297658.394725.10672376245672095901.stgit@toke.dk>
+References: <157269297658.394725.10672376245672095901.stgit@toke.dk>
+User-Agent: StGit/0.20
 MIME-Version: 1.0
-In-Reply-To: <20191030224930.3990755-12-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2019-10-30 23:49, John Hubbard wrote:
-> Convert net/xdp to use the new pin_longterm_pages() call, which sets
-> FOLL_PIN. Setting FOLL_PIN is now required for code that requires
-> tracking of pinned pages.
-> 
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-Acked-by: Björn Töpel <bjorn.topel@intel.com>
+bpf_map__reuse_fd() was calling close() in the error path before returning
+an error value based on errno. However, close can change errno, so that can
+lead to potentially misleading error messages. Instead, explicitly store
+errno in the err variable before each goto.
 
-> ---
->   net/xdp/xdp_umem.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
-> index 16d5f353163a..4d56dfb1139a 100644
-> --- a/net/xdp/xdp_umem.c
-> +++ b/net/xdp/xdp_umem.c
-> @@ -285,8 +285,8 @@ static int xdp_umem_pin_pages(struct xdp_umem *umem)
->   		return -ENOMEM;
->   
->   	down_read(&current->mm->mmap_sem);
-> -	npgs = get_user_pages(umem->address, umem->npgs,
-> -			      gup_flags | FOLL_LONGTERM, &umem->pgs[0], NULL);
-> +	npgs = pin_longterm_pages(umem->address, umem->npgs, gup_flags,
-> +				  &umem->pgs[0], NULL);
->   	up_read(&current->mm->mmap_sem);
->   
->   	if (npgs != umem->npgs) {
-> 
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+ tools/lib/bpf/libbpf.c |   14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index d71631a01926..ce5ef3ddd263 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -1916,16 +1916,22 @@ int bpf_map__reuse_fd(struct bpf_map *map, int fd)
+ 		return -errno;
+ 
+ 	new_fd = open("/", O_RDONLY | O_CLOEXEC);
+-	if (new_fd < 0)
++	if (new_fd < 0) {
++		err = -errno;
+ 		goto err_free_new_name;
++	}
+ 
+ 	new_fd = dup3(fd, new_fd, O_CLOEXEC);
+-	if (new_fd < 0)
++	if (new_fd < 0) {
++		err = -errno;
+ 		goto err_close_new_fd;
++	}
+ 
+ 	err = zclose(map->fd);
+-	if (err)
++	if (err) {
++		err = -errno;
+ 		goto err_close_new_fd;
++	}
+ 	free(map->name);
+ 
+ 	map->fd = new_fd;
+@@ -1944,7 +1950,7 @@ int bpf_map__reuse_fd(struct bpf_map *map, int fd)
+ 	close(new_fd);
+ err_free_new_name:
+ 	free(new_name);
+-	return -errno;
++	return err;
+ }
+ 
+ int bpf_map__resize(struct bpf_map *map, __u32 max_entries)
+
