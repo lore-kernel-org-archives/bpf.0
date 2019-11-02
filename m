@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6CFECA9ED1
-	for <bpf@archiver.kernel.org>; Sat,  2 Nov 2019 22:01:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76CAFCA9ED0
+	for <bpf@archiver.kernel.org>; Sat,  2 Nov 2019 22:01:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 77A6E21897
-	for <bpf@archiver.kernel.org>; Sat,  2 Nov 2019 22:01:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 417F820862
+	for <bpf@archiver.kernel.org>; Sat,  2 Nov 2019 22:01:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1572732073;
-	bh=vezEvUx+1MAeORsw1Y8DO2vJwH0R6EVYKdCFFAR1+k8=;
+	s=default; t=1572732074;
+	bh=Y3Rfiue9iARPkI2YlKm5yihTPrmyOpiyOo0ebMSylDk=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=DxP8xnHYas43UqhT71p7q6WUy9vVdNNpiH6OwPzjQ3S4GIzaEXJKnXie8ZcLz8kVv
-	 AAcRUG9PpY+HLX2uVV6fBx5wX6ACp+5/oEke+Is3L20R9x9hzj311aC3pehZI7gmLR
-	 TLYadWoa1wix22Hvb8CdUa8JIn96KRIgrKbwX02w=
+	b=SNXrwY8wxmFilbLaihU6uxByE/qZMqsydaL4QBzwJaBu8UnDpJKXyYDlr4qV7OBtp
+	 ac7uy2H/qHPU+L2fRIIhNuhnizepSUVgVUUqBf+9u0/wEDw1z9XygeUFP/ZbVpdD0h
+	 7dTluqwZOOKNCHQVqs+mBs/8sgAMPlhjiQnHKoOM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727304AbfKBWBN convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sat, 2 Nov 2019 18:01:13 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:62886 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727300AbfKBWBM (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 2 Nov 2019 18:01:12 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA2LxW5P018128
-        for <bpf@vger.kernel.org>; Sat, 2 Nov 2019 15:01:11 -0700
+        id S1727300AbfKBWBO convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sat, 2 Nov 2019 18:01:14 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:43230 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727267AbfKBWBN (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 2 Nov 2019 18:01:13 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA2LwKTH020828
+        for <bpf@vger.kernel.org>; Sat, 2 Nov 2019 15:01:12 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2w17hpt2tn-14
+        by mx0a-00082601.pphosted.com with ESMTP id 2w16wk24u3-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sat, 02 Nov 2019 15:01:11 -0700
-Received: from 2401:db00:12:9028:face:0:29:0 (2620:10d:c0a8:1b::d) by
+        for <bpf@vger.kernel.org>; Sat, 02 Nov 2019 15:01:12 -0700
+Received: from 2401:db00:12:909f:face:0:3:0 (2620:10d:c0a8:1b::d) by
  mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Sat, 2 Nov 2019 15:00:31 -0700
+ 15.1.1713.5; Sat, 2 Nov 2019 15:00:35 -0700
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id ECCCA760F5C; Sat,  2 Nov 2019 15:00:29 -0700 (PDT)
+        id 056C0760F5C; Sat,  2 Nov 2019 15:00:34 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -47,9 +47,9 @@ CC:     <daniel@iogearbox.net>, <peterz@infradead.org>,
         <rostedt@goodmis.org>, <x86@kernel.org>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 2/7] bpf: refactor x86 JIT into helpers
-Date:   Sat, 2 Nov 2019 15:00:20 -0700
-Message-ID: <20191102220025.2475981-3-ast@kernel.org>
+Subject: [PATCH bpf-next 4/7] libbpf: Add support to attach to fentry/fexit tracing progs
+Date:   Sat, 2 Nov 2019 15:00:22 -0700
+Message-ID: <20191102220025.2475981-5-ast@kernel.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191102220025.2475981-1-ast@kernel.org>
 References: <20191102220025.2475981-1-ast@kernel.org>
@@ -59,219 +59,167 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
  definitions=2019-11-02_13:2019-11-01,2019-11-02 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
- impostorscore=0 mlxscore=0 phishscore=0 clxscore=1015 mlxlogscore=595
- spamscore=0 suspectscore=1 bulkscore=0 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1911020218
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 mlxscore=0
+ bulkscore=0 clxscore=1034 malwarescore=0 mlxlogscore=912
+ priorityscore=1501 impostorscore=0 phishscore=0 suspectscore=3
+ lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1908290000 definitions=main-1911020218
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Refactor x86 JITing of LDX, STX, CALL instructions into separate helper
-functions.  No functional changes in LDX and STX helpers.  There is a minor
-change in CALL helper. It will populate target address correctly on the first
-pass of JIT instead of second pass. That won't reduce total number of JIT
-passes though.
+Teach libbpf to recognize tracing programs types and attach them to
+fentry/fexit.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- arch/x86/net/bpf_jit_comp.c | 151 +++++++++++++++++++++++-------------
- 1 file changed, 97 insertions(+), 54 deletions(-)
+ tools/include/uapi/linux/bpf.h |  2 ++
+ tools/lib/bpf/libbpf.c         | 55 +++++++++++++++++++++++++++++-----
+ tools/lib/bpf/libbpf.h         |  2 ++
+ tools/lib/bpf/libbpf.map       |  1 +
+ 4 files changed, 53 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 8cd23d8309bf..e73fc8a6d665 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -390,6 +390,100 @@ static void emit_mov_reg(u8 **pprog, bool is64, u32 dst_reg, u32 src_reg)
- 	*pprog = prog;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index df6809a76404..69c200e6e696 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -201,6 +201,8 @@ enum bpf_attach_type {
+ 	BPF_CGROUP_GETSOCKOPT,
+ 	BPF_CGROUP_SETSOCKOPT,
+ 	BPF_TRACE_RAW_TP,
++	BPF_TRACE_FENTRY,
++	BPF_TRACE_FEXIT,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
+ 
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 7aa2a2a22cef..03e784f36dd9 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -3744,7 +3744,7 @@ bpf_object__load_progs(struct bpf_object *obj, int log_level)
+ 	return 0;
  }
  
-+/* LDX: dst_reg = *(u8*)(src_reg + off) */
-+static void emit_ldx(u8 **pprog, u32 size, u32 dst_reg, u32 src_reg, int off)
+-static int libbpf_attach_btf_id_by_name(const char *name, __u32 *btf_id);
++static int libbpf_attach_btf_id_by_name(const char *name, __u32 *btf_id, bool raw_tp);
+ 
+ static struct bpf_object *
+ __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
+@@ -3811,7 +3811,9 @@ __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
+ 		bpf_program__set_type(prog, prog_type);
+ 		bpf_program__set_expected_attach_type(prog, attach_type);
+ 		if (prog_type == BPF_PROG_TYPE_TRACING) {
+-			err = libbpf_attach_btf_id_by_name(prog->section_name, &btf_id);
++			err = libbpf_attach_btf_id_by_name(prog->section_name,
++							   &btf_id,
++							   attach_type == BPF_TRACE_RAW_TP);
+ 			if (err)
+ 				goto out;
+ 			prog->attach_btf_id = btf_id;
+@@ -4813,6 +4815,10 @@ static const struct {
+ 	BPF_PROG_SEC("raw_tp/",			BPF_PROG_TYPE_RAW_TRACEPOINT),
+ 	BPF_PROG_BTF("tp_btf/",			BPF_PROG_TYPE_TRACING,
+ 						BPF_TRACE_RAW_TP),
++	BPF_PROG_BTF("fentry/",			BPF_PROG_TYPE_TRACING,
++						BPF_TRACE_FENTRY),
++	BPF_PROG_BTF("fexit/",			BPF_PROG_TYPE_TRACING,
++						BPF_TRACE_FEXIT),
+ 	BPF_PROG_SEC("xdp",			BPF_PROG_TYPE_XDP),
+ 	BPF_PROG_SEC("perf_event",		BPF_PROG_TYPE_PERF_EVENT),
+ 	BPF_PROG_SEC("lwt_in",			BPF_PROG_TYPE_LWT_IN),
+@@ -4930,7 +4936,7 @@ int libbpf_prog_type_by_name(const char *name, enum bpf_prog_type *prog_type,
+ }
+ 
+ #define BTF_PREFIX "btf_trace_"
+-static int libbpf_attach_btf_id_by_name(const char *name, __u32 *btf_id)
++static int libbpf_attach_btf_id_by_name(const char *name, __u32 *btf_id, bool raw_tp)
+ {
+ 	struct btf *btf = bpf_core_find_kernel_btf();
+ 	char raw_tp_btf_name[128] = BTF_PREFIX;
+@@ -4950,10 +4956,14 @@ static int libbpf_attach_btf_id_by_name(const char *name, __u32 *btf_id)
+ 			continue;
+ 		if (strncmp(name, section_names[i].sec, section_names[i].len))
+ 			continue;
+-		/* prepend "btf_trace_" prefix per kernel convention */
+-		strncat(dst, name + section_names[i].len,
+-			sizeof(raw_tp_btf_name) - sizeof(BTF_PREFIX));
+-		ret = btf__find_by_name(btf, raw_tp_btf_name);
++		if (!raw_tp) {
++			ret = btf__find_by_name(btf, name + section_names[i].len);
++		} else {
++			/* prepend "btf_trace_" prefix per kernel convention */
++			strncat(dst, name + section_names[i].len,
++				sizeof(raw_tp_btf_name) - sizeof(BTF_PREFIX));
++			ret = btf__find_by_name(btf, raw_tp_btf_name);
++		}
+ 		if (ret <= 0) {
+ 			pr_warn("%s is not found in vmlinux BTF\n", dst);
+ 			goto out;
+@@ -5594,6 +5604,37 @@ struct bpf_link *bpf_program__attach_raw_tracepoint(struct bpf_program *prog,
+ 	return (struct bpf_link *)link;
+ }
+ 
++struct bpf_link *bpf_program__attach_trace(struct bpf_program *prog)
 +{
-+	u8 *prog = *pprog;
-+	int cnt = 0;
++	char errmsg[STRERR_BUFSIZE];
++	struct bpf_link_fd *link;
++	int prog_fd, pfd;
 +
-+	switch (size) {
-+	case BPF_B:
-+		/* Emit 'movzx rax, byte ptr [rax + off]' */
-+		EMIT3(add_2mod(0x48, src_reg, dst_reg), 0x0F, 0xB6);
-+		break;
-+	case BPF_H:
-+		/* Emit 'movzx rax, word ptr [rax + off]' */
-+		EMIT3(add_2mod(0x48, src_reg, dst_reg), 0x0F, 0xB7);
-+		break;
-+	case BPF_W:
-+		/* Emit 'mov eax, dword ptr [rax+0x14]' */
-+		if (is_ereg(dst_reg) || is_ereg(src_reg))
-+			EMIT2(add_2mod(0x40, src_reg, dst_reg), 0x8B);
-+		else
-+			EMIT1(0x8B);
-+		break;
-+	case BPF_DW:
-+		/* Emit 'mov rax, qword ptr [rax+0x14]' */
-+		EMIT2(add_2mod(0x48, src_reg, dst_reg), 0x8B);
-+		break;
++	prog_fd = bpf_program__fd(prog);
++	if (prog_fd < 0) {
++		pr_warn("program '%s': can't attach before loaded\n",
++			bpf_program__title(prog, false));
++		return ERR_PTR(-EINVAL);
 +	}
-+	/*
-+	 * If insn->off == 0 we can save one extra byte, but
-+	 * special case of x86 R13 which always needs an offset
-+	 * is not worth the hassle
-+	 */
-+	if (is_imm8(off))
-+		EMIT2(add_2reg(0x40, src_reg, dst_reg), off);
-+	else
-+		EMIT1_off32(add_2reg(0x80, src_reg, dst_reg), off);
-+	*pprog = prog;
++
++	link = malloc(sizeof(*link));
++	if (!link)
++		return ERR_PTR(-ENOMEM);
++	link->link.destroy = &bpf_link__destroy_fd;
++
++	pfd = bpf_raw_tracepoint_open(NULL, prog_fd);
++	if (pfd < 0) {
++		pfd = -errno;
++		free(link);
++		pr_warn("program '%s': failed to attach to trace: %s\n",
++			bpf_program__title(prog, false),
++			libbpf_strerror_r(pfd, errmsg, sizeof(errmsg)));
++		return ERR_PTR(pfd);
++	}
++	link->fd = pfd;
++	return (struct bpf_link *)link;
 +}
 +
-+/* STX: *(u8*)(dst_reg + off) = src_reg */
-+static void emit_stx(u8 **pprog, u32 size, u32 dst_reg, u32 src_reg, int off)
-+{
-+	u8 *prog = *pprog;
-+	int cnt = 0;
-+
-+	switch (size) {
-+	case BPF_B:
-+		/* Emit 'mov byte ptr [rax + off], al' */
-+		if (is_ereg(dst_reg) || is_ereg(src_reg) ||
-+		    /* We have to add extra byte for x86 SIL, DIL regs */
-+		    src_reg == BPF_REG_1 || src_reg == BPF_REG_2)
-+			EMIT2(add_2mod(0x40, dst_reg, src_reg), 0x88);
-+		else
-+			EMIT1(0x88);
-+		break;
-+	case BPF_H:
-+		if (is_ereg(dst_reg) || is_ereg(src_reg))
-+			EMIT3(0x66, add_2mod(0x40, dst_reg, src_reg), 0x89);
-+		else
-+			EMIT2(0x66, 0x89);
-+		break;
-+	case BPF_W:
-+		if (is_ereg(dst_reg) || is_ereg(src_reg))
-+			EMIT2(add_2mod(0x40, dst_reg, src_reg), 0x89);
-+		else
-+			EMIT1(0x89);
-+		break;
-+	case BPF_DW:
-+		EMIT2(add_2mod(0x48, dst_reg, src_reg), 0x89);
-+		break;
-+	}
-+	if (is_imm8(off))
-+		EMIT2(add_2reg(0x40, dst_reg, src_reg), off);
-+	else
-+		EMIT1_off32(add_2reg(0x80, dst_reg, src_reg),
-+			    off);
-+	*pprog = prog;
-+}
-+
-+static int emit_call(u8 **pprog, void *func, void *ip)
-+{
-+	u8 *prog = *pprog;
-+	int cnt = 0;
-+	s64 offset;
-+
-+	offset = func - (ip + 5);
-+	if (!is_simm32(offset)) {
-+		pr_err("Target call %p is out of range\n", func);
-+		return -EINVAL;
-+	}
-+	EMIT1_off32(0xE8, offset);
-+	*pprog = prog;
-+	return 0;
-+}
+ enum bpf_perf_event_ret
+ bpf_perf_event_read_simple(void *mmap_mem, size_t mmap_size, size_t page_size,
+ 			   void **copy_mem, size_t *copy_size,
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 6ddc0419337b..0f53b0e0e135 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -248,6 +248,8 @@ LIBBPF_API struct bpf_link *
+ bpf_program__attach_raw_tracepoint(struct bpf_program *prog,
+ 				   const char *tp_name);
  
- static bool ex_handler_bpf(const struct exception_table_entry *x,
- 			   struct pt_regs *regs, int trapnr,
-@@ -773,68 +867,22 @@ st:			if (is_imm8(insn->off))
++LIBBPF_API struct bpf_link *
++bpf_program__attach_trace(struct bpf_program *prog);
+ struct bpf_insn;
  
- 			/* STX: *(u8*)(dst_reg + off) = src_reg */
- 		case BPF_STX | BPF_MEM | BPF_B:
--			/* Emit 'mov byte ptr [rax + off], al' */
--			if (is_ereg(dst_reg) || is_ereg(src_reg) ||
--			    /* We have to add extra byte for x86 SIL, DIL regs */
--			    src_reg == BPF_REG_1 || src_reg == BPF_REG_2)
--				EMIT2(add_2mod(0x40, dst_reg, src_reg), 0x88);
--			else
--				EMIT1(0x88);
--			goto stx;
- 		case BPF_STX | BPF_MEM | BPF_H:
--			if (is_ereg(dst_reg) || is_ereg(src_reg))
--				EMIT3(0x66, add_2mod(0x40, dst_reg, src_reg), 0x89);
--			else
--				EMIT2(0x66, 0x89);
--			goto stx;
- 		case BPF_STX | BPF_MEM | BPF_W:
--			if (is_ereg(dst_reg) || is_ereg(src_reg))
--				EMIT2(add_2mod(0x40, dst_reg, src_reg), 0x89);
--			else
--				EMIT1(0x89);
--			goto stx;
- 		case BPF_STX | BPF_MEM | BPF_DW:
--			EMIT2(add_2mod(0x48, dst_reg, src_reg), 0x89);
--stx:			if (is_imm8(insn->off))
--				EMIT2(add_2reg(0x40, dst_reg, src_reg), insn->off);
--			else
--				EMIT1_off32(add_2reg(0x80, dst_reg, src_reg),
--					    insn->off);
-+			emit_stx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn->off);
- 			break;
- 
- 			/* LDX: dst_reg = *(u8*)(src_reg + off) */
- 		case BPF_LDX | BPF_MEM | BPF_B:
- 		case BPF_LDX | BPF_PROBE_MEM | BPF_B:
--			/* Emit 'movzx rax, byte ptr [rax + off]' */
--			EMIT3(add_2mod(0x48, src_reg, dst_reg), 0x0F, 0xB6);
--			goto ldx;
- 		case BPF_LDX | BPF_MEM | BPF_H:
- 		case BPF_LDX | BPF_PROBE_MEM | BPF_H:
--			/* Emit 'movzx rax, word ptr [rax + off]' */
--			EMIT3(add_2mod(0x48, src_reg, dst_reg), 0x0F, 0xB7);
--			goto ldx;
- 		case BPF_LDX | BPF_MEM | BPF_W:
- 		case BPF_LDX | BPF_PROBE_MEM | BPF_W:
--			/* Emit 'mov eax, dword ptr [rax+0x14]' */
--			if (is_ereg(dst_reg) || is_ereg(src_reg))
--				EMIT2(add_2mod(0x40, src_reg, dst_reg), 0x8B);
--			else
--				EMIT1(0x8B);
--			goto ldx;
- 		case BPF_LDX | BPF_MEM | BPF_DW:
- 		case BPF_LDX | BPF_PROBE_MEM | BPF_DW:
--			/* Emit 'mov rax, qword ptr [rax+0x14]' */
--			EMIT2(add_2mod(0x48, src_reg, dst_reg), 0x8B);
--ldx:			/*
--			 * If insn->off == 0 we can save one extra byte, but
--			 * special case of x86 R13 which always needs an offset
--			 * is not worth the hassle
--			 */
--			if (is_imm8(insn->off))
--				EMIT2(add_2reg(0x40, src_reg, dst_reg), insn->off);
--			else
--				EMIT1_off32(add_2reg(0x80, src_reg, dst_reg),
--					    insn->off);
-+			emit_ldx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn->off);
- 			if (BPF_MODE(insn->code) == BPF_PROBE_MEM) {
- 				struct exception_table_entry *ex;
- 				u8 *_insn = image + proglen;
-@@ -899,13 +947,8 @@ xadd:			if (is_imm8(insn->off))
- 			/* call */
- 		case BPF_JMP | BPF_CALL:
- 			func = (u8 *) __bpf_call_base + imm32;
--			jmp_offset = func - (image + addrs[i]);
--			if (!imm32 || !is_simm32(jmp_offset)) {
--				pr_err("unsupported BPF func %d addr %p image %p\n",
--				       imm32, func, image);
-+			if (!imm32 || emit_call(&prog, func, image + addrs[i - 1]))
- 				return -EINVAL;
--			}
--			EMIT1_off32(0xE8, jmp_offset);
- 			break;
- 
- 		case BPF_JMP | BPF_TAIL_CALL:
+ /*
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 86173cbb159d..f7b4e062d704 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -198,6 +198,7 @@ LIBBPF_0.0.6 {
+ 		bpf_map__set_pin_path;
+ 		bpf_object__open_file;
+ 		bpf_object__open_mem;
++		bpf_program__attach_trace;
+ 		bpf_program__get_expected_attach_type;
+ 		bpf_program__get_type;
+ 		bpf_program__is_tracing;
 -- 
 2.23.0
 
