@@ -2,40 +2,43 @@ Return-Path: <SRS0=ycrV=Y3=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57C96CA9ED4
-	for <bpf@archiver.kernel.org>; Sun,  3 Nov 2019 21:20:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D95DCA9EB0
+	for <bpf@archiver.kernel.org>; Sun,  3 Nov 2019 21:20:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2C06F21D71
-	for <bpf@archiver.kernel.org>; Sun,  3 Nov 2019 21:20:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0DFEF21A4A
+	for <bpf@archiver.kernel.org>; Sun,  3 Nov 2019 21:20:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="OAyRSW4f"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="qPhYOOZQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728471AbfKCVSW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1728459AbfKCVSW (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Sun, 3 Nov 2019 16:18:22 -0500
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:17504 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728330AbfKCVSU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 3 Nov 2019 16:18:20 -0500
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dbf441f0002>; Sun, 03 Nov 2019 13:18:23 -0800
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:6751 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728239AbfKCVSR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 3 Nov 2019 16:18:17 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dbf441d0000>; Sun, 03 Nov 2019 13:18:22 -0800
 Received: from hqmail.nvidia.com ([172.20.161.6])
   by hqpgpgate102.nvidia.com (PGP Universal service);
-  Sun, 03 Nov 2019 13:18:18 -0800
+  Sun, 03 Nov 2019 13:18:16 -0800
 X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Sun, 03 Nov 2019 13:18:18 -0800
-Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sun, 3 Nov
- 2019 21:18:18 +0000
-Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Sun, 3 Nov 2019 21:18:18 +0000
+        by hqpgpgate102.nvidia.com on Sun, 03 Nov 2019 13:18:16 -0800
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sun, 3 Nov
+ 2019 21:18:15 +0000
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sun, 3 Nov
+ 2019 21:18:14 +0000
+Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Sun, 3 Nov 2019 21:18:14 +0000
 Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5dbf44190004>; Sun, 03 Nov 2019 13:18:17 -0800
+        id <B5dbf44160002>; Sun, 03 Nov 2019 13:18:14 -0800
 From:   John Hubbard <jhubbard@nvidia.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 CC:     Al Viro <viro@zeniv.linux.org.uk>,
@@ -53,12 +56,11 @@ CC:     Al Viro <viro@zeniv.linux.org.uk>,
         Jonathan Corbet <corbet@lwn.net>,
         =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
         Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Michal Hocko <mhocko@suse.com>,
         Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
+        "Paul Mackerras" <paulus@samba.org>, Shuah Khan <shuah@kernel.org>,
         Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
         <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
         <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
@@ -66,10 +68,11 @@ CC:     Al Viro <viro@zeniv.linux.org.uk>,
         <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
         <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
         <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v2 14/18] vfio, mm: pin_longterm_pages (FOLL_PIN) and put_user_page() conversion
-Date:   Sun, 3 Nov 2019 13:18:09 -0800
-Message-ID: <20191103211813.213227-15-jhubbard@nvidia.com>
+        John Hubbard <jhubbard@nvidia.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCH v2 01/18] mm/gup: pass flags arg to __gup_device_* functions
+Date:   Sun, 3 Nov 2019 13:17:56 -0800
+Message-ID: <20191103211813.213227-2-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191103211813.213227-1-jhubbard@nvidia.com>
 References: <20191103211813.213227-1-jhubbard@nvidia.com>
@@ -78,89 +81,143 @@ X-NVConfidentiality: public
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1572815904; bh=1iOGN4TRt8PvqjiLdwM6f6zOKk3A3b0FSz4UPjmoAC4=;
+        t=1572815902; bh=HdyyT2HHYT+Tbem5UekR/x2u517mEiU0cIzjorn54wk=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
          In-Reply-To:References:MIME-Version:X-NVConfidentiality:
          Content-Transfer-Encoding:Content-Type;
-        b=OAyRSW4fz9UjixnJPOQaglpLfSXgi7hZ6p50OoOhrLZfb106XYVyWfNelOGyOefln
-         4Xf4SxQgL5HfXtUn5ZluPWd49rtAZPWLpP38mGIQrFtKjFzur2WF8ZuraePQI8ImgT
-         EGXdW1OXicEbqsELOmkgg2iKfHyO0JV2kCE6oBgl5EZnTOiPdBptLS0mRdNxS8xcbm
-         +PUEHlLAjGdEon1mRW51BRYPtc//WiHuZwc3shxSnuSODuNefZNmXSZ1aNdRq8tjjl
-         S+8nLOg7/Xt76GP87RNiwGivmY98faMDXIItZR+tvODSGWV/Ef1Gjiov8uMVg5dZCl
-         o1rjs1yN+iGCQ==
+        b=qPhYOOZQeYvmkZ37VnkaK5PuejNVuQRAi79V4WuaqXjLdXz81YACYPx73LwQH1719
+         Akz+DeaYoOSNUxhLrTOwwznoAZMdBM2JIY90lE+LD1VcAqoXjhrpsPEoBUsiJliiDi
+         r4j4etq+VjC74IuW2pM55MINVwmirCvmxvsKTMtzePKaH5MzbETSQIVMx1lAwYTenf
+         9SUucpyx8HMuay3cIyB3/apjVB4ONfewe5nx3ideL37FwNHkRFF/HfgHMxbcgmgeWR
+         R0DufhaWMVVzG/qkTMxcJdhlOAjVZkGBCBmil80WFbQnNsR8ZZsq3pzYRoKN6MI6JY
+         9zneZB2sdHgxg==
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-1. Change vfio from get_user_pages(FOLL_LONGTERM), to
-pin_longterm_pages(), which sets both FOLL_LONGTERM and FOLL_PIN.
+A subsequent patch requires access to gup flags, so
+pass the flags argument through to the __gup_device_*
+functions.
 
-2. Because all FOLL_PIN-acquired pages must be released via
-put_user_page(), also convert the put_page() call over to
-put_user_pages().
+Also placate checkpatch.pl by shortening a nearby line.
 
-Note that this effectively changes the code's behavior in
-vfio_iommu_type1.c: put_pfn(): it now ultimately calls
-set_page_dirty_lock(), instead of set_page_dirty(). This is
-probably more accurate.
-
-As Christoph Hellwig put it, "set_page_dirty() is only safe if we are
-dealing with a file backed page where we have reference on the inode it
-hangs off." [1]
-
-[1] https://lore.kernel.org/r/20190723153640.GB720@lst.de
-
-Cc: Alex Williamson <alex.williamson@redhat.com>
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
- drivers/vfio/vfio_iommu_type1.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ mm/gup.c | 28 ++++++++++++++++++----------
+ 1 file changed, 18 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type=
-1.c
-index d864277ea16f..795e13f3ef08 100644
---- a/drivers/vfio/vfio_iommu_type1.c
-+++ b/drivers/vfio/vfio_iommu_type1.c
-@@ -327,9 +327,8 @@ static int put_pfn(unsigned long pfn, int prot)
- {
- 	if (!is_invalid_reserved_pfn(pfn)) {
- 		struct page *page =3D pfn_to_page(pfn);
--		if (prot & IOMMU_WRITE)
--			SetPageDirty(page);
--		put_page(page);
-+
-+		put_user_pages_dirty_lock(&page, 1, prot & IOMMU_WRITE);
- 		return 1;
- 	}
- 	return 0;
-@@ -349,11 +348,11 @@ static int vaddr_get_pfn(struct mm_struct *mm, unsign=
-ed long vaddr,
+diff --git a/mm/gup.c b/mm/gup.c
+index 8f236a335ae9..85caf76b3012 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -1890,7 +1890,8 @@ static int gup_pte_range(pmd_t pmd, unsigned long add=
+r, unsigned long end,
 =20
- 	down_read(&mm->mmap_sem);
- 	if (mm =3D=3D current->mm) {
--		ret =3D get_user_pages(vaddr, 1, flags | FOLL_LONGTERM, page,
--				     vmas);
-+		ret =3D pin_longterm_pages(vaddr, 1, flags, page, vmas);
- 	} else {
--		ret =3D get_user_pages_remote(NULL, mm, vaddr, 1, flags, page,
--					    vmas, NULL);
-+		ret =3D pin_longterm_pages_remote(NULL, mm, vaddr, 1,
-+						flags, page, vmas,
-+						NULL);
- 		/*
- 		 * The lifetime of a vaddr_get_pfn() page pin is
- 		 * userspace-controlled. In the fs-dax case this could
-@@ -363,7 +362,7 @@ static int vaddr_get_pfn(struct mm_struct *mm, unsigned=
- long vaddr,
- 		 */
- 		if (ret > 0 && vma_is_fsdax(vmas[0])) {
- 			ret =3D -EOPNOTSUPP;
--			put_page(page[0]);
-+			put_user_page(page[0]);
- 		}
+ #if defined(CONFIG_ARCH_HAS_PTE_DEVMAP) && defined(CONFIG_TRANSPARENT_HUGE=
+PAGE)
+ static int __gup_device_huge(unsigned long pfn, unsigned long addr,
+-		unsigned long end, struct page **pages, int *nr)
++			     unsigned long end, unsigned int flags,
++			     struct page **pages, int *nr)
+ {
+ 	int nr_start =3D *nr;
+ 	struct dev_pagemap *pgmap =3D NULL;
+@@ -1916,13 +1917,14 @@ static int __gup_device_huge(unsigned long pfn, uns=
+igned long addr,
+ }
+=20
+ static int __gup_device_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long ad=
+dr,
+-		unsigned long end, struct page **pages, int *nr)
++				 unsigned long end, unsigned int flags,
++				 struct page **pages, int *nr)
+ {
+ 	unsigned long fault_pfn;
+ 	int nr_start =3D *nr;
+=20
+ 	fault_pfn =3D pmd_pfn(orig) + ((addr & ~PMD_MASK) >> PAGE_SHIFT);
+-	if (!__gup_device_huge(fault_pfn, addr, end, pages, nr))
++	if (!__gup_device_huge(fault_pfn, addr, end, flags, pages, nr))
+ 		return 0;
+=20
+ 	if (unlikely(pmd_val(orig) !=3D pmd_val(*pmdp))) {
+@@ -1933,13 +1935,14 @@ static int __gup_device_huge_pmd(pmd_t orig, pmd_t =
+*pmdp, unsigned long addr,
+ }
+=20
+ static int __gup_device_huge_pud(pud_t orig, pud_t *pudp, unsigned long ad=
+dr,
+-		unsigned long end, struct page **pages, int *nr)
++				 unsigned long end, unsigned int flags,
++				 struct page **pages, int *nr)
+ {
+ 	unsigned long fault_pfn;
+ 	int nr_start =3D *nr;
+=20
+ 	fault_pfn =3D pud_pfn(orig) + ((addr & ~PUD_MASK) >> PAGE_SHIFT);
+-	if (!__gup_device_huge(fault_pfn, addr, end, pages, nr))
++	if (!__gup_device_huge(fault_pfn, addr, end, flags, pages, nr))
+ 		return 0;
+=20
+ 	if (unlikely(pud_val(orig) !=3D pud_val(*pudp))) {
+@@ -1950,14 +1953,16 @@ static int __gup_device_huge_pud(pud_t orig, pud_t =
+*pudp, unsigned long addr,
+ }
+ #else
+ static int __gup_device_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long ad=
+dr,
+-		unsigned long end, struct page **pages, int *nr)
++				 unsigned long end, unsigned int flags,
++				 struct page **pages, int *nr)
+ {
+ 	BUILD_BUG();
+ 	return 0;
+ }
+=20
+ static int __gup_device_huge_pud(pud_t pud, pud_t *pudp, unsigned long add=
+r,
+-		unsigned long end, struct page **pages, int *nr)
++				 unsigned long end, unsigned int flags,
++				 struct page **pages, int *nr)
+ {
+ 	BUILD_BUG();
+ 	return 0;
+@@ -2062,7 +2067,8 @@ static int gup_huge_pmd(pmd_t orig, pmd_t *pmdp, unsi=
+gned long addr,
+ 	if (pmd_devmap(orig)) {
+ 		if (unlikely(flags & FOLL_LONGTERM))
+ 			return 0;
+-		return __gup_device_huge_pmd(orig, pmdp, addr, end, pages, nr);
++		return __gup_device_huge_pmd(orig, pmdp, addr, end, flags,
++					     pages, nr);
  	}
- 	up_read(&mm->mmap_sem);
+=20
+ 	refs =3D 0;
+@@ -2092,7 +2098,8 @@ static int gup_huge_pmd(pmd_t orig, pmd_t *pmdp, unsi=
+gned long addr,
+ }
+=20
+ static int gup_huge_pud(pud_t orig, pud_t *pudp, unsigned long addr,
+-		unsigned long end, unsigned int flags, struct page **pages, int *nr)
++			unsigned long end, unsigned int flags,
++			struct page **pages, int *nr)
+ {
+ 	struct page *head, *page;
+ 	int refs;
+@@ -2103,7 +2110,8 @@ static int gup_huge_pud(pud_t orig, pud_t *pudp, unsi=
+gned long addr,
+ 	if (pud_devmap(orig)) {
+ 		if (unlikely(flags & FOLL_LONGTERM))
+ 			return 0;
+-		return __gup_device_huge_pud(orig, pudp, addr, end, pages, nr);
++		return __gup_device_huge_pud(orig, pudp, addr, end, flags,
++					     pages, nr);
+ 	}
+=20
+ 	refs =3D 0;
 --=20
 2.23.0
 
