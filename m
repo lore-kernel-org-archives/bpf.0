@@ -2,41 +2,46 @@ Return-Path: <SRS0=ycrV=Y3=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AC1ACA9EBB
-	for <bpf@archiver.kernel.org>; Sun,  3 Nov 2019 19:53:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20C9CCA9EB0
+	for <bpf@archiver.kernel.org>; Sun,  3 Nov 2019 21:18:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 39FB321A4A
-	for <bpf@archiver.kernel.org>; Sun,  3 Nov 2019 19:53:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E74A921D71
+	for <bpf@archiver.kernel.org>; Sun,  3 Nov 2019 21:18:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="hz45cfuI"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="CrZf2JZ8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728114AbfKCTxp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 3 Nov 2019 14:53:45 -0500
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:9104 "EHLO
+        id S1728251AbfKCVSR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 3 Nov 2019 16:18:17 -0500
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:10547 "EHLO
         hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727343AbfKCTxo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 3 Nov 2019 14:53:44 -0500
+        with ESMTP id S1728237AbfKCVSR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 3 Nov 2019 16:18:17 -0500
 Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dbf30480000>; Sun, 03 Nov 2019 11:53:45 -0800
+        id <B5dbf441e0000>; Sun, 03 Nov 2019 13:18:22 -0800
 Received: from hqmail.nvidia.com ([172.20.161.6])
   by hqpgpgate101.nvidia.com (PGP Universal service);
-  Sun, 03 Nov 2019 11:53:38 -0800
+  Sun, 03 Nov 2019 13:18:15 -0800
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Sun, 03 Nov 2019 11:53:38 -0800
-Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sun, 3 Nov
- 2019 19:53:37 +0000
-Subject: Re: [PATCH 19/19] Documentation/vm: add pin_user_pages.rst
+        by hqpgpgate101.nvidia.com on Sun, 03 Nov 2019 13:18:15 -0800
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sun, 3 Nov
+ 2019 21:18:15 +0000
+Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Sun, 3 Nov 2019 21:18:15 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5dbf44170000>; Sun, 03 Nov 2019 13:18:15 -0800
+From:   John Hubbard <jhubbard@nvidia.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 CC:     Al Viro <viro@zeniv.linux.org.uk>,
         Alex Williamson <alex.williamson@redhat.com>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
         Christoph Hellwig <hch@infradead.org>,
         Dan Williams <dan.j.williams@intel.com>,
         Daniel Vetter <daniel@ffwll.ch>,
@@ -46,7 +51,7 @@ CC:     Al Viro <viro@zeniv.linux.org.uk>,
         Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
         Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
         Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
         Magnus Karlsson <magnus.karlsson@intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
@@ -60,65 +65,84 @@ CC:     Al Viro <viro@zeniv.linux.org.uk>,
         <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
         <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20191030224930.3990755-1-jhubbard@nvidia.com>
- <20191030224930.3990755-20-jhubbard@nvidia.com>
-X-Nvconfidentiality: public
-From:   John Hubbard <jhubbard@nvidia.com>
-Message-ID: <58d3ef87-85ef-a69d-5cf7-1719ff356048@nvidia.com>
-Date:   Sun, 3 Nov 2019 11:53:37 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v2 03/18] goldish_pipe: rename local pin_user_pages() routine
+Date:   Sun, 3 Nov 2019 13:17:58 -0800
+Message-ID: <20191103211813.213227-4-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191103211813.213227-1-jhubbard@nvidia.com>
+References: <20191103211813.213227-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
-In-Reply-To: <20191030224930.3990755-20-jhubbard@nvidia.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1572810825; bh=rTG1L9aHJoAtL42CYzuRVvyOXz7jlR1h5ExQz/00LXg=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=hz45cfuI6ZB24IXq0tlVG+4gOOw0rO1aR3a1v+mNE3URSP536c/QI/nw4iVi4Q3Fg
-         ZvhfjRg3c8U4Zeed5IN0S8La0/yhKPqXLcaka8zujsYCnTFzskkYWmX6ZMKm85uc53
-         903Xo+ojBBu648JazllTkreHad3wmqcM3sQfIPNK3XPWIubatS+4uPpiaSake+maws
-         O3mb+7lTk0b/qWmINewSdXIPlnBwUrlkcxoUQTGi1jJWPWnSrL74fzVKeEWjMvAjbH
-         5wXYgJG8qyFZYCSM/zx8jBY5FMvGDHZIQbt9J9oHql6kjp+O+lMMcuF1F8/mAcyFV4
-         Yo4Vz3wx3lQSQ==
+        t=1572815902; bh=yxndnpa6bj0xuoqPqvRY6Qkte9w9GoWasaTzIgTLBt4=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Transfer-Encoding:Content-Type;
+        b=CrZf2JZ8Z1BYEcbLmYpFUD1ZNvhKRHAjpH0YXVbR2NxZF7sRz7rzdYCVUfbyeDKkX
+         2g2B6QpG23BEG3g/71RW3OuY9p0N3tXefMp1ZYbFTW1iz2PLwALdJ+mkuVyb1iqsZr
+         F8sWxJDJO54yzjEP4wU9YZdl8I/hsHy8pE37+OizFKv6wlKVuaPeh5mzoi0KCgmnBg
+         /Y00qBw+/btgnF7T7NnqeETOhIof/gF2HPnAs7yZ+7cxOlyZsmzW+pd420DMcmtwfZ
+         vgdXxoB17ve4yALSsXuszIbA5INhDD5JbZJUAmVEfJrKoaspcnukDpzoiq6VEYRf9+
+         tELlqsr98UjAA==
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 10/30/19 3:49 PM, John Hubbard wrote:
-...
-> +* struct page may not be increased in size for this, and all fields are already
-> +  used.
-> +
-> +* Given the above, we can overload the page->_refcount field by using, sort of,
-> +  the upper bits in that field for a dma-pinned count. "Sort of", means that,
-> +  rather than dividing page->_refcount into bit fields, we simple add a medium-
-> +  large value (GUP_PIN_COUNTING_BIAS, initially chosen to be 1024: 10 bits) to
-> +  page->_refcount. This provides fuzzy behavior: if a page has get_page() called
-> +  on it 1024 times, then it will appear to have a single dma-pinned count.
-> +  And again, that's acceptable.
-> +
-> +This also leads to limitations: there are only 32-10==22 bits available for a
-> +counter that increments 10 bits at a time.
-> +
+1. Avoid naming conflicts: rename local static function from
+"pin_user_pages()" to "pin_goldfish_pages()".
 
-The above claim is just a "bit" too optimistic, by one bit: page->_refcount, being 
-an atomic_t which uses a signed int (and we use the sign bit to check for overflow),
-only has 31 total bits available for actual counting, not 32.
+An upcoming patch will introduce a global pin_user_pages()
+function.
 
-I'll adjust the documentation in v2, to account for this.
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ drivers/platform/goldfish/goldfish_pipe.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-thanks,
-
-John Hubbard
-NVIDIA
+diff --git a/drivers/platform/goldfish/goldfish_pipe.c b/drivers/platform/g=
+oldfish/goldfish_pipe.c
+index cef0133aa47a..7ed2a21a0bac 100644
+--- a/drivers/platform/goldfish/goldfish_pipe.c
++++ b/drivers/platform/goldfish/goldfish_pipe.c
+@@ -257,12 +257,12 @@ static int goldfish_pipe_error_convert(int status)
+ 	}
+ }
+=20
+-static int pin_user_pages(unsigned long first_page,
+-			  unsigned long last_page,
+-			  unsigned int last_page_size,
+-			  int is_write,
+-			  struct page *pages[MAX_BUFFERS_PER_COMMAND],
+-			  unsigned int *iter_last_page_size)
++static int pin_goldfish_pages(unsigned long first_page,
++			      unsigned long last_page,
++			      unsigned int last_page_size,
++			      int is_write,
++			      struct page *pages[MAX_BUFFERS_PER_COMMAND],
++			      unsigned int *iter_last_page_size)
+ {
+ 	int ret;
+ 	int requested_pages =3D ((last_page - first_page) >> PAGE_SHIFT) + 1;
+@@ -354,9 +354,9 @@ static int transfer_max_buffers(struct goldfish_pipe *p=
+ipe,
+ 	if (mutex_lock_interruptible(&pipe->lock))
+ 		return -ERESTARTSYS;
+=20
+-	pages_count =3D pin_user_pages(first_page, last_page,
+-				     last_page_size, is_write,
+-				     pipe->pages, &iter_last_page_size);
++	pages_count =3D pin_goldfish_pages(first_page, last_page,
++					 last_page_size, is_write,
++					 pipe->pages, &iter_last_page_size);
+ 	if (pages_count < 0) {
+ 		mutex_unlock(&pipe->lock);
+ 		return pages_count;
+--=20
+2.23.0
 
