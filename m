@@ -2,100 +2,120 @@ Return-Path: <SRS0=e5FL=Y4=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_2 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FE17CA9EA0
-	for <bpf@archiver.kernel.org>; Mon,  4 Nov 2019 10:21:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BDBECA9EB5
+	for <bpf@archiver.kernel.org>; Mon,  4 Nov 2019 14:08:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F39D72184C
-	for <bpf@archiver.kernel.org>; Mon,  4 Nov 2019 10:21:44 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="eHI83e+r"
+	by mail.kernel.org (Postfix) with ESMTP id 58F1A218BA
+	for <bpf@archiver.kernel.org>; Mon,  4 Nov 2019 14:08:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727322AbfKDKVo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 4 Nov 2019 05:21:44 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:59470 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726441AbfKDKVo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 4 Nov 2019 05:21:44 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA4A89KP154426;
-        Mon, 4 Nov 2019 10:21:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2019-08-05;
- bh=HhlZPJXEwbAOsmaU0YyhVSI5tsiYMX2rE1wf8OBs0dY=;
- b=eHI83e+rnN2SV9Fi/7MjhGz1LV2L6fVfhrYGWMDPGNUjYqut1fgFe7v9GwbB2CHl19MO
- rE1UPRoU34dMxMLFrj4OSQL9jrnOuPltUKy7/hbYhmrPILw9zkGdQ4lepoOddNqJHfUs
- hBtimhtBbtqvWqzgaBzouQVSu5Rs/c03NMzBNxh9/TvnMiWlyRJ7X8Pufya437UIlCGo
- QpD/xwt5fGTGSWlV+5Pu4FWbhfQU20tYUu3ocwot3PonAPnEZrPfEcJPVSaa+uV0iio8
- KF0SJCmVeWAv/epDqzsVq5//gh1o3R0BikpQB+CKW/cPgTK0G8bdCKWObVcv4qnJeNlW JQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2w12eqx4r1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 04 Nov 2019 10:21:41 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA4A7StD128539;
-        Mon, 4 Nov 2019 10:21:40 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 2w1kaadftc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 04 Nov 2019 10:21:40 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xA4ALePI010595;
-        Mon, 4 Nov 2019 10:21:40 GMT
-Received: from termi.oracle.com (/10.175.62.217)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 04 Nov 2019 02:21:39 -0800
-From:   jose.marchesi@oracle.com (Jose E. Marchesi)
-To:     Yonghong Song <yhs@fb.com>
-Cc:     "bpf\@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: Re: initiated discussion to support attribute address_space in clang
-References: <87lfutgvsu.fsf@oracle.com>
-        <79a43f7f-b463-5f40-7830-f488d178b0a4@fb.com>
-Date:   Mon, 04 Nov 2019 11:21:34 +0100
-In-Reply-To: <79a43f7f-b463-5f40-7830-f488d178b0a4@fb.com> (Yonghong Song's
-        message of "Thu, 24 Oct 2019 16:56:06 +0000")
-Message-ID: <87tv7kyma9.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S1727939AbfKDOIJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 4 Nov 2019 09:08:09 -0500
+Received: from smtprelay0214.hostedemail.com ([216.40.44.214]:47015 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727766AbfKDOIJ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 4 Nov 2019 09:08:09 -0500
+X-Greylist: delayed 538 seconds by postgrey-1.27 at vger.kernel.org; Mon, 04 Nov 2019 09:08:08 EST
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave07.hostedemail.com (Postfix) with ESMTP id 631D018026108;
+        Mon,  4 Nov 2019 13:59:11 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay06.hostedemail.com (Postfix) with ESMTP id A5FAF18223251;
+        Mon,  4 Nov 2019 13:59:09 +0000 (UTC)
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-HE-Tag: pot84_899e0f45ebd55
+X-Filterd-Recvd-Size: 3574
+Received: from grimm.local.home (unknown [146.247.46.6])
+        (Authenticated sender: rostedt@goodmis.org)
+        by omf08.hostedemail.com (Postfix) with ESMTPA;
+        Mon,  4 Nov 2019 13:59:05 +0000 (UTC)
+Date:   Mon, 4 Nov 2019 08:59:01 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+        Li Zefan <lizefan@huawei.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Song Liu <liu.song.a23@gmail.com>, cgroups@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-block@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] kernfs: Convert to u64 id
+Message-ID: <20191104085901.06035a26@grimm.local.home>
+In-Reply-To: <20191104084520.398584-2-namhyung@kernel.org>
+References: <20191104084520.398584-1-namhyung@kernel.org>
+        <20191104084520.398584-2-namhyung@kernel.org>
+X-Mailer: Claws Mail 3.17.4git49 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9430 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1911040101
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9430 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1911040101
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Mon,  4 Nov 2019 17:45:19 +0900
+Namhyung Kim <namhyung@kernel.org> wrote:
 
-Hi Yonghong.
-    
-    I just initiated a discussion (RFC patch 
-    https://reviews.llvm.org/D69393) for llvm/clang to support user 
-    address_space attribute.
-    
-    I am not able to add your name in subscriber list as you probably
-    not registered with llvm mailing list or phabricator.
-    
-    Just let you know so we can have an eventual proposal which
-    will be also good for gcc. Please participate in discussion.
+> From: Tejun Heo <tj@kernel.org>
+> 
+> The kernfs_id was an union type sharing a 64bit id with 32bit ino +
+> gen.  But it resulted in using 32bit inode even on 64bit systems.
+> Also dealing with an union is annoying especially if you just want to
+> use a single id.
+> 
+> Thus let's get rid of the kernfs_node_id type and use u64 directly.
+> The upper 32bit is used for gen and lower is for ino on 32bit systems.
+> The kernfs_id_ino() and kernfs_id_gen() helpers will take care of the
+> bit handling depends on the system word size.
+> 
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Martin KaFai Lau <kafai@fb.com>
+> Cc: Song Liu <songliubraving@fb.com>
+> Cc: Yonghong Song <yhs@fb.com>
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: linux-block@vger.kernel.org
+> Cc: bpf@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Tejun Heo <tj@kernel.org>
+> [namhyung: fix build error in bpf_get_current_cgroup_id()]
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  fs/kernfs/dir.c                  | 36 ++++++++-----
+>  fs/kernfs/file.c                 |  4 +-
+>  fs/kernfs/inode.c                |  4 +-
+>  fs/kernfs/kernfs-internal.h      |  2 -
+>  fs/kernfs/mount.c                | 92 +++++++++++++++++++-------------
+>  include/linux/cgroup.h           | 17 +++---
+>  include/linux/exportfs.h         |  5 ++
+>  include/linux/kernfs.h           | 47 +++++++++-------
 
-Thanks for reaching out, and sorry for the delay in replying: I needed
-some time to process my backlog after a couple of weeks off.
+>  include/trace/events/writeback.h | 92 ++++++++++++++++----------------
 
-I just created an account in phabricator (jemarch).  Will follow up
-there.
+I only looked at the above file, and didn't see anything bad about it.
 
-Salud!
+Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+
+-- Steve
+
+
+>  kernel/bpf/helpers.c             |  2 +-
+>  kernel/cgroup/cgroup.c           |  5 +-
+>  kernel/trace/blktrace.c          | 66 +++++++++++------------
+>  net/core/filter.c                |  4 +-
+>  13 files changed, 207 insertions(+), 169 deletions(-)
+
