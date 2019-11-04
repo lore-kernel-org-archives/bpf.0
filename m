@@ -2,295 +2,400 @@ Return-Path: <SRS0=e5FL=Y4=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34FB1CA9ED4
-	for <bpf@archiver.kernel.org>; Mon,  4 Nov 2019 17:24:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE371CA9EB5
+	for <bpf@archiver.kernel.org>; Mon,  4 Nov 2019 17:33:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0F939214D8
-	for <bpf@archiver.kernel.org>; Mon,  4 Nov 2019 17:24:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BEFD320869
+	for <bpf@archiver.kernel.org>; Mon,  4 Nov 2019 17:33:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GQpRsC5b"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728392AbfKDRX6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 4 Nov 2019 12:23:58 -0500
-Received: from smtp-sh.infomaniak.ch ([128.65.195.4]:41968 "EHLO
-        smtp-sh.infomaniak.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728322AbfKDRX6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 4 Nov 2019 12:23:58 -0500
-Received: from smtp-2-0000.mail.infomaniak.ch ([10.5.36.107])
-        by smtp-sh.infomaniak.ch (8.14.5/8.14.5) with ESMTP id xA4HLvDM005071
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 4 Nov 2019 18:21:57 +0100
-Received: from localhost (unknown [94.23.54.103])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id E7541100D31A6;
-        Mon,  4 Nov 2019 18:21:53 +0100 (CET)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Drysdale <drysdale@google.com>,
-        Florent Revest <revest@chromium.org>,
-        James Morris <jmorris@namei.org>, Jann Horn <jann@thejh.net>,
-        John Johansen <john.johansen@canonical.com>,
+        id S1729374AbfKDRdo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 4 Nov 2019 12:33:44 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:47389 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727989AbfKDRdo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 4 Nov 2019 12:33:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1572888822;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yb3yyO2PYYBql1Fagu7xeohR5a32M0AhAOb3BjMNyXY=;
+        b=GQpRsC5biVZrcUCmm8/d04vdDBWTuHXVl8fb8jnmz/BzWrplmXBDOnR98lt+lHYe5O/hHE
+        9oWG3Fr/fLPXSyC3dqzkScENA9u159VHaMg1ma8eS+XpmYO3EEfQKxKr2ZNHoMSNcYUrNr
+        J/0gg23fD/hQuRHU0rEkm6E4WJ5AkjI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-149-BOKr1PBBNByJ6qT6wX4yEA-1; Mon, 04 Nov 2019 12:33:38 -0500
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 847CA8017DD;
+        Mon,  4 Nov 2019 17:33:33 +0000 (UTC)
+Received: from redhat.com (unknown [10.20.6.178])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 89C995C557;
+        Mon,  4 Nov 2019 17:33:27 +0000 (UTC)
+Date:   Mon, 4 Nov 2019 12:33:25 -0500
+From:   Jerome Glisse <jglisse@redhat.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
         Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        KP Singh <kpsingh@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mickael.salaun@ssi.gouv.fr>,
-        Paul Moore <paul@paul-moore.com>,
-        Sargun Dhillon <sargun@sargun.me>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
         Shuah Khan <shuah@kernel.org>,
-        Stephen Smalley <sds@tycho.nsa.gov>, Tejun Heo <tj@kernel.org>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Tycho Andersen <tycho@tycho.ws>,
-        Will Drewry <wad@chromium.org>, bpf@vger.kernel.org,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-security-module@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH bpf-next v13 0/7] Landlock LSM
-Date:   Mon,  4 Nov 2019 18:21:39 +0100
-Message-Id: <20191104172146.30797-1-mic@digikod.net>
-X-Mailer: git-send-email 2.24.0.rc1
+        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 05/18] mm/gup: introduce pin_user_pages*() and FOLL_PIN
+Message-ID: <20191104173325.GD5134@redhat.com>
+References: <20191103211813.213227-1-jhubbard@nvidia.com>
+ <20191103211813.213227-6-jhubbard@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
-X-Antivirus-Code: 0x100000
+In-Reply-To: <20191103211813.213227-6-jhubbard@nvidia.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-MC-Unique: BOKr1PBBNByJ6qT6wX4yEA-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+On Sun, Nov 03, 2019 at 01:18:00PM -0800, John Hubbard wrote:
+> Introduce pin_user_pages*() variations of get_user_pages*() calls,
+> and also pin_longterm_pages*() variations.
+>=20
+> These variants all set FOLL_PIN, which is also introduced, and
+> thoroughly documented.
+>=20
+> The pin_longterm*() variants also set FOLL_LONGTERM, in addition
+> to FOLL_PIN:
+>=20
+>     pin_user_pages()
+>     pin_user_pages_remote()
+>     pin_user_pages_fast()
+>=20
+>     pin_longterm_pages()
+>     pin_longterm_pages_remote()
+>     pin_longterm_pages_fast()
+>=20
+> All pages that are pinned via the above calls, must be unpinned via
+> put_user_page().
+>=20
+> The underlying rules are:
+>=20
+> * These are gup-internal flags, so the call sites should not directly
+> set FOLL_PIN nor FOLL_LONGTERM. That behavior is enforced with
+> assertions, for the new FOLL_PIN flag. However, for the pre-existing
+> FOLL_LONGTERM flag, which has some call sites that still directly
+> set FOLL_LONGTERM, there is no assertion yet.
+>=20
+> * Call sites that want to indicate that they are going to do DirectIO
+>   ("DIO") or something with similar characteristics, should call a
+>   get_user_pages()-like wrapper call that sets FOLL_PIN. These wrappers
+>   will:
+>         * Start with "pin_user_pages" instead of "get_user_pages". That
+>           makes it easy to find and audit the call sites.
+>         * Set FOLL_PIN
+>=20
+> * For pages that are received via FOLL_PIN, those pages must be returned
+>   via put_user_page().
+>=20
+> Thanks to Jan Kara and Vlastimil Babka for explaining the 4 cases
+> in this documentation. (I've reworded it and expanded on it slightly.)
+>=20
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 
-Following the previous series [1], this thirteenth series mainly clean
-up and add safeguards to the domain management.  This series also
-improves the documentation, add comments, and fixes some latent bugs.
+Few nitpick belows, nonetheless:
 
-This is the first step of the roadmap discussed at LPC [2].  While the
-intended final goal is to allow unprivileged (or non-root) users to use
-Landlock, this series allows only a process with global CAP_SYS_ADMIN to
-load and enforce a rule.  This may help to get feedback and avoid
-unexpected behaviors.
+Reviewed-by: J=E9r=F4me Glisse <jglisse@redhat.com>
 
-This series can be applied on top of bpf-next, commit e93d99180abd
-("selftests/bpf: Restore $(OUTPUT)/test_stub.o rule").  This can be
-tested with CONFIG_BPF_SYSCALL, CONFIG_SECCOMP_FILTER and
-CONFIG_SECURITY_LANDLOCK.  This patch series can be found in a Git
-repository here:
-https://github.com/landlock-lsm/linux/commits/landlock-v13
-I would really appreciate constructive comments on the design and the
-code.
+> ---
+>  Documentation/vm/index.rst          |   1 +
+>  Documentation/vm/pin_user_pages.rst | 212 ++++++++++++++++++++++
+>  include/linux/mm.h                  |  62 ++++++-
+>  mm/gup.c                            | 265 +++++++++++++++++++++++++---
+>  4 files changed, 514 insertions(+), 26 deletions(-)
+>  create mode 100644 Documentation/vm/pin_user_pages.rst
+>=20
+
+[...]
+
+> diff --git a/Documentation/vm/pin_user_pages.rst b/Documentation/vm/pin_u=
+ser_pages.rst
+> new file mode 100644
+> index 000000000000..3910f49ca98c
+> --- /dev/null
+> +++ b/Documentation/vm/pin_user_pages.rst
+
+[...]
+
+> +
+> +FOLL_PIN, FOLL_GET, FOLL_LONGTERM: when to use which flags
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Thanks to Jan Kara, Vlastimil Babka and several other -mm people, for de=
+scribing
+> +these categories:
+> +
+> +CASE 1: Direct IO (DIO)
+> +-----------------------
+> +There are GUP references to pages that are serving
+> +as DIO buffers. These buffers are needed for a relatively short time (so=
+ they
+> +are not "long term"). No special synchronization with page_mkclean() or
+> +munmap() is provided. Therefore, flags to set at the call site are: ::
+> +
+> +    FOLL_PIN
+> +
+> +...but rather than setting FOLL_PIN directly, call sites should use one =
+of
+> +the pin_user_pages*() routines that set FOLL_PIN.
+> +
+> +CASE 2: RDMA
+> +------------
+> +There are GUP references to pages that are serving as DMA
+> +buffers. These buffers are needed for a long time ("long term"). No spec=
+ial
+> +synchronization with page_mkclean() or munmap() is provided. Therefore, =
+flags
+> +to set at the call site are: ::
+> +
+> +    FOLL_PIN | FOLL_LONGTERM
+> +
+> +NOTE: Some pages, such as DAX pages, cannot be pinned with longterm pins=
+. That's
+> +because DAX pages do not have a separate page cache, and so "pinning" im=
+plies
+> +locking down file system blocks, which is not (yet) supported in that wa=
+y.
+> +
+> +CASE 3: ODP
+> +-----------
+> +(Mellanox/Infiniband On Demand Paging: the hardware supports
+> +replayable page faulting). There are GUP references to pages serving as =
+DMA
+> +buffers. For ODP, MMU notifiers are used to synchronize with page_mkclea=
+n()
+> +and munmap(). Therefore, normal GUP calls are sufficient, so neither fla=
+g
+> +needs to be set.
+
+I would not include ODP or anything like it here, they do not use
+GUP anymore and i believe it is more confusing here. I would how-
+ever include some text in this documentation explaining that hard-
+ware that support page fault is superior as it does not incur any
+of the issues described here.
+
+> +
+> +CASE 4: Pinning for struct page manipulation only
+> +-------------------------------------------------
+> +Here, normal GUP calls are sufficient, so neither flag needs to be set.
+> +
+
+[...]
+
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 199da99e8ffc..1aea48427879 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+
+[...]
+
+> @@ -1014,7 +1018,16 @@ static __always_inline long __get_user_pages_locke=
+d(struct task_struct *tsk,
+>  =09=09BUG_ON(*locked !=3D 1);
+>  =09}
+> =20
+> -=09if (pages)
+> +=09/*
+> +=09 * FOLL_PIN and FOLL_GET are mutually exclusive. Traditional behavior
+> +=09 * is to set FOLL_GET if the caller wants pages[] filled in (but has
+> +=09 * carelessly failed to specify FOLL_GET), so keep doing that, but on=
+ly
+> +=09 * for FOLL_GET, not for the newer FOLL_PIN.
+> +=09 *
+> +=09 * FOLL_PIN always expects pages to be non-null, but no need to asser=
+t
+> +=09 * that here, as any failures will be obvious enough.
+> +=09 */
+> +=09if (pages && !(flags & FOLL_PIN))
+>  =09=09flags |=3D FOLL_GET;
+
+Did you look at user that have pages and not FOLL_GET set ?
+I believe it would be better to first fix them to end up
+with FOLL_GET set and then error out if pages is !=3D NULL but
+nor FOLL_GET or FOLL_PIN is set.
+
+> =20
+>  =09pages_done =3D 0;
+
+> @@ -2373,24 +2402,9 @@ static int __gup_longterm_unlocked(unsigned long s=
+tart, int nr_pages,
+>  =09return ret;
+>  }
+> =20
+> -/**
+> - * get_user_pages_fast() - pin user pages in memory
+> - * @start:=09starting user address
+> - * @nr_pages:=09number of pages from start to pin
+> - * @gup_flags:=09flags modifying pin behaviour
+> - * @pages:=09array that receives pointers to the pages pinned.
+> - *=09=09Should be at least nr_pages long.
+> - *
+> - * Attempt to pin user pages in memory without taking mm->mmap_sem.
+> - * If not successful, it will fall back to taking the lock and
+> - * calling get_user_pages().
+> - *
+> - * Returns number of pages pinned. This may be fewer than the number
+> - * requested. If nr_pages is 0 or negative, returns 0. If no pages
+> - * were pinned, returns -errno.
+> - */
+> -int get_user_pages_fast(unsigned long start, int nr_pages,
+> -=09=09=09unsigned int gup_flags, struct page **pages)
+> +static int internal_get_user_pages_fast(unsigned long start, int nr_page=
+s,
+> +=09=09=09=09=09unsigned int gup_flags,
+> +=09=09=09=09=09struct page **pages)
+
+Usualy function are rename to _old_func_name ie add _ in front. So
+here it would become _get_user_pages_fast but i know some people
+don't like that as sometimes we endup with ___function_overloaded :)
+
+>  {
+>  =09unsigned long addr, len, end;
+>  =09int nr =3D 0, ret =3D 0;
 
 
-# Landlock LSM
+> @@ -2435,4 +2449,215 @@ int get_user_pages_fast(unsigned long start, int =
+nr_pages,
 
-Landlock is a stackable LSM [3] intended to be used as a low-level
-framework to build custom access-control/audit systems or safe endpoint
-security agents.  There is currently one Landlock hook dedicated to
-check ptrace(2).  This hook accepts a dedicated eBPF program, called a
-Landlock program, which can currently compare its position in the
-hierarchy of similar programs tied to other processes.  This enables to
-enforce programmatic scoped ptrace restrictions.
+[...]
 
-The final goal of this new Linux Security Module (LSM) called Landlock
-is to allow any process, including unprivileged ones, to create powerful
-security sandboxes comparable to XNU Sandbox, FreeBSD Capsicum or
-OpenBSD Pledge (which could be implemented with Landlock).  This kind of
-sandbox is expected to help mitigate the security impact of bugs or
-unexpected/malicious behaviors in user-space applications.
+> +/**
+> + * pin_user_pages_remote() - pin pages for (typically) use by Direct IO,=
+ and
+> + * return the pages to the user.
 
-The use of seccomp and Landlock is more suitable with the help of a
-user-space library (e.g.  libseccomp) that could help to specify a
-high-level language to express a security policy instead of raw eBPF
-programs.  Moreover, thanks to the LLVM front-end, it is quite easy to
-write an eBPF program with a subset of the C language.
+Not a fan of (typically) maybe:
+pin_user_pages_remote() - pin pages of a remote process (task !=3D current)
 
-The documentation patch contains some kernel documentation, explanations
-on how to use Landlock and a FAQ.  The compiled documentation and some
-talks can be found here: https://landlock.io
+I think here the remote part if more important that DIO. Remote is use by
+other thing that DIO.
 
+> + *
+> + * Nearly the same as get_user_pages_remote(), except that FOLL_PIN is s=
+et. See
+> + * get_user_pages_remote() for documentation on the function arguments, =
+because
+> + * the arguments here are identical.
+> + *
+> + * FOLL_PIN means that the pages must be released via put_user_page(). P=
+lease
+> + * see Documentation/vm/pin_user_pages.rst for details.
+> + *
+> + * This is intended for Case 1 (DIO) in Documentation/vm/pin_user_pages.=
+rst. It
+> + * is NOT intended for Case 2 (RDMA: long-term pins).
+> + */
+> +long pin_user_pages_remote(struct task_struct *tsk, struct mm_struct *mm=
+,
+> +=09=09=09   unsigned long start, unsigned long nr_pages,
+> +=09=09=09   unsigned int gup_flags, struct page **pages,
+> +=09=09=09   struct vm_area_struct **vmas, int *locked)
+> +{
+> +=09/* FOLL_GET and FOLL_PIN are mutually exclusive. */
+> +=09if (WARN_ON_ONCE(gup_flags & FOLL_GET))
+> +=09=09return -EINVAL;
+> +
+> +=09gup_flags |=3D FOLL_TOUCH | FOLL_REMOTE | FOLL_PIN;
+> +
+> +=09return __get_user_pages_locked(tsk, mm, start, nr_pages, pages, vmas,
+> +=09=09=09=09       locked, gup_flags);
+> +}
+> +EXPORT_SYMBOL(pin_user_pages_remote);
+> +
+> +/**
+> + * pin_longterm_pages_remote() - pin pages for (typically) use by Direct=
+ IO, and
+> + * return the pages to the user.
 
-# Frequently asked questions
+I think you copy pasted this from pin_user_pages_remote() :)
 
-## Why is seccomp-bpf not enough?
+> + *
+> + * Nearly the same as get_user_pages_remote(), but note that FOLL_TOUCH =
+is not
+> + * set, and FOLL_PIN and FOLL_LONGTERM are set. See get_user_pages_remot=
+e() for
+> + * documentation on the function arguments, because the arguments here a=
+re
+> + * identical.
+> + *
+> + * FOLL_PIN means that the pages must be released via put_user_page(). P=
+lease
+> + * see Documentation/vm/pin_user_pages.rst for further details.
+> + *
+> + * FOLL_LONGTERM means that the pages are being pinned for "long term" u=
+se,
+> + * typically by a non-CPU device, and we cannot be sure that waiting for=
+ a
+> + * pinned page to become unpin will be effective.
+> + *
+> + * This is intended for Case 2 (RDMA: long-term pins) in
+> + * Documentation/vm/pin_user_pages.rst.
+> + */
+> +long pin_longterm_pages_remote(struct task_struct *tsk, struct mm_struct=
+ *mm,
+> +=09=09=09       unsigned long start, unsigned long nr_pages,
+> +=09=09=09       unsigned int gup_flags, struct page **pages,
+> +=09=09=09       struct vm_area_struct **vmas, int *locked)
+> +{
+> +=09/* FOLL_GET and FOLL_PIN are mutually exclusive. */
+> +=09if (WARN_ON_ONCE(gup_flags & FOLL_GET))
+> +=09=09return -EINVAL;
+> +
+> +=09/*
+> +=09 * FIXME: as noted in the get_user_pages_remote() implementation, it
+> +=09 * is not yet possible to safely set FOLL_LONGTERM here. FOLL_LONGTER=
+M
+> +=09 * needs to be set, but for now the best we can do is a "TODO" item.
+> +=09 */
+> +=09gup_flags |=3D FOLL_REMOTE | FOLL_PIN;
 
-A seccomp filter can access only raw syscall arguments (i.e. the
-register values) which means that it is not possible to filter according
-to the value pointed to by an argument, such as a file pathname. As an
-embryonic Landlock version demonstrated (i.e. seccomp-object), filtering
-at the syscall level is complicated (e.g. need to take care of race
-conditions). This is mainly because the access control checkpoints of
-the kernel are not at this high-level but more underneath, at the
-LSM-hook level. The LSM hooks are designed to handle this kind of
-checks.  Landlock abstracts this approach to leverage the ability of
-unprivileged users to limit themselves.
-
-Cf. section "What it isn't?" in
-Documentation/userspace-api/seccomp_filter.rst
-
-
-## Why use the seccomp(2) syscall?
-
-Landlock use the same semantic as seccomp to apply access rule
-restrictions. It add a new layer of security for the current process
-which is inherited by its children. It makes sense to use an unique
-access-restricting syscall (that should be allowed by seccomp filters)
-which can only drop privileges. Moreover, a Landlock rule could come
-from outside a process (e.g.  passed through a UNIX socket). It is then
-useful to differentiate the creation/load of Landlock eBPF programs via
-bpf(2), from rule enforcement via seccomp(2).
-
-
-## Why a new LSM? Are SELinux, AppArmor, Smack and Tomoyo not good
-   enough?
-
-The current access control LSMs are fine for their purpose which is to
-give the *root* the ability to enforce a security policy for the
-*system*. What is missing is a way to enforce a security policy for any
-application by its developer and *unprivileged user* as seccomp can do
-for raw syscall filtering.
-
-Differences from other (access control) LSMs:
-* not only dedicated to administrators (i.e. no_new_priv);
-* limited kernel attack surface (e.g. policy parsing);
-* constrained policy rules (no DoS: deterministic execution time);
-* do not leak more information than the loader process can legitimately
-  have access to (minimize metadata inference).
-
-
-# Changes since v12
-
-* make landlock_prepend_prog() more consistant by putting its caller in
-  charge of the lifetime of the Landlock domain being updated
-* always copy a domain being updated, which garantee its immutability,
-  and behave as a copy-on-write thanks to commit_creds()
-* fix preemption
-* improve documentation and comments
-
-
-# Changes since v11
-
-* rework domain management
-* minor fixes
-
-
-# Changes since v10
-
-* remove all the file system related features: program types, inode
-  map and expected_attach_triggers
-* replace the static ptrace security policy with a new and simpler
-  ptrace program (attached) type and a task_landlock_ptrace_ancestor()
-  eBPF helper
-* do not rely on seccomp internal structure but use stacked credentials
-  insdead
-* extend ptrace tests
-* add more documentation
-* split and rename files/patches
-* miscellaneous fixes
-
-
-Previous changes can be found in a previous cover-letter [4].
-
-
-[1] https://lore.kernel.org/lkml/20191031164445.29426-1-mic@digikod.net/
-[2] https://lore.kernel.org/lkml/5828776A.1010104@digikod.net/
-[3] https://lore.kernel.org/lkml/50db058a-7dde-441b-a7f9-f6837fe8b69f@schaufler-ca.com/
-[4] https://lore.kernel.org/lkml/20190721213116.23476-1-mic@digikod.net/
-
-Regards,
-
-Mickaël Salaün (7):
-  bpf,landlock: Define an eBPF program type for Landlock hooks
-  landlock: Add the management of domains
-  landlock,seccomp: Apply Landlock programs to process hierarchy
-  landlock: Add ptrace LSM hooks
-  bpf,landlock: Add task_landlock_ptrace_ancestor() helper
-  bpf,landlock: Add tests for the Landlock ptrace program type
-  landlock: Add user and kernel documentation for Landlock
-
- Documentation/security/index.rst              |   1 +
- Documentation/security/landlock/index.rst     |  22 ++
- Documentation/security/landlock/kernel.rst    | 166 ++++++++++
- Documentation/security/landlock/user.rst      | 153 ++++++++++
- MAINTAINERS                                   |   9 +
- include/linux/bpf.h                           |   3 +
- include/linux/bpf_types.h                     |   3 +
- include/linux/landlock.h                      |  25 ++
- include/linux/lsm_hooks.h                     |   1 +
- include/uapi/linux/bpf.h                      |  23 +-
- include/uapi/linux/landlock.h                 |  39 +++
- include/uapi/linux/seccomp.h                  |   1 +
- kernel/bpf/syscall.c                          |   9 +
- kernel/bpf/verifier.c                         |  11 +
- kernel/seccomp.c                              |   4 +
- scripts/bpf_helpers_doc.py                    |   1 +
- security/Kconfig                              |   1 +
- security/Makefile                             |   2 +
- security/landlock/Kconfig                     |  19 ++
- security/landlock/Makefile                    |   6 +
- security/landlock/bpf_ptrace.c                |  98 ++++++
- security/landlock/bpf_ptrace.h                |  17 ++
- security/landlock/bpf_run.c                   |  65 ++++
- security/landlock/bpf_run.h                   |  25 ++
- security/landlock/bpf_verify.c                |  87 ++++++
- security/landlock/common.h                    |  84 +++++
- security/landlock/domain_manage.c             | 152 +++++++++
- security/landlock/domain_manage.h             |  22 ++
- security/landlock/domain_syscall.c            |  93 ++++++
- security/landlock/hooks_cred.c                |  47 +++
- security/landlock/hooks_cred.h                |  14 +
- security/landlock/hooks_ptrace.c              | 114 +++++++
- security/landlock/hooks_ptrace.h              |  19 ++
- security/landlock/init.c                      |  32 ++
- security/security.c                           |  15 +
- tools/include/uapi/linux/bpf.h                |  23 +-
- tools/include/uapi/linux/landlock.h           |  22 ++
- tools/lib/bpf/libbpf_probes.c                 |   3 +
- tools/testing/selftests/bpf/config            |   3 +
- tools/testing/selftests/bpf/test_verifier.c   |   1 +
- .../testing/selftests/bpf/verifier/landlock.c |  56 ++++
- tools/testing/selftests/landlock/.gitignore   |   5 +
- tools/testing/selftests/landlock/Makefile     |  27 ++
- tools/testing/selftests/landlock/config       |   5 +
- tools/testing/selftests/landlock/test.h       |  48 +++
- tools/testing/selftests/landlock/test_base.c  |  24 ++
- .../testing/selftests/landlock/test_ptrace.c  | 289 ++++++++++++++++++
- 47 files changed, 1887 insertions(+), 2 deletions(-)
- create mode 100644 Documentation/security/landlock/index.rst
- create mode 100644 Documentation/security/landlock/kernel.rst
- create mode 100644 Documentation/security/landlock/user.rst
- create mode 100644 include/linux/landlock.h
- create mode 100644 include/uapi/linux/landlock.h
- create mode 100644 security/landlock/Kconfig
- create mode 100644 security/landlock/Makefile
- create mode 100644 security/landlock/bpf_ptrace.c
- create mode 100644 security/landlock/bpf_ptrace.h
- create mode 100644 security/landlock/bpf_run.c
- create mode 100644 security/landlock/bpf_run.h
- create mode 100644 security/landlock/bpf_verify.c
- create mode 100644 security/landlock/common.h
- create mode 100644 security/landlock/domain_manage.c
- create mode 100644 security/landlock/domain_manage.h
- create mode 100644 security/landlock/domain_syscall.c
- create mode 100644 security/landlock/hooks_cred.c
- create mode 100644 security/landlock/hooks_cred.h
- create mode 100644 security/landlock/hooks_ptrace.c
- create mode 100644 security/landlock/hooks_ptrace.h
- create mode 100644 security/landlock/init.c
- create mode 100644 tools/include/uapi/linux/landlock.h
- create mode 100644 tools/testing/selftests/bpf/verifier/landlock.c
- create mode 100644 tools/testing/selftests/landlock/.gitignore
- create mode 100644 tools/testing/selftests/landlock/Makefile
- create mode 100644 tools/testing/selftests/landlock/config
- create mode 100644 tools/testing/selftests/landlock/test.h
- create mode 100644 tools/testing/selftests/landlock/test_base.c
- create mode 100644 tools/testing/selftests/landlock/test_ptrace.c
-
--- 
-2.23.0
+Wouldn't it be better to not add pin_longterm_pages_remote() until
+it can be properly implemented ?
 
