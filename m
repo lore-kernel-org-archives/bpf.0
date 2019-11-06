@@ -2,78 +2,96 @@ Return-Path: <SRS0=9j6j=Y6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C695DC5DF63
-	for <bpf@archiver.kernel.org>; Wed,  6 Nov 2019 16:16:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A60F6C5DF63
+	for <bpf@archiver.kernel.org>; Wed,  6 Nov 2019 16:28:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8D72D2075C
-	for <bpf@archiver.kernel.org>; Wed,  6 Nov 2019 16:16:11 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="vXbJ1OgQ"
+	by mail.kernel.org (Postfix) with ESMTP id 831C32067B
+	for <bpf@archiver.kernel.org>; Wed,  6 Nov 2019 16:28:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727244AbfKFQQL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Nov 2019 11:16:11 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:41845 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727028AbfKFQQL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 6 Nov 2019 11:16:11 -0500
-Received: by mail-lj1-f196.google.com with SMTP id m9so26750379ljh.8
-        for <bpf@vger.kernel.org>; Wed, 06 Nov 2019 08:16:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bGPUsPyyRZGBgRHd18+89r41fdXlQ11Y76Wnohi+zdE=;
-        b=vXbJ1OgQKmrWn1KiwTYw/fUxuxOOIJkm5AIZvYCj0kryna6WVqIm6rgapWdy+KOK9U
-         hGjIymWvbAzjWTWtj/1quIJY/eDvsGmB9JcMYlRy9K7h0IldyKkvdDcD+hI7s9d9PHqi
-         qNOsZRxgHLnzuhFGSgC1rq2kp3zKQDzbVl089eT5PeG5eimyP9h6UvgpDyAUA+1qzv44
-         qdmQqxJ/EVsFvL6bcFJZgRe1bDRGh+4rN3HJXg1uGHmLEeF7P8/3iR1qcBtcctT6HPGJ
-         N7s/EsdUYlezuRLN7zMUTQKWp2Oa1HEVfJR2IpxtXTTYTzmLiZNEz4GYhbALF5Ph3uKM
-         nlog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bGPUsPyyRZGBgRHd18+89r41fdXlQ11Y76Wnohi+zdE=;
-        b=O+QpmWMZGv9KxCtlbfw85o7bw21uYaORcsl1IDHqUrRWlB0OP6jr/8+kwlixWPmP+a
-         7VI9H9++sAokfGbdqTPizMs6gdzw68Jn1skuTs4Tq1oJZikfCjkL2gqFcFSYzn1SD9B9
-         LAVKFI2iwY/LnbOtYJvThwZ2YOK4Fz5KetbpgQTvxeMWXRm2Um4t4HqtUzzZ9Kg8JO9D
-         xaQHIBs1qHX6+OQEEXWKsW3pihNVuzC6T5g4Eoyqhr5fQc5iEdSrtjZAIF0W5NxJ9k4u
-         YDfOuh3d6eDdX1trt1PiIPl05La6oVUhb477iwkz7PtcyPKdDckwD7qWOrumNIU80P80
-         ji7Q==
-X-Gm-Message-State: APjAAAWRH15+FHhF3NM0RHtFK3BxfQ5zk97LPAl3wpZmCFgrHEWZrLHC
-        axLMtz7TvyLGO1ki8MIWT62vzAGSDc1MJcDj1pg=
-X-Google-Smtp-Source: APXvYqzOIfX1FNT/wT/BmMLT8C9TIlwKO8a670xGNkzmcHlcwNLhhO8N5i/P4YnhnG1XAGABzn0HxsCmbQ8ysag3rBc=
-X-Received: by 2002:a2e:2e10:: with SMTP id u16mr2674632lju.51.1573056969024;
- Wed, 06 Nov 2019 08:16:09 -0800 (PST)
-MIME-Version: 1.0
-References: <20191106161204.87261-1-iii@linux.ibm.com>
-In-Reply-To: <20191106161204.87261-1-iii@linux.ibm.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 6 Nov 2019 08:15:57 -0800
-Message-ID: <CAADnVQ+jOo61VoOp+CDAW7k+GnacgEB8Kge-4JsDBaF25sVhWA@mail.gmail.com>
+        id S1727312AbfKFQ2q convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 6 Nov 2019 11:28:46 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:58706 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727285AbfKFQ2p (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 6 Nov 2019 11:28:45 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id xA6GIuSF039726
+        for <bpf@vger.kernel.org>; Wed, 6 Nov 2019 11:28:44 -0500
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2w40qjk1qn-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 06 Nov 2019 11:28:44 -0500
+Received: from localhost
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <bpf@vger.kernel.org> from <iii@linux.ibm.com>;
+        Wed, 6 Nov 2019 16:28:41 -0000
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 6 Nov 2019 16:28:38 -0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xA6GSbgi33554552
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 6 Nov 2019 16:28:38 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CE59042047;
+        Wed,  6 Nov 2019 16:28:37 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 978A042045;
+        Wed,  6 Nov 2019 16:28:37 +0000 (GMT)
+Received: from dyn-9-152-99-170.boeblingen.de.ibm.com (unknown [9.152.99.170])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  6 Nov 2019 16:28:37 +0000 (GMT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.0 \(3594.4.19\))
 Subject: Re: [RFC PATCH bpf-next] bpf: allow JIT debugging if
  CONFIG_BPF_JIT_ALWAYS_ON is set
-To:     Ilya Leoshkevich <iii@linux.ibm.com>
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+In-Reply-To: <CAADnVQ+jOo61VoOp+CDAW7k+GnacgEB8Kge-4JsDBaF25sVhWA@mail.gmail.com>
+Date:   Wed, 6 Nov 2019 17:28:37 +0100
 Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
         Heiko Carstens <heiko.carstens@de.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+References: <20191106161204.87261-1-iii@linux.ibm.com>
+ <CAADnVQ+jOo61VoOp+CDAW7k+GnacgEB8Kge-4JsDBaF25sVhWA@mail.gmail.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+X-Mailer: Apple Mail (2.3594.4.19)
+X-TM-AS-GCONF: 00
+x-cbid: 19110616-0012-0000-0000-000003614820
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19110616-0013-0000-0000-0000219CA5F2
+Message-Id: <10A60D54-07EB-4B5D-AD3B-59C6D8D7CF9D@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-11-06_05:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=3 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=976 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1911060157
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Nov 6, 2019 at 8:12 AM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
->
-> Currently it's not possible to set bpf_jit_enable = 2 when
-> CONFIG_BPF_JIT_ALWAYS_ON is set, which makes debugging certain problems
-> harder.
+> Am 06.11.2019 um 17:15 schrieb Alexei Starovoitov <alexei.starovoitov@gmail.com>:
+> 
+> On Wed, Nov 6, 2019 at 8:12 AM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
+>> 
+>> Currently it's not possible to set bpf_jit_enable = 2 when
+>> CONFIG_BPF_JIT_ALWAYS_ON is set, which makes debugging certain problems
+>> harder.
+> 
+> This is obsolete way of debugging.
+> Please use bpftool dump jited instead.
 
-This is obsolete way of debugging.
-Please use bpftool dump jited instead.
+Is there a way to integrate bpftool nicely with e.g. test_verifier?
+With bpf_jit_enable = 2, I can see JITed code for each test right away,
+without pausing it (via gdb or rebuilding with added sleep()) and
+running bpftool.
