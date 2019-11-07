@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C617C5DF60
-	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 05:47:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A617BC5DF61
+	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 05:47:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6CEE52166E
-	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 05:47:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7A7BC214D8
+	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 05:47:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573105651;
-	bh=o1DX6LKBtZz9SG9LmSf0DWMEN+Rn/+WQDj4etxnPyh0=;
+	s=default; t=1573105655;
+	bh=o1O/+AJoW1BkQ0HZpEDJbcWmnyV2M2ZxyvbEdboY968=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=A+rZNBI2mAAdJ75xF/DHPJs1SS+Iby4EUx9VsBDxrCTHvUZxjbgLuYLGnUdHHtQmI
-	 +m1UmJJo8AzZTquhBIkZOWjeSl+PF5q7atB5cC20poWHM80jEoHLP/X1Lx38q7Vcd/
-	 gWJ0RwQqqSyHQyKKsHCC8wARb68upWOzW0BNJI7A=
+	b=wfGk7Ns3cAUsTX7dRwxTlytN0ZYiFwAifw1Mub1NIiMcBNJcydMZRurZs6MFogMLW
+	 J1wsaY2WfSWwoY1voHhZ34QUKBwqO2u6ZQzzsef6GVBvcqEq9h5dEkGHuN+rkYXRT2
+	 btCDibis/B93OIaKkg4s2eXzBi8Dz85z/wSiGlf0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726943AbfKGFrb convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 7 Nov 2019 00:47:31 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:30860 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726565AbfKGFrb (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 7 Nov 2019 00:47:31 -0500
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA75jPQR001836
-        for <bpf@vger.kernel.org>; Wed, 6 Nov 2019 21:47:29 -0800
+        id S1726958AbfKGFrf convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 7 Nov 2019 00:47:35 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:11534 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726565AbfKGFrf (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 7 Nov 2019 00:47:35 -0500
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA75i6fu016010
+        for <bpf@vger.kernel.org>; Wed, 6 Nov 2019 21:47:33 -0800
 Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2w41un3gmx-19
+        by mx0a-00082601.pphosted.com with ESMTP id 2w41u0kgxc-6
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 06 Nov 2019 21:47:29 -0800
-Received: from 2401:db00:2120:81dc:face:0:23:0 (2620:10d:c081:10::13) by
+        for <bpf@vger.kernel.org>; Wed, 06 Nov 2019 21:47:33 -0800
+Received: from 2401:db00:12:909f:face:0:3:0 (2620:10d:c081:10::13) by
  mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Wed, 6 Nov 2019 21:47:05 -0800
+ Wed, 6 Nov 2019 21:47:09 -0800
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 9F024760BC0; Wed,  6 Nov 2019 21:47:02 -0800 (PST)
+        id BB699760BC0; Wed,  6 Nov 2019 21:47:08 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -46,9 +46,9 @@ To:     <davem@davemloft.net>
 CC:     <daniel@iogearbox.net>, <x86@kernel.org>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 09/17] selftests/bpf: Add combined fentry/fexit test
-Date:   Wed, 6 Nov 2019 21:46:36 -0800
-Message-ID: <20191107054644.1285697-10-ast@kernel.org>
+Subject: [PATCH v2 bpf-next 12/17] bpf: Fix race in btf_resolve_helper_id()
+Date:   Wed, 6 Nov 2019 21:46:39 -0800
+Message-ID: <20191107054644.1285697-13-ast@kernel.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191107054644.1285697-1-ast@kernel.org>
 References: <20191107054644.1285697-1-ast@kernel.org>
@@ -58,121 +58,111 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-11-06_09:2019-11-06,2019-11-06 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 bulkscore=0
- mlxscore=0 spamscore=0 suspectscore=1 impostorscore=0 mlxlogscore=858
- lowpriorityscore=0 clxscore=1034 malwarescore=0 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1911070060
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ suspectscore=1 bulkscore=0 clxscore=1015 priorityscore=1501 adultscore=0
+ lowpriorityscore=0 mlxscore=0 spamscore=0 impostorscore=0 mlxlogscore=999
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1911070059
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a combined fentry/fexit test.
+btf_resolve_helper_id() caching logic is racy, since under root the verifier
+can verify several programs in parallel. Fix it with extra spin_lock.
 
+Fixes: a7658e1a4164 ("bpf: Check types of arguments passed into helpers")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../selftests/bpf/prog_tests/fentry_fexit.c   | 90 +++++++++++++++++++
- 1 file changed, 90 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
+ include/linux/bpf.h   |  3 ++-
+ kernel/bpf/btf.c      | 34 +++++++++++++++++++++++++++++++++-
+ kernel/bpf/verifier.c |  6 +-----
+ 3 files changed, 36 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-new file mode 100644
-index 000000000000..40bcff2cc274
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-@@ -0,0 +1,90 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2019 Facebook */
-+#include <test_progs.h>
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 9206b7e86dde..c287dfce2a17 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -874,7 +874,8 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ 		      const struct btf_type *t, int off, int size,
+ 		      enum bpf_access_type atype,
+ 		      u32 *next_btf_id);
+-u32 btf_resolve_helper_id(struct bpf_verifier_log *log, void *, int);
++u32 btf_resolve_helper_id(struct bpf_verifier_log *log,
++			  const struct bpf_func_proto *fn, int);
+ 
+ int btf_distill_func_proto(struct bpf_verifier_log *log,
+ 			   struct btf *btf,
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 78d9ceaabc00..7155787a0b13 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -3584,7 +3584,8 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ 	return -EINVAL;
+ }
+ 
+-u32 btf_resolve_helper_id(struct bpf_verifier_log *log, void *fn, int arg)
++static u32 __btf_resolve_helper_id(struct bpf_verifier_log *log, void *fn,
++				   int arg)
+ {
+ 	char fnname[KSYM_SYMBOL_LEN + 4] = "btf_";
+ 	const struct btf_param *args;
+@@ -3652,6 +3653,37 @@ u32 btf_resolve_helper_id(struct bpf_verifier_log *log, void *fn, int arg)
+ 	return btf_id;
+ }
+ 
++static DEFINE_SPINLOCK(btf_resolve_lock);
 +
-+void test_fentry_fexit(void)
++u32 btf_resolve_helper_id(struct bpf_verifier_log *log,
++			  const struct bpf_func_proto *fn, int arg)
 +{
-+	struct bpf_prog_load_attr attr_fentry = {
-+		.file = "./fentry_test.o",
-+	};
-+	struct bpf_prog_load_attr attr_fexit = {
-+		.file = "./fexit_test.o",
-+	};
++	u32 *btf_id = &fn->btf_id[arg];
++	u32 ret;
 +
-+	struct bpf_object *obj_fentry = NULL, *obj_fexit = NULL, *pkt_obj;
-+	struct bpf_map *data_map_fentry, *data_map_fexit;
-+	char fentry_name[] = "fentry/bpf_fentry_testX";
-+	char fexit_name[] = "fexit/bpf_fentry_testX";
-+	int err, pkt_fd, kfree_skb_fd, i;
-+	struct bpf_link *link[12] = {};
-+	struct bpf_program *prog[12];
-+	__u32 duration, retval;
-+	const int zero = 0;
-+	u64 result[12];
++	if (fn->arg_type[arg] != ARG_PTR_TO_BTF_ID)
++		return -EINVAL;
 +
-+	err = bpf_prog_load("./test_pkt_access.o", BPF_PROG_TYPE_SCHED_CLS,
-+			    &pkt_obj, &pkt_fd);
-+	if (CHECK(err, "prog_load sched cls", "err %d errno %d\n", err, errno))
-+		return;
-+	err = bpf_prog_load_xattr(&attr_fentry, &obj_fentry, &kfree_skb_fd);
-+	if (CHECK(err, "prog_load fail", "err %d errno %d\n", err, errno))
-+		goto close_prog;
-+	err = bpf_prog_load_xattr(&attr_fexit, &obj_fexit, &kfree_skb_fd);
-+	if (CHECK(err, "prog_load fail", "err %d errno %d\n", err, errno))
-+		goto close_prog;
-+
-+	for (i = 0; i < 6; i++) {
-+		fentry_name[sizeof(fentry_name) - 2] = '1' + i;
-+		prog[i] = bpf_object__find_program_by_title(obj_fentry, fentry_name);
-+		if (CHECK(!prog[i], "find_prog", "prog %s not found\n", fentry_name))
-+			goto close_prog;
-+		link[i] = bpf_program__attach_trace(prog[i]);
-+		if (CHECK(IS_ERR(link[i]), "attach_trace", "failed to link\n"))
-+			goto close_prog;
++	if (*btf_id)
++		/* ok to do without lock. It only set once */
++		return *btf_id;
++	/* ok to race the search. The result is the same */
++	ret = __btf_resolve_helper_id(log, fn->func, arg);
++	if (!ret) {
++		bpf_log(log, "BTF resolution bug\n");
++		return -EFAULT;
 +	}
-+	data_map_fentry = bpf_object__find_map_by_name(obj_fentry, "fentry_t.bss");
-+	if (CHECK(!data_map_fentry, "find_data_map", "data map not found\n"))
-+		goto close_prog;
-+
-+	for (i = 6; i < 12; i++) {
-+		fexit_name[sizeof(fexit_name) - 2] = '1' + i - 6;
-+		prog[i] = bpf_object__find_program_by_title(obj_fexit, fexit_name);
-+		if (CHECK(!prog[i], "find_prog", "prog %s not found\n", fexit_name))
-+			goto close_prog;
-+		link[i] = bpf_program__attach_trace(prog[i]);
-+		if (CHECK(IS_ERR(link[i]), "attach_trace", "failed to link\n"))
-+			goto close_prog;
++	spin_lock(&btf_resolve_lock);
++	if (*btf_id) {
++		ret = *btf_id;
++		goto out;
 +	}
-+	data_map_fexit = bpf_object__find_map_by_name(obj_fexit, "fexit_te.bss");
-+	if (CHECK(!data_map_fexit, "find_data_map", "data map not found\n"))
-+		goto close_prog;
-+
-+	err = bpf_prog_test_run(pkt_fd, 1, &pkt_v6, sizeof(pkt_v6),
-+				NULL, NULL, &retval, &duration);
-+	CHECK(err || retval, "ipv6",
-+	      "err %d errno %d retval %d duration %d\n",
-+	      err, errno, retval, duration);
-+
-+	err = bpf_map_lookup_elem(bpf_map__fd(data_map_fentry), &zero, &result);
-+	if (CHECK(err, "get_result",
-+		  "failed to get output data: %d\n", err))
-+		goto close_prog;
-+
-+	err = bpf_map_lookup_elem(bpf_map__fd(data_map_fexit), &zero, result + 6);
-+	if (CHECK(err, "get_result",
-+		  "failed to get output data: %d\n", err))
-+		goto close_prog;
-+
-+	for (i = 0; i < 12; i++)
-+		if (CHECK(result[i] != 1, "result", "bpf_fentry_test%d failed err %ld\n",
-+			  i % 6 + 1, result[i]))
-+			goto close_prog;
-+
-+close_prog:
-+	for (i = 0; i < 12; i++)
-+		if (!IS_ERR_OR_NULL(link[i]))
-+			bpf_link__destroy(link[i]);
-+	bpf_object__close(obj_fentry);
-+	bpf_object__close(obj_fexit);
-+	bpf_object__close(pkt_obj);
++	*btf_id = ret;
++out:
++	spin_unlock(&btf_resolve_lock);
++	return ret;
 +}
++
+ static int __get_type_size(struct btf *btf, u32 btf_id,
+ 			   const struct btf_type **bad_type)
+ {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 36542edd4936..c4fd11a27d81 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4147,11 +4147,7 @@ static int check_helper_call(struct bpf_verifier_env *env, int func_id, int insn
+ 	meta.func_id = func_id;
+ 	/* check args */
+ 	for (i = 0; i < 5; i++) {
+-		if (fn->arg_type[i] == ARG_PTR_TO_BTF_ID) {
+-			if (!fn->btf_id[i])
+-				fn->btf_id[i] = btf_resolve_helper_id(&env->log, fn->func, i);
+-			meta.btf_id = fn->btf_id[i];
+-		}
++		meta.btf_id = btf_resolve_helper_id(&env->log, fn, i);
+ 		err = check_func_arg(env, BPF_REG_1 + i, fn->arg_type[i], &meta);
+ 		if (err)
+ 			return err;
 -- 
 2.23.0
 
