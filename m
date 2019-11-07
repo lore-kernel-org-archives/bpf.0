@@ -2,44 +2,44 @@ Return-Path: <SRS0=ta3s=Y7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45A8DFA372C
-	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 02:09:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EA8AFA372C
+	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 02:09:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0E0A2217D7
-	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 02:09:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CB497217D7
+	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 02:09:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="b1f8Hkxs"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="THy42hYV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732230AbfKGCJ3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Nov 2019 21:09:29 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:42086 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732713AbfKGCJ3 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 6 Nov 2019 21:09:29 -0500
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA726IeF005806
-        for <bpf@vger.kernel.org>; Wed, 6 Nov 2019 18:09:28 -0800
+        id S1733017AbfKGCJc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Nov 2019 21:09:32 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:10164 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732713AbfKGCJc (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 6 Nov 2019 21:09:32 -0500
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA729Vc3000359
+        for <bpf@vger.kernel.org>; Wed, 6 Nov 2019 18:09:31 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=laOvc9e7uFypBJ4p6LaL8U4EIapGLQ/v8Btvh2/r8DM=;
- b=b1f8HkxskHyTXCa5/sWmNuPwp8alVQOPirXzpIrlOo8okQxXg/UJUbE1tUCu7bDUoiQE
- ULiNjpN5BwBmneGyAM6j3JeTHp+rw3MzIXZzJktUZU6ri3NWZAGQc1/4CBvLmXjKdPcS
- wiOa31u4RgmKGU4OryEa74npIVNR72sp690= 
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=gg08qCfDg4ZgIQqw/AQObo9HxVXi+vKfc948bZ5/waE=;
+ b=THy42hYVWIoMHi6dV4u25+RuBSOqI2g5zbH4ELrrvJTcXInVxqDpjYyUbN2PxmLZyeoO
+ rNsEcFrbse0TYbpetGK9X+y6AlGU72lzjlPCTur/4EwYg6AJb/hn13zeJJygtfE6Imy+
+ b78a9B6ABjXl+R9Yc6V6MrE4BzSY9okvW3A= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2w41un2k93-4
+        by mx0a-00082601.pphosted.com with ESMTP id 2w41u0jk04-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 06 Nov 2019 18:09:28 -0800
-Received: from 2401:db00:2050:5076:face:0:1f:0 (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 06 Nov 2019 18:09:31 -0800
+Received: from 2401:db00:2050:5102:face:0:3b:0 (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 6 Nov 2019 18:09:25 -0800
+ 15.1.1713.5; Wed, 6 Nov 2019 18:09:20 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id B1DD32EC17EE; Wed,  6 Nov 2019 18:09:24 -0800 (PST)
+        id 36A262EC17EE; Wed,  6 Nov 2019 18:09:20 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,21 +48,19 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 2/5] libbpf: fix potential overflow issue
-Date:   Wed, 6 Nov 2019 18:08:52 -0800
-Message-ID: <20191107020855.3834758-3-andriin@fb.com>
+Subject: [PATCH bpf-next 0/5] Fix bugs and issues found by static analysis in libbpf
+Date:   Wed, 6 Nov 2019 18:08:50 -0800
+Message-ID: <20191107020855.3834758-1-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191107020855.3834758-1-andriin@fb.com>
-References: <20191107020855.3834758-1-andriin@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-11-06_09:2019-11-06,2019-11-06 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 bulkscore=0
- mlxscore=0 spamscore=0 suspectscore=8 impostorscore=0 mlxlogscore=712
- lowpriorityscore=0 clxscore=1015 malwarescore=0 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ suspectscore=25 bulkscore=0 clxscore=1015 priorityscore=1501 adultscore=0
+ lowpriorityscore=0 mlxscore=0 spamscore=0 impostorscore=0 mlxlogscore=651
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1910280000 definitions=main-1911070021
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -70,28 +68,23 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix a potential overflow issue found by LGTM analysis, based on Github libbpf
-source code.
+Github's mirror of libbpf got LGTM and Coverity statis analysis running
+against it and spotted few real bugs and few potential issues. This patch
+series fixes found issues.
 
-Fixes: 3d65014146c6 ("bpf: libbpf: Add btf_line_info support to libbpf")
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/lib/bpf/bpf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Andrii Nakryiko (5):
+  libbpf: fix memory leak/double free issue
+  libbpf: fix potential overflow issue
+  libbpf: fix another potential overflow issue in bpf_prog_linfo
+  libbpf: make btf__resolve_size logic always check size error condition
+  libbpf: improve handling of corrupted ELF during map initialization
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index ca0d635b1d5e..b3e3e99a0f28 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -189,7 +189,7 @@ static void *
- alloc_zero_tailing_info(const void *orecord, __u32 cnt,
- 			__u32 actual_rec_size, __u32 expected_rec_size)
- {
--	__u64 info_len = actual_rec_size * cnt;
-+	__u64 info_len = (__u64)actual_rec_size * cnt;
- 	void *info, *nrecord;
- 	int i;
- 
+ tools/lib/bpf/bpf.c            |  2 +-
+ tools/lib/bpf/bpf_prog_linfo.c | 14 +++++++-------
+ tools/lib/bpf/btf.c            |  3 +--
+ tools/lib/bpf/libbpf.c         |  6 +++---
+ 4 files changed, 12 insertions(+), 13 deletions(-)
+
 -- 
 2.17.1
 
