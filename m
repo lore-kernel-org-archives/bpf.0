@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93764C5DF61
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECDBEFA372C
 	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 05:47:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 62082214D8
+	by mail.kernel.org (Postfix) with ESMTP id C2DAB21D7E
 	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 05:47:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1573105633;
-	bh=wbPEQ/+bZqR4ngd9NWlwMmgvJSFFTeruvQIFjPJISX4=;
+	bh=3a7+Cd7vq9qHoF8v9QXFEHj5+6OOeZBrKv3k4fkLBI0=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=HkV7ClsZPigZjAPEPBOMx05ktijOfr8JuRmTrnt6eriWfD4aJrnVuGyT+kvguSuR8
-	 2CQufKPqkakle6uCKsOclexOF/DxlSkJhQmKtMhuvK77QVEeAIL/XYv7wyjf1udBV2
-	 yOaUDzjlbfja5bW0G5YzJVXLmStU8CostbOWdyQ8=
+	b=kZQO+UGF37Y8sD60UnYcRDRHMcN+TLSpPSibyyd3mHm8qOlpXVtcWPNdSAX21dalZ
+	 3YHCWEZjh4wyuNIsn9yUtAjy13xjWE/7C7LLwviuA2CtgwlQtO4BI1WQHhwydIclBw
+	 ManehrZcj57k8Sni/3LivvXBTWcBCCTSRvnpNTkY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726856AbfKGFrM convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 7 Nov 2019 00:47:12 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:31478 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726823AbfKGFrL (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 7 Nov 2019 00:47:11 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA75dfv8027387
-        for <bpf@vger.kernel.org>; Wed, 6 Nov 2019 21:47:11 -0800
+        id S1726699AbfKGFrN convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 7 Nov 2019 00:47:13 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:25018 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726587AbfKGFrM (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 7 Nov 2019 00:47:12 -0500
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA75hGlF016600
+        for <bpf@vger.kernel.org>; Wed, 6 Nov 2019 21:47:12 -0800
 Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2w41u2kg88-17
+        by mx0a-00082601.pphosted.com with ESMTP id 2w41vxuh9v-9
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 06 Nov 2019 21:47:10 -0800
-Received: from 2401:db00:30:600c:face:0:39:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::126) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 06 Nov 2019 21:47:12 -0800
+Received: from 2401:db00:2050:5102:face:0:37:0 (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Wed, 6 Nov 2019 21:47:07 -0800
+ Wed, 6 Nov 2019 21:46:58 -0800
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id B1072760BC0; Wed,  6 Nov 2019 21:47:06 -0800 (PST)
+        id 801B3760BC0; Wed,  6 Nov 2019 21:46:56 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -46,9 +46,9 @@ To:     <davem@davemloft.net>
 CC:     <daniel@iogearbox.net>, <x86@kernel.org>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 11/17] bpf: Reserver space for BPF trampoline in BPF programs
-Date:   Wed, 6 Nov 2019 21:46:38 -0800
-Message-ID: <20191107054644.1285697-12-ast@kernel.org>
+Subject: [PATCH v2 bpf-next 06/17] bpf: Add kernel test functions for fentry testing
+Date:   Wed, 6 Nov 2019 21:46:33 -0800
+Message-ID: <20191107054644.1285697-7-ast@kernel.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191107054644.1285697-1-ast@kernel.org>
 References: <20191107054644.1285697-1-ast@kernel.org>
@@ -58,9 +58,9 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-11-06_09:2019-11-06,2019-11-06 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- bulkscore=0 suspectscore=1 priorityscore=1501 malwarescore=0 phishscore=0
- adultscore=0 impostorscore=0 mlxlogscore=578 mlxscore=0 clxscore=1015
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ malwarescore=0 lowpriorityscore=0 impostorscore=0 clxscore=1034 mlxscore=0
+ suspectscore=1 bulkscore=0 phishscore=0 adultscore=0 mlxlogscore=999
  spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1910280000 definitions=main-1911070059
 X-FB-Internal: deliver
@@ -69,43 +69,74 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-BPF trampoline can be made to work with existing 5 bytes of BPF program
-prologue, but let's add 5 bytes of NOPs to the beginning of every JITed BPF
-program to make BPF trampoline job easier. They can be removed in the future.
+Add few kernel functions with various number of arguments,
+their types and sizes for BPF trampoline testing to cover
+different calling conventions.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- arch/x86/net/bpf_jit_comp.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ net/bpf/test_run.c | 41 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 44169e8bffc0..260f61276f18 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -206,7 +206,7 @@ struct jit_context {
- /* number of bytes emit_call() needs to generate call instruction */
- #define X86_CALL_SIZE		5
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 0be4497cb832..62933279fbba 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -105,6 +105,40 @@ static int bpf_test_finish(const union bpf_attr *kattr,
+ 	return err;
+ }
  
--#define PROLOGUE_SIZE		20
-+#define PROLOGUE_SIZE		25
- 
- /*
-  * Emit x86-64 prologue code for BPF program and check its size.
-@@ -215,8 +215,13 @@ struct jit_context {
- static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf)
++/* Integer types of various sizes and pointer combinations cover variety of
++ * architecture dependent calling conventions. 7+ can be supported in the
++ * future.
++ */
++int noinline bpf_fentry_test1(int a)
++{
++	return a + 1;
++}
++
++int noinline bpf_fentry_test2(int a, u64 b)
++{
++	return a + b;
++}
++
++int noinline bpf_fentry_test3(char a, int b, u64 c)
++{
++	return a + b + c;
++}
++
++int noinline bpf_fentry_test4(void *a, char b, int c, u64 d)
++{
++	return (long)a + b + c + d;
++}
++
++int noinline bpf_fentry_test5(u64 a, void *b, short c, int d, u64 e)
++{
++	return a + (long)b + c + d + e;
++}
++
++int noinline bpf_fentry_test6(u64 a, void *b, short c, int d, void *e, u64 f)
++{
++	return a + (long)b + c + d + (long)e + f;
++}
++
+ static void *bpf_test_init(const union bpf_attr *kattr, u32 size,
+ 			   u32 headroom, u32 tailroom)
  {
- 	u8 *prog = *pprog;
--	int cnt = 0;
-+	int cnt = X86_CALL_SIZE;
+@@ -122,6 +156,13 @@ static void *bpf_test_init(const union bpf_attr *kattr, u32 size,
+ 		kfree(data);
+ 		return ERR_PTR(-EFAULT);
+ 	}
++	if (bpf_fentry_test1(1) != 2 ||
++	    bpf_fentry_test2(2, 3) != 5 ||
++	    bpf_fentry_test3(4, 5, 6) != 15 ||
++	    bpf_fentry_test4((void *)7, 8, 9, 10) != 34 ||
++	    bpf_fentry_test5(11, (void *)12, 13, 14, 15) != 65 ||
++	    bpf_fentry_test6(16, (void *)17, 18, 19, (void *)20, 21) != 111)
++		return ERR_PTR(-EFAULT);
+ 	return data;
+ }
  
-+	/* BPF trampoline can be made to work without these nops,
-+	 * but let's waste 5 bytes for now and optimize later
-+	 */
-+	memcpy(prog, ideal_nops[NOP_ATOMIC5], cnt);
-+	prog += cnt;
- 	EMIT1(0x55);             /* push rbp */
- 	EMIT3(0x48, 0x89, 0xE5); /* mov rbp, rsp */
- 	/* sub rsp, rounded_stack_depth */
 -- 
 2.23.0
 
