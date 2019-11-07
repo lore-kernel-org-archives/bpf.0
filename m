@@ -2,354 +2,297 @@ Return-Path: <SRS0=ta3s=Y7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9BF9C43331
-	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 18:09:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E764EC43331
+	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 19:02:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 97AC220869
-	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 18:09:19 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="V9ooKzFN"
+	by mail.kernel.org (Postfix) with ESMTP id B43E8218AE
+	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 19:02:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1573153330;
+	bh=/uMza9E8a9VTLNEHHurGZzavvLfKCAQ2PHm1FyqSbAU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=seXT9wsIIpkzz4MCerOKspGBNJCoKXAwqcVojQ05EJmk4pOXbmHubSyDuIkIFHCnu
+	 j5TFUGv4fyfyCcGaBK3jennWVcJ+cNV1wQJHaOM8rweCEnFDzSkmPMXPk3acioszjW
+	 eW3HAhC+Zngeko+v9r7tn28Mw/TuillYgwphr5M4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729858AbfKGSJT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 Nov 2019 13:09:19 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:59296 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729688AbfKGSJS (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 7 Nov 2019 13:09:18 -0500
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA7HswlT018516
-        for <bpf@vger.kernel.org>; Thu, 7 Nov 2019 10:09:18 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=/DeASfoBNR+LMqDiZv3ZdLSmqKbP61+am62oijhyMAI=;
- b=V9ooKzFNSfDE2m2VFIFF7ZTUNmoYxWB0x21/bs9hSqbDyh7ps/1oXMuYpbWiULHmhy5t
- jGYjQLS9bP+kMEqipPm9qb9A/JRBJJsf2+S7tMqpUw/TZmhAMwiLyGKvnQBv9naz12LU
- hHK3vjfzwVDPK98HRSgsOuUhfFl24I0Wj24= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2w41vxxngh-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 07 Nov 2019 10:09:18 -0800
-Received: from 2401:db00:2050:5102:face:0:37:0 (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 7 Nov 2019 10:09:05 -0800
-Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 14EA3294193C; Thu,  7 Nov 2019 10:09:03 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Martin KaFai Lau <kafai@fb.com>
-Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
+        id S1726061AbfKGTCK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 Nov 2019 14:02:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41360 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725851AbfKGTCK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 7 Nov 2019 14:02:10 -0500
+Received: from quaco.ghostprotocols.net (179-240-172-58.3g.claro.net.br [179.240.172.58])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6B3C42085B;
+        Thu,  7 Nov 2019 19:01:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573153328;
+        bh=/uMza9E8a9VTLNEHHurGZzavvLfKCAQ2PHm1FyqSbAU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=kfm70IPUF2D64BLpVAKR5sOpC/n9u8w5RnZEX6pPsgHMKOzNqqRkJqxcvuOXWN1yN
+         qeDUh6hpYmUu66lV/TdkaddHjwR816C8Hp4/fzyte+mbQk28hOetxO/JLMSpclewu0
+         ovsVzh5od5T0S+xvHHBJ9H6N5yccrg/g+fMwzl5U=
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        David Miller <davem@davemloft.net>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v4 bpf-next 1/2] bpf: Add array support to btf_struct_access
-Date:   Thu, 7 Nov 2019 10:09:03 -0800
-Message-ID: <20191107180903.4097702-1-kafai@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191107180901.4097452-1-kafai@fb.com>
-References: <20191107180901.4097452-1-kafai@fb.com>
-X-FB-Internal: Safe
+        Jin Yao <yao.jin@linux.intel.com>,
+        John Garry <john.garry@huawei.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Song Liu <songliubraving@fb.com>,
+        Stephane Eranian <eranian@google.com>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        clang-built-linux@googlegroups.com, netdev@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 11/63] perf tools: Move ALLOC_LIST into a function
+Date:   Thu,  7 Nov 2019 15:59:19 -0300
+Message-Id: <20191107190011.23924-12-acme@kernel.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20191107190011.23924-1-acme@kernel.org>
+References: <20191107190011.23924-1-acme@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-07_05:2019-11-07,2019-11-07 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 lowpriorityscore=0 impostorscore=0 clxscore=1015 mlxscore=0
- suspectscore=8 bulkscore=0 phishscore=0 adultscore=0 mlxlogscore=999
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1911070165
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds array support to btf_struct_access().
-It supports array of int, array of struct and multidimensional
-array.
+From: Ian Rogers <irogers@google.com>
 
-It also allows using u8[] as a scratch space.  For example,
-it allows access the "char cb[48]" with size larger than
-the array's element "char".  Another potential use case is
-"u64 icsk_ca_priv[]" in the tcp congestion control.
+Having a YYABORT in a macro makes it hard to free memory for components
+of a rule. Separate the logic out.
 
-btf_resolve_size() is added to resolve the size of any type.
-It will follow the modifier if there is any.  Please
-see the function comment for details.
-
-This patch also adds the "off < moff" check at the beginning
-of the for loop.  It is to reject cases when "off" is pointing
-to a "hole" in a struct.
-
-Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+Signed-off-by: Ian Rogers <irogers@google.com>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andi Kleen <ak@linux.intel.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jin Yao <yao.jin@linux.intel.com>
+Cc: John Garry <john.garry@huawei.com>
+Cc: Kan Liang <kan.liang@linux.intel.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Stephane Eranian <eranian@google.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: bpf@vger.kernel.org
+Cc: clang-built-linux@googlegroups.com
+Cc: netdev@vger.kernel.org
+Link: http://lore.kernel.org/lkml/20191023005337.196160-5-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- kernel/bpf/btf.c | 195 ++++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 166 insertions(+), 29 deletions(-)
+ tools/perf/util/parse-events.y | 65 ++++++++++++++++++++++------------
+ 1 file changed, 43 insertions(+), 22 deletions(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 128d89601d73..4639c4ba9a9b 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -1036,6 +1036,82 @@ static const struct resolve_vertex *env_stack_peak(struct btf_verifier_env *env)
- 	return env->top_stack ? &env->stack[env->top_stack - 1] : NULL;
- }
+diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
+index 48126ae4cd13..5863acb34780 100644
+--- a/tools/perf/util/parse-events.y
++++ b/tools/perf/util/parse-events.y
+@@ -25,12 +25,17 @@ do { \
+ 		YYABORT; \
+ } while (0)
  
-+/* Resolve the size of a passed-in "type"
-+ *
-+ * type: is an array (e.g. u32 array[x][y])
-+ * return type: type "u32[x][y]", i.e. BTF_KIND_ARRAY,
-+ * *type_size: (x * y * sizeof(u32)).  Hence, *type_size always
-+ *             corresponds to the return type.
-+ * *elem_type: u32
-+ * *total_nelems: (x * y).  Hence, individual elem size is
-+ *                (*type_size / *total_nelems)
-+ *
-+ * type: is not an array (e.g. const struct X)
-+ * return type: type "struct X"
-+ * *type_size: sizeof(struct X)
-+ * *elem_type: same as return type ("struct X")
-+ * *total_nelems: 1
-+ */
-+static const struct btf_type *
-+btf_resolve_size(const struct btf *btf, const struct btf_type *type,
-+		 u32 *type_size, const struct btf_type **elem_type,
-+		 u32 *total_nelems)
+-#define ALLOC_LIST(list) \
+-do { \
+-	list = malloc(sizeof(*list)); \
+-	ABORT_ON(!list);              \
+-	INIT_LIST_HEAD(list);         \
+-} while (0)
++static struct list_head* alloc_list()
 +{
-+	const struct btf_type *array_type = NULL;
-+	const struct btf_array *array;
-+	u32 i, size, nelems = 1;
++	struct list_head *list;
 +
-+	for (i = 0; i < MAX_RESOLVE_DEPTH; i++) {
-+		switch (BTF_INFO_KIND(type->info)) {
-+		/* type->size can be used */
-+		case BTF_KIND_INT:
-+		case BTF_KIND_STRUCT:
-+		case BTF_KIND_UNION:
-+		case BTF_KIND_ENUM:
-+			size = type->size;
-+			goto resolved;
++	list = malloc(sizeof(*list));
++	if (!list)
++		return NULL;
 +
-+		case BTF_KIND_PTR:
-+			size = sizeof(void *);
-+			goto resolved;
-+
-+		/* Modifiers */
-+		case BTF_KIND_TYPEDEF:
-+		case BTF_KIND_VOLATILE:
-+		case BTF_KIND_CONST:
-+		case BTF_KIND_RESTRICT:
-+			type = btf_type_by_id(btf, type->type);
-+			break;
-+
-+		case BTF_KIND_ARRAY:
-+			if (!array_type)
-+				array_type = type;
-+			array = btf_type_array(type);
-+			if (nelems && array->nelems > U32_MAX / nelems)
-+				return ERR_PTR(-EINVAL);
-+			nelems *= array->nelems;
-+			type = btf_type_by_id(btf, array->type);
-+			break;
-+
-+		/* type without size */
-+		default:
-+			return ERR_PTR(-EINVAL);
-+		}
-+	}
-+
-+	return ERR_PTR(-EINVAL);
-+
-+resolved:
-+	if (nelems && size > U32_MAX / nelems)
-+		return ERR_PTR(-EINVAL);
-+
-+	*type_size = nelems * size;
-+	*total_nelems = nelems;
-+	*elem_type = type;
-+
-+	return array_type ? : type;
++	INIT_LIST_HEAD(list);
++	return list;
 +}
-+
- /* The input param "type_id" must point to a needs_resolve type */
- static const struct btf_type *btf_type_id_resolve(const struct btf *btf,
- 						  u32 *type_id)
-@@ -3494,10 +3570,10 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 		      enum bpf_access_type atype,
- 		      u32 *next_btf_id)
+ 
+ static void inc_group_count(struct list_head *list,
+ 		       struct parse_events_state *parse_state)
+@@ -238,7 +243,8 @@ PE_NAME opt_pmu_config
+ 	if (error)
+ 		error->idx = @1.first_column;
+ 
+-	ALLOC_LIST(list);
++	list = alloc_list();
++	ABORT_ON(!list);
+ 	if (parse_events_add_pmu(_parse_state, list, $1, $2, false, false)) {
+ 		struct perf_pmu *pmu = NULL;
+ 		int ok = 0;
+@@ -306,7 +312,8 @@ value_sym '/' event_config '/'
+ 	int type = $1 >> 16;
+ 	int config = $1 & 255;
+ 
+-	ALLOC_LIST(list);
++	list = alloc_list();
++	ABORT_ON(!list);
+ 	ABORT_ON(parse_events_add_numeric(_parse_state, list, type, config, $3));
+ 	parse_events_terms__delete($3);
+ 	$$ = list;
+@@ -318,7 +325,8 @@ value_sym sep_slash_slash_dc
+ 	int type = $1 >> 16;
+ 	int config = $1 & 255;
+ 
+-	ALLOC_LIST(list);
++	list = alloc_list();
++	ABORT_ON(!list);
+ 	ABORT_ON(parse_events_add_numeric(_parse_state, list, type, config, NULL));
+ 	$$ = list;
+ }
+@@ -327,7 +335,8 @@ PE_VALUE_SYM_TOOL sep_slash_slash_dc
  {
-+	u32 i, moff, mtrue_end, msize = 0, total_nelems = 0;
-+	const struct btf_type *mtype, *elem_type = NULL;
- 	const struct btf_member *member;
--	const struct btf_type *mtype;
- 	const char *tname, *mname;
--	int i, moff = 0, msize;
+ 	struct list_head *list;
  
- again:
- 	tname = __btf_name_by_offset(btf_vmlinux, t->name_off);
-@@ -3507,40 +3583,88 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 	}
+-	ALLOC_LIST(list);
++	list = alloc_list();
++	ABORT_ON(!list);
+ 	ABORT_ON(parse_events_add_tool(_parse_state, list, $1));
+ 	$$ = list;
+ }
+@@ -339,7 +348,8 @@ PE_NAME_CACHE_TYPE '-' PE_NAME_CACHE_OP_RESULT '-' PE_NAME_CACHE_OP_RESULT opt_e
+ 	struct parse_events_error *error = parse_state->error;
+ 	struct list_head *list;
  
- 	for_each_member(i, t, member) {
--		/* offset of the field in bits */
--		moff = btf_member_bit_offset(t, member);
--
- 		if (btf_member_bitfield_size(t, member))
- 			/* bitfields are not supported yet */
- 			continue;
+-	ALLOC_LIST(list);
++	list = alloc_list();
++	ABORT_ON(!list);
+ 	ABORT_ON(parse_events_add_cache(list, &parse_state->idx, $1, $3, $5, error, $6));
+ 	parse_events_terms__delete($6);
+ 	$$ = list;
+@@ -351,7 +361,8 @@ PE_NAME_CACHE_TYPE '-' PE_NAME_CACHE_OP_RESULT opt_event_config
+ 	struct parse_events_error *error = parse_state->error;
+ 	struct list_head *list;
  
--		if (off + size <= moff / 8)
-+		/* offset of the field in bytes */
-+		moff = btf_member_bit_offset(t, member) / 8;
-+		if (off + size <= moff)
- 			/* won't find anything, field is already too far */
- 			break;
-+		/* In case of "off" is pointing to holes of a struct */
-+		if (off < moff)
-+			continue;
+-	ALLOC_LIST(list);
++	list = alloc_list();
++	ABORT_ON(!list);
+ 	ABORT_ON(parse_events_add_cache(list, &parse_state->idx, $1, $3, NULL, error, $4));
+ 	parse_events_terms__delete($4);
+ 	$$ = list;
+@@ -363,7 +374,8 @@ PE_NAME_CACHE_TYPE opt_event_config
+ 	struct parse_events_error *error = parse_state->error;
+ 	struct list_head *list;
  
- 		/* type of the field */
- 		mtype = btf_type_by_id(btf_vmlinux, member->type);
- 		mname = __btf_name_by_offset(btf_vmlinux, member->name_off);
+-	ALLOC_LIST(list);
++	list = alloc_list();
++	ABORT_ON(!list);
+ 	ABORT_ON(parse_events_add_cache(list, &parse_state->idx, $1, NULL, NULL, error, $2));
+ 	parse_events_terms__delete($2);
+ 	$$ = list;
+@@ -375,7 +387,8 @@ PE_PREFIX_MEM PE_VALUE '/' PE_VALUE ':' PE_MODIFIER_BP sep_dc
+ 	struct parse_events_state *parse_state = _parse_state;
+ 	struct list_head *list;
  
--		/* skip modifiers */
--		while (btf_type_is_modifier(mtype))
--			mtype = btf_type_by_id(btf_vmlinux, mtype->type);
--
--		if (btf_type_is_array(mtype))
--			/* array deref is not supported yet */
--			continue;
--
--		if (!btf_type_has_size(mtype) && !btf_type_is_ptr(mtype)) {
-+		mtype = btf_resolve_size(btf_vmlinux, mtype, &msize,
-+					 &elem_type, &total_nelems);
-+		if (IS_ERR(mtype)) {
- 			bpf_log(log, "field %s doesn't have size\n", mname);
- 			return -EFAULT;
- 		}
--		if (btf_type_is_ptr(mtype))
--			msize = 8;
--		else
--			msize = mtype->size;
--		if (off >= moff / 8 + msize)
-+
-+		mtrue_end = moff + msize;
-+		if (off >= mtrue_end)
- 			/* no overlap with member, keep iterating */
- 			continue;
-+
-+		if (btf_type_is_array(mtype)) {
-+			u32 elem_idx;
-+
-+			/* btf_resolve_size() above helps to
-+			 * linearize a multi-dimensional array.
-+			 *
-+			 * The logic here is treating an array
-+			 * in a struct as the following way:
-+			 *
-+			 * struct outer {
-+			 *	struct inner array[2][2];
-+			 * };
-+			 *
-+			 * looks like:
-+			 *
-+			 * struct outer {
-+			 *	struct inner array_elem0;
-+			 *	struct inner array_elem1;
-+			 *	struct inner array_elem2;
-+			 *	struct inner array_elem3;
-+			 * };
-+			 *
-+			 * When accessing outer->array[1][0], it moves
-+			 * moff to "array_elem2", set mtype to
-+			 * "struct inner", and msize also becomes
-+			 * sizeof(struct inner).  Then most of the
-+			 * remaining logic will fall through without
-+			 * caring the current member is an array or
-+			 * not.
-+			 *
-+			 * Unlike mtype/msize/moff, mtrue_end does not
-+			 * change.  The naming difference ("_true") tells
-+			 * that it is not always corresponding to
-+			 * the current mtype/msize/moff.
-+			 * It is the true end of the current
-+			 * member (i.e. array in this case).  That
-+			 * will allow an int array to be accessed like
-+			 * a scratch space,
-+			 * i.e. allow access beyond the size of
-+			 *      the array's element as long as it is
-+			 *      within the mtrue_end boundary.
-+			 */
-+
-+			/* skip empty array */
-+			if (moff == mtrue_end)
-+				continue;
-+
-+			msize /= total_nelems;
-+			elem_idx = (off - moff) / msize;
-+			moff += elem_idx * msize;
-+			mtype = elem_type;
-+		}
-+
- 		/* the 'off' we're looking for is either equal to start
- 		 * of this field or inside of this struct
- 		 */
-@@ -3549,20 +3673,20 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 			t = mtype;
+-	ALLOC_LIST(list);
++	list = alloc_list();
++	ABORT_ON(!list);
+ 	ABORT_ON(parse_events_add_breakpoint(list, &parse_state->idx,
+ 					     (void *) $2, $6, $4));
+ 	$$ = list;
+@@ -386,7 +399,8 @@ PE_PREFIX_MEM PE_VALUE '/' PE_VALUE sep_dc
+ 	struct parse_events_state *parse_state = _parse_state;
+ 	struct list_head *list;
  
- 			/* adjust offset we're looking for */
--			off -= moff / 8;
-+			off -= moff;
- 			goto again;
- 		}
--		if (msize != size) {
--			/* field access size doesn't match */
--			bpf_log(log,
--				"cannot access %d bytes in struct %s field %s that has size %d\n",
--				size, tname, mname, msize);
--			return -EACCES;
--		}
+-	ALLOC_LIST(list);
++	list = alloc_list();
++	ABORT_ON(!list);
+ 	ABORT_ON(parse_events_add_breakpoint(list, &parse_state->idx,
+ 					     (void *) $2, NULL, $4));
+ 	$$ = list;
+@@ -397,7 +411,8 @@ PE_PREFIX_MEM PE_VALUE ':' PE_MODIFIER_BP sep_dc
+ 	struct parse_events_state *parse_state = _parse_state;
+ 	struct list_head *list;
  
- 		if (btf_type_is_ptr(mtype)) {
- 			const struct btf_type *stype;
+-	ALLOC_LIST(list);
++	list = alloc_list();
++	ABORT_ON(!list);
+ 	ABORT_ON(parse_events_add_breakpoint(list, &parse_state->idx,
+ 					     (void *) $2, $4, 0));
+ 	$$ = list;
+@@ -408,7 +423,8 @@ PE_PREFIX_MEM PE_VALUE sep_dc
+ 	struct parse_events_state *parse_state = _parse_state;
+ 	struct list_head *list;
  
-+			if (msize != size || off != moff) {
-+				bpf_log(log,
-+					"cannot access ptr member %s with moff %u in struct %s with off %u size %u\n",
-+					mname, moff, tname, off, size);
-+				return -EACCES;
-+			}
-+
- 			stype = btf_type_by_id(btf_vmlinux, mtype->type);
- 			/* skip modifiers */
- 			while (btf_type_is_modifier(stype))
-@@ -3572,7 +3696,20 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 				return PTR_TO_BTF_ID;
- 			}
- 		}
--		/* all other fields are treated as scalars */
-+
-+		/* Allow more flexible access within an int as long as
-+		 * it is within mtrue_end.
-+		 * Since mtrue_end could be the end of an array,
-+		 * that also allows using an array of int as a scratch
-+		 * space. e.g. skb->cb[].
-+		 */
-+		if (off + size > mtrue_end) {
-+			bpf_log(log,
-+				"access beyond the end of member %s (mend:%u) in struct %s with off %u size %u\n",
-+				mname, mtrue_end, tname, off, size);
-+			return -EACCES;
-+		}
-+
- 		return SCALAR_VALUE;
- 	}
- 	bpf_log(log, "struct %s doesn't have field at offset %d\n", tname, off);
+-	ALLOC_LIST(list);
++	list = alloc_list();
++	ABORT_ON(!list);
+ 	ABORT_ON(parse_events_add_breakpoint(list, &parse_state->idx,
+ 					     (void *) $2, NULL, 0));
+ 	$$ = list;
+@@ -421,7 +437,8 @@ tracepoint_name opt_event_config
+ 	struct parse_events_error *error = parse_state->error;
+ 	struct list_head *list;
+ 
+-	ALLOC_LIST(list);
++	list = alloc_list();
++	ABORT_ON(!list);
+ 	if (error)
+ 		error->idx = @1.first_column;
+ 
+@@ -457,7 +474,8 @@ PE_VALUE ':' PE_VALUE opt_event_config
+ {
+ 	struct list_head *list;
+ 
+-	ALLOC_LIST(list);
++	list = alloc_list();
++	ABORT_ON(!list);
+ 	ABORT_ON(parse_events_add_numeric(_parse_state, list, (u32)$1, $3, $4));
+ 	parse_events_terms__delete($4);
+ 	$$ = list;
+@@ -468,7 +486,8 @@ PE_RAW opt_event_config
+ {
+ 	struct list_head *list;
+ 
+-	ALLOC_LIST(list);
++	list = alloc_list();
++	ABORT_ON(!list);
+ 	ABORT_ON(parse_events_add_numeric(_parse_state, list, PERF_TYPE_RAW, $1, $2));
+ 	parse_events_terms__delete($2);
+ 	$$ = list;
+@@ -480,7 +499,8 @@ PE_BPF_OBJECT opt_event_config
+ 	struct parse_events_state *parse_state = _parse_state;
+ 	struct list_head *list;
+ 
+-	ALLOC_LIST(list);
++	list = alloc_list();
++	ABORT_ON(!list);
+ 	ABORT_ON(parse_events_load_bpf(parse_state, list, $1, false, $2));
+ 	parse_events_terms__delete($2);
+ 	$$ = list;
+@@ -490,7 +510,8 @@ PE_BPF_SOURCE opt_event_config
+ {
+ 	struct list_head *list;
+ 
+-	ALLOC_LIST(list);
++	list = alloc_list();
++	ABORT_ON(!list);
+ 	ABORT_ON(parse_events_load_bpf(_parse_state, list, $1, true, $2));
+ 	parse_events_terms__delete($2);
+ 	$$ = list;
 -- 
-2.17.1
+2.21.0
 
