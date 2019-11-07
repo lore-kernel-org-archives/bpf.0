@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECDBEFA372C
-	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 05:47:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1BABC5DF60
+	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 05:47:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C2DAB21D7E
-	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 05:47:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 979582166E
+	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 05:47:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573105633;
-	bh=3a7+Cd7vq9qHoF8v9QXFEHj5+6OOeZBrKv3k4fkLBI0=;
+	s=default; t=1573105637;
+	bh=ggn+tz7Cn9RTJInHlpx5hG4OidUl3pWV21fft5O3HGw=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=kZQO+UGF37Y8sD60UnYcRDRHMcN+TLSpPSibyyd3mHm8qOlpXVtcWPNdSAX21dalZ
-	 3YHCWEZjh4wyuNIsn9yUtAjy13xjWE/7C7LLwviuA2CtgwlQtO4BI1WQHhwydIclBw
-	 ManehrZcj57k8Sni/3LivvXBTWcBCCTSRvnpNTkY=
+	b=lL+fT55ox8D/gI9BEbmHTg7man5+SEdnKU7cVyHTW2Bwv/zDMoV6BwDMo5DXTKfNW
+	 lieNY1JjrmnhosN2P8KZ+K2jnBt/TcCdZyGL5doTJPvwJ2pPZZyco+QeE5fkXxzf21
+	 4hMZbqU0Zret5uvD1XrzlVmT/akMyBckJAf/HWwE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726699AbfKGFrN convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 7 Nov 2019 00:47:13 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:25018 "EHLO
+        id S1726496AbfKGFrQ convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 7 Nov 2019 00:47:16 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:31634 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726587AbfKGFrM (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 7 Nov 2019 00:47:12 -0500
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA75hGlF016600
-        for <bpf@vger.kernel.org>; Wed, 6 Nov 2019 21:47:12 -0800
+        by vger.kernel.org with ESMTP id S1726871AbfKGFrO (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 7 Nov 2019 00:47:14 -0500
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA75jPYQ001835
+        for <bpf@vger.kernel.org>; Wed, 6 Nov 2019 21:47:13 -0800
 Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2w41vxuh9v-9
+        by mx0a-00082601.pphosted.com with ESMTP id 2w41un3gpj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 06 Nov 2019 21:47:12 -0800
+        for <bpf@vger.kernel.org>; Wed, 06 Nov 2019 21:47:13 -0800
 Received: from 2401:db00:2050:5102:face:0:37:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Wed, 6 Nov 2019 21:46:58 -0800
+ Wed, 6 Nov 2019 21:47:06 -0800
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 801B3760BC0; Wed,  6 Nov 2019 21:46:56 -0800 (PST)
+        id A8A10760BC0; Wed,  6 Nov 2019 21:47:04 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -46,9 +46,9 @@ To:     <davem@davemloft.net>
 CC:     <daniel@iogearbox.net>, <x86@kernel.org>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 06/17] bpf: Add kernel test functions for fentry testing
-Date:   Wed, 6 Nov 2019 21:46:33 -0800
-Message-ID: <20191107054644.1285697-7-ast@kernel.org>
+Subject: [PATCH v2 bpf-next 10/17] selftests/bpf: Add stress test for maximum number of progs
+Date:   Wed, 6 Nov 2019 21:46:37 -0800
+Message-ID: <20191107054644.1285697-11-ast@kernel.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191107054644.1285697-1-ast@kernel.org>
 References: <20191107054644.1285697-1-ast@kernel.org>
@@ -58,85 +58,107 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-11-06_09:2019-11-06,2019-11-06 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 lowpriorityscore=0 impostorscore=0 clxscore=1034 mlxscore=0
- suspectscore=1 bulkscore=0 phishscore=0 adultscore=0 mlxlogscore=999
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1911070059
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 bulkscore=0
+ mlxscore=0 spamscore=0 suspectscore=1 impostorscore=0 mlxlogscore=927
+ lowpriorityscore=0 clxscore=1034 malwarescore=0 priorityscore=1501
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1911070060
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add few kernel functions with various number of arguments,
-their types and sizes for BPF trampoline testing to cover
-different calling conventions.
+Add stress test for maximum number of attached BPF programs per BPF trampoline.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- net/bpf/test_run.c | 41 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ .../selftests/bpf/prog_tests/fexit_stress.c   | 76 +++++++++++++++++++
+ 1 file changed, 76 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/fexit_stress.c
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 0be4497cb832..62933279fbba 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -105,6 +105,40 @@ static int bpf_test_finish(const union bpf_attr *kattr,
- 	return err;
- }
- 
-+/* Integer types of various sizes and pointer combinations cover variety of
-+ * architecture dependent calling conventions. 7+ can be supported in the
-+ * future.
-+ */
-+int noinline bpf_fentry_test1(int a)
-+{
-+	return a + 1;
-+}
+diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_stress.c b/tools/testing/selftests/bpf/prog_tests/fexit_stress.c
+new file mode 100644
+index 000000000000..91f6d93d3c83
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/fexit_stress.c
+@@ -0,0 +1,76 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2019 Facebook */
++#include <test_progs.h>
++#include <linux/nbd.h>
 +
-+int noinline bpf_fentry_test2(int a, u64 b)
-+{
-+	return a + b;
-+}
++/* x86-64 fits 55 JITed and 43 interpreted progs into half page */
++#define CNT 40
 +
-+int noinline bpf_fentry_test3(char a, int b, u64 c)
++void test_fexit_stress(void)
 +{
-+	return a + b + c;
-+}
++	char test_skb[128] = {};
++	int fexit_fd[CNT] = {};
++	int link_fd[CNT] = {};
++	__u32 duration = 0;
++	char error[4096];
++	__u32 prog_ret;
++	int err, i;
 +
-+int noinline bpf_fentry_test4(void *a, char b, int c, u64 d)
-+{
-+	return (long)a + b + c + d;
-+}
++	const struct bpf_insn trace_program[] = {
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
 +
-+int noinline bpf_fentry_test5(u64 a, void *b, short c, int d, u64 e)
-+{
-+	return a + (long)b + c + d + e;
-+}
++	struct bpf_load_program_attr load_attr = {
++		.prog_type = BPF_PROG_TYPE_TRACING,
++		.license = "GPL",
++		.insns = trace_program,
++		.insns_cnt = sizeof(trace_program) / sizeof(struct bpf_insn),
++		.expected_attach_type = BPF_TRACE_FEXIT,
++	};
++	
++	const struct bpf_insn skb_program[] = {
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
 +
-+int noinline bpf_fentry_test6(u64 a, void *b, short c, int d, void *e, u64 f)
-+{
-+	return a + (long)b + c + d + (long)e + f;
-+}
++	struct bpf_load_program_attr skb_load_attr = {
++		.prog_type = BPF_PROG_TYPE_SOCKET_FILTER,
++		.license = "GPL",
++		.insns = skb_program,
++		.insns_cnt = sizeof(skb_program) / sizeof(struct bpf_insn),
++	};
 +
- static void *bpf_test_init(const union bpf_attr *kattr, u32 size,
- 			   u32 headroom, u32 tailroom)
- {
-@@ -122,6 +156,13 @@ static void *bpf_test_init(const union bpf_attr *kattr, u32 size,
- 		kfree(data);
- 		return ERR_PTR(-EFAULT);
- 	}
-+	if (bpf_fentry_test1(1) != 2 ||
-+	    bpf_fentry_test2(2, 3) != 5 ||
-+	    bpf_fentry_test3(4, 5, 6) != 15 ||
-+	    bpf_fentry_test4((void *)7, 8, 9, 10) != 34 ||
-+	    bpf_fentry_test5(11, (void *)12, 13, 14, 15) != 65 ||
-+	    bpf_fentry_test6(16, (void *)17, 18, 19, (void *)20, 21) != 111)
-+		return ERR_PTR(-EFAULT);
- 	return data;
- }
- 
++	err = libbpf_attach_btf_id_by_name("fexit/bpf_fentry_test1",
++					   load_attr.expected_attach_type,
++					   &load_attr.attach_btf_id);
++
++	for (i = 0; i < CNT; i++) {
++		fexit_fd[i] = bpf_load_program_xattr(&load_attr, error, sizeof(error));
++		if (CHECK(fexit_fd[i] < 0, "fexit loaded",
++			  "failed: %d errno %d\n", fexit_fd[i], errno))
++			goto out;
++		link_fd[i] = bpf_raw_tracepoint_open(NULL, fexit_fd[i]);
++		if (CHECK(link_fd[i] < 0, "fexit attach failed",
++			  "prog %d failed: %d err %d\n", i, link_fd[i], errno))
++			goto out;
++	}
++
++	int filter_fd =
++		bpf_load_program_xattr(&skb_load_attr, error, sizeof(error));
++	if (CHECK(filter_fd < 0, "test_program_loaded", "failed: %d errno %d\n",
++		  filter_fd, errno))
++		goto out;
++
++	err = bpf_prog_test_run(filter_fd, 1, test_skb, sizeof(test_skb), 0,
++				0, &prog_ret, 0);
++	close(filter_fd);
++	CHECK_FAIL(err);
++out:
++	for (i = 0; i < CNT; i++) {
++		if (link_fd[i])
++			close(link_fd[i]);
++		if (fexit_fd[i])
++			close(fexit_fd[i]);
++	}
++}
 -- 
 2.23.0
 
