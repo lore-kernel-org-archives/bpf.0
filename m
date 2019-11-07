@@ -2,44 +2,44 @@ Return-Path: <SRS0=ta3s=Y7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2CC7FC6194
-	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 01:46:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C1A2FA372C
+	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 01:46:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 672B32178F
-	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 01:46:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0037921848
+	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 01:46:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="oZ5oTVtJ"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="IeLMk0EJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732837AbfKGBqt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Nov 2019 20:46:49 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:7562 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732769AbfKGBqs (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 6 Nov 2019 20:46:48 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA71heps032007
-        for <bpf@vger.kernel.org>; Wed, 6 Nov 2019 17:46:47 -0800
+        id S1732865AbfKGBq4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Nov 2019 20:46:56 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:43294 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732777AbfKGBq4 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 6 Nov 2019 20:46:56 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA71jMW7030488
+        for <bpf@vger.kernel.org>; Wed, 6 Nov 2019 17:46:55 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=JL++fvaC8FmfDQuaMXPMZlgTgm1EVUBKy7zpoUaWJ3U=;
- b=oZ5oTVtJCm9X+wX8tdeFVlKAOeT2gO6AC5mOdfI585WESY2QUXKqn81RR54xsHArIr4P
- Es0wr/SLWAjxI3bIo1nis5/HX/X0cv61uW3gkT6f6r+/bJc/aUevBq0q2d2gs5NCM9Bs
- uOOwODu4gK95ajBIx2FmEwP2cQLHC7BMLmc= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2w41w6jf4s-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 06 Nov 2019 17:46:47 -0800
-Received: from 2401:db00:2120:80d4:face:0:39:0 (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 6 Nov 2019 17:46:46 -0800
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=zk1kCImHpvuY6mO76Vwr4uMLDdfV3Tf1/DVrisRAj8w=;
+ b=IeLMk0EJHlhHeez1zUvLWWtFC+zGwyliX5AQlwfvKoj5C0BdGU7IjUPM2h6RqAt6dhBp
+ Kktb/B4A1Xy0Mn0aWdqXhantjL6bRz+lJHELGpO0HdPZxdvaRqrf/JQwD+jpjPKUzFUD
+ nyhP6xYp1BkLy4Sq342TTnR++bnALgdqFf4= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2w41ue2f8n-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 06 Nov 2019 17:46:55 -0800
+Received: from 2401:db00:2050:5102:face:0:37:0 (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Wed, 6 Nov 2019 17:46:42 -0800
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 07F2729430DB; Wed,  6 Nov 2019 17:46:45 -0800 (PST)
+        id 9DD8529430DB; Wed,  6 Nov 2019 17:46:39 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
@@ -48,205 +48,49 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         David Miller <davem@davemloft.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v3 bpf-next 3/3] bpf: Add cb access in kfree_skb test
-Date:   Wed, 6 Nov 2019 17:46:45 -0800
-Message-ID: <20191107014645.384662-1-kafai@fb.com>
+Subject: [PATCH v3 bpf-next 0/3] bpf: Add array support to btf_struct_access
+Date:   Wed, 6 Nov 2019 17:46:39 -0800
+Message-ID: <20191107014639.384014-1-kafai@fb.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191107014639.384014-1-kafai@fb.com>
-References: <20191107014639.384014-1-kafai@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-11-06_09:2019-11-06,2019-11-06 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
- lowpriorityscore=0 phishscore=0 mlxscore=0 adultscore=0 clxscore=1015
- mlxlogscore=999 suspectscore=9 impostorscore=0 malwarescore=0
- priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1910280000 definitions=main-1911070016
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ clxscore=1015 malwarescore=0 mlxlogscore=871 suspectscore=8 adultscore=0
+ mlxscore=0 bulkscore=0 phishscore=0 priorityscore=1501 impostorscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1911070017
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Access the skb->cb[] in the kfree_skb test.
+This series adds array support to btf_struct_access().
+Please see individual patch for details.
 
-Signed-off-by: Martin KaFai Lau <kafai@fb.com>
----
- .../selftests/bpf/prog_tests/kfree_skb.c      | 54 +++++++++++++++----
- tools/testing/selftests/bpf/progs/kfree_skb.c | 25 +++++++--
- 2 files changed, 63 insertions(+), 16 deletions(-)
+v3:
+- Fixed an interpreter issue that missed accounting
+  for insn->off
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
-index 430b50de1583..55d36856e621 100644
---- a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
-@@ -1,15 +1,38 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
- 
-+struct meta {
-+	int ifindex;
-+	__u32 cb32_0;
-+	__u8 cb8_0;
-+};
-+
-+static union {
-+	__u32 cb32[5];
-+	__u8 cb8[20];
-+} cb = {
-+	.cb32[0] = 0x81828384,
-+};
-+
- static void on_sample(void *ctx, int cpu, void *data, __u32 size)
- {
--	int ifindex = *(int *)data, duration = 0;
--	struct ipv6_packet *pkt_v6 = data + 4;
-+	struct meta *meta = (struct meta *)data;
-+	struct ipv6_packet *pkt_v6 = data + sizeof(*meta);
-+	int duration = 0;
- 
--	if (ifindex != 1)
-+	if (CHECK(size != 72 + sizeof(*meta), "check_size", "size %u != %zu\n",
-+		  size, 72 + sizeof(*meta)))
-+		return;
-+	if (CHECK(meta->ifindex != 1, "check_meta_ifindex",
-+		  "meta->ifindex = %d\n", meta->ifindex))
- 		/* spurious kfree_skb not on loopback device */
- 		return;
--	if (CHECK(size != 76, "check_size", "size %u != 76\n", size))
-+	if (CHECK(meta->cb8_0 != cb.cb8[0], "check_cb8_0", "cb8_0 %x != %x\n",
-+		  meta->cb8_0, cb.cb8[0]))
-+		return;
-+	if (CHECK(meta->cb32_0 != cb.cb32[0], "check_cb32_0",
-+		  "cb32_0 %x != %x\n",
-+		  meta->cb32_0, cb.cb32[0]))
- 		return;
- 	if (CHECK(pkt_v6->eth.h_proto != 0xdd86, "check_eth",
- 		  "h_proto %x\n", pkt_v6->eth.h_proto))
-@@ -26,6 +49,13 @@ static void on_sample(void *ctx, int cpu, void *data, __u32 size)
- 
- void test_kfree_skb(void)
- {
-+	struct __sk_buff skb = {};
-+	struct bpf_prog_test_run_attr tattr = {
-+		.data_in = &pkt_v6,
-+		.data_size_in = sizeof(pkt_v6),
-+		.ctx_in = &skb,
-+		.ctx_size_in = sizeof(skb),
-+	};
- 	struct bpf_prog_load_attr attr = {
- 		.file = "./kfree_skb.o",
- 	};
-@@ -36,11 +66,12 @@ void test_kfree_skb(void)
- 	struct bpf_link *link = NULL;
- 	struct bpf_map *perf_buf_map;
- 	struct bpf_program *prog;
--	__u32 duration, retval;
--	int err, pkt_fd, kfree_skb_fd;
-+	int err, kfree_skb_fd;
- 	bool passed = false;
-+	__u32 duration = 0;
- 
--	err = bpf_prog_load("./test_pkt_access.o", BPF_PROG_TYPE_SCHED_CLS, &obj, &pkt_fd);
-+	err = bpf_prog_load("./test_pkt_access.o", BPF_PROG_TYPE_SCHED_CLS,
-+			    &obj, &tattr.prog_fd);
- 	if (CHECK(err, "prog_load sched cls", "err %d errno %d\n", err, errno))
- 		return;
- 
-@@ -66,11 +97,12 @@ void test_kfree_skb(void)
- 	if (CHECK(IS_ERR(pb), "perf_buf__new", "err %ld\n", PTR_ERR(pb)))
- 		goto close_prog;
- 
--	err = bpf_prog_test_run(pkt_fd, 1, &pkt_v6, sizeof(pkt_v6),
--				NULL, NULL, &retval, &duration);
--	CHECK(err || retval, "ipv6",
-+	memcpy(skb.cb, &cb, sizeof(cb));
-+	err = bpf_prog_test_run_xattr(&tattr);
-+	duration = tattr.duration;
-+	CHECK(err || tattr.retval, "ipv6",
- 	      "err %d errno %d retval %d duration %d\n",
--	      err, errno, retval, duration);
-+	      err, errno, tattr.retval, duration);
- 
- 	/* read perf buffer */
- 	err = perf_buffer__poll(pb, 100);
-diff --git a/tools/testing/selftests/bpf/progs/kfree_skb.c b/tools/testing/selftests/bpf/progs/kfree_skb.c
-index 489319ea1d6a..f769fdbf6725 100644
---- a/tools/testing/selftests/bpf/progs/kfree_skb.c
-+++ b/tools/testing/selftests/bpf/progs/kfree_skb.c
-@@ -43,6 +43,7 @@ struct sk_buff {
- 	refcount_t users;
- 	unsigned char *data;
- 	char __pkt_type_offset[0];
-+	char cb[48];
- };
- 
- /* copy arguments from
-@@ -57,28 +58,41 @@ struct trace_kfree_skb {
- 	void *location;
- };
- 
-+struct meta {
-+	int ifindex;
-+	__u32 cb32_0;
-+	__u8 cb8_0;
-+};
-+
- SEC("tp_btf/kfree_skb")
- int trace_kfree_skb(struct trace_kfree_skb *ctx)
- {
- 	struct sk_buff *skb = ctx->skb;
- 	struct net_device *dev;
--	int ifindex;
- 	struct callback_head *ptr;
- 	void *func;
- 	int users;
- 	unsigned char *data;
- 	unsigned short pkt_data;
-+	struct meta meta = {};
- 	char pkt_type;
-+	__u32 *cb32;
-+	__u8 *cb8;
- 
- 	__builtin_preserve_access_index(({
- 		users = skb->users.refs.counter;
- 		data = skb->data;
- 		dev = skb->dev;
--		ifindex = dev->ifindex;
- 		ptr = dev->ifalias->rcuhead.next;
- 		func = ptr->func;
-+		cb8 = (__u8 *)&skb->cb;
-+		cb32 = (__u32 *)&skb->cb;
- 	}));
- 
-+	meta.ifindex = _(dev->ifindex);
-+	meta.cb8_0 = cb8[8];
-+	meta.cb32_0 = cb32[2];
-+
- 	bpf_probe_read_kernel(&pkt_type, sizeof(pkt_type), _(&skb->__pkt_type_offset));
- 	pkt_type &= 7;
- 
-@@ -90,14 +104,15 @@ int trace_kfree_skb(struct trace_kfree_skb *ctx)
- 		   _(skb->len), users, pkt_type);
- 	bpf_printk("skb->queue_mapping %d\n", _(skb->queue_mapping));
- 	bpf_printk("dev->ifindex %d data %llx pkt_data %x\n",
--		   ifindex, data, pkt_data);
-+		   meta.ifindex, data, pkt_data);
-+	bpf_printk("cb8_0:%x cb32_0:%x\n", meta.cb8_0, meta.cb32_0);
- 
--	if (users != 1 || pkt_data != bpf_htons(0x86dd) || ifindex != 1)
-+	if (users != 1 || pkt_data != bpf_htons(0x86dd) || meta.ifindex != 1)
- 		/* raw tp ignores return value */
- 		return 0;
- 
- 	/* send first 72 byte of the packet to user space */
- 	bpf_skb_output(skb, &perf_buf_map, (72ull << 32) | BPF_F_CURRENT_CPU,
--		       &ifindex, sizeof(ifindex));
-+		       &meta, sizeof(meta));
- 	return 0;
- }
+v2:
+- Fix a divide-by-zero when there is empty array in
+  a struct (e.g. "__u8 __cloned_offset[0];" in skbuff)
+- Add 'static' to a global var in prog_tests/kfree_skb.c
+
+Martin KaFai Lau (3):
+  bpf: Account for insn->off when doing bpf_probe_read_kernel
+  bpf: Add array support to btf_struct_access
+  bpf: Add cb access in kfree_skb test
+
+ kernel/bpf/btf.c                              | 187 +++++++++++++++---
+ kernel/bpf/core.c                             |   2 +-
+ .../selftests/bpf/prog_tests/kfree_skb.c      |  54 +++--
+ tools/testing/selftests/bpf/progs/kfree_skb.c |  25 ++-
+ 4 files changed, 221 insertions(+), 47 deletions(-)
+
 -- 
 2.17.1
 
