@@ -2,115 +2,149 @@ Return-Path: <SRS0=ta3s=Y7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-6.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7848FC6197
-	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 17:48:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5C2CC43331
+	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 17:50:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C06AE20869
-	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 17:48:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A84C920869
+	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 17:50:53 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B2riYz8a"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389775AbfKGRry (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 Nov 2019 12:47:54 -0500
-Received: from mga03.intel.com ([134.134.136.65]:33463 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730591AbfKGRrx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 7 Nov 2019 12:47:53 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Nov 2019 09:47:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,278,1569308400"; 
-   d="scan'208";a="353858401"
-Received: from unknown (HELO VM.jf.intel.com) ([10.78.3.78])
-  by orsmga004.jf.intel.com with ESMTP; 07 Nov 2019 09:47:52 -0800
-From:   Magnus Karlsson <magnus.karlsson@intel.com>
-To:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
-        daniel@iogearbox.net, netdev@vger.kernel.org,
-        jonathan.lemon@gmail.com, u9012063@gmail.com
-Cc:     bpf@vger.kernel.org
-Subject: [PATCH bpf-next 1/5] libbpf: support XDP_SHARED_UMEM with external XDP program
-Date:   Thu,  7 Nov 2019 18:47:36 +0100
-Message-Id: <1573148860-30254-2-git-send-email-magnus.karlsson@intel.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1573148860-30254-1-git-send-email-magnus.karlsson@intel.com>
-References: <1573148860-30254-1-git-send-email-magnus.karlsson@intel.com>
+        id S1730486AbfKGRux (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 Nov 2019 12:50:53 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:37831 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729830AbfKGRux (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 7 Nov 2019 12:50:53 -0500
+Received: by mail-lj1-f194.google.com with SMTP id l20so3263355lje.4;
+        Thu, 07 Nov 2019 09:50:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TS2GxsNifqJ6d4IJfMFJvqs88Utf5kw6eXVlmLfxw8E=;
+        b=B2riYz8aX6d2hWVoZ5vkGep7e1ZqRuniZw138ShPV0MKxduvt9v7230ANasFRpUH/8
+         RbClvchkghrotL6M8uZhJFzmwnerZkg7IMe0m4Au63WoA55jaA39/Yc5Yt82Fr5VGqDu
+         oBRjQU0BMaWc2Xts4XR+/tmXsuxRmoB1tw1fBVkWim6hIS3uLmJugpdq0yPoFcgFAFbH
+         ROYnPZOvilzo1XtwiSX6KCGsa85QC/Pid9rXuW+ID9vn43bSmSR260acnJo+prCzWM9o
+         YeU7SkPZ8fdkyf3m+llXkhtpSPedRrjrSXcHnGhZ0KyhA8bWW1pdt2DrzGINoCdR7Mlm
+         ALHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TS2GxsNifqJ6d4IJfMFJvqs88Utf5kw6eXVlmLfxw8E=;
+        b=gV8cPGmYF+4K0hlbgrwRUIQvssbVzwU/cY/l0YMpGj09dtLza4P61Z6cQViDVJ1tnl
+         jHmG1OKGwi6rL1x3HYWow6xGQmSDGnryB8KGXi/Z1Rri6ctqGucq3nF6OxCYQKX9HSz2
+         2v1i6DrYq+A04t4cLomYLSPAJ/lnu4bGM2LzyvRpKFAGc9O1wbCh/YvvdEh56NAgOhDF
+         WpdGbmtQRhLqQANiesmn3azPxsVbO0godnU8dQFm6dolho4gJ6lyDv35SjctjDYQNG+u
+         6hHhLzErXuX8KTNhUhfYDK9KpjGb7Bt9YhSUxx0ZFRWS3OfgcQ6Vp/om8Fs1Ul/+XpKb
+         IAYg==
+X-Gm-Message-State: APjAAAWg3KgiC+AeVSkYyrDqbLNgG0CYSXJ4Vn3HBJVZ0nttbTopzQV1
+        d67foSt97/eSVYZLLpPBnIfc9foNcDU+PMlrV0g=
+X-Google-Smtp-Source: APXvYqwEYlV4HpkxC4HQnrrPEDlqBsf1aEhYpof3jk1qw3qphCJJhHqCdntXBvyYDBVhN5JsyUbzm8GLRyMYfbgJtdw=
+X-Received: by 2002:a2e:8508:: with SMTP id j8mr3341799lji.136.1573149050357;
+ Thu, 07 Nov 2019 09:50:50 -0800 (PST)
+MIME-Version: 1.0
+References: <20191107054644.1285697-1-ast@kernel.org> <20191107054644.1285697-3-ast@kernel.org>
+ <EE50EB7D-8FB0-4D37-A3F1-3439981A6141@fb.com>
+In-Reply-To: <EE50EB7D-8FB0-4D37-A3F1-3439981A6141@fb.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 7 Nov 2019 09:50:39 -0800
+Message-ID: <CAADnVQJsnVmTNxj1QbEbHCsvyvL348R08cZ6ChZK8EGnpc2BfQ@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 02/17] bpf: Add bpf_arch_text_poke() helper
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Kernel Team <Kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add support in libbpf to create multiple sockets that share a single
-umem. Note that an external XDP program need to be supplied that
-routes the incoming traffic to the desired sockets. So you need to
-supply the libbpf_flag XSK_LIBBPF_FLAGS__INHIBIT_PROG_LOAD and load
-your own XDP program.
+On Thu, Nov 7, 2019 at 9:20 AM Song Liu <songliubraving@fb.com> wrote:
+>
+>
+>
+> > On Nov 6, 2019, at 9:46 PM, Alexei Starovoitov <ast@kernel.org> wrote:
+> >
+> > Add bpf_arch_text_poke() helper that is used by BPF trampoline logic to patch
+> > nops/calls in kernel text into calls into BPF trampoline and to patch
+> > calls/nops inside BPF programs too.
+> >
+> > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> > ---
+> > arch/x86/net/bpf_jit_comp.c | 51 +++++++++++++++++++++++++++++++++++++
+> > include/linux/bpf.h         |  8 ++++++
+> > kernel/bpf/core.c           |  6 +++++
+> > 3 files changed, 65 insertions(+)
+> >
+> > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> > index 0399b1f83c23..8631d3bd637f 100644
+> > --- a/arch/x86/net/bpf_jit_comp.c
+> > +++ b/arch/x86/net/bpf_jit_comp.c
+> > @@ -9,9 +9,11 @@
+> > #include <linux/filter.h>
+> > #include <linux/if_vlan.h>
+> > #include <linux/bpf.h>
+> > +#include <linux/memory.h>
+> > #include <asm/extable.h>
+> > #include <asm/set_memory.h>
+> > #include <asm/nospec-branch.h>
+> > +#include <asm/text-patching.h>
+> >
+> > static u8 *emit_code(u8 *ptr, u32 bytes, unsigned int len)
+> > {
+> > @@ -487,6 +489,55 @@ static int emit_call(u8 **pprog, void *func, void *ip)
+> >       return 0;
+> > }
+> >
+> > +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+> > +                    void *old_addr, void *new_addr)
+> > +{
+> > +     u8 old_insn[NOP_ATOMIC5] = {};
+> > +     u8 new_insn[NOP_ATOMIC5] = {};
+> > +     u8 *prog;
+> > +     int ret;
+> > +
+> > +     if (!is_kernel_text((long)ip))
+> > +             /* BPF trampoline in modules is not supported */
+> > +             return -EINVAL;
+> > +
+> > +     if (old_addr) {
+> > +             prog = old_insn;
+> > +             ret = emit_call(&prog, old_addr, (void *)ip);
+> > +             if (ret)
+> > +                     return ret;
+> > +     }
+> > +     if (old_addr) {
+>                 ^ should be new_addr?
+> > +             prog = new_insn;
+> > +             ret = emit_call(&prog, old_addr, (void *)ip);
+>                                         ^^^ and here?
+> > +             if (ret)
+> > +                     return ret;
+> > +     }
+> > +     ret = -EBUSY;
+> > +     mutex_lock(&text_mutex);
+> > +     switch (t) {
+> > +     case BPF_MOD_NOP_TO_CALL:
+> > +             if (memcmp(ip, ideal_nops, 5))
+>
+> Maybe use X86_CALL_SIZE instead of 5? And the five more "5" below?
 
-Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
----
- tools/lib/bpf/xsk.c | 27 +++++++++++++++++----------
- 1 file changed, 17 insertions(+), 10 deletions(-)
-
-diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
-index 86c1b61..8ebd810 100644
---- a/tools/lib/bpf/xsk.c
-+++ b/tools/lib/bpf/xsk.c
-@@ -586,15 +586,21 @@ int xsk_socket__create(struct xsk_socket **xsk_ptr, const char *ifname,
- 	if (!umem || !xsk_ptr || !rx || !tx)
- 		return -EFAULT;
- 
--	if (umem->refcount) {
--		pr_warn("Error: shared umems not supported by libbpf.\n");
--		return -EBUSY;
--	}
--
- 	xsk = calloc(1, sizeof(*xsk));
- 	if (!xsk)
- 		return -ENOMEM;
- 
-+	err = xsk_set_xdp_socket_config(&xsk->config, usr_config);
-+	if (err)
-+		goto out_xsk_alloc;
-+
-+	if (umem->refcount &&
-+	    !(xsk->config.libbpf_flags & XSK_LIBBPF_FLAGS__INHIBIT_PROG_LOAD)) {
-+		pr_warn("Error: shared umems not supported by libbpf supplied XDP program.\n");
-+		err = -EBUSY;
-+		goto out_xsk_alloc;
-+	}
-+
- 	if (umem->refcount++ > 0) {
- 		xsk->fd = socket(AF_XDP, SOCK_RAW, 0);
- 		if (xsk->fd < 0) {
-@@ -616,10 +622,6 @@ int xsk_socket__create(struct xsk_socket **xsk_ptr, const char *ifname,
- 	memcpy(xsk->ifname, ifname, IFNAMSIZ - 1);
- 	xsk->ifname[IFNAMSIZ - 1] = '\0';
- 
--	err = xsk_set_xdp_socket_config(&xsk->config, usr_config);
--	if (err)
--		goto out_socket;
--
- 	if (rx) {
- 		err = setsockopt(xsk->fd, SOL_XDP, XDP_RX_RING,
- 				 &xsk->config.rx_size,
-@@ -687,7 +689,12 @@ int xsk_socket__create(struct xsk_socket **xsk_ptr, const char *ifname,
- 	sxdp.sxdp_family = PF_XDP;
- 	sxdp.sxdp_ifindex = xsk->ifindex;
- 	sxdp.sxdp_queue_id = xsk->queue_id;
--	sxdp.sxdp_flags = xsk->config.bind_flags;
-+	if (umem->refcount > 1) {
-+		sxdp.sxdp_flags = XDP_SHARED_UMEM;
-+		sxdp.sxdp_shared_umem_fd = umem->fd;
-+	} else {
-+		sxdp.sxdp_flags = xsk->config.bind_flags;
-+	}
- 
- 	err = bind(xsk->fd, (struct sockaddr *)&sxdp, sizeof(sxdp));
- 	if (err) {
--- 
-2.7.4
-
+ohh. yes. of course. I had it fixed.
+NOP_ATOMIC5 above is incorrect as well. I had it fixed too.
+Looks like I've lost another squash commit last night.
+Sorry about that.
