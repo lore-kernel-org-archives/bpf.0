@@ -2,95 +2,104 @@ Return-Path: <SRS0=ta3s=Y7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C1A2FA372C
-	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 01:46:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78166FA372C
+	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 02:09:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0037921848
-	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 01:46:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 49A4B217D7
+	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 02:09:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="IeLMk0EJ"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="SnR+ydn4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732865AbfKGBq4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Nov 2019 20:46:56 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:43294 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732777AbfKGBq4 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 6 Nov 2019 20:46:56 -0500
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA71jMW7030488
-        for <bpf@vger.kernel.org>; Wed, 6 Nov 2019 17:46:55 -0800
+        id S1727916AbfKGCJ1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Nov 2019 21:09:27 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:36708 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1732713AbfKGCJY (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 6 Nov 2019 21:09:24 -0500
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id xA729HOV016817
+        for <bpf@vger.kernel.org>; Wed, 6 Nov 2019 18:09:23 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=zk1kCImHpvuY6mO76Vwr4uMLDdfV3Tf1/DVrisRAj8w=;
- b=IeLMk0EJHlhHeez1zUvLWWtFC+zGwyliX5AQlwfvKoj5C0BdGU7IjUPM2h6RqAt6dhBp
- Kktb/B4A1Xy0Mn0aWdqXhantjL6bRz+lJHELGpO0HdPZxdvaRqrf/JQwD+jpjPKUzFUD
- nyhP6xYp1BkLy4Sq342TTnR++bnALgdqFf4= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2w41ue2f8n-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 06 Nov 2019 17:46:55 -0800
-Received: from 2401:db00:2050:5102:face:0:37:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Wed, 6 Nov 2019 17:46:42 -0800
-Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 9DD8529430DB; Wed,  6 Nov 2019 17:46:39 -0800 (PST)
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=Jg2WSaiepMItwD3sbvg5Luw1hqEJ4muqk3C1YL8SV9w=;
+ b=SnR+ydn4rswPxhUc3QuUAZeSnHnRVaKAu4rFSLt9p6wj3U/vsMwiug43Y9x968mYIvGQ
+ fY0A0nzvKIwG+Uk/yAH/q5WxmtIcRqycZg7RM+CjEZ5XXxUB3p8KW30kRlZlL5R7+tfP
+ GWoAyrVDf3qxvfIymnUC1z5fPuw0clXVkkQ= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net with ESMTP id 2w41w1jjqm-12
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 06 Nov 2019 18:09:23 -0800
+Received: from 2401:db00:2050:5102:face:0:37:0 (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 6 Nov 2019 18:09:23 -0800
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 87FC62EC17EE; Wed,  6 Nov 2019 18:09:22 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
-From:   Martin KaFai Lau <kafai@fb.com>
-Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Miller <davem@davemloft.net>, <kernel-team@fb.com>
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v3 bpf-next 0/3] bpf: Add array support to btf_struct_access
-Date:   Wed, 6 Nov 2019 17:46:39 -0800
-Message-ID: <20191107014639.384014-1-kafai@fb.com>
+Subject: [PATCH bpf-next 1/5] libbpf: fix memory leak/double free issue
+Date:   Wed, 6 Nov 2019 18:08:51 -0800
+Message-ID: <20191107020855.3834758-2-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191107020855.3834758-1-andriin@fb.com>
+References: <20191107020855.3834758-1-andriin@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-11-06_09:2019-11-06,2019-11-06 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- clxscore=1015 malwarescore=0 mlxlogscore=871 suspectscore=8 adultscore=0
- mlxscore=0 bulkscore=0 phishscore=0 priorityscore=1501 impostorscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1911070017
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 priorityscore=1501 impostorscore=0
+ bulkscore=0 mlxlogscore=896 adultscore=0 spamscore=0 phishscore=0
+ clxscore=1015 suspectscore=8 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1910280000 definitions=main-1911070021
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series adds array support to btf_struct_access().
-Please see individual patch for details.
+Coverity scan against Github libbpf code found the issue of not freeing memory and
+leaving already freed memory still referenced from bpf_program. Fix it by
+re-assigning successfully reallocated memory sooner.
 
-v3:
-- Fixed an interpreter issue that missed accounting
-  for insn->off
+Fixes: 2993e0515bb4 ("tools/bpf: add support to read .BTF.ext sections")
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/lib/bpf/libbpf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v2:
-- Fix a divide-by-zero when there is empty array in
-  a struct (e.g. "__u8 __cloned_offset[0];" in skbuff)
-- Add 'static' to a global var in prog_tests/kfree_skb.c
-
-Martin KaFai Lau (3):
-  bpf: Account for insn->off when doing bpf_probe_read_kernel
-  bpf: Add array support to btf_struct_access
-  bpf: Add cb access in kfree_skb test
-
- kernel/bpf/btf.c                              | 187 +++++++++++++++---
- kernel/bpf/core.c                             |   2 +-
- .../selftests/bpf/prog_tests/kfree_skb.c      |  54 +++--
- tools/testing/selftests/bpf/progs/kfree_skb.c |  25 ++-
- 4 files changed, 221 insertions(+), 47 deletions(-)
-
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index be4af95d5a2c..3ef73a214592 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -3523,6 +3523,7 @@ bpf_program__reloc_text(struct bpf_program *prog, struct bpf_object *obj,
+ 			pr_warn("oom in prog realloc\n");
+ 			return -ENOMEM;
+ 		}
++		prog->insns = new_insn;
+ 
+ 		if (obj->btf_ext) {
+ 			err = bpf_program_reloc_btf_ext(prog, obj,
+@@ -3534,7 +3535,6 @@ bpf_program__reloc_text(struct bpf_program *prog, struct bpf_object *obj,
+ 
+ 		memcpy(new_insn + prog->insns_cnt, text->insns,
+ 		       text->insns_cnt * sizeof(*insn));
+-		prog->insns = new_insn;
+ 		prog->main_prog_cnt = prog->insns_cnt;
+ 		prog->insns_cnt = new_cnt;
+ 		pr_debug("added %zd insn from %s to prog %s\n",
 -- 
 2.17.1
 
