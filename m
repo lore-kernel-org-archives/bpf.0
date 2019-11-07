@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16461C5DF61
-	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 05:47:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 621B9FA372C
+	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 05:47:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DEAF52166E
-	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 05:47:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3620D21D82
+	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 05:47:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573105638;
-	bh=pXs2PdMP1vwN9jqqtxb4Q8/IGWYgnvCD1P9T+u6rnfY=;
+	s=default; t=1573105644;
+	bh=cZT+kU9K/NGFc4p0sWcBfKCIOEEovS7DReRw5bWhrWM=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=JGNuT9zOkdLpjcwEyg9dTMLdRcBatddUbM4z6Bbg1AOSoKOe4oMcpwWtUVnaD5nPf
-	 gHg3mlrofLwXcWWRX9M9csPtxliY7ePNw/D+JbCGvzq7t4XxqZO2tY+ONGUNHlxkrj
-	 DrVjSlKO/ERW9ahC5QOaRScOxhZctUhXBi/tVsHQ=
+	b=BNccdxDsJuMnHbZWurgdTzTt/3kXRqb2qcdbMnc8x3PHpsRp4pImljuDKXvufvUzI
+	 iWC5GOATSPE/fpqv8K5LgoEfhimL+/AXdZx2rCkxx9+RgLadgCKgfgAo2XEy1Sl5yh
+	 amqUBxOyVGgFx3u/jyKSq2nekk5XJ3VhCtpMUOAw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725763AbfKGFrS convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 7 Nov 2019 00:47:18 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:54578 "EHLO
+        id S1726871AbfKGFrX convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 7 Nov 2019 00:47:23 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:56292 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726871AbfKGFrS (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 7 Nov 2019 00:47:18 -0500
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA75jPQM001836
-        for <bpf@vger.kernel.org>; Wed, 6 Nov 2019 21:47:17 -0800
+        by vger.kernel.org with ESMTP id S1726565AbfKGFrX (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 7 Nov 2019 00:47:23 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA75j9aL001065
+        for <bpf@vger.kernel.org>; Wed, 6 Nov 2019 21:47:22 -0800
 Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2w41un3gmx-15
+        by mx0a-00082601.pphosted.com with ESMTP id 2w41ue3fux-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 06 Nov 2019 21:47:17 -0800
-Received: from 2401:db00:2050:5102:face:0:3b:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 06 Nov 2019 21:47:22 -0800
+Received: from 2401:db00:2120:81dc:face:0:23:0 (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Wed, 6 Nov 2019 21:46:50 -0800
+ Wed, 6 Nov 2019 21:47:20 -0800
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 33701760BC0; Wed,  6 Nov 2019 21:46:46 -0800 (PST)
+        id F0404760BC0; Wed,  6 Nov 2019 21:47:18 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -46,9 +46,9 @@ To:     <davem@davemloft.net>
 CC:     <daniel@iogearbox.net>, <x86@kernel.org>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 01/17] bpf: refactor x86 JIT into helpers
-Date:   Wed, 6 Nov 2019 21:46:28 -0800
-Message-ID: <20191107054644.1285697-2-ast@kernel.org>
+Subject: [PATCH v2 bpf-next 17/17] selftests/bpf: Add a test for attaching BPF prog to another BPF prog and subprog
+Date:   Wed, 6 Nov 2019 21:46:44 -0800
+Message-ID: <20191107054644.1285697-18-ast@kernel.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191107054644.1285697-1-ast@kernel.org>
 References: <20191107054644.1285697-1-ast@kernel.org>
@@ -58,10 +58,10 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-11-06_09:2019-11-06,2019-11-06 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 bulkscore=0
- mlxscore=0 spamscore=0 suspectscore=1 impostorscore=0 mlxlogscore=554
- lowpriorityscore=0 clxscore=1034 malwarescore=0 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ clxscore=1034 malwarescore=0 mlxlogscore=843 suspectscore=1 adultscore=0
+ mlxscore=0 bulkscore=0 phishscore=0 priorityscore=1501 impostorscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1910280000 definitions=main-1911070060
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -69,217 +69,151 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Refactor x86 JITing of LDX, STX, CALL instructions into separate helper
-functions.  No functional changes in LDX and STX helpers.  There is a minor
-change in CALL helper. It will populate target address correctly on the first
-pass of JIT instead of second pass. That won't reduce total number of JIT
-passes though.
+Add a test that attaches one FEXIT program to main sched_cls networking program
+and another FEXIT program to networking subprogram. Both tracing programs
+access return values and skb->len of networking program and subprogram.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- arch/x86/net/bpf_jit_comp.c | 153 +++++++++++++++++++++++-------------
- 1 file changed, 99 insertions(+), 54 deletions(-)
+ .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  | 73 +++++++++++++++++++
+ .../selftests/bpf/progs/fexit_bpf2bpf.c       | 48 ++++++++++++
+ 2 files changed, 121 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+ create mode 100644 tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 8cd23d8309bf..0399b1f83c23 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -198,6 +198,8 @@ struct jit_context {
- /* Maximum number of bytes emitted while JITing one eBPF insn */
- #define BPF_MAX_INSN_SIZE	128
- #define BPF_INSN_SAFETY		64
-+/* number of bytes emit_call() needs to generate call instruction */
-+#define X86_CALL_SIZE		5
- 
- #define PROLOGUE_SIZE		20
- 
-@@ -390,6 +392,100 @@ static void emit_mov_reg(u8 **pprog, bool is64, u32 dst_reg, u32 src_reg)
- 	*pprog = prog;
- }
- 
-+/* LDX: dst_reg = *(u8*)(src_reg + off) */
-+static void emit_ldx(u8 **pprog, u32 size, u32 dst_reg, u32 src_reg, int off)
-+{
-+	u8 *prog = *pprog;
-+	int cnt = 0;
+diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+new file mode 100644
+index 000000000000..7f5a90349721
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+@@ -0,0 +1,73 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2019 Facebook */
++#include <test_progs.h>
 +
-+	switch (size) {
-+	case BPF_B:
-+		/* Emit 'movzx rax, byte ptr [rax + off]' */
-+		EMIT3(add_2mod(0x48, src_reg, dst_reg), 0x0F, 0xB6);
-+		break;
-+	case BPF_H:
-+		/* Emit 'movzx rax, word ptr [rax + off]' */
-+		EMIT3(add_2mod(0x48, src_reg, dst_reg), 0x0F, 0xB7);
-+		break;
-+	case BPF_W:
-+		/* Emit 'mov eax, dword ptr [rax+0x14]' */
-+		if (is_ereg(dst_reg) || is_ereg(src_reg))
-+			EMIT2(add_2mod(0x40, src_reg, dst_reg), 0x8B);
-+		else
-+			EMIT1(0x8B);
-+		break;
-+	case BPF_DW:
-+		/* Emit 'mov rax, qword ptr [rax+0x14]' */
-+		EMIT2(add_2mod(0x48, src_reg, dst_reg), 0x8B);
-+		break;
++void test_fexit_bpf2bpf(void)
++{
++	const char *prog_name[2] = {
++		"fexit/test_pkt_access",
++		"fexit/test_pkt_access_subprog",
++	};
++	struct bpf_object *obj = NULL, *pkt_obj;
++	int err, pkt_fd, i;
++	struct bpf_link *link[2] = {};
++	struct bpf_program *prog[2];
++	__u32 duration, retval;
++	struct bpf_map *data_map;
++	const int zero = 0;
++	u64 result[2];
++
++	err = bpf_prog_load("./test_pkt_access.o", BPF_PROG_TYPE_UNSPEC,
++			    &pkt_obj, &pkt_fd);
++	if (CHECK(err, "prog_load sched cls", "err %d errno %d\n", err, errno))
++		return;
++	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts,
++			    .attach_prog_fd = pkt_fd,
++			   );
++
++	obj = bpf_object__open_file("./fexit_bpf2bpf.o", &opts);
++	if (CHECK(IS_ERR_OR_NULL(obj), "obj_open",
++		  "failed to open fexit_bpf2bpf: %ld\n",
++		  PTR_ERR(obj)))
++		goto close_prog;
++
++	err = bpf_object__load(obj);
++	if (CHECK(err, "obj_load", "err %d\n", err))
++		goto close_prog;
++
++	for (i = 0; i < 2; i++) {
++		prog[i] = bpf_object__find_program_by_title(obj, prog_name[i]);
++		if (CHECK(!prog[i], "find_prog", "prog %s not found\n", prog_name[i]))
++			goto close_prog;
++		link[i] = bpf_program__attach_trace(prog[i]);
++		if (CHECK(IS_ERR(link[i]), "attach_trace", "failed to link\n"))
++			goto close_prog;
 +	}
-+	/*
-+	 * If insn->off == 0 we can save one extra byte, but
-+	 * special case of x86 R13 which always needs an offset
-+	 * is not worth the hassle
-+	 */
-+	if (is_imm8(off))
-+		EMIT2(add_2reg(0x40, src_reg, dst_reg), off);
-+	else
-+		EMIT1_off32(add_2reg(0x80, src_reg, dst_reg), off);
-+	*pprog = prog;
++	data_map = bpf_object__find_map_by_name(obj, "fexit_bp.bss");
++	if (CHECK(!data_map, "find_data_map", "data map not found\n"))
++		goto close_prog;
++
++	err = bpf_prog_test_run(pkt_fd, 1, &pkt_v6, sizeof(pkt_v6),
++				NULL, NULL, &retval, &duration);
++	CHECK(err || retval, "ipv6",
++	      "err %d errno %d retval %d duration %d\n",
++	      err, errno, retval, duration);
++
++	err = bpf_map_lookup_elem(bpf_map__fd(data_map), &zero, &result);
++	if (CHECK(err, "get_result",
++		  "failed to get output data: %d\n", err))
++		goto close_prog;
++
++	for (i = 0; i < 2; i++)
++		if (CHECK(result[i] != 1, "result", "fexit_bpf2bpf failed err %ld\n",
++			  result[i]))
++			goto close_prog;
++
++close_prog:
++	for (i = 0; i < 1; i++)
++		if (!IS_ERR_OR_NULL(link[i]))
++			bpf_link__destroy(link[i]);
++	if (!IS_ERR_OR_NULL(obj))
++		bpf_object__close(obj);
++	bpf_object__close(pkt_obj);
 +}
+diff --git a/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c
+new file mode 100644
+index 000000000000..17b3822200aa
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c
+@@ -0,0 +1,48 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2019 Facebook */
++#include <linux/bpf.h>
++#include "bpf_helpers.h"
 +
-+/* STX: *(u8*)(dst_reg + off) = src_reg */
-+static void emit_stx(u8 **pprog, u32 size, u32 dst_reg, u32 src_reg, int off)
++struct sk_buff {
++	unsigned int len;
++};
++
++struct args {
++	struct sk_buff *skb;
++	ks32 ret;
++};
++static volatile __u64 test_result;
++SEC("fexit/test_pkt_access")
++int test_main(struct args *ctx)
 +{
-+	u8 *prog = *pprog;
-+	int cnt = 0;
++	struct sk_buff *skb = ctx->skb;
++	int len;
 +
-+	switch (size) {
-+	case BPF_B:
-+		/* Emit 'mov byte ptr [rax + off], al' */
-+		if (is_ereg(dst_reg) || is_ereg(src_reg) ||
-+		    /* We have to add extra byte for x86 SIL, DIL regs */
-+		    src_reg == BPF_REG_1 || src_reg == BPF_REG_2)
-+			EMIT2(add_2mod(0x40, dst_reg, src_reg), 0x88);
-+		else
-+			EMIT1(0x88);
-+		break;
-+	case BPF_H:
-+		if (is_ereg(dst_reg) || is_ereg(src_reg))
-+			EMIT3(0x66, add_2mod(0x40, dst_reg, src_reg), 0x89);
-+		else
-+			EMIT2(0x66, 0x89);
-+		break;
-+	case BPF_W:
-+		if (is_ereg(dst_reg) || is_ereg(src_reg))
-+			EMIT2(add_2mod(0x40, dst_reg, src_reg), 0x89);
-+		else
-+			EMIT1(0x89);
-+		break;
-+	case BPF_DW:
-+		EMIT2(add_2mod(0x48, dst_reg, src_reg), 0x89);
-+		break;
-+	}
-+	if (is_imm8(off))
-+		EMIT2(add_2reg(0x40, dst_reg, src_reg), off);
-+	else
-+		EMIT1_off32(add_2reg(0x80, dst_reg, src_reg),
-+			    off);
-+	*pprog = prog;
-+}
-+
-+static int emit_call(u8 **pprog, void *func, void *ip)
-+{
-+	u8 *prog = *pprog;
-+	int cnt = 0;
-+	s64 offset;
-+
-+	offset = func - (ip + X86_CALL_SIZE);
-+	if (!is_simm32(offset)) {
-+		pr_err("Target call %p is out of range\n", func);
-+		return -EINVAL;
-+	}
-+	EMIT1_off32(0xE8, offset);
-+	*pprog = prog;
++	__builtin_preserve_access_index(({
++		len = skb->len;
++	}));
++	if (len != 74 || ctx->ret != 0)
++		return 0;
++	test_result = 1;
 +	return 0;
 +}
- 
- static bool ex_handler_bpf(const struct exception_table_entry *x,
- 			   struct pt_regs *regs, int trapnr,
-@@ -773,68 +869,22 @@ st:			if (is_imm8(insn->off))
- 
- 			/* STX: *(u8*)(dst_reg + off) = src_reg */
- 		case BPF_STX | BPF_MEM | BPF_B:
--			/* Emit 'mov byte ptr [rax + off], al' */
--			if (is_ereg(dst_reg) || is_ereg(src_reg) ||
--			    /* We have to add extra byte for x86 SIL, DIL regs */
--			    src_reg == BPF_REG_1 || src_reg == BPF_REG_2)
--				EMIT2(add_2mod(0x40, dst_reg, src_reg), 0x88);
--			else
--				EMIT1(0x88);
--			goto stx;
- 		case BPF_STX | BPF_MEM | BPF_H:
--			if (is_ereg(dst_reg) || is_ereg(src_reg))
--				EMIT3(0x66, add_2mod(0x40, dst_reg, src_reg), 0x89);
--			else
--				EMIT2(0x66, 0x89);
--			goto stx;
- 		case BPF_STX | BPF_MEM | BPF_W:
--			if (is_ereg(dst_reg) || is_ereg(src_reg))
--				EMIT2(add_2mod(0x40, dst_reg, src_reg), 0x89);
--			else
--				EMIT1(0x89);
--			goto stx;
- 		case BPF_STX | BPF_MEM | BPF_DW:
--			EMIT2(add_2mod(0x48, dst_reg, src_reg), 0x89);
--stx:			if (is_imm8(insn->off))
--				EMIT2(add_2reg(0x40, dst_reg, src_reg), insn->off);
--			else
--				EMIT1_off32(add_2reg(0x80, dst_reg, src_reg),
--					    insn->off);
-+			emit_stx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn->off);
- 			break;
- 
- 			/* LDX: dst_reg = *(u8*)(src_reg + off) */
- 		case BPF_LDX | BPF_MEM | BPF_B:
- 		case BPF_LDX | BPF_PROBE_MEM | BPF_B:
--			/* Emit 'movzx rax, byte ptr [rax + off]' */
--			EMIT3(add_2mod(0x48, src_reg, dst_reg), 0x0F, 0xB6);
--			goto ldx;
- 		case BPF_LDX | BPF_MEM | BPF_H:
- 		case BPF_LDX | BPF_PROBE_MEM | BPF_H:
--			/* Emit 'movzx rax, word ptr [rax + off]' */
--			EMIT3(add_2mod(0x48, src_reg, dst_reg), 0x0F, 0xB7);
--			goto ldx;
- 		case BPF_LDX | BPF_MEM | BPF_W:
- 		case BPF_LDX | BPF_PROBE_MEM | BPF_W:
--			/* Emit 'mov eax, dword ptr [rax+0x14]' */
--			if (is_ereg(dst_reg) || is_ereg(src_reg))
--				EMIT2(add_2mod(0x40, src_reg, dst_reg), 0x8B);
--			else
--				EMIT1(0x8B);
--			goto ldx;
- 		case BPF_LDX | BPF_MEM | BPF_DW:
- 		case BPF_LDX | BPF_PROBE_MEM | BPF_DW:
--			/* Emit 'mov rax, qword ptr [rax+0x14]' */
--			EMIT2(add_2mod(0x48, src_reg, dst_reg), 0x8B);
--ldx:			/*
--			 * If insn->off == 0 we can save one extra byte, but
--			 * special case of x86 R13 which always needs an offset
--			 * is not worth the hassle
--			 */
--			if (is_imm8(insn->off))
--				EMIT2(add_2reg(0x40, src_reg, dst_reg), insn->off);
--			else
--				EMIT1_off32(add_2reg(0x80, src_reg, dst_reg),
--					    insn->off);
-+			emit_ldx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn->off);
- 			if (BPF_MODE(insn->code) == BPF_PROBE_MEM) {
- 				struct exception_table_entry *ex;
- 				u8 *_insn = image + proglen;
-@@ -899,13 +949,8 @@ xadd:			if (is_imm8(insn->off))
- 			/* call */
- 		case BPF_JMP | BPF_CALL:
- 			func = (u8 *) __bpf_call_base + imm32;
--			jmp_offset = func - (image + addrs[i]);
--			if (!imm32 || !is_simm32(jmp_offset)) {
--				pr_err("unsupported BPF func %d addr %p image %p\n",
--				       imm32, func, image);
-+			if (!imm32 || emit_call(&prog, func, image + addrs[i - 1]))
- 				return -EINVAL;
--			}
--			EMIT1_off32(0xE8, jmp_offset);
- 			break;
- 
- 		case BPF_JMP | BPF_TAIL_CALL:
++
++struct args_subprog {
++	struct sk_buff *skb;
++	ks32 ret;
++};
++static volatile __u64 test_result_subprog;
++SEC("fexit/test_pkt_access_subprog")
++int test_subprog(struct args_subprog *ctx)
++{
++	struct sk_buff *skb = ctx->skb;
++	int len;
++
++	__builtin_preserve_access_index(({
++		len = skb->len;
++	}));
++	if (len != 74 || ctx->ret != 148)
++		return 0;
++	test_result_subprog = 1;
++	return 0;
++}
 -- 
 2.23.0
 
