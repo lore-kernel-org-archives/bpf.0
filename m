@@ -6,52 +6,52 @@ X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39890C5DF61
-	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 16:52:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6338C5DF61
+	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 16:52:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1A47321D79
-	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 16:52:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 807272077C
+	for <bpf@archiver.kernel.org>; Thu,  7 Nov 2019 16:52:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389339AbfKGQwX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 Nov 2019 11:52:23 -0500
-Received: from mx1.redhat.com ([209.132.183.28]:35422 "EHLO mx1.redhat.com"
+        id S2389496AbfKGQw1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 Nov 2019 11:52:27 -0500
+Received: from mx1.redhat.com ([209.132.183.28]:60908 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729509AbfKGQwX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 7 Nov 2019 11:52:23 -0500
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
+        id S2389491AbfKGQw0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 7 Nov 2019 11:52:26 -0500
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 1B5ACC056808
-        for <bpf@vger.kernel.org>; Thu,  7 Nov 2019 16:52:23 +0000 (UTC)
-Received: by mail-lj1-f199.google.com with SMTP id p25so620696lji.23
-        for <bpf@vger.kernel.org>; Thu, 07 Nov 2019 08:52:23 -0800 (PST)
+        by mx1.redhat.com (Postfix) with ESMTPS id AD191368E4
+        for <bpf@vger.kernel.org>; Thu,  7 Nov 2019 16:52:25 +0000 (UTC)
+Received: by mail-lj1-f197.google.com with SMTP id o20so622889ljg.0
+        for <bpf@vger.kernel.org>; Thu, 07 Nov 2019 08:52:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=coY7ll6zI9iYn6/3XVcHoVcsUowxThFI2UGP9S+O/jc=;
-        b=CIqiyhUqNp8/mlUwcLteuf/MLwJLwUJ/cVIwKmyEZav1gy/0YXmQBUN9QPyJuARLrG
-         1Gn0/4jNRo7AdjM8XkoZJgD8YPyi0UdSk+FWVSEo/cgl3Mqq1u1lDp7xI1UIfgRGfvbf
-         dJNmRIGBEpbIuz38BGiKxDh/rRC7Alpk78JS8yBWNtQO8lCTJeGorX0ifXM86vhtkfwH
-         KovrKanWn9WJPUUqEbByBOGduTivBXN2XWMPsKk4P+ew4+/zqOGeDdmyE0fqPieYtZux
-         lv+uPYhcqfjRHkSVxCSllLdC4zgOsZe02jhkx6xM7zhNv9i5M18GE6nNyW57es1vipON
-         JYnQ==
-X-Gm-Message-State: APjAAAU1ZhkhjsSNzC0RyvGaIePELtI7nZcd7mrEAnv8BEm8eBXDdTUR
-        43ptUbCfhHeHePk271oNizzjAnv1VQnLPX72hg/sjl9ILSAEt91nWdoIhJIjteUXGcSr24sGpyC
-        KaHnBB9Eg/lbW
-X-Received: by 2002:a2e:7811:: with SMTP id t17mr3199043ljc.225.1573145541660;
-        Thu, 07 Nov 2019 08:52:21 -0800 (PST)
-X-Google-Smtp-Source: APXvYqwYhbNCUXFifvZe7gefvzI3qyBsufNepIR14D2koN2xOGrU96FmJ6xbrgCdsg974Et3TUp1MA==
-X-Received: by 2002:a2e:7811:: with SMTP id t17mr3199027ljc.225.1573145541473;
-        Thu, 07 Nov 2019 08:52:21 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a00:7660:6da:443::2])
-        by smtp.gmail.com with ESMTPSA id c12sm1408451ljk.77.2019.11.07.08.52.20
+        bh=acP9fb6exvsZs782cFrwYMpKQr8KtyGllKJtn5n3npM=;
+        b=FHWn+BktWPRpBqiv09Z0kfG79Rnw7vJqzLcbjQtnZEMx/+5c5+G+8zAw+Ljd1jATsM
+         5a/7g11FARvYORYqtFMv9ZL81idlSD794jz0IkSD5ZIt6BsZjaV5Bt5jKRc6CY5BLLbZ
+         Mw9ltovpkDw+ssSr6CpJ9ZOqeDGesLanUGzLZCQrPNJAIeNmZOtmxaa8LePy7/L+hV07
+         g498tO5Zq+PL6FlIVnbWfFs/qmEFnE1z+M7og/SNrBe8t7Ggy1IWSOtqn8OHeInTCGh3
+         RtWgUuO4aT9l9i3OFufhAZDWyA4Vl0C1BDlmbKN+L+c2xCDBk1K3HqHLgpWG2P4zUdnW
+         2qmg==
+X-Gm-Message-State: APjAAAVjudvmNgrwk/HjAl1g3LM8erdxmb9jnDZi8G8A1ltEyesZPcsF
+        akf3fvSBXGcTvARfJCggY7/Xh9E/YreqijFBYabHVdaZcjSBs6Wl46/D6WG8TR0s9xFVRMFFmyu
+        D7fldtOlB9LlT
+X-Received: by 2002:a2e:6c0c:: with SMTP id h12mr3121105ljc.222.1573145544056;
+        Thu, 07 Nov 2019 08:52:24 -0800 (PST)
+X-Google-Smtp-Source: APXvYqwQhCgBbNvPQDprTKqC2YP3/j75gRdIfXR1H9LNM4VEdTOCxxW7PUd2vKh01JN6gnu2bQL9mw==
+X-Received: by 2002:a2e:6c0c:: with SMTP id h12mr3121100ljc.222.1573145543912;
+        Thu, 07 Nov 2019 08:52:23 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
+        by smtp.gmail.com with ESMTPSA id z26sm1303573lfg.94.2019.11.07.08.52.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Nov 2019 08:52:20 -0800 (PST)
+        Thu, 07 Nov 2019 08:52:23 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 655F61818B5; Thu,  7 Nov 2019 17:52:20 +0100 (CET)
-Subject: [PATCH bpf-next 2/6] selftests/bpf: Add tests for automatic map
- unpinning on load failure
+        id AAD061818B6; Thu,  7 Nov 2019 17:52:22 +0100 (CET)
+Subject: [PATCH bpf-next 4/6] libbpf: Use pr_warn() when printing netlink
+ errors
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Daniel Borkmann <daniel@iogearbox.net>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -61,8 +61,8 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Thu, 07 Nov 2019 17:52:20 +0100
-Message-ID: <157314554027.693412.3764267220990589755.stgit@toke.dk>
+Date:   Thu, 07 Nov 2019 17:52:22 +0100
+Message-ID: <157314554255.693412.241635799002790913.stgit@toke.dk>
 In-Reply-To: <157314553801.693412.15522462897300280861.stgit@toke.dk>
 References: <157314553801.693412.15522462897300280861.stgit@toke.dk>
 User-Agent: StGit/0.20
@@ -76,67 +76,78 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-This add tests for the different variations of automatic map unpinning on
-load failure.
+The netlink functions were using fprintf(stderr, ) directly to print out
+error messages, instead of going through the usual logging macros. This
+makes it impossible for the calling application to silence or redirect
+those error messages. Fix this by switching to pr_warn() in nlattr.c and
+netlink.c.
 
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- tools/testing/selftests/bpf/prog_tests/pinning.c |   20 +++++++++++++++++---
- tools/testing/selftests/bpf/progs/test_pinning.c |    2 +-
- 2 files changed, 18 insertions(+), 4 deletions(-)
+ tools/lib/bpf/netlink.c |    3 ++-
+ tools/lib/bpf/nlattr.c  |   10 +++++-----
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/pinning.c b/tools/testing/selftests/bpf/prog_tests/pinning.c
-index 525388971e08..041952524c55 100644
---- a/tools/testing/selftests/bpf/prog_tests/pinning.c
-+++ b/tools/testing/selftests/bpf/prog_tests/pinning.c
-@@ -163,12 +163,15 @@ void test_pinning(void)
- 		goto out;
+diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
+index ce3ec81b71c0..a261df9cb488 100644
+--- a/tools/lib/bpf/netlink.c
++++ b/tools/lib/bpf/netlink.c
+@@ -12,6 +12,7 @@
+ 
+ #include "bpf.h"
+ #include "libbpf.h"
++#include "libbpf_internal.h"
+ #include "nlattr.h"
+ 
+ #ifndef SOL_NETLINK
+@@ -43,7 +44,7 @@ int libbpf_netlink_open(__u32 *nl_pid)
+ 
+ 	if (setsockopt(sock, SOL_NETLINK, NETLINK_EXT_ACK,
+ 		       &one, sizeof(one)) < 0) {
+-		fprintf(stderr, "Netlink error reporting not supported\n");
++		pr_warn("Netlink error reporting not supported\n");
  	}
  
--	/* swap pin paths of the two maps */
-+	/* set pin paths so that nopinmap2 will attempt to reuse the map at
-+	 * pinpath (which will fail), but not before pinmap has already been
-+	 * reused
-+	 */
- 	bpf_object__for_each_map(map, obj) {
- 		if (!strcmp(bpf_map__name(map), "nopinmap"))
-+			err = bpf_map__set_pin_path(map, nopinpath2);
-+		else if (!strcmp(bpf_map__name(map), "nopinmap2"))
- 			err = bpf_map__set_pin_path(map, pinpath);
--		else if (!strcmp(bpf_map__name(map), "pinmap"))
--			err = bpf_map__set_pin_path(map, NULL);
- 		else
- 			continue;
+ 	if (bind(sock, (struct sockaddr *)&sa, sizeof(sa)) < 0) {
+diff --git a/tools/lib/bpf/nlattr.c b/tools/lib/bpf/nlattr.c
+index 1e69c0c8d413..8db44bbfc66d 100644
+--- a/tools/lib/bpf/nlattr.c
++++ b/tools/lib/bpf/nlattr.c
+@@ -8,6 +8,7 @@
  
-@@ -181,6 +184,17 @@ void test_pinning(void)
- 	if (CHECK(err != -EINVAL, "param mismatch load", "err %d errno %d\n", err, errno))
- 		goto out;
+ #include <errno.h>
+ #include "nlattr.h"
++#include "libbpf_internal.h"
+ #include <linux/rtnetlink.h>
+ #include <string.h>
+ #include <stdio.h>
+@@ -121,8 +122,8 @@ int libbpf_nla_parse(struct nlattr *tb[], int maxtype, struct nlattr *head,
+ 		}
  
-+	/* nopinmap2 should have been pinned and cleaned up again */
-+	err = stat(nopinpath2, &statbuf);
-+	if (CHECK(!err || errno != ENOENT, "stat nopinpath2",
-+		  "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	/* pinmap should still be there */
-+	err = stat(pinpath, &statbuf);
-+	if (CHECK(err, "stat pinpath", "err %d errno %d\n", err, errno))
-+		goto out;
-+
- 	bpf_object__close(obj);
+ 		if (tb[type])
+-			fprintf(stderr, "Attribute of type %#x found multiple times in message, "
+-				  "previous attribute is being ignored.\n", type);
++			pr_warn("Attribute of type %#x found multiple times in message, "
++				"previous attribute is being ignored.\n", type);
  
- 	/* test auto-pinning at custom path with open opt */
-diff --git a/tools/testing/selftests/bpf/progs/test_pinning.c b/tools/testing/selftests/bpf/progs/test_pinning.c
-index f69a4a50d056..f20e7e00373f 100644
---- a/tools/testing/selftests/bpf/progs/test_pinning.c
-+++ b/tools/testing/selftests/bpf/progs/test_pinning.c
-@@ -21,7 +21,7 @@ struct {
- } nopinmap SEC(".maps");
+ 		tb[type] = nla;
+ 	}
+@@ -181,15 +182,14 @@ int libbpf_nla_dump_errormsg(struct nlmsghdr *nlh)
  
- struct {
--	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(type, BPF_MAP_TYPE_HASH);
- 	__uint(max_entries, 1);
- 	__type(key, __u32);
- 	__type(value, __u64);
+ 	if (libbpf_nla_parse(tb, NLMSGERR_ATTR_MAX, attr, alen,
+ 			     extack_policy) != 0) {
+-		fprintf(stderr,
+-			"Failed to parse extended error attributes\n");
++		pr_warn("Failed to parse extended error attributes\n");
+ 		return 0;
+ 	}
+ 
+ 	if (tb[NLMSGERR_ATTR_MSG])
+ 		errmsg = (char *) libbpf_nla_data(tb[NLMSGERR_ATTR_MSG]);
+ 
+-	fprintf(stderr, "Kernel error message: %s\n", errmsg);
++	pr_warn("Kernel error message: %s\n", errmsg);
+ 
+ 	return 0;
+ }
 
