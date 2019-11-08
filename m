@@ -4,54 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5039AFC6197
-	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 21:33:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8D4AFC6197
+	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 21:33:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 304A42178F
-	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 21:33:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B966221848
+	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 21:33:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732536AbfKHVdP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 Nov 2019 16:33:15 -0500
-Received: from mx1.redhat.com ([209.132.183.28]:33556 "EHLO mx1.redhat.com"
+        id S1732170AbfKHVdR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 Nov 2019 16:33:17 -0500
+Received: from mx1.redhat.com ([209.132.183.28]:34524 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732137AbfKHVdN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 Nov 2019 16:33:13 -0500
+        id S1732513AbfKHVdO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 Nov 2019 16:33:14 -0500
 Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com [209.85.208.200])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 795B65D612
-        for <bpf@vger.kernel.org>; Fri,  8 Nov 2019 21:33:12 +0000 (UTC)
-Received: by mail-lj1-f200.google.com with SMTP id l12so1547879lji.10
-        for <bpf@vger.kernel.org>; Fri, 08 Nov 2019 13:33:12 -0800 (PST)
+        by mx1.redhat.com (Postfix) with ESMTPS id 83D0C859FE
+        for <bpf@vger.kernel.org>; Fri,  8 Nov 2019 21:33:14 +0000 (UTC)
+Received: by mail-lj1-f200.google.com with SMTP id h9so1547642ljc.6
+        for <bpf@vger.kernel.org>; Fri, 08 Nov 2019 13:33:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=BiQhD3lhOOPyI/TJ9HVvq9h3gpiDFD7ZG1O5n1PsnQo=;
-        b=uTOTpNbhkb59tqHwGHZnynUMBXuKUWPRFNcHnPsT9n7YA6IsuUCCakqaoAFDAyukjy
-         49mIzJTWy852znaGDL7CjKseE8zyg/moePV6P6Z7/zZeeb+lLqWqmG7Ir2/tDFQ8uGNS
-         HyKWIWqwuaYEnSvjnzF0WzhJ/JgeQlRT3RrWFhBQ1evKl5bow5sd7HBftSWVVNM0gd49
-         aRLSxttXqw7f9kh0LaWR6qZ8aMF6BlkCim4bih7WdWLpFOtZBA3OlFPyfKq5q1VNHlHQ
-         qGbTCeokQqf7k5UGbp8N1ZEvtsohJYPa74jR7Ihm20U/6Tw3Z9dwaNyl+BBCMeZ21IZ8
-         A/uQ==
-X-Gm-Message-State: APjAAAV+s3gJw8T11nPWbXtEZa15dKb829rDyc7A8XmjduhPiosN/2LH
-        GZaFSBWe1Nytf+Ss7sCvKkG2bT6fXGUdy9ptP9wsVbGud3eKt+DaFt/cwqeAQiIuDlZeh5VA9hC
-        qhBhBpjw5zlGN
-X-Received: by 2002:a2e:84c9:: with SMTP id q9mr7912302ljh.163.1573248791051;
-        Fri, 08 Nov 2019 13:33:11 -0800 (PST)
-X-Google-Smtp-Source: APXvYqz4d3xozYcEnBmlweGpt5e9wPkHYsoy39YA6+ZSu0UsBXNOlNnaKjFsIQUvvMi15x6bsun4yQ==
-X-Received: by 2002:a2e:84c9:: with SMTP id q9mr7912286ljh.163.1573248790781;
-        Fri, 08 Nov 2019 13:33:10 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a00:7660:6da:443::2])
-        by smtp.gmail.com with ESMTPSA id c22sm3629480lfj.28.2019.11.08.13.33.10
+        bh=GBjYCkvy2GbEH7Q23GeY3ESuFtUK5AcyN8OZ2vuJJlc=;
+        b=GPaSx2REo2X28nJG7xoClwboHf9dJYyE3S4Q4S46PxCe0rBLqedsHPhDK8Sjh98rui
+         jM9Kh4HqJbv/lnOfpWR7h818jmXd6JMb/VlrtpQxP/si3SJ6ilhTD1crBR6KqSbxZ5pP
+         uqU0FXKwSyUb9CQVv7wppnts53xldghdz3UvpZeNxYosJdXoE40IcHwN0qakImPfgxwk
+         jp8bYhJWDO6p1lA5ctos8ETAoZMQIOfeUIBb43TTb5fDh1BMIPboai7ohFLpz0dLncAj
+         OuDy7H+kTN3f1pBquhfF0hvv8tSGpzdoQzSynecN42X3YVDBJviUnR9Bwhoh1PXvSktN
+         JFYQ==
+X-Gm-Message-State: APjAAAUl3qehIUOnf86YBQat22IeXPeOWZAuvjJiXnrov3K06KO/0Ot+
+        GBsa95czQzpUaDjDeDJX9fcdU1r2Bd9DOF2OlBxNfzkXpLoWcdXWQ7aMZgLX+KQiafH5sYSvXWp
+        79x7CoY3F5Mvj
+X-Received: by 2002:ac2:5b1d:: with SMTP id v29mr7905212lfn.54.1573248793110;
+        Fri, 08 Nov 2019 13:33:13 -0800 (PST)
+X-Google-Smtp-Source: APXvYqyctTL3kNwz/34TK8mIxExHhHL9/rEa+UQvCWQxPGhApNLDQroCsBY/4KDberzmnIS0GFFUkQ==
+X-Received: by 2002:ac2:5b1d:: with SMTP id v29mr7905193lfn.54.1573248792938;
+        Fri, 08 Nov 2019 13:33:12 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
+        by smtp.gmail.com with ESMTPSA id c19sm2977825ljj.61.2019.11.08.13.33.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Nov 2019 13:33:10 -0800 (PST)
+        Fri, 08 Nov 2019 13:33:12 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id AA5791800BD; Fri,  8 Nov 2019 22:33:09 +0100 (CET)
-Subject: [PATCH bpf-next v2 4/6] libbpf: Use pr_warn() when printing netlink
- errors
+        id CD3C91800BD; Fri,  8 Nov 2019 22:33:11 +0100 (CET)
+Subject: [PATCH bpf-next v2 6/6] libbpf: Add getter for program size
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Daniel Borkmann <daniel@iogearbox.net>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -61,8 +60,8 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Fri, 08 Nov 2019 22:33:09 +0100
-Message-ID: <157324878956.910124.856248605977418231.stgit@toke.dk>
+Date:   Fri, 08 Nov 2019 22:33:11 +0100
+Message-ID: <157324879178.910124.2574532467255490597.stgit@toke.dk>
 In-Reply-To: <157324878503.910124.12936814523952521484.stgit@toke.dk>
 References: <157324878503.910124.12936814523952521484.stgit@toke.dk>
 User-Agent: StGit/0.21
@@ -76,79 +75,54 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-The netlink functions were using fprintf(stderr, ) directly to print out
-error messages, instead of going through the usual logging macros. This
-makes it impossible for the calling application to silence or redirect
-those error messages. Fix this by switching to pr_warn() in nlattr.c and
-netlink.c.
+This adds a new getter for the BPF program size (in bytes). This is useful
+for a caller that is trying to predict how much memory will be locked by
+loading a BPF object into the kernel.
 
 Acked-by: Song Liu <songliubraving@fb.com>
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- tools/lib/bpf/netlink.c |    3 ++-
- tools/lib/bpf/nlattr.c  |   10 +++++-----
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ tools/lib/bpf/libbpf.c   |    5 +++++
+ tools/lib/bpf/libbpf.h   |    1 +
+ tools/lib/bpf/libbpf.map |    1 +
+ 3 files changed, 7 insertions(+)
 
-diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
-index ce3ec81b71c0..a261df9cb488 100644
---- a/tools/lib/bpf/netlink.c
-+++ b/tools/lib/bpf/netlink.c
-@@ -12,6 +12,7 @@
- 
- #include "bpf.h"
- #include "libbpf.h"
-+#include "libbpf_internal.h"
- #include "nlattr.h"
- 
- #ifndef SOL_NETLINK
-@@ -43,7 +44,7 @@ int libbpf_netlink_open(__u32 *nl_pid)
- 
- 	if (setsockopt(sock, SOL_NETLINK, NETLINK_EXT_ACK,
- 		       &one, sizeof(one)) < 0) {
--		fprintf(stderr, "Netlink error reporting not supported\n");
-+		pr_warn("Netlink error reporting not supported\n");
- 	}
- 
- 	if (bind(sock, (struct sockaddr *)&sa, sizeof(sa)) < 0) {
-diff --git a/tools/lib/bpf/nlattr.c b/tools/lib/bpf/nlattr.c
-index 1e69c0c8d413..8db44bbfc66d 100644
---- a/tools/lib/bpf/nlattr.c
-+++ b/tools/lib/bpf/nlattr.c
-@@ -8,6 +8,7 @@
- 
- #include <errno.h>
- #include "nlattr.h"
-+#include "libbpf_internal.h"
- #include <linux/rtnetlink.h>
- #include <string.h>
- #include <stdio.h>
-@@ -121,8 +122,8 @@ int libbpf_nla_parse(struct nlattr *tb[], int maxtype, struct nlattr *head,
- 		}
- 
- 		if (tb[type])
--			fprintf(stderr, "Attribute of type %#x found multiple times in message, "
--				  "previous attribute is being ignored.\n", type);
-+			pr_warn("Attribute of type %#x found multiple times in message, "
-+				"previous attribute is being ignored.\n", type);
- 
- 		tb[type] = nla;
- 	}
-@@ -181,15 +182,14 @@ int libbpf_nla_dump_errormsg(struct nlmsghdr *nlh)
- 
- 	if (libbpf_nla_parse(tb, NLMSGERR_ATTR_MAX, attr, alen,
- 			     extack_policy) != 0) {
--		fprintf(stderr,
--			"Failed to parse extended error attributes\n");
-+		pr_warn("Failed to parse extended error attributes\n");
- 		return 0;
- 	}
- 
- 	if (tb[NLMSGERR_ATTR_MSG])
- 		errmsg = (char *) libbpf_nla_data(tb[NLMSGERR_ATTR_MSG]);
- 
--	fprintf(stderr, "Kernel error message: %s\n", errmsg);
-+	pr_warn("Kernel error message: %s\n", errmsg);
- 
- 	return 0;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 582c0fd16697..facd5e1a3a0b 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -4790,6 +4790,11 @@ int bpf_program__fd(const struct bpf_program *prog)
+ 	return bpf_program__nth_fd(prog, 0);
  }
+ 
++size_t bpf_program__size(const struct bpf_program *prog)
++{
++	return prog->insns_cnt * sizeof(struct bpf_insn);
++}
++
+ int bpf_program__set_prep(struct bpf_program *prog, int nr_instances,
+ 			  bpf_program_prep_t prep)
+ {
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index f0947cc949d2..10875dc68ec8 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -213,6 +213,7 @@ LIBBPF_API void bpf_program__set_ifindex(struct bpf_program *prog,
+ 
+ LIBBPF_API const char *bpf_program__title(const struct bpf_program *prog,
+ 					  bool needs_copy);
++LIBBPF_API size_t bpf_program__size(const struct bpf_program *prog);
+ 
+ LIBBPF_API int bpf_program__load(struct bpf_program *prog, char *license,
+ 				 __u32 kern_version);
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index d1a782a3a58d..9f39ee06b2d4 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -203,4 +203,5 @@ LIBBPF_0.0.6 {
+ 		bpf_program__get_type;
+ 		bpf_program__is_tracing;
+ 		bpf_program__set_tracing;
++		bpf_program__size;
+ } LIBBPF_0.0.5;
 
