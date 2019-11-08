@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 524A0C5DF60
-	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 06:42:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CD4AC5DF60
+	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 06:42:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 24EA4206BA
-	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 06:42:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 700C0206BA
+	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 06:42:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573195320;
-	bh=rhzoiJHBvgK4KLJDJdx/0M3qtJWagd1nq5MHqkMs4nE=;
+	s=default; t=1573195326;
+	bh=4/nLZ3bgW+HPsoKTpgK8u8+SUpviIdq+63g9YQNNDrk=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=q7CF8BSqPT1NtToAZqB/hQYavDfVv7vXJGrS1TqmCO3NeYlNUbAJ0BjbdWwHTP8C7
-	 QMDoxNNE3ncBTZ5JuZ92NFoc/Vn8JnsiZ6qX80xJJkpC7bR8rVv2h4Rt+XOCbJca1m
-	 DyK2iEfDYCRoE4yxi2xW+08rDexNuvofXWndSBRM=
+	b=V9bc3M8/x1z8Hq1v2EAR5nnLN8XySy/RmCENMCtdLmqaCXtA2Km5iDT1P3ozZIs6B
+	 PQNrP/HzXj+nx+OTeHPXbOySQgiexbp6Iq4R7q6LJup6R1x8mGlvR4Zh/l6/BqXIuW
+	 H8Ylnr2Etp/sF7n8pzPK1CzPmlNzTjcA2b0+RGJc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725975AbfKHGl7 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 8 Nov 2019 01:41:59 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:17492 "EHLO
+        id S1727168AbfKHGmG convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 8 Nov 2019 01:42:06 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:50782 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725802AbfKHGl7 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 8 Nov 2019 01:41:59 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA86ejEY022839
-        for <bpf@vger.kernel.org>; Thu, 7 Nov 2019 22:41:58 -0800
+        by vger.kernel.org with ESMTP id S1725802AbfKHGmG (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 8 Nov 2019 01:42:06 -0500
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA86XbuL023894
+        for <bpf@vger.kernel.org>; Thu, 7 Nov 2019 22:42:04 -0800
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2w41ujhnsm-5
+        by mx0a-00082601.pphosted.com with ESMTP id 2w41vy1w7s-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 07 Nov 2019 22:41:58 -0800
-Received: from 2401:db00:30:600c:face:0:1f:0 (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 07 Nov 2019 22:42:04 -0800
+Received: from 2401:db00:2120:80e1:face:0:29:0 (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 7 Nov 2019 22:40:44 -0800
+ 15.1.1713.5; Thu, 7 Nov 2019 22:41:06 -0800
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 7E819760F61; Thu,  7 Nov 2019 22:40:43 -0800 (PST)
+        id E5B77760F61; Thu,  7 Nov 2019 22:41:05 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -46,9 +46,9 @@ To:     <davem@davemloft.net>
 CC:     <daniel@iogearbox.net>, <x86@kernel.org>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v3 bpf-next 02/18] bpf: Add bpf_arch_text_poke() helper
-Date:   Thu, 7 Nov 2019 22:40:23 -0800
-Message-ID: <20191108064039.2041889-3-ast@kernel.org>
+Subject: [PATCH v3 bpf-next 13/18] bpf: Fix race in btf_resolve_helper_id()
+Date:   Thu, 7 Nov 2019 22:40:34 -0800
+Message-ID: <20191108064039.2041889-14-ast@kernel.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191108064039.2041889-1-ast@kernel.org>
 References: <20191108064039.2041889-1-ast@kernel.org>
@@ -58,134 +58,129 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-11-08_01:2019-11-07,2019-11-08 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 clxscore=1034
- suspectscore=1 priorityscore=1501 spamscore=0 mlxlogscore=999
- lowpriorityscore=0 phishscore=0 malwarescore=0 mlxscore=0 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1911080065
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ malwarescore=0 lowpriorityscore=0 impostorscore=0 clxscore=1034 mlxscore=0
+ suspectscore=1 bulkscore=0 phishscore=0 adultscore=0 mlxlogscore=999
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1911080063
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add bpf_arch_text_poke() helper that is used by BPF trampoline logic to patch
-nops/calls in kernel text into calls into BPF trampoline and to patch
-calls/nops inside BPF programs too.
+btf_resolve_helper_id() caching logic is a bit racy, since under root the
+verifier can verify several programs in parallel. Fix it with READ/WRITE_ONCE.
+Fix the type as well, since error is also recorded.
 
+Fixes: a7658e1a4164 ("bpf: Check types of arguments passed into helpers")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- arch/x86/net/bpf_jit_comp.c | 51 +++++++++++++++++++++++++++++++++++++
- include/linux/bpf.h         |  8 ++++++
- kernel/bpf/core.c           |  6 +++++
- 3 files changed, 65 insertions(+)
+ include/linux/bpf.h   |  5 +++--
+ kernel/bpf/btf.c      | 26 +++++++++++++++++++++++++-
+ kernel/bpf/verifier.c |  8 +++-----
+ net/core/filter.c     |  2 +-
+ 4 files changed, 32 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 0399b1f83c23..bb8467fd6715 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -9,9 +9,11 @@
- #include <linux/filter.h>
- #include <linux/if_vlan.h>
- #include <linux/bpf.h>
-+#include <linux/memory.h>
- #include <asm/extable.h>
- #include <asm/set_memory.h>
- #include <asm/nospec-branch.h>
-+#include <asm/text-patching.h>
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 9206b7e86dde..e177758ae439 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -247,7 +247,7 @@ struct bpf_func_proto {
+ 		};
+ 		enum bpf_arg_type arg_type[5];
+ 	};
+-	u32 *btf_id; /* BTF ids of arguments */
++	int *btf_id; /* BTF ids of arguments */
+ };
  
- static u8 *emit_code(u8 *ptr, u32 bytes, unsigned int len)
- {
-@@ -487,6 +489,55 @@ static int emit_call(u8 **pprog, void *func, void *ip)
- 	return 0;
+ /* bpf_context is intentionally undefined structure. Pointer to bpf_context is
+@@ -874,7 +874,8 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ 		      const struct btf_type *t, int off, int size,
+ 		      enum bpf_access_type atype,
+ 		      u32 *next_btf_id);
+-u32 btf_resolve_helper_id(struct bpf_verifier_log *log, void *, int);
++int btf_resolve_helper_id(struct bpf_verifier_log *log,
++			  const struct bpf_func_proto *fn, int);
+ 
+ int btf_distill_func_proto(struct bpf_verifier_log *log,
+ 			   struct btf *btf,
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 9e1164e5b429..033d071eb59c 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -3721,7 +3721,8 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ 	return -EINVAL;
  }
  
-+int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
-+		       void *old_addr, void *new_addr)
+-u32 btf_resolve_helper_id(struct bpf_verifier_log *log, void *fn, int arg)
++static int __btf_resolve_helper_id(struct bpf_verifier_log *log, void *fn,
++				   int arg)
+ {
+ 	char fnname[KSYM_SYMBOL_LEN + 4] = "btf_";
+ 	const struct btf_param *args;
+@@ -3789,6 +3790,29 @@ u32 btf_resolve_helper_id(struct bpf_verifier_log *log, void *fn, int arg)
+ 	return btf_id;
+ }
+ 
++int btf_resolve_helper_id(struct bpf_verifier_log *log,
++			  const struct bpf_func_proto *fn, int arg)
 +{
-+	u8 old_insn[X86_CALL_SIZE] = {};
-+	u8 new_insn[X86_CALL_SIZE] = {};
-+	u8 *prog;
++	int *btf_id = &fn->btf_id[arg];
 +	int ret;
 +
-+	if (!is_kernel_text((long)ip))
-+		/* BPF trampoline in modules is not supported */
++	if (fn->arg_type[arg] != ARG_PTR_TO_BTF_ID)
 +		return -EINVAL;
 +
-+	if (old_addr) {
-+		prog = old_insn;
-+		ret = emit_call(&prog, old_addr, (void *)ip);
-+		if (ret)
-+			return ret;
++	ret = READ_ONCE(*btf_id);
++	if (ret)
++		return ret;
++	/* ok to race the search. The result is the same */
++	ret = __btf_resolve_helper_id(log, fn->func, arg);
++	if (!ret) {
++		/* Function argument cannot be type 'void' */
++		bpf_log(log, "BTF resolution bug\n");
++		return -EFAULT;
 +	}
-+	if (new_addr) {
-+		prog = new_insn;
-+		ret = emit_call(&prog, new_addr, (void *)ip);
-+		if (ret)
-+			return ret;
-+	}
-+	ret = -EBUSY;
-+	mutex_lock(&text_mutex);
-+	switch (t) {
-+	case BPF_MOD_NOP_TO_CALL:
-+		if (memcmp(ip, ideal_nops[NOP_ATOMIC5], X86_CALL_SIZE))
-+			goto out;
-+		text_poke(ip, new_insn, X86_CALL_SIZE);
-+		break;
-+	case BPF_MOD_CALL_TO_CALL:
-+		if (memcmp(ip, old_insn, X86_CALL_SIZE))
-+			goto out;
-+		text_poke(ip, new_insn, X86_CALL_SIZE);
-+		break;
-+	case BPF_MOD_CALL_TO_NOP:
-+		if (memcmp(ip, old_insn, X86_CALL_SIZE))
-+			goto out;
-+		text_poke(ip, ideal_nops[NOP_ATOMIC5], X86_CALL_SIZE);
-+		break;
-+	}
-+	ret = 0;
-+out:
-+	mutex_unlock(&text_mutex);
++	WRITE_ONCE(*btf_id, ret);
 +	return ret;
 +}
 +
- static bool ex_handler_bpf(const struct exception_table_entry *x,
- 			   struct pt_regs *regs, int trapnr,
- 			   unsigned long error_code, unsigned long fault_addr)
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 7c7f518811a6..8b90db25348a 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1157,4 +1157,12 @@ static inline u32 bpf_xdp_sock_convert_ctx_access(enum bpf_access_type type,
- }
- #endif /* CONFIG_INET */
+ static int __get_type_size(struct btf *btf, u32 btf_id,
+ 			   const struct btf_type **bad_type)
+ {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 36542edd4936..90375c26ad45 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4147,11 +4147,9 @@ static int check_helper_call(struct bpf_verifier_env *env, int func_id, int insn
+ 	meta.func_id = func_id;
+ 	/* check args */
+ 	for (i = 0; i < 5; i++) {
+-		if (fn->arg_type[i] == ARG_PTR_TO_BTF_ID) {
+-			if (!fn->btf_id[i])
+-				fn->btf_id[i] = btf_resolve_helper_id(&env->log, fn->func, i);
+-			meta.btf_id = fn->btf_id[i];
+-		}
++		err = btf_resolve_helper_id(&env->log, fn, i);
++		if (err > 0)
++			meta.btf_id = err;
+ 		err = check_func_arg(env, BPF_REG_1 + i, fn->arg_type[i], &meta);
+ 		if (err)
+ 			return err;
+diff --git a/net/core/filter.c b/net/core/filter.c
+index fc303abec8fa..f72face90659 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -3816,7 +3816,7 @@ static const struct bpf_func_proto bpf_skb_event_output_proto = {
+ 	.arg5_type	= ARG_CONST_SIZE_OR_ZERO,
+ };
  
-+enum bpf_text_poke_type {
-+	BPF_MOD_NOP_TO_CALL,
-+	BPF_MOD_CALL_TO_CALL,
-+	BPF_MOD_CALL_TO_NOP,
-+};
-+int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
-+		       void *addr1, void *addr2);
-+
- #endif /* _LINUX_BPF_H */
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index c1fde0303280..c4bcec1014a9 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2140,6 +2140,12 @@ int __weak skb_copy_bits(const struct sk_buff *skb, int offset, void *to,
- 	return -EFAULT;
- }
- 
-+int __weak bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
-+			      void *addr1, void *addr2)
-+{
-+	return -ENOTSUPP;
-+}
-+
- DEFINE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
- EXPORT_SYMBOL(bpf_stats_enabled_key);
- 
+-static u32 bpf_skb_output_btf_ids[5];
++static int bpf_skb_output_btf_ids[5];
+ const struct bpf_func_proto bpf_skb_output_proto = {
+ 	.func		= bpf_skb_event_output,
+ 	.gpl_only	= true,
 -- 
 2.23.0
 
