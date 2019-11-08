@@ -2,184 +2,145 @@ Return-Path: <SRS0=EAyC=ZA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 234C8FC6195
-	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 20:24:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C93BFC6196
+	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 21:14:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DEEB520869
-	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 20:24:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 22C07214DB
+	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 21:14:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Afqn2f9p";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="JaHk6tIG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Odzw2l/K"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727794AbfKHUYi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 Nov 2019 15:24:38 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:6804 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727148AbfKHUYi (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 8 Nov 2019 15:24:38 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA8IsKjR003938;
-        Fri, 8 Nov 2019 10:58:04 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=i1ZMfPXB3rnnMpX/JK1ZDfbqjvciksSg9zSqfdQvJNY=;
- b=Afqn2f9pCJpqgKnNuyVW3lhGyJc6UGQ332ETZBgzD4NWNrdks5w7hc7RGe935fd6PfT3
- v4yIpUSruE05+FRhgel+Sc2dpk65oe5kHHb3Qy6DtNW90JN3PNsizB5woyaVlxhyOZ+0
- 2m1xcxc8ff/n1fsPlaAk20ztsqfOEYD8ZJ0= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2w59shhkrq-9
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 08 Nov 2019 10:58:04 -0800
-Received: from prn-mbx05.TheFacebook.com (2620:10d:c081:6::19) by
- prn-hub05.TheFacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1713.5; Fri, 8 Nov 2019 10:57:42 -0800
-Received: from prn-hub03.TheFacebook.com (2620:10d:c081:35::127) by
- prn-mbx05.TheFacebook.com (2620:10d:c081:6::19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1713.5; Fri, 8 Nov 2019 10:57:42 -0800
-Received: from NAM01-SN1-obe.outbound.protection.outlook.com (192.168.54.28)
- by o365-in.thefacebook.com (192.168.16.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
- via Frontend Transport; Fri, 8 Nov 2019 10:57:42 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BbbNQwcLWH5nf3C4S2+pC21mUmIdrHahNEpk2CKdHHdh3rDcWeucVUZ5OkaU4xt6GkG1IRDU659Px5GK4DlVeQQWjqcFx1qBSFhd1RYi+TsZnpR/eytGGOLcFwp+2R37S9VUXnXzjC77Sdjdb5VX5t8JDuxOQiFBSS6ZxaUc9aCei4RIP9I1BnpbK38b0DcMVnVBhnISP3hqn40hMlq8fY/bGtWihLsKRn9sxKKd8sKRTRKowgyMa0oi9UX8/PAvRVsrXWHa91ywZJdfEkB9DcNFiqg7mkz0LoZALxZL4nw7SupOZ1jcx6/AM/dLFyUFhyWVMPEqQe04iiAmVqJRQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=i1ZMfPXB3rnnMpX/JK1ZDfbqjvciksSg9zSqfdQvJNY=;
- b=VT65GH2IGHEpuzrw2QeR8KS2RWyZ+JPc7cmPaR7t/xu2UtqfVCvb/tMGYNt82fBbC4rGWNuijjV1026r0RdeXeSnP0OTIE97N/mxgzN+asvhEa5PpxuKme4Hjj/zF+/Y1IIJ0etTsbjMdf6XHwnhdTFfXWa5UPXUaMnnrOWvOxXaDVmfvd2JzEH7fv9sXXgJJJzr8a5NElUOMyg09ma0pMsE49pTN3JPzRigZJE80CbOKfTXvfnGseKCDUsIxMcP2pD01m/IM6j20n3QnqhSSeuEScY9EFixdErC87KyHs6l9MxkRTDv4SwrEalj+bPUI8aDfB3er7uJp/G8ChkdLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=i1ZMfPXB3rnnMpX/JK1ZDfbqjvciksSg9zSqfdQvJNY=;
- b=JaHk6tIGTrsHTLZPYTTECXTTxFqGjAzodMBCSapTHxOoe1KfL2aNjBf1nQGKyiaMP1DjJlxc2M/5sJt7pxZwT++bd13qlZF990FkRvpZRUWBh92sZSqCxL3hgxGq1Mfml7rF96z3o15dr76EpL/kvipVzYZn+s/zJ9UwryrkBpM=
-Received: from MWHPR15MB1165.namprd15.prod.outlook.com (10.175.3.22) by
- MWHPR15MB1119.namprd15.prod.outlook.com (10.175.8.20) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2430.22; Fri, 8 Nov 2019 18:57:41 +0000
-Received: from MWHPR15MB1165.namprd15.prod.outlook.com
- ([fe80::fdc8:5546:bace:15f5]) by MWHPR15MB1165.namprd15.prod.outlook.com
- ([fe80::fdc8:5546:bace:15f5%5]) with mapi id 15.20.2430.020; Fri, 8 Nov 2019
- 18:57:41 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     Alexei Starovoitov <ast@kernel.org>
-CC:     David Miller <davem@davemloft.net>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Kernel Team <Kernel-team@fb.com>
-Subject: Re: [PATCH v3 bpf-next 16/18] libbpf: Add support for attaching BPF
- programs to other BPF programs
-Thread-Topic: [PATCH v3 bpf-next 16/18] libbpf: Add support for attaching BPF
- programs to other BPF programs
-Thread-Index: AQHVlf+YwwRq5FosuE2y6hpnfHhzDqeBoMoA
-Date:   Fri, 8 Nov 2019 18:57:41 +0000
-Message-ID: <88611E3B-DD55-4D33-AA15-73DE58F8D44D@fb.com>
+        id S1730923AbfKHVOF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 Nov 2019 16:14:05 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:34222 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729832AbfKHVOF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 Nov 2019 16:14:05 -0500
+Received: by mail-pf1-f193.google.com with SMTP id n13so5503118pff.1;
+        Fri, 08 Nov 2019 13:14:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=IkOG4wMelMkdtz15a0RzG5RgUJm6TFFa3nFHB4ADVL0=;
+        b=Odzw2l/KwJOgPla7N9s4JzT5cdbQRiI5jg3Urp7zeQcENpOI5zm8m/8GFDunaFSpNB
+         IMeXYd87wN8V7bcAwzW4zeznp+sWaDOicCPLc2xqPKG/PHVQaoNRzjZC4uvhzqx9Sch8
+         fCWPxa7XLEiN7j4WmdVNbplKk469qKKf4qRhhyFVdy3mbYnIH/qXYm/Ti6+uOIPQn0ul
+         J+JhfHk3I6tM/pxeX/4Pyesi23XA8lmt4W+WEHukdmYrcTf0ZagOYqorTapRwtFVWa7C
+         rQPQvplfjz6RDOHYxNIfbn+PXXZ21ttCircZPmrobaAoLTrhlv1p68IpRjPw5E5nChRe
+         TzdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=IkOG4wMelMkdtz15a0RzG5RgUJm6TFFa3nFHB4ADVL0=;
+        b=fLaItdzYiUw6RNyETuNGn/XUOfahyz2HsVJNP4mM4HC3TdQHbtv9kClAWQre44SNE5
+         ptykOVqpY8kUMthSxyjFO36ekgdRDqejJNhqvBA8Qs2jq0lOnkUxh3ueVCiGp7YfM2u7
+         i33SUM5fBO4FLEuu+MHbgoCgp/33mm9c+zhXN6CN7eSnIQAnfUhwdO6nGA2BilD3i8dd
+         JKFHTZEx8jlRboi1Byu/cpdUv+0C8LzahFumXK3pEanje3ccWMh/hKLjVpqo8vQEBmmG
+         5ShtkFA9ft9UH03j3TXHTEbo3x0BZL+SEIql9L57/4YkendumpQlCNPRUtrgdC2YKhie
+         bcpQ==
+X-Gm-Message-State: APjAAAV29QQGsGoPOlAMuF++OCjxpzlD11hP6sMkyLLkfcOLPhaOtGGO
+        5dWDlGjuiAJJoqeJGDNXLbY=
+X-Google-Smtp-Source: APXvYqxmtjzodCX277us50CIxM4qAb+YH01OR6UmaZO+JOMdAaBwQBxgf7LQwGO0tBAciLcqpOGY8A==
+X-Received: by 2002:a63:1065:: with SMTP id 37mr14190425pgq.31.1573247644500;
+        Fri, 08 Nov 2019 13:14:04 -0800 (PST)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:200::2:f248])
+        by smtp.gmail.com with ESMTPSA id p5sm6030812pgb.14.2019.11.08.13.14.03
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 08 Nov 2019 13:14:03 -0800 (PST)
+Date:   Fri, 8 Nov 2019 13:14:02 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>, davem@davemloft.net,
+        daniel@iogearbox.net, x86@kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [PATCH v3 bpf-next 15/18] bpf: Support attaching tracing BPF
+ program to other BPF programs
+Message-ID: <20191108211400.m6kuuyvkp2p56gmo@ast-mbp.dhcp.thefacebook.com>
 References: <20191108064039.2041889-1-ast@kernel.org>
- <20191108064039.2041889-17-ast@kernel.org>
-In-Reply-To: <20191108064039.2041889-17-ast@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3601.0.10)
-x-originating-ip: [2620:10d:c090:200::b292]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 77e5b1d0-5697-43bb-c404-08d7647d8816
-x-ms-traffictypediagnostic: MWHPR15MB1119:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR15MB1119C0D93E6764F60F7CA6C8B37B0@MWHPR15MB1119.namprd15.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5516;
-x-forefront-prvs: 0215D7173F
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(396003)(39860400002)(136003)(346002)(366004)(199004)(189003)(33656002)(8936002)(4326008)(66446008)(8676002)(305945005)(5660300002)(36756003)(6116002)(86362001)(71200400001)(76116006)(54906003)(229853002)(46003)(66556008)(64756008)(316002)(66476007)(66946007)(6512007)(50226002)(5024004)(446003)(486006)(81156014)(71190400001)(6246003)(14454004)(81166006)(99286004)(11346002)(2616005)(476003)(186003)(6436002)(6506007)(25786009)(102836004)(478600001)(256004)(53546011)(6486002)(2906002)(6916009)(7736002)(76176011);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR15MB1119;H:MWHPR15MB1165.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hku1Fq7u76MieiKMvy7uc0CfVtwuE/E5GvHA6PW5a5G0B3Rtc35IybLvClcyhnAtS4DQ6wpa7On0rS7o7tTyHXRXelLICcTbbFp78PeqV1af/FhEuCubKy9a6/mXskbvJ9OQDOQjP30BXeKtUEe8HbvsGC7qn7re57dyF1R4goYEFuQRrhu0faA+UtLiDmX5FsC2Ir0oSLVTXeVpLqz8ukiHgKXCFsvQbYiGlK0shF0BridsnMb7GxPGEUVug8xUn+Hitw6YwZXYdoxQqDl0ixAO0z0rQaGn2Tk8rfPijzIs8dWE4d/QBC+6kSkYG2GdUlnmhfY31M3nhT6BMEk/vLPQoZjjc3bEuzmvnowkypr60pSH6X8/UUmQFd4sDUDdj7XP1QeRGpTno9UvHLGZXTvHF2LrZJVzUggBsZ8eZ9B0NOkOPGDY0/NNaQ8UvLdU
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <310EED5D7FE37C4EA448E5E54451A67D@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+ <20191108064039.2041889-16-ast@kernel.org>
+ <87pni2ced3.fsf@toke.dk>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 77e5b1d0-5697-43bb-c404-08d7647d8816
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Nov 2019 18:57:41.1588
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HBhqITCBuiGgb/mXR2tjBYfq7RtDYEqAj/2gKs1ATEbv15NubCKOpMATmNjs7dh0rjQ8B31i7mlC3yyTPVkE8g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR15MB1119
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-08_07:2019-11-08,2019-11-08 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- suspectscore=0 impostorscore=0 clxscore=1015 mlxlogscore=960 spamscore=0
- adultscore=0 mlxscore=0 malwarescore=0 bulkscore=0 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1911080185
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87pni2ced3.fsf@toke.dk>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Fri, Nov 08, 2019 at 09:17:12PM +0100, Toke Høiland-Jørgensen wrote:
+> Alexei Starovoitov <ast@kernel.org> writes:
+> 
+> > Allow FENTRY/FEXIT BPF programs to attach to other BPF programs of any type
+> > including their subprograms. This feature allows snooping on input and output
+> > packets in XDP, TC programs including their return values. In order to do that
+> > the verifier needs to track types not only of vmlinux, but types of other BPF
+> > programs as well. The verifier also needs to translate uapi/linux/bpf.h types
+> > used by networking programs into kernel internal BTF types used by FENTRY/FEXIT
+> > BPF programs. In some cases LLVM optimizations can remove arguments from BPF
+> > subprograms without adjusting BTF info that LLVM backend knows. When BTF info
+> > disagrees with actual types that the verifiers sees the BPF trampoline has to
+> > fallback to conservative and treat all arguments as u64. The FENTRY/FEXIT
+> > program can still attach to such subprograms, but won't be able to recognize
+> > pointer types like 'struct sk_buff *' into won't be able to pass them to
+> > bpf_skb_output() for dumping to user space.
+> >
+> > The BPF_PROG_LOAD command is extended with attach_prog_fd field. When it's set
+> > to zero the attach_btf_id is one vmlinux BTF type ids. When attach_prog_fd
+> > points to previously loaded BPF program the attach_btf_id is BTF type id of
+> > main function or one of its subprograms.
+> >
+> > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> 
+> This is cool! Certainly solves the xdpdump use case; thanks!
+> 
+> I do have a few questions (thinking about whether it can also be used
+> for running multiple XDP programs):
 
+excellent questions.
 
-> On Nov 7, 2019, at 10:40 PM, Alexei Starovoitov <ast@kernel.org> wrote:
->=20
-> Extend libbpf api to pass attach_prog_fd into bpf_object__open.
->=20
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> ---
+> - Can a FEXIT function loaded this way only *observe* the return code of
+>   the BPF program it attaches to, or can it also change it?
 
-[...]
+yes. the verifier can be taught to support that for certain class of programs.
+That needs careful thinking to make sure it's safe.
 
-> +static int libbpf_find_prog_btf_id(const char *name, __u32 attach_prog_f=
-d)
-> +{
-> +	struct bpf_prog_info_linear *info_linear;
-> +	struct bpf_prog_info *info;
-> +	struct btf *btf =3D NULL;
-> +	int err =3D -EINVAL;
-> +
-> +	info_linear =3D bpf_program__get_prog_info_linear(attach_prog_fd, 0);
-> +	if (IS_ERR_OR_NULL(info_linear)) {
-> +		pr_warn("failed get_prog_info_linear for FD %d\n",
-> +			attach_prog_fd);
-> +		return -EINVAL;
-> +	}
-> +	info =3D &info_linear->info;
-> +	if (!info->btf_id) {
-> +		pr_warn("The target program doesn't have BTF\n");
-> +		goto out;
-> +	}
-> +	if (btf__get_from_id(info->btf_id, &btf)) {
-> +		pr_warn("Failed to get BTF of the program\n");
-> +		goto out;
-> +	}
-> +	err =3D btf__find_by_name_kind(btf, name, BTF_KIND_FUNC);
-> +	btf__free(btf);
-> +	if (err <=3D 0) {
-> +		pr_warn("%s is not found in prog's BTF\n", name);
-> +		goto out;
-		^^^ This goto doesn't really do much.=20
-> +	}
-> +out:
-> +	free(info_linear);
-> +	return err;
-> +}
+> - Is it possible to attach multiple FENTRY/FEXIT programs to the same
+>   XDP program 
 
-Otherwise
+Yes. Already possible. See fexit_stress.c that attaches 40 progs to the same
+kernel function. Same thing when attaching fexit BPF to any XDP program.
+Since all of them are read only tracing prog all progs have access to skb on
+input and ouput along with unmodified return value.
 
-Acked-by: Song Liu <songliubraving@fb.com>
+> and/or to recursively attach FENTRY/FEXIT programs to each
+>   other?
+
+Not right now to avoid complex logic of detecting cycles. See simple bit:
+   if (tgt_prog->type == BPF_PROG_TYPE_TRACING) {
+           /* prevent cycles */
+           verbose(env, "Cannot recursively attach\n");
+
+> - Could it be possible for an FENTRY/FEXIT program to call into another
+>   XDP program (i.e., one that has the regular XDP program type)?
+
+It's possible to teach verifier to do that, but we probably shouldn't take that
+route. Instead I've started exploring the idea of dynamic linking. The
+trampoline logic will be used to replace existing BPF program or subprogram
+instead of attaching read-only to it. If types match the new program can
+replace existing one. The concept allows to build any kind of callchain
+programmatically. Pretty much what Ed proposed with static linking, but doing
+it dynamically. I'll start a separate email thread explaining details.
 
