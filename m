@@ -2,139 +2,134 @@ Return-Path: <SRS0=EAyC=ZA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22B60C5DF60
-	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 20:04:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 046A8C5DF60
+	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 20:17:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F2E50207FA
-	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 20:04:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CC13120869
+	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 20:17:21 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UrsyhpY1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731327AbfKHUEP convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 8 Nov 2019 15:04:15 -0500
-Received: from mx1.redhat.com ([209.132.183.28]:18466 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730720AbfKHUEP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 Nov 2019 15:04:15 -0500
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 740C8C057F32
-        for <bpf@vger.kernel.org>; Fri,  8 Nov 2019 20:04:14 +0000 (UTC)
-Received: by mail-lj1-f198.google.com with SMTP id i27so1520526ljb.17
-        for <bpf@vger.kernel.org>; Fri, 08 Nov 2019 12:04:14 -0800 (PST)
+        id S1726819AbfKHURV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 Nov 2019 15:17:21 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:46600 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726641AbfKHURV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 Nov 2019 15:17:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1573244240;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8XmqdlToSU6NJqH8qmccEKFAVpRMleSguA8vXGilu6s=;
+        b=UrsyhpY1MOvn1fM7Vze5QZe009Na0WmD9YWPguQ4jWosHJt96ZMjupoDVw/BUMwcyl0zvc
+        A274OhuJTiPifbB6jZQpk36H/T2qwmDmt2M3txfxw4dBaLIBuQMl9zYpOkvHw0XxYvvd0m
+        5b5Pj5w2pD7wJ296fgCRsSIJV/1S/Ic=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-374-tRBmHF0SMi2AlOh_plJ2tg-1; Fri, 08 Nov 2019 15:17:16 -0500
+Received: by mail-lf1-f70.google.com with SMTP id h3so1504881lfp.17
+        for <bpf@vger.kernel.org>; Fri, 08 Nov 2019 12:17:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=8PjjvIiZ6aE6Dpro+Lpqhvx8ZCU8Es2jgcO6SbHEpro=;
-        b=JLRb2eyP4tQQXsklvyS0oqfQA5NTyziiXo9XaDTmgdC7rIR2z3Om5+NZ3ITrIsVeuF
-         JdmWECXTpcJ6r7fXVnvUpuY31fJfdsMnDxll6gASn12N+iEQX9tW4BoCmHY3QdnkU079
-         Lz9ZwT6mjef80ZllbEHiK9cWFsZs5piOIbhTn+onmxdBIZFNKOa1zF/O6jfIs5okDhDN
-         vcUPYXMrmeF/BoG1ta1WvvDahtYzIq3+UGQU28/hzSQaElscGegz4zAlEAR9cpspOb9W
-         aWcLCTP81JEfZrWSYY7QHux/KiDQUG9jsQh2s9k66/mijjuqaJYva5/bf0BCsT0GZ/ov
-         TJQQ==
-X-Gm-Message-State: APjAAAXLMU/PjWxedgDf1UBNDsxSdG7oLU4q6w4M/4Q5ZsQRV02g9Sip
-        uGL+aZROt/sTWnucxq79D2nlltbzZ3ricqY8BOodiGjab47rYfTtEVVH5DBMMNcRTdpSyv2cQ0K
-        xJc79h9X64lly
-X-Received: by 2002:a05:651c:20a:: with SMTP id y10mr8012312ljn.76.1573243452956;
-        Fri, 08 Nov 2019 12:04:12 -0800 (PST)
-X-Google-Smtp-Source: APXvYqy8CmwFfoGfo8L3dqS47x80bKzoMUDwZo1lM7uiqNiEZoolM1ut3wJvllfWuK3kAbXkZcUYVA==
-X-Received: by 2002:a05:651c:20a:: with SMTP id y10mr8012293ljn.76.1573243452710;
-        Fri, 08 Nov 2019 12:04:12 -0800 (PST)
+         :message-id:mime-version;
+        bh=tZXwWUvRbK2iGv7/sjZbpOCmTR15Xdh/z/tXR5i51YU=;
+        b=iRLtzRH2z/P+Vmo8bUQ3nph7py6iTh7nCwRZ3n73LrSm9jo5GKcxJn07KPBKjtCQ6V
+         G6+RE2V20NVlgHZk8HpolnT9+u70RNE5XmTGLP/5iJD0CSXBP022grFeUn/Tv8LrcP8P
+         aC61qrZ8ADLvjOk2HruBzVuKIZyfUvBsCYCFkPvTSKLa1PnVVjwcDU25KbpNdx4jU1ug
+         hDteUkYILbgWo4J3dAuj18FgqzzOHLe2PqGCfqZsEpIDTFwNDBfoi+qfY1qr4vYKrmDD
+         6kDbdS1pKbsX3/VcSed00lQsEr4f/Hi+lUXVyEoX/ZOEkKeJxZr34qxxjLZHW0UJ5ejb
+         WnKQ==
+X-Gm-Message-State: APjAAAVaim/IJ9O/iltM5TU8ofOTW2wm/qHocmaHFk2gGeTyWPcaRrlh
+        UY4pbH1kdcqMXqkxAxum8FfGO+Us0PzyByGEdfrlb45RLqYFVZsvZrhoRhpdwizSXhDq4v1w9IS
+        9ipop1ZSjswI2
+X-Received: by 2002:a2e:9dd5:: with SMTP id x21mr8021228ljj.232.1573244234676;
+        Fri, 08 Nov 2019 12:17:14 -0800 (PST)
+X-Google-Smtp-Source: APXvYqxZF5NmC9uJloejljsBclAtv2y/On5iFys1P+hJ7HdJ/rjgq4ubrTwjSKlBB8keESGx34oNzA==
+X-Received: by 2002:a2e:9dd5:: with SMTP id x21mr8021218ljj.232.1573244234478;
+        Fri, 08 Nov 2019 12:17:14 -0800 (PST)
 Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
-        by smtp.gmail.com with ESMTPSA id u27sm2819566lfl.34.2019.11.08.12.04.12
+        by smtp.gmail.com with ESMTPSA id b67sm6984800ljf.5.2019.11.08.12.17.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Nov 2019 12:04:12 -0800 (PST)
+        Fri, 08 Nov 2019 12:17:13 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 2524F1818B6; Fri,  8 Nov 2019 21:04:11 +0100 (CET)
+        id F121C1818B6; Fri,  8 Nov 2019 21:17:12 +0100 (CET)
 From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>, Martin Lau <kafai@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        David Miller <davem@davemloft.net>,
-        "netdev\@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf\@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 5/6] libbpf: Add bpf_get_link_xdp_info() function to get more XDP information
-In-Reply-To: <3C1D7121-8D90-4F30-964D-D684CAC3FFEA@fb.com>
-References: <157314553801.693412.15522462897300280861.stgit@toke.dk> <157314554370.693412.2312326138964108684.stgit@toke.dk> <3C1D7121-8D90-4F30-964D-D684CAC3FFEA@fb.com>
+To:     Alexei Starovoitov <ast@kernel.org>, davem@davemloft.net
+Cc:     daniel@iogearbox.net, x86@kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [PATCH v3 bpf-next 15/18] bpf: Support attaching tracing BPF program to other BPF programs
+In-Reply-To: <20191108064039.2041889-16-ast@kernel.org>
+References: <20191108064039.2041889-1-ast@kernel.org> <20191108064039.2041889-16-ast@kernel.org>
 X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Fri, 08 Nov 2019 21:04:11 +0100
-Message-ID: <87r22iceys.fsf@toke.dk>
+Date:   Fri, 08 Nov 2019 21:17:12 +0100
+Message-ID: <87pni2ced3.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+X-MC-Unique: tRBmHF0SMi2AlOh_plJ2tg-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Song Liu <songliubraving@fb.com> writes:
+Alexei Starovoitov <ast@kernel.org> writes:
 
->> On Nov 7, 2019, at 8:52 AM, Toke Høiland-Jørgensen <toke@redhat.com> wrote:
->> 
->> From: Toke Høiland-Jørgensen <toke@redhat.com>
->> 
->> Currently, libbpf only provides a function to get a single ID for the XDP
->> program attached to the interface. However, it can be useful to get the
->> full set of program IDs attached, along with the attachment mode, in one
->> go. Add a new getter function to support this, using an extendible
->> structure to carry the information. Express the old bpf_get_link_id()
->> function in terms of the new function.
->> 
->> Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
->> ---
->> tools/lib/bpf/libbpf.h   |   10 ++++++
->> tools/lib/bpf/libbpf.map |    1 +
->> tools/lib/bpf/netlink.c  |   78 ++++++++++++++++++++++++++++++----------------
->> 3 files changed, 62 insertions(+), 27 deletions(-)
->> 
->> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
->> index 6ddc0419337b..f0947cc949d2 100644
->> --- a/tools/lib/bpf/libbpf.h
->> +++ b/tools/lib/bpf/libbpf.h
->> @@ -427,8 +427,18 @@ LIBBPF_API int bpf_prog_load_xattr(const struct bpf_prog_load_attr *attr,
->> LIBBPF_API int bpf_prog_load(const char *file, enum bpf_prog_type type,
->> 			     struct bpf_object **pobj, int *prog_fd);
->> 
->> +struct xdp_link_info {
->> +	__u32 prog_id;
->> +	__u32 drv_prog_id;
->> +	__u32 hw_prog_id;
->> +	__u32 skb_prog_id;
->> +	__u8 attach_mode;
->> +};
->> +
->> LIBBPF_API int bpf_set_link_xdp_fd(int ifindex, int fd, __u32 flags);
->> LIBBPF_API int bpf_get_link_xdp_id(int ifindex, __u32 *prog_id, __u32 flags);
->> +LIBBPF_API int bpf_get_link_xdp_info(int ifindex, struct xdp_link_info *info,
->> +				     size_t info_size, __u32 flags);
->> 
->> struct perf_buffer;
->> 
->> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
->> index 86173cbb159d..45f229af2766 100644
->> --- a/tools/lib/bpf/libbpf.map
->> +++ b/tools/lib/bpf/libbpf.map
->> @@ -202,4 +202,5 @@ LIBBPF_0.0.6 {
->> 		bpf_program__get_type;
->> 		bpf_program__is_tracing;
->> 		bpf_program__set_tracing;
->> +		bpf_get_link_xdp_info;
+> Allow FENTRY/FEXIT BPF programs to attach to other BPF programs of any ty=
+pe
+> including their subprograms. This feature allows snooping on input and ou=
+tput
+> packets in XDP, TC programs including their return values. In order to do=
+ that
+> the verifier needs to track types not only of vmlinux, but types of other=
+ BPF
+> programs as well. The verifier also needs to translate uapi/linux/bpf.h t=
+ypes
+> used by networking programs into kernel internal BTF types used by FENTRY=
+/FEXIT
+> BPF programs. In some cases LLVM optimizations can remove arguments from =
+BPF
+> subprograms without adjusting BTF info that LLVM backend knows. When BTF =
+info
+> disagrees with actual types that the verifiers sees the BPF trampoline ha=
+s to
+> fallback to conservative and treat all arguments as u64. The FENTRY/FEXIT
+> program can still attach to such subprograms, but won't be able to recogn=
+ize
+> pointer types like 'struct sk_buff *' into won't be able to pass them to
+> bpf_skb_output() for dumping to user space.
 >
-> Please keep these entries in alphabetic order.
-
-Huh, I could have sworn I already did that; will fix and re-send.
-
-> Just found I added most out-of-order entries. :(
+> The BPF_PROG_LOAD command is extended with attach_prog_fd field. When it'=
+s set
+> to zero the attach_btf_id is one vmlinux BTF type ids. When attach_prog_f=
+d
+> points to previously loaded BPF program the attach_btf_id is BTF type id =
+of
+> main function or one of its subprograms.
 >
-> Other than this
->
-> Acked-by: Song Liu <songliubraving@fb.com>
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-Thanks for your review (of the whole series).
+This is cool! Certainly solves the xdpdump use case; thanks!
+
+I do have a few questions (thinking about whether it can also be used
+for running multiple XDP programs):
+
+- Can a FEXIT function loaded this way only *observe* the return code of
+  the BPF program it attaches to, or can it also change it?
+
+- Is it possible to attach multiple FENTRY/FEXIT programs to the same
+  XDP program and/or to recursively attach FENTRY/FEXIT programs to each
+  other?
+
+- Could it be possible for an FENTRY/FEXIT program to call into another
+  XDP program (i.e., one that has the regular XDP program type)?
+
+-Toke
+
