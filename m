@@ -2,56 +2,56 @@ Return-Path: <SRS0=EAyC=ZA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25CC4FC6197
-	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 21:33:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF7F4FC6198
+	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 21:33:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 006C821882
-	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 21:33:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8E745215EA
+	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 21:33:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730596AbfKHVdI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 Nov 2019 16:33:08 -0500
-Received: from mx1.redhat.com ([209.132.183.28]:55848 "EHLO mx1.redhat.com"
+        id S1726900AbfKHVdL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 Nov 2019 16:33:11 -0500
+Received: from mx1.redhat.com ([209.132.183.28]:57266 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730009AbfKHVdI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 Nov 2019 16:33:08 -0500
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198])
+        id S1732145AbfKHVdK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 Nov 2019 16:33:10 -0500
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 2A5E7821D9
-        for <bpf@vger.kernel.org>; Fri,  8 Nov 2019 21:33:08 +0000 (UTC)
-Received: by mail-lj1-f198.google.com with SMTP id o20so1547924ljg.0
-        for <bpf@vger.kernel.org>; Fri, 08 Nov 2019 13:33:08 -0800 (PST)
+        by mx1.redhat.com (Postfix) with ESMTPS id 3DCD6C057E7B
+        for <bpf@vger.kernel.org>; Fri,  8 Nov 2019 21:33:10 +0000 (UTC)
+Received: by mail-lj1-f199.google.com with SMTP id 70so1550842ljf.13
+        for <bpf@vger.kernel.org>; Fri, 08 Nov 2019 13:33:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:user-agent
-         :mime-version:content-transfer-encoding;
-        bh=f9G7ifn6IeScMKogPmkF62Xe41eRO8dRYDdQ01G+h9Y=;
-        b=JHOJ65MBdje5Ax8Z/K3xtSAQ34u9oVPg1ytmi7PGs+hIWpzwjnZDYrjg+e5r+I7P1P
-         Oe9hsDniHsVMhOqdfxq0LtgKCsRhBtPKAwvy0xnsF2Qmm8uJxOM7aJzNqrwCTltn931v
-         EvBIacpSQ4WGEH1dgpN6SUU4j4YzgrQ+zflhMO/7pLnF1jmht4VuEcfnJQLzughtYmq7
-         2VWUGxsROxBRcvZC3g+yL1ZzWNG3pGzUh5JvBg51hq0exI+8GYT9B1pM2ApmciBrFpf9
-         CUltRdRYQBHJ8rR+YTutR66+4nZ8HS//Ii74HAPcZ7Ct2NVBP+dXK+yugOsjINX+1Ets
-         M6/w==
-X-Gm-Message-State: APjAAAX84Pq4KZuY1i14dZPvj5SV/9/6s5Co0lM3Spfm+4nQF9mnyfbf
-        cTziPuzZfLS1rwVgtsheJ2repV28Mz1W+jjNJjZ6YfL4s7jTSjuPkdhFcKmB0z9U4je674jr7pZ
-        BgkXoTAKftFk/
-X-Received: by 2002:a05:651c:1059:: with SMTP id x25mr3891823ljm.255.1573248786667;
-        Fri, 08 Nov 2019 13:33:06 -0800 (PST)
-X-Google-Smtp-Source: APXvYqxH5IsNOnALiXwaJmnRtU+9Blz9TfCCMAbWhWiRYR8R/9dp8YTIX1Qic5MPcVqDSyqwCULPKw==
-X-Received: by 2002:a05:651c:1059:: with SMTP id x25mr3891810ljm.255.1573248786489;
-        Fri, 08 Nov 2019 13:33:06 -0800 (PST)
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=coY7ll6zI9iYn6/3XVcHoVcsUowxThFI2UGP9S+O/jc=;
+        b=TS0oHhP5e5LEOtxFvEIjTI63EKr8nBZjN57OaSNrIHqCwHSE6K89p+fd6d6fJV7JNv
+         E9SV/rdtehIj0V8maIWVJ2Dvg3j/RZnBIaNmVLD2+FWYiwVVtzVJ1l/mVHBdqJMcEDvt
+         ftjRyR7HMwdrOMqhAn4N9qFcSJcaxZEU5J7Bwe35t4KrniNqlW1UrIA49/A8YmO1v/5D
+         HRB3TPAm5cLDWc/GAcN8RThdvkyb32JypYYmda9lbHjgr8LW5j5k2YjymaTRaLT8SA/o
+         b1dSMhUoYqmRQ+dsElUqxv8/aI0SlKbf+r/tXUGfu2k5wF+vdlB4vT1cWVBtE5xaZxkt
+         OS4Q==
+X-Gm-Message-State: APjAAAUtiKzv97pZHfiJytcG7WMAiDs9WQUX2HCcwdua7oovoFyrMeoQ
+        yEPPbDQGZc4N3Gdh9nXaTqYFE072mWu7PvKvP/vhaOpAa19QMJETNXHdD/gAuCSZK3J4yXUd4yN
+        OpcVA1MKt/yYK
+X-Received: by 2002:ac2:51c5:: with SMTP id u5mr8174915lfm.154.1573248788774;
+        Fri, 08 Nov 2019 13:33:08 -0800 (PST)
+X-Google-Smtp-Source: APXvYqzyvHDP0efgof/jZJ2h6EkcDKkWKmHCdHOUs+1eGf8DMuVoc4vo/yLq0eHMxx+YHrTB9wijNA==
+X-Received: by 2002:ac2:51c5:: with SMTP id u5mr8174901lfm.154.1573248788622;
+        Fri, 08 Nov 2019 13:33:08 -0800 (PST)
 Received: from alrua-x1.borgediget.toke.dk ([2a00:7660:6da:443::2])
-        by smtp.gmail.com with ESMTPSA id y6sm3504046lfj.75.2019.11.08.13.33.05
+        by smtp.gmail.com with ESMTPSA id c14sm2964566ljd.3.2019.11.08.13.33.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Nov 2019 13:33:05 -0800 (PST)
+        Fri, 08 Nov 2019 13:33:08 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 3A4901800BD; Fri,  8 Nov 2019 22:33:05 +0100 (CET)
-Subject: [PATCH bpf-next v2 0/6] libbpf: Fix pinning and error message bugs
- and add new getters
+        id 7A7901800BD; Fri,  8 Nov 2019 22:33:07 +0100 (CET)
+Subject: [PATCH bpf-next v2 2/6] selftests/bpf: Add tests for automatic map
+ unpinning on load failure
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Daniel Borkmann <daniel@iogearbox.net>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -61,8 +61,10 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Fri, 08 Nov 2019 22:33:05 +0100
-Message-ID: <157324878503.910124.12936814523952521484.stgit@toke.dk>
+Date:   Fri, 08 Nov 2019 22:33:07 +0100
+Message-ID: <157324878734.910124.13947548477668878554.stgit@toke.dk>
+In-Reply-To: <157324878503.910124.12936814523952521484.stgit@toke.dk>
+References: <157324878503.910124.12936814523952521484.stgit@toke.dk>
 User-Agent: StGit/0.21
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -72,52 +74,69 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series fixes a few bugs in libbpf that I discovered while playing around
-with the new auto-pinning code, and writing the first utility in xdp-tools[0]:
+From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-- If object loading fails, libbpf does not clean up the pinnings created by the
-  auto-pinning mechanism.
-- EPERM is not propagated to the caller on program load
-- Netlink functions write error messages directly to stderr
+This add tests for the different variations of automatic map unpinning on
+load failure.
 
-In addition, libbpf currently only has a somewhat limited getter function for
-XDP link info, which makes it impossible to discover whether an attached program
-is in SKB mode or not. So the last patch in the series adds a new getter for XDP
-link info which returns all the information returned via netlink (and which can
-be extended later).
-
-Finally, add a getter for BPF program size, which can be used by the caller to
-estimate the amount of locked memory needed to load a program.
-
-A selftest is added for the pinning change, while the other features were tested
-in the xdp-filter tool from the xdp-tools repo. The 'new-libbpf-features' branch
-contains the commits that make use of the new XDP getter and the corrected EPERM
-error code.
-
-[0] https://github.com/xdp-project/xdp-tools
-
-Changelog:
-
-v2:
-  - Keep function names in libbpf.map sorted properly
-
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
+ tools/testing/selftests/bpf/prog_tests/pinning.c |   20 +++++++++++++++++---
+ tools/testing/selftests/bpf/progs/test_pinning.c |    2 +-
+ 2 files changed, 18 insertions(+), 4 deletions(-)
 
-Toke Høiland-Jørgensen (6):
-      libbpf: Unpin auto-pinned maps if loading fails
-      selftests/bpf: Add tests for automatic map unpinning on load failure
-      libbpf: Propagate EPERM to caller on program load
-      libbpf: Use pr_warn() when printing netlink errors
-      libbpf: Add bpf_get_link_xdp_info() function to get more XDP information
-      libbpf: Add getter for program size
-
-
- tools/lib/bpf/libbpf.c                           |   25 +++++--
- tools/lib/bpf/libbpf.h                           |   11 +++
- tools/lib/bpf/libbpf.map                         |    2 +
- tools/lib/bpf/netlink.c                          |   81 ++++++++++++++--------
- tools/lib/bpf/nlattr.c                           |   10 +--
- tools/testing/selftests/bpf/prog_tests/pinning.c |   20 +++++
- tools/testing/selftests/bpf/progs/test_pinning.c |    2 -
- 7 files changed, 109 insertions(+), 42 deletions(-)
+diff --git a/tools/testing/selftests/bpf/prog_tests/pinning.c b/tools/testing/selftests/bpf/prog_tests/pinning.c
+index 525388971e08..041952524c55 100644
+--- a/tools/testing/selftests/bpf/prog_tests/pinning.c
++++ b/tools/testing/selftests/bpf/prog_tests/pinning.c
+@@ -163,12 +163,15 @@ void test_pinning(void)
+ 		goto out;
+ 	}
+ 
+-	/* swap pin paths of the two maps */
++	/* set pin paths so that nopinmap2 will attempt to reuse the map at
++	 * pinpath (which will fail), but not before pinmap has already been
++	 * reused
++	 */
+ 	bpf_object__for_each_map(map, obj) {
+ 		if (!strcmp(bpf_map__name(map), "nopinmap"))
++			err = bpf_map__set_pin_path(map, nopinpath2);
++		else if (!strcmp(bpf_map__name(map), "nopinmap2"))
+ 			err = bpf_map__set_pin_path(map, pinpath);
+-		else if (!strcmp(bpf_map__name(map), "pinmap"))
+-			err = bpf_map__set_pin_path(map, NULL);
+ 		else
+ 			continue;
+ 
+@@ -181,6 +184,17 @@ void test_pinning(void)
+ 	if (CHECK(err != -EINVAL, "param mismatch load", "err %d errno %d\n", err, errno))
+ 		goto out;
+ 
++	/* nopinmap2 should have been pinned and cleaned up again */
++	err = stat(nopinpath2, &statbuf);
++	if (CHECK(!err || errno != ENOENT, "stat nopinpath2",
++		  "err %d errno %d\n", err, errno))
++		goto out;
++
++	/* pinmap should still be there */
++	err = stat(pinpath, &statbuf);
++	if (CHECK(err, "stat pinpath", "err %d errno %d\n", err, errno))
++		goto out;
++
+ 	bpf_object__close(obj);
+ 
+ 	/* test auto-pinning at custom path with open opt */
+diff --git a/tools/testing/selftests/bpf/progs/test_pinning.c b/tools/testing/selftests/bpf/progs/test_pinning.c
+index f69a4a50d056..f20e7e00373f 100644
+--- a/tools/testing/selftests/bpf/progs/test_pinning.c
++++ b/tools/testing/selftests/bpf/progs/test_pinning.c
+@@ -21,7 +21,7 @@ struct {
+ } nopinmap SEC(".maps");
+ 
+ struct {
+-	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(type, BPF_MAP_TYPE_HASH);
+ 	__uint(max_entries, 1);
+ 	__type(key, __u32);
+ 	__type(value, __u64);
 
