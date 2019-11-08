@@ -2,188 +2,507 @@ Return-Path: <SRS0=EAyC=ZA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-5.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_FAKE,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA5A2FC6196
-	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 18:59:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F38BDFA372C
+	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 19:12:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7E72822501
-	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 18:59:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B370A20673
+	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 19:12:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ojNqerIm";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="FIMqyNy4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pSxz434i"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732610AbfKHS71 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 Nov 2019 13:59:27 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:9424 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388926AbfKHS7Z (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 8 Nov 2019 13:59:25 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA8ItHeG028052;
-        Fri, 8 Nov 2019 10:59:11 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=4eIWGw34L2CIx8RX7ujYwaAEN15gDd1guczX8fgQkLA=;
- b=ojNqerImKUBpJ37QNelDhpm/3VR4uZGx+ZgUm9j7De5IGSOjRtcgS/PNov4xrG2VDsq1
- H/L5yLfUBaeq5/Fif+iI1o1JwNZG3r4BIFIRBFVIEeIf1iXbvHulKF5r0b5+VJ/blymv
- GRU+GA3TbdaKwma9WKpXLaXQeQKjBildBww= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2w5brygur6-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 08 Nov 2019 10:59:10 -0800
-Received: from ash-exopmbx201.TheFacebook.com (2620:10d:c0a8:83::8) by
- ash-exhub102.TheFacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 8 Nov 2019 10:59:10 -0800
-Received: from ash-exhub104.TheFacebook.com (2620:10d:c0a8:82::d) by
- ash-exopmbx201.TheFacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 8 Nov 2019 10:59:10 -0800
-Received: from NAM05-DM3-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.35.175) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5
- via Frontend Transport; Fri, 8 Nov 2019 10:59:09 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SXDO0tOBqbqme3oh1sLiDN36sJYhMN2EJXh0za2CVcKoVesb1+D8MIuOWWgcz9S5NZ0LbRKdjSCxzDhpTZaB5eAR3Q+Iki4c9JozGQFUFETByzPPFfvKbYxiIfbrXWhrC5esK/wZe9asFMGuQibGYdxkueKi5I9Asqj9eGPwNtl0gZj6Nbr5GXjs9wsL+E7zWvFfUmraOOvYzXH6Z2t1py5xXqMZ1sVNytN7dSNvDheAn3OCQtPttk1J+OsSN7g9KwccTLfKOcV2DEzPwaLiAn/E1a3BZrj8352CHqYIxH+6JssTa8J+0uiJxjao0hjUlWiAab+NHARWFkDsjogqnw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4eIWGw34L2CIx8RX7ujYwaAEN15gDd1guczX8fgQkLA=;
- b=KU6wUj8/TxTGK/Q6R5Y3mcHzSA+4k7ROpzzdey18qIVogr8QbwhVWezG+A2g/1dCMR3JNNe02HwVF0Hyw8S3PLJWayjl66LpNIGPfz/Z4CFU2PhblOK5W0xfZAJNWe3BK84DdrXU+qwCMZ99mt7AR3OlKPUNruliY+XrToYFPaSRE+lxvxUEcbSq4cnB9rAT4lxw4Dv/gtpkrzDA4VFBO/UnNMRzSmY+dGyt+MdPo2J+UdsQNgQG+190qc7YJkdarfdTMb7uEpXNRewZtgXl4ycjMp1Rq8tRLaRkEM7iK8OA49aODugw0+7RGJNOAEarlCO1CJMFqdrofQCfK1Pnxg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4eIWGw34L2CIx8RX7ujYwaAEN15gDd1guczX8fgQkLA=;
- b=FIMqyNy4Jm4RxIdEbxdri2dyHltat0T3j4uKaqtafCwEfDDAtKaNUmtlaAd77osuDONr9IkrRCQVbJuSn9NMGvqWx1833mv3ZB7sc2wD2Y+b7i91rhH6Vill0JIFoKMGExvqyozSou5gMVQ+231eDyCdIkHgKjv2N+H5C0qBY+k=
-Received: from BYAPR15MB2501.namprd15.prod.outlook.com (52.135.196.11) by
- BYAPR15MB2741.namprd15.prod.outlook.com (20.179.155.81) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2430.20; Fri, 8 Nov 2019 18:59:06 +0000
-Received: from BYAPR15MB2501.namprd15.prod.outlook.com
- ([fe80::e864:c934:8b54:4a40]) by BYAPR15MB2501.namprd15.prod.outlook.com
- ([fe80::e864:c934:8b54:4a40%5]) with mapi id 15.20.2430.020; Fri, 8 Nov 2019
- 18:59:06 +0000
-From:   Alexei Starovoitov <ast@fb.com>
-To:     Song Liu <songliubraving@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>
-CC:     David Miller <davem@davemloft.net>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Kernel Team <Kernel-team@fb.com>
-Subject: Re: [PATCH v3 bpf-next 15/18] bpf: Support attaching tracing BPF
- program to other BPF programs
-Thread-Topic: [PATCH v3 bpf-next 15/18] bpf: Support attaching tracing BPF
- program to other BPF programs
-Thread-Index: AQHVlf+nZDPDBM5wGU2+HMUND7lGDKeBnneAgAACtoA=
-Date:   Fri, 8 Nov 2019 18:59:06 +0000
-Message-ID: <5a0caec2-c406-c2b5-b4a8-0412800a6e43@fb.com>
-References: <20191108064039.2041889-1-ast@kernel.org>
- <20191108064039.2041889-16-ast@kernel.org>
- <34A3894D-C928-4332-BD82-9B7C1459A8D1@fb.com>
-In-Reply-To: <34A3894D-C928-4332-BD82-9B7C1459A8D1@fb.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: MWHPR19CA0063.namprd19.prod.outlook.com
- (2603:10b6:300:94::25) To BYAPR15MB2501.namprd15.prod.outlook.com
- (2603:10b6:a02:88::11)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [2620:10d:c090:200::2:f248]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 79eba64d-be9b-43f7-1909-08d7647dba8b
-x-ms-traffictypediagnostic: BYAPR15MB2741:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BYAPR15MB2741B9140676C44DAE5783FCD77B0@BYAPR15MB2741.namprd15.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 0215D7173F
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(396003)(39860400002)(346002)(366004)(376002)(189003)(199004)(102836004)(14444005)(36756003)(386003)(5024004)(31686004)(66476007)(53546011)(6246003)(76176011)(52116002)(316002)(6436002)(54906003)(25786009)(6506007)(14454004)(2906002)(110136005)(6116002)(99286004)(6512007)(5660300002)(7736002)(86362001)(256004)(64756008)(66446008)(66556008)(4326008)(31696002)(186003)(305945005)(6486002)(8936002)(476003)(478600001)(2616005)(71200400001)(71190400001)(8676002)(81156014)(446003)(81166006)(486006)(46003)(11346002)(66946007)(229853002);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB2741;H:BYAPR15MB2501.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: aWWALE/ZWN+DcJey2fJCjoyByea4fIMIFTyVJADPcdDncYJXdHTGDjHRQPQ6ZzIQT9iWHgwyU3qwOsqKV927zMhC1eNWomWtCmZfj96V2J0aeMgZjiW6jIHSZ+HMasaDrDJoBxqk3UFF+/z7IS+UnL8Xedxdv9AGzv90CaxdcIh//UaGmSnqJgtV9xfkgkv1SkfD62K4Fyb/i2BO7qyW/qwWznHjP/Hz5nhMnvm1cZTpFGJ0x+vQqXl7Onu3uaOZeqLXTGj85HY9Vdzew5fh/hZWE7ONXMMrKHdM4e48okCgbDawXl1vhhN3z2SMep35SdlABbTof1TcXSwCjiPUbPVgo9tgY4h3hV2KFkVwabbsJsDoYQFQAlnGDDfEngR5PEqkrSwmjvkNbPKXLuiW+oomRgIbvrPkm+Z9MrtVMu/1yZ+7MU+lkm3u7jmyNJiq
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6CCB0774FFE8044CA401A5516D46044A@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S2390911AbfKHTJf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 Nov 2019 14:09:35 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:44862 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389379AbfKHTJe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 Nov 2019 14:09:34 -0500
+Received: by mail-pg1-f193.google.com with SMTP id f19so4514686pgk.11;
+        Fri, 08 Nov 2019 11:09:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=RTsqKWK9TQJQ9r4NvLdZ/mDXyROjA6u6n1AT+2pQx6Y=;
+        b=pSxz434iVhMJc/0m8XMrwgRFoZF0u9NR4RwvHTxFC+JiVic+ooupLS3jUuUbcu5NLG
+         lu6mH3+MXEQ/hrmq9N34tFW/SLZE8Ont/3eXwVOE9iFGEG+pcfnPfio0eAwOGNt+K4dE
+         Cv1jEwQhD6CFoDHoJEskKcc/moPU3+O6knTrnVp/7ebj1Iz8DOMvBWJP5yUSc0TQeES+
+         5qypGQ6icMHYHNNuaA9nLZVJ7moJcHCilOyjrKjoj3JPhMByKZUQGZ9AE4IYfZTwpiQQ
+         o40RxzNZTYO1QjsMode+Yv0TshmX3w4BUWTflAWH1u0evFdDsMDgBNSMSYtCN6DGlszU
+         mT3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=RTsqKWK9TQJQ9r4NvLdZ/mDXyROjA6u6n1AT+2pQx6Y=;
+        b=mCiPuzV8I+5vZwDiXQ/Qm0dDtkJ+q6ttzrIuJzytEXgBjm5EHZqXw1l7KPX5futoP4
+         D9RgyJVo5y1X+Vd12EV3weXT7WTAzLFnAG06JYBYDcYixKM9HvIX6LMFOBFcpwU8Fegu
+         34WaLq63LNrC9pxLhIkZ0bOwh5Gd4YMTyFtcTLPuzpyirO0puRwSVb5OCclahob5/z8p
+         qyR4BG9AuU/xaz6HoeNKAC+W4dt54RSaJG8bFbjwtzCtzP2tWlxG5Ikl+mW5LH145ueU
+         AITCxDUGjwR2Yn81MrO1xLKb7J9YNPbpCPrKrAGMaynC03lpk2AafKwo01D5ecMYHC+V
+         H0kQ==
+X-Gm-Message-State: APjAAAVWoBf9aFf8u8FxdyHQqMefUJLjR07RJINhomUgoTF3jtXmvcI8
+        HANr/KTYUzzeo9SHTPyRG6E=
+X-Google-Smtp-Source: APXvYqyMd5mDicXTaVk/liZCw7O9fZ5rbAzlDvy40W5YMPrYIFsOUZKXJ1B41LEG26zmdLiK5II7mw==
+X-Received: by 2002:a62:8010:: with SMTP id j16mr13999446pfd.249.1573240173557;
+        Fri, 08 Nov 2019 11:09:33 -0800 (PST)
+Received: from gmail.com ([66.170.99.95])
+        by smtp.gmail.com with ESMTPSA id f59sm10519679pje.0.2019.11.08.11.09.32
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 08 Nov 2019 11:09:32 -0800 (PST)
+Date:   Fri, 8 Nov 2019 11:09:30 -0800
+From:   William Tu <u9012063@gmail.com>
+To:     Magnus Karlsson <magnus.karlsson@gmail.com>
+Cc:     Magnus Karlsson <magnus.karlsson@intel.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Network Development <netdev@vger.kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 2/5] samples/bpf: add XDP_SHARED_UMEM support to
+ xdpsock
+Message-ID: <20191108190930.GD30004@gmail.com>
+References: <1573148860-30254-1-git-send-email-magnus.karlsson@intel.com>
+ <1573148860-30254-3-git-send-email-magnus.karlsson@intel.com>
+ <20191108181330.GB30004@gmail.com>
+ <CAJ8uoz1pvFCpBXFkdEVEfnNC_sc0UEGFaQOc+PeELiXNvEaQCg@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 79eba64d-be9b-43f7-1909-08d7647dba8b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Nov 2019 18:59:06.1770
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: DjDWnpbT6F4hXOm11BnOkT606iJPmFPlsVFpRSM/MExYbP9hG62GMmgFAnzSZDCf
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2741
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-08_07:2019-11-08,2019-11-08 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
- malwarescore=0 adultscore=0 spamscore=0 clxscore=1015 bulkscore=0
- mlxlogscore=788 priorityscore=1501 impostorscore=0 lowpriorityscore=0
- mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1911080186
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJ8uoz1pvFCpBXFkdEVEfnNC_sc0UEGFaQOc+PeELiXNvEaQCg@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-T24gMTEvOC8xOSAxMDo0OSBBTSwgU29uZyBMaXUgd3JvdGU6DQo+IA0KPiANCj4+IE9uIE5vdiA3
-LCAyMDE5LCBhdCAxMDo0MCBQTSwgQWxleGVpIFN0YXJvdm9pdG92IDxhc3RAa2VybmVsLm9yZz4g
-d3JvdGU6DQo+Pg0KPj4gQWxsb3cgRkVOVFJZL0ZFWElUIEJQRiBwcm9ncmFtcyB0byBhdHRhY2gg
-dG8gb3RoZXIgQlBGIHByb2dyYW1zIG9mIGFueSB0eXBlDQo+PiBpbmNsdWRpbmcgdGhlaXIgc3Vi
-cHJvZ3JhbXMuIFRoaXMgZmVhdHVyZSBhbGxvd3Mgc25vb3Bpbmcgb24gaW5wdXQgYW5kIG91dHB1
-dA0KPj4gcGFja2V0cyBpbiBYRFAsIFRDIHByb2dyYW1zIGluY2x1ZGluZyB0aGVpciByZXR1cm4g
-dmFsdWVzLiBJbiBvcmRlciB0byBkbyB0aGF0DQo+PiB0aGUgdmVyaWZpZXIgbmVlZHMgdG8gdHJh
-Y2sgdHlwZXMgbm90IG9ubHkgb2Ygdm1saW51eCwgYnV0IHR5cGVzIG9mIG90aGVyIEJQRg0KPj4g
-cHJvZ3JhbXMgYXMgd2VsbC4gVGhlIHZlcmlmaWVyIGFsc28gbmVlZHMgdG8gdHJhbnNsYXRlIHVh
-cGkvbGludXgvYnBmLmggdHlwZXMNCj4+IHVzZWQgYnkgbmV0d29ya2luZyBwcm9ncmFtcyBpbnRv
-IGtlcm5lbCBpbnRlcm5hbCBCVEYgdHlwZXMgdXNlZCBieSBGRU5UUlkvRkVYSVQNCj4+IEJQRiBw
-cm9ncmFtcy4gSW4gc29tZSBjYXNlcyBMTFZNIG9wdGltaXphdGlvbnMgY2FuIHJlbW92ZSBhcmd1
-bWVudHMgZnJvbSBCUEYNCj4+IHN1YnByb2dyYW1zIHdpdGhvdXQgYWRqdXN0aW5nIEJURiBpbmZv
-IHRoYXQgTExWTSBiYWNrZW5kIGtub3dzLiBXaGVuIEJURiBpbmZvDQo+PiBkaXNhZ3JlZXMgd2l0
-aCBhY3R1YWwgdHlwZXMgdGhhdCB0aGUgdmVyaWZpZXJzIHNlZXMgdGhlIEJQRiB0cmFtcG9saW5l
-IGhhcyB0bw0KPj4gZmFsbGJhY2sgdG8gY29uc2VydmF0aXZlIGFuZCB0cmVhdCBhbGwgYXJndW1l
-bnRzIGFzIHU2NC4gVGhlIEZFTlRSWS9GRVhJVA0KPj4gcHJvZ3JhbSBjYW4gc3RpbGwgYXR0YWNo
-IHRvIHN1Y2ggc3VicHJvZ3JhbXMsIGJ1dCB3b24ndCBiZSBhYmxlIHRvIHJlY29nbml6ZQ0KPj4g
-cG9pbnRlciB0eXBlcyBsaWtlICdzdHJ1Y3Qgc2tfYnVmZiAqJyBpbnRvIHdvbid0IGJlIGFibGUg
-dG8gcGFzcyB0aGVtIHRvDQo+IAkJCQkJXl5eXl4gdGhlc2UgZmV3IHdvcmRzIGFyZSBjb25mdXNp
-bmcNCg0KeWVwLiB3aWxsIGZpeC4NCg0KPj4gYnBmX3NrYl9vdXRwdXQoKSBmb3IgZHVtcGluZyB0
-byB1c2VyIHNwYWNlLg0KPj4NCj4+IFRoZSBCUEZfUFJPR19MT0FEIGNvbW1hbmQgaXMgZXh0ZW5k
-ZWQgd2l0aCBhdHRhY2hfcHJvZ19mZCBmaWVsZC4gV2hlbiBpdCdzIHNldA0KPj4gdG8gemVybyB0
-aGUgYXR0YWNoX2J0Zl9pZCBpcyBvbmUgdm1saW51eCBCVEYgdHlwZSBpZHMuIFdoZW4gYXR0YWNo
-X3Byb2dfZmQNCj4+IHBvaW50cyB0byBwcmV2aW91c2x5IGxvYWRlZCBCUEYgcHJvZ3JhbSB0aGUg
-YXR0YWNoX2J0Zl9pZCBpcyBCVEYgdHlwZSBpZCBvZg0KPj4gbWFpbiBmdW5jdGlvbiBvciBvbmUg
-b2YgaXRzIHN1YnByb2dyYW1zLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IEFsZXhlaSBTdGFyb3Zv
-aXRvdiA8YXN0QGtlcm5lbC5vcmc+DQo+Pg0KPiANCj4gWy4uLl0NCj4gDQo+PiBkaWZmIC0tZ2l0
-IGEva2VybmVsL2JwZi92ZXJpZmllci5jIGIva2VybmVsL2JwZi92ZXJpZmllci5jDQo+PiBpbmRl
-eCBjZDlhOTM5NWM0YjUuLmYzODVjNDA0MzU5NCAxMDA2NDQNCj4+IC0tLSBhL2tlcm5lbC9icGYv
-dmVyaWZpZXIuYw0KPj4gKysrIGIva2VybmVsL2JwZi92ZXJpZmllci5jDQo+PiBAQCAtOTM5MCwx
-MyArOTM5MCwxNyBAQCBzdGF0aWMgdm9pZCBwcmludF92ZXJpZmljYXRpb25fc3RhdHMoc3RydWN0
-IGJwZl92ZXJpZmllcl9lbnYgKmVudikNCj4+IHN0YXRpYyBpbnQgY2hlY2tfYXR0YWNoX2J0Zl9p
-ZChzdHJ1Y3QgYnBmX3ZlcmlmaWVyX2VudiAqZW52KQ0KPj4gew0KPj4gCXN0cnVjdCBicGZfcHJv
-ZyAqcHJvZyA9IGVudi0+cHJvZzsNCj4+ICsJc3RydWN0IGJwZl9wcm9nICp0Z3RfcHJvZyA9IHBy
-b2ctPmF1eC0+bGlua2VkX3Byb2c7DQo+PiAJdTMyIGJ0Zl9pZCA9IHByb2ctPmF1eC0+YXR0YWNo
-X2J0Zl9pZDsNCj4+IAljb25zdCBjaGFyIHByZWZpeFtdID0gImJ0Zl90cmFjZV8iOw0KPj4gCXN0
-cnVjdCBicGZfdHJhbXBvbGluZSAqdHI7DQo+PiAJY29uc3Qgc3RydWN0IGJ0Zl90eXBlICp0Ow0K
-Pj4gKwlpbnQgcmV0LCBzdWJwcm9nID0gLTEsIGk7DQo+PiArCWJvb2wgY29uc2VydmF0aXZlID0g
-dHJ1ZTsNCj4+IAljb25zdCBjaGFyICp0bmFtZTsNCj4+ICsJc3RydWN0IGJ0ZiAqYnRmOw0KPj4g
-CWxvbmcgYWRkcjsNCj4+IC0JaW50IHJldDsNCj4+ICsJdTY0IGtleTsNCj4+DQo+PiAJaWYgKHBy
-b2ctPnR5cGUgIT0gQlBGX1BST0dfVFlQRV9UUkFDSU5HKQ0KPj4gCQlyZXR1cm4gMDsNCj4+IEBA
-IC05NDA1LDE5ICs5NDA5LDQyIEBAIHN0YXRpYyBpbnQgY2hlY2tfYXR0YWNoX2J0Zl9pZChzdHJ1
-Y3QgYnBmX3ZlcmlmaWVyX2VudiAqZW52KQ0KPj4gCQl2ZXJib3NlKGVudiwgIlRyYWNpbmcgcHJv
-Z3JhbXMgbXVzdCBwcm92aWRlIGJ0Zl9pZFxuIik7DQo+PiAJCXJldHVybiAtRUlOVkFMOw0KPj4g
-CX0NCj4+IC0JdCA9IGJ0Zl90eXBlX2J5X2lkKGJ0Zl92bWxpbnV4LCBidGZfaWQpOw0KPj4gKwli
-dGYgPSBicGZfcHJvZ19nZXRfdGFyZ2V0X2J0Zihwcm9nKTsNCj4gDQo+IGJ0ZiBjb3VsZCBiZSBO
-VUxMIGhlcmUsIHNvIHdlIG5lZWQgdG8gY2hlY2sgaXQ/DQoNCnllcC4gd2lsbCBmaXguDQo=
+On Fri, Nov 08, 2019 at 07:33:40PM +0100, Magnus Karlsson wrote:
+> On Fri, Nov 8, 2019 at 7:15 PM William Tu <u9012063@gmail.com> wrote:
+> >
+> > On Thu, Nov 07, 2019 at 06:47:37PM +0100, Magnus Karlsson wrote:
+> > > Add support for the XDP_SHARED_UMEM mode to the xdpsock sample
+> > > application. As libbpf does not have a built in XDP program for this
+> > > mode, we use an explicitly loaded XDP program. This also serves as an
+> > > example on how to write your own XDP program that can route to an
+> > > AF_XDP socket.
+> > >
+> > > Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+> > > ---
+> > >  samples/bpf/Makefile       |   1 +
+> > >  samples/bpf/xdpsock.h      |  11 ++++
+> > >  samples/bpf/xdpsock_kern.c |  24 ++++++++
+> > >  samples/bpf/xdpsock_user.c | 141 +++++++++++++++++++++++++++++++--------------
+> > >  4 files changed, 135 insertions(+), 42 deletions(-)
+> > >  create mode 100644 samples/bpf/xdpsock.h
+> > >  create mode 100644 samples/bpf/xdpsock_kern.c
+> > >
+> > > diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+> > > index 4df11dd..8a9af3a 100644
+> > > --- a/samples/bpf/Makefile
+> > > +++ b/samples/bpf/Makefile
+> > > @@ -167,6 +167,7 @@ always += xdp_sample_pkts_kern.o
+> > >  always += ibumad_kern.o
+> > >  always += hbm_out_kern.o
+> > >  always += hbm_edt_kern.o
+> > > +always += xdpsock_kern.o
+> > >
+> > >  ifeq ($(ARCH), arm)
+> > >  # Strip all except -D__LINUX_ARM_ARCH__ option needed to handle linux
+> > > diff --git a/samples/bpf/xdpsock.h b/samples/bpf/xdpsock.h
+> > > new file mode 100644
+> > > index 0000000..b7eca15
+> > > --- /dev/null
+> > > +++ b/samples/bpf/xdpsock.h
+> > > @@ -0,0 +1,11 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0
+> > > + *
+> > > + * Copyright(c) 2019 Intel Corporation.
+> > > + */
+> > > +
+> > > +#ifndef XDPSOCK_H_
+> > > +#define XDPSOCK_H_
+> > > +
+> > > +#define MAX_SOCKS 4
+> > > +
+> > > +#endif /* XDPSOCK_H */
+> > > diff --git a/samples/bpf/xdpsock_kern.c b/samples/bpf/xdpsock_kern.c
+> > > new file mode 100644
+> > > index 0000000..a06177c
+> > > --- /dev/null
+> > > +++ b/samples/bpf/xdpsock_kern.c
+> > > @@ -0,0 +1,24 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +#include <linux/bpf.h>
+> > > +#include "bpf_helpers.h"
+> > > +#include "xdpsock.h"
+> > > +
+> > > +/* This XDP program is only needed for the XDP_SHARED_UMEM mode.
+> > > + * If you do not use this mode, libbpf can supply an XDP program for you.
+> > > + */
+> > > +
+> > > +struct {
+> > > +     __uint(type, BPF_MAP_TYPE_XSKMAP);
+> > > +     __uint(max_entries, MAX_SOCKS);
+> > > +     __uint(key_size, sizeof(int));
+> > > +     __uint(value_size, sizeof(int));
+> > > +} xsks_map SEC(".maps");
+> > > +
+> > > +static unsigned int rr;
+> > > +
+> > > +SEC("xdp_sock") int xdp_sock_prog(struct xdp_md *ctx)
+> > > +{
+> > > +     rr = (rr + 1) & (MAX_SOCKS - 1);
+> > > +
+> > > +     return bpf_redirect_map(&xsks_map, rr, XDP_DROP);
+> > > +}
+> > > diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
+> > > index 405c4e0..d3dba93 100644
+> > > --- a/samples/bpf/xdpsock_user.c
+> > > +++ b/samples/bpf/xdpsock_user.c
+> > > @@ -29,6 +29,7 @@
+> > >
+> > >  #include "libbpf.h"
+> > >  #include "xsk.h"
+> > > +#include "xdpsock.h"
+> > >  #include <bpf/bpf.h>
+> > >
+> > >  #ifndef SOL_XDP
+> > > @@ -47,7 +48,6 @@
+> > >  #define BATCH_SIZE 64
+> > >
+> > >  #define DEBUG_HEXDUMP 0
+> > > -#define MAX_SOCKS 8
+> > >
+> > >  typedef __u64 u64;
+> > >  typedef __u32 u32;
+> > > @@ -75,7 +75,8 @@ static u32 opt_xdp_bind_flags;
+> > >  static int opt_xsk_frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE;
+> > >  static int opt_timeout = 1000;
+> > >  static bool opt_need_wakeup = true;
+> > > -static __u32 prog_id;
+> > > +static u32 opt_num_xsks = 1;
+> > > +static u32 prog_id;
+> > >
+> > >  struct xsk_umem_info {
+> > >       struct xsk_ring_prod fq;
+> > > @@ -179,7 +180,7 @@ static void *poller(void *arg)
+> > >
+> > >  static void remove_xdp_program(void)
+> > >  {
+> > > -     __u32 curr_prog_id = 0;
+> > > +     u32 curr_prog_id = 0;
+> > >
+> > >       if (bpf_get_link_xdp_id(opt_ifindex, &curr_prog_id, opt_xdp_flags)) {
+> > >               printf("bpf_get_link_xdp_id failed\n");
+> > > @@ -196,11 +197,11 @@ static void remove_xdp_program(void)
+> > >  static void int_exit(int sig)
+> > >  {
+> > >       struct xsk_umem *umem = xsks[0]->umem->umem;
+> > > -
+> > > -     (void)sig;
+> > > +     int i;
+> > >
+> > >       dump_stats();
+> > > -     xsk_socket__delete(xsks[0]->xsk);
+> > > +     for (i = 0; i < num_socks; i++)
+> > > +             xsk_socket__delete(xsks[i]->xsk);
+> > >       (void)xsk_umem__delete(umem);
+> > >       remove_xdp_program();
+> > >
+> > > @@ -290,8 +291,8 @@ static struct xsk_umem_info *xsk_configure_umem(void *buffer, u64 size)
+> > >               .frame_headroom = XSK_UMEM__DEFAULT_FRAME_HEADROOM,
+> > >               .flags = opt_umem_flags
+> > >       };
+> > > -
+> > > -     int ret;
+> > > +     int ret, i;
+> > > +     u32 idx;
+> > >
+> > >       umem = calloc(1, sizeof(*umem));
+> > >       if (!umem)
+> > > @@ -303,6 +304,15 @@ static struct xsk_umem_info *xsk_configure_umem(void *buffer, u64 size)
+> > >       if (ret)
+> > >               exit_with_error(-ret);
+> > >
+> > > +     ret = xsk_ring_prod__reserve(&umem->fq,
+> > > +                                  XSK_RING_PROD__DEFAULT_NUM_DESCS, &idx);
+> > > +     if (ret != XSK_RING_PROD__DEFAULT_NUM_DESCS)
+> > > +             exit_with_error(-ret);
+> > > +     for (i = 0; i < XSK_RING_PROD__DEFAULT_NUM_DESCS; i++)
+> > > +             *xsk_ring_prod__fill_addr(&umem->fq, idx++) =
+> > > +                     i * opt_xsk_frame_size;
+> > > +     xsk_ring_prod__submit(&umem->fq, XSK_RING_PROD__DEFAULT_NUM_DESCS);
+> > > +
+> > >       umem->buffer = buffer;
+> > >       return umem;
+> > >  }
+> > > @@ -312,8 +322,6 @@ static struct xsk_socket_info *xsk_configure_socket(struct xsk_umem_info *umem)
+> > >       struct xsk_socket_config cfg;
+> > >       struct xsk_socket_info *xsk;
+> > >       int ret;
+> > > -     u32 idx;
+> > > -     int i;
+> > >
+> > >       xsk = calloc(1, sizeof(*xsk));
+> > >       if (!xsk)
+> > > @@ -322,11 +330,15 @@ static struct xsk_socket_info *xsk_configure_socket(struct xsk_umem_info *umem)
+> > >       xsk->umem = umem;
+> > >       cfg.rx_size = XSK_RING_CONS__DEFAULT_NUM_DESCS;
+> > >       cfg.tx_size = XSK_RING_PROD__DEFAULT_NUM_DESCS;
+> > > -     cfg.libbpf_flags = 0;
+> > > +     if (opt_num_xsks > 1)
+> > > +             cfg.libbpf_flags = XSK_LIBBPF_FLAGS__INHIBIT_PROG_LOAD;
+> >
+> > I think we can still load our own XDP program, and don't set
+> > XSK_LIBBPF_FLAGS__INHIBIT_PROG_LOAD.
+> > So the xsk_setup_xdp_prog() will find the the loaded XDP program
+> > and sets the xsk map.
+> 
+> So what you are saying is that you would like libbpf to be smarter and
+> insert the sockets into the xskmap automatically? Doable in the simple
+
+Isn't it already there?
+xsk_setup_xdp_prog()
+    xsk_lookup_bpf_maps() (it searches "xsks_maps")
+    xsk_set_bpf_maps()
+        insert socket into xskmap.
+
+> case, but what if the XDP program has multiple xskmaps, or an xskmap
+> with a different name? Seems complicated to do this in the general
+> case. Or maybe I am just chicken to say the user has to load and
+> manage his/her own XDP program when XDP_SHARED_UMEM is used :-).
+
+Yes, if different name, then users have to program xskmap manually.
+
+--William
+> 
+> > > +     else
+> > > +             cfg.libbpf_flags = 0;
+> > >       cfg.xdp_flags = opt_xdp_flags;
+> > >       cfg.bind_flags = opt_xdp_bind_flags;
+> >
+> > Do we need to
+> > cfg.bind_flags |= XDP_SHARED_UMEM?
+> 
+> It is set by libbpf automatically, so no need here.
+> 
+> > Thanks
+> > William
+> >
+> > > -     ret = xsk_socket__create(&xsk->xsk, opt_if, opt_queue, umem->umem,
+> > > -                              &xsk->rx, &xsk->tx, &cfg);
+> > > +
+> > > +     ret = xsk_socket__create(&xsk->xsk, opt_if, opt_queue,
+> > > +                              umem->umem, &xsk->rx, &xsk->tx, &cfg);
+> > >       if (ret)
+> > >               exit_with_error(-ret);
+> > >
+> > > @@ -334,17 +346,6 @@ static struct xsk_socket_info *xsk_configure_socket(struct xsk_umem_info *umem)
+> > >       if (ret)
+> > >               exit_with_error(-ret);
+> > >
+> > > -     ret = xsk_ring_prod__reserve(&xsk->umem->fq,
+> > > -                                  XSK_RING_PROD__DEFAULT_NUM_DESCS,
+> > > -                                  &idx);
+> > > -     if (ret != XSK_RING_PROD__DEFAULT_NUM_DESCS)
+> > > -             exit_with_error(-ret);
+> > > -     for (i = 0; i < XSK_RING_PROD__DEFAULT_NUM_DESCS; i++)
+> > > -             *xsk_ring_prod__fill_addr(&xsk->umem->fq, idx++) =
+> > > -                     i * opt_xsk_frame_size;
+> > > -     xsk_ring_prod__submit(&xsk->umem->fq,
+> > > -                           XSK_RING_PROD__DEFAULT_NUM_DESCS);
+> > > -
+> > >       return xsk;
+> > >  }
+> > >
+> > > @@ -363,6 +364,7 @@ static struct option long_options[] = {
+> > >       {"frame-size", required_argument, 0, 'f'},
+> > >       {"no-need-wakeup", no_argument, 0, 'm'},
+> > >       {"unaligned", no_argument, 0, 'u'},
+> > > +     {"shared-umem", no_argument, 0, 'M'},
+> > >       {0, 0, 0, 0}
+> > >  };
+> > >
+> > > @@ -386,6 +388,7 @@ static void usage(const char *prog)
+> > >               "  -m, --no-need-wakeup Turn off use of driver need wakeup flag.\n"
+> > >               "  -f, --frame-size=n   Set the frame size (must be a power of two in aligned mode, default is %d).\n"
+> > >               "  -u, --unaligned      Enable unaligned chunk placement\n"
+> > > +             "  -M, --shared-umem    Enable XDP_SHARED_UMEM\n"
+> > >               "\n";
+> > >       fprintf(stderr, str, prog, XSK_UMEM__DEFAULT_FRAME_SIZE);
+> > >       exit(EXIT_FAILURE);
+> > > @@ -398,7 +401,7 @@ static void parse_command_line(int argc, char **argv)
+> > >       opterr = 0;
+> > >
+> > >       for (;;) {
+> > > -             c = getopt_long(argc, argv, "Frtli:q:psSNn:czf:mu",
+> > > +             c = getopt_long(argc, argv, "Frtli:q:psSNn:czf:muM",
+> > >                               long_options, &option_index);
+> > >               if (c == -1)
+> > >                       break;
+> > > @@ -448,11 +451,14 @@ static void parse_command_line(int argc, char **argv)
+> > >                       break;
+> > >               case 'f':
+> > >                       opt_xsk_frame_size = atoi(optarg);
+> > > +                     break;
+> > >               case 'm':
+> > >                       opt_need_wakeup = false;
+> > >                       opt_xdp_bind_flags &= ~XDP_USE_NEED_WAKEUP;
+> > >                       break;
+> > > -
+> > > +             case 'M':
+> > > +                     opt_num_xsks = MAX_SOCKS;
+> > > +                     break;
+> > >               default:
+> > >                       usage(basename(argv[0]));
+> > >               }
+> > > @@ -586,11 +592,9 @@ static void rx_drop(struct xsk_socket_info *xsk, struct pollfd *fds)
+> > >
+> > >  static void rx_drop_all(void)
+> > >  {
+> > > -     struct pollfd fds[MAX_SOCKS + 1];
+> > > +     struct pollfd fds[MAX_SOCKS] = {};
+> > >       int i, ret;
+> > >
+> > > -     memset(fds, 0, sizeof(fds));
+> > > -
+> > >       for (i = 0; i < num_socks; i++) {
+> > >               fds[i].fd = xsk_socket__fd(xsks[i]->xsk);
+> > >               fds[i].events = POLLIN;
+> > > @@ -633,11 +637,10 @@ static void tx_only(struct xsk_socket_info *xsk, u32 frame_nb)
+> > >
+> > >  static void tx_only_all(void)
+> > >  {
+> > > -     struct pollfd fds[MAX_SOCKS];
+> > > +     struct pollfd fds[MAX_SOCKS] = {};
+> > >       u32 frame_nb[MAX_SOCKS] = {};
+> > >       int i, ret;
+> > >
+> > > -     memset(fds, 0, sizeof(fds));
+> > >       for (i = 0; i < num_socks; i++) {
+> > >               fds[0].fd = xsk_socket__fd(xsks[i]->xsk);
+> > >               fds[0].events = POLLOUT;
+> > > @@ -706,11 +709,9 @@ static void l2fwd(struct xsk_socket_info *xsk, struct pollfd *fds)
+> > >
+> > >  static void l2fwd_all(void)
+> > >  {
+> > > -     struct pollfd fds[MAX_SOCKS];
+> > > +     struct pollfd fds[MAX_SOCKS] = {};
+> > >       int i, ret;
+> > >
+> > > -     memset(fds, 0, sizeof(fds));
+> > > -
+> > >       for (i = 0; i < num_socks; i++) {
+> > >               fds[i].fd = xsk_socket__fd(xsks[i]->xsk);
+> > >               fds[i].events = POLLOUT | POLLIN;
+> > > @@ -728,13 +729,65 @@ static void l2fwd_all(void)
+> > >       }
+> > >  }
+> > >
+> > > +static void load_xdp_program(char **argv, struct bpf_object **obj)
+> > > +{
+> > > +     struct bpf_prog_load_attr prog_load_attr = {
+> > > +             .prog_type      = BPF_PROG_TYPE_XDP,
+> > > +     };
+> > > +     char xdp_filename[256];
+> > > +     int prog_fd;
+> > > +
+> > > +     snprintf(xdp_filename, sizeof(xdp_filename), "%s_kern.o", argv[0]);
+> > > +     prog_load_attr.file = xdp_filename;
+> > > +
+> > > +     if (bpf_prog_load_xattr(&prog_load_attr, obj, &prog_fd))
+> > > +             exit(EXIT_FAILURE);
+> > > +     if (prog_fd < 0) {
+> > > +             fprintf(stderr, "ERROR: no program found: %s\n",
+> > > +                     strerror(prog_fd));
+> > > +             exit(EXIT_FAILURE);
+> > > +     }
+> > > +
+> > > +     if (bpf_set_link_xdp_fd(opt_ifindex, prog_fd, opt_xdp_flags) < 0) {
+> > > +             fprintf(stderr, "ERROR: link set xdp fd failed\n");
+> > > +             exit(EXIT_FAILURE);
+> > > +     }
+> > > +}
+> > > +
+> > > +static void enter_xsks_into_map(struct bpf_object *obj)
+> > > +{
+> > > +     struct bpf_map *map;
+> > > +     int i, xsks_map;
+> > > +
+> > > +     map = bpf_object__find_map_by_name(obj, "xsks_map");
+> > > +     xsks_map = bpf_map__fd(map);
+> > > +     if (xsks_map < 0) {
+> > > +             fprintf(stderr, "ERROR: no xsks map found: %s\n",
+> > > +                     strerror(xsks_map));
+> > > +                     exit(EXIT_FAILURE);
+> > > +     }
+> > > +
+> > > +     for (i = 0; i < num_socks; i++) {
+> > > +             int fd = xsk_socket__fd(xsks[i]->xsk);
+> > > +             int key, ret;
+> > > +
+> > > +             key = i;
+> > > +             ret = bpf_map_update_elem(xsks_map, &key, &fd, 0);
+> > > +             if (ret) {
+> > > +                     fprintf(stderr, "ERROR: bpf_map_update_elem %d\n", i);
+> > > +                     exit(EXIT_FAILURE);
+> > > +             }
+> > > +     }
+> > > +}
+> > > +
+> > >  int main(int argc, char **argv)
+> > >  {
+> > >       struct rlimit r = {RLIM_INFINITY, RLIM_INFINITY};
+> > >       struct xsk_umem_info *umem;
+> > > +     struct bpf_object *obj;
+> > >       pthread_t pt;
+> > > +     int i, ret;
+> > >       void *bufs;
+> > > -     int ret;
+> > >
+> > >       parse_command_line(argc, argv);
+> > >
+> > > @@ -744,6 +797,9 @@ int main(int argc, char **argv)
+> > >               exit(EXIT_FAILURE);
+> > >       }
+> > >
+> > > +     if (opt_num_xsks > 1)
+> > > +             load_xdp_program(argv, &obj);
+> > > +
+> > >       /* Reserve memory for the umem. Use hugepages if unaligned chunk mode */
+> > >       bufs = mmap(NULL, NUM_FRAMES * opt_xsk_frame_size,
+> > >                   PROT_READ | PROT_WRITE,
+> > > @@ -752,16 +808,17 @@ int main(int argc, char **argv)
+> > >               printf("ERROR: mmap failed\n");
+> > >               exit(EXIT_FAILURE);
+> > >       }
+> > > -       /* Create sockets... */
+> > > +
+> > > +     /* Create sockets... */
+> > >       umem = xsk_configure_umem(bufs, NUM_FRAMES * opt_xsk_frame_size);
+> > > -     xsks[num_socks++] = xsk_configure_socket(umem);
+> > > +     for (i = 0; i < opt_num_xsks; i++)
+> > > +             xsks[num_socks++] = xsk_configure_socket(umem);
+> > >
+> > > -     if (opt_bench == BENCH_TXONLY) {
+> > > -             int i;
+> > > +     for (i = 0; i < NUM_FRAMES; i++)
+> > > +             gen_eth_frame(umem, i * opt_xsk_frame_size);
+> > >
+> > > -             for (i = 0; i < NUM_FRAMES; i++)
+> > > -                     (void)gen_eth_frame(umem, i * opt_xsk_frame_size);
+> > > -     }
+> > > +     if (opt_num_xsks > 1 && opt_bench != BENCH_TXONLY)
+> > > +             enter_xsks_into_map(obj);
+> > >
+> > >       signal(SIGINT, int_exit);
+> > >       signal(SIGTERM, int_exit);
+> > > --
+> > > 2.7.4
+> > >
