@@ -2,181 +2,210 @@ Return-Path: <SRS0=EAyC=ZA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8018C5DF60
-	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 19:16:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 455E2FA372C
+	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 19:18:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7DFB720650
-	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 19:16:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 11BA620674
+	for <bpf@archiver.kernel.org>; Fri,  8 Nov 2019 19:18:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="LYU1tvaV";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="PQ7DL0Oi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Us2wo00r"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732369AbfKHTQG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 Nov 2019 14:16:06 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:61278 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2390820AbfKHTDk (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 8 Nov 2019 14:03:40 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA8ItGIg028030;
-        Fri, 8 Nov 2019 11:03:25 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=EHio6oNmtkZVOl1mRKulaGsfjlNdaXZ4iuCOePk2qAU=;
- b=LYU1tvaVjl74Ulm4s+0CQYSKgDPDoc2KBKmhazNQTJhMESkGm7ePmzPlkXplEOB5xxF5
- mFWVOy1odRHrp2dp04Uu9v/9l8qbz0pputbPa7Ca5Im3Ylbtod3jreXBkkKBtv4nBOh/
- 5JcuLBx2L0IkjHNkJTu4Z+AIKW0/PdMwMLQ= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2w5brygvk4-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 08 Nov 2019 11:03:25 -0800
-Received: from ash-exhub103.TheFacebook.com (2620:10d:c0a8:82::c) by
- ash-exhub101.TheFacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 8 Nov 2019 11:03:18 -0800
-Received: from NAM04-BN3-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.35.174) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
- via Frontend Transport; Fri, 8 Nov 2019 11:03:18 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hjq9kiouvhvhlbSYzZJz6nZnUeF+l2D+5tG0QI/KfKpXKLqc0vxN77zE0jZpGJ1EQyvjN9yPu1wZeUac7f95gDm8yRBdiuwtdq8EyLL1iM704JiBAfGk5bP9dUllCG74z/PKUmkdgyp5fgVhT3O8EhEK3TJYvGcSYJmI5eQ9fUMN2HH71rQBMzD6OiwTlyb62EjpXaVoiMioYTrNMsYFBq12nuZln174/3bo07X2iPhkAHj4zqrbb3VfFRuYvdYkRBnL0XGZ/61IuZPvYwaUofk9+AxkN7rZ2sx3jErhEhP1RrRuEEruRmMmFgla29xfi97IcYppuwuXi7d9kvpF+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EHio6oNmtkZVOl1mRKulaGsfjlNdaXZ4iuCOePk2qAU=;
- b=IX9kmOrOMT3CFr14c2KqhLeYJ+KI0gASqb6xs2AJ7xlrbIIy9nkdP5IaZtZSj4B/qJsHR9mMSoNim2r44X7VEn6oZMbhYcQZq/6vpI24xQCqxxvruw6kX1qWBoHS7b1eSetzMn8+6wgV7kjabXsbLxxoQ6wPEBJ1GZCwsDtkozPV3QQdKTT9baT18vRBYPnyqK+Q5umxico66o0ubb615F3XFfUBUaoBEyosNeR2EXCjsVbhwmWDLZLOfWzeEC75huUkzuYBk+rC9yr7Wu3TsDpW3NHSbF0++IafqxfHEzcWxAR0dLbaPAMXYx/Ef3jwOhfvcUxZOaJe/EmtioZr1w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EHio6oNmtkZVOl1mRKulaGsfjlNdaXZ4iuCOePk2qAU=;
- b=PQ7DL0OiGeil4C3gf6dw1GgcxFF6l4N5fw+7rmYSwLmklSBgDUflaUvHFFOzTB7UmOh6n+s4fJAlw1ipnKDjg/2z3y/nRGgzssMitPh+WCaRSuXdShc6uHcPBvEYSF5zy3xULOWasTvVVF66U3xSjCvPANyOzsFz/jPxpgw45dw=
-Received: from MWHPR15MB1165.namprd15.prod.outlook.com (10.175.3.22) by
- MWHPR15MB1711.namprd15.prod.outlook.com (10.174.254.145) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2430.20; Fri, 8 Nov 2019 19:03:17 +0000
-Received: from MWHPR15MB1165.namprd15.prod.outlook.com
- ([fe80::fdc8:5546:bace:15f5]) by MWHPR15MB1165.namprd15.prod.outlook.com
- ([fe80::fdc8:5546:bace:15f5%5]) with mapi id 15.20.2430.020; Fri, 8 Nov 2019
- 19:03:17 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     Alexei Starovoitov <ast@kernel.org>
-CC:     David Miller <davem@davemloft.net>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Kernel Team <Kernel-team@fb.com>
-Subject: Re: [PATCH v3 bpf-next 17/18] selftests/bpf: Extend test_pkt_access
- test
-Thread-Topic: [PATCH v3 bpf-next 17/18] selftests/bpf: Extend test_pkt_access
- test
-Thread-Index: AQHVlf+Yu86FroKmhUuAZh1018dUrKeBolsA
-Date:   Fri, 8 Nov 2019 19:03:16 +0000
-Message-ID: <CC4F692C-1245-4199-9BDD-4C64C035590B@fb.com>
-References: <20191108064039.2041889-1-ast@kernel.org>
- <20191108064039.2041889-18-ast@kernel.org>
-In-Reply-To: <20191108064039.2041889-18-ast@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3601.0.10)
-x-originating-ip: [2620:10d:c090:200::b292]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a8404e7b-cb5b-4cad-7106-08d7647e504f
-x-ms-traffictypediagnostic: MWHPR15MB1711:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR15MB171187D34BE61ACDC5D168C6B37B0@MWHPR15MB1711.namprd15.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3276;
-x-forefront-prvs: 0215D7173F
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(39860400002)(346002)(376002)(366004)(136003)(189003)(199004)(54906003)(86362001)(53546011)(6506007)(7736002)(102836004)(478600001)(6916009)(14454004)(2616005)(11346002)(476003)(229853002)(25786009)(76176011)(66556008)(6436002)(46003)(6512007)(305945005)(6246003)(316002)(186003)(99286004)(76116006)(66946007)(36756003)(4326008)(50226002)(486006)(6116002)(446003)(14444005)(256004)(33656002)(66476007)(2906002)(71190400001)(71200400001)(5660300002)(64756008)(8676002)(8936002)(66446008)(81156014)(6486002)(81166006);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR15MB1711;H:MWHPR15MB1165.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: OcC7Yo0eYlnJldqtiSU3A36nMDUJBxQwY0WZZd9yxtrVuM1QAE4gAjI7Pkvs/5GPvkZnpHZueDaXu/8Ge3dunBjbjLQ6kVe6bf4vCJuwXyFRZ5nvmkAOM5C49MaaZHC8U5ajLkFE5v1nweXgOZT7XemwyzwqCaBwTdsTaoG4nTTwBBkIBfQWaATxyJR8Zshvvcul+HWQrjRktk8R7Gy/pQaYa6ZCx11u25SZa03iJRxWClyYn829oh3nHOHujDBf76AFmDTYnbBDtpnbohYps9CXRIS3W7wFZKW1KvFHYlgtXduIzgINkL8fQjSxGLilkVnEvGJ1jJ28kc62NSE5hRZ+PdGvmZOT4bkLfrEH9+wu+lxReG2e0sedRaGRVQR/0z7lN6pwmi/Ww7Y1CBQb51xtgk8QuR/u4L3CfUogQPEair1QgKKm88sOFHlTBBE0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <08E1AE770E26F14E9DAF2EFCDCF72AB4@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S2389845AbfKHTSH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 Nov 2019 14:18:07 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:36371 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389814AbfKHTSF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 Nov 2019 14:18:05 -0500
+Received: by mail-ot1-f67.google.com with SMTP id f10so6150295oto.3;
+        Fri, 08 Nov 2019 11:18:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PshHM4wMUmgh4w0+dg2Pa170zD6/a/9WGi4RKmoPqrE=;
+        b=Us2wo00rEDbnJ5WSxsRzjKQzr/4J5sRXF4Z6PGQSq6srp6MgnwVxaHDthN5gntnWAT
+         aRo01cNo5hr5xtpeiIOTw0dabti1PC5A+C95b7NAkhCun7Kwl38dVJBmYlo4KySwoJLn
+         i27wLG0LPpuz01uT3zQ5JdAjdIvv4hg7CsY3uD6FysqArUOld2Ii1yaQtYUYy931/22i
+         3mtlknaYGgEu7gMhfWCDkxLSr0w9+p3gqigVVHt7xMXf7rPwIUxHa7rVq18369qfvVNd
+         FbVY0qjmdfqbXHh24bGXFfCOrXdhNgthnu4MeeUOr8ew4CP//QGUIttqQahJ/pNMFyCQ
+         dt+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PshHM4wMUmgh4w0+dg2Pa170zD6/a/9WGi4RKmoPqrE=;
+        b=q63eW+njnqcj2B5WGmMX8a3jVC18Gu0RCQ0TOb7pKo6wjZrc0+f2/aBGTI3Tp3TINO
+         tMZhhqy6TDT4ChLx9pRHVeD0m9ITqdREnpHqmbRokC3b9QAJ0pFhm5afWscsir9fdDob
+         ibtfMxocbZ5LD6d/CL3xg6Pp00AW3s1+YbJd7NxuBQPSDS2NDGCjSEF/bd+HMT09Cw9C
+         5t5XxQ6fBQKKTmL1ubrC8ujO770WrAeaJghCSc+VFuN95Y6fq2zBCfvS62JQUJV7NwAy
+         QgDmQuOkI926u/bZl1yGKrUYuB3EXqHuN13HoFHvAPALTsa5OJ+//xywenMu60y2yuWq
+         /oBQ==
+X-Gm-Message-State: APjAAAW0X8h4idYe1kHmjfrw0JoIOkfV2QB01QMcTGNOqX0INQAMsIk5
+        U3zKt06srhaL/rf8NtzFAElavsBT/r63eH6g4do=
+X-Google-Smtp-Source: APXvYqz9tjMdt62d6o8FLz7qizChgVo/9yy6E3pgLz6i3Y7LEF03hHrhv1Ca5LQYSg4dX3EoL3FJL8PaU6WU2yR+Oh8=
+X-Received: by 2002:a05:6830:2363:: with SMTP id r3mr10323155oth.39.1573240684852;
+ Fri, 08 Nov 2019 11:18:04 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: a8404e7b-cb5b-4cad-7106-08d7647e504f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Nov 2019 19:03:16.9956
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FN1jrxDSLVoYgb27Bxsk0CPG8e7QVycbp3mPOvKM6YgqYW3jKbf8rKa4URripV9P6qNaIcO4JjyKX4S4nDr9ZQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR15MB1711
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-08_07:2019-11-08,2019-11-08 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
- malwarescore=0 adultscore=0 spamscore=0 clxscore=1015 bulkscore=0
- mlxlogscore=999 priorityscore=1501 impostorscore=0 lowpriorityscore=0
- mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1911080186
-X-FB-Internal: deliver
+References: <1573148860-30254-1-git-send-email-magnus.karlsson@intel.com>
+ <1573148860-30254-2-git-send-email-magnus.karlsson@intel.com>
+ <20191108180314.GA30004@gmail.com> <CAJ8uoz0DJx0sbsAU1GyjZcX3JvcEq7QKFRM5sYrZ_ScAHgEE=A@mail.gmail.com>
+ <20191108184320.GC30004@gmail.com>
+In-Reply-To: <20191108184320.GC30004@gmail.com>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Fri, 8 Nov 2019 20:17:53 +0100
+Message-ID: <CAJ8uoz3_N4JZZtJpWAsRBSLHv0tm4vtC4RT-r-USN0WhudMbig@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/5] libbpf: support XDP_SHARED_UMEM with
+ external XDP program
+To:     William Tu <u9012063@gmail.com>
+Cc:     Magnus Karlsson <magnus.karlsson@intel.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Network Development <netdev@vger.kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Fri, Nov 8, 2019 at 7:43 PM William Tu <u9012063@gmail.com> wrote:
+>
+> On Fri, Nov 08, 2019 at 07:19:18PM +0100, Magnus Karlsson wrote:
+> > On Fri, Nov 8, 2019 at 7:03 PM William Tu <u9012063@gmail.com> wrote:
+> > >
+> > > Hi Magnus,
+> > >
+> > > Thanks for the patch.
+> > >
+> > > On Thu, Nov 07, 2019 at 06:47:36PM +0100, Magnus Karlsson wrote:
+> > > > Add support in libbpf to create multiple sockets that share a single
+> > > > umem. Note that an external XDP program need to be supplied that
+> > > > routes the incoming traffic to the desired sockets. So you need to
+> > > > supply the libbpf_flag XSK_LIBBPF_FLAGS__INHIBIT_PROG_LOAD and load
+> > > > your own XDP program.
+> > > >
+> > > > Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+> > > > ---
+> > > >  tools/lib/bpf/xsk.c | 27 +++++++++++++++++----------
+> > > >  1 file changed, 17 insertions(+), 10 deletions(-)
+> > > >
+> > > > diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+> > > > index 86c1b61..8ebd810 100644
+> > > > --- a/tools/lib/bpf/xsk.c
+> > > > +++ b/tools/lib/bpf/xsk.c
+> > > > @@ -586,15 +586,21 @@ int xsk_socket__create(struct xsk_socket **xsk_ptr, const char *ifname,
+> > > >       if (!umem || !xsk_ptr || !rx || !tx)
+> > > >               return -EFAULT;
+> > > >
+> > > > -     if (umem->refcount) {
+> > > > -             pr_warn("Error: shared umems not supported by libbpf.\n");
+> > > > -             return -EBUSY;
+> > > > -     }
+> > > > -
+> > > >       xsk = calloc(1, sizeof(*xsk));
+> > > >       if (!xsk)
+> > > >               return -ENOMEM;
+> > > >
+> > > > +     err = xsk_set_xdp_socket_config(&xsk->config, usr_config);
+> > > > +     if (err)
+> > > > +             goto out_xsk_alloc;
+> > > > +
+> > > > +     if (umem->refcount &&
+> > > > +         !(xsk->config.libbpf_flags & XSK_LIBBPF_FLAGS__INHIBIT_PROG_LOAD)) {
+> > > > +             pr_warn("Error: shared umems not supported by libbpf supplied XDP program.\n");
+> > >
+> > > Why can't we use the existing default one in libbpf?
+> > > If users don't want to redistribute packet to different queue,
+> > > then they can still use the libbpf default one.
+> >
+> > Is there any point in creating two or more sockets tied to the same
+> > umem and directing all traffic to just one socket? IMHO, I believe
+>
+> When using build-in XDP, isn't the traffic being directed to its
+> own xsk on its queue? (so not just one xsk socket)
+>
+> So using build-in XDP, for example, queue1/xsk1 and queue2/xsk2, and
+> sharing one umem. Both xsk1 and xsk2 receive packets from their queue.
 
+WIth the XDP_SHARED_UMEM flag this is not allowed. In your example,
+queue1/xsk1 and queue1/xsk2 would be allowed. All sockets need to be
+tied to the same queue id if they share a umem. In this case an XDP
+program has to decide how to distribute the packets since they all
+arrive on the same queue.
 
-> On Nov 7, 2019, at 10:40 PM, Alexei Starovoitov <ast@kernel.org> wrote:
->=20
-> The test_pkt_access.o is used by multiple tests. Fix its section name so =
-that
-> program type can be automatically detected by libbpf and make it call oth=
-er
-> subprograms with skb argument.
->=20
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+If you want queue1/xsk1 and queue2/xsk2 you need separate umems since
+it would otherwise violate the SPSC requirement or the rings. Or
+implement MPSC and SPMC queues to be used in this configuration.
 
-Acked-by: Song Liu <songliubraving@fb.com>
+> > that most users in this case would want to distribute the packets over
+> > the sockets in some way. I also think that users might be unpleasantly
+> > surprised if they create multiple sockets and all packets only get to
+> > a single socket because libbpf loaded an XDP program that makes little
+> > sense in the XDP_SHARED_UMEM case. If we force them to supply an XDP
+>
+> Do I misunderstand the code?
+> I looked at xsk_setup_xdp_prog, xsk_load_xdp_prog, and xsk_set_bpf_maps.
+> The build-in prog will distribute packets to different xsk sockets,
+> not a single socket.
 
-> ---
-> .../selftests/bpf/progs/test_pkt_access.c     | 38 ++++++++++++++++++-
-> 1 file changed, 36 insertions(+), 2 deletions(-)
->=20
-> diff --git a/tools/testing/selftests/bpf/progs/test_pkt_access.c b/tools/=
-testing/selftests/bpf/progs/test_pkt_access.c
-> index 7cf42d14103f..3a7b4b607ed3 100644
-> --- a/tools/testing/selftests/bpf/progs/test_pkt_access.c
-> +++ b/tools/testing/selftests/bpf/progs/test_pkt_access.c
-> @@ -17,8 +17,38 @@
-> #define barrier() __asm__ __volatile__("": : :"memory")
-> int _version SEC("version") =3D 1;
->=20
-> -SEC("test1")
-> -int process(struct __sk_buff *skb)
-> +/* llvm will optimize both subprograms into exactly the same BPF assembl=
-y
-> + *
-> + * Disassembly of section .text:
-> + *
-> + * 0000000000000000 test_pkt_access_subprog1:
-> + * ; 	return skb->len * 2;
-> + *        0:	61 10 00 00 00 00 00 00	r0 =3D *(u32 *)(r1 + 0)
-> + *        1:	64 00 00 00 01 00 00 00	w0 <<=3D 1
-> + *        2:	95 00 00 00 00 00 00 00	exit
-> + *
-> + * 0000000000000018 test_pkt_access_subprog2:
-> + * ; 	return skb->len * val;
-> + *        3:	61 10 00 00 00 00 00 00	r0 =3D *(u32 *)(r1 + 0)
-> + *        4:	64 00 00 00 01 00 00 00	w0 <<=3D 1
-> + *        5:	95 00 00 00 00 00 00 00	exit
-> + *
-> + * Which makes it an interesting test for BTF-enabled verifier.
+True, but only for the case above (queue1/xsk1 and queue2/xsk2) where
+they have separate umems. For the queue1/xsk1 and queue1/xsk2 case, it
+would send everything to xsk1.
 
-This is interesting!
+/Magnus
 
+> > program, they need to make this decision. I also wanted to extend the
+> > sample with an explicit user loaded XDP program as an example of how
+> > to do this. What do you think?
+>
+> Yes, I like it. Like previous version having the xdpsock_kern.c as an
+> example for people to follow.
+>
+> William
+>
+> >
+> > /Magnus
+> >
+> > > William
+> > > > +             err = -EBUSY;
+> > > > +             goto out_xsk_alloc;
+> > > > +     }
+> > > > +
+> > > >       if (umem->refcount++ > 0) {
+> > > >               xsk->fd = socket(AF_XDP, SOCK_RAW, 0);
+> > > >               if (xsk->fd < 0) {
+> > > > @@ -616,10 +622,6 @@ int xsk_socket__create(struct xsk_socket **xsk_ptr, const char *ifname,
+> > > >       memcpy(xsk->ifname, ifname, IFNAMSIZ - 1);
+> > > >       xsk->ifname[IFNAMSIZ - 1] = '\0';
+> > > >
+> > > > -     err = xsk_set_xdp_socket_config(&xsk->config, usr_config);
+> > > > -     if (err)
+> > > > -             goto out_socket;
+> > > > -
+> > > >       if (rx) {
+> > > >               err = setsockopt(xsk->fd, SOL_XDP, XDP_RX_RING,
+> > > >                                &xsk->config.rx_size,
+> > > > @@ -687,7 +689,12 @@ int xsk_socket__create(struct xsk_socket **xsk_ptr, const char *ifname,
+> > > >       sxdp.sxdp_family = PF_XDP;
+> > > >       sxdp.sxdp_ifindex = xsk->ifindex;
+> > > >       sxdp.sxdp_queue_id = xsk->queue_id;
+> > > > -     sxdp.sxdp_flags = xsk->config.bind_flags;
+> > > > +     if (umem->refcount > 1) {
+> > > > +             sxdp.sxdp_flags = XDP_SHARED_UMEM;
+> > > > +             sxdp.sxdp_shared_umem_fd = umem->fd;
+> > > > +     } else {
+> > > > +             sxdp.sxdp_flags = xsk->config.bind_flags;
+> > > > +     }
+> > > >
+> > > >       err = bind(xsk->fd, (struct sockaddr *)&sxdp, sizeof(sxdp));
+> > > >       if (err) {
+> > > > --
+> > > > 2.7.4
+> > > >
