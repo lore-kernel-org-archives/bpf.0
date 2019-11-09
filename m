@@ -2,66 +2,67 @@ Return-Path: <SRS0=dKcM=ZB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46E07C17444
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB636C17445
 	for <bpf@archiver.kernel.org>; Sat,  9 Nov 2019 20:37:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1B1AF21848
+	by mail.kernel.org (Postfix) with ESMTP id A0C7C21882
 	for <bpf@archiver.kernel.org>; Sat,  9 Nov 2019 20:37:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eSditqI7"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OHI/wnGQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726561AbfKIUhf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 9 Nov 2019 15:37:35 -0500
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:33935 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726515AbfKIUhf (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 9 Nov 2019 15:37:35 -0500
+        id S1726650AbfKIUhi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 9 Nov 2019 15:37:38 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:43866 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726485AbfKIUhg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 9 Nov 2019 15:37:36 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1573331853;
+        s=mimecast20190719; t=1573331855;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=JAo1J6Owr+4nF6yobLva4aQytX2bXOXitTPKE7xjZhY=;
-        b=eSditqI74VOTWgV90a7KsNv44AUKghPdQU0bh96KF+2Psvn2ovWu6wOzdBine70VhpP7BY
-        5UP5B0Q3CES0VhXE24XWhowYeuWp95zPyezBfUR6Vt6aW12yomKdivta5Ou1nBTNe4/Cfi
-        nXbOM4mMLeVTjoGgnx4oGzkhPKLkl+A=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=c8P5cspoLjdkoTt3mImX/vTX08JWPljE4WM+IvmtptQ=;
+        b=OHI/wnGQdeQJokT8uMkDypxgk52n671PVDdTY4TsW73NmWA44LHO+eaikKLDta3dsAqqZt
+        ceWn+nOaF7vUFeeXxlPzHSe9NiQWs+rXXtmg8Qpv4GxIzsS5h03VzeCPreCEgDn1wALORz
+        WcWO7ePvdWzaSEym8TBCi/A/IgjWRK8=
 Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
  [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-50-L4uTpr6fPxaQOCgq7dKQ5A-1; Sat, 09 Nov 2019 15:37:29 -0500
-Received: by mail-ed1-f69.google.com with SMTP id k6so1024691edq.9
-        for <bpf@vger.kernel.org>; Sat, 09 Nov 2019 12:37:29 -0800 (PST)
+ us-mta-252-2pgEbREiP2y8y0abk7YlCQ-1; Sat, 09 Nov 2019 15:37:34 -0500
+Received: by mail-ed1-f69.google.com with SMTP id j21so7333161edv.20
+        for <bpf@vger.kernel.org>; Sat, 09 Nov 2019 12:37:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:user-agent
-         :mime-version:content-transfer-encoding;
-        bh=3vYfTcrwvzSK+vJhB4J00Pl0KQF3aMpRR2i1QTImMts=;
-        b=CudNfTiEr/oxMtkwNxsUZYKMaIiHku909MaHwbG28kJf37LlWeWnI5dva3FU/UODA7
-         2phZAGEY5HlAP/szqJOaLtzkWcVIcTtQIUIaJnwJgbN47fL2yQ2utlSfVbaQaUL9GnaH
-         WD8zl0fKH2KJnVFsCoccNwAzbSUrDn+9Ybdpqc1EITOSn43l9i8z1atgWH1TEWL6wIYL
-         NEdqjhMPLxI6cRkRKPp4EtxpwYue6jO+gbGypIio0VaBO/droKU9sxr3AZg02ox2WFMW
-         OP3kcJo3v3jKis4SJzKRemcS7nxWzuRqzRHvkIvIyShjmXtlgOXU6M3CKN7As2MGkcMl
-         9ceg==
-X-Gm-Message-State: APjAAAW5nNgN2n0IUaioBO5Hs2HkQC1T6G1Ryj6JmNtVGgU3SDP8XavI
-        LppaVB5G4RwLKkCnrEuU1uliZXHHK3jmd1cdURX5gqFl+RE77qNRiufyrBpmkFtcJXAMgArBdHl
-        HEDM+vOdoIZE6
-X-Received: by 2002:a05:6402:138c:: with SMTP id b12mr17903403edv.28.1573331848049;
-        Sat, 09 Nov 2019 12:37:28 -0800 (PST)
-X-Google-Smtp-Source: APXvYqx1fgfFade0Tq5mHEdcZq9u/a5pVitQtJ9Oy01GxQ81sYxNPdSPl6lw/cQxIJK3D1s1fSowfg==
-X-Received: by 2002:a05:6402:138c:: with SMTP id b12mr17903378edv.28.1573331847856;
-        Sat, 09 Nov 2019 12:37:27 -0800 (PST)
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=Li5s6JX5WIT+IXbJU0kzy8ie+h5GQ+8nNrCKMbvFIXc=;
+        b=QxkbocgPiVMROvjq4LlA88/tKAGT6o3Q3H95K7o8w9tAdVvT7Y9H1nc7d5zW9wUhoD
+         R/vP1sdbx//S6PB7xnCRiYsDmgjaJIs6IzLhP8xILw1dHFPSCJImKgumh5vtGXdIxt5o
+         fNQPafz7+kaZnAa0v1UXLul+SP03q7mEmWFn1AzGGqwrFpcLOlAfl1wnbSFGOwXU/Bij
+         XIL+V1+2jW0hzE1RuoN91yE/fO+D+bC9KSfwr2gPMnFDZ33n+Iqjx0TxQ/NOi0mgLcg4
+         VrNiOIgG+6E8muEhTUMLcawyMhKS48xn8yrnFp8ULraBPmOkWqKzt0K3BClUg26zn64N
+         GQLg==
+X-Gm-Message-State: APjAAAXzBKZTK1ibl3/tozXFbNlkYAnZEqeYfR4G9jnoJvL3kWRbyuWm
+        Op5JT2lyRModKs5m2w7w/+go0QBbcp2hIdztxMJ6vrFL2XVlZZ09sGmOktsOvK2uwV8xKZRi5wj
+        rjg132XMgy2T/
+X-Received: by 2002:a17:906:1a47:: with SMTP id j7mr14980463ejf.232.1573331852872;
+        Sat, 09 Nov 2019 12:37:32 -0800 (PST)
+X-Google-Smtp-Source: APXvYqyqa418TnQLtbyWYeIYefkaRFBibZHLT0pTsJjy6E9onlLrnd6tcVg587As92QWTvPkck0Wtw==
+X-Received: by 2002:a17:906:1a47:: with SMTP id j7mr14980441ejf.232.1573331852604;
+        Sat, 09 Nov 2019 12:37:32 -0800 (PST)
 Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
-        by smtp.gmail.com with ESMTPSA id v3sm325216edq.62.2019.11.09.12.37.26
+        by smtp.gmail.com with ESMTPSA id o59sm335801eda.80.2019.11.09.12.37.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Nov 2019 12:37:26 -0800 (PST)
+        Sat, 09 Nov 2019 12:37:32 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 4CD731800CC; Sat,  9 Nov 2019 21:37:26 +0100 (CET)
-Subject: [PATCH bpf-next v4 0/6] libbpf: Fix pinning and error message bugs
- and add new getters
+        id B002A1800CE; Sat,  9 Nov 2019 21:37:31 +0100 (CET)
+Subject: [PATCH bpf-next v4 5/6] libbpf: Add bpf_get_link_xdp_info() function
+ to get more XDP information
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Daniel Borkmann <daniel@iogearbox.net>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -71,89 +72,217 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Sat, 09 Nov 2019 21:37:26 +0100
-Message-ID: <157333184619.88376.13377736576285554047.stgit@toke.dk>
+Date:   Sat, 09 Nov 2019 21:37:31 +0100
+Message-ID: <157333185164.88376.7520653040667637246.stgit@toke.dk>
+In-Reply-To: <157333184619.88376.13377736576285554047.stgit@toke.dk>
+References: <157333184619.88376.13377736576285554047.stgit@toke.dk>
 User-Agent: StGit/0.21
 MIME-Version: 1.0
-X-MC-Unique: L4uTpr6fPxaQOCgq7dKQ5A-1
+X-MC-Unique: 2pgEbREiP2y8y0abk7YlCQ-1
 X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series fixes a few bugs in libbpf that I discovered while playing arou=
-nd
-with the new auto-pinning code, and writing the first utility in xdp-tools[=
-0]:
+From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 
-- If object loading fails, libbpf does not clean up the pinnings created by=
- the
-  auto-pinning mechanism.
-- EPERM is not propagated to the caller on program load
-- Netlink functions write error messages directly to stderr
+Currently, libbpf only provides a function to get a single ID for the XDP
+program attached to the interface. However, it can be useful to get the
+full set of program IDs attached, along with the attachment mode, in one
+go. Add a new getter function to support this, using an extendible
+structure to carry the information. Express the old bpf_get_link_id()
+function in terms of the new function.
 
-In addition, libbpf currently only has a somewhat limited getter function f=
-or
-XDP link info, which makes it impossible to discover whether an attached pr=
-ogram
-is in SKB mode or not. So the last patch in the series adds a new getter fo=
-r XDP
-link info which returns all the information returned via netlink (and which=
- can
-be extended later).
-
-Finally, add a getter for BPF program size, which can be used by the caller=
- to
-estimate the amount of locked memory needed to load a program.
-
-A selftest is added for the pinning change, while the other features were t=
-ested
-in the xdp-filter tool from the xdp-tools repo. The 'new-libbpf-features' b=
-ranch
-contains the commits that make use of the new XDP getter and the corrected =
-EPERM
-error code.
-
-[0] https://github.com/xdp-project/xdp-tools
-
-Changelog:
-
-v4:
-  - Don't do any size checks on struct xdp_info, just copy (and/or zero)
-    whatever size the caller supplied.
-
-v3:
-  - Pass through all kernel error codes on program load (instead of just EP=
-ERM).
-  - No new bpf_object__unload() variant, just do the loop at the caller
-  - Don't reject struct xdp_info sizes that are bigger than what we expect.
-  - Add a comment noting that bpf_program__size() returns the size in bytes
-
-v2:
-  - Keep function names in libbpf.map sorted properly
-
+Acked-by: David S. Miller <davem@davemloft.net>
+Acked-by: Song Liu <songliubraving@fb.com>
+Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 ---
-
-Toke H=C3=B8iland-J=C3=B8rgensen (6):
-      libbpf: Unpin auto-pinned maps if loading fails
-      selftests/bpf: Add tests for automatic map unpinning on load failure
-      libbpf: Propagate EPERM to caller on program load
-      libbpf: Use pr_warn() when printing netlink errors
-      libbpf: Add bpf_get_link_xdp_info() function to get more XDP informat=
-ion
-      libbpf: Add getter for program size
-
-
- tools/lib/bpf/libbpf.c                           |   41 ++++++----
- tools/lib/bpf/libbpf.h                           |   13 +++
- tools/lib/bpf/libbpf.map                         |    2 +
- tools/lib/bpf/netlink.c                          |   87 +++++++++++++++---=
+ tools/lib/bpf/libbpf.h   |   10 +++++
+ tools/lib/bpf/libbpf.map |    1 +
+ tools/lib/bpf/netlink.c  |   84 +++++++++++++++++++++++++++++++-----------=
 ----
- tools/lib/bpf/nlattr.c                           |   10 +--
- tools/testing/selftests/bpf/prog_tests/pinning.c |   20 ++++-
- tools/testing/selftests/bpf/progs/test_pinning.c |    2 -
- 7 files changed, 120 insertions(+), 55 deletions(-)
+ 3 files changed, 67 insertions(+), 28 deletions(-)
+
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 6ddc0419337b..f0947cc949d2 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -427,8 +427,18 @@ LIBBPF_API int bpf_prog_load_xattr(const struct bpf_pr=
+og_load_attr *attr,
+ LIBBPF_API int bpf_prog_load(const char *file, enum bpf_prog_type type,
+ =09=09=09     struct bpf_object **pobj, int *prog_fd);
+=20
++struct xdp_link_info {
++=09__u32 prog_id;
++=09__u32 drv_prog_id;
++=09__u32 hw_prog_id;
++=09__u32 skb_prog_id;
++=09__u8 attach_mode;
++};
++
+ LIBBPF_API int bpf_set_link_xdp_fd(int ifindex, int fd, __u32 flags);
+ LIBBPF_API int bpf_get_link_xdp_id(int ifindex, __u32 *prog_id, __u32 flag=
+s);
++LIBBPF_API int bpf_get_link_xdp_info(int ifindex, struct xdp_link_info *in=
+fo,
++=09=09=09=09     size_t info_size, __u32 flags);
+=20
+ struct perf_buffer;
+=20
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 86173cbb159d..d1a782a3a58d 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -193,6 +193,7 @@ LIBBPF_0.0.5 {
+=20
+ LIBBPF_0.0.6 {
+ =09global:
++=09=09bpf_get_link_xdp_info;
+ =09=09bpf_map__get_pin_path;
+ =09=09bpf_map__is_pinned;
+ =09=09bpf_map__set_pin_path;
+diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
+index a261df9cb488..5065c1aa1061 100644
+--- a/tools/lib/bpf/netlink.c
++++ b/tools/lib/bpf/netlink.c
+@@ -25,7 +25,7 @@ typedef int (*__dump_nlmsg_t)(struct nlmsghdr *nlmsg, lib=
+bpf_dump_nlmsg_t,
+ struct xdp_id_md {
+ =09int ifindex;
+ =09__u32 flags;
+-=09__u32 id;
++=09struct xdp_link_info info;
+ };
+=20
+ int libbpf_netlink_open(__u32 *nl_pid)
+@@ -203,26 +203,11 @@ static int __dump_link_nlmsg(struct nlmsghdr *nlh,
+ =09return dump_link_nlmsg(cookie, ifi, tb);
+ }
+=20
+-static unsigned char get_xdp_id_attr(unsigned char mode, __u32 flags)
+-{
+-=09if (mode !=3D XDP_ATTACHED_MULTI)
+-=09=09return IFLA_XDP_PROG_ID;
+-=09if (flags & XDP_FLAGS_DRV_MODE)
+-=09=09return IFLA_XDP_DRV_PROG_ID;
+-=09if (flags & XDP_FLAGS_HW_MODE)
+-=09=09return IFLA_XDP_HW_PROG_ID;
+-=09if (flags & XDP_FLAGS_SKB_MODE)
+-=09=09return IFLA_XDP_SKB_PROG_ID;
+-
+-=09return IFLA_XDP_UNSPEC;
+-}
+-
+-static int get_xdp_id(void *cookie, void *msg, struct nlattr **tb)
++static int get_xdp_info(void *cookie, void *msg, struct nlattr **tb)
+ {
+ =09struct nlattr *xdp_tb[IFLA_XDP_MAX + 1];
+ =09struct xdp_id_md *xdp_id =3D cookie;
+ =09struct ifinfomsg *ifinfo =3D msg;
+-=09unsigned char mode, xdp_attr;
+ =09int ret;
+=20
+ =09if (xdp_id->ifindex && xdp_id->ifindex !=3D ifinfo->ifi_index)
+@@ -238,27 +223,40 @@ static int get_xdp_id(void *cookie, void *msg, struct=
+ nlattr **tb)
+ =09if (!xdp_tb[IFLA_XDP_ATTACHED])
+ =09=09return 0;
+=20
+-=09mode =3D libbpf_nla_getattr_u8(xdp_tb[IFLA_XDP_ATTACHED]);
+-=09if (mode =3D=3D XDP_ATTACHED_NONE)
+-=09=09return 0;
++=09xdp_id->info.attach_mode =3D libbpf_nla_getattr_u8(
++=09=09xdp_tb[IFLA_XDP_ATTACHED]);
+=20
+-=09xdp_attr =3D get_xdp_id_attr(mode, xdp_id->flags);
+-=09if (!xdp_attr || !xdp_tb[xdp_attr])
++=09if (xdp_id->info.attach_mode =3D=3D XDP_ATTACHED_NONE)
+ =09=09return 0;
+=20
+-=09xdp_id->id =3D libbpf_nla_getattr_u32(xdp_tb[xdp_attr]);
++=09if (xdp_tb[IFLA_XDP_PROG_ID])
++=09=09xdp_id->info.prog_id =3D libbpf_nla_getattr_u32(
++=09=09=09xdp_tb[IFLA_XDP_PROG_ID]);
++
++=09if (xdp_tb[IFLA_XDP_SKB_PROG_ID])
++=09=09xdp_id->info.skb_prog_id =3D libbpf_nla_getattr_u32(
++=09=09=09xdp_tb[IFLA_XDP_SKB_PROG_ID]);
++
++=09if (xdp_tb[IFLA_XDP_DRV_PROG_ID])
++=09=09xdp_id->info.drv_prog_id =3D libbpf_nla_getattr_u32(
++=09=09=09xdp_tb[IFLA_XDP_DRV_PROG_ID]);
++
++=09if (xdp_tb[IFLA_XDP_HW_PROG_ID])
++=09=09xdp_id->info.hw_prog_id =3D libbpf_nla_getattr_u32(
++=09=09=09xdp_tb[IFLA_XDP_HW_PROG_ID]);
+=20
+ =09return 0;
+ }
+=20
+-int bpf_get_link_xdp_id(int ifindex, __u32 *prog_id, __u32 flags)
++int bpf_get_link_xdp_info(int ifindex, struct xdp_link_info *info,
++=09=09=09  size_t info_size, __u32 flags)
+ {
+ =09struct xdp_id_md xdp_id =3D {};
+ =09int sock, ret;
+ =09__u32 nl_pid;
+ =09__u32 mask;
+=20
+-=09if (flags & ~XDP_FLAGS_MASK)
++=09if (flags & ~XDP_FLAGS_MASK || !info_size)
+ =09=09return -EINVAL;
+=20
+ =09/* Check whether the single {HW,DRV,SKB} mode is set */
+@@ -274,14 +272,44 @@ int bpf_get_link_xdp_id(int ifindex, __u32 *prog_id, =
+__u32 flags)
+ =09xdp_id.ifindex =3D ifindex;
+ =09xdp_id.flags =3D flags;
+=20
+-=09ret =3D libbpf_nl_get_link(sock, nl_pid, get_xdp_id, &xdp_id);
+-=09if (!ret)
+-=09=09*prog_id =3D xdp_id.id;
++=09ret =3D libbpf_nl_get_link(sock, nl_pid, get_xdp_info, &xdp_id);
++=09if (!ret) {
++=09=09size_t sz =3D min(info_size, sizeof(xdp_id.info));
++
++=09=09memcpy(info, &xdp_id.info, sz);
++=09=09memset((void *) info + sz, 0, info_size - sz);
++=09}
+=20
+ =09close(sock);
+ =09return ret;
+ }
+=20
++static __u32 get_xdp_id(struct xdp_link_info *info, __u32 flags)
++{
++=09if (info->attach_mode !=3D XDP_ATTACHED_MULTI)
++=09=09return info->prog_id;
++=09if (flags & XDP_FLAGS_DRV_MODE)
++=09=09return info->drv_prog_id;
++=09if (flags & XDP_FLAGS_HW_MODE)
++=09=09return info->hw_prog_id;
++=09if (flags & XDP_FLAGS_SKB_MODE)
++=09=09return info->skb_prog_id;
++
++=09return 0;
++}
++
++int bpf_get_link_xdp_id(int ifindex, __u32 *prog_id, __u32 flags)
++{
++=09struct xdp_link_info info;
++=09int ret;
++
++=09ret =3D bpf_get_link_xdp_info(ifindex, &info, sizeof(info), flags);
++=09if (!ret)
++=09=09*prog_id =3D get_xdp_id(&info, flags);
++
++=09return ret;
++}
++
+ int libbpf_nl_get_link(int sock, unsigned int nl_pid,
+ =09=09       libbpf_dump_nlmsg_t dump_link_nlmsg, void *cookie)
+ {
 
