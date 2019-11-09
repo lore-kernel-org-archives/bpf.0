@@ -2,67 +2,66 @@ Return-Path: <SRS0=dKcM=ZB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FA91C17446
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46E07C17444
 	for <bpf@archiver.kernel.org>; Sat,  9 Nov 2019 20:37:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7571821848
+	by mail.kernel.org (Postfix) with ESMTP id 1B1AF21848
 	for <bpf@archiver.kernel.org>; Sat,  9 Nov 2019 20:37:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XiLhjxuS"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eSditqI7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726565AbfKIUhi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 9 Nov 2019 15:37:38 -0500
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:45943 "EHLO
+        id S1726561AbfKIUhf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 9 Nov 2019 15:37:35 -0500
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:33935 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726569AbfKIUhf (ORCPT
+        by vger.kernel.org with ESMTP id S1726515AbfKIUhf (ORCPT
         <rfc822;bpf@vger.kernel.org>); Sat, 9 Nov 2019 15:37:35 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1573331854;
+        s=mimecast20190719; t=1573331853;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rH6r2De9GadkXLbCyN93me6DEPMZRHLuAF94Rklw8C8=;
-        b=XiLhjxuSeTuykISQYU90oegugGcNYjbyTSqJ+9oBx9YQAHEcjf16bQjLfyIG4Fg2XouHe5
-        qnmzOP5jYKXqoThqC4AFW+uy8x0mrjqaszD4oQyFQPO+x/hXb2Z4nCgBq9YZrtJd8QkdUj
-        MhS5vgt1E62CsQyO2tQnlmaMfZU43g4=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-155-KIDUutebMcKpE2S8f2o3tA-1; Sat, 09 Nov 2019 15:37:33 -0500
-Received: by mail-ed1-f72.google.com with SMTP id l6so7329140edc.18
-        for <bpf@vger.kernel.org>; Sat, 09 Nov 2019 12:37:32 -0800 (PST)
+         content-transfer-encoding:content-transfer-encoding;
+        bh=JAo1J6Owr+4nF6yobLva4aQytX2bXOXitTPKE7xjZhY=;
+        b=eSditqI74VOTWgV90a7KsNv44AUKghPdQU0bh96KF+2Psvn2ovWu6wOzdBine70VhpP7BY
+        5UP5B0Q3CES0VhXE24XWhowYeuWp95zPyezBfUR6Vt6aW12yomKdivta5Ou1nBTNe4/Cfi
+        nXbOM4mMLeVTjoGgnx4oGzkhPKLkl+A=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-50-L4uTpr6fPxaQOCgq7dKQ5A-1; Sat, 09 Nov 2019 15:37:29 -0500
+Received: by mail-ed1-f69.google.com with SMTP id k6so1024691edq.9
+        for <bpf@vger.kernel.org>; Sat, 09 Nov 2019 12:37:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=+uTEROvAXIn7cfXeWKiRQvoN+m0g9SUDb6vRM4Q9nmw=;
-        b=Sn/f3Ul585dZD4huXiOjUbCKBdXXQ6JUv4qBxsOiDvBtt8MJYxZ/a6Lf2vZbLHIeMY
-         qpU34Kc1q3s6A9P9F1qxlC+sjIBxgwEGxmzCd1OBHYu3GgPI7Mg5H3/2rAqpdc/ABg6h
-         8k649SCwa4jnn308i+BchebhIrLMYFYP1aZc+9ABw0+uOCm/kTdXBUSaOm6Jbq8Cc/F6
-         oQKzDqHXuP4j8N7w9CGrZnSEn8w33fXIjmid7BPcMJdButh+EwxEMmA058BTkh6zUvQe
-         r0LiTz9qclRaW5XFLRCzML4qA3OIJ3YfT+WKf3r+i5S6eqi7UUHZt1E5nGVfxwmQs0sg
-         x2GA==
-X-Gm-Message-State: APjAAAUPlk3Wm7NB0m2GAD4psi5Qtsn8svDBEaDa5K3TutqXZsOyXeKY
-        /IoK1Xasek1LXk9VaKQ2bxlIx1FObNcNtOJyxqSlPBCF8trRIoXYdjYgxb+lF/2uX0C4ZqewQIe
-        ot2rPCLYFnomS
-X-Received: by 2002:a17:906:4098:: with SMTP id u24mr5046243ejj.220.1573331851982;
-        Sat, 09 Nov 2019 12:37:31 -0800 (PST)
-X-Google-Smtp-Source: APXvYqyXH7lIVgPrtwMTO2Tegsgkfa0ZVq0M3RKgvOAhMZ09RVig9dQri4h++YRTQcoLW4X/chJLrA==
-X-Received: by 2002:a17:906:4098:: with SMTP id u24mr5046231ejj.220.1573331851801;
-        Sat, 09 Nov 2019 12:37:31 -0800 (PST)
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:user-agent
+         :mime-version:content-transfer-encoding;
+        bh=3vYfTcrwvzSK+vJhB4J00Pl0KQF3aMpRR2i1QTImMts=;
+        b=CudNfTiEr/oxMtkwNxsUZYKMaIiHku909MaHwbG28kJf37LlWeWnI5dva3FU/UODA7
+         2phZAGEY5HlAP/szqJOaLtzkWcVIcTtQIUIaJnwJgbN47fL2yQ2utlSfVbaQaUL9GnaH
+         WD8zl0fKH2KJnVFsCoccNwAzbSUrDn+9Ybdpqc1EITOSn43l9i8z1atgWH1TEWL6wIYL
+         NEdqjhMPLxI6cRkRKPp4EtxpwYue6jO+gbGypIio0VaBO/droKU9sxr3AZg02ox2WFMW
+         OP3kcJo3v3jKis4SJzKRemcS7nxWzuRqzRHvkIvIyShjmXtlgOXU6M3CKN7As2MGkcMl
+         9ceg==
+X-Gm-Message-State: APjAAAW5nNgN2n0IUaioBO5Hs2HkQC1T6G1Ryj6JmNtVGgU3SDP8XavI
+        LppaVB5G4RwLKkCnrEuU1uliZXHHK3jmd1cdURX5gqFl+RE77qNRiufyrBpmkFtcJXAMgArBdHl
+        HEDM+vOdoIZE6
+X-Received: by 2002:a05:6402:138c:: with SMTP id b12mr17903403edv.28.1573331848049;
+        Sat, 09 Nov 2019 12:37:28 -0800 (PST)
+X-Google-Smtp-Source: APXvYqx1fgfFade0Tq5mHEdcZq9u/a5pVitQtJ9Oy01GxQ81sYxNPdSPl6lw/cQxIJK3D1s1fSowfg==
+X-Received: by 2002:a05:6402:138c:: with SMTP id b12mr17903378edv.28.1573331847856;
+        Sat, 09 Nov 2019 12:37:27 -0800 (PST)
 Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
-        by smtp.gmail.com with ESMTPSA id q2sm335016edj.38.2019.11.09.12.37.30
+        by smtp.gmail.com with ESMTPSA id v3sm325216edq.62.2019.11.09.12.37.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Nov 2019 12:37:31 -0800 (PST)
+        Sat, 09 Nov 2019 12:37:26 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 9C5321800CC; Sat,  9 Nov 2019 21:37:30 +0100 (CET)
-Subject: [PATCH bpf-next v4 4/6] libbpf: Use pr_warn() when printing netlink
- errors
+        id 4CD731800CC; Sat,  9 Nov 2019 21:37:26 +0100 (CET)
+Subject: [PATCH bpf-next v4 0/6] libbpf: Fix pinning and error message bugs
+ and add new getters
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Daniel Borkmann <daniel@iogearbox.net>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -72,100 +71,89 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Sat, 09 Nov 2019 21:37:30 +0100
-Message-ID: <157333185055.88376.15999360127117901443.stgit@toke.dk>
-In-Reply-To: <157333184619.88376.13377736576285554047.stgit@toke.dk>
-References: <157333184619.88376.13377736576285554047.stgit@toke.dk>
+Date:   Sat, 09 Nov 2019 21:37:26 +0100
+Message-ID: <157333184619.88376.13377736576285554047.stgit@toke.dk>
 User-Agent: StGit/0.21
 MIME-Version: 1.0
-X-MC-Unique: KIDUutebMcKpE2S8f2o3tA-1
+X-MC-Unique: L4uTpr6fPxaQOCgq7dKQ5A-1
 X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+This series fixes a few bugs in libbpf that I discovered while playing arou=
+nd
+with the new auto-pinning code, and writing the first utility in xdp-tools[=
+0]:
 
-The netlink functions were using fprintf(stderr, ) directly to print out
-error messages, instead of going through the usual logging macros. This
-makes it impossible for the calling application to silence or redirect
-those error messages. Fix this by switching to pr_warn() in nlattr.c and
-netlink.c.
+- If object loading fails, libbpf does not clean up the pinnings created by=
+ the
+  auto-pinning mechanism.
+- EPERM is not propagated to the caller on program load
+- Netlink functions write error messages directly to stderr
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Acked-by: David S. Miller <davem@davemloft.net>
-Acked-by: Song Liu <songliubraving@fb.com>
-Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+In addition, libbpf currently only has a somewhat limited getter function f=
+or
+XDP link info, which makes it impossible to discover whether an attached pr=
+ogram
+is in SKB mode or not. So the last patch in the series adds a new getter fo=
+r XDP
+link info which returns all the information returned via netlink (and which=
+ can
+be extended later).
+
+Finally, add a getter for BPF program size, which can be used by the caller=
+ to
+estimate the amount of locked memory needed to load a program.
+
+A selftest is added for the pinning change, while the other features were t=
+ested
+in the xdp-filter tool from the xdp-tools repo. The 'new-libbpf-features' b=
+ranch
+contains the commits that make use of the new XDP getter and the corrected =
+EPERM
+error code.
+
+[0] https://github.com/xdp-project/xdp-tools
+
+Changelog:
+
+v4:
+  - Don't do any size checks on struct xdp_info, just copy (and/or zero)
+    whatever size the caller supplied.
+
+v3:
+  - Pass through all kernel error codes on program load (instead of just EP=
+ERM).
+  - No new bpf_object__unload() variant, just do the loop at the caller
+  - Don't reject struct xdp_info sizes that are bigger than what we expect.
+  - Add a comment noting that bpf_program__size() returns the size in bytes
+
+v2:
+  - Keep function names in libbpf.map sorted properly
+
 ---
- tools/lib/bpf/netlink.c |    3 ++-
- tools/lib/bpf/nlattr.c  |   10 +++++-----
- 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
-index ce3ec81b71c0..a261df9cb488 100644
---- a/tools/lib/bpf/netlink.c
-+++ b/tools/lib/bpf/netlink.c
-@@ -12,6 +12,7 @@
-=20
- #include "bpf.h"
- #include "libbpf.h"
-+#include "libbpf_internal.h"
- #include "nlattr.h"
-=20
- #ifndef SOL_NETLINK
-@@ -43,7 +44,7 @@ int libbpf_netlink_open(__u32 *nl_pid)
-=20
- =09if (setsockopt(sock, SOL_NETLINK, NETLINK_EXT_ACK,
- =09=09       &one, sizeof(one)) < 0) {
--=09=09fprintf(stderr, "Netlink error reporting not supported\n");
-+=09=09pr_warn("Netlink error reporting not supported\n");
- =09}
-=20
- =09if (bind(sock, (struct sockaddr *)&sa, sizeof(sa)) < 0) {
-diff --git a/tools/lib/bpf/nlattr.c b/tools/lib/bpf/nlattr.c
-index 1e69c0c8d413..8db44bbfc66d 100644
---- a/tools/lib/bpf/nlattr.c
-+++ b/tools/lib/bpf/nlattr.c
-@@ -8,6 +8,7 @@
-=20
- #include <errno.h>
- #include "nlattr.h"
-+#include "libbpf_internal.h"
- #include <linux/rtnetlink.h>
- #include <string.h>
- #include <stdio.h>
-@@ -121,8 +122,8 @@ int libbpf_nla_parse(struct nlattr *tb[], int maxtype, =
-struct nlattr *head,
- =09=09}
-=20
- =09=09if (tb[type])
--=09=09=09fprintf(stderr, "Attribute of type %#x found multiple times in me=
-ssage, "
--=09=09=09=09  "previous attribute is being ignored.\n", type);
-+=09=09=09pr_warn("Attribute of type %#x found multiple times in message, "
-+=09=09=09=09"previous attribute is being ignored.\n", type);
-=20
- =09=09tb[type] =3D nla;
- =09}
-@@ -181,15 +182,14 @@ int libbpf_nla_dump_errormsg(struct nlmsghdr *nlh)
-=20
- =09if (libbpf_nla_parse(tb, NLMSGERR_ATTR_MAX, attr, alen,
- =09=09=09     extack_policy) !=3D 0) {
--=09=09fprintf(stderr,
--=09=09=09"Failed to parse extended error attributes\n");
-+=09=09pr_warn("Failed to parse extended error attributes\n");
- =09=09return 0;
- =09}
-=20
- =09if (tb[NLMSGERR_ATTR_MSG])
- =09=09errmsg =3D (char *) libbpf_nla_data(tb[NLMSGERR_ATTR_MSG]);
-=20
--=09fprintf(stderr, "Kernel error message: %s\n", errmsg);
-+=09pr_warn("Kernel error message: %s\n", errmsg);
-=20
- =09return 0;
- }
+Toke H=C3=B8iland-J=C3=B8rgensen (6):
+      libbpf: Unpin auto-pinned maps if loading fails
+      selftests/bpf: Add tests for automatic map unpinning on load failure
+      libbpf: Propagate EPERM to caller on program load
+      libbpf: Use pr_warn() when printing netlink errors
+      libbpf: Add bpf_get_link_xdp_info() function to get more XDP informat=
+ion
+      libbpf: Add getter for program size
+
+
+ tools/lib/bpf/libbpf.c                           |   41 ++++++----
+ tools/lib/bpf/libbpf.h                           |   13 +++
+ tools/lib/bpf/libbpf.map                         |    2 +
+ tools/lib/bpf/netlink.c                          |   87 +++++++++++++++---=
+----
+ tools/lib/bpf/nlattr.c                           |   10 +--
+ tools/testing/selftests/bpf/prog_tests/pinning.c |   20 ++++-
+ tools/testing/selftests/bpf/progs/test_pinning.c |    2 -
+ 7 files changed, 120 insertions(+), 55 deletions(-)
 
