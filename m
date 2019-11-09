@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3556C43331
-	for <bpf@archiver.kernel.org>; Sat,  9 Nov 2019 20:37:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 758A9C17440
+	for <bpf@archiver.kernel.org>; Sat,  9 Nov 2019 20:37:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9DCDF21848
-	for <bpf@archiver.kernel.org>; Sat,  9 Nov 2019 20:37:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4602021882
+	for <bpf@archiver.kernel.org>; Sat,  9 Nov 2019 20:37:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZjEO+OBJ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hJQNHlI8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726530AbfKIUhe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 9 Nov 2019 15:37:34 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:26848 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726467AbfKIUhd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 9 Nov 2019 15:37:33 -0500
+        id S1726485AbfKIUhi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 9 Nov 2019 15:37:38 -0500
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:46409 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726565AbfKIUhf (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 9 Nov 2019 15:37:35 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1573331851;
+        s=mimecast20190719; t=1573331854;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=d0rOEoaUyqMmBq+Hxgb41cmJhdsjELtmnb5UaWYonJk=;
-        b=ZjEO+OBJodDEet2uTGQ+dbsGawBT4pcnN/zTX4kzemhZxwO6h496JrUX9VZEhQf9Yj4ybE
-        Bq3O6crdXDiFEnC7IKZe3V1CtitUl6Yswzk8pEp4yLkq2Wzi8jD016tmA4J9Xmmz2hD9vj
-        fgNggN3Gybu2bNBsPIb8947e4TPt3lM=
+        bh=YoGx4j4EJeY43EHTYAjERmWYAXK1PFM/qGcoII7ng1Y=;
+        b=hJQNHlI8KrOOh28S3z1PIrLb0bi9tAQjCvuyfeOsGxiK8YVeYSPW7WjQa9sPVC0sNlqQbK
+        WWJFdnDHUSWqIVaBPSoaaXR94GSCVzjNesYiudj6FfvcDXUM0gfJ/d8KdYIcpvI7g/YY2c
+        hvqY253UCfbqLg0MU83Y0C/GRLnT4Qw=
 Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
  [209.85.208.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-268-TqTNaKaVOfWFs9n-A0W-og-1; Sat, 09 Nov 2019 15:37:30 -0500
-Received: by mail-lj1-f199.google.com with SMTP id y7so1066037ljc.2
-        for <bpf@vger.kernel.org>; Sat, 09 Nov 2019 12:37:30 -0800 (PST)
+ us-mta-254-V-q2i02YPumLFFHEMViEbQ-1; Sat, 09 Nov 2019 15:37:32 -0500
+Received: by mail-lj1-f199.google.com with SMTP id 70so1915957ljf.13
+        for <bpf@vger.kernel.org>; Sat, 09 Nov 2019 12:37:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=62bBWH2vDaf8qBssfp0tI1eOslFQZrsVY2Oj+vZ2ygw=;
-        b=EYfRVDt2MtuARB0N65Z2J66hcFQbFss2Y0ozbC+yPfTtk5WWMTAM2b+dCTV66qYOQd
-         QTech+n+KMlirMz3TZo2OuqpDzLzVvuIyDn+Wn4axxgYRTBn5Bun1SkwLYm/ERKUdvgv
-         LaLq3DVJJ+BqycMFqq7vcl3J5ByIO0ymtvzPrff3tVkrHn12K6NpiQ9tnZTo/zMTJGEM
-         u8shTCTp3Gj2PzTWIgOi3T3NtqRKJZJ7bu135KPGEhOKFnG81qr5QXQVNXgz2JI2EcfJ
-         JX/SwJ0bY95C+J5/AkxN2IxwHN+4Wo25iNPzvuG9WUzEsDd8uph4EIUstsd8TMv6qkHH
-         l8Vw==
-X-Gm-Message-State: APjAAAWkZFkiNEMBx5Z9EsRXyf23lm+U1gC9TPYBQzewbzcTDC+UDkVz
-        YeBSBePM8i5DVjuoAQ/ElpK4EQ7YJNLBoXFGBR1J2A2qQ6jKxPGFIyY+zJBRkAzCpmA3Hv6CeQR
-        +NwjHFOYc99eJ
-X-Received: by 2002:a2e:9610:: with SMTP id v16mr10923762ljh.219.1573331848938;
-        Sat, 09 Nov 2019 12:37:28 -0800 (PST)
-X-Google-Smtp-Source: APXvYqxrUOaBgc2ywo1TZeACcKA2auheY6ip/NPyq6HcO2e5+YPyszOrcFo46dJu9FpjhVM8ZXcXAQ==
-X-Received: by 2002:a2e:9610:: with SMTP id v16mr10923743ljh.219.1573331848665;
-        Sat, 09 Nov 2019 12:37:28 -0800 (PST)
+        bh=4Cvrxa7IvHFSSb8C+MCZfXx4kZGTNEaBrWFzvNfBaO0=;
+        b=TEkSQ4Jmz7OiEFaUtSlEwnpeWMFeZrGYiN0YStoSkCLRKBWVbKfgFOBVly5GBdqWO/
+         PZRJPfL1ot8fQadAsDsjQQfDNcD5n2grk4dQfYxcFkyPUCA4ph20qZXxs+LoByi6KMrZ
+         fV+ubQfcKkpEACcuo0VMc7h3vZQgxbMhQ9vgkuphDV+c+xZ25oIUohXkw/CbVovZi23W
+         yQw4acBeNbzHkxesPK1V/gdVYm/AThvS20AhBw2+dFPJ/XoENJXKTSHXJrVew5XRBCc7
+         vZEUezroKvHJXUGee7oyaD7D9mzTFLoSVKfODW6IosD4DMMiZ5WWh1e3eBvTw6izU2Ve
+         eIpA==
+X-Gm-Message-State: APjAAAX7o9FJrDNhEUOCOSF1/W7jRLNA5D7qe8uVanSHG07pKCPKbY6c
+        C3PNPupaIpYLO5/vfLGEbhvrfmLB53tzJ0L86MHBrO2FkY/zWJknwRyCfK6B63/LwgtHMrqNwBD
+        aseTevVMD/TuR
+X-Received: by 2002:ac2:48af:: with SMTP id u15mr10474031lfg.151.1573331851389;
+        Sat, 09 Nov 2019 12:37:31 -0800 (PST)
+X-Google-Smtp-Source: APXvYqzOULTBv6amA+anb9FPQhw5rLs7XjtcGb4bnE6Nw6HDelmLIUZ3fzr0Ih2/4LaWZUtMKfaI3g==
+X-Received: by 2002:ac2:48af:: with SMTP id u15mr10474015lfg.151.1573331851131;
+        Sat, 09 Nov 2019 12:37:31 -0800 (PST)
 Received: from alrua-x1.borgediget.toke.dk ([2a00:7660:6da:443::2])
-        by smtp.gmail.com with ESMTPSA id t12sm4326307lfc.73.2019.11.09.12.37.28
+        by smtp.gmail.com with ESMTPSA id g13sm4856847lfj.91.2019.11.09.12.37.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Nov 2019 12:37:28 -0800 (PST)
+        Sat, 09 Nov 2019 12:37:30 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 5E0191800CE; Sat,  9 Nov 2019 21:37:27 +0100 (CET)
-Subject: [PATCH bpf-next v4 1/6] libbpf: Unpin auto-pinned maps if loading
- fails
+        id 860DF1800CE; Sat,  9 Nov 2019 21:37:29 +0100 (CET)
+Subject: [PATCH bpf-next v4 3/6] libbpf: Propagate EPERM to caller on program
+ load
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Daniel Borkmann <daniel@iogearbox.net>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -72,13 +72,13 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Sat, 09 Nov 2019 21:37:27 +0100
-Message-ID: <157333184731.88376.9992935027056165873.stgit@toke.dk>
+Date:   Sat, 09 Nov 2019 21:37:29 +0100
+Message-ID: <157333184946.88376.11768171652794234561.stgit@toke.dk>
 In-Reply-To: <157333184619.88376.13377736576285554047.stgit@toke.dk>
 References: <157333184619.88376.13377736576285554047.stgit@toke.dk>
 User-Agent: StGit/0.21
 MIME-Version: 1.0
-X-MC-Unique: TqTNaKaVOfWFs9n-A0W-og-1
+X-MC-Unique: V-q2i02YPumLFFHEMViEbQ-1
 X-Mimecast-Spam-Score: 0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
@@ -89,63 +89,73 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 
-Since the automatic map-pinning happens during load, it will leave pinned
-maps around if the load fails at a later stage. Fix this by unpinning any
-pinned maps on cleanup. To avoid unpinning pinned maps that were reused
-rather than newly pinned, add a new boolean property on struct bpf_map to
-keep track of whether that map was reused or not; and only unpin those maps
-that were not reused.
+When loading an eBPF program, libbpf overrides the return code for EPERM
+errors instead of returning it to the caller. This makes it hard to figure
+out what went wrong on load.
 
-Fixes: 57a00f41644f ("libbpf: Add auto-pinning of maps when loading BPF obj=
-ects")
+In particular, EPERM is returned when the system rlimit is too low to lock
+the memory required for the BPF program. Previously, this was somewhat
+obscured because the rlimit error would be hit on map creation (which does
+return it correctly). However, since maps can now be reused, object load
+can proceed all the way to loading programs without hitting the error;
+propagating it even in this case makes it possible for the caller to react
+appropriately (and, e.g., attempt to raise the rlimit before retrying).
+
 Acked-by: Andrii Nakryiko <andriin@fb.com>
 Acked-by: David S. Miller <davem@davemloft.net>
 Acked-by: Song Liu <songliubraving@fb.com>
 Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 ---
- tools/lib/bpf/libbpf.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ tools/lib/bpf/libbpf.c |   27 +++++++++++----------------
+ 1 file changed, 11 insertions(+), 16 deletions(-)
 
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index be4af95d5a2c..a70ade546a73 100644
+index a70ade546a73..094f5c64611a 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -229,6 +229,7 @@ struct bpf_map {
- =09enum libbpf_map_type libbpf_type;
- =09char *pin_path;
- =09bool pinned;
-+=09bool reused;
- };
+@@ -3721,7 +3721,7 @@ load_program(struct bpf_program *prog, struct bpf_ins=
+n *insns, int insns_cnt,
+ =09=09free(log_buf);
+ =09=09goto retry_load;
+ =09}
+-=09ret =3D -LIBBPF_ERRNO__LOAD;
++=09ret =3D -errno;
+ =09cp =3D libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
+ =09pr_warn("load bpf program failed: %s\n", cp);
 =20
- struct bpf_secdata {
-@@ -1995,6 +1996,7 @@ int bpf_map__reuse_fd(struct bpf_map *map, int fd)
- =09map->def.map_flags =3D info.map_flags;
- =09map->btf_key_type_id =3D info.btf_key_type_id;
- =09map->btf_value_type_id =3D info.btf_value_type_id;
-+=09map->reused =3D true;
+@@ -3734,23 +3734,18 @@ load_program(struct bpf_program *prog, struct bpf_i=
+nsn *insns, int insns_cnt,
+ =09=09pr_warn("Program too large (%zu insns), at most %d insns\n",
+ =09=09=09load_attr.insns_cnt, BPF_MAXINSNS);
+ =09=09ret =3D -LIBBPF_ERRNO__PROG2BIG;
+-=09} else {
++=09} else if (load_attr.prog_type !=3D BPF_PROG_TYPE_KPROBE) {
+ =09=09/* Wrong program type? */
+-=09=09if (load_attr.prog_type !=3D BPF_PROG_TYPE_KPROBE) {
+-=09=09=09int fd;
+-
+-=09=09=09load_attr.prog_type =3D BPF_PROG_TYPE_KPROBE;
+-=09=09=09load_attr.expected_attach_type =3D 0;
+-=09=09=09fd =3D bpf_load_program_xattr(&load_attr, NULL, 0);
+-=09=09=09if (fd >=3D 0) {
+-=09=09=09=09close(fd);
+-=09=09=09=09ret =3D -LIBBPF_ERRNO__PROGTYPE;
+-=09=09=09=09goto out;
+-=09=09=09}
+-=09=09}
++=09=09int fd;
 =20
- =09return 0;
+-=09=09if (log_buf)
+-=09=09=09ret =3D -LIBBPF_ERRNO__KVER;
++=09=09load_attr.prog_type =3D BPF_PROG_TYPE_KPROBE;
++=09=09load_attr.expected_attach_type =3D 0;
++=09=09fd =3D bpf_load_program_xattr(&load_attr, NULL, 0);
++=09=09if (fd >=3D 0) {
++=09=09=09close(fd);
++=09=09=09ret =3D -LIBBPF_ERRNO__PROGTYPE;
++=09=09=09goto out;
++=09=09}
+ =09}
 =20
-@@ -4026,7 +4028,7 @@ int bpf_object__unload(struct bpf_object *obj)
- int bpf_object__load_xattr(struct bpf_object_load_attr *attr)
- {
- =09struct bpf_object *obj;
--=09int err;
-+=09int err, i;
-=20
- =09if (!attr)
- =09=09return -EINVAL;
-@@ -4047,6 +4049,11 @@ int bpf_object__load_xattr(struct bpf_object_load_at=
-tr *attr)
-=20
- =09return 0;
  out:
-+=09/* unpin any maps that were auto-pinned during load */
-+=09for (i =3D 0; i < obj->nr_maps; i++)
-+=09=09if (obj->maps[i].pinned && !obj->maps[i].reused)
-+=09=09=09bpf_map__unpin(&obj->maps[i], NULL);
-+
- =09bpf_object__unload(obj);
- =09pr_warn("failed to load object '%s'\n", obj->path);
- =09return err;
 
