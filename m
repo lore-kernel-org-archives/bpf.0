@@ -4,53 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97460C17440
-	for <bpf@archiver.kernel.org>; Sun, 10 Nov 2019 02:45:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1B7CC43331
+	for <bpf@archiver.kernel.org>; Sun, 10 Nov 2019 03:04:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6047F222D1
-	for <bpf@archiver.kernel.org>; Sun, 10 Nov 2019 02:45:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7145E208C3
+	for <bpf@archiver.kernel.org>; Sun, 10 Nov 2019 03:04:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573353951;
-	bh=VD4umiNxrZippj0WiJGqjuU8zBL40Cfzqdcof7Lh3Rs=;
+	s=default; t=1573355052;
+	bh=46aynxYa1blruQAizaAJje0TP9KsL3W8yOgn6Hl7da0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=afcTZlbQrAW/Uq0U/omNbvGnBznSREz8wAAzo/5S8mgQABeOTOQPmC9WnVO8bWreb
-	 OHtbfue1oGAbR0Ad6/qG0wjLDge2qBUmfj/tkPsIIgrcZ6tbBIiuxU2CikwuvONU4s
-	 dNaFSX8Pe2vtDu2zFeOOGreTVSawa/zfX7IOa/Sg=
+	b=h4BsIkoyRD0ewDkV1RtTiUh0B9vXbW4Ikv+651FtveTN3ZJdIa11XIgHF62uM8gyn
+	 Ws9pLT0ryFobUIKuR6WrEro2KuRwu0TePGvZ42HHlwiEJ4dVU3EK8aWf0YjCdG4sOE
+	 UOup0kFnxM2lLyTTmPVzhLwdoV7yvpXdV/WiAiyE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727822AbfKJCpv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 9 Nov 2019 21:45:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48138 "EHLO mail.kernel.org"
+        id S1727247AbfKJDEE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 9 Nov 2019 22:04:04 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51758 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727934AbfKJCpt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 9 Nov 2019 21:45:49 -0500
+        id S1729220AbfKJCrA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 9 Nov 2019 21:47:00 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EC166222BE;
-        Sun, 10 Nov 2019 02:45:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2255D2085B;
+        Sun, 10 Nov 2019 02:46:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573353948;
-        bh=VD4umiNxrZippj0WiJGqjuU8zBL40Cfzqdcof7Lh3Rs=;
+        s=default; t=1573354019;
+        bh=46aynxYa1blruQAizaAJje0TP9KsL3W8yOgn6Hl7da0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cS5je2qkyI9WiuHiYbJhNHaaVJR8FEAD2OS11yROYcuq8OVcKKD2UrEvqUd8RmMIJ
-         +7wX8FKHO4MDD/JvIuOAi/a5MLQMD7sf041WwDGWDE9m4CBI0fvWCQTRbkmfdNdRt8
-         dJqzJQH9InXysFaagemITp6fXFw8MK8dZaL7pt14=
+        b=IM8kMdVN/A2E2G7ocmmJSEu4ac+QlZ6Bd4lrvQ0ep5qyP+fObnVrVBfwmzj18obpu
+         VNxkrjDtkcWzcwnDrBQWzHaE7zysedzGKq2Uc6Rrrju1bRuXzku0M8UazSnEo9XAvN
+         TkfZKUdOHEbRAo0GLu68VubUIE4+d6JhANYmeoNU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yonghong Song <yhs@fb.com>, Daniel Borkmann <daniel@iogearbox.net>,
+Cc:     Prashant Bhole <bhole_prashant_q7@lab.ntt.co.jp>,
+        Song Liu <songliubraving@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 006/109] samples/bpf: fix a compilation failure
-Date:   Sat,  9 Nov 2019 21:43:58 -0500
-Message-Id: <20191110024541.31567-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 042/109] samples/bpf: fix compilation failure
+Date:   Sat,  9 Nov 2019 21:44:34 -0500
+Message-Id: <20191110024541.31567-42-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191110024541.31567-1-sashal@kernel.org>
 References: <20191110024541.31567-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -59,48 +60,133 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Yonghong Song <yhs@fb.com>
+From: Prashant Bhole <bhole_prashant_q7@lab.ntt.co.jp>
 
-[ Upstream commit 534e0e52bc23de588e81b5a6f75e10c8c4b189fc ]
+[ Upstream commit 32c009798385ce21080beaa87a9b95faad3acd1e ]
 
-samples/bpf build failed with the following errors:
+following commit:
+commit d58e468b1112 ("flow_dissector: implements flow dissector BPF hook")
+added struct bpf_flow_keys which conflicts with the struct with
+same name in sockex2_kern.c and sockex3_kern.c
 
-  $ make samples/bpf/
-  ...
-  HOSTCC  samples/bpf/sockex3_user.o
-  /data/users/yhs/work/net-next/samples/bpf/sockex3_user.c:16:8: error: redefinition of ‘struct bpf_flow_keys’
-   struct bpf_flow_keys {
-          ^
-  In file included from /data/users/yhs/work/net-next/samples/bpf/sockex3_user.c:4:0:
-  ./usr/include/linux/bpf.h:2338:9: note: originally defined here
-    struct bpf_flow_keys *flow_keys;
-           ^
-  make[3]: *** [samples/bpf/sockex3_user.o] Error 1
+similar to commit:
+commit 534e0e52bc23 ("samples/bpf: fix a compilation failure")
+we tried the rename it "flow_keys" but it also conflicted with struct
+having same name in include/net/flow_dissector.h. Hence renaming the
+struct to "flow_key_record". Also, this commit doesn't fix the
+compilation error completely because the similar struct is present in
+sockex3_kern.c. Hence renaming it in both files sockex3_user.c and
+sockex3_kern.c
 
-Commit d58e468b1112d ("flow_dissector: implements flow dissector BPF hook")
-introduced struct bpf_flow_keys in include/uapi/linux/bpf.h and hence
-caused the naming conflict with samples/bpf/sockex3_user.c.
-
-The fix is to rename struct bpf_flow_keys in samples/bpf/sockex3_user.c
-to flow_keys to avoid the conflict.
-
-Signed-off-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Prashant Bhole <bhole_prashant_q7@lab.ntt.co.jp>
+Acked-by: Song Liu <songliubraving@fb.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- samples/bpf/sockex3_user.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ samples/bpf/sockex2_kern.c | 11 ++++++-----
+ samples/bpf/sockex3_kern.c |  8 ++++----
+ samples/bpf/sockex3_user.c |  4 ++--
+ 3 files changed, 12 insertions(+), 11 deletions(-)
 
+diff --git a/samples/bpf/sockex2_kern.c b/samples/bpf/sockex2_kern.c
+index f58acfc925561..f2f9dbc021b0d 100644
+--- a/samples/bpf/sockex2_kern.c
++++ b/samples/bpf/sockex2_kern.c
+@@ -14,7 +14,7 @@ struct vlan_hdr {
+ 	__be16 h_vlan_encapsulated_proto;
+ };
+ 
+-struct bpf_flow_keys {
++struct flow_key_record {
+ 	__be32 src;
+ 	__be32 dst;
+ 	union {
+@@ -59,7 +59,7 @@ static inline __u32 ipv6_addr_hash(struct __sk_buff *ctx, __u64 off)
+ }
+ 
+ static inline __u64 parse_ip(struct __sk_buff *skb, __u64 nhoff, __u64 *ip_proto,
+-			     struct bpf_flow_keys *flow)
++			     struct flow_key_record *flow)
+ {
+ 	__u64 verlen;
+ 
+@@ -83,7 +83,7 @@ static inline __u64 parse_ip(struct __sk_buff *skb, __u64 nhoff, __u64 *ip_proto
+ }
+ 
+ static inline __u64 parse_ipv6(struct __sk_buff *skb, __u64 nhoff, __u64 *ip_proto,
+-			       struct bpf_flow_keys *flow)
++			       struct flow_key_record *flow)
+ {
+ 	*ip_proto = load_byte(skb,
+ 			      nhoff + offsetof(struct ipv6hdr, nexthdr));
+@@ -96,7 +96,8 @@ static inline __u64 parse_ipv6(struct __sk_buff *skb, __u64 nhoff, __u64 *ip_pro
+ 	return nhoff;
+ }
+ 
+-static inline bool flow_dissector(struct __sk_buff *skb, struct bpf_flow_keys *flow)
++static inline bool flow_dissector(struct __sk_buff *skb,
++				  struct flow_key_record *flow)
+ {
+ 	__u64 nhoff = ETH_HLEN;
+ 	__u64 ip_proto;
+@@ -198,7 +199,7 @@ struct bpf_map_def SEC("maps") hash_map = {
+ SEC("socket2")
+ int bpf_prog2(struct __sk_buff *skb)
+ {
+-	struct bpf_flow_keys flow = {};
++	struct flow_key_record flow = {};
+ 	struct pair *value;
+ 	u32 key;
+ 
+diff --git a/samples/bpf/sockex3_kern.c b/samples/bpf/sockex3_kern.c
+index 95907f8d2b17d..c527b57d3ec8a 100644
+--- a/samples/bpf/sockex3_kern.c
++++ b/samples/bpf/sockex3_kern.c
+@@ -61,7 +61,7 @@ struct vlan_hdr {
+ 	__be16 h_vlan_encapsulated_proto;
+ };
+ 
+-struct bpf_flow_keys {
++struct flow_key_record {
+ 	__be32 src;
+ 	__be32 dst;
+ 	union {
+@@ -88,7 +88,7 @@ static inline __u32 ipv6_addr_hash(struct __sk_buff *ctx, __u64 off)
+ }
+ 
+ struct globals {
+-	struct bpf_flow_keys flow;
++	struct flow_key_record flow;
+ };
+ 
+ struct bpf_map_def SEC("maps") percpu_map = {
+@@ -114,14 +114,14 @@ struct pair {
+ 
+ struct bpf_map_def SEC("maps") hash_map = {
+ 	.type = BPF_MAP_TYPE_HASH,
+-	.key_size = sizeof(struct bpf_flow_keys),
++	.key_size = sizeof(struct flow_key_record),
+ 	.value_size = sizeof(struct pair),
+ 	.max_entries = 1024,
+ };
+ 
+ static void update_stats(struct __sk_buff *skb, struct globals *g)
+ {
+-	struct bpf_flow_keys key = g->flow;
++	struct flow_key_record key = g->flow;
+ 	struct pair *value;
+ 
+ 	value = bpf_map_lookup_elem(&hash_map, &key);
 diff --git a/samples/bpf/sockex3_user.c b/samples/bpf/sockex3_user.c
-index 495ee02e2fb7c..4d75674bee35e 100644
+index 4d75674bee35e..741b899b693f3 100644
 --- a/samples/bpf/sockex3_user.c
 +++ b/samples/bpf/sockex3_user.c
 @@ -13,7 +13,7 @@
  #define PARSE_IP_PROG_FD (prog_fd[0])
  #define PROG_ARRAY_FD (map_fd[0])
  
--struct bpf_flow_keys {
-+struct flow_keys {
+-struct flow_keys {
++struct flow_key_record {
  	__be32 src;
  	__be32 dst;
  	union {
@@ -108,8 +194,8 @@ index 495ee02e2fb7c..4d75674bee35e 100644
  	(void) f;
  
  	for (i = 0; i < 5; i++) {
--		struct bpf_flow_keys key = {}, next_key;
-+		struct flow_keys key = {}, next_key;
+-		struct flow_keys key = {}, next_key;
++		struct flow_key_record key = {}, next_key;
  		struct pair value;
  
  		sleep(1);
