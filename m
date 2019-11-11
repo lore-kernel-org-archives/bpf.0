@@ -6,65 +6,66 @@ X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96C63C17441
-	for <bpf@archiver.kernel.org>; Mon, 11 Nov 2019 18:41:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62EC5C17445
+	for <bpf@archiver.kernel.org>; Mon, 11 Nov 2019 19:06:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6F87721655
-	for <bpf@archiver.kernel.org>; Mon, 11 Nov 2019 18:41:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3556621872
+	for <bpf@archiver.kernel.org>; Mon, 11 Nov 2019 19:06:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="jsmHBM1k"
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="Wz88+p3X"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728850AbfKKSlB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 Nov 2019 13:41:01 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:37196 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726988AbfKKSlA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 11 Nov 2019 13:41:00 -0500
-Received: by mail-pg1-f196.google.com with SMTP id z24so9978455pgu.4
-        for <bpf@vger.kernel.org>; Mon, 11 Nov 2019 10:41:00 -0800 (PST)
+        id S1727741AbfKKSjX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 Nov 2019 13:39:23 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:42375 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728645AbfKKSjU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 11 Nov 2019 13:39:20 -0500
+Received: by mail-pg1-f193.google.com with SMTP id q17so9951350pgt.9
+        for <bpf@vger.kernel.org>; Mon, 11 Nov 2019 10:39:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=date:from:to:cc:subject:message-id:in-reply-to:references
          :organization:mime-version:content-transfer-encoding;
-        bh=5e0w3CQksxVMU/lpN+cxiiEhTWlz5Cq8XlCAAEMfzs0=;
-        b=jsmHBM1kJhwgwx4Wg9T663bZvEh4kV1pO8gOynTMTjaA7lsSEKYPmM64ghgH1rTNTU
-         +6Z3DczHUjRPP6rzAwysi6eDjHin2m6Mjlgylu/RhpAVtsqnA2N39u5uLFrDp4ZQ0jlA
-         0RvQ4JqvZGUGtPTxBgAkqsihip17fGun9vUcaozTmioiKJELuOLIA/VP5X4VUCRgc1aM
-         SMIsfD+eaIpItc4Dkx6jK6ekf3GTNp5XwsD+eU/3eFQewQLNHrQEvpahexBs92RzpqV4
-         JBVzWXbRz85oBX5GrEHxKriP+XTU/gPWVcirRm5wcADqV52RpACvOcXprkTWHlpXJoh2
-         SGUg==
+        bh=0Mu4udifMW2tdEjG6UYU2zT+RxK9F/wgdArkhXdHLKk=;
+        b=Wz88+p3XFfPbBq2jkfD75pN1azkIyYcRgohl37Bo8NUOwmW5K5ilJS+O8lA0ThFV48
+         Nk+WAltH90XO24/CKTHW5Rxm/L5euGHmIVXSp3sbw1tFboUtCdwUL962rIy9lJE+2qci
+         atdgIpcx6EONK9ZUWm40teQepN/o082ib5f6dkIuqdsE4s2Ri3DE2aXY9k9shs7SxkgW
+         B7lGDS2dxHmPVv7YyqcCAaUJ4QRoX3AFxGVoysOdaszyfmpFU7pz+G9IloDNx6JmcqfP
+         G4HArcPt7Ss4EYPoyla8yw0GVe5VQlFFuOzA9ObmlmbdDzt0ZXJ2NgoqHWR/0AdOO3Sc
+         xtjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
          :references:organization:mime-version:content-transfer-encoding;
-        bh=5e0w3CQksxVMU/lpN+cxiiEhTWlz5Cq8XlCAAEMfzs0=;
-        b=GfY76z/apmJib1ULmLq49RJVqS+BY8K/3teqp0PrnNP8snN7v9FzBgQLd7BygLkz6i
-         e2jfBzPVBIukpS4XOW2ggUdkhilI1NqiVedzdSoBxJih9t7DVvqoRahjaLNrdFp/RjC4
-         8K+B2eapSL6J+8/weqszuoXzqeyGb9cdz4oqif+5prHsWH+JOGi9GMJImvjLaO+JUajy
-         VtessqH9Wet/pbtKHMI1Dglylto6B6GFD+zNJh2KGRpMWjr8iBlwKVXZ2LtO5QO1MN5N
-         ayAMBpf2Ep+0UqwVPKumV2LlcbhSeJSgti1G6UllGsWn7CHc5Jj9IciZzTXWhORGCHvw
-         9Vxw==
-X-Gm-Message-State: APjAAAX3ODttyO+YHrs5Xf1Wr77JmfG+y4edK4arTX/apeq5YRN1Qj+s
-        IqmXB36QH7zLLOaAOD6J5KrFZgelBaY=
-X-Google-Smtp-Source: APXvYqzEVIpxxwFp43Qk9kb+rMQROh8++y6Dlv3qoOGQ/XhcfQv5UkkhbMLGtlmEtDj0J+deE/EVJg==
-X-Received: by 2002:aa7:870c:: with SMTP id b12mr31547925pfo.30.1573497659902;
-        Mon, 11 Nov 2019 10:40:59 -0800 (PST)
+        bh=0Mu4udifMW2tdEjG6UYU2zT+RxK9F/wgdArkhXdHLKk=;
+        b=pp375aCtTQ96ROtdkkKQ72Tut5Qgj5F8ZO4IJ89LsglEQUrIBFI6qyigjpHkaiR5W0
+         3MX/Nq0QlHoZTTg4lrIDC2bE1HTf0nYVQnC2Hu0yRa0IwKluD7BbVP6MigU5J2krUAtW
+         +bJpLJyIDK27imgNpQnk2sltWaLqV+2cIzH+GMdk5nUQMGgjorBxFd2jqpfsJVPqhZSf
+         Dj1apZ6SZcCsH95Gw31lG+E1stL55W9RBajyCrwXTdqqFF7597vLJvlWw3DgTJ3RR9k4
+         Bhzr858WZ28Y0X6f2Jqqt0sKBT0F4sxpSVftcO27HfcPZBEktxbZF8iW8chDNSQeLHO3
+         vN5Q==
+X-Gm-Message-State: APjAAAWp8+2lacOcfCKWjLdThv/b33F6cKTodI9Vwza8fb0EOsl5SykY
+        2wAYzEyQ2YcU95AURRsK3zxZpQ==
+X-Google-Smtp-Source: APXvYqyNKEVZUi7PkBOrunPMI8En5eOdd1G4iqdJWGFXePrC4G6pZaQFPJ7LpNqvBvf7JnFw2pn6JA==
+X-Received: by 2002:a65:620d:: with SMTP id d13mr31242730pgv.64.1573497559352;
+        Mon, 11 Nov 2019 10:39:19 -0800 (PST)
 Received: from cakuba (c-73-202-202-92.hsd1.ca.comcast.net. [73.202.202.92])
-        by smtp.gmail.com with ESMTPSA id c16sm14673943pfo.34.2019.11.11.10.40.59
+        by smtp.gmail.com with ESMTPSA id h3sm1671026pgr.81.2019.11.11.10.39.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2019 10:40:59 -0800 (PST)
-Date:   Mon, 11 Nov 2019 10:40:57 -0800
+        Mon, 11 Nov 2019 10:39:19 -0800 (PST)
+Date:   Mon, 11 Nov 2019 10:39:16 -0800
 From:   Jakub Kicinski <jakub.kicinski@netronome.com>
 To:     Andrii Nakryiko <andriin@fb.com>
 Cc:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>, <andrii.nakryiko@gmail.com>,
-        <kernel-team@fb.com>
-Subject: Re: [PATCH v2 bpf-next 2/3] libbpf: make global data internal
- arrays mmap()-able, if possible
-Message-ID: <20191111104057.0a9dfd84@cakuba>
-In-Reply-To: <20191109080633.2855561-3-andriin@fb.com>
+        <kernel-team@fb.com>, Rik van Riel <riel@surriel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Subject: Re: [PATCH v2 bpf-next 1/3] bpf: add mmap() support for
+ BPF_MAP_TYPE_ARRAY
+Message-ID: <20191111103916.0af3ac5b@cakuba>
+In-Reply-To: <20191109080633.2855561-2-andriin@fb.com>
 References: <20191109080633.2855561-1-andriin@fb.com>
-        <20191109080633.2855561-3-andriin@fb.com>
+        <20191109080633.2855561-2-andriin@fb.com>
 Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -74,32 +75,15 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, 9 Nov 2019 00:06:31 -0800, Andrii Nakryiko wrote:
-> +static int bpf_object__probe_array_mmap(struct bpf_object *obj)
-> +{
-> +	struct bpf_create_map_attr attr = {
-> +		.map_type = BPF_MAP_TYPE_ARRAY,
-> +		.map_flags = BPF_F_MMAPABLE,
-> +		.key_size = sizeof(int),
-> +		.value_size = sizeof(int),
-> +		.max_entries = 1,
-> +	};
-> +	int fd = bpf_create_map_xattr(&attr);
-> +
-> +	if (fd >= 0) {
+On Sat, 9 Nov 2019 00:06:30 -0800, Andrii Nakryiko wrote:
+> @@ -74,7 +78,7 @@ static struct bpf_map *array_map_alloc(union bpf_attr *attr)
+>  	int ret, numa_node = bpf_map_attr_numa_node(attr);
+>  	u32 elem_size, index_mask, max_entries;
+>  	bool unpriv = !capable(CAP_SYS_ADMIN);
+> -	u64 cost, array_size, mask64;
+> +	u64 cost, array_size, data_size, mask64;
+>  	struct bpf_map_memory mem;
+>  	struct bpf_array *array;
+>  
 
-The point of the empty line between variable declarations and code in
-the Linux coding style is to provide a visual separation between
-variables and code.
-
-If you call a complex function in variable init and then check for
-errors in the code that really breaks that principle.
-
-> +		obj->caps.array_mmap = 1;
-> +		close(fd);
-> +		return 1;
-> +	}
-> +
-> +	return 0;
-> +}
-
+Please don't break reverse xmas tree where it exists.
