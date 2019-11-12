@@ -2,130 +2,122 @@ Return-Path: <SRS0=YQHJ=ZE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B00E6C43331
-	for <bpf@archiver.kernel.org>; Tue, 12 Nov 2019 11:20:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66432C17448
+	for <bpf@archiver.kernel.org>; Tue, 12 Nov 2019 11:45:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 92BAB2246F
-	for <bpf@archiver.kernel.org>; Tue, 12 Nov 2019 11:20:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3E01E2084E
+	for <bpf@archiver.kernel.org>; Tue, 12 Nov 2019 11:45:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JKKSqD83"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727524AbfKLLS2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Nov 2019 06:18:28 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:33927 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727507AbfKLLS2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Nov 2019 06:18:28 -0500
-Received: from [5.158.153.53] (helo=tip-bot2.lab.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tip-bot2@linutronix.de>)
-        id 1iUUBK-0000Ji-Kl; Tue, 12 Nov 2019 12:17:58 +0100
-Received: from [127.0.1.1] (localhost [IPv6:::1])
-        by tip-bot2.lab.linutronix.de (Postfix) with ESMTP id BAEAF1C04C9;
-        Tue, 12 Nov 2019 12:17:56 +0100 (CET)
-Date:   Tue, 12 Nov 2019 11:17:56 -0000
-From:   "tip-bot2 for Ian Rogers" <tip-bot2@linutronix.de>
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf parse: If pmu configuration fails free terms
-Cc:     Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        John Garry <john.garry@huawei.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Song Liu <songliubraving@fb.com>,
-        Stephane Eranian <eranian@google.com>,
-        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
-        clang-built-linux@googlegroups.com, netdev@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20191030223448.12930-9-irogers@google.com>
-References: <20191030223448.12930-9-irogers@google.com>
+        id S1726376AbfKLLps (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Nov 2019 06:45:48 -0500
+Received: from mail-yb1-f194.google.com ([209.85.219.194]:44357 "EHLO
+        mail-yb1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726008AbfKLLpr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Nov 2019 06:45:47 -0500
+Received: by mail-yb1-f194.google.com with SMTP id g38so7449303ybe.11;
+        Tue, 12 Nov 2019 03:45:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Zze64Tjkpcna3jw2z4tcVgFoaR/PTDyV/TrWdLqNFp0=;
+        b=JKKSqD83FUdkdnT5Dki0Sba5fcso+rZpA8tmSf7pku6J303dvhwHIXtIUj/RooAUMl
+         1UAeFFl7S7H+HB+dQJZatpl7pY/rnJoQ89pgbplkDLAAqrLxNJhRDiobQ//m9KR9Q/YP
+         fu/D+evgqhdbB9TkyMPQakIkZsh8USkuXXt2cJb/y17dmEMXgGFxZcL7GAgpjvpZyyHo
+         MkHAXgBFwhBTUIl53iHIzbRx/5QgT7wam+tOrYa00PG4o0cgr8kUfcuV8HgzooorJeEP
+         0YZJr+3NEEiLjQ8s6xm7zO6ysz6xvC3OE7mTcFxmeZXspaW9VWFRETE3Y1bQURcAfsRd
+         1QqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Zze64Tjkpcna3jw2z4tcVgFoaR/PTDyV/TrWdLqNFp0=;
+        b=FxX0LSJEwlCbIy3dCtdS99sheOrsq/bZ8jidYUm3RyzicRwFwg9f26hKW+Fu9QxVvY
+         6HnWe+jecoc32cUBJnkmNpXEjaqof2XRLSkTaFYs0tNRlBRsq595wRE0tOlhYR/4QGTf
+         sTzX+ecMMQK0+83yXBx+x0BbbX1AunsG0oUbept+1Xsf5lZoGrvuC22TVZrHlU+yob02
+         J1NRBPB5HhJ4UFQpy4qQ6kVEp3FLdkjlfYKKb4mHRx63kp7SEVVT4aX2c8cDv5k/Mes9
+         URD8WXbxpoDXtC1OZBm+LWu0vMgQdHujettpArXK32Sz1UmhdmykV34GwW/HADaXqTjF
+         S8+Q==
+X-Gm-Message-State: APjAAAVp32PjQoyroGz+qJ+vVnhshdzqiJO8D30C9jZ6GbB3ycpRAr5w
+        4La2qXhZ7knI7jPgLsp+Sx+bS25xM64tAVJUDQ==
+X-Google-Smtp-Source: APXvYqzXVvPlqePTpm4+7jSq28ds4cuofCbIayRQNE4ktjkhekkJ4Fuvxn0KKSAlL8HCnHnSLOxNSFjTPAMQC6PuG7w=
+X-Received: by 2002:a25:c503:: with SMTP id v3mr11928306ybe.333.1573559146429;
+ Tue, 12 Nov 2019 03:45:46 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <157355747641.29376.8277642487437732660.tip-bot2@tip-bot2>
-X-Mailer: tip-git-log-daemon
-Robot-ID: <tip-bot2.linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+References: <20191110081901.20851-1-danieltimlee@gmail.com> <CAEf4BzYRqeg5vFm+Ac2TVVeAw=N+qhosy5qF9Dr_ka3hn8DsPg@mail.gmail.com>
+In-Reply-To: <CAEf4BzYRqeg5vFm+Ac2TVVeAw=N+qhosy5qF9Dr_ka3hn8DsPg@mail.gmail.com>
+From:   "Daniel T. Lee" <danieltimlee@gmail.com>
+Date:   Tue, 12 Nov 2019 20:45:31 +0900
+Message-ID: <CAEKGpzhEuNfZq+XGfTau4uaHhijtx316sLQmQWm7-P_H=iZ=bA@mail.gmail.com>
+Subject: Re: [PATCH] samples: bpf: fix outdated README build command
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The following commit has been merged into the perf/core branch of tip:
+On Mon, Nov 11, 2019 at 3:09 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Sun, Nov 10, 2019 at 12:19 AM Daniel T. Lee <danieltimlee@gmail.com> wrote:
+> >
+> > Currently, building the bpf samples under samples/bpf directory isn't
+> > working. Running make from the directory 'samples/bpf' will just shows
+> > following result without compiling any samples.
+> >
+>
+> Do you mind trying to see if it's possible to detect that plain `make`
+> is being run from samples/bpf subdirectory, and if that's the case,
+> just running something like `make M=samples/bpf -C ../../`? If that's
+> not too hard, it would be a nice touch to still have it working old
+> (and intuitive) way, IMO.
+>
 
-Commit-ID:     38f2c4226e6bc3e8c41c318242821ba5dc825aba
-Gitweb:        https://git.kernel.org/tip/38f2c4226e6bc3e8c41c318242821ba5dc825aba
-Author:        Ian Rogers <irogers@google.com>
-AuthorDate:    Wed, 30 Oct 2019 15:34:46 -07:00
-Committer:     Arnaldo Carvalho de Melo <acme@redhat.com>
-CommitterDate: Thu, 07 Nov 2019 08:30:18 -03:00
+Thanks for the review!
+And seems it works with `make M=samples/bpf -C ../../` and it's better
+solution!
 
-perf parse: If pmu configuration fails free terms
+It's just the issue has been solved as Daniel Borkmann mentioned.
+Anyway, thanks for the review!
 
-Avoid a memory leak when the configuration fails.
+Best,
+Daniel
 
-Signed-off-by: Ian Rogers <irogers@google.com>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Andi Kleen <ak@linux.intel.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Jin Yao <yao.jin@linux.intel.com>
-Cc: John Garry <john.garry@huawei.com>
-Cc: Kan Liang <kan.liang@linux.intel.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Martin KaFai Lau <kafai@fb.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: Stephane Eranian <eranian@google.com>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: bpf@vger.kernel.org
-Cc: clang-built-linux@googlegroups.com
-Cc: netdev@vger.kernel.org
-Link: http://lore.kernel.org/lkml/20191030223448.12930-9-irogers@google.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/perf/util/parse-events.c |  9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index 578288c..a0a80f4 100644
---- a/tools/perf/util/parse-events.c
-+++ b/tools/perf/util/parse-events.c
-@@ -1388,8 +1388,15 @@ int parse_events_add_pmu(struct parse_events_state *parse_state,
- 	if (get_config_terms(head_config, &config_terms))
- 		return -ENOMEM;
- 
--	if (perf_pmu__config(pmu, &attr, head_config, parse_state->error))
-+	if (perf_pmu__config(pmu, &attr, head_config, parse_state->error)) {
-+		struct perf_evsel_config_term *pos, *tmp;
-+
-+		list_for_each_entry_safe(pos, tmp, &config_terms, list) {
-+			list_del_init(&pos->list);
-+			free(pos);
-+		}
- 		return -EINVAL;
-+	}
- 
- 	evsel = __add_event(list, &parse_state->idx, &attr,
- 			    get_config_name(head_config), pmu,
+>
+> >  $ make
+> >  make -C ../../ /git/linux/samples/bpf/ BPF_SAMPLES_PATH=/git/linux/samples/bpf
+> >  make[1]: Entering directory '/git/linux'
+> >    CALL    scripts/checksyscalls.sh
+> >    CALL    scripts/atomic/check-atomics.sh
+> >    DESCEND  objtool
+> >  make[1]: Leaving directory '/git/linux'
+> >
+> > Due to commit 394053f4a4b3 ("kbuild: make single targets work more
+> > correctly"), building samples/bpf without support of samples/Makefile
+> > is unavailable. Instead, building the samples with 'make M=samples/bpf'
+> > from the root source directory will solve this issue.[1]
+> >
+> > This commit fixes the outdated README build command with samples/bpf.
+> >
+> > [0]: https://patchwork.kernel.org/patch/11168393/
+> >
+> > Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
+> > ---
+> >  samples/bpf/README.rst | 19 +++++++++----------
+> >  1 file changed, 9 insertions(+), 10 deletions(-)
+> >
+>
+> [...]
