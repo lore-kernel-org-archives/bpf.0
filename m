@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-11.8 required=3.0
 	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3B07C43331
-	for <bpf@archiver.kernel.org>; Tue, 12 Nov 2019 11:19:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14339C43331
+	for <bpf@archiver.kernel.org>; Tue, 12 Nov 2019 11:19:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C35D622469
-	for <bpf@archiver.kernel.org>; Tue, 12 Nov 2019 11:19:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E3A562248A
+	for <bpf@archiver.kernel.org>; Tue, 12 Nov 2019 11:19:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727720AbfKLLTF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Nov 2019 06:19:05 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:34111 "EHLO
+        id S1727743AbfKLLTO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Nov 2019 06:19:14 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:33994 "EHLO
         Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727563AbfKLLTE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Nov 2019 06:19:04 -0500
+        with ESMTP id S1727543AbfKLLSc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Nov 2019 06:18:32 -0500
 Received: from [5.158.153.53] (helo=tip-bot2.lab.linutronix.de)
         by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
         (Exim 4.80)
         (envelope-from <tip-bot2@linutronix.de>)
-        id 1iUUBl-0000go-RY; Tue, 12 Nov 2019 12:18:26 +0100
+        id 1iUUBO-0000LL-Pi; Tue, 12 Nov 2019 12:18:02 +0100
 Received: from [127.0.1.1] (localhost [IPv6:::1])
-        by tip-bot2.lab.linutronix.de (Postfix) with ESMTP id F08A11C0357;
-        Tue, 12 Nov 2019 12:18:14 +0100 (CET)
-Date:   Tue, 12 Nov 2019 11:18:14 -0000
+        by tip-bot2.lab.linutronix.de (Postfix) with ESMTP id AC2901C0483;
+        Tue, 12 Nov 2019 12:17:57 +0100 (CET)
+Date:   Tue, 12 Nov 2019 11:17:57 -0000
 From:   "tip-bot2 for Ian Rogers" <tip-bot2@linutronix.de>
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf tools: Avoid a malloc() for array events
+Subject: [tip: perf/core] perf parse: Add destructors for parse event terms
 Cc:     Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
@@ -52,10 +52,10 @@ Cc:     Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
         Arnaldo Carvalho de Melo <acme@redhat.com>,
         Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20191023005337.196160-6-irogers@google.com>
-References: <20191023005337.196160-6-irogers@google.com>
+In-Reply-To: <20191030223448.12930-7-irogers@google.com>
+References: <20191030223448.12930-7-irogers@google.com>
 MIME-Version: 1.0
-Message-ID: <157355749440.29376.10975700265435116588.tip-bot2@tip-bot2>
+Message-ID: <157355747733.29376.2202395677486498086.tip-bot2@tip-bot2>
 X-Mailer: tip-git-log-daemon
 Robot-ID: <tip-bot2.linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
@@ -71,17 +71,26 @@ X-Mailing-List: bpf@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     826100a7ce9a659b42140710ebe789d710799048
-Gitweb:        https://git.kernel.org/tip/826100a7ce9a659b42140710ebe789d710799048
+Commit-ID:     f2a8ecd8b1f4df096d9597388eda1c994c72d373
+Gitweb:        https://git.kernel.org/tip/f2a8ecd8b1f4df096d9597388eda1c994c72d373
 Author:        Ian Rogers <irogers@google.com>
-AuthorDate:    Tue, 22 Oct 2019 17:53:33 -07:00
+AuthorDate:    Wed, 30 Oct 2019 15:34:44 -07:00
 Committer:     Arnaldo Carvalho de Melo <acme@redhat.com>
-CommitterDate: Wed, 06 Nov 2019 15:43:05 -03:00
+CommitterDate: Thu, 07 Nov 2019 08:29:43 -03:00
 
-perf tools: Avoid a malloc() for array events
+perf parse: Add destructors for parse event terms
 
-Use realloc() rather than malloc()+memcpy() to possibly avoid a memory
-allocation when appending array elements.
+If parsing fails then destructors are ran to clean the up the stack.
+Rename the head union member to make the term and evlist use cases more
+distinct, this simplifies matching the correct destructor.
+
+Committer notes:
+
+Jiri: "Nice did not know about this.. looks like it's been in bison for some time, right?"
+
+Ian:  "Looks like it wasn't in Bison 1 but in Bison 2, we're at Bison 3 and
+       Bison 2 is > 14 years old:
+       https://web.archive.org/web/20050924004158/http://www.gnu.org/software/bison/manual/html_mono/bison.html#Destructor-Decl"
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 Acked-by: Jiri Olsa <jolsa@kernel.org>
@@ -103,31 +112,120 @@ Cc: Yonghong Song <yhs@fb.com>
 Cc: bpf@vger.kernel.org
 Cc: clang-built-linux@googlegroups.com
 Cc: netdev@vger.kernel.org
-Link: http://lore.kernel.org/lkml/20191023005337.196160-6-irogers@google.com
+Link: http://lore.kernel.org/lkml/20191030223448.12930-7-irogers@google.com
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- tools/perf/util/parse-events.y | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ tools/perf/util/parse-events.y | 69 ++++++++++++++++++++++-----------
+ 1 file changed, 48 insertions(+), 21 deletions(-)
 
 diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
-index 5863acb..ffa1a1b 100644
+index 545ab7c..035edfa 100644
 --- a/tools/perf/util/parse-events.y
 +++ b/tools/perf/util/parse-events.y
-@@ -689,14 +689,12 @@ array_terms ',' array_term
- 	struct parse_events_array new_array;
- 
- 	new_array.nr_ranges = $1.nr_ranges + $3.nr_ranges;
--	new_array.ranges = malloc(sizeof(new_array.ranges[0]) *
--				  new_array.nr_ranges);
-+	new_array.ranges = realloc($1.ranges,
-+				sizeof(new_array.ranges[0]) *
-+				new_array.nr_ranges);
- 	ABORT_ON(!new_array.ranges);
--	memcpy(&new_array.ranges[0], $1.ranges,
--	       $1.nr_ranges * sizeof(new_array.ranges[0]));
- 	memcpy(&new_array.ranges[$1.nr_ranges], $3.ranges,
- 	       $3.nr_ranges * sizeof(new_array.ranges[0]));
--	free($1.ranges);
- 	free($3.ranges);
- 	$$ = new_array;
+@@ -12,6 +12,7 @@
+ #include <stdio.h>
+ #include <linux/compiler.h>
+ #include <linux/types.h>
++#include <linux/zalloc.h>
+ #include "pmu.h"
+ #include "evsel.h"
+ #include "parse-events.h"
+@@ -37,6 +38,25 @@ static struct list_head* alloc_list()
+ 	return list;
  }
+ 
++static void free_list_evsel(struct list_head* list_evsel)
++{
++	struct evsel *evsel, *tmp;
++
++	list_for_each_entry_safe(evsel, tmp, list_evsel, core.node) {
++		list_del_init(&evsel->core.node);
++		perf_evsel__delete(evsel);
++	}
++	free(list_evsel);
++}
++
++static void free_term(struct parse_events_term *term)
++{
++	if (term->type_val == PARSE_EVENTS__TERM_TYPE_STR)
++		free(term->val.str);
++	zfree(&term->array.ranges);
++	free(term);
++}
++
+ static void inc_group_count(struct list_head *list,
+ 		       struct parse_events_state *parse_state)
+ {
+@@ -66,6 +86,7 @@ static void inc_group_count(struct list_head *list,
+ %type <num> PE_VALUE_SYM_TOOL
+ %type <num> PE_RAW
+ %type <num> PE_TERM
++%type <num> value_sym
+ %type <str> PE_NAME
+ %type <str> PE_BPF_OBJECT
+ %type <str> PE_BPF_SOURCE
+@@ -76,37 +97,43 @@ static void inc_group_count(struct list_head *list,
+ %type <str> PE_EVENT_NAME
+ %type <str> PE_PMU_EVENT_PRE PE_PMU_EVENT_SUF PE_KERNEL_PMU_EVENT
+ %type <str> PE_DRV_CFG_TERM
+-%type <num> value_sym
+-%type <head> event_config
+-%type <head> opt_event_config
+-%type <head> opt_pmu_config
++%destructor { free ($$); } <str>
+ %type <term> event_term
+-%type <head> event_pmu
+-%type <head> event_legacy_symbol
+-%type <head> event_legacy_cache
+-%type <head> event_legacy_mem
+-%type <head> event_legacy_tracepoint
++%destructor { free_term ($$); } <term>
++%type <list_terms> event_config
++%type <list_terms> opt_event_config
++%type <list_terms> opt_pmu_config
++%destructor { parse_events_terms__delete ($$); } <list_terms>
++%type <list_evsel> event_pmu
++%type <list_evsel> event_legacy_symbol
++%type <list_evsel> event_legacy_cache
++%type <list_evsel> event_legacy_mem
++%type <list_evsel> event_legacy_tracepoint
++%type <list_evsel> event_legacy_numeric
++%type <list_evsel> event_legacy_raw
++%type <list_evsel> event_bpf_file
++%type <list_evsel> event_def
++%type <list_evsel> event_mod
++%type <list_evsel> event_name
++%type <list_evsel> event
++%type <list_evsel> events
++%type <list_evsel> group_def
++%type <list_evsel> group
++%type <list_evsel> groups
++%destructor { free_list_evsel ($$); } <list_evsel>
+ %type <tracepoint_name> tracepoint_name
+-%type <head> event_legacy_numeric
+-%type <head> event_legacy_raw
+-%type <head> event_bpf_file
+-%type <head> event_def
+-%type <head> event_mod
+-%type <head> event_name
+-%type <head> event
+-%type <head> events
+-%type <head> group_def
+-%type <head> group
+-%type <head> groups
++%destructor { free ($$.sys); free ($$.event); } <tracepoint_name>
+ %type <array> array
+ %type <array> array_term
+ %type <array> array_terms
++%destructor { free ($$.ranges); } <array>
+ 
+ %union
+ {
+ 	char *str;
+ 	u64 num;
+-	struct list_head *head;
++	struct list_head *list_evsel;
++	struct list_head *list_terms;
+ 	struct parse_events_term *term;
+ 	struct tracepoint_name {
+ 		char *sys;
