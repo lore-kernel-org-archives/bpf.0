@@ -2,156 +2,128 @@ Return-Path: <SRS0=ppgX=ZF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85AE7C43331
-	for <bpf@archiver.kernel.org>; Wed, 13 Nov 2019 03:15:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE783C43331
+	for <bpf@archiver.kernel.org>; Wed, 13 Nov 2019 03:19:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 528D4222BD
-	for <bpf@archiver.kernel.org>; Wed, 13 Nov 2019 03:15:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8F8FE222BD
+	for <bpf@archiver.kernel.org>; Wed, 13 Nov 2019 03:19:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="GNR5vsJN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ofaOLRa0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726980AbfKMDPd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Nov 2019 22:15:33 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:62416 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726953AbfKMDPd (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 12 Nov 2019 22:15:33 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAD38gOp007308
-        for <bpf@vger.kernel.org>; Tue, 12 Nov 2019 19:15:32 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=eQvAR0KsDAU7VVhlbgUlS3DZ+EoDvMFnLdJUpY5bPx0=;
- b=GNR5vsJNtT+A5sLHCrFCqy1hgGDNxWfUeADudP86sxaVC293FTeb74zmjM1jSTeEWZdG
- WEiiGEt8UfB5/Pu00JSH/kj25MDb2PXHP+dyQxdfub9moU4xXBpufLZP1J3VNV+RETRV
- eqlg7+zV2dhA0Akl+GFtWja9ILY9JvHFYqA= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2w7pr2nu0k-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 12 Nov 2019 19:15:32 -0800
-Received: from 2401:db00:12:9028:face:0:29:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Tue, 12 Nov 2019 19:15:30 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id A57BD2EC1B1D; Tue, 12 Nov 2019 19:15:27 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v3 bpf-next 2/3] libbpf: make global data internal arrays mmap()-able, if possible
-Date:   Tue, 12 Nov 2019 19:15:17 -0800
-Message-ID: <20191113031518.155618-3-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191113031518.155618-1-andriin@fb.com>
-References: <20191113031518.155618-1-andriin@fb.com>
-X-FB-Internal: Safe
+        id S1727438AbfKMDTr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Nov 2019 22:19:47 -0500
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:46978 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727097AbfKMDTr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Nov 2019 22:19:47 -0500
+Received: by mail-qt1-f196.google.com with SMTP id r20so951022qtp.13;
+        Tue, 12 Nov 2019 19:19:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jABndcZBzvuqmV48EOJ4ssQ9rvNduL7vt2CVS2VLZH8=;
+        b=ofaOLRa0W+MVcy4OnARzIS0FJY8qn5H/9oeHdm9+52RmllY4+zxBdtheiFHBy9fJGM
+         oRhI0jm+ejM/5cLwiVG73L0kR0OwBxdcxeldim2jBdpEHsnWT8woQaBB/XstC1GWYWnW
+         QBo8uZlLFT0Rsj5HSaSmQ9kw1iOfSAzvX9NSbvkiVdWS23b3B2AUlgmx12+o/naS8djy
+         puU+v5rkFrSfSO5NIJgDxbMZnMVLZGgo3SNammnhdEWwbJHsU89x3UGTcYENlR6ArFZJ
+         b3fD81Z3uYM0ZQ1vvrgJ9QGFHPFHpPU/vDLvtfbwsZ2I2PDzu3s5p1lY8w8K68mvGyow
+         0WCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jABndcZBzvuqmV48EOJ4ssQ9rvNduL7vt2CVS2VLZH8=;
+        b=RH5XmhhFm7ZnfT7BBXCZhYhj2GPjOoLGqtF7O6SdSYTUNIWT3T5TRzDi2VVRCVLxHv
+         MA4yElb6T9aeEznnvA8W+VOXhDq9cJXQEF0mvmZ5L+s4QuvrCIWS3o8erC76BEyZgVX3
+         nfN6bDd6Mv1JHyIjFdJa+xgywj9ABDfO0pDaePUKkhSs0+HRxedMqCXqmUo7XWImJy77
+         2qenobj0QDx39XMnJdD7RdPzPB8YZ+RkA+eyn89bwUwnF7Q4DOZYGbcx88MLCojPUe8+
+         +2xTuZuLRcKvBH3SvCplxAY+4TX4aiWgXysh5EbiJyDWxg4ppyMF2Mtoc1uF5zrYEzS7
+         a4Og==
+X-Gm-Message-State: APjAAAXA+pJSXcDsTZkMljQ1Kh7C9sQYQhrRuaEnIcIdhkGFNOh013q2
+        ZpnQiyg/Nr52mvu39CEpbb2pUPGQeB1Djkt4AYw=
+X-Google-Smtp-Source: APXvYqx+YGq/3B6qg3YAmz2pmE01fHQQk079Cq/uqzz6oiOHD8gsD4nZnmZrkmEiKrj/2tWOGxtF4NhqaA6UNasdOak=
+X-Received: by 2002:ac8:199d:: with SMTP id u29mr628550qtj.93.1573615185793;
+ Tue, 12 Nov 2019 19:19:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-12_10:2019-11-11,2019-11-12 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- suspectscore=8 clxscore=1015 adultscore=0 mlxlogscore=999
- lowpriorityscore=0 malwarescore=0 spamscore=0 priorityscore=1501
- mlxscore=0 bulkscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1910280000 definitions=main-1911130026
-X-FB-Internal: deliver
+References: <20191109080633.2855561-1-andriin@fb.com> <20191109080633.2855561-2-andriin@fb.com>
+ <20191111103743.1c3a38a3@cakuba> <CAEf4Bzay-sCd5+5Y1+toJuEd6vNh+R7pkosYA7V7wDqTdoDxdw@mail.gmail.com>
+ <20191112111750.2168b131@cakuba> <CAEf4Bzbx0WvgX9uGF4U1HM41m6kfdvWHCeYBSBRnQhR3egGy5w@mail.gmail.com>
+ <20191112143817.0c0eb768@cakuba>
+In-Reply-To: <20191112143817.0c0eb768@cakuba>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 12 Nov 2019 19:19:33 -0800
+Message-ID: <CAEf4Bzb5y3eEq4QU_3zdGJts4PeSVGr1YVmmWjTgs=LOf4PLKw@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 1/3] bpf: add mmap() support for BPF_MAP_TYPE_ARRAY
+To:     Jakub Kicinski <jakub.kicinski@netronome.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>,
+        Rik van Riel <riel@surriel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add detection of BPF_F_MMAPABLE flag support for arrays and add it as an extra
-flag to internal global data maps, if supported by kernel. This allows users
-to memory-map global data and use it without BPF map operations, greatly
-simplifying user experience.
+On Tue, Nov 12, 2019 at 2:38 PM Jakub Kicinski
+<jakub.kicinski@netronome.com> wrote:
+>
+> On Tue, 12 Nov 2019 14:03:50 -0800, Andrii Nakryiko wrote:
+> > On Tue, Nov 12, 2019 at 11:17 AM Jakub Kicinski wrote:
+> > > On Mon, 11 Nov 2019 18:06:42 -0800, Andrii Nakryiko wrote:
+> > > > So let's say if sizeof(struct bpf_array) is 300, then I'd have to either:
+> > > >
+> > > > - somehow make sure that I allocate 4k (for data) + 300 (for struct
+> > > > bpf_array) in such a way that those 4k of data are 4k-aligned. Is
+> > > > there any way to do that?
+> > > > - assuming there isn't, then another way would be to allocate entire
+> > > > 4k page for struct bpf_array itself, but put it at the end of that
+> > > > page, so that 4k of data is 4k-aligned. While wasteful, the bigger
+> > > > problem is that pointer to bpf_array is not a pointer to allocated
+> > > > memory anymore, so we'd need to remember that and adjust address
+> > > > before calling vfree().
+> > > >
+> > > > Were you suggesting #2 as a solution? Or am I missing some other way to do this?
+> > >
+> > > I am suggesting #2, that's the way to do it in the kernel.
+> >
+> > So I'm concerned about this approach, because it feels like a bunch of
+> > unnecessarily wasted memory. While there is no way around doing
+> > round_up(PAGE_SIZE) for data itself, it certainly is not necessary to
+> > waste almost entire page for struct bpf_array. And given this is going
+> > to be used for BPF maps backing global variables, there most probably
+> > will be at least 3 (.data, .bss, .rodata) per each program, and could
+> > be more. Also, while on x86_64 page is 4k, on other architectures it
+> > can be up to 64KB, so this seems wasteful.
+>
+> With the extra mutex and int you grew struct bpf_map from 192B to 256B,
+> that's for every map on the system, unconditionally, and array map has
+> an extra pointer even if it doesn't need it.
+>
+> Increasing "wasted" space when an opt-in feature is selected doesn't
+> seem all that terrible to me, especially that the overhead of aligning
+> up map size to page size is already necessary.
 
-Acked-by: Song Liu <songliubraving@fb.com>
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/lib/bpf/libbpf.c | 32 ++++++++++++++++++++++++++++++--
- 1 file changed, 30 insertions(+), 2 deletions(-)
+Well, I've been talking about one more extra page for struct bpf_array
+itself, on top of what we already potentially waste for mmap()'ing
+array data. But I went ahead and posted v3 with layout we discussed
+here, aligning array->value on page boundary. Let's see if you like it
+better.
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 96ef18cfeffb..7e2be1288fa1 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -142,6 +142,8 @@ struct bpf_capabilities {
- 	__u32 btf_func:1;
- 	/* BTF_KIND_VAR and BTF_KIND_DATASEC support */
- 	__u32 btf_datasec:1;
-+	/* BPF_F_MMAPABLE is supported for arrays */
-+	__u32 array_mmap:1;
- };
- 
- /*
-@@ -856,8 +858,6 @@ bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map_type type,
- 		pr_warn("failed to alloc map name\n");
- 		return -ENOMEM;
- 	}
--	pr_debug("map '%s' (global data): at sec_idx %d, offset %zu.\n",
--		 map_name, map->sec_idx, map->sec_offset);
- 
- 	def = &map->def;
- 	def->type = BPF_MAP_TYPE_ARRAY;
-@@ -865,6 +865,12 @@ bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map_type type,
- 	def->value_size = data->d_size;
- 	def->max_entries = 1;
- 	def->map_flags = type == LIBBPF_MAP_RODATA ? BPF_F_RDONLY_PROG : 0;
-+	if (obj->caps.array_mmap)
-+		def->map_flags |= BPF_F_MMAPABLE;
-+
-+	pr_debug("map '%s' (global data): at sec_idx %d, offset %zu, flags %x.\n",
-+		 map_name, map->sec_idx, map->sec_offset, def->map_flags);
-+
- 	if (data_buff) {
- 		*data_buff = malloc(data->d_size);
- 		if (!*data_buff) {
-@@ -2160,6 +2166,27 @@ static int bpf_object__probe_btf_datasec(struct bpf_object *obj)
- 	return 0;
- }
- 
-+static int bpf_object__probe_array_mmap(struct bpf_object *obj)
-+{
-+	struct bpf_create_map_attr attr = {
-+		.map_type = BPF_MAP_TYPE_ARRAY,
-+		.map_flags = BPF_F_MMAPABLE,
-+		.key_size = sizeof(int),
-+		.value_size = sizeof(int),
-+		.max_entries = 1,
-+	};
-+	int fd;
-+
-+	fd = bpf_create_map_xattr(&attr);
-+	if (fd >= 0) {
-+		obj->caps.array_mmap = 1;
-+		close(fd);
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+
- static int
- bpf_object__probe_caps(struct bpf_object *obj)
- {
-@@ -2168,6 +2195,7 @@ bpf_object__probe_caps(struct bpf_object *obj)
- 		bpf_object__probe_global_data,
- 		bpf_object__probe_btf_func,
- 		bpf_object__probe_btf_datasec,
-+		bpf_object__probe_array_mmap,
- 	};
- 	int i, ret;
- 
--- 
-2.17.1
-
+>
+> > What's your concern exactly with the way it's implemented in this patch?
+>
+> Judging by other threads we seem to care about performance of BPF
+> (rightly so). Doing an extra pointer deref for every static data access
+> seems like an obvious waste.
+>
+> But then again, it's just an obvious suggestion, take it or leave it..
