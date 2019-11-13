@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0414AC17441
-	for <bpf@archiver.kernel.org>; Wed, 13 Nov 2019 02:19:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 063DBC43331
+	for <bpf@archiver.kernel.org>; Wed, 13 Nov 2019 02:19:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D22D122459
-	for <bpf@archiver.kernel.org>; Wed, 13 Nov 2019 02:19:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CEA21222CA
+	for <bpf@archiver.kernel.org>; Wed, 13 Nov 2019 02:19:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573611548;
-	bh=eJF2Lv1JO7SGTrNnwUZO9cfYP9zZZ6tpTHTU0INEZ64=;
+	s=default; t=1573611553;
+	bh=2mZNh7vjMLJ8VzjcNt4mAP3gxaWYiCtdp11s1HXRELc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=d4EpwQoFdkETOBHSfXcCgHkkUVreTqGu8HvMFnM5fpqoJmcnzaB4j9akdig6EIBcg
-	 3gn6VQcCbbeI9U7ISTe4rXy+Y/cZu0o9ws39jUu99BUTX+AHdEnWa/jHq0xELzEV7P
-	 EQTXMGkVKw1E1SVq5Lve0NaujcHu83z1kyuj5z/g=
+	b=V2UX4RTTyM/yKVbseZn7lJkcYDIQr3L76U2DBcBJ5KmXe5yNNuiqDqoaFsztOVlEL
+	 S/OvXl2NYrqUNBpJJpfyvdh7xsw5EuHYzaEbo1UZS3cjrB+KItk4U2P7b6DgsjhWAP
+	 5DcVcLaaU+MIEWa8UWxPeIdZUHsig0F4H1nZ0P3c=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728858AbfKMCTB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Nov 2019 21:19:01 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47120 "EHLO mail.kernel.org"
+        id S1728229AbfKMBz0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Nov 2019 20:55:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47052 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729117AbfKMBz2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Nov 2019 20:55:28 -0500
+        id S1729094AbfKMBz0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Nov 2019 20:55:26 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 47773222CD;
-        Wed, 13 Nov 2019 01:55:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A1FB4222CD;
+        Wed, 13 Nov 2019 01:55:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573610128;
-        bh=eJF2Lv1JO7SGTrNnwUZO9cfYP9zZZ6tpTHTU0INEZ64=;
+        s=default; t=1573610125;
+        bh=2mZNh7vjMLJ8VzjcNt4mAP3gxaWYiCtdp11s1HXRELc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ntoEW3NC7YBzzgdtWPpD4y+/WdXWizmVutsxPwqrBWlxgd/WGIGvWCfWdCr5UP01d
-         JnsO63of80XtbEZE2aQY0cRSSd5+2ZR0c5gtqoXJTZ+4unSh/U8V/U8wYYMSJe+uKy
-         RdTLTM9YzaLEtCOsM56S2DKRRaYc1KpJeJfYq7OI=
+        b=xRTa8/gylhOKzUjejuwgTcN3YOeKgOkjp9W50sms7H+u8BrZPcsn8Z/ThgNFxA8wF
+         IX4zCSO0TUqw5QvW1V9/ATRpirvgaMidCKZjn80FACgpmQcQbnEB3l9IPmcboOtdYe
+         ovkdSzAStTNugXDjm2Kj9qMW9klPAuipFfZawlHg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
+Cc:     Wenwen Wang <wang6495@umn.edu>, Song Liu <songliubraving@fb.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 178/209] net: fix generic XDP to handle if eth header was mangled
-Date:   Tue, 12 Nov 2019 20:49:54 -0500
-Message-Id: <20191113015025.9685-178-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 177/209] bpf: btf: Fix a missing check bug
+Date:   Tue, 12 Nov 2019 20:49:53 -0500
+Message-Id: <20191113015025.9685-177-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191113015025.9685-1-sashal@kernel.org>
 References: <20191113015025.9685-1-sashal@kernel.org>
@@ -59,73 +59,46 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jesper Dangaard Brouer <brouer@redhat.com>
+From: Wenwen Wang <wang6495@umn.edu>
 
-[ Upstream commit 2972495699320229b55b8e5065a310be5c81485b ]
+[ Upstream commit 8af03d1ae2e154a8be3631e8694b87007e1bdbc2 ]
 
-XDP can modify (and resize) the Ethernet header in the packet.
+In btf_parse_hdr(), the length of the btf data header is firstly copied
+from the user space to 'hdr_len' and checked to see whether it is larger
+than 'btf_data_size'. If yes, an error code EINVAL is returned. Otherwise,
+the whole header is copied again from the user space to 'btf->hdr'.
+However, after the second copy, there is no check between
+'btf->hdr->hdr_len' and 'hdr_len' to confirm that the two copies get the
+same value. Given that the btf data is in the user space, a malicious user
+can race to change the data between the two copies. By doing so, the user
+can provide malicious data to the kernel and cause undefined behavior.
 
-There is a bug in generic-XDP, because skb->protocol and skb->pkt_type
-are setup before reaching (netif_receive_)generic_xdp.
+This patch adds a necessary check after the second copy, to make sure
+'btf->hdr->hdr_len' has the same value as 'hdr_len'. Otherwise, an error
+code EINVAL will be returned.
 
-This bug was hit when XDP were popping VLAN headers (changing
-eth->h_proto), as skb->protocol still contains VLAN-indication
-(ETH_P_8021Q) causing invocation of skb_vlan_untag(skb), which corrupt
-the packet (basically popping the VLAN again).
-
-This patch catch if XDP changed eth header in such a way, that SKB
-fields needs to be updated.
-
-V2: on request from Song Liu, use ETH_HLEN instead of mac_len,
-in __skb_push() as eth_type_trans() use ETH_HLEN in paired skb_pull_inline().
-
-Fixes: d445516966dc ("net: xdp: support xdp generic on virtual devices")
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Signed-off-by: Wenwen Wang <wang6495@umn.edu>
+Acked-by: Song Liu <songliubraving@fb.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/dev.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ kernel/bpf/btf.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index ddd8aab20adf2..3e8b468a9f264 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -4296,6 +4296,9 @@ static u32 netif_receive_generic_xdp(struct sk_buff *skb,
- 	struct netdev_rx_queue *rxqueue;
- 	void *orig_data, *orig_data_end;
- 	u32 metalen, act = XDP_DROP;
-+	__be16 orig_eth_type;
-+	struct ethhdr *eth;
-+	bool orig_bcast;
- 	int hlen, off;
- 	u32 mac_len;
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 138f0302692ec..378cef70341c4 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -2114,6 +2114,9 @@ static int btf_parse_hdr(struct btf_verifier_env *env, void __user *btf_data,
  
-@@ -4336,6 +4339,9 @@ static u32 netif_receive_generic_xdp(struct sk_buff *skb,
- 	xdp->data_hard_start = skb->data - skb_headroom(skb);
- 	orig_data_end = xdp->data_end;
- 	orig_data = xdp->data;
-+	eth = (struct ethhdr *)xdp->data;
-+	orig_bcast = is_multicast_ether_addr_64bits(eth->h_dest);
-+	orig_eth_type = eth->h_proto;
+ 	hdr = &btf->hdr;
  
- 	rxqueue = netif_get_rxqueue(skb);
- 	xdp->rxq = &rxqueue->xdp_rxq;
-@@ -4359,6 +4365,14 @@ static u32 netif_receive_generic_xdp(struct sk_buff *skb,
- 
- 	}
- 
-+	/* check if XDP changed eth hdr such SKB needs update */
-+	eth = (struct ethhdr *)xdp->data;
-+	if ((orig_eth_type != eth->h_proto) ||
-+	    (orig_bcast != is_multicast_ether_addr_64bits(eth->h_dest))) {
-+		__skb_push(skb, ETH_HLEN);
-+		skb->protocol = eth_type_trans(skb, skb->dev);
-+	}
++	if (hdr->hdr_len != hdr_len)
++		return -EINVAL;
 +
- 	switch (act) {
- 	case XDP_REDIRECT:
- 	case XDP_TX:
+ 	btf_verifier_log_hdr(env, btf_data_size);
+ 
+ 	if (hdr->magic != BTF_MAGIC) {
 -- 
 2.20.1
 
