@@ -5,37 +5,37 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3B09C17442
-	for <bpf@archiver.kernel.org>; Wed, 13 Nov 2019 04:27:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFBD7C1745A
+	for <bpf@archiver.kernel.org>; Wed, 13 Nov 2019 04:27:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9214022473
-	for <bpf@archiver.kernel.org>; Wed, 13 Nov 2019 04:27:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 866212245C
+	for <bpf@archiver.kernel.org>; Wed, 13 Nov 2019 04:27:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="pj6M3Paz"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="H9vUdAtX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727199AbfKME1Q (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Nov 2019 23:27:16 -0500
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:13623 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726995AbfKME1P (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Nov 2019 23:27:15 -0500
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dcb86200000>; Tue, 12 Nov 2019 20:27:12 -0800
+        id S1727801AbfKME1g (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Nov 2019 23:27:36 -0500
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:4079 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727800AbfKME10 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Nov 2019 23:27:26 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dcb85ea0005>; Tue, 12 Nov 2019 20:26:18 -0800
 Received: from hqmail.nvidia.com ([172.20.161.6])
   by hqpgpgate102.nvidia.com (PGP Universal service);
-  Tue, 12 Nov 2019 20:27:12 -0800
+  Tue, 12 Nov 2019 20:27:14 -0800
 X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Tue, 12 Nov 2019 20:27:12 -0800
-Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL105.nvidia.com
+        by hqpgpgate102.nvidia.com on Tue, 12 Nov 2019 20:27:14 -0800
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL105.nvidia.com
  (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 13 Nov
- 2019 04:27:12 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Wed, 13 Nov 2019 04:27:12 +0000
+ 2019 04:27:13 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Wed, 13 Nov 2019 04:27:13 +0000
 Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5dcb86200000>; Tue, 12 Nov 2019 20:27:12 -0800
+        id <B5dcb86210006>; Tue, 12 Nov 2019 20:27:13 -0800
 From:   John Hubbard <jhubbard@nvidia.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 CC:     Al Viro <viro@zeniv.linux.org.uk>,
@@ -67,200 +67,100 @@ CC:     Al Viro <viro@zeniv.linux.org.uk>,
         <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
         <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
         John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v4 04/23] mm: devmap: refactor 1-based refcounting for ZONE_DEVICE pages
-Date:   Tue, 12 Nov 2019 20:26:51 -0800
-Message-ID: <20191113042710.3997854-5-jhubbard@nvidia.com>
+Subject: [PATCH v4 20/23] mm/gup_benchmark: use proper FOLL_WRITE flags instead of hard-coding "1"
+Date:   Tue, 12 Nov 2019 20:27:07 -0800
+Message-ID: <20191113042710.3997854-21-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191113042710.3997854-1-jhubbard@nvidia.com>
 References: <20191113042710.3997854-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
 X-NVConfidentiality: public
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1573619232; bh=eh5PKTqFnv3H2C1oWk46Hm4jlzYBaiSiPR2xbAo8/Xk=;
+        t=1573619178; bh=7Vmsb+9KRgkgzRB+pY1tHWrSRQ+BM3AUrdVPH7GeYFc=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
          In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Type:Content-Transfer-Encoding;
-        b=pj6M3Paz4Jb8s/zkr4xbcn7V9rw85SFVXQf2t/30nSh5HeFhZtiu6L2TDkY9LXdBk
-         qmFAmsMXW8K9aqONmx5rzpgcKrp7KyoDoxEcKWWeF72f2hFzO1rgnvWA62qGpVpJpw
-         Fji+h0aQkFAXAMnKj3pPlPYU48JG4GZyXfD/6m7PagtSohgBgvIQp6tKddm+C3WJk9
-         XcFpVY0yWtBnkeMgSj0/b7hydd7pek7qPo7vhnlFkZz0SUdf+MdspBaUtaMwS2wKLd
-         hFWYy6ySeXIEnL5hOSCfBW1tz3UyYdy4KyiOziT+U/tvErynTern5gpDgfTipG7fZf
-         A69nwyNvr8ktQ==
+         Content-Transfer-Encoding:Content-Type;
+        b=H9vUdAtX4lkrYvps4Cxbqg5o9D86/82qya+eDd7C4Fkudybq93veQ/F7aDuQv32CK
+         3dXOlykPB7k3TRHD1VWLecBebO6L9jcl704BZDowAj8HHmVVRLw1DEulIBFP/ePgqF
+         rL6IUQ4WaVVrWO0Yni7Q0V3NR9eR2qbuy0XyBlnfx6e/zmUSOMazFdIAMsNPbMYcVE
+         D2/RirPzqzJMhtIOnblA3J2bC3zLcpg+bUOiKKsnJoaEZxNoR8ZLuWHXNzoETQ4l/C
+         4GvCB6hy0If9p8ky/s8F9h3e/AH+sZfm8lOyRQ1k+mq5eWdoxvBNL8vjs3HA1aUN6z
+         OTgapBu/yCHUg==
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-An upcoming patch changes and complicates the refcounting and
-especially the "put page" aspects of it. In order to keep
-everything clean, refactor the devmap page release routines:
+Fix the gup benchmark flags to use the symbolic FOLL_WRITE,
+instead of a hard-coded "1" value.
 
-* Rename put_devmap_managed_page() to page_is_devmap_managed(),
-  and limit the functionality to "read only": return a bool,
-  with no side effects.
+Also, clean up the filtering of gup flags a little, by just doing
+it once before issuing any of the get_user_pages*() calls. This
+makes it harder to overlook, instead of having little "gup_flags & 1"
+phrases in the function calls.
 
-* Add a new routine, put_devmap_managed_page(), to handle checking
-  what kind of page it is, and what kind of refcount handling it
-  requires.
-
-* Rename __put_devmap_managed_page() to free_devmap_managed_page(),
-  and limit the functionality to unconditionally freeing a devmap
-  page.
-
-This is originally based on a separate patch by Ira Weiny, which
-applied to an early version of the put_user_page() experiments.
-Since then, J=C3=A9r=C3=B4me Glisse suggested the refactoring described abo=
-ve.
-
-Suggested-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
- include/linux/mm.h | 27 ++++++++++++++++---
- mm/memremap.c      | 67 ++++++++++++++++++++--------------------------
- 2 files changed, 53 insertions(+), 41 deletions(-)
+ mm/gup_benchmark.c                         | 9 ++++++---
+ tools/testing/selftests/vm/gup_benchmark.c | 6 +++++-
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index a2adf95b3f9c..96228376139c 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -967,9 +967,10 @@ static inline bool is_zone_device_page(const struct pa=
-ge *page)
- #endif
+diff --git a/mm/gup_benchmark.c b/mm/gup_benchmark.c
+index 7dd602d7f8db..7fc44d25eca7 100644
+--- a/mm/gup_benchmark.c
++++ b/mm/gup_benchmark.c
+@@ -48,18 +48,21 @@ static int __gup_benchmark_ioctl(unsigned int cmd,
+ 			nr =3D (next - addr) / PAGE_SIZE;
+ 		}
 =20
- #ifdef CONFIG_DEV_PAGEMAP_OPS
--void __put_devmap_managed_page(struct page *page);
-+void free_devmap_managed_page(struct page *page);
- DECLARE_STATIC_KEY_FALSE(devmap_managed_key);
--static inline bool put_devmap_managed_page(struct page *page)
++		/* Filter out most gup flags: only allow a tiny subset here: */
++		gup->flags &=3D FOLL_WRITE;
 +
-+static inline bool page_is_devmap_managed(struct page *page)
- {
- 	if (!static_branch_unlikely(&devmap_managed_key))
- 		return false;
-@@ -978,7 +979,6 @@ static inline bool put_devmap_managed_page(struct page =
-*page)
- 	switch (page->pgmap->type) {
- 	case MEMORY_DEVICE_PRIVATE:
- 	case MEMORY_DEVICE_FS_DAX:
--		__put_devmap_managed_page(page);
- 		return true;
- 	default:
- 		break;
-@@ -986,6 +986,27 @@ static inline bool put_devmap_managed_page(struct page=
- *page)
- 	return false;
- }
+ 		switch (cmd) {
+ 		case GUP_FAST_BENCHMARK:
+-			nr =3D get_user_pages_fast(addr, nr, gup->flags & 1,
++			nr =3D get_user_pages_fast(addr, nr, gup->flags,
+ 						 pages + i);
+ 			break;
+ 		case GUP_LONGTERM_BENCHMARK:
+ 			nr =3D get_user_pages(addr, nr,
+-					    (gup->flags & 1) | FOLL_LONGTERM,
++					    gup->flags | FOLL_LONGTERM,
+ 					    pages + i, NULL);
+ 			break;
+ 		case GUP_BENCHMARK:
+-			nr =3D get_user_pages(addr, nr, gup->flags & 1, pages + i,
++			nr =3D get_user_pages(addr, nr, gup->flags, pages + i,
+ 					    NULL);
+ 			break;
+ 		default:
+diff --git a/tools/testing/selftests/vm/gup_benchmark.c b/tools/testing/sel=
+ftests/vm/gup_benchmark.c
+index 485cf06ef013..389327e9b30a 100644
+--- a/tools/testing/selftests/vm/gup_benchmark.c
++++ b/tools/testing/selftests/vm/gup_benchmark.c
+@@ -18,6 +18,9 @@
+ #define GUP_LONGTERM_BENCHMARK	_IOWR('g', 2, struct gup_benchmark)
+ #define GUP_BENCHMARK		_IOWR('g', 3, struct gup_benchmark)
 =20
-+static inline bool put_devmap_managed_page(struct page *page)
-+{
-+	bool is_devmap =3D page_is_devmap_managed(page);
++/* Just the flags we need, copied from mm.h: */
++#define FOLL_WRITE	0x01	/* check pte is writable */
 +
-+	if (is_devmap) {
-+		int count =3D page_ref_dec_return(page);
-+
-+		/*
-+		 * devmap page refcounts are 1-based, rather than 0-based: if
-+		 * refcount is 1, then the page is free and the refcount is
-+		 * stable because nobody holds a reference on the page.
-+		 */
-+		if (count =3D=3D 1)
-+			free_devmap_managed_page(page);
-+		else if (!count)
-+			__put_page(page);
-+	}
-+
-+	return is_devmap;
-+}
-+
- #else /* CONFIG_DEV_PAGEMAP_OPS */
- static inline bool put_devmap_managed_page(struct page *page)
- {
-diff --git a/mm/memremap.c b/mm/memremap.c
-index 03ccbdfeb697..bc7e2a27d025 100644
---- a/mm/memremap.c
-+++ b/mm/memremap.c
-@@ -410,48 +410,39 @@ struct dev_pagemap *get_dev_pagemap(unsigned long pfn=
-,
- EXPORT_SYMBOL_GPL(get_dev_pagemap);
+ struct gup_benchmark {
+ 	__u64 get_delta_usec;
+ 	__u64 put_delta_usec;
+@@ -85,7 +88,8 @@ int main(int argc, char **argv)
+ 	}
 =20
- #ifdef CONFIG_DEV_PAGEMAP_OPS
--void __put_devmap_managed_page(struct page *page)
-+void free_devmap_managed_page(struct page *page)
- {
--	int count =3D page_ref_dec_return(page);
-+	/* Clear Active bit in case of parallel mark_page_accessed */
-+	__ClearPageActive(page);
-+	__ClearPageWaiters(page);
-+
-+	mem_cgroup_uncharge(page);
+ 	gup.nr_pages_per_call =3D nr_pages;
+-	gup.flags =3D write;
++	if (write)
++		gup.flags |=3D FOLL_WRITE;
 =20
- 	/*
--	 * If refcount is 1 then page is freed and refcount is stable as nobody
--	 * holds a reference on the page.
-+	 * When a device_private page is freed, the page->mapping field
-+	 * may still contain a (stale) mapping value. For example, the
-+	 * lower bits of page->mapping may still identify the page as
-+	 * an anonymous page. Ultimately, this entire field is just
-+	 * stale and wrong, and it will cause errors if not cleared.
-+	 * One example is:
-+	 *
-+	 *  migrate_vma_pages()
-+	 *    migrate_vma_insert_page()
-+	 *      page_add_new_anon_rmap()
-+	 *        __page_set_anon_rmap()
-+	 *          ...checks page->mapping, via PageAnon(page) call,
-+	 *            and incorrectly concludes that the page is an
-+	 *            anonymous page. Therefore, it incorrectly,
-+	 *            silently fails to set up the new anon rmap.
-+	 *
-+	 * For other types of ZONE_DEVICE pages, migration is either
-+	 * handled differently or not done at all, so there is no need
-+	 * to clear page->mapping.
- 	 */
--	if (count =3D=3D 1) {
--		/* Clear Active bit in case of parallel mark_page_accessed */
--		__ClearPageActive(page);
--		__ClearPageWaiters(page);
--
--		mem_cgroup_uncharge(page);
--
--		/*
--		 * When a device_private page is freed, the page->mapping field
--		 * may still contain a (stale) mapping value. For example, the
--		 * lower bits of page->mapping may still identify the page as
--		 * an anonymous page. Ultimately, this entire field is just
--		 * stale and wrong, and it will cause errors if not cleared.
--		 * One example is:
--		 *
--		 *  migrate_vma_pages()
--		 *    migrate_vma_insert_page()
--		 *      page_add_new_anon_rmap()
--		 *        __page_set_anon_rmap()
--		 *          ...checks page->mapping, via PageAnon(page) call,
--		 *            and incorrectly concludes that the page is an
--		 *            anonymous page. Therefore, it incorrectly,
--		 *            silently fails to set up the new anon rmap.
--		 *
--		 * For other types of ZONE_DEVICE pages, migration is either
--		 * handled differently or not done at all, so there is no need
--		 * to clear page->mapping.
--		 */
--		if (is_device_private_page(page))
--			page->mapping =3D NULL;
-+	if (is_device_private_page(page))
-+		page->mapping =3D NULL;
-=20
--		page->pgmap->ops->page_free(page);
--	} else if (!count)
--		__put_page(page);
-+	page->pgmap->ops->page_free(page);
- }
--EXPORT_SYMBOL(__put_devmap_managed_page);
-+EXPORT_SYMBOL(free_devmap_managed_page);
- #endif /* CONFIG_DEV_PAGEMAP_OPS */
+ 	fd =3D open("/sys/kernel/debug/gup_benchmark", O_RDWR);
+ 	if (fd =3D=3D -1)
 --=20
 2.24.0
 
