@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97658C432C3
-	for <bpf@archiver.kernel.org>; Thu, 14 Nov 2019 18:58:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1142C432C3
+	for <bpf@archiver.kernel.org>; Thu, 14 Nov 2019 18:58:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6D61920725
-	for <bpf@archiver.kernel.org>; Thu, 14 Nov 2019 18:58:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C061A20724
+	for <bpf@archiver.kernel.org>; Thu, 14 Nov 2019 18:58:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573757885;
-	bh=RBQRem8vUJSEogQlW+D0gDaePS8jpd4l/M8m/MWSciA=;
+	s=default; t=1573757891;
+	bh=JCE3ViaJCiWrzRC+l1N9hiMYatrxwsBN7sgHnlssT8g=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=xsb9VWL8ElEUtPMbkykwt8r0VBh2OJppY5pyOgMaE6jUrXSohmPNaaia7JROnnkct
-	 WHHJ1aV6xLcVWyEWXA2zS+6zDpTCTKyc2v+nzw+RpbPm5QYdVeXp+Uhd0DBikzdNUS
-	 2JgD5fA+vF9fzS6d48m/9JuoMrlN3nEc5xw4iKJY=
+	b=L9xyVUblL/F/60015bVFMiRDA/mDHSLhTK5vWFRL5GZ0OZodjByUWIZN4+ORzxq3H
+	 cZjPcNzCqHGVkzl85bOWRL+S08fopn89DtTNuh1lDycwVwMXYywgFbytuXvNQGxOyW
+	 0ti5MIdSYlKOs8snLMWXv5sRi4I2a0v38o/CqPGc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727325AbfKNS6F convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 14 Nov 2019 13:58:05 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:11174 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727143AbfKNS5g (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 14 Nov 2019 13:57:36 -0500
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAEIhP5l030200
-        for <bpf@vger.kernel.org>; Thu, 14 Nov 2019 10:57:35 -0800
+        id S1726592AbfKNS6G convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 14 Nov 2019 13:58:06 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:2402 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727262AbfKNS6E (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 14 Nov 2019 13:58:04 -0500
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAEIdSUe001183
+        for <bpf@vger.kernel.org>; Thu, 14 Nov 2019 10:58:03 -0800
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2w8qj9e15g-1
+        by mx0a-00082601.pphosted.com with ESMTP id 2w90t83j0c-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 14 Nov 2019 10:57:35 -0800
-Received: from 2401:db00:2120:80d4:face:0:39:0 (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 14 Nov 2019 10:58:03 -0800
+Received: from 2401:db00:2120:81dc:face:0:23:0 (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 14 Nov 2019 10:57:34 -0800
+ 15.1.1713.5; Thu, 14 Nov 2019 10:58:02 -0800
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 35B7E76071B; Thu, 14 Nov 2019 10:57:33 -0800 (PST)
+        id 017B876071B; Thu, 14 Nov 2019 10:57:59 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -46,9 +46,9 @@ To:     <davem@davemloft.net>
 CC:     <daniel@iogearbox.net>, <x86@kernel.org>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v4 bpf-next 06/20] libbpf: Add support to attach to fentry/fexit tracing progs
-Date:   Thu, 14 Nov 2019 10:57:06 -0800
-Message-ID: <20191114185720.1641606-7-ast@kernel.org>
+Subject: [PATCH v4 bpf-next 19/20] selftests/bpf: Extend test_pkt_access test
+Date:   Thu, 14 Nov 2019 10:57:19 -0800
+Message-ID: <20191114185720.1641606-20-ast@kernel.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191114185720.1641606-1-ast@kernel.org>
 References: <20191114185720.1641606-1-ast@kernel.org>
@@ -58,10 +58,10 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-11-14_05:2019-11-14,2019-11-14 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 malwarescore=0
- bulkscore=0 spamscore=0 lowpriorityscore=0 priorityscore=1501
- clxscore=1034 mlxlogscore=897 suspectscore=3 adultscore=0 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 adultscore=0
+ malwarescore=0 priorityscore=1501 mlxscore=0 mlxlogscore=839 phishscore=0
+ spamscore=0 impostorscore=0 clxscore=1015 suspectscore=1
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1910280000 definitions=main-1911140157
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -69,234 +69,73 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Teach libbpf to recognize tracing programs types and attach them to
-fentry/fexit.
+The test_pkt_access.o is used by multiple tests. Fix its section name so that
+program type can be automatically detected by libbpf and make it call other
+subprograms with skb argument.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Acked-by: Song Liu <songliubraving@fb.com>
 Acked-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/include/uapi/linux/bpf.h |  2 +
- tools/lib/bpf/libbpf.c         | 99 +++++++++++++++++++++++++---------
- tools/lib/bpf/libbpf.h         |  4 ++
- tools/lib/bpf/libbpf.map       |  2 +
- 4 files changed, 82 insertions(+), 25 deletions(-)
+ .../selftests/bpf/progs/test_pkt_access.c     | 38 ++++++++++++++++++-
+ 1 file changed, 36 insertions(+), 2 deletions(-)
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index df6809a76404..69c200e6e696 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -201,6 +201,8 @@ enum bpf_attach_type {
- 	BPF_CGROUP_GETSOCKOPT,
- 	BPF_CGROUP_SETSOCKOPT,
- 	BPF_TRACE_RAW_TP,
-+	BPF_TRACE_FENTRY,
-+	BPF_TRACE_FEXIT,
- 	__MAX_BPF_ATTACH_TYPE
- };
+diff --git a/tools/testing/selftests/bpf/progs/test_pkt_access.c b/tools/testing/selftests/bpf/progs/test_pkt_access.c
+index 7cf42d14103f..3a7b4b607ed3 100644
+--- a/tools/testing/selftests/bpf/progs/test_pkt_access.c
++++ b/tools/testing/selftests/bpf/progs/test_pkt_access.c
+@@ -17,8 +17,38 @@
+ #define barrier() __asm__ __volatile__("": : :"memory")
+ int _version SEC("version") = 1;
  
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 96ef18cfeffb..98ee033e021f 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -3856,7 +3856,8 @@ bpf_object__load_progs(struct bpf_object *obj, int log_level)
- 	return 0;
- }
- 
--static int libbpf_attach_btf_id_by_name(const char *name, __u32 *btf_id);
-+static int libbpf_attach_btf_id_by_name(const char *name,
-+					enum bpf_attach_type attach_type);
- 
- static struct bpf_object *
- __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
-@@ -3910,7 +3911,6 @@ __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
- 	bpf_object__for_each_program(prog, obj) {
- 		enum bpf_prog_type prog_type;
- 		enum bpf_attach_type attach_type;
--		__u32 btf_id;
- 
- 		err = libbpf_prog_type_by_name(prog->section_name, &prog_type,
- 					       &attach_type);
-@@ -3923,10 +3923,11 @@ __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
- 		bpf_program__set_type(prog, prog_type);
- 		bpf_program__set_expected_attach_type(prog, attach_type);
- 		if (prog_type == BPF_PROG_TYPE_TRACING) {
--			err = libbpf_attach_btf_id_by_name(prog->section_name, &btf_id);
--			if (err)
-+			err = libbpf_attach_btf_id_by_name(prog->section_name,
-+							   attach_type);
-+			if (err <= 0)
- 				goto out;
--			prog->attach_btf_id = btf_id;
-+			prog->attach_btf_id = err;
- 		}
- 	}
- 
-@@ -4935,6 +4936,10 @@ static const struct {
- 	BPF_PROG_SEC("raw_tp/",			BPF_PROG_TYPE_RAW_TRACEPOINT),
- 	BPF_PROG_BTF("tp_btf/",			BPF_PROG_TYPE_TRACING,
- 						BPF_TRACE_RAW_TP),
-+	BPF_PROG_BTF("fentry/",			BPF_PROG_TYPE_TRACING,
-+						BPF_TRACE_FENTRY),
-+	BPF_PROG_BTF("fexit/",			BPF_PROG_TYPE_TRACING,
-+						BPF_TRACE_FEXIT),
- 	BPF_PROG_SEC("xdp",			BPF_PROG_TYPE_XDP),
- 	BPF_PROG_SEC("perf_event",		BPF_PROG_TYPE_PERF_EVENT),
- 	BPF_PROG_SEC("lwt_in",			BPF_PROG_TYPE_LWT_IN),
-@@ -5052,43 +5057,56 @@ int libbpf_prog_type_by_name(const char *name, enum bpf_prog_type *prog_type,
- }
- 
- #define BTF_PREFIX "btf_trace_"
--static int libbpf_attach_btf_id_by_name(const char *name, __u32 *btf_id)
-+int libbpf_find_vmlinux_btf_id(const char *name,
-+			       enum bpf_attach_type attach_type)
+-SEC("test1")
+-int process(struct __sk_buff *skb)
++/* llvm will optimize both subprograms into exactly the same BPF assembly
++ *
++ * Disassembly of section .text:
++ *
++ * 0000000000000000 test_pkt_access_subprog1:
++ * ; 	return skb->len * 2;
++ *        0:	61 10 00 00 00 00 00 00	r0 = *(u32 *)(r1 + 0)
++ *        1:	64 00 00 00 01 00 00 00	w0 <<= 1
++ *        2:	95 00 00 00 00 00 00 00	exit
++ *
++ * 0000000000000018 test_pkt_access_subprog2:
++ * ; 	return skb->len * val;
++ *        3:	61 10 00 00 00 00 00 00	r0 = *(u32 *)(r1 + 0)
++ *        4:	64 00 00 00 01 00 00 00	w0 <<= 1
++ *        5:	95 00 00 00 00 00 00 00	exit
++ *
++ * Which makes it an interesting test for BTF-enabled verifier.
++ */
++static __attribute__ ((noinline))
++int test_pkt_access_subprog1(volatile struct __sk_buff *skb)
++{
++	return skb->len * 2;
++}
++
++static __attribute__ ((noinline))
++int test_pkt_access_subprog2(int val, volatile struct __sk_buff *skb)
++{
++	return skb->len * val;
++}
++
++SEC("classifier/test_pkt_access")
++int test_pkt_access(struct __sk_buff *skb)
  {
- 	struct btf *btf = bpf_core_find_kernel_btf();
--	char raw_tp_btf_name[128] = BTF_PREFIX;
--	char *dst = raw_tp_btf_name + sizeof(BTF_PREFIX) - 1;
--	int ret, i, err = -EINVAL;
-+	char raw_tp_btf[128] = BTF_PREFIX;
-+	char *dst = raw_tp_btf + sizeof(BTF_PREFIX) - 1;
-+	const char *btf_name;
-+	int err = -EINVAL;
-+	u32 kind;
- 
- 	if (IS_ERR(btf)) {
- 		pr_warn("vmlinux BTF is not found\n");
- 		return -EINVAL;
+ 	void *data_end = (void *)(long)skb->data_end;
+ 	void *data = (void *)(long)skb->data;
+@@ -48,6 +78,10 @@ int process(struct __sk_buff *skb)
+ 		tcp = (struct tcphdr *)((void *)(ip6h) + ihl_len);
  	}
  
-+	if (attach_type == BPF_TRACE_RAW_TP) {
-+		/* prepend "btf_trace_" prefix per kernel convention */
-+		strncat(dst, name, sizeof(raw_tp_btf) - sizeof(BTF_PREFIX));
-+		btf_name = raw_tp_btf;
-+		kind = BTF_KIND_TYPEDEF;
-+	} else {
-+		btf_name = name;
-+		kind = BTF_KIND_FUNC;
-+	}
-+	err = btf__find_by_name_kind(btf, btf_name, kind);
-+	btf__free(btf);
-+	return err;
-+}
-+
-+static int libbpf_attach_btf_id_by_name(const char *name,
-+					enum bpf_attach_type attach_type)
-+{
-+	int i, err;
-+
- 	if (!name)
--		goto out;
-+		return -EINVAL;
- 
- 	for (i = 0; i < ARRAY_SIZE(section_names); i++) {
- 		if (!section_names[i].is_attach_btf)
- 			continue;
- 		if (strncmp(name, section_names[i].sec, section_names[i].len))
- 			continue;
--		/* prepend "btf_trace_" prefix per kernel convention */
--		strncat(dst, name + section_names[i].len,
--			sizeof(raw_tp_btf_name) - sizeof(BTF_PREFIX));
--		ret = btf__find_by_name(btf, raw_tp_btf_name);
--		if (ret <= 0) {
--			pr_warn("%s is not found in vmlinux BTF\n", dst);
--			goto out;
--		}
--		*btf_id = ret;
--		err = 0;
--		goto out;
-+		err = libbpf_find_vmlinux_btf_id(name + section_names[i].len,
-+						 attach_type);
-+		if (err <= 0)
-+			pr_warn("%s is not found in vmlinux BTF\n", name);
-+		return err;
- 	}
- 	pr_warn("failed to identify btf_id based on ELF section name '%s'\n", name);
--	err = -ESRCH;
--out:
--	btf__free(btf);
--	return err;
-+	return -ESRCH;
- }
- 
- int libbpf_attach_type_by_name(const char *name,
-@@ -5716,6 +5734,37 @@ struct bpf_link *bpf_program__attach_raw_tracepoint(struct bpf_program *prog,
- 	return (struct bpf_link *)link;
- }
- 
-+struct bpf_link *bpf_program__attach_trace(struct bpf_program *prog)
-+{
-+	char errmsg[STRERR_BUFSIZE];
-+	struct bpf_link_fd *link;
-+	int prog_fd, pfd;
-+
-+	prog_fd = bpf_program__fd(prog);
-+	if (prog_fd < 0) {
-+		pr_warn("program '%s': can't attach before loaded\n",
-+			bpf_program__title(prog, false));
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	link = malloc(sizeof(*link));
-+	if (!link)
-+		return ERR_PTR(-ENOMEM);
-+	link->link.destroy = &bpf_link__destroy_fd;
-+
-+	pfd = bpf_raw_tracepoint_open(NULL, prog_fd);
-+	if (pfd < 0) {
-+		pfd = -errno;
-+		free(link);
-+		pr_warn("program '%s': failed to attach to trace: %s\n",
-+			bpf_program__title(prog, false),
-+			libbpf_strerror_r(pfd, errmsg, sizeof(errmsg)));
-+		return ERR_PTR(pfd);
-+	}
-+	link->fd = pfd;
-+	return (struct bpf_link *)link;
-+}
-+
- enum bpf_perf_event_ret
- bpf_perf_event_read_simple(void *mmap_mem, size_t mmap_size, size_t page_size,
- 			   void **copy_mem, size_t *copy_size,
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 5aa27caad6c2..fbff419f6daf 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -188,6 +188,8 @@ libbpf_prog_type_by_name(const char *name, enum bpf_prog_type *prog_type,
- 			 enum bpf_attach_type *expected_attach_type);
- LIBBPF_API int libbpf_attach_type_by_name(const char *name,
- 					  enum bpf_attach_type *attach_type);
-+LIBBPF_API int libbpf_find_vmlinux_btf_id(const char *name,
-+					  enum bpf_attach_type attach_type);
- 
- /* Accessors of bpf_program */
- struct bpf_program;
-@@ -251,6 +253,8 @@ LIBBPF_API struct bpf_link *
- bpf_program__attach_raw_tracepoint(struct bpf_program *prog,
- 				   const char *tp_name);
- 
-+LIBBPF_API struct bpf_link *
-+bpf_program__attach_trace(struct bpf_program *prog);
- struct bpf_insn;
- 
- /*
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 420e69bfe699..8ddc2c40e482 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -199,10 +199,12 @@ LIBBPF_0.0.6 {
- 		bpf_map__set_pin_path;
- 		bpf_object__open_file;
- 		bpf_object__open_mem;
-+		bpf_program__attach_trace;
- 		bpf_program__get_expected_attach_type;
- 		bpf_program__get_type;
- 		bpf_program__is_tracing;
- 		bpf_program__set_tracing;
- 		bpf_program__size;
- 		btf__find_by_name_kind;
-+		libbpf_find_vmlinux_btf_id;
- } LIBBPF_0.0.5;
++	if (test_pkt_access_subprog1(skb) != skb->len * 2)
++		return TC_ACT_SHOT;
++	if (test_pkt_access_subprog2(2, skb) != skb->len * 2)
++		return TC_ACT_SHOT;
+ 	if (tcp) {
+ 		if (((void *)(tcp) + 20) > data_end || proto != 6)
+ 			return TC_ACT_SHOT;
 -- 
 2.23.0
 
