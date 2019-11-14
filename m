@@ -2,233 +2,152 @@ Return-Path: <SRS0=h7mW=ZG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E2BDC432C3
-	for <bpf@archiver.kernel.org>; Thu, 14 Nov 2019 15:41:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5A39C432C3
+	for <bpf@archiver.kernel.org>; Thu, 14 Nov 2019 17:10:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0A90B206D5
-	for <bpf@archiver.kernel.org>; Thu, 14 Nov 2019 15:41:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A79302071B
+	for <bpf@archiver.kernel.org>; Thu, 14 Nov 2019 17:10:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="S0/6f0Y1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fiNvbPub"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726505AbfKNPlI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Nov 2019 10:41:08 -0500
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:29773 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726473AbfKNPlI (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 14 Nov 2019 10:41:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1573746066;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TsUJgGUVpXmofLpPKpc4ZZrOh9LKGy0txkuAyysjhio=;
-        b=S0/6f0Y1yZYRSU6BqHmXzYY9uTLU1YWNGJpnMHLWZvEjIaYbcNlkeEBuQp95AkyznStD5K
-        sLINAiK4h+NY8diCxeEjse5YN12mZDRwaEW4TTxraFozUqIAn0HW0GVbu/zAbYbpHAtUxP
-        B9Ut9FvBDWK+vcpA/5FUf2BDh1Kpxzk=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-218-4TN_GUMtNemYFdwWF92eBA-1; Thu, 14 Nov 2019 10:41:05 -0500
-Received: by mail-lf1-f69.google.com with SMTP id t6so2074719lfd.13
-        for <bpf@vger.kernel.org>; Thu, 14 Nov 2019 07:41:05 -0800 (PST)
+        id S1726592AbfKNRKY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Nov 2019 12:10:24 -0500
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:46687 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726482AbfKNRKY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 Nov 2019 12:10:24 -0500
+Received: by mail-qt1-f194.google.com with SMTP id r20so7517003qtp.13;
+        Thu, 14 Nov 2019 09:10:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hXsovt/+oVzYhy5yR+2IkWFi/pL7lXhsTNS0COVVYGA=;
+        b=fiNvbPubHYbK7sKeYRSX4634vRo4+gRYo+yrlUc9ZXM2RRj/LQqZb8djpLStKALMih
+         jCyz0W0NpHczqSvdbq42hwHGTvjFQ/4+jk7vIpk21Rq1xGw9asTLmXPwiAu4jMdBAdA4
+         eMkyJ0Fy10+B/WZaYbUwNumHAlwFsFWgphbXcpyzndw4Mpwnf9nPX1IqyYbySK9TLiJJ
+         ZZW1OL8VkbLTUHglpdhbfjBpc4HRyQ7eK0VgOn9WpPMascB9+gE/17qf+PgcCPYEt1hp
+         RsH3uJE0FJ/2/k9DOadYrfP/u9wqQ8dypa2StWbXIMMFOiZNgDv/bUsKs4i4pjH3K7xy
+         XFfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=GLlkNjP2tY8QkKUF/OUq6PPbMjkE8ofUEdh3FKzNTPE=;
-        b=r7SR56RN2r0cRVFZfgZ/ZMIusgKJL3ylhaqU/yMvuPhmcLAHl5SdVtfkpSnxrNh/J+
-         XjlW+J0V3/HdWpzJnhoRAUxoQMIl39b8ya1nAuD+39BffizNOkz7vtPo0m2o4331raBl
-         FbQCuF/v25qK2A0C/Ljop0FnqJl1cadjISiNOR9TGo/olNPXO9FhjcBOIKLuyptiisVY
-         N4WF24kJRIkhP/7PmdDWT1fVBKbrAbEisBCJXJpTbzxg1Jhmumi4LjSDtesjIv26/bUb
-         G5kU5rnSmKsaxCG7LzjRQOzqbjBB+rQ1Jfz6hu1luFvk+W0T1xvXxKJ2QJB1bx3FT2D+
-         dd8Q==
-X-Gm-Message-State: APjAAAXTc6wKagIIP1BNlsVzyGh1sgW30KG0r+q3PjK8VKnzlAuddPY5
-        8NkRSVFPOxtxHGslHM6KaiPzt9ZgGTRaKsPCYZs3f6TcbOcbdznozjniQPQBdKUwMuKerTXl7HB
-        piIAuQKnkZJU2
-X-Received: by 2002:a19:6d12:: with SMTP id i18mr7332762lfc.153.1573746063791;
-        Thu, 14 Nov 2019 07:41:03 -0800 (PST)
-X-Google-Smtp-Source: APXvYqw7DlklcocOm5Bieb8jiL3ND9ar6KSd0KbOYO2zf8WREILKU6HiWQQTMUYBqv+4ssIvPPyCTQ==
-X-Received: by 2002:a19:6d12:: with SMTP id i18mr7332736lfc.153.1573746063358;
-        Thu, 14 Nov 2019 07:41:03 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk (borgediget.toke.dk. [85.204.121.218])
-        by smtp.gmail.com with ESMTPSA id g14sm2885065lfj.17.2019.11.14.07.41.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Nov 2019 07:41:02 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id B4D781803C7; Thu, 14 Nov 2019 16:41:01 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Edward Cree <ecree@solarflare.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hXsovt/+oVzYhy5yR+2IkWFi/pL7lXhsTNS0COVVYGA=;
+        b=Gv7at5yLK+vD1mrikPCdIp2IdanF65iDLpgdMgPXM0g3JmiPhO/p8IXFTDoQXk0q+o
+         lW9HN3nGcv4omTG0tOp6ENHP8CdMoiMEVu1FKqXqXV+k+N/swfSUQmE7IZN42dBEZWVE
+         k+jPz8IlXz8KpJZQN+6N+rK0/OWZyplTipFjhwQgCj7EH33WI15PXtnp1vJWQTJ6E3nH
+         KPp/3oPuM8JkLScI5GAzoJK+Zga6Kcjcu9/Dd6DXjIqurXL9uERiAlGif5pnCSXKK0Lj
+         Md5DdMqCSqC8hhKhsBR93jzC3yU2xf1jSK4SwzC9mdF0dYCLlX9zovCHkL9L0/dVLoYi
+         Poow==
+X-Gm-Message-State: APjAAAWI8khZkc1+difptHxn57ERw+heNuwzO7IvLvOpeL0i4tIERB5k
+        iEA2+Qp2HjI132hgvvwLVkZpvehsB+kjWi3//6s=
+X-Google-Smtp-Source: APXvYqyVmZp0LiGgW6UpImGbpYtjfxZf/IQFSI6kpYrUt0vENrK8mPXpfgUgtc2MSUjsLPCDp4GHbJZqtzri3ejxWjA=
+X-Received: by 2002:ac8:6f4e:: with SMTP id n14mr9100011qtv.309.1573751421543;
+ Thu, 14 Nov 2019 09:10:21 -0800 (PST)
+MIME-Version: 1.0
+References: <87h840oese.fsf@toke.dk> <282d61fe-7178-ebf1-e0da-bdc3fb724e4b@gmail.com>
+ <87wocqrz2v.fsf@toke.dk> <20191027.121727.1776345635168200501.davem@davemloft.net>
+ <09817958-e331-63e9-efbf-05341623a006@gmail.com> <CALDO+SaxbNpON+=3zA4r4k6BE7UhbGU1WovW8Owyi8-9J_Wbkw@mail.gmail.com>
+ <53538a02-e6d3-5443-8251-bef381c691a0@gmail.com>
+In-Reply-To: <53538a02-e6d3-5443-8251-bef381c691a0@gmail.com>
+From:   William Tu <u9012063@gmail.com>
+Date:   Thu, 14 Nov 2019 09:09:42 -0800
+Message-ID: <CALDO+SbqcoiwJn3jskpPTjdJyK5932r0cEzs=1R6p=CWgERLuw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 bpf-next 00/15] xdp_flow: Flow offload to XDP
+To:     Toshiaki Makita <toshiaki.makita1@gmail.com>
+Cc:     David Miller <davem@davemloft.net>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Marek Majkowski <marek@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: static and dynamic linking. Was: [PATCH bpf-next v3 1/5] bpf: Support chain calling multiple BPF
-In-Reply-To: <20191112195223.cp5kcmkko54dsfbg@ast-mbp.dhcp.thefacebook.com>
-References: <5da4ab712043c_25f42addb7c085b83b@john-XPS-13-9370.notmuch> <87eezfi2og.fsf@toke.dk> <f9d5f717-51fe-7d03-6348-dbaf0b9db434@solarflare.com> <87r23egdua.fsf@toke.dk> <70142501-e2dd-1aed-992e-55acd5c30cfd@solarflare.com> <874l07fu61.fsf@toke.dk> <aeae7b94-090a-a850-4740-0274ab8178d5@solarflare.com> <87eez4odqp.fsf@toke.dk> <20191112025112.bhzmrrh2pr76ssnh@ast-mbp.dhcp.thefacebook.com> <87h839oymg.fsf@toke.dk> <20191112195223.cp5kcmkko54dsfbg@ast-mbp.dhcp.thefacebook.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Thu, 14 Nov 2019 16:41:01 +0100
-Message-ID: <87y2wimpo2.fsf@toke.dk>
-MIME-Version: 1.0
-X-MC-Unique: 4TN_GUMtNemYFdwWF92eBA-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        pravin shelar <pshelar@ovn.org>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Stanislav Fomichev <sdf@fomichev.me>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
-
-[...]
-
-> Back to your question of how fw2 will get loaded.. I'm thinking the follo=
-wing:
-> 1. Static linking:
->   obj =3D bpf_object__open("rootlet.o", "fw1.o", "fw2.o");
->   // libbpf adjusts call offsets and links into single loadable bpf_objec=
-t
->   bpf_object__load(obj);
->   bpf_set_link_xdp_fd()
-> No kernel changes are necessary to support program chaining via static li=
-nking.
+On Thu, Nov 14, 2019 at 2:06 AM Toshiaki Makita
+<toshiaki.makita1@gmail.com> wrote:
 >
-> 2. Dynamic linking:
->   // assuming libxdp.so manages eth0
->   rootlet_fd =3D get_xdp_fd(eth0);
->   subprog_btf_id =3D libbpf_find_prog_btf_id("name_of_placeholder", roole=
-t_fd);
->   //                  ^ this function is in patch 16/18 of trampoline
->   attr.attach_prog_fd =3D roolet_fd;
->   attr.attach_btf_id =3D subprog_btf_id;
->   // pair (prog_fd, btf_id) needs to be specified at load time
->   obj =3D bpf_object__open("fw2.o", attr);
->   bpf_object__load(obj);
->   prog =3D bpf_object__find_program_by_title(obj);
->   link =3D bpf_program__replace(prog); // similar to bpf_program__attach_=
-trace()
->   // no extra arguments during 'replace'.
->   // Target (prog_fd, btf_id) already known to the kernel and verified
-
-OK, this makes sense.
-
->> So the two component programs would still exist as kernel objects,
->> right?=20
+> On 2019/11/13 2:50, William Tu wrote:
+> > On Wed, Oct 30, 2019 at 5:32 PM Toshiaki Makita
+> > <toshiaki.makita1@gmail.com> wrote:
+> >>
+> >> On 2019/10/28 4:17, David Miller wrote:
+> >>> From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> >>> Date: Sun, 27 Oct 2019 16:24:24 +0100
+> >>>
+> >>>> The results in the paper also shows somewhat disappointing performan=
+ce
+> >>>> for the eBPF implementation, but that is not too surprising given th=
+at
+> >>>> it's implemented as a TC eBPF hook, not an XDP program. I seem to re=
+call
+> >>>> that this was also one of the things puzzling to me back when this w=
+as
+> >>>> presented...
+> >>>
+> >>> Also, no attempt was made to dyanamically optimize the data structure=
+s
+> >>> and code generated in response to features actually used.
+> >>>
+> >>> That's the big error.
+> >>>
+> >>> The full OVS key is huge, OVS is really quite a monster.
+> >>>
+> >>> But people don't use the entire key, nor do they use the totality of
+> >>> the data paths.
+> >>>
+> >>> So just doing a 1-to-1 translation of the OVS datapath into BPF makes
+> >>> absolutely no sense whatsoever and it is guaranteed to have worse
+> >>> performance.
+> >
+> > 1-to-1 translation has nothing to do with performance.
 >
-> yes. Both fw1.o and fw2.o will be loaded and running instead of placehold=
-ers.
+> I think at least key size matters.
+> One big part of hot spots in xdp_flow bpf program is hash table lookup.
+> Especially hash calculation by jhash and key comparison are heavy.
+> The computational cost heavily depends on key size.
 >
->> And the trampolines would keep individual stats for each one (if
->> BPF stats are enabled)?=20
+> If umh can determine some keys won't be used in some way (not sure if it'=
+s
+> practical though), umh can load an XDP program which uses less sized
+> key. Also it can remove unnecessary key parser routines.
+> If it's possible, the performance will increase.
 >
-> In case of dynamic linking both fw1.o and fw2.o will be seen as individua=
-l
-> programs from 'bpftool p s' point of view. And both will have
-> individual stats.
+Yes, that's a good point.
+In other meeting people also gave me this suggestions.
 
-Right, this is important, and I think it's where my skepticism about
-static linking comes from. With static linking, each XDP program will be
-"reduced" to a subprog instead of a full stand-alone program. Which
-means that its execution will be different depending on whether it is
-just attached directly to an interface, or if it's been linked with a
-rootlet before loading.
+Basically it's "on-demand flow key parsing using eBPF"
+The key parsing consists of multiple eBPF programs, and
+based on the existing rules, load the program and parse minimum
+necessary fields required by existing rules. This will definitely
+have better performance.
 
-I'll admit I don't know enough about how subprograms actually work to
-know if it's a *meaningful* difference, so I guess I'll go play around
-with it. If nothing else, experimenting with static linking can be a way
-to hash out the semantics until dynamic linking lands.
+I didn't try it at all because most of our use cases use overlay
+tunnel and connection tracking.  There is little chance of rules
+using only L2 or L3 fields. Another way is to do flow key compression
+something like miniflow in OVS userspace datapath.
 
->> Could userspace also extract the prog IDs being
->> referenced by the "glue" proglet?=20
->
-> Not sure I follow. Both fw1.o and fw2.o will have their own prog ids.
-> fw1_prog->aux->linked_prog =3D=3D rootlet_prog
-> fw2_prog->aux->linked_prog =3D=3D rootlet_prog
-> Unloading and detaching fw1.o will make kernel to switch back to placehol=
-der
-> subprog in roolet_prog. I believe roolet_prog should not keep a list of p=
-rogs
-> that attached to it (or replaced its subprogs) to avoid circular
-> dependency.
-
-Well I did mean the link in the other direction. But thinking about it
-some more, I don't think it really matters. The important bit is that
-userspace can answer the question "given that rootlet ID X is currently
-attached on eth0, which two program IDs Y and Z will actually run on
-that interface?". And if there's a link in the other direction, it could
-just iterate over all loaded programs in the kernel to find them, so
-that is OK; as long as we can also tell in which "slot" in the rootlet a
-given program is currently attached.
-
-> Due to that detaching roolet_prog from netdev will stop the flow of
-> packets into fw1.o, but refcnt of rootlet_prog will not go to zero, so
-> it will stay in memory until both fw1.o and fw2.o detach from
-> rootlet.o.
-
-OK, that is probably fine. I think we should teach most utilities to
-deal with this anyway; in particular, iproute2 should know about
-multi-progs (i.e., link against libxdp).
-
->> What about attaching a third program? Would that work by recursion (as
->> above, but with the old proglet as old_fd), or should the library build
->> a whole new sequence from the component programs?
->
-> This choice is up to libxdp.so. It can have a number of placeholders
-> ready to be replaced by new progs. Or it can re-generate rootlet.o
-> every time new fwX.o comes along. Short term I would start development
-> with auto-generated roolet.o and static linking done by libbpf
-> while the policy and roolet are done by libxdp.so, since this work
-> doesn't depend on any kernel changes. Long term auto-generation
-> can stay in libxdp.so if it turns out to be sufficient.
-
-Yes, as I said above this sounds like at least it's a start.
-
->> Finally, what happens if someone where to try to attach a retprobe to
->> one of the component programs? Could it be possible to do that even
->> while program is being run from proglet dispatch? That way we can still
->> debug an individual XDP program even though it's run as part of a chain.
->
-> Right. The fentry/fexit tracing is orthogonal to static/dynamic linking.
-> It will be available for all prog types after trampoline patches land.
-> See fexit_bpf2bpf.c example in the last 18/18 patch.
-> We will be able to debug XDP program regardless whether it's a rootlet
-> or a subprogram. Doesn't matter whether linking was static or dynamic.
-
-OK, that's great, and certainly resolved one point of skepticism :)
-
-> With fentry/fexit we will be able to do different stats too.
-> Right now bpf program stats are limited to cycles and I resisted a lot
-> of pressure to add more hard coded stats. With fentry/fexit we can
-> collect arbitrary counters per program. Like number of L1-cache misses
-> or number of TLB misses in a given XDP prog.
-
-Yeah, that makes a lot of sense, of course. Great!
-
->> Sounds reasonable. Any reason libxdp.so couldn't be part of libbpf?
->
-> libxdp.so is a policy specifier while libbpf is a tool. It makes more
-> sense for them to be separate. libbpf has strong api compatibility
-> guarantees. While I don't think anyone knows at this point how libxdp
-> api should look and it will take some time for it to mature.
-
-Well, we'd want libxdp to have the same strong API guarantees,
-eventually. Which would be a reason to just include it in libbpf. But
-sure, I wasn't suggesting to do this from the get-go; we can start out
-with something separate and decide later when/if it makes sense to
-integrate. As long as libbpf can do the heavy lifting on the actual
-linking that is fine with me.
-
--Toke
-
+Regards,
+William
