@@ -2,66 +2,94 @@ Return-Path: <SRS0=h7mW=ZG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5D30C43215
-	for <bpf@archiver.kernel.org>; Thu, 14 Nov 2019 17:28:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D6AFC432C3
+	for <bpf@archiver.kernel.org>; Thu, 14 Nov 2019 17:40:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A0CE9206CC
-	for <bpf@archiver.kernel.org>; Thu, 14 Nov 2019 17:28:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1E408206DC
+	for <bpf@archiver.kernel.org>; Thu, 14 Nov 2019 17:40:19 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rxLtngFx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726598AbfKNR2n (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Nov 2019 12:28:43 -0500
-Received: from mga03.intel.com ([134.134.136.65]:32570 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726599AbfKNR2n (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 Nov 2019 12:28:43 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Nov 2019 09:28:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,304,1569308400"; 
-   d="scan'208";a="288286417"
-Received: from aguedesl-testbed1.jf.intel.com ([10.54.31.71])
-  by orsmga001.jf.intel.com with ESMTP; 14 Nov 2019 09:28:42 -0800
-From:   Andre Guedes <andre.guedes@intel.com>
-To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org
-Subject: [PATCH bpf-next 1/2] samples/bpf: Remove duplicate option from xdpsock
-Date:   Thu, 14 Nov 2019 08:28:46 -0800
-Message-Id: <20191114162847.221770-1-andre.guedes@intel.com>
-X-Mailer: git-send-email 2.24.0
+        id S1726263AbfKNRkS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Nov 2019 12:40:18 -0500
+Received: from mail-qv1-f66.google.com ([209.85.219.66]:37998 "EHLO
+        mail-qv1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725976AbfKNRkS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 Nov 2019 12:40:18 -0500
+Received: by mail-qv1-f66.google.com with SMTP id q19so2681959qvs.5
+        for <bpf@vger.kernel.org>; Thu, 14 Nov 2019 09:40:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+8WyiicmDK1Ja6lb7FfUoneixA/LHRTQy3JnVr4Hw9s=;
+        b=rxLtngFxfG6VGJM5HaKGbUt1Sp4+BWlxkwCCphmyfTmdt0GDWA06DUwACtoeJd28lB
+         7hWcx7h11t0IZS1wtkMgPqoMTCNFxhWaZXG4E6EusWa/OXMMW8Z0fWUceDgMqoVUHbca
+         yy8la24DMmNrv1AXtiqYibLg1kqhHML9qcLRYH9Bc4xii8nDhM0SCTmeRLmilfhz7pwN
+         Xi4+obdj/9fF38/AWMVd3KBp2b5gTo0WoMJV54Q7Bpy2f1eZRwu2Vsis75wI5nnt+8GD
+         MxP5OY2wTK2lDsS9TDbdrtljOpkiF1XucKc4cuu0WVefkCKzgt3vgh5lkS7WgCDsWrjB
+         MgHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+8WyiicmDK1Ja6lb7FfUoneixA/LHRTQy3JnVr4Hw9s=;
+        b=MpwUADABY+KegvnOe5L1hfQTVYOaURoHed8vc01Lc2QytfHwFYo5+NiJhyCyRDwIZ5
+         ohPtIm8BcSWLRtLx246bOpO80GurEoWXem2RrkfyWtCvHK5i4aRh8fzo0mtWH3HnsHWb
+         Hr7iuej1eEwH+LjE8hVCOFL0LP1x6EOJpWhdpPJhWI62hXfxv6unRhJWgheVdxo7OKCC
+         kAgtEd13/j9sj9RrvhL9Abp45HlyF9w/LcJCXdLZUxriwsgvVD+FP5b3/q5DucRgAwic
+         6C/BQ0sUd2TDs03VUL2dWmetHGG8KQzMvWIy0BP7+tJeZIgiT3zSRBGoQ+ShHBt3v63n
+         AnbA==
+X-Gm-Message-State: APjAAAWc1nLGOHtZFHme+04GG5LRkwOP0PlOOLrcjiGQeLaoF5k7bGtl
+        lNrchNjzkdx1pj2DIbJzhB0m2Q6BiRGyo2N4ktc=
+X-Google-Smtp-Source: APXvYqwNzSb2gps29EJC9MlvPm7U3i/mdZLLjmbFCJ4FfIt3OV2ilwmQzv/YerIzshfFw9ZCVZ2dFew3M1Gf03vL9/s=
+X-Received: by 2002:ad4:4092:: with SMTP id l18mr8876596qvp.114.1573753216187;
+ Thu, 14 Nov 2019 09:40:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20191113170005.48813-1-iii@linux.ibm.com>
+In-Reply-To: <20191113170005.48813-1-iii@linux.ibm.com>
+From:   Song Liu <liu.song.a23@gmail.com>
+Date:   Thu, 14 Nov 2019 09:40:05 -0800
+Message-ID: <CAPhsuW6ktX4zDt4fE=C0G4gCZoY_GRdkJFk0sdpsxYVtohnBxA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: make bpf_jit_binary_alloc support alignment
+ > 4
+To:     Ilya Leoshkevich <iii@linux.ibm.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The '-f' option is shown twice in the usage(). This patch removes the
-outdated version.
+On Wed, Nov 13, 2019 at 9:20 AM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
+>
+> Currently passing alignment greater than 4 to bpf_jit_binary_alloc does
+> not work: in such cases it aligns only to 4 bytes.
+>
+> However, this is required on s390, where in order to load a constant
+> from memory in a large (>512k) BPF program, one must use lgrl
+> instruction, whose memory operand must be aligned on an 8-byte boundary.
+>
+> This patch makes it possible to request an arbitrary power-of-2
+> alignment from bpf_jit_binary_alloc by allocating extra padding bytes
+> and aligning the resulting pointer rather than the start offset.
+>
+> An alternative would be to simply increase the alignment of
+> bpf_binary_header.image to 8, but this would increase the risk of
+> wasting a page on arches that don't need it, and would also be
+> insufficient in case someone needs e.g. 16-byte alignment in the
+> future.
+>
+> Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 
-Signed-off-by: Andre Guedes <andre.guedes@intel.com>
----
- samples/bpf/xdpsock_user.c | 1 -
- 1 file changed, 1 deletion(-)
+Maybe we can just make it 8 byte aligned for all architectures?
 
-diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
-index a1f96e55e43a..c5d0a006cafc 100644
---- a/samples/bpf/xdpsock_user.c
-+++ b/samples/bpf/xdpsock_user.c
-@@ -393,7 +393,6 @@ static void usage(const char *prog)
- 		"  -n, --interval=n	Specify statistics update interval (default 1 sec).\n"
- 		"  -z, --zero-copy      Force zero-copy mode.\n"
- 		"  -c, --copy           Force copy mode.\n"
--		"  -f, --frame-size=n   Set the frame size (must be a power of two, default is %d).\n"
- 		"  -m, --no-need-wakeup Turn off use of driver need wakeup flag.\n"
- 		"  -f, --frame-size=n   Set the frame size (must be a power of two in aligned mode, default is %d).\n"
- 		"  -u, --unaligned	Enable unaligned chunk placement\n"
--- 
-2.24.0
-
+#define BPF_IMAGE_ALIGNMENT 8
