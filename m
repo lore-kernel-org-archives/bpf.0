@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65F8EC432C3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B28B9C33C9A
 	for <bpf@archiver.kernel.org>; Thu, 14 Nov 2019 18:57:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 40B362071B
+	by mail.kernel.org (Postfix) with ESMTP id 90F012071B
 	for <bpf@archiver.kernel.org>; Thu, 14 Nov 2019 18:57:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1573757874;
-	bh=1FZnsekhyvRJyA2zUH0aQqHMrxXljCuvWTKQzQOkJ0Q=;
+	bh=En/5tcuGDRNc1OdMfYKCjXP6LCNVIBLdfx/NX3Jpvtk=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=cVK+/6AUPQn/1kQeHv7W5oDkW/BhNJPlzJi/XxUKzh8+rxdW33AUqd8PESZIBrLAn
-	 UIrQ819Wn94ykZpu07FJPJF3PWCJ7WAFqUKCU8l/NT9VkDw8oZ8F447K1F5bbSiDcm
-	 Fjcp1MMeeVoP8qI7yYKSc9cFRuhekHYa+6zEBInk=
+	b=bfhby0hGplSlzsZUMhrKh9J96tiz7QzAsh0XlE/QeOZCotH6C+KqrFOKsaLxPa6UA
+	 rL2Htogil2t/NuXXBFKHZS6laAln2bhlUuJSr1ScKBcH6GSKgO1HNl1cNqlOhMOVox
+	 uI3S6erMGxo1azOyjeM0CJDNkC/a4UFw790YcVSI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727226AbfKNS5x convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 14 Nov 2019 13:57:53 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:29998 "EHLO
+        id S1727238AbfKNS5t convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 14 Nov 2019 13:57:49 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:16180 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727199AbfKNS5w (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 14 Nov 2019 13:57:52 -0500
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAEIeSNx028177
-        for <bpf@vger.kernel.org>; Thu, 14 Nov 2019 10:57:51 -0800
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2w8n9s6y7h-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 14 Nov 2019 10:57:51 -0800
-Received: from 2401:db00:30:600c:face:0:1f:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Thu, 14 Nov 2019 10:57:50 -0800
+        by vger.kernel.org with ESMTP id S1727217AbfKNS5t (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 14 Nov 2019 13:57:49 -0500
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAEIhOud030160
+        for <bpf@vger.kernel.org>; Thu, 14 Nov 2019 10:57:48 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2w8qj9e190-6
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 14 Nov 2019 10:57:47 -0800
+Received: from 2401:db00:2120:80d4:face:0:39:0 (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Thu, 14 Nov 2019 10:57:44 -0800
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 89CB576071B; Thu, 14 Nov 2019 10:57:49 -0800 (PST)
+        id 6859776071B; Thu, 14 Nov 2019 10:57:43 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -46,9 +46,9 @@ To:     <davem@davemloft.net>
 CC:     <daniel@iogearbox.net>, <x86@kernel.org>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v4 bpf-next 14/20] bpf: Fix race in btf_resolve_helper_id()
-Date:   Thu, 14 Nov 2019 10:57:14 -0800
-Message-ID: <20191114185720.1641606-15-ast@kernel.org>
+Subject: [PATCH v4 bpf-next 11/20] selftests/bpf: Add combined fentry/fexit test
+Date:   Thu, 14 Nov 2019 10:57:11 -0800
+Message-ID: <20191114185720.1641606-12-ast@kernel.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191114185720.1641606-1-ast@kernel.org>
 References: <20191114185720.1641606-1-ast@kernel.org>
@@ -58,10 +58,10 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-11-14_05:2019-11-14,2019-11-14 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 mlxscore=0
- adultscore=0 impostorscore=0 priorityscore=1501 phishscore=0 clxscore=1034
- lowpriorityscore=0 malwarescore=0 suspectscore=1 mlxlogscore=999
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 malwarescore=0
+ bulkscore=0 spamscore=0 lowpriorityscore=0 priorityscore=1501
+ clxscore=1034 mlxlogscore=852 suspectscore=1 adultscore=0 phishscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1910280000 definitions=main-1911140157
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -69,120 +69,111 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-btf_resolve_helper_id() caching logic is a bit racy, since under root the
-verifier can verify several programs in parallel. Fix it with READ/WRITE_ONCE.
-Fix the type as well, since error is also recorded.
+Add a combined fentry/fexit test.
 
-Fixes: a7658e1a4164 ("bpf: Check types of arguments passed into helpers")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Acked-by: Song Liu <songliubraving@fb.com>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
 ---
- include/linux/bpf.h   |  5 +++--
- kernel/bpf/btf.c      | 26 +++++++++++++++++++++++++-
- kernel/bpf/verifier.c |  8 +++-----
- net/core/filter.c     |  2 +-
- 4 files changed, 32 insertions(+), 9 deletions(-)
+ .../selftests/bpf/prog_tests/fentry_fexit.c   | 90 +++++++++++++++++++
+ 1 file changed, 90 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 0d4c5c224d79..cb5a356381f5 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -248,7 +248,7 @@ struct bpf_func_proto {
- 		};
- 		enum bpf_arg_type arg_type[5];
- 	};
--	u32 *btf_id; /* BTF ids of arguments */
-+	int *btf_id; /* BTF ids of arguments */
- };
- 
- /* bpf_context is intentionally undefined structure. Pointer to bpf_context is
-@@ -881,7 +881,8 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 		      const struct btf_type *t, int off, int size,
- 		      enum bpf_access_type atype,
- 		      u32 *next_btf_id);
--u32 btf_resolve_helper_id(struct bpf_verifier_log *log, void *, int);
-+int btf_resolve_helper_id(struct bpf_verifier_log *log,
-+			  const struct bpf_func_proto *fn, int);
- 
- int btf_distill_func_proto(struct bpf_verifier_log *log,
- 			   struct btf *btf,
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 9e1164e5b429..033d071eb59c 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -3721,7 +3721,8 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 	return -EINVAL;
- }
- 
--u32 btf_resolve_helper_id(struct bpf_verifier_log *log, void *fn, int arg)
-+static int __btf_resolve_helper_id(struct bpf_verifier_log *log, void *fn,
-+				   int arg)
- {
- 	char fnname[KSYM_SYMBOL_LEN + 4] = "btf_";
- 	const struct btf_param *args;
-@@ -3789,6 +3790,29 @@ u32 btf_resolve_helper_id(struct bpf_verifier_log *log, void *fn, int arg)
- 	return btf_id;
- }
- 
-+int btf_resolve_helper_id(struct bpf_verifier_log *log,
-+			  const struct bpf_func_proto *fn, int arg)
+diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
+new file mode 100644
+index 000000000000..40bcff2cc274
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
+@@ -0,0 +1,90 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2019 Facebook */
++#include <test_progs.h>
++
++void test_fentry_fexit(void)
 +{
-+	int *btf_id = &fn->btf_id[arg];
-+	int ret;
++	struct bpf_prog_load_attr attr_fentry = {
++		.file = "./fentry_test.o",
++	};
++	struct bpf_prog_load_attr attr_fexit = {
++		.file = "./fexit_test.o",
++	};
 +
-+	if (fn->arg_type[arg] != ARG_PTR_TO_BTF_ID)
-+		return -EINVAL;
++	struct bpf_object *obj_fentry = NULL, *obj_fexit = NULL, *pkt_obj;
++	struct bpf_map *data_map_fentry, *data_map_fexit;
++	char fentry_name[] = "fentry/bpf_fentry_testX";
++	char fexit_name[] = "fexit/bpf_fentry_testX";
++	int err, pkt_fd, kfree_skb_fd, i;
++	struct bpf_link *link[12] = {};
++	struct bpf_program *prog[12];
++	__u32 duration, retval;
++	const int zero = 0;
++	u64 result[12];
 +
-+	ret = READ_ONCE(*btf_id);
-+	if (ret)
-+		return ret;
-+	/* ok to race the search. The result is the same */
-+	ret = __btf_resolve_helper_id(log, fn->func, arg);
-+	if (!ret) {
-+		/* Function argument cannot be type 'void' */
-+		bpf_log(log, "BTF resolution bug\n");
-+		return -EFAULT;
++	err = bpf_prog_load("./test_pkt_access.o", BPF_PROG_TYPE_SCHED_CLS,
++			    &pkt_obj, &pkt_fd);
++	if (CHECK(err, "prog_load sched cls", "err %d errno %d\n", err, errno))
++		return;
++	err = bpf_prog_load_xattr(&attr_fentry, &obj_fentry, &kfree_skb_fd);
++	if (CHECK(err, "prog_load fail", "err %d errno %d\n", err, errno))
++		goto close_prog;
++	err = bpf_prog_load_xattr(&attr_fexit, &obj_fexit, &kfree_skb_fd);
++	if (CHECK(err, "prog_load fail", "err %d errno %d\n", err, errno))
++		goto close_prog;
++
++	for (i = 0; i < 6; i++) {
++		fentry_name[sizeof(fentry_name) - 2] = '1' + i;
++		prog[i] = bpf_object__find_program_by_title(obj_fentry, fentry_name);
++		if (CHECK(!prog[i], "find_prog", "prog %s not found\n", fentry_name))
++			goto close_prog;
++		link[i] = bpf_program__attach_trace(prog[i]);
++		if (CHECK(IS_ERR(link[i]), "attach_trace", "failed to link\n"))
++			goto close_prog;
 +	}
-+	WRITE_ONCE(*btf_id, ret);
-+	return ret;
-+}
++	data_map_fentry = bpf_object__find_map_by_name(obj_fentry, "fentry_t.bss");
++	if (CHECK(!data_map_fentry, "find_data_map", "data map not found\n"))
++		goto close_prog;
 +
- static int __get_type_size(struct btf *btf, u32 btf_id,
- 			   const struct btf_type **bad_type)
- {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8f89cfa93e88..e78ec7990767 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4147,11 +4147,9 @@ static int check_helper_call(struct bpf_verifier_env *env, int func_id, int insn
- 	meta.func_id = func_id;
- 	/* check args */
- 	for (i = 0; i < 5; i++) {
--		if (fn->arg_type[i] == ARG_PTR_TO_BTF_ID) {
--			if (!fn->btf_id[i])
--				fn->btf_id[i] = btf_resolve_helper_id(&env->log, fn->func, i);
--			meta.btf_id = fn->btf_id[i];
--		}
-+		err = btf_resolve_helper_id(&env->log, fn, i);
-+		if (err > 0)
-+			meta.btf_id = err;
- 		err = check_func_arg(env, BPF_REG_1 + i, fn->arg_type[i], &meta);
- 		if (err)
- 			return err;
-diff --git a/net/core/filter.c b/net/core/filter.c
-index fc303abec8fa..f72face90659 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3816,7 +3816,7 @@ static const struct bpf_func_proto bpf_skb_event_output_proto = {
- 	.arg5_type	= ARG_CONST_SIZE_OR_ZERO,
- };
- 
--static u32 bpf_skb_output_btf_ids[5];
-+static int bpf_skb_output_btf_ids[5];
- const struct bpf_func_proto bpf_skb_output_proto = {
- 	.func		= bpf_skb_event_output,
- 	.gpl_only	= true,
++	for (i = 6; i < 12; i++) {
++		fexit_name[sizeof(fexit_name) - 2] = '1' + i - 6;
++		prog[i] = bpf_object__find_program_by_title(obj_fexit, fexit_name);
++		if (CHECK(!prog[i], "find_prog", "prog %s not found\n", fexit_name))
++			goto close_prog;
++		link[i] = bpf_program__attach_trace(prog[i]);
++		if (CHECK(IS_ERR(link[i]), "attach_trace", "failed to link\n"))
++			goto close_prog;
++	}
++	data_map_fexit = bpf_object__find_map_by_name(obj_fexit, "fexit_te.bss");
++	if (CHECK(!data_map_fexit, "find_data_map", "data map not found\n"))
++		goto close_prog;
++
++	err = bpf_prog_test_run(pkt_fd, 1, &pkt_v6, sizeof(pkt_v6),
++				NULL, NULL, &retval, &duration);
++	CHECK(err || retval, "ipv6",
++	      "err %d errno %d retval %d duration %d\n",
++	      err, errno, retval, duration);
++
++	err = bpf_map_lookup_elem(bpf_map__fd(data_map_fentry), &zero, &result);
++	if (CHECK(err, "get_result",
++		  "failed to get output data: %d\n", err))
++		goto close_prog;
++
++	err = bpf_map_lookup_elem(bpf_map__fd(data_map_fexit), &zero, result + 6);
++	if (CHECK(err, "get_result",
++		  "failed to get output data: %d\n", err))
++		goto close_prog;
++
++	for (i = 0; i < 12; i++)
++		if (CHECK(result[i] != 1, "result", "bpf_fentry_test%d failed err %ld\n",
++			  i % 6 + 1, result[i]))
++			goto close_prog;
++
++close_prog:
++	for (i = 0; i < 12; i++)
++		if (!IS_ERR_OR_NULL(link[i]))
++			bpf_link__destroy(link[i]);
++	bpf_object__close(obj_fentry);
++	bpf_object__close(obj_fexit);
++	bpf_object__close(pkt_obj);
++}
 -- 
 2.23.0
 
