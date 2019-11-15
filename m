@@ -2,193 +2,126 @@ Return-Path: <SRS0=5OmT=ZH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62CCBC432C3
-	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 05:43:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64933C432C3
+	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 05:53:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2D10D2072B
-	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 05:43:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3DD3E20733
+	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 05:53:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UezsTkcS"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="Lr98RhG1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726131AbfKOFnn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Nov 2019 00:43:43 -0500
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:45359 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725774AbfKOFnn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 Nov 2019 00:43:43 -0500
-Received: by mail-qk1-f195.google.com with SMTP id q70so7183993qke.12;
-        Thu, 14 Nov 2019 21:43:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5kO62DEWrUevVGmGRvxNJbGuiR7eiqhQGCoFZHvJ8bw=;
-        b=UezsTkcSsokMIYZ3C3ggGM7LdPFsaxg3RHfV1MgMZNE9ivR3azAAP/l2Gs3kOVhtht
-         dY3SCs0Sdm329y+9yO43ddL9BSmFE27/EAQVNo2k66m+Hku2QDgRd0nHmEjRuzKcf6CU
-         Ltyz2qJDaMP25/qCqSYXv6WQDLM3TeFE6CDQrJY//DT1L9iPdVUZIg2DI2X+EF9oB6Yj
-         s00cNifX8w8gFxkezWjsDzuKEg747l4RhRTPPHl8pKgqwPOKlCRuPybg0Fw2vy5ladDW
-         oa6X3ShGxmyVwf41LFnPsgUV5kYvONR6AwFNkvrmhETyIGHuw72qsLK0t50jqW5/O5Qf
-         vXrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5kO62DEWrUevVGmGRvxNJbGuiR7eiqhQGCoFZHvJ8bw=;
-        b=cNQ6TrcCJ8KhII/mNcYXEgMQzaSau8eySPLwnveVl0OcyClCD9YOWgnniG9GQ8/Mcv
-         OrgZF0k2LEXtpOW9EL+7IfQWFB3ZfaU7lkgPmiVAMO5D+yGJwCtTT17Jxx/FZ5SNL3lW
-         wjzcrpG3jI2NB1X0tiYmP7rvnSDWoWOSlxk9/Px8XUJFmUzvUHGnBeqqdWpi9VFOU4gA
-         nGWVLZE/Gak27dYH8AXIREazjAuSi3lSoq0oDy9wSi4a2wmPdG5N4zuhsTXJKR4LAxnS
-         Eg9BpqmEI7H+tNSxaPfMtPR6OsB24xen5bwuO6aHtq/7F+NISjRwbOxtzMNAYNIvwmVm
-         vdMg==
-X-Gm-Message-State: APjAAAU+M/Vz6yMXQmi3QFAlK/KQ0FjV7muCVvNoWqXcoiViRTiROO4y
-        cUUY8Ihq5EbTdfqysB13rI3vKNvlrsh7VoMdwAs=
-X-Google-Smtp-Source: APXvYqx9wtRQyQ6YIJYdvV4ld/NfZBoaeiX9U8VCfkFP7l29hlPKDUylfGGh8nC/BYlKVCw9H3d2Z1/7MyDcHKEQkrY=
-X-Received: by 2002:a37:b3c4:: with SMTP id c187mr11357017qkf.36.1573796620532;
- Thu, 14 Nov 2019 21:43:40 -0800 (PST)
+        id S1726717AbfKOFxu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 Nov 2019 00:53:50 -0500
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:10609 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726553AbfKOFxu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Nov 2019 00:53:50 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dce3d690002>; Thu, 14 Nov 2019 21:53:45 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Thu, 14 Nov 2019 21:53:45 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Thu, 14 Nov 2019 21:53:45 -0800
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 15 Nov
+ 2019 05:53:45 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Fri, 15 Nov 2019 05:53:45 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5dce3d680009>; Thu, 14 Nov 2019 21:53:44 -0800
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v5 16/24] net/xdp: set FOLL_PIN via pin_user_pages()
+Date:   Thu, 14 Nov 2019 21:53:32 -0800
+Message-ID: <20191115055340.1825745-17-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20191115055340.1825745-1-jhubbard@nvidia.com>
+References: <20191115055340.1825745-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
-References: <20191115040225.2147245-1-andriin@fb.com> <20191115040225.2147245-3-andriin@fb.com>
- <20191115044518.sqh3y3bwtjfp5zex@ast-mbp.dhcp.thefacebook.com>
- <CAEf4BzbE+1s_4=jpWEgNj+T0HyMXt1yjiRncq4sB3vfx6A3Sxw@mail.gmail.com> <20191115050824.76gmttbxd32jnnhb@ast-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20191115050824.76gmttbxd32jnnhb@ast-mbp.dhcp.thefacebook.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 14 Nov 2019 21:43:29 -0800
-Message-ID: <CAEf4BzbsJSEgnW14F7Xt+E911NC_ZqEUeLg0pxrUbaoj1Zzkyg@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf-next 2/4] bpf: add mmap() support for BPF_MAP_TYPE_ARRAY
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Rik van Riel <riel@surriel.com>
+X-NVConfidentiality: public
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1573797225; bh=JiuMSIu1KROGnYN0FUrQmmZholMbEQnfhCSo9iAG4Tw=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Type:Content-Transfer-Encoding;
+        b=Lr98RhG1tdsqYwnbXMSzbUdWbL674VZdXLsVAgHvVfrs4Hk6lBTc3JKG4tmaUMzLY
+         kKWmn4CVywlkea7GLWF9HCnCy7Gso6hbPQdfdShqQR98JvMhWr14DCr28YVtKSVlyp
+         mlrhJHBEKkELIhKp0qvI07yd+HzJVN465g8cV1i24T75NYzIiLnddO57oL0PJf6Euu
+         UgY7fTW+AmvxU2v6ggU/PG38PrfXJEOPKksOfyIK8rtfga23etn94AgtGUIjiFFemY
+         YTEr1+qk02/Z9sYgvFOmjbA67wdpIEaTZNwTfDa7KHdoB3wMLyk7xhocHeBYEGu8nk
+         igvLkkjfoocbw==
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Nov 14, 2019 at 9:08 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Thu, Nov 14, 2019 at 09:05:26PM -0800, Andrii Nakryiko wrote:
-> > On Thu, Nov 14, 2019 at 8:45 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Thu, Nov 14, 2019 at 08:02:23PM -0800, Andrii Nakryiko wrote:
-> > > > Add ability to memory-map contents of BPF array map. This is extremely useful
-> > > > for working with BPF global data from userspace programs. It allows to avoid
-> > > > typical bpf_map_{lookup,update}_elem operations, improving both performance
-> > > > and usability.
-> > > >
-> > > > There had to be special considerations for map freezing, to avoid having
-> > > > writable memory view into a frozen map. To solve this issue, map freezing and
-> > > > mmap-ing is happening under mutex now:
-> > > >   - if map is already frozen, no writable mapping is allowed;
-> > > >   - if map has writable memory mappings active (accounted in map->writecnt),
-> > > >     map freezing will keep failing with -EBUSY;
-> > > >   - once number of writable memory mappings drops to zero, map freezing can be
-> > > >     performed again.
-> > > >
-> > > > Only non-per-CPU plain arrays are supported right now. Maps with spinlocks
-> > > > can't be memory mapped either.
-> > > >
-> > > > For BPF_F_MMAPABLE array, memory allocation has to be done through vmalloc()
-> > > > to be mmap()'able. We also need to make sure that array data memory is
-> > > > page-sized and page-aligned, so we over-allocate memory in such a way that
-> > > > struct bpf_array is at the end of a single page of memory with array->value
-> > > > being aligned with the start of the second page. On deallocation we need to
-> > > > accomodate this memory arrangement to free vmalloc()'ed memory correctly.
-> > > >
-> > > > One important consideration regarding how memory-mapping subsystem functions.
-> > > > Memory-mapping subsystem provides few optional callbacks, among them open()
-> > > > and close().  close() is called for each memory region that is unmapped, so
-> > > > that users can decrease their reference counters and free up resources, if
-> > > > necessary. open() is *almost* symmetrical: it's called for each memory region
-> > > > that is being mapped, **except** the very first one. So bpf_map_mmap does
-> > > > initial refcnt bump, while open() will do any extra ones after that. Thus
-> > > > number of close() calls is equal to number of open() calls plus one more.
-> > > >
-> > > > Cc: Johannes Weiner <hannes@cmpxchg.org>
-> > > > Cc: Rik van Riel <riel@surriel.com>
-> > > > Acked-by: Song Liu <songliubraving@fb.com>
-> > > > Acked-by: John Fastabend <john.fastabend@gmail.com>
-> > > > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-> > > > ---
-> > > >  include/linux/bpf.h            | 11 ++--
-> > > >  include/linux/vmalloc.h        |  1 +
-> > > >  include/uapi/linux/bpf.h       |  3 ++
-> > > >  kernel/bpf/arraymap.c          | 59 +++++++++++++++++---
-> > > >  kernel/bpf/syscall.c           | 99 ++++++++++++++++++++++++++++++++--
-> > > >  mm/vmalloc.c                   | 20 +++++++
-> > > >  tools/include/uapi/linux/bpf.h |  3 ++
-> > > >  7 files changed, 184 insertions(+), 12 deletions(-)
-> > > >
-> > > > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> > > > index 6fbe599fb977..8021fce98868 100644
-> > > > --- a/include/linux/bpf.h
-> > > > +++ b/include/linux/bpf.h
-> > > > @@ -12,6 +12,7 @@
-> > > >  #include <linux/err.h>
-> > > >  #include <linux/rbtree_latch.h>
-> > > >  #include <linux/numa.h>
-> > > > +#include <linux/mm_types.h>
-> > > >  #include <linux/wait.h>
-> > > >  #include <linux/u64_stats_sync.h>
-> > > >
-> > > > @@ -66,6 +67,7 @@ struct bpf_map_ops {
-> > > >                                    u64 *imm, u32 off);
-> > > >       int (*map_direct_value_meta)(const struct bpf_map *map,
-> > > >                                    u64 imm, u32 *off);
-> > > > +     int (*map_mmap)(struct bpf_map *map, struct vm_area_struct *vma);
-> > > >  };
-> > > >
-> > > >  struct bpf_map_memory {
-> > > > @@ -94,9 +96,10 @@ struct bpf_map {
-> > > >       u32 btf_value_type_id;
-> > > >       struct btf *btf;
-> > > >       struct bpf_map_memory memory;
-> > > > +     char name[BPF_OBJ_NAME_LEN];
-> > > >       bool unpriv_array;
-> > > > -     bool frozen; /* write-once */
-> > > > -     /* 48 bytes hole */
-> > > > +     bool frozen; /* write-once; write-protected by freeze_mutex */
-> > > > +     /* 22 bytes hole */
-> > > >
-> > > >       /* The 3rd and 4th cacheline with misc members to avoid false sharing
-> > > >        * particularly with refcounting.
-> > > > @@ -104,7 +107,8 @@ struct bpf_map {
-> > > >       atomic64_t refcnt ____cacheline_aligned;
-> > > >       atomic64_t usercnt;
-> > > >       struct work_struct work;
-> > > > -     char name[BPF_OBJ_NAME_LEN];
-> > > > +     struct mutex freeze_mutex;
-> > > > +     u64 writecnt; /* writable mmap cnt; protected by freeze_mutex */
-> > > >  };
-> > >
-> > > Can the mutex be moved into bpf_array instead of being in bpf_map that is
-> > > shared across all map types?
-> >
-> > No, freezing logic is common to all maps. Same for writecnt and
-> > mmap()-ing overall.
->
-> How mmap is going to work for hash map ? and for prog_array?
->
+Convert net/xdp to use the new pin_longterm_pages() call, which sets
+FOLL_PIN. Setting FOLL_PIN is now required for code that requires
+tracking of pinned pages.
 
-It probably won't. But one day we might have hash map using open
-adressing, which will be more prone to memory-mapping. Or, say, some
-sort of non-per-CPU ring buffer would be a good candidate as well. It
-doesn't seem like a good idea to restrict mmap()-ability to just array
-for no good reason.
+In partial anticipation of this work, the net/xdp code was already
+calling put_user_page() instead of put_page(). Therefore, in order to
+convert from the get_user_pages()/put_page() model, to the
+pin_user_pages()/put_user_page() model, the only change required
+here is to change get_user_pages() to pin_user_pages().
 
-But speaking about freeze_mutex specifically. It's to coordinate
-writable memory-mapping and frozen flag. Even if we make
-memory-mapping bpf_array specific, map->frozen is generic flag and
-handled in syscall.c generically, so I just can't protect it only from
-bpf_array side.
+Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ net/xdp/xdp_umem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
+index 3049af269fbf..d071003b5e76 100644
+--- a/net/xdp/xdp_umem.c
++++ b/net/xdp/xdp_umem.c
+@@ -291,7 +291,7 @@ static int xdp_umem_pin_pages(struct xdp_umem *umem)
+ 		return -ENOMEM;
+=20
+ 	down_read(&current->mm->mmap_sem);
+-	npgs =3D get_user_pages(umem->address, umem->npgs,
++	npgs =3D pin_user_pages(umem->address, umem->npgs,
+ 			      gup_flags | FOLL_LONGTERM, &umem->pgs[0], NULL);
+ 	up_read(&current->mm->mmap_sem);
+=20
+--=20
+2.24.0
+
