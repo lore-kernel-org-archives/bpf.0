@@ -2,76 +2,170 @@ Return-Path: <SRS0=5OmT=ZH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDD49C43215
-	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 01:04:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6328AC432C3
+	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 01:50:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9980520725
-	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 01:04:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2E8EF2071B
+	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 01:50:07 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X6cVeiof"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727315AbfKOBEU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Nov 2019 20:04:20 -0500
-Received: from www62.your-server.de ([213.133.104.62]:50704 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727112AbfKOBEU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 Nov 2019 20:04:20 -0500
-Received: from 57.248.197.178.dynamic.dsl-lte-bonding.zhbmb00p-msn.res.cust.swisscom.ch ([178.197.248.57] helo=localhost)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1iVQ25-00080O-5I; Fri, 15 Nov 2019 02:04:17 +0100
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     ast@kernel.org
-Cc:     john.fastabend@gmail.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH rfc bpf-next 0/8] Optimize BPF tail calls for direct jumps
-Date:   Fri, 15 Nov 2019 02:03:54 +0100
-Message-Id: <cover.1573779287.git.daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
+        id S1727239AbfKOBuG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Nov 2019 20:50:06 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:34041 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726956AbfKOBuG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 Nov 2019 20:50:06 -0500
+Received: by mail-pf1-f195.google.com with SMTP id n13so5554321pff.1;
+        Thu, 14 Nov 2019 17:50:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=c61Ig9SwSoDqV7zYUXQJVmC/opkuC1ckBKs3j2LfZ8E=;
+        b=X6cVeiofk1m8oDoYmfhokhr3mDnJcd6YUIivEM8+ec8ZYmmMpARpo2iMJLxrvQk7Ll
+         09YorFNiMK6vBqQi4MMXXc+Pw6ANivhcI2G0zJZ2ssO72/fif7cwwi0ZuUg7yqsN00GS
+         iy+2N59lvsdwVCk9lVsLEfU51xfTceJ+FpxYEDdJ04dTCShiU/0/BKnON3bSC6sz0NBP
+         awAFgc/WuB2JpgkGubQacYjGS0Zk3AXgBJHuhCr2vbzlEi0hlpeqzCtkC+/nN9XECtSC
+         7kxP1/5hC2kfPiwY8249dyf6vXAdPGwOXNGMHzcHKlcSvomXrPpvk+Pn2wo0iRWc4n00
+         U7Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=c61Ig9SwSoDqV7zYUXQJVmC/opkuC1ckBKs3j2LfZ8E=;
+        b=sV26QJC6Icbc2Vkm8190t1ntQW35ngGZ6h9FFoauQded4OpfL5ELQQp4tOhNgs6VTb
+         zv7TvJMk1uvXLX5Z3cxV4wTIJvAxFUHoLnonXLoqF6Du0B+G7izPeXzsonfPxw+PGY/n
+         SibYH1t6LBvYeKmulZS/WsePFelXa8FhTdMUN3Dq8JxoF264YxH1ePL8GU+o3iPofqla
+         jLpRAzob1tt/D92CaMzg6L2Ul8b9aZClzAyP203Rmf9NCUomi4K8vezXQ/F8Dm7rEYZY
+         BrPv2yRUDwEAZ1yM7lx0/KJleYub5sU9jM9yMdPGkI4jydXxJOYt5PkoYQXuuvxNKovV
+         vFAg==
+X-Gm-Message-State: APjAAAVaUt4of8riQyqILlv2qhJGLakg2IcDPTY+L06VPu1MR1UiHhi6
+        D+hHVDMYM5Cj3dTsznqK4bA=
+X-Google-Smtp-Source: APXvYqweRFwLYD1YzcH+8o+vHooL43IMa8Qu6x4b+uHj1uQmVERPeMJ4ClvjfiV8YKDES/ckY8kDIA==
+X-Received: by 2002:a17:90a:ba81:: with SMTP id t1mr16166868pjr.139.1573782605331;
+        Thu, 14 Nov 2019 17:50:05 -0800 (PST)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:200::6ab4])
+        by smtp.gmail.com with ESMTPSA id w15sm7407109pfn.13.2019.11.14.17.50.03
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 14 Nov 2019 17:50:04 -0800 (PST)
+Date:   Thu, 14 Nov 2019 17:50:02 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Edward Cree <ecree@solarflare.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Marek Majkowski <marek@cloudflare.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: static and dynamic linking. Was: [PATCH bpf-next v3 1/5] bpf:
+ Support chain calling multiple BPF
+Message-ID: <20191115015001.iyqipxhoqt77iade@ast-mbp.dhcp.thefacebook.com>
+References: <70142501-e2dd-1aed-992e-55acd5c30cfd@solarflare.com>
+ <874l07fu61.fsf@toke.dk>
+ <aeae7b94-090a-a850-4740-0274ab8178d5@solarflare.com>
+ <87eez4odqp.fsf@toke.dk>
+ <20191112025112.bhzmrrh2pr76ssnh@ast-mbp.dhcp.thefacebook.com>
+ <87h839oymg.fsf@toke.dk>
+ <20191112195223.cp5kcmkko54dsfbg@ast-mbp.dhcp.thefacebook.com>
+ <5dcb3f4e8be4_3202ae6af4ec5bcac@john-XPS-13-9370.notmuch>
+ <20191113002058.bkch563wm6vhmn3l@ast-mbp.dhcp.thefacebook.com>
+ <5dcb959eb9d15_6dcc2b08358745c0f9@john-XPS-13-9370.notmuch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.101.4/25633/Thu Nov 14 10:50:04 2019)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5dcb959eb9d15_6dcc2b08358745c0f9@john-XPS-13-9370.notmuch>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This gets rid of indirect jumps for BPF tail calls whenever possible.
-See patch 7/8 for more general details. This is on top of Alexei's
-'[v4,bpf-next,00/20] Introduce BPF trampoline' series [0]. For non-RFC
-I'll still massage commit messages a bit and expand the existing set
-of tail call tests with a few more kselftest cases.
+On Tue, Nov 12, 2019 at 09:33:18PM -0800, John Fastabend wrote:
+> 
+> In addition to above flow something like this to load libraries first should
+> also work?
+> 
+>    // here fw2 is a library its never attached to anything but can be
+>    // used to pull functions from
+>    obj = bpf_object__open("fw2.o", attr);
+>    bpf_object__load(obj);
+>    prog = bpf_object__find_program_by_title(obj);
+>    subprog_btf_id0 = libbpf_find_obj_btf_id("name of function", obj);
+>    subprog_btf_id1 = libbpf_find_obj_btf_id("name of function", obj);
+> 
+>    // all pairs of (prog_fd, btf_id) need to be specified at load time
+>    attr.attach[0].prog_fd = fw2_fd;
+>    attr.attach[0].btf_id = subprog_btf_id0;
+>    attr.attach[1].prog_fd = fw2_fd;
+>    attr.attach[1].btf_id = subprog_btf_id1;
+>    obj = bpf_object__open("rootlet.o", attr)
+>    bpf_object__load(obj)
+>    prog = bpf_object__find_program_by_title(obj);
+>    link = bpf_program__replace(prog);
+>    // attach rootlet.o at this point with subprog_btf_id
 
-Thanks,
-Daniel
+The point I'm arguing that these:
+   attr.attach[0].prog_fd = fw2_fd;
+   attr.attach[0].btf_id = subprog_btf_id0;
+   attr.attach[1].prog_fd = fw2_fd;
+   attr.attach[1].btf_id = subprog_btf_id1;
+should not be part of libbpf api. Instead libbpf should be able to adjust
+relocations inside the program. You're proposing to do linking via explicit
+calls, I'm saying such linking should be declarative. libbpf should be able to
+derive the intent from the program and patch calls.
 
-  [0] https://patchwork.ozlabs.org/project/netdev/list/?series=142923
+Example:
+helpers.o:
+int foo(struct xdp_md *ctx, int var) {...}
+int bar(int *array, bpf_size_t size) {...}
+obj = bpf_object__open("helpers.o", attr)
+bpf_object__load(obj);
+// load and verify helpers. 'foo' and 'bar' are not attachable to anything.
+// These two programs don't have program type.
+// The kernel loaded and verified them.
+main_prog.o:
+int foo(struct xdp_md *ctx, int var);
+int bar(int *array, bpf_size_t size);
+int main_prog(struct xdp_md *ctx) 
+{ 
+  int ar[5], ret;
+  ret = foo(ctx, 1) + bar(ar, 5);
+}
+// 'foo' and 'bar' are extern functions from main_prog pov.
+obj = bpf_object__open("main_prog.o", attr)
+bpf_object__load(obj);
+// libbpf finds foo/bar in the kernel and adjusts two call instructions inside
+// main_prog to point to prog_fd+btf_id
 
-Daniel Borkmann (8):
-  bpf, x86: generalize and extend bpf_arch_text_poke for direct jumps
-  bpf: add bpf_prog_under_eviction helper
-  bpf: move bpf_free_used_maps into sleepable section
-  bpf: move owner type,jited info into array auxillary data
-  bpf: add jit poke descriptor mock-up for jit images
-  bpf: add poke dependency tracking for prog array maps
-  bpf, x86: emit patchable direct jump as tail call
-  bpf: constant map key tracking for prog array pokes
+That is the second use case of dynamic linking I've been talking earlier. The
+same thing should be possible to do with static linking. Then libbpf will
+adjust calls inside main_prog to be 'call pc+123' and 'foo' and 'bar' will
+become traditional bpf subprograms. main_prog() has single 'struct xdp_md *'
+argument. It is normal attachable XDP program.
 
- arch/x86/net/bpf_jit_comp.c  | 234 ++++++++++++++++++++++++-----------
- include/linux/bpf.h          |  85 +++++++++++--
- include/linux/bpf_verifier.h |   1 +
- include/linux/filter.h       |  10 ++
- kernel/bpf/arraymap.c        | 152 ++++++++++++++++++++++-
- kernel/bpf/core.c            |  73 ++++++++++-
- kernel/bpf/map_in_map.c      |   5 +-
- kernel/bpf/syscall.c         |  41 ++----
- kernel/bpf/verifier.c        |  98 +++++++++++++++
- 9 files changed, 578 insertions(+), 121 deletions(-)
+Loading main_prog.o first and then loading helpers.o should be possible as
+well. The verifier needs BTF of extern 'foo' and 'bar' symbols to be able to
+verify main_prog() independently. For example to check that main_prog() is
+passing correct ctx into foo(). That is the main difference vs traditional
+dynamic linking. I think we all agree that we want bpf programs to be verified
+independently. To do that the verifier needs to have BTF (function prototypes)
+of extern symbols. One can argue that it's not necessary and helpers.o can be
+loaded first. I don't think that will work in all cases. There could be many
+dependencies between helpers1.o calling another helpers2.o and so on and there
+will be no good order where calling extern foo() can be avoided.
 
--- 
-2.21.0
+This thread is getting long :) and sounds like we're converging. I'm thinking
+to combine everything we've discussed so far into dynamic/static linking doc.
 
