@@ -2,44 +2,44 @@ Return-Path: <SRS0=5OmT=ZH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA1B2C432C3
-	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 04:03:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBB3CC33C99
+	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 04:03:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AF788206F4
-	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 04:03:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C73A52072A
+	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 04:03:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="mb2EJDZ2"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="MiNLjKHX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727089AbfKOEDH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Nov 2019 23:03:07 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:26248 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726958AbfKOEDH (ORCPT
+        id S1727109AbfKOEDI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Nov 2019 23:03:08 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:12886 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727081AbfKOEDH (ORCPT
         <rfc822;bpf@vger.kernel.org>); Thu, 14 Nov 2019 23:03:07 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAF42wfT013923
-        for <bpf@vger.kernel.org>; Thu, 14 Nov 2019 20:03:05 -0800
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAF435cx024070
+        for <bpf@vger.kernel.org>; Thu, 14 Nov 2019 20:03:06 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=NjD6iYWWXMn0edcBKgfvhlw6MnG/DFIs2+m4hGfsSm8=;
- b=mb2EJDZ2qIR1UaujUnsf79m7DMkoNimJb/5DQEK8D2NSTjn0i+bc2Imw/zcUSnHU8sLO
- rMaoXzQG6DASVc1kxQXQ9mkGAMgal+0tIk2Rr3odjwJ6SgRcH23rLRkKPDY1LGOiI7U6
- 1q0u7YxuLYhoWCGawdwqSOxH597PdUwAIp8= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2w9gffu7n2-11
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 14 Nov 2019 20:03:05 -0800
-Received: from 2401:db00:2120:81ca:face:0:31:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Thu, 14 Nov 2019 20:02:53 -0800
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=ejC9iTYZ85BR5qdCuIQaf1BngC+V5I0ppQHDB+wY5Eg=;
+ b=MiNLjKHXUiqhRlsXF13HjDZm2yhkPCSK+6SDruD4JmrEIWUNm/fY7XePCGqCh69iAC+D
+ VbTB1KEVPSWZSkzV/n6hpnKS4udVMRD98NHqxhWJlZl0uWuZNphSGhmwLXWvwlEHCuTi
+ rNbeHYtFq2xxMx51NWOOL7/NDS/c/H3PaC8= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2w8qj9mda6-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 14 Nov 2019 20:03:06 -0800
+Received: from 2401:db00:2050:5076:face:0:7:0 (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Thu, 14 Nov 2019 20:02:56 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 4057F2EC1AEC; Thu, 14 Nov 2019 20:02:49 -0800 (PST)
+        id CB3992EC1AEC; Thu, 14 Nov 2019 20:02:55 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,89 +48,111 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v4 bpf-next 0/4] Add support for memory-mapping BPF array maps
-Date:   Thu, 14 Nov 2019 20:02:21 -0800
-Message-ID: <20191115040225.2147245-1-andriin@fb.com>
+Subject: [PATCH v4 bpf-next 3/4] libbpf: make global data internal arrays mmap()-able, if possible
+Date:   Thu, 14 Nov 2019 20:02:24 -0800
+Message-ID: <20191115040225.2147245-4-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191115040225.2147245-1-andriin@fb.com>
+References: <20191115040225.2147245-1-andriin@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-11-14_07:2019-11-14,2019-11-14 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- bulkscore=0 mlxscore=0 clxscore=1015 malwarescore=0 mlxlogscore=521
- suspectscore=8 lowpriorityscore=0 phishscore=0 adultscore=0
- priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1910280000 definitions=main-1911150035
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 malwarescore=0
+ bulkscore=0 spamscore=0 lowpriorityscore=0 priorityscore=1501
+ clxscore=1015 mlxlogscore=999 suspectscore=8 adultscore=0 phishscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1911150035
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set adds ability to memory-map BPF array maps (single- and
-multi-element). The primary use case is memory-mapping BPF array maps, created
-to back global data variables, created by libbpf implicitly. This allows for
-much better usability, along with avoiding syscalls to read or update data
-completely.
+Add detection of BPF_F_MMAPABLE flag support for arrays and add it as an extra
+flag to internal global data maps, if supported by kernel. This allows users
+to memory-map global data and use it without BPF map operations, greatly
+simplifying user experience.
 
-Due to memory-mapping requirements, BPF array map that is supposed to be
-memory-mapped, has to be created with special BPF_F_MMAPABLE attribute, which
-triggers slightly different memory allocation strategy internally. See
-patch 1 for details.
+Acked-by: Song Liu <songliubraving@fb.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/lib/bpf/libbpf.c | 32 ++++++++++++++++++++++++++++++--
+ 1 file changed, 30 insertions(+), 2 deletions(-)
 
-Libbpf is extended to detect kernel support for this flag, and if supported,
-will specify it for all global data maps automatically.
-
-Patch #1 refactors bpf_map_inc() and converts bpf_map's refcnt to atomic64_t
-to make refcounting never fail.
-
-v3->v4:
-- add mmap's open() callback to fix refcounting (Johannes);
-- switch to remap_vmalloc_pages() instead of custom fault handler (Johannes);
-- converted bpf_map's refcnt/usercnt into atomic64_t;
-- provide default bpf_map_default_vmops handling open/close properly;
-
-v2->v3:
-- change allocation strategy to avoid extra pointer dereference (Jakub);
-
-v1->v2:
-- fix map lookup code generation for BPF_F_MMAPABLE case;
-- prevent BPF_F_MMAPABLE flag for all but plain array map type;
-- centralize ref-counting in generic bpf_map_mmap();
-- don't use uref counting (Alexei);
-- use vfree() directly;
-- print flags with %x (Song);
-- extend tests to verify bpf_map_{lookup,update}_elem() logic as well.
-
-
-Andrii Nakryiko (4):
-  bpf: switch bpf_map ref counter to 64bit so bpf_map_inc never fails
-  bpf: add mmap() support for BPF_MAP_TYPE_ARRAY
-  libbpf: make global data internal arrays mmap()-able, if possible
-  selftests/bpf: add BPF_TYPE_MAP_ARRAY mmap() tests
-
- .../net/ethernet/netronome/nfp/bpf/offload.c  |   4 +-
- include/linux/bpf.h                           |  21 +-
- include/linux/vmalloc.h                       |   1 +
- include/uapi/linux/bpf.h                      |   3 +
- kernel/bpf/arraymap.c                         |  59 ++++-
- kernel/bpf/inode.c                            |   2 +-
- kernel/bpf/map_in_map.c                       |   2 +-
- kernel/bpf/syscall.c                          | 150 +++++++++---
- kernel/bpf/verifier.c                         |   6 +-
- kernel/bpf/xskmap.c                           |   6 +-
- mm/vmalloc.c                                  |  20 ++
- net/core/bpf_sk_storage.c                     |   2 +-
- tools/include/uapi/linux/bpf.h                |   3 +
- tools/lib/bpf/libbpf.c                        |  32 ++-
- .../selftests/bpf/prog_tests/core_reloc.c     |  45 ++--
- tools/testing/selftests/bpf/prog_tests/mmap.c | 220 ++++++++++++++++++
- tools/testing/selftests/bpf/progs/test_mmap.c |  45 ++++
- 17 files changed, 540 insertions(+), 81 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/mmap.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_mmap.c
-
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 96ef18cfeffb..7e2be1288fa1 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -142,6 +142,8 @@ struct bpf_capabilities {
+ 	__u32 btf_func:1;
+ 	/* BTF_KIND_VAR and BTF_KIND_DATASEC support */
+ 	__u32 btf_datasec:1;
++	/* BPF_F_MMAPABLE is supported for arrays */
++	__u32 array_mmap:1;
+ };
+ 
+ /*
+@@ -856,8 +858,6 @@ bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map_type type,
+ 		pr_warn("failed to alloc map name\n");
+ 		return -ENOMEM;
+ 	}
+-	pr_debug("map '%s' (global data): at sec_idx %d, offset %zu.\n",
+-		 map_name, map->sec_idx, map->sec_offset);
+ 
+ 	def = &map->def;
+ 	def->type = BPF_MAP_TYPE_ARRAY;
+@@ -865,6 +865,12 @@ bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map_type type,
+ 	def->value_size = data->d_size;
+ 	def->max_entries = 1;
+ 	def->map_flags = type == LIBBPF_MAP_RODATA ? BPF_F_RDONLY_PROG : 0;
++	if (obj->caps.array_mmap)
++		def->map_flags |= BPF_F_MMAPABLE;
++
++	pr_debug("map '%s' (global data): at sec_idx %d, offset %zu, flags %x.\n",
++		 map_name, map->sec_idx, map->sec_offset, def->map_flags);
++
+ 	if (data_buff) {
+ 		*data_buff = malloc(data->d_size);
+ 		if (!*data_buff) {
+@@ -2160,6 +2166,27 @@ static int bpf_object__probe_btf_datasec(struct bpf_object *obj)
+ 	return 0;
+ }
+ 
++static int bpf_object__probe_array_mmap(struct bpf_object *obj)
++{
++	struct bpf_create_map_attr attr = {
++		.map_type = BPF_MAP_TYPE_ARRAY,
++		.map_flags = BPF_F_MMAPABLE,
++		.key_size = sizeof(int),
++		.value_size = sizeof(int),
++		.max_entries = 1,
++	};
++	int fd;
++
++	fd = bpf_create_map_xattr(&attr);
++	if (fd >= 0) {
++		obj->caps.array_mmap = 1;
++		close(fd);
++		return 1;
++	}
++
++	return 0;
++}
++
+ static int
+ bpf_object__probe_caps(struct bpf_object *obj)
+ {
+@@ -2168,6 +2195,7 @@ bpf_object__probe_caps(struct bpf_object *obj)
+ 		bpf_object__probe_global_data,
+ 		bpf_object__probe_btf_func,
+ 		bpf_object__probe_btf_datasec,
++		bpf_object__probe_array_mmap,
+ 	};
+ 	int i, ret;
+ 
 -- 
 2.17.1
 
