@@ -2,44 +2,45 @@ Return-Path: <SRS0=5OmT=ZH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1A27C432C3
-	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 21:59:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82B74C432C3
+	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 22:06:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A50F22073A
-	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 21:59:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5CA6A2072A
+	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 22:06:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726969AbfKOV7D (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Nov 2019 16:59:03 -0500
-Received: from www62.your-server.de ([213.133.104.62]:47692 "EHLO
+        id S1726812AbfKOWGQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 Nov 2019 17:06:16 -0500
+Received: from www62.your-server.de ([213.133.104.62]:48284 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726598AbfKOV7D (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 Nov 2019 16:59:03 -0500
+        with ESMTP id S1726598AbfKOWGP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Nov 2019 17:06:15 -0500
 Received: from sslproxy01.your-server.de ([88.198.220.130])
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1iVjcL-0004me-AN; Fri, 15 Nov 2019 22:59:01 +0100
+        id 1iVjjK-0005Ds-5s; Fri, 15 Nov 2019 23:06:14 +0100
 Received: from [178.197.248.45] (helo=pc-9.home)
         by sslproxy01.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89)
         (envelope-from <daniel@iogearbox.net>)
-        id 1iVjcK-0002j1-VR; Fri, 15 Nov 2019 22:59:01 +0100
-Subject: Re: [PATCH bpf] selftests: bpf: fix test_tc_tunnel hanging
+        id 1iVjjJ-0006Th-PA; Fri, 15 Nov 2019 23:06:13 +0100
+Subject: Re: [PATCH bpf] selftests: bpf: xdping is not meant to be run
+ standalone
 To:     Jiri Benc <jbenc@redhat.com>, bpf@vger.kernel.org,
         netdev@vger.kernel.org
-Cc:     Willem de Bruijn <willemb@google.com>
-References: <60919291657a9ee89c708d8aababc28ebe1420be.1573821780.git.jbenc@redhat.com>
+Cc:     Alan Maguire <alan.maguire@oracle.com>
+References: <4365c81198f62521344c2215909634407184387e.1573821726.git.jbenc@redhat.com>
 From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <dc889f46-bc26-df21-bf24-906a6ccf7a12@iogearbox.net>
-Date:   Fri, 15 Nov 2019 22:58:59 +0100
+Message-ID: <427e0b06-679e-5621-f828-be545e6ca3b1@iogearbox.net>
+Date:   Fri, 15 Nov 2019 23:06:13 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <60919291657a9ee89c708d8aababc28ebe1420be.1573821780.git.jbenc@redhat.com>
+In-Reply-To: <4365c81198f62521344c2215909634407184387e.1573821726.git.jbenc@redhat.com>
 Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -50,40 +51,20 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 11/15/19 1:43 PM, Jiri Benc wrote:
-> When run_kselftests.sh is run, it hangs after test_tc_tunnel.sh. The reason
-> is test_tc_tunnel.sh ensures the server ('nc -l') is run all the time,
-> starting it again every time it is expected to terminate. The exception is
-> the final client_connect: the server is not started anymore, which ensures
-> no process is kept running after the test is finished.
+On 11/15/19 1:42 PM, Jiri Benc wrote:
+> The actual test to run is test_xdping.sh, which is already in TEST_PROGS.
+> The xdping program alone is not runnable with 'make run_tests', it
+> immediatelly fails due to missing arguments.
 > 
-> For a sit test, though, the script is terminated prematurely without the
-> final client_connect and the 'nc' process keeps running. This in turn causes
-> the run_one function in kselftest/runner.sh to hang forever, waiting for the
-> runaway process to finish.
+> Move xdping to TEST_GEN_PROGS_EXTENDED in order to be built but not run.
 > 
-> Ensure a remaining server is terminated on cleanup.
-> 
-> Fixes: f6ad6accaa9d ("selftests/bpf: expand test_tc_tunnel with SIT encap")
-> Cc: Willem de Bruijn <willemb@google.com>
+> Fixes: cd5385029f1d ("selftests/bpf: measure RTT from xdp using xdping")
+> Cc: Alan Maguire <alan.maguire@oracle.com>
 > Signed-off-by: Jiri Benc <jbenc@redhat.com>
 
-Looks like your Fixes tag is wrong:
-
-[...]
-Applying: selftests: bpf: Fix test_tc_tunnel hanging
-Switched to branch 'master'
-Your branch is up to date with 'origin/master'.
-Updating 808c9f7ebfff..e2090d0451c5
-Fast-forward
-  tools/testing/selftests/bpf/test_tc_tunnel.sh | 5 +++++
-  1 file changed, 5 insertions(+)
-Deleted branch mbox (was e2090d0451c5).
-Commit: e2090d0451c5 ("selftests: bpf: Fix test_tc_tunnel hanging")
-	Fixes tag: Fixes: f6ad6accaa9d ("selftests/bpf: expand test_tc_tunnel with SIT encap")
-	Has these problem(s):
-		- Target SHA1 does not exist
-[...]
+Any objections if I take this to bpf-next as otherwise this will create an ugly
+merge conflict between bpf and bpf-next given selftests have been heavily reworked
+in there.
 
 Thanks,
 Daniel
